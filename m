@@ -2,86 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F66C75173D
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jul 2023 06:15:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B81E97517FE
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jul 2023 07:21:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233516AbjGMEPg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Jul 2023 00:15:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59770 "EHLO
+        id S233837AbjGMFVm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Jul 2023 01:21:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232553AbjGMEPe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jul 2023 00:15:34 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EBAE170E;
-        Wed, 12 Jul 2023 21:15:33 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36D2vfb6014648;
-        Thu, 13 Jul 2023 04:14:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=lo5w9wU2QVl/tyJfc7XjBLXmBUMX7AYxuEXj6BLmjOw=;
- b=RfJI/uHotS5VcQYzMhAvjsVGoNiIK8lHB5pLA6Qg+J2uCLSvE94HUSv/FD2rCBBIgTyx
- bjzCVzpI8e8seTTIe+KUrPKzItIXxwf2ezh+wtgmHqDlsO9/utLqFeSV7rWtmTAtFVfk
- tyiTqK+nu+fA8fToeTuDstoQZxNgj/w/cs6HWg6XyfLA9/bvpxPFDMrsCDZlrEOP3RQs
- QoNCifMWsVgEPd/BwHdrIaWw0RWXFyTkARM1DuWXLTIGDdK0BhsGSxhzmZSIv5TF4jHb
- 3pZpk7Ee/JajV6jGPtFa3iP1nmKn3MfbYFB7hDiMAv8l9OzQGc+whcWSp3FKuCRDztIW 5A== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rse45kama-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Jul 2023 04:14:54 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36D4Eqjv023263
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 13 Jul 2023 04:14:52 GMT
-Received: from varda-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Wed, 12 Jul 2023 21:14:44 -0700
-Date:   Thu, 13 Jul 2023 09:44:40 +0530
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
-        <kishon@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <gregkh@linuxfoundation.org>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <p.zabel@pengutronix.de>, <arnd@arndb.de>,
-        <geert+renesas@glider.be>, <neil.armstrong@linaro.org>,
-        <nfraprado@collabora.com>, <rafal@milecki.pl>,
-        <quic_srichara@quicinc.com>, <quic_varada@quicinc.org>,
-        <quic_wcheng@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v4 4/6] arm64: dts: qcom: ipq5332: Add USB related nodes
-Message-ID: <20230713041439.GA24906@varda-linux.qualcomm.com>
-References: <cover.1689160067.git.quic_varada@quicinc.com>
- <1f99805b6437aa8d6eaa4663e8d27b98ee595f00.1689160067.git.quic_varada@quicinc.com>
- <13555184-1708-befd-1f2c-5e6f7e04a6ce@linaro.org>
- <0f98360a-6d88-9a8b-5d60-3d6120e0640f@linaro.org>
+        with ESMTP id S233803AbjGMFVl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jul 2023 01:21:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADCA92114;
+        Wed, 12 Jul 2023 22:21:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B4EA61A17;
+        Thu, 13 Jul 2023 05:21:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40D6FC433C8;
+        Thu, 13 Jul 2023 05:21:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689225696;
+        bh=wQyN/phaMAVOufua/AruswFV26dN3USZ1Q3/Ucif1mA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Hwpk+OKSW6E3452BnVFbO2AWkzxQJJLV+ONr+xTPIjLIzuKalVaFMxWF/CKKfpjKU
+         bk1+eQpIS139fe2KkkwWXtqct7iu30cY2yj775yhuQY/CRyY0NC3BplUUiKZdX29Wn
+         5ECNjy78cmEVX8vTFRq3Ff8kzdamfdkJV8oHSe61T5B1EPLZ+EMuFEgk/VXYqM0Szg
+         BABdEpyK9CatPJMdo7X1m5Qk5qO8AXokY3ayWZjpUqgR3pnx9mAVKaXMn5goHGk7yt
+         iy4qR+JDPx7L9rnYm+kCulQwSC2nOXGDbtds2LNbCXLcflYkywa1/qcnlqb1x8Mxxh
+         6C+ma5mH7MEZw==
+Date:   Thu, 13 Jul 2023 07:21:28 +0200
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Enrico Mioso <mrkiko.rs@gmail.com>,
+        Jan Engelhardt <jengelh@inai.de>, linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Kalle Valo <kvalo@kernel.org>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Maciej =?UTF-8?B?xbtlbmN6eWtvd3NraQ==?= <maze@google.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        =?UTF-8?B?xYF1a2Fzeg==?= Stelmach <l.stelmach@samsung.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org,
+        Ilja Van Sprundel <ivansprundel@ioactive.com>,
+        Joseph Tartaro <joseph.tartaro@ioactive.com>
+Subject: Re: [PATCH] USB: disable all RNDIS protocol drivers
+Message-ID: <20230713072128.4f4bd9cd@coco.lan>
+In-Reply-To: <2023070430-fragment-remember-2fdd@gregkh>
+References: <20221123124620.1387499-1-gregkh@linuxfoundation.org>
+        <n9108s34-9rn0-3n8q-r3s5-51r9647331ns@vanv.qr>
+        <ZKM5nbDnKnFZLOlY@rivendell>
+        <2023070430-fragment-remember-2fdd@gregkh>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <0f98360a-6d88-9a8b-5d60-3d6120e0640f@linaro.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: AhuY4QKQugtt-AIl-fWparknQC9pZlTV
-X-Proofpoint-ORIG-GUID: AhuY4QKQugtt-AIl-fWparknQC9pZlTV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-13_01,2023-07-11_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
- phishscore=0 priorityscore=1501 lowpriorityscore=0 bulkscore=0
- suspectscore=0 mlxscore=0 spamscore=0 malwarescore=0 mlxlogscore=762
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2307130036
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -90,62 +73,48 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 12, 2023 at 03:28:43PM +0300, Dmitry Baryshkov wrote:
-> On 12/07/2023 15:04, Krzysztof Kozlowski wrote:
-> >On 12/07/2023 13:38, Varadarajan Narayanan wrote:
-> >>Add USB phy and controller nodes.
-> >>
-> >>Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> >>---
-> >>v4:
-> >>	Change node name
-> >>	Remove blank line
-> >>	'make CHECK_DTBS=y DT_SCHEMA_FILES=qcom qcom/ipq5332-rdp441.dtb' passed
-> >>v1:
-> >>	Rename phy node
-> >>	Change compatible from m31,ipq5332-usb-hsphy -> qcom,ipq5332-usb-hsphy
-> >>	Remove 'qscratch' from phy node
-> >>	Fix alignment and upper-case hex no.s
-> >>	Add clock definition for the phy
-> >>	Remove snps,ref-clock-period-ns as it is not used. dwc3_ref_clk_period()
-> >>	in dwc3/core.c takes the frequency from ref clock and calculates fladj
-> >>	as appropriate.
-> >>---
-> >>  arch/arm64/boot/dts/qcom/ipq5332.dtsi | 53 +++++++++++++++++++++++++++++++++++
-> >>  1 file changed, 53 insertions(+)
-> >>
-> >>diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-> >>index 8bfc2db..8118356 100644
-> >>--- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-> >>+++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-> >>@@ -405,6 +405,59 @@
-> >>  				status = "disabled";
-> >>  			};
-> >>  		};
-> >>+
-> >>+		usbphy0: usb-phy@7b000 {
-> >>+			compatible = "qcom,ipq5332-usb-hsphy";
-> >>+			reg = <0x0007b000 0x12c>;
-> >>+
-> >>+			clocks = <&gcc GCC_USB0_PHY_CFG_AHB_CLK>;
-> >>+			clock-names = "cfg_ahb";
-> >>+
-> >>+			resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
-> >>+
-> >>+			status = "disabled";
-> >>+		};
-> >>+
-> >>+		usb2: usb2@8a00000 {
-> >
-> >So you responded to my comments, wait ten minutes and send v2? No need
-> >to wait for my feedback, right?
-> >
-> >No, it's not ok. This is "usb", not "usb2". Are you saying you have
-> >second device with the same address?
->
-> Just to emphasise, it's the node name `usb2', which is not fine. DT label
-> `usb2' is (hopefully) fine.
+Em Tue, 4 Jul 2023 07:47:31 +0100
+Greg Kroah-Hartman <gregkh@linuxfoundation.org> escreveu:
 
-Thanks for the clarification. Will post a new patch.
+> On Mon, Jul 03, 2023 at 11:11:57PM +0200, Enrico Mioso wrote:
+> > Hi all!!
+> > 
+> > I think the rndis_host USB driver might emit a warning in the dmesg, but disabling the driver wouldn't be a good idea.
+> > The TP-Link MR6400 V1 LTE modem and also some ZTE modems integrated in routers do use this protocol.
+> > 
+> > We may also distinguish between these cases and devices you might plug in - as they pose different risk levels.  
+> 
+> Again, you have to fully trust the other side of an RNDIS connection,
+> any hints on how to have the kernel determine that?
 
--Varada
+Kernel may not know but the user does.
+
+See, when doing a security risk assessment, one needs to evaluate the
+risks, the costs to implement mitigation issues, and the measures that
+will be taken. Sometimes, the measure is to just accept the risk, as
+either the chances to actually happen on a particular scenario is 
+very unlikely, and/or the costs to mitigate are too high.
+
+In any case, it should not be up to Kernel developers to do risk
+assessment, as this has to be checked case by case.
+
+For instance I usually disable several the security options on my
+slow test devices, as the risk to run untrusted code on them
+while I'm testing a new Kernel I just built is close to zero
+and doesn't pay off the the extra hours I'll be wasting otherwise.
+
+In the specific case of untrusted USB devices, the risk of having 
+USB untrusted sticks connected to my desktop machine is very low, 
+and if a criminal breaks into my house to be close enough to plug an
+USB device, I would have a lot more to be concerned than just my PC.
+
+Granted, the risk is higher on laptops and mobile devices, but
+still it might be acceptable on some use cases.
+
+Maybe a compromise would be to add a modprobe parameter and/or
+a Kconfig option to allow enabling RDNIS host and RDNIS gadget
+support at the security options to let the user select what 
+kind of risks he's willing to take.
+
+Thanks,
+Mauro
