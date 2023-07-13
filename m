@@ -2,219 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EDC8751E0D
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jul 2023 12:00:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30DD2751E4C
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jul 2023 12:06:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233464AbjGMKAt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Jul 2023 06:00:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44244 "EHLO
+        id S234615AbjGMKGm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Jul 2023 06:06:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233688AbjGMKAW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jul 2023 06:00:22 -0400
-Received: from mail-ot1-f79.google.com (mail-ot1-f79.google.com [209.85.210.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3813E30DC
-        for <linux-usb@vger.kernel.org>; Thu, 13 Jul 2023 02:59:51 -0700 (PDT)
-Received: by mail-ot1-f79.google.com with SMTP id 46e09a7af769-6b8927fd3d2so772520a34.1
-        for <linux-usb@vger.kernel.org>; Thu, 13 Jul 2023 02:59:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689242390; x=1691834390;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mTij7KSOxkJc3DOrNp655BMRHw+1Y0mxxpIcA3AxT/s=;
-        b=dveG+OxKe8drSudlh0hsHbHbPbRnQ8tN/EZEnr48Q8r6RBMnEmPZ98LQxMu8PLmyxj
-         lh44L2BdggrL/R19T4CftF0W0KRzLB6vH1LfBgw9IS+skmMlLBFy2PxhWEJc6B5PJCTL
-         fa2/FT28auKchucjjNboLWf4Sl7StdjTWNQXwRD2valOPNPLb+lVnNt057AllR+80i4W
-         wwAWZ8WEj7k+hrXVzNLf0a4li5HM9RIgE8O1gBvyrDOZNU30lzkHrmtqIclARjeDsayy
-         IntQdS3rd73shDDIoIcG3j/SxodzXrWtC/VnKY59HzQ61WI6RwpFgt/VAOP4B3BTLXLu
-         z0pw==
-X-Gm-Message-State: ABy/qLbtvVwuNjC9EdRWk/u3hq3zMg6HyyPVnxk6ZMf7Uk3S7synlDai
-        15wOxW8t5bEQcYejTuyNYkmM5bvGFwU2agG2M7yCedAQdAlr
-X-Google-Smtp-Source: APBJJlHjxxN0x97mJLB3wflRB+hj1Kl4dNzvEhHMSkmYqcCP2ye/zglvmZmL6LTENU/dIdZbuZRnKkw1lxnooa6r8U7vQKMvddHw
+        with ESMTP id S234583AbjGMKGT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jul 2023 06:06:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16961270F;
+        Thu, 13 Jul 2023 03:06:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8BF4A608D5;
+        Thu, 13 Jul 2023 10:06:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6875C433C8;
+        Thu, 13 Jul 2023 10:05:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689242764;
+        bh=uxBF/65cfGgFc9NUZsYBWMo4c7yjkoqCGF6QeEUJdAY=;
+        h=From:Subject:Date:To:Cc:From;
+        b=fMIucUY7GArhLgcLDCFIQxCyAzXRgRPE8TkbNnY5GyU1HBPhbd5464W8Yg6jjQ1lL
+         m6CWFlXeaqd10iV8ptWkOllE56aJPowyXSs5WiPty1Qsblb5rDh7+XYZZkXkukuQUD
+         2oiaMlw7C0sww3ot9gyUkCaU1j297MtNOoU25HevXc+ptbrPhHq2Zk21bLHu2o2olV
+         KM6Bl/kUQtYvAIUPH+MSd/KGQP+HX58eb57Amnb444A4mU/RQ41PTUTV2bTgUUDM37
+         0Ncnb1LvDeYFhV3bcDM22YynZx1G+N6CQHl4PYcq4tdmwsqnstpRPCpNQMucQad6SH
+         v0+dq9gbDJkNg==
+From:   Christian Brauner <brauner@kernel.org>
+Subject: [PATCH 0/2] eventfd: simplify signal helpers
+Date:   Thu, 13 Jul 2023 12:05:36 +0200
+Message-Id: <20230713-vfs-eventfd-signal-v1-0-7fda6c5d212b@kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a9d:74c9:0:b0:6b9:5b73:f70 with SMTP id
- a9-20020a9d74c9000000b006b95b730f70mr1018604otl.1.1689242390343; Thu, 13 Jul
- 2023 02:59:50 -0700 (PDT)
-Date:   Thu, 13 Jul 2023 02:59:50 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000009db51a06005b64e9@google.com>
-Subject: [syzbot] [usb?] memory leak in raw_open
-From:   syzbot <syzbot+feb045d335c1fdde5bf7@syzkaller.appspotmail.com>
-To:     andreyknvl@gmail.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHDMr2QC/x3MwQrCMAyA4VcZORtpN9jAVxEPaZtuAY3SSBHG3
+ t3o8Tv8/w7GTdjgMuzQuIvJUx3xNEDeSFdGKW4YwziFJU7YqyF31nctaLIq3TGkUOK8UJk5g4e
+ vxlU+/+n15k5kjKmR5u238sP5IZbhOL4kMfO0fwAAAA==
+To:     linux-fsdevel@vger.kernel.org
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        David Woodhouse <dwmw2@infradead.org>,
+        Paul Durrant <paul@xen.org>, Oded Gabbay <ogabbay@kernel.org>,
+        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Leon Romanovsky <leon@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Frederic Barrat <fbarrat@linux.ibm.com>,
+        Andrew Donnellan <ajd@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Eric Farman <farman@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Tony Krowiak <akrowiak@linux.ibm.com>,
+        Jason Herne <jjherne@linux.ibm.com>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Eric Auger <eric.auger@redhat.com>, Fei Li <fei1.li@intel.com>,
+        Benjamin LaHaise <bcrl@kvack.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Kirti Wankhede <kwankhede@nvidia.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-fpga@vger.kernel.org, intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, linux-rdma@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-aio@kvack.org, cgroups@vger.kernel.org, linux-mm@kvack.org,
+        Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        io-uring@vger.kernel.org
+X-Mailer: b4 0.13-dev-099c9
+X-Developer-Signature: v=1; a=openpgp-sha256; l=276; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=uxBF/65cfGgFc9NUZsYBWMo4c7yjkoqCGF6QeEUJdAY=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaSsP1PLoVi0NYRvYnj1752/FbjTRLb2F5/eK1jjLMP8OeoE
+ g8DNjlIWBjEuBlkxRRaHdpNwueU8FZuNMjVg5rAygQxh4OIUgIlwrGT4n2l3WEWjd0VXqt6ih11Ns1
+ YfjrROvjc3V73IYWbr0apscUaGq6+my1lGuQtz2O564OagKGE5qVEnsLx/a9H1rIRnpwXZAA==
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Hey everyone,
 
-syzbot found the following issue on:
+This simplifies the eventfd_signal() and eventfd_signal_mask() helpers
+by removing the count argument which is effectively unused.
 
-HEAD commit:    1c7873e33645 mm: lock newly mapped VMA with corrected orde..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1517663ca80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=832b404e095b70c0
-dashboard link: https://syzkaller.appspot.com/bug?extid=feb045d335c1fdde5bf7
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1776519ca80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=117f9778a80000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/43b42bd2cf70/disk-1c7873e3.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/011ba1b9e8c1/vmlinux-1c7873e3.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/18b349342595/bzImage-1c7873e3.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+feb045d335c1fdde5bf7@syzkaller.appspotmail.com
-
-BUG: memory leak
-unreferenced object 0xffff88810b172000 (size 4096):
-  comm "syz-executor103", pid 5067, jiffies 4294964128 (age 13.070s)
-  hex dump (first 32 bytes):
-    01 00 00 00 00 00 00 00 00 bc 96 0e 81 88 ff ff  ................
-    5d b6 9e 85 ff ff ff ff 03 00 00 00 00 00 00 00  ]...............
-  backtrace:
-    [<ffffffff8154bf94>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1076
-    [<ffffffff8347eb55>] kmalloc include/linux/slab.h:582 [inline]
-    [<ffffffff8347eb55>] kzalloc include/linux/slab.h:703 [inline]
-    [<ffffffff8347eb55>] dev_new drivers/usb/gadget/legacy/raw_gadget.c:191 [inline]
-    [<ffffffff8347eb55>] raw_open+0x45/0x110 drivers/usb/gadget/legacy/raw_gadget.c:385
-    [<ffffffff827d1d09>] misc_open+0x1a9/0x1f0 drivers/char/misc.c:165
-    [<ffffffff8166763b>] chrdev_open+0x11b/0x340 fs/char_dev.c:414
-    [<ffffffff8165573f>] do_dentry_open+0x30f/0x990 fs/open.c:914
-    [<ffffffff8167cabb>] do_open fs/namei.c:3636 [inline]
-    [<ffffffff8167cabb>] path_openat+0x178b/0x1b20 fs/namei.c:3793
-    [<ffffffff8167e995>] do_filp_open+0xc5/0x1b0 fs/namei.c:3820
-    [<ffffffff81659453>] do_sys_openat2+0xe3/0x140 fs/open.c:1407
-    [<ffffffff81659de3>] do_sys_open fs/open.c:1422 [inline]
-    [<ffffffff81659de3>] __do_sys_openat fs/open.c:1438 [inline]
-    [<ffffffff81659de3>] __se_sys_openat fs/open.c:1433 [inline]
-    [<ffffffff81659de3>] __x64_sys_openat+0x83/0xe0 fs/open.c:1433
-    [<ffffffff84a77ff9>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84a77ff9>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84c0008b>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-BUG: memory leak
-unreferenced object 0xffff88810ad20d60 (size 32):
-  comm "syz-executor103", pid 5067, jiffies 4294964128 (age 13.070s)
-  hex dump (first 32 bytes):
-    72 61 77 2d 67 61 64 67 65 74 2e 30 00 00 00 00  raw-gadget.0....
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff8154bf94>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1076
-    [<ffffffff8347cd2f>] kmalloc include/linux/slab.h:582 [inline]
-    [<ffffffff8347cd2f>] raw_ioctl_init+0xdf/0x410 drivers/usb/gadget/legacy/raw_gadget.c:460
-    [<ffffffff8347dfe9>] raw_ioctl+0x5f9/0x1120 drivers/usb/gadget/legacy/raw_gadget.c:1250
-    [<ffffffff81685173>] vfs_ioctl fs/ioctl.c:51 [inline]
-    [<ffffffff81685173>] __do_sys_ioctl fs/ioctl.c:870 [inline]
-    [<ffffffff81685173>] __se_sys_ioctl fs/ioctl.c:856 [inline]
-    [<ffffffff81685173>] __x64_sys_ioctl+0x103/0x140 fs/ioctl.c:856
-    [<ffffffff84a77ff9>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84a77ff9>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84c0008b>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-BUG: memory leak
-unreferenced object 0xffff88810e96bc00 (size 128):
-  comm "syz-executor103", pid 5067, jiffies 4294964128 (age 13.070s)
-  hex dump (first 32 bytes):
-    64 75 6d 6d 79 5f 75 64 63 00 00 00 00 00 00 00  dummy_udc.......
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff8154bf94>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1076
-    [<ffffffff8347cd6d>] kmalloc include/linux/slab.h:582 [inline]
-    [<ffffffff8347cd6d>] raw_ioctl_init+0x11d/0x410 drivers/usb/gadget/legacy/raw_gadget.c:468
-    [<ffffffff8347dfe9>] raw_ioctl+0x5f9/0x1120 drivers/usb/gadget/legacy/raw_gadget.c:1250
-    [<ffffffff81685173>] vfs_ioctl fs/ioctl.c:51 [inline]
-    [<ffffffff81685173>] __do_sys_ioctl fs/ioctl.c:870 [inline]
-    [<ffffffff81685173>] __se_sys_ioctl fs/ioctl.c:856 [inline]
-    [<ffffffff81685173>] __x64_sys_ioctl+0x103/0x140 fs/ioctl.c:856
-    [<ffffffff84a77ff9>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84a77ff9>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84c0008b>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-BUG: memory leak
-unreferenced object 0xffff88810e96ba80 (size 128):
-  comm "syz-executor103", pid 5067, jiffies 4294964128 (age 13.070s)
-  hex dump (first 32 bytes):
-    64 75 6d 6d 79 5f 75 64 63 2e 30 00 00 00 00 00  dummy_udc.0.....
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff8154bf94>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1076
-    [<ffffffff8347cdfc>] kmalloc include/linux/slab.h:582 [inline]
-    [<ffffffff8347cdfc>] raw_ioctl_init+0x1ac/0x410 drivers/usb/gadget/legacy/raw_gadget.c:479
-    [<ffffffff8347dfe9>] raw_ioctl+0x5f9/0x1120 drivers/usb/gadget/legacy/raw_gadget.c:1250
-    [<ffffffff81685173>] vfs_ioctl fs/ioctl.c:51 [inline]
-    [<ffffffff81685173>] __do_sys_ioctl fs/ioctl.c:870 [inline]
-    [<ffffffff81685173>] __se_sys_ioctl fs/ioctl.c:856 [inline]
-    [<ffffffff81685173>] __x64_sys_ioctl+0x103/0x140 fs/ioctl.c:856
-    [<ffffffff84a77ff9>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84a77ff9>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84c0008b>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-BUG: memory leak
-unreferenced object 0xffff88810e96bd00 (size 128):
-  comm "syz-executor103", pid 5067, jiffies 4294964128 (age 13.070s)
-  hex dump (first 32 bytes):
-    00 bd 96 0e 81 88 ff ff 00 bd 96 0e 81 88 ff ff  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff8154bf94>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1076
-    [<ffffffff833ecc6a>] kmalloc include/linux/slab.h:582 [inline]
-    [<ffffffff833ecc6a>] kzalloc include/linux/slab.h:703 [inline]
-    [<ffffffff833ecc6a>] dummy_alloc_request+0x5a/0xe0 drivers/usb/gadget/udc/dummy_hcd.c:665
-    [<ffffffff833e9132>] usb_ep_alloc_request+0x22/0xd0 drivers/usb/gadget/udc/core.c:196
-    [<ffffffff8347f13d>] gadget_bind+0x6d/0x370 drivers/usb/gadget/legacy/raw_gadget.c:292
-    [<ffffffff833e9e83>] gadget_bind_driver+0xe3/0x2e0 drivers/usb/gadget/udc/core.c:1591
-    [<ffffffff82ba069d>] call_driver_probe drivers/base/dd.c:579 [inline]
-    [<ffffffff82ba069d>] really_probe+0x12d/0x430 drivers/base/dd.c:658
-    [<ffffffff82ba0a61>] __driver_probe_device+0xc1/0x1a0 drivers/base/dd.c:798
-    [<ffffffff82ba0b6a>] driver_probe_device+0x2a/0x120 drivers/base/dd.c:828
-    [<ffffffff82ba0eae>] __driver_attach drivers/base/dd.c:1214 [inline]
-    [<ffffffff82ba0eae>] __driver_attach+0xfe/0x1f0 drivers/base/dd.c:1154
-    [<ffffffff82b9d985>] bus_for_each_dev+0xa5/0x110 drivers/base/bus.c:368
-    [<ffffffff82b9f486>] bus_add_driver+0x126/0x2a0 drivers/base/bus.c:673
-    [<ffffffff82ba25da>] driver_register+0x8a/0x190 drivers/base/driver.c:246
-    [<ffffffff833e7524>] usb_gadget_register_driver_owner+0x64/0x160 drivers/usb/gadget/udc/core.c:1665
-    [<ffffffff8347e0e6>] raw_ioctl_run drivers/usb/gadget/legacy/raw_gadget.c:546 [inline]
-    [<ffffffff8347e0e6>] raw_ioctl+0x6f6/0x1120 drivers/usb/gadget/legacy/raw_gadget.c:1253
-    [<ffffffff81685173>] vfs_ioctl fs/ioctl.c:51 [inline]
-    [<ffffffff81685173>] __do_sys_ioctl fs/ioctl.c:870 [inline]
-    [<ffffffff81685173>] __se_sys_ioctl fs/ioctl.c:856 [inline]
-    [<ffffffff81685173>] __x64_sys_ioctl+0x103/0x140 fs/ioctl.c:856
-    [<ffffffff84a77ff9>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84a77ff9>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+---
 
 
 
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+base-commit: 6be357f00aad4189130147fdc6f568cf776a4909
+change-id: 20230713-vfs-eventfd-signal-0b0d167ad6ec
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
