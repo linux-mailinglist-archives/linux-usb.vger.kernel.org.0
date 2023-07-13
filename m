@@ -2,198 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25970751FE5
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jul 2023 13:28:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE40875200F
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jul 2023 13:37:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233780AbjGML2r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Jul 2023 07:28:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36260 "EHLO
+        id S234492AbjGMLhU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Jul 2023 07:37:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233086AbjGML2p (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jul 2023 07:28:45 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 543B62715
-        for <linux-usb@vger.kernel.org>; Thu, 13 Jul 2023 04:28:34 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id E02921FDA2;
-        Thu, 13 Jul 2023 11:28:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1689247712; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=8GYoZ1/AmjNU8Mc/vio8xbECgr+3KYTNDFUUGdI7ZpA=;
-        b=KuY2YdirMI8tjwhZMUTVIHzmqyzeVzAv8C+WnNeqPPaQyZiC3gpDDauqHpttRHZao+pxAr
-        4VGA23fjmcGvke16bUZGtZazAK+0x1TcDQ6fU+RtOga5tMN4tgqDGS6BdJE8D6xthAW/Wz
-        UJsJSVey+rUXGqsWFddWvlqBxj2QUDA=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 97BB113489;
-        Thu, 13 Jul 2023 11:28:32 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id T6HlIuDfr2S+CwAAMHmgww
-        (envelope-from <oneukum@suse.com>); Thu, 13 Jul 2023 11:28:32 +0000
-From:   Oliver Neukum <oneukum@suse.com>
-To:     jonathan@raspberrypi.org, linux-usb@vger.kernel.org,
-        gregkh@linuxfoundatin.org
-Cc:     Oliver Neukum <oneukum@suse.com>
-Subject: [PATCH] Revert "xhci: add quirk for host controllers that don't update endpoint DCS"
-Date:   Thu, 13 Jul 2023 13:28:10 +0200
-Message-ID: <20230713112830.21773-1-oneukum@suse.com>
-X-Mailer: git-send-email 2.41.0
+        with ESMTP id S234419AbjGMLhT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jul 2023 07:37:19 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31FD52723
+        for <linux-usb@vger.kernel.org>; Thu, 13 Jul 2023 04:37:00 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3fbf1b82d9cso4973745e9.2
+        for <linux-usb@vger.kernel.org>; Thu, 13 Jul 2023 04:37:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689248218; x=1691840218;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yg3+ltae9txCQHkNZ8ew/vDeWxnQVlh8GZjwxVSzsmE=;
+        b=oR6Qq4tUXYxURj2kKLDigQN4hSxPreEHDACih7z6ejaLWNT/QElG/D79Mrsv/vN8Ny
+         0r+3bdojlQyIJB3LRXSzcPJKDF/aM5sJ+YSL+TCEAZEeDugGMvAluBLARlsquemP2c7G
+         z2SwQCcCmLjwvmDNrjwkFlcYyqvL+34h6CqznBAWjXdr7mP7WRdJzviKLXhITRKu9Ttb
+         ZvZopjmcheoHuPhyIIFLJJ+ajtFLN0a1GN6ZnoWFid9e9mYEpsjnYpLALtsm59WrMUpi
+         R3PaSl623Ya0ELHJdgSaXgq5g0X+0yaFSYvq139oVeo2geSlyFbXt84190zfLMR9P+wr
+         lSOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689248218; x=1691840218;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yg3+ltae9txCQHkNZ8ew/vDeWxnQVlh8GZjwxVSzsmE=;
+        b=SqrP9h+ZrhZuX1Qf3dtNA+HGNOixDZ/HUqLHG4I2OXoxt6oa+/C+U4n61AOvV11tJM
+         pSCJPzuBSNxj+anrElPy6g7OMxyvo/DjmL+XcpqMmBnAlfmtapK8wWVH49FD/u23LoMh
+         E6yCGrLYB2/C78JZkkfuvW6dWZfeAI6zRp7Fv7+YafEhTQgvZpdm4R+Stgpx9j/c0SJD
+         iJkx1IpVObmALc8Z9J4UJ8tnHBZ+INbQrNQcP6BtAgEnhDiOMhI745fr7qxK5wx+zrZO
+         JR6BFKnzCleHuKeFKXTzVlZ/dVej8kSlkg+7R3zCTSPLzR0eLSPRqd4Udi1dHTGiwxx2
+         2R2Q==
+X-Gm-Message-State: ABy/qLaPsZj00pONVi6fxKew2tHRD5xf6XGNkgVAX82R54tNuTcZ1ZdP
+        Jed/K1QATHZSQid/u0N9m9t+UBAXzmIQd5z1hFcvCw==
+X-Google-Smtp-Source: APBJJlF8GdZS3ShkisOw1onsgke22P9SX9aKJjOQWKfqavy8b9fmDTouU4NBJmZYeT9YO95+hbJ4Tw==
+X-Received: by 2002:a05:600c:2945:b0:3fb:739d:27b2 with SMTP id n5-20020a05600c294500b003fb739d27b2mr1180111wmd.8.1689248218586;
+        Thu, 13 Jul 2023 04:36:58 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id 16-20020a05600c029000b003fc04d13242sm15051331wmk.0.2023.07.13.04.36.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Jul 2023 04:36:57 -0700 (PDT)
+Message-ID: <fb7e557c-c41d-26b9-9018-75c179483314@linaro.org>
+Date:   Thu, 13 Jul 2023 13:36:54 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v3 2/6] dt-bindings: phy: qcom,m31: Document qcom,m31 USB
+ phy
+Content-Language: en-US
+To:     Varadarajan Narayanan <quic_varada@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, vkoul@kernel.org,
+        kishon@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        gregkh@linuxfoundation.org, catalin.marinas@arm.com,
+        will@kernel.org, p.zabel@pengutronix.de, arnd@arndb.de,
+        geert+renesas@glider.be, neil.armstrong@linaro.org,
+        nfraprado@collabora.com, broonie@kernel.org, rafal@milecki.pl,
+        quic_srichara@quicinc.com, quic_varada@quicinc.org,
+        quic_wcheng@quicinc.com, linux-arm-msm@vger.kernel.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <cover.1689065318.git.quic_varada@quicinc.com>
+ <77fe66271044a18871e1dfb80bbb481617197d18.1689065318.git.quic_varada@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <77fe66271044a18871e1dfb80bbb481617197d18.1689065318.git.quic_varada@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This reverts commit 5255660b208aebfdb71d574f3952cf48392f4306.
+On 11/07/2023 10:51, Varadarajan Narayanan wrote:
+> Document the M31 USB2 phy present in IPQ5332.
+> 
+> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> ---
+> v3:
+> 	Incorporate review comments. Will bring in ipq5018 compatible
+> 	string while posting ipq5018 usb patchset.
+> 
+> v1:
+> 	Rename qcom,m31.yaml -> qcom,ipq5332-usb-hsphy.yaml
+> 	Drop default binding "m31,usb-hsphy"
+> 	Add clock
+> 	Remove 'oneOf' from compatible
+> 	Remove 'qscratch' region from register space as it is not needed
+> 	Remove reset-names
+> 	Fix the example definition
+> ---
+>  .../bindings/phy/qcom,ipq5332-usb-hsphy.yaml       | 49 ++++++++++++++++++++++
+>  1 file changed, 49 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/qcom,ipq5332-usb-hsphy.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/qcom,ipq5332-usb-hsphy.yaml b/Documentation/devicetree/bindings/phy/qcom,ipq5332-usb-hsphy.yaml
+> new file mode 100644
+> index 0000000..2cfdd73
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/phy/qcom,ipq5332-usb-hsphy.yaml
+> @@ -0,0 +1,49 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/phy/qcom,ipq5332-usb-hsphy.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: M31 (https://www.m31tech.com) USB PHY
+> +
+> +maintainers:
+> +  - Sricharan Ramabadhran <quic_srichara@quicinc.com>
+> +  - Varadarajan Narayanan <quic_varada@quicinc.org>
 
-This quirk breaks at least the following hardware:
+I was wondering why I keep receiving delays/bounces for my emails in
+this thread... and here we have. Please correct your email.
 
-0b:00.0 0c03: 1106:3483 (rev 01) (prog-if 30 [XHCI])
-        Subsystem: 1106:3483
-        Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx+
-        Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
-        Latency: 0, Cache Line Size: 64 bytes
-        Interrupt: pin A routed to IRQ 66
-        Region 0: Memory at fb400000 (64-bit, non-prefetchable) [size=4K]
-        Capabilities: [80] Power Management version 3
-                Flags: PMEClk- DSI- D1- D2- AuxCurrent=375mA PME(D0+,D1+,D2+,D3hot+,D3cold+)
-                Status: D0 NoSoftRst- PME-Enable- DSel=0 DScale=0 PME-
-        Capabilities: [90] MSI: Enable+ Count=1/4 Maskable- 64bit+
-                Address: 00000000fee007b8  Data: 0000
-        Capabilities: [c4] Express (v2) Endpoint, MSI 00
-                DevCap: MaxPayload 256 bytes, PhantFunc 0, Latency L0s <64ns, L1 <1us
-                        ExtTag- AttnBtn- AttnInd- PwrInd- RBE+ FLReset- SlotPowerLimit 89W
-                DevCtl: CorrErr- NonFatalErr- FatalErr- UnsupReq-
-                        RlxdOrd- ExtTag- PhantFunc- AuxPwr- NoSnoop+
-                        MaxPayload 128 bytes, MaxReadReq 512 bytes
-                DevSta: CorrErr- NonFatalErr- FatalErr- UnsupReq- AuxPwr+ TransPend-
-                LnkCap: Port #0, Speed 5GT/s, Width x1, ASPM L0s L1, Exit Latency L0s <2us, L1 <16us
-                        ClockPM+ Surprise- LLActRep- BwNot- ASPMOptComp-
-                LnkCtl: ASPM Disabled; RCB 64 bytes, Disabled- CommClk+
-                        ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
-                LnkSta: Speed 5GT/s, Width x1
-                        TrErr- Train- SlotClk+ DLActive- BWMgmt- ABWMgmt-
-                DevCap2: Completion Timeout: Range B, TimeoutDis+ NROPrPrP- LTR-
-                         10BitTagComp- 10BitTagReq- OBFF Not Supported, ExtFmt- EETLPPrefix-
-                         EmergencyPowerReduction Not Supported, EmergencyPowerReductionInit-
-                         FRS- TPHComp- ExtTPHComp-
-                         AtomicOpsCap: 32bit- 64bit- 128bitCAS-
-                DevCtl2: Completion Timeout: 50us to 50ms, TimeoutDis- LTR- 10BitTagReq- OBFF Disabled,
-                         AtomicOpsCtl: ReqEn-
-                LnkCtl2: Target Link Speed: 5GT/s, EnterCompliance- SpeedDis-
-                         Transmit Margin: Normal Operating Range, EnterModifiedCompliance- ComplianceSOS-
-                         Compliance Preset/De-emphasis: -6dB de-emphasis, 0dB preshoot
-                LnkSta2: Current De-emphasis Level: -6dB, EqualizationComplete- EqualizationPhase1-
-                         EqualizationPhase2- EqualizationPhase3- LinkEqualizationRequest-
-                         Retimer- 2Retimers- CrosslinkRes: unsupported
-       Capabilities: [100 v1] Advanced Error Reporting
-                UESta:  DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
-                UEMsk:  DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
-                UESvrt: DLP+ SDES+ TLP- FCP+ CmpltTO- CmpltAbrt- UnxCmplt- RxOF+ MalfTLP+ ECRC- UnsupReq- ACSViol-
-                CESta:  RxErr- BadTLP- BadDLLP- Rollover- Timeout- AdvNonFatalErr-
-                CEMsk:  RxErr- BadTLP- BadDLLP- Rollover- Timeout- AdvNonFatalErr+
-                AERCap: First Error Pointer: 00, ECRCGenCap- ECRCGenEn- ECRCChkCap- ECRCChkEn-
-                        MultHdrRecCap- MultHdrRecEn- TLPPfxPres- HdrLogCap-
-                HeaderLog: 00000000 00000000 00000000 00000000
-        Kernel driver in use: xhci_hcd
-        Kernel modules: xhci_pci
-
-with the quirk enabled it fails early with
-
-[    0.754373] pci 0000:0b:00.0: xHCI HW did not halt within 32000 usec status = 0x1000
-[    0.754419] pci 0000:0b:00.0: quirk_usb_early_handoff+0x0/0x7a0 took 31459 usecs
-[    2.228048] xhci_hcd 0000:0b:00.0: xHCI Host Controller
-[    2.228053] xhci_hcd 0000:0b:00.0: new USB bus registered, assigned bus number 7
-[    2.260073] xhci_hcd 0000:0b:00.0: Host halt failed, -110
-[    2.260079] xhci_hcd 0000:0b:00.0: can't setup: -110
-[    2.260551] xhci_hcd 0000:0b:00.0: USB bus 7 deregistered
-[    2.260624] xhci_hcd 0000:0b:00.0: init 0000:0b:00.0 fail, -110
-[    2.260639] xhci_hcd: probe of 0000:0b:00.0 failed with error -110
-
-The hardware in question is an external PCIe card. It looks to me like the quirk
-needs to be narrowed down. But this needs information about the hardware showing
-the issue this quirk is to fix. So for now a clean revert.
-
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
----
- drivers/usb/host/xhci-pci.c  |  4 +---
- drivers/usb/host/xhci-ring.c | 25 +------------------------
- 2 files changed, 2 insertions(+), 27 deletions(-)
-
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index c6742bae41c0..b9ae5c2a2527 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -479,10 +479,8 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 			pdev->device == 0x3432)
- 		xhci->quirks |= XHCI_BROKEN_STREAMS;
- 
--	if (pdev->vendor == PCI_VENDOR_ID_VIA && pdev->device == 0x3483) {
-+	if (pdev->vendor == PCI_VENDOR_ID_VIA && pdev->device == 0x3483)
- 		xhci->quirks |= XHCI_LPM_SUPPORT;
--		xhci->quirks |= XHCI_EP_CTX_BROKEN_DCS;
--	}
- 
- 	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
- 		pdev->device == PCI_DEVICE_ID_ASMEDIA_1042_XHCI) {
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 646ff125def5..1dde53f6eb31 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -626,11 +626,8 @@ static int xhci_move_dequeue_past_td(struct xhci_hcd *xhci,
- 	struct xhci_ring *ep_ring;
- 	struct xhci_command *cmd;
- 	struct xhci_segment *new_seg;
--	struct xhci_segment *halted_seg = NULL;
- 	union xhci_trb *new_deq;
- 	int new_cycle;
--	union xhci_trb *halted_trb;
--	int index = 0;
- 	dma_addr_t addr;
- 	u64 hw_dequeue;
- 	bool cycle_found = false;
-@@ -668,27 +665,7 @@ static int xhci_move_dequeue_past_td(struct xhci_hcd *xhci,
- 	hw_dequeue = xhci_get_hw_deq(xhci, dev, ep_index, stream_id);
- 	new_seg = ep_ring->deq_seg;
- 	new_deq = ep_ring->dequeue;
--
--	/*
--	 * Quirk: xHC write-back of the DCS field in the hardware dequeue
--	 * pointer is wrong - use the cycle state of the TRB pointed to by
--	 * the dequeue pointer.
--	 */
--	if (xhci->quirks & XHCI_EP_CTX_BROKEN_DCS &&
--	    !(ep->ep_state & EP_HAS_STREAMS))
--		halted_seg = trb_in_td(xhci, td->start_seg,
--				       td->first_trb, td->last_trb,
--				       hw_dequeue & ~0xf, false);
--	if (halted_seg) {
--		index = ((dma_addr_t)(hw_dequeue & ~0xf) - halted_seg->dma) /
--			 sizeof(*halted_trb);
--		halted_trb = &halted_seg->trbs[index];
--		new_cycle = halted_trb->generic.field[3] & 0x1;
--		xhci_dbg(xhci, "Endpoint DCS = %d TRB index = %d cycle = %d\n",
--			 (u8)(hw_dequeue & 0x1), index, new_cycle);
--	} else {
--		new_cycle = hw_dequeue & 0x1;
--	}
-+	new_cycle = hw_dequeue & 0x1;
- 
- 	/*
- 	 * We want to find the pointer, segment and cycle state of the new trb
--- 
-2.41.0
+Best regards,
+Krzysztof
 
