@@ -2,289 +2,232 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6E32752C43
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jul 2023 23:37:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1266752C64
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jul 2023 23:50:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232707AbjGMVhm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Jul 2023 17:37:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43644 "EHLO
+        id S233832AbjGMVuB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Jul 2023 17:50:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232606AbjGMVhl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jul 2023 17:37:41 -0400
-Received: from h2.cmg2.smtp.forpsi.com (h2.cmg2.smtp.forpsi.com [81.2.195.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB152D61
-        for <linux-usb@vger.kernel.org>; Thu, 13 Jul 2023 14:37:37 -0700 (PDT)
-Received: from lenoch ([91.218.190.200])
-        by cmgsmtp with ESMTPSA
-        id K40EqqwnQv5uIK40FqaZWI; Thu, 13 Jul 2023 23:37:36 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1689284256; bh=iDPVub+KKpn1ANzg5PkPC252fE7qrXd2YD5EGrv5mc8=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=icqm5yR2W6Yc/qsq2onM0HTF4MYAy35bDhlbeMyYiZbv6livDuOjP2GPlkqIrBBc1
-         tRDDay/PjiZLEp4klWQ44mGyvvtUXCZBAu125KEEXxDNI9r56e7eLZF9JzZ4PK6FDk
-         K5PTClsY7oKDHzPktM97m2BtDED2S71tHakDj2hoQzKBOt1OHEx9jAtXwu8g9SDAzT
-         aX8VHZewDmIrphvE2PgG7jqvQy9HnSlndD1YbW+B0Zc8043DiJPVNMas2Y9zTq//Fo
-         5F9qA8l7gth3cBHrnoLAh9Y6ckUVzOzCccLBUjRZQ0zaRR/07upOpb1zRtV7b91jJA
-         u/Uzv6I72hQ6g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1689284256; bh=iDPVub+KKpn1ANzg5PkPC252fE7qrXd2YD5EGrv5mc8=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=icqm5yR2W6Yc/qsq2onM0HTF4MYAy35bDhlbeMyYiZbv6livDuOjP2GPlkqIrBBc1
-         tRDDay/PjiZLEp4klWQ44mGyvvtUXCZBAu125KEEXxDNI9r56e7eLZF9JzZ4PK6FDk
-         K5PTClsY7oKDHzPktM97m2BtDED2S71tHakDj2hoQzKBOt1OHEx9jAtXwu8g9SDAzT
-         aX8VHZewDmIrphvE2PgG7jqvQy9HnSlndD1YbW+B0Zc8043DiJPVNMas2Y9zTq//Fo
-         5F9qA8l7gth3cBHrnoLAh9Y6ckUVzOzCccLBUjRZQ0zaRR/07upOpb1zRtV7b91jJA
-         u/Uzv6I72hQ6g==
-Date:   Thu, 13 Jul 2023 23:37:34 +0200
-From:   Ladislav Michl <oss-lists@triops.cz>
+        with ESMTP id S230027AbjGMVuB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jul 2023 17:50:01 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 900E5172C;
+        Thu, 13 Jul 2023 14:49:59 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-31434226a2eso1421592f8f.1;
+        Thu, 13 Jul 2023 14:49:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689284998; x=1691876998;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=WawFw1m+7HfbMJFd8m7nBIUiUmmc8R2rRh/KVmJ8HY0=;
+        b=M+DgUAebrreQPlwoNCNX152cEGG/FFrH9HRyf44Ihn+mBB7tlQALUMkXoA1yVZlgBh
+         ibM7TswvWnCYl9mnMaDt0RNzSdEUxtviHyniBTbRNLewFVUCY3gKXPHdtUSEf4KceCZD
+         0vF+2/TX8Jm9KaU1hDOZnUwrVrbLFhmGn6oLACIMRYUxo56BfLwtcqqGJumjNwNI7OiV
+         v0fzv3Gv/7NwsUD3rrxAkga6IIxiWJ/NSUFid72NW/eunX1cbZGCE5BnTbn8tSoyPzcy
+         zNvU7U/cERspRwN56bKczkLRYXjibeJxD/f86ad3WjkN59FcGY99foqCJcIUIm5F6wE1
+         f9yA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689284998; x=1691876998;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WawFw1m+7HfbMJFd8m7nBIUiUmmc8R2rRh/KVmJ8HY0=;
+        b=kpJ4095525y9yhaOP0l3riuIrYCcoE1ewvbEJ5moekBxdqRfqG5vA4PcbbHpcNWjjs
+         waYj+O1BA3cdBfr4wkLOm3iVROSmhFbxpg1TDSGXILyldZbLU3gpBn0YLV7CZva9ocyR
+         rAqZa8pz1hnlnrik3Ab7hAjH1XzE97zOuqDCKSV+susBA/LPm465OGPPAKtLMXHDnArR
+         ELDOYhGA8Pt7i6AFYa96Pu9zof5EFV+WdixCcxOFKhhRAzx3YND/2UZFl3ZNAqZFXWzl
+         QkYpNDIZ9PbGJs+gKl2kq4M5fgSDSv01D2VVJMsSjh/Q4+rNM9nvTYZfBbibx2fywTzg
+         WvCA==
+X-Gm-Message-State: ABy/qLbXr2Ct+MKfKrOtxauYuNjP6/YN8Mv1btPIj+oXLaDtBGRSPSNJ
+        FL2+y2Oi7uKmX7NapRYXCMQ05gh77Di5HU5D
+X-Google-Smtp-Source: APBJJlHnfhcCQCVy5cpSnXxfWdE7v5fXYyAz005plZepeSUxc7iY+mXKjhq+uydCysi6mMdOyn6KGg==
+X-Received: by 2002:adf:f887:0:b0:314:4db:e0bd with SMTP id u7-20020adff887000000b0031404dbe0bdmr2907448wrp.11.1689284997861;
+        Thu, 13 Jul 2023 14:49:57 -0700 (PDT)
+Received: from [10.0.0.98] (snat-11.cgn.sat-an.net. [176.222.226.11])
+        by smtp.gmail.com with ESMTPSA id s26-20020a7bc39a000000b003fa74bff02asm26587wmj.26.2023.07.13.14.49.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Jul 2023 14:49:57 -0700 (PDT)
+Message-ID: <aad3936c41c6520f6863a859eb4c4cdb5fdc0549.camel@gmail.com>
+Subject: Re: [PATCH v2] Revert "usb: dwc3: core: Enable AutoRetry feature in
+ the controller"
+From:   Jakub =?iso-8859-2?Q?Van=ECk?= <linuxtardis@gmail.com>
 To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Liang He <windhl@126.com>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH v2 2/3] usb: dwc3: dwc3-octeon: Move node parsing into
- driver probe
-Message-ID: <ZLBunhzPaRsFlg41@lenoch>
-References: <ZKDBiY6TKdDKIFK+@lenoch>
- <ZKDB+d49HVfoZDdd@lenoch>
- <20230705230827.ckzaryaaz73sjrqb@synopsys.com>
+Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Mauro Ribeiro <mauro.ribeiro@hardkernel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Date:   Thu, 13 Jul 2023 23:49:56 +0200
+In-Reply-To: <20230712225518.2smu7wse6djc7l5o@synopsys.com>
+References: <20230712224037.24948-1-linuxtardis@gmail.com>
+         <20230712225518.2smu7wse6djc7l5o@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230705230827.ckzaryaaz73sjrqb@synopsys.com>
-X-CMAE-Envelope: MS4wfCcIus07gXlhNcVehH4BNpUwDi32vMOrM+rfCUnhYBgWY/LHxOJqo0E68AB9I9YOmPxK9rOTCLOWp2acrutJj33VL9SbeKlS8kODUA5HuNSAV8y0cRYQ
- ZnOE8dhKWzF16IVAb/wUFLGNMV/koFrk+9TZ3kIaVXjs3xLbbGD5RECW5oMfK+K3sav9teYjUNf9Hp0PSfnPgrXeuHlMnPyfMs6U+yM8Q4IoA6NHT47o16cP
- ZC2/rgyFtfJ6ufSCtlUsa78vgdHE8WidKMBYkoy8zfalgN+er/byZ4tdspAC4BWzAd/IXn1LCmF0+26zwAO86zesnMDG8XuR2XYIpJMxiqv9n+LPJU8Kb23O
- FijOFiDN
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 05, 2023 at 11:08:31PM +0000, Thinh Nguyen wrote:
-> On Sun, Jul 02, 2023, Ladislav Michl wrote:
-> > From: Ladislav Michl <ladis@linux-mips.org>
-> > 
-> > Make dwc3_octeon_clocks_start just start the clocks.
-> 
-> This commit message is different than the subject. Also, please explain
-> why we need to move this logic to probe in this commit message body.
-> 
-> > 
-> > Signed-off-by: Ladislav Michl <ladis@linux-mips.org>
+Hi Thinh,
+
+On Wed, 2023-07-12 at 22:55 +0000, Thinh Nguyen wrote:
+> On Thu, Jul 13, 2023, Jakub Vanek wrote:
+> > This reverts commit b138e23d3dff90c0494925b4c1874227b81bddf7.
+> >=20
+> > AutoRetry has been found to cause some issues. This feature allows
+> > the controller in host mode (further referred to as the xHC) to
+> > send
+> > non-terminating/burst retry ACKs (Retry=3D1 and Nump!=3D0) instead of
+> > terminating retry ACKs (Retry=3D1 and Nump=3D0) to devices when
+> > a transaction error occurs.
+> >=20
+> > Unfortunately, some USB devices fail to retry transactions when
+> > the xHC sends them a burst retry ACK. When this happens, the xHC
+>=20
+> For some clarity: if the device continues to respond with CRC error,
+> the xHC will not complete endpoint related commands while it keeps
+> autoretry.
+
+Acknowledged. Do you think it it would be better to respin this patch
+once more to include this in the changelog?
+
+> > enters a strange state. After the affected transfer times out,
+> > the xHCI driver tries to resume normal operation of the xHC
+> > by sending it a Stop Endpoint command. However, the xHC fails
+> > to respond to it, and the xHCI driver gives up. [1]
+> > This fact is reported via dmesg:
+> >=20
+> > [sda] tag#29 uas_eh_abort_handler 0 uas-tag 1 inflight: CMD IN
+> > [sda] tag#29 CDB: opcode=3D0x28 28 00 00 69 42 80 00 00 48 00
+> > xhci-hcd: xHCI host not responding to stop endpoint command
+> > xhci-hcd: xHCI host controller not responding, assume dead
+> > xhci-hcd: HC died; cleaning up
+> >=20
+> > Some users observed this problem on an Odroid HC2 with the JMS578
+> > USB3-to-SATA bridge. The issue can be triggered by starting
+> > a read-heavy workload on an attached SSD. After a while, the host
+> > controller would die and the SSD would disappear from the system.
+> > [1]
+> >=20
+> > Further analysis by Synopsys determined that controller revisions
+> > other than the one in Odroid HC2 are also affected by this.
+> > The recommended solution was to disable AutoRetry altogether.
+> > This change does not have a noticeable performance impact. [2]
+> >=20
+> > Fixes: b138e23d3dff ("usb: dwc3: core: Enable AutoRetry feature in
+> > the controller")
+> > Link:
+> > https://urldefense.com/v3/__https://lore.kernel.org/r/a21f34c04632d250c=
+d0a78c7c6f4a1c9c7a43142.camel@gmail.com/__;!!A4F2R9G_pg!aCe0isNmX63t6ILE2Tv=
+2cX4UnrpDFo6LXWb6oS3-OYFYfX88igrfqmW4Z8UdO7sWz0mdco6vbBrR_KMzYaccpLF7Kw$
+> > =C2=A0 [1]
+> > Link:
+> > https://urldefense.com/v3/__https://lore.kernel.org/r/20230711214834.ky=
+r6ulync32d4ktk@synopsys.com/__;!!A4F2R9G_pg!aCe0isNmX63t6ILE2Tv2cX4UnrpDFo6=
+LXWb6oS3-OYFYfX88igrfqmW4Z8UdO7sWz0mdco6vbBrR_KMzYae75T8GCw$
+> > =C2=A0 [2]
+> > Cc: stable@vger.kernel.org
+> > Cc: Mauro Ribeiro <mauro.ribeiro@hardkernel.com>
+> > Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > Suggested-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> > Signed-off-by: Jakub Vanek <linuxtardis@gmail.com>
 > > ---
-> >  CHANGES:
-> >  -v2: if else block bracket according CodingStyle
-> >  
-> >  drivers/usb/dwc3/dwc3-octeon.c | 148 ++++++++++++++++-----------------
-> >  1 file changed, 71 insertions(+), 77 deletions(-)
-> > 
-> > diff --git a/drivers/usb/dwc3/dwc3-octeon.c b/drivers/usb/dwc3/dwc3-octeon.c
-> > index 8d5facd881c1..668f6d3490b1 100644
-> > --- a/drivers/usb/dwc3/dwc3-octeon.c
-> > +++ b/drivers/usb/dwc3/dwc3-octeon.c
-> > @@ -300,67 +300,14 @@ static int dwc3_octeon_config_power(struct device *dev, void __iomem *base)
-> >  	return 0;
-> >  }
-> >  
-> > -static int dwc3_octeon_clocks_start(struct device *dev, void __iomem *base)
-> > +static int dwc3_octeon_clocks_start(struct device *dev, void __iomem *base,
-> > +				    int ref_clk_sel, int ref_clk_fsel,
-> > +				    int mpll_mul)
-> >  {
-> > -	int i, div, mpll_mul, ref_clk_fsel, ref_clk_sel = 2;
-> > -	u32 clock_rate;
-> > +	int div;
-> >  	u64 val;
-> >  	void __iomem *uctl_ctl_reg = base + USBDRD_UCTL_CTL;
-> >  
-> > -	if (dev->of_node) {
-> > -		const char *ss_clock_type;
-> > -		const char *hs_clock_type;
+> > V1 -> V2: Updated to disable AutoRetry everywhere based on Synopsys
+> > feedback
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Reworded the cha=
+ngelog a bit to make it clearer
+> >=20
+> > =C2=A0drivers/usb/dwc3/core.c | 16 ----------------
+> > =C2=A0drivers/usb/dwc3/core.h |=C2=A0 3 ---
+> > =C2=A02 files changed, 19 deletions(-)
+> >=20
+> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > index f6689b731718..a4e079d37566 100644
+> > --- a/drivers/usb/dwc3/core.c
+> > +++ b/drivers/usb/dwc3/core.c
+> > @@ -1209,22 +1209,6 @@ static int dwc3_core_init(struct dwc3 *dwc)
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0dwc3_writel(dwc->regs, DWC3_GUCTL1, reg);
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+> > =C2=A0
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (dwc->dr_mode =3D=3D USB_=
+DR_MODE_HOST ||
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dwc->dr_m=
+ode =3D=3D USB_DR_MODE_OTG) {
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0reg =3D dwc3_readl(dwc->regs, DWC3_GUCTL);
 > > -
-> > -		i = of_property_read_u32(dev->of_node,
-> > -					 "refclk-frequency", &clock_rate);
-> > -		if (i) {
-> > -			dev_err(dev, "No UCTL \"refclk-frequency\"\n");
-> > -			return -EINVAL;
-> > -		}
-> > -		i = of_property_read_string(dev->of_node,
-> > -					    "refclk-type-ss", &ss_clock_type);
-> > -		if (i) {
-> > -			dev_err(dev, "No UCTL \"refclk-type-ss\"\n");
-> > -			return -EINVAL;
-> > -		}
-> > -		i = of_property_read_string(dev->of_node,
-> > -					    "refclk-type-hs", &hs_clock_type);
-> > -		if (i) {
-> > -			dev_err(dev, "No UCTL \"refclk-type-hs\"\n");
-> > -			return -EINVAL;
-> > -		}
-> > -		if (strcmp("dlmc_ref_clk0", ss_clock_type) == 0) {
-> > -			if (strcmp(hs_clock_type, "dlmc_ref_clk0") == 0)
-> > -				ref_clk_sel = 0;
-> > -			else if (strcmp(hs_clock_type, "pll_ref_clk") == 0)
-> > -				ref_clk_sel = 2;
-> > -			else
-> > -				dev_warn(dev, "Invalid HS clock type %s, using pll_ref_clk instead\n",
-> > -					 hs_clock_type);
-> > -		} else if (strcmp(ss_clock_type, "dlmc_ref_clk1") == 0) {
-> > -			if (strcmp(hs_clock_type, "dlmc_ref_clk1") == 0)
-> > -				ref_clk_sel = 1;
-> > -			else if (strcmp(hs_clock_type, "pll_ref_clk") == 0)
-> > -				ref_clk_sel = 3;
-> > -			else {
-> > -				dev_warn(dev, "Invalid HS clock type %s, using pll_ref_clk instead\n",
-> > -					 hs_clock_type);
-> > -				ref_clk_sel = 3;
-> > -			}
-> > -		} else
-> > -			dev_warn(dev, "Invalid SS clock type %s, using dlmc_ref_clk0 instead\n",
-> > -				 ss_clock_type);
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0/*
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 * Enable Auto retry Feature to make the controller
+> > operating in
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 * Host mode on seeing transaction errors(CRC
+> > errors or internal
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 * overrun scenerios) on IN transfers to reply to
+> > the device
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 * with a non-terminating retry ACK (i.e, an ACK
+> > transcation
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 * packet with Retry=3D1 & Nump !=3D 0)
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 */
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0reg |=3D DWC3_GUCTL_HSTINAUTORETRY;
 > > -
-> > -		if ((ref_clk_sel == 0 || ref_clk_sel == 1) &&
-> > -		    (clock_rate != 100000000))
-> > -			dev_warn(dev, "Invalid UCTL clock rate of %u, using 100000000 instead\n",
-> > -				 clock_rate);
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0dwc3_writel(dwc->regs, DWC3_GUCTL, reg);
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
 > > -
-> > -	} else {
-> > -		dev_err(dev, "No USB UCTL device node\n");
-> > -		return -EINVAL;
-> > -	}
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/*
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Must config both num=
+ber of packets and max burst
+> > settings to enable
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * RX and/or TX thresho=
+ld.
+> > diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+> > index 8b1295e4dcdd..a69ac67d89fe 100644
+> > --- a/drivers/usb/dwc3/core.h
+> > +++ b/drivers/usb/dwc3/core.h
+> > @@ -256,9 +256,6 @@
+> > =C2=A0#define DWC3_GCTL_GBLHIBERNATIONEN=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0B=
+IT(1)
+> > =C2=A0#define DWC3_GCTL_DSBLCLKGTNG=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0BIT(0)
+> > =C2=A0
+> > -/* Global User Control Register */
+> > -#define DWC3_GUCTL_HSTINAUTORETRY=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0B=
+IT(14)
 > > -
-> >  	/*
-> >  	 * Step 1: Wait for all voltages to be stable...that surely
-> >  	 *         happened before starting the kernel. SKIP
-> > @@ -404,24 +351,6 @@ static int dwc3_octeon_clocks_start(struct device *dev, void __iomem *base)
-> >  	val &= ~USBDRD_UCTL_CTL_REF_CLK_SEL;
-> >  	val |= FIELD_PREP(USBDRD_UCTL_CTL_REF_CLK_SEL, ref_clk_sel);
-> >  
-> > -	ref_clk_fsel = 0x07;
-> > -	switch (clock_rate) {
-> > -	default:
-> > -		dev_warn(dev, "Invalid ref_clk %u, using 100000000 instead\n",
-> > -			 clock_rate);
-> > -		fallthrough;
-> > -	case 100000000:
-> > -		mpll_mul = 0x19;
-> > -		if (ref_clk_sel < 2)
-> > -			ref_clk_fsel = 0x27;
-> > -		break;
-> > -	case 50000000:
-> > -		mpll_mul = 0x32;
-> > -		break;
-> > -	case 125000000:
-> > -		mpll_mul = 0x28;
-> > -		break;
-> > -	}
-> >  	val &= ~USBDRD_UCTL_CTL_REF_CLK_FSEL;
-> >  	val |= FIELD_PREP(USBDRD_UCTL_CTL_REF_CLK_FSEL, ref_clk_fsel);
-> >  
-> > @@ -505,8 +434,72 @@ static void __init dwc3_octeon_phy_reset(void __iomem *base)
-> >  static int dwc3_octeon_probe(struct platform_device *pdev)
-> >  {
-> >  	struct device *dev = &pdev->dev;
-> > +	struct device_node *node = dev->of_node;
-> >  	struct dwc3_data *data;
-> > -	int err;
-> > +	int err, ref_clk_sel, ref_clk_fsel, mpll_mul;
-> > +	uint32_t clock_rate;
-> 
-> Use u32?
+> > =C2=A0/* Global User Control 1 Register */
+> > =C2=A0#define DWC3_GUCTL1_DEV_DECOUPLE_L1L2_EVT=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0BIT(31)
+> > =C2=A0#define DWC3_GUCTL1_TX_IPGAP_LINECHECK_DIS=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0BIT(28)
+> > --=20
+> > 2.25.1
+> >=20
+>=20
+> Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 
-I do not like homebrew types when we have standard ones. But it seems almost
-all usb code is using u32, so I can live with that.
+Thanks!
 
-> > +	const char *hs_clock_type, *ss_clock_type;
-> > +
-> > +	if (!node) {
-> > +		dev_err(dev, "No USB UCTL device node\n");
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	if (of_property_read_u32(node, "refclk-frequency", &clock_rate)) {
-> > +		dev_err(dev, "No UCTL \"refclk-frequency\"\n");
-> > +		return -EINVAL;
-> > +	}
-> > +	if (of_property_read_string(node, "refclk-type-ss", &ss_clock_type)) {
-> > +		dev_err(dev, "No UCTL \"refclk-type-ss\"\n");
-> > +		return -EINVAL;
-> > +	}
-> > +	if (of_property_read_string(node, "refclk-type-hs", &hs_clock_type)) {
-> > +		dev_err(dev, "No UCTL \"refclk-type-hs\"\n");
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	ref_clk_sel = 2;
-> > +	if (strcmp("dlmc_ref_clk0", ss_clock_type) == 0) {
-> > +		if (strcmp(hs_clock_type, "dlmc_ref_clk0") == 0)
-> > +			ref_clk_sel = 0;
-> > +		else if (strcmp(hs_clock_type, "pll_ref_clk") == 0)
-> > +			ref_clk_sel = 2;
-> > +		else
-> > +			dev_warn(dev, "Invalid HS clock type %s, using pll_ref_clk instead\n",
-> > +				 hs_clock_type);
-> > +	} else if (strcmp(ss_clock_type, "dlmc_ref_clk1") == 0) {
-> 
-> Did you run checkpatch? I still see some minor formatting issues.
 
-Yes I did. What complain do you see from checkpatch?
-
-> > +		if (strcmp(hs_clock_type, "dlmc_ref_clk1") == 0)
-> > +			ref_clk_sel = 1;
-> > +		else if (strcmp(hs_clock_type, "pll_ref_clk") == 0) {
-> > +			ref_clk_sel = 3;
-> > +		} else {
-> > +			dev_warn(dev, "Invalid HS clock type %s, using pll_ref_clk instead\n",
-> > +				 hs_clock_type);
-> > +			ref_clk_sel = 3;
-> > +		}
-> > +	} else {
-> > +		dev_warn(dev, "Invalid SS clock type %s, using dlmc_ref_clk0 instead\n",
-> > +			 ss_clock_type);
-> > +	}
-> > +
-> > +	ref_clk_fsel = 0x07;
-> > +	switch (clock_rate) {
-> > +	default:
-> > +		dev_warn(dev, "Invalid ref_clk %u, using 100000000 instead\n",
-> > +			 clock_rate);
-> > +		fallthrough;
-> > +	case 100000000:
-> > +		mpll_mul = 0x19;
-> > +		if (ref_clk_sel < 2)
-> > +			ref_clk_fsel = 0x27;
-> > +		break;
-> > +	case 50000000:
-> > +		mpll_mul = 0x32;
-> > +		break;
-> > +	case 125000000:
-> > +		mpll_mul = 0x28;
-> > +		break;
-> > +	}
-> >  
-> >  	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-> >  	if (!data)
-> > @@ -516,7 +509,8 @@ static int dwc3_octeon_probe(struct platform_device *pdev)
-> >  	if (IS_ERR(data->base))
-> >  		return PTR_ERR(data->base);
-> >  
-> > -	err = dwc3_octeon_clocks_start(dev, data->base);
-> > +	err = dwc3_octeon_clocks_start(dev, data->base,
-> > +				       ref_clk_sel, ref_clk_fsel, mpll_mul);
-> >  	if (err)
-> >  		return err;
-> >  
-> > -- 
-> > 2.39.2
-> > 
-> 
-> BR,
+> Thanks,
 > Thinh
+
+Best regards,
+Jakub
