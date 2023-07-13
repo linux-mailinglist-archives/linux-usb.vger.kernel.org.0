@@ -2,42 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97D677515AE
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jul 2023 03:00:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88A687515B5
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jul 2023 03:09:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232263AbjGMBAi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 Jul 2023 21:00:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53602 "EHLO
+        id S231758AbjGMBJV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 Jul 2023 21:09:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231836AbjGMBAg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jul 2023 21:00:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D599E
-        for <linux-usb@vger.kernel.org>; Wed, 12 Jul 2023 18:00:35 -0700 (PDT)
+        with ESMTP id S229755AbjGMBJU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 Jul 2023 21:09:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F72B127
+        for <linux-usb@vger.kernel.org>; Wed, 12 Jul 2023 18:09:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B48C6618CF
-        for <linux-usb@vger.kernel.org>; Thu, 13 Jul 2023 01:00:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 14117C433C7
-        for <linux-usb@vger.kernel.org>; Thu, 13 Jul 2023 01:00:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AE046618A6
+        for <linux-usb@vger.kernel.org>; Thu, 13 Jul 2023 01:09:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0FC31C433C9
+        for <linux-usb@vger.kernel.org>; Thu, 13 Jul 2023 01:09:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689210034;
-        bh=56pkEqYGDVIyRU4efXMSBoVUmkn948dRdtpD7GV+4kk=;
+        s=k20201202; t=1689210559;
+        bh=JXwzsVN7wufAq7R9EoXJgvyrBHcFwdAWHhevXNSGbl0=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=OYDK1SGeelktWdwPJDqIgtlQVCD61zfAa0y8+PFKBo0OzPghmMNg6o1HPbGEP7DxB
-         yK/HZxPF8Q1NPaWXFIg7Ssj3rmP7d9Axg88IO+M78yb2JDv1raS/CNANtg3q03UXvE
-         ULpe6eI16HsFxu78ZaIibiOTon+CYpb/DU/+g8IphkzzFEdszH2xoJto7CIHC3KlBc
-         25FjpUGDvkOuPEuEYo9BQDh1OqhpV/U7kXrhLhPUXnZ+u44XZaVR8mZ0MNfnfPDoOu
-         S4/SqznBTmQuaMoNb9wzoeIN9v7Z4peNS7zAQ1E3+jioB+81Xc12OgbtDNS1xa/Mn5
-         3l87flJvjxGGQ==
+        b=ZfaMevqhMdfjMATCNyIIJMyuQAGZPMKKcDEHZCMetV4p6WbTj37q6LegMSPZ8a7HY
+         Nae0d4YvNB7dpt2ZrUe6jytZOm3phijf2wFECqP/quQUBDwGW3mZ2GY+MyObp1jYs5
+         DLoBfUVxCs8oa+s2y22mRvdC6ykGQ3TeU9Hauhgq/yehafun1lew9fM+GlT8Szd1Ug
+         bjdp9i8QPiqU7T4SH+gADR91ypn/5aOv6qLQjfDpWm3TcCsk8opP+gaP4fZFoliaH5
+         sTewIMkoqkwJJ4DCViWxCyZ7hSGO8CH0+Klb9YvS36u6gI7Wm0Id01dQOuX6OOK+39
+         QMNhrkpDi6fMg==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id ED4B6C4332E; Thu, 13 Jul 2023 01:00:33 +0000 (UTC)
+        id DBAB3C4332E; Thu, 13 Jul 2023 01:09:18 +0000 (UTC)
 From:   bugzilla-daemon@kernel.org
 To:     linux-usb@vger.kernel.org
 Subject: [Bug 217632] 3 more broken Zaurii - SL-5600, A300, C700
-Date:   Thu, 13 Jul 2023 01:00:33 +0000
+Date:   Thu, 13 Jul 2023 01:09:18 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -53,7 +53,7 @@ X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: attachments.isobsolete attachments.created
-Message-ID: <bug-217632-208809-jiyzPlpFH4@https.bugzilla.kernel.org/>
+Message-ID: <bug-217632-208809-7DSgqNkQgp@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-217632-208809@https.bugzilla.kernel.org/>
 References: <bug-217632-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -61,10 +61,10 @@ Content-Transfer-Encoding: quoted-printable
 X-Bugzilla-URL: https://bugzilla.kernel.org/
 Auto-Submitted: auto-generated
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -77,12 +77,12 @@ Ross Maynard (bids.7405@bigpond.com) changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
- Attachment #304609|0                           |1
+ Attachment #304621|0                           |1
         is obsolete|                            |
 
---- Comment #5 from Ross Maynard (bids.7405@bigpond.com) ---
-Created attachment 304621
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D304621&action=3Dedit
+--- Comment #6 from Ross Maynard (bids.7405@bigpond.com) ---
+Created attachment 304622
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D304622&action=3Dedit
 Patch for 3 broken zaurus devices
 
 --=20
