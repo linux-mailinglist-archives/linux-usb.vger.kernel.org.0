@@ -2,74 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B385F752130
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Jul 2023 14:22:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B32D752142
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Jul 2023 14:27:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234393AbjGMMWw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 Jul 2023 08:22:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46120 "EHLO
+        id S234382AbjGMM1g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 Jul 2023 08:27:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234271AbjGMMWv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jul 2023 08:22:51 -0400
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:242:246e::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C9302D5F;
-        Thu, 13 Jul 2023 05:22:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=vjuO5R/KxvsMqsY6ylLB1bwZHDgruZucXbpLJVFeYDU=;
-        t=1689250939; x=1690460539; b=mKvjJVr/i8ovv/d+lTmhaL2gKpxwIkmD5UG/8hnbjyvNHTB
-        miUia7QyZxTWojZ0IninjFs9CA1av/gY7z/gqNY6wkExvZnMeGgidmnNBQf7zwEmUNVHVif0dLMjS
-        wFshQMwZfAUWujcj3suK+gimlFTTRH24/b60xDgQARU1SuprKjEVZit+d0oOvvRBZHAhQeRWByW3n
-        xCTtGwO2/zoOgCfhUexJmrAKrpia7UrffiNBDWY/vgEvQzRyfY/hAkiyPRIXYqQqq0EHPS/0oi1LW
-        0gH0tSlEQ/KHVjcGHkKbuCbgJ+Rv5q0vDltPPhaIfJ6pXp+N9th4dSnEQV2HNS7A==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.96)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1qJvKO-001IDj-0c;
-        Thu, 13 Jul 2023 14:21:48 +0200
-Message-ID: <42f91f17602fea258fecb443ba81fa573bae1acb.camel@sipsolutions.net>
-Subject: Re: [PATCH] USB: disable all RNDIS protocol drivers
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        Enrico Mioso <mrkiko.rs@gmail.com>,
-        Jan Engelhardt <jengelh@inai.de>, linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Kalle Valo <kvalo@kernel.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Maciej =?UTF-8?Q?=C5=BBenczykowski?= <maze@google.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        =?UTF-8?Q?=C5=81ukasz?= Stelmach <l.stelmach@samsung.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org,
-        Ilja Van Sprundel <ivansprundel@ioactive.com>,
-        Joseph Tartaro <joseph.tartaro@ioactive.com>
-Date:   Thu, 13 Jul 2023 14:21:46 +0200
-In-Reply-To: <2023071333-wildly-playroom-878b@gregkh>
-References: <20221123124620.1387499-1-gregkh@linuxfoundation.org>
-         <n9108s34-9rn0-3n8q-r3s5-51r9647331ns@vanv.qr> <ZKM5nbDnKnFZLOlY@rivendell>
-         <2023070430-fragment-remember-2fdd@gregkh>
-         <e5a92f9c-2d56-00fc-5e01-56e7df8dc1c1@suse.com>
-         <6a4a8980912380085ea628049b5e19e38bcd8e1d.camel@sipsolutions.net>
-         <2023071222-asleep-vacancy-4cfa@gregkh>
-         <2d26c0028590a80e7aa80487cbeffd5ca6e6a5ea.camel@sipsolutions.net>
-         <2023071333-wildly-playroom-878b@gregkh>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+        with ESMTP id S234349AbjGMM1f (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 Jul 2023 08:27:35 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82326AA
+        for <linux-usb@vger.kernel.org>; Thu, 13 Jul 2023 05:27:33 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-314172bac25so769124f8f.3
+        for <linux-usb@vger.kernel.org>; Thu, 13 Jul 2023 05:27:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=raspberrypi.com; s=google; t=1689251252; x=1691843252;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=FCFLho9QXkZyks8BPwXY6c/YjMDOZgknNdKIPljSeJ0=;
+        b=HKxSNiChklA3TsWLMZ6ndk1VDCe+R4tzUz0NpA1CTj1mUQ0kCmVjMrfx+B+o79qMD9
+         V3tzFnTc0vUoyM43NxqND+xNepjArcYUP7eqzzscFxcSk0s7ejd5Jhs0WsE9RVduzRWn
+         e7wRkkyilWB9VKmtNFuQezEQKyQuK2Jppi1z6tPwE7S6bYZcZ81j6dF4+5wunY7KEsQu
+         e9XyEj+jwCNUl5Im6AtQbjrcAUlmiWrrDSXFh1AhY7iXxbpXBHCo/wFzEMRamEydbI0Q
+         qMvu96qBoQsTIJ9ulPfWUAo0EQ/hfkwMWyplhXeieen917BKH6RFJznp+HBOFD8F7O9t
+         7P1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689251252; x=1691843252;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FCFLho9QXkZyks8BPwXY6c/YjMDOZgknNdKIPljSeJ0=;
+        b=YwTO/knQ1Ed3QNMldJkDHB9AVZieVveOl+R8SDVURCZC4tpdLt5Xr+HSLV1XwmmN8v
+         lH+cwDogvK9rko1b/8FOncD6nccnyZb1tWdTOLI+O8cQIrofrzQbygKJdIeed/znJPf/
+         LeBvGvHEYptlH/xubntwz4daaz/bpQE9nA8xHcm/vtrHQFIh2BT11CHazMSRB9ZN6gsY
+         5gka7wWU8kNfKFONrwzz9Cbh5BSCC0RLV6sYRrj8GezlZtpecEuqCu8JhylXlWL4KB1p
+         Sdq1440lx07Jwyn3/d0krv3KkRVXqRIhFZSM+Uxmyx9tNfEOJpCR8UkBGpUIMn/GlTEA
+         sSxw==
+X-Gm-Message-State: ABy/qLb/R0+FMtCmHgC7pFmTqU4YMPz+duvqOg26G+QXhTJCD5Nt1pnm
+        THra65JUlSIvIGdE3hkKIF+y9zez1HhniKFMECVNn8PEgjHuj126bOE=
+X-Google-Smtp-Source: APBJJlHem5bjiJ+hvWYJsUhMqni22Zx7fWHxILVp+bq/5PBcUyqrVVKVR190Pr9HCNstho7NZzuVmGlLJ1snbuPnLT8=
+X-Received: by 2002:adf:de12:0:b0:315:8a13:ef16 with SMTP id
+ b18-20020adfde12000000b003158a13ef16mr1405836wrm.69.1689251251948; Thu, 13
+ Jul 2023 05:27:31 -0700 (PDT)
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
+References: <20230713112830.21773-1-oneukum@suse.com>
+In-Reply-To: <20230713112830.21773-1-oneukum@suse.com>
+From:   Jonathan Bell <jonathan@raspberrypi.com>
+Date:   Thu, 13 Jul 2023 13:27:20 +0100
+Message-ID: <CADQZjwcF14dme4yT39pkGE8Xg+0i5Tb2vz8apb8M1RoB42CQjg@mail.gmail.com>
+Subject: Re: [PATCH] Revert "xhci: add quirk for host controllers that don't
+ update endpoint DCS"
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,73 +67,69 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 2023-07-13 at 07:34 +0200, Greg Kroah-Hartman wrote:
-> I wasn't trying to be glib here, sorry if it came across that way.  I'll
-> blame the heat...
+On Thu, 13 Jul 2023 at 12:28, Oliver Neukum <oneukum@suse.com> wrote:
+>
+> This reverts commit 5255660b208aebfdb71d574f3952cf48392f4306.
+>
+> This quirk breaks at least the following hardware:
+>
+> 0b:00.0 0c03: 1106:3483 (rev 01) (prog-if 30 [XHCI])
+>         Subsystem: 1106:3483
+>         Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr- Stepping- SERR- FastB2B- DisINTx+
+>         Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- <TAbort- <MAbort- >SERR- <PERR- INTx-
+>         Latency: 0, Cache Line Size: 64 bytes
+>         Interrupt: pin A routed to IRQ 66
+>         Region 0: Memory at fb400000 (64-bit, non-prefetchable) [size=4K]
+>         Capabilities: [80] Power Management version 3
+>                 Flags: PMEClk- DSI- D1- D2- AuxCurrent=375mA PME(D0+,D1+,D2+,D3hot+,D3cold+)
+>                 Status: D0 NoSoftRst- PME-Enable- DSel=0 DScale=0 PME-
+>         Capabilities: [90] MSI: Enable+ Count=1/4 Maskable- 64bit+
+>                 Address: 00000000fee007b8  Data: 0000
+>         Capabilities: [c4] Express (v2) Endpoint, MSI 00
+>                 DevCap: MaxPayload 256 bytes, PhantFunc 0, Latency L0s <64ns, L1 <1us
+>                         ExtTag- AttnBtn- AttnInd- PwrInd- RBE+ FLReset- SlotPowerLimit 89W
+>                 DevCtl: CorrErr- NonFatalErr- FatalErr- UnsupReq-
+>                         RlxdOrd- ExtTag- PhantFunc- AuxPwr- NoSnoop+
+>                         MaxPayload 128 bytes, MaxReadReq 512 bytes
+>                 DevSta: CorrErr- NonFatalErr- FatalErr- UnsupReq- AuxPwr+ TransPend-
+>                 LnkCap: Port #0, Speed 5GT/s, Width x1, ASPM L0s L1, Exit Latency L0s <2us, L1 <16us
+>                         ClockPM+ Surprise- LLActRep- BwNot- ASPMOptComp-
+>                 LnkCtl: ASPM Disabled; RCB 64 bytes, Disabled- CommClk+
+>                         ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
+>                 LnkSta: Speed 5GT/s, Width x1
+>                         TrErr- Train- SlotClk+ DLActive- BWMgmt- ABWMgmt-
+>                 DevCap2: Completion Timeout: Range B, TimeoutDis+ NROPrPrP- LTR-
+>                          10BitTagComp- 10BitTagReq- OBFF Not Supported, ExtFmt- EETLPPrefix-
+>                          EmergencyPowerReduction Not Supported, EmergencyPowerReductionInit-
+>                          FRS- TPHComp- ExtTPHComp-
+>                          AtomicOpsCap: 32bit- 64bit- 128bitCAS-
+>                 DevCtl2: Completion Timeout: 50us to 50ms, TimeoutDis- LTR- 10BitTagReq- OBFF Disabled,
+>                          AtomicOpsCtl: ReqEn-
+>                 LnkCtl2: Target Link Speed: 5GT/s, EnterCompliance- SpeedDis-
+>                          Transmit Margin: Normal Operating Range, EnterModifiedCompliance- ComplianceSOS-
+>                          Compliance Preset/De-emphasis: -6dB de-emphasis, 0dB preshoot
+>                 LnkSta2: Current De-emphasis Level: -6dB, EqualizationComplete- EqualizationPhase1-
+>                          EqualizationPhase2- EqualizationPhase3- LinkEqualizationRequest-
+>                          Retimer- 2Retimers- CrosslinkRes: unsupported
+>        Capabilities: [100 v1] Advanced Error Reporting
+>                 UESta:  DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
+>                 UEMsk:  DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
+>                 UESvrt: DLP+ SDES+ TLP- FCP+ CmpltTO- CmpltAbrt- UnxCmplt- RxOF+ MalfTLP+ ECRC- UnsupReq- ACSViol-
+>                 CESta:  RxErr- BadTLP- BadDLLP- Rollover- Timeout- AdvNonFatalErr-
+>                 CEMsk:  RxErr- BadTLP- BadDLLP- Rollover- Timeout- AdvNonFatalErr+
+>                 AERCap: First Error Pointer: 00, ECRCGenCap- ECRCGenEn- ECRCChkCap- ECRCChkEn-
+>                         MultHdrRecCap- MultHdrRecEn- TLPPfxPres- HdrLogCap-
+>                 HeaderLog: 00000000 00000000 00000000 00000000
+>         Kernel driver in use: xhci_hcd
+>         Kernel modules: xhci_pci
 
-No worries.
+Odd. There are many third party VLI cards in the field and this is the
+first I've heard of an incompatibility.
+Can you please report the output of
+lspci -s 0b:00.0 -xxx
+and pastebin a dmesg trace with xhci debug printks (and the quirk) turned on?
 
-> > All we said is that your statement of "RNDIS is fundamentally unfixable=
-"
-> > doesn't make a lot of sense. If this were the case, all USB drivers
-> > would have to "trust the other side" as well, right?
->=20
-> No, well, yes.  See the zillion patches we have had to apply to the
-> kernel over the years when someone decided that "usb devices are not to
-> be trusted" that syzbot has helped find :)
+Regards
+Jonathan
 
-Sure, I'm well aware of that. But that's also exactly my point - nowhere
-has anyone previously suggested that the protocol for any of those
-devices is fundamentally broken and the drivers should be removed. We've
-fixed those things and moved on.
-
-I can even understand the initial reaction of "oh hey this ancient thing
-is probably not used any more, let's just remove it", but even that's a
-different reasoning, along the lines of "this has bugs and nobody needs
-it". Though that nobody uses it has in fact been proven wrong, which is
-pretty much why we're have this discussion at all.
-
-> It's not a DMA issue here, it's a "the protocol allows for buffer
-> overflows and does not seem to be able to be verified to prevent this"
-> from what I remember (it's been a year since I looked at this last,
-> details are hazy.)
-
-If you s/be able to be verified/be verified in the code/ I entirely
-believe it, in fact I think it's quite likely given the age of the code
-and all. It's just that not being _able_ to verify it seems questionable
-to me (and you haven't given any reasons), given that it's USB and you
-always have a full buffer in hand when processing it, at a time where
-the device can no longer modify it (IOW no TOCTTOU issues either.)
-
-(As an aside, I've wondered about TOCTTOU with PCI, given that IOMMUs
-can and will do lazy unmap ... but that's a different discussion.)
-
-
-> At the time, I didn't see a way that it could be
-> fixed, hence this patch.
-
-Yeah I mean, the code isn't great, even if it's not _that_ much, but all
-the likely() and things in there don't make it easy to read, and the
-buffer size handling seems not immediately clear to me. So I probably
-couldn't fix it quickly either, though I haven't even seen the reports.
-Maciej seems to think it's fixable, at least. And yeah, we'd want to
-actually review/audit that, I suppose.
-
-
-So if you'd have said something like
-
-   Let's disable the RNDIS driver(s) because there are known exploits
-   there, nobody really knows how to fix this, and we need a short-term
-   solution until the issues are public and somebody steps up to fix and
-   maintain it.
-
-I'd have much less of a problem with that. That's not _great_, but at
-least it's honest and realistic. That could give us some time and maybe
-then we can get the bug reports public once it's no longer an immediate
-threat for all kernels, and go about fixing it with more time, maybe
-eventually backporting fixes and reverting the disablement etc.
-
-I guess this is why secret bug reports suck so much :-)
-
-Thanks,
-johannes
+(cc Greg K-H as the previous email address was typo'd).
