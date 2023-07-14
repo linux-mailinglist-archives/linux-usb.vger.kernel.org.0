@@ -2,118 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A38C753609
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Jul 2023 11:06:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDDAD7536C4
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Jul 2023 11:39:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235312AbjGNJGe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 Jul 2023 05:06:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40146 "EHLO
+        id S235327AbjGNJj0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 Jul 2023 05:39:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234562AbjGNJGc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Jul 2023 05:06:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE1D330E9;
-        Fri, 14 Jul 2023 02:06:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 301E961CBD;
-        Fri, 14 Jul 2023 09:05:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 849BBC433C7;
-        Fri, 14 Jul 2023 09:05:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689325543;
-        bh=WvoBK4BO8pPPux6zd3qw6bxteYzOyTTKLiAplHoONqg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oYQOx+Bf0l+WC841uAxl+EmnmXnIWq6H+9fTX5BHU8AjkSu6g7L7b+35oANMDJ728
-         nF07kgeXFpmztoS8zKDGp2Mz27GCeCt7JKD3hff8XA2o0mBZk4Nge8EXeaoSA0qqDd
-         qNhuCMiEmA07Rm3MnKJy4sU6OriXo4GOhrwjDy9Ec9Pc5KjCTBevCk0VOxFNM3CYsD
-         ptVnuN5pjFgKZDeLU1O5hmNDvs7hmiq9gVknilZkJs2L9wKbYIskaGlSsxtuIOsPB1
-         F2Cf3t/QymtdnWVbbWqiqcXn3WoABZ99gxrxT+xscG187m1AvLnsv/Pm4NX2dphzmo
-         xUI0zL6JveEkw==
-Received: from johan by xi.lan with local (Exim 4.96)
-        (envelope-from <johan@kernel.org>)
-        id 1qKEkC-0006bZ-0a;
-        Fri, 14 Jul 2023 11:05:44 +0200
-Date:   Fri, 14 Jul 2023 11:05:44 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
-        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
-        ahalaney@redhat.com, quic_shazhuss@quicinc.com
-Subject: Re: [PATCH v9 06/10] usb: dwc3: qcom: Add support to read IRQ's
- related to multiport
-Message-ID: <ZLEP6Ekh3unSTiCL@hovoldconsulting.com>
-References: <20230621043628.21485-1-quic_kriskura@quicinc.com>
- <20230621043628.21485-7-quic_kriskura@quicinc.com>
- <ZK6YrLMn9r39zEeB@hovoldconsulting.com>
- <ef29e520-7b9c-f581-e70a-250df80d3821@quicinc.com>
+        with ESMTP id S234300AbjGNJjZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Jul 2023 05:39:25 -0400
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com [209.85.167.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B29011B6
+        for <linux-usb@vger.kernel.org>; Fri, 14 Jul 2023 02:39:22 -0700 (PDT)
+Received: by mail-oi1-f197.google.com with SMTP id 5614622812f47-3a36b52afcfso2682542b6e.3
+        for <linux-usb@vger.kernel.org>; Fri, 14 Jul 2023 02:39:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689327562; x=1691919562;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8rkH2baniJscfH3sCpFw43dt5egSNBgguTianiqLM64=;
+        b=TAdSIgMlSzAX3mCCcY/XP2WYANw7pQJeB4kMvZ0STDpg03skjwXB4QOmX0PebcaPjZ
+         EtNQDfFs70qGUb68m58eGND2x8W/+V74fVZWGNsC5KcgvE52GZhjhPUnvqAcyB8pQw6L
+         gsPqQ5nHht+YEHr+rcEtx0Raws3HsTkiYGDkdwgaw7sFE6P86N0vFAFaxy7y3/6HvsAk
+         p6M8S4k4uf5HnVjo1u/BTw6cIiOIpErP5BORV+dNKBrq7AEtGoqiID3EsdFdfwU8p6Pu
+         9/I4RI3vRboQEviuwjKpbdI9tklfYQ8ZpxaxTS7RUC+dboFau8tyr/Bnau2TYUhTKVHG
+         rIpQ==
+X-Gm-Message-State: ABy/qLa5RKsSVN+YBCX3n1pNScQNAGnrKSHSSwceFMAIeS9ssSZnP+Cp
+        jc19deFlDuA/2M02e+LIZXF6Uec/9otmt/W5O9Pgn/uogrk3
+X-Google-Smtp-Source: APBJJlH2iq/qPy0eOiIw7q1AvFlFvCxYUc0DoRCBd7qefgsoqoVTBLX2fWpEmp2Fs/UcMV5N6GuaGyf56WTJViS26bxZkiHrq9Fg
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ef29e520-7b9c-f581-e70a-250df80d3821@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6808:10d1:b0:3a1:d419:9c64 with SMTP id
+ s17-20020a05680810d100b003a1d4199c64mr6152357ois.5.1689327562033; Fri, 14 Jul
+ 2023 02:39:22 -0700 (PDT)
+Date:   Fri, 14 Jul 2023 02:39:21 -0700
+In-Reply-To: <CALm+0cVa0H3BOD1Q6x5jOtAzQqnpQR1ju+9HhBS893mHkdQnpw@mail.gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003e91db06006f39e8@google.com>
+Subject: Re: [syzbot] [usb?] memory leak in raw_open
+From:   syzbot <syzbot+feb045d335c1fdde5bf7@syzkaller.appspotmail.com>
+To:     andreyknvl@gmail.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        qiang.zhang1211@gmail.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 12, 2023 at 11:56:33PM +0530, Krishna Kurapati PSSNV wrote:
-> On 7/12/2023 5:42 PM, Johan Hovold wrote:
-> > On Wed, Jun 21, 2023 at 10:06:24AM +0530, Krishna Kurapati wrote:
-> >> Add support to read Multiport IRQ's related to quad port controller
-> >> of SA8295 Device.
-> >>
-> >> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> >> ---
-> >>   drivers/usb/dwc3/dwc3-qcom.c | 108 +++++++++++++++++++++++++++++------
-> >>   1 file changed, 91 insertions(+), 17 deletions(-)
-> > 
-> >> +static int dwc3_qcom_setup_mp_irq(struct platform_device *pdev)
-> >> +{
-> >> +	struct dwc3_qcom *qcom = platform_get_drvdata(pdev);
-> >> +	char irq_name[15];
-> > 
-> > The interrupt device-name string can not be allocated on the stack or
-> > reused as it is stored directly in each irqaction structure.
-> > 
-> > This can otherwise lead to random crashes when accessing
-> > /proc/interrupts:
-> > 
-> > 	https://lore.kernel.org/lkml/ZK6IV_jJPICX5r53@hovoldconsulting.com/
+Hello,
 
->    Sure, will create a static array of names if possible in global 
-> section of file and use it to read interrupts.
+syzbot tried to test the proposed patch but the build/boot failed:
 
-Or just use devm_kasprintf(), which should allow for a cleaner
-implementation.
+failed to apply patch:
+checking file drivers/usb/gadget/legacy/raw_gadget.c
+patch: **** unexpected end of file in patch
 
-I've fixed it up like this for my X13s wip branches:
 
-	https://github.com/jhovold/linux/commit/0898b54456bc2f4bd4d420480db98e6758771ace
- 
->    Are you fine with seperating out setup_irq and setup_mp_irq functions 
-> ? Can you please review comments and suggestion on [1].
 
-I haven't had time to look at your latest replies yet, but as I already
-said when reviewing v9, it seems you should be using a common helper for
-non-mp and mp.
+Tested on:
 
-Johan
+commit:         7c2878be Add linux-next specific files for 20230714
+git tree:       linux-next
+dashboard link: https://syzkaller.appspot.com/bug?extid=feb045d335c1fdde5bf7
+compiler:       
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=118488f8a80000
+
