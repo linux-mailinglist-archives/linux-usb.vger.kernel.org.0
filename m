@@ -2,61 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A199753ABE
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Jul 2023 14:24:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AEDF753ADE
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Jul 2023 14:26:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235518AbjGNMYF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 Jul 2023 08:24:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35816 "EHLO
+        id S235882AbjGNM0J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 Jul 2023 08:26:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235837AbjGNMYA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Jul 2023 08:24:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA1230ED;
-        Fri, 14 Jul 2023 05:23:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D4C661D06;
-        Fri, 14 Jul 2023 12:23:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE9FEC433C7;
-        Fri, 14 Jul 2023 12:23:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689337434;
-        bh=8pAPa9LAiH8CqC58A4IqSufu6LWcLWvwyikY62DhFpQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=GLburYcPL4o2ZErSHjjOv/U90vqX+WXWXq9o0TBxxUH+kEqGNBHyqdEr9kNmGRQ+/
-         o/OdvJtEtIdMRFxMNsBDPYOhlJTIsbG22llt1UMCm90Ex03H5iA0X1Q9YlUg1sUjyH
-         DzE8RWGFW7Kl94oYP403x4BjNxhKMd3kStq1GsA0s0tRmZMxavtg45yPXZPjD06tF2
-         ZJR2Pfyn9i0866js5QzTyRUaQApHcV2rNd53wXeeLD7BSFMD9AjliJkgVcC/sTjh2k
-         spchQag5uXm0DDYNGYYctrwzZbCmrgR2hsx7Ddt3WWalAmbUpHM0Uy2L6lzs7vYkOI
-         owMMOqIs5cmJQ==
-Message-ID: <8b10d8a5-a9df-6a2e-61b9-7119961e2401@kernel.org>
-Date:   Fri, 14 Jul 2023 15:23:50 +0300
+        with ESMTP id S235887AbjGNMZh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Jul 2023 08:25:37 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B19743C1B;
+        Fri, 14 Jul 2023 05:25:06 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-98de21518fbso251154866b.0;
+        Fri, 14 Jul 2023 05:25:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689337492; x=1691929492;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vkPYI3Vjys6HUZ7g47wuaPMnyVLdDQufL5+zqucCKZc=;
+        b=AzmkvcnjqYrirYQYyNP9UwZF5wOxd8pOG9kLaNfd+JwBNM5D3VmWa7s4BPIzzvr+vy
+         O9Uu1GL0Ak1ZG/K8oujzVXP4vXDm8cqXZOq+z8GpgNWVELyxY8o2v/x4J4nbkjuYSrzY
+         b7xVin8dXKYhqulfRyIHJQXUURZCW0Wz55EjWfwxfzhTUZsNjhccMXp6s8K4TVu4NpLm
+         qwGeO7S4rKUiUl9waTXoPhS3vi5DTkaubrSuwqR1J+5ms2ecAocYVKmmU/0d45UAL5E3
+         t0S3MX0mEl1nXMXKnec8oi6YokGZqT90K+Q4QTjl+WIYKTNqJ/GbbLxHODir1tkHCJDb
+         y9Cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689337492; x=1691929492;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vkPYI3Vjys6HUZ7g47wuaPMnyVLdDQufL5+zqucCKZc=;
+        b=Q6ihlVx9YgJpfwVgHXAQyuin2wcpHtruL211s/+QitVHWmk2BA2MlwZVQo0GTHpUF2
+         QsxhMoZm4VOL8G5IPf/ehJJWIGP1Cd0whVmK2Gn47OOe1ODAi+IiVGhTdhfp5XC2RSoD
+         N0E91kMzNsnp4SFJIqXOwhdj4nILD2WbR0CTlD4nFMlxPaY0kBhqMtCJVs3ZDRtotLjp
+         tX+8pDSROJ7w8Nvj75nKj9oufVDzAoPWgdarzQyDZkJA+U6jRU4OqdKBhu7CWsATVrTN
+         B8USS+Lh7z1LM6tR2WJyMsXveZ3gol83U4C4saPiTZP++V6xWXstsvVx47F3k4SvDkLI
+         YqGg==
+X-Gm-Message-State: ABy/qLZU8DSm+ScUgXB3pc6xSZqu9cyT9m7Qv+SmNj360I2V1O0eK+ne
+        eicwztOyh+hgfCPqz9/WtDY=
+X-Google-Smtp-Source: APBJJlGP00fXjQi9ojrEp9x2syWFzQt0DOIFe1J/unjIM3SHAChHfvWXet0XqhTd5Mg4zVQ6vhoLgA==
+X-Received: by 2002:a17:906:a897:b0:982:1936:ad27 with SMTP id ha23-20020a170906a89700b009821936ad27mr4178686ejb.11.1689337492399;
+        Fri, 14 Jul 2023 05:24:52 -0700 (PDT)
+Received: from localhost.localdomain (snat-11.cgn.sat-an.net. [176.222.226.11])
+        by smtp.gmail.com with ESMTPSA id h19-20020a170906719300b00993cc1242d4sm5314054ejk.151.2023.07.14.05.24.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Jul 2023 05:24:52 -0700 (PDT)
+From:   Jakub Vanek <linuxtardis@gmail.com>
+To:     Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Jakub Vanek <linuxtardis@gmail.com>, stable@vger.kernel.org,
+        Mauro Ribeiro <mauro.ribeiro@hardkernel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v3] Revert "usb: dwc3: core: Enable AutoRetry feature in the controller"
+Date:   Fri, 14 Jul 2023 14:24:19 +0200
+Message-Id: <20230714122419.27741-1-linuxtardis@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v3 3/3] usb: dwc3: Modify runtime pm ops to handle bus
- suspend
-Content-Language: en-US
-To:     Elson Serrao <quic_eserrao@quicinc.com>, Thinh.Nguyen@synopsys.com,
-        stern@rowland.harvard.edu
-Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, quic_wcheng@quicinc.com,
-        quic_jackp@quicinc.com
-References: <20230711174320.24058-1-quic_eserrao@quicinc.com>
- <20230711174320.24058-4-quic_eserrao@quicinc.com>
- <9fc752db-ea8a-4bf0-a99a-832403668384@kernel.org>
- <3c9c6924-bf79-e8bb-fd44-9262f114504b@quicinc.com>
- <9715b60c-2caa-82d6-42ea-31502272ebc4@kernel.org>
- <aa311ec9-7abd-0684-16cd-e7a2cfa7ef3c@quicinc.com>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <aa311ec9-7abd-0684-16cd-e7a2cfa7ef3c@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,383 +70,100 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+This reverts commit b138e23d3dff90c0494925b4c1874227b81bddf7.
 
+AutoRetry has been found to sometimes cause controller freezes when
+communicating with buggy USB devices.
 
-On 14/07/2023 01:31, Elson Serrao wrote:
-> 
-> 
-> On 7/13/2023 5:56 AM, Roger Quadros wrote:
->>
->>
->> On 13/07/2023 01:57, Elson Serrao wrote:
->>>
->>>
->>> On 7/12/2023 6:46 AM, Roger Quadros wrote:
->>>>
->>>>
->>>> On 11/07/2023 20:43, Elson Roy Serrao wrote:
->>>>> The current implementation blocks the runtime pm operations when cable
->>>>> is connected. This would block platforms from entering system wide suspend
->>>>> during bus suspend scenario. Modify the runtime pm ops to handle bus
->>>>> suspend case for such platforms where the controller low power mode
->>>>> entry/exit is handled by the glue driver. This enablement is controlled
->>>>> through a dt property and platforms capable of detecting bus resume can
->>>>> benefit from this feature. Also modify the remote wakeup operations to
->>>>> trigger runtime resume before sending wakeup signal.
->>>>>
->>>>> Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
->>>>> ---
->>>>>    drivers/usb/dwc3/core.c   | 26 ++++++++++++++++++++++---
->>>>>    drivers/usb/dwc3/core.h   |  3 +++
->>>>>    drivers/usb/dwc3/gadget.c | 40 ++++++++++++++++++++++++++++++++-------
->>>>>    3 files changed, 59 insertions(+), 10 deletions(-)
->>>>>
->>>>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
->>>>> index f6689b731718..898c0f68e190 100644
->>>>> --- a/drivers/usb/dwc3/core.c
->>>>> +++ b/drivers/usb/dwc3/core.c
->>>>> @@ -1534,6 +1534,9 @@ static void dwc3_get_properties(struct dwc3 *dwc)
->>>>>        dwc->dis_split_quirk = device_property_read_bool(dev,
->>>>>                    "snps,dis-split-quirk");
->>>>>    +    dwc->allow_rtsusp_on_u3 = device_property_read_bool(dev,
->>>>> +                "snps,allow-rtsusp-on-u3");
->>>>> +
->>>>>        dwc->lpm_nyet_threshold = lpm_nyet_threshold;
->>>>>        dwc->tx_de_emphasis = tx_de_emphasis;
->>>>>    @@ -1984,11 +1987,21 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
->>>>>    {
->>>>>        unsigned long    flags;
->>>>>        u32 reg;
->>>>> +    int link_state;
->>>>>          switch (dwc->current_dr_role) {
->>>>>        case DWC3_GCTL_PRTCAP_DEVICE:
->>>>>            if (pm_runtime_suspended(dwc->dev))
->>>>>                break;
->>>>> +
->>>>> +        if (dwc->connected) {
->>>>> +            link_state = dwc3_gadget_get_link_state(dwc);
->>>>> +            /* bus suspend case */
->>>>> +            if (dwc->allow_rtsusp_on_u3 &&
->>>>> +                link_state == DWC3_LINK_STATE_U3> +                break;
->>>>
->>>> dwc3_suspend_common() is called both during runtime suspend and system sleep with
->>>> appropriate pm_msg_t argument.
->>>> Do you want the same behavior for both cases?
->>>>
->>> Thank you for your comments and feedback.
->>> The goal here is to trigger runtime suspend when bus suspend interrupt is received. If dwc3 runtime suspend is executed, then for system sleep dwc3_suspend_common() is a no-op as we have a pm_runtime_suspended(dwc->dev) check in place in the above code.
->>> The exception I can think of with these changes in place is below sequence
->>> USB bus suspended---->Runtime suspend fails OR is not invoked for some reason--->System sleep is triggered.
->>>
->>> We can extend this change to above case as well. I believe that was the intention of your patch (i.e avoid gadget disconnect if usb bus is suspended for system sleep case)
->>> https://lore.kernel.org/linux-usb/20230320093447.32105-3-rogerq@kernel.org/
->>>
->>> Please let me know your opinion on extending this series to system sleep also.
->>
->> As dwc3_suspend_common()/dwc3_resume_common() is used for both runtime and
->> system suspend it would be nice if you test that system suspend is not broken.
->> Doesn't have to be enhanced.
->>
-> Sure. Will update the details accordingly in v4.
->>>
->>>
->>>> You are not checking if the gadget driver was put into suspend state or not.
->>>> So, instead of just checking line state, should we also check that we processed
->>>> the suspend interrupt and gadget driver has been suspended as well?
->>>> i.e. add a SW flag dwc3->suspended and set it at end of dwc3_suspend_gadget()
->>>> and clear it at beginning of dwc3_resume_gadget().
->>>> Check for that flag in the above if condition.
->>>> i.e. if (dwc->connected && dwc->suspended)
->>>>
->>>
->>> We already have flags for these purposes (dwc->link_state and dwc->suspended) that we set when suspend interrupt is received and clear during wakeup. We can use these flags here
->>
->> OK but bear in mind that link_state might not be updated once runtime suspended.
->>
->>>
->>>>> +            return -EBUSY;
->>>>> +        }
->>>>>            dwc3_gadget_suspend(dwc);
->>>>>            synchronize_irq(dwc->irq_gadget);
->>>>>            dwc3_core_exit(dwc);
->>>>> @@ -2045,6 +2058,9 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
->>>>>          switch (dwc->current_dr_role) {
->>>>>        case DWC3_GCTL_PRTCAP_DEVICE:
->>>>> +        /* bus resume case */
->>>>> +        if (dwc->connected)
->>>>
->>>> dwc->connected might get cleard to false if device was disconnected. So this is not reliable.
->>>> You might want to set another SW flag to track this special case of suspend
->>>> with controller kept active.
->>>>
->>>
->>> Are you referring to the DISCONNECT interrupt ? We dont handle gadget interrupts when in runtime suspended state and dwc3 driver has to be resumed first. The mechanism for this already exists in dwc3_check_event_buf() like below
->>>
->>>      if (pm_runtime_suspended(dwc->dev)) {
->>>          pm_runtime_get(dwc->dev);
->>>          disable_irq_nosync(dwc->irq_gadget);
->>>          dwc->pending_events = true;
->>>          return IRQ_HANDLED;
->>>      }
->>>
->>> I cant think of any scenario where dwc->connected is cleared before calling resume_common() for bus suspend case. Please let me know if I am missing any corner case.
->>>
->>>>> +            break;
->>>>>            ret = dwc3_core_init_for_resume(dwc);
->>>>>            if (ret)
->>>>>                return ret;
->>>>> @@ -2123,9 +2139,6 @@ static int dwc3_runtime_suspend(struct device *dev)
->>>>>        struct dwc3     *dwc = dev_get_drvdata(dev);
->>>>>        int        ret;
->>>>>    -    if (dwc3_runtime_checks(dwc))
->>>>> -        return -EBUSY;
->>>>> -
->>>> Instead of removing this how about modifying dwc3_runtime_checks(). see below.
->>>>
->>>
->>> Yes we can do that. But if we are planning to extend these changes to system sleep better to leave it here IMO.
->>>
->>>>>        ret = dwc3_suspend_common(dwc, PMSG_AUTO_SUSPEND);
->>>>>        if (ret)
->>>>>            return ret;
->>>>> @@ -2160,9 +2173,15 @@ static int dwc3_runtime_resume(struct device *dev)
->>>>>    static int dwc3_runtime_idle(struct device *dev)
->>>>>    {
->>>>>        struct dwc3     *dwc = dev_get_drvdata(dev);
->>>>> +    int        link_state;
->>>>>          switch (dwc->current_dr_role) {
->>>>>        case DWC3_GCTL_PRTCAP_DEVICE:
->>>>> +        link_state = dwc3_gadget_get_link_state(dwc);
->>>>> +        /* for bus suspend case return success */
->>>>> +        if (dwc->allow_rtsusp_on_u3 && dwc->connected &&
->>>>> +            link_state == DWC3_LINK_STATE_U3)
->>>>> +            goto autosuspend;
->>>>
->>>> why not just break?
->>> Done
->>>>
->>>>>            if (dwc3_runtime_checks(dwc))
->>>>
->>>> what about this dwc3_runtime_checks()?
->>>> Looks like the if condition you added above can go in dwc3_runtime_checks() instead.
->>>>
->>>>>                return -EBUSY;
->>>>>            break;
->>>>> @@ -2172,6 +2191,7 @@ static int dwc3_runtime_idle(struct device *dev)
->>>>>            break;
->>>>>        }
->>>>>    +autosuspend:
->>>>>        pm_runtime_mark_last_busy(dev);
->>>>>        pm_runtime_autosuspend(dev);
->>>>>    diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
->>>>> index 8b1295e4dcdd..33b2ccbbd963 100644
->>>>> --- a/drivers/usb/dwc3/core.h
->>>>> +++ b/drivers/usb/dwc3/core.h
->>>>> @@ -1127,6 +1127,8 @@ struct dwc3_scratchpad_array {
->>>>>     * @num_ep_resized: carries the current number endpoints which have had its tx
->>>>>     *            fifo resized.
->>>>>     * @debug_root: root debugfs directory for this device to put its files in.
->>>>> + * @allow_rtsusp_on_u3: true if dwc3 runtime suspend is allowed during bus
->>>>> + *            suspend scenario.
->>>>
->>>> what about system sleep?
->>>>
->>> Currently this series is tested for runtime suspend during bus suspend scenario. We can extend to system sleep like explained above.
->>>
->>>>>     */
->>>>>    struct dwc3 {
->>>>>        struct work_struct    drd_work;
->>>>> @@ -1343,6 +1345,7 @@ struct dwc3 {
->>>>>        int            last_fifo_depth;
->>>>>        int            num_ep_resized;
->>>>>        struct dentry        *debug_root;
->>>>> +    bool            allow_rtsusp_on_u3;
->>>>>    };
->>>>>      #define INCRX_BURST_MODE 0
->>>>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->>>>> index 5fd067151fbf..0797cffa2d48 100644
->>>>> --- a/drivers/usb/dwc3/gadget.c
->>>>> +++ b/drivers/usb/dwc3/gadget.c
->>>>> @@ -2401,15 +2401,21 @@ static int dwc3_gadget_wakeup(struct usb_gadget *g)
->>>>>            return -EINVAL;
->>>>>        }
->>>>>    -    spin_lock_irqsave(&dwc->lock, flags);
->>>>>        if (!dwc->gadget->wakeup_armed) {
->>>>>            dev_err(dwc->dev, "not armed for remote wakeup\n");
->>>>> -        spin_unlock_irqrestore(&dwc->lock, flags);
->>>>>            return -EINVAL;
->>>>>        }
->>>>> -    ret = __dwc3_gadget_wakeup(dwc, true);
->>>>>    +    ret = pm_runtime_resume_and_get(dwc->dev);
->>>>> +    if (ret < 0) {
->>>>> +        pm_runtime_set_suspended(dwc->dev);
->>>>> +        return ret;
->>>>> +    }
->>>>> +
->>>>> +    spin_lock_irqsave(&dwc->lock, flags);
->>>>> +    ret = __dwc3_gadget_wakeup(dwc, true);
->>>>>        spin_unlock_irqrestore(&dwc->lock, flags);
->>>>> +    pm_runtime_put_noidle(dwc->dev);
->>>>>          return ret;
->>>>>    }
->>>>> @@ -2428,6 +2434,12 @@ static int dwc3_gadget_func_wakeup(struct usb_gadget *g, int intf_id)
->>>>>            return -EINVAL;
->>>>>        }
->>>>>    +    ret = pm_runtime_resume_and_get(dwc->dev);
->>>>> +    if (ret < 0) {
->>>>> +        pm_runtime_set_suspended(dwc->dev);
->>>>> +        return ret;
->>>>> +    }
->>>>> +
->>>>>        spin_lock_irqsave(&dwc->lock, flags);
->>>>>        /*
->>>>>         * If the link is in U3, signal for remote wakeup and wait for the
->>>>> @@ -2438,6 +2450,7 @@ static int dwc3_gadget_func_wakeup(struct usb_gadget *g, int intf_id)
->>>>>            ret = __dwc3_gadget_wakeup(dwc, false);
->>>>>            if (ret) {
->>>>>                spin_unlock_irqrestore(&dwc->lock, flags);
->>>>> +            pm_runtime_put_noidle(dwc->dev);
->>>>>                return -EINVAL;
->>>>>            }
->>>>>            dwc3_resume_gadget(dwc);
->>>>> @@ -2452,6 +2465,7 @@ static int dwc3_gadget_func_wakeup(struct usb_gadget *g, int intf_id)
->>>>>            dev_err(dwc->dev, "function remote wakeup failed, ret:%d\n", ret);
->>>>>          spin_unlock_irqrestore(&dwc->lock, flags);
->>>>> +    pm_runtime_put_noidle(dwc->dev);
->>>>>          return ret;
->>>>>    }
->>>>> @@ -2732,21 +2746,23 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
->>>>>        /*
->>>>>         * Avoid issuing a runtime resume if the device is already in the
->>>>>         * suspended state during gadget disconnect.  DWC3 gadget was already
->>>>> -     * halted/stopped during runtime suspend.
->>>>> +     * halted/stopped during runtime suspend except for bus suspend case
->>>>> +     * where we would have skipped the controller halt.
->>>>>         */
->>>>>        if (!is_on) {
->>>>>            pm_runtime_barrier(dwc->dev);
->>>>> -        if (pm_runtime_suspended(dwc->dev))
->>>>> +        if (pm_runtime_suspended(dwc->dev) && !dwc->connected)
->>>>
->>>> dwc->connected will to to false on disconnect. I'm not sure if we can rely
->>>> on this flag here.
->>>>
->>> This is for handling gadget_pullup() when we are in bus suspend state (and thus runtime suspended) for cases where a usb composition switch is triggered. Like explained above we dont clear dwc->connected flag without resuming the driver first.
->>>
->>>>>                return 0;
->>>>>        }
->>>>>          /*
->>>>>         * Check the return value for successful resume, or error.  For a
->>>>>         * successful resume, the DWC3 runtime PM resume routine will handle
->>>>> -     * the run stop sequence, so avoid duplicate operations here.
->>>>> +     * the run stop sequence except for bus resume case, so avoid
->>>>> +     * duplicate operations here.
->>>>>         */
->>>>>        ret = pm_runtime_get_sync(dwc->dev);
->>>>> -    if (!ret || ret < 0) {
->>>>> +    if ((!ret && !dwc->connected) || ret < 0) {
->>>>
->>>> Why this check?
->>>>
->>> In the resume operation above we would have skipped setting the run stop bit and other operations for bus suspend scenario. Hence we are not bailing out here if dwc->connected is true (which indicates that the resume operation was for cable connected case)
->>
->> I think we are over-complicating the simple pullup() function.
->> How about not skipping setting the necessary bits in bus suspend case?
-> 
-> We cannot clear the RUN_STOP bit during bus suspend as that would stop the controller and disconnect from the bus. (I believe the exception would be if HIBERNATION feature is enabled on dwc3 IP).
-> 
-> I am failing to see the complication here.
-> The current implementation is to skip the run stop sequence in pullup() function if resume is triggered. The addition here is, not to skip the run stop sequence in pullup() if resume is triggered in bus suspend context.
-> 
->>>
->>>>>            pm_runtime_put(dwc->dev);
->>>>>            if (ret < 0)
->>>>>                pm_runtime_set_suspended(dwc->dev);
->>>>> @@ -4331,6 +4347,8 @@ static void dwc3_gadget_suspend_interrupt(struct dwc3 *dwc,
->>>>>        }
->>>>>          dwc->link_state = next;
->>>>> +    pm_runtime_mark_last_busy(dwc->dev);
->>>>> +    pm_request_autosuspend(dwc->dev);
->>>>
->>>> Not here. You should do this in dwc3_suspend_gadget() after gadget driver
->>>> has completed suspend.
->>>>
->>>
->>> Since the goal was to trigger runtime suspend when bus suspend irq is received I have added it here. I see that dwc3_suspend_gadget is called in other instances as well (like U1,U2) and hence having it here specific to U3/L2 handler is better IMO.
->>
->> OK.
->>
->>>>>    }
->>>>>      static void dwc3_gadget_interrupt(struct dwc3 *dwc,
->>>>> @@ -4718,7 +4736,15 @@ void dwc3_gadget_process_pending_events(struct dwc3 *dwc)
->>>>>    {
->>>>>        if (dwc->pending_events) {
->>>>>            dwc3_interrupt(dwc->irq_gadget, dwc->ev_buf);
->>>>> +        pm_runtime_put(dwc->dev);
->>>>
->>>> Why the put here?
->>>>
->>>
->>> To balance the get() called when setting the pending_events flag in dwc3_check_event_buf()
->>>
->>>      if (pm_runtime_suspended(dwc->dev)) {
->>>          pm_runtime_get(dwc->dev);
->>>          disable_irq_nosync(dwc->irq_gadget);
->>>          dwc->pending_events = true;
->>>          return IRQ_HANDLED;
->>>      }
->>>
->>
->> No this wrong. We want the device to be active from now on.
->>
->> runtime suspended->interrupt->pm_runtime_get->runtime_resume->process_pending_events->USB gadget resumed
->>
->> Only on next USB suspend you want to do the pm_runtime_put like you are doing it
->> in dwc3_gadget_suspend_interrupt() by pm_request_autosuspend()
->>
-> 
-> That would break/block dwc3 runtime suspend during DISCONNECT case in below scenario
-> 
-> runtime suspended->interrupt->pm_runtime_get (runtime usage count is 1)->runtime_resume->process_pending_events->USB gadget resumed -> USB disconnect (autosuspend blocked due to runtime usage count being 1 due to unbalanced get() ).
-> 
-> The idea here is to balance the get() that was requested for processing the pending events, after processing those events. (like how we balance get() of ep_queue through put() in ep_dequeue)
-> 
-> Also pm_request_autosuspend() doesnt decrement the usage count, it only requests for autosuspend.
+This controller feature allows the controller in host mode to send
+non-terminating/burst retry ACKs instead of terminating retry ACKs
+to devices when a transaction error (CRC error or overflow) occurs.
 
-Ah, indeed.
+Unfortunately, if the USB device continues to respond with a CRC error,
+the controller will not complete endpoint-related commands while it
+keeps trying to auto-retry. [3] The xHCI driver will notice this once
+it tries to abort the transfer using a Stop Endpoint command and
+does not receive a completion in time. [1]
+This situation is reported to dmesg:
 
-> 
-> But I think better approach in terms of ordering is below
+[sda] tag#29 uas_eh_abort_handler 0 uas-tag 1 inflight: CMD IN
+[sda] tag#29 CDB: opcode=0x28 28 00 00 69 42 80 00 00 48 00
+xhci-hcd: xHCI host not responding to stop endpoint command
+xhci-hcd: xHCI host controller not responding, assume dead
+xhci-hcd: HC died; cleaning up
 
-ok, but should dwc->pending_events be set before calling pm_runtime_get() in dwc3_check_event_buf()?
-Can we add a comment there that the get will be balanced out in dwc3_gadget_process_pending_events()?
+Some users observed this problem on an Odroid HC2 with the JMS578
+USB3-to-SATA bridge. The issue can be triggered by starting
+a read-heavy workload on an attached SSD. After a while, the host
+controller would die and the SSD would disappear from the system. [1]
 
-> 
-> @@ -4718,7 +4736,15 @@ void dwc3_gadget_process_pending_events(struct dwc3 *dwc)
->  {
->      if (dwc->pending_events) {
->          dwc3_interrupt(dwc->irq_gadget, dwc->ev_buf);
-> +        /*
-> +         * We have only stored the pending events as part
-> +         * of dwc3_interrupt() above, but those events are
-> +         * not yet handled. So explicitly invoke the
-> +         * interrupt handler for handling those events.
-> +         */
-> +        dwc3_thread_interrupt(dwc->irq_gadget, dwc->ev_buf);
->          dwc->pending_events = false;
->          enable_irq(dwc->irq_gadget);
-> +        pm_runtime_put(dwc->dev);
+Further analysis by Synopsys determined that controller revisions
+other than the one in Odroid HC2 are also affected by this.
+The recommended solution was to disable AutoRetry altogether.
+This change does not have a noticeable performance impact. [2]
 
-We could do the put right after dwc3_thread_interrupt().
+Revert the enablement commit. This will keep the AutoRetry bit in
+the default state configured during SoC design [2].
 
-> 
->      }
->  }
+Fixes: b138e23d3dff ("usb: dwc3: core: Enable AutoRetry feature in the controller")
+Link: https://lore.kernel.org/r/a21f34c04632d250cd0a78c7c6f4a1c9c7a43142.camel@gmail.com/ [1]
+Link: https://lore.kernel.org/r/20230711214834.kyr6ulync32d4ktk@synopsys.com/ [2]
+Link: https://lore.kernel.org/r/20230712225518.2smu7wse6djc7l5o@synopsys.com/ [3]
+Cc: stable@vger.kernel.org
+Cc: Mauro Ribeiro <mauro.ribeiro@hardkernel.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Suggested-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Signed-off-by: Jakub Vanek <linuxtardis@gmail.com>
+---
+V2 -> V3: Include more findings in changelog
+V1 -> V2: Updated to disable AutoRetry everywhere based on Synopsys feedback
+          Reworded the changelog a bit to make it clearer
 
-I think this fix should be an independent patch
-as this fixes an issue that existed prior to this series?
-also need to -cc stable?
+ drivers/usb/dwc3/core.c | 16 ----------------
+ drivers/usb/dwc3/core.h |  3 ---
+ 2 files changed, 19 deletions(-)
 
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index f6689b731718..a4e079d37566 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -1209,22 +1209,6 @@ static int dwc3_core_init(struct dwc3 *dwc)
+ 		dwc3_writel(dwc->regs, DWC3_GUCTL1, reg);
+ 	}
+ 
+-	if (dwc->dr_mode == USB_DR_MODE_HOST ||
+-	    dwc->dr_mode == USB_DR_MODE_OTG) {
+-		reg = dwc3_readl(dwc->regs, DWC3_GUCTL);
+-
+-		/*
+-		 * Enable Auto retry Feature to make the controller operating in
+-		 * Host mode on seeing transaction errors(CRC errors or internal
+-		 * overrun scenerios) on IN transfers to reply to the device
+-		 * with a non-terminating retry ACK (i.e, an ACK transcation
+-		 * packet with Retry=1 & Nump != 0)
+-		 */
+-		reg |= DWC3_GUCTL_HSTINAUTORETRY;
+-
+-		dwc3_writel(dwc->regs, DWC3_GUCTL, reg);
+-	}
+-
+ 	/*
+ 	 * Must config both number of packets and max burst settings to enable
+ 	 * RX and/or TX threshold.
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index 8b1295e4dcdd..a69ac67d89fe 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -256,9 +256,6 @@
+ #define DWC3_GCTL_GBLHIBERNATIONEN	BIT(1)
+ #define DWC3_GCTL_DSBLCLKGTNG		BIT(0)
+ 
+-/* Global User Control Register */
+-#define DWC3_GUCTL_HSTINAUTORETRY	BIT(14)
+-
+ /* Global User Control 1 Register */
+ #define DWC3_GUCTL1_DEV_DECOUPLE_L1L2_EVT	BIT(31)
+ #define DWC3_GUCTL1_TX_IPGAP_LINECHECK_DIS	BIT(28)
 -- 
-cheers,
--roger
+2.25.1
+
