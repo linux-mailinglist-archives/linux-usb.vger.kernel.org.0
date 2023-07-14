@@ -2,140 +2,153 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63C43753EBC
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Jul 2023 17:24:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62834753F87
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Jul 2023 18:09:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236357AbjGNPYv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 Jul 2023 11:24:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49170 "EHLO
+        id S235524AbjGNQJR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 Jul 2023 12:09:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235881AbjGNPYu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Jul 2023 11:24:50 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B0522D7B
-        for <linux-usb@vger.kernel.org>; Fri, 14 Jul 2023 08:24:48 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id 5614622812f47-3a3efebcc24so1639683b6e.1
-        for <linux-usb@vger.kernel.org>; Fri, 14 Jul 2023 08:24:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1689348287; x=1691940287;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KKCPDDjyadziwl2/AK/7bwW5AQLCnpdzpQfQJ+yWANU=;
-        b=VkfHth5MNAZHQQpEhdDGh0pq0hoDNb/IkCyvJyfZlohZ7FEqc/tc2UlGQlp5P+ls2k
-         LP4Az77bQs/0UVX1KSsNiwTlKtw8ZJErPfpgp4NpbjjW9RxzvWKdoj5q9JZGtbqYKyMw
-         IkbeE1z0uT48kd4G5uv3BxnFhNNELaU6M+7XHRszPJ3LTmAtfce0FwO0kiq6qtWbZVLj
-         +GaUqzfPkfSAQcQuVfYKAUHYwjH4iU0nqNSXmWkPMWsXsceycWdUU7PI1Bdr+PTPu7X6
-         X/OpA3sg1LJmtBpK2xUftGMYHz3Z91vTuIVh4aBU1pURrsic+RJAvN3CFStnNYgOJO/U
-         rXPA==
+        with ESMTP id S235303AbjGNQJQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 Jul 2023 12:09:16 -0400
+Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B1630F4;
+        Fri, 14 Jul 2023 09:09:15 -0700 (PDT)
+Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-78374596182so84065139f.0;
+        Fri, 14 Jul 2023 09:09:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689348287; x=1691940287;
+        d=1e100.net; s=20221208; t=1689350955; x=1691942955;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KKCPDDjyadziwl2/AK/7bwW5AQLCnpdzpQfQJ+yWANU=;
-        b=Ag6hHIbbTOS0amHV6cN8adLGwuZDzIEILRwacCcO4FJDf38Eif1T62Bhf4euWmYGA+
-         h/on8P6+w/iLDg27ZRfJq4yA4grSRFc+Q+77ZQ8GVvRY3BVQip0Nbj6eFyBUVm1pJoo3
-         ZSLCjtYZoXpoeoG0glDyEQkZ27RUBqEaQzriEy7wQh/8CF327SFJX2Qd2UKE3H2FLAGJ
-         Sqv4cAdn5Ei64KVG4z8PfRi1wukLHoLl09yTgDD0jXOFoetTl/RasyBZx+7qmxr8d1Vy
-         TA+/lmM58XgJqRH9A/uK3cm5HfpE5jZYwj/E2sCjkgOZn5V1fgeHYDonCSNWBZF7EmHW
-         yKHA==
-X-Gm-Message-State: ABy/qLY/QC+ZvtGXWOzUl7ECw5NGkvTM21I4tf3dovzhTDhltiQ6hg/X
-        QEFao3wMLICkFlRW02ZQQqrFYg==
-X-Google-Smtp-Source: APBJJlH+MwWcaUVg/7akbj8keBMvf8gq7EKuq9vDRBoNFYJ4+ezTmB048XjMLkW7GX8JAT8v1K03Sg==
-X-Received: by 2002:a05:6808:2226:b0:3a3:eceb:7bbc with SMTP id bd38-20020a056808222600b003a3eceb7bbcmr7147567oib.54.1689348287397;
-        Fri, 14 Jul 2023 08:24:47 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-68-25-194.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.25.194])
-        by smtp.gmail.com with ESMTPSA id x19-20020a17090aa39300b00263154aab24sm1230248pjp.57.2023.07.14.08.24.46
+        bh=xwfN0AjJiCW6P2GxSV3v/bOqQB8wMErVeNdQNrLkhjY=;
+        b=EuZU2lHh06H2deH6cjyvesoaqDI6fxVzSOeF3It1eWiAPyWti74IGr0t7NtLUVIIfs
+         w3lIB9ZYyKW0VYejEc+uTkmMuzB7oENlWxDj1xcChqmkOZu1m279jZXEFsdRBNRXj3Pg
+         vbe1QQm0HRzyiq17zeEwBSxX7RwFGO+kibgd29hQpVaRy/g3ANXvTpXKLTa93S3Doj61
+         bjVl1dFdM8FN7H0BXFdLTQaGyiC/hKW4j7V3wi3WC3gk679aNyIRJZBhoh+3gJ7l6t1h
+         lxUqvzHNCZ6OBmLOwhWbz1//D2owmK2SHuj+zU+Dl+af/YreFFiq53D1j/kS4hhWRiCO
+         AC6g==
+X-Gm-Message-State: ABy/qLZfUFkZZCw909+YXXDkPNq0jKogTkxezpYdJ7N3jJQ5OHIi4TWK
+        1kfE9rGeWZ1sn0sCIdzwpoMctPPOlA==
+X-Google-Smtp-Source: APBJJlHy30Aj8mI9J3Q4ry+hIBPJNXFvDCtic8YvzqUB9GkTBi83GV3C1ObysRCXM79iRuwMEJ9PJA==
+X-Received: by 2002:a6b:f21a:0:b0:77a:e86a:c24b with SMTP id q26-20020a6bf21a000000b0077ae86ac24bmr5412087ioh.6.1689350954857;
+        Fri, 14 Jul 2023 09:09:14 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id k1-20020a02a701000000b0042b2df337ccsm2504326jam.76.2023.07.14.09.09.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Jul 2023 08:24:46 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1qKKez-0017NL-5i;
-        Fri, 14 Jul 2023 12:24:45 -0300
-Date:   Fri, 14 Jul 2023 12:24:45 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Alex Williamson <alex.williamson@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-aio@kvack.org,
-        linux-usb@vger.kernel.org, Matthew Rosato <mjrosato@linux.ibm.com>,
-        Paul Durrant <paul@xen.org>, Tom Rix <trix@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        dri-devel@lists.freedesktop.org, Michal Hocko <mhocko@kernel.org>,
-        linux-mm@kvack.org, Kirti Wankhede <kwankhede@nvidia.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Harald Freudenberger <freude@linux.ibm.com>,
-        Fei Li <fei1.li@intel.com>, x86@kernel.org,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        intel-gfx@lists.freedesktop.org,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        linux-fpga@vger.kernel.org, Zhi Wang <zhi.a.wang@intel.com>,
-        Wu Hao <hao.wu@intel.com>, Jason Herne <jjherne@linux.ibm.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andrew Donnellan <ajd@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-s390@vger.kernel.org,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        linuxppc-dev@lists.ozlabs.org, Eric Auger <eric.auger@redhat.com>,
-        Borislav Petkov <bp@alien8.de>, kvm@vger.kernel.org,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>, cgroups@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        virtualization@lists.linux-foundation.org,
-        intel-gvt-dev@lists.freedesktop.org, io-uring@vger.kernel.org,
-        netdev@vger.kernel.org, Tony Krowiak <akrowiak@linux.ibm.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        Benjamin LaHaise <bcrl@kvack.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Frederic Barrat <fbarrat@linux.ibm.com>,
-        Moritz Fischer <mdf@kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Xu Yilun <yilun.xu@intel.com>, jaz@semihalf.com
-Subject: Re: [PATCH 0/2] eventfd: simplify signal helpers
-Message-ID: <ZLFovYocElAD7gJ0@ziepe.ca>
-References: <20230630155936.3015595-1-jaz@semihalf.com>
- <20230714-gauner-unsolidarisch-fc51f96c61e8@brauner>
+        Fri, 14 Jul 2023 09:09:14 -0700 (PDT)
+Received: (nullmailer pid 3933554 invoked by uid 1000);
+        Fri, 14 Jul 2023 16:09:12 -0000
+Date:   Fri, 14 Jul 2023 10:09:12 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Kyle Tso <kyletso@google.com>
+Cc:     krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org, badhri@google.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: connector: Add child nodes for multiple
+ PD capabilities
+Message-ID: <20230714160912.GA3920890-robh@kernel.org>
+References: <20230712072853.1755559-1-kyletso@google.com>
+ <20230712072853.1755559-2-kyletso@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230714-gauner-unsolidarisch-fc51f96c61e8@brauner>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230712072853.1755559-2-kyletso@google.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jul 14, 2023 at 09:05:21AM +0200, Christian Brauner wrote:
+On Wed, Jul 12, 2023 at 03:28:52PM +0800, Kyle Tso wrote:
+> Define a new optional property "capabilities" which is a child node
+> under connector to contain multiple USB Power Delivery capabilities.
 
-> I have no skin in the game aside from having to drop this conversion
-> which I'm fine to do if there are actually users for this btu really,
-> that looks a lot like abusing an api that really wasn't designed for
-> this.
+Is multiple capabilities a USB spec thing or some Linux feature? I think 
+DT should only define the limits of the h/w capabilities and if the OS 
+wants to define multiple profiles within those limits that's its 
+problem.
 
-Yeah, I think so too. The ACPI thing should use its own FD if it wants
-to feed actual data..
+> 
+> Define a new property with pattern (e.g. caps0, caps1) which is a child
+> node under "capabilities". Each node contains PDO data of a selectable
+> Power Delivery capability.
+> 
+> Signed-off-by: Kyle Tso <kyletso@google.com>
+> ---
+>  .../bindings/connector/usb-connector.yaml     | 44 +++++++++++++++++++
+>  1 file changed, 44 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+> index 1c4d3eb87763..b8c96d0a127a 100644
+> --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
+> +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+> @@ -228,6 +228,50 @@ properties:
+>        SNK_READY for non-pd link.
+>      type: boolean
+>  
+> +  capabilities:
+> +    description: A child node to contain all the selectable USB Power Delivery capabilities.
+> +    type: object
+> +
+> +    patternProperties:
+> +      "^caps[0-9]+$":
 
-Jason
+caps-[0-9] is more the convention.
 
+> +        description: Child nodes under "capabilities" node. Each node contains a selectable USB
+> +          Power Delivery capability.
+> +        type: object
+> +
+> +        properties:
+> +          source-pdos:
+
+You are now defining the same property twice. You can use '$defs' to 
+define common properties and then reference them. Or put all the PD 
+properties into its own schema file and reference it.
+
+> +            description: An array of u32 with each entry providing supported power
+> +              source data object(PDO), the detailed bit definitions of PDO can be found
+> +              in "Universal Serial Bus Power Delivery Specification" chapter 6.4.1.2
+> +              Source_Capabilities Message, the order of each entry(PDO) should follow
+> +              the PD spec chapter 6.4.1. Required for power source and power dual role.
+> +              User can specify the source PDO array via PDO_FIXED/BATT/VAR/PPS_APDO()
+> +              defined in dt-bindings/usb/pd.h.
+> +            $ref: /schemas/types.yaml#/definitions/uint32-array
+> +            minItems: 1
+> +            maxItems: 7
+> +
+> +          sink-pdos:
+> +            description: An array of u32 with each entry providing supported power sink
+> +              data object(PDO), the detailed bit definitions of PDO can be found in
+> +              "Universal Serial Bus Power Delivery Specification" chapter 6.4.1.3
+> +              Sink Capabilities Message, the order of each entry(PDO) should follow the
+> +              PD spec chapter 6.4.1. Required for power sink and power dual role. User
+> +              can specify the sink PDO array via PDO_FIXED/BATT/VAR/PPS_APDO() defined
+> +              in dt-bindings/usb/pd.h.
+> +            $ref: /schemas/types.yaml#/definitions/uint32-array
+> +            minItems: 1
+> +            maxItems: 7
+> +
+> +          op-sink-microwatt:
+> +            description: Sink required operating power in microwatt, if source can't
+> +              offer the power, Capability Mismatch is set. Required for power sink and
+> +              power dual role.
+> +
+> +        additionalProperties: false
+> +
+> +    additionalProperties: false
+> +
+>  dependencies:
+>    sink-vdos-v1: [ 'sink-vdos' ]
+>    sink-vdos: [ 'sink-vdos-v1' ]
+> -- 
+> 2.41.0.255.g8b1d071c50-goog
+> 
