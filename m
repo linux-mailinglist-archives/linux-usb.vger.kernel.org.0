@@ -2,166 +2,223 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22327756C10
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Jul 2023 20:29:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7405A756CD2
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Jul 2023 21:09:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231205AbjGQS25 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Jul 2023 14:28:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56062 "EHLO
+        id S229931AbjGQTJ3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Jul 2023 15:09:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231868AbjGQS2B (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Jul 2023 14:28:01 -0400
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFFD31FFC;
-        Mon, 17 Jul 2023 11:27:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1689618414; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=VljLj4OVMxfm78yJkQUtYu4wDlICS181Tw+EJBkTZfH2uTeG3Y0buvZT/WiPqcK4wJ
-    9gRIamkL39lZQtVPKOL4eFw+E5sEwDpuV2lzBaNS8lOY0FfvAF1Nfs1yuKisRYPpN5jA
-    8djrt+ZB5cM88zC/W4rzsX87zoPYKljPTq8qs5XD94zjmNYJgYGDq3T/1r2Lw3I9aM1p
-    SqWg1iHiuT5rx6hwuAf+bKVBZ6nGFzocglKNPM1P8QQY6Ndrc1rqNiu9a5FZNg+ysEX8
-    PS5QdyOv+b5ZkIBaaU4go0z1viqD4XUAxtA0caHxtljMXQUj4sFtLbetTZhbpfFrnXiC
-    UC4g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1689618414;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=FGH/oUaQ4RyjF+KveTDJrIq7bF1n+Vvfi6tgzGQ25mA=;
-    b=dMi55pBa5IX5eFMC8iB5LgB8kGDK8yXyHSaVUD7zyOcZCZmvLbgnaHvbB9Iok1PQMs
-    1/47lfKoO+96U6RxQhCIHNk6InfzaCN6tzqLAaDmMV+gHMfdcpk66+tZ4W5JzvZrdDzv
-    d08M3bTwe5HiorwO88wWI+hLqbVXDmc5NCqn6F8vuv6JDLVhewdwrfHScsMWpCNQ52Yo
-    5IWFkIXkZr+TJ6SeAzn+4oLfouMmsldtQ7OZFKdkNrroPRM9fcpTn3K+QKN+X/M6Nhso
-    fkmZtLymX97100gklpyfwKmGYaCZygUnxa90IvCilJBYih+4vlhf8BsFo9VR5QwsRWc0
-    8vCg==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1689618414;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=FGH/oUaQ4RyjF+KveTDJrIq7bF1n+Vvfi6tgzGQ25mA=;
-    b=Yj+Efc/2sKWi83nVQPskIXq71Kp8I02u2Iz6W5JSdMn7PSAwVfzKX1nSMoXKtbyeiF
-    Q+2zYE/6zpvdATX+hnya4nhcDE9WE/6VV5CiE66P9L8AKhsKZ0n7snADyYgxeBcHwzFe
-    efWpAo1Lzr01EGVqujOydofiMMFycxeV4yAVIrsPuqYg7GRiZpVirwpmM+Bc9YMak7Xq
-    LhLQGonjizsdX/wDaRTNRyV16UsxCI8Uap0nVw6e4AYg9dOXAl3gexU0v/z6akF4Krs9
-    K8hhqwPkQkcVyA+JJ5qR29C0BTwQkGJZhOfYFOzOcDxvHVfjooDlJE3roNXBMbMqIF+n
-    MsqQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1689618414;
-    s=strato-dkim-0003; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=FGH/oUaQ4RyjF+KveTDJrIq7bF1n+Vvfi6tgzGQ25mA=;
-    b=YO7q5onkXqMFwL261aNMdoM1cWWRHqGTGJJurFROnp+bmi3rNn9p5pjv2cQbTHP6od
-    JkmtsDziZeovY4Ga3fAA==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4paA8Z2L1A=="
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 49.6.0 DYNA|AUTH)
-    with ESMTPSA id D0d0a8z6HIQrZM7
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Mon, 17 Jul 2023 20:26:53 +0200 (CEST)
-Date:   Mon, 17 Jul 2023 20:26:37 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, linux-kernel@vger.kernel.org,
-        bhupesh.linux@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, krzysztof.kozlowski@linaro.org,
-        quic_schowdhu@quicinc.com, gregkh@linuxfoundation.org
-Subject: Re: [PATCH v8 3/4] arm64: dts: qcom: sm6115: Add EUD dt node and
- dwc3 connector
-Message-ID: <ZLWHwnjjMkJx_ACH@gerhold.net>
-References: <20230717103236.1246771-1-bhupesh.sharma@linaro.org>
- <20230717103236.1246771-4-bhupesh.sharma@linaro.org>
- <ZLUbyocjNT2bGvVt@gerhold.net>
- <CAH=2NtzM=jaVtjeHHO0rY0_wHu9==Jpdz4zx5nCK3gBh2kpL=A@mail.gmail.com>
+        with ESMTP id S230177AbjGQTJY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Jul 2023 15:09:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 966531B6
+        for <linux-usb@vger.kernel.org>; Mon, 17 Jul 2023 12:08:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1689620918;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ir1J/k3wLKNYp7LI2ijvFBF6ZKrDfOA6Drq2a2Jon50=;
+        b=dt8Y3wq43vWIZczqy3WH6dLv2FvplUud69uuAqA1lQjcE8v4AjAnQPI5nBh9DQEe+aowAy
+        5J4FejLSDDGX3cht7ig2pu5GN0jq84DoZ73O5NjbiDNLJz7kH51KM3ZbnDuCHzgfejytH4
+        eXAk7wlAr9o/hchLPsT6eZ8sCPlzimw=
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
+ [209.85.166.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-424-4cilEqF7PmqtaiTQLJeYDA-1; Mon, 17 Jul 2023 15:08:36 -0400
+X-MC-Unique: 4cilEqF7PmqtaiTQLJeYDA-1
+Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-34610c52cf8so30600785ab.0
+        for <linux-usb@vger.kernel.org>; Mon, 17 Jul 2023 12:08:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689620914; x=1692212914;
+        h=content-transfer-encoding:mime-version:organization:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ir1J/k3wLKNYp7LI2ijvFBF6ZKrDfOA6Drq2a2Jon50=;
+        b=A7Rxm3HtqILwKc5zl85jFL/CES1ehRghyyUOvk64tqSeDQKpSHRDry59MsRTPQ9lxM
+         iQ1UvEg3kAopA7KeXXTYfIFjm1E8v/jb/8/gxCFn6Mwelv9BH7J8mFw1qNRejy9OgoFC
+         RCBWAOAK2sazx1NK+ZYrXAHFH0/seef/MxLzyHIOb+aN6Fa356Dl4k0JUR/NEKiLb4GQ
+         wh/D/IcgzFzsGT03aLlVkR9sB+6HcM63C1Op5+K/FnxdisVq3cSHA9NtIp604nN+fPkW
+         p0oSrnsqnU9I+RZGQJMxog6scaxz+UzGQ3aHu1R5gh5FmrX5iPXd4PCMXmooXXIh68V8
+         flkA==
+X-Gm-Message-State: ABy/qLYrZjJYhH47JJ2pZLiKd4IpszgyOH7LR3BJ2EIb+Vo4Ye9G/5fI
+        TFu5VQMuLOwAJ90cZvFvhjW3UqY4VOlnBKT4O02ZI2HMrDGgaOKK5zWj9siAck3iz1n39Lj2HZF
+        oWVeveCKc2NEKuwQ9am62
+X-Received: by 2002:a05:6e02:1a8b:b0:348:8542:a673 with SMTP id k11-20020a056e021a8b00b003488542a673mr578095ilv.22.1689620914143;
+        Mon, 17 Jul 2023 12:08:34 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlH8IAKDk/Qq0r0DbEq84CfbH5y70uroq/83Nyu0gFtjM6u4GlatJgupAE/Bg/5ujaAlXs4PMg==
+X-Received: by 2002:a05:6e02:1a8b:b0:348:8542:a673 with SMTP id k11-20020a056e021a8b00b003488542a673mr578040ilv.22.1689620913830;
+        Mon, 17 Jul 2023 12:08:33 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id o9-20020a92dac9000000b003460b456030sm129837ilq.60.2023.07.17.12.08.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Jul 2023 12:08:33 -0700 (PDT)
+Date:   Mon, 17 Jul 2023 13:08:31 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Grzegorz Jaszczyk <jaz@semihalf.com>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-aio@kvack.org,
+        linux-usb@vger.kernel.org, Matthew Rosato <mjrosato@linux.ibm.com>,
+        Paul Durrant <paul@xen.org>, Tom Rix <trix@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        dri-devel@lists.freedesktop.org, Michal Hocko <mhocko@kernel.org>,
+        linux-mm@kvack.org, Kirti Wankhede <kwankhede@nvidia.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        Fei Li <fei1.li@intel.com>, x86@kernel.org,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Ingo Molnar <mingo@redhat.com>,
+        intel-gfx@lists.freedesktop.org,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        linux-fpga@vger.kernel.org, Zhi Wang <zhi.a.wang@intel.com>,
+        Wu Hao <hao.wu@intel.com>, Jason Herne <jjherne@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andrew Donnellan <ajd@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-s390@vger.kernel.org,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        linuxppc-dev@lists.ozlabs.org, Eric Auger <eric.auger@redhat.com>,
+        Borislav Petkov <bp@alien8.de>, kvm@vger.kernel.org,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>, cgroups@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        virtualization@lists.linux-foundation.org,
+        intel-gvt-dev@lists.freedesktop.org, io-uring@vger.kernel.org,
+        netdev@vger.kernel.org, Tony Krowiak <akrowiak@linux.ibm.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        Benjamin LaHaise <bcrl@kvack.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Frederic Barrat <fbarrat@linux.ibm.com>,
+        Moritz Fischer <mdf@kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Xu Yilun <yilun.xu@intel.com>,
+        Dominik Behr <dbehr@chromium.org>,
+        Marcin Wojtas <mw@semihalf.com>
+Subject: Re: [PATCH 0/2] eventfd: simplify signal helpers
+Message-ID: <20230717130831.0f18381a.alex.williamson@redhat.com>
+In-Reply-To: <CAH76GKPF4BjJLrzLBW8k12ATaAGADeMYc2NQ9+j0KgRa0pomUw@mail.gmail.com>
+References: <20230630155936.3015595-1-jaz@semihalf.com>
+        <20230714-gauner-unsolidarisch-fc51f96c61e8@brauner>
+        <CAH76GKPF4BjJLrzLBW8k12ATaAGADeMYc2NQ9+j0KgRa0pomUw@mail.gmail.com>
+Organization: Red Hat
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAH=2NtzM=jaVtjeHHO0rY0_wHu9==Jpdz4zx5nCK3gBh2kpL=A@mail.gmail.com>
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 17, 2023 at 11:33:40PM +0530, Bhupesh Sharma wrote:
-> On Mon, 17 Jul 2023 at 16:15, Stephan Gerhold <stephan@gerhold.net> wrote:
-> >
-> > On Mon, Jul 17, 2023 at 04:02:35PM +0530, Bhupesh Sharma wrote:
-> > > Add the Embedded USB Debugger(EUD) device tree node for
-> > > SM6115 / SM4250 SoC.
-> > >
-> > > The node contains EUD base register region, EUD mode manager
-> > > register region and TCSR Base register region along with the
-> > > interrupt entry.
-> > >
-> > > [...]
-> > >
-> > > Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> > > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> > > ---
-> > >  arch/arm64/boot/dts/qcom/sm6115.dtsi | 50 ++++++++++++++++++++++++++++
-> > >  1 file changed, 50 insertions(+)
-> > >
-> > > diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> > > index 839c603512403..db45337c1082c 100644
-> > > --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> > > +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> > > [...]
-> > > @@ -789,6 +801,37 @@ gcc: clock-controller@1400000 {
-> > >                       #power-domain-cells = <1>;
-> > >               };
-> > >
-> > > +             eud: eud@1610000 {
-> > > +                     compatible = "qcom,sm6115-eud", "qcom,eud";
-> > > +                     reg = <0x0 0x01610000 0x0 0x2000>,
-> > > +                           <0x0 0x01612000 0x0 0x1000>,
-> > > +                           <0x0 0x003c0000 0x0 0x40000>;
-> > > +                     reg-names = "eud-base", "eud-mode-mgr", "tcsr-base";
-> >
-> > TCSR is a separate hardware block unrelated to the EUD. IMHO it
-> > shouldn't be listed as "reg" here.
-> >
-> > Typically we describe it as syscon and then reference it from other
-> > nodes. See e.g. sm8450.dtsi "tcsr: syscon@1fc0000" referenced in &scm
-> > "qcom,dload-mode = <&tcsr 0x13000>". This is pretty much exactly the
-> > same use case as you have. It also uses this to write something with
-> > qcom_scm_io_writel() at the end.
-> 
-> That was discussed a bit during v1 patchset review. Basically, if we
-> use a tcsr syscon approach here, we will need to define a 'qcom,xx'
-> vendor specific dt-property and use something like this in the eud
-> node:
-> 
-> qcom,eud-sec-reg = <&tcsr_reg yyyy>
-> 
-> which would be then used by the eud driver (via
-> syscon_regmap_lookup_by_phandle()).
-> 
-> But for sm6115 / qcm2290 this would be an over complicated solution as
-> normally the eud driver (say sc7280) doesn't need tcsr based secure
-> mode manager access. So defining a new soc / vendor specific
-> dt-property might be an overkill.
-> 
+On Mon, 17 Jul 2023 10:29:34 +0200
+Grzegorz Jaszczyk <jaz@semihalf.com> wrote:
 
-IMO a vendor-specific DT property is still better than messing up the
-device separation in the device tree. The same "tcsr-base" reg would
-also appear on the actual tcsr syscon device tree node. Having two
-device tree nodes with the same reg region is generally not valid.
+> pt., 14 lip 2023 o 09:05 Christian Brauner <brauner@kernel.org> napisa=C5=
+=82(a):
+> >
+> > On Thu, Jul 13, 2023 at 11:10:54AM -0600, Alex Williamson wrote: =20
+> > > On Thu, 13 Jul 2023 12:05:36 +0200
+> > > Christian Brauner <brauner@kernel.org> wrote:
+> > > =20
+> > > > Hey everyone,
+> > > >
+> > > > This simplifies the eventfd_signal() and eventfd_signal_mask() help=
+ers
+> > > > by removing the count argument which is effectively unused. =20
+> > >
+> > > We have a patch under review which does in fact make use of the
+> > > signaling value:
+> > >
+> > > https://lore.kernel.org/all/20230630155936.3015595-1-jaz@semihalf.com=
+/ =20
+> >
+> > Huh, thanks for the link.
+> >
+> > Quoting from
+> > https://patchwork.kernel.org/project/kvm/patch/20230307220553.631069-1-=
+jaz@semihalf.com/#25266856
+> > =20
+> > > Reading an eventfd returns an 8-byte value, we generally only use it
+> > > as a counter, but it's been discussed previously and IIRC, it's possi=
+ble
+> > > to use that value as a notification value. =20
+> >
+> > So the goal is to pipe a specific value through eventfd? But it is
+> > explicitly a counter. The whole thing is written around a counter and
+> > each write and signal adds to the counter.
+> >
+> > The consequences are pretty well described in the cover letter of
+> > v6 https://lore.kernel.org/all/20230630155936.3015595-1-jaz@semihalf.co=
+m/
+> > =20
+> > > Since the eventfd counter is used as ACPI notification value
+> > > placeholder, the eventfd signaling needs to be serialized in order to
+> > > not end up with notification values being coalesced. Therefore ACPI
+> > > notification values are buffered and signalized one by one, when the
+> > > previous notification value has been consumed. =20
+> >
+> > But isn't this a good indication that you really don't want an eventfd
+> > but something that's explicitly designed to associate specific data with
+> > a notification? Using eventfd in that manner requires serialization,
+> > buffering, and enforces ordering.
 
-Something like qcom,eud-sec-reg = <&tcsr_reg yyyy> would at least make
-clear that this points into a region that is shared between multiple
-different devices, while adding it as reg suggests that TCSR belongs
-exclusively to EUD.
+What would that mechanism be?  We've been iterating on getting the
+serialization and buffering correct, but I don't know of another means
+that combines the notification with a value, so we'd likely end up with
+an eventfd only for notification and a separate ring buffer for
+notification values.
 
-Thanks,
-Stephan
+As this series demonstrates, the current in-kernel users only increment
+the counter and most userspace likely discards the counter value, which
+makes the counter largely a waste.  While perhaps unconventional,
+there's no requirement that the counter may only be incremented by one,
+nor any restriction that I see in how userspace must interpret the
+counter value.
+
+As I understand the ACPI notification proposal that Grzegorz links
+below, a notification with an interpreted value allows for a more
+direct userspace implementation when dealing with a series of discrete
+notification with value events.  Thanks,
+
+Alex
+
+> > I have no skin in the game aside from having to drop this conversion
+> > which I'm fine to do if there are actually users for this btu really,
+> > that looks a lot like abusing an api that really wasn't designed for
+> > this. =20
+>=20
+> https://patchwork.kernel.org/project/kvm/patch/20230307220553.631069-1-ja=
+z@semihalf.com/
+> was posted at the beginig of March and one of the main things we've
+> discussed was the mechanism for propagating acpi notification value.
+> We've endup with eventfd as the best mechanism and have actually been
+> using it from v2. I really do not want to waste this effort, I think
+> we are quite advanced with v6 now. Additionally we didn't actually
+> modify any part of eventfd support that was in place, we only used it
+> in a specific (and discussed beforehand) way.
+
