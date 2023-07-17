@@ -2,69 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A73A756D75
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Jul 2023 21:38:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B65D756DFB
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Jul 2023 22:10:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbjGQTiI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Jul 2023 15:38:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38284 "EHLO
+        id S231310AbjGQUKA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Jul 2023 16:10:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231628AbjGQTh7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Jul 2023 15:37:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BFC9D
-        for <linux-usb@vger.kernel.org>; Mon, 17 Jul 2023 12:37:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EEA761234
-        for <linux-usb@vger.kernel.org>; Mon, 17 Jul 2023 19:37:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 797EFC433C8
-        for <linux-usb@vger.kernel.org>; Mon, 17 Jul 2023 19:37:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689622677;
-        bh=BU9zKoDvUNMpcq1l0qnZlazYvoiiwQGgLJTBbmsysho=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=HnkLv1zEJt3HBlU+N7lL9ckMywupwv74lF1LNav0YT6ZQDR+eOaQQhIFET4H4eW7k
-         yzfb6LFs8RCeItsLpNlzWKCfUfZR10byVMi6A44DsdAKMxXvcGbMqIAHNx5miL51iK
-         Mew+Sn79XKaK4K3+QXQmfcnPVSUyPBP/WYVnNnQjb2QGwOtKYwTaruSBfBe+lmp7lD
-         tNR1UIbblQ1nd5+/zCKFF9Lj0p9drNIzVyCSeRo0bbW3RASJbZChTd8zHFl4uo8O+u
-         7fK3BjCjW90lgyoAZuGORUp1JZXK2xjBXBMZdaymNr2SIlOLUWU1gnI9e0YddWtcy+
-         3OmhFO9L6rwqQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 56A8AC53BCD; Mon, 17 Jul 2023 19:37:57 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 217674] Thunderbolt dock does not recognize displays connected
- via DP->HDMI cable
-Date:   Mon, 17 Jul 2023 19:37:57 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: mario.limonciello@amd.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-217674-208809-C58KJo7eKy@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-217674-208809@https.bugzilla.kernel.org/>
-References: <bug-217674-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S231324AbjGQUJ7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Jul 2023 16:09:59 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B078BFB
+        for <linux-usb@vger.kernel.org>; Mon, 17 Jul 2023 13:09:54 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-314172bac25so4820503f8f.3
+        for <linux-usb@vger.kernel.org>; Mon, 17 Jul 2023 13:09:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689624593; x=1692216593;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=23dRsu8FFXKzlR7wpidba41k+oFieJdfmWOjiAaYDnw=;
+        b=Hm1a9ZNqEybhEbdbYVSWOnLddeGSSYalfJhbMYYH2HW6pML3qI5/Z6qRhRRviVKiIs
+         0Y43gN87iC2muHypgZvLaYmenOeLK9WGpTRq3gq0rsQYOO4DnR1oewY7oB9bK+8Qu2CD
+         8pS6vsxyxAGka8ifKfm9bz5fvShH/BEX0x2Jth4TqUuBlqZR32dLqInaELalW1yAn1BA
+         +eXr/O023PxrC6ZIj1y7vpoTCK2CmcL9bbSpFGxvHWam9MgjbaUjTiztUDQV3Bk7Xr1p
+         Ghg6BynZX1EzJJ+xVgnmq5xZsXMwlXBs4vhgR6OLkzbYkKKquYyvkilwN6B151TTLnb9
+         fFeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689624593; x=1692216593;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=23dRsu8FFXKzlR7wpidba41k+oFieJdfmWOjiAaYDnw=;
+        b=Zo7CzxYcrZWalMaEr0CWbXQauQ7/4+9idRZorDELW8e0AtUsNhkoTtCBZM04NOnMn6
+         avvB9oR1BKBVCTPTptJT/vg/UsvCeDnHKrTIfrY/sIw3CglJ/KCEvki58vT68fih3ue7
+         ei2XWRz9bF5ifT3zXWsKAprkGZrKHYr68ppHhM0TkOjML8BkqWe/juMfzxeRSu6UJOrc
+         Vv9qpY684IvCwe863/2bxrOIIBWCFf+mH05ZewI41FkEtspH2dXpici52S0AfpBBwlGb
+         tmli69VJoAqv6wZDNge/+z3DWaKQ3naoMOM44fI9X95H/OkGA5MbyLzJCFqXOfdKzT6E
+         cILw==
+X-Gm-Message-State: ABy/qLZDU6TCPJTAzv3KXBHtGKBvfyU2TvG2lrE5gPFS2v5+OhrrTN/K
+        yEHv8329YVRssP4RcjcXDOX9yYQnOP3MkDZqvOfXHg==
+X-Google-Smtp-Source: APBJJlEa9PfjirXt6bc7HlMULQG1woEKCO5ni/IRSegVAYsLM1HvtKDtOWzdVotBBR6kNmVYkQzrdhaPYNxMRApwCSQ=
+X-Received: by 2002:adf:d84e:0:b0:313:f6bb:ec2b with SMTP id
+ k14-20020adfd84e000000b00313f6bbec2bmr9945414wrl.47.1689624593023; Mon, 17
+ Jul 2023 13:09:53 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20230717103236.1246771-1-bhupesh.sharma@linaro.org>
+ <20230717103236.1246771-4-bhupesh.sharma@linaro.org> <ZLUbyocjNT2bGvVt@gerhold.net>
+ <CAH=2NtzM=jaVtjeHHO0rY0_wHu9==Jpdz4zx5nCK3gBh2kpL=A@mail.gmail.com> <ZLWHwnjjMkJx_ACH@gerhold.net>
+In-Reply-To: <ZLWHwnjjMkJx_ACH@gerhold.net>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Date:   Tue, 18 Jul 2023 01:39:41 +0530
+Message-ID: <CAH=2NtxHekJVvzaD5SNhZZmAHXhc=7v4Pr7RMEFNTXXH6x_AgQ@mail.gmail.com>
+Subject: Re: [PATCH v8 3/4] arm64: dts: qcom: sm6115: Add EUD dt node and dwc3 connector
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, linux-kernel@vger.kernel.org,
+        bhupesh.linux@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, krzysztof.kozlowski@linaro.org,
+        quic_schowdhu@quicinc.com, gregkh@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,20 +72,82 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D217674
+On Mon, 17 Jul 2023 at 23:58, Stephan Gerhold <stephan@gerhold.net> wrote:
+>
+> On Mon, Jul 17, 2023 at 11:33:40PM +0530, Bhupesh Sharma wrote:
+> > On Mon, 17 Jul 2023 at 16:15, Stephan Gerhold <stephan@gerhold.net> wrote:
+> > >
+> > > On Mon, Jul 17, 2023 at 04:02:35PM +0530, Bhupesh Sharma wrote:
+> > > > Add the Embedded USB Debugger(EUD) device tree node for
+> > > > SM6115 / SM4250 SoC.
+> > > >
+> > > > The node contains EUD base register region, EUD mode manager
+> > > > register region and TCSR Base register region along with the
+> > > > interrupt entry.
+> > > >
+> > > > [...]
+> > > >
+> > > > Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> > > > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> > > > ---
+> > > >  arch/arm64/boot/dts/qcom/sm6115.dtsi | 50 ++++++++++++++++++++++++++++
+> > > >  1 file changed, 50 insertions(+)
+> > > >
+> > > > diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> > > > index 839c603512403..db45337c1082c 100644
+> > > > --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> > > > +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> > > > [...]
+> > > > @@ -789,6 +801,37 @@ gcc: clock-controller@1400000 {
+> > > >                       #power-domain-cells = <1>;
+> > > >               };
+> > > >
+> > > > +             eud: eud@1610000 {
+> > > > +                     compatible = "qcom,sm6115-eud", "qcom,eud";
+> > > > +                     reg = <0x0 0x01610000 0x0 0x2000>,
+> > > > +                           <0x0 0x01612000 0x0 0x1000>,
+> > > > +                           <0x0 0x003c0000 0x0 0x40000>;
+> > > > +                     reg-names = "eud-base", "eud-mode-mgr", "tcsr-base";
+> > >
+> > > TCSR is a separate hardware block unrelated to the EUD. IMHO it
+> > > shouldn't be listed as "reg" here.
+> > >
+> > > Typically we describe it as syscon and then reference it from other
+> > > nodes. See e.g. sm8450.dtsi "tcsr: syscon@1fc0000" referenced in &scm
+> > > "qcom,dload-mode = <&tcsr 0x13000>". This is pretty much exactly the
+> > > same use case as you have. It also uses this to write something with
+> > > qcom_scm_io_writel() at the end.
+> >
+> > That was discussed a bit during v1 patchset review. Basically, if we
+> > use a tcsr syscon approach here, we will need to define a 'qcom,xx'
+> > vendor specific dt-property and use something like this in the eud
+> > node:
+> >
+> > qcom,eud-sec-reg = <&tcsr_reg yyyy>
+> >
+> > which would be then used by the eud driver (via
+> > syscon_regmap_lookup_by_phandle()).
+> >
+> > But for sm6115 / qcm2290 this would be an over complicated solution as
+> > normally the eud driver (say sc7280) doesn't need tcsr based secure
+> > mode manager access. So defining a new soc / vendor specific
+> > dt-property might be an overkill.
+> >
+>
+> IMO a vendor-specific DT property is still better than messing up the
+> device separation in the device tree. The same "tcsr-base" reg would
+> also appear on the actual tcsr syscon device tree node. Having two
+> device tree nodes with the same reg region is generally not valid.
+>
+> Something like qcom,eud-sec-reg = <&tcsr_reg yyyy> would at least make
+> clear that this points into a region that is shared between multiple
+> different devices, while adding it as reg suggests that TCSR belongs
+> exclusively to EUD.
 
-Mario Limonciello (AMD) (mario.limonciello@amd.com) changed:
+I understand your point but since for sm6115 / qcm2290 devices TCSR is
+not used for any other purpose than EUD, I still think introducing a
+new soc / vendor specific dt-property might be an overkill for this
+changeset.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |mario.limonciello@amd.com
-
---- Comment #5 from Mario Limonciello (AMD) (mario.limonciello@amd.com) ---
-This is very likely a GPU driver or GPU microcode bug.  Can you please bring
-the issue to https://gitlab.freedesktop.org/drm/amd/-/issues
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Thanks,
+Bhupesh
