@@ -2,74 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D52B75668C
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Jul 2023 16:38:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D35CE756753
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Jul 2023 17:15:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231626AbjGQOiF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Jul 2023 10:38:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58880 "EHLO
+        id S231191AbjGQPPp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Jul 2023 11:15:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232101AbjGQOhw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Jul 2023 10:37:52 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AADE9E7F;
-        Mon, 17 Jul 2023 07:37:50 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3fc02a92dcfso42102855e9.0;
-        Mon, 17 Jul 2023 07:37:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1689604669; x=1692196669;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=nYUU8YV3BqJ0I2zWti5nCz47R+nejQLyugvMd3FOv9g=;
-        b=M8mHQyW3k62+jCLLDGKRyfwx32nZWnPK5ML+MVAtbEqjo6XWyCE8Q1dKc0vcYLNYOj
-         0tX/zmr93MOg2fjL1VrZrlaW4s16C+NrWdl97eSkyhbia1BvBh4TQp6ae59LZAKdw1sM
-         muieYaRa3vuOPD2qGm8AhzfdvM/QApB+/sXKZL9TzVy6nITKQs0WPtbUst/yWGt1NI5k
-         dga02M8OEa0oTMshB6HHlJXOkMbsbYmDZ4WJAeO+vTKvju2MFp0fD0zIvqxUWoCj9/4i
-         k+kOjfKblXmy0Rh+Fd1TyzEwgjG+LXMD+mI7FyOi3naGlkMGdgbSylkbhaK0Fp10cSDY
-         aTxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689604669; x=1692196669;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nYUU8YV3BqJ0I2zWti5nCz47R+nejQLyugvMd3FOv9g=;
-        b=BsKkmOZ1dpm2RWmMkMTu05GUo5cZJVn/uEW0GNYxtL0cppA0KhkhheyrYukJnETTC/
-         M6KOqzlTutJ5B8XqW5PGi68EH1HnAyjX8oqpMMsBaZzW/DgDxCsCKu2/kd/l41/o1+nO
-         Uf4QvkgZtYj6NUU6+n7q0ECztegOVki5zcDsWuARL+00dujGYy5wm5kR8J0oA6iVzfQM
-         lsjnNtimCMpfzH4H37KfTTS/GoP+ux5IqrWikUhFmNt7l9ylvD1TpXqRiRjAe3WNKfZV
-         5AYqvDSk/wqwrjVs/Jmh9OYDAgOUT0zjPzh8nemgzpQJUwQlAdR3EejI5k/6ftRbzi+0
-         rjwA==
-X-Gm-Message-State: ABy/qLaIShGsiVRvAjKsK91KNdCmyD9UyLwqeQyTIpsDgNp32EUG6Cle
-        eomlp7w9UNf+qZcbffZaCqM=
-X-Google-Smtp-Source: APBJJlGlBUjN/AJOghm7qejJnwmyoRu2rFRiWEIaL7/Y/DT8/Fq1mlhKtJWadteBiwX0qpkH7F2ssg==
-X-Received: by 2002:a1c:4b0e:0:b0:3fb:b4fc:be62 with SMTP id y14-20020a1c4b0e000000b003fbb4fcbe62mr9722372wma.17.1689604668611;
-        Mon, 17 Jul 2023 07:37:48 -0700 (PDT)
-Received: from [10.0.0.102] (snat-11.cgn.sat-an.net. [176.222.226.11])
-        by smtp.gmail.com with ESMTPSA id n22-20020a7bc5d6000000b003fa968e9c27sm8056153wmk.9.2023.07.17.07.37.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Jul 2023 07:37:48 -0700 (PDT)
-Message-ID: <63a650a449b9937f95f5f2b47546e07e60c06630.camel@gmail.com>
-Subject: Re: [PATCH v3] Revert "usb: dwc3: core: Enable AutoRetry feature in
- the controller"
-From:   Jakub =?iso-8859-2?Q?Van=ECk?= <linuxtardis@gmail.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Mauro Ribeiro <mauro.ribeiro@hardkernel.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Date:   Mon, 17 Jul 2023 16:37:47 +0200
-In-Reply-To: <20230714213838.zil4c4wt3spbedvi@synopsys.com>
-References: <20230714122419.27741-1-linuxtardis@gmail.com>
-         <20230714213838.zil4c4wt3spbedvi@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        with ESMTP id S230266AbjGQPPo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Jul 2023 11:15:44 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D02C9F9;
+        Mon, 17 Jul 2023 08:15:42 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36HCoKJM021976;
+        Mon, 17 Jul 2023 15:15:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=iJVRwGgBDqorv/DdEpo+T+O3KpUQk35Go53H2Mg5u8E=;
+ b=TEv12YQJtRqtcBcMQNYjN2fHJr5tQSNHxSPBRbeabR7qC+/GYg5bqGHdJFIeslN6vbqe
+ t0r5WUxe61FcITS5uXF8c5h2f2Z1vYQxIHEZlk5OQAUm5wvs4XPjdvx3q6TJ/byYBjK/
+ O4kDChun4EJkq6FEjScChAV+6aeWNLEpPVRzW9Aqz66X85l/YBaXVqOsu1Ja8/pokEcm
+ 9POr3DvhDDR9UHf/fMtc0KvSxC5p/nrbH+eLbIG0RVpzVy6xAohlB4wr62q6toem/W5j
+ Gk31paBt7EENzORSPmP3uazlF3ansNOcGb/muMIlszDKDxHbUdRHkRmhzwowjpda4Ws2 Dg== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3run1jkrc1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 17 Jul 2023 15:15:24 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36HFFNXY009272
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 17 Jul 2023 15:15:23 GMT
+Received: from [10.216.3.135] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Mon, 17 Jul
+ 2023 08:15:17 -0700
+Message-ID: <02428901-1941-f104-e55b-d197d589a93f@quicinc.com>
+Date:   Mon, 17 Jul 2023 20:45:14 +0530
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.1
+Subject: Re: [PATCH v9 06/10] usb: dwc3: qcom: Add support to read IRQ's
+ related to multiport
+From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+To:     Johan Hovold <johan@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        <quic_jackp@quicinc.com>, Wesley Cheng <quic_wcheng@quicinc.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>, <ahalaney@redhat.com>,
+        <quic_shazhuss@quicinc.com>
+References: <20230621043628.21485-1-quic_kriskura@quicinc.com>
+ <20230621043628.21485-7-quic_kriskura@quicinc.com>
+ <ZK6YrLMn9r39zEeB@hovoldconsulting.com>
+ <ef29e520-7b9c-f581-e70a-250df80d3821@quicinc.com>
+ <ZLEP6Ekh3unSTiCL@hovoldconsulting.com>
+ <7c04ebd9-4def-87d6-0640-35fd0ccd20f5@quicinc.com>
+ <9a304650-0360-5509-4922-0818e8e306f5@quicinc.com>
+Content-Language: en-US
+In-Reply-To: <9a304650-0360-5509-4922-0818e8e306f5@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: XuMn0I8BfbE4W_gx3_jejELyo-kSgIBF
+X-Proofpoint-GUID: XuMn0I8BfbE4W_gx3_jejELyo-kSgIBF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-17_12,2023-07-13_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
+ bulkscore=0 mlxlogscore=908 priorityscore=1501 mlxscore=0 spamscore=0
+ phishscore=0 lowpriorityscore=0 impostorscore=0 malwarescore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2306200000 definitions=main-2307170139
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,157 +97,103 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Thinh,
 
-On Fri, 2023-07-14 at 21:38 +0000, Thinh Nguyen wrote:
-> On Fri, Jul 14, 2023, Jakub Vanek wrote:
-> > This reverts commit b138e23d3dff90c0494925b4c1874227b81bddf7.
-> >=20
-> > AutoRetry has been found to sometimes cause controller freezes when
-> > communicating with buggy USB devices.
-> >=20
-> > This controller feature allows the controller in host mode to send
-> > non-terminating/burst retry ACKs instead of terminating retry ACKs
-> > to devices when a transaction error (CRC error or overflow) occurs.
-> >=20
-> > Unfortunately, if the USB device continues to respond with a CRC
-> > error,
-> > the controller will not complete endpoint-related commands while it
-> > keeps trying to auto-retry. [3] The xHCI driver will notice this
-> > once
-> > it tries to abort the transfer using a Stop Endpoint command and
-> > does not receive a completion in time. [1]
-> > This situation is reported to dmesg:
-> >=20
-> > [sda] tag#29 uas_eh_abort_handler 0 uas-tag 1 inflight: CMD IN
-> > [sda] tag#29 CDB: opcode=3D0x28 28 00 00 69 42 80 00 00 48 00
-> > xhci-hcd: xHCI host not responding to stop endpoint command
-> > xhci-hcd: xHCI host controller not responding, assume dead
-> > xhci-hcd: HC died; cleaning up
-> >=20
-> > Some users observed this problem on an Odroid HC2 with the JMS578
-> > USB3-to-SATA bridge. The issue can be triggered by starting
-> > a read-heavy workload on an attached SSD. After a while, the host
-> > controller would die and the SSD would disappear from the system.
-> > [1]
-> >=20
-> > Further analysis by Synopsys determined that controller revisions
-> > other than the one in Odroid HC2 are also affected by this.
-> > The recommended solution was to disable AutoRetry altogether.
-> > This change does not have a noticeable performance impact. [2]
-> >=20
-> > Revert the enablement commit. This will keep the AutoRetry bit in
-> > the default state configured during SoC design [2].
-> >=20
-> > Fixes: b138e23d3dff ("usb: dwc3: core: Enable AutoRetry feature in
-> > the controller")
-> > Link:
-> > https://urldefense.com/v3/__https://lore.kernel.org/r/a21f34c04632d250c=
-d0a78c7c6f4a1c9c7a43142.camel@gmail.com/__;!!A4F2R9G_pg!cQZmUozSCVry9wEn5TT=
-VGljEo6B_nKIel0kWXsUQbaleJZwkOyrvc4FzWTlbfcUJ7hGz9V50rn0A2WMEceULIS9y9A$
-> > =C2=A0 [1]
-> > Link:
-> > https://urldefense.com/v3/__https://lore.kernel.org/r/20230711214834.ky=
-r6ulync32d4ktk@synopsys.com/__;!!A4F2R9G_pg!cQZmUozSCVry9wEn5TTVGljEo6B_nKI=
-el0kWXsUQbaleJZwkOyrvc4FzWTlbfcUJ7hGz9V50rn0A2WMEceXrbrG9iA$
-> > =C2=A0 [2]
-> > Link:
-> > https://urldefense.com/v3/__https://lore.kernel.org/r/20230712225518.2s=
-mu7wse6djc7l5o@synopsys.com/__;!!A4F2R9G_pg!cQZmUozSCVry9wEn5TTVGljEo6B_nKI=
-el0kWXsUQbaleJZwkOyrvc4FzWTlbfcUJ7hGz9V50rn0A2WMEceWVJz8nuQ$
-> > =C2=A0 [3]
-> > Cc: stable@vger.kernel.org
-> > Cc: Mauro Ribeiro <mauro.ribeiro@hardkernel.com>
-> > Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > Suggested-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-> > Signed-off-by: Jakub Vanek <linuxtardis@gmail.com>
-> > ---
-> > V2 -> V3: Include more findings in changelog
-> > V1 -> V2: Updated to disable AutoRetry everywhere based on Synopsys
-> > feedback
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Reworded the cha=
-ngelog a bit to make it clearer
-> >=20
-> > =C2=A0drivers/usb/dwc3/core.c | 16 ----------------
-> > =C2=A0drivers/usb/dwc3/core.h |=C2=A0 3 ---
-> > =C2=A02 files changed, 19 deletions(-)
-> >=20
-> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> > index f6689b731718..a4e079d37566 100644
-> > --- a/drivers/usb/dwc3/core.c
-> > +++ b/drivers/usb/dwc3/core.c
-> > @@ -1209,22 +1209,6 @@ static int dwc3_core_init(struct dwc3 *dwc)
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0dwc3_writel(dwc->regs, DWC3_GUCTL1, reg);
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
-> > =C2=A0
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (dwc->dr_mode =3D=3D USB_=
-DR_MODE_HOST ||
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dwc->dr_m=
-ode =3D=3D USB_DR_MODE_OTG) {
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0reg =3D dwc3_readl(dwc->regs, DWC3_GUCTL);
-> > -
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0/*
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 * Enable Auto retry Feature to make the controller
-> > operating in
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 * Host mode on seeing transaction errors(CRC
-> > errors or internal
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 * overrun scenerios) on IN transfers to reply to
-> > the device
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 * with a non-terminating retry ACK (i.e, an ACK
-> > transcation
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 * packet with Retry=3D1 & Nump !=3D 0)
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 */
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0reg |=3D DWC3_GUCTL_HSTINAUTORETRY;
-> > -
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0dwc3_writel(dwc->regs, DWC3_GUCTL, reg);
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
-> > -
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/*
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Must config both num=
-ber of packets and max burst
-> > settings to enable
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * RX and/or TX thresho=
-ld.
-> > diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-> > index 8b1295e4dcdd..a69ac67d89fe 100644
-> > --- a/drivers/usb/dwc3/core.h
-> > +++ b/drivers/usb/dwc3/core.h
-> > @@ -256,9 +256,6 @@
-> > =C2=A0#define DWC3_GCTL_GBLHIBERNATIONEN=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0B=
-IT(1)
-> > =C2=A0#define DWC3_GCTL_DSBLCLKGTNG=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0BIT(0)
-> > =C2=A0
-> > -/* Global User Control Register */
-> > -#define DWC3_GUCTL_HSTINAUTORETRY=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0B=
-IT(14)
-> > -
-> > =C2=A0/* Global User Control 1 Register */
-> > =C2=A0#define DWC3_GUCTL1_DEV_DECOUPLE_L1L2_EVT=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0BIT(31)
-> > =C2=A0#define DWC3_GUCTL1_TX_IPGAP_LINECHECK_DIS=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0BIT(28)
-> > --=20
-> > 2.25.1
-> >=20
->=20
-> Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 
-Thank you!
+On 7/16/2023 12:31 AM, Krishna Kurapati PSSNV wrote:
+> 
+> 
+> On 7/14/2023 4:10 PM, Krishna Kurapati PSSNV wrote:
+>>
+>>
+>> On 7/14/2023 2:35 PM, Johan Hovold wrote:
+>>> On Wed, Jul 12, 2023 at 11:56:33PM +0530, Krishna Kurapati PSSNV wrote:
+>>>> On 7/12/2023 5:42 PM, Johan Hovold wrote:
+>>>>> On Wed, Jun 21, 2023 at 10:06:24AM +0530, Krishna Kurapati wrote:
+>>>>>> Add support to read Multiport IRQ's related to quad port controller
+>>>>>> of SA8295 Device.
+>>>>>>
+>>>>>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>>>>>> ---
+>>>>>>    drivers/usb/dwc3/dwc3-qcom.c | 108 
+>>>>>> +++++++++++++++++++++++++++++------
+>>>>>>    1 file changed, 91 insertions(+), 17 deletions(-)
+>>>>>
+>>>>>> +static int dwc3_qcom_setup_mp_irq(struct platform_device *pdev)
+>>>>>> +{
+>>>>>> +    struct dwc3_qcom *qcom = platform_get_drvdata(pdev);
+>>>>>> +    char irq_name[15];
+>>>>>
+>>>>> The interrupt device-name string can not be allocated on the stack or
+>>>>> reused as it is stored directly in each irqaction structure.
+>>>>>
+>>>>> This can otherwise lead to random crashes when accessing
+>>>>> /proc/interrupts:
+>>>>>
+>>>>>     https://lore.kernel.org/lkml/ZK6IV_jJPICX5r53@hovoldconsulting.com/
+>>>
+>>>>     Sure, will create a static array of names if possible in global
+>>>> section of file and use it to read interrupts.
+>>>
+>>> Or just use devm_kasprintf(), which should allow for a cleaner
+>>> implementation.
+>>>
+>>> I've fixed it up like this for my X13s wip branches:
+>>>
+>>>     https://github.com/jhovold/linux/commit/0898b54456bc2f4bd4d420480db98e6758771ace
+>>>>     Are you fine with seperating out setup_irq and setup_mp_irq 
+>>>> functions
+>>>> ? Can you please review comments and suggestion on [1].
+>>>
+>>> I haven't had time to look at your latest replies yet, but as I already
+>>> said when reviewing v9, it seems you should be using a common helper for
+>>> non-mp and mp.
+>>>
+>> Hi Johan,
+>>
+>>   The gist of my mail was to see if I can defer qcom probe when dwc3 
+>> probe fails/or doesn't happen on of_plat_pop (which is logical) so 
+>> that we can move setup_irq to after dwc3_register_core so that we know 
+>> whether we are MP capable or not. This would help us move all IRQ 
+>> reading into one function.
+>>
+> Hi Johan,
+> 
+>   I see it is difficult to write a common helper. To do so, we need to 
+> know whether the device is MP capable or not in advance. And since it is 
+> not possible to know it before of_plat_pop is done, I see only few ways 
+> to do it:
+> 
+> 1. Based on qcom node compatible string, I can read whether the device 
+> is MP capable or not and get IRQ's accordingly.
+> 
+> 2. Read the port_info in advance but it needs me to go through some DT 
+> props and try getting this info. Or read xhci regs like we are doing in 
+> core (which is not good). Also since some Dt props can be missing, is it 
+> difficult to get the MP capability info before of_plat_pop is done.
+> 
+> 3. Remove IRQ handling completely. Just because the device has IRQ's 
+> present, I don't see a point in adding them to bindings, and because we 
+> added them to bindings, we are making a patch to read them (and since 
+> this is a little challenging, the whole of multiport series is blocked 
+> although I don't need wakeup support on these interrupts right away).
+> 
+> Can't we let the rest of the patches go through and let interrupt 
+> handling for 2nd, 3rd and 4rth ports be taken care later ? I am asking 
+> this because I want the rest of the patches which are in good shape now 
+> (after fixing the nits mentioned) to get merged atleast. I will make 
+> sure to add interrupt handling later in a different series once this is 
+> merged once I send v10.
+> 
+> Or if there is a simpler way to do it, I would be happy to take any 
+> suggestions and complete this missing part in this series itself.
+>
 
-> Thanks,
-> Thinh
+Hi Konrad, Bjorn,
 
-Best regards,
-Jakub
+  Can you also let me know your review on this. Can we add a compatible 
+data to dwc3-qcom to identify whether we need to read MP irq's or non-NP 
+irq's and also if it is better to split this series into two. (One for 
+multiport and one for dwc3-qcom IRQ's)
+
+Regards,
+Krishna,
