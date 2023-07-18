@@ -2,248 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC08C757431
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jul 2023 08:32:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28399757534
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jul 2023 09:21:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230339AbjGRGb7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Jul 2023 02:31:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38574 "EHLO
+        id S231382AbjGRHVh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Jul 2023 03:21:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230152AbjGRGb6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Jul 2023 02:31:58 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2C312D
-        for <linux-usb@vger.kernel.org>; Mon, 17 Jul 2023 23:31:56 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-51e566b1774so6972703a12.1
-        for <linux-usb@vger.kernel.org>; Mon, 17 Jul 2023 23:31:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689661915; x=1692253915;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6/hoyrn/wbGIYhczZbohLc08mPQz2c//diCGmR1SNCs=;
-        b=cCmezODa1Zjk5YSZs21FFtyeirFpNuGyUodWN+5TlWZsJa+qY5zs9WlubMvpARwvZY
-         bzLaAqqioBCuU+IlEAPAlI+vMZ+zl2wdk0ro+1dDnRORUSUljNJFsd6HcPTCt9k/SnKT
-         LxUc9/eWkFkfcIYUhva3oixOyjezyOHJh5buJqjwk07gRvfr1UwQf1ndI37EBoAC2D/8
-         /c714FVYY5ZrUa4V4SsDaiuOBV4shvtV4K1/Psd37zoYBp8UFTF0M2PrqtQ8Ykiv8V5P
-         QfzvViNO3lcgseWuEW2LaZ2f5wdIOENnphA0WuCbClPvlCGzjIk02sS3ouxropnl6xT6
-         wuOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689661915; x=1692253915;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6/hoyrn/wbGIYhczZbohLc08mPQz2c//diCGmR1SNCs=;
-        b=di6mbsMbdzZGJVhnmh6o5C/m8DtCgpaJ1ueivdDTb/bNn9jtzQGfMjJtLKcMhuiviJ
-         pSQLTGuykBREHS0jG8uhXmMfdSlM19J7Mic7WDL8luZgN62iL73ttvRn5kwP5toOZd8Y
-         mOAaBns7UwPmzMaAj4ajUyKW1/JI+YYvRIeTjHUYOBf25fXnhJ80Rg24zR3cL5OpQvZH
-         X2n4u5dTYfJsg0ZXQZFYTQrNQ7rijdWDcGPBY9+PD6yIVF59w8ekfTOsS0eimEtkdxRM
-         N6P5TS39Yh5JMQLE4ioizxWXCl7fliY5XKWWnQTmHtDmHReHP1tqK7cw154McCKIwU3w
-         EqdA==
-X-Gm-Message-State: ABy/qLZKeue1Nj7HHNEkAVzE6xplhjjf5SVTH7zLweVh42V6TZkv34VR
-        V725BWo4B3YILuCGBHIlMBEv3w==
-X-Google-Smtp-Source: APBJJlHURaF/a0OqM8YRJRdaBe/gIR6bagjx9zEXyeMpdO5aKCJG+sg2VCR+Gp+Fl7AXhUigQq4zOg==
-X-Received: by 2002:a05:6402:7c4:b0:51e:5cab:feb9 with SMTP id u4-20020a05640207c400b0051e5cabfeb9mr12767227edy.33.1689661915337;
-        Mon, 17 Jul 2023 23:31:55 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id ca17-20020aa7cd71000000b0051e249f3dc6sm704832edb.72.2023.07.17.23.31.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jul 2023 23:31:54 -0700 (PDT)
-Message-ID: <1f400879-03e4-9a36-b6db-91f53f70a866@linaro.org>
-Date:   Tue, 18 Jul 2023 08:31:52 +0200
+        with ESMTP id S229920AbjGRHVg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Jul 2023 03:21:36 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9BB4610C;
+        Tue, 18 Jul 2023 00:21:32 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 36I7L8h44009295, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 36I7L8h44009295
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
+        Tue, 18 Jul 2023 15:21:08 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Tue, 18 Jul 2023 15:21:17 +0800
+Received: from RTEXH36505.realtek.com.tw (172.21.6.25) by
+ RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Tue, 18 Jul 2023 15:21:15 +0800
+Received: from localhost.localdomain (172.21.252.101) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server id
+ 15.1.2375.32 via Frontend Transport; Tue, 18 Jul 2023 15:21:15 +0800
+From:   Stanley Chang <stanley_chang@realtek.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     Stanley Chang <stanley_chang@realtek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v1] usb: dwc3: core: configure TX/RX threshold for DWC3_IP
+Date:   Tue, 18 Jul 2023 15:21:08 +0800
+Message-ID: <20230718072115.19685-1-stanley_chang@realtek.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v9 4/7] usb: misc: eud: Add driver support for SM6115 /
- SM4250
-Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        quic_schowdhu@quicinc.com, gregkh@linuxfoundation.org,
-        stephan@gerhold.net
-References: <20230718061052.1332993-1-bhupesh.sharma@linaro.org>
- <20230718061052.1332993-5-bhupesh.sharma@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230718061052.1332993-5-bhupesh.sharma@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-KSE-ServerInfo: RTEXMBS04.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 18/07/2023 08:10, Bhupesh Sharma wrote:
-> Add SM6115 / SM4250 SoC EUD support in qcom_eud driver.
-> 
-> On some SoCs (like the SM6115 / SM4250 SoC), the mode manager
-> needs to be accessed only via the secure world (through 'scm'
-> calls).
-> 
-> Also, the enable bit inside 'tcsr_check_reg' needs to be set
-> first to set the eud in 'enable' mode on these SoCs.
-> 
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
->  drivers/usb/misc/Kconfig    |  2 +-
->  drivers/usb/misc/qcom_eud.c | 76 ++++++++++++++++++++++++++++++++++---
->  2 files changed, 72 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
-> index 99b15b77dfd57..51eb5140caa14 100644
-> --- a/drivers/usb/misc/Kconfig
-> +++ b/drivers/usb/misc/Kconfig
-> @@ -146,7 +146,7 @@ config USB_APPLEDISPLAY
->  
->  config USB_QCOM_EUD
->  	tristate "QCOM Embedded USB Debugger(EUD) Driver"
-> -	depends on ARCH_QCOM || COMPILE_TEST
-> +	depends on (ARCH_QCOM && QCOM_SCM) || COMPILE_TEST
->  	select USB_ROLE_SWITCH
->  	help
->  	  This module enables support for Qualcomm Technologies, Inc.
-> diff --git a/drivers/usb/misc/qcom_eud.c b/drivers/usb/misc/qcom_eud.c
-> index 7f371ea1248c3..a5b28fc24116a 100644
-> --- a/drivers/usb/misc/qcom_eud.c
-> +++ b/drivers/usb/misc/qcom_eud.c
-> @@ -11,9 +11,12 @@
->  #include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/of.h>
-> +#include <linux/of_address.h>
-> +#include <linux/of_device.h>
->  #include <linux/platform_device.h>
->  #include <linux/slab.h>
->  #include <linux/sysfs.h>
-> +#include <linux/firmware/qcom/qcom_scm.h>
->  #include <linux/usb/role.h>
->  
->  #define EUD_REG_INT1_EN_MASK	0x0024
-> @@ -30,6 +33,10 @@
->  #define EUD_INT_SAFE_MODE	BIT(4)
->  #define EUD_INT_ALL		(EUD_INT_VBUS | EUD_INT_SAFE_MODE)
->  
-> +#define EUD_EN2_EN		BIT(0)
-> +#define EUD_EN2_DISABLE		(0)
-> +#define TCSR_CHECK_EN		BIT(0)
-> +
->  struct eud_chip {
->  	struct device			*dev;
->  	struct usb_role_switch		*role_sw;
-> @@ -39,6 +46,7 @@ struct eud_chip {
->  	int				irq;
->  	bool				enabled;
->  	bool				usb_attached;
-> +	phys_addr_t			secure_mode_mgr;
->  };
->  
->  static int enable_eud(struct eud_chip *priv)
-> @@ -46,7 +54,11 @@ static int enable_eud(struct eud_chip *priv)
->  	writel(EUD_ENABLE, priv->base + EUD_REG_CSR_EUD_EN);
->  	writel(EUD_INT_VBUS | EUD_INT_SAFE_MODE,
->  			priv->base + EUD_REG_INT1_EN_MASK);
-> -	writel(1, priv->mode_mgr + EUD_REG_EUD_EN2);
-> +
-> +	if (priv->secure_mode_mgr)
-> +		qcom_scm_io_writel(priv->secure_mode_mgr + EUD_REG_EUD_EN2, EUD_EN2_EN);
-> +	else
-> +		writel(EUD_EN2_EN, priv->mode_mgr + EUD_REG_EUD_EN2);
->  
->  	return usb_role_switch_set_role(priv->role_sw, USB_ROLE_DEVICE);
->  }
-> @@ -54,7 +66,11 @@ static int enable_eud(struct eud_chip *priv)
->  static void disable_eud(struct eud_chip *priv)
->  {
->  	writel(0, priv->base + EUD_REG_CSR_EUD_EN);
-> -	writel(0, priv->mode_mgr + EUD_REG_EUD_EN2);
-> +
-> +	if (priv->secure_mode_mgr)
-> +		qcom_scm_io_writel(priv->secure_mode_mgr + EUD_REG_EUD_EN2, EUD_EN2_DISABLE);
-> +	else
-> +		writel(EUD_EN2_DISABLE, priv->mode_mgr + EUD_REG_EUD_EN2);
->  }
->  
->  static ssize_t enable_show(struct device *dev,
-> @@ -175,9 +191,37 @@ static void eud_role_switch_release(void *data)
->  	usb_role_switch_put(chip->role_sw);
->  }
->  
-> +static int eud_find_secure_reg_addr(struct device *dev, u64 *addr)
-> +{
-> +	struct device_node *tcsr;
-> +	struct device_node *np = dev->of_node;
-> +	struct resource res;
-> +	u32 offset;
-> +	int ret;
-> +
-> +	tcsr = of_parse_phandle(np, "qcom,secure-eud-reg", 0);
-> +	if (!tcsr)
-> +		return 0;
-> +
-> +	ret = of_address_to_resource(tcsr, 0, &res);
-> +	of_node_put(tcsr);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = of_property_read_u32_index(np, "qcom,secure-eud-reg", 1, &offset);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	*addr = res.start + offset;
-> +
-> +	return 0;
-> +}
-> +
->  static int eud_probe(struct platform_device *pdev)
->  {
->  	struct eud_chip *chip;
-> +	struct resource *res;
-> +	phys_addr_t tcsr_check = 0;
->  	int ret;
->  
->  	chip = devm_kzalloc(&pdev->dev, sizeof(*chip), GFP_KERNEL);
-> @@ -200,9 +244,30 @@ static int eud_probe(struct platform_device *pdev)
->  	if (IS_ERR(chip->base))
->  		return PTR_ERR(chip->base);
->  
-> -	chip->mode_mgr = devm_platform_ioremap_resource(pdev, 1);
-> -	if (IS_ERR(chip->mode_mgr))
-> -		return PTR_ERR(chip->mode_mgr);
-> +	/*
-> +	 * EUD block on a few Qualcomm SoCs needs secure register access.
-> +	 * Check for the same via vendor-specific dt property.
-> +	 */
-> +	ret = eud_find_secure_reg_addr(&pdev->dev, &tcsr_check);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	if (tcsr_check) {
-> +		res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+In Synopsys's dwc3 data book:
+To avoid underrun and overrun during the burst, in a high-latency bus
+system (like USB), threshold and burst size control is provided through
+GTXTHRCFG and GRXTHRCFG registers.
 
-I don't understand this code. If you have syscon to eud reg, then why
-you are not using it, but instead map again second address space?
+In Realtek DHC SoC, DWC3 USB 3.0 uses AHB system bus. When dwc3 is
+connected with USB 2.5G Ethernet, there will be overrun problem.
+Therefore, setting TX/RX thresholds can avoid this issue.
 
-> +		if (!res)
-> +			return dev_err_probe(chip->dev, -ENODEV,
-> +					     "failed to get secure_mode_mgr reg base\n");
-> +
-> +		chip->secure_mode_mgr = res->start;
-> +
-> +		ret = qcom_scm_io_writel(tcsr_check, TCSR_CHECK_EN);
+Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
+---
+ drivers/usb/dwc3/core.c | 33 +++++++++++++++++++++++++++++++++
+ drivers/usb/dwc3/core.h |  5 +++++
+ 2 files changed, 38 insertions(+)
 
-That's not how syscon is used. Your bindings defined it as syscon, so
-are you sure you are using it correctly?
-
-
-
-Best regards,
-Krzysztof
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index f6689b731718..a0a54e5c4ad9 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -1262,6 +1262,39 @@ static int dwc3_core_init(struct dwc3 *dwc)
+ 		}
+ 	}
+ 
++	if (DWC3_IP_IS(DWC3)) {
++		u8 rx_thr_num = dwc->rx_thr_num_pkt_prd;
++		u8 rx_maxburst = dwc->rx_max_burst_prd;
++		u8 tx_thr_num = dwc->tx_thr_num_pkt_prd;
++		u8 tx_maxburst = dwc->tx_max_burst_prd;
++
++		if (rx_thr_num && rx_maxburst) {
++			reg = dwc3_readl(dwc->regs, DWC3_GRXTHRCFG);
++			reg |= DWC3_GRXTHRCFG_PKTCNTSEL;
++
++			reg &= ~DWC3_GRXTHRCFG_RXPKTCNT(~0);
++			reg |= DWC3_GRXTHRCFG_RXPKTCNT(rx_thr_num);
++
++			reg &= ~DWC3_GRXTHRCFG_MAXRXBURSTSIZE(~0);
++			reg |= DWC3_GRXTHRCFG_MAXRXBURSTSIZE(rx_maxburst);
++
++			dwc3_writel(dwc->regs, DWC3_GRXTHRCFG, reg);
++		}
++
++		if (tx_thr_num && tx_maxburst) {
++			reg = dwc3_readl(dwc->regs, DWC3_GTXTHRCFG);
++			reg |= DWC3_GTXTHRCFG_PKTCNTSEL;
++
++			reg &= ~DWC3_GTXTHRCFG_TXPKTCNT(~0);
++			reg |= DWC3_GTXTHRCFG_TXPKTCNT(tx_thr_num);
++
++			reg &= ~DWC3_GTXTHRCFG_MAXTXBURSTSIZE(~0);
++			reg |= DWC3_GTXTHRCFG_MAXTXBURSTSIZE(tx_maxburst);
++
++			dwc3_writel(dwc->regs, DWC3_GTXTHRCFG, reg);
++		}
++	}
++
+ 	return 0;
+ 
+ err_power_off_phy:
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index 8b1295e4dcdd..5480fcb59bcb 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -211,6 +211,11 @@
+ #define DWC3_GRXTHRCFG_RXPKTCNT(n) (((n) & 0xf) << 24)
+ #define DWC3_GRXTHRCFG_PKTCNTSEL BIT(29)
+ 
++/* Global TX Threshold Configuration Register */
++#define DWC3_GTXTHRCFG_MAXTXBURSTSIZE(n) (((n) & 0xff) << 16)
++#define DWC3_GTXTHRCFG_TXPKTCNT(n) (((n) & 0xf) << 24)
++#define DWC3_GTXTHRCFG_PKTCNTSEL BIT(29)
++
+ /* Global RX Threshold Configuration Register for DWC_usb31 only */
+ #define DWC31_GRXTHRCFG_MAXRXBURSTSIZE(n)	(((n) & 0x1f) << 16)
+ #define DWC31_GRXTHRCFG_RXPKTCNT(n)		(((n) & 0x1f) << 21)
+-- 
+2.34.1
 
