@@ -2,268 +2,189 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F3007575B8
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jul 2023 09:52:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9714B75765F
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jul 2023 10:15:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231428AbjGRHwS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Jul 2023 03:52:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56670 "EHLO
+        id S231285AbjGRIPn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Jul 2023 04:15:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjGRHwR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Jul 2023 03:52:17 -0400
+        with ESMTP id S229923AbjGRIPm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Jul 2023 04:15:42 -0400
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D436C2;
-        Tue, 18 Jul 2023 00:52:16 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36I7hGVe013888;
-        Tue, 18 Jul 2023 07:52:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=oQ6BOhiyyrFevBw4ynJ7O3649893Zgi0w2EtY3I9Inw=;
- b=Sm8rK76Ri+mF7jHMxjUWqGiAcGSmstOlWa3rsmQETH/18bbftcRhDgVqkTb4Lv6iyZUk
- p05PV8z6gtvQseMZkqeH3zszFNymJ6VE7VbPYm3xNKKpQyxU8+vpiiVXgLGDXfn5qvJ6
- HN2+0ELNX6m8vdaiymsGq6x2600ejGVLRUAPeB4mwJWM0gD6d+J1jSVoCO9YIa3X3WPk
- vF1VwJCEdvM99J4Yhd5oCQ6Cwwev5BJ0QmsDHHCbocRLfJDHWqQe8LSGmabD/od76KNO
- qhtYRAitqt4hiLoiSZdidlObdSh32OQ9mDdsf/gf8oonmuUmHmENVnKU6KRFCtIuq3KA ww== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rwfj78ud8-1
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBB75137;
+        Tue, 18 Jul 2023 01:15:40 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36I7wSXc013480;
+        Tue, 18 Jul 2023 08:14:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=QlUaxF4lNsiBTdcU49lZ8jFbRsh1z2SpxDDTLFj5kCE=;
+ b=Cse8vtDex3891zr+cs17ubIS2jDDrfDgVBuYr8dzniwX7H77thfgTqjtPbhJmupdCMqY
+ 6ZEcogEQUp0U0HTQmrpRwwCqtpSeNLovjdUT95rMEDuCePYEsHFkVhg6YPkEgnKVs/d0
+ 6J8JZ3VmGPtzDtN4wwu+oN0CeY8somBMZzLrNOKWlHxBnlH1j3D7Z7e7Q7OyWaH+r+BY
+ QTHZEoTzj5tbB7imfIUCktQnbSfkUwhvd2ZNbLGccGz/mpCCQ8+e0G5gA/AV6CLx9Rz/
+ g9ZYWrz2P6eRDy/6sRFoNwgV2fUoCnaeOWG77E2R0ksWMj21JG1Dc79MEXyIn2mxH5SX /Q== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rwps581rc-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Jul 2023 07:52:09 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36I7q7MP030165
+        Tue, 18 Jul 2023 08:14:49 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36I8Eleb031853
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 18 Jul 2023 07:52:07 GMT
-Received: from [10.50.3.220] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Tue, 18 Jul
- 2023 00:52:03 -0700
-Message-ID: <2adb5ee2-7876-cdf1-d0c6-437615b4f52c@quicinc.com>
-Date:   Tue, 18 Jul 2023 13:21:59 +0530
+        Tue, 18 Jul 2023 08:14:47 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Tue, 18 Jul 2023 01:14:39 -0700
+Date:   Tue, 18 Jul 2023 13:44:35 +0530
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <gregkh@linuxfoundation.org>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <p.zabel@pengutronix.de>, <arnd@arndb.de>,
+        <geert+renesas@glider.be>, <neil.armstrong@linaro.org>,
+        <nfraprado@collabora.com>, <rafal@milecki.pl>,
+        <quic_srichara@quicinc.com>, <quic_varada@quicinc.org>,
+        <quic_wcheng@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v4 4/6] arm64: dts: qcom: ipq5332: Add USB related nodes
+Message-ID: <20230718081434.GA5012@varda-linux.qualcomm.com>
+References: <cover.1689160067.git.quic_varada@quicinc.com>
+ <1f99805b6437aa8d6eaa4663e8d27b98ee595f00.1689160067.git.quic_varada@quicinc.com>
+ <cfafdde2-4ded-517f-7c69-a751e53984e3@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v9 4/7] usb: misc: eud: Add driver support for SM6115 /
- SM4250
-Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
-CC:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <linux-kernel@vger.kernel.org>,
-        <bhupesh.linux@gmail.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <krzysztof.kozlowski@linaro.org>, <gregkh@linuxfoundation.org>,
-        <stephan@gerhold.net>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
-References: <20230718061052.1332993-1-bhupesh.sharma@linaro.org>
- <20230718061052.1332993-5-bhupesh.sharma@linaro.org>
-From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-In-Reply-To: <20230718061052.1332993-5-bhupesh.sharma@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <cfafdde2-4ded-517f-7c69-a751e53984e3@linaro.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 X-Originating-IP: [10.80.80.8]
 X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+ nasanex01a.na.qualcomm.com (10.52.223.231)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: w6giwMxFqSCAA8ImGtdm2dVVwcy_YUgB
-X-Proofpoint-ORIG-GUID: w6giwMxFqSCAA8ImGtdm2dVVwcy_YUgB
+X-Proofpoint-GUID: O5yMJKbLUQKlQN6oq9z6uvLMPJAk0ldF
+X-Proofpoint-ORIG-GUID: O5yMJKbLUQKlQN6oq9z6uvLMPJAk0ldF
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
  definitions=2023-07-17_15,2023-07-13_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
- mlxlogscore=999 impostorscore=0 clxscore=1011 phishscore=0 spamscore=0
- lowpriorityscore=0 priorityscore=1501 mlxscore=0 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2306200000 definitions=main-2307180070
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ mlxlogscore=784 lowpriorityscore=0 suspectscore=0 bulkscore=0
+ priorityscore=1501 adultscore=0 impostorscore=0 phishscore=0 clxscore=1015
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2306200000 definitions=main-2307180073
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Bhupesh,
+On Sat, Jul 15, 2023 at 02:36:18PM +0200, Konrad Dybcio wrote:
+> On 12.07.2023 13:38, Varadarajan Narayanan wrote:
+> > Add USB phy and controller nodes.
+> >
+> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > ---
+> > v4:
+> > 	Change node name
+> > 	Remove blank line
+> > 	'make CHECK_DTBS=y DT_SCHEMA_FILES=qcom qcom/ipq5332-rdp441.dtb' passed
+> DT_SCHEMA_FILES accepts yaml files
 
-On 7/18/2023 11:40 AM, Bhupesh Sharma wrote:
-> Add SM6115 / SM4250 SoC EUD support in qcom_eud driver.
-> 
-> On some SoCs (like the SM6115 / SM4250 SoC), the mode manager
-> needs to be accessed only via the secure world (through 'scm'
-> calls).
-> 
-> Also, the enable bit inside 'tcsr_check_reg' needs to be set
-> first to set the eud in 'enable' mode on these SoCs.
-> 
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
->   drivers/usb/misc/Kconfig    |  2 +-
->   drivers/usb/misc/qcom_eud.c | 76 ++++++++++++++++++++++++++++++++++---
->   2 files changed, 72 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
-> index 99b15b77dfd57..51eb5140caa14 100644
-> --- a/drivers/usb/misc/Kconfig
-> +++ b/drivers/usb/misc/Kconfig
-> @@ -146,7 +146,7 @@ config USB_APPLEDISPLAY
->   
->   config USB_QCOM_EUD
->   	tristate "QCOM Embedded USB Debugger(EUD) Driver"
-> -	depends on ARCH_QCOM || COMPILE_TEST
-> +	depends on (ARCH_QCOM && QCOM_SCM) || COMPILE_TEST
->   	select USB_ROLE_SWITCH
->   	help
->   	  This module enables support for Qualcomm Technologies, Inc.
-> diff --git a/drivers/usb/misc/qcom_eud.c b/drivers/usb/misc/qcom_eud.c
-> index 7f371ea1248c3..a5b28fc24116a 100644
-> --- a/drivers/usb/misc/qcom_eud.c
-> +++ b/drivers/usb/misc/qcom_eud.c
-> @@ -11,9 +11,12 @@
->   #include <linux/kernel.h>
->   #include <linux/module.h>
->   #include <linux/of.h>
-> +#include <linux/of_address.h>
-> +#include <linux/of_device.h>
->   #include <linux/platform_device.h>
->   #include <linux/slab.h>
->   #include <linux/sysfs.h>
-> +#include <linux/firmware/qcom/qcom_scm.h>
->   #include <linux/usb/role.h>
->   
->   #define EUD_REG_INT1_EN_MASK	0x0024
-> @@ -30,6 +33,10 @@
->   #define EUD_INT_SAFE_MODE	BIT(4)
->   #define EUD_INT_ALL		(EUD_INT_VBUS | EUD_INT_SAFE_MODE)
->   
-> +#define EUD_EN2_EN		BIT(0)
-> +#define EUD_EN2_DISABLE		(0)
-> +#define TCSR_CHECK_EN		BIT(0)
-> +
->   struct eud_chip {
->   	struct device			*dev;
->   	struct usb_role_switch		*role_sw;
-> @@ -39,6 +46,7 @@ struct eud_chip {
->   	int				irq;
->   	bool				enabled;
->   	bool				usb_attached;
-> +	phys_addr_t			secure_mode_mgr;
->   };
->   
->   static int enable_eud(struct eud_chip *priv)
-> @@ -46,7 +54,11 @@ static int enable_eud(struct eud_chip *priv)
->   	writel(EUD_ENABLE, priv->base + EUD_REG_CSR_EUD_EN);
->   	writel(EUD_INT_VBUS | EUD_INT_SAFE_MODE,
->   			priv->base + EUD_REG_INT1_EN_MASK);
-> -	writel(1, priv->mode_mgr + EUD_REG_EUD_EN2);
-> +
-> +	if (priv->secure_mode_mgr)
-> +		qcom_scm_io_writel(priv->secure_mode_mgr + EUD_REG_EUD_EN2, EUD_EN2_EN);
-> +	else
-> +		writel(EUD_EN2_EN, priv->mode_mgr + EUD_REG_EUD_EN2);
->   
->   	return usb_role_switch_set_role(priv->role_sw, USB_ROLE_DEVICE);
->   }
-> @@ -54,7 +66,11 @@ static int enable_eud(struct eud_chip *priv)
->   static void disable_eud(struct eud_chip *priv)
->   {
->   	writel(0, priv->base + EUD_REG_CSR_EUD_EN);
-> -	writel(0, priv->mode_mgr + EUD_REG_EUD_EN2);
-> +
-> +	if (priv->secure_mode_mgr)
-> +		qcom_scm_io_writel(priv->secure_mode_mgr + EUD_REG_EUD_EN2, EUD_EN2_DISABLE);
-> +	else
-> +		writel(EUD_EN2_DISABLE, priv->mode_mgr + EUD_REG_EUD_EN2);
->   }
->   
->   static ssize_t enable_show(struct device *dev,
-> @@ -175,9 +191,37 @@ static void eud_role_switch_release(void *data)
->   	usb_role_switch_put(chip->role_sw);
->   }
->   
-> +static int eud_find_secure_reg_addr(struct device *dev, u64 *addr)
-> +{
-> +	struct device_node *tcsr;
-> +	struct device_node *np = dev->of_node;
-> +	struct resource res;
-> +	u32 offset;
-> +	int ret;
-> +
-> +	tcsr = of_parse_phandle(np, "qcom,secure-eud-reg", 0);
-> +	if (!tcsr)
-> +		return 0;
-> +
-> +	ret = of_address_to_resource(tcsr, 0, &res);
-> +	of_node_put(tcsr);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = of_property_read_u32_index(np, "qcom,secure-eud-reg", 1, &offset);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	*addr = res.start + offset;
-> +
-> +	return 0;
-> +}
-> +
->   static int eud_probe(struct platform_device *pdev)
->   {
->   	struct eud_chip *chip;
-> +	struct resource *res;
-> +	phys_addr_t tcsr_check = 0;
->   	int ret;
->   
->   	chip = devm_kzalloc(&pdev->dev, sizeof(*chip), GFP_KERNEL);
-> @@ -200,9 +244,30 @@ static int eud_probe(struct platform_device *pdev)
->   	if (IS_ERR(chip->base))
->   		return PTR_ERR(chip->base);
->   
-> -	chip->mode_mgr = devm_platform_ioremap_resource(pdev, 1);
-> -	if (IS_ERR(chip->mode_mgr))
-> -		return PTR_ERR(chip->mode_mgr);
-> +	/*
-> +	 * EUD block on a few Qualcomm SoCs needs secure register access.
-> +	 * Check for the same via vendor-specific dt property.
-> +	 */
-> +	ret = eud_find_secure_reg_addr(&pdev->dev, &tcsr_check);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	if (tcsr_check) {
-> +		res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
-> +		if (!res)
-> +			return dev_err_probe(chip->dev, -ENODEV,
-> +					     "failed to get secure_mode_mgr reg base\n");
-> +
-> +		chip->secure_mode_mgr = res->start;
+I followed the example given in https://www.linaro.org/blog/tips-and-tricks-for-validating-devicetree-sources-with-the-devicetree-schema/
 
-There are multiple instances where the addresses are being mapped from 
-the dt property without using the devm version. Either we should switch 
-to the later or ensure that these addresses are unmapped in the removal
-path of the driver.
+		make CHECK_DTBS=y DT_SCHEMA_FILES=trivial-devices.yaml qcom/sm8450-hdk.dtb
+		make CHECK_DTBS=y DT_SCHEMA_FILES=/gpio/ qcom/sm8450-hdk.dtb
+	---->	make CHECK_DTBS=y DT_SCHEMA_FILES=qcom qcom/sm8450-hdk.dtb
 
-Thanks,
-Souradeep
+Will include the yaml from next time.
 
-> +
-> +		ret = qcom_scm_io_writel(tcsr_check, TCSR_CHECK_EN);
-> +		if (ret)
-> +			return dev_err_probe(chip->dev, ret, "failed to write tcsr check reg\n");
-> +	} else {
-> +		chip->mode_mgr = devm_platform_ioremap_resource(pdev, 1);
-> +		if (IS_ERR(chip->mode_mgr))
-> +			return PTR_ERR(chip->mode_mgr);
-> +	}
->   
->   	chip->irq = platform_get_irq(pdev, 0);
->   	ret = devm_request_threaded_irq(&pdev->dev, chip->irq, handle_eud_irq,
-> @@ -230,6 +295,7 @@ static void eud_remove(struct platform_device *pdev)
->   
->   static const struct of_device_id eud_dt_match[] = {
->   	{ .compatible = "qcom,sc7280-eud" },
-> +	{ .compatible = "qcom,sm6115-eud" },
->   	{ }
->   };
->   MODULE_DEVICE_TABLE(of, eud_dt_match);
+Thanks
+Varada
+
+> Konrad
+> > v1:
+> > 	Rename phy node
+> > 	Change compatible from m31,ipq5332-usb-hsphy -> qcom,ipq5332-usb-hsphy
+> > 	Remove 'qscratch' from phy node
+> > 	Fix alignment and upper-case hex no.s
+> > 	Add clock definition for the phy
+> > 	Remove snps,ref-clock-period-ns as it is not used. dwc3_ref_clk_period()
+> > 	in dwc3/core.c takes the frequency from ref clock and calculates fladj
+> > 	as appropriate.
+> > ---
+> >  arch/arm64/boot/dts/qcom/ipq5332.dtsi | 53 +++++++++++++++++++++++++++++++++++
+> >  1 file changed, 53 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+> > index 8bfc2db..8118356 100644
+> > --- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+> > @@ -405,6 +405,59 @@
+> >  				status = "disabled";
+> >  			};
+> >  		};
+> > +
+> > +		usbphy0: usb-phy@7b000 {
+> > +			compatible = "qcom,ipq5332-usb-hsphy";
+> > +			reg = <0x0007b000 0x12c>;
+> > +
+> > +			clocks = <&gcc GCC_USB0_PHY_CFG_AHB_CLK>;
+> > +			clock-names = "cfg_ahb";
+> > +
+> > +			resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
+> > +
+> > +			status = "disabled";
+> > +		};
+> > +
+> > +		usb2: usb2@8a00000 {
+> > +			compatible = "qcom,ipq5332-dwc3", "qcom,dwc3";
+> > +			reg = <0x08af8800 0x400>;
+> > +
+> > +			interrupts = <GIC_SPI 62 IRQ_TYPE_LEVEL_HIGH>;
+> > +			interrupt-names = "hs_phy_irq";
+> > +
+> > +			clocks = <&gcc GCC_USB0_MASTER_CLK>,
+> > +				 <&gcc GCC_SNOC_USB_CLK>,
+> > +				 <&gcc GCC_USB0_SLEEP_CLK>,
+> > +				 <&gcc GCC_USB0_MOCK_UTMI_CLK>;
+> > +			clock-names = "core",
+> > +				      "iface",
+> > +				      "sleep",
+> > +				      "mock_utmi";
+> > +
+> > +			resets = <&gcc GCC_USB_BCR>;
+> > +
+> > +			qcom,select-utmi-as-pipe-clk;
+> > +
+> > +			#address-cells = <1>;
+> > +			#size-cells = <1>;
+> > +			ranges;
+> > +
+> > +			status = "disabled";
+> > +
+> > +			usb2_0_dwc: usb@8a00000 {
+> > +				compatible = "snps,dwc3";
+> > +				reg = <0x08a00000 0xe000>;
+> > +				clocks = <&gcc GCC_USB0_MOCK_UTMI_CLK>;
+> > +				clock-names = "ref";
+> > +				interrupts = <GIC_SPI 64 IRQ_TYPE_LEVEL_HIGH>;
+> > +				usb-phy = <&usbphy0>;
+> > +				tx-fifo-resize;
+> > +				snps,is-utmi-l1-suspend;
+> > +				snps,hird-threshold = /bits/ 8 <0x0>;
+> > +				snps,dis_u2_susphy_quirk;
+> > +				snps,dis_u3_susphy_quirk;
+> > +			};
+> > +		};
+> >  	};
+> >
+> >  	timer {
