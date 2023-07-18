@@ -2,50 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC981757A59
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jul 2023 13:22:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68804757A5B
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jul 2023 13:23:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231831AbjGRLWg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Jul 2023 07:22:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39584 "EHLO
+        id S231964AbjGRLXE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Jul 2023 07:23:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231460AbjGRLWe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Jul 2023 07:22:34 -0400
+        with ESMTP id S231795AbjGRLWy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Jul 2023 07:22:54 -0400
 Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2088.outbound.protection.outlook.com [40.107.20.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF551701
-        for <linux-usb@vger.kernel.org>; Tue, 18 Jul 2023 04:22:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 048BB1731
+        for <linux-usb@vger.kernel.org>; Tue, 18 Jul 2023 04:22:35 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QBLu5GDjLHc+p+Oyy9LJP0q/Pi0UpiwF0QwzqV4WsIpxAXLw5h3JaMz5L+dT/5+4zayjdYWh+8DuJNlVB+oUsMriJqxBKRzDX+mA6ejqebpwlRaa0C2nvOBBe6ReVDQore1Mo06gqWWjVgYpOFhN6Na/7L3gx2bOGFzQ7vc/f0TA9oicMwu/c+47n8ryDcE0h4zB1WLju7xEbyJJforgM8+UeNZXjI8iOg6FRZsCxplysuRE2Yw5ZGbk2qs23eFlTQlj6+bOl+b4ICajZybURm4KOks7nVTVC7sjrlogx9YRpA3vFfbDk31mZ1gWZFJTJM7AVngm0gOZBgZZafJqVA==
+ b=mgUdpGSHZ5ot7+R6F7uC3LTymauVkB/QQhmiURMctCH0lK1u59Q1D1SsYG/Y03n9txbUhwgUaLHDR71l04e8PasMqXLmVpw/q+PPKQLMo4XslUc9qNh0lrS8BH1y0aQ91wspvXoyb+k9jlP+9I9a6lxP9bNtenbk1P+wi9QTXumtbLKBXcnwJs3zlSV5343iGrf8xQftScjX3h/bxk5ZR5cA0m3+YHe0qL+6BtoTnMX6FeOgHGSWHwZ51J04Y/ZOl5ZmyR9r+lxwNyrDJW89pIZolSE9jv0T2VGQNmKPq142uz6FKpL++dhvVymrqsw2LPRvDrKh11XkNVxgtpjggw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WABKwB67A0itaa/O3pQi5SwXQZUmAdNDXW9Q0+Zds8w=;
- b=SAJj3D2k2ZJ/IQcg8k0bF9H5CO4fkDdrlJQNWMNCFP28uYLvwTjm5RN6Z7/7+9PScPoaKzrpMc6qOMoBhnH5GZevcMjc++plqmYgLtCKiN7OShzsm5+zz1lPmkiY3GR+Wt6CUJbF5CljagW/oPQFRcbJ0HhQNbDDjuEmyfhD0XZ+GE6+VWYv+qtNabLle2RYsGesDsOgx090A+m0BZKuGfVd+cttHnJtEFqy7hBMKUzhCw4qsoPhb50WZ7lRrvDuOQ7mXxAKrBTmB7v9TP58IF+Sf/Jbwz1cCu5GY2FLK5wbbiMEjEnOHk3HMYL5HTEr2pjdJlYYEmE/PTMZBB8v1Q==
+ bh=HxYM8wAOWLY4g48aacF1x+UadbVDfLASTVbSiy4zkeI=;
+ b=Lh7s5tWcL6PiYzeY6NT0Zfu+ehNuMmbua+GcRPZaCmqO13vHlKb8ANcH31OJUwKr21+bnIrFS1jzzEP8sl0iI28+fXnIhjjnxN/FTLqi404IDEn5UZw7JnBTIYgJVo+UUqKXXS7kw+c6mxtpLjhEi3zkCObALt5+SCnGZo8xRv/alaxezL/jDfNo4GzhFez/N10w2ipjNJhsIutVq6Sk/0qWpJd9f7l1khBYVw6JT7JQO0FN/Hq0COwleN7e11l7J7MSr0Gim0vw3PXDhb/M/87Ze6+1iMirDQcHkpOSaWAl2H6iGgPmkmzB04TZe9v3JgMy5EgZOPwtNqgByQHn1Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WABKwB67A0itaa/O3pQi5SwXQZUmAdNDXW9Q0+Zds8w=;
- b=GQ/gKtJ5YGYm9Bai3yZhvnjf3zcRyvguEx3801yGC+stEkefbArfOG+2i/NzTzq41LUz/MWPkSqYsSufpBCvG6q+iN2uzfkhUaDREXxeQDHcgiBzzbVL9CZ5S8eeumsB9rciE9YhAcc09ZrSW4HINMgWlYfAAPpOP6x4PF2WjC0=
+ bh=HxYM8wAOWLY4g48aacF1x+UadbVDfLASTVbSiy4zkeI=;
+ b=nIUweqZmj1sHMNay9KZUwYwHoxpIQ1ITey3gt8tuMcIueFHo+4YwEaXrHV0cZqbOfW0uMipx8Xcsdw7yV+Jy53dJ9iMU/kCiyu8eoI2KRb+/UzQoZVvuS+Zk+9N9RcEjB0+CbGraJ5RvhfD3Kb7tpJNydsYsYi0YbgeDJjtJQYI=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from DB7PR04MB4505.eurprd04.prod.outlook.com (2603:10a6:5:39::26) by
  DU2PR04MB8743.eurprd04.prod.outlook.com (2603:10a6:10:2e1::5) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6588.31; Tue, 18 Jul 2023 11:22:13 +0000
+ 15.20.6588.31; Tue, 18 Jul 2023 11:22:15 +0000
 Received: from DB7PR04MB4505.eurprd04.prod.outlook.com
  ([fe80::473a:28:1d98:10ab]) by DB7PR04MB4505.eurprd04.prod.outlook.com
  ([fe80::473a:28:1d98:10ab%5]) with mapi id 15.20.6588.031; Tue, 18 Jul 2023
- 11:22:13 +0000
+ 11:22:15 +0000
 From:   Xu Yang <xu.yang_2@nxp.com>
 To:     stern@rowland.harvard.edu
 Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
         xu.yang_2@nxp.com, jun.li@nxp.com
-Subject: [PATCH 1/2] usb: host: ehci-sched: add itd/sitd_unlink_urb() functions
-Date:   Tue, 18 Jul 2023 19:25:59 +0800
-Message-Id: <20230718112600.3969141-1-xu.yang_2@nxp.com>
+Subject: [PATCH 2/2] usb: ehci: unlink itd/sitds from hardware list if the controller has stopped periodic schedule
+Date:   Tue, 18 Jul 2023 19:26:00 +0800
+Message-Id: <20230718112600.3969141-2-xu.yang_2@nxp.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230718112600.3969141-1-xu.yang_2@nxp.com>
+References: <20230718112600.3969141-1-xu.yang_2@nxp.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: SG2PR04CA0169.apcprd04.prod.outlook.com (2603:1096:4::31)
@@ -53,50 +55,50 @@ X-ClientProxiedBy: SG2PR04CA0169.apcprd04.prod.outlook.com (2603:1096:4::31)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: DB7PR04MB4505:EE_|DU2PR04MB8743:EE_
-X-MS-Office365-Filtering-Correlation-Id: fb6cfc4c-cc62-4bac-b64b-08db87813bf3
+X-MS-Office365-Filtering-Correlation-Id: 14d23877-ad59-4450-c49a-08db87813d6e
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: L6plY7UWsx4NSq3ozKlLPyMU7MdF3+cfFh+zUbExUzUueAzM5BSOV1AgxPRjjcd/hcCpVuPuBLQrLvT+xIXTlnfxco3mHijGfqZ4xlN0f+h+XOp3Olt0zACglCeluCfRdYjY+11G+ltMjm0ET+dSOmlbeGtQ16y9q9i7E8t8gI06XVaOhnmCqnw4wMWLCvaEooTBzIgjk89zWN31b1iFgtalU+T0S9O47nMdvMY9urHvfsh5N1NRDyo8YEgvmvO2HwFvMVThI6pFBBYwZf+zhXRDJqOj0duJCnCkvU+tJ5+Cx7nvxuQtcrR+VUoVHOeUfDPYmxW/1nYQxLj146cq3BAb5nDN3JkFPre78Hr5OB0lX5FYdORw5Vfd6z0yf+yPKJNzaSGPmpdYKeV82WN4epPf5rqnykzhyorU69Hb9U8GrkvL7S5gGszD9NHwnPOudDg8jM5od6JFlaPILfmVuq7prPCAKtoOqywHZh0vMSYDdDHj/YYaG37DbLCqKmBDE0Fm36EjME23PVZRBCGfi5dgQ4d29LfQ3MEjo3ieX+o/syGT9MsFR0d0BTdukFITOrf7/O99UIAIZHhO0vftC5ZEN/nF8HCmQJjs4rwL0mQX3to4OnBV0hGxzS5KKK5H
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR04MB4505.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(39860400002)(346002)(376002)(366004)(451199021)(86362001)(2906002)(66476007)(5660300002)(66556008)(41300700001)(4326008)(8936002)(8676002)(66946007)(38350700002)(6916009)(38100700002)(316002)(186003)(36756003)(2616005)(1076003)(6506007)(478600001)(26005)(52116002)(6666004)(6486002)(6512007);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: uKVelnQ6df/B/AGdPcs8AGaK7ORhsrf9g6hEjli/Zoh0v5zxg8e3NwRp569KMAzkZbJIsWpClZmQTD5fb2GsgyK2aGCOzGIk/cZgkHQG+RI3oOWWdtkqGVyUsSz/ycQDJxkwlxnkFzraAClCFLW/YoLXSYdlp/7YdQWSAYgaQtX1ffPoRHHxFAJi6EFfzuKBe2ceiLvYv8DGdSIcmvKIT//HK74AFZeGLNwOm2PBP9VzRzMFsdnrCpyXzOpqmNxT+3HK9pC/ob5S98K27OIkbXE8E5aGF+6nj97+eQwvf7u2v9By7ntmXqdGx0G1sB5UaI0+Ad/UJyh2P4AvK3HXJdQ0fdqM8XSUXPkAFK5BrnyAu5J/J1JNnRyUcUHtjPwzEw4YovWyu6py5v6f5H14tWdRDM+Ta2SoHSI/1po+3/yyE7h8W99trwzYJHOxiRAPlM8jLkxmPFeDv49XHrI2v3BGvlcHPwcmEacM/NV4eNnp0KKt3B0pY2MZA8Ql+uFUE/0w+TZ0kMAeEAIDr4lr+jJHWXVMrsISfthd24EhegZW83AA5JzJl/7AQpFk96lMAQnpRFsrCiicMhrIKLnJ7yJggvReyxnhtxnhdk32Iz7D2cILm4MiJTifevpmFY/h
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR04MB4505.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(39860400002)(346002)(376002)(366004)(451199021)(86362001)(2906002)(66476007)(5660300002)(66556008)(41300700001)(4326008)(8936002)(8676002)(66946007)(38350700002)(6916009)(38100700002)(316002)(186003)(36756003)(2616005)(1076003)(6506007)(478600001)(26005)(83380400001)(52116002)(6666004)(6486002)(6512007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7C+itHoFdWi6qnumKC3sdB7MU2j3uI1B2ABO45SAxiPuFTSQcRiuB6ZGGEDK?=
- =?us-ascii?Q?/ZvVX0OQ6ycgORimf2P+H2e95IcnVQuEQvg2dujCxbY7hKZfwv6A5NwX+CRy?=
- =?us-ascii?Q?u3DSxCXW2QshfowAX1uxKnSeXzW58oNnDrVH9n0C+YrNPf1AjN6qa3xSvHPg?=
- =?us-ascii?Q?HpmEdiviJ/4VmiZg+LPOsuRh0D0sgqxX5ZYZBx+ZebrpfvPQxdCn8pDVWDPU?=
- =?us-ascii?Q?jYlew1Kht88mN49zqbuRUWdnsTmMF/0StN0qHWqhUC0Qra556NKA9MEW+9hd?=
- =?us-ascii?Q?LIFseBHmPryLqxD7TZfU/IdNBJtGhOU2XZdIpGXJ+7KL53elM9U+qWGSXGqo?=
- =?us-ascii?Q?bfv/L9vRIdRsCGxCWufqQF5UEyYNQKB8Bbz/UXbS0ZfRxGgjcReZCrPcB46F?=
- =?us-ascii?Q?yadDcxo28BvfCFHzL45z4KCovEFCtSCxtCAeC2AyFbCj8s7LYqCPuFmRTpn0?=
- =?us-ascii?Q?a10gXNiHP7/IfNkzGWbzKJe/DoUAX0V7vv4JLKR5KGNhN6pGPLkVGyKke9h7?=
- =?us-ascii?Q?c/7059djCfdGBMVOjSiRkyNCTnzRhWAxKF3bvPu5F1uaAMsvRzfTEm8zIWK0?=
- =?us-ascii?Q?3BT4KJCSKsKkPdCuyyFKaGIPivo140l/Agaf+1M2i+7c5YZXVJSUKfCSGGMv?=
- =?us-ascii?Q?oMmEennRuAu/F9W5IGcjn6V0PeHwPuJh6HvXsZHOp1aWOxPy4/QLvPzUpihA?=
- =?us-ascii?Q?cPL32iKXDhMLa+e/uzrRkuF0iGlbTpaZAtE0Nv/1o45WmcgkX44KwSplPn1c?=
- =?us-ascii?Q?WsGKN/247IgJoug1X0OPOaIGrMI4XGnzFG86J0wSiVSQoKcZJXLeajY78cNy?=
- =?us-ascii?Q?NBZKJIKaL/Ssz1pb7h8SgkGnR4HWVQ6SxAYxbJcJnCnFv+ykRIlyWNMtq8Xk?=
- =?us-ascii?Q?QKvBe/Ivcb30hZtOxZKTXDU0LqZ53cTbNxX5whDaj5UcqosyHMx9A6bnAUH0?=
- =?us-ascii?Q?lCjRrG9IOAwQ0X0+d0LlcWBAP/LyPNv7SEc5f0y6QuCX+dZrg4CnYP5qCrNa?=
- =?us-ascii?Q?sGYrWVh/B6EAe7tKINHNYUxIGt/bsO5unPFTd6N1ML/MET9Nz+ZfVZlXAQqu?=
- =?us-ascii?Q?7ZVCb+JOtKYOSEEoQCEVtOSF0cq/7XjGTW3L6lkTRAS32deYgGRRFl62jrx2?=
- =?us-ascii?Q?n0uEV3lpt1xqbf4MU/7GBLnrfGPNIukUZN5Psh21OtXRe3TW9P+ny+gM/tRe?=
- =?us-ascii?Q?xLeyCT8JwOC4TEwvoM+XYoDXyJC3sVkGdanJu1lzvEGZxkcPSLRTslKwqfC0?=
- =?us-ascii?Q?puTA/M+b4LfSpSJ+6ciYQIRMe4OUmFSPGY8QzqtUv/kzfsU8IzGJqTG5deeH?=
- =?us-ascii?Q?m4RhzD3+4dh82alB9rlgXQWdkjDMglmTkw57MxOtNmsP1OwZ+PDI02hLQU0r?=
- =?us-ascii?Q?GeIw0O16mkJcYl0zLu1IK2Sn8+qzdQWMETYzg4ljkiOUXFarDgGvc+JuwGkV?=
- =?us-ascii?Q?Tup0eFYb1hVWDrIIdQuC4lJr8x1zkNYopYFrRrzFvE0TlTEyopX0uddcCj8K?=
- =?us-ascii?Q?9olCif0IIQdevM9zfkynNo2PYyD7IYMSjlf6yHKv8hcwFS2HvvOkZklGi3Ku?=
- =?us-ascii?Q?lHhQiw1pmjUURT9OR782h7Jr1p/LNiJjzfKgUOwI?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?36uZ5+rrR8CXyCBR1qdsiXMn7fOpAGEpI2oOvqKVtuw6VF0adSlneIKXvvRG?=
+ =?us-ascii?Q?7ndoKLWexxj9KA5IX3f9KelFpAhNSQ32VyURQEodxzc1Rs9q6du3C2Qf8Zw/?=
+ =?us-ascii?Q?pGzh6ZEsM+2nf4Ed3sg9c5M2PUsm+E/sAfCZLJJW3hpskl13Hc+LJAttc/xK?=
+ =?us-ascii?Q?b+7zMJyd0dHxG2amYW4SmqaXUgtFhS8a/XzI4+6keBlRTUWxaoOKJ2u+r3tF?=
+ =?us-ascii?Q?mDB7Ya/S/UMd4OW6uAzbyagmea7BgMv1yqiF0E5J9zx373il18Vqr+2oumHj?=
+ =?us-ascii?Q?+zpP8IiKgwc72fb2hgKqFD6aZ0AOHf3sYREfV435ceqFGSgDm+f9h+zFaviP?=
+ =?us-ascii?Q?7TG365kb0ThvH0VhLivI5LNpGkClp8uVBPPyyONGObtsbCMNeZy2S72XW9xD?=
+ =?us-ascii?Q?gJ/7a4NZIRqUosdb4+owwTRqG41wPL0bWzYBZnToC/RNeNCsIVm6WqnFkvlw?=
+ =?us-ascii?Q?HsdE2oROsg3ss3wxLSMe6LDdiYHiTPuzj3rH1cRp/9/EOyh2uiKilNKozhA2?=
+ =?us-ascii?Q?oF1TFeB9r9aojsz1wcELaO1UAOl9cyw8EGebcpu/wkuSGUO2gAnQDDV28xxc?=
+ =?us-ascii?Q?jWG+Lb9rQKJdaDynBfM2sY2dUE5nmwbThdFLVxzt475kE6gpSo6yHXT1Lw62?=
+ =?us-ascii?Q?y8Fa0gEDUX0CJkpsobIhc0Fe58aH0UY4+i3O/Trmm9PBI3BLumrDQtnjoJWu?=
+ =?us-ascii?Q?sXqKoqsJdoJOFGdt+wyIoPX8SxfFiBZ1bqOlC3nVGbj9tKB9oUfTGvOFlftR?=
+ =?us-ascii?Q?fismUPOztEkWtDsd76pOr3nO1vpztiO9RFedBtUqDBSeS2C7KzCaHI8XISH3?=
+ =?us-ascii?Q?66WWxtjXFwPioiPxwXzxs5g3cjZWMdWrHgFLTUxhyAWJowcRC2KFEDHGt7Id?=
+ =?us-ascii?Q?bpeVkXNx0KVf40Q4ozPRi0cxGxhp3L9a92kswBYT/tGf6lPgySZoAzZdTeAc?=
+ =?us-ascii?Q?dbPxAAIVcMcJ8XMz+wr70yo2lo+5V4D5ANDVC6YVBiIlMDjtCrnxFdpNg4br?=
+ =?us-ascii?Q?cvHOGEm9gmbdXwmAIwJoG0U7B1Zy5yZvBUSrcKnWzXtQ7uipKRAD6RNvrJ10?=
+ =?us-ascii?Q?Na/3xbaCIbxvWtCN5lwyDkfbJ43zJzYy7Yl5jBtHZ7PLL+dXGgq6AaU2ZURe?=
+ =?us-ascii?Q?hlkvBsA51AqTMydAWvlCjpwgz2fxSWX7ihoY7ip4dZpCsF/8jV90v1k7IMrl?=
+ =?us-ascii?Q?bkpE/GEz/OAqxq/kz3ZR1u2qOE2bE8K205BwowLTHo3pbwygoSMSujIBLqo6?=
+ =?us-ascii?Q?5EXTNzhGXd8m09BvbTlc79tKRVGV2bMxFg1RuWINTC9jhtPih6Rmu697241F?=
+ =?us-ascii?Q?gaJzR8DZNiq2qs3ESxsnpgTkw3mcCOYvATFh/FC82qeyd9rmTGg6fPDtPDiI?=
+ =?us-ascii?Q?TWb2y5gEhorKeW30iKNTAnut0mw+Y5j9gbEBg4UNPGek4MIcuuQLLsLzJZfF?=
+ =?us-ascii?Q?W7Mpp8T9ccOLsm8Ykt+p87xLRTb3mM5OcFs6Gq2Vxk9627NfYCaZV3L18/FB?=
+ =?us-ascii?Q?BwwpCnDMF66ieCOOGtbfJsiKCHnYYntG2GMIzYXca2bV5/WtLVU1pOiq9Yw3?=
+ =?us-ascii?Q?wtKSQDGBwYsmYTNdO8ecIPMhHna35EiSt9O5hcz4?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fb6cfc4c-cc62-4bac-b64b-08db87813bf3
+X-MS-Exchange-CrossTenant-Network-Message-Id: 14d23877-ad59-4450-c49a-08db87813d6e
 X-MS-Exchange-CrossTenant-AuthSource: DB7PR04MB4505.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jul 2023 11:22:13.3970
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jul 2023 11:22:15.6984
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: fUUPIe9Ssl0KPdSQii7/HVBKjGU15PEHAukW07f5nXczPqTBhODFhj/nFJunmRzXA7jjAJJ9/i0QCMRrojyOqw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: p1yjPElLjq//rrulziwZ4PVT2DHUmaovpc9VfXfqLqENbdSum3oEmbZAdHiZj0eyF88CH0JxeWSu7uEaRRNwkw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8743
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
@@ -108,126 +110,73 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This will add itd/sitd_unlink_urb() functions in case of the driver needs
-to unlink these urbs manually.
+In current design, the ehci driver will not unlink itd/sitds from the
+hardware list when dequeue isochronous urbs. Rather just wait until they
+complete normally or their time slot expires. However, this will cause
+issues if the controller has stopped periodic schedule before finished
+all periodic schedule. The urb will not be done forever in this case and
+then usb_kill/poison_urb() will always wait there.
+
+The ChipIdea IP exactly has a bug: if frame babble occurs during periodic
+transfer, PE (PORTSC.bit2) will be cleared and the controller will stop
+periodic schedule immediately. So if the user tries to kill or poison
+related urb, it will wait there since the urb can't be done forever.
+
+This patch will check if this issue occurs, then it will unlink itd/sitds
+from the hardware list depends on the result.
 
 Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
 ---
- drivers/usb/host/ehci-sched.c | 94 +++++++++++++++++++++++++++++++++++
- 1 file changed, 94 insertions(+)
+ drivers/usb/host/ehci-hcd.c | 33 ++++++++++++++++++++++++++++++++-
+ 1 file changed, 32 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/host/ehci-sched.c b/drivers/usb/host/ehci-sched.c
-index bd542b6fc46b..b95a8bc4d3ba 100644
---- a/drivers/usb/host/ehci-sched.c
-+++ b/drivers/usb/host/ehci-sched.c
-@@ -1805,6 +1805,67 @@ static void itd_link_urb(
- 	enable_periodic(ehci);
- }
+diff --git a/drivers/usb/host/ehci-hcd.c b/drivers/usb/host/ehci-hcd.c
+index a1930db0da1c..26dc1d1ae5e8 100644
+--- a/drivers/usb/host/ehci-hcd.c
++++ b/drivers/usb/host/ehci-hcd.c
+@@ -930,10 +930,41 @@ static int ehci_urb_dequeue(struct usb_hcd *hcd, struct urb *urb, int status)
  
-+/* unlink itd/sitd from the periodic list */
-+static inline void
-+unlink(struct ehci_hcd *ehci, unsigned frame, void *ptr)
-+{
-+	union ehci_shadow	*prev = &ehci->pshadow[frame];
-+	__hc32			*hw_p = &ehci->periodic[frame];
-+	union ehci_shadow	here = *prev;
+ 	if (usb_pipetype(urb->pipe) == PIPE_ISOCHRONOUS) {
+ 		/*
+-		 * We don't expedite dequeue for isochronous URBs.
++		 * 1. We don't expedite dequeue for isochronous URBs.
+ 		 * Just wait until they complete normally or their
+ 		 * time slot expires.
++		 *
++		 * 2. The ChipIdea IP has a bug: if frame babble occurs,
++		 * PE will be cleared and the controller will stop periodic
++		 * schedule. So if we don't force dequeue this urb, it
++		 * won't be done forever. Here, a force dequeue is needed
++		 * for this case.
+ 		 */
++		unsigned 		i = HCS_N_PORTS (ehci->hcs_params);
++		bool 			need_force_dequeue = false;
 +
-+	while (here.ptr && here.ptr != ptr) {
-+		prev = periodic_next_shadow(ehci, prev,
-+			Q_NEXT_TYPE(ehci, *hw_p));
-+		hw_p = shadow_next_periodic(ehci, &here,
-+			Q_NEXT_TYPE(ehci, *hw_p));
-+		here = *prev;
-+	}
++		while (i--) {
++			int pstatus;
 +
-+	*prev = *periodic_next_shadow(ehci, &here,
-+			Q_NEXT_TYPE(ehci, *hw_p));
++			pstatus = ehci_readl(ehci,
++					&ehci->regs->port_status[i]);
 +
-+	if (!ehci->use_dummy_qh ||
-+		*shadow_next_periodic(ehci, &here, Q_NEXT_TYPE(ehci, *hw_p)
-+		!= EHCI_LIST_END(ehci)))
-+		*hw_p = *shadow_next_periodic(ehci, &here,
-+					Q_NEXT_TYPE(ehci, *hw_p));
-+	else
-+		*hw_p = cpu_to_hc32(ehci, ehci->dummy->qh_dma);
-+}
++			/* Any cleared PE means controller has stopped
++			 * periodic schedule.
++			 */
++			if (!(pstatus & PORT_PE)) {
++				need_force_dequeue = true;
++				break;
++			}
++		}
 +
-+static void itd_unlink_urb(
-+	struct ehci_hcd         *ehci,
-+	struct urb              *urb
-+)
-+{
-+	struct ehci_itd         *itd, *n;
-+	struct ehci_iso_stream	*stream = urb->hcpriv;
++		if (!need_force_dequeue)
++			goto done;
 +
-+	if (unlikely(list_empty(&stream->td_list)))
-+		return;
-+
-+	list_for_each_entry_safe(itd, n, &stream->td_list, itd_list) {
-+		if (itd->urb != urb)
-+			continue;
-+		unlink(ehci, itd->frame, itd);
-+		itd->urb = NULL;
-+		list_move_tail(&itd->itd_list, &stream->free_list);
-+	}
-+
-+	ehci_to_hcd(ehci)->self.bandwidth_isoc_reqs--;
-+	if (unlikely(list_empty(&stream->td_list)))
-+		ehci_to_hcd(ehci)->self.bandwidth_allocated -= stream->bandwidth;
-+
-+	ehci_urb_done(ehci, urb, -ENOENT);
-+
-+	--ehci->isoc_count;
-+	disable_periodic(ehci);
-+
-+	list_splice_tail_init(&stream->free_list,
-+			&ehci->cached_itd_list);
-+	start_free_itds(ehci);
-+}
-+
- #define	ISO_ERRS (EHCI_ISOC_BUF_ERR | EHCI_ISOC_BABBLE | EHCI_ISOC_XACTERR)
- 
- /* Process and recycle a completed ITD.  Return true iff its urb completed,
-@@ -2196,6 +2257,39 @@ static void sitd_link_urb(
- 	enable_periodic(ehci);
- }
- 
-+static void sitd_unlink_urb(
-+	struct ehci_hcd         *ehci,
-+	struct urb              *urb
-+)
-+{
-+	struct ehci_sitd         *sitd, *n;
-+	struct ehci_iso_stream	*stream = urb->hcpriv;
-+
-+	if (unlikely(list_empty(&stream->td_list)))
-+		return;
-+
-+	list_for_each_entry_safe(sitd, n, &stream->td_list, sitd_list) {
-+		if (sitd->urb != urb)
-+			continue;
-+		unlink(ehci, sitd->frame, sitd);
-+		sitd->urb = NULL;
-+		list_move_tail(&sitd->sitd_list, &stream->free_list);
-+	}
-+
-+	ehci_to_hcd(ehci)->self.bandwidth_isoc_reqs--;
-+	if (unlikely(list_empty(&stream->td_list)))
-+		ehci_to_hcd(ehci)->self.bandwidth_allocated -= stream->bandwidth;
-+
-+	ehci_urb_done(ehci, urb, -ENOENT);
-+
-+	--ehci->isoc_count;
-+	disable_periodic(ehci);
-+
-+	list_splice_tail_init(&stream->free_list,
-+			&ehci->cached_sitd_list);
-+	start_free_itds(ehci);
-+}
-+
- /*-------------------------------------------------------------------------*/
- 
- #define	SITD_ERRS (SITD_STS_ERR | SITD_STS_DBE | SITD_STS_BABBLE \
++		if (urb->dev->speed == USB_SPEED_HIGH)
++			itd_unlink_urb(ehci, urb);
++		else
++			sitd_unlink_urb(ehci, urb);
+ 	} else {
+ 		qh = (struct ehci_qh *) urb->hcpriv;
+ 		qh->unlink_reason |= QH_UNLINK_REQUESTED;
 -- 
 2.34.1
 
