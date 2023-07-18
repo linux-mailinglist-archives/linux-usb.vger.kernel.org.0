@@ -2,170 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF5C5758182
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jul 2023 17:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A520758228
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jul 2023 18:33:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233787AbjGRP4v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Jul 2023 11:56:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49948 "EHLO
+        id S232927AbjGRQdY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Jul 2023 12:33:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233779AbjGRP4q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Jul 2023 11:56:46 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 095AF19B0
-        for <linux-usb@vger.kernel.org>; Tue, 18 Jul 2023 08:56:41 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id d75a77b69052e-403b6b7c0f7so42262761cf.0
-        for <linux-usb@vger.kernel.org>; Tue, 18 Jul 2023 08:56:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1689695800; x=1692287800;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tjh+qVHNBsaCt+fpZytXbv4JtN2Kf+QfiKBiC+OQp3c=;
-        b=bYsTsBY1ioUL9k8drjTPCTw/fEJ0EAlGX5g4owJLPMPxN2CHLKUwbHRdsGU8yNpkgq
-         tSJhCUQojCe7iZMsDT/aY34J1oz2QHRzCjLM+KqEBEo9M8BD2KOp45IRPvgTMkckJ6dq
-         H9fFQEgiHBZaevHiGZSqEfXqcoEtLjezHUCteBqtpUndGthYRfcrzEkhL4CGHaIFAcmx
-         6wdKboUdDaPeOVdQT0aOEr8C1+gySsRWrc1UqrjcLLXuhZDet2FHUgbuPzKGfDMScL/V
-         K78x7SFpD7MaWzPqAIp0HWYQyARw7uG7tneLlNjtBlR/Fv5UIeG6Vm/K9G6rR6HJEl7q
-         8oNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689695800; x=1692287800;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Tjh+qVHNBsaCt+fpZytXbv4JtN2Kf+QfiKBiC+OQp3c=;
-        b=bC3eUDfSkkzCBkvjE5flrkprSJPyYMQNTHvj4Zdk6lFDm7zZ40ByHuY1sdcaoNaKv/
-         tMM/tMsXnXzThfKRPZ8HOcAG8HWqmzdGQHBjyr6uduf402hwJXV57lqE8Xxt/LY8AeW+
-         QU8ytj4wqnpyUS+frA87Lecffn3Ievqal0emr7RohfLbM6Ejqx4wcRIM/HGXaEqHp/d+
-         dCEtpBCvvMHcvl0tWb8OALRlpDWqsovyUOzwToSdN2bxR9ACpQNu26v6PXpMuZdUS1j/
-         3Lw/l3qqf1nYZdS6nnnZ8rdjC8P63Js0i3bLvTdL+RTKDhVFbjb8ioTRnNyTwjzRb8iD
-         8/Gw==
-X-Gm-Message-State: ABy/qLYDd0r5UT43z3/FeDkNJfeegE5cEsEz6nB5suJIHiqvXDJ205n5
-        Oe3zFMSh9hlKWk++s+4602xIuA==
-X-Google-Smtp-Source: APBJJlFA9677r6PhZxjwKlQ1fKWxhiNMVqP6N1YqyjTADbRS7wwnXs7xld1btAoYMOwt7mM3Vw+c9w==
-X-Received: by 2002:ac8:7dd0:0:b0:403:a814:ef4d with SMTP id c16-20020ac87dd0000000b00403a814ef4dmr21293071qte.49.1689695800050;
-        Tue, 18 Jul 2023 08:56:40 -0700 (PDT)
-Received: from ziepe.ca ([206.223.160.26])
-        by smtp.gmail.com with ESMTPSA id s21-20020ac87595000000b003e635f80e72sm727847qtq.48.2023.07.18.08.56.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Jul 2023 08:56:39 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1qLn42-002YJT-5I;
-        Tue, 18 Jul 2023 12:56:38 -0300
-Date:   Tue, 18 Jul 2023 12:56:38 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Alex Williamson <alex.williamson@redhat.com>
-Cc:     Grzegorz Jaszczyk <jaz@semihalf.com>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-aio@kvack.org,
-        linux-usb@vger.kernel.org, Matthew Rosato <mjrosato@linux.ibm.com>,
-        Paul Durrant <paul@xen.org>, Tom Rix <trix@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        dri-devel@lists.freedesktop.org, Michal Hocko <mhocko@kernel.org>,
-        linux-mm@kvack.org, Kirti Wankhede <kwankhede@nvidia.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Harald Freudenberger <freude@linux.ibm.com>,
-        Fei Li <fei1.li@intel.com>, x86@kernel.org,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        intel-gfx@lists.freedesktop.org,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        linux-fpga@vger.kernel.org, Zhi Wang <zhi.a.wang@intel.com>,
-        Wu Hao <hao.wu@intel.com>, Jason Herne <jjherne@linux.ibm.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andrew Donnellan <ajd@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-s390@vger.kernel.org,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        linuxppc-dev@lists.ozlabs.org, Eric Auger <eric.auger@redhat.com>,
-        Borislav Petkov <bp@alien8.de>, kvm@vger.kernel.org,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>, cgroups@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        virtualization@lists.linux-foundation.org,
-        intel-gvt-dev@lists.freedesktop.org, io-uring@vger.kernel.org,
-        netdev@vger.kernel.org, Tony Krowiak <akrowiak@linux.ibm.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        Benjamin LaHaise <bcrl@kvack.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Frederic Barrat <fbarrat@linux.ibm.com>,
-        Moritz Fischer <mdf@kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Xu Yilun <yilun.xu@intel.com>,
-        Dominik Behr <dbehr@chromium.org>,
-        Marcin Wojtas <mw@semihalf.com>
-Subject: Re: [PATCH 0/2] eventfd: simplify signal helpers
-Message-ID: <ZLa2NmwexoxPkS9a@ziepe.ca>
-References: <20230630155936.3015595-1-jaz@semihalf.com>
- <20230714-gauner-unsolidarisch-fc51f96c61e8@brauner>
- <CAH76GKPF4BjJLrzLBW8k12ATaAGADeMYc2NQ9+j0KgRa0pomUw@mail.gmail.com>
- <20230717130831.0f18381a.alex.williamson@redhat.com>
- <ZLW8wEzkhBxd0O0L@ziepe.ca>
- <20230717165203.4ee6b1e6.alex.williamson@redhat.com>
+        with ESMTP id S230079AbjGRQdX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Jul 2023 12:33:23 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3A410C;
+        Tue, 18 Jul 2023 09:33:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689698002; x=1721234002;
+  h=message-id:date:mime-version:to:cc:from:subject:
+   content-transfer-encoding;
+  bh=p2StYZ/CJnj2bZSCSEtO3x2enP4NjCt63nrW2M8VDAw=;
+  b=AygK5SyAC+TCmhSnMFJipLfpqaTCXgvji1o2SPsalKwFfAU2c9x3IGtt
+   qXIgC4mVJ7GoRruPCladvRLxf1oUhxdooFwOfOI2u5F/gUpP9T8uY5Cs/
+   8//PREVP9gef+m/vn1rgguc7OvBext0+RV6orLtszFckSHSdtQWugk+0x
+   wuAO6+lpb+qfIQsUp8syWfBF+GSP2T2sAEPkmek8jBY2BcSdCtOaQrADT
+   9/UolqjxSCBfepRiWYYzxdEYWx5xlvlNUlnAyiWk0uCioG1ygSVGn4Swq
+   BuRmF///4sxtvNdVX7fCs0DlLEiGZWT6OM31r71Z8pNBCX+IdWb92Iztx
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="430015988"
+X-IronPort-AV: E=Sophos;i="6.01,214,1684825200"; 
+   d="scan'208";a="430015988"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2023 09:33:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="837336227"
+X-IronPort-AV: E=Sophos;i="6.01,214,1684825200"; 
+   d="scan'208";a="837336227"
+Received: from rajatkha-mobl.gar.corp.intel.com (HELO [10.215.197.225]) ([10.215.197.225])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2023 09:33:19 -0700
+Message-ID: <2dab15ba-efd0-97cb-dfde-fa6f9d05f5fb@linux.intel.com>
+Date:   Tue, 18 Jul 2023 22:02:57 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230717165203.4ee6b1e6.alex.williamson@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-usb@vger.kernel.org,
+        "Khandelwal, Rajat" <rajat.khandelwal@intel.com>
+From:   Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+Subject: ANNOUNCE: thunderbolt-utils-v0.1-rc1
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 17, 2023 at 04:52:03PM -0600, Alex Williamson wrote:
-> On Mon, 17 Jul 2023 19:12:16 -0300
-> Jason Gunthorpe <jgg@ziepe.ca> wrote:
-> 
-> > On Mon, Jul 17, 2023 at 01:08:31PM -0600, Alex Williamson wrote:
-> > 
-> > > What would that mechanism be?  We've been iterating on getting the
-> > > serialization and buffering correct, but I don't know of another means
-> > > that combines the notification with a value, so we'd likely end up with
-> > > an eventfd only for notification and a separate ring buffer for
-> > > notification values.  
-> > 
-> > All FDs do this. You just have to make a FD with custom
-> > file_operations that does what this wants. The uAPI shouldn't be able
-> > to tell if the FD is backing it with an eventfd or otherwise. Have the
-> > kernel return the FD instead of accepting it. Follow the basic design
-> > of eg mlx5vf_save_fops
-> 
-> Sure, userspace could poll on any fd and read a value from it, but at
-> that point we're essentially duplicating a lot of what eventfd provides
-> for a minor(?) semantic difference over how the counter value is
-> interpreted.  Using an actual eventfd allows the ACPI notification to
-> work as just another interrupt index within the existing vfio IRQ
-> uAPI.
+Hi,
 
-Yes, duplicated, sort of, whatever the "ack" is to allow pushing a new
-value can be revised to run as part of the read.
+This is an official announcement that 'thunderbolt-utils', a collection of
+user-space utilities for the TBT/USB4 subsystem is now made public for its first
+release candidate.
 
-But I don't really view it as a minor difference. eventfd is a
-counter. It should not be abused otherwise, even if it can be made to
-work.
+# What is it?
 
-It really isn't an IRQ if it is pushing an async message w/data.
+The utilities comprise 'lstbt', similar in lines with 'lspci' and 'lsusb',
+which polls the TBT/USB4 subsystem's information including enumerated
+retimers.
 
-Jason
+The secondary component of the utilities is the goal towards providing
+a collection of available wrappers to provide the abstraction of configuring
+the subsystem in user-space. This is made possible via porting the DMA layer
+from kernel-space to user-space for the subsystem in an IOMMU-protected
+environment.
+
+# Why?
+
+Thunderbolt/USB4, a relatively newer industry standard with its v2 released
+past year is now increasingly being adopted.
+
+'lstbt' serves as the first incorporation of a user-space helper library for the
+subsystem that fulfills the following requirements and provides advantages
+throughout the Linux community.
+1. Better subsystem exposure to the user: The library provides the subsystem's
+information in a compact and legible format to the user with detailed
+functionalities available using the verbose option. Apart from serving as a handy
+library, it exports the information using TBT/USB4 keywords like domains, routers,
+ports, etc., most of which are unperceived to the users as of now.
+2. Better debugging: Since the library extracts valuable information like the routers'
+functionalities (PM, protocol-tunneling, e.g., PCIe, USB, and DP, various states,
+negotiated parameters, bandwidth used, NVM, etc.), it will serve as a very vital
+tool for Linux debuggers throughout the industry.
+3. Automation exposure: Automation being increasingly adopted in various industries
+as a way to aid in debugs, detect faults autonomously, or even create dedicated scripts
+around the subsystems, the library will be utilized as the primary go-to option for the
+TBT/USB4 subsystem.
+
+The secondary component of the utilities is providing wrappers for the user to configure
+the subsystem. This is probably the first prefatory incorporation of such utilities
+which would help the users who wish to handle the subsystem outside the kernel-space.
+This subsequently provides the user better controllability over the subsystem which
+obviously would pave the way for the development of independent software around it, which
+can provide the users to derive dedicated functionalities over the subsystem.
+This is in its rudimentary phase as of now.
+
+Repository: https://github.com/intel/thunderbolt-utils
+
+Thanks
+Rajat
+
