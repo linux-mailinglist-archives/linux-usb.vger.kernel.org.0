@@ -2,53 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76DFA757BC3
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jul 2023 14:27:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EEED757D76
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jul 2023 15:27:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230308AbjGRM1d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Jul 2023 08:27:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49050 "EHLO
+        id S231657AbjGRN1x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Jul 2023 09:27:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230156AbjGRM1d (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Jul 2023 08:27:33 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C00C1701
-        for <linux-usb@vger.kernel.org>; Tue, 18 Jul 2023 05:27:26 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 87D8740019;
-        Tue, 18 Jul 2023 12:27:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1689683245;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=f6xThtoI74+33Y4055B7f1d7kS0rFeuCMzbcqIuEbDo=;
-        b=EOF3082Xa0HR7RXXd9pSTh4w4sm808TojoyNjFqjvZfq8dN8mN+Mu812PngvcDmV1NI6rD
-        wL8j2wC3K3EzU1auXyGb0q3rpymZ8LpEU/0Mk1fWjoKA26oUg7d7tqhQDV34YRV6eQ2s9P
-        AGBGRONDUOs4EfoW2nYptwIZH5oC+YKEe0/1uQOKxhFCMUCLeyEmzAyaXXfXyATPcyGUIF
-        PaO8KIhnhW9G8DrTQPxiyNXZFTv0wgaMHnGn/7nhaVa/a7wUKrcdjNRvU+Lw5IkawaS8K1
-        Jzg7pUJ6gyTgWErKTIyV5BhECfb0kSBFDvkqZ3JFDjFF0qsxLZYOeOjeapmJRw==
-Date:   Tue, 18 Jul 2023 14:27:22 +0200
-From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
-To:     Xu Yang <xu.yang_2@nxp.com>
-Cc:     peter.chen@kernel.org, gregkh@linuxfoundation.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, balbi@ti.com,
-        linux-usb@vger.kernel.org, jun.li@nxp.com,
-        Francesco Dolcini <francesco.dolcini@toradex.com>
-Subject: Re: [PATCH 1/3] usb: chipidea: add USB PHY event
-Message-ID: <20230718142722.53cc9135@booty>
-In-Reply-To: <20230627110353.1879477-1-xu.yang_2@nxp.com>
-References: <20230627110353.1879477-1-xu.yang_2@nxp.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S230081AbjGRN1w (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Jul 2023 09:27:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11265D1
+        for <linux-usb@vger.kernel.org>; Tue, 18 Jul 2023 06:27:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A3E7C61587
+        for <linux-usb@vger.kernel.org>; Tue, 18 Jul 2023 13:27:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEFBCC433C7;
+        Tue, 18 Jul 2023 13:27:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1689686870;
+        bh=OllI6hqwDmAP9/S7KjyQLxoCQsdlJakPqeGx3eqe7n8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DGcVLWbGC+0pwwepizlUfKJV2Ug+iwpitZdTNMNNIvD1MzWkEqHmjbPDbs2hno+UV
+         bzktmaGosHPlGAloJPdBOOCNtCSOrkL7F2ZHVMOs48+IU+AsgBBfgoVgrhxrjUeew5
+         J5d3ObW1bjqQUlLczqul6dC1DA/hdvPWMnxQuvHY=
+Date:   Tue, 18 Jul 2023 15:27:45 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Ross Maynard <bids.7405@bigpond.com>
+Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        davem@davemloft.net, kuba@kernel.org,
+        Oliver Neukum <oneukum@suse.com>
+Subject: Re: [PATCH] USB: zaurus: 3 broken Zaurus devices
+Message-ID: <2023071811-dandy-jugular-b306@gregkh>
+References: <4963f4df-e36d-94e2-a045-48469ab2a892@bigpond.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-GND-Sasl: luca.ceresoli@bootlin.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4963f4df-e36d-94e2-a045-48469ab2a892@bigpond.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,33 +52,31 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello Xu,
-
-On Tue, 27 Jun 2023 19:03:51 +0800
-Xu Yang <xu.yang_2@nxp.com> wrote:
-
-> Add USB PHY event for below situation:
-> - usb role changed
-> - vbus connect
-> - vbus disconnect
-> - gadget driver is enumerated
+On Tue, Jul 18, 2023 at 10:16:55AM +1000, Ross Maynard wrote:
+> Hi Greg,
 > 
-> USB PHY driver can get the last event after above situation occurs
-> and deal with different situations.
+> This is related to Oliver Neukum's patch
+> 6605cc67ca18b9d583eb96e18a20f5f4e726103c (USB: zaurus: support another
+> broken Zaurus) which you committed in 2022 to fix broken support for the
+> Zaurus SL-6000.
 > 
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> Prior to that I had been able to track down the original offending patch
+> using git bisect as you had suggested to me:
+> 16adf5d07987d93675945f3cecf0e33706566005 (usbnet: Remove over-broad module
+> alias from zaurus).
+> 
+> It turns out that the offending patch also broke support for 3 other Zaurus
+> models: A300, C700 and B500/SL-5600. My patch adds the 3 device IDs to the
+> driver in the same way Oliver added the SL-6000 ID in his patch.
+> 
+> Could you please review the attached patch? I tested it on all 3 devices and
+> it fixed the problem. For your reference, the associated bug URL is
+> https://bugzilla.kernel.org/show_bug.cgi?id=217632.
 
-I tested this patchset on top of v6.5-rc2 and USB detection
-is still broken on the Colibri iMX6ULL. With or without the patches
-the behavior is the same: USB devices are detected only during boot,
-and anything connected after boot is never detected.
+I'll be glad to accept it if you resend it in a format that I can apply
+it in.  I'll run my patch-bot on it to give you some hints on what needs
+to be done here.
 
-Is there anything I can test for you do understand what's going wrong
-here?
+thanks,
 
-Luca
-
--- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+greg k-h
