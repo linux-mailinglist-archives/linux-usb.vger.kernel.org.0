@@ -2,165 +2,197 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6DD4757010
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jul 2023 00:53:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C39CB7570D2
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jul 2023 02:17:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230170AbjGQWxc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 Jul 2023 18:53:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49454 "EHLO
+        id S230477AbjGRARI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 Jul 2023 20:17:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbjGQWxb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Jul 2023 18:53:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA52A138
-        for <linux-usb@vger.kernel.org>; Mon, 17 Jul 2023 15:52:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1689634329;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8wy84DSSq8n2YYiK0mWellsvoswCFp/2kMAmdZ+UHHc=;
-        b=WSU35uqKWX5qXsL9Eqi4qqS9SCAvtRdUoP1pqlX2O/1cZK2gLwhVZqB5eExNH9bGJCaIvz
-        BDObKB9Pjgy9nnNWI0Mg64rgQFu1m48ni/wL21sFRtdMbxZw6ZsGTbH7RccOeY6fV1KDLB
-        hn5FNoggx6POG5Pi2hj0zNHisqxMXTQ=
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
- [209.85.166.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-49-N7Q5C38NPwuXGUeXQLh6xA-1; Mon, 17 Jul 2023 18:52:08 -0400
-X-MC-Unique: N7Q5C38NPwuXGUeXQLh6xA-1
-Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-786fa88a6f0so317984439f.1
-        for <linux-usb@vger.kernel.org>; Mon, 17 Jul 2023 15:52:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689634327; x=1692226327;
-        h=content-transfer-encoding:mime-version:organization:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8wy84DSSq8n2YYiK0mWellsvoswCFp/2kMAmdZ+UHHc=;
-        b=bzwR1J1Cwbu0Tm1MZcBkE/j71d7ZXKeV5eXCoyo0E/5bgufrprsEUR+oW2wp/R9lmA
-         M1Dq0uH1WYajACtRP73eONvjb8p1kAnJ5QuQyF3+UBRkNSZ0n5NjmMK2bQ0rTeJv4Ygh
-         LBo4ROcb1fbK0VbQN3KkMrewZgbxRteaXAn4KHE/guDZwrfmyMh1kT6zwJ6YjninOI24
-         +IFSUWK8mx1pkvj+N+aIFFcCYE2d0RCb7Av4Poe3pSXiAMQjYUpVlTRW1wtrS7I9a7tI
-         9kYeW2SoeURurpBLA6XUldZbN1H8ZDdnIdyWAOQcmOe+sCAGs992xtYW+AEkt9kR3w+/
-         0f4g==
-X-Gm-Message-State: ABy/qLasmB4LVc5uEeDcMY0v/sKgiZsNFlJwLGje7/Bb1GGZ0WlIFOa0
-        Ej+iAkyp2OCmzsztX+DxAz8awYw+KIH14gILv6Z6hhCkJ8IcqSx89fVxDgzk3g80EzIEvHrwc9l
-        KB+ng644shNKK59RUEtWq
-X-Received: by 2002:a92:c651:0:b0:347:693a:7300 with SMTP id 17-20020a92c651000000b00347693a7300mr1012044ill.26.1689634327048;
-        Mon, 17 Jul 2023 15:52:07 -0700 (PDT)
-X-Google-Smtp-Source: APBJJlGlBYmCdY1EaUds5QDcX7E6PqePOm9wJTOwk2wgOBkeJp+9wxIVvWJlHjSTuTXhWw/m+atXtQ==
-X-Received: by 2002:a92:c651:0:b0:347:693a:7300 with SMTP id 17-20020a92c651000000b00347693a7300mr1012015ill.26.1689634326829;
-        Mon, 17 Jul 2023 15:52:06 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id d10-20020a92ddca000000b00341c0710169sm242627ilr.46.2023.07.17.15.52.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Jul 2023 15:52:06 -0700 (PDT)
-Date:   Mon, 17 Jul 2023 16:52:03 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Grzegorz Jaszczyk <jaz@semihalf.com>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-aio@kvack.org,
-        linux-usb@vger.kernel.org, Matthew Rosato <mjrosato@linux.ibm.com>,
-        Paul Durrant <paul@xen.org>, Tom Rix <trix@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        dri-devel@lists.freedesktop.org, Michal Hocko <mhocko@kernel.org>,
-        linux-mm@kvack.org, Kirti Wankhede <kwankhede@nvidia.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Harald Freudenberger <freude@linux.ibm.com>,
-        Fei Li <fei1.li@intel.com>, x86@kernel.org,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        intel-gfx@lists.freedesktop.org,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        linux-fpga@vger.kernel.org, Zhi Wang <zhi.a.wang@intel.com>,
-        Wu Hao <hao.wu@intel.com>, Jason Herne <jjherne@linux.ibm.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andrew Donnellan <ajd@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>, linux-s390@vger.kernel.org,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        linuxppc-dev@lists.ozlabs.org, Eric Auger <eric.auger@redhat.com>,
-        Borislav Petkov <bp@alien8.de>, kvm@vger.kernel.org,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>, cgroups@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        virtualization@lists.linux-foundation.org,
-        intel-gvt-dev@lists.freedesktop.org, io-uring@vger.kernel.org,
-        netdev@vger.kernel.org, Tony Krowiak <akrowiak@linux.ibm.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        Benjamin LaHaise <bcrl@kvack.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Frederic Barrat <fbarrat@linux.ibm.com>,
-        Moritz Fischer <mdf@kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Xu Yilun <yilun.xu@intel.com>,
-        Dominik Behr <dbehr@chromium.org>,
-        Marcin Wojtas <mw@semihalf.com>
-Subject: Re: [PATCH 0/2] eventfd: simplify signal helpers
-Message-ID: <20230717165203.4ee6b1e6.alex.williamson@redhat.com>
-In-Reply-To: <ZLW8wEzkhBxd0O0L@ziepe.ca>
-References: <20230630155936.3015595-1-jaz@semihalf.com>
-        <20230714-gauner-unsolidarisch-fc51f96c61e8@brauner>
-        <CAH76GKPF4BjJLrzLBW8k12ATaAGADeMYc2NQ9+j0KgRa0pomUw@mail.gmail.com>
-        <20230717130831.0f18381a.alex.williamson@redhat.com>
-        <ZLW8wEzkhBxd0O0L@ziepe.ca>
-Organization: Red Hat
+        with ESMTP id S229819AbjGRARH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 Jul 2023 20:17:07 -0400
+Received: from exhmta17.bpe.bigpond.com (exhmta17.bpe.bigpond.com [203.42.40.161])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D0A188;
+        Mon, 17 Jul 2023 17:17:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=bigpond.com
+        ; s=202303; h=Content-Type:MIME-Version:Date:Message-ID:To:Subject:From;
+        bh=Q0ZgKzQZd4FX/D+rysn1QvJp6Cn5FgznCU7I/mWePQ4=; b=BdTVojFH19bpzxzE0yOoEysqxW
+        nTsF+DV2Pr+MJz6UwYbf9h68cp8N1BhSi+33fVlWx65wYuynKeNI+gHNM4WV7TnD3dQfmu+gAVb02
+        uah9YwcrdlIKxPc9gX1avo+sCG8WSUmhndLtUR2kkHm+Gkdi9e+5iAEH9VV0N140Jj4ibE37FR7aI
+        jsNUsFbtOuTjHo+Ad51RW6kQeUflRz4shuX3jv6eal4ymAZ0rRFft2GcEh2Q7LooMKtUH+0pVRg/l
+        XmcO1o3bvM/bYvdvI8PSHG4qZiq1hQuJc9Xy1hFTx20ItoyHuaKYi/J3KqdBmmEqZm6IypnucEAlm
+        y22YvjeQ==;
+Received: from exhprdcmr03
+         by exhprdomr17 with esmtp
+         (envelope-from <bids.7405@bigpond.com>)
+         id 1qLYOh-0007Hk-1c
+         for ;
+        Tue, 18 Jul 2023 10:16:59 +1000
+Received: from [101.191.138.223] (helo=[10.0.0.38])
+         by exhprdcmr03 with esmtpa
+        (envelope-from <bids.7405@bigpond.com>)
+        id 1qLYOh-0008eX-0y;
+        Tue, 18 Jul 2023 10:16:59 +1000
+From:   Ross Maynard <bids.7405@bigpond.com>
+Subject: [PATCH] USB: zaurus: 3 broken Zaurus devices
+To:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org
+Cc:     Oliver Neukum <oneukum@suse.com>
+Message-ID: <4963f4df-e36d-94e2-a045-48469ab2a892@bigpond.com>
+Date:   Tue, 18 Jul 2023 10:16:55 +1000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed;
+ boundary="------------D0D6B9EE406C3C126D1D9B9D"
+Content-Language: en-US
+X-tce-id: bids.7405@bigpond.com
+X-tce-ares-id: e{574c812c-f7a5-4f03-878b-cf17a3d432d5}1
+X-tce-spam-action: no action
+X-tce-spam-score: 0.0
+X-Cm-Analysis: v=2.4 cv=PNXJu9mC c=1 sm=1 tr=0 ts=64b5d9fb a=I+ymoOSk5yzZBOYXmf4WnA==:117 a=I+ymoOSk5yzZBOYXmf4WnA==:17 a=ws7JD89P4LkA:10 a=r77TgQKjGQsHNAKrUKIA:9 a=VwQbUJbxAAAA:8 a=vca9FNj1airBrpF0sQMA:9 a=QEXdDO2ut3YA:10 a=1IlZJK9HAAAA:8 a=iXZdpN1a21TaRPcZ4IIA:9 a=B2y7HmGcmWMA:10 a=AjGcO6oz07-iQ99wixmX:22
+X-Cm-Envelope: MS4xfFavOt6c0+/h0YKaw/uC8Di/Vg708bI+MXh28FIG7Xg911w3ZUQsfPpxhK6xb2OJyNSiVtiFOzuZ7tEhBItCM2PWoe7y5ky4CaXdB/IXmvL3/rOBRvxr 43RBBWMk7IfE/W9GRC4sLFQHdfQfmLECNB0PCIwINoafXlRpb3rlXINp3EcjS5MYiKoO2Gu3cq1cNA==
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 17 Jul 2023 19:12:16 -0300
-Jason Gunthorpe <jgg@ziepe.ca> wrote:
+This is a multi-part message in MIME format.
+--------------D0D6B9EE406C3C126D1D9B9D
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-> On Mon, Jul 17, 2023 at 01:08:31PM -0600, Alex Williamson wrote:
-> 
-> > What would that mechanism be?  We've been iterating on getting the
-> > serialization and buffering correct, but I don't know of another means
-> > that combines the notification with a value, so we'd likely end up with
-> > an eventfd only for notification and a separate ring buffer for
-> > notification values.  
-> 
-> All FDs do this. You just have to make a FD with custom
-> file_operations that does what this wants. The uAPI shouldn't be able
-> to tell if the FD is backing it with an eventfd or otherwise. Have the
-> kernel return the FD instead of accepting it. Follow the basic design
-> of eg mlx5vf_save_fops
+Hi Greg,
 
-Sure, userspace could poll on any fd and read a value from it, but at
-that point we're essentially duplicating a lot of what eventfd provides
-for a minor(?) semantic difference over how the counter value is
-interpreted.  Using an actual eventfd allows the ACPI notification to
-work as just another interrupt index within the existing vfio IRQ uAPI.
-Thanks,
+This is related to Oliver Neukum's patch 
+6605cc67ca18b9d583eb96e18a20f5f4e726103c (USB: zaurus: support another 
+broken Zaurus) which you committed in 2022 to fix broken support for the 
+Zaurus SL-6000.
 
-Alex
+Prior to that I had been able to track down the original offending patch 
+using git bisect as you had suggested to me: 
+16adf5d07987d93675945f3cecf0e33706566005 (usbnet: Remove over-broad 
+module alias from zaurus).
 
+It turns out that the offending patch also broke support for 3 other 
+Zaurus models: A300, C700 and B500/SL-5600. My patch adds the 3 device 
+IDs to the driver in the same way Oliver added the SL-6000 ID in his patch.
+
+Could you please review the attached patch? I tested it on all 3 devices 
+and it fixed the problem. For your reference, the associated bug URL is 
+https://bugzilla.kernel.org/show_bug.cgi?id=217632.
+
+Thank you.
+
+Regards,
+
+Ross
+
+
+--------------D0D6B9EE406C3C126D1D9B9D
+Content-Type: text/x-patch; charset=UTF-8;
+ name="3-broken-zaurus-devices.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="3-broken-zaurus-devices.patch"
+
+Signed-off-by: Ross Maynard <bids.7405@bigpond.com>
+Reported-by: Ross Maynard <bids.7405@bigpond.com>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=217632
+---
+ drivers/net/usb/cdc_ether.c | 21 +++++++++++++++++++++
+ drivers/net/usb/zaurus.c    | 21 +++++++++++++++++++++
+ 2 files changed, 42 insertions(+)
+
+--- a/drivers/net/usb/cdc_ether.c
++++ b/drivers/net/usb/cdc_ether.c
+@@ -616,6 +616,13 @@ static const struct usb_device_id	products[] = {
+ }, {
+ 	.match_flags	=   USB_DEVICE_ID_MATCH_INT_INFO
+ 			  | USB_DEVICE_ID_MATCH_DEVICE,
++	.idVendor		= 0x04DD,
++	.idProduct		= 0x8005,   /* A-300 */
++	ZAURUS_FAKE_INTERFACE,
++	.driver_info        = 0,
++}, {
++	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
++			  | USB_DEVICE_ID_MATCH_DEVICE,
+ 	.idVendor		= 0x04DD,
+ 	.idProduct		= 0x8006,	/* B-500/SL-5600 */
+ 	ZAURUS_MASTER_INTERFACE,
+@@ -623,12 +630,26 @@ static const struct usb_device_id	products[] = {
+ }, {
+ 	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
+ 			  | USB_DEVICE_ID_MATCH_DEVICE,
++	.idVendor		= 0x04DD,
++	.idProduct		= 0x8006,   /* B-500/SL-5600 */
++	ZAURUS_FAKE_INTERFACE,
++	.driver_info        = 0,
++}, {
++	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
++			  | USB_DEVICE_ID_MATCH_DEVICE,
+ 	.idVendor		= 0x04DD,
+ 	.idProduct		= 0x8007,	/* C-700 */
+ 	ZAURUS_MASTER_INTERFACE,
+ 	.driver_info		= 0,
+ }, {
+ 	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
++			  | USB_DEVICE_ID_MATCH_DEVICE,
++	.idVendor		= 0x04DD,
++	.idProduct		= 0x8007,   /* C-700 */
++	ZAURUS_FAKE_INTERFACE,
++	.driver_info        = 0,
++}, {
++	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
+ 		 | USB_DEVICE_ID_MATCH_DEVICE,
+ 	.idVendor               = 0x04DD,
+ 	.idProduct              = 0x9031,	/* C-750 C-760 */
+--- a/drivers/net/usb/zaurus.c
++++ b/drivers/net/usb/zaurus.c
+@@ -289,9 +289,23 @@ static const struct usb_device_id	products [] = {
+ 	.match_flags	=   USB_DEVICE_ID_MATCH_INT_INFO
+ 			  | USB_DEVICE_ID_MATCH_DEVICE,
+ 	.idVendor		= 0x04DD,
++	.idProduct		= 0x8005,	/* A-300 */
++	ZAURUS_FAKE_INTERFACE,
++	.driver_info = (unsigned long)&bogus_mdlm_info,
++}, {
++	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
++			  | USB_DEVICE_ID_MATCH_DEVICE,
++	.idVendor		= 0x04DD,
+ 	.idProduct		= 0x8006,	/* B-500/SL-5600 */
+ 	ZAURUS_MASTER_INTERFACE,
+ 	.driver_info = ZAURUS_PXA_INFO,
++}, {
++	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
++			  | USB_DEVICE_ID_MATCH_DEVICE,
++	.idVendor		= 0x04DD,
++	.idProduct		= 0x8006,	/* B-500/SL-5600 */
++	ZAURUS_FAKE_INTERFACE,
++	.driver_info = (unsigned long)&bogus_mdlm_info,
+ }, {
+ 	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
+ 	          | USB_DEVICE_ID_MATCH_DEVICE,
+@@ -301,6 +315,13 @@ static const struct usb_device_id	products [] = {
+ 	.driver_info = ZAURUS_PXA_INFO,
+ }, {
+ 	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
++			  | USB_DEVICE_ID_MATCH_DEVICE,
++	.idVendor		= 0x04DD,
++	.idProduct		= 0x8007,	/* C-700 */
++	ZAURUS_FAKE_INTERFACE,
++	.driver_info = (unsigned long)&bogus_mdlm_info,
++}, {
++	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
+ 		 | USB_DEVICE_ID_MATCH_DEVICE,
+ 	.idVendor               = 0x04DD,
+ 	.idProduct              = 0x9031,	/* C-750 C-760 */
+
+
+--------------D0D6B9EE406C3C126D1D9B9D--
