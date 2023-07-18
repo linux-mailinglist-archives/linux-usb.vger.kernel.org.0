@@ -2,140 +2,166 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97D6C7573A4
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jul 2023 08:09:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E6C87573AE
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jul 2023 08:11:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231178AbjGRGJ2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Jul 2023 02:09:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52700 "EHLO
+        id S231196AbjGRGLJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Jul 2023 02:11:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231162AbjGRGJ0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Jul 2023 02:09:26 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C99EFF
-        for <linux-usb@vger.kernel.org>; Mon, 17 Jul 2023 23:09:25 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4fb7dc16ff0so8435845e87.2
-        for <linux-usb@vger.kernel.org>; Mon, 17 Jul 2023 23:09:25 -0700 (PDT)
+        with ESMTP id S229678AbjGRGLH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Jul 2023 02:11:07 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D61D1
+        for <linux-usb@vger.kernel.org>; Mon, 17 Jul 2023 23:11:06 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-6687096c6ddso3338193b3a.0
+        for <linux-usb@vger.kernel.org>; Mon, 17 Jul 2023 23:11:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689660563; x=1690265363;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=86IjmM7p82pa8pS02wHCCMR8Mx3WqXRMqAhbbiD/ZKw=;
-        b=jeWgMqzSlbZh6d2AUuYz7bI9PWQP5+iPZQ8T3yYMOKHmVNE6gtlJfeVAi921OgLY8I
-         W5NxLvBpW7b0ast+6hb3RR2XFhUb5OJOPEI+Mmv8YFyI0syo3N30gi9xPagATuqmNscr
-         StAFF83t38X9IpnspbxDp6FN11jvMFLAOqhW0ofqFAR6Rl5Rh42eNiZOZ6Oy0WcF+pkO
-         knLT6VTWxVmP+faLb7/Zafzn89QdNQMZCI8EaLWlJHdQFXykaqSV8J33P4h2R1qXH/Q0
-         MUwNsqK0Mvrqm3jiTLxdbkbYrC0klQoGTJ1y8s1HAJuHy5kbKmuL/IIQIQBP8Jbw9BMw
-         FEng==
+        d=linaro.org; s=google; t=1689660666; x=1692252666;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xPAaQscYyYfWa0/+4P1+lL3rpjQtoe/1gDGIsUASAgQ=;
+        b=KW1ie5FGzFjDrqMygdPl4Lj1piL5u2RpqrK7sQ8XQ01mFfxWHmNnYfSk9bBjZH491Y
+         ikeoK63NNt6MxydcJOrQzONDq57gOXSfPOYHR2EwV4VrIeDm0ip75L8ZeGKh6MnUIbSw
+         V7a6G0lCqDQykbFBVtz8k0TXxiA0+5pGpY24thKkXbLbH841r2UnBfiZc+wbCu5jC0Q6
+         8d6/l4W79/hFeVv6WnXMSGEokFsVlgBdvetMLfnl8I90tGW1vLsFnzp7LMJch8JMLF2S
+         aRvizq3H97TKTMCZEuZKx9FHblXblqrbzLtzFHfrnpmdCuZOhsHLK9av3P6Gc90UOkFO
+         BanA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689660563; x=1690265363;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=86IjmM7p82pa8pS02wHCCMR8Mx3WqXRMqAhbbiD/ZKw=;
-        b=ReNAfpRprvoUfi0nHFhdag70Jc1/3opbru6TB9ckG9BuUX/ItOEMLZD+Ca9j1+5kCP
-         V7CJJ4tLf2JSxxoFQkUVpHtFf9NCaLla7cNculVqb/lWBFaN2nMcjSc/8sfj2GGoK3zw
-         QB6v7wDaayt+S1Lei723FXStUlwEzqa+6yhKXw0pgkeXANEecR9BYVtheMLZt74LjNwS
-         fjS8BaxfvLRRa6bjcRYkKwcYmgr+8ZR69FPgyz2rffHJ6Jl1p9RVH7M3KOemRmp5lSZe
-         QCI0Ee3tqsIypIv6vE6zd4ahZEno2oggi/9vaYUX96y2gKy5iGOuhAV99Y8bEIhd6YGA
-         Q3zg==
-X-Gm-Message-State: ABy/qLYlYhxdD6EN3dYcZ33VmLN/mn4pkIYBL49O7/fxQfWBuPapKn9s
-        +74BAlQziM4ylYOfOm2cgw4Vaw==
-X-Google-Smtp-Source: APBJJlHT2Ay/ACQOrcVssQRBdrI8/dXrSUgLpM8js1Xu1/vXEBQyMHDJzgMOKvpnFQaxTJCiIJKeLA==
-X-Received: by 2002:a05:6512:247:b0:4f8:7960:f72 with SMTP id b7-20020a056512024700b004f879600f72mr7914110lfo.44.1689660563436;
-        Mon, 17 Jul 2023 23:09:23 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id f4-20020ac251a4000000b004fcdea129basm277655lfk.94.2023.07.17.23.09.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Jul 2023 23:09:22 -0700 (PDT)
-Message-ID: <3102d8a1-b89a-440e-7986-fc407d707676@linaro.org>
-Date:   Tue, 18 Jul 2023 09:09:22 +0300
+        d=1e100.net; s=20221208; t=1689660666; x=1692252666;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xPAaQscYyYfWa0/+4P1+lL3rpjQtoe/1gDGIsUASAgQ=;
+        b=GJcFXg9JHV1LkQtlC6p5XQIOBD1dwYEFdodmDUwKooHC266m/VluFi0JjZADU9gofw
+         fNYEhAuzHtWNoJUVOfUCJfO37jDdxoyni9zdWvzHFuRXAhrBt88S64WUXEG/ogUBmiBJ
+         ck+qGg8gow/C47j7h3e5tsz7EQjGKqeJu0XT7IZF0YAPzrDYyP+mzvlrDw8CwW2S/Aod
+         /KEfKznWy3Ac2gys1biyM/tpK5fz3qjI/66RK/uJI/eaw2QHEkcPWIWExklS4dSoHoRC
+         3DJuB0/H9zGLtwwppMu1uVyZSpl6SOmMyHzCupHzVt/uy6XXtN7FbuCcfCZyTmRYGuGk
+         gOjg==
+X-Gm-Message-State: ABy/qLaVD5J7U9gB2PlsnlnvHt1dI1C2YdcFL+XMXxtJ/bk5+Yrvswyz
+        hxBC5U7guPlULZx3vZQBCdbpn9a0oOM4aGAIzR0/Ew==
+X-Google-Smtp-Source: APBJJlE0Vx3+AL/QmINR2rZ0+C9ed8ADDT1oKhzLMD93Mi58PrLI956au/YOin1349SeJj7WK4s5PQ==
+X-Received: by 2002:a05:6a00:1ac8:b0:67e:e019:3a28 with SMTP id f8-20020a056a001ac800b0067ee0193a28mr11334070pfv.16.1689660665744;
+        Mon, 17 Jul 2023 23:11:05 -0700 (PDT)
+Received: from localhost.localdomain ([223.233.68.54])
+        by smtp.gmail.com with ESMTPSA id h21-20020a62b415000000b0067db7c32419sm778106pfn.15.2023.07.17.23.11.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Jul 2023 23:11:05 -0700 (PDT)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
+        bhupesh.sharma@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, krzysztof.kozlowski@linaro.org,
+        quic_schowdhu@quicinc.com, gregkh@linuxfoundation.org,
+        stephan@gerhold.net
+Subject: [PATCH v9 0/7] Add Qualcomm SM6115 / SM4250 EUD dt-bindings & driver support
+Date:   Tue, 18 Jul 2023 11:40:45 +0530
+Message-Id: <20230718061052.1332993-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v8 04/11] dt-bindings: phy: qcom,sc7180-qmp-usb3-dp-phy:
- Add input and output ports
-Content-Language: en-GB
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, luca.weiss@fairphone.com,
-        lujianhua000@gmail.com, linux-usb@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        konrad.dybcio@linaro.org, caleb.connolly@linaro.org,
-        subbaram@quicinc.com, jackp@quicinc.com, robertom@qti.qualcomm.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20230515133643.3621656-1-bryan.odonoghue@linaro.org>
- <20230515133643.3621656-5-bryan.odonoghue@linaro.org>
- <20230515195949.yemdw4n2pquive2r@ripper>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230515195949.yemdw4n2pquive2r@ripper>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 15/05/2023 22:59, Bjorn Andersson wrote:
-> On Mon, May 15, 2023 at 02:36:36PM +0100, Bryan O'Donoghue wrote:
->> Add a ports declaration which is optional containing two port@
->> declarations.
->>
->> port@0 to receive an orientation-switch message from the Type-C port or
->> redriver
->>
->> port@1 to subsequently transmit the orientation-switch on once the PHY has
->> finished doing its orientation turn-around.
->>
->> If ports is declared the input port port@0 is mandatory but the output
->> port@1 is optional.
->>
->> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
->> ---
->>   .../phy/qcom,sc7180-qmp-usb3-dp-phy.yaml      | 38 +++++++++++++++++++
->>   1 file changed, 38 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/phy/qcom,sc7180-qmp-usb3-dp-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,sc7180-qmp-usb3-dp-phy.yaml
->> index d307343388888..c370b9cd58c2e 100644
->> --- a/Documentation/devicetree/bindings/phy/qcom,sc7180-qmp-usb3-dp-phy.yaml
->> +++ b/Documentation/devicetree/bindings/phy/qcom,sc7180-qmp-usb3-dp-phy.yaml
->> @@ -65,6 +65,25 @@ properties:
->>       description: Flag the port as possible handler of orientation switching
->>       type: boolean
->>   
->> +  ports:
->> +    $ref: /schemas/graph.yaml#/properties/ports
->> +    description: OF graph bindings that model incoming orientation-switch and
->> +      outgoing orientation-switch messages. An example of an incoming
->> +      orientation-switch message might come form a Type-C connector or a USB
->> +      redriver. An example of an output would be a DisplayPort controller.
-> 
-> Orientation switching is just one of the uses of this graph, and each
-> port is both input and output of different signals (orientation switch,
-> altmode switch, hot plug signals, signal path).
-> 
-> 
-> How about aligning this version of the QMP binding with the proposed
-> binding for 8280xp here:
-> https://lore.kernel.org/linux-arm-msm/20230515032743.400170-2-quic_bjorande@quicinc.com/
-> 
-> Perhaps we could put some of this in a separate yaml and include that?
+Changes since v8:
+-------------------
+- v8 can be viewed here: https://lore.kernel.org/linux-arm-msm/20230717103236.1246771-1-bhupesh.sharma@linaro.org/
+- Konrad and Stephan pointed that I should define 'tcsr syscon' node for sm6115.dtsi,
+  and use phandle for the same inside the EUD node, which would eventually be used
+  inside the eud driver. Added [PATCH 1/7] and [PATCH 5/7] for the same
+  in this series.
+- Rebased on latest linux-next/master.
 
-We are slowly moving towards removal of sc7180-qmp-usb3-dp-phy.yaml. 
-Once that is done, this extra include file becomes included from a 
-single source. So I'd suggest putting necessary properties into the main 
-schema even if that looks like duplication.
+Changes since v6/v7:
+-------------------
+- v6 can be viewed here: https://lore.kernel.org/linux-arm-msm/20230517211756.2483552-1-bhupesh.sharma@linaro.org/
+- Konrad and Krzysztof had different suggestions on how to tackle
+  different SoCs inside the eud driver which require access to secure mode
+  manager register space. While Konrad's suggestion was to use a dt property,
+  other comments suggested using optional platform data for determining
+  the same. Modified [PATCH 2/4] accordingly to use the optional
+  platform data for now.
+- Added Krzysztof's RB for [PATCH 1/4] and also addressed his review comments
+  received on v5.
+- Dropped eud cleanup patches (which were sent a v7) as they have been accepted in linux-next.
+- Rebased on latest linux-next/master.
+
+Changes since v5:
+----------------
+- v5 can be viewed here: https://lore.kernel.org/linux-arm-msm/20230516213308.2432018-1-bhupesh.sharma@linaro.org/
+- Addressed Mani's comment and added Fixes tag for [PATCH 1/6].
+  Also collected his Ack for this patch.
+- Fixed [PATCH 4/6] as per Greg's comments and added a separate patch
+  for identation issues -> [PATCH 3/6].
+
+Changes since v4:
+----------------
+- v4 can be viewed here: https://lore.kernel.org/linux-arm-msm/20230505064039.1630025-1-bhupesh.sharma@linaro.org/
+- Addressed Konrad's review comments regarding EUD driver code.
+- Also collected his R-B for [PATCH 4/5 and 5/5].
+- Fixed the dt-bindings as per Krzysztof's comments.
+
+Changes since v3:
+----------------
+- v3 can be viewed here: https://www.spinics.net/lists/linux-arm-msm/msg137025.html 
+- Addressed Konrad's review comments regarding mainly the driver code.
+  Also fixed the .dtsi as per his comments.
+- Also collected his R-B for [PATCH 1/5].
+
+Changes since v2:
+----------------
+- v2 can be viewed here: https://www.spinics.net/lists/linux-arm-msm/msg137025.html 
+- Addressed Bjorn and Krzysztof's comments.
+- Added [PATCH 1/5] which fixes the 'qcom_eud' sysfs path. 
+- Added [PATCH 5/5] to enable EUD for Qualcomm QRB4210-RB2 boards.
+
+Changes since v1:
+----------------
+- v1 can be viewed here: https://lore.kernel.org/linux-arm-msm/20221231130743.3285664-1-bhupesh.sharma@linaro.org
+- Added Krzysztof in Cc list.
+- Fixed the following issue reported by kernel test bot:
+  >> ERROR: modpost: "qcom_scm_io_writel" [drivers/usb/misc/qcom_eud.ko] undefined!
+
+This series adds the dt-binding and driver support for SM6115 / SM4250
+EUD (Embedded USB Debugger) block available on Qualcomm SoCs.
+
+It also enables the same for QRB4210-RB2 boards by default (the user
+still needs to enable the same via sysfs).
+
+The EUD is a mini-USB hub implemented on chip to support the USB-based debug
+and trace capabilities.
+
+EUD driver listens to events like USB attach or detach and then
+informs the USB about these events via ROLE-SWITCH.
+
+Bhupesh Sharma (7):
+  dt-bindings: mfd: qcom,tcsr: Add the compatible for SM6115
+  dt-bindings: soc: qcom: eud: Document vendor-specific 'secure mode'
+    property
+  dt-bindings: soc: qcom: eud: Add SM6115 / SM4250 support
+  usb: misc: eud: Add driver support for SM6115 / SM4250
+  arm64: dts: qcom: sm6115: Add tcsr syscon node
+  arm64: dts: qcom: sm6115: Add EUD dt node and dwc3 connector
+  arm64: dts: qcom: qrb4210-rb2: Enable EUD debug peripheral
+
+ .../devicetree/bindings/mfd/qcom,tcsr.yaml    |  1 +
+ .../bindings/soc/qcom/qcom,eud.yaml           |  9 +++
+ arch/arm64/boot/dts/qcom/qrb4210-rb2.dts      | 27 ++++++-
+ arch/arm64/boot/dts/qcom/sm6115.dtsi          | 56 ++++++++++++++
+ drivers/usb/misc/Kconfig                      |  2 +-
+ drivers/usb/misc/qcom_eud.c                   | 76 +++++++++++++++++--
+ 6 files changed, 164 insertions(+), 7 deletions(-)
 
 -- 
-With best wishes
-Dmitry
+2.38.1
 
