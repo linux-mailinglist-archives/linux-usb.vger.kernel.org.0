@@ -2,68 +2,170 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D1A6758027
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Jul 2023 16:53:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF5C5758182
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Jul 2023 17:56:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232207AbjGROxW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Jul 2023 10:53:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37982 "EHLO
+        id S233787AbjGRP4v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Jul 2023 11:56:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230339AbjGROxU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Jul 2023 10:53:20 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id E04D6A4
-        for <linux-usb@vger.kernel.org>; Tue, 18 Jul 2023 07:53:17 -0700 (PDT)
-Received: (qmail 1608754 invoked by uid 1000); 18 Jul 2023 10:53:16 -0400
-Date:   Tue, 18 Jul 2023 10:53:16 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Xu Yang <xu.yang_2@nxp.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        jun.li@nxp.com
-Subject: Re: [PATCH 2/2] usb: ehci: unlink itd/sitds from hardware list if
- the controller has stopped periodic schedule
-Message-ID: <52e62d2e-a82a-4c9f-86ce-3ddad3efffb5@rowland.harvard.edu>
-References: <20230718112600.3969141-1-xu.yang_2@nxp.com>
- <20230718112600.3969141-2-xu.yang_2@nxp.com>
+        with ESMTP id S233779AbjGRP4q (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Jul 2023 11:56:46 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 095AF19B0
+        for <linux-usb@vger.kernel.org>; Tue, 18 Jul 2023 08:56:41 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id d75a77b69052e-403b6b7c0f7so42262761cf.0
+        for <linux-usb@vger.kernel.org>; Tue, 18 Jul 2023 08:56:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1689695800; x=1692287800;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Tjh+qVHNBsaCt+fpZytXbv4JtN2Kf+QfiKBiC+OQp3c=;
+        b=bYsTsBY1ioUL9k8drjTPCTw/fEJ0EAlGX5g4owJLPMPxN2CHLKUwbHRdsGU8yNpkgq
+         tSJhCUQojCe7iZMsDT/aY34J1oz2QHRzCjLM+KqEBEo9M8BD2KOp45IRPvgTMkckJ6dq
+         H9fFQEgiHBZaevHiGZSqEfXqcoEtLjezHUCteBqtpUndGthYRfcrzEkhL4CGHaIFAcmx
+         6wdKboUdDaPeOVdQT0aOEr8C1+gySsRWrc1UqrjcLLXuhZDet2FHUgbuPzKGfDMScL/V
+         K78x7SFpD7MaWzPqAIp0HWYQyARw7uG7tneLlNjtBlR/Fv5UIeG6Vm/K9G6rR6HJEl7q
+         8oNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689695800; x=1692287800;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Tjh+qVHNBsaCt+fpZytXbv4JtN2Kf+QfiKBiC+OQp3c=;
+        b=bC3eUDfSkkzCBkvjE5flrkprSJPyYMQNTHvj4Zdk6lFDm7zZ40ByHuY1sdcaoNaKv/
+         tMM/tMsXnXzThfKRPZ8HOcAG8HWqmzdGQHBjyr6uduf402hwJXV57lqE8Xxt/LY8AeW+
+         QU8ytj4wqnpyUS+frA87Lecffn3Ievqal0emr7RohfLbM6Ejqx4wcRIM/HGXaEqHp/d+
+         dCEtpBCvvMHcvl0tWb8OALRlpDWqsovyUOzwToSdN2bxR9ACpQNu26v6PXpMuZdUS1j/
+         3Lw/l3qqf1nYZdS6nnnZ8rdjC8P63Js0i3bLvTdL+RTKDhVFbjb8ioTRnNyTwjzRb8iD
+         8/Gw==
+X-Gm-Message-State: ABy/qLYDd0r5UT43z3/FeDkNJfeegE5cEsEz6nB5suJIHiqvXDJ205n5
+        Oe3zFMSh9hlKWk++s+4602xIuA==
+X-Google-Smtp-Source: APBJJlFA9677r6PhZxjwKlQ1fKWxhiNMVqP6N1YqyjTADbRS7wwnXs7xld1btAoYMOwt7mM3Vw+c9w==
+X-Received: by 2002:ac8:7dd0:0:b0:403:a814:ef4d with SMTP id c16-20020ac87dd0000000b00403a814ef4dmr21293071qte.49.1689695800050;
+        Tue, 18 Jul 2023 08:56:40 -0700 (PDT)
+Received: from ziepe.ca ([206.223.160.26])
+        by smtp.gmail.com with ESMTPSA id s21-20020ac87595000000b003e635f80e72sm727847qtq.48.2023.07.18.08.56.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Jul 2023 08:56:39 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1qLn42-002YJT-5I;
+        Tue, 18 Jul 2023 12:56:38 -0300
+Date:   Tue, 18 Jul 2023 12:56:38 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Alex Williamson <alex.williamson@redhat.com>
+Cc:     Grzegorz Jaszczyk <jaz@semihalf.com>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-aio@kvack.org,
+        linux-usb@vger.kernel.org, Matthew Rosato <mjrosato@linux.ibm.com>,
+        Paul Durrant <paul@xen.org>, Tom Rix <trix@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        dri-devel@lists.freedesktop.org, Michal Hocko <mhocko@kernel.org>,
+        linux-mm@kvack.org, Kirti Wankhede <kwankhede@nvidia.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        Fei Li <fei1.li@intel.com>, x86@kernel.org,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        intel-gfx@lists.freedesktop.org,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        linux-fpga@vger.kernel.org, Zhi Wang <zhi.a.wang@intel.com>,
+        Wu Hao <hao.wu@intel.com>, Jason Herne <jjherne@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andrew Donnellan <ajd@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-s390@vger.kernel.org,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        linuxppc-dev@lists.ozlabs.org, Eric Auger <eric.auger@redhat.com>,
+        Borislav Petkov <bp@alien8.de>, kvm@vger.kernel.org,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>, cgroups@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        virtualization@lists.linux-foundation.org,
+        intel-gvt-dev@lists.freedesktop.org, io-uring@vger.kernel.org,
+        netdev@vger.kernel.org, Tony Krowiak <akrowiak@linux.ibm.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        Benjamin LaHaise <bcrl@kvack.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Frederic Barrat <fbarrat@linux.ibm.com>,
+        Moritz Fischer <mdf@kernel.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Xu Yilun <yilun.xu@intel.com>,
+        Dominik Behr <dbehr@chromium.org>,
+        Marcin Wojtas <mw@semihalf.com>
+Subject: Re: [PATCH 0/2] eventfd: simplify signal helpers
+Message-ID: <ZLa2NmwexoxPkS9a@ziepe.ca>
+References: <20230630155936.3015595-1-jaz@semihalf.com>
+ <20230714-gauner-unsolidarisch-fc51f96c61e8@brauner>
+ <CAH76GKPF4BjJLrzLBW8k12ATaAGADeMYc2NQ9+j0KgRa0pomUw@mail.gmail.com>
+ <20230717130831.0f18381a.alex.williamson@redhat.com>
+ <ZLW8wEzkhBxd0O0L@ziepe.ca>
+ <20230717165203.4ee6b1e6.alex.williamson@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230718112600.3969141-2-xu.yang_2@nxp.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230717165203.4ee6b1e6.alex.williamson@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 18, 2023 at 07:26:00PM +0800, Xu Yang wrote:
-> In current design, the ehci driver will not unlink itd/sitds from the
-> hardware list when dequeue isochronous urbs. Rather just wait until they
-> complete normally or their time slot expires. However, this will cause
-> issues if the controller has stopped periodic schedule before finished
-> all periodic schedule. The urb will not be done forever in this case and
-> then usb_kill/poison_urb() will always wait there.
+On Mon, Jul 17, 2023 at 04:52:03PM -0600, Alex Williamson wrote:
+> On Mon, 17 Jul 2023 19:12:16 -0300
+> Jason Gunthorpe <jgg@ziepe.ca> wrote:
 > 
-> The ChipIdea IP exactly has a bug: if frame babble occurs during periodic
-> transfer, PE (PORTSC.bit2) will be cleared and the controller will stop
-> periodic schedule immediately. So if the user tries to kill or poison
-> related urb, it will wait there since the urb can't be done forever.
+> > On Mon, Jul 17, 2023 at 01:08:31PM -0600, Alex Williamson wrote:
+> > 
+> > > What would that mechanism be?  We've been iterating on getting the
+> > > serialization and buffering correct, but I don't know of another means
+> > > that combines the notification with a value, so we'd likely end up with
+> > > an eventfd only for notification and a separate ring buffer for
+> > > notification values.  
+> > 
+> > All FDs do this. You just have to make a FD with custom
+> > file_operations that does what this wants. The uAPI shouldn't be able
+> > to tell if the FD is backing it with an eventfd or otherwise. Have the
+> > kernel return the FD instead of accepting it. Follow the basic design
+> > of eg mlx5vf_save_fops
 > 
-> This patch will check if this issue occurs, then it will unlink itd/sitds
-> from the hardware list depends on the result.
+> Sure, userspace could poll on any fd and read a value from it, but at
+> that point we're essentially duplicating a lot of what eventfd provides
+> for a minor(?) semantic difference over how the counter value is
+> interpreted.  Using an actual eventfd allows the ACPI notification to
+> work as just another interrupt index within the existing vfio IRQ
+> uAPI.
 
-This is not the right approach.  There already is code in the driver for 
-unlinking itds/sitds when the periodic schedule isn't running: See how 
-the "live" variable is used in scan_isoc().  You don't need to add new 
-code to do the same thing, you simply have to make sure that live is set 
-to false if the controller has stopped the periodic schedule 
-unexpectedly.
+Yes, duplicated, sort of, whatever the "ack" is to allow pushing a new
+value can be revised to run as part of the read.
 
-(Be very careful about handling the case where CMD_PSE is set and 
-STS_PSS is clear.  This can happen when the controller has been told to 
-start the periodic schedule but it hasn't done so yet.)
+But I don't really view it as a minor difference. eventfd is a
+counter. It should not be abused otherwise, even if it can be made to
+work.
 
-Alan Stern
+It really isn't an IRQ if it is pushing an async message w/data.
+
+Jason
