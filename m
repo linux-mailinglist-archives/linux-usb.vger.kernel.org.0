@@ -2,59 +2,250 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E047F759D7D
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jul 2023 20:36:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68662759EFE
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Jul 2023 21:52:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbjGSSgb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Jul 2023 14:36:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57056 "EHLO
+        id S230245AbjGSTwE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Jul 2023 15:52:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230322AbjGSSg3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Jul 2023 14:36:29 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 57AD31BF6
-        for <linux-usb@vger.kernel.org>; Wed, 19 Jul 2023 11:36:26 -0700 (PDT)
-Received: (qmail 1652203 invoked by uid 1000); 19 Jul 2023 14:36:25 -0400
-Date:   Wed, 19 Jul 2023 14:36:25 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Alexandru Gagniuc <alexandru.gagniuc@hp.com>
-Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, hayeswang@realtek.com, jflf_kernel@gmx.com,
-        bjorn@mork.no, svenva@chromium.org, linux-kernel@vger.kernel.org,
-        eniac-xw.zhang@hp.com, stable@vger.kernel.org
-Subject: Re: [PATCH v2] r8152: Suspend USB device before shutdown when WoL is
- enabled
-Message-ID: <3c4fd3d8-2b0b-492e-aacc-afafcea98417@rowland.harvard.edu>
-References: <2c12d7a0-3edb-48b3-abf7-135e1a8838ca@rowland.harvard.edu>
- <20230719173756.380829-1-alexandru.gagniuc@hp.com>
+        with ESMTP id S229560AbjGSTwD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Jul 2023 15:52:03 -0400
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C37B01FCE
+        for <linux-usb@vger.kernel.org>; Wed, 19 Jul 2023 12:52:00 -0700 (PDT)
+Received: by mail-vs1-xe31.google.com with SMTP id ada2fe7eead31-44523d9fd18so27217137.0
+        for <linux-usb@vger.kernel.org>; Wed, 19 Jul 2023 12:52:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1689796320; x=1690401120;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JYOwNntA5WE6xe24NJ4pZv26m9x1H9FPfyiIwBhTOwY=;
+        b=YLruMY8r1vjqEc9OKeC82gvXH4C9UyDZMonQnhIP72NhGaW1MgLJBnTRrW9L6uLRvd
+         ebJTg1d214RL9UgRJHKzFBJBh9ugocEAkj1SjxbL25+KduqszB4IJ/yI4oxDJrhHb+Xs
+         XwJ2SqGPKyqDIHygAS4QU38SQxCrgyHgBwGSG4eYFMUDSeMRxo5cR+x1T3zfZmtmqC2A
+         xCRg9kGx8il5nMiqWqmAWMYY9EGJdpFvYJGCl1Ti07YZah0gfDAtp8dO2MdaQUllKvrb
+         tY9aL4rko2x9jv+GavR/pairFVG8ksHdLw/XAL2Kj8I9rHd09XIBQ+W0uI6D+iPxjRE8
+         arBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689796320; x=1690401120;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JYOwNntA5WE6xe24NJ4pZv26m9x1H9FPfyiIwBhTOwY=;
+        b=imxVypMrx9okiiaHRadBc4jC1djuCj7awwB5m1eoEvGZxfQhgeYxJz5cUpf+18XSF4
+         7dkWdSN+n7uNDDu5Rov27dVppP9l4c3B/dmmn2XWo1rxf4FWzQxk6nctlsk6vcRMaZ/M
+         v9d1ZEF5MrLOVaeLuOKf+I+iypu/T9G4/ZBJI8nlJb/48p7eaVybM6Qrke+BKBo0crX3
+         bJZLQ/wEjYJHqFOZEVHOzCR55Kk42r+9S1GMKtKxXAKYLNsc9egHndVLErK1xc0QI/A1
+         t4kPX273/vKxLabzqxsy3PqDiZhOFcFuylCrF/X77PXcu68H+2SGh4iAlcwXW/71kVwP
+         rlNw==
+X-Gm-Message-State: ABy/qLamvtFVpjQBktTUtvrB6onLJLz5HNB41ukPYtnqH8m5AY0kvTP5
+        QEFbZSpgCEs9ZvIAPVvsG4sByIamZlBIkxVxc4LJ3A==
+X-Google-Smtp-Source: APBJJlFKL49KzazS4jd+QjD1HBJYykETwHvON7Of5qx39ifseYKwWKBElKzF04lhO++OWwX4U9Iztc5jELZKiOrn8o8=
+X-Received: by 2002:a67:f648:0:b0:443:59e3:f4f6 with SMTP id
+ u8-20020a67f648000000b0044359e3f4f6mr1439304vso.22.1689796319725; Wed, 19 Jul
+ 2023 12:51:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230719173756.380829-1-alexandru.gagniuc@hp.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20221219204619.2205248-1-allenwebb@google.com>
+ <20230406190030.968972-1-allenwebb@google.com> <20230406190030.968972-9-allenwebb@google.com>
+ <ZG22iPLED+SJsEFa@bombadil.infradead.org>
+In-Reply-To: <ZG22iPLED+SJsEFa@bombadil.infradead.org>
+From:   Allen Webb <allenwebb@google.com>
+Date:   Wed, 19 Jul 2023 14:51:48 -0500
+Message-ID: <CAJzde04MmfyGeAzQ_7FW-0sATk7TT-MkxCbNPSzb-94wK6nhkA@mail.gmail.com>
+Subject: Re: [PATCH v10 08/11] build: Add modules.builtin.alias
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        gregkh@linuxfoundation.org, christophe.leroy@csgroup.eu,
+        nick.alcock@oracle.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 19, 2023 at 05:37:56PM +0000, Alexandru Gagniuc wrote:
-> For Wake-on-LAN to work from S5 (shutdown), the USB link must be put
-> in U3 state. If it is not, and the host "disappears", the chip will
-> no longer respond to WoL triggers.
-> 
-> To resolve this, add a notifier block and register it as a reboot
-> notifier. When WoL is enabled, work through the usb_device struct to
-> get to the suspend function. Calling this function puts the link in
-> the correct state for WoL to function.
+I finally got a chance to go through the comments and work on a
+follow-up to this series, but it probably makes sense to get this
+sorted ahead of the follow-up (if possible).
 
-How do you know that the link will _remain_ in the correct state?
+On Wed, May 24, 2023 at 2:02=E2=80=AFAM Luis Chamberlain <mcgrof@kernel.org=
+> wrote:
+>
+> On Thu, Apr 06, 2023 at 02:00:27PM -0500, Allen Webb wrote:
+> > Generate modules.builtin.alias using modpost and install it with the
+> > modules.
+>
+> Why? This is probably one of the more important commits and the
+> commit log is pretty slim.
+>
+> > Signed-off-by: Allen Webb <allenwebb@google.com>
+> > ---
+> >  .gitignore               |  1 +
+> >  Makefile                 |  1 +
+> >  scripts/Makefile.modpost | 15 +++++++++++++++
+> >  3 files changed, 17 insertions(+)
+> >
+> > diff --git a/.gitignore b/.gitignore
+> > index 13a7f08a3d73..ddaa622bddac 100644
+> > --- a/.gitignore
+> > +++ b/.gitignore
+> > @@ -71,6 +71,7 @@ modules.order
+> >  /System.map
+> >  /Module.markers
+> >  /modules.builtin
+> > +/modules.builtin.alias
+> >  /modules.builtin.modinfo
+> >  /modules.nsdeps
+> >
+> > diff --git a/Makefile b/Makefile
+> > index a2c310df2145..43dcc1ea5fcf 100644
+> > --- a/Makefile
+> > +++ b/Makefile
+> > @@ -1578,6 +1578,7 @@ __modinst_pre:
+> >       fi
+> >       @sed 's:^\(.*\)\.o$$:kernel/\1.ko:' modules.order > $(MODLIB)/mod=
+ules.order
+> >       @cp -f modules.builtin $(MODLIB)/
+> > +     @cp -f modules.builtin.alias $(MODLIB)/
+> >       @cp -f $(objtree)/modules.builtin.modinfo $(MODLIB)/
+> >
+> >  endif # CONFIG_MODULES
+> > diff --git a/scripts/Makefile.modpost b/scripts/Makefile.modpost
+> > index 0980c58d8afc..e3ecc17a7a19 100644
+> > --- a/scripts/Makefile.modpost
+> > +++ b/scripts/Makefile.modpost
+> > @@ -15,6 +15,7 @@
+> >  # 2) modpost is then used to
+> >  # 3)  create one <module>.mod.c file per module
+> >  # 4)  create one Module.symvers file with CRC for all exported symbols
+> > +# 5)  create modules.builtin.alias the aliases for built-in modules
+>
+> Does everyone want that file?
 
-That is, how do you know that the shutdown processing for the USB host 
-controller won't disable the link entirely, thereby preventing WoL from 
-working?
+Not everyone needs it so we could exclude it, but the cost of adding
+it isn't that high. I am fine with putting it behind a config, though
+we would need to decide whether to have it default on/off.
 
-Alan Stern
+>
+> >  # Step 3 is used to place certain information in the module's ELF
+> >  # section, including information such as:
+> > @@ -63,6 +64,20 @@ modpost-args +=3D -T $(MODORDER)
+> >  modpost-deps +=3D $(MODORDER)
+> >  endif
+> >
+> > +ifneq ($(wildcard vmlinux.o),)
+> > +output-builtin.alias :=3D modules.builtin.alias
+> > +modpost-args +=3D -b .modules.builtin.alias.in
+> > +.modules.builtin.alias.in: $(output-symdump)
+> > +     @# Building $(output-symdump) generates .modules.builtin.alias.in=
+ as a
+> > +     @# side effect.
+> > +     @[ -e $@ ] || $(MODPOST) -b .modules.builtin.alias.in vmlinux.o
+>
+> Does using -b create a delay in builds ? What is the effect on build
+> time on a typical 4-core or 8-core build? Does everyone want it?
+
+Here is some data I collected related to build time and memory usage impact=
+:
+
+Without builtin.alias:
+TIME=3D"real %e\nuser %U\nsys %S\nres-max %M" time scripts/mod/modpost
+-E -o Module.symvers -T modules.order
+ERROR: modpost: "__x86_return_thunk"
+[arch/x86/crypto/chacha-x86_64.ko] undefined!
+ERROR: modpost: "kernel_fpu_end" [arch/x86/crypto/chacha-x86_64.ko] undefin=
+ed!
+ERROR: modpost: "hchacha_block_generic"
+[arch/x86/crypto/chacha-x86_64.ko] undefined!
+ERROR: modpost: "boot_cpu_data" [arch/x86/crypto/chacha-x86_64.ko] undefine=
+d!
+ERROR: modpost: "static_key_enable" [arch/x86/crypto/chacha-x86_64.ko]
+undefined!
+ERROR: modpost: "cpu_has_xfeatures" [arch/x86/crypto/chacha-x86_64.ko]
+undefined!
+ERROR: modpost: "crypto_register_skciphers"
+[arch/x86/crypto/chacha-x86_64.ko] undefined!
+ERROR: modpost: "crypto_unregister_skciphers"
+[arch/x86/crypto/chacha-x86_64.ko] undefined!
+ERROR: modpost: "__stack_chk_fail" [arch/x86/crypto/chacha-x86_64.ko] undef=
+ined!
+ERROR: modpost: "memset" [arch/x86/crypto/chacha-x86_64.ko] undefined!
+WARNING: modpost: suppressed 17432 unresolved symbol warnings because
+there were too many)
+Command exited with non-zero status 1
+real 0.44
+user 0.43
+sys 0.01
+res-max 4896
+
+With builtin.alias:
+TIME=3D"real %e\nuser %U\nsys %S\nres-max %M" time scripts/mod/modpost
+-E -o Module.symvers -T modules.order -b .modules.builtin.alias.in
+vmlinux.o
+real 1.43
+user 1.38
+sys 0.05
+res-max 51920
+
+Notice that modpost only uses a single core, so multicore isn't really
+as much of a factor here. While it more than triples the time required
+for the modpost operation the difference is only about one second of
+CPU time. The memory usage is much larger when generating
+modules.builtin.alias because of the size of vmlinux.o.
+
+My biggest performance related concern is actually the size difference
+of vmlinux caused by the modules.h changes, but it looks like that is
+negligible (24KiB):
+
+Without builtin.alias:
+du vmlinux.o
+663048  vmlinux.o
+
+With builtin.alias:
+du vmlinux.o
+663072  vmlinux.o
+
+>
+> Should we add a new option which lets people decide if they want this
+> at build time or not?
+
+I don't feel strongly that there should or should not be a config for
+this. On the side for a config the extra second of CPU time and space
+taken up by the modules.builtin.alias file would add up across all the
+builds and machines, so removing it where it isn't used would help
+mitigate that. On the flip side if it isn't used widely enough, it is
+more likely that breakages are missed until someone who actually uses
+it notices.
+
+Please let me know if you feel strongly either way given the data.
+
+Thanks,
+Allen
+
+>
+>   Luis
+>
+> > +
+> > +$(output-builtin.alias): .modules.builtin.alias.in
+> > +     sort -o $@ $^
+> > +
+> > +__modpost: $(output-builtin.alias)
+> > +endif
+> > +
+> >  ifeq ($(KBUILD_EXTMOD),)
+> >
+> >  # Generate the list of in-tree objects in vmlinux
+> > --
+> > 2.39.2
+> >
