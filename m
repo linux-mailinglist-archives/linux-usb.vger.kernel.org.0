@@ -2,250 +2,211 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68662759EFE
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jul 2023 21:52:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F18875A01D
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Jul 2023 22:46:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230245AbjGSTwE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Jul 2023 15:52:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40396 "EHLO
+        id S229932AbjGSUqK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Jul 2023 16:46:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbjGSTwD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Jul 2023 15:52:03 -0400
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C37B01FCE
-        for <linux-usb@vger.kernel.org>; Wed, 19 Jul 2023 12:52:00 -0700 (PDT)
-Received: by mail-vs1-xe31.google.com with SMTP id ada2fe7eead31-44523d9fd18so27217137.0
-        for <linux-usb@vger.kernel.org>; Wed, 19 Jul 2023 12:52:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689796320; x=1690401120;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JYOwNntA5WE6xe24NJ4pZv26m9x1H9FPfyiIwBhTOwY=;
-        b=YLruMY8r1vjqEc9OKeC82gvXH4C9UyDZMonQnhIP72NhGaW1MgLJBnTRrW9L6uLRvd
-         ebJTg1d214RL9UgRJHKzFBJBh9ugocEAkj1SjxbL25+KduqszB4IJ/yI4oxDJrhHb+Xs
-         XwJ2SqGPKyqDIHygAS4QU38SQxCrgyHgBwGSG4eYFMUDSeMRxo5cR+x1T3zfZmtmqC2A
-         xCRg9kGx8il5nMiqWqmAWMYY9EGJdpFvYJGCl1Ti07YZah0gfDAtp8dO2MdaQUllKvrb
-         tY9aL4rko2x9jv+GavR/pairFVG8ksHdLw/XAL2Kj8I9rHd09XIBQ+W0uI6D+iPxjRE8
-         arBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689796320; x=1690401120;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JYOwNntA5WE6xe24NJ4pZv26m9x1H9FPfyiIwBhTOwY=;
-        b=imxVypMrx9okiiaHRadBc4jC1djuCj7awwB5m1eoEvGZxfQhgeYxJz5cUpf+18XSF4
-         7dkWdSN+n7uNDDu5Rov27dVppP9l4c3B/dmmn2XWo1rxf4FWzQxk6nctlsk6vcRMaZ/M
-         v9d1ZEF5MrLOVaeLuOKf+I+iypu/T9G4/ZBJI8nlJb/48p7eaVybM6Qrke+BKBo0crX3
-         bJZLQ/wEjYJHqFOZEVHOzCR55Kk42r+9S1GMKtKxXAKYLNsc9egHndVLErK1xc0QI/A1
-         t4kPX273/vKxLabzqxsy3PqDiZhOFcFuylCrF/X77PXcu68H+2SGh4iAlcwXW/71kVwP
-         rlNw==
-X-Gm-Message-State: ABy/qLamvtFVpjQBktTUtvrB6onLJLz5HNB41ukPYtnqH8m5AY0kvTP5
-        QEFbZSpgCEs9ZvIAPVvsG4sByIamZlBIkxVxc4LJ3A==
-X-Google-Smtp-Source: APBJJlFKL49KzazS4jd+QjD1HBJYykETwHvON7Of5qx39ifseYKwWKBElKzF04lhO++OWwX4U9Iztc5jELZKiOrn8o8=
-X-Received: by 2002:a67:f648:0:b0:443:59e3:f4f6 with SMTP id
- u8-20020a67f648000000b0044359e3f4f6mr1439304vso.22.1689796319725; Wed, 19 Jul
- 2023 12:51:59 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221219204619.2205248-1-allenwebb@google.com>
- <20230406190030.968972-1-allenwebb@google.com> <20230406190030.968972-9-allenwebb@google.com>
- <ZG22iPLED+SJsEFa@bombadil.infradead.org>
-In-Reply-To: <ZG22iPLED+SJsEFa@bombadil.infradead.org>
-From:   Allen Webb <allenwebb@google.com>
-Date:   Wed, 19 Jul 2023 14:51:48 -0500
-Message-ID: <CAJzde04MmfyGeAzQ_7FW-0sATk7TT-MkxCbNPSzb-94wK6nhkA@mail.gmail.com>
-Subject: Re: [PATCH v10 08/11] build: Add modules.builtin.alias
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        with ESMTP id S229531AbjGSUqJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Jul 2023 16:46:09 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67418FD;
+        Wed, 19 Jul 2023 13:46:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689799568; x=1721335568;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=G5+V6oWzi6eJfvlDuvhWm2ws+L3utOAoyU/EZppzzaY=;
+  b=fVewWJECOJyEY/6gNuWWsUzqQYdhp73jjcg1FmTG+TXA0KhMoaQgAt82
+   RMViMvrBXqEyctjB1ypCDPLv4ornF4ryatnd7vVRk9ijOzc73nGJd71wk
+   1Nb+H49816nR0AGPIckeM3S/FWoeFyjsGReNT+isGRT9g0ZjkD7OcyggI
+   0/xP6rzGv1S+/lm0MhpoREjCv906VfiRcril2TAuMzqI862r71AWw6ksY
+   FxP4zyL2usOOmyyH4pVmAxgUhtr+wexDtEEDEYUza9YaiwNwtP1w2O3Rs
+   5IQdQllZg8lKZ5V/GTP7OklW2yLDCni38ARE9KWLNGXkNLEbDp99NUvyP
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10776"; a="370133234"
+X-IronPort-AV: E=Sophos;i="6.01,216,1684825200"; 
+   d="scan'208";a="370133234"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2023 13:46:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10776"; a="753816085"
+X-IronPort-AV: E=Sophos;i="6.01,216,1684825200"; 
+   d="scan'208";a="753816085"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by orsmga008.jf.intel.com with ESMTP; 19 Jul 2023 13:46:07 -0700
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Wed, 19 Jul 2023 13:46:07 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27 via Frontend Transport; Wed, 19 Jul 2023 13:46:07 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.174)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.27; Wed, 19 Jul 2023 13:46:07 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ICSwajRaEZKYpluLajDujx2QD6XDaCFRZy6yTCY6RwhGqwr0rOvqSUaHd1aYc0r7SDm27Dfn1KCjtW1a2GvuVFyuPoZCNNPigLysk6CBxMyBQ6z41Kdtd0LNAfc3v1IgkTO/AcYVg1YE5tqc4eR2pnArM/tT3BCq8bR19hZsQHt5+Qu9L36ZCPL06SWKMltSeO1rx/UTxbBjzOVxE5LNeRuzbg9Tzktur5fPVDSwe8MMqSspjugPV9R6CQH9dI99qlKff7Aky2+y0rXNYlHxvsdXVUKYthaCrWUcnFonO74knEVvSBpjTQQb0TMe6kYFgANu1yLsIzeSWUVnmfVB7Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UEFhx4fRpVf5xeYPee/42IBvyoI+xXOFyyx5oPq+ovA=;
+ b=Rqbs0CoPk6o0hAyT585+NnzEqpW7NJXYzp+TX551iXUvKhjxWRplmhQKveZQvLFi/4OQ2MOv5N7ArkViei3vep5RXokMavuP3zhiJVdB8HpwBtmqGBeyerx8YoIO1NMZEcEKCHuwiv8nPWauLbME9oqzbqWn1dJzCQB0heVBKo6Df3pm5hfm13VXjrezlng+77DN7DLxz8BHdbKeL56zi+jtC9z1IJEgaHbVfX9oIxxfwasvCNfwo8LY/fPnKHpcPovvHx6ZEUaXQhNpn4IyTxWmh8dNGlBGAghIJuugjPSFxXlDbQLwgl/8UU+yTaWG1mQv9g4rkIhY8tO2nP/aGw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from MWHPR11MB0048.namprd11.prod.outlook.com (2603:10b6:301:6a::31)
+ by PH8PR11MB8014.namprd11.prod.outlook.com (2603:10b6:510:23a::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.33; Wed, 19 Jul
+ 2023 20:46:05 +0000
+Received: from MWHPR11MB0048.namprd11.prod.outlook.com
+ ([fe80::ee97:2e55:ae8d:2809]) by MWHPR11MB0048.namprd11.prod.outlook.com
+ ([fe80::ee97:2e55:ae8d:2809%4]) with mapi id 15.20.6609.022; Wed, 19 Jul 2023
+ 20:46:05 +0000
+From:   "Patel, Utkarsh H" <utkarsh.h.patel@intel.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        gregkh@linuxfoundation.org, christophe.leroy@csgroup.eu,
-        nick.alcock@oracle.com
-Content-Type: text/plain; charset="UTF-8"
+        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
+        "pmalani@chromium.org" <pmalani@chromium.org>,
+        "bleung@chromium.org" <bleung@chromium.org>
+Subject: RE: [PATCH v4 2/2] usb: typec: intel_pmc_mux: Configure Active and
+ Retimer Cable type
+Thread-Topic: [PATCH v4 2/2] usb: typec: intel_pmc_mux: Configure Active and
+ Retimer Cable type
+Thread-Index: AQHZuR/kR1fgAoQ4cU+gDZWp1WKvJK+/hYAAgAILzUA=
+Date:   Wed, 19 Jul 2023 20:46:05 +0000
+Message-ID: <MWHPR11MB0048115794666D99182D85DBA939A@MWHPR11MB0048.namprd11.prod.outlook.com>
+References: <20230718024703.1013367-1-utkarsh.h.patel@intel.com>
+ <20230718024703.1013367-3-utkarsh.h.patel@intel.com>
+ <2023071800-roaming-automated-5404@gregkh>
+In-Reply-To: <2023071800-roaming-automated-5404@gregkh>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MWHPR11MB0048:EE_|PH8PR11MB8014:EE_
+x-ms-office365-filtering-correlation-id: 7b1d6076-42e4-41d5-3f02-08db88992c30
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: kZTvXENOZFnNxyDAklYgOGhfB/PTl4PjuUVRownF7/tkCYP3Gel1RXbJ6gdhf9a7zM/eCyqu3YAJPchQW5+X8/sKggXVLJjUdkCiPaFuWwRGIcKYR/jQJdfBXeRIyk0CsLYc4/G/6V4V6lD19Io5ByljcnGVmL3TjCsX9h73//ZyFj0aB84D8Mp3ye8KWxFyHCndCXfExw6Zek9c5VG72HndosMEZJDG5+tDn2Rojo30KhOHNulERe5CuWXfrs1EQ3DQs288u1jsAFwhQ6Xw+ya055Dkq+Uqm3gBKeGbHbRZcQlCt8u0m93yfAUYkyZ2gAlisqH/cYGDrTSOzKSx/J8vvEqRxadCEsUyezgqlRsBSO9LBVEQ0wszinnu2VhznDT0v/VkGMYrOrtbGPApoDSq3XDWc6IlIGHmG582jZFWb9q3A3q5/rrMT8BlkOmBnWdcz0Ooj753cKSp0HPw7Bbdd7xcw9liwG4pEDevMncsC8txe+7e6moeWBIOtOUYEmdaxrvs6GPjzfY77uvVbgZbcTt2LGhqeqE4fDLOqU2jrxe1XiT6kpiqCAkBeljFhauePs6LpwJKOdjUZLG0V8BvMlrs2/W59Ko1GMfyk2MzTxFRU/nIu88w38PEd970
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB0048.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(376002)(136003)(346002)(396003)(39860400002)(451199021)(316002)(41300700001)(66476007)(64756008)(6916009)(66946007)(4326008)(66446008)(66556008)(5660300002)(8936002)(8676002)(33656002)(83380400001)(38100700002)(86362001)(55016003)(9686003)(122000001)(82960400001)(38070700005)(186003)(76116006)(26005)(7696005)(53546011)(6506007)(54906003)(478600001)(71200400001)(52536014)(2906002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Ezr0DyQEOjYHemzk3+ALIhfWK7qHMGA40VGpG+PF72PR78lDTYhf54S35WJ3?=
+ =?us-ascii?Q?O0j7YMagf3uOfSywXQgcEqzHtLEI19wIkbSDlqT8aOilKvPcHs8soMH8Yq5O?=
+ =?us-ascii?Q?IgVu9QPRlS7nczzNzy311zqrYGPKQXMDUW5Y36yXbY8OZCj+yDuDNe5PsRVF?=
+ =?us-ascii?Q?6DW8iWZwBm31ZcLu/2MBR/4AbPAjEFsojzThM+2xt7MigLxZVYZ3OwCzTf9/?=
+ =?us-ascii?Q?queazfFpBpNo+07sQBk28Ev6iVSBfK2v4PieAbsuhcXqV/tLBYJdWvfIunb0?=
+ =?us-ascii?Q?6NRECpy8vAqUhm+Xs6D6bsf9MDdFaAt61DQcU1vHNrOMoKF7dQ895CPTPyBu?=
+ =?us-ascii?Q?KWDgTFr2olrRDs+rCMoYbXq3Z0x23yTkyddxHJWmzl2x7hia1mLYKfhl96Gt?=
+ =?us-ascii?Q?iXVQ5zYwTy8uA5XR/kfPNZ7BCur29rzQefJUadQo+T4Yl3YDb338bm6kevqX?=
+ =?us-ascii?Q?kjMVucNQFdDlumvQ/dqDyFCTe8dkYIYyBz7IJMbIx7/crH0gc9HL0ok9Hchd?=
+ =?us-ascii?Q?Q3v8BxqhID9/8QXtWak/gjDSEHct6petuiuYdjk1MUoD8mYHu2iHPS0p6C1M?=
+ =?us-ascii?Q?UAte/IVFz9RNATDwE+9HnZq5nXSZCOF7RSkMyyaRafQjbIAyC55BCiFH39b9?=
+ =?us-ascii?Q?eYFsnQ8b+/4HQBrVzpks6EaKrhMP9/9X4PrrSEOmtFbqFsrSj7x4xTlZtnBy?=
+ =?us-ascii?Q?ACJlpo0uD8pDncMf5Sv64p77l341SsysAYasm75C10DG9VayhCt6jHFC/FrW?=
+ =?us-ascii?Q?xd/BCy9cybZwaDM4QH1c3U46zqc0Aey9Z2yYtghzWoRiBTyJDWi8hHlFViZH?=
+ =?us-ascii?Q?9HHUXpDLf81qaumOr0pIfpLanhCjIM4qGKvbMCcoXe7QtapfhbeNB3aHfj8X?=
+ =?us-ascii?Q?StoIom6EuEG+OZr5XK5ANgzLLDhQZh0FgJA7ICdOAQVeufCWde/X7JD9XEt2?=
+ =?us-ascii?Q?d32I+R0T3fvjjs7VPnX4NbJNOywHUyu+sgyodZ4IbuCrtF3vPR98cxgvb/Hq?=
+ =?us-ascii?Q?PDQUOzjrcMVbuAE4zbbG3WtpzTC6dHvdcmz2qCVoTl18pSd+yOUqOm3TK+NO?=
+ =?us-ascii?Q?U1Wucp9k9fFkrSUz9O1K9uqCMm1fB1Gpi0+PLmBQ2V0zqH6/Vx1S9FKmpygr?=
+ =?us-ascii?Q?j//zmL3DSgt6V5KQoPujyZfOzDH21V1fbHsVmldtoCkluVqh69rhUpnkILLh?=
+ =?us-ascii?Q?Vl2xdms84NkO9oHLxYc7JlvWKlYHDVbrL+PAD2mvqWehCIjb2CcOc/uwYTw8?=
+ =?us-ascii?Q?n0ebR5BaQUAuI9vkw+36MeLxwb8Ad0vQFWV2KxJHRf+PEi1l2MXYszsCIHKC?=
+ =?us-ascii?Q?4GSVCMk7SC0T0RVWP3K+M1S7Y9wcx/TVsa2OTZsuc01IsQM2Dyda6Ni7kJ8w?=
+ =?us-ascii?Q?cKw6fRPq8jiVFQM9zA7xUFJdofzQE5fpmjkuLDW3MtuFrzuPiIxBoPfoPPyG?=
+ =?us-ascii?Q?yQ2dyNjDasI4DyRGKK7YJKFXIBnBRmIUovxs6npFRm5wc7modA8zgNugwj6e?=
+ =?us-ascii?Q?u+hqSuVkxS6/wJ8jAwSzIIQ+4n6uhvpUrX45T4u/N+G+AXUIDV2hs9UvESCH?=
+ =?us-ascii?Q?3aAJ+2snMIE6gUxAViUXSABHKP8TagePm+xBbvj9EAnoCWS2fUDL42udvSqN?=
+ =?us-ascii?Q?lw=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB0048.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7b1d6076-42e4-41d5-3f02-08db88992c30
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jul 2023 20:46:05.5542
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ibvpZx+O0mkLOH86TTNRBCX362tl85pSs45maE4xYLzHp/CT3OyxceC8ME81u+P6w9O9Y/9ixsGnS2583TyN8jKBwhO9bbRoNffa2YTkWrc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB8014
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-I finally got a chance to go through the comments and work on a
-follow-up to this series, but it probably makes sense to get this
-sorted ahead of the follow-up (if possible).
+Hi Greg,
 
-On Wed, May 24, 2023 at 2:02=E2=80=AFAM Luis Chamberlain <mcgrof@kernel.org=
-> wrote:
->
-> On Thu, Apr 06, 2023 at 02:00:27PM -0500, Allen Webb wrote:
-> > Generate modules.builtin.alias using modpost and install it with the
-> > modules.
->
-> Why? This is probably one of the more important commits and the
-> commit log is pretty slim.
->
-> > Signed-off-by: Allen Webb <allenwebb@google.com>
+Thank you for the review and feedback.=20
+
+> -----Original Message-----
+> From: Greg KH <gregkh@linuxfoundation.org>
+> Sent: Tuesday, July 18, 2023 6:29 AM
+> To: Patel, Utkarsh H <utkarsh.h.patel@intel.com>
+> Cc: linux-kernel@vger.kernel.org; linux-usb@vger.kernel.org;
+> heikki.krogerus@linux.intel.com; pmalani@chromium.org;
+> bleung@chromium.org
+> Subject: Re: [PATCH v4 2/2] usb: typec: intel_pmc_mux: Configure Active a=
+nd
+> Retimer Cable type
+>=20
+> On Mon, Jul 17, 2023 at 07:47:03PM -0700, Utkarsh Patel wrote:
+> > Cable type such as active and retimer received as a part of
+> > Thunderbolt3 or Thunderbolt4 cable discover mode VDO needs to be
+> > configured in the thunderbolt alternate mode.
+> >
+> > Configuring the register bits for this cable type is changed with
+> > Intel Meteor Lake platform. BIT2 for Retimer/Redriver cable and BIT22
+> > for Active/Passive cable.
+> >
+> > Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > Signed-off-by: Utkarsh Patel <utkarsh.h.patel@intel.com>
 > > ---
-> >  .gitignore               |  1 +
-> >  Makefile                 |  1 +
-> >  scripts/Makefile.modpost | 15 +++++++++++++++
-> >  3 files changed, 17 insertions(+)
+> > Changes in v4:
+> >  - No changes.
 > >
-> > diff --git a/.gitignore b/.gitignore
-> > index 13a7f08a3d73..ddaa622bddac 100644
-> > --- a/.gitignore
-> > +++ b/.gitignore
-> > @@ -71,6 +71,7 @@ modules.order
-> >  /System.map
-> >  /Module.markers
-> >  /modules.builtin
-> > +/modules.builtin.alias
-> >  /modules.builtin.modinfo
-> >  /modules.nsdeps
+> > Changes in v3:
+> >  - No changes.
 > >
-> > diff --git a/Makefile b/Makefile
-> > index a2c310df2145..43dcc1ea5fcf 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -1578,6 +1578,7 @@ __modinst_pre:
-> >       fi
-> >       @sed 's:^\(.*\)\.o$$:kernel/\1.ko:' modules.order > $(MODLIB)/mod=
-ules.order
-> >       @cp -f modules.builtin $(MODLIB)/
-> > +     @cp -f modules.builtin.alias $(MODLIB)/
-> >       @cp -f $(objtree)/modules.builtin.modinfo $(MODLIB)/
-> >
-> >  endif # CONFIG_MODULES
-> > diff --git a/scripts/Makefile.modpost b/scripts/Makefile.modpost
-> > index 0980c58d8afc..e3ecc17a7a19 100644
-> > --- a/scripts/Makefile.modpost
-> > +++ b/scripts/Makefile.modpost
-> > @@ -15,6 +15,7 @@
-> >  # 2) modpost is then used to
-> >  # 3)  create one <module>.mod.c file per module
-> >  # 4)  create one Module.symvers file with CRC for all exported symbols
-> > +# 5)  create modules.builtin.alias the aliases for built-in modules
->
-> Does everyone want that file?
+> > Changes in v2:
+> >  - No changes.
+> > ---
+> > ---
+> >  drivers/usb/typec/mux/intel_pmc_mux.c | 28
+> > +++++++++++++++++++++++----
+> >  1 file changed, 24 insertions(+), 4 deletions(-)
+>=20
+> Why the 2 --- lines?
 
-Not everyone needs it so we could exclude it, but the cost of adding
-it isn't that high. I am fine with putting it behind a config, though
-we would need to decide whether to have it default on/off.
+This is by mistake.
 
->
-> >  # Step 3 is used to place certain information in the module's ELF
-> >  # section, including information such as:
-> > @@ -63,6 +64,20 @@ modpost-args +=3D -T $(MODORDER)
-> >  modpost-deps +=3D $(MODORDER)
-> >  endif
-> >
-> > +ifneq ($(wildcard vmlinux.o),)
-> > +output-builtin.alias :=3D modules.builtin.alias
-> > +modpost-args +=3D -b .modules.builtin.alias.in
-> > +.modules.builtin.alias.in: $(output-symdump)
-> > +     @# Building $(output-symdump) generates .modules.builtin.alias.in=
- as a
-> > +     @# side effect.
-> > +     @[ -e $@ ] || $(MODPOST) -b .modules.builtin.alias.in vmlinux.o
->
-> Does using -b create a delay in builds ? What is the effect on build
-> time on a typical 4-core or 8-core build? Does everyone want it?
+>=20
+> And why are you not cc:ing all the proper people (i.e. the person that ca=
+n
+> actually apply this...)?
+>=20
+Ack.
 
-Here is some data I collected related to build time and memory usage impact=
-:
+I will correct both of these when I send next patch.=20
 
-Without builtin.alias:
-TIME=3D"real %e\nuser %U\nsys %S\nres-max %M" time scripts/mod/modpost
--E -o Module.symvers -T modules.order
-ERROR: modpost: "__x86_return_thunk"
-[arch/x86/crypto/chacha-x86_64.ko] undefined!
-ERROR: modpost: "kernel_fpu_end" [arch/x86/crypto/chacha-x86_64.ko] undefin=
-ed!
-ERROR: modpost: "hchacha_block_generic"
-[arch/x86/crypto/chacha-x86_64.ko] undefined!
-ERROR: modpost: "boot_cpu_data" [arch/x86/crypto/chacha-x86_64.ko] undefine=
-d!
-ERROR: modpost: "static_key_enable" [arch/x86/crypto/chacha-x86_64.ko]
-undefined!
-ERROR: modpost: "cpu_has_xfeatures" [arch/x86/crypto/chacha-x86_64.ko]
-undefined!
-ERROR: modpost: "crypto_register_skciphers"
-[arch/x86/crypto/chacha-x86_64.ko] undefined!
-ERROR: modpost: "crypto_unregister_skciphers"
-[arch/x86/crypto/chacha-x86_64.ko] undefined!
-ERROR: modpost: "__stack_chk_fail" [arch/x86/crypto/chacha-x86_64.ko] undef=
-ined!
-ERROR: modpost: "memset" [arch/x86/crypto/chacha-x86_64.ko] undefined!
-WARNING: modpost: suppressed 17432 unresolved symbol warnings because
-there were too many)
-Command exited with non-zero status 1
-real 0.44
-user 0.43
-sys 0.01
-res-max 4896
-
-With builtin.alias:
-TIME=3D"real %e\nuser %U\nsys %S\nres-max %M" time scripts/mod/modpost
--E -o Module.symvers -T modules.order -b .modules.builtin.alias.in
-vmlinux.o
-real 1.43
-user 1.38
-sys 0.05
-res-max 51920
-
-Notice that modpost only uses a single core, so multicore isn't really
-as much of a factor here. While it more than triples the time required
-for the modpost operation the difference is only about one second of
-CPU time. The memory usage is much larger when generating
-modules.builtin.alias because of the size of vmlinux.o.
-
-My biggest performance related concern is actually the size difference
-of vmlinux caused by the modules.h changes, but it looks like that is
-negligible (24KiB):
-
-Without builtin.alias:
-du vmlinux.o
-663048  vmlinux.o
-
-With builtin.alias:
-du vmlinux.o
-663072  vmlinux.o
-
->
-> Should we add a new option which lets people decide if they want this
-> at build time or not?
-
-I don't feel strongly that there should or should not be a config for
-this. On the side for a config the extra second of CPU time and space
-taken up by the modules.builtin.alias file would add up across all the
-builds and machines, so removing it where it isn't used would help
-mitigate that. On the flip side if it isn't used widely enough, it is
-more likely that breakages are missed until someone who actually uses
-it notices.
-
-Please let me know if you feel strongly either way given the data.
-
-Thanks,
-Allen
-
->
->   Luis
->
-> > +
-> > +$(output-builtin.alias): .modules.builtin.alias.in
-> > +     sort -o $@ $^
-> > +
-> > +__modpost: $(output-builtin.alias)
-> > +endif
-> > +
-> >  ifeq ($(KBUILD_EXTMOD),)
-> >
-> >  # Generate the list of in-tree objects in vmlinux
-> > --
-> > 2.39.2
-> >
+Sincerely,
+Utkarsh Patel.=20
