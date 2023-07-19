@@ -2,139 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 315F0759417
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jul 2023 13:23:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE160759618
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Jul 2023 15:01:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbjGSLXb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Jul 2023 07:23:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48584 "EHLO
+        id S229771AbjGSNBO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Jul 2023 09:01:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjGSLXa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Jul 2023 07:23:30 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2042.outbound.protection.outlook.com [40.107.8.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D045E52;
-        Wed, 19 Jul 2023 04:23:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ov3FTNRdOCIFaBn5y5sIz+BfE3X/UYOIEyfvTsLOiMb9oU/rj73legJPN2HnOReRB+TR9aRrt+OvUKJWQN/OPLsP05F0nWM3mhhvJ2aMX+sKagwCjLSKQnqkJovdSzfPw0HQ8u8fnC5jwpyonpzqStsLjxoirxTvgCfloxCsyHlz/wD74UuEnLH48N5HBNdrUTnTnvOILja0wjCNoRWJHIr9DINi5Pnh+5YHjEzHFYCueb+9ZxE4aXD0G0ApL3qaDFJscKBC0nvvXgRfnrITZ7xYkvJO24pBWAnXJJcfiqw2Y7htDEG4XL/BifjTySVWu7QUmjpUZmJpN4cWzWPwsA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IEkVtEVwrtrT2lcgjb1fce1rxKGqjbHCy9U6zCKxdEc=;
- b=cQDO0VovTFrEvGZusLQQQQx1cJtExVxLQGP7z9fVRs8TWGcM/tZsQtaEncCC4/cBKNOsGNNKsWADbWGT+OzkhN29+24pYFoGDls5UVJdVL6EI/FU8NNGU5R8KKyLsPki4CAUv3Ftq26BZuuQclnDpl3kzMtY8qImam6y34Y7A3KsID40v2zoE1uw0l8ldDKZT3L5b+nB+fV+76bMs9/SeqzNIwH2wrB3RoP0pA1loI0LW2j4s6qlqejSnpgBXcZCMaKwFB5wMFmypZCWbdQG/NAcrd7hQU6/Y3Ss3QySpZFS8wpmr5ciTn1cF5S+jMmnyuzXgJQZe5T96puU8Tku+g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IEkVtEVwrtrT2lcgjb1fce1rxKGqjbHCy9U6zCKxdEc=;
- b=GwCeTa4oHJgHDAvPuLEP/zGlS3bAu8SOjh6GtGQmjPMf62pJV7noAus9tS9EbxPgjGr9Q8vkTc/1oZYimuM1EBghpZos4XIhKTJ9yqjY2/whVwZZAflvBKTMuXDJ+Q/O77FhfuNxRuy5+mFlLWMxgiJmPCy1emVXt0zzwwQhVmU=
-Received: from DB7PR04MB4505.eurprd04.prod.outlook.com (2603:10a6:5:39::26) by
- AM8PR04MB8035.eurprd04.prod.outlook.com (2603:10a6:20b:248::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6609.24; Wed, 19 Jul
- 2023 11:23:26 +0000
-Received: from DB7PR04MB4505.eurprd04.prod.outlook.com
- ([fe80::473a:28:1d98:10ab]) by DB7PR04MB4505.eurprd04.prod.outlook.com
- ([fe80::473a:28:1d98:10ab%5]) with mapi id 15.20.6609.022; Wed, 19 Jul 2023
- 11:23:26 +0000
-From:   Xu Yang <xu.yang_2@nxp.com>
-To:     Luca Ceresoli <luca.ceresoli@bootlin.com>
-CC:     Francesco Dolcini <francesco@dolcini.it>, Jun Li <jun.li@nxp.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>
-Subject: RE: [EXT] Re: [PATCH v2 2/3] usb: chipidea: imx: support disabling
- runtime-pm
-Thread-Topic: [EXT] Re: [PATCH v2 2/3] usb: chipidea: imx: support disabling
- runtime-pm
-Thread-Index: AQHZkukSER6EMlEOvUGUKvCWQIHv2K+swg6AgBG0WYCAAQQm4IAARWMAgAF+cOA=
-Date:   Wed, 19 Jul 2023 11:23:26 +0000
-Message-ID: <DB7PR04MB4505560E7DCBC2523FD7A0FE8C39A@DB7PR04MB4505.eurprd04.prod.outlook.com>
-References: <20230504162312.1506763-1-luca.ceresoli@bootlin.com>
-        <ZFPiRvoF5l8uGzzZ@francesco-nb.int.toradex.com>
-        <PA4PR04MB96403377F5E37C12AD8C25B389729@PA4PR04MB9640.eurprd04.prod.outlook.com>
-        <20230505120618.2f4cf22c@booty>
-        <ZFThyn/D/dDK9nk3@francesco-nb.int.toradex.com>
-        <PA4PR04MB96405EE2468555EA900B340189739@PA4PR04MB9640.eurprd04.prod.outlook.com>
-        <ZFjaNzY32x8o2XG7@francesco-nb.int.toradex.com>
-        <20230508151756.785ec07e@booty> <20230529121825.71e9b6d6@booty>
-        <PA4PR04MB96405138465D215C34285F02894B9@PA4PR04MB9640.eurprd04.prod.outlook.com>
-        <ZKaWL3+ClI7iNr/4@francesco-nb.int.toradex.com>
-        <20230717184537.6d6ed607@booty>
-        <DB7PR04MB450573F8EA936E049F053A258C38A@DB7PR04MB4505.eurprd04.prod.outlook.com>
- <20230718142504.075d0186@booty>
-In-Reply-To: <20230718142504.075d0186@booty>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DB7PR04MB4505:EE_|AM8PR04MB8035:EE_
-x-ms-office365-filtering-correlation-id: 9e906301-4191-4273-cf92-08db884a9229
-x-ld-processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 8DlQTzMxkv5Pw5yzfUFTAmUKVJaHN02VcEZfbX2e+bAHUUANipIfDbBBiABurOEymccl51eJQRLbSHyC3EbEkyAt4/z715BcS28qrQKhkZ8czWqtd8ErbbPmxtBvDoJhV59wRQ5n/VtXX0SPU8jMpnFvhIM4+339n9pcIWMA7vfYrddF+jB4gPhaq2x2GzJhEXG8gWT9afX5bBKQvp9Iu7TpDce0RylyRtqDfZ86h4aUgPhQrVQG6bySSiUkXqXVCQebw4QKwBGX+jNvRWyMlZ9AzmnTbTF+azpVNdafJWhklV8oM/MJPoRDhpE1wA7QNw7Ln/3DdLTy7KxwCfSu6pkjHeFvicdeAGzZUj4lHrE2/xkMXPjTY7T78WY/3oWzLNdUtEltfu1hCExUCGm/5V6njTy6I9LMLU89LDASJ3z9dLwA0hP8JKUE1uoelW1jloAzKmkbHHVlLFfKJuxAQ/6Yf/1jSodgFDuDWfrkfEAzIHmpA2L/VKmc5WmNbh2Fl36Ji8iRzmJe0t+4rm/04gjw3b8MrtYRJI2GCf5LJ/XZ3ofyHqCVKrsKLw4k9bxOFDC3ygxa2uFwlrnisi45rPA+15ReaKJKeXSdlI7YRogR61jqQCWx5j5FyiPlPGgf
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR04MB4505.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(366004)(346002)(396003)(39860400002)(136003)(451199021)(2906002)(38070700005)(86362001)(71200400001)(26005)(6506007)(186003)(83380400001)(38100700002)(122000001)(55016003)(478600001)(7696005)(33656002)(9686003)(54906003)(316002)(41300700001)(66556008)(66476007)(66446008)(64756008)(4326008)(6916009)(7416002)(52536014)(8936002)(8676002)(5660300002)(66946007)(76116006);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?2BSVlLvAjF6LTiTwG87TocOtCB8DOj44LfFcY1E8lKt6Gl/DGk3IHUv4a0qr?=
- =?us-ascii?Q?nQ4uvADNkpMAqyjO1xeMCuIIXfxCdPzj8R5jIqxpo0wamXkLkMjLyf5AWCMp?=
- =?us-ascii?Q?+GHQSvSvNnckN9t+ezm7gkuMSdrDH+DYJ3l7igb2neAPzN/B6wGYqussiWKc?=
- =?us-ascii?Q?Xr0ndPssWDN3+sDE1qd3Z8ZmImsErhBPqIGSY4sPmwJhUCslOOxdE6d2qL/K?=
- =?us-ascii?Q?JP/UYH48TL0O9bq9vODQGMVFtEcn/lM998GgAj1xMj5aXCPoVfzJKqpaPw27?=
- =?us-ascii?Q?mpUECZ2q/g2wsTYB1SrM6FyeWJlfOxC9hMt6bf12HYufXjU5K8WQ3fPK1Hiu?=
- =?us-ascii?Q?H+rwx7ptP0IJR5F/bhywkZCeTrLiz1n0ciaV7/9X+CbHZA7rAKLFDk9gH8mY?=
- =?us-ascii?Q?2AiFKtYJB8GOqBDqdHGEW+AgF8mWCF4LbS8KjhYSs1ppWDEd9jiyDyFr83zw?=
- =?us-ascii?Q?Eul/fO/lT1fB2Ff4ZWcNSKNgjx/VGc+tEthucoPmAlULaUTRIPRAcIb/eMIP?=
- =?us-ascii?Q?1W/hAkG4OD/fjL/NhaI7Cd4pH05+gzXkNg3KauQ0bu5TwMxCdsmSBNX3q+O0?=
- =?us-ascii?Q?8XyygtOIKPyVKs9V6hXtcwBWyjcg8CLyRSr8OnVKBY0WlHpBE39v1Be3uQEc?=
- =?us-ascii?Q?lx0HEOLbNv4WCCavWokL4Xso5rjkY6uP7RFHeXS5r1QFTZvwNOM5zS0a39gR?=
- =?us-ascii?Q?/sCh94m5CAo+wOryGaymrUv5cybbycNED6yAeTsmwxa9hcH4lJN5Xcg4YuXW?=
- =?us-ascii?Q?p8DmCbUrRssytjnIxJbNRz17L/m4Kqsz9fyJlfnSkVhAETBrzWFKJB0bRM1A?=
- =?us-ascii?Q?0r3wnwp2D2+UgOBWaJYgApdTuHrUPJn3q24vGAo343mu3IWyUdydWmexMGPY?=
- =?us-ascii?Q?FWY2Gq4gV1tJYHGqcErsQhQ6VlXypiZRwDrehI5AfqslMh54Ax0OnqQAgLJW?=
- =?us-ascii?Q?zPBbl6us2Yz1XxABLCgWiuiaW6eBPiUyjnIu1VcbFCjO4Wkhyf63RXIOLTfa?=
- =?us-ascii?Q?ZzmlsVLFUh79mJcKvmT6loF0PoJoHI5B57Zv5zKEvMTX/XVjyGX4ab4DefrF?=
- =?us-ascii?Q?DnMOTVLsw2QqlUbguX5MDW8jNl3cr9Bh+g+vXcOBlXUUP9CixsVA78Hz8bXb?=
- =?us-ascii?Q?EeKHNjO6OjMpwd+Mubnp1F8J9JTOIDkhOCC565SODb0P0j/QTyBM6NLaV6RM?=
- =?us-ascii?Q?K42qxzm0olL7UxiFv92mnCQk/bjdG8cMs0ZiYOkz2y6Mfo4BHHAOf1lpyDC0?=
- =?us-ascii?Q?BCZV7z5WOWzpC1gbL89AuzdylQqKeu9L02HN/MYshGx8Uf1UPY98j2hXu1yw?=
- =?us-ascii?Q?EsL8jJF+tCrA03th6aGeDHe9U+pJiVbbngETQKNgmizBQkv/mmuJkctoitcF?=
- =?us-ascii?Q?xE2hO2Sj/UJaj0thRuQ5jNhCyJ2RiDHnv7gbvSkdrvZh9SZKMJK/VLG2qM5b?=
- =?us-ascii?Q?WQ0Tv23bEXBFFKkyYmB/tZl1Sw0SyHIVQzAWTUtGVP2rDMkaPktHoxYdGZh6?=
- =?us-ascii?Q?bmgj5oVygXv3omtx7yta/zLf53ihXr0ZNQb02/vwycYCmD4NDtsjycsQ5FAb?=
- =?us-ascii?Q?2LU/L+H2ZfuMJCSgEqg=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S230377AbjGSNBJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Jul 2023 09:01:09 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6FAB10FE
+        for <linux-usb@vger.kernel.org>; Wed, 19 Jul 2023 06:01:06 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id 6a1803df08f44-635eb3a1d93so46005206d6.1
+        for <linux-usb@vger.kernel.org>; Wed, 19 Jul 2023 06:01:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1689771666; x=1692363666;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZUn3qzGm6xqqej4OZuBEBV3n0Emxu1ym1jKr3YxBxt4=;
+        b=EXi3YJo+tIJmmNSoWfYCEVCYQ0TenNkNzkAiMGbWD6i3Bl4Vh9hg1A2/Qh9ZCBylir
+         TTyaRei9mq4QeXe6yrDPBVL6SKGP7wggwDzzd21nQU6Vu4zB41ogLuZ9mlFwo/cT0Aka
+         h+wS7sRqG5AcnrG5jLjLH5e/aWmEqULYcAwuM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689771666; x=1692363666;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZUn3qzGm6xqqej4OZuBEBV3n0Emxu1ym1jKr3YxBxt4=;
+        b=DFpBdN9t9eJGF02eEKy6nSp9YcTz+WXoaHVYHkxrYzLrsgz/mR51HZc0JhpBj/Yvhh
+         anuupO3TVFdqlDsatzB5lLxaiey/7YToskwg+YVA+uo2831/rNa51KtG/fHDW808qIFW
+         36h/7wS2ofGT1VTrYUkv0NZnS8bQk0Kb5KUp/FekN9ErzrPFHutT51q0tSCkJvA7x/bG
+         b0obPmICoPnHE5uKYVrYCVDZ+/YA1DrvfBZNaNFl26JHPlcJs9tdmd2hJ2w9Y7PPRkv4
+         UDT7ppPkbeQvZNuymlSgCWz45Bnb46NME5qiFct054oGO122JSpL/iwH9iOpgQObM+0v
+         ZRsQ==
+X-Gm-Message-State: ABy/qLYFdjDR6MsgWlut2nOn7N6EpRsDsYpExxRpDMdq0Jck1GzmIBqL
+        JALDeHKrrCzp/9wZi2x8eULG5kNPJxSS8J1ecOZHOA==
+X-Google-Smtp-Source: APBJJlFJ/uUoPyBlB6eF2HjrBIvLmfBkIFeJEBs7aqFiM09haYrQ7eLtRuzcLk4otJh+fisg3cOCDQ==
+X-Received: by 2002:a0c:e08b:0:b0:632:207d:b834 with SMTP id l11-20020a0ce08b000000b00632207db834mr2381913qvk.58.1689771665612;
+        Wed, 19 Jul 2023 06:01:05 -0700 (PDT)
+Received: from denia.c.googlers.com (122.213.145.34.bc.googleusercontent.com. [34.145.213.122])
+        by smtp.gmail.com with ESMTPSA id l18-20020a0c9792000000b006379c3f7895sm1453255qvd.52.2023.07.19.06.01.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Jul 2023 06:01:05 -0700 (PDT)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Wed, 19 Jul 2023 13:01:04 +0000
+Subject: [PATCH v2] usb: xhci-mtk: set the dma max_seg_size
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DB7PR04MB4505.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9e906301-4191-4273-cf92-08db884a9229
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jul 2023 11:23:26.3776
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: gOgFVWFsdauVJjiWaJwtgy4BXURn+zUH0umLpUhIBvvwwfUhgA6+HlFO2j0P5pm42w2kjupti8jwX8ZJZlNgBQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB8035
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230628-mtk-usb-v2-1-c8c34eb9f229@chromium.org>
+X-B4-Tracking: v=1; b=H4sIAI/et2QC/2WNQQ6CMBBFr0Jm7ZhSBIWV9zAsOqXQRmjNFIiGc
+ HcrW5fv5ef9DaJhZyI02QZsVhdd8AnkKQNtlR8Mui4xSCELUckbTvMTl0hIvRBl3VcX6q6Q1qS
+ iQWLltU17v4xjki82vXsf+Ueb2Lo4B/4cb2v+s//hNcccC12SNKroKqrv2nKY3DKdAw/Q7vv+B
+ XzkU/a2AAAA
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Zubin Mithra <zsm@chromium.org>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        Ricardo Ribalda Delgado <ribalda@chromium.org>
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -142,89 +78,137 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Luca,
+Allow devices to have dma operations beyond 64K, and avoid warnings such
+as:
 
-> -----Original Message-----
->=20
-> Hello Xu,
->=20
-> On Tue, 18 Jul 2023 08:31:48 +0000
-> Xu Yang <xu.yang_2@nxp.com> wrote:
->=20
-> > > -----Original Message-----
-> > >
-> > > Ciao Francesco,
-> > >
-> > > On Thu, 6 Jul 2023 12:23:43 +0200
-> > > Francesco Dolcini <francesco@dolcini.it> wrote:
-> > >
-> > > > Hello Luca,
-> > > >
-> > > > On Tue, May 30, 2023 at 11:22:51AM +0000, Jun Li wrote:
-> > > > > Yes, your understanding is correct, talked with Xu(in CC), he wil=
-l take this
-> > > > > soon.
-> > > >
-> > > > A series was posted
-> > > >
-> > > > I had no time to try or look at it yet.
-> > >
-> > > Thanks for keeping me up to date on this topic, which is still totall=
-y
-> > > relevant to me.
-> > >
-> > > I looked at the series, but it does not seem to be addressing the
-> > > problem with USB host not detecting new devices when VBUS is not
-> > > directly connected, e.g. in the Colibri imx6ull SoM.
-> > >
-> > > Xu, do you confirm the series at the link is _not_ solving the proble=
-m
-> > > being discussed here?
-> >
-> > Have you tried this patchset? The upstream driver couldn't get correct
-> > USB role from HW_USBPHY_CTRL register when the ID pin is float. This is
-> > what this patchset is trying to fix. With this patch, condition
-> > "(!vbus_is_on && !mxs_phy_is_otg_host(mxs_phy)" will always be false wh=
-en
-> > controller acts as host role, then __mxs_phy_disconnect_line(phy, true)
-> > will never be called. So I think it doesn't matter whether VBUS is conn=
-ected
-> > or not when act as host mode. If you still have issue after apply this =
-patchset,
-> > please let me know.
->=20
-> I tested this patchset on top of v6.5-rc2 and I confirm USB detection
-> is still broken on the Colibri iMX6ULL. With or without the patches
-> the behavior is the same: USB devices are detected only during boot,
-> and anything connected after boot are never detected.
+DMA-API: xhci-mtk 11200000.usb: mapping sg segment longer than device claims to support [len=98304] [max=65536]
 
-Thanks for your feedback. As you said this issue will disappear with below =
-change, right?
+Fixes: 0cbd4b34cda9 ("xhci: mediatek: support MTK xHCI host controller")
+Tested-by: Zubin Mithra <zsm@chromium.org>
+Reported-by: Zubin Mithra <zsm@chromium.org>
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+Fix warnings such as:
 
-	diff --git a/drivers/usb/phy/phy-mxs-usb.c b/drivers/usb/phy/phy-mxs-usb.c
-	index e1a2b2ea098b..ec5ee790455e 100644
-	--- a/drivers/usb/phy/phy-mxs-usb.c
-	+++ b/drivers/usb/phy/phy-mxs-usb.c
-	@@ -178,7 +178,6 @@ static const struct mxs_phy_data imx6sx_phy_data =3D {
-	 };
+[  451.089443] ------------[ cut here ]------------
+[  451.089498] DMA-API: xhci-mtk 11200000.usb: mapping sg segment longer than device claims to support [len=98304] [max=65536]
+[  451.089617] WARNING: CPU: 7 PID: 14227 at kernel/dma/debug.c:1163 debug_dma_map_sg+0x5bc/0x950
+[  451.089674] Modules linked in: xfrm_interface tun hci_vhci bridge stp llc veth xt_cgroup xt_MASQUERADE uinput rfcomm ip6table_nat fuse 8021q algif_hash algif_skcipher af_alg r8153_ecm cdc_ether usbnet r8152 mii mtk_vcodec_dec_hw mt7921s mt76_sdio mt7921_common mt76_connac_lib mt76 uvcvideo videobuf2_vmalloc mtk_vcodec_dec v4l2_h264 mtk_vcodec_enc mtk_jpeg v4l2_vp9 videobuf2_dma_contig videobuf2_memops v4l2_mem2mem videobuf2_v4l2 btmtksdio videobuf2_common mtk_vcodec_common btmtk mac80211 snd_sof_mt8186 snd_sof_xtensa_dsp snd_sof_of snd_sof snd_sof_utils mtk_scp mtk_rpmsg rpmsg_core mtk_scp_ipi hid_rmi rmi_core serio bluetooth ecdh_generic ecc cfg80211 lzo_rle lzo_compress zram joydev
+[  451.090285] CPU: 7 PID: 14227 Comm: syz-executor.0 Not tainted 5.15.118-lockdep-19753-g1b0a8b16661d #1 cd3ddfc5e13dbbbea438d3161fcad4d98ec474f4
+[  451.090333] Hardware name: Google Rusty sku196608/196609/196610/196611 board (DT)
+[  451.090356] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[  451.090401] pc : debug_dma_map_sg+0x5bc/0x950
+[  451.090433] lr : debug_dma_map_sg+0x5bc/0x950
+[  451.090462] sp : ffffffc01fdd75e0
+[  451.090479] x29: ffffffc01fdd7640 x28: ffffff80c1280300 x27: 0000000000010000
+[  451.090531] x26: ffffff80c1ec9600 x25: 1ffffff01a749501 x24: ffffff80d3a4a800
+[  451.090581] x23: dfffffc000000000 x22: ffffff80d3a4a80c x21: ffffffc00aae5740
+[  451.090631] x20: ffffffffffffffff x19: ffffff80d3a4a810 x18: 0000000000000000
+[  451.090680] x17: 64206e6168742072 x16: 65676e6f6c20746e x15: 656d676573206773
+[  451.090731] x14: 20676e697070616d x13: 0000000000000001 x12: 0000000000000001
+[  451.090779] x11: 0000000000000000 x10: 0000000000040000 x9 : 3c6fd66e79e32400
+[  451.090828] x8 : 3c6fd66e79e32400 x7 : 0000000000000001 x6 : 0000000000000001
+[  451.090877] x5 : ffffffc01fdd7158 x4 : ffffffc00b64e2a0 x3 : ffffffc008f92adc
+[  451.090926] x2 : 0000000100000000 x1 : ffffff8057afd940 x0 : 000000000000006f
+[  451.090976] Call trace:
+[  451.090994]  debug_dma_map_sg+0x5bc/0x950
+[  451.091026]  dma_alloc_noncontiguous+0x2f4/0x404
+[  451.091060]  uvc_alloc_urb_buffers+0x1e8/0x600 [uvcvideo 1a151fdc876854366480a9c6b7aaa4b7999fb493]
+[  451.091150]  uvc_video_start_transfer+0xaf4/0x1628 [uvcvideo 1a151fdc876854366480a9c6b7aaa4b7999fb493]
+[  451.091228]  uvc_video_start_streaming+0x154/0x2d8 [uvcvideo 1a151fdc876854366480a9c6b7aaa4b7999fb493]
+[  451.091305]  uvc_start_streaming+0x20c/0x3d4 [uvcvideo 1a151fdc876854366480a9c6b7aaa4b7999fb493]
+[  451.091379]  vb2_start_streaming+0x118/0x400 [videobuf2_common 252dc8c49960dcb8e329e2787100c89e1899c17f]
+[  451.091446]  vb2_core_streamon+0x258/0x360 [videobuf2_common 252dc8c49960dcb8e329e2787100c89e1899c17f]
+[  451.091507]  vb2_streamon+0x88/0xbc [videobuf2_v4l2 f4acca89bfe3410cd8f3ca536255fc3877fe63db]
+[  451.091555]  uvc_queue_streamon+0x44/0x68 [uvcvideo 1a151fdc876854366480a9c6b7aaa4b7999fb493]
+[  451.091631]  uvc_ioctl_streamon+0xd8/0x124 [uvcvideo 1a151fdc876854366480a9c6b7aaa4b7999fb493]
+[  451.091705]  v4l_streamon+0x74/0xa8
+[  451.091738]  __video_do_ioctl+0x90c/0xa40
+[  451.091769]  video_usercopy+0xa44/0x1ef8
+[  451.091799]  video_ioctl2+0x44/0x58
+[  451.091830]  v4l2_ioctl+0x138/0x164
+[  451.091860]  __arm64_sys_ioctl+0x154/0x1d0
+[  451.091892]  invoke_syscall+0x98/0x278
+[  451.091923]  el0_svc_common+0x214/0x274
+[  451.091953]  do_el0_svc+0x9c/0x19c
+[  451.091982]  el0_svc+0x5c/0xc0
+[  451.092013]  el0t_64_sync_handler+0x78/0x108
+[  451.092045]  el0t_64_sync+0x1a4/0x1a8
+[  451.092081] Kernel panic - not syncing: kernel: panic_on_warn set ...
+[  451.092103] CPU: 7 PID: 14227 Comm: syz-executor.0 Not tainted 5.15.118-lockdep-19753-g1b0a8b16661d #1 cd3ddfc5e13dbbbea438d3161fcad4d98ec474f4
+[  451.092148] Hardware name: Google Rusty sku196608/196609/196610/196611 board (DT)
+[  451.092171] Call trace:
+[  451.092186]  dump_backtrace+0x0/0x4e8
+[  451.092219]  show_stack+0x34/0x44
+[  451.092247]  dump_stack_lvl+0xdc/0x11c
+[  451.092278]  dump_stack+0x1c/0x48
+[  451.092307]  panic+0x2a4/0x7b8
+[  451.092335]  check_panic_on_warn+0xb8/0x104
+[  451.092369]  __warn+0x16c/0x230
+[  451.092399]  report_bug+0x160/0x280
+[  451.092432]  bug_handler+0x48/0xb8
+[  451.092466]  call_break_hook+0x180/0x1b4
+[  451.092498]  brk_handler+0x30/0xbc
+[  451.092529]  do_debug_exception+0x16c/0x31c
+[  451.092563]  el1_dbg+0x64/0x80
+[  451.092592]  el1h_64_sync_handler+0x70/0xb4
+[  451.092624]  el1h_64_sync+0x7c/0x80
+[  451.092653]  debug_dma_map_sg+0x5bc/0x950
+[  451.092685]  dma_alloc_noncontiguous+0x2f4/0x404
+[  451.092717]  uvc_alloc_urb_buffers+0x1e8/0x600 [uvcvideo 1a151fdc876854366480a9c6b7aaa4b7999fb493]
+[  451.092794]  uvc_video_start_transfer+0xaf4/0x1628 [uvcvideo 1a151fdc876854366480a9c6b7aaa4b7999fb493]
+[  451.092868]  uvc_video_start_streaming+0x154/0x2d8 [uvcvideo 1a151fdc876854366480a9c6b7aaa4b7999fb493]
+[  451.092942]  uvc_start_streaming+0x20c/0x3d4 [uvcvideo 1a151fdc876854366480a9c6b7aaa4b7999fb493]
+[  451.093015]  vb2_start_streaming+0x118/0x400 [videobuf2_common 252dc8c49960dcb8e329e2787100c89e1899c17f]
+[  451.093079]  vb2_core_streamon+0x258/0x360 [videobuf2_common 252dc8c49960dcb8e329e2787100c89e1899c17f]
+[  451.093139]  vb2_streamon+0x88/0xbc [videobuf2_v4l2 f4acca89bfe3410cd8f3ca536255fc3877fe63db]
+[  451.093187]  uvc_queue_streamon+0x44/0x68 [uvcvideo 1a151fdc876854366480a9c6b7aaa4b7999fb493]
+[  451.093261]  uvc_ioctl_streamon+0xd8/0x124 [uvcvideo 1a151fdc876854366480a9c6b7aaa4b7999fb493]
+[  451.093334]  v4l_streamon+0x74/0xa8
+[  451.093366]  __video_do_ioctl+0x90c/0xa40
+[  451.093398]  video_usercopy+0xa44/0x1ef8
+[  451.093428]  video_ioctl2+0x44/0x58
+[  451.093457]  v4l2_ioctl+0x138/0x164
+[  451.093487]  __arm64_sys_ioctl+0x154/0x1d0
+[  451.093518]  invoke_syscall+0x98/0x278
+[  451.093548]  el0_svc_common+0x214/0x274
+[  451.093578]  do_el0_svc+0x9c/0x19c
+[  451.093607]  el0_svc+0x5c/0xc0
+[  451.093637]  el0t_64_sync_handler+0x78/0x108
+[  451.093669]  el0t_64_sync+0x1a4/0x1a8
+[  451.093701] SMP: stopping secondary CPUs
+[  451.093777] Kernel Offset: disabled
+[  451.093797] CPU features: 0xc00181c1,a3300e42
+[  451.093822] Memory Limit: none
 
-	 static const struct mxs_phy_data imx6ul_phy_data =3D {
-	-       .flags =3D MXS_PHY_DISCONNECT_LINE_WITHOUT_VBUS,
-	 };
+Signed-off-by: Ricardo Ribalda Delgado <ribalda@chromium.org>
+---
+Changes in v2:
+- Add Zubin Mithra traits
+- Move dma_set_max_seg_size(), Thanks Chunfeng
+- Link to v1: https://lore.kernel.org/r/20230628-mtk-usb-v1-1-3c5b2ea3d6b9@chromium.org
+---
+ drivers/usb/host/xhci-mtk.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-	 static const struct mxs_phy_data imx7ulp_phy_data =3D {
+diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-mtk.c
+index 51d9d4d4f6a5..bbdf1b0b7be1 100644
+--- a/drivers/usb/host/xhci-mtk.c
++++ b/drivers/usb/host/xhci-mtk.c
+@@ -586,6 +586,7 @@ static int xhci_mtk_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	device_init_wakeup(dev, true);
++	dma_set_max_seg_size(dev, UINT_MAX);
+ 
+ 	xhci = hcd_to_xhci(hcd);
+ 	xhci->main_hcd = hcd;
 
-So I guess something in __mxs_phy_disconnect_line(mxs_phy, true) is causing=
- this behavior.
-Could you please help to find which line to comment to make this issue disa=
-ppear?
+---
+base-commit: fdf0eaf11452d72945af31804e2a1048ee1b574c
+change-id: 20230628-mtk-usb-bf0059f64bd7
 
-Thanks,
-Xu Yang
-
->=20
-> For the archives, I'm replying also to the patch series.
->=20
-> Luca
->=20
+Best regards,
+-- 
+Ricardo Ribalda <ribalda@chromium.org>
 
