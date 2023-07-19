@@ -2,158 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67BB3759C8D
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jul 2023 19:38:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E062F759C9C
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Jul 2023 19:40:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229987AbjGSRi4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Jul 2023 13:38:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60412 "EHLO
+        id S230447AbjGSRk3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Jul 2023 13:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbjGSRiz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Jul 2023 13:38:55 -0400
-Received: from us-smtp-delivery-162.mimecast.com (us-smtp-delivery-162.mimecast.com [170.10.129.162])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E9518D
-        for <linux-usb@vger.kernel.org>; Wed, 19 Jul 2023 10:38:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hp.com; s=mimecast20180716;
-        t=1689788288;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qxAHiS1dMKUPvSOrNPg4ns2JBXqCwmJKuYUyY8qtwHk=;
-        b=XN2Z+wVzrI7P8m/UrninbWUyJUqNwVa9n5D2GDAtWCaKBuwselXEWB5mYse5ux1VF8aTRA
-        duwOe6GAJzee0pSVa4Fqm6tmPoj1Iq9own4wLT5bnxS1QSYRSGvsB4cBa7SyxuAt/3Ngct
-        67Ogi0KLo/d1/tXCh2d5XJ8nrDK6vi8=
-Received: from g2t4621.austin.hp.com (g2t4621.austin.hp.com [15.73.212.80])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-611-vkySPCFzPUOsuizxogouvw-1; Wed, 19 Jul 2023 13:38:02 -0400
-X-MC-Unique: vkySPCFzPUOsuizxogouvw-1
-Received: from g1t6217.austin.hpicorp.net (g1t6217.austin.hpicorp.net [15.67.1.144])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        with ESMTP id S230373AbjGSRk1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Jul 2023 13:40:27 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0913B1FC0;
+        Wed, 19 Jul 2023 10:40:20 -0700 (PDT)
+Received: from jupiter.universe (dyndsl-091-248-208-009.ewe-ip-backbone.de [91.248.208.9])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by g2t4621.austin.hp.com (Postfix) with ESMTPS id B083426F;
-        Wed, 19 Jul 2023 17:37:59 +0000 (UTC)
-Received: from jam-buntu.lan (unknown [15.74.50.248])
-        by g1t6217.austin.hpicorp.net (Postfix) with ESMTP id 174AB65;
-        Wed, 19 Jul 2023 17:37:58 +0000 (UTC)
-From:   Alexandru Gagniuc <alexandru.gagniuc@hp.com>
-To:     linux-usb@vger.kernel.org, netdev@vger.kernel.org
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, hayeswang@realtek.com, jflf_kernel@gmx.com,
-        bjorn@mork.no, svenva@chromium.org, linux-kernel@vger.kernel.org,
-        eniac-xw.zhang@hp.com,
-        Alexandru Gagniuc <alexandru.gagniuc@hp.com>,
-        stable@vger.kernel.org
-Subject: [PATCH v2] r8152: Suspend USB device before shutdown when WoL is enabled
-Date:   Wed, 19 Jul 2023 17:37:56 +0000
-Message-Id: <20230719173756.380829-1-alexandru.gagniuc@hp.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <2c12d7a0-3edb-48b3-abf7-135e1a8838ca@rowland.harvard.edu>
-References: <2c12d7a0-3edb-48b3-abf7-135e1a8838ca@rowland.harvard.edu>
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4027F6607030;
+        Wed, 19 Jul 2023 18:40:19 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1689788419;
+        bh=npdCwm3+Jd5lwBgGPCmM83TseN3mERIRvQQxK5+YEOQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=M/Y0L+mGEInoRfd0/tuQH0u9rqufvnDcRD68MWl5xMBZuNZ5VHY67yhMml1IYvaIz
+         s1Bpjkzq4t2QSCLCjgW7LMb55eQcvUulqOgEgkTt9nJNl8reqOMheAiTsRiS1Jsw1H
+         pdXNrzV6JXb36Zj13URCJqUZIoPWvmBESBtHzmfssFG5qzTTIL+ZP/y/GrD/8VHRNe
+         6wJhR+wvzHv8xejN7hutaTdQz1nrtKgZlWTK5eghJ/VixpoGITK92RLF/uZUB63a2e
+         k8aywk5yJc4WDBaHUJt13ob6oaQSPZjBAwTtPPvk+EKLcpetZm9m1olv+8Q1KNUvD7
+         vDe9rT/Y3A8+w==
+Received: by jupiter.universe (Postfix, from userid 1000)
+        id 1EA0A480DA3; Wed, 19 Jul 2023 19:40:17 +0200 (CEST)
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Heiko Stuebner <heiko@sntech.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-rockchip@lists.infradead.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        kernel@collabora.com
+Subject: [PATCH v1 0/2] RK3588 USB3 host controller support
+Date:   Wed, 19 Jul 2023 19:40:13 +0200
+Message-Id: <20230719174015.68153-1-sebastian.reichel@collabora.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: hp.com
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=WINDOWS-1252; x-default=true
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-For Wake-on-LAN to work from S5 (shutdown), the USB link must be put
-in U3 state. If it is not, and the host "disappears", the chip will
-no longer respond to WoL triggers.
+Hi,
 
-To resolve this, add a notifier block and register it as a reboot
-notifier. When WoL is enabled, work through the usb_device struct to
-get to the suspend function. Calling this function puts the link in
-the correct state for WoL to function.
+This adds RK3588 USB3 host controller support. The DT binding is
+already prepared for the dual-role controllers, which are also DWC3
+based, but using a different PHY and a different set of clocks.
 
-Fixes: 21ff2e8976b1 ("r8152: support WOL")
-Cc: stable@vger.kernel.org
-Signed-off-by: Alexandru Gagniuc <alexandru.gagniuc@hp.com>
----
-Changes since v1:
-    * Add "Fixes:" tag to commit message
+The series has been tested with Radxa Rock 5B, which uses the controller
+for the upper USB3 port. The patch enabling &combphy2_psu and &usbhost3_0
+for this board will be send separately once this has been merged.
 
- drivers/net/usb/r8152.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+-- Sebastian
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 0738baa5b82e..abb82a80d262 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -20,6 +20,7 @@
- #include <net/ip6_checksum.h>
- #include <uapi/linux/mdio.h>
- #include <linux/mdio.h>
-+#include <linux/reboot.h>
- #include <linux/usb/cdc.h>
- #include <linux/suspend.h>
- #include <linux/atomic.h>
-@@ -876,6 +877,7 @@ struct r8152 {
- =09struct delayed_work schedule, hw_phy_work;
- =09struct mii_if_info mii;
- =09struct mutex control;=09/* use for hw setting */
-+=09struct notifier_block reboot_notifier;
- #ifdef CONFIG_PM_SLEEP
- =09struct notifier_block pm_notifier;
- #endif
-@@ -9610,6 +9612,25 @@ static bool rtl8152_supports_lenovo_macpassthru(stru=
-ct usb_device *udev)
- =09return 0;
- }
-=20
-+/* Suspend realtek chip before system shutdown
-+ *
-+ * For Wake-on-LAN to work from S5, the USB link must be put in U3 state. =
-If
-+ * the host otherwise "disappears", the chip will not respond to WoL trigg=
-ers.
-+ */
-+static int rtl8152_notify(struct notifier_block *nb, unsigned long code,
-+=09=09=09  void *unused)
-+{
-+=09struct r8152 *tp =3D container_of(nb, struct r8152, reboot_notifier);
-+=09struct device *dev =3D &tp->udev->dev;
-+
-+=09if (code =3D=3D SYS_POWER_OFF) {
-+=09=09if (tp->saved_wolopts && dev->type->pm->suspend)
-+=09=09=09dev->type->pm->suspend(dev);
-+=09}
-+
-+=09return NOTIFY_DONE;
-+}
-+
- static int rtl8152_probe(struct usb_interface *intf,
- =09=09=09 const struct usb_device_id *id)
- {
-@@ -9792,6 +9813,9 @@ static int rtl8152_probe(struct usb_interface *intf,
- =09else
- =09=09device_set_wakeup_enable(&udev->dev, false);
-=20
-+=09tp->reboot_notifier.notifier_call =3D rtl8152_notify;
-+=09register_reboot_notifier(&tp->reboot_notifier);
-+
- =09netif_info(tp, probe, netdev, "%s\n", DRIVER_VERSION);
-=20
- =09return 0;
-@@ -9812,6 +9836,7 @@ static void rtl8152_disconnect(struct usb_interface *=
-intf)
- =09if (tp) {
- =09=09rtl_set_unplug(tp);
-=20
-+=09=09unregister_reboot_notifier(&tp->reboot_notifier);
- =09=09unregister_netdev(tp->netdev);
- =09=09tasklet_kill(&tp->tx_tl);
- =09=09cancel_delayed_work_sync(&tp->hw_phy_work);
---=20
-2.39.1
+Sebastian Reichel (2):
+  dt-bindings: usb: rockchip,dwc3: Add RK3588 binding
+  arm64: dts: rockchip: rk3588s: Add USB3 host controller
+
+ .../bindings/usb/rockchip,rk3399-dwc3.yaml    | 107 ++++++++++++++----
+ arch/arm64/boot/dts/rockchip/rk3588s.dtsi     |  29 +++++
+ 2 files changed, 114 insertions(+), 22 deletions(-)
+
+-- 
+2.40.1
 
