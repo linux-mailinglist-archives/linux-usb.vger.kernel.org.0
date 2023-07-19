@@ -2,187 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A36C75921A
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jul 2023 11:52:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27FC075936B
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Jul 2023 12:51:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230308AbjGSJwt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Jul 2023 05:52:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54248 "EHLO
+        id S229788AbjGSKvd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Jul 2023 06:51:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbjGSJwr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Jul 2023 05:52:47 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A454C10D4
-        for <linux-usb@vger.kernel.org>; Wed, 19 Jul 2023 02:52:44 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-5216f44d881so7101192a12.1
-        for <linux-usb@vger.kernel.org>; Wed, 19 Jul 2023 02:52:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689760363; x=1692352363;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nj4t+6YbLWTik/Age6vPknRf0XinqBnh5qi+UfutZ18=;
-        b=zqs07WOmGwu1OxGhh7CNgA3g3F0Sqdm3mtL5Cls+siGZWh+lLLhTVZM7edIArChwU0
-         YaUxMYg1KdqF1ozNMT20I3ZyytiMja33I322EF9Q7XdrlWs8SE3tMxyVTjeRxQyrmF71
-         gY8TN25sY/iC4KdxwlJohqkcdf1ZKpD97zXfxwJcHHFkO9aihJii4VZlL+tQb2FQ5wI4
-         mab1n2zqVbeqh00FDRwk48yGL1tXlPZDotze2AXqAqOGWuRWccgZYwKkHRI3k76iCAay
-         jIXHtsa8z5MLc+Se1IO79iq2i6Ve3hMrIn6matLe26uDSnt/gy9MOLRL61/pUC989spj
-         h3oA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689760363; x=1692352363;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nj4t+6YbLWTik/Age6vPknRf0XinqBnh5qi+UfutZ18=;
-        b=A7g3SkFqiHi6rZTs9xkKJXLYh6xluCkd++wA9beks2pwONGxX8z6GIOXKJdJTpUb5t
-         c+JaAJ+ydTfvv07YOGRdEcSWlOF9xOKa6ll3WCKAFVBp8t3jEbjlw8UBOTs8E6lUX3qD
-         ETSfjey64DVmbIwumS7GuAGVuSYuGmy8BIIV/0nfckvkG+1n3Ya68LMOkBjYSzVvEOw8
-         3mXwHSkYO0e3yuCNOvOcGLDaohIKhjY5h2WObbHWLDvi1o5qfaBcnfGAo4FsMB3IKwTf
-         Dk0Vie6K6+1EqZNBU5uSPDhZI8ppWKHJoRp1AtovwNtK5I2MiCJCEyAcazl7ZyMcXWWP
-         5dNw==
-X-Gm-Message-State: ABy/qLYXJbgBJ6otcNvySKKV57ec08/+nJoywAhY+pGXV+FS+Lbo1m3H
-        f3XcymTsN95QriUuvUm7s52K3Q==
-X-Google-Smtp-Source: APBJJlHsOEml5GQAKZicEiNmIU63/NqANniY1ELzcdeLinh4JGyCmPDl7v6mI3CvFixYDhoOdm+loA==
-X-Received: by 2002:aa7:d659:0:b0:51d:d295:6741 with SMTP id v25-20020aa7d659000000b0051dd2956741mr1883598edr.6.1689760363087;
-        Wed, 19 Jul 2023 02:52:43 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id g8-20020a056402180800b0051e0f8aac74sm2523079edy.8.2023.07.19.02.52.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Jul 2023 02:52:42 -0700 (PDT)
-Message-ID: <33d91ece-03b5-7dc2-b63d-516390495792@linaro.org>
-Date:   Wed, 19 Jul 2023 11:52:36 +0200
-MIME-Version: 1.0
+        with ESMTP id S229648AbjGSKvb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Jul 2023 06:51:31 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on0605.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe0d::605])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54ABFE5
+        for <linux-usb@vger.kernel.org>; Wed, 19 Jul 2023 03:51:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IHdNMjZJNbjAzaBUUp8Gf56LpXlTNHge7uDRQPue+xAPs8G0BrucCsIan5U6GfzGenAjKds7V6q0Ys1x/4sfxSncwAy5qT26/rkuH02lytPI6BAJ64l7aoYrwVIE141DuejXcX3RnfoGz8gDCt6KUIHtMtaxzS8wBcPVITzJYsD0lQ9Fml6A11n6ulrYmv+RCA/tr7Gwu1VpHqYFZOXcTMOICx3sF2F6jCnju/hiqva1SEC93Shwq50T0OVwVM+ovkLN3Qud8qY8qn0Wx/o0mRQ5a2NYN+A5xMAYziqX56hzWay88h1JHDfAUGjAddS6misN3WZriv/TvT/nOLMAgw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CvRrrBybdP6lMqP2FP++GxdZiS88Bo8rBo4XN5bnygA=;
+ b=FSsoCszeiBslgxnuK15UStM82qN3eIs+m8V+tvsx+Hvt9m+d7PEWitOSqDPoivazGgMWLJfe9BZAS8PKk3U+ldU3S7WOT2Zkr2qmnwV3lKv+PwI8+CdYLJB+N8dunigIFs5pfyrErKc42QrVfwsqDzBWBDf765g5Pg0FYK9FFZ/pOuZartK9H4eOoXK+6kGJqEZsNid0qlkJkyNgsyeFnLzYft6wpNjz4U5/FEd0TyTucmyWbvskPsLRodtqYC7J/PRDXYY5jubT/uXVQnunxz8orzVegpJWJIcU9vZaClLBc5p2JUbx3MGWdvSNGkZloHKiwxe88c/n5r8/bf60cA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CvRrrBybdP6lMqP2FP++GxdZiS88Bo8rBo4XN5bnygA=;
+ b=gux0ojTNQKpwQnvYjY/cZDaJlftQn8OZr5b8GjAQSwXyg58Sr0FoFzcinWZVZ/hMJAb3jWs9jt66or/u6XLfvTU9Mrt0t1xlvay1e54d/CVaJSw/SHtuvBLtcLb6ugNZOFCuiDhYQr+PosHzMn1FRXb7FMlEn4vSsLeK2FzlAV/XTxZXHjdGSisM3Jgk11buj/x7uEEyMvfM8axw/vX4MJNH1jK2rYfuZL+vjLCD9iTzLQovRINb2iqEGCdLGwGPxgf6ZDa8R28TyglAbipYX076bzUx6oVdnVWJKg/f4xg8ha3md4aEdGGZl8+zmxCDE2B0m+e4AzC9ZLfN4BhupA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
+ by AM0PR04MB6818.eurprd04.prod.outlook.com (2603:10a6:208:186::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.33; Wed, 19 Jul
+ 2023 10:51:26 +0000
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com
+ ([fe80::7ef4:97ef:66d5:f5b3]) by VI1PR04MB7104.eurprd04.prod.outlook.com
+ ([fe80::7ef4:97ef:66d5:f5b3%2]) with mapi id 15.20.6609.024; Wed, 19 Jul 2023
+ 10:51:25 +0000
+Message-ID: <241c5df6-6888-0d6d-dbf7-900cfcc6b115@suse.com>
+Date:   Wed, 19 Jul 2023 12:51:22 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH 3/3] dt-bindings: usb: dwc2: add compatible
- "intel,socfpga-stratix10-hsotg"
+ Thunderbird/102.12.0
 Content-Language: en-US
-To:     "Li, Meng" <Meng.Li@windriver.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>,
-        "dinguyen@kernel.org" <dinguyen@kernel.org>,
-        "hminas@synopsys.com" <hminas@synopsys.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230719025509.3007986-1-Meng.Li@windriver.com>
- <20230719025509.3007986-4-Meng.Li@windriver.com>
- <488835c0-e08e-c0cc-abac-192f658b093f@linaro.org>
- <PH0PR11MB51913FB3A55B1420B7798C01F139A@PH0PR11MB5191.namprd11.prod.outlook.com>
- <86cbedcd-692b-ecb8-2075-d50835739bcf@linaro.org>
- <PH0PR11MB5191867DF205B301A8FD701EF139A@PH0PR11MB5191.namprd11.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <PH0PR11MB5191867DF205B301A8FD701EF139A@PH0PR11MB5191.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
+To:     USB list <linux-usb@vger.kernel.org>
+From:   Oliver Neukum <oneukum@suse.com>
+Subject: question on sturuct xhci_hcd::priv
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+X-ClientProxiedBy: FR2P281CA0152.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:98::19) To VI1PR04MB7104.eurprd04.prod.outlook.com
+ (2603:10a6:800:126::9)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|AM0PR04MB6818:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7dd757b3-7b9e-4217-bcb8-08db88461902
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: uGTvD5DG8HCpjMfkQRJMOuNKZLxbla+o+YseEIy6bBankuSKCbtYAhoOQe54MVvnvVR0eoz2pPzaTnCeWbexnOcOMvoSHTaAjUvD+hDTNFNj+99pWjCPnsjdeITaEuM3btnzRWfk8wOi/fsfAgE85TLR1dhn41gqQRuoA47DByG9+bZrwhPktp/WakZR4DqMeE/8CjA8gN0VVWxh/MTyxQKiIVetrilITcIaWX1UcRedMne/siVOU9cEvtt/wCJChWaU5mQEHGYjJlECX6GR8kGKcUyKqzLzS0i165sf6EjmRRlXGa4YenClvzYd0ZK/rJ9677TWxHvyVB+v+kEU/jKDRPKQ3772Dr15DZqY0kOkRw+sXEJD97rd5XalPMdIICWS7ggxPEoKPQlrVIoPmrzigwdGJunx6HJqTfj+k+0t0vue84mBo3UX2MVbvwPRZS4xpkC3hYJLHkd7JlZXynpoy4HJdEPwZWJ31JIMv6wuoe7mBYmg6X87bdNqcfUUE5kVyNJXjTXgopljkcX8YqRMUQekimJL+bDChjJVikmM96ufhchQa01vGLk4gn0++tEEdN1TVQ7/981KQKgK39JQ/B/nreKY3IfDf4hcSXeugyCjP+NAa7jDKO4bCaw7ss61LwCjVc14DDRAxglRLw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(366004)(346002)(39860400002)(136003)(396003)(451199021)(6486002)(6666004)(478600001)(6506007)(186003)(6512007)(2906002)(5660300002)(66946007)(6916009)(66556008)(66476007)(316002)(8936002)(8676002)(38100700002)(31696002)(86362001)(36756003)(558084003)(2616005)(31686004)(41300700001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aHQvbXRaMFVSUUlwUmt2ZlBBU213Ly9OVGtnVk5BTS8vQnJkQmY3dEpBQllR?=
+ =?utf-8?B?RUE5U2t6L3BmZlFnWnMzWlpCV2NucFY1ZzNmRjVVelB1SHdWNTlkdmZOT1Zl?=
+ =?utf-8?B?czZXOXUzYUVTbzRxVzUzKy9PSStqbEIzSzJLZURGcWZTTGdNcUs0YlY4blY2?=
+ =?utf-8?B?aEtmNHQ3cStDT0RYa2dsYWRhdDZEdVNmREdjQVpIMGtaU1Z6UG1MOGV5ZlJW?=
+ =?utf-8?B?Q21OQ21HUjEyVVYycWFzUTlKUy9UQlJxSzVPa29qYlU0aUVrL3dOMW1aeW8z?=
+ =?utf-8?B?OENudlErWExYK2htQjc2alBlcFRuODJvSGdleFNWdEt2Q1RvUCtqTWJ6dCtl?=
+ =?utf-8?B?UWpLTFpVUnZDeWN2MFBTcUJ5Zit1alZBUktjcGZxNEJZOXNRaUFIOTBJL2ZH?=
+ =?utf-8?B?OXVNWlRGQ0Z5VjV6bUdid1ZWWDNpNW16MS9TaXkvZ2hSaU9mZW9PRDYydkpk?=
+ =?utf-8?B?cXlyVTVKUGpHZzJKdmFRdC9vTGRtczFCV3pzVnRVUXlkRWdvNlR3QVNWUmtl?=
+ =?utf-8?B?NnVySHU1UEQ1YkpIeTA4ZUFVb2gzbEtRMVFXOUhQMG85enFTOWs0eUVNTHI0?=
+ =?utf-8?B?QnVrS2gxQWZhalVOZFBvU3BZQzI5ZkVFVmRXYjRYK2VURHFEWFhoTTN0WElY?=
+ =?utf-8?B?WDlmeFZwR2M5NkVmUndlMnIwMjhFQjhnUC9LdWJ3ZUhaSHFWanFuV3RJV3Uz?=
+ =?utf-8?B?VDNmUmtwNW5UcTFSQjFjUElxbEtuZXRkazV5MGJDL0hQcmxTQmhNMlJObk5r?=
+ =?utf-8?B?M0ZSSTdaK2ZHRm4rL0JwNGZvb09XVWFBd1UrZStPQk45ZFR2MkpPZjVGN1Rt?=
+ =?utf-8?B?WWZ1NHlhcU93NUlPY3E4YWdUZFU4UmpjakdKR2VLTXR6OW4rb2dFSE1YMHRu?=
+ =?utf-8?B?WEFiczJJc3c1NTB5THpLK0tUWkVvZ0ZOQnVJQUhYNXJmczV0TEdTV3ZTU3Yv?=
+ =?utf-8?B?bVBvdGhwT1EwZkxVWThhZEtPa09QTjl5VGpTa3RUSjhDcDZHalorampkMEJs?=
+ =?utf-8?B?RUNJUE9rR3JCbjdEa28yRE55YkxpS3NTYmNmNTRra3l3aVA5UGg0RnRzdWpO?=
+ =?utf-8?B?YXRKeUV2RVVYNVlpV09kejZSNmJTNG1CMDBJbUhzdTZSOUw1cXBnZkVqRm1n?=
+ =?utf-8?B?dDg3d25Cd3cweHY2eXNhZHhuSjBmUlpobVkwUGFpZWpZNzhmeFNyV296SVpq?=
+ =?utf-8?B?Kyt0MGdibGtTdTlHZHY1VGFMUVNUblB5M3lScmdTSTdORGpFUWpJL0hBZXV1?=
+ =?utf-8?B?MXE0eWpGRVYzdDBpdjlQNFpiRFArbWwrVmJPYTh6cG1WR1pWd2MrQkZCUEpS?=
+ =?utf-8?B?SzN0cmRkMXB4bVYrTXRzbmVNejlMNmplVlpkaTdLd2lxdmsxZ3BScDdqd0tV?=
+ =?utf-8?B?ZTVQSzlNYi9EVk9ZbjNTb2MrWnRPVldubmFPTHdZQ1p3ODByYk51K2lCOFFm?=
+ =?utf-8?B?Y2t3T0JwTnJ6NldTbkZQRzlvcEM1V3BmTkJvTVpKWjU2Vmt5VTBvbis3QUly?=
+ =?utf-8?B?Q3VXUWpMYk1INS9GK3MyS25WbnRzSXk1UlEyRUhYcDVyeFB3QWcrb1c1VnY5?=
+ =?utf-8?B?aVJYWUg4N0lhalhoTTFBV0JJcUdnMy9qWHREbi91TlFqUzYwMFh0VmNCS3VM?=
+ =?utf-8?B?NnBtV0V6ZHdvZk1jT3FBd2licmNtcktpcTllblRxWlgyWGNJa0g3SWh6cm0x?=
+ =?utf-8?B?RDNDejYvUzlQeFgvVWhRNktrSVNkM3VoaExlcGxXTTYyM3RHU1hpR1FvblVi?=
+ =?utf-8?B?UEo5MHVWaFVINE1tdWFHR00za1BpaDVIWnVDUjUwWUI1Ty9aT3IyaEFZWEFB?=
+ =?utf-8?B?MlhLQkZaUlZHR2FCUmM4eGNsRGIrSFk2a2VETGc4b3N2N0hEVlJyUU5MM3No?=
+ =?utf-8?B?aGpwSERvQXJaSFNDSEZOMm96L3pQbmR2ZWY5RmxFWllUS09RTEZRdW0zRytL?=
+ =?utf-8?B?THF1VHJITTVKM2N3K21JSkVhSTh5SENnNzYyMnlSYjcyMHR3UnRTdDlaSTVh?=
+ =?utf-8?B?SWpVWTZJemp6bE1IbVk5bHhIYURyQ05RRmVlMWtBeUhUUXdNdlNiaGllUlhs?=
+ =?utf-8?B?dXgxNkFIWmNpaHo1c0hISW9jSWtGeGtiM2NJL0VQalZ3aWM5OGZwd2xnS3Ix?=
+ =?utf-8?B?a0N6c3hDa1VNelVCZHcxTmVJWlBwQkpJTFBmTU5rNFNxVnhVczZJL2RQc0hj?=
+ =?utf-8?Q?D8jO6EGBm139Hty1Chxrz7g=3D?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7dd757b3-7b9e-4217-bcb8-08db88461902
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jul 2023 10:51:25.5760
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: osOw92dteBMxlccN0r29JPVpbQbLF8zTrpIFwcaRhyiv8alKobkm1YvIle3+CZ0rEuXepl+WZP2eR4ghDz5l9A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6818
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 19/07/2023 11:49, Li, Meng wrote:
-> 
-> 
->> -----Original Message-----
->> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Sent: Wednesday, July 19, 2023 4:59 PM
->> To: Li, Meng <Meng.Li@windriver.com>; gregkh@linuxfoundation.org;
->> robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org; conor+dt@kernel.org;
->> dinguyen@kernel.org; hminas@synopsys.com; linux-usb@vger.kernel.org;
->> devicetree@vger.kernel.org
->> Cc: linux-kernel@vger.kernel.org
->> Subject: Re: [PATCH 3/3] dt-bindings: usb: dwc2: add compatible "intel,socfpga-
->> stratix10-hsotg"
->>
->> CAUTION: This email comes from a non Wind River email account!
->> Do not click links or open attachments unless you recognize the sender and
->> know the content is safe.
->>
->> On 19/07/2023 10:45, Li, Meng wrote:
->>>
->>>
->>>> -----Original Message-----
->>>> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>> Sent: Wednesday, July 19, 2023 2:39 PM
->>>> To: Li, Meng <Meng.Li@windriver.com>; gregkh@linuxfoundation.org;
->>>> robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org;
->>>> robh+conor+dt@kernel.org;
->>>> dinguyen@kernel.org; hminas@synopsys.com; linux-usb@vger.kernel.org;
->>>> devicetree@vger.kernel.org
->>>> Cc: linux-kernel@vger.kernel.org
->>>> Subject: Re: [PATCH 3/3] dt-bindings: usb: dwc2: add compatible
->>>> "intel,socfpga- stratix10-hsotg"
->>>>
->>>> CAUTION: This email comes from a non Wind River email account!
->>>> Do not click links or open attachments unless you recognize the
->>>> sender and know the content is safe.
->>>>
->>>> On 19/07/2023 04:55, Meng Li wrote:
->>>>> Add the compatible "intel,socfpga-stratix10-hsotg" to the DWC2
->>>>> implementation, because the Stratix DWC2 implementation does not
->>>>> support clock gating. This compatible is used with generic snps,dwc2.
->>>>>
->>>>> Signed-off-by: Meng Li <Meng.Li@windriver.com>
->>>>
->>>> Missing changelog, missing versioning. This is v3 or v4.
->>>>
->>>>> ---
->>>>>  Documentation/devicetree/bindings/usb/dwc2.yaml | 1 +
->>>>>  1 file changed, 1 insertion(+)
->>>>>
->>>>> diff --git a/Documentation/devicetree/bindings/usb/dwc2.yaml
->>>>> b/Documentation/devicetree/bindings/usb/dwc2.yaml
->>>>> index dc4988c0009c..f90094320914 100644
->>>>> --- a/Documentation/devicetree/bindings/usb/dwc2.yaml
->>>>> +++ b/Documentation/devicetree/bindings/usb/dwc2.yaml
->>>>> @@ -51,6 +51,7 @@ properties:
->>>>>                - amlogic,meson-g12a-usb
->>>>>                - amlogic,meson-a1-usb
->>>>>                - intel,socfpga-agilex-hsotg
->>>>> +              - intel,socfpga-stratix10-hsotg
->>>>
->>>> So you just sent the same patch as before. I pointed you to the
->>>> proper solution with compatibility.
->>>>
->>>
->>> No. not the same.
->>> I don't understand why SoC specific compatible "intel,socfpga-agilex-hsotg" is
->> able to be added, but the SoC specific compatible "intel,socfpga-stratix10-hsotg"
->> is not allowed.
->>>
->>> You said "Where is SoC specific compatible?"
->>> Now, I add the SoC specific compatible "intel,socfpga-stratix10-hsotg", but
->> why it is still not reasonable.
->>
->> The compatible should be added, but I said they are compatible, so express it. I
->> also gave you example of file which expresses it.
->>
->> Why that compatible is not allowed alone? Because what we said here many,
->> many times and because the doc I gave you which explains this.
->>
-> 
-> I had a look the doc ,and refer to rk3128.dtsi and commit 5032b269203287c17064d33c72be1ebf30c04a95.
-> So I think it needs to add " intel,socfpga-stratix10-hsotg" Documentation/devicetree/bindings/usb/dwc2.yaml.
+Hi,
 
-Open the DTSI and look at compatibles. Now open the driver and look at
-the compatibles - surprise, there is no rockchip,rk3128-usb! Now open
-the binding and look how it is done.
+it looks to me like the priv member of struct xhci_hcd
+is used only to hold struct xhci_plat_priv. Is that sensible?
+Should struct xhci_plat_priv be integrated into struct xhci_hcd?
 
-> But if you think it is not reasonable, could you please show what is your modification for the dwc2.yaml.
-
-Open the binding - it is already there.
-
-I bet there is someone in Windriver who does Linux and can help here as
-well, none of existing code is working for you as an example?
-
-Best regards,
-Krzysztof
-
+	Regards
+		Oliver
