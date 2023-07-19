@@ -2,140 +2,200 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B38B6758AD8
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jul 2023 03:26:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB67758B81
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Jul 2023 04:47:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbjGSB0z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 Jul 2023 21:26:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36470 "EHLO
+        id S229994AbjGSCrd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 Jul 2023 22:47:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjGSB0y (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Jul 2023 21:26:54 -0400
-Received: from mail.synergyst.club (mail.synergyst.club [45.56.67.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F03212F
-        for <linux-usb@vger.kernel.org>; Tue, 18 Jul 2023 18:26:53 -0700 (PDT)
-Received: from box.synergyst.club (localhost [127.0.0.1])
-        by mail.synergyst.club (Postfix) with ESMTPS id 191CD100BA1
-        for <linux-usb@vger.kernel.org>; Tue, 18 Jul 2023 20:26:53 -0500 (CDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.synergyst.club 191CD100BA1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mail.synergyst.club;
-        s=mail; t=1689730013;
-        bh=YsrNEELwlkcpwsEmvXuwjfehl3v7rhNOfmAE+vofHp8=;
-        h=Date:From:Subject:To:From;
-        b=Dw7o6qirS21E9uul+Q85l3O5t6UnenXIBzhHsxmQBxNGdmJ6oWLom4Qy7o7KVl1FH
-         sd0kCTaK8zehLgINV+MKBp38pef2ticc5ltJ8J/u2wP9gMiVUN7WRT248D954JSPYs
-         MTzESkkarYrSmk+FRG/UNQZ9f3na31xV8aO7EZS+DQNiKSLi0GGNz3nJ08mITQOQj+
-         CLbhftq21Cyn70AdyC0IAykYGEVT/6W8SX9Tv5EjV03xrHcDR7E2VoeJKFUsrJdbWb
-         SnagqdZWtm9g1W7N+cu0/4SOV/lk0eVKKax2i0MVoXLmvI3y2VmcKNjHooM+xNGvY/
-         PAL6AmuSWw4YA==
+        with ESMTP id S229670AbjGSCrc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 Jul 2023 22:47:32 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C993B1BDC;
+        Tue, 18 Jul 2023 19:47:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1689734850; x=1721270850;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7l2RLpq7FfwUjP9ss8SVVFWP/mR+Jc43Uc8Ex0yPyD4=;
+  b=Ldhe186cycf8RjDZEPWiKWUC8OROpIXYR/wMSSrdZNi7yISnuX91TlGo
+   K76fOxvMxYMm9q/zqCnzjZLy3pm28VmKUizq/dhpZ34szwL9ba8UKztuJ
+   2q4WyuQpXQxZI0K2hEEerpQ6N3tqOQJIjGinDIlTh0K+Lv1/aJLV78U2b
+   k3A6wINW5JUQKIOM18y+nFnwcgvR4jPan9FT4/YeRkY4FyXJuHUkppqrC
+   N6ZgxalGPw1pXXVBtcBxyCD5M+BkMH8hTUmbvgxTpHT8okXrSWSgdT0Dz
+   HsPd+z+UbcbLk50K2csAFGswEwwJrHY4EB6LXING8cfrFzCQfhnL0Rmzl
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="356305645"
+X-IronPort-AV: E=Sophos;i="6.01,215,1684825200"; 
+   d="scan'208";a="356305645"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2023 19:47:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10775"; a="723840975"
+X-IronPort-AV: E=Sophos;i="6.01,215,1684825200"; 
+   d="scan'208";a="723840975"
+Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 18 Jul 2023 19:47:26 -0700
+Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qLxDp-00045M-1J;
+        Wed, 19 Jul 2023 02:47:25 +0000
+Date:   Wed, 19 Jul 2023 10:46:37 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
+        bhupesh.sharma@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, krzysztof.kozlowski@linaro.org,
+        quic_schowdhu@quicinc.com, gregkh@linuxfoundation.org,
+        stephan@gerhold.net
+Subject: Re: [PATCH v9 4/7] usb: misc: eud: Add driver support for SM6115 /
+ SM4250
+Message-ID: <202307191045.FMNOhyay-lkp@intel.com>
+References: <20230718061052.1332993-5-bhupesh.sharma@linaro.org>
 MIME-Version: 1.0
-Date:   Wed, 19 Jul 2023 01:26:53 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: RainLoop/1.14.0
-From:   administrator@mail.synergyst.club
-Message-ID: <7af62c3c59a3239d2f64615b99049a5e@mail.synergyst.club>
-Subject: Tell linux-usb@vger.kernel.org to add your device to a proper 
- driver.
-To:     linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230718061052.1332993-5-bhupesh.sharma@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,=0A=0AI have an Infiray Micro III Lite that seems to need adding to=
- some driver.=0A=0AHere's a snippet of my lsusb --verbose command:=0A=0AB=
-us 001 Device 003: ID 3474:750e=0ADevice Descriptor:=0AbLength 18=0AbDesc=
-riptorType 1=0AbcdUSB 2.00=0AbDeviceClass 239 Miscellaneous Device=0AbDev=
-iceSubClass 2 ?=0AbDeviceProtocol 1 Interface Association=0AbMaxPacketSiz=
-e0 64=0AidVendor 0x3474=0AidProduct 0x750e=0AbcdDevice 0.00=0AiManufactur=
-er 1 IRay=0AiProduct 2 M3Lite=0AiSerial 0=0AbNumConfigurations 1=0AConfig=
-uration Descriptor:=0AbLength 9=0AbDescriptorType 2=0AwTotalLength 272=0A=
-bNumInterfaces 4=0AbConfigurationValue 1=0AiConfiguration 0=0AbmAttribute=
-s 0x80=0A(Bus Powered)=0AMaxPower 500mA=0AInterface Association:=0AbLengt=
-h 8=0AbDescriptorType 11=0AbFirstInterface 0=0AbInterfaceCount 2=0AbFunct=
-ionClass 14 Video=0AbFunctionSubClass 3 Video Interface Collection=0AbFun=
-ctionProtocol 0=0AiFunction 2 M3Lite=0AInterface Descriptor:=0AbLength 9=
-=0AbDescriptorType 4=0AbInterfaceNumber 0=0AbAlternateSetting 0=0AbNumEnd=
-points 1=0AbInterfaceClass 14 Video=0AbInterfaceSubClass 1 Video Control=
-=0AbInterfaceProtocol 0=0AiInterface 2 M3Lite=0AVideoControl Interface De=
-scriptor:=0AbLength 13=0AbDescriptorType 36=0AbDescriptorSubtype 1 (HEADE=
-R)=0AbcdUVC 1.10=0AwTotalLength 81=0AdwClockFrequency 48.000000MHz=0AbInC=
-ollection 1=0AbaInterfaceNr( 0) 1=0AVideoControl Interface Descriptor:=0A=
-bLength 18=0AbDescriptorType 36=0AbDescriptorSubtype 2 (INPUT_TERMINAL)=
-=0AbTerminalID 1=0AwTerminalType 0x0201 Camera Sensor=0AbAssocTerminal 0=
-=0AiTerminal 0=0AwObjectiveFocalLengthMin 1=0AwObjectiveFocalLengthMax 10=
-=0AwOcularFocalLength 1=0AbControlSize 3=0AbmControls 0x00000200=0AZoom (=
-Absolute)=0AVideoControl Interface Descriptor:=0AbLength 13=0AbDescriptor=
-Type 36=0AbDescriptorSubtype 5 (PROCESSING_UNIT)=0AbUnitID 2=0AbSourceID =
-1=0AwMaxMultiplier 16384=0AbControlSize 3=0AbmControls 0x00000000=0AiProc=
-essing 0=0AbmVideoStandards 0x 0=0AVideoControl Interface Descriptor:=0Ab=
-Length 28=0AbDescriptorType 36=0AbDescriptorSubtype 6 (EXTENSION_UNIT)=0A=
-bUnitID 3=0AguidExtensionCode {ffffffff-ffff-ffff-ffff-ffffffffffff}=0AbN=
-umControl 0=0AbNrPins 1=0AbaSourceID( 0) 2=0AbControlSize 3=0AbmControls(=
- 0) 0x00=0AbmControls( 1) 0x00=0AbmControls( 2) 0x00=0AiExtension 0=0AVid=
-eoControl Interface Descriptor:=0AbLength 9=0AbDescriptorType 36=0AbDescr=
-iptorSubtype 3 (OUTPUT_TERMINAL)=0AbTerminalID 4=0AwTerminalType 0x0101 U=
-SB Streaming=0AbAssocTerminal 0=0AbSourceID 3=0AiTerminal 0=0AEndpoint De=
-scriptor:=0AbLength 7=0AbDescriptorType 5=0AbEndpointAddress 0x82 EP 2 IN=
-=0AbmAttributes 3=0ATransfer Type Interrupt=0ASynch Type None=0AUsage Typ=
-e Data=0AwMaxPacketSize 0x0040 1x 64 bytes=0AbInterval 8=0AInterface Desc=
-riptor:=0AbLength 9=0AbDescriptorType 4=0AbInterfaceNumber 1=0AbAlternate=
-Setting 0=0AbNumEndpoints 1=0AbInterfaceClass 14 Video=0AbInterfaceSubCla=
-ss 2 Video Streaming=0AbInterfaceProtocol 0=0AiInterface 0=0AVideoStreami=
-ng Interface Descriptor:=0AbLength 14=0AbDescriptorType 36=0AbDescriptorS=
-ubtype 1 (INPUT_HEADER)=0AbNumFormats 1=0AwTotalLength 71=0AbEndPointAddr=
-ess 131=0AbmInfo 0=0AbTerminalLink 4=0AbStillCaptureMethod 1=0AbTriggerSu=
-pport 0=0AbTriggerUsage 0=0AbControlSize 1=0AbmaControls( 0) 27=0AVideoSt=
-reaming Interface Descriptor:=0AbLength 27=0AbDescriptorType 36=0AbDescri=
-ptorSubtype 4 (FORMAT_UNCOMPRESSED)=0AbFormatIndex 1=0AbNumFrameDescripto=
-rs 1=0AguidFormat {59555932-0000-1000-8000-00aa00389b71}=0AbBitsPerPixel =
-16=0AbDefaultFrameIndex 1=0AbAspectRatioX 8=0AbAspectRatioY 6=0AbmInterla=
-ceFlags 0x00=0AInterlaced stream or variable: No=0AFields per frame: 2 fi=
-elds=0AField 1 first: No=0AField pattern: Field 1 only=0AbCopyProtect 0=
-=0AVideoStreaming Interface Descriptor:=0AbLength 30=0AbDescriptorType 36=
-=0AbDescriptorSubtype 5 (FRAME_UNCOMPRESSED)=0AbFrameIndex 1=0AbmCapabili=
-ties 0x01=0AStill image supported=0AwWidth 1280=0AwHeight 512=0AdwMinBitR=
-ate 832000000=0AdwMaxBitRate 832000000=0AdwMaxVideoFrameBufferSize 131072=
-0=0AdwDefaultFrameInterval 400000=0AbFrameIntervalType 1=0AdwFrameInterva=
-l( 0) 400000=0AEndpoint Descriptor:=0AbLength 7=0AbDescriptorType 5=0AbEn=
-dpointAddress 0x83 EP 3 IN=0AbmAttributes 2=0ATransfer Type Bulk=0ASynch =
-Type None=0AUsage Type Data=0AwMaxPacketSize 0x0200 1x 512 bytes=0AbInter=
-val 0=0AInterface Association:=0AbLength 8=0AbDescriptorType 11=0AbFirstI=
-nterface 2=0AbInterfaceCount 2=0AbFunctionClass 2 Communications=0AbFunct=
-ionSubClass 2 Abstract (modem)=0AbFunctionProtocol 1 AT-commands (v.25ter=
-)=0AiFunction 0=0AInterface Descriptor:=0AbLength 9=0AbDescriptorType 4=
-=0AbInterfaceNumber 2=0AbAlternateSetting 0=0AbNumEndpoints 1=0AbInterfac=
-eClass 2 Communications=0AbInterfaceSubClass 2 Abstract (modem)=0AbInterf=
-aceProtocol 1 AT-commands (v.25ter)=0AiInterface 0=0ACDC Header:=0AbcdCDC=
- 1.10=0ACDC ACM:=0AbmCapabilities 0x02=0Aline coding and serial state=0AC=
-DC Union:=0AbMasterInterface 2=0AbSlaveInterface 1=0ACDC Call Management:=
-=0AbmCapabilities 0x00=0AbDataInterface 1=0AEndpoint Descriptor:=0AbLengt=
-h 7=0AbDescriptorType 5=0AbEndpointAddress 0x81 EP 1 IN=0AbmAttributes 3=
-=0ATransfer Type Interrupt=0ASynch Type None=0AUsage Type Data=0AwMaxPack=
-etSize 0x0040 1x 64 bytes=0AbInterval 2=0AInterface Descriptor:=0AbLength=
- 9=0AbDescriptorType 4=0AbInterfaceNumber 3=0AbAlternateSetting 0=0AbNumE=
-ndpoints 2=0AbInterfaceClass 10 CDC Data=0AbInterfaceSubClass 0 Unused=0A=
-bInterfaceProtocol 0=0AiInterface 0=0AEndpoint Descriptor:=0AbLength 7=0A=
-bDescriptorType 5=0AbEndpointAddress 0x05 EP 5 OUT=0AbmAttributes 2=0ATra=
-nsfer Type Bulk=0ASynch Type None=0AUsage Type Data=0AwMaxPacketSize 0x02=
-00 1x 512 bytes=0AbInterval 0=0AEndpoint Descriptor:=0AbLength 7=0AbDescr=
-iptorType 5=0AbEndpointAddress 0x85 EP 5 IN=0AbmAttributes 2=0ATransfer T=
-ype Bulk=0ASynch Type None=0AUsage Type Data=0AwMaxPacketSize 0x0200 1x 5=
-12 bytes=0AbInterval 0=0ADevice Status: 0x0000=0A(Bus Powered)=0A=0AHere'=
-s an output from lsusb --tree --verbose:=0A=0A/: Bus 01.Port 1: Dev 1, Cl=
-ass=3Droot_hub, Driver=3Dxhci-hcd/1p, 480M=0AID 1d6b:0002 Linux Foundatio=
-n 2.0 root hub=0A|__ Port 1: Dev 2, If 0, Class=3DHub, Driver=3Dhub/4p, 4=
-80M=0AID 1a40:0101 Terminus Technology Inc. Hub=0A|__ Port 1: Dev 4, If 0=
-, Class=3DVendor Specific Class, Driver=3D, 480M=0AID 03e7:f63d Intel=0A|=
-__ Port 1: Dev 4, If 1, Class=3DVideo, Driver=3Duvcvideo, 480M=0AID 03e7:=
-f63d Intel=0A|__ Port 1: Dev 4, If 2, Class=3DVideo, Driver=3Duvcvideo, 4=
-80M=0AID 03e7:f63d Intel=0A|__ Port 2: Dev 3, If 3, Class=3DCDC Data, Dri=
-ver=3Dusbserial_generic, 480M=0AID 3474:750e=0A|__ Port 2: Dev 3, If 1, C=
-lass=3DVideo, Driver=3Duvcvideo, 480M=0AID 3474:750e=0A|__ Port 2: Dev 3,=
- If 2, Class=3DCommunications, Driver=3D, 480M=0AID 3474:750e=0A|__ Port =
-2: Dev 3, If 0, Class=3DVideo, Driver=3Duvcvideo, 480M=0AID 3474:750e
+Hi Bhupesh,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on usb/usb-next usb/usb-linus lee-mfd/for-mfd-next linus/master v6.5-rc2 next-20230718]
+[cannot apply to robh/for-next lee-mfd/for-mfd-fixes]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Bhupesh-Sharma/dt-bindings-mfd-qcom-tcsr-Add-the-compatible-for-SM6115/20230718-190223
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20230718061052.1332993-5-bhupesh.sharma%40linaro.org
+patch subject: [PATCH v9 4/7] usb: misc: eud: Add driver support for SM6115 / SM4250
+config: arm-allmodconfig (https://download.01.org/0day-ci/archive/20230719/202307191045.FMNOhyay-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230719/202307191045.FMNOhyay-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307191045.FMNOhyay-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   drivers/usb/misc/qcom_eud.c: In function 'eud_probe':
+>> drivers/usb/misc/qcom_eud.c:251:52: error: passing argument 2 of 'eud_find_secure_reg_addr' from incompatible pointer type [-Werror=incompatible-pointer-types]
+     251 |         ret = eud_find_secure_reg_addr(&pdev->dev, &tcsr_check);
+         |                                                    ^~~~~~~~~~~
+         |                                                    |
+         |                                                    phys_addr_t * {aka unsigned int *}
+   drivers/usb/misc/qcom_eud.c:194:62: note: expected 'u64 *' {aka 'long long unsigned int *'} but argument is of type 'phys_addr_t *' {aka 'unsigned int *'}
+     194 | static int eud_find_secure_reg_addr(struct device *dev, u64 *addr)
+         |                                                         ~~~~~^~~~
+   cc1: some warnings being treated as errors
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for SM_GCC_8350
+   Depends on [n]: COMMON_CLK [=y] && COMMON_CLK_QCOM [=m] && (ARM64 || COMPILE_TEST [=n])
+   Selected by [m]:
+   - SM_VIDEOCC_8350 [=m] && COMMON_CLK [=y] && COMMON_CLK_QCOM [=m]
+   WARNING: unmet direct dependencies detected for SM_GCC_8450
+   Depends on [n]: COMMON_CLK [=y] && COMMON_CLK_QCOM [=m] && (ARM64 || COMPILE_TEST [=n])
+   Selected by [m]:
+   - SM_GPUCC_8450 [=m] && COMMON_CLK [=y] && COMMON_CLK_QCOM [=m]
+   - SM_VIDEOCC_8450 [=m] && COMMON_CLK [=y] && COMMON_CLK_QCOM [=m]
+   WARNING: unmet direct dependencies detected for SM_GCC_8550
+   Depends on [n]: COMMON_CLK [=y] && COMMON_CLK_QCOM [=m] && (ARM64 || COMPILE_TEST [=n])
+   Selected by [m]:
+   - SM_GPUCC_8550 [=m] && COMMON_CLK [=y] && COMMON_CLK_QCOM [=m]
+   - SM_VIDEOCC_8550 [=m] && COMMON_CLK [=y] && COMMON_CLK_QCOM [=m]
+
+
+vim +/eud_find_secure_reg_addr +251 drivers/usb/misc/qcom_eud.c
+
+   219	
+   220	static int eud_probe(struct platform_device *pdev)
+   221	{
+   222		struct eud_chip *chip;
+   223		struct resource *res;
+   224		phys_addr_t tcsr_check = 0;
+   225		int ret;
+   226	
+   227		chip = devm_kzalloc(&pdev->dev, sizeof(*chip), GFP_KERNEL);
+   228		if (!chip)
+   229			return -ENOMEM;
+   230	
+   231		chip->dev = &pdev->dev;
+   232	
+   233		chip->role_sw = usb_role_switch_get(&pdev->dev);
+   234		if (IS_ERR(chip->role_sw))
+   235			return dev_err_probe(chip->dev, PTR_ERR(chip->role_sw),
+   236						"failed to get role switch\n");
+   237	
+   238		ret = devm_add_action_or_reset(chip->dev, eud_role_switch_release, chip);
+   239		if (ret)
+   240			return dev_err_probe(chip->dev, ret,
+   241					"failed to add role switch release action\n");
+   242	
+   243		chip->base = devm_platform_ioremap_resource(pdev, 0);
+   244		if (IS_ERR(chip->base))
+   245			return PTR_ERR(chip->base);
+   246	
+   247		/*
+   248		 * EUD block on a few Qualcomm SoCs needs secure register access.
+   249		 * Check for the same via vendor-specific dt property.
+   250		 */
+ > 251		ret = eud_find_secure_reg_addr(&pdev->dev, &tcsr_check);
+   252		if (ret < 0)
+   253			return ret;
+   254	
+   255		if (tcsr_check) {
+   256			res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+   257			if (!res)
+   258				return dev_err_probe(chip->dev, -ENODEV,
+   259						     "failed to get secure_mode_mgr reg base\n");
+   260	
+   261			chip->secure_mode_mgr = res->start;
+   262	
+   263			ret = qcom_scm_io_writel(tcsr_check, TCSR_CHECK_EN);
+   264			if (ret)
+   265				return dev_err_probe(chip->dev, ret, "failed to write tcsr check reg\n");
+   266		} else {
+   267			chip->mode_mgr = devm_platform_ioremap_resource(pdev, 1);
+   268			if (IS_ERR(chip->mode_mgr))
+   269				return PTR_ERR(chip->mode_mgr);
+   270		}
+   271	
+   272		chip->irq = platform_get_irq(pdev, 0);
+   273		ret = devm_request_threaded_irq(&pdev->dev, chip->irq, handle_eud_irq,
+   274				handle_eud_irq_thread, IRQF_ONESHOT, NULL, chip);
+   275		if (ret)
+   276			return dev_err_probe(chip->dev, ret, "failed to allocate irq\n");
+   277	
+   278		enable_irq_wake(chip->irq);
+   279	
+   280		platform_set_drvdata(pdev, chip);
+   281	
+   282		return 0;
+   283	}
+   284	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
