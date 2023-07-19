@@ -2,60 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E13758DFB
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jul 2023 08:39:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2CC1758E01
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Jul 2023 08:39:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231149AbjGSGj1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Jul 2023 02:39:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60748 "EHLO
+        id S231178AbjGSGjo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Jul 2023 02:39:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231146AbjGSGjY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Jul 2023 02:39:24 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3941FD8
-        for <linux-usb@vger.kernel.org>; Tue, 18 Jul 2023 23:39:22 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-51e5e4c6026so9262495a12.0
-        for <linux-usb@vger.kernel.org>; Tue, 18 Jul 2023 23:39:22 -0700 (PDT)
+        with ESMTP id S230212AbjGSGjl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Jul 2023 02:39:41 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A53CF1FDC
+        for <linux-usb@vger.kernel.org>; Tue, 18 Jul 2023 23:39:35 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-993d1f899d7so910597666b.2
+        for <linux-usb@vger.kernel.org>; Tue, 18 Jul 2023 23:39:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1689748761; x=1692340761;
+        d=linaro.org; s=google; t=1689748774; x=1692340774;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=FkYcA/qG9jmDR//bHA4TMNeynT6TeOA+h1nLtEf6hYw=;
-        b=JjlB3wjWE06Kz96Bwnsiuf10N99M+n4lkVQzefLjb/9vTzHznBONpd+6Qji16CkyT6
-         kNIh4Y2d5xOsOWj0jVRyhH5STDoLXBit8aXZkw/ztDSPpfQxGc/uvmtiUS+/mX1ZKv3p
-         PbaxGm9pWLFUNRxY5enilifh765Kk8HX9JGESqfl+LbjqDB9JmM+tILofgD64OccmNaE
-         35TYRpCehDVBIdbHK1GaUld57csHY1RefRRo2CmPq8GRqGyEp1fkZN6QtXXTSqvLvQjo
-         rPxKAJXDycMQHoSrVdiWpwQ8zxpORiHCZ1DPntyBFWHDQngAdwBy1OU4GwXH7D5des68
-         XB0w==
+        bh=72PaLUSSuoFU0PTvBWd+xwIa1Skzf0/nV9CmdSHfMuA=;
+        b=KX+Ptl0NWz8bP7E9tEBd5Jz5vGlc8R2BPv7DQgoV/CuwlGyqeU7qF/IPnnWyz9fBXW
+         KVcF5xXcQZdGMaNIgRcsO6Q8HhE7uefeLWUpQIAd3NNgNErFsTmg09+pato+gqSH6tPC
+         ALThPj7+WTuGCwgK625EvwVvYgDziulTEbEM3WbjvR6FfgcUXki6Jsm1ownCMKX75O9t
+         8H98Qj2R7RV527Tl60YIS69iCoU175VEIsJV0KqOY65GpVl5ARuAzzQqKwQPVwm/zweH
+         q87Cpi2ZdZcTjn0l6G8zro6vm7skVMu2qkvc5wTl/h8N/JpKFQ/8nHn5qTqBcxykUJK4
+         6xWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689748761; x=1692340761;
+        d=1e100.net; s=20221208; t=1689748774; x=1692340774;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FkYcA/qG9jmDR//bHA4TMNeynT6TeOA+h1nLtEf6hYw=;
-        b=XmAdBSHM5eofjXX4iUgYKzSbL3Uv89IyT4fuwCfqMjtcTaKF202LSA0rLWHNoHYmAh
-         2v5U5kHi1LDMSfxEobolaLphHyd/yGbOfJi2tSgNXPxeLpLfF8PWIQwDPFCQZj7vCqPV
-         l6YC7qAM8ty/SmGRgWwQWxaX6ZHTS+5l3GDlw5ahQGtLvPLzrfZwdGbqjgul7RnqazVJ
-         pO8o0+/LQUgW3Pw/cQeIyLR1NhSUXhB/ZwRXbMzqV0WaTFop+4togrLLI3fCcyK0IyFt
-         gxiIhmr55BnEwotcM1NrALQP1c0WQZdWETMheun9Q8jHBcK0E6SBTsULUmi0C/8k/50h
-         POpA==
-X-Gm-Message-State: ABy/qLbPID+GzyXL5RtYuW3optOaQzOtbsaGnXMSYu7sN/i6LJ887HUH
-        XD7UhiHngwoPmUqUxXxslkzLeg==
-X-Google-Smtp-Source: APBJJlFeM5UlgZygOPuiVhdu1mcPY3p3Gj/OOrFdxdWDZUSCCBvwFF58vuybpXJ6JQqTIHleL9Am7Q==
-X-Received: by 2002:a17:906:2457:b0:987:5147:7498 with SMTP id a23-20020a170906245700b0098751477498mr1651514ejb.32.1689748760757;
-        Tue, 18 Jul 2023 23:39:20 -0700 (PDT)
+        bh=72PaLUSSuoFU0PTvBWd+xwIa1Skzf0/nV9CmdSHfMuA=;
+        b=V/Zedsyus3dicDKSHnSNQ3WZk1vQB5m5Gy4WaPO3cjTU4vIsQKlqQw2j3JzjxGLJcy
+         OkhvFcoLJbfPQs/f3TYtqh9UwGlMWAeOqzV26GJOiwRsZf0ZRXbt5lErge/27CjnIRmv
+         j3DwvgCDbnd6qkj0fPi+woyvK/4OwL2TDZKVa6D35IEZ1VULGjLRb4JKfRBMIb+LPdPu
+         DE5EqDqP6rMhdMMIL/cuN/f00W6wIeH+7aqqqD2rZD0TiC9e6nh36VIcRXE9vrJRssXx
+         JHjJuU58xqbtZEbvTLQp6RQzIUij6D2syCyOX5AKrHV0TD4SA7pZkYRYh+oc6FVmbe7w
+         HVGg==
+X-Gm-Message-State: ABy/qLZymQNJHXi6V4QRWlY008YCSL4K1Q4OvKcQeTyjQX3HPGlL5K4i
+        CWy2nNQ9gVPvb8ScNfF3j6ttow==
+X-Google-Smtp-Source: APBJJlFX6SEMOhzwgOYEClD4Ea2P2nHJ7RaCK3OxdQknYfcBuuRn+Knk9rUpijP8hznvmXQYVG4uFA==
+X-Received: by 2002:a17:906:7a4b:b0:992:58fc:bcb8 with SMTP id i11-20020a1709067a4b00b0099258fcbcb8mr1373352ejo.56.1689748774154;
+        Tue, 18 Jul 2023 23:39:34 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id p1-20020a1709061b4100b00982a92a849asm1894498ejg.91.2023.07.18.23.39.19
+        by smtp.gmail.com with ESMTPSA id w21-20020a1709064a1500b00997d76981e0sm1840403eju.208.2023.07.18.23.39.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Jul 2023 23:39:20 -0700 (PDT)
-Message-ID: <488835c0-e08e-c0cc-abac-192f658b093f@linaro.org>
-Date:   Wed, 19 Jul 2023 08:39:18 +0200
+        Tue, 18 Jul 2023 23:39:32 -0700 (PDT)
+Message-ID: <ec93a939-883d-5778-2f32-69eb370c9768@linaro.org>
+Date:   Wed, 19 Jul 2023 08:39:30 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [PATCH 3/3] dt-bindings: usb: dwc2: add compatible
- "intel,socfpga-stratix10-hsotg"
+Subject: Re: [PATCH 1/3] usb: dwc2: Add platform specific data for Intel
+ Stratix10 platform
 Content-Language: en-US
 To:     Meng Li <Meng.Li@windriver.com>, gregkh@linuxfoundation.org,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
@@ -63,9 +63,9 @@ To:     Meng Li <Meng.Li@windriver.com>, gregkh@linuxfoundation.org,
         linux-usb@vger.kernel.org, devicetree@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org
 References: <20230719025509.3007986-1-Meng.Li@windriver.com>
- <20230719025509.3007986-4-Meng.Li@windriver.com>
+ <20230719025509.3007986-2-Meng.Li@windriver.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230719025509.3007986-4-Meng.Li@windriver.com>
+In-Reply-To: <20230719025509.3007986-2-Meng.Li@windriver.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -79,33 +79,28 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 On 19/07/2023 04:55, Meng Li wrote:
-> Add the compatible "intel,socfpga-stratix10-hsotg" to the DWC2
-> implementation, because the Stratix DWC2 implementation does
-> not support clock gating. This compatible is used with generic
-> snps,dwc2.
+> Intel Stratix10 is very the same with Agilex platform, the DWC2 IP on
+> the Stratix platform also does not support clock-gating. So, refer to
+> commit 3d8d3504d233("usb: dwc2: Add platform specific data for
+> Intel's Agilex"), add platform specific data for Intel Stratix10 platform.
 > 
 > Signed-off-by: Meng Li <Meng.Li@windriver.com>
-
-Missing changelog, missing versioning. This is v3 or v4.
-
 > ---
->  Documentation/devicetree/bindings/usb/dwc2.yaml | 1 +
->  1 file changed, 1 insertion(+)
+>  drivers/usb/dwc2/params.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/dwc2.yaml b/Documentation/devicetree/bindings/usb/dwc2.yaml
-> index dc4988c0009c..f90094320914 100644
-> --- a/Documentation/devicetree/bindings/usb/dwc2.yaml
-> +++ b/Documentation/devicetree/bindings/usb/dwc2.yaml
-> @@ -51,6 +51,7 @@ properties:
->                - amlogic,meson-g12a-usb
->                - amlogic,meson-a1-usb
->                - intel,socfpga-agilex-hsotg
-> +              - intel,socfpga-stratix10-hsotg
+> diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
+> index 8eab5f38b110..3d085ae1ecd8 100644
+> --- a/drivers/usb/dwc2/params.c
+> +++ b/drivers/usb/dwc2/params.c
+> @@ -267,6 +267,8 @@ const struct of_device_id dwc2_of_match_table[] = {
+>  	  .data = dwc2_set_stm32mp15_hsotg_params },
+>  	{ .compatible = "intel,socfpga-agilex-hsotg",
+>  	  .data = dwc2_set_socfpga_agilex_params },
+> +	{ .compatible = "intel,socfpga-stratix10-hsotg",
+> +	  .data = dwc2_set_socfpga_agilex_params },
 
-So you just sent the same patch as before. I pointed you to the proper
-solution with compatibility.
-
-
+NAK. I already wrote why.
 
 Best regards,
 Krzysztof
