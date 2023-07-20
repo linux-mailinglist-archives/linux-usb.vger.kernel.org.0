@@ -2,211 +2,219 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F18875A01D
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Jul 2023 22:46:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12F9475A3E7
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Jul 2023 03:28:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbjGSUqK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 Jul 2023 16:46:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45600 "EHLO
+        id S229805AbjGTB20 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 Jul 2023 21:28:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbjGSUqJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Jul 2023 16:46:09 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67418FD;
-        Wed, 19 Jul 2023 13:46:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1689799568; x=1721335568;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=G5+V6oWzi6eJfvlDuvhWm2ws+L3utOAoyU/EZppzzaY=;
-  b=fVewWJECOJyEY/6gNuWWsUzqQYdhp73jjcg1FmTG+TXA0KhMoaQgAt82
-   RMViMvrBXqEyctjB1ypCDPLv4ornF4ryatnd7vVRk9ijOzc73nGJd71wk
-   1Nb+H49816nR0AGPIckeM3S/FWoeFyjsGReNT+isGRT9g0ZjkD7OcyggI
-   0/xP6rzGv1S+/lm0MhpoREjCv906VfiRcril2TAuMzqI862r71AWw6ksY
-   FxP4zyL2usOOmyyH4pVmAxgUhtr+wexDtEEDEYUza9YaiwNwtP1w2O3Rs
-   5IQdQllZg8lKZ5V/GTP7OklW2yLDCni38ARE9KWLNGXkNLEbDp99NUvyP
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10776"; a="370133234"
-X-IronPort-AV: E=Sophos;i="6.01,216,1684825200"; 
-   d="scan'208";a="370133234"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jul 2023 13:46:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10776"; a="753816085"
-X-IronPort-AV: E=Sophos;i="6.01,216,1684825200"; 
-   d="scan'208";a="753816085"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orsmga008.jf.intel.com with ESMTP; 19 Jul 2023 13:46:07 -0700
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Wed, 19 Jul 2023 13:46:07 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27 via Frontend Transport; Wed, 19 Jul 2023 13:46:07 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.174)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.27; Wed, 19 Jul 2023 13:46:07 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ICSwajRaEZKYpluLajDujx2QD6XDaCFRZy6yTCY6RwhGqwr0rOvqSUaHd1aYc0r7SDm27Dfn1KCjtW1a2GvuVFyuPoZCNNPigLysk6CBxMyBQ6z41Kdtd0LNAfc3v1IgkTO/AcYVg1YE5tqc4eR2pnArM/tT3BCq8bR19hZsQHt5+Qu9L36ZCPL06SWKMltSeO1rx/UTxbBjzOVxE5LNeRuzbg9Tzktur5fPVDSwe8MMqSspjugPV9R6CQH9dI99qlKff7Aky2+y0rXNYlHxvsdXVUKYthaCrWUcnFonO74knEVvSBpjTQQb0TMe6kYFgANu1yLsIzeSWUVnmfVB7Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UEFhx4fRpVf5xeYPee/42IBvyoI+xXOFyyx5oPq+ovA=;
- b=Rqbs0CoPk6o0hAyT585+NnzEqpW7NJXYzp+TX551iXUvKhjxWRplmhQKveZQvLFi/4OQ2MOv5N7ArkViei3vep5RXokMavuP3zhiJVdB8HpwBtmqGBeyerx8YoIO1NMZEcEKCHuwiv8nPWauLbME9oqzbqWn1dJzCQB0heVBKo6Df3pm5hfm13VXjrezlng+77DN7DLxz8BHdbKeL56zi+jtC9z1IJEgaHbVfX9oIxxfwasvCNfwo8LY/fPnKHpcPovvHx6ZEUaXQhNpn4IyTxWmh8dNGlBGAghIJuugjPSFxXlDbQLwgl/8UU+yTaWG1mQv9g4rkIhY8tO2nP/aGw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MWHPR11MB0048.namprd11.prod.outlook.com (2603:10b6:301:6a::31)
- by PH8PR11MB8014.namprd11.prod.outlook.com (2603:10b6:510:23a::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6588.33; Wed, 19 Jul
- 2023 20:46:05 +0000
-Received: from MWHPR11MB0048.namprd11.prod.outlook.com
- ([fe80::ee97:2e55:ae8d:2809]) by MWHPR11MB0048.namprd11.prod.outlook.com
- ([fe80::ee97:2e55:ae8d:2809%4]) with mapi id 15.20.6609.022; Wed, 19 Jul 2023
- 20:46:05 +0000
-From:   "Patel, Utkarsh H" <utkarsh.h.patel@intel.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
-        "pmalani@chromium.org" <pmalani@chromium.org>,
-        "bleung@chromium.org" <bleung@chromium.org>
-Subject: RE: [PATCH v4 2/2] usb: typec: intel_pmc_mux: Configure Active and
- Retimer Cable type
-Thread-Topic: [PATCH v4 2/2] usb: typec: intel_pmc_mux: Configure Active and
- Retimer Cable type
-Thread-Index: AQHZuR/kR1fgAoQ4cU+gDZWp1WKvJK+/hYAAgAILzUA=
-Date:   Wed, 19 Jul 2023 20:46:05 +0000
-Message-ID: <MWHPR11MB0048115794666D99182D85DBA939A@MWHPR11MB0048.namprd11.prod.outlook.com>
-References: <20230718024703.1013367-1-utkarsh.h.patel@intel.com>
- <20230718024703.1013367-3-utkarsh.h.patel@intel.com>
- <2023071800-roaming-automated-5404@gregkh>
-In-Reply-To: <2023071800-roaming-automated-5404@gregkh>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MWHPR11MB0048:EE_|PH8PR11MB8014:EE_
-x-ms-office365-filtering-correlation-id: 7b1d6076-42e4-41d5-3f02-08db88992c30
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: kZTvXENOZFnNxyDAklYgOGhfB/PTl4PjuUVRownF7/tkCYP3Gel1RXbJ6gdhf9a7zM/eCyqu3YAJPchQW5+X8/sKggXVLJjUdkCiPaFuWwRGIcKYR/jQJdfBXeRIyk0CsLYc4/G/6V4V6lD19Io5ByljcnGVmL3TjCsX9h73//ZyFj0aB84D8Mp3ye8KWxFyHCndCXfExw6Zek9c5VG72HndosMEZJDG5+tDn2Rojo30KhOHNulERe5CuWXfrs1EQ3DQs288u1jsAFwhQ6Xw+ya055Dkq+Uqm3gBKeGbHbRZcQlCt8u0m93yfAUYkyZ2gAlisqH/cYGDrTSOzKSx/J8vvEqRxadCEsUyezgqlRsBSO9LBVEQ0wszinnu2VhznDT0v/VkGMYrOrtbGPApoDSq3XDWc6IlIGHmG582jZFWb9q3A3q5/rrMT8BlkOmBnWdcz0Ooj753cKSp0HPw7Bbdd7xcw9liwG4pEDevMncsC8txe+7e6moeWBIOtOUYEmdaxrvs6GPjzfY77uvVbgZbcTt2LGhqeqE4fDLOqU2jrxe1XiT6kpiqCAkBeljFhauePs6LpwJKOdjUZLG0V8BvMlrs2/W59Ko1GMfyk2MzTxFRU/nIu88w38PEd970
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB0048.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(376002)(136003)(346002)(396003)(39860400002)(451199021)(316002)(41300700001)(66476007)(64756008)(6916009)(66946007)(4326008)(66446008)(66556008)(5660300002)(8936002)(8676002)(33656002)(83380400001)(38100700002)(86362001)(55016003)(9686003)(122000001)(82960400001)(38070700005)(186003)(76116006)(26005)(7696005)(53546011)(6506007)(54906003)(478600001)(71200400001)(52536014)(2906002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Ezr0DyQEOjYHemzk3+ALIhfWK7qHMGA40VGpG+PF72PR78lDTYhf54S35WJ3?=
- =?us-ascii?Q?O0j7YMagf3uOfSywXQgcEqzHtLEI19wIkbSDlqT8aOilKvPcHs8soMH8Yq5O?=
- =?us-ascii?Q?IgVu9QPRlS7nczzNzy311zqrYGPKQXMDUW5Y36yXbY8OZCj+yDuDNe5PsRVF?=
- =?us-ascii?Q?6DW8iWZwBm31ZcLu/2MBR/4AbPAjEFsojzThM+2xt7MigLxZVYZ3OwCzTf9/?=
- =?us-ascii?Q?queazfFpBpNo+07sQBk28Ev6iVSBfK2v4PieAbsuhcXqV/tLBYJdWvfIunb0?=
- =?us-ascii?Q?6NRECpy8vAqUhm+Xs6D6bsf9MDdFaAt61DQcU1vHNrOMoKF7dQ895CPTPyBu?=
- =?us-ascii?Q?KWDgTFr2olrRDs+rCMoYbXq3Z0x23yTkyddxHJWmzl2x7hia1mLYKfhl96Gt?=
- =?us-ascii?Q?iXVQ5zYwTy8uA5XR/kfPNZ7BCur29rzQefJUadQo+T4Yl3YDb338bm6kevqX?=
- =?us-ascii?Q?kjMVucNQFdDlumvQ/dqDyFCTe8dkYIYyBz7IJMbIx7/crH0gc9HL0ok9Hchd?=
- =?us-ascii?Q?Q3v8BxqhID9/8QXtWak/gjDSEHct6petuiuYdjk1MUoD8mYHu2iHPS0p6C1M?=
- =?us-ascii?Q?UAte/IVFz9RNATDwE+9HnZq5nXSZCOF7RSkMyyaRafQjbIAyC55BCiFH39b9?=
- =?us-ascii?Q?eYFsnQ8b+/4HQBrVzpks6EaKrhMP9/9X4PrrSEOmtFbqFsrSj7x4xTlZtnBy?=
- =?us-ascii?Q?ACJlpo0uD8pDncMf5Sv64p77l341SsysAYasm75C10DG9VayhCt6jHFC/FrW?=
- =?us-ascii?Q?xd/BCy9cybZwaDM4QH1c3U46zqc0Aey9Z2yYtghzWoRiBTyJDWi8hHlFViZH?=
- =?us-ascii?Q?9HHUXpDLf81qaumOr0pIfpLanhCjIM4qGKvbMCcoXe7QtapfhbeNB3aHfj8X?=
- =?us-ascii?Q?StoIom6EuEG+OZr5XK5ANgzLLDhQZh0FgJA7ICdOAQVeufCWde/X7JD9XEt2?=
- =?us-ascii?Q?d32I+R0T3fvjjs7VPnX4NbJNOywHUyu+sgyodZ4IbuCrtF3vPR98cxgvb/Hq?=
- =?us-ascii?Q?PDQUOzjrcMVbuAE4zbbG3WtpzTC6dHvdcmz2qCVoTl18pSd+yOUqOm3TK+NO?=
- =?us-ascii?Q?U1Wucp9k9fFkrSUz9O1K9uqCMm1fB1Gpi0+PLmBQ2V0zqH6/Vx1S9FKmpygr?=
- =?us-ascii?Q?j//zmL3DSgt6V5KQoPujyZfOzDH21V1fbHsVmldtoCkluVqh69rhUpnkILLh?=
- =?us-ascii?Q?Vl2xdms84NkO9oHLxYc7JlvWKlYHDVbrL+PAD2mvqWehCIjb2CcOc/uwYTw8?=
- =?us-ascii?Q?n0ebR5BaQUAuI9vkw+36MeLxwb8Ad0vQFWV2KxJHRf+PEi1l2MXYszsCIHKC?=
- =?us-ascii?Q?4GSVCMk7SC0T0RVWP3K+M1S7Y9wcx/TVsa2OTZsuc01IsQM2Dyda6Ni7kJ8w?=
- =?us-ascii?Q?cKw6fRPq8jiVFQM9zA7xUFJdofzQE5fpmjkuLDW3MtuFrzuPiIxBoPfoPPyG?=
- =?us-ascii?Q?yQ2dyNjDasI4DyRGKK7YJKFXIBnBRmIUovxs6npFRm5wc7modA8zgNugwj6e?=
- =?us-ascii?Q?u+hqSuVkxS6/wJ8jAwSzIIQ+4n6uhvpUrX45T4u/N+G+AXUIDV2hs9UvESCH?=
- =?us-ascii?Q?3aAJ+2snMIE6gUxAViUXSABHKP8TagePm+xBbvj9EAnoCWS2fUDL42udvSqN?=
- =?us-ascii?Q?lw=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S229808AbjGTB2Z (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 Jul 2023 21:28:25 -0400
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B22A268B
+        for <linux-usb@vger.kernel.org>; Wed, 19 Jul 2023 18:28:18 -0700 (PDT)
+Received: by mail-oi1-x231.google.com with SMTP id 5614622812f47-3a3a8d21208so221201b6e.0
+        for <linux-usb@vger.kernel.org>; Wed, 19 Jul 2023 18:28:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1689816498; x=1692408498;
+        h=content-transfer-encoding:subject:from:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DUkfiN21zhhBT9MAHR3YtMD392fgTaVEL9uuVpEhQmY=;
+        b=JW9VcMLH6nEozSg5EXGTjf1Kv3CzPMeTXxwYPnfokdAhegsktdMXOXyYjhOPttl4fp
+         L80dYKXp7cCGqmzW5fYdVLGUN8/GQ1uVm+N2Tuzammuuaq9z6xVp8AeCYTWG8TqT2tUI
+         ypmZC4Hg/bh7kIR3fX/VQuV6GtiEMIHeyfLTivnkU4JvUqoCfKQAppwggD1uVUYZanui
+         lV4uBY6DL9BCjx4Ly9Y5Kjz6Wdyo9xWA+r9D+SfwPvDDHB5lYFyTJehmTWuwUDS3E+u0
+         hOC7pr1BLWCPgvDLv42rEEkIQafq4ovS7x7WUs5p3heG7bmkVDpjioJYCp8v8AHDiSCg
+         lpSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689816498; x=1692408498;
+        h=content-transfer-encoding:subject:from:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=DUkfiN21zhhBT9MAHR3YtMD392fgTaVEL9uuVpEhQmY=;
+        b=UM3oH2TTrS583QLOA99IK9Koi5F/VQZ7R1cgtH2tROqDYR20al/nNU9T3KnuqAG3QJ
+         6HqtuWE3ee/z/mN5ks9p43txNAC7RUGRNxpp0WzBgbyAXC9M83u0nOfZSKFC9nHBcBlI
+         2GP2yMLqAhMfEGV20q7O2aWasBeJ/evnuTPM4y7qP3epU73WGDLrcSeQN9RVBaEKVeXz
+         IbnbZc8uNxO+BApPmB8n3Crbu90k7aSZ7o20HPdVLlwZehjyG0x0XmBpuwYGA8jWQ4Zs
+         ECtUS6yDfs/ZiwTA7pEabiN8lKmhvU0JApKkSVnxejHRv1AKlybIDX2/YIbNF1JBwLU2
+         Fl2Q==
+X-Gm-Message-State: ABy/qLZI+K24sh3kuaVm2Ci1Z7usx2dg8qnI4ebpifz8KuSGUq45I98a
+        MHLdFB0A/+RyB2gOzPcLWNj9iw==
+X-Google-Smtp-Source: APBJJlG0eaRwUd8UStxSK6SNQKB1hUZ9kFvA3gj6/oTmRskHbUk/JH3lwcWs7glun16kQ3HT8hahaA==
+X-Received: by 2002:a05:6808:1210:b0:3a1:df16:2eed with SMTP id a16-20020a056808121000b003a1df162eedmr218432oil.30.1689816497616;
+        Wed, 19 Jul 2023 18:28:17 -0700 (PDT)
+Received: from [192.168.60.239] (124.190.199.35.bc.googleusercontent.com. [35.199.190.124])
+        by smtp.gmail.com with ESMTPSA id u71-20020a63794a000000b00551df489590sm4148430pgc.12.2023.07.19.18.28.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Jul 2023 18:28:17 -0700 (PDT)
+Message-ID: <4d7aa3f4-22d9-9f5a-3d70-1bd7148ff4ba@google.com>
+Date:   Wed, 19 Jul 2023 18:28:16 -0700
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB0048.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7b1d6076-42e4-41d5-3f02-08db88992c30
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jul 2023 20:46:05.5542
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ibvpZx+O0mkLOH86TTNRBCX362tl85pSs45maE4xYLzHp/CT3OyxceC8ME81u+P6w9O9Y/9ixsGnS2583TyN8jKBwhO9bbRoNffa2YTkWrc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB8014
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Content-Language: en-US
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        "dan.scally@ideasonboard.com" <dan.scally@ideasonboard.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        "Eino-Ville Talvala (Eddy)" <etalvala@google.com>,
+        Jayant Chowdhary <jchowdhary@google.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+From:   Avichal Rakesh <arakesh@google.com>
+Subject: Kernel panic when unbinding UVC gadget function
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
+Hey all,
 
-Thank you for the review and feedback.=20
+I recently ran into a kernel panic when testing the UVC Gadget Driver.
+The device ramdumps with the following stack when removing the UVC config from
+configfs:
 
-> -----Original Message-----
-> From: Greg KH <gregkh@linuxfoundation.org>
-> Sent: Tuesday, July 18, 2023 6:29 AM
-> To: Patel, Utkarsh H <utkarsh.h.patel@intel.com>
-> Cc: linux-kernel@vger.kernel.org; linux-usb@vger.kernel.org;
-> heikki.krogerus@linux.intel.com; pmalani@chromium.org;
-> bleung@chromium.org
-> Subject: Re: [PATCH v4 2/2] usb: typec: intel_pmc_mux: Configure Active a=
-nd
-> Retimer Cable type
->=20
-> On Mon, Jul 17, 2023 at 07:47:03PM -0700, Utkarsh Patel wrote:
-> > Cable type such as active and retimer received as a part of
-> > Thunderbolt3 or Thunderbolt4 cable discover mode VDO needs to be
-> > configured in the thunderbolt alternate mode.
-> >
-> > Configuring the register bits for this cable type is changed with
-> > Intel Meteor Lake platform. BIT2 for Retimer/Redriver cable and BIT22
-> > for Active/Passive cable.
-> >
-> > Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > Signed-off-by: Utkarsh Patel <utkarsh.h.patel@intel.com>
-> > ---
-> > Changes in v4:
-> >  - No changes.
-> >
-> > Changes in v3:
-> >  - No changes.
-> >
-> > Changes in v2:
-> >  - No changes.
-> > ---
-> > ---
-> >  drivers/usb/typec/mux/intel_pmc_mux.c | 28
-> > +++++++++++++++++++++++----
-> >  1 file changed, 24 insertions(+), 4 deletions(-)
->=20
-> Why the 2 --- lines?
+KP: Oops - BUG: Fatal exception: comm:Thread-6 PC:__list_del_entry_valid+0xb0/0xc4 LR:__list_del_entry_valid+0xb0/0xc4
+PC: __list_del_entry_valid+0xb0 <FFFFFFE685330294>
+LR: __list_del_entry_valid+0xb0 <FFFFFFE685330294>
 
-This is by mistake.
+[<FFFFFFE685330294>] __list_del_entry_valid+0xb0
+[<FFFFFFE6857E50AC>] v4l2_fh_del+0x78
+[<FFFFFFE685769774>] uvc_v4l2_release+0xd0
+[<FFFFFFE6857D9B10>] v4l2_release+0xcc
+[<FFFFFFE684EE192C>] __fput+0xf8
+[<FFFFFFE684EE17CC>] ____fput+0xc
+[<FFFFFFE684B5C9E0>] task_work_run+0x138
 
->=20
-> And why are you not cc:ing all the proper people (i.e. the person that ca=
-n
-> actually apply this...)?
->=20
-Ack.
+This looks like a side effect of
+https://lore.kernel.org/lkml/20230608204517.105396-1-badhri@google.com/.
+Effectively, UVC function tried to disconnect the gadget before 
+cleaning up resources. However, usb_gadget_unregister_driver which is 
+removing the function prevents the gadget from disconnecting until the 
+function is unbound.
 
-I will correct both of these when I send next patch.=20
+As of the patch mentioned above, gadget_unbind_driver holds
+udc->connect_lock and calls both usb_gadget_disconnect_locked and
+udc->driver->unbind one after the other.
 
-Sincerely,
-Utkarsh Patel.=20
+usb_gadget_disconnect_locked calls into UVC Gadget driver as follows:
+
+1. usb_gadget_disconnect_locked
+2. configfs_composite_disconnect
+3. __composite_disconnect
+4. uvc_function_disable
+
+udc->driver->unbind calls into UVC Gadget driver as follows:
+
+1. udc->driver->unbind
+2. configfs_composite_unbind
+3. purge_configs_funcs
+4. uvc_function_unbind
+
+uvc_function_disable notifies the userspace application with
+UVC_EVENT_DISCONNECTED which causes the V4L2 node to be released
+(or unsubscribed to). Either on unsubscribe or on release, the UVC Gadget
+Driver calls uvc_function_disconnect before cleaning up resources. Following
+is the problematic stack from uvc_v4l2_disable.
+
+1. uvc_v4l2_disable
+2. uvc_function_disconnect
+3. usb_function_deactivate
+4. usb_gadget_deactivate
+
+usb_gadget_deactivate attempts to lock udc->connect_lock as of the patch
+mentioned above.
+
+This means that attempting to unregister the UVC Gadget Driver results in the
+V4L2 resource cleanup being stuck behind udc->connect_lock, which will only
+be released after uvc_function_unbind finishes. This results in either the
+gadget deactivating after the unbind process has finished, or in a Kernel Panic
+as it tries to cleanup a V4L2 node that has been purged.
+
+This leaves us with two options:
+1. We "fix" the locking in core.c to restore old behavior, and let the
+   usb_gadget_deactivate call go through without locking. However,
+   I am not sure about the specifics of the patch were and what exact issue it
+   was trying to fix. 
+
+   Badhri, would you know if relaxing the constraints on 
+   usb_gadget_deactivate is feasible? It is possible that other gadget drivers
+   run into similar issues as UVC driver.
+
+3. UVC Gadget Driver calls usb_function_deactivate to take down the gadget if
+   the userspace application stops listening to the V4L2 node. However, AFAICT
+   disable is called as a part of the gadget resetting. So, if the V4L2 node 
+   is released because of UVC_EVENT_DISCONNECT, we can skip calling 
+   usb_function_deactivate as the gadget will be reset anyway.
+
+   usb_function documentation seems to agree that if 'disable' is called,
+   the gadget will be reset/reconfigured shortly:
+
+     @disable: (REQUIRED) Indicates the function should be disabled.  Reasons
+      *	  include host resetting or reconfiguring the gadget, and disconnection.
+
+A dirty Patch for option 2 is attached below which skips calling 
+usb_function_deactivate if uvc_function_disable was called before. It seems 
+to work okay in testing. Let me know if the analysis and solutions seems okay
+and I can upload a formal patch.
+
+Thank you!
+
+---
+ drivers/usb/gadget/function/f_uvc.c | 12 ++++++++++--
+ drivers/usb/gadget/function/uvc.h   |  1 +
+ 2 files changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+index 5e919fb65833..cef92243f1f7 100644
+--- a/drivers/usb/gadget/function/f_uvc.c
++++ b/drivers/usb/gadget/function/f_uvc.c
+@@ -385,7 +385,7 @@ uvc_function_disable(struct usb_function *f)
+ 	v4l2_event.type = UVC_EVENT_DISCONNECT;
+ 	v4l2_event_queue(&uvc->vdev, &v4l2_event);
+ 
+-	uvc->state = UVC_STATE_DISCONNECTED;
++	uvc->state = UVC_STATE_HOST_DISCONNECTED;
+ 
+ 	usb_ep_disable(uvc->video.ep);
+ 	if (uvc->enable_interrupt_ep)
+@@ -410,8 +410,16 @@ uvc_function_disconnect(struct uvc_device *uvc)
+ {
+ 	int ret;
+ 
+-	if ((ret = usb_function_deactivate(&uvc->func)) < 0)
++	if (uvc->state == UVC_STATE_HOST_DISCONNECTED) {
++		/*
++		 * Don't deactivate gadget as this is being called in
++		 * response to the host resetting. Gadget will be deactivated
++		 * anyway. Just update to state as acknowledgement
++		 */
++		uvc->state = UVC_STATE_DISCONNECTED;
++	} else if ((ret = usb_function_deactivate(&uvc->func)) < 0) {
+ 		uvcg_info(&uvc->func, "UVC disconnect failed with %d\n", ret);
++	}
+ }
+ 
+ /* --------------------------------------------------------------------------
+diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
+index 100475b1363e..f1e2bc98dc61 100644
+--- a/drivers/usb/gadget/function/uvc.h
++++ b/drivers/usb/gadget/function/uvc.h
+@@ -120,6 +120,7 @@ struct uvc_video {
+ };
+ 
+ enum uvc_state {
++	UVC_STATE_HOST_DISCONNECTED,
+ 	UVC_STATE_DISCONNECTED,
+ 	UVC_STATE_CONNECTED,
+ 	UVC_STATE_STREAMING,
+-- 
