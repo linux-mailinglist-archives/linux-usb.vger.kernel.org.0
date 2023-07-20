@@ -2,220 +2,194 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21C4A75AEBB
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Jul 2023 14:49:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8DC575AF94
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Jul 2023 15:22:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbjGTMt3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Jul 2023 08:49:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52208 "EHLO
+        id S231825AbjGTNWq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Jul 2023 09:22:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjGTMt2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Jul 2023 08:49:28 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8401E2137;
-        Thu, 20 Jul 2023 05:49:26 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A276E240014;
-        Thu, 20 Jul 2023 12:49:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1689857364;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KM2SNsZ/HAYwDzPK1l8Fn0Kjjd/fx0+8gmsPG5KrJWc=;
-        b=FEh8dN41ecWrK2JCCbjB9zBgE9WkGGualnGygAJrZVYFkXIxDGxSUpQykjxr0AzozyZ7cU
-        qz7K48c92QfNUdV05PdDAbooql7esT72PoDftVnhRhv0z5LSafebmRZPVg8GdxNM112wpI
-        6rKWJorJxONEzQO1uNbQY3PgEoNRkEhXnJP8HczlydnmBqvFkFTRxKw7j6eMNsY38tQFT5
-        Pye+lsCX9jqxH9R3wowxWVVUc5ua1IG70OeATVmszNu+hYev8lenMrAwDsL2sITr3/7InS
-        4cjaEtZT8ky9/jYANrNEnwpxxFsV98nKM86XXin2SI9R+EYsD4SexDjroj9E8A==
-Date:   Thu, 20 Jul 2023 14:49:16 +0200
-From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
-To:     Xu Yang <xu.yang_2@nxp.com>
-Cc:     Francesco Dolcini <francesco@dolcini.it>, Jun Li <jun.li@nxp.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>
-Subject: Re: [EXT] Re: [PATCH v2 2/3] usb: chipidea: imx: support disabling
- runtime-pm
-Message-ID: <20230720144916.01d49adb@booty>
-In-Reply-To: <DB7PR04MB45050B15EDA7A2A3940840308C3EA@DB7PR04MB4505.eurprd04.prod.outlook.com>
-References: <20230504162312.1506763-1-luca.ceresoli@bootlin.com>
-        <ZFPiRvoF5l8uGzzZ@francesco-nb.int.toradex.com>
-        <PA4PR04MB96403377F5E37C12AD8C25B389729@PA4PR04MB9640.eurprd04.prod.outlook.com>
-        <20230505120618.2f4cf22c@booty>
-        <ZFThyn/D/dDK9nk3@francesco-nb.int.toradex.com>
-        <PA4PR04MB96405EE2468555EA900B340189739@PA4PR04MB9640.eurprd04.prod.outlook.com>
-        <ZFjaNzY32x8o2XG7@francesco-nb.int.toradex.com>
-        <20230508151756.785ec07e@booty>
-        <20230529121825.71e9b6d6@booty>
-        <PA4PR04MB96405138465D215C34285F02894B9@PA4PR04MB9640.eurprd04.prod.outlook.com>
-        <ZKaWL3+ClI7iNr/4@francesco-nb.int.toradex.com>
-        <20230717184537.6d6ed607@booty>
-        <DB7PR04MB450573F8EA936E049F053A258C38A@DB7PR04MB4505.eurprd04.prod.outlook.com>
-        <20230718142504.075d0186@booty>
-        <DB7PR04MB4505560E7DCBC2523FD7A0FE8C39A@DB7PR04MB4505.eurprd04.prod.outlook.com>
-        <20230719184831.75ae8658@booty>
-        <DB7PR04MB45050B15EDA7A2A3940840308C3EA@DB7PR04MB4505.eurprd04.prod.outlook.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S231623AbjGTNWo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Jul 2023 09:22:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FCDAE60;
+        Thu, 20 Jul 2023 06:22:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CACF961A28;
+        Thu, 20 Jul 2023 13:22:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BEDAC433C8;
+        Thu, 20 Jul 2023 13:22:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1689859362;
+        bh=UxGNS4Tm6QXbkmz0tPWtSTwsEwS6W+sxPDlrcmJzi4g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uFsbvlwUy0eZzVtaNrYod3QeHOgHvnrJpDQShlhOyL2ojGnnIJM0YAo/qTdK9hkTs
+         QwpHFQXZeL1PDMK3YHfl9au7pabLMpYvk6tMXsiMAXzDVmgqcGbquQQdsrXmwOPUK5
+         Eh379GAva0qS0Xvex5vh3aKupbnfFNYFuZ0K057s=
+Date:   Thu, 20 Jul 2023 15:22:38 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Aman Deep <aman.deep@samsung.com>
+Cc:     stern@rowland.harvard.edu, laurent.pinchart@ideasonboard.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Anuj Gupta <anuj01.gupta@samsung.com>
+Subject: Re: [PATCH] USB: Fix race condition during UVC webcam disconnect
+Message-ID: <2023072013-reconvene-capsize-0286@gregkh>
+References: <CGME20230720113203epcas5p1eb52bec9c076d1a2f3dac5e317d0361b@epcas5p1.samsung.com>
+ <20230720113142.3070583-1-aman.deep@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-GND-Sasl: luca.ceresoli@bootlin.com
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230720113142.3070583-1-aman.deep@samsung.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Xu,
-
-On Thu, 20 Jul 2023 10:13:57 +0000
-Xu Yang <xu.yang_2@nxp.com> wrote:
-
-> Hi Luca,
+On Thu, Jul 20, 2023 at 05:01:42PM +0530, Aman Deep wrote:
+> In the bug happened during uvc webcam disconect,there is race
+> between stopping a video transfer and usb disconnect.This issue is
+> reproduced in my system running Linux kernel when UVC webcam play is
+> stopped and UVC webcam is disconnected at the same time. This causes the
+> below backtrace:
 > 
-> > > > -----Original Message-----
-> > > >
-> > > > Hello Xu,
-> > > >
-> > > > On Tue, 18 Jul 2023 08:31:48 +0000
-> > > > Xu Yang <xu.yang_2@nxp.com> wrote:
-> > > >  
-> > > > > > -----Original Message-----
-> > > > > >
-> > > > > > Ciao Francesco,
-> > > > > >
-> > > > > > On Thu, 6 Jul 2023 12:23:43 +0200
-> > > > > > Francesco Dolcini <francesco@dolcini.it> wrote:
-> > > > > >  
-> > > > > > > Hello Luca,
-> > > > > > >
-> > > > > > > On Tue, May 30, 2023 at 11:22:51AM +0000, Jun Li wrote:  
-> > > > > > > > Yes, your understanding is correct, talked with Xu(in CC), he will take this
-> > > > > > > > soon.  
-> > > > > > >
-> > > > > > > A series was posted
-> > > > > > >
-> > > > > > > I had no time to try or look at it yet.  
-> > > > > >
-> > > > > > Thanks for keeping me up to date on this topic, which is still totally
-> > > > > > relevant to me.
-> > > > > >
-> > > > > > I looked at the series, but it does not seem to be addressing the
-> > > > > > problem with USB host not detecting new devices when VBUS is not
-> > > > > > directly connected, e.g. in the Colibri imx6ull SoM.
-> > > > > >
-> > > > > > Xu, do you confirm the series at the link is _not_ solving the problem
-> > > > > > being discussed here?  
-> > > > >
-> > > > > Have you tried this patchset? The upstream driver couldn't get correct
-> > > > > USB role from HW_USBPHY_CTRL register when the ID pin is float. This is
-> > > > > what this patchset is trying to fix. With this patch, condition
-> > > > > "(!vbus_is_on && !mxs_phy_is_otg_host(mxs_phy)" will always be false when
-> > > > > controller acts as host role, then __mxs_phy_disconnect_line(phy, true)
-> > > > > will never be called. So I think it doesn't matter whether VBUS is connected
-> > > > > or not when act as host mode. If you still have issue after apply this patchset,
-> > > > > please let me know.  
-> > > >
-> > > > I tested this patchset on top of v6.5-rc2 and I confirm USB detection
-> > > > is still broken on the Colibri iMX6ULL. With or without the patches
-> > > > the behavior is the same: USB devices are detected only during boot,
-> > > > and anything connected after boot are never detected.  
-> > >
-> > > Thanks for your feedback. As you said this issue will disappear with below change, right?
-> > >
-> > >       diff --git a/drivers/usb/phy/phy-mxs-usb.c b/drivers/usb/phy/phy-mxs-usb.c
-> > >       index e1a2b2ea098b..ec5ee790455e 100644
-> > >       --- a/drivers/usb/phy/phy-mxs-usb.c
-> > >       +++ b/drivers/usb/phy/phy-mxs-usb.c
-> > >       @@ -178,7 +178,6 @@ static const struct mxs_phy_data imx6sx_phy_data = {
-> > >        };
-> > >
-> > >        static const struct mxs_phy_data imx6ul_phy_data = {
-> > >       -       .flags = MXS_PHY_DISCONNECT_LINE_WITHOUT_VBUS,
-> > >        };
-> > >
-> > >        static const struct mxs_phy_data imx7ulp_phy_data = {  
-> > 
-> > Exactly.
-> >   
-> > > So I guess something in __mxs_phy_disconnect_line(mxs_phy, true) is causing this behavior.
-> > > Could you please help to find which line to comment to make this issue disappear?  
+> [2-3496.7275]  PC is at 0xbf418000+0x2d8 [usbcore]
+> [2-3496.7275]  LR is at 0x00000005
+> [2-3496.7275] pc : [<bf4182d8>]((usb_ifnum_to_if
+> </drivers/usb/core/usb.c:283
+> [usbcore.ko]>)) lr : [<00000005>]() psr: 20000013
+> [2-3496.7275] Function entered at [<bf4182a4>]((usb_ifnum_to_if
+> </drivers/usb/core/usb.c:275
+> [usbcore.ko]>)) (0xbf418000+0x2a4 [usbcore]) from
+> [<bf423974>]((usb_hcd_alloc_bandwidth
+> </drivers/usb/core/hcd.c:1947
+> [usbcore.ko]>)) (0xbf418000+0xb974 [usbcore])
+> [2-3496.7275] Function entered at [<bf423738>]((usb_hcd_alloc_bandwidth
+> </drivers/usb/core/hcd.c:1876
+> [usbcore.ko]>)) (0xbf418000+0xb738 [usbcore]) from
+> [<bf426ca0>]((usb_set_interface
+> </drivers/usb/core/message.c:1461
+> [usbcore.ko]>)) (0xbf418000+0xeca0 [usbcore])
+> [2-3496.7275] Function entered at [<bf426b9c>]((usb_set_interface
+> </drivers/usb/core/message.c:1385
+> [usbcore.ko]>)) (0xbf418000+0xeb9c [usbcore]) from
+> [<bf9c4dd4>]((uvc_video_clock_cleanup
+> </drivers/media/usb/uvc/uvc_video.c:598
+> uvc_video_stop_streaming
+> </drivers/media/usb/uvc/uvc_video.c:2221
+> [uvcvideo.ko]>)) (0xbf9bd000+0x7dd4 [uvcvideo])
+> [2-3496.7275] Function entered at [<bf9c4d98>]((uvc_video_stop_streaming
+> </drivers/media/usb/uvc/uvc_video.c:2200
+> [uvcvideo.ko]>)) (0xbf9bd000+0x7d98 [uvcvideo]) from
+> [<bf9bfab8>]((spin_lock_irq
+> </include/linux/spinlock.h:363
+> uvc_stop_streaming
+> </drivers/media/usb/uvc/uvc_queue.c:194
+> [uvcvideo.ko]>)) (0xbf9bd000+0x2ab8 [uvcvideo])
+> [2-3496.7276] Function entered at [<bf9bfa94>]((uvc_stop_streaming
+> </drivers/media/usb/uvc/uvc_queue.c:186
+> [uvcvideo.ko]>)) (0xbf9bd000+0x2a94 [uvcvideo]) from
+> [<be307150>]((__read_once_size
+> </include/linux/compiler.h:290
+> (discriminator 1) __vb2_queue_cancel
+> </drivers/media/common/videobuf2/videobuf2-core.c:1893
+> (discriminator 1) [videobuf2_common.ko]>)) (0xbe306000+0x1150
+> [videobuf2_common])
+> [2-3496.7276] Function entered at [<be307120>]((__vb2_queue_cancel
+> </drivers/media/common/videobuf2/videobuf2-core.c:1877
+> [videobuf2_common.ko]>)) (0xbe306000+0x1120 [videobuf2_common]) from
+> [<be308894>]((vb2_core_streamoff
+> </drivers/media/common/videobuf2/videobuf2-core.c:2053
+
+Odd wrapping, please fix.
+
 > 
-> To correct what I said:  __mxs_phy_disconnect_line(mxs_phy, false) should
-> be called.
+> This below solution patch fixes this race condition at USB core level
+> occurring during UVC webcam device disconnect.
 > 
-> I think the enable wakeup sequence should be follow for host-only port:
-> mxs_phy_set_wakeup(mxs_phy, true)
->     mxs_phy_disconnect_line(mxs_phy, true);
->         __mxs_phy_disconnect_line(mxs_phy, false);
+> Signed-off-by: Anuj Gupta <anuj01.gupta@samsung.com>
+> Signed-off-by: Aman Deep <aman.deep@samsung.com>
+
+What commit id does this fix?  SHould this go to the stable trees?
+
+> ---
+>  drivers/usb/core/hcd.c     | 7 ++++++-
+>  drivers/usb/core/message.c | 4 ++++
+>  drivers/usb/core/usb.c     | 9 ++++++---
+>  3 files changed, 16 insertions(+), 4 deletions(-)
+
+Why are you making changes to the core USB stack for a driver bug?
+
 > 
-> And disable wakeup sequence:
-> mxs_phy_set_wakeup(mxs_phy, false)
->     mxs_phy_disconnect_line(mxs_phy, false);
->         __mxs_phy_disconnect_line(mxs_phy, false);
-> 
-> So "bool variable disconnect is false" all the time.
-> 
-> > 
-> > I did some tests and detection works by doing _any_ of the following
-> > two changes (or both of them).
-> > 
-> > Change 1:
-> > 
-> > --- a/drivers/usb/phy/phy-mxs-usb.c
-> > +++ b/drivers/usb/phy/phy-mxs-usb.c
-> > @@ -359,10 +359,6 @@ static void __mxs_phy_disconnect_line(struct mxs_phy *mxs_phy, bool disconnect)
-> >         void __iomem *base = mxs_phy->phy.io_priv;
-> >         u32 reg;
-> > 
-> > -       if (disconnect)
-> > -               writel_relaxed(BM_USBPHY_DEBUG_CLKGATE,
-> > -                       base + HW_USBPHY_DEBUG_CLR);
-> > -  
-> 
-> Since disconnect = false, this code didn't get executed all the time.
-> Remove this will have no impact. But your test results didn't align
-> to this. Could you please help check the sequence? Is disconnect
-> true or false when __mxs_phy_disconnect_line is called?
+> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+> index 8300baedafd2..a06452cbbaa4 100644
+> --- a/drivers/usb/core/hcd.c
+> +++ b/drivers/usb/core/hcd.c
+> @@ -1931,7 +1931,12 @@ int usb_hcd_alloc_bandwidth(struct usb_device *udev,
+>  		}
+>  	}
+>  	if (cur_alt && new_alt) {
+> -		struct usb_interface *iface = usb_ifnum_to_if(udev,
+> +		struct usb_interface *iface;
+> +
+> +		if (udev->state == USB_STATE_NOTATTACHED)
+> +			return -ENODEV;
+> +
+> +		iface = usb_ifnum_to_if(udev,
+>  				cur_alt->desc.bInterfaceNumber);
+>  
+>  		if (!iface)
+> diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
+> index b5811620f1de..f31c7287dc01 100644
+> --- a/drivers/usb/core/message.c
+> +++ b/drivers/usb/core/message.c
+> @@ -1575,7 +1575,11 @@ int usb_set_interface(struct usb_device *dev, int interface, int alternate)
+>  	for (i = 0; i < iface->cur_altsetting->desc.bNumEndpoints; i++)
+>  		iface->cur_altsetting->endpoint[i].streams = 0;
+>  
+> +	if (dev->state == USB_STATE_NOTATTACHED)
+> +		return -ENODEV;
+> +
+>  	ret = usb_hcd_alloc_bandwidth(dev, NULL, iface->cur_altsetting, alt);
+> +
 
-What I observe is that __mxs_phy_disconnect_line(..., true) is called.
-This happens during boot and after unplugging a device in case one was
-detected during boot.
+Why the extra line?
 
-This is because in mxs_phy_disconnect_line() [0]:
- - on = 1
- - !vbus_is_on = 1
- - !mxs_phy_is_otg_host(mxs_phy) = 1
+And why can't the state change right after you check for it?  What
+happens if the device is unattached right here?
 
-Which one(s) of those three would you expect to be 0?
+>  	if (ret < 0) {
+>  		dev_info(&dev->dev, "Not enough bandwidth for altsetting %d\n",
+>  				alternate);
+> diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
+> index 901ec732321c..6fb8b14469ae 100644
+> --- a/drivers/usb/core/usb.c
+> +++ b/drivers/usb/core/usb.c
+> @@ -352,10 +352,13 @@ struct usb_interface *usb_ifnum_to_if(const struct usb_device *dev,
+>  
+>  	if (!config)
+>  		return NULL;
+> -	for (i = 0; i < config->desc.bNumInterfaces; i++)
+> -		if (config->interface[i]->altsetting[0]
+> -				.desc.bInterfaceNumber == ifnum)
+> +	for (i = 0; i < config->desc.bNumInterfaces; i++) {
+> +		if (config->interface[i] &&
+> +				config->interface[i]->altsetting[0]
+> +				.desc.bInterfaceNumber == ifnum) {
+>  			return config->interface[i];
 
-Some additional info about the !mxs_phy_is_otg_host(mxs_phy) value:
-with or without CONFIG_USB_OTG, it always has the same value because
-phyctrl always has the BM_USBPHY_CTRL_OTG_ID_VALUE bit set.
+I don't understand this change, what does it do?
 
-[0]
-https://elixir.bootlin.com/linux/v6.5-rc2/source/drivers/usb/phy/phy-mxs-usb.c#L415
+Your changelog does not say why you are doing any of this, only that
+"there is a problem", please explain this better when you resubmit this.
 
-Luca
+thanks,
 
--- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+greg k-h
