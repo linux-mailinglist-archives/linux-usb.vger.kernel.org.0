@@ -2,55 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBC8675B052
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Jul 2023 15:46:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37ADA75B067
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Jul 2023 15:52:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231164AbjGTNqA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Jul 2023 09:46:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59544 "EHLO
+        id S231479AbjGTNwN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Jul 2023 09:52:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230134AbjGTNp7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Jul 2023 09:45:59 -0400
+        with ESMTP id S231405AbjGTNwN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Jul 2023 09:52:13 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BCCE1986;
-        Thu, 20 Jul 2023 06:45:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9EE2122;
+        Thu, 20 Jul 2023 06:52:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ADB9A61AF3;
-        Thu, 20 Jul 2023 13:45:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE895C433C8;
-        Thu, 20 Jul 2023 13:45:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8317F61ADE;
+        Thu, 20 Jul 2023 13:52:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5AA9C433C7;
+        Thu, 20 Jul 2023 13:52:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689860757;
-        bh=MVVckKfWdb/UFwbNUW/fQU3gPnX5foBXQJh6KT8HQ+0=;
+        s=k20201202; t=1689861128;
+        bh=7qMBM2O1eJyO65YYQrFbKbYLInUaocfLwQBu0lo73lM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=boFfscIY8umJ/s7h4gFQo5CTmHGrgpus1lA0CIwGCqiXJEdfJZ7xqXm/BciUYsfei
-         Bp5R3aIPsCW0LzfkWu/GWbVaICvCG6Bhghqkh4PIUZDQ5qwYvzgqzldEGoQF6g+cp1
-         EB+t94GHkAZGQTucE5y1mL1/54YAY0i5+RLcxAphNv+xRGZ5G3Cte8xLSHtsNpJXXK
-         PwiY9ELH8r1+2UJs3Rcb/CEtH/R1Um6bxmWLG4iqnMHW7KB3VaMT3N5/LtqGhL7m5a
-         7vHXJqpIjNQMnvjo4Nx1lxq1PaVMo8WT9Su9BJmVNxTuVZnRpaN2/Ve9//957kdC7X
-         s574fvJaTCvwQ==
+        b=o6YH0LUfb24M65v9ROoNvDh8Qv9ongsj8EZseujrAh9lDOgvB30wCbr2YrQeb9BJg
+         kn2VrBEcezhPPaylGcSJPlvdML6oyab9cxkBiaLZLSceFVEYYqjbqOkQptMjGan/zG
+         V/tuQxem6P07BjaGDC5FPbrbcsoSsGcKzGlWoUV4Xj8+esVugPL4c3NMHDZV6auttH
+         juVxunPlaDKV9YjJ0oHZxD9LfYJeJAR6wYvMTmsVFAhjtF6AMIKvtmh6i7H1qSBTuy
+         4up25ZwO0yfWB2efP0qDYlUZzh2cPptHOu4rqJQAT6Q3hWVedXzuPymbi3ae/hjwTh
+         w9uqRSbCZ6clg==
 Received: from johan by xi.lan with local (Exim 4.96)
         (envelope-from <johan@kernel.org>)
-        id 1qMTyo-00076j-07;
-        Thu, 20 Jul 2023 15:46:06 +0200
-Date:   Thu, 20 Jul 2023 15:46:06 +0200
+        id 1qMU4m-0007v3-1f;
+        Thu, 20 Jul 2023 15:52:17 +0200
+Date:   Thu, 20 Jul 2023 15:52:16 +0200
 From:   Johan Hovold <johan@kernel.org>
 To:     Jarkko Sonninen <kasper@iki.fi>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] USB: serial: xr: Add TIOCGRS485 and TIOCSRS485 ioctls
-Message-ID: <ZLk6nu_PuH5Tr-L8@hovoldconsulting.com>
-References: <ZD1cy6omacYMRCLs@hovoldconsulting.com>
- <20230423185929.1595056-1-kasper@iki.fi>
- <ZJGduS4z5U65T7IL@hovoldconsulting.com>
- <ae52e145-98b5-dd55-a4d8-5022c99b1129@iki.fi>
+Subject: Re: [PATCH v5] USB: serial: xr: Add TIOCGRS485 and TIOCSRS485 ioctls
+Message-ID: <ZLk8ECsKZc-akHef@hovoldconsulting.com>
+References: <ZJGduS4z5U65T7IL@hovoldconsulting.com>
+ <20230708145651.1860565-1-kasper@iki.fi>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ae52e145-98b5-dd55-a4d8-5022c99b1129@iki.fi>
+In-Reply-To: <20230708145651.1860565-1-kasper@iki.fi>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -61,56 +59,55 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 06, 2023 at 10:37:51PM +0300, Jarkko Sonninen wrote:
-> On 6/20/23 15:38, Johan Hovold wrote:
-
-> Thank you. Sorry for slow responses. My mind has been elsewhere.
-
-No worries at all.
-
-> > On Sun, Apr 23, 2023 at 09:59:28PM +0300, Jarkko Sonninen wrote:
-
-> >> User enables RS-485 mode by setting SER_RS485_ENABLED flag in
-> >> struct serial_rs485 flags. User should also set either
-> >> SER_RS485_RTS_ON_SEND or SER_RS485_RTS_AFTER_SEND to select the
-> >> behaviour of the RTS#/RS485 pin. Setting SER_RS485_RTS_ON_SEND
-> >> will drive RTS#/RS485 high during transmission. As this is the
-> >> typical application described by Exar, it is selected when
-> >> user sets neither or both flags.
-
-> > Since RTS# is active low, shouldn't SER_RS485_RTS_ON_SEND drive RTS# low
-> > rather than high during transmission as I also pointed out earlier?
+On Sat, Jul 08, 2023 at 05:56:50PM +0300, Jarkko Sonninen wrote:
+> Exar devices like XR21B1411 can control an RS485 transceiver by
+> automatically asserting the RTS#/RS485 pin before sending data
+> and deasserting it when the last stop bit has been transmitted.
+> The polarity of the RST#/RS485 signal is configurable and the
+> hardware also supports half-duplex turn-around delay and
+> address matching mode.
 > 
-> I guess you are right. I'll change that.
+> Add support for enabling and disabling RS-485 mode and
+> configuring the RST#/RS485 signal polarity using the TIOCGRS485
+> and TIOCSRS485 ioctls. Support for half-duplex turn-around delay
+> and address matching mode are left unimplemented for now.
 > 
+> User enables RS-485 mode by setting SER_RS485_ENABLED flag in
+> struct serial_rs485 flags. User should also set either
+> SER_RS485_RTS_ON_SEND or SER_RS485_RTS_AFTER_SEND to select the
+> behaviour of the RTS#/RS485 pin. Setting SER_RS485_RTS_AFTER_SEND
+> will drive RTS#/RS485 high during transmission. As this is the
+> typical application described by Exar, it is selected when
+> user sets neither or both flags.
 > 
-> I use an exar usb adapter to control a solar charging controller. I 
-> haven't found any other type of exar adapters in ebay.
-> 
-> This adapter uses high level (RTS off) on TX. So I really would like it 
-> to work with the default configuration.
-> 
-> I hope it is ok to use SER_RS485_RTS_AFTER_SEND as the default
+> Signed-off-by: Jarkko Sonninen <kasper@iki.fi>
+> ---
+> Changes in v3:
+>  - In this version only rs485.flags are stored to state.
+>  - There is no locking as only one bit of the flags is used.
+>  - ioctl returns -ENOIOCTLCMD as the actual error handling is in tty code.
+> Changes in v4:
+>  - Store struct rs485 to data
+>  - Add mutex to protect data->rs485.
+>  - Implement SER_RS485_RTS_ON_SEND or SER_RS485_RTS_AFTER_SEND flags
+>  - SER_RS485_RTS_ON_SEND is the default like in serial_core.c
+> Change in v5:
+>  - Use tty->termios_rwsem semaphore instead of own mutex
+>  - Set SER_RS485_RTS_AFTER_SEND as the default
+>  - Fix XR_GPIO_MODE_RS485_TX_H setting with SER_RS485_RTS_ON_SEND
+>  - Add missing __user directives
 
-I was first going to argue against with this as serial core defaults to
-SER_RS485_RTS_ON_SEND when neither is set, but I changed my mind as I
-believe this is more in line with how these flags were intended to be
-used.
+I've applied this one now but with the small change I just mentioned
+that makes SER_RS485_RTS_ON_SEND determine SER_RS485_RTS_AFTER_SEND.
 
-Having both flags set to the same value clearly makes no sense, but if
-left that way I think SER_RS485_RTS_ON_SEND should take precedence and
-SER_RS485_RTS_AFTER_SEND simply be set not its negation (when the
-hardware does not support the nonsensical RTS always asserted
-combination...). That is:
+Since this sets SER_RS485_RTS_AFTER_SEND when neither flag is set, I
+believe you get the behaviour you preferred (even if
+SER_RS485_RTS_AFTER_SEND is now cleared when both flags are set).
 
-	/* RTS always toggles after TX */
-	if (rs485->flags & SER_RS485_RTS_ON_SEND)
-		rs485->flags &= ~SER_RS485_RTS_AFTER_SEND;
-	else
-		rs485->flags |= SER_RS485_RTS_AFTER_SEND;
+Let me know otherwise and we'll discuss it. Here's the result:
 
-Since you still need to use the new ioctl() to enable RS485 mode, there
-shouldn't really be any reason not to simultaneously set the polarity
-your application expects anyway.
+	https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git/commit/?h=usb-next&id=974e2f6a0554685493cc44406bc7d8ba0a3b0e33
+
+Thanks for sticking with. I think the end result looks really good.
 
 Johan
