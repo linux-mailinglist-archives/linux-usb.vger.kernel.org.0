@@ -2,46 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B257275B031
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Jul 2023 15:38:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBC8675B052
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Jul 2023 15:46:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbjGTNia (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Jul 2023 09:38:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56550 "EHLO
+        id S231164AbjGTNqA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Jul 2023 09:46:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjGTNi3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Jul 2023 09:38:29 -0400
+        with ESMTP id S230134AbjGTNp7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Jul 2023 09:45:59 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE6691986
-        for <linux-usb@vger.kernel.org>; Thu, 20 Jul 2023 06:38:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BCCE1986;
+        Thu, 20 Jul 2023 06:45:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 402BF61AEA
-        for <linux-usb@vger.kernel.org>; Thu, 20 Jul 2023 13:38:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08E40C433C7;
-        Thu, 20 Jul 2023 13:38:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1689860307;
-        bh=g9EsUvh+orK2v7Cx5OoXSs0mRmwK7x2nHVRGYYFy3KQ=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ADB9A61AF3;
+        Thu, 20 Jul 2023 13:45:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE895C433C8;
+        Thu, 20 Jul 2023 13:45:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1689860757;
+        bh=MVVckKfWdb/UFwbNUW/fQU3gPnX5foBXQJh6KT8HQ+0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=v9SX9szgvCRudIZuCFEDAYl0KAsak13ueLE7dLzwJOg6GhEksVazBOdKnfKiLq0b6
-         nV+mdC+jCMXrQwSDuDu20RX64CSO2GgC1UqVgipapo1hyCPRLjVsG+93G/1cjGWfIA
-         K38Evka7Qu7/aWXrFvV9Xcm9LDaBbZ9a2RDp16vY=
-Date:   Thu, 20 Jul 2023 15:38:24 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Martin Kohn <m.kohn@welotec.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] Quectel EM05G LTE Modem with new Product ID
-Message-ID: <2023072049-unclog-savanna-5571@gregkh>
-References: <AM0PR04MB5764E9F944881E5B1FCE63F0973EA@AM0PR04MB5764.eurprd04.prod.outlook.com>
- <AM0PR04MB5764EE9ECBEC5B8E00BBD84D973EA@AM0PR04MB5764.eurprd04.prod.outlook.com>
+        b=boFfscIY8umJ/s7h4gFQo5CTmHGrgpus1lA0CIwGCqiXJEdfJZ7xqXm/BciUYsfei
+         Bp5R3aIPsCW0LzfkWu/GWbVaICvCG6Bhghqkh4PIUZDQ5qwYvzgqzldEGoQF6g+cp1
+         EB+t94GHkAZGQTucE5y1mL1/54YAY0i5+RLcxAphNv+xRGZ5G3Cte8xLSHtsNpJXXK
+         PwiY9ELH8r1+2UJs3Rcb/CEtH/R1Um6bxmWLG4iqnMHW7KB3VaMT3N5/LtqGhL7m5a
+         7vHXJqpIjNQMnvjo4Nx1lxq1PaVMo8WT9Su9BJmVNxTuVZnRpaN2/Ve9//957kdC7X
+         s574fvJaTCvwQ==
+Received: from johan by xi.lan with local (Exim 4.96)
+        (envelope-from <johan@kernel.org>)
+        id 1qMTyo-00076j-07;
+        Thu, 20 Jul 2023 15:46:06 +0200
+Date:   Thu, 20 Jul 2023 15:46:06 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Jarkko Sonninen <kasper@iki.fi>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] USB: serial: xr: Add TIOCGRS485 and TIOCSRS485 ioctls
+Message-ID: <ZLk6nu_PuH5Tr-L8@hovoldconsulting.com>
+References: <ZD1cy6omacYMRCLs@hovoldconsulting.com>
+ <20230423185929.1595056-1-kasper@iki.fi>
+ <ZJGduS4z5U65T7IL@hovoldconsulting.com>
+ <ae52e145-98b5-dd55-a4d8-5022c99b1129@iki.fi>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <AM0PR04MB5764EE9ECBEC5B8E00BBD84D973EA@AM0PR04MB5764.eurprd04.prod.outlook.com>
+In-Reply-To: <ae52e145-98b5-dd55-a4d8-5022c99b1129@iki.fi>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -52,84 +61,56 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 20, 2023 at 12:30:53PM +0000, Martin Kohn wrote:
-> Hello everyone,
+On Thu, Jul 06, 2023 at 10:37:51PM +0300, Jarkko Sonninen wrote:
+> On 6/20/23 15:38, Johan Hovold wrote:
+
+> Thank you. Sorry for slow responses. My mind has been elsewhere.
+
+No worries at all.
+
+> > On Sun, Apr 23, 2023 at 09:59:28PM +0300, Jarkko Sonninen wrote:
+
+> >> User enables RS-485 mode by setting SER_RS485_ENABLED flag in
+> >> struct serial_rs485 flags. User should also set either
+> >> SER_RS485_RTS_ON_SEND or SER_RS485_RTS_AFTER_SEND to select the
+> >> behaviour of the RTS#/RS485 pin. Setting SER_RS485_RTS_ON_SEND
+> >> will drive RTS#/RS485 high during transmission. As this is the
+> >> typical application described by Exar, it is selected when
+> >> user sets neither or both flags.
+
+> > Since RTS# is active low, shouldn't SER_RS485_RTS_ON_SEND drive RTS# low
+> > rather than high during transmission as I also pointed out earlier?
 > 
-> Quectel has changed the product ID for EM05G LTE Modem (global variant), here my verified patch for it:
+> I guess you are right. I'll change that.
 > 
-> >From 7a19d929aa07b3541f6a1205cb0ce3f0f5dc54a6 Mon Sep 17 00:00:00 2001
-> From: Martin Kohn mailto:m.kohn@welotec.com
-> Date: Wed, 19 Jul 2023 12:04:21 +0200
-> Subject: [PATCH] Quectel has changed the Product ID from 030a to 030e for the
-> EM05G modem. Both versions must be supported in the future.
 > 
-> Signed-off-by: Martin Kohn mailto:m.kohn@welotec.com
-> ---
-> drivers/usb/serial/option.c | 3 +++
-> 1 file changed, 3 insertions(+)
+> I use an exar usb adapter to control a solar charging controller. I 
+> haven't found any other type of exar adapters in ebay.
 > 
-> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> index 288a96a74266..64b1995b410d 100644
-> --- a/drivers/usb/serial/option.c
-> +++ b/drivers/usb/serial/option.c
-> @@ -256,6 +256,7 @@ static void option_instat_callback(struct urb *urb);
-> #define QUECTEL_PRODUCT_BG96                                         0x0296
-> #define QUECTEL_PRODUCT_EP06                                         0x0306
-> #define QUECTEL_PRODUCT_EM05G                                    0x030a
-> +#define QUECTEL_PRODUCT_EM05GV2                              0x030e
-> #define QUECTEL_PRODUCT_EM060K                                   0x030b
-> #define QUECTEL_PRODUCT_EM05G_CS                             0x030c
-> #define QUECTEL_PRODUCT_EM05CN_SG                          0x0310
-> @@ -1186,6 +1187,8 @@ static const struct usb_device_id option_ids[] = {
->                  .driver_info = RSVD(6) | ZLP },
->                { USB_DEVICE_INTERFACE_CLASS(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM05G, 0xff),
->                  .driver_info = RSVD(6) | ZLP },
-> +        { USB_DEVICE_INTERFACE_CLASS(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM05GV2, 0xff),
-> +          .driver_info = RSVD(6) | ZLP },
->                { USB_DEVICE_INTERFACE_CLASS(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM05G_CS, 0xff),
->                  .driver_info = RSVD(6) | ZLP },
->                { USB_DEVICE_INTERFACE_CLASS(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM05G_GR, 0xff),
-> -- 
-> 2.25.1
+> This adapter uses high level (RTS off) on TX. So I really would like it 
+> to work with the default configuration.
 > 
+> I hope it is ok to use SER_RS485_RTS_AFTER_SEND as the default
 
-Hi,
+I was first going to argue against with this as serial core defaults to
+SER_RS485_RTS_ON_SEND when neither is set, but I changed my mind as I
+believe this is more in line with how these flags were intended to be
+used.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+Having both flags set to the same value clearly makes no sense, but if
+left that way I think SER_RS485_RTS_ON_SEND should take precedence and
+SER_RS485_RTS_AFTER_SEND simply be set not its negation (when the
+hardware does not support the nonsensical RTS always asserted
+combination...). That is:
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+	/* RTS always toggles after TX */
+	if (rs485->flags & SER_RS485_RTS_ON_SEND)
+		rs485->flags &= ~SER_RS485_RTS_AFTER_SEND;
+	else
+		rs485->flags |= SER_RS485_RTS_AFTER_SEND;
 
-- Your patch is malformed (tabs converted to spaces, linewrapped, etc.)
-  and can not be applied.  Please read the file,
-  Documentation/process/email-clients.rst in order to fix this.
+Since you still need to use the new ioctl() to enable RS485 mode, there
+shouldn't really be any reason not to simultaneously set the polarity
+your application expects anyway.
 
-- Your patch was attached, please place it inline so that it can be
-  applied directly from the email message itself.
-
-- You did not specify a description of why the patch is needed, or
-  possibly, any description at all, in the email body.  Please read the
-  section entitled "The canonical patch format" in the kernel file,
-  Documentation/process/submitting-patches.rst for what is needed in
-  order to properly describe the change.
-
-- You did not write a descriptive Subject: for the patch, allowing Greg,
-  and everyone else, to know what this patch is all about.  Please read
-  the section entitled "The canonical patch format" in the kernel file,
-  Documentation/process/submitting-patches.rst for what a proper
-  Subject: line should look like.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+Johan
