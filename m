@@ -2,46 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00DC675AD00
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Jul 2023 13:31:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C01875AD40
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Jul 2023 13:44:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230447AbjGTLb3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 Jul 2023 07:31:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38230 "EHLO
+        id S229872AbjGTLoO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 Jul 2023 07:44:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231338AbjGTLb2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Jul 2023 07:31:28 -0400
-Received: from ir1.moh53n.ir (unknown [178.22.121.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 153D6BB;
-        Thu, 20 Jul 2023 04:31:26 -0700 (PDT)
-From:   Mohsen Tahmasebi <moh53n@moh53n.ir>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=moh53n.ir; s=mail;
-        t=1689852681; bh=NZGHI5T/zzMbFiaNzKqeLSzUzjtjUhcS1RDGMu1Zgtc=;
-        h=From:To:Cc:Subject:In-Reply-To:References;
-        b=S34XyKUDwN5gwc7azgPcfsLha6idNQyfjqWRY3rib/pWBN3XkNIUbL7N097gkiPz1
-         wfpORUUK4OjN/lMxJWUUnK6SK7s5ElAUAvXeL70QVwGXOlQ53QmvFuvDAYP50LqhfF
-         u6/R8nF+k59aZlVRA5acfkepzR0NRh2+e5uw0+yA+mwvqzX5cgNyAUKIsLF22TB9yx
-         IrqC0PYkjFnIm2/Dc2eZhQ/DoaEOQY8SfWWdNW+cDG8LFYbBobF32DGz0tmoF/xdvn
-         TlpMvvEG3xsdSY0R3XwsLECUdASOs8NhHdod684hDWSY18IherjAsZCKVrw+ll2YoJ
-         8Ia6pwiimdlI9YeWvLY7duSw2hytBjrmJwo/hHE/ntm7dF5mqTsqXHcRiAGDo1NCrD
-         1HJBdYzuibb3s1suqEcRpm6w3E0Bp/FD1PtY6x/4Uznuv1ybd3OPYnOYR9Xse98ILU
-         pgWKV2wjQh3L8iul2ht7qNphn1Z98QcQoOTwvXBBq6fYWwUibet/UfTDJ6HFfyIeCh
-         fp0Oa0CMdnhTw8vdPSt04vJVo/9d7gDO+NWRVHGwItUIDYSyFxrESzIpJfK+dvx7ax
-         4C5/BThIddQuQuMrgwUEv5kIaIpBQDGLvMiOpSE0KgtZAEQndx7jnLaW4j/sz7RyBO
-         Y6xVz+kbGqMgGxIvqxwwqaYI=
-To:     johan@kernel.org
-Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, moh53n@moh53n.ir, mostafaghrr@gmail.com
-Subject: Re: [PATCH v2] USB: serial: option: add Quectel EC200A module support
-Date:   Thu, 20 Jul 2023 15:00:25 +0330
-Message-ID: <20230720113105.20320-1-moh53n@moh53n.ir>
-In-Reply-To: <ZLjkC88x39tEX28c@hovoldconsulting.com>
-References: <ZLjkC88x39tEX28c@hovoldconsulting.com>
+        with ESMTP id S229680AbjGTLoN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 Jul 2023 07:44:13 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C911EC
+        for <linux-usb@vger.kernel.org>; Thu, 20 Jul 2023 04:44:12 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id E2E0822C62;
+        Thu, 20 Jul 2023 11:44:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1689853450; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=RkxV1IGyap+mQaumT3qW1wgBVIXV4JLg/0E8maTPMYg=;
+        b=dSmFCMFWmd85ROjhC2VBycYxkzGAbwWfA8W1QHgeH5sEJUITLGJs8GfMMPpJwDXO4q9+jd
+        jxRPv62g0Kg0XOu+XfHgXFZvApn5/rmxNeHOtNBJDbkH2HT6P27eHJGTyT2DingfNd0pgR
+        la1dCTJySjL8HqGiVivT9CQOq8Q6UVs=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B0AF3133DD;
+        Thu, 20 Jul 2023 11:44:10 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id J08TKAoeuWRMEgAAMHmgww
+        (envelope-from <oneukum@suse.com>); Thu, 20 Jul 2023 11:44:10 +0000
+From:   Oliver Neukum <oneukum@suse.com>
+To:     johan@kernel.org, linux-usb@vger.kernel.org
+Cc:     Oliver Neukum <oneukum@suse.com>
+Subject: [PATCH] USB: serial: simple-serial: spell out the ordering
+Date:   Thu, 20 Jul 2023 13:44:06 +0200
+Message-ID: <20230720114406.14587-1-oneukum@suse.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,35 +56,37 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Thanks for the tips Johan, I'll do better next time.
-Yes, the device supports RNDIS mode with the same PID and you can switch with a AT command, so I think it should be ECM/RNDIS.
+keeping a list ordered alphabetically instead
+nummerically be vendor/product ID is unusual.
+This is so odd that examples do not help.
+It needs to be clearly stated with strong words.
 
-usb-devices output in RNDIS mode:
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+---
+ drivers/usb/serial/usb-serial-simple.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Bus=01 Lev=02 Prnt=02 Port=03 Cnt=03 Dev#=  6 Spd=480 MxCh= 0
-D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=2c7c ProdID=6005 Rev=03.18
-S:  Manufacturer=Android
-S:  Product=Android
-S:  SerialNumber=0000
-C:  #Ifs= 5 Cfg#= 1 Atr=e0 MxPwr=500mA
-I:  If#=0x0 Alt= 0 #EPs= 1 Cls=e0(wlcon) Sub=01 Prot=03 Driver=rndis_host
-I:  If#=0x1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
-I:  If#=0x2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+diff --git a/drivers/usb/serial/usb-serial-simple.c b/drivers/usb/serial/usb-serial-simple.c
+index 24b8772a345e..954b3be7403d 100644
+--- a/drivers/usb/serial/usb-serial-simple.c
++++ b/drivers/usb/serial/usb-serial-simple.c
+@@ -33,6 +33,16 @@ static struct usb_serial_driver vendor##_device = {		\
+ 
+ #define DEVICE(vendor, IDS)	DEVICE_N(vendor, IDS, 1)
+ 
++/*
++ * These tables are NOT in order of device id by intention
++ *
++ * Keep them and add new entries sorted by
++ *
++ * 1. Alphabetical order of the vendor name
++ * 2. Alphabetical order of the product name
++ *
++ */
++
+ /* Medtronic CareLink USB driver */
+ #define CARELINK_IDS()			\
+ 	{ USB_DEVICE(0x0a21, 0x8001) }	/* MMT-7305WW */
+-- 
+2.41.0
 
-usb-devices output in ECM mode:
-
-Bus=01 Lev=02 Prnt=02 Port=03 Cnt=03 Dev#=  6 Spd=480 MxCh= 0
-D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=2c7c ProdID=6005 Rev=03.18
-S:  Manufacturer=Android
-S:  Product=Android
-S:  SerialNumber=0000
-C:  #Ifs= 5 Cfg#= 1 Atr=e0 MxPwr=500mA
-I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=06 Prot=00 Driver=cdc_ether
-I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
-I:  If#=0x2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
