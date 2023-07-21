@@ -2,131 +2,202 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1741175CC3B
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Jul 2023 17:43:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E30875CCD3
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Jul 2023 17:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232138AbjGUPny (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 Jul 2023 11:43:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44892 "EHLO
+        id S231709AbjGUP6Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 Jul 2023 11:58:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231807AbjGUPnx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Jul 2023 11:43:53 -0400
-Received: from m13116.mail.163.com (m13116.mail.163.com [220.181.13.116])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 79B1B1727;
-        Fri, 21 Jul 2023 08:43:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
-        Message-ID; bh=XTJYfllEo+smLOKh/rd6ml4aoLIB5HXMxyL+yhtIcmU=; b=a
-        13wUjK/MmGPfFsL/dCAvM0ekyKiiFQvSly+YJvF0RLlSl3KxOtevyQOqrkjD2XbL
-        jKafM0Ybd1AtwFfq4sEOxcqsXH6LH3qZc+qp2Txa2TN7GFWSXmLA/SSLBGG/KyQD
-        TtlsGG3rE/jFJsHAV/13KX3x/1Stca+UbuKkZiFBCY=
-Received: from 18500469033$163.com ( [114.253.21.2] ) by
- ajax-webmail-wmsvr116 (Coremail) ; Fri, 21 Jul 2023 23:43:29 +0800 (CST)
-X-Originating-IP: [114.253.21.2]
-Date:   Fri, 21 Jul 2023 23:43:29 +0800 (CST)
-From:   "Dingyan Li" <18500469033@163.com>
-To:     "Greg KH" <gregkh@linuxfoundation.org>
-Cc:     stern@rowland.harvard.edu, sebastian.reichel@collabora.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re:Re: Re: [PATCH] USB: add usbfs ioctl to get specific
- superspeedplus rates
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20230109(dcb5de15)
- Copyright (c) 2002-2023 www.mailtech.cn 163com
-In-Reply-To: <2023072159-carol-underfeed-43eb@gregkh>
-References: <20230721084039.9728-1-18500469033@163.com>
- <2023072105-lethargic-saddling-ad97@gregkh>
- <130b453c.5c8f.1897872ce54.Coremail.18500469033@163.com>
- <2023072159-carol-underfeed-43eb@gregkh>
-X-NTES-SC: AL_QuyTC/Weu0or7yObY+kXkkYVgew6WsC4vf4k3IReOps0qivL0AQaZkZ9F17s0sauIQaniSG2SRFhy9V1ZpRmfKJEjac7+fRCjtf1K7IOZ8uS
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        with ESMTP id S232308AbjGUP57 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Jul 2023 11:57:59 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 327691BD
+        for <linux-usb@vger.kernel.org>; Fri, 21 Jul 2023 08:57:57 -0700 (PDT)
+Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id E0083373D;
+        Fri, 21 Jul 2023 17:56:59 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1689955020;
+        bh=IlXIExcbBvo6k4XNPA4lf3EWoW0Cl5RwI1BH5qpDlLQ=;
+        h=Date:To:References:From:Subject:In-Reply-To:From;
+        b=laxoJqGoMCLowK/jcDyBOLXKPqRG3/qfRTOM2n3UikBAvSk8lXxAtak6WDdGk7d4x
+         n1Cu3aK35gHYgnWI5HtTxEZPqEZojhe0Qoprv8dc2MI0o5zwj+CYT0FxVczCeEg7Fs
+         lRtv/+sl4OF7FM9rLtXZZSvTjsp3ireAUKQqvMLI=
+Message-ID: <8de4bb54-8daa-73c0-b5eb-4aa4b9675ce5@ideasonboard.com>
+Date:   Fri, 21 Jul 2023 16:57:51 +0100
 MIME-Version: 1.0
-Message-ID: <25f05926.7e4c.189791ece3b.Coremail.18500469033@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: dMGowAC331Shp7pkrvMHAA--.45458W
-X-CM-SenderInfo: jprykiiquwmiitt6il2tof0z/xtbBUQazy1aEE963YAABsm
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+To:     Avichal Rakesh <arakesh@google.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        "Eino-Ville Talvala (Eddy)" <etalvala@google.com>,
+        Jayant Chowdhary <jchowdhary@google.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+References: <4d7aa3f4-22d9-9f5a-3d70-1bd7148ff4ba@google.com>
+Content-Language: en-US
+From:   Dan Scally <dan.scally@ideasonboard.com>
+Subject: Re: Kernel panic when unbinding UVC gadget function
+In-Reply-To: <4d7aa3f4-22d9-9f5a-3d70-1bd7148ff4ba@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-CkF0IDIwMjMtMDctMjEgMjI6NTE6MzIsICJHcmVnIEtIIiA8Z3JlZ2toQGxpbnV4Zm91bmRhdGlv
-bi5vcmc+IHdyb3RlOgo+T24gRnJpLCBKdWwgMjEsIDIwMjMgYXQgMDg6MzU6MzdQTSArMDgwMCwg
-RGluZ3lhbiBMaSB3cm90ZToKPj4gCj4+IEF0IDIwMjMtMDctMjEgMTk6MDQ6MjksICJHcmVnIEtI
-IiA8Z3JlZ2toQGxpbnV4Zm91bmRhdGlvbi5vcmc+IHdyb3RlOgo+PiA+T24gRnJpLCBKdWwgMjEs
-IDIwMjMgYXQgMDQ6NDA6MzlQTSArMDgwMCwgRGluZ3lhbiBMaSB3cm90ZToKPj4gPj4gVGhlIHVz
-YmZzIGludGVyZmFjZSBkb2VzIG5vdCBwcm92aWRlIGFueSB3YXkgdG8gZ2V0IHNwZWNpZmljCj4+
-ID4+IHN1cGVyc3BlZWRwbHVzIHJhdGUsIGxpa2UgR2VuMngxLCBHZW4xeDIgb3IgR2VuMngyLiBD
-dXJyZW50Cj4+ID4+IEFQSSBpbmNsdWRlIGFuIFVTQkRFVkZTX0dFVF9TUEVFRCBpb2N0bCwgYnV0
-IGl0IGNhbiBvbmx5IHJldHVybgo+PiA+PiBnZW5lcmFsIHN1cGVyc3BlZWRwbHVzIHNwZWVkIGlu
-c3RlYWQgb2YgYW55IHNwZWNpZmljIHJhdGVzLgo+PiA+PiBUaGVyZWZvcmUgd2UgY2FuJ3QgdGVs
-bCB3aGV0aGVyIGl0J3MgYSBHZW4yeDIoMjBHYnBzKSBkZXZpY2UuCj4+ID4+IAo+PiA+PiBUaGlz
-IHBhdGNoIGludHJvZHVjZSBhIG5ldyBpb2N0bCBVU0JERVZGU19HRVRfU1NQX1JBVEUgdG8gZml4
-Cj4+ID4+IGl0LiBTaW1pbGFyIGluZm9ybWF0aW9uIGlzIGFscmVhZHkgYXZhaWxhYmxlIHZpYSBz
-eXNmcywgaXQncwo+PiA+PiBnb29kIHRvIGFkZCBpdCBmb3IgdXNiZnMgdG9vLgo+PiA+PiAKPj4g
-Pj4gU2lnbmVkLW9mZi1ieTogRGluZ3lhbiBMaSA8MTg1MDA0NjkwMzNAMTYzLmNvbT4KPj4gPj4g
-LS0tCj4+ID4+ICBkcml2ZXJzL3VzYi9jb3JlL2RldmlvLmMgICAgICAgICAgfCAzICsrKwo+PiA+
-PiAgaW5jbHVkZS91YXBpL2xpbnV4L3VzYmRldmljZV9mcy5oIHwgMSArCj4+ID4+ICAyIGZpbGVz
-IGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKQo+PiA+PiAKPj4gPj4gZGlmZiAtLWdpdCBhL2RyaXZl
-cnMvdXNiL2NvcmUvZGV2aW8uYyBiL2RyaXZlcnMvdXNiL2NvcmUvZGV2aW8uYwo+PiA+PiBpbmRl
-eCAxYTE2YThiZGVhNjAuLjJmNTdlYjE2MzM2MCAxMDA2NDQKPj4gPj4gLS0tIGEvZHJpdmVycy91
-c2IvY29yZS9kZXZpby5jCj4+ID4+ICsrKyBiL2RyaXZlcnMvdXNiL2NvcmUvZGV2aW8uYwo+PiA+
-PiBAQCAtMjc4Myw2ICsyNzgzLDkgQEAgc3RhdGljIGxvbmcgdXNiZGV2X2RvX2lvY3RsKHN0cnVj
-dCBmaWxlICpmaWxlLCB1bnNpZ25lZCBpbnQgY21kLAo+PiA+PiAgCWNhc2UgVVNCREVWRlNfR0VU
-X1NQRUVEOgo+PiA+PiAgCQlyZXQgPSBwcy0+ZGV2LT5zcGVlZDsKPj4gPj4gIAkJYnJlYWs7Cj4+
-ID4+ICsJY2FzZSBVU0JERVZGU19HRVRfU1NQX1JBVEU6Cj4+ID4+ICsJCXJldCA9IHBzLT5kZXYt
-PnNzcF9yYXRlOwo+PiA+PiArCQlicmVhazsKPj4gPgo+PiA+U2hvdWxkbid0IHRoaXMgbmV3IGlv
-Y3RsIGJlIGRvY3VtZW50ZWQgc29tZXdoZXJlPyAgV2hhdCBhcmUgdGhlIHZhbGlkCj4+ID52YWx1
-ZXMgaXQgY2FuIHJldHVybj8gIFdoYXQgaWYgaXQgaW4ndCBhIHN1cGVyc3BlZWQgZGV2aWNlPyAg
-V2hvIGlzCj4+ID5nb2luZyB0byB1c2UgdGhpcz8KPj4gPgo+PiA+QW5kIHdlIGhhdmUgdHJhZGl0
-aW9uYWxseSBvbmx5IGJlZW4gYWRkaW5nIG5ldyBpbmZvcm1hdGlvbiBsaWtlIHRoaXMgdG8KPj4g
-PnN5c2ZzLCB3aGljaCB3YXMgbm90IGFyb3VuZCB3aGVuIHVzYmZzIHdhcyBjcmVhdGVkLiAgV2h5
-IG5vdCBqdXN0IHVzZQo+PiA+dGhhdCBpbnN0ZWFkPyAgQXJlIHlvdSB3YW50aW5nIHRvIHNlZSBh
-bGwgb2YgdGhlIHN5c2ZzLXByb3ZpZGVkCj4+ID5pbmZvcm1hdGlvbiBpbiB1c2JmcyBhbHNvPwo+
-PiA+Cj4+ID50aGFua3MsCj4+ID4KPj4gCj4+ID5ncmVnIGstaAo+PiAKPj4gMS4gQnkgc2F5aW5n
-ICJiZSBkb2N1bWVudGVkIHNvbWV3aGVyZSIsIGRvIHlvdSBtZWFuIHRoZXJlIGlzIGV4dHJhCj4+
-ICAgICBkb2N1bWVudGF0aW9uIHdvcmsgd2hpY2ggbmVlZHMgdG8gYmUgZG9uZT8gU29ycnkgdGhh
-dCBJIG1pc3NlZCB0aGlzCj4+ICAgICBwYXJ0IHNpbmNlIGl0J3MgdGhlIGZpcnN0IHRpbWUgZm9y
-IG1lIHRvIHdvcmsgb24gYSBrZXJuZWwgcGF0Y2guCj4KPkl0IG5lZWRzIHRvIGJlIGRvY3VtZW50
-ZWQgc29tZXdoZXJlLCBvdGhlcndpc2Ugbm8gb25lIGtub3dzIGhvdyB0byB1c2UKPml0Lgo+Cj4+
-IDIuIElmIG5vIGVycm9yLCByZXR1cm5lZCB2YWx1ZXMgYXJlICJlbnVtIHVzYl9zc3BfcmF0ZSIg
-ZGVmaW5lZCBpbiBpbmNsdWRlL2xpbnV4L3VzYi9jaDkuaAo+PiAzLiBzc3AgcmF0ZSBpcyBvbmx5
-IHZhbGlkIGZvciBzdXBlcnNwZWVkcGx1cy4gRm9yIG90aGVyIHNwZWVkcywgaXQgc2hvdWxkIGJl
-Cj4+ICAgICBVU0JfU1NQX0dFTl9VTktOT1dOLgo+Cj5PaywgdGhhdCBzaG91bGQgYmUgZG9jdW1l
-bnRlZC4KPgo+PiA0LiBJIGZvdW5kIGluIGxpYnVzYiwgdGhlcmUgYXJlIHR3byB3YXlzIHRvIGdl
-dCBzcGVlZCB2YWx1ZSBmb3IgYSBkZXZpY2UuCj4+ICAgICBPbmUgd2F5IGlzIHZpYSBzeXNmcywg
-d2hpY2ggaGFzIHN1cHBvcnRlZCAyMEdicHMgbm93LiBBbm90aGVyIHdheSBpcwo+PiAgICAgdG8g
-dXNlIGlvY3RsIFVTQkRFVkZTX0dFVF9TUEVFRC4gVGhpcyBpcyB3aGVuIEkgZm91bmQgdGhpcyBp
-b2N0bCBjYW4gb25seQo+PiAgICAgcmV0dXJuIFVTQl9TUEVFRF9TVVBFUl9QTFVTIGF0IG1vc3Qs
-IGl0IGNhbm5vdCBkZXRlcm1pbmUgY3VycmVudCBzc3AgcmF0ZQo+PiAgICAgZnVydGhlciwgbm8g
-bWF0dGVyIEdlbjF4MigxMEdicHMpLCBHZW4yeDEoMTBHYnBzKSBvciBHZW4yeDIoMjBHYnBzKS4g
-U28gSQo+PiAgICAgdGhvdWdodCBtYXliZSBpdCdzIGdvb2QgdG8gcHJvdmlkZSBhIHNpbWlsYXIg
-d2F5IGxpa2UgaW9jdGwgVVNCREVWRlNfR0VUX1NQRUVECj4+ICAgICBpbiBvcmRlciB0byBnZXQg
-c3NwIHJhdGVzLgo+Cj5JZiBsaWJ1c2IgZG9lc24ndCBuZWVkIHRoaXMgaW9jdGwsIHdobyB3b3Vs
-ZCB1c2UgaXQ/ICBXZSBvbmx5IGFkZCBhcGlzCj50aGF0IGFyZSBhY3R1YWxseSBnb2luZyB0byBi
-ZSB1c2VkLgo+Cj5TbyBpZiBsaWJ1c2IgZG9lc24ndCB1c2UgaXQsIHdlIG5lZWQgYSByZWFsLXdv
-cmxkIHVzZXIgZm9yIHVzIHRvIGJlIGFibGUKPnRvIGFkZCB0aGlzLgo+Cj50aGFua3MsCj4KCj5n
-cmVnIGstaAoKT2theSwgZ290IGl0LiBUaGUgbW90aXZhdGlvbiBzaG91bGQgY29tZSBmcm9tIHJl
-YWwtd29ybGQgbmVlZHMuCgpKdXN0IGxpa2UgSSBtZW50aW9uZWQgYWJvdmUsIGN1cnJlbnRseSBp
-biBsaWJ1c2IgaW9jdGwgVVNCREVWRlNfR0VUX1NQRUVECmlzIHN0aWxsIHVzZWQsIGVzcGVjaWFs
-bHkgd2hlcmUgc3lzZnMgaXMgbm90IHN1cHBvcnRlZC4gTXkgb3JpZ2luYWwgaWRlYQp3YXMgZXhh
-Y3RseSB0cnlpbmcgdG8gYWRkIHRoaXMgbmV3IGlvY3RsIGludG8gbGlidXNiLiBTbyBpbiBvcmRl
-ciB0byBnZXQgMjBHYnBzCnNwZWVkLCB3ZSBuZWVkIGV4dHJhIGluZm9ybWF0aW9uLiBUaGUgYmFz
-aWMgd29ya2Zsb3cgaXMgbGlrZSBiZWxvdzoKCi8vIFRoaXMgaXMgcHJldHR5IG11Y2ggaG93IGxp
-YnVzYiBkb2VzIGl0LCBnZXQgMTBHYnBzIGF0IG1vc3QKcmV0ID0gaW9jdGwoVVNCREVWRlNfR0VU
-X1NQRUVEKQppZiAocmV0ID09wqBVU0JfU1BFRURfU1VQRVJfUExVUykgdGhlbgogICDCoHNwZWVk
-ID0gMTBHYnBzCiAgICAvLyBXaXRoIHRoaXMgbmV3IGlvY3RsLCB3ZSBjYW4gZ2V0IDIwR2JwcyBu
-b3cKICAgIHJldCA9IGlvY3RsKFVTQkRFVkZTX0dFVF9TU1BfUkFURSkKICAgIGlmIChyZXQgPT0g
-VVNCX1NTUF9HRU5fMngyKQogICAgICAgIHNwZWVkID0gMjBHYnBzCgpsaWJ1c2IgY2FuIGJlIGEg
-Z29vZCBwbGFjZSB0byBkb2N1bWVudCB0aGUgdXNhZ2Ugb2YgdGhpcyBuZXcgaW9jdGwgaWbCoHNp
-bWlsYXIgcGF0Y2gKY2FuIGJlIGFjY2VwdGVkIGludG8gaXQuIEFuZCBJIGNhbid0IHRoaW5rIG9m
-IG90aGVyIHJlYWwtd29ybGQgdXNlcnMgbm93LiBPZiBjb3Vyc2UsCmxpa2UgeW91J3ZlIGV4cGxh
-aW5lZCwgaXQgc2VlbXMgcXVpdGUgdW5uZWNlc3Nhcnkgd2hlbiBzeXNmcyBpcyBzdXBwb3J0ZWQu
-CgpSZWdhcmRzLApEaW5neWFu
+Hi Avichal - thanks for all the detail
+
+On 20/07/2023 02:28, Avichal Rakesh wrote:
+> Hey all,
+>
+> I recently ran into a kernel panic when testing the UVC Gadget Driver.
+> The device ramdumps with the following stack when removing the UVC config from
+> configfs:
+>
+> KP: Oops - BUG: Fatal exception: comm:Thread-6 PC:__list_del_entry_valid+0xb0/0xc4 LR:__list_del_entry_valid+0xb0/0xc4
+> PC: __list_del_entry_valid+0xb0 <FFFFFFE685330294>
+> LR: __list_del_entry_valid+0xb0 <FFFFFFE685330294>
+>
+> [<FFFFFFE685330294>] __list_del_entry_valid+0xb0
+> [<FFFFFFE6857E50AC>] v4l2_fh_del+0x78
+> [<FFFFFFE685769774>] uvc_v4l2_release+0xd0
+> [<FFFFFFE6857D9B10>] v4l2_release+0xcc
+> [<FFFFFFE684EE192C>] __fput+0xf8
+> [<FFFFFFE684EE17CC>] ____fput+0xc
+> [<FFFFFFE684B5C9E0>] task_work_run+0x138
+>
+> This looks like a side effect of
+> https://lore.kernel.org/lkml/20230608204517.105396-1-badhri@google.com/.
+> Effectively, UVC function tried to disconnect the gadget before
+> cleaning up resources. However, usb_gadget_unregister_driver which is
+> removing the function prevents the gadget from disconnecting until the
+> function is unbound.
+>
+> As of the patch mentioned above, gadget_unbind_driver holds
+> udc->connect_lock and calls both usb_gadget_disconnect_locked and
+> udc->driver->unbind one after the other.
+>
+> usb_gadget_disconnect_locked calls into UVC Gadget driver as follows:
+>
+> 1. usb_gadget_disconnect_locked
+> 2. configfs_composite_disconnect
+> 3. __composite_disconnect
+> 4. uvc_function_disable
+>
+> udc->driver->unbind calls into UVC Gadget driver as follows:
+>
+> 1. udc->driver->unbind
+> 2. configfs_composite_unbind
+> 3. purge_configs_funcs
+> 4. uvc_function_unbind
+>
+> uvc_function_disable notifies the userspace application with
+> UVC_EVENT_DISCONNECTED which causes the V4L2 node to be released
+> (or unsubscribed to). Either on unsubscribe or on release, the UVC Gadget
+> Driver calls uvc_function_disconnect before cleaning up resources. Following
+> is the problematic stack from uvc_v4l2_disable.
+>
+> 1. uvc_v4l2_disable
+> 2. uvc_function_disconnect
+> 3. usb_function_deactivate
+> 4. usb_gadget_deactivate
+>
+> usb_gadget_deactivate attempts to lock udc->connect_lock as of the patch
+> mentioned above.
+>
+> This means that attempting to unregister the UVC Gadget Driver results in the
+> V4L2 resource cleanup being stuck behind udc->connect_lock, which will only
+> be released after uvc_function_unbind finishes. This results in either the
+> gadget deactivating after the unbind process has finished, or in a Kernel Panic
+> as it tries to cleanup a V4L2 node that has been purged.
+>
+> This leaves us with two options:
+> 1. We "fix" the locking in core.c to restore old behavior, and let the
+>     usb_gadget_deactivate call go through without locking. However,
+>     I am not sure about the specifics of the patch were and what exact issue it
+>     was trying to fix.
+>
+>     Badhri, would you know if relaxing the constraints on
+>     usb_gadget_deactivate is feasible? It is possible that other gadget drivers
+>     run into similar issues as UVC driver.
+>
+> 3. UVC Gadget Driver calls usb_function_deactivate to take down the gadget if
+>     the userspace application stops listening to the V4L2 node. However, AFAICT
+>     disable is called as a part of the gadget resetting. So, if the V4L2 node
+>     is released because of UVC_EVENT_DISCONNECT, we can skip calling
+>     usb_function_deactivate as the gadget will be reset anyway.
+>
+>     usb_function documentation seems to agree that if 'disable' is called,
+>     the gadget will be reset/reconfigured shortly:
+>
+>       @disable: (REQUIRED) Indicates the function should be disabled.  Reasons
+>        *	  include host resetting or reconfiguring the gadget, and disconnection.
+>
+> A dirty Patch for option 2 is attached below which skips calling
+> usb_function_deactivate if uvc_function_disable was called before. It seems
+> to work okay in testing. Let me know if the analysis and solutions seems okay
+> and I can upload a formal patch.
+
+
+For what it's worth the analysis makes sense; the patch looks ok to me so if the conclusion is to 
+fix the problem that way I think it's fine, but I'm more inclined to consider this a locking problem 
+in core - it'd be better to fix it there I think.
+
+> Thank you!
+>
+> ---
+>   drivers/usb/gadget/function/f_uvc.c | 12 ++++++++++--
+>   drivers/usb/gadget/function/uvc.h   |  1 +
+>   2 files changed, 11 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+> index 5e919fb65833..cef92243f1f7 100644
+> --- a/drivers/usb/gadget/function/f_uvc.c
+> +++ b/drivers/usb/gadget/function/f_uvc.c
+> @@ -385,7 +385,7 @@ uvc_function_disable(struct usb_function *f)
+>   	v4l2_event.type = UVC_EVENT_DISCONNECT;
+>   	v4l2_event_queue(&uvc->vdev, &v4l2_event);
+>   
+> -	uvc->state = UVC_STATE_DISCONNECTED;
+> +	uvc->state = UVC_STATE_HOST_DISCONNECTED;
+>   
+>   	usb_ep_disable(uvc->video.ep);
+>   	if (uvc->enable_interrupt_ep)
+> @@ -410,8 +410,16 @@ uvc_function_disconnect(struct uvc_device *uvc)
+>   {
+>   	int ret;
+>   
+> -	if ((ret = usb_function_deactivate(&uvc->func)) < 0)
+> +	if (uvc->state == UVC_STATE_HOST_DISCONNECTED) {
+> +		/*
+> +		 * Don't deactivate gadget as this is being called in
+> +		 * response to the host resetting. Gadget will be deactivated
+> +		 * anyway. Just update to state as acknowledgement
+> +		 */
+> +		uvc->state = UVC_STATE_DISCONNECTED;
+> +	} else if ((ret = usb_function_deactivate(&uvc->func)) < 0) {
+>   		uvcg_info(&uvc->func, "UVC disconnect failed with %d\n", ret);
+> +	}
+>   }
+>   
+>   /* --------------------------------------------------------------------------
+> diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
+> index 100475b1363e..f1e2bc98dc61 100644
+> --- a/drivers/usb/gadget/function/uvc.h
+> +++ b/drivers/usb/gadget/function/uvc.h
+> @@ -120,6 +120,7 @@ struct uvc_video {
+>   };
+>   
+>   enum uvc_state {
+> +	UVC_STATE_HOST_DISCONNECTED,
+>   	UVC_STATE_DISCONNECTED,
+>   	UVC_STATE_CONNECTED,
+>   	UVC_STATE_STREAMING,
