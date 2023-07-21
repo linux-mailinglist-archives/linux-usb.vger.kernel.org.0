@@ -2,41 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 294B375C3F2
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Jul 2023 12:02:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37ADF75C573
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Jul 2023 13:08:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbjGUKCV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 Jul 2023 06:02:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44260 "EHLO
+        id S231305AbjGULIt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 Jul 2023 07:08:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229899AbjGUKCT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Jul 2023 06:02:19 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F1E0B7;
-        Fri, 21 Jul 2023 03:02:18 -0700 (PDT)
-Received: from kwepemm600005.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4R6lQn60gdzHqZp;
-        Fri, 21 Jul 2023 17:59:45 +0800 (CST)
-Received: from huawei.com (10.50.163.32) by kwepemm600005.china.huawei.com
- (7.193.23.191) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 21 Jul
- 2023 18:02:15 +0800
-From:   liulongfang <liulongfang@huawei.com>
-To:     <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] USB:bugfix a controller halt error
-Date:   Fri, 21 Jul 2023 18:00:15 +0800
-Message-ID: <20230721100015.27124-1-liulongfang@huawei.com>
-X-Mailer: git-send-email 2.24.0
+        with ESMTP id S231874AbjGULID (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Jul 2023 07:08:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01E5D30E6;
+        Fri, 21 Jul 2023 04:04:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 859B1619D9;
+        Fri, 21 Jul 2023 11:04:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A693C433C8;
+        Fri, 21 Jul 2023 11:04:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1689937471;
+        bh=kLm2U5Pu52hMweuu3JvWp8RIyfl+fqT5TzNBsbBd25s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=shPjxjQ5wh01SrsoFazMqcBR5iqM2AIV0qD4B/HKYJJToU2dCiKnberYbH0U5d+qk
+         cUKnz2ERJRFo/ZMCV+Uj+8g7R+lHMMJZl1QeFsLddUu3qeBVBwQ8snFMQKjCbLdyCB
+         cFEiD2vSZjAQ6+0HZHqmUIBXfBYCcRoDu1Nbc+p8=
+Date:   Fri, 21 Jul 2023 13:04:29 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Dingyan Li <18500469033@163.com>
+Cc:     stern@rowland.harvard.edu, sebastian.reichel@collabora.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: add usbfs ioctl to get specific superspeedplus rates
+Message-ID: <2023072105-lethargic-saddling-ad97@gregkh>
+References: <20230721084039.9728-1-18500469033@163.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.50.163.32]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600005.china.huawei.com (7.193.23.191)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230721084039.9728-1-18500469033@163.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,40 +51,44 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On systems that use ECC memory. The ECC error of the memory will
-cause the USB controller to halt. It causes the usb_control_msg()
-operation to fail.
-At this point, the returned buffer data is an abnormal value, and
-continuing to use it will lead to incorrect results.
+On Fri, Jul 21, 2023 at 04:40:39PM +0800, Dingyan Li wrote:
+> The usbfs interface does not provide any way to get specific
+> superspeedplus rate, like Gen2x1, Gen1x2 or Gen2x2. Current
+> API include an USBDEVFS_GET_SPEED ioctl, but it can only return
+> general superspeedplus speed instead of any specific rates.
+> Therefore we can't tell whether it's a Gen2x2(20Gbps) device.
+> 
+> This patch introduce a new ioctl USBDEVFS_GET_SSP_RATE to fix
+> it. Similar information is already available via sysfs, it's
+> good to add it for usbfs too.
+> 
+> Signed-off-by: Dingyan Li <18500469033@163.com>
+> ---
+>  drivers/usb/core/devio.c          | 3 +++
+>  include/uapi/linux/usbdevice_fs.h | 1 +
+>  2 files changed, 4 insertions(+)
+> 
+> diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
+> index 1a16a8bdea60..2f57eb163360 100644
+> --- a/drivers/usb/core/devio.c
+> +++ b/drivers/usb/core/devio.c
+> @@ -2783,6 +2783,9 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
+>  	case USBDEVFS_GET_SPEED:
+>  		ret = ps->dev->speed;
+>  		break;
+> +	case USBDEVFS_GET_SSP_RATE:
+> +		ret = ps->dev->ssp_rate;
+> +		break;
 
-Therefore, it is necessary to judge the return value and exit.
+Shouldn't this new ioctl be documented somewhere?  What are the valid
+values it can return?  What if it in't a superspeed device?  Who is
+going to use this?
 
-Signed-off-by: liulongfang <liulongfang@huawei.com>
----
- drivers/usb/core/hub.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+And we have traditionally only been adding new information like this to
+sysfs, which was not around when usbfs was created.  Why not just use
+that instead?  Are you wanting to see all of the sysfs-provided
+information in usbfs also?
 
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index a739403a9e45..6a43198be263 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -4891,6 +4891,16 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
- 					USB_DT_DEVICE << 8, 0,
- 					buf, GET_DESCRIPTOR_BUFSIZE,
- 					initial_descriptor_timeout);
-+				/* On systems that use ECC memory, ECC errors can
-+				 * cause the USB controller to halt.
-+				 * It causes this operation to fail. At this time,
-+				 * the buf data is an abnormal value and needs to be exited.
-+				 */
-+				if (r < 0) {
-+					kfree(buf);
-+					goto fail;
-+				}
-+
- 				switch (buf->bMaxPacketSize0) {
- 				case 8: case 16: case 32: case 64: case 255:
- 					if (buf->bDescriptorType ==
--- 
-2.24.0
+thanks,
 
+greg k-h
