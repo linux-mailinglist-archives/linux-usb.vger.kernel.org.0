@@ -2,111 +2,172 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E11E75BD6A
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Jul 2023 06:38:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B47F375BE11
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Jul 2023 07:56:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230392AbjGUEh5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 Jul 2023 00:37:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46106 "EHLO
+        id S229613AbjGUF4t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 Jul 2023 01:56:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229937AbjGUEhc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Jul 2023 00:37:32 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F5022D7D;
-        Thu, 20 Jul 2023 21:36:59 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36L3kD97002866;
-        Fri, 21 Jul 2023 04:36:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=l1y/UsCTAY05inK8sGX65oj93CvTM8Lbh5TpQaHqppA=;
- b=HZd5ZI9rdQ7owsxKnDOqqvfCbPNH0cT8OQJEDY3Sgt44rPDEtHRlWmCNLHuv1/yCJohL
- brO+nxdIcAWe75FVvGVV4cUF1nHjAnXc31E9L4ZzduEBJtmB/qyAof68fhh94JYfdk8g
- sUVPXZCSfyjfsX7GjBIZNGFbJdTlCnfP3j9miudr2dNr6Kube7zwIJOnPephzLWveDq6
- PZMxy6JMWOsdInXUtL0ER3cfvf1yVM7EsLbB1uvNxgDiwyAhebsBW2X+coVFDEF5HS0G
- j1MSJmZRWtkrtywAGaPXfG0vY42phMMB44+TjZlro9qpM/KCcaG4p/9ytiwOGBT2JZ8M Hw== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ry3y1j5m1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 21 Jul 2023 04:36:32 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36L4aW4b012880
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 21 Jul 2023 04:36:32 GMT
-Received: from varda-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Thu, 20 Jul 2023 21:36:24 -0700
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
-        <kishon@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <gregkh@linuxfoundation.org>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <p.zabel@pengutronix.de>, <arnd@arndb.de>,
-        <geert+renesas@glider.be>, <neil.armstrong@linaro.org>,
-        <nfraprado@collabora.com>, <rafal@milecki.pl>,
-        <quic_srichara@quicinc.com>, <quic_varada@quicinc.com>,
-        <quic_wcheng@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH v5 6/6] arm64: defconfig: Enable M31 USB phy driver
-Date:   Fri, 21 Jul 2023 10:05:31 +0530
-Message-ID: <75ecdc497d58ecb6d0cbb067c23fe72193de5493.1689913334.git.quic_varada@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1689913334.git.quic_varada@quicinc.com>
-References: <cover.1689913334.git.quic_varada@quicinc.com>
+        with ESMTP id S229500AbjGUF4s (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Jul 2023 01:56:48 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11CBA9E;
+        Thu, 20 Jul 2023 22:56:48 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id 98e67ed59e1d1-267c41ca947so739783a91.1;
+        Thu, 20 Jul 2023 22:56:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1689919007; x=1690523807;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1VvmUuvocKT0p8P+1xMQjftTbnP9MxxAarU5pfhilHM=;
+        b=sMkNBSnDoqSrEiaDbuunvLPeDJ9lPJOpblWhV/J9YBZImKUGrFEDjl/vUDf8c4u6gB
+         Ehp+Qpy1uBIQpT2QNdy5ouR1t9nShjot0Gla5TLKCUZNeWp+GbBe1FUK1VCcRySapToy
+         RcF6ZhPOJQjMSKEp9si9ipQCgb5OAW+dZgSipTrA1PWxb3EeIEAEtiXsFeqrwY429pbR
+         KPCh16O0av4wcVN6JFDtS9GXBRIuymPtFK/1VwBfRDo66kR7siGnnohOU+uQhxOLFxzX
+         4XUf1mUKp81i82hWQ1MdzWMWi0usuXp/Q+MZsuz1bSvDpuiv6VF91QQWtPYy0t3C8SB9
+         GY5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689919007; x=1690523807;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1VvmUuvocKT0p8P+1xMQjftTbnP9MxxAarU5pfhilHM=;
+        b=UlWChHgOst7xtYCpnLQzf1OV7uRMgVGNamLFdE5TF6kn5sUaRZuCu6Wyr1AjoGIr5A
+         FOF1uTvd5hIzEuoiSaRB6Iv0cFFmQQAiAfeEnNkhjlX4Ti9FzHoYAaVAW0g8TfW+MPUZ
+         cPZQmZXNkiFvspFDLYVQ57EEUiK2rJRShu4cRmQlQRpsrOMl+nOFSrFFhTuHUQSxwATm
+         /8qEctzayHdHQxnHRvsajh8XypFzFzZsn7Na3eZpfIUt2iWycjePNmv35s9wmb2sb0Ig
+         Jkee8oRh8IlyEyspA4qE4C9xc2DOYg6qVcQiz75ofzyg2hyOOBJFwY2cGP8v6H5azPn0
+         Xkpg==
+X-Gm-Message-State: ABy/qLayx894UNQrf/ol4uzcpaNBxujn5KNgQ26wBxrikGlLAC+cwD8i
+        25Wc6GxPsq1c0cWO4DVpn2UFtmK3lmYXrAf9FiNC/Wu0GaA=
+X-Google-Smtp-Source: APBJJlE8tdmEkOx686WvREXmv3TYClv6VQ6fOrBzChvuo8EXALjn1+1aD1pLufOGiBm9/pf5yjQsfNQ+Sz9uAP9csc8=
+X-Received: by 2002:a17:90a:1b62:b0:262:ebb9:dd60 with SMTP id
+ q89-20020a17090a1b6200b00262ebb9dd60mr573492pjq.20.1689919007410; Thu, 20 Jul
+ 2023 22:56:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: -Dt6IeC_7PyzHzRS4NsMsBURV4GlRIWB
-X-Proofpoint-ORIG-GUID: -Dt6IeC_7PyzHzRS4NsMsBURV4GlRIWB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-07-21_02,2023-07-20_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
- spamscore=0 priorityscore=1501 mlxlogscore=452 bulkscore=0 impostorscore=0
- phishscore=0 suspectscore=0 lowpriorityscore=0 malwarescore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2306200000 definitions=main-2307210041
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230714074011.20989-1-qiang.zhang1211@gmail.com> <CA+fCnZfxLLLVJdPZmVKg5w4YY+i09ZRz-wu+TAXBaroRgGsAsQ@mail.gmail.com>
+In-Reply-To: <CA+fCnZfxLLLVJdPZmVKg5w4YY+i09ZRz-wu+TAXBaroRgGsAsQ@mail.gmail.com>
+From:   Z qiang <qiang.zhang1211@gmail.com>
+Date:   Fri, 21 Jul 2023 13:56:35 +0800
+Message-ID: <CALm+0cX5bsjP-yrCywz_Pmwr+2y5VwuSj3fBNdnZD0JLrS+AdQ@mail.gmail.com>
+Subject: Re: [PATCH] USB: gadget: Fix the memory leak in raw_gadget driver
+To:     Andrey Konovalov <andreyknvl@gmail.com>, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Enable M31 USB phy driver present in IPQ5332.
+>
+> On Fri, Jul 14, 2023 at 9:40=E2=80=AFAM Zqiang <qiang.zhang1211@gmail.com=
+> wrote:
+> >
+> > Currently, increasing raw_dev->count happens before invoke the
+> > raw_queue_event(), if the raw_queue_event() return error, invoke
+> > raw_release() will not trigger the dev_free() to be called.
+> >
+> > [  268.905865][ T5067] raw-gadget.0 gadget.0: failed to queue event
+> > [  268.912053][ T5067] udc dummy_udc.0: failed to start USB Raw Gadget:=
+ -12
+> > [  268.918885][ T5067] raw-gadget.0: probe of gadget.0 failed with erro=
+r -12
+> > [  268.925956][ T5067] UDC core: USB Raw Gadget: couldn't find an avail=
+able UDC or it's busy
+> > [  268.934657][ T5067] misc raw-gadget: fail, usb_gadget_register_drive=
+r returned -16
+> >
+> > BUG: memory leak
+> >
+> > [<ffffffff8154bf94>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1076
+> > [<ffffffff8347eb55>] kmalloc include/linux/slab.h:582 [inline]
+> > [<ffffffff8347eb55>] kzalloc include/linux/slab.h:703 [inline]
+> > [<ffffffff8347eb55>] dev_new drivers/usb/gadget/legacy/raw_gadget.c:191=
+ [inline]
+> > [<ffffffff8347eb55>] raw_open+0x45/0x110 drivers/usb/gadget/legacy/raw_=
+gadget.c:385
+> > [<ffffffff827d1d09>] misc_open+0x1a9/0x1f0 drivers/char/misc.c:165
+> >
+> > [<ffffffff8154bf94>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1076
+> > [<ffffffff8347cd2f>] kmalloc include/linux/slab.h:582 [inline]
+> > [<ffffffff8347cd2f>] raw_ioctl_init+0xdf/0x410 drivers/usb/gadget/legac=
+y/raw_gadget.c:460
+> > [<ffffffff8347dfe9>] raw_ioctl+0x5f9/0x1120 drivers/usb/gadget/legacy/r=
+aw_gadget.c:1250
+> > [<ffffffff81685173>] vfs_ioctl fs/ioctl.c:51 [inline]
+> >
+> > [<ffffffff8154bf94>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1076
+> > [<ffffffff833ecc6a>] kmalloc include/linux/slab.h:582 [inline]
+> > [<ffffffff833ecc6a>] kzalloc include/linux/slab.h:703 [inline]
+> > [<ffffffff833ecc6a>] dummy_alloc_request+0x5a/0xe0 drivers/usb/gadget/u=
+dc/dummy_hcd.c:665
+> > [<ffffffff833e9132>] usb_ep_alloc_request+0x22/0xd0 drivers/usb/gadget/=
+udc/core.c:196
+> > [<ffffffff8347f13d>] gadget_bind+0x6d/0x370 drivers/usb/gadget/legacy/r=
+aw_gadget.c:292
+> >
+> > This commit therefore invoke kref_get() under the condition that
+> > raw_queue_event() return success.
+> >
+> > Reported-by: syzbot+feb045d335c1fdde5bf7@syzkaller.appspotmail.com
+> > Closes: https://syzkaller.appspot.com/bug?extid=3Dfeb045d335c1fdde5bf7
+> > Signed-off-by: Zqiang <qiang.zhang1211@gmail.com>
+> > ---
+> >  drivers/usb/gadget/legacy/raw_gadget.c | 10 ++++++----
+> >  1 file changed, 6 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadge=
+t/legacy/raw_gadget.c
+> > index 2acece16b890..e549022642e5 100644
+> > --- a/drivers/usb/gadget/legacy/raw_gadget.c
+> > +++ b/drivers/usb/gadget/legacy/raw_gadget.c
+> > @@ -310,13 +310,15 @@ static int gadget_bind(struct usb_gadget *gadget,
+> >         dev->eps_num =3D i;
+> >         spin_unlock_irqrestore(&dev->lock, flags);
+> >
+> > -       /* Matches kref_put() in gadget_unbind(). */
+> > -       kref_get(&dev->count);
+> > -
+> >         ret =3D raw_queue_event(dev, USB_RAW_EVENT_CONNECT, 0, NULL);
+> > -       if (ret < 0)
+> > +       if (ret < 0) {
+> >                 dev_err(&gadget->dev, "failed to queue event\n");
+> > +               set_gadget_data(gadget, NULL);
+> > +               return ret;
+> > +       }
+> >
+> > +       /* Matches kref_put() in gadget_unbind(). */
+> > +       kref_get(&dev->count);
+> >         return ret;
+> >  }
+> >
+> > --
+> > 2.17.1
+>
+> Indeed, if gadget_bind fails due to a raw_queue_event failure, the
+> core gadget code will never call gadget_unbind.
+>
+> Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
+> Tested-by: Andrey Konovalov <andreyknvl@gmail.com>
+>
 
-Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
----
-v2:
-	Add full stop to commit log.
----
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+Hi Greg
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 6cbf6eb..e6d2012 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -1389,6 +1389,7 @@ CONFIG_PHY_QCOM_USB_SNPS_FEMTO_V2=m
- CONFIG_PHY_QCOM_USB_HS_28NM=m
- CONFIG_PHY_QCOM_USB_SS=m
- CONFIG_PHY_QCOM_SGMII_ETH=m
-+CONFIG_PHY_QCOM_M31_USB=m
- CONFIG_PHY_R8A779F0_ETHERNET_SERDES=y
- CONFIG_PHY_RCAR_GEN3_PCIE=y
- CONFIG_PHY_RCAR_GEN3_USB2=y
--- 
-2.7.4
+Friendly ping :)
 
+Thanks
+Zqiang
+
+
+
+
+> Thanks!
