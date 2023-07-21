@@ -2,62 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F27675D117
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Jul 2023 20:10:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B6F675D138
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Jul 2023 20:23:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbjGUSKo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 Jul 2023 14:10:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57536 "EHLO
+        id S230322AbjGUSX1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 Jul 2023 14:23:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjGUSKn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Jul 2023 14:10:43 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98908E68
-        for <linux-usb@vger.kernel.org>; Fri, 21 Jul 2023 11:10:41 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id d75a77b69052e-4036bd4fff1so33341cf.0
-        for <linux-usb@vger.kernel.org>; Fri, 21 Jul 2023 11:10:41 -0700 (PDT)
+        with ESMTP id S229566AbjGUSXZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Jul 2023 14:23:25 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9584F2D71
+        for <linux-usb@vger.kernel.org>; Fri, 21 Jul 2023 11:23:22 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id d75a77b69052e-40550136e54so36711cf.0
+        for <linux-usb@vger.kernel.org>; Fri, 21 Jul 2023 11:23:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689963040; x=1690567840;
+        d=google.com; s=20221208; t=1689963801; x=1690568601;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=hFYVlIuV3SGxBG0fjwk4bJ+kU5G2GbANTNHrn4TbrUg=;
-        b=zlaHhYAuDcN+NBY3fG3Nt9xpPWzOZo4z8aGJjykoMHUowL9veoqZ9mqVj2ZXjyLRVJ
-         BwoxwT3cPMoADqxIvLhrks4iHpJ+sPU6PcaHIQP+djorCN4+J+WoO6kVSmYwprWnCW3Y
-         KtUX+Xg5wiMZ2+iW+6LJmZHnPhFpAGsr6W9i+wor+TidzwDnvPUeG1sOa9fmf/vvgxM/
-         YsPFyIwOjW7mVDj2+znKyYoUbMNaWHbv1ekvDRlrdqf0sz6Ll2rGuTo0OEWTGJi0UOoX
-         Dege6QOhevEUfbqu54a7a0S4fC47+r5e3q1VkMtPsPUUsXg361h4J7uaLkTC5syCFDWg
-         5mZQ==
+        bh=zbk958y4KnS7jYLqoI+AzJybv9QEYczcaQT0KClb7vw=;
+        b=ZdEI8jp3VV0lgbJtmCuhKLP5Qvw3ylSq6Jo+LChTtKnUHffI7/bnwf+w1puPFE/z1W
+         A5JXqKJDYd/syTaHQTlu4WxSOgki/u826aRXtaFK+zj7SQbp8YPuUIOQU/a0uBmyW1+d
+         YglqurwUe4fWpmiuGTeqRnEo77O6SQ65qwxPQQt8D62mdMo9BiS9SgFAm+wAZ++oQpmV
+         WuDhofhAP8AMwJzxhQlg7fxgRuZURb1hhtUQfiJgHnPeTz4ENX5JVxmoksMowF3/E606
+         Z8d4tP6awyKScE5wAPXZcbW58shx4lBkUzmU2mSjvXdSKj5905wMvrxSuABN/WBXnOm4
+         JyOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689963040; x=1690567840;
+        d=1e100.net; s=20221208; t=1689963801; x=1690568601;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=hFYVlIuV3SGxBG0fjwk4bJ+kU5G2GbANTNHrn4TbrUg=;
-        b=NHgCGQP6mvWoY+actwFGkZNsPX28CUOtbLPYTABwDCXOG5I40HWDe4XP0d3RI4yt8j
-         74o29C7Px22HfQXewhLrV/5zpUP1xGbmp+XMBOWhU4qi+gdN/q0CywY0TVHeeQpm6wtL
-         KXQqtI6swirK6UZyqY5BJz/l/HG0oj0aOHYU7JX+Rm4Y6Y5fO/xg2i3nR+FlttpZ7f3O
-         1ZCN8xyIMC7QkNaT3v1+x+CsmHpfTbzCaOGXcanjhoG6FeonhV3Y6vqG0KeFX7JMqjHO
-         6x9IMuZ3KlUrLgzf2o0VTX5Lelnm1XO7NbLVUVJsTXaHB0wbHooysyjpLDHNH8hdBbVW
-         aXOA==
-X-Gm-Message-State: ABy/qLbcNYDYAg6S1R5fbxiB7bO5QWRwaaEvtYjEFsdXANIDSBztE7X/
-        fy/hSOD3PaZQzWYl7xdtlNKsi3LcH5SFSxdBr20bJQ==
-X-Google-Smtp-Source: APBJJlHAKT9wkXtzkakDOw4xLXcZGmOsh+GFQ2UW2jqv8GwPJrNuvLTOZMm+mKPH6HU7869Xp2+qtrRxmMU8hq/sFyE=
-X-Received: by 2002:ac8:5848:0:b0:3fa:45ab:22a5 with SMTP id
- h8-20020ac85848000000b003fa45ab22a5mr20520qth.27.1689963040401; Fri, 21 Jul
- 2023 11:10:40 -0700 (PDT)
+        bh=zbk958y4KnS7jYLqoI+AzJybv9QEYczcaQT0KClb7vw=;
+        b=kBaVUcmOFOuTDnX47p5F5Ci6BHJSHvfHE1TnEFeMvkNM9ktQcL68i3FSRxDmkk5EyU
+         AFG9iqpam0lvr3CiuHewmpYF/eXpsFwd+rta8F/FT75tB6qHZG8AlZy90ITFcGN0xlHo
+         lATcMphPfu+fKXTSB28MGQRZ6pIlrXUVSFnQqAeHedF/GpZtdE6nl8vRnfTfcynFKXTT
+         21qx3Kl+RHKg7Y72T+3KfJVPAoz6IHBFPIxMIHYwm2DtLTJmRa79OZJF5yeA0lNt/JcK
+         h9pFzQizLJ6J/4Li2tDT4i7DVdyqmus9KwiucyvXWp7GpuHpWiPUbQEaQOQ9cjppzhT7
+         js8Q==
+X-Gm-Message-State: ABy/qLYnCki0UkZZAeQBcpErTPJhx4/hF3/Qxd9qNc4E0iaeqm9A0gM3
+        sr0UbxFMVxsmjNbT+Y64p79lEilJ22K63GT1yJg6Vw==
+X-Google-Smtp-Source: APBJJlF7oh1FAMoNxmX9F6gdsYhjGbhtsvHMmq2L9xlzUtGUcgt00WVd9y6El7tJMjvIlLmii2m402HArQsdtXP6mno=
+X-Received: by 2002:ac8:7c47:0:b0:403:b3ab:393e with SMTP id
+ o7-20020ac87c47000000b00403b3ab393emr39167qtv.18.1689963801341; Fri, 21 Jul
+ 2023 11:23:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <000000000000c0ffe505fe86c9ca@google.com>
-In-Reply-To: <000000000000c0ffe505fe86c9ca@google.com>
+References: <000000000000c0ffe505fe86c9ca@google.com> <CACGdZYJVYXA1gYTx+fvLa6H443+4SXLgG-iJcE7wQYSh+0aOzg@mail.gmail.com>
+In-Reply-To: <CACGdZYJVYXA1gYTx+fvLa6H443+4SXLgG-iJcE7wQYSh+0aOzg@mail.gmail.com>
 From:   Khazhy Kumykov <khazhy@google.com>
-Date:   Fri, 21 Jul 2023 11:10:27 -0700
-Message-ID: <CACGdZYJVYXA1gYTx+fvLa6H443+4SXLgG-iJcE7wQYSh+0aOzg@mail.gmail.com>
+Date:   Fri, 21 Jul 2023 11:23:10 -0700
+Message-ID: <CACGdZYK8FupYqA2CoqoDjS4i=FvG1+ie7fG2MENHtuxspC0-Dg@mail.gmail.com>
 Subject: Re: [syzbot] [usb?] KASAN: slab-out-of-bounds Read in
  read_descriptors (3)
 To:     syzbot <syzbot+18996170f8096c6174d0@syzkaller.appspotmail.com>
 Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
         linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000bbf1860601032ef1"
+        boundary="00000000000016be240601035ca5"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
@@ -69,236 +69,255 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---000000000000bbf1860601032ef1
+--00000000000016be240601035ca5
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jun 19, 2023 at 7:56=E2=80=AFPM syzbot
-<syzbot+18996170f8096c6174d0@syzkaller.appspotmail.com> wrote:
+On Fri, Jul 21, 2023 at 11:10=E2=80=AFAM Khazhy Kumykov <khazhy@google.com>=
+ wrote:
 >
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    40f71e7cd3c6 Merge tag 'net-6.4-rc7' of git://git.kernel.=
-o..
-> git tree:       upstream
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=3D1581445b28000=
-0
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3Dac246111fb601=
-aec
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3D18996170f8096c6=
-174d0
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binuti=
-ls for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D15d23487280=
+> On Mon, Jun 19, 2023 at 7:56=E2=80=AFPM syzbot
+> <syzbot+18996170f8096c6174d0@syzkaller.appspotmail.com> wrote:
+> >
+> > Hello,
+> >
+> > syzbot found the following issue on:
+> >
+> > HEAD commit:    40f71e7cd3c6 Merge tag 'net-6.4-rc7' of git://git.kerne=
+l.o..
+> > git tree:       upstream
+> > console+strace: https://syzkaller.appspot.com/x/log.txt?x=3D1581445b280=
 000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D16613ed328000=
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3Dac246111fb6=
+01aec
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=3D18996170f8096=
+c6174d0
+> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binu=
+tils for Debian) 2.35.2
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D15d234872=
+80000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D16613ed3280=
+000
+> >
+> > Downloadable assets:
+> > disk image: https://storage.googleapis.com/syzbot-assets/30922ad38c58/d=
+isk-40f71e7c.raw.xz
+> > vmlinux: https://storage.googleapis.com/syzbot-assets/3bd12e7503b8/vmli=
+nux-40f71e7c.xz
+> > kernel image: https://storage.googleapis.com/syzbot-assets/1dcd340b18d4=
+/bzImage-40f71e7c.xz
+> >
+> > IMPORTANT: if you fix the issue, please add the following tag to the co=
+mmit:
+> > Reported-by: syzbot+18996170f8096c6174d0@syzkaller.appspotmail.com
+> >
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > BUG: KASAN: slab-out-of-bounds in read_descriptors+0x263/0x280 drivers/=
+usb/core/sysfs.c:883
+> > Read of size 8 at addr ffff88801e78b8c8 by task udevd/5011
+> >
+> > CPU: 0 PID: 5011 Comm: udevd Not tainted 6.4.0-rc6-syzkaller-00195-g40f=
+71e7cd3c6 #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS=
+ Google 05/27/2023
+> > Call Trace:
+> >  <TASK>
+> >  __dump_stack lib/dump_stack.c:88 [inline]
+> >  dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
+> >  print_address_description.constprop.0+0x2c/0x3c0 mm/kasan/report.c:351
+> >  print_report mm/kasan/report.c:462 [inline]
+> >  kasan_report+0x11c/0x130 mm/kasan/report.c:572
+>
+> "src =3D udev->rawdescriptors[cfgno]" (so, just reading rawdescriptors)
+>
+> >  read_descriptors+0x263/0x280 drivers/usb/core/sysfs.c:883
+> >  sysfs_kf_bin_read+0x19a/0x270 fs/sysfs/file.c:97
+> >  kernfs_file_read_iter fs/kernfs/file.c:251 [inline]
+> >  kernfs_fop_read_iter+0x387/0x690 fs/kernfs/file.c:280
+> >  call_read_iter include/linux/fs.h:1862 [inline]
+> >  new_sync_read fs/read_write.c:389 [inline]
+> >  vfs_read+0x4b1/0x8a0 fs/read_write.c:470
+> >  ksys_read+0x12b/0x250 fs/read_write.c:613
+> >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> >  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > RIP: 0033:0x7f07c7916b6a
+> > Code: 00 3d 00 00 41 00 75 0d 50 48 8d 3d 2d 08 0a 00 e8 ea 7d 01 00 31=
+ c0 e9 07 ff ff ff 64 8b 04 25 18 00 00 00 85 c0 75 1b 0f 05 <48> 3d 00 f0 =
+ff ff 76 6c 48 8b 15 8f a2 0d 00 f7 d8 64 89 02 48 83
+> > RSP: 002b:00007ffdf34973d8 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+> > RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f07c7916b6a
+> > RDX: 0000000000010011 RSI: 00007ffdf3497407 RDI: 0000000000000008
+> > RBP: 0000000000000008 R08: 0000000000000003 R09: f4f13e10193fbafe
+> > R10: 0000000000000000 R11: 0000000000000246 R12: 000055be37470e10
+> > R13: 00007ffdf34a7ae8 R14: 00007ffdf34a8138 R15: 00007ffdf3497407
+> >  </TASK>
+> >
+> > Allocated by task 758:
+> >  kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
+> >  kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+> >  ____kasan_kmalloc mm/kasan/common.c:374 [inline]
+> >  ____kasan_kmalloc mm/kasan/common.c:333 [inline]
+> >  __kasan_kmalloc+0xa2/0xb0 mm/kasan/common.c:383
+> >  kasan_kmalloc include/linux/kasan.h:196 [inline]
+> >  __do_kmalloc_node mm/slab_common.c:966 [inline]
+> >  __kmalloc+0x5e/0x190 mm/slab_common.c:979
+> >  kmalloc include/linux/slab.h:563 [inline]
+> >  kzalloc include/linux/slab.h:680 [inline]
+>
+> kzmalloc(length) -> this length derived from dev->descriptor.bNumConfigur=
+ations
+>
+> The corresponding kfree is in usb_destroy_configuration (makes sense)
+> - we also set rawdescriptors to NULL here. If this race was happening,
+> I'd also expect some sort of null deref report...
+>
+> Stumbled upon https://lore.kernel.org/all/1599201467-11000-1-git-send-ema=
+il-prime.zeng@hisilicon.com/T/,
+> which suggests that we can, instead, race with a descriptor change,
+> which sounds plausible - descriptor changes, bNumConfigurations no
+> longer lines up with our kmalloc... so we may run past the end of it.
+Ah yeah, the syzbot C repro does something like this, it has a virtual
+usb and keeps changing the descs -> which may end up calling
+hub_port_connect_change()
+>
+> Looking at hub_port_connect_change(), we seem to read directly into
+> udev->descriptor, check if it changed, and if it did, set
+> udev->descriptor back to the old one...? If we have an ongoing sysfs
+> read, which directly touches udev->descriptor, there might be
+> trouble...
+>
+> I see this is called in both hub_port_connect_change() and
+> usb_reset_and_verify_device()... which both seem to lock the port_dev?
+> ("port_dev->status_lock"). This looks like a different lock than
+> usb_lock_device_interruptible would grab, maybe the code has changed
+> since that was reported in 2020. But it seems to suggest we want to
+> grab this lock in sysfs to safely read from udev->descriptor.
+>
+> (I'm not clear on when the sysfs gets added/removed, since it happens
+> in usb_bus_notify()..., the above two functions that touch
+> udev->descriptor don't look like they send the
+> BUS_NOTIFY_ADD/DEL_DEVICE to me, so the race seems plausible)
+
+Ah yeah - in hub_port_connect_change() we call hub_port_connect() if
+the descriptor changed, which notifies us of device remove *after* we
+already directly messed with udev->descriptor for a potentially live
+device.
+
+I do see there's several sysfs files that directly read
+udev->descriptor with no locking - should these all need to grab the
+port_dev->status_lock?
+
+>
+> >  usb_get_configuration+0x1f7/0x5170 drivers/usb/core/config.c:887
+> >  usb_enumerate_device drivers/usb/core/hub.c:2407 [inline]
+> >  usb_new_device+0x12b0/0x19d0 drivers/usb/core/hub.c:2545
+> >  hub_port_connect drivers/usb/core/hub.c:5407 [inline]
+> >  hub_port_connect_change drivers/usb/core/hub.c:5551 [inline]
+> >  port_event drivers/usb/core/hub.c:5711 [inline]
+> >  hub_event+0x2d9e/0x4e40 drivers/usb/core/hub.c:5793
+> >  process_one_work+0x99a/0x15e0 kernel/workqueue.c:2405
+> >  worker_thread+0x67d/0x10c0 kernel/workqueue.c:2552
+> >  kthread+0x344/0x440 kernel/kthread.c:379
+> >  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+> >
+> > The buggy address belongs to the object at ffff88801e78b8c0
+> >  which belongs to the cache kmalloc-8 of size 8
+> > The buggy address is located 0 bytes to the right of
+> >  allocated 8-byte region [ffff88801e78b8c0, ffff88801e78b8c8)
+> >
+> > The buggy address belongs to the physical page:
+> > page:ffffea000079e2c0 refcount:1 mapcount:0 mapping:0000000000000000 in=
+dex:0x0 pfn:0x1e78b
+> > anon flags: 0xfff00000000200(slab|node=3D0|zone=3D1|lastcpupid=3D0x7ff)
+> > page_type: 0xffffffff()
+> > raw: 00fff00000000200 ffff888012441280 0000000000000000 dead00000000000=
+1
+> > raw: 0000000000000000 0000000000660066 00000001ffffffff 000000000000000=
 0
->
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/30922ad38c58/dis=
-k-40f71e7c.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/3bd12e7503b8/vmlinu=
-x-40f71e7c.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/1dcd340b18d4/b=
-zImage-40f71e7c.xz
->
-> IMPORTANT: if you fix the issue, please add the following tag to the comm=
-it:
-> Reported-by: syzbot+18996170f8096c6174d0@syzkaller.appspotmail.com
->
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+> > page dumped because: kasan: bad access detected
+> > page_owner tracks the page as allocated
+> > page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12cc=
+0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY), pid 1, tgid 1 (swapper/0), ts 829=
+8345549, free_ts 8292702290
+> >  set_page_owner include/linux/page_owner.h:31 [inline]
+> >  post_alloc_hook+0x2db/0x350 mm/page_alloc.c:1731
+> >  prep_new_page mm/page_alloc.c:1738 [inline]
+> >  get_page_from_freelist+0xf41/0x2c00 mm/page_alloc.c:3502
+> >  __alloc_pages+0x1cb/0x4a0 mm/page_alloc.c:4768
+> >  alloc_page_interleave+0x1e/0x200 mm/mempolicy.c:2112
+> >  alloc_pages+0x233/0x270 mm/mempolicy.c:2274
+> >  alloc_slab_page mm/slub.c:1851 [inline]
+> >  allocate_slab+0x25f/0x390 mm/slub.c:1998
+> >  new_slab mm/slub.c:2051 [inline]
+> >  ___slab_alloc+0xa91/0x1400 mm/slub.c:3192
+> >  __slab_alloc.constprop.0+0x56/0xa0 mm/slub.c:3291
+> >  __slab_alloc_node mm/slub.c:3344 [inline]
+> >  slab_alloc_node mm/slub.c:3441 [inline]
+> >  __kmem_cache_alloc_node+0x136/0x320 mm/slub.c:3490
+> >  __do_kmalloc_node mm/slab_common.c:965 [inline]
+> >  __kmalloc_node_track_caller+0x4f/0x1a0 mm/slab_common.c:986
+> >  kstrdup+0x3f/0x70 mm/util.c:62
+> >  kstrdup_const+0x57/0x80 mm/util.c:85
+> >  kvasprintf_const+0x10c/0x190 lib/kasprintf.c:48
+> >  kobject_set_name_vargs+0x5a/0x150 lib/kobject.c:267
+> >  dev_set_name+0xbf/0xf0 drivers/base/core.c:3429
+> >  tty_register_device_attr+0x301/0x7d0 drivers/tty/tty_io.c:3243
+> > page last free stack trace:
+> >  reset_page_owner include/linux/page_owner.h:24 [inline]
+> >  free_pages_prepare mm/page_alloc.c:1302 [inline]
+> >  free_unref_page_prepare+0x62e/0xcb0 mm/page_alloc.c:2564
+> >  free_unref_page+0x33/0x370 mm/page_alloc.c:2659
+> Huh, why did our page get vfree'd, when it was kmalloc'd? Maybe the
+> memory was reused multiple times before generating this report...?
+> >  vfree+0x180/0x7e0 mm/vmalloc.c:2798
+> >  delayed_vfree_work+0x57/0x70 mm/vmalloc.c:2719
+> >  process_one_work+0x99a/0x15e0 kernel/workqueue.c:2405
+> >  worker_thread+0x67d/0x10c0 kernel/workqueue.c:2552
+> >  kthread+0x344/0x440 kernel/kthread.c:379
+> >  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+> >
+> > Memory state around the buggy address:
+> >  ffff88801e78b780: 00 fc fc fc fc fa fc fc fc fc fa fc fc fc fc fa
+> >  ffff88801e78b800: fc fc fc fc 00 fc fc fc fc fa fc fc fc fc fa fc
+> > >ffff88801e78b880: fc fc fc fa fc fc fc fc 00 fc fc fc fc 00 fc fc
+> >                                               ^
+> >  ffff88801e78b900: fc fc 00 fc fc fc fc fa fc fc fc fc 00 fc fc fc
+> >  ffff88801e78b980: fc 00 fc fc fc fc fa fc fc fc fc 00 fc fc fc fc
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> BUG: KASAN: slab-out-of-bounds in read_descriptors+0x263/0x280 drivers/us=
-b/core/sysfs.c:883
-> Read of size 8 at addr ffff88801e78b8c8 by task udevd/5011
->
-> CPU: 0 PID: 5011 Comm: udevd Not tainted 6.4.0-rc6-syzkaller-00195-g40f71=
-e7cd3c6 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS G=
-oogle 05/27/2023
-> Call Trace:
->  <TASK>
->  __dump_stack lib/dump_stack.c:88 [inline]
->  dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
->  print_address_description.constprop.0+0x2c/0x3c0 mm/kasan/report.c:351
->  print_report mm/kasan/report.c:462 [inline]
->  kasan_report+0x11c/0x130 mm/kasan/report.c:572
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >
+> >
+> > ---
+> > This report is generated by a bot. It may contain errors.
+> > See https://goo.gl/tpsmEJ for more information about syzbot.
+> > syzbot engineers can be reached at syzkaller@googlegroups.com.
+> >
+> > syzbot will keep track of this issue. See:
+> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> >
+> > If the bug is already fixed, let syzbot know by replying with:
+> > #syz fix: exact-commit-title
+> >
+> > If you want syzbot to run the reproducer, reply with:
+> > #syz test: git://repo/address.git branch-or-commit-hash
+> > If you attach or paste a git patch, syzbot will apply it before testing=
+.
+> >
+> > If you want to change bug's subsystems, reply with:
+> > #syz set subsystems: new-subsystem
+> > (See the list of subsystem names on the web dashboard)
+> >
+> > If the bug is a duplicate of another bug, reply with:
+> > #syz dup: exact-subject-of-another-report
+> >
+> > If you want to undo deduplication, reply with:
+> > #syz undup
 
-"src =3D udev->rawdescriptors[cfgno]" (so, just reading rawdescriptors)
-
->  read_descriptors+0x263/0x280 drivers/usb/core/sysfs.c:883
->  sysfs_kf_bin_read+0x19a/0x270 fs/sysfs/file.c:97
->  kernfs_file_read_iter fs/kernfs/file.c:251 [inline]
->  kernfs_fop_read_iter+0x387/0x690 fs/kernfs/file.c:280
->  call_read_iter include/linux/fs.h:1862 [inline]
->  new_sync_read fs/read_write.c:389 [inline]
->  vfs_read+0x4b1/0x8a0 fs/read_write.c:470
->  ksys_read+0x12b/0x250 fs/read_write.c:613
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7f07c7916b6a
-> Code: 00 3d 00 00 41 00 75 0d 50 48 8d 3d 2d 08 0a 00 e8 ea 7d 01 00 31 c=
-0 e9 07 ff ff ff 64 8b 04 25 18 00 00 00 85 c0 75 1b 0f 05 <48> 3d 00 f0 ff=
- ff 76 6c 48 8b 15 8f a2 0d 00 f7 d8 64 89 02 48 83
-> RSP: 002b:00007ffdf34973d8 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
-> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f07c7916b6a
-> RDX: 0000000000010011 RSI: 00007ffdf3497407 RDI: 0000000000000008
-> RBP: 0000000000000008 R08: 0000000000000003 R09: f4f13e10193fbafe
-> R10: 0000000000000000 R11: 0000000000000246 R12: 000055be37470e10
-> R13: 00007ffdf34a7ae8 R14: 00007ffdf34a8138 R15: 00007ffdf3497407
->  </TASK>
->
-> Allocated by task 758:
->  kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
->  kasan_set_track+0x25/0x30 mm/kasan/common.c:52
->  ____kasan_kmalloc mm/kasan/common.c:374 [inline]
->  ____kasan_kmalloc mm/kasan/common.c:333 [inline]
->  __kasan_kmalloc+0xa2/0xb0 mm/kasan/common.c:383
->  kasan_kmalloc include/linux/kasan.h:196 [inline]
->  __do_kmalloc_node mm/slab_common.c:966 [inline]
->  __kmalloc+0x5e/0x190 mm/slab_common.c:979
->  kmalloc include/linux/slab.h:563 [inline]
->  kzalloc include/linux/slab.h:680 [inline]
-
-kzmalloc(length) -> this length derived from dev->descriptor.bNumConfigurat=
-ions
-
-The corresponding kfree is in usb_destroy_configuration (makes sense)
-- we also set rawdescriptors to NULL here. If this race was happening,
-I'd also expect some sort of null deref report...
-
-Stumbled upon https://lore.kernel.org/all/1599201467-11000-1-git-send-email=
--prime.zeng@hisilicon.com/T/,
-which suggests that we can, instead, race with a descriptor change,
-which sounds plausible - descriptor changes, bNumConfigurations no
-longer lines up with our kmalloc... so we may run past the end of it.
-
-Looking at hub_port_connect_change(), we seem to read directly into
-udev->descriptor, check if it changed, and if it did, set
-udev->descriptor back to the old one...? If we have an ongoing sysfs
-read, which directly touches udev->descriptor, there might be
-trouble...
-
-I see this is called in both hub_port_connect_change() and
-usb_reset_and_verify_device()... which both seem to lock the port_dev?
-("port_dev->status_lock"). This looks like a different lock than
-usb_lock_device_interruptible would grab, maybe the code has changed
-since that was reported in 2020. But it seems to suggest we want to
-grab this lock in sysfs to safely read from udev->descriptor.
-
-(I'm not clear on when the sysfs gets added/removed, since it happens
-in usb_bus_notify()..., the above two functions that touch
-udev->descriptor don't look like they send the
-BUS_NOTIFY_ADD/DEL_DEVICE to me, so the race seems plausible)
-
->  usb_get_configuration+0x1f7/0x5170 drivers/usb/core/config.c:887
->  usb_enumerate_device drivers/usb/core/hub.c:2407 [inline]
->  usb_new_device+0x12b0/0x19d0 drivers/usb/core/hub.c:2545
->  hub_port_connect drivers/usb/core/hub.c:5407 [inline]
->  hub_port_connect_change drivers/usb/core/hub.c:5551 [inline]
->  port_event drivers/usb/core/hub.c:5711 [inline]
->  hub_event+0x2d9e/0x4e40 drivers/usb/core/hub.c:5793
->  process_one_work+0x99a/0x15e0 kernel/workqueue.c:2405
->  worker_thread+0x67d/0x10c0 kernel/workqueue.c:2552
->  kthread+0x344/0x440 kernel/kthread.c:379
->  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
->
-> The buggy address belongs to the object at ffff88801e78b8c0
->  which belongs to the cache kmalloc-8 of size 8
-> The buggy address is located 0 bytes to the right of
->  allocated 8-byte region [ffff88801e78b8c0, ffff88801e78b8c8)
->
-> The buggy address belongs to the physical page:
-> page:ffffea000079e2c0 refcount:1 mapcount:0 mapping:0000000000000000 inde=
-x:0x0 pfn:0x1e78b
-> anon flags: 0xfff00000000200(slab|node=3D0|zone=3D1|lastcpupid=3D0x7ff)
-> page_type: 0xffffffff()
-> raw: 00fff00000000200 ffff888012441280 0000000000000000 dead000000000001
-> raw: 0000000000000000 0000000000660066 00000001ffffffff 0000000000000000
-> page dumped because: kasan: bad access detected
-> page_owner tracks the page as allocated
-> page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12cc0(=
-GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY), pid 1, tgid 1 (swapper/0), ts 82983=
-45549, free_ts 8292702290
->  set_page_owner include/linux/page_owner.h:31 [inline]
->  post_alloc_hook+0x2db/0x350 mm/page_alloc.c:1731
->  prep_new_page mm/page_alloc.c:1738 [inline]
->  get_page_from_freelist+0xf41/0x2c00 mm/page_alloc.c:3502
->  __alloc_pages+0x1cb/0x4a0 mm/page_alloc.c:4768
->  alloc_page_interleave+0x1e/0x200 mm/mempolicy.c:2112
->  alloc_pages+0x233/0x270 mm/mempolicy.c:2274
->  alloc_slab_page mm/slub.c:1851 [inline]
->  allocate_slab+0x25f/0x390 mm/slub.c:1998
->  new_slab mm/slub.c:2051 [inline]
->  ___slab_alloc+0xa91/0x1400 mm/slub.c:3192
->  __slab_alloc.constprop.0+0x56/0xa0 mm/slub.c:3291
->  __slab_alloc_node mm/slub.c:3344 [inline]
->  slab_alloc_node mm/slub.c:3441 [inline]
->  __kmem_cache_alloc_node+0x136/0x320 mm/slub.c:3490
->  __do_kmalloc_node mm/slab_common.c:965 [inline]
->  __kmalloc_node_track_caller+0x4f/0x1a0 mm/slab_common.c:986
->  kstrdup+0x3f/0x70 mm/util.c:62
->  kstrdup_const+0x57/0x80 mm/util.c:85
->  kvasprintf_const+0x10c/0x190 lib/kasprintf.c:48
->  kobject_set_name_vargs+0x5a/0x150 lib/kobject.c:267
->  dev_set_name+0xbf/0xf0 drivers/base/core.c:3429
->  tty_register_device_attr+0x301/0x7d0 drivers/tty/tty_io.c:3243
-> page last free stack trace:
->  reset_page_owner include/linux/page_owner.h:24 [inline]
->  free_pages_prepare mm/page_alloc.c:1302 [inline]
->  free_unref_page_prepare+0x62e/0xcb0 mm/page_alloc.c:2564
->  free_unref_page+0x33/0x370 mm/page_alloc.c:2659
-Huh, why did our page get vfree'd, when it was kmalloc'd? Maybe the
-memory was reused multiple times before generating this report...?
->  vfree+0x180/0x7e0 mm/vmalloc.c:2798
->  delayed_vfree_work+0x57/0x70 mm/vmalloc.c:2719
->  process_one_work+0x99a/0x15e0 kernel/workqueue.c:2405
->  worker_thread+0x67d/0x10c0 kernel/workqueue.c:2552
->  kthread+0x344/0x440 kernel/kthread.c:379
->  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
->
-> Memory state around the buggy address:
->  ffff88801e78b780: 00 fc fc fc fc fa fc fc fc fc fa fc fc fc fc fa
->  ffff88801e78b800: fc fc fc fc 00 fc fc fc fc fa fc fc fc fc fa fc
-> >ffff88801e78b880: fc fc fc fa fc fc fc fc 00 fc fc fc fc 00 fc fc
->                                               ^
->  ffff88801e78b900: fc fc 00 fc fc fc fc fa fc fc fc fc 00 fc fc fc
->  ffff88801e78b980: fc 00 fc fc fc fc fa fc fc fc fc 00 fc fc fc fc
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->
->
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
->
-> If the bug is already fixed, let syzbot know by replying with:
-> #syz fix: exact-commit-title
->
-> If you want syzbot to run the reproducer, reply with:
-> #syz test: git://repo/address.git branch-or-commit-hash
-> If you attach or paste a git patch, syzbot will apply it before testing.
->
-> If you want to change bug's subsystems, reply with:
-> #syz set subsystems: new-subsystem
-> (See the list of subsystem names on the web dashboard)
->
-> If the bug is a duplicate of another bug, reply with:
-> #syz dup: exact-subject-of-another-report
->
-> If you want to undo deduplication, reply with:
-> #syz undup
-
---000000000000bbf1860601032ef1
+--00000000000016be240601035ca5
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -365,14 +384,14 @@ hBDfCkyRbFphFmeJ+0A1fPxECLLkrXR2izyctzMAGZH2ceScAlECO1r3aEQcyx9n7/YlMc24ZF0I
 vEb7YC0jFAT8SmYmtSOr+4aZJRIwVjXlI04Mfr3jcbqDnzfv0VgVp5UlzQK4aApofbSsSDeXsDR+
 t30gEkeMNUvUqd6PaxYxggJqMIICZgIBATBoMFQxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9i
 YWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFzIFIzIFNNSU1FIENBIDIwMjAC
-EAGy8e6bI55p/yISlXXGSrAwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIK/ZmyIK
-EsuAL8OoZAJxBS68+Ad8c8OBNkq6yIM1YLUuMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJ
-KoZIhvcNAQkFMQ8XDTIzMDcyMTE4MTA0MFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASow
+EAGy8e6bI55p/yISlXXGSrAwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEILtr3KGQ
+eF/8BGsAVUdntx7sFJ5oi57TKInm+W/YutSDMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJ
+KoZIhvcNAQkFMQ8XDTIzMDcyMTE4MjMyMVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASow
 CwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZI
-hvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQAVcj74rgxZOiGHCXMcvuWCPY2X
-jiW13/IBlRnbk21ekJ5aBzkaWhPwbHHe9hqMEDOG+wV2rUiu/X2JdlVfUIDL8nZ8wIEkjaFbeQ/r
-nBDT9rOrborr2TGxmtooG06OWkN/JCjWQZquTo/uXWKGU+YT+gyCNp0MYCAqAOohRQYFr6BZ2E7j
-xdj0oEpE1O7m8IbZygNnK/C6JUm1bfO3DGRNNqtevxGYNwumx/6ODM7yFPpe06zauYHrKXtoiaUa
-80hwF1O5+4cGuup8JTfYjL/pHRzUyr2h8JD/qMzbKmwIZggBI49famQNJb3OclC2+G3kc/+PMg7E
-ylP135NQlWL3
---000000000000bbf1860601032ef1--
+hvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBeNsqSMjvqhFb7T7OMQUxnXMvy
+k1tEZG14patquIKxbbRN9d7DFok+pJBYxpCdv4Faz96zTU66zZkTxezt7p5hfWxVyfmPhOhpHLqG
+fgLTCU9tYmjJgqy5w0U8kajbx92pE6LXp4KUGDJ+QxtFNQ9IN5CLAfLpsWwVjYyHdCcr3AvPk/2W
+eanAgkS0o18FTi5GPigxTfvLuJ9Y5+wkdJpELBvPMYyO4pJyp3rE/fWX4vvevQLNwqrcy4t5V47A
+RUNmg5JT4qzeuaaZe/L41d2X96QcyOoi7O52kqIxAw/ies5IA+iV+VfJFCvp8NmMbupv3qG3nfcu
+q/0ZOzblkh6Z
+--00000000000016be240601035ca5--
