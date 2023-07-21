@@ -2,247 +2,188 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE7FF75C08C
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Jul 2023 09:56:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D016F75C0B9
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Jul 2023 10:04:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230346AbjGUH4j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 Jul 2023 03:56:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46440 "EHLO
+        id S231293AbjGUIEW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 Jul 2023 04:04:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbjGUH4i (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Jul 2023 03:56:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D529270A;
-        Fri, 21 Jul 2023 00:56:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8FCF36137B;
-        Fri, 21 Jul 2023 07:56:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB402C433C7;
-        Fri, 21 Jul 2023 07:56:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689926188;
-        bh=5CIitjjI5khTPF7RHT+gTh25uD/FQODAUJsQwUhQD5w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=svt1h8bTI05Eh8uMp29Ukd0mWqQ2hOFonGmcNeA9eCKIIKGkIgWhr43D7ndQR/ZBx
-         0agLf0SrMxcb1VUcZHyIXudI5yx2JNIIKF8DQm8n98Ja2/mUo2/pptnDYyEoOw0XxA
-         Z2RLAQfBrjyxK4xDB5Gw0mREQc9dMymipb0kvO/jxH7vUCe0tj7V0wmBPAlNqUQN9b
-         SCQ2oSLk/tzUYeb+XZ9pkIPIYNwvzZDe9IrHaFSjmqloE1FiK3YdMPm8WT3DpQQERa
-         IsRVi3jlAzbNEsncO2gNQz+e1HBEXQ+ejz6DYCkAjyj939dwI0uKHIIh1Amk8P3pm8
-         MRAEkH7AdawUg==
-Received: from johan by xi.lan with local (Exim 4.96)
-        (envelope-from <johan@kernel.org>)
-        id 1qMl07-0003Iw-1s;
-        Fri, 21 Jul 2023 09:56:36 +0200
-Date:   Fri, 21 Jul 2023 09:56:35 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
-        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
-        ahalaney@redhat.com, quic_shazhuss@quicinc.com
-Subject: Re: [PATCH v9 05/10] usb: dwc3: core: Refactor PHY logic to support
- Multiport Controller
-Message-ID: <ZLo6MwbuKNL5xtPE@hovoldconsulting.com>
-References: <20230621043628.21485-1-quic_kriskura@quicinc.com>
- <20230621043628.21485-6-quic_kriskura@quicinc.com>
- <ZJrRe7HtMs0KbsCy@hovoldconsulting.com>
- <e3e0c4c8-1e91-caf1-c1c4-86203a7ecba0@quicinc.com>
+        with ESMTP id S230060AbjGUIEV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Jul 2023 04:04:21 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C802707
+        for <linux-usb@vger.kernel.org>; Fri, 21 Jul 2023 01:04:19 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-313e742a787so1010405f8f.1
+        for <linux-usb@vger.kernel.org>; Fri, 21 Jul 2023 01:04:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1689926657; x=1690531457;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=u9uYOCRA5YadDN02dX7/R6KaJAYc8dbbN6vLAWHejI0=;
+        b=DfC2Abzho1Hf/+i1bGQ/ahasv/PMsVT80j0C85yQGApL2UwCYU+QicLDzNpZsHGJqU
+         JdsaBm3igzvnH3jSCK0cP3GW3juQ69C7QQs4MB2ykqac6t+a4cL+kVTmmaFyhKEF2okS
+         DENYjZ6fqArK6sdMSisfJ9DveXQaTZ+/3viKlkbsWzOUp9/BGiyYHsHpVTUTBZZHsq0W
+         h+HbUfbOaezPWYJ497heHnwa55TJcstlEEOSqk/OW5JdDn4ApokjdXA8wLSWr0X6xSWT
+         qxz9iQjjOsB4AKkbpnB9vke87XRtiS0W1thnwEyHVPr+mXpABjgapSggnij57RmbgZCk
+         ugoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1689926657; x=1690531457;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=u9uYOCRA5YadDN02dX7/R6KaJAYc8dbbN6vLAWHejI0=;
+        b=Q7SILaOcyAl7jd2g3YMYORqSegE4VEFQ5gvfxxxBkKe59A2dxBswuq3scMZIz2SeZu
+         KC+M/dIcnnmGdhodRbPTp+KC5X09o1CQBxl6nqYGORzvlEAMPXo8Pt7uQdpWdKkqoLml
+         GaLiDn+fJf+CNfVIjjKuMzD7YZnk1GEMGLI2vt4SUCvn/mW/UoKIP1jSyzqwsV8Fbclq
+         GonqTK70uE+uL4ZjY3x+6c1NGjrqrKA/F+buIq7oRMrBbtbwGRwiyKPAibB6c/LDx+uC
+         co1EqnS7Dg0oqTFWLAyx8Hvf2tpNS7zTPu1+LQFBrjEUamROSI1L5umD3IRa0Dwkt/kZ
+         ifFQ==
+X-Gm-Message-State: ABy/qLYlnu31+2JQVZWDTxTBZ8/jlZfVtFlQOSlw2xrD8Gwl3VuRzEG7
+        A8NfF1DvCUFsZ2iqbK4siImWosiy6vQQMQmnFxU+ag==
+X-Google-Smtp-Source: APBJJlEML6EeH92FgA4w00FQaUwkaGEn7DDRSFfRrlIJyO51/cyCNcuW4pf7Q9nhFGKwSequGJWveQ==
+X-Received: by 2002:adf:e64a:0:b0:316:f4b9:a952 with SMTP id b10-20020adfe64a000000b00316f4b9a952mr4818727wrn.31.1689926657529;
+        Fri, 21 Jul 2023 01:04:17 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id l16-20020a1c7910000000b003fba137857esm2900437wme.14.2023.07.21.01.04.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Jul 2023 01:04:17 -0700 (PDT)
+Message-ID: <216a3abe-1350-cbb1-4cfd-0dc4d7f70a88@linaro.org>
+Date:   Fri, 21 Jul 2023 10:04:15 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e3e0c4c8-1e91-caf1-c1c4-86203a7ecba0@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH 1/2] dt-bindings: usb: Add Intel SoCFPGA USB controller
+ bindings
+Content-Language: en-US
+To:     adrian.ho.yin.ng@intel.com, gregkh@linuxfoundation.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, Thinh.Nguyen@synopsys.com,
+        p.zabel@pengutronix.de
+References: <cover.1689913114.git.adrian.ho.yin.ng@intel.com>
+ <68037e45970a9ef930c609c002d36863d96b39cc.1689913114.git.adrian.ho.yin.ng@intel.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <68037e45970a9ef930c609c002d36863d96b39cc.1689913114.git.adrian.ho.yin.ng@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 03, 2023 at 12:26:26AM +0530, Krishna Kurapati PSSNV wrote:
-> On 6/27/2023 5:39 PM, Johan Hovold wrote:
-> > On Wed, Jun 21, 2023 at 10:06:23AM +0530, Krishna Kurapati wrote:
-> >> Currently the DWC3 driver supports only single port controller
-> >> which requires at most one HS and one SS PHY.
-> >>
-> >> But the DWC3 USB controller can be connected to multiple ports and
-> >> each port can have their own PHYs. Each port of the multiport
-> >> controller can either be HS+SS capable or HS only capable
-> >> Proper quantification of them is required to modify GUSB2PHYCFG
-> >> and GUSB3PIPECTL registers appropriately.
-> >>
-> >> Add support for detecting, obtaining and configuring phy's supported
-> >> by a multiport controller and limit the max number of ports
-> >> supported to 4.
-> >>
-> >> Signed-off-by: Harsh Agarwal <quic_harshq@quicinc.com>
-> >> [Krishna: Modifed logic for generic phy and rebased the patch]
-> >> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> > 
-> > As I already said:
-> > 
-> > 	If Harsh is the primary author you need to add a From: line at
-> > 	the beginning of the patch.
-> > 
-> > 	Either way, you need his SoB as well as your Co-developed-by tag.
-> > 
-> > 	All this is documented under Documentation/process/ somewhere.
-> > 
-> > The above is missing a From line and two Co-developed-by tags at least.
-
->   I tried to follow the following commit:
+On 21/07/2023 06:30, adrian.ho.yin.ng@intel.com wrote:
+> From: Adrian Ng Ho Yin <adrian.ho.yin.ng@intel.com>
 > 
-> 8030cb9a5568 ("soc: qcom: aoss: remove spurious IRQF_ONESHOT flags")
+> Existing binding intel,keembay-dwc3.yaml does not have the required
+> properties for Intel SoCFPGA devices.
+> Introduce new binding description for Intel SoCFPGA USB controller
+> which will be used for current and future SoCFPGA devices.
 > 
-> Let me know if that is not acceptable.
+> Signed-off-by: Adrian Ng Ho Yin <adrian.ho.yin.ng@intel.com>
 
-I don't see how that commit relevant to the discussion at hand.
+A nit, subject: drop second/last, redundant "bindings". The
+"dt-bindings" prefix is already stating that these are bindings.
 
-Please just fix your use of Signed-off-by and Co-developed-by tags that
-I've now pointed out repeatedly.
+> ---
+>  .../bindings/usb/intel,socfpga-dwc3.yaml      | 78 +++++++++++++++++++
+>  1 file changed, 78 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/intel,socfpga-dwc3.yaml
 
-If you can't figure it out by yourself after the feedback I've already
-given you need to ask someone inside Qualcomm. You work for a huge
-company that should provide resources for training it's developers in
-basic process issues like this.
+Filename matching compatible.
 
-> >> @@ -120,10 +120,11 @@ void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode)
-> >>   static void __dwc3_set_mode(struct work_struct *work)
-> >>   {
-> >>   	struct dwc3 *dwc = work_to_dwc(work);
-> >> +	u32 desired_dr_role;
-> >>   	unsigned long flags;
-> >>   	int ret;
-> >>   	u32 reg;
-> >> -	u32 desired_dr_role;
-> > 
-> > This is an unrelated change. Just add int i at the end.
-> > 
-> I was trying to keep the reverse xmas order of variables.
-
-That's generally good, but you should not change unrelated code as part
-of this patch. It's fine to leave this as is for now.
-
-> >> +	int i;
-> >>   
-> >>   	mutex_lock(&dwc->mutex);
-> >>   	spin_lock_irqsave(&dwc->lock, flags);
-> > 
-> >> @@ -746,23 +779,34 @@ static int dwc3_phy_setup(struct dwc3 *dwc)
-> >>   static int dwc3_phy_init(struct dwc3 *dwc)
-> >>   {
-> >>   	int ret;
-> >> +	int i;
-> >> +	int j;
-> >>   
-> >>   	usb_phy_init(dwc->usb2_phy);
-> >>   	usb_phy_init(dwc->usb3_phy);
-> >>   
-> >> -	ret = phy_init(dwc->usb2_generic_phy);
-> >> -	if (ret < 0)
-> >> -		goto err_shutdown_usb3_phy;
-> >> +	for (i = 0; i < dwc->num_usb2_ports; i++) {
-> >> +		ret = phy_init(dwc->usb2_generic_phy[i]);
-> >> +		if (ret < 0)
-> >> +			goto err_exit_usb2_phy;
-> >> +	}
-> >>   
-> >> -	ret = phy_init(dwc->usb3_generic_phy);
-> >> -	if (ret < 0)
-> >> -		goto err_exit_usb2_phy;
-> >> +	for (i = 0; i < dwc->num_usb2_ports; i++) {
-> >> +		ret = phy_init(dwc->usb3_generic_phy[i]);
-> >> +		if (ret < 0)
-> >> +			goto err_exit_usb3_phy;
-> >> +	}
-> >>   
-> >>   	return 0;
-> >>   
-> >> +err_exit_usb3_phy:
-> >> +	for (j = i-1; j >= 0; j--)
-> > 
-> > Missing spaces around - here and below.
-> > 
-> >> +		phy_exit(dwc->usb3_generic_phy[j]);
-> >> +	i = dwc->num_usb2_ports;
-> >>   err_exit_usb2_phy:
-> >> -	phy_exit(dwc->usb2_generic_phy);
-> >> -err_shutdown_usb3_phy:
-> >> +	for (j = i-1; j >= 0; j--)
-> >> +		phy_exit(dwc->usb2_generic_phy[j]);
-> >> +
-> > 
-> > Again:
-> > 
-> > 	The above is probably better implemented as a *single* loop over
-> > 	num_usb2_ports where you enable each USB2 and USB3 PHY. On
-> > 	errors you use the loop index to disable the already enabled
-> > 	PHYs in reverse order below (after disabling the USB2 PHY if
-> > 	USB3 phy init fails).
-> > 
-> > with emphasis on "single" added.
-> > 
-> Oh, you mean something like this ?
 > 
-> for (loop over num_ports) {
-> 	ret = phy_init(dwc->usb3_generic_phy[i]);
-> 	if (ret != 0)
-> 		goto err_exit_phy;
-> 
-> 	ret = phy_init(dwc->usb2_generic_phy[i]);
-> 	if (ret != 0)
-> 		goto err_exit_phy;
-> }
-> 
-> err_exit_phy:
-> 	for (j = i-1; j >= 0; j--) {
-> 		phy_exit(dwc->usb3_generic_phy[j]);
-> 		phy_exit(dwc->usb2_generic_phy[j]);
-> 	}
+> diff --git a/Documentation/devicetree/bindings/usb/intel,socfpga-dwc3.yaml b/Documentation/devicetree/bindings/usb/intel,socfpga-dwc3.yaml
+> new file mode 100644
+> index 000000000000..dedef70df887
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/intel,socfpga-dwc3.yaml
+> @@ -0,0 +1,78 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/intel,socfpga-dwc3.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Intel SoCFPGA DWC3 USB controller
+> +
+> +maintainers:
+> +  - Adrian Ng Ho Yin <adrian.ho.yin.ng@intel.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: intel,agilex5-dwc3
 
-Yeah, something like that, but you need to disable the usb3[i] phy when
-usb2[2] init fail above (and I'd also keep the order of initialising
-usb2 before usb3).
+Why using compatible style different than other Agilex blocks? Which one
+is recommended/official/correct?
 
-> >>   	usb_phy_shutdown(dwc->usb3_phy);
-> >>   	usb_phy_shutdown(dwc->usb2_phy);
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 2
 
-> >> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-> >> index 42fb17aa66fa..b2bab23ca22b 100644
-> >> --- a/drivers/usb/dwc3/core.h
-> >> +++ b/drivers/usb/dwc3/core.h
-> >> @@ -37,6 +37,9 @@
-> >>   #define XHCI_EXT_PORT_MINOR(x)	(((x) >> 16) & 0xff)
-> >>   #define XHCI_EXT_PORT_COUNT(x)	(((x) >> 8) & 0xff)
-> >>   
-> >> +/* Number of ports supported by a multiport controller */
-> >> +#define DWC3_MAX_PORTS 4
-> > 
-> > You did not answer my question about whether this was an arbitrary
-> > implementation limit (i.e. just reflecting the only currently supported
-> > multiport controller)?
-> > 
-> I mentioned in commit text that it is limited to 4. Are you referring to 
-> state the reason why I chose the value 4 ?
+What are the items?
 
-Yes, and to clarify whether this was an arbitrary limit you chose
-because it was all that was needed for the hw you care about, or if it's
-a more general limitation.
+> +
+> +  ranges: true
+> +
+> +  resets:
+> +    maxItems: 2
+> +
+> +  reset-names:
+> +    items:
+> +      - const: dwc3
+> +      - const: dwc3-ecc
+> +
+> +  '#address-cells':
+> +    enum: [ 1, 2 ]
+> +
+> +  '#size-cells':
+> +    enum: [ 1, 2 ]
+> +
+> +# Required child node:
+> +
+> +patternProperties:
+> +  "^usb@[0-9a-f]+$":
+> +    $ref: snps,dwc3.yaml#
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - resets
+> +  - ranges
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/reset/altr,rst-mgr.h>
+> +    #define AGILEX5_USB31_SUSPEND_CLK
+> +    #define AGILEX5_USB31_BUS_CLK_EARLY
 
-Johan
+Drop defines. Include proper header or use some numbers, if the headers
+are not there yet.
+
+> +
+> +    usb1@11000000 {
+
+Node names should be generic. See also an explanation and list of
+examples (not exhaustive) in DT specification:
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+
+> +          compatible = "intel,agilex5-dwc3";
+Best regards,
+Krzysztof
+
