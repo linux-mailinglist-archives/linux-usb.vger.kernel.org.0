@@ -2,143 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACE9775C1CC
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Jul 2023 10:35:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0044675C1DC
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Jul 2023 10:42:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231403AbjGUIfS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 Jul 2023 04:35:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45494 "EHLO
+        id S230090AbjGUImG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 Jul 2023 04:42:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231454AbjGUIfQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Jul 2023 04:35:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D152D7B;
-        Fri, 21 Jul 2023 01:35:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 40F2561880;
-        Fri, 21 Jul 2023 08:35:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EDD1C433C9;
-        Fri, 21 Jul 2023 08:35:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1689928507;
-        bh=6LbigfYqXwFco4QzAjvVJNGTQFJ6Z80yZ4lA9uao7dY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IRJtIxEhfjoSTdAixbjssNlPaTcC4Be+VneENzRk4Nk1bSBm/gmfw+0EU7JoxMbQQ
-         bd87n4DieSa7VUMp+PaEzvzKUAPejRqvhfqOaUeGaxbHrc3IGfgtD+vftBorke6ull
-         z1s7E7lg6aBKEkKzdUnSI2zrwGRXTLOHO+GF6a4cDGxYYqoQ27W1H3IFo1Tn2T62Iu
-         ZX57tFlLQaSt1MdXwL5lgB2l5XvbBQROPp92GW/GTZN84m68LBomxoYm7gXupp3yIq
-         vYa6MFUT8SNaHV2qdYw90OYSnLZHH5G2CeFKtytWUDcJp7t7lQGMJ5VzLH7jCYbUJz
-         /W6uHoyOCwO2A==
-Received: from johan by xi.lan with local (Exim 4.96)
-        (envelope-from <johan@kernel.org>)
-        id 1qMlbX-0003Qc-2o;
-        Fri, 21 Jul 2023 10:35:15 +0200
-Date:   Fri, 21 Jul 2023 10:35:15 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        quic_jackp@quicinc.com, Wesley Cheng <quic_wcheng@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com, ahalaney@redhat.com,
-        quic_shazhuss@quicinc.com
-Subject: Re: [PATCH v9 06/10] usb: dwc3: qcom: Add support to read IRQ's
- related to multiport
-Message-ID: <ZLpDQ0R1BjG8fJk8@hovoldconsulting.com>
-References: <20230621043628.21485-1-quic_kriskura@quicinc.com>
- <20230621043628.21485-7-quic_kriskura@quicinc.com>
- <ZK6YrLMn9r39zEeB@hovoldconsulting.com>
- <ef29e520-7b9c-f581-e70a-250df80d3821@quicinc.com>
- <ZLEP6Ekh3unSTiCL@hovoldconsulting.com>
- <7c04ebd9-4def-87d6-0640-35fd0ccd20f5@quicinc.com>
- <9a304650-0360-5509-4922-0818e8e306f5@quicinc.com>
+        with ESMTP id S229786AbjGUImF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Jul 2023 04:42:05 -0400
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1E48B273A;
+        Fri, 21 Jul 2023 01:41:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=45nbv
+        SIDFTeptEDezMNw4kfndw/BNytulwYrUeJEA1g=; b=PiPx8QPjzY3W+RXyCqQoC
+        fiTXqkngyWpZGcbFJovC4PUtX+guIckxPEcaDWL45Sy2MGzTGuq1eOIBXzdoUSnz
+        Vv7JnaxoUHhz6WGLHaayCkqagub99TGH1MXh6J01KnFA1WtWmKtyYUzjazf58vwy
+        olPinapVIxN+WfZ+cVgyGM=
+Received: from sc9-mailhost2.vmware.com (unknown [114.253.21.2])
+        by zwqz-smtp-mta-g1-4 (Coremail) with SMTP id _____wCXHEKcRLpk9jqAAw--.11481S2;
+        Fri, 21 Jul 2023 16:41:01 +0800 (CST)
+From:   Dingyan Li <18500469033@163.com>
+To:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
+        sebastian.reichel@collabora.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] USB: add usbfs ioctl to get specific superspeedplus rates
+Date:   Fri, 21 Jul 2023 16:40:39 +0800
+Message-Id: <20230721084039.9728-1-18500469033@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <9a304650-0360-5509-4922-0818e8e306f5@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: _____wCXHEKcRLpk9jqAAw--.11481S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Cr47Cr15JrWUZr4DtF18Zrb_yoW8WFyxpF
+        4kAFy8JFWkWF4S9r18Cay8u3W5WwsxKay5K3429wn09FW3t34ruF1rAry5Cr95Ar4jyr17
+        tasxZ34Yg3yxCrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jhrcfUUUUU=
+X-Originating-IP: [114.253.21.2]
+X-CM-SenderInfo: jprykiiquwmiitt6il2tof0z/xtbBUR6zy1aEE9sfTwAAs9
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L4,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jul 16, 2023 at 12:31:05AM +0530, Krishna Kurapati PSSNV wrote:
-> On 7/14/2023 4:10 PM, Krishna Kurapati PSSNV wrote:
-> > On 7/14/2023 2:35 PM, Johan Hovold wrote:
+The usbfs interface does not provide any way to get specific
+superspeedplus rate, like Gen2x1, Gen1x2 or Gen2x2. Current
+API include an USBDEVFS_GET_SPEED ioctl, but it can only return
+general superspeedplus speed instead of any specific rates.
+Therefore we can't tell whether it's a Gen2x2(20Gbps) device.
 
-> >> I haven't had time to look at your latest replies yet, but as I already
-> >> said when reviewing v9, it seems you should be using a common helper for
-> >> non-mp and mp.
+This patch introduce a new ioctl USBDEVFS_GET_SSP_RATE to fix
+it. Similar information is already available via sysfs, it's
+good to add it for usbfs too.
 
-> >   The gist of my mail was to see if I can defer qcom probe when dwc3 
-> > probe fails/or doesn't happen on of_plat_pop (which is logical) so that 
-> > we can move setup_irq to after dwc3_register_core so that we know 
-> > whether we are MP capable or not. This would help us move all IRQ 
-> > reading into one function.
+Signed-off-by: Dingyan Li <18500469033@163.com>
+---
+ drivers/usb/core/devio.c          | 3 +++
+ include/uapi/linux/usbdevice_fs.h | 1 +
+ 2 files changed, 4 insertions(+)
 
->   I see it is difficult to write a common helper. To do so, we need to 
-> know whether the device is MP capable or not in advance. And since it is 
-> not possible to know it before of_plat_pop is done, I see only few ways 
-> to do it:
-> 
-> 1. Based on qcom node compatible string, I can read whether the device 
-> is MP capable or not and get IRQ's accordingly.
+diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
+index 1a16a8bdea60..2f57eb163360 100644
+--- a/drivers/usb/core/devio.c
++++ b/drivers/usb/core/devio.c
+@@ -2783,6 +2783,9 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
+ 	case USBDEVFS_GET_SPEED:
+ 		ret = ps->dev->speed;
+ 		break;
++	case USBDEVFS_GET_SSP_RATE:
++		ret = ps->dev->ssp_rate;
++		break;
+ 	case USBDEVFS_FORBID_SUSPEND:
+ 		ret = proc_forbid_suspend(ps);
+ 		break;
+diff --git a/include/uapi/linux/usbdevice_fs.h b/include/uapi/linux/usbdevice_fs.h
+index 74a84e02422a..f5522e910329 100644
+--- a/include/uapi/linux/usbdevice_fs.h
++++ b/include/uapi/linux/usbdevice_fs.h
+@@ -227,5 +227,6 @@ struct usbdevfs_streams {
+ #define USBDEVFS_FORBID_SUSPEND    _IO('U', 33)
+ #define USBDEVFS_ALLOW_SUSPEND     _IO('U', 34)
+ #define USBDEVFS_WAIT_FOR_RESUME   _IO('U', 35)
++#define USBDEVFS_GET_SSP_RATE      _IO('U', 36)
+ 
+ #endif /* _UAPI_LINUX_USBDEVICE_FS_H */
+-- 
+2.25.1
 
-See, it's not impossible. You can also determine whether you have a
-multiport controller from looking at the interrupt names which are
-indexed and distinct for MP.
-
-> 2. Read the port_info in advance but it needs me to go through some DT 
-> props and try getting this info. Or read xhci regs like we are doing in 
-> core (which is not good). Also since some Dt props can be missing, is it 
-> difficult to get the MP capability info before of_plat_pop is done.
-
-That seem unnecessary currently, but long term we probably need to fix
-the design of this driver and defer some setup using callbacks that are
-called when the core driver probes. Perhaps now is the time to add such
-functionality.
-
-> 3. Remove IRQ handling completely. Just because the device has IRQ's 
-> present, I don't see a point in adding them to bindings, and because we 
-> added them to bindings, we are making a patch to read them (and since 
-> this is a little challenging, the whole of multiport series is blocked 
-> although I don't need wakeup support on these interrupts right away).
-
-Again, no. The devicetree binding should describe the hardware
-capabilities and that has nothing to do with whether you need this for
-you current project or not.
-
-> Can't we let the rest of the patches go through and let interrupt 
-> handling for 2nd, 3rd and 4rth ports be taken care later ? I am asking 
-> this because I want the rest of the patches which are in good shape now 
-> (after fixing the nits mentioned) to get merged atleast. I will make 
-> sure to add interrupt handling later in a different series once this is 
-> merged once I send v10.
-
-As I've explained in earlier mails, I don't think that is acceptable as
-you'd be dumping your technical debt on the community which will be left
-to clean up your mess.
-
-> Or if there is a simpler way to do it, I would be happy to take any 
-> suggestions and complete this missing part in this series itself.
-
-Using the 'compatible' or 'interrupt-names' properties seems like the
-easiest way to determine whether you have an MP controller or not.
-
-Johan
