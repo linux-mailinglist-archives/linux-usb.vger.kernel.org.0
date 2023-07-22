@@ -2,186 +2,143 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E70875D7A6
-	for <lists+linux-usb@lfdr.de>; Sat, 22 Jul 2023 00:45:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A9A075D832
+	for <lists+linux-usb@lfdr.de>; Sat, 22 Jul 2023 02:32:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbjGUWpJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 Jul 2023 18:45:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45086 "EHLO
+        id S231157AbjGVAcf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 Jul 2023 20:32:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230037AbjGUWpI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Jul 2023 18:45:08 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C3FD3A8C
-        for <linux-usb@vger.kernel.org>; Fri, 21 Jul 2023 15:45:06 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-992b27e1c55so372218566b.2
-        for <linux-usb@vger.kernel.org>; Fri, 21 Jul 2023 15:45:06 -0700 (PDT)
+        with ESMTP id S229744AbjGVAce (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 Jul 2023 20:32:34 -0400
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA20D1731
+        for <linux-usb@vger.kernel.org>; Fri, 21 Jul 2023 17:32:32 -0700 (PDT)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-1bb29ae5975so598375fac.2
+        for <linux-usb@vger.kernel.org>; Fri, 21 Jul 2023 17:32:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1689979504; x=1690584304;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UlbhjqXQg7VrRY714bJFhKiLE8AjgGqQQTyreHqWQBI=;
-        b=bFaE7+t/zSr4iNFjrMkLdx8PKhxsrqYK3T+HV5/GVHx3+tHyt5yJ0O3HNNW28v/lMx
-         3V4RZgHgIxWgH3fBI3rkSpbMBdCIYeT0YG6hizU6Fc4iXx+tDCHHjIsVfKmBIDlQumI1
-         tbzyfSey1jNMe1JtVV7eFnKYyO+AW/2oI6BrC5qWGNAeIiKhupGZChaLlxXT5DuIt8+J
-         dcAxMAHsPeP6YFd+2S4rKxIONpewABwqe6plz4fkl5+6g0S2mJk+ML3QfPn9/iJHpTe6
-         oW8y5rE+vY+mSxbVIp2jGuYvRdsk1AzY9W4qwfJBK6IS8Rs6mHFQX1EHYH+DCj+ZeMqi
-         jgIg==
+        d=gmail.com; s=20221208; t=1689985952; x=1690590752;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=OXA4WFzZ0VY5hwN2PPnfgBn2bOmyEfTGP4+a7Pqpyv0=;
+        b=S2eajCBfWRP1rI4pA1k5uJs/0YW3FEoGeHDGDcC+nhWVgJfNTH8iZColxOGIlk2dks
+         3bYgFhgbv3fm9UxmN9wmLcbaNWRdxT4OUH4S6JBgrCOKbBMM9O8la653lV+Ht1/boWuG
+         fy/g1HGrziLOoyT5P0wf7vbZNBCOZX9B3dSfoVil3kfvaDKtNwkI7lY4LdcdojUuOiHO
+         3/rvlzE4xi47kxeOhA2p9mblDzQioiBayYcXXSUB/kKcaGgF3sh2QM7IY2RPMmKJ8iyY
+         YrNejhf4f8Xlv323ENRKObTdqPmVI2aib6uZ48sRPoTYZpcgvTaDdQOjD915tN5t5Bwi
+         VSOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1689979504; x=1690584304;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UlbhjqXQg7VrRY714bJFhKiLE8AjgGqQQTyreHqWQBI=;
-        b=VypyGfaLUCP0HWrWDfqWe0Abe4emhzd/KOQjnE7f0HKRmt3/Ib8EW8u/FeRAKkYQ5C
-         XvCTXacizjmrqwjtwZgOZE9xe7VcHSqLV5xP1cPKrB7GtRi8bZ6uTVjwQnGkYLX+MQSV
-         /q1xKq51uskbyXWiQNN1TMjZD9+EIJD94JS4S01suDxY3WzmSb/fE4vJ/cYqbA5pQPhl
-         wkt4WVELHIvGvhzcWyJYDUyxRbbgKn8+N3CRv5UmqHlfIvdpBvjV7Ge0wKFhZ0uPrS1t
-         YXpBkkOiFAx3ewLGlxwMYv+jR/gMyw9tvBN95h2R6oiAFybdhqDn59Kgv4Dx9myCil7b
-         HsKA==
-X-Gm-Message-State: ABy/qLbIqetco7efNZmP38EfvJjkGuVuZ2hAi5zcTYsYmu8PtyDc8kSm
-        PBV4jPluIqlQhm5Z/sbToR4XXgbYfOtk3PvDs/Sipw==
-X-Google-Smtp-Source: APBJJlFqsU3gasrCHNKZ9kJk8nMha8Y8YvCbuUEEB8P0EMfi/Dh89x6T/v1ejQHZWk2Tb8MWzBbriZwVsx1lClzh0zk=
-X-Received: by 2002:a17:906:3059:b0:994:673:8afa with SMTP id
- d25-20020a170906305900b0099406738afamr2683327ejd.28.1689979504498; Fri, 21
- Jul 2023 15:45:04 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1689985952; x=1690590752;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OXA4WFzZ0VY5hwN2PPnfgBn2bOmyEfTGP4+a7Pqpyv0=;
+        b=kIkjILTB2LW4GT7KbzCwxPGawJP1RjK26nmq7Pvo9X4HJAyoEk7p3m1E7FYKYpPKeZ
+         vPrRacNsSTeQpO+JyYZYejoqmQvZJmlBVtCS5yT7lOZ5UqqdATft6Jxtf4kUraXPFRRW
+         3uhb8IuGtsldgpDH73p0EJsUmQeYDk4A338lBtk0HQYqm4mR3YhLhvePx1hv5OSEv43N
+         jX71tJsT5zJmYpt1wj3hdMiu4hP/msaCR7nVpuqICrgwktqUpRnAjukH/tpS38jOSp0F
+         1CZejHxv6ouGDZOI7jW8h2CsovINXrKdQnr3r7eBPr0bQ8DsftpKrFWwmv5XRL365Pfq
+         bp6Q==
+X-Gm-Message-State: ABy/qLZuPqK35Ad/GwbJhrToV8ri2S155qPmJLOuXpUBbg2icAiS5iKS
+        mbYN7JQLaPH9TsrXVo68ZHmQXW1iWMNBjw==
+X-Google-Smtp-Source: APBJJlFaDo4NZEbuANIGJ5NyC0z6AvuNRLmREjpgwVwuiD7ifZ/7ubSbpi5GYFneQE2faWvhEIRiaA==
+X-Received: by 2002:a05:6871:89f:b0:1ba:caf2:acc3 with SMTP id r31-20020a056871089f00b001bacaf2acc3mr3682318oaq.5.1689985952016;
+        Fri, 21 Jul 2023 17:32:32 -0700 (PDT)
+Received: from [192.168.1.9] ([159.192.85.211])
+        by smtp.googlemail.com with ESMTPSA id n18-20020aa79052000000b0066a4e561beesm3591950pfo.173.2023.07.21.17.32.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Jul 2023 17:32:31 -0700 (PDT)
+Message-ID: <84196e5f-31fc-28ff-b047-3f234f1a1a4f@gmail.com>
+Date:   Sat, 22 Jul 2023 07:31:58 +0700
 MIME-Version: 1.0
-References: <4d7aa3f4-22d9-9f5a-3d70-1bd7148ff4ba@google.com>
- <8de4bb54-8daa-73c0-b5eb-4aa4b9675ce5@ideasonboard.com> <fa11d883-2c72-486f-9b7b-46f238e2e03f@rowland.harvard.edu>
-In-Reply-To: <fa11d883-2c72-486f-9b7b-46f238e2e03f@rowland.harvard.edu>
-From:   Avichal Rakesh <arakesh@google.com>
-Date:   Fri, 21 Jul 2023 15:44:52 -0700
-Message-ID: <CAMHf4WJ4QyvFfnAWSk_D3VuPOe7+if=pgQvunjLXOHTcBgi4Qw@mail.gmail.com>
-Subject: Re: Kernel panic when unbinding UVC gadget function
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Dan Scally <dan.scally@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        "Eino-Ville Talvala (Eddy)" <etalvala@google.com>,
-        Jayant Chowdhary <jchowdhary@google.com>,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] USB: serial: option: add Quectel EM05G module support
+ with product ID 0x030e
+To:     Martin Kohn <m.kohn@welotec.com>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <AM0PR04MB576480684AA0896B32D32975973FA@AM0PR04MB5764.eurprd04.prod.outlook.com>
+Content-Language: en-US
+From:   Lars Melin <larsm17@gmail.com>
+In-Reply-To: <AM0PR04MB576480684AA0896B32D32975973FA@AM0PR04MB5764.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Thank you both, Dan and Alan, for your comments!
+On 7/22/2023 1:26, Martin Kohn wrote:
+> Add Quectel EM05G with product ID 0x030e
+> 
+> T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  8 Spd=480  MxCh= 0
+> D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+> P:  Vendor=2c7c ProdID=030e Rev= 3.18
+> S:  Manufacturer=Quectel
+> S:  Product=Quectel EM05-G
+> C:* #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=500mA
+> I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+> E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+> E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+> E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+> E:  Ad=89(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+> E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> 
+> 
+> Signed-off-by: Martin Kohn <m.kohn@welotec.com>
+> ---
+>   drivers/usb/serial/option.c | 3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+> index 288a96a74266..cbe35c3db45a 100644
+> --- a/drivers/usb/serial/option.c
+> +++ b/drivers/usb/serial/option.c
+> @@ -256,6 +256,7 @@ static void option_instat_callback(struct urb *urb);
+>   #define QUECTEL_PRODUCT_BG96			0x0296
+>   #define QUECTEL_PRODUCT_EP06			0x0306
+>   #define QUECTEL_PRODUCT_EM05G			0x030a
+> +#define QUECTEL_PRODUCT_EM05GV2			0x030e
+>   #define QUECTEL_PRODUCT_EM060K			0x030b
+>   #define QUECTEL_PRODUCT_EM05G_CS		0x030c
+>   #define QUECTEL_PRODUCT_EM05CN_SG		0x0310
+> @@ -1186,6 +1187,8 @@ static const struct usb_device_id option_ids[] = {
+>   	  .driver_info = RSVD(6) | ZLP },
+>   	{ USB_DEVICE_INTERFACE_CLASS(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM05G, 0xff),
+>   	  .driver_info = RSVD(6) | ZLP },
+> +	{ USB_DEVICE_INTERFACE_CLASS(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM05GV2, 0xff),
+> +	  .driver_info = RSVD(6) | ZLP },
+>   	{ USB_DEVICE_INTERFACE_CLASS(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM05G_CS, 0xff),
+>   	  .driver_info = RSVD(6) | ZLP },
+>   	{ USB_DEVICE_INTERFACE_CLASS(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EM05G_GR, 0xff),
 
-On Fri, Jul 21, 2023 at 12:32=E2=80=AFPM Alan Stern <stern@rowland.harvard.=
-edu> wrote:
->
-> On Fri, Jul 21, 2023 at 04:57:51PM +0100, Dan Scally wrote:
-> > Hi Avichal - thanks for all the detail
-> >
-> > > A dirty Patch for option 2 is attached below which skips calling
-> > > usb_function_deactivate if uvc_function_disable was called before. It=
- seems
-> > > to work okay in testing. Let me know if the analysis and solutions se=
-ems okay
-> > > and I can upload a formal patch.
-> >
-> >
-> > For what it's worth the analysis makes sense; the patch looks ok to me =
-so if
-> > the conclusion is to fix the problem that way I think it's fine, but I'=
-m
-> > more inclined to consider this a locking problem in core - it'd be bett=
-er to
-> > fix it there I think.
->
-> I'm not so sure that handling this in the core is feasible.  Removing
-> the driver obviously needs to be synchronized with deactivation, since
-> the two actions affect the same parts of the state (i.e., the pull-ups
-> and the "connected" flag).
 
-I don't have the full context on what caused the locking to be added,
-but now that it
-in place, it seems like there needs to be a clarification of
-expectation between core
-and the gadget drivers. Is it valid for the gadget drivers to call
-usb_gadget_deactivate (and similar functions) as a part of disable/unbind
-(in terms of API/expectations)?
+That doesn't look right to me for many reasons, one of them being that 
+you let the option driver bind to the qmi net interface.
+You have also reserved interface 6 but there is no interface with that 
+number in EM05GV2.
 
-1. If yes, maybe core can track when it is in the middle of resetting and
-drop calls to usb_gadget_deactivate if called in the middle of the
-disconnect--->unbind sequence. This is effectively what the patch above
-does in UVC driver, but core might (with some extra state) have stronger
-guarantees of when a call is redundant and can be safely dropped.
+Thanks
+Lars
 
-2. If no, then it becomes the gadget's responsibility to ensure that it doe=
-sn't
-call any of the usb_gadget_* functions when disabling/unbinding. However, i=
-t
-does require core to provide some concrete rules around when things are saf=
-e
-to call, and when they aren't.
 
->
-> Consequently I don't see how to avoid a deadlock if the driver's unbind
-> callback does a deactivate.  Besides, as the patch mentions, doing so is
-> never necessary.
->
-> However, even with that call removed we could still have a problem.  I
-> don't know much about how the UVC function driver works, but it would be
-> reasonable for the driver to have a private mutex that gets held both
-> during unbind and when the user application closes the V4L2 node.  Then
-> there's an ABBA locking issue:
->
->         Unbind: The UDC core holds connect_lock while calling the UVC
->         unbind handler, which needs to acquire the private mutex.
->
->         Close node: The UVC driver holds the private mutex while doing
->         a deactivate, which needs to acquire connect_lock.
->
-> Any ideas on how to clear this up?
->
-
-I think my question above gives us two options out based on the answer:
-
-1. Core handling redundant calls is the more bullet-proof solution IMO. It
-means that the gadget driver never holds connect_lock when it shouldn't.
-No more ABBA!
-
-One potential implementation is to track when core is resetting in a protec=
-ted
-flag. All functions related to resetting/disconnecting would check the
-flag before
-locking connect_lock and would become no-ops if gadget is in the middle of
-resetting.
-
-2. Some stronger guarantees will let the gadget driver's state machine deci=
-de
-if it can call usb_gadget_* functions. For example, if we can say for sure =
-that
-disable call will always be followed by the unbind call, and that usb_gadge=
-t_*
-functions are disallowed between the two, then UVC driver can handle ABBA
-situation by tracking when it is between a disable and unbind call and skip
-calling usb_gadget_* function until unbind finishes.
-
-The downside of (2), is that a poorly written (or malicious) gadget driver =
-can
-grind the gadget to a halt with a somewhat simple deadlock.
-
-Unfortunately, I am travelling over the next week, but I'll try to
-create and attach
-a dirty patch for core to handle redundant calls to usb_gadget_* over the n=
-ext
-week.
-
-I am fairly new and don't know the full semantics around core, so if I
-am missing
-something simple here, please do let me know!
-
-Regards,
-Avi
