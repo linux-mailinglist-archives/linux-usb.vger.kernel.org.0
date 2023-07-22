@@ -2,72 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C762775DDDC
-	for <lists+linux-usb@lfdr.de>; Sat, 22 Jul 2023 19:33:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1A2075DE43
+	for <lists+linux-usb@lfdr.de>; Sat, 22 Jul 2023 21:29:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbjGVRdh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 22 Jul 2023 13:33:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38782 "EHLO
+        id S229515AbjGVT3j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 22 Jul 2023 15:29:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbjGVRdg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 Jul 2023 13:33:36 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D8D2706
-        for <linux-usb@vger.kernel.org>; Sat, 22 Jul 2023 10:33:33 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id 98e67ed59e1d1-267eee7ecebso236831a91.1
-        for <linux-usb@vger.kernel.org>; Sat, 22 Jul 2023 10:33:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690047213; x=1690652013;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XwQ9KTk0AvNg4YEGpLO6Mzd1tQ0NGTk2GH4qBYSzWYc=;
-        b=VgzZMptrmZ8TWZlxmL7uj46LqGTn5bcQsDytmauMeEb7890xlnF7daq2CEEGMnZ9/Z
-         2YeM29/AwkqHTH0jS1CpvSk9kZVtYGiyBT6f7RMo9cKuvHoe9kZi0PhVT9S16QwWl6IJ
-         hKylPvfYWtUMI1hzwsNnorESKbmngUKjbDcVWCqohrvzxnrnZ1diQfvsyNAPN33EhcDw
-         /D3WxcSxyY44lsDuJ+oKIB1HMNlws0smCwwol4ecOLZkv5tgkze8FDT79naNiVl3ANsv
-         u8OnTj2mk9bfWSZSexMMF0mPnUX8wekGS356PXJXTSnIGQioil1IOh0CHgMKRQ/Dc5vP
-         IDcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690047213; x=1690652013;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XwQ9KTk0AvNg4YEGpLO6Mzd1tQ0NGTk2GH4qBYSzWYc=;
-        b=V9gq6bd7nI4NyP/khI+L3ADTackre7IEYp4VhJ9YTLA32dPg3FZoz4qqLNhUfF6DHC
-         DMcuM886Cw7tQhb0HoL3HU27gFFGc8R+h0CZEw7+aaAw2P61mHH21j80EUEjGtiL2nno
-         O5VcQ91fS4ToKD3mMlvepc6038yNn15oMHaAwn7eO5H0aEeyPUnDM9tmK7HxrNGdCEU6
-         KJlIsngMcBVv/K+kadNoniuEQTIz2a2M2BCTmIp2CAh31ANDFhwpl3yo1NTYrd1NVmSU
-         2i7e5H5C/VKV3J6YJ1GxCP7NYjcR9Jk1Cvuw3gkDtU4vKmaleUb3FO1n/axpbHcz76S+
-         7qtQ==
-X-Gm-Message-State: ABy/qLb8/AYtEkbAlQvOG9Xfe6Ktd6AFVq2ByDasnxbV0tG7i6JxcUrp
-        Qv4FApuW1k2relT6lb+ZF4rOGQvsekMEh1d0bYc=
-X-Google-Smtp-Source: APBJJlGaafNiiHf9/1O0psWPRSU+7sNla2aMoOYF66iC/Xrx4mVCb4Rkkl5MrHBWY+m5yeh1LUIwdQAeleHpZGArl9Y=
-X-Received: by 2002:a17:90b:d8f:b0:250:6c76:fd9b with SMTP id
- bg15-20020a17090b0d8f00b002506c76fd9bmr3433350pjb.38.1690047212899; Sat, 22
- Jul 2023 10:33:32 -0700 (PDT)
+        with ESMTP id S229489AbjGVT3i (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 Jul 2023 15:29:38 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id D3BD71717
+        for <linux-usb@vger.kernel.org>; Sat, 22 Jul 2023 12:29:35 -0700 (PDT)
+Received: (qmail 1794931 invoked by uid 1000); 22 Jul 2023 15:29:35 -0400
+Date:   Sat, 22 Jul 2023 15:29:35 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     USB mailing list <linux-usb@vger.kernel.org>
+Subject: Kernel support for wireless USB
+Message-ID: <2a21cefa-99a7-497c-901f-3ea097361a80@rowland.harvard.edu>
 MIME-Version: 1.0
-Received: by 2002:a05:6a20:556:b0:130:f967:83dc with HTTP; Sat, 22 Jul 2023
- 10:33:32 -0700 (PDT)
-Reply-To: mrsvl06@gmail.com
-From:   Veronica Lee <barr.freemanukoh@gmail.com>
-Date:   Sat, 22 Jul 2023 19:33:32 +0200
-Message-ID: <CAB6WZPoaKVWPbmVCghccn8Ed=43UndtTt_gOWQ-F7rurprkDnQ@mail.gmail.com>
-Subject: re
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=4.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-16nXnNeV150g15nXp9eZ16jXmSwg15DXoNeZINek15XXoNeUINeQ15zXmdeaINec157XmdeT16Ig
-16nXkdeo16bXldeg15kg15zXl9ec15XXpyDXkNeZ16rXmiDXkNecINeq15TXodehINec15TXqdeZ
-15Eg15zXpNeo15jXmdedDQo=
+Greg:
+
+To what extent does the kernel still support Wireless USB?  Is it 
+supposed to be completely gone?
+
+I ask because there's still a bunch of code in the hub.c for it, and the 
+logic doesn't all look right.  Removing it would be easier than trying 
+to fix it.
+
+Alan Stern
