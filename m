@@ -2,141 +2,144 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6C6E75E3F7
-	for <lists+linux-usb@lfdr.de>; Sun, 23 Jul 2023 19:05:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACACF75E41F
+	for <lists+linux-usb@lfdr.de>; Sun, 23 Jul 2023 20:11:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229944AbjGWRFt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 23 Jul 2023 13:05:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57860 "EHLO
+        id S229841AbjGWSLU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 23 Jul 2023 14:11:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbjGWRFs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Jul 2023 13:05:48 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2041.outbound.protection.outlook.com [40.107.8.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45413E6B;
-        Sun, 23 Jul 2023 10:05:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZnLiHY1z+GBCs1EaEpaYJ2qGEWZ6xxL3whY36wTawTn4lOocjmSITnNHQNpgdXqgH9cQqCx1zBBdY2rp83xgnlIzdKLNK+wanbuJDJ9B5FyJBYjQcyMp5oufy+4nHhe9hD5lozDevGG0xhknBQ3ksRS7zgw96rQ7ttEb3IkHR25TiQAOlsGDxU0YpQc/nk/nMfekdKgt82fpZDv8hHWMQY9j5RaHHhCl5JH5u2ktZJec9FKiXnwg8P85hykClc5JS9G20non0W0c5zeymNFkaoqhliYJg2Y527pWD0Yx/DQgF+C0pM9ETpRObWZ3lGC8Cax3tehNom/XDCcvPzn/TA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=31DKp+UB8WVoLa2MiPtj77IVdnyyHU9gC/T5iF/HcUs=;
- b=nlHN88bjlYxzNq7dkoSAVZG2o3B9TdF5oRzvBI3upgiipVFO9VXDkvPs3yZfQ7TSutAlmUs0XmAgqMLUtrg1WCVhovofwl0Ng+D5qovr1DKin+Dy/XSyQrT3UVNFWPxyalkAdFUfYTOU3Gq7qPuwbZRZBuT6PoZiwPUHCLpzAdIG+KXmecBwMiljEorDzm+QQLA3+oYk+ym9vtsWKqBjbezzGinS+ydrz3RjT88XXbQO7FdC931CAlITWG3pLqv+I5uoL5fpm0OjuULiKT0X/XW+ovtLyMAJ4CIf7OxLiV6f+eNwvk5jQQyzXMWOY7ueFqZcz5G9HtHcu2wBKAidug==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=31DKp+UB8WVoLa2MiPtj77IVdnyyHU9gC/T5iF/HcUs=;
- b=OfiRBYx4kv2VIO4v9sH1UM8+1l6oMgriOnW7hOqq0e4YzXE7/PFJbS+hYJUTIgfA06TunSG78WD4H56TNroaDYGQ2uahpculIuTcAyG99rObf45GHkFDq7XVBtHW3ljgi8TNbD/l/XwH2noTf1J7bVByuVNd87/g3AhibQcrkH+r/c01G4Gf972VcocO3hyhRdT1reTsJVDGZA5vHT7uZMLN4x5hEwmISmvEhTH/IsVCKp4T9hZ2aT7LOZhvMXmceum/Tbf0OeimGC/iu8HzjWP2xToeSnvWQ5N25VnX1DVTzw/k6RHf0JbEEHug6NI9rHXidyBsf0vLf/NipTan4A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
- by PA4PR04MB7664.eurprd04.prod.outlook.com (2603:10a6:102:f1::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6609.31; Sun, 23 Jul
- 2023 17:05:43 +0000
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com
- ([fe80::7ef4:97ef:66d5:f5b3]) by VI1PR04MB7104.eurprd04.prod.outlook.com
- ([fe80::7ef4:97ef:66d5:f5b3%2]) with mapi id 15.20.6609.031; Sun, 23 Jul 2023
- 17:05:43 +0000
-Message-ID: <b6e48f28-c832-7a05-d05f-e35514bec7b8@suse.com>
-Date:   Sun, 23 Jul 2023 19:05:40 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: Nomenclature for USB-connected WiFi devices
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Wireless mailing list <linux-wireless@vger.kernel.org>,
-        USB mailing list <linux-usb@vger.kernel.org>,
-        PCI mailing list <linux-pci@vger.kernel.org>
-References: <8ce5288f-9ed2-4df9-a0a2-bb46941089fb@rowland.harvard.edu>
-Content-Language: en-US
-From:   Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <8ce5288f-9ed2-4df9-a0a2-bb46941089fb@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR2P281CA0097.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:9c::12) To VI1PR04MB7104.eurprd04.prod.outlook.com
- (2603:10a6:800:126::9)
+        with ESMTP id S229567AbjGWSLU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Jul 2023 14:11:20 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD794E54
+        for <linux-usb@vger.kernel.org>; Sun, 23 Jul 2023 11:11:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690135878; x=1721671878;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=i6U4ujofSsnsIojjwUl9eMlSD895ohSFLW0dlyOr4I8=;
+  b=YKpuqrw0xdHMY1t3ZiJSNSUnQLG9RNRzNeBr0ZREVGXr1XhNhNmFzQRh
+   IwMI6yEFE1qdlnGa6cBtiGwJgCLEQJViOEuY8Wc0W0m87Dy3aea0ej8li
+   EJ7UrHV+Sv29fgFf03NwJRc/0E25lzpH2vR6VyuxPuvIV/I3m0ogkz2zx
+   tFIZ0O3eeJWfz8XAFdcluTsast5Pz7i9EuOttdTTdLxNfRACKH2rXzhaS
+   hrwoFcDI3W1PozGlyFkiK73qWoUF80FJOc0ri7yDDX+BWgBedkTZYKMv6
+   YKpifo5VTGn9PaWK25dS3wIrW32e34oDPMnKZkN1mhy9Bh4O8PgHIFfUB
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="346898630"
+X-IronPort-AV: E=Sophos;i="6.01,227,1684825200"; 
+   d="scan'208";a="346898630"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2023 11:11:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10780"; a="815577753"
+X-IronPort-AV: E=Sophos;i="6.01,227,1684825200"; 
+   d="scan'208";a="815577753"
+Received: from lkp-server02.sh.intel.com (HELO 36946fcf73d7) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 23 Jul 2023 11:11:16 -0700
+Received: from kbuild by 36946fcf73d7 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qNdY1-0009AP-0Y;
+        Sun, 23 Jul 2023 18:11:13 +0000
+Date:   Mon, 24 Jul 2023 02:10:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Xu Yang <xu.yang_2@nxp.com>, stern@rowland.harvard.edu
+Cc:     oe-kbuild-all@lists.linux.dev, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, xu.yang_2@nxp.com, jun.li@nxp.com
+Subject: Re: [PATCH 1/2] usb: host: ehci-sched: add itd/sitd_unlink_urb()
+ functions
+Message-ID: <202307240103.vWzkF4eB-lkp@intel.com>
+References: <20230718112600.3969141-1-xu.yang_2@nxp.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|PA4PR04MB7664:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2a9d12f4-44d3-46b9-3d21-08db8b9f0c4b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pNXCHxiNIMoJFpRsTBbYbn7w8okVFewegcdWeVE+cVBichCaUSeRyYgHHj2F6WQ+TIdX6m7/a+t9lRakm+bdeIdoa5XS3CQfNElo6ZW4120aZ2htldiVj4FIrXICFGI4MJonB5Q8uoCrNRLnretXkaJsA4Wdx6R9Wji+Mu700Nu0RIqav+TZ0joc/218uyHhLOP8p8GxcHeOMkHgNOYiQlfkDdTcUpnuQCfuPCguWRLd7Vee02fq63e8qH24Z/S7+u0YyHqIyb8lG44rJny+RhJbdUx3IgQkDo1OnROhjcdVnSSIWPmwoE/QMx1NypPtYtxm6DVj/bwFvJTARqEnNLF6GjkA0pbqXgAGnTenYQvMsqqWILEG/UmLN4xcCUg+7V4SP8j46weGPSFi828HhhouIVRfsvxJXrjIbWfiXvudCExDAJ6WQw8wHUM61eqzawZXBdM13UaPsCyx03/wU5ydUCPsKLRBUpqDDavXJ1QJZ5BdxJUF2KXvoLIhEtnitEbBpnvcZcLsvmEGtx5fdSiBOFhT4fizSM40VysSr7daxDS27qxpMGzu9x+bzM+aqG1DD+/XCztOBXdgNpe6kdjsRr/7L80W7YvgMe7i9gCIIMRC5YrRw7fh41TG/YGPMdLRW6fxq2faHFzowX7/xw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(6029001)(376002)(136003)(366004)(39850400004)(346002)(396003)(451199021)(2906002)(38100700002)(478600001)(8676002)(6512007)(186003)(6506007)(2616005)(53546011)(5660300002)(86362001)(31696002)(8936002)(4744005)(36756003)(6486002)(66476007)(66556008)(66946007)(316002)(110136005)(41300700001)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?THNPWUdpeW56V1duamhTMHZHeGlJbm5PTTM0QlE4OHlYRkY4YkM1RnRITXZT?=
- =?utf-8?B?RTdjYTJ4ZkRNdmJEeFBlTkl4RGRPb3d0NUJkUm9UM21laXYvM0FtQmliUkNt?=
- =?utf-8?B?SGZCejgrUUtKSXdiTENqeXpwNlRHampkOVlKTUIzdDdzRFhrYWJVRDk0ZndM?=
- =?utf-8?B?RFJQb3V3ZjBjVElRUm53NHljVzN4OGMrek1hc1U5RmFkV2podGpmTHV6L3ZB?=
- =?utf-8?B?TjlEemVZNnZoV3N1WXhnaTJrazRLWlpvK05rWnlwTkk5d2c1UHk4WjBEUUgz?=
- =?utf-8?B?WEZpcjFmYmcrd2pkNlAwdHMvcEZRRjdPdW16SjExTE1haitmSnBneE5JUzRk?=
- =?utf-8?B?VlNsSUk3ajRENFN5TTdYS0ZIeUJKaWdPY0g3aVlVZmFsZC9lT1FST3JaQklH?=
- =?utf-8?B?eWdvRDNodzdHdCsvbGtlbllOSS9XZ0kvMys1bTR6aG94bUphall0bytVTldv?=
- =?utf-8?B?bEgzeDBFeEJKSWMvR3k2YlBqSS9US0ZhZlpOUnRhNSs1WWRSOXNHZktEREE4?=
- =?utf-8?B?ZkJybU4rengrNzJHbU9aTHo2TW1McGkwd0tpYk5sTjNJQzR2bCtZNkVHOGNu?=
- =?utf-8?B?S0hFblJzSUFTOGpNYy8zaitXMW4rRlVJMGhuRkE4Vjk5ZU1zVVlMRTB5YWcz?=
- =?utf-8?B?N0FCeWdNT2dMVTFnbEVsT1FMUGV1amJuM1duOFBMdS9vWCtaQmMzdWszaDE5?=
- =?utf-8?B?Wkx3MlVSK2ZXanhTYVdwM2thbnFBdjJ2N1BxUFo4Nmx6aUw4TzRrMm84Zm9m?=
- =?utf-8?B?RG92WDdPV1U1KzhOMXpOQ1RtN3BXcVJER1F6V0RlZUl1VTdySmNlNmVVTmlN?=
- =?utf-8?B?S3lnMmNuRDh2SmMwNmRjWnE2dXFJRzFzZU04cUJ1ZllGOEJIRThqZDhucnJ0?=
- =?utf-8?B?YnRMdGU5YVVRVE9UaUhYQUlHZkZPMXlMQUFHOXNJRm5UMHJESEsrQjJKaTYx?=
- =?utf-8?B?ZitjZVpON0g0M294R0F3b1JwNWcvSzFzc2lsNnVHT2pWRFN3aHVQcktBVmZE?=
- =?utf-8?B?RjNFNjFxT2ZqdDE0dWZib3lQWDYwQVBIVFN1WEdzNllvdTdXMHIzZkU2RUJT?=
- =?utf-8?B?cnpzOUMvWk94c1hEaS9UMStBc01hd0xpWWs0RmtJYXdyTkYzWXRaY1dmQmVX?=
- =?utf-8?B?dmVYM0gyNHk1SVRVNlIvRHUyS2FLYnNzZ3hQTDByd0V6YjRVd1FRZzNNNkpT?=
- =?utf-8?B?czdPOFdlcGFGNEFQMmZEaFF3RFg2WHA2WEZaYTF0N0pkeFd4dXozd0Zabm81?=
- =?utf-8?B?R0xsdGdOck9lbkJoZkRNdmYzWlFzU3lha3h6SHVoYmk4RmsrNGlyR3Vqakdn?=
- =?utf-8?B?cUFOSjl4b3FoZXpDMFltRWdxU1lzaWVRNUpNOU81eW5aVzhoVGlWbXR3bTlW?=
- =?utf-8?B?L1FaWm5oZmE3VWlBNjNCL28vTVNwY2E4TmFWRUJMWlVua3RpdjE3aE53eEM1?=
- =?utf-8?B?SVV6VXFYdStFSzB2VFlHVXBHSFZhczltWnVrK3Y5UXQ3M3dhYklJR1NvNXRO?=
- =?utf-8?B?Vmxqcnpka29NOGhsand4T3R5WlI3NWZuVWhyRnhBZGtzNEJtSXFiSkVVbllR?=
- =?utf-8?B?ZFpwaXp3dVoxdld5QnBkenI5ZXk4R3AwR0JieXk1WG9NWFcxaUkrRUl2bmZF?=
- =?utf-8?B?MXhzcHoyVHRxbDRBLzh3QWUrY2doY3JFZlBPeVB5MXN0N3lGY1ZSNU1ZSjdZ?=
- =?utf-8?B?YnlVOVVBTFR4cHVHNVZVeFlkT1NFV0lTOForTzNyNEhCYzk1ZjdJUjQyY2ZP?=
- =?utf-8?B?b1dFcDlxTWN3VDRna2pZN3FQOWh4U0U5d2F0TWIyZ1dNd3lGd0tpNGdSb0Nu?=
- =?utf-8?B?dnN0b1h4TDJ3bnM1RFhpMEhJRURDUC90ck5zSVJpM2NMZDJWemVLaHZ2RjVC?=
- =?utf-8?B?VG1kRzRNUTdsSFg5NklCVno3YkhqcjYyb0l2UXF6Sjhsd2NlWnlJQmF1WmZY?=
- =?utf-8?B?b1kwbUFSTFdsZmZYcytrUGpla0IvM2xsbXo5dy92YW1HMXJQNUxoYmVyWlJl?=
- =?utf-8?B?b213U2duYzZCU0didlFuNlIvNzh4cURKckF3Q2NuTXBqYlR4RXQ5WS8vTXZF?=
- =?utf-8?B?WUszNjNETmFpZFMxQ0gvd2NPZWdvSUxyWnVKODVYOHB5MmJKVlkyekovK0kz?=
- =?utf-8?B?OXc1NzRreHVpd0JkZVJBSy9iR1k1N0Q5Y1ladW5ZL2gxTlliYUVJakU2czNq?=
- =?utf-8?Q?+uEogKDZCcyK8AMsp1i1Y74=3D?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2a9d12f4-44d3-46b9-3d21-08db8b9f0c4b
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jul 2023 17:05:42.8301
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: w4IV6wE2gB7uNJ23Dr4mgeP6kVhKkgmBtX2Gq9BvzgeF/gld48BTwlfvW06fA/4KmCWZR/0hfj2C1/yS5X8MLQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7664
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230718112600.3969141-1-xu.yang_2@nxp.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 23.07.23 18:04, Alan Stern wrote:
-> If you've got a WiFi device that connects to the host computer via USB,
-> do you refer to it as a "wireless USB device" or as a "USB wireless
-> device"?
-> 
-> The second would seem to be more logical, by analogy with things like a
-> USB mouse or a USB thumbdrive -- we don't say "mouse USB device" or
-> "thumbdrive USB device"!
+Hi Xu,
 
-If you are doing this, why not go to USB WiFi? We want to know what
-kind of wireless device it is.
+kernel test robot noticed the following build warnings:
 
-	Regards
-		Oliver
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on usb/usb-next usb/usb-linus char-misc/char-misc-testing char-misc/char-misc-next char-misc/char-misc-linus westeri-thunderbolt/next linus/master v6.5-rc2 next-20230721]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Xu-Yang/usb-ehci-unlink-itd-sitds-from-hardware-list-if-the-controller-has-stopped-periodic-schedule/20230718-192747
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20230718112600.3969141-1-xu.yang_2%40nxp.com
+patch subject: [PATCH 1/2] usb: host: ehci-sched: add itd/sitd_unlink_urb() functions
+config: microblaze-randconfig-r072-20230723 (https://download.01.org/0day-ci/archive/20230724/202307240103.vWzkF4eB-lkp@intel.com/config)
+compiler: microblaze-linux-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230724/202307240103.vWzkF4eB-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307240103.vWzkF4eB-lkp@intel.com/
+
+sparse warnings: (new ones prefixed by >>)
+   drivers/usb/host/ehci-hcd.c: note: in included file:
+   drivers/usb/host/ehci-q.c:1390:27: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __hc32 [usertype] old_current @@     got int @@
+   drivers/usb/host/ehci-q.c:1390:27: sparse:     expected restricted __hc32 [usertype] old_current
+   drivers/usb/host/ehci-q.c:1390:27: sparse:     got int
+   drivers/usb/host/ehci-hcd.c: note: in included file:
+   drivers/usb/host/ehci-mem.c:187:24: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __hc32 [usertype] *periodic @@     got restricted __le32 [usertype] * @@
+   drivers/usb/host/ehci-mem.c:187:24: sparse:     expected restricted __hc32 [usertype] *periodic
+   drivers/usb/host/ehci-mem.c:187:24: sparse:     got restricted __le32 [usertype] *
+   drivers/usb/host/ehci-hcd.c:568:27: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __hc32 [usertype] old_current @@     got int @@
+   drivers/usb/host/ehci-hcd.c:568:27: sparse:     expected restricted __hc32 [usertype] old_current
+   drivers/usb/host/ehci-hcd.c:568:27: sparse:     got int
+   drivers/usb/host/ehci-hcd.c: note: in included file:
+>> drivers/usb/host/ehci-sched.c:1829:17: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected restricted __hc32 [usertype] tag @@     got int @@
+   drivers/usb/host/ehci-sched.c:1829:17: sparse:     expected restricted __hc32 [usertype] tag
+   drivers/usb/host/ehci-sched.c:1829:17: sparse:     got int
+>> drivers/usb/host/ehci-sched.c:1829:17: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected restricted __hc32 [usertype] tag @@     got int @@
+   drivers/usb/host/ehci-sched.c:1829:17: sparse:     expected restricted __hc32 [usertype] tag
+   drivers/usb/host/ehci-sched.c:1829:17: sparse:     got int
+
+vim +1829 drivers/usb/host/ehci-sched.c
+
+  1807	
+  1808	/* unlink itd/sitd from the periodic list */
+  1809	static inline void
+  1810	unlink(struct ehci_hcd *ehci, unsigned frame, void *ptr)
+  1811	{
+  1812		union ehci_shadow	*prev = &ehci->pshadow[frame];
+  1813		__hc32			*hw_p = &ehci->periodic[frame];
+  1814		union ehci_shadow	here = *prev;
+  1815	
+  1816		while (here.ptr && here.ptr != ptr) {
+  1817			prev = periodic_next_shadow(ehci, prev,
+  1818				Q_NEXT_TYPE(ehci, *hw_p));
+  1819			hw_p = shadow_next_periodic(ehci, &here,
+  1820				Q_NEXT_TYPE(ehci, *hw_p));
+  1821			here = *prev;
+  1822		}
+  1823	
+  1824		*prev = *periodic_next_shadow(ehci, &here,
+  1825				Q_NEXT_TYPE(ehci, *hw_p));
+  1826	
+  1827		if (!ehci->use_dummy_qh ||
+  1828			*shadow_next_periodic(ehci, &here, Q_NEXT_TYPE(ehci, *hw_p)
+> 1829			!= EHCI_LIST_END(ehci)))
+  1830			*hw_p = *shadow_next_periodic(ehci, &here,
+  1831						Q_NEXT_TYPE(ehci, *hw_p));
+  1832		else
+  1833			*hw_p = cpu_to_hc32(ehci, ehci->dummy->qh_dma);
+  1834	}
+  1835	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
