@@ -2,83 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2B3675EE74
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jul 2023 10:55:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19E0875EEA5
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Jul 2023 11:06:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231992AbjGXIz3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Jul 2023 04:55:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51772 "EHLO
+        id S232124AbjGXJGJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Jul 2023 05:06:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231989AbjGXIzT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Jul 2023 04:55:19 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7181D10EB
-        for <linux-usb@vger.kernel.org>; Mon, 24 Jul 2023 01:55:09 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-52229d3b8c8so1425396a12.2
-        for <linux-usb@vger.kernel.org>; Mon, 24 Jul 2023 01:55:09 -0700 (PDT)
+        with ESMTP id S232069AbjGXJFy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Jul 2023 05:05:54 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F229E6D
+        for <linux-usb@vger.kernel.org>; Mon, 24 Jul 2023 02:05:50 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-9928abc11deso706939166b.1
+        for <linux-usb@vger.kernel.org>; Mon, 24 Jul 2023 02:05:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690188908; x=1690793708;
-        h=content-transfer-encoding:in-reply-to:from:references:to
+        d=linaro.org; s=google; t=1690189549; x=1690794349;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=qhPKMxZi0lYsmk3OnAguIIrqJ1a2PPNTKhYBvw/UW8o=;
-        b=gOlFfvUzMEpXyaDTAcBZgj5gOP4CLaiQoX78O2NV6FqDFfKnOWtCMM8n2Iif2/5Ffd
-         lildWJH6hCT2NDcGONZ9VLaA6dce/myie5+tCdE1wcsGHVvFK/CAj3WeEcXUdYWrIATh
-         VHPKbuVdVnRg1tudNZr1vfmebeI0tP6Ifa6bPCBAG+qepsDGXNg2N591kEJdq6o2lrUd
-         8FQYC1nELmk+SGV4+9VAJzcypcd5Bd49Rk2JnFQ0C63sPjBMmrPUtXUSju2l8TVvvT6B
-         UKGVfl39qQBqmAzBxlrSIyV94cIZrKADGFzogdHcml5joZwkCt64CuEylVkZlTQa3c1P
-         10ww==
+        bh=0qBTrjnoLMPhI5YTQA6DVRtgSqXnXbNpJNoKVH85RHE=;
+        b=UfKiaBvDzfuRZfFZTzzjwQ3j8D4qXCeEqovTw+BFdwYYQsQ/bSd8SpMCg5KI3NtoHS
+         no3tx7bqUwjQ+k4qHHUw/417iFuUB/B+xWSWNVjmbSf86DtlLGazVtPiJMawJFgcp5jV
+         +C57nto4QTHFYrfpsHWa3EU5oM9qVMJEl887lRC9fHKW810esRi8c2Yq3CLHVR2Qxd+f
+         gScmx6pcJgmHIUw36TFMu3kBRfJ6y6vACqhqeBTi/EHVKce25sACNqBTr7ZEOp/EYn4d
+         Ou1Hh2LAzkpZw/Q3pY//h0NzynXaX6ni7zSeX76J7XlRi/r3aIqucul4f4Wufhp9P01N
+         obwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690188908; x=1690793708;
-        h=content-transfer-encoding:in-reply-to:from:references:to
+        d=1e100.net; s=20221208; t=1690189549; x=1690794349;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qhPKMxZi0lYsmk3OnAguIIrqJ1a2PPNTKhYBvw/UW8o=;
-        b=Tez64N6kAv5dPkXL/V4HGvYNQ8wFa7XEXTuNfob3PkAlFiYIH1FS+1F5/rCyppIjI0
-         VVPPtt/Ly5fou19VMbZrW+y4XBG3ZK5omXuFH/Bl0jAP6EzxNjgBQFAM+lm4D0J213p1
-         vZuOrBg7sj8wj5syZyiZEX9RvBDJ7D9XjWGECb5NfFSGec044rTheL0FAeYqDwp1bg3/
-         03r9u8QCLTNt5YniJQ5IjUDiT8jD28EdUSaDe/kS0L4wz16J91riM+TGDX5zUHhjNytA
-         hL5vtYEspIe7ytPyPCI21ONvIrECTeNI52tbLFpOph/YA2oIzavP4L8JsmUzYa8pshWn
-         0rYg==
-X-Gm-Message-State: ABy/qLYT8WwqNNDdyc4dPhxfhg2I9xKT8dNyqU+dzRJrGSKR01EyHQzB
-        E/bfnP0Rc5fQrUqzvqMJBhE04Q==
-X-Google-Smtp-Source: APBJJlEvGQqPbacW0dN3hmwJWR+nUzAEC2GbSbpGeSWq1K1U42vofUNAahjno4xauusckq1o4Iyfpw==
-X-Received: by 2002:a17:906:5346:b0:997:eac2:65e0 with SMTP id j6-20020a170906534600b00997eac265e0mr8766964ejo.73.1690188907956;
-        Mon, 24 Jul 2023 01:55:07 -0700 (PDT)
+        bh=0qBTrjnoLMPhI5YTQA6DVRtgSqXnXbNpJNoKVH85RHE=;
+        b=SnEYzmgNovt5RjRcHUc395eGjiVgckYPXF2JGj3XI8dYi2d1v06C5ylJs6M8fH1flg
+         G4VyRkTkZuXBfOE3MD4hE5vJCVvJpZLgP+kmtYiWWIDIITNhKL5I7u/JlTARa53j1tpX
+         FhjOji3xNvxCTfcYssIu6ATM2t7Gmw87ELimS4+T/+UtMUhOsu3Dtw1NnGVr+Y9t1fje
+         N5kkEm/8q2aCqpLuHAaP2XltGkUigqjg5PpYHUNidgX6Ix6cV8PXlhSO1B2FwUYdLVHC
+         wBry2xhpqyeNrSCE+wPBccTzFkOvYkwAM4OcEAIFbqvDaREIoAuIJFYbLRzfjhCOjIMW
+         aubA==
+X-Gm-Message-State: ABy/qLazQBBlobTTG+m6nlPcYOC1OOhTA+EsA0Xo16wiRGNkBF+/qlI0
+        S+nOLvL2htUNt9lQ0/WRJtf6Jg==
+X-Google-Smtp-Source: APBJJlGEaeQNWfy5PFWso8e07aTFyy4J/IEQjoHP1CCmOgc32EJRFyrwx6VuXaTiMbcq/GqEflFuPQ==
+X-Received: by 2002:a17:906:5a4e:b0:99b:4f06:492e with SMTP id my14-20020a1709065a4e00b0099b4f06492emr10205331ejc.64.1690189548870;
+        Mon, 24 Jul 2023 02:05:48 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id t10-20020a1709064f0a00b009929d998abcsm6347000eju.209.2023.07.24.01.55.06
+        by smtp.gmail.com with ESMTPSA id b10-20020a170906038a00b009929ab17bdfsm6406085eja.168.2023.07.24.02.05.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Jul 2023 01:55:07 -0700 (PDT)
-Message-ID: <70d1f41d-2c00-d80b-97c1-6d80301d79b8@linaro.org>
-Date:   Mon, 24 Jul 2023 10:55:05 +0200
+        Mon, 24 Jul 2023 02:05:48 -0700 (PDT)
+Message-ID: <c52ee94f-f60b-f8f0-f93c-221beec0224a@linaro.org>
+Date:   Mon, 24 Jul 2023 11:05:44 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: usb: Add Intel SoCFPGA USB controller
+Subject: Re: [PATCH 09/11] dt-bindings: arm: msm: kpss-acc: Make the optional
+ reg truly optional
 Content-Language: en-US
-To:     "Ng, Adrian Ho Yin" <adrian.ho.yin.ng@intel.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "Thinh.Nguyen@synopsys.com" <Thinh.Nguyen@synopsys.com>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>
-References: <cover.1690179693.git.adrian.ho.yin.ng@intel.com>
- <0d12c7a196d6ad81cfc69b281dd1c4cca623d9bd.1690179693.git.adrian.ho.yin.ng@intel.com>
- <70a823a4-54d1-18a3-3d77-45564d88e8f1@linaro.org>
- <SA2PR11MB486040E69B4DCE82631213328002A@SA2PR11MB4860.namprd11.prod.outlook.com>
- <2b3fcc1b-156d-9f5f-3436-139ebcd846fe@linaro.org>
- <SA2PR11MB4860256BC6BC5A2F9259F8698002A@SA2PR11MB4860.namprd11.prod.outlook.com>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        cros-qcom-dts-watchers@chromium.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Benjamin Li <benl@squareup.com>,
+        James Willcox <jwillcox@squareup.com>,
+        Joseph Gates <jgates@squareup.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Zac Crosby <zac@squareup.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Lee Jones <lee@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Xu Yang <xu.yang_2@nxp.com>, Peng Fan <peng.fan@nxp.com>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Jun Nie <jun.nie@linaro.org>, Max Chen <mchen@squareup.com>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Vivek Gautam <vivek.gautam@codeaurora.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Vincent Knecht <vincent.knecht@mailoo.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        alsa-devel@alsa-project.org, iommu@lists.linux.dev,
+        linux-usb@vger.kernel.org, Leo Yan <leo.yan@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Andy Gross <andy.gross@linaro.org>
+References: <20230627-topic-more_bindings-v1-0-6b4b6cd081e5@linaro.org>
+ <20230627-topic-more_bindings-v1-9-6b4b6cd081e5@linaro.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <SA2PR11MB4860256BC6BC5A2F9259F8698002A@SA2PR11MB4860.namprd11.prod.outlook.com>
+In-Reply-To: <20230627-topic-more_bindings-v1-9-6b4b6cd081e5@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,116 +110,16 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 24/07/2023 09:53, Ng, Adrian Ho Yin wrote:
->> -----Original Message-----
->> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Sent: Monday, 24 July, 2023 3:28 PM
->> To: Ng, Adrian Ho Yin <adrian.ho.yin.ng@intel.com>;
->> gregkh@linuxfoundation.org; robh+dt@kernel.org;
->> krzysztof.kozlowski+dt@linaro.org; conor+dt@kernel.org; linux-
->> usb@vger.kernel.org; devicetree@vger.kernel.org;
->> Thinh.Nguyen@synopsys.com; p.zabel@pengutronix.de
->> Subject: Re: [PATCH v2 1/2] dt-bindings: usb: Add Intel SoCFPGA USB controller
->>
->> On 24/07/2023 09:18, Ng, Adrian Ho Yin wrote:
->>>> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>> Sent: Monday, 24 July, 2023 3:05 PM
->>>> To: Ng, Adrian Ho Yin <adrian.ho.yin.ng@intel.com>;
->>>> gregkh@linuxfoundation.org; robh+dt@kernel.org;
->>>> krzysztof.kozlowski+dt@linaro.org; conor+dt@kernel.org; linux-
->>>> usb@vger.kernel.org; devicetree@vger.kernel.org;
->>>> Thinh.Nguyen@synopsys.com; p.zabel@pengutronix.de
->>>> Subject: Re: [PATCH v2 1/2] dt-bindings: usb: Add Intel SoCFPGA USB
->>>> controller
->>>>
->>>> On 24/07/2023 08:36, adrian.ho.yin.ng@intel.com wrote:
->>>>> From: Adrian Ng Ho Yin <adrian.ho.yin.ng@intel.com>
->>>>>
->>>>> Existing binding intel,keembay-dwc3.yaml does not have the required
->>>>> properties for Intel SoCFPGA devices.
->>>>> Introduce new binding description for Intel SoCFPGA USB controller
->>>>> which will be used for current and future SoCFPGA devices.
->>>>>
->>>>> Signed-off-by: Adrian Ng Ho Yin <adrian.ho.yin.ng@intel.com>
->>>>> ---
->>>>>  .../bindings/usb/intel,socfpga-dwc3.yaml      | 84 +++++++++++++++++++
->>>>>  1 file changed, 84 insertions(+)
->>>>>  create mode 100644
->>>>> Documentation/devicetree/bindings/usb/intel,socfpga-dwc3.yaml
->>>>>
->>>>> diff --git
->>>>> a/Documentation/devicetree/bindings/usb/intel,socfpga-dwc3.yaml
->>>>> b/Documentation/devicetree/bindings/usb/intel,socfpga-dwc3.yaml
->>>>> new file mode 100644
->>>>> index 000000000000..e36b087c2651
->>>>> --- /dev/null
->>>>> +++ b/Documentation/devicetree/bindings/usb/intel,socfpga-dwc3.yaml
->>>>> @@ -0,0 +1,84 @@
->>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) %YAML 1.2
->>>>> +---
->>>>> +$id: http://devicetree.org/schemas/usb/intel,socfpga-dwc3.yaml#
->>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>>> +
->>>>> +title: Intel SoCFPGA DWC3 USB controller
->>>>> +
->>>>> +maintainers:
->>>>> +  - Adrian Ng Ho Yin <adrian.ho.yin.ng@intel.com>
->>>>> +
->>>>> +properties:
->>>>> +  compatible:
->>>>> +    items:
->>>>> +      - enum:
->>>>> +          - intel,agilex5-dwc3
->>>>> +      - const: intel,socfpga-dwc3
->>>>
->>>> So you did not even wait for my answer? What happened here with this
->>>> compatible? I asked you to change file name, not add intel,socfpga-dwc3.
->>>> Again - why using different style for Agilex? Which style is correct?
->>>>
->>>
->>> The intention is to use a common binding for Intel SoCFPGA products that is
->> using DWC3 controller.
->>> This is done with reference to qcom,dwc3.yaml.
->>
->> Nope, your driver change does not match it at all. Your explanation does not
->> make any sense.
->>
->> Don't answer only half of my questions. So third time - the last: since you add
->> new style for Agilex, which style of Agilex compatibles is correct?
-
-I still did not receive here answer. Which style, naming convention for
-agilex is correct for your platform?
-
-Why this:
-git grep agilex | grep intel,
-
-gives different compatibles than you start here? I assume Intel/Altera
-knows better the platform so will provide here some guidance. If unsure,
-please consult your colleagues.
-
-
->>
+On 27/06/2023 18:24, Konrad Dybcio wrote:
+> The description of reg[1] says that register is optional. Adjust
+> minItems to make it truly optional.
 > 
-> My apologies.
-> In your opinion which is the proper practice?
-> 1. Create new binding for new products that is using the same controller.
+> Fixes: 12f40018b6a9 ("dt-bindings: arm: msm: Convert kpss-acc driver Documentation to yaml")
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
 
-What is "new binding"? What do you mean by that? New file, then not.
-
-> 2. Create a common binding that will be used by products using the same controller?
-> Referring to the current bindings that are available the two options are being practiced at the moment.
-> 
-> If option 1 is the proper practice the correct Agilex compatible is intel,agilex5-dwc3.
-> To rework the binding to cater for agilex5-dwc3 only. The compatible in glue driver will remain the same. 
-> 
-> If option 2 is the proper practice then the correct Agilex compatible is intel,socfpga-dwc3.
-> To update compatible in glue driver in V3. 
-> 
-
-
-Recommended practice is to use specific compatible for both: your device
-and as fallback for any future devices. In certain cases, option 2 is okay.
-
+This patch does not make sense. It wasn't also tested. The code
+(minItems) is already there.
 
 Best regards,
 Krzysztof
