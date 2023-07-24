@@ -2,56 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A47CE75E8C1
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jul 2023 03:44:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 502BF75E8C3
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Jul 2023 03:44:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232403AbjGXBoh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 23 Jul 2023 21:44:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47882 "EHLO
+        id S232385AbjGXBoc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 23 Jul 2023 21:44:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232481AbjGXBnQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Jul 2023 21:43:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D72959C1;
-        Sun, 23 Jul 2023 18:37:55 -0700 (PDT)
+        with ESMTP id S232786AbjGXBns (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Jul 2023 21:43:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F3D59F3;
+        Sun, 23 Jul 2023 18:38:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 61A9F61000;
-        Mon, 24 Jul 2023 01:33:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF372C433C9;
-        Mon, 24 Jul 2023 01:33:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ADA2061015;
+        Mon, 24 Jul 2023 01:34:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 682CAC433C9;
+        Mon, 24 Jul 2023 01:34:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690162419;
-        bh=uGYXHYMmOR9x2PokzqhPPrYJHj9EyT3jcAB2LDclP98=;
+        s=k20201202; t=1690162445;
+        bh=Po3zGwZzTFhKqrwdh2ukdplw47V4csNz3FYyoyufQJk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Bc8P+UvAcEVbBlolEmjrH2ZskVhVUf6+C68vGteGajNVGXztAkXOe4DUh3KeII6QX
-         aBA3KXf8uJLHFuMAccI37mzsI4rm2wZHRoa6TQ/XfPbzTWcrYc5x8SeE6eUDULDaEL
-         TO3gwUSFR5146C8uttwBj9L6e28f6WXNxJ1FS9NOS9ORYrMu/6RUtfwJBXXsu6cnd0
-         JsgcqNFqAAwTgDF9KurHEyXBPf21to2Ko6S+KAdaGYQoGytWyzDfrRh1zHoZSfCi1U
-         uQdUmOwyor2v+cZg+XtkO2adJFqeZGhTXmMKDi5Nmq5K37rv9ORdQMwtk1Icn2SFTP
-         xXWwEoBxE91xg==
+        b=fw5eaRq+ol9KzblTt7cmXreQj5urqu25bSXRfC7TCOs1qPn0Oo6TiXzGUkUdCQ03E
+         G7g1YLMNr6epyejPBkEmTxNotcSkB0kkXuLYABrx9/+vGOiAYlldkixmfDcoxXKdAc
+         /MZH5gAiaQ9Ux1nKtYuxGGEH53J7tfaGYec2O45g7cte1a9vEG7zdWCyIL7kL/sXFQ
+         doIjml6sFRr0a/JnIqNFSwQegwIgicRADmKeTnziKkZAIUA8Hflrd//LcdxM0XOV9A
+         UXz6wg0TfBckPnLG+6cJ+Z4x5vc9PwjD5RAjlcboe1aAVbo8Inz5eKQozY6s/DiGQp
+         hAGm99XohJbeQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Xu Yang <xu.yang_2@nxp.com>, Li Jun <jun.li@nxp.com>,
-        Peter Chen <peter.chen@kernel.org>,
+Cc:     Prashanth K <quic_prashk@quicinc.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, Peter.Chen@nxp.com,
+        Sasha Levin <sashal@kernel.org>, balbi@kernel.org,
         linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 09/24] usb: chipidea: imx: add missing USB PHY DPDM wakeup setting
-Date:   Sun, 23 Jul 2023 21:33:10 -0400
-Message-Id: <20230724013325.2332084-9-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 02/16] usb: gadget: u_serial: Avoid spinlock recursion in __gs_console_push
+Date:   Sun, 23 Jul 2023 21:33:46 -0400
+Message-Id: <20230724013401.2333159-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230724013325.2332084-1-sashal@kernel.org>
-References: <20230724013325.2332084-1-sashal@kernel.org>
+In-Reply-To: <20230724013401.2333159-1-sashal@kernel.org>
+References: <20230724013401.2333159-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.15.121
+X-stable-base: Linux 5.10.186
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,39 +59,59 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Xu Yang <xu.yang_2@nxp.com>
+From: Prashanth K <quic_prashk@quicinc.com>
 
-[ Upstream commit 53d061c19dc4cb68409df6dc11c40389c8c42a75 ]
+[ Upstream commit e5990469943c711cb00bfde6338d2add6c6d0bfe ]
 
-USB PHY DPDM wakeup bit is enabled by default, when USB wakeup
-is not required(/sys/.../wakeup is disabled), this bit should be
-disabled, otherwise we will have unexpected wakeup if do USB device
-connect/disconnect while system sleep.
-This bit can be enabled for both host and device mode.
+When serial console over USB is enabled, gs_console_connect
+queues gs_console_work, where it acquires the spinlock and
+queues the usb request, and this request goes to gadget layer.
+Now consider a situation where gadget layer prints something
+to dmesg, this will eventually call gs_console_write() which
+requires cons->lock. And this causes spinlock recursion. Avoid
+this by excluding usb_ep_queue from the spinlock.
 
-Signed-off-by: Li Jun <jun.li@nxp.com>
-Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-Acked-by: Peter Chen <peter.chen@kernel.org>
-Message-ID: <20230517081907.3410465-3-xu.yang_2@nxp.com>
+ spin_lock_irqsave //needs cons->lock
+ gs_console_write
+	.
+	.
+ _printk
+ __warn_printk
+ dev_warn/pr_err
+	.
+	.
+ [USB Gadget Layer]
+	.
+	.
+ usb_ep_queue
+ gs_console_work
+ __gs_console_push // acquires cons->lock
+ process_one_work
+
+Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+Link: https://lore.kernel.org/r/1683638872-6885-1-git-send-email-quic_prashk@quicinc.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/chipidea/usbmisc_imx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/gadget/function/u_serial.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/usb/chipidea/usbmisc_imx.c b/drivers/usb/chipidea/usbmisc_imx.c
-index bac0f5458cab9..2318c7906acdb 100644
---- a/drivers/usb/chipidea/usbmisc_imx.c
-+++ b/drivers/usb/chipidea/usbmisc_imx.c
-@@ -135,7 +135,7 @@
- #define TXVREFTUNE0_MASK		(0xf << 20)
+diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/function/u_serial.c
+index 7b54e814aefb1..869ed5ab4c292 100644
+--- a/drivers/usb/gadget/function/u_serial.c
++++ b/drivers/usb/gadget/function/u_serial.c
+@@ -917,8 +917,11 @@ static void __gs_console_push(struct gs_console *cons)
+ 	}
  
- #define MX6_USB_OTG_WAKEUP_BITS (MX6_BM_WAKEUP_ENABLE | MX6_BM_VBUS_WAKEUP | \
--				 MX6_BM_ID_WAKEUP)
-+				 MX6_BM_ID_WAKEUP | MX6SX_BM_DPDM_WAKEUP_EN)
+ 	req->length = size;
++
++	spin_unlock_irq(&cons->lock);
+ 	if (usb_ep_queue(ep, req, GFP_ATOMIC))
+ 		req->length = 0;
++	spin_lock_irq(&cons->lock);
+ }
  
- struct usbmisc_ops {
- 	/* It's called once when probe a usb device */
+ static void gs_console_work(struct work_struct *work)
 -- 
 2.39.2
 
