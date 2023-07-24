@@ -2,45 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 502BF75E8C3
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jul 2023 03:44:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0531575E8CC
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Jul 2023 03:44:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232385AbjGXBoc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 23 Jul 2023 21:44:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48382 "EHLO
+        id S232349AbjGXBoj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 23 Jul 2023 21:44:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232786AbjGXBns (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Jul 2023 21:43:48 -0400
+        with ESMTP id S232850AbjGXBoA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Jul 2023 21:44:00 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F3D59F3;
-        Sun, 23 Jul 2023 18:38:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC7F0E40;
+        Sun, 23 Jul 2023 18:38:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ADA2061015;
-        Mon, 24 Jul 2023 01:34:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 682CAC433C9;
-        Mon, 24 Jul 2023 01:34:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E0E3261004;
+        Mon, 24 Jul 2023 01:34:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68117C433CA;
+        Mon, 24 Jul 2023 01:34:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690162445;
-        bh=Po3zGwZzTFhKqrwdh2ukdplw47V4csNz3FYyoyufQJk=;
+        s=k20201202; t=1690162449;
+        bh=a18K2LEprRpTzPvGFGPzJoVCY6l1dgQyL+ze+Oep0ro=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fw5eaRq+ol9KzblTt7cmXreQj5urqu25bSXRfC7TCOs1qPn0Oo6TiXzGUkUdCQ03E
-         G7g1YLMNr6epyejPBkEmTxNotcSkB0kkXuLYABrx9/+vGOiAYlldkixmfDcoxXKdAc
-         /MZH5gAiaQ9Ux1nKtYuxGGEH53J7tfaGYec2O45g7cte1a9vEG7zdWCyIL7kL/sXFQ
-         doIjml6sFRr0a/JnIqNFSwQegwIgicRADmKeTnziKkZAIUA8Hflrd//LcdxM0XOV9A
-         UXz6wg0TfBckPnLG+6cJ+Z4x5vc9PwjD5RAjlcboe1aAVbo8Inz5eKQozY6s/DiGQp
-         hAGm99XohJbeQ==
+        b=M9cCEZ58vIeNHIqJQHOoW4zkRd5px4k8QcY+hGl11Pz30Vw3hJ3sBM5GfClE+Yws+
+         t64mGuJE1CD5ZI4y0dMaZKBYCogHqjUtEMhzJu1+rojx22GLQ34ptPpD6x/zRzGz3K
+         9UOunwG/W9V1mp036fLyd9fvkMWfSJi5erX2bAeTSwHXW0g0XRGh9lMOVzAn/5ICPn
+         L85kFdC5iLKV2HBtpHebfXOYVX+gUKFGiPI3eXI2WPm5ZvHM47nsnahcp62jcdTW2H
+         /J24/suMmM+x1az3Jxvc6yXv59LcM7AMGQ2HiI4DNQzTwmWEI0pKZVwzWxz8YClUjv
+         9WtHcv5jb0lRw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Prashanth K <quic_prashk@quicinc.com>,
+Cc:     Xu Yang <xu.yang_2@nxp.com>, Li Jun <jun.li@nxp.com>,
+        Peter Chen <peter.chen@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, balbi@kernel.org,
+        Sasha Levin <sashal@kernel.org>, Peter.Chen@nxp.com,
         linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 02/16] usb: gadget: u_serial: Avoid spinlock recursion in __gs_console_push
-Date:   Sun, 23 Jul 2023 21:33:46 -0400
-Message-Id: <20230724013401.2333159-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 05/16] usb: chipidea: imx: don't request QoS for imx8ulp
+Date:   Sun, 23 Jul 2023 21:33:49 -0400
+Message-Id: <20230724013401.2333159-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230724013401.2333159-1-sashal@kernel.org>
 References: <20230724013401.2333159-1-sashal@kernel.org>
@@ -59,59 +60,47 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Prashanth K <quic_prashk@quicinc.com>
+From: Xu Yang <xu.yang_2@nxp.com>
 
-[ Upstream commit e5990469943c711cb00bfde6338d2add6c6d0bfe ]
+[ Upstream commit 9a070e8e208995a9d638b538ed7abf28bd6ea6f0 ]
 
-When serial console over USB is enabled, gs_console_connect
-queues gs_console_work, where it acquires the spinlock and
-queues the usb request, and this request goes to gadget layer.
-Now consider a situation where gadget layer prints something
-to dmesg, this will eventually call gs_console_write() which
-requires cons->lock. And this causes spinlock recursion. Avoid
-this by excluding usb_ep_queue from the spinlock.
+Use dedicated imx8ulp usb compatible to remove QoS request
+since imx8ulp has no such limitation of imx7ulp: DMA will
+not work if system enters idle.
 
- spin_lock_irqsave //needs cons->lock
- gs_console_write
-	.
-	.
- _printk
- __warn_printk
- dev_warn/pr_err
-	.
-	.
- [USB Gadget Layer]
-	.
-	.
- usb_ep_queue
- gs_console_work
- __gs_console_push // acquires cons->lock
- process_one_work
-
-Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
-Link: https://lore.kernel.org/r/1683638872-6885-1-git-send-email-quic_prashk@quicinc.com
+Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+Signed-off-by: Li Jun <jun.li@nxp.com>
+Acked-by: Peter Chen <peter.chen@kernel.org>
+Message-ID: <20230530104007.1294702-2-xu.yang_2@nxp.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/gadget/function/u_serial.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/usb/chipidea/ci_hdrc_imx.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/function/u_serial.c
-index 7b54e814aefb1..869ed5ab4c292 100644
---- a/drivers/usb/gadget/function/u_serial.c
-+++ b/drivers/usb/gadget/function/u_serial.c
-@@ -917,8 +917,11 @@ static void __gs_console_push(struct gs_console *cons)
- 	}
+diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci_hdrc_imx.c
+index f798455942844..4d47fe89864d9 100644
+--- a/drivers/usb/chipidea/ci_hdrc_imx.c
++++ b/drivers/usb/chipidea/ci_hdrc_imx.c
+@@ -70,6 +70,10 @@ static const struct ci_hdrc_imx_platform_flag imx7ulp_usb_data = {
+ 		CI_HDRC_PMQOS,
+ };
  
- 	req->length = size;
++static const struct ci_hdrc_imx_platform_flag imx8ulp_usb_data = {
++	.flags = CI_HDRC_SUPPORTS_RUNTIME_PM,
++};
 +
-+	spin_unlock_irq(&cons->lock);
- 	if (usb_ep_queue(ep, req, GFP_ATOMIC))
- 		req->length = 0;
-+	spin_lock_irq(&cons->lock);
- }
- 
- static void gs_console_work(struct work_struct *work)
+ static const struct of_device_id ci_hdrc_imx_dt_ids[] = {
+ 	{ .compatible = "fsl,imx23-usb", .data = &imx23_usb_data},
+ 	{ .compatible = "fsl,imx28-usb", .data = &imx28_usb_data},
+@@ -80,6 +84,7 @@ static const struct of_device_id ci_hdrc_imx_dt_ids[] = {
+ 	{ .compatible = "fsl,imx6ul-usb", .data = &imx6ul_usb_data},
+ 	{ .compatible = "fsl,imx7d-usb", .data = &imx7d_usb_data},
+ 	{ .compatible = "fsl,imx7ulp-usb", .data = &imx7ulp_usb_data},
++	{ .compatible = "fsl,imx8ulp-usb", .data = &imx8ulp_usb_data},
+ 	{ /* sentinel */ }
+ };
+ MODULE_DEVICE_TABLE(of, ci_hdrc_imx_dt_ids);
 -- 
 2.39.2
 
