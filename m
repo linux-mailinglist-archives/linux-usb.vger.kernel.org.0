@@ -2,222 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C20175F380
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jul 2023 12:38:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35F3975F4E8
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Jul 2023 13:29:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231634AbjGXKiI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Jul 2023 06:38:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37224 "EHLO
+        id S231582AbjGXL3Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Jul 2023 07:29:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231888AbjGXKh7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Jul 2023 06:37:59 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 32B72E4F;
-        Mon, 24 Jul 2023 03:37:20 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 36OAaXsA5031024, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 36OAaXsA5031024
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Mon, 24 Jul 2023 18:36:33 +0800
-Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Mon, 24 Jul 2023 18:36:44 +0800
-Received: from RTEXH36505.realtek.com.tw (172.21.6.25) by
- RTEXMBS01.realtek.com.tw (172.21.6.94) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Mon, 24 Jul 2023 18:36:43 +0800
-Received: from localhost.localdomain (172.21.252.101) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server id
- 15.1.2375.32 via Frontend Transport; Mon, 24 Jul 2023 18:36:43 +0800
-From:   Stanley Chang <stanley_chang@realtek.com>
+        with ESMTP id S229928AbjGXL3Y (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Jul 2023 07:29:24 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0D19E5C
+        for <linux-usb@vger.kernel.org>; Mon, 24 Jul 2023 04:29:22 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4fdddf92b05so5942914e87.3
+        for <linux-usb@vger.kernel.org>; Mon, 24 Jul 2023 04:29:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google; t=1690198161; x=1690802961;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kRfo5YiTarf2JRuyrUwS+oTWGNTjD9P2a+wjJdihkXc=;
+        b=HhR/s2eASv5mFUSwnlt8BH7baCjp+WIg/wvsxT3L+mPE7McqmK60FnGCjwEBEo8ACu
+         +g2vps5suXa92g5cA4UxBQBENAjEKTw9zD1cdNXoF5cwDO2BjUyzjNxZ/ezc3iJr29BF
+         pBFaFwCiAg4CH1sJBdXftvRH95kYhImN3EkFsaFKiHMRWtn7vo9AI4JAnjy2zTl0CQkR
+         mFwLAYR9YP5HpHpDMr5+3wKVm24tV4JKzK0yDMyWAIhGFOgNVk97BgZlHm5fu5uadYvm
+         +JMkYoiaUjxN86fzNK9LmlKjpWXUa1Gh4PIeLNi0I54j0GM22BBEOlYRN/sqvSPxdh+D
+         hiSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690198161; x=1690802961;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kRfo5YiTarf2JRuyrUwS+oTWGNTjD9P2a+wjJdihkXc=;
+        b=ZKcjaf3oRWxJSB9uHWWcpkxPM5h7jJtiu386vOS3Uk5DWfdWTz0pW5vAgyPL6QYedb
+         ibVSmJHG+f0jgzhI0fBjNitTBJp4eh0jpebGzfKd+31zxQlo54wBJ0Lbmr77rppR0dcA
+         1QljpoD/lGzEgwa0B+zCi5esLRn3r3ntK73A9T395RAU3EVPTWsv6eKVpaVvwkYpRi/Q
+         1Io4/eJcDAR6NFcuIHoV4idYuqb4URgJ2civsUoGUIqv0T2sxnTXxY0XIVQSPzqynG0M
+         3qDB/E2flNojReS9U3O74LIyd/zpi7qLc6gvCNEzqNUUxXo+Jt4Tyf7OhZCxfobewRri
+         Ldiw==
+X-Gm-Message-State: ABy/qLaOVb04jaqVGIw/2ntt/AToMn6WX622wND8RGDkKAM4iTtcgOgX
+        ERnLFz747heJntNYILNdp/aw
+X-Google-Smtp-Source: APBJJlGCu20wuxsL/mNm2Y190ohvk9LaLcsTK7Rk+Ga+zBykBJsQCzEk3W3Jjn+sxPtdrW1I4XwM9A==
+X-Received: by 2002:a05:6512:31cf:b0:4fb:93db:fff3 with SMTP id j15-20020a05651231cf00b004fb93dbfff3mr5576926lfe.16.1690198160833;
+        Mon, 24 Jul 2023 04:29:20 -0700 (PDT)
+Received: from ukaszb-l.wifi.semihalf.net ([83.142.187.85])
+        by smtp.gmail.com with ESMTPSA id d22-20020ac25456000000b004f858249932sm2166271lfn.90.2023.07.24.04.29.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Jul 2023 04:29:20 -0700 (PDT)
+From:   =?UTF-8?q?=C5=81ukasz=20Bartosik?= <lb@semihalf.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Stanley Chang <stanley_chang@realtek.com>,
-        Rob Herring <robh@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Flavio Suligoi <f.suligoi@asem.it>,
-        Ray Chi <raychi@google.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Roy Luo <royluo@google.com>, <linux-phy@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>
-Subject: [PATCH v8 5/5] dt-bindings: phy: realtek: Add Realtek DHC RTD SoC USB 3.0 PHY
-Date:   Mon, 24 Jul 2023 18:34:52 +0800
-Message-ID: <20230724103600.14164-5-stanley_chang@realtek.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230724103600.14164-1-stanley_chang@realtek.com>
-References: <20230724103600.14164-1-stanley_chang@realtek.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        upstream@semihalf.com
+Subject: [PATCH] USB: quirks: add quirk for Focusrite Scarlett
+Date:   Mon, 24 Jul 2023 13:29:11 +0200
+Message-Id: <20230724112911.1802577-1-lb@semihalf.com>
+X-Mailer: git-send-email 2.38.3
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-KSE-ServerInfo: RTEXMBS01.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Document the USB PHY bindings for Realtek SoCs.
-Realtek DHC (digital home center) RTD SoCs support DWC3 XHCI USB
-controller and using USB 3.0 PHY transceiver.
+The Focusrite Scarlett audio device does not behave correctly during
+resumes. Below is what happens during every resume (captured with
+Beagle 5000):
 
-Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
----
-v7 to v8 change:
-    No Change
-v6 to v7 change:
-    Revise the commit message.
-v5 to v6 change:
-    Drop the labels of example.
-v4 to v5 change:
-    1. Remove the compatible realtek,usb3phy.
-    2. Add the default of the property.
-v3 to v4 change:
-    1. Remove the parameter and non hardware properties from dts.
-    2. Using the compatible data included the config and parameter
-       in driver.
-v2 to v3 change:
-    1. Broken down into two patches, one for each of USB 2 & 3.
-    2. Add more description about Realtek RTD SoCs architecture.
-    3. Removed parameter v1 support for simplification.
-    4. Revised the compatible name for fallback compatible.
-    5. Remove some properties that can be set in the driver.
-v1 to v2 change:
-    Add phy-cells for generic phy driver
----
- .../bindings/phy/realtek,usb3phy.yaml         | 107 ++++++++++++++++++
- 1 file changed, 107 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml
+<Suspend>
+<Resume>
+<Reset>/<Chirp J>/<Tiny J>
+<Reset/Target disconnected>
+<High Speed>
 
-diff --git a/Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml b/Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml
-new file mode 100644
-index 000000000000..dfe2bb4e59e7
---- /dev/null
-+++ b/Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml
-@@ -0,0 +1,107 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+# Copyright 2023 Realtek Semiconductor Corporation
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/phy/realtek,usb3phy.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+The Scarlett disconnects and is enumerated again.
+
+However from time to time it drops completely off the USB bus during
+resume. Below is captured occurrence of such an event:
+
+<Suspend>
+<Resume>
+<Reset>/<Chirp J>/<Tiny J>
+<Reset>/<Chirp K>/<Tiny K>
+<High Speed>
+<Corrupted packet>
+<Reset/Target disconnected>
+
+To fix the condition a user has to unplug and plug the device again.
+
+With USB_QUIRK_RESET_RESUME applied ("usbcore.quirks=1235:8211:b")
+for the Scarlett audio device the issue still reproduces. 
+
+Applying USB_QUIRK_DISCONNECT_SUSPEND ("usbcore.quirks=1235:8211:m")
+fixed the issue and the Scarlett audio device didn't drop off the USB
+bus for ~5000 suspend/resume cycles where originally issue reproduced in
+~100 or less suspend/resume cycles.
+
+Signed-off-by: Łukasz Bartosik <lb@semihalf.com>
+---
+ drivers/usb/core/quirks.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
+index 934b3d997..15e9bd180 100644
+--- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -436,6 +436,10 @@ static const struct usb_device_id usb_quirk_list[] = {
+ 	/* novation SoundControl XL */
+ 	{ USB_DEVICE(0x1235, 0x0061), .driver_info = USB_QUIRK_RESET_RESUME },
+ 
++	/* Focusrite Scarlett Solo USB */
++	{ USB_DEVICE(0x1235, 0x8211), .driver_info =
++			USB_QUIRK_DISCONNECT_SUSPEND },
 +
-+title: Realtek DHC SoCs USB 3.0 PHY
-+
-+maintainers:
-+  - Stanley Chang <stanley_chang@realtek.com>
-+
-+description: |
-+  Realtek USB 3.0 PHY support the digital home center (DHC) RTD series SoCs.
-+  The USB 3.0 PHY driver is designed to support the XHCI controller. The SoCs
-+  support multiple XHCI controllers. One PHY device node maps to one XHCI
-+  controller.
-+
-+  RTD1295/RTD1619 SoCs USB
-+  The USB architecture includes three XHCI controllers.
-+  Each XHCI maps to one USB 2.0 PHY and map one USB 3.0 PHY on some
-+  controllers.
-+  XHCI controller#0 -- usb2phy -- phy#0
-+                    |- usb3phy -- phy#0
-+  XHCI controller#1 -- usb2phy -- phy#0
-+  XHCI controller#2 -- usb2phy -- phy#0
-+                    |- usb3phy -- phy#0
-+
-+  RTD1319/RTD1619b SoCs USB
-+  The USB architecture includes three XHCI controllers.
-+  Each XHCI maps to one USB 2.0 PHY and map one USB 3.0 PHY on controllers#2.
-+  XHCI controller#0 -- usb2phy -- phy#0
-+  XHCI controller#1 -- usb2phy -- phy#0
-+  XHCI controller#2 -- usb2phy -- phy#0
-+                    |- usb3phy -- phy#0
-+
-+  RTD1319d SoCs USB
-+  The USB architecture includes three XHCI controllers.
-+  Each xhci maps to one USB 2.0 PHY and map one USB 3.0 PHY on controllers#0.
-+  XHCI controller#0 -- usb2phy -- phy#0
-+                    |- usb3phy -- phy#0
-+  XHCI controller#1 -- usb2phy -- phy#0
-+  XHCI controller#2 -- usb2phy -- phy#0
-+
-+properties:
-+  compatible:
-+    enum:
-+      - realtek,rtd1295-usb3phy
-+      - realtek,rtd1319-usb3phy
-+      - realtek,rtd1319d-usb3phy
-+      - realtek,rtd1619-usb3phy
-+      - realtek,rtd1619b-usb3phy
-+
-+  reg:
-+    maxItems: 1
-+
-+  "#phy-cells":
-+    const: 0
-+
-+  nvmem-cells:
-+    maxItems: 1
-+    description: A phandle to the tx lfps swing trim data provided by
-+      a nvmem device, if unspecified, default values shall be used.
-+
-+  nvmem-cell-names:
-+    items:
-+      - const: usb_u3_tx_lfps_swing_trim
-+
-+  realtek,amplitude-control-coarse-tuning:
-+    description:
-+      This adjusts the signal amplitude for normal operation and beacon LFPS.
-+      This value is a parameter for coarse tuning.
-+      For different boards, if the default value is inappropriate, this
-+      property can be assigned to adjust.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    default: 255
-+    minimum: 0
-+    maximum: 255
-+
-+  realtek,amplitude-control-fine-tuning:
-+    description:
-+      This adjusts the signal amplitude for normal operation and beacon LFPS.
-+      This value is used for fine-tuning parameters.
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    default: 65535
-+    minimum: 0
-+    maximum: 65535
-+
-+required:
-+  - compatible
-+  - reg
-+  - "#phy-cells"
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    usb-phy@13e10 {
-+        compatible = "realtek,rtd1319d-usb3phy";
-+        reg = <0x13e10 0x4>;
-+        #phy-cells = <0>;
-+
-+        nvmem-cells = <&otp_usb_u3_tx_lfps_swing_trim>;
-+        nvmem-cell-names = "usb_u3_tx_lfps_swing_trim";
-+
-+        realtek,amplitude-control-coarse-tuning = <0x77>;
-+    };
+ 	/* Huawei 4G LTE module */
+ 	{ USB_DEVICE(0x12d1, 0x15bb), .driver_info =
+ 			USB_QUIRK_DISCONNECT_SUSPEND },
 -- 
-2.34.1
+2.38.3
 
