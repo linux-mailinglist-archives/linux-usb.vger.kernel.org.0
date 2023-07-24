@@ -2,71 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8940F75FB05
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jul 2023 17:41:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A91875FB5E
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Jul 2023 18:01:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229529AbjGXPlk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Jul 2023 11:41:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56312 "EHLO
+        id S230237AbjGXQBq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Jul 2023 12:01:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjGXPlk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Jul 2023 11:41:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7DAB7;
-        Mon, 24 Jul 2023 08:41:39 -0700 (PDT)
+        with ESMTP id S230139AbjGXQBm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Jul 2023 12:01:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC9619A;
+        Mon, 24 Jul 2023 09:01:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D571560C49;
-        Mon, 24 Jul 2023 15:41:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FBE2C433C8;
-        Mon, 24 Jul 2023 15:41:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BF296123A;
+        Mon, 24 Jul 2023 16:01:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14399C433C9;
+        Mon, 24 Jul 2023 16:01:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690213298;
-        bh=FwmJyUFEwRmW6GyLKrRzaoOIFKD1ZixYyekFLFBjYm8=;
+        s=k20201202; t=1690214500;
+        bh=obEOVXewu49VHgFG99DmRcFBdBiVyJBWFXsPB3r31fU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KxZNmLvGWF0DcvPN5zy994G1T8upsOy4oNv0aa5nIm9dPf/QVVpQZn848TRZ1rklg
-         3W1Bdkz6crdOaUKTZJTf63y+9/GThMSsqtya4Gl9U9YgsTgm0RLlGuHo6H6C5/1VaI
-         9zWORpzVrZesTnVYEsypK7vADRQiw93qJVtLfSG/JjoSJ1ZfB0015D7Sf5a4wKrXe/
-         kGnkkRJY/FoAVIib6/IqSS/08ZYLBSqS8CQiwQ60ySUCkGDBDg5Xc9nf4w7qQK40yc
-         siMJJO9hrCcKMdsVuPTxhP/ROnUDZe+VLzRnAYTnPhxlJIsHxIQqHdOGfX/Oe4wP9Y
-         91yoKaZiERL/Q==
-Received: from johan by xi.lan with local (Exim 4.96)
-        (envelope-from <johan@kernel.org>)
-        id 1qNxgz-0005Ey-0h;
-        Mon, 24 Jul 2023 17:41:49 +0200
-Date:   Mon, 24 Jul 2023 17:41:49 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
-        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
-        ahalaney@redhat.com, quic_shazhuss@quicinc.com
-Subject: Re: [PATCH v9 03/10] usb: dwc3: core: Access XHCI address space
- temporarily to read port info
-Message-ID: <ZL6bvQkBUsFErpXd@hovoldconsulting.com>
-References: <20230621043628.21485-1-quic_kriskura@quicinc.com>
- <20230621043628.21485-4-quic_kriskura@quicinc.com>
- <ZJrL5SXrSiYbvq2o@hovoldconsulting.com>
- <e225fa01-c3be-8bfc-03de-59b507c70d3b@quicinc.com>
+        b=OojbEwQeuKb6QLqK6xMwGZ+fLq0y6ggK/tEkfAkegcfDu+8CKzOPOnuFdZePmmFWT
+         8hMsA2mSyXl2bzJd6bKTm1ew8RsSgBYz8qt/EaxqgFvdvS8dvRfiesUvQvRMQBF7FO
+         9GhbXLzIVKH4iDo8A3E5Erf9xLofT70hZzRtH9Hh0J9bSwiZ0wPOsgoE4Amd27eEKA
+         FMD5phjLHByS4SRc8y82CK1So8dFE4GD5i2KhNZQWL+4t/G1E5dF3nQAUGwsO5dKPR
+         SXSyeiVAQveObzPk/v/94s43da2MCi0JzEgEvGDRtCGL2D1o3hUn8jyOrpZM3L8WJF
+         bX5xpTCFzPFMw==
+Received: (nullmailer pid 3620992 invoked by uid 1000);
+        Mon, 24 Jul 2023 16:01:36 -0000
+Date:   Mon, 24 Jul 2023 10:01:36 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Varadarajan Narayanan <quic_varada@quicinc.com>, agross@kernel.org,
+        konrad.dybcio@linaro.org, vkoul@kernel.org, kishon@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        gregkh@linuxfoundation.org, catalin.marinas@arm.com,
+        will@kernel.org, p.zabel@pengutronix.de, arnd@arndb.de,
+        geert+renesas@glider.be, neil.armstrong@linaro.org,
+        nfraprado@collabora.com, rafal@milecki.pl,
+        quic_srichara@quicinc.com, quic_wcheng@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v5 2/6] dt-bindings: phy: qcom,m31: Document qcom,m31 USB
+ phy
+Message-ID: <20230724160136.GA3619408-robh@kernel.org>
+References: <cover.1689913334.git.quic_varada@quicinc.com>
+ <131eb1694229436919ac88bb9920fb54d6808388.1689913334.git.quic_varada@quicinc.com>
+ <ymbcafqqhc6hgrfhpef4byehvfyjzovs5zeprmj343erdv5ti5@tj2iunu6whvi>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e225fa01-c3be-8bfc-03de-59b507c70d3b@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <ymbcafqqhc6hgrfhpef4byehvfyjzovs5zeprmj343erdv5ti5@tj2iunu6whvi>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,27 +68,90 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-[ Please remember to trim your replies. ]
-
-On Sun, Jul 23, 2023 at 08:29:47PM +0530, Krishna Kurapati PSSNV wrote:
-> On 6/27/2023 5:15 PM, Johan Hovold wrote:
-> > On Wed, Jun 21, 2023 at 10:06:21AM +0530, Krishna Kurapati wrote:
-
-> >> +#define XHCI_EXT_PORT_MAJOR(x)	(((x) >> 24) & 0xff)
-> >> +#define XHCI_EXT_PORT_MINOR(x)	(((x) >> 16) & 0xff)
-> >> +#define XHCI_EXT_PORT_COUNT(x)	(((x) >> 8) & 0xff)
+On Fri, Jul 21, 2023 at 10:10:57PM -0700, Bjorn Andersson wrote:
+> On Fri, Jul 21, 2023 at 10:05:27AM +0530, Varadarajan Narayanan wrote:
+> > Document the M31 USB2 phy present in IPQ5332.
 > > 
-> > Again, don't copy defines from xhci.
-> > 
-> > Looks like these should be moved to the xhci-ext-caps.h header along
-> > with struct xhci_protocol_caps.
+> > Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
 > 
-> Moving the defines would be sufficient right ? Just wanted to know if 
-> there is any reason you are suggesting to move the structure as well so 
-> that I can update commit text accordingly.
+> As Sricharan is the first one to certify the patch's origin, it seems
+> likely that he's the author. Please add a Co-developed-by: Sricharan.
+> 
+> [..]
+> > diff --git a/Documentation/devicetree/bindings/phy/qcom,ipq5332-usb-hsphy.yaml b/Documentation/devicetree/bindings/phy/qcom,ipq5332-usb-hsphy.yaml
+> > new file mode 100644
+> > index 0000000..e0b282b
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/phy/qcom,ipq5332-usb-hsphy.yaml
+> > @@ -0,0 +1,51 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/phy/qcom,ipq5332-usb-hsphy.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: M31 USB PHY
+> > +
+> > +maintainers:
+> > +  - Sricharan Ramabadhran <quic_srichara@quicinc.com>
+> > +  - Varadarajan Narayanan <quic_varada@quicinc.com>
+> > +
+> > +description:
+> > +  USB M31 PHY (https://www.m31tech.com) found in Qualcomm
+> > +  IPQ5018, IPQ5332 SoCs.
+> > +
+> > +properties:
+> > +  "#phy-cells":
+> > +    const: 0
+> > +
+> > +  compatible:
+> > +    enum:
+> 
+> const?
+> 
+> > +      - qcom,ipq5332-usb-hsphy
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    maxItems: 1
+> > +
+> > +  clock-names:
+> > +    items:
+> > +      - const: cfg_ahb
+> > +
+> > +  resets:
+> > +    maxItems: 1
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/clock/qcom,ipq5332-gcc.h>
+> > +    usbphy0: usb-phy@7b000 {
+> 
+> usb@
 
-The defines are used for parsing the members of struct
-xhci_protocol_caps and they belong together even if no driver has
-apparently ever used the structure.
+You mean phy@? But 'usb2-phy' is accepted too.
 
-Johan
+> 
+> And you don't need to give the node a label in the example.
+> 
+> > +        compatible = "qcom,ipq5332-usb-hsphy";
+> > +        reg = <0x0007b000 0x12c>;
+> > +
+> > +        clocks = <&gcc GCC_USB0_PHY_CFG_AHB_CLK>;
+> > +        clock-names = "cfg_ahb";
+> > +
+> 
+> No #phy-cells?
+> 
+> Regards,
+> Bjorn
+> 
+> > +        resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
+> > +    };
+> > -- 
+> > 2.7.4
+> > 
