@@ -2,46 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 615F975E801
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jul 2023 03:37:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76A6775E833
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Jul 2023 03:38:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231944AbjGXBhJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 23 Jul 2023 21:37:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37466 "EHLO
+        id S230326AbjGXBit (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 23 Jul 2023 21:38:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230046AbjGXBgk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Jul 2023 21:36:40 -0400
+        with ESMTP id S232157AbjGXBiM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 Jul 2023 21:38:12 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FCD59F9;
-        Sun, 23 Jul 2023 18:33:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BCAD30D3;
+        Sun, 23 Jul 2023 18:34:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F1C1E60F66;
-        Mon, 24 Jul 2023 01:31:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 834B3C433C9;
-        Mon, 24 Jul 2023 01:31:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A927760EF9;
+        Mon, 24 Jul 2023 01:31:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61BA5C433CA;
+        Mon, 24 Jul 2023 01:31:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690162310;
-        bh=5SmmEGHfrZpuLd/DCKZNq391SJbmZqSPRMwsRqx3UYA=;
+        s=k20201202; t=1690162314;
+        bh=X/kRmcNGJ1d670NJAA2QlucT4XVIeOz5VIdZCa1CxwA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UeZMw3gcdZg5SB4qZq7LxSHdQ6YXwu7pY6zK8QBP2Xg3GX2nqBDSbgwUf5v9dJmh+
-         Cn+nJRNmnnGaWlWxQdN4rJTqU6ld9HT86fFei72ZSsXqotF+JekZF2eVtqajOhADbJ
-         CdnlI06vLXPx4KlbQ2NEYV6hhz0CUOQoXfF+ChNSt9+DzqbW2v8fGoTAArMwa/+T6Z
-         C9F4q6FtJJGwi/9OTPUwr4YhDuJ6LnpKppusTvhMxBDVrIwBZKASu0/qbbRoR4igd4
-         eY+bT0gqBxGjwlmUH0ywSJPwIXBDJgs9uowBrGW4yW6/9Lvn+NCxUd/RcCBHMAlylR
-         mTIemPEtHku4A==
+        b=soQA5WAGVL3YaTCYIwdhybxdCQgAyoczc3zg2XUFHOABuqXR2fe5OxQzT0O2ljbKK
+         38GP9giW+DVyUnKQB2bZAcvQ+rYKKtTurrPnx3F0XErDalfLTkX6rWcPDbWTQmwTBS
+         Vww+j4LRHb028q97o088dPc9fp2sldOWbiQcd1rE4d800Lp7CaRoH9QwsXCkvBgsHU
+         1nxWDfhGSJAEXmWXRBZxz/43GDjlZFJSxzoEH0iOe9wF/N7kDAR1+hGBeJa696BMRi
+         LK2bQbmWRiE3mboc5INmlr+neXvT/PiMIfPqXFE3SVXtju+WSnlCfA9Tv57/J/0fIZ
+         4Ixe3LyOLoKUA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Avichal Rakesh <arakesh@google.com>,
+Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>,
-        laurent.pinchart@ideasonboard.com, balbi@kernel.org,
+        Sasha Levin <sashal@kernel.org>, mathias.nyman@intel.com,
         linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.4 06/40] usb: gadget: uvc: queue empty isoc requests if no video buffer is available
-Date:   Sun, 23 Jul 2023 21:31:06 -0400
-Message-Id: <20230724013140.2327815-6-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.4 09/40] xhci: Don't require a valid get_quirks() function pointer during xhci setup
+Date:   Sun, 23 Jul 2023 21:31:09 -0400
+Message-Id: <20230724013140.2327815-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230724013140.2327815-1-sashal@kernel.org>
 References: <20230724013140.2327815-1-sashal@kernel.org>
@@ -60,103 +59,36 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Avichal Rakesh <arakesh@google.com>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
 
-[ Upstream commit c3ff12a92bd7072170978b8b41c2fa41b038139a ]
+[ Upstream commit 9b907c91aa94522ae14bf155ce7b9ccb10a0903c ]
 
-ISOC transfers expect a certain cadence of requests being queued. Not
-keeping up with the expected rate of requests results in missed ISOC
-transfers (EXDEV). The application layer may or may not produce video
-frames to match this expectation, so uvc gadget driver must handle cases
-where the application is not queuing up buffers fast enough to fulfill
-ISOC requirements.
+Not all platforms drivers need to set up custom quirks during the xhci
+generic setup. Allow them to pass NULL as the function pointer when
+calling xhci_gen_setup()
 
-Currently, uvc gadget driver waits for new video buffer to become available
-before queuing up usb requests. With this patch the gadget driver queues up
-0 length usb requests whenever there are no video buffers available. The
-USB controller's complete callback is used as the limiter for how quickly
-the 0 length packets will be queued. Video buffers are still queued as
-soon as they become available.
-
-Link: https://lore.kernel.org/CAMHf4WKbi6KBPQztj9FA4kPvESc1fVKrC8G73-cs6tTeQby9=w@mail.gmail.com/
-Signed-off-by: Avichal Rakesh <arakesh@google.com>
-Link: https://lore.kernel.org/r/20230508231103.1621375-1-arakesh@google.com
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <20230602144009.1225632-4-mathias.nyman@linux.intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/gadget/function/uvc_video.c | 32 ++++++++++++++++++-------
- 1 file changed, 24 insertions(+), 8 deletions(-)
+ drivers/usb/host/xhci.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
-index dd1c6b2ca7c6f..e81865978299c 100644
---- a/drivers/usb/gadget/function/uvc_video.c
-+++ b/drivers/usb/gadget/function/uvc_video.c
-@@ -386,6 +386,9 @@ static void uvcg_video_pump(struct work_struct *work)
- 	struct uvc_buffer *buf;
- 	unsigned long flags;
- 	int ret;
-+	bool buf_int;
-+	/* video->max_payload_size is only set when using bulk transfer */
-+	bool is_bulk = video->max_payload_size;
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 78790dc13c5f1..a1e5f3bd883cc 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -5180,7 +5180,8 @@ int xhci_gen_setup(struct usb_hcd *hcd, xhci_get_quirks_t get_quirks)
  
- 	while (video->ep->enabled) {
- 		/*
-@@ -408,20 +411,35 @@ static void uvcg_video_pump(struct work_struct *work)
- 		 */
- 		spin_lock_irqsave(&queue->irqlock, flags);
- 		buf = uvcg_queue_head(queue);
--		if (buf == NULL) {
-+
-+		if (buf != NULL) {
-+			video->encode(req, video, buf);
-+			/* Always interrupt for the last request of a video buffer */
-+			buf_int = buf->state == UVC_BUF_STATE_DONE;
-+		} else if (!(queue->flags & UVC_QUEUE_DISCONNECTED) && !is_bulk) {
-+			/*
-+			 * No video buffer available; the queue is still connected and
-+			 * we're traferring over ISOC. Queue a 0 length request to
-+			 * prevent missed ISOC transfers.
-+			 */
-+			req->length = 0;
-+			buf_int = false;
-+		} else {
-+			/*
-+			 * Either queue has been disconnected or no video buffer
-+			 * available to bulk transfer. Either way, stop processing
-+			 * further.
-+			 */
- 			spin_unlock_irqrestore(&queue->irqlock, flags);
- 			break;
- 		}
+ 	xhci->quirks |= quirks;
  
--		video->encode(req, video, buf);
--
- 		/*
- 		 * With usb3 we have more requests. This will decrease the
- 		 * interrupt load to a quarter but also catches the corner
- 		 * cases, which needs to be handled.
- 		 */
--		if (list_empty(&video->req_free) ||
--		    buf->state == UVC_BUF_STATE_DONE ||
-+		if (list_empty(&video->req_free) || buf_int ||
- 		    !(video->req_int_count %
- 		       DIV_ROUND_UP(video->uvc_num_requests, 4))) {
- 			video->req_int_count = 0;
-@@ -441,8 +459,7 @@ static void uvcg_video_pump(struct work_struct *work)
+-	get_quirks(dev, xhci);
++	if (get_quirks)
++		get_quirks(dev, xhci);
  
- 		/* Endpoint now owns the request */
- 		req = NULL;
--		if (buf->state != UVC_BUF_STATE_DONE)
--			video->req_int_count++;
-+		video->req_int_count++;
- 	}
- 
- 	if (!req)
-@@ -527,4 +544,3 @@ int uvcg_video_init(struct uvc_video *video, struct uvc_device *uvc)
- 			V4L2_BUF_TYPE_VIDEO_OUTPUT, &video->mutex);
- 	return 0;
- }
--
+ 	/* In xhci controllers which follow xhci 1.0 spec gives a spurious
+ 	 * success event after a short transfer. This quirk will ignore such
 -- 
 2.39.2
 
