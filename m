@@ -2,31 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21EAF75F97A
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jul 2023 16:13:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF0DD75F9A2
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Jul 2023 16:18:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbjGXONJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Jul 2023 10:13:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42174 "EHLO
+        id S231949AbjGXOSx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Jul 2023 10:18:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231931AbjGXONF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Jul 2023 10:13:05 -0400
+        with ESMTP id S229977AbjGXOSw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Jul 2023 10:18:52 -0400
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id AD939E53
-        for <linux-usb@vger.kernel.org>; Mon, 24 Jul 2023 07:13:02 -0700 (PDT)
-Received: (qmail 1848478 invoked by uid 1000); 24 Jul 2023 10:13:01 -0400
-Date:   Mon, 24 Jul 2023 10:13:01 -0400
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 8B27CB2
+        for <linux-usb@vger.kernel.org>; Mon, 24 Jul 2023 07:18:51 -0700 (PDT)
+Received: (qmail 1848669 invoked by uid 1000); 24 Jul 2023 10:18:50 -0400
+Date:   Mon, 24 Jul 2023 10:18:50 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     gregkh@linuxfoundation.org, liulongfang@huawei.com,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] USB: hub: make sure stale buffers are not enumerated
-Message-ID: <c4493483-be91-4a63-9a82-6ebc9a3123c0@rowland.harvard.edu>
-References: <20230724124057.12975-1-oneukum@suse.com>
+To:     Stanley Chang <stanley_chang@realtek.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Roy Luo <royluo@google.com>, Ray Chi <raychi@google.com>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v8 1/5] usb: phy: add usb phy notify port status API
+Message-ID: <802dd50c-7201-45d2-8855-6692aeb947db@rowland.harvard.edu>
+References: <20230724103600.14164-1-stanley_chang@realtek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230724124057.12975-1-oneukum@suse.com>
+In-Reply-To: <20230724103600.14164-1-stanley_chang@realtek.com>
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
@@ -37,62 +45,37 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 24, 2023 at 02:40:57PM +0200, Oliver Neukum wrote:
-> Quoting Alan Stern on why we cannot just check errors:
-> 
-> The operation carried out here is deliberately unsafe (for full-speed
-> devices).  It is made before we know the actual maxpacket size for ep0,
-> and as a result it might return an error code even when it works okay.
-> This shouldn't happen, but a lot of USB hardware is unreliable.
-> 
-> Therefore we must not ignore the result merely because r < 0.  If we do
-> that, the kernel might stop working with some devices.
-> 
-> He is absolutely right. However, we must make sure that in case
-> we read nothing or a short answer, the buffer contains nothing
-> that can be misinterpreted as a valid answer.
-> So we have to zero it before we use it for IO.
-> 
-> Reported-by: liulongfang <liulongfang@huawei.com>
-> Signed-off-by: Oliver Neukum <oneukum@suse.com>
-> ---
->  drivers/usb/core/hub.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index a739403a9e45..9772716925c3 100644
+On Mon, Jul 24, 2023 at 06:34:48PM +0800, Stanley Chang wrote:
+
 > --- a/drivers/usb/core/hub.c
 > +++ b/drivers/usb/core/hub.c
-> @@ -4873,7 +4873,8 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
->  			}
->  
->  #define GET_DESCRIPTOR_BUFSIZE	64
-> -			buf = kmalloc(GET_DESCRIPTOR_BUFSIZE, GFP_NOIO);
-> +			/* zeroed so we don't operate on a stale buffer on errors */
-> +			buf = kzalloc(GET_DESCRIPTOR_BUFSIZE, GFP_NOIO);
->  			if (!buf) {
->  				retval = -ENOMEM;
->  				continue;
+> @@ -614,6 +614,30 @@ static int hub_ext_port_status(struct usb_hub *hub, int port1, int type,
+>  		ret = 0;
+>  	}
+>  	mutex_unlock(&hub->status_mutex);
+> +
+> +	/*
+> +	 * There is no need to lock status_mutex here, because status_mutex
+> +	 * protects hub->status, and the phy driver only checks the port
+> +	 * status without changing the status.
+> +	 */
+> +	if (!ret) {
+> +		struct usb_device *hdev = hub->hdev;
+> +
+> +		/*
+> +		 * Applies to roothub only. That is, when hdev->parent is
+> +		 * empty. Only roothub will be notified of port state
+> +		 * changes, since the USB PHY only cares about changes at
+> +		 * the next level.
+> +		 */
+> +		if (hdev && !hdev->parent) {
 
-There is no need for kzalloc.
+hdev can never be NULL, so you don't need to test it.  Also, there 
+is an is_root_hub() routine you can call here -- it's an inline defined 
+in usb.h.  If you use that then you won't have to explain it in the 
+comment.
 
-The only accesses we do to buf (besides feeding it to usb_control_msg) 
-are to read buf->bMaxPacketSize0 and buf->bDescriptorType.  The only 
-field that actually needs to be initialized is bMaxPacketSize0, and the 
-code already sets it to 0 before calling usb_control_msg.  Furthermore, 
-we don't try to read bDescriptorType if bMaxPacketSize0 is invalid after 
-the I/O operation.
-
-I guess if you really want to be safe, you could do:
-
--			udev->descriptor.bMaxPacketSize0 =
--					buf->bMaxPacketSize0;
-+			if (r == 0)
-+				udev->descriptor.bMaxPacketSize0 =
-+						buf->bMaxPacketSize0;
-
-at line 4918.  But even that's not necessary, since the following call 
-to hub_port_reset doesn't use udev->descriptor.bMaxPacketSize0, so it 
-doesn't matter if that field contains garbage.
+To be fair, there are plenty of other places in the driver that test 
+!hdev->parent (or !udev->parent) with no explanation.
 
 Alan Stern
