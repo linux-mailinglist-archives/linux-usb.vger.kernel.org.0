@@ -2,91 +2,181 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6935F75F212
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jul 2023 12:06:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7683375F36F
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Jul 2023 12:36:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233099AbjGXKGu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Jul 2023 06:06:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36762 "EHLO
+        id S231401AbjGXKgv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Jul 2023 06:36:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233112AbjGXKGe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Jul 2023 06:06:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA8844B2
-        for <linux-usb@vger.kernel.org>; Mon, 24 Jul 2023 02:59:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 698B461011
-        for <linux-usb@vger.kernel.org>; Mon, 24 Jul 2023 09:58:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB324C433C8;
-        Mon, 24 Jul 2023 09:58:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690192697;
-        bh=NfnBu8TqHXRiBOuSbG5E810YGgMAMNxY5tlRlr/Toas=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Lddyrs/CbCilCyLSZ/CUoram3ODdDfqWthf2dOwDuXuLwY7x1DpxABuEcScV/ALJU
-         C86yYK3HijVlh5rlYLsUgob0+TuHXTrkniM+9HVrodho2NbmzWCEbcuJWpKV4i6n1m
-         wwygTDWYVrk0iCB9AiQ0qxirhVZXm8D1+okisrHhuzXYays4tNiPMmFadYqIulgwmU
-         Pevs8bCcINOk7RsubX1wU1p/+VW3A+b+n5z0LrA+sLxE5FbTf3ymgkgM5dYKbSzxKm
-         XrY1YYMa+9jQJgS8BYRYnLGKaeoMF7jHn4bnWwqzbsEAVk2AnrRx5VLjgobEtEHms7
-         zYZuUMfgJZO/w==
-Received: from johan by xi.lan with local (Exim 4.96)
-        (envelope-from <johan@kernel.org>)
-        id 1qNsKi-0003sy-2B;
-        Mon, 24 Jul 2023 11:58:28 +0200
-Date:   Mon, 24 Jul 2023 11:58:28 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Martin Kohn <m.kohn@welotec.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] Quectel EM05G LTE Modem with new Product ID
-Message-ID: <ZL5LRAqvEjYw52xr@hovoldconsulting.com>
-References: <AM0PR04MB5764E9F944881E5B1FCE63F0973EA@AM0PR04MB5764.eurprd04.prod.outlook.com>
- <AM0PR04MB5764EE9ECBEC5B8E00BBD84D973EA@AM0PR04MB5764.eurprd04.prod.outlook.com>
- <ZLlACymhpmIx59UX@hovoldconsulting.com>
- <AM0PR04MB5764A20ECDD077042E6D768F9702A@AM0PR04MB5764.eurprd04.prod.outlook.com>
+        with ESMTP id S229980AbjGXKgu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Jul 2023 06:36:50 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 387A9DD;
+        Mon, 24 Jul 2023 03:36:49 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 36OAZoHY2028924, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 36OAZoHY2028924
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
+        Mon, 24 Jul 2023 18:35:50 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32; Mon, 24 Jul 2023 18:36:01 +0800
+Received: from RTEXH36505.realtek.com.tw (172.21.6.25) by
+ RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Mon, 24 Jul 2023 18:36:01 +0800
+Received: from localhost.localdomain (172.21.252.101) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server id
+ 15.1.2375.32 via Frontend Transport; Mon, 24 Jul 2023 18:36:01 +0800
+From:   Stanley Chang <stanley_chang@realtek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Stanley Chang <stanley_chang@realtek.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Roy Luo <royluo@google.com>, Ray Chi <raychi@google.com>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
+Subject: [PATCH v8 1/5] usb: phy: add usb phy notify port status API
+Date:   Mon, 24 Jul 2023 18:34:48 +0800
+Message-ID: <20230724103600.14164-1-stanley_chang@realtek.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <AM0PR04MB5764A20ECDD077042E6D768F9702A@AM0PR04MB5764.eurprd04.prod.outlook.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-KSE-ServerInfo: RTEXMBS04.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Marin,
+In Realtek SoC, the parameter of usb phy is designed to can dynamic
+tuning base on port status. Therefore, add a notify callback of phy
+driver when usb port status change.
 
-When working upstream you should remember to reply inline (and trim
-unneeded context) rather than top posting as you did here.
+The Realtek phy driver is designed to dynamically adjust disconnection
+level and calibrate phy parameters. When the device connected bit changes
+and when the disconnected bit changes, do port status change notification:
 
-Also wrap your mails at 72 columns or so (I've added the missing
-newlines below).
+Check if portstatus is USB_PORT_STAT_CONNECTION and portchange is
+USB_PORT_STAT_C_CONNECTION.
+1. The device is connected, the driver lowers the disconnection level and
+   calibrates the phy parameters.
+2. The device disconnects, the driver increases the disconnect level and
+   calibrates the phy parameters.
 
-On Mon, Jul 24, 2023 at 09:24:34AM +0000, Martin Kohn wrote:
+When controller to notify connect that device is already ready. If we
+adjust the disconnection level in notify_connect, the disconnect may have
+been triggered at this stage. So we need to change that as early as
+possible. The status change of connection is before port reset.
+Therefore, we add an api to notify phy the port status changes. In this
+stage, the device is not port enable, and it will not trigger disconnection.
 
-> Could you please point me to what I did exactly wrong, now I tried
-> second time and as I'm new here, I honestly do not know what I did
-> wrong?
+Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
+---
+v7 to v8 change:
+    Add more comments about this api.
+v6 to v7 change:
+    No change
+v5 to v6 change:
+    No change
+v4 to v5 change:
+    No change
+v3 to v4 change:
+    Fix the warning for checkpatch with strict.
+v2 to v3 change:
+    Add more comments about the reason for adding this api
+v1 to v2 change:
+    No change
+---
+ drivers/usb/core/hub.c  | 24 ++++++++++++++++++++++++
+ include/linux/usb/phy.h | 13 +++++++++++++
+ 2 files changed, 37 insertions(+)
 
-It looks your second attempt worked correctly:
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index a739403a9e45..cd2c9c6eab95 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -614,6 +614,30 @@ static int hub_ext_port_status(struct usb_hub *hub, int port1, int type,
+ 		ret = 0;
+ 	}
+ 	mutex_unlock(&hub->status_mutex);
++
++	/*
++	 * There is no need to lock status_mutex here, because status_mutex
++	 * protects hub->status, and the phy driver only checks the port
++	 * status without changing the status.
++	 */
++	if (!ret) {
++		struct usb_device *hdev = hub->hdev;
++
++		/*
++		 * Applies to roothub only. That is, when hdev->parent is
++		 * empty. Only roothub will be notified of port state
++		 * changes, since the USB PHY only cares about changes at
++		 * the next level.
++		 */
++		if (hdev && !hdev->parent) {
++			struct usb_hcd *hcd = bus_to_hcd(hdev->bus);
++
++			if (hcd->usb_phy)
++				usb_phy_notify_port_status(hcd->usb_phy,
++							   port1 - 1, *status, *change);
++		}
++	}
++
+ 	return ret;
+ }
+ 
+diff --git a/include/linux/usb/phy.h b/include/linux/usb/phy.h
+index e4de6bc1f69b..b513749582d7 100644
+--- a/include/linux/usb/phy.h
++++ b/include/linux/usb/phy.h
+@@ -144,6 +144,10 @@ struct usb_phy {
+ 	 */
+ 	int	(*set_wakeup)(struct usb_phy *x, bool enabled);
+ 
++	/* notify phy port status change */
++	int	(*notify_port_status)(struct usb_phy *x, int port,
++				      u16 portstatus, u16 portchange);
++
+ 	/* notify phy connect status change */
+ 	int	(*notify_connect)(struct usb_phy *x,
+ 			enum usb_device_speed speed);
+@@ -316,6 +320,15 @@ usb_phy_set_wakeup(struct usb_phy *x, bool enabled)
+ 		return 0;
+ }
+ 
++static inline int
++usb_phy_notify_port_status(struct usb_phy *x, int port, u16 portstatus, u16 portchange)
++{
++	if (x && x->notify_port_status)
++		return x->notify_port_status(x, port, portstatus, portchange);
++	else
++		return 0;
++}
++
+ static inline int
+ usb_phy_notify_connect(struct usb_phy *x, enum usb_device_speed speed)
+ {
+-- 
+2.34.1
 
-	https://lore.kernel.org/all/AM0PR04MB576480684AA0896B32D32975973FA@AM0PR04MB5764.eurprd04.prod.outlook.com/#t
-
-In your previous attempt, tabs had specifically been replaced by spaces.
-
-> I did run checkpatch and applied it back to my repository and
-> everything is fine on my side.
-
-As long as you ran checkpatch on the patch (and applied it) *after*
-mailing it to yourself, you should be good.
-
-Also remember to include me as a recipient when posting. My filters
-should catch it anyway, but it may take some time before I see it.
-
-Johan
