@@ -2,32 +2,33 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C7D875F9C5
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jul 2023 16:26:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0179275F9E3
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Jul 2023 16:29:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbjGXO0G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Jul 2023 10:26:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51770 "EHLO
+        id S229887AbjGXO3S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Jul 2023 10:29:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjGXO0F (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Jul 2023 10:26:05 -0400
+        with ESMTP id S229692AbjGXO3R (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Jul 2023 10:29:17 -0400
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 7FAC9E63
-        for <linux-usb@vger.kernel.org>; Mon, 24 Jul 2023 07:26:04 -0700 (PDT)
-Received: (qmail 1848894 invoked by uid 1000); 24 Jul 2023 10:26:03 -0400
-Date:   Mon, 24 Jul 2023 10:26:03 -0400
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id B5915E6
+        for <linux-usb@vger.kernel.org>; Mon, 24 Jul 2023 07:29:16 -0700 (PDT)
+Received: (qmail 1849056 invoked by uid 1000); 24 Jul 2023 10:29:16 -0400
+Date:   Mon, 24 Jul 2023 10:29:16 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Michael Grzeschik <m.grzeschik@pengutronix.de>
-Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH] usb: gadget: core: remove unbalanced mutex_unlock in
- usb_gadget_activate
-Message-ID: <b4ccd0c4-78f7-4f7c-bf6f-cae048c6e841@rowland.harvard.edu>
-References: <20230721222256.1743645-1-m.grzeschik@pengutronix.de>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     Johan Hovold <johan@kernel.org>, gregkh@linuxfoundation.org,
+        liulongfang@huawei.com, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] USB: hub: make sure stale buffers are not enumerated
+Message-ID: <1fa217a4-0150-4658-bf13-eaf34d300d65@rowland.harvard.edu>
+References: <20230724124057.12975-1-oneukum@suse.com>
+ <ZL6CHnYEmxssGXRG@hovoldconsulting.com>
+ <1ae1ad1c-34ad-3a1d-baa7-529832ed42eb@suse.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230721222256.1743645-1-m.grzeschik@pengutronix.de>
+In-Reply-To: <1ae1ad1c-34ad-3a1d-baa7-529832ed42eb@suse.com>
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
@@ -38,35 +39,33 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Jul 22, 2023 at 12:22:56AM +0200, Michael Grzeschik wrote:
-> Commit 286d9975a838 ("usb: gadget: udc: core: Prevent soft_connect_store() race")
-> introduced one extra mutex_unlock of connect_lock in the usb_gadget_active function.
+On Mon, Jul 24, 2023 at 04:24:55PM +0200, Oliver Neukum wrote:
+> On 24.07.23 15:52, Johan Hovold wrote:
 > 
-> Fixes: 286d9975a838 ("usb: gadget: udc: core: Prevent soft_connect_store() race")
-> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-> ---
-
-Hard to see how we missed that...
-
-Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
-
-Thanks!
-
->  drivers/usb/gadget/udc/core.c | 1 -
->  1 file changed, 1 deletion(-)
+> > 
+> > This patch is neither correct or needed. The current implementation sets
+> > 	
+> > 	buf->bMaxPacketSize0 = 0
+> > 
+> > before reading the descriptor and makes sure that that field is non-zero
+> > before accessing buf->bDescriptorType which lies before bMaxPacketSize0.
+> > 
+> > It may be subtle, but it looks correct.
 > 
-> diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-> index 59188ea065e0c9..cd58f2a4e7f34d 100644
-> --- a/drivers/usb/gadget/udc/core.c
-> +++ b/drivers/usb/gadget/udc/core.c
-> @@ -878,7 +878,6 @@ int usb_gadget_activate(struct usb_gadget *gadget)
->  	 */
->  	if (gadget->connected)
->  		ret = usb_gadget_connect_locked(gadget);
-> -	mutex_unlock(&gadget->udc->connect_lock);
->  
->  unlock:
->  	mutex_unlock(&gadget->udc->connect_lock);
-> -- 
-> 2.39.2
+> True, but I am afraid not sufficient. It neglects the case of getting
+> a partial read. That is
 > 
+> buf->bMaxPacketSize0
+> 
+> can be genuine, but the later test
+> if (buf->bDescriptorType ==
+>             USB_DT_DEVICE) {
+> 
+> still spuriously succeed
+
+How can it?  bDescriptorType is at the start of the device descriptor, 
+whereas bMaxPacketSize0 is more towards the end.  If the later part get 
+transferred from the device, the earlier part must have been transferred 
+as well.  Even if the transfer was short.
+
+Alan Stern
