@@ -2,121 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A408F7600D3
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jul 2023 23:02:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35F01760333
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jul 2023 01:35:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230241AbjGXVCl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Jul 2023 17:02:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44008 "EHLO
+        id S229749AbjGXXfa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Jul 2023 19:35:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjGXVCk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Jul 2023 17:02:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62410E67;
-        Mon, 24 Jul 2023 14:02:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E827D61411;
-        Mon, 24 Jul 2023 21:02:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A62EC433D9;
-        Mon, 24 Jul 2023 21:02:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690232558;
-        bh=0+Srw7lXT1FA8YIDbGu44docy330MM50fqmGEpJ5PiY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=eF880e10xh6n475OZjp5F/Po8sUNB+6EBgxnJbCsEXZK3RaXYlY+t3JoJzkMC5CUV
-         TjA2GwYkIaFbjR1iRd1y7TXm/mEDexVUie/0iU3huXUxbyhN26riJMpZt88FNvDvi9
-         Kcn4MX3KpjJRaA2BATIpZHbS0sqACpdYlP4WIwC5h6aN/paMxhVY/+7BrzUQA+21/g
-         gcyzj9jR3ZFeArfjNVuNqDSCaXTcvgFcl3deDvxjOawX9gsXagFytQPlAgnZPRDfeP
-         kYdOd5rTcMWpbV8TEl1op6AUBrzBkzavsxry0ellreSDbh0UxUKUUqvfeB8B1OIsUo
-         XRipzVZd0M7+Q==
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2b7430bda8bso70538321fa.0;
-        Mon, 24 Jul 2023 14:02:38 -0700 (PDT)
-X-Gm-Message-State: ABy/qLZwkQSTkS3vn0blE4KPAI18RpQFkPumnouB2gfqExRwWL5NLaFP
-        BcDMSF+j57OATqZczONwoREfNyehKiNnwNu/BQ==
-X-Google-Smtp-Source: APBJJlG02/cT58K6TBy2dpTL5aTHIezcfXvz2TD3qAfXrj44uyTbqvpoDx2CALCp5CDzH8HFqOlm6YDCvEHlbpVDOSQ=
-X-Received: by 2002:a2e:924b:0:b0:2b6:e536:a2a3 with SMTP id
- v11-20020a2e924b000000b002b6e536a2a3mr7171152ljg.19.1690232555975; Mon, 24
- Jul 2023 14:02:35 -0700 (PDT)
+        with ESMTP id S229459AbjGXXf3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Jul 2023 19:35:29 -0400
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8015E10F0
+        for <linux-usb@vger.kernel.org>; Mon, 24 Jul 2023 16:35:26 -0700 (PDT)
+Received: by mail-oi1-x230.google.com with SMTP id 5614622812f47-3a04e5baffcso3418884b6e.3
+        for <linux-usb@vger.kernel.org>; Mon, 24 Jul 2023 16:35:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1690241725; x=1690846525;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=I8fz4cK5y9JcsINOznOi6I+slOOwe0qn3DVZUoBbC9w=;
+        b=gyrYIkCIORhM0Xo2OeACAoyeqsgmvMki5OW8sawDOPwE5GdYjIxsgmzappwCq4L/Cs
+         iMEYziJKPM+2nJ78HrBHl0HrPDB6+jse0+hZn03CY9LzFP9fWcw3uJWL0WPhj+LRtbWB
+         gpJQwIkDf4gdR+5RT3UtTKIx8vCMdlnA3tGEqUpJsxWiXYlTKBGOgXIRA/wA08FnUZ50
+         4Hccw59fEEXUpqVhUR1zsk4R1sFumUACUOPxpP3ynBqazO2vNV7NukOlD45vvhoVBILa
+         KTN/b8HZGu6TjTsgPmloqRKO8vVV+Xes65ZK4uvTGV5uoAk0mMzjI6x2fSF+hClCJk2k
+         dePw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690241725; x=1690846525;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=I8fz4cK5y9JcsINOznOi6I+slOOwe0qn3DVZUoBbC9w=;
+        b=QGBVhzhOtKE5/+LvpWuJEnFi+mgnPvD3E+onAjkCz1511pOj/MPEd9BOOCGVHlfn+A
+         tER2R75Kww6D2EMaapE6/9p+qBC9XRccdq3OJKwawA/vGlmCXhaDo1vOFpFXsq0jN6gV
+         ahKk9RsepTVECm8guKbihxhGHgEesZMj2Sz1PBF9tTaZppb7zc2XcP6T7Pw8fls+cf95
+         qBzKEbBVIbziLDkVsFqhms/MdtbhpGKrKLH8TXDhI2NSxAxhtemZfoXew6b+VALPP+Y2
+         zoaKGaGLCv76C4tpZZGA0J6qJmM2JwMyMKcfE9fHD25/PVFPSgNm2gDT+Oepem7geiQl
+         RyNA==
+X-Gm-Message-State: ABy/qLa1zmHw3Jmk/3GuOx+bLYlRFZh5bHgvAFgpeCopmlB2ork9DWfT
+        I/vQ8w7wkki9J61VP3Cw/PXCeZu4Y0EVyMxJiABZu0TEW+0zng==
+X-Google-Smtp-Source: APBJJlHKzcKAobl5khO29PPaUVb1mxmTjNfIZiG7nJgTD+W4ZTW0fBPWTnXszJ94+eWGsz8m7WPAKJnjrzckijvbdxY=
+X-Received: by 2002:a05:6358:998b:b0:134:c8ee:e451 with SMTP id
+ j11-20020a056358998b00b00134c8eee451mr5606851rwb.13.1690241725467; Mon, 24
+ Jul 2023 16:35:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230723071105.40157-1-krzysztof.kozlowski@linaro.org>
- <20230724162638.GA3784203-robh@kernel.org> <60e7e772-bf0a-264d-abac-4ed72766a2d0@linaro.org>
-In-Reply-To: <60e7e772-bf0a-264d-abac-4ed72766a2d0@linaro.org>
-From:   Rob Herring <robh@kernel.org>
-Date:   Mon, 24 Jul 2023 15:02:23 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLwZR_VQEAuhLLqN4BF8Yvh=3vkQe=tFHaKWzJzMMP+qw@mail.gmail.com>
-Message-ID: <CAL_JsqLwZR_VQEAuhLLqN4BF8Yvh=3vkQe=tFHaKWzJzMMP+qw@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: usb: add missing unevaluatedProperties on
- USB connector
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Jagan Sridharan <badhri@google.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        Min Guo <min.guo@mediatek.com>,
-        Gene Chen <gene_chen@richtek.com>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
+From:   Andrea Stedile <andreastedile97@gmail.com>
+Date:   Tue, 25 Jul 2023 01:35:14 +0200
+Message-ID: <CAMOGSPFDpPEeAEjc1c=a_Z3TZOcrTO8FBxNRqDXUADdRc+CRPw@mail.gmail.com>
+Subject: UCSI_GET_PDOS failed + video + logs
+To:     linux-usb@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 24, 2023 at 11:05=E2=80=AFAM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 24/07/2023 18:26, Rob Herring wrote:
-> > On Sun, Jul 23, 2023 at 09:11:05AM +0200, Krzysztof Kozlowski wrote:
-> >> The usb-connector.yaml schema allows any additional properties, thus i=
-ts
-> >> usage should finish with unevaluatedProperties: false.
-> >
-> > Is it problematic if usb-connector.yaml is restricted?
->
-> Yes, a bit.
-> 1. Missing reg/unit-address:
-> Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
-> I guess this could be easily solved.
->
-> 2. phy-supply:
-> arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
-> (and more of armada)
-> This is a bit odd:
->
-> phy@18300 {
->   compatible =3D "marvell,comphy-a3700";
->   comphy0: phy@0 {}
->   comphy1: phy@1 {}
->   comphy2: phy@2 {
->     connector {
->       compatible =3D "usb-a-connector";
->       phy-supply =3D <&exp_usb3_vbus>;
->    };
-> };
->
-> I would assume that phy-supply should be a property of the phy.
-
-Indeed. We already have vbus-supply which this looks like it is. I'm
-pretty sure I've seen Vbus in phy bindings too which I've pushed back
-on as to whether Vbus really went to the phy or was there because the
-phy driver just wants to control Vbus.
-
-The marvell platforms aren't in great shape schema wise, so maybe
-don't worry about it now.
-
-Rob
+Hi,
+Maybe you are getting this email twice, but it was flagged as spam.
+I would like to report a possible bug that I am deterministically able
+to reproduce by plugging my USB-C charger. Kernel is
+6.5.0-0.rc2.17.fc39.x86_64.
+My laptop has three USB-C ports, one on the left side and two on the
+right side. The single port on the left supports USB-PD. The two right
+ports support DisplayPort and Thunderbolt 3.
+I made a screen recording of the output of sudo journalctl -k -f when
+I connect the charger to the left port. I also created a text file
+containing the text output. You can find them at [4].
+The output contains a lot of lines, because I have added other kernel
+parameters to help me debug an i915 bug I am experiencing [1] that may
+be related to this one (see perhaps the traces at [2] and [3]).
+On the other two USB-C port (that also allows for video and audio), I
+obtain similar errors (uploaded video and text file at [4] as well).
+The errors is:
+ucsi_acpi USBC000:00: possible UCSI driver bug 2
+ucsi_acpi USBC000:00: UCSI_GET_PDOS failed (-22)
+Can I help in debugging this?
+Kind regards,
+Andrea
+[1] https://gitlab.freedesktop.org/drm/intel/-/issues/8964
+[2] https://www.diffchecker.com/S5MEjVHU/
+[3] https://www.diffchecker.com/rMjENqjH/
+[4] https://drive.google.com/drive/folders/1eWsUBHDLizLjEx7R1b6ukjQISOPl_TNK?usp=sharing
