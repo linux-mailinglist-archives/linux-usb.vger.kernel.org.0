@@ -2,73 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10DB775EC2B
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Jul 2023 09:04:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCDAE75EC2D
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Jul 2023 09:06:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbjGXHEo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Jul 2023 03:04:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50586 "EHLO
+        id S230212AbjGXHGQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Jul 2023 03:06:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230120AbjGXHEm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Jul 2023 03:04:42 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12FF1133
-        for <linux-usb@vger.kernel.org>; Mon, 24 Jul 2023 00:04:40 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-51e28cac164so10481120a12.1
-        for <linux-usb@vger.kernel.org>; Mon, 24 Jul 2023 00:04:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690182278; x=1690787078;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BnI7Q+4yw6+Z1QsdbFCjMZJuIk0S1yM6lQ+dTWG+bVY=;
-        b=oFRBRV+e8Y/1GMGUalQeZ8ynScg1pxsFkjUl1Id0XqRLT9gzB1JUMgrzDpIBzhr9uK
-         Ie7LEBjLzgAEz3u5KlizMJNhKWyIesAU8u5JO3iCWSIaJv2sHsA0RDYr3O2IZf1c/L6O
-         gb+dUsj/Mt+25J4FLZxLNvECG6LUJN1cwl0ZLANi90v2YW+0yypreCt66Ih4P3LEEl8w
-         FHahHHJ3r6hJzBFrhs97btXxpeOC3ByTuK2xETtWYywjFHXJ1v6Mj25nw6K2hYKiJ7Ci
-         wRohVY3Eh/9V6BYEQGhwjOKW3f3OVfKZk8VfkJLrlRh0oc3nAxCaIdrXNwOh1kEDANx2
-         sumg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690182278; x=1690787078;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BnI7Q+4yw6+Z1QsdbFCjMZJuIk0S1yM6lQ+dTWG+bVY=;
-        b=Jpd0nI87S0IbbFwTyIueu5W1uwSa1HxwBPidqZm2JyttS4r8rfZcHBPdK3wrm6MQTM
-         e4SKPV7Ul93jVxlb3IlVhR49r9V9NyEshpbAUm5+a6kiqRgX/gnZvG3dE3e76NJ9OkSj
-         YSqBXqhD2VU906ZYs8gj8YfC+9+Y2ULkpZN0czxHT6MX8IhoDPZzG3BKMEOgd2ulPycM
-         dhRmaOrCDOav+gJxwEaIFAxbIprkYid+DEWnjw3ovYuhjyY2qzablYwSZq33wTeE9ArY
-         xi6qmu2xlAbrQUvCnS5bzsRqANkmPj14HbPt/DUf5u0nwq+SVNVKp/LtwAD4aXu9q7qS
-         y18w==
-X-Gm-Message-State: ABy/qLZqEXz9M2+wJiU4puHX800rI8JzkzEHR/RaQNCuCZM92+1GJGCF
-        iYL6/aJftb6hND/fzHs6rgEvrc/iTDgIkNgrZ5EpHQ==
-X-Google-Smtp-Source: APBJJlEr9XbF2zEoV+DCoZBAEmLbxcPrw/9GpNugz7ENquW1MAgvZ4niHKqwkUjGuLAYUZXNkEqdzQ==
-X-Received: by 2002:a17:906:1090:b0:997:e9a3:9c4f with SMTP id u16-20020a170906109000b00997e9a39c4fmr8787535eju.30.1690182278467;
-        Mon, 24 Jul 2023 00:04:38 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id bt16-20020a170906b15000b00993159ce075sm6209126ejb.210.2023.07.24.00.04.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Jul 2023 00:04:37 -0700 (PDT)
-Message-ID: <70a823a4-54d1-18a3-3d77-45564d88e8f1@linaro.org>
-Date:   Mon, 24 Jul 2023 09:04:36 +0200
+        with ESMTP id S229468AbjGXHGO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Jul 2023 03:06:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B4C133;
+        Mon, 24 Jul 2023 00:06:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AFC9060F59;
+        Mon, 24 Jul 2023 07:06:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 862B9C433C8;
+        Mon, 24 Jul 2023 07:06:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1690182372;
+        bh=bXFbzDGRsLJzol8Y088QZs2hbY4BTS9fB8XOAo5P7pM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=x/hXPZkjJNK3wZD1Xpmk/Yxs4AEAdaEAnvsfPYpCwjK9UjONk8HYYE1U1pOE3kPpK
+         /rfjnXJuxxQs2KwyTWJ4FMlsQ566oYZgaJb69pvEMdIcrtA1RzVcmRTBxhtJWyI8oh
+         9i612V0vaCWUKGzs3ifPh6Xt0C5LwexotGtYT1NY=
+Date:   Mon, 24 Jul 2023 09:06:09 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Stanley =?utf-8?B?Q2hhbmdb5piM6IKy5b63XQ==?= 
+        <stanley_chang@realtek.com>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Roy Luo <royluo@google.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        Ray Chi <raychi@google.com>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH v7 1/5] usb: phy: add usb phy notify port status API
+Message-ID: <2023072454-mosaic-ogle-9a27@gregkh>
+References: <20230707064725.25291-1-stanley_chang@realtek.com>
+ <2023072452-jasmine-palm-7b73@gregkh>
+ <47131beec8a24572873aa31e87cfaab6@realtek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: usb: Add Intel SoCFPGA USB controller
-Content-Language: en-US
-To:     adrian.ho.yin.ng@intel.com, gregkh@linuxfoundation.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, Thinh.Nguyen@synopsys.com,
-        p.zabel@pengutronix.de
-References: <cover.1690179693.git.adrian.ho.yin.ng@intel.com>
- <0d12c7a196d6ad81cfc69b281dd1c4cca623d9bd.1690179693.git.adrian.ho.yin.ng@intel.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <0d12c7a196d6ad81cfc69b281dd1c4cca623d9bd.1690179693.git.adrian.ho.yin.ng@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <47131beec8a24572873aa31e87cfaab6@realtek.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,129 +68,107 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 24/07/2023 08:36, adrian.ho.yin.ng@intel.com wrote:
-> From: Adrian Ng Ho Yin <adrian.ho.yin.ng@intel.com>
+On Mon, Jul 24, 2023 at 06:49:50AM +0000, Stanley Chang[昌育德] wrote:
 > 
-> Existing binding intel,keembay-dwc3.yaml does not have the required
-> properties for Intel SoCFPGA devices.
-> Introduce new binding description for Intel SoCFPGA USB controller
-> which will be used for current and future SoCFPGA devices.
+> > 
+> > On Fri, Jul 07, 2023 at 02:47:00PM +0800, Stanley Chang wrote:
+> > > In Realtek SoC, the parameter of usb phy is designed to can dynamic
+> > > tuning base on port status. Therefore, add a notify callback of phy
+> > > driver when usb port status change.
+> > >
+> > > The Realtek phy driver is designed to dynamically adjust disconnection
+> > > level and calibrate phy parameters. When the device connected bit
+> > > changes and when the disconnected bit changes, do port status change
+> > notification:
+> > >
+> > > Check if portstatus is USB_PORT_STAT_CONNECTION and portchange is
+> > > USB_PORT_STAT_C_CONNECTION.
+> > > 1. The device is connected, the driver lowers the disconnection level and
+> > >    calibrates the phy parameters.
+> > > 2. The device disconnects, the driver increases the disconnect level and
+> > >    calibrates the phy parameters.
+> > >
+> > > When controller to notify connect that device is already ready. If we
+> > > adjust the disconnection level in notify_connect, the disconnect may
+> > > have been triggered at this stage. So we need to change that as early
+> > > as possible. Therefore, we add an api to notify phy the port status changes.
+> > 
+> > How do you know that the disconnect will not have already been triggered at
+> > this point, when the status changes?
 > 
-> Signed-off-by: Adrian Ng Ho Yin <adrian.ho.yin.ng@intel.com>
-> ---
->  .../bindings/usb/intel,socfpga-dwc3.yaml      | 84 +++++++++++++++++++
->  1 file changed, 84 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/intel,socfpga-dwc3.yaml
+> The status change of connection is before port reset.
+> In this stage, the device is not port enable, and it will not trigger disconnection.
+
+Ok, then say that here please :)
+
+> > >
+> > > Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
+> > > ---
+> > > v6 to v7 change:
+> > >     No change
+> > > v5 to v6 change:
+> > >     No change
+> > > v4 to v5 change:
+> > >     No change
+> > > v3 to v4 change:
+> > >     Fix the warning for checkpatch with strict.
+> > > v2 to v3 change:
+> > >     Add more comments about the reason for adding this api
+> > > v1 to v2 change:
+> > >     No change
+> > > ---
+> > >  drivers/usb/core/hub.c  | 13 +++++++++++++  include/linux/usb/phy.h |
+> > > 13 +++++++++++++
+> > >  2 files changed, 26 insertions(+)
+> > >
+> > > diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c index
+> > > a739403a9e45..8433ff89dea6 100644
+> > > --- a/drivers/usb/core/hub.c
+> > > +++ b/drivers/usb/core/hub.c
+> > > @@ -614,6 +614,19 @@ static int hub_ext_port_status(struct usb_hub *hub,
+> > int port1, int type,
+> > >               ret = 0;
+> > >       }
+> > >       mutex_unlock(&hub->status_mutex);
+> > > +
+> > > +     if (!ret) {
+> > > +             struct usb_device *hdev = hub->hdev;
+> > > +
+> > > +             if (hdev && !hdev->parent) {
+> > 
+> > Why the check for no parent?  Please document that here in a comment.
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/intel,socfpga-dwc3.yaml b/Documentation/devicetree/bindings/usb/intel,socfpga-dwc3.yaml
-> new file mode 100644
-> index 000000000000..e36b087c2651
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/intel,socfpga-dwc3.yaml
-> @@ -0,0 +1,84 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/intel,socfpga-dwc3.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Intel SoCFPGA DWC3 USB controller
-> +
-> +maintainers:
-> +  - Adrian Ng Ho Yin <adrian.ho.yin.ng@intel.com>
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - intel,agilex5-dwc3
-> +      - const: intel,socfpga-dwc3
+> I will add a comment :
+> /* Only notify roothub. That is, when hdev->parent is empty. */
 
-So you did not even wait for my answer? What happened here with this
-compatible? I asked you to change file name, not add intel,socfpga-dwc3.
-Again - why using different style for Agilex? Which style is correct?
+Also document this that this will only happen for root hub status
+changes, that's not obvious in the callback name or documentation or
+anywhere else here.
 
-> +
-> +  reg:
-> +    description: Offset and length of DWC3 controller register
+> > > +                     struct usb_hcd *hcd = bus_to_hcd(hdev->bus);
+> > > +
+> > > +                     if (hcd->usb_phy)
+> > > +
+> > usb_phy_notify_port_status(hcd->usb_phy,
+> > > +                                                        port1 -
+> > 1, *status, *change);
+> > > +             }
+> > > +     }
+> > > +
+> > 
+> > This is safe to notify with the hub mutex unlocked?  Again, a comment would
+> > be helpful to future people explaining why that is so.
+> > 
+> 
+> I will add a comment: 
+> /*                                                                      
+>  * There is no need to lock status_mutex here, because status_mutex     
+>  * protects hub->status, and the phy driver only checks the port        
+>  * status without changing the status.                                  
+>  */  
 
-What happened here? It wasn't here before.
+Looks good, if you do it without the trailing whitespace :)
 
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: Controller Master/Core clock
-> +      - description: Controller Suspend clock
-> +
-> +  ranges: true
-> +
-> +  resets:
-> +    description: A list of phandles for resets listed in reset-names
+thanks,
 
-Neither was this useless description, it is obvious.
-
-> +    maxItems: 2
-> +
-> +  reset-names:
-> +    items:
-> +      - const: dwc3
-> +      - const: dwc3-ecc
-> +
-> +  '#address-cells':
-> +    enum: [ 1, 2 ]
-> +
-> +  '#size-cells':
-> +    enum: [ 1, 2 ]
-> +
-> +# Required child node:
-> +
-> +patternProperties:
-> +  "^usb@[0-9a-f]+$":
-> +    $ref: snps,dwc3.yaml#
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - resets
-> +  - ranges
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/reset/altr,rst-mgr.h>
-> +
-> +    usb@11000000 {
-> +          compatible = "intel,agilex5-dwc3", "intel,socfpga-dwc3";
-
-Still wrong indentation....
-
-> +          reg = <0x11000000 0x100000>;
-> +          ranges;
-> +          clocks = <&clkmgr 54>,
-> +                   <&clkmgr 55>;
-> +          resets = <&rst USB0_RESET>, <&rst USB1_RESET>;
-> +          reset-names = "dwc3", "dwc3-ecc";
-> +          #address-cells = <1>;
-> +          #size-cells = <1>;
-> +
-> +          usb@11000000 {
-> +                compatible = "snps,dwc3";
-> +                reg = <0x11000000 0x100000>;
-> +                interrupts = <GIC_SPI 94 IRQ_TYPE_LEVEL_HIGH>;
-> +                dr_mode = "host";
-> +          };
-> +    };
-> +
-
-Drop trailing line.
-
-Instead of resending just after your reply, allow for reviewer to respond.
-
-Best regards,
-Krzysztof
-
+greg k-h
