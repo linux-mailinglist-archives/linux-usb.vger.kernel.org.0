@@ -2,112 +2,182 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C22376108A
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jul 2023 12:22:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04699761092
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jul 2023 12:23:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233207AbjGYKWU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Jul 2023 06:22:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44834 "EHLO
+        id S233331AbjGYKXd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Jul 2023 06:23:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233185AbjGYKWS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jul 2023 06:22:18 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 881E5D3
-        for <linux-usb@vger.kernel.org>; Tue, 25 Jul 2023 03:22:17 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-992e22c09edso781050266b.2
-        for <linux-usb@vger.kernel.org>; Tue, 25 Jul 2023 03:22:17 -0700 (PDT)
+        with ESMTP id S230462AbjGYKXd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jul 2023 06:23:33 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEEEB10CC
+        for <linux-usb@vger.kernel.org>; Tue, 25 Jul 2023 03:23:30 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-991f956fb5aso791400366b.0
+        for <linux-usb@vger.kernel.org>; Tue, 25 Jul 2023 03:23:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690280536; x=1690885336;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zWadWjqF45OYKb04rK5xzE1AeT6F9pvOBw28ewY8qRw=;
-        b=CQiqWpke4LmeiynkUU0LU4wU+J5FlhcsxT3Js4zHwRI/SiW2kSi8fbWeP8Zuc4XdWd
-         B2ENsZ7qPQojA9+xYW+5DNO+4OL1FsHFEOfM3CtYhFj7dLmESzp5eL2x4cdJMs/vs5Bn
-         8ABaHje1rWZ8sX5Mpe9IjWUqw/H3tTrWnTle3qYiQFZ6oA6ayHc8lrWlEte53fBrFjrW
-         IcZYrlf2HseSwTZn7rT4igpkk2hKMSRG77sW6LU1yp/btgD6tbiE6UE4vVlk9tTk9qRL
-         YE6RVWu/giPc3uvJJzSzdOqY7mu6hP8EigzRYKBeDo0RnG1dkuBsiJd4InbMBVDO+C+G
-         lCqQ==
+        d=linaro.org; s=google; t=1690280609; x=1690885409;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ja4+MqHfl9X0tKSYm800u8KwnOGZLdpwubmp8VoMlQQ=;
+        b=O+18cz9q0RR58TDgOKYgTYov+m+0R9fEuoRTb6OKJoK/JGW+YcI61YlQXhZeL8biQ0
+         hjUeozP4G0k7EXRCF17f9p+lMPNvY65hgqBjWzvS+v8yFLQ7ZIwKzB9mBh/zcVrcw58G
+         ct8ilL7SjMYd8PL+cl/3sh6HAMag3kGAmuMbDkwjzG/1eeODZxzrS8ixlkEfVha6HlQ4
+         HEU7vujNoVLlk0xRdEpCFowLT0lNwMj192ZwOvAPto93q5y/HjPskn4unYEVzpcFTkt0
+         upP4RTpxzxX6ZlM/o+C/bn68fQmHNDvshFHy+TPTPkzVn8icoNXAJoArG4epe3jnzFF+
+         jGIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690280536; x=1690885336;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zWadWjqF45OYKb04rK5xzE1AeT6F9pvOBw28ewY8qRw=;
-        b=Z80tWRpEe35tTA/vhP14MJKsJPGJx0G6f77uIAZeBYpMGQRwbOCJfjIRNjBkNIb1Ox
-         Xx+IU4UXbigEuIuW1ycSg1oxHTXJRNOn3k0SV4/7IjMyrkwfOPPINssGo4KxF8Si2wGr
-         RFVRYaC9NmSH0k9bj1hzzvojkDCf9pDqc/A5C4iaoJRcMYRtX3e0oCP3PGUT5tP70GAA
-         rl+eHlcHcloH59QSzUyW53p9OyQyEHHeRfjmBi7RCD2u7hsOC4uUY69SKCUtEpiHp1t8
-         N3XuljR5hvf7zfGsB9lFc5GUGMhN8zqfL/sxFoyl9xXheTDDD56yG+h+1w4rG5/P8FUS
-         FNdQ==
-X-Gm-Message-State: ABy/qLZxYqPmlBADoqRlzfeSPY9rxQEoNRqBFpCLG/61XlXTMU5fJcV2
-        mMpvl2vFtjv3bqMbcvmJL7AiMA==
-X-Google-Smtp-Source: APBJJlGGVArmfyzfCFxzdLxo1G3ncs6vyd50LiUpQOe+HyUBxHObEZr0PgpxaPwhnG1avvlYapxTDQ==
-X-Received: by 2002:a17:906:30c3:b0:993:f996:52cf with SMTP id b3-20020a17090630c300b00993f99652cfmr12726557ejb.28.1690280536032;
-        Tue, 25 Jul 2023 03:22:16 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id jp7-20020a170906f74700b009937dbabbd5sm7952129ejb.220.2023.07.25.03.22.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jul 2023 03:22:15 -0700 (PDT)
-Message-ID: <c54c8973-7cff-dad5-51ef-41523cf2f2b5@linaro.org>
-Date:   Tue, 25 Jul 2023 12:22:12 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH] dt-bindings: usb: add missing unevaluatedProperties on
- USB connector
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        d=1e100.net; s=20221208; t=1690280609; x=1690885409;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ja4+MqHfl9X0tKSYm800u8KwnOGZLdpwubmp8VoMlQQ=;
+        b=PiwS6medoVZOdgt7cHQetjQgFG2CAzVd/fvddceoaoOl/pRpV1M5NhRySCd/D5A/nI
+         AjvJKk9EneFaASe+4lBfdKpj75NZndX6IbuROsv+s2m6zJZ8dK9Xnfv1f817orPy6cPs
+         XGhvcTE8uTlCefJ9atJ93B0uogX0bnmgJIwyykAv3YQltPElgNke4+TKhCkrB4g7HoMM
+         TnJpIJY34mpXhc5ns/2L0YYYUdIGDfsfgssgV6DQCiUOX85Q1ljzcgTLGtjZxRbCqqSJ
+         mqHqg4tmP5KHdPWIHrPaUJ6AvkQO+HZLQVFYSIohz/LjNme4lQ3LtLWb2cMKWRFQLqnS
+         Y8yQ==
+X-Gm-Message-State: ABy/qLYFL4Rqk/onHBHHqKWdpZTU0hpPPOesNcgIyug7iJXAbWpTPVIW
+        onfoVGQJXnAJzBb8G9OHSP1lgA==
+X-Google-Smtp-Source: APBJJlEnJZpNRqox/mI/F+UVFWcjxKilSCWS+31W6pOEKBcwwQ2PZ/TVSqbTP/NQeP//kD5YeBtq2A==
+X-Received: by 2002:a17:906:300d:b0:973:d06d:545f with SMTP id 13-20020a170906300d00b00973d06d545fmr11568811ejz.24.1690280609327;
+        Tue, 25 Jul 2023 03:23:29 -0700 (PDT)
+Received: from krzk-bin.. ([178.197.223.104])
+        by smtp.gmail.com with ESMTPSA id m26-20020a170906849a00b00982a352f078sm7832471ejx.124.2023.07.25.03.23.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Jul 2023 03:23:28 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Jagan Sridharan <badhri@google.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        Min Guo <min.guo@mediatek.com>,
-        Gene Chen <gene_chen@richtek.com>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230723071105.40157-1-krzysztof.kozlowski@linaro.org>
- <20230724162638.GA3784203-robh@kernel.org>
- <60e7e772-bf0a-264d-abac-4ed72766a2d0@linaro.org>
- <CAL_JsqLwZR_VQEAuhLLqN4BF8Yvh=3vkQe=tFHaKWzJzMMP+qw@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAL_JsqLwZR_VQEAuhLLqN4BF8Yvh=3vkQe=tFHaKWzJzMMP+qw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Wayne Chang <waynec@nvidia.com>, devicetree@vger.kernel.org,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2] dt-bindings: usb: connector: disallow additional properties
+Date:   Tue, 25 Jul 2023 12:23:25 +0200
+Message-Id: <20230725102325.76336-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 24/07/2023 23:02, Rob Herring wrote:
->>       compatible = "usb-a-connector";
->>       phy-supply = <&exp_usb3_vbus>;
->>    };
->> };
->>
->> I would assume that phy-supply should be a property of the phy.
-> 
-> Indeed. We already have vbus-supply which this looks like it is. I'm
-> pretty sure I've seen Vbus in phy bindings too which I've pushed back
-> on as to whether Vbus really went to the phy or was there because the
-> phy driver just wants to control Vbus.
-> 
-> The marvell platforms aren't in great shape schema wise, so maybe
-> don't worry about it now.
+USB connector bindings is complete, thus no additional properties should
+be allowed.  Add missing 'reg' property and change additionalProperties
+to false, so the schema will check for anything not unexpected.  This
+also allows to drop the 'reg' from other bindings referencing the
+usb-connector.yaml and make it required.
 
-OK, I will send a v2.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Best regards,
-Krzysztof
+---
+
+Changes in v2:
+1. Make usb-connector.yaml additionalProperties:false (Rob)
+
+v1:
+https://lore.kernel.org/all/20230723071105.40157-1-krzysztof.kozlowski@linaro.org/
+---
+ .../devicetree/bindings/chrome/google,cros-ec-typec.yaml    | 6 ++----
+ .../devicetree/bindings/connector/usb-connector.yaml        | 5 ++++-
+ .../devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml       | 6 ------
+ Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml | 6 ++----
+ 4 files changed, 8 insertions(+), 15 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/chrome/google,cros-ec-typec.yaml b/Documentation/devicetree/bindings/chrome/google,cros-ec-typec.yaml
+index 3b0548c34791..9f9816fbecbc 100644
+--- a/Documentation/devicetree/bindings/chrome/google,cros-ec-typec.yaml
++++ b/Documentation/devicetree/bindings/chrome/google,cros-ec-typec.yaml
+@@ -29,10 +29,8 @@ properties:
+ patternProperties:
+   '^connector@[0-9a-f]+$':
+     $ref: /schemas/connector/usb-connector.yaml#
+-    unevaluatedProperties: false
+-    properties:
+-      reg:
+-        maxItems: 1
++    required:
++      - reg
+ 
+ required:
+   - compatible
+diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+index 1c4d3eb87763..e1b8b8b63120 100644
+--- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
++++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+@@ -30,6 +30,9 @@ properties:
+           - const: samsung,usb-connector-11pin
+           - const: usb-b-connector
+ 
++  reg:
++    maxItems: 1
++
+   label:
+     description: Symbolic name for the connector.
+ 
+@@ -264,7 +267,7 @@ anyOf:
+         - typec-power-opmode
+         - new-source-frs-typec-current
+ 
+-additionalProperties: true
++additionalProperties: false
+ 
+ examples:
+   # Micro-USB connector with HS lines routed via controller (MUIC).
+diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
+index 6440dc801387..bceb479f74c5 100644
+--- a/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
++++ b/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
+@@ -38,15 +38,9 @@ properties:
+ patternProperties:
+   '^connector@\d$':
+     $ref: /schemas/connector/usb-connector.yaml#
+-
+-    properties:
+-      reg: true
+-
+     required:
+       - reg
+ 
+-    unevaluatedProperties: false
+-
+ required:
+   - compatible
+ 
+diff --git a/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml b/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
+index 75eec4a9a020..89fc9a434d05 100644
+--- a/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
++++ b/Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml
+@@ -43,10 +43,8 @@ properties:
+ patternProperties:
+   '^connector@[01]$':
+     $ref: /schemas/connector/usb-connector.yaml#
+-    unevaluatedProperties: false
+-    properties:
+-      reg:
+-        maxItems: 1
++    required:
++      - reg
+ 
+ required:
+   - compatible
+-- 
+2.34.1
 
