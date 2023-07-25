@@ -2,52 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCF54761AD7
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jul 2023 16:00:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EE1F761B00
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jul 2023 16:08:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231962AbjGYOAu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Jul 2023 10:00:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52552 "EHLO
+        id S232350AbjGYOIv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Jul 2023 10:08:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230309AbjGYOAt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jul 2023 10:00:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B1BB0;
-        Tue, 25 Jul 2023 07:00:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DD1A661731;
-        Tue, 25 Jul 2023 14:00:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C1F5C433C7;
-        Tue, 25 Jul 2023 14:00:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690293647;
-        bh=KxdroIHSsGYEX4N3u3daebwShXgD0pgJCElrR/YHdj8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=I6f14DS8zaBAQUUQ1Fu8L+7+xvK/XKduZjNgpOVAiAzK1pkeL/YjzUSrPPFIQi6Xq
-         s+L7qOqBv8hqDFTU9Xb7KhhvHS5gRownkuWP82xCtNT/c2NtLiAMODrY+H8WM27WAK
-         W2gX0L9FnR4khVhsS5rth8BXumGPt/yQX5/KeZ1mz8LE45cRj2b0mXO03C3qUazmn4
-         GeIo/S2lgzLA2iOqPF6tmEmPSJt7PwOQyAi7jsL3tXGVg7g8448FhXysOwNoOCJ/MF
-         9vPYNykHsI6cNV4qUPTvVIOoO996yuwYUCyTnb6YeI6JqI3RqqDvO77QqbujA38INY
-         oCoerpCVOEynA==
-Received: from johan by xi.lan with local (Exim 4.96)
-        (envelope-from <johan@kernel.org>)
-        id 1qOIaz-00018A-13;
-        Tue, 25 Jul 2023 16:01:01 +0200
-Date:   Tue, 25 Jul 2023 16:01:01 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] USB-serial device ids for 6.5-rc4
-Message-ID: <ZL_VnZUGvlOlLKAy@hovoldconsulting.com>
+        with ESMTP id S232298AbjGYOIs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jul 2023 10:08:48 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF82D1FD7;
+        Tue, 25 Jul 2023 07:08:46 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36PDXDMu010531;
+        Tue, 25 Jul 2023 16:08:01 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=aKox1fifr/MD7CscnSNaYClzgh1MKEowYV/1CFbHY8Q=;
+ b=4sFWeFLREgJioc9H+rODp72hj3AVdLAeXn//m7QoqBPjLcHM3h6ErPmn4WA399Y/aITY
+ Es+zEl+7c1OuNWP/mY/sYFUWBgIrS0ZnwoA5voqLfap1MOnNtJ/zdQsJH70zP6mKb4It
+ up4nrSg6m/QvGFbwtP1STGuEVZLJ00BGoK2EjvjlEjCcZJFyhQQwWBxUeAAPCbeV4q3h
+ 6aBJcowFMNfbDdrNiVfgGpJZ6jk6/MU4C0knjVH4EQXo3oCJXoEvofraY3JZmoYetI5I
+ ZcYWT0tL9hA+ODD+fHxyfM0nlDUmDa3FOMio5gfyLhC4I0CiM1Tbi4NIEhA6R3rIQpjx iw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3s2bkbhv00-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Jul 2023 16:08:01 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B9F8E100048;
+        Tue, 25 Jul 2023 16:07:56 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5ACB4241EF6;
+        Tue, 25 Jul 2023 16:07:56 +0200 (CEST)
+Received: from [10.201.21.121] (10.201.21.121) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 25 Jul
+ 2023 16:07:54 +0200
+Message-ID: <1faa5511-a341-9c17-5e2a-974f8139d1d6@foss.st.com>
+Date:   Tue, 25 Jul 2023 16:07:49 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH 07/10] arm64: dts: st: add RIFSC as a domain controller
+ for STM32MP25x boards
+Content-Language: en-US
+From:   Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
+To:     Alexandre TORGUE <alexandre.torgue@foss.st.com>,
+        <Oleksii_Moisieiev@epam.com>, <gregkh@linuxfoundation.org>,
+        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <vkoul@kernel.org>, <jic23@kernel.org>,
+        <olivier.moysan@foss.st.com>, <arnaud.pouliquen@foss.st.com>,
+        <mchehab@kernel.org>, <fabrice.gasnier@foss.st.com>,
+        <andi.shyti@kernel.org>, <ulf.hansson@linaro.org>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <hugues.fruchet@foss.st.com>, <lee@kernel.org>, <will@kernel.org>,
+        <catalin.marinas@arm.com>, <arnd@kernel.org>,
+        <richardcochran@gmail.com>
+CC:     <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <linux-media@vger.kernel.org>,
+        <linux-mmc@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-serial@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>
+References: <20230705172759.1610753-1-gatien.chevallier@foss.st.com>
+ <20230705172759.1610753-8-gatien.chevallier@foss.st.com>
+ <61d93738-4ffd-411d-d32c-912c14eea56d@foss.st.com>
+ <997780a9-1cbc-46a2-2743-7fd493682278@foss.st.com>
+In-Reply-To: <997780a9-1cbc-46a2-2743-7fd493682278@foss.st.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.201.21.121]
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-25_08,2023-07-25_01,2023-05-22_02
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,42 +93,79 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit fdf0eaf11452d72945af31804e2a1048ee1b574c:
+Hi Alex,
 
-  Linux 6.5-rc2 (2023-07-16 15:10:37 -0700)
+On 7/6/23 11:30, Gatien CHEVALLIER wrote:
+> Hi Alex,
+> 
+> On 7/6/23 11:25, Alexandre TORGUE wrote:
+>> Hi Gatien
+>>
+>> On 7/5/23 19:27, Gatien Chevallier wrote:
+>>> RIFSC is a firewall controller. Change its compatible so that is matches
+>>> the documentation and reference RIFSC as a feature-domain-controller.
+>>>
+>>> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+>>> ---
+>>>   arch/arm64/boot/dts/st/stm32mp251.dtsi | 5 ++++-
+>>>   1 file changed, 4 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/st/stm32mp251.dtsi 
+>>> b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+>>> index 5268a4321841..62101084cab8 100644
+>>> --- a/arch/arm64/boot/dts/st/stm32mp251.dtsi
+>>> +++ b/arch/arm64/boot/dts/st/stm32mp251.dtsi
+>>> @@ -106,17 +106,20 @@ soc@0 {
+>>>           ranges = <0x0 0x0 0x0 0x80000000>;
+>>>           rifsc: rifsc-bus@42080000 {
+>>> -            compatible = "simple-bus";
+>>> +            compatible = "st,stm32mp25-rifsc";
+>>
+>> You could keep "simple-bus" compatible (in second position). In case 
+>> of the RIFSC is not probed, the platform will be able to boot. If you 
+>> agree you can use the same for ETZPC.
+>>
+>> Cheers
+>> Alex
+> 
+> Sure, good point.
+> 
+> I'll change that in V2
+> 
+> Best regards,
+> Gatien
 
-are available in the Git repository at:
+Actually, it would be a bad idea to keep "simple-bus" as a compatible.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-6.5-rc4
+Practical example:
+1) Firewall controller forbids a device probe by marking the device's
+node as populated (OF_POPULATED flag).
+2) The simple-bus, which is simple, populates all the devices
+from the device tree data, overriding what the firewall bus has done.
+3)=>Forbidden device's driver will be probed.
 
-for you to fetch changes up to d245aedc00775c4d7265a9f4522cc4e1fd34d102:
+I think it's best to keep one compatible. If someone wants these drivers
+as external modules, then it'll be best to handle this differently.
+I'll resubmit with a single compatible for V2, please do not
+hesitate to comment on the V2 if you're not okay with this.
 
-  USB: serial: simple: sort driver entries (2023-07-20 15:59:25 +0200)
+Best regards,
+Gatien
 
-----------------------------------------------------------------
-USB-serial device ids for 6.5-rc4
-
-Here are some new modem device ids and a new "simple" driver for a CAN
-bus device.
-
-Included is also a patch sorting the "simple" driver entries in order to
-make it more obvious where new ones should be added.
-
-All have been in linux-next with no reported issues.
-
-----------------------------------------------------------------
-Jerry Meng (1):
-      USB: serial: option: support Quectel EM060K_128
-
-Johan Hovold (1):
-      USB: serial: simple: sort driver entries
-
-Mohsen Tahmasebi (1):
-      USB: serial: option: add Quectel EC200A module support
-
-Oliver Neukum (1):
-      USB: serial: simple: add Kaufmann RKS+CAN VCP
-
- drivers/usb/serial/option.c            |  6 +++
- drivers/usb/serial/usb-serial-simple.c | 73 +++++++++++++++++++---------------
- 2 files changed, 46 insertions(+), 33 deletions(-)
+>>
+>>>               reg = <0x42080000 0x1000>;
+>>>               #address-cells = <1>;
+>>>               #size-cells = <1>;
+>>>               ranges;
+>>> +            feature-domain-controller;
+>>> +            #feature-domain-cells = <1>;
+>>>               usart2: serial@400e0000 {
+>>>                   compatible = "st,stm32h7-uart";
+>>>                   reg = <0x400e0000 0x400>;
+>>>                   interrupts = <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>;
+>>>                   clocks = <&ck_flexgen_08>;
+>>> +                feature-domains = <&rifsc 32>;
+>>>                   status = "disabled";
+>>>               };
+>>>           };
+>>
