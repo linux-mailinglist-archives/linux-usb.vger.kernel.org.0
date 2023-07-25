@@ -2,103 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50C1A760652
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jul 2023 05:06:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B25FA760613
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jul 2023 04:58:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231607AbjGYDGe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 Jul 2023 23:06:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58194 "EHLO
+        id S231365AbjGYC6E (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 Jul 2023 22:58:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231628AbjGYDGO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Jul 2023 23:06:14 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9780BE69;
-        Mon, 24 Jul 2023 20:06:11 -0700 (PDT)
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 36P2ho7kB027817, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 36P2ho7kB027817
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Tue, 25 Jul 2023 10:43:50 +0800
-Received: from RTEXDAG02.realtek.com.tw (172.21.6.101) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Tue, 25 Jul 2023 10:44:01 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXDAG02.realtek.com.tw (172.21.6.101) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Tue, 25 Jul 2023 10:44:01 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
- RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
- 15.01.2375.007; Tue, 25 Jul 2023 10:44:01 +0800
-From:   =?big5?B?U3RhbmxleSBDaGFuZ1up96h8vHdd?= <stanley_chang@realtek.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "Roy Luo" <royluo@google.com>, Ray Chi <raychi@google.com>,
-        Flavio Suligoi <f.suligoi@asem.it>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH v8 1/5] usb: phy: add usb phy notify port status API
-Thread-Topic: [PATCH v8 1/5] usb: phy: add usb phy notify port status API
-Thread-Index: AQHZvhqkycGt3KejTUSlVj06OKYZVq/IcTcAgAFVX3A=
-Date:   Tue, 25 Jul 2023 02:44:01 +0000
-Message-ID: <0c611f376c4646bda5bae2b46261ecbc@realtek.com>
-References: <20230724103600.14164-1-stanley_chang@realtek.com>
- <802dd50c-7201-45d2-8855-6692aeb947db@rowland.harvard.edu>
-In-Reply-To: <802dd50c-7201-45d2-8855-6692aeb947db@rowland.harvard.edu>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.190.159]
-x-kse-serverinfo: RTEXDAG02.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="big5"
-Content-Transfer-Encoding: base64
+        with ESMTP id S231244AbjGYC6D (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 Jul 2023 22:58:03 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7B6AE66;
+        Mon, 24 Jul 2023 19:58:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=45bHUFKTD/380fgU5lYTQ/UsscSGYyfLmPiWaWhqXAM=; b=mUaCnpfd8eJWZ2XRSGrN+QnqS4
+        hKjl9Pqrx99tX2t18F/qI9F+x00Yw+cukt+JIclzANGI9a+QAmoSG751eoBQ0SY/uIYQ0pMOMZWPA
+        JxKQCkeikB2Fk5GSQi7N5auLbhIPV+kNupQHVF2N5nGwH+kAjbsyRdRmCwvpw+rHKVXgXNGB9NOdD
+        L/YKEkQ+OtO+fp+WVa/s/prmzOCxEuVBTmk47UFeYj2arrGDg9e3zuB5qGe/FuGQKe3MOFUJcA9kE
+        AsC+rfyuu/4c6jhkLC5V/n5lGGUxPrHyZU8t+QEthWot9rNXcEeOvtA2z20rFAONoAiO9LBw3MAV9
+        P5QB8rsw==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qO8FB-005yV0-0u;
+        Tue, 25 Jul 2023 02:57:49 +0000
+Message-ID: <e1d01143-0b25-05fa-5bc9-557d233c45f6@infradead.org>
+Date:   Mon, 24 Jul 2023 19:57:45 -0700
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v4 18/32] sound: usb: Introduce QC USB SND offloading
+ support
+Content-Language: en-US
+To:     Wesley Cheng <quic_wcheng@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        catalin.marinas@arm.com, will@kernel.org, mathias.nyman@intel.com,
+        gregkh@linuxfoundation.org, lgirdwood@gmail.com,
+        broonie@kernel.org, perex@perex.cz, tiwai@suse.com,
+        srinivas.kandagatla@linaro.org, bgoswami@quicinc.com,
+        Thinh.Nguyen@synopsys.com
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-usb@vger.kernel.org, alsa-devel@alsa-project.org,
+        quic_jackp@quicinc.com, pierre-louis.bossart@linux.intel.com,
+        oneukum@suse.com, albertccwang@google.com, o-takashi@sakamocchi.jp
+References: <20230725023416.11205-1-quic_wcheng@quicinc.com>
+ <20230725023416.11205-19-quic_wcheng@quicinc.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230725023416.11205-19-quic_wcheng@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgQWxhbiwNCg0KPiA+IC0tLSBhL2RyaXZlcnMvdXNiL2NvcmUvaHViLmMNCj4gPiArKysgYi9k
-cml2ZXJzL3VzYi9jb3JlL2h1Yi5jDQo+ID4gQEAgLTYxNCw2ICs2MTQsMzAgQEAgc3RhdGljIGlu
-dCBodWJfZXh0X3BvcnRfc3RhdHVzKHN0cnVjdCB1c2JfaHViICpodWIsDQo+IGludCBwb3J0MSwg
-aW50IHR5cGUsDQo+ID4gICAgICAgICAgICAgICByZXQgPSAwOw0KPiA+ICAgICAgIH0NCj4gPiAg
-ICAgICBtdXRleF91bmxvY2soJmh1Yi0+c3RhdHVzX211dGV4KTsNCj4gPiArDQo+ID4gKyAgICAg
-LyoNCj4gPiArICAgICAgKiBUaGVyZSBpcyBubyBuZWVkIHRvIGxvY2sgc3RhdHVzX211dGV4IGhl
-cmUsIGJlY2F1c2Ugc3RhdHVzX211dGV4DQo+ID4gKyAgICAgICogcHJvdGVjdHMgaHViLT5zdGF0
-dXMsIGFuZCB0aGUgcGh5IGRyaXZlciBvbmx5IGNoZWNrcyB0aGUgcG9ydA0KPiA+ICsgICAgICAq
-IHN0YXR1cyB3aXRob3V0IGNoYW5naW5nIHRoZSBzdGF0dXMuDQo+ID4gKyAgICAgICovDQo+ID4g
-KyAgICAgaWYgKCFyZXQpIHsNCj4gPiArICAgICAgICAgICAgIHN0cnVjdCB1c2JfZGV2aWNlICpo
-ZGV2ID0gaHViLT5oZGV2Ow0KPiA+ICsNCj4gPiArICAgICAgICAgICAgIC8qDQo+ID4gKyAgICAg
-ICAgICAgICAgKiBBcHBsaWVzIHRvIHJvb3RodWIgb25seS4gVGhhdCBpcywgd2hlbiBoZGV2LT5w
-YXJlbnQgaXMNCj4gPiArICAgICAgICAgICAgICAqIGVtcHR5LiBPbmx5IHJvb3RodWIgd2lsbCBi
-ZSBub3RpZmllZCBvZiBwb3J0IHN0YXRlDQo+ID4gKyAgICAgICAgICAgICAgKiBjaGFuZ2VzLCBz
-aW5jZSB0aGUgVVNCIFBIWSBvbmx5IGNhcmVzIGFib3V0IGNoYW5nZXMgYXQNCj4gPiArICAgICAg
-ICAgICAgICAqIHRoZSBuZXh0IGxldmVsLg0KPiA+ICsgICAgICAgICAgICAgICovDQo+ID4gKyAg
-ICAgICAgICAgICBpZiAoaGRldiAmJiAhaGRldi0+cGFyZW50KSB7DQo+IA0KPiBoZGV2IGNhbiBu
-ZXZlciBiZSBOVUxMLCBzbyB5b3UgZG9uJ3QgbmVlZCB0byB0ZXN0IGl0LiAgQWxzbywgdGhlcmUg
-aXMgYW4NCj4gaXNfcm9vdF9odWIoKSByb3V0aW5lIHlvdSBjYW4gY2FsbCBoZXJlIC0tIGl0J3Mg
-YW4gaW5saW5lIGRlZmluZWQgaW4gdXNiLmguICBJZiB5b3UNCj4gdXNlIHRoYXQgdGhlbiB5b3Ug
-d29uJ3QgaGF2ZSB0byBleHBsYWluIGl0IGluIHRoZSBjb21tZW50Lg0KPiANCj4gVG8gYmUgZmFp
-ciwgdGhlcmUgYXJlIHBsZW50eSBvZiBvdGhlciBwbGFjZXMgaW4gdGhlIGRyaXZlciB0aGF0IHRl
-c3QgIWhkZXYtPnBhcmVudA0KPiAob3IgIXVkZXYtPnBhcmVudCkgd2l0aCBubyBleHBsYW5hdGlv
-bi4NCj4gDQoNClVzaW5nIGlzX3Jvb3RfaHViKCkgaXMgYSBnb29kIGNob2ljZS4NCg0KVGhhbmtz
-LA0KU3RhbmxleQ0KDQo=
+
+
+On 7/24/23 19:34, Wesley Cheng wrote:
+> diff --git a/sound/usb/Kconfig b/sound/usb/Kconfig
+> index 059242f15d75..44b0fa92b6cc 100644
+> --- a/sound/usb/Kconfig
+> +++ b/sound/usb/Kconfig
+> @@ -165,6 +165,21 @@ config SND_BCD2000
+>  	  To compile this driver as a module, choose M here: the module
+>  	  will be called snd-bcd2000.
+>  
+> +config QC_USB_AUDIO_OFFLOAD
+> +	tristate "Qualcomm Audio Offload driver"
+> +	depends on QCOM_QMI_HELPERS
+> +	select SND_PCM
+> +	help
+> +	  Say Y here to enable the Qualcomm USB audio offloading feature
+
+	                                                         feature.
+
+> +
+> +	  This module sets up the required QMI stream enable/disable
+> +	  responses to requests generated by the audio DSP.  It passes the
+> +	  USB transfer resource references, so that the audio DSP can issue
+> +	  USB transfers to the host controller.
+> +
+> +	  To compile this driver as a module, choose M here: the module
+> +	  will be called qc-audio-offload.
+
+-- 
+~Randy
