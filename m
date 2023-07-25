@@ -2,112 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 943AB7610FE
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jul 2023 12:35:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AD7D761502
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jul 2023 13:24:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233401AbjGYKfj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Jul 2023 06:35:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52488 "EHLO
+        id S234551AbjGYLYm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Jul 2023 07:24:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233440AbjGYKfi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jul 2023 06:35:38 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2039C131
-        for <linux-usb@vger.kernel.org>; Tue, 25 Jul 2023 03:35:36 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-9924ac01f98so913865466b.1
-        for <linux-usb@vger.kernel.org>; Tue, 25 Jul 2023 03:35:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690281334; x=1690886134;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xRSCjzoFlf7+1pwK2274OEG2qCHzv1zVFI3OEYWB7Ic=;
-        b=L1ESNfLDThRmEQmyq3QCUnymgcDRa9+iMV1l0gch6YrnemwC+/tkPL+B7TmaO6Pvh/
-         5cd2FDEeuJQZIe2/kkjbqTU/2w1ChrWHkTx17VDsvmmaxwtSdMzHv8SdYlfffCAvLpL4
-         cxK4SgaE4gUXapWGotW0u05hBwCqeOqqr8mV/isGLZ2NC/QJ4mKTs+EXHZhceS3HCwfT
-         KQMmYBIfazv7GjgIue973VYyYpM1JrkbDjTTwfSc0+9WUkdHDR41tItjmPoQ3FzHg+V+
-         74mH8j3bp0zDZxr+Vu30SMhl4s8eMqlBL9R681gqSTTacMQzTHLLYslGKHjsMmBwrSGi
-         BRRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690281334; x=1690886134;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xRSCjzoFlf7+1pwK2274OEG2qCHzv1zVFI3OEYWB7Ic=;
-        b=Vazms8H68pW0RzU0Ii3vbABrhz1StPziSnZ3IniwW4SM7hDomAmSFJoF92FVjdUoXC
-         Y17JCccWcfCM0etYVKklC8iqloyR0Xuasmm0J7eIwn9p2stcKMMUUi7hQAeIHuQiF1jg
-         JSRwyHEOf3ZBh8HCvHogesanztarHdwAcMGZ/41ik9EtcvqhV1QtUQZ/2RDgwdPeIRQg
-         y5pNOJMRVXYn9+mY5a5wWNnclak0qt4y94GTxqXs3mib4g5fN9rMYfLOYo67/BHHSlBT
-         F4/7LmpTGz/AikPUvD26/HVeWrSFY20TUcyVnAjnEcN+hseAsVhoB5+iqucFTtAYid2Q
-         /p6A==
-X-Gm-Message-State: ABy/qLY0j21Slg3HrV+kGzuE4z2M6T7qs3THUfxMzXBXfYHZ7pC28YlH
-        NGhEoqwcgcP94RyKX2f0ONag4Q==
-X-Google-Smtp-Source: APBJJlEeAYXZil/XyuB5ylTiwIPKbvsDFmDdl0tv2VrAlD7DtAQVb1lRFLJxpnumFOyiReYDJEeKFg==
-X-Received: by 2002:a17:906:cc0e:b0:99b:465c:fb9f with SMTP id ml14-20020a170906cc0e00b0099b465cfb9fmr12834886ejb.8.1690281334516;
-        Tue, 25 Jul 2023 03:35:34 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id dt19-20020a170906b79300b0098242730348sm8090252ejb.72.2023.07.25.03.35.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Jul 2023 03:35:28 -0700 (PDT)
-Message-ID: <00980fa2-5f8c-d616-ef3f-957090c25d48@linaro.org>
-Date:   Tue, 25 Jul 2023 12:35:25 +0200
+        with ESMTP id S234549AbjGYLYl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jul 2023 07:24:41 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70BB211B;
+        Tue, 25 Jul 2023 04:24:40 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 59295558;
+        Tue, 25 Jul 2023 13:23:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1690284220;
+        bh=K1vHyO+RlQbYoTs/r4CBYxR/YvYkBhFrxQUSgg5Z25c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=szMKCgZ9Ii/kky+Xdpvk0t9e+CJ8uoVK4sgtwbBKiYeW0G4IOxo2jLenqLd0iXO2N
+         WujQClWyOagjTiUzh7qvxwpaMqxdMX8GXB3tlmEQ3kF/zBxo1H1EMBkcU/ZuTd9DRH
+         p5tkazG0sFPAJapzm41FP2aSQJnoTMXYk7McvDM0=
+Date:   Tue, 25 Jul 2023 14:24:46 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Michael Grzeschik <m.grzeschik@pengutronix.de>
+Cc:     Dan Scally <dan.scally@ideasonboard.com>,
+        linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+        gregkh@linuxfoundation.org, balbi@kernel.org,
+        kernel@pengutronix.de, stable <stable@kernel.org>
+Subject: Re: [PATCH v2 2/2] usb: gadget: uvc: limit isoc_sg to super speed
+ gadgets
+Message-ID: <20230725112446.GD31069@pendragon.ideasonboard.com>
+References: <20221125153450.344392-1-m.grzeschik@pengutronix.de>
+ <20221125153450.344392-2-m.grzeschik@pengutronix.de>
+ <be391e47-afe2-e7f6-93c8-7135b399598c@ideasonboard.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v2] dt-bindings: usb: connector: disallow additional
- properties
-Content-Language: en-US
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        Wayne Chang <waynec@nvidia.com>, devicetree@vger.kernel.org,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20230725102325.76336-1-krzysztof.kozlowski@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230725102325.76336-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <be391e47-afe2-e7f6-93c8-7135b399598c@ideasonboard.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 25/07/2023 12:23, Krzysztof Kozlowski wrote:
-> USB connector bindings is complete, thus no additional properties should
-> be allowed.  Add missing 'reg' property and change additionalProperties
-> to false, so the schema will check for anything not unexpected.  This
+Hi Michael,
 
-An MIT linguistics professor was lecturing his class the other day. "In
-English," he said, "a double negative forms a positive. However, in some
-languages, such as Polish, a double negative remains a negative. But
-there isn't a single language, not one, in which a double positive can
-express a negative."
-
-A voice from the back of the room piped up, "Yeah, right."
-
-Obviously:
-"... will check for anything unexpected".
-
-
-> also allows to drop the 'reg' from other bindings referencing the
-> usb-connector.yaml and make it required.
+On Mon, Jul 24, 2023 at 01:47:09PM +0100, Dan Scally wrote:
+> On 25/11/2022 15:34, Michael Grzeschik wrote:
+> > When calling uvc_video_encode_isoc_sg the function is preparing the sg payload
+> > by setting the sglist pointers of the videobuffer for the request. The usb
+> > gadget driver then is parsing the sg list and uses each sg entry to send in one
+> > urb to the host. Because of the unrelated buffer of the uvc header that buffer
+> > has to be send separately in an extra sg entry.
+> >
+> > When it comes to transfers with an limited payload (e.g. the maximum of 3kB for
+> > high-speed) this extra payload handling is not justified. A simple memcpy of
+> > the header and payload is usually faster and does not come with that extra
+> > runtime overhead.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Sorry for the delay with this one. I don't suppose you benchmarked
+> this at all? I'd be curious to see the effect.
+
+That's a good question. Michael, do you have numbers ?
+
+> > This patch is changing the uvc_video_encode_isoc_sg encode function only to be
+> > used for super speed gadgets.
+> >
+> > Cc: stable <stable@kernel.org>
+> > Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+> > ---
+> > v1 -> v2: - left the sg assignment in uvc_buffer_sg under the test for use_sg
+> >            - rephrased the commit message
+> >
+> >   drivers/usb/gadget/function/uvc_queue.c | 3 +--
+> >   drivers/usb/gadget/function/uvc_video.c | 9 +++++++--
+> >   2 files changed, 8 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/usb/gadget/function/uvc_queue.c b/drivers/usb/gadget/function/uvc_queue.c
+> > index 0aa3d7e1f3cc32..0abb1763faf1b6 100644
+> > --- a/drivers/usb/gadget/function/uvc_queue.c
+> > +++ b/drivers/usb/gadget/function/uvc_queue.c
+> > @@ -87,9 +87,8 @@ static int uvc_buffer_prepare(struct vb2_buffer *vb)
+> >   	if (queue->use_sg) {
+> >   		buf->sgt = vb2_dma_sg_plane_desc(vb, 0);
+> >   		buf->sg = buf->sgt->sgl;
+> > -	} else {
+> > -		buf->mem = vb2_plane_vaddr(vb, 0);
+> >   	}
+> > +	buf->mem = vb2_plane_vaddr(vb, 0);
+> >   	buf->length = vb2_plane_size(vb, 0);
+> >   	if (vb->type == V4L2_BUF_TYPE_VIDEO_CAPTURE)
+> >   		buf->bytesused = 0;
+> > diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
+> > index dd1c6b2ca7c6f3..b6ea600b011185 100644
+> > --- a/drivers/usb/gadget/function/uvc_video.c
+> > +++ b/drivers/usb/gadget/function/uvc_video.c
+> > @@ -459,6 +459,9 @@ static void uvcg_video_pump(struct work_struct *work)
+> >    */
+> >   int uvcg_video_enable(struct uvc_video *video, int enable)
+> >   {
+> > +	struct uvc_device *uvc = video->uvc;
+> > +	struct usb_composite_dev *cdev = uvc->func.config->cdev;
+> > +	struct usb_gadget *gadget = cdev->gadget;
+> >   	unsigned int i;
+> >   	int ret;
+> >   
+> > @@ -490,9 +493,11 @@ int uvcg_video_enable(struct uvc_video *video, int enable)
+> >   	if (video->max_payload_size) {
+> >   		video->encode = uvc_video_encode_bulk;
+> >   		video->payload_size = 0;
+> > -	} else
+> > -		video->encode = video->queue.use_sg ?
+> > +	} else {
+> > +		video->encode = (video->queue.use_sg &&
+> > +				 !(gadget->speed <= USB_SPEED_HIGH)) ?
+> >   			uvc_video_encode_isoc_sg : uvc_video_encode_isoc;
+> > +	}
 > 
+> I think it'd be better to just set video->queue.use_sg n uvcg_queue_init() by checking 
+> cdev->gadget->speed as well as cdev->gadget->sg_supported; can we do that?
 
-Best regards,
-Krzysztof
+Agreed, otherwise use_sg will be a misnommer (it could be set to true
+without actually using SG). Furthermore, we should not create a CPU
+mapping of the buffer when using SG, as that's a waste of resources.
 
+> >   
+> >   	video->req_int_count = 0;
+> >   
+
+-- 
+Regards,
+
+Laurent Pinchart
