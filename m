@@ -2,190 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4192A760BE3
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jul 2023 09:34:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDBDA760C3E
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jul 2023 09:45:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232049AbjGYHeZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Jul 2023 03:34:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49728 "EHLO
+        id S232427AbjGYHo6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Jul 2023 03:44:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231840AbjGYHd6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jul 2023 03:33:58 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BD5DC18D;
-        Tue, 25 Jul 2023 00:31:31 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 36P7V1Ni8028318, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 36P7V1Ni8028318
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Tue, 25 Jul 2023 15:31:01 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Tue, 25 Jul 2023 15:31:12 +0800
-Received: from fc38.localdomain (172.22.228.98) by RTEXMBS04.realtek.com.tw
- (172.21.6.97) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Tue, 25 Jul
- 2023 15:31:10 +0800
-From:   Hayes Wang <hayeswang@realtek.com>
-To:     <kuba@kernel.org>, <davem@davemloft.net>
-CC:     <netdev@vger.kernel.org>, <nic_swsd@realtek.com>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        Hayes Wang <hayeswang@realtek.com>
-Subject: [PATCH net-next 2/2] r8152: set bp in bulk
-Date:   Tue, 25 Jul 2023 15:30:50 +0800
-Message-ID: <20230725073051.5150-416-nic_swsd@realtek.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230725073051.5150-414-nic_swsd@realtek.com>
-References: <20230725073051.5150-414-nic_swsd@realtek.com>
+        with ESMTP id S233083AbjGYHna (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jul 2023 03:43:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C03DB;
+        Tue, 25 Jul 2023 00:43:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 85FEA612BF;
+        Tue, 25 Jul 2023 07:43:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6960C433C9;
+        Tue, 25 Jul 2023 07:43:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690270992;
+        bh=C79oRJdKDgbX+Aim3ZSqIUlOwH5qfGIJsUWSdBmA2dw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=XUbElce4oGgSg0gzhnR5ZYQCFOf+EUxO/rPAhY5LCtYUUeuz+jvUPZhNQRrQrAK9Y
+         OnSFHRs3nFfIFUBc3gVWKB3SKHMg4gkyNSeKAeYui1MTfUazeEsCGDFGoTtsReBcS2
+         jOzH+iCfDyvca2ZgEE/7Zhp6RJ1i3P0mq4lyQuiby86YIPQQC+g7FLZJfIwt++ui+v
+         7pmu7QcXvW46dYudDCMWyaCNlF43DlbHxR5/LUZgIXyIUT66yEfr7WF/GlUtnWPcJD
+         AuP4OSza7nPPBmJBHCvs+7IRWRywx1QEyCtp8PXl6l/dbmdvomqyxLYFZDw/tUPY6n
+         6ljvRNjpJWKsA==
+Message-ID: <dd800ec2-684a-d6fc-2fb3-d146b95a8370@kernel.org>
+Date:   Tue, 25 Jul 2023 10:43:06 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [172.22.228.98]
-X-ClientProxiedBy: RTEXH36506.realtek.com.tw (172.21.6.27) To
- RTEXMBS04.realtek.com.tw (172.21.6.97)
-X-KSE-ServerInfo: RTEXMBS04.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] arm64: dts: ti: k3-am62a7-sk: Enable dual role support
+ for Type-C port
+Content-Language: en-US
+To:     Ravi Gunasekaran <r-gunasekaran@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        nm@ti.com, vigneshr@ti.com, kristo@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+References: <20230724115133.2226-1-r-gunasekaran@ti.com>
+ <c907c3aa-84b8-c667-e8ea-dd7e5bd4a54b@linaro.org>
+ <1fed3f09-75e4-bb44-71d7-f7319f1b0c3c@ti.com>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <1fed3f09-75e4-bb44-71d7-f7319f1b0c3c@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-PLA_BP_0 ~ PLA_BP_15 (0xfc28 ~ 0xfc46) are continuous registers, so we
-could combine the control transfers into one control transfer.
 
-Signed-off-by: Hayes Wang <hayeswang@realtek.com>
----
- drivers/net/usb/r8152.c | 75 ++++++++++++++---------------------------
- 1 file changed, 25 insertions(+), 50 deletions(-)
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index f6578a99dbac..db9897e825b4 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -3978,29 +3978,10 @@ static void rtl_reset_bmu(struct r8152 *tp)
- /* Clear the bp to stop the firmware before loading a new one */
- static void rtl_clear_bp(struct r8152 *tp, u16 type)
- {
--	switch (tp->version) {
--	case RTL_VER_01:
--	case RTL_VER_02:
--	case RTL_VER_07:
--		break;
--	case RTL_VER_03:
--	case RTL_VER_04:
--	case RTL_VER_05:
--	case RTL_VER_06:
--		ocp_write_byte(tp, type, PLA_BP_EN, 0);
--		break;
--	case RTL_VER_14:
--		ocp_write_word(tp, type, USB_BP2_EN, 0);
-+	u16 bp[16] = {0};
-+	u16 bp_num;
- 
--		ocp_write_word(tp, type, USB_BP_8, 0);
--		ocp_write_word(tp, type, USB_BP_9, 0);
--		ocp_write_word(tp, type, USB_BP_10, 0);
--		ocp_write_word(tp, type, USB_BP_11, 0);
--		ocp_write_word(tp, type, USB_BP_12, 0);
--		ocp_write_word(tp, type, USB_BP_13, 0);
--		ocp_write_word(tp, type, USB_BP_14, 0);
--		ocp_write_word(tp, type, USB_BP_15, 0);
--		break;
-+	switch (tp->version) {
- 	case RTL_VER_08:
- 	case RTL_VER_09:
- 	case RTL_VER_10:
-@@ -4008,32 +3989,31 @@ static void rtl_clear_bp(struct r8152 *tp, u16 type)
- 	case RTL_VER_12:
- 	case RTL_VER_13:
- 	case RTL_VER_15:
--	default:
- 		if (type == MCU_TYPE_USB) {
- 			ocp_write_word(tp, MCU_TYPE_USB, USB_BP2_EN, 0);
--
--			ocp_write_word(tp, MCU_TYPE_USB, USB_BP_8, 0);
--			ocp_write_word(tp, MCU_TYPE_USB, USB_BP_9, 0);
--			ocp_write_word(tp, MCU_TYPE_USB, USB_BP_10, 0);
--			ocp_write_word(tp, MCU_TYPE_USB, USB_BP_11, 0);
--			ocp_write_word(tp, MCU_TYPE_USB, USB_BP_12, 0);
--			ocp_write_word(tp, MCU_TYPE_USB, USB_BP_13, 0);
--			ocp_write_word(tp, MCU_TYPE_USB, USB_BP_14, 0);
--			ocp_write_word(tp, MCU_TYPE_USB, USB_BP_15, 0);
--		} else {
--			ocp_write_byte(tp, MCU_TYPE_PLA, PLA_BP_EN, 0);
-+			bp_num = 16;
-+			break;
- 		}
-+		fallthrough;
-+	case RTL_VER_03:
-+	case RTL_VER_04:
-+	case RTL_VER_05:
-+	case RTL_VER_06:
-+		ocp_write_byte(tp, type, PLA_BP_EN, 0);
-+		fallthrough;
-+	case RTL_VER_01:
-+	case RTL_VER_02:
-+	case RTL_VER_07:
-+		bp_num = 8;
-+		break;
-+	case RTL_VER_14:
-+	default:
-+		ocp_write_word(tp, type, USB_BP2_EN, 0);
-+		bp_num = 16;
- 		break;
- 	}
- 
--	ocp_write_word(tp, type, PLA_BP_0, 0);
--	ocp_write_word(tp, type, PLA_BP_1, 0);
--	ocp_write_word(tp, type, PLA_BP_2, 0);
--	ocp_write_word(tp, type, PLA_BP_3, 0);
--	ocp_write_word(tp, type, PLA_BP_4, 0);
--	ocp_write_word(tp, type, PLA_BP_5, 0);
--	ocp_write_word(tp, type, PLA_BP_6, 0);
--	ocp_write_word(tp, type, PLA_BP_7, 0);
-+	generic_ocp_write(tp, PLA_BP_0, BYTE_EN_DWORD, bp_num << 1, bp, type);
- 
- 	/* wait 3 ms to make sure the firmware is stopped */
- 	usleep_range(3000, 6000);
-@@ -5007,10 +4987,9 @@ static void rtl8152_fw_phy_nc_apply(struct r8152 *tp, struct fw_phy_nc *phy)
- 
- static void rtl8152_fw_mac_apply(struct r8152 *tp, struct fw_mac *mac)
- {
--	u16 bp_en_addr, bp_index, type, bp_num, fw_ver_reg;
-+	u16 bp_en_addr, type, fw_ver_reg;
- 	u32 length;
- 	u8 *data;
--	int i;
- 
- 	switch (__le32_to_cpu(mac->blk_hdr.type)) {
- 	case RTL_FW_PLA:
-@@ -5052,12 +5031,8 @@ static void rtl8152_fw_mac_apply(struct r8152 *tp, struct fw_mac *mac)
- 	ocp_write_word(tp, type, __le16_to_cpu(mac->bp_ba_addr),
- 		       __le16_to_cpu(mac->bp_ba_value));
- 
--	bp_index = __le16_to_cpu(mac->bp_start);
--	bp_num = __le16_to_cpu(mac->bp_num);
--	for (i = 0; i < bp_num; i++) {
--		ocp_write_word(tp, type, bp_index, __le16_to_cpu(mac->bp[i]));
--		bp_index += 2;
--	}
-+	generic_ocp_write(tp, __le16_to_cpu(mac->bp_start), BYTE_EN_DWORD,
-+			  __le16_to_cpu(mac->bp_num) << 1, mac->bp, type);
- 
- 	bp_en_addr = __le16_to_cpu(mac->bp_en_addr);
- 	if (bp_en_addr)
+On 25/07/2023 07:19, Ravi Gunasekaran wrote:
+> 
+> 
+> On 7/24/2023 7:27 PM, Krzysztof Kozlowski wrote:
+>> On 24/07/2023 13:51, Ravi Gunasekaran wrote:
+>>> USB0 is interfaced with a Type-C DRP connector and is managed via a
+>>> USB PD controller. Add support for the Type-C port with dual data
+>>> and power sink role.
+>>>
+>>> Signed-off-by: Ravi Gunasekaran <r-gunasekaran@ti.com>
+>>> ---
+>>>  arch/arm64/boot/dts/ti/k3-am62a7-sk.dts | 33 +++++++++++++++++++++++++
+>>>  1 file changed, 33 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts b/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
+>>> index d2cca6182738..b478b794de00 100644
+>>> --- a/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
+>>> +++ b/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
+>>> @@ -226,6 +226,24 @@
+>>>  	pinctrl-names = "default";
+>>>  	pinctrl-0 = <&main_i2c0_pins_default>;
+>>>  	clock-frequency = <400000>;
+>>> +
+>>> +	typec_pd0:tps6598x@3f {
+> 
+> Thanks for reviewing the patch.
+> 
+>> Missing space after:
+> 
+> I will fix this in v2.
+> 
+>>
+>> Node names should be generic. See also an explanation and list of
+>> examples (not exhaustive) in DT specification:
+>> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+> 
+> Thanks for pointing to the section. I checked it and also few other node names
+> in the existing DTs.
+> TPS6598 is a USB Type C and Power Delivery Controller. So does a node name
+> "type-c-pd-controller" sound fine?
+
+Type-c is irrelevant in node name.
+The name needs to indicate it has something to do with USB, Power Control and Role control.
+
+e.g.
+usb-power-controller
+or
+usb-role-controller
+?
+
+> 
+>>
+>> Best regards,
+>> Krzysztof
+>>
+> 
+> Regards,
+> Ravi
+
 -- 
-2.41.0
-
+cheers,
+-roger
