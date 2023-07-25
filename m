@@ -2,74 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B115F760CDD
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jul 2023 10:23:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F1C0760E3D
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jul 2023 11:19:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231726AbjGYIXh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Jul 2023 04:23:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48974 "EHLO
+        id S233127AbjGYJSx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Jul 2023 05:18:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjGYIXg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jul 2023 04:23:36 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A43D10C3;
-        Tue, 25 Jul 2023 01:23:33 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 36P8NKH4063046;
-        Tue, 25 Jul 2023 03:23:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1690273400;
-        bh=csTp1gSAJevM1r7adANvI2VZ+uKXhEKluf8kdGBt1KE=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=UVIUMEnzqiHpMoB/Y2pN6E95XOAVax/ixxbCGMsjpRSnysWkbGAy3hBifvOtmMRzD
-         GG2E/qkOZAm7CPuL71G/5JfXc7RHnbLkLG+/OJRSoE7iLdhEmAw6ZNd+wXIs6lqhug
-         mSuraQGyy88SAJHsn8f9NpxEXNTphrqsDyQL47jw=
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 36P8NKx1114351
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 25 Jul 2023 03:23:20 -0500
-Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 25
- Jul 2023 03:23:20 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 25 Jul 2023 03:23:20 -0500
-Received: from [10.249.130.150] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 36P8NFF5129185;
-        Tue, 25 Jul 2023 03:23:16 -0500
-Message-ID: <c8220210-033e-018a-460a-1b87232cfdb8@ti.com>
-Date:   Tue, 25 Jul 2023 13:53:14 +0530
+        with ESMTP id S233082AbjGYJSm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jul 2023 05:18:42 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A5E10E7;
+        Tue, 25 Jul 2023 02:18:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690276715; x=1721812715;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=LKtaiWNgDWK8U+v+CSkjSmMLNgc+6CwnEmQrVA3o6hk=;
+  b=X9Tnq3Mqr7hSM1pYrZe4MDh+iteuG93bMGwcd0dwbhDzbXB6dKtQ8wwC
+   GFbgh8yfuPPUl9X/8hxurecx98oDSAzdDcC/KMxqjQYGQD23nQWVa22fa
+   vjuCsCxuKaj/BUvZqtoY/Az8MPYTRLV0mLlzpii4mKt7fQzjFHY7n79qC
+   NQBTuMNMtkNAwpdFo/5SHcyuop6C8zpMhxbizzhP+rgntiwBZw+bX32HP
+   //4vyJ6W+lDNn2o2oYofPa/6X7A4jlCSkSWImL32c5I7gzLQRRM/yrSss
+   3pfiCKNMynqbCYbxMTiDCHrKZOGl04ZqJhAG4Z9K87KF6Ss7wjzmND6xK
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10781"; a="454048830"
+X-IronPort-AV: E=Sophos;i="6.01,230,1684825200"; 
+   d="scan'208";a="454048830"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2023 02:18:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10781"; a="719980312"
+X-IronPort-AV: E=Sophos;i="6.01,230,1684825200"; 
+   d="scan'208";a="719980312"
+Received: from mongola-mobl.ger.corp.intel.com (HELO [10.249.37.129]) ([10.249.37.129])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jul 2023 02:18:28 -0700
+Message-ID: <eb1c679b-f50b-1f20-c7c8-da3f4857bec1@linux.intel.com>
+Date:   Tue, 25 Jul 2023 10:27:00 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH] arm64: dts: ti: k3-am62a7-sk: Enable dual role support
- for Type-C port
-To:     Roger Quadros <rogerq@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-References: <20230724115133.2226-1-r-gunasekaran@ti.com>
- <c907c3aa-84b8-c667-e8ea-dd7e5bd4a54b@linaro.org>
- <1fed3f09-75e4-bb44-71d7-f7319f1b0c3c@ti.com>
- <dd800ec2-684a-d6fc-2fb3-d146b95a8370@kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.13.0
+Subject: Re: [PATCH v4 08/32] ASoC: qcom: qdsp6: Introduce USB AFE port to
+ q6dsp
 Content-Language: en-US
-From:   Ravi Gunasekaran <r-gunasekaran@ti.com>
-In-Reply-To: <dd800ec2-684a-d6fc-2fb3-d146b95a8370@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+To:     Wesley Cheng <quic_wcheng@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        catalin.marinas@arm.com, will@kernel.org, mathias.nyman@intel.com,
+        gregkh@linuxfoundation.org, lgirdwood@gmail.com,
+        broonie@kernel.org, perex@perex.cz, tiwai@suse.com,
+        srinivas.kandagatla@linaro.org, bgoswami@quicinc.com,
+        Thinh.Nguyen@synopsys.com
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-usb@vger.kernel.org, alsa-devel@alsa-project.org,
+        quic_jackp@quicinc.com, oneukum@suse.com, albertccwang@google.com,
+        o-takashi@sakamocchi.jp
+References: <20230725023416.11205-1-quic_wcheng@quicinc.com>
+ <20230725023416.11205-9-quic_wcheng@quicinc.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20230725023416.11205-9-quic_wcheng@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -77,59 +76,156 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
+> +static const struct snd_soc_dai_ops q6usb_ops = {
+> +	.prepare	= q6afe_dai_prepare,
+> +	.hw_params	= q6usb_hw_params,
+> +	.shutdown	= q6afe_dai_shutdown,
 
-On 7/25/2023 1:13 PM, Roger Quadros wrote:
->
-> On 25/07/2023 07:19, Ravi Gunasekaran wrote:
->>
->> On 7/24/2023 7:27 PM, Krzysztof Kozlowski wrote:
->>> On 24/07/2023 13:51, Ravi Gunasekaran wrote:
->>>> USB0 is interfaced with a Type-C DRP connector and is managed via a
->>>> USB PD controller. Add support for the Type-C port with dual data
->>>> and power sink role.
->>>>
->>>> Signed-off-by: Ravi Gunasekaran <r-gunasekaran@ti.com>
->>>> ---
->>>>  arch/arm64/boot/dts/ti/k3-am62a7-sk.dts | 33 +++++++++++++++++++++++++
->>>>  1 file changed, 33 insertions(+)
->>>>
->>>> diff --git a/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts b/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
->>>> index d2cca6182738..b478b794de00 100644
->>>> --- a/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
->>>> +++ b/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
->>>> @@ -226,6 +226,24 @@
->>>>  	pinctrl-names = "default";
->>>>  	pinctrl-0 = <&main_i2c0_pins_default>;
->>>>  	clock-frequency = <400000>;
->>>> +
->>>> +	typec_pd0:tps6598x@3f {
->> Thanks for reviewing the patch.
->>
->>> Missing space after:
->> I will fix this in v2.
->>
->>> Node names should be generic. See also an explanation and list of
->>> examples (not exhaustive) in DT specification:
->>> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
->> Thanks for pointing to the section. I checked it and also few other node names
->> in the existing DTs.
->> TPS6598 is a USB Type C and Power Delivery Controller. So does a node name
->> "type-c-pd-controller" sound fine?
-> Type-c is irrelevant in node name.
-> The name needs to indicate it has something to do with USB, Power Control and Role control.
->
-> e.g.
-> usb-power-controller
-> or
-> usb-role-controller
-> ?
+it's a bit odd to see a .shutdown without a .startup?
 
-I will use the node name "usb-power-controller'.
+Is this intentional and should a comment be added?
 
->
->>> Best regards,
->>> Krzysztof
->>>
->> Regards,
->> Ravi
+
+> +/* device token of actual end USB aduio device */
+
+audio
+
+> +	u32                  dev_token;
+> +/* endianness of this interface */
+> +	u32                   endian;
+> +/* service interval */
+> +	u32                  service_interval;
+> +} __packed;
+> +
+> +/**
+> + * struct afe_param_id_usb_audio_dev_params
+> + * @cfg_minor_version: Minor version used for tracking USB audio device
+> + * configuration.
+> + * Supported values:
+> + *     AFE_API_MINOR_VERSION_USB_AUDIO_CONFIG
+> + * @dev_token: device token of actual end USB aduio device
+
+audio. please run a spell-checker.
+
+
+> +	svc_int.cfg_minor_version = AFE_API_MINOR_VERSION_USB_AUDIO_CONFIG;
+> +	svc_int.svc_interval = pcfg->usb_cfg.service_interval;
+> +	ret = q6afe_port_set_param_v2(port, &svc_int,
+> +				      AFE_PARAM_ID_USB_AUDIO_SVC_INTERVAL,
+> +				      AFE_MODULE_AUDIO_DEV_INTERFACE, sizeof(svc_int));
+> +	if (ret) {
+> +		dev_err(port->afe->dev, "%s: AFE device param cmd svc_interval failed %d\n",
+> +			__func__, ret);
+> +		ret = -EINVAL;
+
+why do you override the return value?
+
+> +		goto exit;
+
+not necessary, this is a jump to the next line. Looks like copy-paste ...
+
+> +	}
+> +exit:
+> +	return ret;
+> +}
+> +
+> +/**
+> + * q6afe_usb_port_prepare() - Prepare usb afe port.
+> + *
+> + * @port: Instance of afe port
+> + * @cfg: USB configuration for the afe port
+> + *
+> + */
+> +void q6afe_usb_port_prepare(struct q6afe_port *port,
+> +			     struct q6afe_usb_cfg *cfg)
+> +{
+> +	union afe_port_config *pcfg = &port->port_cfg;
+> +
+> +	pcfg->usb_cfg.cfg_minor_version = AFE_API_MINOR_VERSION_USB_AUDIO_CONFIG;
+> +	pcfg->usb_cfg.sample_rate = cfg->sample_rate;
+> +	pcfg->usb_cfg.num_channels = cfg->num_channels;
+> +	pcfg->usb_cfg.bit_width = cfg->bit_width;
+> +
+> +	afe_port_send_usb_dev_param(port, cfg);
+> +}
+> +EXPORT_SYMBOL_GPL(q6afe_usb_port_prepare);
+> +
+>  /**
+>   * q6afe_hdmi_port_prepare() - Prepare hdmi afe port.
+>   *
+> @@ -1611,7 +1791,10 @@ struct q6afe_port *q6afe_port_get_from_id(struct device *dev, int id)
+>  		break;
+>  	case AFE_PORT_ID_WSA_CODEC_DMA_RX_0 ... AFE_PORT_ID_RX_CODEC_DMA_RX_7:
+>  		cfg_type = AFE_PARAM_ID_CODEC_DMA_CONFIG;
+> -	break;
+> +		break;
+> +	case AFE_PORT_ID_USB_RX:
+> +		cfg_type = AFE_PARAM_ID_USB_AUDIO_CONFIG;
+> +		break;
+>  	default:
+>  		dev_err(dev, "Invalid port id 0x%x\n", port_id);
+>  		return ERR_PTR(-EINVAL);
+> diff --git a/sound/soc/qcom/qdsp6/q6afe.h b/sound/soc/qcom/qdsp6/q6afe.h
+> index 30fd77e2f458..e098a3e15135 100644
+> --- a/sound/soc/qcom/qdsp6/q6afe.h
+> +++ b/sound/soc/qcom/qdsp6/q6afe.h
+> @@ -5,7 +5,7 @@
+>  
+>  #include <dt-bindings/sound/qcom,q6afe.h>
+>  
+> -#define AFE_PORT_MAX		129
+> +#define AFE_PORT_MAX		130
+>  
+>  #define MSM_AFE_PORT_TYPE_RX 0
+>  #define MSM_AFE_PORT_TYPE_TX 1
+> @@ -205,6 +205,47 @@ struct q6afe_cdc_dma_cfg {
+>  	u16	active_channels_mask;
+>  };
+>  
+> +/**
+> + * struct q6afe_usb_cfg
+> + * @cfg_minor_version: Minor version used for tracking USB audio device
+> + * configuration.
+> + * Supported values:
+> + *     AFE_API_MINOR_VERSION_USB_AUDIO_CONFIG
+> + * @sample_rate: Sampling rate of the port
+> + *    Supported values:
+> + *      AFE_PORT_SAMPLE_RATE_8K
+> + *      AFE_PORT_SAMPLE_RATE_11025
+> + *      AFE_PORT_SAMPLE_RATE_12K
+> + *      AFE_PORT_SAMPLE_RATE_16K
+> + *      AFE_PORT_SAMPLE_RATE_22050
+> + *      AFE_PORT_SAMPLE_RATE_24K
+> + *      AFE_PORT_SAMPLE_RATE_32K
+> + *      AFE_PORT_SAMPLE_RATE_44P1K
+> + *      AFE_PORT_SAMPLE_RATE_48K
+> + *      AFE_PORT_SAMPLE_RATE_96K
+> + *      AFE_PORT_SAMPLE_RATE_192K
+> + * @bit_width: Bit width of the sample.
+> + *    Supported values: 16, 24
+> + * @num_channels: Number of channels
+> + *    Supported values: 1, 2
+> + * @data_format: Data format supported by the USB
+> + *    Supported values: 0
+> + * @reserved: this field must be 0
+> + * @dev_token: device token of actual end USB audio device
+> + * @endian: endianness of this interface
+> + * @service_interval: service interval
+> + **/
+> +struct q6afe_usb_cfg {
+> +	u32	cfg_minor_version;
+> +	u32     sample_rate;
+> +	u16	bit_width;
+> +	u16	num_channels;
+> +	u16	data_format;
+> +	u16	reserved;
+> +	u32	dev_token;
+> +	u32	endian;
+> +	u32	service_interval;
+> +};
+
+this definition looks exactly the same as
+struct afe_param_id_usb_cfg
+??
+
 
