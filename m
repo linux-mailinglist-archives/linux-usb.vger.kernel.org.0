@@ -2,50 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C68FD761E4E
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jul 2023 18:20:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD2E0761E86
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jul 2023 18:29:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231344AbjGYQUA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Jul 2023 12:20:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52594 "EHLO
+        id S231319AbjGYQ3U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Jul 2023 12:29:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231452AbjGYQT5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jul 2023 12:19:57 -0400
+        with ESMTP id S231638AbjGYQ3T (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jul 2023 12:29:19 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8327311A;
-        Tue, 25 Jul 2023 09:19:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7DA10C9;
+        Tue, 25 Jul 2023 09:29:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A7F76179A;
-        Tue, 25 Jul 2023 16:19:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C647C433C8;
-        Tue, 25 Jul 2023 16:19:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DD6296179A;
+        Tue, 25 Jul 2023 16:29:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE7A2C433C7;
+        Tue, 25 Jul 2023 16:29:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1690301993;
-        bh=O0xlvC0v8lQMUfRa0bL717dXjSMBPnduOOvYxmERoaM=;
+        s=korg; t=1690302555;
+        bh=8V3JU6dJEtGUWklvo/YnWOtYSGFsSMLIx1oBF8E8QBE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YkQVVV0LrvWEBH2nSBYEfC8MIQB/+Lmy4uFgqUgITvha9L6FktWN2G8r4iEmxae+E
-         IRYT8DncnvnTDl5JATWB3V0MKWbLQCoCkTJpDpseps0jEb3OoDHwUyD/S7z5quSoWf
-         CsA+A0Ek9RkCAeGIeMDWFZeMXk8x9OIHvQ4nxkOQ=
-Date:   Tue, 25 Jul 2023 18:19:45 +0200
+        b=xI9jD8nPfS4CfSdJJIQFbHgjwL9Yw2WTfzkz9O+8d8Y9G7GVLu5eq0/yHQDCnemYE
+         myFhEYy+2bV3bPmQ4pmvClerAqtdAxo1h4Tuwkg5ECziImuJURePjk0teHaq2dGvti
+         GFoqRC5T/SFiQnEUGCBpYMwGGHObIj3j4obIoCP8=
+Date:   Tue, 25 Jul 2023 18:29:08 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Haotien Hsu <haotienh@nvidia.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Wayne Chang <waynec@nvidia.com>,
-        JC Kuo <jckuo@nvidia.com>, WK Tsai <wtsai@nvidia.com>,
-        Henry Lin <henryl@nvidia.com>
-Subject: Re: [PATCH v2] usb: xhci: tegra: Add shutdown callback for Tegra XUSB
-Message-ID: <2023072532-vacancy-headlock-46be@gregkh>
-References: <20230718091425.307589-1-haotienh@nvidia.com>
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     alsa-devel@alsa-project.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/7] usb: Add USB MIDI 2.0 Gadget Function Driver
+Message-ID: <2023072550-refocus-depth-1086@gregkh>
+References: <20230725062206.9674-1-tiwai@suse.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230718091425.307589-1-haotienh@nvidia.com>
+In-Reply-To: <20230725062206.9674-1-tiwai@suse.de>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -56,24 +51,26 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 18, 2023 at 05:14:25PM +0800, Haotien Hsu wrote:
-> From: Henry Lin <henryl@nvidia.com>
+On Tue, Jul 25, 2023 at 08:21:59AM +0200, Takashi Iwai wrote:
+> Hi,
 > 
-> If memory accesses by the Tegra XUSB controller are translated through
-> the SMMU (System MMU), the hardware may continue accessing memory even
-> after the SMMU translations have been disabled during the shutdown
-> process and this can in turn cause unpredictable crashes.
-> Fix this by adding a shutdown implementation that ensures the hardware
-> is turned off during system reboot or shutdown.
+> This is a patch set for adding a USB gadget function driver for USB
+> MIDI 2.0 interface.  The MIDI 2.0 support in the host side was already
+> enabled since 6.5 kernel in snd-usb-audio driver.  Now, this provides
+> a similar gadget functionality using the existing ALSA UMP helper
+> functions.
 > 
-> Signed-off-by: Henry Lin <henryl@nvidia.com>
-> Signed-off-by: Haotien Hsu <haotienh@nvidia.com>
-> Acked-by: Thierry Reding <treding@nvidia.com>
+> The gadget driver provides both MIDI 2.0 and MIDI 1.0 fallback
+> interfaces with one or more loopback UMP rawmidi devices.  The
+> configfs implementation is flexible enough to allow users to set up
+> multiple UMP Endpoints and Function Blocks.
 > 
-> ---
-> V1 -> V2: Resend for the typo in the mailing list
-> ---
->  drivers/usb/host/xhci-tegra.c | 28 +++++++++++++++++++++-------
->  1 file changed, 21 insertions(+), 7 deletions(-)
+> The first patch adds the bare f_midi2 driver without configfs support,
+> followed by the configfs support, MIDI 1.0 interface support and a few
+> other extensions and documentation.
+> 
 
-Does not apply against 6.5-rc4 at all :(
+Very cool, thanks for doing this!  All now queued up, let's see what the
+builders say...
+
+greg k-h
