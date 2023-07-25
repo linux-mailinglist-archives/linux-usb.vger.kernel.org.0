@@ -2,116 +2,225 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4D157608C9
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jul 2023 06:42:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ACB0760901
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jul 2023 07:05:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231153AbjGYEmc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Jul 2023 00:42:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33554 "EHLO
+        id S231794AbjGYFFP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Jul 2023 01:05:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231803AbjGYEm3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jul 2023 00:42:29 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904AB1BCD
-        for <linux-usb@vger.kernel.org>; Mon, 24 Jul 2023 21:42:27 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id d75a77b69052e-403b6b7c0f7so39996861cf.0
-        for <linux-usb@vger.kernel.org>; Mon, 24 Jul 2023 21:42:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690260146; x=1690864946;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QY85I1cYh872qoFTBiLXUdzIc+PQCjN21Cp/B0kA4Ec=;
-        b=Ws851dh3TMJqK7f9HamOutLshKnQysSP+mDHDtkAuiOhUoCampqBXyG9fvPvFJKLRY
-         x9ZyhQdCYkaXciMvUJ6q65oIc45/ayP2tEOVJDOYsdnPe0X8uXC6oOK3deANlwR3PDaa
-         +x9Tn+BKLcUrprEYxfn43dYx+K+DMb72PR6P5YQxFHk9oxSDaNdY/65Lf46DnRUKG5QR
-         0OgEqKn3q98QQ2aulceQ5tEmrJ9DZkC1NYEIRaCkce5KRIhAr88Kfz94MKGdPLBAyU8g
-         ERMeTkIUKK3qSFJkCYcXP1naQvDlqxN60smgF36Wviz968pkfT310DO1TR3wdneSchnK
-         3UdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690260146; x=1690864946;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QY85I1cYh872qoFTBiLXUdzIc+PQCjN21Cp/B0kA4Ec=;
-        b=Z4uh5Rn3GLJqcjL8KGuB35vbuuGeWNS/oLb4r+EHj+fBpe+olTyyD2xtmlujzinhMz
-         hnATpwl7253KxaNIZn+zBnW2s6yJs0YmJ7eUpbEbH5vm2LpEQM+84uUhyjlOgXZ0cPUv
-         fLz3ymp//LeObSGHPkNxpA68lLCJnxR+ONgxaTLav9Ax54dXkSFpuD4g3vSFOLDke/9l
-         FPdCEhluFxtWm+qXGg5w9S71Q+Jy8SD//LE7Pi1K0O+y1oR32vz8pmJc1V3eNu39e3nk
-         5MlhFrskofIynGlbpNv7WsA49ZOdFNb8vgrPIey1pwmIF67HzvkWYlA0uUQHqQUdFZem
-         dgHA==
-X-Gm-Message-State: ABy/qLZUbRqLJtDzOpk4OJpkOX29zjVm12qgIhsR6eWk40a66h78bKKy
-        0h2oj/52gjABFdE+ubJhyoSr1lt5PlI=
-X-Google-Smtp-Source: APBJJlHqSGIQAWx6VmQa6G3L6IqFNPUzykBybS8HtERgBA74Xk/kCKg8AbLL6+TahVnPhyFyZkceAw==
-X-Received: by 2002:a05:622a:592:b0:400:aa4d:7a5d with SMTP id c18-20020a05622a059200b00400aa4d7a5dmr2051988qtb.24.1690260146154;
-        Mon, 24 Jul 2023 21:42:26 -0700 (PDT)
-Received: from [192.168.1.9] ([159.192.254.36])
-        by smtp.googlemail.com with ESMTPSA id ji17-20020a170903325100b001b246dcffb7sm9800799plb.300.2023.07.24.21.42.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Jul 2023 21:42:25 -0700 (PDT)
-Message-ID: <47a5b962-4891-2d61-7a6c-fa87ddf5b78f@gmail.com>
-Date:   Tue, 25 Jul 2023 11:42:22 +0700
+        with ESMTP id S229541AbjGYFFN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jul 2023 01:05:13 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A36E56;
+        Mon, 24 Jul 2023 22:05:12 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36P4xHKv008002;
+        Tue, 25 Jul 2023 05:04:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=yLAYUc3XxR4JwK7hTafWdygc9ZsLEyDajZt8xSA0Wkk=;
+ b=VpaG8jqDw397vgsGenzaonWz9OGGfxVQf2sBGM+kVpbn5tjNtff3ZpEZT5SAZrRurZ4b
+ 4Ny18eXrSqvDzX2i0VbpIxpy8mVo+xY3uuqGRZHJJciJvbxOqi1XH5C/LBk0YZngn3Ml
+ 5U1nMrv5lzarih4ivg7/WWGYpVSWJgnIAP4a3Q87wa4pfuCqgBGFVppWzsme60oAXokK
+ X8++T7OcXfLQpRZ/d+EpiassnrvaZKgKMaVzt+jMnUYTw3IkSFvmvz4jOFBfinHVttSf
+ NWeCRM88MuYtGkKest1SHl0RNoQzL9Eff9YoL9VOhk/cSU+T+CIcBXnaknj7l7qZTrcW /w== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3s1sr71ssr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Jul 2023 05:04:29 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36P54SVQ014523
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Jul 2023 05:04:28 GMT
+Received: from [10.110.90.103] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Mon, 24 Jul
+ 2023 22:04:27 -0700
+Message-ID: <07931697-8f91-487a-06aa-9d247bd77316@quicinc.com>
+Date:   Mon, 24 Jul 2023 22:04:25 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH] USB: serial: option: add Quectel EM05G module support
- with product ID 0x030e
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v4 12/32] sound: usb: Export USB SND APIs for modules
 Content-Language: en-US
-To:     Martin Kohn <m.kohn@welotec.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Johan Hovold <johan@kernel.org>
-References: <AM0PR04MB576480684AA0896B32D32975973FA@AM0PR04MB5764.eurprd04.prod.outlook.com>
- <84196e5f-31fc-28ff-b047-3f234f1a1a4f@gmail.com>
- <AM0PR04MB5764DED62F134146DC8DC8C79702A@AM0PR04MB5764.eurprd04.prod.outlook.com>
-From:   Lars Melin <larsm17@gmail.com>
-In-Reply-To: <AM0PR04MB5764DED62F134146DC8DC8C79702A@AM0PR04MB5764.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Wesley Cheng <quic_wcheng@quicinc.com>, <agross@kernel.org>,
+        <andersson@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>,
+        <lgirdwood@gmail.com>, <broonie@kernel.org>, <perex@perex.cz>,
+        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
+        <bgoswami@quicinc.com>, <Thinh.Nguyen@synopsys.com>
+CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-usb@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <quic_jackp@quicinc.com>, <pierre-louis.bossart@linux.intel.com>,
+        <oneukum@suse.com>, <albertccwang@google.com>,
+        <o-takashi@sakamocchi.jp>
+References: <20230725023416.11205-1-quic_wcheng@quicinc.com>
+ <20230725023416.11205-13-quic_wcheng@quicinc.com>
+From:   Trilok Soni <quic_tsoni@quicinc.com>
+In-Reply-To: <20230725023416.11205-13-quic_wcheng@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: xh41puLVhBPoJh7IulUa_m7BBYQccO1H
+X-Proofpoint-ORIG-GUID: xh41puLVhBPoJh7IulUa_m7BBYQccO1H
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-25_01,2023-07-24_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ phishscore=0 adultscore=0 impostorscore=0 bulkscore=0 mlxscore=0
+ clxscore=1011 spamscore=0 malwarescore=0 suspectscore=0 lowpriorityscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2306200000 definitions=main-2307250045
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 7/24/2023 16:24, Martin Kohn wrote:
-> Hello Lars,
+On 7/24/2023 7:33 PM, Wesley Cheng wrote:
+> Some vendor modules will utilize useful parsing and endpoint management
+> APIs to start audio playback/capture.
 > 
-> a little background: We are just a company that uses the Quectel modems in our products. So far, I was not able to get more information from Quectel apart from
-> that it is the same module with a different product ID. Unfortunately, they will stick to the new product ID.
->
-Yes it is the same module but with a different interface layout so you 
-can not just copy and paste the option driver entry for the old device.
-
-> So, my approach was to clone to entry for EM05-G with the old id. With these changes it is working.
+> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> ---
+>   sound/core/oss/pcm_oss.c |  4 ++--
+>   sound/usb/card.c         |  2 ++
+>   sound/usb/endpoint.c     |  2 ++
+>   sound/usb/helper.c       |  1 +
+>   sound/usb/pcm.c          |  9 ++++++---
+>   sound/usb/pcm.h          | 12 ++++++++++++
+>   6 files changed, 25 insertions(+), 5 deletions(-)
 > 
-It does work as ppp dialup modem which limits its bandwidth to 30-50Mbps 
-(host dependent) but this is a LTE CAT4 device which is able to transfer 
-150Mbps down and 50Mbs up, they always have some kind of direct net 
-interface.
-On the EM05Gv2 that is interface #4 which should be reserved in the 
-option driver and added in the qmi_wwan driver.
-The older EM05G  had qmi_wwan on interface #6 which is why that 
-interface was reserved in the option driver.
-If you let the option driver bind to the net interface then the net 
-driver can not bind to that interface, that's why the net interface must 
-be declared as reserved (RSVD) in the option driver.
+> diff --git a/sound/core/oss/pcm_oss.c b/sound/core/oss/pcm_oss.c
+> index 728c211142d1..7773b5362e1a 100644
+> --- a/sound/core/oss/pcm_oss.c
+> +++ b/sound/core/oss/pcm_oss.c
+> @@ -444,8 +444,8 @@ static int snd_pcm_hw_param_near(struct snd_pcm_substream *pcm,
+>   }
+>   
+>   static int _snd_pcm_hw_param_set(struct snd_pcm_hw_params *params,
+> -				 snd_pcm_hw_param_t var, unsigned int val,
+> -				 int dir)
+> +				snd_pcm_hw_param_t var, unsigned int val,
+> +				int dir)
+>   {
+>   	int changed;
+>   	if (hw_is_mask(var)) {
+> diff --git a/sound/usb/card.c b/sound/usb/card.c
+> index 9365d1e17836..a3fad66a3337 100644
+> --- a/sound/usb/card.c
+> +++ b/sound/usb/card.c
+> @@ -1076,6 +1076,7 @@ int snd_usb_autoresume(struct snd_usb_audio *chip)
+>   	}
+>   	return 0;
+>   }
+> +EXPORT_SYMBOL_GPL(snd_usb_autoresume);
+>   
+>   void snd_usb_autosuspend(struct snd_usb_audio *chip)
+>   {
+> @@ -1089,6 +1090,7 @@ void snd_usb_autosuspend(struct snd_usb_audio *chip)
+>   	for (i = 0; i < chip->num_interfaces; i++)
+>   		usb_autopm_put_interface(chip->intf[i]);
+>   }
+> +EXPORT_SYMBOL_GPL(snd_usb_autosuspend);
+>   
+>   static int usb_audio_suspend(struct usb_interface *intf, pm_message_t message)
+>   {
+> diff --git a/sound/usb/endpoint.c b/sound/usb/endpoint.c
+> index a385e85c4650..0757499599c8 100644
+> --- a/sound/usb/endpoint.c
+> +++ b/sound/usb/endpoint.c
+> @@ -866,6 +866,7 @@ snd_usb_endpoint_open(struct snd_usb_audio *chip,
+>   	mutex_unlock(&chip->mutex);
+>   	return ep;
+>   }
+> +EXPORT_SYMBOL_GPL(snd_usb_endpoint_open);
+>   
+>   /*
+>    * snd_usb_endpoint_set_sync: Link data and sync endpoints
+> @@ -1503,6 +1504,7 @@ int snd_usb_endpoint_prepare(struct snd_usb_audio *chip,
+>   	mutex_unlock(&chip->mutex);
+>   	return err;
+>   }
+> +EXPORT_SYMBOL_GPL(snd_usb_endpoint_prepare);
+>   
+>   /* get the current rate set to the given clock by any endpoint */
+>   int snd_usb_endpoint_get_clock_rate(struct snd_usb_audio *chip, int clock)
+> diff --git a/sound/usb/helper.c b/sound/usb/helper.c
+> index bf80e55d013a..4322ae3738e6 100644
+> --- a/sound/usb/helper.c
+> +++ b/sound/usb/helper.c
+> @@ -62,6 +62,7 @@ void *snd_usb_find_csint_desc(void *buffer, int buflen, void *after, u8 dsubtype
+>   	}
+>   	return NULL;
+>   }
+> +EXPORT_SYMBOL_GPL(snd_usb_find_csint_desc);
+>   
+>   /*
+>    * Wrapper for usb_control_msg().
+> diff --git a/sound/usb/pcm.c b/sound/usb/pcm.c
+> index eec5232f9fb2..b6fb6d84d9eb 100644
+> --- a/sound/usb/pcm.c
+> +++ b/sound/usb/pcm.c
+> @@ -87,7 +87,7 @@ static snd_pcm_uframes_t snd_usb_pcm_pointer(struct snd_pcm_substream *substream
+>   /*
+>    * find a matching audio format
+>    */
+> -static const struct audioformat *
+> +const struct audioformat *
+>   find_format(struct list_head *fmt_list_head, snd_pcm_format_t format,
+>   	    unsigned int rate, unsigned int channels, bool strict_match,
+>   	    struct snd_usb_substream *subs)
+> @@ -147,8 +147,9 @@ find_format(struct list_head *fmt_list_head, snd_pcm_format_t format,
+>   	}
+>   	return found;
+>   }
+> +EXPORT_SYMBOL_GPL(find_format);
+>   
+> -static const struct audioformat *
+> +const struct audioformat *
+>   find_substream_format(struct snd_usb_substream *subs,
+>   		      const struct snd_pcm_hw_params *params)
+>   {
+> @@ -156,6 +157,7 @@ find_substream_format(struct snd_usb_substream *subs,
+>   			   params_rate(params), params_channels(params),
+>   			   true, subs);
+>   }
+> +EXPORT_SYMBOL_GPL(find_substream_format);
+>   
+>   bool snd_usb_pcm_has_fixed_rate(struct snd_usb_substream *subs)
+>   {
+> @@ -446,7 +448,7 @@ int snd_usb_pcm_resume(struct snd_usb_stream *as)
+>   	return 0;
+>   }
+>   
+> -static void close_endpoints(struct snd_usb_audio *chip,
+> +void close_endpoints(struct snd_usb_audio *chip,
+>   			    struct snd_usb_substream *subs)
+>   {
+>   	if (subs->data_endpoint) {
+> @@ -460,6 +462,7 @@ static void close_endpoints(struct snd_usb_audio *chip,
+>   		subs->sync_endpoint = NULL;
+>   	}
+>   }
+> +EXPORT_SYMBOL(close_endpoints);
 
-> But you are right. I removed RSVP(6) option entirely and it also works fine.
-> I currently trying to get on hold of a module with the old product ID (might be difficult), because I think the driver for the old revision might then also have the same issue.
-> 
-> Please provide any feedback you can, it would be greatly appreciated, our customers are eager to have the modem working in Linux again.
->
-Any changes from your initial patch should have a revision number in the 
-email header and there should be an explanation in the email body below 
-the tear line what has changed from revision to revision. Since you did 
-not revision your previous patches then your next attempt should be a v2 
-patch.
+EXPORT_SYMBOL_GPL here as well?
 
-> Greetings,
-> Martin Kohn
-
+-- 
+---Trilok Soni
 
