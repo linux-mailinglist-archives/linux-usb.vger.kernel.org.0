@@ -2,118 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D862761ABC
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jul 2023 15:56:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCF54761AD7
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jul 2023 16:00:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231976AbjGYN4H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Jul 2023 09:56:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48944 "EHLO
+        id S231962AbjGYOAu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Jul 2023 10:00:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232046AbjGYNz5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jul 2023 09:55:57 -0400
-Received: from m1344.mail.163.com (m1344.mail.163.com [220.181.13.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8CDBE268D;
-        Tue, 25 Jul 2023 06:55:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
-        Message-ID; bh=w1BqlOtQMbujMWKorncDYQCEF9xZSLq3MzcjG+h0oFM=; b=q
-        M6fTlEnxz8JgHrmK4yb7MEIg+RzjAMzgB62b2HPBSKg7dfSxj3dRiUjaS7qQsq/Z
-        3kzvu/0kKzjmXkK4F8u+Z0hskIy0bEPVg2vj2q563OLcnBDiXaTK0fKK9E9Q9Ub/
-        Q8KxsyIGSRCDsY2V6jGvekLdk5VX8VjBUbMczynetE=
-Received: from 18500469033$163.com ( [114.253.21.2] ) by
- ajax-webmail-wmsvr44 (Coremail) ; Tue, 25 Jul 2023 21:54:26 +0800 (CST)
-X-Originating-IP: [114.253.21.2]
-Date:   Tue, 25 Jul 2023 21:54:26 +0800 (CST)
-From:   "Dingyan Li" <18500469033@163.com>
-To:     "Greg KH" <gregkh@linuxfoundation.org>
-Cc:     "Oliver Neukum" <oneukum@suse.com>, stern@rowland.harvard.edu,
-        sebastian.reichel@collabora.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re:Re: [PATCH] USB: add usbfs ioctl to get specific superspeedplus
- rates
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20230109(dcb5de15)
- Copyright (c) 2002-2023 www.mailtech.cn 163com
-In-Reply-To: <2023072546-denture-half-5ceb@gregkh>
-References: <20230721084039.9728-1-18500469033@163.com>
- <2023072105-lethargic-saddling-ad97@gregkh>
- <130b453c.5c8f.1897872ce54.Coremail.18500469033@163.com>
- <2023072159-carol-underfeed-43eb@gregkh>
- <781b3f95-96e7-af83-e089-887ec7f2d255@suse.com>
- <2023072546-denture-half-5ceb@gregkh>
-X-NTES-SC: AL_QuySAv6SvEot4CObZOkXkkYVgew6WsC4vf4k3IReOps0hinw3BwPUnVhIUbWwMCGKhyeuhKKTBxk2sVbQaJjZ4KWP/goNaEbiKM6XasjvmCR
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+        with ESMTP id S230309AbjGYOAt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jul 2023 10:00:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B1BB0;
+        Tue, 25 Jul 2023 07:00:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DD1A661731;
+        Tue, 25 Jul 2023 14:00:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C1F5C433C7;
+        Tue, 25 Jul 2023 14:00:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690293647;
+        bh=KxdroIHSsGYEX4N3u3daebwShXgD0pgJCElrR/YHdj8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=I6f14DS8zaBAQUUQ1Fu8L+7+xvK/XKduZjNgpOVAiAzK1pkeL/YjzUSrPPFIQi6Xq
+         s+L7qOqBv8hqDFTU9Xb7KhhvHS5gRownkuWP82xCtNT/c2NtLiAMODrY+H8WM27WAK
+         W2gX0L9FnR4khVhsS5rth8BXumGPt/yQX5/KeZ1mz8LE45cRj2b0mXO03C3qUazmn4
+         GeIo/S2lgzLA2iOqPF6tmEmPSJt7PwOQyAi7jsL3tXGVg7g8448FhXysOwNoOCJ/MF
+         9vPYNykHsI6cNV4qUPTvVIOoO996yuwYUCyTnb6YeI6JqI3RqqDvO77QqbujA38INY
+         oCoerpCVOEynA==
+Received: from johan by xi.lan with local (Exim 4.96)
+        (envelope-from <johan@kernel.org>)
+        id 1qOIaz-00018A-13;
+        Tue, 25 Jul 2023 16:01:01 +0200
+Date:   Tue, 25 Jul 2023 16:01:01 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] USB-serial device ids for 6.5-rc4
+Message-ID: <ZL_VnZUGvlOlLKAy@hovoldconsulting.com>
 MIME-Version: 1.0
-Message-ID: <4edabcb3.7e65.1898d54679e.Coremail.18500469033@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: LMGowAD3_48S1L9kcJ8JAA--.4908W
-X-CM-SenderInfo: jprykiiquwmiitt6il2tof0z/xtbBZxK3y1et-riUWQAAs4
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-CkF0IDIwMjMtMDctMjUgMjE6MjQ6MzIsICJHcmVnIEtIIiA8Z3JlZ2toQGxpbnV4Zm91bmRhdGlv
-bi5vcmc+IHdyb3RlOgo+T24gTW9uLCBKdWwgMjQsIDIwMjMgYXQgMTE6NDc6NDlBTSArMDIwMCwg
-T2xpdmVyIE5ldWt1bSB3cm90ZToKPj4gT24gMjEuMDcuMjMgMTY6NTEsIEdyZWcgS0ggd3JvdGU6
-Cj4+IAo+PiA+ID4gMS4gQnkgc2F5aW5nICJiZSBkb2N1bWVudGVkIHNvbWV3aGVyZSIsIGRvIHlv
-dSBtZWFuIHRoZXJlIGlzIGV4dHJhCj4+ID4gPiAgICAgIGRvY3VtZW50YXRpb24gd29yayB3aGlj
-aCBuZWVkcyB0byBiZSBkb25lPyBTb3JyeSB0aGF0IEkgbWlzc2VkIHRoaXMKPj4gPiA+ICAgICAg
-cGFydCBzaW5jZSBpdCdzIHRoZSBmaXJzdCB0aW1lIGZvciBtZSB0byB3b3JrIG9uIGEga2VybmVs
-IHBhdGNoLgo+PiA+IAo+PiA+IEl0IG5lZWRzIHRvIGJlIGRvY3VtZW50ZWQgc29tZXdoZXJlLCBv
-dGhlcndpc2Ugbm8gb25lIGtub3dzIGhvdyB0byB1c2UKPj4gPiBpdC4KPj4gPiAKPj4gPiA+IDIu
-IElmIG5vIGVycm9yLCByZXR1cm5lZCB2YWx1ZXMgYXJlICJlbnVtIHVzYl9zc3BfcmF0ZSIgZGVm
-aW5lZCBpbiBpbmNsdWRlL2xpbnV4L3VzYi9jaDkuaAo+PiA+ID4gMy4gc3NwIHJhdGUgaXMgb25s
-eSB2YWxpZCBmb3Igc3VwZXJzcGVlZHBsdXMuIEZvciBvdGhlciBzcGVlZHMsIGl0IHNob3VsZCBi
-ZQo+PiA+ID4gICAgICBVU0JfU1NQX0dFTl9VTktOT1dOLgo+PiA+IAo+PiA+IE9rLCB0aGF0IHNo
-b3VsZCBiZSBkb2N1bWVudGVkLgo+PiAKPj4gRG9jdW1lbnRhdGlvbiB3b3VsZCBiZSBnb29kLgo+
-PiBXaGVyZSBzaG91bGQgaXQgZ28sIHRob3VnaD8gVGhlc2UgZW51bXMgYXJlIHBhcnQgb2YgdGhl
-IHVhcGkKPj4gaGllcmFyY2h5LiBOb3csIGRvY3VtZW50YXRpb24gZm9yIHVhcGkgd291bGQgYmUg
-Z29vZCwgYnV0IHdlCj4+IHNob3VsZCBub3QgbWl4IGl0IHdpdGggZG9jdW1lbnRhdGlvbiBmb3Ig
-aW9jdGwKPj4gVGhhdCBpcyBpZiBhbiBpb2N0bCB1c2VzIGFuIGVudW0gb3V0IG9mIHVhcGkgaXQg
-bmVlZHMgdG8gYmUKPj4gZXhwbGljaXRseSBtZW50aW9uZWQgYnkgbmFtZSwgYnV0IGRvY3VtZW50
-aW5nIHRoZSBzZW1hbnRpY3MKPj4gb2YgdGhlIGVudW0gX3RoZXJlXyB3b3VsZCBiZSB3cm9uZy4K
-Pj4gCj4+ID4gCj4+ID4gPiA0LiBJIGZvdW5kIGluIGxpYnVzYiwgdGhlcmUgYXJlIHR3byB3YXlz
-IHRvIGdldCBzcGVlZCB2YWx1ZSBmb3IgYSBkZXZpY2UuCj4+ID4gPiAgICAgIE9uZSB3YXkgaXMg
-dmlhIHN5c2ZzLCB3aGljaCBoYXMgc3VwcG9ydGVkIDIwR2JwcyBub3cuIEFub3RoZXIgd2F5IGlz
-Cj4+ID4gPiAgICAgIHRvIHVzZSBpb2N0bCBVU0JERVZGU19HRVRfU1BFRUQuIFRoaXMgaXMgd2hl
-biBJIGZvdW5kIHRoaXMgaW9jdGwgY2FuIG9ubHkKPj4gPiA+ICAgICAgcmV0dXJuIFVTQl9TUEVF
-RF9TVVBFUl9QTFVTIGF0IG1vc3QsIGl0IGNhbm5vdCBkZXRlcm1pbmUgY3VycmVudCBzc3AgcmF0
-ZQo+PiA+ID4gICAgICBmdXJ0aGVyLCBubyBtYXR0ZXIgR2VuMXgyKDEwR2JwcyksIEdlbjJ4MSgx
-MEdicHMpIG9yIEdlbjJ4MigyMEdicHMpLiBTbyBJCj4+ID4gPiAgICAgIHRob3VnaHQgbWF5YmUg
-aXQncyBnb29kIHRvIHByb3ZpZGUgYSBzaW1pbGFyIHdheSBsaWtlIGlvY3RsIFVTQkRFVkZTX0dF
-VF9TUEVFRAo+PiA+ID4gICAgICBpbiBvcmRlciB0byBnZXQgc3NwIHJhdGVzLgo+PiA+IAo+PiA+
-IElmIGxpYnVzYiBkb2Vzbid0IG5lZWQgdGhpcyBpb2N0bCwgd2hvIHdvdWxkIHVzZSBpdD8gIFdl
-IG9ubHkgYWRkIGFwaXMKPj4gPiB0aGF0IGFyZSBhY3R1YWxseSBnb2luZyB0byBiZSB1c2VkLgo+
-PiA+IAo+PiA+IFNvIGlmIGxpYnVzYiBkb2Vzbid0IHVzZSBpdCwgd2UgbmVlZCBhIHJlYWwtd29y
-bGQgdXNlciBmb3IgdXMgdG8gYmUgYWJsZQo+PiA+IHRvIGFkZCB0aGlzLgo+PiAKPj4gSSBhbSBz
-b3JyeSwgYnV0IHRoYXQgbG9va3MgcHJldHR5IG11Y2ggbGlrZSBhIHF1ZXN0aW9uIG9mIEFQSSBk
-ZXNpZ24gdG8gbWUuCj4+IFRvIHdoYXQgZXh0ZW50IGlzIGxpYnVzYiBzdXBwb3NlZCB0byBiZSBm
-dW5jdGlvbmFsIHdpdGhvdXQgc3lzZnM/IFRoZXJlIGlzCj4+IG5vIHRlY2huaWNhbCBhbnN3ZXIg
-dG8gdGhpcy4gSXQgaXMgYSBxdWVzdGlvbiBvZiBkZXNpZ24gZ29hbHMuCj4+IAo+PiBJZiB3ZSBm
-b2xsb3cgdGhlIHByZWNlZGVudCBvZiBjMDFiMjQ0YWQ4NDhhCj4+ICgiVVNCOiBhZGQgdXNiZnMg
-aW9jdGwgdG8gcmV0cmlldmUgdGhlIGNvbm5lY3Rpb24gc3BlZWQiKQo+PiB0aGVuIHdlIHNob3Vs
-ZCBhcHBseSBhbiB1cGRhdGVkIHZlcnNpb24gb2YgRGluZ3lhbiBMaSdzIHBhdGNoLCBwcmVmZXJh
-Ymx5Cj4+IGNvdXBsZWQgd2l0aCBhIHBhdGNoIGZvciBsaWJ1c2Igb3Igd2UgZ28gYW5kIGRlcHJl
-Y2F0ZSBzb21lIGlvY3Rscy4KPgo+V2UgY2FuIG5ldmVyICJkZXByZWNhdGUiIGlvY3Rscywgc29y
-cnkuCj4KPlNvIHVubGVzcyB0aGVyZSBpcyBzb21lIGFjdHVhbCBuZWVkIGZyb20gdXNlcnNwYWNl
-IHRvb2xzIGxpa2UgbGlidXNiIChvcgo+YW55dGhpbmcgZWxzZT8pIHRoYXQgcmVxdWlyZXMgdGhp
-cyBuZXcgaW9jdGwsIGxldCdzIG5vdCBhZGQgaXQgb3RoZXJ3aXNlCj53ZSBhcmUgc2lnbmluZyBv
-dXJzZWx2ZXMgdXAgdG8gc3VwcG9ydCBpdCBmb3IgZm9yZXZlci4KPgo+dGhhbmtzLAo+Cgo+Z3Jl
-ZyBrLWgKCklmIHdlIGNhbid0ICJkZXByZWNhdGUiIGlvY3RscywgY2FuIHdlIGNoYW5nZSB0aGUg
-cmV0dXJuZWQgY29udGVudHMgb2YgZXhpc3Rpbmcgb25lcz8KCkkgZm91bmQgZXZlbiBpbiB1c2Jm
-cywgd2UgZ290IHR3byBkaWZmZXJlbnQgaW9jdGxzIHdoaWNoIGNhbiBiZSB1c2VkIHRvIGdldCBk
-ZXZpY2Ugc3BlZWQsCmluY2x1ZGluZyBVU0JERVZGU19HRVRfU1BFRUQgYW5kIFVTQkRFVkZTX0NP
-Tk5JTkZPX0VYLiBNYXliZSB3ZSBjYW4gcmVkdWNlCnNvbWUgcmVkdW5kYW5jeSB0aGVyZS4KCkFu
-ZCBieSBzYXlpbmcgYWN0dWFsIG5lZWRzLCB5b3UgbWVhbiBpdCdzIG5vdCBlbm91Z2ggdG8ganVz
-dCBhZGQgdGhpcyBuZXcgaW9jdGwgdG8gbGlidXNiIGFuZAppbWFnaW5lIHRoaXMgcGFydCBvZiBs
-aWJ1c2Igd2lsbCBiZSB1c2VkIGJ5IGFueW9uZSBpbiB0aGUgZnV0dXJlLiBUaGVyZSBtdXN0IGJl
-IHNvbWUgcmVhbC13b3JsZApyZXF1ZXN0cyBmb3Igbm93IHdoaWNoIG1ha2UgbGlidXNiIGhhdmUg
-dG8gdXNlIHRoaXMgbmV3IGlvY3RsLCByaWdodD8KCgpSZWdhcmRzLApEaW5neWFu
+The following changes since commit fdf0eaf11452d72945af31804e2a1048ee1b574c:
+
+  Linux 6.5-rc2 (2023-07-16 15:10:37 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-6.5-rc4
+
+for you to fetch changes up to d245aedc00775c4d7265a9f4522cc4e1fd34d102:
+
+  USB: serial: simple: sort driver entries (2023-07-20 15:59:25 +0200)
+
+----------------------------------------------------------------
+USB-serial device ids for 6.5-rc4
+
+Here are some new modem device ids and a new "simple" driver for a CAN
+bus device.
+
+Included is also a patch sorting the "simple" driver entries in order to
+make it more obvious where new ones should be added.
+
+All have been in linux-next with no reported issues.
+
+----------------------------------------------------------------
+Jerry Meng (1):
+      USB: serial: option: support Quectel EM060K_128
+
+Johan Hovold (1):
+      USB: serial: simple: sort driver entries
+
+Mohsen Tahmasebi (1):
+      USB: serial: option: add Quectel EC200A module support
+
+Oliver Neukum (1):
+      USB: serial: simple: add Kaufmann RKS+CAN VCP
+
+ drivers/usb/serial/option.c            |  6 +++
+ drivers/usb/serial/usb-serial-simple.c | 73 +++++++++++++++++++---------------
+ 2 files changed, 46 insertions(+), 33 deletions(-)
