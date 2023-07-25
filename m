@@ -2,52 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01195760B09
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jul 2023 08:57:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90A1A760BBB
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jul 2023 09:28:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231676AbjGYG5i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Jul 2023 02:57:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32860 "EHLO
+        id S231899AbjGYH2U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Jul 2023 03:28:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbjGYG5h (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jul 2023 02:57:37 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B791BD;
-        Mon, 24 Jul 2023 23:57:36 -0700 (PDT)
+        with ESMTP id S232554AbjGYH13 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jul 2023 03:27:29 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 893B7E0;
+        Tue, 25 Jul 2023 00:26:59 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 16A77218A2;
-        Tue, 25 Jul 2023 06:57:35 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 29D9C1F8B3;
+        Tue, 25 Jul 2023 07:26:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1690268255; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1690270018; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=9Oi3czKnpvE6a+3o5E+2OD3NX8ZHwPHEeEjkU+816sI=;
-        b=0zxnnVkqjhYogR+gSX8ALAzMUJOePN8qiWPDDTsnTWm/yobi1+3EfgQcJPR/00OSQE3cns
-        lovd+FP4k4hD5UunNTWUeUimHGaaPPsjm2QqNe1ITsTrY8NCMTzqcg/pXDEM0WEBjABovF
-        hvsNvTBNDqkuhFP0aVEMpfGAfGZ65dg=
+        bh=7Xc+x3bm0aDx5lBbs4AFmDsPjM7vKL6WtyoQNR4tK/E=;
+        b=dUBWqyHbQwKYt2wSpE/zBet21VuJXKX0vml+r+fr2TY7T0eNHKfjOMemkdeLEOF3L8t7tD
+        6HYrViDDuEocyARFPTuFhzfMHOJHE0vbuvYbxVmAqeI6bwngqbxoa0Tjnd/7Qcg3CuRNh0
+        kHIUixZr03XkU2opCeRtl5ZU0EyhlpM=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1690268255;
+        s=susede2_ed25519; t=1690270018;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=9Oi3czKnpvE6a+3o5E+2OD3NX8ZHwPHEeEjkU+816sI=;
-        b=jGs9ToYVVp0Pnq39eX42g+FlWEbZnjh5urcI3qMPD09lMmi+Ywi9lpeBohzDI/SDbw6+Ym
-        zyLzL4gbUmK1P5Bw==
+        bh=7Xc+x3bm0aDx5lBbs4AFmDsPjM7vKL6WtyoQNR4tK/E=;
+        b=fPskUvashiZyTcb/ryCu/ZVCVXchmvSf2JCtlKNdPCRNZFa5H3oOqKqkTxEVVkooX0Rx2q
+        Y4nZGIVy99swIbAQ==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8278713487;
-        Tue, 25 Jul 2023 06:57:34 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9CED513487;
+        Tue, 25 Jul 2023 07:26:57 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id 7VDhHl5yv2R1BgAAMHmgww
-        (envelope-from <tiwai@suse.de>); Tue, 25 Jul 2023 06:57:34 +0000
-Date:   Tue, 25 Jul 2023 08:57:34 +0200
-Message-ID: <87cz0gv5pd.wl-tiwai@suse.de>
+        id /chyJUF5v2SZFAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Tue, 25 Jul 2023 07:26:57 +0000
+Date:   Tue, 25 Jul 2023 09:26:57 +0200
+Message-ID: <87bkg0v4ce.wl-tiwai@suse.de>
 From:   Takashi Iwai <tiwai@suse.de>
 To:     Wesley Cheng <quic_wcheng@quicinc.com>
 Cc:     <agross@kernel.org>, <andersson@kernel.org>, <robh+dt@kernel.org>,
@@ -64,10 +64,10 @@ Cc:     <agross@kernel.org>, <andersson@kernel.org>, <robh+dt@kernel.org>,
         <quic_jackp@quicinc.com>, <pierre-louis.bossart@linux.intel.com>,
         <oneukum@suse.com>, <albertccwang@google.com>,
         <o-takashi@sakamocchi.jp>
-Subject: Re: [PATCH v4 19/32] sound: usb: card: Check for support for requested audio format
-In-Reply-To: <20230725023416.11205-20-quic_wcheng@quicinc.com>
+Subject: Re: [PATCH v4 18/32] sound: usb: Introduce QC USB SND offloading support
+In-Reply-To: <20230725023416.11205-19-quic_wcheng@quicinc.com>
 References: <20230725023416.11205-1-quic_wcheng@quicinc.com>
-        <20230725023416.11205-20-quic_wcheng@quicinc.com>
+        <20230725023416.11205-19-quic_wcheng@quicinc.com>
 User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
@@ -81,39 +81,105 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 25 Jul 2023 04:34:03 +0200,
+On Tue, 25 Jul 2023 04:34:02 +0200,
 Wesley Cheng wrote:
 > 
-> Allow for checks on a specific USB audio device to see if a requested PCM
-> format is supported.  This is needed for support for when playback is
-> initiated by the ASoC USB backend path.
-> 
-> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
-> ---
->  sound/usb/card.c | 28 ++++++++++++++++++++++++++++
->  sound/usb/card.h |  8 ++++++++
->  2 files changed, 36 insertions(+)
-> 
-> diff --git a/sound/usb/card.c b/sound/usb/card.c
-> index a3fad66a3337..365f6d978608 100644
-> --- a/sound/usb/card.c
-> +++ b/sound/usb/card.c
-> @@ -142,6 +142,34 @@ int snd_usb_unregister_platform_ops(void)
->  }
->  EXPORT_SYMBOL_GPL(snd_usb_unregister_platform_ops);
+> --- a/sound/usb/Kconfig
+> +++ b/sound/usb/Kconfig
+> @@ -165,6 +165,21 @@ config SND_BCD2000
+>  	  To compile this driver as a module, choose M here: the module
+>  	  will be called snd-bcd2000.
 >  
-> +struct snd_usb_stream *snd_usb_find_suppported_substream(int card_idx,
-> +			struct snd_pcm_hw_params *params, int direction)
+> +config QC_USB_AUDIO_OFFLOAD
+> +	tristate "Qualcomm Audio Offload driver"
+> +	depends on QCOM_QMI_HELPERS
+> +	select SND_PCM
+
+So the driver can be enabled without CONFIG_SND_USB_AUDIO?  It makes
+little sense without it.
+Or is it set so intentionally for testing purpose?
+
+About the code:
+
+> +/* Offloading IOMMU management */
+> +static unsigned long uaudio_get_iova(unsigned long *curr_iova,
+> +	size_t *curr_iova_size, struct list_head *head, size_t size)
+> +{
+> +	struct iova_info *info, *new_info = NULL;
+> +	struct list_head *curr_head;
+> +	unsigned long va = 0;
+> +	size_t tmp_size = size;
+> +	bool found = false;
+> +
+> +	if (size % PAGE_SIZE) {
+> +		dev_err(uaudio_qdev->dev, "size %zu is not page size multiple\n",
+> +			size);
+> +		goto done;
+
+This can be easily triggered by user-space as it's passed directly
+from the mmap call, and it implies that you can fill up the messages
+easily.  It's safer to make it debug message or add the rate limit.
+
+Ditto for other error messages.
+
+> +static void disable_audio_stream(struct snd_usb_substream *subs)
+> +{
+> +	struct snd_usb_audio *chip = subs->stream->chip;
+> +
+> +	if (subs->data_endpoint || subs->sync_endpoint) {
+> +		close_endpoints(chip, subs);
+> +
+> +		mutex_lock(&chip->mutex);
+> +		subs->cur_audiofmt = NULL;
+> +		mutex_unlock(&chip->mutex);
+> +	}
+
+Now looking at this and...
+
+> +static int enable_audio_stream(struct snd_usb_substream *subs,
+> +				snd_pcm_format_t pcm_format,
+> +				unsigned int channels, unsigned int cur_rate,
+> +				int datainterval)
 > +{
 
-Please add a comment what this function does.
+... this implementation, I wonder whether it'd be better to modify and
+export  snd_usb_hw_params() snd snd_usb_hw_free() to fit with qcom
+driver.  Then you can avoid lots of open code.
 
+In general, if you see a direct use of chip->mutex, it can be often
+done better in a different form.  The use of an internal lock or such
+from an external driver is always fragile and error-prone.
 
-> +	struct snd_usb_audio *chip = usb_chip[card_idx];
+Also, the current open-code misses the potential race against the
+disconnection during the operation.  In snd-usb-audio, it protects
+with snd_usb_lock_shutdown() and snd_usb_unlock_shutdown() pairs.
 
-Is the dereference safe without locking?
-If the call is supposed to be allowed only in a safe situation, it
-should be mentioned in the function description.
+> +static int __init qc_usb_audio_offload_init(void)
+> +{
+> +	struct uaudio_qmi_svc *svc;
+> +	int ret;
+> +
+> +	ret = snd_usb_register_platform_ops(&offload_ops);
+> +	if (ret < 0)
+> +		return ret;
+
+Registering the ops at the very first opens a potential access to the
+uninitialized stuff.  Imagine a suspend happens right after this
+point.  As the ops is already registered, it'll enter to the
+suspend_cb callback and straight to Oops.
+
+> +static void __exit qc_usb_audio_offload_exit(void)
+> +{
+> +	struct uaudio_qmi_svc *svc = uaudio_svc;
+> +
+> +	qmi_handle_release(svc->uaudio_svc_hdl);
+> +	flush_workqueue(svc->uaudio_wq);
+> +	destroy_workqueue(svc->uaudio_wq);
+> +	kfree(svc);
+> +	uaudio_svc = NULL;
+> +	snd_usb_unregister_platform_ops();
+
+Similarly, the unregister order has to be careful, too.
 
 
 thanks,
