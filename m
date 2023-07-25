@@ -2,69 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7CAE7624BC
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jul 2023 23:46:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2209976271E
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Jul 2023 01:00:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230508AbjGYVqv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Jul 2023 17:46:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39302 "EHLO
+        id S230233AbjGYXA4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Jul 2023 19:00:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbjGYVqu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jul 2023 17:46:50 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 608C11FEC
-        for <linux-usb@vger.kernel.org>; Tue, 25 Jul 2023 14:46:49 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id d75a77b69052e-4036bd4fff1so118611cf.0
-        for <linux-usb@vger.kernel.org>; Tue, 25 Jul 2023 14:46:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690321608; x=1690926408;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=JOWU8cObq5uQ1D0fzOH9YopNNbLh+D19QlGECPvPuv8=;
-        b=xXLeR4nwpaEm9il3aI8su253TZphe9/pojnCZd9mYdIlC9HltTppaNPFVK2R4IEOuu
-         Z2X4coD3FAb3eMI6R6Qqle1mBvzmRllkiTzaXw7En6/nJEK6q7bOarTQC0cB9tKcsoNv
-         +4sU7AK0EzfNg5Fe+2mA2gDvWg0dguuleDDLD5eIUGfUu3pqnthuVGk7+rt5oEMBptiU
-         zQWIZNaW5zEUFFBCZlRQrKTm8J4Cjp+4MIBEOISifsnLYC3asfYze8OsoWskD/S4Q+ii
-         C77dTJy8d20y511eztz7r84B5+3k9tUaPrsFdjh18MPGh8vRLHOw4DmtyTPulojeELn3
-         jaHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690321608; x=1690926408;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JOWU8cObq5uQ1D0fzOH9YopNNbLh+D19QlGECPvPuv8=;
-        b=PxTqqEjKo1lsSjoD8SsAuUXadsBt50qdL4fqQFJfJyGYX7gSJEYT7kby1onBXFF3VM
-         8zVjgqunZZlrX/Gup6sb97PiksCtvCYd/4R1/yphcVtJqBAT/JNEc8Auc7X+fzG6Et+1
-         6LP/jl7ri5mLS+yxJWDRLPpwIgxnQkbNExEzg7n7opLyoHBNHGHFhhPa8QiRBEqqnUAA
-         Hf+uEMjtb4806BrTFTMUPjRtaUVacTT/uSE2pSDF+q4Pxwba9VUx94xFLiRQlKHrHHhX
-         2548h3nV3mqS0BFC504jqYqmm/xqvIwCe+oJ0GkuqCKXiW+iMXIh+3hbnTqFAj/zWEO5
-         6kyw==
-X-Gm-Message-State: ABy/qLa1ipXvRfdnLmtUn1meL9HrkzBcy6+HeHvz0usemyR96aEIJMwN
-        7D3nPznBH0en50ipBSYxnb0/d1NIcqgUMO5EaLTauX5/rvxr7Gqu+xbDEw==
-X-Google-Smtp-Source: APBJJlFmy1ZRRYLp9p3+kpaID4akaDsSWDLGkuxREQ5NapLrUhU11R775skqJCYGTPsOjHSIxTsU4qsi8EGeGF0DDL0=
-X-Received: by 2002:ac8:5987:0:b0:403:dcd4:b9b1 with SMTP id
- e7-20020ac85987000000b00403dcd4b9b1mr348591qte.18.1690321608276; Tue, 25 Jul
- 2023 14:46:48 -0700 (PDT)
+        with ESMTP id S229694AbjGYXAz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jul 2023 19:00:55 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFA8C172E;
+        Tue, 25 Jul 2023 16:00:41 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 36PMFfaU032110;
+        Tue, 25 Jul 2023 22:59:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=2pFySXKPFM81kXlQzIVKlnvEWXbOdlylxbolS5QUAAU=;
+ b=GKMhJgsGuOyVr/Fzx8npFQqER2kjdyKBoYCbSs5v9P8k32IOyKUskRI854DFCFPjGUCz
+ 1bFGelgHcVMyaFhzdOR3XkgC8HPCU3CeIj1Ln79uKnLeQHTB1xHP2ExqcyAuMiV/ij7p
+ Jgo7mT0Bju7DDnE6B5R9u7l6l/qEAgWaHYnrSSO6fjmWhw00CQ5T237szAKm9M1i3IS+
+ z7qUYO1QRUj0lLEXZP1+O7C84VM3zmGYydygGTsUsY0B9D0LlFy3qBVaa6P/PNobqDFA
+ rjEZMhtHY9twBVHszmNCTT/PncO8jtMpzV1Ypolzz9wZ/y/lViiu7ZaI12omKIn2DknV Gg== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3s2dauhhwk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Jul 2023 22:59:59 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 36PMxwOR028551
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 25 Jul 2023 22:59:58 GMT
+Received: from [10.110.23.161] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Tue, 25 Jul
+ 2023 15:59:57 -0700
+Message-ID: <243ee81d-d46d-e05a-1fcd-35e6301a39cd@quicinc.com>
+Date:   Tue, 25 Jul 2023 15:59:57 -0700
 MIME-Version: 1.0
-References: <e5a6c3be-6dd3-4c85-9c5b-f9fb7aca0b36@rowland.harvard.edu>
- <0000000000007fc04d06011e274f@google.com> <c9bb72e0-8e02-4568-bd43-6897f9c94d12@rowland.harvard.edu>
- <CACGdZYL_dPFp-yHWHGC3vxyv4R4dYtSJe5GPcN0NjG2qaz+xmg@mail.gmail.com> <248d9759-aef7-45ce-b0a4-6c1cafee76c9@rowland.harvard.edu>
-In-Reply-To: <248d9759-aef7-45ce-b0a4-6c1cafee76c9@rowland.harvard.edu>
-From:   Khazhy Kumykov <khazhy@google.com>
-Date:   Tue, 25 Jul 2023 14:46:37 -0700
-Message-ID: <CACGdZY+qJ7P8FZj6ZGmcDkf2YH7LRBnfvuwiro4ZF37+owHo9g@mail.gmail.com>
-Subject: Re: [syzbot] [usb?] KASAN: slab-out-of-bounds Read in
- read_descriptors (3)
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     syzbot <syzbot+18996170f8096c6174d0@syzkaller.appspotmail.com>,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000000b327d060156abe3"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v4 18/32] sound: usb: Introduce QC USB SND offloading
+ support
+Content-Language: en-US
+To:     Takashi Iwai <tiwai@suse.de>
+CC:     <agross@kernel.org>, <andersson@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>,
+        <lgirdwood@gmail.com>, <broonie@kernel.org>, <perex@perex.cz>,
+        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
+        <bgoswami@quicinc.com>, <Thinh.Nguyen@synopsys.com>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-usb@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <quic_jackp@quicinc.com>, <pierre-louis.bossart@linux.intel.com>,
+        <oneukum@suse.com>, <albertccwang@google.com>,
+        <o-takashi@sakamocchi.jp>
+References: <20230725023416.11205-1-quic_wcheng@quicinc.com>
+ <20230725023416.11205-19-quic_wcheng@quicinc.com>
+ <87bkg0v4ce.wl-tiwai@suse.de>
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <87bkg0v4ce.wl-tiwai@suse.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 7AYH6eHmajjPxJdpkNnu3V5fahHix3Nj
+X-Proofpoint-ORIG-GUID: 7AYH6eHmajjPxJdpkNnu3V5fahHix3Nj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-07-25_12,2023-07-25_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 impostorscore=0
+ suspectscore=0 lowpriorityscore=0 priorityscore=1501 malwarescore=0
+ spamscore=0 mlxscore=0 phishscore=0 mlxlogscore=978 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2306200000 definitions=main-2307250196
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,161 +93,150 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---0000000000000b327d060156abe3
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Hi Takashi,
 
-On Tue, Jul 25, 2023 at 2:30=E2=80=AFPM Alan Stern <stern@rowland.harvard.e=
-du> wrote:
->
-> On Tue, Jul 25, 2023 at 01:42:01PM -0700, Khazhy Kumykov wrote:
-> > On Tue, Jul 25, 2023 at 12:26=E2=80=AFPM Alan Stern <stern@rowland.harv=
-ard.edu> wrote:
->
-> > > @@ -2671,12 +2671,17 @@ int usb_authorize_device(struct usb_devi
-> > >         }
-> > >
-> > >         if (usb_dev->wusb) {
-> > > -               result =3D usb_get_device_descriptor(usb_dev, sizeof(=
-usb_dev->descriptor));
-> > > -               if (result < 0) {
-> > > +               struct usb_device_descriptor *descr;
-> > > +
-> > > +               descr =3D usb_get_device_descriptor(usb_dev);
-> > > +               if (IS_ERR(descr)) {
-> > > +                       result =3D PTR_ERR(descr);
-> > >                         dev_err(&usb_dev->dev, "can't re-read device =
-descriptor for "
-> > >                                 "authorization: %d\n", result);
-> > >                         goto error_device_descriptor;
-> > >                 }
-> > > +               usb_dev->descriptor =3D *descr;
-> > Hmm, in your first patch you rejected diffs to the descriptor here,
-> > which might be necessary - since we don't re-initialize the device so
-> > can get a similar issue if the bad usb device decides to change
-> > bNumConfigurations to cause a buffer overrun. (This also stuck out to
-> > me as an exception to the "descriptors should be immutable" comment
-> > later in the patch.
->
-> I removed that part of the previous patch because there's no point to
-> it.  None of this code ever gets executed; the usb_dev->wusb test can
-> never succeed because the kernel doesn't support wireless USB any more.
-> (I asked Greg KH about that in a separate email thread:
-> <https://lore.kernel.org/linux-usb/2a21cefa-99a7-497c-901f-3ea097361a80@r=
-owland.harvard.edu/#r>.)
->
-> A later patch will remove all of the wireless USB stuff.  The only real
-> reason for leaving this much of the code there now is to prevent
-> compilation errors and keep the form looking right.
-Ah ok, cool.
+On 7/25/2023 12:26 AM, Takashi Iwai wrote:
+> On Tue, 25 Jul 2023 04:34:02 +0200,
+> Wesley Cheng wrote:
+>>
+>> --- a/sound/usb/Kconfig
+>> +++ b/sound/usb/Kconfig
+>> @@ -165,6 +165,21 @@ config SND_BCD2000
+>>   	  To compile this driver as a module, choose M here: the module
+>>   	  will be called snd-bcd2000.
+>>   
+>> +config QC_USB_AUDIO_OFFLOAD
+>> +	tristate "Qualcomm Audio Offload driver"
+>> +	depends on QCOM_QMI_HELPERS
+>> +	select SND_PCM
+> 
+> So the driver can be enabled without CONFIG_SND_USB_AUDIO?  It makes
+> little sense without it.
+> Or is it set so intentionally for testing purpose?
+> 
 
->
-> > > @@ -6018,7 +6064,7 @@ static int usb_reset_and_verify_device(s
-> > >                 /* ep0 maxpacket size may change; let the HCD know ab=
-out it.
-> > >                  * Other endpoints will be handled by re-enumeration.=
- */
-> > >                 usb_ep0_reinit(udev);
-> > > -               ret =3D hub_port_init(parent_hub, udev, port1, i);
-> > > +               ret =3D hub_port_init(parent_hub, udev, port1, i, &de=
-scriptor);
-> > Looks like this is the only caller that passes &descriptor, and it
-> > just checks that it didn't change. Would it make sense to put the
-> > enitre descriptors_changed stanza in hub_port_init, for the re-init
-> > case?
->
-> The descriptors_changed check has to be _somewhere_, either here or
-> there.  I don't see what difference it makes whether the check is done
-> in this routine or in hub_port_init.  Since it doesn't matter, why
-> change the existing code?
-No strong feelings, but it lets us remove the variable in
-usb_reset_and_verify_device() and directly check on the malloc'd copy,
-instead of copying back up to here.
+Thanks for the review.  I'll change this to be dependent on 
+CONFIG_SND_USB_AUDIO...it shouldn't exist in the end use case w/o it.
 
-Overall, looks good to my naive eyes.
+> About the code:
+> 
+>> +/* Offloading IOMMU management */
+>> +static unsigned long uaudio_get_iova(unsigned long *curr_iova,
+>> +	size_t *curr_iova_size, struct list_head *head, size_t size)
+>> +{
+>> +	struct iova_info *info, *new_info = NULL;
+>> +	struct list_head *curr_head;
+>> +	unsigned long va = 0;
+>> +	size_t tmp_size = size;
+>> +	bool found = false;
+>> +
+>> +	if (size % PAGE_SIZE) {
+>> +		dev_err(uaudio_qdev->dev, "size %zu is not page size multiple\n",
+>> +			size);
+>> +		goto done;
+> 
+> This can be easily triggered by user-space as it's passed directly
+> from the mmap call, and it implies that you can fill up the messages
+> easily.  It's safer to make it debug message or add the rate limit.
+> 
+> Ditto for other error messages.
+> 
 
-CVE-2023-37453 was filed for this syzbot report, I'm not sure how that
-system gets tracked, but might be good to mention for folks looking
-for a fix.
+Got it, I'll make sure to address the above dev_err().
 
-Thanks,
-Khazhy
+>> +static void disable_audio_stream(struct snd_usb_substream *subs)
+>> +{
+>> +	struct snd_usb_audio *chip = subs->stream->chip;
+>> +
+>> +	if (subs->data_endpoint || subs->sync_endpoint) {
+>> +		close_endpoints(chip, subs);
+>> +
+>> +		mutex_lock(&chip->mutex);
+>> +		subs->cur_audiofmt = NULL;
+>> +		mutex_unlock(&chip->mutex);
+>> +	}
+> 
+> Now looking at this and...
+> 
+>> +static int enable_audio_stream(struct snd_usb_substream *subs,
+>> +				snd_pcm_format_t pcm_format,
+>> +				unsigned int channels, unsigned int cur_rate,
+>> +				int datainterval)
+>> +{
+> 
+> ... this implementation, I wonder whether it'd be better to modify and
+> export  snd_usb_hw_params() snd snd_usb_hw_free() to fit with qcom
+> driver.  Then you can avoid lots of open code.
+> 
 
---0000000000000b327d060156abe3
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+I think the problem is that snd_usb_hw_params assumes that we've already 
+done a PCM open on the PCM device created by USB SND.  However, with the 
+offload path, we don't reference the USB PCM device, but the one created 
+by the platform sound card.  Hence, I don't have access to the 
+snd_pcm_substream.
 
-MIIPmwYJKoZIhvcNAQcCoIIPjDCCD4gCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz1MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-2d1HymA53tUP1hUwTAYDVR0gBEUwQzBBBgkrBgEEAaAyASgwNDAyBggrBgEFBQcCARYmaHR0cHM6
-Ly93d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wDAYDVR0TAQH/BAIwADCBmgYIKwYBBQUH
-AQEEgY0wgYowPgYIKwYBBQUHMAGGMmh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2NhL2dzYXRs
-YXNyM3NtaW1lY2EyMDIwMEgGCCsGAQUFBzAChjxodHRwOi8vc2VjdXJlLmdsb2JhbHNpZ24uY29t
-L2NhY2VydC9nc2F0bGFzcjNzbWltZWNhMjAyMC5jcnQwHwYDVR0jBBgwFoAUfMwKaNei6x4schvR
-zV2Vb4378mMwRgYDVR0fBD8wPTA7oDmgN4Y1aHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMC5jcmwwDQYJKoZIhvcNAQELBQADggEBADeZduKRV5+J7StRkfoY
-hBDfCkyRbFphFmeJ+0A1fPxECLLkrXR2izyctzMAGZH2ceScAlECO1r3aEQcyx9n7/YlMc24ZF0I
-++9b72/wv6J6POICeIj6MgschmHIUz4Rw4H5IdBLo62N0jBBzv2T9ASRAl7Yryl6tHUN5X5228Tt
-3LJe5Gtb1cm22DdXBM3xnD7Kd59ls9j/tz5I+yEsLIK7zQk7hBt87a31T55CTVgMQZ4lTavG5vdz
-vEb7YC0jFAT8SmYmtSOr+4aZJRIwVjXlI04Mfr3jcbqDnzfv0VgVp5UlzQK4aApofbSsSDeXsDR+
-t30gEkeMNUvUqd6PaxYxggJqMIICZgIBATBoMFQxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9i
-YWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFzIFIzIFNNSU1FIENBIDIwMjAC
-EAGy8e6bI55p/yISlXXGSrAwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIO4sUzGu
-dX1QFnkeHRaZiOcF11wRmv5YGlIhqywBIcHpMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJ
-KoZIhvcNAQkFMQ8XDTIzMDcyNTIxNDY0OFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASow
-CwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZI
-hvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQB72r8M7oHnFPwuoWSjTwV+4VMj
-XOq4WYWPVp+lZs0FwaN7unk0978nl5LUemkOkdJ/GdAzE1RK8MQoSPbKLeR74X+ObDRq+uML4FHk
-4AnbaFZPqIp62ngEWy0S5TjvrN5HJIlpMUSrHn+/2akmxxkATi2+t2Dn6TfhnJ1GpjQW53AUlBJp
-yKZFZ9UyhdfwkrCWxX1dtvjRTnaegp/xHAO0HU0OUC8F088wccxx1azWXECbz03XBkIHYqpjFp1z
-bH29dNAJAFWT9LuMFIGcDqLpQsV/Uy2W0xssOqVOb7X3GWSjM1jE8fJM0eq5tItdbpD8AJfoO6AE
-UKVF7Qk7ED3h
---0000000000000b327d060156abe3--
+I attempted to derive snd_pcm_substream from snd_usb_substream, but 
+since PCM open isn't run, it doesn't provide a valid structure.
+
+What do you think about adding a wrapper to snd_usb_hw_params?  Have a 
+version that will take in snd_usb_substream, and another that is 
+registered to hw_params().
+
+> In general, if you see a direct use of chip->mutex, it can be often
+> done better in a different form.  The use of an internal lock or such
+> from an external driver is always fragile and error-prone.
+> 
+> Also, the current open-code misses the potential race against the
+> disconnection during the operation.  In snd-usb-audio, it protects
+> with snd_usb_lock_shutdown() and snd_usb_unlock_shutdown() pairs.
+> 
+
+I agree...I think then the best approach would be something like the 
+above, ie:
+
+int snd_usb_hw_params(struct snd_pcm_substream *substream,
+			     struct snd_pcm_hw_params *hw_params)
+{
+	struct snd_usb_substream *subs = substream->runtime->private_data;
+
+	snd_usb_ep_attach(subs, hw_params);
+...
+
+int snd_usb_ep_attach(...)
+{
+	//implementation of current code in snd_usb_hw_params()
+}
+EXPORT_SYMBOL(snd_usb_ep_attach);
+
+>> +static int __init qc_usb_audio_offload_init(void)
+>> +{
+>> +	struct uaudio_qmi_svc *svc;
+>> +	int ret;
+>> +
+>> +	ret = snd_usb_register_platform_ops(&offload_ops);
+>> +	if (ret < 0)
+>> +		return ret;
+> 
+> Registering the ops at the very first opens a potential access to the
+> uninitialized stuff.  Imagine a suspend happens right after this
+> point.  As the ops is already registered, it'll enter to the
+> suspend_cb callback and straight to Oops.
+> 
+>> +static void __exit qc_usb_audio_offload_exit(void)
+>> +{
+>> +	struct uaudio_qmi_svc *svc = uaudio_svc;
+>> +
+>> +	qmi_handle_release(svc->uaudio_svc_hdl);
+>> +	flush_workqueue(svc->uaudio_wq);
+>> +	destroy_workqueue(svc->uaudio_wq);
+>> +	kfree(svc);
+>> +	uaudio_svc = NULL;
+>> +	snd_usb_unregister_platform_ops();
+> 
+> Similarly, the unregister order has to be careful, too.
+> 
+
+Let me re-organize it a bit more.
+
+Thanks
+Wesley Cheng
