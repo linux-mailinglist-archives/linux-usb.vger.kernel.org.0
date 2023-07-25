@@ -2,57 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38F5A761D07
-	for <lists+linux-usb@lfdr.de>; Tue, 25 Jul 2023 17:12:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2624F761D6E
+	for <lists+linux-usb@lfdr.de>; Tue, 25 Jul 2023 17:34:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232545AbjGYPMH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 Jul 2023 11:12:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42030 "EHLO
+        id S232160AbjGYPeO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 Jul 2023 11:34:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230376AbjGYPMG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jul 2023 11:12:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A24D1BD8;
-        Tue, 25 Jul 2023 08:12:04 -0700 (PDT)
+        with ESMTP id S231829AbjGYPeM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 Jul 2023 11:34:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7353C1FFD;
+        Tue, 25 Jul 2023 08:34:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 09A5861796;
-        Tue, 25 Jul 2023 15:12:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 190B3C433C8;
-        Tue, 25 Jul 2023 15:12:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E66DA617AC;
+        Tue, 25 Jul 2023 15:34:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2B9AC433C8;
+        Tue, 25 Jul 2023 15:34:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1690297923;
-        bh=8THp3K8VuswJyA6ZQXnYnjyJbhS9jvJpXnNYRT9oTbY=;
+        s=korg; t=1690299246;
+        bh=rpH154zrASptkkUj6Sk6ZcbARrBcY532COfB6r+zRUg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=2kT7TXzWg5z4DsF7ST/eGZz62RXegu3XcV33Ukca4bw/tzemlkmbWOpjHfRnKfHry
-         oUmqfPBF2pZdibId+QxwSoVpWcN35WI/0szz66+xFMsS9VDRd3zjdmvplOR7Vsls5z
-         MtbVij7rryRX4PV1vtlQT2y1VzCF164N+fD0KrOY=
-Date:   Tue, 25 Jul 2023 17:12:01 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Dingyan Li <18500469033@163.com>
-Cc:     Oliver Neukum <oneukum@suse.com>, stern@rowland.harvard.edu,
-        sebastian.reichel@collabora.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: Re: [PATCH] USB: add usbfs ioctl to get specific superspeedplus
- rates
-Message-ID: <2023072526-reissue-uplifting-5674@gregkh>
-References: <20230721084039.9728-1-18500469033@163.com>
- <2023072105-lethargic-saddling-ad97@gregkh>
- <130b453c.5c8f.1897872ce54.Coremail.18500469033@163.com>
- <2023072159-carol-underfeed-43eb@gregkh>
- <781b3f95-96e7-af83-e089-887ec7f2d255@suse.com>
- <2023072546-denture-half-5ceb@gregkh>
- <4edabcb3.7e65.1898d54679e.Coremail.18500469033@163.com>
- <ca4ad735-5605-3fd4-c903-fe5b039cf6a8@suse.com>
- <3018cd33.7ee4.1898d7e4798.Coremail.18500469033@163.com>
+        b=gqTJqQ1+tcHDfGRxPck404mYwMV+VwMly8u0XP5LXA6Ydfs3ZhCwWa3fxPNL96Kw9
+         VyfvEx+sRsZmGKW+vtU8A/9FQ2p3ueTRUc+ALZHgk1aM6NUA7+4o3q9zfEAjm2qn0q
+         z//Vj8/tWd1Fmy/X91HjdSUa3Q0ihyYdUsHhDlBc=
+Date:   Tue, 25 Jul 2023 17:34:03 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Prashanth K <quic_prashk@quicinc.com>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: usb: common: usb-conn-gpio: Prevent bailing out if initial role
+ is none
+Message-ID: <2023072517-revocable-squiggly-de1c@gregkh>
+References: <1688638258-23806-1-git-send-email-quic_prashk@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3018cd33.7ee4.1898d7e4798.Coremail.18500469033@163.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <1688638258-23806-1-git-send-email-quic_prashk@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,34 +55,59 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 25, 2023 at 10:40:10PM +0800, Dingyan Li wrote:
+On Thu, Jul 06, 2023 at 03:40:58PM +0530, Prashanth K wrote:
+> Currently if we bootup a device without cable connected, then
+> usb-conn-gpio won't call set_role() since last_role is same as
+> current role. This happens because during probe last_role gets
+> initialised to zero.
 > 
-> At 2023-07-25 22:08:44, "Oliver Neukum" <oneukum@suse.com> wrote:
-> >On 25.07.23 15:54, Dingyan Li wrote:
-> >
-> >> If we can't "deprecate" ioctls, can we change the returned contents of existing ones?
-> >
-> >No. Absolutely not. That is totally unacceptable. It would be much
-> >worse than just removing the support.
-> >
-> >	Regards
-> >		Oliver
+> To avoid this, add a new flag initial_det in usb_conn_info,
+> which is used to prevent bailing out during init detection.
 > 
-> Got it, I guess this is for backward-compatibility.
+> Fixes: 4602f3bff266 ("usb: common: add USB GPIO based connection detection driver")
+> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+> ---
+>  drivers/usb/common/usb-conn-gpio.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
 > 
-> I also have another thought. USBDEVFS_CONNINFO_EX is kind of special and
-> used to retrieve contents of variable length. If you check proc_conninfo_ex(),
-> I think maybe we can append a new member to "struct usbdevfs_conninfo_ex"
-> without breaking backward-compatibility.
+> diff --git a/drivers/usb/common/usb-conn-gpio.c b/drivers/usb/common/usb-conn-gpio.c
+> index 766005d..46290ff 100644
+> --- a/drivers/usb/common/usb-conn-gpio.c
+> +++ b/drivers/usb/common/usb-conn-gpio.c
+> @@ -42,6 +42,7 @@ struct usb_conn_info {
+>  
+>  	struct power_supply_desc desc;
+>  	struct power_supply *charger;
+> +	bool initial_det;
 
-How exactly would that work?  Remember, new kernels still need to work
-with old userspace code.
+What does "initial_det" mean?  Please document this better.
 
-> By this way, we can avoid adding a new ioctl. Or even more aggressively,
-> drop USBDEVFS_GET_SPEED and force everyone to use USBDEVFS_CONNINFO_EX
-> since it can also return device speed.
+>  };
+>  
+>  /*
+> @@ -86,11 +87,13 @@ static void usb_conn_detect_cable(struct work_struct *work)
+>  	dev_dbg(info->dev, "role %s -> %s, gpios: id %d, vbus %d\n",
+>  		usb_role_string(info->last_role), usb_role_string(role), id, vbus);
+>  
+> -	if (info->last_role == role) {
+> +	if (!info->initial_det && info->last_role == role) {
+>  		dev_warn(info->dev, "repeated role: %s\n", usb_role_string(role));
+>  		return;
+>  	}
+>  
+> +	info->initial_det = false;
+> +
+>  	if (info->last_role == USB_ROLE_HOST && info->vbus)
+>  		regulator_disable(info->vbus);
+>  
+> @@ -258,6 +261,7 @@ static int usb_conn_probe(struct platform_device *pdev)
+>  	device_set_wakeup_capable(&pdev->dev, true);
+>  
+>  	/* Perform initial detection */
+> +	info->initial_det = true;
 
-We can not "force" anyone to change, that's not how the kernel works,
-sorry.
+What is protecting this from changing right after you test for it?
+
+thanks,
 
 greg k-h
