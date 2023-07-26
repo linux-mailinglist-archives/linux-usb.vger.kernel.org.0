@@ -2,81 +2,173 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9739976391C
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Jul 2023 16:29:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5948C763939
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Jul 2023 16:34:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233881AbjGZO3d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Jul 2023 10:29:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52978 "EHLO
+        id S232004AbjGZOeX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Jul 2023 10:34:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233628AbjGZO3a (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Jul 2023 10:29:30 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 6490B1BF2
-        for <linux-usb@vger.kernel.org>; Wed, 26 Jul 2023 07:29:29 -0700 (PDT)
-Received: (qmail 1924383 invoked by uid 1000); 26 Jul 2023 10:29:28 -0400
-Date:   Wed, 26 Jul 2023 10:29:28 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 03/30] usb: ohci-at91: Use
- devm_platform_get_and_ioremap_resource()
-Message-ID: <bdb58dfb-9423-4949-9b2a-e979bfebb2f4@rowland.harvard.edu>
-References: <20230726113816.888-1-frank.li@vivo.com>
- <20230726113816.888-3-frank.li@vivo.com>
- <2ab38659-a25b-43a8-934a-5d44533a51c2@rowland.harvard.edu>
+        with ESMTP id S231929AbjGZOeV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Jul 2023 10:34:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55650CE
+        for <linux-usb@vger.kernel.org>; Wed, 26 Jul 2023 07:33:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1690382011;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2wDJZYchIVkh7r/YkUh+Rl0n+teRoHYZgfwVCEQ3SPM=;
+        b=YjbGRxC9si92zevQYcfgaSW5e3xrskg97qCpo6TzO8H6juFCBY7prx1LsjKR+jmNwmY4XC
+        B0Ry7ZZSNMiFVTsKz2QIUOnftSM8c7yTPHzAWPQjwHUlLksZcUqxTisLjYDYzlJy6Vy/V9
+        IswMuFuUVv5AW4I+70FCHnIS8ibLXtA=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-141-fGqHm0t3PJWYldCWmxj4iw-1; Wed, 26 Jul 2023 10:33:30 -0400
+X-MC-Unique: fGqHm0t3PJWYldCWmxj4iw-1
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-9932e8e76b9so552671466b.3
+        for <linux-usb@vger.kernel.org>; Wed, 26 Jul 2023 07:33:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690382009; x=1690986809;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2wDJZYchIVkh7r/YkUh+Rl0n+teRoHYZgfwVCEQ3SPM=;
+        b=UcRjem01z8uAJ+iyYwJCMFiWuRt01hEpvir7d3LVwHMmTE9X8ARVkeEEpiWDp02Srd
+         tYd5jIB+7osl95Lqqbjgii8ARao3mtZpGZxTT4X+RgnExpGa5MDYnQ48XQ6TaKz0e+Vg
+         FkBZPiXAktsNDi/60LwCRLOwIWOTjohxX/27yIDpuevAdDdtnmdd0+0l5cEqWHCm4fEz
+         4ER73OzCXd+S5QJP7wmF8xWA14xbmhLAYynPW03pPvcCNGiQNBVu/KZsUtTqB82vs0Eb
+         ZDushuX7jCGnqbJ8RUS27G1yDJhdNSwtpJqGCN0fIiUOpIz27DcRSBg7qhj0MQIyLZp7
+         7AoA==
+X-Gm-Message-State: ABy/qLZTCm2LazsDAfBLn4+7oT2COFECg7xB0VsIe12tHyucXtVhqCVy
+        TXlC116Y23ctHABU7bful5aRHHvAuaxhyXWfFm8e4FubKU6AXjYZ1NsvrbVv4UAY6UQPiEC4VjW
+        iJ2TANxiM7rWXIlXYEvqa
+X-Received: by 2002:a17:907:b1a:b0:96f:d780:5734 with SMTP id h26-20020a1709070b1a00b0096fd7805734mr1771759ejl.65.1690382008867;
+        Wed, 26 Jul 2023 07:33:28 -0700 (PDT)
+X-Google-Smtp-Source: APBJJlHQ7Jl1vFcoJO5H3B3T2jHjkZsTJJQ9AZIMD7NmPJVqhhhgbo++OMGJO7db6cml3nWvZ4siLQ==
+X-Received: by 2002:a17:907:b1a:b0:96f:d780:5734 with SMTP id h26-20020a1709070b1a00b0096fd7805734mr1771748ejl.65.1690382008528;
+        Wed, 26 Jul 2023 07:33:28 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id o19-20020a17090608d300b0098d2f703408sm9648295eje.118.2023.07.26.07.33.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Jul 2023 07:33:28 -0700 (PDT)
+Message-ID: <5fdc06b2-22bc-1470-e60c-1e388774ee4b@redhat.com>
+Date:   Wed, 26 Jul 2023 16:33:27 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2ab38659-a25b-43a8-934a-5d44533a51c2@rowland.harvard.edu>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] usb: dwc3: pci: skip BYT GPIO lookup table for hardwired
+ phy
+Content-Language: en-US, nl
+To:     Gratian Crisan <gratian.crisan@ni.com>, Thinh.Nguyen@synopsys.com,
+        gregkh@linuxfoundation.org, felipe.balbi@linux.intel.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gratian@gmail.com
+References: <20230717170552.466914-1-gratian.crisan@ni.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230717170552.466914-1-gratian.crisan@ni.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 26, 2023 at 10:27:43AM -0400, Alan Stern wrote:
-> On Wed, Jul 26, 2023 at 07:37:49PM +0800, Yangtao Li wrote:
-> > Convert platform_get_resource(), devm_ioremap_resource() to a single
-> > call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> > what this function does.
-> > 
-> > Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> > ---
-> >  drivers/usb/host/ohci-at91.c | 3 +--
-> >  1 file changed, 1 insertion(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/usb/host/ohci-at91.c b/drivers/usb/host/ohci-at91.c
-> > index b9ce8d80f20b..f957d008f360 100644
-> > --- a/drivers/usb/host/ohci-at91.c
-> > +++ b/drivers/usb/host/ohci-at91.c
-> > @@ -200,8 +200,7 @@ static int usb_hcd_at91_probe(const struct hc_driver *driver,
-> >  		return -ENOMEM;
-> >  	ohci_at91 = hcd_to_ohci_at91_priv(hcd);
-> >  
-> > -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> > -	hcd->regs = devm_ioremap_resource(dev, res);
-> > +	hcd->regs = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
-> >  	if (IS_ERR(hcd->regs)) {
-> >  		retval = PTR_ERR(hcd->regs);
-> >  		goto err;
+Hi,
+
+On 7/17/23 19:05, Gratian Crisan wrote:
+> Hardware based on the Bay Trail / BYT SoCs require an external ULPI phy for
+> USB device-mode. The phy chip usually has its 'reset' and 'chip select'
+> lines connected to GPIOs described by ACPI fwnodes in the DSDT table.
 > 
-> Did you try to test-compile this change (and all the similar ones in 
-> this series)?  If you did, you would have gotten a warning about res 
-> being used without being initialized.
+> Because of hardware with missing ACPI resources for the 'reset' and 'chip
+> select' GPIOs commit 5741022cbdf3 ("usb: dwc3: pci: Add GPIO lookup table
+> on platforms without ACPI GPIO resources") introduced a fallback
+> gpiod_lookup_table with hard-coded mappings for Bay Trail devices.
+> 
+> However there are existing Bay Trail based devices, like the National
+> Instruments cRIO-903x series, where the phy chip has its 'reset' and
+> 'chip-select' lines always asserted in hardware via resistor pull-ups. On
+> this hardware the phy chip is always enabled and the ACPI dsdt table is
+> missing information not only for the 'chip-select' and 'reset' lines but
+> also for the BYT GPIO controller itself "INT33FC".
+> 
+> With the introduction of the gpiod_lookup_table initializing the USB
+> device-mode on these hardware now errors out. The error comes from the
+> gpiod_get_optional() calls in dwc3_pci_quirks() which will now return an
+> -ENOENT error due to the missing ACPI entry for the INT33FC gpio controller
+> used in the aforementioned table.
+> 
+> This hardware used to work before because gpiod_get_optional() will return
+> NULL instead of -ENOENT if no GPIO has been assigned to the requested
+> function. The dwc3_pci_quirks() code for setting the 'cs' and 'reset' GPIOs
+> was then skipped (due to the NULL return). This is the correct behavior in
+> cases where the phy chip is hardwired and there are no GPIOs to control.
+> 
+> Since the gpiod_lookup_table relies on the presence of INT33FC fwnode
+> in ACPI tables only add the table if we know the entry for the INT33FC
+> gpio controller is present. Additionally check the 'cs' gpio handle is
+> not NULL before using it (like we do for the 'reset' line). This
+> allows Bay Trail based devices with hardwired dwc3 ULPI phys to
+> continue working.
+> 
+> Fixes: 5741022cbdf3 ("usb: dwc3: pci: Add GPIO lookup table on platforms without ACPI GPIO resources")
+> Signed-off-by: Gratian Crisan <gratian.crisan@ni.com>
+> ---
+>  drivers/usb/dwc3/dwc3-pci.c | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
+> index 44a04c9b2073..780984b07437 100644
+> --- a/drivers/usb/dwc3/dwc3-pci.c
+> +++ b/drivers/usb/dwc3/dwc3-pci.c
+> @@ -233,10 +233,12 @@ static int dwc3_pci_quirks(struct dwc3_pci *dwc,
+>  
+>  			/*
+>  			 * A lot of BYT devices lack ACPI resource entries for
+> -			 * the GPIOs, add a fallback mapping to the reference
+> +			 * the GPIOs. If the ACPI entry for the GPIO controller
+> +			 * is present add a fallback mapping to the reference
+>  			 * design GPIOs which all boards seem to use.
+>  			 */
+> -			gpiod_add_lookup_table(&platform_bytcr_gpios);
+> +			if (acpi_dev_present("INT33FC", NULL, -1))
+> +				gpiod_add_lookup_table(&platform_bytcr_gpios);
+>  
+>  			/*
+>  			 * These GPIOs will turn on the USB2 PHY. Note that we have to
 
-Oops!  My apologies, I didn't read the code closely enough.  Sorry.
+Thanks this change looks good to me.
 
-For all the ehci, ohci, and uhci changes in this series:
+> @@ -247,8 +249,10 @@ static int dwc3_pci_quirks(struct dwc3_pci *dwc,
+>  			if (IS_ERR(gpio))
+>  				return PTR_ERR(gpio);
+>  
+> -			gpiod_set_value_cansleep(gpio, 1);
+> -			gpiod_put(gpio);
+> +			if (gpio) {
+> +				gpiod_set_value_cansleep(gpio, 1);
+> +				gpiod_put(gpio);
+> +			}
+>  
+>  			gpio = gpiod_get_optional(&pdev->dev, "reset", GPIOD_OUT_LOW);
+>  			if (IS_ERR(gpio))
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+But this is not necessary both gpiod_set_value_cansleep() and gpiod_put() handle being called with NULL gracefully (so they handle NULL returned by gpiod_get_optional() without issues) .
 
-Alan Stern
+Can you please post a version 2 of this patch dropping this unnecessary change?
+
+Regards,
+
+Hans
+
+
