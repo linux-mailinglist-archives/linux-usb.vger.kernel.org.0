@@ -2,122 +2,145 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8216B7635F0
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Jul 2023 14:13:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CB2176365C
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Jul 2023 14:32:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233755AbjGZMNK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Jul 2023 08:13:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59128 "EHLO
+        id S232670AbjGZMcI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Jul 2023 08:32:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233804AbjGZMNA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Jul 2023 08:13:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3B0D1739;
-        Wed, 26 Jul 2023 05:12:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        with ESMTP id S232553AbjGZMcH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Jul 2023 08:32:07 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47117E61;
+        Wed, 26 Jul 2023 05:32:00 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CC1A61ACC;
-        Wed, 26 Jul 2023 12:12:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73356C433C8;
-        Wed, 26 Jul 2023 12:12:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690373578;
-        bh=Ke8AONnAOWupVgvu9a1rrtccA5xWjVMePJQxM8Ht3Kc=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=gYrqFr8wvj2MJmmwmwf8M6I8rekTV9+bxmW2rqLD55Qm7Z/X+3fqo2oPfopkxdlCi
-         n241AQBCMxM7eFrih3i3Sbv5AKj0bq28ozziIAExFd7E/RXMMNS1aKn+yJARtnBmU4
-         FfN14X79faCpLGre6x+vnvwoxjIsG/L/ooLw+V13rcjVx7tIPmq/1O2zG9aawBpzTf
-         uhcvPI4MEqZ0fNFaHRBAISQWggi8tN88wV4MzFoUqwVN0pOsQ3BgyiTak4/MrtL+0t
-         6GpQd+/9rUTZVGi45edSMIe9j4qSBoulHPW7gK71wysfs2CSJoMHtELswVidt7IBP2
-         x+DypAIC/tqTg==
-Received: (nullmailer pid 1182938 invoked by uid 1000);
-        Wed, 26 Jul 2023 12:12:54 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Gatien Chevallier <gatien.chevallier@foss.st.com>
-Cc:     linux-mmc@vger.kernel.org, gregkh@linuxfoundation.org,
-        lee@kernel.org, catalin.marinas@arm.com, jic23@kernel.org,
-        hugues.fruchet@foss.st.com, richardcochran@gmail.com,
-        will@kernel.org, arnd@kernel.org, davem@davemloft.net,
-        Oleksii Moisieiev <oleksii_moisieiev@epam.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Oleksii_Moisieiev@epam.com, linux-phy@lists.infradead.org,
-        linux-crypto@vger.kernel.org, kuba@kernel.org,
-        linux-spi@vger.kernel.org, linux-usb@vger.kernel.org,
-        vkoul@kernel.org, linux-arm-kernel@lists.infradead.org,
-        edumazet@google.com, devicetree@vger.kernel.org,
-        linux-iio@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        herbert@gondor.apana.org.au, linux-i2c@vger.kernel.org,
-        alexandre.torgue@foss.st.com, mchehab@kernel.org,
-        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
-        ulf.hansson@linaro.org, netdev@vger.kernel.org,
-        andi.shyti@kernel.org, olivier.moysan@foss.st.com,
-        linux-serial@vger.kernel.org, pabeni@redhat.com,
-        arnaud.pouliquen@foss.st.com, dmaengine@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-media@vger.kernel.org,
-        conor+dt@kernel.org, fabrice.gasnier@foss.st.com
-In-Reply-To: <20230726083810.232100-2-gatien.chevallier@foss.st.com>
-References: <20230726083810.232100-1-gatien.chevallier@foss.st.com>
- <20230726083810.232100-2-gatien.chevallier@foss.st.com>
-Message-Id: <169037357425.1182922.8121576517266921442.robh@kernel.org>
-Subject: Re: [IGNORE][PATCH v3 01/11] dt-bindings: Document common device
- controller bindings
-Date:   Wed, 26 Jul 2023 06:12:54 -0600
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        by smtp-out1.suse.de (Postfix) with ESMTPS id D7A2021CB9;
+        Wed, 26 Jul 2023 12:31:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1690374718; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rQRJ4YwQA/6O0WXa/1Z5ActdMgPE2S7rN2kN4ZsnP5s=;
+        b=sBohaG/6wQ0MNG9epgDlnJLCBjqa7F+dl7OQQwWTyzLvPMjFK9Za3zLY+0QNKFAGk8v4CU
+        Q3BcKt+i+WNHpAgpsFU40HGoPIB8YUVDcdem+zT+KpIFphRtfOo6KbVm90W2/fWtjl3bWn
+        H393pY7OIvuzH1hTOOJ+d+yz7fwj4bQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1690374718;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rQRJ4YwQA/6O0WXa/1Z5ActdMgPE2S7rN2kN4ZsnP5s=;
+        b=6NQCnDnvw0PBrRBwW12lm/uW8aVoTQyAKwUdfFpg4zDta1dnUnd3kuke3mhlpepVyJLKsG
+        BJFwhGeXeoBjnkBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 91720139BD;
+        Wed, 26 Jul 2023 12:31:58 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id x/X4Ij4SwWQdSAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 26 Jul 2023 12:31:58 +0000
+Date:   Wed, 26 Jul 2023 14:31:58 +0200
+Message-ID: <87msziyhtt.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Wesley Cheng <quic_wcheng@quicinc.com>
+Cc:     <agross@kernel.org>, <andersson@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>,
+        <lgirdwood@gmail.com>, <broonie@kernel.org>, <perex@perex.cz>,
+        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
+        <bgoswami@quicinc.com>, <Thinh.Nguyen@synopsys.com>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-usb@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <quic_jackp@quicinc.com>, <pierre-louis.bossart@linux.intel.com>,
+        <oneukum@suse.com>, <albertccwang@google.com>,
+        <o-takashi@sakamocchi.jp>
+Subject: Re: [PATCH v4 18/32] sound: usb: Introduce QC USB SND offloading support
+In-Reply-To: <243ee81d-d46d-e05a-1fcd-35e6301a39cd@quicinc.com>
+References: <20230725023416.11205-1-quic_wcheng@quicinc.com>
+        <20230725023416.11205-19-quic_wcheng@quicinc.com>
+        <87bkg0v4ce.wl-tiwai@suse.de>
+        <243ee81d-d46d-e05a-1fcd-35e6301a39cd@quicinc.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-On Wed, 26 Jul 2023 10:38:00 +0200, Gatien Chevallier wrote:
-> From: Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
+On Wed, 26 Jul 2023 00:59:57 +0200,
+Wesley Cheng wrote:
 > 
-> Introducing of the common device controller bindings for the controller
-> provider and consumer devices. Those bindings are intended to allow
-> divided system on chip into muliple domains, that can be used to
-> configure hardware permissions.
+> >> +static int enable_audio_stream(struct snd_usb_substream *subs,
+> >> +				snd_pcm_format_t pcm_format,
+> >> +				unsigned int channels, unsigned int cur_rate,
+> >> +				int datainterval)
+> >> +{
+> > 
+> > ... this implementation, I wonder whether it'd be better to modify and
+> > export  snd_usb_hw_params() snd snd_usb_hw_free() to fit with qcom
+> > driver.  Then you can avoid lots of open code.
+> > 
 > 
-> Signed-off-by: Oleksii Moisieiev <oleksii_moisieiev@epam.com>
-> ---
->  .../feature-domain-controller.yaml            | 84 +++++++++++++++++++
->  1 file changed, 84 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/feature-controllers/feature-domain-controller.yaml
+> I think the problem is that snd_usb_hw_params assumes that we've
+> already done a PCM open on the PCM device created by USB SND.
+> However, with the offload path, we don't reference the USB PCM device,
+> but the one created by the platform sound card.  Hence, I don't have
+> access to the snd_pcm_substream.
 > 
+> I attempted to derive snd_pcm_substream from snd_usb_substream, but
+> since PCM open isn't run, it doesn't provide a valid structure.
+> 
+> What do you think about adding a wrapper to snd_usb_hw_params?  Have a
+> version that will take in snd_usb_substream, and another that is
+> registered to hw_params().
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Yes, that's what I had in mind, too.
 
-yamllint warnings/errors:
+> > In general, if you see a direct use of chip->mutex, it can be often
+> > done better in a different form.  The use of an internal lock or such
+> > from an external driver is always fragile and error-prone.
+> > 
+> > Also, the current open-code misses the potential race against the
+> > disconnection during the operation.  In snd-usb-audio, it protects
+> > with snd_usb_lock_shutdown() and snd_usb_unlock_shutdown() pairs.
+> > 
+> 
+> I agree...I think then the best approach would be something like the
+> above, ie:
+> 
+> int snd_usb_hw_params(struct snd_pcm_substream *substream,
+> 			     struct snd_pcm_hw_params *hw_params)
+> {
+> 	struct snd_usb_substream *subs = substream->runtime->private_data;
+> 
+> 	snd_usb_ep_attach(subs, hw_params);
+> ...
+> 
+> int snd_usb_ep_attach(...)
+> {
+> 	//implementation of current code in snd_usb_hw_params()
+> }
+> EXPORT_SYMBOL(snd_usb_ep_attach);
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/feature-controllers/feature-domain-controller.yaml: title: 'Generic Domain Controller bindings' should not be valid under {'pattern': '([Bb]inding| [Ss]chema)'}
-	hint: Everything is a binding/schema, no need to say it. Describe what hardware the binding is for.
-	from schema $id: http://devicetree.org/meta-schemas/core.yaml#
+Yes, exactly something like that ;)
 
-doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230726083810.232100-2-gatien.chevallier@foss.st.com
+thanks,
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+Takashi
