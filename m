@@ -2,56 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E51C8763C7E
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Jul 2023 18:29:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59864763D15
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Jul 2023 18:59:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230138AbjGZQ3S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Jul 2023 12:29:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49748 "EHLO
+        id S229803AbjGZQ7c (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Jul 2023 12:59:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjGZQ3S (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Jul 2023 12:29:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1387C26A1;
-        Wed, 26 Jul 2023 09:29:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E98C61BC2;
-        Wed, 26 Jul 2023 16:29:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65A4EC433C8;
-        Wed, 26 Jul 2023 16:29:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690388956;
-        bh=ZVCmTrjZgRuUMiAs+8tqCzy75T2DMxHWuEZMbl9wyKk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=I/HrksIQv40llE0OQU3gtKSFhQLDbu7BrCI2PAToDpozpfEOPCzZMvTJnaWOqJPnJ
-         2EisLEhLYlcNvl3Haewa3FNsXapoNVnXUaIdhHO3Lb17hd1sFzcPww5br0zE0lkEPx
-         T1G4kwxvGvGsn2eX8YSN8ZKdtceuInUKg6J4QDJDw9m04adWTtR/o/B5bEFVorE8ST
-         46N7UznvCB5z1cyvUiPruVHfSNo7iJv6CigiIgt1vVYHFvPqgeLO02f83H9hN3xfqN
-         XuRnwhR4gwB/vL8rPrzq+NJLLkx0fURwharxwBUoM8Jt2HQGsnlD8Dyu7X7VayEydW
-         fA2W42v313E1A==
-Received: (nullmailer pid 1549550 invoked by uid 1000);
-        Wed, 26 Jul 2023 16:29:14 -0000
-Date:   Wed, 26 Jul 2023 10:29:14 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     adrian.ho.yin.ng@intel.com
-Cc:     gregkh@linuxfoundation.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, Thinh.Nguyen@synopsys.com,
-        p.zabel@pengutronix.de
-Subject: Re: [PATCH v2 1/2] dt-bindings: usb: Add Intel SoCFPGA USB controller
-Message-ID: <20230726162914.GA1542946-robh@kernel.org>
-References: <cover.1690179693.git.adrian.ho.yin.ng@intel.com>
- <0d12c7a196d6ad81cfc69b281dd1c4cca623d9bd.1690179693.git.adrian.ho.yin.ng@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0d12c7a196d6ad81cfc69b281dd1c4cca623d9bd.1690179693.git.adrian.ho.yin.ng@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        with ESMTP id S230130AbjGZQ73 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Jul 2023 12:59:29 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B4FC26A4
+        for <linux-usb@vger.kernel.org>; Wed, 26 Jul 2023 09:59:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690390768; x=1721926768;
+  h=date:from:to:cc:subject:message-id;
+  bh=DfcmCoyTOCbUiZhNuUypGThwspQSJyHbz0n0HO/178Q=;
+  b=Tmhrh4m9Sw//WYDQbTagEyblv46AUvFhP5xC0hBrR71TbVgA4gYpEUbo
+   w7FFSFqaPARb/s2xytvxJExWEdvoLpm8tUo2jZ0iFXJwsOmulBIRcRn0p
+   +3fmuO/e9HsvfyKR/w2aNo1+k2chjHTjAwliKmsjipBMlovoSgqYXusYa
+   ueGUDgFF0UuIrbJoW8wo5u0r03M5iTTuJJFGzRl7l42VAPHm8narFyGGw
+   FnK58G8exkFfIz+yCZJj2yZgGQOwWyOPNbsX3ikW9xMw/PPA96d71HjSz
+   Qs3NKD7jAGpesqaLYR/X9800qUtCdVGuziRvGBrlyeoXSlMm/cV2CDWvi
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="431874443"
+X-IronPort-AV: E=Sophos;i="6.01,232,1684825200"; 
+   d="scan'208";a="431874443"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jul 2023 09:59:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10783"; a="1057304162"
+X-IronPort-AV: E=Sophos;i="6.01,232,1684825200"; 
+   d="scan'208";a="1057304162"
+Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 26 Jul 2023 09:59:17 -0700
+Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qOhpH-00017v-2h;
+        Wed, 26 Jul 2023 16:57:51 +0000
+Date:   Thu, 27 Jul 2023 00:56:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ a85ff0db48c372063988f2072a07bd361ce9c4ef
+Message-ID: <202307270029.KlZEJ2Fo-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,124 +59,191 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 24, 2023 at 02:36:58PM +0800, adrian.ho.yin.ng@intel.com wrote:
-> From: Adrian Ng Ho Yin <adrian.ho.yin.ng@intel.com>
-> 
-> Existing binding intel,keembay-dwc3.yaml does not have the required
-> properties for Intel SoCFPGA devices.
-> Introduce new binding description for Intel SoCFPGA USB controller
-> which will be used for current and future SoCFPGA devices.
-> 
-> Signed-off-by: Adrian Ng Ho Yin <adrian.ho.yin.ng@intel.com>
-> ---
->  .../bindings/usb/intel,socfpga-dwc3.yaml      | 84 +++++++++++++++++++
->  1 file changed, 84 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/intel,socfpga-dwc3.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/intel,socfpga-dwc3.yaml b/Documentation/devicetree/bindings/usb/intel,socfpga-dwc3.yaml
-> new file mode 100644
-> index 000000000000..e36b087c2651
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/intel,socfpga-dwc3.yaml
-> @@ -0,0 +1,84 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/intel,socfpga-dwc3.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Intel SoCFPGA DWC3 USB controller
-> +
-> +maintainers:
-> +  - Adrian Ng Ho Yin <adrian.ho.yin.ng@intel.com>
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - intel,agilex5-dwc3
-> +      - const: intel,socfpga-dwc3
-> +
-> +  reg:
-> +    description: Offset and length of DWC3 controller register
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    items:
-> +      - description: Controller Master/Core clock
-> +      - description: Controller Suspend clock
-> +
-> +  ranges: true
-> +
-> +  resets:
-> +    description: A list of phandles for resets listed in reset-names
-> +    maxItems: 2
-> +
-> +  reset-names:
-> +    items:
-> +      - const: dwc3
-> +      - const: dwc3-ecc
-> +
-> +  '#address-cells':
-> +    enum: [ 1, 2 ]
-> +
-> +  '#size-cells':
-> +    enum: [ 1, 2 ]
-> +
-> +# Required child node:
-> +
-> +patternProperties:
-> +  "^usb@[0-9a-f]+$":
-> +    $ref: snps,dwc3.yaml#
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: a85ff0db48c372063988f2072a07bd361ce9c4ef  usb: gadget: midi2: More flexible MIDI 1.0 configuration
 
-One node, no wrapper node and dwc3 child node please unless you have 
-actual registers for the wrapper. Based on the example having the same 
-register addresses in both nodes, you don't need the wrapper.
+elapsed time: 727m
 
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - resets
-> +  - ranges
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/reset/altr,rst-mgr.h>
-> +
-> +    usb@11000000 {
-> +          compatible = "intel,agilex5-dwc3", "intel,socfpga-dwc3";
-> +          reg = <0x11000000 0x100000>;
+configs tested: 172
+configs skipped: 13
 
-You really have 1MB worth of registers? That chews up 1MB of 
-kernel virtual space. Not a big deal for 64-bit, but it is a problem on 
-32-bit systems. Define the length to just what you need.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> +          ranges;
-> +          clocks = <&clkmgr 54>,
-> +                   <&clkmgr 55>;
-> +          resets = <&rst USB0_RESET>, <&rst USB1_RESET>;
-> +          reset-names = "dwc3", "dwc3-ecc";
-> +          #address-cells = <1>;
-> +          #size-cells = <1>;
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r024-20230726   gcc  
+alpha                randconfig-r031-20230726   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                        nsim_700_defconfig   gcc  
+arc                  randconfig-r006-20230726   gcc  
+arc                  randconfig-r024-20230726   gcc  
+arc                  randconfig-r035-20230726   gcc  
+arc                  randconfig-r043-20230726   gcc  
+arm                              alldefconfig   clang
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r002-20230726   clang
+arm                  randconfig-r013-20230726   gcc  
+arm                  randconfig-r014-20230726   gcc  
+arm                  randconfig-r032-20230726   clang
+arm                  randconfig-r046-20230726   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r002-20230726   gcc  
+arm64                randconfig-r013-20230726   clang
+arm64                randconfig-r025-20230726   clang
+csky                                defconfig   gcc  
+hexagon              randconfig-r022-20230726   clang
+hexagon              randconfig-r023-20230726   clang
+hexagon              randconfig-r036-20230726   clang
+hexagon              randconfig-r041-20230726   clang
+hexagon              randconfig-r045-20230726   clang
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-r004-20230726   gcc  
+i386         buildonly-randconfig-r005-20230726   gcc  
+i386         buildonly-randconfig-r006-20230726   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230726   gcc  
+i386                 randconfig-i002-20230726   gcc  
+i386                 randconfig-i003-20230726   gcc  
+i386                 randconfig-i004-20230726   gcc  
+i386                 randconfig-i005-20230726   gcc  
+i386                 randconfig-i006-20230726   gcc  
+i386                 randconfig-i011-20230726   clang
+i386                 randconfig-i012-20230726   clang
+i386                 randconfig-i013-20230726   clang
+i386                 randconfig-i014-20230726   clang
+i386                 randconfig-i015-20230726   clang
+i386                 randconfig-i016-20230726   clang
+i386                 randconfig-r006-20230726   gcc  
+i386                 randconfig-r011-20230726   clang
+i386                 randconfig-r016-20230726   clang
+i386                 randconfig-r021-20230726   clang
+i386                 randconfig-r026-20230726   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r001-20230726   gcc  
+loongarch            randconfig-r006-20230726   gcc  
+loongarch            randconfig-r015-20230726   gcc  
+loongarch            randconfig-r016-20230726   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r001-20230726   gcc  
+m68k                 randconfig-r002-20230726   gcc  
+m68k                 randconfig-r004-20230726   gcc  
+m68k                 randconfig-r012-20230726   gcc  
+m68k                 randconfig-r014-20230726   gcc  
+m68k                 randconfig-r021-20230726   gcc  
+m68k                 randconfig-r026-20230726   gcc  
+m68k                 randconfig-r035-20230726   gcc  
+microblaze           randconfig-r001-20230726   gcc  
+microblaze           randconfig-r006-20230726   gcc  
+microblaze           randconfig-r014-20230726   gcc  
+microblaze           randconfig-r032-20230726   gcc  
+microblaze           randconfig-r034-20230726   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                 randconfig-r001-20230726   clang
+mips                 randconfig-r015-20230726   gcc  
+mips                 randconfig-r035-20230726   clang
+nios2                               defconfig   gcc  
+nios2                randconfig-r003-20230726   gcc  
+nios2                randconfig-r004-20230726   gcc  
+nios2                randconfig-r011-20230726   gcc  
+nios2                randconfig-r015-20230726   gcc  
+nios2                randconfig-r022-20230726   gcc  
+openrisc             randconfig-r005-20230726   gcc  
+openrisc             randconfig-r022-20230726   gcc  
+openrisc             randconfig-r025-20230726   gcc  
+openrisc             randconfig-r026-20230726   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc                generic-64bit_defconfig   gcc  
+parisc               randconfig-r003-20230726   gcc  
+parisc               randconfig-r012-20230726   gcc  
+parisc               randconfig-r014-20230726   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                     powernv_defconfig   clang
+powerpc              randconfig-r005-20230726   gcc  
+powerpc              randconfig-r006-20230726   gcc  
+powerpc              randconfig-r013-20230726   clang
+powerpc              randconfig-r032-20230726   gcc  
+powerpc              randconfig-r036-20230726   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r001-20230726   gcc  
+riscv                randconfig-r005-20230726   gcc  
+riscv                randconfig-r016-20230726   clang
+riscv                randconfig-r033-20230726   gcc  
+riscv                randconfig-r036-20230726   gcc  
+riscv                randconfig-r042-20230726   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r004-20230726   gcc  
+s390                 randconfig-r014-20230726   clang
+s390                 randconfig-r023-20230726   clang
+s390                 randconfig-r034-20230726   gcc  
+s390                 randconfig-r044-20230726   clang
+sh                               allmodconfig   gcc  
+sh                   randconfig-r001-20230726   gcc  
+sh                           se7750_defconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r016-20230726   gcc  
+sparc                randconfig-r024-20230726   gcc  
+sparc                randconfig-r033-20230726   gcc  
+sparc64              randconfig-r013-20230726   gcc  
+sparc64              randconfig-r023-20230726   gcc  
+sparc64              randconfig-r025-20230726   gcc  
+sparc64              randconfig-r031-20230726   gcc  
+um                               alldefconfig   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                   randconfig-r012-20230726   gcc  
+um                   randconfig-r034-20230726   clang
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-r001-20230726   gcc  
+x86_64       buildonly-randconfig-r002-20230726   gcc  
+x86_64       buildonly-randconfig-r003-20230726   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-r003-20230726   gcc  
+x86_64               randconfig-r005-20230726   gcc  
+x86_64               randconfig-x001-20230726   clang
+x86_64               randconfig-x002-20230726   clang
+x86_64               randconfig-x003-20230726   clang
+x86_64               randconfig-x004-20230726   clang
+x86_64               randconfig-x005-20230726   clang
+x86_64               randconfig-x006-20230726   clang
+x86_64               randconfig-x011-20230726   gcc  
+x86_64               randconfig-x012-20230726   gcc  
+x86_64               randconfig-x013-20230726   gcc  
+x86_64               randconfig-x014-20230726   gcc  
+x86_64               randconfig-x015-20230726   gcc  
+x86_64               randconfig-x016-20230726   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r002-20230726   gcc  
+xtensa               randconfig-r023-20230726   gcc  
+xtensa               randconfig-r031-20230726   gcc  
 
-BTW, this implies that you can only DMA 32-bit bits. Not sure if the 
-dwc3 supports more. 
-
-> +
-> +          usb@11000000 {
-> +                compatible = "snps,dwc3";
-> +                reg = <0x11000000 0x100000>;
-> +                interrupts = <GIC_SPI 94 IRQ_TYPE_LEVEL_HIGH>;
-> +                dr_mode = "host";
-> +          };
-> +    };
-> +
-> -- 
-> 2.26.2
-> 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
