@@ -2,46 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2E13762C2F
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Jul 2023 08:59:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E11FC762D21
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Jul 2023 09:22:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231948AbjGZG7B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Jul 2023 02:59:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35980 "EHLO
+        id S231539AbjGZHWj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Jul 2023 03:22:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231913AbjGZG6g (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Jul 2023 02:58:36 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56AF930D7;
-        Tue, 25 Jul 2023 23:58:24 -0700 (PDT)
-Received: from kwepemm600005.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4R9l8705F9z1GDHf;
-        Wed, 26 Jul 2023 14:57:26 +0800 (CST)
-Received: from [10.67.103.158] (10.67.103.158) by
- kwepemm600005.china.huawei.com (7.193.23.191) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Wed, 26 Jul 2023 14:58:19 +0800
+        with ESMTP id S231531AbjGZHWL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Jul 2023 03:22:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A12C54C24;
+        Wed, 26 Jul 2023 00:18:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 263F161536;
+        Wed, 26 Jul 2023 07:18:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F35DC433C8;
+        Wed, 26 Jul 2023 07:18:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1690355903;
+        bh=Lmm+4McdjfF7XNhSI+TigH314Z3lKfBItXi5XhHhA/E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PchRafcDVLFtMd90/7z41tLGON8pwMw//Ta/zKZvcxeiFlRP9ksoiI/+R4p0SltvF
+         i/SIjUOr7es2D3cNbuDA0Pd3t5ySWrJ2CCdmvs/EZ/FJZcTk6dmCwvc1qnasOrYRpb
+         LoUpVwyga+unCQAYm7VPDB0zoVI+KvX1mTSnnjJ0=
+Date:   Wed, 26 Jul 2023 09:18:15 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     liulongfang <liulongfang@huawei.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] USB:bugfix a controller halt error
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
+Message-ID: <2023072629-unblended-perky-4732@gregkh>
 References: <20230721100015.27124-1-liulongfang@huawei.com>
- <c3ab029f-f6ab-4b09-b2b5-1cc6a5370d0d@rowland.harvard.edu>
-From:   liulongfang <liulongfang@huawei.com>
-Message-ID: <bfee90c1-a7ca-27e3-88f9-936f48cd2595@huawei.com>
-Date:   Wed, 26 Jul 2023 14:58:18 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+ <2023072153-module-wannabe-5637@gregkh>
+ <bc2cd818-c7ad-9061-29ce-f5390d44d8ab@huawei.com>
 MIME-Version: 1.0
-In-Reply-To: <c3ab029f-f6ab-4b09-b2b5-1cc6a5370d0d@rowland.harvard.edu>
-Content-Type: text/plain; charset="gbk"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.103.158]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600005.china.huawei.com (7.193.23.191)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bc2cd818-c7ad-9061-29ce-f5390d44d8ab@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,96 +52,40 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2023/7/21 22:57, Alan Stern Wrote:
-> On Fri, Jul 21, 2023 at 06:00:15PM +0800, liulongfang wrote:
->> On systems that use ECC memory. The ECC error of the memory will
->> cause the USB controller to halt. It causes the usb_control_msg()
->> operation to fail.
+On Wed, Jul 26, 2023 at 02:44:01PM +0800, liulongfang wrote:
+> On 2023/7/21 19:08, Greg KH Wrote:
+> > On Fri, Jul 21, 2023 at 06:00:15PM +0800, liulongfang wrote:
+> >> On systems that use ECC memory. The ECC error of the memory will
+> >> cause the USB controller to halt. It causes the usb_control_msg()
+> >> operation to fail.
+> > 
+> > Why does ECC memory matter here?
+> >
 > 
-> How often does this happen in real life?  (Besides, it seems to me that 
-> if your system is getting a bunch of ECC memory errors then you've got 
-> much worse problems than a simple USB failure!)
->
+> This is a test conducted under a special test scenario.
+> ECC memory errors are caused by some test tools.
 
-This problem is on ECC memory platform.
-In the test scenario, the problem is 100% reproducible.
+What memory is failing, and why does just this single check matter in
+the whole kernel?
 
-> And why do you worry about ECC memory failures in particular?  Can't 
-> _any_ kind of failure cause the usb_control_msg() operation to fail?
-> 
->> At this point, the returned buffer data is an abnormal value, and
->> continuing to use it will lead to incorrect results.
-> 
-> The driver already contains code to check for abnormal values.  The 
-> check is not perfect, but it should prevent things from going too 
-> badly wrong.
->
+If hardware is broken, and failing, it's not the job of the kernel to
+protect against that, is it?  Shouldn't the ECC memory controller have
+properly notified the kernel of the fault and reset the machine because
+it is now in an undetermined state?
 
-If it is ECC memory error. These parameter checks would also
-actually be invalid.
+> > Are you sure this is correct?  How was this tested?  Seems to me that
+> > this will still return "success" if this code path ever happens, what am
+> 
+> You are right. I made a patch error here. The code modification should be like this:
+> if (r < 0) {
+> 	retval = r;
+> 	kfree(buf);
+> 	goto fail;
+> }
 
->> Therefore, it is necessary to judge the return value and exit.
->>
->> Signed-off-by: liulongfang <liulongfang@huawei.com>
-> 
-> There is a flaw in your reasoning.
-> 
-> The operation carried out here is deliberately unsafe (for full-speed 
-> devices).  It is made before we know the actual maxpacket size for ep0, 
-> and as a result it might return an error code even when it works okay.  
-> This shouldn't happen, but a lot of USB hardware is unreliable.
-> 
-> Therefore we must not ignore the result merely because r < 0.  If we do 
-> that, the kernel might stop working with some devices.
-> 
-It may be that the handling solution for ECC errors is different from that
-of the OS platform. On the test platform, after usb_control_msg() fails,
-reading the memory data of buf will directly lead to kernel crash:
-
-[ T14] Call trace:
-[ T14] hub_port_init+0x280/0x9f0
-[ T14] hub_port_connect+0x1d4/0xa40
-[ T14] hub_port_connect_change+0xb8/0x2b0
-[ T14] port_event+0x430/0x5d0
-[ T14] hub_event+0x138/0x4a0
-[ T14] process_one_work+0x1c8/0x39c
-[ T14] worker_thread+0x150/0x3d0
-[ T14] kthread+0xfc/0x130
-[ T14] ret_from_fork+0x10/0x18
-[ T14] Code: 528000c2 b9007fea 94002c9a b9407fea (39401f41)
+This means that you didn't test this change at all, so I don't really
+think it is needed :(
 
 thanks,
-Longfang.
-> Alan Stern
-> 
->> ---
->>  drivers/usb/core/hub.c | 10 ++++++++++
->>  1 file changed, 10 insertions(+)
->>
->> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
->> index a739403a9e45..6a43198be263 100644
->> --- a/drivers/usb/core/hub.c
->> +++ b/drivers/usb/core/hub.c
->> @@ -4891,6 +4891,16 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
->>  					USB_DT_DEVICE << 8, 0,
->>  					buf, GET_DESCRIPTOR_BUFSIZE,
->>  					initial_descriptor_timeout);
->> +				/* On systems that use ECC memory, ECC errors can
->> +				 * cause the USB controller to halt.
->> +				 * It causes this operation to fail. At this time,
->> +				 * the buf data is an abnormal value and needs to be exited.
->> +				 */
->> +				if (r < 0) {
->> +					kfree(buf);
->> +					goto fail;
->> +				}
->> +
->>  				switch (buf->bMaxPacketSize0) {
->>  				case 8: case 16: case 32: case 64: case 255:
->>  					if (buf->bDescriptorType ==
->> -- 
->> 2.24.0
->>
-> 
-> .
-> 
+
+greg k-h
