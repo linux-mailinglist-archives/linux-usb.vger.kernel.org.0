@@ -2,110 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61EB4763BC9
-	for <lists+linux-usb@lfdr.de>; Wed, 26 Jul 2023 17:58:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E51C8763C7E
+	for <lists+linux-usb@lfdr.de>; Wed, 26 Jul 2023 18:29:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234407AbjGZP6B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 Jul 2023 11:58:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56632 "EHLO
+        id S230138AbjGZQ3S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Jul 2023 12:29:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235014AbjGZP5m (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Jul 2023 11:57:42 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A638D213A
-        for <linux-usb@vger.kernel.org>; Wed, 26 Jul 2023 08:57:40 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4fbb281eec6so10976846e87.1
-        for <linux-usb@vger.kernel.org>; Wed, 26 Jul 2023 08:57:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690387059; x=1690991859;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7ib/RHzr+Jh6K08RxAEYxj+gk0Q47eL5hakUFKE7hYM=;
-        b=eLb+d4uJxCg1hqloXAAfoaoe/lI7o2H+Rz0S/41abNUtbbxa/OD9G/AEAFYcZrpiD7
-         3ZjRsGKganbOYxOjAI1om68BUSkP7edZro7FnTAHCgCekOM4J65NY3plpIUvCpZvE9/W
-         zcksX6sKFVAvWkLAvzCk5f1kAf9rQPSjCpFnHNNoZ+I/neOxtqQSIwfQRSy1/+4psUGC
-         440IkXGPfbMo1TgGDcYxL6vif1WVjSQr3sjYMuY7KXbpQ3yBOuCxs+q6ePD9dM0BdEgC
-         WhkAky/rT61F6zFL0gJYXl1bXBCqXia7AUjVlo8biQ5koKnl5VkUmyeahsUDOsTwvQAb
-         XFKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690387059; x=1690991859;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7ib/RHzr+Jh6K08RxAEYxj+gk0Q47eL5hakUFKE7hYM=;
-        b=DCXQaw5ZpOHTF7vX8orX9m95YjvD0tt2QPSiADGPnftMYb0l96KnKOeuWOTn/Gc6W4
-         nXnwGmKD1wll/b7842MvWc2qL5whlfryngxHoALaJED6kFgu1NDEnGucITehizqyeKEr
-         q7i1/twFnNruK62et7NhrVOwRotRaWibvQDvLuB9CRz8JT/+Sdhx8wpdjA2R6c5o1zcd
-         qBnHwGNE4XOaFTUs1tC+WgP7Dj6RAPSILWFQJ8ayCo1lUTZcYcdfd+NvG8OGNqrNSFwD
-         +hyY+jdHb4vGyJsSsVXaYS6BXdq+QJ1zI5J8/SUDO3OvmkAor6G+FwPA8+VQcbxy4oQO
-         Tjyg==
-X-Gm-Message-State: ABy/qLZzb/lqUOvRssA6IoYlqfLRRsH2y4KZtaQ3wHw3ggVm4qLsmdXS
-        QG/rIqF+8ush0VLsWhXxUxocWA==
-X-Google-Smtp-Source: APBJJlGR/v8GPNVDnQPcx9BBVpDW27YxsNB9wyX+S9NVnQ7otkGTGtsbtUL+TYK3AvrnWoCg4MZ1nw==
-X-Received: by 2002:a05:6512:3495:b0:4fb:8939:d95c with SMTP id v21-20020a056512349500b004fb8939d95cmr1708041lfr.30.1690387058919;
-        Wed, 26 Jul 2023 08:57:38 -0700 (PDT)
-Received: from [192.168.1.101] (abxh240.neoplus.adsl.tpnet.pl. [83.9.1.240])
-        by smtp.gmail.com with ESMTPSA id j17-20020ac25511000000b004cc9042c9cfsm3309889lfk.158.2023.07.26.08.57.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Jul 2023 08:57:38 -0700 (PDT)
-Message-ID: <416df8e3-cdab-2f2f-fc9a-b77e954faa1b@linaro.org>
-Date:   Wed, 26 Jul 2023 17:57:37 +0200
+        with ESMTP id S229550AbjGZQ3S (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Jul 2023 12:29:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1387C26A1;
+        Wed, 26 Jul 2023 09:29:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E98C61BC2;
+        Wed, 26 Jul 2023 16:29:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65A4EC433C8;
+        Wed, 26 Jul 2023 16:29:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690388956;
+        bh=ZVCmTrjZgRuUMiAs+8tqCzy75T2DMxHWuEZMbl9wyKk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=I/HrksIQv40llE0OQU3gtKSFhQLDbu7BrCI2PAToDpozpfEOPCzZMvTJnaWOqJPnJ
+         2EisLEhLYlcNvl3Haewa3FNsXapoNVnXUaIdhHO3Lb17hd1sFzcPww5br0zE0lkEPx
+         T1G4kwxvGvGsn2eX8YSN8ZKdtceuInUKg6J4QDJDw9m04adWTtR/o/B5bEFVorE8ST
+         46N7UznvCB5z1cyvUiPruVHfSNo7iJv6CigiIgt1vVYHFvPqgeLO02f83H9hN3xfqN
+         XuRnwhR4gwB/vL8rPrzq+NJLLkx0fURwharxwBUoM8Jt2HQGsnlD8Dyu7X7VayEydW
+         fA2W42v313E1A==
+Received: (nullmailer pid 1549550 invoked by uid 1000);
+        Wed, 26 Jul 2023 16:29:14 -0000
+Date:   Wed, 26 Jul 2023 10:29:14 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     adrian.ho.yin.ng@intel.com
+Cc:     gregkh@linuxfoundation.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, Thinh.Nguyen@synopsys.com,
+        p.zabel@pengutronix.de
+Subject: Re: [PATCH v2 1/2] dt-bindings: usb: Add Intel SoCFPGA USB controller
+Message-ID: <20230726162914.GA1542946-robh@kernel.org>
+References: <cover.1690179693.git.adrian.ho.yin.ng@intel.com>
+ <0d12c7a196d6ad81cfc69b281dd1c4cca623d9bd.1690179693.git.adrian.ho.yin.ng@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 5/7] arm64: dts: qcom: sm6115: Add tcsr syscon node
-Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Cc:     agross@kernel.org, andersson@kernel.org,
-        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        krzysztof.kozlowski@linaro.org, quic_schowdhu@quicinc.com,
-        gregkh@linuxfoundation.org, stephan@gerhold.net
-References: <20230718061052.1332993-1-bhupesh.sharma@linaro.org>
- <20230718061052.1332993-6-bhupesh.sharma@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <20230718061052.1332993-6-bhupesh.sharma@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0d12c7a196d6ad81cfc69b281dd1c4cca623d9bd.1690179693.git.adrian.ho.yin.ng@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -114,11 +59,124 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 18.07.2023 08:10, Bhupesh Sharma wrote:
-> Add the TCSR syscon dt node for SM6115 / SM4250 SoC.
+On Mon, Jul 24, 2023 at 02:36:58PM +0800, adrian.ho.yin.ng@intel.com wrote:
+> From: Adrian Ng Ho Yin <adrian.ho.yin.ng@intel.com>
 > 
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> Existing binding intel,keembay-dwc3.yaml does not have the required
+> properties for Intel SoCFPGA devices.
+> Introduce new binding description for Intel SoCFPGA USB controller
+> which will be used for current and future SoCFPGA devices.
+> 
+> Signed-off-by: Adrian Ng Ho Yin <adrian.ho.yin.ng@intel.com>
 > ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>  .../bindings/usb/intel,socfpga-dwc3.yaml      | 84 +++++++++++++++++++
+>  1 file changed, 84 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/intel,socfpga-dwc3.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/intel,socfpga-dwc3.yaml b/Documentation/devicetree/bindings/usb/intel,socfpga-dwc3.yaml
+> new file mode 100644
+> index 000000000000..e36b087c2651
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/intel,socfpga-dwc3.yaml
+> @@ -0,0 +1,84 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/intel,socfpga-dwc3.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Intel SoCFPGA DWC3 USB controller
+> +
+> +maintainers:
+> +  - Adrian Ng Ho Yin <adrian.ho.yin.ng@intel.com>
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - intel,agilex5-dwc3
+> +      - const: intel,socfpga-dwc3
+> +
+> +  reg:
+> +    description: Offset and length of DWC3 controller register
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: Controller Master/Core clock
+> +      - description: Controller Suspend clock
+> +
+> +  ranges: true
+> +
+> +  resets:
+> +    description: A list of phandles for resets listed in reset-names
+> +    maxItems: 2
+> +
+> +  reset-names:
+> +    items:
+> +      - const: dwc3
+> +      - const: dwc3-ecc
+> +
+> +  '#address-cells':
+> +    enum: [ 1, 2 ]
+> +
+> +  '#size-cells':
+> +    enum: [ 1, 2 ]
+> +
+> +# Required child node:
+> +
+> +patternProperties:
+> +  "^usb@[0-9a-f]+$":
+> +    $ref: snps,dwc3.yaml#
 
-Konrad
+One node, no wrapper node and dwc3 child node please unless you have 
+actual registers for the wrapper. Based on the example having the same 
+register addresses in both nodes, you don't need the wrapper.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - resets
+> +  - ranges
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/reset/altr,rst-mgr.h>
+> +
+> +    usb@11000000 {
+> +          compatible = "intel,agilex5-dwc3", "intel,socfpga-dwc3";
+> +          reg = <0x11000000 0x100000>;
+
+You really have 1MB worth of registers? That chews up 1MB of 
+kernel virtual space. Not a big deal for 64-bit, but it is a problem on 
+32-bit systems. Define the length to just what you need.
+
+> +          ranges;
+> +          clocks = <&clkmgr 54>,
+> +                   <&clkmgr 55>;
+> +          resets = <&rst USB0_RESET>, <&rst USB1_RESET>;
+> +          reset-names = "dwc3", "dwc3-ecc";
+> +          #address-cells = <1>;
+> +          #size-cells = <1>;
+
+BTW, this implies that you can only DMA 32-bit bits. Not sure if the 
+dwc3 supports more. 
+
+> +
+> +          usb@11000000 {
+> +                compatible = "snps,dwc3";
+> +                reg = <0x11000000 0x100000>;
+> +                interrupts = <GIC_SPI 94 IRQ_TYPE_LEVEL_HIGH>;
+> +                dr_mode = "host";
+> +          };
+> +    };
+> +
+> -- 
+> 2.26.2
+> 
