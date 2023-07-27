@@ -2,42 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87159765C35
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jul 2023 21:38:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DE51765F02
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Jul 2023 00:12:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbjG0Tio (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Jul 2023 15:38:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56918 "EHLO
+        id S232594AbjG0WMc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Jul 2023 18:12:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbjG0Tim (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jul 2023 15:38:42 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EC33273C
-        for <linux-usb@vger.kernel.org>; Thu, 27 Jul 2023 12:38:41 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2358F2E4;
-        Thu, 27 Jul 2023 21:37:39 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1690486659;
-        bh=QYXUdkx7fg7+czm6gafo0W1rp4FXvsBk4RFfJB0ftjs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=R7/w7FGBTSZIuB+syxCTUCNvyvHSqARfZymEd0ULlNgCmpni00BhRu9LWZPAfJcag
-         4WZPHcyrD+/pMylRvBCtJcbSQkujaqPQGquKXLoafiBH8xwdZ1XU2FCw6yi9ikGerO
-         9fRd08WHi5upcSrcjm0TgExfog3nzAdurr04KTfI=
-Date:   Thu, 27 Jul 2023 22:38:44 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     marco@zatta.me, USB list <linux-usb@vger.kernel.org>
-Subject: Re: Something is really broken for Logitech webcams
-Message-ID: <20230727193844.GB16455@pendragon.ideasonboard.com>
-References: <6dcde4c2-9400-44af-c8b4-5e63b947a2bf@suse.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <6dcde4c2-9400-44af-c8b4-5e63b947a2bf@suse.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        with ESMTP id S232604AbjG0WMb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jul 2023 18:12:31 -0400
+Received: from mgamail.intel.com (unknown [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE541271E
+        for <linux-usb@vger.kernel.org>; Thu, 27 Jul 2023 15:12:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690495948; x=1722031948;
+  h=date:from:to:cc:subject:message-id;
+  bh=vwA8xIK3XCvAhEIXct3o1+zFdTATGu2V6d2gXEOpsgs=;
+  b=Hfx78JAAI5l4KT0NIMRXshNR3JqTZOffBDQ9+lO4DwEQC0wL+95MqOCA
+   Aue1Q72FzGoIj2EMIAmfmTPB7rAe8fJxsW0Qaz+hBHSrg/XDq2rUSCs+C
+   fSdBkbm28ga61kaBk40BqQf+SK9k1f+nY/YMRg0Igx+0YammgIhAMPyeF
+   wvwmckc4LtLh3JDWIIleKPY+1UZn4ty1sN++kLq8VqUPPKZq49B9bUoly
+   3Fa1iLKifClg7CMMAbDiCjq3F6GWeRxdh/MJxHTKoU7cqD3g0uToUxc/E
+   J0DbnCup9/dbL9BYn4CSO/j+f+oPlbFXU3lN2J+RJeF4SCiBqv0+AHX7J
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="365901859"
+X-IronPort-AV: E=Sophos;i="6.01,236,1684825200"; 
+   d="scan'208";a="365901859"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2023 15:12:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10784"; a="797189921"
+X-IronPort-AV: E=Sophos;i="6.01,236,1684825200"; 
+   d="scan'208";a="797189921"
+Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 27 Jul 2023 15:12:25 -0700
+Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qP9Dc-0002dE-33;
+        Thu, 27 Jul 2023 22:12:24 +0000
+Date:   Fri, 28 Jul 2023 06:12:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ ba0b3af706305e5b11fd832eecd2c4a7fce57156
+Message-ID: <202307280611.lOmJKnpB-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,80 +59,142 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Oliver,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: ba0b3af706305e5b11fd832eecd2c4a7fce57156  usb: ohci-st: Use devm_platform_get_and_ioremap_resource()
 
-On Thu, Jul 27, 2023 at 01:48:28PM +0200, Oliver Neukum wrote:
-> Hi,
-> 
-> looking at bd21f0222adab
-> ("USB: Fix chipmunk-like voice when using Logitech C270 for recording audio.")
-> we see that it introduced RESET_RESUME for the C270 webcam
-> 
-> For that camera I asked a user to provide lsusb, which got this
-> (a bit shortened)
-> 
-> Bus 001 Device 004: ID 046d:0825 Logitech, Inc. Webcam C270
-> Device Descriptor:
->    bLength                18
->    bDescriptorType         1
->    bcdUSB               2.00
->    bDeviceClass          239 Miscellaneous Device
->    bDeviceSubClass         2
->    bDeviceProtocol         1 Interface Association
->    bMaxPacketSize0        64
->    idVendor           0x046d Logitech, Inc.
->    idProduct          0x0825 Webcam C270
-> 
->      Interface Descriptor:
->        bLength                 9
->        bDescriptorType         4
->        bInterfaceNumber        0
->        bAlternateSetting       0
->        bNumEndpoints           1
->        bInterfaceClass        14 Video
->        bInterfaceSubClass      1 Video Control
->        bInterfaceProtocol      0
->        iInterface              0
-> 
-> So this thing says that it is UVC. That means that it should trigger
-> e387ef5c47dde ("usb: Add USB_QUIRK_RESET_RESUME for all Logitech UVC webcams")
-> adding the following declaration:
-> 
-> static const struct usb_device_id usb_interface_quirk_list[] = {
->          /* Logitech UVC Cameras */
->          { USB_VENDOR_AND_INTERFACE_INFO(0x046d, USB_CLASS_VIDEO, 1, 0),
->            .driver_info = USB_QUIRK_RESET_RESUME },
-> 
-> wich AFAICT matches the device.
-> 
-> On the face of it, this makes no sense. What is going on here?
-> Do we really need to assume that Logitech has been selling a whole slew
-> of cameras in both UVC and something else, which we have no driver for,
-> but nobody complains?
+elapsed time: 722m
 
-The first Logitech webcams that were developed against the UVC
-specification were not fully UVC-compatible. They were thus advertised
-with a vendor-specific class. The uvcvideo driver supports them, you can
-find the list in uvc_driver.c:
+configs tested: 123
+configs skipped: 8
 
-Logitech Quickcam Fusion			0x08c1
-Logitech Quickcam Orbit MP			0x08c2
-Logitech Quickcam Pro for Notebook		0x08c3
-Logitech Quickcam Pro 5000			0x08c5
-Logitech Quickcam OEM Dell Notebook		0x08c6
-Logitech Quickcam OEM Cisco VT Camera II	0x08c7
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-This explains why usb_quirk_list has 6 corresponding entries.
-
-Why Marco's patch is needed, I'm not sure. It seems that the device and
-interface quirks are handled at different points of time, maybe that
-plays a role ?
-
-> Could somebody please look at this or am I somehow not right in the head?
-> 
-> And Marco specifically, did you make your patch based on a bisection?
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r014-20230727   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r013-20230727   gcc  
+arc                  randconfig-r022-20230727   gcc  
+arc                  randconfig-r043-20230727   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r046-20230727   clang
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r016-20230727   gcc  
+arm64                randconfig-r024-20230727   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r011-20230727   gcc  
+csky                 randconfig-r036-20230727   gcc  
+hexagon              randconfig-r026-20230727   clang
+hexagon              randconfig-r041-20230727   clang
+hexagon              randconfig-r045-20230727   clang
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-r004-20230727   clang
+i386         buildonly-randconfig-r005-20230727   clang
+i386         buildonly-randconfig-r006-20230727   clang
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230727   clang
+i386                 randconfig-i002-20230727   clang
+i386                 randconfig-i003-20230727   clang
+i386                 randconfig-i004-20230727   clang
+i386                 randconfig-i005-20230727   clang
+i386                 randconfig-i006-20230727   clang
+i386                 randconfig-i011-20230727   gcc  
+i386                 randconfig-i012-20230727   gcc  
+i386                 randconfig-i013-20230727   gcc  
+i386                 randconfig-i014-20230727   gcc  
+i386                 randconfig-i015-20230727   gcc  
+i386                 randconfig-i016-20230727   gcc  
+i386                 randconfig-r003-20230727   clang
+i386                 randconfig-r012-20230727   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r013-20230727   gcc  
+loongarch            randconfig-r034-20230727   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r026-20230727   gcc  
+m68k                 randconfig-r031-20230727   gcc  
+microblaze           randconfig-r024-20230727   gcc  
+microblaze           randconfig-r025-20230727   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                 randconfig-r006-20230727   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r022-20230727   gcc  
+openrisc             randconfig-r004-20230727   gcc  
+openrisc             randconfig-r014-20230727   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r035-20230727   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc              randconfig-r002-20230727   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r012-20230727   gcc  
+riscv                randconfig-r042-20230727   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r001-20230727   clang
+s390                 randconfig-r003-20230727   clang
+s390                 randconfig-r032-20230727   clang
+s390                 randconfig-r044-20230727   gcc  
+sh                               allmodconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r015-20230727   gcc  
+sparc                randconfig-r031-20230727   gcc  
+sparc64              randconfig-r023-20230727   gcc  
+sparc64              randconfig-r025-20230727   gcc  
+sparc64              randconfig-r033-20230727   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                   randconfig-r023-20230727   clang
+um                   randconfig-r032-20230727   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-r001-20230727   clang
+x86_64       buildonly-randconfig-r002-20230727   clang
+x86_64       buildonly-randconfig-r003-20230727   clang
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-x001-20230727   gcc  
+x86_64               randconfig-x002-20230727   gcc  
+x86_64               randconfig-x003-20230727   gcc  
+x86_64               randconfig-x004-20230727   gcc  
+x86_64               randconfig-x005-20230727   gcc  
+x86_64               randconfig-x006-20230727   gcc  
+x86_64               randconfig-x011-20230727   clang
+x86_64               randconfig-x012-20230727   clang
+x86_64               randconfig-x013-20230727   clang
+x86_64               randconfig-x014-20230727   clang
+x86_64               randconfig-x015-20230727   clang
+x86_64               randconfig-x016-20230727   clang
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r002-20230727   gcc  
+xtensa               randconfig-r011-20230727   gcc  
+xtensa               randconfig-r021-20230727   gcc  
+xtensa               randconfig-r033-20230727   gcc  
+xtensa               randconfig-r034-20230727   gcc  
 
 -- 
-Regards,
-
-Laurent Pinchart
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
