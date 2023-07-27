@@ -2,117 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4520B765821
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jul 2023 17:58:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DD3F76598F
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jul 2023 19:09:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234164AbjG0P5q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Jul 2023 11:57:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54974 "EHLO
+        id S231447AbjG0RJ4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Jul 2023 13:09:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234060AbjG0P5p (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jul 2023 11:57:45 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id DE859271D
-        for <linux-usb@vger.kernel.org>; Thu, 27 Jul 2023 08:57:43 -0700 (PDT)
-Received: (qmail 1994833 invoked by uid 1000); 27 Jul 2023 11:57:43 -0400
-Date:   Thu, 27 Jul 2023 11:57:43 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     liulongfang <liulongfang@huawei.com>, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB:bugfix a controller halt error
-Message-ID: <c827147f-793b-49ae-8549-3c5d4e8a7264@rowland.harvard.edu>
-References: <20230721100015.27124-1-liulongfang@huawei.com>
- <c3ab029f-f6ab-4b09-b2b5-1cc6a5370d0d@rowland.harvard.edu>
- <bfee90c1-a7ca-27e3-88f9-936f48cd2595@huawei.com>
- <bd440f1d-5ea4-485e-9924-433997765adc@rowland.harvard.edu>
- <77a8ecb4-8099-1826-abd8-4f080d80b07d@huawei.com>
- <73b58ff7-2a0a-43f7-bda9-52b9437f5bc0@rowland.harvard.edu>
- <e983fecd-ff59-e97e-0099-b33685d45d00@suse.com>
+        with ESMTP id S231386AbjG0RJz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jul 2023 13:09:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01444273C;
+        Thu, 27 Jul 2023 10:09:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6054461E9F;
+        Thu, 27 Jul 2023 17:09:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88213C433C7;
+        Thu, 27 Jul 2023 17:09:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690477793;
+        bh=Ky/oluIzHCEeuhuElQC9U6jY75TgLuPVRTngDIASvjE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tV37aRq3EnmJ9lKNBvRBBvsJcANZbaisFqMyrl2Pi3tWcwWt18y03vrvM9t5FKEk1
+         Rl2/hqSCp3MrBcDSdvTjpGkYTdPmzmXE1L5NwlutDlmd9t4OfapibIqrZitsxA/HH/
+         /LG4PLGudZsTrq0m5vXi1bZ3nGWoSvAXkxCBC2o11jKkYuSQE1xiQjpMFLDO+bByk3
+         GoIz9nFIM43fkkTCYGgbdNWbDUp/AbK8mgEyboS+emJNvBbvKmjCxukQ22Pwd+5+2J
+         +RNRSUTAAYm6mwokdZvQGBU3TQBa/uZqp80HzgudzpTStjB0DxSYsDWkPLybPYap7a
+         1zS3Q+X2UWTPA==
+Received: (nullmailer pid 1835903 invoked by uid 1000);
+        Thu, 27 Jul 2023 17:09:51 -0000
+Date:   Thu, 27 Jul 2023 11:09:51 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Wayne Chang <waynec@nvidia.com>,
+        Benson Leung <bleung@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        chrome-platform@lists.linux.dev
+Subject: Re: [PATCH v2] dt-bindings: usb: connector: disallow additional
+ properties
+Message-ID: <169047762815.1817455.10294109902961650429.robh@kernel.org>
+References: <20230725102325.76336-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e983fecd-ff59-e97e-0099-b33685d45d00@suse.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230725102325.76336-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 27, 2023 at 05:31:41PM +0200, Oliver Neukum wrote:
-> On 27.07.23 16:42, Alan Stern wrote:
-> > On Thu, Jul 27, 2023 at 03:03:57PM +0800, liulongfang wrote:
-> > > On 2023/7/26 22:20, Alan Stern wrote:
-> 
-> > > > It seems to me that something along these lines must be necessary in
-> > > > any case.  Unless the bad memory is cleared somehow, it would never be
-> > > > usable again.  The kernel might deallocate it, then reallocate for
-> > > > another purpose, and then crash when the new user tries to access it.
-> > > > 
-> > > > In fact, this scenario could still happen even with your patch, which
-> > > > means the patch doesn't really fix the problem.
-> 
-> I suppose in theory you could have something like a bad blocks list
-> just for RAM, but that would really hurt. You'd have to do something
-> about every DMA operation in every driver in theory.
-> 
-> Error handling would basically be an intentional memory leak.
 
-I started out thinking this way, but maybe that's not how it works.  
-Perhaps simply overwriting the part of memory that got the ECC error 
-would clear the error state.  (This may depend on the kind of error, 
-one-time vs. permanent.)
-
-If that's the case, and if the memory buffer was deallocated without 
-being accessed and then later reallocated, things would be okay.  The 
-routine that reallocated the buffer wouldn't try to read from it before 
-initializing it somehow.
-
-> > > This patch is only used to prevent data in the buffer from being accessed.
-> > > As long as the data is not accessed, the kernel does not crash.
-> > 
-> > I still don't understand.  You haven't provided nearly enough
-> > information.  You should start by answering the questions that Oliver
-> > asked.  Then answer this question:
-> > 
-> > The code you are concerned about is this:
-> > 
-> > 		r = usb_control_msg(udev, usb_rcvaddr0pipe(),
-> > 				USB_REQ_GET_DESCRIPTOR, USB_DIR_IN,
-> > 				USB_DT_DEVICE << 8, 0,
-> > 				buf, GET_DESCRIPTOR_BUFSIZE,
-> > 				initial_descriptor_timeout);
-> > 		switch (buf->bMaxPacketSize0) {
-> > 
-> > You're worried that if an ECC memory error occurs during the
-> > usb_control_msg transfer, the kernel will crash when the "switch"
-> > statement tries to read the value of buf->bMaxPacketSize0.  That's a
-> > reasonable thing to worry about.
+On Tue, 25 Jul 2023 12:23:25 +0200, Krzysztof Kozlowski wrote:
+> USB connector bindings is complete, thus no additional properties should
+> be allowed.  Add missing 'reg' property and change additionalProperties
+> to false, so the schema will check for anything not unexpected.  This
+> also allows to drop the 'reg' from other bindings referencing the
+> usb-connector.yaml and make it required.
 > 
-> Albeit unlikely. If the hardware and implementation are reasonable
-> you'd return a specific error code from the HCD and clean up the
-> RAM in your ecc driver.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > 
-> The fix for USB would then conceptually be something like
+> ---
 > 
-> retryio:
-> 	r = usb_control_msg()
-> 	if (r == -EMEMORYCORRUPTION)
-> 		goto retryio;
+> Changes in v2:
+> 1. Make usb-connector.yaml additionalProperties:false (Rob)
+> 
+> v1:
+> https://lore.kernel.org/all/20230723071105.40157-1-krzysztof.kozlowski@linaro.org/
+> ---
+>  .../devicetree/bindings/chrome/google,cros-ec-typec.yaml    | 6 ++----
+>  .../devicetree/bindings/connector/usb-connector.yaml        | 5 ++++-
+>  .../devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml       | 6 ------
+>  Documentation/devicetree/bindings/usb/cypress,cypd4226.yaml | 6 ++----
+>  4 files changed, 8 insertions(+), 15 deletions(-)
+> 
 
-Yes, we could do this, but it's not necessary.  Let's say that the HCD 
-returns -EMEMORYCORRUPTION and the ecc driver cleans up the RAM 
-(probably by resetting its contents to 0, but possibly leaving garbage 
-there instead).  Then when the following code in hub_port_init() tests 
-buf->bMaxPacketSize0, it will see an invalid value and will retry the 
-transfer.
+I didn't not fix the double negative and applied, thanks! ;)
 
-Or, with low probability, it will see a valid but incorrect value.  If 
-that happens then later transfers using ep0 will fail, causing the hub 
-driver to reiterate the outer loop in hub_port_connect().  Eventually 
-the device will be correctly initialized and enumerated.
-
-Alan Stern
