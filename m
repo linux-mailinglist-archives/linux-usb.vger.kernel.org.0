@@ -2,114 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 432B6764764
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jul 2023 09:00:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C40FC7647F1
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jul 2023 09:09:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232345AbjG0HAO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Jul 2023 03:00:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49130 "EHLO
+        id S233223AbjG0HJw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Jul 2023 03:09:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230282AbjG0HAM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jul 2023 03:00:12 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A11F1FCF;
-        Thu, 27 Jul 2023 00:00:10 -0700 (PDT)
-Received: from kwepemm600005.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RBM4q5z03zNmNc;
-        Thu, 27 Jul 2023 14:56:43 +0800 (CST)
+        with ESMTP id S231883AbjG0HId (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jul 2023 03:08:33 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECB3A3C31;
+        Thu, 27 Jul 2023 00:05:00 -0700 (PDT)
+Received: from kwepemm600005.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RBM9R3RmrztRjS;
+        Thu, 27 Jul 2023 15:00:43 +0800 (CST)
 Received: from [10.67.103.158] (10.67.103.158) by
  kwepemm600005.china.huawei.com (7.193.23.191) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Thu, 27 Jul 2023 15:00:06 +0800
+ 15.1.2507.27; Thu, 27 Jul 2023 15:03:58 +0800
 Subject: Re: [PATCH] USB:bugfix a controller halt error
-To:     Oliver Neukum <oneukum@suse.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
 References: <20230721100015.27124-1-liulongfang@huawei.com>
- <2023072153-module-wannabe-5637@gregkh>
- <bc2cd818-c7ad-9061-29ce-f5390d44d8ab@huawei.com>
- <2023072629-unblended-perky-4732@gregkh>
- <05f0dc06-5a16-fba7-a256-b1d9dea989de@suse.com>
+ <c3ab029f-f6ab-4b09-b2b5-1cc6a5370d0d@rowland.harvard.edu>
+ <bfee90c1-a7ca-27e3-88f9-936f48cd2595@huawei.com>
+ <bd440f1d-5ea4-485e-9924-433997765adc@rowland.harvard.edu>
 From:   liulongfang <liulongfang@huawei.com>
-Message-ID: <f03958f4-de73-ec43-fa13-02727b6018c3@huawei.com>
-Date:   Thu, 27 Jul 2023 15:00:06 +0800
+Message-ID: <77a8ecb4-8099-1826-abd8-4f080d80b07d@huawei.com>
+Date:   Thu, 27 Jul 2023 15:03:57 +0800
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <05f0dc06-5a16-fba7-a256-b1d9dea989de@suse.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <bd440f1d-5ea4-485e-9924-433997765adc@rowland.harvard.edu>
+Content-Type: text/plain; charset="gbk"
+Content-Transfer-Encoding: 7bit
 X-Originating-IP: [10.67.103.158]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
  kwepemm600005.china.huawei.com (7.193.23.191)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2023/7/26 19:16, Oliver Neukum wrote:
-> On 26.07.23 09:18, Greg KH wrote:
->> On Wed, Jul 26, 2023 at 02:44:01PM +0800, liulongfang wrote:
+On 2023/7/26 22:20, Alan Stern wrote:
+> On Wed, Jul 26, 2023 at 02:58:18PM +0800, liulongfang wrote:
+>> On 2023/7/21 22:57, Alan Stern Wrote:
+>>> On Fri, Jul 21, 2023 at 06:00:15PM +0800, liulongfang wrote:
+>>>> On systems that use ECC memory. The ECC error of the memory will
+>>>> cause the USB controller to halt. It causes the usb_control_msg()
+>>>> operation to fail.
+>>>
+>>> How often does this happen in real life?  (Besides, it seems to me that 
+>>> if your system is getting a bunch of ECC memory errors then you've got 
+>>> much worse problems than a simple USB failure!)
+>>>
+>>
+>> This problem is on ECC memory platform.
+>> In the test scenario, the problem is 100% reproducible.
+>>
+>>> And why do you worry about ECC memory failures in particular?  Can't 
+>>> _any_ kind of failure cause the usb_control_msg() operation to fail?
+>>>
+>>>> At this point, the returned buffer data is an abnormal value, and
+>>>> continuing to use it will lead to incorrect results.
+>>>
+>>> The driver already contains code to check for abnormal values.  The 
+>>> check is not perfect, but it should prevent things from going too 
+>>> badly wrong.
+>>>
+>>
+>> If it is ECC memory error. These parameter checks would also
+>> actually be invalid.
+>>
+>>>> Therefore, it is necessary to judge the return value and exit.
+>>>>
+>>>> Signed-off-by: liulongfang <liulongfang@huawei.com>
+>>>
+>>> There is a flaw in your reasoning.
+>>>
+>>> The operation carried out here is deliberately unsafe (for full-speed 
+>>> devices).  It is made before we know the actual maxpacket size for ep0, 
+>>> and as a result it might return an error code even when it works okay.  
+>>> This shouldn't happen, but a lot of USB hardware is unreliable.
+>>>
+>>> Therefore we must not ignore the result merely because r < 0.  If we do 
+>>> that, the kernel might stop working with some devices.
+>>>
+>> It may be that the handling solution for ECC errors is different from that
+>> of the OS platform. On the test platform, after usb_control_msg() fails,
+>> reading the memory data of buf will directly lead to kernel crash:
 > 
->>> This is a test conducted under a special test scenario.
->>> ECC memory errors are caused by some test tools.
+> All right, then here's a proposal for a different way to solve the 
+> problem: Change the kernel's handler for the ECC error notification.  
+> Have it clear the affected parts of memory, so that the kernel can go 
+> ahead and use them without crashing.
 > 
-> So we are looking at a corner case here.
+> It seems to me that something along these lines must be necessary in 
+> any case.  Unless the bad memory is cleared somehow, it would never be 
+> usable again.  The kernel might deallocate it, then reallocate for 
+> another purpose, and then crash when the new user tries to access it.  
 > 
-> I think we need to step back, get an overview. And I would
-> like to apologize for not being entirely helpful.
+> In fact, this scenario could still happen even with your patch, which 
+> means the patch doesn't really fix the problem.
 > 
-> I see a theoretical possibility here of what is going wrong
-> and an extremely theoretical bug, but it would be very good
-> if you could describe your test setup.
-> 
-> So. You are inducing simulated memory errors.
-> For this scenario to make any sense your failure must be
-> 
-> 1. temporary - that is you have detected memory corruption but the RAM cell is not broken
-> 2. unrecoverable - that is we have lost data
-> 3. locateable - that is you know it hit the buffer of this operation and only it
-> 
-> Am I correct so far?
->
-You are right about the testing process.
-But this problem can exist in the real environment, just the probability of
-occurrence is very low.
-Use a test tool just to make it easier to trigger it.
 
-> Furthermore your system reports the error to the HC, so that in last
-> consequence the transfer fails. Right?
-> 
->> What memory is failing, and why does just this single check matter in
->> the whole kernel?
-> 
-> The difference here is that we are deliberately ignoring errors.
->  
->> If hardware is broken, and failing, it's not the job of the kernel to
->> protect against that, is it?  Shouldn't the ECC memory controller have
->> properly notified the kernel of the fault
-> 
-> Definitely it should. But this whole discussion makes only sense
-> if exactly that happens.
->
-Our test tool only simulates that external interference destroys this part
-of the data in the buffer on the ECC memory. Even without this testing tool.
-This problem may also occur on real business hardware devices.
+This patch is only used to prevent data in the buffer from being accessed.
+As long as the data is not accessed, the kernel does not crash.
 
->> and reset the machine because
->> it is now in an undetermined state?
+thanks,
+Longfang.
+
+> Alan Stern
 > 
-> No. It is not in an undetermined state if your detection logic is good enough.
-> 
->     Regards
->         Oliver
 > .
 > 
-Thanks,
-Longfang.
