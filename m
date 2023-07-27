@@ -2,159 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D46AF76502E
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jul 2023 11:47:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7CC57650BF
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jul 2023 12:18:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233293AbjG0JrE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Jul 2023 05:47:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60664 "EHLO
+        id S231631AbjG0KSJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Jul 2023 06:18:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233277AbjG0Jqz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jul 2023 05:46:55 -0400
-Received: from clamta01.bpe.bigpond.com (clamta01.bpe.bigpond.com [203.42.22.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EB69BF;
-        Thu, 27 Jul 2023 02:46:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=bigpond.com
-        ; s=202303; h=Content-Type:MIME-Version:Date:Message-ID:To:Subject:From;
-        bh=7Tn6Qbwis+gUfMa7OdP8CE9Ab2YJ6cKEtbqwYs1q/BA=; b=f38hYtqeLY1i1k6v8tF60LP3mH
-        D4yAwig8vt3WOL71oZPs4QKjFjv9JcWW0YmPgtSWM5HcG6xZfcYQYLX1S05JKZS25v2lhr6ja5PV1
-        nGErHtus/LcS/nW6X52XKsUmz7KKzxDAngY607s7L0fupw20gDOONp6RfXunr8YT4np2ptwc8Ei7B
-        +V7khFouYEVutdWw61bzXNL6sRw+ssk70203umz762+Qhaw77xNg9ob6UbEgPUAFboGK2+G7dmLvZ
-        L8QFA6oo0a2cTr7MFVKQ1iXhofhRHsk+2PodjT6Jhn9xKXeQ4ENpj5JoxQuYR1/EdzvkUj7p2VgBE
-        hcv5BWIg==;
-Received: from claprdcmr03
-         by claprdomr01 with esmtp
-         (envelope-from <bids.7405@bigpond.com>)
-         id 1qOxa2-000EkM-1k
-         for ;
-        Thu, 27 Jul 2023 19:46:46 +1000
-Received: from [101.191.138.223] (helo=[10.0.0.38])
-         by claprdcmr03 with esmtpa
-        (envelope-from <bids.7405@bigpond.com>)
-        id 1qOxa2-0001ZO-1K;
-        Thu, 27 Jul 2023 19:46:46 +1000
-From:   Ross Maynard <bids.7405@bigpond.com>
-Subject: [PATCH] USB: zaurus: Add ID for A-300/B-500/C-700
-To:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org
-Cc:     Oliver Neukum <oneukum@suse.com>
-Message-ID: <8b15ff2c-baaa-eb73-5fc9-b77ba6482bd5@bigpond.com>
-Date:   Thu, 27 Jul 2023 19:46:44 +1000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        with ESMTP id S233643AbjG0KSI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jul 2023 06:18:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91EDF187
+        for <linux-usb@vger.kernel.org>; Thu, 27 Jul 2023 03:18:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2719761E03
+        for <linux-usb@vger.kernel.org>; Thu, 27 Jul 2023 10:18:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 89AA6C433C7
+        for <linux-usb@vger.kernel.org>; Thu, 27 Jul 2023 10:18:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690453086;
+        bh=o8Koip8d0z9JK9LHHSnmtBDGq51F/zzqMdVCFtG+1Io=;
+        h=From:To:Subject:Date:From;
+        b=ph4BrziuvwxpPvHx+/jIv3kdUm0Vqa8XwSHRqzYWc0csNhk3c1zGVJas9/6LIKBam
+         EcxzNeYrh3o9MFABLQFNsg+mvLDfpV0qDPgPQncd5GmoHR88aGDcnpUKOlyLyHxN+N
+         OMAlf0+G6/Dq3hTwOyIquLg9lDVe6S96HP00a64JXOoSSHq6jzgwFQsUb5rELUjJ+m
+         z+SvNqrIcdQC6mg9BWTqxZZk9pegYEVUGwJbUx+k3krARE8LD+EM1Fa8z/aUmlvcCm
+         0YekkOJHlqhy7+6qZ0GAZtcj9ic1AofebuUfEg1Mq2o9WlxhnGrhGrGnkVsspzglAx
+         qkJ50siu7o03A==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 614F7C4332E; Thu, 27 Jul 2023 10:18:06 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 217715] New: USB from Thunderbolt 2 dock disconnects (xHCI host
+ not responding)
+Date:   Thu, 27 Jul 2023 10:18:06 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: youp1one1@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter
+ cf_regression
+Message-ID: <bug-217715-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-tce-id: bids.7405@bigpond.com
-X-tce-ares-id: e{9e428940-842d-48c4-bdaf-1ac8a75c08d5}1
-X-tce-spam-action: no action
-X-tce-spam-score: 0.0
-X-Cm-Analysis: v=2.4 cv=d7kzizvE c=1 sm=1 tr=0 ts=64c23d06 a=I+ymoOSk5yzZBOYXmf4WnA==:117 a=I+ymoOSk5yzZBOYXmf4WnA==:17 a=IkcTkHD0fZMA:10 a=ws7JD89P4LkA:10 a=1IlZJK9HAAAA:8 a=VwQbUJbxAAAA:8 a=zblBDeNr1pAM3S_0FrwA:9 a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22
-X-Cm-Envelope: MS4xfD++0fbhqPmCaByK6ZErpp9XSIEwzWSasb89n3rsACHfYOugD2m1VWBSv8FTaJwlrw4Vrye56cXz9sZTJzjJS2ULklDr01wTUKVhqgygFSkGlMFvJiVY cujFA6SiulXFel0bnRqqDkyg2YHr56eE9621Lje6aIvAO7dpXfz+krKQFFOwU5CUeQFn1uzltWBsZA==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The SL-A300, B500/5600, and C700 devices no longer auto-load because of
-"usbnet: Remove over-broad module alias from zaurus."
-This patch adds IDs for those 3 devices.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217715
 
-Reported-by: Ross Maynard <bids.7405@bigpond.com>
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=217632
-Fixes: 16adf5d07987 ("usbnet: Remove over-broad module alias from zaurus.")
-Signed-off-by: Ross Maynard <bids.7405@bigpond.com>
----
- drivers/net/usb/cdc_ether.c | 21 +++++++++++++++++++++
- drivers/net/usb/zaurus.c    | 21 +++++++++++++++++++++
- 2 files changed, 42 insertions(+)
+            Bug ID: 217715
+           Summary: USB from Thunderbolt 2 dock disconnects (xHCI host not
+                    responding)
+           Product: Drivers
+           Version: 2.5
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P3
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: youp1one1@gmail.com
+        Regression: No
 
---- a/drivers/net/usb/cdc_ether.c
-+++ b/drivers/net/usb/cdc_ether.c
-@@ -616,6 +616,13 @@ static const struct usb_device_id	products[] = {
- }, {
- 	.match_flags	=   USB_DEVICE_ID_MATCH_INT_INFO
- 			  | USB_DEVICE_ID_MATCH_DEVICE,
-+	.idVendor		= 0x04DD,
-+	.idProduct		= 0x8005,   /* A-300 */
-+	ZAURUS_FAKE_INTERFACE,
-+	.driver_info        = 0,
-+}, {
-+	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
-+			  | USB_DEVICE_ID_MATCH_DEVICE,
- 	.idVendor		= 0x04DD,
- 	.idProduct		= 0x8006,	/* B-500/SL-5600 */
- 	ZAURUS_MASTER_INTERFACE,
-@@ -623,12 +630,26 @@ static const struct usb_device_id	products[] = {
- }, {
- 	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
- 			  | USB_DEVICE_ID_MATCH_DEVICE,
-+	.idVendor		= 0x04DD,
-+	.idProduct		= 0x8006,   /* B-500/SL-5600 */
-+	ZAURUS_FAKE_INTERFACE,
-+	.driver_info        = 0,
-+}, {
-+	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
-+			  | USB_DEVICE_ID_MATCH_DEVICE,
- 	.idVendor		= 0x04DD,
- 	.idProduct		= 0x8007,	/* C-700 */
- 	ZAURUS_MASTER_INTERFACE,
- 	.driver_info		= 0,
- }, {
- 	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
-+			  | USB_DEVICE_ID_MATCH_DEVICE,
-+	.idVendor		= 0x04DD,
-+	.idProduct		= 0x8007,   /* C-700 */
-+	ZAURUS_FAKE_INTERFACE,
-+	.driver_info        = 0,
-+}, {
-+	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
- 		 | USB_DEVICE_ID_MATCH_DEVICE,
- 	.idVendor               = 0x04DD,
- 	.idProduct              = 0x9031,	/* C-750 C-760 */
---- a/drivers/net/usb/zaurus.c
-+++ b/drivers/net/usb/zaurus.c
-@@ -289,9 +289,23 @@ static const struct usb_device_id	products [] = {
- 	.match_flags	=   USB_DEVICE_ID_MATCH_INT_INFO
- 			  | USB_DEVICE_ID_MATCH_DEVICE,
- 	.idVendor		= 0x04DD,
-+	.idProduct		= 0x8005,	/* A-300 */
-+	ZAURUS_FAKE_INTERFACE,
-+	.driver_info = (unsigned long)&bogus_mdlm_info,
-+}, {
-+	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
-+			  | USB_DEVICE_ID_MATCH_DEVICE,
-+	.idVendor		= 0x04DD,
- 	.idProduct		= 0x8006,	/* B-500/SL-5600 */
- 	ZAURUS_MASTER_INTERFACE,
- 	.driver_info = ZAURUS_PXA_INFO,
-+}, {
-+	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
-+			  | USB_DEVICE_ID_MATCH_DEVICE,
-+	.idVendor		= 0x04DD,
-+	.idProduct		= 0x8006,	/* B-500/SL-5600 */
-+	ZAURUS_FAKE_INTERFACE,
-+	.driver_info = (unsigned long)&bogus_mdlm_info,
- }, {
- 	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
- 	          | USB_DEVICE_ID_MATCH_DEVICE,
-@@ -301,6 +315,13 @@ static const struct usb_device_id	products [] = {
- 	.driver_info = ZAURUS_PXA_INFO,
- }, {
- 	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
-+			  | USB_DEVICE_ID_MATCH_DEVICE,
-+	.idVendor		= 0x04DD,
-+	.idProduct		= 0x8007,	/* C-700 */
-+	ZAURUS_FAKE_INTERFACE,
-+	.driver_info = (unsigned long)&bogus_mdlm_info,
-+}, {
-+	.match_flags    =   USB_DEVICE_ID_MATCH_INT_INFO
- 		 | USB_DEVICE_ID_MATCH_DEVICE,
- 	.idVendor               = 0x04DD,
- 	.idProduct              = 0x9031,	/* C-750 C-760 */
+System details:
+
+Operating System: openSUSE Tumbleweed=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20
+          Kernel: Linux 6.4.4-1-default
+    Architecture: x86-64
+ Hardware Vendor: Lenovo
+  Hardware Model: ThinkPad P72
+Firmware Version: N2CET65W (1.48 )
+   Firmware Date: Mon 2022-08-01
+
+
+I have an old Elgato Thunderbolt 2 dock connected to my laptop's Thunderbol=
+t 3
+port via the Apple TB2->TB3 adapter
+(https://www.apple.com/shop/product/MMEL2AM/A/thunderbolt-3-usb-c-to-thunde=
+rbolt-2-adapter).
+
+I have some USB devices connected to that dock: keyboard, speakers (using U=
+SB
+audio).
+The USB subsystem of the dock randomly disconnects with the following trace:
+
+[50410.012153] xhci_hcd 0000:09:00.0: xHCI host controller not responding,
+assume dead
+[50410.012191] xhci_hcd 0000:09:00.0: HC died; cleaning up
+[50410.012231] usb 5-4: USB disconnect, device number 2
+
+It disconnects randomly less than one hour after fresh boot or hours later,
+there is no identifiable pattern. It happens out of the blue while I'm using
+the machine normally, usually playing audio to the connected speaker via USB
+audio.
+Replugging the TB3 cable usually makes USB work again for a while until it
+disconnects again. A monitor is connected to this dock via DisplayPort and =
+is
+unaffected.
+I noticed that issue starting with Kernel 6.3.4, although it could have
+happened before.
+
+Here's my initial bug report on openSUSE Tumbleweed issue tracker:
+https://bugzilla.opensuse.org/show_bug.cgi?id=3D1212019
+
+I can provide any additional info required.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
