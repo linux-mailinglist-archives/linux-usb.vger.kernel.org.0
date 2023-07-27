@@ -2,44 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6276576431A
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jul 2023 02:52:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AC4A76439A
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jul 2023 03:58:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230174AbjG0AwR convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Wed, 26 Jul 2023 20:52:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44298 "EHLO
+        id S230189AbjG0B6F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 Jul 2023 21:58:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbjG0AwQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Jul 2023 20:52:16 -0400
-Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB75026A6;
-        Wed, 26 Jul 2023 17:52:14 -0700 (PDT)
-Received: from dlp.unisoc.com ([10.29.3.86])
-        by SHSQR01.spreadtrum.com with ESMTP id 36R0prL4049406;
-        Thu, 27 Jul 2023 08:51:53 +0800 (+08)
-        (envelope-from surong.pang@unisoc.com)
-Received: from SHDLP.spreadtrum.com (shmbx05.spreadtrum.com [10.29.1.56])
-        by dlp.unisoc.com (SkyGuard) with ESMTPS id 4RBBy64wsQz2K5pr2;
-        Thu, 27 Jul 2023 08:50:22 +0800 (CST)
-Received: from zeshkernups01.spreadtrum.com (10.29.55.99) by
- shmbx05.spreadtrum.com (10.29.1.56) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Thu, 27 Jul 2023 08:51:52 +0800
-From:   Surong Pang <surong.pang@unisoc.com>
-To:     <Thinh.Nguyen@synopsys.com>, <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <Orson.Zhai@unisoc.com>, <Zhiyong.liu@unisoc.com>,
-        <Surong.Pang@Unisoc.com>, <Surong.Pang@gmail.com>
-Subject: [PATCH] usb: dwc3: gadget: let pm runtime get/put paired
-Date:   Thu, 27 Jul 2023 08:51:50 +0800
-Message-ID: <20230727005150.18836-1-surong.pang@unisoc.com>
-X-Mailer: git-send-email 2.17.1
-MIME-Version: 1.0
+        with ESMTP id S230164AbjG0B6D (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 Jul 2023 21:58:03 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DA53F1BFA;
+        Wed, 26 Jul 2023 18:58:01 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 36R1uTME1028742, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 36R1uTME1028742
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
+        Thu, 27 Jul 2023 09:56:29 +0800
+Received: from RTEXDAG02.realtek.com.tw (172.21.6.101) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32; Thu, 27 Jul 2023 09:56:41 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXDAG02.realtek.com.tw (172.21.6.101) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Thu, 27 Jul 2023 09:56:41 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
+ RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
+ 15.01.2375.007; Thu, 27 Jul 2023 09:56:41 +0800
+From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
+        <stanley_chang@realtek.com>
+To:     Oliver Neukum <oneukum@suse.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        Roy Luo <royluo@google.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Ray Chi <raychi@google.com>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [PATCH v9 2/5] phy: realtek: usb: Add driver for the Realtek SoC USB 2.0 PHY
+Thread-Topic: [PATCH v9 2/5] phy: realtek: usb: Add driver for the Realtek SoC
+ USB 2.0 PHY
+Thread-Index: AQHZvqjHuTebp6Y5CkiaavpdCwkvGa/LLs2AgAGuseA=
+Date:   Thu, 27 Jul 2023 01:56:40 +0000
+Message-ID: <708d5e38c8f84aa995a16c8a018be40c@realtek.com>
+References: <20230725033318.8361-1-stanley_chang@realtek.com>
+ <20230725033318.8361-2-stanley_chang@realtek.com>
+ <a11f0ec8-7eaa-aa3e-8b86-555e5dbe6e3e@suse.com>
+In-Reply-To: <a11f0ec8-7eaa-aa3e-8b86-555e5dbe6e3e@suse.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.190.159]
+x-kse-serverinfo: RTEXDAG02.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
 Content-Type: text/plain; charset="utf-8"
-X-Originating-IP: [10.29.55.99]
-X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
- shmbx05.spreadtrum.com (10.29.1.56)
-Content-Transfer-Encoding: 8BIT
-X-MAIL: SHSQR01.spreadtrum.com 36R0prL4049406
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
@@ -49,28 +84,6 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-pm_runtime_get is called when setting pending_events to true.
-pm_runtime_put is needed for pairing with pm_runtime_get.
-
-Signed-off-by: Surong Pang <surong.pang@unisoc.com>
----
- drivers/usb/dwc3/gadget.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 5fd067151fbf..9c835c5f9928 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -4720,5 +4720,6 @@ void dwc3_gadget_process_pending_events(struct dwc3 *dwc)
-                dwc3_interrupt(dwc->irq_gadget, dwc->ev_buf);
-                dwc->pending_events = false;
-                enable_irq(dwc->irq_gadget);
-+               pm_runtime_put(dwc->dev);
-        }
- }
---
-2.17.1
-
-________________________________
- This email (including its attachments) is intended only for the person or entity to which it is addressed and may contain information that is privileged, confidential or otherwise protected from disclosure. Unauthorized use, dissemination, distribution or copying of this email or the information herein or taking any action in reliance on the contents of this email or the information herein, by anyone other than the intended recipient, or an employee or agent responsible for delivering the message to the intended recipient, is strictly prohibited. If you are not the intended recipient, please do not read, copy, use or disclose any part of this e-mail to others. Please notify the sender immediately and permanently delete this e-mail and any attachments if you received it in error. Internet communications cannot be guaranteed to be timely, secure, error-free or virus-free. The sender does not accept liability for any errors or omissions.
-本邮件及其附件具有保密性质，受法律保护不得泄露，仅发送给本邮件所指特定收件人。严禁非经授权使用、宣传、发布或复制本邮件或其内容。若非该特定收件人，请勿阅读、复制、 使用或披露本邮件的任何内容。若误收本邮件，请从系统中永久性删除本邮件及所有附件，并以回复邮件的方式即刻告知发件人。无法保证互联网通信及时、安全、无误或防毒。发件人对任何错漏均不承担责任。
+SGkgT2xpdmVyLA0KDQoNCj4gbnZtZW1fY2VsbF9yZWFkKCkgY2FuIHRha2UgTlVMTCBhcyB0aGUg
+c2Vjb25kIGFyZ3VtZW50Lg0KPiBZb3UgYXJlIHRocm93aW5nIGF3YXkgYnVmX3NpemUgYW55d2F5
+Lg0KPiANClRoYW5rcyBmb3IgeW91ciBzdWdnZXN0aW9uLg0KDQpUaGFua3MsDQpTdGFubGV5DQo=
