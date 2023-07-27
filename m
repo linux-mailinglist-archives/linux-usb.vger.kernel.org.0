@@ -2,91 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59069765621
-	for <lists+linux-usb@lfdr.de>; Thu, 27 Jul 2023 16:42:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 239CD76565A
+	for <lists+linux-usb@lfdr.de>; Thu, 27 Jul 2023 16:48:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233890AbjG0Omh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 Jul 2023 10:42:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37138 "EHLO
+        id S234223AbjG0Or4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 Jul 2023 10:47:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232809AbjG0Ome (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jul 2023 10:42:34 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 8403335A5
-        for <linux-usb@vger.kernel.org>; Thu, 27 Jul 2023 07:42:18 -0700 (PDT)
-Received: (qmail 1967770 invoked by uid 1000); 27 Jul 2023 10:42:17 -0400
-Date:   Thu, 27 Jul 2023 10:42:17 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     liulongfang <liulongfang@huawei.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB:bugfix a controller halt error
-Message-ID: <73b58ff7-2a0a-43f7-bda9-52b9437f5bc0@rowland.harvard.edu>
-References: <20230721100015.27124-1-liulongfang@huawei.com>
- <c3ab029f-f6ab-4b09-b2b5-1cc6a5370d0d@rowland.harvard.edu>
- <bfee90c1-a7ca-27e3-88f9-936f48cd2595@huawei.com>
- <bd440f1d-5ea4-485e-9924-433997765adc@rowland.harvard.edu>
- <77a8ecb4-8099-1826-abd8-4f080d80b07d@huawei.com>
+        with ESMTP id S232704AbjG0Orl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 Jul 2023 10:47:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA6B3594;
+        Thu, 27 Jul 2023 07:47:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BF5461E8A;
+        Thu, 27 Jul 2023 14:47:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5834CC433CA;
+        Thu, 27 Jul 2023 14:47:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1690469220;
+        bh=opLdqn7f8D0qGZiGDm9QU2lmGXhtxokrtarVA5rFFb4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Te6nDSczd8N6IVTDn8sHxmnJntiGTiQvPxVOrk99FKyOigE92gvO660x9abTWcyee
+         4cM7o4ZpSXfJycL+IZh/zzmHsmZTrZwspbjSMfrxguENmNsKakENwDbSxtk1iI6/f4
+         ZYfq6BRetwtK75j5oBG9cV+sff79AIMgogZhIT1U=
+Date:   Thu, 27 Jul 2023 16:46:56 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     =?utf-8?Q?=C5=81ukasz?= Bartosik <lb@semihalf.com>
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        upstream@semihalf.com
+Subject: Re: [PATCH v1 1/2] thunderbolt: add tracefs support to tb_* logging
+ helpers
+Message-ID: <2023072705-palpitate-cut-874b@gregkh>
+References: <20230727131326.2282301-1-lb@semihalf.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <77a8ecb4-8099-1826-abd8-4f080d80b07d@huawei.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230727131326.2282301-1-lb@semihalf.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 27, 2023 at 03:03:57PM +0800, liulongfang wrote:
-> On 2023/7/26 22:20, Alan Stern wrote:
-> >> It may be that the handling solution for ECC errors is different from that
-> >> of the OS platform. On the test platform, after usb_control_msg() fails,
-> >> reading the memory data of buf will directly lead to kernel crash:
-> > 
-> > All right, then here's a proposal for a different way to solve the 
-> > problem: Change the kernel's handler for the ECC error notification.  
-> > Have it clear the affected parts of memory, so that the kernel can go 
-> > ahead and use them without crashing.
-> > 
-> > It seems to me that something along these lines must be necessary in 
-> > any case.  Unless the bad memory is cleared somehow, it would never be 
-> > usable again.  The kernel might deallocate it, then reallocate for 
-> > another purpose, and then crash when the new user tries to access it.  
-> > 
-> > In fact, this scenario could still happen even with your patch, which 
-> > means the patch doesn't really fix the problem.
-> > 
+On Thu, Jul 27, 2023 at 03:13:25PM +0200, Łukasz Bartosik wrote:
+> Thunderbolt tracing is a lightweight alternative to traditional
+> thunderbolt debug logging. While thunderbolt debug logging is quite
+> convenient when reproducing a specific issue, it doesn't help when
+> something goes wrong unexpectedly. There are a couple of reasons why
+> one does not want to enable thunderbolt debug logging at all times:
 > 
-> This patch is only used to prevent data in the buffer from being accessed.
-> As long as the data is not accessed, the kernel does not crash.
+> 1. We don't want to overwhelm kernel log with thunderbolt spam, others
+>    want to use it too
 
-I still don't understand.  You haven't provided nearly enough 
-information.  You should start by answering the questions that Oliver 
-asked.  Then answer this question:
+But doesn't the dynamic debug infrastructure allow this today?
 
-The code you are concerned about is this:
+> 2. Console logging is slow
 
-		r = usb_control_msg(udev, usb_rcvaddr0pipe(),
-				USB_REQ_GET_DESCRIPTOR, USB_DIR_IN,
-				USB_DT_DEVICE << 8, 0,
-				buf, GET_DESCRIPTOR_BUFSIZE,
-				initial_descriptor_timeout);
-		switch (buf->bMaxPacketSize0) {
+Slow how?
 
-You're worried that if an ECC memory error occurs during the 
-usb_control_msg transfer, the kernel will crash when the "switch" 
-statement tries to read the value of buf->bMaxPacketSize0.  That's a 
-reasonable thing to worry about.
+> Thunderbolt tracing aims to solve both these problems. Use of
+> the thunderbolt tracefs instance allows to enable thunderbolt
+> logging in production without impacting performance or spamming
+> the system logs.
+> 
+> To use thunderbolt tracing, set the thunderbolt.trace module parameter
+> (via cmdline or sysfs) to true:
+> ::
+>   eg: echo true > /sys/module/thunderbolt/parameters/trace
 
-Now think about what will happen if usb_control_msg works successfully 
-but an ECC memory error occurs when the return code from the function 
-call is stored in r?  Won't the kernel crash then?  Or if not then, when 
-it reads the value of r a few lines later?
+Why yet-another module parameter?  Why is this required?
 
-So why bother to handle the first kind of ECC error but not the second?  
-What makes one ECC error more important than another?
+> Once active, all log messages will be written to the thunderbolt trace.
+> Once at capacity, the trace will overwrite old messages with new ones.
+> At any point, one can read the trace file to extract the previous
+> thunderbolt messages:
+> ::
+>   eg: cat /sys/kernel/tracing/instances/thunderbolt/trace
+> 
+> The thunderbolt trace instance is subsystem wide, so if you have multiple
+> devices active, they will be adding logs to the same trace.
 
-Alan Stern
+This just uses the existing logging functionality and ties it into the
+trace functionality, right?
+
+If so, why not do this for all printk messages, why should this be
+unique to thunderbolt?
+
+Normally with tracing, you enable specific tracepoints that you add, not
+just "all dev_*() messages", are you sure this will actually help?
+
+thanks,
+
+greg k-h
