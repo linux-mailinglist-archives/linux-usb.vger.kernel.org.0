@@ -2,99 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 591D67671FD
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Jul 2023 18:37:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E70676722F
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Jul 2023 18:43:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233597AbjG1QhQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Jul 2023 12:37:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42002 "EHLO
+        id S234181AbjG1Qni (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Jul 2023 12:43:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbjG1QhA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jul 2023 12:37:00 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78C444234
-        for <linux-usb@vger.kernel.org>; Fri, 28 Jul 2023 09:36:56 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-31765792c7cso2420293f8f.0
-        for <linux-usb@vger.kernel.org>; Fri, 28 Jul 2023 09:36:56 -0700 (PDT)
+        with ESMTP id S234874AbjG1QnK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jul 2023 12:43:10 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 708D04688
+        for <linux-usb@vger.kernel.org>; Fri, 28 Jul 2023 09:42:58 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-5221f3affe4so2994631a12.0
+        for <linux-usb@vger.kernel.org>; Fri, 28 Jul 2023 09:42:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690562215; x=1691167015;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=linaro.org; s=google; t=1690562576; x=1691167376;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=kv1vn8i10uKiVGMZqWV0hp2dp0U/OH8nWn1xPOKpe2E=;
-        b=WXsUGfp3JibzzSWaJLOYRCf5x8xXWgYZKzFIf69dgVy9YK8C4NDwHyEDFZXz5w3U4v
-         QQOs8VR3xBCFtRC9Uc3C7jDtHbHf/TVcDQbt3KNBbvC3KguUj++OBRSmosar1TXhCfCO
-         cgVRNgC2CqwGVozxV9BCvuohUn46t+dccFpMTd9ejv8OKqQcVDJDj14Xf7r2EkIsfxZ5
-         ogiBvgZjEDgqBJiNCt+R3MZB3dOH5vA6Wa4t08ltVHwtTVkpajcfwR8vctgSe4BB19fI
-         6WAvtCklIkG3U/TnlOkzeYCurxGOclz0CiZwVtqU4t3uUZ/xLeZzpgcwN0UIfUeqn7Sx
-         T+Ug==
+        bh=q3+wuhVg/p8H9ClZOmeQcBUOyAzdHoE0pZfkw6+aEgE=;
+        b=f4rWmLbH6MxCsyYr37tBB/9EqqbZJuHRl8dlSWCSmANEHsTqQ31ZVBocBl1X24/rR9
+         Xvyh6Bb+HAh5im1Vz0JV7c+gYlyYCnsPDDDyXoFgnJJjMyJwEqqCf2gybkFnDTGKf2nd
+         QzeFOLP9ZI6CIQuRVTXp13T0NEHNrkCmCXBoQt3LjiUEiJ2qPFnLeTSZIaSGH+Nh7HcV
+         nYGBKahXXFafGQAoio7PdhVNcfGv2k9v+95YGcvDT8WGgBE/wK7lmqIQpX3qVPtcfH+X
+         EsIc6vi41fMzS1gkpAyc9yIAVoOwPjWFfp0ANdQyieeHA5f1nOZdlqjbG7RTEuzUV4GB
+         qbjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690562215; x=1691167015;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=1e100.net; s=20221208; t=1690562576; x=1691167376;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kv1vn8i10uKiVGMZqWV0hp2dp0U/OH8nWn1xPOKpe2E=;
-        b=B/fhlre91bVbjrSI3e1RoYbMkGJJ1TLv2aY6w+6f5t2mAT3jfMtrRJ3LehdWQfMjw1
-         VEVGiXES0ARQjF//tTv+izFtSb+Lxm6n2IOPrchNBGmbE4d6ogmair7lcg07XxWAv/Be
-         lx0DSSgrjb7uamh7zrwxX0dz0wXMbmW6KF4d0JsZUfVLysc8ZjpDl+cJwQwVRdsmvFux
-         oh8YgGavR3BebeyuODtbJqPCNn5arQUTsKMtt985zPOm63o7TW9skMw11EB3uv+DkFZ6
-         wcSVn/YcEQP6IP6SgxjbJyJE+XYpDhM2/vtBLZFX87FhWizp+1hfoeZ0wJVrSvOTGToQ
-         ZcPA==
-X-Gm-Message-State: ABy/qLa8CewfOnXRwhFa2MSne5/jFdfs8OQu5Lu5Tusj7FE4wkqiBPi1
-        gXf7+gK2F/IguZQpNLXvU2tsfA==
-X-Google-Smtp-Source: APBJJlFtwmVxo8pxiclcUgLI8fwOIzC/1t6avYTLDMrZvATE9p+eFs+1MvU7kydx7xR6YX3cFZ69Tg==
-X-Received: by 2002:a05:6000:11:b0:317:5de3:86fb with SMTP id h17-20020a056000001100b003175de386fbmr2171475wrx.10.1690562214762;
-        Fri, 28 Jul 2023 09:36:54 -0700 (PDT)
+        bh=q3+wuhVg/p8H9ClZOmeQcBUOyAzdHoE0pZfkw6+aEgE=;
+        b=guY4cg/qyuCIEYFtZQ7DWe2cDz2M6xAcRTQFjYLYL/7c0wvK8gIenFOrAQ6ESoD3WV
+         WAvD0HPUuJP8LlGMDjSsBi+Vhc0d6MHhbC810QA+Jim2/giDfaxfNAAcRdP6lpWLrAsI
+         7I8mEl0MufnVN9ArQWEopKp9T4OQUFOwRVFgIVr8aC6OKS8eqwQeGXB2HzUNRcxFchD4
+         SCf7hU7xwvvuFaUDoJt2PoTQ7Re8KXqwa7EFZTZTqBlz4/E8eLo9k5yQnvcsVAKQzHeA
+         GPOc431syMTHkHOH2bppP+gBwE4GwR8Jx/wB4VSuy4MJBXe1zy4/xZfa7wzvBamuSUj9
+         7i5A==
+X-Gm-Message-State: ABy/qLZc+2OPjG29LUC9CGwOyyxCBxUcvd98gv0L6jzv9/raQQ67qu6G
+        POIvadRV9yA6JLHL60qriOEtEw==
+X-Google-Smtp-Source: APBJJlH5bYOR2n9oNfZEBMlqmDVCuTpOl4ID0OVQNdhlRA4qkuu66jlfbD+Oepe/HalkiwyCrR+NKA==
+X-Received: by 2002:aa7:d145:0:b0:522:203d:c9b1 with SMTP id r5-20020aa7d145000000b00522203dc9b1mr2368024edo.11.1690562576039;
+        Fri, 28 Jul 2023 09:42:56 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id p9-20020a5d48c9000000b0031433443265sm5235215wrs.53.2023.07.28.09.36.48
+        by smtp.gmail.com with ESMTPSA id w10-20020aa7da4a000000b0051a53d7b160sm1968420eds.80.2023.07.28.09.42.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Jul 2023 09:36:54 -0700 (PDT)
-Message-ID: <30943376-f895-2eb9-1b00-55ce56f51742@linaro.org>
-Date:   Fri, 28 Jul 2023 18:36:47 +0200
+        Fri, 28 Jul 2023 09:42:55 -0700 (PDT)
+Message-ID: <f042b194-659a-b128-7f5a-572150bf532f@linaro.org>
+Date:   Fri, 28 Jul 2023 18:42:53 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
-Subject: Re: [PATCH v3 00/50] Add support for sam9x7 SoC family
+Subject: Re: [PATCH v3 27/50] dt-bindings: usb: atmel: add sam9x7
 Content-Language: en-US
-To:     Conor Dooley <conor@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Varshini Rajendran <varshini.rajendran@microchip.com>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org,
-        andi.shyti@kernel.org, tglx@linutronix.de, maz@kernel.org,
-        lee@kernel.org, ulf.hansson@linaro.org, tudor.ambarus@linaro.org,
-        richard@nod.at, vigneshr@ti.com, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, linus.walleij@linaro.org,
-        sre@kernel.org, p.zabel@pengutronix.de, olivia@selenic.com,
-        a.zummo@towertech.it, radu_nicolae.pirea@upb.ro,
-        richard.genoud@gmail.com, gregkh@linuxfoundation.org,
-        lgirdwood@gmail.com, broonie@kernel.org, wim@linux-watchdog.org,
-        linux@roeck-us.net, linux@armlinux.org.uk,
-        durai.manickamkr@microchip.com, andrew@lunn.ch,
-        jerry.ray@microchip.com, andre.przywara@arm.com, mani@kernel.org,
-        alexandre.torgue@st.com, gregory.clement@bootlin.com,
-        arnd@arndb.de, rientjes@google.com, deller@gmx.de,
-        42.hyeyoo@gmail.com, vbabka@suse.cz, mripard@kernel.org,
-        mihai.sain@microchip.com, codrin.ciubotariu@microchip.com,
-        eugen.hristev@collabora.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-crypto@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        netdev@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-usb@vger.kernel.org,
-        linux-watchdog@vger.kernel.org
-References: <20230728102223.265216-1-varshini.rajendran@microchip.com>
- <c0792cfd-db4f-7153-0775-824912277908@linaro.org>
- <20230728-floss-stark-889158f968ea@spud> <20230728180443.55363550@xps-13>
- <20230728-perfectly-online-499ba99ce421@spud>
+To:     Varshini Rajendran <varshini.rajendran@microchip.com>,
+        gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        claudiu.beznea@microchip.com, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20230728102753.266660-1-varshini.rajendran@microchip.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230728-perfectly-online-499ba99ce421@spud>
+In-Reply-To: <20230728102753.266660-1-varshini.rajendran@microchip.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -107,50 +78,41 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 28/07/2023 18:10, Conor Dooley wrote:
-> On Fri, Jul 28, 2023 at 06:04:43PM +0200, Miquel Raynal wrote:
->> Hi Conor,
->>
->> conor@kernel.org wrote on Fri, 28 Jul 2023 16:50:24 +0100:
->>
->>> On Fri, Jul 28, 2023 at 01:32:12PM +0200, Krzysztof Kozlowski wrote:
->>>> On 28/07/2023 12:22, Varshini Rajendran wrote:  
->>>>> This patch series adds support for the new SoC family - sam9x7.
->>>>>  - The device tree, configs and drivers are added
->>>>>  - Clock driver for sam9x7 is added
->>>>>  - Support for basic peripherals is added
->>>>>  - Target board SAM9X75 Curiosity is added
->>>>>   
->>>>
->>>> Your threading is absolutely broken making it difficult to review and apply.  
->>>
->>> I had a chat with Varshini today, they were trying to avoid sending the
->>> patches to a massive CC list, but didn't set any in-reply-to header.
->>> For the next submission whole series could be sent to the binding &
->>> platform maintainers and the individual patches additionally to their
->>> respective lists/maintainers. Does that sound okay to you, or do you
->>> think it should be broken up?
->>
->> I usually prefer receiving the dt-bindings *and* the driver changes, so
->> I can give my feedback on the description side, as well as looking at
->> the implementation and see if that really matches what was discussed
->> with you :)
+On 28/07/2023 12:27, Varshini Rajendran wrote:
+> Add sam9x7 bindings.
 > 
-> Right, that is what I was suggesting. Respective maintainers would get
-> the drivers *and* bindings for their subsystems - IOW, each patch is
-> sent to what get_maintainer.pl outputs for it.
+> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
+> ---
+>  Documentation/devicetree/bindings/usb/atmel-usb.txt | 11 +++++++----
+>  1 file changed, 7 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/atmel-usb.txt b/Documentation/devicetree/bindings/usb/atmel-usb.txt
+> index 12183ef47ee4..82bd0dbc2a48 100644
+> --- a/Documentation/devicetree/bindings/usb/atmel-usb.txt
+> +++ b/Documentation/devicetree/bindings/usb/atmel-usb.txt
+> @@ -3,8 +3,9 @@ Atmel SOC USB controllers
+>  OHCI
+>  
+>  Required properties:
+> - - compatible: Should be "atmel,at91rm9200-ohci" for USB controllers
+> -   used in host mode.
+> + - compatible: Should be "atmel,at91rm9200-ohci" or
+> +   "microchip,sam9x7-ohci", "atmel,at91rm9200-ohci"
+> +   for USB controllers used in host mode.
+>   - reg: Address and length of the register set for the device
+>   - interrupts: Should contain ohci interrupt
+>   - clocks: Should reference the peripheral, host and system clocks
+> @@ -30,8 +31,9 @@ usb0: ohci@500000 {
+>  EHCI
+>  
+>  Required properties:
+> - - compatible: Should be "atmel,at91sam9g45-ehci" for USB controllers
+> -   used in host mode.
+> + - compatible: Should be "atmel,at91sam9g45-ehci" or
+> +   "microchip,sam9x7-ehci", "atmel,at91sam9g45-ehci"
 
-For reviewers I find the easiest if this is mostly split per subsystem.
-There were here few patches for USB, few clk etc, so these easily can be
-separate patchsets. All the rest one-liners or one-patch-per-subsystem
-could be grouped and set in one patchset, after fixing the threading.
-
-But the moment the patchset grows to 50 it's time to re-think it whether
-this grouping is necessary or even beneficial.
-
-This is not a conversion of mach to DT (like ep93xx) which benefits of
-doing everything in one step. Therefore my recommendation for this work
-is to split it entirely per each subsystem.
+This confuses me. Isn't microchip,sam9x7-ehci already described in EHCI
+bindings?
 
 Best regards,
 Krzysztof
