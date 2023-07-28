@@ -2,181 +2,180 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02496766FC4
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Jul 2023 16:47:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42883766FD3
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Jul 2023 16:50:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237195AbjG1Ore (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Jul 2023 10:47:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32916 "EHLO
+        id S237251AbjG1Ou2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Jul 2023 10:50:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237156AbjG1Ora (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jul 2023 10:47:30 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEEE5421C;
-        Fri, 28 Jul 2023 07:47:22 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-686b879f605so1543416b3a.1;
-        Fri, 28 Jul 2023 07:47:22 -0700 (PDT)
+        with ESMTP id S237012AbjG1Ou1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jul 2023 10:50:27 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E1B12D
+        for <linux-usb@vger.kernel.org>; Fri, 28 Jul 2023 07:50:25 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4fe0bb9500aso3785383e87.1
+        for <linux-usb@vger.kernel.org>; Fri, 28 Jul 2023 07:50:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690555642; x=1691160442;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=QACIBEcV1r2Mkf1JqDfdoATefDObW7+anJzfPY99Gis=;
-        b=GTGsF003YcxUNIrHANoxXK2ROnhxjXUsKCs9Z9jSXRl3noutQ3mFPnO1mL59Whzi/3
-         NNbPiOPyKXVgl3uinHxK8Az3NdLeq0QfYk7i5eFVnm6K1GtTn8UZYj0XgtN55xXveVM6
-         ZLz7JzyKLxaZLaxK27dq5yxuNHiezZ6UifRowCGPeIOKOGVWPV+RCvAK5ybbEagqRWH8
-         1iIx+Q76u+QS+aXJV2pJb5tRmKwdEOkEUNWEnsoZQOR835/BYA5HullATumi57NzaAEM
-         DNo2/gxJd84ZqDlnFMD50xuj+GdzRG3Py9CAqOHLBE4SRip/xBqj7ayBM8MS8sdQPiKs
-         /tdw==
+        d=semihalf.com; s=google; t=1690555824; x=1691160624;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X0/Zz0K7yOTQgY23M7Y3UkTj7T3LRo0eppYGxgXzcnk=;
+        b=M05v02b4dnmqB+FuH88rSkQy5xn7f+D99fe8i9xh3POgzAV5xBS63MZkWMbR86aQQY
+         O4mA7paJFzXNm5KEhzb43Sza0hOmpE3+cYiYAT6/Hu8GhG/aMHFqaKlX/kYUQLV2vMiV
+         +RbJs3guf7WHponUAHCRCu+gG4XSw4EPLdW/AahoZ1ZLLe/p4wY2HOKT+o+Fa7qGeqA1
+         TQ/Vr+lxFcedspQYp4mo3o7Y1ggtay++TE9u5cExd/fb+JLORznKv1zEDX1XpLRuOGnh
+         ULtRkgtot0MTis509tbh70ZFE+kO1BynbZ0Ax7kF+nucwDT/B2AzJpu9joh/cu1snkbq
+         GJqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690555642; x=1691160442;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QACIBEcV1r2Mkf1JqDfdoATefDObW7+anJzfPY99Gis=;
-        b=ibyqxJ9mZIF/xjVUuhqosWTG5CWyFthG6LuuMikeZaJxY1g6PwS9HvRKsiIpqxZnB2
-         eFXA5/JE1e8uP/GgFxL0H5Sr46LxS9Qfl07DNB5p5QWt2HjYo6d+aM8l7Ph4pAK0tDTe
-         VRmyAZTie2iwjUO9/AUFop3tcerODXEbeyi8TQndVc+toJLnCnT10zIy+Fhj3aD1VPWy
-         iiPbro80A2SzYv36tKl7VQYS6lQzBgbE855tIfqfTRbUVgfkpmyLY/patvFgHPACN8+f
-         sLm8B2SXnnskQpAqe4zFC4gZQeVky89w47DMlicJnibNlzTqsZjJeiPmT/O9wikQ+xhu
-         AE+g==
-X-Gm-Message-State: ABy/qLavjwVjEKYqgGhc6YTrGHUC3qOYRV9EtpDR2U0IhCYqaEn25JvH
-        r7n6gzBmUxK5iehm88XlFmo=
-X-Google-Smtp-Source: APBJJlHHOzMz4IVNTKgOdtU38ZVCABRqOaV+Z3PvDEbedYM+li2BTliHj7nOKFNighRtOxMW0COmKw==
-X-Received: by 2002:a05:6a00:2d84:b0:66a:613f:87e1 with SMTP id fb4-20020a056a002d8400b0066a613f87e1mr2036078pfb.8.1690555642070;
-        Fri, 28 Jul 2023 07:47:22 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x1-20020aa784c1000000b006827c26f147sm3299575pfn.138.2023.07.28.07.47.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Jul 2023 07:47:21 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <849c86ac-6f24-828f-664b-a3c209056072@roeck-us.net>
-Date:   Fri, 28 Jul 2023 07:47:20 -0700
+        d=1e100.net; s=20221208; t=1690555824; x=1691160624;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=X0/Zz0K7yOTQgY23M7Y3UkTj7T3LRo0eppYGxgXzcnk=;
+        b=HM5ugFsuIyHkjb3NAG4gle0JSmZK60zMcavzr/0Vz2FboDxPN8QU8nsnXDZhBRff3K
+         SC9XXi/NGTym27KEzNqG+TZ3l5+wsiXswgi1Nvjs35i3qipH1RZH6cONNLSqsdyjTJJW
+         FTWUDSx/bvPTmPuNaccwQWTjgojek+qd5J6CeHMM0a2frCMQeeGJxfi5HjbW6kUUK+lU
+         e59teT+afmw7ZwYwt92svBDkgLZxQ2M5QheWh87Lx5XbZkhxIQllELV6zP+7q0CU18VU
+         Rb/cEfjzbwwHmzigD61A8EAKKA232VvHtZ7KtQdp+8oYKQ7Ff7V3wKzUZUBuXhMiX42U
+         OnhA==
+X-Gm-Message-State: ABy/qLbOoJRqy4+jwFppUNbYkzcdrNUrWT25Eeqf8W995qgZgff8XBJ6
+        Py9JgyUTbEIJlxhtDCmfJiY6cr0u4GkXpa+dP3Oh
+X-Google-Smtp-Source: APBJJlHL9s9IQm/WCVsA5DFEWr3ThKD1y31sFxG54tKaprJl1vahhrlHsKpgG8AEeiGFhCS1Y0f8O0XXzAEkwBtwIZ4=
+X-Received: by 2002:a05:6512:ac2:b0:4fb:9631:4bb with SMTP id
+ n2-20020a0565120ac200b004fb963104bbmr2285073lfu.11.1690555824109; Fri, 28 Jul
+ 2023 07:50:24 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v4 2/2] usb: typec: qcom-pmic-typec: register drm_bridge
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <20230728110942.485358-1-dmitry.baryshkov@linaro.org>
- <20230728110942.485358-3-dmitry.baryshkov@linaro.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230728110942.485358-3-dmitry.baryshkov@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20230727131326.2282301-1-lb@semihalf.com> <2023072705-palpitate-cut-874b@gregkh>
+In-Reply-To: <2023072705-palpitate-cut-874b@gregkh>
+From:   =?UTF-8?Q?=C5=81ukasz_Bartosik?= <lb@semihalf.com>
+Date:   Fri, 28 Jul 2023 16:50:12 +0200
+Message-ID: <CAK8ByeJYtFcMbEabSDJwXhE3jYY2xQG+JHR0gpwh6_=yg+AXjw@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] thunderbolt: add tracefs support to tb_* logging helpers
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        upstream@semihalf.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 7/28/23 04:09, Dmitry Baryshkov wrote:
-> The current approach to handling DP on bridge-enabled platforms requires
-> a chain of DP bridges up to the USB-C connector. Register a last DRM
-> bridge for such chain.
-> 
-> Acked-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
->   drivers/usb/typec/tcpm/Kconfig                |  1 +
->   drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c | 35 +++++++++++++++++++
->   2 files changed, 36 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec/tcpm/Kconfig
-> index 5d393f520fc2..0b2993fef564 100644
-> --- a/drivers/usb/typec/tcpm/Kconfig
-> +++ b/drivers/usb/typec/tcpm/Kconfig
-> @@ -79,6 +79,7 @@ config TYPEC_WCOVE
->   config TYPEC_QCOM_PMIC
->   	tristate "Qualcomm PMIC USB Type-C Port Controller Manager driver"
->   	depends on ARCH_QCOM || COMPILE_TEST
-> +	depends on DRM || DRM=n
->   	help
->   	  A Type-C port and Power Delivery driver which aggregates two
->   	  discrete pieces of silicon in the PM8150b PMIC block: the
-> diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
-> index af44ee4e6e86..0ea7cc656089 100644
-> --- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
-> +++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
-> @@ -17,6 +17,9 @@
->   #include <linux/usb/role.h>
->   #include <linux/usb/tcpm.h>
->   #include <linux/usb/typec_mux.h>
-> +
-> +#include <drm/drm_bridge.h>
-> +
->   #include "qcom_pmic_typec_pdphy.h"
->   #include "qcom_pmic_typec_port.h"
->   
-> @@ -33,6 +36,7 @@ struct pmic_typec {
->   	struct pmic_typec_port	*pmic_typec_port;
->   	bool			vbus_enabled;
->   	struct mutex		lock;		/* VBUS state serialization */
-> +	struct drm_bridge	bridge;
->   };
->   
->   #define tcpc_to_tcpm(_tcpc_) container_of(_tcpc_, struct pmic_typec, tcpc)
-> @@ -146,6 +150,33 @@ static int qcom_pmic_typec_init(struct tcpc_dev *tcpc)
->   	return 0;
->   }
->   
-> +#ifdef CONFIG_DRM
+czw., 27 lip 2023 o 16:47 Greg KH <gregkh@linuxfoundation.org> napisa=C5=82=
+(a):
+>
+> On Thu, Jul 27, 2023 at 03:13:25PM +0200, =C5=81ukasz Bartosik wrote:
+> > Thunderbolt tracing is a lightweight alternative to traditional
+> > thunderbolt debug logging. While thunderbolt debug logging is quite
+> > convenient when reproducing a specific issue, it doesn't help when
+> > something goes wrong unexpectedly. There are a couple of reasons why
+> > one does not want to enable thunderbolt debug logging at all times:
+> >
+> > 1. We don't want to overwhelm kernel log with thunderbolt spam, others
+> >    want to use it too
+>
+> But doesn't the dynamic debug infrastructure allow this today?
+>
 
-Sorry for not noticing earlier. This needs to be "#if IS_ENABLED(CONFIG_DRM)"
-or otherwise would not catch DRM=m situations.
+Dynamic debug allows only partially what we would like to achieve.
 
-> +static int qcom_pmic_typec_attach(struct drm_bridge *bridge,
-> +				     enum drm_bridge_attach_flags flags)
-> +{
-> +	return flags & DRM_BRIDGE_ATTACH_NO_CONNECTOR ? 0 : -EINVAL;
-> +}
-> +
-> +static const struct drm_bridge_funcs qcom_pmic_typec_bridge_funcs = {
-> +	.attach = qcom_pmic_typec_attach,
-> +};
-> +
-> +static int qcom_pmic_typec_init_drm(struct pmic_typec *tcpm)
-> +{
-> +	tcpm->bridge.funcs = &qcom_pmic_typec_bridge_funcs;
-> +	tcpm->bridge.of_node = of_get_child_by_name(tcpm->dev->of_node, "connector");
-> +	tcpm->bridge.ops = DRM_BRIDGE_OP_HPD;
-> +	tcpm->bridge.type = DRM_MODE_CONNECTOR_DisplayPort;
-> +
-> +	return devm_drm_bridge_add(tcpm->dev, &tcpm->bridge);
-> +}
-> +#else
-> +static int qcom_pmic_typec_init_drm(struct pmic_typec *tcpm)
-> +{
-> +	return 0;
-> +}
-> +#endif
-> +
->   static int qcom_pmic_typec_probe(struct platform_device *pdev)
->   {
->   	struct pmic_typec *tcpm;
-> @@ -208,6 +239,10 @@ static int qcom_pmic_typec_probe(struct platform_device *pdev)
->   	mutex_init(&tcpm->lock);
->   	platform_set_drvdata(pdev, tcpm);
->   
-> +	ret = qcom_pmic_typec_init_drm(tcpm);
-> +	if (ret)
-> +		return ret;
-> +
->   	tcpm->tcpc.fwnode = device_get_named_child_node(tcpm->dev, "connector");
->   	if (!tcpm->tcpc.fwnode)
->   		return -EINVAL;
+Our goal is to be able to gather thunderbolt debug logs from ChromeOS
+end users when an issue happens. Especially that would be very useful
+for us in case of issues which reproduction is difficult. We would
+write thunderbolt debug logs to a separate wrap around buffer provided
+by trace subsystem. When an issue happens and a user sends a feedback
+then thunderbolt logs would be attached to the feedback providing
+more insight into what happened.
 
+Dynamic debug sends all debug messages to dmesg and with significant
+number of dynamic dev_dbg prints enabled dmesg may be quickly overwritten
+and other important logs lost. Also enabling dynamic debug for the
+entire kernel might
+not be appropriate for production kernels due to impact on kernel size and =
+perf.
+
+> > 2. Console logging is slow
+>
+> Slow how?
+>
+
+I meant slow compared to writing messages to trace array instance in memory=
+.
+
+> > Thunderbolt tracing aims to solve both these problems. Use of
+> > the thunderbolt tracefs instance allows to enable thunderbolt
+> > logging in production without impacting performance or spamming
+> > the system logs.
+> >
+> > To use thunderbolt tracing, set the thunderbolt.trace module parameter
+> > (via cmdline or sysfs) to true:
+> > ::
+> >   eg: echo true > /sys/module/thunderbolt/parameters/trace
+>
+> Why yet-another module parameter?  Why is this required?
+>
+
+This is to enable/disable write of thunderbolt debug logs to thunderbolt
+trace array instance.
+
+
+> > Once active, all log messages will be written to the thunderbolt trace.
+> > Once at capacity, the trace will overwrite old messages with new ones.
+> > At any point, one can read the trace file to extract the previous
+> > thunderbolt messages:
+> > ::
+> >   eg: cat /sys/kernel/tracing/instances/thunderbolt/trace
+> >
+> > The thunderbolt trace instance is subsystem wide, so if you have multip=
+le
+> > devices active, they will be adding logs to the same trace.
+>
+> This just uses the existing logging functionality and ties it into the
+> trace functionality, right?
+>
+
+Yes, it writes log messages (including debug level) to memory buffer provid=
+ed
+by trace framework.
+
+> If so, why not do this for all printk messages, why should this be
+> unique to thunderbolt?
+>
+
+I agree it would be better to come up with a general solution that can be
+used by any part/subsystem of a kernel. I think it makes sense for me to lo=
+ok
+more into dynamic debug and see how it could be extended to cover our use c=
+ase.
+
+> Normally with tracing, you enable specific tracepoints that you add, not
+> just "all dev_*() messages", are you sure this will actually help?
+>
+
+Yes, it would be helpful, here is an example snippet from logs
+captured into thunderbolt trace array instance:
+ <...>-177     [000] .....   217.635100: tb_trace_printf: thunderbolt
+0000:00:0d.3: 0: resuming switch
+ <...>-177     [000] .....   217.635101: tb_trace_printf: thunderbolt
+0000:00:0d.3: restoring Switch at 0x0 (depth: 0, up port: 7)
+ <...>-177     [000] .....   217.635400: tb_trace_printf: thunderbolt
+0000:00:0d.3: 0:1: USB4 wake: no, connection wake: no, disconnection
+wake: yes
+
+Thanks,
+Lukasz
+
+> thanks,
+>
+> greg k-h
