@@ -2,139 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E5F2767686
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Jul 2023 21:44:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30681767760
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Jul 2023 23:03:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234638AbjG1ToF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Jul 2023 15:44:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55020 "EHLO
+        id S233322AbjG1VDL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Jul 2023 17:03:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234612AbjG1ToF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jul 2023 15:44:05 -0400
-Received: from soltyk.jannau.net (soltyk.jannau.net [144.76.91.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFCA53AB1;
-        Fri, 28 Jul 2023 12:44:03 -0700 (PDT)
-Received: by soltyk.jannau.net (Postfix, from userid 1000)
-        id 539692701FE; Fri, 28 Jul 2023 21:44:02 +0200 (CEST)
-Date:   Fri, 28 Jul 2023 21:44:02 +0200
-From:   Janne Grunau <janne@jannau.net>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ville =?iso-8859-1?Q?Syrj=E4l=E4?= 
-        <ville.syrjala@linux.intel.com>, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-usb@vger.kernel.org,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        dri-devel@lists.freedesktop.org, Sean Paul <sean@poorly.run>,
-        intel-gfx@lists.freedesktop.org
-Subject: Re: [PATCH v6 3/3] drm/bridge_connector: implement oob_hotplug_event
-Message-ID: <ZMQaguWtUjYMxw7l@jannau.net>
-References: <20230709202511.287794-1-dmitry.baryshkov@linaro.org>
- <20230709202511.287794-4-dmitry.baryshkov@linaro.org>
+        with ESMTP id S233279AbjG1VDK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jul 2023 17:03:10 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id C79ED449E
+        for <linux-usb@vger.kernel.org>; Fri, 28 Jul 2023 14:03:08 -0700 (PDT)
+Received: (qmail 51440 invoked by uid 1000); 28 Jul 2023 17:03:08 -0400
+Date:   Fri, 28 Jul 2023 17:03:08 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Avichal Rakesh <arakesh@google.com>
+Cc:     Dan Scally <dan.scally@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        "Eino-Ville Talvala \(Eddy\)" <etalvala@google.com>,
+        Jayant Chowdhary <jchowdhary@google.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: Kernel panic when unbinding UVC gadget function
+Message-ID: <fe501805-2eec-4cd1-be61-ad446002af9c@rowland.harvard.edu>
+References: <4d7aa3f4-22d9-9f5a-3d70-1bd7148ff4ba@google.com>
+ <8de4bb54-8daa-73c0-b5eb-4aa4b9675ce5@ideasonboard.com>
+ <fa11d883-2c72-486f-9b7b-46f238e2e03f@rowland.harvard.edu>
+ <CAMHf4WJ4QyvFfnAWSk_D3VuPOe7+if=pgQvunjLXOHTcBgi4Qw@mail.gmail.com>
+ <8242fba3-ebcc-481e-92bb-e25a3516853a@rowland.harvard.edu>
+ <CAMHf4W+d1P8_Ahgc=Wj5K7BJa2Oi+cfXozd8e0_cdzioAjHeBg@mail.gmail.com>
+ <7a71a4c9-324e-44a9-b38b-31ea87d60e6e@rowland.harvard.edu>
+ <b55b51b3-7632-4ba5-b4fc-ea0384321149@rowland.harvard.edu>
+ <CAMHf4WL8jWhkeDsLpH1z9sXi4-42+WExtCeJWjXNKy9R85oJQg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230709202511.287794-4-dmitry.baryshkov@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMHf4WL8jWhkeDsLpH1z9sXi4-42+WExtCeJWjXNKy9R85oJQg@mail.gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2023-07-09 23:25:11 +0300, Dmitry Baryshkov wrote:
-> Implement the oob_hotplug_event() callback. Translate it to the HPD
-> notification sent to the HPD bridge in the chain.
+On Fri, Jul 28, 2023 at 11:41:19PM +0530, Avichal Rakesh wrote:
+> On Fri, Jul 28, 2023 at 9:07 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > It's not clear that the patch will fix the problem entirely.  Your
+> > original analysis of the bug stated:
+> >
+> > > This means that attempting to unregister the UVC Gadget Driver results in the
+> > > V4L2 resource cleanup being stuck behind udc->connect_lock, which will only
+> > > be released after uvc_function_unbind finishes. This results in either the
+> > > gadget deactivating after the unbind process has finished, or in a Kernel Panic
+> > > as it tries to cleanup a V4L2 node that has been purged.
+> >
+> > My patch removes the locking issue.  But if an execution path can
+> > occur with a lock present, it can also occur when the lock has been
+> > removed.  That means it may still be possible for the UVC gadget driver
+> > to try deactivating the UDC after the unbind process has finished or for
+> > it to try cleaning up a V4L2 node that has been purged.
+> >
+> > If either of those really could have happened (as opposed to just
+> > getting stuck in a deadlock, waiting for a mutex that would never be
+> > released), then it can still happen with the patch.  Fixing them would
+> > require changes to the UVC gadget driver.  So the problem may not be
+> > gone entirely.
+> >
+> The current situation can theoretically happen without the deadlock,
+> yes, but shouldn't happen in practice. UVC's disable/unbind code flow
+> looks as follows:
 > 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> 1. When disable callback is called, the gadget driver signals the
+> userspace application to close the V4L2 node.
+> 2. Closing the V4L2 node calls the release callback to clean up
+> resources. It is this callback that calls into gadget_deactivate and
+> gets blocked currently (without your patch).
+> 3. Separately, the unbind callback waits on release callback to finish
+> for 500ms, assuming the userspace application to behave well and close
+> the node in a reasonable amount of time.
+> 4. If the release callback still hasn't been called, the V4L2 node is
+> forcefully removed and UVC driver waits for another 1000ms for the
+> release callback to clean up any pending resources.
+> 5. The unbind process continues regardless of the status of release
+> callback after waiting at most 1.5s for release.
+> 
+> So the only way to run into the current issue is if the release
+> callback fails to finish in both step 3 and step 4 (for example, due
+> to a deadlock) in the span of 1.5s. It is possible, but fairly
+> unlikely (at least in my limited understanding) for the release
+> callback to be delayed for quite that long.
+> 
+> Hope that makes some sense!
 
-Reviewed-by: Janne Grunau <j@jannau.net>
-> ---
->  drivers/gpu/drm/drm_bridge_connector.c | 29 +++++++++++++++++++++++---
->  1 file changed, 26 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/drm_bridge_connector.c b/drivers/gpu/drm/drm_bridge_connector.c
-> index 84d8d310ef04..364f6e37fbdc 100644
-> --- a/drivers/gpu/drm/drm_bridge_connector.c
-> +++ b/drivers/gpu/drm/drm_bridge_connector.c
-> @@ -5,6 +5,8 @@
->  
->  #include <linux/kernel.h>
->  #include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/property.h>
->  #include <linux/slab.h>
->  
->  #include <drm/drm_atomic_state_helper.h>
-> @@ -107,10 +109,9 @@ static void drm_bridge_connector_hpd_notify(struct drm_connector *connector,
->  	}
->  }
->  
-> -static void drm_bridge_connector_hpd_cb(void *cb_data,
-> -					enum drm_connector_status status)
-> +static void drm_bridge_connector_handle_hpd(struct drm_bridge_connector *drm_bridge_connector,
-> +					    enum drm_connector_status status)
->  {
-> -	struct drm_bridge_connector *drm_bridge_connector = cb_data;
->  	struct drm_connector *connector = &drm_bridge_connector->base;
->  	struct drm_device *dev = connector->dev;
->  
-> @@ -123,6 +124,21 @@ static void drm_bridge_connector_hpd_cb(void *cb_data,
->  	drm_kms_helper_hotplug_event(dev);
->  }
->  
-> +static void drm_bridge_connector_hpd_cb(void *cb_data,
-> +					enum drm_connector_status status)
-> +{
-> +	drm_bridge_connector_handle_hpd(cb_data, status);
-> +}
-> +
-> +static void drm_bridge_connector_oob_hotplug_event(struct drm_connector *connector,
-> +						   enum drm_connector_status status)
-> +{
-> +	struct drm_bridge_connector *bridge_connector =
-> +		to_drm_bridge_connector(connector);
-> +
-> +	drm_bridge_connector_handle_hpd(bridge_connector, status);
-> +}
-> +
->  static void drm_bridge_connector_enable_hpd(struct drm_connector *connector)
->  {
->  	struct drm_bridge_connector *bridge_connector =
-> @@ -216,6 +232,7 @@ static const struct drm_connector_funcs drm_bridge_connector_funcs = {
->  	.atomic_duplicate_state = drm_atomic_helper_connector_duplicate_state,
->  	.atomic_destroy_state = drm_atomic_helper_connector_destroy_state,
->  	.debugfs_init = drm_bridge_connector_debugfs_init,
-> +	.oob_hotplug_event = drm_bridge_connector_oob_hotplug_event,
->  };
->  
->  /* -----------------------------------------------------------------------------
-> @@ -351,6 +368,12 @@ struct drm_connector *drm_bridge_connector_init(struct drm_device *drm,
->  		if (!drm_bridge_get_next_bridge(bridge))
->  			connector_type = bridge->type;
->  
-> +#ifdef CONFIG_OF
-> +		if (!drm_bridge_get_next_bridge(bridge) &&
-> +		    bridge->of_node)
-> +			connector->fwnode = fwnode_handle_get(of_fwnode_handle(bridge->of_node));
-> +#endif
-> +
->  		if (bridge->ddc)
->  			ddc = bridge->ddc;
->  
-> -- 
-> 2.39.2
-> 
+Yes, and it shows that there really is a bug in the UVC driver.  In 
+kernel programming, fairly unlikely == not impossible == bound to happen 
+eventually!
+
+I don't know enough about the driver to make any detailed 
+recommendations.  But you might consider, for example, that if the 
+unbind routine can get along with forcibly removing the V4L2 node and 
+not waiting for the release callback to finish, then why not have it 
+behave that way all the time?  In other words, shorten the timeouts from 
+500 ms and 1000 ms to 0 ms.
+
+Whether you do that or not, someone definitely should fix up the release 
+routine so that it won't get into trouble if it is called after (or 
+concurrently with) all of the cleanup operations -- which is quite 
+likely to happen if those timeouts are eliminated!  In particular, it 
+shouldn't call gadget_deactivate unless it knows that an unbind hasn't 
+happened yet.  And if that is the case, it should block the unbind 
+routine until gadget_deactivate returns.  Basically, it's a bug for a 
+function driver to call any gadget core routine after its unbind 
+callback has returned.
+
+Alan Stern
