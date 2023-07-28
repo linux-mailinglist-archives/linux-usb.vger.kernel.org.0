@@ -2,118 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E70676722F
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Jul 2023 18:43:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94338767390
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Jul 2023 19:38:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234181AbjG1Qni (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Jul 2023 12:43:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46420 "EHLO
+        id S232802AbjG1RiV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Jul 2023 13:38:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234874AbjG1QnK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jul 2023 12:43:10 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 708D04688
-        for <linux-usb@vger.kernel.org>; Fri, 28 Jul 2023 09:42:58 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-5221f3affe4so2994631a12.0
-        for <linux-usb@vger.kernel.org>; Fri, 28 Jul 2023 09:42:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690562576; x=1691167376;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=q3+wuhVg/p8H9ClZOmeQcBUOyAzdHoE0pZfkw6+aEgE=;
-        b=f4rWmLbH6MxCsyYr37tBB/9EqqbZJuHRl8dlSWCSmANEHsTqQ31ZVBocBl1X24/rR9
-         Xvyh6Bb+HAh5im1Vz0JV7c+gYlyYCnsPDDDyXoFgnJJjMyJwEqqCf2gybkFnDTGKf2nd
-         QzeFOLP9ZI6CIQuRVTXp13T0NEHNrkCmCXBoQt3LjiUEiJ2qPFnLeTSZIaSGH+Nh7HcV
-         nYGBKahXXFafGQAoio7PdhVNcfGv2k9v+95YGcvDT8WGgBE/wK7lmqIQpX3qVPtcfH+X
-         EsIc6vi41fMzS1gkpAyc9yIAVoOwPjWFfp0ANdQyieeHA5f1nOZdlqjbG7RTEuzUV4GB
-         qbjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690562576; x=1691167376;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=q3+wuhVg/p8H9ClZOmeQcBUOyAzdHoE0pZfkw6+aEgE=;
-        b=guY4cg/qyuCIEYFtZQ7DWe2cDz2M6xAcRTQFjYLYL/7c0wvK8gIenFOrAQ6ESoD3WV
-         WAvD0HPUuJP8LlGMDjSsBi+Vhc0d6MHhbC810QA+Jim2/giDfaxfNAAcRdP6lpWLrAsI
-         7I8mEl0MufnVN9ArQWEopKp9T4OQUFOwRVFgIVr8aC6OKS8eqwQeGXB2HzUNRcxFchD4
-         SCf7hU7xwvvuFaUDoJt2PoTQ7Re8KXqwa7EFZTZTqBlz4/E8eLo9k5yQnvcsVAKQzHeA
-         GPOc431syMTHkHOH2bppP+gBwE4GwR8Jx/wB4VSuy4MJBXe1zy4/xZfa7wzvBamuSUj9
-         7i5A==
-X-Gm-Message-State: ABy/qLZc+2OPjG29LUC9CGwOyyxCBxUcvd98gv0L6jzv9/raQQ67qu6G
-        POIvadRV9yA6JLHL60qriOEtEw==
-X-Google-Smtp-Source: APBJJlH5bYOR2n9oNfZEBMlqmDVCuTpOl4ID0OVQNdhlRA4qkuu66jlfbD+Oepe/HalkiwyCrR+NKA==
-X-Received: by 2002:aa7:d145:0:b0:522:203d:c9b1 with SMTP id r5-20020aa7d145000000b00522203dc9b1mr2368024edo.11.1690562576039;
-        Fri, 28 Jul 2023 09:42:56 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id w10-20020aa7da4a000000b0051a53d7b160sm1968420eds.80.2023.07.28.09.42.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Jul 2023 09:42:55 -0700 (PDT)
-Message-ID: <f042b194-659a-b128-7f5a-572150bf532f@linaro.org>
-Date:   Fri, 28 Jul 2023 18:42:53 +0200
+        with ESMTP id S236399AbjG1RiG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jul 2023 13:38:06 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8DE2C3A81;
+        Fri, 28 Jul 2023 10:37:44 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 36SHb6Sp9029538, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 36SHb6Sp9029538
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
+        Sat, 29 Jul 2023 01:37:07 +0800
+Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Sat, 29 Jul 2023 01:37:19 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Sat, 29 Jul 2023 01:37:19 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
+ RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
+ 15.01.2375.007; Sat, 29 Jul 2023 01:37:19 +0800
+From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
+        <stanley_chang@realtek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v1 2/2] doc: dt: bindings: usb: realtek,dwc3: Add Realtek DHC RTD SoC DWC3 USB
+Thread-Topic: [PATCH v1 2/2] doc: dt: bindings: usb: realtek,dwc3: Add Realtek
+ DHC RTD SoC DWC3 USB
+Thread-Index: AQHZwQcMHiqO6RUc7UW0WlFc2kMWqq/OO0OAgAEzo7A=
+Date:   Fri, 28 Jul 2023 17:37:18 +0000
+Message-ID: <740d0d33a9064c2bb2696ef762294b0c@realtek.com>
+References: <20230728035318.18741-1-stanley_chang@realtek.com>
+ <20230728035318.18741-2-stanley_chang@realtek.com>
+ <4bbdd646-ad16-1a7d-a727-878c6cf92410@linaro.org>
+In-Reply-To: <4bbdd646-ad16-1a7d-a727-878c6cf92410@linaro.org>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.190.159]
+x-kse-serverinfo: RTEXMBS03.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v3 27/50] dt-bindings: usb: atmel: add sam9x7
-Content-Language: en-US
-To:     Varshini Rajendran <varshini.rajendran@microchip.com>,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        claudiu.beznea@microchip.com, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20230728102753.266660-1-varshini.rajendran@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230728102753.266660-1-varshini.rajendran@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 28/07/2023 12:27, Varshini Rajendran wrote:
-> Add sam9x7 bindings.
-> 
-> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
-> ---
->  Documentation/devicetree/bindings/usb/atmel-usb.txt | 11 +++++++----
->  1 file changed, 7 insertions(+), 4 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/atmel-usb.txt b/Documentation/devicetree/bindings/usb/atmel-usb.txt
-> index 12183ef47ee4..82bd0dbc2a48 100644
-> --- a/Documentation/devicetree/bindings/usb/atmel-usb.txt
-> +++ b/Documentation/devicetree/bindings/usb/atmel-usb.txt
-> @@ -3,8 +3,9 @@ Atmel SOC USB controllers
->  OHCI
->  
->  Required properties:
-> - - compatible: Should be "atmel,at91rm9200-ohci" for USB controllers
-> -   used in host mode.
-> + - compatible: Should be "atmel,at91rm9200-ohci" or
-> +   "microchip,sam9x7-ohci", "atmel,at91rm9200-ohci"
-> +   for USB controllers used in host mode.
->   - reg: Address and length of the register set for the device
->   - interrupts: Should contain ohci interrupt
->   - clocks: Should reference the peripheral, host and system clocks
-> @@ -30,8 +31,9 @@ usb0: ohci@500000 {
->  EHCI
->  
->  Required properties:
-> - - compatible: Should be "atmel,at91sam9g45-ehci" for USB controllers
-> -   used in host mode.
-> + - compatible: Should be "atmel,at91sam9g45-ehci" or
-> +   "microchip,sam9x7-ehci", "atmel,at91sam9g45-ehci"
-
-This confuses me. Isn't microchip,sam9x7-ehci already described in EHCI
-bindings?
-
-Best regards,
-Krzysztof
-
+SGkgS3J6eXN6dG9mLA0KDQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggdjEgMi8yXSBkb2M6IGR0OiBi
+aW5kaW5nczogdXNiOiByZWFsdGVrLGR3YzM6IEFkZCBSZWFsdGVrDQo+IERIQyBSVEQgU29DIERX
+QzMgVVNCDQo+IA0KPiBPbiAyOC8wNy8yMDIzIDA1OjUzLCBTdGFubGV5IENoYW5nIHdyb3RlOg0K
+PiA+IERvY3VtZW50IHRoZSBEV0MzIFVTQiBiaW5kaW5ncyBmb3IgUmVhbHRlayBTb0NzLg0KPiAN
+Cj4gUGxlYXNlIHVzZSBzdWJqZWN0IHByZWZpeGVzIG1hdGNoaW5nIHRoZSBzdWJzeXN0ZW0uIFlv
+dSBjYW4gZ2V0IHRoZW0gZm9yDQo+IGV4YW1wbGUgd2l0aCBgZ2l0IGxvZyAtLW9uZWxpbmUgLS0g
+RElSRUNUT1JZX09SX0ZJTEVgIG9uIHRoZSBkaXJlY3RvcnkgeW91cg0KPiBwYXRjaCBpcyB0b3Vj
+aGluZy4NCj4gDQo+IE15IGZpbHRlcmluZyBvZiBlbWFpbHMgZGVwZW5kcyBvbiBpdC4NCg0KSSB3
+aWxsIHJldmlzZSB0aGUgc3ViamVjdC4NCg0KPiA+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9u
+L2RldmljZXRyZWUvYmluZGluZ3MvdXNiL3JlYWx0ZWssZHdjMy55YW1sDQo+ID4gYi9Eb2N1bWVu
+dGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvdXNiL3JlYWx0ZWssZHdjMy55YW1sDQo+IA0KPiBy
+ZWFsdGVrLHJ0ZC1kd2MzLnlhbWwNCg0KSSB3aWxsIHJlbmFtZSB0aGlzIGZpbGUuDQoNCj4gPiAr
+JGlkOiAiaHR0cDovL2RldmljZXRyZWUub3JnL3NjaGVtYXMvdXNiL3JlYWx0ZWssZHdjMy55YW1s
+IyINCj4gPiArJHNjaGVtYTogImh0dHA6Ly9kZXZpY2V0cmVlLm9yZy9tZXRhLXNjaGVtYXMvY29y
+ZS55YW1sIyINCj4gDQo+IERyb3AgcXVvdGVzLiBXYXNuJ3QgdGVzdGVkLCBiZWNhdXNlIGR0c2No
+ZW1hIHJlcG9ydHMgd2FybmluZ3MgaGVyZS4uLg0KDQpPa2F5LCBJIHdpbGwgZHJvcCBpdC4NCg0K
+PiA+ICsgIHJlYWx0ZWssdW5saW5rLXVzYjMtcG9ydDoNCj4gPiArICAgIGRlc2NyaXB0aW9uOiBE
+aXNhYmxlIGxpbmsgYmV0d2VlbiBVU0IgMy4wIFBIWSBhbmQgVVNCIG1hYy4NCj4gPiArICAgICAg
+T25seSBmb3IgUlREMTYxOSBTb0MsIGlmIHRoZSBib2FyZCBkZXNpZ24gc3VwcG9ydCBtYXhpbXVt
+IDIuMA0KPiBzcGVlZC4NCj4gPiArICAgIHR5cGU6IGJvb2xlYW4NCj4gPiArDQo+ID4gKyAgcmVh
+bHRlayxkaXNhYmxlLXVzYjMtcGh5Og0KPiA+ICsgICAgZGVzY3JpcHRpb246IENsb3NlIFVTQiAz
+LjAgUEhZIGlmIHRoZSBib2FyZCBkZXNpZ24gbm90IHN1cHBvcnQgVVNCIDMuMC4NCj4gPiArICAg
+IHR5cGU6IGJvb2xlYW4NCj4gPiArDQo+ID4gKyAgcmVhbHRlayxlbmFibGUtbDRpY2c6DQo+ID4g
+KyAgICBkZXNjcmlwdGlvbjogRW5hYmxlIHRoZSBwb3dlciBzYXZpbmcgZmVhdHVyZSBsNGljZyBi
+eSBoYXJkd2FyZSBjbG9jay4NCj4gPiArICAgICAgZ2F0aW5nLg0KPiANCj4gWW91IGRlc2NyaWJl
+ZCB0aGUgZGVzaXJlZCBMaW51eCBmZWF0dXJlIG9yIGJlaGF2aW9yLCBub3QgdGhlIGFjdHVhbCBo
+YXJkd2FyZS4NCj4gVGhlIGJpbmRpbmdzIGFyZSBhYm91dCB0aGUgbGF0dGVyLCBzbyBpbnN0ZWFk
+IHlvdSBuZWVkIHRvIHJlcGhyYXNlIHRoZSBwcm9wZXJ0eQ0KPiBhbmQgaXRzIGRlc2NyaXB0aW9u
+IHRvIG1hdGNoIGFjdHVhbCBoYXJkd2FyZQ0KPiBjYXBhYmlsaXRpZXMvZmVhdHVyZXMvY29uZmln
+dXJhdGlvbiBldGMuDQoNClRoZSBsNGljZyBlbnRyeSBpcyBhIGhhcmR3YXJlIGZlYXR1cmUgZm9y
+IHBvd2VyIHNhdmluZy4gDQpUaGUgdGVybSBtYXkgbm90IGNsZWFybHkgY29udmV5IHRoZSBmdW5j
+dGlvbi4NClNvIGluc3RlYWQgb2YgdGhlIHRlcm0gImw0aWNnIiBJIHVzZSAiaHcgY2xvY2sgZ2F0
+aW5nIi4NCg0KICByZWFsdGVrLGVuYWJsZS1ody1jbG9jay1nYXRpbmc6DQogICAgZGVzY3JpcHRp
+b246IEVuYWJsZSB0aGUgY2xvY2sgZ2F0ZWQgZnVuY3Rpb24gd2hpY2ggd2lsbCBnYXRpbmcgc3Jh
+bQ0KICAgICAgY2xvY2sgd2hlbiBkYnVzIGlkbGUuDQoNCj4gPiArZXhhbXBsZXM6DQo+ID4gKyAg
+LSB8DQo+ID4gKyAgICB1c2JAOTgwMTNlMDAgew0KPiA+ICsgICAgICAgIGNvbXBhdGlibGUgPSAi
+cmVhbHRlayxydGQxMzE5ZC1kd2MzIiwgInJlYWx0ZWsscnRkLWR3YzMiOw0KPiA+ICsgICAgICAg
+IHJlZyA9IDwweDk4MDEzZTAwIDB4MjAwPjsNCj4gPiArICAgICAgICAjYWRkcmVzcy1jZWxscyA9
+IDwxPjsNCj4gPiArICAgICAgICAjc2l6ZS1jZWxscyA9IDwxPjsNCj4gPiArICAgICAgICByYW5n
+ZXM7DQo+ID4gKyAgICAgICAgc3RhdHVzID0gIm9rYXkiOw0KPiANCj4gRHJvcCBzdGF0dXMuDQo+
+IA0KT2theS4NCg0KVGhhbmtzLA0KU3RhbmxleQ0K
