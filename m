@@ -2,73 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEED0766C08
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Jul 2023 13:48:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B623F766C88
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Jul 2023 14:07:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236308AbjG1LsX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Jul 2023 07:48:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45222 "EHLO
+        id S232776AbjG1MHm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Jul 2023 08:07:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236310AbjG1LsU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jul 2023 07:48:20 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4240B3C38
-        for <linux-usb@vger.kernel.org>; Fri, 28 Jul 2023 04:48:17 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-98e39784a85so701271366b.1
-        for <linux-usb@vger.kernel.org>; Fri, 28 Jul 2023 04:48:17 -0700 (PDT)
+        with ESMTP id S233609AbjG1MHk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jul 2023 08:07:40 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B640D3A8C;
+        Fri, 28 Jul 2023 05:07:38 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1bb893e6365so12670545ad.2;
+        Fri, 28 Jul 2023 05:07:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690544895; x=1691149695;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OuzUyywHxT84EL99s/bvwXYrYcfjNmcsDh9sDx8tOW0=;
-        b=mD9j05W91EisOUuFMiWr/AiUJLILh/ARnNVvyMNOB4nHCrxhYMTXwCNiSE7cGf+4JO
-         M2GuQI4Uh4kKMTXSB1u/4k2WS5ut3NfxGfC68aoTWT1DWL5oFThepmJg84h5G8febWNg
-         0Uobzl8dWM48vd+rHuR7Uk7bZtM2vZHPuEBFKQ/8aweaa8vF61xfTXwphRmEY4Pl/u4a
-         nJDCmiHwuLcoMQdjVznZIfjYysRCor+g0ak3MBejxuqpQgnmiSzssGOEOIHoZVuionem
-         G60vIK9vD/64mXZlzukSmuUEHyyCdqPeV9Kn72biGcFoyehHq+1vxBEpu5/qh6lIpN8B
-         btzg==
+        d=gmail.com; s=20221208; t=1690546058; x=1691150858;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1jpcXUzEwELWXs2RIMu0L/y8ad++SC5sQ/lHuSCbESc=;
+        b=lB6TUsU0iXYbNOhnrWHMnF4wrUyA/ZILz9dwrze8V1KY1D7tZkwst6pdmy2XTM0uox
+         5CxWYRNA1g0Jblbn3VOoVBCXzeGuaSYbgCpDy1gGzkRJnlZ+2fwW0citiYvzROP/npba
+         Kp1LELSX7x8p7iZnQRGC5+V5Qr0oNkvfz8e9ESmsc+OIL3NfTdSteCndcpFtP6ICyIIT
+         9hX1jHEBO/D3jBH1Swkn+h7fRilL+SaqFIFpqLnpu5552Feu2m63HI6hR3tqezTMvhAh
+         t5umnfszkVl0qNXrYgOrVSUTDFCfUp0haHfKi7iFhcfkP9TQG/X3qMBEvgwizIi3s/rj
+         NDaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690544895; x=1691149695;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OuzUyywHxT84EL99s/bvwXYrYcfjNmcsDh9sDx8tOW0=;
-        b=FcUt8ltrpfKg3/jR7OhCdD4BNNss39bhiZHDR9XpztL2bLUZsQPS8ndineRevXRM13
-         MUNkiDOeItXTYvDebvcoo2/ICFv1CRXEe5xUqC1EW0tU7oOrFdKQoaU6nAz9OrOiu28z
-         zh/3kUWT8RmobWfCYLzxD9nbHqSnSfetoO3Q4AGuBng/vWiX0/kLftwosiNhi+2v67j0
-         0uFG8Rl/9rmgQ8XtVY6T1xPkkxEvxnVOYGPtIC6q9lSivYnKoz8rX9pHBxI36eL605P0
-         1ofoXQkCU3F1E7Lp4FRXbWYaGzgne3LMd7hghIBhYyQ23a88RQEGIDrDpHH436apvZAR
-         wDYg==
-X-Gm-Message-State: ABy/qLaaiWOnxEULJMlN3nMfjnd+mdJ5eyFvaNRD2Y2MnXpSfjRl8OcK
-        TRFQYHXxF/eQhN1s4cmtaW0O0A==
-X-Google-Smtp-Source: APBJJlFN40fawfB2fPkyvs17Fx56bmLcdHZCsN5xZrwBk3BeuyDYH1/Jc5kIbpeFt4dhtEVuMqjwVw==
-X-Received: by 2002:a17:907:c0f:b0:99b:56d4:82bb with SMTP id ga15-20020a1709070c0f00b0099b56d482bbmr6567885ejc.6.1690544895724;
-        Fri, 28 Jul 2023 04:48:15 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.223.104])
-        by smtp.gmail.com with ESMTPSA id se27-20020a170906ce5b00b00992d122af63sm1980122ejb.89.2023.07.28.04.48.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Jul 2023 04:48:15 -0700 (PDT)
-Message-ID: <60a915aa-520a-b275-cc7f-9a409610181b@linaro.org>
-Date:   Fri, 28 Jul 2023 13:48:13 +0200
+        d=1e100.net; s=20221208; t=1690546058; x=1691150858;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1jpcXUzEwELWXs2RIMu0L/y8ad++SC5sQ/lHuSCbESc=;
+        b=a8lTxuswsAgzBztkDEDo1V0yjEmCKdlRJMRnknuMt5gM28A371qCBYsm4GWjjepc+c
+         IlDE18NxQiRis7cJfbKQBElr7O9UHjbGC/z5bPEY32G2pQQQ+wh3JbfH+7YiAwlrCTnc
+         7r4IlaE8vDwvMqIQsuCHQogPAwqy+pQHSjfEfYGXF2lv8AduMSv9ylOHPAk3ZmKYb0Zd
+         0R6KkYWbjt8DKsXvZz7YXxkLHRI4kWFJ0J03sb7/NmdFxjIo/qpCwKdaXkjWxtfLhf+3
+         mul4HXU+tHdmZQoppVCNiXyJ52dSOeEAqJO1E4fxpk27a3yHgu/aa5JcNGMijfd9wfwR
+         iA6g==
+X-Gm-Message-State: ABy/qLasozMNFU1zXzA8zMtverpJJv/S+8GcMlkFUV/ZhU+sgeOHtuHQ
+        COlMo7GM2EH3mBhELDMCJvA=
+X-Google-Smtp-Source: APBJJlGjnlVu0+z2TGpdvnUNa3WkMM3jcn6GPIPfxQvVrK7w1qtolsqtumhkySfGX9plpwAVveNZbw==
+X-Received: by 2002:a17:902:da83:b0:1b8:9b1b:ae8e with SMTP id j3-20020a170902da8300b001b89b1bae8emr1537022plx.59.1690546058080;
+        Fri, 28 Jul 2023 05:07:38 -0700 (PDT)
+Received: from localhost.localdomain ([113.103.5.50])
+        by smtp.gmail.com with ESMTPSA id f16-20020a170902ce9000b001b016313b1dsm3435627plg.86.2023.07.28.05.07.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Jul 2023 05:07:37 -0700 (PDT)
+From:   Guiting Shen <aarongt.shen@gmail.com>
+To:     nicolas.ferre@microchip.com, gregkh@linuxfoundation.org,
+        stern@rowland.harvard.edu
+Cc:     alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Guiting Shen <aarongt.shen@gmail.com>
+Subject: [PATCH v3 RESEND] usb: ohci-at91: Fix the unhandle interrupt when resume
+Date:   Fri, 28 Jul 2023 20:06:48 +0800
+Message-Id: <20230728120648.5878-1-aarongt.shen@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v3 32/50] dt-bindings: usb: ehci: Add sam9x7
-Content-Language: en-US
-To:     Varshini Rajendran <varshini.rajendran@microchip.com>,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230728102836.266918-1-varshini.rajendran@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230728102836.266918-1-varshini.rajendran@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,30 +70,39 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 28/07/2023 12:28, Varshini Rajendran wrote:
-> Document sam9x7 compatible for usb-ehci.
-> 
-> Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
-> ---
->  Documentation/devicetree/bindings/usb/generic-ehci.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/generic-ehci.yaml b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
-> index e5c8f4e085de..afc4da89dde5 100644
-> --- a/Documentation/devicetree/bindings/usb/generic-ehci.yaml
-> +++ b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
-> @@ -82,6 +82,12 @@ properties:
->            - nuvoton,npcm845-ehci
->            - ti,ehci-omap
->            - usb-ehci
-> +      - items:
-> +          - enum:
-> +              - microchip,sam9x7-ehci
-> +          - enum:
-> +              - atmel,at91sam9g45-ehci
+The ohci_hcd_at91_drv_suspend() sets ohci->rh_state to OHCI_RH_HALTED when
+suspend which will let the ohci_irq() skip the interrupt after resume. And
+nobody to handle this interrupt.
 
-Same problem.
+According to the comment in ohci_hcd_at91_drv_suspend(), it need to reset
+when resume from suspend(MEM) to fix by setting "hibernated" argument of
+ohci_resume().
 
-Best regards,
-Krzysztof
+Signed-off-by: Guiting Shen <aarongt.shen@gmail.com>
+Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
+---
+ drivers/usb/host/ohci-at91.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/host/ohci-at91.c b/drivers/usb/host/ohci-at91.c
+index 533537ef3c21..360680769494 100644
+--- a/drivers/usb/host/ohci-at91.c
++++ b/drivers/usb/host/ohci-at91.c
+@@ -673,7 +673,13 @@ ohci_hcd_at91_drv_resume(struct device *dev)
+ 	else
+ 		at91_start_clock(ohci_at91);
+ 
+-	ohci_resume(hcd, false);
++	/*
++	 * According to the comment in ohci_hcd_at91_drv_suspend()
++	 * we need to do a reset if the 48Mhz clock was stopped,
++	 * that is, if ohci_at91->wakeup is clear. Tell ohci_resume()
++	 * to reset in this case by setting its "hibernated" flag.
++	 */
++	ohci_resume(hcd, !ohci_at91->wakeup);
+ 
+ 	return 0;
+ }
+-- 
+2.25.1
 
