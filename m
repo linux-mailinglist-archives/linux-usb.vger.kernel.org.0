@@ -2,122 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30681767760
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Jul 2023 23:03:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA20F767923
+	for <lists+linux-usb@lfdr.de>; Sat, 29 Jul 2023 01:48:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233322AbjG1VDL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Jul 2023 17:03:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52036 "EHLO
+        id S233800AbjG1Xst (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Jul 2023 19:48:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233279AbjG1VDK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jul 2023 17:03:10 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id C79ED449E
-        for <linux-usb@vger.kernel.org>; Fri, 28 Jul 2023 14:03:08 -0700 (PDT)
-Received: (qmail 51440 invoked by uid 1000); 28 Jul 2023 17:03:08 -0400
-Date:   Fri, 28 Jul 2023 17:03:08 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Avichal Rakesh <arakesh@google.com>
-Cc:     Dan Scally <dan.scally@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        "Eino-Ville Talvala \(Eddy\)" <etalvala@google.com>,
-        Jayant Chowdhary <jchowdhary@google.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: Kernel panic when unbinding UVC gadget function
-Message-ID: <fe501805-2eec-4cd1-be61-ad446002af9c@rowland.harvard.edu>
-References: <4d7aa3f4-22d9-9f5a-3d70-1bd7148ff4ba@google.com>
- <8de4bb54-8daa-73c0-b5eb-4aa4b9675ce5@ideasonboard.com>
- <fa11d883-2c72-486f-9b7b-46f238e2e03f@rowland.harvard.edu>
- <CAMHf4WJ4QyvFfnAWSk_D3VuPOe7+if=pgQvunjLXOHTcBgi4Qw@mail.gmail.com>
- <8242fba3-ebcc-481e-92bb-e25a3516853a@rowland.harvard.edu>
- <CAMHf4W+d1P8_Ahgc=Wj5K7BJa2Oi+cfXozd8e0_cdzioAjHeBg@mail.gmail.com>
- <7a71a4c9-324e-44a9-b38b-31ea87d60e6e@rowland.harvard.edu>
- <b55b51b3-7632-4ba5-b4fc-ea0384321149@rowland.harvard.edu>
- <CAMHf4WL8jWhkeDsLpH1z9sXi4-42+WExtCeJWjXNKy9R85oJQg@mail.gmail.com>
+        with ESMTP id S229457AbjG1Xsr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jul 2023 19:48:47 -0400
+Received: from mgamail.intel.com (unknown [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F17422C
+        for <linux-usb@vger.kernel.org>; Fri, 28 Jul 2023 16:48:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690588126; x=1722124126;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=S9IBxkNG+RbHBQj2Nn9W+yro3ABRrGiQH5vd15aoFAA=;
+  b=CwaHD8HmQ0dzbrEVLZhfbMEw7B2AQ7ZF5pzaT+rm4vYvpRXw4vlk5veO
+   RObTw05WW6m7BkGAhHQ9vB9aHRpfcLhvXtU1Mp2HXoB9lRoSi4Ml7lNM3
+   rV8tvxTjvAzP5vfqvfyGeKL+qRQ3BMUw+kBcIhpbma5aT6v2LV3eNJZzp
+   V7Kw+0n+lUvuENVwI1KRcSdZiwK8d2QJF5R6e9VB9unIxU+Gsogp5KvQW
+   Noh1HeMvw2HOC+u4KwsamqrNEU0svBb5rY+lJ5B7kSJEqmi0RKqXo5u2r
+   4EnNtgrTZ5X4i/TIimPlqaVQI3rNGOpCDLVCkiD9+nSsbP47+BXEZiJhJ
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10785"; a="367590263"
+X-IronPort-AV: E=Sophos;i="6.01,238,1684825200"; 
+   d="scan'208";a="367590263"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2023 16:48:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10785"; a="793075782"
+X-IronPort-AV: E=Sophos;i="6.01,238,1684825200"; 
+   d="scan'208";a="793075782"
+Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 28 Jul 2023 16:48:45 -0700
+Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qPXC3-0003fp-12;
+        Fri, 28 Jul 2023 23:48:28 +0000
+Date:   Sat, 29 Jul 2023 07:47:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Stanley Chang <stanley_chang@realtek.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [usb:usb-next 26/67] drivers/phy/realtek/phy-rtk-usb2.c:715:
+ undefined reference to `usb_debug_root'
+Message-ID: <202307290733.weSlHrGp-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMHf4WL8jWhkeDsLpH1z9sXi4-42+WExtCeJWjXNKy9R85oJQg@mail.gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jul 28, 2023 at 11:41:19PM +0530, Avichal Rakesh wrote:
-> On Fri, Jul 28, 2023 at 9:07 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> > It's not clear that the patch will fix the problem entirely.  Your
-> > original analysis of the bug stated:
-> >
-> > > This means that attempting to unregister the UVC Gadget Driver results in the
-> > > V4L2 resource cleanup being stuck behind udc->connect_lock, which will only
-> > > be released after uvc_function_unbind finishes. This results in either the
-> > > gadget deactivating after the unbind process has finished, or in a Kernel Panic
-> > > as it tries to cleanup a V4L2 node that has been purged.
-> >
-> > My patch removes the locking issue.  But if an execution path can
-> > occur with a lock present, it can also occur when the lock has been
-> > removed.  That means it may still be possible for the UVC gadget driver
-> > to try deactivating the UDC after the unbind process has finished or for
-> > it to try cleaning up a V4L2 node that has been purged.
-> >
-> > If either of those really could have happened (as opposed to just
-> > getting stuck in a deadlock, waiting for a mutex that would never be
-> > released), then it can still happen with the patch.  Fixing them would
-> > require changes to the UVC gadget driver.  So the problem may not be
-> > gone entirely.
-> >
-> The current situation can theoretically happen without the deadlock,
-> yes, but shouldn't happen in practice. UVC's disable/unbind code flow
-> looks as follows:
-> 
-> 1. When disable callback is called, the gadget driver signals the
-> userspace application to close the V4L2 node.
-> 2. Closing the V4L2 node calls the release callback to clean up
-> resources. It is this callback that calls into gadget_deactivate and
-> gets blocked currently (without your patch).
-> 3. Separately, the unbind callback waits on release callback to finish
-> for 500ms, assuming the userspace application to behave well and close
-> the node in a reasonable amount of time.
-> 4. If the release callback still hasn't been called, the V4L2 node is
-> forcefully removed and UVC driver waits for another 1000ms for the
-> release callback to clean up any pending resources.
-> 5. The unbind process continues regardless of the status of release
-> callback after waiting at most 1.5s for release.
-> 
-> So the only way to run into the current issue is if the release
-> callback fails to finish in both step 3 and step 4 (for example, due
-> to a deadlock) in the span of 1.5s. It is possible, but fairly
-> unlikely (at least in my limited understanding) for the release
-> callback to be delayed for quite that long.
-> 
-> Hope that makes some sense!
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
+head:   ba0b3af706305e5b11fd832eecd2c4a7fce57156
+commit: 134e6d25f6bd06071e5aac0a7eefcea6f7713955 [26/67] phy: realtek: usb: Add driver for the Realtek SoC USB 2.0 PHY
+config: openrisc-randconfig-r005-20230728 (https://download.01.org/0day-ci/archive/20230729/202307290733.weSlHrGp-lkp@intel.com/config)
+compiler: or1k-linux-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230729/202307290733.weSlHrGp-lkp@intel.com/reproduce)
 
-Yes, and it shows that there really is a bug in the UVC driver.  In 
-kernel programming, fairly unlikely == not impossible == bound to happen 
-eventually!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307290733.weSlHrGp-lkp@intel.com/
 
-I don't know enough about the driver to make any detailed 
-recommendations.  But you might consider, for example, that if the 
-unbind routine can get along with forcibly removing the V4L2 node and 
-not waiting for the release callback to finish, then why not have it 
-behave that way all the time?  In other words, shorten the timeouts from 
-500 ms and 1000 ms to 0 ms.
+All errors (new ones prefixed by >>):
 
-Whether you do that or not, someone definitely should fix up the release 
-routine so that it won't get into trouble if it is called after (or 
-concurrently with) all of the cleanup operations -- which is quite 
-likely to happen if those timeouts are eliminated!  In particular, it 
-shouldn't call gadget_deactivate unless it knows that an unbind hasn't 
-happened yet.  And if that is the case, it should block the unbind 
-routine until gadget_deactivate returns.  Basically, it's a bug for a 
-function driver to call any gadget core routine after its unbind 
-callback has returned.
+   or1k-linux-ld: drivers/phy/realtek/phy-rtk-usb2.o: in function `create_phy_debug_root':
+>> drivers/phy/realtek/phy-rtk-usb2.c:715: undefined reference to `usb_debug_root'
+>> or1k-linux-ld: drivers/phy/realtek/phy-rtk-usb2.c:715: undefined reference to `usb_debug_root'
+   or1k-linux-ld: drivers/phy/realtek/phy-rtk-usb2.c:717: undefined reference to `usb_debug_root'
+   pahole: .tmp_vmlinux.btf: Invalid argument
+   .btf.vmlinux.bin.o: file not recognized: file format not recognized
 
-Alan Stern
+
+vim +715 drivers/phy/realtek/phy-rtk-usb2.c
+
+   709	
+   710	#ifdef CONFIG_DEBUG_FS
+   711	static struct dentry *create_phy_debug_root(void)
+   712	{
+   713		struct dentry *phy_debug_root;
+   714	
+ > 715		phy_debug_root = debugfs_lookup("phy", usb_debug_root);
+   716		if (!phy_debug_root)
+   717			phy_debug_root = debugfs_create_dir("phy", usb_debug_root);
+   718	
+   719		return phy_debug_root;
+   720	}
+   721	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
