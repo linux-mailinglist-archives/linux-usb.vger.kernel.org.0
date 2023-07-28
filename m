@@ -2,105 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FE457670C0
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Jul 2023 17:38:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27F4E7670F9
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Jul 2023 17:50:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237386AbjG1PiO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Jul 2023 11:38:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59238 "EHLO
+        id S235914AbjG1PuI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Jul 2023 11:50:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237410AbjG1Phz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jul 2023 11:37:55 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 6459F1FF0
-        for <linux-usb@vger.kernel.org>; Fri, 28 Jul 2023 08:37:52 -0700 (PDT)
-Received: (qmail 41419 invoked by uid 1000); 28 Jul 2023 11:37:51 -0400
-Date:   Fri, 28 Jul 2023 11:37:51 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Avichal Rakesh <arakesh@google.com>
-Cc:     Dan Scally <dan.scally@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        "Eino-Ville Talvala \(Eddy\)" <etalvala@google.com>,
-        Jayant Chowdhary <jchowdhary@google.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: Kernel panic when unbinding UVC gadget function
-Message-ID: <b55b51b3-7632-4ba5-b4fc-ea0384321149@rowland.harvard.edu>
-References: <4d7aa3f4-22d9-9f5a-3d70-1bd7148ff4ba@google.com>
- <8de4bb54-8daa-73c0-b5eb-4aa4b9675ce5@ideasonboard.com>
- <fa11d883-2c72-486f-9b7b-46f238e2e03f@rowland.harvard.edu>
- <CAMHf4WJ4QyvFfnAWSk_D3VuPOe7+if=pgQvunjLXOHTcBgi4Qw@mail.gmail.com>
- <8242fba3-ebcc-481e-92bb-e25a3516853a@rowland.harvard.edu>
- <CAMHf4W+d1P8_Ahgc=Wj5K7BJa2Oi+cfXozd8e0_cdzioAjHeBg@mail.gmail.com>
- <7a71a4c9-324e-44a9-b38b-31ea87d60e6e@rowland.harvard.edu>
+        with ESMTP id S237393AbjG1PuG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jul 2023 11:50:06 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF48C30FB
+        for <linux-usb@vger.kernel.org>; Fri, 28 Jul 2023 08:50:02 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-5222a38c0a0so3023808a12.1
+        for <linux-usb@vger.kernel.org>; Fri, 28 Jul 2023 08:50:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google; t=1690559401; x=1691164201;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vJBRs+Bnwl2OMoy/OyNAhtrD/F8OCxBPBCF/VhngpSg=;
+        b=CnZu+SXs9oSz7zlr59C7aTZSXCNsMMjPndBSf214vpYOdp7ePykWCJYBddaJzvIL1l
+         al4spNG8jC2xywNsivi6wP3lZClH1zbKQL1JN6NoYKntN7vn/AnYiFjcxPYVomCiarHp
+         yO1aDIqMPJrvUT1amatglNAA5uOpxHeO27JdLMp5dE5Y1DltCMPGaiRuiAEW7j/jsD//
+         aFsHgyu8aGAhf0+IJG8epIWcB4bRmKkLLnGJdtzKA6CRU7R/cUIqHVDnAob8XkC9Vp1g
+         waIHx4L4fCwGg2O62zOTqLZvv8Prr4zRTzVPjKT5KWZ8kmLo0UeVcpQLxP5epvnLbXhs
+         WvNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690559401; x=1691164201;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vJBRs+Bnwl2OMoy/OyNAhtrD/F8OCxBPBCF/VhngpSg=;
+        b=apdNyp/H4XHjQDm/tGP8tqygfwbp9jySkWoRmU5eUj4O64uDD5YcIj4PDUsB4xdG5J
+         mMsaMh5gZWOkMWAyLQv7fQoCfySqGJc6MWSf4b2qVQuo9EY2SF3GGDMpG6PKhgnC6Nt7
+         I19gGeChfxj9ivjnHjyrGxJHw72UqHNDDlRks3EAPntZU8rvIQv9JlcniL6F0AzrEtGL
+         vaEIyYAGZbO9825ZrQ76M5jVWed2iA4kf42DQIFFOnUbnnkSXb6KzNvHgQu1+0CU4vuc
+         JcS0UZ8v04IFQ+6cBp7OxlA91KhjXGvvn261YwjCVT+dfrDd0oZ72p9sVtHYnMBiMe3F
+         bqRw==
+X-Gm-Message-State: ABy/qLbXBy/LdlWapXnkox6LA297VarhuOeVmcOrJUhnlxl3r61kgbJf
+        0241gYfvjtKK++1rmucLq9osV3vrNDXux3jhvTEO
+X-Google-Smtp-Source: APBJJlEo1nZ4GFR3RxnGEsWJX1CRKPDiKaYoZ5TV+ZYucpP4c+Bcc1TmLeSdUeg9DCKYStWeMFzQGL7oar0y1aGzP5s=
+X-Received: by 2002:aa7:d85a:0:b0:515:1e50:5498 with SMTP id
+ f26-20020aa7d85a000000b005151e505498mr1975917eds.15.1690559401271; Fri, 28
+ Jul 2023 08:50:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7a71a4c9-324e-44a9-b38b-31ea87d60e6e@rowland.harvard.edu>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20230727131326.2282301-1-lb@semihalf.com> <2023072705-palpitate-cut-874b@gregkh>
+ <CAK8ByeJYtFcMbEabSDJwXhE3jYY2xQG+JHR0gpwh6_=yg+AXjw@mail.gmail.com> <2023072825-alfalfa-skincare-23b2@gregkh>
+In-Reply-To: <2023072825-alfalfa-skincare-23b2@gregkh>
+From:   =?UTF-8?Q?=C5=81ukasz_Bartosik?= <lb@semihalf.com>
+Date:   Fri, 28 Jul 2023 17:49:49 +0200
+Message-ID: <CAK8ByeK-pue7o2r5kKgxR=si9BT3E_SSEXkmka84JVW0_L3aFg@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] thunderbolt: add tracefs support to tb_* logging helpers
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        upstream@semihalf.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jul 28, 2023 at 10:05:39AM -0400, Alan Stern wrote:
-> On Fri, Jul 28, 2023 at 01:57:15PM +0530, Avichal Rakesh wrote:
-> > On Sat, Jul 22, 2023 at 8:57 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> 
-> > > Here's a proposal, along the lines of your first suggestion above.  The
-> > > idea is to avoid holding the connect_lock mutex while invoking a gadget
-> > > driver's callbacks.
+pt., 28 lip 2023 o 17:32 Greg KH <gregkh@linuxfoundation.org> napisa=C5=82(=
+a):
+>
+> On Fri, Jul 28, 2023 at 04:50:12PM +0200, =C5=81ukasz Bartosik wrote:
+> > czw., 27 lip 2023 o 16:47 Greg KH <gregkh@linuxfoundation.org> napisa=
+=C5=82(a):
 > > >
-> > > Unfortunately, this is unavoidable in the case of the ->disconnect()
-> > > callback, but that's okay because the kerneldoc already says that
-> > > ->disconnect() may be called in_interrupt, so it's not allowed to call
-> > > any core routines that may sleep.  Just to make this perfectly clear,
-> > > the patch adds a couple of comments along these lines.
+> > > On Thu, Jul 27, 2023 at 03:13:25PM +0200, =C5=81ukasz Bartosik wrote:
+> > > > Thunderbolt tracing is a lightweight alternative to traditional
+> > > > thunderbolt debug logging. While thunderbolt debug logging is quite
+> > > > convenient when reproducing a specific issue, it doesn't help when
+> > > > something goes wrong unexpectedly. There are a couple of reasons wh=
+y
+> > > > one does not want to enable thunderbolt debug logging at all times:
+> > > >
+> > > > 1. We don't want to overwhelm kernel log with thunderbolt spam, oth=
+ers
+> > > >    want to use it too
 > > >
-> > > As far as I can tell, there is no real reason to hold connect_lock
-> > > during the ->unbind() callback.  Not doing so should fix the problem in
-> > > the UVC function driver.
-> > 
-> > Thank you for the patch (and apologies for the delay)! This is a neat
-> > fix I completely glossed over. Looked around at other places where
-> > unbind is called, and it looks like the lock isn't held anywhere else
-> > either, so dropping the lock before calling unbind shouldn't break any
-> > existing assumptions around the callback.
-> 
-> > Tried the patch, and it fixes the issue for UVC Gadget Driver! UVC
-> > driver can now be unbound without locking up with the V4L2 release
-> > callback. Logs confirm that the calls are still being interleaved, but
-> > don't result in a deadlock now.
-> 
-> Thanks for trying it out.  Is it okay for me to add your "Tested-by:"  
-> tag when the patch is submitted?
+> > > But doesn't the dynamic debug infrastructure allow this today?
+> > >
+> >
+> > Dynamic debug allows only partially what we would like to achieve.
+> >
+> > Our goal is to be able to gather thunderbolt debug logs from ChromeOS
+> > end users when an issue happens. Especially that would be very useful
+> > for us in case of issues which reproduction is difficult. We would
+> > write thunderbolt debug logs to a separate wrap around buffer provided
+> > by trace subsystem. When an issue happens and a user sends a feedback
+> > then thunderbolt logs would be attached to the feedback providing
+> > more insight into what happened.
+>
+> The problem is, you don't want 100 different debug log formats and tools
+> for the 100 different driver subsystems.
+>
+> That is why we unified everything on the dev_* format, and the tracing
+> tools.  Use them, don't create something new.
+>
+> > Dynamic debug sends all debug messages to dmesg and with significant
+> > number of dynamic dev_dbg prints enabled dmesg may be quickly overwritt=
+en
+> > and other important logs lost. Also enabling dynamic debug for the
+> > entire kernel might
+> > not be appropriate for production kernels due to impact on kernel size =
+and perf.
+>
+> If you look at the typec code, they have their own type of ring-buffer
+> for logging things.  Perhaps look at making that more generic like what
+> you need here as well, and adding that to the tracing core for everyone
+> to use and unify with?
+>
 
-Another thing...
+Thanks for the comments and pointing me to the typec code for the reference=
+.
 
-It's not clear that the patch will fix the problem entirely.  Your 
-original analysis of the bug stated:
+Lukasz
 
-> This means that attempting to unregister the UVC Gadget Driver results in the
-> V4L2 resource cleanup being stuck behind udc->connect_lock, which will only
-> be released after uvc_function_unbind finishes. This results in either the
-> gadget deactivating after the unbind process has finished, or in a Kernel Panic
-> as it tries to cleanup a V4L2 node that has been purged.
-
-My patch removes the locking issue.  But if an execution path can 
-occur with a lock present, it can also occur when the lock has been 
-removed.  That means it may still be possible for the UVC gadget driver 
-to try deactivating the UDC after the unbind process has finished or for 
-it to try cleaning up a V4L2 node that has been purged.
-
-If either of those really could have happened (as opposed to just 
-getting stuck in a deadlock, waiting for a mutex that would never be 
-released), then it can still happen with the patch.  Fixing them would 
-require changes to the UVC gadget driver.  So the problem may not be 
-gone entirely.
-
-Alan Stern
+> I don't want one-off solutions like this, sorry, that way lies madness,
+> madness that we used to have before we unified everything.  Let's learn
+> from our past mistakes and not make them again please.
+>
+> thanks,
+>
+> greg k-h
