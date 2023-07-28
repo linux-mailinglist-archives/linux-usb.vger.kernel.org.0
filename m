@@ -2,46 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C78A7667E8
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Jul 2023 10:55:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14B79766932
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Jul 2023 11:44:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234365AbjG1Izu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Jul 2023 04:55:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49476 "EHLO
+        id S235236AbjG1JoO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Jul 2023 05:44:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234426AbjG1IzW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jul 2023 04:55:22 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86C752D47
-        for <linux-usb@vger.kernel.org>; Fri, 28 Jul 2023 01:54:21 -0700 (PDT)
-Received: from dggpemm100019.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4RC1cR4Gfzz1GDMp;
-        Fri, 28 Jul 2023 16:52:55 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm100019.china.huawei.com (7.185.36.251) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Fri, 28 Jul 2023 16:53:50 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 28 Jul
- 2023 16:53:50 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-usb@vger.kernel.org>
-CC:     <gregkh@linuxfoundation.org>, <tiwai@suse.de>,
-        <yangyingliang@huawei.com>
-Subject: [PATCH -next] usb: gadget: midi2: fix missing unlock in f_midi2_block_opts_create()
-Date:   Fri, 28 Jul 2023 16:51:20 +0800
-Message-ID: <20230728085120.3192474-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        with ESMTP id S235178AbjG1JoI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jul 2023 05:44:08 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3393A81
+        for <linux-usb@vger.kernel.org>; Fri, 28 Jul 2023 02:44:05 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id EEFDC1F390;
+        Fri, 28 Jul 2023 09:44:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1690537442; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YIj3Fke5ZxKaO7NvOeAH6ScMS9WZbOk4ITgAnQYtUMM=;
+        b=QmAtRkvWsfcDoTHxORvuOqV0FwrB+o79Vcg4ZsPSz5Hj6saBTDbrZnOnOmdftFMqtB9tYg
+        0doSiKhSkGnpnf5nz7rgwN0qlQP3b/5TxWxEpsrsi1aKh4tnZmF+5gKVSg+aQIaU0gBxYX
+        /vCpz54IWlvdQN/I5j0P8KeOJvTaeI4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1690537442;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YIj3Fke5ZxKaO7NvOeAH6ScMS9WZbOk4ITgAnQYtUMM=;
+        b=o1M1l2JI4ftQomYJXpHP6b2kTWMr1K63vRjM045m5SEKI6QV11FmXmYhF9NropGs9Uid9w
+        3LbaMhS4niskx5DA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CB53913276;
+        Fri, 28 Jul 2023 09:44:02 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id HHZvMOKNw2Q3EgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 28 Jul 2023 09:44:02 +0000
+Date:   Fri, 28 Jul 2023 11:44:02 +0200
+Message-ID: <87sf982wwt.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     <linux-usb@vger.kernel.org>, <gregkh@linuxfoundation.org>,
+        <tiwai@suse.de>
+Subject: Re: [PATCH -next] usb: gadget: midi2: fix missing unlock in f_midi2_block_opts_create()
+In-Reply-To: <20230728085120.3192474-1-yangyingliang@huawei.com>
+References: <20230728085120.3192474-1-yangyingliang@huawei.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,29 +68,40 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In the error path in f_midi2_block_opts_create(), mutex_unlock() is missed,
-fix it by move the unlock after 'out' label.
+On Fri, 28 Jul 2023 10:51:20 +0200,
+Yang Yingliang wrote:
+> 
+> In the error path in f_midi2_block_opts_create(), mutex_unlock() is missed,
+> fix it by move the unlock after 'out' label.
+> 
+> Fixes: 29ee7a4dddd5 ("usb: gadget: midi2: Add configfs support")
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 
-Fixes: 29ee7a4dddd5 ("usb: gadget: midi2: Add configfs support")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/usb/gadget/function/f_midi2.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks, Good catch!
 
-diff --git a/drivers/usb/gadget/function/f_midi2.c b/drivers/usb/gadget/function/f_midi2.c
-index f1c47753e0c1..5a971ba600fe 100644
---- a/drivers/usb/gadget/function/f_midi2.c
-+++ b/drivers/usb/gadget/function/f_midi2.c
-@@ -2350,8 +2350,8 @@ static int f_midi2_block_opts_create(struct f_midi2_ep_opts *ep_opts,
- 	ep_opts->blks[blk] = block_opts;
- 	*block_p = block_opts;
- 
--	mutex_unlock(&ep_opts->opts->lock);
-  out:
-+	mutex_unlock(&ep_opts->opts->lock);
- 	return ret;
- }
- 
--- 
-2.25.1
+Reviewed-by: Takashi Iwai <tiwai@suse.de>
 
+
+Takashi
+
+> ---
+>  drivers/usb/gadget/function/f_midi2.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/gadget/function/f_midi2.c b/drivers/usb/gadget/function/f_midi2.c
+> index f1c47753e0c1..5a971ba600fe 100644
+> --- a/drivers/usb/gadget/function/f_midi2.c
+> +++ b/drivers/usb/gadget/function/f_midi2.c
+> @@ -2350,8 +2350,8 @@ static int f_midi2_block_opts_create(struct f_midi2_ep_opts *ep_opts,
+>  	ep_opts->blks[blk] = block_opts;
+>  	*block_p = block_opts;
+>  
+> -	mutex_unlock(&ep_opts->opts->lock);
+>   out:
+> +	mutex_unlock(&ep_opts->opts->lock);
+>  	return ret;
+>  }
+>  
+> -- 
+> 2.25.1
+> 
