@@ -2,52 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11003766A37
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Jul 2023 12:24:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7048A766A8A
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Jul 2023 12:29:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235818AbjG1KYA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Jul 2023 06:24:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51634 "EHLO
+        id S235899AbjG1K3P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Jul 2023 06:29:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235836AbjG1KXw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jul 2023 06:23:52 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF246421D;
-        Fri, 28 Jul 2023 03:23:39 -0700 (PDT)
+        with ESMTP id S235641AbjG1K2y (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jul 2023 06:28:54 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B40420C;
+        Fri, 28 Jul 2023 03:28:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1690539819; x=1722075819;
+  t=1690540081; x=1722076081;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
-  bh=8Jf6mTT0NG93rr1p7HYLhKRrI65Z3mrLqeiz6Xw3TYg=;
-  b=e7OODQby1qQ16al9a3lz4h0JqEboRVpz7ghj3aqI4FfNpuyj5f4ojFdB
-   rinNljzZ8OQiYzaxzbB7Cqj2E/Q/GZxpqGPQcLLJkSG9XAFKb0KgqBrSn
-   H4kvhGMOe0BBG4x+900fbIkSvEVVgV5kg4yusIKSFwd6pYVuigYCqupQD
-   SfQpVZwm2jxuLyBOe+0snHD/zclyBSfmW8MvVu3WrgrsJFUhik8VLjhUn
-   moH+2mrkvRviD7DpGsy9+rmfWJkWwQJ9HONttHTcX7NKHPYoHYfZeey+/
-   OPqod5kRqd41Ka5C4cf/5pgm9GhB888O36nraDRDK4W/3EUUhSopaP8xE
+  bh=J56scc4lwCw64Hq+Y3iwSMBkAqaw8UYobN/SUdebGoM=;
+  b=graE0EyjMkCzCLWPAb73xwFmqzqzj+4yCRK46Mce2/X6nwXJAukeynpz
+   gRcmwpcEAlBVhKCKBct5TumVbV8S+2pQ2ll7fzsmtEUZp/RBHtio9VDd2
+   fQjkApDW3Wb0snZHCFrQpPLbmxVrlUejcXDBdeucxt9OObhGvaDoJKkNb
+   PVtTXEFWThe7gHAMjRLoF9ZrzMT2X48m9aldaPTNqaOkvaMsvabbydgEP
+   n9vnTbuM4vJcnDG9+peY61l0nKmSjAtOu2bRFzvx/yjITLq74qIeDyNgG
+   CdgOVcmNPYrZFny0w88XY9uiWxv96aD1Tx7xKkDbl1OX8zqCtaWnFBqWw
    A==;
 X-IronPort-AV: E=Sophos;i="6.01,237,1684825200"; 
-   d="scan'208";a="227046886"
+   d="scan'208";a="238401601"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Jul 2023 03:23:38 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 28 Jul 2023 03:28:01 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 28 Jul 2023 03:23:27 -0700
+ 15.1.2507.21; Fri, 28 Jul 2023 03:28:00 -0700
 Received: from che-lt-i67070.amer.actel.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Fri, 28 Jul 2023 03:23:23 -0700
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.21 via Frontend Transport; Fri, 28 Jul 2023 03:27:56 -0700
 From:   Varshini Rajendran <varshini.rajendran@microchip.com>
 To:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
         <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <claudiu.beznea@microchip.com>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>
-CC:     <varshini.rajendran@microchip.com>, Rob Herring <robh@kernel.org>
-Subject: [PATCH v3 02/50] dt-bindings: usb: ehci: Add atmel at91sam9g45-ehci compatible
-Date:   Fri, 28 Jul 2023 15:53:18 +0530
-Message-ID: <20230728102318.265360-1-varshini.rajendran@microchip.com>
+CC:     <varshini.rajendran@microchip.com>
+Subject: [PATCH v3 27/50] dt-bindings: usb: atmel: add sam9x7
+Date:   Fri, 28 Jul 2023 15:57:53 +0530
+Message-ID: <20230728102753.266660-1-varshini.rajendran@microchip.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -63,26 +66,49 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Document at91sam9g45-ehci compatible for usb-ehci.
+Add sam9x7 bindings.
 
 Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
-Acked-by: Rob Herring <robh@kernel.org>
 ---
- Documentation/devicetree/bindings/usb/generic-ehci.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ Documentation/devicetree/bindings/usb/atmel-usb.txt | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/usb/generic-ehci.yaml b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
-index b956bb5fada7..e5c8f4e085de 100644
---- a/Documentation/devicetree/bindings/usb/generic-ehci.yaml
-+++ b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
-@@ -67,6 +67,7 @@ properties:
-           - const: generic-ehci
-       - items:
-           - enum:
-+              - atmel,at91sam9g45-ehci
-               - cavium,octeon-6335-ehci
-               - ibm,usb-ehci-440epx
-               - ibm,usb-ehci-460ex
+diff --git a/Documentation/devicetree/bindings/usb/atmel-usb.txt b/Documentation/devicetree/bindings/usb/atmel-usb.txt
+index 12183ef47ee4..82bd0dbc2a48 100644
+--- a/Documentation/devicetree/bindings/usb/atmel-usb.txt
++++ b/Documentation/devicetree/bindings/usb/atmel-usb.txt
+@@ -3,8 +3,9 @@ Atmel SOC USB controllers
+ OHCI
+ 
+ Required properties:
+- - compatible: Should be "atmel,at91rm9200-ohci" for USB controllers
+-   used in host mode.
++ - compatible: Should be "atmel,at91rm9200-ohci" or
++   "microchip,sam9x7-ohci", "atmel,at91rm9200-ohci"
++   for USB controllers used in host mode.
+  - reg: Address and length of the register set for the device
+  - interrupts: Should contain ohci interrupt
+  - clocks: Should reference the peripheral, host and system clocks
+@@ -30,8 +31,9 @@ usb0: ohci@500000 {
+ EHCI
+ 
+ Required properties:
+- - compatible: Should be "atmel,at91sam9g45-ehci" for USB controllers
+-   used in host mode.
++ - compatible: Should be "atmel,at91sam9g45-ehci" or
++   "microchip,sam9x7-ehci", "atmel,at91sam9g45-ehci"
++   for USB controllers used in host mode.
+  - reg: Address and length of the register set for the device
+  - interrupts: Should contain ehci interrupt
+  - clocks: Should reference the peripheral and the UTMI clocks
+@@ -87,6 +89,7 @@ Required properties:
+ 	       "atmel,at91sam9g45-udc"
+ 	       "atmel,sama5d3-udc"
+ 	       "microchip,sam9x60-udc"
++	       "microchip,sam9x7-udc", "microchip,sam9x60-udc"
+ 	       "microchip,lan9662-udc"
+ 	       For "microchip,lan9662-udc" the fallback "atmel,sama5d3-udc"
+ 	       is required.
 -- 
 2.25.1
 
