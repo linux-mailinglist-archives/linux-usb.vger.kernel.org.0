@@ -2,55 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F18276761D
-	for <lists+linux-usb@lfdr.de>; Fri, 28 Jul 2023 21:15:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ED7476763E
+	for <lists+linux-usb@lfdr.de>; Fri, 28 Jul 2023 21:23:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231516AbjG1TPZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 Jul 2023 15:15:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41026 "EHLO
+        id S233639AbjG1TXE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 Jul 2023 15:23:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbjG1TPY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jul 2023 15:15:24 -0400
+        with ESMTP id S229622AbjG1TXD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 Jul 2023 15:23:03 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E001C3C06;
-        Fri, 28 Jul 2023 12:15:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561EC11B;
+        Fri, 28 Jul 2023 12:23:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 70C38621D8;
-        Fri, 28 Jul 2023 19:15:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D455C433C8;
-        Fri, 28 Jul 2023 19:15:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DE52F621D2;
+        Fri, 28 Jul 2023 19:23:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8ECB7C433C8;
+        Fri, 28 Jul 2023 19:23:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690571721;
-        bh=7nzeD4OG5R60IdpA9pA5gs1FjPrFySMLyGJy7bncXK4=;
+        s=k20201202; t=1690572181;
+        bh=bpqmvFe1tBhOBmXbLXPISbiAb+pX9YpEUC+7p3McqTA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dTB/QMT0kAkyH3U3pWSEc1d0F7nimYpzDvIgsAgHf/gJhyelEZpiwRbR4RPWwb+UH
-         RP4adOgXtSidC2l6ls1h603jiXFnz/wg8o3Q9+GEskggSiQDIk9HSZf3JiUBIZHIqH
-         xmpmQbakO887Ps7lH3GCFoZHRwfYiLdlc2sWGw/bO6YgDVAWuVhkiRE9vPgaeEWCWE
-         Ca6ysL1dr2LDWCOPtXrJovRA8vgmD+zylEYoO/gl2SqpK7nzbxWc2ECHyLvZu1OoTZ
-         lruRSK09D0dMvCWv8zlrcsPS7jQT7fDZ8Z5izy+kA4Zbw4Pt1iZ7Ea94gqdSVPtY/z
-         kMWfwERX96bRQ==
-Received: (nullmailer pid 1121284 invoked by uid 1000);
-        Fri, 28 Jul 2023 19:15:18 -0000
-Date:   Fri, 28 Jul 2023 13:15:18 -0600
+        b=QRHDQYe/a5s6LPy4yxR4fRYhyw0pfaCgRNW+brnvs2gUHBg2DaouOF79k9+AOLEJP
+         2E1Zr/jKibWAED9g3HemurePVU35CxA1MCn82DgRbp8dObtLXFbz7hGLIXfKbkezHC
+         aUb52JfUHDu96Aocn23T8uRf8e6CuOTGJNZbBlD4ZvhvyVqzPCfgqpieul2yy7gTEa
+         hmEbt3OooIzM6DobGUyp2A3q7SWzchp/p3lQihsWCFhaVDy05uCn6EVDT51iWEI6vo
+         mWKMM9K7iBIL+n5JQO5yPvoQhTRUCoUshi42AMLkGs9KgwM4OlMwbAZ5uLrUOUVdXQ
+         M0Z6uPDCWzRNw==
+Received: (nullmailer pid 1168530 invoked by uid 1000);
+        Fri, 28 Jul 2023 19:22:59 -0000
+Date:   Fri, 28 Jul 2023 13:22:59 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     Varshini Rajendran <varshini.rajendran@microchip.com>,
         gregkh@linuxfoundation.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 27/50] dt-bindings: usb: atmel: add sam9x7
-Message-ID: <20230728191518.GA869757-robh@kernel.org>
-References: <20230728102753.266660-1-varshini.rajendran@microchip.com>
- <f042b194-659a-b128-7f5a-572150bf532f@linaro.org>
+        conor+dt@kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 33/50] dt-bindings: usb: add sam9x7
+Message-ID: <20230728192259.GA1164895-robh@kernel.org>
+References: <20230728102843.266967-1-varshini.rajendran@microchip.com>
+ <c03f4364-3d97-531a-8acc-aae68de39562@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f042b194-659a-b128-7f5a-572150bf532f@linaro.org>
+In-Reply-To: <c03f4364-3d97-531a-8acc-aae68de39562@linaro.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -61,47 +59,36 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jul 28, 2023 at 06:42:53PM +0200, Krzysztof Kozlowski wrote:
-> On 28/07/2023 12:27, Varshini Rajendran wrote:
-> > Add sam9x7 bindings.
+On Fri, Jul 28, 2023 at 01:48:01PM +0200, Krzysztof Kozlowski wrote:
+> On 28/07/2023 12:28, Varshini Rajendran wrote:
+> > Document sam9x7 compatible for usb ohci.
 > > 
 > > Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
 > > ---
-> >  Documentation/devicetree/bindings/usb/atmel-usb.txt | 11 +++++++----
-> >  1 file changed, 7 insertions(+), 4 deletions(-)
+> >  Documentation/devicetree/bindings/usb/generic-ohci.yaml | 6 ++++++
+> >  1 file changed, 6 insertions(+)
 > > 
-> > diff --git a/Documentation/devicetree/bindings/usb/atmel-usb.txt b/Documentation/devicetree/bindings/usb/atmel-usb.txt
-> > index 12183ef47ee4..82bd0dbc2a48 100644
-> > --- a/Documentation/devicetree/bindings/usb/atmel-usb.txt
-> > +++ b/Documentation/devicetree/bindings/usb/atmel-usb.txt
-> > @@ -3,8 +3,9 @@ Atmel SOC USB controllers
-> >  OHCI
-> >  
-> >  Required properties:
-> > - - compatible: Should be "atmel,at91rm9200-ohci" for USB controllers
-> > -   used in host mode.
-> > + - compatible: Should be "atmel,at91rm9200-ohci" or
-> > +   "microchip,sam9x7-ohci", "atmel,at91rm9200-ohci"
-> > +   for USB controllers used in host mode.
-> >   - reg: Address and length of the register set for the device
-> >   - interrupts: Should contain ohci interrupt
-> >   - clocks: Should reference the peripheral, host and system clocks
-> > @@ -30,8 +31,9 @@ usb0: ohci@500000 {
-> >  EHCI
-> >  
-> >  Required properties:
-> > - - compatible: Should be "atmel,at91sam9g45-ehci" for USB controllers
-> > -   used in host mode.
-> > + - compatible: Should be "atmel,at91sam9g45-ehci" or
-> > +   "microchip,sam9x7-ehci", "atmel,at91sam9g45-ehci"
+> > diff --git a/Documentation/devicetree/bindings/usb/generic-ohci.yaml b/Documentation/devicetree/bindings/usb/generic-ohci.yaml
+> > index be268e23ca79..a2490759f694 100644
+> > --- a/Documentation/devicetree/bindings/usb/generic-ohci.yaml
+> > +++ b/Documentation/devicetree/bindings/usb/generic-ohci.yaml
+> > @@ -57,6 +57,12 @@ properties:
+> >                - nxp,ohci-nxp
+> >                - st,spear600-ohci
+> >            - const: usb-ohci
+> > +      - items:
+> > +          - enum:
+> > +              - microchip,sam9x7-ohci
+> > +          - enum:
 > 
-> This confuses me. Isn't microchip,sam9x7-ehci already described in EHCI
-> bindings?
+> That's not an enum. You cannot have here different compatibles.
+> 
+> > +              - atmel,at91rm9200-ohci
+> > +          - const: usb-ohci
 
-The Atmel .dts (including the one in this series) files use usb-ohci and 
-usb-ehci compatibles, but they have extra properties (and clocks are 
-different IIRC). So they aren't 'generic' and should drop those 
-compatibles. There's already warnings generated for this, but obviously 
-no one is paying attention.
+As mentioned elsewhere, you aren't really compatible having custom 
+properties. If you are adding this here, then stuff should be removed 
+from the .txt binding. You need to sort out this mess and the existing 
+warnings with 'usb-ohci' in Atmel dts files before adding on to it.
 
 Rob
