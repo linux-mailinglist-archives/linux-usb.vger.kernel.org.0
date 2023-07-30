@@ -2,47 +2,47 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7830768319
-	for <lists+linux-usb@lfdr.de>; Sun, 30 Jul 2023 03:08:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4284376844C
+	for <lists+linux-usb@lfdr.de>; Sun, 30 Jul 2023 09:58:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229488AbjG3BIh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 29 Jul 2023 21:08:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52856 "EHLO
+        id S229723AbjG3H6F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 30 Jul 2023 03:58:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjG3BIh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 29 Jul 2023 21:08:37 -0400
-Received: from mgamail.intel.com (unknown [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E2D32701;
-        Sat, 29 Jul 2023 18:08:35 -0700 (PDT)
+        with ESMTP id S229505AbjG3H6E (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 30 Jul 2023 03:58:04 -0400
+Received: from mgamail.intel.com (unknown [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A4F1BEA;
+        Sun, 30 Jul 2023 00:58:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690679315; x=1722215315;
+  t=1690703882; x=1722239882;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Pn2YJCGXkyEQ1oZ3DmDf8JjbyCx2Q0Jd+FIiyB3IIoM=;
-  b=KXMKvmid/Sc5MwAcL+IN+oOc04bAUvfHPswxvYrIehxJuTThcosVAUjt
-   pRiTPtfM7i7US4iHuPeL8H3xLE2HHM1OsQjEzyIBZLr9xztUb0aW/wmvm
-   Robc6KtNPBOKSikUQoglLHoIzOZKw/eIVXXevDBWDuMzt281NlGaFblin
-   ZqmRMUN/WBJDRZW0x9MRIPYEZcxIBBCv3uD8PXy1rgteM9Inn/BFgL2Ql
-   guvWldt7mIfBKKvh/+FmHWALQZa7krkfguf51H+fEMAOyRRrLHVuUV49l
-   8+aVXNUa/3V0MX7h+3pen++NSX15YRmg3gQGq+DtG2FN+iuczg6x2/rZu
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10786"; a="349100552"
-X-IronPort-AV: E=Sophos;i="6.01,240,1684825200"; 
-   d="scan'208";a="349100552"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2023 18:08:35 -0700
+  bh=CsE/bgTXsqeAgc6gQpCkw5uM2Xjfz/zItOnPDuAhOpM=;
+  b=KgM34w8ltggJPYtb/Pk/S2EWsxgwIBPTy2s5VHeiu3XoRrh/0G2DwzsG
+   eCrQULwdaelxdhNp5CLdhQXS1aFXpTLwoyrFJ23mbGbnfiZDx0T+Aw+9I
+   PbYKWnQYLXzsgRN57W9aYfMEZe9liCsyy3ehiJCYpLBieefnt6DstH0dW
+   deMo6U+IMaV33L/Bd1g15TNzkXdyA7gP12pt/5w5crhLGMhClM8s8nk9L
+   NTJGIklkhHYZSVKlEP7eQFcnXX3NPz+sUpNRJhP8ld6k62XInx+6cNxvK
+   eoJ19NEQNvGyScbYNnlY7NUvoFsftlLQvUl4QzX5bMUUPokpY01ybAYpf
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10786"; a="367709341"
+X-IronPort-AV: E=Sophos;i="6.01,242,1684825200"; 
+   d="scan'208";a="367709341"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2023 00:57:43 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10786"; a="762954221"
-X-IronPort-AV: E=Sophos;i="6.01,240,1684825200"; 
-   d="scan'208";a="762954221"
+X-IronPort-AV: E=McAfee;i="6600,9927,10786"; a="731235875"
+X-IronPort-AV: E=Sophos;i="6.01,242,1684825200"; 
+   d="scan'208";a="731235875"
 Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 29 Jul 2023 18:08:30 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 30 Jul 2023 00:57:39 -0700
 Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1qPuv7-0004Mj-3D;
-        Sun, 30 Jul 2023 01:08:30 +0000
-Date:   Sun, 30 Jul 2023 09:08:12 +0800
+        id 1qQ1J4-0004Vf-2G;
+        Sun, 30 Jul 2023 07:57:38 +0000
+Date:   Sun, 30 Jul 2023 15:57:29 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         David Airlie <airlied@gmail.com>,
@@ -55,20 +55,20 @@ To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-phy@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH 3/3] usb: typec: nb7vpq904m: switch to DRM_SIMPLE_BRIDGE
-Message-ID: <202307300803.N6tLICrD-lkp@intel.com>
-References: <20230729204307.268587-4-dmitry.baryshkov@linaro.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-phy@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH 2/3] phy: qcom: qmp-combo: switch to DRM_SIMPLE_BRIDGE
+Message-ID: <202307301515.iHNSmHFk-lkp@intel.com>
+References: <20230729204307.268587-3-dmitry.baryshkov@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230729204307.268587-4-dmitry.baryshkov@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230729204307.268587-3-dmitry.baryshkov@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -88,54 +88,120 @@ https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Baryshkov/drm-display-add-transparent-bridge-helper/20230730-044510
 base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20230729204307.268587-4-dmitry.baryshkov%40linaro.org
-patch subject: [PATCH 3/3] usb: typec: nb7vpq904m: switch to DRM_SIMPLE_BRIDGE
-config: i386-buildonly-randconfig-r006-20230730 (https://download.01.org/0day-ci/archive/20230730/202307300803.N6tLICrD-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce: (https://download.01.org/0day-ci/archive/20230730/202307300803.N6tLICrD-lkp@intel.com/reproduce)
+patch link:    https://lore.kernel.org/r/20230729204307.268587-3-dmitry.baryshkov%40linaro.org
+patch subject: [PATCH 2/3] phy: qcom: qmp-combo: switch to DRM_SIMPLE_BRIDGE
+config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20230730/202307301515.iHNSmHFk-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230730/202307301515.iHNSmHFk-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202307300803.N6tLICrD-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202307301515.iHNSmHFk-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
->> drivers/gpu/drm/display/drm_simple_bridge.c:104:15: error: no member named 'of_node' in 'struct drm_bridge'
-           data->bridge.of_node = data->dev->of_node;
-           ~~~~~~~~~~~~ ^
-   1 error generated.
---
->> drivers/gpu/drm/bridge/simple-bridge.c:212:18: error: no member named 'of_node' in 'struct drm_bridge'
-           sbridge->bridge.of_node = pdev->dev.of_node;
-           ~~~~~~~~~~~~~~~ ^
-   1 error generated.
-
-
-vim +104 drivers/gpu/drm/display/drm_simple_bridge.c
-
-cd1c726976d298 Dmitry Baryshkov 2023-07-29   87  
-cd1c726976d298 Dmitry Baryshkov 2023-07-29   88  static int drm_simple_bridge_probe(struct auxiliary_device *auxdev,
-cd1c726976d298 Dmitry Baryshkov 2023-07-29   89  				   const struct auxiliary_device_id *id)
-cd1c726976d298 Dmitry Baryshkov 2023-07-29   90  {
-cd1c726976d298 Dmitry Baryshkov 2023-07-29   91  	struct drm_simple_bridge_data *data;
-cd1c726976d298 Dmitry Baryshkov 2023-07-29   92  
-cd1c726976d298 Dmitry Baryshkov 2023-07-29   93  	data = devm_kzalloc(&auxdev->dev, sizeof(*data), GFP_KERNEL);
-cd1c726976d298 Dmitry Baryshkov 2023-07-29   94  	if (!data)
-cd1c726976d298 Dmitry Baryshkov 2023-07-29   95  		return -ENOMEM;
-cd1c726976d298 Dmitry Baryshkov 2023-07-29   96  
-cd1c726976d298 Dmitry Baryshkov 2023-07-29   97  	data->dev = &auxdev->dev;
-cd1c726976d298 Dmitry Baryshkov 2023-07-29   98  	data->next_bridge = devm_drm_of_get_bridge(&auxdev->dev, auxdev->dev.of_node, 0, 0);
-cd1c726976d298 Dmitry Baryshkov 2023-07-29   99  	if (IS_ERR(data->next_bridge))
-cd1c726976d298 Dmitry Baryshkov 2023-07-29  100  		return dev_err_probe(&auxdev->dev, PTR_ERR(data->next_bridge),
-cd1c726976d298 Dmitry Baryshkov 2023-07-29  101  				     "failed to acquire drm_bridge\n");
-cd1c726976d298 Dmitry Baryshkov 2023-07-29  102  
-cd1c726976d298 Dmitry Baryshkov 2023-07-29  103  	data->bridge.funcs = &drm_simple_bridge_funcs;
-cd1c726976d298 Dmitry Baryshkov 2023-07-29 @104  	data->bridge.of_node = data->dev->of_node;
-cd1c726976d298 Dmitry Baryshkov 2023-07-29  105  
-cd1c726976d298 Dmitry Baryshkov 2023-07-29  106  	return devm_drm_bridge_add(data->dev, &data->bridge);
-cd1c726976d298 Dmitry Baryshkov 2023-07-29  107  }
-cd1c726976d298 Dmitry Baryshkov 2023-07-29  108  
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_rr.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_wrr.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_lc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_wlc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_fo.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_ovf.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_lblc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_lblcr.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_dh.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_sh.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_sed.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_nq.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_twos.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_ftp.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/netfilter/ipvs/ip_vs_pe_sip.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/netfilter/nf_defrag_ipv4.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/netfilter/nf_reject_ipv4.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/netfilter/iptable_nat.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/netfilter/iptable_raw.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/ip_tunnel.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/ipip.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/ip_gre.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/udp_tunnel.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/ip_vti.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/ah4.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/esp4.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/xfrm4_tunnel.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/tunnel4.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/inet_diag.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/tcp_diag.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/udp_diag.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv4/raw_diag.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/xfrm/xfrm_algo.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/xfrm/xfrm_user.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/unix/unix_diag.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/netfilter/ip6table_raw.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/netfilter/ip6table_nat.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/netfilter/nf_defrag_ipv6.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/netfilter/nf_reject_ipv6.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/ah6.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/esp6.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/xfrm6_tunnel.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/tunnel6.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/mip6.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/sit.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ipv6/ip6_udp_tunnel.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/dsa/tag_ar9331.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/dsa/tag_brcm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/dsa/tag_dsa.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/dsa/tag_gswip.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/dsa/tag_hellcreek.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/dsa/tag_ksz.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/dsa/tag_lan9303.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/dsa/tag_mtk.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/dsa/tag_none.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/dsa/tag_ocelot.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/dsa/tag_ocelot_8021q.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/dsa/tag_qca.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/dsa/tag_rtl4_a.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/dsa/tag_rtl8_4.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/dsa/tag_rzn1_a5psw.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/dsa/tag_sja1105.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/dsa/tag_trailer.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/dsa/tag_xrs700x.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/8021q/8021q.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/xdp/xsk_diag.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/mptcp/mptcp_diag.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/mptcp/mptcp_crypto_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/mptcp/mptcp_token_test.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/packet/af_packet.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/packet/af_packet_diag.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/key/af_key.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/bridge/netfilter/nf_conntrack_bridge.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/bridge/netfilter/ebtables.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/bridge/netfilter/ebtable_broute.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/bridge/netfilter/ebtable_filter.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/bridge/netfilter/ebtable_nat.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/bridge/bridge.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sunrpc/sunrpc.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sunrpc/auth_gss/auth_rpcgss.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sunrpc/auth_gss/rpcsec_gss_krb5.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/kcm/kcm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/atm/atm.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/atm/lec.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/atm/mpoa.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/sctp/sctp_diag.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/tipc/diag.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/smc/smc_diag.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/caif/caif.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/caif/chnl_net.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/caif/caif_socket.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/caif/caif_usb.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/6lowpan/6lowpan.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ieee802154/6lowpan/ieee802154_6lowpan.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/ieee802154/ieee802154_socket.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/nfc/nci/nci.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/nfc/nci/nci_spi.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/nfc/nfc_digital.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/vmw_vsock/vsock_diag.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in net/hsr/hsr.o
+>> ERROR: modpost: "drm_simple_bridge_register" [drivers/phy/qualcomm/phy-qcom-qmp-combo.ko] undefined!
 
 -- 
 0-DAY CI Kernel Test Service
