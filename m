@@ -2,105 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FC1E76866E
-	for <lists+linux-usb@lfdr.de>; Sun, 30 Jul 2023 18:27:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3262768721
+	for <lists+linux-usb@lfdr.de>; Sun, 30 Jul 2023 20:34:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbjG3Q1T (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 30 Jul 2023 12:27:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33488 "EHLO
+        id S229582AbjG3Sed (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 30 Jul 2023 14:34:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjG3Q1S (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 30 Jul 2023 12:27:18 -0400
-Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E4910D7;
-        Sun, 30 Jul 2023 09:27:15 -0700 (PDT)
-Received: from martin by viti.kaiser.cx with local (Exim 4.89)
-        (envelope-from <martin@viti.kaiser.cx>)
-        id 1qQ9Fi-0003fq-1p; Sun, 30 Jul 2023 18:26:42 +0200
-Date:   Sun, 30 Jul 2023 18:26:42 +0200
-From:   Martin Kaiser <martin@kaiser.cx>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Fabio Estevam <festevam@gmail.com>,
-        Arnd Bergmann <arnd@kernel.org>, soc@kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Hartley Sweeten <hsweeten@visionengravers.com>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Tony Lindgren <tony@atomide.com>, Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Linux-OMAP <linux-omap@vger.kernel.org>,
-        linux-clk@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 05/13] ARM: imx: remove unused mx25_revision()
-Message-ID: <20230730162642.ib6hfbw5zgeked6h@viti.kaiser.cx>
-References: <20230516153109.514251-1-arnd@kernel.org>
- <20230516153109.514251-6-arnd@kernel.org>
- <CAOMZO5B0stW2X6YqPTTKDpCOAzPDvm=4HT8jfBAgbTy11gnKgg@mail.gmail.com>
- <4e026f08-d733-4b01-ab47-e921d041e74e@app.fastmail.com>
- <20230517154525.ljoamjlfhpejtizm@viti.kaiser.cx>
- <0808604b-a26e-43b8-83da-2c3dc12446d2@app.fastmail.com>
+        with ESMTP id S229437AbjG3Sed (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 30 Jul 2023 14:34:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D28B10DF
+        for <linux-usb@vger.kernel.org>; Sun, 30 Jul 2023 11:34:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B73660C98
+        for <linux-usb@vger.kernel.org>; Sun, 30 Jul 2023 18:34:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DCE56C433C7
+        for <linux-usb@vger.kernel.org>; Sun, 30 Jul 2023 18:34:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690742070;
+        bh=2voImRoBji7YZrxm8fO2gCgAbkpBW7fLlfcjA47XAZM=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=l6AyWAqk4p+PzzXadKzUI9Wi+GsnuTqyPVjMOh+fx0x6sdr+WZNILdCTWVNPkDb9F
+         YUDQoXPXJ9DLpKSIKqXDHA4VbB5J7qJE8qPMEU/E4HYM8aotHkq9HpBMJdBLWn3Dol
+         xllbHTeFhqD2sDNcEPQmRLJifBtZzzn27bGvyCTH08gF6VszdMgGt+QS28eoTWBcxG
+         SAow7jMCMmXnkVoPgPINRkIO7ie+43Ak6+rjs1cDxQygF8FVh6TWT9wHhV76XWwC2e
+         mq0hKAcyad05dgQQBxFmGe7j3ZyDeBwea1Wm2m2fccuu+1FrMc98rztOhKLbHirBXl
+         a3uaRGz3qJEBw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id C4A0CC4332E; Sun, 30 Jul 2023 18:34:30 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 217715] USB from Thunderbolt 2 dock disconnects (xHCI host not
+ responding)
+Date:   Sun, 30 Jul 2023 18:34:30 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: youp1one1@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-217715-208809-TDRIVxiAb7@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-217715-208809@https.bugzilla.kernel.org/>
+References: <bug-217715-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0808604b-a26e-43b8-83da-2c3dc12446d2@app.fastmail.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
-Sender: Martin Kaiser <martin@viti.kaiser.cx>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Arnd,
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217715
 
-Arnd Bergmann (arnd@arndb.de) wrote:
+--- Comment #5 from youp1one1@gmail.com ---
+I've been testing with v6.5-rc3 and it has been promising, with no
+disconnections during several hours.
 
-> >> I'll leave it up to you, if you want to merge Martin's patches or
-> >> a replacement for the soc-imx driver through the imx tree for 6.5,
-> >> I'll drop my patch from this series, otherwise I'll keep it for now
-> >> and we can still do it better at later point.
+For the time being, I had to revert to the distro's current kernel for other
+reasons (some third party modules not being compiled for 6.5) but I will be
+able to definitely tell is v6.5 fixes this issue when Tumbleweed is updated=
+ to
+it, I suppose in a few weeks.
 
-> > I suggest we merge my patches for imx25 first and then clean up all the
-> > older imx families to use the common functions.
+--=20
+You may reply to this email to add a comment.
 
-> > I've just rebased the patches against today's linux-next. My understanding
-> > is that they have to go through the clk tree.
-
-> This never happened, right? I see that mx25_revision() is still in the
-> tree without any users, so I can't easily turn on the warning by default
-> yet. Should I just go ahead and remove it for 5.6, or do you expect to
-> have your patch ready in time for the merge window?
-
-sorry for delaying your series.
-
-So far, there's been no response to my patches from the clk maintainers.
-Let me resend the patches one final time. If we don't hear anything back
-within a week or so, feel free to remove mx25_revision (and probably all
-of arch/arm/mach-imx/cpu-imx25.c) for the 6.6 merge window.
-
-Thanks,
-Martin
+You are receiving this mail because:
+You are watching the assignee of the bug.=
