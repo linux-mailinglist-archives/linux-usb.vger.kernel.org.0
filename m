@@ -2,181 +2,202 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DEF476A0B9
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Jul 2023 20:58:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D10F76A190
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Jul 2023 21:57:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230174AbjGaS6T (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Jul 2023 14:58:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40472 "EHLO
+        id S229966AbjGaT5O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Jul 2023 15:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjGaS6S (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Jul 2023 14:58:18 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D769E
-        for <linux-usb@vger.kernel.org>; Mon, 31 Jul 2023 11:58:17 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b9bee2d320so72517411fa.1
-        for <linux-usb@vger.kernel.org>; Mon, 31 Jul 2023 11:58:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690829895; x=1691434695;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4oxjOcheoKpsDM2xN2U2v/k6YSBJ6FeRy8U903DeE8Y=;
-        b=fZNfYS91HKAqcqDTbTgMivCTr03EJi0OQcsV9/rZJLwMcEkbfMfKSPGvXsjPf9si+C
-         Z6mJN7dsFK1SdKu+K84K6AE38fwGrPiu8QcHDwYn3SdAIKfbwqy+p3Woqbq8EFI1TNX2
-         yR8paVJesevnmeYms+TckQU0yih2wSb4gE1qWr9kYku4bkU9mawm77yQEvIb1Qvdo55q
-         NdsEghYyscnMqIxyuHJLQ/dtsnVwo436whPKgaHmAc4xzXp0kXoNMflmOSql/mN6nIih
-         9WDGf6LKBlEEn2wUsGkARHcsKrh+xvBYRimBvbnyPhQVpcYZvPUz2K3FLYm7b9mHH3JS
-         z7pQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690829895; x=1691434695;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4oxjOcheoKpsDM2xN2U2v/k6YSBJ6FeRy8U903DeE8Y=;
-        b=fNroT5YEgxdzcnYCgfAdd9DCSQqxBjPolMij/uBTCY/3A2QSrGrA5vCeC8XTMPdImt
-         Cy1SMd4GfdDBHNdXlrTYMUxjElOsjgAxayLYEtfvgRcPA71JMaMgeQmVCjSWKnMQ4Qob
-         Wm83gBNgwsyecU7g9oDVxskq6kRAtrCjOfcC/KX9ZK7iiQTMtTKuOdGdF2pxuyJgxdPC
-         tIJrB/SL6JXnU/89twuy00qefE5BAeq6alan+TBBeujQoJ/UlYLuLZPybN/7lK14MvTF
-         Irkrk1b4fqAUnwlaTVpYKPs/S83f6HVDvdX9QQoo7FOyaYCtRzZrzlR1hFkdbIsx5Unj
-         bOFg==
-X-Gm-Message-State: ABy/qLYdc07iOohc+HsziEzAObt3XdCGdmlRG1AGKVngmmW38ErP53ok
-        GI4VnrJ8rc0hvEZv1bgtfA2Iib/c6z2WWDrwGQDpeA==
-X-Google-Smtp-Source: APBJJlGktSxx4YUN/wNDBst69t0w7/N5c4Y4nV00pgGZARtunHNrxoXkjhQxuGTuiQasbv0M03oTKvHtvotrZb1iHys=
-X-Received: by 2002:a2e:870a:0:b0:2b8:36d4:7b0a with SMTP id
- m10-20020a2e870a000000b002b836d47b0amr539794lji.29.1690829895392; Mon, 31 Jul
- 2023 11:58:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <4d7aa3f4-22d9-9f5a-3d70-1bd7148ff4ba@google.com>
- <8de4bb54-8daa-73c0-b5eb-4aa4b9675ce5@ideasonboard.com> <fa11d883-2c72-486f-9b7b-46f238e2e03f@rowland.harvard.edu>
- <CAMHf4WJ4QyvFfnAWSk_D3VuPOe7+if=pgQvunjLXOHTcBgi4Qw@mail.gmail.com>
- <8242fba3-ebcc-481e-92bb-e25a3516853a@rowland.harvard.edu>
- <CAMHf4W+d1P8_Ahgc=Wj5K7BJa2Oi+cfXozd8e0_cdzioAjHeBg@mail.gmail.com>
- <7a71a4c9-324e-44a9-b38b-31ea87d60e6e@rowland.harvard.edu>
- <b55b51b3-7632-4ba5-b4fc-ea0384321149@rowland.harvard.edu>
- <CAMHf4WL8jWhkeDsLpH1z9sXi4-42+WExtCeJWjXNKy9R85oJQg@mail.gmail.com> <fe501805-2eec-4cd1-be61-ad446002af9c@rowland.harvard.edu>
-In-Reply-To: <fe501805-2eec-4cd1-be61-ad446002af9c@rowland.harvard.edu>
-From:   Avichal Rakesh <arakesh@google.com>
-Date:   Tue, 1 Aug 2023 00:28:03 +0530
-Message-ID: <CAMHf4WL+HyfeejbnkeTuVBw-nOG9J-dKECi7hjzUhaWJHw1n7Q@mail.gmail.com>
-Subject: Re: Kernel panic when unbinding UVC gadget function
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Dan Scally <dan.scally@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        "Eino-Ville Talvala (Eddy)" <etalvala@google.com>,
-        Jayant Chowdhary <jchowdhary@google.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229538AbjGaT5M (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Jul 2023 15:57:12 -0400
+Received: from mgamail.intel.com (unknown [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9A2319AC
+        for <linux-usb@vger.kernel.org>; Mon, 31 Jul 2023 12:57:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1690833430; x=1722369430;
+  h=date:from:to:cc:subject:message-id;
+  bh=lcE0YXwOtnc9hz1QiE1CpJPdY8hovPufLJrDie4f2jY=;
+  b=m4DLmjo6vfUTN3ASlTXKVIEp9QFmTcocP7V9V2XhduN3JOGCC399b6Yb
+   sqzYI4kP4gcXqfIzUzt6YDMTpEtEhHMUe2LZ7Uo8M5NgwudAPe1vSb+mK
+   6T51uYCj16ktYhx8XyTOOFaR3+c+udoFZz9iaBWNHeX8gCzN+DUe8JdG5
+   hHhXdTOTN45vdfwNc0C14K1vdEqYK2iAjaK3lTC0JBhZbemTp5mip2OC7
+   bQcONZaHEg+QPla02+dAioaacik1yJG7XEYbXRH96SPuxQyqYIySyBL7Y
+   P29wNkZDf17dSCCjXDRXEk1Wf8+ZfZuCs80eKG3ShJwk0AxHPar0soAUL
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10788"; a="455489537"
+X-IronPort-AV: E=Sophos;i="6.01,245,1684825200"; 
+   d="scan'208";a="455489537"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2023 12:56:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10788"; a="728414273"
+X-IronPort-AV: E=Sophos;i="6.01,245,1684825200"; 
+   d="scan'208";a="728414273"
+Received: from lkp-server02.sh.intel.com (HELO 953e8cd98f7d) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 31 Jul 2023 12:56:58 -0700
+Received: from kbuild by 953e8cd98f7d with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qQZ0j-0005Ka-2N;
+        Mon, 31 Jul 2023 19:56:57 +0000
+Date:   Tue, 01 Aug 2023 03:56:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ 98a9e32bdf2525073fdfbdcc520d5c798a7375e5
+Message-ID: <202308010306.3AI2E8Zf-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Jul 29, 2023 at 2:33=E2=80=AFAM Alan Stern <stern@rowland.harvard.e=
-du> wrote:
->
-> On Fri, Jul 28, 2023 at 11:41:19PM +0530, Avichal Rakesh wrote:
-> > On Fri, Jul 28, 2023 at 9:07=E2=80=AFPM Alan Stern <stern@rowland.harva=
-rd.edu> wrote:
-> > > It's not clear that the patch will fix the problem entirely.  Your
-> > > original analysis of the bug stated:
-> > >
-> > > > This means that attempting to unregister the UVC Gadget Driver resu=
-lts in the
-> > > > V4L2 resource cleanup being stuck behind udc->connect_lock, which w=
-ill only
-> > > > be released after uvc_function_unbind finishes. This results in eit=
-her the
-> > > > gadget deactivating after the unbind process has finished, or in a =
-Kernel Panic
-> > > > as it tries to cleanup a V4L2 node that has been purged.
-> > >
-> > > My patch removes the locking issue.  But if an execution path can
-> > > occur with a lock present, it can also occur when the lock has been
-> > > removed.  That means it may still be possible for the UVC gadget driv=
-er
-> > > to try deactivating the UDC after the unbind process has finished or =
-for
-> > > it to try cleaning up a V4L2 node that has been purged.
-> > >
-> > > If either of those really could have happened (as opposed to just
-> > > getting stuck in a deadlock, waiting for a mutex that would never be
-> > > released), then it can still happen with the patch.  Fixing them woul=
-d
-> > > require changes to the UVC gadget driver.  So the problem may not be
-> > > gone entirely.
-> > >
-> > The current situation can theoretically happen without the deadlock,
-> > yes, but shouldn't happen in practice. UVC's disable/unbind code flow
-> > looks as follows:
-> >
-> > 1. When disable callback is called, the gadget driver signals the
-> > userspace application to close the V4L2 node.
-> > 2. Closing the V4L2 node calls the release callback to clean up
-> > resources. It is this callback that calls into gadget_deactivate and
-> > gets blocked currently (without your patch).
-> > 3. Separately, the unbind callback waits on release callback to finish
-> > for 500ms, assuming the userspace application to behave well and close
-> > the node in a reasonable amount of time.
-> > 4. If the release callback still hasn't been called, the V4L2 node is
-> > forcefully removed and UVC driver waits for another 1000ms for the
-> > release callback to clean up any pending resources.
-> > 5. The unbind process continues regardless of the status of release
-> > callback after waiting at most 1.5s for release.
-> >
-> > So the only way to run into the current issue is if the release
-> > callback fails to finish in both step 3 and step 4 (for example, due
-> > to a deadlock) in the span of 1.5s. It is possible, but fairly
-> > unlikely (at least in my limited understanding) for the release
-> > callback to be delayed for quite that long.
-> >
-> > Hope that makes some sense!
->
-> Yes, and it shows that there really is a bug in the UVC driver.  In
-> kernel programming, fairly unlikely =3D=3D not impossible =3D=3D bound to=
- happen
-> eventually!
->
-> I don't know enough about the driver to make any detailed
-> recommendations.  But you might consider, for example, that if the
-> unbind routine can get along with forcibly removing the V4L2 node and
-> not waiting for the release callback to finish, then why not have it
-> behave that way all the time?  In other words, shorten the timeouts from
-> 500 ms and 1000 ms to 0 ms.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: 98a9e32bdf2525073fdfbdcc520d5c798a7375e5  Merge 6.5-rc4 into usb-next
 
-Forcibly removing the V4L2 node doesn't clean up the associated
-resources (for example, the fd held by the userspace application),
-so we risk running into kernel panics if the V4L2 node is forcibly
-removed without a clean release from the userspace application.
+elapsed time: 721m
 
-I don't see an easy way to reduce or remove the timeouts entirely,
-but I might be missing something simple again. Dan and Laurent,
-if you have ideas around this, I am happy to test stuff out!
+configs tested: 126
+configs skipped: 9
 
->
-> Whether you do that or not, someone definitely should fix up the release
-> routine so that it won't get into trouble if it is called after (or
-> concurrently with) all of the cleanup operations -- which is quite
-> likely to happen if those timeouts are eliminated!  In particular, it
-> shouldn't call gadget_deactivate unless it knows that an unbind hasn't
-> happened yet.  And if that is the case, it should block the unbind
-> routine until gadget_deactivate returns.  Basically, it's a bug for a
-> function driver to call any gadget core routine after its unbind
-> callback has returned.
->
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-This seems like a reasonable check to have. I am out until next week,
-but I can test and put up a patch once I get back!
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r001-20230731   gcc  
+alpha                randconfig-r005-20230731   gcc  
+alpha                randconfig-r022-20230731   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r031-20230731   gcc  
+arc                  randconfig-r043-20230731   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r006-20230731   clang
+arm                  randconfig-r023-20230731   gcc  
+arm                  randconfig-r046-20230731   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r021-20230731   clang
+arm64                randconfig-r033-20230731   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r013-20230731   gcc  
+csky                 randconfig-r016-20230731   gcc  
+hexagon              randconfig-r041-20230731   clang
+hexagon              randconfig-r045-20230731   clang
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-r004-20230731   gcc  
+i386         buildonly-randconfig-r005-20230731   gcc  
+i386         buildonly-randconfig-r006-20230731   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230731   gcc  
+i386                 randconfig-i002-20230731   gcc  
+i386                 randconfig-i003-20230731   gcc  
+i386                 randconfig-i004-20230731   gcc  
+i386                 randconfig-i005-20230731   gcc  
+i386                 randconfig-i006-20230731   gcc  
+i386                 randconfig-i011-20230731   clang
+i386                 randconfig-i012-20230731   clang
+i386                 randconfig-i013-20230731   clang
+i386                 randconfig-i014-20230731   clang
+i386                 randconfig-i015-20230731   clang
+i386                 randconfig-i016-20230731   clang
+i386                 randconfig-r024-20230731   clang
+i386                 randconfig-r025-20230731   clang
+i386                 randconfig-r026-20230731   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r012-20230731   gcc  
+loongarch            randconfig-r014-20230731   gcc  
+loongarch            randconfig-r024-20230731   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r003-20230731   gcc  
+m68k                 randconfig-r005-20230731   gcc  
+microblaze           randconfig-r006-20230731   gcc  
+microblaze           randconfig-r023-20230731   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                 randconfig-r032-20230731   clang
+nios2                               defconfig   gcc  
+nios2                randconfig-r035-20230731   gcc  
+openrisc             randconfig-r001-20230731   gcc  
+openrisc             randconfig-r036-20230731   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r013-20230731   gcc  
+parisc               randconfig-r021-20230731   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc              randconfig-r015-20230731   clang
+powerpc              randconfig-r022-20230731   clang
+powerpc              randconfig-r026-20230731   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r003-20230731   gcc  
+riscv                randconfig-r004-20230731   gcc  
+riscv                randconfig-r034-20230731   gcc  
+riscv                randconfig-r042-20230731   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r014-20230731   clang
+s390                 randconfig-r044-20230731   clang
+sh                               allmodconfig   gcc  
+sh                   randconfig-r012-20230731   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r034-20230731   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                   randconfig-r025-20230731   gcc  
+um                   randconfig-r032-20230731   clang
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-r001-20230731   gcc  
+x86_64       buildonly-randconfig-r002-20230731   gcc  
+x86_64       buildonly-randconfig-r003-20230731   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-r011-20230731   clang
+x86_64               randconfig-r036-20230731   gcc  
+x86_64               randconfig-x001-20230731   clang
+x86_64               randconfig-x002-20230731   clang
+x86_64               randconfig-x003-20230731   clang
+x86_64               randconfig-x004-20230731   clang
+x86_64               randconfig-x005-20230731   clang
+x86_64               randconfig-x006-20230731   clang
+x86_64               randconfig-x011-20230731   gcc  
+x86_64               randconfig-x012-20230731   gcc  
+x86_64               randconfig-x013-20230731   gcc  
+x86_64               randconfig-x014-20230731   gcc  
+x86_64               randconfig-x015-20230731   gcc  
+x86_64               randconfig-x016-20230731   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r004-20230731   gcc  
+xtensa               randconfig-r033-20230731   gcc  
 
-Thank you!
-
-- Avi.
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
