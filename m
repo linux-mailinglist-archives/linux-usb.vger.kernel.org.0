@@ -2,53 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9224769AFD
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Jul 2023 17:43:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 919EC769B29
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Jul 2023 17:49:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232035AbjGaPnE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Jul 2023 11:43:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52462 "EHLO
+        id S232447AbjGaPtV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Jul 2023 11:49:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbjGaPnD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Jul 2023 11:43:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67601E0;
-        Mon, 31 Jul 2023 08:43:02 -0700 (PDT)
+        with ESMTP id S232817AbjGaPtN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Jul 2023 11:49:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC3F219B7
+        for <linux-usb@vger.kernel.org>; Mon, 31 Jul 2023 08:49:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 042A0611A5;
-        Mon, 31 Jul 2023 15:43:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFBFDC433C7;
-        Mon, 31 Jul 2023 15:42:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D7A8611BE
+        for <linux-usb@vger.kernel.org>; Mon, 31 Jul 2023 15:49:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 472A3C433CB;
+        Mon, 31 Jul 2023 15:49:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690818181;
-        bh=/W2XVVZ70Suilz4XvS7nOUajHcrXgB3wWG6Dueczvec=;
+        s=k20201202; t=1690818548;
+        bh=IiqjtFljpF3JFBsgdPWDkjyDlc2GqaguJSDXrS94mrg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G7a4tQ+VUMK3V3PwL5NEu/9uYkedTQ3kVuTjAYB3miHf3Y7eZ5vTngYi+6MQ7LVLX
-         qGPG9FmZoWF3PVEN35T3Gn4D+q+D6p49dqaByDVjBaxFlAiuouikbN/SAmhflwJFuO
-         tCbVVda20TQUHk0nsN9vOnIyKWqrrerK7ghpTzSn3YgsgZnKD/5WekLN8zwNNLClxc
-         HiAbuVMCIa0ceP9b3j9L4qDHTvfpGvOCoiL10KyOUzVICTm7ESKMw+pTYdEUwCOv/X
-         RX9qWAuJguSrFfE0rb3WTG/Zkpp7au75bKBX9fyB6Khbh0wg9poiBgumU1UEe8yKnx
-         0TsODjJipaI0w==
-Date:   Mon, 31 Jul 2023 16:42:57 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        Fabio Estevam <festevam@denx.de>
-Subject: Re: [PATCH 2/2] dt-bindings: usb: ci-hdrc-usb2: Fix
- clocks/clock-names maxItems
-Message-ID: <20230731-snide-unrented-45886c0317c7@spud>
-References: <20230731144422.1532498-1-festevam@gmail.com>
- <20230731144422.1532498-2-festevam@gmail.com>
+        b=fo84xOZQ19JMnvS1yPw9YGAtTMoMhJjihcZ2js3t+lNfe3qW7IbwgNzn32zAITt5f
+         DDLVJrLte8TxT90Qh4Moz5PRiwcx9+uCHKRtgMiJNP2Ae/eGjCJLmp0j2ffUTIDlXX
+         oMLDFKKwteCAsw1Lcbhl8bFyUnSsJyHaI48UGqumQpY7qLr4/sv4R0qhyq3FUjcuVM
+         McHxI0pxh7Yq7C6ZskiGYAv8wwXijg9rfeOSWJfA7qQkbF8HUUJ/7r5lmqoRlZtGIf
+         a9WJI0jiJkRqb3wm5rpeeMm4xmc/Qh2UqKS3T7W1jp25leUwGmpflLvJ4XBh2YcZ2o
+         MLrRG6XZvdawA==
+Date:   Mon, 31 Jul 2023 08:49:06 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Ladislav Michl <ladis@triops.cz>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+        oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org
+Subject: Re: [usb:usb-testing 25/42] drivers/usb/dwc3/dwc3-octeon.c:403:10:
+ warning: shift count >= width of type
+Message-ID: <20230731154906.GA1823389@dev-arch.thelio-3990X>
+References: <202307260537.MROrhVNM-lkp@intel.com>
+ <2023072653-viewable-harmonics-09e0@gregkh>
+ <fbceb8e5444eab23788501b002926e07f54fdd7c.camel@triops.cz>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="zYizTsKi2BEF7P6Z"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230731144422.1532498-2-festevam@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <fbceb8e5444eab23788501b002926e07f54fdd7c.camel@triops.cz>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -59,35 +59,40 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Ladislav,
 
---zYizTsKi2BEF7P6Z
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Fri, Jul 28, 2023 at 08:48:20AM +0200, Ladislav Michl wrote:
+> Hi Greg,
+> 
+> I'm sorry for late reply (travelling)
+> 
+> On Wed, 2023-07-26 at 06:39 +0200, Greg Kroah-Hartman wrote:
+> > On Wed, Jul 26, 2023 at 05:09:56AM +0800, kernel test robot wrote:
+> > > Hi Ladislav,
+> > > 
+> > > First bad commit (maybe != root cause):
+> > > 
+> > > tree:  
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-
+> > > testing
+> > > head:   ac47051f0bb8ccf1eaedb296a19fcb541474db53
+> > > commit: b3061c5a15fe460502e9574b4663dd7c6ed80b48 [25/42] usb: dwc3:
+> > > dwc3-octeon: Convert to glue driver
+> > 
+> > Ladislav, I've dropped your dwc3-octeon patches from my tree now,
+> > please fix up and resend when you have this resolved.
+> 
+> As I didn't find a better place to ask, I'm asking here:
+> all registers are 64bit and driver is now using GENMASK and BIT
+> macros to access their values. Reported problem comes from 32bit
+> configuration, where BIT is UL(1) << (nr) and BITS_PER_LONG is 32.
+> Is using GENMASK_ULL and BIT_ULL preferred way to go here? I'm not a
+> bit fan of "fixing" code just to silence warning on irrelevant
+> configurations, but will do it unless someone points me to better way.
 
-On Mon, Jul 31, 2023 at 11:44:22AM -0300, Fabio Estevam wrote:
-> From: Fabio Estevam  <festevam@denx.de>
->=20
-> imx35.dtsi has three USB clocks. Adjust the maxItems to fix the following
-> schema warnings:
->=20
-> imx35-eukrea-mbimxsd35-baseboard.dtb: usb@53ff4400: clock-names: ['ipg', =
-'ahb', 'per'] is too long
+I am not Greg but I see you did not get a response on this yet. Yes, you
+should use the _ULL macros to ensure the values are always 64-bit, which
+will avoid this issue altogether.
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-
-Thanks,
-Conor.
-
---zYizTsKi2BEF7P6Z
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZMfWgQAKCRB4tDGHoIJi
-0vLdAQDgMhOyofofEdKvAkLRXrSxJqb8QUtFomnfYQ2ja/DZXQEA2vtKKUOmTqIs
-6ZCBGACUuAQlmXC6rdA2d2u0/RJpRQ0=
-=MpVH
------END PGP SIGNATURE-----
-
---zYizTsKi2BEF7P6Z--
+Cheers,
+Nathan
