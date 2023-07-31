@@ -2,183 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6552B768E9E
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Jul 2023 09:24:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A6B5769009
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Jul 2023 10:24:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230289AbjGaHXz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Jul 2023 03:23:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35322 "EHLO
+        id S230217AbjGaIYO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Jul 2023 04:24:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbjGaHXU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Jul 2023 03:23:20 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C56691BF3
-        for <linux-usb@vger.kernel.org>; Mon, 31 Jul 2023 00:19:36 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b9c907bc68so51062651fa.2
-        for <linux-usb@vger.kernel.org>; Mon, 31 Jul 2023 00:19:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690787974; x=1691392774;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aArr+Z0OOAMh7dLqu6+G5gaqEsgGaXff5br4Ze76jN4=;
-        b=QVfPUkFINU++0UtYQJu+LcaKoI23bnJHqonbs2+f9RPgXDiPa2zZCxyyDWMiOK8XgS
-         eV3HuY1x2nwBsf/f4MyS7RR/aX5eQivolz3unvkSfM6vN6eQhkaDpIo3nJoGzU3rq9BY
-         IAsS2den+Mma8f35wxGnjHUsh+XyUGhKEux0QNLCU8WuHyyto4x9dcxQ6HqqjSLMVjJ+
-         w+SPpUpfYROjzjMpsfoyOml3VkL2CN0SnejVxK1uZrMNQWpTi3Eg7IHyPF70Xcqm7qjo
-         6sokl3IVWRLwc7dPuowSPknTT6N6q0wE/ju/beFOVOUvxdGZuhwKm9yUVvEoe7juBWY8
-         gKnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690787974; x=1691392774;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aArr+Z0OOAMh7dLqu6+G5gaqEsgGaXff5br4Ze76jN4=;
-        b=aMl3pU6c1Usx81+jMxRKk4lZL7imPwsQHd+qbeeboLvatgLF0/uHscATkOO06MxdfP
-         6uxLRS1Mbh1teMRnwcIqwnEw2kw+nc2orRJfyAECzEQIOzZoYFZywIqP2jxJq0EvDIXd
-         c63qBNYvkHWWRElLfw16xNEuPiWxkiw4EKitXEjpnNlvJYXAjbjd/Ohr2F9/xn1cB5Ok
-         rD2IXj5PtkSq9TOtEMqtD5z1JWMKsiNWwFtJ0bLfbbFrWAOStdMTkBAUICkx3YrEtDGT
-         //giaq752EZ8R6+pn8ctkL3NIv/GuhvWGttTsEUsPIR4EhbLm5UXWLP2PODJA+n4xE85
-         RaVw==
-X-Gm-Message-State: ABy/qLaVMEtSdZ9MWSdRvDVCR/ShUF1OqvxpL4jMdTs1YbZ9c0YE6jJe
-        tdjXiaHHv4+zJpJ282RLHyzP6w==
-X-Google-Smtp-Source: APBJJlHIL09yD+cpaKj4AkcHas75MqVJTUzMeOhlJXyOtc3pfudP9xHd2NG0vOKt1b+I26sAEFyLGg==
-X-Received: by 2002:a2e:9d96:0:b0:2b9:e6a0:5c3a with SMTP id c22-20020a2e9d96000000b002b9e6a05c3amr1494502ljj.48.1690787974573;
-        Mon, 31 Jul 2023 00:19:34 -0700 (PDT)
-Received: from umbar.unikie.fi ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id c4-20020a2ea1c4000000b002b71c128ea0sm2413267ljm.117.2023.07.31.00.19.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Jul 2023 00:19:34 -0700 (PDT)
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
-        freedreno@lists.freedesktop.org
-Subject: [PATCH v2 3/3] usb: typec: nb7vpq904m: switch to DRM_SIMPLE_BRIDGE
-Date:   Mon, 31 Jul 2023 10:19:30 +0300
-Message-Id: <20230731071930.3928150-4-dmitry.baryshkov@linaro.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230731071930.3928150-1-dmitry.baryshkov@linaro.org>
-References: <20230731071930.3928150-1-dmitry.baryshkov@linaro.org>
+        with ESMTP id S230201AbjGaIXx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Jul 2023 04:23:53 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08E2213B;
+        Mon, 31 Jul 2023 01:22:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=a2UzXH65pU6D+5RxuoqV0mU4KwvxcFu8nPejcDojQSQ=; b=UwJDP8wVdnTMyuNZaLfOYX61sN
+        dhXQOsNgIco1viC7mimNkQcfg6W1vDs94hfOOH/qxl2ENaMo5QQKKk59gydjyj9Gy0flLYqZAsXKd
+        Jk8tjhjkF6UMKvSl6RmcTxeSN2H2/uYtQ+SbE3X8io8N2TtSSBjizQetXpEUS5BaasUs=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1qQOB0-002hKr-N2; Mon, 31 Jul 2023 10:22:50 +0200
+Date:   Mon, 31 Jul 2023 10:22:50 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Ross Maynard <bids.7405@bigpond.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        Oliver Neukum <oneukum@suse.com>
+Subject: Re: [PATCH v2] USB: zaurus: Add ID for A-300/B-500/C-700
+Message-ID: <556dcedc-b727-49b6-886f-5d485cf02713@lunn.ch>
+References: <69b5423b-2013-9fc9-9569-58e707d9bafb@bigpond.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <69b5423b-2013-9fc9-9569-58e707d9bafb@bigpond.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Switch to using the new DRM_SIMPLE_BRIDGE helper to create the
-transparent DRM bridge device instead of handcoding corresponding
-functionality.
+On Mon, Jul 31, 2023 at 03:42:04PM +1000, Ross Maynard wrote:
+> The SL-A300, B500/5600, and C700 devices no longer auto-load because of
+> "usbnet: Remove over-broad module alias from zaurus."
+> This patch adds IDs for those 3 devices.
+> 
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217632
+> Fixes: 16adf5d07987 ("usbnet: Remove over-broad module alias from zaurus.")
+> Signed-off-by: Ross Maynard <bids.7405@bigpond.com>
+> Cc: stable@vger.kernel.org
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- drivers/usb/typec/mux/Kconfig      |  2 +-
- drivers/usb/typec/mux/nb7vpq904m.c | 44 ++----------------------------
- 2 files changed, 3 insertions(+), 43 deletions(-)
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
-diff --git a/drivers/usb/typec/mux/Kconfig b/drivers/usb/typec/mux/Kconfig
-index 784b9d8107e9..350a7ffce67e 100644
---- a/drivers/usb/typec/mux/Kconfig
-+++ b/drivers/usb/typec/mux/Kconfig
-@@ -39,7 +39,7 @@ config TYPEC_MUX_NB7VPQ904M
- 	tristate "On Semiconductor NB7VPQ904M Type-C redriver driver"
- 	depends on I2C
- 	depends on DRM || DRM=n
--	select DRM_PANEL_BRIDGE if DRM
-+	select DRM_SIMPLE_BRIDGE if DRM
- 	select REGMAP_I2C
- 	help
- 	  Say Y or M if your system has a On Semiconductor NB7VPQ904M Type-C
-diff --git a/drivers/usb/typec/mux/nb7vpq904m.c b/drivers/usb/typec/mux/nb7vpq904m.c
-index 9360b65e8b06..c89a956412ea 100644
---- a/drivers/usb/typec/mux/nb7vpq904m.c
-+++ b/drivers/usb/typec/mux/nb7vpq904m.c
-@@ -11,7 +11,7 @@
- #include <linux/regmap.h>
- #include <linux/bitfield.h>
- #include <linux/of_graph.h>
--#include <drm/drm_bridge.h>
-+#include <drm/display/drm_simple_bridge.h>
- #include <linux/usb/typec_dp.h>
- #include <linux/usb/typec_mux.h>
- #include <linux/usb/typec_retimer.h>
-@@ -70,8 +70,6 @@ struct nb7vpq904m {
- 	bool swap_data_lanes;
- 	struct typec_switch *typec_switch;
- 
--	struct drm_bridge bridge;
--
- 	struct mutex lock; /* protect non-concurrent retimer & switch */
- 
- 	enum typec_orientation orientation;
-@@ -297,44 +295,6 @@ static int nb7vpq904m_retimer_set(struct typec_retimer *retimer, struct typec_re
- 	return ret;
- }
- 
--#if IS_ENABLED(CONFIG_OF) && IS_ENABLED(CONFIG_DRM_PANEL_BRIDGE)
--static int nb7vpq904m_bridge_attach(struct drm_bridge *bridge,
--				    enum drm_bridge_attach_flags flags)
--{
--	struct nb7vpq904m *nb7 = container_of(bridge, struct nb7vpq904m, bridge);
--	struct drm_bridge *next_bridge;
--
--	if (!(flags & DRM_BRIDGE_ATTACH_NO_CONNECTOR))
--		return -EINVAL;
--
--	next_bridge = devm_drm_of_get_bridge(&nb7->client->dev, nb7->client->dev.of_node, 0, 0);
--	if (IS_ERR(next_bridge)) {
--		dev_err(&nb7->client->dev, "failed to acquire drm_bridge: %pe\n", next_bridge);
--		return PTR_ERR(next_bridge);
--	}
--
--	return drm_bridge_attach(bridge->encoder, next_bridge, bridge,
--				 DRM_BRIDGE_ATTACH_NO_CONNECTOR);
--}
--
--static const struct drm_bridge_funcs nb7vpq904m_bridge_funcs = {
--	.attach	= nb7vpq904m_bridge_attach,
--};
--
--static int nb7vpq904m_register_bridge(struct nb7vpq904m *nb7)
--{
--	nb7->bridge.funcs = &nb7vpq904m_bridge_funcs;
--	nb7->bridge.of_node = nb7->client->dev.of_node;
--
--	return devm_drm_bridge_add(&nb7->client->dev, &nb7->bridge);
--}
--#else
--static int nb7vpq904m_register_bridge(struct nb7vpq904m *nb7)
--{
--	return 0;
--}
--#endif
--
- static const struct regmap_config nb7_regmap = {
- 	.max_register = 0x1f,
- 	.reg_bits = 8,
-@@ -461,7 +421,7 @@ static int nb7vpq904m_probe(struct i2c_client *client)
- 
- 	gpiod_set_value(nb7->enable_gpio, 1);
- 
--	ret = nb7vpq904m_register_bridge(nb7);
-+	ret = drm_simple_bridge_register(dev);
- 	if (ret)
- 		return ret;
- 
--- 
-2.39.2
-
+    Andrew
