@@ -2,143 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25E827697DE
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Jul 2023 15:42:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6C467699F5
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Jul 2023 16:44:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230295AbjGaNm0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Jul 2023 09:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39134 "EHLO
+        id S233094AbjGaOos (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Jul 2023 10:44:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230265AbjGaNm0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Jul 2023 09:42:26 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07CB8170A
-        for <linux-usb@vger.kernel.org>; Mon, 31 Jul 2023 06:42:25 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id 98e67ed59e1d1-2680a031283so2717568a91.3
-        for <linux-usb@vger.kernel.org>; Mon, 31 Jul 2023 06:42:25 -0700 (PDT)
+        with ESMTP id S233029AbjGaOoi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Jul 2023 10:44:38 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4876A10C1;
+        Mon, 31 Jul 2023 07:44:35 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-1bb6d6b09d6so1134972fac.1;
+        Mon, 31 Jul 2023 07:44:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1690810944; x=1691415744;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=UABKvsP146+NetkqsehekGWioRGp+pybOwSs4IsftuY=;
-        b=SEk4W3w739sVosqglI2lZLnjO+pU6sjxj9RT7winQ4+Rg9N8fhLHgcnHyMe7eRoGr/
-         rzWCIU2fLeZi6E8YsWTFkw9Pi4gFedWcJHx9ZQK+LSH0xGZmKYvMKb4wLTOE4kSah+CX
-         XgLWp2hmKdGQHhYo7Y2ci+114AmCzB7MquF7s+IBTjwzluO74TWS0M+zmwv61jtsGOaC
-         keJf4Iy5QtYAf4oOTBTLLodOaNOPuNV3o8kGoVhzRr8WC/QO8AWiWK3NbuzY+76jjMbi
-         RewzHCPCo9QyDfQ7NmMP98ZRrY2dn7iQryMJ2VzlrOZx8kraZpO9Xh2pu/r3rac9CGSR
-         joLw==
+        d=gmail.com; s=20221208; t=1690814674; x=1691419474;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7d7INobfDxOpMkWypEdSgvYnpooGOM0WqSpMzmhXiUI=;
+        b=RWyDNaj9dwuh4PAHVBTYSK7cHJu1luoWPGw8/3icsLK6L51wAXv1xZuXJLa4aEQXwZ
+         9t/moS05lrmtVddD/d8lcm8HhIE2rkcHJrNw0uaNMjQJDZj9SS5oSX9MzF/eA4WWPh+C
+         NCRpUZi9Rt9GyJJMeLu4QkljvRnLx2U89D+fQgVeBXhttQe5ATbyLpliClSXWGcTnzRS
+         twVB5eM5FW8tziDFeNEDwjTNhnZYgPUiaQWgc3v5+BgYQmOMDYRnuUEN4BZQM+1YRT7/
+         fxPYXH83cpyP4RuZWMlXazDn3uH3rQVc1SCQShNZfr8AvQqmtMjdW2Ry1pSxEF/cLEsF
+         u52Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690810944; x=1691415744;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1690814674; x=1691419474;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=UABKvsP146+NetkqsehekGWioRGp+pybOwSs4IsftuY=;
-        b=gGo3PZwBwFiXt3OmAM6wH0Pf2A2SO52DL5MUGLxhEDX1LFth4fJdG9qZWWqTzjF5Ie
-         RBnZG2OktCprrH6CoC4XufR+jerpzOubMjTo0Kh3pm9RHMZPYyGhS6OUOA6scnrZs1ph
-         ibF5c9pnaX8RnCveB2xmMtcOCgFXIeRzNtUBBCHMxZxLR7z7Nl1ykwnJc8uYyVDjaOad
-         Z7FHhK134YWxO+GCULQaWySginmA5vT4gaEr5Th79D9publDv8SC/Wwpl7KtftKbTlhM
-         FFHt7odxiu0JIxl6vQvsdpcvc+zZDEwpLVdl3xI8hXztwQQ1Jiv65IRwa1GRUxTHLI5e
-         vwbw==
-X-Gm-Message-State: ABy/qLalWf/QXKz0YTrFCZef/BXkt6sz9R4BrcPUM+ZmHqW8KIpHWH6S
-        EEStIDYBAbvOrZ+oWOklcSU=
-X-Google-Smtp-Source: APBJJlGYMEhrJXdPjXZ3l7xU4jQbtJztFd9tRU+BnlimEVrjypuDNshhFmtmr1rZHNF/4vfkHzZvKg==
-X-Received: by 2002:a17:90a:2c8:b0:267:ee56:4c59 with SMTP id d8-20020a17090a02c800b00267ee564c59mr7943026pjd.35.1690810944230;
-        Mon, 31 Jul 2023 06:42:24 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id cp4-20020a17090afb8400b002676e973275sm8929036pjb.1.2023.07.31.06.42.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Jul 2023 06:42:23 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <5759a57b-3bb8-5a1b-a7a8-8c512fc50012@roeck-us.net>
-Date:   Mon, 31 Jul 2023 06:42:22 -0700
+        bh=7d7INobfDxOpMkWypEdSgvYnpooGOM0WqSpMzmhXiUI=;
+        b=haFH6hQeFVW8U+Tb/NUTx3u1TkCgOLsFA456XDEKiVl/rXJTmaoH/bGNQvLdDwCbG+
+         iEGUmmoAFOKxqCxhf2mwhO1MriWrZ1BZk520Zl+bE7KtyLePJbRRXEb4ywttUiB37+SG
+         rhNfTeq2mA94w15uKYqG0WDBuBN10LOO03/EQvS0e2OKfGb/a5IKFaF2RGXXWs9rj8AA
+         zxkW9l3KjZohI55uDTPEuVbpUesOSLUItSJmdU1gwSQyPuH24KNUBXs6yNgsLrlqGMgV
+         RWuBrkqvw3nZZHP8cDmylomEXGWEgDcxCO6/3ZJB3ungmExQfEj9Xqy2ymAfDlZ4ZlD9
+         VQcg==
+X-Gm-Message-State: ABy/qLbp7wkurFLsQz7lP7hMfKBD62LZBW9qovou8FkOXraPDFxXcA3p
+        9mtPm2qOdhWeLeSqKPr2Ic0=
+X-Google-Smtp-Source: APBJJlHxY2k1D0wgwy7gUVa5i1WhwWpD5KzAezCsAE6x33l8cqqx4NOGpD+vlYOBYXAqnlbsBHnzhQ==
+X-Received: by 2002:a05:6870:4728:b0:1bb:a037:321e with SMTP id b40-20020a056870472800b001bba037321emr7220825oaq.1.1690814674461;
+        Mon, 31 Jul 2023 07:44:34 -0700 (PDT)
+Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:fb3f:fd5:45fe:5e7a])
+        by smtp.gmail.com with ESMTPSA id d44-20020a056870d2ac00b001beeaa10924sm822252oae.0.2023.07.31.07.44.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Jul 2023 07:44:33 -0700 (PDT)
+From:   Fabio Estevam <festevam@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, Fabio Estevam <festevam@denx.de>
+Subject: [PATCH 1/2] dt-bindings: usb: ci-hdrc-usb2: Add the "fsl,imx35-usb" entry
+Date:   Mon, 31 Jul 2023 11:44:21 -0300
+Message-Id: <20230731144422.1532498-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH] usb: typec: tcpm: not sink vbus if operational current is
- 0mA
-Content-Language: en-US
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Xu Yang <xu.yang_2@nxp.com>
-Cc:     gregkh@linuxfoundation.org, linux-imx@nxp.com,
-        linux-usb@vger.kernel.org, jun.li@nxp.com
-References: <20230630105656.2828595-1-xu.yang_2@nxp.com>
- <ZMe4GOfAT3a1YueY@kuha.fi.intel.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <ZMe4GOfAT3a1YueY@kuha.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 7/31/23 06:33, Heikki Krogerus wrote:
-> Hi,
-> 
-> I'm sorry to keep you waiting.
-> 
-> On Fri, Jun 30, 2023 at 06:56:56PM +0800, Xu Yang wrote:
->> PD3.0 Spec 6.4.1.3.1 said:
->> For a Sink requiring no power from the Source, the Voltage (B19…10)
->> Shall be set to 5V and the Operational Current Shall be set to 0mA.
->>
->> Therefore, we can keep sink path closed if the operational current of
->> the first fixed PDO is 0mA.
->>
->> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
->> ---
->>   drivers/usb/typec/tcpm/tcpm.c | 12 ++++++++++--
->>   1 file changed, 10 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
->> index 829d75ebab42..4f7e4c50e847 100644
->> --- a/drivers/usb/typec/tcpm/tcpm.c
->> +++ b/drivers/usb/typec/tcpm/tcpm.c
->> @@ -4301,7 +4301,12 @@ static void run_state_machine(struct tcpm_port *port)
->>   			if (port->slow_charger_loop && (current_lim > PD_P_SNK_STDBY_MW / 5))
->>   				current_lim = PD_P_SNK_STDBY_MW / 5;
->>   			tcpm_set_current_limit(port, current_lim, 5000);
->> -			tcpm_set_charge(port, true);
->> +
->> +			if (pdo_max_current(port->snk_pdo[0]))
->> +				tcpm_set_charge(port, true);
->> +			else
->> +				tcpm_log(port, "Not require power from Source");
->> +
->>   			if (!port->pd_supported)
->>   				tcpm_set_state(port, SNK_READY, 0);
->>   			else
->> @@ -4582,7 +4587,10 @@ static void run_state_machine(struct tcpm_port *port)
->>   			tcpm_set_current_limit(port,
->>   					       tcpm_get_current_limit(port),
->>   					       5000);
->> -			tcpm_set_charge(port, true);
->> +			if (pdo_max_current(port->snk_pdo[0]))
->> +				tcpm_set_charge(port, true);
->> +			else
->> +				tcpm_log(port, "Not require power from Source");
-> 
-> Shouldn't you still always call tcpm_set_charge()?
-> 
->          tcpm_set_charge(port, pdo_max_current(port->snk_pdo[0]));
-> 
+From: Fabio Estevam <festevam@denx.de>
 
-I think so, something like
-	tcpm_set_charge(port, !!pdo_max_current(port->snk_pdo[0]));
+The "fsl,imx35-usb" entry is missing in the supported compatible
+string list.
 
-Guenter
+Add it to the list.
 
-> I think we need to wait for comments from Guenter. I don't know this
-> driver well enough.
-> 
-> thanks,
-> 
+Signed-off-by: Fabio Estevam  <festevam@denx.de>
+---
+ Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
+index 532d6464c8b3..85016dd2e187 100644
+--- a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
++++ b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
+@@ -34,6 +34,7 @@ properties:
+               - fsl,imx23-usb
+               - fsl,imx25-usb
+               - fsl,imx28-usb
++              - fsl,imx35-usb
+               - fsl,imx50-usb
+               - fsl,imx51-usb
+               - fsl,imx53-usb
+-- 
+2.34.1
 
