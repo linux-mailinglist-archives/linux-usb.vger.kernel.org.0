@@ -2,56 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 405687694A8
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Jul 2023 13:21:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40BF576968A
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Jul 2023 14:42:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231417AbjGaLV3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Jul 2023 07:21:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35026 "EHLO
+        id S231675AbjGaMmk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Jul 2023 08:42:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbjGaLVT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Jul 2023 07:21:19 -0400
-Received: from mgamail.intel.com (unknown [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A311725;
-        Mon, 31 Jul 2023 04:21:12 -0700 (PDT)
+        with ESMTP id S231577AbjGaMmi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Jul 2023 08:42:38 -0400
+Received: from mgamail.intel.com (unknown [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 011B710DF;
+        Mon, 31 Jul 2023 05:42:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1690802472; x=1722338472;
+  t=1690807358; x=1722343358;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=F383v6e7PZXrXOhnmeDdxH0xkRInOWuQNTUB1QVjx2g=;
-  b=lAColInEjFEl99nnulzmqTT//Zb/S8ep8yvbyhZL1YEAXeWk2OQz5a/n
-   EzwvyQ4UYWe4RpQrHt9IQ/NVt6heeY2mkoyzt/fbi0vx8+g0Ws+CGrXhX
-   6TeTJSjYylDw5/gAu0hRZDnCqhhLYqu+H6xGfi2+dV3lE1e/dKtgR0BoE
-   vLEIGB6ADT3347h2TvMsMssfW7jwWWzhY571dLqMStqtrQdbykLB4VFFm
-   iEOo4H2EycXSzavox0sYJFHAxqfJrahQ2VSzGMTfmSVmdBU1WM0+m6iIE
-   R/uo8BRKtPVd3ADoW7dNpksP6BuXIV5iLxCponSOpfYmBmL14pI7L0YAQ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10787"; a="455364791"
+  bh=0MB2M7pKhqWAVfxRDoJt9ipjAOPvnCoU+CUBnmXYZ8o=;
+  b=PlBeKTTpCsgQwYYjSoWGC2dFQ0hzanX4/eowTCwqluSpnbCPrXH6LlWO
+   ESWJMFjDqW/dEimKCy9AwcILrwb5oeBzYc7uKh4wD+wGOiItQirpugUKZ
+   Dn9yRnmkkPmxAPclntLWxAa9NdvUZYr/ynLT4epvUlfEQTD2sNFNod08U
+   J3irWz0pdrKKqQg+CgfWmLTEQaJjfzLD0vfrRxQFjtxxaPT6mF4ZBh1dW
+   Dk5fKw/kYzbO3aDlFLZdonmxJPN9tAGCGGiV+Cd0dDz7FbxRg5pTJUoGB
+   Gz5Ntw4o/zz58kabEeqnsDh/Hk9ovmpkFAgYPxODWKrte9ePq9oBLYPKJ
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10788"; a="348604838"
 X-IronPort-AV: E=Sophos;i="6.01,244,1684825200"; 
-   d="scan'208";a="455364791"
+   d="scan'208";a="348604838"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2023 04:16:26 -0700
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2023 05:42:37 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
-   d="scan'208";a="871646173"
+   d="scan'208";a="871667298"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 31 Jul 2023 04:16:25 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 31 Jul 2023 14:16:22 +0300
-Date:   Mon, 31 Jul 2023 14:16:22 +0300
+  by fmsmga001.fm.intel.com with SMTP; 31 Jul 2023 05:42:36 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 31 Jul 2023 15:42:34 +0300
+Date:   Mon, 31 Jul 2023 15:42:33 +0300
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To:     RD Babiera <rdbabiera@google.com>
-Cc:     linux@roeck-us.net, gregkh@linuxfoundation.org, kyletso@google.com,
-        badhri@google.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v1] usb: typec: tcpm: set initial svdm version based on
- pd revision
-Message-ID: <ZMeYBvD+I1U8HNfF@kuha.fi.intel.com>
-References: <20230726020810.1408299-1-rdbabiera@google.com>
+Cc:     gregkh@linuxfoundation.org, badhri@google.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v1] usb: typec: altmodes/displayport: Signal hpd when
+ configuring pin assignment
+Message-ID: <ZMesOaooOBvl7X1j@kuha.fi.intel.com>
+References: <20230726020903.1409072-1-rdbabiera@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230726020810.1408299-1-rdbabiera@google.com>
+In-Reply-To: <20230726020903.1409072-1-rdbabiera@google.com>
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -62,112 +62,76 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-I'm sorry to keep you waiting.
-
-On Wed, Jul 26, 2023 at 02:08:07AM +0000, RD Babiera wrote:
-> When sending Discover Identity messages to a Port Partner that uses Power
-> Delivery v2 and SVDM v1, we currently send PD v2 messages with SVDM v2.0,
-> expecting the port partner to respond with its highest supported SVDM
-> version as stated in Section 6.4.4.2.3 in the Power Delivery v3
-> specification. However, sending SVDM v2 to some Power Delivery v2 port
-> partners results in a NAK whereas sending SVDM v1 does not.
+On Wed, Jul 26, 2023 at 02:09:02AM +0000, RD Babiera wrote:
+> When connecting to some DisplayPort partners, the initial status update
+> after entering DisplayPort Alt Mode notifies that the DFP_D/UFP_D is not in
+> the connected state. This leads to sending a configure message that keeps
+> the device in USB mode. The port partner then sets DFP_D/UFP_D to the
+> connected state and HPD to high in the same Attention message. Currently,
+> the HPD signal is dropped in order to handle configuration.
 > 
-> NAK messages can be handled by the initiator (PD v3 section 6.4.4.2.5.1),
-> and one solution could be to resend Discover Identity on a lower SVDM
-> version if possible. But, Section 6.4.4.3 of PD v2 states that "A NAK
-> response Should be taken as an indication not to retry that particular
-> Command."
+> This patch saves changes to the HPD signal when the device chooses to
+> configure during dp_altmode_status_update, and invokes sysfs_notify if
+> necessary for HPD after configuring.
 > 
-> Instead, we can set the SVDM version to the maximum one supported by the
-> negotiated PD revision. When operating in PD v2, this obeys Section
-> 6.4.4.2.3, which states the SVDM field "Shall be set to zero to indicate
-> Version 1.0." In PD v3, the SVDM field "Shall be set to 01b to indicate
-> Version 2.0."
-
-This makes sense to me, but couple of nitpicks below.
-
-> Fixes: c34e85fa69b9 ("usb: typec: tcpm: Send DISCOVER_IDENTITY from dedicated work")
+> Fixes: 0e3bb7d6894d ("usb: typec: Add driver for DisplayPort alternate mode")
 > Cc: stable@vger.kernel.org
 > Signed-off-by: RD Babiera <rdbabiera@google.com>
+
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
 > ---
->  drivers/usb/typec/tcpm/tcpm.c | 35 +++++++++++++++++++++++++++++++----
->  1 file changed, 31 insertions(+), 4 deletions(-)
+>  drivers/usb/typec/altmodes/displayport.c | 18 +++++++++++++++++-
+>  1 file changed, 17 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 829d75ebab42..5b0a428fcf5d 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -3928,6 +3928,31 @@ static enum typec_cc_status tcpm_pwr_opmode_to_rp(enum typec_pwr_opmode opmode)
->  	}
->  }
+> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
+> index 66de880b28d0..cdf8261e22db 100644
+> --- a/drivers/usb/typec/altmodes/displayport.c
+> +++ b/drivers/usb/typec/altmodes/displayport.c
+> @@ -60,6 +60,7 @@ struct dp_altmode {
 >  
-> +static void tcpm_set_initial_svdm_version(struct tcpm_port *port)
-> +{
-> +	switch (port->negotiated_rev) {
-> +	case PD_REV30:
-> +		break;
-> +	/*
-> +	 * 6.4.4.2.3 Structured VDM Version
-> +	 * 2.0 states "At this time, there is only one version (1.0) defined.
-> +	 * This field Shall be set to zero to indicate Version 1.0."
-> +	 * 3.0 states "This field Shall be set to 01b to indicate Version 2.0."
-> +	 * To ensure that we follow the Power Delivery revision we are currently
-> +	 * operating on, downgrade the SVDM version to the highest one supported
-> +	 * by the Power Delivery revision.
-> +	 */
-> +	case PD_REV20:
-> +		typec_partner_set_svdm_version(port->partner,
-> +					       SVDM_VER_1_0);
-
-One line is enough.
-
-> +		break;
-> +	default:
-> +		typec_partner_set_svdm_version(port->partner,
-> +					       SVDM_VER_1_0);
-
-Ditto.
-
-> +		break;
-> +	}
-> +}
-> +
->  static void run_state_machine(struct tcpm_port *port)
+>  	enum dp_state state;
+>  	bool hpd;
+> +	bool pending_hpd;
+>  
+>  	struct mutex lock; /* device lock */
+>  	struct work_struct work;
+> @@ -144,8 +145,13 @@ static int dp_altmode_status_update(struct dp_altmode *dp)
+>  		dp->state = DP_STATE_EXIT;
+>  	} else if (!(con & DP_CONF_CURRENTLY(dp->data.conf))) {
+>  		ret = dp_altmode_configure(dp, con);
+> -		if (!ret)
+> +		if (!ret) {
+>  			dp->state = DP_STATE_CONFIGURE;
+> +			if (dp->hpd != hpd) {
+> +				dp->hpd = hpd;
+> +				dp->pending_hpd = true;
+> +			}
+> +		}
+>  	} else {
+>  		if (dp->hpd != hpd) {
+>  			drm_connector_oob_hotplug_event(dp->connector_fwnode);
+> @@ -161,6 +167,16 @@ static int dp_altmode_configured(struct dp_altmode *dp)
 >  {
->  	int ret;
-> @@ -4165,9 +4190,10 @@ static void run_state_machine(struct tcpm_port *port)
->  		 * For now, this driver only supports SOP for DISCOVER_IDENTITY, thus using
->  		 * port->explicit_contract to decide whether to send the command.
->  		 */
-> -		if (port->explicit_contract)
-> +		if (port->explicit_contract) {
-> +			tcpm_set_initial_svdm_version(port);
->  			mod_send_discover_delayed_work(port, 0);
-> -		else
-> +		} else
->  			port->send_discover = false;
-
-The else statement needs to be wrapped in curly brackets in this case
-since the if statement had them.
-
->  		/*
-> @@ -4455,9 +4481,10 @@ static void run_state_machine(struct tcpm_port *port)
->  		 * For now, this driver only supports SOP for DISCOVER_IDENTITY, thus using
->  		 * port->explicit_contract.
->  		 */
-> -		if (port->explicit_contract)
-> +		if (port->explicit_contract) {
-> +			tcpm_set_initial_svdm_version(port);
->  			mod_send_discover_delayed_work(port, 0);
-> -		else
-> +		} else
->  			port->send_discover = false;
-
-Ditto.
-
-thanks,
+>  	sysfs_notify(&dp->alt->dev.kobj, "displayport", "configuration");
+>  	sysfs_notify(&dp->alt->dev.kobj, "displayport", "pin_assignment");
+> +	/*
+> +	 * If the DFP_D/UFP_D sends a change in HPD when first notifying the
+> +	 * DisplayPort driver that it is connected, then we wait until
+> +	 * configuration is complete to signal HPD.
+> +	 */
+> +	if (dp->pending_hpd) {
+> +		drm_connector_oob_hotplug_event(dp->connector_fwnode);
+> +		sysfs_notify(&dp->alt->dev.kobj, "displayport", "hpd");
+> +		dp->pending_hpd = false;
+> +	}
+>  
+>  	return dp_altmode_notify(dp);
+>  }
+> 
+> base-commit: fdf0eaf11452d72945af31804e2a1048ee1b574c
+> -- 
+> 2.41.0.487.g6d72f3e995-goog
 
 -- 
 heikki
