@@ -2,117 +2,144 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 482F2769B75
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Jul 2023 17:55:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84A51769BB3
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Jul 2023 18:02:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232937AbjGaPzc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Jul 2023 11:55:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33008 "EHLO
+        id S233033AbjGaQCx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Jul 2023 12:02:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232949AbjGaPz2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Jul 2023 11:55:28 -0400
-Received: from h2.cmg1.smtp.forpsi.com (h2.cmg1.smtp.forpsi.com [81.2.195.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08D6198B
-        for <linux-usb@vger.kernel.org>; Mon, 31 Jul 2023 08:55:24 -0700 (PDT)
-Received: from [192.168.1.166] ([91.218.190.200])
-        by cmgsmtp with ESMTPSA
-        id QVEuqzesOPm6CQVEvqrTep; Mon, 31 Jul 2023 17:55:22 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1690818922; bh=Yp95+3EY9f7hBdv+WzMvSHfhSdPzd3L/hdIpYvXs3nI=;
-        h=Message-ID:Subject:From:To:Date:Content-Type:MIME-Version;
-        b=uOruI7o76E0/KCiYfTcvDrBhcZ9jBJLIhkjz/03vnp4znL1fhN74f4uIlthPgjXgl
-         GCv3tlVm5R/ghFuVx02EDP9+RobTlvIP0QEq3mhEuwmSMar79JYbhltebAdy/LNBQg
-         6Z4z3cC2q0YCl6P6XPQdVNXRXLqCRbxxWKfGSdEisQa0Q3rZG9Mav3SpAqLlupJ7ro
-         9V2WXeUETZUVEyiv6wB7h52tWzk3TfG+I+2KnxDjLQrb4yqb7YoKUpCunXX5wT/Lm6
-         KHM3lq3nomX/qOtM0lAHo+7DFlLT3irgV8q8zg2IZ2nvayibUsHr7lQgEIO/Ql8PQk
-         wUFbs3bp+CfLg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1690818922; bh=Yp95+3EY9f7hBdv+WzMvSHfhSdPzd3L/hdIpYvXs3nI=;
-        h=Message-ID:Subject:From:To:Date:Content-Type:MIME-Version;
-        b=uOruI7o76E0/KCiYfTcvDrBhcZ9jBJLIhkjz/03vnp4znL1fhN74f4uIlthPgjXgl
-         GCv3tlVm5R/ghFuVx02EDP9+RobTlvIP0QEq3mhEuwmSMar79JYbhltebAdy/LNBQg
-         6Z4z3cC2q0YCl6P6XPQdVNXRXLqCRbxxWKfGSdEisQa0Q3rZG9Mav3SpAqLlupJ7ro
-         9V2WXeUETZUVEyiv6wB7h52tWzk3TfG+I+2KnxDjLQrb4yqb7YoKUpCunXX5wT/Lm6
-         KHM3lq3nomX/qOtM0lAHo+7DFlLT3irgV8q8zg2IZ2nvayibUsHr7lQgEIO/Ql8PQk
-         wUFbs3bp+CfLg==
-Message-ID: <f833e6f20a0e745163d5abd4bdb62d6d3b7e156e.camel@triops.cz>
-Subject: Re: [usb:usb-testing 25/42] drivers/usb/dwc3/dwc3-octeon.c:403:10:
- warning: shift count >= width of type
-From:   Ladislav Michl <ladis@triops.cz>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-        oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org
-Date:   Mon, 31 Jul 2023 17:55:20 +0200
-In-Reply-To: <20230731154906.GA1823389@dev-arch.thelio-3990X>
-References: <202307260537.MROrhVNM-lkp@intel.com>
-         <2023072653-viewable-harmonics-09e0@gregkh>
-         <fbceb8e5444eab23788501b002926e07f54fdd7c.camel@triops.cz>
-         <20230731154906.GA1823389@dev-arch.thelio-3990X>
-Organization: Triops, s.r.o.
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+        with ESMTP id S230039AbjGaQCv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Jul 2023 12:02:51 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2068.outbound.protection.outlook.com [40.107.243.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD1CC1B4;
+        Mon, 31 Jul 2023 09:02:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QegXG+rS97OTtEZQcU0E5CGr3KeJ4n92i/xHm5EbSW20iqHTm+LToUwmncUfNVGKOOb2/UqNb6Ny6DkShVsU1PFOLIM/zJ3MrzY7NiM4v38Gn3NJo/eNi/6atdmM3hbL9w2ubsItD/IMuZspmxRNHZ9JVvHWNU1cjhLesKlzawKD5tZNRZMrf7uXmnQ7DT2riW5H4zUWGQANji2Mx+iqqe8Fkd9NQXkDmgRtvkqhIUHTvtfj64i+4dMhx+VSWxWlg3iXQ1ucKXetYRSb4zkSHPlvTFesbq3qY9k2ElE2ATqEfwk/RW3dKQVLjtnCY7F0jkLtHI2pauXzw+vaNLNvGA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gt/l4GT3t2A5I8Uk0HlKy7jIu7i6g5lmrALO+TmdaM0=;
+ b=dShOkjZmEabL9CknOyAviE5/dWNok3sf1B5IglTlK57XO00CIf5AHXFR/ttPKv4HV6xZoS6WIW203ebjdQ20Wj6ydM+jQ5DOzkMCdXiVXsKf0BgghsKKfH/iD/VL9olcIdtpO/SdUOs/S/JSKfuzNqlPu1KFwRaoSEVn1UTh/HXLuI/2aRLTvKbVQNnu05AGLkyWRbWDS+qOD8pgUxutOER43IuMZBwt3c655QcbW0ChPLS83mML2/HxVis8aDQRrIt+5/3LjW4v3fslb7sBWNyKK8Imq6LVqKBcFX03RrPohe2dUOxKfb+ipaJMADbDy2p0x1n/mP4HOqWCOwrdkw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gt/l4GT3t2A5I8Uk0HlKy7jIu7i6g5lmrALO+TmdaM0=;
+ b=iEriNiR0ZOceiSxCn0kQWqknY0FSlcAJUMsqOVMLlurEa5ZA43zyHO5mpGNnrbtYlm9XGrFFQCZbl4MhEQxIrjsQDmIDPx1fiCu69A8RoCUs37SOQXHT4xkRc92rZb9dPX2Ws5iTDyA9fv0dr93AQD5xNZFa7Pot1lRtaCH9C9Y=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by DS0PR12MB8041.namprd12.prod.outlook.com (2603:10b6:8:147::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.44; Mon, 31 Jul
+ 2023 16:02:44 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::36f9:ffa7:c770:d146]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::36f9:ffa7:c770:d146%7]) with mapi id 15.20.6631.043; Mon, 31 Jul 2023
+ 16:02:43 +0000
+Message-ID: <0bfd445a-81f7-f702-08b0-bd5a72095e49@amd.com>
+Date:   Mon, 31 Jul 2023 11:02:40 -0500
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+From:   "Limonciello, Mario" <mario.limonciello@amd.com>
+Subject: Error 'netif_napi_add_weight() called with weight 256'
+To:     kuba@kernel.org, hayeswang@realtek.com, edumazet@google.com
+Cc:     LKML <linux-kernel@vger.kernel.org>, netdev@vger.kernel.org,
+        davem@davemloft.net, linux-usb@vger.kernel.org, pabeni@redhat.com,
+        Paul Menzel <pmenzel@molgen.mpg.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SA1PR02CA0002.namprd02.prod.outlook.com
+ (2603:10b6:806:2cf::6) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4wfHDUUouenX+wc09TBc9VfvKOpMzH53Yj/b6ZHML7s/r+2FfeP/0nZQbstfEobNT3QqTK1A9Vaz4Ag20LCq1nBFiihi/r64UhvyGnztEQNZdprW2/UJGS
- 1XNV6rdquitKLLfLH4aTRqP2ikRfqTxAmDoL1HSKgiGTz3ov+oeLxTjuJBfHqeSvIJ1VOojtjodiWg0Ifw+vhkUbhkwrINIEBoklaSnJjgJVJ3DPfJXYJpoV
- QYynnrZgcuRqU0kDCe4NabxBrng3fg8l/nDfKiTmN3LeMfHuLD4Sdp/h4choOTbOez8M7XmPpnFxHL+yDulymeRAOaX4tHAHAe7bxcPbs1Y=
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|DS0PR12MB8041:EE_
+X-MS-Office365-Filtering-Correlation-Id: e70a3419-0ff1-461e-ed03-08db91df92ea
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: PlSYz6ogKlLBD3rah92YPTpL+WDelhjVRz1F0N4ftgov/ObuTz2G3d3o/95irmDO6z3MfmuPtQQTR/JuwOqdwJazf4S4LVLPjoY1EBRiKH1NI+UyjJTMoIu+afat8eJ17o4EpZ+Oif4AZw1O0/4N0OAYlDoWQKLA9mFyQ1kpG9yew6fOOi+d+Php57Wuuwh6xTsj+yBQKc6ifbW7pkitMn2wKO3gsdM3CMwliPoqTivdTeCmzF7KeMv08HKi5yF6yWc791LO4iUDdbbIWKNleGWlhQlUSJrVvFnuXzSlaDg1L6SVWf5H12tECB6LJG9DW4B6pmX26LNEeSDeGmSDoUs0+H8lxbRVg6uF3VwiUOJ/wMz84bI3o6+TOHBLdzqn+etdtpG5PAGmBCrWm3YqX60M/9Y3bxZjMv0AMkNYloZNNrf/MbWIteuMORy8N0eI45tXmjZiY9Mp2Gdqsl0RiwG8EOZy9LNj3QMKvW7TpgEuKvl0GNGBIULwjoRPcX3n4MPFALEbbWSvgLwdVl6NDssjjnTG/RJKpb3WGGIPXDHll4R8/IMn4W3XG8nzwksTVVfIqquY1CGx4ECH6BgZNavdMJjxfnPEFPEeVkFLUdIZwjI7hQiJF3AUMP4I+NUEMThE+cVd9k+a3V9i/YRQ7w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(366004)(39860400002)(346002)(136003)(396003)(451199021)(6486002)(6512007)(31696002)(86362001)(2616005)(36756003)(186003)(83380400001)(6506007)(26005)(38100700002)(8676002)(4326008)(41300700001)(8936002)(31686004)(66946007)(5660300002)(66556008)(66476007)(2906002)(4744005)(316002)(478600001)(54906003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?anRXR1JFOXA5QkdzeTVscGl6aGhYN0piZGxMMXl3dmZuVFZnVDZ5OExmbFdh?=
+ =?utf-8?B?MmplRUpNSmpUcEpmTWZTengzYkQwSCtmUEhSVjZuaE0rWlp4ZnRXcXQyRGxS?=
+ =?utf-8?B?VWRBL3hjYm9RYTFaK0ZWNG8zTXd0MGM1OWkvYWpBWDUrOU8xdHJYUjd5eGly?=
+ =?utf-8?B?TjdKQjNTb0pvWU53ME5kbmRFTnhsQnJCdzNWTDZpc3h1KzloUW5ybDhkc2xs?=
+ =?utf-8?B?alkvSThERytqMlExem9oOXNGSTZIa2xLRE9UcWhWQUhwNFZ3cmN6ZUxUR1Ny?=
+ =?utf-8?B?aDY5ZmdoOWFpcXlvOGkxNUNSMWtkVUdSd2RjSEpPZUhCRWMyeHFXZzVOZWhl?=
+ =?utf-8?B?S0t3MFBzOHVlZG1LVWZubUc2RU4wb2g3NTRzSXpOVFBMWkVBQmtaUm1Dbkc2?=
+ =?utf-8?B?Ylo0djRId3JOSklNOTdUZFpkZ3R6TlBTc0hlQ2ViRGVRcCt3ZEtVa0VvZmsy?=
+ =?utf-8?B?SFVoekVrK0h3TEJrSWl2TTVnOENXL2RLazIwalZxRWtHc1VDbFV5NXNoRFM3?=
+ =?utf-8?B?T3J1a0EvbVd4c2IxRmo1TlpZYUZ2YUF0TEVDNkxlbUdWSFRSYUNSZUg5Q29Y?=
+ =?utf-8?B?R0RsQjV0OXBYQ2Y0Ly9xLzdmNEZKUzdWc2U1NmFRakhUeXV4Tm52YzVKSHdS?=
+ =?utf-8?B?ODJlM1pWOTJ4UGhJcURRblBmYUVRZ3JtN3Z6OWNFUGh3YzhLNm1NNFFQWG5u?=
+ =?utf-8?B?S2JkVitlMmYxRE1TVnByYndXR2ErR2xqNCt3RUpiVi9wNE0zUmZpbDBHOHFK?=
+ =?utf-8?B?RjEwVy9LU3lqMERoUGhZc01XdDQ2SFF4VllEL0pzcysrcU9XaTh4MkpsTkhS?=
+ =?utf-8?B?a1UvdlRQY3NmWFdLYThPSzIxM1ZCdlVnQUtNb3I0Q2hUVXp5MkxocWZibnAr?=
+ =?utf-8?B?anhSWmh6TzU3aXpjeUlRRGMwTy9KZmpzaE1TRFB5c1hYVndXb1JvVWJOdzRz?=
+ =?utf-8?B?a1ZlWXZJMnA3Mnp6OTdNZWZ2UXNOdTY4Y1BoZXBibUlMUzhhV05OUlpmQUUw?=
+ =?utf-8?B?NmZIMVBNTjNnVG41dXV3RWpwQVFoalpyemVqaGZGcmFNQ3F5aEJlaE9zYzZj?=
+ =?utf-8?B?ZVBuK01ZUTZRVmdBTjFjYXZXZThKcTBVS0orOFcvdmo2eWlZdW9rTE9hZkYw?=
+ =?utf-8?B?QWNRMjA3RzU4Nk95cldJMGprMWV5STg0T1dVUE0wbG0zK2d3UHZKR3Nnb05n?=
+ =?utf-8?B?NUpYb0kyajdTdXp5ZlRzNVI4RW5MQ0I5WmduUUowaHdaM212V1Fvb2h2Uy8v?=
+ =?utf-8?B?U0QwZEhBSWtBS0JoZE5XRVRNSVhMaWp0dEFGOHgvNGV5SFExTzNPTDV6V0U3?=
+ =?utf-8?B?RVZJWXU5VnhaWHpRYkJjR2tMenpnaGk5U3g0QjVBRDVXNElmT0JqMG5zcllO?=
+ =?utf-8?B?NHIzREFsZklJeElMWVk1dFBrbWhVOEZRbU9vUUdNWmZFNExWbERhTi9Gb29Y?=
+ =?utf-8?B?SmxjWEo1ZGZ5b3VGRVlyY3NZQU5OMzJFa2FjTWtKT3pQUXM1M2h4b3ZmWkRu?=
+ =?utf-8?B?QUp2WE4xYmhDeGRmbHdXeCtUVHhMSy9UUmUxNTdqd25hdXNVMnBjdzFnZE1M?=
+ =?utf-8?B?aG1KaExibmZHanBmSUVQRG1EZGIvcGxKSU5RQnFBMHp5c21iN1AxNmRhb0RQ?=
+ =?utf-8?B?NHdPV3U0Nnk3aXJpMGtwc0FVYnQ5ak1wc3NCZGE3WWVqZUxHc1JDSWZBWVVq?=
+ =?utf-8?B?Q3NtcWo2UEwyMjh4SzNUem0wVFpIZXUwZE9BeTZaU2ZVODA4Z3NqSkFJTWx0?=
+ =?utf-8?B?bmNrTVVPYVZUWndOWDBnN1VrSzk1Zzg5ZHNiL0c5NkRmbFIyc3cxR2p5cnZ2?=
+ =?utf-8?B?ODR6VTlpbE5INnVIOTBWN3JwMlVOOEFobFlmeXgrUWhQNGgwTWw3dnJzMG1G?=
+ =?utf-8?B?aU9UUVBMaGhrUTNteFRxajBMRVJuSWNXNXJibEcwZHk0Q3BTck54Y1JJVlBt?=
+ =?utf-8?B?d2F6UTRQWko3WDNpWk5MK1F1eVlwZkE5aG5xamNKdUUvSllMQ3dSU0FmYU5p?=
+ =?utf-8?B?L3Z2S1dBcXNsOHRqUEsvcWJzVmRPREo0T0VQM3BhSFlqLytJUHcrUGFLeFZV?=
+ =?utf-8?B?UnBHK1ViTlJEdnV2cERaT2lTZWxVRDdJY1FGc2E2LzF5TitRdmN5RkFPYWxJ?=
+ =?utf-8?Q?Z6/H23YBZi5FRJTqY54rvB14V?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e70a3419-0ff1-461e-ed03-08db91df92ea
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jul 2023 16:02:43.3958
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: eRIetQ8/8M8sVPKA6UiUcXRQmpEbf9HWdYfTC3qjAEEH484bO+jeLWNbY4KMnHCg7Rsw1aGYnY14M4ROqDd1Ng==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8041
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Nathan,
+Hi,
 
-On Mon, 2023-07-31 at 08:49 -0700, Nathan Chancellor wrote:
-> Hi Ladislav,
->=20
-> On Fri, Jul 28, 2023 at 08:48:20AM +0200, Ladislav Michl wrote:
-> > Hi Greg,
-> >=20
-> > I'm sorry for late reply (travelling)
-> >=20
-> > On Wed, 2023-07-26 at 06:39 +0200, Greg Kroah-Hartman wrote:
-> > > On Wed, Jul 26, 2023 at 05:09:56AM +0800, kernel test robot
-> > > wrote:
-> > > > Hi Ladislav,
-> > > >=20
-> > > > First bad commit (maybe !=3D root cause):
-> > > >=20
-> > > > tree:=C2=A0=C2=A0
-> > > > https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git=C2=
-=A0
-> > > > usb-
-> > > > testing
-> > > > head:=C2=A0=C2=A0 ac47051f0bb8ccf1eaedb296a19fcb541474db53
-> > > > commit: b3061c5a15fe460502e9574b4663dd7c6ed80b48 [25/42] usb:
-> > > > dwc3:
-> > > > dwc3-octeon: Convert to glue driver
-> > >=20
-> > > Ladislav, I've dropped your dwc3-octeon patches from my tree now,
-> > > please fix up and resend when you have this resolved.
-> >=20
-> > As I didn't find a better place to ask, I'm asking here:
-> > all registers are 64bit and driver is now using GENMASK and BIT
-> > macros to access their values. Reported problem comes from 32bit
-> > configuration, where BIT is UL(1) << (nr) and BITS_PER_LONG is 32.
-> > Is using GENMASK_ULL and BIT_ULL preferred way to go here? I'm not
-> > a bit fan of "fixing" code just to silence warning on irrelevant
-> > configurations, but will do it unless someone points me to better
-> > way.
->=20
-> I am not Greg but I see you did not get a response on this yet. Yes,
-> you should use the _ULL macros to ensure the values are always 64-
-> bit, which will avoid this issue altogether.
+I noticed today with 6.5-rc4 and also on 6.1.42 that I'm getting an 
+error from an r8152 based dongle (Framework ethernet expansion card).
 
-Thanks for an answer. Although it comes a bit late as v5 with mentioned
-change was sent to mailing list a few hours ago :) Let's see what else
-pops up...
+netif_napi_add_weight() called with weight 256
 
-Best regards,
-	l.
+It seems that this message is likely introduced by
+8ded532cd1cbe ("r8152: switch to netif_napi_add_weight()")
+
+which if the card has support_2500full set will program the value to 256:
+
+	netif_napi_add_weight(netdev, &tp->napi, r8152_poll,
+			      tp->support_2500full ? 256 : 64);
+
+It's err level from
+82dc3c63c692b ("net: introduce NAPI_POLL_WEIGHT")
+
+Why is this considered an error but the driver uses the bigger value?
+Should it be downgraded to a warning?
+
+Thanks,
