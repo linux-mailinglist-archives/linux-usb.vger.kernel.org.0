@@ -2,166 +2,181 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5F0976A04A
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Jul 2023 20:24:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DEF476A0B9
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Jul 2023 20:58:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231365AbjGaSYB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Jul 2023 14:24:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51930 "EHLO
+        id S230174AbjGaS6T (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Jul 2023 14:58:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231343AbjGaSX7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Jul 2023 14:23:59 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2040.outbound.protection.outlook.com [40.107.223.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC80719B0;
-        Mon, 31 Jul 2023 11:23:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jm7i23516Tv7MpYmUzIVaUZPumzz7OXp5yU/vriRNpJmFTa/7RzKAhFwKZIGcvZsNtuZNKq9QUulCjqbzyXQCMEca30/+FpZRD5URM8vUmzs9G7uVTbb0MnAduJHO8WXVB0Qjc7bftKcKflxXeBPjR2TiBnjf4wGBO6GLy81Q5bnpJnyLf/5Lzn/50r2t9cmyYZvqYM2rn/x4aOtoGsNrqN9ktM+QByggNr1Y1iOMzlbHXrVEqWkb+gAg+4DPZgOUnnzV69bxQ2VfkFeepj6XdbTo6lAemXnEVTXqGyvHV7a2St6ojPpC+UlmMuQ4BGREBUfp03KlE4YMBDqZxUgbg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xWHcWiDhdEztOc9nkLoFd1pEpxlbnCIEfFgF2rdItP4=;
- b=dqtPZyZ62BkH5Rdhah06Ko+m7BMjaNRaQIG5MVwMWG6BA0OWRaAnkYgfqjlr1yd0QrRPJeQUd4DVV8VxHIIKbV2jyWJnvnP2oEFbpfizmquqdnbTvT+L8WxySm5e2Fcd+7tQf99ngDuUDoOVQXdRuKmwHvsz74oVG1HFLSreHo9NkkT1Ls8HL7L4raLiZJceLp8tYcdSe7gJSayZtLVPASbAqbDqvQnQubw5KMRx/fVZnV4Ka6CO/XdQNnJf4lqa/lFFiLrmGL3Ams1g37q+I09l3qVqOs0fvqaI1ogA7I44Bvvl+gpZvGMQw4I1u+zL2Uy+XZqWBSz8ITa5rdgodA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xWHcWiDhdEztOc9nkLoFd1pEpxlbnCIEfFgF2rdItP4=;
- b=erbgfLHp2porVoqwX5xlHmSuTQ6MKKs2JRscmmjjM1uVispWDPuXqRe1SnetIdwzfH318T+JdoxlanF70W0Y72YKESaSN1rHt+hrDkB1xY1EFiYZN84rw89vZHtX4xGXrlLbCIuFyuvf1JRlytfPDaqrYtV37TXqbfdVmlblVAg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by SN7PR12MB7936.namprd12.prod.outlook.com (2603:10b6:806:347::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.44; Mon, 31 Jul
- 2023 18:23:50 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::36f9:ffa7:c770:d146]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::36f9:ffa7:c770:d146%7]) with mapi id 15.20.6631.043; Mon, 31 Jul 2023
- 18:23:50 +0000
-Message-ID: <673bc252-2b34-6ef9-1765-9c7cac1e8658@amd.com>
-Date:   Mon, 31 Jul 2023 13:23:47 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: Error 'netif_napi_add_weight() called with weight 256'
-Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>, hayeswang@realtek.com
-Cc:     edumazet@google.com, LKML <linux-kernel@vger.kernel.org>,
-        netdev@vger.kernel.org, davem@davemloft.net,
-        linux-usb@vger.kernel.org, pabeni@redhat.com,
-        Paul Menzel <pmenzel@molgen.mpg.de>
-References: <0bfd445a-81f7-f702-08b0-bd5a72095e49@amd.com>
- <20230731111330.5211e637@kernel.org>
-From:   "Limonciello, Mario" <mario.limonciello@amd.com>
-In-Reply-To: <20230731111330.5211e637@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SN7PR04CA0035.namprd04.prod.outlook.com
- (2603:10b6:806:120::10) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+        with ESMTP id S229486AbjGaS6S (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Jul 2023 14:58:18 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D769E
+        for <linux-usb@vger.kernel.org>; Mon, 31 Jul 2023 11:58:17 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b9bee2d320so72517411fa.1
+        for <linux-usb@vger.kernel.org>; Mon, 31 Jul 2023 11:58:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1690829895; x=1691434695;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4oxjOcheoKpsDM2xN2U2v/k6YSBJ6FeRy8U903DeE8Y=;
+        b=fZNfYS91HKAqcqDTbTgMivCTr03EJi0OQcsV9/rZJLwMcEkbfMfKSPGvXsjPf9si+C
+         Z6mJN7dsFK1SdKu+K84K6AE38fwGrPiu8QcHDwYn3SdAIKfbwqy+p3Woqbq8EFI1TNX2
+         yR8paVJesevnmeYms+TckQU0yih2wSb4gE1qWr9kYku4bkU9mawm77yQEvIb1Qvdo55q
+         NdsEghYyscnMqIxyuHJLQ/dtsnVwo436whPKgaHmAc4xzXp0kXoNMflmOSql/mN6nIih
+         9WDGf6LKBlEEn2wUsGkARHcsKrh+xvBYRimBvbnyPhQVpcYZvPUz2K3FLYm7b9mHH3JS
+         z7pQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690829895; x=1691434695;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4oxjOcheoKpsDM2xN2U2v/k6YSBJ6FeRy8U903DeE8Y=;
+        b=fNroT5YEgxdzcnYCgfAdd9DCSQqxBjPolMij/uBTCY/3A2QSrGrA5vCeC8XTMPdImt
+         Cy1SMd4GfdDBHNdXlrTYMUxjElOsjgAxayLYEtfvgRcPA71JMaMgeQmVCjSWKnMQ4Qob
+         Wm83gBNgwsyecU7g9oDVxskq6kRAtrCjOfcC/KX9ZK7iiQTMtTKuOdGdF2pxuyJgxdPC
+         tIJrB/SL6JXnU/89twuy00qefE5BAeq6alan+TBBeujQoJ/UlYLuLZPybN/7lK14MvTF
+         Irkrk1b4fqAUnwlaTVpYKPs/S83f6HVDvdX9QQoo7FOyaYCtRzZrzlR1hFkdbIsx5Unj
+         bOFg==
+X-Gm-Message-State: ABy/qLYdc07iOohc+HsziEzAObt3XdCGdmlRG1AGKVngmmW38ErP53ok
+        GI4VnrJ8rc0hvEZv1bgtfA2Iib/c6z2WWDrwGQDpeA==
+X-Google-Smtp-Source: APBJJlGktSxx4YUN/wNDBst69t0w7/N5c4Y4nV00pgGZARtunHNrxoXkjhQxuGTuiQasbv0M03oTKvHtvotrZb1iHys=
+X-Received: by 2002:a2e:870a:0:b0:2b8:36d4:7b0a with SMTP id
+ m10-20020a2e870a000000b002b836d47b0amr539794lji.29.1690829895392; Mon, 31 Jul
+ 2023 11:58:15 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|SN7PR12MB7936:EE_
-X-MS-Office365-Filtering-Correlation-Id: efd69008-f867-410e-ac75-08db91f3498f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: MlAjD6gI9+uUC1k32NY0fZNUNP8KnwPxC10BV3ndW43Jqm7atosJyIfCHyesDGHYs9jsfe4coWlLx6Tlb7iebny2A7ySOKH/wy3ljIOf/6otI67nmYpnAzTaCqr5InADmjKd99wWCsNMklsUyAorJ0UWB0RM/DOFQX30k/SpiV5JFXw4eesCUEaF24L9ulcfjAl6jVr/gEUeAwpX0DhDUaJh+6+XldoW28fum7u+y/nHDKhJmw7EnrkeboWuMeQoAznpGSvvC46a0k/v1A5xTc1ocUBb8EHSOA74pEWkn6DuEZ1QXCyzD1boszF2V373QtopgPzfxViyeiqGqADJV71AuX37BcqjjbowsZ1J1qMH9CV/3DMr/GetezRJ5JoA6VlgtqRMoOcohWitHh2x1GE8DomGzTmwX33Sjkmvm9CNZ86OWDY74gfevDwzTPMqqsamP6eUEmRXCsaani8Mtorc8ix87yUvx5aeMlp5zP/aKpEYWbFRMjYDe26OJi4Daocsrz+Byl91lB+LhgPkjzncV3hI8HfJvOfUIiUDYQFvxaMl1eiSo3FS1BU8J1h9B02f/NTVYQQC19TFgkg0DCDL6I7GNNjh/CEC823HQHZAtaMVGKrkF3PepB1XwU7o20qpuZK4KVpc2AcGvF8D0w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(366004)(376002)(136003)(396003)(451199021)(6512007)(6486002)(36756003)(53546011)(2616005)(26005)(6506007)(83380400001)(186003)(66946007)(66556008)(41300700001)(38100700002)(54906003)(31696002)(86362001)(66476007)(316002)(4326008)(5660300002)(8936002)(8676002)(31686004)(2906002)(6666004)(478600001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?akk0TGlzeVdyTE5LL0lsNWdJMjdxSUdFS2NUNUJNVytpNzYwSGJYVHRJRGVQ?=
- =?utf-8?B?RVFuQitkcmRIN3VQdE95VTVZRkxDRWlkcDZySkoyVXVFbDBQZHgxTmlvRG1x?=
- =?utf-8?B?RHpLeTcxSVFQZFlJYWM0SjNGT3ZIQUxidldudmtyWVRCbkpSTml3bi9GeUpT?=
- =?utf-8?B?bFlQamxFdzVaRStnWXRJSGJhVkYrQTlVUWpNSENVdzlvcUp1NFRScGd6b2Qr?=
- =?utf-8?B?YjZod0xmM25YT0dtanpDTE85MEg0UytxM05vaTU5Uzh5YmFNR2JGUk5lRnpp?=
- =?utf-8?B?Vyt5Y08xc2lMdGJGckc4ZUErTzlXeU9RWk1mWlZFSGwrOU93N0h1cE1XZ1pV?=
- =?utf-8?B?NHlLa3pmQXJYNzc0bHFLZC9YTU5pOUt1NDRhOEFXSVV4ckpVVVJLTVlaN05j?=
- =?utf-8?B?MGJpL0xOL3JaenZRTjJpYjFPYkxtVitSWnpCV2dPTVpSbmVtR1lpZDJQY284?=
- =?utf-8?B?elBnRG1Mc2VTWHNvQjRzMkVKMjNUemQ0RzRhMCtWRkhlVXN4T0owcTBLekMv?=
- =?utf-8?B?b2NLNmdXREw3dzNqdWlHVE9wbENtQUNKajB6bFFnQXIwemRDUnA1TlVkaFdZ?=
- =?utf-8?B?T1RzYjU5UTNDZy9MMWVJT2dPaGZTbkkvcGd3L1RQdy95Mmw1R29VeVJXMVE3?=
- =?utf-8?B?a2JUK01oUkVlZXgzUzhVZDd2RU1hSHZ3WUVnTWxJNjIwdURzeG1mZC96bDFI?=
- =?utf-8?B?bkRad1V2a0FDWlRYaGRyazhTZDA2STRNay9zaHA5SndKTjFUSHFvdmVrQU5J?=
- =?utf-8?B?MTZvbEVrcTVPTHZ5TDFpNzBVbmJvMmsySFdxQWxmbE5rNnZFZWxUUVZxck5w?=
- =?utf-8?B?dFBrMVN1TEpNY2Ntb2xQZmlxUTNzeUdMU2NJclI1WisyMTdpVmJEQ0tPMlBI?=
- =?utf-8?B?SEI2aVNtb0t4SC8rSXoyQkRhdGFpbnFDejJHT3JGRzlnTDNZRnU1SG0wbGtx?=
- =?utf-8?B?bGZuSUNtUXJGRDIva3ppNlZrTjdzWFA4eU1JSFhvWkNCTmpweStaZGs4Zkx6?=
- =?utf-8?B?eEZYWEtJZzcyT00yaWVMYWFqVmI5aGRFRmI3WEhyMXBhRkM2QVFrQXdqZmRy?=
- =?utf-8?B?NkRVdHd5S1hIa1BkN0RjdlZwRjFZSWxMWXhoZkJKZzVCOVZIRWlRMi94RDdp?=
- =?utf-8?B?SnFyNjlIZy9YOWpLbk41TDRYZGp4bURvTGFuMjdqSW5HZjE1ZmZpRjdQYWc3?=
- =?utf-8?B?SmYvMUl5L0tWSUhJWWtnbnFNODd5SXZLYVp2c3RGM1ZraHJIWGF2NFZUdjZi?=
- =?utf-8?B?YW1yalNJUlNxbEtyYURHUXVZZEYvckt5Q3ZuRmlhc0pPUUQ1cmIyeG9adEFy?=
- =?utf-8?B?MzdMZHRnKzNZNFQ4ZStXejNnSWlhdzJrTGpLZGJNUnJseHJrMDhjb0VwaFQ5?=
- =?utf-8?B?TjVOejNvRWJjMkFLREtZZ1d4Z1krUG1pZmJ3eitVNXErZGVXSXc1eEhkYThN?=
- =?utf-8?B?Q3ZHYjh2SHNKSGphRDdzRFVmeG9yVEZVNy9lUVB1OFl3My9jR3kyYjBwQUlX?=
- =?utf-8?B?QUdQQVM1eERaQTRrQVVBRHlrMjRhdVRzeGptMFFRTGFPcE81bllicjRlbjJy?=
- =?utf-8?B?cGxyS1ZLZ1lPTWlmblFTRi9XM2tXZVVkVUpINFR0UnE1cXo3UGNxcUlaanFY?=
- =?utf-8?B?Y0FyYm5RRlVUeXpER08yTk5jUTRxS2w0NWF4VmhXS0VHRVZET3ZZa1FDRkZI?=
- =?utf-8?B?RGpuTFNaOXVHK2cvMmkxazZXakd3UnhzRlpSWkhkSE54K2NGZ2lyd3VoeGM2?=
- =?utf-8?B?dmhxMVRjRndsU0hIUzQ0eUs5dUhqTUVIMXRqeDVFRzdxMFZyN2RsbEJuTFlK?=
- =?utf-8?B?Z0VCajhJS3htMmltTXRKbmZTSVhwOFpLYURCckdkc3R3cXNyNUxBbkFlamFK?=
- =?utf-8?B?VUlqMmtiLysraXdCVmJ3RWpEeVhzQlhHbmJmUjFPNFlMUkhiNm81K1dIRVln?=
- =?utf-8?B?U2t4N3hBdnBnVDZiK0RtajgySkdub0Y3ZmJJazY2VFIzc1J6Ry91RjN0dGlk?=
- =?utf-8?B?R2R4YjlmTFJLMjRZeVhPaUk2b29nMS9CQysyQWRLU3MzZU5pUS80RmRRUXYx?=
- =?utf-8?B?Rkp0cWF6MnlLaG12OGNGWkhtaks5WVVTdnM4M3kvTjVtRmd5TE9BNzlyU0Rh?=
- =?utf-8?Q?IVy6JzBLLMA+e4BJhFvBZUhij?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: efd69008-f867-410e-ac75-08db91f3498f
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jul 2023 18:23:50.1959
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VzgzOg1l67PdX/HpNY5ovA6vqz/sP1YDJZ6RG6perJcN9lHRP+5qchoGDfbfJ341vAqVSK+HUgXpOj3I2YIiOA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7936
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <4d7aa3f4-22d9-9f5a-3d70-1bd7148ff4ba@google.com>
+ <8de4bb54-8daa-73c0-b5eb-4aa4b9675ce5@ideasonboard.com> <fa11d883-2c72-486f-9b7b-46f238e2e03f@rowland.harvard.edu>
+ <CAMHf4WJ4QyvFfnAWSk_D3VuPOe7+if=pgQvunjLXOHTcBgi4Qw@mail.gmail.com>
+ <8242fba3-ebcc-481e-92bb-e25a3516853a@rowland.harvard.edu>
+ <CAMHf4W+d1P8_Ahgc=Wj5K7BJa2Oi+cfXozd8e0_cdzioAjHeBg@mail.gmail.com>
+ <7a71a4c9-324e-44a9-b38b-31ea87d60e6e@rowland.harvard.edu>
+ <b55b51b3-7632-4ba5-b4fc-ea0384321149@rowland.harvard.edu>
+ <CAMHf4WL8jWhkeDsLpH1z9sXi4-42+WExtCeJWjXNKy9R85oJQg@mail.gmail.com> <fe501805-2eec-4cd1-be61-ad446002af9c@rowland.harvard.edu>
+In-Reply-To: <fe501805-2eec-4cd1-be61-ad446002af9c@rowland.harvard.edu>
+From:   Avichal Rakesh <arakesh@google.com>
+Date:   Tue, 1 Aug 2023 00:28:03 +0530
+Message-ID: <CAMHf4WL+HyfeejbnkeTuVBw-nOG9J-dKECi7hjzUhaWJHw1n7Q@mail.gmail.com>
+Subject: Re: Kernel panic when unbinding UVC gadget function
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Dan Scally <dan.scally@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        "Eino-Ville Talvala (Eddy)" <etalvala@google.com>,
+        Jayant Chowdhary <jchowdhary@google.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Sat, Jul 29, 2023 at 2:33=E2=80=AFAM Alan Stern <stern@rowland.harvard.e=
+du> wrote:
+>
+> On Fri, Jul 28, 2023 at 11:41:19PM +0530, Avichal Rakesh wrote:
+> > On Fri, Jul 28, 2023 at 9:07=E2=80=AFPM Alan Stern <stern@rowland.harva=
+rd.edu> wrote:
+> > > It's not clear that the patch will fix the problem entirely.  Your
+> > > original analysis of the bug stated:
+> > >
+> > > > This means that attempting to unregister the UVC Gadget Driver resu=
+lts in the
+> > > > V4L2 resource cleanup being stuck behind udc->connect_lock, which w=
+ill only
+> > > > be released after uvc_function_unbind finishes. This results in eit=
+her the
+> > > > gadget deactivating after the unbind process has finished, or in a =
+Kernel Panic
+> > > > as it tries to cleanup a V4L2 node that has been purged.
+> > >
+> > > My patch removes the locking issue.  But if an execution path can
+> > > occur with a lock present, it can also occur when the lock has been
+> > > removed.  That means it may still be possible for the UVC gadget driv=
+er
+> > > to try deactivating the UDC after the unbind process has finished or =
+for
+> > > it to try cleaning up a V4L2 node that has been purged.
+> > >
+> > > If either of those really could have happened (as opposed to just
+> > > getting stuck in a deadlock, waiting for a mutex that would never be
+> > > released), then it can still happen with the patch.  Fixing them woul=
+d
+> > > require changes to the UVC gadget driver.  So the problem may not be
+> > > gone entirely.
+> > >
+> > The current situation can theoretically happen without the deadlock,
+> > yes, but shouldn't happen in practice. UVC's disable/unbind code flow
+> > looks as follows:
+> >
+> > 1. When disable callback is called, the gadget driver signals the
+> > userspace application to close the V4L2 node.
+> > 2. Closing the V4L2 node calls the release callback to clean up
+> > resources. It is this callback that calls into gadget_deactivate and
+> > gets blocked currently (without your patch).
+> > 3. Separately, the unbind callback waits on release callback to finish
+> > for 500ms, assuming the userspace application to behave well and close
+> > the node in a reasonable amount of time.
+> > 4. If the release callback still hasn't been called, the V4L2 node is
+> > forcefully removed and UVC driver waits for another 1000ms for the
+> > release callback to clean up any pending resources.
+> > 5. The unbind process continues regardless of the status of release
+> > callback after waiting at most 1.5s for release.
+> >
+> > So the only way to run into the current issue is if the release
+> > callback fails to finish in both step 3 and step 4 (for example, due
+> > to a deadlock) in the span of 1.5s. It is possible, but fairly
+> > unlikely (at least in my limited understanding) for the release
+> > callback to be delayed for quite that long.
+> >
+> > Hope that makes some sense!
+>
+> Yes, and it shows that there really is a bug in the UVC driver.  In
+> kernel programming, fairly unlikely =3D=3D not impossible =3D=3D bound to=
+ happen
+> eventually!
+>
+> I don't know enough about the driver to make any detailed
+> recommendations.  But you might consider, for example, that if the
+> unbind routine can get along with forcibly removing the V4L2 node and
+> not waiting for the release callback to finish, then why not have it
+> behave that way all the time?  In other words, shorten the timeouts from
+> 500 ms and 1000 ms to 0 ms.
 
+Forcibly removing the V4L2 node doesn't clean up the associated
+resources (for example, the fd held by the userspace application),
+so we risk running into kernel panics if the V4L2 node is forcibly
+removed without a clean release from the userspace application.
 
-On 7/31/2023 1:13 PM, Jakub Kicinski wrote:
-> On Mon, 31 Jul 2023 11:02:40 -0500 Limonciello, Mario wrote:
->> Hi,
->>
->> I noticed today with 6.5-rc4 and also on 6.1.42 that I'm getting an
->> error from an r8152 based dongle (Framework ethernet expansion card).
->>
->> netif_napi_add_weight() called with weight 256
->>
->> It seems that this message is likely introduced by
->> 8ded532cd1cbe ("r8152: switch to netif_napi_add_weight()")
->>
->> which if the card has support_2500full set will program the value to 256:
->>
->> 	netif_napi_add_weight(netdev, &tp->napi, r8152_poll,
->> 			      tp->support_2500full ? 256 : 64);
->>
->> It's err level from
->> 82dc3c63c692b ("net: introduce NAPI_POLL_WEIGHT")
->>
->> Why is this considered an error but the driver uses the bigger value?
->> Should it be downgraded to a warning?
-> 
-> Could you double check that the warning wasn't there before? The code
-> added by commit 195aae321c82 ("r8152: support new chips") in 5.13 looks
-> very much equivalent.
+I don't see an easy way to reduce or remove the timeouts entirely,
+but I might be missing something simple again. Dan and Laurent,
+if you have ideas around this, I am happy to test stuff out!
 
-Yeah; looking through the history I agree it was probably was there from 
-the beginning of being introduced.
+>
+> Whether you do that or not, someone definitely should fix up the release
+> routine so that it won't get into trouble if it is called after (or
+> concurrently with) all of the cleanup operations -- which is quite
+> likely to happen if those timeouts are eliminated!  In particular, it
+> shouldn't call gadget_deactivate unless it knows that an unbind hasn't
+> happened yet.  And if that is the case, it should block the unbind
+> routine until gadget_deactivate returns.  Basically, it's a bug for a
+> function driver to call any gadget core routine after its unbind
+> callback has returned.
+>
 
-6.1 is the earliest kernel that is usable with this laptop (for other 
-reasons).
+This seems like a reasonable check to have. I am out until next week,
+but I can test and put up a patch once I get back!
 
-> The custom weight is probably due to a misunderstanding. We have 200G
-> adapters using the standard weight of 64, IDK why 2.5G adapter would
-> need anything special.
+Thank you!
 
-Perhaps Hayes Wang can comment on this (as the author of 195aae321c82).
+- Avi.
