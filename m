@@ -2,61 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A6B5769009
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Jul 2023 10:24:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E70FE769083
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Jul 2023 10:41:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbjGaIYO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Jul 2023 04:24:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42292 "EHLO
+        id S231640AbjGaIlS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Jul 2023 04:41:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230201AbjGaIXx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Jul 2023 04:23:53 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08E2213B;
-        Mon, 31 Jul 2023 01:22:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=a2UzXH65pU6D+5RxuoqV0mU4KwvxcFu8nPejcDojQSQ=; b=UwJDP8wVdnTMyuNZaLfOYX61sN
-        dhXQOsNgIco1viC7mimNkQcfg6W1vDs94hfOOH/qxl2ENaMo5QQKKk59gydjyj9Gy0flLYqZAsXKd
-        Jk8tjhjkF6UMKvSl6RmcTxeSN2H2/uYtQ+SbE3X8io8N2TtSSBjizQetXpEUS5BaasUs=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1qQOB0-002hKr-N2; Mon, 31 Jul 2023 10:22:50 +0200
-Date:   Mon, 31 Jul 2023 10:22:50 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Ross Maynard <bids.7405@bigpond.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        Oliver Neukum <oneukum@suse.com>
-Subject: Re: [PATCH v2] USB: zaurus: Add ID for A-300/B-500/C-700
-Message-ID: <556dcedc-b727-49b6-886f-5d485cf02713@lunn.ch>
-References: <69b5423b-2013-9fc9-9569-58e707d9bafb@bigpond.com>
+        with ESMTP id S231604AbjGaIkn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Jul 2023 04:40:43 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C38A2729
+        for <linux-usb@vger.kernel.org>; Mon, 31 Jul 2023 01:39:04 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3fe1fc8768aso9217645e9.1
+        for <linux-usb@vger.kernel.org>; Mon, 31 Jul 2023 01:39:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1690792738; x=1691397538;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=8iu5cp8Y1GY0uNruSlKQJ5tGFR1JHk9Mos4NpUwA/wg=;
+        b=yZuwdwFmisXPSEluH2zX2tYetrzxIzHXt9nfphWuS3Rf5Lu8PgHpR7Qs8WYXv3VWFr
+         szsvlIuBbmmG26gM7Ig8uuqXbYTresYPNFI6yPhCcQ+Y3igG/69JB0BZvn5DTWAd6ZEl
+         PHzI/u0UNIJcHWOh9VAWUZHJAdzKhql0+6yEPoPqdG3OZh7zu0+qZliBxy/xdyPpgj6a
+         NviyD9nIPsiYeY5C7rJRYzw/L6tFxcbyl3QvZbTVBqDIud09m89s3KY7FZ357dlwJc/d
+         8LNMNMiQQ+RS1qb+ebVDqhabrperJaDIDJgkhGfSOSQ6LwDE7GD7uKjpZN23CG8trwqL
+         caGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690792738; x=1691397538;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8iu5cp8Y1GY0uNruSlKQJ5tGFR1JHk9Mos4NpUwA/wg=;
+        b=jEaA/DfUj++HBYqjfhrjjlptKx2CWVk85HzUYmDto55V1GfEn8mI8oX6X356uZOBcv
+         JTv6bZjz8hKHH/ql++A2mtxrDaa/ZlfPajRESdo8YT+mkcPFiyk11Ady9F9rWUZdkBh8
+         JjaqE6JqdPITA0IBcgr/N+YYQaq8x6b6bOgahuAsdIIBquQxqHermp1E8a/7dNrOo8Y/
+         C6gA4+v0tZzDW1OBASJLtXq/e5e02hY+fdHh/v/FFHj8nbWddy7NJrdYHGHzD/CW4gOC
+         FtwJEvP3QwHeMbKXIYoa1H1EiOnL+f7e3P4d+2z4GMYd/z6aepX7shMzbqOVOhmWuAS1
+         9LrA==
+X-Gm-Message-State: ABy/qLamaR+BZXP0giP9JkzL6nylQdACln9BFqt4E5UVtHxKamnJc26O
+        AV8gyRgWh7ISP0YMdqYfe/CeMg==
+X-Google-Smtp-Source: APBJJlGe9+f3abgBiBGI/g3dK5e3z6k6mz+gPWGjUfyhIP1sP/oWUqrsh6ruhgXBgfkMGwgCW1OLrw==
+X-Received: by 2002:a1c:f70c:0:b0:3fc:80a:cf63 with SMTP id v12-20020a1cf70c000000b003fc080acf63mr7980848wmh.38.1690792737906;
+        Mon, 31 Jul 2023 01:38:57 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:14b8:9aa7:6bf0:256d? ([2a01:e0a:982:cbb0:14b8:9aa7:6bf0:256d])
+        by smtp.gmail.com with ESMTPSA id 9-20020a05600c020900b003fe1cb874afsm3963566wmi.18.2023.07.31.01.38.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Jul 2023 01:38:57 -0700 (PDT)
+Message-ID: <aee8b25a-217d-a63c-d2b9-3b7a9c4cd248@linaro.org>
+Date:   Mon, 31 Jul 2023 10:38:56 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <69b5423b-2013-9fc9-9569-58e707d9bafb@bigpond.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH] usb: typec: nb7vpq904m: Add an error handling path in
+ nb7vpq904m_probe()
+Content-Language: en-US
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-usb@vger.kernel.org
+References: <9118954765821ea9f1179883602b4eca63e91749.1689716381.git.christophe.jaillet@wanadoo.fr>
+Organization: Linaro Developer Services
+In-Reply-To: <9118954765821ea9f1179883602b4eca63e91749.1689716381.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 31, 2023 at 03:42:04PM +1000, Ross Maynard wrote:
-> The SL-A300, B500/5600, and C700 devices no longer auto-load because of
-> "usbnet: Remove over-broad module alias from zaurus."
-> This patch adds IDs for those 3 devices.
+On 18/07/2023 23:40, Christophe JAILLET wrote:
+> In case of error in the nb7vpq904m_probe() probe function, some resources
+> need to be freed, as already done in the remove function.
 > 
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217632
-> Fixes: 16adf5d07987 ("usbnet: Remove over-broad module alias from zaurus.")
-> Signed-off-by: Ross Maynard <bids.7405@bigpond.com>
-> Cc: stable@vger.kernel.org
+> Add the missing error handling path and adjust code accordingly.
+> 
+> Fixes: 88d8f3ac9c67 ("usb: typec: add support for the nb7vpq904m Type-C Linear Redriver")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> This changes the order with some devm_ allocated resources. I hope this is
+> fine. At least it is consistent with the remove function.
+> ---
+>   drivers/usb/typec/mux/nb7vpq904m.c | 25 ++++++++++++++++++-------
+>   1 file changed, 18 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/mux/nb7vpq904m.c b/drivers/usb/typec/mux/nb7vpq904m.c
+> index 80e580d50129..4d1122d95013 100644
+> --- a/drivers/usb/typec/mux/nb7vpq904m.c
+> +++ b/drivers/usb/typec/mux/nb7vpq904m.c
+> @@ -463,16 +463,18 @@ static int nb7vpq904m_probe(struct i2c_client *client)
+>   
+>   	ret = nb7vpq904m_register_bridge(nb7);
+>   	if (ret)
+> -		return ret;
+> +		goto err_disable_gpio;
+>   
+>   	sw_desc.drvdata = nb7;
+>   	sw_desc.fwnode = dev->fwnode;
+>   	sw_desc.set = nb7vpq904m_sw_set;
+>   
+>   	nb7->sw = typec_switch_register(dev, &sw_desc);
+> -	if (IS_ERR(nb7->sw))
+> -		return dev_err_probe(dev, PTR_ERR(nb7->sw),
+> -				     "Error registering typec switch\n");
+> +	if (IS_ERR(nb7->sw)) {
+> +		ret = dev_err_probe(dev, PTR_ERR(nb7->sw),
+> +				    "Error registering typec switch\n");
+> +		goto err_disable_gpio;
+> +	}
+>   
+>   	retimer_desc.drvdata = nb7;
+>   	retimer_desc.fwnode = dev->fwnode;
+> @@ -480,12 +482,21 @@ static int nb7vpq904m_probe(struct i2c_client *client)
+>   
+>   	nb7->retimer = typec_retimer_register(dev, &retimer_desc);
+>   	if (IS_ERR(nb7->retimer)) {
+> -		typec_switch_unregister(nb7->sw);
+> -		return dev_err_probe(dev, PTR_ERR(nb7->retimer),
+> -				     "Error registering typec retimer\n");
+> +		ret = dev_err_probe(dev, PTR_ERR(nb7->retimer),
+> +				    "Error registering typec retimer\n");
+> +		goto err_switch_unregister;
+>   	}
+>   
+>   	return 0;
+> +
+> +err_switch_unregister:
+> +	typec_switch_unregister(nb7->sw);
+> +
+> +err_disable_gpio:
+> +	gpiod_set_value(nb7->enable_gpio, 0);
+> +	regulator_disable(nb7->vcc_supply);
+> +
+> +	return ret;
+>   }
+>   
+>   static void nb7vpq904m_remove(struct i2c_client *client)
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
-    Andrew
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
