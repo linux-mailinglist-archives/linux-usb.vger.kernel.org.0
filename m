@@ -2,99 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87A3B768BF7
-	for <lists+linux-usb@lfdr.de>; Mon, 31 Jul 2023 08:26:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B349768E96
+	for <lists+linux-usb@lfdr.de>; Mon, 31 Jul 2023 09:23:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230213AbjGaG0F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Jul 2023 02:26:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51854 "EHLO
+        id S231472AbjGaHXt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Jul 2023 03:23:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230149AbjGaG0D (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Jul 2023 02:26:03 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B90BE7B;
-        Sun, 30 Jul 2023 23:26:00 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 36V6PNH00006422, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 36V6PNH00006422
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Mon, 31 Jul 2023 14:25:23 +0800
-Received: from RTEXMBS06.realtek.com.tw (172.21.6.99) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Mon, 31 Jul 2023 14:25:37 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS06.realtek.com.tw (172.21.6.99) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Mon, 31 Jul 2023 14:25:36 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
- RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
- 15.01.2375.007; Mon, 31 Jul 2023 14:25:36 +0800
-From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
-        <stanley_chang@realtek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v1 2/2] doc: dt: bindings: usb: realtek,dwc3: Add Realtek DHC RTD SoC DWC3 USB
-Thread-Topic: [PATCH v1 2/2] doc: dt: bindings: usb: realtek,dwc3: Add Realtek
- DHC RTD SoC DWC3 USB
-Thread-Index: AQHZwQcMHiqO6RUc7UW0WlFc2kMWqq/OO0OAgAEzo7CAAgjiAIAB8loA
-Date:   Mon, 31 Jul 2023 06:25:36 +0000
-Message-ID: <74e8f0f1c0ec4196b242a1d5b47979d8@realtek.com>
-References: <20230728035318.18741-1-stanley_chang@realtek.com>
- <20230728035318.18741-2-stanley_chang@realtek.com>
- <4bbdd646-ad16-1a7d-a727-878c6cf92410@linaro.org>
- <740d0d33a9064c2bb2696ef762294b0c@realtek.com>
- <08388eec-bfe8-c4c4-06b7-8450bc34182e@linaro.org>
-In-Reply-To: <08388eec-bfe8-c4c4-06b7-8450bc34182e@linaro.org>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.190.159]
-x-kse-serverinfo: RTEXMBS06.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S231447AbjGaHWe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Jul 2023 03:22:34 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D1C1BD2
+        for <linux-usb@vger.kernel.org>; Mon, 31 Jul 2023 00:19:33 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4fe2503e3easo3423144e87.2
+        for <linux-usb@vger.kernel.org>; Mon, 31 Jul 2023 00:19:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1690787972; x=1691392772;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HDhfU2FoK8aIJGXr0hUVQrh/P1Qtr8xU+ls50+YP7vQ=;
+        b=pKUFzvIbDXE4qehMCnW185ujZVoxzM64vjsTHYaa8ZifxCwJAiCOV4K51poAf0woPb
+         muInJ8nf1Af/KfLwxvGlbcAUyoJOZ0qV8NBPaysp7o5K37pth4xxejw2Pg0iBvQYW4JE
+         mZzqjyezpf6KybQarU40lVrLbZwaPufKxzExD2aL3F+CsesXxcNMl05REvmtpK25WGrG
+         TpdhGXnGeN2HSZR+t8j5Trb59cIfT8YhhM1LT41WTyvF+1QwUcNWCsxOKLZ2MKbSy4Yg
+         zdsTSFzD5Xp5hRP3u5GdBIPYiUtm+oUlJptM/AqhbnMiqCNFoAZ/G8n4mCJ9Jhgr4qIw
+         CHAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690787972; x=1691392772;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HDhfU2FoK8aIJGXr0hUVQrh/P1Qtr8xU+ls50+YP7vQ=;
+        b=aPPj2KvyzAf1d66DYej61IfA4/VquIRXX+4z5WkIGmkddOS4n6QHgkIeQKTkwVjhPI
+         K7xZM4YeEGBmxiLTLv4XxuCmPC7+8lG9t+ghZLerizvpMqXyv4Dq3fPfAjbyepHosXBg
+         Q84WkJLF9vGsLycbkn9zAwvFsy++QtpyQhGTAm1D3aknquXQMNh3P/2llgTcUjuKw11B
+         6HlHfC288WgMYFqohSIuutkEn16L8BjMKR6MDX/LJr1HGAPI4fwUhGyPktY1lgNOOEf9
+         xpB4l9bso8POAZ8zP8qIJkbvipfkLPox0M4/d3ME0GJ6lfs9cUnntBsm8/ee9znkU5eE
+         0Fdw==
+X-Gm-Message-State: ABy/qLY094er3qAf3ZC+oamlR7tbbvowj2Dt6zyloBhQQVmxV+oQOLnF
+        UISH95AJBZinG/sD4g8bDkRdWg==
+X-Google-Smtp-Source: APBJJlEFmmxgVpsb4VKdX/OmDgm7CzXZk2Cy1ts84q1OxjZfrnZW6wz1kgkFsMhlbMY/DhcQwIQTHA==
+X-Received: by 2002:a2e:8ed0:0:b0:2b9:4b2e:5420 with SMTP id e16-20020a2e8ed0000000b002b94b2e5420mr5467379ljl.52.1690787971721;
+        Mon, 31 Jul 2023 00:19:31 -0700 (PDT)
+Received: from umbar.unikie.fi ([192.130.178.91])
+        by smtp.gmail.com with ESMTPSA id c4-20020a2ea1c4000000b002b71c128ea0sm2413267ljm.117.2023.07.31.00.19.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Jul 2023 00:19:31 -0700 (PDT)
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
+        freedreno@lists.freedesktop.org
+Subject: [PATCH v2 0/3] drm/display: simplify support for transparent DRM bridges
+Date:   Mon, 31 Jul 2023 10:19:27 +0300
+Message-Id: <20230731071930.3928150-1-dmitry.baryshkov@linaro.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgS3J6eXN6dG9mLA0KDQo+ID4+PiArICByZWFsdGVrLGVuYWJsZS1sNGljZzoNCj4gPj4+ICsg
-ICAgZGVzY3JpcHRpb246IEVuYWJsZSB0aGUgcG93ZXIgc2F2aW5nIGZlYXR1cmUgbDRpY2cgYnkg
-aGFyZHdhcmUNCj4gY2xvY2suDQo+ID4+PiArICAgICAgZ2F0aW5nLg0KPiA+Pg0KPiA+PiBZb3Ug
-ZGVzY3JpYmVkIHRoZSBkZXNpcmVkIExpbnV4IGZlYXR1cmUgb3IgYmVoYXZpb3IsIG5vdCB0aGUg
-YWN0dWFsDQo+IGhhcmR3YXJlLg0KPiA+PiBUaGUgYmluZGluZ3MgYXJlIGFib3V0IHRoZSBsYXR0
-ZXIsIHNvIGluc3RlYWQgeW91IG5lZWQgdG8gcmVwaHJhc2UNCj4gPj4gdGhlIHByb3BlcnR5IGFu
-ZCBpdHMgZGVzY3JpcHRpb24gdG8gbWF0Y2ggYWN0dWFsIGhhcmR3YXJlDQo+ID4+IGNhcGFiaWxp
-dGllcy9mZWF0dXJlcy9jb25maWd1cmF0aW9uIGV0Yy4NCj4gPg0KPiA+IFRoZSBsNGljZyBlbnRy
-eSBpcyBhIGhhcmR3YXJlIGZlYXR1cmUgZm9yIHBvd2VyIHNhdmluZy4NCj4gPiBUaGUgdGVybSBt
-YXkgbm90IGNsZWFybHkgY29udmV5IHRoZSBmdW5jdGlvbi4NCj4gPiBTbyBpbnN0ZWFkIG9mIHRo
-ZSB0ZXJtICJsNGljZyIgSSB1c2UgImh3IGNsb2NrIGdhdGluZyIuDQo+ID4NCj4gPiAgIHJlYWx0
-ZWssZW5hYmxlLWh3LWNsb2NrLWdhdGluZzoNCj4gPiAgICAgZGVzY3JpcHRpb246IEVuYWJsZSB0
-aGUgY2xvY2sgZ2F0ZWQgZnVuY3Rpb24gd2hpY2ggd2lsbCBnYXRpbmcgc3JhbQ0KPiA+ICAgICAg
-IGNsb2NrIHdoZW4gZGJ1cyBpZGxlLg0KPiANCj4gQW5kIHdoeSB0aGlzIHNob3VsZCBiZSBjb25m
-aWd1cmFibGUgcGVyIGJvYXJkPyBJdCBsb29rcyB5b3UgbGlrZSB0byBwdXQgT1MNCj4gcG9saWN5
-IGludG8gRFQsIHNvIG5vLg0KPiANCk9rLCBJJ2xsIHJlbW92ZSBpdCBmcm9tIERULg0KSSBwdXQg
-aXQgaW4gRFQgYmVjYXVzZSBody1jbG9jay1nYXRpbmcgaXMgbm90IGFuIE9TIHBvbGljeS4gVGhp
-cyBpcyBhIHB1cmUgaGFyZHdhcmUgZnVuY3Rpb24gYW5kIGlzIG5vdCBjb250cm9sbGVkIGJ5IHNv
-ZnR3YXJlLg0KSSB3YW50IHRvIGNvbnRyb2wgZW5hYmxpbmcgb3IgZGlzYWJsaW5nIG9uIGRpZmZl
-cmVudCBTb0NzIG9yIGJvYXJkcy4NCkJ1dCBmb3IgcG93ZXIgc2F2aW5nLCBpdCBzaG91bGQgYmUg
-ZW5hYmxlZCBieSBkZWZhdWx0IGV4Y2VwdCBmb3IgcnRkMTI5NSBTb0MuDQpTbyBJIHdvdWxkIGhh
-bmRsZSB0aGlzIHNwZWNpYWwgY2FzZSBvZiBydGQxMjk1IGluIHRoZSBkcml2ZXIuDQoNClRoYW5r
-cywNClN0YW5sZXkNCg==
+Supporting DP/USB-C can result in a chain of several transparent
+bridges (PHY, redrivers, mux, etc). This results in drivers having
+similar boilerplate code for such bridges.
+
+Next, these drivers are susceptible to -EPROBE_DEFER loops: the next
+bridge can either be probed from the bridge->attach callback, when it is
+too late to return -EPROBE_DEFER, or from the probe() callback, when the
+next bridge might not yet be available, because it depends on the
+resources provided by the probing device.
+
+Last, but not least, this results in the the internal knowledge of DRM
+subsystem slowly diffusing into other subsystems, like PHY or USB/TYPEC.
+
+To solve all these issues, define a separate DRM helper, which creates
+separate aux device just for the bridge. During probe such aux device
+doesn't result in the EPROBE_DEFER loops. Instead it allows the device
+drivers to probe properly, according to the actual resource
+dependencies. The bridge auxdevs are then probed when the next bridge
+becomes available, sparing drivers from drm_bridge_attach() returning
+-EPROBE_DEFER.
+
+Proposed merge strategy: immutable branch with the drm commit, which is
+then merged into PHY and USB subsystems together with the corresponding
+patch.
+
+Changes since v1:
+ - Added EXPORT_SYMBOL_GPL / MODULE_LICENSE / etc. to drm_simple_bridge
+
+Dmitry Baryshkov (3):
+  drm/display: add transparent bridge helper
+  phy: qcom: qmp-combo: switch to DRM_SIMPLE_BRIDGE
+  usb: typec: nb7vpq904m: switch to DRM_SIMPLE_BRIDGE
+
+ drivers/gpu/drm/display/Kconfig             |   9 ++
+ drivers/gpu/drm/display/Makefile            |   2 +
+ drivers/gpu/drm/display/drm_simple_bridge.c | 125 ++++++++++++++++++++
+ drivers/phy/qualcomm/Kconfig                |   2 +-
+ drivers/phy/qualcomm/phy-qcom-qmp-combo.c   |  44 +------
+ drivers/usb/typec/mux/Kconfig               |   2 +-
+ drivers/usb/typec/mux/nb7vpq904m.c          |  44 +------
+ include/drm/display/drm_simple_bridge.h     |  19 +++
+ 8 files changed, 161 insertions(+), 86 deletions(-)
+ create mode 100644 drivers/gpu/drm/display/drm_simple_bridge.c
+ create mode 100644 include/drm/display/drm_simple_bridge.h
+
+-- 
+2.39.2
+
