@@ -2,275 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A135576A868
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Aug 2023 07:39:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43BC276A898
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Aug 2023 08:02:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230140AbjHAFjD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Aug 2023 01:39:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51136 "EHLO
+        id S231232AbjHAGCD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Aug 2023 02:02:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbjHAFi7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Aug 2023 01:38:59 -0400
-Received: from h2.cmg2.smtp.forpsi.com (h2.cmg2.smtp.forpsi.com [81.2.195.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D4CF268C
-        for <linux-usb@vger.kernel.org>; Mon, 31 Jul 2023 22:38:06 -0700 (PDT)
-Received: from lenoch ([91.218.190.200])
-        by cmgsmtp with ESMTPSA
-        id Qi4fq9CPRv5uIQi4hqF4AB; Tue, 01 Aug 2023 07:37:40 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1690868260; bh=iujVlxm/IrZlWPJc0HtVaxrKxQuaUsBouaX/p49s9QE=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=IDghlKbdm6VXSjqYUwecHH6swodjVviBI0dZmxOr47NwNcSGd6Vg63xl6E334QqOr
-         gREYtwsq6A4WFMkTxOlJOYGkdSynp3yBFkW/wD4PRUw1XbyTStDBctOtMzwj6d4Bmg
-         Yw5cuV7bw3YeO/XA1Y1F5S+y6wFPnm7PbdUpZDnweUzU5iG/k9aXKCNzs5fVq70X20
-         TJSOmR3dOMiS1FIU948OeFbxchuLELaz+g20m414pz5CpdJ0Y5soGQt3uYXaS7+VAw
-         1+KKXW1iU694/TV0/uvK4zNYBdEU15hRKQwxoLBgm8hlpet6DH7pGTJoQOAMg8uLlU
-         I9BGyuyYVvrKw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1690868260; bh=iujVlxm/IrZlWPJc0HtVaxrKxQuaUsBouaX/p49s9QE=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=IDghlKbdm6VXSjqYUwecHH6swodjVviBI0dZmxOr47NwNcSGd6Vg63xl6E334QqOr
-         gREYtwsq6A4WFMkTxOlJOYGkdSynp3yBFkW/wD4PRUw1XbyTStDBctOtMzwj6d4Bmg
-         Yw5cuV7bw3YeO/XA1Y1F5S+y6wFPnm7PbdUpZDnweUzU5iG/k9aXKCNzs5fVq70X20
-         TJSOmR3dOMiS1FIU948OeFbxchuLELaz+g20m414pz5CpdJ0Y5soGQt3uYXaS7+VAw
-         1+KKXW1iU694/TV0/uvK4zNYBdEU15hRKQwxoLBgm8hlpet6DH7pGTJoQOAMg8uLlU
-         I9BGyuyYVvrKw==
-Date:   Tue, 1 Aug 2023 07:37:37 +0200
-From:   Ladislav Michl <oss-lists@triops.cz>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Liang He <windhl@126.com>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH v5 4/7] usb: dwc3: dwc3-octeon: Avoid half-initialized
- controller state
-Message-ID: <ZMiaIUy6d5gVl7mA@lenoch>
-References: <ZMd/HzISn0mPsNWt@lenoch>
- <ZMd/oMRx8ze22/kK@lenoch>
- <20230801003838.ifbydrbwq34df3n3@synopsys.com>
+        with ESMTP id S230096AbjHAGCB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Aug 2023 02:02:01 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5944E7D;
+        Mon, 31 Jul 2023 23:01:59 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3715woir026178;
+        Tue, 1 Aug 2023 06:01:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=rSy7dPqq1OG7Y6hBJX9jb9y8LyPyQfc/Of+5x7X6wfw=;
+ b=iBKwCs4ccCspmHvyG8PFYisnizgHPHKUQNzSCmCWCVZwLc2YAErXMqB229vowCiCq/6H
+ DLq/yKtTDq2KBEibSp4ieEP2iNN8zl2hV2BshfVkeMHVzm7HmpMs5rAt9zLWYxkJkU0/
+ n720ix46ErzmuhhmPhG0tpN32iJ/p8nL/oM43ro8IZTkaDtQq58GV+7MqvC0ojnluQAT
+ GkrROlzCuTPxcfh63RsjaIAGGTrrDzrEyz0Z2rhWd0/xgpfEARMXO77sBdh0QjNMGwcK
+ u7SH0ibWEN5aM8VgQmXoKcpZTIwvgrO/Jvmku++rANJBXbd1lyyCI068duM6wkDrp9N2 Ng== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3s6a502tpr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Aug 2023 06:01:54 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37161rZ0031148
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 1 Aug 2023 06:01:53 GMT
+Received: from hu-prashk-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Mon, 31 Jul 2023 23:01:50 -0700
+From:   Prashanth K <quic_prashk@quicinc.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "AngeloGioacchino Del Regno" 
+        <angelogioacchino.delregno@collabora.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+CC:     Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Prashanth K <quic_prashk@quicinc.com>
+Subject: [v2] usb: common: usb-conn-gpio: Prevent bailing out if initial role is none
+Date:   Tue, 1 Aug 2023 11:31:35 +0530
+Message-ID: <1690869695-32018-1-git-send-email-quic_prashk@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230801003838.ifbydrbwq34df3n3@synopsys.com>
-X-CMAE-Envelope: MS4wfNSHklKXjkZP8eU+6tWiynGKJ5+rzw1I4xZP/eMdMSIs54HDpgJ/gsrWEusZQdaYj91Tppx4Uzlc5Vnefwbz3aN6682OZU82rVsQQQQSg7u9yRgxViOT
- xOFytjTC3NTJwWQcYvncUlddi2YerpmLkupVoljbjsqYgjvT/0SSdz5TXhadtjs2Kolxov6QVLryRmHqdcJM0csj0gYTiEmv38PaZSpqowNhWwszK3JLsxXY
- zFLSpJgIfYQB1uVQKffGAEeD5AwJS8knbvzc/DrWcKH10NpbhXawhhonEh6Ze3U3PZm7TBOKKVy1fvHFgL+BPjYThNhkfUwqS2QsMaFkihpYezOoQg0ZiFqG
- SEIQdOvC
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: rL03t9C0u4CngsQgmCsE9uu27tZeobvl
+X-Proofpoint-ORIG-GUID: rL03t9C0u4CngsQgmCsE9uu27tZeobvl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-08-01_03,2023-07-31_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
+ priorityscore=1501 phishscore=0 clxscore=1015 mlxscore=0
+ lowpriorityscore=0 impostorscore=0 bulkscore=0 suspectscore=0
+ mlxlogscore=851 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2306200000 definitions=main-2308010055
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 01, 2023 at 12:38:43AM +0000, Thinh Nguyen wrote:
-> On Mon, Jul 31, 2023, Ladislav Michl wrote:
-> > From: Ladislav Michl <ladis@linux-mips.org>
-> > 
-> > Power gpio configuration is done from the middle of
-> > dwc3_octeon_clocks_start leaving hardware in half-initialized
-> > state if it fails. As that indicates dwc3_octeon_clocks_start
-> > does more than just initialize the clocks rename it appropriately
-> > and verify power gpio configuration in advance at the beginning
-> > of device probe.
-> > 
-> > Signed-off-by: Ladislav Michl <ladis@linux-mips.org>
-> > ---
-> >  CHANGES:
-> >  - v4: new patch
-> >  - v5: use uintptr_t instead of u64 to retype base address to make 32bit
-> >        compilers happy.
-> > 
-> >  drivers/usb/dwc3/dwc3-octeon.c | 90 ++++++++++++++++------------------
-> >  1 file changed, 43 insertions(+), 47 deletions(-)
-> > 
-> > diff --git a/drivers/usb/dwc3/dwc3-octeon.c b/drivers/usb/dwc3/dwc3-octeon.c
-> > index 24e75881b5cf..0dc45dda134c 100644
-> > --- a/drivers/usb/dwc3/dwc3-octeon.c
-> > +++ b/drivers/usb/dwc3/dwc3-octeon.c
-> > @@ -192,6 +192,8 @@ struct dwc3_octeon {
-> >  	void __iomem *base;
-> >  };
-> >  
-> > +#define DWC3_GPIO_POWER_NONE	(-1)
-> > +
-> >  #ifdef CONFIG_CAVIUM_OCTEON_SOC
-> >  #include <asm/octeon/octeon.h>
-> >  static inline uint64_t dwc3_octeon_readq(void __iomem *addr)
-> > @@ -258,55 +260,15 @@ static int dwc3_octeon_get_divider(void)
-> >  	return div;
-> >  }
-> >  
-> > -static int dwc3_octeon_config_power(struct device *dev, void __iomem *base)
-> > -{
-> > -	uint32_t gpio_pwr[3];
-> > -	int gpio, len, power_active_low;
-> > -	struct device_node *node = dev->of_node;
-> > -	u64 val;
-> > -	void __iomem *uctl_host_cfg_reg = base + USBDRD_UCTL_HOST_CFG;
-> > -
-> > -	if (of_find_property(node, "power", &len) != NULL) {
-> > -		if (len == 12) {
-> > -			of_property_read_u32_array(node, "power", gpio_pwr, 3);
-> > -			power_active_low = gpio_pwr[2] & 0x01;
-> > -			gpio = gpio_pwr[1];
-> > -		} else if (len == 8) {
-> > -			of_property_read_u32_array(node, "power", gpio_pwr, 2);
-> > -			power_active_low = 0;
-> > -			gpio = gpio_pwr[1];
-> > -		} else {
-> > -			dev_err(dev, "invalid power configuration\n");
-> > -			return -EINVAL;
-> > -		}
-> > -		dwc3_octeon_config_gpio(((u64)base >> 24) & 1, gpio);
-> > -
-> > -		/* Enable XHCI power control and set if active high or low. */
-> > -		val = dwc3_octeon_readq(uctl_host_cfg_reg);
-> > -		val |= USBDRD_UCTL_HOST_PPC_EN;
-> > -		if (power_active_low)
-> > -			val &= ~USBDRD_UCTL_HOST_PPC_ACTIVE_HIGH_EN;
-> > -		else
-> > -			val |= USBDRD_UCTL_HOST_PPC_ACTIVE_HIGH_EN;
-> > -		dwc3_octeon_writeq(uctl_host_cfg_reg, val);
-> > -	} else {
-> > -		/* Disable XHCI power control and set if active high. */
-> > -		val = dwc3_octeon_readq(uctl_host_cfg_reg);
-> > -		val &= ~USBDRD_UCTL_HOST_PPC_EN;
-> > -		val &= ~USBDRD_UCTL_HOST_PPC_ACTIVE_HIGH_EN;
-> > -		dwc3_octeon_writeq(uctl_host_cfg_reg, val);
-> > -		dev_info(dev, "power control disabled\n");
-> > -	}
-> > -	return 0;
-> > -}
-> > -
-> > -static int dwc3_octeon_clocks_start(struct dwc3_octeon *octeon)
-> > +static int dwc3_octeon_setup(struct dwc3_octeon *octeon,
-> > +			     int power_gpio, int power_active_low)
-> >  {
-> >  	int i, div, mpll_mul, ref_clk_fsel, ref_clk_sel = 2;
-> >  	u32 clock_rate;
-> >  	u64 val;
-> >  	struct device *dev = octeon->dev;
-> >  	void __iomem *uctl_ctl_reg = octeon->base + USBDRD_UCTL_CTL;
-> > +	void __iomem *uctl_host_cfg_reg = octeon->base + USBDRD_UCTL_HOST_CFG;
-> >  
-> >  	if (dev->of_node) {
-> >  		const char *ss_clock_type;
-> > @@ -454,8 +416,21 @@ static int dwc3_octeon_clocks_start(struct dwc3_octeon *octeon)
-> >  	udelay(10);
-> >  
-> >  	/* Step 8c: Setup power control. */
-> > -	if (dwc3_octeon_config_power(dev, octeon->base))
-> > -		return -EINVAL;
-> > +	val = dwc3_octeon_readq(uctl_host_cfg_reg);
-> > +	val |= USBDRD_UCTL_HOST_PPC_EN;
-> > +	if (power_gpio == DWC3_GPIO_POWER_NONE) {
-> > +		val &= ~USBDRD_UCTL_HOST_PPC_EN;
-> > +	} else {
-> > +		val |= USBDRD_UCTL_HOST_PPC_EN;
-> > +		dwc3_octeon_config_gpio(((__force uintptr_t)octeon->base >> 24) & 1,
-> > +					power_gpio);
-> 
-> Let's not cast it like this. It's not readable. Make the logic
-> intentional and clear:
-> e.g.: int index = !!(octeon->base & BIT(24));
-> dwc3_octeon_config_gpio(index, power_gpio);
+Currently if we bootup a device without cable connected, then
+usb-conn-gpio won't call set_role() since last_role is same as
+current role. This happens because during probe last_role gets
+initialised to zero.
 
-I'd prefer to stick with original code.
+To avoid this, add a new flag initial_detection in the struct
+usb_conn_info, which prevents from bailing out during initial
+detection.
 
-> It's odd that the "index" is being used as boolean here.
->
-> Regardless, I don't know what this magic offset BIT(24) means. If
-> there's some context, then you can refactor the
-> dwc3_octeon_config_gpio() as below:
+Fixes: 4602f3bff266 ("usb: common: add USB GPIO based connection detection driver")
+Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+---
+v2: Updated the bool name to initial_detection.
 
-Context is a bit scary and perhaps could be documented as described later.
+ drivers/usb/common/usb-conn-gpio.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-> dwc3_octeon_config_gpio(power_gpio, is_bit24) where "is_bit24" is some
-> other meaningful boolean name.
+diff --git a/drivers/usb/common/usb-conn-gpio.c b/drivers/usb/common/usb-conn-gpio.c
+index 766005d..501e8bc9 100644
+--- a/drivers/usb/common/usb-conn-gpio.c
++++ b/drivers/usb/common/usb-conn-gpio.c
+@@ -42,6 +42,7 @@ struct usb_conn_info {
+ 
+ 	struct power_supply_desc desc;
+ 	struct power_supply *charger;
++	bool initial_detection;
+ };
+ 
+ /*
+@@ -86,11 +87,13 @@ static void usb_conn_detect_cable(struct work_struct *work)
+ 	dev_dbg(info->dev, "role %s -> %s, gpios: id %d, vbus %d\n",
+ 		usb_role_string(info->last_role), usb_role_string(role), id, vbus);
+ 
+-	if (info->last_role == role) {
++	if (!info->initial_detection && info->last_role == role) {
+ 		dev_warn(info->dev, "repeated role: %s\n", usb_role_string(role));
+ 		return;
+ 	}
+ 
++	info->initial_detection = false;
++
+ 	if (info->last_role == USB_ROLE_HOST && info->vbus)
+ 		regulator_disable(info->vbus);
+ 
+@@ -258,6 +261,7 @@ static int usb_conn_probe(struct platform_device *pdev)
+ 	device_set_wakeup_capable(&pdev->dev, true);
+ 
+ 	/* Perform initial detection */
++	info->initial_detection = true;
+ 	usb_conn_queue_dwork(info, 0);
+ 
+ 	return 0;
+-- 
+2.7.4
 
-As there is no pinctrl driver for octeon, configuration is done here.
-There are two UCTLs: at 0x1180068000000 and second at 0x1180069000000.
-We are just using bit 24 to distiguish between them. No matter how you
-rewrite this function, it is still horrible hack and making it "nice"
-does not solve anything. For that reason I stick with original code as
-there is no point touching anything that just should not exist.
-
-Once Octeon gets its pinctlr driver, this function will disapear
-altogether. The very same is true for clock parsing - there is no clk api.
-
-But note that might as well never happen as documentation is under NDA
-and I have it only for single SoC as well as I have only single SoC
-available for testing, so it is quite hard to write proper drivers
-without breaking anything.
-
-Anyway, what about just passing octeon into dwc3_octeon_config_gpio
-and use all that dirty magic inside. Would that work work for you?
-
-> > +		dev_dbg(dev, "power control is using gpio%d\n", power_gpio);
-> > +	}
-> > +	if (power_active_low)
-> > +		val &= ~USBDRD_UCTL_HOST_PPC_ACTIVE_HIGH_EN;
-> > +	else
-> > +		val |= USBDRD_UCTL_HOST_PPC_ACTIVE_HIGH_EN;
-> > +	dwc3_octeon_writeq(uctl_host_cfg_reg, val);
-> >  
-> >  	/* Step 8d: Deassert UAHC reset signal. */
-> >  	val = dwc3_octeon_readq(uctl_ctl_reg);
-> > @@ -508,7 +483,28 @@ static int dwc3_octeon_probe(struct platform_device *pdev)
-> >  	struct device *dev = &pdev->dev;
-> >  	struct device_node *node = dev->of_node;
-> >  	struct dwc3_octeon *octeon;
-> > -	int err;
-> > +	int power_active_low, power_gpio;
-> > +	int err, len;
-> > +
-> > +	power_gpio = DWC3_GPIO_POWER_NONE;
-> > +	power_active_low = 0;
-> > +	if (of_find_property(node, "power", &len)) {
-> > +		u32 gpio_pwr[3];
-> > +
-> > +		switch (len) {
-> > +		case 8:
-> > +			of_property_read_u32_array(node, "power", gpio_pwr, 2);
-> > +			break;
-> > +		case 12:
-> > +			of_property_read_u32_array(node, "power", gpio_pwr, 3);
-> > +			power_active_low = gpio_pwr[2] & 0x01;
-> 
-> It would be better for these magic numbers (e.g. 0x01) to be written in
-> macros or at least documented in the future. That update can be done in
-> a separate commit in the future.
-
-Sure. In the future, this should just wanish as noted above.
-
-> > +			break;
-> > +		default:
-> > +			dev_err(dev, "invalid power configuration\n");
-> > +			return -EINVAL;
-> > +		}
-> > +		power_gpio = gpio_pwr[1];
-> > +	}
-> >  
-> >  	octeon = devm_kzalloc(dev, sizeof(*octeon), GFP_KERNEL);
-> >  	if (!octeon)
-> > @@ -519,7 +515,7 @@ static int dwc3_octeon_probe(struct platform_device *pdev)
-> >  	if (IS_ERR(octeon->base))
-> >  		return PTR_ERR(octeon->base);
-> >  
-> > -	err = dwc3_octeon_clocks_start(octeon);
-> > +	err = dwc3_octeon_setup(octeon, power_gpio, power_active_low);
-> >  	if (err)
-> >  		return err;
-> >  
-> > -- 
-> > 2.39.2
-> > 
-> 
-> Thanks,
-> Thinh
