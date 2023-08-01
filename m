@@ -2,138 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 630EC76A9D0
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Aug 2023 09:16:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C086A76A9EC
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Aug 2023 09:27:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230339AbjHAHQs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Aug 2023 03:16:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39010 "EHLO
+        id S230167AbjHAH1S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Aug 2023 03:27:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbjHAHQr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Aug 2023 03:16:47 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4F5FC1736;
-        Tue,  1 Aug 2023 00:16:46 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 3717Frj96006523, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 3717Frj96006523
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Tue, 1 Aug 2023 15:15:53 +0800
-Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Tue, 1 Aug 2023 15:15:10 +0800
-Received: from RTEXH36505.realtek.com.tw (172.21.6.25) by
- RTEXMBS01.realtek.com.tw (172.21.6.94) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Tue, 1 Aug 2023 15:15:09 +0800
-Received: from localhost.localdomain (172.21.252.101) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server id
- 15.1.2375.32 via Frontend Transport; Tue, 1 Aug 2023 15:15:09 +0800
-From:   Stanley Chang <stanley_chang@realtek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Stanley Chang <stanley_chang@realtek.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        <linux-phy@lists.infradead.org>
-Subject: [PATCH usb-next] phy: realtek: usb: add the error handler for nvmem_cell_read
-Date:   Tue, 1 Aug 2023 15:14:52 +0800
-Message-ID: <20230801071509.20096-1-stanley_chang@realtek.com>
-X-Mailer: git-send-email 2.41.0
+        with ESMTP id S229965AbjHAH1R (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Aug 2023 03:27:17 -0400
+Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71CA6F1;
+        Tue,  1 Aug 2023 00:27:16 -0700 (PDT)
+Received: by mail-ua1-x935.google.com with SMTP id a1e0cc1a2514c-799a451ca9cso1660512241.2;
+        Tue, 01 Aug 2023 00:27:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1690874835; x=1691479635;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=S7KIGZwA5gSq1xiYPTxpABuRbYjwdKovk1doJXVlPF0=;
+        b=Mq2szzo7iqnTtxwMA+MiMZjOy8JWI88T3hSU4Ly5M+atekVVUamGMZfuxhu8RpLKk0
+         23NSo0d/HVGkW7N507MrR71nH/Egbwa3fcPPgefV/CtxlU8LWD40kCarHVn+hMcV936S
+         +COUzPmVrVGPgPKWytcmtFUOsB7SWgJPVg+YsQjAmsEap7+nlQK8kxM1DKl7FeIGPWKh
+         X05ChWVq5HTulbNwbyok21cYdGovE9HwN/y+Gbx96Hc94ZoUP345M2IxgCz2wEWPpqbC
+         C3ehx9x4KeHGC4beFtNTA276KxGGX3iIfXzLqZkHXrI8n/44NR3yi7HesDf+DBeIOsqf
+         giOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690874835; x=1691479635;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=S7KIGZwA5gSq1xiYPTxpABuRbYjwdKovk1doJXVlPF0=;
+        b=Osap0x3Iet8oBHi6rv4A2FgKPksLp1eAKMZMSEgyYmuiSYZJiyoMnRJFRdLkQIDpzJ
+         aXfUwEtNQKZ3nlVjSO86trwdVduF/763RvKH9OVWHd3DFRLECFbvNIPCq50MDwl84aYM
+         gvLIns2HZfwobPWlUO+Vof7SDNvPySC49iFQWDXGjR66wq8GFj1GE7ZNGIscmCcxicge
+         k8gWqWrV2TU8klms/vPl6WzR3SgBciXM6nNDxKP2rL/f9DcGa6ny0Mr/19su3pQAJrhR
+         3XdurR9Ugau/bMwARoXhac2JQRMBB/pPrEZa9ugMpmTuFbyWIdeXDx3pbeTJBxhhnoJc
+         lniA==
+X-Gm-Message-State: ABy/qLaGD7XdP5wiwKxc8+/602v7U6d0IBukeEiwRZ5OU7z+QnKrR1ZK
+        kKQNcikIdGUCOVkIpYvBJ+bfVirRslFfy7TX5t4=
+X-Google-Smtp-Source: APBJJlG2YJWKkUnkL0wBCGZ4RjdngxR+iuif/HIMGg95l3vg+dJuB+OPwijVoCVxf1TsHyoOCpaajZm9GO6R8A9Spdc=
+X-Received: by 2002:a67:f84c:0:b0:445:4996:1d27 with SMTP id
+ b12-20020a67f84c000000b0044549961d27mr1789438vsp.3.1690874835502; Tue, 01 Aug
+ 2023 00:27:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-KSE-ServerInfo: RTEXMBS01.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230801045449.156348-1-zhouscd@gmail.com> <2023080159-uncorrupt-chamber-7de0@gregkh>
+ <CAN4mUXNNM-25oCx1jjVqqoPpX1P8Z4zkjh84Azprz52O4_AMNw@mail.gmail.com> <2023080108-resilient-citation-9a34@gregkh>
+In-Reply-To: <2023080108-resilient-citation-9a34@gregkh>
+From:   chengdong zhou <zhouscd@gmail.com>
+Date:   Tue, 1 Aug 2023 15:27:04 +0800
+Message-ID: <CAN4mUXNZomVDfve1p_2D6G38MXd=gWLdg3=eSUMnFcWhcyb2EA@mail.gmail.com>
+Subject: Re: [PATCH] USB: gadget: Fix the function name error in sourcesink/loopback.
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     dan.scally@ideasonboard.com, laurent.pinchart@ideasonboard.com,
+        m.grzeschik@pengutronix.de, john@keeping.me.uk,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-There are following smatch warning:
-drivers/phy/realtek/phy-rtk-usb2.c:901 get_phy_data_by_efuse()
-error: 'buf' dereferencing possible ERR_PTR()
-drivers/phy/realtek/phy-rtk-usb2.c:942 get_phy_data_by_efuse()
-error: 'buf' dereferencing possible ERR_PTR()
+Thank you for your patient response.
 
-drivers/phy/realtek/phy-rtk-usb3.c:460
-get_phy_data_by_efuse() error: 'buf' dereferencing possible ERR_PTR()
+On Tue, Aug 1, 2023 at 2:23=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org>=
+ wrote:
+>
+>
+> Please document this in the changelog text.
 
-The nvmem_cell_read may fail to read. So, driver must handle failure cases.
+But I can't find the changelog text anywhere.
 
-Fixes: 134e6d25f6bd ("phy: realtek: usb: Add driver for the Realtek SoC USB 2.0 PHY")
-Fixes: adda6e82a7de ("phy: realtek: usb: Add driver for the Realtek SoC USB 3.0 PHY")
-Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-Closes: https://lore.kernel.org/linux-phy/e7ff2870-c30c-4d8d-a7a9-d2d6a4962eb5@kadam.mountain/
-Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
----
- drivers/phy/realtek/phy-rtk-usb2.c | 14 ++++++++------
- drivers/phy/realtek/phy-rtk-usb3.c |  7 ++++---
- 2 files changed, 12 insertions(+), 9 deletions(-)
+>
+>
+> But you changed the name:
+>
+> > > > -     ss->function.name =3D "source/sink";
+> > > > +     ss->function.name =3D "sourcesink";
+>
+> isn't that visable to userspace?
 
-diff --git a/drivers/phy/realtek/phy-rtk-usb2.c b/drivers/phy/realtek/phy-rtk-usb2.c
-index ed47a1ce5d9c..5e7ee060b404 100644
---- a/drivers/phy/realtek/phy-rtk-usb2.c
-+++ b/drivers/phy/realtek/phy-rtk-usb2.c
-@@ -898,9 +898,10 @@ static int get_phy_data_by_efuse(struct rtk_phy *rtk_phy,
- 		size_t buf_size;
- 
- 		buf = nvmem_cell_read(cell, &buf_size);
--		value = buf[0] & phy_cfg->dc_driving_mask;
--
--		kfree(buf);
-+		if (!IS_ERR(buf)) {
-+			value = buf[0] & phy_cfg->dc_driving_mask;
-+			kfree(buf);
-+		}
- 		nvmem_cell_put(cell);
- 	}
- 
-@@ -939,9 +940,10 @@ static int get_phy_data_by_efuse(struct rtk_phy *rtk_phy,
- 		size_t buf_size;
- 
- 		buf = nvmem_cell_read(cell, &buf_size);
--		value = buf[0] & phy_cfg->dc_disconnect_mask;
--
--		kfree(buf);
-+		if (!IS_ERR(buf)) {
-+			value = buf[0] & phy_cfg->dc_disconnect_mask;
-+			kfree(buf);
-+		}
- 		nvmem_cell_put(cell);
- 	}
- 
-diff --git a/drivers/phy/realtek/phy-rtk-usb3.c b/drivers/phy/realtek/phy-rtk-usb3.c
-index 6050f1ef4f6b..7881f908aade 100644
---- a/drivers/phy/realtek/phy-rtk-usb3.c
-+++ b/drivers/phy/realtek/phy-rtk-usb3.c
-@@ -457,9 +457,10 @@ static int get_phy_data_by_efuse(struct rtk_phy *rtk_phy,
- 		size_t buf_size;
- 
- 		buf = nvmem_cell_read(cell, &buf_size);
--		value = buf[0] & USB_U3_TX_LFPS_SWING_TRIM_MASK;
--
--		kfree(buf);
-+		if (!IS_ERR(buf)) {
-+			value = buf[0] & USB_U3_TX_LFPS_SWING_TRIM_MASK;
-+			kfree(buf);
-+		}
- 		nvmem_cell_put(cell);
- 	}
- 
--- 
-2.34.1
+Yes, I removed the "/". Because the macro definition
+DECLARE_USB_FUNCTION_INIT does not support "/".
+Should I stick with the original "SourceSink"? I think using the
+Linux-style "sourcesink" is better. By the way, due to the current
+bug, no one should be able to use "source/sink" in userspace.
 
+
+thanks.
