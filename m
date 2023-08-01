@@ -2,180 +2,154 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A3D976A6DF
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Aug 2023 04:18:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86F9576A76F
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Aug 2023 05:21:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231715AbjHACSJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Jul 2023 22:18:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55850 "EHLO
+        id S229604AbjHADVx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 Jul 2023 23:21:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231751AbjHACR6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Jul 2023 22:17:58 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2054.outbound.protection.outlook.com [40.107.21.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C7B1125
-        for <linux-usb@vger.kernel.org>; Mon, 31 Jul 2023 19:17:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=U5js/yhetT7B+BBBYRwvVoJHga5FYzsOXsBvsjx9CRpKnfLbMFqqsoW+BpEswN+anS5np35Ur8RxFWufFMOko3nAqErFzcMFIzsglxinLfWyt8fYyFcSQ0thVSroNX12XbsoYmm2zm9k2cAtb6UF1qy4TbwwRXusOVR59iWhzUmO3ATdffTK4H9f1NzY6oeR+sDcDvUk9cpquASPU4op5i/uuUTsuQuubTXoR4UcsquogaXeUv2BBJDRYLjCQuHJBzJGFPBeRGUT1zEYs7I9ckXKO4SYw2FCiqeBheq/b7wKk2y5n/d5YwQbipq7LZ90lvXKMhrDErmuY4zdqxGLMw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mZKJJHLqCFBCHi3afIja4+JwfVV4c1GKbI4p4W7R0sE=;
- b=hv8JdCHk5cSWoZlHOz3RspwGnZCdOsDRj2ykASxxZiWqyMBf9IF2eryy38p4MZCbP1I40Z05/rViFREK7jkE07O18G4xYT+KxbBXtjzeJnezKSUwVozL6sO8rEFiVJ6THxjVMQ25xchYv7J/aUUezdKh3WKkQmqQyfMBRLDDrNdvaQeixxo3mMKQdP873Hx0nJEjKbG7z5QvFFlnHLEM8aarLdWjTR/h8ishrUQDRezMSDK9F4oOM50trpuZ0QkYoE2O8Fxnlzl3FSq545f28K21nutpI0Q1nMhjnMAvsP9rLDlQWCM8wXE9gUNZ6D2MioRGYDiZSRGSZRbjq1ez1g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mZKJJHLqCFBCHi3afIja4+JwfVV4c1GKbI4p4W7R0sE=;
- b=mPvul31b9ktyMFueTFRW7ieACJlLHCxNoe3BJjYd6+kE5+QmcJAX9W0KMN0D7+QBlfqukl+ZkgUJw7+J0RNakSqjMc7qL42Wx7gOSZJw8uXX+vww7XLU0d7O2+SXtP/ysCaRpP3dWMUxmr8tw2E4s9dwxOqOP7TLd4BIj8NSCvM=
-Received: from DB7PR04MB4505.eurprd04.prod.outlook.com (2603:10a6:5:39::26) by
- PAXPR04MB8896.eurprd04.prod.outlook.com (2603:10a6:102:20f::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6631.43; Tue, 1 Aug 2023 02:17:52 +0000
-Received: from DB7PR04MB4505.eurprd04.prod.outlook.com
- ([fe80::1640:f76f:1d74:82fa]) by DB7PR04MB4505.eurprd04.prod.outlook.com
- ([fe80::1640:f76f:1d74:82fa%4]) with mapi id 15.20.6631.043; Tue, 1 Aug 2023
- 02:17:52 +0000
-From:   Xu Yang <xu.yang_2@nxp.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Jun Li <jun.li@nxp.com>
-Subject: RE: [EXT] Re: [PATCH] usb: typec: tcpm: not sink vbus if operational
- current is 0mA
-Thread-Topic: [EXT] Re: [PATCH] usb: typec: tcpm: not sink vbus if operational
- current is 0mA
-Thread-Index: AQHZq0EWrRme1GvW7UiXk1aB0o5uBq/UEJgAgAACjwCAANCGgA==
-Date:   Tue, 1 Aug 2023 02:17:52 +0000
-Message-ID: <DB7PR04MB45053C37DCF56B1469D536658C0AA@DB7PR04MB4505.eurprd04.prod.outlook.com>
-References: <20230630105656.2828595-1-xu.yang_2@nxp.com>
- <ZMe4GOfAT3a1YueY@kuha.fi.intel.com>
- <5759a57b-3bb8-5a1b-a7a8-8c512fc50012@roeck-us.net>
-In-Reply-To: <5759a57b-3bb8-5a1b-a7a8-8c512fc50012@roeck-us.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DB7PR04MB4505:EE_|PAXPR04MB8896:EE_
-x-ms-office365-filtering-correlation-id: 0ba4d300-c85f-4a8b-30ce-08db923582af
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: y9HSP6KLmdDcp6ERf4Q+KMijk+IIO3oHeDZ71zxVKAMoR5Gyi2syeyAvYxxTVZaToQtMpSvLhIJ/8p6SqThTWVa+EpDnuQvv/fPxtPKCNM8D787r8KjHty9IqWEpwo8GRW35LgzsWqLOOGcTmKEQRrJ7JI0BEVANbpWcKnM8Sb8YWR/I/YlHyxUhEaI0IgZleZmMRe4vN8UWfwH1Q0mGx2XXMyatyW+wt3H2Ge08HctxyMdUeYh85+ISX7avOB5rCF55IQIinOz91ptPLCXYWBucdOGhZ4xugGz1e/0dKUQ4Lbp3D4pgvreDHDwbZ0OJN9WnFNnkQWMs42rFQenI9tm/4FJCcXIkRmkOiHoNDfPH5dycoNucttasWBVG3ELn2FwKeOS6XF7wte3NEl2HK899w7q7XkCJ9im0RoVsR4R6AmKzBcXpATeYoIr8mR3pzzrSwTX5bCCjrp7APeiROZEMJlh6OyVOUNsy89mQJgsIg6h1+TaL0UFFcud4J40wFB1pYY2SM3TneCZBmFfF8Fr/AWJko5I3dJaI59KId8UpOOzUjSIO+iuwxhTZ5508yDGO4yVLcGhuJuEVnVjPWQn8J65YkCDRrchvETY8jpCSP6j9ajE/zJjWUpcEOOWunYLKYirJPAK2hVqX5pZFYw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR04MB4505.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(366004)(376002)(346002)(39860400002)(451199021)(38070700005)(478600001)(38100700002)(122000001)(55016003)(86362001)(33656002)(9686003)(71200400001)(7696005)(53546011)(186003)(26005)(6506007)(8936002)(8676002)(76116006)(52536014)(5660300002)(4326008)(66556008)(66476007)(64756008)(66446008)(66946007)(2906002)(54906003)(41300700001)(110136005)(316002)(83380400001)(309714004);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SThuWVRFZkVTTzAxN1p1dEE0STBjTExqemhjOFcwMk9KTFBYd1VsdWdndEJW?=
- =?utf-8?B?a3FNcG53Qm85K3RRalNMNWpZTHZReFUwOHBLMkRVVEg2S0dvUFA0R3FETEJK?=
- =?utf-8?B?NlZjR3NmdkJ0VWppc0V3dlg4RHJUbW5pR3kwQlhOWUZPTVVxWXZENjZocFNz?=
- =?utf-8?B?dll2bCt2dXM4aEtYSG5qa0cxU3Z4MXIvZ0Zhak1ibnRoTW5CeWI2UG9jR1JC?=
- =?utf-8?B?OWFLUUxzTTZRaTN3b2VPMUpwMVRwRzNzRWp5WkhyZUpKS2RnUFo4a0VuU2FD?=
- =?utf-8?B?R28yMFVLVVBTT2Z2QVVVSU1jRzRQRUlnR1ZveVV1MU5aUm9EZVNUTW1oM3hh?=
- =?utf-8?B?ZDdaa1ExMWhzU3Y0TmZkVFk4TkVQb1FqWkVhNjJhQzRRakVlb3lpOEl4T2Vo?=
- =?utf-8?B?VlE3VUZmN1JlRlRxdndsNFlIbXgxTEhXMVR6RHRMWkhVMFV1c2RzVEdJOWlx?=
- =?utf-8?B?andMWHA3dW5NYmJiUzZuM2Urc2tuZnd6dExsTHdyOXZ1Y1ZqQjNTUStmVXB2?=
- =?utf-8?B?MkNhSnZhR3JqRnJxc29pZTdHTDdMaHkrMVY4UUw5R3B6MGpZSXNpS2ZKNXMy?=
- =?utf-8?B?WGpNQXFFQ0cwSnZXcm14VHY3OFVJc3hBdjJwRkpvdnEwZzFldzc2RVlmWVhj?=
- =?utf-8?B?TUZsT2xDUU84VEtaOUVYaHZmcjZmZGhXc3pocVFSZG9xVFlrZldjMGtWUVY0?=
- =?utf-8?B?eDczQVJCQ3MrekhYVzVuZU44U0toLzFnazhSM1E3U1QrMFViMTN5Z0hVMnE1?=
- =?utf-8?B?dFQrcHZxa2dON0FjSGM4d2VGRCtkai9wYWRmOHk2UVJERW04cUEzemRGL0Rs?=
- =?utf-8?B?UGtnN0huVU1rVjR2WllTZEFkWTZWL1NZbGhKUzczdVEvN1NLNzdKTzE0TVJh?=
- =?utf-8?B?OHZxdzFyZFpjRWdtZXR1ZDBqdTh2YmNvMFlJaUpWNGJOTUU5SzJRMFJNRzNB?=
- =?utf-8?B?cVNIUHhrSWtpcHJtL05zODFBYnQyWUwxK2U5dzNDcVI5dWIwWEU2cEtzTHAz?=
- =?utf-8?B?SXFTYkY1bitLRzhPSTFYUWZmWnliOGUrQ2h3WFVaY2RQdHkvazNWZ2YxWExw?=
- =?utf-8?B?ZXI5eTQweGF0azkzc2VrMGFyYmJPcEFEbnQzSDczRzM1VGdIWjlIbkY1SUU2?=
- =?utf-8?B?VEhuTjNYV0VHOVJ0T1JuUEp0aTZ5VzFqd1pmbVVQSmVHZURScmFGL2RvM2Vx?=
- =?utf-8?B?U0MwODM2akdFZ1BjaUxUYitTbWw3U3FkSzBiOHpPL1FCMkxXU3hheXk5TTU1?=
- =?utf-8?B?MTErZXQrZUtIZ0lsdW9YWWVGaFJ6dUhDb1JUZDdqbFphQVpEdWc3UHRlbCtI?=
- =?utf-8?B?L0tFZGROV3JneHgwOUNUbmt6SW9tTGEwT2RkdG95MXlhb21SYkIvTVBaSWQy?=
- =?utf-8?B?OG1PeFBFMHh0bnB3REo4c1ZYRkJETnRZNExDQmNSdnkweGhDNlIyeGxDZDBo?=
- =?utf-8?B?TVArMnNxd1pCNEhjcmZCcjJmcjc3VFdtVnYyRnQ1SkdSS0pMYW9SWXlreSsz?=
- =?utf-8?B?ZDl0b2dmQzJxSnN6Tng4NlhZa0VXR2FYRldQNlk2cmtoMlFCc3B5UkdIVlp6?=
- =?utf-8?B?NktuSFV4WkJxbzRwbDBiTytDUWJaQW9VRmsyVXgrWW4xMk9hMFgrb0cya1lO?=
- =?utf-8?B?Z1E5ZkgwVjhIenh4WkZ4aTM4SExOM3pvSXZZWnJDRGtob2o5dmFqY1FpUHgz?=
- =?utf-8?B?N21LZUtPSzNCTnNITlBmZTNjOTV4QWFpSlAxL3kzYUtONXVkR0JBUitwYmNl?=
- =?utf-8?B?SHAxVVdhNzhDbk02L1dCRkY4THcvd2R2RWJyMWVoa0lJWE00aXBvTFVFYm9Z?=
- =?utf-8?B?U1U0cm5LbFdJQ1JLMWQ0dDJ3RXQ3M0pUWnN0SjFvZWpmWWN6ZjJxTWRCRWlZ?=
- =?utf-8?B?dDVJS28wZEpKNTJSQXlzY0ZTamVVaDN3OHJucncyZ1IzVXdVMktRbUZGM2dK?=
- =?utf-8?B?UkNOMzZualdyN2FzN2lyV0RIRERXZ1J4VVEwNTU0T2g1S3dScVRpMXhCNUF5?=
- =?utf-8?B?Wk9pZ3RmL2pJN3lxK3Faa2FrZFpuQzljM0JYbGxPVTBuTnpSd0RHYkJhVkdY?=
- =?utf-8?B?MEpHd2VYRGdWT1hKQnVLQWpuTlJ2YUtmWjJMRWlHb2tkMDN0aVZDVGlSK3hi?=
- =?utf-8?Q?tEyU=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S229602AbjHADVv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Jul 2023 23:21:51 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB69A1FC9
+        for <linux-usb@vger.kernel.org>; Mon, 31 Jul 2023 20:21:49 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-5229e0603edso3847a12.1
+        for <linux-usb@vger.kernel.org>; Mon, 31 Jul 2023 20:21:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1690860108; x=1691464908;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zzO/1LcDVMRB/OrxjquBH6be8FG+byeJszof6FJNED4=;
+        b=fJmuoGeTpbIWCHmssy9B43L0Xph9h/r7LrC/wEUz1j/QKNUPziFKWmoFYmjdhk2VWp
+         aviEgUkM/uepWRCBpF2QCLMad2f/IPR8lyHFN3DV9gTHsNjd8+xDpNln29B2DA+4JqKb
+         XhBhBZ/rOSOOOMi9PGwQgP6NhRxoqihZf3j/B95oKlIcTwvwiH9O684PFo1F96YhcTfX
+         wFWpbFEULW1/w0J7cikWliw6Zx7u7WRaT/qLVT/Sh4I493hL66qbjIbxM9KAWZ3RZeTT
+         +rc0w9oTuNxskYJjXtSW1jkEDfnDsmNt2KH22JqGAPla7Tzqy8cR1XtdEzohOvc6NAqV
+         Ofow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690860108; x=1691464908;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zzO/1LcDVMRB/OrxjquBH6be8FG+byeJszof6FJNED4=;
+        b=kwCKF2IP4V+WMqzRQ3G8upxY2pdf7waSY9+DkVgB8k1mk4C3p6Rqb//UoCQgVdJPO9
+         cQz3L8nRCUU8VIjA/3tdJ9DzK5VJfQCQ65zsJ6BV1YDfHTtTWWGR50tPcwUne+SzF5fw
+         AtF6yF+Fby7V0bixjhQgq9KeJWCpU9KNdt67ckUvmbFvf8lTg9BB9RTGWcvenELitEqk
+         Wopzq/K5H64FGGefqjn53eOj2ITfvyYvEfbCrTIeBacYLAz1xPuE0BNyoiwEi/rpXL/R
+         qBzhq++LzDDYRSgB32MArpqDCdXcjp+7GHDI/l0VGfxrtaq1KTQKTjpXBv+aJrZhSfhG
+         fp1w==
+X-Gm-Message-State: ABy/qLZVG6LGYDibRHV1ZUYUNB3UMeYfHvKky+RsED/WIEzYxW01sPEX
+        C54jEgpfbrOog/hoA8SapClrzDStsZvIudMrg8d8Dg==
+X-Google-Smtp-Source: APBJJlHiBDrGA9hMcrRbXx5+ScfnkbUYR2tzQ1Bn7KtqXKPaoSy5GWQRjVQXT3oVZs7I7SzJWvw7QJTQSvsHdvv8OkI=
+X-Received: by 2002:a50:f69d:0:b0:519:7d2:e256 with SMTP id
+ d29-20020a50f69d000000b0051907d2e256mr266704edn.0.1690860108303; Mon, 31 Jul
+ 2023 20:21:48 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DB7PR04MB4505.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0ba4d300-c85f-4a8b-30ce-08db923582af
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Aug 2023 02:17:52.6061
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 9Sn3F7IVsH6qdcJaFpRwK1YkKhQ6GclEmOPqGLJvVMb35I9hVp31J/bZagkj7wVUU61eQjs0ryHjVhDvhqEtjA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8896
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230630065711.801569-1-hhhuuu@google.com> <ZMeVnbnIuf1bNuKQ@kuha.fi.intel.com>
+In-Reply-To: <ZMeVnbnIuf1bNuKQ@kuha.fi.intel.com>
+From:   Jimmy Hu <hhhuuu@google.com>
+Date:   Tue, 1 Aug 2023 11:21:36 +0800
+Message-ID: <CAJh=zjJBUb2JpEh4Tf6z0V9KTy2jufRQktuJt2oMYbeu52PXzg@mail.gmail.com>
+Subject: Re: [PATCH] usb: typec: tcpm: Add IS_ERR_OR_NULL check for port->partner
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     linux@roeck-us.net, gregkh@linuxfoundation.org, kyletso@google.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgSGVpa2tpIGFuZCBHdWVudGVyLA0KDQo+IE9uIDcvMzEvMjMgMDY6MzMsIEhlaWtraSBLcm9n
-ZXJ1cyB3cm90ZToNCj4gPiBIaSwNCj4gPg0KPiA+IEknbSBzb3JyeSB0byBrZWVwIHlvdSB3YWl0
-aW5nLg0KPiA+DQo+ID4gT24gRnJpLCBKdW4gMzAsIDIwMjMgYXQgMDY6NTY6NTZQTSArMDgwMCwg
-WHUgWWFuZyB3cm90ZToNCj4gPj4gUEQzLjAgU3BlYyA2LjQuMS4zLjEgc2FpZDoNCj4gPj4gRm9y
-IGEgU2luayByZXF1aXJpbmcgbm8gcG93ZXIgZnJvbSB0aGUgU291cmNlLCB0aGUgVm9sdGFnZSAo
-QjE54oCmMTApDQo+ID4+IFNoYWxsIGJlIHNldCB0byA1ViBhbmQgdGhlIE9wZXJhdGlvbmFsIEN1
-cnJlbnQgU2hhbGwgYmUgc2V0IHRvIDBtQS4NCj4gPj4NCj4gPj4gVGhlcmVmb3JlLCB3ZSBjYW4g
-a2VlcCBzaW5rIHBhdGggY2xvc2VkIGlmIHRoZSBvcGVyYXRpb25hbCBjdXJyZW50IG9mDQo+ID4+
-IHRoZSBmaXJzdCBmaXhlZCBQRE8gaXMgMG1BLg0KPiA+Pg0KPiA+PiBTaWduZWQtb2ZmLWJ5OiBY
-dSBZYW5nIDx4dS55YW5nXzJAbnhwLmNvbT4NCj4gPj4gLS0tDQo+ID4+ICAgZHJpdmVycy91c2Iv
-dHlwZWMvdGNwbS90Y3BtLmMgfCAxMiArKysrKysrKysrLS0NCj4gPj4gICAxIGZpbGUgY2hhbmdl
-ZCwgMTAgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkNCj4gPj4NCj4gPj4gZGlmZiAtLWdp
-dCBhL2RyaXZlcnMvdXNiL3R5cGVjL3RjcG0vdGNwbS5jIGIvZHJpdmVycy91c2IvdHlwZWMvdGNw
-bS90Y3BtLmMNCj4gPj4gaW5kZXggODI5ZDc1ZWJhYjQyLi40ZjdlNGM1MGU4NDcgMTAwNjQ0DQo+
-ID4+IC0tLSBhL2RyaXZlcnMvdXNiL3R5cGVjL3RjcG0vdGNwbS5jDQo+ID4+ICsrKyBiL2RyaXZl
-cnMvdXNiL3R5cGVjL3RjcG0vdGNwbS5jDQo+ID4+IEBAIC00MzAxLDcgKzQzMDEsMTIgQEAgc3Rh
-dGljIHZvaWQgcnVuX3N0YXRlX21hY2hpbmUoc3RydWN0IHRjcG1fcG9ydCAqcG9ydCkNCj4gPj4g
-ICAgICAgICAgICAgICAgICAgICAgaWYgKHBvcnQtPnNsb3dfY2hhcmdlcl9sb29wICYmIChjdXJy
-ZW50X2xpbSA+IFBEX1BfU05LX1NUREJZX01XIC8gNSkpDQo+ID4+ICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgY3VycmVudF9saW0gPSBQRF9QX1NOS19TVERCWV9NVyAvIDU7DQo+ID4+ICAg
-ICAgICAgICAgICAgICAgICAgIHRjcG1fc2V0X2N1cnJlbnRfbGltaXQocG9ydCwgY3VycmVudF9s
-aW0sIDUwMDApOw0KPiA+PiAtICAgICAgICAgICAgICAgICAgICB0Y3BtX3NldF9jaGFyZ2UocG9y
-dCwgdHJ1ZSk7DQo+ID4+ICsNCj4gPj4gKyAgICAgICAgICAgICAgICAgICAgaWYgKHBkb19tYXhf
-Y3VycmVudChwb3J0LT5zbmtfcGRvWzBdKSkNCj4gPj4gKyAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICB0Y3BtX3NldF9jaGFyZ2UocG9ydCwgdHJ1ZSk7DQo+ID4+ICsgICAgICAgICAgICAgICAg
-ICAgIGVsc2UNCj4gPj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICB0Y3BtX2xvZyhwb3J0
-LCAiTm90IHJlcXVpcmUgcG93ZXIgZnJvbSBTb3VyY2UiKTsNCj4gPj4gKw0KPiA+PiAgICAgICAg
-ICAgICAgICAgICAgICBpZiAoIXBvcnQtPnBkX3N1cHBvcnRlZCkNCj4gPj4gICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICB0Y3BtX3NldF9zdGF0ZShwb3J0LCBTTktfUkVBRFksIDApOw0KPiA+
-PiAgICAgICAgICAgICAgICAgICAgICBlbHNlDQo+ID4+IEBAIC00NTgyLDcgKzQ1ODcsMTAgQEAg
-c3RhdGljIHZvaWQgcnVuX3N0YXRlX21hY2hpbmUoc3RydWN0IHRjcG1fcG9ydCAqcG9ydCkNCj4g
-Pj4gICAgICAgICAgICAgICAgICAgICAgdGNwbV9zZXRfY3VycmVudF9saW1pdChwb3J0LA0KPiA+
-PiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHRjcG1fZ2V0X2N1
-cnJlbnRfbGltaXQocG9ydCksDQo+ID4+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgNTAwMCk7DQo+ID4+IC0gICAgICAgICAgICAgICAgICAgIHRjcG1fc2V0X2No
-YXJnZShwb3J0LCB0cnVlKTsNCj4gPj4gKyAgICAgICAgICAgICAgICAgICAgaWYgKHBkb19tYXhf
-Y3VycmVudChwb3J0LT5zbmtfcGRvWzBdKSkNCj4gPj4gKyAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICB0Y3BtX3NldF9jaGFyZ2UocG9ydCwgdHJ1ZSk7DQo+ID4+ICsgICAgICAgICAgICAgICAg
-ICAgIGVsc2UNCj4gPj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICB0Y3BtX2xvZyhwb3J0
-LCAiTm90IHJlcXVpcmUgcG93ZXIgZnJvbSBTb3VyY2UiKTsNCj4gPg0KPiA+IFNob3VsZG4ndCB5
-b3Ugc3RpbGwgYWx3YXlzIGNhbGwgdGNwbV9zZXRfY2hhcmdlKCk/DQo+ID4NCj4gPiAgICAgICAg
-ICB0Y3BtX3NldF9jaGFyZ2UocG9ydCwgcGRvX21heF9jdXJyZW50KHBvcnQtPnNua19wZG9bMF0p
-KTsNCj4gPg0KPiANCj4gSSB0aGluayBzbywgc29tZXRoaW5nIGxpa2UNCj4gICAgICAgICB0Y3Bt
-X3NldF9jaGFyZ2UocG9ydCwgISFwZG9fbWF4X2N1cnJlbnQocG9ydC0+c25rX3Bkb1swXSkpOw0K
-DQpJIGFzc3VtZSB0aGUgc2luayBwYXRoIGlzIGFscmVhZHkgY2xvc2VkIGJlZm9yZSB0Y3BtX3Nl
-dF9jaGFyZ2UoKS4gQnV0DQp0aGlzIHdheSBvZiBoYW5kbGluZyBpcyBhbHNvIG9rYXkgZm9yIG1l
-LiBXaWxsIHNlbmQgb3V0IHYyIGxhdGVyLg0KDQpUaGFua3MsDQpYdSBZYW5nDQoNCj4gDQo+IEd1
-ZW50ZXINCj4gDQo+ID4gSSB0aGluayB3ZSBuZWVkIHRvIHdhaXQgZm9yIGNvbW1lbnRzIGZyb20g
-R3VlbnRlci4gSSBkb24ndCBrbm93IHRoaXMNCj4gPiBkcml2ZXIgd2VsbCBlbm91Z2guDQo+ID4N
-Cj4gPiB0aGFua3MsDQo+ID4NCg0K
+On Mon, Jul 31, 2023 at 7:06=E2=80=AFPM Heikki Krogerus
+<heikki.krogerus@linux.intel.com> wrote:
+>
+> Hi,
+>
+> I'm sorry to keep you waiting.
+>
+> On Fri, Jun 30, 2023 at 06:57:11AM +0000, Jimmy Hu wrote:
+> > port->partner may be an error or NULL, so we must check it with
+> > IS_ERR_OR_NULL() before dereferencing it.
+>
+> Have you seen this happening? Maybe the partner check should happen
+> earlier, before tcpm_pd_svdm() is even called?
+>
+> > Fixes: 5e1d4c49fbc8 ("usb: typec: tcpm: Determine common SVDM Version")
+> > Signed-off-by: Jimmy Hu <hhhuuu@google.com>
+> > ---
+> >  drivers/usb/typec/tcpm/tcpm.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcp=
+m.c
+> > index 829d75ebab42..cd2590eead04 100644
+> > --- a/drivers/usb/typec/tcpm/tcpm.c
+> > +++ b/drivers/usb/typec/tcpm/tcpm.c
+> > @@ -1626,6 +1626,8 @@ static int tcpm_pd_svdm(struct tcpm_port *port, s=
+truct typec_altmode *adev,
+> >                               break;
+> >
+> >                       if (PD_VDO_SVDM_VER(p[0]) < svdm_version) {
+> > +                             if (IS_ERR_OR_NULL(port->partner))
+> > +                                     break;
+> >                               typec_partner_set_svdm_version(port->part=
+ner,
+> >                                                              PD_VDO_SVD=
+M_VER(p[0]));
+> >                               svdm_version =3D PD_VDO_SVDM_VER(p[0]);
+>
+> Now you will still build a response? I'm pretty sure you don't want
+> that.
+>
+> Do we need to do anything in this function if the partner is lost? If
+> not, then why not just check the partner in the beginning of the
+> function. Or just make sure we don't even call tcpm_pd_svdm() if
+> there's no partner.
+>
+> thanks,
+>
+> --
+> heikki
+
+Yes, we've seen this. Here is part of the last kmsg.
+
+[978098.478754][  T319] typec port0: failed to register partner (-17)
+...
+[978101.505668][  T319] Unable to handle kernel NULL pointer
+dereference at virtual address 000000000000039f
+[978101.864439][  T319] CPU: 5 PID: 319 Comm: i2c-max77759tcp Tainted:
+G        W  O      5.10.66-android12-9-00229-gd736cbf8d9ac-ab7921439
+#1
+[978101.866919][ T1176] [07:31:46.926532][dhd][wlan]
+[978101.876939][  T319] Hardware name: Raven DVT (DT)
+[978101.876949][  T319] pstate: 80c00005 (Nzcv daif +PAN +UAO -TCO BTYPE=3D=
+--)
+[978101.876982][  T319] pc : tcpm_pd_data_request+0x310/0x13fc
+[978101.876987][  T319] lr : tcpm_pd_data_request+0x298/0x13fc
+...
+978101.886481][  T319] Call trace:
+[978101.886492][  T319]  tcpm_pd_data_request+0x310/0x13fc
+[978101.886506][  T319]  tcpm_pd_rx_handler+0x100/0x9e8
+[978101.898747][  T319]  kthread_worker_fn+0x178/0x58c
+[978101.898756][  T319]  kthread+0x150/0x200
+[978101.898769][  T319]  ret_from_fork+0x10/0x30
+
+Since this happens when PD_VDO_SVDM_VER(p[0]) < svdm_version, I think
+we can check the partner after the condition is met.
+Or check it when entering CMD_DISCOVER_IDENT case. Just like:
+case CMDT_RSP_ACK:
+/* silently drop message if we are not connected */
+if (IS_ERR_OR_NULL(port->partner))
+break;
+
+Thanks,
+Jimmy
