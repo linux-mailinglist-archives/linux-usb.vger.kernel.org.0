@@ -2,43 +2,43 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C59EF76B1C8
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Aug 2023 12:29:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3389C76B1C9
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Aug 2023 12:29:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231989AbjHAK32 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Aug 2023 06:29:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49120 "EHLO
+        id S231961AbjHAK3p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Aug 2023 06:29:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230294AbjHAK30 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Aug 2023 06:29:26 -0400
+        with ESMTP id S230294AbjHAK3o (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Aug 2023 06:29:44 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA9D0DB
-        for <linux-usb@vger.kernel.org>; Tue,  1 Aug 2023 03:29:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F3EDB
+        for <linux-usb@vger.kernel.org>; Tue,  1 Aug 2023 03:29:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5936E61528
-        for <linux-usb@vger.kernel.org>; Tue,  1 Aug 2023 10:29:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BBAF6C433C7
-        for <linux-usb@vger.kernel.org>; Tue,  1 Aug 2023 10:29:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BFC7861529
+        for <linux-usb@vger.kernel.org>; Tue,  1 Aug 2023 10:29:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2DFE9C433C8
+        for <linux-usb@vger.kernel.org>; Tue,  1 Aug 2023 10:29:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690885764;
-        bh=+5bgkXlwMmE5+z/x2hD3L5/pOqUI+BkrPoSqKljFMZg=;
+        s=k20201202; t=1690885782;
+        bh=6vr5dDdeilL3GcaoYBqTl0b/3gP6Ukr7lfhO+DrgocY=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=HGvZCb6A8WioGyX+jUMZpP5vt4g6+b3GICwvjvQCy4ABd1S6sAZIXFukB2Z0VEk6y
-         vbnuEhF0ODtAdrjnt5jnC7jhR8BEZKKTeZ4k7zkPevj+5PUYigqD9pk+T/DEDWoUby
-         Px0aTW06XuX3LM2GYL0Lo4e6+UY+Fuenp8g1UCty+YhY8zBoTb/k0cHxdMFWVdWIlv
-         8qAERgL8RMb1NvcqqQlof05VMLvaYBUH7SfWObpXPinb5RO+i21sVMXMly9+f5Dbli
-         Wg+C6KgZtOd/JdaXjPL1/bkXNGQxz7d5VqVyJqPkKmCqtrjVMi0s4U80GarQR7JpJB
-         ilODDTZwPV6yg==
+        b=Dro/TGrGYibre3zy67NTRDF97rdPEEXIJwMeKubeTOLATecEoY86miYN+zTMDZeMC
+         a5bxYpCsOg5C7Xa7sc/DvSSqBS0V//z/zPIKwcNmLGm6AsixD3Bziqz4Nj6qCBz9QL
+         HQzsNb90QzT6VQc+fNigEFfZZoedg7HOZG4B4vnDU9XsKuIJpnObmME0P8neKXiGbE
+         jGzBWzW+geRXKeA9feul3uFTveLZESUp38pNSsrr8TS9IVVRZx3FyFpvxExu7hID9V
+         soez5nkg9DOSBbK7XFRzhGlRZoFmeF1gvgel92DxuBAZTl5STcICllKHy67aIDnNkQ
+         h4mcIZjheyV1g==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id AD4DFC53BD0; Tue,  1 Aug 2023 10:29:24 +0000 (UTC)
+        id 1D4AEC53BD0; Tue,  1 Aug 2023 10:29:42 +0000 (UTC)
 From:   bugzilla-daemon@kernel.org
 To:     linux-usb@vger.kernel.org
 Subject: [Bug 217744] "usb usb2-port3: Cannot enable. Maybe the USB cable is
  bad?" Tiger Lake-LP Thunderbolt 4 [8086:9a13]
-Date:   Tue, 01 Aug 2023 10:29:24 +0000
+Date:   Tue, 01 Aug 2023 10:29:41 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -54,7 +54,7 @@ X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-217744-208809-Y335XiBD4g@https.bugzilla.kernel.org/>
+Message-ID: <bug-217744-208809-bObhbA0RP7@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-217744-208809@https.bugzilla.kernel.org/>
 References: <bug-217744-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -74,10 +74,10 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D217744
 
---- Comment #1 from TJ (linux@iam.tj) ---
-Created attachment 304747
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D304747&action=3Dedit
-lspci -nnk
+--- Comment #2 from TJ (linux@iam.tj) ---
+Created attachment 304748
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D304748&action=3Dedit
+lsusb -vt
 
 --=20
 You may reply to this email to add a comment.
