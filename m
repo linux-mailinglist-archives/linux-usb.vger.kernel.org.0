@@ -2,154 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86F9576A76F
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Aug 2023 05:21:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 716A576A7F3
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Aug 2023 06:44:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbjHADVx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 Jul 2023 23:21:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49414 "EHLO
+        id S231173AbjHAEoE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Aug 2023 00:44:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbjHADVv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 Jul 2023 23:21:51 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB69A1FC9
-        for <linux-usb@vger.kernel.org>; Mon, 31 Jul 2023 20:21:49 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-5229e0603edso3847a12.1
-        for <linux-usb@vger.kernel.org>; Mon, 31 Jul 2023 20:21:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1690860108; x=1691464908;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zzO/1LcDVMRB/OrxjquBH6be8FG+byeJszof6FJNED4=;
-        b=fJmuoGeTpbIWCHmssy9B43L0Xph9h/r7LrC/wEUz1j/QKNUPziFKWmoFYmjdhk2VWp
-         aviEgUkM/uepWRCBpF2QCLMad2f/IPR8lyHFN3DV9gTHsNjd8+xDpNln29B2DA+4JqKb
-         XhBhBZ/rOSOOOMi9PGwQgP6NhRxoqihZf3j/B95oKlIcTwvwiH9O684PFo1F96YhcTfX
-         wFWpbFEULW1/w0J7cikWliw6Zx7u7WRaT/qLVT/Sh4I493hL66qbjIbxM9KAWZ3RZeTT
-         +rc0w9oTuNxskYJjXtSW1jkEDfnDsmNt2KH22JqGAPla7Tzqy8cR1XtdEzohOvc6NAqV
-         Ofow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690860108; x=1691464908;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zzO/1LcDVMRB/OrxjquBH6be8FG+byeJszof6FJNED4=;
-        b=kwCKF2IP4V+WMqzRQ3G8upxY2pdf7waSY9+DkVgB8k1mk4C3p6Rqb//UoCQgVdJPO9
-         cQz3L8nRCUU8VIjA/3tdJ9DzK5VJfQCQ65zsJ6BV1YDfHTtTWWGR50tPcwUne+SzF5fw
-         AtF6yF+Fby7V0bixjhQgq9KeJWCpU9KNdt67ckUvmbFvf8lTg9BB9RTGWcvenELitEqk
-         Wopzq/K5H64FGGefqjn53eOj2ITfvyYvEfbCrTIeBacYLAz1xPuE0BNyoiwEi/rpXL/R
-         qBzhq++LzDDYRSgB32MArpqDCdXcjp+7GHDI/l0VGfxrtaq1KTQKTjpXBv+aJrZhSfhG
-         fp1w==
-X-Gm-Message-State: ABy/qLZVG6LGYDibRHV1ZUYUNB3UMeYfHvKky+RsED/WIEzYxW01sPEX
-        C54jEgpfbrOog/hoA8SapClrzDStsZvIudMrg8d8Dg==
-X-Google-Smtp-Source: APBJJlHiBDrGA9hMcrRbXx5+ScfnkbUYR2tzQ1Bn7KtqXKPaoSy5GWQRjVQXT3oVZs7I7SzJWvw7QJTQSvsHdvv8OkI=
-X-Received: by 2002:a50:f69d:0:b0:519:7d2:e256 with SMTP id
- d29-20020a50f69d000000b0051907d2e256mr266704edn.0.1690860108303; Mon, 31 Jul
- 2023 20:21:48 -0700 (PDT)
+        with ESMTP id S229461AbjHAEoD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Aug 2023 00:44:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BFDE10C7;
+        Mon, 31 Jul 2023 21:44:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 750B761291;
+        Tue,  1 Aug 2023 04:44:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A7C5C433C8;
+        Tue,  1 Aug 2023 04:44:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1690865040;
+        bh=GjKxAXGP2fKgPoDAoWw83ehKfw7SlLEc4M0e89fOPiQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=U8O3nyeM0AMZiXnYX0AoDHRnq4zfo0vJyJ6dzhbcI0J93lY0sqLVVxBaIBTeQMpPc
+         waQSRhp9l1X1aaUEVrDs4Ci89XxyQnzZhvdKdRP2PjYQlzLe4P+8a7KPm9czHrKBmF
+         7onO7P5feclOx0fwZdFCi5RmOqz6zhEGSGb+WfXY=
+Date:   Tue, 1 Aug 2023 06:43:58 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Elson Serrao <quic_eserrao@quicinc.com>
+Cc:     Surong Pang <surong.pang@unisoc.com>, Thinh.Nguyen@synopsys.com,
+        felipe.balbi@linux.intel.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rogerq@kernel.org,
+        Orson.Zhai@unisoc.com, Chunyan.Zhang@unisoc.com,
+        Zhiyong.liu@unisoc.com, Surong.Pang@gmail.com
+Subject: Re: [PATCH V2] usb: dwc3: gadget: Let pm runtime get/put paired
+Message-ID: <2023080128-bubble-frosty-92c8@gregkh>
+References: <20230801011548.30232-1-surong.pang@unisoc.com>
+ <e8d9652f-3b81-319a-7ca6-9b656eac6f40@quicinc.com>
 MIME-Version: 1.0
-References: <20230630065711.801569-1-hhhuuu@google.com> <ZMeVnbnIuf1bNuKQ@kuha.fi.intel.com>
-In-Reply-To: <ZMeVnbnIuf1bNuKQ@kuha.fi.intel.com>
-From:   Jimmy Hu <hhhuuu@google.com>
-Date:   Tue, 1 Aug 2023 11:21:36 +0800
-Message-ID: <CAJh=zjJBUb2JpEh4Tf6z0V9KTy2jufRQktuJt2oMYbeu52PXzg@mail.gmail.com>
-Subject: Re: [PATCH] usb: typec: tcpm: Add IS_ERR_OR_NULL check for port->partner
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     linux@roeck-us.net, gregkh@linuxfoundation.org, kyletso@google.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e8d9652f-3b81-319a-7ca6-9b656eac6f40@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 31, 2023 at 7:06=E2=80=AFPM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
->
-> Hi,
->
-> I'm sorry to keep you waiting.
->
-> On Fri, Jun 30, 2023 at 06:57:11AM +0000, Jimmy Hu wrote:
-> > port->partner may be an error or NULL, so we must check it with
-> > IS_ERR_OR_NULL() before dereferencing it.
->
-> Have you seen this happening? Maybe the partner check should happen
-> earlier, before tcpm_pd_svdm() is even called?
->
-> > Fixes: 5e1d4c49fbc8 ("usb: typec: tcpm: Determine common SVDM Version")
-> > Signed-off-by: Jimmy Hu <hhhuuu@google.com>
+On Mon, Jul 31, 2023 at 06:33:04PM -0700, Elson Serrao wrote:
+> 
+> 
+> On 7/31/2023 6:15 PM, Surong Pang wrote:
+> > Pm_runtime_get is called when setting pending_events to true.
+> > Pm_runtime_put is needed for pairing with pm_runtime_get.
+> > 
+> > Fixes: fc8bb91bc83e ("usb: dwc3: implement runtime PM")
+> > Signed-off-by: Surong Pang <surong.pang@unisoc.com>
+> > 
 > > ---
-> >  drivers/usb/typec/tcpm/tcpm.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcp=
-m.c
-> > index 829d75ebab42..cd2590eead04 100644
-> > --- a/drivers/usb/typec/tcpm/tcpm.c
-> > +++ b/drivers/usb/typec/tcpm/tcpm.c
-> > @@ -1626,6 +1626,8 @@ static int tcpm_pd_svdm(struct tcpm_port *port, s=
-truct typec_altmode *adev,
-> >                               break;
-> >
-> >                       if (PD_VDO_SVDM_VER(p[0]) < svdm_version) {
-> > +                             if (IS_ERR_OR_NULL(port->partner))
-> > +                                     break;
-> >                               typec_partner_set_svdm_version(port->part=
-ner,
-> >                                                              PD_VDO_SVD=
-M_VER(p[0]));
-> >                               svdm_version =3D PD_VDO_SVDM_VER(p[0]);
->
-> Now you will still build a response? I'm pretty sure you don't want
-> that.
->
-> Do we need to do anything in this function if the partner is lost? If
-> not, then why not just check the partner in the beginning of the
-> function. Or just make sure we don't even call tcpm_pd_svdm() if
-> there's no partner.
->
-> thanks,
->
-> --
-> heikki
+> > V2: add Fixes tag, fix Fixes tag
+> > ---
+> >   drivers/usb/dwc3/gadget.c | 1 +
+> >   1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> > index 5fd067151fbf..9c835c5f9928 100644
+> > --- a/drivers/usb/dwc3/gadget.c
+> > +++ b/drivers/usb/dwc3/gadget.c
+> > @@ -4720,5 +4720,6 @@ void dwc3_gadget_process_pending_events(struct dwc3 *dwc)
+> >   		dwc3_interrupt(dwc->irq_gadget, dwc->ev_buf);
+> >   		dwc->pending_events = false;
+> >   		enable_irq(dwc->irq_gadget);
+> > +		pm_runtime_put(dwc->dev);
+> >   	}
+> >   }
+> 
+> I am already handling this change as part of below series. Will be uploading
+> a separate patch based on the feedback from Roger.
+> 
+> https://lore.kernel.org/all/be57511d-2005-a1f5-d5a5-809e71029aec@quicinc.com/
 
-Yes, we've seen this. Here is part of the last kmsg.
+But this should be fixed now, and properly backported to stable kernels.
+There's no need to wait for a different patch series if this one is
+correct, right?
 
-[978098.478754][  T319] typec port0: failed to register partner (-17)
-...
-[978101.505668][  T319] Unable to handle kernel NULL pointer
-dereference at virtual address 000000000000039f
-[978101.864439][  T319] CPU: 5 PID: 319 Comm: i2c-max77759tcp Tainted:
-G        W  O      5.10.66-android12-9-00229-gd736cbf8d9ac-ab7921439
-#1
-[978101.866919][ T1176] [07:31:46.926532][dhd][wlan]
-[978101.876939][  T319] Hardware name: Raven DVT (DT)
-[978101.876949][  T319] pstate: 80c00005 (Nzcv daif +PAN +UAO -TCO BTYPE=3D=
---)
-[978101.876982][  T319] pc : tcpm_pd_data_request+0x310/0x13fc
-[978101.876987][  T319] lr : tcpm_pd_data_request+0x298/0x13fc
-...
-978101.886481][  T319] Call trace:
-[978101.886492][  T319]  tcpm_pd_data_request+0x310/0x13fc
-[978101.886506][  T319]  tcpm_pd_rx_handler+0x100/0x9e8
-[978101.898747][  T319]  kthread_worker_fn+0x178/0x58c
-[978101.898756][  T319]  kthread+0x150/0x200
-[978101.898769][  T319]  ret_from_fork+0x10/0x30
+thanks,
 
-Since this happens when PD_VDO_SVDM_VER(p[0]) < svdm_version, I think
-we can check the partner after the condition is met.
-Or check it when entering CMD_DISCOVER_IDENT case. Just like:
-case CMDT_RSP_ACK:
-/* silently drop message if we are not connected */
-if (IS_ERR_OR_NULL(port->partner))
-break;
-
-Thanks,
-Jimmy
+greg k-h
