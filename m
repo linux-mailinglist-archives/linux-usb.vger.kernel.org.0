@@ -2,127 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E22A76B63F
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Aug 2023 15:50:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E140E76B6A6
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Aug 2023 16:03:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232359AbjHANug (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Aug 2023 09:50:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51350 "EHLO
+        id S234371AbjHAODl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Aug 2023 10:03:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbjHANuf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Aug 2023 09:50:35 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB7EFB
-        for <linux-usb@vger.kernel.org>; Tue,  1 Aug 2023 06:50:34 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-31427ddd3fbso5238646f8f.0
-        for <linux-usb@vger.kernel.org>; Tue, 01 Aug 2023 06:50:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690897833; x=1691502633;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IJuCqMY/WyVWQqhvhXoSdBwu9Yp8tzubG+TPvAbbNM0=;
-        b=jZdycMa2But4VpDOKGfaEG6Ogd98YDBj/OKXqU8rNJrVNpZEcWJJXM96TadK3jl/5j
-         uyqQVlJSWpVCHSj5FjcfYLU0le4a5aAGdmPNVp2D16WWhj+R3GtLs/qJoUcC6eqZLwwK
-         fvBhSWdCASJ649iMs/nhq9ezosL9o33/dCWt1bAGjTWNbXll68KvYzONgslOCq0o+XvK
-         to2zxlbv0YRlVsrC9cFgfa1SUDjmXeiAczOORUCHAU9ckvQBx0eGIuxz3hUfuzZaSE3U
-         56FoPO3G4YHJbfQc6IxqP0h+I/MbxCyJPXVi+KgpfPx3zZC8ibcoqS3R5a9SoIr3MqKs
-         jVdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690897833; x=1691502633;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IJuCqMY/WyVWQqhvhXoSdBwu9Yp8tzubG+TPvAbbNM0=;
-        b=hv6dgEIhaFkckj0Cnqo2zsr5E/mapBvXwgnFeLa3EqD1i/nQ9Y3Z6FdLCD5KdOr8Rl
-         5+MIGKV3sg9Augceq1yJdb9zm1Ptpg+NQhSKbVdb/RYsIKrOu3tv/2Vnr/UduN59dD8i
-         cRXKRCikNcZwiWozujP6Uw337ib0Gp9WnVGW2491JWhaP+ZYv0/301EdT7GjpQiPtRnI
-         Nmbh0qQ162i64jDpY1GzCHx5wxMMncrIQH+2PKyJLkxKwXifbUZ9+MRpW70TKLmFi3es
-         Dy2cFcFlatA3u3Yb0DG65B+MULtqbURyOpF/qu01102MudWLvQN8prK4s7UiTuExgc8S
-         8ApA==
-X-Gm-Message-State: ABy/qLa7ca0HDml81TUIx3evRIqhA3BPcEGjE1AoM8rOZTS1j4ccdzwG
-        6WIM+74IaVvkOtWh/uuzugUT6yWiBmdflDcrwBU=
-X-Google-Smtp-Source: APBJJlHCzwrT2n/ZEY2tClXquSHSfoSTE6jOjV3Csu0wV5bAAfeXLbOigrmSovPQYx1TDbaGYrEEIg==
-X-Received: by 2002:a5d:494b:0:b0:317:636b:fcb1 with SMTP id r11-20020a5d494b000000b00317636bfcb1mr2239485wrs.27.1690897832765;
-        Tue, 01 Aug 2023 06:50:32 -0700 (PDT)
-Received: from [192.168.69.115] ([176.176.174.59])
-        by smtp.gmail.com with ESMTPSA id r8-20020adfe688000000b0031434c08bb7sm16073501wrm.105.2023.08.01.06.50.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Aug 2023 06:50:32 -0700 (PDT)
-Message-ID: <76e29459-d407-e2d1-c052-c841bfab9474@linaro.org>
-Date:   Tue, 1 Aug 2023 15:50:30 +0200
+        with ESMTP id S234454AbjHAOD3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Aug 2023 10:03:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B66F6213E
+        for <linux-usb@vger.kernel.org>; Tue,  1 Aug 2023 07:03:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EF5E2615BA
+        for <linux-usb@vger.kernel.org>; Tue,  1 Aug 2023 14:03:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5D870C433C9
+        for <linux-usb@vger.kernel.org>; Tue,  1 Aug 2023 14:03:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1690898601;
+        bh=70X9XXv3kdX2wNG1c9IpVVs9vIlipYAIUt00829U7V0=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=OZ+gXOA902OZxpsZHrlhGavU/jtUfixL39zfKhQzZg2nSm7xzB7yRuIVd9lcyW+D8
+         Gt+r2XjCWm5OgL1rmrghDTuCfQeyiwwFSfWGm5gNQw2xlBhOxyxkcwLNrH62IXXWqS
+         O/4FmfY4+d3sWKF6popIjK2mHZ/eeCKlDy8BPnqKhaCQ2S/RMTmXNuVyXyYJ7c+ePe
+         +L56sqqXM4RUrrZuSMYGC+Cwp/dwAQxoY/5AowtbnKoRw3uauKjlwQ7+04uBJaf3HU
+         GF0tqEXxtOSbJS7p/nSwyZIe2BmlNEDY/nNXz9zOshcKGP3UJA8aK8dA+nDr7hVPOJ
+         jNQdMYm0+t+bQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 3729BC53BCD; Tue,  1 Aug 2023 14:03:21 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 217744] Resume: "usb usb2-port3: Cannot enable. Maybe the USB
+ cable is bad?" Tiger Lake-LP Thunderbolt 4 [8086:9a13]
+Date:   Tue, 01 Aug 2023 14:03:20 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: linux@iam.tj
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-217744-208809-2MEohKLaCy@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-217744-208809@https.bugzilla.kernel.org/>
+References: <bug-217744-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.13.0
-Subject: Re: [PATCH v5 7/7] usb: dwc3: dwc3-octeon: Add SPDX header and
- copyright
-Content-Language: en-US
-To:     Ladislav Michl <oss-lists@triops.cz>,
-        David Daney <david.daney@fungible.com>
-Cc:     linux-mips@vger.kernel.org,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        linux-usb@vger.kernel.org, Liang He <windhl@126.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-References: <ZMd/HzISn0mPsNWt@lenoch> <ZMeAAYx6Z3hlQBNQ@lenoch>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <ZMeAAYx6Z3hlQBNQ@lenoch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 31/7/23 11:33, Ladislav Michl wrote:
-> From: Ladislav Michl <ladis@linux-mips.org>
-> 
-> Assign copyright to indicate driver rewrite is done for RACOM s.r.o.
-> As David no longer works for Marvell (Cavium), I'm to blame for breakage.
-> 
-> Signed-off-by: Ladislav Michl <ladis@linux-mips.org>
-> ---
->   CHANGES:
->   - v2: None
->   - v3: None
->   - v4: Assign copyring to RACOM s.r.o., Mírová 1283, Nové Město na Moravě
->   - v5: None
-> 
->   drivers/usb/dwc3/dwc3-octeon.c | 10 ++++------
->   1 file changed, 4 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-octeon.c b/drivers/usb/dwc3/dwc3-octeon.c
-> index d578110f7afb..6f47262a117a 100644
-> --- a/drivers/usb/dwc3/dwc3-octeon.c
-> +++ b/drivers/usb/dwc3/dwc3-octeon.c
-> @@ -1,11 +1,9 @@
-> +// SPDX-License-Identifier: GPL-2.0
->   /*
-> - * XHCI HCD glue for Cavium Octeon III SOCs.
-> + * DWC3 glue for Cavium Octeon III SOCs.
->    *
->    * Copyright (C) 2010-2017 Cavium Networks
-> - *
-> - * This file is subject to the terms and conditions of the GNU General Public
-> - * License.  See the file "COPYING" in the main directory of this archive
-> - * for more details.
-> + * Copyright (C) 2023 RACOM s.r.o.
->    */
->   
->   #include <linux/bitfield.h>
-> @@ -537,6 +535,6 @@ static struct platform_driver dwc3_octeon_driver = {
->   module_platform_driver(dwc3_octeon_driver);
->   
->   MODULE_ALIAS("platform:dwc3-octeon");
-> -MODULE_AUTHOR("David Daney <david.daney@cavium.com>");
-> +MODULE_AUTHOR("Ladislav Michl <ladis@linux-mips.org>");
->   MODULE_LICENSE("GPL");
->   MODULE_DESCRIPTION("DesignWare USB3 OCTEON III Glue Layer");
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217744
 
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+--- Comment #4 from TJ (linux@iam.tj) ---
+(In reply to Bagas Sanjaya from comment #3)
 
+> Does v6.0 not have this issue? Or is it hardware issue too?
+
+Cannot say. The system when presented has Debian 12 amd64 which uses v6.1
+kernel; Trying latest mainline was to test if the issue has been fixed sinc=
+e.
+
+I've asked the owner to update the PC to the most recent firmware in case t=
+here
+is some issue there but I do not see anything in the firmware changelog to
+indicate it.
+
+It seems to be the Lenovo Thinkpad USB3.x dock - I have seen other people
+mention something like this in support chat channels but never focused on t=
+hose
+issues myself so no idea if this is a systemic problem.
+
+Hopefully the owner can contribute more precise detail here with the precise
+make/model/ID of the external dock.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
