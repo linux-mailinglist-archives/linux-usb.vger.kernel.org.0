@@ -2,127 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C51F76AB40
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Aug 2023 10:43:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D2C276ACC5
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Aug 2023 11:19:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231846AbjHAInF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Aug 2023 04:43:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49248 "EHLO
+        id S232696AbjHAJTs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Aug 2023 05:19:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232107AbjHAImv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Aug 2023 04:42:51 -0400
-Received: from h1.cmg2.smtp.forpsi.com (h1.cmg2.smtp.forpsi.com [81.2.195.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C81DE1B6
-        for <linux-usb@vger.kernel.org>; Tue,  1 Aug 2023 01:42:49 -0700 (PDT)
-Received: from lenoch ([91.218.190.200])
-        by cmgsmtp with ESMTPSA
-        id QkxoqAnWFv5uIQkxpqFl1S; Tue, 01 Aug 2023 10:42:47 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1690879367; bh=JWpGmZjXUjgR7yQlSUk5xck/N4ztdufJt7qH4vqz7mc=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=J1AJYSiZanDiGhwgc38fTBPfllxVmp/STXFdXKyxZTNLfMHEd9Wxbwte1IE1LW1cY
-         LCCKIrQ/hj+CisnNS8ErYF9s6MsiFbdXIsT/qGFNhTln+ujjYiT6HXI2Jfa8B+lBht
-         9l214Lz8UUG6tZddEOmkau0GMXRkdtZgBB2p6TTe/hj7YTIh7+UKzZgZpESBTOElA+
-         97jRINpWDm4FmfmNNk6PN8EgBYRBxWOw1UW4n+4rfo/t6I83++5wrT3G5N8OAAiRXE
-         59W/e/j/AT7ehOdGFXGaE1ZDTd9y5a/aZGvl5Mok0bvwRGUIx7hFWMVlIgU2KHmTax
-         3H8KKfSfThwJg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1690879367; bh=JWpGmZjXUjgR7yQlSUk5xck/N4ztdufJt7qH4vqz7mc=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=J1AJYSiZanDiGhwgc38fTBPfllxVmp/STXFdXKyxZTNLfMHEd9Wxbwte1IE1LW1cY
-         LCCKIrQ/hj+CisnNS8ErYF9s6MsiFbdXIsT/qGFNhTln+ujjYiT6HXI2Jfa8B+lBht
-         9l214Lz8UUG6tZddEOmkau0GMXRkdtZgBB2p6TTe/hj7YTIh7+UKzZgZpESBTOElA+
-         97jRINpWDm4FmfmNNk6PN8EgBYRBxWOw1UW4n+4rfo/t6I83++5wrT3G5N8OAAiRXE
-         59W/e/j/AT7ehOdGFXGaE1ZDTd9y5a/aZGvl5Mok0bvwRGUIx7hFWMVlIgU2KHmTax
-         3H8KKfSfThwJg==
-Date:   Tue, 1 Aug 2023 10:42:44 +0200
-From:   Ladislav Michl <oss-lists@triops.cz>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Liang He <windhl@126.com>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH v5 4/7] usb: dwc3: dwc3-octeon: Avoid half-initialized
- controller state
-Message-ID: <ZMjFhMrnrJRQ2Qlf@lenoch>
-References: <ZMd/HzISn0mPsNWt@lenoch>
- <ZMd/oMRx8ze22/kK@lenoch>
- <20230801003838.ifbydrbwq34df3n3@synopsys.com>
- <ZMiaIUy6d5gVl7mA@lenoch>
+        with ESMTP id S232842AbjHAJTP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Aug 2023 05:19:15 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1ABA198C;
+        Tue,  1 Aug 2023 02:17:30 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37189ds0009279;
+        Tue, 1 Aug 2023 09:04:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=KHfLUQGL6faL0F/nqq7dox/0afIBoQuFJvhxwvUo7Oo=;
+ b=diTWugTb2yTf4hkW+pNfpS9azQ74t3yZV0fCwa3NekRR9yV+aas5eXl5iYZrkTSioqc4
+ t0EKxl/+b82tSbd9zy3q6RwXp0BaVDQwMzIGf0VCiwozB79wKmta5cUZaW6PFLco2eCV
+ p67zCtn4LeG+DDrAgnOax/7Y6+EQQpc0uX9SuJo3yXQr+IQeCCzoTZG0QlJPROz6uHDG
+ /4a1HMTwEfG/aK0rAECPAZ9G3H9EuscWk48Hx0XIKoD0+0DBGc+Zfj908sKZZ6pNuRD/
+ tqC4GfIUdt4rLb+R+OrpgvKbLOLQ+lfNss7uCsgfrfdRlAEz3LHyQD245Yu7ImMJfqai cg== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3s6ckfjr6u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Aug 2023 09:04:11 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3719400G019389
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 1 Aug 2023 09:04:00 GMT
+Received: from hu-prashk-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Tue, 1 Aug 2023 02:03:57 -0700
+From:   Prashanth K <quic_prashk@quicinc.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Prashanth K <quic_prashk@quicinc.com>,
+        "# 5 . 4" <stable@vger.kernel.org>
+Subject: [PATCH v3] usb: common: usb-conn-gpio: Prevent bailing out if initial role is none
+Date:   Tue, 1 Aug 2023 14:33:52 +0530
+Message-ID: <1690880632-12588-1-git-send-email-quic_prashk@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZMiaIUy6d5gVl7mA@lenoch>
-X-CMAE-Envelope: MS4wfFPiDbeufM4QXtXC/gck9KMHReF52FSTt92B82pVsT4ontnMmjF6s0bRsx4IlSjUP7+R8w99DqpRS1MhRaZg4AM03barvp4s+Y8FGarak+KldTT1KmIa
- A+S1kngsnG4gFIY4B7gky5rfXfxu3cOEikHGfc8uBLkq6XIaXrjXqoJMYjz6QvIP3XqTLoJo5D1ywnoaqBWqQo4fgXSF1f1Q2dX/XPXhOakDEZ8iXQSIMcoW
- GbnQNpUOKEFiaYNa20egGpuTI3DXSEpUMcYZwqeQGV+8mFk4HoOyB8XZ9i7T1ePTJaJ7DO9pEeF/WaitK0m70f5yW3Jfvr8SaV91z9l95pFR/VdfYzaNLok/
- 7LE2A2io
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: WOAdOjPmQ1559TjJLMp9b0ORUc9TQPci
+X-Proofpoint-ORIG-GUID: WOAdOjPmQ1559TjJLMp9b0ORUc9TQPci
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-08-01_03,2023-07-31_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 malwarescore=0
+ lowpriorityscore=0 priorityscore=1501 impostorscore=0 adultscore=0
+ bulkscore=0 mlxlogscore=843 spamscore=0 clxscore=1011 mlxscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2306200000 definitions=main-2308010082
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 01, 2023 at 07:37:37AM +0200, Ladislav Michl wrote:
-> Anyway, what about just passing octeon into dwc3_octeon_config_gpio
-> and use all that dirty magic inside. Would that work work for you?
+Currently if we bootup a device without cable connected, then
+usb-conn-gpio won't call set_role() because last_role is same
+as current role. This happens since last_role gets initialised
+to zero during the probe.
 
-Something like this:
+To avoid this, add a new flag initial_detection into struct
+usb_conn_info, which prevents bailing out during initial
+detection.
 
-[PATCH] usb: dwc3: dwc3-octeon: Consolidate pinmux configuration
-
-As there is no pinctrl driver for Octeon, pinmux configuration is done
-in dwc3_octeon_config_gpio function. It has been always done the tricky
-way: there are two UCTLs; first at 0x1180068000000 and second at
-0x1180069000000, so address based test is used to get index to configure
-pin muxing, because DT does not provide that information.
-
-To make pinmux configuration a little less hackish until proper solution
-is developed, move all its logic into dwc3_octeon_config_gpio function.
+Cc: <stable@vger.kernel.org> # 5.4
+Fixes: 4602f3bff266 ("usb: common: add USB GPIO based connection detection driver")
+Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
 ---
- drivers/usb/dwc3/dwc3-octeon.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+v3: Added cc tag as suggested by the patch-bot.
+v2: Updated the bool name to initial_detection.
 
-diff --git a/drivers/usb/dwc3/dwc3-octeon.c b/drivers/usb/dwc3/dwc3-octeon.c
-index 90e1ae66769f..f35dca899d6e 100644
---- a/drivers/usb/dwc3/dwc3-octeon.c
-+++ b/drivers/usb/dwc3/dwc3-octeon.c
-@@ -206,9 +206,10 @@ static inline void dwc3_octeon_writeq(void __iomem *base, uint64_t val)
- 	cvmx_writeq_csr(base, val);
- }
+ drivers/usb/common/usb-conn-gpio.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/common/usb-conn-gpio.c b/drivers/usb/common/usb-conn-gpio.c
+index 766005d..501e8bc9 100644
+--- a/drivers/usb/common/usb-conn-gpio.c
++++ b/drivers/usb/common/usb-conn-gpio.c
+@@ -42,6 +42,7 @@ struct usb_conn_info {
  
--static void dwc3_octeon_config_gpio(int index, int gpio)
-+static void dwc3_octeon_config_gpio(struct dwc3_octeon *octeon, int gpio)
- {
- 	union cvmx_gpio_bit_cfgx gpio_bit;
-+	int index = ((__force uintptr_t)octeon->base >> 24) & 1;
+ 	struct power_supply_desc desc;
+ 	struct power_supply *charger;
++	bool initial_detection;
+ };
  
- 	if ((OCTEON_IS_MODEL(OCTEON_CN73XX) ||
- 	    OCTEON_IS_MODEL(OCTEON_CNF75XX))
-@@ -237,7 +238,7 @@ static inline uint64_t dwc3_octeon_readq(void __iomem *addr)
+ /*
+@@ -86,11 +87,13 @@ static void usb_conn_detect_cable(struct work_struct *work)
+ 	dev_dbg(info->dev, "role %s -> %s, gpios: id %d, vbus %d\n",
+ 		usb_role_string(info->last_role), usb_role_string(role), id, vbus);
  
- static inline void dwc3_octeon_writeq(void __iomem *base, uint64_t val) { }
- 
--static inline void dwc3_octeon_config_gpio(int index, int gpio) { }
-+static inline void dwc3_octeon_config_gpio(struct dwc3_octeon *octeon, int gpio) { }
- 
- static uint64_t octeon_get_io_clock_rate(void)
- {
-@@ -422,7 +423,7 @@ static int dwc3_octeon_setup(struct dwc3_octeon *octeon,
- 		val &= ~USBDRD_UCTL_HOST_PPC_EN;
- 	} else {
- 		val |= USBDRD_UCTL_HOST_PPC_EN;
--		dwc3_octeon_config_gpio(((u64)octeon->base >> 24) & 1, power_gpio);
-+		dwc3_octeon_config_gpio(octeon, power_gpio);
- 		dev_dbg(dev, "power control is using gpio%d\n", power_gpio);
+-	if (info->last_role == role) {
++	if (!info->initial_detection && info->last_role == role) {
+ 		dev_warn(info->dev, "repeated role: %s\n", usb_role_string(role));
+ 		return;
  	}
- 	if (power_active_low)
+ 
++	info->initial_detection = false;
++
+ 	if (info->last_role == USB_ROLE_HOST && info->vbus)
+ 		regulator_disable(info->vbus);
+ 
+@@ -258,6 +261,7 @@ static int usb_conn_probe(struct platform_device *pdev)
+ 	device_set_wakeup_capable(&pdev->dev, true);
+ 
+ 	/* Perform initial detection */
++	info->initial_detection = true;
+ 	usb_conn_queue_dwork(info, 0);
+ 
+ 	return 0;
 -- 
-2.39.2
+2.7.4
 
