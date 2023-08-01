@@ -2,73 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F09476BBF0
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Aug 2023 20:08:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E341876BCF3
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Aug 2023 20:50:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230483AbjHASIL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Aug 2023 14:08:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58340 "EHLO
+        id S229807AbjHASup (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Aug 2023 14:50:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbjHASIK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Aug 2023 14:08:10 -0400
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E724E103;
-        Tue,  1 Aug 2023 11:08:08 -0700 (PDT)
-Received: from pps.filterd (m0134424.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 371Hn07K014036;
-        Tue, 1 Aug 2023 18:08:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : subject :
- date : message-id : references : in-reply-to : content-type :
+        with ESMTP id S229705AbjHASuo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Aug 2023 14:50:44 -0400
+Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B974C1708;
+        Tue,  1 Aug 2023 11:50:42 -0700 (PDT)
+Received: from pps.filterd (m0134420.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 371IW9jZ020422;
+        Tue, 1 Aug 2023 18:50:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type :
  content-transfer-encoding : mime-version; s=pps0720;
- bh=pFjnewi1vLLVy5mT4Srml6ka8/hKtyIdC4RGqJDS3pI=;
- b=EmDaK98elVVefA3jQHwuNjscCipSj0/TBEMhcJ1Cpc3hm1svxA0yKFokQtTbp+iE2oeM
- 4/ILM7Df1FMSot0e9VpsLvtDGje4r+BfMGmUtD7W/obLeFJPQKWdU/Q45ehYOxoaWEZ+
- Wo9NZw5sUuQstg2RiSlWQ7snG/wDAue75jPwcQdSN0PTu5JA5q9RLfDseRDXqfrfxXHJ
- PbkjkPHkLI4sqEG4gHHQ7Znf1VLuGOYgtRvL8t3TCkxWLaA3OpQkFsjN2mT4p4ssyfgz
- Ungw11zdhj12TJt4UMvqx+RNnSrXS824ebi38o5IX1dbQMXloC0/s7f9bX0xdxuxgy4J gA== 
-Received: from p1lg14880.it.hpe.com ([16.230.97.201])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3s6w8pnsv5-1
+ bh=ykka5B8Lp3VXl4+hqMU3/ET+bOw78yNk4K79FmKJqYo=;
+ b=ZffFs6sy1Lf+wIRl+N0iyifKgipzzlfoCxoI7qv7s5UNyrTnzNOob3lVDQqO57dU7Jm8
+ cPw8QNFMXPqgm3gr84nI41juPj+WqRLT37Cf8IoGpeczi/f0KvrryFhPRs1Ca+aKX+gE
+ DB0uY1NczbtnbfYMTxEp+UtFeJ2OKSaqoQjeEeNOUinZ8z8yFWSeAgNalG14u58ZFvUV
+ FR6fQ3C6sttgSZ5hLHU/KEQDzeomxr1a8t/zG7dEXOUnUJ9LjrPa7UMedS3cLx+RammN
+ 32u/HRAPM31Eo9nxsqZGvR6wfkrGQ6FU42aWsXsbYy/8TfLeNyHu83QKPXIj9gYzSPIY xg== 
+Received: from p1lg14879.it.hpe.com ([16.230.97.200])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3s6wdvwtbg-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Aug 2023 18:08:03 +0000
-Received: from p1wg14926.americas.hpqcorp.net (unknown [10.119.18.115])
+        Tue, 01 Aug 2023 18:50:30 +0000
+Received: from p1wg14923.americas.hpqcorp.net (unknown [10.119.18.111])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by p1lg14880.it.hpe.com (Postfix) with ESMTPS id 8AB95800EC5;
-        Tue,  1 Aug 2023 18:08:02 +0000 (UTC)
-Received: from p1wg14924.americas.hpqcorp.net (10.119.18.113) by
- p1wg14926.americas.hpqcorp.net (10.119.18.115) with Microsoft SMTP Server
+        by p1lg14879.it.hpe.com (Postfix) with ESMTPS id DEFD2D2C4;
+        Tue,  1 Aug 2023 18:50:28 +0000 (UTC)
+Received: from p1wg14923.americas.hpqcorp.net (10.119.18.111) by
+ p1wg14923.americas.hpqcorp.net (10.119.18.111) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Tue, 1 Aug 2023 06:08:02 -1200
+ 15.2.986.42; Tue, 1 Aug 2023 06:50:18 -1200
 Received: from p1wg14920.americas.hpqcorp.net (16.230.19.123) by
- p1wg14924.americas.hpqcorp.net (10.119.18.113) with Microsoft SMTP Server
+ p1wg14923.americas.hpqcorp.net (10.119.18.111) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42
- via Frontend Transport; Tue, 1 Aug 2023 06:08:02 -1200
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (192.58.206.38)
+ via Frontend Transport; Tue, 1 Aug 2023 06:50:18 -1200
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (192.58.206.38)
  by edge.it.hpe.com (16.230.19.123) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Tue, 1 Aug 2023 06:08:02 -1200
+ 15.2.986.42; Tue, 1 Aug 2023 06:50:18 -1200
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lg9fRQHxsboyt/mlU1QmWIH4dlDLRYA5OqY+EG8xIBkPkb2/JSIXZt+gjry2Qsc7cYfI/Iv65ydPRGC6Mlnq3tVHXpSEK+KD4I871f5HChZOAW6PkReqjEeJvBu4P7cw1TwWfGm/TjOntebhHiP6K/GAAqHd42CIewq5oPWEK7pAEXYtiyhp2JavW+Ir6mxRKvSmug15Q7zbatph8Rc06YZ1fwnOavVFYN/MAXFAi3j8GtIkDRrfr9uEvg+4TnS/hFQxxav6xDNKm0XBQnDXOxxiLY7lNy8xR5IkyzmFznLneD3BOoYJyHY6vTxqlocMLbBMAAuu6cPFLLiro13zAg==
+ b=FG8KDublbZYZVp49L7FmYa5DqcN+QX+IbfSV1Mh+Th1pVsDJ0q5piLQjN6sNSrcbuXTcL90Agu9H1+A5NVzYAsSvXnfMxR9K2KGNHYrXAvwJvLOGlXE3U77rCrJVeqIiN005ZH4T44tW1K9QZGKxBbhVTMf9JSvn+EcZNi5VYg6bLD9eLAxUoh0owU3KxthTsbk5rKuEHXXxS/E8nev5FD7DkAjuTAc4sVX5LShhURzF1aD8D1VnwaxBKK3vqkd83RBGQuFP59y7Yu64PbmE+4Lp27ul4daTIjlIxFKB/xYUs9E331YctdqkVNKcwCr5D3HiJa5uvYNyeE4Bb3ayGQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pFjnewi1vLLVy5mT4Srml6ka8/hKtyIdC4RGqJDS3pI=;
- b=lsI+olnw4vSL+tT6kRD32P0IMizsPeOacHbdpHyGBwY1nF3wsLTsJ8t1aHHj6jUsAjAqP7kKdoyLG+ylWidWFt3WIUEbLE9j5woHZe+wvChp92bjsdm1O9oGAW3ZzaLZ2SWi1KaFXPTMU6BZPSJ/1ISsbTxp8YDlP44JJzTFso4geVpvu0SRttxOPwMvpggozJnK5oI3bpbFV4fLnY/jHDRFtx15NcuWniazphKemh9eKHl+Xzxe2Qd/gu+zEXeF5dNOqL6vkRL48Y+BRz8al+f7x9XRJ2u0SGRJkprjSE66hITTTOWCgTVdG0DCEIcc4uXdzuRio/C2uLyuj9KnRw==
+ bh=ykka5B8Lp3VXl4+hqMU3/ET+bOw78yNk4K79FmKJqYo=;
+ b=bb4ts7JMEiZgrhz77xpGr9uMJREMVEaeEYk9uLCm1bCQKT16rmWanehOTjg9vBjdikSbOjFd5VOnb3OldiFmYYr1JDrC1a+CQDeCra8Y05sLJtwvSUfhnB+FpD4aSCDYMEwsfouM7BrFrLt4p4TiQdXBWy6oSpwetcOWMR0cn3BpP9xWSJzWVrDWNKPKtpmH+OCrYyLwjVxGzCn/Sp/QGC48ikO/LifUI5M/AnmDSidaIUQS3UBH6ki7lLIy/6cZtfrd7SnUNLqZsyloL6EiFz15QTdIYk5PEtuCBh2AibA+Hr5stOVpF7Em0DIOJgz/NRHtSKdepRM7tJxXiOsRnA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
  header.d=hpe.com; arc=none
-Received: from SJ0PR84MB2085.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:a03:434::14)
- by MW4PR84MB1804.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:303:1b3::13) with
+Received: from PH7PR84MB2078.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:510:155::11)
+ by LV3PR84MB3651.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:408:20f::7) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.45; Tue, 1 Aug
- 2023 18:08:00 +0000
-Received: from SJ0PR84MB2085.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::d0e:da5f:f782:9327]) by SJ0PR84MB2085.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::d0e:da5f:f782:9327%4]) with mapi id 15.20.6631.042; Tue, 1 Aug 2023
- 18:07:59 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6631.44; Tue, 1 Aug
+ 2023 18:50:16 +0000
+Received: from PH7PR84MB2078.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::9d09:a85:f15a:6035]) by PH7PR84MB2078.NAMPRD84.PROD.OUTLOOK.COM
+ ([fe80::9d09:a85:f15a:6035%5]) with mapi id 15.20.6631.043; Tue, 1 Aug 2023
+ 18:50:16 +0000
 From:   "Yu, Richard" <richard.yu@hpe.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "Verdun, Jean-Marie" <verdun@hpe.com>,
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     "Verdun, Jean-Marie" <verdun@hpe.com>,
         "Hawkins, Nick" <nick.hawkins@hpe.com>,
         "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
         "robh+dt@kernel.org" <robh+dt@kernel.org>,
@@ -78,89 +78,81 @@ To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v1 1/3] dt-bindings: usb: Add HPE GXP UDCG Controller
-Thread-Topic: [PATCH v1 1/3] dt-bindings: usb: Add HPE GXP UDCG Controller
-Thread-Index: AQHZsFXDXRwLTnyj+EG3EOG0eweVQK+t+ScAgCfp9zA=
-Date:   Tue, 1 Aug 2023 18:07:59 +0000
-Message-ID: <SJ0PR84MB20854B4A444283E31025FA398D0AA@SJ0PR84MB2085.NAMPRD84.PROD.OUTLOOK.COM>
+Subject: RE: [PATCH v1 2/3] usb: gadget: udc: gxp-udc: add HPE GXP USB support
+Thread-Topic: [PATCH v1 2/3] usb: gadget: udc: gxp-udc: add HPE GXP USB
+ support
+Thread-Index: AQHZsFXCbdwZ6+IdWk2JqVh7Iq8M5K+tkYMAgChUK5A=
+Date:   Tue, 1 Aug 2023 18:50:16 +0000
+Message-ID: <PH7PR84MB207885AAF21466E6FCE26C0B8D0AA@PH7PR84MB2078.NAMPRD84.PROD.OUTLOOK.COM>
 References: <20230706215910.78772-1-richard.yu@hpe.com>
- <20230706215910.78772-2-richard.yu@hpe.com>
- <9f1bd0f1-d93e-243a-4622-721319fd1235@linaro.org>
-In-Reply-To: <9f1bd0f1-d93e-243a-4622-721319fd1235@linaro.org>
+ <20230706215910.78772-3-richard.yu@hpe.com>
+ <9171a00d-9ce5-4aca-8f81-2ad2b6961e17@rowland.harvard.edu>
+In-Reply-To: <9171a00d-9ce5-4aca-8f81-2ad2b6961e17@rowland.harvard.edu>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SJ0PR84MB2085:EE_|MW4PR84MB1804:EE_
-x-ms-office365-filtering-correlation-id: 9862c54a-213b-4ae7-489f-08db92ba3da8
+x-ms-traffictypediagnostic: PH7PR84MB2078:EE_|LV3PR84MB3651:EE_
+x-ms-office365-filtering-correlation-id: cddcf8d3-0ef6-4d20-567f-08db92c0258a
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 61WeoJOJhai+wGRwQsIwHYUpWhEWdsjf6v2eqPKvqXvvaYKnx51KAQEsN07hqDbFYFQfMqtLpciWWugNpQmRcWSANT2j9eXi/886lK6YLvZW3P5N/hNuhU3pmONosuqiSsVLM+QMuDU6LCNP4qBhVTL2jgw6rZpZnLGoN1PYHozhWwSNLc/54SAMBBxj2NLRreDyprJW7e0+7nQA6GFt+pAhVQV3vVcWYRTVbjdnu2T7DRaxMuqhfkumJXm2r76goPoUwgABd1aks+nq0KXsCGfDlDamWrUTcYe6IyjDe1s2gPKuN3MXUq2nGX75GU2PBThsgx5jM/w+ER3XDCANMSrr88U281iK8WJOrloTneWxdO4nu+ZfIlr/pvsSRvFWcgYWyl6iAOfpBESs4d7RNH6Zoh+QWFSRdO2nTkEuvmbclqBPoI/ssP/jMFDyuKtVXz2eWMSAFE1vUwlH9qHJIZngMtdVDd467XQPbpZ7QlaG4nYVBncSpeKggCQKrd0UZsHrJu2CaQiibBbld3Vha7ZHfUErPtxNFmBYRoyrow0NSZL9N4CCD8ARaTmFO1zXiDyHicLvbzc5/Dgd0W0m7B5kdX6HUzR3mO3QDIbGRrOzWQr7aq2U+M970ai01UgoObp0qfgU1N+nYIGR7kbSTA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR84MB2085.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(376002)(136003)(396003)(346002)(366004)(39860400002)(451199021)(64756008)(66556008)(66946007)(66446008)(66476007)(83380400001)(316002)(7696005)(9686003)(71200400001)(110136005)(478600001)(186003)(76116006)(55236004)(6506007)(26005)(38070700005)(2906002)(86362001)(33656002)(52536014)(41300700001)(38100700002)(921005)(122000001)(82960400001)(55016003)(5660300002)(8676002)(8936002);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: yptHmGKIE/CouDF5u7Ax0zTHXeAaeZzxa6jpxe1R+zOaMJhM0mCYwD+pgMy3tAI9ReU9rKUozU7hFaTD1izMV5QPyNUVh7d8lleWS9SZGvADjJm93CkE7uhSbFlOQItjE6kMK1Dq+mHK+A11xkKuXw7+esKE247i0/p/OoCSMozvPDUAMpSGdIEMSKaiGNnz9sQ/rQxhQL/clBt7W4abig8fVinAK1VALm20sxb/NmBoLet39PGbWhAu/cfoqF5M5Dslgbtb/xfS4qM1vsKXJoi2Rd9NmtQoDWX9/VRruo0mXU0CR4pUJ/QNWs0P8xWeTCsm6QrvLBImGrZFGbCGEjhGaHLPlClf+zpRBz7vPKU6pw1aPYH6003q4zZO8XLdX419J+swjLs034/eWjXMCqNlLRtt2C5YvRwehsfMk6xIsrz9O4kZpHGApd2Qu/EzrbqmDTPO+ki8+sNQdg54Zv9VIGC44/zqOwPtaJLZ39r7lc7XM+9Co7j2KD/siZb1YnwTky/fNf2YlAEeMAMrJw/Pcr4b7zY5Ot0KTLfdJ7FTHxb2WA4zBbFvxedWyfYeUtJGf48AHTHKEbQ7a/7XzEh8QvElIAwLMjIgt7huu6WATE5+BugNApX7b2aP70/L
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR84MB2078.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(396003)(136003)(366004)(39860400002)(346002)(376002)(451199021)(9686003)(71200400001)(52536014)(5660300002)(55016003)(186003)(33656002)(6916009)(66946007)(76116006)(66556008)(66446008)(66476007)(4326008)(64756008)(478600001)(54906003)(7696005)(316002)(38070700005)(41300700001)(8936002)(8676002)(122000001)(82960400001)(26005)(38100700002)(86362001)(55236004)(53546011)(2906002)(6506007)(83380400001);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?S3BPRjZOcjRiNUJPWEhmbmpSbEMzWUdjbGVTWGFRbXFaSzRyYXhpNkJxenA1?=
- =?utf-8?B?bFdTZGxHYlN6bStlaXFmS0NBd2YrNnE5ZXRaKy9GaGZyK1g1RGwzSnZQWE1y?=
- =?utf-8?B?amc0RncyTW14UDlBZjYyNE9wV210cExnM0VCNnpaTlBaWkV6enk3a2FzQTJR?=
- =?utf-8?B?cXVRUFdJR2VjaE11K2xPbDZ1RXViNVJTS0tybnNvZjdBaWkyTFRiaGpBQWdF?=
- =?utf-8?B?MG1qVGEyc1poVllsRzAyQm1TOXlWN3JXcExUKzRISUgzMmRHbm9aZlErRUxE?=
- =?utf-8?B?Y3hZQkhWbURxNDdvLytla2xFZWpCaUU4cFpQdnlZbjlDN1Jsb2xCb3lMYWRw?=
- =?utf-8?B?bVFGWW11NkVBblhOUjFFN3pzV0k5Z2VzTjliR3BiZkVUQ0h2ZFJiVFJZUnZO?=
- =?utf-8?B?SlRoczg5VmEveDV5enY5SFBXWTUrOENQdVZ1MmUwZHhRV3NBRkFiS3Nmd1Y5?=
- =?utf-8?B?NzJSK1ppck14M2xNcE1KL1lTS1RXODl2ckIrYTQ0My9rZlFDa09KVWZUKzFy?=
- =?utf-8?B?dGlhbEM3dVBxbEEreEVadStSWVhUUjVBaDlLNGs1NGlWdHlmeTg3dVByOVBj?=
- =?utf-8?B?NkxsN2o4Q2Q1UlduQ3ZDakwxYjdCeUlDQjlKMlRBeUZQSFl0bXF1WTkrUnhv?=
- =?utf-8?B?U1RTN0gvZEZPWWJzMW1PSFQxVHlId0dmZTNiN2xuL1VqNnJFTks5TEpGR1RR?=
- =?utf-8?B?WmVPSkQ3VkdtaVVXZFZlZVBqK25mRnQrc3J3SUVhbHpmTk5qWFJXS1JPYUNU?=
- =?utf-8?B?eGptc1VrR0lxMjcrMnBiOTZKelhPbUxNZGVVNXU1N0ZhVHB4S0NWMTNTcWZT?=
- =?utf-8?B?V3FIeFROZElVbEFIcE1OenNERHRDK2Evbm1TTjdtS0dDd0JpeVVHMnNwdy9S?=
- =?utf-8?B?WS9vTmN6Y1luMjZSazEzRWlCM3gvQmVMS1JkRnZhejZCamw5c1hwNlBIemZ6?=
- =?utf-8?B?WWtvL3dzaXFDdnNlOEd0OTlxK3R4b3BmSG0ySGtXcDlDWER3Rk9DNDJJMkxr?=
- =?utf-8?B?UlA0U283Ym0rYjg1SWFPZnYwRk5EbmJLbFpnV3lXTlM2YVZiMXZBY1A2ZXJo?=
- =?utf-8?B?Z09aN2JzWGloMEN0TUZkVDNRWVNkZkhkTFpxNHZycHNLcWg4c0VMaHBmdEd3?=
- =?utf-8?B?My9kUDU0aGpxUEtua2YrUGRTUVIyT1diVjJVdlg4WVJRMHlSQW9TV1ZiMGlG?=
- =?utf-8?B?enFhcWRweUJndW5TWGYzVjJZQVA5MGZSUENHdkZjdUtYdXJjZkt4WVpzNWpP?=
- =?utf-8?B?OE5xYlZLd3Z4eTNUUzVkYU4vQmQ0VGtnWUx0QVBTdTN0VjBoSlhSSjRwNVhS?=
- =?utf-8?B?bGVJSFhiYXJEWVVyeUZyL3RpbVlYek9ZK1I0SVZ6Y1JsTGFmNTBqdk1ycVBF?=
- =?utf-8?B?YWV5eEhNZ0RNRmZJa0lDbVFYUG9aTGd3UHB2VTlDY0VUK0xIcFJLUzJERXNW?=
- =?utf-8?B?bU5TQUNIZ2VjaHhVcTNNVTJ6d3hPZDlNdThoNGxrWXVrUFZtM0tYb0R1NzR6?=
- =?utf-8?B?cnpIbXFDakNpeVVmeVdtOXRSeXBXQUpSWmJHZFF3UUVVL0pGYzJRU09BVERB?=
- =?utf-8?B?Mm5YQVpQRnRVcnJjSUxCczZKL1IyUWJKcUhtRlA3TjBrTDZORmJNdkZ5NVMx?=
- =?utf-8?B?RnlaQ05ncjV6Mk1Ibnh3VC9FbTVtVHVJK0hIc3dSYjRoUjY2TTQvamhYdmth?=
- =?utf-8?B?V2RtMFRzbTJZZnhXRndYeUtnUm56RGticjU1V3o3RDk3WDB4ck1uY2ExYTJx?=
- =?utf-8?B?YXNUaWU2YTVxTmRKeHd1WHNqZk12NGxUWUhPVGNubmFkK3VUenErTlVTSW4v?=
- =?utf-8?B?MmpzV0huWUM2dEtrVFZaYjE1V0RZSy9HQ3B3WWwxaXNRWUNuVVRUQWJsT0h5?=
- =?utf-8?B?MENpZ1VqZXNwcWkrVldFdnFaWkR3cmttZlJXeDdHbDhGb0xBMEIreHZvejFI?=
- =?utf-8?B?aFZxQVRJTFZjeDFBdktWV1VmVXBsZGZJSjFOZHdjQ2hqcHg1SEl5R1ZlWDBv?=
- =?utf-8?B?eDRCdGFIdkZHNUZKVThJbEI4cTBlQU43b3VzUFJoUU4xU3M0YVY5WHFXVGRv?=
- =?utf-8?B?d1EvN3h5T2tWWDkxY2FSZUR2aU5neEgxTlVqR2tXc0RtUHVMNkdoREtsU1hL?=
- =?utf-8?Q?HwyQCHQ4pQ8dokYjQBhoNrysc?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Ugx+lF0AgLhmc+YPp9MUiMdYk45oKeSeVElD7vZBL/fBOVH9HofWVOHx6mTm?=
+ =?us-ascii?Q?raaqS9j+8gudBjdcRVG5DwTjYi/zRzHmciVJuLk9/R7JHWejcAhiPyHUZVCK?=
+ =?us-ascii?Q?0nKkNqOAFjkgCHWFx/rSh+lJubtFAQziL6ChhCgcx4Hy4JQ9o8gK0iT4wUfK?=
+ =?us-ascii?Q?jrslil2ZMTiOICZHsMK8gw62ht9P2i/PuYWA0HnPRcUg51kdyV34tx+8EKD5?=
+ =?us-ascii?Q?PrQ1AMmxNm3tvvoR/kUkF4A+bauQ9FSRtOmOz5ewrD49TsyAYOk+kigLiKuR?=
+ =?us-ascii?Q?uhyFzDjF5vD2yITggeEYf76Fi3X4zmEqMIWX/M2wZvSGfx/vR4Q9qyQGu82+?=
+ =?us-ascii?Q?vAfjWPmHQnVOPAzE9vEApVJOmFnJMg5xXVlQn1X+7sGSArKbh02GpGXGY95h?=
+ =?us-ascii?Q?hoJefnGrqUBpXFGNSta2ZzXBuHF91sOCjauyWm8LbO6ka20HfUzy2givfPpf?=
+ =?us-ascii?Q?NfFrBEp+8nH+pEyg/30Dz7SXPrHSZsrq3iPB2oIHUcZc/gZkJ3x3ZcyhQE4m?=
+ =?us-ascii?Q?GG828nTZE6akE0Qj1KMC9hqmpypMgUHitnhL7PwQRxdgEAW+2QLxpa7Wj1Sj?=
+ =?us-ascii?Q?kdppDAkoySTbUqCUsGytATDu0Ck+M9t2Ub9jpuXYAxtgGdgjJcbnGfK4LJnZ?=
+ =?us-ascii?Q?r0mZlK5FIqKx759EX9ff4LMYCDc+KLIESmCo1WBjPKQMNMelIMd2IqFwtGki?=
+ =?us-ascii?Q?Md59CYkQ0BiTqMeiP5x3Uq8FCnqIAkJTIRXmcdAT/UcR+z+VUOTvi8o+9ih0?=
+ =?us-ascii?Q?mig6nULqhFv1KU+5UxhbsMftThVQ6MbCJe0lmDJdCFmZsnfaajVn7aDWBkX4?=
+ =?us-ascii?Q?OLDGyrjjwGu4StASe7Wj6JD/e2WXXG1c2Btl22kawOzHgN0YhQ+PKUPzz+zV?=
+ =?us-ascii?Q?kAUtxslCkd2eSPWPA6GYgYhC8+VSurdkx2EDEeqpQdi81kdOp5PCY9t2cOAv?=
+ =?us-ascii?Q?thRHattmfYBsnqiU7pfWb0ilWbLeuXRPNgEOZpyIAHVZ3+tZ9e4RsDBFbl0B?=
+ =?us-ascii?Q?e3c8h+DMWz1UsEeCSJZ14E2AbUMIbN84NemHbH27lrSED9cAHc9BQTtQ7yfb?=
+ =?us-ascii?Q?zyte1oKhNxi6OfESs346c0JGhad9wAuB2IQp86EkprAhr9fMoNAhg3AjJiX8?=
+ =?us-ascii?Q?7BLY0Fb3ODwa6p0xK1VzdRrPDEsa3BZyRj5Rkzr5ub7MX7BI0Zcbo3FYzluW?=
+ =?us-ascii?Q?uzUFKr3g/Q/4NiLYX8i5IXYXzE+DuuhPKwvZ33qEGap4gHvXjhgJdY4/UeHu?=
+ =?us-ascii?Q?K0g/EebwHtNqCqkg431lH3BKamXt9bptwe+ZHyngd/tps7zUgX+wjdnhwwDT?=
+ =?us-ascii?Q?Zt0EQ2dCypnCT4fZALcngu4boiOG3Z+6Z8m8KsDAQ1R7MNZgemk5BjiFFEtL?=
+ =?us-ascii?Q?a+JyAxXypLTaIuzIZ00HkbB4rEoKRw++r46RzGP8eRmjixmSzdJrM4+5ZsM3?=
+ =?us-ascii?Q?QwiOcSCeqMjWJV8QNUzSEmnI0YB75Q9zxcOu3pDWcT1m5DE4ykuI1YWUlfTa?=
+ =?us-ascii?Q?5dXrIey6lXKAmU4tik6raN4X1/UxZ39I41HZd5Xl6NJvIU3cZPTBDnCPQrZx?=
+ =?us-ascii?Q?/sAJOOWVQUkVo6r1YEH0de5xh41ej7Ypx45Otk4l?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR84MB2085.NAMPRD84.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9862c54a-213b-4ae7-489f-08db92ba3da8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Aug 2023 18:07:59.8472
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR84MB2078.NAMPRD84.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: cddcf8d3-0ef6-4d20-567f-08db92c0258a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Aug 2023 18:50:16.3712
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 3Etjh16aCmXVF6Z6Js0sf/yq2+RBzoty4BV91RN318YbRuJoGZtaP2PwIckXMQoG3hwGhxQp2Qdg4GaciPFyMw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR84MB1804
+X-MS-Exchange-CrossTenant-userprincipalname: NRtyrmnbdc/EWieuUevVyqQiTpI82o+cchrSzPbrphRAuXr6zqQf29LPziA9ZfXApQKDmTzOKiUr/TOR5vg2dg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR84MB3651
 X-OriginatorOrg: hpe.com
-X-Proofpoint-GUID: 0GQ4ty3nYm67FfKZflMyRRHZJv6KStjH
-X-Proofpoint-ORIG-GUID: 0GQ4ty3nYm67FfKZflMyRRHZJv6KStjH
+X-Proofpoint-GUID: RM-OMxLWspfCBbHeMp-JrGYoQbm7NctE
+X-Proofpoint-ORIG-GUID: RM-OMxLWspfCBbHeMp-JrGYoQbm7NctE
 X-HPE-SCL: -1
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
  definitions=2023-08-01_16,2023-08-01_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
- mlxscore=0 spamscore=0 bulkscore=0 mlxlogscore=363 lowpriorityscore=0
- suspectscore=0 malwarescore=0 priorityscore=1501 clxscore=1011
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2306200000 definitions=main-2308010164
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 spamscore=0 adultscore=0 bulkscore=0 malwarescore=0
+ mlxlogscore=570 mlxscore=0 suspectscore=0 clxscore=1011 impostorscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2306200000 definitions=main-2308010168
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
@@ -172,39 +164,68 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-DQo+PiArdGl0bGU6IEhQRSBHWFAgVVNCIFZpcnR1YWwgRUhDSSBjb250cm9sbGVyDQoNCj4gVGhl
-IHdvcmQgInZpcnR1YWwiIGluIGJpbmRpbmdzIHByZXR0eSBvZnRlbiByYWlzZXMgcXVlc3Rpb25z
-LCBiZWNhdXNlIHdlDQo+IGRlc2NyaWJlIHVzdWFsbHkgcmVhbCBoYXJkd2FyZSwgbm90IHZpcnR1
-YWwuIFNvbWUgZXhwbGFuYXRpb24gaW4NCj4gZGVzY3JpcHRpb24gd291bGQgYmUgdXNlZnVsLg0K
-DQpIZXJlIHdlIGFyZSB3b3JraW5nIHdpdGggdmlydHVhbCBkZXZpY2VzIHRoYXQgYXJlIGNyZWF0
-ZWQgYW5kIGhhdmUgbm8NCnBoeXNpY2FsIHByZXNlbmNlLiBXZSBoYXZlIG1vZGVsZWQgb3VyIGNv
-ZGUgb2ZmIG9mIEFTUEVFRCdzIFZIVUINCmltcGxlbWVudGF0aW9uIHRvIGNvbXBseSB3aXRoIHRo
-ZSBpbXBsZW1lbnRhdGlvbiBpbiBPcGVuQk1DLg0KDQo+PiArIFRoZSBIUEUgR1hQIFVTQiBWaXJ0
-dWFsIEVIQ0kgQ29udHJvbGxlciBpbXBsZW1lbnRzIDEgc2V0IG9mIFVTQiBFSENJDQo+PiArIHJl
-Z2lzdGVyIGFuZCBzZXZlcmFsIHNldHMgb2YgZGV2aWNlIGFuZCBlbmRwb2ludCByZWdpc3RlcnMg
-dG8gc3VwcG9ydA0KPj4gKyB0aGUgdmlydHVhbCBFSENJJ3MgZG93bnN0cmVhbSBVU0IgZGV2aWNl
-cy4NCj4+ICsNCg0KDQo+IElmIHRoaXMgaXMgRUhDSSBjb250cm9sbGVyLCB0aGVuIEkgd291bGQg
-ZXhwZWN0IGhlcmUgcmVmZXJlbmNlIHRvIHVzYi1oY2QuDQoNCldlIHdpbGwgcmVtb3ZlIHJlZmVy
-ZW5jZXMgdG8gRUhDSSBpbiBjb2RlIGFuZCBkb2N1bWVudGF0aW9uLiBJdCBoYXMgYmVlbg0KbW9k
-ZWxlZCB0byBmb2xsb3dpbmcgQVNQRUVEcyBhcHByb2FjaCBhcyBtZW50aW9uZWQgYWJvdmUuDQoN
-Cj4+ICsgaHBlLHZlaGNpLWRvd25zdHJlYW0tcG9ydHM6DQo+PiArIGRlc2NyaXB0aW9uOiBOdW1i
-ZXIgb2YgZG93bnN0cmVhbSBwb3J0cyBzdXBwb3J0ZWQgYnkgdGhlIEdYUA0KDQoNCj4gV2h5IGRv
-IHlvdSBuZWVkIHRoaXMgcHJvcGVydHkgaW4gRFQgYW5kIHdoYXQgZXhhY3RseSBkb2VzIGl0IHJl
-cHJlc2VudD8NCj4gWW91IGhhdmUgb25lIGRldmljZSAtIEVIQ0kgY29udHJvbGxlciAtIGFuZCBv
-biBzb21lIGJvYXJkcyBpdCBpcyBmdXJ0aGVyDQo+IGN1c3RvbWl6ZWQ/IEV2ZW4gdGhvdWdoIGl0
-IGlzIHRoZSBzYW1lIGRldmljZT8NCg0KVGhhdCBpcyBjb3JyZWN0LiBXZSBjYW4gY29uZmlndXJl
-IHRoaXMgVkhVQiBDb250cm9sbGVyIHRvIGhhdmUgb25lIHRvDQo4IHZpcnR1YWwgcG9ydHMuIFRo
-aXMgaXMgc2ltaWxhciB0byB0aGUgYXNwZWVkIHZpcnR1YWwgVVNCIEhVQg0KImFzcGVlZCx2aHVi
-LWRvd25zdHJlYW0tcG9ydHMiIG1vdmluZyBmb3J3YXJkIGluIHRoZSBuZXh0IHBhdGNoDQp3ZSBh
-cmUgZ29pbmcgdG8gdXNlICJocGUsdmh1Yi1kb3duc3RyZWFtLXBvcnRzIg0KDQo+PiArICRyZWY6
-IC9zY2hlbWFzL3R5cGVzLnlhbWwjL2RlZmluaXRpb25zL3VpbnQzMg0KPj4gKyBkZWZhdWx0OiA0
-DQo+PiArIG1pbmltdW06IDENCj4+ICsgbWF4aW11bTogOA0KPj4gKw0KPj4gKyBocGUsdmVoY2kt
-Z2VuZXJpYy1lbmRwb2ludHM6DQo+PiArIGRlc2NyaXB0aW9uOiBOdW1iZXIgb2YgZ2VuZXJpYyBl
-bmRwb2ludHMgc3VwcG9ydGVkIGJ5IHRoZSBHWFANCj4+ICsgJHJlZjogL3NjaGVtYXMvdHlwZXMu
-eWFtbCMvZGVmaW5pdGlvbnMvdWludDMyDQoNCg0KPiBTYW1lIGNvbmNlcm5zLg0KDQpXZSBpbnRl
-bmQgdG8gY2hhbmdlIHRoaXMgdG8gImhwZSx2aHViLWdlbmVyaWMtZW5kcG9pbnRzIiBmb2xsb3dp
-bmcNCkFTUEVFRCdzICJhc3BlZWQsdmh1Yi1nZW5lcmljLWVuZHBvaW50cyINCg0KPj4gK2V4YW1w
-bGVzOg0KPj4gKyAtIHwNCj4+ICsgdWRjZ0A4MDQwMDgwMCB7DQoNCg0KPiBOb2RlIG5hbWVzIHNo
-b3VsZCBiZSBnZW5lcmljLiBTZWUgYWxzbyBhbiBleHBsYW5hdGlvbiBhbmQgbGlzdCBvZg0KLi4u
-DQpXZSB3aWxsIHVzZSB1c2ItaHViLg0KDQpUaGFuayB5b3UgZm9yIHlvdXIgZmVlZGJhY2ssDQpS
-aWNoYXJkIFl1DQoNCg==
+
+
+-----Original Message-----
+From: Alan Stern <stern@rowland.harvard.edu>=20
+Sent: Thursday, July 6, 2023 9:17 PM
+To: Yu, Richard <richard.yu@hpe.com>
+Cc: Verdun, Jean-Marie <verdun@hpe.com>; Hawkins, Nick <nick.hawkins@hpe.co=
+m>; gregkh@linuxfoundation.org; robh+dt@kernel.org; krzysztof.kozlowski+dt@=
+linaro.org; conor+dt@kernel.org; linux-usb@vger.kernel.org; devicetree@vger=
+.kernel.org; linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 2/3] usb: gadget: udc: gxp-udc: add HPE GXP USB supp=
+ort
+
+On Thu, Jul 06, 2023 at 04:59:09PM -0500, richard.yu@hpe.com wrote:
+>> From: Richard Yu <richard.yu@hpe.com>
+>>=20
+>> The HPE GXP vEHCI controller presents a four port EHCI compatible PCI=20
+>> function to host software. Each vEHCI port is logically connected to a=20
+>> corresponding set of virtual device registers.
+
+> What makes the vEHCI controller virtual?  Presenting a "PCI function"
+> certainly seems to indicate it is a physical device, indeed, a PCI device=
+.
+
+To the host and system OS, GXP is indeed to present a physical standard=20
+EHCI controller. The standard Linux EHCI driver will be used. What virtual
+Here are the ports. We will remove references to EHCI in code and
+Documentation. It has been modeled to following ASPEEDs v-hub approach.
+
+>> +config USB_GXP_UDC
+>> +        bool "GXP UDC Driver"
+>> +        depends on ARCH_HPE_GXP || COMPILE_TEST
+>> +        help
+>> +          Say "y" to add support for GXP UDC driver
+
+> Now hang on a second.  What sort of driver is this patch adding support
+> for: a GXP vEHCI controller driver or a GXP UDC controller driver? =20
+> The patch description says the first, but the code says the second.
+
+I will modify the patch description as a GXP virtual UDC driver.
+
+> It sounds like this thing actually is a PCI device that appears to the OS=
+ as=20
+> an actual EHCI controller, but with virtual (rather than physical) downst=
+ream ports,=20
+> and it includes a virtual UDC for each port.  As such, it requires a driv=
+er for the virtual UDCs,=20
+> which is what this patch provides.  (No new driver is needed for the EHCI=
+ controller part,=20
+> since the kernel already has an EHCI driver.)
+
+> Is that a correct description?  And if it is, what is the purpose of this=
+ device? =20
+> To act as a testing ground for gadget drivers?
+
+That is a correct description. The purpose of this device is for us to crea=
+te virtual USB devices,
+such as virtual keyboard/ mouse using in OpenBmc KVM, virtual CD, virtual N=
+IC...
+
+> Alan Stern
+
+Thank you very much for your feedback.
+
+Richard.
