@@ -2,83 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0A6376D3F6
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Aug 2023 18:47:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FD1176D483
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Aug 2023 19:01:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229642AbjHBQrD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Aug 2023 12:47:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46674 "EHLO
+        id S231612AbjHBRBo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Aug 2023 13:01:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231266AbjHBQrA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Aug 2023 12:47:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6572710
-        for <linux-usb@vger.kernel.org>; Wed,  2 Aug 2023 09:46:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5166F615C2
-        for <linux-usb@vger.kernel.org>; Wed,  2 Aug 2023 16:46:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id ACD77C433C9
-        for <linux-usb@vger.kernel.org>; Wed,  2 Aug 2023 16:46:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690994815;
-        bh=nR5b22Vd4ATtg5y+KwKGLBlAUpgDuSy/R7Ajtq+e/9w=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=k+Z72RSgfwC8+1v5RBS9jr8DkrnBnPctr+/DuIygH9ypiHaKCbv+00Wpjan6bW0h2
-         CiNhvHhnuHZf0nwkaw2n2Y93Zd6gQeBgeVchJbBx5S6vyNaTnJECFhXCZPfVH6fDAA
-         nPExvkQsgEeUUzHBgUSa4XQMv3DSSAoJ+bkNFvL+NT3nUHkOmFe0kTA84DztqR1wf6
-         UrVc81YI1U2z330uENafP/Lfw4RX4fJ4WqjJ5DNmFC+Yy+v/j7Sx51ktuCn7D5Ozzv
-         NyETc+NM+LQO1PcpICLgF6/UX/U/hUEyl5a9GTg2Itv9RSF+elGZThUHllsMC7bcO1
-         POEgjFZaZR/ww==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 8EC4FC4332E; Wed,  2 Aug 2023 16:46:55 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 217122] Regression in xhci driver since 6.1 "Transfer event TRB
- DMA ptr not part of current TD"
-Date:   Wed, 02 Aug 2023 16:46:55 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: ZeroBeat@gmx.de
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: DUPLICATE
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-217122-208809-E9KRW5r6PX@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-217122-208809@https.bugzilla.kernel.org/>
-References: <bug-217122-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S231665AbjHBRBk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Aug 2023 13:01:40 -0400
+Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com [209.85.161.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEDBA1726
+        for <linux-usb@vger.kernel.org>; Wed,  2 Aug 2023 10:01:39 -0700 (PDT)
+Received: by mail-oo1-f70.google.com with SMTP id 006d021491bc7-5662c34e5cdso102354eaf.0
+        for <linux-usb@vger.kernel.org>; Wed, 02 Aug 2023 10:01:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1690995699; x=1691600499;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=caklcQ8zXP35AFvs1Skd0dLN1uNpRcw319HyOn8Wu94=;
+        b=S4ff0jsAubzV6tnm4zv6Cojtw5LLg2wp9Zaclwce+SsupimBvyIZU9/PXdDumH2seS
+         R9kntlLv7kScsEaFC69TQEg25mEFwoby2nS9wIJHSmwbsBQqgFdrLRD12Chx98Fw9Ekb
+         sPn7gcuzmFGwwrQE57Eei9EQ5UAwmAexKboFBS/xLqkgaLwTDimsKDBdI7mVwop/Wvwj
+         wzw8qcmXQXsah+bn4l9yyFE79Vmr7iPd77e4km0G8anLoNjaDhyPjCOcXT4FoZsrcKKI
+         xSSEmvHE2Ui7MBZsFMZXUrg8st8gyuHu+YeFmy5Os6Uu0B5Ps7JCF3GaoYRZS2FLlIEW
+         6ejw==
+X-Gm-Message-State: ABy/qLYKC4m0X7KaqCNfvsNVg8yst/rsSz07l5Oz3jPLSQfpK7A6Zt4F
+        s5tf6hR99HuzpS4lFeUESJQm7DFCdhP4N6Il8LHaH+XI+8Sw
+X-Google-Smtp-Source: APBJJlGulYYkz+bq7cpRVtbZqc4W8NC5ZaAtYhSf78V3TU6IZzJ3Z0IDfoRp6WXQNsiQm+W4XJ+5AVu1lYmCZzdKL3HQxKEbRJTQ
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a4a:4515:0:b0:56c:cf3f:efb with SMTP id
+ y21-20020a4a4515000000b0056ccf3f0efbmr6724683ooa.1.1690995699164; Wed, 02 Aug
+ 2023 10:01:39 -0700 (PDT)
+Date:   Wed, 02 Aug 2023 10:01:39 -0700
+In-Reply-To: <497564c2-632f-472a-914e-5e19488824ae@rowland.harvard.edu>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f72f670601f39d9e@google.com>
+Subject: Re: [syzbot] [usb?] [usb-storage?] KMSAN: uninit-value in alauda_check_media
+From:   syzbot <syzbot+e7d46eb426883fb97efd@syzkaller.appspotmail.com>
+To:     christophe.jaillet@wanadoo.fr, linux-usb@vger.kernel.org,
+        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D217122
+Hello,
 
---- Comment #30 from Michael (ZeroBeat@gmx.de) ---
-Thanks for the fast response and the patch.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
---=20
-You may reply to this email to add a comment.
+Reported-and-tested-by: syzbot+e7d46eb426883fb97efd@syzkaller.appspotmail.com
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Tested on:
+
+commit:         6eaae198 Linux 6.5-rc3
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/ v6.5-rc3
+console output: https://syzkaller.appspot.com/x/log.txt?x=159285dea80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=254d7af7cd6058ea
+dashboard link: https://syzkaller.appspot.com/bug?extid=e7d46eb426883fb97efd
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1020d97ea80000
+
+Note: testing is done by a robot and is best-effort only.
