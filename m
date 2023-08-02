@@ -2,68 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D9CD76C24B
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Aug 2023 03:37:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81F5476C263
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Aug 2023 03:40:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230470AbjHBBhM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Aug 2023 21:37:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42066 "EHLO
+        id S231790AbjHBBkZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Aug 2023 21:40:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjHBBhL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Aug 2023 21:37:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95BB21B7
-        for <linux-usb@vger.kernel.org>; Tue,  1 Aug 2023 18:37:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1387861783
-        for <linux-usb@vger.kernel.org>; Wed,  2 Aug 2023 01:37:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 74474C433C7
-        for <linux-usb@vger.kernel.org>; Wed,  2 Aug 2023 01:37:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1690940229;
-        bh=QRFQI+pzM/65TYgLsPcc3mGbFuFf1Ai/FCnBHONvevA=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=g4+6Z9vW8Wds3zIldCgS/nwsvvjdBtmgHP3MHEfTfPbpXo1AfUACslQfqXwq58Gn1
-         x4lkPVS93CHNStzvqzp7lGTXQ3kqcxXeMZSWRGflXQ9p83p87W+lbv4UiTBMnJORNi
-         HV6eIpYlr0Pp6Tz110haFrZ4FQfuLkoTN3U3bLg4JbE5ioTqu2xCB5+qB3yMrB9NIj
-         2k6x5VNdZK5Ukrs/Y/n3qTqjrQtsGLq1msQ1/Ui7ViHv5xcP8qtdpCVEcLZwxo3les
-         gFFnSxVvZ3QJVgJ1PPHN8InCHyJY1wuSUjonGqR7UjvoudlM/CbL1vK4oyKreG9ygV
-         1vfVCAz/ZtW5g==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 5708CC4332E; Wed,  2 Aug 2023 01:37:09 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 217632] 3 more broken Zaurii - SL-5600, A300, C700
-Date:   Wed, 02 Aug 2023 01:37:09 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: bids.7405@bigpond.com
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: CODE_FIX
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_status resolution
-Message-ID: <bug-217632-208809-OcZgj87nz4@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-217632-208809@https.bugzilla.kernel.org/>
-References: <bug-217632-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S231597AbjHBBkM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Aug 2023 21:40:12 -0400
+Received: from SHSQR01.spreadtrum.com (unknown [222.66.158.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77CBA26B6
+        for <linux-usb@vger.kernel.org>; Tue,  1 Aug 2023 18:39:43 -0700 (PDT)
+Received: from dlp.unisoc.com ([10.29.3.86])
+        by SHSQR01.spreadtrum.com with ESMTP id 3721dBOw089645;
+        Wed, 2 Aug 2023 09:39:11 +0800 (+08)
+        (envelope-from surong.pang@unisoc.com)
+Received: from SHDLP.spreadtrum.com (shmbx02.spreadtrum.com [10.0.1.204])
+        by dlp.unisoc.com (SkyGuard) with ESMTPS id 4RFvjh6T77z2NmGQq;
+        Wed,  2 Aug 2023 09:37:28 +0800 (CST)
+Received: from shmbx05.spreadtrum.com (10.29.1.56) by SHMBX02.spreadtrum.com
+ (10.0.1.204) with Microsoft SMTP Server (TLS) id 15.0.1497.23; Wed, 2 Aug
+ 2023 09:39:09 +0800
+Received: from shmbx05.spreadtrum.com ([fe80::3169:eec0:7a15:2543]) by
+ shmbx05.spreadtrum.com ([fe80::3169:eec0:7a15:2543%16]) with mapi id
+ 15.00.1497.023; Wed, 2 Aug 2023 09:39:09 +0800
+From:   =?utf-8?B?5bqe6IuP6I2jIChTdXJvbmcgUGFuZyk=?= 
+        <surong.pang@unisoc.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Elson Roy Serrao <quic_eserrao@quicinc.com>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>,
+        "rogerq@kernel.org" <rogerq@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
+        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        =?utf-8?B?5bqe6IuP6I2jIChTdXJvbmcgUGFuZyk=?= 
+        <surong.pang@unisoc.com>
+Subject: Re: [PATCH] usb: dwc3: Properly handle processing of pending events
+Thread-Topic: [PATCH] usb: dwc3: Properly handle processing of pending events
+Thread-Index: AdnE4JtB3fks6OUtQTaFZJ3KC9QX1w==
+Date:   Wed, 2 Aug 2023 01:39:09 +0000
+Message-ID: <2bf3663abc72448da44427dcaedb49fe@shmbx05.spreadtrum.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.29.69.35]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MAIL: SHSQR01.spreadtrum.com 3721dBOw089645
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,17 +65,60 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D217632
-
-Ross Maynard (bids.7405@bigpond.com) changed:
-
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |CODE_FIX
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+RGVhcnPvvIwNCklmIHRoZXJlIGlzL2FyZSBldmVudChzKSBpbiBldnQtPmJ1ZiwgIGluIGR3YzNf
+Y2hlY2tfZXZlbnRfYnVmLCAgZHdjM190aHJlYWRfaW50ZXJydXB0IHdpbGwgYmUgd29rZSB1cC4N
+Cg0KPiA+IEBAIC00NzE4LDYgKzQ3MjMsOCBAQCB2b2lkIGR3YzNfZ2FkZ2V0X3Byb2Nlc3NfcGVu
+ZGluZ19ldmVudHMoc3RydWN0DQo+ID4gZHdjMyAqZHdjKSAgew0KPiA+ICAgICAgIGlmIChkd2Mt
+PnBlbmRpbmdfZXZlbnRzKSB7DQo+ID4gICAgICAgICAgICAgICBkd2MzX2ludGVycnVwdChkd2Mt
+PmlycV9nYWRnZXQsIGR3Yy0+ZXZfYnVmKTsNCj4gPiArICAgICAgICAgICAgIGR3YzNfdGhyZWFk
+X2ludGVycnVwdChkd2MtPmlycV9nYWRnZXQsIGR3Yy0+ZXZfYnVmKTsNCj4gPiArICAgICAgICAg
+ICAgIHBtX3J1bnRpbWVfcHV0KGR3Yy0+ZGV2KTsNCj4gPiAgICAgICAgICAgICAgIGR3Yy0+cGVu
+ZGluZ19ldmVudHMgPSBmYWxzZTsNCj4gPiAgICAgICAgICAgICAgIGVuYWJsZV9pcnEoZHdjLT5p
+cnFfZ2FkZ2V0KTsNCj4gPiAgICAgICB9DQoNCkkganVzdCB3YW50IHRvIGtub3cgZHdjM190aHJl
+YWRfaW50ZXJydXB0IGhlcmUgaXMgbmVjZXNzYXJ5IG9yIG5vdD8NCg0KDQo+IE9uIFR1ZSwgQXVn
+IDAyLCAyMDIzIDg6MTIgVGhpbmggTmd1eWVuIHdyb3RlOg0KPj4gT24gVHVlLCBBdWcgMDEsIDIw
+MjMsIEVsc29uIFJveSBTZXJyYW8gd3JvdGU6DQo+ID4gSWYgZHdjMyBpcyBydW50aW1lIHN1c3Bl
+bmRlZCB3ZSBkZWZlciBwcm9jZXNzaW5nIHRoZSBldmVudCBidWZmZXINCj4gPiB1bnRpbCByZXN1
+bWUsIGJ5IHNldHRpbmcgdGhlIHBlbmRpbmdfZXZlbnRzIGZsYWcuIFNldCB0aGlzIGZsYWcgYmVm
+b3JlDQo+ID4gdHJpZ2dlcmluZyByZXN1bWUgdG8gYXZvaWQgcmFjZSB3aXRoIHRoZSBydW50aW1l
+IHJlc3VtZSBjYWxsYmFjay4NCj4gPg0KPiA+IFdoaWxlIGhhbmRsaW5nIHRoZSBwZW5kaW5nIGV2
+ZW50cywgaW4gYWRkaXRpb24gdG8gY2hlY2tpbmcgdGhlIGV2ZW50DQo+ID4gYnVmZmVyIHdlIGFs
+c28gbmVlZCB0byBwcm9jZXNzIGl0LiBIYW5kbGUgdGhpcyBieSBleHBsaWNpdGx5IGNhbGxpbmcN
+Cj4gPiBkd2MzX3RocmVhZF9pbnRlcnJ1cHQoKS4gQWxzbyBiYWxhbmNlIHRoZSBydW50aW1lIHBt
+IGdldCgpIG9wZXJhdGlvbg0KPiA+IHRoYXQgdHJpZ2dlcmVkIHRoaXMgcHJvY2Vzc2luZy4NCj4g
+Pg0KPiA+IENjOiBzdGFibGVAdmdlci5rZXJuZWwub3JnDQo+ID4gRml4ZXM6IGZjOGJiOTFiYzgz
+ZSAoInVzYjogZHdjMzogaW1wbGVtZW50IHJ1bnRpbWUgUE0iKQ0KPiA+IFNpZ25lZC1vZmYtYnk6
+IEVsc29uIFJveSBTZXJyYW8gPHF1aWNfZXNlcnJhb0BxdWljaW5jLmNvbT4NCj4gPiAtLS0NCj4g
+PiBDaGFuZ2Ugc2VwYXJhdGVkIGZyb20gYmVsb3cgc2VyaWVzIGFzIGFuIGluZGVwZW5kZW50IGZp
+eCBiYXNlZCBvbiB0aGUNCj4gPiBlYXJsaWVyIGRpc2N1c3Npb24NCj4gPiBodHRwczovL3VybGRl
+ZmVuc2UuY29tL3YzL19faHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYWxsL2JlNTc1MTFkLTIwMDUt
+DQo+ID4gYTFmNS1kNWE1LTgwOWU3MTAyOWFlY0BxdWljaW5jLmNvbS9fXzshIUE0RjJSOUdfcGch
+WXRaOTNBTEVwRE5UQ0VoZjBXRQ0KPiA+IHlCNVMwOTBwUGxLSUtWdGpxVE9BRUpkeGRXYmw4UUc2
+ZWlSbWx2Zml2VXRENXFqS1dXTFgyQzRmYjRXOFZBZzV3OXFhc0wNCj4gPiB1S0IkDQo+ID4NCj4g
+PiAgZHJpdmVycy91c2IvZHdjMy9nYWRnZXQuYyB8IDkgKysrKysrKystDQo+ID4gIDEgZmlsZSBj
+aGFuZ2VkLCA4IGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkNCj4gPg0KPiA+IGRpZmYgLS1n
+aXQgYS9kcml2ZXJzL3VzYi9kd2MzL2dhZGdldC5jIGIvZHJpdmVycy91c2IvZHdjMy9nYWRnZXQu
+Yw0KPiA+IGluZGV4IDVmZDA2NzE1MWZiZi4uODU4ZmU0YzI5OWI3IDEwMDY0NA0KPiA+IC0tLSBh
+L2RyaXZlcnMvdXNiL2R3YzMvZ2FkZ2V0LmMNCj4gPiArKysgYi9kcml2ZXJzL3VzYi9kd2MzL2dh
+ZGdldC5jDQo+ID4gQEAgLTQ0NTUsOSArNDQ1NSwxNCBAQCBzdGF0aWMgaXJxcmV0dXJuX3QgZHdj
+M19jaGVja19ldmVudF9idWYoc3RydWN0IGR3YzNfZXZlbnRfYnVmZmVyICpldnQpDQo+ID4gICAg
+ICAgdTMyIGNvdW50Ow0KPiA+DQo+ID4gICAgICAgaWYgKHBtX3J1bnRpbWVfc3VzcGVuZGVkKGR3
+Yy0+ZGV2KSkgew0KPiA+ICsgICAgICAgICAgICAgZHdjLT5wZW5kaW5nX2V2ZW50cyA9IHRydWU7
+DQo+ID4gKyAgICAgICAgICAgICAvKg0KPiA+ICsgICAgICAgICAgICAgICogVHJpZ2dlciBydW50
+aW1lIHJlc3VtZS4gVGhlIGdldCgpIGZ1bmN0aW9uIHdpbGwgYmUgYmFsYW5jZWQNCj4gPiArICAg
+ICAgICAgICAgICAqIGFmdGVyIHByb2Nlc3NpbmcgdGhlIHBlbmRpbmcgZXZlbnRzIGluIGR3YzNf
+cHJvY2Vzc19wZW5kaW5nDQo+ID4gKyAgICAgICAgICAgICAgKiBldmVudHMoKS4NCj4gPiArICAg
+ICAgICAgICAgICAqLw0KPiA+ICAgICAgICAgICAgICAgcG1fcnVudGltZV9nZXQoZHdjLT5kZXYp
+Ow0KPiA+ICAgICAgICAgICAgICAgZGlzYWJsZV9pcnFfbm9zeW5jKGR3Yy0+aXJxX2dhZGdldCk7
+DQo+ID4gLSAgICAgICAgICAgICBkd2MtPnBlbmRpbmdfZXZlbnRzID0gdHJ1ZTsNCj4gPiAgICAg
+ICAgICAgICAgIHJldHVybiBJUlFfSEFORExFRDsNCj4gPiAgICAgICB9DQo+ID4NCj4gPiBAQCAt
+NDcxOCw2ICs0NzIzLDggQEAgdm9pZCBkd2MzX2dhZGdldF9wcm9jZXNzX3BlbmRpbmdfZXZlbnRz
+KHN0cnVjdA0KPiA+IGR3YzMgKmR3YykgIHsNCj4gPiAgICAgICBpZiAoZHdjLT5wZW5kaW5nX2V2
+ZW50cykgew0KPiA+ICAgICAgICAgICAgICAgZHdjM19pbnRlcnJ1cHQoZHdjLT5pcnFfZ2FkZ2V0
+LCBkd2MtPmV2X2J1Zik7DQo+ID4gKyAgICAgICAgICAgICBkd2MzX3RocmVhZF9pbnRlcnJ1cHQo
+ZHdjLT5pcnFfZ2FkZ2V0LCBkd2MtPmV2X2J1Zik7DQo+ID4gKyAgICAgICAgICAgICBwbV9ydW50
+aW1lX3B1dChkd2MtPmRldik7DQo+ID4gICAgICAgICAgICAgICBkd2MtPnBlbmRpbmdfZXZlbnRz
+ID0gZmFsc2U7DQo+ID4gICAgICAgICAgICAgICBlbmFibGVfaXJxKGR3Yy0+aXJxX2dhZGdldCk7
+DQo+ID4gICAgICAgfQ0KPiA+IC0tDQo+ID4gMi4xNy4xDQo+ID4NCj4gDQo+IFRoaXMgZml4IGlz
+IG1vcmUgY29tcGxldGUuDQo+IA0KPiBBY2tlZC1ieTogVGhpbmggTmd1eWVuIDxUaGluaC5OZ3V5
+ZW5Ac3lub3BzeXMuY29tPg0KPiANCj4gVGhhbmtzLA0KPiBUaGluaA0K
