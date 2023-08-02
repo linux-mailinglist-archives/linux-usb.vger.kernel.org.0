@@ -2,99 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E46EE76CB9C
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Aug 2023 13:19:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07B9676CF4F
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Aug 2023 15:58:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232002AbjHBLTB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Aug 2023 07:19:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47694 "EHLO
+        id S234512AbjHBN6A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Aug 2023 09:58:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232920AbjHBLTA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Aug 2023 07:19:00 -0400
-Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com [209.85.167.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F2A2130
-        for <linux-usb@vger.kernel.org>; Wed,  2 Aug 2023 04:18:59 -0700 (PDT)
-Received: by mail-oi1-f200.google.com with SMTP id 5614622812f47-3a71ea1f049so1076599b6e.1
-        for <linux-usb@vger.kernel.org>; Wed, 02 Aug 2023 04:18:59 -0700 (PDT)
+        with ESMTP id S234509AbjHBN5w (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Aug 2023 09:57:52 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9384B2101
+        for <linux-usb@vger.kernel.org>; Wed,  2 Aug 2023 06:57:51 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id ca18e2360f4ac-790b95beeedso82517439f.0
+        for <linux-usb@vger.kernel.org>; Wed, 02 Aug 2023 06:57:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1690984671; x=1691589471;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=VKbqMXLKKXNpH8fQsyhuKq6zIQy3jNDRCBAR4n87W4I=;
+        b=EzVUA909uxcEE3Ut2z+x1DepQOoU+ud+WeQlEB1rkxFdZSN6/inxSIEvvHGRYMMmix
+         sAqESN13WI9647WLWSqOGAjPzeb1c8yaxLRwDpYBPVkD6dqCOF7jTQBTR4BcAFGweBcj
+         mHb+nd4jANFVj61VHXTzOoCOBLZHc49L1iFBf6J5jgmHq0Jxp5xzWbmCnT3Exr9+hWMN
+         SHDsqVPUR20EaN8MMB5/Fm+TP+CsjdY2HjWrsFxSvbMrgctLaDLpD8fsnfomW9yGiTn4
+         srCMT8ECb2+XGP2XgQYpapKBryZyy9Git0tVOapYO7FdwMG+Htcdgau3wgeTIB+7pJCU
+         YVJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690975138; x=1691579938;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RWvXpxCuJYpjEFo/W4sG+AcmV8aTSmJ5ToLMiyxysts=;
-        b=JnFV2Nx899uNeGgBt/aKDVwyKYK61rv3Ed2Xuw1vBxLM6dG2++KcCa5voN2yZheq9J
-         2FhxvltQPO3z7hbK0PXfo1NxOrCIavVw9k94SNUTSTuG0ZPuekN9YJxC4LR8dSVyx/N4
-         nuYYjr730UkPZaGh3EaQYdkAfSueVZyhgDAe8Qu7ioSHFLr5mYPBolUrpHo9sHH6MoPH
-         kfbIc5A91M1+a65rwCY1nLLQqSIua9R5G5z/+w2srd8fDYp5967LGDIQtCuokcBTk2DG
-         yFHGCAFwlEeAzr1gKTudoie7tDm3XRFleiBflxzKpfPyVmmdzPq+JZAAvfLMftfh/1qp
-         15Mg==
-X-Gm-Message-State: ABy/qLYe0YZZMQLiGPiGLIYCw/3oBxzJgMyirLOQVfU0l3TidovYpj5v
-        405znzcSHJMVp48YZYm7K0wvea/euidT6bwqdErCuCjpNUIH
-X-Google-Smtp-Source: APBJJlFKRFyHPxPxPL0fIDfAh0MQOBXDXYHiOQoOgsYkNHrzRIU3fEVEh4ewUG1IAqV4g19Bng8BMMHXERb3gK6buSXLI6Lv+XLH
+        d=1e100.net; s=20221208; t=1690984671; x=1691589471;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VKbqMXLKKXNpH8fQsyhuKq6zIQy3jNDRCBAR4n87W4I=;
+        b=GlPWF7/6IKV4aig9zEX19jSCs3T7dQccDSR0leaHkop/ZIu/VJ0yBnq7xmodk2LTaJ
+         luLSU2z2yMPad+i6dCK3KNS5JWV0HeNdWHRzLoWa62xIGcVNTic6SlUhxuu3xcIh68fI
+         81DtncKaXFdYbnH9d06DHT/hAAobza5G53iWniedTxk45SUkb/gw5VnD1yDYIkh0q0wC
+         IopGSWsAmy44XPhpFkQ6B+YmFVrsoBBttvdoMX4pcAszfsiXH5RHPNMznyFApLiM53Yy
+         GoQGboo1wmocIa3BV7Pw9Yy0WtkHnaB3n+DRi45eq3OSG0Ovhxbw/WBDBEWRlUZaiYRV
+         3GaQ==
+X-Gm-Message-State: ABy/qLaccwrcwad5RUmbJbF3DMaCOyO9zHUhDSQznC2/yQeOk0Fs8Lhw
+        HH8EqtKmBFkaJv9XTaMwlCk=
+X-Google-Smtp-Source: APBJJlHQdjWSA0YudGlTFDzBqWVQhEVfqljZRADxdTe+X+7bYxGGSPTe1LmDq8B0IXckRGDviu6KmA==
+X-Received: by 2002:a05:6e02:1a24:b0:349:1a2:f695 with SMTP id g4-20020a056e021a2400b0034901a2f695mr16435860ile.31.1690984670763;
+        Wed, 02 Aug 2023 06:57:50 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id o10-20020a92d38a000000b00345aaa564a6sm4455811ilo.44.2023.08.02.06.57.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Aug 2023 06:57:50 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <f178fed7-2580-6565-0497-eb6483a50258@roeck-us.net>
+Date:   Wed, 2 Aug 2023 06:57:48 -0700
 MIME-Version: 1.0
-X-Received: by 2002:a05:6808:1819:b0:3a0:9db4:a575 with SMTP id
- bh25-20020a056808181900b003a09db4a575mr30719794oib.1.1690975138674; Wed, 02
- Aug 2023 04:18:58 -0700 (PDT)
-Date:   Wed, 02 Aug 2023 04:18:58 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000076ffa30601eed47b@google.com>
-Subject: [syzbot] Monthly usb report (Aug 2023)
-From:   syzbot <syzbot+list7326d21fc77552823fb4@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v2] usb: typec: tcpm: not sink vbus if operational current
+ is 0mA
+Content-Language: en-US
+To:     Xu Yang <xu.yang_2@nxp.com>, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-imx@nxp.com, jun.li@nxp.com
+References: <20230801070110.1653394-1-xu.yang_2@nxp.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230801070110.1653394-1-xu.yang_2@nxp.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello usb maintainers/developers,
+On 8/1/23 00:01, Xu Yang wrote:
+> PD3.0 Spec 6.4.1.3.1 said:
+> For a Sink requiring no power from the Source, the Voltage (B19-10)
+> shall be set to 5V and the Operational Current Shall be set to 0mA.
+> 
+> Therefore, we can keep sink path closed if the operational current of
+> the first fixed PDO is 0mA.
+> 
+> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
 
-This is a 31-day syzbot report for the usb subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/usb
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-During the period, 4 new issues were detected and 3 were fixed.
-In total, 73 issues are still open and 322 have been fixed so far.
+> 
+> ---
+> Changes in v2:
+>    - also call tcpm_set_charge() when charge is false as suggested from
+>      Heikki and Guenter.
+> ---
+>   drivers/usb/typec/tcpm/tcpm.c | 7 +++++--
+>   1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 829d75ebab42..d999e6984fea 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -4301,7 +4301,9 @@ static void run_state_machine(struct tcpm_port *port)
+>   			if (port->slow_charger_loop && (current_lim > PD_P_SNK_STDBY_MW / 5))
+>   				current_lim = PD_P_SNK_STDBY_MW / 5;
+>   			tcpm_set_current_limit(port, current_lim, 5000);
+> -			tcpm_set_charge(port, true);
+> +			/* Not sink vbus if operational current is 0mA */
+> +			tcpm_set_charge(port, !!pdo_max_current(port->snk_pdo[0]));
+> +
+>   			if (!port->pd_supported)
+>   				tcpm_set_state(port, SNK_READY, 0);
+>   			else
+> @@ -4582,7 +4584,8 @@ static void run_state_machine(struct tcpm_port *port)
+>   			tcpm_set_current_limit(port,
+>   					       tcpm_get_current_limit(port),
+>   					       5000);
+> -			tcpm_set_charge(port, true);
+> +			/* Not sink vbus if operational current is 0mA */
+> +			tcpm_set_charge(port, !!pdo_max_current(port->snk_pdo[0]));
+>   		}
+>   		if (port->ams == HARD_RESET)
+>   			tcpm_ams_finish(port);
 
-Some of the still happening issues:
-
-Ref  Crashes Repro Title
-<1>  2254    Yes   KMSAN: uninit-value in mii_nway_restart
-                   https://syzkaller.appspot.com/bug?extid=1f53a30781af65d2c955
-<2>  2098    Yes   WARNING in firmware_fallback_sysfs
-                   https://syzkaller.appspot.com/bug?extid=95f2e2439b97575ec3c0
-<3>  1059    Yes   KMSAN: uninit-value in alauda_check_media
-                   https://syzkaller.appspot.com/bug?extid=e7d46eb426883fb97efd
-<4>  983     Yes   WARNING in smsusb_term_device
-                   https://syzkaller.appspot.com/bug?extid=40ac6e73326e79ee8ecb
-<5>  851     Yes   INFO: task hung in usb_get_descriptor (2)
-                   https://syzkaller.appspot.com/bug?extid=e8db9d9e65feff8fa471
-<6>  485     Yes   INFO: task hung in hub_port_init (3)
-                   https://syzkaller.appspot.com/bug?extid=b6f11035e572f08bc20f
-<7>  355     Yes   KASAN: slab-use-after-free Read in pvr2_context_set_notify
-                   https://syzkaller.appspot.com/bug?extid=621409285c4156a009b3
-<8>  340     Yes   INFO: task hung in r871xu_dev_remove
-                   https://syzkaller.appspot.com/bug?extid=f39c1dad0b7db49ca4a8
-<9>  325     Yes   INFO: task hung in usbdev_open (2)
-                   https://syzkaller.appspot.com/bug?extid=b73659f5bb96fac34820
-<10> 238     Yes   INFO: task hung in netdev_run_todo (2)
-                   https://syzkaller.appspot.com/bug?extid=9d77543f47951a63d5c1
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
-
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
-
-You may send multiple commands in a single email message.
