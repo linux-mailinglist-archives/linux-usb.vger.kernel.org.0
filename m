@@ -2,307 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9949076C829
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Aug 2023 10:15:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1828776C852
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Aug 2023 10:27:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232430AbjHBIPQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Aug 2023 04:15:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40412 "EHLO
+        id S233933AbjHBI1V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Aug 2023 04:27:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230495AbjHBIPP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Aug 2023 04:15:15 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E76219F
-        for <linux-usb@vger.kernel.org>; Wed,  2 Aug 2023 01:15:14 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-31757edd9edso5802931f8f.2
-        for <linux-usb@vger.kernel.org>; Wed, 02 Aug 2023 01:15:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1690964112; x=1691568912;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=5207ikmn6FO2pMg9Ii8+IOoLRcWuJD5TBwm7P4/PsQc=;
-        b=Qnv5VGWYZWJNvzi0EqgiFIA/bMbwyBgFHSg7T5sm47dvx/OQ38acYrlbiozXWpY0K5
-         t0IRRxge/yvXwNGs66cf2hgjz92/WHjVK6+0QdCAP7brEDcHCE7IdJYAue1XjAnNQ169
-         l+8GEb5a5e862qqJNC/6sWBKE7R4VEjQ1Gl/qC4Y7tkVrV5Zmtc/foJqLCfFTj386UvD
-         YXpFsAi1dTF35+9bs0u9Y/IJ0UhKXNivz4oScn8yl5+lUYpTpS0cKGdDmmrUWz+SogVc
-         8BoVASwuQBs7kkdHR4e8O5XvdViWXvzzEfBkEJAVICcg5J7iY/er3IDy4ZpUj350R66U
-         vG4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1690964112; x=1691568912;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5207ikmn6FO2pMg9Ii8+IOoLRcWuJD5TBwm7P4/PsQc=;
-        b=Q9AFqn0Y3qw/yvgF+rqIdhyaGXiGUWQOdpPb2khIVaBIG4LiVF0FBUt9bvmGHKnMK7
-         Ch7Tqv0XeycjpCKCwj0Cl0IMIfqFimkEq1mb/ACy0UtnJiCFOGcm8gZNFe6J6Ei3s7mY
-         aFqFT1lQwCV8NIaWA3tKxwoWkODRddk0U/xOS/HntPxUnXIQpKyZOrqcTzh9a+C28oyR
-         OxVxlmkjtcUCDJ1n9rZ6ho+tPlL9x9JgqTn4JCsmFHqcWW12GRO10wN8zQhY9gPpigtr
-         WxI/1YhQOnA77IVdBxpNLvJbjLxSDzHHLaoJlNvT6b3lPF+PxvPjV/1JwlItFg911G61
-         iWzQ==
-X-Gm-Message-State: ABy/qLbSLnLSYT/KZc3nXwvnueb28JzwMzL8/ff5KcqnWt1vcjIuw0V6
-        Q0yGvV6ZNyjAF1xpbThj4pKOvw==
-X-Google-Smtp-Source: APBJJlGrlmEBQ2oMdc02mtFAqelLKeKt6FFTP+bX6dAhd1LhtAC5oPtuwPafwqHkJrDtIVJFoLGw5g==
-X-Received: by 2002:a5d:4572:0:b0:313:f0ef:1e55 with SMTP id a18-20020a5d4572000000b00313f0ef1e55mr3983967wrc.37.1690964112450;
-        Wed, 02 Aug 2023 01:15:12 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:c5bb:5b4:61e3:d196? ([2a01:e0a:982:cbb0:c5bb:5b4:61e3:d196])
-        by smtp.gmail.com with ESMTPSA id b10-20020a5d4b8a000000b003175f00e555sm18086855wrt.97.2023.08.02.01.15.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Aug 2023 01:15:11 -0700 (PDT)
-Message-ID: <e611a1db-89f6-999b-1a01-a49d9d00b07f@linaro.org>
-Date:   Wed, 2 Aug 2023 10:15:10 +0200
+        with ESMTP id S232838AbjHBI1U (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Aug 2023 04:27:20 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 36361E48;
+        Wed,  2 Aug 2023 01:27:18 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 3728QaklE004404, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 3728QaklE004404
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
+        Wed, 2 Aug 2023 16:26:36 +0800
+Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Wed, 2 Aug 2023 16:26:51 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS01.realtek.com.tw (172.21.6.94) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Wed, 2 Aug 2023 16:26:50 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
+ RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
+ 15.01.2375.007; Wed, 2 Aug 2023 16:26:50 +0800
+From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
+        <stanley_chang@realtek.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2 1/2] usb: dwc3: add Realtek DHC RTD SoC dwc3 glue layer driver
+Thread-Topic: [PATCH v2 1/2] usb: dwc3: add Realtek DHC RTD SoC dwc3 glue
+ layer driver
+Thread-Index: AQHZxFokPxd4W07ijUGGBrmKl0qPKq/VrnaAgADyIuA=
+Date:   Wed, 2 Aug 2023 08:26:50 +0000
+Message-ID: <ff9ca6f15936450696bff502c0047708@realtek.com>
+References: <20230801092541.25261-1-stanley_chang@realtek.com>
+ <20230802011400.v4jim6ajsqc3tvei@synopsys.com>
+In-Reply-To: <20230802011400.v4jim6ajsqc3tvei@synopsys.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.190.159]
+x-kse-serverinfo: RTEXMBS01.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v3 1/3] drm/display: add transparent bridge helper
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
-        freedreno@lists.freedesktop.org
-References: <20230802011845.4176631-1-dmitry.baryshkov@linaro.org>
- <20230802011845.4176631-2-dmitry.baryshkov@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <20230802011845.4176631-2-dmitry.baryshkov@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-On 02/08/2023 03:18, Dmitry Baryshkov wrote:
-> Define a helper for creating simple transparent bridges which serve the
-> only purpose of linking devices into the bridge chain up to the last
-> bridge representing the connector. This is especially useful for
-> DP/USB-C bridge chains, which can span across several devices, but do
-> not require any additional functionality from the intermediate bridges.
-> 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
->   drivers/gpu/drm/display/Kconfig             |   9 ++
->   drivers/gpu/drm/display/Makefile            |   2 +
->   drivers/gpu/drm/display/drm_simple_bridge.c | 127 ++++++++++++++++++++
-
-I wonder why drm/display/ and not drm/bridge ?
-
-It's an helper, but it's mainly a bridge.
-
->   include/drm/display/drm_simple_bridge.h     |  19 +++
->   4 files changed, 157 insertions(+)
->   create mode 100644 drivers/gpu/drm/display/drm_simple_bridge.c
->   create mode 100644 include/drm/display/drm_simple_bridge.h
-> 
-> diff --git a/drivers/gpu/drm/display/Kconfig b/drivers/gpu/drm/display/Kconfig
-> index 09712b88a5b8..a6132984b9e3 100644
-> --- a/drivers/gpu/drm/display/Kconfig
-> +++ b/drivers/gpu/drm/display/Kconfig
-> @@ -49,3 +49,12 @@ config DRM_DP_CEC
->   
->   	  Note: not all adapters support this feature, and even for those
->   	  that do support this they often do not hook up the CEC pin.
-> +
-> +config DRM_SIMPLE_BRIDGE
-> +	tristate
-> +	depends on DRM
-> +	select AUXILIARY_BUS
-> +	select DRM_PANEL_BRIDGE
-> +	help
-> +	  Simple transparent bridge that is used by several drivers to build
-> +	  bridges chain.
-> diff --git a/drivers/gpu/drm/display/Makefile b/drivers/gpu/drm/display/Makefile
-> index 17ac4a1006a8..6e2b0d7f24b3 100644
-> --- a/drivers/gpu/drm/display/Makefile
-> +++ b/drivers/gpu/drm/display/Makefile
-> @@ -16,3 +16,5 @@ drm_display_helper-$(CONFIG_DRM_DP_AUX_CHARDEV) += drm_dp_aux_dev.o
->   drm_display_helper-$(CONFIG_DRM_DP_CEC) += drm_dp_cec.o
->   
->   obj-$(CONFIG_DRM_DISPLAY_HELPER) += drm_display_helper.o
-> +
-> +obj-$(CONFIG_DRM_SIMPLE_BRIDGE) += drm_simple_bridge.o
-> diff --git a/drivers/gpu/drm/display/drm_simple_bridge.c b/drivers/gpu/drm/display/drm_simple_bridge.c
-> new file mode 100644
-> index 000000000000..9e80efe67b93
-> --- /dev/null
-> +++ b/drivers/gpu/drm/display/drm_simple_bridge.c
-> @@ -0,0 +1,127 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * Copyright (C) 2023 Linaro Ltd.
-> + *
-> + * Author: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> + */
-> +#include <linux/auxiliary_bus.h>
-> +#include <linux/module.h>
-> +
-> +#include <drm/drm_bridge.h>
-> +#include <drm/display/drm_simple_bridge.h>
-> +
-> +static DEFINE_IDA(simple_bridge_ida);
-> +
-> +static void drm_simple_bridge_release(struct device *dev)
-> +{
-> +	struct auxiliary_device *adev = to_auxiliary_dev(dev);
-> +
-> +	kfree(adev);
-> +}
-> +
-> +static void drm_simple_bridge_unregister_adev(void *_adev)
-> +{
-> +	struct auxiliary_device *adev = _adev;
-> +
-> +	auxiliary_device_delete(adev);
-> +	auxiliary_device_uninit(adev);
-> +}
-> +
-> +int drm_simple_bridge_register(struct device *parent)
-> +{
-> +	struct auxiliary_device *adev;
-> +	int ret;
-> +
-> +	adev = kzalloc(sizeof(*adev), GFP_KERNEL);
-> +	if (!adev)
-> +		return -ENOMEM;
-> +
-> +	ret = ida_alloc(&simple_bridge_ida, GFP_KERNEL);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	adev->id = ret;
-> +	adev->name = "simple_bridge";
-> +	adev->dev.parent = parent;
-> +	adev->dev.of_node = parent->of_node;
-> +	adev->dev.release = drm_simple_bridge_release;
-> +
-> +	ret = auxiliary_device_init(adev);
-> +	if (ret) {
-> +		kfree(adev);
-> +		return ret;
-> +	}
-> +
-> +	ret = auxiliary_device_add(adev);
-> +	if (ret) {
-> +		auxiliary_device_uninit(adev);
-> +		return ret;
-> +	}
-> +
-> +	return devm_add_action_or_reset(parent, drm_simple_bridge_unregister_adev, adev);
-> +}
-> +EXPORT_SYMBOL_GPL(drm_simple_bridge_register);
-> +
-> +struct drm_simple_bridge_data {
-> +	struct drm_bridge bridge;
-> +	struct drm_bridge *next_bridge;
-> +	struct device *dev;
-> +};
-> +
-> +static int drm_simple_bridge_attach(struct drm_bridge *bridge,
-> +				    enum drm_bridge_attach_flags flags)
-> +{
-> +	struct drm_simple_bridge_data *data;
-> +
-> +	if (!(flags & DRM_BRIDGE_ATTACH_NO_CONNECTOR))
-> +		return -EINVAL;
-> +
-> +	data = container_of(bridge, struct drm_simple_bridge_data, bridge);
-> +
-> +	return drm_bridge_attach(bridge->encoder, data->next_bridge, bridge,
-> +				 DRM_BRIDGE_ATTACH_NO_CONNECTOR);
-> +}
-> +
-> +static const struct drm_bridge_funcs drm_simple_bridge_funcs = {
-> +	.attach	= drm_simple_bridge_attach,
-> +};
-> +
-> +static int drm_simple_bridge_probe(struct auxiliary_device *auxdev,
-> +				   const struct auxiliary_device_id *id)
-> +{
-> +	struct drm_simple_bridge_data *data;
-> +
-> +	data = devm_kzalloc(&auxdev->dev, sizeof(*data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	data->dev = &auxdev->dev;
-> +	data->next_bridge = devm_drm_of_get_bridge(&auxdev->dev, auxdev->dev.of_node, 0, 0);
-> +	if (IS_ERR(data->next_bridge))
-> +		return dev_err_probe(&auxdev->dev, PTR_ERR(data->next_bridge),
-> +				     "failed to acquire drm_bridge\n");
-> +
-> +	data->bridge.funcs = &drm_simple_bridge_funcs;
-> +#ifdef CONFIG_OF
-> +	data->bridge.of_node = data->dev->of_node;
-> +#endif
-
-I think the whole stuff should depend on OF since devm_drm_of_get_bridge() is a no-op when !OF
-
-> +
-> +	return devm_drm_bridge_add(data->dev, &data->bridge);
-> +}
-> +
-> +static const struct auxiliary_device_id drm_simple_bridge_table[] = {
-> +	{ .name = KBUILD_MODNAME ".simple_bridge" },
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(auxiliary, drm_simple_bridge_table);
-> +
-> +struct auxiliary_driver drm_simple_bridge_drv = {
-> +	.name = "simple_bridge",
-> +	.id_table = drm_simple_bridge_table,
-> +	.probe = drm_simple_bridge_probe,
-> +};
-> +module_auxiliary_driver(drm_simple_bridge_drv);
-> +
-> +MODULE_AUTHOR("Dmitry Baryshkov <dmitry.baryshkov@linaro.org>");
-> +MODULE_DESCRIPTION("DRM simple bridge helper");
-> +MODULE_LICENSE("GPL");
-> diff --git a/include/drm/display/drm_simple_bridge.h b/include/drm/display/drm_simple_bridge.h
-> new file mode 100644
-> index 000000000000..3da8e1fb1137
-> --- /dev/null
-> +++ b/include/drm/display/drm_simple_bridge.h
-> @@ -0,0 +1,19 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * Copyright (C) 2023 Linaro Ltd.
-> + *
-> + * Author: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> + */
-> +#ifndef DRM_SIMPLE_BRIDGE_H
-> +#define DRM_SIMPLE_BRIDGE_H
-> +
-> +#if IS_ENABLED(CONFIG_DRM_SIMPLE_BRIDGE)
-> +int drm_simple_bridge_register(struct device *parent);
-> +#else
-> +static inline int drm_simple_bridge_register(struct device *parent)
-> +{
-> +	return 0;
-> +}
-> +#endif
-> +
-> +#endif
-
-The design looks fine, but I'll need another review.
-
-Thanks,
-Neil
-
+SGkgVGhpbmgsDQoNCj4gPiArc3RydWN0IGR3YzNfcnRrIHsNCj4gPiArICAgICBzdHJ1Y3QgZGV2
+aWNlICpkZXY7DQo+ID4gKyAgICAgdm9pZCBfX2lvbWVtICpyZWdzOw0KPiA+ICsgICAgIHNpemVf
+dCByZWdzX3NpemU7DQo+ID4gKw0KPiA+ICsgICAgIHN0cnVjdCBkd2MzICpkd2M7DQo+ID4gKw0K
+PiA+ICsgICAgIGludCBjdXJfZHJfbW9kZTsgLyogY3VycmVudCBkciBtb2RlICovDQo+ID4gKyAg
+ICAgYm9vbCBzdXBwb3J0X2RyZF9tb2RlOyAvKiBpZiBzdXBwb3J0IEhvc3QvZGV2aWNlIHN3aXRj
+aCAqLw0KPiANCj4gSSB0aGluayB3ZSBtYXkgbm90IG5lZWQgdGhpcyBhbmQgZG8gYXdheSB0aGUg
+Ym9vbGVhbiBzdXBwb3J0X2RyZF9tb2RlLg0KDQpZZXMsIHRoZSBpbml0aWFsIGZsb3cgc2hvdWxk
+IGJlIHNpbXBsaWZpZWQgYXMNCkBAIC0zNDYsMTIgKzM0Miw3IEBAIHN0YXRpYyBpbnQgZHdjM19y
+dGtfcHJvYmVfZHdjM19jb3JlKHN0cnVjdCBkd2MzX3J0ayAqcnRrKQ0KDQogICAgICAgIHJ0ay0+
+Y3VyX2RyX21vZGUgPSBkcl9tb2RlOw0KDQotICAgICAgIGlmIChkZXZpY2VfcHJvcGVydHlfcmVh
+ZF9ib29sKGR3YzNfZGV2LCAidXNiLXJvbGUtc3dpdGNoIikpDQotICAgICAgICAgICAgICAgcnRr
+LT5zdXBwb3J0X2RyZF9tb2RlID0gdHJ1ZTsNCi0gICAgICAgZWxzZQ0KLSAgICAgICAgICAgICAg
+IHJ0ay0+c3VwcG9ydF9kcmRfbW9kZSA9IGZhbHNlOw0KLQ0KLSAgICAgICBpZiAocnRrLT5zdXBw
+b3J0X2RyZF9tb2RlKSB7DQorICAgICAgIGlmIChkZXZpY2VfcHJvcGVydHlfcmVhZF9ib29sKGR3
+YzNfZGV2LCAidXNiLXJvbGUtc3dpdGNoIikpIHsNCiAgICAgICAgICAgICAgICBkd2MzX3J0a19z
+ZXR1cF9yb2xlX3N3aXRjaChydGspOw0KICAgICAgICAgICAgICAgIHJ0ay0+Y3VyX2RyX21vZGUg
+PSBkd2MzX3J0a19nZXRfZHJfbW9kZShydGspOw0KICAgICAgICB9DQoNCj4gPiArc3RhdGljIGlu
+dCBkd2MzX3J0a19zZXRfZHJfbW9kZShzdHJ1Y3QgZHdjM19ydGsgKnJ0aywgaW50IGRyX21vZGUp
+DQo+IA0KPiBXaHkgcmV0dXJuIHRoZSBtb2RlIHJhdGhlciB0aGFuIHN0YXR1cyBpZiB0aGUgc2V0
+dGluZz8gWW91J3JlIG5vdCBjaGVja2luZyB0aGUNCj4gcmV0dXJuIG9mIHRoaXMgZnVuY3Rpb24g
+aW4gdGhlIGNhbGxlciBhbnl3YXkuDQoNCllvdSBhcmUgcmlnaHQsIHRoaXMgcmV0dXJuIHZhbHVl
+IGlzIHVubmVjZXNzYXJ5Lg0KSSB3aWxsIHJlbW92ZSBpdC4NCg0KPiA+ICt7DQo+ID4gKyAgICAg
+aWYgKCFydGstPnN1cHBvcnRfZHJkX21vZGUpDQo+ID4gKyAgICAgICAgICAgICByZXR1cm4gcnRr
+LT5jdXJfZHJfbW9kZTsNCj4gPiArDQo+ID4gKyAgICAgcnRrLT5jdXJfZHJfbW9kZSA9IGRyX21v
+ZGU7DQo+ID4gKw0KPiA+ICsgICAgIHN3aXRjaF9kd2MzX2RyX21vZGUocnRrLCBkcl9tb2RlKTsN
+Cj4gPiArICAgICBtZGVsYXkoMTApOw0KPiA+ICsgICAgIHN3aXRjaF91c2IyX2RyX21vZGUocnRr
+LCBkcl9tb2RlKTsNCj4gPiArDQo+ID4gKyAgICAgcmV0dXJuIHJ0ay0+Y3VyX2RyX21vZGU7DQo+
+ID4gK30NCj4gPiArDQoNCj4gPiArc3RhdGljIGludCBkd2MzX3J0a19zZXR1cF9yb2xlX3N3aXRj
+aChzdHJ1Y3QgZHdjM19ydGsgKnJ0aykNCj4gDQo+IEFueSByZWFzb24gd2h5IHdlJ3JlIGRvaW5n
+IHRoZSByb2xlIHN3aXRjaCBoZXJlIGFuZCBub3Qgd2hhdCdzIGltcGxlbWVudGVkDQo+IGZyb20g
+dGhlIGNvcmU/DQo+IA0KQmVjYXVzZSB3ZSBoYXZlIHRvIHNldCB0aGUgdXNiIDIuMCBwaHkgbW9k
+ZSB0aHJvdWdoIHN3aXRjaF91c2IyX2RyX21vZGUgaW4gdGhlIGZ1bmN0aW9uIGR3YzNfcnRrX3Nl
+dF9kcl9tb2RlLg0KSW4gZmFjdCwgc3dpdGNoX2R3YzNfZHJfbW9kZSB3aWxsIHVzZSB0aGUgcm9s
+ZSBzd2l0Y2hpbmcgaW1wbGVtZW50ZWQgYnkgY29yZS4NCg0KPiA+ICsNCj4gPiArbW9kdWxlX3Bs
+YXRmb3JtX2RyaXZlcihkd2MzX3J0a19kcml2ZXIpOw0KPiA+ICsNCj4gPiArTU9EVUxFX0FVVEhP
+UigiU3RhbmxleSBDaGFuZyA8c3RhbmxleV9jaGFuZ0ByZWFsdGVrLmNvbT4iKTsNCj4gPiArTU9E
+VUxFX0RFU0NSSVBUSU9OKCJEZXNpZ25XYXJlIFVTQjMgUmVhbHRlayBHbHVlIExheWVyIik7DQo+
+ID4gK01PRFVMRV9BTElBUygicGxhdGZvcm06cnRrLWR3YzMiKTsNCj4gPiArTU9EVUxFX0xJQ0VO
+U0UoIkdQTCIpOw0KPiANCj4gSSdtIG5vdCBmYW1pbGlhciB3aXRoIGxpY2Vuc2luZyBtdWNoLCBi
+dXQgY2FuIHRoZSBTUERYIGhlYWRlciBpbmRpY2F0ZXMNCj4gZGlmZmVyZW50IHZlcnNpb24gdGhh
+biB0aGUgbW9kdWxlIGxpY2Vuc2U/DQo+IA0KVGhhbmtzIEdyZWcgZm9yIHlvdXIgY29tbWVudC4N
+CkVpdGhlciBHUEwgb3IgR1BMIHYyIGFyZSBzdWl0YWJsZSBmb3Igb3VyIHNvdXJjZSBjb2RlLg0K
+DQpUaGFua3MsDQpTdGFubGV5DQoNCg==
