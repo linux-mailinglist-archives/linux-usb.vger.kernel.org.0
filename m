@@ -2,66 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1828776C852
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Aug 2023 10:27:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36EFF76C8F6
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Aug 2023 11:07:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233933AbjHBI1V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Aug 2023 04:27:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44780 "EHLO
+        id S233896AbjHBJHC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Aug 2023 05:07:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232838AbjHBI1U (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Aug 2023 04:27:20 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 36361E48;
-        Wed,  2 Aug 2023 01:27:18 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 3728QaklE004404, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 3728QaklE004404
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Wed, 2 Aug 2023 16:26:36 +0800
-Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Wed, 2 Aug 2023 16:26:51 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS01.realtek.com.tw (172.21.6.94) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Wed, 2 Aug 2023 16:26:50 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
- RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
- 15.01.2375.007; Wed, 2 Aug 2023 16:26:50 +0800
-From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
-        <stanley_chang@realtek.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 1/2] usb: dwc3: add Realtek DHC RTD SoC dwc3 glue layer driver
-Thread-Topic: [PATCH v2 1/2] usb: dwc3: add Realtek DHC RTD SoC dwc3 glue
- layer driver
-Thread-Index: AQHZxFokPxd4W07ijUGGBrmKl0qPKq/VrnaAgADyIuA=
-Date:   Wed, 2 Aug 2023 08:26:50 +0000
-Message-ID: <ff9ca6f15936450696bff502c0047708@realtek.com>
-References: <20230801092541.25261-1-stanley_chang@realtek.com>
- <20230802011400.v4jim6ajsqc3tvei@synopsys.com>
-In-Reply-To: <20230802011400.v4jim6ajsqc3tvei@synopsys.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.190.159]
-x-kse-serverinfo: RTEXMBS01.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S233840AbjHBJG5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Aug 2023 05:06:57 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 86204272A;
+        Wed,  2 Aug 2023 02:06:55 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.201])
+        by gateway (Coremail) with SMTP id _____8DxPOuuHMpkNdQOAA--.29482S3;
+        Wed, 02 Aug 2023 17:06:54 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.20.42.201])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxriOqHMpk_mZFAA--.8718S2;
+        Wed, 02 Aug 2023 17:06:53 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: [PATCH] usb: xhci-plat: fix usb disconnect issue after s4
+Date:   Wed,  2 Aug 2023 17:06:42 +0800
+Message-Id: <20230802090642.1642-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8CxriOqHMpk_mZFAA--.8718S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
+        nUUI43ZEXa7xR_UUUUUUUUU==
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
@@ -71,46 +47,71 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgVGhpbmgsDQoNCj4gPiArc3RydWN0IGR3YzNfcnRrIHsNCj4gPiArICAgICBzdHJ1Y3QgZGV2
-aWNlICpkZXY7DQo+ID4gKyAgICAgdm9pZCBfX2lvbWVtICpyZWdzOw0KPiA+ICsgICAgIHNpemVf
-dCByZWdzX3NpemU7DQo+ID4gKw0KPiA+ICsgICAgIHN0cnVjdCBkd2MzICpkd2M7DQo+ID4gKw0K
-PiA+ICsgICAgIGludCBjdXJfZHJfbW9kZTsgLyogY3VycmVudCBkciBtb2RlICovDQo+ID4gKyAg
-ICAgYm9vbCBzdXBwb3J0X2RyZF9tb2RlOyAvKiBpZiBzdXBwb3J0IEhvc3QvZGV2aWNlIHN3aXRj
-aCAqLw0KPiANCj4gSSB0aGluayB3ZSBtYXkgbm90IG5lZWQgdGhpcyBhbmQgZG8gYXdheSB0aGUg
-Ym9vbGVhbiBzdXBwb3J0X2RyZF9tb2RlLg0KDQpZZXMsIHRoZSBpbml0aWFsIGZsb3cgc2hvdWxk
-IGJlIHNpbXBsaWZpZWQgYXMNCkBAIC0zNDYsMTIgKzM0Miw3IEBAIHN0YXRpYyBpbnQgZHdjM19y
-dGtfcHJvYmVfZHdjM19jb3JlKHN0cnVjdCBkd2MzX3J0ayAqcnRrKQ0KDQogICAgICAgIHJ0ay0+
-Y3VyX2RyX21vZGUgPSBkcl9tb2RlOw0KDQotICAgICAgIGlmIChkZXZpY2VfcHJvcGVydHlfcmVh
-ZF9ib29sKGR3YzNfZGV2LCAidXNiLXJvbGUtc3dpdGNoIikpDQotICAgICAgICAgICAgICAgcnRr
-LT5zdXBwb3J0X2RyZF9tb2RlID0gdHJ1ZTsNCi0gICAgICAgZWxzZQ0KLSAgICAgICAgICAgICAg
-IHJ0ay0+c3VwcG9ydF9kcmRfbW9kZSA9IGZhbHNlOw0KLQ0KLSAgICAgICBpZiAocnRrLT5zdXBw
-b3J0X2RyZF9tb2RlKSB7DQorICAgICAgIGlmIChkZXZpY2VfcHJvcGVydHlfcmVhZF9ib29sKGR3
-YzNfZGV2LCAidXNiLXJvbGUtc3dpdGNoIikpIHsNCiAgICAgICAgICAgICAgICBkd2MzX3J0a19z
-ZXR1cF9yb2xlX3N3aXRjaChydGspOw0KICAgICAgICAgICAgICAgIHJ0ay0+Y3VyX2RyX21vZGUg
-PSBkd2MzX3J0a19nZXRfZHJfbW9kZShydGspOw0KICAgICAgICB9DQoNCj4gPiArc3RhdGljIGlu
-dCBkd2MzX3J0a19zZXRfZHJfbW9kZShzdHJ1Y3QgZHdjM19ydGsgKnJ0aywgaW50IGRyX21vZGUp
-DQo+IA0KPiBXaHkgcmV0dXJuIHRoZSBtb2RlIHJhdGhlciB0aGFuIHN0YXR1cyBpZiB0aGUgc2V0
-dGluZz8gWW91J3JlIG5vdCBjaGVja2luZyB0aGUNCj4gcmV0dXJuIG9mIHRoaXMgZnVuY3Rpb24g
-aW4gdGhlIGNhbGxlciBhbnl3YXkuDQoNCllvdSBhcmUgcmlnaHQsIHRoaXMgcmV0dXJuIHZhbHVl
-IGlzIHVubmVjZXNzYXJ5Lg0KSSB3aWxsIHJlbW92ZSBpdC4NCg0KPiA+ICt7DQo+ID4gKyAgICAg
-aWYgKCFydGstPnN1cHBvcnRfZHJkX21vZGUpDQo+ID4gKyAgICAgICAgICAgICByZXR1cm4gcnRr
-LT5jdXJfZHJfbW9kZTsNCj4gPiArDQo+ID4gKyAgICAgcnRrLT5jdXJfZHJfbW9kZSA9IGRyX21v
-ZGU7DQo+ID4gKw0KPiA+ICsgICAgIHN3aXRjaF9kd2MzX2RyX21vZGUocnRrLCBkcl9tb2RlKTsN
-Cj4gPiArICAgICBtZGVsYXkoMTApOw0KPiA+ICsgICAgIHN3aXRjaF91c2IyX2RyX21vZGUocnRr
-LCBkcl9tb2RlKTsNCj4gPiArDQo+ID4gKyAgICAgcmV0dXJuIHJ0ay0+Y3VyX2RyX21vZGU7DQo+
-ID4gK30NCj4gPiArDQoNCj4gPiArc3RhdGljIGludCBkd2MzX3J0a19zZXR1cF9yb2xlX3N3aXRj
-aChzdHJ1Y3QgZHdjM19ydGsgKnJ0aykNCj4gDQo+IEFueSByZWFzb24gd2h5IHdlJ3JlIGRvaW5n
-IHRoZSByb2xlIHN3aXRjaCBoZXJlIGFuZCBub3Qgd2hhdCdzIGltcGxlbWVudGVkDQo+IGZyb20g
-dGhlIGNvcmU/DQo+IA0KQmVjYXVzZSB3ZSBoYXZlIHRvIHNldCB0aGUgdXNiIDIuMCBwaHkgbW9k
-ZSB0aHJvdWdoIHN3aXRjaF91c2IyX2RyX21vZGUgaW4gdGhlIGZ1bmN0aW9uIGR3YzNfcnRrX3Nl
-dF9kcl9tb2RlLg0KSW4gZmFjdCwgc3dpdGNoX2R3YzNfZHJfbW9kZSB3aWxsIHVzZSB0aGUgcm9s
-ZSBzd2l0Y2hpbmcgaW1wbGVtZW50ZWQgYnkgY29yZS4NCg0KPiA+ICsNCj4gPiArbW9kdWxlX3Bs
-YXRmb3JtX2RyaXZlcihkd2MzX3J0a19kcml2ZXIpOw0KPiA+ICsNCj4gPiArTU9EVUxFX0FVVEhP
-UigiU3RhbmxleSBDaGFuZyA8c3RhbmxleV9jaGFuZ0ByZWFsdGVrLmNvbT4iKTsNCj4gPiArTU9E
-VUxFX0RFU0NSSVBUSU9OKCJEZXNpZ25XYXJlIFVTQjMgUmVhbHRlayBHbHVlIExheWVyIik7DQo+
-ID4gK01PRFVMRV9BTElBUygicGxhdGZvcm06cnRrLWR3YzMiKTsNCj4gPiArTU9EVUxFX0xJQ0VO
-U0UoIkdQTCIpOw0KPiANCj4gSSdtIG5vdCBmYW1pbGlhciB3aXRoIGxpY2Vuc2luZyBtdWNoLCBi
-dXQgY2FuIHRoZSBTUERYIGhlYWRlciBpbmRpY2F0ZXMNCj4gZGlmZmVyZW50IHZlcnNpb24gdGhh
-biB0aGUgbW9kdWxlIGxpY2Vuc2U/DQo+IA0KVGhhbmtzIEdyZWcgZm9yIHlvdXIgY29tbWVudC4N
-CkVpdGhlciBHUEwgb3IgR1BMIHYyIGFyZSBzdWl0YWJsZSBmb3Igb3VyIHNvdXJjZSBjb2RlLg0K
-DQpUaGFua3MsDQpTdGFubGV5DQoNCg==
+The xhci retaining bogus hardware states cause usb disconnect devices
+connected before hibernation(s4) and refer to the commit '547d55fa83
+("usb: ohci-platform: fix usb disconnect issue after s4")' which set
+flag "hibernated" as true when resume-from-hibernation and that the
+drivers will reset the hardware to get rid of any existing state and
+make sure resume from hibernation re-enumerates everything for xhci.
+
+Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+---
+ drivers/usb/host/xhci-plat.c | 21 ++++++++++++++++++---
+ 1 file changed, 18 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+index 28218c8f1837..41a213070435 100644
+--- a/drivers/usb/host/xhci-plat.c
++++ b/drivers/usb/host/xhci-plat.c
+@@ -451,7 +451,7 @@ static int __maybe_unused xhci_plat_suspend(struct device *dev)
+ 	return 0;
+ }
+ 
+-static int __maybe_unused xhci_plat_resume(struct device *dev)
++static int __maybe_unused xhci_plat_resume_common(struct device *dev, struct pm_message pmsg)
+ {
+ 	struct usb_hcd	*hcd = dev_get_drvdata(dev);
+ 	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
+@@ -466,7 +466,7 @@ static int __maybe_unused xhci_plat_resume(struct device *dev)
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = xhci_resume(xhci, PMSG_RESUME);
++	ret = xhci_resume(xhci, pmsg);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -477,6 +477,16 @@ static int __maybe_unused xhci_plat_resume(struct device *dev)
+ 	return 0;
+ }
+ 
++static int __maybe_unused xhci_plat_resume(struct device *dev)
++{
++	return xhci_plat_resume_common(dev, PMSG_RESUME);
++}
++
++static int __maybe_unused xhci_plat_restore(struct device *dev)
++{
++	return xhci_plat_resume_common(dev, PMSG_RESTORE);
++}
++
+ static int __maybe_unused xhci_plat_runtime_suspend(struct device *dev)
+ {
+ 	struct usb_hcd  *hcd = dev_get_drvdata(dev);
+@@ -499,7 +509,12 @@ static int __maybe_unused xhci_plat_runtime_resume(struct device *dev)
+ }
+ 
+ const struct dev_pm_ops xhci_plat_pm_ops = {
+-	SET_SYSTEM_SLEEP_PM_OPS(xhci_plat_suspend, xhci_plat_resume)
++	.suspend = xhci_plat_suspend,
++	.resume = xhci_plat_resume,
++	.freeze = xhci_plat_suspend,
++	.thaw = xhci_plat_resume,
++	.poweroff = xhci_plat_suspend,
++	.restore = xhci_plat_restore,
+ 
+ 	SET_RUNTIME_PM_OPS(xhci_plat_runtime_suspend,
+ 			   xhci_plat_runtime_resume,
+-- 
+2.31.1
+
