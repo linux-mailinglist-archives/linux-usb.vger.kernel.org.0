@@ -2,202 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DACF76DD10
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Aug 2023 03:18:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC93576DDBE
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Aug 2023 03:58:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232283AbjHCBSm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Aug 2023 21:18:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50348 "EHLO
+        id S230376AbjHCB6p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Aug 2023 21:58:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjHCBSk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Aug 2023 21:18:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84DD91B9;
-        Wed,  2 Aug 2023 18:18:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1FC4661B9F;
-        Thu,  3 Aug 2023 01:18:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A81B1C433C8;
-        Thu,  3 Aug 2023 01:18:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691025518;
-        bh=0P0S2/MgycChVw2ibGG2dMFXAv+3iwZOlw6Fgpq6W7o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hqN6OA/93yzinfVGHXyl12eDcC7r/sS8zKgv+lh30BnIvzSpXVa9ncvbuw4yxNGRx
-         ZgNwf0Z0ztBcLqVTXr/OHzBAU8tdKw4lhP+DFs+h2sYRto9qxuRcXxAePTET9ypbZ7
-         FU0XG2jUfDpBBrKAFH9j/K2ttnJsC21f1UWvy6hYcU0vj8AASxdJPFA7YhWxVWumqs
-         vS4/m+zQqN0CzfUWACLbz10Oj2sNSDZ9hMelnuB16Pzld3Me6u+y70sngwar4tNDnC
-         JX0QtwC1ALxc8J4rheTd94Rw3QWcF9yPQrFAlEvjhtM83tWFDqoBqhQu0aSyrE691C
-         YUSpfqzJk6y1A==
-Received: (nullmailer pid 1644049 invoked by uid 1000);
-        Thu, 03 Aug 2023 01:18:36 -0000
-Date:   Wed, 2 Aug 2023 19:18:36 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Stanley Chang <stanley_chang@realtek.com>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] doc: dt: bindings: usb: realtek,dwc3: Add Realtek
- DHC RTD SoC DWC3 USB
-Message-ID: <20230803011836.GA1635549-robh@kernel.org>
-References: <20230728035318.18741-1-stanley_chang@realtek.com>
- <20230728035318.18741-2-stanley_chang@realtek.com>
+        with ESMTP id S230369AbjHCB6K (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Aug 2023 21:58:10 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id B9CD130FB
+        for <linux-usb@vger.kernel.org>; Wed,  2 Aug 2023 18:56:10 -0700 (PDT)
+Received: (qmail 226884 invoked by uid 1000); 2 Aug 2023 21:56:09 -0400
+Date:   Wed, 2 Aug 2023 21:56:09 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Ron <ronald.du.igt.linuxml@gmail.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: GadgetFS ep0 OUT transactions immediately following SETUP
+ transactions
+Message-ID: <23a2c177-491e-416d-9e52-2c145f0264f3@rowland.harvard.edu>
+References: <CAHA0pnyBgFPbU0X6Ywe28ERcKcoB2LwfVEju6RXCS3SMRZS_RQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230728035318.18741-2-stanley_chang@realtek.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAHA0pnyBgFPbU0X6Ywe28ERcKcoB2LwfVEju6RXCS3SMRZS_RQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jul 28, 2023 at 11:53:13AM +0800, Stanley Chang wrote:
-> Document the DWC3 USB bindings for Realtek SoCs.
+On Wed, Aug 02, 2023 at 04:43:53PM -0700, Ron wrote:
+> Hello everyone,
 > 
-> Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
-> ---
->  .../devicetree/bindings/usb/realtek,dwc3.yaml | 107 ++++++++++++++++++
->  1 file changed, 107 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/realtek,dwc3.yaml
+> Thank you all for the help!
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/realtek,dwc3.yaml b/Documentation/devicetree/bindings/usb/realtek,dwc3.yaml
-> new file mode 100644
-> index 000000000000..74d388809924
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/realtek,dwc3.yaml
-> @@ -0,0 +1,107 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +# Copyright 2023 Realtek Semiconductor Corporation
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/usb/realtek,dwc3.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: Realtek DWC3 USB SoC Controller Glue
-> +
-> +maintainers:
-> +  - Stanley Chang <stanley_chang@realtek.com>
-> +
-> +description:
-> +  The Realtek DHC SoC embeds a DWC3 USB IP Core configured for USB 2.0
-> +  and USB 3.0 in host or dual-role mode.
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - realtek,rtd1295-dwc3
-> +          - realtek,rtd1315e-dwc3
-> +          - realtek,rtd1319-dwc3
-> +          - realtek,rtd1319d-dwc3
-> +          - realtek,rtd1395-dwc3
-> +          - realtek,rtd1619-dwc3
-> +          - realtek,rtd1619b-dwc3
-> +      - const: realtek,rtd-dwc3
-> +
-> +  reg:
-> +    maxItems: 1
+> I'm trying to modify the GadgetFS kernel driver to be able to handle
+> Vendor Specific Out requests to ep0. All of these transactions are
+> occuring on ep0. Right now the host is sending the SETUP transaction,
+> then an OUT transaction with vendor specific data, which is followed
+> by the device sending an IN transaction to acknowledge the whole
+> request. When polling the ep0 file descriptor in userspace, I can
+> receive the Vendor Specific SETUP transaction and the respective
+> bRequest, wValue, etc values from the SETUP transaction. However, I
+> can't figure out how to also get the data from the OUT transaction
+> into userspace.
 
-Some details on what these registers are would be useful. Or describing 
-what's in the 'glue' device?
+You just read that data from the ep0 file descriptor, same as you read 
+the SETUP information (except that this data won't be encapsulated in 
+a usb_gadgetfs_event structure).
 
-> +
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 1
-> +
-> +  ranges: true
-> +
-> +  realtek,unlink-usb3-port:
-> +    description: Disable link between USB 3.0 PHY and USB mac.
-> +      Only for RTD1619 SoC, if the board design support maximum 2.0 speed.
-> +    type: boolean
+>  I have tried modifying inode.c for gadgetFS but am not
+> sure where to begin to do this.
 
-We have a property for this: maximum-speed
+No modifications should be needed.
 
-That belongs in the USB controller node though.
-
-> +
-> +  realtek,disable-usb3-phy:
-> +    description: Close USB 3.0 PHY if the board design not support USB 3.0.
-> +    type: boolean
-
-Can't this be determined by not having a USB3 phy listed?
-
-> +
-> +  realtek,enable-l4icg:
-> +    description: Enable the power saving feature l4icg by hardware clock.
-> +      gating.
-> +    type: boolean
-> +
-> +patternProperties:
-> +  "^usb@[0-9a-f]+$":
-> +    $ref: snps,dwc3.yaml#
-> +    description: Required child node
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - "#address-cells"
-> +  - "#size-cells"
-> +  - ranges
-> +
-> +allOf:
-> +  - if:
-> +      not:
-> +        properties:
-> +          compatible:
-> +            contains:
-> +              enum:
-> +                - realtek,rtd1619-dwc3
-> +    then:
-> +      properties:
-> +        realtek,unlink-usb3-port: false
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    usb@98013e00 {
-> +        compatible = "realtek,rtd1319d-dwc3", "realtek,rtd-dwc3";
-> +        reg = <0x98013e00 0x200>;
-> +        #address-cells = <1>;
-> +        #size-cells = <1>;
-> +        ranges;
-> +        status = "okay";
-
-Drop status from examples.
-
-> +        realtek,disable-usb3-phy;
-> +        realtek,enable-l4icg;
-> +
-> +        usb@98050000 {
-> +            compatible = "snps,dwc3";
-> +            reg = <0x98050000 0x9000>;
-> +            interrupts = <0 94 4>;
-> +            phys = <&usb2phy &usb3phy>;
-> +            phy-names = "usb2-phy", "usb3-phy";
-> +            dr_mode = "otg";
-> +            usb-role-switch;
-> +            role-switch-default-mode = "host";
-> +            snps,dis_u2_susphy_quirk;
-> +            snps,parkmode-disable-ss-quirk;
-> +            snps,parkmode-disable-hs-quirk;
-> +            maximum-speed = "high-speed";
-> +        };
-> +    };
-> -- 
-> 2.34.1
-> 
+Alan Stern
