@@ -2,91 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC7A176DE91
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Aug 2023 04:54:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A7DF76DF06
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Aug 2023 05:30:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232382AbjHCCy6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Aug 2023 22:54:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38620 "EHLO
+        id S229932AbjHCDaC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Aug 2023 23:30:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjHCCy4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Aug 2023 22:54:56 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CFC4A10A;
-        Wed,  2 Aug 2023 19:54:54 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.201])
-        by gateway (Coremail) with SMTP id _____8Cxh+j9FstkOW4PAA--.39S3;
-        Thu, 03 Aug 2023 10:54:53 +0800 (CST)
-Received: from [10.20.42.201] (unknown [10.20.42.201])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxzM78FstkEI1GAA--.51281S3;
-        Thu, 03 Aug 2023 10:54:52 +0800 (CST)
-Subject: Re: [PATCH] usb: xhci-plat: fix usb disconnect issue after s4
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
-References: <20230802090642.1642-1-zhuyinbo@loongson.cn>
- <2023080243-matted-abnormal-0fb0@gregkh>
- <4ee866a1-39a4-3b88-20f6-108e605ab00e@loongson.cn>
- <2023080222-sizable-gauntlet-e658@gregkh>
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-Message-ID: <73446dc0-d2e0-1d80-8107-186b8c41bee5@loongson.cn>
-Date:   Thu, 3 Aug 2023 10:54:52 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        with ESMTP id S233397AbjHCD30 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Aug 2023 23:29:26 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8480630E5;
+        Wed,  2 Aug 2023 20:29:09 -0700 (PDT)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4RGZ4v6BW8zyNJ3;
+        Thu,  3 Aug 2023 11:26:23 +0800 (CST)
+Received: from huawei.com (10.90.53.73) by kwepemi500012.china.huawei.com
+ (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 3 Aug
+ 2023 11:29:06 +0800
+From:   Li Zetao <lizetao1@huawei.com>
+To:     <herve.codina@bootlin.com>, <gregkh@linuxfoundation.org>
+CC:     <lizetao1@huawei.com>, <linux-renesas-soc@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>
+Subject: [PATCH -next] usb: gadget: udc: Remove redundant initialization for udc_driver
+Date:   Thu, 3 Aug 2023 11:28:38 +0800
+Message-ID: <20230803032838.3045730-1-lizetao1@huawei.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <2023080222-sizable-gauntlet-e658@gregkh>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxzM78FstkEI1GAA--.51281S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
-        nUUI43ZEXa7xR_UUUUUUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.90.53.73]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+There is a warning reported by coccinelle:
 
+./drivers/usb/gadget/udc/renesas_usbf.c:3381:3-8:
+		No need to set .owner here. The core will do it.
 
-在 2023/8/2 下午6:06, Greg Kroah-Hartman 写道:
-> On Wed, Aug 02, 2023 at 05:58:17PM +0800, Yinbo Zhu wrote:
->>
->>
->> 在 2023/8/2 下午5:39, Greg Kroah-Hartman 写道:
->>> On Wed, Aug 02, 2023 at 05:06:42PM +0800, Yinbo Zhu wrote:
->>>> The xhci retaining bogus hardware states cause usb disconnect devices
->>>> connected before hibernation(s4) and refer to the commit '547d55fa83
->>>> ("usb: ohci-platform: fix usb disconnect issue after s4")' which set
->>>> flag "hibernated" as true when resume-from-hibernation and that the
->>>> drivers will reset the hardware to get rid of any existing state and
->>>> make sure resume from hibernation re-enumerates everything for xhci.
->>>>
->>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->>>> ---
->>>>    drivers/usb/host/xhci-plat.c | 21 ++++++++++++++++++---
->>>>    1 file changed, 18 insertions(+), 3 deletions(-)
->>>
->>> What commit id does this fix?
+The module_platform_driver() will set "THIS_MODULE" to driver.owner
+when register a driver for platform-level devices, so it is redundant
+initialization to set driver.owner in udc_driver statement. Remove it
+to silence the warning.
 
+Signed-off-by: Li Zetao <lizetao1@huawei.com>
+---
+ drivers/usb/gadget/udc/renesas_usbf.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Sorry, I misunderstood your meaning earlier. This patch is not meant to
-fix the bugs in the previous commit id. Actually, it was to fix xhci
-issue that refer to repair of ohci (commit id "f3d478858bec4").
-
->>>
->>> Should it go to stable kernels?
-
-
-Do I need to add Cc about stable kernel for the above situation?
-
-Thanks,
-Yinbo
+diff --git a/drivers/usb/gadget/udc/renesas_usbf.c b/drivers/usb/gadget/udc/renesas_usbf.c
+index 3482b41d0646..657f265ac7cc 100644
+--- a/drivers/usb/gadget/udc/renesas_usbf.c
++++ b/drivers/usb/gadget/udc/renesas_usbf.c
+@@ -3378,7 +3378,6 @@ MODULE_DEVICE_TABLE(of, usbf_match);
+ static struct platform_driver udc_driver = {
+ 	.driver = {
+ 		.name = "usbf_renesas",
+-		.owner = THIS_MODULE,
+ 		.of_match_table = usbf_match,
+ 	},
+ 	.probe          = usbf_probe,
+-- 
+2.34.1
 
