@@ -2,36 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DE6076E978
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Aug 2023 15:06:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4475076E97D
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Aug 2023 15:06:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236044AbjHCNGl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Aug 2023 09:06:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54552 "EHLO
+        id S236086AbjHCNGy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Aug 2023 09:06:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236043AbjHCNGG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Aug 2023 09:06:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C214C37;
-        Thu,  3 Aug 2023 06:04:42 -0700 (PDT)
+        with ESMTP id S235884AbjHCNGV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Aug 2023 09:06:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD1E53C3C;
+        Thu,  3 Aug 2023 06:04:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE0FC61D7E;
-        Thu,  3 Aug 2023 13:04:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29ED8C433C7;
-        Thu,  3 Aug 2023 13:04:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A1C0D61DA6;
+        Thu,  3 Aug 2023 13:04:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA118C433C7;
+        Thu,  3 Aug 2023 13:04:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691067881;
-        bh=LWzbhEDAkcUxT4vk5MFeu//No99X5Z72z+2vQyX8zFQ=;
+        s=k20201202; t=1691067889;
+        bh=86rL97Y8LGSMwqN4UB29phiH/7PV6r8NUnN8AezfSh8=;
         h=From:To:Cc:Subject:Date:From;
-        b=egTh1qwbhDDz+mxMqe5xTEhKdo5bMxIJRQET/OIJpAOxaXWhZ5JvoVyNNmgQMloHi
-         MKNF52PCBVzowz78NGXSPG719IEUQ0HEF4NdjfNeUVRVWKYcWOvLky+0gk5Bw8LKKK
-         zJh9emqkVp4D+vHkx8jABzEKm8w29YrW1qXSrfbTclNO1KPRSNMEehsYf8pMUwJfv6
-         WKeqZGOngNgq0mFw48qyZZELxNQwO+kC3KZ5fLeeJoYhnYcv1Kp+vLnOyPTwtJffgX
-         kTTzmiJlvho0V3glUXeQTnOOfaXcIBvYJqVNznuac9FGzdt7eTX6HP9LptqEHtR+Qg
-         w7iXmG7UIVygA==
+        b=qzBdAtG0+WQv9czSqYqQTtciTyODL/3rKsQvkDQNYGuRa7TwZ4sr7sls5ycSUMgUb
+         YFgBDN5+7lETFfhRRCZ0BQ4Hzr6QnHdCvyw16xwv3inLYuvsAYcAPEF3DcChFQ9/Rh
+         ZMMUNDmfv6WAIz9yKny41sM6m3A5ciHgsRFRiSBenYP8q1OslKi1gh0uL7Pg3mxKt/
+         KG0a+Fk9aHrZurvPg0B9SvsdbI8MQ0bi6X9eyVCfVC+r7ElBL+P9tcdTsewPIerVe2
+         wGkHNn2SbJ7eQjQK2jCePJ2nXk6QQILY33YTWfEshkklOpj52S8IJqsq9nA4aoVfJ4
+         gJZB4A8U9ROrw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Alan Stern <stern@rowland.harvard.edu>,
@@ -41,17 +41,17 @@ Cc:     Alan Stern <stern@rowland.harvard.edu>,
         Sasha Levin <sashal@kernel.org>, davem@davemloft.net,
         edumazet@google.com, pabeni@redhat.com, netdev@vger.kernel.org,
         linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 1/3] net: usbnet: Fix WARNING in usbnet_start_xmit/usb_submit_urb
-Date:   Thu,  3 Aug 2023 09:04:36 -0400
-Message-Id: <20230803130438.641988-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 1/3] net: usbnet: Fix WARNING in usbnet_start_xmit/usb_submit_urb
+Date:   Thu,  3 Aug 2023 09:04:43 -0400
+Message-Id: <20230803130446.642038-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.15.123
+X-stable-base: Linux 5.10.188
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -111,10 +111,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 6 insertions(+)
 
 diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-index e4fbb4d866064..566aa01ad2810 100644
+index 43d70348343b2..481a41d879b53 100644
 --- a/drivers/net/usb/usbnet.c
 +++ b/drivers/net/usb/usbnet.c
-@@ -1771,6 +1771,10 @@ usbnet_probe (struct usb_interface *udev, const struct usb_device_id *prod)
+@@ -1738,6 +1738,10 @@ usbnet_probe (struct usb_interface *udev, const struct usb_device_id *prod)
  	} else if (!info->in || !info->out)
  		status = usbnet_get_endpoints (dev, udev);
  	else {
@@ -125,7 +125,7 @@ index e4fbb4d866064..566aa01ad2810 100644
  		dev->in = usb_rcvbulkpipe (xdev, info->in);
  		dev->out = usb_sndbulkpipe (xdev, info->out);
  		if (!(info->flags & FLAG_NO_SETINT))
-@@ -1780,6 +1784,8 @@ usbnet_probe (struct usb_interface *udev, const struct usb_device_id *prod)
+@@ -1747,6 +1751,8 @@ usbnet_probe (struct usb_interface *udev, const struct usb_device_id *prod)
  		else
  			status = 0;
  
