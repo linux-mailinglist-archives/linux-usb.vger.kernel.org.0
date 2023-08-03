@@ -2,66 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AA4F76EFD8
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Aug 2023 18:44:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC8BE76F03F
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Aug 2023 19:00:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234613AbjHCQoY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Aug 2023 12:44:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46872 "EHLO
+        id S234217AbjHCRAu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Aug 2023 13:00:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234465AbjHCQoW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Aug 2023 12:44:22 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617C83AA3;
-        Thu,  3 Aug 2023 09:44:18 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4fe48d0ab0fso1998023e87.1;
-        Thu, 03 Aug 2023 09:44:18 -0700 (PDT)
+        with ESMTP id S232505AbjHCRAr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Aug 2023 13:00:47 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E13C8212D;
+        Thu,  3 Aug 2023 10:00:41 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4fe2503e3easo2007692e87.2;
+        Thu, 03 Aug 2023 10:00:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691081056; x=1691685856;
+        d=gmail.com; s=20221208; t=1691082040; x=1691686840;
         h=content-transfer-encoding:content-language:in-reply-to:mime-version
          :user-agent:date:message-id:from:references:to:subject:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4Zvwc1p5HtLDdNnsvsflobUwI0/gIvHPTTxHIRtuIk8=;
-        b=UxFpZJVklEjVT9J0WAyRjTYVtSEY5EaP9Ji4DmlgE6lTalsWxrhtjRqjvUEP8EeZ4H
-         OnXNQflVLzN3WNhL5UFdHhQvLsRlv/UzrJx00959KjuYPw52rg4PMlhgRD2CXKNk3sCg
-         fxSvb6Q0GZuH3EHAtUjY63sWQIMTCAVpH119uhwuYMsfXYBjj9PrIqu6lCYvBkXaLh5q
-         9Ldqw43FAZKbod3mJGv3rnHjjgX89e6WKaaq2FpJoBlvybTRzvLifC/3EeOvBDcLdCjp
-         4umyJ51fMttfV5jp/yyfxqW7fojvx3JwInrO4veeM28DnWwR1uJKUQyAXF7FZqHdTuJs
-         0fVg==
+        bh=GSV8tU2Xed0CrxKN0ExqCQL3NAOiSSNTMwftFExPE74=;
+        b=bTI7LqXuTY4jIVIzXGBXT2VOfOzZOmBbruZhrAAGCW16E4QoEzU/+UIg9tapBTHtmg
+         0URTLql0r17ZBF94jEWD4ifRu5dT1wKi27LsZFnhmQoFxLir3tMSys5B1kWz+FVmZZ2Z
+         al7qQDVbs1Jb5tjhkYJqwO8yIw1+bqQQlH+lBhexKmV7A1vjnMOEjXnCquewEE0VF3uf
+         P0g3Pf5R08PKpNrUxqxakoN1MgbQ2U6lSYm+iIaeKDpxsmZW/PBVK0MV7VbGHWOwAQk4
+         S/zvENXF5PsKTi5PTIONjYzRtbJiCE7/5Owt6v/tN0S8zuZB9zmp3Kq9kNvViPmEhhA8
+         iJYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691081056; x=1691685856;
+        d=1e100.net; s=20221208; t=1691082040; x=1691686840;
         h=content-transfer-encoding:content-language:in-reply-to:mime-version
          :user-agent:date:message-id:from:references:to:subject
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4Zvwc1p5HtLDdNnsvsflobUwI0/gIvHPTTxHIRtuIk8=;
-        b=A3AFmqjiS8RhUf9mTaUUJMfpHP4v7+X1QaD0dFtkkEUNMPHq1yMu2weWteuyJGkuvL
-         4U5QKDu2pX9pzUmQIK+MLIt25Gzt+cNRDZqqNZ9MSnKTYakAmGy6k4tMH15jvGut1AGN
-         6dqdjr/JeyCUKxWTO1WEsJXEw2nBtD9zyc7qgfOolw4mAjl5dGMtTOpjV+d/5xHu6Pb5
-         pMnI6hh0AN9EfgMRW7ZLSojneXl+Acm9cgBuEm7mZwdR/u9+2WHlkbo4W08POG/Z2w9r
-         Rr50BZNwfLkULg7KioHdj3nLXs4g7GiIPg5JGBbaNbOAPCMMs6YPo8aji/m4kZ+w29OJ
-         qv3A==
-X-Gm-Message-State: AOJu0Yy1tzdp3BoSABHFL6KqZj6CfwvNmorbyBErXVSBsvWaxma8E09N
-        Az+LtYnbNVtH4sx6w2FG0+KKOmvOg6k=
-X-Google-Smtp-Source: AGHT+IFYiIiKCHEmkIuEXSOxCAFeDHZwl7zIB9KRI4AoS4Sjrnoopn+udfez+RoXdfRA3ZMUaR/06w==
-X-Received: by 2002:a05:6512:31c9:b0:4fe:4e2c:8e52 with SMTP id j9-20020a05651231c900b004fe4e2c8e52mr4062960lfe.42.1691081055961;
-        Thu, 03 Aug 2023 09:44:15 -0700 (PDT)
+        bh=GSV8tU2Xed0CrxKN0ExqCQL3NAOiSSNTMwftFExPE74=;
+        b=hfGy9A89tcP76rYZss+nZK0ttaxlHdj9DqwM4UWYXc2tZpBRtNPicGUlcTW04lyuPK
+         yMn5C9vDbYq2CRh1JLG+8uNnbiNjCLdI5w6IZqUzLXORpNv+Ex2Vx8XFqEGCccbYKWNf
+         uKOrmWTL3dyB29eGuCg0oBaiEu5yHgLi+QBirGC8pHAkRVPZ4p4dBNdRyI0MxJAx1K7c
+         7XkqH4C1Z+pogs9js8c5CGb2IiGdgRoj2h+QRqw0/Xg7xm0xoRopeP1kiFXHDQSZZYQG
+         9QyU5RiOsRjCUeKqZr5Xf+LU4q3D1AlDj93mj1uykS4gP6uLgYiNbZIZyfLjyxkcmDrs
+         1U9Q==
+X-Gm-Message-State: ABy/qLYKVgYqTk0iqDe6M41d9e5onywUdVwv/l/3HKxTqgqQaARvEFFT
+        3vUev7ysSCgM54MdxtCnkhZvwkGg1FM=
+X-Google-Smtp-Source: APBJJlExghUM8ysBRm/2An6b744Ys4TQw6w1hZy4xU12spPy8OqXdpTKVTm2XNKETo4zoihWKs5kBQ==
+X-Received: by 2002:ac2:5e6b:0:b0:4f8:5905:8e0a with SMTP id a11-20020ac25e6b000000b004f859058e0amr6476941lfr.6.1691082039582;
+        Thu, 03 Aug 2023 10:00:39 -0700 (PDT)
 Received: from [192.168.1.103] ([178.176.72.24])
-        by smtp.gmail.com with ESMTPSA id b7-20020ac247e7000000b004fe4e89dc41sm30011lfp.214.2023.08.03.09.44.14
+        by smtp.gmail.com with ESMTPSA id o15-20020a056512050f00b004fb85ffc82csm38322lfb.10.2023.08.03.10.00.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Aug 2023 09:44:14 -0700 (PDT)
-Subject: Re: [PATCH -next v3] usb: musb: Do not check 0 for
- platform_get_irq_byname()
-To:     Zhu Wang <wangzhu9@huawei.com>, b-liu@ti.com,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        Thu, 03 Aug 2023 10:00:38 -0700 (PDT)
+Subject: Re: [PATCH -next v3] usb: gadget: udc: gr_udc: Do not check 0 for
+ platform_get_irq()
+To:     Zhu Wang <wangzhu9@huawei.com>, gregkh@linuxfoundation.org,
+        herve.codina@bootlin.com, stern@rowland.harvard.edu,
+        robh@kernel.org, aaro.koskinen@iki.fi, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20230803120039.83502-1-wangzhu9@huawei.com>
+References: <20230803121136.86037-1-wangzhu9@huawei.com>
 From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <d45574ec-17cd-cd30-2c6f-8c2719f811e3@gmail.com>
-Date:   Thu, 3 Aug 2023 19:44:07 +0300
+Message-ID: <e85efc8e-5a12-5f9f-a23e-d701b5722896@gmail.com>
+Date:   Thu, 3 Aug 2023 20:00:36 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.10.1
 MIME-Version: 1.0
-In-Reply-To: <20230803120039.83502-1-wangzhu9@huawei.com>
+In-Reply-To: <20230803121136.86037-1-wangzhu9@huawei.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -75,23 +76,20 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 8/3/23 3:00 PM, Zhu Wang wrote:
+On 8/3/23 3:11 PM, Zhu Wang wrote:
 
-> When platform_get_irq_byname() failed, it may return -EPROBE_DEFER,
+> When platform_get_irq() failed, it may return -EPROBE_DEFER, -EINVAL or
+> -ENXIO, it is important to propagate the detail upstream, we cannot
+> override it.
 
-   s/failed/fails/, I think...
+   Deferred probing being fixed should be emphasized. And the patch is
+no longer "-next" material due to that...
 
-> -EINVAL or -ENXIO, it is important to propagate the detail upstream, we
-> cannot override it.
-
-   You better rename the patch to something like "usb: musb: Fix deferred
-probing" now. And remove "-next:, as this became a real fix.
-
-> And platform_get_irq_byname() used to return 0 (as both IRQ0 and error
+> And platform_get_irq() used to return 0 (as both IRQ0 and error
 > indication), there are several patches fixing the inconsistencies.
 
-   In no way I suggested to take my "historical" passage into the
-patch description!
+   No, this "historical" passage wasn't meant to be a part of the patch
+description.
 
 > Commit ce753ad1549c ("platform: finally disallow IRQ0 in
 > platform_get_irq() and its ilk") makes sure IRQ0 is not returned.
@@ -106,10 +104,10 @@ patch description!
 > ---
 > Changes in v3:
 > - Update the commit message, explain in detail why the return value of
-> platform_get_irq_byname() cannot be override.
+> platform_get_irq() cannot be override.
 
-   You didn't emphasize the deferred probing breakage we're trying to
-fix here at last; the other error codes here are not very important...
+   As I said, your descrioption isn't very convincing as you don't
+emphasize the deferred probing being fixed.
 
 [...]
 
