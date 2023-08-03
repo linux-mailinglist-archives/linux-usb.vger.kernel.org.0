@@ -2,113 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC8BE76F03F
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Aug 2023 19:00:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E20476F0F7
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Aug 2023 19:56:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234217AbjHCRAu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Aug 2023 13:00:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56732 "EHLO
+        id S235199AbjHCR4L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Aug 2023 13:56:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232505AbjHCRAr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Aug 2023 13:00:47 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E13C8212D;
-        Thu,  3 Aug 2023 10:00:41 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4fe2503e3easo2007692e87.2;
-        Thu, 03 Aug 2023 10:00:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691082040; x=1691686840;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:to:subject:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GSV8tU2Xed0CrxKN0ExqCQL3NAOiSSNTMwftFExPE74=;
-        b=bTI7LqXuTY4jIVIzXGBXT2VOfOzZOmBbruZhrAAGCW16E4QoEzU/+UIg9tapBTHtmg
-         0URTLql0r17ZBF94jEWD4ifRu5dT1wKi27LsZFnhmQoFxLir3tMSys5B1kWz+FVmZZ2Z
-         al7qQDVbs1Jb5tjhkYJqwO8yIw1+bqQQlH+lBhexKmV7A1vjnMOEjXnCquewEE0VF3uf
-         P0g3Pf5R08PKpNrUxqxakoN1MgbQ2U6lSYm+iIaeKDpxsmZW/PBVK0MV7VbGHWOwAQk4
-         S/zvENXF5PsKTi5PTIONjYzRtbJiCE7/5Owt6v/tN0S8zuZB9zmp3Kq9kNvViPmEhhA8
-         iJYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691082040; x=1691686840;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GSV8tU2Xed0CrxKN0ExqCQL3NAOiSSNTMwftFExPE74=;
-        b=hfGy9A89tcP76rYZss+nZK0ttaxlHdj9DqwM4UWYXc2tZpBRtNPicGUlcTW04lyuPK
-         yMn5C9vDbYq2CRh1JLG+8uNnbiNjCLdI5w6IZqUzLXORpNv+Ex2Vx8XFqEGCccbYKWNf
-         uKOrmWTL3dyB29eGuCg0oBaiEu5yHgLi+QBirGC8pHAkRVPZ4p4dBNdRyI0MxJAx1K7c
-         7XkqH4C1Z+pogs9js8c5CGb2IiGdgRoj2h+QRqw0/Xg7xm0xoRopeP1kiFXHDQSZZYQG
-         9QyU5RiOsRjCUeKqZr5Xf+LU4q3D1AlDj93mj1uykS4gP6uLgYiNbZIZyfLjyxkcmDrs
-         1U9Q==
-X-Gm-Message-State: ABy/qLYKVgYqTk0iqDe6M41d9e5onywUdVwv/l/3HKxTqgqQaARvEFFT
-        3vUev7ysSCgM54MdxtCnkhZvwkGg1FM=
-X-Google-Smtp-Source: APBJJlExghUM8ysBRm/2An6b744Ys4TQw6w1hZy4xU12spPy8OqXdpTKVTm2XNKETo4zoihWKs5kBQ==
-X-Received: by 2002:ac2:5e6b:0:b0:4f8:5905:8e0a with SMTP id a11-20020ac25e6b000000b004f859058e0amr6476941lfr.6.1691082039582;
-        Thu, 03 Aug 2023 10:00:39 -0700 (PDT)
-Received: from [192.168.1.103] ([178.176.72.24])
-        by smtp.gmail.com with ESMTPSA id o15-20020a056512050f00b004fb85ffc82csm38322lfb.10.2023.08.03.10.00.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Aug 2023 10:00:38 -0700 (PDT)
-Subject: Re: [PATCH -next v3] usb: gadget: udc: gr_udc: Do not check 0 for
- platform_get_irq()
-To:     Zhu Wang <wangzhu9@huawei.com>, gregkh@linuxfoundation.org,
-        herve.codina@bootlin.com, stern@rowland.harvard.edu,
-        robh@kernel.org, aaro.koskinen@iki.fi, linux-usb@vger.kernel.org,
+        with ESMTP id S230460AbjHCR4I (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Aug 2023 13:56:08 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 278E030E5
+        for <linux-usb@vger.kernel.org>; Thu,  3 Aug 2023 10:56:04 -0700 (PDT)
+Received: (qmail 3079 invoked by uid 1000); 3 Aug 2023 13:56:03 -0400
+Date:   Thu, 3 Aug 2023 13:56:03 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Dingyan Li <18500469033@163.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Xiaofan Chen <xiaofanc@gmail.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        Tormod Volden <lists.tormod@gmail.com>,
+        sebastian.reichel@collabora.com, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20230803121136.86037-1-wangzhu9@huawei.com>
-From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <e85efc8e-5a12-5f9f-a23e-d701b5722896@gmail.com>
-Date:   Thu, 3 Aug 2023 20:00:36 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+Subject: Re: Re: [PATCH] USB: add usbfs ioctl to get specific superspeedplus
+ rates
+Message-ID: <c10dd3c1-efab-47d6-904f-3b211965be44@rowland.harvard.edu>
+References: <781b3f95-96e7-af83-e089-887ec7f2d255@suse.com>
+ <2023072546-denture-half-5ceb@gregkh>
+ <CAGjSPUCQ892adFdYm7zCuMpWujwzwoQtYimvp3xXrnnCCyN47w@mail.gmail.com>
+ <da536c80-7398-dae0-a22c-16e521be697a@suse.com>
+ <CAGjSPUDtn-YMqmNrmku+hkyXCKys4XRue4wdzQwr+yGxe2cJSQ@mail.gmail.com>
+ <2a82ba01-38dd-fad9-98b9-ac8591107921@redhat.com>
+ <151a5748.3e99.189ba07b110.Coremail.18500469033@163.com>
+ <51926ee6-ee81-4543-a1f7-338e65a26670@rowland.harvard.edu>
+ <a31ee75e-6a8e-fe7b-aadc-f118d9ab60f9@redhat.com>
+ <67b68375.80b5.189bc2653e9.Coremail.18500469033@163.com>
 MIME-Version: 1.0
-In-Reply-To: <20230803121136.86037-1-wangzhu9@huawei.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <67b68375.80b5.189bc2653e9.Coremail.18500469033@163.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 8/3/23 3:11 PM, Zhu Wang wrote:
+On Fri, Aug 04, 2023 at 12:06:15AM +0800, Dingyan Li wrote:
+> So after usb_device_speed is extended with Gen2x1, Gen1x2 and Gen2x2,
+> it feels that enum usb_ssp_rate becomes useless. Is it okay to just delete it?
+> I'm asking this since it is also used in several other source files so the fix may
+> not be as trivial as it looks.
 
-> When platform_get_irq() failed, it may return -EPROBE_DEFER, -EINVAL or
-> -ENXIO, it is important to propagate the detail upstream, we cannot
-> override it.
+As long as the file is being used by other source files, don't delete 
+it.  If you want to fix up all those other places and then delete the 
+file, that's fine.  But of course, it would have to be a separate set of 
+patches.
 
-   Deferred probing being fixed should be emphasized. And the patch is
-no longer "-next" material due to that...
+It will also be necessary to audit the places in the kernel that 
+currently use usb_device_speed.  Some of them may need to be extended to 
+handle the new entries properly.  (Including, obviously, the parts of 
+the code that store the device's speed in the first place.)
 
-> And platform_get_irq() used to return 0 (as both IRQ0 and error
-> indication), there are several patches fixing the inconsistencies.
-
-   No, this "historical" passage wasn't meant to be a part of the patch
-description.
-
-> Commit ce753ad1549c ("platform: finally disallow IRQ0 in
-> platform_get_irq() and its ilk") makes sure IRQ0 is not returned.
-> 
-> Signed-off-by: Zhu Wang <wangzhu9@huawei.com>
-> 
-> ---
-> Changes in v2:
-> - Update the commit message, present the reason of replacing the return
-> value of the probe.
-> 
-> ---
-> Changes in v3:
-> - Update the commit message, explain in detail why the return value of
-> platform_get_irq() cannot be override.
-
-   As I said, your descrioption isn't very convincing as you don't
-emphasize the deferred probing being fixed.
-
-[...]
-
-MBR, Sergey
+Alan Stern
