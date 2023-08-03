@@ -2,76 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2979A76DF32
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Aug 2023 05:58:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3323E76DFA5
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Aug 2023 07:18:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232093AbjHCD6n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Aug 2023 23:58:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60882 "EHLO
+        id S232372AbjHCFSz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Aug 2023 01:18:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231717AbjHCD6j (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Aug 2023 23:58:39 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D67E30D3
-        for <linux-usb@vger.kernel.org>; Wed,  2 Aug 2023 20:58:32 -0700 (PDT)
-Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RGZlw4dGnzVjgX;
-        Thu,  3 Aug 2023 11:56:44 +0800 (CST)
-Received: from ubuntu1804.huawei.com (10.67.174.202) by
- dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Thu, 3 Aug 2023 11:58:30 +0800
-From:   Zhu Wang <wangzhu9@huawei.com>
-To:     <b-liu@ti.com>, <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>
-CC:     <wangzhu9@huawei.com>
-Subject: [PATCH -next] usb: musb: Do not check 0 for platform_get_irq()
-Date:   Thu, 3 Aug 2023 11:58:00 +0800
-Message-ID: <20230803035800.32891-1-wangzhu9@huawei.com>
+        with ESMTP id S232291AbjHCFSx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Aug 2023 01:18:53 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637031B4
+        for <linux-usb@vger.kernel.org>; Wed,  2 Aug 2023 22:18:52 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3735FDgm020916;
+        Thu, 3 Aug 2023 05:18:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=r7CXV1K2k31n/kgF6YyewE/g+B0xLq3AQbBNsPsTlrw=;
+ b=pPMsBY/LHA6oSoDEYbwh/tyPgYa++2+tcK40uhLvZdhEs696t7pL4bRycWA/+J9FDiyw
+ y3tfYLfFoXLPOQ8C3qJWpiZKWRWGmrg1xYwUHzFh/MeXOgAUZ+TrwRlxsck27Hy1/itc
+ 5oQkr7ap4KH+x92e5aRGAwKvNt49DYhL5R3go0Jd76YFRl6pAxylSc6PvVfHR8lkDpeO
+ 48XT16RAzZDWv3Y+26E/srwSGepzmNwJFcwaxi5ELklF2a/qvU/jVhIuwdeaHVSm+9Tj
+ 8Bt4m0cHXwskAN42eHVKOU8qPPoOe16WB8RowIICeq6fRW+8icTVHtnwtwWLz/Ljumyf 6A== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3s85fxr1fw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Aug 2023 05:18:51 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3735InW5017238
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 3 Aug 2023 05:18:49 GMT
+Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.30; Wed, 2 Aug 2023 22:18:47 -0700
+From:   Linyu Yuan <quic_linyyuan@quicinc.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, Linyu Yuan <quic_linyyuan@quicinc.com>
+Subject: [PATCH 0/7] remove some usage of gadget_is_{*}speed() API
+Date:   Thu, 3 Aug 2023 13:18:03 +0800
+Message-ID: <20230803051810.2974-1-quic_linyyuan@quicinc.com>
 X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Content-Type: text/plain
-X-Originating-IP: [10.67.174.202]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500025.china.huawei.com (7.185.36.35)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: _xtGNlGG5uqQ1SIAzE_ZIPatsmV5fqUW
+X-Proofpoint-ORIG-GUID: _xtGNlGG5uqQ1SIAzE_ZIPatsmV5fqUW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-08-03_02,2023-08-01_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 malwarescore=0
+ mlxscore=0 clxscore=1011 priorityscore=1501 mlxlogscore=531 bulkscore=0
+ phishscore=0 impostorscore=0 spamscore=0 lowpriorityscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2306200000
+ definitions=main-2308030048
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Since platform_get_irq() never returned zero, so it need not to check
-whether it returned zero, and we use the return error code of
-platform_get_irq() to replace the current return error code.
+This series try to remove some usage of gadget_is_dualspeed(),
+gadget_is_superspeed() and gadget_is_superspeed_plus().
 
-Please refer to the commit a85a6c86c25b ("driver core: platform: Clarify
-that IRQ 0 is invalid") to get that platform_get_irq() never returned
-zero.
+please check each change for details.
 
-Signed-off-by: Zhu Wang <wangzhu9@huawei.com>
----
- drivers/usb/musb/musb_core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Linyu Yuan (7):
+  usb: gadget: f_ecm: fix ecm_bitrate() for SuperSpeed and above
+  usb: gaget: use working speed to calcaulate network bitrate and qlen
+  usb: gadget: f_uvc: change endpoint allocation in uvc_function_bind()
+  usb: gadget: unconditionally allocate hs/ss descriptor in bind
+    operation
+  usb: gadget: config: remove max speed check in
+    usb_assign_descriptors()
+  usb: gadget: composite: cleanup function config_ep_by_speed_and_alt()
+  usb: gadget: remove max support speed info in bind operation
 
-diff --git a/drivers/usb/musb/musb_core.c b/drivers/usb/musb/musb_core.c
-index ecbd3784bec3..b24adb5b399f 100644
---- a/drivers/usb/musb/musb_core.c
-+++ b/drivers/usb/musb/musb_core.c
-@@ -2610,8 +2610,8 @@ static int musb_probe(struct platform_device *pdev)
- 	int		irq = platform_get_irq_byname(pdev, "mc");
- 	void __iomem	*base;
- 
--	if (irq <= 0)
--		return -ENODEV;
-+	if (irq < 0)
-+		return irq;
- 
- 	base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(base))
+ drivers/usb/gadget/composite.c             | 34 ++++++-------
+ drivers/usb/gadget/config.c                |  8 ++--
+ drivers/usb/gadget/function/f_acm.c        |  4 +-
+ drivers/usb/gadget/function/f_ecm.c        | 12 ++---
+ drivers/usb/gadget/function/f_eem.c        |  4 +-
+ drivers/usb/gadget/function/f_loopback.c   |  4 +-
+ drivers/usb/gadget/function/f_midi.c       | 56 +++++++++-------------
+ drivers/usb/gadget/function/f_midi2.c      | 44 +++++++----------
+ drivers/usb/gadget/function/f_ncm.c        | 10 ++--
+ drivers/usb/gadget/function/f_obex.c       |  3 +-
+ drivers/usb/gadget/function/f_rndis.c      | 10 ++--
+ drivers/usb/gadget/function/f_serial.c     |  4 +-
+ drivers/usb/gadget/function/f_sourcesink.c |  4 +-
+ drivers/usb/gadget/function/f_subset.c     |  4 +-
+ drivers/usb/gadget/function/f_uvc.c        | 36 +++++---------
+ drivers/usb/gadget/function/u_ether.c      |  5 +-
+ 16 files changed, 92 insertions(+), 150 deletions(-)
+
 -- 
 2.17.1
 
