@@ -2,73 +2,43 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A65276EE59
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Aug 2023 17:40:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DABB76EEFD
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Aug 2023 18:07:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235570AbjHCPku (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Aug 2023 11:40:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32802 "EHLO
+        id S234700AbjHCQHK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Aug 2023 12:07:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234994AbjHCPkt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Aug 2023 11:40:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CB2810C1
-        for <linux-usb@vger.kernel.org>; Thu,  3 Aug 2023 08:40:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1691077202;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7MjFAiqKbDglL6akdiTVv7zchJ6NU5F4MtEgJgPDBUc=;
-        b=hVWEcqUGEjY3OPtegE79rm+yP14tqW8HuWs+jnjU01ZAokmkRKRFnCuzKY4tEJBMnns9wr
-        zu7nNR2mLRwqp16KUHwK9voNGwYhdeehf5J1R5muOWkBF9yf3GTUpompHFdzfo1CmCIrFm
-        tK/6TQ2ozszXN7DJhXREkXxg+1upWT8=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-372-UIrnk3S3PwuS9uDCcjkCtQ-1; Thu, 03 Aug 2023 11:40:01 -0400
-X-MC-Unique: UIrnk3S3PwuS9uDCcjkCtQ-1
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-94a355c9028so112557066b.3
-        for <linux-usb@vger.kernel.org>; Thu, 03 Aug 2023 08:40:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691077200; x=1691682000;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7MjFAiqKbDglL6akdiTVv7zchJ6NU5F4MtEgJgPDBUc=;
-        b=HBvqkY0zCzgI/BW/0fEur5GOcgwxFmYA5zBfLPfiMDj8ODI2/CHbTdB/2zZuLcqZql
-         AqTjJCn0Z5gmbh3DhHAjW7iugKkivkjrezU/FW+0/uaeRoHFou+x3pDoxbRCFa1OGS4D
-         5y8JD/YG4S+WwWopspb/G8ABXJBJA5O5HFA9aVjxxkx1qI9A4qdlhL721/l7G2r0Z4Gd
-         FiVx5KRW/wvssBmuuQ27uvQc3351OILjUqKS7tNDG4S6UG3DM4CMCDpyyU529ySGTCC0
-         O4ySAhkQJylNM9T2hgo+glLLpIwhNQm4ENA5x0iDzguhdRVkCQdVTI41+Vs/kj78x9tK
-         7Lrw==
-X-Gm-Message-State: AOJu0YxnyUG79+8fFPel7HSQMtLnBLt3uTR/qjbwdjk63ysrlz4l0HqJ
-        foMS9Wf63mfUH4Ih3okXIvC33YnYhAqrBqTKs/tGFvBSqFdOI7m20cu4VTFDciH/zhDG5Bx4kNt
-        pGAxNzosgMoz4TY0XFl9g
-X-Received: by 2002:a17:906:7696:b0:99c:7551:933e with SMTP id o22-20020a170906769600b0099c7551933emr1588274ejm.64.1691077200282;
-        Thu, 03 Aug 2023 08:40:00 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGueAUbd/L+hZPNN8XPKjjKUPVWxcZvTxILlNSJZ+Rnc9aHH9B1BTl2vMyaDeea/XT56fULgw==
-X-Received: by 2002:a17:906:7696:b0:99c:7551:933e with SMTP id o22-20020a170906769600b0099c7551933emr1588261ejm.64.1691077199965;
-        Thu, 03 Aug 2023 08:39:59 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id gy26-20020a170906f25a00b00993470682e5sm10639904ejb.32.2023.08.03.08.39.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Aug 2023 08:39:58 -0700 (PDT)
-Message-ID: <a31ee75e-6a8e-fe7b-aadc-f118d9ab60f9@redhat.com>
-Date:   Thu, 3 Aug 2023 17:39:56 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH] USB: add usbfs ioctl to get specific superspeedplus rates
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Dingyan Li <18500469033@163.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Xiaofan Chen <xiaofanc@gmail.com>,
-        Oliver Neukum <oneukum@suse.com>,
-        Tormod Volden <lists.tormod@gmail.com>,
+        with ESMTP id S229779AbjHCQHJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Aug 2023 12:07:09 -0400
+Received: from m13116.mail.163.com (m13116.mail.163.com [220.181.13.116])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8C6061FCF;
+        Thu,  3 Aug 2023 09:07:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
+        Message-ID; bh=w5CQQ06HohigWmso7gDwXFWT7ldvmSUYfTFTwRWzylE=; b=g
+        FPLMs5PzKtmeR9ahPHczcsWDA08K+yXgnH8WmKPaPbYowk90N/7j7QdjsjRqFDTK
+        KnBtHVrHUFO1pw+cdWm9TunrI4xOVWJYQTSdKjNNQFJbSpUC6J7IKyK6BWCpUeHL
+        6qxJ615fOFi7dN4dnbWbrQoJ4ZOq8yy9gXLsxalnA4=
+Received: from 18500469033$163.com ( [114.250.138.216] ) by
+ ajax-webmail-wmsvr116 (Coremail) ; Fri, 4 Aug 2023 00:06:15 +0800 (CST)
+X-Originating-IP: [114.250.138.216]
+Date:   Fri, 4 Aug 2023 00:06:15 +0800 (CST)
+From:   "Dingyan Li" <18500469033@163.com>
+To:     "Hans de Goede" <hdegoede@redhat.com>,
+        "Alan Stern" <stern@rowland.harvard.edu>
+Cc:     "Greg KH" <gregkh@linuxfoundation.org>,
+        "Xiaofan Chen" <xiaofanc@gmail.com>,
+        "Oliver Neukum" <oneukum@suse.com>,
+        "Tormod Volden" <lists.tormod@gmail.com>,
         sebastian.reichel@collabora.com, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
+Subject: Re:Re: [PATCH] USB: add usbfs ioctl to get specific superspeedplus
+ rates
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20230109(dcb5de15)
+ Copyright (c) 2002-2023 www.mailtech.cn 163com
+In-Reply-To: <a31ee75e-6a8e-fe7b-aadc-f118d9ab60f9@redhat.com>
 References: <2023072105-lethargic-saddling-ad97@gregkh>
  <130b453c.5c8f.1897872ce54.Coremail.18500469033@163.com>
  <2023072159-carol-underfeed-43eb@gregkh>
@@ -80,112 +50,91 @@ References: <2023072105-lethargic-saddling-ad97@gregkh>
  <2a82ba01-38dd-fad9-98b9-ac8591107921@redhat.com>
  <151a5748.3e99.189ba07b110.Coremail.18500469033@163.com>
  <51926ee6-ee81-4543-a1f7-338e65a26670@rowland.harvard.edu>
-Content-Language: en-US, nl
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <51926ee6-ee81-4543-a1f7-338e65a26670@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+ <a31ee75e-6a8e-fe7b-aadc-f118d9ab60f9@redhat.com>
+X-NTES-SC: AL_QuySA/yct08s4yeQZukXkkYVgew6WsC4vf4k3IReOps0qivB2gU/YWRAN2Tn/8ioIgGFqwOaSQR2yuB+T61VQI6bNN6rfZd1hcKTSeLEeX6i
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
+MIME-Version: 1.0
+Message-ID: <67b68375.80b5.189bc2653e9.Coremail.18500469033@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: dMGowACnz1R30Mtk8PkOAA--.20896W
+X-CM-SenderInfo: jprykiiquwmiitt6il2tof0z/1S2mDhfAy2SAXJ88VAAAsd
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-On 8/3/23 17:10, Alan Stern wrote:
-> On Thu, Aug 03, 2023 at 02:13:33PM +0800, Dingyan Li wrote:
->>
->> At 2023-07-26 22:39:32, "Hans de Goede" <hdegoede@redhat.com> wrote:
-> 
->>> Right, so the reason why IOCTL USBDEVFS_GET_SPEED was added is so 
->>> that a confined qemu process which gets just a fd for a /dev/bus/usb/ 
->>> device passed by a more privileged process can still get the speed 
->>> despite it not having sysfs access. This is necessary for correct 
->>> pass-through of USB devices.
->>>
->>> Since USBDEVFS_GET_SPEED now no longer tells the full story I believe 
->>> that the proposed USBDEVFS_GET_SSP_RATE ioctl makes sense.
->>>
->>> The current patch however misses moving the enum usb_ssp_rate 
->>> declaration from include/linux/usb/ch9.h to 
->>> include/uapi/linux/usb/ch9.h so that needs to be fixed in a version 
->>> 2. Assuming that with the above explanation of why this is necessary 
->>> Greg and Alan are ok with adding the ioctl.
->>>
->>> Regards,
->>>
->>> Hans
->>>
->>
->> Hi Greg and Alan,
->>
->> Could you please share your opinions about Hans' justification?
-> 
-> Instead of adding a new ioctl or modifying an existing one, how about 
-> increasing the set of constants in enum usb_device_speed?  Then the 
-> existing ioctls could return the newly defined values when appropriate, 
-> with no other changes necessary.
-
-Right, I was thinking along the same lines but I was not entirely
-sure this would work because I looked at the wrong bits of
-include/uapi/linux/usb/ch9.h while writing my first email on this.
-
-Looking again I see we already have a straight forward
-enum usb_device_speed for this which can easily be extended.
-
-> (This doesn't mean just moving the definition of usb_ssp_rate from one 
-> header file to the other.  The usb_device_speed enumeration should be 
-> extended with the new members.  Perhaps omitting USB_SSP_GEN_UNKNOWN 
-> since we already have USB_SPEED_SUPER_PLUS, or setting the first equal 
-> to the second.)
-> 
-> I don't think there was ever a requirement in the API that the set of 
-> values in usb_device_speed could never increase (and in fact it has 
-> increased in the past).  Such a requirement wouldn't make any sense, 
-> given how the USB-IF keeps defining newer and faster USB bus 
-> implementations.
-> 
-> Hans, would that play well with libusb?
-
-It should, this is how libusb uses the USBDEVFS_GET_SPEED ioctl:
-
-static enum libusb_speed usbfs_get_speed(struct libusb_context *ctx, int fd)
-{
-	int r;
-
-	r = ioctl(fd, IOCTL_USBFS_GET_SPEED, NULL);
-	switch (r) {
-	case USBFS_SPEED_UNKNOWN:	return LIBUSB_SPEED_UNKNOWN;
-	case USBFS_SPEED_LOW:		return LIBUSB_SPEED_LOW;
-	case USBFS_SPEED_FULL:		return LIBUSB_SPEED_FULL;
-	case USBFS_SPEED_HIGH:		return LIBUSB_SPEED_HIGH;
-	case USBFS_SPEED_WIRELESS:	return LIBUSB_SPEED_HIGH;
-	case USBFS_SPEED_SUPER:		return LIBUSB_SPEED_SUPER;
-	case USBFS_SPEED_SUPER_PLUS:	return LIBUSB_SPEED_SUPER_PLUS;
-	default:
-		usbi_warn(ctx, "Error getting device speed: %d", r);
-	}
-
-	return LIBUSB_SPEED_UNKNOWN;
-}
-
-I think that GEN_2x1 should probably be mapped to
-USBFS_SPEED_SUPER_PLUS so as to not break this most common case
-and to keep apps reporting either Super Speed Plus or 10Gbps
-(more common) for this.
-
-GEN_1x2 + GEN_2x2 can then be mapped to new values, which will
-cause libusb to log a warning + return LIBUSB_SPEED_UNKNOWN
-until libusb is updated which seems harmless enough.
-
-Regards,
-
-Hans
-
-
+CkF0IDIwMjMtMDgtMDMgMjM6Mzk6NTYsICJIYW5zIGRlIEdvZWRlIiA8aGRlZ29lZGVAcmVkaGF0
+LmNvbT4gd3JvdGU6Cj5IaSwKPgo+T24gOC8zLzIzIDE3OjEwLCBBbGFuIFN0ZXJuIHdyb3RlOgo+
+PiBPbiBUaHUsIEF1ZyAwMywgMjAyMyBhdCAwMjoxMzozM1BNICswODAwLCBEaW5neWFuIExpIHdy
+b3RlOgo+Pj4KPj4+IEF0IDIwMjMtMDctMjYgMjI6Mzk6MzIsICJIYW5zIGRlIEdvZWRlIiA8aGRl
+Z29lZGVAcmVkaGF0LmNvbT4gd3JvdGU6Cj4+IAo+Pj4+IFJpZ2h0LCBzbyB0aGUgcmVhc29uIHdo
+eSBJT0NUTCBVU0JERVZGU19HRVRfU1BFRUQgd2FzIGFkZGVkIGlzIHNvIAo+Pj4+IHRoYXQgYSBj
+b25maW5lZCBxZW11IHByb2Nlc3Mgd2hpY2ggZ2V0cyBqdXN0IGEgZmQgZm9yIGEgL2Rldi9idXMv
+dXNiLyAKPj4+PiBkZXZpY2UgcGFzc2VkIGJ5IGEgbW9yZSBwcml2aWxlZ2VkIHByb2Nlc3MgY2Fu
+IHN0aWxsIGdldCB0aGUgc3BlZWQgCj4+Pj4gZGVzcGl0ZSBpdCBub3QgaGF2aW5nIHN5c2ZzIGFj
+Y2Vzcy4gVGhpcyBpcyBuZWNlc3NhcnkgZm9yIGNvcnJlY3QgCj4+Pj4gcGFzcy10aHJvdWdoIG9m
+IFVTQiBkZXZpY2VzLgo+Pj4+Cj4+Pj4gU2luY2UgVVNCREVWRlNfR0VUX1NQRUVEIG5vdyBubyBs
+b25nZXIgdGVsbHMgdGhlIGZ1bGwgc3RvcnkgSSBiZWxpZXZlIAo+Pj4+IHRoYXQgdGhlIHByb3Bv
+c2VkIFVTQkRFVkZTX0dFVF9TU1BfUkFURSBpb2N0bCBtYWtlcyBzZW5zZS4KPj4+Pgo+Pj4+IFRo
+ZSBjdXJyZW50IHBhdGNoIGhvd2V2ZXIgbWlzc2VzIG1vdmluZyB0aGUgZW51bSB1c2Jfc3NwX3Jh
+dGUgCj4+Pj4gZGVjbGFyYXRpb24gZnJvbSBpbmNsdWRlL2xpbnV4L3VzYi9jaDkuaCB0byAKPj4+
+PiBpbmNsdWRlL3VhcGkvbGludXgvdXNiL2NoOS5oIHNvIHRoYXQgbmVlZHMgdG8gYmUgZml4ZWQg
+aW4gYSB2ZXJzaW9uIAo+Pj4+IDIuIEFzc3VtaW5nIHRoYXQgd2l0aCB0aGUgYWJvdmUgZXhwbGFu
+YXRpb24gb2Ygd2h5IHRoaXMgaXMgbmVjZXNzYXJ5IAo+Pj4+IEdyZWcgYW5kIEFsYW4gYXJlIG9r
+IHdpdGggYWRkaW5nIHRoZSBpb2N0bC4KPj4+Pgo+Pj4+IFJlZ2FyZHMsCj4+Pj4KPj4+PiBIYW5z
+Cj4+Pj4KPj4+Cj4+PiBIaSBHcmVnIGFuZCBBbGFuLAo+Pj4KPj4+IENvdWxkIHlvdSBwbGVhc2Ug
+c2hhcmUgeW91ciBvcGluaW9ucyBhYm91dCBIYW5zJyBqdXN0aWZpY2F0aW9uPwo+PiAKPj4gSW5z
+dGVhZCBvZiBhZGRpbmcgYSBuZXcgaW9jdGwgb3IgbW9kaWZ5aW5nIGFuIGV4aXN0aW5nIG9uZSwg
+aG93IGFib3V0IAo+PiBpbmNyZWFzaW5nIHRoZSBzZXQgb2YgY29uc3RhbnRzIGluIGVudW0gdXNi
+X2RldmljZV9zcGVlZD8gIFRoZW4gdGhlIAo+PiBleGlzdGluZyBpb2N0bHMgY291bGQgcmV0dXJu
+IHRoZSBuZXdseSBkZWZpbmVkIHZhbHVlcyB3aGVuIGFwcHJvcHJpYXRlLCAKPj4gd2l0aCBubyBv
+dGhlciBjaGFuZ2VzIG5lY2Vzc2FyeS4KPgo+UmlnaHQsIEkgd2FzIHRoaW5raW5nIGFsb25nIHRo
+ZSBzYW1lIGxpbmVzIGJ1dCBJIHdhcyBub3QgZW50aXJlbHkKPnN1cmUgdGhpcyB3b3VsZCB3b3Jr
+IGJlY2F1c2UgSSBsb29rZWQgYXQgdGhlIHdyb25nIGJpdHMgb2YKPmluY2x1ZGUvdWFwaS9saW51
+eC91c2IvY2g5Lmggd2hpbGUgd3JpdGluZyBteSBmaXJzdCBlbWFpbCBvbiB0aGlzLgo+Cj5Mb29r
+aW5nIGFnYWluIEkgc2VlIHdlIGFscmVhZHkgaGF2ZSBhIHN0cmFpZ2h0IGZvcndhcmQKPmVudW0g
+dXNiX2RldmljZV9zcGVlZCBmb3IgdGhpcyB3aGljaCBjYW4gZWFzaWx5IGJlIGV4dGVuZGVkLgo+
+Cj4+IChUaGlzIGRvZXNuJ3QgbWVhbiBqdXN0IG1vdmluZyB0aGUgZGVmaW5pdGlvbiBvZiB1c2Jf
+c3NwX3JhdGUgZnJvbSBvbmUgCj4+IGhlYWRlciBmaWxlIHRvIHRoZSBvdGhlci4gIFRoZSB1c2Jf
+ZGV2aWNlX3NwZWVkIGVudW1lcmF0aW9uIHNob3VsZCBiZSAKPj4gZXh0ZW5kZWQgd2l0aCB0aGUg
+bmV3IG1lbWJlcnMuICBQZXJoYXBzIG9taXR0aW5nIFVTQl9TU1BfR0VOX1VOS05PV04gCj4+IHNp
+bmNlIHdlIGFscmVhZHkgaGF2ZSBVU0JfU1BFRURfU1VQRVJfUExVUywgb3Igc2V0dGluZyB0aGUg
+Zmlyc3QgZXF1YWwgCj4+IHRvIHRoZSBzZWNvbmQuKQo+PiAKPj4gSSBkb24ndCB0aGluayB0aGVy
+ZSB3YXMgZXZlciBhIHJlcXVpcmVtZW50IGluIHRoZSBBUEkgdGhhdCB0aGUgc2V0IG9mIAo+PiB2
+YWx1ZXMgaW4gdXNiX2RldmljZV9zcGVlZCBjb3VsZCBuZXZlciBpbmNyZWFzZSAoYW5kIGluIGZh
+Y3QgaXQgaGFzIAo+PiBpbmNyZWFzZWQgaW4gdGhlIHBhc3QpLiAgU3VjaCBhIHJlcXVpcmVtZW50
+IHdvdWxkbid0IG1ha2UgYW55IHNlbnNlLCAKPj4gZ2l2ZW4gaG93IHRoZSBVU0ItSUYga2VlcHMg
+ZGVmaW5pbmcgbmV3ZXIgYW5kIGZhc3RlciBVU0IgYnVzIAo+PiBpbXBsZW1lbnRhdGlvbnMuCj4+
+IAo+PiBIYW5zLCB3b3VsZCB0aGF0IHBsYXkgd2VsbCB3aXRoIGxpYnVzYj8KPgo+SXQgc2hvdWxk
+LCB0aGlzIGlzIGhvdyBsaWJ1c2IgdXNlcyB0aGUgVVNCREVWRlNfR0VUX1NQRUVEIGlvY3RsOgo+
+Cj5zdGF0aWMgZW51bSBsaWJ1c2Jfc3BlZWQgdXNiZnNfZ2V0X3NwZWVkKHN0cnVjdCBsaWJ1c2Jf
+Y29udGV4dCAqY3R4LCBpbnQgZmQpCj57Cj4JaW50IHI7Cj4KPglyID0gaW9jdGwoZmQsIElPQ1RM
+X1VTQkZTX0dFVF9TUEVFRCwgTlVMTCk7Cj4Jc3dpdGNoIChyKSB7Cj4JY2FzZSBVU0JGU19TUEVF
+RF9VTktOT1dOOglyZXR1cm4gTElCVVNCX1NQRUVEX1VOS05PV047Cj4JY2FzZSBVU0JGU19TUEVF
+RF9MT1c6CQlyZXR1cm4gTElCVVNCX1NQRUVEX0xPVzsKPgljYXNlIFVTQkZTX1NQRUVEX0ZVTEw6
+CQlyZXR1cm4gTElCVVNCX1NQRUVEX0ZVTEw7Cj4JY2FzZSBVU0JGU19TUEVFRF9ISUdIOgkJcmV0
+dXJuIExJQlVTQl9TUEVFRF9ISUdIOwo+CWNhc2UgVVNCRlNfU1BFRURfV0lSRUxFU1M6CXJldHVy
+biBMSUJVU0JfU1BFRURfSElHSDsKPgljYXNlIFVTQkZTX1NQRUVEX1NVUEVSOgkJcmV0dXJuIExJ
+QlVTQl9TUEVFRF9TVVBFUjsKPgljYXNlIFVTQkZTX1NQRUVEX1NVUEVSX1BMVVM6CXJldHVybiBM
+SUJVU0JfU1BFRURfU1VQRVJfUExVUzsKPglkZWZhdWx0Ogo+CQl1c2JpX3dhcm4oY3R4LCAiRXJy
+b3IgZ2V0dGluZyBkZXZpY2Ugc3BlZWQ6ICVkIiwgcik7Cj4JfQo+Cj4JcmV0dXJuIExJQlVTQl9T
+UEVFRF9VTktOT1dOOwo+fQo+Cj5JIHRoaW5rIHRoYXQgR0VOXzJ4MSBzaG91bGQgcHJvYmFibHkg
+YmUgbWFwcGVkIHRvCj5VU0JGU19TUEVFRF9TVVBFUl9QTFVTIHNvIGFzIHRvIG5vdCBicmVhayB0
+aGlzIG1vc3QgY29tbW9uIGNhc2UKPmFuZCB0byBrZWVwIGFwcHMgcmVwb3J0aW5nIGVpdGhlciBT
+dXBlciBTcGVlZCBQbHVzIG9yIDEwR2Jwcwo+KG1vcmUgY29tbW9uKSBmb3IgdGhpcy4KPgo+R0VO
+XzF4MiArIEdFTl8yeDIgY2FuIHRoZW4gYmUgbWFwcGVkIHRvIG5ldyB2YWx1ZXMsIHdoaWNoIHdp
+bGwKPmNhdXNlIGxpYnVzYiB0byBsb2cgYSB3YXJuaW5nICsgcmV0dXJuIExJQlVTQl9TUEVFRF9V
+TktOT1dOCj51bnRpbCBsaWJ1c2IgaXMgdXBkYXRlZCB3aGljaCBzZWVtcyBoYXJtbGVzcyBlbm91
+Z2guCj4KPlJlZ2FyZHMsCj4KPkhhbnMKPgoKU28gYWZ0ZXIgdXNiX2RldmljZV9zcGVlZCBpcyBl
+eHRlbmRlZCB3aXRoIEdlbjJ4MSwgR2VuMXgyIGFuZCBHZW4yeDIsCml0IGZlZWxzIHRoYXQgZW51
+bSB1c2Jfc3NwX3JhdGUgYmVjb21lcyB1c2VsZXNzLiBJcyBpdCBva2F5IHRvIGp1c3QgZGVsZXRl
+IGl0PwpJJ20gYXNraW5nIHRoaXMgc2luY2UgaXQgaXMgYWxzbyB1c2VkIGluIHNldmVyYWwgb3Ro
+ZXIgc291cmNlIGZpbGVzIHNvIHRoZSBmaXggbWF5Cm5vdCBiZSBhcyB0cml2aWFsIGFzIGl0IGxv
+b2tzLgoKUmVnYXJkcywKRGluZ3lhbgo=
