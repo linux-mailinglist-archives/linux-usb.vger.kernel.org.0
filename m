@@ -2,252 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 639D076DFAB
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Aug 2023 07:19:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E61076E012
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Aug 2023 08:14:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232769AbjHCFTu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Aug 2023 01:19:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50696 "EHLO
+        id S232776AbjHCGOQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Aug 2023 02:14:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232400AbjHCFTZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Aug 2023 01:19:25 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A32083C3C
-        for <linux-usb@vger.kernel.org>; Wed,  2 Aug 2023 22:19:06 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37357uaW009998;
-        Thu, 3 Aug 2023 05:19:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=nI+KfOofYlPleGJYyUj9T95++Dj9KvSzi1rHi0s7t2Q=;
- b=N0pIWWtc0tdDGPXghKp7xTCoUvNMI+RRtYZnrjnNz/fzbRmGR1O65+sJnCD5Xj+Y+Cso
- 3LppI4dWuetYEFo7Lji9xv3gMH3YjUWJHV4bGB+WA5E8VkIS9esbVk/pzPIPOBr0elKz
- mxS2AE5qhQ9myD1rV1Pj/ZLsGscmuJD9p4oqJLY04ZqSRnHD0FsxxXGv0WNrhvpXv1ch
- 9yxJZS3xS/zPwPAwnWXedbiQ1VJanrgu8FqcXWD5IdFAsiwWxa/eOcx3o9vb1cvJ3WY3
- mVc2CKq3u8lYh4l3C37r0FXRpuK7qnEE0sE+s9AkBFyjb1QB5Lwtnrn+IVG/dFve2wNA 3Q== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3s7vxsruxn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Aug 2023 05:19:04 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3735IwwJ025637
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 3 Aug 2023 05:18:58 GMT
-Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Wed, 2 Aug 2023 22:18:57 -0700
-From:   Linyu Yuan <quic_linyyuan@quicinc.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, Linyu Yuan <quic_linyyuan@quicinc.com>
-Subject: [PATCH 7/7] usb: gadget: remove max support speed info in bind operation
-Date:   Thu, 3 Aug 2023 13:18:10 +0800
-Message-ID: <20230803051810.2974-8-quic_linyyuan@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230803051810.2974-1-quic_linyyuan@quicinc.com>
-References: <20230803051810.2974-1-quic_linyyuan@quicinc.com>
+        with ESMTP id S231598AbjHCGOP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Aug 2023 02:14:15 -0400
+Received: from m1319.mail.163.com (m1319.mail.163.com [220.181.13.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9514A272C;
+        Wed,  2 Aug 2023 23:14:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
+        Message-ID; bh=cZKYvK7GENrcvv8wShgW7ZbfXpqvhB7cEmA7abJwyA4=; b=k
+        UK3d5zKZce1lQwywP377x2k7ajeGczYrIisCsc5xqne1leebmuaLvYGxG+5XivOJ
+        qyUEWLWXMh8b4IOAKdCJtunnnjyiu7gn7tK2mDnrshYMahgsrc/Hx4QRYMoJ/maD
+        xjJKNF/QezdA11qIoVKqRbpefvWvJOJrJkzAhcc8sk=
+Received: from 18500469033$163.com ( [43.243.14.10] ) by
+ ajax-webmail-wmsvr19 (Coremail) ; Thu, 3 Aug 2023 14:13:33 +0800 (CST)
+X-Originating-IP: [43.243.14.10]
+Date:   Thu, 3 Aug 2023 14:13:33 +0800 (CST)
+From:   "Dingyan Li" <18500469033@163.com>
+To:     stern@rowland.harvard.edu, "Greg KH" <gregkh@linuxfoundation.org>
+Cc:     "Hans de Goede" <hdegoede@redhat.com>,
+        "Xiaofan Chen" <xiaofanc@gmail.com>,
+        "Oliver Neukum" <oneukum@suse.com>,
+        "Tormod Volden" <lists.tormod@gmail.com>,
+        sebastian.reichel@collabora.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re:Re: [PATCH] USB: add usbfs ioctl to get specific superspeedplus
+ rates
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20230109(dcb5de15)
+ Copyright (c) 2002-2023 www.mailtech.cn 163com
+In-Reply-To: <2a82ba01-38dd-fad9-98b9-ac8591107921@redhat.com>
+References: <20230721084039.9728-1-18500469033@163.com>
+ <2023072105-lethargic-saddling-ad97@gregkh>
+ <130b453c.5c8f.1897872ce54.Coremail.18500469033@163.com>
+ <2023072159-carol-underfeed-43eb@gregkh>
+ <781b3f95-96e7-af83-e089-887ec7f2d255@suse.com>
+ <2023072546-denture-half-5ceb@gregkh>
+ <CAGjSPUCQ892adFdYm7zCuMpWujwzwoQtYimvp3xXrnnCCyN47w@mail.gmail.com>
+ <da536c80-7398-dae0-a22c-16e521be697a@suse.com>
+ <CAGjSPUDtn-YMqmNrmku+hkyXCKys4XRue4wdzQwr+yGxe2cJSQ@mail.gmail.com>
+ <2a82ba01-38dd-fad9-98b9-ac8591107921@redhat.com>
+X-NTES-SC: AL_QuySA/yfvEoq5SWQZOkXkkYVgew6WsC4vf4k3IReOps0pinT3gQ5cWFfB0r7z/meNiCcrgaTdydv5Mp/f49FRpJC4VKEcX/F4xqOKLwNgUJv
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 7FhWclbkQeP0lBlnWWaGWhD8fKVRtYOe
-X-Proofpoint-GUID: 7FhWclbkQeP0lBlnWWaGWhD8fKVRtYOe
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-08-03_02,2023-08-01_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- suspectscore=0 adultscore=0 priorityscore=1501 clxscore=1015
- malwarescore=0 bulkscore=0 mlxlogscore=712 phishscore=0 spamscore=0
- mlxscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2306200000 definitions=main-2308030048
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Message-ID: <151a5748.3e99.189ba07b110.Coremail.18500469033@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: E8GowAD39gCORctki40OAA--.52929W
+X-CM-SenderInfo: jprykiiquwmiitt6il2tof0z/xtbB5xbAy2BHLIrzYwAAsr
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Take ecm_bind() for example, it call gadget_is_{*}speed() API to show
-gadget max support speed, it is not much help, remove the API usage here
-is safe.
-
-Similar change apply to acm,eem,loopback,ncm,obex,rndis,serial,
-sourcesink,subset functions.
-
-Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
----
- drivers/usb/gadget/function/f_acm.c        | 4 +---
- drivers/usb/gadget/function/f_ecm.c        | 4 +---
- drivers/usb/gadget/function/f_eem.c        | 4 +---
- drivers/usb/gadget/function/f_loopback.c   | 4 +---
- drivers/usb/gadget/function/f_ncm.c        | 4 +---
- drivers/usb/gadget/function/f_obex.c       | 3 +--
- drivers/usb/gadget/function/f_rndis.c      | 4 +---
- drivers/usb/gadget/function/f_serial.c     | 4 +---
- drivers/usb/gadget/function/f_sourcesink.c | 4 +---
- drivers/usb/gadget/function/f_subset.c     | 4 +---
- 10 files changed, 10 insertions(+), 29 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/f_acm.c b/drivers/usb/gadget/function/f_acm.c
-index cb523f118f04..f616059c5e1e 100644
---- a/drivers/usb/gadget/function/f_acm.c
-+++ b/drivers/usb/gadget/function/f_acm.c
-@@ -691,10 +691,8 @@ acm_bind(struct usb_configuration *c, struct usb_function *f)
- 		goto fail;
- 
- 	dev_dbg(&cdev->gadget->dev,
--		"acm ttyGS%d: %s speed IN/%s OUT/%s NOTIFY/%s\n",
-+		"acm ttyGS%d: IN/%s OUT/%s NOTIFY/%s\n",
- 		acm->port_num,
--		gadget_is_superspeed(c->cdev->gadget) ? "super" :
--		gadget_is_dualspeed(c->cdev->gadget) ? "dual" : "full",
- 		acm->port.in->name, acm->port.out->name,
- 		acm->notify->name);
- 	return 0;
-diff --git a/drivers/usb/gadget/function/f_ecm.c b/drivers/usb/gadget/function/f_ecm.c
-index b1cb944559d4..28ee1029a212 100644
---- a/drivers/usb/gadget/function/f_ecm.c
-+++ b/drivers/usb/gadget/function/f_ecm.c
-@@ -801,9 +801,7 @@ ecm_bind(struct usb_configuration *c, struct usb_function *f)
- 	ecm->port.open = ecm_open;
- 	ecm->port.close = ecm_close;
- 
--	DBG(cdev, "CDC Ethernet: %s speed IN/%s OUT/%s NOTIFY/%s\n",
--			gadget_is_superspeed(c->cdev->gadget) ? "super" :
--			gadget_is_dualspeed(c->cdev->gadget) ? "dual" : "full",
-+	DBG(cdev, "CDC Ethernet: IN/%s OUT/%s NOTIFY/%s\n",
- 			ecm->port.in_ep->name, ecm->port.out_ep->name,
- 			ecm->notify->name);
- 	return 0;
-diff --git a/drivers/usb/gadget/function/f_eem.c b/drivers/usb/gadget/function/f_eem.c
-index 5d38f29bda72..3b445bd88498 100644
---- a/drivers/usb/gadget/function/f_eem.c
-+++ b/drivers/usb/gadget/function/f_eem.c
-@@ -311,9 +311,7 @@ static int eem_bind(struct usb_configuration *c, struct usb_function *f)
- 	if (status)
- 		goto fail;
- 
--	DBG(cdev, "CDC Ethernet (EEM): %s speed IN/%s OUT/%s\n",
--			gadget_is_superspeed(c->cdev->gadget) ? "super" :
--			gadget_is_dualspeed(c->cdev->gadget) ? "dual" : "full",
-+	DBG(cdev, "CDC Ethernet (EEM): IN/%s OUT/%s\n",
- 			eem->port.in_ep->name, eem->port.out_ep->name);
- 	return 0;
- 
-diff --git a/drivers/usb/gadget/function/f_loopback.c b/drivers/usb/gadget/function/f_loopback.c
-index ae41f556eb75..17ac6ace0cff 100644
---- a/drivers/usb/gadget/function/f_loopback.c
-+++ b/drivers/usb/gadget/function/f_loopback.c
-@@ -211,9 +211,7 @@ static int loopback_bind(struct usb_configuration *c, struct usb_function *f)
- 	if (ret)
- 		return ret;
- 
--	DBG(cdev, "%s speed %s: IN/%s, OUT/%s\n",
--	    (gadget_is_superspeed(c->cdev->gadget) ? "super" :
--	     (gadget_is_dualspeed(c->cdev->gadget) ? "dual" : "full")),
-+	DBG(cdev, "%s: IN/%s, OUT/%s\n",
- 			f->name, loop->in_ep->name, loop->out_ep->name);
- 	return 0;
- }
-diff --git a/drivers/usb/gadget/function/f_ncm.c b/drivers/usb/gadget/function/f_ncm.c
-index e6dac5510540..433d278e40ff 100644
---- a/drivers/usb/gadget/function/f_ncm.c
-+++ b/drivers/usb/gadget/function/f_ncm.c
-@@ -1544,9 +1544,7 @@ static int ncm_bind(struct usb_configuration *c, struct usb_function *f)
- 	hrtimer_init(&ncm->task_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL_SOFT);
- 	ncm->task_timer.function = ncm_tx_timeout;
- 
--	DBG(cdev, "CDC Network: %s speed IN/%s OUT/%s NOTIFY/%s\n",
--			gadget_is_superspeed(c->cdev->gadget) ? "super" :
--			gadget_is_dualspeed(c->cdev->gadget) ? "dual" : "full",
-+	DBG(cdev, "CDC Network: IN/%s OUT/%s NOTIFY/%s\n",
- 			ncm->port.in_ep->name, ncm->port.out_ep->name,
- 			ncm->notify->name);
- 	return 0;
-diff --git a/drivers/usb/gadget/function/f_obex.c b/drivers/usb/gadget/function/f_obex.c
-index ab26d84ed95e..dcb093210305 100644
---- a/drivers/usb/gadget/function/f_obex.c
-+++ b/drivers/usb/gadget/function/f_obex.c
-@@ -365,9 +365,8 @@ static int obex_bind(struct usb_configuration *c, struct usb_function *f)
- 	if (status)
- 		goto fail;
- 
--	dev_dbg(&cdev->gadget->dev, "obex ttyGS%d: %s speed IN/%s OUT/%s\n",
-+	dev_dbg(&cdev->gadget->dev, "obex ttyGS%d: IN/%s OUT/%s\n",
- 		obex->port_num,
--		gadget_is_dualspeed(c->cdev->gadget) ? "dual" : "full",
- 		obex->port.in->name, obex->port.out->name);
- 
- 	return 0;
-diff --git a/drivers/usb/gadget/function/f_rndis.c b/drivers/usb/gadget/function/f_rndis.c
-index eff5d7cbce00..f0fa332e679a 100644
---- a/drivers/usb/gadget/function/f_rndis.c
-+++ b/drivers/usb/gadget/function/f_rndis.c
-@@ -811,9 +811,7 @@ rndis_bind(struct usb_configuration *c, struct usb_function *f)
- 	 * until we're activated via set_alt().
- 	 */
- 
--	DBG(cdev, "RNDIS: %s speed IN/%s OUT/%s NOTIFY/%s\n",
--			gadget_is_superspeed(c->cdev->gadget) ? "super" :
--			gadget_is_dualspeed(c->cdev->gadget) ? "dual" : "full",
-+	DBG(cdev, "RNDIS: IN/%s OUT/%s NOTIFY/%s\n",
- 			rndis->port.in_ep->name, rndis->port.out_ep->name,
- 			rndis->notify->name);
- 	return 0;
-diff --git a/drivers/usb/gadget/function/f_serial.c b/drivers/usb/gadget/function/f_serial.c
-index a9480b9e312e..65c50092aea2 100644
---- a/drivers/usb/gadget/function/f_serial.c
-+++ b/drivers/usb/gadget/function/f_serial.c
-@@ -236,10 +236,8 @@ static int gser_bind(struct usb_configuration *c, struct usb_function *f)
- 			gser_ss_function, gser_ss_function);
- 	if (status)
- 		goto fail;
--	dev_dbg(&cdev->gadget->dev, "generic ttyGS%d: %s speed IN/%s OUT/%s\n",
-+	dev_dbg(&cdev->gadget->dev, "generic ttyGS%d: IN/%s OUT/%s\n",
- 		gser->port_num,
--		gadget_is_superspeed(c->cdev->gadget) ? "super" :
--		gadget_is_dualspeed(c->cdev->gadget) ? "dual" : "full",
- 		gser->port.in->name, gser->port.out->name);
- 	return 0;
- 
-diff --git a/drivers/usb/gadget/function/f_sourcesink.c b/drivers/usb/gadget/function/f_sourcesink.c
-index 6803cd60cc6d..2edbd9b510d6 100644
---- a/drivers/usb/gadget/function/f_sourcesink.c
-+++ b/drivers/usb/gadget/function/f_sourcesink.c
-@@ -436,9 +436,7 @@ sourcesink_bind(struct usb_configuration *c, struct usb_function *f)
- 	if (ret)
- 		return ret;
- 
--	DBG(cdev, "%s speed %s: IN/%s, OUT/%s, ISO-IN/%s, ISO-OUT/%s\n",
--	    (gadget_is_superspeed(c->cdev->gadget) ? "super" :
--	     (gadget_is_dualspeed(c->cdev->gadget) ? "dual" : "full")),
-+	DBG(cdev, "%s: IN/%s, OUT/%s, ISO-IN/%s, ISO-OUT/%s\n",
- 			f->name, ss->in_ep->name, ss->out_ep->name,
- 			ss->iso_in_ep ? ss->iso_in_ep->name : "<none>",
- 			ss->iso_out_ep ? ss->iso_out_ep->name : "<none>");
-diff --git a/drivers/usb/gadget/function/f_subset.c b/drivers/usb/gadget/function/f_subset.c
-index 51c1cae162d9..8ae9689ef2a0 100644
---- a/drivers/usb/gadget/function/f_subset.c
-+++ b/drivers/usb/gadget/function/f_subset.c
-@@ -367,9 +367,7 @@ geth_bind(struct usb_configuration *c, struct usb_function *f)
- 	 * until we're activated via set_alt().
- 	 */
- 
--	DBG(cdev, "CDC Subset: %s speed IN/%s OUT/%s\n",
--			gadget_is_superspeed(c->cdev->gadget) ? "super" :
--			gadget_is_dualspeed(c->cdev->gadget) ? "dual" : "full",
-+	DBG(cdev, "CDC Subset: IN/%s OUT/%s\n",
- 			geth->port.in_ep->name, geth->port.out_ep->name);
- 	return 0;
- 
--- 
-2.17.1
-
+CkF0IDIwMjMtMDctMjYgMjI6Mzk6MzIsICJIYW5zIGRlIEdvZWRlIiA8aGRlZ29lZGVAcmVkaGF0
+LmNvbT4gd3JvdGU6Cj5IaSBBbGwsCj4KPk9uIDcvMjYvMjMgMDU6MjAsIFhpYW9mYW4gQ2hlbiB3
+cm90ZToKPj4gT24gV2VkLCBKdWwgMjYsIDIwMjMgYXQgNTozOOKAr1BNIE9saXZlciBOZXVrdW0g
+PG9uZXVrdW1Ac3VzZS5jb20+IHdyb3RlOgo+Pj4KPj4+IE9uIDI2LjA3LjIzIDAzOjM3LCBYaWFv
+ZmFuIENoZW4gd3JvdGU6Cj4+Pj4gT24gVHVlLCBKdWwgMjUsIDIwMjMgYXQgMTA6MjPigK9QTSBH
+cmVnIEtIIDxncmVna2hAbGludXhmb3VuZGF0aW9uLm9yZz4gd3JvdGU6Cj4+Pgo+Pj4gSGksCj4+
+Pgo+Pj4+PiBTbyB1bmxlc3MgdGhlcmUgaXMgc29tZSBhY3R1YWwgbmVlZCBmcm9tIHVzZXJzcGFj
+ZSB0b29scyBsaWtlIGxpYnVzYiAob3IKPj4+Pj4gYW55dGhpbmcgZWxzZT8pIHRoYXQgcmVxdWly
+ZXMgdGhpcyBuZXcgaW9jdGwsIGxldCdzIG5vdCBhZGQgaXQgb3RoZXJ3aXNlCj4+Pj4+IHdlIGFy
+ZSBzaWduaW5nIG91cnNlbHZlcyB1cCB0byBzdXBwb3J0IGl0IGZvciBmb3JldmVyLgo+Pj4+Cj4+
+Pj4gSW50ZXJlc3RpbmdseSB0aGVyZSBpcyBQUiBpbiBsaWJ1c2Igbm93LCB3aGljaCB1c2VzIHN5
+c2ZzIGZvciAyMEdicHMuCj4+Pgo+Pj4gVHJ1ZS4gTm93IHdvdWxkIHlvdSB3cml0ZSBhIHBhdGNo
+IGZvciBsaWJ1c2I/Cj4+PiBUaGlzIGxvb2tzIHRvIGJlIHR1cm5pbmcgaW50byBhIGNoaWNrZW4g
+YW5kIGVnZyBwcm9ibGVtLgo+Pj4KPj4+PiBNYXliZSB0aGlzIG5ldyB1c2JmcyBJT0NUTCBpcyBp
+bmRlZWQgZ29vZCB0byBoYXZlIGlmIHdlIGNhbiBub3QgZXh0ZW5kCj4+Pgo+Pj4gTG9va2luZyBh
+dCB0aGUgY29kZSBvZiBsaWJ1c2IgeW91IGNhbiBzZWUgdGhhdCBsaWJ1c2IgaGFzIHR3byBtb2Rl
+cwo+Pj4gb2Ygb3BlcmF0aW9uLiBFaXRoZXIgaXQgZmluZHMgc3lzZnMsIHRoZW4gaXQgdXNlcyBp
+dCwgaWYgbm90IGl0Cj4+PiBnb2VzIGZvciB0aGUgaW9jdGwuCj4+Pgo+Pj4gTm93LCBob3cgd2Vs
+bCBzaGFsbCBpdCB3b3JrIHdpdGhvdXQgc3lzZnM/IFRoYXQgaXMgYSBkZXNpZ24gZGVjaXNpb24K
+Pj4+IGFuZCB3ZSBzaG91bGQgbm90IGJlIGhhdmluZyB0aGlzIGRpc2N1c3Npb24gYWdhaW4gYW5k
+IGFnYWluLgo+Pj4KPj4+IEJUVywgdGhhdCBpcyBub3QgYWltZWQgYXQgYW55Ym9keSBwZXJzb25h
+bGx5LCB3ZSBhcmUganVzdCB0cnlpbmcgdG8KPj4+IGF2b2lkIGEgYmFzaWMgZGVjaXNpb24gYW5k
+IGl0IHdpbGwgY29tZSBiYWNrLgo+Pj4KPj4+PiB0aGUgZXhpc3RpbmcgSU9DVEwgVVNCREVWRlNf
+R0VUX1NQRUVEIChidXQgd2h5IG5vdD8pLgo+Pj4KPj4+IEl0IGRvZXMgbm90IGluY2x1ZGUgdGhl
+IGxhbmUgY291bnQuCj4+PiBBbmQgc29ydCBvZiBmdWRnaW5nIHRoaXMgaW50byBzcGVlZCBpcyBh
+IGJhZCBpZGVhIGluIHRoZSBsb25nCj4+PiBydW4gYmVjYXVzZSB3ZSBhcmUgbGlrZWx5IHRvIGhh
+dmUgY29sbGlzaW9ucyBpbiB0aGUgZnV0dXJlLgo+Pj4KPj4+IFdlIGhhdmUgYSBiYXNpYyBpc3N1
+ZSBoZXJlLiBEbyB3ZSByZXF1aXJlIGxpYnVzYiB0byB1c2Ugc3lzZnMgb3Igbm90Pwo+PiAKPj4g
+QWRkaW5nIEhhbnMgZGUgR29lZGUgYW5kIFRvcm1vZCBWb2xkZXIgKGxpYnVzYiBhZG1pbnMpIGhl
+cmUgaW4gdGhlIGRpc2N1c3Npb25zCj4+IGFzIEkgYW0gbW9yZSBpbnRvIHRoZSB0ZXN0aW5nIGFu
+ZCBzdXBwb3J0IHNpZGUgb2YgbGlidXNiIGFuZCBub3QgYQo+PiByZWFsIGRldmVsb3Blci4KPj4g
+Cj4+IGxpYnVzYiBkb2VzIHdvcmsgd2l0aCBvciB3aXRob3V0IHN5c2ZzIGFuZCB0aGVyZSBhcmUg
+bXVsdGlwbGUgY29tbWl0cyByZWxhdGVkCj4+IHRvIHN5c2ZzIHZzIHVzYmZzLgo+PiAKPj4gQW4g
+ZXhhbXBsZSBjb21taXQgZnJvbSBIYW5zIGluIFNlcHQgMjAyIHdoaWNoIGlzIHJlbGF0ZWQgdG8g
+dGhpcyBkaXNjdXNzaW9uLgo+PiBodHRwczovL2dpdGh1Yi5jb20vbGlidXNiL2xpYnVzYi9jb21t
+aXQvZjYwNjhlODNjNGY1ZTVmYmExNmIyM2I2YTg3ZjFmNmQ3YWI3MjAwYQo+PiArKysrKysrKysr
+KysrKysrCj4+IGxpbnV4OiBGaXggbGlidXNiX2dldF9kZXZpY2Vfc3BlZWQoKSBub3Qgd29ya2lu
+ZyBvbiB3cmFwcGVkIGRldmljZXMKPj4gCj4+IFdlIGRvbid0IGhhdmUgYSBzeXNmc19kaXIgZm9y
+IHdyYXBwZWQgZGV2aWNlcywgc28gd2UgY2Fubm90IHJlYWQgdGhlIHNwZWVkCj4+IGZyb20gc3lz
+ZnMuCj4+IAo+PiBUaGUgTGludXgga2VybmVsIGhhcyBzdXBwb3J0ZWQgYSBuZXcgaW9jdGwgdG8g
+Z2V0IHRoZSBzcGVlZCBkaXJlY3RseSBmcm9tCj4+IHRoZSBmZCBmb3IgYSB3aGlsZSBub3csIHVz
+ZSB0aGF0IHdoZW4gd2UgZG9uJ3QgaGF2ZSBzeXNmcyBhY2Nlc3MuCj4+IAo+PiBCdWdsaW5rOiBo
+dHRwczovL2J1Z3ppbGxhLnJlZGhhdC5jb20vc2hvd19idWcuY2dpP2lkPTE4NzE4MTgKPj4gUmVw
+b3J0ZWQtYnk6IEdlcmQgSG9mZm1hbm4gPGtyYXhlbEByZWRoYXQuY29tPgo+PiBTaWduZWQtb2Zm
+LWJ5OiBIYW5zIGRlIEdvZWRlIDxoZGVnb2VkZUByZWRoYXQuY29tPgo+PiArKysrKysrKysrKysr
+KysrKwo+PiAKPj4gVG8gSGFucyBhbmQgVG9ybW9kOgo+PiBEaXNjdXNzaW9uIHRocmVhZCBmb3Ig
+cmVmZXJlbmNlOgo+PiBodHRwczovL2xvcmUua2VybmVsLm9yZy9saW51eC11c2IvZGE1MzZjODAt
+NzM5OC1kYWUwLWEyMmMtMTZlNTIxYmU2OTdhQHN1c2UuY29tL1QvI3QKPgo+UmlnaHQsIHNvIHRo
+ZSByZWFzb24gd2h5IElPQ1RMIFVTQkRFVkZTX0dFVF9TUEVFRCB3YXMgYWRkZWQgaXMgc28gdGhh
+dCBhIGNvbmZpbmVkIHFlbXUgcHJvY2VzcyB3aGljaCBnZXRzIGp1c3QgYSBmZCBmb3IgYSAvZGV2
+L2J1cy91c2IvIGRldmljZSBwYXNzZWQgYnkgYSBtb3JlIHByaXZpbGVnZWQgcHJvY2VzcyBjYW4g
+c3RpbGwgZ2V0IHRoZSBzcGVlZCBkZXNwaXRlIGl0IG5vdCBoYXZpbmcgc3lzZnMgYWNjZXNzLiBU
+aGlzIGlzIG5lY2Vzc2FyeSBmb3IgY29ycmVjdCBwYXNzLXRocm91Z2ggb2YgVVNCIGRldmljZXMu
+Cj4KPlNpbmNlIFVTQkRFVkZTX0dFVF9TUEVFRCBub3cgbm8gbG9uZ2VyIHRlbGxzIHRoZSBmdWxs
+IHN0b3J5IEkgYmVsaWV2ZSB0aGF0IHRoZSBwcm9wb3NlZCBVU0JERVZGU19HRVRfU1NQX1JBVEUg
+aW9jdGwgbWFrZXMgc2Vuc2UuCj4KPlRoZSBjdXJyZW50IHBhdGNoIGhvd2V2ZXIgbWlzc2VzIG1v
+dmluZyB0aGUgZW51bSB1c2Jfc3NwX3JhdGUgZGVjbGFyYXRpb24gZnJvbSBpbmNsdWRlL2xpbnV4
+L3VzYi9jaDkuaCB0byBpbmNsdWRlL3VhcGkvbGludXgvdXNiL2NoOS5oIHNvIHRoYXQgbmVlZHMg
+dG8gYmUgZml4ZWQgaW4gYSB2ZXJzaW9uIDIuIEFzc3VtaW5nIHRoYXQgd2l0aCB0aGUgYWJvdmUg
+ZXhwbGFuYXRpb24gb2Ygd2h5IHRoaXMgaXMgbmVjZXNzYXJ5IEdyZWcgYW5kIEFsYW4gYXJlIG9r
+IHdpdGggYWRkaW5nIHRoZSBpb2N0bC4KPgo+UmVnYXJkcywKPgo+SGFucwo+CgpIaSBHcmVnIGFu
+ZCBBbGFuLAoKQ291bGQgeW91IHBsZWFzZSBzaGFyZSB5b3VyIG9waW5pb25zIGFib3V0IEhhbnMn
+IGp1c3RpZmljYXRpb24/CgpSZWdhcmRzLApEaW5neWFuCg==
