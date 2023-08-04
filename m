@@ -2,38 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0F4776FF0C
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Aug 2023 12:57:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ECA776FF29
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Aug 2023 13:02:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231733AbjHDK5P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Aug 2023 06:57:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55014 "EHLO
+        id S231659AbjHDLC2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Aug 2023 07:02:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbjHDK4w (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Aug 2023 06:56:52 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68B234C04;
-        Fri,  4 Aug 2023 03:55:00 -0700 (PDT)
-Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RHMxy4YtnzVk0P;
-        Fri,  4 Aug 2023 18:53:10 +0800 (CST)
+        with ESMTP id S231209AbjHDLCA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Aug 2023 07:02:00 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24DB5558A;
+        Fri,  4 Aug 2023 04:00:35 -0700 (PDT)
+Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RHN2Y2tQ5ztRhc;
+        Fri,  4 Aug 2023 18:57:09 +0800 (CST)
 Received: from ubuntu1804.huawei.com (10.67.174.202) by
  dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Fri, 4 Aug 2023 18:54:58 +0800
+ 15.1.2507.27; Fri, 4 Aug 2023 19:00:33 +0800
 From:   Zhu Wang <wangzhu9@huawei.com>
-To:     <b-liu@ti.com>, <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <sergei.shtylyov@gmail.com>
+To:     <gregkh@linuxfoundation.org>, <herve.codina@bootlin.com>,
+        <stern@rowland.harvard.edu>, <robh@kernel.org>,
+        <aaro.koskinen@iki.fi>, <sergei.shtylyov@gmail.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 CC:     <wangzhu9@huawei.com>
-Subject: [PATCH v4] usb: musb: Fix deferred probing
-Date:   Fri, 4 Aug 2023 18:54:30 +0800
-Message-ID: <20230804105430.95773-1-wangzhu9@huawei.com>
+Subject: [PATCH v4] usb: gadget: udc: gr_udc: Fix deferred probing
+Date:   Fri, 4 Aug 2023 19:00:05 +0800
+Message-ID: <20230804110005.97061-1-wangzhu9@huawei.com>
 X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Originating-IP: [10.67.174.202]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
  dggpeml500025.china.huawei.com (7.185.36.35)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
@@ -45,8 +46,8 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When platform_get_irq_byname() fails, it may return -EPROBE_DEFER,
-which suggested deferred probing, it is very important to propagate it
+When platform_get_irq() fails, it may return -EPROBE_DEFER, which
+suggested deferred probing, it is very important to propagate it
 upstream. We cannot override it with other error code.
 
 Commit ce753ad1549c ("platform: finally disallow IRQ0 in
@@ -62,7 +63,7 @@ value of the probe.
 ---
 Changes in v3:
 - Update the commit message, explain in detail why the return value of
-platform_get_irq_byname() cannot be override.
+platform_get_irq() cannot be override.
 
 ---
 Changes in v4:
@@ -71,24 +72,33 @@ Changes in v4:
 overwritten by other error code.
 - Remove -next tag.
 ---
- drivers/usb/musb/musb_core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/usb/gadget/udc/gr_udc.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/musb/musb_core.c b/drivers/usb/musb/musb_core.c
-index ecbd3784bec3..b24adb5b399f 100644
---- a/drivers/usb/musb/musb_core.c
-+++ b/drivers/usb/musb/musb_core.c
-@@ -2610,8 +2610,8 @@ static int musb_probe(struct platform_device *pdev)
- 	int		irq = platform_get_irq_byname(pdev, "mc");
- 	void __iomem	*base;
+diff --git a/drivers/usb/gadget/udc/gr_udc.c b/drivers/usb/gadget/udc/gr_udc.c
+index 0c3969301a53..c6dfa7cccc11 100644
+--- a/drivers/usb/gadget/udc/gr_udc.c
++++ b/drivers/usb/gadget/udc/gr_udc.c
+@@ -2136,15 +2136,15 @@ static int gr_probe(struct platform_device *pdev)
+ 		return PTR_ERR(regs);
  
--	if (irq <= 0)
+ 	dev->irq = platform_get_irq(pdev, 0);
+-	if (dev->irq <= 0)
 -		return -ENODEV;
-+	if (irq < 0)
-+		return irq;
++	if (dev->irq < 0)
++		return dev->irq;
  
- 	base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(base))
+ 	/* Some core configurations has separate irqs for IN and OUT events */
+ 	dev->irqi = platform_get_irq(pdev, 1);
+ 	if (dev->irqi > 0) {
+ 		dev->irqo = platform_get_irq(pdev, 2);
+-		if (dev->irqo <= 0)
+-			return -ENODEV;
++		if (dev->irqo < 0)
++			return dev->irqo;
+ 	} else {
+ 		dev->irqi = 0;
+ 	}
 -- 
 2.17.1
 
