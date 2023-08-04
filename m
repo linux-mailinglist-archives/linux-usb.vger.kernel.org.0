@@ -2,77 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E9A376FD63
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Aug 2023 11:34:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0F4776FF0C
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Aug 2023 12:57:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230448AbjHDJeF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Aug 2023 05:34:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43212 "EHLO
+        id S231733AbjHDK5P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Aug 2023 06:57:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230446AbjHDJdw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Aug 2023 05:33:52 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBBA349D8
-        for <linux-usb@vger.kernel.org>; Fri,  4 Aug 2023 02:33:48 -0700 (PDT)
-Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RHL952BZLzrS7v;
-        Fri,  4 Aug 2023 17:32:41 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by kwepemi500008.china.huawei.com
- (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 4 Aug
- 2023 17:33:45 +0800
-From:   Ruan Jinjie <ruanjinjie@huawei.com>
-To:     <peter.chen@kernel.org>, <gregkh@linuxfoundation.org>,
-        <leoyang.li@nxp.com>, <b-liu@ti.com>,
-        <valentina.manea.m@gmail.com>, <shuah@kernel.org>, <i@zenithal.me>,
-        <stern@rowland.harvard.edu>, <u.kleine-koenig@pengutronix.de>,
-        <aaro.koskinen@iki.fi>, <void0red@gmail.com>,
-        <linux-usb@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>
-CC:     <ruanjinjie@huawei.com>
-Subject: [PATCH -next 5/5] USB: usbip: Remove an unnecessary NULL value
-Date:   Fri, 4 Aug 2023 17:32:53 +0800
-Message-ID: <20230804093253.91647-6-ruanjinjie@huawei.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230804093253.91647-1-ruanjinjie@huawei.com>
-References: <20230804093253.91647-1-ruanjinjie@huawei.com>
+        with ESMTP id S229570AbjHDK4w (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Aug 2023 06:56:52 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68B234C04;
+        Fri,  4 Aug 2023 03:55:00 -0700 (PDT)
+Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RHMxy4YtnzVk0P;
+        Fri,  4 Aug 2023 18:53:10 +0800 (CST)
+Received: from ubuntu1804.huawei.com (10.67.174.202) by
+ dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Fri, 4 Aug 2023 18:54:58 +0800
+From:   Zhu Wang <wangzhu9@huawei.com>
+To:     <b-liu@ti.com>, <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <sergei.shtylyov@gmail.com>
+CC:     <wangzhu9@huawei.com>
+Subject: [PATCH v4] usb: musb: Fix deferred probing
+Date:   Fri, 4 Aug 2023 18:54:30 +0800
+Message-ID: <20230804105430.95773-1-wangzhu9@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.90.53.73]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemi500008.china.huawei.com (7.221.188.139)
+Content-Type: text/plain
+X-Originating-IP: [10.67.174.202]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500025.china.huawei.com (7.185.36.35)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The NULL initialization of the pointers assigned by kzalloc() first is
-not necessary, because if the kzalloc() failed, the pointers will be
-assigned NULL, otherwise it works as usual. so remove it.
+When platform_get_irq_byname() fails, it may return -EPROBE_DEFER,
+which suggested deferred probing, it is very important to propagate it
+upstream. We cannot override it with other error code.
 
-Signed-off-by: Ruan Jinjie <ruanjinjie@huawei.com>
+Commit ce753ad1549c ("platform: finally disallow IRQ0 in
+platform_get_irq() and its ilk") makes sure IRQ0 is not returned.
+
+Signed-off-by: Zhu Wang <wangzhu9@huawei.com>
+
 ---
- drivers/usb/usbip/vudc_dev.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes in v2:
+- Update the commit message, present the reason of replacing the return
+value of the probe.
 
-diff --git a/drivers/usb/usbip/vudc_dev.c b/drivers/usb/usbip/vudc_dev.c
-index 2bc428f2e261..8e42839e6060 100644
---- a/drivers/usb/usbip/vudc_dev.c
-+++ b/drivers/usb/usbip/vudc_dev.c
-@@ -489,7 +489,7 @@ static void vudc_device_unusable(struct usbip_device *ud)
+---
+Changes in v3:
+- Update the commit message, explain in detail why the return value of
+platform_get_irq_byname() cannot be override.
+
+---
+Changes in v4:
+- Update the title to "Fix deferred probing".
+- Update the commit message, emphasize the -EPROBE_DEFER cannot be
+overwritten by other error code.
+- Remove -next tag.
+---
+ drivers/usb/musb/musb_core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/musb/musb_core.c b/drivers/usb/musb/musb_core.c
+index ecbd3784bec3..b24adb5b399f 100644
+--- a/drivers/usb/musb/musb_core.c
++++ b/drivers/usb/musb/musb_core.c
+@@ -2610,8 +2610,8 @@ static int musb_probe(struct platform_device *pdev)
+ 	int		irq = platform_get_irq_byname(pdev, "mc");
+ 	void __iomem	*base;
  
- struct vudc_device *alloc_vudc_device(int devid)
- {
--	struct vudc_device *udc_dev = NULL;
-+	struct vudc_device *udc_dev;
+-	if (irq <= 0)
+-		return -ENODEV;
++	if (irq < 0)
++		return irq;
  
- 	udc_dev = kzalloc(sizeof(*udc_dev), GFP_KERNEL);
- 	if (!udc_dev)
+ 	base = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(base))
 -- 
-2.34.1
+2.17.1
 
