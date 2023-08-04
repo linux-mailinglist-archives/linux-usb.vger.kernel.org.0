@@ -2,93 +2,41 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0B4D770247
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Aug 2023 15:50:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AB59770257
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Aug 2023 15:55:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231489AbjHDNui (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Aug 2023 09:50:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58550 "EHLO
+        id S229984AbjHDNzj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Aug 2023 09:55:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231459AbjHDNu0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Aug 2023 09:50:26 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8780819AA
-        for <linux-usb@vger.kernel.org>; Fri,  4 Aug 2023 06:50:23 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3fbea14706eso20185615e9.2
-        for <linux-usb@vger.kernel.org>; Fri, 04 Aug 2023 06:50:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691157022; x=1691761822;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ukcL+6odfb1FFYIkWIv0OQk72o2fTIvHxVA78LrZQtE=;
-        b=vGda7p81GqHiR+qtqDS8bCRcL7vF/bVymUQAHZpG+53cfIrfPbH7ONrw8Bw5hZSb5J
-         n6GDOaAlbnuX9/1Au4Wq1TpJUQs58Y38/MbtZyYgWvPNYN9t6LbnM9QJORPWwpyEc8yi
-         UoessiuldhM1j2+6zn2k0ACoqIQlGJcxnY9LJc5nfZ66aVwEhafRyDcReofeLbihNMgO
-         4Z9xwi+zFuNltTx5lh7kZiPrbjpRR+WMiK8m/eKinMy1+6mYtkcxmxbkEUGF5hOTrA7f
-         dK3hj8+EgyysU2AD3M8kFGr5msyCOWbtzunQAIdl5PsyE613OHxqtfoN5ArWTTNdj1yP
-         U8SQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691157022; x=1691761822;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ukcL+6odfb1FFYIkWIv0OQk72o2fTIvHxVA78LrZQtE=;
-        b=gKS1VS0nmvMzePOQO9HvBliBZ41uJVbBGDLklP7ZJBSrp4vWEP82PCRHNoW8YSqtNK
-         Py+FvleWEHpfhvMNpJ/114d63Hg6IsfmRGFHvEUnC9EBSUqVl4vSjGSbPUHS8qrZpXov
-         VhY5uZfM7aK3wult6pcAcisPiwlxixTDK1Fo2ij7oYGNc9va5vPlaVrGFVsQh9oPGOI0
-         kEWjHiFB/Q6xR6J6aRitOZMXPViixrp48qTqsPJG6GaCEhTR2g5AytoNLLDDXtUxm7NY
-         iIauTKnAL72cv9fIFONTELC1t1Y1TqfhyVhIJHU3qtpTFLwoQGF80Jfz2Evfi5tm/o39
-         S6lA==
-X-Gm-Message-State: AOJu0Yz6djc6vUs4a76uDLGcQsxAvZ4Z0sP1/wGz9ZZh5/TOyPUQFZUS
-        p3R5OBZtuUmn/eyRlePRPWgDUA==
-X-Google-Smtp-Source: AGHT+IHqV+Yo5HvNtyM7QPTWXzBAXAWYv24S6GAlI+HjEhfCLaYShG+3Rjjv5X3ZB/nwbzzEzY3Dwg==
-X-Received: by 2002:a05:600c:2255:b0:3fb:b008:1ff6 with SMTP id a21-20020a05600c225500b003fbb0081ff6mr1611819wmm.0.1691157022052;
-        Fri, 04 Aug 2023 06:50:22 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id u25-20020a7bcb19000000b003fe1cac37d8sm6894793wmj.11.2023.08.04.06.50.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Aug 2023 06:50:21 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Fri, 04 Aug 2023 15:50:10 +0200
-Subject: [PATCH 4/4] arm64: dts: qcom: sm8550-qrd: add orientation gpio
+        with ESMTP id S229582AbjHDNzi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Aug 2023 09:55:38 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD0FCC;
+        Fri,  4 Aug 2023 06:55:37 -0700 (PDT)
+Received: from canpemm500007.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4RHRxG1MSSz1Z1S8;
+        Fri,  4 Aug 2023 21:52:50 +0800 (CST)
+Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
+ (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 4 Aug
+ 2023 21:55:34 +0800
+From:   Yue Haibing <yuehaibing@huawei.com>
+To:     <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yuehaibing@huawei.com>
+Subject: [PATCH -next] xhci: Remove unused function declarations
+Date:   Fri, 4 Aug 2023 21:55:20 +0800
+Message-ID: <20230804135520.20964-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.10.2.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230804-topic-sm8550-upstream-type-c-orientation-v1-4-36dd3edec7bf@linaro.org>
-References: <20230804-topic-sm8550-upstream-type-c-orientation-v1-0-36dd3edec7bf@linaro.org>
-In-Reply-To: <20230804-topic-sm8550-upstream-type-c-orientation-v1-0-36dd3edec7bf@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=699;
- i=neil.armstrong@linaro.org; h=from:subject:message-id;
- bh=PgRVPE+sttPCsO3i6Si4QDJqPDiuAM0EzLTcJZd3VKY=;
- b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBkzQIYYmczdV+OIzmHi1D8WSPn1fn/O3VPLkAQcZtm
- FYFCwe2JAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZM0CGAAKCRB33NvayMhJ0R03EA
- CDre8ntJmi2BpNmhQ+svCFicfZVV/zzlmR3t1hUBND1kN6Ht3bmIZvq4LGTR/bq7JXLVP2ef9Pc3Rb
- ISqqu0DvqKs5Zxj/U9NcMRt1ZWh2YsKvhzx/FtgaU3ysRvkGL1wykhN9mVxCCEm/7nY327TLfWDY8y
- oym2IPMNoz/6RWAwbfm0UV1WH4UpViXGk9+NoDDiFI4zaHxXRqzFEy74i2wZSlBafP1kt7/bHC8BVD
- 7JfLW2XIC1XCmAhTR3dMvxcdh8s1LxOdpDRGqGAnv7ofNu1xYrFnWky60GYhqS1BsTPuM5jEt1y3Ui
- kjkDqbZzQTz/DD+Dcbph0XCc0nyBAf218unohsXmzkKA0sJauo6+d+z70MvO1pxYUC+Uonac8uxTjZ
- gnSSyzaCEE9uSfyDAh2++2wkQu/ozYpB1B8V6wYA6ehAHNLXR7xrYD/cHUwpWSGcAODvOguRlKSQwy
- /kMSeAtXPNwFo0iIVIPyv0bNB2gwCc2KWXA5guFDDhE8x7QyM/rYfkIJd1n/oWn+hUU1ZqklRLUoIe
- Ms56mvZ2l8q3V0Cdw1j/Hb5WtM4OtUpcblAfBuFigNCOHnnWaF1K2XBEGPG4fvg/WB6//NOF8PlTJC
- PCcOL1f2zxN4ASWP8gk8kA7B0ZjDPBm/yVIr0BMHrpG63HH3cI05Ak7MhSgQ==
-X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
- fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+Content-Type: text/plain
+X-Originating-IP: [10.174.179.215]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ canpemm500007.china.huawei.com (7.192.104.62)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,26 +44,41 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Specify orientation GPIO to the PMIC GLINK node.
+Commit 674f8438c121 ("xhci: split handling halted endpoints into two steps")
+remove xhci_cleanup_stalled_ring() but leave declaration.
+And commit 25355e046d29 ("xhci: use generic command timer for stop endpoint commands.")
+left behind xhci_stop_endpoint_command_watchdog().
+Commit b17a57f89f69 ("xhci: Refactor interrupter code for initial multi interrupter support.")
+leave xhci_free_erst() declaration.
 
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+Signed-off-by: Yue Haibing <yuehaibing@huawei.com>
 ---
- arch/arm64/boot/dts/qcom/sm8550-qrd.dts | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/host/xhci.h | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8550-qrd.dts b/arch/arm64/boot/dts/qcom/sm8550-qrd.dts
-index 2c09ce8aeafd..950dfbf73410 100644
---- a/arch/arm64/boot/dts/qcom/sm8550-qrd.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8550-qrd.dts
-@@ -75,6 +75,7 @@ pmic-glink {
- 		compatible = "qcom,sm8550-pmic-glink", "qcom,pmic-glink";
- 		#address-cells = <1>;
- 		#size-cells = <0>;
-+		orientation-gpios = <&tlmm 11 GPIO_ACTIVE_HIGH>;
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index 7e282b4522c0..4cae1d4b7a86 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -2084,7 +2084,6 @@ int xhci_alloc_erst(struct xhci_hcd *xhci,
+ 		gfp_t flags);
+ void xhci_initialize_ring_info(struct xhci_ring *ring,
+ 			unsigned int cycle_state);
+-void xhci_free_erst(struct xhci_hcd *xhci, struct xhci_erst *erst);
+ void xhci_free_endpoint_ring(struct xhci_hcd *xhci,
+ 		struct xhci_virt_device *virt_dev,
+ 		unsigned int ep_index);
+@@ -2184,10 +2183,6 @@ int xhci_queue_reset_ep(struct xhci_hcd *xhci, struct xhci_command *cmd,
+ 		enum xhci_ep_reset_type reset_type);
+ int xhci_queue_reset_device(struct xhci_hcd *xhci, struct xhci_command *cmd,
+ 		u32 slot_id);
+-void xhci_cleanup_stalled_ring(struct xhci_hcd *xhci, unsigned int slot_id,
+-			       unsigned int ep_index, unsigned int stream_id,
+-			       struct xhci_td *td);
+-void xhci_stop_endpoint_command_watchdog(struct timer_list *t);
+ void xhci_handle_command_timeout(struct work_struct *work);
  
- 		connector@0 {
- 			compatible = "usb-c-connector";
-
+ void xhci_ring_ep_doorbell(struct xhci_hcd *xhci, unsigned int slot_id,
 -- 
 2.34.1
 
