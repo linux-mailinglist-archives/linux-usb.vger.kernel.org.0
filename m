@@ -2,140 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADE3E770F2D
-	for <lists+linux-usb@lfdr.de>; Sat,  5 Aug 2023 12:04:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF4257711AA
+	for <lists+linux-usb@lfdr.de>; Sat,  5 Aug 2023 21:08:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbjHEKEx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 5 Aug 2023 06:04:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43556 "EHLO
+        id S230269AbjHETIm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 5 Aug 2023 15:08:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjHEKEw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 5 Aug 2023 06:04:52 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C503944A0;
-        Sat,  5 Aug 2023 03:04:50 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 1C35532000E5;
-        Sat,  5 Aug 2023 06:04:47 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Sat, 05 Aug 2023 06:04:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1691229886; x=1691316286; bh=Oa
-        pval07/RcASiQ/IjJUx0o7BkKn8DpbMkWvORW7A8o=; b=eBHBQgrzlgEGha23yE
-        h5XJ2UnnCtSgKAdVywiCqrIXT7eiiwagNJSYM6a+iYskE1Ko1fTdSk5hV/Vg24B4
-        B4t8N6gdxumkv4DqvbyhbF6VzuAVkcW5sxTb/MNk0MaoEn8wTSErq1mpxBkp89TD
-        WIYWfPfLJ4eqXSHGmUYTtJY1S+dYIGVetVM4+eLM/EQiOsnPbXCGl5GL3hMsGIR4
-        2M6TUI+x3R0FTDwSsRuO71JhvIeqEDsOmt4L70kEdKdgCyed75Xdpj5y5rd9bD/R
-        YElL4mX73KfeHx31ZJg30G2uSuVegTaJAg0QVRKuvnMK9mcTc7Tw+Irr/KSg15PU
-        jvCw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1691229886; x=1691316286; bh=Oapval07/RcAS
-        iQ/IjJUx0o7BkKn8DpbMkWvORW7A8o=; b=TSgMlRz1CsGhs6m9vx1Bmst5QKQK/
-        HINKKyr8vp1FXUbZPJjNg81NU7gPXJtB2yZ07Xu+jiwX70t1RLOj/GrF4XsaD7W3
-        oelakMM301Skew51tkrrA7VbhrRYKnvjWBIlDztSt/Y11DYUNJZVytgRxXcwXPse
-        VBTwYxquFnJKXlhyMJOGrl6O+CPIjjomzq3IOaBOlw4fvWUkiGurjrcmSrjRH300
-        rft6r4zzTAZengp8Uo0ABDhzA9Ou8wWOhx2sDOTRTXLo1/tavDr4tdvzNtx3h6fO
-        y2JjUSFWmSTK8R9gEv6Y5hj5Amzc3jRg2uuIYlAt6B8C5IfiaTlHMU89g==
-X-ME-Sender: <xms:vh7OZFJ8M6yWCgiLqWf5rThS1X9jF5KySyX6rdZ4PFAaquMsJ_Pq7A>
-    <xme:vh7OZBK3K5OdiDgXwTDndsYnYT7UFTXaXqTSuhTWaxtougZGj6DLoizSgGPh5tJwc
-    a2AgxIWcqJX_9U3Ajw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrkeeigddvfecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:vh7OZNt2D0gUEC-zoXNSBJiDVLfgMy86LMgHM6tohOkZeksp4py-5A>
-    <xmx:vh7OZGbJJVTAE7oDryhtPSuo7oEYzcERZwMFiKvsnVutQK3ytM5lHg>
-    <xmx:vh7OZMYoVCFHUHEc5_aVcOI7ACJiiWHeiuTtceJbA_397COu51S1jw>
-    <xmx:vh7OZBOaoOC8RPgkis_6hKh5yG9znHF5Fepxjc2jvDXWRbHuE2S_LA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 3DCB6B60089; Sat,  5 Aug 2023 06:04:46 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-624-g7714e4406d-fm-20230801.001-g7714e440
-Mime-Version: 1.0
-Message-Id: <9b8abe84-80be-4e16-8792-92ae101187f3@app.fastmail.com>
-In-Reply-To: <2023080514-mothball-chaps-2b42@gregkh>
-References: <20230805095157.3459892-1-arnd@kernel.org>
- <2023080514-mothball-chaps-2b42@gregkh>
-Date:   Sat, 05 Aug 2023 12:04:24 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Arnd Bergmann" <arnd@kernel.org>
-Cc:     "Heikki Krogerus" <heikki.krogerus@linux.intel.com>,
-        "Rajat Khandelwal" <rajat.khandelwal@linux.intel.com>,
-        "Neil Armstrong" <neil.armstrong@linaro.org>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: intel_pmc_mux: select CONFIG_USB_COMMON
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S230265AbjHETIl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 5 Aug 2023 15:08:41 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48F9B113
+        for <linux-usb@vger.kernel.org>; Sat,  5 Aug 2023 12:08:39 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3fe2048c910so28390385e9.1
+        for <linux-usb@vger.kernel.org>; Sat, 05 Aug 2023 12:08:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1691262518; x=1691867318;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ci5g0L3lDWd1ad2I5/zlL521QTxiIlvqfwBSNYlhmm4=;
+        b=isPu0U9HvnEnti01C5gZ605dboA1zdGghYeSHbU+qURewel+VxA8vdz+KyFpIwV5R4
+         EDcdvy7us+eu6CxPGBEeM2K8Zll06tSQ2J4bn+fvsX3MtW3aDZUekGcfmZWTOamzGlLJ
+         bhv6EyBF2NzKgC6QeLCydlZJLjYcWHU5LRQoRUCyBXcNEz6JjdPqUats00fr4EFxcG/Q
+         lcO+dZEy1GA28aXrKudcK/Wz+Q8Aqd24+Ix6/crJoy0a+j8Fw6CuzxMYgl7FHi6yc2jd
+         EvCvTIOI0Pq7bQVqZ1MYg0zdUvWahAJkcZD356ei92WJU0Y/9E8G5WQcfcac3BsODUIZ
+         nv9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691262518; x=1691867318;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ci5g0L3lDWd1ad2I5/zlL521QTxiIlvqfwBSNYlhmm4=;
+        b=CjUO0uoBNdGDhfEDZkzVknp+jLQ3SCiJxcfaFfXvs46Fb1BhrO2PjivJ+kLtaIc310
+         qdY1CzMe1Bwl+ABsZzsf5siFe5//n2zsgStiuQgXjD/WW6buJNolZCTgwMhOvBoOf2Lb
+         4IcjTRWPVMXd6KtL5Av6HB4RnwLqnZY+lmG4ZzoyIR9fQ/twsAg/tr6aKJkgwWQK7wlE
+         gXy2kUgosVfnLDNqh2QNqB0mXVP3uvWsW6KZYo3pMyVjCDXZsUVUmzaPutpjpiNIxJQ0
+         xkWmdTXtLfHnP5AieBu8BE/XASePkno3sAdPIAlv0sIrRQ5UvMd8NgpXX3a8uF9noa5f
+         sj6w==
+X-Gm-Message-State: AOJu0YzFwrUGVWM0NSL1rsDDdOV5YKoHcN66QErFAuunfnhzJTWJmm2M
+        tpG8y2c7VpQk3GTEVdPeitN3XH6/mndkyATCoKI=
+X-Google-Smtp-Source: AGHT+IGxR6lIQII7VnRB6Dnh3BPr2qdoP2ijfkvBwAnBE1qeXZ9OkTLEgGNFZbvuH4nuQC2KiUZv0A==
+X-Received: by 2002:a05:600c:450:b0:3fc:62c:8275 with SMTP id s16-20020a05600c045000b003fc062c8275mr3405325wmb.35.1691262517660;
+        Sat, 05 Aug 2023 12:08:37 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.222.245])
+        by smtp.gmail.com with ESMTPSA id e13-20020a05600c218d00b003fe2bea77ccsm5705999wme.5.2023.08.05.12.08.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 05 Aug 2023 12:08:37 -0700 (PDT)
+Message-ID: <e2e7c830-07f4-a34e-6bf8-c9e8dc33bf57@linaro.org>
+Date:   Sat, 5 Aug 2023 21:08:35 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH v1 1/3] dt-bindings: usb: Add HPE GXP UDCG Controller
+Content-Language: en-US
+To:     "Yu, Richard" <richard.yu@hpe.com>,
+        "Verdun, Jean-Marie" <verdun@hpe.com>,
+        "Hawkins, Nick" <nick.hawkins@hpe.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "conor+dt@kernel.org" <conor+dt@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230706215910.78772-1-richard.yu@hpe.com>
+ <20230706215910.78772-2-richard.yu@hpe.com>
+ <9f1bd0f1-d93e-243a-4622-721319fd1235@linaro.org>
+ <SJ0PR84MB20854B4A444283E31025FA398D0AA@SJ0PR84MB2085.NAMPRD84.PROD.OUTLOOK.COM>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <SJ0PR84MB20854B4A444283E31025FA398D0AA@SJ0PR84MB2085.NAMPRD84.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Aug 5, 2023, at 11:59, Greg Kroah-Hartman wrote:
-> On Sat, Aug 05, 2023 at 11:51:53AM +0200, Arnd Bergmann wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
->> 
->> It is possible to configure the typec drivers to be built-in while the
->> actual USB host and device support is in loadable modules, but that now
->> causes a link failure because the usb debugfs support is then not
->> available to built-in code.
->> 
->> x86_64-linux-ld: drivers/usb/typec/mux/intel_pmc_mux.o: in function `pmc_usb_init':
->> intel_pmc_mux.c:(.init.text+0x3): undefined reference to `usb_debug_root'
->> 
->> Select CONFIG_USB_COMMON to get it to build again, as we do for
->> other drivers that require the core usb functionality.
->> 
->> Fixes: 0a453dc9f2602 ("usb: typec: intel_pmc_mux: Expose IOM port status to debugfs")
->> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->> ---
->>  drivers/usb/typec/mux/Kconfig | 1 +
->>  1 file changed, 1 insertion(+)
->> 
->> diff --git a/drivers/usb/typec/mux/Kconfig b/drivers/usb/typec/mux/Kconfig
->> index 784b9d8107e9b..65da61150ba78 100644
->> --- a/drivers/usb/typec/mux/Kconfig
->> +++ b/drivers/usb/typec/mux/Kconfig
->> @@ -29,6 +29,7 @@ config TYPEC_MUX_INTEL_PMC
->>  	tristate "Intel PMC mux control"
->>  	depends on ACPI
->>  	depends on INTEL_SCU_IPC
->> +	select USB_COMMON
->>  	select USB_ROLE_SWITCH
->>  	help
->>  	  Driver for USB muxes controlled by Intel PMC FW. Intel PMC FW can
->> -- 
->> 2.39.2
->> 
->
-> I think this is already fixed by commit ef7c4d8a90c6 ("usb: typec: mux:
-> intel: Add dependency on USB_COMMON") in my tree and will be in the next
-> linux-next release on Monday.
+On 01/08/2023 20:07, Yu, Richard wrote:
+> 
+>>> +title: HPE GXP USB Virtual EHCI controller
+> 
+>> The word "virtual" in bindings pretty often raises questions, because we
+>> describe usually real hardware, not virtual. Some explanation in
+>> description would be useful.
+> 
+> Here we are working with virtual devices that are created and have no
 
-Right, adding a dependency also works.
+Unfortunately I do not know what are virtual devices which do not exist
+physically. I have serious doubts that they fit Devicetree purpose...
 
-I tried to avoid mixing 'depends on' with 'select' here, and
-(almost) all the other users of USB_COMMON use select since
-this is a hidden symbol, but practically speaking there is
-very little difference since you wouldn't actually want to
-have the typec support builtin without also having USB builtin.
+> physical presence. We have modeled our code off of ASPEED's VHUB
+> implementation to comply with the implementation in OpenBMC.
+> 
+>>> + The HPE GXP USB Virtual EHCI Controller implements 1 set of USB EHCI
+>>> + register and several sets of device and endpoint registers to support
+>>> + the virtual EHCI's downstream USB devices.
+>>> +
+> 
+> 
+>> If this is EHCI controller, then I would expect here reference to usb-hcd.
+> 
+> We will remove references to EHCI in code and documentation. It has been
+> modeled to following ASPEEDs approach as mentioned above.
+> 
+>>> + hpe,vehci-downstream-ports:
+>>> + description: Number of downstream ports supported by the GXP
+> 
+> 
+>> Why do you need this property in DT and what exactly does it represent?
+>> You have one device - EHCI controller - and on some boards it is further
+>> customized? Even though it is the same device?
+> 
+> That is correct. We can configure this VHUB Controller to have one to
+> 8 virtual ports. This is similar to the aspeed virtual USB HUB
+> "aspeed,vhub-downstream-ports" moving forward in the next patch
+> we are going to use "hpe,vhub-downstream-ports"
 
-      Arnd
+Moving forward you need to address this lack of physical presence...
+Aren't these different devices and you just forgot to customize the
+compatible?
+
+Best regards,
+Krzysztof
+
