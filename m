@@ -2,133 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF4257711AA
-	for <lists+linux-usb@lfdr.de>; Sat,  5 Aug 2023 21:08:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA002771344
+	for <lists+linux-usb@lfdr.de>; Sun,  6 Aug 2023 04:33:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230269AbjHETIm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 5 Aug 2023 15:08:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52962 "EHLO
+        id S229504AbjHFCdE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 5 Aug 2023 22:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230265AbjHETIl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 5 Aug 2023 15:08:41 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48F9B113
-        for <linux-usb@vger.kernel.org>; Sat,  5 Aug 2023 12:08:39 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3fe2048c910so28390385e9.1
-        for <linux-usb@vger.kernel.org>; Sat, 05 Aug 2023 12:08:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691262518; x=1691867318;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ci5g0L3lDWd1ad2I5/zlL521QTxiIlvqfwBSNYlhmm4=;
-        b=isPu0U9HvnEnti01C5gZ605dboA1zdGghYeSHbU+qURewel+VxA8vdz+KyFpIwV5R4
-         EDcdvy7us+eu6CxPGBEeM2K8Zll06tSQ2J4bn+fvsX3MtW3aDZUekGcfmZWTOamzGlLJ
-         bhv6EyBF2NzKgC6QeLCydlZJLjYcWHU5LRQoRUCyBXcNEz6JjdPqUats00fr4EFxcG/Q
-         lcO+dZEy1GA28aXrKudcK/Wz+Q8Aqd24+Ix6/crJoy0a+j8Fw6CuzxMYgl7FHi6yc2jd
-         EvCvTIOI0Pq7bQVqZ1MYg0zdUvWahAJkcZD356ei92WJU0Y/9E8G5WQcfcac3BsODUIZ
-         nv9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691262518; x=1691867318;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ci5g0L3lDWd1ad2I5/zlL521QTxiIlvqfwBSNYlhmm4=;
-        b=CjUO0uoBNdGDhfEDZkzVknp+jLQ3SCiJxcfaFfXvs46Fb1BhrO2PjivJ+kLtaIc310
-         qdY1CzMe1Bwl+ABsZzsf5siFe5//n2zsgStiuQgXjD/WW6buJNolZCTgwMhOvBoOf2Lb
-         4IcjTRWPVMXd6KtL5Av6HB4RnwLqnZY+lmG4ZzoyIR9fQ/twsAg/tr6aKJkgwWQK7wlE
-         gXy2kUgosVfnLDNqh2QNqB0mXVP3uvWsW6KZYo3pMyVjCDXZsUVUmzaPutpjpiNIxJQ0
-         xkWmdTXtLfHnP5AieBu8BE/XASePkno3sAdPIAlv0sIrRQ5UvMd8NgpXX3a8uF9noa5f
-         sj6w==
-X-Gm-Message-State: AOJu0YzFwrUGVWM0NSL1rsDDdOV5YKoHcN66QErFAuunfnhzJTWJmm2M
-        tpG8y2c7VpQk3GTEVdPeitN3XH6/mndkyATCoKI=
-X-Google-Smtp-Source: AGHT+IGxR6lIQII7VnRB6Dnh3BPr2qdoP2ijfkvBwAnBE1qeXZ9OkTLEgGNFZbvuH4nuQC2KiUZv0A==
-X-Received: by 2002:a05:600c:450:b0:3fc:62c:8275 with SMTP id s16-20020a05600c045000b003fc062c8275mr3405325wmb.35.1691262517660;
-        Sat, 05 Aug 2023 12:08:37 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.222.245])
-        by smtp.gmail.com with ESMTPSA id e13-20020a05600c218d00b003fe2bea77ccsm5705999wme.5.2023.08.05.12.08.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 05 Aug 2023 12:08:37 -0700 (PDT)
-Message-ID: <e2e7c830-07f4-a34e-6bf8-c9e8dc33bf57@linaro.org>
-Date:   Sat, 5 Aug 2023 21:08:35 +0200
+        with ESMTP id S229477AbjHFCdD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 5 Aug 2023 22:33:03 -0400
+X-Greylist: delayed 406 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 05 Aug 2023 19:33:02 PDT
+Received: from vps3.drown.org (vps3.drown.org [96.126.122.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 554231FEB
+        for <linux-usb@vger.kernel.org>; Sat,  5 Aug 2023 19:33:02 -0700 (PDT)
+X-Envelope-From: dan-netdev@drown.org
+Received: from vps3.drown.org (vps3.drown.org [IPv6:2600:3c00::f03c:91ff:fedf:5654])
+        by vps3.drown.org (Postfix) with ESMTPSA id 32C9B3A04EC
+        for <linux-usb@vger.kernel.org>; Sat,  5 Aug 2023 21:26:15 -0500 (CDT)
+Date:   Sat, 5 Aug 2023 21:26:13 -0500
+From:   Dan Drown <dan-netdev@drown.org>
+To:     linux-usb@vger.kernel.org
+Subject: [PATCH] usb: cdc-acm: add PPS support
+Message-ID: <ZM8ExV6bAvJtIA1d@vps3.drown.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH v1 1/3] dt-bindings: usb: Add HPE GXP UDCG Controller
-Content-Language: en-US
-To:     "Yu, Richard" <richard.yu@hpe.com>,
-        "Verdun, Jean-Marie" <verdun@hpe.com>,
-        "Hawkins, Nick" <nick.hawkins@hpe.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230706215910.78772-1-richard.yu@hpe.com>
- <20230706215910.78772-2-richard.yu@hpe.com>
- <9f1bd0f1-d93e-243a-4622-721319fd1235@linaro.org>
- <SJ0PR84MB20854B4A444283E31025FA398D0AA@SJ0PR84MB2085.NAMPRD84.PROD.OUTLOOK.COM>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <SJ0PR84MB20854B4A444283E31025FA398D0AA@SJ0PR84MB2085.NAMPRD84.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_SBL_CSS,SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 01/08/2023 20:07, Yu, Richard wrote:
-> 
->>> +title: HPE GXP USB Virtual EHCI controller
-> 
->> The word "virtual" in bindings pretty often raises questions, because we
->> describe usually real hardware, not virtual. Some explanation in
->> description would be useful.
-> 
-> Here we are working with virtual devices that are created and have no
+This patch adds support for PPS to CDC devices. Changes to the DCD pin
+are monitored and passed to the ldisc system, which is used by
+pps-ldisc.
 
-Unfortunately I do not know what are virtual devices which do not exist
-physically. I have serious doubts that they fit Devicetree purpose...
+Signed-off-by: Dan Drown <dan-netdev@drown.org>
+---
+ drivers/usb/class/cdc-acm.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-> physical presence. We have modeled our code off of ASPEED's VHUB
-> implementation to comply with the implementation in OpenBMC.
-> 
->>> + The HPE GXP USB Virtual EHCI Controller implements 1 set of USB EHCI
->>> + register and several sets of device and endpoint registers to support
->>> + the virtual EHCI's downstream USB devices.
->>> +
-> 
-> 
->> If this is EHCI controller, then I would expect here reference to usb-hcd.
-> 
-> We will remove references to EHCI in code and documentation. It has been
-> modeled to following ASPEEDs approach as mentioned above.
-> 
->>> + hpe,vehci-downstream-ports:
->>> + description: Number of downstream ports supported by the GXP
-> 
-> 
->> Why do you need this property in DT and what exactly does it represent?
->> You have one device - EHCI controller - and on some boards it is further
->> customized? Even though it is the same device?
-> 
-> That is correct. We can configure this VHUB Controller to have one to
-> 8 virtual ports. This is similar to the aspeed virtual USB HUB
-> "aspeed,vhub-downstream-ports" moving forward in the next patch
-> we are going to use "hpe,vhub-downstream-ports"
-
-Moving forward you need to address this lack of physical presence...
-Aren't these different devices and you just forgot to customize the
-compatible?
-
-Best regards,
-Krzysztof
+diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
+index 11da5fb284d0..9b34199474c4 100644
+--- a/drivers/usb/class/cdc-acm.c
++++ b/drivers/usb/class/cdc-acm.c
+@@ -28,6 +28,7 @@
+ #include <linux/serial.h>
+ #include <linux/tty_driver.h>
+ #include <linux/tty_flip.h>
++#include <linux/tty_ldisc.h>
+ #include <linux/module.h>
+ #include <linux/mutex.h>
+ #include <linux/uaccess.h>
+@@ -324,8 +325,17 @@ static void acm_process_notification(struct acm *acm, unsigned char *buf)
+ 
+ 		if (difference & USB_CDC_SERIAL_STATE_DSR)
+ 			acm->iocount.dsr++;
+-		if (difference & USB_CDC_SERIAL_STATE_DCD)
++		if (difference & USB_CDC_SERIAL_STATE_DCD) {
++			if (acm->port.tty) {
++				struct tty_ldisc *ld = tty_ldisc_ref(acm->port.tty);
++				if (ld) {
++					if (ld->ops->dcd_change)
++						ld->ops->dcd_change(acm->port.tty, newctrl & USB_CDC_SERIAL_STATE_DCD);
++					tty_ldisc_deref(ld);
++				}
++			}
+ 			acm->iocount.dcd++;
++		}
+ 		if (newctrl & USB_CDC_SERIAL_STATE_BREAK) {
+ 			acm->iocount.brk++;
+ 			tty_insert_flip_char(&acm->port, 0, TTY_BREAK);
+-- 
+2.41.0
 
