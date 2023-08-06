@@ -2,123 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78C6E7715CC
-	for <lists+linux-usb@lfdr.de>; Sun,  6 Aug 2023 17:15:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C02AF771694
+	for <lists+linux-usb@lfdr.de>; Sun,  6 Aug 2023 21:38:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230064AbjHFPP5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 6 Aug 2023 11:15:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56956 "EHLO
+        id S230298AbjHFTie (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 6 Aug 2023 15:38:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229906AbjHFPP4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Aug 2023 11:15:56 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 10A71E49
-        for <linux-usb@vger.kernel.org>; Sun,  6 Aug 2023 08:15:53 -0700 (PDT)
-Received: (qmail 96132 invoked by uid 1000); 6 Aug 2023 11:15:51 -0400
-Date:   Sun, 6 Aug 2023 11:15:51 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Zhang Shurong <zhang_shurong@foxmail.com>, jgross@suse.com,
-        xen-devel@lists.xenproject.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] xen: fix potential shift out-of-bounds in
- xenhcd_hub_control()
-Message-ID: <3481a644-1648-4fa9-86eb-2a0b86b8f47a@rowland.harvard.edu>
-References: <tencent_15DD79B42AD8A0D64A7CDC24D4FE6C85800A@qq.com>
- <2023062628-shame-ebook-56f2@gregkh>
- <4825193.GXAFRqVoOG@localhost.localdomain>
- <tencent_942CC5C35E410E3545C2E386BE566B8B1405@qq.com>
- <2023080659-turban-exemption-1196@gregkh>
+        with ESMTP id S229733AbjHFTid (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Aug 2023 15:38:33 -0400
+Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com [209.85.167.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F096171A
+        for <linux-usb@vger.kernel.org>; Sun,  6 Aug 2023 12:38:32 -0700 (PDT)
+Received: by mail-oi1-f197.google.com with SMTP id 5614622812f47-3a5ab57036fso7002018b6e.3
+        for <linux-usb@vger.kernel.org>; Sun, 06 Aug 2023 12:38:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691350711; x=1691955511;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wHAFAUtlpPTsblmGRi8/yz/rtfn+G6tOKLxXyDwkU7c=;
+        b=EuZOQEv2cBmzRtwS9hUss3C9xbHnt/md0q9OayL0m6wmqlCq6gGlV/kRpZxrEkTdSR
+         7ji3lDAIEctfuyIra67Ju7eYR3yRW2Yw698e8ktrHwDiUUReBhCgwmBkjmfbL/HhvOI9
+         DFrp/EBq7TJx3jAW4jeadbDlrlSFAFcvbh2JfR5K/Suzgh/IOnU+hE5GF6EddRCb/KX1
+         YlHgMYJg8sZ0ZHCIeAMLfGbTWHgJ2n8FYKNdAslCFHY0RY1kiOd6/ObzycNI5C59d6qD
+         PBWUePkuTdb8bjE1BzTekhtlVNCp05K/lmo0sVnv5lp71uXnwbHtY6Ew/C2yM/LbC57/
+         t12g==
+X-Gm-Message-State: AOJu0YyBa7jc7kYaBEWxaFkGAE2myGelyyicfqNWtCuITi+08lhCfRUa
+        lpkf6T0FHAagkNgGhv0AycXTa2cqT0rveaK5KBYBvJ9FTzZJ
+X-Google-Smtp-Source: AGHT+IF40jj0zFbkkF2AkDSkU6OeSWL//98qOUQ8SLl2cjxFtDsY+SqCrZULINynDdtK/cdLxjdxmz+HSUoxFnDSbnBts8CbBw0I
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2023080659-turban-exemption-1196@gregkh>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6808:3020:b0:3a7:275a:dc69 with SMTP id
+ ay32-20020a056808302000b003a7275adc69mr11976106oib.1.1691350711498; Sun, 06
+ Aug 2023 12:38:31 -0700 (PDT)
+Date:   Sun, 06 Aug 2023 12:38:31 -0700
+In-Reply-To: <0000000000005003fe05a8af2231@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000597f580602464669@google.com>
+Subject: Re: [syzbot] [wireless?] INFO: trying to register non-static key in skb_queue_tail
+From:   syzbot <syzbot+743547b2a7fd655ffb6d@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, ath9k-devel@qca.qualcomm.com,
+        brookebasile@gmail.com, davem@davemloft.net, kuba@kernel.org,
+        kvalo@codeaurora.org, kvalo@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, pchelkin@ispras.ru, quic_kvalo@quicinc.com,
+        syzkaller-bugs@googlegroups.com, toke@toke.dk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Aug 06, 2023 at 04:27:27PM +0200, Greg KH wrote:
-> On Sun, Aug 06, 2023 at 10:11:43PM +0800, Zhang Shurong wrote:
-> > 在 2023年7月1日星期六 CST 下午11:51:43，Zhang Shurong 写道：
-> > > 在 2023年6月26日星期一 CST 下午1:52:02，您写道：
-> > > 
-> > > > On Mon, Jun 26, 2023 at 07:48:05AM +0200, Jan Beulich wrote:
-> > > > > On 25.06.2023 18:42, Zhang Shurong wrote:
-> > > > > > --- a/drivers/usb/host/xen-hcd.c
-> > > > > > +++ b/drivers/usb/host/xen-hcd.c
-> > > > > > @@ -456,6 +456,8 @@ static int xenhcd_hub_control(struct usb_hcd *hcd,
-> > > > > > __u16 typeReq, __u16 wValue,> >
-> > > > > > 
-> > > > > >  			info->ports[wIndex - 1].c_connection =
-> > > 
-> > > false;
-> > > 
-> > > > > >  			fallthrough;
-> > > > > >  		
-> > > > > >  		default:
-> > > > > > +			if (wValue >= 32)
-> > > > > > +				goto error;
-> > > > > > 
-> > > > > >  			info->ports[wIndex - 1].status &= ~(1
-> > > 
-> > > << wValue);
-> > > 
-> > > > > Even 31 is out of bounds (as in: UB) as long as it's 1 here rather
-> > > > > than 1u.
-> > > > 
-> > > > Why isn't the caller fixed so this type of value could never be passed
-> > > > to the hub_control callback?
-> > > > 
-> > > > thanks,
-> > > > 
-> > > > greg k-h
-> > > 
-> > > Although I'm not knowledgeable about the USB subsystem, I've observed that
-> > > not all driver code that implements hub_control callback performs a shift
-> > > operation on wValue, and not all shift operations among them cause
-> > > problems. Therefore, I've decided to fix this issue within each driver
-> > > itself.
-> > > 
-> > > For example, in r8a66597_hub_control, it will first check whether wValue is
-> > > valid (always < 31) before the shift operation. In case of an invalid
-> > > number, the code would execute the error branch instead of the shift
-> > > operation.
-> > > 
-> > > switch (wValue) {
-> > > case USB_PORT_FEAT_ENABLE:
-> > > 	rh->port &= ~USB_PORT_STAT_POWER;
-> > > 	break;
-> > > case USB_PORT_FEAT_SUSPEND:
-> > > 	break;
-> > > case USB_PORT_FEAT_POWER:
-> > > 	r8a66597_port_power(r8a66597, port, 0);
-> > > 	break;
-> > > case USB_PORT_FEAT_C_ENABLE:
-> > > case USB_PORT_FEAT_C_SUSPEND:
-> > > case USB_PORT_FEAT_C_CONNECTION:
-> > > case USB_PORT_FEAT_C_OVER_CURRENT:
-> > > case USB_PORT_FEAT_C_RESET:
-> > > 	break;
-> > > default:
-> > > 	goto error;
-> > > }
-> > > rh->port &= ~(1 << wValue);
-> > 
-> > Hi there. I apologize for reaching out once more. I'm feeling a bit puzzled 
-> > about what my next step should be. I'm unsure whether I should rewrite this 
-> > patch or attempt to address the issue at the caller level.
-> 
-> Try addressing it at the caller level first please.  If that somehow
-> does not work, then we will take a patch series that fixes all of the
-> host controller drivers at once.
+syzbot suspects this issue was fixed by commit:
 
-It's not feasible to fix all the callers, because the calls can come 
-from userspace via usbfs.
+commit 061b0cb9327b80d7a0f63a33e7c3e2a91a71f142
+Author: Fedor Pchelkin <pchelkin@ispras.ru>
+Date:   Wed May 17 15:03:17 2023 +0000
 
-Alan Stern
+    wifi: ath9k: don't allow to overwrite ENDPOINT0 attributes
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1243d549a80000
+start commit:   559089e0a93d vmalloc: replace VM_NO_HUGE_VMAP with VM_ALLO..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=dd7c9a79dfcfa205
+dashboard link: https://syzkaller.appspot.com/bug?extid=743547b2a7fd655ffb6d
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15d5d7f4f00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=106ff834f00000
+
+If the result looks correct, please mark the issue as fixed by replying with:
+
+#syz fix: wifi: ath9k: don't allow to overwrite ENDPOINT0 attributes
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
