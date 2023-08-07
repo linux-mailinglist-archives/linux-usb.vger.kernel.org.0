@@ -2,327 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7447E772303
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Aug 2023 13:48:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19EF67723BE
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Aug 2023 14:21:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbjHGLsS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Aug 2023 07:48:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52350 "EHLO
+        id S233435AbjHGMVV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Aug 2023 08:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233059AbjHGLrv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Aug 2023 07:47:51 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDD7199
-        for <linux-usb@vger.kernel.org>; Mon,  7 Aug 2023 04:47:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691408869; x=1722944869;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=b0P6enm4x0YY7z0Neh2sj5+llTug0secPVpz7CNdHio=;
-  b=cb5AqX8q7jTRZ9Ic+DzqBPD6BEMgCWR0kxutsEUDG3x2/wAKNThLK9K5
-   bW5181OdvS79FNPgk2hNosRw8zpHmeU7hRbmngcc24x+oum5TyTEZSGOZ
-   UtUrKRi1u05bG3LBX5SRliDyklSaD8e8PjgRqksdm4L7duJe2rYCFsola
-   3y9DEXsQKnAo6PcVopfAaQkD7mtw14qWijpT3+2TC69I+n3gezdWVvqYj
-   NV2p0QQk5DNnEC6CT5pc9GHIjo3RRnShbioHQv0+fHQlqh0hC047hAaSk
-   buyapbR35wdCdZPEC0ae+1IFaHgD1jpkbfAv1e+mDLZUChIqf/TZM8AFt
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10794"; a="374198863"
-X-IronPort-AV: E=Sophos;i="6.01,261,1684825200"; 
-   d="scan'208";a="374198863"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2023 04:47:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
-   d="scan'208";a="874284441"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 07 Aug 2023 04:47:49 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 07 Aug 2023 14:47:46 +0300
-Date:   Mon, 7 Aug 2023 14:47:45 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Saranya Gopal <saranya.gopal@intel.com>
-Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rajaram Regupathy <rajaram.regupathy@intel.com>
-Subject: Re: [PATCH v2] usb: typec: ucsi: Add debugfs for ucsi commands
-Message-ID: <ZNDZ4T5hAeRZTavR@kuha.fi.intel.com>
-References: <20230807105205.742819-1-saranya.gopal@intel.com>
+        with ESMTP id S233412AbjHGMVR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Aug 2023 08:21:17 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2084.outbound.protection.outlook.com [40.107.237.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08171E46;
+        Mon,  7 Aug 2023 05:20:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NLVbgSuOaFr+NzB8RQUlgXKN3wewHs0TyuxA0HwWaJS5NZOl0slT+rhGpjo7j+pdO0XlCZA5EdSXWD3eqx5UX0Auc9yL+WWfBRC8X+/1ev6SMB4AfCbNVU1oG+/xumk18VLu0zUH3Uq6olnGqNMI+8GD8mYxleXQyDx0ItbEMH0sG4TB1RmEeR8dJwnRJbUY2JGd73ze+vRtblSXpUCZTntSM1NE6NGWZN24/tkCmu7oLvaOsE1rVwMV5zX0EmPVeqakNql6MpgNHS+EwFj/AfBvD242k9fCA3SZTQ9E7kdWUE5WMtiQF8LWHbsvYLXqWuHfxrxVBDlWwF972EyYcg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zV8cyOpyi0L6DE8j4lygV50KnCcHX4GbFjMd1Cw23fw=;
+ b=Ijs+TUD1uwlm9Xh6TAtaZeRfflFFmyyk9+sdHvcKvdBF2/w5pLDKYEEomQllJj2u3KnhTpVbRtNg9tt1VbuadBXQM7imMVZyVk1Am6nL/luZFbMGduAx9S4nYuk0WyYyHUPLyHTBWFHtttp/Q0khOdeUqfmm0LJDFVMlfnDRpQvExCpYZTkTSi+9++qGED7pqjtIsIl2aZ3Wd90NTi7GENbS8WxvqJz6Vv3Pd8mNL/K9PawAf99DKmJPI46bW4bA+bYfSV4/0o5mRAASIfOJQwpjv5zYPXQDLzQmR20GVag6XoMWW16DgcsWACBOXMXMt6ed4ZrOlWjvheFp9urChw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=rowland.harvard.edu smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zV8cyOpyi0L6DE8j4lygV50KnCcHX4GbFjMd1Cw23fw=;
+ b=I0UQQ37nkHGLGFGMQ2hLh9ZgYlKTFUybuILVrN5Fdh0GJBRhWGbl8S1ijQd+9wqHJp6WEv+JGXZ+CBksVISjUAgObdKurhBqbUta9KS6iTfs/2HYJ760964nOGNPDRFFykiW5qfcs4C5/h0aibPN3Kq+dM9EfXX0nd68AXM62sU=
+Received: from SA0PR12CA0029.namprd12.prod.outlook.com (2603:10b6:806:6f::34)
+ by DS0PR12MB8245.namprd12.prod.outlook.com (2603:10b6:8:f2::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.26; Mon, 7 Aug
+ 2023 12:20:48 +0000
+Received: from SA2PEPF00001504.namprd04.prod.outlook.com
+ (2603:10b6:806:6f:cafe::24) by SA0PR12CA0029.outlook.office365.com
+ (2603:10b6:806:6f::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.27 via Frontend
+ Transport; Mon, 7 Aug 2023 12:20:48 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ SA2PEPF00001504.mail.protection.outlook.com (10.167.242.36) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6652.19 via Frontend Transport; Mon, 7 Aug 2023 12:20:50 +0000
+Received: from SATLEXMB07.amd.com (10.181.41.45) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 7 Aug
+ 2023 07:20:50 -0500
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB07.amd.com
+ (10.181.41.45) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 7 Aug
+ 2023 05:20:49 -0700
+Received: from xhdnavam40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.27 via Frontend
+ Transport; Mon, 7 Aug 2023 07:20:47 -0500
+From:   Piyush Mehta <piyush.mehta@amd.com>
+To:     <stern@rowland.harvard.edu>, <gregkh@linuxfoundation.org>
+CC:     <michal.simek@amd.com>, <siva.durga.prasad.paladugu@amd.com>,
+        <radhey.shyam.pandey@amd.com>, <git@amd.com>,
+        <linux-usb@vger.kernel.org>,
+        <usb-storage@lists.one-eyed-alien.net>,
+        <linux-kernel@vger.kernel.org>, Piyush Mehta <piyush.mehta@amd.com>
+Subject: [PATCH] uas: Add US_FL_NO_ATA_1X for linux tcm_usb_gadget
+Date:   Mon, 7 Aug 2023 17:50:25 +0530
+Message-ID: <20230807122025.2818062-1-piyush.mehta@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230807105205.742819-1-saranya.gopal@intel.com>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA2PEPF00001504:EE_|DS0PR12MB8245:EE_
+X-MS-Office365-Filtering-Correlation-Id: dec6cfce-cb0b-45f1-2109-08db9740bd01
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: JclJFE4WUes+c+40Yp59SvLvVxbTLKVXJFX5tB6WFsg64SUF6MtZTor3C3GqgJTua4uJywXHRLrnrdQ/RpbUIDrNTgXjQOT2F5rvBC1VM8SfwQDpaOF5uLY90RCcf6uhOC7ApbsOTmRsrsC+9++OQ0ab/ElGiFUv7IZ3pJimZyK7xD4REXvmizI1QCPBh33i8FUeuiqOogcgPNGCbChOpugytWEF6kBnTVJoNm6HVGSRyp06GcMuOG23QamrMNc8mXaqXGYCtV5zOZ/MaZbcEgiy3Hch74FfXGsYzxvj3jj+YJTUQxMX3WYOoytJvb8h8dSAsHC1gWJX1hGyFvRf+FcCnfmmGqfg9mYYIDhpHDlTU4b0tAVF9WCAG3p8vtdXG8Q34FvSGHCblqAdnE0c0Blpsg4GsQtspk3kVD5yV79ogMkCFkixohlUNnlR1VW1PB4NaS1hD0dKmnB2L2uy5vttH/yP1HaDS+OOTNoJESJQrgJNTOHrkjhtuSd8nuaLH4XM7u/C73LuLYPaELOVSehxMhr/dvr2smPqrT3ENmEHPGbBValgMa2YtRnmDv6CFZofXoWBTRVxNNwbcwkiyNudL0LQMNI2FCW4WJvTIEoiSegjYsq8aj6Ob8AyoA7nuOMPaEOFW/tvoT/3p2pIXaOGiboRe/+Rs3GIh5vNkUg4Rz3Pjq+7fd3t8GJi/OSxD7rjqe4mCQc126EHKV35upMWmQ1GdFPrVuPvc2G10QeHzeCamV6IObKyzCF0esHS4w1Kfrs9Aubr+CmsysTMZQ==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(39860400002)(346002)(396003)(451199021)(1800799003)(82310400008)(186006)(40470700004)(36840700001)(46966006)(40480700001)(40460700003)(2616005)(6666004)(81166007)(86362001)(478600001)(82740400003)(1076003)(356005)(26005)(36756003)(41300700001)(316002)(5660300002)(44832011)(8676002)(8936002)(54906003)(110136005)(4326008)(2906002)(70206006)(70586007)(336012)(47076005)(83380400001)(36860700001)(426003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Aug 2023 12:20:50.7101
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: dec6cfce-cb0b-45f1-2109-08db9740bd01
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: SA2PEPF00001504.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8245
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 07, 2023 at 04:22:05PM +0530, Saranya Gopal wrote:
-> Add support for UCSI commands through the following debugfs:
->   # /sys/kernel/debug/usb/ucsi/$UCSI_DEVICE/command
->   # /sys/kernel/debug/usb/ucsi/$UCSI_DEVICE/response
-> 
-> Eg: To execute UCSI GetCapabilities:
->   # echo 0x6 > /sys/kernel/debug/usb/ucsi/<ucsi device>/command
-> Then read the result,
->   # cat /sys/kernel/debug/usb/ucsi/<ucsi device>/response
->     0x02000320000000020000ff0400000445
-> 
-> UCSI command will be written into the command file and the
-> response for the command can be viewed under the response file.
-> 
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: Saranya Gopal <saranya.gopal@intel.com>
-> Co-developed-by: Rajaram Regupathy <rajaram.regupathy@intel.com>
-> Signed-off-by: Rajaram Regupathy <rajaram.regupathy@intel.com>
+The linux kernel's tcm_usb_gadget requires the US_FL_NO_ATA_1X quirk.
+It does not respond to the ATA_12 family of commands and hangs. The host
+prevents the issuing of ATA_12 commands to the TCM module, by introducing
+this quirk, the host is permitted to proceed with other operations.
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
+---
+ drivers/usb/storage/unusual_uas.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-> ---
-> Changes from v1:
->  - Removed debugfs.h file and moved the definitions directly to ucsi.h
->  - Made void as return type for ucsi_debugfs_init
->  - Made void as return type for ucsi_debugfs_register
-> 
->  drivers/usb/typec/ucsi/Kconfig   |  1 +
->  drivers/usb/typec/ucsi/Makefile  |  2 +
->  drivers/usb/typec/ucsi/debugfs.c | 99 ++++++++++++++++++++++++++++++++
->  drivers/usb/typec/ucsi/ucsi.c    | 15 +++++
->  drivers/usb/typec/ucsi/ucsi.h    | 24 ++++++++
->  5 files changed, 141 insertions(+)
->  create mode 100644 drivers/usb/typec/ucsi/debugfs.c
-> 
-> diff --git a/drivers/usb/typec/ucsi/Kconfig b/drivers/usb/typec/ucsi/Kconfig
-> index b3bb0191987e..bdcb1764cfae 100644
-> --- a/drivers/usb/typec/ucsi/Kconfig
-> +++ b/drivers/usb/typec/ucsi/Kconfig
-> @@ -4,6 +4,7 @@ config TYPEC_UCSI
->  	tristate "USB Type-C Connector System Software Interface driver"
->  	depends on !CPU_BIG_ENDIAN
->  	depends on USB_ROLE_SWITCH || !USB_ROLE_SWITCH
-> +	select USB_COMMON if DEBUG_FS
->  	help
->  	  USB Type-C Connector System Software Interface (UCSI) is a
->  	  specification for an interface that allows the operating system to
-> diff --git a/drivers/usb/typec/ucsi/Makefile b/drivers/usb/typec/ucsi/Makefile
-> index 77f09e136956..b4679f94696b 100644
-> --- a/drivers/usb/typec/ucsi/Makefile
-> +++ b/drivers/usb/typec/ucsi/Makefile
-> @@ -5,6 +5,8 @@ obj-$(CONFIG_TYPEC_UCSI)		+= typec_ucsi.o
->  
->  typec_ucsi-y				:= ucsi.o
->  
-> +typec_ucsi-$(CONFIG_DEBUG_FS)		+= debugfs.o
-> +
->  typec_ucsi-$(CONFIG_TRACING)		+= trace.o
->  
->  ifneq ($(CONFIG_POWER_SUPPLY),)
-> diff --git a/drivers/usb/typec/ucsi/debugfs.c b/drivers/usb/typec/ucsi/debugfs.c
-> new file mode 100644
-> index 000000000000..0c7bf88d4a7f
-> --- /dev/null
-> +++ b/drivers/usb/typec/ucsi/debugfs.c
-> @@ -0,0 +1,99 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * UCSI debugfs interface
-> + *
-> + * Copyright (C) 2023 Intel Corporation
-> + *
-> + * Authors: Rajaram Regupathy <rajaram.regupathy@intel.com>
-> + *	    Gopal Saranya <saranya.gopal@intel.com>
-> + */
-> +#include <linux/debugfs.h>
-> +#include <linux/slab.h>
-> +#include <linux/string.h>
-> +#include <linux/types.h>
-> +#include <linux/usb.h>
-> +
-> +#include <asm/errno.h>
-> +
-> +#include "ucsi.h"
-> +
-> +static struct dentry *ucsi_debugfs_root;
-> +
-> +static int ucsi_cmd(void *data, u64 val)
-> +{
-> +	struct ucsi *ucsi = data;
-> +	int ret;
-> +
-> +	memset(&ucsi->debugfs->response, 0, sizeof(ucsi->debugfs->response));
-> +	ucsi->debugfs->status = 0;
-> +
-> +	switch (UCSI_COMMAND(val)) {
-> +	case UCSI_SET_UOM:
-> +	case UCSI_SET_UOR:
-> +	case UCSI_SET_PDR:
-> +	case UCSI_CONNECTOR_RESET:
-> +		ret = ucsi_send_command(ucsi, val, NULL, 0);
-> +		break;
-> +	case UCSI_GET_CAPABILITY:
-> +	case UCSI_GET_CONNECTOR_CAPABILITY:
-> +	case UCSI_GET_ALTERNATE_MODES:
-> +	case UCSI_GET_CURRENT_CAM:
-> +	case UCSI_GET_PDOS:
-> +	case UCSI_GET_CABLE_PROPERTY:
-> +	case UCSI_GET_CONNECTOR_STATUS:
-> +		ret = ucsi_send_command(ucsi, val,
-> +					&ucsi->debugfs->response,
-> +					sizeof(ucsi->debugfs->response));
-> +		break;
-> +	default:
-> +		ret = -EOPNOTSUPP;
-> +	}
-> +
-> +	if (ret < 0) {
-> +		ucsi->debugfs->status = ret;
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +DEFINE_DEBUGFS_ATTRIBUTE(ucsi_cmd_fops, NULL, ucsi_cmd, "0x%llx\n");
-> +
-> +static int ucsi_resp_show(struct seq_file *s, void *not_used)
-> +{
-> +	struct ucsi *ucsi = s->private;
-> +
-> +	if (ucsi->debugfs->status)
-> +		return ucsi->debugfs->status;
-> +
-> +	seq_printf(s, "0x%016llx%016llx\n", ucsi->debugfs->response.high,
-> +		   ucsi->debugfs->response.low);
-> +	return 0;
-> +}
-> +DEFINE_SHOW_ATTRIBUTE(ucsi_resp);
-> +
-> +void ucsi_debugfs_register(struct ucsi *ucsi)
-> +{
-> +	ucsi->debugfs = kzalloc(sizeof(*ucsi->debugfs), GFP_KERNEL);
-> +	if (!ucsi->debugfs)
-> +		return;
-> +
-> +	ucsi->debugfs->dentry = debugfs_create_dir(dev_name(ucsi->dev), ucsi_debugfs_root);
-> +	debugfs_create_file("command", 0200, ucsi->debugfs->dentry, ucsi, &ucsi_cmd_fops);
-> +	debugfs_create_file("response", 0400, ucsi->debugfs->dentry, ucsi, &ucsi_resp_fops);
-> +}
-> +
-> +void ucsi_debugfs_unregister(struct ucsi *ucsi)
-> +{
-> +	debugfs_remove_recursive(ucsi->debugfs->dentry);
-> +	kfree(ucsi->debugfs);
-> +}
-> +
-> +void ucsi_debugfs_init(void)
-> +{
-> +	ucsi_debugfs_root = debugfs_create_dir("ucsi", usb_debug_root);
-> +}
-> +
-> +void ucsi_debugfs_exit(void)
-> +{
-> +	debugfs_remove(ucsi_debugfs_root);
-> +}
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index f6901319639d..c6dfe3dff346 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -1530,6 +1530,7 @@ EXPORT_SYMBOL_GPL(ucsi_create);
->   */
->  void ucsi_destroy(struct ucsi *ucsi)
->  {
-> +	ucsi_debugfs_unregister(ucsi);
->  	kfree(ucsi);
->  }
->  EXPORT_SYMBOL_GPL(ucsi_destroy);
-> @@ -1552,6 +1553,7 @@ int ucsi_register(struct ucsi *ucsi)
->  
->  	queue_delayed_work(system_long_wq, &ucsi->work, 0);
->  
-> +	ucsi_debugfs_register(ucsi);
->  	return 0;
->  }
->  EXPORT_SYMBOL_GPL(ucsi_register);
-> @@ -1611,6 +1613,19 @@ void ucsi_unregister(struct ucsi *ucsi)
->  }
->  EXPORT_SYMBOL_GPL(ucsi_unregister);
->  
-> +static int __init ucsi_module_init(void)
-> +{
-> +	ucsi_debugfs_init();
-> +	return 0;
-> +}
-> +module_init(ucsi_module_init);
-> +
-> +static void __exit ucsi_module_exit(void)
-> +{
-> +	ucsi_debugfs_exit();
-> +}
-> +module_exit(ucsi_module_exit);
-> +
->  MODULE_AUTHOR("Heikki Krogerus <heikki.krogerus@linux.intel.com>");
->  MODULE_LICENSE("GPL v2");
->  MODULE_DESCRIPTION("USB Type-C Connector System Software Interface driver");
-> diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-> index c09af859f573..474315a72c77 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.h
-> +++ b/drivers/usb/typec/ucsi/ucsi.h
-> @@ -15,6 +15,7 @@
->  
->  struct ucsi;
->  struct ucsi_altmode;
-> +struct dentry;
->  
->  /* UCSI offsets (Bytes) */
->  #define UCSI_VERSION			0
-> @@ -277,6 +278,16 @@ struct ucsi_connector_status {
->  
->  /* -------------------------------------------------------------------------- */
->  
-> +struct ucsi_debugfs_entry {
-> +	u64 command;
-> +	struct ucsi_data {
-> +		u64 low;
-> +		u64 high;
-> +	} response;
-> +	u32 status;
-> +	struct dentry *dentry;
-> +};
-> +
->  struct ucsi {
->  	u16 version;
->  	struct device *dev;
-> @@ -286,6 +297,7 @@ struct ucsi {
->  
->  	struct ucsi_capability cap;
->  	struct ucsi_connector *connector;
-> +	struct ucsi_debugfs_entry *debugfs;
->  
->  	struct work_struct resume_work;
->  	struct delayed_work work;
-> @@ -388,6 +400,18 @@ static inline void
->  ucsi_displayport_remove_partner(struct typec_altmode *adev) { }
->  #endif /* CONFIG_TYPEC_DP_ALTMODE */
->  
-> +#ifdef CONFIG_DEBUG_FS
-> +void ucsi_debugfs_init(void);
-> +void ucsi_debugfs_exit(void);
-> +void ucsi_debugfs_register(struct ucsi *ucsi);
-> +void ucsi_debugfs_unregister(struct ucsi *ucsi);
-> +#else
-> +static inline void ucsi_debugfs_init(void) { }
-> +static inline void ucsi_debugfs_exit(void) { }
-> +static inline void ucsi_debugfs_register(struct ucsi *ucsi) { }
-> +static inline void ucsi_debugfs_unregister(struct ucsi *ucsi) { }
-> +#endif /* CONFIG_DEBUG_FS */
-> +
->  /*
->   * NVIDIA VirtualLink (svid 0x955) has two altmode. VirtualLink
->   * DP mode with vdo=0x1 and NVIDIA test mode with vdo=0x3
-> -- 
-> 2.25.1
-
+diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
+index 1f8c9b16a0fb..2fc0220c72ee 100644
+--- a/drivers/usb/storage/unusual_uas.h
++++ b/drivers/usb/storage/unusual_uas.h
+@@ -177,6 +177,13 @@ UNUSUAL_DEV(0x4971, 0x8017, 0x0000, 0x9999,
+ 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+ 		US_FL_NO_REPORT_OPCODES),
+ 
++/* Reported-by: Piyush Mehta <piyush.mehta@amd.com> */
++UNUSUAL_DEV(0x0525, 0xa4a5, 0x0000, 0x9999,
++		"NetChip",
++		"Target Product",
++		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
++		US_FL_NO_ATA_1X),
++
+ /* "G-DRIVE" external HDD hangs on write without these.
+  * Patch submitted by Alexander Kappner <agk@godking.net>
+  */
 -- 
-heikki
+2.25.1
+
