@@ -2,209 +2,201 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E14D77741B4
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Aug 2023 19:26:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BCDA774127
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Aug 2023 19:15:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234621AbjHHR0c (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Aug 2023 13:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36648 "EHLO
+        id S234254AbjHHRPd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Aug 2023 13:15:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233789AbjHHRZn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Aug 2023 13:25:43 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C0C8205E0
-        for <linux-usb@vger.kernel.org>; Tue,  8 Aug 2023 09:11:09 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-31759e6a4a1so4381387f8f.3
-        for <linux-usb@vger.kernel.org>; Tue, 08 Aug 2023 09:11:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691511023; x=1692115823;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=/zypaBxPLVAPc31qUuCjXrOIoE2MnVMIBlcoWFCbsKI=;
-        b=pMsSIydIIb3lLcgbmMn18mhwO/3UPbvK3ir/7CoEKssSVr9e3oSdG/bzzsxJP2gnlW
-         v5EkVaS0kiITYJOW/P2S5XJI0qpuF7UKw0DTMOkrTDiQbRi5qoPuZJLANx5mnVG2lHk4
-         8eO6kBGfylBlOOTDdnuMo3vjKU0xjt2JIIb1O0uZnLNhrooVn61Rj+CDifQ1D+LogX9V
-         oWd3NWx0opeOkApwh2fi28YnMbI3nG23Bs/dZEBumLyKgWfNhY61PXlNan0UpQi6X1Ei
-         LOTqmXP2GcUyZPj3t6U9xdNI+LRto5YYq2d5P6GlAyNg8CTgEzUUBgm3eBtD7tVljAFU
-         3sHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691511023; x=1692115823;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/zypaBxPLVAPc31qUuCjXrOIoE2MnVMIBlcoWFCbsKI=;
-        b=Kuc3FeqfhITPcRvxMTvcYKx/Y2FE1ubSZS8S3wBGo6X7K/EEJqlLAsp83y0PwZTlsv
-         e4jWT5fzWaEZ39xICFwa0SQnBpk/SLD5jpBIsluHt0IvW71yaqqYdvCHH5hqWLNT+OBU
-         gqWKhJ1aPCk1JADUp3b/Qi+3i+bk+ouoxwOWITDXXxJ1SO3S3RnFQiXsWRGwe9XKpzVP
-         pVKHtDtFEE3g9FjhwDRBcpZjlOOil4gsrM4nuyuzZJPR38VPBlFJ+1uvhqBtWR1SPteT
-         GX8gcKRxrB+N4o6IxSbdVPq5Sesw2eB1NbTrZIhiFtchwLDgelXCeqWAGgpcZhUsfLYo
-         Nd5g==
-X-Gm-Message-State: AOJu0YwchXtNnxRVEmFknOl0PoAvoiahbd3sRn7nE41+WYD0M35fA5Ct
-        Hu5l9MYbaUfFJEiuYD6dbbzmjKwP/RkAFnV4DQQ=
-X-Google-Smtp-Source: AGHT+IEoGl3vyoVtiywtPvr5AXF6ZdPgkAryg6BVWtqdOXiDMhBXW7AIpBBiui1nIRpUAsdrT42WOQ==
-X-Received: by 2002:ac2:4e8b:0:b0:4fe:181f:272c with SMTP id o11-20020ac24e8b000000b004fe181f272cmr6904189lfr.41.1691495409134;
-        Tue, 08 Aug 2023 04:50:09 -0700 (PDT)
-Received: from [192.168.1.101] (abxi185.neoplus.adsl.tpnet.pl. [83.9.2.185])
-        by smtp.gmail.com with ESMTPSA id v2-20020ac25922000000b004fe4a1f046asm1856888lfi.266.2023.08.08.04.50.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Aug 2023 04:50:08 -0700 (PDT)
-Message-ID: <30b1fe67-bab5-4add-8d89-cc8e06cd8c7f@linaro.org>
-Date:   Tue, 8 Aug 2023 13:50:06 +0200
+        with ESMTP id S233830AbjHHRO4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Aug 2023 13:14:56 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 34E25B2B0
+        for <linux-usb@vger.kernel.org>; Tue,  8 Aug 2023 09:06:11 -0700 (PDT)
+Received: (qmail 161982 invoked by uid 1000); 8 Aug 2023 11:05:14 -0400
+Date:   Tue, 8 Aug 2023 11:05:14 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Zhang Shurong <zhang_shurong@foxmail.com>, jgross@suse.com,
+        xen-devel@lists.xenproject.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] xen: fix potential shift out-of-bounds in
+ xenhcd_hub_control()
+Message-ID: <ccb08027-6836-4207-969b-fd0cf63e9faf@rowland.harvard.edu>
+References: <tencent_15DD79B42AD8A0D64A7CDC24D4FE6C85800A@qq.com>
+ <2023062628-shame-ebook-56f2@gregkh>
+ <4825193.GXAFRqVoOG@localhost.localdomain>
+ <tencent_942CC5C35E410E3545C2E386BE566B8B1405@qq.com>
+ <2023080659-turban-exemption-1196@gregkh>
+ <3481a644-1648-4fa9-86eb-2a0b86b8f47a@rowland.harvard.edu>
+ <2023080845-talisman-ravage-0b58@gregkh>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 06/11] usb: dwc3: qcom: Refactor IRQ handling in QCOM
- Glue driver
-To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Johan Hovold <johan@kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
-        quic_jackp@quicinc.com, ahalaney@redhat.com,
-        quic_shazhuss@quicinc.com
-References: <20230727223307.8096-1-quic_kriskura@quicinc.com>
- <20230727223307.8096-7-quic_kriskura@quicinc.com>
- <pyxerd3lirbh2p43m74ohwocjjb7uh56xxmaxbrkay3svossik@ksd3yojw5wgr>
- <dc800b15-e35d-207b-73a8-9a3d2261f4f5@quicinc.com>
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <dc800b15-e35d-207b-73a8-9a3d2261f4f5@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <2023080845-talisman-ravage-0b58@gregkh>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 8.08.2023 10:32, Krishna Kurapati PSSNV wrote:
->  +
->>> +enum dwc3_qcom_phy_irq_identifier {
->>> +    HS_PHY_IRQ = 0,
->>> +    DP_HS_PHY_IRQ,
->>> +    DM_HS_PHY_IRQ,
->>> +    SS_PHY_IRQ,
->>>   };
->>
->> This enum is unused.
->>
+On Tue, Aug 08, 2023 at 10:26:38AM +0200, Greg KH wrote:
+> On Sun, Aug 06, 2023 at 11:15:51AM -0400, Alan Stern wrote:
+> > On Sun, Aug 06, 2023 at 04:27:27PM +0200, Greg KH wrote:
+> > > On Sun, Aug 06, 2023 at 10:11:43PM +0800, Zhang Shurong wrote:
+> > > > 在 2023年7月1日星期六 CST 下午11:51:43，Zhang Shurong 写道：
+> > > > > 在 2023年6月26日星期一 CST 下午1:52:02，您写道：
+> > > > > 
+> > > > > > On Mon, Jun 26, 2023 at 07:48:05AM +0200, Jan Beulich wrote:
+> > > > > > > On 25.06.2023 18:42, Zhang Shurong wrote:
+> > > > > > > > --- a/drivers/usb/host/xen-hcd.c
+> > > > > > > > +++ b/drivers/usb/host/xen-hcd.c
+> > > > > > > > @@ -456,6 +456,8 @@ static int xenhcd_hub_control(struct usb_hcd *hcd,
+> > > > > > > > __u16 typeReq, __u16 wValue,> >
+> > > > > > > > 
+> > > > > > > >  			info->ports[wIndex - 1].c_connection =
+> > > > > 
+> > > > > false;
+> > > > > 
+> > > > > > > >  			fallthrough;
+> > > > > > > >  		
+> > > > > > > >  		default:
+> > > > > > > > +			if (wValue >= 32)
+> > > > > > > > +				goto error;
+> > > > > > > > 
+> > > > > > > >  			info->ports[wIndex - 1].status &= ~(1
+> > > > > 
+> > > > > << wValue);
+> > > > > 
+> > > > > > > Even 31 is out of bounds (as in: UB) as long as it's 1 here rather
+> > > > > > > than 1u.
+> > > > > > 
+> > > > > > Why isn't the caller fixed so this type of value could never be passed
+> > > > > > to the hub_control callback?
+> > > > > > 
+> > > > > > thanks,
+> > > > > > 
+> > > > > > greg k-h
+> > > > > 
+> > > > > Although I'm not knowledgeable about the USB subsystem, I've observed that
+> > > > > not all driver code that implements hub_control callback performs a shift
+> > > > > operation on wValue, and not all shift operations among them cause
+> > > > > problems. Therefore, I've decided to fix this issue within each driver
+> > > > > itself.
+> > > > > 
+> > > > > For example, in r8a66597_hub_control, it will first check whether wValue is
+> > > > > valid (always < 31) before the shift operation. In case of an invalid
+> > > > > number, the code would execute the error branch instead of the shift
+> > > > > operation.
+> > > > > 
+> > > > > switch (wValue) {
+> > > > > case USB_PORT_FEAT_ENABLE:
+> > > > > 	rh->port &= ~USB_PORT_STAT_POWER;
+> > > > > 	break;
+> > > > > case USB_PORT_FEAT_SUSPEND:
+> > > > > 	break;
+> > > > > case USB_PORT_FEAT_POWER:
+> > > > > 	r8a66597_port_power(r8a66597, port, 0);
+> > > > > 	break;
+> > > > > case USB_PORT_FEAT_C_ENABLE:
+> > > > > case USB_PORT_FEAT_C_SUSPEND:
+> > > > > case USB_PORT_FEAT_C_CONNECTION:
+> > > > > case USB_PORT_FEAT_C_OVER_CURRENT:
+> > > > > case USB_PORT_FEAT_C_RESET:
+> > > > > 	break;
+> > > > > default:
+> > > > > 	goto error;
+> > > > > }
+> > > > > rh->port &= ~(1 << wValue);
+> > > > 
+> > > > Hi there. I apologize for reaching out once more. I'm feeling a bit puzzled 
+> > > > about what my next step should be. I'm unsure whether I should rewrite this 
+> > > > patch or attempt to address the issue at the caller level.
+> > > 
+> > > Try addressing it at the caller level first please.  If that somehow
+> > > does not work, then we will take a patch series that fixes all of the
+> > > host controller drivers at once.
+> > 
+> > It's not feasible to fix all the callers, because the calls can come 
+> > from userspace via usbfs.
 > 
-> Hi Bjorn,
-> 
->  I didn't use the enum directly, but used its members in the get_port_irq call below.
-> 
->> [..]
->>> +static int dwc3_get_acpi_index(const struct dwc3_acpi_pdata *pdata, int irq_index)
->>> +{
->>> +    int acpi_index = -1;
->>> +
->>> +    if (!pdata)
->>> +        return -1;
->>> +
->>> +    if (irq_index == DP_HS_PHY_IRQ)
->>> +        acpi_index = pdata->dp_hs_phy_irq_index;
->>> +    else if (irq_index == DM_HS_PHY_IRQ)
->>> +        acpi_index = pdata->dm_hs_phy_irq_index;
->>> +    else if (irq_index == SS_PHY_IRQ)
->>> +        acpi_index = pdata->ss_phy_irq_index;
->>
->> It looks favourable to put these in an array, instead of having to pull
->> them out of 4 different variables conditionally.
->>
->>> +
->>> +    return acpi_index;
->>> +}
->>> +
->>> +static int dwc3_get_port_irq(struct platform_device *pdev, u8 port_index)
->>> +{
->>> +    struct dwc3_qcom *qcom = platform_get_drvdata(pdev);
->>> +    bool is_mp_supported = (qcom->data->num_ports > 1) ? true : false;
->>> +    const struct dwc3_acpi_pdata *pdata = qcom->acpi_pdata;
->>> +    char *disp_name;
->>> +    int acpi_index;
->>> +    char *dt_name;
->>> +    int ret;
->>> +    int irq;
->>> +    int i;
->>> +
->>> +    /*
->>> +     * We need to read only DP/DM/SS IRQ's here.
->>> +     * So loop over from 1->3 and accordingly modify respective phy_irq[].
->>> +     */
->>> +    for (i = 1; i < MAX_PHY_IRQ; i++) {
->>> +
->>> +        if (!is_mp_supported && (port_index == 0)) {
->>> +            if (i == DP_HS_PHY_IRQ) {
->>> +                dt_name = devm_kasprintf(&pdev->dev, GFP_KERNEL,
->>> +                    "dp_hs_phy_irq");
->>> +                disp_name = devm_kasprintf(&pdev->dev, GFP_KERNEL,
->>> +                    "qcom_dwc3 DP_HS");
->>> +            } else if (i == DM_HS_PHY_IRQ) {
->>> +                dt_name = devm_kasprintf(&pdev->dev, GFP_KERNEL,
->>> +                    "dm_hs_phy_irq");
->>> +                disp_name = devm_kasprintf(&pdev->dev, GFP_KERNEL,
->>> +                    "qcom_dwc3 DM_HS");
->>> +            } else if (i == SS_PHY_IRQ) {
->>> +                dt_name = devm_kasprintf(&pdev->dev, GFP_KERNEL,
->>> +                    "ss_phy_irq");
->>> +                disp_name = devm_kasprintf(&pdev->dev, GFP_KERNEL,
->>> +                    "qcom_dwc3 SS");
-> Bjorn, Konrad,
-> 
-> If we are to remove this repetitive loops, we might need to make a 2D array for all of Dp/Dm/Ss interrutps and make a global array of names to be used for irq lookup and use them to reduce the if-else-if stuff here. If that is fine, I can make those changes, else I would like to stick to this approach for now because if we don't add the global array of names, prepping them seperately for dp/dm/ss would again lead us to making if-else loops like above.
-> 
-> Please let me know your thoughts on this.
-Can we not just reuse the associated interrupt-names from the devicetree
-if present?
+> It can?  Hm, that happens through the call in rh_call_control(), right?
+> But there, we do a bunch of validation before calling hub_control() so
+> why can't we do the same thing in that one place as well?  Making
+> invalid requests from userspace should be disallowed (or we can catch
+> this in the usbfs interface.)
 
-Konrad
+Yes, we could filter these things out at either spot.
+
+But that's not the best approach.  The reason xen-hcd.c needs this 
+change in the first place is because the code is buggy, and the change 
+does not fix the real bug.
+
+Section 11.24.2.2 (CLEAR PORT FEATURE) of the USB-2 spec says:
+
+        It is a Request Error if wValue is not a feature selector listed 
+        in Table 11-17, if wIndex specifies a port that does not exist,
+        or if wLength is not as specified above.
+
+xenhcd_hub_control() validates wIndex but not wValue.  (In theory we 
+should validate wLength also, but in practice it doesn't matter.)  
+Here's an example from the code:
+
+	case ClearPortFeature:
+		if (!wIndex || wIndex > ports)
+			goto error;
+
+		switch (wValue) {
+		case USB_PORT_FEAT_SUSPEND:
+			xenhcd_rhport_resume(info, wIndex);
+			break;
+		case USB_PORT_FEAT_POWER:
+			xenhcd_rhport_power_off(info, wIndex);
+			break;
+		case USB_PORT_FEAT_ENABLE:
+			xenhcd_rhport_disable(info, wIndex);
+			break;
+		case USB_PORT_FEAT_C_CONNECTION:
+			info->ports[wIndex - 1].c_connection = false;
+		default:
+			info->ports[wIndex - 1].status &= ~(1 << wValue);
+
+This line is wrong, and not just because wValue might be too large.  The 
+only status bits that should be manipulated are the ones controlling 
+features the driver actually implements.  Not random bits passed in by 
+the caller!
+
+			break;
+		}
+		break;
+
+So here's what the code _should_ look like (just the end part):
+
+		case USB_PORT_FEAT_C_CONNECTION:
+			info->ports[wIndex - 1].c_connection = false;
+			fallthrough;
+		case USB_PORT_FEAT_C_RESET:
+		case USB_PORT_FEAT_C_ENABLE:
+		case USB_PORT_FEAT_C_SUSPEND:
+			info->ports[wIndex - 1].status &= ~(1 << wValue);
+			break;
+		default:
+			goto error;
+		}
+		break;
+
+(Perhaps also include USB_PORT_FEAT_C_OVER_CURRENT and 
+USB_PORT_FEAT_INDICATOR, depending on whether the driver supports them.)
+
+This way the driver does the right thing in all cases and it never runs 
+the risk of a shift amount being too big.  The other HCD drivers are 
+written this way.
+
+Similar reasoning applies to the SetPortFeature section.
+
+Alan Stern
