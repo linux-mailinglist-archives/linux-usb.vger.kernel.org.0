@@ -2,86 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E0E6774B78
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Aug 2023 22:48:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE7D3774B9A
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Aug 2023 22:51:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234970AbjHHUsX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Aug 2023 16:48:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44260 "EHLO
+        id S235564AbjHHUvC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Aug 2023 16:51:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234976AbjHHUsK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Aug 2023 16:48:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67640157A4
-        for <linux-usb@vger.kernel.org>; Tue,  8 Aug 2023 09:40:27 -0700 (PDT)
+        with ESMTP id S231282AbjHHUui (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Aug 2023 16:50:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B0F0110752;
+        Tue,  8 Aug 2023 09:46:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 038846241A
-        for <linux-usb@vger.kernel.org>; Tue,  8 Aug 2023 08:22:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB7C3C433C9;
-        Tue,  8 Aug 2023 08:22:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A82062445;
+        Tue,  8 Aug 2023 08:28:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 184BEC433C9;
+        Tue,  8 Aug 2023 08:28:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1691482937;
-        bh=MP7+JLF4kUnXC3IV6QHYeU5TzicDI3udQET1phMOPVU=;
+        s=korg; t=1691483297;
+        bh=Djk8mLxd+Qv4AQ1frLgSkodP5pGCBCHr0ci1b1vDP7c=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=l2M78I3NYxX+6hwj1tqHHDFdFC92yxK1gdk6Pwe/CaYTaftEdrR1QZaSkbly7NMlN
-         dOqYAbtF7fg6fVegnUMAPt7PKDTxLSSExEHlY4J6WbsK/yWNl2ZbLQsQT9Pgsz56q3
-         iqIq1YkGyl796eB7IweDShTnO+RLJpYYgVhUl5HM=
-Date:   Tue, 8 Aug 2023 10:22:14 +0200
+        b=BNzHXKKuW9lHvuBNDCS1RHJmhFsVODNnXd16zMlsLGK76bwVpjSfmnoC5uE64kg/n
+         5Dmiil6Tu+9hLUEyn92V6w7564PoTEGKe6NElZFgMI77TuLzy9ut5/pFiBmckKxYs2
+         t59MEiB5pG5TIPbPvNzW6TW5TfrltVuSbqMSvYp8=
+Date:   Tue, 8 Aug 2023 10:28:14 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Ruan Jinjie <ruanjinjie@huawei.com>
-Cc:     hadess@hadess.net, benjamin.tissoires@redhat.com,
-        herve.codina@bootlin.com, robh@kernel.org,
-        mailhol.vincent@wanadoo.fr, linux-usb@vger.kernel.org
-Subject: Re: [PATCH -next] USB: core: Switch to use kmemdup_nul() helper
-Message-ID: <2023080822-embark-quaking-074e@gregkh>
-References: <20230807124610.2283583-1-ruanjinjie@huawei.com>
+To:     Chengfeng Ye <dg573847474@gmail.com>
+Cc:     gustavoars@kernel.org, u.kleine-koenig@pengutronix.de,
+        giometti@linux.it, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: host: oxu210hp-hcd: Fix potential deadlock on
+ &oxu->mem_lock
+Message-ID: <2023080817-antler-enchilada-cccf@gregkh>
+References: <20230729092634.78336-1-dg573847474@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230807124610.2283583-1-ruanjinjie@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230729092634.78336-1-dg573847474@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 07, 2023 at 08:46:10PM +0800, Ruan Jinjie wrote:
-> Use kmemdup_nul() helper instead of open-coding it to simplify the code.
+On Sat, Jul 29, 2023 at 09:26:34AM +0000, Chengfeng Ye wrote:
+> &oxu->mem_lock is acquired by isr oxu_irq() along the below call
+> chain under hardirq context.
 > 
-> Signed-off-by: Ruan Jinjie <ruanjinjie@huawei.com>
-> ---
->  drivers/usb/core/message.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+> <hard interrupt>
+>         -> oxu_irq()
+>         -> oxu210_hcd_irq()
+>         -> ehci_work()
+>         -> scan_async()
+>         -> qh_completions()
+>         -> oxu_murb_free()
+>         -> spin_lock(&oxu->mem_lock)
 > 
-> diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
-> index 0d2bfc909019..5762fd04f0d5 100644
-> --- a/drivers/usb/core/message.c
-> +++ b/drivers/usb/core/message.c
-> @@ -1029,10 +1029,9 @@ char *usb_cache_string(struct usb_device *udev, int index)
->  	if (buf) {
->  		len = usb_string(udev, index, buf, MAX_USB_STRING_SIZE);
->  		if (len > 0) {
-> -			smallbuf = kmalloc(++len, GFP_NOIO);
-> +			smallbuf = kmemdup_nul(buf, len, GFP_NOIO);
->  			if (!smallbuf)
->  				return buf;
-> -			memcpy(smallbuf, buf, len);
+> Thus the acquisition of the lock under process context should disable
+> irq, otherwise deadlock could happen if the irq happens to preempt the
+> execution while the lock is held in process context on the same CPU.
+> 
+> This flaw was found by an experimental static analysis tool I am developing
+> for irq-related deadlock. x86_64 allmodconfig using gcc shows no new
+> warning.
+> 
+> The patch fixes the potential deadlocks by using spin_lock_irqsave() on
+> &oxu->mem_lock
+> 
+> Signed-off-by: Chengfeng Ye <dg573847474@gmail.com>
+> 
+> Changes in v2
+> - use spin_lock_irqsave() on more potential deadlock sites of &oxu->mem_lock
 
-But you changed the logic here, you now added an extra \0 where the
-existing code did not.  Are you sure you mean to do this?  If so, why,
-and it needs to be documented in the changelog text.
+This needs to be below the --- line, as documented, so it doesn't show
+up in the changelog.
 
-What this could be is a call to kmemdup() if you really want it, but be
-careful about the ++len usage...
-
-Also, does this need to be changed at all?  How was it tested?
+How did you test this change?  Do you have hardware to test it out?  If
+not, I don't think we can accpet this, see the kernel documentation for
+what we accept from tools and researchers.
 
 thanks,
 
