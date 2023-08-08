@@ -2,112 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C714F773730
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Aug 2023 04:59:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 536EF773C3B
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Aug 2023 18:02:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230137AbjHHC7G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Aug 2023 22:59:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39140 "EHLO
+        id S231398AbjHHQCi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Aug 2023 12:02:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230115AbjHHC7F (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Aug 2023 22:59:05 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B501E10CC;
-        Mon,  7 Aug 2023 19:59:02 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 3782wUpzD029217, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 3782wUpzD029217
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Tue, 8 Aug 2023 10:58:30 +0800
-Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Tue, 8 Aug 2023 10:58:17 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS01.realtek.com.tw (172.21.6.94) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Tue, 8 Aug 2023 10:58:17 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
- RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
- 15.01.2375.007; Tue, 8 Aug 2023 10:58:17 +0800
-From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
-        <stanley_chang@realtek.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 1/2] usb: dwc3: add Realtek DHC RTD SoC dwc3 glue layer driver
-Thread-Topic: [PATCH v2 1/2] usb: dwc3: add Realtek DHC RTD SoC dwc3 glue
- layer driver
-Thread-Index: AQHZxFokPxd4W07ijUGGBrmKl0qPKq/VrnaAgADyIuCAAIy6gIAA9MlwgACO44CABeKOsIAAc0MAgACusCA=
-Date:   Tue, 8 Aug 2023 02:58:17 +0000
-Message-ID: <f38e2a4cb00d40429bf3504a183bbc83@realtek.com>
-References: <20230801092541.25261-1-stanley_chang@realtek.com>
- <20230802011400.v4jim6ajsqc3tvei@synopsys.com>
- <ff9ca6f15936450696bff502c0047708@realtek.com>
- <20230803000417.qfuwsx5we5a7lfvd@synopsys.com>
- <7d47cbfdbc31436b89d3d92bf980c8fa@realtek.com>
- <20230803231156.laggnj5bzuhugwfd@synopsys.com>
- <ae619edfcce545b78697c6bcdadfff27@realtek.com>
- <20230807235636.mlos5tpeg5foymnz@synopsys.com>
-In-Reply-To: <20230807235636.mlos5tpeg5foymnz@synopsys.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.190.159]
-x-kse-serverinfo: RTEXMBS01.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S229653AbjHHQAz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Aug 2023 12:00:55 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5929D2109
+        for <linux-usb@vger.kernel.org>; Mon,  7 Aug 2023 20:29:36 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2b9338e4695so83651541fa.2
+        for <linux-usb@vger.kernel.org>; Mon, 07 Aug 2023 20:29:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=libre.computer; s=google; t=1691465374; x=1692070174;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=w2a2fi6fo8O2qphEYAkmBRgnh3Id5Qk5HANh3JTmLrk=;
+        b=Hv0EkMFwuoyzbj7wybAw2sah1r5PcEsI9FNN9nLIlvkNEpHSFHw4jcZKq/NkXGTw6z
+         H42R1MPcMSc8IIbKlAyXG1c0yacNizA221RfmnShj84TS/hy3iWPjxmdPyQv7ZxU8TG7
+         hpT6Z4tY0EZoJoyg6WfiTFEaPLh6C+jhz6GHGqJVIafQ68XNayOBx0xe/m5BsTf3D1HI
+         j/rN/NYIuWU98uIvWBgGI0u17/cRIekusBpWhj45eIhdqLWoop2D5lE7uBdJ1OaeFKnx
+         SQMjWMbfBsMbDrTnG5IAIcQnZd+a+ujSMOvp0lA9QUDdDk24tLRY/H73PpTXxQW61bd9
+         Xujg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691465374; x=1692070174;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=w2a2fi6fo8O2qphEYAkmBRgnh3Id5Qk5HANh3JTmLrk=;
+        b=gszJvTU04xI5Er/T84QqsAznczYUuXx0F6WrolflL0rwpu9CTS+VMaE0LfzbMEnd7Y
+         yf5kDFmglxL9fh3DXx/lIWd7dFXPMxxieUXJGFMhZ+s2A8Y65eMoOF/jMyv5Cve/ZX7/
+         gL+635Q9Rwwkzcxb7/r+JKbixg811sZIhgIBYDn6+A5bkF8mtCz7QXi8evl6kk8mH8fX
+         iVOuP5FONLCB57AVP6+Q7s7iqFP84zbx/SgKrlf8vLqDZ39e3XsXILQS7cIuWvHFSKO/
+         MUhfD1XIYC5hX28b2iXL8BEAzx18S7A/oo4sonhloLFKxFQyWVtuH0BjGZzyjgl4dA0O
+         Qnew==
+X-Gm-Message-State: AOJu0YziWvCXmyymI0yFbCJtkE6sqcITnBUE7GDlpYBUJtbwmApuTziR
+        sdddWw1lROjOPevXa6xzNz42GEXhIV7aFoQc7xw9+pLj5VOxQw==
+X-Google-Smtp-Source: AGHT+IHUJlcYJA5OEaih3/uCPH2RSh8acayw3bMZ9xFGDbb2rx6os6/zhDaz9FaWTAYH/lOAbrlTdA==
+X-Received: by 2002:a05:6512:34c2:b0:4fd:fe8f:4108 with SMTP id w2-20020a05651234c200b004fdfe8f4108mr6732753lfr.62.1691465374338;
+        Mon, 07 Aug 2023 20:29:34 -0700 (PDT)
+Received: from bear.local ([69.165.74.129])
+        by smtp.gmail.com with ESMTPSA id a3-20020a056512020300b004fcdd81355csm1715321lfo.269.2023.08.07.20.29.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Aug 2023 20:29:34 -0700 (PDT)
+From:   Luke Lu <luke.lu@libre.computer>
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        linux-usb@vger.kernel.org, linux-amlogic@lists.infradead.org
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Da Xue <da@libre.computer>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Luke Lu <luke.lu@libre.computer>
+Subject: [PATCH] usb: dwc3: meson-g12a: do post init to fix broken usb after resumption
+Date:   Tue,  8 Aug 2023 03:25:10 +0000
+Message-Id: <20230808032510.31754-1-luke.lu@libre.computer>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgVGhpbmgsDQoNCj4gT24gTW9uLCBBdWcgMDcsIDIwMjMsIFN0YW5sZXkgQ2hhbmdb5piM6IKy
-5b63XSB3cm90ZToNCj4gPiBIaSBUaGluaCwNCj4gPg0KPiA+ID4gPiA+ID4gPiA+ICtzdGF0aWMg
-aW50IGR3YzNfcnRrX3NldHVwX3JvbGVfc3dpdGNoKHN0cnVjdCBkd2MzX3J0aw0KPiA+ID4gPiA+
-ID4gPiA+ICsqcnRrKQ0KPiA+ID4gPiA+ID4gPg0KPiA+ID4gPiA+ID4gPiBBbnkgcmVhc29uIHdo
-eSB3ZSdyZSBkb2luZyB0aGUgcm9sZSBzd2l0Y2ggaGVyZSBhbmQgbm90DQo+ID4gPiA+ID4gPiA+
-IHdoYXQncyBpbXBsZW1lbnRlZCBmcm9tIHRoZSBjb3JlPw0KPiA+ID4gPiA+ID4gPg0KPiA+ID4g
-PiA+ID4gQmVjYXVzZSB3ZSBoYXZlIHRvIHNldCB0aGUgdXNiIDIuMCBwaHkgbW9kZSB0aHJvdWdo
-DQo+ID4gPiA+ID4gPiBzd2l0Y2hfdXNiMl9kcl9tb2RlDQo+ID4gPiA+ID4gaW4gdGhlIGZ1bmN0
-aW9uIGR3YzNfcnRrX3NldF9kcl9tb2RlLg0KPiA+ID4gPiA+ID4gSW4gZmFjdCwgc3dpdGNoX2R3
-YzNfZHJfbW9kZSB3aWxsIHVzZSB0aGUgcm9sZSBzd2l0Y2hpbmcNCj4gPiA+ID4gPiA+IGltcGxl
-bWVudGVkIGJ5DQo+ID4gPiA+ID4gY29yZS4NCj4gPiA+ID4gPiA+DQo+ID4gPiA+ID4NCj4gPiA+
-ID4gPiBJIGRvbid0IHRoaW5rIHRoaXMgaXMgYSBnb29kIHdheSB0byBnbyBhYm91dCBpdC4gRG8g
-eW91ICh0aGUNCj4gPiA+ID4gPiBnbHVlDQo+ID4gPiA+ID4gZHJpdmVyKSBjcmVhdGUgYSByb2xl
-IHN3aXRjaCBzdHJ1Y3R1cmUgYW5kIHJlZ2lzdGVyIHRvIHRoZSBzYW1lDQo+ID4gPiA+ID4gcm9s
-ZSBzd2l0Y2ggZGV2aWNlIHRoYXQgdGhlIGR3YzMgY29yZSB3b3VsZCByZWdpc3RlciBsYXRlcj8g
-SQ0KPiA+ID4gPiA+IGRpZCBub3QgZXhwZWN0IHRoYXQgdG8gd29yayBhdCBhbGwuDQo+ID4gPiA+
-ID4NCj4gPiA+ID4gSW4gb3VyIGFwcGxpY2F0aW9uLCB0aGlzIHJvbGUgc3dpdGNoIGluIHRoZSBn
-bHVlIGRyaXZlciB3b3JrcyBmaW5lLg0KPiA+ID4NCj4gPiA+IElzIHRoZSBvcmRlciBvZiBvcGVy
-YXRpb24gYmV0d2VlbiB0aGUgc3dpdGNoIGZyb20gdGhlIGNvcmUgdnMgdGhlDQo+ID4gPiBnbHVl
-IGRldGVybWluYXRlPyBBbHNvLCB3aGljaCBvcGVyYXRpb24gc2hvdWxkIGhhcHBlbiBmaXJzdD8g
-SXQncw0KPiA+ID4gbm90IGNsZWFyIGhvdyB5b3UgaGFuZGxlIGl0IGhlcmUuDQo+ID4NCj4gPiBX
-ZSBoYXZlIGEgdHlwZSBjIGRyaXZlciB0aGF0IGZpcnN0IGNhbGxzIHJvbGUgc3dpdGNoIGluIGds
-dWUuDQo+ID4gVGhlIHJvbGUgc3dpdGNoaW5nIGZ1bmN0aW9uIGluIGdsdWUgd2lsbCBjYWxsIHRo
-ZSByb2xlIHN3aXRjaGluZyBmdW5jdGlvbiBpbg0KPiBjb3JlLg0KPiANCj4gSG93IGRvIHdlIGtu
-b3cgdGhhdD8gWW91J3JlIHJlZ2lzdGVyaW5nIHRvIHRoZSBzYW1lIHN3aXRjaCBkZXZpY2UsIHdv
-dWxkbid0DQo+IHRoZSBzd2l0Y2ggZXZlbnQgbm90aWZ5IHRoZSBzd2l0Y2ggd29yayBpbiBib3Ro
-IHRoZSBnbHVlIGFuZCB0aGUgY29yZT8gUGVyaGFwcw0KPiBJJ20gbWlzc2luZyBzb21ldGhpbmcg
-aGVyZSwgYnV0IGlzIHRoZXJlIHNvbWUgbWVjaGFuaXNtIHRoYXQgd2FpdHMgZm9yIHRoZQ0KPiBz
-d2l0Y2ggd29yayBmcm9tIHRoZSBnbHVlIHRvIGNvbXBsZXRlIGJlZm9yZSB0aGUgY29yZS4NCg0K
-Rmlyc3QsIHRoZSBzd2l0Y2hlcyBpbiBnbHVlIGFuZCBjb3JlIGFyZSBkaWZmZXJlbnQgZGV2aWNl
-cy4NCkluIHRoZSB0eXBlLWMgZHJpdmVyLCB3ZSBvbmx5IG5vdGlmeSB0aGUgc3dpdGNoIGluIHRo
-ZSBnbHVlLg0KVGhlbiwgdGhlIHN3aXRjaCBpbiB0aGUgZ2x1ZSBjYWxscyB0aGUgc3dpdGNoIGlu
-IHRoZSBjb3JlIHRvIGNoYW5nZSByb2xlcy4NClRoaXMgaXMgYSBzZXF1ZW50aWFsIHByb2Nlc3Mu
-IFNvIHRoZXJlIGlzIG5vIG9yZGVyIHByb2JsZW0uDQoNClRoYW5rcywNClN0YW5sZXkNCg==
+Device connected to usb otg port of GXL-based boards can not be
+recognised after resumption, doesn't recover even if disconnect and
+reconnect the device. dmesg shows it disconnects during resumption.
+
+[   41.492911] usb 1-2: USB disconnect, device number 3
+[   41.499346] usb 1-2: unregistering device
+[   41.511939] usb 1-2: unregistering interface 1-2:1.0
+
+Calling usb_post_init() will fix this issue, and it's tested and
+verified on libretech's aml-s905x-cc board.
+
+Signed-off-by: Luke Lu <luke.lu@libre.computer>
+---
+ drivers/usb/dwc3/dwc3-meson-g12a.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/usb/dwc3/dwc3-meson-g12a.c b/drivers/usb/dwc3/dwc3-meson-g12a.c
+index e99c7489dba0..2c07c038b584 100644
+--- a/drivers/usb/dwc3/dwc3-meson-g12a.c
++++ b/drivers/usb/dwc3/dwc3-meson-g12a.c
+@@ -926,6 +926,12 @@ static int __maybe_unused dwc3_meson_g12a_resume(struct device *dev)
+ 			return ret;
+ 	}
+ 
++	if (priv->drvdata->usb_post_init) {
++		ret = priv->drvdata->usb_post_init(priv);
++		if (ret)
++			return ret;
++	}
++
+ 	return 0;
+ }
+ 
+-- 
+2.40.1
+
