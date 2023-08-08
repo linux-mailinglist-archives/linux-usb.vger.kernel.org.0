@@ -2,87 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDCC6774BEB
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Aug 2023 23:00:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7659E774D60
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Aug 2023 23:53:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234194AbjHHVAY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Aug 2023 17:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57180 "EHLO
+        id S231894AbjHHVxM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Aug 2023 17:53:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234162AbjHHVAB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Aug 2023 17:00:01 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6803C8C0C
-        for <linux-usb@vger.kernel.org>; Tue,  8 Aug 2023 09:55:09 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4fe55d70973so63261e87.0
-        for <linux-usb@vger.kernel.org>; Tue, 08 Aug 2023 09:55:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1691513703; x=1692118503;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BGR/FDAz6QwzMVqhMqlOHMf82ldcSZKkfY2QM99zIzc=;
-        b=ATjvR7pkq9tD9JmBVswvuI5mNN8ecYp01MHlxnNonWVvBEgbRmL0rQhip9kxYRhKBQ
-         AGa95ay1Yy17SnWZUHsdziAxdnmFWq7xa783lrnSHx2eumLZZn3gBb8hYJhowJ00gsYB
-         5u6ECiHdAAzYWkby1IBTfyV34MOJ3ZYFPjVzNlXLiFm0R3Oifqv7KnAOHYx2siWn6aPX
-         qbEi7JU1a7p6LEuxoSd+o+6AN4+rbyN/ir8TmYZJRZbU1EmXofMLS8ornGk+Ns7QeSFj
-         TpMFMsV0vYT2ja5/G3WlODX6KSoLHfCA+O9tzj5Eqv65fMWvWMD80ZHtdG+IkFoawMOo
-         Tobg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691513703; x=1692118503;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BGR/FDAz6QwzMVqhMqlOHMf82ldcSZKkfY2QM99zIzc=;
-        b=VVv+RyK44JUihuPyzfgx3LsyPQPN7afcdQmovvJPGWNxBSMtjLetUgtWYd+dUigKij
-         EEZ8/sd7U4OZkk53RZ3NmoLDykNQUHq7Zid+1aEv2Ikbp73055iCAb0Du4sB64JipWnt
-         PvqxCihl07Qte8vvqyC1qWRrJkxDjfIFlbLb/G5ClGiLMHrnt4YQmkbfbD0h7E5RnoCC
-         ji3uBtbsUjMK4mClaP3zeOyN/neSGvdGq9oj8u5CakSnq2VWJJbvZgvVcmV3fRph1dx4
-         8QItkGvhBD3fbGbX45D/mn6zoDiZb9x+uguueyF9aRE4iEJ3FXSQGExpPoqKxnkozRKu
-         AwEg==
-X-Gm-Message-State: AOJu0YxYWE8CtoQpZCMt/PP3AFbCvJphG30PLnw12jLhyR43+5nokqWp
-        fhQu7fn4Nzbc6tMdbLpMFWlq40ojs9pVoZrdX0E=
-X-Google-Smtp-Source: AGHT+IFzDPeVzQZoYJKpnuTnwP9ABSYbuSXkjD6PnqoZvzUu25vMVnUvTGUH/D3RmOCcWmeDluW3cg==
-X-Received: by 2002:adf:f984:0:b0:313:e391:e492 with SMTP id f4-20020adff984000000b00313e391e492mr7187996wrr.17.1691489278679;
-        Tue, 08 Aug 2023 03:07:58 -0700 (PDT)
-Received: from toaster.lan ([2a01:e0a:3c5:5fb1:efd4:f3df:2c50:1776])
-        by smtp.googlemail.com with ESMTPSA id e11-20020a5d500b000000b003143c9beeaesm13109420wrt.44.2023.08.08.03.07.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Aug 2023 03:07:58 -0700 (PDT)
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Jerome Brunet <jbrunet@baylibre.com>, Da Xue <da@libre.computer>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 0/2] usb: misc: onboard_usb_hub: add gl3510 support
-Date:   Tue,  8 Aug 2023 12:07:44 +0200
-Message-Id: <20230808100746.391365-1-jbrunet@baylibre.com>
-X-Mailer: git-send-email 2.40.1
+        with ESMTP id S231848AbjHHVxH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Aug 2023 17:53:07 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3258D32980;
+        Tue,  8 Aug 2023 09:31:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691512269; x=1723048269;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=n+5QGUNq96Zzb5hprHduqLPIugcCxfucZViugpqDUbY=;
+  b=HmMki0I+vEeV2uLP0eQS9xi9POwWcqvC4egoHTgLnLIoQM84oJyNk0sj
+   5ZKw8JB31wRBIi5eg47KS7HlmLZB4HhslJYG6qG2ltaqKa+epwyDh+W0s
+   Ss6HUpiubl3A+1iNmDLT7rMFcTd5WGjbN/aAzWhRNZRgfg0aQZWc36mXp
+   OwEBOG63LTUqwajmKmOuV2hAtxeG1K5xYFH8VuyEZbCxyLedVK3UwSmOB
+   GQvZH1g/yFay/tj+fOWHTAn9SL4GiJutwdXRsBtLJY9xMYUSYE061/AT+
+   RvVzxYoal5xL8fbj2vA01iAO2BPoq0JqLOM39+kvLmUrUoVwQam/APdLq
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="401755388"
+X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
+   d="scan'208";a="401755388"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2023 04:30:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="905192031"
+X-IronPort-AV: E=Sophos;i="6.01,156,1684825200"; 
+   d="scan'208";a="905192031"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 08 Aug 2023 04:30:56 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qTKvQ-0005JY-0G;
+        Tue, 08 Aug 2023 11:30:56 +0000
+Date:   Tue, 8 Aug 2023 19:30:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v4 2/2] usb: typec: qcom-pmic-typec: register drm_bridge
+Message-ID: <202308081918.CVuUdaXs-lkp@intel.com>
+References: <20230728110942.485358-3-dmitry.baryshkov@linaro.org>
 MIME-Version: 1.0
-X-Patchwork-Bot: notify
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230728110942.485358-3-dmitry.baryshkov@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patchset adds the bindings and driver support to trigger the reset
-pin of the Genesys Logic gl3510 usb hub.
+Hi Dmitry,
 
-Jerome Brunet (2):
-  dt-bindings: usb: add device for Genesys Logic hub gl3510
-  usb: misc: onboard_usb_hub: add Genesys Logic gl3510 hub support
+kernel test robot noticed the following build errors:
 
- Documentation/devicetree/bindings/usb/genesys,gl850g.yaml | 3 ++-
- drivers/usb/misc/onboard_usb_hub.h                        | 5 +++++
- 2 files changed, 7 insertions(+), 1 deletion(-)
+[auto build test ERROR on usb/usb-linus]
+[also build test ERROR on linus/master v6.5-rc5 next-20230808]
+[cannot apply to usb/usb-testing usb/usb-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Baryshkov/usb-typec-altmodes-displayport-add-support-for-embedded-DP-cases/20230728-191207
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+patch link:    https://lore.kernel.org/r/20230728110942.485358-3-dmitry.baryshkov%40linaro.org
+patch subject: [PATCH v4 2/2] usb: typec: qcom-pmic-typec: register drm_bridge
+config: i386-buildonly-randconfig-r006-20230808 (https://download.01.org/0day-ci/archive/20230808/202308081918.CVuUdaXs-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230808/202308081918.CVuUdaXs-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308081918.CVuUdaXs-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c:167:15: error: no member named 'of_node' in 'struct drm_bridge'
+           tcpm->bridge.of_node = of_get_child_by_name(tcpm->dev->of_node, "connector");
+           ~~~~~~~~~~~~ ^
+   1 error generated.
+
+
+vim +167 drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
+
+   163	
+   164	static int qcom_pmic_typec_init_drm(struct pmic_typec *tcpm)
+   165	{
+   166		tcpm->bridge.funcs = &qcom_pmic_typec_bridge_funcs;
+ > 167		tcpm->bridge.of_node = of_get_child_by_name(tcpm->dev->of_node, "connector");
+   168		tcpm->bridge.ops = DRM_BRIDGE_OP_HPD;
+   169		tcpm->bridge.type = DRM_MODE_CONNECTOR_DisplayPort;
+   170	
+   171		return devm_drm_bridge_add(tcpm->dev, &tcpm->bridge);
+   172	}
+   173	#else
+   174	static int qcom_pmic_typec_init_drm(struct pmic_typec *tcpm)
+   175	{
+   176		return 0;
+   177	}
+   178	#endif
+   179	
 
 -- 
-2.40.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
