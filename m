@@ -2,212 +2,240 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7F93773554
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Aug 2023 02:14:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1645E77358D
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Aug 2023 02:51:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbjHHANo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Aug 2023 20:13:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42758 "EHLO
+        id S230211AbjHHAvA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Aug 2023 20:51:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjHHANn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Aug 2023 20:13:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A58F5D9
-        for <linux-usb@vger.kernel.org>; Mon,  7 Aug 2023 17:13:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4272C62333
-        for <linux-usb@vger.kernel.org>; Tue,  8 Aug 2023 00:13:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9984CC433CA
-        for <linux-usb@vger.kernel.org>; Tue,  8 Aug 2023 00:13:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691453621;
-        bh=b5xKFpWnZMtdwMwsEY5gPDPlhUUEhPp/atW0bTJUnl8=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=FemCfXGA2E5tu5VgWxToI/vUl96NMdbEAyzz22ZuN7vCwuKW4ALdzIHCxDGsugziY
-         7atMdrbeIkd3QJ3o4QYGtHp5zot97T6Z/KhjplwJ7FwsDMmktT1jrcxBv7qz4azOj2
-         CPqfCiook7XjjUQCu2CRxaYYUF+W5P4YuFAT1O0X+ngXdZztVsAbvvPp4vyN8v7qDA
-         90pTi6Yp3lrHnnBHWyPQQgtosByMW8GJCs2PWLPlqwZMZSV9WP7Ey84iKBa1TWf4Vg
-         GW7pNciSHWI/LiC8g50yrM6XDe1MSuGhBhQbvzOUcOVyHK6nen6IGGR7tFIWq3hdJC
-         fmyZNxNmMOLOA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 89F04C53BD2; Tue,  8 Aug 2023 00:13:41 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 217122] Regression in xhci driver since 6.1 "Transfer event TRB
- DMA ptr not part of current TD"
-Date:   Tue, 08 Aug 2023 00:13:41 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: dmitri926@gmail.com
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: DUPLICATE
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-217122-208809-6vo6nHqZJN@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-217122-208809@https.bugzilla.kernel.org/>
-References: <bug-217122-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S229744AbjHHAu7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Aug 2023 20:50:59 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11202170B;
+        Mon,  7 Aug 2023 17:50:57 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3780ccxa011108;
+        Tue, 8 Aug 2023 00:50:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=dq+Ac7H1VO2uWs6wuXTd+gQ6CJsKUJs85h+IpW2YRbI=;
+ b=hUn3or2/X2hqdPPg4Rop39d223H9UL+ZBo8eFVCge0EkKrUOGssbAfywM0MBsuO+03yM
+ 9aQmVLAjSX4p0f/YAL2b+dFtzEswM2DVGOZYqMnuwhNULaKD7DCq2jRcuHgo3WZ4G9H2
+ w8f5nxtiAzUIasbPLXLSE/sOxkafZbHa+hQhcSds2l4c70++brO2BEV1im8KOUik0ETz
+ IaxlX2SoMQOwTFn9DPxLjlwhfyqdaJnCi2MGf5FcapGWUZCrG9nt2qFD1dTfKpl9UKOV
+ ypLCWJJrt7wbiS1XtRZqU7bBxmJT1W7JsRbJKt4U+5wJ06ujab4g4Kld9undFrSUPUcV Bw== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3sb6jbrf1f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 08 Aug 2023 00:50:25 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3780oO2H013279
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 8 Aug 2023 00:50:24 GMT
+Received: from [10.110.124.178] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Mon, 7 Aug
+ 2023 17:50:23 -0700
+Message-ID: <be6ef3e4-a3d6-3af8-0a47-506e2275b40b@quicinc.com>
+Date:   Mon, 7 Aug 2023 17:50:22 -0700
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v4 10/32] ASoC: qcom: Add USB backend ASoC driver for Q6
+Content-Language: en-US
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        <agross@kernel.org>, <andersson@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>,
+        <lgirdwood@gmail.com>, <broonie@kernel.org>, <perex@perex.cz>,
+        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
+        <bgoswami@quicinc.com>, <Thinh.Nguyen@synopsys.com>
+CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-usb@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <quic_jackp@quicinc.com>, <oneukum@suse.com>,
+        <albertccwang@google.com>, <o-takashi@sakamocchi.jp>
+References: <20230725023416.11205-1-quic_wcheng@quicinc.com>
+ <20230725023416.11205-11-quic_wcheng@quicinc.com>
+ <37018459-ee43-d853-1d73-3c6234a265b2@linux.intel.com>
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <37018459-ee43-d853-1d73-3c6234a265b2@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: U7G8aZINZ3sI_IoYSnETSuLdn7RXEAEz
+X-Proofpoint-GUID: U7G8aZINZ3sI_IoYSnETSuLdn7RXEAEz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-08-07_27,2023-08-03_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ bulkscore=0 mlxlogscore=923 priorityscore=1501 lowpriorityscore=0
+ impostorscore=0 clxscore=1015 mlxscore=0 phishscore=0 adultscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2306200000 definitions=main-2308080005
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D217122
+Hi Pierre,
 
-Dmitri (dmitri926@gmail.com) changed:
+On 7/25/2023 1:45 AM, Pierre-Louis Bossart wrote:
+> 
+>> +struct q6usb_port_data {
+>> +	struct q6afe_usb_cfg usb_cfg;
+>> +	struct snd_soc_usb *usb;
+>> +	struct q6usb_offload priv;
+>> +	int active_idx;
+> 
+> what is an 'active_idx' ?
+> 
+> 
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |dmitri926@gmail.com
+active_idx carries the USB sound card we're going to be offloading.
 
---- Comment #35 from Dmitri (dmitri926@gmail.com) ---
-Hi Mario & Michael,
+>> +static int q6usb_alsa_connection_cb(struct snd_soc_usb *usb, int card_idx,
+>> +			int connected)
+>> +{
+>> +	struct snd_soc_dapm_context *dapm;
+>> +	struct q6usb_port_data *data;
+>> +
+>> +	dapm = snd_soc_component_get_dapm(usb->component);
+>> +	data = dev_get_drvdata(usb->component->dev);
+> 
+> shouldn't you test that 'dapm' and 'data' are not NULL ?
+> 
 
-I was able to test on a physical box. I'm not seeing the "Transfer event TRB
-DMA ptr not part of current TD" error in dmesg but not able to capture any
-packets either.
+q6usb_component_probe() would be the one that registers to SOC USB to 
+add this callback.  At that time, the component's dev and dapm 
+references should be populated, so that should ensure that those are 
+valid.  However, we could see that usb->component to be NULL, as that 
+assignment happens after adding the port.  Instead I will add a check 
+for usb->component before attempting to access the dapm/data params.
 
-$ uname -a
-Linux sonylaptop 6.5.0-0.a.test-amd64 #1 SMP PREEMPT_DYNAMIC Debian
-6.5~rc4-1~exp1a~test (2023-08-07) x86_64 GNU/Linux
+Another thing I will modify is to add a component removal callback, 
+which will remove the SOC USB port.  That will ensure that no 
+connection_cb() events are issued, so we don't run into any NULL pointer 
+issues during the remove path.
 
-[ 1189.175651] usb 3-2: new high-speed USB device number 5 using xhci_hcd
-[ 1189.326329] usb 3-2: New USB device found, idVendor=3D0e8d, idProduct=3D=
-7961,
-bcdDevice=3D 1.00
-[ 1189.326351] usb 3-2: New USB device strings: Mfr=3D6, Product=3D7,
-SerialNumber=3D8
-[ 1189.326358] usb 3-2: Product: Wireless_Device
-[ 1189.326363] usb 3-2: Manufacturer: MediaTek Inc.
-[ 1189.326368] usb 3-2: SerialNumber: 000000000
-[ 1189.332931] bluetooth hci1: firmware: direct-loading firmware
-mediatek/BT_RAM_CODE_MT7961_1_2_hdr.bin
-[ 1189.337734] mt7921u 3-2:1.3: firmware: direct-loading firmware
-mediatek/WIFI_RAM_CODE_MT7961_1.bin
-[ 1195.262160] mt7921u 3-2:1.3: firmware: direct-loading firmware
-mediatek/WIFI_RAM_CODE_MT7961_1.bin
-[ 1195.276095] mt7921u 3-2:1.3: WM Firmware Version: ____010000, Build Time:
-20230526130958
-[ 1196.916463] mt7921u 3-2:1.3 wlx00c0cab3c769: renamed from wlan0
+>> +
+>> +	if (connected) {
+> 
+> this goes back to my earlier comment that you treat 'connected' as a
+> boolean.
+> 
 
-    description: Motherboard
-       product: VAIO
-       vendor: Sony Corporation
-       physical id: 0
-       version: N/A
-       serial: N/A
-     *-firmware
-          description: BIOS
-          vendor: Insyde Corp.
-          physical id: 0
-          version: R0220DA
-          date: 11/18/2013
-          size: 128KiB
-          capacity: 3MiB
-          capabilities: pci pnp upgrade shadowing cdboot bootselect edd
-int9keyboard int10video acpi usb smartbattery biosbootspecification netboot
-uefi
-     *-cpu
-          description: CPU
-          product: Intel(R) Core(TM) i5-3337U CPU @ 1.80GHz
-          vendor: Intel Corp.
-          physical id: 4
-          bus info: cpu@0
-          version: 6.58.9
-          serial: N/A
-          slot: N/A
-          size: 2591MHz
-     *-usbhost:1
-                product: xHCI Host Controller
-                vendor: Linux 6.5.0-0.a.test-amd64 xhci-hcd
-                physical id: 1
-                bus info: usb@4
-                logical name: usb4
-                version: 6.05
-                capabilities: usb-3.00
-                configuration: driver=3Dhub slots=3D4 speed=3D5000Mbit/s
+Done, changed to boolean.
 
-$ lsusb
-Bus 002 Device 002: ID 8087:0024 Intel Corp. Integrated Rate Matching Hub
-Bus 002 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-Bus 001 Device 004: ID 0bda:5729 Realtek Semiconductor Corp. Front Camera
-Bus 001 Device 003: ID 0489:e062 Foxconn / Hon Hai BCM43142A0
-Bus 001 Device 002: ID 8087:0024 Intel Corp. Integrated Rate Matching Hub
-Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-Bus 003 Device 005: ID 0e8d:7961 MediaTek Inc. Wireless_Device
-Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+>> +		snd_soc_dapm_enable_pin(dapm, "USB_RX_BE");
+>> +		/* We only track the latest USB headset plugged in */
+>> +		data->active_idx = card_idx;
+>> +	} else {
+>> +		snd_soc_dapm_disable_pin(dapm, "USB_RX_BE");
+>> +	}
+>> +	snd_soc_dapm_sync(dapm);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int q6usb_component_probe(struct snd_soc_component *component)
+>> +{
+>> +	struct q6usb_port_data *data = dev_get_drvdata(component->dev);
+>> +	struct snd_soc_dapm_context *dapm = snd_soc_component_get_dapm(component);
+>> +
+>> +	snd_soc_dapm_disable_pin(dapm, "USB_RX_BE");
+>> +	snd_soc_dapm_sync(dapm);
+>> +
+>> +	data->usb = snd_soc_usb_add_port(component->dev, &data->priv, q6usb_alsa_connection_cb);
+>> +	if (IS_ERR(data->usb)) {
+>> +		dev_err(component->dev, "failed to add usb port\n");
+>> +		return -ENODEV;
+>> +	}
+>> +
+>> +	data->usb->component = component;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static const struct snd_soc_component_driver q6usb_dai_component = {
+>> +	.probe = q6usb_component_probe,
+> 
+> erm, if you have a .probe that adds a port, don't you need a remove that
+> removes the same port, and sets the pin state as well?
+> 
 
-$ hcxdumptool -L
+Will add this as mentioned above.
 
-Requesting physical interface capabilities. This may take some time.
-Please be patient...
+>> +	.name = "q6usb-dai-component",
+>> +	.dapm_widgets = q6usb_dai_widgets,
+>> +	.num_dapm_widgets = ARRAY_SIZE(q6usb_dai_widgets),
+>> +	.dapm_routes = q6usb_dapm_routes,
+>> +	.num_dapm_routes = ARRAY_SIZE(q6usb_dapm_routes),
+>> +	.of_xlate_dai_name = q6usb_audio_ports_of_xlate_dai_name,
+>> +};
+>> +
+>> +static int q6usb_dai_dev_probe(struct platform_device *pdev)
+>> +{
+>> +	struct device_node *node = pdev->dev.of_node;
+>> +	struct q6usb_port_data *data;
+>> +	struct device *dev = &pdev->dev;
+>> +	struct of_phandle_args args;
+>> +	int ret;
+>> +
+>> +	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+>> +	if (!data)
+>> +		return -ENOMEM;
+>> +
+>> +	ret = of_property_read_u32(node, "qcom,usb-audio-intr-num",
+>> +				&data->priv.intr_num);
+>> +	if (ret) {
+>> +		dev_err(&pdev->dev, "failed to read intr num.\n");
+>> +		return ret;
+>> +	}
+>> +
+>> +	ret = of_parse_phandle_with_fixed_args(node, "iommus", 1, 0, &args);
+>> +	if (ret < 0)
+>> +		data->priv.sid = -1;
+>> +	else
+>> +		data->priv.sid = args.args[0] & SID_MASK;
+>> +
+>> +	data->priv.domain = iommu_get_domain_for_dev(&pdev->dev);
+>> +
+>> +	data->priv.dev = dev;
+>> +	dev_set_drvdata(dev, data);
+>> +
+>> +	ret = devm_snd_soc_register_component(dev, &q6usb_dai_component,
+>> +					q6usb_be_dais, ARRAY_SIZE(q6usb_be_dais));
+>> +	if (ret < 0)
+>> +		return ret;
+>> +
+>> +	return 0;
+> 
+> return devm_snd_soc_register_component
+> 
+>> +}
+>> +
+>> +static int q6usb_dai_dev_remove(struct platform_device *pdev)
+>> +{
+>> +	snd_soc_usb_remove_port(&pdev->dev);
+> 
+> that seems wrong, the port is added in the component probe, not the
+> platform device probe.
+> 
 
+Will fix this.
 
-available wlan devices:
-
-phy idx hw-mac       virtual-mac  m ifname           driver (protocol)
----------------------------------------------------------------------------=
-------------------
-  3   6 00c0cab3c769 00c0cab3c769 * wlx00c0cab3c769  mt7921u (NETLINK)
-
-* active monitor mode available
-+ monitor mode available
-- no monitor mode available
-
-
-:~/work$ sudo iw dev $IFACE set type monitor
-:~/work$ sudo ip link set $IFACE up
-:~/work$ sudo iw dev
-phy#3
-        Interface wlx00c0cab3c769
-                ifindex 6
-                wdev 0x300000001
-                addr d8:5d:fb:08:df:5c
-                type monitor
-                channel 6 (2437 MHz), width: 20 MHz (no HT), center1: 2437 =
-MHz
-                txpower 3.00 dBm
-                multicast TXQ:
-                        qsz-byt qsz-pkt flows   drops   marks   overlmt has=
-hcol
-tx-bytes        tx-packets
-                        0       0       0       0       0       0       0=
-=20=20=20=20=20=20
-0               0
-
-
-
-$ sudo tshark -i $IFACE
-Running as user "root" and group "root". This could be dangerous.
-Capturing on 'wlx00c0cab3c769'
- ** (tshark:8102) 20:10:07.839462 [Main MESSAGE] -- Capture started.
- ** (tshark:8102) 20:10:07.839571 [Main MESSAGE] -- File:
-"/tmp/wireshark_wlx00c0cab3c769SOIS91.pcapng"
-^Ctshark:
-0 packets captured
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Thanks
+Wesley Cheng
