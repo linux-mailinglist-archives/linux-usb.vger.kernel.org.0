@@ -2,112 +2,153 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 536EF773C3B
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Aug 2023 18:02:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50588773B2C
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Aug 2023 17:45:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231398AbjHHQCi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Aug 2023 12:02:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55396 "EHLO
+        id S230073AbjHHPpG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Aug 2023 11:45:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229653AbjHHQAz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Aug 2023 12:00:55 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5929D2109
-        for <linux-usb@vger.kernel.org>; Mon,  7 Aug 2023 20:29:36 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2b9338e4695so83651541fa.2
-        for <linux-usb@vger.kernel.org>; Mon, 07 Aug 2023 20:29:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=libre.computer; s=google; t=1691465374; x=1692070174;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=w2a2fi6fo8O2qphEYAkmBRgnh3Id5Qk5HANh3JTmLrk=;
-        b=Hv0EkMFwuoyzbj7wybAw2sah1r5PcEsI9FNN9nLIlvkNEpHSFHw4jcZKq/NkXGTw6z
-         H42R1MPcMSc8IIbKlAyXG1c0yacNizA221RfmnShj84TS/hy3iWPjxmdPyQv7ZxU8TG7
-         hpT6Z4tY0EZoJoyg6WfiTFEaPLh6C+jhz6GHGqJVIafQ68XNayOBx0xe/m5BsTf3D1HI
-         j/rN/NYIuWU98uIvWBgGI0u17/cRIekusBpWhj45eIhdqLWoop2D5lE7uBdJ1OaeFKnx
-         SQMjWMbfBsMbDrTnG5IAIcQnZd+a+ujSMOvp0lA9QUDdDk24tLRY/H73PpTXxQW61bd9
-         Xujg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691465374; x=1692070174;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=w2a2fi6fo8O2qphEYAkmBRgnh3Id5Qk5HANh3JTmLrk=;
-        b=gszJvTU04xI5Er/T84QqsAznczYUuXx0F6WrolflL0rwpu9CTS+VMaE0LfzbMEnd7Y
-         yf5kDFmglxL9fh3DXx/lIWd7dFXPMxxieUXJGFMhZ+s2A8Y65eMoOF/jMyv5Cve/ZX7/
-         gL+635Q9Rwwkzcxb7/r+JKbixg811sZIhgIBYDn6+A5bkF8mtCz7QXi8evl6kk8mH8fX
-         iVOuP5FONLCB57AVP6+Q7s7iqFP84zbx/SgKrlf8vLqDZ39e3XsXILQS7cIuWvHFSKO/
-         MUhfD1XIYC5hX28b2iXL8BEAzx18S7A/oo4sonhloLFKxFQyWVtuH0BjGZzyjgl4dA0O
-         Qnew==
-X-Gm-Message-State: AOJu0YziWvCXmyymI0yFbCJtkE6sqcITnBUE7GDlpYBUJtbwmApuTziR
-        sdddWw1lROjOPevXa6xzNz42GEXhIV7aFoQc7xw9+pLj5VOxQw==
-X-Google-Smtp-Source: AGHT+IHUJlcYJA5OEaih3/uCPH2RSh8acayw3bMZ9xFGDbb2rx6os6/zhDaz9FaWTAYH/lOAbrlTdA==
-X-Received: by 2002:a05:6512:34c2:b0:4fd:fe8f:4108 with SMTP id w2-20020a05651234c200b004fdfe8f4108mr6732753lfr.62.1691465374338;
-        Mon, 07 Aug 2023 20:29:34 -0700 (PDT)
-Received: from bear.local ([69.165.74.129])
-        by smtp.gmail.com with ESMTPSA id a3-20020a056512020300b004fcdd81355csm1715321lfo.269.2023.08.07.20.29.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Aug 2023 20:29:34 -0700 (PDT)
-From:   Luke Lu <luke.lu@libre.computer>
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        linux-usb@vger.kernel.org, linux-amlogic@lists.infradead.org
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        with ESMTP id S229931AbjHHPng (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Aug 2023 11:43:36 -0400
+Received: from h2.cmg2.smtp.forpsi.com (h2.cmg2.smtp.forpsi.com [81.2.195.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00792FB
+        for <linux-usb@vger.kernel.org>; Tue,  8 Aug 2023 08:36:27 -0700 (PDT)
+Received: from [192.168.1.166] ([91.218.190.200])
+        by cmgsmtp with ESMTPSA
+        id TIjQqMCSNv5uITIjQqVwRf; Tue, 08 Aug 2023 11:10:25 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
+        t=1691485825; bh=pxBPGY/8saHyrmYDg9GzSr24b1NP0Ka+vfDcTpfzL/w=;
+        h=Message-ID:Subject:From:To:Date:Content-Type:MIME-Version;
+        b=nExGr5hNsACSHIq/486b8ATCtVQfhkSRN4G+gqu26YlAlxIaGquG83tZntAgKW0zG
+         u6bnhtT00h3LJuNm90aDmh5+gAZ7j8qGgWb7T5jeQBmWEk826K7vE5XpFiLH4SJOMT
+         ZdAgy24BcsBIbGds9riyGSHwOcmh392muArlMSU5RE1gxujwAB+SWbD+rGISFBOfMA
+         g7xP0ameQdKKdwuUPxhJ9Bk27CvQ8cRWHjyD6PO3df9BkhsnyeRgFNWPi/giSNo7eb
+         bovYLWhatRST7jQvZLuACVb7htYa6Lmpkn2zfv4xeX18mvCO7MQMhqH5SrbBqS4uyB
+         +zPe44VmXSs/A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
+        t=1691485825; bh=pxBPGY/8saHyrmYDg9GzSr24b1NP0Ka+vfDcTpfzL/w=;
+        h=Message-ID:Subject:From:To:Date:Content-Type:MIME-Version;
+        b=nExGr5hNsACSHIq/486b8ATCtVQfhkSRN4G+gqu26YlAlxIaGquG83tZntAgKW0zG
+         u6bnhtT00h3LJuNm90aDmh5+gAZ7j8qGgWb7T5jeQBmWEk826K7vE5XpFiLH4SJOMT
+         ZdAgy24BcsBIbGds9riyGSHwOcmh392muArlMSU5RE1gxujwAB+SWbD+rGISFBOfMA
+         g7xP0ameQdKKdwuUPxhJ9Bk27CvQ8cRWHjyD6PO3df9BkhsnyeRgFNWPi/giSNo7eb
+         bovYLWhatRST7jQvZLuACVb7htYa6Lmpkn2zfv4xeX18mvCO7MQMhqH5SrbBqS4uyB
+         +zPe44VmXSs/A==
+Message-ID: <567bd0e0e28a4cac4ce13bb314dcf04739598fbc.camel@triops.cz>
+Subject: Re: next: mips: cavium_octeon_defconfig: gcc-8 -
+ dwc3-octeon.c:502:8: include/linux/compiler_types.h:397:38: error: call to
+ '__compiletime_assert_335' declared with attribute error: FIELD_PREP: value
+ too large for the field _compiletime_assert
+From:   Ladislav Michl <ladis@triops.cz>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-usb@vger.kernel.org, linux-mips@vger.kernel.org,
+        lkft-triage@lists.linaro.org
+Cc:     Thinh.Nguyen@synopsys.com,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Da Xue <da@libre.computer>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Luke Lu <luke.lu@libre.computer>
-Subject: [PATCH] usb: dwc3: meson-g12a: do post init to fix broken usb after resumption
-Date:   Tue,  8 Aug 2023 03:25:10 +0000
-Message-Id: <20230808032510.31754-1-luke.lu@libre.computer>
-X-Mailer: git-send-email 2.40.1
+        Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Date:   Tue, 08 Aug 2023 11:10:23 +0200
+In-Reply-To: <1ab766fca893588d75590d2faf624eb7d9d27a8a.camel@triops.cz>
+References: <CA+G9fYspyEdT9wmVpL04J-p0CwqA+_v_L4H+ihY9VYqpCMmQ1Q@mail.gmail.com>
+         <1ab766fca893588d75590d2faf624eb7d9d27a8a.camel@triops.cz>
+Organization: Triops, s.r.o.
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
+X-CMAE-Envelope: MS4wfP3DisK3KstSzX1Mm3zYKOfoLr30Fb25YJH2esbk2sMTpCEIeraaJY+by4IOCZUiqWJRtJFmW6dOEzTD9+gozpUvY8zkGCwz+srrQejHjrCQDEJwSHy6
+ 2pW4+0Y2XhJELiSPet442CJ4kW43nKpINuE8xCa7Q3L/cOFyAfe6LIAopIO1Pjky2f6oBSxU3ufb/62bjMyqIH8Vg4aXAC5KnwILVzagZm9cxIOC9QnV0ixH
+ 6TwbVqZZFxUjMfBQrM2S6MOjhoZVjjKSdyo8fCwmnCpt/eSqKgBS05OWW/ffwSv+DspC4k7jepbmFjh5kDQ60GINPsFVzzeoS0FCU2m45wYeFwhFmkgRPh6M
+ +lo+1pdaY3ao2G24RHl8qGWNjD+7dow2M8JIgiy6pf58QmKtJlekiRMYTpVFHgD/vWHSVhqt7ke1mBuua7LEXwsOeWs6FOIsbSutYpgXyK07gEQ2b0y5AJdS
+ fNLmZ+Nupmpi5LvDG0Wb8ieIMJE1AnZz2egaHNskaILV6Q57txRoPqwyQtY=
+X-Spam-Status: No, score=-0.2 required=5.0 tests=DKIM_SIGNED,DKIM_VALID,
+        DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Device connected to usb otg port of GXL-based boards can not be
-recognised after resumption, doesn't recover even if disconnect and
-reconnect the device. dmesg shows it disconnects during resumption.
+On Tue, 2023-08-08 at 09:45 +0200, Ladislav Michl wrote:
+> Hi Naresh,
+>=20
+> On Tue, 2023-08-08 at 12:41 +0530, Naresh Kamboju wrote:
+> > [My two cents]
 
-[   41.492911] usb 1-2: USB disconnect, device number 3
-[   41.499346] usb 1-2: unregistering device
-[   41.511939] usb 1-2: unregistering interface 1-2:1.0
+seems this is going to be far more expensive ;-)
 
-Calling usb_post_init() will fix this issue, and it's tested and
-verified on libretech's aml-s905x-cc board.
+> > While building Linux next-20230808 mips cavium_octeon_defconfig
+> > with gcc-8 failed with below warnings and errors.
+> >=20
+> > Build log:
+> > ----------
+> >=20
+> > In function 'dwc3_octeon_setup.isra.4',
+> > =C2=A0=C2=A0=C2=A0 inlined from 'dwc3_octeon_probe' at drivers/usb/dwc3=
+/dwc3-
+> > octeon.c:502:8:
+> > include/linux/compiler_types.h:397:38: error: call to
+> > '__compiletime_assert_335' declared with attribute error:
+> > FIELD_PREP:
+> > value too large for the field
+> > =C2=A0 _compiletime_assert(condition, msg, __compiletime_assert_,
+> > __COUNTER__)
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 ^
+> > include/linux/compiler_types.h:378:4: note: in definition of macro
+> > '__compiletime_assert'
+> > =C2=A0=C2=A0=C2=A0 prefix ## suffix();=C2=A0=C2=A0=C2=A0 \
+> > =C2=A0=C2=A0=C2=A0 ^~~~~~
+>=20
+> Not sure what is really going on there. Code compiles even using
+> 32bit toochains without warnings and such an assignments are used in
+> other kernel drivers. See for example drivers/cxl/core/hdm.c:534
+> which is using the same types. Also=20
+> drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c in
+> rvu_exact_prepare_table_entry...
 
-Signed-off-by: Luke Lu <luke.lu@libre.computer>
----
- drivers/usb/dwc3/dwc3-meson-g12a.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+So using gcc-8.2.1 20181130 I see the same error. However
+drivers/cxl/core/hdm.c still compiler cleanly.
 
-diff --git a/drivers/usb/dwc3/dwc3-meson-g12a.c b/drivers/usb/dwc3/dwc3-meson-g12a.c
-index e99c7489dba0..2c07c038b584 100644
---- a/drivers/usb/dwc3/dwc3-meson-g12a.c
-+++ b/drivers/usb/dwc3/dwc3-meson-g12a.c
-@@ -926,6 +926,12 @@ static int __maybe_unused dwc3_meson_g12a_resume(struct device *dev)
- 			return ret;
- 	}
- 
-+	if (priv->drvdata->usb_post_init) {
-+		ret = priv->drvdata->usb_post_init(priv);
-+		if (ret)
-+			return ret;
-+	}
-+
- 	return 0;
- }
- 
--- 
-2.40.1
+Now USBDRD_UCTL_CTL_H_CLKDIV_SEL is defined as GENMASK_ULL(26, 24).
+Making is GENMASK_ULL(27, 24) makes error go away. Also making clk_div
+array in dwc3_octeon_get_divider one element shorter makes error go
+away.
+
+To me it seems gcc-8 figures out the result of dwc3_octeon_get_divider
+can be greater than 7 and produces error. Cannot happen in the real
+world. Should we make gcc-8 stand corrected?
+
+> Anyway, let me setup gcc-8 toolchain :)
+>=20
+> > =C2=A0 Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> >=20
+> > Links:
+> > -----
+> > =C2=A0-
+> > https://qa-reports.linaro.org/lkft/linux-next-master/build/next-2023080=
+8/testrun/18882876/suite/build/test/gcc-8-cavium_octeon_defconfig/log
+> > =C2=A0-
+> > https://qa-reports.linaro.org/lkft/linux-next-master/build/next-2023080=
+8/testrun/18882876/suite/build/test/gcc-8-cavium_octeon_defconfig/history/
+> >=20
+> > Steps to reproduce:
+> > ------------
+> > =C2=A0 tuxmake --runtime podman --target-arch mips --toolchain gcc-8
+> > --kconfig cavium_octeon_defconfig
+> > =C2=A0=C2=A0 -
+> > https://storage.tuxsuite.com/public/linaro/lkft/builds/2TgoAZwerJ28UWHy=
+qfQUiaYYhrl/tuxmake_reproducer.sh
+> >=20
+> > --
+> > Linaro LKFT
+> > https://lkft.linaro.org
+>=20
 
