@@ -2,93 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 624C4774382
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Aug 2023 20:06:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09F28774593
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Aug 2023 20:43:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235146AbjHHSGy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Aug 2023 14:06:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41628 "EHLO
+        id S233748AbjHHSnh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Aug 2023 14:43:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbjHHSG3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Aug 2023 14:06:29 -0400
-Received: from h1.cmg2.smtp.forpsi.com (h1.cmg2.smtp.forpsi.com [81.2.195.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F015F752
-        for <linux-usb@vger.kernel.org>; Tue,  8 Aug 2023 10:06:00 -0700 (PDT)
-Received: from lenoch ([91.218.190.200])
-        by cmgsmtp with ESMTPSA
-        id TK6xqN1CNv5uITK6yqWFVz; Tue, 08 Aug 2023 12:38:49 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1691491129; bh=99a8sbPMFP6BIytgJuHTfTeDV1YHpAKlfAo4I1ukHl8=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=2FDU8Vy979bUmdApcVHkL00l92KeU9sbWPCHnj74QyRRQrbUXzTW/OHW2SCO6/lkx
-         51sF9E6z6w4AY1nEMuAtZcW3wbwiFdwASOhNPgxdNG/xy8HFJViH31hcmpZKkgjr1t
-         2fERVOMdYsWlAByG0m5PO3MR0ezdhGEch2nJn2y9aMYGRi9Hj3iCOw9Gfilk01dYVo
-         5VVyiwR77KWKyj9rOiw7m9HcOxsjVDrsUGtsY61GBSV1Xjwy/uBzsw7LZt+gfo+Kj6
-         /4Co0PW0wRARoJKOrK/bviaS2f+qTzcBnlkS7b0iX88IKFQ3B1I0j14taAgbyA3Ed2
-         9dBdtkYIFmvbQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
-        t=1691491129; bh=99a8sbPMFP6BIytgJuHTfTeDV1YHpAKlfAo4I1ukHl8=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=2FDU8Vy979bUmdApcVHkL00l92KeU9sbWPCHnj74QyRRQrbUXzTW/OHW2SCO6/lkx
-         51sF9E6z6w4AY1nEMuAtZcW3wbwiFdwASOhNPgxdNG/xy8HFJViH31hcmpZKkgjr1t
-         2fERVOMdYsWlAByG0m5PO3MR0ezdhGEch2nJn2y9aMYGRi9Hj3iCOw9Gfilk01dYVo
-         5VVyiwR77KWKyj9rOiw7m9HcOxsjVDrsUGtsY61GBSV1Xjwy/uBzsw7LZt+gfo+Kj6
-         /4Co0PW0wRARoJKOrK/bviaS2f+qTzcBnlkS7b0iX88IKFQ3B1I0j14taAgbyA3Ed2
-         9dBdtkYIFmvbQ==
-Date:   Tue, 8 Aug 2023 12:38:46 +0200
-From:   Ladislav Michl <oss-lists@triops.cz>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-usb@vger.kernel.org, linux-mips@vger.kernel.org,
-        lkft-triage@lists.linaro.org, Thinh.Nguyen@synopsys.com,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: Re: [PATCH] usb: dwc3: dwc3-octeon: Verify clock divider
-Message-ID: <ZNIbNj4Orr7PEqY9@lenoch>
-References: <ZNIM7tlBNdHFzXZG@lenoch>
- <2023080830-wincing-goldmine-def9@gregkh>
+        with ESMTP id S233592AbjHHSnV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Aug 2023 14:43:21 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43811387CA
+        for <linux-usb@vger.kernel.org>; Tue,  8 Aug 2023 09:37:49 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4fe10f0f4d1so9727218e87.0
+        for <linux-usb@vger.kernel.org>; Tue, 08 Aug 2023 09:37:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1691512644; x=1692117444;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=A6LfCAMj0DFAFgXZ5oRgcMXEYEXLBhRELRNEOdU8pto=;
+        b=gTPysjpvBSz7i325J9Uc7ujkJFq16hrEQex/LtXLbHZ+wBkB6n4RvpRnBcYPOyHPTI
+         FYNnuSvP/JfRUd5ghr7fPg5S/fCafPu9n9J2KiUUvqooUOZ6jw2kajgTSHXFMvLDmFfp
+         8/OcyKKyF+M+HEHjlrjCO43WfSGsSjAn52jLd76bBd2Ry2vT8b9HvrToIK3XnXyyiHfY
+         R3uivCerAy899iyTX+B158TVe5s90UlmwVj1+n0jV0ngYsJB3lHR+OJHiQPNrvhYQNup
+         lQ7sC5e6gC94wOOCtrOn01D5G9obAeGkzpCQjDvWOTi4SpTJbKjhAARa072wZ5XoUX+F
+         rJ6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691512644; x=1692117444;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=A6LfCAMj0DFAFgXZ5oRgcMXEYEXLBhRELRNEOdU8pto=;
+        b=GQqUqOu9Bl+fXiZVpEmMQ84cIkO0AI0wYqZnuUUQAx4u4Qx0W9nAIabQ15rL+4KaK0
+         LJlzvGwyMW9XIVx7Grw8qR6dMxoBk9PoevVJtoxYez4CpLvy5YjakYTqUCGY6rxYPMmN
+         Kb5Aug8U04v5vx/a9AfVxlFpkiEBgGz1Q8OqFup2N5Zl8bop03wbpB14P90bxq1A46oi
+         0D2Z6fVFAVeDAucKrDb/OCIS42XFADawtcbwtlsDHAGRT9v7oE1ODBntxqIXNV4mjHi4
+         6/HSKr6tInKJm4FTqd6xxSoMeNSYWVZngYW9zofMAwbwGblSzfAsOCQy46bLj4L9x0S5
+         0iMg==
+X-Gm-Message-State: AOJu0Yy593MjzwPcgp67uPlxULVsMOFkuP2f2LinBWHnge1xVSFMkohx
+        jPOoAXS9WHRJYXQSNMEu7apvGxd8NShbS7cW
+X-Google-Smtp-Source: AGHT+IGW9Ialzh0UtEfgQ/NUlrxfMl+JvOwGOmx807BHruxTqgrFB1wO8FtSUuOq7S5R+/RKKpuMcQ==
+X-Received: by 2002:adf:dd83:0:b0:317:4755:9e48 with SMTP id x3-20020adfdd83000000b0031747559e48mr7053045wrl.53.1691491952555;
+        Tue, 08 Aug 2023 03:52:32 -0700 (PDT)
+Received: from localhost.localdomain ([31.145.189.2])
+        by smtp.googlemail.com with ESMTPSA id t6-20020a5d6a46000000b003142e438e8csm13265709wrw.26.2023.08.08.03.52.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Aug 2023 03:52:31 -0700 (PDT)
+From:   Alper Ak <alperyasinak1@gmail.com>
+To:     johan@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, Alper Ak <alperyasinak1@gmail.com>
+Subject: [PATCH] USB: serial: option: add Quectel EG912Y module support
+Date:   Tue,  8 Aug 2023 13:51:58 +0300
+Message-Id: <20230808105158.631761-1-alperyasinak1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2023080830-wincing-goldmine-def9@gregkh>
-X-CMAE-Envelope: MS4wfO980XvXG+2EkWJZqrMEX/eYOZqR+vRYsxAipUQDIJ1MryLpKUMcBJOCUzM4Kt3JE4EKHdy5HH9CP7SZhDJHA+GNzaU2hzQuIrZwvVmrASUkIqvec1c0
- z3Ko5Mt2Uji4SVSVq7HlL7aCYmJ8zZsjKKQOksbSIiidehvjFHg4HIKt7KuvD3XkCQa1YDz7wSQdprMlZRDapKo1QHASzF+wTVqGdJXxR1C1Q9zG9lZK+dNb
- 2UVa2gQcxDR0RD6qfUSu2PImD6ybEC17M3vf0XiwuCTUmjkW98C8mXGtVMeI/GMTy7PXf1fy4PDBKbQmQMGQthY3tmGbdhMvl5UTgWp+t2At6j9q8X5oCVxJ
- g00EgEJ1Bp72E0OovaYUIMrQ7q9J5OmG4QYQNgQik1imkcRWxq7kbPKCv9Cg64JI+SIIDeq/vgYLgq/DVp8E8OutoIcy9SNEieYTkbl9RixjpLBkd+OMSnCG
- RMp2iocNfRdib4x4XUK852jLd52Dx1uaJRpqrQ==
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 08, 2023 at 12:00:42PM +0200, Greg Kroah-Hartman wrote:
-> On Tue, Aug 08, 2023 at 11:37:50AM +0200, Ladislav Michl wrote:
-> > From: Ladislav Michl <ladis@linux-mips.org>
-> > 
-> > Although valid USB clock divider will be calculated for all valid
-> > Octeon core frequencies, make code formally correct limiting
-> > divider not to be greater that 7 so it fits into H_CLKDIV_SEL
-> > field.
-> > 
-> > Signed-off-by: Ladislav Michl <ladis@linux-mips.org>
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > Closes: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230808/testrun/18882876/suite/build/test/gcc-8-cavium_octeon_defconfig/log
-> > ---
-> >  Greg, if you want to resent whole serie, just drop me a note.
-> >  Otherwise, this patch is meant to be applied on to of it.
-> 
-> On top of what series?
+Add Quectel EG912Y "DIAG, AT, MODEM"
 
-I'm sorry, "[PATCH v5 0/7] Cleanup Octeon DWC3 glue code".
-In your usb-next, last patch of serie is:
-d9216d3ef538 ("usb: dwc3: dwc3-octeon: Add SPDX header and copyright")
+0x6001: ECM / RNDIS + DIAG + AT + MODEM
 
-Thanks,
-	l.
+T:  Bus=01 Lev=02 Prnt=02 Port=00 Cnt=01 Dev#=  3 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=2c7c ProdID=6001 Rev= 3.18
+S:  Manufacturer=Android
+S:  Product=Android
+S:  SerialNumber=0000
+C:* #Ifs= 5 Cfg#= 1 Atr=e0 MxPwr=500mA
+A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=06 Prot=00
+I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=06 Prot=00 Driver=cdc_ether
+E:  Ad=87(I) Atr=03(Int.) MxPS=  64 Ivl=4096ms
+I:  If#= 1 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
+I:* If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=0c(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=0b(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=89(I) Atr=03(Int.) MxPS=  64 Ivl=4096ms
+E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=88(I) Atr=03(Int.) MxPS=  64 Ivl=4096ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=0a(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+Signed-off-by: Alper Ak <alperyasinak1@gmail.com>
+---
+ drivers/usb/serial/option.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index 8ac98e60fff5..5a132dd0a9cf 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -274,6 +274,7 @@ static void option_instat_callback(struct urb *urb);
+ #define QUECTEL_PRODUCT_EM061K_LCN		0x6009
+ #define QUECTEL_PRODUCT_EC200T			0x6026
+ #define QUECTEL_PRODUCT_RM500K			0x7001
++#define QUECTEL_PRODUCT_EG912Y			0x6001
+ 
+ #define CMOTECH_VENDOR_ID			0x16d8
+ #define CMOTECH_PRODUCT_6001			0x6001
+@@ -1235,6 +1236,7 @@ static const struct usb_device_id option_ids[] = {
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200S_CN, 0xff, 0, 0) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC200T, 0xff, 0, 0) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_RM500K, 0xff, 0x00, 0x00) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EG912Y, 0xff, 0, 0) },
+ 
+ 	{ USB_DEVICE(CMOTECH_VENDOR_ID, CMOTECH_PRODUCT_6001) },
+ 	{ USB_DEVICE(CMOTECH_VENDOR_ID, CMOTECH_PRODUCT_CMU_300) },
+-- 
+2.25.1
+
