@@ -2,72 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1507F77490F
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Aug 2023 21:48:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 624C4774382
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Aug 2023 20:06:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235217AbjHHTsI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Aug 2023 15:48:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40762 "EHLO
+        id S235146AbjHHSGy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Aug 2023 14:06:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235090AbjHHTrp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Aug 2023 15:47:45 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 975834BBFA
-        for <linux-usb@vger.kernel.org>; Tue,  8 Aug 2023 09:52:14 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-997c4107d62so820395366b.0
-        for <linux-usb@vger.kernel.org>; Tue, 08 Aug 2023 09:52:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1691513533; x=1692118333;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=r+/8A+T5kJZ2sAJcy7n9I+3axWMphmfRgNl05Gm90p8=;
-        b=p5+5j+TqBHX6JDlv33bY4LrKL7skkWsaqTxc0b58EeuUDkmRKcgerX2TZABHdsjF2q
-         QPCdxQUgrSO7aq5ZQq9Jdl+s+rCU6k9R315UjV8Rx1rrVBlIMVtMfZLGmZal1ZAzk3wD
-         j9P1lKOGh0t2lOJdVd2853RFyYc2nmiCAp/vAen2F91OkI66uARi0q8zQ3Plvx4lSrKK
-         VFGgq7U3ApezkJNtYqAwGZDmA3DI3MiAKPAJKD39ZSuXME3XUh1FhKpU6LzlHedtSRoZ
-         3entS9xnfGKvfD+uWiux2KNkZOWqyB6HlbFneniA+rtP9rjzlGajDKSudqUeQ2bukLf7
-         OfoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691513533; x=1692118333;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=r+/8A+T5kJZ2sAJcy7n9I+3axWMphmfRgNl05Gm90p8=;
-        b=ftTMbBKsyeaDZPixe9jjX5NxRLnsZ+e9rrgHpFXExRYj01FLRVH4W8N5VoTBr39AG3
-         0nVsxbA2hvyxqH5llxEmxGKjSAk989m9aTphA2y/cgOYqrivyEwHCLl24/BEozt6O+7h
-         7o8rZ3Ff4FQ25p0Tt4jLveOU4UaqTnJUtb4MjHi2JYpMSioSAl/8AgttMIstb5YAJkCJ
-         Fp0W58V0adPv0P3yDa+rQTgNvHeECPlcxoPf3WsISEDUSf97m+SIhFLaxrWMmoUlD+V2
-         9+kRCubyRWWzFaNf4JijX4EBxEi7YqvhdjQfM6RWi+00xprjNAvqXfn9Dcw6Gr4B4a9g
-         HH2g==
-X-Gm-Message-State: AOJu0YyB8GQEO2tZNzfaLc2qFMj4uUSFx17sXJAx76KRKn+13+ZwFe2d
-        L3GyLS2/wFAj46KIEJCOC/s0vhnYXBklBas2k8A=
-X-Google-Smtp-Source: AGHT+IGCn2asXBAYQXYX9ZgKLoWcp+AtEuDppAqyRaH1bhY7zh95GS9v1NDzWXazD0FnzkfprrmIWA==
-X-Received: by 2002:a5d:6d51:0:b0:317:f7b0:85f with SMTP id k17-20020a5d6d51000000b00317f7b0085fmr1442288wri.33.1691489279549;
-        Tue, 08 Aug 2023 03:07:59 -0700 (PDT)
-Received: from toaster.lan ([2a01:e0a:3c5:5fb1:efd4:f3df:2c50:1776])
-        by smtp.googlemail.com with ESMTPSA id e11-20020a5d500b000000b003143c9beeaesm13109420wrt.44.2023.08.08.03.07.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Aug 2023 03:07:59 -0700 (PDT)
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Jerome Brunet <jbrunet@baylibre.com>, Da Xue <da@libre.computer>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] dt-bindings: usb: add device for Genesys Logic hub gl3510
-Date:   Tue,  8 Aug 2023 12:07:45 +0200
-Message-Id: <20230808100746.391365-2-jbrunet@baylibre.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230808100746.391365-1-jbrunet@baylibre.com>
-References: <20230808100746.391365-1-jbrunet@baylibre.com>
+        with ESMTP id S229708AbjHHSG3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Aug 2023 14:06:29 -0400
+Received: from h1.cmg2.smtp.forpsi.com (h1.cmg2.smtp.forpsi.com [81.2.195.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F015F752
+        for <linux-usb@vger.kernel.org>; Tue,  8 Aug 2023 10:06:00 -0700 (PDT)
+Received: from lenoch ([91.218.190.200])
+        by cmgsmtp with ESMTPSA
+        id TK6xqN1CNv5uITK6yqWFVz; Tue, 08 Aug 2023 12:38:49 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
+        t=1691491129; bh=99a8sbPMFP6BIytgJuHTfTeDV1YHpAKlfAo4I1ukHl8=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=2FDU8Vy979bUmdApcVHkL00l92KeU9sbWPCHnj74QyRRQrbUXzTW/OHW2SCO6/lkx
+         51sF9E6z6w4AY1nEMuAtZcW3wbwiFdwASOhNPgxdNG/xy8HFJViH31hcmpZKkgjr1t
+         2fERVOMdYsWlAByG0m5PO3MR0ezdhGEch2nJn2y9aMYGRi9Hj3iCOw9Gfilk01dYVo
+         5VVyiwR77KWKyj9rOiw7m9HcOxsjVDrsUGtsY61GBSV1Xjwy/uBzsw7LZt+gfo+Kj6
+         /4Co0PW0wRARoJKOrK/bviaS2f+qTzcBnlkS7b0iX88IKFQ3B1I0j14taAgbyA3Ed2
+         9dBdtkYIFmvbQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
+        t=1691491129; bh=99a8sbPMFP6BIytgJuHTfTeDV1YHpAKlfAo4I1ukHl8=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=2FDU8Vy979bUmdApcVHkL00l92KeU9sbWPCHnj74QyRRQrbUXzTW/OHW2SCO6/lkx
+         51sF9E6z6w4AY1nEMuAtZcW3wbwiFdwASOhNPgxdNG/xy8HFJViH31hcmpZKkgjr1t
+         2fERVOMdYsWlAByG0m5PO3MR0ezdhGEch2nJn2y9aMYGRi9Hj3iCOw9Gfilk01dYVo
+         5VVyiwR77KWKyj9rOiw7m9HcOxsjVDrsUGtsY61GBSV1Xjwy/uBzsw7LZt+gfo+Kj6
+         /4Co0PW0wRARoJKOrK/bviaS2f+qTzcBnlkS7b0iX88IKFQ3B1I0j14taAgbyA3Ed2
+         9dBdtkYIFmvbQ==
+Date:   Tue, 8 Aug 2023 12:38:46 +0200
+From:   Ladislav Michl <oss-lists@triops.cz>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-usb@vger.kernel.org, linux-mips@vger.kernel.org,
+        lkft-triage@lists.linaro.org, Thinh.Nguyen@synopsys.com,
+        Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: Re: [PATCH] usb: dwc3: dwc3-octeon: Verify clock divider
+Message-ID: <ZNIbNj4Orr7PEqY9@lenoch>
+References: <ZNIM7tlBNdHFzXZG@lenoch>
+ <2023080830-wincing-goldmine-def9@gregkh>
 MIME-Version: 1.0
-X-Patchwork-Bot: notify
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2023080830-wincing-goldmine-def9@gregkh>
+X-CMAE-Envelope: MS4wfO980XvXG+2EkWJZqrMEX/eYOZqR+vRYsxAipUQDIJ1MryLpKUMcBJOCUzM4Kt3JE4EKHdy5HH9CP7SZhDJHA+GNzaU2hzQuIrZwvVmrASUkIqvec1c0
+ z3Ko5Mt2Uji4SVSVq7HlL7aCYmJ8zZsjKKQOksbSIiidehvjFHg4HIKt7KuvD3XkCQa1YDz7wSQdprMlZRDapKo1QHASzF+wTVqGdJXxR1C1Q9zG9lZK+dNb
+ 2UVa2gQcxDR0RD6qfUSu2PImD6ybEC17M3vf0XiwuCTUmjkW98C8mXGtVMeI/GMTy7PXf1fy4PDBKbQmQMGQthY3tmGbdhMvl5UTgWp+t2At6j9q8X5oCVxJ
+ g00EgEJ1Bp72E0OovaYUIMrQ7q9J5OmG4QYQNgQik1imkcRWxq7kbPKCv9Cg64JI+SIIDeq/vgYLgq/DVp8E8OutoIcy9SNEieYTkbl9RixjpLBkd+OMSnCG
+ RMp2iocNfRdib4x4XUK852jLd52Dx1uaJRpqrQ==
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,34 +68,27 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add gl3510 USB 3 root hub device id
+On Tue, Aug 08, 2023 at 12:00:42PM +0200, Greg Kroah-Hartman wrote:
+> On Tue, Aug 08, 2023 at 11:37:50AM +0200, Ladislav Michl wrote:
+> > From: Ladislav Michl <ladis@linux-mips.org>
+> > 
+> > Although valid USB clock divider will be calculated for all valid
+> > Octeon core frequencies, make code formally correct limiting
+> > divider not to be greater that 7 so it fits into H_CLKDIV_SEL
+> > field.
+> > 
+> > Signed-off-by: Ladislav Michl <ladis@linux-mips.org>
+> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > Closes: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230808/testrun/18882876/suite/build/test/gcc-8-cavium_octeon_defconfig/log
+> > ---
+> >  Greg, if you want to resent whole serie, just drop me a note.
+> >  Otherwise, this patch is meant to be applied on to of it.
+> 
+> On top of what series?
 
-Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
----
- Documentation/devicetree/bindings/usb/genesys,gl850g.yaml | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+I'm sorry, "[PATCH v5 0/7] Cleanup Octeon DWC3 glue code".
+In your usb-next, last patch of serie is:
+d9216d3ef538 ("usb: dwc3: dwc3-octeon: Add SPDX header and copyright")
 
-diff --git a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-index cc4cf92b70d1..a7e7142651f8 100644
---- a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-+++ b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-@@ -4,7 +4,7 @@
- $id: http://devicetree.org/schemas/usb/genesys,gl850g.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
- 
--title: Genesys Logic GL850G USB 2.0 hub controller
-+title: Genesys Logic USB hub controller
- 
- maintainers:
-   - Icenowy Zheng <uwu@icenowy.me>
-@@ -17,6 +17,7 @@ properties:
-     enum:
-       - usb5e3,608
-       - usb5e3,610
-+      - usb5e3.626
- 
-   reg: true
- 
--- 
-2.40.1
-
+Thanks,
+	l.
