@@ -2,80 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81598773DCB
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Aug 2023 18:23:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA658773EB7
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Aug 2023 18:34:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231185AbjHHQXH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Aug 2023 12:23:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43796 "EHLO
+        id S233076AbjHHQex (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Aug 2023 12:34:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232518AbjHHQVg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Aug 2023 12:21:36 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC06D9EC8;
-        Tue,  8 Aug 2023 08:49:11 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-99bf1f632b8so875156966b.1;
-        Tue, 08 Aug 2023 08:49:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1691509750; x=1692114550;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=O3JDBlhThehmzGpl6qM9UdpbRL+nxpaOBfK296WrIFw=;
-        b=cualjSg//7wD7yhW5nRXtrI8hUcY9YK46FTT9oPp2JCiivyr/2sMZpZ4pGazpui7e/
-         zB8CnpAd91BOsxjUpsp+LeI7TuZsOuie6b/xeZna/U3nDhxYUfAwH7Nxxq3yyPGQqbdH
-         hfNdrwuS9rqz+r5Z/NOw8OwjfZ6VOYUXvgWfxfFo/G3rs2EJ2hP8Q3aBOIj8K6cqUYvb
-         oaLAvnVNx5u6uUzI59FaIjIM/6WQqIf1b+bkZCQtcPoOJpioRH14NekX/VSeLxGN5lfU
-         rJ9PLEPyK8Lhm+fLdU4gT5FyZPDwsECB6vlC2zrJfiJT8NQeXLtBRswZ4csm5HO4fLCD
-         7Zhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691509750; x=1692114550;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=O3JDBlhThehmzGpl6qM9UdpbRL+nxpaOBfK296WrIFw=;
-        b=fMBK090GZDxW2SIctSRpTIRDLLzEsbh0y5LfvDpexsRt10xtjFr6mmhAFQdsnosN5j
-         NnTbkQ+rnhh1FrShF9X7nnb1FCaSHZ2Q9Q3fpbyba8cXUeCpEb+33CLRP8FIpV20O49a
-         qKYpPlW4bAJ1+0QSviGueGmvhUga1t8QTPNA+1BuDgGoN/5GQCeTK17CUAalpoc/Nfo7
-         cXLlg847mYQneLfpHT9/VKHAJfSXy2g0O9+jIHjaL1ka9JsJ43Qk1YMl47ZRkep5U67/
-         iw5DAIdu6eujli5pZl3AYhFgRq0KSzdRQXWiOPNa/YRdSPoXIfWVsrDi/BKF9GkLsTsP
-         kJhg==
-X-Gm-Message-State: AOJu0YxL6dkajTpFkyW4M6vuw/fR/tofhUPJDOtD3Wl9y3W1bciOOLfg
-        YtUdCrLGk8OAz6UxM+w+Iw/WXPn8gDQ/UC1hBnT0QnNiwCELxQ==
-X-Google-Smtp-Source: AGHT+IEiZQ5mtN03JK3pZU9kp2Es6dYBa8b9ZJY1FIJC222Xvs0ImshT9RkLj/PUowndmS7IcAaCmUcsKbprP1G2qLo=
-X-Received: by 2002:adf:f007:0:b0:317:690e:7b39 with SMTP id
- j7-20020adff007000000b00317690e7b39mr8151172wro.12.1691507845886; Tue, 08 Aug
- 2023 08:17:25 -0700 (PDT)
+        with ESMTP id S232957AbjHHQeA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Aug 2023 12:34:00 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id DD2224C3A
+        for <linux-usb@vger.kernel.org>; Tue,  8 Aug 2023 08:52:19 -0700 (PDT)
+Received: (qmail 162593 invoked by uid 1000); 8 Aug 2023 11:25:03 -0400
+Date:   Tue, 8 Aug 2023 11:25:03 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Xu Yang <xu.yang_2@nxp.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        jun.li@nxp.com
+Subject: Re: [PATCH 1/2] usb: ehci: add workaround for chipidea PORTSC.PEC bug
+Message-ID: <b0e64bd2-b4fa-4570-97ed-c2ab5898ede5@rowland.harvard.edu>
+References: <20230808102959.479264-1-xu.yang_2@nxp.com>
 MIME-Version: 1.0
-References: <20230729092634.78336-1-dg573847474@gmail.com> <2023080817-antler-enchilada-cccf@gregkh>
-In-Reply-To: <2023080817-antler-enchilada-cccf@gregkh>
-From:   Chengfeng Ye <dg573847474@gmail.com>
-Date:   Tue, 8 Aug 2023 23:17:14 +0800
-Message-ID: <CAAo+4rWHSmKe8eh0=2vWGS-pfhR+GXNwZ6uBAqR=ePnBJ-vFog@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: host: oxu210hp-hcd: Fix potential deadlock on &oxu->mem_lock
-To:     Greg KH <gregkh@linuxfoundation.org>, gustavoars@kernel.org,
-        u.kleine-koenig@pengutronix.de, giometti@linux.it
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230808102959.479264-1-xu.yang_2@nxp.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Thank you for pointing out the formatting error in the patch.
+On Tue, Aug 08, 2023 at 06:29:58PM +0800, Xu Yang wrote:
+> Some NXP processor using chipidea IP has a bug when frame babble is
+> detected.
+> 
+> As per 4.15.1.1.1 Serial Bus Babble:
+>   A babble condition also exists if IN transaction is in progress at
+> High-speed SOF2 point. This is called frame balle. The host controller
 
-Truly only building testing is performed as mentioned in commit but
-no hardware testing was able to be performed. The bug was detected
-by tool and also reviewed by myself, I thought it could be a real issue
-so I send the patch to fix it by using safer irq-variant locking API.
+s/balle/babble/
 
-I understand the guideline and appreciate it. Would be grateful if anyone
-who has written/is familiar with the driver could review whether this is
-a real bug and whether it should be fixed.
+> must disable the port to which the frame babble is detected.
+> 
+> The USB controller has disabled the port (PE cleared) and has asserted
+> USBERRINT when frame babble is detected, but PEC is not asserted.
+> Therefore, the SW didn't aware that port has been disabled. Then the
 
-Best,
-Chengfeng
+s/didn't/isn't/
+
+> SW keeps sending packets to this port, but all of the transfers will
+> fail.
+> 
+> This workaround will firstly assert PCD by SW when USBERRINT is detected
+> and then judge whether port change has really occurred or not by polling
+> roothub status. Because the PEC doesn't get asserted in our case, this
+> patch will also assert it by SW when specific conditions are satisfied.
+> 
+> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> ---
+>  drivers/usb/host/ehci-hcd.c |  5 +++++
+>  drivers/usb/host/ehci-hub.c | 10 +++++++++-
+>  drivers/usb/host/ehci.h     | 10 ++++++++++
+>  3 files changed, 24 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/host/ehci-hcd.c b/drivers/usb/host/ehci-hcd.c
+> index a1930db0da1c..d6b276c354db 100644
+> --- a/drivers/usb/host/ehci-hcd.c
+> +++ b/drivers/usb/host/ehci-hcd.c
+> @@ -762,6 +762,11 @@ static irqreturn_t ehci_irq (struct usb_hcd *hcd)
+>  		bh = 1;
+>  	}
+>  
+> +	/* Force to check port status */
+> +	if (ehci->has_ci_pec_bug && (status & STS_ERR)
+> +			&& !(status & STS_PCD))
+> +		status |= STS_PCD;
+
+Suggestion for minor improvement: First, you don't really need the 
+(status & STS_PCD) test, because if the bit is already set then turning 
+it again on won't matter.  Second, after that test has been removed you 
+can merge this code with the INCR(ehci->stats.error) line above, 
+removing the (status & STS_ERR) test.
+
+The rest of the patch looks okay.
+
+Alan Stern
