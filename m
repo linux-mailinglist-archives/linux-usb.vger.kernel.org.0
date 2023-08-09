@@ -2,150 +2,211 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 839867752E4
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Aug 2023 08:30:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8884F7752E7
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Aug 2023 08:31:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231176AbjHIGaF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Aug 2023 02:30:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42780 "EHLO
+        id S230287AbjHIGb2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Aug 2023 02:31:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231167AbjHIGaE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Aug 2023 02:30:04 -0400
-Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C572110CF
-        for <linux-usb@vger.kernel.org>; Tue,  8 Aug 2023 23:30:03 -0700 (PDT)
-Received: by mail-vs1-xe2c.google.com with SMTP id ada2fe7eead31-447be69ae43so1868297137.0
-        for <linux-usb@vger.kernel.org>; Tue, 08 Aug 2023 23:30:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691562603; x=1692167403;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=neTmf5P15paOxXzupKMu3RNPlvtFTYN497G//b83UsM=;
-        b=lY1NEIiEUr4uPw84kWrKXa/qzm7f/NO2muz0k589XUGjYkGfxqvFoKk4rxJTaZRDV8
-         13qp6kkCThe9RUGFqj4slajifw/qTLwA0kapIZDvMNJR7uT5FHwNUCP4k6t057FW0NJD
-         kOx4nwLne8cf+DmHK8yM90DugOvtgFlUliXFWFXfXfIDrFJQAwOh0WuPYswL4P8SSEp/
-         LF+MAmwVewrUHyQn/gaCoW4aq9vB83qnaHx2rWstAgNKSTtGTR3MJhABy0dV87qgc7XK
-         /GXZqmiBGa1IeUg+OujjHCzNVRR9oM2wsaD8LbNS3pQRwrDei4zELH6iPQhzVSmsEOxZ
-         vq1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691562603; x=1692167403;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=neTmf5P15paOxXzupKMu3RNPlvtFTYN497G//b83UsM=;
-        b=aW2PEv+o2xH2vphz/4fb3A/w1ldL2fSh2WHgRsoAu16OdMVsecABXin8u4hfXb6Qqc
-         5D5m9ohy3IGvTKWN5xVhHFUJQgLt+fo9UwFLZyYSNrmNhdQ2a5s2VFvPOiN8uA2PMNiV
-         7ol2JQ0Bk1c4vVxtFVBfYwljFZPNKRbgbhI1xYhj50RPZUCfHBNj1eyJ0KGLLfh2LphT
-         lu+oGkqVWBZPEREjGhq14mJ05qPmavXTouROwm9kw4hFiybNsqoICYkC8A0LSDmhhVZf
-         jFtDNoX596iSZYUJsvQw09VmRU4UGjoxcUJJ9vGHFMcy7EoGru07b3/TZAagU1zluo4X
-         OX6g==
-X-Gm-Message-State: AOJu0YxQPM7bX7nMk9VTv8znMb1jH+yEGQX0c45BZv7Q5VqEkEnmkYPl
-        V0sWSpsl9KLHIvfKGhqmRIXtbx3PMGKGqJ18ruBeLg==
-X-Google-Smtp-Source: AGHT+IFjZhbcKr3eNydvf6ZMRnd1wQ4W6yXaoahpWXSff3ZmV4KNZ/0/E3kghBQjZDI3KisgUGjuTzJbCuRETv/9jYA=
-X-Received: by 2002:a67:fbd1:0:b0:447:9a22:2a6 with SMTP id
- o17-20020a67fbd1000000b004479a2202a6mr1319385vsr.26.1691562602807; Tue, 08
- Aug 2023 23:30:02 -0700 (PDT)
-MIME-Version: 1.0
-References: <CA+G9fYspyEdT9wmVpL04J-p0CwqA+_v_L4H+ihY9VYqpCMmQ1Q@mail.gmail.com>
- <1ab766fca893588d75590d2faf624eb7d9d27a8a.camel@triops.cz>
-In-Reply-To: <1ab766fca893588d75590d2faf624eb7d9d27a8a.camel@triops.cz>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 9 Aug 2023 11:59:50 +0530
-Message-ID: <CA+G9fYuO1-q_agmNqRaGVq5Af4+EpCx3UVG7gCx0Gu=O2Kd-vg@mail.gmail.com>
-Subject: Re: next: mips: cavium_octeon_defconfig: gcc-8 - dwc3-octeon.c:502:8:
- include/linux/compiler_types.h:397:38: error: call to '__compiletime_assert_335'
- declared with attribute error: FIELD_PREP: value too large for the field _compiletime_assert
-To:     Ladislav Michl <ladis@triops.cz>
-Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-usb@vger.kernel.org, linux-mips@vger.kernel.org,
-        lkft-triage@lists.linaro.org, Thinh.Nguyen@synopsys.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S229814AbjHIGb1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Aug 2023 02:31:27 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DDC110CF
+        for <linux-usb@vger.kernel.org>; Tue,  8 Aug 2023 23:31:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1691562686; x=1723098686;
+  h=date:from:to:cc:subject:message-id;
+  bh=NZLsK+7qoE+RMKnt93/DsZ8V87+Suv9vHApAapWb6dE=;
+  b=HKhRkUs/jEK+ZZIeeG5XrOmqbTRQ2X0W9xpScFZQGeQK89L+Bi0OycUP
+   U1urfdBZ98s7lyoqzfVkUxiL74nOKmYUiZDwhXKRxcNpVEoTrP7SazZRo
+   Ux8lE/FCF8/+QC9wW/ZRWiSOY55g5CiVdH+WK9VgRNTWzeWN/hph6me1c
+   RyaFVfdp7k68gK+mYSO2AnFegfB3PULdexWtF0HcoofcWJS5BkfbsC3d0
+   2vBn+O/Xnd/MhaKrc7nEVjhtMjTfB+ua11R4r1GUwVfpfE/0RsfvSMSsK
+   oFIQ/zM7+3brN9Ll/g7Zhkv1eD6WXU9hGScXLk0e2FhDnNvOxOaXKYjpH
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="402003111"
+X-IronPort-AV: E=Sophos;i="6.01,158,1684825200"; 
+   d="scan'208";a="402003111"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2023 23:31:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10795"; a="978252274"
+X-IronPort-AV: E=Sophos;i="6.01,158,1684825200"; 
+   d="scan'208";a="978252274"
+Received: from lkp-server01.sh.intel.com (HELO d1ccc7e87e8f) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 08 Aug 2023 23:31:24 -0700
+Received: from kbuild by d1ccc7e87e8f with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qTcj5-0005ry-1y;
+        Wed, 09 Aug 2023 06:31:23 +0000
+Date:   Wed, 09 Aug 2023 14:30:42 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ ff33299ec8bb80cdcc073ad9c506bd79bb2ed20b
+Message-ID: <202308091440.4aN6hFTa-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 8 Aug 2023 at 13:15, Ladislav Michl <ladis@triops.cz> wrote:
->
-> Hi Naresh,
->
-> On Tue, 2023-08-08 at 12:41 +0530, Naresh Kamboju wrote:
-> > [My two cents]
-> >
-> > While building Linux next-20230808 mips cavium_octeon_defconfig with
-> > gcc-8
-> > failed with below warnings and errors.
-> >
-> > Build log:
-> > ----------
-> >
-> > In function 'dwc3_octeon_setup.isra.4',
-> >     inlined from 'dwc3_octeon_probe' at drivers/usb/dwc3/dwc3-
-> > octeon.c:502:8:
-> > include/linux/compiler_types.h:397:38: error: call to
-> > '__compiletime_assert_335' declared with attribute error: FIELD_PREP:
-> > value too large for the field
-> >   _compiletime_assert(condition, msg, __compiletime_assert_,
-> > __COUNTER__)
-> >                                       ^
-> > include/linux/compiler_types.h:378:4: note: in definition of macro
-> > '__compiletime_assert'
-> >     prefix ## suffix();    \
-> >     ^~~~~~
->
-> Not sure what is really going on there. Code compiles even using 32bit
-> toochains without warnings and such an assignments are used in other
-> kernel drivers. See for example drivers/cxl/core/hdm.c:534 which is
-> using the same types. Also
-> drivers/net/ethernet/marvell/octeontx2/af/rvu_npc_hash.c in
-> rvu_exact_prepare_table_entry...
->
-> Anyway, let me setup gcc-8 toolchain :)
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: ff33299ec8bb80cdcc073ad9c506bd79bb2ed20b  USB: core: Fix race by not overwriting udev->descriptor in hub_port_init()
 
-For your reference,
-These are steps to setup toolchain and build with single command,
+elapsed time: 1287m
 
-# TuxMake is a command line tool and Python library that provides
-# portable and repeatable Linux kernel builds across a variety of
-# architectures, toolchains, kernel configurations, and make targets.
-#
-# TuxMake supports the concept of runtimes.
-# See https://docs.tuxmake.org/runtimes/, for that to work it requires
-# that you install podman or docker on your system.
-#
-# To install tuxmake to your home directory at ~/.local/bin:
-# pip3 install -U --user tuxmake
-#
-# Or install a deb/rpm depending on the running distribution
-# See https://tuxmake.org/install-deb/ or
-# https://tuxmake.org/install-rpm/
-#
-# See https://docs.tuxmake.org/ for complete documentation.
-# Original tuxmake command with fragments listed below.
-# tuxmake --runtime podman --target-arch mips --toolchain gcc-8
---kconfig cavium_octeon_defconfig
+configs tested: 135
+configs skipped: 10
 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-tuxmake --runtime podman --target-arch mips --toolchain gcc-8
---kconfig https://storage.tuxsuite.com/public/linaro/lkft/builds/2TgoAZwerJ28UWHyqfQUiaYYhrl/config
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r021-20230808   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                 nsimosci_hs_smp_defconfig   gcc  
+arc                  randconfig-r043-20230808   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                     am200epdkit_defconfig   clang
+arm                                 defconfig   gcc  
+arm                  randconfig-r046-20230808   clang
+arm                       versatile_defconfig   clang
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r006-20230808   clang
+csky                                defconfig   gcc  
+csky                 randconfig-r011-20230808   gcc  
+csky                 randconfig-r023-20230808   gcc  
+csky                 randconfig-r033-20230808   gcc  
+hexagon              randconfig-r002-20230808   clang
+hexagon              randconfig-r031-20230808   clang
+hexagon              randconfig-r036-20230808   clang
+hexagon              randconfig-r041-20230808   clang
+hexagon              randconfig-r045-20230808   clang
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-r004-20230808   clang
+i386         buildonly-randconfig-r005-20230808   clang
+i386         buildonly-randconfig-r006-20230808   clang
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-i001-20230808   clang
+i386                 randconfig-i002-20230808   clang
+i386                 randconfig-i003-20230808   clang
+i386                 randconfig-i004-20230808   clang
+i386                 randconfig-i005-20230808   clang
+i386                 randconfig-i006-20230808   clang
+i386                 randconfig-i011-20230808   gcc  
+i386                 randconfig-i012-20230808   gcc  
+i386                 randconfig-i013-20230808   gcc  
+i386                 randconfig-i014-20230808   gcc  
+i386                 randconfig-i015-20230808   gcc  
+i386                 randconfig-i016-20230808   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r025-20230808   gcc  
+loongarch            randconfig-r033-20230808   gcc  
+m68k                             allmodconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                        mvme147_defconfig   gcc  
+m68k                 randconfig-r011-20230808   gcc  
+m68k                 randconfig-r012-20230808   gcc  
+microblaze           randconfig-r034-20230808   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                          ath79_defconfig   clang
+mips                 randconfig-r025-20230808   clang
+mips                        vocore2_defconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r013-20230808   gcc  
+openrisc             randconfig-r001-20230808   gcc  
+openrisc             randconfig-r013-20230808   gcc  
+openrisc             randconfig-r016-20230808   gcc  
+openrisc             randconfig-r022-20230808   gcc  
+openrisc             randconfig-r024-20230808   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r005-20230808   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                     kilauea_defconfig   clang
+powerpc              randconfig-r003-20230808   clang
+powerpc              randconfig-r004-20230808   clang
+powerpc              randconfig-r023-20230808   gcc  
+powerpc                  storcenter_defconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r042-20230808   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             alldefconfig   clang
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r001-20230808   clang
+s390                 randconfig-r044-20230808   gcc  
+sh                               allmodconfig   gcc  
+sh                   randconfig-r026-20230808   gcc  
+sh                   randconfig-r035-20230808   gcc  
+sh                        sh7785lcr_defconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r015-20230808   gcc  
+sparc                randconfig-r021-20230808   gcc  
+sparc                randconfig-r024-20230808   gcc  
+sparc                randconfig-r026-20230808   gcc  
+sparc64              randconfig-r003-20230808   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                   randconfig-r006-20230808   gcc  
+um                   randconfig-r032-20230808   gcc  
+um                   randconfig-r034-20230808   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-r001-20230808   clang
+x86_64       buildonly-randconfig-r002-20230808   clang
+x86_64       buildonly-randconfig-r003-20230808   clang
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-r005-20230808   clang
+x86_64               randconfig-x001-20230808   gcc  
+x86_64               randconfig-x002-20230808   gcc  
+x86_64               randconfig-x003-20230808   gcc  
+x86_64               randconfig-x004-20230808   gcc  
+x86_64               randconfig-x005-20230808   gcc  
+x86_64               randconfig-x006-20230808   gcc  
+x86_64               randconfig-x011-20230808   clang
+x86_64               randconfig-x012-20230808   clang
+x86_64               randconfig-x013-20230808   clang
+x86_64               randconfig-x014-20230808   clang
+x86_64               randconfig-x015-20230808   clang
+x86_64               randconfig-x016-20230808   clang
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r004-20230808   gcc  
+xtensa               randconfig-r016-20230808   gcc  
+xtensa               randconfig-r022-20230808   gcc  
+xtensa               randconfig-r031-20230808   gcc  
 
-
-Steps to reproduce:
-------------
-  tuxmake --runtime podman --target-arch mips --toolchain gcc-8
---kconfig cavium_octeon_defconfig
-
-
-   - https://storage.tuxsuite.com/public/linaro/lkft/builds/2TgoAZwerJ28UWHyqfQUiaYYhrl/tuxmake_reproducer.sh
-
-
-- Naresh
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
