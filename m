@@ -2,70 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D89F775EA9
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Aug 2023 14:17:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64AD477604D
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Aug 2023 15:13:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231221AbjHIMQ4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Aug 2023 08:16:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60774 "EHLO
+        id S232192AbjHINNB convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 9 Aug 2023 09:13:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbjHIMQz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Aug 2023 08:16:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A04D2DF;
-        Wed,  9 Aug 2023 05:16:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D22963834;
-        Wed,  9 Aug 2023 12:16:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A486C433C8;
-        Wed,  9 Aug 2023 12:16:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1691583410;
-        bh=fhlCDOO7YuFkzPjnTCoHyb9IK82UtrqsMxIb95H7Xv4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gpgT9uOnkBuyZhTSRICFZ96AajV0o2W3kbp1aw6iQd0BBoWDMPc46Lvx0InOvAHp6
-         HQjPlNjD465TJSGMRgVgN/uAycgZXIue+eJZaN4UZOkyn8CL3gaCHkqfFRfVPSL50g
-         xEVEiU6yNCGBWfwQn05gJyVXWFKtunUb/u3gDzcU=
-Date:   Wed, 9 Aug 2023 14:16:48 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     USB mailing list <linux-usb@vger.kernel.org>,
-        linux-pci@vger.kernel.org, linux-wireless@vger.kernel.org
-Subject: Re: [PATCH] Fix nomenclature for USB and PCI wireless devices
-Message-ID: <2023080940-overhand-fondly-7ef7@gregkh>
-References: <57da7c80-0e48-41b5-8427-884a02648f55@rowland.harvard.edu>
+        with ESMTP id S231902AbjHINNA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Aug 2023 09:13:00 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 94C942100;
+        Wed,  9 Aug 2023 06:12:59 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 379DBfAnA009807, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 379DBfAnA009807
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 9 Aug 2023 21:11:41 +0800
+Received: from RTEXDAG01.realtek.com.tw (172.21.6.100) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Wed, 9 Aug 2023 21:11:58 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXDAG01.realtek.com.tw (172.21.6.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Wed, 9 Aug 2023 21:11:57 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
+ RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
+ 15.01.2375.007; Wed, 9 Aug 2023 21:11:57 +0800
+From:   Hayes Wang <hayeswang@realtek.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     "Limonciello, Mario" <mario.limonciello@amd.com>,
+        "edumazet@google.com" <edumazet@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "Paul Menzel" <pmenzel@molgen.mpg.de>
+Subject: RE: Error 'netif_napi_add_weight() called with weight 256'
+Thread-Topic: Error 'netif_napi_add_weight() called with weight 256'
+Thread-Index: AQHZw8h1VlKS4AgmjUKpznAl5+SYmK/Tp70AgAAC4ICACvPXQP//7sWAgANr4sA=
+Date:   Wed, 9 Aug 2023 13:11:57 +0000
+Message-ID: <ba9b777754f7493ba14faa2dab7d8d59@realtek.com>
+References: <0bfd445a-81f7-f702-08b0-bd5a72095e49@amd.com>
+        <20230731111330.5211e637@kernel.org>
+        <673bc252-2b34-6ef9-1765-9c7cac1e8658@amd.com>
+        <8fcbab1aa2e14262bea79222bf7a4976@realtek.com>
+ <20230807093727.5249f517@kernel.org>
+In-Reply-To: <20230807093727.5249f517@kernel.org>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.22.228.6]
+x-kse-serverinfo: RTEXDAG01.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <57da7c80-0e48-41b5-8427-884a02648f55@rowland.harvard.edu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 08, 2023 at 08:44:48PM -0400, Alan Stern wrote:
-> A mouse that uses a USB connection is called a "USB mouse" device (or
-> "USB mouse" for short), not a "mouse USB" device.  By analogy, a WiFi
-> adapter that connects to the host computer via USB is a "USB wireless"
-> device, not a "wireless USB" device.  (The latter term more properly
-> refers to a defunct Wireless USB specification, which described a
-> technology for sending USB protocol messages over an ultra wideband
-> radio link.)
+Jakub Kicinski <kuba@kernel.org>
+> Sent: Tuesday, August 8, 2023 12:37 AM
+[...]
+> > I test our devices on an Embedded system.
+> > We find the throughput is low.
+> > And it is caused by the weight.
+> > Our NAPI function often uses the whole budget.
+> > Finally, we increase the weight, and the throughput is good.
 > 
-> Similarly for a WiFi adapter card that plugs into a PCIe slot: It is a
-> "PCIe wireless" device, not a "wireless PCIe" device.
-> 
-> Rephrase the text in the kernel source where the word ordering is
-> wrong.
-> 
-> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+> Could it possibly be related to handling of aggregation?
+> Problem must lay somewhere in USB specifics, since as I said
+> there are 100Gbps devices running fine with budget of 64.
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+I think it depends on the platform.
+Most of the platforms don't have the same situation.
+Besides, I think the platform with 100Gbps device may
+have faster CPU than that one which I test.
+
+What would happen, if I set the weight to 256 on the platform
+which runs well for the weight of 64?
+Doesn't it only influence the slow platform?
+
+Best Regards,
+Hayes
+
