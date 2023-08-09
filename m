@@ -2,51 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1B417750FD
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Aug 2023 04:40:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 373B07750FE
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Aug 2023 04:40:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230402AbjHICki (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Aug 2023 22:40:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49650 "EHLO
+        id S230404AbjHICkj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Aug 2023 22:40:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjHICkh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Aug 2023 22:40:37 -0400
+        with ESMTP id S230392AbjHICki (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Aug 2023 22:40:38 -0400
 Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on0600.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe0c::600])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 037F61986
-        for <linux-usb@vger.kernel.org>; Tue,  8 Aug 2023 19:40:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97BA9198A
+        for <linux-usb@vger.kernel.org>; Tue,  8 Aug 2023 19:40:37 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QPNa+ehhpraB9CaT4h5stXBE6SYMfbUmGWVvu25Y+Gf/D3q3ecXi6pvcLu2V/d9nUU9fBe9z/jGWGQuxWU0YI89lmsNjrgy+rAvVgPg4/2oYTp+Np9vRlMWrHzz6vi7WTAV9sywHPje4eR+pU41ufXLBK45a/CjFTwe1/pPEx/KhrlylDK3jHBPEj1ram+i3unmr0hxP6ZguIM9nOkBO7RqryzNyGeBKYmOV5B3Wpj+E7wUYplz7LUbeBuou7dGYTB0SlaYhRXEoQhcdAfsn0vR00dbcOc3srfqH1TVt7hXEc/8p8gSxdZjIm86LzLhf/mF0PRwgV9fz68MrfbhaWg==
+ b=cD1Sbn2P2h1jKR/thnVl8aYdvLTIqrDTiGxRO9/VxdnsaS3CFny4N4q1YuaY5qPkarA0g/JoY19iScArFu46qFFgBkDwj/FOVN/Q0Zt/1D7AKMjSaGAbGqI9y0+pq3AWs/oJb5fgtzA91+AOk16YwOps21F992PTqekbbwGSP66ZAWdEaOJS9yMY1HEldBsCMwuSdblKW5ZyU3wIVZBQgTsvGbnRIAqHp6hk2e+hOHkENAHiyqHFUxYhQgTpGmk43UCsDB5mnxKtufSTiI7mQxvqzUI36JzovrBxTjAvq/loS8GXQ0VAj2idEZiEtn8OeztFX8Jtd+8i09neDhCErg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6CrVl9W/I1Swcne2vwgFvjR3vgR1/z6eYCkxgb+9Hlc=;
- b=kyX+yWy6OUrqHfdfeTO1499rEbP5pV283Iw/BivXOSjyc3kRLXYHt/OD6oBsCfK2U4SssPWH9dYjVJ5H8D17Uy07HDpDDuU+CZ9F1IasjA6daBsuTOBjCj2P+tcf/rItoROx+v90eLOTOZLypnKQmUUqaARSdQSkdpE74x/Ho/+UEsFGILSWIm/jT1sL4xGA+OanuSr6clYJiRdf7ge31tdvKhc9goSqnAB6Sf2Z1pt/z46ZsHdyqVwgffC0rQqD4zYPlBC5gh0UHD2+cZdEsEMF5DEjqwZ1580UbA8dbb3n9zWk7k6z6bn4kg8RLPcn8pNOF+22CemP1g01PRIK/Q==
+ bh=9IGQQC36QJfjwmi+ZfR5YRhmhybwYqS6LMhZTvFwH/A=;
+ b=RSQf85lH+V41ClOSoSKFS+ZkEEynLoQCOpYHe5ghdQawI8cPbH921XSkxnPdyShbhZA6LQAhmrTYu7Ms4FdePPkYFTgvPUHZqsfbStix6DNbLzlElzr+/VHFicntbDAlvpWQ1xNSH5uIjAocrp1+RfH8Az4nDYKQdk05i9ORSC3yAyRxVNBrPq+JbAOmHDpEzvGVmdObYxil6aqM3zsSn3Cod7oTh90hWrLVdLc874T0QWTvlZbx56zaNrTdWFnhBltoFBy8/phBTyq+9H5SyITExPRj61P7mLwAKIb8/bWKhBJ2SvwEe27jCTXhTVEK31CVSUfce8ZmTLo8m0Yk6w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6CrVl9W/I1Swcne2vwgFvjR3vgR1/z6eYCkxgb+9Hlc=;
- b=UdW3WRPLpUh2bXeEoMLi1g2T8Xp5ZcGyHo40QjnHRTwA6IYZ+QGr7DmuhFteSPfGR7n7NOzP6rHh8fHffyEKOrS+NzbVDbVsjW/aAfyZ9Zb20YLGWznh3pjMWa+XWi3im/jfJl7XzrW+SyAm1kvHaxTIfNG6VanVbpf7TbY+jk8=
+ bh=9IGQQC36QJfjwmi+ZfR5YRhmhybwYqS6LMhZTvFwH/A=;
+ b=sWA5HkCMMQLy/EyJv6cEwebi/5xoN6HFIxRd7GTycSJPS0qPcptwrJnKG8mHoG02WJD+Tnc1Rj03Gd2HagKkhH0Hfom6jBHVbtznXHTyolfueWFIvTM42HosyQODLrvQA2mOlCC0A/aoV52oBTE51RcwTSiukbIj1q6QXYyIKl4=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from DB7PR04MB4505.eurprd04.prod.outlook.com (2603:10a6:5:39::26) by
  VE1PR04MB7374.eurprd04.prod.outlook.com (2603:10a6:800:1ac::11) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6652.28; Wed, 9 Aug
- 2023 02:40:27 +0000
+ 2023 02:40:30 +0000
 Received: from DB7PR04MB4505.eurprd04.prod.outlook.com
  ([fe80::85e5:acf6:574d:a2a1]) by DB7PR04MB4505.eurprd04.prod.outlook.com
  ([fe80::85e5:acf6:574d:a2a1%4]) with mapi id 15.20.6652.028; Wed, 9 Aug 2023
- 02:40:27 +0000
+ 02:40:30 +0000
 From:   Xu Yang <xu.yang_2@nxp.com>
 To:     stern@rowland.harvard.edu, peter.chen@kernel.org
 Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
         jun.li@nxp.com, xu.yang_2@nxp.com
-Subject: [PATCH v2 1/2] usb: ehci: add workaround for chipidea PORTSC.PEC bug
-Date:   Wed,  9 Aug 2023 10:44:31 +0800
-Message-Id: <20230809024432.535160-1-xu.yang_2@nxp.com>
+Subject: [PATCH v2 2/2] usb: chipidea: add workaround for chipidea PEC bug
+Date:   Wed,  9 Aug 2023 10:44:32 +0800
+Message-Id: <20230809024432.535160-2-xu.yang_2@nxp.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230809024432.535160-1-xu.yang_2@nxp.com>
+References: <20230809024432.535160-1-xu.yang_2@nxp.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: SG2PR03CA0128.apcprd03.prod.outlook.com
@@ -55,50 +57,50 @@ X-ClientProxiedBy: SG2PR03CA0128.apcprd03.prod.outlook.com
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: DB7PR04MB4505:EE_|VE1PR04MB7374:EE_
-X-MS-Office365-Filtering-Correlation-Id: d16c7bf9-60a1-40a4-6035-08db9881fd48
+X-MS-Office365-Filtering-Correlation-Id: 14f40ac5-c5dc-4219-400c-08db9881ff38
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HecCzsYGjOKXMIV5wSyJaeSDFEbZ3KRLokuOSp6ldPaxL30RcemllzTrb0R/z5AVE9bGFvb7ZxXKx7guRBP2y4JHymIYGI9KNphq96hXRyQGy1BXHgzLb+2GXrcCpz57OyKaZaLE4+L0WDR/hbsuzaZTZpdjYoNgi4I6URPDL9DhY2Pi1RgAH6epcDtW48GIe4l6Kc0BRghalZCH9cxs+jUY7z32XXwUItNWa9B/Ud3lF4X/Satq6LtC8bHvf17LiYVYqf4rAuPuU1s862Y2r/Ih9+V/AsuBlzGWo7xNrOWszr3ZcH3d+9lZghtNrG3tmuqe4nbyPJTKHkrtU/DCbS7+k3AtloQJw/IRIw4f4KhyzVMojr9zLTuTEqCmu/UK3P6PEhqwM3eQy8EEfMQVx0RC8TdEG5uKisSJZ3QjjmAdZ7b2Cl+LK4a7z0WYKMc68wn5LY6XDT/XzMLUAjkMsvMAp/3g/obTFi6oQuXI2lqr3I9n2pz6uz3xMXsu5fm5mVlnQ55rW+CezwCwZsNyWTyEPXiZ+TMWSGT0GWfiUBCMYAlNe99101Ffu4NYblGGNIy/u4FhoUZKGTtzthpRZdz73/uBBDWhy/8+HnOJb8372U055sMMWcrjIWSJ6Age
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR04MB4505.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(376002)(136003)(39860400002)(346002)(366004)(451199021)(1800799006)(186006)(316002)(66946007)(66556008)(66476007)(4326008)(8676002)(8936002)(41300700001)(2616005)(83380400001)(86362001)(38350700002)(38100700002)(52116002)(36756003)(6486002)(6512007)(6666004)(6506007)(26005)(1076003)(478600001)(2906002)(5660300002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: tcen7c5PaFQwQ+mL+bBRQibao/O3VkGTJamcTOrHGoEFMP1xoXmQCSJYuB9CC1XUxLJyPPEK6Q2j8S4orY8FIXcQz1BKo3gBFBBQ/3UMu3HjALu71aoJ1KVcthQNFRaml5CpyQT4HH895OE71YixJoBQuWCuCCizgP7dhpn5+8twqe5ZlTq7nvWTg+iyKfUJFhFmT5Tfnzx9QRs+esqzRjS0YNkxTxbRN7+EXSYb5etL3+ocmHlHCcUSI+2vRNXPm8r6gww6BC1XG/NsBp7k1GhXW6I2ITqDq6p67I5x17yJTj2+4V2yPJe+xohaQgL9YrX2ZhYTT7RFzN2yavmAZz03FVZD40flToHpKhLlS6V5bl56CtGPvj48HeYmpTBAUAm+/MRgyRO+U1dlG4bawDxjYOSvsBggyDHqaSWAG3sVe8Udny57MEIryam+AQVDz8BYOVXN7XVJDNWPclBWfW8s0bkT+S/X3tD9iOCJb+mdf/teoMayVz2HuEcbedIx8XGHXoQGI5OVG/tQybvMQI9WqfElmQL/QJNjrBlsF/dwsJ4hy3vNHTVVcX0HJmsqxLUKaJmKxbYzvVlEwHMUqzdtczlCy8k8mUEF1jwiKMiz07TMZEqltvO0mW1IY0at
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR04MB4505.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(376002)(136003)(39860400002)(346002)(366004)(451199021)(1800799006)(186006)(316002)(66946007)(66556008)(66476007)(4326008)(8676002)(8936002)(41300700001)(2616005)(83380400001)(86362001)(38350700002)(38100700002)(52116002)(36756003)(6486002)(6512007)(6506007)(26005)(1076003)(478600001)(2906002)(5660300002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?URKSxaBaDFapKjzadRhXcPzVlk+uYgEwJq0aubp/gSs4MWtQZitpozS+7Oxw?=
- =?us-ascii?Q?IuTyYIDFfYqjwtvB1NBYPivuUblSt8pHZeqQOSPsWfj5s9UtwEGSj8wXogtg?=
- =?us-ascii?Q?Jx/A1H+FAZMGc1m352O2N+MQPn1iWO/pnDDLKqZqDzaOb20sWC4oRQhjewF0?=
- =?us-ascii?Q?mUfd64K1esLHYW2XQI6eN/pEUBMg1jJHTArKaerbCfbrsccJLwWxo84xzSkh?=
- =?us-ascii?Q?x7f02isCVSvDPQNWXc+IW3cLT4x+/WVKz07ZwcCyc10rss+sj+MNVegeKVbg?=
- =?us-ascii?Q?xiOMcv65SUhpxnqYEMaEZ8sIAlij+Y3iCS8AHdSFZLOWZFvPR88OqT3Oaj01?=
- =?us-ascii?Q?O2kpJKlzNNS8n6G+S0kxqtGf/Wjr4oCRBhiVTTLOpbti9NSx6XDpkeWRkR71?=
- =?us-ascii?Q?7BLUiWmyz1CRBRbv2xv84xmLlNDC7cUJHifMt5viyfeFr0Snkx10BMdsNFLC?=
- =?us-ascii?Q?yNHuJW53RBiqhAv7IUUD/P/IjyeSLmClFefLC4c504lLWesXbPcvOthiGs52?=
- =?us-ascii?Q?gdZ0PPj2Cz8CF+qQZT0GAZXBXwXu7b68QMQVA+G9u0RGI9PdnLv7Ng6MdNEw?=
- =?us-ascii?Q?dhFriWOFyymLD41EraIqKDEIlDUBNOeKVUKRFVeeCnOzdx7QZKj/VuypDa0m?=
- =?us-ascii?Q?a90UmDmXS9Xw8Sa9QJYXn8Jf7p279xxGBhZtOYEQ16+5I5/yJfauNnYGaPNL?=
- =?us-ascii?Q?jLkn5z+LIkrakgMV0HjjwqiC6mv2MU+dM5ytjGTcazTZvqjKLli6RT7LEeyP?=
- =?us-ascii?Q?rI1AD2rJDwU7VQORHNR2+BQTiHUwwi7hOvuCasNCfAcyp90DyyMOZQMc68VR?=
- =?us-ascii?Q?3Y5AY5KOse2QZkZeJyYwmHUQX6svl+79lcVL+Or3WGaY3yDzcX7WZwNoLCWW?=
- =?us-ascii?Q?OyXWnIvxcw4EYTHq9ZSHBmHPgbnMtFBC597cLX60rPbDKuUH2v2CPi4Ig5Pe?=
- =?us-ascii?Q?5y6X1RNO767MPseOnFsKNhrovjz9PsjcZL/XPJCBqIv3LSP24U5DAFIYFWGo?=
- =?us-ascii?Q?81nh3F7B+AfHil/IMTZ+fInU501EUdjEmDQWyYqwXRFvhvPWXmnED6na5fZY?=
- =?us-ascii?Q?bLAMMAJuTbio1l0Cu+/Xp0+kPjhF1WKLJ+3CxcQ+8eeMM2Qkc5NvjochDs/s?=
- =?us-ascii?Q?XmI1CAdVIydXKOfJe1opbgmBbPNDb66wTnINp5lCDmHbhby3KZOjopq+cE+d?=
- =?us-ascii?Q?TwN0Wod0eOQ3BvixlFC308KMltEpmSa68ynuspdKgiKOhsu4wZsp6nGIWW2o?=
- =?us-ascii?Q?hiA4TnEjHWXLpc+MAWO+lqx6rkLtAk4TqsZ5Lh8IwzJxY/3LCDU3YdGwYTlu?=
- =?us-ascii?Q?PEGmzGiFuWlHXqFTKefLUnMKIkKn4JjfvhFlPqYGKoPh9W9IME6cNIwl6BBN?=
- =?us-ascii?Q?kwNsugmdBlYl13nnHNLckfZvTC9EcVEkGVNrNtv3WQrFFFgdAjy/daMhTIko?=
- =?us-ascii?Q?vuQscWPXFUvOV89tSXI+wlA5vghZl6jh2+otHABj7duy8fF8gPXde9sPYT4n?=
- =?us-ascii?Q?JZ2Ol4np30FfEjMoygfmMnaJ+C3QErRsejKovqkyLlaNpjezGPgYRmuR5uKd?=
- =?us-ascii?Q?3vrfPXHoEDXdJ+ihwwM0a6RtukXxvqgeFmkovqeM?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rJwEyYLK9IW/MLrkJSSLkkd4CUHfwSDGay5ri941DNjHMQwm49b1dAubME+G?=
+ =?us-ascii?Q?zeGPZa4QgtHO9XcshlZPG5seV900c1ZTt4xupZYeBwf2jp+20ndclf+1ZE+0?=
+ =?us-ascii?Q?xLeuYe+0ZHJ+/Z0CywNZvtJ99jUjSPjNExLQO1fTHIRS0CqNFQMQndX5zYaM?=
+ =?us-ascii?Q?K2srNzngxFj0eypmI742vExTqut9nTq99xbZlYw4Zwy9HkrU5V+5Cj82B+QK?=
+ =?us-ascii?Q?PVbN1PKzTIctWJpJYXmTiX6xA1UGkEGSgia/pMgAkO2+ILUDfQaQe0xAJb15?=
+ =?us-ascii?Q?Q+q6QUUR1WZCpejkvYJrMs5hlSXVBasBCO7Y3gwq6ezgqWtGVrUMVtvI/x7X?=
+ =?us-ascii?Q?79Aip6AGKZLpmBQJLJ57XKwLvlMGvxpL8C0JX5oAeiPRj9R6317nkGKd7AVu?=
+ =?us-ascii?Q?iNjrqsmT3n4NESRRZUxwR1+4QwFn32NWtGZA7nKaJnlOufstMUG/wje9SZMp?=
+ =?us-ascii?Q?ufXyLh50f/EkeYQDUsguW4gftW4gXmoWJmArZbGFbsmmX6IQbCuSVELTujOy?=
+ =?us-ascii?Q?qbXS5PZXDRrN8aVZlZ++kbDePcAicUzCRT29IDXUi56DD20qzqaBOyhVOVJ4?=
+ =?us-ascii?Q?xTosM5uLbWURQ59k4dazgOq7xrztMkzfYWqoh2ci84Gc1D4u/MeIgZ4iE4qS?=
+ =?us-ascii?Q?dGylym6RRINol74PNvj6rSj+7OikY1pSS9pyxwpuRyPAr5L1eVnACdb7LL0Y?=
+ =?us-ascii?Q?ekcSP/0IKobbs1A9ghTk5XlibaD8Mzat3pd3qomUET/e4jwORVF7Pb3D3Sg1?=
+ =?us-ascii?Q?4VX0Zv/e37E8UEDJXbbMZ7ntHZHWhhrgNAnd9XntVVq+QrSlUMYSkzZBjQY9?=
+ =?us-ascii?Q?ODiMADFho0ILT6dXv9gXbtetDEMstwPAwQk7SD+sXxyjZh7Z24aIvk/d3A+g?=
+ =?us-ascii?Q?0WQKQTGLwWbb7uBdrZu+6bfwQhX8QV/DX6lvQvrJ6UldAyi7qZ9tGcnRus8G?=
+ =?us-ascii?Q?HTCCKzYwXxobTFzECOgryZptDuLvidEK9fuYUFV5z6+bUAdghsWeb1MsQO1P?=
+ =?us-ascii?Q?JPXBo1qGemBWxyWrFIMXlr00O9t1pTtt6VR5ioObLLLwKlMVUuwPPXRa/shu?=
+ =?us-ascii?Q?PG5h0bqyL2qvOH3LI8Hy9ZjsHkZVEuQlKwN0I173KCBQZwuA2K/ON+HroJRt?=
+ =?us-ascii?Q?kRvMf+LGW8cgXZl5n4tWO0wg/9O4sZvRy3S1UdZAvg4B4nLc3C82/VilGVFg?=
+ =?us-ascii?Q?BA0cqanmg/Upu5OrajRidooCGuFc819onvfniHGVTttkdGqng9dThmiwGnyq?=
+ =?us-ascii?Q?iTKfFdXW3KU58DMTFHcGVoWtk1li5mJiJjlJzonqxnukhYCuy1tt7y/EOw8G?=
+ =?us-ascii?Q?dq6bIWiBmeVWJXK4OQqzedw7sBF/UB2ynBeTFwgj8yornhuH8Qqd+b6eYsd+?=
+ =?us-ascii?Q?A6fg5FjZocle5dhENKUIeAFK/GHXTumHpLOdCC52EA9UaDOn7MntDAXshN8k?=
+ =?us-ascii?Q?wSTI097tiiNb97E2ajKib8DgpMPbF6tozPjTrMn8bbvyaiij9ryop+WWW1QM?=
+ =?us-ascii?Q?/xPtYF554MEEbVa9Eqv7Hc4BMtZblKeQRXlz3CW0vP49O/iVQNia+BHM4Lqo?=
+ =?us-ascii?Q?j9PAoqNvlyuOZGAxBEEwWVZxyJ9jhnaEIkdbkjk7?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d16c7bf9-60a1-40a4-6035-08db9881fd48
+X-MS-Exchange-CrossTenant-Network-Message-Id: 14f40ac5-c5dc-4219-400c-08db9881ff38
 X-MS-Exchange-CrossTenant-AuthSource: DB7PR04MB4505.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Aug 2023 02:40:27.2686
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Aug 2023 02:40:30.6014
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CLGKwh9xf3x30wsVx0OYSTOEOOYxDkysTfASW73EXnCoQdNAmgFtMAEOy11E1vQYAbJqgXTOHhgaNTGiNTMYEw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: W1W6wnz3LjMZ+676zRWYgfcR06saT+j2siNZa4HliYoA31+dLEDif6zni2DRdaFmAcDDuNh6KODEA1GEt3cuSQ==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB7374
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
@@ -110,114 +112,101 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Some NXP processor using chipidea IP has a bug when frame babble is
+Some NXP processors using ChipIdea USB IP have a bug when frame babble is
 detected.
 
-As per 4.15.1.1.1 Serial Bus Babble:
-  A babble condition also exists if IN transaction is in progress at
-High-speed SOF2 point. This is called frame babble. The host controller
-must disable the port to which the frame babble is detected.
+Issue description:
+In USB camera test, our controller is host in HS mode. In ISOC IN, when
+device sends data across the micro frame, it causes the babble in host
+controller. This will clear the PE bit. In spec, it also requires to set
+the PEC bit and then set the PCI bit. Without the PCI interrupt, the
+software does not know the PE is cleared.
 
-The USB controller has disabled the port (PE cleared) and has asserted
-USBERRINT when frame babble is detected, but PEC is not asserted.
-Therefore, the SW isn't aware that port has been disabled. Then the
-SW keeps sending packets to this port, but all of the transfers will
-fail.
-
-This workaround will firstly assert PCD by SW when USBERRINT is detected
-and then judge whether port change has really occurred or not by polling
-roothub status. Because the PEC doesn't get asserted in our case, this
-patch will also assert it by SW when specific conditions are satisfied.
+This will add a flag CI_HDRC_HAS_PORTSC_PEC_MISSED to some impacted
+platform datas. And the ehci host driver will assert PEC by SW when
+specific conditions are satisfied.
 
 Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
 
 ---
 Changes in v2:
- - fix typo in commit message
- - Adjust the judgement logic in echi_irq() as suggested from Alan
+ - no change
 ---
- drivers/usb/host/ehci-hcd.c |  8 ++++++--
- drivers/usb/host/ehci-hub.c | 10 +++++++++-
- drivers/usb/host/ehci.h     | 10 ++++++++++
- 3 files changed, 25 insertions(+), 3 deletions(-)
+ drivers/usb/chipidea/ci.h          | 1 +
+ drivers/usb/chipidea/ci_hdrc_imx.c | 4 +++-
+ drivers/usb/chipidea/core.c        | 2 ++
+ drivers/usb/chipidea/host.c        | 1 +
+ include/linux/usb/chipidea.h       | 1 +
+ 5 files changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/host/ehci-hcd.c b/drivers/usb/host/ehci-hcd.c
-index a1930db0da1c..802bfafb1012 100644
---- a/drivers/usb/host/ehci-hcd.c
-+++ b/drivers/usb/host/ehci-hcd.c
-@@ -755,10 +755,14 @@ static irqreturn_t ehci_irq (struct usb_hcd *hcd)
+diff --git a/drivers/usb/chipidea/ci.h b/drivers/usb/chipidea/ci.h
+index d262b9df7b3d..d9bb3d3f026e 100644
+--- a/drivers/usb/chipidea/ci.h
++++ b/drivers/usb/chipidea/ci.h
+@@ -257,6 +257,7 @@ struct ci_hdrc {
+ 	bool				id_event;
+ 	bool				b_sess_valid_event;
+ 	bool				imx28_write_fix;
++	bool				has_portsc_pec_bug;
+ 	bool				supports_runtime_pm;
+ 	bool				in_lpm;
+ 	bool				wakeup_int;
+diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci_hdrc_imx.c
+index 772bbdade994..e28bb2f2612d 100644
+--- a/drivers/usb/chipidea/ci_hdrc_imx.c
++++ b/drivers/usb/chipidea/ci_hdrc_imx.c
+@@ -68,11 +68,13 @@ static const struct ci_hdrc_imx_platform_flag imx7d_usb_data = {
  
- 	/* normal [4.15.1.2] or error [4.15.1.1] completion */
- 	if (likely ((status & (STS_INT|STS_ERR)) != 0)) {
--		if (likely ((status & STS_ERR) == 0))
-+		if (likely ((status & STS_ERR) == 0)) {
- 			INCR(ehci->stats.normal);
--		else
-+		} else {
-+			/* Force to check port status */
-+			if (ehci->has_ci_pec_bug)
-+				status |= STS_PCD;
- 			INCR(ehci->stats.error);
-+		}
- 		bh = 1;
- 	}
+ static const struct ci_hdrc_imx_platform_flag imx7ulp_usb_data = {
+ 	.flags = CI_HDRC_SUPPORTS_RUNTIME_PM |
++		CI_HDRC_HAS_PORTSC_PEC_MISSED |
+ 		CI_HDRC_PMQOS,
+ };
  
-diff --git a/drivers/usb/host/ehci-hub.c b/drivers/usb/host/ehci-hub.c
-index efe30e3be22f..1aee392e8492 100644
---- a/drivers/usb/host/ehci-hub.c
-+++ b/drivers/usb/host/ehci-hub.c
-@@ -674,7 +674,8 @@ ehci_hub_status_data (struct usb_hcd *hcd, char *buf)
+ static const struct ci_hdrc_imx_platform_flag imx8ulp_usb_data = {
+-	.flags = CI_HDRC_SUPPORTS_RUNTIME_PM,
++	.flags = CI_HDRC_SUPPORTS_RUNTIME_PM |
++		CI_HDRC_HAS_PORTSC_PEC_MISSED,
+ };
  
- 		if ((temp & mask) != 0 || test_bit(i, &ehci->port_c_suspend)
- 				|| (ehci->reset_done[i] && time_after_eq(
--					jiffies, ehci->reset_done[i]))) {
-+					jiffies, ehci->reset_done[i]))
-+				|| ehci_has_ci_pec_bug(ehci, temp)) {
- 			if (i < 7)
- 			    buf [0] |= 1 << (i + 1);
- 			else
-@@ -875,6 +876,13 @@ int ehci_hub_control(
- 		if (temp & PORT_PEC)
- 			status |= USB_PORT_STAT_C_ENABLE << 16;
+ static const struct of_device_id ci_hdrc_imx_dt_ids[] = {
+diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
+index 6e1196b53253..7ac39a281b8c 100644
+--- a/drivers/usb/chipidea/core.c
++++ b/drivers/usb/chipidea/core.c
+@@ -1044,6 +1044,8 @@ static int ci_hdrc_probe(struct platform_device *pdev)
+ 		CI_HDRC_IMX28_WRITE_FIX);
+ 	ci->supports_runtime_pm = !!(ci->platdata->flags &
+ 		CI_HDRC_SUPPORTS_RUNTIME_PM);
++	ci->has_portsc_pec_bug = !!(ci->platdata->flags &
++		CI_HDRC_HAS_PORTSC_PEC_MISSED);
+ 	platform_set_drvdata(pdev, ci);
  
-+		if (ehci_has_ci_pec_bug(ehci, temp)) {
-+			status |= USB_PORT_STAT_C_ENABLE << 16;
-+			ehci_info(ehci,
-+				"PE is cleared by HW port:%d PORTSC:%08x\n",
-+				wIndex + 1, temp);
-+		}
-+
- 		if ((temp & PORT_OCC) && (!ignore_oc && !ehci->spurious_oc)){
- 			status |= USB_PORT_STAT_C_OVERCURRENT << 16;
+ 	ret = hw_device_init(ci, base);
+diff --git a/drivers/usb/chipidea/host.c b/drivers/usb/chipidea/host.c
+index ebe7400243b1..08af26b762a2 100644
+--- a/drivers/usb/chipidea/host.c
++++ b/drivers/usb/chipidea/host.c
+@@ -151,6 +151,7 @@ static int host_start(struct ci_hdrc *ci)
+ 	ehci->has_hostpc = ci->hw_bank.lpm;
+ 	ehci->has_tdi_phy_lpm = ci->hw_bank.lpm;
+ 	ehci->imx28_write_fix = ci->imx28_write_fix;
++	ehci->has_ci_pec_bug = ci->has_portsc_pec_bug;
  
-diff --git a/drivers/usb/host/ehci.h b/drivers/usb/host/ehci.h
-index c5c7f8782549..1441e3400796 100644
---- a/drivers/usb/host/ehci.h
-+++ b/drivers/usb/host/ehci.h
-@@ -207,6 +207,7 @@ struct ehci_hcd {			/* one per controller */
- 	unsigned		has_fsl_port_bug:1; /* FreeScale */
- 	unsigned		has_fsl_hs_errata:1;	/* Freescale HS quirk */
- 	unsigned		has_fsl_susp_errata:1;	/* NXP SUSP quirk */
-+	unsigned		has_ci_pec_bug:1;	/* ChipIdea PEC bug */
- 	unsigned		big_endian_mmio:1;
- 	unsigned		big_endian_desc:1;
- 	unsigned		big_endian_capbase:1;
-@@ -707,6 +708,15 @@ ehci_port_speed(struct ehci_hcd *ehci, unsigned int portsc)
-  */
- #define ehci_has_fsl_susp_errata(e)	((e)->has_fsl_susp_errata)
- 
-+/*
-+ * Some Freescale/NXP processors using ChipIdea IP have a bug in which
-+ * disabling the port (PE is cleared) does not cause PEC to be asserted
-+ * when frame babble is detected.
-+ */
-+#define ehci_has_ci_pec_bug(e, portsc) \
-+	((e)->has_ci_pec_bug && ((e)->command & CMD_PSE) \
-+	 && !(portsc & PORT_PEC) && !(portsc & PORT_PE))
-+
- /*
-  * While most USB host controllers implement their registers in
-  * little-endian format, a minority (celleb companion chip) implement
+ 	priv = (struct ehci_ci_priv *)ehci->priv;
+ 	priv->reg_vbus = NULL;
+diff --git a/include/linux/usb/chipidea.h b/include/linux/usb/chipidea.h
+index ee38835ed77c..0b4f2d5faa08 100644
+--- a/include/linux/usb/chipidea.h
++++ b/include/linux/usb/chipidea.h
+@@ -63,6 +63,7 @@ struct ci_hdrc_platform_data {
+ #define CI_HDRC_IMX_IS_HSIC		BIT(14)
+ #define CI_HDRC_PMQOS			BIT(15)
+ #define CI_HDRC_PHY_VBUS_CONTROL	BIT(16)
++#define CI_HDRC_HAS_PORTSC_PEC_MISSED	BIT(17)
+ 	enum usb_dr_mode	dr_mode;
+ #define CI_HDRC_CONTROLLER_RESET_EVENT		0
+ #define CI_HDRC_CONTROLLER_STOPPED_EVENT	1
 -- 
 2.34.1
 
