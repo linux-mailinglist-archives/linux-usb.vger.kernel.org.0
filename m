@@ -2,25 +2,26 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EB8F774FF7
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Aug 2023 02:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 875A3774FFA
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Aug 2023 02:44:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231430AbjHIAoi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Aug 2023 20:44:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36096 "EHLO
+        id S231441AbjHIAoz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Aug 2023 20:44:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231414AbjHIAoh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Aug 2023 20:44:37 -0400
+        with ESMTP id S231414AbjHIAoy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Aug 2023 20:44:54 -0400
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 7D1581BF4
-        for <linux-usb@vger.kernel.org>; Tue,  8 Aug 2023 17:44:36 -0700 (PDT)
-Received: (qmail 178256 invoked by uid 1000); 8 Aug 2023 20:44:35 -0400
-Date:   Tue, 8 Aug 2023 20:44:35 -0400
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 73AD11FC3
+        for <linux-usb@vger.kernel.org>; Tue,  8 Aug 2023 17:44:49 -0700 (PDT)
+Received: (qmail 178269 invoked by uid 1000); 8 Aug 2023 20:44:48 -0400
+Date:   Tue, 8 Aug 2023 20:44:48 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
 To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     USB mailing list <linux-usb@vger.kernel.org>
-Subject: [PATCH] USB: Remove Wireless USB and UWB documentation
-Message-ID: <015d4310-bcd3-4ba4-9a0e-3664f281a9be@rowland.harvard.edu>
+Cc:     USB mailing list <linux-usb@vger.kernel.org>,
+        linux-pci@vger.kernel.org, linux-wireless@vger.kernel.org
+Subject: [PATCH] Fix nomenclature for USB and PCI wireless devices
+Message-ID: <57da7c80-0e48-41b5-8427-884a02648f55@rowland.harvard.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -33,507 +34,457 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Support for Wireless USB and Ultra WideBand was removed in 2020 by
-commit caa6772db4c1 ("Staging: remove wusbcore and UWB from the kernel
-tree.").  But the documentation files were left behind.
+A mouse that uses a USB connection is called a "USB mouse" device (or
+"USB mouse" for short), not a "mouse USB" device.  By analogy, a WiFi
+adapter that connects to the host computer via USB is a "USB wireless"
+device, not a "wireless USB" device.  (The latter term more properly
+refers to a defunct Wireless USB specification, which described a
+technology for sending USB protocol messages over an ultra wideband
+radio link.)
 
-Let's get rid of that out-of-date documentation.
+Similarly for a WiFi adapter card that plugs into a PCIe slot: It is a
+"PCIe wireless" device, not a "wireless PCIe" device.
+
+Rephrase the text in the kernel source where the word ordering is
+wrong.
 
 Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
 
 ---
 
- CREDITS                                             |   11 -
- Documentation/ABI/testing/sysfs-bus-umc             |   28 ---
- Documentation/ABI/testing/sysfs-bus-usb             |   34 ----
- Documentation/ABI/testing/sysfs-class-uwb_rc        |  156 --------------------
- Documentation/ABI/testing/sysfs-class-uwb_rc-wusbhc |   57 -------
- Documentation/ABI/testing/sysfs-wusb_cbaf           |  101 ------------
- Documentation/admin-guide/kernel-parameters.txt     |    2 
- Documentation/driver-api/usb/usb.rst                |    3 
- Documentation/usb/authorization.rst                 |    9 -
- 9 files changed, 5 insertions(+), 396 deletions(-)
+ drivers/net/wireless/ath/ath10k/pci.c               |    2 
+ drivers/net/wireless/ath/ath10k/usb.c               |    2 
+ drivers/net/wireless/ath/ath11k/pci.c               |    2 
+ drivers/net/wireless/ath/ath12k/pci.c               |    2 
+ drivers/net/wireless/atmel/at76c50x-usb.c           |    8 +--
+ drivers/net/wireless/intersil/orinoco/orinoco_usb.c |   12 ++---
+ drivers/net/wireless/legacy/rndis_wlan.c            |    2 
+ drivers/net/wireless/mediatek/mt76/mt7603/Kconfig   |    2 
+ drivers/net/wireless/mediatek/mt76/mt7615/Kconfig   |    2 
+ drivers/net/wireless/mediatek/mt76/mt76x0/Kconfig   |    4 -
+ drivers/net/wireless/mediatek/mt76/mt76x2/Kconfig   |    4 -
+ drivers/net/wireless/mediatek/mt76/mt7915/Kconfig   |    2 
+ drivers/net/wireless/mediatek/mt76/mt7996/Kconfig   |    2 
+ drivers/net/wireless/mediatek/mt7601u/Kconfig       |    2 
+ drivers/net/wireless/purelifi/plfxlc/Kconfig        |    2 
+ drivers/net/wireless/ralink/rt2x00/Kconfig          |    2 
+ drivers/net/wireless/realtek/rtw88/pci.c            |    2 
+ drivers/net/wireless/realtek/rtw88/usb.c            |    2 
+ drivers/net/wireless/realtek/rtw89/pci.c            |    2 
+ drivers/net/wireless/zydas/zd1201.c                 |    6 +-
+ drivers/platform/x86/eeepc-laptop.c                 |    2 
+ drivers/staging/wlan-ng/prism2usb.c                 |   48 ++++++++++----------
+ 22 files changed, 57 insertions(+), 57 deletions(-)
 
-Index: usb-devel/Documentation/ABI/testing/sysfs-bus-umc
+Index: usb-devel/drivers/net/wireless/ath/ath10k/usb.c
 ===================================================================
---- usb-devel.orig/Documentation/ABI/testing/sysfs-bus-umc
-+++ /dev/null
-@@ -1,28 +0,0 @@
--What:           /sys/bus/umc/
--Date:           July 2008
--KernelVersion:  2.6.27
--Contact:        David Vrabel <david.vrabel@csr.com>
--Description:
--                The Wireless Host Controller Interface (WHCI)
--                specification describes a PCI-based device with
--                multiple capabilities; the UWB Multi-interface
--                Controller (UMC).
--
--                The umc bus presents each of the individual
--                capabilties as a device.
--
--What:           /sys/bus/umc/devices/.../capability_id
--Date:           July 2008
--KernelVersion:  2.6.27
--Contact:        David Vrabel <david.vrabel@csr.com>
--Description:
--                The ID of this capability, with 0 being the radio
--                controller capability.
--
--What:           /sys/bus/umc/devices/.../version
--Date:           July 2008
--KernelVersion:  2.6.27
--Contact:        David Vrabel <david.vrabel@csr.com>
--Description:
--                The specification version this capability's hardware
--                interface complies with.
-Index: usb-devel/Documentation/ABI/testing/sysfs-bus-usb
+--- usb-devel.orig/drivers/net/wireless/ath/ath10k/usb.c
++++ usb-devel/drivers/net/wireless/ath/ath10k/usb.c
+@@ -1126,5 +1126,5 @@ static struct usb_driver ath10k_usb_driv
+ module_usb_driver(ath10k_usb_driver);
+ 
+ MODULE_AUTHOR("Atheros Communications, Inc.");
+-MODULE_DESCRIPTION("Driver support for Qualcomm Atheros 802.11ac WLAN USB devices");
++MODULE_DESCRIPTION("Driver support for Qualcomm Atheros USB 802.11ac WLAN devices");
+ MODULE_LICENSE("Dual BSD/GPL");
+Index: usb-devel/drivers/net/wireless/atmel/at76c50x-usb.c
 ===================================================================
---- usb-devel.orig/Documentation/ABI/testing/sysfs-bus-usb
-+++ usb-devel/Documentation/ABI/testing/sysfs-bus-usb
-@@ -28,40 +28,6 @@ Description:
- 		drivers, non-authorized one are not.  By default, wired
- 		USB devices are authorized.
- 
--		Certified Wireless USB devices are not authorized
--		initially and should be (by writing 1) after the
--		device has been authenticated.
--
--What:		/sys/bus/usb/device/.../wusb_cdid
--Date:		July 2008
--KernelVersion:	2.6.27
--Contact:	David Vrabel <david.vrabel@csr.com>
--Description:
--		For Certified Wireless USB devices only.
--
--		A devices's CDID, as 16 space-separated hex octets.
--
--What:		/sys/bus/usb/device/.../wusb_ck
--Date:		July 2008
--KernelVersion:	2.6.27
--Contact:	David Vrabel <david.vrabel@csr.com>
--Description:
--		For Certified Wireless USB devices only.
--
--		Write the device's connection key (CK) to start the
--		authentication of the device.  The CK is 16
--		space-separated hex octets.
--
--What:		/sys/bus/usb/device/.../wusb_disconnect
--Date:		July 2008
--KernelVersion:	2.6.27
--Contact:	David Vrabel <david.vrabel@csr.com>
--Description:
--		For Certified Wireless USB devices only.
--
--		Write a 1 to force the device to disconnect
--		(equivalent to unplugging a wired USB device).
--
- What:		/sys/bus/usb/drivers/.../new_id
- Date:		October 2011
- Contact:	linux-usb@vger.kernel.org
-Index: usb-devel/Documentation/ABI/testing/sysfs-wusb_cbaf
+--- usb-devel.orig/drivers/net/wireless/atmel/at76c50x-usb.c
++++ usb-devel/drivers/net/wireless/atmel/at76c50x-usb.c
+@@ -10,7 +10,7 @@
+  * Copyright (c) 2007 Kalle Valo <kalle.valo@iki.fi>
+  * Copyright (c) 2010 Sebastian Smolorz <sesmo@gmx.net>
+  *
+- * This file is part of the Berlios driver for WLAN USB devices based on the
++ * This file is part of the Berlios driver for USB WLAN devices based on the
+  * Atmel AT76C503A/505/505A.
+  *
+  * Some iw_handler code was taken from airo.c, (C) 1999 Benjamin Reed
+@@ -143,7 +143,7 @@ static const struct usb_device_id dev_ta
+ 	{ USB_DEVICE(0x0cde, 0x0001), USB_DEVICE_DATA(BOARD_503_ISL3861) },
+ 	/* Dynalink/Askey WLL013 (intersil) */
+ 	{ USB_DEVICE(0x069a, 0x0320), USB_DEVICE_DATA(BOARD_503_ISL3861) },
+-	/* EZ connect 11Mpbs Wireless USB Adapter SMC2662W v1 */
++	/* EZ connect 11Mpbs USB Wireless Adapter SMC2662W v1 */
+ 	{ USB_DEVICE(0x0d5c, 0xa001), USB_DEVICE_DATA(BOARD_503_ISL3861) },
+ 	/* BenQ AWL300 */
+ 	{ USB_DEVICE(0x04a5, 0x9000), USB_DEVICE_DATA(BOARD_503_ISL3861) },
+@@ -195,7 +195,7 @@ static const struct usb_device_id dev_ta
+ 	{ USB_DEVICE(0x04a5, 0x9001), USB_DEVICE_DATA(BOARD_503) },
+ 	/* 3Com 3CRSHEW696 */
+ 	{ USB_DEVICE(0x0506, 0x0a01), USB_DEVICE_DATA(BOARD_503) },
+-	/* Siemens Santis ADSL WLAN USB adapter WLL 013 */
++	/* Siemens Santis ADSL USB WLAN adapter WLL 013 */
+ 	{ USB_DEVICE(0x0681, 0x001b), USB_DEVICE_DATA(BOARD_503) },
+ 	/* Belkin F5D6050, version 2 */
+ 	{ USB_DEVICE(0x050d, 0x0050), USB_DEVICE_DATA(BOARD_503) },
+@@ -238,7 +238,7 @@ static const struct usb_device_id dev_ta
+ 	{ USB_DEVICE(0x1915, 0x2233), USB_DEVICE_DATA(BOARD_505_2958) },
+ 	/* Xterasys XN-2122B, IBlitzz BWU613B/BWU613SB */
+ 	{ USB_DEVICE(0x12fd, 0x1001), USB_DEVICE_DATA(BOARD_505_2958) },
+-	/* Corega WLAN USB Stick 11 */
++	/* Corega USB WLAN Stick 11 */
+ 	{ USB_DEVICE(0x07aa, 0x7613), USB_DEVICE_DATA(BOARD_505_2958) },
+ 	/* Microstar MSI Box MS6978 */
+ 	{ USB_DEVICE(0x0db0, 0x1020), USB_DEVICE_DATA(BOARD_505_2958) },
+Index: usb-devel/drivers/net/wireless/intersil/orinoco/orinoco_usb.c
 ===================================================================
---- usb-devel.orig/Documentation/ABI/testing/sysfs-wusb_cbaf
-+++ /dev/null
-@@ -1,101 +0,0 @@
--What:           /sys/bus/usb/drivers/wusb_cbaf/.../wusb_*
--Date:           August 2008
--KernelVersion:  2.6.27
--Contact:        David Vrabel <david.vrabel@csr.com>
--Description:
--                Various files for managing Cable Based Association of
--                (wireless) USB devices.
--
--                The sequence of operations should be:
--
--                1. Device is plugged in.
--
--                2. The connection manager (CM) sees a device with CBA capability.
--                   (the wusb_chid etc. files in /sys/devices/blah/OURDEVICE).
--
--                3. The CM writes the host name, supported band groups,
--                   and the CHID (host ID) into the wusb_host_name,
--                   wusb_host_band_groups and wusb_chid files. These
--                   get sent to the device and the CDID (if any) for
--                   this host is requested.
--
--                4. The CM can verify that the device's supported band
--                   groups (wusb_device_band_groups) are compatible
--                   with the host.
--
--                5. The CM reads the wusb_cdid file.
--
--                6. The CM looks it up its database.
--
--                   - If it has a matching CHID,CDID entry, the device
--                     has been authorized before and nothing further
--                     needs to be done.
--
--                   - If the CDID is zero (or the CM doesn't find a
--                     matching CDID in its database), the device is
--                     assumed to be not known.  The CM may associate
--                     the host with device by: writing a randomly
--                     generated CDID to wusb_cdid and then a random CK
--                     to wusb_ck (this uploads the new CC to the
--                     device).
--
--                     CMD may choose to prompt the user before
--                     associating with a new device.
--
--                7. Device is unplugged.
--
--                References:
--                  [WUSB-AM]
--			    Association Models Supplement to the
--                            Certified Wireless Universal Serial Bus
--                            Specification, version 1.0.
--
--What:           /sys/bus/usb/drivers/wusb_cbaf/.../wusb_chid
--Date:           August 2008
--KernelVersion:  2.6.27
--Contact:        David Vrabel <david.vrabel@csr.com>
--Description:
--                The CHID of the host formatted as 16 space-separated
--                hex octets.
--
--                Writes fetches device's supported band groups and the
--                the CDID for any existing association with this host.
--
--What:           /sys/bus/usb/drivers/wusb_cbaf/.../wusb_host_name
--Date:           August 2008
--KernelVersion:  2.6.27
--Contact:        David Vrabel <david.vrabel@csr.com>
--Description:
--                A friendly name for the host as a UTF-8 encoded string.
--
--What:           /sys/bus/usb/drivers/wusb_cbaf/.../wusb_host_band_groups
--Date:           August 2008
--KernelVersion:  2.6.27
--Contact:        David Vrabel <david.vrabel@csr.com>
--Description:
--                The band groups supported by the host, in the format
--                defined in [WUSB-AM].
--
--What:           /sys/bus/usb/drivers/wusb_cbaf/.../wusb_device_band_groups
--Date:           August 2008
--KernelVersion:  2.6.27
--Contact:        David Vrabel <david.vrabel@csr.com>
--Description:
--                The band groups supported by the device, in the format
--                defined in [WUSB-AM].
--
--What:           /sys/bus/usb/drivers/wusb_cbaf/.../wusb_cdid
--Date:           August 2008
--KernelVersion:  2.6.27
--Contact:        David Vrabel <david.vrabel@csr.com>
--Description:
--                The device's CDID formatted as 16 space-separated hex
--                octets.
--
--What:           /sys/bus/usb/drivers/wusb_cbaf/.../wusb_ck
--Date:           August 2008
--KernelVersion:  2.6.27
--Contact:        David Vrabel <david.vrabel@csr.com>
--Description:
--                Write 16 space-separated random, hex octets to
--                associate with the device.
-Index: usb-devel/Documentation/admin-guide/kernel-parameters.txt
+--- usb-devel.orig/drivers/net/wireless/intersil/orinoco/orinoco_usb.c
++++ usb-devel/drivers/net/wireless/intersil/orinoco/orinoco_usb.c
+@@ -129,18 +129,18 @@ MODULE_FIRMWARE("orinoco_ezusb_fw");
+ 
+ #define USB_AVAYA8_VENDOR_ID     0x0D98
+ #define USB_AVAYAE_VENDOR_ID     0x0D9E
+-#define USB_AVAYA_WIRELESS_ID    0x0300 /* Avaya Wireless USB Card */
++#define USB_AVAYA_WIRELESS_ID    0x0300 /* Avaya USB Wireless Card */
+ 
+ #define USB_AGERE_VENDOR_ID      0x0D4E /* Agere Systems */
+-#define USB_AGERE_MODEL0801_ID   0x1000 /* Wireless USB Card Model 0801 */
+-#define USB_AGERE_MODEL0802_ID   0x1001 /* Wireless USB Card Model 0802 */
+-#define USB_AGERE_REBRANDED_ID   0x047A /* WLAN USB Card */
++#define USB_AGERE_MODEL0801_ID   0x1000 /* USB Wireless Card Model 0801 */
++#define USB_AGERE_MODEL0802_ID   0x1001 /* USB Wireless Card Model 0802 */
++#define USB_AGERE_REBRANDED_ID   0x047A /* USB WLAN Card */
+ 
+ #define USB_ELSA_VENDOR_ID       0x05CC
+ #define USB_ELSA_AIRLANCER_ID    0x3100 /* ELSA AirLancer USB-11 */
+ 
+ #define USB_LEGEND_VENDOR_ID     0x0E7C
+-#define USB_LEGEND_JOYNET_ID     0x0300 /* Joynet WLAN USB Card */
++#define USB_LEGEND_JOYNET_ID     0x0300 /* Joynet USB WLAN Card */
+ 
+ #define USB_SAMSUNG_VENDOR_ID    0x04E8
+ #define USB_SAMSUNG_SEW2001U1_ID 0x5002 /* Samsung SEW-2001u Card */
+@@ -154,7 +154,7 @@ MODULE_FIRMWARE("orinoco_ezusb_fw");
+ #define USB_FUJITSU_E1100_ID     0x1002 /* connect2AIR WLAN E-1100 USB */
+ 
+ #define USB_2WIRE_VENDOR_ID      0x1630
+-#define USB_2WIRE_WIRELESS_ID    0xff81 /* 2Wire Wireless USB adapter */
++#define USB_2WIRE_WIRELESS_ID    0xff81 /* 2Wire USB Wireless adapter */
+ 
+ 
+ #define EZUSB_REQUEST_FW_TRANS		0xA0
+Index: usb-devel/drivers/net/wireless/mediatek/mt76/mt76x2/Kconfig
 ===================================================================
---- usb-devel.orig/Documentation/admin-guide/kernel-parameters.txt
-+++ usb-devel/Documentation/admin-guide/kernel-parameters.txt
-@@ -6607,7 +6607,7 @@
+--- usb-devel.orig/drivers/net/wireless/mediatek/mt76/mt76x2/Kconfig
++++ usb-devel/drivers/net/wireless/mediatek/mt76/mt76x2/Kconfig
+@@ -9,7 +9,7 @@ config MT76x2E
+ 	depends on MAC80211
+ 	depends on PCI
+ 	help
+-	  This adds support for MT7612/MT7602/MT7662-based wireless PCIe
++	  This adds support for MT7612/MT7602/MT7662-based PCIe wireless
+ 	  devices, which comply with IEEE 802.11ac standards and support
+ 	  2SS to 866Mbit/s PHY rate.
  
- 	usbcore.authorized_default=
- 			[USB] Default USB device authorization:
--			(default -1 = authorized except for wireless USB,
-+			(default -1 = authorized (same as 1),
- 			0 = not authorized, 1 = authorized, 2 = authorized
- 			if device connected to internal port)
+@@ -22,7 +22,7 @@ config MT76x2U
+ 	depends on MAC80211
+ 	depends on USB
+ 	help
+-	  This adds support for MT7612U-based wireless USB 3.0 dongles,
++	  This adds support for MT7612U-based USB 3.0 wireless dongles,
+ 	  which comply with IEEE 802.11ac standards and support 2SS to
+ 	  866Mbit/s PHY rate.
  
-Index: usb-devel/Documentation/driver-api/usb/usb.rst
+Index: usb-devel/drivers/net/wireless/mediatek/mt7601u/Kconfig
 ===================================================================
---- usb-devel.orig/Documentation/driver-api/usb/usb.rst
-+++ usb-devel/Documentation/driver-api/usb/usb.rst
-@@ -771,8 +771,7 @@ Speed may be:
- 	======= ======================================================
- 	1.5	Mbit/s for low speed USB
- 	12	Mbit/s for full speed USB
--	480	Mbit/s for high speed USB (added for USB 2.0);
--		also used for Wireless USB, which has no fixed speed
-+	480	Mbit/s for high speed USB (added for USB 2.0)
- 	5000	Mbit/s for SuperSpeed USB (added for USB 3.0)
- 	======= ======================================================
- 
-Index: usb-devel/Documentation/usb/authorization.rst
+--- usb-devel.orig/drivers/net/wireless/mediatek/mt7601u/Kconfig
++++ usb-devel/drivers/net/wireless/mediatek/mt7601u/Kconfig
+@@ -4,4 +4,4 @@ config MT7601U
+ 	depends on MAC80211
+ 	depends on USB
+ 	help
+-	  This adds support for MT7601U-based wireless USB dongles.
++	  This adds support for MT7601U-based USB wireless dongles.
+Index: usb-devel/drivers/net/wireless/purelifi/plfxlc/Kconfig
 ===================================================================
---- usb-devel.orig/Documentation/usb/authorization.rst
-+++ usb-devel/Documentation/usb/authorization.rst
-@@ -33,12 +33,9 @@ Remove the lock down::
- 
- 	$ echo 1 > /sys/bus/usb/devices/usbX/authorized_default
- 
--By default, Wired USB devices are authorized by default to
--connect. Wireless USB hosts deauthorize by default all new connected
--devices (this is so because we need to do an authentication phase
--before authorizing). Writing "2" to the authorized_default attribute
--causes kernel to only authorize by default devices connected to internal
--USB ports.
-+By default, all USB devices are authorized.  Writing "2" to the
-+authorized_default attribute causes the kernel to authorize by default
-+only devices connected to internal USB ports.
- 
- 
- Example system lockdown (lame)
-Index: usb-devel/Documentation/ABI/testing/sysfs-class-uwb_rc
+--- usb-devel.orig/drivers/net/wireless/purelifi/plfxlc/Kconfig
++++ usb-devel/drivers/net/wireless/purelifi/plfxlc/Kconfig
+@@ -3,7 +3,7 @@ config PLFXLC
+ 	tristate "pureLiFi X, XL, XC device support"
+ 	depends on CFG80211 && MAC80211 && USB
+ 	help
+-	   This option adds support for pureLiFi LiFi wireless USB
++	   This option adds support for pureLiFi LiFi USB wireless
+ 	   adapters. The pureLiFi X, XL, XC USB devices are based on
+ 	   802.11 OFDM PHY but uses light as the transmission medium.
+ 	   The driver supports common 802.11 encryption/authentication
+Index: usb-devel/drivers/net/wireless/ralink/rt2x00/Kconfig
 ===================================================================
---- usb-devel.orig/Documentation/ABI/testing/sysfs-class-uwb_rc
-+++ /dev/null
-@@ -1,156 +0,0 @@
--What:           /sys/class/uwb_rc
--Date:           July 2008
--KernelVersion:  2.6.27
--Contact:        linux-usb@vger.kernel.org
--Description:
--                Interfaces for WiMedia Ultra Wideband Common Radio
--                Platform (UWB) radio controllers.
--
--                Familiarity with the ECMA-368 'High Rate Ultra
--                Wideband MAC and PHY Specification' is assumed.
--
--What:           /sys/class/uwb_rc/beacon_timeout_ms
--Date:           July 2008
--KernelVersion:  2.6.27
--Description:
--                If no beacons are received from a device for at least
--                this time, the device will be considered to have gone
--                and it will be removed.  The default is 3 superframes
--                (~197 ms) as required by the specification.
--
--What:           /sys/class/uwb_rc/uwb<N>/
--Date:           July 2008
--KernelVersion:  2.6.27
--Contact:        linux-usb@vger.kernel.org
--Description:
--                An individual UWB radio controller.
--
--What:           /sys/class/uwb_rc/uwb<N>/beacon
--Date:           July 2008
--KernelVersion:  2.6.27
--Contact:        linux-usb@vger.kernel.org
--Description:
--                Write:
--
--                <channel>
--
--                to force a specific channel to be used when beaconing,
--                or, if <channel> is -1, to prohibit beaconing.  If
--                <channel> is 0, then the default channel selection
--                algorithm will be used.  Valid channels depends on the
--                radio controller's supported band groups.
--
--                Reading returns the currently active channel, or -1 if
--                the radio controller is not beaconing.
--
--What:           /sys/class/uwb_rc/uwb<N>/ASIE
--Date:           August 2014
--KernelVersion:  3.18
--Contact:        linux-usb@vger.kernel.org
--Description:
--
--                The application-specific information element (ASIE)
--                included in this device's beacon, in space separated
--                hex octets.
--
--                Reading returns the current ASIE.  Writing replaces
--                the current ASIE with the one written.
--
--What:           /sys/class/uwb_rc/uwb<N>/scan
--Date:           July 2008
--KernelVersion:  2.6.27
--Contact:        linux-usb@vger.kernel.org
--Description:
--                Write:
--
--                <channel> <type> [<bpst offset>]
--
--                to start (or stop) scanning on a channel.  <type> is one of:
--
--		   ==   =======================================
--                    0   scan
--                    1   scan outside BP
--                    2   scan while inactive
--                    3   scanning disabled
--                    4   scan (with start time of <bpst offset>)
--		   ==   =======================================
--
--What:           /sys/class/uwb_rc/uwb<N>/mac_address
--Date:           July 2008
--KernelVersion:  2.6.27
--Contact:        linux-usb@vger.kernel.org
--Description:
--                The EUI-48, in colon-separated hex octets, for this
--                radio controller.  A write will change the radio
--                controller's EUI-48 but only do so while the device is
--                not beaconing or scanning.
--
--What:           /sys/class/uwb_rc/uwb<N>/wusbhc
--Date:           July 2008
--KernelVersion:  2.6.27
--Contact:        linux-usb@vger.kernel.org
--Description:
--                A symlink to the device (if any) of the WUSB Host
--                Controller PAL using this radio controller.
--
--What:           /sys/class/uwb_rc/uwb<N>/<EUI-48>/
--Date:           July 2008
--KernelVersion:  2.6.27
--Contact:        linux-usb@vger.kernel.org
--Description:
--                A neighbour UWB device that has either been detected
--                as part of a scan or is a member of the radio
--                controllers beacon group.
--
--What:           /sys/class/uwb_rc/uwb<N>/<EUI-48>/BPST
--Date:           July 2008
--KernelVersion:  2.6.27
--Contact:        linux-usb@vger.kernel.org
--Description:
--                The time (using the radio controllers internal 1 ms
--                interval superframe timer) of the last beacon from
--                this device was received.
--
--What:           /sys/class/uwb_rc/uwb<N>/<EUI-48>/DevAddr
--Date:           July 2008
--KernelVersion:  2.6.27
--Contact:        linux-usb@vger.kernel.org
--Description:
--                The current DevAddr of this device in colon separated
--                hex octets.
--
--What:           /sys/class/uwb_rc/uwb<N>/<EUI-48>/EUI_48
--Date:           July 2008
--KernelVersion:  2.6.27
--Contact:        linux-usb@vger.kernel.org
--Description:
--
--                The EUI-48 of this device in colon separated hex
--                octets.
--
--What:           /sys/class/uwb_rc/uwb<N>/<EUI-48>/IEs
--Date:           July 2008
--KernelVersion:  2.6.27
--Contact:        linux-usb@vger.kernel.org
--Description:
--                The latest IEs included in this device's beacon, in
--                space separated hex octets with one IE per line.
--
--What:           /sys/class/uwb_rc/uwb<N>/<EUI-48>/LQE
--Date:           July 2008
--KernelVersion:  2.6.27
--Contact:        linux-usb@vger.kernel.org
--Description:
--                Link Quality Estimate - the Signal to Noise Ratio
--                (SNR) of all packets received from this device in dB.
--                This gives an estimate on a suitable PHY rate. Refer
--                to [ECMA-368] section 13.3 for more details.
--
--What:           /sys/class/uwb_rc/uwb<N>/<EUI-48>/RSSI
--Date:           July 2008
--KernelVersion:  2.6.27
--Contact:        linux-usb@vger.kernel.org
--Description:
--                Received Signal Strength Indication - the strength of
--                the received signal in dB.  LQE is a more useful
--                measure of the radio link quality.
-Index: usb-devel/Documentation/ABI/testing/sysfs-class-uwb_rc-wusbhc
-===================================================================
---- usb-devel.orig/Documentation/ABI/testing/sysfs-class-uwb_rc-wusbhc
-+++ /dev/null
-@@ -1,57 +0,0 @@
--What:           /sys/class/uwb_rc/uwb<N>/wusbhc/wusb_chid
--Date:           July 2008
--KernelVersion:  2.6.27
--Contact:        David Vrabel <david.vrabel@csr.com>
--Description:
--                Write the CHID (16 space-separated hex octets) for this host controller.
--                This starts the host controller, allowing it to accept connection from
--                WUSB devices.
--
--                Set an all zero CHID to stop the host controller.
--
--What:           /sys/class/uwb_rc/uwb<N>/wusbhc/wusb_trust_timeout
--Date:           July 2008
--KernelVersion:  2.6.27
--Contact:        David Vrabel <david.vrabel@csr.com>
--Description:
--                Devices that haven't sent a WUSB packet to the host
--                within 'wusb_trust_timeout' ms are considered to have
--                disconnected and are removed.  The default value of
--                4000 ms is the value required by the WUSB
--                specification.
--
--                Since this relates to security (specifically, the
--                lifetime of PTKs and GTKs) it should not be changed
--                from the default.
--
--What:           /sys/class/uwb_rc/uwb<N>/wusbhc/wusb_phy_rate
--Date:           August 2009
--KernelVersion:  2.6.32
--Contact:        David Vrabel <david.vrabel@csr.com>
--Description:
--                The maximum PHY rate to use for all connected devices.
--                This is only of limited use for testing and
--                development as the hardware's automatic rate
--                adaptation is better then this simple control.
--
--                Refer to [ECMA-368] section 10.3.1.1 for the value to
--                use.
--
--What:           /sys/class/uwb_rc/uwb<N>/wusbhc/wusb_dnts
--Date:           June 2013
--KernelVersion:  3.11
--Contact:        Thomas Pugliese <thomas.pugliese@gmail.com>
--Description:
--                The device notification time slot (DNTS) count and inverval in
--                milliseconds that the WUSB host should use.  This controls how
--                often the devices will have the opportunity to send
--                notifications to the host.
--
--What:           /sys/class/uwb_rc/uwb<N>/wusbhc/wusb_retry_count
--Date:           June 2013
--KernelVersion:  3.11
--Contact:        Thomas Pugliese <thomas.pugliese@gmail.com>
--Description:
--                The number of retries that the WUSB host should attempt
--                before reporting an error for a bus transaction.  The range of
--                valid values is [0..15], where 0 indicates infinite retries.
-Index: usb-devel/CREDITS
-===================================================================
---- usb-devel.orig/CREDITS
-+++ usb-devel/CREDITS
-@@ -666,11 +666,6 @@ S: Tamsui town, Taipei county,
- S: Taiwan 251
- S: Republic of China
+--- usb-devel.orig/drivers/net/wireless/ralink/rt2x00/Kconfig
++++ usb-devel/drivers/net/wireless/ralink/rt2x00/Kconfig
+@@ -170,7 +170,7 @@ config RT2800USB_RT35XX
+ config RT2800USB_RT3573
+ 	bool "rt2800usb - Include support for rt3573 devices (EXPERIMENTAL)"
+ 	help
+-	  This enables support for RT3573 chipset based wireless USB devices
++	  This enables support for RT3573 chipset based USB wireless devices
+ 	  in the rt2800usb driver.
  
--N: Reinette Chatre
--E: reinette.chatre@intel.com
--D: WiMedia Link Protocol implementation
--D: UWB stack bits and pieces
--
- N: Michael Elizabeth Chastain
- E: mec@shout.net
- D: Configure, Menuconfig, xconfig
-@@ -3023,12 +3018,6 @@ S: Demonstratsii 8-382
- S: Tula 300000
- S: Russia
+ config RT2800USB_RT53XX
+Index: usb-devel/drivers/net/wireless/realtek/rtw88/usb.c
+===================================================================
+--- usb-devel.orig/drivers/net/wireless/realtek/rtw88/usb.c
++++ usb-devel/drivers/net/wireless/realtek/rtw88/usb.c
+@@ -927,5 +927,5 @@ void rtw_usb_disconnect(struct usb_inter
+ EXPORT_SYMBOL(rtw_usb_disconnect);
  
--N: Inaky Perez-Gonzalez
--E: inaky.perez-gonzalez@intel.com
--D: UWB stack, HWA-RC driver and HWA-HC drivers
--D: Wireless USB additions to the USB stack
--D: WiMedia Link Protocol bits and pieces
--
- N: Gordon Peters
- E: GordPeters@smarttech.com
- D: Isochronous receive for IEEE 1394 driver (OHCI module).
+ MODULE_AUTHOR("Realtek Corporation");
+-MODULE_DESCRIPTION("Realtek 802.11ac wireless USB driver");
++MODULE_DESCRIPTION("Realtek USB 802.11ac wireless driver");
+ MODULE_LICENSE("Dual BSD/GPL");
+Index: usb-devel/drivers/net/wireless/zydas/zd1201.c
+===================================================================
+--- usb-devel.orig/drivers/net/wireless/zydas/zd1201.c
++++ usb-devel/drivers/net/wireless/zydas/zd1201.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ /*
+- *	Driver for ZyDAS zd1201 based wireless USB devices.
++ *	Driver for ZyDAS zd1201 based USB wireless devices.
+  *
+  *	Copyright (c) 2004, 2005 Jeroen Vreeken (pe1rxq@amsat.org)
+  *
+@@ -23,8 +23,8 @@
+ #include "zd1201.h"
+ 
+ static const struct usb_device_id zd1201_table[] = {
+-	{USB_DEVICE(0x0586, 0x3400)}, /* Peabird Wireless USB Adapter */
+-	{USB_DEVICE(0x0ace, 0x1201)}, /* ZyDAS ZD1201 Wireless USB Adapter */
++	{USB_DEVICE(0x0586, 0x3400)}, /* Peabird USB Wireless Adapter */
++	{USB_DEVICE(0x0ace, 0x1201)}, /* ZyDAS ZD1201 USB Wireless Adapter */
+ 	{USB_DEVICE(0x050d, 0x6051)}, /* Belkin F5D6051 usb  adapter */
+ 	{USB_DEVICE(0x0db0, 0x6823)}, /* MSI UB11B usb  adapter */
+ 	{USB_DEVICE(0x1044, 0x8004)}, /* Gigabyte GN-WLBZ101 */
+Index: usb-devel/drivers/staging/wlan-ng/prism2usb.c
+===================================================================
+--- usb-devel.orig/drivers/staging/wlan-ng/prism2usb.c
++++ usb-devel/drivers/staging/wlan-ng/prism2usb.c
+@@ -11,45 +11,45 @@
+ 
+ static const struct usb_device_id usb_prism_tbl[] = {
+ 	PRISM_DEV(0x04bb, 0x0922, "IOData AirPort WN-B11/USBS"),
+-	PRISM_DEV(0x07aa, 0x0012, "Corega Wireless LAN USB Stick-11"),
+-	PRISM_DEV(0x09aa, 0x3642, "Prism2.x 11Mbps WLAN USB Adapter"),
+-	PRISM_DEV(0x1668, 0x0408, "Actiontec Prism2.5 11Mbps WLAN USB Adapter"),
+-	PRISM_DEV(0x1668, 0x0421, "Actiontec Prism2.5 11Mbps WLAN USB Adapter"),
+-	PRISM_DEV(0x1915, 0x2236, "Linksys WUSB11v3.0 11Mbps WLAN USB Adapter"),
+-	PRISM_DEV(0x066b, 0x2212, "Linksys WUSB11v2.5 11Mbps WLAN USB Adapter"),
+-	PRISM_DEV(0x066b, 0x2213, "Linksys WUSB12v1.1 11Mbps WLAN USB Adapter"),
++	PRISM_DEV(0x07aa, 0x0012, "Corega USB Wireless LAN Stick-11"),
++	PRISM_DEV(0x09aa, 0x3642, "Prism2.x 11Mbps USB WLAN Adapter"),
++	PRISM_DEV(0x1668, 0x0408, "Actiontec Prism2.5 11Mbps USB WLAN Adapter"),
++	PRISM_DEV(0x1668, 0x0421, "Actiontec Prism2.5 11Mbps USB WLAN Adapter"),
++	PRISM_DEV(0x1915, 0x2236, "Linksys WUSB11v3.0 11Mbps USB WLAN Adapter"),
++	PRISM_DEV(0x066b, 0x2212, "Linksys WUSB11v2.5 11Mbps USB WLAN Adapter"),
++	PRISM_DEV(0x066b, 0x2213, "Linksys WUSB12v1.1 11Mbps USB WLAN Adapter"),
+ 	PRISM_DEV(0x0411, 0x0016, "Melco WLI-USB-S11 11Mbps WLAN Adapter"),
+-	PRISM_DEV(0x08de, 0x7a01, "PRISM25 IEEE 802.11 Mini USB Adapter"),
+-	PRISM_DEV(0x8086, 0x1111, "Intel PRO/Wireless 2011B LAN USB Adapter"),
++	PRISM_DEV(0x08de, 0x7a01, "PRISM25 USB IEEE 802.11 Mini Adapter"),
++	PRISM_DEV(0x8086, 0x1111, "Intel PRO/Wireless 2011B USB LAN Adapter"),
+ 	PRISM_DEV(0x0d8e, 0x7a01, "PRISM25 IEEE 802.11 Mini USB Adapter"),
+-	PRISM_DEV(0x045e, 0x006e, "Microsoft MN510 Wireless USB Adapter"),
++	PRISM_DEV(0x045e, 0x006e, "Microsoft MN510 USB Wireless Adapter"),
+ 	PRISM_DEV(0x0967, 0x0204, "Acer Warplink USB Adapter"),
+ 	PRISM_DEV(0x0cde, 0x0002, "Z-Com 725/726 Prism2.5 USB/USB Integrated"),
+-	PRISM_DEV(0x0cde, 0x0005, "Z-Com Xl735 Wireless 802.11b USB Adapter"),
+-	PRISM_DEV(0x413c, 0x8100, "Dell TrueMobile 1180 Wireless USB Adapter"),
+-	PRISM_DEV(0x0b3b, 0x1601, "ALLNET 0193 11Mbps WLAN USB Adapter"),
+-	PRISM_DEV(0x0b3b, 0x1602, "ZyXEL ZyAIR B200 Wireless USB Adapter"),
+-	PRISM_DEV(0x0baf, 0x00eb, "USRobotics USR1120 Wireless USB Adapter"),
++	PRISM_DEV(0x0cde, 0x0005, "Z-Com Xl735 USB Wireless 802.11b Adapter"),
++	PRISM_DEV(0x413c, 0x8100, "Dell TrueMobile 1180 USB Wireless Adapter"),
++	PRISM_DEV(0x0b3b, 0x1601, "ALLNET 0193 11Mbps USB WLAN Adapter"),
++	PRISM_DEV(0x0b3b, 0x1602, "ZyXEL ZyAIR B200 USB Wireless Adapter"),
++	PRISM_DEV(0x0baf, 0x00eb, "USRobotics USR1120 USB Wireless Adapter"),
+ 	PRISM_DEV(0x0411, 0x0027, "Melco WLI-USB-KS11G 11Mbps WLAN Adapter"),
+ 	PRISM_DEV(0x04f1, 0x3009, "JVC MP-XP7250 Builtin USB WLAN Adapter"),
+ 	PRISM_DEV(0x0846, 0x4110, "NetGear MA111"),
+ 	PRISM_DEV(0x03f3, 0x0020, "Adaptec AWN-8020 USB WLAN Adapter"),
+-	PRISM_DEV(0x2821, 0x3300, "ASUS-WL140 / Hawking HighDB Wireless USB Adapter"),
+-	PRISM_DEV(0x2001, 0x3700, "DWL-122 Wireless USB Adapter"),
+-	PRISM_DEV(0x2001, 0x3702, "DWL-120 Rev F Wireless USB Adapter"),
++	PRISM_DEV(0x2821, 0x3300, "ASUS-WL140 / Hawking HighDB USB Wireless Adapter"),
++	PRISM_DEV(0x2001, 0x3700, "DWL-122 USB Wireless Adapter"),
++	PRISM_DEV(0x2001, 0x3702, "DWL-120 Rev F USB Wireless Adapter"),
+ 	PRISM_DEV(0x50c2, 0x4013, "Averatec USB WLAN Adapter"),
+-	PRISM_DEV(0x2c02, 0x14ea, "Planex GW-US11H WLAN USB Adapter"),
+-	PRISM_DEV(0x124a, 0x168b, "Airvast PRISM3 WLAN USB Adapter"),
++	PRISM_DEV(0x2c02, 0x14ea, "Planex GW-US11H USB WLAN Adapter"),
++	PRISM_DEV(0x124a, 0x168b, "Airvast PRISM3 USB WLAN Adapter"),
+ 	PRISM_DEV(0x083a, 0x3503, "T-Sinus 111 USB WLAN Adapter"),
+ 	PRISM_DEV(0x0411, 0x0044, "Melco WLI-USB-KB11 11Mbps WLAN Adapter"),
+-	PRISM_DEV(0x1668, 0x6106, "ROPEX FreeLan 802.11b USB Adapter"),
+-	PRISM_DEV(0x124a, 0x4017, "Pheenet WL-503IA 802.11b USB Adapter"),
++	PRISM_DEV(0x1668, 0x6106, "ROPEX FreeLan USB 802.11b Adapter"),
++	PRISM_DEV(0x124a, 0x4017, "Pheenet WL-503IA USB 802.11b Adapter"),
+ 	PRISM_DEV(0x0bb2, 0x0302, "Ambit Microsystems Corp."),
+-	PRISM_DEV(0x9016, 0x182d, "Sitecom WL-022 802.11b USB Adapter"),
++	PRISM_DEV(0x9016, 0x182d, "Sitecom WL-022 USB 802.11b Adapter"),
+ 	PRISM_DEV(0x0543, 0x0f01,
+ 		  "ViewSonic Airsync USB Adapter 11Mbps (Prism2.5)"),
+ 	PRISM_DEV(0x067c, 0x1022,
+-		  "Siemens SpeedStream 1022 11Mbps WLAN USB Adapter"),
++		  "Siemens SpeedStream 1022 11Mbps USB WLAN Adapter"),
+ 	PRISM_DEV(0x049f, 0x0033,
+ 		  "Compaq/Intel W100 PRO/Wireless 11Mbps multiport WLAN Adapter"),
+ 	{ } /* terminator */
+Index: usb-devel/drivers/net/wireless/legacy/rndis_wlan.c
+===================================================================
+--- usb-devel.orig/drivers/net/wireless/legacy/rndis_wlan.c
++++ usb-devel/drivers/net/wireless/legacy/rndis_wlan.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0-or-later
+ /*
+- * Driver for RNDIS based wireless USB devices.
++ * Driver for RNDIS based USB wireless devices.
+  *
+  * Copyright (C) 2007 by Bjorge Dijkstra <bjd@jooz.net>
+  * Copyright (C) 2008-2009 by Jussi Kivilinna <jussi.kivilinna@iki.fi>
+Index: usb-devel/drivers/net/wireless/mediatek/mt76/mt7603/Kconfig
+===================================================================
+--- usb-devel.orig/drivers/net/wireless/mediatek/mt76/mt7603/Kconfig
++++ usb-devel/drivers/net/wireless/mediatek/mt76/mt7603/Kconfig
+@@ -5,7 +5,7 @@ config MT7603E
+ 	depends on MAC80211
+ 	depends on PCI
+ 	help
+-	  This adds support for MT7603E wireless PCIe devices and the WLAN core
++	  This adds support for MT7603E PCIe wireless devices and the WLAN core
+ 	  on MT7628/MT7688 SoC devices. This family supports IEEE 802.11n 2x2
+ 	  to 300Mbps PHY rate
+ 
+Index: usb-devel/drivers/net/wireless/mediatek/mt76/mt7615/Kconfig
+===================================================================
+--- usb-devel.orig/drivers/net/wireless/mediatek/mt76/mt7615/Kconfig
++++ usb-devel/drivers/net/wireless/mediatek/mt76/mt7615/Kconfig
+@@ -11,7 +11,7 @@ config MT7615E
+ 	depends on MAC80211
+ 	depends on PCI
+ 	help
+-	  This adds support for MT7615-based wireless PCIe devices,
++	  This adds support for MT7615-based PCIe wireless devices,
+ 	  which support concurrent dual-band operation at both 5GHz
+ 	  and 2.4GHz, IEEE 802.11ac 4x4:4SS 1733Mbps PHY rate, wave2
+ 	  MU-MIMO up to 4 users/group and 160MHz channels.
+Index: usb-devel/drivers/net/wireless/mediatek/mt76/mt76x0/Kconfig
+===================================================================
+--- usb-devel.orig/drivers/net/wireless/mediatek/mt76/mt76x0/Kconfig
++++ usb-devel/drivers/net/wireless/mediatek/mt76/mt76x0/Kconfig
+@@ -10,7 +10,7 @@ config MT76x0U
+ 	depends on MAC80211
+ 	depends on USB
+ 	help
+-	  This adds support for MT7610U-based wireless USB 2.0 dongles,
++	  This adds support for MT7610U-based USB 2.0 wireless dongles,
+ 	  which comply with IEEE 802.11ac standards and support 1x1
+ 	  433Mbps PHY rate.
+ 
+@@ -22,7 +22,7 @@ config MT76x0E
+ 	depends on MAC80211
+ 	depends on PCI
+ 	help
+-	  This adds support for MT7610/MT7630-based wireless PCIe devices,
++	  This adds support for MT7610/MT7630-based PCIe wireless devices,
+ 	  which comply with IEEE 802.11ac standards and support 1x1
+ 	  433Mbps PHY rate.
+ 
+Index: usb-devel/drivers/net/wireless/mediatek/mt76/mt7915/Kconfig
+===================================================================
+--- usb-devel.orig/drivers/net/wireless/mediatek/mt76/mt7915/Kconfig
++++ usb-devel/drivers/net/wireless/mediatek/mt76/mt7915/Kconfig
+@@ -7,7 +7,7 @@ config MT7915E
+ 	depends on PCI
+ 	select RELAY
+ 	help
+-	  This adds support for MT7915-based wireless PCIe devices,
++	  This adds support for MT7915-based PCIe wireless devices,
+ 	  which support concurrent dual-band operation at both 5GHz
+ 	  and 2.4GHz IEEE 802.11ax 4x4:4SS 1024-QAM, 160MHz channels,
+ 	  OFDMA, spatial reuse and dual carrier modulation.
+Index: usb-devel/drivers/net/wireless/mediatek/mt76/mt7996/Kconfig
+===================================================================
+--- usb-devel.orig/drivers/net/wireless/mediatek/mt76/mt7996/Kconfig
++++ usb-devel/drivers/net/wireless/mediatek/mt76/mt7996/Kconfig
+@@ -7,7 +7,7 @@ config MT7996E
+ 	depends on MAC80211
+ 	depends on PCI
+ 	help
+-	  This adds support for MT7996-based wireless PCIe devices,
++	  This adds support for MT7996-based PCIe wireless devices,
+ 	  which support concurrent tri-band operation at 6GHz, 5GHz,
+ 	  and 2.4GHz IEEE 802.11be 4x4:4SS 4096-QAM, 320MHz channels.
+ 
+Index: usb-devel/drivers/net/wireless/realtek/rtw88/pci.c
+===================================================================
+--- usb-devel.orig/drivers/net/wireless/realtek/rtw88/pci.c
++++ usb-devel/drivers/net/wireless/realtek/rtw88/pci.c
+@@ -1828,5 +1828,5 @@ void rtw_pci_shutdown(struct pci_dev *pd
+ EXPORT_SYMBOL(rtw_pci_shutdown);
+ 
+ MODULE_AUTHOR("Realtek Corporation");
+-MODULE_DESCRIPTION("Realtek 802.11ac wireless PCI driver");
++MODULE_DESCRIPTION("Realtek PCI 802.11ac wireless driver");
+ MODULE_LICENSE("Dual BSD/GPL");
+Index: usb-devel/drivers/net/wireless/realtek/rtw89/pci.c
+===================================================================
+--- usb-devel.orig/drivers/net/wireless/realtek/rtw89/pci.c
++++ usb-devel/drivers/net/wireless/realtek/rtw89/pci.c
+@@ -3939,5 +3939,5 @@ void rtw89_pci_remove(struct pci_dev *pd
+ EXPORT_SYMBOL(rtw89_pci_remove);
+ 
+ MODULE_AUTHOR("Realtek Corporation");
+-MODULE_DESCRIPTION("Realtek 802.11ax wireless PCI driver");
++MODULE_DESCRIPTION("Realtek PCI 802.11ax wireless driver");
+ MODULE_LICENSE("Dual BSD/GPL");
+Index: usb-devel/drivers/net/wireless/ath/ath10k/pci.c
+===================================================================
+--- usb-devel.orig/drivers/net/wireless/ath/ath10k/pci.c
++++ usb-devel/drivers/net/wireless/ath/ath10k/pci.c
+@@ -3816,7 +3816,7 @@ static void __exit ath10k_pci_exit(void)
+ module_exit(ath10k_pci_exit);
+ 
+ MODULE_AUTHOR("Qualcomm Atheros");
+-MODULE_DESCRIPTION("Driver support for Qualcomm Atheros 802.11ac WLAN PCIe/AHB devices");
++MODULE_DESCRIPTION("Driver support for Qualcomm Atheros PCIe/AHB 802.11ac WLAN devices");
+ MODULE_LICENSE("Dual BSD/GPL");
+ 
+ /* QCA988x 2.0 firmware files */
+Index: usb-devel/drivers/net/wireless/ath/ath11k/pci.c
+===================================================================
+--- usb-devel.orig/drivers/net/wireless/ath/ath11k/pci.c
++++ usb-devel/drivers/net/wireless/ath/ath11k/pci.c
+@@ -1034,7 +1034,7 @@ static void ath11k_pci_exit(void)
+ 
+ module_exit(ath11k_pci_exit);
+ 
+-MODULE_DESCRIPTION("Driver support for Qualcomm Technologies 802.11ax WLAN PCIe devices");
++MODULE_DESCRIPTION("Driver support for Qualcomm Technologies PCIe 802.11ax WLAN devices");
+ MODULE_LICENSE("Dual BSD/GPL");
+ 
+ /* firmware files */
+Index: usb-devel/drivers/net/wireless/ath/ath12k/pci.c
+===================================================================
+--- usb-devel.orig/drivers/net/wireless/ath/ath12k/pci.c
++++ usb-devel/drivers/net/wireless/ath/ath12k/pci.c
+@@ -1409,5 +1409,5 @@ static void ath12k_pci_exit(void)
+ 
+ module_exit(ath12k_pci_exit);
+ 
+-MODULE_DESCRIPTION("Driver support for Qualcomm Technologies 802.11be WLAN PCIe devices");
++MODULE_DESCRIPTION("Driver support for Qualcomm Technologies PCIe 802.11be WLAN devices");
+ MODULE_LICENSE("Dual BSD/GPL");
+Index: usb-devel/drivers/platform/x86/eeepc-laptop.c
+===================================================================
+--- usb-devel.orig/drivers/platform/x86/eeepc-laptop.c
++++ usb-devel/drivers/platform/x86/eeepc-laptop.c
+@@ -1394,7 +1394,7 @@ static int eeepc_acpi_add(struct acpi_de
+ 	 * and machine-specific scripts find the fixed name convenient.  But
+ 	 * It's also good for us to exclude multiple instances because both
+ 	 * our hwmon and our wlan rfkill subdevice use global ACPI objects
+-	 * (the EC and the wlan PCI slot respectively).
++	 * (the EC and the PCI wlan slot respectively).
+ 	 */
+ 	result = eeepc_platform_init(eeepc);
+ 	if (result)
