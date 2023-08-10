@@ -2,138 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E119776D7A
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Aug 2023 03:20:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BBAC776D9F
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Aug 2023 03:47:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231409AbjHJBUk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Aug 2023 21:20:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50546 "EHLO
+        id S232041AbjHJBrS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Aug 2023 21:47:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjHJBUk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Aug 2023 21:20:40 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B88D10D8;
-        Wed,  9 Aug 2023 18:20:39 -0700 (PDT)
-Received: from kwepemm600005.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RLpx82lpvzcbZ9;
-        Thu, 10 Aug 2023 09:19:24 +0800 (CST)
-Received: from [10.67.103.158] (10.67.103.158) by
- kwepemm600005.china.huawei.com (7.193.23.191) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Thu, 10 Aug 2023 09:20:36 +0800
-Subject: Re: [PATCH] USB:bugfix a controller halt error
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Oliver Neukum <oneukum@suse.com>
-CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230721100015.27124-1-liulongfang@huawei.com>
- <c3ab029f-f6ab-4b09-b2b5-1cc6a5370d0d@rowland.harvard.edu>
- <bfee90c1-a7ca-27e3-88f9-936f48cd2595@huawei.com>
- <bd440f1d-5ea4-485e-9924-433997765adc@rowland.harvard.edu>
- <77a8ecb4-8099-1826-abd8-4f080d80b07d@huawei.com>
- <73b58ff7-2a0a-43f7-bda9-52b9437f5bc0@rowland.harvard.edu>
- <e983fecd-ff59-e97e-0099-b33685d45d00@suse.com>
- <c827147f-793b-49ae-8549-3c5d4e8a7264@rowland.harvard.edu>
-From:   liulongfang <liulongfang@huawei.com>
-Message-ID: <c80c7065-5cb2-7e49-de71-ea589e588fef@huawei.com>
-Date:   Thu, 10 Aug 2023 09:20:36 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        with ESMTP id S232013AbjHJBrR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Aug 2023 21:47:17 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 980531982
+        for <linux-usb@vger.kernel.org>; Wed,  9 Aug 2023 18:47:15 -0700 (PDT)
+Received: (qmail 217443 invoked by uid 1000); 9 Aug 2023 21:47:14 -0400
+Date:   Wed, 9 Aug 2023 21:47:14 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Khazhy Kumykov <khazhy@google.com>,
+        USB mailing list <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH 0/3] USB: core: Don't overwrite device descriptor during
+ reinitialization
+Message-ID: <e070f49d-9bd2-4711-b748-b15e1a6be901@rowland.harvard.edu>
+References: <6eadec91-990a-4fbd-8883-8366c4a4d8e4@rowland.harvard.edu>
+ <20230810002257.nadxmfmrobkaxgnz@synopsys.com>
 MIME-Version: 1.0
-In-Reply-To: <c827147f-793b-49ae-8549-3c5d4e8a7264@rowland.harvard.edu>
-Content-Type: text/plain; charset="gbk"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.103.158]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600005.china.huawei.com (7.193.23.191)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230810002257.nadxmfmrobkaxgnz@synopsys.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2023/7/27 23:57, Alan Stern wrote:
-> On Thu, Jul 27, 2023 at 05:31:41PM +0200, Oliver Neukum wrote:
->> On 27.07.23 16:42, Alan Stern wrote:
->>> On Thu, Jul 27, 2023 at 03:03:57PM +0800, liulongfang wrote:
->>>> On 2023/7/26 22:20, Alan Stern wrote:
->>
->>>>> It seems to me that something along these lines must be necessary in
->>>>> any case.  Unless the bad memory is cleared somehow, it would never be
->>>>> usable again.  The kernel might deallocate it, then reallocate for
->>>>> another purpose, and then crash when the new user tries to access it.
->>>>>
->>>>> In fact, this scenario could still happen even with your patch, which
->>>>> means the patch doesn't really fix the problem.
->>
->> I suppose in theory you could have something like a bad blocks list
->> just for RAM, but that would really hurt. You'd have to do something
->> about every DMA operation in every driver in theory.
->>
->> Error handling would basically be an intentional memory leak.
+On Thu, Aug 10, 2023 at 12:28:27AM +0000, Thinh Nguyen wrote:
+> Hi Alan,
 > 
-> I started out thinking this way, but maybe that's not how it works.  
-> Perhaps simply overwriting the part of memory that got the ECC error 
-> would clear the error state.  (This may depend on the kind of error, 
-> one-time vs. permanent.)
+> On Fri, Aug 04, 2023, Alan Stern wrote:
+> > An outstanding syzbot bug report has been traced to a race between the
+> > routine that reads in the device descriptor for a device being
+> > reinitialized and the routine that writes the descriptors to a sysfs
+> > attribute file.  The problem is that reinitializing a device, like
+> > initializing it for the first time, stores the device descriptor
+> > directly in the usb_device structure, where it may be accessed
+> > concurrently as part of sending the descriptors to the sysfs reader.
+> > 
+> > This three-part series fixes the problem:
+> > 
+> > 	The first patch unites the code paths responsible for first
+> > 	reading the device descriptor in hub.c's old scheme and new
+> > 	scheme, so that neither of them will call
+> > 	usb_get_device_descriptor().
+> > 
+> > 	The second patch changes usb_get_device_descriptor(), making
+> > 	it return the descriptor in a dynamically allocated buffer
+> > 	rather than storing it directly in the device structure.
+> > 
+> > 	The third patch changes hub_port_init(), adding a new argument
+> > 	that specifies a buffer in which to store the device
+> > 	descriptor for devices being reinitialized.
+> > 
+> > As a result of these changes, the copy of the device descriptor stored
+> > in the usb_device structure will never be overwritten once it has been
+> > initialized.  This eliminates the data race causing the bug identified
+> > by syzbot.
+> > 
+> > It would be nice at some point to make a similar change to the code
+> > that reads the device's BOS descriptor; reinitialization should not
+> > overwrite its existing data either.  This series doesn't attempt to do
+> > that, but it would be a good thing to do.
+> > 
 > 
-> If that's the case, and if the memory buffer was deallocated without 
-> being accessed and then later reallocated, things would be okay.  The 
-> routine that reallocated the buffer wouldn't try to read from it before 
-> initializing it somehow.
+> Testing from Greg's usb-next branch, this series causes problem with
+> device enumeration:
 > 
->>>> This patch is only used to prevent data in the buffer from being accessed.
->>>> As long as the data is not accessed, the kernel does not crash.
->>>
->>> I still don't understand.  You haven't provided nearly enough
->>> information.  You should start by answering the questions that Oliver
->>> asked.  Then answer this question:
->>>
->>> The code you are concerned about is this:
->>>
->>> 		r = usb_control_msg(udev, usb_rcvaddr0pipe(),
->>> 				USB_REQ_GET_DESCRIPTOR, USB_DIR_IN,
->>> 				USB_DT_DEVICE << 8, 0,
->>> 				buf, GET_DESCRIPTOR_BUFSIZE,
->>> 				initial_descriptor_timeout);
->>> 		switch (buf->bMaxPacketSize0) {
->>>
->>> You're worried that if an ECC memory error occurs during the
->>> usb_control_msg transfer, the kernel will crash when the "switch"
->>> statement tries to read the value of buf->bMaxPacketSize0.  That's a
->>> reasonable thing to worry about.
->>
->> Albeit unlikely. If the hardware and implementation are reasonable
->> you'd return a specific error code from the HCD and clean up the
->> RAM in your ecc driver.
->>
->> The fix for USB would then conceptually be something like
->>
->> retryio:
->> 	r = usb_control_msg()
->> 	if (r == -EMEMORYCORRUPTION)
->> 		goto retryio;
+> [   31.650759] usb 2-1: new SuperSpeed Plus Gen 2x1 USB device number 2 using xhci_hcd
+> [   31.663107] usb 2-1: device descriptor read/8, error -71
+> [   31.952697] usb 2-1: new SuperSpeed Plus Gen 2x1 USB device number 3 using xhci_hcd
+> [   31.965122] usb 2-1: device descriptor read/8, error -71
+> [   32.080991] usb usb2-port1: attempt power cycle
+> [   34.826893] usb 2-1: new SuperSpeed Plus Gen 2x1 USB device number 5 using xhci_hcd
+> [   34.839241] usb 2-1: device descriptor read/8, error -71
+> [   35.129908] usb 2-1: new SuperSpeed Plus Gen 2x1 USB device number 6 using xhci_hcd
+> [   35.142264] usb 2-1: device descriptor read/8, error -71
+> [   35.257155] usb usb2-port1: attempt power cycle
+> [   37.258922] usb 1-1: new high-speed USB device number 5 using xhci_hcd
+> [   38.115053] usb 2-1: new SuperSpeed Plus Gen 2x1 USB device number 8 using xhci_hcd
+> [   38.127407] usb 2-1: device descriptor read/8, error -71
+> [   38.417066] usb 2-1: new SuperSpeed Plus Gen 2x1 USB device number 9 using xhci_hcd
+> [   38.429428] usb 2-1: device descriptor read/8, error -71
+> [   38.545315] usb usb2-port1: attempt power cycle
+> [   43.347312] usb 2-2: new SuperSpeed Plus Gen 2x1 USB device number 11 using xhci_hcd
+> [   43.359659] usb 2-2: device descriptor read/8, error -71
+> [   43.649323] usb 2-2: new SuperSpeed Plus Gen 2x1 USB device number 12 using xhci_hcd
+> [   43.661681] usb 2-2: device descriptor read/8, error -71
+> [   43.777566] usb usb2-port2: attempt power cycle
 > 
-> Yes, we could do this, but it's not necessary.  Let's say that the HCD 
-> returns -EMEMORYCORRUPTION and the ecc driver cleans up the RAM 
-> (probably by resetting its contents to 0, but possibly leaving garbage 
-> there instead).  Then when the following code in hub_port_init() tests 
-> buf->bMaxPacketSize0, it will see an invalid value and will retry the 
-> transfer.
+> I was testing with our host along with other common vendor hosts with a
+> few 3.x devices. Reverting this series resolves the issue. I didn't do
+> extensive tests for various speeds or debug it. I just want to notify
+> this first perhaps you can figure out the issue right away.
 > 
-> Or, with low probability, it will see a valid but incorrect value.  If 
-> that happens then later transfers using ep0 will fail, causing the hub 
-> driver to reiterate the outer loop in hub_port_connect().  Eventually 
-> the device will be correctly initialized and enumerated.
-> 
-> Alan Stern
->
+> I can look into it and provide more info later this week. If you want to
+> print any debug, let me know and I can provide later this week.
 
-OK, thanks.
-Longfang.
-> .
-> 
+Thanks for the notification.  The problem is almost certainly caused by 
+the first patch in the series, which changes the way that the initial 
+read/8 thing is done.  However, I have no idea what part of the patch 
+could be causing these errors.  I would appreciate anything you can find 
+out.
+
+You should concentrate your initial investigation on the new 
+get_bMaxPacketSize0() routine.  In particular, does the -EPROTO error 
+value arise as the return value from the usb_control_msg() call, or does 
+it happen because of the values stored in buf?  In the first case, how 
+does this call differ from the one that used to be made by 
+usb_get_device_descriptor()?  And in the second case, what are the 
+values of rc, buf->bMaxPacketSize0, and buf->bDescriptorType?
+
+Alan Stern
