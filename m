@@ -2,67 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7C967771F3
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Aug 2023 09:56:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B2E477738E
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Aug 2023 11:00:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231886AbjHJH4K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Aug 2023 03:56:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59552 "EHLO
+        id S232100AbjHJJAG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Aug 2023 05:00:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbjHJH4J (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Aug 2023 03:56:09 -0400
-Received: from mail.venturelinkbiz.com (mail.venturelinkbiz.com [51.195.119.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EACF2E4D
-        for <linux-usb@vger.kernel.org>; Thu, 10 Aug 2023 00:56:00 -0700 (PDT)
-Received: by mail.venturelinkbiz.com (Postfix, from userid 1002)
-        id 8E04A458DC; Thu, 10 Aug 2023 07:55:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=venturelinkbiz.com;
-        s=mail; t=1691654157;
-        bh=Mjfq+hZZ0+rPTC06HjjASvlnsTMgj1yAndWxi/OAu2M=;
-        h=Date:From:To:Subject:From;
-        b=EQdUV2VTODNd41ZUhcrozKyF49MoF8TGGvfjjl4c8QrV6E2aVpptSgwUso5vW/C6I
-         y+EXIs2So8TJ7QFuu3AJWA3HUFlkEYlwxCWC9teGaZrsiGYg1S4OtbkQkF+F/pxvAi
-         dgBxNBDw7MLE9xxzrjB6dLOVjL3+0cMVBMuy2Ve0buku10KqNqEhgj8TexIH2iBvfg
-         wqb7UlrZWbgrGhK6BObFogTRqfb5qzbS4fSgl8b1xOFYsfg04FON4W7rXyI7eXvCeI
-         LvZOYBJSztnSjxCp3MkTvuisgKyf4wzFYolzJZDj4AMXzqLL/c3liTyOltoOe8X4T+
-         JIlcOqyzMoA3Q==
-Received: by mail.venturelinkbiz.com for <linux-usb@vger.kernel.org>; Thu, 10 Aug 2023 07:55:45 GMT
-Message-ID: <20230810064500-0.1.1q.4hpm.0.q1qp0w6n4x@venturelinkbiz.com>
-Date:   Thu, 10 Aug 2023 07:55:45 GMT
-From:   "Michal Rmoutil" <michal.rmoutil@venturelinkbiz.com>
-To:     <linux-usb@vger.kernel.org>
-Subject: =?UTF-8?Q?Syst=C3=A9m_sledov=C3=A1n=C3=AD_a_optimalizace_v=C3=BDroby?=
-X-Mailer: mail.venturelinkbiz.com
+        with ESMTP id S231231AbjHJJAF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Aug 2023 05:00:05 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8C412123
+        for <linux-usb@vger.kernel.org>; Thu, 10 Aug 2023 02:00:04 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3fe1e1142caso5907275e9.0
+        for <linux-usb@vger.kernel.org>; Thu, 10 Aug 2023 02:00:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1691658003; x=1692262803;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=apCyx7BnprLlNUtpxgI6ODrkhYEMJ4RAFB4yHFVMfI8=;
+        b=cVdtENVBqkmVo7mhcn41Hs7v9W+1r6WC7SKAUkK0sQjOBgAlM5naVYjUnDsgRMHb3t
+         pRcnknchJZPisfwVakNwZMq/8AM6/k/Dh4BZ11VqCChCGyd0qsE6QGuHdqSABiT0LWXi
+         tic1V7TPvGGCaY60KFWEIV92flCtDx12JgAhDkzXhKpcqmgYg35/3tamRu2vHH0MRunb
+         EV6vaPBzZHfS6Iaja7ODtkfaTKVSivYRruBPKRBPUfZdOkWPSGaRNMD1Rs+znZpXY7MT
+         GynzjIzfF8pIJsWOJV6AzdIORG3VO/0W5VHnXAHRebmHY9ERkBjST2ODEtUcsM+tf+KL
+         HoCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691658003; x=1692262803;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=apCyx7BnprLlNUtpxgI6ODrkhYEMJ4RAFB4yHFVMfI8=;
+        b=NlU94Q0yJzDIrA72NHAP7z9ysX2gQA5n5gkvy0FAwEEQVC0eNb251FgTHAecQqrY03
+         XWxOF1E/9TBtweG6PPhmOhG4wwOnlq6p5+wBBeUkg0UocEkDwzkibNNmNZs9oaK1+YuX
+         kBCcn7cFckUik2BevgRmsZgmbv25uPYEsQ8Td7aCU9EuYOY7qQ2EDYJ1VKNmHzS2rfJR
+         QafnJGSU3J8w1kBFRuF+Dyqgb0mwD5GeRrwQp4QYEMuyIjASi4Ycz5JJJTYDklghobCP
+         7qK6QlxRfTSZWvwH5GceG5J07nvBsaU4VLEfXMhU9HHcbpf/7aThkVJn4RRq1TnS3NcQ
+         Qlvw==
+X-Gm-Message-State: AOJu0YxUcP8omvkgWJR0ck+RypMqI3Asp2GM/GbNGnLKZY5RC7OW9dl0
+        jqBPyk1tbO9IETYcZix4VAUKfw==
+X-Google-Smtp-Source: AGHT+IG6duMflYRBl5CQeCt/dV9xwJXDPQRP/d6NWugTgoVZOj3U5miGLp2jSFREeeNioqcKY7SORg==
+X-Received: by 2002:a1c:7518:0:b0:3fe:687a:abad with SMTP id o24-20020a1c7518000000b003fe687aabadmr1323005wmc.20.1691658003225;
+        Thu, 10 Aug 2023 02:00:03 -0700 (PDT)
+Received: from [192.168.69.115] ([176.176.158.65])
+        by smtp.gmail.com with ESMTPSA id n24-20020a7bcbd8000000b003fbb0c01d4bsm1466098wmi.16.2023.08.10.02.00.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Aug 2023 02:00:02 -0700 (PDT)
+Message-ID: <ef8cff61-d61e-120d-fd69-8612c64b4139@linaro.org>
+Date:   Thu, 10 Aug 2023 11:00:00 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,URIBL_CSS_A,URIBL_DBL_SPAM
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.13.0
+Subject: Re: [PATCH] usb: dwc3: dwc3-octeon: Verify clock divider
+Content-Language: en-US
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-usb@vger.kernel.org, linux-mips@vger.kernel.org,
+        lkft-triage@lists.linaro.org
+Cc:     Thinh.Nguyen@synopsys.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+References: <ZNIM7tlBNdHFzXZG@lenoch>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <ZNIM7tlBNdHFzXZG@lenoch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dobr=C3=A9 r=C3=A1no
+On 8/8/23 11:37, Ladislav Michl wrote:
+> From: Ladislav Michl <ladis@linux-mips.org>
+> 
+> Although valid USB clock divider will be calculated for all valid
+> Octeon core frequencies, make code formally correct limiting
+> divider not to be greater that 7 so it fits into H_CLKDIV_SEL
+> field.
+> 
+> Signed-off-by: Ladislav Michl <ladis@linux-mips.org>
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> Closes: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230808/testrun/18882876/suite/build/test/gcc-8-cavium_octeon_defconfig/log
+> ---
+>   Greg, if you want to resent whole serie, just drop me a note.
+>   Otherwise, this patch is meant to be applied on to of it.
+>   Thank you.
+> 
+>   drivers/usb/dwc3/dwc3-octeon.c | 8 ++++++--
+>   1 file changed, 6 insertions(+), 2 deletions(-)
 
-Zn=C3=A1te syst=C3=A9m, kter=C3=BD nejen hl=C3=ADd=C3=A1, ale i optimaliz=
-uje v=C3=BDrobu a p=C5=99in=C3=A1=C5=A1=C3=AD st=C3=A1l=C3=BD p=C5=99=C3=AD=
-jem?
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
-D=C3=ADky nejnov=C4=9Bj=C5=A1=C3=ADm technologi=C3=ADm a anal=C3=BDze dat=
- na=C5=A1e =C5=99e=C5=A1en=C3=AD identifikuje oblasti optimalizace, zv=C3=
-=BD=C5=A1en=C3=AD efektivity a sn=C3=AD=C5=BEen=C3=AD n=C3=A1klad=C5=AF. =
-Na=C5=A1i klienti zaznamenali n=C3=A1r=C5=AFst p=C5=99=C3=ADjm=C5=AF v pr=
-=C5=AFm=C4=9Bru o 20 % a dnes si to m=C5=AF=C5=BEete vyzkou=C5=A1et na 60=
- dn=C3=AD zdarma.
-
-Pokud chcete dal=C5=A1=C3=AD podrobnosti, odpov=C4=9Bzte pros=C3=ADm na k=
-ontaktn=C3=AD =C4=8D=C3=ADslo.
-
-
-Pozdravy
-Michal Rmoutil
