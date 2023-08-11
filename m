@@ -2,92 +2,165 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D52177971B
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Aug 2023 20:30:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C99E8779745
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Aug 2023 20:48:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231646AbjHKSaH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Aug 2023 14:30:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51324 "EHLO
+        id S235503AbjHKSsK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Aug 2023 14:48:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230478AbjHKSaG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Aug 2023 14:30:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE1030DC
-        for <linux-usb@vger.kernel.org>; Fri, 11 Aug 2023 11:30:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CDB1A66E07
-        for <linux-usb@vger.kernel.org>; Fri, 11 Aug 2023 18:30:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 32116C433C8
-        for <linux-usb@vger.kernel.org>; Fri, 11 Aug 2023 18:30:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691778605;
-        bh=NkDhY1TktCRbEfLO/TcIAmJJlubimxC5Xamiximqk58=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=OI/Vle+0Qc8wSkhO3/rusz+tJ/JGkAME6DUtXuKvC2CTzpcEUwDZp1Rpkn4svFvie
-         o5PGHgIiVTQ6vx564YDlX76uzg6HPtX7qaG358OtVcUpwHWVAEqCb2jcergW0PcGQh
-         XTnYkmoMHPZJDqdg9SzQxq+UQbkO6jZL7f95ppWleIwhIGSPyhF721n1MszcgF+fq8
-         LaI5FFdzOUYJ0QR38sgy5O4Q5mE3QoUR78As3wwcx5uQmT6kaEwN9PZBgr1anRnnjV
-         vwViBb0KGyODydscqK/baMnXtLqRLEmiEx0DZ+v7dOj+UiSOm35YT2lFmrvb+2e/St
-         5Z2uC9qiB4ZLA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 18949C53BD2; Fri, 11 Aug 2023 18:30:05 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 216483] Logitech HID++ feature ADC_MEASUREMENT=0x1F20 reports
- battery information
-Date:   Fri, 11 Aug 2023 18:30:04 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: bugzilla@hadess.net
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: CODE_FIX
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_status resolution
-Message-ID: <bug-216483-208809-u2CI43iHAg@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-216483-208809@https.bugzilla.kernel.org/>
-References: <bug-216483-208809@https.bugzilla.kernel.org/>
+        with ESMTP id S229577AbjHKSsJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Aug 2023 14:48:09 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB24E30EA
+        for <linux-usb@vger.kernel.org>; Fri, 11 Aug 2023 11:48:08 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-d66af3c8ac7so1099172276.1
+        for <linux-usb@vger.kernel.org>; Fri, 11 Aug 2023 11:48:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1691779688; x=1692384488;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ZJJ8UdAIxIsw1LkzQ8Bf6m1ij6K720NrGCKMd7eniDM=;
+        b=oZKX9eh/oR9Kkzl97al4UScWBn7jnrWuhJe5205va1AhljySM2gHSaH1yj7tV/v3T9
+         aS1NbtndUEeMUBFsb8BNrkCG3ADshR1Qr/8RHv8SiMeasr711vA+HCF655Bfs+fKp4Ae
+         wKCf4xI9ILtCQqA/nd3FZXXl8+KxttPoD8W9TFJM9CQXz6niVgstQCNTBANbR2MPKK7N
+         gba7m0SMNqO8IeUG+y7voRqfyMF9IMss5oeEk7ziuFi6rM99EvX/tz4EOaCjJdKMqxof
+         3ZmDfA0WaWkSxuU7cGN9n8rPaq3NrupxQwx8VG3MNnq3PBzvFyvI3FlR+75ocnGUDTP+
+         QCyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691779688; x=1692384488;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZJJ8UdAIxIsw1LkzQ8Bf6m1ij6K720NrGCKMd7eniDM=;
+        b=K00O4Imk23ygDjoB4JhhmOtWTejdLHyAnZNugnBvVqY2/LL3/d7jh9qG934LGJE7Pc
+         JxiSWd0u7k6eoDQSdwunNPFVyvy4vd6NDGpqEho7zym1Ye/SwY/Bgx5aisERACEILv30
+         GsCHW/7BM4iNWLGL7oDSNr7l5X750xi7I2MS6rX4QevCKbpimsnkPISXdkaMAdgOprvd
+         s3zxeb8PVq6YJsmXigDpU+4t8/pJwJFTBEMHKUIvcDZvx3RfVao9PHhMvP9Pvrscb8ia
+         v38e2VaeAq2JG6hgNVQ/p2XkiyF5lH13AgPogJWQnEJvgGk8GXLxmBGMTKRJ43KgwUu7
+         ourA==
+X-Gm-Message-State: AOJu0Yw3I7AUkNWbbPV87S8UVvargHj7YZXVS0YkvCB5+WXqtVjQIef4
+        4D1s3m/alnOZVjY2R7w4V8FNuCmleLWg7Vk=
+X-Google-Smtp-Source: AGHT+IEnRj3XgadHnPY0JsCnuxHjF2khkZv3Wyf3q91Z5QvsEE5u2YoEPQOSwguVfdhtyYW/HmP8lMT6za6KB+g=
+X-Received: from rdbabiera.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:18a8])
+ (user=rdbabiera job=sendgmr) by 2002:a25:d153:0:b0:d3f:3186:2296 with SMTP id
+ i80-20020a25d153000000b00d3f31862296mr49820ybg.3.1691779687961; Fri, 11 Aug
+ 2023 11:48:07 -0700 (PDT)
+Date:   Fri, 11 Aug 2023 18:47:54 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.640.ga95def55d0-goog
+Message-ID: <20230811184754.1886458-1-rdbabiera@google.com>
+Subject: [PATCH v2] usb: typec: bus: verify partner exists in typec_altmode_attention
+From:   RD Babiera <rdbabiera@google.com>
+To:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        linux@roeck-us.net
+Cc:     badhri@google.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, RD Babiera <rdbabiera@google.com>,
+        stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D216483
+Some usb hubs will negotiate DisplayPort Alt mode with the device
+but will then negotiate a data role swap after entering the alt
+mode. The data role swap causes the device to unregister all alt
+modes, however the usb hub will still send Attention messages
+even after failing to reregister the Alt Mode. type_altmode_attention
+currently does not verify whether or not a device's altmode partner
+exists, which results in a NULL pointer error when dereferencing
+the typec_altmode and typec_altmode_ops belonging to the altmode
+partner.
 
-Bastien Nocera (bugzilla@hadess.net) changed:
+This patch verifies the presence of a device's altmode partner
+before sending the Attention message to the Alt Mode driver.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |CODE_FIX
+Fixes: 8a37d87d72f0 ("usb: typec: Bus type for alternate modes")
+Cc: stable@vger.kernel.org
+Signed-off-by: RD Babiera <rdbabiera@google.com>
+---
+Changes since v1:
+* Only assigns pdev if altmode partner exists in typec_altmode_attention
+* Removed error return in typec_altmode_attention if Alt Mode does
+  not implement Attention messages.
+* Changed tcpm_log message to indicate that altmode partner does not exist,
+  as it only logs in that case.
+---
+ drivers/usb/typec/bus.c           | 12 ++++++++++--
+ drivers/usb/typec/tcpm/tcpm.c     |  5 ++++-
+ include/linux/usb/typec_altmode.h |  2 +-
+ 3 files changed, 15 insertions(+), 4 deletions(-)
 
---- Comment #2 from Bastien Nocera (bugzilla@hadess.net) ---
-Support was merged upstream in:
-https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git/commit/?id=3Dc3=
-61982a13c91
+diff --git a/drivers/usb/typec/bus.c b/drivers/usb/typec/bus.c
+index fe5b9a2e61f5..e95ec7e382bb 100644
+--- a/drivers/usb/typec/bus.c
++++ b/drivers/usb/typec/bus.c
+@@ -183,12 +183,20 @@ EXPORT_SYMBOL_GPL(typec_altmode_exit);
+  *
+  * Notifies the partner of @adev about Attention command.
+  */
+-void typec_altmode_attention(struct typec_altmode *adev, u32 vdo)
++int typec_altmode_attention(struct typec_altmode *adev, u32 vdo)
+ {
+-	struct typec_altmode *pdev = &to_altmode(adev)->partner->adev;
++	struct altmode *partner = to_altmode(adev)->partner;
++	struct typec_altmode *pdev;
++
++	if (!partner)
++		return -ENODEV;
++
++	pdev = &partner->adev;
+ 
+ 	if (pdev->ops && pdev->ops->attention)
+ 		pdev->ops->attention(pdev, vdo);
++
++	return 0;
+ }
+ EXPORT_SYMBOL_GPL(typec_altmode_attention);
+ 
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 5a7d8cc04628..b0328e922989 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -1791,6 +1791,7 @@ static void tcpm_handle_vdm_request(struct tcpm_port *port,
+ 	u32 p[PD_MAX_PAYLOAD];
+ 	u32 response[8] = { };
+ 	int i, rlen = 0;
++	int ret;
+ 
+ 	for (i = 0; i < cnt; i++)
+ 		p[i] = le32_to_cpu(payload[i]);
+@@ -1877,7 +1878,9 @@ static void tcpm_handle_vdm_request(struct tcpm_port *port,
+ 			}
+ 			break;
+ 		case ADEV_ATTENTION:
+-			typec_altmode_attention(adev, p[1]);
++			ret = typec_altmode_attention(adev, p[1]);
++			if (ret)
++				tcpm_log(port, "typec_altmode_attention invalid port partner");
+ 			break;
+ 		}
+ 	}
+diff --git a/include/linux/usb/typec_altmode.h b/include/linux/usb/typec_altmode.h
+index 350d49012659..28aeef8f9e7b 100644
+--- a/include/linux/usb/typec_altmode.h
++++ b/include/linux/usb/typec_altmode.h
+@@ -67,7 +67,7 @@ struct typec_altmode_ops {
+ 
+ int typec_altmode_enter(struct typec_altmode *altmode, u32 *vdo);
+ int typec_altmode_exit(struct typec_altmode *altmode);
+-void typec_altmode_attention(struct typec_altmode *altmode, u32 vdo);
++int typec_altmode_attention(struct typec_altmode *altmode, u32 vdo);
+ int typec_altmode_vdm(struct typec_altmode *altmode,
+ 		      const u32 header, const u32 *vdo, int count);
+ int typec_altmode_notify(struct typec_altmode *altmode, unsigned long conf,
 
---=20
-You may reply to this email to add a comment.
+base-commit: f176638af476c6d46257cc3303f5c7cf47d5967d
+-- 
+2.41.0.640.ga95def55d0-goog
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
