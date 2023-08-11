@@ -2,148 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B26C778E3B
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Aug 2023 13:51:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D2E4778E8E
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Aug 2023 14:01:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232218AbjHKLvU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Aug 2023 07:51:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37530 "EHLO
+        id S235098AbjHKMBI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Aug 2023 08:01:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjHKLvT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Aug 2023 07:51:19 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FFC1DC;
-        Fri, 11 Aug 2023 04:51:18 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37BBlRKA019472;
-        Fri, 11 Aug 2023 11:51:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : from : subject : to : cc : content-type :
- content-transfer-encoding; s=qcppdkim1;
- bh=1Z6oCYamo2xQg3871Q2Qd7ihLz0me4HirROMOgqLRRk=;
- b=XMUwvOTvwQwSkCkHy/0vmqJRAUgFMBukbHfvGmuONKVB9CAYrEJEKVQxxvG7SIke8KC4
- giZCJobShbhHOTzzR/SH2Uqm5/f6GWOCg7PqGVKYkDPYivhakPYzwUjKCdcMvTUkLubX
- 0pXK4Uy9NJge+Ol0TJB4hHh6JWDMBgwZ7ycvSpNM+hj1TVq3NDLFH6LyZ/uDC5qBiTGM
- ustY2fuOuNTF38pboov4dXAoqb8mWPLyHuh5Rhw+58k6E5SGiNCnW9k5mnCLkWh8oR+j
- UEIGlyCS7jV6jYBJLHw6q/PbN8X3/bAvBvo21BbiLgxFRLlrCKDNILooxAe7ycWuqnt6 Ew== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3sd9061f4k-1
+        with ESMTP id S231285AbjHKMBF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Aug 2023 08:01:05 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C2410F;
+        Fri, 11 Aug 2023 05:01:00 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 37B88G8v008911;
+        Fri, 11 Aug 2023 14:00:30 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+        message-id:date:mime-version:subject:to:cc:references:from
+        :in-reply-to:content-type:content-transfer-encoding; s=
+        selector1; bh=YFHcudHf3KpEu6VK+Oi7sDZa7u7aRH57T4p90BFxYt4=; b=kU
+        O35PwDwyu9KjgW31K5h+6ypqbjSO6SxBadYITZWgPgbjcx7JybnAtEPYUufCNZ1c
+        UmcJYsfb4v5cYrhDkibKKDxm5TpRLh/usyV9eplTbzPk8FWxlpA11SMe+tWFoHtE
+        nXPAN596HtBzcvDnDHR0ekdCH486R0r+TxPzL9tozmYQYoPWnnLGInYl3MRzO4Ve
+        mX/GHIkPAIGcQsdV9V/wrcIE3MhSv5JVpUfvddbdbHMcOV/6LpEQ9KIuJdAz19XH
+        RJctqFi0wSAJ+BRNaqX/iLjVk/ggN6VW/unTU9UDPsJ6xBkOROMcl3YQW+ceqGTb
+        HV30OC1Vqh+PAlrRr7vg==
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3sdh74h9vb-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Aug 2023 11:51:13 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37BBpCB8027710
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Aug 2023 11:51:12 GMT
-Received: from [10.216.22.214] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Fri, 11 Aug
- 2023 04:51:08 -0700
-Message-ID: <af60c05b-4a0f-51b8-486a-1fc601602515@quicinc.com>
-Date:   Fri, 11 Aug 2023 17:21:03 +0530
+        Fri, 11 Aug 2023 14:00:29 +0200 (MEST)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 64D9710004F;
+        Fri, 11 Aug 2023 14:00:27 +0200 (CEST)
+Received: from Webmail-eu.st.com (eqndag1node4.st.com [10.75.129.133])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 287D02171E0;
+        Fri, 11 Aug 2023 14:00:27 +0200 (CEST)
+Received: from [10.201.21.121] (10.201.21.121) by EQNDAG1NODE4.st.com
+ (10.75.129.133) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Fri, 11 Aug
+ 2023 14:00:25 +0200
+Message-ID: <4f0f9d6c-ce4d-73a2-60bf-801c1a1d6cc3@foss.st.com>
+Date:   Fri, 11 Aug 2023 14:00:20 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.1
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-Subject: Disconnect interrupt generation for QC targets when role switch is
- enabled
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [IGNORE][PATCH v4 01/11] dt-bindings: Document common device
+ controller bindings
 Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <Oleksii_Moisieiev@epam.com>, <herbert@gondor.apana.org.au>,
+        <davem@davemloft.net>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <alexandre.torgue@foss.st.com>, <vkoul@kernel.org>,
+        <jic23@kernel.org>, <olivier.moysan@foss.st.com>,
+        <arnaud.pouliquen@foss.st.com>, <mchehab@kernel.org>,
+        <fabrice.gasnier@foss.st.com>, <andi.shyti@kernel.org>,
+        <ulf.hansson@linaro.org>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <hugues.fruchet@foss.st.com>,
+        <lee@kernel.org>, <will@kernel.org>, <catalin.marinas@arm.com>,
+        <arnd@kernel.org>, <richardcochran@gmail.com>,
+        Frank Rowand <frowand.list@gmail.com>, <peng.fan@oss.nxp.com>,
+        <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <linux-media@vger.kernel.org>,
+        <linux-mmc@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-serial@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>
+References: <20230811100731.108145-1-gatien.chevallier@foss.st.com>
+ <20230811100731.108145-2-gatien.chevallier@foss.st.com>
+ <2023081117-sprout-cruncher-862c@gregkh>
+From:   Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
+In-Reply-To: <2023081117-sprout-cruncher-862c@gregkh>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: cAgBcsdx_Iy3Ws3QWYPQTAFYf11Ch62T
-X-Proofpoint-ORIG-GUID: cAgBcsdx_Iy3Ws3QWYPQTAFYf11Ch62T
+X-Originating-IP: [10.201.21.121]
+X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To EQNDAG1NODE4.st.com
+ (10.75.129.133)
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-08-11_03,2023-08-10_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
- impostorscore=0 lowpriorityscore=0 priorityscore=1501 adultscore=0
- suspectscore=0 malwarescore=0 mlxscore=0 clxscore=1011 spamscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2306200000 definitions=main-2308110108
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+ definitions=2023-08-11_02,2023-08-10_01,2023-05-22_02
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Thinh, Johan, Bjorn, Konrad,
 
-   On QC targets today, the disconnect event in device mode is generated 
-by controller when software writes to QSCRATCH registers in qcom glue 
-layer rather than the vbus line being routed to dwc3 core IP for it to 
-recognize and generate conndone/disconnect events.
 
-We need to write '1' to  UTMI_OTG_VBUS_VALID bit of QSCRATCH_HS_PHY_CTRL 
-register to generate a connection done event and "0" if we need to 
-generate a disconnect event during cable removal or mode switch. Exactly 
-what is done by "dwc3_qcom_vbus_override_enable" call in dwc3-qcom. In 
-case the user wants to enable runtime suspend for dwc3 and we don't 
-generate a disconnect event, the dwc->connected flag will be "true" and 
-it would block suspend entry.
+On 8/11/23 12:16, Greg KH wrote:
+> On Fri, Aug 11, 2023 at 12:07:21PM +0200, Gatien Chevallier wrote:
+>> From: Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
+>>
+>> Introducing of the common device controller bindings for the controller
+>> provider and consumer devices. Those bindings are intended to allow
+>> divided system on chip into multiple domains, that can be used to
+>> configure hardware permissions.
+>>
+>> Signed-off-by: Oleksii Moisieiev <oleksii_moisieiev@epam.com>
+>> [Gatien: Fix typos and YAML error]
+>> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+>> ---
+>>
+>> Changes in V4:
+>> 	Corrected typos and YAML errors	
+> 
+> Why are we supposed to ignore the first patch in this series, but pay
+> attention to the 10 after this that depend on it?
+> 
+> totally confused,
+> 
+> greg k-h
 
-Today, in dwc3-qcom, this qscratch modification is being done only for 
-vbus/host notifiers where I assume dwc3-qcom would be receiving these 
-notifications from charger driver regarding cable connect and removal 
-and since we are receiving a copy of the information in dwc3-qcom as 
-well, we would be knowing when to set/clear the VBUS_VALID bit.
+Hello Greg,
 
-But, when we have role switch in play, the role_set callback goes to DRD 
-and Qcom driver is agnostic of what is actually happening. While this 
-doesn't hinder mode switch, the role change notification never really 
-reaches dwc3-qcom and we would never set this bit to "0" and disconnect 
-event is not generated upon cable plug-out. Is there a way we can 
-properly provide this notification to qcom glue driver ?
+I'm sorry that this tag troubles your review. It was first suggested
+in [1]. The "IGNORE" means ignore review on this thread, as it is still
+under review in another thread (Link in the cover letter). It does not
+mean that the content should be ignored for the series. I will change
+this to something else as this is obviously confusing the review.
 
-I had some idea on how to get the role notification reach qcom glue 
-driver but wanted your opinion on whether they can be used or not:
+@Oleksii, can we imagine integrating this patch to this series or do
+you prefer to keep it apart?
 
-1. Register a vendor_hook from glue driver and invoke that during 
-__dwc3_set_mode.
+Should I consider a resend with another tag if Oleksii prefers to keep
+this patch apart?
 
-2. Let the role notification reach dwc3-qcom first and then let qcom 
-driver invoke role_set of drd. Something similar to what was implemented 
-by Wesley on [1].
+[1] 
+https://lore.kernel.org/all/1e498b93-d3bd-bd12-e991-e3f4bedf632d@linaro.org/
 
-But both the options require dwc3_probe to be done in sync with 
-of_platform_populate or we need to defer qcom probe if dwc3_probe is 
-deferred. Since we are leaning towards async probe, not sure if the 
-above two options would be proper.
-
-Couple of more reasons to ask for the above two options:
-
-1. We would know when we are in device/host mode and we can avoid having 
-any layering violations in dwc3-qcom.
-
-2. When it comes to runtime pm implementation for dwc3-qcom, an effort 
-was done by Manivannan Sadhasivam previously [2], we can avoid modifying 
-xhci-plat.c to set autosuspend delay to any specific value. We would be 
-able to enable runtime/autosuspend for dwc->xhci->dev from dwc3-qcom 
-itself upon entering host mode.
-
-Can you help let know your thoughts on the above two options or if there 
-is any way we can implement the role change / cable plug in(out) callback.
-
-[1]: 
-https://patchwork.kernel.org/project/linux-usb/patch/20201009082843.28503-4-wcheng@codeaurora.org/
-[2]: 
-https://patchwork.kernel.org/project/linux-usb/cover/20230325165217.31069-1-manivannan.sadhasivam@linaro.org/
-
-Regards,
-Krishna,
+Best regards,
+Gatien
