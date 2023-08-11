@@ -2,118 +2,169 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7823D7798EB
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Aug 2023 22:53:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37F847799A4
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Aug 2023 23:37:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236904AbjHKUwl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Aug 2023 16:52:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53988 "EHLO
+        id S236972AbjHKVhz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Aug 2023 17:37:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236806AbjHKUwh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Aug 2023 16:52:37 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA1A30F8;
-        Fri, 11 Aug 2023 13:52:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1691787151; x=1723323151;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=9+EKRCDHeYAFpWJW50VR+0rBDbKfPEO7TcEgh/r17hc=;
-  b=m6KQr1nHBrdHOLbQHkwzpfyRdr0EqNyIZzOelYfFLuH5PVB95CIH2pHM
-   Kw4Sj7cpkCz8a7vL8d7oIZjzbWDBpu3+/fjSeSTTDL8jC7IiJ1Md8odV/
-   llpAp70gnxmTM3eceCZWxXqD7p0+ofROi87Py77eUHW370hV3UcTbELvO
-   rvd60w/6dVeFTxlJ6SCpvo+YlNN/XyzswQjLb5m3pg9UoRjbQ7osJBTqd
-   He2X2qrpnCyUynGRqcP0ebYR3Pxpu7CyoL39gxqmqHu11NZWDrvJG2kJA
-   aTj0MERMwRUNllY9JLOZUIRkEaYRPaNGbOcV0KWFb8arArNjY38VzWNDp
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="375473047"
-X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
-   d="scan'208";a="375473047"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2023 13:52:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10799"; a="762322064"
-X-IronPort-AV: E=Sophos;i="6.01,166,1684825200"; 
-   d="scan'208";a="762322064"
-Received: from uhpatel-desk4.jf.intel.com ([10.23.15.223])
-  by orsmga008.jf.intel.com with ESMTP; 11 Aug 2023 13:52:11 -0700
-From:   Utkarsh Patel <utkarsh.h.patel@intel.com>
-To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     heikki.krogerus@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        pmalani@chromium.org, bleung@chromium.org,
-        Utkarsh Patel <utkarsh.h.patel@intel.com>
-Subject: [PATCH 4/4] usb: typec: intel_pmc_mux: Configure Displayport Alternate mode 2.1
-Date:   Fri, 11 Aug 2023 14:07:35 -0700
-Message-Id: <20230811210735.159529-5-utkarsh.h.patel@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230811210735.159529-1-utkarsh.h.patel@intel.com>
-References: <20230811210735.159529-1-utkarsh.h.patel@intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S236965AbjHKVhw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Aug 2023 17:37:52 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF2F30C8
+        for <linux-usb@vger.kernel.org>; Fri, 11 Aug 2023 14:37:40 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-584139b6b03so27963677b3.3
+        for <linux-usb@vger.kernel.org>; Fri, 11 Aug 2023 14:37:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1691789859; x=1692394659;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=bMZsVZSnTwxLBUZ0gFEh6Z7YIIkBHuiAxRukuullP64=;
+        b=72OZU8nCPwmXMWau/bDePSdndzSri29uvu09IJBTIwz9ICBVapeWg+SDFxS7gpRIBd
+         +zoymg8oFyxYMMo4M9G0obTzeT639Wm5c+nZxA2PPVoPx6nSJ7X5SeuHxeU+U+RlN9U1
+         hjbl+ZBBf4O19aItCQ1LkQTdOQR8LZoFzMJwgXYMgGdLoymniI0bFQUGGlBoH+WYmuHb
+         uP7n+nRe8wFb8HC7UzjnjPJiAaRlFzCvpVufqlCtPkzJvmGntJ6WVu3PaNLJIwAlmwyg
+         HcwoXb2r6JaBHuENjKDKAu+9OBarskuwun5cAk4THv3SdbEQ6o/arCQw+XEJtDCebTqC
+         LXRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1691789859; x=1692394659;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bMZsVZSnTwxLBUZ0gFEh6Z7YIIkBHuiAxRukuullP64=;
+        b=ATWu5dl5oCqGSwj86PYRTvh6aPDr8pvTR0fwl4AWKjo+zP/oxDRvmrY85EKtH/1I2r
+         lC8Et3P0b3W6gtcDb6luv6RFVdyezvm7PIZ014ixNZ9YiOT9pf2+upwho+Fciky2qEAX
+         36ZF8P2pkGMOeyeXszDxQIAFNie+ULhMqoI3+JLZa8N8onXyM+Nla0YTFJSLqt7hJJQs
+         fir2GetlN/IWvowErB9/jyLXefeWgHAUoQjN/BRkq9KNCw1RtT9PgPG2y/xmIrRGz7qC
+         IVHKiO+RCnlM9sdqeNRS8Hf3K3zke+BoTLR/FyIP+a4GZ8F1hasemVEcvzL97aG1Mvq6
+         7AYw==
+X-Gm-Message-State: AOJu0Yy8+ri8BThtuokiC5gQ2YydsF9SB7PvcN/cNC/1IGRrdlMLC7HW
+        BJ6LVw6Bf2NIRbjaUpAzDsqBdYrctLs4eM0=
+X-Google-Smtp-Source: AGHT+IFP1TLkOnN0mXKWfJp/bqh9cjlj0kJRsKyzdyvggLP4N2xzIVCKSkVK86ZkSomHRWVcdvm5Y14/oZ6JJ58=
+X-Received: from rdbabiera.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:18a8])
+ (user=rdbabiera job=sendgmr) by 2002:a81:ae12:0:b0:584:41b7:30e7 with SMTP id
+ m18-20020a81ae12000000b0058441b730e7mr52742ywh.0.1691789859770; Fri, 11 Aug
+ 2023 14:37:39 -0700 (PDT)
+Date:   Fri, 11 Aug 2023 21:37:32 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.640.ga95def55d0-goog
+Message-ID: <20230811213732.3325896-1-rdbabiera@google.com>
+Subject: [PATCH v3] usb: typec: bus: verify partner exists in typec_altmode_attention
+From:   RD Babiera <rdbabiera@google.com>
+To:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        linux@roeck-us.net
+Cc:     badhri@google.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, RD Babiera <rdbabiera@google.com>,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Mux agent driver can configure cable details such as cable type and
-cable speed received as a part of displayport configuration to support
-Displayport Alternate mode 2.1.
+Some usb hubs will negotiate DisplayPort Alt mode with the device
+but will then negotiate a data role swap after entering the alt
+mode. The data role swap causes the device to unregister all alt
+modes, however the usb hub will still send Attention messages
+even after failing to reregister the Alt Mode. type_altmode_attention
+currently does not verify whether or not a device's altmode partner
+exists, which results in a NULL pointer error when dereferencing
+the typec_altmode and typec_altmode_ops belonging to the altmode
+partner.
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Utkarsh Patel <utkarsh.h.patel@intel.com>
+Verify the presence of a device's altmode partner before sending
+the Attention message to the Alt Mode driver.
+
+Fixes: 8a37d87d72f0 ("usb: typec: Bus type for alternate modes")
+Cc: stable@vger.kernel.org
+Signed-off-by: RD Babiera <rdbabiera@google.com>
 ---
- drivers/usb/typec/mux/intel_pmc_mux.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+Changes since v1:
+* Only assigns pdev if altmode partner exists in typec_altmode_attention
+* Removed error return in typec_altmode_attention if Alt Mode does
+  not implement Attention messages.
+* Changed tcpm_log message to indicate that altmode partner does not exist,
+  as it only logs in that case.
+---
+Changes since v2:
+* Changed tcpm_log message to accurately reflect error
+* Revised commit message
+---
+ drivers/usb/typec/bus.c           | 12 ++++++++++--
+ drivers/usb/typec/tcpm/tcpm.c     |  5 ++++-
+ include/linux/usb/typec_altmode.h |  2 +-
+ 3 files changed, 15 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
-index 888632847a74..218f6e25518d 100644
---- a/drivers/usb/typec/mux/intel_pmc_mux.c
-+++ b/drivers/usb/typec/mux/intel_pmc_mux.c
-@@ -180,6 +180,12 @@ static int hsl_orientation(struct pmc_usb_port *port)
- 	return port->orientation - 1;
- }
- 
-+static bool is_pmc_mux_tbt(struct acpi_device *adev)
-+{
-+	return acpi_dev_hid_uid_match(adev, "INTC1072", NULL) ||
-+	       acpi_dev_hid_uid_match(adev, "INTC1079", NULL);
-+}
-+
- static int pmc_usb_send_command(struct intel_scu_ipc_dev *ipc, u8 *msg, u32 len)
+diff --git a/drivers/usb/typec/bus.c b/drivers/usb/typec/bus.c
+index fe5b9a2e61f5..e95ec7e382bb 100644
+--- a/drivers/usb/typec/bus.c
++++ b/drivers/usb/typec/bus.c
+@@ -183,12 +183,20 @@ EXPORT_SYMBOL_GPL(typec_altmode_exit);
+  *
+  * Notifies the partner of @adev about Attention command.
+  */
+-void typec_altmode_attention(struct typec_altmode *adev, u32 vdo)
++int typec_altmode_attention(struct typec_altmode *adev, u32 vdo)
  {
- 	u8 response[4];
-@@ -282,6 +288,24 @@ pmc_usb_mux_dp(struct pmc_usb_port *port, struct typec_mux_state *state)
- 	req.mode_data |= (state->mode - TYPEC_STATE_MODAL) <<
- 			 PMC_USB_ALTMODE_DP_MODE_SHIFT;
+-	struct typec_altmode *pdev = &to_altmode(adev)->partner->adev;
++	struct altmode *partner = to_altmode(adev)->partner;
++	struct typec_altmode *pdev;
++
++	if (!partner)
++		return -ENODEV;
++
++	pdev = &partner->adev;
  
-+	if (!is_pmc_mux_tbt(port->pmc->iom_adev)) {
-+		u8 cable_speed = (data->conf & DP_CONF_SIGNALLING_MASK) >>
-+				  DP_CONF_SIGNALLING_SHIFT;
+ 	if (pdev->ops && pdev->ops->attention)
+ 		pdev->ops->attention(pdev, vdo);
 +
-+		u8 cable_type = (data->conf & DP_CONF_CABLE_TYPE_MASK) >>
-+				 DP_CONF_CABLE_TYPE_SHIFT;
-+
-+		req.mode_data |= PMC_USB_ALTMODE_CABLE_SPD(cable_speed);
-+
-+		if (cable_type == DP_CONF_CABLE_TYPE_OPTICAL)
-+			req.mode_data |= PMC_USB_ALTMODE_CABLE_TYPE;
-+		else if (cable_type == DP_CONF_CABLE_TYPE_RE_TIMER)
-+			req.mode_data |= PMC_USB_ALTMODE_ACTIVE_CABLE |
-+					 PMC_USB_ALTMODE_RETIMER_CABLE;
-+		else if (cable_type == DP_CONF_CABLE_TYPE_RE_DRIVER)
-+			req.mode_data |= PMC_USB_ALTMODE_ACTIVE_CABLE;
-+	}
-+
- 	ret = pmc_usb_command(port, (void *)&req, sizeof(req));
- 	if (ret)
- 		return ret;
++	return 0;
+ }
+ EXPORT_SYMBOL_GPL(typec_altmode_attention);
+ 
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 5a7d8cc04628..97b7b22e9cf1 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -1791,6 +1791,7 @@ static void tcpm_handle_vdm_request(struct tcpm_port *port,
+ 	u32 p[PD_MAX_PAYLOAD];
+ 	u32 response[8] = { };
+ 	int i, rlen = 0;
++	int ret;
+ 
+ 	for (i = 0; i < cnt; i++)
+ 		p[i] = le32_to_cpu(payload[i]);
+@@ -1877,7 +1878,9 @@ static void tcpm_handle_vdm_request(struct tcpm_port *port,
+ 			}
+ 			break;
+ 		case ADEV_ATTENTION:
+-			typec_altmode_attention(adev, p[1]);
++			ret = typec_altmode_attention(adev, p[1]);
++			if (ret)
++				tcpm_log(port, "typec_altmode_attention NULL port partner altmode");
+ 			break;
+ 		}
+ 	}
+diff --git a/include/linux/usb/typec_altmode.h b/include/linux/usb/typec_altmode.h
+index 350d49012659..28aeef8f9e7b 100644
+--- a/include/linux/usb/typec_altmode.h
++++ b/include/linux/usb/typec_altmode.h
+@@ -67,7 +67,7 @@ struct typec_altmode_ops {
+ 
+ int typec_altmode_enter(struct typec_altmode *altmode, u32 *vdo);
+ int typec_altmode_exit(struct typec_altmode *altmode);
+-void typec_altmode_attention(struct typec_altmode *altmode, u32 vdo);
++int typec_altmode_attention(struct typec_altmode *altmode, u32 vdo);
+ int typec_altmode_vdm(struct typec_altmode *altmode,
+ 		      const u32 header, const u32 *vdo, int count);
+ int typec_altmode_notify(struct typec_altmode *altmode, unsigned long conf,
+
+base-commit: f176638af476c6d46257cc3303f5c7cf47d5967d
 -- 
-2.25.1
+2.41.0.640.ga95def55d0-goog
 
