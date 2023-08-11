@@ -2,96 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70C4C778410
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Aug 2023 01:18:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41FFE77851D
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Aug 2023 03:51:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233074AbjHJXR6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Aug 2023 19:17:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54758 "EHLO
+        id S231938AbjHKBvQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Aug 2023 21:51:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233044AbjHJXRy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Aug 2023 19:17:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E9A2D76;
-        Thu, 10 Aug 2023 16:17:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5275B669FD;
-        Thu, 10 Aug 2023 23:17:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16A2AC433C8;
-        Thu, 10 Aug 2023 23:17:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1691709469;
-        bh=PflT+dpFfXcivxjANA04EvC0KDcMcvIWrxSzmMR+gmE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SQvlkreFmgQfFzptcYHY5nilAX7QVUMWZMV9Pc25FdEtgQ/n046DKME5jJObrMPFT
-         wmdP4ShOvcWFyC2lxZeKTfW8RUxAWe2M63oOG7BgzZbn/qxFFZ3f5gaXkn8Qoe5Ds8
-         NBEJr6Dz+Dq43Whr/7H1XXCGU9QGlwsUq+NzuM5oBkEJR6XK/dq8Fkddq+BlUVx2WA
-         ueDWlyTR7mZzZbRWugAASa5TodXcZlfRbVdJkj6IBGaiiCawOGu+xVEwoVDRaQ/pL4
-         3ERkRNtu2U2kXWq4VTJeU1AzfOmg/YqPUYsteT9u0FQViJ91gCrVMdvTL311VjzVW3
-         rYRhva18jOerQ==
-Received: (nullmailer pid 1545115 invoked by uid 1000);
-        Thu, 10 Aug 2023 23:17:48 -0000
-Date:   Thu, 10 Aug 2023 17:17:48 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Jerome Brunet <jbrunet@baylibre.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, Da Xue <da@libre.computer>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: usb: add device for Genesys Logic hub
- gl3510
-Message-ID: <20230810231748.GA1543958-robh@kernel.org>
-References: <20230808100746.391365-1-jbrunet@baylibre.com>
- <20230808100746.391365-2-jbrunet@baylibre.com>
+        with ESMTP id S231183AbjHKBvO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Aug 2023 21:51:14 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id E88622D57
+        for <linux-usb@vger.kernel.org>; Thu, 10 Aug 2023 18:51:12 -0700 (PDT)
+Received: (qmail 263409 invoked by uid 1000); 10 Aug 2023 21:51:11 -0400
+Date:   Thu, 10 Aug 2023 21:51:11 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Alexandru Gagniuc <alexandru.gagniuc@hp.com>
+Cc:     bjorn@mork.no, davem@davemloft.net, edumazet@google.com,
+        eniac-xw.zhang@hp.com, hayeswang@realtek.com, jflf_kernel@gmx.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, stable@vger.kernel.org, svenva@chromium.org
+Subject: Re: [PATCH v2] r8152: Suspend USB device before shutdown when WoL is
+ enabled
+Message-ID: <cce11aea-166e-4d4b-84c0-a7fafb666aba@rowland.harvard.edu>
+References: <78e3aade-2a88-42f4-9991-8e245f3eb9b9@rowland.harvard.edu>
+ <20230810225109.13973-1-alexandru.gagniuc@hp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230808100746.391365-2-jbrunet@baylibre.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230810225109.13973-1-alexandru.gagniuc@hp.com>
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SORTED_RECIPS,SPF_HELO_PASS,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 08, 2023 at 12:07:45PM +0200, Jerome Brunet wrote:
-> Add gl3510 USB 3 root hub device id
+On Thu, Aug 10, 2023 at 10:51:09PM +0000, Alexandru Gagniuc wrote:
+> On Thu, Aug 10, 2023 at 01:34:39PM -0400, Alan Stern wrote:
+> > I was thinking that the host controller driver's shutdown method might 
+> > turn off power to all of the ports.
+> > 
+> > For example, in the ehci-hcd driver, ehci_shutdown() calls 
+> > ehci_silence_controller(), which calls ehci_turn_off_all_ports().  I 
+> > don't know if xhci-hcd does anything similar.
 > 
-> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
-> ---
->  Documentation/devicetree/bindings/usb/genesys,gl850g.yaml | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-> index cc4cf92b70d1..a7e7142651f8 100644
-> --- a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-> +++ b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-> @@ -4,7 +4,7 @@
->  $id: http://devicetree.org/schemas/usb/genesys,gl850g.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->  
-> -title: Genesys Logic GL850G USB 2.0 hub controller
-> +title: Genesys Logic USB hub controller
->  
->  maintainers:
->    - Icenowy Zheng <uwu@icenowy.me>
-> @@ -17,6 +17,7 @@ properties:
->      enum:
->        - usb5e3,608
->        - usb5e3,610
-> +      - usb5e3.626
+> EHCI is a different beast. I don't think EHCI (USB2.0) has the U3 link state.
 
-Should be a comma, not a period.
+USB-2 doesn't have link states, but it does have the notion of a 
+downstream port being suspended, which is effectively the same as U3.
 
->  
->    reg: true
->  
-> -- 
-> 2.40.1
-> 
+> The equivalent for would be xhci_shutdown(). It makes a call to
+> usb_disable_xhci_ports() for XHCI_SPURIOUS_REBOOT quirk. As I have not
+> encountered it, I don't know how it will affect the link state of other ports.
+> The quirk appears to switch ports to EHCI mode, rather than turn off power.
+
+All right.  The important point is that the patch works for your 
+situation.  I was just trying to find out how much thought you had given 
+to the possibilities other people might face, if their systems aren't 
+quite the same as yours.
+
+Alan Stern
