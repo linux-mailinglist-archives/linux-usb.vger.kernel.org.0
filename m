@@ -2,85 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD1BA779512
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Aug 2023 18:48:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B68D377959D
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Aug 2023 19:05:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233592AbjHKQs0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Aug 2023 12:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51710 "EHLO
+        id S235118AbjHKRFN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Aug 2023 13:05:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233418AbjHKQsZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Aug 2023 12:48:25 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7308D30CD
-        for <linux-usb@vger.kernel.org>; Fri, 11 Aug 2023 09:48:21 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4fe27849e6aso3477219e87.1
-        for <linux-usb@vger.kernel.org>; Fri, 11 Aug 2023 09:48:21 -0700 (PDT)
+        with ESMTP id S233713AbjHKRFM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Aug 2023 13:05:12 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 233521FE3
+        for <linux-usb@vger.kernel.org>; Fri, 11 Aug 2023 10:05:11 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b9db1de50cso33752981fa.3
+        for <linux-usb@vger.kernel.org>; Fri, 11 Aug 2023 10:05:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691772499; x=1692377299;
+        d=linaro.org; s=google; t=1691773509; x=1692378309;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=D3Gp+IMxKZDgNVcIGMPfvwovFcia/kmOZd2YqdHgfkQ=;
-        b=cocZxpQ4GuklgdXgwDuYn/2XPc8o51powTaZwkhviGPsGcBQrvhxfVG5OAhXxd5hr2
-         0/m8MF0H643+5Sm0Ptg5cIh8RWGp+5Gh4Cm2v0Nic4S8rP+BgInMTspc+lu9eQtk27iG
-         Prs1DoIdO3kekxKplftc7KUaoJveaN79I//OdMNoxQaFhzxjti9BAoxCnTfytCQLIj2w
-         oZ5+HN0YoRiZIKumZdBcLEreu/4PIJ1jfVFEvloLWFU1uDBiaDvZLNu1RTQmanyASwof
-         BbbTL239CmLGGWrFPq/lAqcznHOlkF+Lp/7B3awUJrDKNdDou5Y8Kg1DcK0OA3pCv3bR
-         Qw6g==
+        bh=KmYvyZJ/MZJ7qF+caJh0dxeZFJ+UOhFluzJhEvu+/8A=;
+        b=PNSuWfY6HccIFUxWRmD+aYcX9N29vq+/UkLf5Y6n8qHgWdRYYqbfigUuPzOEwas3us
+         11KeQh9XXkTE3kC45V3NVehq8a06CQcSK8p/BemAganwznRCG8GofImL3yKWC1APeKmt
+         +nfc4fvsXlRhXTN/d4OyfCw4WNkVZ5OwrkxB/fHNXKrXqMAbq0QNXJ9LMYv7pZVETlaS
+         Yrls/qzbChAvxVhNkmhBvJk0KLW2n29ci3KS3yLEBOVDwslZJ+Fb2JCZdvRrg3+0r9X2
+         JYR7wigTQkbDuyvCtFdM63Duy+EZHdIPyHpMGMMkbdz32fQqJFfH+tznkE0xUT6ly3bQ
+         Xmyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691772499; x=1692377299;
+        d=1e100.net; s=20221208; t=1691773509; x=1692378309;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=D3Gp+IMxKZDgNVcIGMPfvwovFcia/kmOZd2YqdHgfkQ=;
-        b=RR+PdV46csTOXC0WXEBfCUrnLXtpSDdZz/28Jr7gMbqCw64ad4q+jmI1/Lu7210+Bv
-         u43Zhaoy0OENrcm+32cXL16/4K57eLZilssd2zvVWjCB/zox1Hg+4Va0qWV7TFQFvYzb
-         /7C+9uUUAzR+YHxHjsmwECTtKdh5Esmd85FuqPtiLQBY4ti8R3TCKd/+Z7GNRONnUq2P
-         wRRLRwFKbBNfGMWmSh27iP1KKdfmrQAox7KjRG33v9bgDJa7BEKkvXECpA5xiK++kgmG
-         qBLoa1xXoMXQEsZ/SrO65F4QP2gmlOC7a2MfyXPaT9Jm9zy8twLm5xOf7fSprEBX85AG
-         01wg==
-X-Gm-Message-State: AOJu0YxlBvY3ffkWuTFD9p6zq6gZii2WhjBoqZcJ2+AJQKYWKBvbxSLc
-        Poi6F4YX158Z6FYEYfwWtPwNXg==
-X-Google-Smtp-Source: AGHT+IGH2uzw8VedMkVo75Wd7GgWQupm8Avjro4P9SAFfZJx7T3LbTdKsdhgX+qbuJU+Oolz6QLRgQ==
-X-Received: by 2002:ac2:4e08:0:b0:4fe:551:3d3c with SMTP id e8-20020ac24e08000000b004fe05513d3cmr2620732lfr.36.1691772499423;
-        Fri, 11 Aug 2023 09:48:19 -0700 (PDT)
+        bh=KmYvyZJ/MZJ7qF+caJh0dxeZFJ+UOhFluzJhEvu+/8A=;
+        b=UwBCBl4PCPBkoerwMcjJWf8wiEyDyu8VKPcaUpgTtyCndBh1Ky5pz1HYtP2Vk53knC
+         yGDbyg/aatM3/SdqPwdpzbxThsTPvq49MjCZUe6cgYXHcHWJRM1MNk8sgNmgbKIe9kFl
+         ucHLhKkDqCuO5SjE3fowdRdkOZmjDY8p1UHN/FqMUlXoEHXMckZQlwSpIh2QvsmBH8Fs
+         mlLqPzv0tm9s62c82nLpA99PGeqUNThd78DmR9bZiCF2wGwwtcss3TUIw/wVYwG/tcLQ
+         QsgOPBHZ3MyLfgupZjplc0Bc/dn70rPJWoQLP7xqI/JMtHAy0GsZbWPsABCKJaWfFqkQ
+         F2UQ==
+X-Gm-Message-State: AOJu0Ywq8/UqT2GDEgBkvlBB+zp8UGoLDPUxo+IM+V6OiC8ZJj5u5LNx
+        g2d1Rg0nxVlLyV9feRCkuhBlfA==
+X-Google-Smtp-Source: AGHT+IFISNeODcY6NT/CCJDKCZhNtDLcz1zasMXh2CR/m9kSG5BB0vgDr/qYP3QAK2ZPJtWA8Wf2Mg==
+X-Received: by 2002:a2e:80c3:0:b0:2b9:bcac:7ba6 with SMTP id r3-20020a2e80c3000000b002b9bcac7ba6mr1961728ljg.46.1691773509299;
+        Fri, 11 Aug 2023 10:05:09 -0700 (PDT)
 Received: from [192.168.1.101] (abyj188.neoplus.adsl.tpnet.pl. [83.9.29.188])
-        by smtp.gmail.com with ESMTPSA id o2-20020ac24942000000b004fe27212a6asm785748lfi.308.2023.08.11.09.48.17
+        by smtp.gmail.com with ESMTPSA id y15-20020a05651c020f00b002b6ed0067c9sm944492ljn.116.2023.08.11.10.05.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Aug 2023 09:48:18 -0700 (PDT)
-Message-ID: <dd622171-a4d3-4143-9e8a-f5a47d3e7916@linaro.org>
-Date:   Fri, 11 Aug 2023 18:48:16 +0200
+        Fri, 11 Aug 2023 10:05:08 -0700 (PDT)
+Message-ID: <c8d77d4f-6696-4dc9-8030-daf1d10b114b@linaro.org>
+Date:   Fri, 11 Aug 2023 19:05:06 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 6/9] usb: dwc3: qcom: Add multiport controller support
- for qcom wrapper
+Subject: Re: [PATCH v10 06/11] usb: dwc3: qcom: Refactor IRQ handling in QCOM
+ Glue driver
 Content-Language: en-US
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Jack Pham <quic_jackp@quicinc.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Johan Hovold <johan@kernel.org>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Philipp Zabel <p.zabel@pengutronix.de>,
         Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com, ahalaney@redhat.com
-References: <20230514054917.21318-1-quic_kriskura@quicinc.com>
- <20230514054917.21318-7-quic_kriskura@quicinc.com>
- <ZIB1JEmLCw41v_4e@hovoldconsulting.com>
- <ZJsDpqttBYtbQ0yg@hovoldconsulting.com>
- <26ae15d1-4e13-3ab7-6844-3a7d3ed03af4@quicinc.com>
- <ZLEOk-9VImJNHYHa@hovoldconsulting.com>
- <f02104c0-d177-0e4e-dcb0-ffca589c8b00@quicinc.com>
- <ZLppB67LyWk1kD8w@hovoldconsulting.com>
- <ea41e06c-bd2a-e375-4e7c-8cff85d29627@linaro.org>
- <ZLqAHyD5HH6Ka5pl@hovoldconsulting.com>
+        Felipe Balbi <balbi@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
+        quic_jackp@quicinc.com, ahalaney@redhat.com,
+        quic_shazhuss@quicinc.com
+References: <20230727223307.8096-1-quic_kriskura@quicinc.com>
+ <20230727223307.8096-7-quic_kriskura@quicinc.com>
+ <pyxerd3lirbh2p43m74ohwocjjb7uh56xxmaxbrkay3svossik@ksd3yojw5wgr>
+ <dc800b15-e35d-207b-73a8-9a3d2261f4f5@quicinc.com>
+ <30b1fe67-bab5-4add-8d89-cc8e06cd8c7f@linaro.org>
+ <3c8dff80-eec8-1721-8ab0-3cf12d4c1df4@quicinc.com>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
 Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  xsFNBF9ALYUBEADWAhxdTBWrwAgDQQzc1O/bJ5O7b6cXYxwbBd9xKP7MICh5YA0DcCjJSOum
@@ -117,11 +115,11 @@ Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  bGqMHex48FVZhexNPYOd58EY9/7mL5u0sJmo+jTeb4JBgIbFPJCFyng4HwbniWgQJZ1WqaUC
  nas9J77uICis2WH7N8Bs9jy0wQYezNzqS+FxoNXmDQg2jetX8en4bO2Di7Pmx0jXA4TOb9TM
  izWDgYvmBE8=
-In-Reply-To: <ZLqAHyD5HH6Ka5pl@hovoldconsulting.com>
+In-Reply-To: <3c8dff80-eec8-1721-8ab0-3cf12d4c1df4@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -130,51 +128,101 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21.07.2023 14:54, Johan Hovold wrote:
-> On Fri, Jul 21, 2023 at 02:10:07PM +0200, Konrad Dybcio wrote:
->> On 21.07.2023 13:16, Johan Hovold wrote:
->>> On Fri, Jul 14, 2023 at 04:08:45PM +0530, Krishna Kurapati PSSNV wrote:
->>>> On 7/14/2023 2:30 PM, Johan Hovold wrote:
->>>>> On Mon, Jul 03, 2023 at 12:35:48AM +0530, Krishna Kurapati PSSNV wrote:
->>>>>> On 6/27/2023 9:13 PM, Johan Hovold wrote:
->>>>>>> On Wed, Jun 07, 2023 at 02:16:37PM +0200, Johan Hovold wrote:
->>>>>>>> On Sun, May 14, 2023 at 11:19:14AM +0530, Krishna Kurapati wrote:
->>>>>
->>>>>>>>> -	val = readl(qcom->qscratch_base + PWR_EVNT_IRQ_STAT_REG);
->>>>>>>>> -	if (!(val & PWR_EVNT_LPM_IN_L2_MASK))
->>>>>>>>> -		dev_err(qcom->dev, "HS-PHY not in L2\n");
->>>>>>>>> +	for (i = 0; i < dwc->num_usb2_ports; i++) {
->>>>>>>>> +		val = readl(qcom->qscratch_base + pwr_evnt_irq_stat_reg_offset[i]);
->>>>>>>>> +		if (!(val & PWR_EVNT_LPM_IN_L2_MASK))
->>>>>>>>> +			dev_err(qcom->dev, "HS-PHY%d not in L2\n", i);
->>>>>>>>> +	}
->>>>>>>
->>>>>>>> When testing this on the X13s I get:
->>>>>>>>
->>>>>>>> 	dwc3-qcom a4f8800.usb: HS-PHY2 not in L2
+On 9.08.2023 08:06, Krishna Kurapati PSSNV wrote:
 > 
->> Sidenote, I get this on any Qcom device on any platform I try
->> to enter suspend on, without these MP patches.
 > 
-> Ok, that might provide some hint. But on sc8280xp (X13s) we only get it
-> on one of the four MP ports (i.e. on one out of six ports in total).
+> On 8/8/2023 5:20 PM, Konrad Dybcio wrote:
+>> On 8.08.2023 10:32, Krishna Kurapati PSSNV wrote:
+>>>   +
+>>>>> +enum dwc3_qcom_phy_irq_identifier {
+>>>>> +    HS_PHY_IRQ = 0,
+>>>>> +    DP_HS_PHY_IRQ,
+>>>>> +    DM_HS_PHY_IRQ,
+>>>>> +    SS_PHY_IRQ,
+>>>>>    };
+>>>>
+>>>> This enum is unused.
+>>>>
+>>>
+>>> Hi Bjorn,
+>>>
+>>>   I didn't use the enum directly, but used its members in the get_port_irq call below.
+>>>
+>>>> [..]
+>>>>> +static int dwc3_get_acpi_index(const struct dwc3_acpi_pdata *pdata, int irq_index)
+>>>>> +{
+>>>>> +    int acpi_index = -1;
+>>>>> +
+>>>>> +    if (!pdata)
+>>>>> +        return -1;
+>>>>> +
+>>>>> +    if (irq_index == DP_HS_PHY_IRQ)
+>>>>> +        acpi_index = pdata->dp_hs_phy_irq_index;
+>>>>> +    else if (irq_index == DM_HS_PHY_IRQ)
+>>>>> +        acpi_index = pdata->dm_hs_phy_irq_index;
+>>>>> +    else if (irq_index == SS_PHY_IRQ)
+>>>>> +        acpi_index = pdata->ss_phy_irq_index;
+>>>>
+>>>> It looks favourable to put these in an array, instead of having to pull
+>>>> them out of 4 different variables conditionally.
+>>>>
+>>>>> +
+>>>>> +    return acpi_index;
+>>>>> +}
+>>>>> +
+>>>>> +static int dwc3_get_port_irq(struct platform_device *pdev, u8 port_index)
+>>>>> +{
+>>>>> +    struct dwc3_qcom *qcom = platform_get_drvdata(pdev);
+>>>>> +    bool is_mp_supported = (qcom->data->num_ports > 1) ? true : false;
+>>>>> +    const struct dwc3_acpi_pdata *pdata = qcom->acpi_pdata;
+>>>>> +    char *disp_name;
+>>>>> +    int acpi_index;
+>>>>> +    char *dt_name;
+>>>>> +    int ret;
+>>>>> +    int irq;
+>>>>> +    int i;
+>>>>> +
+>>>>> +    /*
+>>>>> +     * We need to read only DP/DM/SS IRQ's here.
+>>>>> +     * So loop over from 1->3 and accordingly modify respective phy_irq[].
+>>>>> +     */
+>>>>> +    for (i = 1; i < MAX_PHY_IRQ; i++) {
+>>>>> +
+>>>>> +        if (!is_mp_supported && (port_index == 0)) {
+>>>>> +            if (i == DP_HS_PHY_IRQ) {
+>>>>> +                dt_name = devm_kasprintf(&pdev->dev, GFP_KERNEL,
+>>>>> +                    "dp_hs_phy_irq");
+>>>>> +                disp_name = devm_kasprintf(&pdev->dev, GFP_KERNEL,
+>>>>> +                    "qcom_dwc3 DP_HS");
+>>>>> +            } else if (i == DM_HS_PHY_IRQ) {
+>>>>> +                dt_name = devm_kasprintf(&pdev->dev, GFP_KERNEL,
+>>>>> +                    "dm_hs_phy_irq");
+>>>>> +                disp_name = devm_kasprintf(&pdev->dev, GFP_KERNEL,
+>>>>> +                    "qcom_dwc3 DM_HS");
+>>>>> +            } else if (i == SS_PHY_IRQ) {
+>>>>> +                dt_name = devm_kasprintf(&pdev->dev, GFP_KERNEL,
+>>>>> +                    "ss_phy_irq");
+>>>>> +                disp_name = devm_kasprintf(&pdev->dev, GFP_KERNEL,
+>>>>> +                    "qcom_dwc3 SS");
+>>> Bjorn, Konrad,
+>>>
+>>> If we are to remove this repetitive loops, we might need to make a 2D array for all of Dp/Dm/Ss interrutps and make a global array of names to be used for irq lookup and use them to reduce the if-else-if stuff here. If that is fine, I can make those changes, else I would like to stick to this approach for now because if we don't add the global array of names, prepping them seperately for dp/dm/ss would again lead us to making if-else loops like above.
+>>>
+>>> Please let me know your thoughts on this.
+>> Can we not just reuse the associated interrupt-names from the devicetree
+>> if present?
+>>
+> Hi Konrad,
 > 
-> While on sa8295p-adp there are no such errors on any port.
-I've been playing with 8450 and it looks like snps,dis_u2_susphy_quirk
-causes this error.
+>  Thanks for the comments but one more confirmation.
+> We can read the interrupts from DT but I believe the compatible would still need to stay. We need the num_ports information not just for registering interrupts but for modifying the pwr_event_irq registers during suspend/resume. If we rely on the interrupts to find the number of ports, the user is free to remove any IRQ and we might end up in a situation where glue and core are not having same view of how many number of ports present. So I believe its best to keep the compatible and get num_ports info from there and rely on reading interrupt-names to get interrupts cleanly. Can you let me know your view on the same.
+So is "is it okay to add SoC-specific compatibles and add the port number in
+match data" what you're asking?
 
-The downstream tree contains this property and I'm inclined to believe
-it means that this platforms should define it (as the devicetrees are
-machine-generated to a degree, AFAIK), especially since this quirk does
-the exact same thing on a known-working downstream, namely unsetting
-DWC3_GUSB2PHYCFG_SUSPHY.
+If so, that doesn't seem right.
 
-Digging a bit deeper, dwc3-msm-core [1], the downstream version of dwc3-qcom
-performs a bit of a dance in a couple of places.. Look for that register name.
-
-Unfortunately I have little idea what the "USB2 suspend phy" is.. is it a PHY
-used in suspend? Is it the suspension of the USB2 PHY? No clue.
-
-[1] https://git.codelinaro.org/clo/la/kernel/msm-5.10/-/blob/KERNEL.PLATFORM.1.0.r2-08800-WAIPIOLE.0/drivers/usb/dwc3/dwc3-msm-core.c
+The user should not "feel free to remove any IRQ", modifying the devicetree to
+depict a subset of the hardware is not something we want to support. The driver
+has to work with the "full" description in accordance with the bindings.
 
 Konrad
