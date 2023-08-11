@@ -2,67 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41FFE77851D
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Aug 2023 03:51:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4392778520
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Aug 2023 03:52:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231938AbjHKBvQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Aug 2023 21:51:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56576 "EHLO
+        id S231989AbjHKBws (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Aug 2023 21:52:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231183AbjHKBvO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Aug 2023 21:51:14 -0400
+        with ESMTP id S229665AbjHKBwr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Aug 2023 21:52:47 -0400
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id E88622D57
-        for <linux-usb@vger.kernel.org>; Thu, 10 Aug 2023 18:51:12 -0700 (PDT)
-Received: (qmail 263409 invoked by uid 1000); 10 Aug 2023 21:51:11 -0400
-Date:   Thu, 10 Aug 2023 21:51:11 -0400
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id DDA6A2132
+        for <linux-usb@vger.kernel.org>; Thu, 10 Aug 2023 18:52:46 -0700 (PDT)
+Received: (qmail 263446 invoked by uid 1000); 10 Aug 2023 21:52:46 -0400
+Date:   Thu, 10 Aug 2023 21:52:46 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Alexandru Gagniuc <alexandru.gagniuc@hp.com>
-Cc:     bjorn@mork.no, davem@davemloft.net, edumazet@google.com,
-        eniac-xw.zhang@hp.com, hayeswang@realtek.com, jflf_kernel@gmx.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, stable@vger.kernel.org, svenva@chromium.org
-Subject: Re: [PATCH v2] r8152: Suspend USB device before shutdown when WoL is
- enabled
-Message-ID: <cce11aea-166e-4d4b-84c0-a7fafb666aba@rowland.harvard.edu>
-References: <78e3aade-2a88-42f4-9991-8e245f3eb9b9@rowland.harvard.edu>
- <20230810225109.13973-1-alexandru.gagniuc@hp.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Khazhy Kumykov <khazhy@google.com>,
+        USB mailing list <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH 0/3] USB: core: Don't overwrite device descriptor during
+ reinitialization
+Message-ID: <3c63cad6-55ef-46dd-90b7-d19cbefedbea@rowland.harvard.edu>
+References: <6eadec91-990a-4fbd-8883-8366c4a4d8e4@rowland.harvard.edu>
+ <20230810002257.nadxmfmrobkaxgnz@synopsys.com>
+ <e070f49d-9bd2-4711-b748-b15e1a6be901@rowland.harvard.edu>
+ <c1a18876-c505-4d4f-9f58-264199135905@rowland.harvard.edu>
+ <20230810223824.6kgawiwerwkaj6vh@synopsys.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230810225109.13973-1-alexandru.gagniuc@hp.com>
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SORTED_RECIPS,SPF_HELO_PASS,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230810223824.6kgawiwerwkaj6vh@synopsys.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 10, 2023 at 10:51:09PM +0000, Alexandru Gagniuc wrote:
-> On Thu, Aug 10, 2023 at 01:34:39PM -0400, Alan Stern wrote:
-> > I was thinking that the host controller driver's shutdown method might 
-> > turn off power to all of the ports.
+On Thu, Aug 10, 2023 at 10:39:36PM +0000, Thinh Nguyen wrote:
+> On Thu, Aug 10, 2023, Alan Stern wrote:
+> > Never mind; I found the problem.  I had forgotten that at SuperSpeed or 
+> > faster, the device descriptor uses a logarithmic encoding for 
+> > bMaxPacketSize0.
 > > 
-> > For example, in the ehci-hcd driver, ehci_shutdown() calls 
-> > ehci_silence_controller(), which calls ehci_turn_off_all_ports().  I 
-> > don't know if xhci-hcd does anything similar.
+> > The patch below should fix things up.  Let me know how it goes.
+> > 
 > 
-> EHCI is a different beast. I don't think EHCI (USB2.0) has the U3 link state.
+> Quick test for Gen 1 and 2 devices work fine now. Highspeed also works
+> as expected before. I didn't test Fullspeed with various MPS, but I
+> don't expect any problem looking at the change.
+> 
+> Thanks for the fix,
 
-USB-2 doesn't have link states, but it does have the notion of a 
-downstream port being suspended, which is effectively the same as U3.
-
-> The equivalent for would be xhci_shutdown(). It makes a call to
-> usb_disable_xhci_ports() for XHCI_SPURIOUS_REBOOT quirk. As I have not
-> encountered it, I don't know how it will affect the link state of other ports.
-> The quirk appears to switch ports to EHCI mode, rather than turn off power.
-
-All right.  The important point is that the patch works for your 
-situation.  I was just trying to find out how much thought you had given 
-to the possibilities other people might face, if their systems aren't 
-quite the same as yours.
+And thanks for testing it.  Is it okay to put your 
+"Reported-and-tested-by:" tag on the submitted patch?
 
 Alan Stern
