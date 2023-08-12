@@ -2,61 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2121277A0C8
-	for <lists+linux-usb@lfdr.de>; Sat, 12 Aug 2023 17:28:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FDC877A0EE
+	for <lists+linux-usb@lfdr.de>; Sat, 12 Aug 2023 17:56:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232357AbjHLP2L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 12 Aug 2023 11:28:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57182 "EHLO
+        id S229802AbjHLP4h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 12 Aug 2023 11:56:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjHLP2K (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 12 Aug 2023 11:28:10 -0400
+        with ESMTP id S229625AbjHLP4f (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 12 Aug 2023 11:56:35 -0400
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 72928E54
-        for <linux-usb@vger.kernel.org>; Sat, 12 Aug 2023 08:28:13 -0700 (PDT)
-Received: (qmail 317157 invoked by uid 1000); 12 Aug 2023 11:28:12 -0400
-Date:   Sat, 12 Aug 2023 11:28:12 -0400
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 8847FE53
+        for <linux-usb@vger.kernel.org>; Sat, 12 Aug 2023 08:56:37 -0700 (PDT)
+Received: (qmail 317565 invoked by uid 1000); 12 Aug 2023 11:56:36 -0400
+Date:   Sat, 12 Aug 2023 11:56:36 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Khazhy Kumykov <khazhy@google.com>,
-        USB mailing list <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] USB: core: Fix oversight in SuperSpeed initialization
-Message-ID: <bcd6865e-4687-4414-8b63-0f2e6b5ae96c@rowland.harvard.edu>
-References: <6eadec91-990a-4fbd-8883-8366c4a4d8e4@rowland.harvard.edu>
- <20230810002257.nadxmfmrobkaxgnz@synopsys.com>
- <e070f49d-9bd2-4711-b748-b15e1a6be901@rowland.harvard.edu>
- <c1a18876-c505-4d4f-9f58-264199135905@rowland.harvard.edu>
- <20230810223824.6kgawiwerwkaj6vh@synopsys.com>
- <3c63cad6-55ef-46dd-90b7-d19cbefedbea@rowland.harvard.edu>
- <20230811170500.xbjyzmcslvajs2qv@synopsys.com>
- <8809e6c5-59d5-4d2d-ac8f-6d106658ad73@rowland.harvard.edu>
- <2023081204-concave-yoga-f6f0@gregkh>
+To:     syzbot <syzbot+d6b0b0ea0781c14b2ecf@syzkaller.appspotmail.com>,
+        Oliver Neukum <oneukum@suse.com>
+Cc:     arnd@arndb.de, christian.brauner@ubuntu.com,
+        gregkh@linuxfoundation.org, hdanton@sina.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        mpe@ellerman.id.au, oleg@redhat.com,
+        syzkaller-bugs@googlegroups.com, web@syzkaller.appspotmail.com
+Subject: Re: [syzbot] [usb?] KASAN: slab-use-after-free Write in
+ usb_anchor_suspend_wakeups
+Message-ID: <1134d446-3189-4f2d-81b4-10142e751320@rowland.harvard.edu>
+References: <0000000000007c27e105faa4aa99@google.com>
+ <00000000000014678c0602b6c643@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2023081204-concave-yoga-f6f0@gregkh>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+In-Reply-To: <00000000000014678c0602b6c643@google.com>
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Aug 12, 2023 at 10:05:27AM +0200, Greg KH wrote:
-> Process nit, when you add a patch to an existing patch series like this,
-> when I run `b4` to download and apply the patch, it sucks in the
-> original patch series, not this add-on patch (which then of course fails
-> as the original patch series was already applied.)
+On Sat, Aug 12, 2023 at 02:51:30AM -0700, syzbot wrote:
+> syzbot has bisected this issue to:
 > 
-> So, if it's easy enough, can you just send add-on patches for stuff that
-> has been applied, as a new thread?  That way the tools handle it
-> automatically and I don't have to hand edit/apply the patch?
+> commit 9b4feb630e8e9801603f3cab3a36369e3c1cf88d
+> Author: Christian Brauner <christian.brauner@ubuntu.com>
+> Date:   Fri May 24 09:31:44 2019 +0000
+> 
+>     arch: wire-up close_range()
+> 
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1323329ba80000
+> start commit:   89d77f71f493 Merge tag 'riscv-for-linus-6.4-mw1' of git://..
+> git tree:       upstream
+> final oops:     https://syzkaller.appspot.com/x/report.txt?x=10a3329ba80000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1723329ba80000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=d963e7536cbe545e
+> dashboard link: https://syzkaller.appspot.com/bug?extid=d6b0b0ea0781c14b2ecf
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11471b84280000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10b98e2c280000
+> 
+> Reported-by: syzbot+d6b0b0ea0781c14b2ecf@syzkaller.appspotmail.com
+> Fixes: 9b4feb630e8e ("arch: wire-up close_range()")
+> 
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
-Sure.  I don't use b4, so I wasn't aware of this behavior.
+This attribution is extremely unlikely.
 
-If I ever forget in the future, feel free to yell at me.  :-)
+The real problem seems to be some sort of race in usbtmc and the core 
+between URBs being added to an anchor, file I/O being stopped, and URBs 
+being killed or scuttled when the file is flushed.
+
+The bug is caused by an URB completing after (or while) its anchor is 
+deallocated.  Note that __usb_hcd_giveback_urb() removes an URB from its 
+anchor before calling the completion routine, but dereferences the 
+anchor afterward.  The anchor could easily be deallocated during that 
+window.
 
 Alan Stern
