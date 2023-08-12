@@ -2,80 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E51A779EB0
-	for <lists+linux-usb@lfdr.de>; Sat, 12 Aug 2023 11:51:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C131779EDB
+	for <lists+linux-usb@lfdr.de>; Sat, 12 Aug 2023 12:17:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236699AbjHLJv2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 12 Aug 2023 05:51:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36690 "EHLO
+        id S235918AbjHLKRI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 12 Aug 2023 06:17:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235504AbjHLJv1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 12 Aug 2023 05:51:27 -0400
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44121E7
-        for <linux-usb@vger.kernel.org>; Sat, 12 Aug 2023 02:51:31 -0700 (PDT)
-Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-268099fd4f5so3002799a91.1
-        for <linux-usb@vger.kernel.org>; Sat, 12 Aug 2023 02:51:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691833891; x=1692438691;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QR7Jc1vXxo0aDPQdMwxp89Yuch6sITXUZ93/IQ44yYs=;
-        b=hdE1mC6kinP3t5bj47XxME93Fqxnac7HNCOUXl3kiRsoM6Eg911RVZmMwp4UO+8Cna
-         zkSMcMkLGb01jpKZ7uu5/zpjTDLXEk9ifG5feyXRXR9MxW8gaWlhfBdfP4weObyMMBIp
-         vWR/X0ZlLLXPnJWWRSMyTIKZqgcrJSOxuOMBdq3cmS94FqoD1r26QGCMGaIihOGzJ0YN
-         EIfaLfpr5BKJn9hN2fI25C0Cb1DgETN7Tx2uEyx3XvUWXqiCKfd6Pn56ETSPmccMwmuu
-         ck2OMWv4Qtya0iX8WaQxmr2Qea1JyEbOnz14GrjMUJyGYsSfmLmozQHdKCGNsIC5NnxP
-         3w3w==
-X-Gm-Message-State: AOJu0YxOQa8/X+ArOBdP7lVYcmpawHS+YJ62fn19z/VxC9GhLHy9Emyp
-        XITyJat1hPoqjNPo0HXypqg8B7bbfQGKDbyIl/DvyHIQiCXA
-X-Google-Smtp-Source: AGHT+IHALHpoCwhShDFEGgDOt2ZbFeaOEdtaxOTMKph4e5BOl1uedD/sil3YuojOjSpfvCPW6fWCTC9sNw3JkwTgnRhMhksgWyTb
+        with ESMTP id S229829AbjHLKRH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 12 Aug 2023 06:17:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3723E2133;
+        Sat, 12 Aug 2023 03:17:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C9B95627D0;
+        Sat, 12 Aug 2023 10:17:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4F6AC433C8;
+        Sat, 12 Aug 2023 10:17:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1691835429;
+        bh=6KGjl4ZuzTY+sVa6wHpgVBZci7895Ma+lGQhtvuLk2A=;
+        h=Date:From:To:Cc:Subject:From;
+        b=gJFCxdQUXl9Fl2xmyO92CPc0evmsYbUhpsqdOGtqPFcJiCXbtOoFYR2jhETYKYmvN
+         d3/OlsdAFDfdBWzFw+gLyHQNwQYmcPGC95fVhDdrzCoYQ275Nth+3f7fuocRSWAwFZ
+         sPRzTItMbZs0j96v0dEzi1j5C4/MBVWXf/d7d7Lo=
+Date:   Sat, 12 Aug 2023 12:17:06 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB / Thunderbolt driver fixes for 6.5-rc6
+Message-ID: <ZNdcIir55QE1o2mO@kroah.com>
 MIME-Version: 1.0
-X-Received: by 2002:a17:90a:f0c4:b0:268:5919:a271 with SMTP id
- fa4-20020a17090af0c400b002685919a271mr936991pjb.8.1691833890791; Sat, 12 Aug
- 2023 02:51:30 -0700 (PDT)
-Date:   Sat, 12 Aug 2023 02:51:30 -0700
-In-Reply-To: <0000000000007c27e105faa4aa99@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000014678c0602b6c643@google.com>
-Subject: Re: [syzbot] [usb?] KASAN: slab-use-after-free Write in usb_anchor_suspend_wakeups
-From:   syzbot <syzbot+d6b0b0ea0781c14b2ecf@syzkaller.appspotmail.com>
-To:     arnd@arndb.de, christian.brauner@ubuntu.com,
-        gregkh@linuxfoundation.org, hdanton@sina.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        mpe@ellerman.id.au, oleg@redhat.com,
-        syzkaller-bugs@googlegroups.com, web@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-syzbot has bisected this issue to:
+The following changes since commit 5d0c230f1de8c7515b6567d9afba1f196fb4e2f4:
 
-commit 9b4feb630e8e9801603f3cab3a36369e3c1cf88d
-Author: Christian Brauner <christian.brauner@ubuntu.com>
-Date:   Fri May 24 09:31:44 2019 +0000
+  Linux 6.5-rc4 (2023-07-30 13:23:47 -0700)
 
-    arch: wire-up close_range()
+are available in the Git repository at:
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1323329ba80000
-start commit:   89d77f71f493 Merge tag 'riscv-for-linus-6.4-mw1' of git://..
-git tree:       upstream
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=10a3329ba80000
-console output: https://syzkaller.appspot.com/x/log.txt?x=1723329ba80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d963e7536cbe545e
-dashboard link: https://syzkaller.appspot.com/bug?extid=d6b0b0ea0781c14b2ecf
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11471b84280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10b98e2c280000
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.5-rc6
 
-Reported-by: syzbot+d6b0b0ea0781c14b2ecf@syzkaller.appspotmail.com
-Fixes: 9b4feb630e8e ("arch: wire-up close_range()")
+for you to fetch changes up to f48585c468f51ac038c2cfaafcd4437bc3746bce:
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+  Merge tag 'thunderbolt-for-v6.5-rc6' of git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-linus (2023-08-08 10:04:47 +0200)
+
+----------------------------------------------------------------
+USB/Thunderbolt driver fixes for 6.5-rc6
+
+Here are some small USB and Thunderbolt driver fixes for reported
+problems.  Included in here are:
+  - thunderbolt driver memory leak fix
+  - thunderbolt display flicker fix
+  - usb dwc3 driver fix
+  - usb gadget uvc disconnect crash fix
+  - usb typec Kconfig build dependency fix
+  - usb typec small fixes
+  - usb-con-gpio bugfix
+  - usb-storage old driver bugfix
+
+All of these have been in linux-next for a while with no reported
+issues.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Alan Stern (2):
+      USB: Gadget: core: Help prevent panic during UVC unconfigure
+      usb-storage: alauda: Fix uninit-value in alauda_check_media()
+
+Badhri Jagan Sridharan (1):
+      usb: typec: tcpm: Fix response to vsafe0V event
+
+Christophe JAILLET (1):
+      usb: typec: nb7vpq904m: Add an error handling path in nb7vpq904m_probe()
+
+Elson Roy Serrao (1):
+      usb: dwc3: Properly handle processing of pending events
+
+Greg Kroah-Hartman (1):
+      Merge tag 'thunderbolt-for-v6.5-rc6' of git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-linus
+
+Heikki Krogerus (1):
+      usb: typec: mux: intel: Add dependency on USB_COMMON
+
+Mika Westerberg (1):
+      thunderbolt: Fix memory leak in tb_handle_dp_bandwidth_request()
+
+Prashanth K (1):
+      usb: common: usb-conn-gpio: Prevent bailing out if initial role is none
+
+RD Babiera (1):
+      usb: typec: altmodes/displayport: Signal hpd when configuring pin assignment
+
+Sanjay R Mehta (1):
+      thunderbolt: Fix Thunderbolt 3 display flickering issue on 2nd hot plug onwards
+
+ drivers/thunderbolt/tb.c                 |  2 ++
+ drivers/thunderbolt/tmu.c                |  4 +++-
+ drivers/usb/common/usb-conn-gpio.c       |  6 +++++-
+ drivers/usb/dwc3/gadget.c                |  9 ++++++++-
+ drivers/usb/gadget/udc/core.c            |  9 +++++++++
+ drivers/usb/storage/alauda.c             | 12 +++++++++---
+ drivers/usb/typec/altmodes/displayport.c | 18 +++++++++++++++++-
+ drivers/usb/typec/mux/Kconfig            |  1 +
+ drivers/usb/typec/mux/nb7vpq904m.c       | 25 ++++++++++++++++++-------
+ drivers/usb/typec/tcpm/tcpm.c            |  7 +++++++
+ 10 files changed, 79 insertions(+), 14 deletions(-)
