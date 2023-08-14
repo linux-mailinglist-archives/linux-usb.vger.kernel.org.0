@@ -2,82 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 399DB77B2C5
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Aug 2023 09:42:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2823677B376
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Aug 2023 10:10:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234236AbjHNHmG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Aug 2023 03:42:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36572 "EHLO
+        id S232902AbjHNIKT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Aug 2023 04:10:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234335AbjHNHl7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Aug 2023 03:41:59 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89511E73
-        for <linux-usb@vger.kernel.org>; Mon, 14 Aug 2023 00:41:57 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3fe4cdb72b9so36358775e9.0
-        for <linux-usb@vger.kernel.org>; Mon, 14 Aug 2023 00:41:57 -0700 (PDT)
+        with ESMTP id S234610AbjHNIKF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Aug 2023 04:10:05 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F27A19AF
+        for <linux-usb@vger.kernel.org>; Mon, 14 Aug 2023 01:09:44 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-3197a71a9c0so235018f8f.1
+        for <linux-usb@vger.kernel.org>; Mon, 14 Aug 2023 01:09:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1691998916; x=1692603716;
+        d=linaro.org; s=google; t=1692000583; x=1692605383;
         h=content-transfer-encoding:in-reply-to:organization:references:cc:to
          :content-language:subject:reply-to:from:user-agent:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=BBL9irmWHTMujcW4M1YOlLfxnMuczJQ+8mOVXEk0MVk=;
-        b=P1iq/wXbOo9batstDzGV9YJzd+25bRwaiWK6awDIC0BZVCTq6Ne82lsk/7vIeDXZA+
-         1vDti1FRtCZExgKWGz5fFWlczEQwtema0pHr1L2vCySRLS9DIEwvoRGPs2CmakOLi0JC
-         Gl5AMM894PvoEEcRkVbJfplm/NQfo/LMYT7kFUMlwFcsifvJc9bdbDqb/I1eWNA38fyu
-         4wu7ZmrvPaoUMEc9o//9Pnavsn8iuX0WDtqufc2T/T3y3YBQPNddnP6yQwdGMpVpyc9N
-         56ooqAUo7xmTVH1gRb0RX1AGItygrf1MvFO3w7bzVJAE4UHzAe/CZbq1t8w60wiF46g+
-         v7mQ==
+        bh=h96fvtK7Q6sYb+yjtmtmp5Cx7J/yaSonESREWSMDZaQ=;
+        b=yiJ+a+9RMWJqN1w+rJDCBGGGGOATGap34HO6ZfAOGwJ2aU+b9EzjU8C7ICOj+Mx4he
+         rMIXOfPKYID+UybVy/kZbB4jC2o4sZDEbN48qT4OPDL6hMqgyNtvNijNW4HYoh6q65bJ
+         IIRb1G33nhyhrRS4IM+sqOvmoa2kcRrGujORzyMIBh0W7uggT+mfMsNeQMJmLEVWPFjN
+         e6nPGUtmo6nXwK7LGfSccLn3gpPmh2ckmCTU6pUDA5snu9+Xd0htDfGq5p0KdOc3VcX1
+         b/5Z11KFYBwBJj1TMvQICXaYv/duwweZfU9j29ZybSgfuN8AzjNppkAbmLOG+y+YBwn2
+         Y+tQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1691998916; x=1692603716;
+        d=1e100.net; s=20221208; t=1692000583; x=1692605383;
         h=content-transfer-encoding:in-reply-to:organization:references:cc:to
          :content-language:subject:reply-to:from:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=BBL9irmWHTMujcW4M1YOlLfxnMuczJQ+8mOVXEk0MVk=;
-        b=KhcJOVSW/OxZu03r0ths44piwA28ZDyaqvoRlElfICs3YegX6nbxXDW1MbRJHYkbph
-         ktp4T0NHjZq66zdMvESK0IwRl8aN7Et/hkotnmA9zupRDwTkXQs7gaESS9BJjP+Y/Hbn
-         b1gNQ+Q35S85nWOGvK+OnYNsah59OPyNbdrqSFuuT836oejIVFjaN0lS2hCe7MqYfnHN
-         d3Xxn8WJFmdXxUGR1mzKVPpS0KAXlY3iAoUd6T+vt4nf6/YeLhnQwItHlT/hQwwNPlRb
-         GWzeEYcLInx8k0IS2/D56fTRaefwK1yrak8LvdrAtRMfa3IYsJr8APPT29cd/A93Xlng
-         B6+w==
-X-Gm-Message-State: AOJu0Yx1fyqRmZMl3sG17EGire5u1tIE+It4fysxdnmMIN1vR3451EU0
-        2pMm9F7V2IDgfbzgpFerwuLT34MUa4rQqVpoX3F7dw==
-X-Google-Smtp-Source: AGHT+IFIrpJ3pZKR98GY/ZQMj9zHd+SKgxbbYpqvJsQjOEPPpk3/oxMFBr9duPkiu1pVrX0yA9+2uA==
-X-Received: by 2002:a7b:ce05:0:b0:3fb:ffa8:6d78 with SMTP id m5-20020a7bce05000000b003fbffa86d78mr6531169wmc.36.1691998915875;
-        Mon, 14 Aug 2023 00:41:55 -0700 (PDT)
+        bh=h96fvtK7Q6sYb+yjtmtmp5Cx7J/yaSonESREWSMDZaQ=;
+        b=DI5/bZdQpI16svF4ZhkchTN6a2BmZZ/UQW7ZCv90XXm3J981iSiIO+xfWwk9lIdqrk
+         awZm/N7RfqoLHqG6fIlLKvcfoQXPqQ2r7siYaPZBsgQmCX8lX6479lGbCRaX7QHxWZPa
+         X7UGTD1Lyyto1YKcadPMLg8Zj0zQ6FspEs/Od6rtkCpjeRyL46ee9YX8oqqgb7ldALGX
+         HqAOVbVBbX3Xdplm4ASNKgtP+k9ucxahp3H1DwDcy9LggLndyk+ZfH0DolcpDT5HXDdh
+         3KSqgIH5uiE1S5aJbOd4sVyMSXc46Ldl5SPe12KaerUvnUGrG4BOfRCA7utHJRUdPtYq
+         /7sQ==
+X-Gm-Message-State: AOJu0YxcIimRgbgCoE4XSnsc5AgdXktwP/DHk0xhkk70PVO0QN3DToXw
+        LJm8OGF1jaMO9uEHUhK8MOaMnA==
+X-Google-Smtp-Source: AGHT+IG5QpfTnxygk3x8uHSWEhK6bF3gN3WPZBhQegGjbp6KlbwT+Ggb6vfwd9jhaBqOIDrqTRVOYg==
+X-Received: by 2002:a05:6000:188:b0:315:a235:8aa8 with SMTP id p8-20020a056000018800b00315a2358aa8mr9337209wrx.2.1692000582779;
+        Mon, 14 Aug 2023 01:09:42 -0700 (PDT)
 Received: from ?IPV6:2a01:e0a:982:cbb0:a3d8:b217:d82c:9bc0? ([2a01:e0a:982:cbb0:a3d8:b217:d82c:9bc0])
-        by smtp.gmail.com with ESMTPSA id z15-20020a1c4c0f000000b003fc0505be19sm13452478wmf.37.2023.08.14.00.41.54
+        by smtp.gmail.com with ESMTPSA id y9-20020a1c4b09000000b003fe1cac37d8sm16209267wma.11.2023.08.14.01.09.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Aug 2023 00:41:55 -0700 (PDT)
-Message-ID: <4de07b08-5eda-86d7-8925-f2fadbfca407@linaro.org>
-Date:   Mon, 14 Aug 2023 09:41:53 +0200
+        Mon, 14 Aug 2023 01:09:42 -0700 (PDT)
+Message-ID: <7fc7371a-1b2d-ccce-1e73-6bfe70ea2b20@linaro.org>
+Date:   Mon, 14 Aug 2023 10:09:41 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.13.0
 From:   Neil Armstrong <neil.armstrong@linaro.org>
 Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v2] usb: dwc3: meson-g12a: do post init to fix broken usb
- after resumption
+Subject: Re: [PATCH 1/4] dt-bindings: soc: qcom: qcom,pmic-glink: add a gpio
+ used to determine the Type-C port plug orientation
 Content-Language: en-US
-To:     Luke Lu <luke.lu@libre.computer>, linux-usb@vger.kernel.org,
-        linux-amlogic@lists.infradead.org
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Da Xue <da@libre.computer>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20230809212911.18903-1-luke.lu@libre.computer>
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20230804-topic-sm8550-upstream-type-c-orientation-v1-0-36dd3edec7bf@linaro.org>
+ <20230804-topic-sm8550-upstream-type-c-orientation-v1-1-36dd3edec7bf@linaro.org>
+ <zhm72wrjg7yazutkinv5lx55dgqtm4hmuexw2ht24fu6txxk3d@oum27inbk7si>
 Organization: Linaro Developer Services
-In-Reply-To: <20230809212911.18903-1-luke.lu@libre.computer>
+In-Reply-To: <zhm72wrjg7yazutkinv5lx55dgqtm4hmuexw2ht24fu6txxk3d@oum27inbk7si>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,52 +87,78 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 09/08/2023 23:29, Luke Lu wrote:
-> Device connected to usb otg port of GXL-based boards can not be
-> recognised after resumption, doesn't recover even if disconnect and
-> reconnect the device. dmesg shows it disconnects during resumption.
+On 04/08/2023 18:03, Bjorn Andersson wrote:
+> On Fri, Aug 04, 2023 at 03:50:07PM +0200, Neil Armstrong wrote:
+>> On SM8450 and SM8550 based platforms, the Type-C plug orientation is given on a
+>> GPIO line set by the PMIC.
+>>
+>> Document this optional Type-C connector property, and take the
+>> assumption an active level represents an inverted/flipped orientation.
+>>
+>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>> ---
+>>   .../devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml  | 18 ++++++++++++++++++
+>>   1 file changed, 18 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
+>> index bceb479f74c5..1b0a00b19a54 100644
+>> --- a/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
+>> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
+>> @@ -35,6 +35,11 @@ properties:
+>>     '#size-cells':
+>>       const: 0
+>>   
+>> +  orientation-gpios:
+>> +    description: An input gpio for Type-C connector orientation, used to detect orientation
+>> +      of the Type-C connector. GPIO active level means "CC2" or Reversed/Flipped orientation.
 > 
-> [   41.492911] usb 1-2: USB disconnect, device number 3
-> [   41.499346] usb 1-2: unregistering device
-> [   41.511939] usb 1-2: unregistering interface 1-2:1.0
-> 
-> Calling usb_post_init() will fix this issue, and it's tested and
-> verified on libretech's aml-s905x-cc board.
-> 
-> Cc: stable@vger.kernel.org # v5.8+
-> Fixes: c99993376f72 ("usb: dwc3: Add Amlogic G12A DWC3 glue")
-> Signed-off-by: Luke Lu <luke.lu@libre.computer>
-> 
-> ---
-> Note here, the commmit of Fixes tag is the first patch which bring
-> suspend/resume function, so let's use it as the fix tag.
-> 
-> As commit 5b0ba0caaf3a: (usb: dwc3: meson-g12a: refactor usb init)"
-> introduced the use_post_init() function, and this patch will explicitly
-> depend on it, so let's set kernel version higher or equal to v5.8.
-> 
-> Changes since v1:
->   - add Fixes tag and Cc stable tree
-> ---
->   drivers/usb/dwc3/dwc3-meson-g12a.c | 6 ++++++
->   1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-meson-g12a.c b/drivers/usb/dwc3/dwc3-meson-g12a.c
-> index e99c7489dba0..2c07c038b584 100644
-> --- a/drivers/usb/dwc3/dwc3-meson-g12a.c
-> +++ b/drivers/usb/dwc3/dwc3-meson-g12a.c
-> @@ -926,6 +926,12 @@ static int __maybe_unused dwc3_meson_g12a_resume(struct device *dev)
->   			return ret;
->   	}
->   
-> +	if (priv->drvdata->usb_post_init) {
-> +		ret = priv->drvdata->usb_post_init(priv);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
->   	return 0;
->   }
->   
+> This is a per-connector/port property, as such be part of the connector
+> sub nodes rather than as a property of the shared pmic_glink entity.
 
-Acked-by: Neil Armstrong <neil.armstrong@linaro.org>
+This has been rejected by Rob, Dmitry & Krzysztof in:
+https://lore.kernel.org/all/0fbf55e7-2140-751d-5347-f907a46ef78c@linaro.org/
+&
+https://lore.kernel.org/all/20230608154751.GA2750742-robh@kernel.org/
+
+Indeed the "GPIO" is not part of the physical USB-C connector, but a property,
+and it's not part of the PMIC GLINK firmware either, so ?
+
+The PMIC function which generates this signal is handled by the PMIC GLINK
+firmware, so this representation is the most accurate.
+
+Neil
+
+> 
+> Regards,
+> Bjorn
+> 
+>> +    maxItems: 1
+>> +
+>>   patternProperties:
+>>     '^connector@\d$':
+>>       $ref: /schemas/connector/usb-connector.yaml#
+>> @@ -44,6 +49,19 @@ patternProperties:
+>>   required:
+>>     - compatible
+>>   
+>> +allOf:
+>> +  - if:
+>> +      not:
+>> +        properties:
+>> +          compatible:
+>> +            contains:
+>> +              enum:
+>> +                - qcom,sm8450-pmic-glink
+>> +                - qcom,sm8550-pmic-glink
+>> +    then:
+>> +      properties:
+>> +        orientation-gpios: false
+>> +
+>>   additionalProperties: false
+>>   
+>>   examples:
+>>
+>> -- 
+>> 2.34.1
+>>
+
