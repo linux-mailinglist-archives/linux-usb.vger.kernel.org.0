@@ -2,163 +2,143 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E474C77BF8E
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Aug 2023 20:08:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 121FB77C00D
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Aug 2023 20:52:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230226AbjHNSHn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Aug 2023 14:07:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52040 "EHLO
+        id S231610AbjHNSv0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Aug 2023 14:51:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230086AbjHNSHK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Aug 2023 14:07:10 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25FF2E61
-        for <linux-usb@vger.kernel.org>; Mon, 14 Aug 2023 11:07:09 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-d61e9cb310dso5234022276.0
-        for <linux-usb@vger.kernel.org>; Mon, 14 Aug 2023 11:07:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1692036428; x=1692641228;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ILL3/wme+Xj3iELICcc/rzQVuKV1rDXNge6KvsnjpQU=;
-        b=byqR1Ww+0r/eXw/qhFsThHdhUozBD7vXDz8QBlKVU7ODMahemj/tryCgsp4E4moyVo
-         Y6WIvCu4UBQCyYP5mYnIz14yhVEqF0KWZo78E+i/dl/n9UFjqYadCSAb3JQTWyuXtDvT
-         4UJd1fX5GS4LxUOCNLGiW26cx5vZ9VE9JB4mVqHFhkCZn5wP8QNDqPLg11wcW+C04Jz3
-         +rcvEt4yROAK69LcpGxkVyx+x5gT0zv8M+aMV5dZ4uUnSekygISfLbwjVe+6MzvzbUfG
-         F4m09HWA7nxzK5jOFjK4r6EXvYW1uUC8pipTpQCpkwumrAI+6q7TQSgAzntNvfUSGgth
-         qBDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692036428; x=1692641228;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ILL3/wme+Xj3iELICcc/rzQVuKV1rDXNge6KvsnjpQU=;
-        b=gCpc8YxHKva4ilpEpXiPqjitNmGa46FiA1KqDbyR2lXxkWU9ZRMtpGLbuv8P1yb8Tf
-         wqcKKqGdKmzvplmBnAd9DRqfeQLvx705Mbn8C0tJSzsSx2mNdOu58sfNsESHYpOeSoyF
-         dg22CQPSa7oXNu6zxusZwevYaJVGfzARWfe3IWvL3TaZqAYi3iGrOjQVkzVGDi3dSt6/
-         ETXuBSAQ//+Dl+OOB1VA2z7tw9DeLJm1oSxg9UyiuBZe3eN6A5kxGrjqdN5Sph2IskBU
-         Qf8FY4jtvsDUObtVrJ+ijJfpE6gdnCCsKzoR4D+SO7tn5JmXxUaqE0lbr3AS2D1SNRay
-         nk9Q==
-X-Gm-Message-State: AOJu0YxsHZsBtNfYMuj7VPHJ1PR+SNMrVr+FZLUlAmHum85PN7WH8Xo2
-        gda+Nc5VhJJQwdC38y86R6j+kMBHg2iPQq8=
-X-Google-Smtp-Source: AGHT+IFPcHmzG6KqaH70vqmY/Q2yqgXqnRgdvqHi7Ao2JTUETR1j90+egJ02S9qBGbxPNcRQs1E46IszPQ13uZA=
-X-Received: from rdbabiera.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:18a8])
- (user=rdbabiera job=sendgmr) by 2002:a25:d4d5:0:b0:d0f:bcfe:bc74 with SMTP id
- m204-20020a25d4d5000000b00d0fbcfebc74mr138892ybf.9.1692036428382; Mon, 14 Aug
- 2023 11:07:08 -0700 (PDT)
-Date:   Mon, 14 Aug 2023 18:05:59 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.41.0.694.ge786442a9b-goog
-Message-ID: <20230814180559.923475-1-rdbabiera@google.com>
-Subject: [PATCH v4] usb: typec: bus: verify partner exists in typec_altmode_attention
-From:   RD Babiera <rdbabiera@google.com>
-To:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
-        linux@roeck-us.net
-Cc:     badhri@google.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, RD Babiera <rdbabiera@google.com>,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        with ESMTP id S231728AbjHNSvJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Aug 2023 14:51:09 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C1921722;
+        Mon, 14 Aug 2023 11:51:03 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37EBitj1020161;
+        Mon, 14 Aug 2023 18:50:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=Ff23cqy0WI6THuMabAgFiq8/o6dUkjU6MfTGSZu2134=;
+ b=nI4Hr3WjFFo7I+fOXU+tCdkBHydmn9SZxuOevn+iXDYVBrfcTL3KKdHExhjqIrFKZ8n3
+ wwBp0TzgEjl1mtLP0OA4Y1XYU1UmgSAZshu+C2FLbY73QBQ6QUJrwjb60QLc0tZaI/LE
+ tuw68DDcxjkXd0Zs60wEoGL7LIsSg65qahrZnL9ye2Ld0fRWir6Ri6vDS13qUoHFlRu8
+ Z/j0XczugZlGzONR+MLZK47GNiNebhDOn7bYgEwDshjxtjaxWyAuCa+1KULXkjxxjf93
+ WQ0iXS8dzLLCasW33Y+g+byOu/9yvH54oI/xTd2ZCmiJaqMyRdmys29YN40hskHRN6cm LA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3se3gn4pmq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Aug 2023 18:50:49 +0000
+Received: from pps.filterd (NALASPPMTA01.qualcomm.com [127.0.0.1])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 37EIonaG009755;
+        Mon, 14 Aug 2023 18:50:49 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by NALASPPMTA01.qualcomm.com (PPS) with ESMTP id 3se35mmw89-1;
+        Mon, 14 Aug 2023 18:50:49 +0000
+Received: from NALASPPMTA01.qualcomm.com (NALASPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 37EIomFh009749;
+        Mon, 14 Aug 2023 18:50:49 GMT
+Received: from hu-devc-lv-u18-c.qualcomm.com (hu-eserrao-lv.qualcomm.com [10.47.235.27])
+        by NALASPPMTA01.qualcomm.com (PPS) with ESMTP id 37EIomgh009744;
+        Mon, 14 Aug 2023 18:50:48 +0000
+Received: by hu-devc-lv-u18-c.qualcomm.com (Postfix, from userid 464172)
+        id B3A095005A3; Mon, 14 Aug 2023 11:50:48 -0700 (PDT)
+From:   Elson Roy Serrao <quic_eserrao@quicinc.com>
+To:     gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
+        rogerq@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Elson Roy Serrao <quic_eserrao@quicinc.com>
+Subject: [PATCH v4 0/3] Support dwc3 runtime suspend during bus suspend
+Date:   Mon, 14 Aug 2023 11:50:40 -0700
+Message-Id: <20230814185043.9252-1-quic_eserrao@quicinc.com>
+X-Mailer: git-send-email 2.17.1
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: vu610sPq8cQ-2Y58-xMaPvWWrn8m2yqz
+X-Proofpoint-GUID: vu610sPq8cQ-2Y58-xMaPvWWrn8m2yqz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-08-14_16,2023-08-10_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=6 phishscore=0 spamscore=6
+ impostorscore=0 clxscore=1011 bulkscore=0 lowpriorityscore=0
+ priorityscore=1501 suspectscore=0 malwarescore=0 mlxscore=6 adultscore=0
+ mlxlogscore=121 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2306200000 definitions=main-2308140175
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Some usb hubs will negotiate DisplayPort Alt mode with the device
-but will then negotiate a data role swap after entering the alt
-mode. The data role swap causes the device to unregister all alt
-modes, however the usb hub will still send Attention messages
-even after failing to reregister the Alt Mode. type_altmode_attention
-currently does not verify whether or not a device's altmode partner
-exists, which results in a NULL pointer error when dereferencing
-the typec_altmode and typec_altmode_ops belonging to the altmode
-partner.
-
-Verify the presence of a device's altmode partner before sending
-the Attention message to the Alt Mode driver.
-
-Fixes: 8a37d87d72f0 ("usb: typec: Bus type for alternate modes")
-Cc: stable@vger.kernel.org
-Signed-off-by: RD Babiera <rdbabiera@google.com>
----
-Changes since v1:
-* Only assigns pdev if altmode partner exists in typec_altmode_attention
-* Removed error return in typec_altmode_attention if Alt Mode does
-  not implement Attention messages.
-* Changed tcpm_log message to indicate that altmode partner does not exist,
-  as it only logs in that case.
----
-Changes since v2:
-* Changed tcpm_log message to accurately reflect error
-* Revised commit message
----
-Changes since v3:
-* Fixed nits
----
- drivers/usb/typec/bus.c           | 12 ++++++++++--
- drivers/usb/typec/tcpm/tcpm.c     |  3 ++-
- include/linux/usb/typec_altmode.h |  2 +-
- 3 files changed, 13 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/usb/typec/bus.c b/drivers/usb/typec/bus.c
-index fe5b9a2e61f5..e95ec7e382bb 100644
---- a/drivers/usb/typec/bus.c
-+++ b/drivers/usb/typec/bus.c
-@@ -183,12 +183,20 @@ EXPORT_SYMBOL_GPL(typec_altmode_exit);
-  *
-  * Notifies the partner of @adev about Attention command.
-  */
--void typec_altmode_attention(struct typec_altmode *adev, u32 vdo)
-+int typec_altmode_attention(struct typec_altmode *adev, u32 vdo)
- {
--	struct typec_altmode *pdev = &to_altmode(adev)->partner->adev;
-+	struct altmode *partner = to_altmode(adev)->partner;
-+	struct typec_altmode *pdev;
-+
-+	if (!partner)
-+		return -ENODEV;
-+
-+	pdev = &partner->adev;
+Changes in v4
+ - Changed the dt property name to 'snps,runtime-suspend-on-usb-suspend' as per
+   the feedback received.
+ - Separated the pending events handling to a different patch as it is an
+   independent fix
+   https://lore.kernel.org/all/b2ab8803-d4e0-bd63-7a64-bcc411e04cfe@kernel.org/
+ - Moved the bus suspend checks to runtime_checks() API to make it more relevant
+   to runtime ops. Also added explicit run time check in resume common function.
+ - Instead of checking the link state for bus suspend, used dwc->suspended flag
+   as it directly reflects the gadget suspend/resume operations.
  
- 	if (pdev->ops && pdev->ops->attention)
- 		pdev->ops->attention(pdev, vdo);
-+
-+	return 0;
- }
- EXPORT_SYMBOL_GPL(typec_altmode_attention);
+Changes in v3
+ - Added a dt property 'snps,allow-rtsusp-on-u3' to make this feature platform
+   dependent as per the feedback from Thinh N.
+ - Changed the RT idle/suspend/resume handling to device mode specific and dt
+   property dependent.
+ - Modified the cover letter to document how resume is handled on qcom platforms.
  
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 5a7d8cc04628..77fe16190766 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -1877,7 +1877,8 @@ static void tcpm_handle_vdm_request(struct tcpm_port *port,
- 			}
- 			break;
- 		case ADEV_ATTENTION:
--			typec_altmode_attention(adev, p[1]);
-+			if (typec_altmode_attention(adev, p[1]))
-+				tcpm_log(port, "typec_altmode_attention no port partner altmode");
- 			break;
- 		}
- 	}
-diff --git a/include/linux/usb/typec_altmode.h b/include/linux/usb/typec_altmode.h
-index 350d49012659..28aeef8f9e7b 100644
---- a/include/linux/usb/typec_altmode.h
-+++ b/include/linux/usb/typec_altmode.h
-@@ -67,7 +67,7 @@ struct typec_altmode_ops {
- 
- int typec_altmode_enter(struct typec_altmode *altmode, u32 *vdo);
- int typec_altmode_exit(struct typec_altmode *altmode);
--void typec_altmode_attention(struct typec_altmode *altmode, u32 vdo);
-+int typec_altmode_attention(struct typec_altmode *altmode, u32 vdo);
- int typec_altmode_vdm(struct typec_altmode *altmode,
- 		      const u32 header, const u32 *vdo, int count);
- int typec_altmode_notify(struct typec_altmode *altmode, unsigned long conf,
+Changes in v2
+ - Used pm_runtime_resume_and_get() API instead of pm_runtime_get_sync()
+   as suggested by Dan.
+ - Handled the return value in ether_wakeup_host to print error message.
 
-base-commit: f176638af476c6d46257cc3303f5c7cf47d5967d
+When a USB link is idle, the host sends a bus suspend event to the device
+so that the device can save power. But true power savings during bus
+suspend can be seen only if we let the USB controller enter low power
+mode and turn off the clocks. Vendor drivers may have their own runtime
+power management framework to power up/down the controller. But since
+vendor drivers' runtime suspend/resume routines depend on the dwc3 child
+node we would need a framework to trigger dwc3 runtime pm ops whenever a
+bus suspend is received. If the device wants to exit from bus suspend
+state it can send a wakeup signal to the host by first bringing out the
+controller from low power mode. This series implements the needed
+framework to achieve this functionality when a bus suspend interupt is
+received.
+
+The assumption here is that the dwc3 hibernation feature is not enabled and the
+platform is responsible to detect resume events to bring the controller out of
+suspend. On Qualcomm platforms the resume is handled through PHY sideband signalling.
+
+
+The series is organized in below fashion:
+Patch 1: This includes the modification needed from function drivers to let
+UDC enter low power mode.
+Patch 2: This has the modification needed in the UDC driver to trigger runtime
+suspend whene a bus suspend interrupt is received. This also handles resume
+and remote wakeup features from power management perspective.
+
+Elson Roy Serrao (3):
+  usb: function: u_ether: Handle rx requests during suspend/resume
+  dt-bindings: usb: snps,dwc3: Add runtime-suspend-on-usb-suspend
+    property
+  usb: dwc3: Modify runtime pm ops to handle bus suspend
+
+ .../devicetree/bindings/usb/snps,dwc3.yaml    |  5 ++
+ drivers/usb/dwc3/core.c                       | 28 ++++++++++-
+ drivers/usb/dwc3/core.h                       |  3 ++
+ drivers/usb/dwc3/gadget.c                     | 32 ++++++++++---
+ drivers/usb/gadget/function/u_ether.c         | 47 +++++++++++++++----
+ 5 files changed, 97 insertions(+), 18 deletions(-)
+
 -- 
-2.41.0.694.ge786442a9b-goog
+2.17.1
 
