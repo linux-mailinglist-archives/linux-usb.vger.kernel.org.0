@@ -2,134 +2,144 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C93377CCE3
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Aug 2023 14:48:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BDC077CD45
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Aug 2023 15:19:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237248AbjHOMry (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Aug 2023 08:47:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45650 "EHLO
+        id S231364AbjHONSj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Aug 2023 09:18:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231523AbjHOMrW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Aug 2023 08:47:22 -0400
-Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [176.9.242.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 152911B2
-        for <linux-usb@vger.kernel.org>; Tue, 15 Aug 2023 05:47:19 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
-        by bmailout3.hostsharing.net (Postfix) with ESMTPS id 283E9100D943A;
-        Tue, 15 Aug 2023 14:47:18 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id EC7AE1E8279; Tue, 15 Aug 2023 14:47:17 +0200 (CEST)
-Message-Id: <97f42cbb432ed38a327f02ef37348bd07765e0f5.1692085657.git.lukas@wunner.de>
-In-Reply-To: <cover.1692085657.git.lukas@wunner.de>
-References: <cover.1692085657.git.lukas@wunner.de>
-From:   Lukas Wunner <lukas@wunner.de>
-Date:   Tue, 15 Aug 2023 14:40:39 +0200
-Subject: [PATCH 2/2] xhci: Use more than one Event Ring segment
-To:     Mathias Nyman <mathias.nyman@intel.com>,
+        with ESMTP id S237428AbjHONSY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Aug 2023 09:18:24 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50FEAD1
+        for <linux-usb@vger.kernel.org>; Tue, 15 Aug 2023 06:18:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692105503; x=1723641503;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=bsm51loDbJ9DqIBsxkCw3qgi+WfNK45KGUNtr5kFsSs=;
+  b=RfYh52Ye6BYKi/IdKTue+kl3FBe5iDEmNswAwQHnapj69O/hVoqVTe7s
+   cvcF1wRxxdw2CG28UAob7FqzRFTiAAL1NGV5RJllQpwYe/c+V3LRfRx2s
+   0Nj7h5+M3LW3F9NwIwBkPXAOTrG1heZfQwJrNHzhhzS0Z5sBPXx2U4AcW
+   0zaWDQiMBctG2p0lrrphahuuTDqhl95eo1ZPhg2VVDEHOpre16b8VmS5m
+   IwQe6Na3Zrlon8AUuThREcIITLVFBEWpcvaO6LY34trOxhvc5xU/HfvZN
+   hnnYq/S+yKU0855LciSIeQu1Zz7YNm2bRYHlE33yiSWYnTaZPIZWNDoH1
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="436167129"
+X-IronPort-AV: E=Sophos;i="6.01,174,1684825200"; 
+   d="scan'208";a="436167129"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2023 06:18:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="727376508"
+X-IronPort-AV: E=Sophos;i="6.01,174,1684825200"; 
+   d="scan'208";a="727376508"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga007.jf.intel.com with ESMTP; 15 Aug 2023 06:18:21 -0700
+Message-ID: <abac0c9d-ce51-b777-c27d-96911c745cd2@linux.intel.com>
+Date:   Tue, 15 Aug 2023 16:19:37 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.13.0
+Content-Language: en-US
+To:     Lukas Wunner <lukas@wunner.de>,
+        Mathias Nyman <mathias.nyman@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org,
-        Jonathan Bell <jonathan@raspberrypi.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Philipp Rosenberger <p.rosenberger@kunbus.com>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Cc:     linux-usb@vger.kernel.org, Peter Chen <peter.chen@nxp.com>
+References: <0e26fb1421216b198a89b9164ab6c4cd9e1e127a.1692049324.git.lukas@wunner.de>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH] xhci: Clear EHB bit only at end of interrupt handler
+In-Reply-To: <0e26fb1421216b198a89b9164ab6c4cd9e1e127a.1692049324.git.lukas@wunner.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Jonathan Bell <jonathan@raspberrypi.com>
+On 15.8.2023 10.20, Lukas Wunner wrote:
+> The Event Handler Busy bit shall be cleared by software when the Event
+> Ring is empty.  The xHC is thereby informed that it may raise another
+> interrupt once it has enqueued new events (sec 4.17.2).
+> 
+> However since commit dc0ffbea5729 ("usb: host: xhci: update event ring
+> dequeue pointer on purpose"), the EHB bit is already cleared after half
+> a segment has been processed.
+> 
+> As a result, spurious interrupts may occur:
+> 
+> - xhci_irq() processes half a segment, clears EHB, continues processing
+>    remaining events.
+> - xHC enqueues new events.  Because EHB has been cleared, xHC sets
+>    Interrupt Pending bit.  Interrupt moderation countdown begins.
+> - Meanwhile xhci_irq() continues processing events.  Interrupt
+>    moderation countdown reaches zero, so an MSI interrupt is signaled.
+> - xhci_irq() empties the Event Ring, clears EHB again and is done.
+> - Because an MSI interrupt has been signaled, xhci_irq() is run again.
+>    It discovers there's nothing to do and returns IRQ_NONE.
+> 
+> Avoid by clearing the EHB bit only at the end of xhci_irq().
 
-Users have reported log spam created by "Event Ring Full" xHC event
-TRBs.  These are caused by interrupt latency in conjunction with a very
-busy set of devices on the bus.  The errors are benign, but throughput
-will suffer as the xHC will pause processing of transfers until the
-Event Ring is drained by the kernel.
+Thanks,
+Nice catch, we shouldn't clear EHB if we are in the middle of handling several
+events.
 
-Commit dc0ffbea5729 ("usb: host: xhci: update event ring dequeue pointer
-on purpose") mitigated the issue by advancing the Event Ring Dequeue
-Pointer already after half a segment has been processed.  Nevertheless,
-providing a larger Event Ring would be useful to cope with load peaks.
+> 
+> Fixes: dc0ffbea5729 ("usb: host: xhci: update event ring dequeue pointer on purpose")
+> Signed-off-by: Lukas Wunner <lukas@wunner.de>
+> Cc: stable@vger.kernel.org # v5.5+
+> Cc: Peter Chen <peter.chen@nxp.com>
+> ---
+>   drivers/usb/host/xhci-ring.c | 10 ++++++----
+>   1 file changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+> index 1dde53f..bc6280b 100644
+> --- a/drivers/usb/host/xhci-ring.c
+> +++ b/drivers/usb/host/xhci-ring.c
+> @@ -2996,7 +2996,8 @@ static int xhci_handle_event(struct xhci_hcd *xhci, struct xhci_interrupter *ir)
+>    */
+>   static void xhci_update_erst_dequeue(struct xhci_hcd *xhci,
+>   				     struct xhci_interrupter *ir,
+> -				     union xhci_trb *event_ring_deq)
+> +				     union xhci_trb *event_ring_deq,
+> +				     bool clear_ehb)
+>   {
+>   	u64 temp_64;
+>   	dma_addr_t deq;
+> @@ -3022,7 +3023,8 @@ static void xhci_update_erst_dequeue(struct xhci_hcd *xhci,
+>   	}
+>   
+>   	/* Clear the event handler busy flag (RW1C) */
+> -	temp_64 |= ERST_EHB;
+> +	if (clear_ehb)
+> +		temp_64 |= ERST_EHB;
+>   	xhci_write_64(xhci, temp_64, &ir->ir_set->erst_dequeue);
+>   }
 
-Expand the number of event TRB slots available by increasing the number
-of Event Ring segments in the ERST.
 
-Controllers have a hardware-defined limit as to the number of ERST
-entries they can process, but with up to 32k it can be excessively high
-(sec 5.3.4).  So cap the actual number at 8 (configurable through the
-ERST_MAX_SEGS macro), which seems like a reasonable quantity.
+This might still write the ERST_EHB bit even if clear_ehb is false.
+  
+Earlier in xhci_update_erst_dequeue() we do:
+   temp_64 = xhci_read_64(xhci, &ir->ir_set->erst_dequeue)
+   ...
+   temp_64 &= ERST_PTR_MASK;
+   temp_64 |= ((u64) deq & (u64) ~ERST_PTR_MASK);
 
-An alternative to increasing the number of Event Ring segments would be
-an increase of the segment size.  But that requires allocating multiple
-contiguous pages, which may be impossible if memory is fragmented.
+ERST_PTR_MASK covers the ERST_EHB bit, so if it's set it will also be written back,
+which clears it (RW1C)
 
-Link: https://forums.raspberrypi.com/viewtopic.php?t=246263
-Signed-off-by: Jonathan Bell <jonathan@raspberrypi.com>
-Signed-off-by: Lukas Wunner <lukas@wunner.de>
----
- drivers/usb/host/xhci-mem.c | 10 +++++++---
- drivers/usb/host/xhci.h     |  5 +++--
- 2 files changed, 10 insertions(+), 5 deletions(-)
+   #define ERST_EHB                (1 << 3)
+   #define ERST_PTR_MASK           (0xf)
 
-diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index c265425..cb50bf8 100644
---- a/drivers/usb/host/xhci-mem.c
-+++ b/drivers/usb/host/xhci-mem.c
-@@ -2238,14 +2238,18 @@ static int xhci_setup_port_arrays(struct xhci_hcd *xhci, gfp_t flags)
- {
- 	struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
- 	struct xhci_interrupter *ir;
-+	unsigned int num_segs;
- 	int ret;
- 
- 	ir = kzalloc_node(sizeof(*ir), flags, dev_to_node(dev));
- 	if (!ir)
- 		return NULL;
- 
--	ir->event_ring = xhci_ring_alloc(xhci, ERST_NUM_SEGS, 1, TYPE_EVENT,
--					0, flags);
-+	num_segs = min_t(unsigned int, 1 << HCS_ERST_MAX(xhci->hcs_params2),
-+			 ERST_MAX_SEGS);
-+
-+	ir->event_ring = xhci_ring_alloc(xhci, num_segs, 1, TYPE_EVENT, 0,
-+					 flags);
- 	if (!ir->event_ring) {
- 		xhci_warn(xhci, "Failed to allocate interrupter event ring\n");
- 		kfree(ir);
-@@ -2281,7 +2285,7 @@ static int xhci_setup_port_arrays(struct xhci_hcd *xhci, gfp_t flags)
- 	/* set ERST count with the number of entries in the segment table */
- 	erst_size = readl(&ir->ir_set->erst_size);
- 	erst_size &= ERST_SIZE_MASK;
--	erst_size |= ERST_NUM_SEGS;
-+	erst_size |= ir->event_ring->num_segs;
- 	writel(erst_size, &ir->ir_set->erst_size);
- 
- 	erst_base = xhci_read_64(xhci, &ir->ir_set->erst_base);
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 45c9177..0948d51 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -1674,8 +1674,9 @@ struct urb_priv {
-  * Each segment table entry is 4*32bits long.  1K seems like an ok size:
-  * (1K bytes * 8bytes/bit) / (4*32 bits) = 64 segment entries in the table,
-  * meaning 64 ring segments.
-- * Initial allocated size of the ERST, in number of entries */
--#define	ERST_NUM_SEGS	1
-+ *
-+ * Reasonable limit for number of Event Ring segments (spec allows 32k) */
-+#define	ERST_MAX_SEGS	8
- /* Poll every 60 seconds */
- #define	POLL_TIMEOUT	60
- /* Stop endpoint command timeout (secs) for URB cancellation watchdog timer */
--- 
-2.39.2
+The ERST_PTR_MASK name is really confusing as it masks everything else than the dequeue pointer.
+Should probably be changed
 
+-Mathias
