@@ -2,192 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1173077C835
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Aug 2023 08:59:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F132477C884
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Aug 2023 09:27:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235310AbjHOG7I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Aug 2023 02:59:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39520 "EHLO
+        id S234860AbjHOH1Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Aug 2023 03:27:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235367AbjHOG7C (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Aug 2023 02:59:02 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E0A8C10C6;
-        Mon, 14 Aug 2023 23:58:58 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.201])
-        by gateway (Coremail) with SMTP id _____8Dxl+gwIttk7akYAA--.14636S3;
-        Tue, 15 Aug 2023 14:58:56 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.20.42.201])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxDc8sIttkH_haAA--.27070S2;
-        Tue, 15 Aug 2023 14:58:55 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     Minas Harutyunyan <hminas@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        loongson-kernel@lists.loongnix.cn, Yinbo Zhu <zhuyinbo@loongson.cn>
-Subject: [PATCH RESEND v2] usb: dwc2: add pci_device_id driver_data parse support
-Date:   Tue, 15 Aug 2023 14:58:33 +0800
-Message-Id: <20230815065833.3375-1-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxDc8sIttkH_haAA--.27070S2
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
-        nUUI43ZEXa7xR_UUUUUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S235433AbjHOH03 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Aug 2023 03:26:29 -0400
+X-Greylist: delayed 329 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 15 Aug 2023 00:26:27 PDT
+Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [176.9.242.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301E31999
+        for <linux-usb@vger.kernel.org>; Tue, 15 Aug 2023 00:26:26 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
+        by bmailout3.hostsharing.net (Postfix) with ESMTPS id CD6AD100DA1A2;
+        Tue, 15 Aug 2023 09:20:53 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id 82ECD2E9C31; Tue, 15 Aug 2023 09:20:53 +0200 (CEST)
+Message-Id: <0e26fb1421216b198a89b9164ab6c4cd9e1e127a.1692049324.git.lukas@wunner.de>
+From:   Lukas Wunner <lukas@wunner.de>
+Date:   Tue, 15 Aug 2023 09:20:53 +0200
+Subject: [PATCH] xhci: Clear EHB bit only at end of interrupt handler
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, Peter Chen <peter.chen@nxp.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The dwc2 driver has everything we need to run in PCI mode except
-for pci_device_id driver_data parse.  With that to set Loongson
-dwc2 element and added identified as PCI_VENDOR_ID_LOONGSON
-and PCI_DEVICE_ID_LOONGSON_DWC2 in dwc2_pci_ids, the Loongson
-dwc2 controller will work.
+The Event Handler Busy bit shall be cleared by software when the Event
+Ring is empty.  The xHC is thereby informed that it may raise another
+interrupt once it has enqueued new events (sec 4.17.2).
 
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+However since commit dc0ffbea5729 ("usb: host: xhci: update event ring
+dequeue pointer on purpose"), the EHB bit is already cleared after half
+a segment has been processed.
+
+As a result, spurious interrupts may occur:
+
+- xhci_irq() processes half a segment, clears EHB, continues processing
+  remaining events.
+- xHC enqueues new events.  Because EHB has been cleared, xHC sets
+  Interrupt Pending bit.  Interrupt moderation countdown begins.
+- Meanwhile xhci_irq() continues processing events.  Interrupt
+  moderation countdown reaches zero, so an MSI interrupt is signaled.
+- xhci_irq() empties the Event Ring, clears EHB again and is done.
+- Because an MSI interrupt has been signaled, xhci_irq() is run again.
+  It discovers there's nothing to do and returns IRQ_NONE.
+
+Avoid by clearing the EHB bit only at the end of xhci_irq().
+
+Fixes: dc0ffbea5729 ("usb: host: xhci: update event ring dequeue pointer on purpose")
+Signed-off-by: Lukas Wunner <lukas@wunner.de>
+Cc: stable@vger.kernel.org # v5.5+
+Cc: Peter Chen <peter.chen@nxp.com>
 ---
-Change in v2:
-		1. Move the dwc2 pci ID from pci_ids.h to params.c.
-		2. Add some code logic to ensure that the current device is
-		   a PCI device.
-		3. Fix the compile issue when dwc2 pci driver as module.
+ drivers/usb/host/xhci-ring.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
- drivers/usb/dwc2/core.h   |  1 +
- drivers/usb/dwc2/params.c | 39 ++++++++++++++++++++++++++++++++++++++-
- drivers/usb/dwc2/pci.c    | 14 +-------------
- 3 files changed, 40 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
-index 0bb4c0c845bf..c92a1da46a01 100644
---- a/drivers/usb/dwc2/core.h
-+++ b/drivers/usb/dwc2/core.h
-@@ -1330,6 +1330,7 @@ irqreturn_t dwc2_handle_common_intr(int irq, void *dev);
- /* The device ID match table */
- extern const struct of_device_id dwc2_of_match_table[];
- extern const struct acpi_device_id dwc2_acpi_match[];
-+extern const struct pci_device_id dwc2_pci_ids[];
- 
- int dwc2_lowlevel_hw_enable(struct dwc2_hsotg *hsotg);
- int dwc2_lowlevel_hw_disable(struct dwc2_hsotg *hsotg);
-diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
-index 21d16533bd2f..6b68a8830781 100644
---- a/drivers/usb/dwc2/params.c
-+++ b/drivers/usb/dwc2/params.c
-@@ -7,9 +7,14 @@
- #include <linux/module.h>
- #include <linux/of_device.h>
- #include <linux/usb/of.h>
-+#include <linux/pci_ids.h>
-+#include <linux/pci.h>
- 
- #include "core.h"
- 
-+#define PCI_PRODUCT_ID_HAPS_HSOTG	0xabc0
-+#define PCI_DEVICE_ID_LOONGSON_DWC2	0x7a04
-+
- static void dwc2_set_bcm_params(struct dwc2_hsotg *hsotg)
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index 1dde53f..bc6280b 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -2996,7 +2996,8 @@ static int xhci_handle_event(struct xhci_hcd *xhci, struct xhci_interrupter *ir)
+  */
+ static void xhci_update_erst_dequeue(struct xhci_hcd *xhci,
+ 				     struct xhci_interrupter *ir,
+-				     union xhci_trb *event_ring_deq)
++				     union xhci_trb *event_ring_deq,
++				     bool clear_ehb)
  {
- 	struct dwc2_core_params *p = &hsotg->params;
-@@ -55,6 +60,14 @@ static void dwc2_set_jz4775_params(struct dwc2_hsotg *hsotg)
- 		!device_property_read_bool(hsotg->dev, "disable-over-current");
- }
- 
-+static void dwc2_set_loongson_params(struct dwc2_hsotg *hsotg)
-+{
-+	struct dwc2_core_params *p = &hsotg->params;
-+
-+	p->phy_utmi_width = 8;
-+	p->power_down = DWC2_POWER_DOWN_PARAM_PARTIAL;
-+}
-+
- static void dwc2_set_x1600_params(struct dwc2_hsotg *hsotg)
- {
- 	struct dwc2_core_params *p = &hsotg->params;
-@@ -281,6 +294,23 @@ const struct acpi_device_id dwc2_acpi_match[] = {
- };
- MODULE_DEVICE_TABLE(acpi, dwc2_acpi_match);
- 
-+const struct pci_device_id dwc2_pci_ids[] = {
-+	{
-+		PCI_DEVICE(PCI_VENDOR_ID_SYNOPSYS, PCI_PRODUCT_ID_HAPS_HSOTG),
-+	},
-+	{
-+		PCI_DEVICE(PCI_VENDOR_ID_STMICRO,
-+			   PCI_DEVICE_ID_STMICRO_USB_OTG),
-+	},
-+	{
-+		PCI_DEVICE(PCI_VENDOR_ID_LOONGSON, PCI_DEVICE_ID_LOONGSON_DWC2),
-+		.driver_data = (unsigned long)dwc2_set_loongson_params,
-+	},
-+	{ /* end: all zeroes */ }
-+};
-+MODULE_DEVICE_TABLE(pci, dwc2_pci_ids);
-+EXPORT_SYMBOL_GPL(dwc2_pci_ids);
-+
- static void dwc2_set_param_otg_cap(struct dwc2_hsotg *hsotg)
- {
- 	switch (hsotg->hw_params.op_mode) {
-@@ -927,13 +957,20 @@ int dwc2_init_params(struct dwc2_hsotg *hsotg)
- 	if (match && match->data) {
- 		set_params = match->data;
- 		set_params(hsotg);
--	} else {
-+	} else if (!match) {
- 		const struct acpi_device_id *amatch;
-+		const struct pci_device_id *pmatch = NULL;
- 
- 		amatch = acpi_match_device(dwc2_acpi_match, hsotg->dev);
- 		if (amatch && amatch->driver_data) {
- 			set_params = (set_params_cb)amatch->driver_data;
- 			set_params(hsotg);
-+		} else if (!amatch)
-+			pmatch = pci_match_id(dwc2_pci_ids, to_pci_dev(hsotg->dev->parent));
-+
-+		if (pmatch && pmatch->driver_data) {
-+			set_params = (set_params_cb)pmatch->driver_data;
-+			set_params(hsotg);
- 		}
+ 	u64 temp_64;
+ 	dma_addr_t deq;
+@@ -3022,7 +3023,8 @@ static void xhci_update_erst_dequeue(struct xhci_hcd *xhci,
  	}
  
-diff --git a/drivers/usb/dwc2/pci.c b/drivers/usb/dwc2/pci.c
-index b7306ed8be4c..f3a1e4232a31 100644
---- a/drivers/usb/dwc2/pci.c
-+++ b/drivers/usb/dwc2/pci.c
-@@ -24,7 +24,7 @@
- #include <linux/platform_device.h>
- #include <linux/usb/usb_phy_generic.h>
- 
--#define PCI_PRODUCT_ID_HAPS_HSOTG	0xabc0
-+#include "core.h"
- 
- static const char dwc2_driver_name[] = "dwc2-pci";
- 
-@@ -122,18 +122,6 @@ static int dwc2_pci_probe(struct pci_dev *pci,
- 	return ret;
+ 	/* Clear the event handler busy flag (RW1C) */
+-	temp_64 |= ERST_EHB;
++	if (clear_ehb)
++		temp_64 |= ERST_EHB;
+ 	xhci_write_64(xhci, temp_64, &ir->ir_set->erst_dequeue);
  }
  
--static const struct pci_device_id dwc2_pci_ids[] = {
--	{
--		PCI_DEVICE(PCI_VENDOR_ID_SYNOPSYS, PCI_PRODUCT_ID_HAPS_HSOTG),
--	},
--	{
--		PCI_DEVICE(PCI_VENDOR_ID_STMICRO,
--			   PCI_DEVICE_ID_STMICRO_USB_OTG),
--	},
--	{ /* end: all zeroes */ }
--};
--MODULE_DEVICE_TABLE(pci, dwc2_pci_ids);
--
- static struct pci_driver dwc2_pci_driver = {
- 	.name = dwc2_driver_name,
- 	.id_table = dwc2_pci_ids,
+@@ -3103,7 +3105,7 @@ irqreturn_t xhci_irq(struct usb_hcd *hcd)
+ 	while (xhci_handle_event(xhci, ir) > 0) {
+ 		if (event_loop++ < TRBS_PER_SEGMENT / 2)
+ 			continue;
+-		xhci_update_erst_dequeue(xhci, ir, event_ring_deq);
++		xhci_update_erst_dequeue(xhci, ir, event_ring_deq, false);
+ 		event_ring_deq = ir->event_ring->dequeue;
+ 
+ 		/* ring is half-full, force isoc trbs to interrupt more often */
+@@ -3113,7 +3115,7 @@ irqreturn_t xhci_irq(struct usb_hcd *hcd)
+ 		event_loop = 0;
+ 	}
+ 
+-	xhci_update_erst_dequeue(xhci, ir, event_ring_deq);
++	xhci_update_erst_dequeue(xhci, ir, event_ring_deq, true);
+ 	ret = IRQ_HANDLED;
+ 
+ out:
 -- 
-2.31.1
+2.39.2
 
