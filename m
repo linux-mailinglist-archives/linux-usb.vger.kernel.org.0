@@ -2,289 +2,634 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 992EC77C99C
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Aug 2023 10:46:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C443877CAD6
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Aug 2023 11:56:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235738AbjHOIqE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Aug 2023 04:46:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58312 "EHLO
+        id S236291AbjHOJz4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Aug 2023 05:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235741AbjHOIpn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Aug 2023 04:45:43 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04C21E72
-        for <linux-usb@vger.kernel.org>; Tue, 15 Aug 2023 01:45:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692089141; x=1723625141;
-  h=date:from:to:cc:subject:message-id;
-  bh=wuU03MET80Q99JcOVQ6ijrw32kvl7cGWgao79K00Szs=;
-  b=chQM4C+wpORP9FoG0f9U+vBQzSGH1QgzKwre73IIxCzj9qrVtTHDzFyI
-   c6QC6zkRQlw5Il77P+U8Qizn5efB6vX5faPvVVPK1fxVMTjB0jepUjn+o
-   QcHLgYcPb5vVA5REOfEDdLLFCTUNN4n+VmIU4PDh8NE8uUAT+FOjddyX/
-   t/T/qRsvDhd0XgF9z1NTDWWHTSTQ4Wq2XXkVjA43DnpmNaJGvQl4RwV/E
-   eu9B8T9Tms/fWLQ30lODnc2wdvcxqaB+8WTEMV4PynAb+DtLTTr7uy2T/
-   pTM/uqyhwZjaqu18CRWlInGJmfhGpoe+v8RjuNVka57VceL9lPsd4QXOC
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10802"; a="403214415"
-X-IronPort-AV: E=Sophos;i="6.01,174,1684825200"; 
-   d="scan'208";a="403214415"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2023 01:45:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10802"; a="1064380613"
-X-IronPort-AV: E=Sophos;i="6.01,174,1684825200"; 
-   d="scan'208";a="1064380613"
-Received: from lkp-server02.sh.intel.com (HELO b5fb8d9e1ffc) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 15 Aug 2023 01:45:37 -0700
-Received: from kbuild by b5fb8d9e1ffc with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qVpgG-0000nt-2G;
-        Tue, 15 Aug 2023 08:45:36 +0000
-Date:   Tue, 15 Aug 2023 16:45:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- bbb9e06d2c6435af9c62074ad7048910eeb2e7bc
-Message-ID: <202308151620.KeNKOU2j-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S236379AbjHOJzS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Aug 2023 05:55:18 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6F137F7;
+        Tue, 15 Aug 2023 02:55:14 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 37F9sYpV5008505, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 37F9sYpV5008505
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 15 Aug 2023 17:54:34 +0800
+Received: from RTEXDAG01.realtek.com.tw (172.21.6.100) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Tue, 15 Aug 2023 17:54:53 +0800
+Received: from RTEXH36506.realtek.com.tw (172.21.6.27) by
+ RTEXDAG01.realtek.com.tw (172.21.6.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Tue, 15 Aug 2023 17:54:52 +0800
+Received: from localhost.localdomain (172.21.252.101) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server id
+ 15.1.2507.17 via Frontend Transport; Tue, 15 Aug 2023 17:54:52 +0800
+From:   Stanley Chang <stanley_chang@realtek.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     Stanley Chang <stanley_chang@realtek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v4 1/2] usb: dwc3: add Realtek DHC RTD SoC dwc3 glue layer driver
+Date:   Tue, 15 Aug 2023 17:54:37 +0800
+Message-ID: <20230815095452.4146-1-stanley_chang@realtek.com>
+X-Mailer: git-send-email 2.41.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-KSE-ServerInfo: RTEXDAG01.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: bbb9e06d2c6435af9c62074ad7048910eeb2e7bc  Merge 6.5-rc6 into usb-next
+Realtek DHC RTD SoCs integrate dwc3 IP and has some customizations to
+support different generations of SoCs.
 
-elapsed time: 724m
+Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
+---
+v3 to v4 change:
+    Get max-speed from dwc3 node.
+    Add the register set for pm control.
+v2 to v3 change:
+    Remove the support_drd_mode of struct dwc3_rtk.
+    Remove unlink_usb3_port and disable_usb3_phy.
+    Disabled usb3 phy if the max speed is not super-speed.
+v1 to v2 change:
+    Remove the code about the property realtek,enable-l4icg.
+    Select USB_ROLE_SWITCH in Kconfig.
+    Add dependency OF and ARCH_REALTEK in Kconfig.
+---
+ drivers/usb/dwc3/Kconfig    |  11 +
+ drivers/usb/dwc3/Makefile   |   1 +
+ drivers/usb/dwc3/dwc3-rtk.c | 512 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 524 insertions(+)
+ create mode 100644 drivers/usb/dwc3/dwc3-rtk.c
 
-configs tested: 212
-configs skipped: 11
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r022-20230815   gcc  
-alpha                randconfig-r024-20230815   gcc  
-alpha                randconfig-r031-20230815   gcc  
-alpha                randconfig-r033-20230815   gcc  
-alpha                randconfig-r034-20230815   gcc  
-alpha                randconfig-r036-20230815   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r005-20230815   gcc  
-arc                  randconfig-r024-20230815   gcc  
-arc                  randconfig-r043-20230815   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                           h3600_defconfig   gcc  
-arm                       imx_v6_v7_defconfig   gcc  
-arm                         lpc18xx_defconfig   gcc  
-arm                          moxart_defconfig   clang
-arm                        multi_v7_defconfig   gcc  
-arm                        mvebu_v7_defconfig   gcc  
-arm                             mxs_defconfig   clang
-arm                  randconfig-r011-20230815   clang
-arm                  randconfig-r024-20230815   clang
-arm                  randconfig-r025-20230815   clang
-arm                  randconfig-r034-20230815   gcc  
-arm                  randconfig-r046-20230815   clang
-arm                           sunxi_defconfig   gcc  
-arm                           tegra_defconfig   gcc  
-arm64                            alldefconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r014-20230815   gcc  
-arm64                randconfig-r016-20230815   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r031-20230815   gcc  
-csky                 randconfig-r033-20230815   gcc  
-csky                 randconfig-r034-20230815   gcc  
-hexagon              randconfig-r014-20230815   clang
-hexagon              randconfig-r026-20230815   clang
-hexagon              randconfig-r041-20230815   clang
-hexagon              randconfig-r045-20230815   clang
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-r004-20230815   clang
-i386         buildonly-randconfig-r005-20230815   clang
-i386         buildonly-randconfig-r006-20230815   clang
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-i001-20230815   clang
-i386                 randconfig-i002-20230815   clang
-i386                 randconfig-i003-20230815   clang
-i386                 randconfig-i004-20230815   clang
-i386                 randconfig-i005-20230815   clang
-i386                 randconfig-i006-20230815   clang
-i386                 randconfig-i011-20230815   gcc  
-i386                 randconfig-i012-20230815   gcc  
-i386                 randconfig-i013-20230815   gcc  
-i386                 randconfig-i014-20230815   gcc  
-i386                 randconfig-i015-20230815   gcc  
-i386                 randconfig-i016-20230815   gcc  
-i386                 randconfig-r004-20230815   clang
-i386                 randconfig-r005-20230815   clang
-i386                 randconfig-r016-20230815   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r003-20230815   gcc  
-loongarch            randconfig-r004-20230815   gcc  
-loongarch            randconfig-r012-20230815   gcc  
-loongarch            randconfig-r013-20230815   gcc  
-loongarch            randconfig-r023-20230815   gcc  
-loongarch            randconfig-r035-20230815   gcc  
-m68k                             allmodconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                       bvme6000_defconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                        mvme16x_defconfig   gcc  
-m68k                 randconfig-r013-20230815   gcc  
-m68k                 randconfig-r014-20230815   gcc  
-m68k                 randconfig-r015-20230815   gcc  
-m68k                 randconfig-r021-20230815   gcc  
-m68k                 randconfig-r025-20230815   gcc  
-m68k                 randconfig-r031-20230815   gcc  
-m68k                 randconfig-r035-20230815   gcc  
-m68k                 randconfig-r036-20230815   gcc  
-microblaze           randconfig-r015-20230815   gcc  
-microblaze           randconfig-r034-20230815   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                       lemote2f_defconfig   clang
-mips                     loongson1b_defconfig   gcc  
-mips                  maltasmvp_eva_defconfig   gcc  
-mips                 randconfig-r031-20230815   gcc  
-mips                 randconfig-r032-20230815   gcc  
-mips                 randconfig-r036-20230815   gcc  
-nios2                         3c120_defconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r001-20230815   gcc  
-nios2                randconfig-r015-20230815   gcc  
-nios2                randconfig-r023-20230815   gcc  
-nios2                randconfig-r031-20230815   gcc  
-openrisc             randconfig-r011-20230815   gcc  
-openrisc             randconfig-r012-20230815   gcc  
-parisc                           alldefconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r006-20230815   gcc  
-parisc               randconfig-r015-20230815   gcc  
-parisc               randconfig-r016-20230815   gcc  
-parisc               randconfig-r024-20230815   gcc  
-parisc               randconfig-r032-20230815   gcc  
-parisc               randconfig-r033-20230815   gcc  
-parisc               randconfig-r036-20230815   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                      arches_defconfig   gcc  
-powerpc                      cm5200_defconfig   gcc  
-powerpc                       ebony_defconfig   gcc  
-powerpc                    klondike_defconfig   gcc  
-powerpc                      mgcoge_defconfig   gcc  
-powerpc              randconfig-r002-20230815   clang
-powerpc              randconfig-r011-20230815   gcc  
-powerpc              randconfig-r023-20230815   gcc  
-powerpc              randconfig-r033-20230815   clang
-powerpc                     taishan_defconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r001-20230815   clang
-riscv                randconfig-r002-20230815   clang
-riscv                randconfig-r003-20230815   clang
-riscv                randconfig-r026-20230815   gcc  
-riscv                randconfig-r042-20230815   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r006-20230815   clang
-s390                 randconfig-r022-20230815   gcc  
-s390                 randconfig-r044-20230815   gcc  
-sh                               allmodconfig   gcc  
-sh                        edosk7760_defconfig   gcc  
-sh                               j2_defconfig   gcc  
-sh                          r7785rp_defconfig   gcc  
-sh                   randconfig-r005-20230815   gcc  
-sh                   randconfig-r011-20230815   gcc  
-sh                   randconfig-r022-20230815   gcc  
-sh                   randconfig-r025-20230815   gcc  
-sh                   randconfig-r032-20230815   gcc  
-sh                   rts7751r2dplus_defconfig   gcc  
-sh                          sdk7780_defconfig   gcc  
-sh                           se7619_defconfig   gcc  
-sh                            titan_defconfig   gcc  
-sh                              ul2_defconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r012-20230815   gcc  
-sparc                randconfig-r016-20230815   gcc  
-sparc                randconfig-r021-20230815   gcc  
-sparc                randconfig-r022-20230815   gcc  
-sparc                randconfig-r023-20230815   gcc  
-sparc                randconfig-r024-20230815   gcc  
-sparc                randconfig-r026-20230815   gcc  
-sparc                randconfig-r031-20230815   gcc  
-sparc                randconfig-r033-20230815   gcc  
-sparc                randconfig-r034-20230815   gcc  
-sparc64                             defconfig   gcc  
-sparc64              randconfig-r012-20230815   gcc  
-sparc64              randconfig-r021-20230815   gcc  
-sparc64              randconfig-r032-20230815   gcc  
-sparc64              randconfig-r036-20230815   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                   randconfig-r014-20230815   clang
-um                           x86_64_defconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-r001-20230815   clang
-x86_64       buildonly-randconfig-r002-20230815   clang
-x86_64       buildonly-randconfig-r003-20230815   clang
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-r005-20230815   clang
-x86_64               randconfig-r013-20230815   gcc  
-x86_64               randconfig-r015-20230815   gcc  
-x86_64               randconfig-r025-20230815   gcc  
-x86_64               randconfig-x001-20230815   gcc  
-x86_64               randconfig-x002-20230815   gcc  
-x86_64               randconfig-x003-20230815   gcc  
-x86_64               randconfig-x004-20230815   gcc  
-x86_64               randconfig-x005-20230815   gcc  
-x86_64               randconfig-x006-20230815   gcc  
-x86_64               randconfig-x011-20230815   clang
-x86_64               randconfig-x012-20230815   clang
-x86_64               randconfig-x013-20230815   clang
-x86_64               randconfig-x014-20230815   clang
-x86_64               randconfig-x015-20230815   clang
-x86_64               randconfig-x016-20230815   clang
-x86_64                          rhel-8.3-func   gcc  
-x86_64                    rhel-8.3-kselftests   gcc  
-x86_64                           rhel-8.3-ltp   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                  nommu_kc705_defconfig   gcc  
-xtensa               randconfig-r014-20230815   gcc  
-xtensa               randconfig-r026-20230815   gcc  
-xtensa               randconfig-r033-20230815   gcc  
-
+diff --git a/drivers/usb/dwc3/Kconfig b/drivers/usb/dwc3/Kconfig
+index 98efcbb76c88..5fc27b20df63 100644
+--- a/drivers/usb/dwc3/Kconfig
++++ b/drivers/usb/dwc3/Kconfig
+@@ -178,4 +178,15 @@ config USB_DWC3_OCTEON
+ 	  Only the host mode is currently supported.
+ 	  Say 'Y' or 'M' here if you have one such device.
+ 
++config USB_DWC3_RTK
++	tristate "Realtek DWC3 Platform Driver"
++	depends on OF && ARCH_REALTEK
++	default USB_DWC3
++	select USB_ROLE_SWITCH
++	help
++	  RTK DHC RTD SoCs with DesignWare Core USB3 IP inside,
++	  and IP Core configured for USB 2.0 and USB 3.0 in host
++	  or dual-role mode.
++	  Say 'Y' or 'M' if you have such device.
++
+ endif
+diff --git a/drivers/usb/dwc3/Makefile b/drivers/usb/dwc3/Makefile
+index fe1493d4bbe5..124eda2522d9 100644
+--- a/drivers/usb/dwc3/Makefile
++++ b/drivers/usb/dwc3/Makefile
+@@ -55,3 +55,4 @@ obj-$(CONFIG_USB_DWC3_QCOM)		+= dwc3-qcom.o
+ obj-$(CONFIG_USB_DWC3_IMX8MP)		+= dwc3-imx8mp.o
+ obj-$(CONFIG_USB_DWC3_XILINX)		+= dwc3-xilinx.o
+ obj-$(CONFIG_USB_DWC3_OCTEON)		+= dwc3-octeon.o
++obj-$(CONFIG_USB_DWC3_RTK)		+= dwc3-rtk.o
+diff --git a/drivers/usb/dwc3/dwc3-rtk.c b/drivers/usb/dwc3/dwc3-rtk.c
+new file mode 100644
+index 000000000000..70d298471d26
+--- /dev/null
++++ b/drivers/usb/dwc3/dwc3-rtk.c
+@@ -0,0 +1,512 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * dwc3-rtk.c - Realtek DWC3 Specific Glue layer
++ *
++ * Copyright (C) 2023 Realtek Semiconductor Corporation
++ *
++ */
++
++#include <linux/module.h>
++#include <linux/kernel.h>
++#include <linux/platform_device.h>
++#include <linux/of.h>
++#include <linux/of_platform.h>
++#include <linux/suspend.h>
++#include <linux/sys_soc.h>
++#include <linux/usb/otg.h>
++#include <linux/usb/of.h>
++#include <linux/usb/role.h>
++
++#include "core.h"
++
++#define WRAP_CTR_REG  0x0
++#define DISABLE_MULTI_REQ BIT(1)
++#define DESC_R2W_MULTI_DISABLE BIT(9)
++#define FORCE_PIPE3_PHY_STATUS_TO_0 BIT(13)
++
++#define WRAP_USB2_PHY_UTMI_REG 0x8
++#define TXHSVM_EN BIT(3)
++
++#define WRAP_PHY_PIPE_REG 0xC
++#define RESET_DISABLE_PIPE3_P0 BIT(0)
++#define CLOCK_ENABLE_FOR_PIPE3_PCLK BIT(1)
++
++#define WRAP_USB_HMAC_CTR0_REG 0x60
++#define U3PORT_DIS BIT(8)
++
++#define WRAP_USB2_PHY_REG  0x70
++#define USB2_PHY_EN_PHY_PLL_PORT0 BIT(12)
++#define USB2_PHY_EN_PHY_PLL_PORT1 BIT(13)
++#define USB2_PHY_SWITCH_MASK 0x707
++#define USB2_PHY_SWITCH_DEVICE 0x0
++#define USB2_PHY_SWITCH_HOST 0x606
++
++#define WRAP_APHY_REG 0x128
++#define USB3_MBIAS_ENABLE BIT(1)
++
++/* pm control */
++#define WRAP_USB_DBUS_PWR_CTRL_REG 0x160
++#define USB_DBUS_PWR_CTRL_REG 0x0
++#define DBUS_PWR_CTRL_EN BIT(0)
++
++struct dwc3_rtk {
++	struct device *dev;
++	void __iomem *regs;
++	size_t regs_size;
++	void __iomem *pm_base;
++
++	struct dwc3 *dwc;
++
++	int cur_dr_mode; /* current dr mode */
++	struct usb_role_switch *role_switch;
++};
++
++static void switch_usb2_dr_mode(struct dwc3_rtk *rtk, int dr_mode)
++{
++	switch (dr_mode) {
++	case USB_DR_MODE_PERIPHERAL:
++		writel(USB2_PHY_SWITCH_DEVICE |
++			    (~USB2_PHY_SWITCH_MASK &
++			      readl(rtk->regs + WRAP_USB2_PHY_REG)),
++			    rtk->regs + WRAP_USB2_PHY_REG);
++		break;
++	case USB_DR_MODE_HOST:
++		writel(USB2_PHY_SWITCH_HOST |
++			    (~USB2_PHY_SWITCH_MASK &
++			      readl(rtk->regs + WRAP_USB2_PHY_REG)),
++			    rtk->regs + WRAP_USB2_PHY_REG);
++		break;
++	default:
++		dev_dbg(rtk->dev, "%s: dr_mode=%d\n", __func__, dr_mode);
++		break;
++	}
++}
++
++static void switch_dwc3_dr_mode(struct dwc3_rtk *rtk, int dr_mode)
++{
++	if (!rtk->dwc->role_sw)
++		goto out;
++
++	switch (dr_mode) {
++	case USB_DR_MODE_PERIPHERAL:
++		usb_role_switch_set_role(rtk->dwc->role_sw, USB_ROLE_DEVICE);
++		break;
++	case USB_DR_MODE_HOST:
++		usb_role_switch_set_role(rtk->dwc->role_sw, USB_ROLE_HOST);
++		break;
++	default:
++		dev_dbg(rtk->dev, "%s dr_mode=%d\n", __func__, dr_mode);
++		break;
++	}
++
++out:
++	return;
++}
++
++static int dwc3_rtk_get_dr_mode(struct dwc3_rtk *rtk)
++{
++	enum usb_role role;
++
++	role = rtk->cur_dr_mode;
++
++	if (rtk->dwc && rtk->dwc->role_sw)
++		role = usb_role_switch_get_role(rtk->dwc->role_sw);
++	else
++		dev_dbg(rtk->dev, "%s not usb_role_switch role=%d\n", __func__, role);
++
++	return role;
++}
++
++static void dwc3_rtk_set_dr_mode(struct dwc3_rtk *rtk, int dr_mode)
++{
++	rtk->cur_dr_mode = dr_mode;
++
++	switch_dwc3_dr_mode(rtk, dr_mode);
++	mdelay(10);
++	switch_usb2_dr_mode(rtk, dr_mode);
++}
++
++#if IS_ENABLED(CONFIG_USB_ROLE_SWITCH)
++static int dwc3_usb_role_switch_set(struct usb_role_switch *sw, enum usb_role role)
++{
++	struct dwc3_rtk *rtk = usb_role_switch_get_drvdata(sw);
++
++	switch (role) {
++	case USB_ROLE_HOST:
++		dwc3_rtk_set_dr_mode(rtk, USB_DR_MODE_HOST);
++		break;
++	case USB_ROLE_DEVICE:
++		dwc3_rtk_set_dr_mode(rtk, USB_DR_MODE_PERIPHERAL);
++		break;
++	default:
++		dwc3_rtk_set_dr_mode(rtk, 0);
++	}
++
++	return 0;
++}
++
++static enum usb_role dwc3_usb_role_switch_get(struct usb_role_switch *sw)
++{
++	struct dwc3_rtk *rtk = usb_role_switch_get_drvdata(sw);
++	enum usb_role role = USB_ROLE_NONE;
++	int dr_mode;
++
++	dr_mode = dwc3_rtk_get_dr_mode(rtk);
++	switch (dr_mode) {
++	case USB_DR_MODE_HOST:
++		role = USB_ROLE_HOST;
++		break;
++	case USB_DR_MODE_PERIPHERAL:
++		role = USB_ROLE_DEVICE;
++		break;
++	default:
++		dev_dbg(rtk->dev, "%s dr_mode=%d", __func__, dr_mode);
++		break;
++	}
++	return role;
++}
++
++static int dwc3_rtk_setup_role_switch(struct dwc3_rtk *rtk)
++{
++	struct usb_role_switch_desc dwc3_role_switch = {NULL};
++
++	dwc3_role_switch.name = strchrnul(dev_name(rtk->dev), '.') + 1;
++	dwc3_role_switch.driver_data = rtk;
++	dwc3_role_switch.allow_userspace_control = true;
++	dwc3_role_switch.fwnode = dev_fwnode(rtk->dev);
++	dwc3_role_switch.set = dwc3_usb_role_switch_set;
++	dwc3_role_switch.get = dwc3_usb_role_switch_get;
++	rtk->role_switch = usb_role_switch_register(rtk->dev, &dwc3_role_switch);
++	if (IS_ERR(rtk->role_switch))
++		return PTR_ERR(rtk->role_switch);
++
++	return 0;
++}
++
++static int dwc3_rtk_remove_role_switch(struct dwc3_rtk *rtk)
++{
++	if (rtk->role_switch)
++		usb_role_switch_unregister(rtk->role_switch);
++
++	rtk->role_switch = NULL;
++
++	return 0;
++}
++#else
++#define dwc3_rtk_setup_role_switch(x) 0
++#define dwc3_rtk_remove_role_switch(x) 0
++#endif
++
++static const char *const speed_names[] = {
++	[USB_SPEED_UNKNOWN] = "UNKNOWN",
++	[USB_SPEED_LOW] = "low-speed",
++	[USB_SPEED_FULL] = "full-speed",
++	[USB_SPEED_HIGH] = "high-speed",
++	[USB_SPEED_WIRELESS] = "wireless",
++	[USB_SPEED_SUPER] = "super-speed",
++	[USB_SPEED_SUPER_PLUS] = "super-speed-plus",
++};
++
++static enum usb_device_speed __get_dwc3_maximum_speed(struct device_node *np)
++{
++	struct device_node *dwc3_np;
++	const char *maximum_speed;
++	int ret;
++
++	dwc3_np = of_get_compatible_child(np, "snps,dwc3");
++	if (!dwc3_np)
++		return USB_SPEED_UNKNOWN;
++
++	ret = of_property_read_string(dwc3_np, "maximum-speed", &maximum_speed);
++	if (ret < 0)
++		return USB_SPEED_UNKNOWN;
++
++	ret = match_string(speed_names, ARRAY_SIZE(speed_names), maximum_speed);
++
++	return (ret < 0) ? USB_SPEED_UNKNOWN : ret;
++}
++
++static int dwc3_rtk_init(struct dwc3_rtk *rtk)
++{
++	struct device *dev = rtk->dev;
++	void __iomem *regs = rtk->regs;
++	enum usb_device_speed maximum_speed;
++	const struct soc_device_attribute rtk_soc_kylin_a00[] = {
++		{ .family = "Realtek Kylin", .revision = "A00", },
++		{ /* empty */ } };
++	const struct soc_device_attribute rtk_soc_hercules[] = {
++		{ .family = "Realtek Hercules", }, { /* empty */ } };
++	const struct soc_device_attribute rtk_soc_thor[] = {
++		{ .family = "Realtek Thor", }, { /* empty */ } };
++
++	if (soc_device_match(rtk_soc_kylin_a00)) {
++		writel(DISABLE_MULTI_REQ | readl(regs + WRAP_CTR_REG),
++		       regs + WRAP_CTR_REG);
++		dev_info(dev, "[bug fixed] 1295/1296 A00: add workaround to disable multiple request for D-Bus");
++	}
++
++	if (soc_device_match(rtk_soc_hercules)) {
++		writel(USB2_PHY_EN_PHY_PLL_PORT1 |
++		       readl(regs + WRAP_USB2_PHY_REG),
++		       regs + WRAP_USB2_PHY_REG);
++		dev_info(dev, "[bug fixed] 1395 add workaround to disable usb2 port 2 suspend!");
++	}
++
++	writel(TXHSVM_EN | readl(regs + WRAP_USB2_PHY_UTMI_REG),
++	       regs + WRAP_USB2_PHY_UTMI_REG);
++
++	maximum_speed = __get_dwc3_maximum_speed(dev->of_node);
++	if (maximum_speed != USB_SPEED_UNKNOWN && maximum_speed <= USB_SPEED_HIGH) {
++		void __iomem *reg;
++		int val;
++
++		if (soc_device_match(rtk_soc_thor)) {
++			reg =  regs + WRAP_USB_HMAC_CTR0_REG;
++			val = U3PORT_DIS | readl(reg);
++			writel(val, reg);
++		} else {
++			reg = regs + WRAP_CTR_REG;
++			val = FORCE_PIPE3_PHY_STATUS_TO_0 | readl(reg);
++			writel(val, reg);
++
++			reg = regs + WRAP_PHY_PIPE_REG;
++			val = ~CLOCK_ENABLE_FOR_PIPE3_PCLK & readl(reg);
++			val |= RESET_DISABLE_PIPE3_P0;
++			writel(val, reg);
++
++			reg =  regs + WRAP_USB_HMAC_CTR0_REG;
++			val = U3PORT_DIS | readl(reg);
++			writel(val, reg);
++
++			reg = regs + WRAP_APHY_REG;
++			val = ~USB3_MBIAS_ENABLE & readl(reg);
++			writel(val, reg);
++
++			dev_info(rtk->dev, "%s: disable usb 3.0 phy\n", __func__);
++		}
++	}
++
++	writel(DESC_R2W_MULTI_DISABLE | readl(regs + WRAP_CTR_REG),
++	       regs + WRAP_CTR_REG);
++
++	/* Set phy Dp/Dm initial state to host mode to avoid the Dp glitch */
++	writel(USB2_PHY_SWITCH_HOST |
++	       (~USB2_PHY_SWITCH_MASK & readl(regs + WRAP_USB2_PHY_REG)),
++	       regs + WRAP_USB2_PHY_REG);
++
++	if (rtk->pm_base) {
++		void __iomem *reg;
++		int val;
++
++		reg = rtk->pm_base + USB_DBUS_PWR_CTRL_REG;
++		val = DBUS_PWR_CTRL_EN | readl(reg);
++		writel(val, reg);
++	}
++
++	return 0;
++}
++
++static int dwc3_rtk_probe_dwc3_core(struct dwc3_rtk *rtk)
++{
++	struct device *dev = rtk->dev;
++	struct device_node *node = dev->of_node;
++	struct platform_device *dwc3_pdev;
++	struct device *dwc3_dev;
++	struct device_node *dwc3_node;
++	int dr_mode;
++	int ret = 0;
++
++	ret = dwc3_rtk_init(rtk);
++	if (ret)
++		return -EINVAL;
++
++	ret = of_platform_populate(node, NULL, NULL, dev);
++	if (ret) {
++		dev_err(dev, "failed to add dwc3 core\n");
++		return ret;
++	}
++
++	dwc3_node = of_get_compatible_child(node, "snps,dwc3");
++	if (!dwc3_node) {
++		dev_err(dev, "failed to find dwc3 core node\n");
++		ret = -ENODEV;
++		goto depopulate;
++	}
++
++	dwc3_pdev = of_find_device_by_node(dwc3_node);
++	if (!dwc3_pdev) {
++		dev_err(dev, "failed to find dwc3 core platform_device\n");
++		ret = -ENODEV;
++		goto err_node_put;
++	}
++
++	dwc3_dev = &dwc3_pdev->dev;
++	rtk->dwc = platform_get_drvdata(dwc3_pdev);
++	if (!rtk->dwc) {
++		dev_err(dev, "failed to find dwc3 core\n");
++		ret = -ENODEV;
++		goto err_pdev_put;
++	}
++
++	dr_mode = usb_get_dr_mode(dwc3_dev);
++	if (dr_mode != rtk->dwc->dr_mode) {
++		dev_info(dev, "dts set dr_mode=%d, but dwc3 set dr_mode=%d\n",
++			 dr_mode, rtk->dwc->dr_mode);
++		dr_mode = rtk->dwc->dr_mode;
++	}
++
++	rtk->cur_dr_mode = dr_mode;
++
++	if (device_property_read_bool(dwc3_dev, "usb-role-switch")) {
++		ret = dwc3_rtk_setup_role_switch(rtk);
++		if (ret) {
++			dev_err(dev, "dwc3_rtk_setup_role_switch fail=%d\n", ret);
++			goto err_pdev_put;
++		}
++		rtk->cur_dr_mode = dwc3_rtk_get_dr_mode(rtk);
++	}
++
++	switch_usb2_dr_mode(rtk, rtk->cur_dr_mode);
++
++	return 0;
++
++err_pdev_put:
++	platform_device_put(dwc3_pdev);
++err_node_put:
++	of_node_put(dwc3_node);
++depopulate:
++	of_platform_depopulate(dev);
++
++	return ret;
++}
++
++static int dwc3_rtk_probe(struct platform_device *pdev)
++{
++	struct dwc3_rtk *rtk;
++	struct device *dev = &pdev->dev;
++	struct resource *res;
++	void __iomem *regs;
++	int ret = 0;
++	unsigned long probe_time = jiffies;
++
++	rtk = devm_kzalloc(dev, sizeof(*rtk), GFP_KERNEL);
++	if (!rtk) {
++		ret = -ENOMEM;
++		goto err1;
++	}
++
++	platform_set_drvdata(pdev, rtk);
++
++	rtk->dev = dev;
++
++	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	if (!res) {
++		dev_err(dev, "missing memory resource\n");
++		ret = -ENODEV;
++		goto err1;
++	}
++
++	regs = devm_ioremap_resource(dev, res);
++	if (IS_ERR(regs)) {
++		ret = PTR_ERR(regs);
++		goto err1;
++	}
++
++	rtk->regs = regs;
++	rtk->regs_size = resource_size(res);
++
++	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
++	if (res) {
++		rtk->pm_base = devm_ioremap_resource(dev, res);
++		if (IS_ERR(rtk->pm_base)) {
++			ret = PTR_ERR(rtk->pm_base);
++			goto err1;
++		}
++	}
++
++	ret = dwc3_rtk_probe_dwc3_core(rtk);
++	if (ret)
++		goto err1;
++
++	dev_dbg(dev, "%s ok! (take %d ms)\n", __func__,
++		jiffies_to_msecs(jiffies - probe_time));
++
++	return 0;
++
++err1:
++	return ret;
++}
++
++static void dwc3_rtk_remove(struct platform_device *pdev)
++{
++	struct dwc3_rtk *rtk = platform_get_drvdata(pdev);
++
++	rtk->dwc = NULL;
++
++	dwc3_rtk_remove_role_switch(rtk);
++
++	of_platform_depopulate(rtk->dev);
++}
++
++static void dwc3_rtk_shutdown(struct platform_device *pdev)
++{
++	struct dwc3_rtk *rtk = platform_get_drvdata(pdev);
++
++	of_platform_depopulate(rtk->dev);
++}
++
++static const struct of_device_id rtk_dwc3_match[] = {
++	{ .compatible = "realtek,rtd-dwc3" },
++	{},
++};
++MODULE_DEVICE_TABLE(of, rtk_dwc3_match);
++
++#ifdef CONFIG_PM_SLEEP
++static int dwc3_rtk_suspend(struct device *dev)
++{
++	return 0;
++}
++
++static int dwc3_rtk_resume(struct device *dev)
++{
++	struct dwc3_rtk *rtk = dev_get_drvdata(dev);
++
++	dwc3_rtk_init(rtk);
++
++	switch_usb2_dr_mode(rtk, rtk->cur_dr_mode);
++
++	/* runtime set active to reflect active state. */
++	pm_runtime_disable(dev);
++	pm_runtime_set_active(dev);
++	pm_runtime_enable(dev);
++
++	return 0;
++}
++
++static const struct dev_pm_ops dwc3_rtk_dev_pm_ops = {
++	SET_SYSTEM_SLEEP_PM_OPS(dwc3_rtk_suspend, dwc3_rtk_resume)
++};
++
++#define DEV_PM_OPS	(&dwc3_rtk_dev_pm_ops)
++#else
++#define DEV_PM_OPS	NULL
++#endif /* CONFIG_PM_SLEEP */
++
++static struct platform_driver dwc3_rtk_driver = {
++	.probe		= dwc3_rtk_probe,
++	.remove_new	= dwc3_rtk_remove,
++	.driver		= {
++		.name	= "rtk-dwc3",
++		.of_match_table = rtk_dwc3_match,
++		.pm	= DEV_PM_OPS,
++	},
++	.shutdown	= dwc3_rtk_shutdown,
++};
++
++module_platform_driver(dwc3_rtk_driver);
++
++MODULE_AUTHOR("Stanley Chang <stanley_chang@realtek.com>");
++MODULE_DESCRIPTION("DesignWare USB3 Realtek Glue Layer");
++MODULE_ALIAS("platform:rtk-dwc3");
++MODULE_LICENSE("GPL");
++MODULE_SOFTDEP("pre: phy_rtk_usb2 phy_rtk_usb3");
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
