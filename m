@@ -2,46 +2,47 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43F9B77D4C9
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Aug 2023 23:06:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0582177D4DE
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Aug 2023 23:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239938AbjHOVF3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Aug 2023 17:05:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34526 "EHLO
+        id S239974AbjHOVHi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Aug 2023 17:07:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239927AbjHOVE5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Aug 2023 17:04:57 -0400
+        with ESMTP id S239997AbjHOVHH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Aug 2023 17:07:07 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DFB6F2;
-        Tue, 15 Aug 2023 14:04:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F8A1B2;
+        Tue, 15 Aug 2023 14:07:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C12465C8C;
-        Tue, 15 Aug 2023 21:04:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06EFAC433C8;
-        Tue, 15 Aug 2023 21:04:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CBE7D659BB;
+        Tue, 15 Aug 2023 21:07:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D912AC433CA;
+        Tue, 15 Aug 2023 21:07:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1692133495;
-        bh=xwcwDarbzFSg0MwR0Od2kOF7EW3e+nIsngI5mMgpVvQ=;
+        s=korg; t=1692133625;
+        bh=aUjeA8TDXxec5uQfQ22Hm9VJ5mfTMfSZTvWkNRoYaHs=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Oy21WmZrDR0ZcAKdfSVfTVV8GgQ2KOOCMZpPY4iNEx4uRXpzxOp78SRjQlg+U1QD3
-         AZp1N6BcdHShCbCALtA9daPAFmZCSxBKtSgckIBkz9tApkjuohFsNeZgxKKyhCJWdH
-         +XLftEcvkiULzlUKY+dAEUghMkkUm7Z4oo35yyRc=
-Date:   Tue, 15 Aug 2023 23:04:52 +0200
+        b=C24SITg5PXu6rhloJjEou7wk7y6Jt2ocA9i7owyx947HN1EhagcPg5cvRhPuLcAw2
+         FyHeKqt21GrTNg9pxMgzUFJ/7/Abt4tg0NfMGFV6stw+Aq+n44sUMxE/eyKZpwo+ri
+         JpDm7d/H54/gj8j9ARNnZ3hLy/px/Lg127Pt7gbA=
+Date:   Tue, 15 Aug 2023 23:07:02 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Atul Kumar Pant <atulpant.linux@gmail.com>
-Cc:     oneukum@suse.com, linux-usb@vger.kernel.org,
+Cc:     richard.leitner@linux.dev, wsa+renesas@sang-engineering.com,
+        mhocko@suse.com, surenb@google.com, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org, shuah@kernel.org
-Subject: Re: [PATCH v1] kernel: usb: Adds space, removes trailing whitespace
- and fixes pointer declaration.
-Message-ID: <2023081533-require-pastor-d432@gregkh>
-References: <20230815204841.52600-1-atulpant.linux@gmail.com>
+Subject: Re: [PATCH v1] drivers: usb: Removes use of assignment in if
+ condition
+Message-ID: <2023081550-absurd-sprint-65e5@gregkh>
+References: <20230815204141.51972-1-atulpant.linux@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230815204841.52600-1-atulpant.linux@gmail.com>
+In-Reply-To: <20230815204141.51972-1-atulpant.linux@gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
@@ -52,88 +53,36 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 16, 2023 at 02:18:41AM +0530, Atul Kumar Pant wrote:
+On Wed, Aug 16, 2023 at 02:11:41AM +0530, Atul Kumar Pant wrote:
 > This patch fixes following checkpatch.pl issue:
-> ERROR: space required before the open parenthesis '('
-> ERROR: trailing whitespace
-> ERROR: space required after that ','
-> ERROR: "foo * bar" should be "foo *bar"
+> ERROR: do not use assignment in if condition
 > 
 > Signed-off-by: Atul Kumar Pant <atulpant.linux@gmail.com>
 > ---
->  drivers/usb/class/cdc-acm.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+>  drivers/usb/core/devio.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
-> index 11da5fb284d0..638c9cdaa041 100644
-> --- a/drivers/usb/class/cdc-acm.c
-> +++ b/drivers/usb/class/cdc-acm.c
-> @@ -203,7 +203,7 @@ static int acm_wb_is_avail(struct acm *acm)
->  	n = ACM_NW;
->  	spin_lock_irqsave(&acm->write_lock, flags);
->  	for (i = 0; i < ACM_NW; i++)
-> -		if(acm->wb[i].use)
-> +		if (acm->wb[i].use)
->  			n--;
->  	spin_unlock_irqrestore(&acm->write_lock, flags);
->  	return n;
-> @@ -1006,7 +1006,7 @@ static int wait_serial_change(struct acm *acm, unsigned long arg)
+> diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
+> index e501a03d6c70..56899fed6bd4 100644
+> --- a/drivers/usb/core/devio.c
+> +++ b/drivers/usb/core/devio.c
+> @@ -2333,9 +2333,10 @@ static int proc_ioctl(struct usb_dev_state *ps, struct usbdevfs_ioctl *ctl)
 >  		}
->  	} while (!rv);
+>  	}
 >  
-> -	
-> +
->  
->  	return rv;
->  }
-> @@ -1257,7 +1257,7 @@ static int acm_probe(struct usb_interface *intf,
->  
->  	if (control_interface == data_interface) {
->  		/* some broken devices designed for windows work this way */
-> -		dev_warn(&intf->dev,"Control and data interfaces are not separated!\n");
-> +		dev_warn(&intf->dev, "Control and data interfaces are not separated!\n");
->  		combined_interfaces = 1;
->  		/* a popular other OS doesn't use it */
->  		quirks |= NO_CAP_LINE;
-> @@ -1428,7 +1428,7 @@ static int acm_probe(struct usb_interface *intf,
->  		goto err_free_write_urbs;
->  
->  	if (h.usb_cdc_country_functional_desc) { /* export the country data */
-> -		struct usb_cdc_country_functional_desc * cfd =
-> +		struct usb_cdc_country_functional_desc *cfd =
->  					h.usb_cdc_country_functional_desc;
->  
->  		acm->country_codes = kmalloc(cfd->bLength - 4, GFP_KERNEL);
-> -- 
-> 2.25.1
-> 
+> +	intf = usb_ifnum_to_if(ps->dev, ctl->ifno);
+>  	if (ps->dev->state != USB_STATE_CONFIGURED)
+>  		retval = -EHOSTUNREACH;
+> -	else if (!(intf = usb_ifnum_to_if(ps->dev, ctl->ifno)))
+> +	else if (!intf)
 
-Hi,
+Did you mean to change the logic here by doing the calculation always?
+Does that change functionality?
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
-
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- Your patch did many different things all at once, making it difficult
-  to review.  All Linux kernel patches need to only do one thing at a
-  time.  If you need to do multiple things (such as clean up all coding
-  style issues in a file/driver), do it in a sequence of patches, each
-  one doing only one thing.  This will make it easier to review the
-  patches to ensure that they are correct, and to help alleviate any
-  merge issues that larger patches can cause.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+The existing code is fine, running checkpatch on code outside of
+drivers/staging/ or on new patches you are writing, is generally
+discouraged as the code usually is older than checkpatch is :)
 
 thanks,
 
-greg k-h's patch email bot
+greg k-h
