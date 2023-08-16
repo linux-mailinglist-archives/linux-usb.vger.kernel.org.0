@@ -2,99 +2,144 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5951A77EA70
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Aug 2023 22:12:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CA9B77EA90
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Aug 2023 22:17:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346014AbjHPULf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Aug 2023 16:11:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39760 "EHLO
+        id S1346071AbjHPURC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Aug 2023 16:17:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346100AbjHPUL0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Aug 2023 16:11:26 -0400
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFA37F3
-        for <linux-usb@vger.kernel.org>; Wed, 16 Aug 2023 13:11:24 -0700 (PDT)
-Received: by mail-ot1-x331.google.com with SMTP id 46e09a7af769-6bca3588edbso4837734a34.0
-        for <linux-usb@vger.kernel.org>; Wed, 16 Aug 2023 13:11:24 -0700 (PDT)
+        with ESMTP id S1346073AbjHPUQs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Aug 2023 16:16:48 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D45E1FE3;
+        Wed, 16 Aug 2023 13:16:47 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-68879c7f5easo1203366b3a.1;
+        Wed, 16 Aug 2023 13:16:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692216684; x=1692821484;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2Lws75iJ418dvUiFUMpSCZSJpyx26Sbj9eIlHFk1PcY=;
-        b=gN0LEIm74Bz0xvqXdVi1r5MAh02OiOvRcyxW0f5+qOT1fJ/7dmXHMYpRBo7e8fuedD
-         8E4aeaIwULrgMTSxCM6jl7PiqnX64zMuGoumHx0wl9gy/X+Bc+FYvDnQVSxw7e/jJLxx
-         HlLEC2nruRP1nKj8dGZNxRz3ZfnKUDUPrlmrFzHIumdsS2pBPPbZXXu7Io7JbR8rLxHT
-         52TZ66fWdg83GsKplHOCsehJ/qqNNLkipPKwsrkQB02DfKddjUYHpd4MCyGel9BmX377
-         U5dFdwvUhxoGzVKdzENDAKD78Yk6dYBnyZPLXU7qe5kjSmRbYP6Yqyeb0vQob5B29ZEV
-         EGww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692216684; x=1692821484;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20221208; t=1692217007; x=1692821807;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=2Lws75iJ418dvUiFUMpSCZSJpyx26Sbj9eIlHFk1PcY=;
-        b=F0RWj3mRluEr7Yo8dWFEPkIhM7UDd4E9oDGX6oN5QNCY0b5O9ZjaWV0lLkqvBSs6FB
-         XWmW5k/U/Wjs3QBY7OCsyv1a5iRz4T62buAA7Anknz/CNm0ctjMlV6gaDHhs2cGbBcfk
-         N6/d8wfWWTetU6sI20tZLQ40M1hIxGmL9BOivU+2P/SWTvjksA4ewnSnf2zVDnMjphs9
-         J4LfsfUNNvjPcgQQs6REZptTwFMcu04RC8DC4sOWSjbUXakU4mkFZA8UoT8lOaJl5KiV
-         GPuKvR+ghrH9xSB/k2OpHDIhE/N4Lqx/C+CC+HvLM0AzqOa/y5z4faHfgOeiTDpcScKf
-         i7nQ==
-X-Gm-Message-State: AOJu0YwC/yt91flohDbiKdN6MGSp15s1sQW/9vV9d0VqpLG/Hwvd7/yd
-        8kkp04ym/3b8Z1dH2f88+r8D5g==
-X-Google-Smtp-Source: AGHT+IFnT/6Su+IdemW7NvD/jLoMyj22j+Z2P6LjjB67eLjhfM9Ka2Q7lSUSr79I01dl9GO21DBAtw==
-X-Received: by 2002:a9d:6a99:0:b0:6b8:dc53:9efd with SMTP id l25-20020a9d6a99000000b006b8dc539efdmr3138769otq.3.1692216684263;
-        Wed, 16 Aug 2023 13:11:24 -0700 (PDT)
-Received: from localhost ([136.49.140.41])
-        by smtp.gmail.com with ESMTPSA id i6-20020a9d6506000000b006b58616daa1sm6349374otl.2.2023.08.16.13.11.23
+        bh=nZM/eyn/Z81Tm9J694oWmHZlVhE2rGX5Mf5KWzu1qc0=;
+        b=ZZLlPWhtpBfb8SoQ0BhA/882tPCtx3FYqRb+hioIWXD0wyuZgBXPWKfFA+9LrWWWW2
+         KPSzsog2P0h343wrzVZ2b71JnJ0Ww3DXgg2IwqDAKKtWNgHzTaRpA7tW+7fS+8yC5L5v
+         ScOV2Vcp0fivunwcTAKxIAlhhEQjC0EVhlxBQD7Z6rTTSn7FcGQ5AhUNt1sDhYyyGWym
+         4TK3/Dy6sTMlnix3YwUTqsdIetuhlD7lYKg5qJRrDJ5dfZ5R3rkjGnnrTKGYXA63DBRu
+         expypEbq5Q69/l9G8IGbSU/BCpPmjrIjnClDiHghwxOPwiTfjBOdZcRXOyg2UsmiQ75a
+         wcRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692217007; x=1692821807;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nZM/eyn/Z81Tm9J694oWmHZlVhE2rGX5Mf5KWzu1qc0=;
+        b=Y8izhaQP1mquXqzetTssSeRF1dWf6/DDq/29y4Diq/EAUmvu14QPXDZpMwGJHNCivM
+         78aWL52k/a1bkoxkdxGlnmIU5kMQTCee/augkgK6X6y9rO0Z89IFU5G3rQFolZYu0bXN
+         qRlleKHHn1YPj/q38pkUI0Llkd7/2uZbizGLvqYQSe4IQRL5RJEqvT7THEgssUHAMsnw
+         0p3TAOzEEdNaMsunY3kxp0NDafvSMxFAYVkry0fmroW3eUFi7thFQBJiVxHuCGhCrUxc
+         NvklO9xUgeVRDwkX9PtZy104hSxSCaQHOiNXJF14ePRvg/cV6sriFa5C2CF8BlG4jMBr
+         UWKQ==
+X-Gm-Message-State: AOJu0YwgJe4xcL7pr1zVCtyhuNnHPUAGpF8F+p4ndWQN6PPPRsif7Dye
+        m8WYqatp3kVlKABlOlcNg2jePRpocH4=
+X-Google-Smtp-Source: AGHT+IG7oPpIeGE0niswNlwO4hc+s+FI0MmkllISzy9y0LRDHfCq+UZnlTYGS32lTEsHnmV8McNbbQ==
+X-Received: by 2002:a05:6a21:3383:b0:13b:9d80:673d with SMTP id yy3-20020a056a21338300b0013b9d80673dmr3631298pzb.48.1692217006754;
+        Wed, 16 Aug 2023 13:16:46 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n12-20020aa7904c000000b00688214cff65sm7884844pfo.44.2023.08.16.13.16.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Aug 2023 13:11:23 -0700 (PDT)
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Conor Dooley <conor+dt@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: usb: samsung,exynos-dwc3: Fix Exynos5433 compatible
-Date:   Wed, 16 Aug 2023 15:11:23 -0500
-Message-Id: <20230816201123.3530-1-semen.protsenko@linaro.org>
-X-Mailer: git-send-email 2.39.2
+        Wed, 16 Aug 2023 13:16:46 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 16 Aug 2023 13:16:44 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, m.felsch@pengutronix.de, jun.li@nxp.com,
+        xu.yang_2@nxp.com, angus@akkea.ca, stable@vger.kernel.org,
+        Christian Bach <christian.bach@scs.ch>,
+        Fabio Estevam <festevam@denx.de>
+Subject: Re: [PATCH v3] usb: typec: tcpci: clear the fault status bit
+Message-ID: <462383e9-48be-41a2-a275-8c330a2fb7e6@roeck-us.net>
+References: <20230816172502.1155079-1-festevam@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230816172502.1155079-1-festevam@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The correct compatible for Exynos5433 is "samsung,exynos5433-dwusb3".
-Fix the typo in its usage.
+On Wed, Aug 16, 2023 at 02:25:02PM -0300, Fabio Estevam wrote:
+> From: Marco Felsch <m.felsch@pengutronix.de>
+> 
+> According the "USB Type-C Port Controller Interface Specification v2.0"
+> the TCPC sets the fault status register bit-7
+> (AllRegistersResetToDefault) once the registers have been reset to
+> their default values.
+> 
+> This triggers an alert(-irq) on PTN5110 devices albeit we do mask the
+> fault-irq, which may cause a kernel hang. Fix this generically by writing
+> a one to the corresponding bit-7.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 74e656d6b055 ("staging: typec: Type-C Port Controller Interface driver (tcpci)")
+> Reported-by: Angus Ainslie (Purism) <angus@akkea.ca>
+> Closes: https://lore.kernel.org/all/20190508002749.14816-2-angus@akkea.ca/
+> Reported-by: Christian Bach <christian.bach@scs.ch>
+> Closes: https://lore.kernel.org/regressions/ZR0P278MB07737E5F1D48632897D51AC3EB329@ZR0P278MB0773.CHEP278.PROD.OUTLOOK.COM/t/
+> Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+> Signed-off-by: Fabio Estevam <festevam@denx.de>
 
-Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
-Fixes: 949ea75b7ba4 ("dt-bindings: usb: samsung,exynos-dwc3: convert to dtschema")
----
- Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-diff --git a/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml b/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml
-index 42ceaf13cd5d..240f41b7133a 100644
---- a/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml
-@@ -72,7 +72,7 @@ allOf:
-       properties:
-         compatible:
-           contains:
--            const: samsung,exynos54333-dwusb3
-+            const: samsung,exynos5433-dwusb3
-     then:
-       properties:
-         clocks:
--- 
-2.39.2
-
+> ---
+> Changes since v2:
+> - Submitted it as a standalone patch.
+> - Explain that it may cause a kernel hang.
+> - Fixed typos in the commit log. (Guenter)
+> - Check the tcpci_write16() return value. (Guenter)
+> - Write to TCPC_FAULT_STATUS unconditionally. (Guenter)
+> - Added Fixes, Reported-by and Closes tags.
+> - CCed stable
+> 
+>  drivers/usb/typec/tcpm/tcpci.c | 4 ++++
+>  include/linux/usb/tcpci.h      | 1 +
+>  2 files changed, 5 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
+> index fc708c289a73..0ee3e6e29bb1 100644
+> --- a/drivers/usb/typec/tcpm/tcpci.c
+> +++ b/drivers/usb/typec/tcpm/tcpci.c
+> @@ -602,6 +602,10 @@ static int tcpci_init(struct tcpc_dev *tcpc)
+>  	if (time_after(jiffies, timeout))
+>  		return -ETIMEDOUT;
+>  
+> +	ret = tcpci_write16(tcpci, TCPC_FAULT_STATUS, TCPC_FAULT_STATUS_ALL_REG_RST_TO_DEFAULT);
+> +	if (ret < 0)
+> +		return ret;
+> +
+>  	/* Handle vendor init */
+>  	if (tcpci->data->init) {
+>  		ret = tcpci->data->init(tcpci, tcpci->data);
+> diff --git a/include/linux/usb/tcpci.h b/include/linux/usb/tcpci.h
+> index 85e95a3251d3..83376473ac76 100644
+> --- a/include/linux/usb/tcpci.h
+> +++ b/include/linux/usb/tcpci.h
+> @@ -103,6 +103,7 @@
+>  #define TCPC_POWER_STATUS_SINKING_VBUS	BIT(0)
+>  
+>  #define TCPC_FAULT_STATUS		0x1f
+> +#define TCPC_FAULT_STATUS_ALL_REG_RST_TO_DEFAULT BIT(7)
+>  
+>  #define TCPC_ALERT_EXTENDED		0x21
+>  
+> -- 
+> 2.34.1
+> 
