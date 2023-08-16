@@ -2,111 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B4E277D92F
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Aug 2023 05:44:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D86BC77D9E7
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Aug 2023 07:45:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241217AbjHPDnf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Aug 2023 23:43:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38064 "EHLO
+        id S241945AbjHPFom (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Aug 2023 01:44:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241649AbjHPDnW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Aug 2023 23:43:22 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDCED106;
-        Tue, 15 Aug 2023 20:43:21 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id 98e67ed59e1d1-26b2884bec8so3256363a91.0;
-        Tue, 15 Aug 2023 20:43:21 -0700 (PDT)
+        with ESMTP id S241949AbjHPFoa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Aug 2023 01:44:30 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC062117
+        for <linux-usb@vger.kernel.org>; Tue, 15 Aug 2023 22:44:29 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2ba1e9b1fa9so95469701fa.3
+        for <linux-usb@vger.kernel.org>; Tue, 15 Aug 2023 22:44:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692157401; x=1692762201;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+MG/LBLNC/1jL+k5aZb0NuJseJ3XI84wzhjQpnVkoLg=;
-        b=VibyU1Vcjg0kPPMn4/ped/KjnfhOwlVJC1qeW70G9tEUPErBv65Ji5UPiPW1xJ/Oup
-         84PR44d7K0uFULM/5WJG7VOWElYxYWsUxuP5vMCV39ubOoO8pfYiottuAdbLVWrbiTeq
-         ac3XmKzweo8rlX95YTgy0WaGm8lGgj7qqGPOKT0IldOehBMPyNXINzq7jnUDUVxFoSEJ
-         WfsKXuxtyQ/Dyd3TDTjeypKsfNIh3N+/OLFzqni7tZdsP7pCTF+bo0haqhZqivfTxwSi
-         ykCcA9YEtsdL2tAfrpVAfLkpg630YTQrXRyqFN9dV7JeUAlediyuu99Dd0CrJ6RT5bzN
-         DywA==
+        d=linaro.org; s=google; t=1692164667; x=1692769467;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=p1Cm3rJor+XGdM+JIjydBHGbLEQZZ1g1LuWvc+gZ0Ws=;
+        b=aRueGjQacY6wEgWZGOweUYdzMfdD0aYJNkkXYRhF4sNem4ZuqZ0eALGamCCY9cRVfd
+         CeN4vPFV/aBN+BL3bnrRR5hZyZxd33Umc7ORjtrImrxYofsVh5EBK7/gu0PK/0iIJgzm
+         L4PA1UjhUYi9DEp/canKyjkmCSrJb5pe5YZhWU9xGHfzzWHhgDfKGjHnUwCI0YLnvSvK
+         /PrwgXJHZi1TIZIMhnT9eZu3MxYscEwUqAPzV8FxWt39NH2GbQ67x2sVhrcG4e+hhN6O
+         Q1ZwScyBzhZcfAKpMIs90B/oKNmGIhgqH5pFU4cPxfs7YKG34yJYCrscL7bwF9Sge9TJ
+         fTzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692157401; x=1692762201;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+MG/LBLNC/1jL+k5aZb0NuJseJ3XI84wzhjQpnVkoLg=;
-        b=Bo3wcPeWic8SiYnauAB/LVpRkZETdin7u0/20t0UOMW5JkhR2qElTvSS8EWpPuXSg9
-         apVNEeHv//I71ubTkLI3ZjUTpCNlFs/kqIZuvLb6tLuotoPw2KhNvY/QwVqr0XhXmMoo
-         j1pMOdD1Ltc8Ymu8MX/ma5QG18liOcYMqAK08AKgahh19YcNAQFGMoC5fvxanENFBnk8
-         UJ7WX1Jzl9FSPdeeEHMPDCc622E8cWbxSSJBfgauyWf1/qXAvp4Xiaa8TIRDHd3zPtX6
-         7Fr64A7zsXbjsc0Qcra7l7o1TDFWotbJJtK7ENamNayrGrZSfRMoldZaQswSFFMi5qoy
-         mr0w==
-X-Gm-Message-State: AOJu0YxylsaFkAdFPcnVNOdSFZEfFVN3CN9aVr+Z26WM7OY+10ebgLZ2
-        GF1mItx4f8dG+ofF7RHE7PE=
-X-Google-Smtp-Source: AGHT+IGFv8x8MzsU1NkdJe3UFhKVzn9SwPupCmDsTd9ooLwptPiJUbA88CqN/bk3B7yKSs3SxzW09g==
-X-Received: by 2002:a17:90b:1013:b0:269:46d7:f1db with SMTP id gm19-20020a17090b101300b0026946d7f1dbmr466664pjb.32.1692157401277;
-        Tue, 15 Aug 2023 20:43:21 -0700 (PDT)
-Received: from atom0118 ([2405:201:c009:58e9:83df:3d7d:2a60:5498])
-        by smtp.gmail.com with ESMTPSA id 23-20020a17090a005700b00268b9862343sm12941311pjb.24.2023.08.15.20.43.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Aug 2023 20:43:20 -0700 (PDT)
-Date:   Wed, 16 Aug 2023 09:13:13 +0530
-From:   Atul Kumar Pant <atulpant.linux@gmail.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     richard.leitner@linux.dev, wsa+renesas@sang-engineering.com,
-        mhocko@suse.com, surenb@google.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, shuah@kernel.org
-Subject: Re: [PATCH v1] drivers: usb: Removes use of assignment in if
- condition
-Message-ID: <20230816034313.GA57824@atom0118>
-References: <20230815204141.51972-1-atulpant.linux@gmail.com>
- <2023081550-absurd-sprint-65e5@gregkh>
+        d=1e100.net; s=20221208; t=1692164667; x=1692769467;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=p1Cm3rJor+XGdM+JIjydBHGbLEQZZ1g1LuWvc+gZ0Ws=;
+        b=Xzca33W5tPbMeCylkJmEEUnHB/QPmbhKYA+Rq6lvKf51z7FbLqVm0A65KYA2Y88hol
+         6HmTlCquKIjmWVNhMLoq6MDV0SRg6m+JU48Bi1FYaGXPDABNXt6Dk1H0ovnXWTQ0OznA
+         FA91SFEVHRCnyjuv4u2nHTfKJ+EnRgvmK7S6t9tq/bY7qCJorVbvZxsXUny2Kzj5ISfg
+         ikQIMR/vFGxtYzjpjKzN+kpbLLm67THi9ZVoOJBBz3O8xEuo8OlDzxbAZ3PrG47QnDLQ
+         /dtxndB9+MC6IQYf+iNvMmvB00Rn0B21RYHcam3Iom6piWlsWeM4RhoRltIacQavZDKQ
+         xWrQ==
+X-Gm-Message-State: AOJu0Yxq3tb5vu5qF7I9GFnOnvzQ6syg7zxWWSSsr86OcpJi+NDygFfE
+        dGLO7yjNTQZ55OjZtfgAH80mwg==
+X-Google-Smtp-Source: AGHT+IENB/+/1yCrgGPWlxAVOLiWjZiIUENth9HghBcpRunhKp0CjXWEK4UXuzlDgMFSy68BFO/+ZA==
+X-Received: by 2002:a2e:9b0d:0:b0:2b9:e501:a6a6 with SMTP id u13-20020a2e9b0d000000b002b9e501a6a6mr819956lji.30.1692164667394;
+        Tue, 15 Aug 2023 22:44:27 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.214.188])
+        by smtp.gmail.com with ESMTPSA id k3-20020a5d6283000000b00317643a93f4sm19907832wru.96.2023.08.15.22.44.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Aug 2023 22:44:26 -0700 (PDT)
+Message-ID: <a77403f5-8b99-3012-3843-1999ee8d12ce@linaro.org>
+Date:   Wed, 16 Aug 2023 07:44:25 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2023081550-absurd-sprint-65e5@gregkh>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH v4 2/3] dt-bindings: usb: snps,dwc3: Add
+ runtime-suspend-on-usb-suspend property
+Content-Language: en-US
+To:     Elson Roy Serrao <quic_eserrao@quicinc.com>,
+        gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
+        rogerq@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20230814185043.9252-1-quic_eserrao@quicinc.com>
+ <20230814185043.9252-3-quic_eserrao@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230814185043.9252-3-quic_eserrao@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 15, 2023 at 11:07:02PM +0200, Greg KH wrote:
-> On Wed, Aug 16, 2023 at 02:11:41AM +0530, Atul Kumar Pant wrote:
-> > This patch fixes following checkpatch.pl issue:
-> > ERROR: do not use assignment in if condition
-> > 
-> > Signed-off-by: Atul Kumar Pant <atulpant.linux@gmail.com>
-> > ---
-> >  drivers/usb/core/devio.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
-> > index e501a03d6c70..56899fed6bd4 100644
-> > --- a/drivers/usb/core/devio.c
-> > +++ b/drivers/usb/core/devio.c
-> > @@ -2333,9 +2333,10 @@ static int proc_ioctl(struct usb_dev_state *ps, struct usbdevfs_ioctl *ctl)
-> >  		}
-> >  	}
-> >  
-> > +	intf = usb_ifnum_to_if(ps->dev, ctl->ifno);
-> >  	if (ps->dev->state != USB_STATE_CONFIGURED)
-> >  		retval = -EHOSTUNREACH;
-> > -	else if (!(intf = usb_ifnum_to_if(ps->dev, ctl->ifno)))
-> > +	else if (!intf)
+On 14/08/2023 20:50, Elson Roy Serrao wrote:
+> This property allows dwc3 runtime suspend when bus suspend interrupt
+> is received even with cable connected. This would allow the dwc3
+> controller to enter low power mode during bus suspend scenario.
 > 
-> Did you mean to change the logic here by doing the calculation always?
-> Does that change functionality?
+> This property would particularly benefit dwc3 IPs where hibernation is
+> not enabled and the dwc3 low power mode entry/exit is handled by the
+> glue driver. The assumption here is that the platform using this dt
+> property is capable of detecting resume events to bring the controller
+> out of suspend.
 > 
-	Now the calculation of interface will be done always, which can be
-	redundant. But this would not change the functionality.
+> Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
+> ---
+>  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> index a696f23730d3..e19a60d06d2b 100644
+> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> @@ -403,6 +403,11 @@ properties:
+>      description:
+>        Enable USB remote wakeup.
+>  
+> +  snps,runtime-suspend-on-usb-suspend:
+> +    description:
+> +      If True then dwc3 runtime suspend is allowed during bus suspend
+> +      case even with the USB cable connected.
 
-> The existing code is fine, running checkpatch on code outside of
-> drivers/staging/ or on new patches you are writing, is generally
-> discouraged as the code usually is older than checkpatch is :)
-> 
-> thanks,
-> 
-> greg k-h
+This was no tested... but anyway, this is no a DT property but OS
+policy. There is no such thing as "runtime suspend" in the hardware,
+because you describe one particular OS.
+
+Sorry, no a DT property, drop the change entirely.
+
+
+Best regards,
+Krzysztof
+
