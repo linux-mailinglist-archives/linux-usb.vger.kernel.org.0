@@ -2,77 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B87077E705
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Aug 2023 18:55:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C52E277E789
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Aug 2023 19:26:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344985AbjHPQzK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Aug 2023 12:55:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49170 "EHLO
+        id S1344647AbjHPRZx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Aug 2023 13:25:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345060AbjHPQzG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Aug 2023 12:55:06 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C71561FC3
-        for <linux-usb@vger.kernel.org>; Wed, 16 Aug 2023 09:55:01 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-564a0d2d35eso3995664a12.0
-        for <linux-usb@vger.kernel.org>; Wed, 16 Aug 2023 09:55:01 -0700 (PDT)
+        with ESMTP id S237703AbjHPRZT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Aug 2023 13:25:19 -0400
+Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23AC3E55;
+        Wed, 16 Aug 2023 10:25:18 -0700 (PDT)
+Received: by mail-oo1-xc2b.google.com with SMTP id 006d021491bc7-56d0deeca09so1017081eaf.0;
+        Wed, 16 Aug 2023 10:25:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692204901; x=1692809701;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=msBfPd8BuzD/GUlkblv4mwPk8fVn9ZKYLL0U+2C7Ff4=;
-        b=tJD5cEIiV7GNuFYaHRCvIaE0+8W2uzFOZ8eWkWn4XWh+DbkU+3hX+zMxdD3eD2c/yO
-         K2WDDvj1V6Ml0D7OkL9b4ncDhpVvJihwwKb1sQXWnHr2nnYmSSUHV5GwetWBIvoHZN0E
-         xT8TXGz3YmmwFnlUiREveMC52xdOKaZJvwc72j0fTqIiYySf2aylBzfm6KOZgZLQPEQb
-         jhAXupb0J2f6godJtF0D7xJBf3WRYs2aP6hTqFomDqVm8LGk9MmnTztZ0yjE6BXcSVsT
-         5ZkhS0Zt8aATqimnjdbGD7sBNVuV/ycB5ctOcGCKSax2M/bkfoYeOJdG/g7nQGHWmlBf
-         LYWw==
+        d=gmail.com; s=20221208; t=1692206717; x=1692811517;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=yZwy11i+99etV1V2sEIzKf13b6QI8uwN0WmhEJWceLk=;
+        b=AhxWs/stRhdT+/TEUBJ2p8WcMC9IQwXHQiT6Bo/l90IB1IWzjNfu+up6bi09+loub8
+         4KjMunC8fLf+nzFV+gPL1eKItik9N9ScKWX5SuaKmSwfL1mosbSNRzuyEWWPd4ceBa5r
+         z2sdupCvE1ScQLFKO1AZJG7NNZAfKKK3p84vksuAHQmRorrnUEu9LuyuTb9w6Gi1pRdp
+         k/UyvRg3rRinzb4bRCwHtYFbJWj9bFcvBHMRrsSpXXSKMzh0lpaT/sJTrkI/Cz4rzx7N
+         1TgKpK+YK1imXrBjkr2p8wPp0JsIzU81OhYfIhG1ES2fDAVeYBrmPIPM7s8ovEfWM9cB
+         V+Vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692204901; x=1692809701;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=msBfPd8BuzD/GUlkblv4mwPk8fVn9ZKYLL0U+2C7Ff4=;
-        b=PlDvw+dIdXqbvFdZtm+YTZWzL8UQpuqHSdCAgKXprUe08ONXjqlWgHmNE0hCgazdlk
-         lohWbxNCnWje7SYbOsuKkayRvYigMltZvjXuGcUHQqU5JupD/f4dRhM8+pIg120+RCXR
-         jJxw+4N8ZPplMBZIqrUwGAujPeyZI2cGTR9NTou/juO7y5RD78yx0EeymL59EVUadpv9
-         +GO5s0gvFWOMLZO39rwQ30ojayL+gXvSfYLSxhJ9WRM+tMcwd2LKlZQtH3IeeS/zcl9T
-         7eb5grbJoMB5zt8JgJ/AEYtGC1Yawxt+8JDmjILNoFRVkev//6cxNSODu60vBWqDnQFe
-         B6tg==
-X-Gm-Message-State: AOJu0YxtHs6pFG0tHKUmwph7ljTd5hZQ+A98jnPetrFLynHbK7jYUoON
-        8QEBc1DerQY8fZLXM4lHdtYf
-X-Google-Smtp-Source: AGHT+IE0VMMoFi/0xXy9WRxnp9BBxLzIGWSRRF/ZixvOl8lChvXu3J8yB9UY/E0Bkb2BJXL4r0oiPA==
-X-Received: by 2002:a05:6a21:778b:b0:13f:7c0e:dc74 with SMTP id bd11-20020a056a21778b00b0013f7c0edc74mr2426622pzc.55.1692204901191;
-        Wed, 16 Aug 2023 09:55:01 -0700 (PDT)
-Received: from thinkpad ([117.248.5.25])
-        by smtp.gmail.com with ESMTPSA id h27-20020a63385b000000b005641fadb844sm12265647pgn.49.2023.08.16.09.54.57
+        d=1e100.net; s=20221208; t=1692206717; x=1692811517;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yZwy11i+99etV1V2sEIzKf13b6QI8uwN0WmhEJWceLk=;
+        b=kBGEKGKkjC/WGI6sAEWEBhWliY1f0EOsL2y7NH0Ph4numTZONmUsHLLJSmfkIqnyCR
+         6k1mGN9rUmqp9X7ak2F6r6ewqSI9W1LDvaWQDN5swfALyxNVxw+WTNSORaC241xuE3TM
+         e7mlbJebfjyOO0jsUL5zavH+pEh8qCfhKdA0Ay8GmwdKKmxDvnRfyi9psU7QxWXUEDN6
+         aPFWgR5+uEv+P/UM6yF66OzJxzA2FuItfVBSh63s/rAvj+S+bAUTYkJ9/kKJUs6hJph/
+         fFOnfHhq3QhTXChGIJdRFBDNuvPhqIk/0hVsv/ghcEeyQUiD73eb+JVwjSwZg+CdP3pU
+         7AjQ==
+X-Gm-Message-State: AOJu0YzzbOdcNeYLcZ4jQgDVmzQYVaaQCW8jMUw1M21CpTmwy9q4y4ec
+        UQqexgOLcnTgfndYUUCR5bM=
+X-Google-Smtp-Source: AGHT+IGuozZRbezEFJnG2QmPgsgXQU2/xieDIn0LWYTBq4sgh+w9fU9ua7sgEy3Au2DUdHeXtjykKA==
+X-Received: by 2002:a4a:dec2:0:b0:569:a08a:d9c5 with SMTP id w2-20020a4adec2000000b00569a08ad9c5mr2372268oou.0.1692206717358;
+        Wed, 16 Aug 2023 10:25:17 -0700 (PDT)
+Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:44e:4905:bf55:4568])
+        by smtp.gmail.com with ESMTPSA id l2-20020a4ab0c2000000b0054f85f67f31sm6140859oon.46.2023.08.16.10.25.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Aug 2023 09:55:00 -0700 (PDT)
-Date:   Wed, 16 Aug 2023 22:24:55 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>
-Subject: Re: Disconnect interrupt generation for QC targets when role switch
- is enabled
-Message-ID: <20230816165455.GA23057@thinkpad>
-References: <af60c05b-4a0f-51b8-486a-1fc601602515@quicinc.com>
+        Wed, 16 Aug 2023 10:25:16 -0700 (PDT)
+From:   Fabio Estevam <festevam@gmail.com>
+To:     linux@roeck-us.net
+Cc:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, m.felsch@pengutronix.de, jun.li@nxp.com,
+        xu.yang_2@nxp.com, angus@akkea.ca, stable@vger.kernel.org,
+        Christian Bach <christian.bach@scs.ch>,
+        Fabio Estevam <festevam@denx.de>
+Subject: [PATCH v3] usb: typec: tcpci: clear the fault status bit
+Date:   Wed, 16 Aug 2023 14:25:02 -0300
+Message-Id: <20230816172502.1155079-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <af60c05b-4a0f-51b8-486a-1fc601602515@quicinc.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,86 +71,66 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 11, 2023 at 05:21:03PM +0530, Krishna Kurapati PSSNV wrote:
-> Hi Thinh, Johan, Bjorn, Konrad,
-> 
->   On QC targets today, the disconnect event in device mode is generated by
-> controller when software writes to QSCRATCH registers in qcom glue layer
-> rather than the vbus line being routed to dwc3 core IP for it to recognize
-> and generate conndone/disconnect events.
-> 
-> We need to write '1' to  UTMI_OTG_VBUS_VALID bit of QSCRATCH_HS_PHY_CTRL
-> register to generate a connection done event and "0" if we need to generate
-> a disconnect event during cable removal or mode switch. Exactly what is done
-> by "dwc3_qcom_vbus_override_enable" call in dwc3-qcom. In case the user
-> wants to enable runtime suspend for dwc3 and we don't generate a disconnect
-> event, the dwc->connected flag will be "true" and it would block suspend
-> entry.
-> 
-> Today, in dwc3-qcom, this qscratch modification is being done only for
-> vbus/host notifiers where I assume dwc3-qcom would be receiving these
-> notifications from charger driver regarding cable connect and removal and
-> since we are receiving a copy of the information in dwc3-qcom as well, we
-> would be knowing when to set/clear the VBUS_VALID bit.
-> 
-> But, when we have role switch in play, the role_set callback goes to DRD and
-> Qcom driver is agnostic of what is actually happening. While this doesn't
-> hinder mode switch, the role change notification never really reaches
-> dwc3-qcom and we would never set this bit to "0" and disconnect event is not
-> generated upon cable plug-out. Is there a way we can properly provide this
-> notification to qcom glue driver ?
-> 
-> I had some idea on how to get the role notification reach qcom glue driver
-> but wanted your opinion on whether they can be used or not:
-> 
-> 1. Register a vendor_hook from glue driver and invoke that during
-> __dwc3_set_mode.
-> 
-> 2. Let the role notification reach dwc3-qcom first and then let qcom driver
-> invoke role_set of drd. Something similar to what was implemented by Wesley
-> on [1].
-> 
-> But both the options require dwc3_probe to be done in sync with
-> of_platform_populate or we need to defer qcom probe if dwc3_probe is
-> deferred. Since we are leaning towards async probe, not sure if the above
-> two options would be proper.
-> 
-> Couple of more reasons to ask for the above two options:
-> 
-> 1. We would know when we are in device/host mode and we can avoid having any
-> layering violations in dwc3-qcom.
-> 
-> 2. When it comes to runtime pm implementation for dwc3-qcom, an effort was
-> done by Manivannan Sadhasivam previously [2], we can avoid modifying
-> xhci-plat.c to set autosuspend delay to any specific value. We would be able
-> to enable runtime/autosuspend for dwc->xhci->dev from dwc3-qcom itself upon
-> entering host mode.
-> 
+From: Marco Felsch <m.felsch@pengutronix.de>
 
-Since you have quoted my series, I'd like to get clarification on one issue I'm
-seeing. When resuming from runtime suspend in host mode, dwc3-qcom driver gets
-the wakeup event and it resumes the xhci driver. But the XHCI IRQs are received
-after some delay. Due to this, xhci driver doesn't resume the device, instead,
-all the drivers (dwc3-qcom, dwc3-core, xhci) went to runtime suspend again.
+According the "USB Type-C Port Controller Interface Specification v2.0"
+the TCPC sets the fault status register bit-7
+(AllRegistersResetToDefault) once the registers have been reset to
+their default values.
 
-But once the XHCI IRQs are received, dwc3-qcom gets the wakeup event and this
-time, xhci driver resumes the device.
+This triggers an alert(-irq) on PTN5110 devices albeit we do mask the
+fault-irq, which may cause a kernel hang. Fix this generically by writing
+a one to the corresponding bit-7.
 
-This is the reason why I added the autosuspend delay of 200ms to allow the xhci
-driver to wait for IRQs before going to runtime suspend.
+Cc: stable@vger.kernel.org
+Fixes: 74e656d6b055 ("staging: typec: Type-C Port Controller Interface driver (tcpci)")
+Reported-by: Angus Ainslie (Purism) <angus@akkea.ca>
+Closes: https://lore.kernel.org/all/20190508002749.14816-2-angus@akkea.ca/
+Reported-by: Christian Bach <christian.bach@scs.ch>
+Closes: https://lore.kernel.org/regressions/ZR0P278MB07737E5F1D48632897D51AC3EB329@ZR0P278MB0773.CHEP278.PROD.OUTLOOK.COM/t/
+Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+Signed-off-by: Fabio Estevam <festevam@denx.de>
+---
+Changes since v2:
+- Submitted it as a standalone patch.
+- Explain that it may cause a kernel hang.
+- Fixed typos in the commit log. (Guenter)
+- Check the tcpci_write16() return value. (Guenter)
+- Write to TCPC_FAULT_STATUS unconditionally. (Guenter)
+- Added Fixes, Reported-by and Closes tags.
+- CCed stable
 
-Can you clarify why there is a delay in receiving XHCI IRQs?
+ drivers/usb/typec/tcpm/tcpci.c | 4 ++++
+ include/linux/usb/tcpci.h      | 1 +
+ 2 files changed, 5 insertions(+)
 
-- Mani
-
-> Can you help let know your thoughts on the above two options or if there is
-> any way we can implement the role change / cable plug in(out) callback.
-> 
-> [1]: https://patchwork.kernel.org/project/linux-usb/patch/20201009082843.28503-4-wcheng@codeaurora.org/
-> [2]: https://patchwork.kernel.org/project/linux-usb/cover/20230325165217.31069-1-manivannan.sadhasivam@linaro.org/
-> 
-> Regards,
-> Krishna,
-
+diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
+index fc708c289a73..0ee3e6e29bb1 100644
+--- a/drivers/usb/typec/tcpm/tcpci.c
++++ b/drivers/usb/typec/tcpm/tcpci.c
+@@ -602,6 +602,10 @@ static int tcpci_init(struct tcpc_dev *tcpc)
+ 	if (time_after(jiffies, timeout))
+ 		return -ETIMEDOUT;
+ 
++	ret = tcpci_write16(tcpci, TCPC_FAULT_STATUS, TCPC_FAULT_STATUS_ALL_REG_RST_TO_DEFAULT);
++	if (ret < 0)
++		return ret;
++
+ 	/* Handle vendor init */
+ 	if (tcpci->data->init) {
+ 		ret = tcpci->data->init(tcpci, tcpci->data);
+diff --git a/include/linux/usb/tcpci.h b/include/linux/usb/tcpci.h
+index 85e95a3251d3..83376473ac76 100644
+--- a/include/linux/usb/tcpci.h
++++ b/include/linux/usb/tcpci.h
+@@ -103,6 +103,7 @@
+ #define TCPC_POWER_STATUS_SINKING_VBUS	BIT(0)
+ 
+ #define TCPC_FAULT_STATUS		0x1f
++#define TCPC_FAULT_STATUS_ALL_REG_RST_TO_DEFAULT BIT(7)
+ 
+ #define TCPC_ALERT_EXTENDED		0x21
+ 
 -- 
-மணிவண்ணன் சதாசிவம்
+2.34.1
+
