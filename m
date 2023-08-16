@@ -2,34 +2,34 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1DF877E3FA
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Aug 2023 16:43:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4BC077E400
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Aug 2023 16:44:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343753AbjHPOnB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Aug 2023 10:43:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57678 "EHLO
+        id S231491AbjHPOne (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Aug 2023 10:43:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343774AbjHPOmr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Aug 2023 10:42:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E41D268F;
-        Wed, 16 Aug 2023 07:42:45 -0700 (PDT)
+        with ESMTP id S1343771AbjHPOnP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Aug 2023 10:43:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 445D0DF;
+        Wed, 16 Aug 2023 07:43:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C339669E3;
-        Wed, 16 Aug 2023 14:42:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3937C433C7;
-        Wed, 16 Aug 2023 14:42:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C9E54669E7;
+        Wed, 16 Aug 2023 14:43:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D728FC433C7;
+        Wed, 16 Aug 2023 14:43:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1692196964;
-        bh=Onf8GBQ42sfUuG/X+JQV54DEIRlWJ+k2bjhvUDfua9M=;
+        s=korg; t=1692196993;
+        bh=7MhSWxdKXgEcVGTgGM+iF5JnC2mJBD7XbvJkqeDuvUM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NhbKHsh29N+CyM6scVJy+tK2FuiWOpM6D/FhGzi9Jl4I/e/Pz8WqmnRj6uPprhyGi
-         68prQxeoAvMRfIex1nJuOcLD/5fkIQk1Hz57+Zfl0whWIGk9VYLVSk1kvOL/F3xUuI
-         2lfkKC2/50dyHyf5pbdScxcWE9u4EbN17HSkCMuc=
-Date:   Wed, 16 Aug 2023 16:42:41 +0200
+        b=rY0UiLXcKUmwIrbE3//SdWp7WGG74zxIEcZG69TJ2cpZm9F2hj7p/xB5WuWSEB+PH
+         oq5OvnxeP+BKp493qS1JSjnR0ofvcfcn8H1ygpiZHo/CjsVEof3QSpoHKVkVHgXd0H
+         zAtX95QllGDrsTeBCA67hE35SJd525AvHkw2wC1M=
+Date:   Wed, 16 Aug 2023 16:43:10 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Atul Kumar Pant <atulpant.linux@gmail.com>
 Cc:     richard.leitner@linux.dev, wsa+renesas@sang-engineering.com,
@@ -37,16 +37,16 @@ Cc:     richard.leitner@linux.dev, wsa+renesas@sang-engineering.com,
         linux-kernel@vger.kernel.org, shuah@kernel.org
 Subject: Re: [PATCH v1] drivers: usb: Removes use of assignment in if
  condition
-Message-ID: <2023081606-geology-purging-8ff1@gregkh>
+Message-ID: <2023081648-disloyal-sharpener-2fd2@gregkh>
 References: <20230815204141.51972-1-atulpant.linux@gmail.com>
  <2023081550-absurd-sprint-65e5@gregkh>
- <20230816034313.GA57824@atom0118>
+ <20230816025217.GC57274@atom0118>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230816034313.GA57824@atom0118>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20230816025217.GC57274@atom0118>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,7 +55,7 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 16, 2023 at 09:13:13AM +0530, Atul Kumar Pant wrote:
+On Wed, Aug 16, 2023 at 08:22:17AM +0530, Atul Kumar Pant wrote:
 > On Tue, Aug 15, 2023 at 11:07:02PM +0200, Greg KH wrote:
 > > On Wed, Aug 16, 2023 at 02:11:41AM +0530, Atul Kumar Pant wrote:
 > > > This patch fixes following checkpatch.pl issue:
@@ -83,12 +83,16 @@ On Wed, Aug 16, 2023 at 09:13:13AM +0530, Atul Kumar Pant wrote:
 > > Did you mean to change the logic here by doing the calculation always?
 > > Does that change functionality?
 > > 
-> 	Now the calculation of interface will be done always, which can be
-> 	redundant. But this would not change the functionality.
+> > The existing code is fine, running checkpatch on code outside of
+> > drivers/staging/ or on new patches you are writing, is generally
+> > discouraged as the code usually is older than checkpatch is :)
+> 
+> 	Understood. One question though, should we fix issues like no space
+> 	before open parenthesis (e.g. if(val)) in the code that is outside
+> 	of /drivers/staging/ ?
 
-Yes, but it is now redundant, so this change isn't really needed, the
-original code is "more correct", please leave it as-is.
+Only if the maintainer of that subsystem says it is ok to do so.
 
-thanks,
+good luck!
 
 greg k-h
