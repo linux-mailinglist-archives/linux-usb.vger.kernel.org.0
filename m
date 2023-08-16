@@ -2,53 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08A8B77D893
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Aug 2023 04:53:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B4E277D92F
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Aug 2023 05:44:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241314AbjHPCwc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Aug 2023 22:52:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40718 "EHLO
+        id S241217AbjHPDnf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Aug 2023 23:43:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236810AbjHPCw1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Aug 2023 22:52:27 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA647212D;
-        Tue, 15 Aug 2023 19:52:24 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-6887480109bso792178b3a.0;
-        Tue, 15 Aug 2023 19:52:24 -0700 (PDT)
+        with ESMTP id S241649AbjHPDnW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Aug 2023 23:43:22 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDCED106;
+        Tue, 15 Aug 2023 20:43:21 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id 98e67ed59e1d1-26b2884bec8so3256363a91.0;
+        Tue, 15 Aug 2023 20:43:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692154344; x=1692759144;
+        d=gmail.com; s=20221208; t=1692157401; x=1692762201;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pBnDBacgo0Wjuz4vbeWQQj2kQUCoYKUZpi0rH2k7kbc=;
-        b=qkg9dYtCPfXt9Qz+UNC2TZKWO+DnAJIqm5Vq7IhjYwmOWOVj7nN8mxux5B77Ai/pK8
-         xLQgJrhxf0u7XMhnBLiKIk2ak0I5UgWynrEbtW0ud7TbFrO3lyT3X4LNTxRcJ8kYvjsJ
-         eiJW8VxjuojpOM6T2EYhCvy7y6BWj7s1t6C6JZYSfJ9sNg/ZuPqdy57z2Yv8cJ6+Qkg0
-         /2CKdT22yw8ghzI0B+H+0kGFGuy6CY9/nZgT7S/gq1CdfHCnsTt2Fd84M6JNRu7luGIx
-         poGxULOl5aj0OTu+bT8uZjMbwcSB1tFq0N/f/taEDav7gpanMtFB9YTBvuEoGgICDbwp
-         XxZA==
+        bh=+MG/LBLNC/1jL+k5aZb0NuJseJ3XI84wzhjQpnVkoLg=;
+        b=VibyU1Vcjg0kPPMn4/ped/KjnfhOwlVJC1qeW70G9tEUPErBv65Ji5UPiPW1xJ/Oup
+         84PR44d7K0uFULM/5WJG7VOWElYxYWsUxuP5vMCV39ubOoO8pfYiottuAdbLVWrbiTeq
+         ac3XmKzweo8rlX95YTgy0WaGm8lGgj7qqGPOKT0IldOehBMPyNXINzq7jnUDUVxFoSEJ
+         WfsKXuxtyQ/Dyd3TDTjeypKsfNIh3N+/OLFzqni7tZdsP7pCTF+bo0haqhZqivfTxwSi
+         ykCcA9YEtsdL2tAfrpVAfLkpg630YTQrXRyqFN9dV7JeUAlediyuu99Dd0CrJ6RT5bzN
+         DywA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692154344; x=1692759144;
+        d=1e100.net; s=20221208; t=1692157401; x=1692762201;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pBnDBacgo0Wjuz4vbeWQQj2kQUCoYKUZpi0rH2k7kbc=;
-        b=GNZArfQNZ5fJQFYnUe3EQHFRPIGpggIcGriOwedpEEWcneEdZY/VHrFAKuE/t3bNYY
-         tQPOYVhsNKDpEpN69KWsA/1UqWp73MSuCndbqa+hzemPLtI/qcBp5NWuHLIhzg6TKoBH
-         yrRFj9BiLHbt8/rKV/tnU10A+S46pJqWm3Hx+2++dholxUVMQIzMB2VOwWrLlGTrebsT
-         qti/Pcas7OoJmzNiLf/48eDnsJkWFdzyolRhvPOGZhbAogKcBhIh3QM1cRRu2VabXWPU
-         pOPRy6C9luXl5dYD5ba6dPD+Yh6mMNvvunRstRYEPnA8K2akF1SZRVsFstc4r/u0AnI2
-         k0JA==
-X-Gm-Message-State: AOJu0YxTVhLo8SRJfMqsPcGIedAw/2QDivxJmQkxF15VjG9Mr1uCH+qo
-        6zEtQdTneMQuFGOhKVf55Mc=
-X-Google-Smtp-Source: AGHT+IGJaFszMT/iSru5k1QxXXJdUJ0kuDWJKg8Jo6J8Zcgo/mOb46WbY4jrWWVTALUVINH8xi3A2g==
-X-Received: by 2002:a05:6a00:1503:b0:64f:35c8:8584 with SMTP id q3-20020a056a00150300b0064f35c88584mr822860pfu.18.1692154344189;
-        Tue, 15 Aug 2023 19:52:24 -0700 (PDT)
-Received: from atom0118 ([2405:201:c009:58e9:6a8f:3187:b8c8:1572])
-        by smtp.gmail.com with ESMTPSA id y17-20020aa78551000000b00687fcb2ba7csm10024798pfn.103.2023.08.15.19.52.20
+        bh=+MG/LBLNC/1jL+k5aZb0NuJseJ3XI84wzhjQpnVkoLg=;
+        b=Bo3wcPeWic8SiYnauAB/LVpRkZETdin7u0/20t0UOMW5JkhR2qElTvSS8EWpPuXSg9
+         apVNEeHv//I71ubTkLI3ZjUTpCNlFs/kqIZuvLb6tLuotoPw2KhNvY/QwVqr0XhXmMoo
+         j1pMOdD1Ltc8Ymu8MX/ma5QG18liOcYMqAK08AKgahh19YcNAQFGMoC5fvxanENFBnk8
+         UJ7WX1Jzl9FSPdeeEHMPDCc622E8cWbxSSJBfgauyWf1/qXAvp4Xiaa8TIRDHd3zPtX6
+         7Fr64A7zsXbjsc0Qcra7l7o1TDFWotbJJtK7ENamNayrGrZSfRMoldZaQswSFFMi5qoy
+         mr0w==
+X-Gm-Message-State: AOJu0YxylsaFkAdFPcnVNOdSFZEfFVN3CN9aVr+Z26WM7OY+10ebgLZ2
+        GF1mItx4f8dG+ofF7RHE7PE=
+X-Google-Smtp-Source: AGHT+IGFv8x8MzsU1NkdJe3UFhKVzn9SwPupCmDsTd9ooLwptPiJUbA88CqN/bk3B7yKSs3SxzW09g==
+X-Received: by 2002:a17:90b:1013:b0:269:46d7:f1db with SMTP id gm19-20020a17090b101300b0026946d7f1dbmr466664pjb.32.1692157401277;
+        Tue, 15 Aug 2023 20:43:21 -0700 (PDT)
+Received: from atom0118 ([2405:201:c009:58e9:83df:3d7d:2a60:5498])
+        by smtp.gmail.com with ESMTPSA id 23-20020a17090a005700b00268b9862343sm12941311pjb.24.2023.08.15.20.43.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Aug 2023 19:52:23 -0700 (PDT)
-Date:   Wed, 16 Aug 2023 08:22:17 +0530
+        Tue, 15 Aug 2023 20:43:20 -0700 (PDT)
+Date:   Wed, 16 Aug 2023 09:13:13 +0530
 From:   Atul Kumar Pant <atulpant.linux@gmail.com>
 To:     Greg KH <gregkh@linuxfoundation.org>
 Cc:     richard.leitner@linux.dev, wsa+renesas@sang-engineering.com,
@@ -56,7 +56,7 @@ Cc:     richard.leitner@linux.dev, wsa+renesas@sang-engineering.com,
         linux-kernel@vger.kernel.org, shuah@kernel.org
 Subject: Re: [PATCH v1] drivers: usb: Removes use of assignment in if
  condition
-Message-ID: <20230816025217.GC57274@atom0118>
+Message-ID: <20230816034313.GA57824@atom0118>
 References: <20230815204141.51972-1-atulpant.linux@gmail.com>
  <2023081550-absurd-sprint-65e5@gregkh>
 MIME-Version: 1.0
@@ -100,14 +100,12 @@ On Tue, Aug 15, 2023 at 11:07:02PM +0200, Greg KH wrote:
 > Did you mean to change the logic here by doing the calculation always?
 > Does that change functionality?
 > 
+	Now the calculation of interface will be done always, which can be
+	redundant. But this would not change the functionality.
+
 > The existing code is fine, running checkpatch on code outside of
 > drivers/staging/ or on new patches you are writing, is generally
 > discouraged as the code usually is older than checkpatch is :)
-
-	Understood. One question though, should we fix issues like no space
-	before open parenthesis (e.g. if(val)) in the code that is outside
-	of /drivers/staging/ ?
-
 > 
 > thanks,
 > 
