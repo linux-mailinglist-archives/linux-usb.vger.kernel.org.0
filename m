@@ -2,119 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D86BC77D9E7
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Aug 2023 07:45:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9382577DAFB
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Aug 2023 09:15:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241945AbjHPFom (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Aug 2023 01:44:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57922 "EHLO
+        id S242333AbjHPHOe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Aug 2023 03:14:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241949AbjHPFoa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Aug 2023 01:44:30 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC062117
-        for <linux-usb@vger.kernel.org>; Tue, 15 Aug 2023 22:44:29 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2ba1e9b1fa9so95469701fa.3
-        for <linux-usb@vger.kernel.org>; Tue, 15 Aug 2023 22:44:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692164667; x=1692769467;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=p1Cm3rJor+XGdM+JIjydBHGbLEQZZ1g1LuWvc+gZ0Ws=;
-        b=aRueGjQacY6wEgWZGOweUYdzMfdD0aYJNkkXYRhF4sNem4ZuqZ0eALGamCCY9cRVfd
-         CeN4vPFV/aBN+BL3bnrRR5hZyZxd33Umc7ORjtrImrxYofsVh5EBK7/gu0PK/0iIJgzm
-         L4PA1UjhUYi9DEp/canKyjkmCSrJb5pe5YZhWU9xGHfzzWHhgDfKGjHnUwCI0YLnvSvK
-         /PrwgXJHZi1TIZIMhnT9eZu3MxYscEwUqAPzV8FxWt39NH2GbQ67x2sVhrcG4e+hhN6O
-         Q1ZwScyBzhZcfAKpMIs90B/oKNmGIhgqH5pFU4cPxfs7YKG34yJYCrscL7bwF9Sge9TJ
-         fTzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692164667; x=1692769467;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=p1Cm3rJor+XGdM+JIjydBHGbLEQZZ1g1LuWvc+gZ0Ws=;
-        b=Xzca33W5tPbMeCylkJmEEUnHB/QPmbhKYA+Rq6lvKf51z7FbLqVm0A65KYA2Y88hol
-         6HmTlCquKIjmWVNhMLoq6MDV0SRg6m+JU48Bi1FYaGXPDABNXt6Dk1H0ovnXWTQ0OznA
-         FA91SFEVHRCnyjuv4u2nHTfKJ+EnRgvmK7S6t9tq/bY7qCJorVbvZxsXUny2Kzj5ISfg
-         ikQIMR/vFGxtYzjpjKzN+kpbLLm67THi9ZVoOJBBz3O8xEuo8OlDzxbAZ3PrG47QnDLQ
-         /dtxndB9+MC6IQYf+iNvMmvB00Rn0B21RYHcam3Iom6piWlsWeM4RhoRltIacQavZDKQ
-         xWrQ==
-X-Gm-Message-State: AOJu0Yxq3tb5vu5qF7I9GFnOnvzQ6syg7zxWWSSsr86OcpJi+NDygFfE
-        dGLO7yjNTQZ55OjZtfgAH80mwg==
-X-Google-Smtp-Source: AGHT+IENB/+/1yCrgGPWlxAVOLiWjZiIUENth9HghBcpRunhKp0CjXWEK4UXuzlDgMFSy68BFO/+ZA==
-X-Received: by 2002:a2e:9b0d:0:b0:2b9:e501:a6a6 with SMTP id u13-20020a2e9b0d000000b002b9e501a6a6mr819956lji.30.1692164667394;
-        Tue, 15 Aug 2023 22:44:27 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.214.188])
-        by smtp.gmail.com with ESMTPSA id k3-20020a5d6283000000b00317643a93f4sm19907832wru.96.2023.08.15.22.44.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Aug 2023 22:44:26 -0700 (PDT)
-Message-ID: <a77403f5-8b99-3012-3843-1999ee8d12ce@linaro.org>
-Date:   Wed, 16 Aug 2023 07:44:25 +0200
+        with ESMTP id S230038AbjHPHOE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Aug 2023 03:14:04 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B5482112
+        for <linux-usb@vger.kernel.org>; Wed, 16 Aug 2023 00:14:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.at;
+ s=s31663417; t=1692170037; x=1692774837;
+ i=christian.schaubschlaeger@gmx.at;
+ bh=G/bPTUaiEySKNFMXYsYcMiy29P5Ts1nIzhbo/DIjtwY=;
+ h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+ b=JMWQgTdF24cpOIXLuzSyRwUyEILGKjCdkWc54F4vyKMRRauSd5lNIP3iqTuPscyUobhzmvN
+ ZRQVb7E6PeYr3BIvrDn1yv09tsYZ4Ape5fJ+S+JY1Oncc1zh1kuwGwxGrnFR7HFY41RPNAXiF
+ WnzxUEJLJw3lv9bVTX6gY0OkYJ4jmwy6MXo8mCDwx1ZVtC/FRV97Y+aZY1sqz4gOUF8Hazdf4
+ yhpqR1aUFPgZfw/y97ZoNPnrrg5LOsSz6NQx0RaP0fh7xpO9uk6x+3OseuvajDWZ+40i897+c
+ 2TFLOWI8YLVMFzzwUFGSlvzi0qbDgZFr5bftrt9zKMVzcWPSOm8g==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.0.70] ([88.116.17.66]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N6KUT-1phsLc22bB-016gOw; Wed, 16
+ Aug 2023 09:13:57 +0200
+Message-ID: <5bc24e26-ae55-3c8f-ea5b-6be7ebbcf957@gmx.at>
+Date:   Wed, 16 Aug 2023 09:13:55 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.14.0
-Subject: Re: [PATCH v4 2/3] dt-bindings: usb: snps,dwc3: Add
- runtime-suspend-on-usb-suspend property
+Subject: Re: USB issue on a TB4 controller?
 Content-Language: en-US
-To:     Elson Roy Serrao <quic_eserrao@quicinc.com>,
-        gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
-        rogerq@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        devicetree@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20230814185043.9252-1-quic_eserrao@quicinc.com>
- <20230814185043.9252-3-quic_eserrao@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230814185043.9252-3-quic_eserrao@quicinc.com>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org
+References: <a45b9989-c9da-bf4e-94c8-3e1341777b4d@gmx.at>
+ <20230526123655.GW45886@black.fi.intel.com>
+ <0bbb844d-3348-dc28-311a-d4111f8a7f81@linux.intel.com>
+ <2d12af30-4a7c-5fb3-fab8-5759296c68ac@gmx.at>
+ <20230530105039.GF45886@black.fi.intel.com>
+ <d6e7e0d5-0b30-d66c-2ee8-4f0c0caef0b9@gmx.at>
+ <20230530121756.GG45886@black.fi.intel.com>
+ <a22f8874-c2b3-92a5-e858-b877872e5284@gmx.at>
+ <894ba559-9233-4428-69e7-7c0bf5c7556e@gmx.at>
+ <b45b5e8a-756e-fd76-64af-d3e376997a31@linux.intel.com>
+ <618d9789-fc5a-10b3-6dc9-27be5bbff666@gmx.at>
+ <dd62787f-a04c-01ce-6a16-6a116f0f9c3b@linux.intel.com>
+ <36d37597-c0fb-cbaa-dd7c-0f3d6b4050c1@gmx.at>
+ <8b96cd69-324a-8f9e-fcd2-4681a43c2020@linux.intel.com>
+From:   =?UTF-8?Q?Christian_Schaubschl=c3=a4ger?= 
+        <christian.schaubschlaeger@gmx.at>
+In-Reply-To: <8b96cd69-324a-8f9e-fcd2-4681a43c2020@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:65OpsXVEH8v50o99eiUZTCm8xLWwD3dwkQg+hwQzUKOmoNdORAS
+ fnDH2jEnm2SmsHxv/abnzZTSzVimHDtAl/+kNEiAgub2MaGxbu88oy5b2l+gyj2F2kzVLQ7
+ ZBp88B07xyBfrZ5AJTzB8qeOaGR4yGufpffPqfXXiUhlOKCrieS6BnQwxHAdLdCjoyG9If2
+ SfcadqZLve35dOnTLpMJA==
+UI-OutboundReport: notjunk:1;M01:P0:k69ejxKKzQI=;XgB6iuxtjEDkxEKSqaboNuorcyC
+ kE14W+Mj69prHUka2TP2gWSeXjc4laXBMzkMaMGSPvSv9hgEeGsmUw5lddlZ5ih9YFE48hy7q
+ y/osfUDQxrJS9LmEbCf/X9wan1p9F6LIKHNrYWBcpZkk6k4tBwRi5B863MHWREzR40HN6OQpB
+ Aknafl5SKY/4i1SjwbSGcWobSqfJJQMd6PWuZnjycGiPuzf49E3sWtXIdXgDeMWLC8KhyZ874
+ h1n0wg4ArHkkaDr4ab7y7VVLRadXfXIv3/Wtouj2o0Tg1KINSRHCmlp6iftDqxA+SGb+52Eao
+ 2Pve6L35/Z+5DCgDGqhcuxbvEHnh4VNqVwRsuL90OjiDXsfSMXluDBz/fAFj1D17lBL1L3cAE
+ OGjMyEnwOhkPbxhA6LKFMGrvH3PnqGC0EfcD9D/zRxdIyGiIFyE/I78S9f8INOufBbU43CId1
+ 33kxk8a+Y0COrzhjbIvOZXBEpNHR1w+qPqJp5aja5IKg806MQNR5UbGWG4zaigQ4pwei07tVy
+ kavTOmOz9AYnGHODLl0t/MK/qEGmOep91TDEPhAkyUSetRm98A+9w4loJlZJqkA6f/+ROjsSu
+ 8TXbhRCPLr7wohLPslZv0oJZ8m63ATPCIeb0P+DZVdJaaNMNnxpUToGojsRenjECcpEPNGeTj
+ 8U6togGxqa12AqcusKRGFTlt1RKCE1c3fwvlLC8yV3ATc5v3V4XMb2bAqRmy/3jET+oIdoRiU
+ qq5nzJy5YtXb/ESDx7+c8y6XQ3mzuklMcswylzR/Ga2LnuirhgBOyr4J8wFuRvgPcP9RZukIw
+ YOE/ECng+lBRjsKxrUEkZ5gT9kvTAhEtIjoOuorFnaDWxZfX+XDPpPElOR2WVsdam53rHCX+r
+ Cn8aRQETzT8BYmDzL5MmA9PvCGSwM8hm0UvKEazwBynP20KUAspVQkH8A4YaDGA4uwWmpmjvs
+ +t5LFQ==
 X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 14/08/2023 20:50, Elson Roy Serrao wrote:
-> This property allows dwc3 runtime suspend when bus suspend interrupt
-> is received even with cable connected. This would allow the dwc3
-> controller to enter low power mode during bus suspend scenario.
-> 
-> This property would particularly benefit dwc3 IPs where hibernation is
-> not enabled and the dwc3 low power mode entry/exit is handled by the
-> glue driver. The assumption here is that the platform using this dt
-> property is capable of detecting resume events to bring the controller
-> out of suspend.
-> 
-> Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
-> ---
->  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> index a696f23730d3..e19a60d06d2b 100644
-> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> @@ -403,6 +403,11 @@ properties:
->      description:
->        Enable USB remote wakeup.
->  
-> +  snps,runtime-suspend-on-usb-suspend:
-> +    description:
-> +      If True then dwc3 runtime suspend is allowed during bus suspend
-> +      case even with the USB cable connected.
+Hello,
 
-This was no tested... but anyway, this is no a DT property but OS
-policy. There is no such thing as "runtime suspend" in the hardware,
-because you describe one particular OS.
+> I have to check if we have similar machines and docks laying around.
+> I'm away until August so there will be some delay on my side
 
-Sorry, no a DT property, drop the change entirely.
+I just want to ask, if you could find any machines / docks for testing this. Today I could reproduce the issue with a 6.5.0-rc6 kernel, also with the lastest Ubuntu-22.04.03 which comes with a 6.2 kernel. As I said before, if you need any logs or tests, I'd be happy to help debugging this.
 
-
-Best regards,
-Krzysztof
+Thanks and best regards,
+Christian
 
