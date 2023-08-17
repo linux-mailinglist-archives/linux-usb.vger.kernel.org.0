@@ -2,173 +2,161 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D751377FA64
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Aug 2023 17:09:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F256177FC69
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Aug 2023 18:58:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352864AbjHQPJW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Aug 2023 11:09:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43872 "EHLO
+        id S1353780AbjHQQ6K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Aug 2023 12:58:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352928AbjHQPJR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Aug 2023 11:09:17 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC3730DF
-        for <linux-usb@vger.kernel.org>; Thu, 17 Aug 2023 08:08:44 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b9db1de50cso117816341fa.3
-        for <linux-usb@vger.kernel.org>; Thu, 17 Aug 2023 08:08:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692284908; x=1692889708;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hZ0C4gM1MGvlXqRM+eWMYuEXR3MLstzhpSuwjlgfvLI=;
-        b=e7/tjJYcUXzJ/fc5afxlyPh2GEoSNtR/Pik/2N83a5bFFYgYpqHPFzRybUOC3aYxRN
-         0YAkAIX2NkCWmCkzgN3/ElWQFzS5bgm34BzASSAq9ytScx7/9lmEQcm4gTCoPSyw5dmL
-         stBk8pFVBIcyx7hE2sBOg4d+vM0tx2DrfNG1VCph7yamdeID/bpyYB5v2YvZ2jin7Iuu
-         mGbWB+Id7Jrko47BYDtm24ImW9z5mFEgWva65DgzmKUI67dDU9LqdoFXfE3dzq4nbRK7
-         tBg3kx/vOWc3+VAAIfOJLRaxWFdAXnMGzmxMHR8CcTIF1R9myLRzbqAdUPaexCCEgXD/
-         TaHA==
+        with ESMTP id S1353771AbjHQQ54 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Aug 2023 12:57:56 -0400
+Received: from mail-pl1-f207.google.com (mail-pl1-f207.google.com [209.85.214.207])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B5A2D5D
+        for <linux-usb@vger.kernel.org>; Thu, 17 Aug 2023 09:57:54 -0700 (PDT)
+Received: by mail-pl1-f207.google.com with SMTP id d9443c01a7336-1bbb97d27d6so168295ad.1
+        for <linux-usb@vger.kernel.org>; Thu, 17 Aug 2023 09:57:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692284908; x=1692889708;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hZ0C4gM1MGvlXqRM+eWMYuEXR3MLstzhpSuwjlgfvLI=;
-        b=BfuhWk3HWM1/bpj7ibPeXh7IDBiTXeywHpSAMEDzdo8GoYQjhaTPyDR2xfEH/d9w31
-         gW7wuZGr6pdqYHqXY51xYPO4fy1QPmT2QuD3aTiUXyGB9sqqSX9IHeX6TZMcHrJcqxgE
-         eeGIuDyEmuBi7rgMB2soQ9rIiXElHljnb0+4PXb6oqjeMNHKLsTFcOrXjwbJgR9kCR4O
-         ywKxpo7kIKGwIi658ZobsWa4g/itsIaBi5zyPiwvf0qYFikAWJ04Bsv1rD4N+5xngQAQ
-         JCv4/yJo3KyVdvbxp40OBCe5VkLDXLAj2BzTWRdNKa0bjiYlrdUWMkC9Efkd6M/Fkiac
-         B4ow==
-X-Gm-Message-State: AOJu0YyIvN1ww+Gh01AZrNf43bAkkumwgMynrARpNSgkLl9QkL7TPdZC
-        r4UQTbLMFlh0flouy/X7tenb4w==
-X-Google-Smtp-Source: AGHT+IHCkGizuzzIPtIX5WMAX9krzdeHAXfQZ492o8PeshzyR0meMULw9sDdOM14ds1qMND3CXOeog==
-X-Received: by 2002:a2e:994b:0:b0:2bb:a28b:58e0 with SMTP id r11-20020a2e994b000000b002bba28b58e0mr2005867ljj.14.1692284908361;
-        Thu, 17 Aug 2023 08:08:28 -0700 (PDT)
-Received: from umbar.unikie.fi ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id u8-20020a2e9b08000000b002b6ef2fca66sm4111413lji.41.2023.08.17.08.08.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Aug 2023 08:08:27 -0700 (PDT)
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v5 2/2] usb: typec: qcom-pmic-typec: register drm_bridge
-Date:   Thu, 17 Aug 2023 18:08:24 +0300
-Message-Id: <20230817150824.14371-3-dmitry.baryshkov@linaro.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230817150824.14371-1-dmitry.baryshkov@linaro.org>
-References: <20230817150824.14371-1-dmitry.baryshkov@linaro.org>
+        d=1e100.net; s=20221208; t=1692291474; x=1692896274;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kg0QE7WFC8jIy1ZqIe4bmipuDdvn/U9mghxu2TvRjdY=;
+        b=kekzHMdAir55rPABvVdulX/ZzkaGMiD9qMs5bATlelqihTE2pWIBtDqF43RLJlng0W
+         gvmkJWSITiu6p26CQH9DJYyr3K9xHv7Ppd1T1a+32H5gIgqTc1hSFWlFu9d7M3jWY5cz
+         W/NefW1a4+IZe7H6uhM4H5hJIYu6qeZPqcLoV//djx+3aIVB4a/r2okapTwvIe1DhDJM
+         G2ngUdFVt3vRd3msoIab2aadYMG8JzgRYpjpsbmgEFSludqMysAsyJ6LuqQra+y7JTd9
+         8r2tN4XjidbVf2YlZein82GFhCYBI2BNKUlmXRX1LL/F9Ysd52tt5ZnVdAovVugimA+o
+         rEfg==
+X-Gm-Message-State: AOJu0YyxaXZpMphvJBCIt9wRJw0oKP4hzq852z7QD/SARrNjD9bb1cJH
+        pInF2mQJCMlvxCk3L47NSFf8V/yeUDgLa9CVLtcqbREn3rqV
+X-Google-Smtp-Source: AGHT+IHwt0gjkRKpc97W+cfpcU7E3G/whLAz1Nq6YNHExHH4HSBlb2RVSmxU1pev+NrhTqcYtuniymiIAXbyb1Q2yGQcFbNObXPb
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a17:902:ec92:b0:1b9:e8e5:b0a4 with SMTP id
+ x18-20020a170902ec9200b001b9e8e5b0a4mr2156836plg.8.1692291473831; Thu, 17 Aug
+ 2023 09:57:53 -0700 (PDT)
+Date:   Thu, 17 Aug 2023 09:57:53 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000027870106032150f5@google.com>
+Subject: [syzbot] [media?] [usb?] UBSAN: shift-out-of-bounds in set_flicker
+From:   syzbot <syzbot+e27f3dbdab04e43b9f73@syzkaller.appspotmail.com>
+To:     hverkuil@xs4all.nl, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        mchehab@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The current approach to handling DP on bridge-enabled platforms requires
-a chain of DP bridges up to the USB-C connector. Register a last DRM
-bridge for such chain.
+Hello,
 
-Acked-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+syzbot found the following issue on:
+
+HEAD commit:    55c3e571d2a0 USB: gadget: f_mass_storage: Fix unused varia..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=13eead53a80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f7789f2bd4d1e7af
+dashboard link: https://syzkaller.appspot.com/bug?extid=e27f3dbdab04e43b9f73
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15dfaeada80000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/5ac7d16ee63e/disk-55c3e571.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/ea99a7a9832f/vmlinux-55c3e571.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/6848258d554d/bzImage-55c3e571.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e27f3dbdab04e43b9f73@syzkaller.appspotmail.com
+
+gspca_cpia1: usb_control_msg 03, error -32
+gspca_cpia1: usb_control_msg a1, error -32
+gspca_cpia1: usb_control_msg a1, error -32
+gspca_cpia1: usb_control_msg a1, error -32
+gspca_cpia1: usb_control_msg 05, error -71
+gspca_cpia1: usb_control_msg 03, error -71
+================================================================================
+UBSAN: shift-out-of-bounds in drivers/media/usb/gspca/cpia1.c:1031:27
+shift exponent 245 is too large for 32-bit type 'int'
+CPU: 1 PID: 25 Comm: kworker/1:1 Not tainted 6.5.0-rc4-syzkaller-00118-g55c3e571d2a0 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/26/2023
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x125/0x1b0 lib/dump_stack.c:106
+ ubsan_epilogue lib/ubsan.c:217 [inline]
+ __ubsan_handle_shift_out_of_bounds+0x27a/0x600 lib/ubsan.c:387
+ set_flicker.cold+0x1b/0x20 drivers/media/usb/gspca/cpia1.c:1031
+ sd_s_ctrl+0x2c6/0xbf0 drivers/media/usb/gspca/cpia1.c:1782
+ __v4l2_ctrl_handler_setup+0x511/0x710 drivers/media/v4l2-core/v4l2-ctrls-core.c:2481
+ v4l2_ctrl_handler_setup drivers/media/v4l2-core/v4l2-ctrls-core.c:2498 [inline]
+ v4l2_ctrl_handler_setup+0x50/0xa0 drivers/media/v4l2-core/v4l2-ctrls-core.c:2490
+ gspca_set_default_mode drivers/media/usb/gspca/gspca.c:908 [inline]
+ gspca_dev_probe2+0xdd6/0x1b20 drivers/media/usb/gspca/gspca.c:1541
+ gspca_dev_probe+0x18b/0x270 drivers/media/usb/gspca/gspca.c:1610
+ usb_probe_interface+0x307/0x930 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:579 [inline]
+ really_probe+0x234/0xc90 drivers/base/dd.c:658
+ __driver_probe_device+0x1de/0x4b0 drivers/base/dd.c:798
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:828
+ __device_attach_driver+0x1d4/0x300 drivers/base/dd.c:956
+ bus_for_each_drv+0x157/0x1d0 drivers/base/bus.c:457
+ __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1028
+ bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
+ device_add+0x11f1/0x1b40 drivers/base/core.c:3625
+ usb_set_configuration+0x10cb/0x1c40 drivers/usb/core/message.c:2207
+ usb_generic_driver_probe+0xca/0x130 drivers/usb/core/generic.c:238
+ usb_probe_device+0xda/0x2c0 drivers/usb/core/driver.c:293
+ call_driver_probe drivers/base/dd.c:579 [inline]
+ really_probe+0x234/0xc90 drivers/base/dd.c:658
+ __driver_probe_device+0x1de/0x4b0 drivers/base/dd.c:798
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:828
+ __device_attach_driver+0x1d4/0x300 drivers/base/dd.c:956
+ bus_for_each_drv+0x157/0x1d0 drivers/base/bus.c:457
+ __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1028
+ bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
+ device_add+0x11f1/0x1b40 drivers/base/core.c:3625
+ usb_new_device+0xd80/0x1960 drivers/usb/core/hub.c:2589
+ hub_port_connect drivers/usb/core/hub.c:5440 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5580 [inline]
+ port_event drivers/usb/core/hub.c:5740 [inline]
+ hub_event+0x2e62/0x4f30 drivers/usb/core/hub.c:5822
+ process_one_work+0xaa2/0x16f0 kernel/workqueue.c:2597
+ process_scheduled_works kernel/workqueue.c:2664 [inline]
+ worker_thread+0x896/0x1110 kernel/workqueue.c:2750
+ kthread+0x33a/0x430 kernel/kthread.c:389
+ ret_from_fork+0x2c/0x70 arch/x86/kernel/process.c:145
+ ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:304
+ </TASK>
+================================================================================
+
+
 ---
- drivers/usb/typec/tcpm/Kconfig                |  1 +
- drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c | 37 +++++++++++++++++++
- 2 files changed, 38 insertions(+)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec/tcpm/Kconfig
-index 5d393f520fc2..0b2993fef564 100644
---- a/drivers/usb/typec/tcpm/Kconfig
-+++ b/drivers/usb/typec/tcpm/Kconfig
-@@ -79,6 +79,7 @@ config TYPEC_WCOVE
- config TYPEC_QCOM_PMIC
- 	tristate "Qualcomm PMIC USB Type-C Port Controller Manager driver"
- 	depends on ARCH_QCOM || COMPILE_TEST
-+	depends on DRM || DRM=n
- 	help
- 	  A Type-C port and Power Delivery driver which aggregates two
- 	  discrete pieces of silicon in the PM8150b PMIC block: the
-diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
-index af44ee4e6e86..581199d37b49 100644
---- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
-+++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
-@@ -17,6 +17,9 @@
- #include <linux/usb/role.h>
- #include <linux/usb/tcpm.h>
- #include <linux/usb/typec_mux.h>
-+
-+#include <drm/drm_bridge.h>
-+
- #include "qcom_pmic_typec_pdphy.h"
- #include "qcom_pmic_typec_port.h"
- 
-@@ -33,6 +36,7 @@ struct pmic_typec {
- 	struct pmic_typec_port	*pmic_typec_port;
- 	bool			vbus_enabled;
- 	struct mutex		lock;		/* VBUS state serialization */
-+	struct drm_bridge	bridge;
- };
- 
- #define tcpc_to_tcpm(_tcpc_) container_of(_tcpc_, struct pmic_typec, tcpc)
-@@ -146,6 +150,35 @@ static int qcom_pmic_typec_init(struct tcpc_dev *tcpc)
- 	return 0;
- }
- 
-+#if IS_ENABLED(CONFIG_DRM)
-+static int qcom_pmic_typec_attach(struct drm_bridge *bridge,
-+				     enum drm_bridge_attach_flags flags)
-+{
-+	return flags & DRM_BRIDGE_ATTACH_NO_CONNECTOR ? 0 : -EINVAL;
-+}
-+
-+static const struct drm_bridge_funcs qcom_pmic_typec_bridge_funcs = {
-+	.attach = qcom_pmic_typec_attach,
-+};
-+
-+static int qcom_pmic_typec_init_drm(struct pmic_typec *tcpm)
-+{
-+	tcpm->bridge.funcs = &qcom_pmic_typec_bridge_funcs;
-+#ifdef CONFIG_OF
-+	tcpm->bridge.of_node = of_get_child_by_name(tcpm->dev->of_node, "connector");
-+#endif
-+	tcpm->bridge.ops = DRM_BRIDGE_OP_HPD;
-+	tcpm->bridge.type = DRM_MODE_CONNECTOR_DisplayPort;
-+
-+	return devm_drm_bridge_add(tcpm->dev, &tcpm->bridge);
-+}
-+#else
-+static int qcom_pmic_typec_init_drm(struct pmic_typec *tcpm)
-+{
-+	return 0;
-+}
-+#endif
-+
- static int qcom_pmic_typec_probe(struct platform_device *pdev)
- {
- 	struct pmic_typec *tcpm;
-@@ -208,6 +241,10 @@ static int qcom_pmic_typec_probe(struct platform_device *pdev)
- 	mutex_init(&tcpm->lock);
- 	platform_set_drvdata(pdev, tcpm);
- 
-+	ret = qcom_pmic_typec_init_drm(tcpm);
-+	if (ret)
-+		return ret;
-+
- 	tcpm->tcpc.fwnode = device_get_named_child_node(tcpm->dev, "connector");
- 	if (!tcpm->tcpc.fwnode)
- 		return -EINVAL;
--- 
-2.39.2
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
