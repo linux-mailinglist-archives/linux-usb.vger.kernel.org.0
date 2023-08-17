@@ -2,33 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D793177F85D
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Aug 2023 16:08:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 596F777F86E
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Aug 2023 16:13:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351694AbjHQOH5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Aug 2023 10:07:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37498 "EHLO
+        id S1351617AbjHQONR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Aug 2023 10:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351674AbjHQOHj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Aug 2023 10:07:39 -0400
+        with ESMTP id S1351733AbjHQOMy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Aug 2023 10:12:54 -0400
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id BECF8E55
-        for <linux-usb@vger.kernel.org>; Thu, 17 Aug 2023 07:07:37 -0700 (PDT)
-Received: (qmail 475392 invoked by uid 1000); 17 Aug 2023 10:07:37 -0400
-Date:   Thu, 17 Aug 2023 10:07:37 -0400
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id E78CC10C8
+        for <linux-usb@vger.kernel.org>; Thu, 17 Aug 2023 07:12:52 -0700 (PDT)
+Received: (qmail 475574 invoked by uid 1000); 17 Aug 2023 10:12:52 -0400
+Date:   Thu, 17 Aug 2023 10:12:52 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     mathias.nyman@intel.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] xhci: Disable connect, disconnect and over-current
- wakeup on system suspend
-Message-ID: <cab8a29b-816c-41c7-8d2a-418f787e406e@rowland.harvard.edu>
-References: <20230817093305.212821-1-kai.heng.feng@canonical.com>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     syzbot <syzbot+d6b0b0ea0781c14b2ecf@syzkaller.appspotmail.com>,
+        arnd@arndb.de, christian.brauner@ubuntu.com,
+        gregkh@linuxfoundation.org, hdanton@sina.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        mpe@ellerman.id.au, oleg@redhat.com,
+        syzkaller-bugs@googlegroups.com, web@syzkaller.appspotmail.com
+Subject: Re: [syzbot] [usb?] KASAN: slab-use-after-free Write in
+ usb_anchor_suspend_wakeups
+Message-ID: <6c58e18b-1a66-4853-af33-17bc6f9f7ebd@rowland.harvard.edu>
+References: <0000000000007c27e105faa4aa99@google.com>
+ <00000000000014678c0602b6c643@google.com>
+ <1134d446-3189-4f2d-81b4-10142e751320@rowland.harvard.edu>
+ <5919c39c-1ee4-262b-4ba1-f0e58088611d@suse.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230817093305.212821-1-kai.heng.feng@canonical.com>
+In-Reply-To: <5919c39c-1ee4-262b-4ba1-f0e58088611d@suse.com>
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,
         SPF_PASS autolearn=no autolearn_force=no version=3.4.6
@@ -38,68 +44,31 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 17, 2023 at 05:33:05PM +0800, Kai-Heng Feng wrote:
-> HP ProOne 440 G10 AIO sometimes cannot suspend as xHCI wakes up the
-> system:
-> [  445.814574] hub 2-0:1.0: hub_suspend
-> [  445.814652] usb usb2: bus suspend, wakeup 0
-> [  445.824629] xhci_hcd 0000:00:14.0: Port change event, 1-11, id 11, portsc: 0x202a0
-
-What is the meaning of the 0x202a0 bits?  What caused this wakeup?
-
-> [  445.824639] xhci_hcd 0000:00:14.0: resume root hub
-> [  445.824651] xhci_hcd 0000:00:14.0: handle_port_status: starting usb1 port polling.
-> [  445.844039] xhci_hcd 0000:00:14.0: PM: pci_pm_suspend(): hcd_pci_suspend+0x0/0x20 returns -16
-> [  445.844058] xhci_hcd 0000:00:14.0: PM: dpm_run_callback(): pci_pm_suspend+0x0/0x1c0 returns -16
-> [  445.844072] xhci_hcd 0000:00:14.0: PM: failed to suspend async: error -16
-> [  446.276101] PM: Some devices failed to suspend, or early wake event detected
+On Thu, Aug 17, 2023 at 02:16:26PM +0200, Oliver Neukum wrote:
+> On 12.08.23 17:56, Alan Stern wrote:
+> Hi,
+> > The real problem seems to be some sort of race in usbtmc and the core
+> > between URBs being added to an anchor, file I/O being stopped, and URBs
+> > being killed or scuttled when the file is flushed.
 > 
-> The system is designed to let display and touchpanel share the same
-> power source, so when the display becomes off, the USB touchpanel also
-> lost its power and disconnect itself from USB bus. That doesn't play
-> well when most Desktop Environment lock and turnoff the display right
-> before entering system suspend.
+> just to make sure, you think it is failing here:
+> 
+> usb_anchor_resume_wakeups(anchor);
 
-I don't see why that should cause any trouble.  The display gets locked 
-and turned off, the touchpanel disconnects from the USB bus, and then 
-the system goes into suspend.  Why would there be a wakeup signal at 
-this point?
+That's what the syzbot console log output shows in the stack dump.
 
-> So for system-wide suspend, also disable connect, disconnect and
-> over-current wakeup to prevent spurious wakeup.
+> because we cannot guarantee that the anchor pointer
+> is still valid,
 
-Whether to disable these things is part of the userspace policy.  The 
-kernel should not make the decision; the user does by enabling or 
-disabling wakeups.
+That's my conclusion.  There don't seem to be any other candidates for a 
+bad pointer.
+
+>  unless we refcount anchors, which would
+> make embedding them impossible?
+
+Whether the validity is ensured by refcounting or by some other 
+mechanism is up to the implementor (i.e., you).  I'm merely trying to 
+restate and explain the syzbot results in terms understandable by 
+humans.
 
 Alan Stern
-
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> ---
->  drivers/usb/host/xhci.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index fae994f679d4..dc499100efa6 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -16,6 +16,7 @@
->  #include <linux/module.h>
->  #include <linux/moduleparam.h>
->  #include <linux/slab.h>
-> +#include <linux/suspend.h>
->  #include <linux/dmi.h>
->  #include <linux/dma-mapping.h>
->  
-> @@ -789,7 +790,7 @@ static void xhci_disable_hub_port_wake(struct xhci_hcd *xhci,
->  		t2 = t1;
->  
->  		/* clear wake bits if do_wake is not set */
-> -		if (!do_wakeup)
-> +		if (!do_wakeup || pm_suspend_target_state != PM_SUSPEND_ON)
->  			t2 &= ~PORT_WAKE_BITS;
->  
->  		/* Don't touch csc bit if connected or connect change is set */
-> -- 
-> 2.34.1
-> 
