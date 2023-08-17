@@ -2,77 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EE1D77F9CF
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Aug 2023 16:56:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4E6777FA5E
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Aug 2023 17:09:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351900AbjHQOz5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Aug 2023 10:55:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37766 "EHLO
+        id S1352846AbjHQPJU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Aug 2023 11:09:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352480AbjHQOzY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Aug 2023 10:55:24 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646EB173F
-        for <linux-usb@vger.kernel.org>; Thu, 17 Aug 2023 07:55:22 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2ba0f27a4c2so117400781fa.2
-        for <linux-usb@vger.kernel.org>; Thu, 17 Aug 2023 07:55:22 -0700 (PDT)
+        with ESMTP id S1352913AbjHQPJP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Aug 2023 11:09:15 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C737F271B
+        for <linux-usb@vger.kernel.org>; Thu, 17 Aug 2023 08:08:39 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b9a828c920so119045121fa.1
+        for <linux-usb@vger.kernel.org>; Thu, 17 Aug 2023 08:08:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692284120; x=1692888920;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OlgCEaIC8FZi1kBAJHvSLicuPs6BHTt85hVqeuEwwkM=;
-        b=HPHfVlyekf+0D88oUZ3pTtVQy+KKt3z9sgqsJBW7nlp6EiPACGm8Elo9MtycHFSjmT
-         uCr/UKShqTSfSAR0qM3OwHut38QHGuvJCtreAcA4GrHj+z120fajBFx2XjiecegwY4CV
-         hkBjl6NNLCqN2wom8sp/IBkwKCrx3zHawnxjtHU8nYmUq8uNW57F5J+y5aRInKBiS5fM
-         DjGHiihI+RtlPOXIZO3Ux9uCF1q0OkkTlsjOWKZdXTZ5S1ScWSybeDljFsijAwQYEk3Y
-         GObXFfcoktzMjlsxGkQ8px0E/dCXGorlUJHJl0eEYhTmSDUkpWHH7SE2uQKHBx+4rJLF
-         UYTw==
+        d=linaro.org; s=google; t=1692284906; x=1692889706;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZQOKLFSRw5whge5pt965xQ0um1rH9VrSs87wuRePlok=;
+        b=xGXUTZ5Q9FjqCp8/YaNNnsp21FodXU1//vTz0vURJ3RfEpWlaLoB282d1n5XO+qI+M
+         yhm798wwKu4FLRmFw+k5e7xhQWReXOKietVaGdLqovu0iKlqwkYYl/zn4edgIY/G70OR
+         0F8DWIbVGR7XJW004YSIyPShD7MvoE0eFQs1L7tz8+kxnluQ0lKrmZfx/1fG+0QmKhBH
+         zw+pYW69FuCMmQcJXLRt2e4QfjxzLOUEaaN/YUggnO4eiXuzpgo8kVbBGgQ/LCYe0CEs
+         kDSO7Xbd8aEl1UMNjp9A7Idb+7horaUT1NSdjYrvFtUcogSIRP4IgQ26NRzVhhE9gC3h
+         Klaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692284120; x=1692888920;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OlgCEaIC8FZi1kBAJHvSLicuPs6BHTt85hVqeuEwwkM=;
-        b=E7qHuYlwCVDzaA/ZuznOvZmvOB7pZuNU2gZ/EEjk7LYnNKTOfetMhdd3vOP7A1hSU8
-         qJ89hd2yg5o7Xd/frdaRR3QhZIitBKB5lH+M+jDnxBaD3KkyoFMO5CfnHl+0uPMRV8+I
-         ERZew9IBuxjRXUsOG++GaAv/KNKsyo4HC9zLEtrfp65LXcLjs9oTxQqSjbWZLPV5Vdeq
-         iBojLMK6TNpaJml+c8Uv3n0LL0ukwnURDxW7WqNuoP0eOzfxJ7Bcetv4mTBjPTcueRnG
-         OYuKE0twB8plT0+KHZsdBIuBTO22K0p8BboVYxVTce8GYCvUojdjTxegax36HLTy6049
-         V/MQ==
-X-Gm-Message-State: AOJu0YwDhGv6uEiNPpyA6uto2LTtAvo7LqO6dA8qtLg+wIwUGjc0WPsE
-        z3cj0vwrkgZnYeij0ybd+i89GA==
-X-Google-Smtp-Source: AGHT+IE3JacvyHwBlM2Ow/Mpnexmsek0Fe8sWqf7opMsp7TjUuPZ1QkhzpGNrTby2ebf28Mr3v2cJA==
-X-Received: by 2002:a2e:320c:0:b0:2b9:f0c0:5985 with SMTP id y12-20020a2e320c000000b002b9f0c05985mr3841862ljy.53.1692284120747;
-        Thu, 17 Aug 2023 07:55:20 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1692284906; x=1692889706;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZQOKLFSRw5whge5pt965xQ0um1rH9VrSs87wuRePlok=;
+        b=SUhExW2kZcgOY/Rl2NanwlnYIrntrMR1zsULZ8YwcOdPZQHt5BllhvT9aH5m0cREBq
+         QKmaiH8WizZ+RUOpkg86lhR6zRgbqRU6s4Fsa0hkknziBZDFZwNfjhBJhe8dPeo4KB+A
+         aNIouxAO9L/7wflZq8fa6bhxFgSmhFikK4PpieME6vj4glrjQ6y4YB8/JhcF4+cCPLT2
+         lBHhAK+nf4aFOW7L1i66B+dFBUnoOAX0OTGMucOKPHa5z/JcLCtbFbiu1PzIgucwbS2Z
+         E5ZqoKXuGlQRTjzEu+kITS+NsAOfoohfaIRvN3wAV39fyBCY7OIJ8ICgvszelTQBHpiN
+         oAag==
+X-Gm-Message-State: AOJu0YyHfhBH9nUiEDhOODddaT4rbg5QJ7v2JueIRRD9xBXZTlN7SpJX
+        /Tc3Av2MJ4vUjL4RwHMvFRTTYA==
+X-Google-Smtp-Source: AGHT+IGNqy/GmFcXkzErjwbjqgy+8GRT4/DtzlNV8TFPf8yaPghQ87/shTD6zsYd7YczRUdkwQ2rSg==
+X-Received: by 2002:a05:651c:d6:b0:2b6:e958:5700 with SMTP id 22-20020a05651c00d600b002b6e9585700mr3949207ljr.4.1692284906396;
+        Thu, 17 Aug 2023 08:08:26 -0700 (PDT)
 Received: from umbar.unikie.fi ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id z13-20020a2e350d000000b002b9e5fe86dasm4082728ljz.81.2023.08.17.07.55.19
+        by smtp.gmail.com with ESMTPSA id u8-20020a2e9b08000000b002b6ef2fca66sm4111413lji.41.2023.08.17.08.08.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Aug 2023 07:55:20 -0700 (PDT)
+        Thu, 17 Aug 2023 08:08:25 -0700 (PDT)
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
+To:     "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
-        freedreno@lists.freedesktop.org
-Subject: [PATCH v4 3/3] usb: typec: nb7vpq904m: switch to DRM_AUX_BRIDGE
-Date:   Thu, 17 Aug 2023 17:55:16 +0300
-Message-Id: <20230817145516.5924-4-dmitry.baryshkov@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v5 0/2] usb: typec: qcom-pmic-typec: enable DP support
+Date:   Thu, 17 Aug 2023 18:08:22 +0300
+Message-Id: <20230817150824.14371-1-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230817145516.5924-1-dmitry.baryshkov@linaro.org>
-References: <20230817145516.5924-1-dmitry.baryshkov@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -85,106 +74,45 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Switch to using the new DRM_AUX_BRIDGE helper to create the
-transparent DRM bridge device instead of handcoding corresponding
-functionality.
+To enable DisplayPort on the platforms supported by qcom-pmic-typec
+driver, we need to register a corresponding drm_bridge for this device
+and also be able to send the OOB hotplug event to the corresponding DRM
+connector. All this is implemented by [1], but there is no direct
+dependency on that patchset.
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- drivers/usb/typec/mux/Kconfig      |  2 +-
- drivers/usb/typec/mux/nb7vpq904m.c | 44 ++----------------------------
- 2 files changed, 3 insertions(+), 43 deletions(-)
+[1] https://patchwork.freedesktop.org/series/120393/
 
-diff --git a/drivers/usb/typec/mux/Kconfig b/drivers/usb/typec/mux/Kconfig
-index 65da61150ba7..e3fee531548f 100644
---- a/drivers/usb/typec/mux/Kconfig
-+++ b/drivers/usb/typec/mux/Kconfig
-@@ -40,7 +40,7 @@ config TYPEC_MUX_NB7VPQ904M
- 	tristate "On Semiconductor NB7VPQ904M Type-C redriver driver"
- 	depends on I2C
- 	depends on DRM || DRM=n
--	select DRM_PANEL_BRIDGE if DRM
-+	select DRM_AUX_BRIDGE if DRM && OF
- 	select REGMAP_I2C
- 	help
- 	  Say Y or M if your system has a On Semiconductor NB7VPQ904M Type-C
-diff --git a/drivers/usb/typec/mux/nb7vpq904m.c b/drivers/usb/typec/mux/nb7vpq904m.c
-index cda206cf0c38..b17826713753 100644
---- a/drivers/usb/typec/mux/nb7vpq904m.c
-+++ b/drivers/usb/typec/mux/nb7vpq904m.c
-@@ -11,7 +11,7 @@
- #include <linux/regmap.h>
- #include <linux/bitfield.h>
- #include <linux/of_graph.h>
--#include <drm/drm_bridge.h>
-+#include <drm/bridge/aux-bridge.h>
- #include <linux/usb/typec_dp.h>
- #include <linux/usb/typec_mux.h>
- #include <linux/usb/typec_retimer.h>
-@@ -70,8 +70,6 @@ struct nb7vpq904m {
- 	bool swap_data_lanes;
- 	struct typec_switch *typec_switch;
- 
--	struct drm_bridge bridge;
--
- 	struct mutex lock; /* protect non-concurrent retimer & switch */
- 
- 	enum typec_orientation orientation;
-@@ -297,44 +295,6 @@ static int nb7vpq904m_retimer_set(struct typec_retimer *retimer, struct typec_re
- 	return ret;
- }
- 
--#if IS_ENABLED(CONFIG_OF) && IS_ENABLED(CONFIG_DRM_PANEL_BRIDGE)
--static int nb7vpq904m_bridge_attach(struct drm_bridge *bridge,
--				    enum drm_bridge_attach_flags flags)
--{
--	struct nb7vpq904m *nb7 = container_of(bridge, struct nb7vpq904m, bridge);
--	struct drm_bridge *next_bridge;
--
--	if (!(flags & DRM_BRIDGE_ATTACH_NO_CONNECTOR))
--		return -EINVAL;
--
--	next_bridge = devm_drm_of_get_bridge(&nb7->client->dev, nb7->client->dev.of_node, 0, 0);
--	if (IS_ERR(next_bridge)) {
--		dev_err(&nb7->client->dev, "failed to acquire drm_bridge: %pe\n", next_bridge);
--		return PTR_ERR(next_bridge);
--	}
--
--	return drm_bridge_attach(bridge->encoder, next_bridge, bridge,
--				 DRM_BRIDGE_ATTACH_NO_CONNECTOR);
--}
--
--static const struct drm_bridge_funcs nb7vpq904m_bridge_funcs = {
--	.attach	= nb7vpq904m_bridge_attach,
--};
--
--static int nb7vpq904m_register_bridge(struct nb7vpq904m *nb7)
--{
--	nb7->bridge.funcs = &nb7vpq904m_bridge_funcs;
--	nb7->bridge.of_node = nb7->client->dev.of_node;
--
--	return devm_drm_bridge_add(&nb7->client->dev, &nb7->bridge);
--}
--#else
--static int nb7vpq904m_register_bridge(struct nb7vpq904m *nb7)
--{
--	return 0;
--}
--#endif
--
- static const struct regmap_config nb7_regmap = {
- 	.max_register = 0x1f,
- 	.reg_bits = 8,
-@@ -461,7 +421,7 @@ static int nb7vpq904m_probe(struct i2c_client *client)
- 
- 	gpiod_set_value(nb7->enable_gpio, 1);
- 
--	ret = nb7vpq904m_register_bridge(nb7);
-+	ret = drm_aux_bridge_register(dev);
- 	if (ret)
- 		goto err_disable_gpio;
- 
+Changes since v4:
+- Put of_node field access under CONFIG_OF (LKP)
+- Changed ifdef CONFIG_DRM to IS_ENABLED(CONFIG_DRM) (Guenter)
+
+Changes since v3:
+- Fixed changelog for v1 (Guenter)
+- After discussion on IRC, change connector type to
+  DRM_MODE_CONNECTOR_DisplayPort to follow i915 and amdgpu example.
+  The fact that this is a DP wrapped in the USB connector will be
+  handled separately via the subconnector property (Simon Ser, Janne
+  Grunau)
+
+Changes since v2:
+- Reworded commit message for the first patch to explicitly mention that
+  the "displayport" OF property was rejected (Bjorn)
+- Removed several #ifdefs from the qcom-pmic-typec patch (Bryan, Konrad,
+  Greg K-H)
+
+Changes since v1:
+- Properly handle CONFIG_DRM dependency. Disallow building
+  qcom-pmic-typec into the kernel if DRM is built as module (Bryan).
+
+Dmitry Baryshkov (2):
+  usb: typec: altmodes/displayport: add support for embedded DP cases
+  usb: typec: qcom-pmic-typec: register drm_bridge
+
+ drivers/usb/typec/altmodes/displayport.c      |  5 ++-
+ drivers/usb/typec/tcpm/Kconfig                |  1 +
+ drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c | 37 +++++++++++++++++++
+ 3 files changed, 42 insertions(+), 1 deletion(-)
+
 -- 
 2.39.2
 
