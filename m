@@ -2,161 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F256177FC69
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Aug 2023 18:58:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A8B87801EF
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Aug 2023 01:50:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353780AbjHQQ6K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Aug 2023 12:58:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33250 "EHLO
+        id S1356297AbjHQXuY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Aug 2023 19:50:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353771AbjHQQ54 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Aug 2023 12:57:56 -0400
-Received: from mail-pl1-f207.google.com (mail-pl1-f207.google.com [209.85.214.207])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B5A2D5D
-        for <linux-usb@vger.kernel.org>; Thu, 17 Aug 2023 09:57:54 -0700 (PDT)
-Received: by mail-pl1-f207.google.com with SMTP id d9443c01a7336-1bbb97d27d6so168295ad.1
-        for <linux-usb@vger.kernel.org>; Thu, 17 Aug 2023 09:57:54 -0700 (PDT)
+        with ESMTP id S1356330AbjHQXtz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Aug 2023 19:49:55 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 578FF3A86
+        for <linux-usb@vger.kernel.org>; Thu, 17 Aug 2023 16:49:37 -0700 (PDT)
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id C817F3FA9C
+        for <linux-usb@vger.kernel.org>; Thu, 17 Aug 2023 23:49:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1692316175;
+        bh=6BbeXo8UTwYrifJVaAXx6UEqDSfopA4U70/DY2zh8Ok=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=K3G0fOU+beAY1QsIlZASgv02pX/TG0WdYD0oHgeR6LfBqSfg1BYTmmSZ/aImeNGBO
+         4is5ub9EAduhyd0u86LAv4jeou6r7tlqAuoVBz8Fxq/qswvnSJgMQ/suPDoxHwfhHD
+         Tz0NVx5gQ+DhImezNiNXvipyUh53vXlJo8f+csbp6cPXI1kv3acfLyEUBYo23CE0ax
+         M5ZOR47ToW+86hLN33Zme2F7fIkveC3CEtrCrPHbaf+6HNwshgIg9nFNfFglnUCt6+
+         zRdAD1eSdsmuZcY4IxYXQJKK+KOFcAF54VU767Fon2GP24HzKIOeyXkUANUSdfAgrw
+         ueWrYMQaKFvBQ==
+Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-268099fd4f5so443400a91.1
+        for <linux-usb@vger.kernel.org>; Thu, 17 Aug 2023 16:49:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692291474; x=1692896274;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kg0QE7WFC8jIy1ZqIe4bmipuDdvn/U9mghxu2TvRjdY=;
-        b=kekzHMdAir55rPABvVdulX/ZzkaGMiD9qMs5bATlelqihTE2pWIBtDqF43RLJlng0W
-         gvmkJWSITiu6p26CQH9DJYyr3K9xHv7Ppd1T1a+32H5gIgqTc1hSFWlFu9d7M3jWY5cz
-         W/NefW1a4+IZe7H6uhM4H5hJIYu6qeZPqcLoV//djx+3aIVB4a/r2okapTwvIe1DhDJM
-         G2ngUdFVt3vRd3msoIab2aadYMG8JzgRYpjpsbmgEFSludqMysAsyJ6LuqQra+y7JTd9
-         8r2tN4XjidbVf2YlZein82GFhCYBI2BNKUlmXRX1LL/F9Ysd52tt5ZnVdAovVugimA+o
-         rEfg==
-X-Gm-Message-State: AOJu0YyxaXZpMphvJBCIt9wRJw0oKP4hzq852z7QD/SARrNjD9bb1cJH
-        pInF2mQJCMlvxCk3L47NSFf8V/yeUDgLa9CVLtcqbREn3rqV
-X-Google-Smtp-Source: AGHT+IHwt0gjkRKpc97W+cfpcU7E3G/whLAz1Nq6YNHExHH4HSBlb2RVSmxU1pev+NrhTqcYtuniymiIAXbyb1Q2yGQcFbNObXPb
+        d=1e100.net; s=20221208; t=1692316174; x=1692920974;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6BbeXo8UTwYrifJVaAXx6UEqDSfopA4U70/DY2zh8Ok=;
+        b=d7tzu0HM7dm5gicJZL/agiqc5LQXhbyj3IuzmXoMR3quUozFjyyoW3vuluuLfm5w3f
+         RcyGwBE2mS8/0OdCREZhM81enQftkFhva8ZE9Qf7Er47561CO0MkhVqo+Mui5AS7szgy
+         ok7lyq1iFA2tjlZa7g9GbNgmwVWKUjuEPETRh7OIu/6D2xMo8AFApSUgLiQgyN/fIhhC
+         yCK+0eZlsYKTbiFNI6PKzl7mWvg07uQJrEU4iuE3C1MRrq05RpRMFOd4UorRU3EfxTvJ
+         wCn0LU2DubdjXDd7Dh9WelIM3aBxe4OBd0mttYTvU0OLv6mmzRDQev/OFJXZwApv5Qzy
+         Xh3g==
+X-Gm-Message-State: AOJu0YzBmxGWZR3Bkd7zd9446GEBBRRcvaJ1ZO8LooKZHT3p/WYBnG/O
+        gc21sYugiaBr8KkURwuqI8bMwtJaYOcNC544uvc4v8Vn800+MJiNPnlhmtMjdr1+Stx/inxDavh
+        D31RQYim6gME+AqIG4L9eV5FeO2TV0/GvcW9cuVkQGAOlEbCh9QEkyRUxIMKooAQM
+X-Received: by 2002:a17:90b:3715:b0:269:2195:c322 with SMTP id mg21-20020a17090b371500b002692195c322mr910296pjb.41.1692316174484;
+        Thu, 17 Aug 2023 16:49:34 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGARXfDGrVgmDDreuvzjSlxCUtzMIVjFnjG2nKpHFQ3+dVGwso6ygAunD4DVB1W7Fwz+vcbPSZZj7jTM7XyqjY=
+X-Received: by 2002:a17:90b:3715:b0:269:2195:c322 with SMTP id
+ mg21-20020a17090b371500b002692195c322mr910289pjb.41.1692316174170; Thu, 17
+ Aug 2023 16:49:34 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a17:902:ec92:b0:1b9:e8e5:b0a4 with SMTP id
- x18-20020a170902ec9200b001b9e8e5b0a4mr2156836plg.8.1692291473831; Thu, 17 Aug
- 2023 09:57:53 -0700 (PDT)
-Date:   Thu, 17 Aug 2023 09:57:53 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000027870106032150f5@google.com>
-Subject: [syzbot] [media?] [usb?] UBSAN: shift-out-of-bounds in set_flicker
-From:   syzbot <syzbot+e27f3dbdab04e43b9f73@syzkaller.appspotmail.com>
-To:     hverkuil@xs4all.nl, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
-        mchehab@kernel.org, syzkaller-bugs@googlegroups.com
+References: <20230817093305.212821-1-kai.heng.feng@canonical.com>
+ <cc271e17-6204-b610-b40e-5c882ad6be36@suse.com> <ef189a18-98ba-52c9-13a3-ce8531fc18cf@linux.intel.com>
+ <CAAd53p67m3o1nz3cKjiSJWDMWnsoB-4=pFWwBhpaoZ+ns22-tw@mail.gmail.com> <cc190b72-03cc-400b-9dc4-abef21562eff@rowland.harvard.edu>
+In-Reply-To: <cc190b72-03cc-400b-9dc4-abef21562eff@rowland.harvard.edu>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Fri, 18 Aug 2023 07:49:20 +0800
+Message-ID: <CAAd53p4oSHqqaMPdh5MuBXMD2bLhGqqZBGbJWPWiij3wU=DX4Q@mail.gmail.com>
+Subject: Re: [PATCH] xhci: Disable connect, disconnect and over-current wakeup
+ on system suspend
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Oliver Neukum <oneukum@suse.com>, mathias.nyman@intel.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Thu, Aug 17, 2023 at 10:03=E2=80=AFPM Alan Stern <stern@rowland.harvard.=
+edu> wrote:
+>
+> On Thu, Aug 17, 2023 at 09:13:55PM +0800, Kai-Heng Feng wrote:
+> > On Thu, Aug 17, 2023 at 8:52=E2=80=AFPM Mathias Nyman
+> > <mathias.nyman@linux.intel.com> wrote:
+> > >
+> > > On 17.8.2023 14.18, Oliver Neukum wrote:
+> > > > On 17.08.23 11:33, Kai-Heng Feng wrote:
+> > > >
+> > > > Hi,
+> > > >
+> > > >> So for system-wide suspend, also disable connect, disconnect and
+> > > >> over-current wakeup to prevent spurious wakeup.
+> > > >
+> > > > isn't this breaking the ability to effectively use your root hub
+> > > > as a source of system wakeups? That is, even if you want the
+> > > > system to wake up if somebody attaches a new device, it no longer w=
+orks?
+> > > >
+> > >
+> > > I got the same concern about this.
+> >
+> > Per my test, it doesn't work with or without this change. This applies
+> > to disconnection too, disconnecting USB devices doesn't wake the
+> > system up.
+> > Furthermore, if the newly attached device is a USB keyboard, pressing
+> > it doesn't wake the system up either. Probably because remote wakeup
+> > isn't configured when the system is suspended.
+>
+> If remote wakeup isn't enabled then the do_wakeup variable will be 0,
+> so your patch wouldn't make any difference.  The question is what
+> happens when remote wakeup _is_ enabled.
 
-syzbot found the following issue on:
+Nothing happens either per my testing.
 
-HEAD commit:    55c3e571d2a0 USB: gadget: f_mass_storage: Fix unused varia..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=13eead53a80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f7789f2bd4d1e7af
-dashboard link: https://syzkaller.appspot.com/bug?extid=e27f3dbdab04e43b9f73
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15dfaeada80000
+For USB keyboard, the remote wakeup is enabled, unplugging it when
+suspend is suspended doesn't wake the system up, despite of
+PORT_WKDISC_E being set.
+Plugging it back doesn't wake the system up either, despite of PORT_WKCONN_=
+E.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/5ac7d16ee63e/disk-55c3e571.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/ea99a7a9832f/vmlinux-55c3e571.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/6848258d554d/bzImage-55c3e571.xz
+>
+> Did you check the settings in the controller's and root hub's
+> power/wakeup sysfs files?
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+e27f3dbdab04e43b9f73@syzkaller.appspotmail.com
+Yes. It's all correct as keyboard press can wake the system up.
 
-gspca_cpia1: usb_control_msg 03, error -32
-gspca_cpia1: usb_control_msg a1, error -32
-gspca_cpia1: usb_control_msg a1, error -32
-gspca_cpia1: usb_control_msg a1, error -32
-gspca_cpia1: usb_control_msg 05, error -71
-gspca_cpia1: usb_control_msg 03, error -71
-================================================================================
-UBSAN: shift-out-of-bounds in drivers/media/usb/gspca/cpia1.c:1031:27
-shift exponent 245 is too large for 32-bit type 'int'
-CPU: 1 PID: 25 Comm: kworker/1:1 Not tainted 6.5.0-rc4-syzkaller-00118-g55c3e571d2a0 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/26/2023
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x125/0x1b0 lib/dump_stack.c:106
- ubsan_epilogue lib/ubsan.c:217 [inline]
- __ubsan_handle_shift_out_of_bounds+0x27a/0x600 lib/ubsan.c:387
- set_flicker.cold+0x1b/0x20 drivers/media/usb/gspca/cpia1.c:1031
- sd_s_ctrl+0x2c6/0xbf0 drivers/media/usb/gspca/cpia1.c:1782
- __v4l2_ctrl_handler_setup+0x511/0x710 drivers/media/v4l2-core/v4l2-ctrls-core.c:2481
- v4l2_ctrl_handler_setup drivers/media/v4l2-core/v4l2-ctrls-core.c:2498 [inline]
- v4l2_ctrl_handler_setup+0x50/0xa0 drivers/media/v4l2-core/v4l2-ctrls-core.c:2490
- gspca_set_default_mode drivers/media/usb/gspca/gspca.c:908 [inline]
- gspca_dev_probe2+0xdd6/0x1b20 drivers/media/usb/gspca/gspca.c:1541
- gspca_dev_probe+0x18b/0x270 drivers/media/usb/gspca/gspca.c:1610
- usb_probe_interface+0x307/0x930 drivers/usb/core/driver.c:396
- call_driver_probe drivers/base/dd.c:579 [inline]
- really_probe+0x234/0xc90 drivers/base/dd.c:658
- __driver_probe_device+0x1de/0x4b0 drivers/base/dd.c:798
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:828
- __device_attach_driver+0x1d4/0x300 drivers/base/dd.c:956
- bus_for_each_drv+0x157/0x1d0 drivers/base/bus.c:457
- __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1028
- bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
- device_add+0x11f1/0x1b40 drivers/base/core.c:3625
- usb_set_configuration+0x10cb/0x1c40 drivers/usb/core/message.c:2207
- usb_generic_driver_probe+0xca/0x130 drivers/usb/core/generic.c:238
- usb_probe_device+0xda/0x2c0 drivers/usb/core/driver.c:293
- call_driver_probe drivers/base/dd.c:579 [inline]
- really_probe+0x234/0xc90 drivers/base/dd.c:658
- __driver_probe_device+0x1de/0x4b0 drivers/base/dd.c:798
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:828
- __device_attach_driver+0x1d4/0x300 drivers/base/dd.c:956
- bus_for_each_drv+0x157/0x1d0 drivers/base/bus.c:457
- __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1028
- bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
- device_add+0x11f1/0x1b40 drivers/base/core.c:3625
- usb_new_device+0xd80/0x1960 drivers/usb/core/hub.c:2589
- hub_port_connect drivers/usb/core/hub.c:5440 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5580 [inline]
- port_event drivers/usb/core/hub.c:5740 [inline]
- hub_event+0x2e62/0x4f30 drivers/usb/core/hub.c:5822
- process_one_work+0xaa2/0x16f0 kernel/workqueue.c:2597
- process_scheduled_works kernel/workqueue.c:2664 [inline]
- worker_thread+0x896/0x1110 kernel/workqueue.c:2750
- kthread+0x33a/0x430 kernel/kthread.c:389
- ret_from_fork+0x2c/0x70 arch/x86/kernel/process.c:145
- ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:304
- </TASK>
-================================================================================
+Kai-Heng
 
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+>
+> Alan Stern
