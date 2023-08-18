@@ -2,61 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5C83780C60
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Aug 2023 15:18:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAB07780DBC
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Aug 2023 16:13:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377020AbjHRNRi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Aug 2023 09:17:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52198 "EHLO
+        id S1377663AbjHRONE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Aug 2023 10:13:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346972AbjHRNR2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Aug 2023 09:17:28 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 478502723;
-        Fri, 18 Aug 2023 06:17:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692364637; x=1723900637;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=01GUnJdnsfSW3V/fRhcTMyz0P3VHw8bOSYw42JoVXSc=;
-  b=AV7R5v4Iei65yjZNchiu0dTLIsT5igNHbQ44EnCkSaSJ6GU98+rRfU6L
-   5aAjYnchzPUbQYd23PU9vPa/HD5p5LYMuBQ8PUqSiyeCK4SZFPdqG4cRp
-   uepPxxDSN482ftjfkd1zcVsq9q+T8OA2ouKjbPtwcu8jfY/j6wCDsi60N
-   Hex3I9gLRKDbH8e2M5Phm1nnafrR9kP+5zZyyUI5OtPJFimVuQf8xm8Zs
-   jt7AzR5SlC3AVXsdxs8KaaBE01Z93IxpUEDMcmuf+N5q12GMVn8aBLMtJ
-   vhn4Op2+urZhCo8hfT4mApRCPSkXIad13fjMfwmnswsZbUuRuYRAO0Fpn
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10806"; a="373081511"
-X-IronPort-AV: E=Sophos;i="6.01,183,1684825200"; 
-   d="scan'208";a="373081511"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2023 06:17:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
-   d="scan'208";a="878686416"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga001.fm.intel.com with ESMTP; 18 Aug 2023 06:17:18 -0700
-Message-ID: <2c029018-a926-6fda-ed71-937ac74d00b0@linux.intel.com>
-Date:   Fri, 18 Aug 2023 16:18:30 +0300
+        with ESMTP id S1377656AbjHROMn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Aug 2023 10:12:43 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7098A170E
+        for <linux-usb@vger.kernel.org>; Fri, 18 Aug 2023 07:12:41 -0700 (PDT)
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id DD84F3F545
+        for <linux-usb@vger.kernel.org>; Fri, 18 Aug 2023 14:12:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1692367959;
+        bh=s0q3HaxL/YFdL22o+r4tOlZiSRwNRkwNXgdQ3e/hBrs=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=JT11UgNhKLE5uz+Jut+R6U/bHa7H4Gu5aqVbeYqfKh5XqYnI2JGuQNc4AsAq8jTc5
+         oC8NEftwmRUNsTL4WQwJOHvgHL8PbibSCC5qkPYQ9/MxFUXx08+X5WpcKhvoDXQvXU
+         6rPP8DnGSyAqD5AQ5AW0MemO7LQ1G8IpPhGEWkbewLcCBGyXWA8VgNyzlALkpm+ulR
+         IXdb3HYrE6xNg4rQBhpfKKzwqp30Aody6Y2TgTDPWUTG2GcMe/JbdBP/vj5gPFrGY5
+         BEzQnluOQi4D2mhE3L2Zr59rqVZi/4fv7Cs/ARRDjmysfxMmo9/yJcwdKUQkBP5/1M
+         SrwXQR8Vu9u/g==
+Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-2680f0cc480so1149800a91.0
+        for <linux-usb@vger.kernel.org>; Fri, 18 Aug 2023 07:12:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692367958; x=1692972758;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=s0q3HaxL/YFdL22o+r4tOlZiSRwNRkwNXgdQ3e/hBrs=;
+        b=RBALfETSLeRt3KDVz3GB/cR9XRwvwbZPJNaABiChjNMYKVQO/l4wej2A8B2yGwmLzf
+         JIpnNxdT3KrEfNwL4+NhLa3xtKld1/O5TwZkvTzeyo4gQeNjd4B/+QrHrHpObhTtIvSU
+         rpAKrWs7XfOgGSuYruv7cckvhCpw21auUIBzTF4LWPd1/UcnvjCRAwARKXXHlaoAGQRb
+         8qOS8OhZy+jdsbOC/J7OqJct0NVxtxFyYBga+d+gmZVaGrs3ZM1Yo1N7VvTaiFDYLHPp
+         NK1uriQCWRqzQWHzYFhM/9enH+VudpQn5XQNrAIboag/+ZQn96VCn/hapYnrC1iOXeKW
+         dXhA==
+X-Gm-Message-State: AOJu0YzrizybBDaXJWjrL/7KhXfZn8JZTxWN7GED25gdo35N6UBr+9wB
+        b2qW64QzmFBL+cunfKUIaICmw5X5qGupnZUlnfQappNp7HyfjZAr5B3q9iveNB54/MiWAHbH4dG
+        IARnvEm5Dliqs1urku0MSjPfowPGvFba5PKtWq8WE6XvhqISM7lljVQ==
+X-Received: by 2002:a17:90a:c287:b0:26b:2e08:a5b3 with SMTP id f7-20020a17090ac28700b0026b2e08a5b3mr2519373pjt.34.1692367958387;
+        Fri, 18 Aug 2023 07:12:38 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFXhkm9RtOaa/xkyFHsIiSyqcHHZM1TvdVeesK8hEIt3vspHa/4YdzWGXHqKj/HIPC4Y5Cdevbys1wn9TNk92o=
+X-Received: by 2002:a17:90a:c287:b0:26b:2e08:a5b3 with SMTP id
+ f7-20020a17090ac28700b0026b2e08a5b3mr2519335pjt.34.1692367957744; Fri, 18 Aug
+ 2023 07:12:37 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.13.0
-Content-Language: en-US
-To:     Hardik Gajjar <hgajjar@de.adit-jv.com>, gregkh@linuxfoundation.org,
-        mathias.nyman@intel.com, stern@rowland.harvard.edu,
-        yangyingliang@huawei.com
-Cc:     jinpu.wang@ionos.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, erosca@de.adit-jv.com
-References: <20230818092353.124658-1-hgajjar@de.adit-jv.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH] usb: hcd: xhci: Add set command timer delay API
-In-Reply-To: <20230818092353.124658-1-hgajjar@de.adit-jv.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+References: <20230817093305.212821-1-kai.heng.feng@canonical.com>
+ <cab8a29b-816c-41c7-8d2a-418f787e406e@rowland.harvard.edu>
+ <59898e32-f2ea-4df7-947b-3d74835ff9b7@rowland.harvard.edu>
+ <CAAd53p5pxGfS0y260NsMF+m_Ota+d1ZKbtdq4dfM5s+T1z14bw@mail.gmail.com> <b08553d7-017e-477c-b18e-8564fe88646b@rowland.harvard.edu>
+In-Reply-To: <b08553d7-017e-477c-b18e-8564fe88646b@rowland.harvard.edu>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Fri, 18 Aug 2023 22:12:25 +0800
+Message-ID: <CAAd53p5EJG=gUOt48mk=o2QdMjoR-FgQqkt80BQX8f8uph4MVg@mail.gmail.com>
+Subject: Re: [PATCH] xhci: Disable connect, disconnect and over-current wakeup
+ on system suspend
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     mathias.nyman@intel.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,91 +81,88 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 18.8.2023 12.23, Hardik Gajjar wrote:
-> xHCI driver starts the response timer after sending each
-> command to the device. The default value of this timer is
-> 5 seconds (XHCI_CMD_DEFAULT_TIMEOUT = HZ*5). This seems
-> too high in time crtical use case.
-> 
-> This patch provides an API to change the default value of
-> the timer from the vendor USB driver.
-> 
-> The default value will be XHCI_CMD_DEFAULT_TIMEOUT (5 sec)
-> 
-> Use case:
-> According to the Smartphone integration certification
-> requirement in the automotive, the phone connected via USB
-> should complete enumeration and user space handshake
-> within 3 sec.
+On Fri, Aug 18, 2023 at 11:08=E2=80=AFAM Alan Stern <stern@rowland.harvard.=
+edu> wrote:
+>
+> On Fri, Aug 18, 2023 at 08:01:54AM +0800, Kai-Heng Feng wrote:
+> > On Thu, Aug 17, 2023 at 10:22=E2=80=AFPM Alan Stern <stern@rowland.harv=
+ard.edu> wrote:
+> > >
+> > > On Thu, Aug 17, 2023 at 10:07:37AM -0400, Alan Stern wrote:
+> > > > On Thu, Aug 17, 2023 at 05:33:05PM +0800, Kai-Heng Feng wrote:
+> > > > > HP ProOne 440 G10 AIO sometimes cannot suspend as xHCI wakes up t=
+he
+> > > > > system:
+> > > > > [  445.814574] hub 2-0:1.0: hub_suspend
+> > > > > [  445.814652] usb usb2: bus suspend, wakeup 0
+> > > > > [  445.824629] xhci_hcd 0000:00:14.0: Port change event, 1-11, id=
+ 11, portsc: 0x202a0
+> > > >
+> > > > What is the meaning of the 0x202a0 bits?  What caused this wakeup?
+> > >
+> > > And more to the point, given that the previous line says "wakeup 0", =
+why
+> > > should any port change event cause a wakeup?
+> >
+> > I think the controller and roothub have to deal with the interrupt
+> > about disconnecting regardless of the remote wakeup setting.
+>
+> This seems to contradict what you wrote in an earlier email:
 
-The above incorrectly makes it sound as if the command timeout
-timer causes the delay.
+Nothing is contradicting, what I mentioned is the wakeup of USB
+touchpanel, not the controller or root hub.
 
-> 
-> Reducing the response waiting time by setting the smaller
-> command timer delay helps to speed up overall re-enumeration
-> process of the USB device in case of device is not responding
-> properly in first enumeration iteration.
+>
+> > > If remote wakeup isn't enabled then the do_wakeup variable will be 0,
+> > > so your patch wouldn't make any difference.  The question is what
+> > > happens when remote wakeup _is_ enabled.
+> >
+> > Nothing happens either per my testing.
+> >
+> > For USB keyboard, the remote wakeup is enabled, unplugging it when
+> > suspend is suspended doesn't wake the system up, despite of PORT_WKDISC=
+_E being set.
+> > Plugging it back doesn't wake the system up either, despite of PORT_WKC=
+ONN_E.
+>
+> You appear to be saying that when wakeup is disabled, unplugging a
+> device will wake up the system -- but when wakeup is enabled, unplugging
+> a device will not wake up the system!
 
-So is this a case where addressing a usb device behind xHC always
-fail on the first attempt, i.e. address device command in xhci
-never completes. Solution proposed here is to fail faster and
-retry?
+No, what I was saying is that when PORT_WKCONN_E and PORT_WKDISC_E are
+set, plugging/unplugging USB doesn't wake up the system from suspended
+state.
+What it really does for this case is to hinder the suspending process.
 
-Is the rootcause known why first enumeration fails?
+>
+> Is that really what you meant?  It doesn't make sense.  Probably means
+> there's a bug in the HCD.
+>
+> The point I'm trying to get at is that if wakeups are disabled for both
+> the host controller and the root hub then _nothing_ should generate an
+> interrupt or wakeup request.  Not pressing a key, not unplugging a
+> device... nothing.  But if wakeup _is_ enabled for both the controller
+> and the root hub, then any of those actions should generate an interrupt
+> and wake up the system.
 
-Does setting old_scheme_first module parameter help?
+Like above, the wakeup I mentioned is on the USB touchpanel itself,
+not on the controller and roothub.
+There's no IRQ generated when controller's wakeup is disabled.
 
-> 
-> Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
-> ---
->   drivers/usb/core/hcd.c       | 23 +++++++++++++++++++++++
->   drivers/usb/host/xhci-ring.c | 10 +++++-----
->   drivers/usb/host/xhci.c      | 15 +++++++++++++++
->   drivers/usb/host/xhci.h      |  1 +
->   include/linux/usb/hcd.h      |  2 ++
->   5 files changed, 46 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-> index 8300baedafd2..e392e90e918c 100644
-> --- a/drivers/usb/core/hcd.c
-> +++ b/drivers/usb/core/hcd.c
-> @@ -3157,6 +3157,29 @@ int usb_hcd_setup_local_mem(struct usb_hcd *hcd, phys_addr_t phys_addr,
->   }
->   EXPORT_SYMBOL_GPL(usb_hcd_setup_local_mem);
->   
-> +/**
-> + * usb_hcd_set_cmd_timer_delay Set the delay of the command timer.
-> + * @hcd - pointer to the HCD representing the controller
-> + * @delay - Delay value to be used in command timer.
-> + *
-> + * wrapper function to call the set_cmd_timer_delay API of the host
-> + * diver.
-> + *
-> + * return 0 on success; otherwise -ENODEV means the feature not
-> + * supported by host driver.
-> + */
-> +
-> +int usb_hcd_set_cmd_timer_delay(struct usb_hcd *hcd, int delay)
-> +{
-> +	int ret = -ENODEV;
-> +
-> +	if (hcd->driver->set_cmd_timer_delay)
-> +		ret = hcd->driver->set_cmd_timer_delay(hcd, delay);
-> +
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(usb_hcd_set_cmd_timer_delay);
-> +
+>
+> If wakeup is enabled for the host controller but not for the root hub,
+> then unplugging a device from the root hub should not generate a wakeup
+> request or an interrupt.  But things like pressing a key on a
+> wakeup-enabled keyboard should.  (In other words, the root hub shouldn't
+> generate any wakeup requests on its own but it should relay wakeup
+> requests that it receives from downstream devices.)  However, it's
+> understandable if the system doesn't behave properly in this case since
+> it's kind of an odd situation.
 
-The xhci command timeout is more of a xhci internal thing, not sure it's a good
-idea to add this to hcd.
+Do you mean when the system is suspended, or system is still suspending?
+The issue only happens when the system is suspending.
 
-Would it make sense to add a timeout parameter to hcd->driver->address_device(hcd, udev)
-instead?
+Kai-Heng
 
-First priority should of course be finding out why the first enumeration fails,
-and solve that.
-
-Thanks
-Mathias
+>
+> Alan Stern
