@@ -2,157 +2,224 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8075E7804E7
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Aug 2023 05:43:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F55A780682
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Aug 2023 09:44:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345251AbjHRDml (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Aug 2023 23:42:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37370 "EHLO
+        id S1358254AbjHRHoJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Aug 2023 03:44:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357751AbjHRDmK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Aug 2023 23:42:10 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id B598C358E
-        for <linux-usb@vger.kernel.org>; Thu, 17 Aug 2023 20:42:06 -0700 (PDT)
-Received: (qmail 18664 invoked by uid 1000); 17 Aug 2023 23:42:05 -0400
-Date:   Thu, 17 Aug 2023 23:42:05 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
+        with ESMTP id S1358224AbjHRHnp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Aug 2023 03:43:45 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C961030FE;
+        Fri, 18 Aug 2023 00:43:42 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 37I7h6uqD013379, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 37I7h6uqD013379
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 18 Aug 2023 15:43:06 +0800
+Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32; Fri, 18 Aug 2023 15:43:26 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Fri, 18 Aug 2023 15:43:26 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
+ RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
+ 15.01.2375.007; Fri, 18 Aug 2023 15:43:26 +0800
+From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
+        <stanley_chang@realtek.com>
 To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: dwc3: unusual handling of setup requests with wLength == 0
-Message-ID: <cfc7ae18-140b-4223-9cc2-7ee4b9ddea28@rowland.harvard.edu>
-References: <CA+fCnZcQSYy63ichdivAH5-fYvN2UMzTtZ--h=F6nK0jfVou3Q@mail.gmail.com>
- <20230818010815.4kcue67idma5yguf@synopsys.com>
- <bb470c47-c9dc-4dae-ae3f-c7d4736ee7e9@rowland.harvard.edu>
- <20230818031045.wovf5tj2un7nwf72@synopsys.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v4 1/2] usb: dwc3: add Realtek DHC RTD SoC dwc3 glue layer driver
+Thread-Topic: [PATCH v4 1/2] usb: dwc3: add Realtek DHC RTD SoC dwc3 glue
+ layer driver
+Thread-Index: AQHZz16JBD32PXlY/Uy8zvoBgYO/Fq/us6MAgADJ/UA=
+Date:   Fri, 18 Aug 2023 07:43:26 +0000
+Message-ID: <8b4f8ba8685c43df9f297fefcc53edb1@realtek.com>
+References: <20230815095452.4146-1-stanley_chang@realtek.com>
+ <20230818003752.3ghaw4vprnqs6s2f@synopsys.com>
+In-Reply-To: <20230818003752.3ghaw4vprnqs6s2f@synopsys.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.190.159]
+x-kse-serverinfo: RTEXMBS03.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230818031045.wovf5tj2un7nwf72@synopsys.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 18, 2023 at 03:10:48AM +0000, Thinh Nguyen wrote:
-> On Thu, Aug 17, 2023, Alan Stern wrote:
-> > On Fri, Aug 18, 2023 at 01:08:19AM +0000, Thinh Nguyen wrote:
-> > > Hi,
-> > > 
-> > > On Fri, Aug 18, 2023, Andrey Konovalov wrote:
-> > > > Hi Alan and Thinh,
-> > > > 
-> > > > I have been testing Raw Gadget with the dwc3 UDC driver and stumbled
-> > > > upon an issue related to how dwc3 handles setup requests with wLength
-> > > > == 0.
-> > > > 
-> > > > When running a simple Raw Gadget-based keyboard emulator [1],
-> > > > everything works as expected until the point when the host sends a
-> > > > SET_CONFIGURATION request, which has wLength == 0.
-> > > > 
-> > > > For setup requests with wLength != 0, just like the other UDC drivers
-> > > > I tested, dwc3 calls the gadget driver's ->setup() callback and then
-> > > > waits until the gadget driver queues an URB to EP0 as a response.
-> > > 
-> > > For the lack of better term, can we use "request" or "usb_request"
-> > > instead of URB for gadget side, I get confused with the host side
-> > > whenever we mention URB.
-> > > 
-> > > > 
-> > > > However, for a setup request with wLength == 0, dwc3 does not wait
-> > > > until the gadget driver queues an URB to ack the transfer. It appears
-> > > > that dwc3 just acks the request internally and then proceeds with
-> > > > calling the ->setup() callback for the next request received from the
-> > > 
-> > > It depends on the bRequest. It should not proceed to ->setup() unless
-> > > the gadget driver already setups the request for it.
-> > 
-> > Let's see if I understand what you're saying.  Some control transfers 
-> > are handled directly by the UDC driver (things like SET_ADDRESS or 
-> > CLEAR_HALT).  For these transfers, the ->setup() callback is not invoked 
-> > and the gadget driver is completely unaware of them.  But for all other 
-> > control transfers, the ->setup() callback _is_ invoked.
-> > 
-> > Is that what you meant?
-> 
-> That's not what I meant.
-> 
-> I was referring to the next request. It should not be processed until
-> the first request is completed. Depending on the type of request, if
-> there's a delayed_status, the dwc3 driver will not prepare for the
-> Status stage and Setup stage (after status completion) to proceed to the
-> _next_ ->setup callback.
-> 
-> My understanding from the described problem is that somehow dwc3
-> processes the next request immediately without waiting for the raw
-> gadget preparing the data stage.
-
-Um.  This is one of the design flaws I mentioned: a new SETUP packet 
-arriving before the old control transfer is finished.  The USB spec 
-requires devices to accept the new SETUP packet and abort the old 
-transfer.  So in this case, processing the next request immediately is 
-the right thing to do.
-
-One question is why Andrey is observing a new ->setup() callback 
-happening so soon?  The host is supposed to allow a fairly long time for 
-standard control requests to complete.  If the userspace component of 
-the Raw Gadget takes too long to act, the transfer could time out and be 
-cancelled on the host.  But "too long" means several seconds -- is that 
-really what's going on here?
-
-> I was talking in context of 0-length transfer (albeit I forgot about the
-> special case of control OUT doesn't have 3-stage).
-> 
-> If it's a vendor request 0-length transfer, without responding with
-> USB_GADGET_DELAYED_STATUS, the dwc3 will proceed with preparing the
-> status stage.
-
-This may be a holdover from the early days of the Gadget subsystem.  My 
-memory from back then isn't very good; I vaguely recall that the first 
-UDC drivers would queue their automatic Status-stage requests if wLength 
-was 0 and ->setup() returned 0 (which would explain why 
-USB_GADGET_DELAYED_STATUS had to be invented).  Unless I'm completely 
-confused, that's not how UDC drivers are supposed to act now.
-
-> > (IMO that automatic action is a design flaw; the UDC driver should wait 
-> > for the gadget driver to explictly queue a 0-length request or a STALL 
-> > instead of doing it automatically.)
-> 
-> Would every UDC has this capability? I recalled some aren't capable of
-> delayed_status.
-
-In those cases the UDC driver would just have to do the best it can.  
-Very few modern USB device controllers should have this limitation.
-
-> > (Another design flaw is that this design doesn't specify what should 
-> > happen if the UDC receives another SETUP packet from the host before the 
-> > Status stage completes.  By sending another SETUP packet, the host is 
-> > indicating that the earlier control transfer has been aborted.  
-> > Presumably the UDC driver will complete all the outstanding requests 
-> > with an error status, but there's a potential race in the gadget driver 
-> > between queuing a request for the first transfer and executing the 
-> > ->setup() callback for the second transfer.)
-> 
-> If there's another SETUP packet coming while there's a pending control
-> transfer, for dwc3 UDC, the pending control TRB should be completed with
-> a Setup_pending status indicating aborted control transfer for dwc3
-> driver to handle that.
-
-Right.  The difficulty doesn't involve the communication between the HCD 
-and the UDC hardware; it involves the communication between the UDC 
-driver and the gadget driver.  Somehow they need to synchronize so that 
-when the gadget driver queues a usb_request, the UDC driver can tell 
-whether the request was meant for the earlier aborted control transfer 
-or the new active one.  This can matter if the gadget driver has a 
-separate control thread (a work routine or a kthread, for example) that 
-could be queuing requests while the ->setup() callback is running.
-
-Alan Stern
+SGkgVGhpbmgsDQoNCj4gDQo+IE9uIFR1ZSwgQXVnIDE1LCAyMDIzLCBTdGFubGV5IENoYW5nIHdy
+b3RlOg0KPiA+IFJlYWx0ZWsgREhDIFJURCBTb0NzIGludGVncmF0ZSBkd2MzIElQIGFuZCBoYXMg
+c29tZSBjdXN0b21pemF0aW9ucyB0bw0KPiA+IHN1cHBvcnQgZGlmZmVyZW50IGdlbmVyYXRpb25z
+IG9mIFNvQ3MuDQo+IA0KPiBQbGVhc2UgcHJvdmlkZSBhIHN1bW1hcnkgb2Ygd2hhdCAiY3VzdG9t
+aXphdGlvbnMiIGFyZSBkb25lIGhlcmUuDQo+IA0KSSB3aWxsIGFkZCBkZXNjcmlwdGlvbjoNCg0K
+VGhlIFJURDE2MTliIHN1YmNsYXNzIFNvQyBvbmx5IHN1cHBvcnRzIFVTQiAyLjAgZnJvbSBkd2Mz
+Lg0KVGhlIGRyaXZlciBjYW4gc2V0IGEgbWF4aW11bSBzcGVlZCB0byBzdXBwb3J0IHRoaXMuDQpB
+ZGQgcm9sZSBzd2l0Y2hpbmcgZnVuY3Rpb24sIHRoYXQgY2FuIHN3aXRjaCBVU0Igcm9sZXMgdGhy
+b3VnaCBvdGhlciBkcml2ZXJzLA0Kb3Igc3dpdGNoIFVTQiByb2xlcyB0aHJvdWdoIHVzZXIgc3Bh
+Y2UgdGhyb3VnaCBzZXQgL3N5cy9jbGFzcy91c2Jfcm9sZS8uDQoNCj4gPiArc3RydWN0IGR3YzNf
+cnRrIHsNCj4gPiArICAgICBzdHJ1Y3QgZGV2aWNlICpkZXY7DQo+ID4gKyAgICAgdm9pZCBfX2lv
+bWVtICpyZWdzOw0KPiA+ICsgICAgIHNpemVfdCByZWdzX3NpemU7DQo+ID4gKyAgICAgdm9pZCBf
+X2lvbWVtICpwbV9iYXNlOw0KPiA+ICsNCj4gPiArICAgICBzdHJ1Y3QgZHdjMyAqZHdjOw0KPiA+
+ICsNCj4gPiArICAgICBpbnQgY3VyX2RyX21vZGU7IC8qIGN1cnJlbnQgZHIgbW9kZSAqLw0KPiAN
+Cj4gV2h5IG5vdCB1c2UgZW51bSBmb3IgZHJfbW9kZT8gQW5kIEkgZG9uJ3QgdGhpbmsgeW91IG5l
+ZWQgdGhlIGNvbW1lbnQuDQoNCkkgd2lsbCByZW1vdmUgY29tbWVudC4NCkkgd2lsbCBtb2RpZnkg
+dG8gdXNlIGVudW1lcmF0aW9uIGFuZCBkZWZpbmUgdXNiX3JvbGUgdW5pZm9ybWx5IGluc3RlYWQg
+b2YNCmRyX21vZGUgdG8gYXZvaWQgY29uZnVzaW5nIGRyX21vZGUgYW5kIHVzYl9yb2xlLg0KDQo+
+ID4gKyAgICAgc3RydWN0IHVzYl9yb2xlX3N3aXRjaCAqcm9sZV9zd2l0Y2g7IH07DQo+ID4gKw0K
+PiA+ICtzdGF0aWMgdm9pZCBzd2l0Y2hfdXNiMl9kcl9tb2RlKHN0cnVjdCBkd2MzX3J0ayAqcnRr
+LCBpbnQgZHJfbW9kZSkgew0KPiA+ICsgICAgIHN3aXRjaCAoZHJfbW9kZSkgew0KPiA+ICsgICAg
+IGNhc2UgVVNCX0RSX01PREVfUEVSSVBIRVJBTDoNCj4gPiArICAgICAgICAgICAgIHdyaXRlbChV
+U0IyX1BIWV9TV0lUQ0hfREVWSUNFIHwNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICh+
+VVNCMl9QSFlfU1dJVENIX01BU0sgJg0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICBy
+ZWFkbChydGstPnJlZ3MgKyBXUkFQX1VTQjJfUEhZX1JFRykpLA0KPiA+ICsgICAgICAgICAgICAg
+ICAgICAgICAgICAgcnRrLT5yZWdzICsgV1JBUF9VU0IyX1BIWV9SRUcpOw0KPiANCj4gUGxlYXNl
+IHNwbGl0IHRoZSByZWdpc3RlciByZWFkIGFuZCB3cml0ZSB0byBzZXBhcmF0ZSBvcGVyYXRpb25z
+IGhlcmUgYW5kDQo+IGV2ZXJ5d2hlcmUgZWxzZS4gaWU6DQo+ICAgICAgICAgdmFsID0gcmVhZGwo
+b2Zmc2V0KTsNCj4gICAgICAgICB3cml0ZWwodmFsIHwgbW9kLCBvZmZzZXQpOw0KT2theS4NCg0K
+PiA+ICsgICAgICAgICAgICAgYnJlYWs7DQo+ID4gKyAgICAgY2FzZSBVU0JfRFJfTU9ERV9IT1NU
+Og0KPiA+ICsgICAgICAgICAgICAgd3JpdGVsKFVTQjJfUEhZX1NXSVRDSF9IT1NUIHwNCj4gPiAr
+ICAgICAgICAgICAgICAgICAgICAgICAgICh+VVNCMl9QSFlfU1dJVENIX01BU0sgJg0KPiA+ICsg
+ICAgICAgICAgICAgICAgICAgICAgICAgICByZWFkbChydGstPnJlZ3MgKyBXUkFQX1VTQjJfUEhZ
+X1JFRykpLA0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgICAgcnRrLT5yZWdzICsgV1JBUF9V
+U0IyX1BIWV9SRUcpOw0KPiA+ICsgICAgICAgICAgICAgYnJlYWs7DQo+ID4gKyAgICAgZGVmYXVs
+dDoNCj4gPiArICAgICAgICAgICAgIGRldl9kYmcocnRrLT5kZXYsICIlczogZHJfbW9kZT0lZFxu
+IiwgX19mdW5jX18sDQo+IGRyX21vZGUpOw0KPiA+ICsgICAgICAgICAgICAgYnJlYWs7DQo+ID4g
+KyAgICAgfQ0KPiA+ICt9DQo+ID4gKw0KPiA+ICtzdGF0aWMgdm9pZCBzd2l0Y2hfZHdjM19kcl9t
+b2RlKHN0cnVjdCBkd2MzX3J0ayAqcnRrLCBpbnQgZHJfbW9kZSkgew0KPiA+ICsgICAgIGlmICgh
+cnRrLT5kd2MtPnJvbGVfc3cpDQo+ID4gKyAgICAgICAgICAgICBnb3RvIG91dDsNCj4gPiArDQo+
+ID4gKyAgICAgc3dpdGNoIChkcl9tb2RlKSB7DQo+ID4gKyAgICAgY2FzZSBVU0JfRFJfTU9ERV9Q
+RVJJUEhFUkFMOg0KPiA+ICsgICAgICAgICAgICAgdXNiX3JvbGVfc3dpdGNoX3NldF9yb2xlKHJ0
+ay0+ZHdjLT5yb2xlX3N3LA0KPiBVU0JfUk9MRV9ERVZJQ0UpOw0KPiA+ICsgICAgICAgICAgICAg
+YnJlYWs7DQo+ID4gKyAgICAgY2FzZSBVU0JfRFJfTU9ERV9IT1NUOg0KPiA+ICsgICAgICAgICAg
+ICAgdXNiX3JvbGVfc3dpdGNoX3NldF9yb2xlKHJ0ay0+ZHdjLT5yb2xlX3N3LA0KPiBVU0JfUk9M
+RV9IT1NUKTsNCj4gPiArICAgICAgICAgICAgIGJyZWFrOw0KPiA+ICsgICAgIGRlZmF1bHQ6DQo+
+ID4gKyAgICAgICAgICAgICBkZXZfZGJnKHJ0ay0+ZGV2LCAiJXMgZHJfbW9kZT0lZFxuIiwgX19m
+dW5jX18sDQo+IGRyX21vZGUpOw0KPiA+ICsgICAgICAgICAgICAgYnJlYWs7DQo+ID4gKyAgICAg
+fQ0KPiA+ICsNCj4gPiArb3V0Og0KPiA+ICsgICAgIHJldHVybjsNCj4gPiArfQ0KPiA+ICsNCj4g
+PiArc3RhdGljIGludCBkd2MzX3J0a19nZXRfZHJfbW9kZShzdHJ1Y3QgZHdjM19ydGsgKnJ0aykg
+ew0KPiA+ICsgICAgIGVudW0gdXNiX3JvbGUgcm9sZTsNCj4gPiArDQo+ID4gKyAgICAgcm9sZSA9
+IHJ0ay0+Y3VyX2RyX21vZGU7DQo+ID4gKw0KPiA+ICsgICAgIGlmIChydGstPmR3YyAmJiBydGst
+PmR3Yy0+cm9sZV9zdykNCj4gPiArICAgICAgICAgICAgIHJvbGUgPSB1c2Jfcm9sZV9zd2l0Y2hf
+Z2V0X3JvbGUocnRrLT5kd2MtPnJvbGVfc3cpOw0KPiA+ICsgICAgIGVsc2UNCj4gPiArICAgICAg
+ICAgICAgIGRldl9kYmcocnRrLT5kZXYsICIlcyBub3QgdXNiX3JvbGVfc3dpdGNoIHJvbGU9JWRc
+biIsDQo+ID4gKyBfX2Z1bmNfXywgcm9sZSk7DQo+ID4gKw0KPiA+ICsgICAgIHJldHVybiByb2xl
+Ow0KPiA+ICt9DQo+ID4gKw0KPiA+ICtzdGF0aWMgdm9pZCBkd2MzX3J0a19zZXRfZHJfbW9kZShz
+dHJ1Y3QgZHdjM19ydGsgKnJ0aywgaW50IGRyX21vZGUpIHsNCj4gPiArICAgICBydGstPmN1cl9k
+cl9tb2RlID0gZHJfbW9kZTsNCj4gPiArDQo+ID4gKyAgICAgc3dpdGNoX2R3YzNfZHJfbW9kZShy
+dGssIGRyX21vZGUpOw0KPiA+ICsgICAgIG1kZWxheSgxMCk7DQo+ID4gKyAgICAgc3dpdGNoX3Vz
+YjJfZHJfbW9kZShydGssIGRyX21vZGUpOyB9DQo+ID4gKw0KPiA+ICsjaWYgSVNfRU5BQkxFRChD
+T05GSUdfVVNCX1JPTEVfU1dJVENIKQ0KPiA+ICtzdGF0aWMgaW50IGR3YzNfdXNiX3JvbGVfc3dp
+dGNoX3NldChzdHJ1Y3QgdXNiX3JvbGVfc3dpdGNoICpzdywgZW51bQ0KPiA+ICt1c2Jfcm9sZSBy
+b2xlKSB7DQo+ID4gKyAgICAgc3RydWN0IGR3YzNfcnRrICpydGsgPSB1c2Jfcm9sZV9zd2l0Y2hf
+Z2V0X2RydmRhdGEoc3cpOw0KPiA+ICsNCj4gPiArICAgICBzd2l0Y2ggKHJvbGUpIHsNCj4gPiAr
+ICAgICBjYXNlIFVTQl9ST0xFX0hPU1Q6DQo+ID4gKyAgICAgICAgICAgICBkd2MzX3J0a19zZXRf
+ZHJfbW9kZShydGssIFVTQl9EUl9NT0RFX0hPU1QpOw0KPiA+ICsgICAgICAgICAgICAgYnJlYWs7
+DQo+ID4gKyAgICAgY2FzZSBVU0JfUk9MRV9ERVZJQ0U6DQo+ID4gKyAgICAgICAgICAgICBkd2Mz
+X3J0a19zZXRfZHJfbW9kZShydGssIFVTQl9EUl9NT0RFX1BFUklQSEVSQUwpOw0KPiA+ICsgICAg
+ICAgICAgICAgYnJlYWs7DQo+ID4gKyAgICAgZGVmYXVsdDoNCj4gPiArICAgICAgICAgICAgIGR3
+YzNfcnRrX3NldF9kcl9tb2RlKHJ0aywgMCk7DQo+IA0KPiBBbnkgb3RoZXIgdmFsdWUgc2hvdWxk
+IGJlIGludmFsaWQgYW5kIHNob3VsZCBub3QgaW52b2tlDQo+IGR3YzNfcnRrX3NldF9kcl9tb2Rl
+KCkuDQoNCkkgd2lsbCByZW1vdmUgaXQuDQoNCj4gPiArICAgICB9DQo+ID4gKw0KPiA+ICsgICAg
+IHJldHVybiAwOw0KPiA+ICt9DQo+ID4gKw0KPiA+ICtzdGF0aWMgZW51bSB1c2Jfcm9sZSBkd2Mz
+X3VzYl9yb2xlX3N3aXRjaF9nZXQoc3RydWN0IHVzYl9yb2xlX3N3aXRjaA0KPiA+ICsqc3cpIHsN
+Cj4gPiArICAgICBzdHJ1Y3QgZHdjM19ydGsgKnJ0ayA9IHVzYl9yb2xlX3N3aXRjaF9nZXRfZHJ2
+ZGF0YShzdyk7DQo+ID4gKyAgICAgZW51bSB1c2Jfcm9sZSByb2xlID0gVVNCX1JPTEVfTk9ORTsN
+Cj4gPiArICAgICBpbnQgZHJfbW9kZTsNCj4gPiArDQo+ID4gKyAgICAgZHJfbW9kZSA9IGR3YzNf
+cnRrX2dldF9kcl9tb2RlKHJ0ayk7DQo+IA0KPiBkd2MzX3J0a19nZXRfZHJfbW9kZSgpIHJldHVy
+bnMgaW50IGNvbnZlcnRlZCBmcm9tIGVudW0gdXNiX3JvbGUuIE5vdw0KPiB5b3UncmUgbWl4aW5n
+IGRyX21vZGUgd2l0aCB1c2Jfcm9sZS4gUGxlYXNlIHVzZSBlbnVtIGFuZCBhdm9pZCBjYXN0aW5n
+Lg0KDQpUaGlzIGlzIG15IGZhdWx0LiBjdXJfZHJfbW9kZSBtaXhlcyBkcl9tb2RlIGFuZCB1c2Jf
+cm9sZSwgYWx0aG91Z2ggdGhleSBoYXZlIHRoZSBzYW1lIHZhbHVlLg0KSSB3aWxsIHVzZSBjdXJf
+cm9sZSBhbmQgZW51bSB1c2Jfcm9sZSB0eXBlcyB1bmlmb3JtbHkuDQoNCj4gPiArICAgICBzd2l0
+Y2ggKGRyX21vZGUpIHsNCj4gPiArICAgICBjYXNlIFVTQl9EUl9NT0RFX0hPU1Q6DQo+ID4gKyAg
+ICAgICAgICAgICByb2xlID0gVVNCX1JPTEVfSE9TVDsNCj4gPiArICAgICAgICAgICAgIGJyZWFr
+Ow0KPiA+ICsgICAgIGNhc2UgVVNCX0RSX01PREVfUEVSSVBIRVJBTDoNCj4gPiArICAgICAgICAg
+ICAgIHJvbGUgPSBVU0JfUk9MRV9ERVZJQ0U7DQo+ID4gKyAgICAgICAgICAgICBicmVhazsNCj4g
+PiArICAgICBkZWZhdWx0Og0KPiA+ICsgICAgICAgICAgICAgZGV2X2RiZyhydGstPmRldiwgIiVz
+IGRyX21vZGU9JWQiLCBfX2Z1bmNfXywgZHJfbW9kZSk7DQo+ID4gKyAgICAgICAgICAgICBicmVh
+azsNCj4gPiArICAgICB9DQo+ID4gKyAgICAgcmV0dXJuIHJvbGU7DQo+ID4gK30NCj4gPiArDQo+
+ID4gK3N0YXRpYyBpbnQgZHdjM19ydGtfc2V0dXBfcm9sZV9zd2l0Y2goc3RydWN0IGR3YzNfcnRr
+ICpydGspIHsNCj4gPiArICAgICBzdHJ1Y3QgdXNiX3JvbGVfc3dpdGNoX2Rlc2MgZHdjM19yb2xl
+X3N3aXRjaCA9IHtOVUxMfTsNCj4gPiArDQo+ID4gKyAgICAgZHdjM19yb2xlX3N3aXRjaC5uYW1l
+ID0gc3RyY2hybnVsKGRldl9uYW1lKHJ0ay0+ZGV2KSwgJy4nKSArIDE7DQo+IA0KPiBXaHkgbm90
+IGp1c3QgdXNlIGRldl9uYW1lKHJ0ay0+ZGV2KT8NCj4gDQpJIHdhbnQgdG8gcmVtb3ZlIHRoZSBh
+ZGRyZXNzLg0KRm9yIGV4YW1wbGUsDQpPcmlnaW5hbDoNCjk4MDIwMDAwLmR3YzNfdTJkcmQtcm9s
+ZS1zd2l0Y2gNCkkgd2FudDoNCmR3YzNfdTJkcmQtcm9sZS1zd2l0Y2gNCg0KPiA+ICsgICAgIGR3
+YzNfcm9sZV9zd2l0Y2guZHJpdmVyX2RhdGEgPSBydGs7DQo+ID4gKyAgICAgZHdjM19yb2xlX3N3
+aXRjaC5hbGxvd191c2Vyc3BhY2VfY29udHJvbCA9IHRydWU7DQo+ID4gKyAgICAgZHdjM19yb2xl
+X3N3aXRjaC5md25vZGUgPSBkZXZfZndub2RlKHJ0ay0+ZGV2KTsNCj4gPiArICAgICBkd2MzX3Jv
+bGVfc3dpdGNoLnNldCA9IGR3YzNfdXNiX3JvbGVfc3dpdGNoX3NldDsNCj4gPiArICAgICBkd2Mz
+X3JvbGVfc3dpdGNoLmdldCA9IGR3YzNfdXNiX3JvbGVfc3dpdGNoX2dldDsNCj4gPiArICAgICBy
+dGstPnJvbGVfc3dpdGNoID0gdXNiX3JvbGVfc3dpdGNoX3JlZ2lzdGVyKHJ0ay0+ZGV2LA0KPiAm
+ZHdjM19yb2xlX3N3aXRjaCk7DQo+ID4gKyAgICAgaWYgKElTX0VSUihydGstPnJvbGVfc3dpdGNo
+KSkNCj4gPiArICAgICAgICAgICAgIHJldHVybiBQVFJfRVJSKHJ0ay0+cm9sZV9zd2l0Y2gpOw0K
+PiA+ICsNCj4gPiArICAgICByZXR1cm4gMDsNCj4gPiArfQ0KPiA+ICsNCj4gPiArc3RhdGljIGlu
+dCBkd2MzX3J0a19yZW1vdmVfcm9sZV9zd2l0Y2goc3RydWN0IGR3YzNfcnRrICpydGspIHsNCj4g
+PiArICAgICBpZiAocnRrLT5yb2xlX3N3aXRjaCkNCj4gPiArICAgICAgICAgICAgIHVzYl9yb2xl
+X3N3aXRjaF91bnJlZ2lzdGVyKHJ0ay0+cm9sZV9zd2l0Y2gpOw0KPiA+ICsNCj4gPiArICAgICBy
+dGstPnJvbGVfc3dpdGNoID0gTlVMTDsNCj4gPiArDQo+ID4gKyAgICAgcmV0dXJuIDA7DQo+ID4g
+K30NCj4gPiArI2Vsc2UNCj4gPiArI2RlZmluZSBkd2MzX3J0a19zZXR1cF9yb2xlX3N3aXRjaCh4
+KSAwICNkZWZpbmUNCj4gPiArZHdjM19ydGtfcmVtb3ZlX3JvbGVfc3dpdGNoKHgpIDAgI2VuZGlm
+DQo+ID4gKw0KDQoNCj4gPiArc3RhdGljIGludCBkd2MzX3J0a19wcm9iZShzdHJ1Y3QgcGxhdGZv
+cm1fZGV2aWNlICpwZGV2KSB7DQo+ID4gKyAgICAgc3RydWN0IGR3YzNfcnRrICpydGs7DQo+ID4g
+KyAgICAgc3RydWN0IGRldmljZSAqZGV2ID0gJnBkZXYtPmRldjsNCj4gPiArICAgICBzdHJ1Y3Qg
+cmVzb3VyY2UgKnJlczsNCj4gPiArICAgICB2b2lkIF9faW9tZW0gKnJlZ3M7DQo+ID4gKyAgICAg
+aW50IHJldCA9IDA7DQo+ID4gKyAgICAgdW5zaWduZWQgbG9uZyBwcm9iZV90aW1lID0gamlmZmll
+czsNCj4gPiArDQo+ID4gKyAgICAgcnRrID0gZGV2bV9remFsbG9jKGRldiwgc2l6ZW9mKCpydGsp
+LCBHRlBfS0VSTkVMKTsNCj4gPiArICAgICBpZiAoIXJ0aykgew0KPiA+ICsgICAgICAgICAgICAg
+cmV0ID0gLUVOT01FTTsNCj4gPiArICAgICAgICAgICAgIGdvdG8gZXJyMTsNCj4gPiArICAgICB9
+DQo+ID4gKw0KPiA+ICsgICAgIHBsYXRmb3JtX3NldF9kcnZkYXRhKHBkZXYsIHJ0ayk7DQo+ID4g
+Kw0KPiA+ICsgICAgIHJ0ay0+ZGV2ID0gZGV2Ow0KPiA+ICsNCj4gPiArICAgICByZXMgPSBwbGF0
+Zm9ybV9nZXRfcmVzb3VyY2UocGRldiwgSU9SRVNPVVJDRV9NRU0sIDApOw0KPiA+ICsgICAgIGlm
+ICghcmVzKSB7DQo+ID4gKyAgICAgICAgICAgICBkZXZfZXJyKGRldiwgIm1pc3NpbmcgbWVtb3J5
+IHJlc291cmNlXG4iKTsNCj4gPiArICAgICAgICAgICAgIHJldCA9IC1FTk9ERVY7DQo+ID4gKyAg
+ICAgICAgICAgICBnb3RvIGVycjE7DQo+ID4gKyAgICAgfQ0KPiA+ICsNCj4gPiArICAgICByZWdz
+ID0gZGV2bV9pb3JlbWFwX3Jlc291cmNlKGRldiwgcmVzKTsNCj4gPiArICAgICBpZiAoSVNfRVJS
+KHJlZ3MpKSB7DQo+ID4gKyAgICAgICAgICAgICByZXQgPSBQVFJfRVJSKHJlZ3MpOw0KPiA+ICsg
+ICAgICAgICAgICAgZ290byBlcnIxOw0KPiA+ICsgICAgIH0NCj4gPiArDQo+ID4gKyAgICAgcnRr
+LT5yZWdzID0gcmVnczsNCj4gPiArICAgICBydGstPnJlZ3Nfc2l6ZSA9IHJlc291cmNlX3NpemUo
+cmVzKTsNCj4gPiArDQo+ID4gKyAgICAgcmVzID0gcGxhdGZvcm1fZ2V0X3Jlc291cmNlKHBkZXYs
+IElPUkVTT1VSQ0VfTUVNLCAxKTsNCj4gPiArICAgICBpZiAocmVzKSB7DQo+ID4gKyAgICAgICAg
+ICAgICBydGstPnBtX2Jhc2UgPSBkZXZtX2lvcmVtYXBfcmVzb3VyY2UoZGV2LCByZXMpOw0KPiA+
+ICsgICAgICAgICAgICAgaWYgKElTX0VSUihydGstPnBtX2Jhc2UpKSB7DQo+ID4gKyAgICAgICAg
+ICAgICAgICAgICAgIHJldCA9IFBUUl9FUlIocnRrLT5wbV9iYXNlKTsNCj4gPiArICAgICAgICAg
+ICAgICAgICAgICAgZ290byBlcnIxOw0KPiA+ICsgICAgICAgICAgICAgfQ0KPiA+ICsgICAgIH0N
+Cj4gPiArDQo+ID4gKyAgICAgcmV0ID0gZHdjM19ydGtfcHJvYmVfZHdjM19jb3JlKHJ0ayk7DQo+
+ID4gKyAgICAgaWYgKHJldCkNCj4gPiArICAgICAgICAgICAgIGdvdG8gZXJyMTsNCj4gPiArDQo+
+ID4gKyAgICAgZGV2X2RiZyhkZXYsICIlcyBvayEgKHRha2UgJWQgbXMpXG4iLCBfX2Z1bmNfXywN
+Cj4gPiArICAgICAgICAgICAgIGppZmZpZXNfdG9fbXNlY3MoamlmZmllcyAtIHByb2JlX3RpbWUp
+KTsNCj4gDQo+IFRoaXMgZGVidWcgbWVzc2FnZSBkb2Vzbid0IGxvb2sgbGlrZSBpdCBzaG91bGQg
+YmUgaGVyZSB1bmxlc3MgaXQncyBlYXJseSBpbiB0aGUNCj4gZGV2ZWxvcG1lbnQgY3ljbGUuIERv
+IHdlIG5lZWQgdGhpcyBkZWJ1ZyBtZXNzYWdlPw0KDQpJIG9ubHkgd2FudCB0byBwcmludCB0aW1l
+IG9mIHByb2JlLg0KSSB3aWxsIHJlbW92ZSBpdC4NCg0KPiA+ICsNCj4gPiArICAgICByZXR1cm4g
+MDsNCj4gPiArDQo+ID4gK2VycjE6DQo+IA0KPiBXaGVyZSdzIGVycjI/IElmIHRoZXJlIGFyZSBt
+dWx0aXBsZSBnb3RvcywgcHJvdmlkZSBtb3JlIGRlc2NyaXB0aXZlIG5hbWVzDQo+IGluc3RlYWQg
+b2YganVzdCBudW1iZXJzLg0KDQpPa2F5IEkgd2lsbCByZXZpc2UgdGhpcy4NCj4gDQo+ID4gKyAg
+ICAgcmV0dXJuIHJldDsNCj4gPiArfQ0KPiA+ICsNCg0KVGhhbmtzLA0KU3RhbmxleQ0KDQo=
