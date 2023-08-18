@@ -2,169 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B86A6781179
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Aug 2023 19:17:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CB0C781348
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Aug 2023 21:17:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358929AbjHRRQm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Aug 2023 13:16:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44602 "EHLO
+        id S1379590AbjHRTQw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Aug 2023 15:16:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358396AbjHRRQQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Aug 2023 13:16:16 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 605583AB2
-        for <linux-usb@vger.kernel.org>; Fri, 18 Aug 2023 10:16:14 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-6889656eb58so961318b3a.1
-        for <linux-usb@vger.kernel.org>; Fri, 18 Aug 2023 10:16:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1692378974; x=1692983774;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NNq6LlN9NG5Z9ixvm9VM7Aws5YwlE9M4fTdMCaH4A3c=;
-        b=gpqJEnSxRP7b7f6q2V4gq+qIn7IdwUMk3W76ChsvZp0cU1VzPlLCLS8FLcn7XQ076j
-         Jis9J5F7fdTYmr61ZxkwDJtL2m8LmIVxZaih95688jEXusSlvcTVjaSoQKQO5X4Z/VMX
-         0faSpYl4mG2FbQF2I64uoeFuN33mZgbYqGTjc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692378974; x=1692983774;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NNq6LlN9NG5Z9ixvm9VM7Aws5YwlE9M4fTdMCaH4A3c=;
-        b=GkMJkMIEpH+37+GYeT2CVsnjtffTi7DWijHytDWvbYcxxZhXZnTqDFJbSSdoAhYmXp
-         5oonj5xzFdlZzwnOpbNHUFbRkr1MmhAHDYX0Z4epq3D1G9HYppXxwfr8cFlIFQK0uwe/
-         /dJUsOoqgCqdNjEvc5YkpXpzzbt0uKvOnekfEimnMsTeC47IMvTzASiCDJxJEgmz4EWZ
-         orZdeRVzOBqbV78N9xRoAVmuh1zLniVxN3fQbhxW3EJ1vxrfdQozLjqBiFpqwk+7ZAvT
-         eMRXDz4Cw6Yj7PVrt6Ff6xD78H/vkPA8+r6kWGsSKXlT414FMS6HaynbGXhPmJYjjqHn
-         77Jw==
-X-Gm-Message-State: AOJu0YyNeceQlL+YGSSmxVSn0TNMq7FELKrGKUZxwAcowqZYBGwzVNoD
-        7TYuOPcIiMZhS0KO3K41ywkt3w==
-X-Google-Smtp-Source: AGHT+IGo+KoiwtYNz2QpPJ+wDSXrsUm6GewSPPNIpT+zwd/nOIVFEZrz1y8aqEeB/no1MYMoamQR7Q==
-X-Received: by 2002:a05:6a20:12c9:b0:140:bd85:15a5 with SMTP id v9-20020a056a2012c900b00140bd8515a5mr4226284pzg.39.1692378973746;
-        Fri, 18 Aug 2023 10:16:13 -0700 (PDT)
-Received: from chromium.org (137.22.168.34.bc.googleusercontent.com. [34.168.22.137])
-        by smtp.gmail.com with ESMTPSA id y8-20020aa78048000000b006661562429fsm1819434pfm.97.2023.08.18.10.16.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Aug 2023 10:16:13 -0700 (PDT)
-Date:   Fri, 18 Aug 2023 17:16:12 +0000
-From:   Prashant Malani <pmalani@chromium.org>
-To:     Utkarsh Patel <utkarsh.h.patel@intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        heikki.krogerus@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        bleung@chromium.org
-Subject: Re: [PATCH 3/4] platform/chrome: cros_ec_typec: Add Displayport
- Alternatemode 2.1 Support
-Message-ID: <ZN+nXGr3S0OL3Edn@chromium.org>
-References: <20230811210735.159529-1-utkarsh.h.patel@intel.com>
- <20230811210735.159529-4-utkarsh.h.patel@intel.com>
+        with ESMTP id S1379585AbjHRTQm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Aug 2023 15:16:42 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3B583A9A;
+        Fri, 18 Aug 2023 12:16:40 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37IFgdB4032675;
+        Fri, 18 Aug 2023 19:16:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=M7AyHtkOD7BP2Rqswxij2Lysdt0K7dux5u9Qwg9Ybmk=;
+ b=JB2yEwP5qJsyquXhzvHhathfVQyWLk/+jswMuqQCOeWXKm2NDcvrfFjS+FndcvyGxD46
+ btTD1obfdSIxWezol1UZzCyVcnHVHmV9ZI7yixFE2xdc1KjPNehIlMzgC2EC1bF4rVBl
+ fmQvRC1wGWOWdxTUioxJq+mC9pgBq49vnYP5CGTRU0OaLAtMBhj8GVUQSvhRVfKewqas
+ GIiTsCul181qb/IgRSQI7lrH8pupbJBCNb+uTbOMVPK0T0A0tX6JK022BYDe31j+QJTQ
+ FAE8JmPL7Th3evnV5wbIoOOg1CLncJmS/ubeq+/+ibFEyvhQznAYRgerLKYSpnHVXgds Rg== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3sj3g9hecd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 18 Aug 2023 19:16:34 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37IJGX86001768
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 18 Aug 2023 19:16:33 GMT
+Received: from [10.110.43.93] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Fri, 18 Aug
+ 2023 12:16:32 -0700
+Message-ID: <6b27cd55-4e44-7a26-30ff-9692344cae4c@quicinc.com>
+Date:   Fri, 18 Aug 2023 12:16:25 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230811210735.159529-4-utkarsh.h.patel@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v4 2/3] dt-bindings: usb: snps,dwc3: Add
+ runtime-suspend-on-usb-suspend property
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <gregkh@linuxfoundation.org>, <Thinh.Nguyen@synopsys.com>,
+        <rogerq@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <devicetree@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
+References: <20230814185043.9252-1-quic_eserrao@quicinc.com>
+ <20230814185043.9252-3-quic_eserrao@quicinc.com>
+ <a77403f5-8b99-3012-3843-1999ee8d12ce@linaro.org>
+From:   Elson Serrao <quic_eserrao@quicinc.com>
+In-Reply-To: <a77403f5-8b99-3012-3843-1999ee8d12ce@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: r9gQ5kqbUrkT1ITBW44BqoRBiLXjkaeK
+X-Proofpoint-ORIG-GUID: r9gQ5kqbUrkT1ITBW44BqoRBiLXjkaeK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-08-18_24,2023-08-18_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1011
+ priorityscore=1501 spamscore=0 mlxlogscore=666 bulkscore=0 suspectscore=0
+ phishscore=0 lowpriorityscore=0 impostorscore=0 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2306200000 definitions=main-2308180176
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Utkarsh,
 
-Thanks for the patch. Please include the chrome-platform mailing list to each
-patch in the series; at the very least, patches which touch drivers/platform/chrome
-should definitely have the mailing list (chrome-platform@lists.linux.dev). Otherwise,
-we don't have enough context about what changes are being made across the series.
 
-On Aug 11 14:07, Utkarsh Patel wrote:
-> Displayport Alternatemode 2.1 requires cable capabilities such as cable
-> signalling, cable type, DPAM version which then will be used by mux
-> driver for displayport configuration.
+On 8/15/2023 10:44 PM, Krzysztof Kozlowski wrote:
+> On 14/08/2023 20:50, Elson Roy Serrao wrote:
+>> This property allows dwc3 runtime suspend when bus suspend interrupt
+>> is received even with cable connected. This would allow the dwc3
+>> controller to enter low power mode during bus suspend scenario.
+>>
+>> This property would particularly benefit dwc3 IPs where hibernation is
+>> not enabled and the dwc3 low power mode entry/exit is handled by the
+>> glue driver. The assumption here is that the platform using this dt
+>> property is capable of detecting resume events to bring the controller
+>> out of suspend.
+>>
+>> Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
+>> ---
+>>   Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 5 +++++
+>>   1 file changed, 5 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+>> index a696f23730d3..e19a60d06d2b 100644
+>> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+>> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+>> @@ -403,6 +403,11 @@ properties:
+>>       description:
+>>         Enable USB remote wakeup.
+>>   
+>> +  snps,runtime-suspend-on-usb-suspend:
+>> +    description:
+>> +      If True then dwc3 runtime suspend is allowed during bus suspend
+>> +      case even with the USB cable connected.
 > 
-> These capabilities can be derived from the Cable VDO data as well as from
-> the existing EC PD host command interface.
+> This was no tested... but anyway, this is no a DT property but OS
+> policy. There is no such thing as "runtime suspend" in the hardware,
+> because you describe one particular OS.
 > 
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Signed-off-by: Utkarsh Patel <utkarsh.h.patel@intel.com>
-> ---
->  drivers/platform/chrome/cros_ec_typec.c | 30 +++++++++++++++++++++++++
->  drivers/platform/chrome/cros_ec_typec.h |  1 +
->  2 files changed, 31 insertions(+)
+> Sorry, no a DT property, drop the change entirely.
 > 
-> diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
-> index d0b4d3fc40ed..eb4a1cb584a2 100644
-> --- a/drivers/platform/chrome/cros_ec_typec.c
-> +++ b/drivers/platform/chrome/cros_ec_typec.c
-> @@ -485,6 +485,32 @@ static int cros_typec_enable_tbt(struct cros_typec_data *typec,
->  	return typec_mux_set(port->mux, &port->state);
->  }
->  
-> +static int cros_typec_dp21_support(struct cros_typec_port *port,
-> +				   struct typec_displayport_data dp21_data,
-> +				   struct ec_response_usb_pd_control_v2 *pd_ctrl)
-> +{
-> +	u32 cable_vdo = cros_typec_get_cable_vdo(port, USB_TYPEC_DP_SID);
-> +
-> +	if (cable_vdo & DP_CAP_DPAM_VERSION) {
-> +		dp21_data.conf |= cable_vdo;
-> +	} else {
-> +		/* Cable Speed */
-> +		dp21_data.conf |= pd_ctrl->cable_speed << DP_CONF_SIGNALLING_SHIFT;
-> +
-> +		/* Cable Type */
-> +		if (pd_ctrl->cable_gen & USB_PD_CTRL_OPTICAL_CABLE)
-> +			dp21_data.conf |= DP_CONF_CABLE_TYPE_OPTICAL << DP_CONF_CABLE_TYPE_SHIFT;
-> +		else if (cros_typec_get_cable_vdo(port, USB_TYPEC_TBT_SID) & TBT_CABLE_RETIMER)
-> +			dp21_data.conf |= DP_CONF_CABLE_TYPE_RE_TIMER << DP_CONF_CABLE_TYPE_SHIFT;
-> +		else if (pd_ctrl->cable_gen & USB_PD_CTRL_ACTIVE_CABLE)
-> +			dp21_data.conf |= DP_CONF_CABLE_TYPE_RE_DRIVER << DP_CONF_CABLE_TYPE_SHIFT;
-> +	}
+> 
+Hi Krzysztof
 
-I don't understand why the conf VDO is being recreated here. cable_vdo should already contain the necessary
-bits. Just use the cable_vdo that you get from cros_typec_get_cable_vdo(); it will have all the bits
-set correctly already (the EC should be doing that).
+Sorry my local dt checker had some issue and it did not catch these 
+errors. I have rectified it now.
 
-The "if" condition should also be unnecessary.
+This dt property is mainly for skipping dwc3 controller halt when a USB 
+suspend interrupt is received with usb cable connected, so that we dont 
+trigger a DISCONNECT event. Perhaps a better name would reflect the true 
+usage of this?
 
-You are already doing something similar in the other patch for "active retimer cable support" [1]
+Something like snps,skip-dwc3-halt-on-usb-suspend. dwc3 cores where 
+hibernation feature is not enabled/supported can use this property
 
-> +
-> +	port->state.data = &dp21_data;
-> +
-> +	return typec_mux_set(port->mux, &port->state);
+Hi Thinh,Roger
+Please let me know your opinion on 'snps,skip-dwc3-halt-on-usb-suspend' 
+as the quirk name.
 
-Note that now you have reversed the order in which the muxes are set (which leads to subtle timing issues with
-Burnside Bridge and other similar retimers). So please don't do this.
-
-> +}
-> +
->  /* Spoof the VDOs that were likely communicated by the partner. */
->  static int cros_typec_enable_dp(struct cros_typec_data *typec,
->  				int port_num,
-> @@ -524,6 +550,9 @@ static int cros_typec_enable_dp(struct cros_typec_data *typec,
->  	port->state.data = &dp_data;
->  	port->state.mode = TYPEC_MODAL_STATE(ffs(pd_ctrl->dp_mode));
->  
-> +	if (typec->typec_dp21_supported)
-> +		return cros_typec_dp21_support(port, dp_data, pd_ctrl);
-> +
->  	ret = cros_typec_retimer_set(port->retimer, port->state);
->  	if (!ret)
->  		ret = typec_mux_set(port->mux, &port->state);
-> @@ -1196,6 +1225,7 @@ static int cros_typec_probe(struct platform_device *pdev)
->  
->  	typec->typec_cmd_supported = cros_ec_check_features(ec_dev, EC_FEATURE_TYPEC_CMD);
->  	typec->needs_mux_ack = cros_ec_check_features(ec_dev, EC_FEATURE_TYPEC_MUX_REQUIRE_AP_ACK);
-> +	typec->typec_dp21_supported = cros_ec_check_features(ec_dev, EC_FEATURE_TYPEC_DP2_1);
-
-This entire feature isn't necessary. Regardless of whether dp2.1 is supported or not, the port driver
-just needs to forward the cable_vdo it receives faithfully to the mux driver, which can deal with
-internal details (based on whether *it* supports DP 2.1 or not).
-
-Thanks,
-
--Prashant
-
-[1] https://lore.kernel.org/linux-usb/20230718024703.1013367-1-utkarsh.h.patel@intel.com/T/#m950b24e7874d34f11081f252ba3ef4e752628529
+Thanks
+Elson
