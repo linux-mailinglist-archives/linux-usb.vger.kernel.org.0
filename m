@@ -2,104 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A66E9780261
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Aug 2023 02:04:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CA8C7802A4
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Aug 2023 02:16:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353525AbjHRAEX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Aug 2023 20:04:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57758 "EHLO
+        id S1356669AbjHRAQK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Aug 2023 20:16:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356597AbjHRAEO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Aug 2023 20:04:14 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5EE3C06
-        for <linux-usb@vger.kernel.org>; Thu, 17 Aug 2023 17:03:43 -0700 (PDT)
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id D9EF73F533
-        for <linux-usb@vger.kernel.org>; Fri, 18 Aug 2023 00:02:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1692316928;
-        bh=Tmnlfhs95EL6waz9oCG9J1eFGjBYGw5AvYaX1Beaazg=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=sXnTLxO81kRpdGmMUNbf0PvrIpqEBnSeB0jyo2OB6InweEetK+qtfLYxBm0ShQy4i
-         MHID4FqTYxy9M6pIoyUptFPu+pOIZiCfFgbHHVPlnm3AC5EwYZCvBJbTod8Wp4VQsk
-         rpFB/xfZdc22uu+QAyG1QiPKTsxThzKehI4TBGE6FxXKMc3SFVeo2k8WRHBF+YIMZ6
-         sa/Y+ZrcIdQMmaQLOfDq14rE28IwVRigdgbjqzU+X2dFR/UOJRbGUFyclbHCi1vRI5
-         FPHrdJXwE5/L7pxE6e5696pjh5nIyOYU0aGsXMhb+cOl7Itvw2UuBRCX4VbfYS5aYb
-         EPikjPjuDwU+g==
-Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-26b2daf44c3so479753a91.3
-        for <linux-usb@vger.kernel.org>; Thu, 17 Aug 2023 17:02:08 -0700 (PDT)
+        with ESMTP id S1356786AbjHRAQF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Aug 2023 20:16:05 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D033FE;
+        Thu, 17 Aug 2023 17:16:03 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id 41be03b00d2f7-51b4ef5378bso316946a12.1;
+        Thu, 17 Aug 2023 17:16:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692317763; x=1692922563;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=2dZC6I9263vVrfc1sUtjjkPmfW6/RSeek9PprIZRkEM=;
+        b=lKELf2czkVnZlHfQA9i7vJNnNd5DC6dKqaKgqW+COsja4jbtVzN6FZICcKsO/YbIx+
+         qJ2TZvjXUjdEUFTtpnEC2AlUCmyUEm527LdRXAY3IYSkmhmpl3E5XpajIvZ5+124JzOR
+         q9TTd79Bg4vQhDiU+CVBvceMBQp5AtBYPk8Y7MOPVV/16HvU46hiYPSksEQ2v0UccD+/
+         +Zi8+MZLIyb838yZ0fJWUBKe7lfiAV5PSZDVQX8PzbCJxDcHfrliaX9I9d9W4QvXwQUY
+         sHdNuKOtGP6pX6Gl8fjSHqJHYSV+vlvGsKX1C6tvRsL3sVhQeS49OVc4CVV0BAdcP4eV
+         Xdxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692316927; x=1692921727;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Tmnlfhs95EL6waz9oCG9J1eFGjBYGw5AvYaX1Beaazg=;
-        b=kav9dBQ85th0kkljoynojL32Ev+hlP4Boeu8Av1U43QyHTVQqDgWibdO4JibtElndo
-         mzFXkwwfydionI2iNlJI9Czq8L1xzb04+durR1tEpUUtOGzPIYQeJgZSCWnMov3rZ/2X
-         Nh0jw1vJ7BYVHx6K0By5S6W2n99F1VU5O5y+d0wJdvMtbea1eXjTYhaw09lWGh2337iG
-         OakXXu8nVXHqc4GVpsTTbaK40G+tINYE5w8LJW6ahcZTS5lMu2Z+i/KydlEe+igx2ozN
-         8TX5bXzTq4U/25uUm+fzPi40wQ7nQbbWA09JkNiJQhwHROHxDy2aycUgG7OPyAqvVm48
-         j5Cw==
-X-Gm-Message-State: AOJu0YzCy4J9fuCXCc43SGiV3Z9KNpqWSw77MjQVtC+Es/AfulOX9Kg+
-        yfeki/RGczd/kfPHnUnImJ5m1oP6DBLAf1zJWH88MGcH5AHEGlKwJ2Y+YmY50KGlTjuduFOUmQ8
-        ZmPbAWAc1XH7vb14dIBu24pyYZv4uPnRDeA+fCxAtvjvrrg/zkGN7Hw==
-X-Received: by 2002:a17:90a:7486:b0:26b:c3f:1503 with SMTP id p6-20020a17090a748600b0026b0c3f1503mr1064243pjk.17.1692316927388;
-        Thu, 17 Aug 2023 17:02:07 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IE+7EIVypmed5RGIhj0djV4fI4FSoK8WKnbipAJ8Tz7OsrmqWJYy2cffgUm1RSouUyrs3uw9e0d2WvEVxKlJsU=
-X-Received: by 2002:a17:90a:7486:b0:26b:c3f:1503 with SMTP id
- p6-20020a17090a748600b0026b0c3f1503mr1064228pjk.17.1692316927159; Thu, 17 Aug
- 2023 17:02:07 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1692317763; x=1692922563;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2dZC6I9263vVrfc1sUtjjkPmfW6/RSeek9PprIZRkEM=;
+        b=UJme/ldLq1xVwX5GPpM/DEur6vrJNy4LaFMiqCmsuLVAYfUVzOmN4OUbPUQsEn0uIE
+         4gibQER7HvMFP7CkKvGmaokac0b1Gpw0kD5UHVRyAoeq+H2dOk6i3mKwNk1vJyKvnzRg
+         N87QiTPFFqV1WCwCcUHWfz/Do/VmLWxrawuvKM6V88FhbxayxY7bcrcDOtgiIqkteOCj
+         7gzgSmKGlWZZ7BaNYzRpchD3e1CFR2+nqYH57V/DYf42yTXMZqEQ9BUTWlNEAk66D8FH
+         FIgvqSwzyEO+VS3+QXCpOejEt3q2m8PqvkeRN84CX5k78X6GlLtzpUsL4cIuW9/1ijFM
+         Z2NQ==
+X-Gm-Message-State: AOJu0Yxyg7d9osQ+znhXUV5QlOS+u9XCpEumXjxQAv2TtitL/I59jofh
+        tKKWw/OHyo85KZXDhFnnBMvWPMwe15nluRnnWu0=
+X-Google-Smtp-Source: AGHT+IGlFGWDpYqKetUPlFM7ih87U7uJrfuNsmPwe6MMJ3aFK5QnSp6xSXMhlZfeGV6t6Axn+3XYIy2J3cqAYS+M8hE=
+X-Received: by 2002:a17:90a:bf02:b0:267:f1d0:ca70 with SMTP id
+ c2-20020a17090abf0200b00267f1d0ca70mr992707pjs.47.1692317762928; Thu, 17 Aug
+ 2023 17:16:02 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230817093305.212821-1-kai.heng.feng@canonical.com>
- <cab8a29b-816c-41c7-8d2a-418f787e406e@rowland.harvard.edu> <59898e32-f2ea-4df7-947b-3d74835ff9b7@rowland.harvard.edu>
-In-Reply-To: <59898e32-f2ea-4df7-947b-3d74835ff9b7@rowland.harvard.edu>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Fri, 18 Aug 2023 08:01:54 +0800
-Message-ID: <CAAd53p5pxGfS0y260NsMF+m_Ota+d1ZKbtdq4dfM5s+T1z14bw@mail.gmail.com>
-Subject: Re: [PATCH] xhci: Disable connect, disconnect and over-current wakeup
- on system suspend
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     mathias.nyman@intel.com,
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Fri, 18 Aug 2023 02:15:52 +0200
+Message-ID: <CA+fCnZcQSYy63ichdivAH5-fYvN2UMzTtZ--h=F6nK0jfVou3Q@mail.gmail.com>
+Subject: dwc3: unusual handling of setup requests with wLength == 0
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+        USB list <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 17, 2023 at 10:22=E2=80=AFPM Alan Stern <stern@rowland.harvard.=
-edu> wrote:
->
-> On Thu, Aug 17, 2023 at 10:07:37AM -0400, Alan Stern wrote:
-> > On Thu, Aug 17, 2023 at 05:33:05PM +0800, Kai-Heng Feng wrote:
-> > > HP ProOne 440 G10 AIO sometimes cannot suspend as xHCI wakes up the
-> > > system:
-> > > [  445.814574] hub 2-0:1.0: hub_suspend
-> > > [  445.814652] usb usb2: bus suspend, wakeup 0
-> > > [  445.824629] xhci_hcd 0000:00:14.0: Port change event, 1-11, id 11,=
- portsc: 0x202a0
-> >
-> > What is the meaning of the 0x202a0 bits?  What caused this wakeup?
->
-> And more to the point, given that the previous line says "wakeup 0", why
-> should any port change event cause a wakeup?
+Hi Alan and Thinh,
 
-I think the controller and roothub have to deal with the interrupt
-about disconnecting regardless of the remote wakeup setting.
+I have been testing Raw Gadget with the dwc3 UDC driver and stumbled
+upon an issue related to how dwc3 handles setup requests with wLength
+== 0.
 
-Kai-Heng
+When running a simple Raw Gadget-based keyboard emulator [1],
+everything works as expected until the point when the host sends a
+SET_CONFIGURATION request, which has wLength == 0.
 
->
-> Alan Stern
+For setup requests with wLength != 0, just like the other UDC drivers
+I tested, dwc3 calls the gadget driver's ->setup() callback and then
+waits until the gadget driver queues an URB to EP0 as a response.
+
+However, for a setup request with wLength == 0, dwc3 does not wait
+until the gadget driver queues an URB to ack the transfer. It appears
+that dwc3 just acks the request internally and then proceeds with
+calling the ->setup() callback for the next request received from the
+host. This confuses Raw Gadget, as it does not expect to get a new
+->setup() call before it explicitly acks the previous one by queuing
+an URB. As a result, the emulation fails.
+
+I suspect this issue has not been observed with other gadget drivers,
+as they queue an URB immediately after receiving a ->setup() call:
+dwc3 appears to somehow correctly handle this internally even though
+it acks the transfer by itself. But the timings with Raw Gadget are
+different, as it requires userspace to ack the transfer. Sometimes
+though, the Raw Gadget-based emulator also manages to queue an URB
+before the next request is received from the host and the enumeration
+continues properly (until the next request with wLength == 0).
+
+What do you think would be the best approach to deal with this?
+
+Can this be considered a bug in dwc3 that should be fixed? There's a
+seemingly related comment in dwc3 code [2], but I'm not familiar
+enough with its internals to understand whether this is what leads to
+the issue I'm seeing.
+
+Or should I adapt Raw Gadget to handle this unusual dwc3 behavior?
+This might be tricky to do, as I cannot change the existing userspace
+API.
+
+On a side note, as an experiment, I tried returning
+USB_GADGET_DELAYED_STATUS from the Raw Gadget's ->setup() callback if
+the UDC driver calls it too early: some UDC drivers, including dwc3,
+appear to contain a special handling for this return value. However,
+that didn't work out. Perhaps, I misunderstand the meaning of this
+value.
+
+Thank you!
+
+[1] https://github.com/xairy/raw-gadget/blob/master/examples/keyboard.c
+[2] https://elixir.bootlin.com/linux/v6.5-rc6/source/drivers/usb/dwc3/ep0.c#L145
