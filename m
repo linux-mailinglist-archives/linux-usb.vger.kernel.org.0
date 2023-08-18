@@ -2,95 +2,153 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85573780BF6
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Aug 2023 14:41:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5C83780C60
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Aug 2023 15:18:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376881AbjHRMks (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Aug 2023 08:40:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60048 "EHLO
+        id S1377020AbjHRNRi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Aug 2023 09:17:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376916AbjHRMkf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Aug 2023 08:40:35 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 355783A8D
-        for <linux-usb@vger.kernel.org>; Fri, 18 Aug 2023 05:40:33 -0700 (PDT)
-Received: from canpemm500007.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4RS1dl5DVcz1GFGT;
-        Fri, 18 Aug 2023 20:39:07 +0800 (CST)
-Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
- (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Fri, 18 Aug
- 2023 20:40:30 +0800
-From:   Yue Haibing <yuehaibing@huawei.com>
-To:     <gregkh@linuxfoundation.org>, <laurent.pinchart@ideasonboard.com>,
-        <dan.scally@ideasonboard.com>, <yuehaibing@huawei.com>
-CC:     <linux-usb@vger.kernel.org>
-Subject: [PATCH -next] usb: gadget: function: Remove unused declarations
-Date:   Fri, 18 Aug 2023 20:40:25 +0800
-Message-ID: <20230818124025.51576-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
+        with ESMTP id S1346972AbjHRNR2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Aug 2023 09:17:28 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 478502723;
+        Fri, 18 Aug 2023 06:17:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692364637; x=1723900637;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=01GUnJdnsfSW3V/fRhcTMyz0P3VHw8bOSYw42JoVXSc=;
+  b=AV7R5v4Iei65yjZNchiu0dTLIsT5igNHbQ44EnCkSaSJ6GU98+rRfU6L
+   5aAjYnchzPUbQYd23PU9vPa/HD5p5LYMuBQ8PUqSiyeCK4SZFPdqG4cRp
+   uepPxxDSN482ftjfkd1zcVsq9q+T8OA2ouKjbPtwcu8jfY/j6wCDsi60N
+   Hex3I9gLRKDbH8e2M5Phm1nnafrR9kP+5zZyyUI5OtPJFimVuQf8xm8Zs
+   jt7AzR5SlC3AVXsdxs8KaaBE01Z93IxpUEDMcmuf+N5q12GMVn8aBLMtJ
+   vhn4Op2+urZhCo8hfT4mApRCPSkXIad13fjMfwmnswsZbUuRuYRAO0Fpn
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10806"; a="373081511"
+X-IronPort-AV: E=Sophos;i="6.01,183,1684825200"; 
+   d="scan'208";a="373081511"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2023 06:17:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
+   d="scan'208";a="878686416"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga001.fm.intel.com with ESMTP; 18 Aug 2023 06:17:18 -0700
+Message-ID: <2c029018-a926-6fda-ed71-937ac74d00b0@linux.intel.com>
+Date:   Fri, 18 Aug 2023 16:18:30 +0300
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.174.179.215]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500007.china.huawei.com (7.192.104.62)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.13.0
+Content-Language: en-US
+To:     Hardik Gajjar <hgajjar@de.adit-jv.com>, gregkh@linuxfoundation.org,
+        mathias.nyman@intel.com, stern@rowland.harvard.edu,
+        yangyingliang@huawei.com
+Cc:     jinpu.wang@ionos.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, erosca@de.adit-jv.com
+References: <20230818092353.124658-1-hgajjar@de.adit-jv.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH] usb: hcd: xhci: Add set command timer delay API
+In-Reply-To: <20230818092353.124658-1-hgajjar@de.adit-jv.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-These declarations are not implemented anymore, remove them.
+On 18.8.2023 12.23, Hardik Gajjar wrote:
+> xHCI driver starts the response timer after sending each
+> command to the device. The default value of this timer is
+> 5 seconds (XHCI_CMD_DEFAULT_TIMEOUT = HZ*5). This seems
+> too high in time crtical use case.
+> 
+> This patch provides an API to change the default value of
+> the timer from the vendor USB driver.
+> 
+> The default value will be XHCI_CMD_DEFAULT_TIMEOUT (5 sec)
+> 
+> Use case:
+> According to the Smartphone integration certification
+> requirement in the automotive, the phone connected via USB
+> should complete enumeration and user space handshake
+> within 3 sec.
 
-Signed-off-by: Yue Haibing <yuehaibing@huawei.com>
----
- drivers/usb/gadget/function/u_phonet.h | 1 -
- drivers/usb/gadget/function/u_serial.h | 4 ----
- drivers/usb/gadget/function/uvc.h      | 2 --
- 3 files changed, 7 deletions(-)
+The above incorrectly makes it sound as if the command timeout
+timer causes the delay.
 
-diff --git a/drivers/usb/gadget/function/u_phonet.h b/drivers/usb/gadget/function/u_phonet.h
-index c53233b37192..ff62ca22c40d 100644
---- a/drivers/usb/gadget/function/u_phonet.h
-+++ b/drivers/usb/gadget/function/u_phonet.h
-@@ -20,7 +20,6 @@ struct f_phonet_opts {
- struct net_device *gphonet_setup_default(void);
- void gphonet_set_gadget(struct net_device *net, struct usb_gadget *g);
- int gphonet_register_netdev(struct net_device *net);
--int phonet_bind_config(struct usb_configuration *c, struct net_device *dev);
- void gphonet_cleanup(struct net_device *dev);
- 
- #endif /* __U_PHONET_H */
-diff --git a/drivers/usb/gadget/function/u_serial.h b/drivers/usb/gadget/function/u_serial.h
-index 102a7323a1fd..901d99310bc4 100644
---- a/drivers/usb/gadget/function/u_serial.h
-+++ b/drivers/usb/gadget/function/u_serial.h
-@@ -71,8 +71,4 @@ void gserial_disconnect(struct gserial *);
- void gserial_suspend(struct gserial *p);
- void gserial_resume(struct gserial *p);
- 
--/* functions are bound to configurations by a config or gadget driver */
--int gser_bind_config(struct usb_configuration *c, u8 port_num);
--int obex_bind_config(struct usb_configuration *c, u8 port_num);
--
- #endif /* __U_SERIAL_H */
-diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
-index 100475b1363e..6751de8b63ad 100644
---- a/drivers/usb/gadget/function/uvc.h
-+++ b/drivers/usb/gadget/function/uvc.h
-@@ -178,8 +178,6 @@ struct uvc_file_handle {
-  */
- 
- extern void uvc_function_setup_continue(struct uvc_device *uvc);
--extern void uvc_endpoint_stream(struct uvc_device *dev);
--
- extern void uvc_function_connect(struct uvc_device *uvc);
- extern void uvc_function_disconnect(struct uvc_device *uvc);
- 
--- 
-2.34.1
+> 
+> Reducing the response waiting time by setting the smaller
+> command timer delay helps to speed up overall re-enumeration
+> process of the USB device in case of device is not responding
+> properly in first enumeration iteration.
 
+So is this a case where addressing a usb device behind xHC always
+fail on the first attempt, i.e. address device command in xhci
+never completes. Solution proposed here is to fail faster and
+retry?
+
+Is the rootcause known why first enumeration fails?
+
+Does setting old_scheme_first module parameter help?
+
+> 
+> Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
+> ---
+>   drivers/usb/core/hcd.c       | 23 +++++++++++++++++++++++
+>   drivers/usb/host/xhci-ring.c | 10 +++++-----
+>   drivers/usb/host/xhci.c      | 15 +++++++++++++++
+>   drivers/usb/host/xhci.h      |  1 +
+>   include/linux/usb/hcd.h      |  2 ++
+>   5 files changed, 46 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+> index 8300baedafd2..e392e90e918c 100644
+> --- a/drivers/usb/core/hcd.c
+> +++ b/drivers/usb/core/hcd.c
+> @@ -3157,6 +3157,29 @@ int usb_hcd_setup_local_mem(struct usb_hcd *hcd, phys_addr_t phys_addr,
+>   }
+>   EXPORT_SYMBOL_GPL(usb_hcd_setup_local_mem);
+>   
+> +/**
+> + * usb_hcd_set_cmd_timer_delay Set the delay of the command timer.
+> + * @hcd - pointer to the HCD representing the controller
+> + * @delay - Delay value to be used in command timer.
+> + *
+> + * wrapper function to call the set_cmd_timer_delay API of the host
+> + * diver.
+> + *
+> + * return 0 on success; otherwise -ENODEV means the feature not
+> + * supported by host driver.
+> + */
+> +
+> +int usb_hcd_set_cmd_timer_delay(struct usb_hcd *hcd, int delay)
+> +{
+> +	int ret = -ENODEV;
+> +
+> +	if (hcd->driver->set_cmd_timer_delay)
+> +		ret = hcd->driver->set_cmd_timer_delay(hcd, delay);
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(usb_hcd_set_cmd_timer_delay);
+> +
+
+The xhci command timeout is more of a xhci internal thing, not sure it's a good
+idea to add this to hcd.
+
+Would it make sense to add a timeout parameter to hcd->driver->address_device(hcd, udev)
+instead?
+
+First priority should of course be finding out why the first enumeration fails,
+and solve that.
+
+Thanks
+Mathias
