@@ -2,72 +2,41 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4949780A07
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Aug 2023 12:29:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85573780BF6
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Aug 2023 14:41:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359279AbjHRK30 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Aug 2023 06:29:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50874 "EHLO
+        id S1376881AbjHRMks (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Aug 2023 08:40:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359699AbjHRK3R (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Aug 2023 06:29:17 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAEE626A8
-        for <linux-usb@vger.kernel.org>; Fri, 18 Aug 2023 03:29:15 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-9a1681fa868so29048766b.3
-        for <linux-usb@vger.kernel.org>; Fri, 18 Aug 2023 03:29:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692354554; x=1692959354;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=HIXdHmbJ/1H+7sVStqZs6MCT28eORkXsThJXsBANxyU=;
-        b=kZZuRn+2N/u+2djWTn9I0tqO9da2n6zBwV0W7bFuBfVxZFYtQ9anaguWhkEo7sVbGd
-         zbjjzjTkGYGZ61VZPrswwdxIihftexIcSMQ/SSBnqH7bJ3DbBkNHhFSVK9H6YfFgzTAZ
-         ZL7MCjzNFZfKa3LBC/jFGUgqfXhAfd3mcjbQCne0EiGTHvN2K6ZxulcXnwLss1QcMJnD
-         jlOdfDIiHY4YQJPzRn5AKi1p8zCZBSJF6rRUJe8vEJDuO9252keS1ErpklpVyEcT+a0+
-         ikEXiIbPGR6yQf133kqxdeKgXYLDJrQgXRe11vIO994AZ3y/Z8wyUFHfnN6PyFQnttQ7
-         QqIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692354554; x=1692959354;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HIXdHmbJ/1H+7sVStqZs6MCT28eORkXsThJXsBANxyU=;
-        b=kfp9n17RoQgLxVJxlKKLal5e5etdT2JYp62QgbI2SjEu8+gRyNe8IfFRCBhDG6VtgR
-         m5IU0qyv/7wzHqgRGHMrGFOVQ4qPuIy+JwdVcDdACAVbS7GXDBXD0BLLGR8j+LDpBFUt
-         /H0a/o11KWT4FX+h3MeAtmRs45C78C4uZiT4xHgx4Tmnub3/kOtrjtU4JBb9FtZmn1hM
-         zs+F/jVV9d7xOn9YBk+Da+pMdwFigWel1WbKyaA3nioduenCfKg294HF/OCDviSXAa5x
-         hpI1VWHXgE77CLvAJQLg6ZweFnNVXzLvSBjEYEBnr0PyY4UHKJ+9gj/hXc2VzV7e+0p+
-         8wjg==
-X-Gm-Message-State: AOJu0YxphEt1AxtQcxCXBKr0Q6VCvCx+gg39THdZWNXoGpmko1w0hA64
-        05oyQpfETA/GMi2rXddMD5Dceg==
-X-Google-Smtp-Source: AGHT+IGyaHg28rUIREhoYmqbDtr2UtDKWZmkPT4qvdhoOEqX0b2crmbXQiLYzf5Z3vgW3SHSSt89Og==
-X-Received: by 2002:a17:907:7792:b0:99c:3b4:940c with SMTP id ky18-20020a170907779200b0099c03b4940cmr1690618ejc.7.1692354554437;
-        Fri, 18 Aug 2023 03:29:14 -0700 (PDT)
-Received: from krzk-bin.. ([77.252.47.198])
-        by smtp.gmail.com with ESMTPSA id fy3-20020a170906b7c300b009894b476310sm994053ejb.163.2023.08.18.03.29.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Aug 2023 03:29:14 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sam Protsenko <semen.protsenko@linaro.org>
-Subject: [PATCH] dt-bindings: usb: samsung,exynos-dwc3: fix order of clocks on Exynos5433
-Date:   Fri, 18 Aug 2023 12:29:11 +0200
-Message-Id: <20230818102911.18388-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S1376916AbjHRMkf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Aug 2023 08:40:35 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 355783A8D
+        for <linux-usb@vger.kernel.org>; Fri, 18 Aug 2023 05:40:33 -0700 (PDT)
+Received: from canpemm500007.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4RS1dl5DVcz1GFGT;
+        Fri, 18 Aug 2023 20:39:07 +0800 (CST)
+Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
+ (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Fri, 18 Aug
+ 2023 20:40:30 +0800
+From:   Yue Haibing <yuehaibing@huawei.com>
+To:     <gregkh@linuxfoundation.org>, <laurent.pinchart@ideasonboard.com>,
+        <dan.scally@ideasonboard.com>, <yuehaibing@huawei.com>
+CC:     <linux-usb@vger.kernel.org>
+Subject: [PATCH -next] usb: gadget: function: Remove unused declarations
+Date:   Fri, 18 Aug 2023 20:40:25 +0800
+Message-ID: <20230818124025.51576-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.10.2.windows.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+Content-Type: text/plain
+X-Originating-IP: [10.174.179.215]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500007.china.huawei.com (7.192.104.62)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,34 +44,53 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The Exynos5433 DTSI had always different order of DWC USB3 controller
-clocks than the binding.  The order in the binding was introduced in the
-commit 949ea75b7ba4 ("dt-bindings: usb: samsung,exynos-dwc3: convert to
-dtschema") converting to DT schema.  The Linux driver does not care
-about order and was always getting clocks by name.  Therefore assume the
-DTS is the preferred order and correct the binding.
+These declarations are not implemented anymore, remove them.
 
-Fixes: 949ea75b7ba4 ("dt-bindings: usb: samsung,exynos-dwc3: convert to dtschema")
-Cc: Sam Protsenko <semen.protsenko@linaro.org>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Yue Haibing <yuehaibing@huawei.com>
 ---
- Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/gadget/function/u_phonet.h | 1 -
+ drivers/usb/gadget/function/u_serial.h | 4 ----
+ drivers/usb/gadget/function/uvc.h      | 2 --
+ 3 files changed, 7 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml b/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml
-index 240f41b7133a..deeed2bca2cd 100644
---- a/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml
-@@ -82,8 +82,8 @@ allOf:
-           items:
-             - const: aclk
-             - const: susp_clk
--            - const: pipe_pclk
-             - const: phyclk
-+            - const: pipe_pclk
+diff --git a/drivers/usb/gadget/function/u_phonet.h b/drivers/usb/gadget/function/u_phonet.h
+index c53233b37192..ff62ca22c40d 100644
+--- a/drivers/usb/gadget/function/u_phonet.h
++++ b/drivers/usb/gadget/function/u_phonet.h
+@@ -20,7 +20,6 @@ struct f_phonet_opts {
+ struct net_device *gphonet_setup_default(void);
+ void gphonet_set_gadget(struct net_device *net, struct usb_gadget *g);
+ int gphonet_register_netdev(struct net_device *net);
+-int phonet_bind_config(struct usb_configuration *c, struct net_device *dev);
+ void gphonet_cleanup(struct net_device *dev);
  
-   - if:
-       properties:
+ #endif /* __U_PHONET_H */
+diff --git a/drivers/usb/gadget/function/u_serial.h b/drivers/usb/gadget/function/u_serial.h
+index 102a7323a1fd..901d99310bc4 100644
+--- a/drivers/usb/gadget/function/u_serial.h
++++ b/drivers/usb/gadget/function/u_serial.h
+@@ -71,8 +71,4 @@ void gserial_disconnect(struct gserial *);
+ void gserial_suspend(struct gserial *p);
+ void gserial_resume(struct gserial *p);
+ 
+-/* functions are bound to configurations by a config or gadget driver */
+-int gser_bind_config(struct usb_configuration *c, u8 port_num);
+-int obex_bind_config(struct usb_configuration *c, u8 port_num);
+-
+ #endif /* __U_SERIAL_H */
+diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
+index 100475b1363e..6751de8b63ad 100644
+--- a/drivers/usb/gadget/function/uvc.h
++++ b/drivers/usb/gadget/function/uvc.h
+@@ -178,8 +178,6 @@ struct uvc_file_handle {
+  */
+ 
+ extern void uvc_function_setup_continue(struct uvc_device *uvc);
+-extern void uvc_endpoint_stream(struct uvc_device *dev);
+-
+ extern void uvc_function_connect(struct uvc_device *uvc);
+ extern void uvc_function_disconnect(struct uvc_device *uvc);
+ 
 -- 
 2.34.1
 
