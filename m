@@ -2,35 +2,37 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68F4E7803DD
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Aug 2023 04:38:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C66F9780431
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Aug 2023 05:09:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357275AbjHRChl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Aug 2023 22:37:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37232 "EHLO
+        id S1357433AbjHRDJV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Aug 2023 23:09:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242424AbjHRChK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Aug 2023 22:37:10 -0400
+        with ESMTP id S1357459AbjHRDIz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Aug 2023 23:08:55 -0400
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 1477F3A93
-        for <linux-usb@vger.kernel.org>; Thu, 17 Aug 2023 19:37:05 -0700 (PDT)
-Received: (qmail 17280 invoked by uid 1000); 17 Aug 2023 22:37:05 -0400
-Date:   Thu, 17 Aug 2023 22:37:05 -0400
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 2639C2D56
+        for <linux-usb@vger.kernel.org>; Thu, 17 Aug 2023 20:08:54 -0700 (PDT)
+Received: (qmail 17988 invoked by uid 1000); 17 Aug 2023 23:08:53 -0400
+Date:   Thu, 17 Aug 2023 23:08:53 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     mathias.nyman@intel.com,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: dwc3: unusual handling of setup requests with wLength == 0
-Message-ID: <bb470c47-c9dc-4dae-ae3f-c7d4736ee7e9@rowland.harvard.edu>
-References: <CA+fCnZcQSYy63ichdivAH5-fYvN2UMzTtZ--h=F6nK0jfVou3Q@mail.gmail.com>
- <20230818010815.4kcue67idma5yguf@synopsys.com>
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] xhci: Disable connect, disconnect and over-current
+ wakeup on system suspend
+Message-ID: <b08553d7-017e-477c-b18e-8564fe88646b@rowland.harvard.edu>
+References: <20230817093305.212821-1-kai.heng.feng@canonical.com>
+ <cab8a29b-816c-41c7-8d2a-418f787e406e@rowland.harvard.edu>
+ <59898e32-f2ea-4df7-947b-3d74835ff9b7@rowland.harvard.edu>
+ <CAAd53p5pxGfS0y260NsMF+m_Ota+d1ZKbtdq4dfM5s+T1z14bw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230818010815.4kcue67idma5yguf@synopsys.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAAd53p5pxGfS0y260NsMF+m_Ota+d1ZKbtdq4dfM5s+T1z14bw@mail.gmail.com>
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
@@ -40,109 +42,58 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 18, 2023 at 01:08:19AM +0000, Thinh Nguyen wrote:
-> Hi,
+On Fri, Aug 18, 2023 at 08:01:54AM +0800, Kai-Heng Feng wrote:
+> On Thu, Aug 17, 2023 at 10:22 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> >
+> > On Thu, Aug 17, 2023 at 10:07:37AM -0400, Alan Stern wrote:
+> > > On Thu, Aug 17, 2023 at 05:33:05PM +0800, Kai-Heng Feng wrote:
+> > > > HP ProOne 440 G10 AIO sometimes cannot suspend as xHCI wakes up the
+> > > > system:
+> > > > [  445.814574] hub 2-0:1.0: hub_suspend
+> > > > [  445.814652] usb usb2: bus suspend, wakeup 0
+> > > > [  445.824629] xhci_hcd 0000:00:14.0: Port change event, 1-11, id 11, portsc: 0x202a0
+> > >
+> > > What is the meaning of the 0x202a0 bits?  What caused this wakeup?
+> >
+> > And more to the point, given that the previous line says "wakeup 0", why
+> > should any port change event cause a wakeup?
 > 
-> On Fri, Aug 18, 2023, Andrey Konovalov wrote:
-> > Hi Alan and Thinh,
-> > 
-> > I have been testing Raw Gadget with the dwc3 UDC driver and stumbled
-> > upon an issue related to how dwc3 handles setup requests with wLength
-> > == 0.
-> > 
-> > When running a simple Raw Gadget-based keyboard emulator [1],
-> > everything works as expected until the point when the host sends a
-> > SET_CONFIGURATION request, which has wLength == 0.
-> > 
-> > For setup requests with wLength != 0, just like the other UDC drivers
-> > I tested, dwc3 calls the gadget driver's ->setup() callback and then
-> > waits until the gadget driver queues an URB to EP0 as a response.
+> I think the controller and roothub have to deal with the interrupt
+> about disconnecting regardless of the remote wakeup setting.
+
+This seems to contradict what you wrote in an earlier email:
+
+> > If remote wakeup isn't enabled then the do_wakeup variable will be 0,
+> > so your patch wouldn't make any difference.  The question is what
+> > happens when remote wakeup _is_ enabled.
 > 
-> For the lack of better term, can we use "request" or "usb_request"
-> instead of URB for gadget side, I get confused with the host side
-> whenever we mention URB.
+> Nothing happens either per my testing.
 > 
-> > 
-> > However, for a setup request with wLength == 0, dwc3 does not wait
-> > until the gadget driver queues an URB to ack the transfer. It appears
-> > that dwc3 just acks the request internally and then proceeds with
-> > calling the ->setup() callback for the next request received from the
-> 
-> It depends on the bRequest. It should not proceed to ->setup() unless
-> the gadget driver already setups the request for it.
+> For USB keyboard, the remote wakeup is enabled, unplugging it when
+> suspend is suspended doesn't wake the system up, despite of PORT_WKDISC_E being set.
+> Plugging it back doesn't wake the system up either, despite of PORT_WKCONN_E.
 
-Let's see if I understand what you're saying.  Some control transfers 
-are handled directly by the UDC driver (things like SET_ADDRESS or 
-CLEAR_HALT).  For these transfers, the ->setup() callback is not invoked 
-and the gadget driver is completely unaware of them.  But for all other 
-control transfers, the ->setup() callback _is_ invoked.
+You appear to be saying that when wakeup is disabled, unplugging a 
+device will wake up the system -- but when wakeup is enabled, unplugging 
+a device will not wake up the system!
 
-Is that what you meant?
+Is that really what you meant?  It doesn't make sense.  Probably means 
+there's a bug in the HCD.
 
-> > host. This confuses Raw Gadget, as it does not expect to get a new
-> > ->setup() call before it explicitly acks the previous one by queuing
-> > an URB. As a result, the emulation fails.
-> 
-> If the host intent is to send a 3-stage control request with a 0-length
-> data packet, the gadget driver needs to return USB_GADGET_DELAYED_STATUS
-> to prepare a 0-length request. For SET_CONFIGURATION, we don't expect
-> a data phase, why should the gadget driver queue a 0-length data?
+The point I'm trying to get at is that if wakeups are disabled for both 
+the host controller and the root hub then _nothing_ should generate an 
+interrupt or wakeup request.  Not pressing a key, not unplugging a 
+device... nothing.  But if wakeup _is_ enabled for both the controller 
+and the root hub, then any of those actions should generate an interrupt 
+and wake up the system.
 
-The USB-2 spec prohibits 3-stage control requests with wLength == 0 (see 
-sections 9.3.1 and 9.3.5).  Therefore the host's intent can never be to 
-send a 3-stage control request with a 0-length Data-stage packet.
-
-> > I suspect this issue has not been observed with other gadget drivers,
-> > as they queue an URB immediately after receiving a ->setup() call:
-> > dwc3 appears to somehow correctly handle this internally even though
-> > it acks the transfer by itself. But the timings with Raw Gadget are
-> > different, as it requires userspace to ack the transfer. Sometimes
-> > though, the Raw Gadget-based emulator also manages to queue an URB
-> > before the next request is received from the host and the enumeration
-> > continues properly (until the next request with wLength == 0).
-> > 
-> > What do you think would be the best approach to deal with this?
-> 
-> The communication should be clearly defined. That is, the dwc3 needs to
-> know if this is a 3-stage or 2-stage control transfer. It knows about
-> the standard requests, but not the vendor/non-standard ones. If the raw
-> gadget defined some unknown OUT request, it needs to tell dwc3 whether
-> it should expect the data stage or not.
-
-The communication _is_ clearly defined.  Here's how it works:
-
-For control transfers that aren't handled directly by the UDC, the UDC 
-driver invokes the ->setup() callback and waits for the gadget driver to 
-queue a request.  If the SETUP packet's wLength value is > 0 then the 
-gadget driver queues an IN or OUT request (depending on the transfer's 
-direction) and the UDC waits for the host to transfer the Data stage 
-packets, completing the request.  After this happens, the UDC driver 
-automatically queues an internal 0-length request in the opposite 
-direction for the Status stage.  Data-stage transfers are not allowed to 
-span more than one usb_request.
-
-(IMO that automatic action is a design flaw; the UDC driver should wait 
-for the gadget driver to explictly queue a 0-length request or a STALL 
-instead of doing it automatically.)
-
-But if the SETUP packet's wLength value is 0 then when the gadget driver 
-is ready, it queues a 0-length IN request which will act as the Status 
-stage.  In this situation the UDC does not automatically create a 
-Status-stage request.
-
-Note that the gadget driver is allowed to queue its various requests 
-either while the ->setup() callback is running or after it has returned.
-
-(Another design flaw is that this design doesn't specify what should 
-happen if the UDC receives another SETUP packet from the host before the 
-Status stage completes.  By sending another SETUP packet, the host is 
-indicating that the earlier control transfer has been aborted.  
-Presumably the UDC driver will complete all the outstanding requests 
-with an error status, but there's a potential race in the gadget driver 
-between queuing a request for the first transfer and executing the 
-->setup() callback for the second transfer.)
-
-If the dwc3 UDC driver doesn't behave this way then it needs to be 
-fixed.
+If wakeup is enabled for the host controller but not for the root hub, 
+then unplugging a device from the root hub should not generate a wakeup 
+request or an interrupt.  But things like pressing a key on a 
+wakeup-enabled keyboard should.  (In other words, the root hub shouldn't 
+generate any wakeup requests on its own but it should relay wakeup 
+requests that it receives from downstream devices.)  However, it's 
+understandable if the system doesn't behave properly in this case since 
+it's kind of an odd situation.
 
 Alan Stern
