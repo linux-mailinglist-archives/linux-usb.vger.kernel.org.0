@@ -2,228 +2,188 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2C5E78088F
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Aug 2023 11:35:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9B8C780888
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Aug 2023 11:32:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353464AbjHRJfT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Aug 2023 05:35:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35064 "EHLO
+        id S1359190AbjHRJcJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Aug 2023 05:32:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359191AbjHRJex (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Aug 2023 05:34:53 -0400
-X-Greylist: delayed 619 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 18 Aug 2023 02:34:24 PDT
-Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12ADE4204;
-        Fri, 18 Aug 2023 02:34:24 -0700 (PDT)
-Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
-        by hi1smtp01.de.adit-jv.com (Postfix) with ESMTP id 450845200CA;
-        Fri, 18 Aug 2023 11:24:03 +0200 (CEST)
-Received: from vmlxhi-118.adit-jv.com (10.72.93.77) by hi2exch02.adit-jv.com
- (10.72.92.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.32; Fri, 18 Aug
- 2023 11:24:03 +0200
-From:   Hardik Gajjar <hgajjar@de.adit-jv.com>
-To:     <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
-        <stern@rowland.harvard.edu>, <yangyingliang@huawei.com>
-CC:     <jinpu.wang@ionos.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <erosca@de.adit-jv.com>
-Subject: [PATCH] usb: hcd: xhci: Add set command timer delay API
-Date:   Fri, 18 Aug 2023 11:23:53 +0200
-Message-ID: <20230818092353.124658-1-hgajjar@de.adit-jv.com>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S1359243AbjHRJbw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Aug 2023 05:31:52 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36CDD3C19
+        for <linux-usb@vger.kernel.org>; Fri, 18 Aug 2023 02:31:39 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-5280ef23593so820227a12.3
+        for <linux-usb@vger.kernel.org>; Fri, 18 Aug 2023 02:31:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1692351097; x=1692955897;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pL7L3WqTivmRh2NkcdS+o8QoBLa4Dg7vH4Pm6EApcf8=;
+        b=vCjDYRIlAAp5DeEkp/TeWIxPOdQQKKZMZR76F/a9136wSifkRBIsipwCC9T5xagszg
+         lRU47G6naZfec/ZXJdbIQ4ttG+jUBZadVCNFFGZ5YbA8x7Q0cpOJ8UM1avgwnVqzhvMS
+         nvTUbidt9XAzZv/j6YHEyCidXw0bynRO7FEYVwcoCd0Af7es0s+9HHbtRknjWwMo0To8
+         c87g8Ygxerd9FfHi6pp/Wmy0CtPceg62o/Rf1NrvgDN3ZFS+VdSCgp4VESjLvLrZc2g4
+         +M6rxEFJOahVODgK23bqQHi7v+WN8ddVF3YwWTM6J5nfHV/3YWM409dTcFkxOaWvl6ul
+         D4sQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692351097; x=1692955897;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pL7L3WqTivmRh2NkcdS+o8QoBLa4Dg7vH4Pm6EApcf8=;
+        b=f5F4M+pa8vh+bBDGOAgIuLmMfrBlysN6KRsnc43PL9BpTSVNuk7Z+KcfS0Vcmq+dMN
+         N1wysM7BDVn8PuE8lW5zglhKjOXW83njFB5u3rshEuzITTbr6FVdOAotWLoyNg8BCFwD
+         DbTBYbtSCU+IW9Zzkiq6Xe1PCgKV3hjfJpL7QYQ9tHSZZ8Z5oKuTVQ3XWe6MDsYt1Z/W
+         LMdk0xzzYJ+VSnCCqzPVnK9IKkW5gPCD748eUDfQIs8m3moAaTTQLKkIuacBQJIDTI5H
+         b+bnAeJ2Ump7FqGUmRedVMXkTU4USZ9cf8Ogs0vY4F/mKtOerxOd2oWTAcHcT79fzciX
+         U2pA==
+X-Gm-Message-State: AOJu0YzqYaeDsSk5zbpDb7LrDGoL2E/v6B3PQxWlAjSzhhrImkXpDYBj
+        3Mknn8n/VU8jYEwhI3W+ZjWEGw==
+X-Google-Smtp-Source: AGHT+IFEfIKo8zmvgiACt6EAKWKYfHjNWnIq6cJKnY6qX//b9iaqG1p449CeXVv+Rj+D+S5crLWdPg==
+X-Received: by 2002:a17:906:23f2:b0:99c:7915:b844 with SMTP id j18-20020a17090623f200b0099c7915b844mr1388984ejg.57.1692351097620;
+        Fri, 18 Aug 2023 02:31:37 -0700 (PDT)
+Received: from [192.168.0.22] ([77.252.47.198])
+        by smtp.gmail.com with ESMTPSA id h17-20020a17090634d100b00993cc1242d4sm948376ejb.151.2023.08.18.02.31.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Aug 2023 02:31:37 -0700 (PDT)
+Message-ID: <eba26f0e-40dd-3661-b089-bc34c9426000@linaro.org>
+Date:   Fri, 18 Aug 2023 11:31:35 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.72.93.77]
-X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
- hi2exch02.adit-jv.com (10.72.92.28)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH] dt-bindings: usb: Add binding for ti,tps25750
+Content-Language: en-US
+To:     Abdel Alkuor <alkuor@gmail.com>, devicetree@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abdel Alkuor <abdelalkuor@geotab.com>
+References: <20230817235212.441254-1-alkuor@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230817235212.441254-1-alkuor@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-xHCI driver starts the response timer after sending each
-command to the device. The default value of this timer is
-5 seconds (XHCI_CMD_DEFAULT_TIMEOUT = HZ*5). This seems
-too high in time crtical use case.
+On 18/08/2023 01:52, Abdel Alkuor wrote:
+> From: Abdel Alkuor <abdelalkuor@geotab.com>
+> 
+> TPS25750 provides power negotiation and capabilities management
+> for USB Type-C applications.
+> 
+> Signed-off-by: Abdel Alkuor <abdelalkuor@geotab.com>
 
-This patch provides an API to change the default value of
-the timer from the vendor USB driver.
+Where is any user of it? DTS, driver or 3rd party upstream open-source
+project?
 
-The default value will be XHCI_CMD_DEFAULT_TIMEOUT (5 sec)
 
-Use case:
-According to the Smartphone integration certification
-requirement in the automotive, the phone connected via USB
-should complete enumeration and user space handshake
-within 3 sec.
+A nit, subject: drop second/last, redundant "binding for". The
+"dt-bindings" prefix is already stating that these are bindings.
 
-Reducing the response waiting time by setting the smaller
-command timer delay helps to speed up overall re-enumeration
-process of the USB device in case of device is not responding
-properly in first enumeration iteration.
+> ---
+>  .../devicetree/bindings/usb/ti,tps25750.yaml  | 84 +++++++++++++++++++
+>  1 file changed, 84 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/ti,tps25750.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/ti,tps25750.yaml b/Documentation/devicetree/bindings/usb/ti,tps25750.yaml
+> new file mode 100644
+> index 000000000000..326c9c2f766b
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/ti,tps25750.yaml
+> @@ -0,0 +1,84 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/ti,tps25750.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Texas Instruments 25750 Type-C Port Switch and Power Delivery controller
+> +
+> +maintainers:
+> +  - Abdel Alkuor <abdelalkuor@geotab.com>
+> +
+> +description: |
+> +  Texas Instruments 25750 Type-C Port Switch and Power Delivery controller
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - ti,tps25750
 
-Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
----
- drivers/usb/core/hcd.c       | 23 +++++++++++++++++++++++
- drivers/usb/host/xhci-ring.c | 10 +++++-----
- drivers/usb/host/xhci.c      | 15 +++++++++++++++
- drivers/usb/host/xhci.h      |  1 +
- include/linux/usb/hcd.h      |  2 ++
- 5 files changed, 46 insertions(+), 5 deletions(-)
+Blank line
 
-diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-index 8300baedafd2..e392e90e918c 100644
---- a/drivers/usb/core/hcd.c
-+++ b/drivers/usb/core/hcd.c
-@@ -3157,6 +3157,29 @@ int usb_hcd_setup_local_mem(struct usb_hcd *hcd, phys_addr_t phys_addr,
- }
- EXPORT_SYMBOL_GPL(usb_hcd_setup_local_mem);
- 
-+/**
-+ * usb_hcd_set_cmd_timer_delay Set the delay of the command timer.
-+ * @hcd - pointer to the HCD representing the controller
-+ * @delay - Delay value to be used in command timer.
-+ *
-+ * wrapper function to call the set_cmd_timer_delay API of the host
-+ * diver.
-+ *
-+ * return 0 on success; otherwise -ENODEV means the feature not
-+ * supported by host driver.
-+ */
-+
-+int usb_hcd_set_cmd_timer_delay(struct usb_hcd *hcd, int delay)
-+{
-+	int ret = -ENODEV;
-+
-+	if (hcd->driver->set_cmd_timer_delay)
-+		ret = hcd->driver->set_cmd_timer_delay(hcd, delay);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(usb_hcd_set_cmd_timer_delay);
-+
- /*-------------------------------------------------------------------------*/
- 
- #if IS_ENABLED(CONFIG_USB_MON)
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 1dde53f6eb31..f4fcac9ae692 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -366,9 +366,9 @@ void xhci_ring_cmd_db(struct xhci_hcd *xhci)
- 	readl(&xhci->dba->doorbell[0]);
- }
- 
--static bool xhci_mod_cmd_timer(struct xhci_hcd *xhci, unsigned long delay)
-+static bool xhci_mod_cmd_timer(struct xhci_hcd *xhci)
- {
--	return mod_delayed_work(system_wq, &xhci->cmd_timer, delay);
-+	return mod_delayed_work(system_wq, &xhci->cmd_timer, xhci->cmd_timer_delay);
- }
- 
- static struct xhci_command *xhci_next_queued_cmd(struct xhci_hcd *xhci)
-@@ -412,7 +412,7 @@ static void xhci_handle_stopped_cmd_ring(struct xhci_hcd *xhci,
- 	if ((xhci->cmd_ring->dequeue != xhci->cmd_ring->enqueue) &&
- 	    !(xhci->xhc_state & XHCI_STATE_DYING)) {
- 		xhci->current_cmd = cur_cmd;
--		xhci_mod_cmd_timer(xhci, XHCI_CMD_DEFAULT_TIMEOUT);
-+		xhci_mod_cmd_timer(xhci);
- 		xhci_ring_cmd_db(xhci);
- 	}
- }
-@@ -1786,7 +1786,7 @@ static void handle_cmd_completion(struct xhci_hcd *xhci,
- 	if (!list_is_singular(&xhci->cmd_list)) {
- 		xhci->current_cmd = list_first_entry(&cmd->cmd_list,
- 						struct xhci_command, cmd_list);
--		xhci_mod_cmd_timer(xhci, XHCI_CMD_DEFAULT_TIMEOUT);
-+		xhci_mod_cmd_timer(xhci);
- 	} else if (xhci->current_cmd == cmd) {
- 		xhci->current_cmd = NULL;
- 	}
-@@ -4301,7 +4301,7 @@ static int queue_command(struct xhci_hcd *xhci, struct xhci_command *cmd,
- 	/* if there are no other commands queued we start the timeout timer */
- 	if (list_empty(&xhci->cmd_list)) {
- 		xhci->current_cmd = cmd;
--		xhci_mod_cmd_timer(xhci, XHCI_CMD_DEFAULT_TIMEOUT);
-+		xhci_mod_cmd_timer(xhci);
- 	}
- 
- 	list_add_tail(&cmd->cmd_list, &xhci->cmd_list);
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index fae994f679d4..e1920af985ed 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -449,6 +449,8 @@ static int xhci_init(struct usb_hcd *hcd)
- 		compliance_mode_recovery_timer_init(xhci);
- 	}
- 
-+	xhci->cmd_timer_delay = XHCI_CMD_DEFAULT_TIMEOUT;
-+
- 	return retval;
- }
- 
-@@ -5267,6 +5269,18 @@ static void xhci_clear_tt_buffer_complete(struct usb_hcd *hcd,
- 	spin_unlock_irqrestore(&xhci->lock, flags);
- }
- 
-+static int xhci_set_cmd_delay(struct usb_hcd *hcd, int cmd_delay_ms)
-+{
-+	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
-+
-+	if (cmd_delay_ms < 150 || cmd_delay_ms > 10000)
-+		return -EINVAL;
-+
-+	xhci->cmd_timer_delay = cmd_delay_ms;
-+
-+	return 0;
-+}
-+
- static const struct hc_driver xhci_hc_driver = {
- 	.description =		"xhci-hcd",
- 	.product_desc =		"xHCI Host Controller",
-@@ -5332,6 +5346,7 @@ static const struct hc_driver xhci_hc_driver = {
- 	.disable_usb3_lpm_timeout =	xhci_disable_usb3_lpm_timeout,
- 	.find_raw_port_number =	xhci_find_raw_port_number,
- 	.clear_tt_buffer_complete = xhci_clear_tt_buffer_complete,
-+	.set_cmd_timer_delay = xhci_set_cmd_delay,
- };
- 
- void xhci_init_driver(struct hc_driver *drv,
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 7e282b4522c0..eb9a9b0bfa3d 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -1808,6 +1808,7 @@ struct xhci_hcd {
- 	struct list_head        cmd_list;
- 	unsigned int		cmd_ring_reserved_trbs;
- 	struct delayed_work	cmd_timer;
-+	unsigned long		cmd_timer_delay;
- 	struct completion	cmd_ring_stop_completion;
- 	struct xhci_command	*current_cmd;
- 
-diff --git a/include/linux/usb/hcd.h b/include/linux/usb/hcd.h
-index 4e9623e8492b..b6b0a0bbf9fc 100644
---- a/include/linux/usb/hcd.h
-+++ b/include/linux/usb/hcd.h
-@@ -405,6 +405,7 @@ struct hc_driver {
- #define EHSET_TEST_SINGLE_STEP_SET_FEATURE 0x06
- 	int	(*submit_single_step_set_feature)(struct usb_hcd *,
- 			struct urb *, int);
-+	int	(*set_cmd_timer_delay)(struct usb_hcd *hcd, int delay);
- };
- 
- static inline int hcd_giveback_urb_in_bh(struct usb_hcd *hcd)
-@@ -466,6 +467,7 @@ extern void usb_remove_hcd(struct usb_hcd *hcd);
- extern int usb_hcd_find_raw_port_number(struct usb_hcd *hcd, int port1);
- int usb_hcd_setup_local_mem(struct usb_hcd *hcd, phys_addr_t phys_addr,
- 			    dma_addr_t dma, size_t size);
-+int usb_hcd_set_cmd_timer_delay(struct usb_hcd *hcd, int delay);
- 
- struct platform_device;
- extern void usb_hcd_platform_shutdown(struct platform_device *dev);
--- 
-2.17.1
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    description: |
+
+Drop description
+
+> +    maxItems: 1
+> +
+> +  interrupt-names:
+> +    items:
+> +      - const: irq
+
+Drop interrupt-names, it is useless in this form.
+
+> +
+> +  firmware-name:
+> +    description: |
+> +      Should contain the name of the default patch binary
+> +      file located on the firmware search path which is
+> +      used to switch the controller into APP mode
+
+maxItems: 1
+
+> +
+> +  connector:
+> +    type: object
+> +    $ref: ../connector/usb-connector.yaml#
+> +    description:
+> +      Properties for usb c connector.
+> +    required:
+> +      - data-role
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - connector
+> +
+> +additionalProperties: true
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        tps25750: tps25750@21 {
+
+Node names should be generic. See also an explanation and list of
+examples (not exhaustive) in DT specification:
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+
+> +            compatible = "ti,tps25750";
+> +            reg = <0x21>;
+> +
+
+
+Best regards,
+Krzysztof
 
