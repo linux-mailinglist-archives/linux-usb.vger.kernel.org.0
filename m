@@ -2,152 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1610781782
-	for <lists+linux-usb@lfdr.de>; Sat, 19 Aug 2023 07:49:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46A307817F1
+	for <lists+linux-usb@lfdr.de>; Sat, 19 Aug 2023 09:09:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244288AbjHSFsb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 19 Aug 2023 01:48:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47308 "EHLO
+        id S1344082AbjHSHJR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 19 Aug 2023 03:09:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233214AbjHSFrz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 19 Aug 2023 01:47:55 -0400
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D35004208;
-        Fri, 18 Aug 2023 22:47:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=nKrHe
-        h3vFgqCircTvGmw8LS+NCBCOKBP8D1zl/uTuM4=; b=PLKVQwcprNSru6sTORlXg
-        LKj4bstjzcEfwbgdfgZmm+fMu9kY0c2wwJT/UyIzryOn2LCMWyWrb+eZ51Uejbak
-        AuvH5mVOvgANCebiNI06KEpIu7lYx9jDfneuFArEaIlvWc4wYw2pWfuZ52KC0DWb
-        VhmXqV4fvUQOHbvRcr6QEo=
-Received: from sc9-mailhost1.vmware.com (unknown [114.250.138.216])
-        by zwqz-smtp-mta-g5-3 (Coremail) with SMTP id _____wBn3XFkV+BkQevQDQ--.2412S2;
-        Sat, 19 Aug 2023 13:47:16 +0800 (CST)
-From:   Dingyan Li <18500469033@163.com>
-To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org
-Cc:     hdegoede@redhat.com, xiaofanc@gmail.com, oneukum@suse.com,
-        lists.tormod@gmail.com, sebastian.reichel@collabora.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] USB: Support 20Gbps speed for ioctl USBDEVFS_GET_SPEED
-Date:   Sat, 19 Aug 2023 13:46:55 +0800
-Message-Id: <20230819054655.5495-1-18500469033@163.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <79f3ec25.fa3.18a0c111fa9.Coremail.18500469033@163.com>
-References: <79f3ec25.fa3.18a0c111fa9.Coremail.18500469033@163.com>
+        with ESMTP id S1343984AbjHSHJK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 19 Aug 2023 03:09:10 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D70CF3C23
+        for <linux-usb@vger.kernel.org>; Sat, 19 Aug 2023 00:09:06 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-99c3c8adb27so205605566b.1
+        for <linux-usb@vger.kernel.org>; Sat, 19 Aug 2023 00:09:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1692428945; x=1693033745;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iNZbeqSVhasfGUErtV5q61IvmoorlC+cVrGMEvE4cm0=;
+        b=DC9Aovqc4ZYNUzbqRgn3hWorZIeZxG2o/E+MmADA2nbVL0KHnCUJyPeQXTXpuqA2Xz
+         oZEWmSlNFfDCvxJZLQ+O/c47xTvamXrlEQKMQegL2MeFbNINIraW0cEG5/y92qSv1HCx
+         dgVEAlTx1hXP/GJITC9Q6m6HUvGqrLejCtHJgvB+DQ2FLqXTuR1uH5pNK6i3XMGVUWqf
+         LhHsECatVITe/9LtoFMCBXAiD2AxJ23fbjUPDzntkXEvwwVREhLS37XDW00Nl+Q/sqN2
+         UX66eemUGqM3QKjn0kkuwcfofPAbb2y60SaL7B2Hpf26Dgrc62+JzRvDWunFMIqcxnvP
+         lo4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692428945; x=1693033745;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iNZbeqSVhasfGUErtV5q61IvmoorlC+cVrGMEvE4cm0=;
+        b=hBLRhZW4uFsIg6dfbU6DQ4yofgUZ1i7nzoel47GIOoW5eg9aiY0YA0IFcLC39HUP39
+         6ocTq0KzEhMHoF+3cWWjOFw90oZqraiVfd9mOSO5SxyfC9SOxq+3/G5706MbcuaGhpeZ
+         g1bMTe1frTWIK25n+e+wTLjq7VywS23ktdrtEMNT4+gcJhUX1GEZAhbsU8AIvXjRzNEy
+         UexDjlbd96Hl/86tENLYzOZFhPvK/26IeLtCjL/XiXq3ywcJtSoCT0V2CVNw+MGYRACU
+         xGGrE9tVrXawekof4+DNibruxkUtN7KwUWkXaLaShck7HQSIK5OJUWMf5UhufmTfNoW7
+         jUoQ==
+X-Gm-Message-State: AOJu0Yz2VE17mz42mgxeabwALK6hcEk1WsQJMoxryjR0NrlLrTD8OLbx
+        1xOKNaQNQyFCMVjZ6LQVWe9CKg==
+X-Google-Smtp-Source: AGHT+IGqWVxgB6V8BKoeEAcFDjA1ZAfZLJm/2VnM41Up1zXYMnMwQUUXoTvaEt7h1dSKvcY9QNd5Hg==
+X-Received: by 2002:a17:907:8194:b0:98e:2097:f23e with SMTP id iy20-20020a170907819400b0098e2097f23emr761355ejc.77.1692428945413;
+        Sat, 19 Aug 2023 00:09:05 -0700 (PDT)
+Received: from [192.168.0.22] ([77.252.47.198])
+        by smtp.gmail.com with ESMTPSA id t23-20020a170906269700b00992b50fbbe9sm2206142ejc.90.2023.08.19.00.09.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 19 Aug 2023 00:09:04 -0700 (PDT)
+Message-ID: <f2be5c54-b98d-d4eb-2107-6364701edca9@linaro.org>
+Date:   Sat, 19 Aug 2023 09:09:03 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wBn3XFkV+BkQevQDQ--.2412S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxCrWUtrW3ArW7Cr4fuw1rJFb_yoW5uFy5pF
-        WkCFWxJr4xJFWrur4fGay8Cw1rWws8Ca4qg342gw10vFy3t348ZF4vyr13CryxXan0yr42
-        qFy7WrWFgaykCrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jTSoJUUUUU=
-X-Originating-IP: [114.250.138.216]
-X-CM-SenderInfo: jprykiiquwmiitt6il2tof0z/xtbBZwbQy1et-+VHWAAAsF
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L4,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH] dt-bindings: usb: Add binding for ti,tps25750
+To:     Abdel Alkuor <alkuor@gmail.com>
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        conor+dt@kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        abdelalkuor@geotab.com
+References: <20230817235212.441254-1-alkuor@gmail.com>
+ <eba26f0e-40dd-3661-b089-bc34c9426000@linaro.org> <ZN+PzWuiLRsSVcmU@abdel>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <ZN+PzWuiLRsSVcmU@abdel>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Currently ioctl USBDEVFS_GET_SPEED can only return
-USB_SPEED_SUPER_PLUS at most. However, there are also
-ssp rates to indicate different connection speeds, which
-we can not tell further via USBDEVFS_GET_SPEED.
+On 18/08/2023 17:35, Abdel Alkuor wrote:
+> On Fri, Aug 18, 2023 at 11:31:35AM +0200, Krzysztof Kozlowski wrote:
+>> Where is any user of it? DTS, driver or 3rd party upstream open-source
+>> project?
+>>
+> Yes, for Geotab. We are working on bringing up a new BSP and we have tps25750
+> which doesn't have a driver in Linux yet. We developed the driver but I thought
+> I needed to get the dt-bindings accepted first before sending the patch for
+> the driver.
+> 
+> Sorry, this is my first time contributing to Linux. Maybe this question
+> was asked before but for some reason I couldn't find it.
+> 
+> What is usually the process? Should I upload the driver too?
 
-To fix it, this patch still uses USB_SPEED_SUPER_PLUS
-to indicate USB_SSP_GEN_UNKNOWN, USB_SSP_GEN_2x1, and
-USB_SSP_GEN_1x2. But need to #define a new value for
-USB_SSP_GEN_2x2. Besides, move the definition of enum
-usb_ssp_rate from include/linux/usb/ch9.h to
-include/uapi/linux/usb/ch9.h, which is a better place
-to hold it.
+Yes, please upload in one patchset, in following order:
+1. This bindings patch
+2. Driver patch
 
-Signed-off-by: Dingyan Li <18500469033@163.com>
----
- drivers/usb/core/devio.c          | 3 +++
- include/linux/usb/ch9.h           | 9 ---------
- include/uapi/linux/usb/ch9.h      | 8 ++++++++
- include/uapi/linux/usbdevice_fs.h | 8 ++++++--
- 4 files changed, 17 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
-index 1a16a8bdea60..ad13f58cbd06 100644
---- a/drivers/usb/core/devio.c
-+++ b/drivers/usb/core/devio.c
-@@ -2782,6 +2782,9 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
- 		break;
- 	case USBDEVFS_GET_SPEED:
- 		ret = ps->dev->speed;
-+		if (ret == USB_SPEED_SUPER_PLUS &&
-+				ps->dev->ssp_rate == USB_SSP_GEN_2x2)
-+			ret = USBDEVFS_SPEED_SUPER_PLUS_BY2;
- 		break;
- 	case USBDEVFS_FORBID_SUSPEND:
- 		ret = proc_forbid_suspend(ps);
-diff --git a/include/linux/usb/ch9.h b/include/linux/usb/ch9.h
-index c93b410b314a..b5a0bc89de5c 100644
---- a/include/linux/usb/ch9.h
-+++ b/include/linux/usb/ch9.h
-@@ -32,15 +32,6 @@
- 
- #include <uapi/linux/usb/ch9.h>
- 
--/* USB 3.2 SuperSpeed Plus phy signaling rate generation and lane count */
--
--enum usb_ssp_rate {
--	USB_SSP_GEN_UNKNOWN = 0,
--	USB_SSP_GEN_2x1,
--	USB_SSP_GEN_1x2,
--	USB_SSP_GEN_2x2,
--};
--
- struct device;
- 
- extern const char *usb_ep_type_string(int ep_type);
-diff --git a/include/uapi/linux/usb/ch9.h b/include/uapi/linux/usb/ch9.h
-index 8a147abfc680..62591eb4d30a 100644
---- a/include/uapi/linux/usb/ch9.h
-+++ b/include/uapi/linux/usb/ch9.h
-@@ -1185,6 +1185,14 @@ enum usb_device_speed {
- 	USB_SPEED_SUPER_PLUS,			/* usb 3.1 */
- };
- 
-+/* USB 3.2 SuperSpeed Plus phy signaling rate generation and lane count */
-+
-+enum usb_ssp_rate {
-+	USB_SSP_GEN_UNKNOWN = 0,
-+	USB_SSP_GEN_2x1,
-+	USB_SSP_GEN_1x2,
-+	USB_SSP_GEN_2x2,
-+};
- 
- enum usb_device_state {
- 	/* NOTATTACHED isn't in the USB spec, and this state acts
-diff --git a/include/uapi/linux/usbdevice_fs.h b/include/uapi/linux/usbdevice_fs.h
-index 74a84e02422a..46ba793f4938 100644
---- a/include/uapi/linux/usbdevice_fs.h
-+++ b/include/uapi/linux/usbdevice_fs.h
-@@ -180,9 +180,13 @@ struct usbdevfs_streams {
- };
- 
- /*
-- * USB_SPEED_* values returned by USBDEVFS_GET_SPEED are defined in
-- * linux/usb/ch9.h
-+ * For USBDEVFS_GET_SPEED:
-+ *
-+ * When speed is USB_SPEED_SUPER_PLUS and ssp_rate is USB_SSP_GEN_2x2
-+ * or higher, use below definitions to indicate actual connection speed.
-+ * Otherwise, just return USB_SPEED_* values defined in linux/usb/ch9.h.
-  */
-+#define USBDEVFS_SPEED_SUPER_PLUS_BY2	7	/* USB_SSP_GEN_2x2, 20Gbps */
- 
- #define USBDEVFS_CONTROL           _IOWR('U', 0, struct usbdevfs_ctrltransfer)
- #define USBDEVFS_CONTROL32           _IOWR('U', 0, struct usbdevfs_ctrltransfer32)
--- 
-2.25.1
+Best regards,
+Krzysztof
 
