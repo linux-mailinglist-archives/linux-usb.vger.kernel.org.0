@@ -2,218 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D0EA78171A
-	for <lists+linux-usb@lfdr.de>; Sat, 19 Aug 2023 05:18:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CF7F78175A
+	for <lists+linux-usb@lfdr.de>; Sat, 19 Aug 2023 06:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244994AbjHSDSD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Aug 2023 23:18:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39712 "EHLO
+        id S234261AbjHSEdy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 19 Aug 2023 00:33:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244855AbjHSDRm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Aug 2023 23:17:42 -0400
-Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92FEA421A
-        for <linux-usb@vger.kernel.org>; Fri, 18 Aug 2023 20:17:40 -0700 (PDT)
-Received: by mail-oo1-xc33.google.com with SMTP id 006d021491bc7-56dd683e9b3so942386eaf.3
-        for <linux-usb@vger.kernel.org>; Fri, 18 Aug 2023 20:17:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692415060; x=1693019860;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EK4lc13hsQBieya89oWIFB0P2uDWj3MviewwKrAjxRw=;
-        b=gH2yIICE5JiUkpTUs4CSGRbbH5ZMRMUR0GayY2DiaZAwbPuo7IBZOO19ZfmjRnWQow
-         WSvXRhBjmEJwhIHLbz3MLbKMue1Y73dVgaSmND3FeGzInC45hRXk62nvTmyUXvINW+kQ
-         IFLuZmM/4525WH4XAPKBdcSojq1g5646XK9kggBY2WIbpV0d59N2WSp/D0E+/wW8FsNP
-         1S4HzvMPpFtP/9BIcu927YlH+iXdQoDB/j3X5trswIRH/NUJ/8MfhXzEu5KG1vIJLGUP
-         zm8YYj1dnbrdDwzfsSGa59JPhmz07dFWmaRDzDavUZAQ8FOTt7eAQS9ZhSNAzeFjj1uu
-         Qu5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692415060; x=1693019860;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EK4lc13hsQBieya89oWIFB0P2uDWj3MviewwKrAjxRw=;
-        b=dIJx9QvUz4rqF+FBg1ADCF3K0gu/RB2IPyDwOodVsVWlLRCoBAxtQSGg075zpSVmMi
-         vP3y2PLVwvlIgGydb8tGc3Cvs4WzYAZCUr9+Hrun8Svz/CcsAwlu2PQzAMVXJ8rLVK9i
-         1cVJ7mGy8eeC8dOZBUdQPQqKvSHz8UZH5FPIyAgHq9t9YPwGeoxSFAethiJBfJPQG2Vi
-         k14g2o5lCtlHGb5eofAFY/otIMHKTYrxH3FKeogv1JTHEmMisiAq0rW0QeUFZZHnt9kO
-         2JiuqiroddQ6Oy+5tplfdgJlGHf9T9UZ/sgaFSYBzocc7o3mTTjvqTjNmkhBhUq0uSVy
-         23Aw==
-X-Gm-Message-State: AOJu0Yywvh9aCRbI9PN3oWrghP6iyYC8ZypIUx+vYUwd8Nya8pajP+Hv
-        BXh4syS/ZClXwZ+ckt4jNlLhOg==
-X-Google-Smtp-Source: AGHT+IEQ3BwqLE3HDnHpyCiEwIbHJOPXfPkwHfhNQFFL1+Q07JcVrXASX49TluX1i2SH3iY6U9p5kw==
-X-Received: by 2002:a05:6870:1d0:b0:1bb:c946:b80e with SMTP id n16-20020a05687001d000b001bbc946b80emr1102346oad.28.1692415059832;
-        Fri, 18 Aug 2023 20:17:39 -0700 (PDT)
-Received: from localhost ([136.49.140.41])
-        by smtp.gmail.com with ESMTPSA id q2-20020a9d7c82000000b006b89dafb721sm1424375otn.78.2023.08.18.20.17.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Aug 2023 20:17:39 -0700 (PDT)
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     JaeHun Jung <jh0801.jung@samsung.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Heiko Stuebner <heiko@sntech.de>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: [PATCH 8/8] arm64: dts: exynos: Enable USB support on E850-96 board
-Date:   Fri, 18 Aug 2023 22:17:31 -0500
-Message-Id: <20230819031731.22618-9-semen.protsenko@linaro.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230819031731.22618-1-semen.protsenko@linaro.org>
-References: <20230819031731.22618-1-semen.protsenko@linaro.org>
+        with ESMTP id S229532AbjHSEdY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 19 Aug 2023 00:33:24 -0400
+Received: from m1319.mail.163.com (m1319.mail.163.com [220.181.13.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BBA364211;
+        Fri, 18 Aug 2023 21:33:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
+        Message-ID; bh=iz1kc/+jTr35gcMc4FDnO3H2sC+Z+IBN0qSrWXZCvrc=; b=d
+        vCEAFIWMis2eTc7P/ZCwc3Kr3M9cKWhlOcPfCk3Rix+ewAyZjWabP28pyIWxwRRK
+        8gNwbP3JKX7DOL3D/+OGB/0c8uZSmIUd3f9S2cZCJ/0SvpWnmqsqlkDaUO3bGVeF
+        DUJyyzGq8rR7i3uOcukIrA9KYvrnb2BhuFZliW5V1Y=
+Received: from 18500469033$163.com ( [114.250.138.216] ) by
+ ajax-webmail-wmsvr19 (Coremail) ; Sat, 19 Aug 2023 12:32:43 +0800 (CST)
+X-Originating-IP: [114.250.138.216]
+Date:   Sat, 19 Aug 2023 12:32:43 +0800 (CST)
+From:   "Dingyan Li" <18500469033@163.com>
+To:     "Alan Stern" <stern@rowland.harvard.edu>
+Cc:     "Hans de Goede" <hdegoede@redhat.com>,
+        "Greg KH" <gregkh@linuxfoundation.org>,
+        "Xiaofan Chen" <xiaofanc@gmail.com>,
+        "Oliver Neukum" <oneukum@suse.com>,
+        "Tormod Volden" <lists.tormod@gmail.com>,
+        sebastian.reichel@collabora.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re:Re: Re: Re: [PATCH] USB: add usbfs ioctl to get specific
+ superspeedplus rates
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20230109(dcb5de15)
+ Copyright (c) 2002-2023 www.mailtech.cn 163com
+In-Reply-To: <daa39dd3-4e8b-4d69-8ad3-5ec73fa12f8c@rowland.harvard.edu>
+References: <CAGjSPUCQ892adFdYm7zCuMpWujwzwoQtYimvp3xXrnnCCyN47w@mail.gmail.com>
+ <da536c80-7398-dae0-a22c-16e521be697a@suse.com>
+ <CAGjSPUDtn-YMqmNrmku+hkyXCKys4XRue4wdzQwr+yGxe2cJSQ@mail.gmail.com>
+ <2a82ba01-38dd-fad9-98b9-ac8591107921@redhat.com>
+ <151a5748.3e99.189ba07b110.Coremail.18500469033@163.com>
+ <51926ee6-ee81-4543-a1f7-338e65a26670@rowland.harvard.edu>
+ <a31ee75e-6a8e-fe7b-aadc-f118d9ab60f9@redhat.com>
+ <67b68375.80b5.189bc2653e9.Coremail.18500469033@163.com>
+ <c10dd3c1-efab-47d6-904f-3b211965be44@rowland.harvard.edu>
+ <5ccfaa7e.3180.189bec2b80e.Coremail.18500469033@163.com>
+ <daa39dd3-4e8b-4d69-8ad3-5ec73fa12f8c@rowland.harvard.edu>
+X-NTES-SC: AL_QuySAPiatk0t5SSbZelS/T5Xw5RfLaTO5axEmsQBSeEQpj7O2S0yZkBGJHjL1Pn2ppozhKLZruPb8jACaZKe
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Message-ID: <79f3ec25.fa3.18a0c111fa9.Coremail.18500469033@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: E8GowAAXFwHrReBkbTcXAA--.35294W
+X-CM-SenderInfo: jprykiiquwmiitt6il2tof0z/xtbB5xDQy2BHLU7TTgABs0
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The E850-96 board has a micro-USB socket and two USB 2.0 host sockets.
-The USB role (host or peripheral) is selected automatically depending on
-micro-USB cable attachment state:
-  - micro-USB cable is attached: USB device role
-  - micro-USB cable is detached: USB host role
-
-USB can't act simultaneously as a device and a host, because Exynos850
-SoC has only one USB controller and there are no external USB
-controllers on the E850-96 board. So the USB switch chip (specifically
-TS3USB221A) connects SoC USB lines either to micro-USB connector or to
-USB hub chip (LAN9514), w.r.t. micro-USB cable attachment state.
-
-When USB works in the host role, Ethernet capability becomes available
-too, as LAN9514 chip (providing USB hub) also enables Ethernet PHY and
-Ethernet MAC.
-
-Dynamic role switching is done in gpio-usb-b-connector, using current
-micro-USB VBUS line level as a trigger:
-  - VBUS=high: SoC USB lines are wired to micro-USB socket
-  - VBUS=low: SoC USB lines are wired to USB hub chip
-
-In order to make USB host functional when the board is booted with
-micro-USB cable disconnected, role-switch-default-mode = "host" is used.
-
-One can look at E850-96 board schematics [1] to figure out how exactly
-all related USB hardware connections and lines reflect into
-corresponding device tree definitions.
-
-As PMIC regulators are not implemented yet, we rely on USB LDOs being
-already enabled in the bootloader, and a dummy regulator is provided to
-"usbdrd" vdd nodes for now.
-
-[1] https://www.96boards.org/documentation/consumer/e850-96b/hardware-docs/
-
-Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
----
- .../boot/dts/exynos/exynos850-e850-96.dts     | 58 +++++++++++++++++++
- 1 file changed, 58 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/exynos/exynos850-e850-96.dts b/arch/arm64/boot/dts/exynos/exynos850-e850-96.dts
-index 6ed38912507f..8d733361ef82 100644
---- a/arch/arm64/boot/dts/exynos/exynos850-e850-96.dts
-+++ b/arch/arm64/boot/dts/exynos/exynos850-e850-96.dts
-@@ -29,6 +29,22 @@ chosen {
- 		stdout-path = &serial_0;
- 	};
- 
-+	connector {
-+		compatible = "gpio-usb-b-connector", "usb-b-connector";
-+		label = "micro-USB";
-+		type = "micro";
-+		vbus-supply = <&reg_usb_host_vbus>;
-+		id-gpios = <&gpa0 0 GPIO_ACTIVE_LOW>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&micro_usb_det_pins>;
-+
-+		port {
-+			usb_dr_connector: endpoint {
-+				remote-endpoint = <&usb1_drd_sw>;
-+			};
-+		};
-+	};
-+
- 	/*
- 	 * RAM: 4 GiB (eMCP):
- 	 *   - 2 GiB at 0x80000000
-@@ -111,6 +127,20 @@ bt_active_led: led-5 {
- 		};
- 	};
- 
-+	/* TODO: Remove this once PMIC is implemented  */
-+	reg_dummy: regulator-0 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "dummy_reg";
-+	};
-+
-+	reg_usb_host_vbus: regulator-1 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "usb_host_vbus";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		gpio = <&gpa3 5 GPIO_ACTIVE_LOW>;
-+	};
-+
- 	/*
- 	 * RTC clock (XrtcXTI); external, must be 32.768 kHz.
- 	 *
-@@ -172,6 +202,12 @@ key_volup_pins: key-volup-pins {
- 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
- 		samsung,pin-drv = <EXYNOS5420_PIN_DRV_LV1>;
- 	};
-+
-+	micro_usb_det_pins: micro-usb-det-pins {
-+		samsung,pins = "gpa0-0";
-+		samsung,pin-function = <EXYNOS_PIN_FUNC_INPUT>;
-+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
-+	};
- };
- 
- &rtc {
-@@ -186,6 +222,28 @@ &serial_0 {
- 	pinctrl-0 = <&uart1_pins>;
- };
- 
-+&usbdrd {
-+	status = "okay";
-+	vdd10-supply = <&reg_dummy>;
-+	vdd33-supply = <&reg_dummy>;
-+};
-+
-+&usbdrd_dwc3 {
-+	dr_mode = "otg";
-+	usb-role-switch;
-+	role-switch-default-mode = "host";
-+
-+	port {
-+		usb1_drd_sw: endpoint {
-+			remote-endpoint = <&usb_dr_connector>;
-+		};
-+	};
-+};
-+
-+&usbdrd_phy {
-+	status = "okay";
-+};
-+
- &usi_uart {
- 	samsung,clkreq-on; /* needed for UART mode */
- 	status = "okay";
--- 
-2.39.2
-
+CkF0IDIwMjMtMDgtMDQgMjI6NTU6NDksICJBbGFuIFN0ZXJuIiA8c3Rlcm5Acm93bGFuZC5oYXJ2
+YXJkLmVkdT4gd3JvdGU6Cgo+PiBBbm90aGVyIGlzc3VlIGlzIHRoYXQgVVNCX1NQRUVEX1NVUEVS
+X1BMVVMgaGFzIGJlZW4gd2lkZWx5IHVzZWQgaW4KPj4gc28gbWFueSBmaWxlcyB0byBleGVjdXRl
+IGNvbmRpdGlvbmFsIGJhbmNoZXMuIE9uY2Ugd2UgZXh0ZW5kIGFuZCBzdG9yZSBkZXZpY2Uncwo+
+PiBzcGVlZCB3aXRoIG5ldyB2YWx1ZXMgaW4gdGhlIGZpcnN0IHBsYWNlLCB3ZSBtaWdodCBuZWVk
+IHRvIGNoZWNrIGFsbCBwbGFjZXMgd2hlcmUKPj4gVVNCX1NQRUVEX1NVUEVSX1BMVVMgaXMgdXNl
+ZCBpbiBjYXNlIG9mIGFueSByZWdyZXNzaW9uLgo+Cj5DZXJ0YWlubHkuICBUaGF0J3MgcGFydCBv
+ZiBhdWRpdGluZyBhbGwgdGhlIGN1cnJlbnQgdXNlcnMgb2YgCj51c2JfZGV2aWNlX3NwZWVkLgoK
+VGhpcyBtaWdodCBub3QgYmUgYSBnb29kIGlkZWEgYW5kIGZlZWxzIGtpbmQgb2YgZHJpZnQgYXdh
+eSBmcm9tIHdoYXQgd2Ugb3JpZ2luYWxseQp3YW50IHRvIGRvLiBCZXNpZGVzLCBzdXBwb3NlIGxh
+dGVyIG5ldyBzcGVlZCB2YWx1ZXMgYXJlIGFkZGVkLCBzb21lb25lIHN0aWxsIGhhcwp0byByZXZp
+c2l0IGFsbCB0aGUgZmlsZXMgdG8gbW9kaWZ5IHRob3NlIGNoZWNrcy4gSSB0aGluayB3ZSBzaG91
+bGQgdHJ5IHRvIGF2b2lkIHRoaXMgc2l0dWF0aW9uLgoKPj4gSSB0aGluayBtYXliZSB3ZSBjYW4g
+dHJ5IHRvIHJlbW92ZSB0aGUgZGVwZW5kZW5jeSBvbiBlbnVtIHVzYl9kZXZpY2Vfc3BlZWQKPj4g
+aW4gdXNiZnMgYW5kIGRlZmluZSBhIHNlcGFyYXRlIHNldCBvZiBzcGVlZCB2YWx1ZXMgc2ltaWxh
+ciB0byBwcmV2aW91cyBkZXNpZ24KPj4gYXQgaHR0cHM6Ly93d3cuc3Bpbmljcy5uZXQvbGlzdHMv
+bGludXgtdXNiL21zZzE1NzcwOS5odG1sCj4+IEJ5IHRoaXMgd2F5LCBpbiB1c2JmcyB3ZSBnZXQg
+bW9yZSBmcmVlZG9tIHRvIGRldGVybWluZSBob3cgdG8gZXhwbGFpbgo+PiB1c2JfZGV2aWNlX3Nw
+ZWVkIGFuZCB1c2Jfc3NwX3JhdGUsIHdpdGhvdXQgdGhlIHJpc2sgb2YgYnJlYWtpbmcgYW55dGhp
+bmcKPj4gZWxzZXdoZXJlLgo+PiAKPj4gRm9yIGV4YW1wbGUsIGRlZmluZSBhbiBVU0JERVZGU19T
+UEVFRF9TVVBFUl9QTFVTIHRvIGluZGljYXRlCj4+IFVTQl9TUEVFRF9TVVBFUl9QTFVTIHdpdGgg
+c3NwIHJhdGVzIEdFTl9VTktOT1dOLCBHRU5fMngxIGFuZAo+PiBHRU5fMXgyLiBUaGV5IGFsbCBz
+dGFuZCBmb3IgMTBHYnBzIGFuZCB3ZSBkb24ndCBuZWVkIHRvIHRlbGwgb25lIGZyb20KPj4gYW5v
+dGhlciwgc2ltaWxhciB0byBob3cgaXQgd29ya3MgaW4gc3lzZnMuIFRoZW4gZGVmaW5lIGFuCj4+
+IFVTQkRFVkZTX1NQRUVEX1NVUEVSX1BMVVNfQlkyKG1heWJlIHRoZXJlIGlzIGEgbW9yZSBwcm9w
+ZXIgbmFtZSkKPj4gdG8gaW5kaWNhdGUgVVNCX1NQRUVEX1NVUEVSX1BMVVMgd2l0aCBzc3AgcmF0
+ZSBHRU5fMngyLCB3aGljaCBzdGFuZHMKPj4gZm9yIDIwR2Jwcy4KPgo+WW91IGNhbid0IHJlYWxs
+eSBkbyB0aGF0LiAgVGhlIHZhbHVlcyByZXR1cm5lZCBieSB0aGUgVVNCREVWRlNfR0VUX1NQRUVE
+IAo+aW9jdGwgYXJlIHRoZSBvbmVzIGRlZmluZWQgaW4gaW5jbHVkZS91YXBpL2xpbnV4L3VzYi9j
+aDkuaC4gIFRoZXkgYXJlIAo+VVNCX1NQRUVEX1VOS05PV04sIGV0Yy4sIG5vdCBVU0JERVZGU19T
+UEVFRF9VTktOT1dOLCBldGMuICBUaGUgb25seSB3YXkgCj50byBleHRlbmQgdGhlbSBpcyBieSBh
+ZGRpbmcgbmV3IGVudHJpZXMgdG8gZW51bSB1c2JfZGV2aWNlX3NwZWVkLgo+Cj5Gb3IgZXhhbXBs
+ZSwgeW91IG11c3Qgbm90IGRvIGFueXRoaW5nIHRoYXQgd291bGQgYnJlYWsgYSB1c2VyIHByb2dy
+YW0gCj53aGljaCBkb2VzIHNvbWV0aGluZyBsaWtlIHRoaXM6Cj4KPiNpbmNsdWRlIDxsaW51eC91
+c2JkZXZmcy5oPgo+I2luY2x1ZGUgPGxpbnV4L3VzYi9jaDkuaD4KPgo+Li4uCj4KPgllbnVtIHVz
+Yl9kZXZpY2Vfc3BlZWQgczsKPgo+CXMgPSBpb2N0bChmZCwgVVNCREVWRlNfR0VUX1NQRUVEKTsK
+PglpZiAocyA9PSBVU0JfU1BFRURfSElHSCkgLi4uCj4KPkFsYW4gU3Rlcm4KClNpbmNlIHRob3Nl
+IHNwZWVkIGRlZmluaXRpb25zIGFyZSBqdXN0IGludCB2YWx1ZXMsIHdlIGNvdWxkIG1hbmFnZSB0
+byBtYWludGFpbiB0aGUgY29tcGF0aWJpbGl0eQpieSBrZWVwaW5nIHRoZSBzYW1lIHZhbHVlLiBC
+dXQgYW55d2F5LCBteSBsYXRlc3QgaWRlYSBpcyBub3QgdG8gZXh0ZW5kIGVudW0gdXNiX2Rldmlj
+ZV9zcGVlZC4KVGhlcmUgYXJlIHRocmVlIGJhc2ljIGNhc2VzOgoxKSBXaGVuIHNwZWVkIGlzIGxl
+c3MgdGhhbiBVU0JfU1BFRURfU1VQRVJfUExVUywganVzdCByZXR1cm4gZGV2LT5zcGVlZDsKMikg
+V2hlbiBzcGVlZCBpcyBVU0JfU1BFRURfU1VQRVJfUExVUyBidXQgc3NwX3JhdGUgaXMgbGVzcyB0
+aGFuIFVTQl9TU1BfR0VOXzJ4MiwKcmV0dXJuIGRldi0+c3BlZWQ7CjMpIFdoZW4gc3BlZWQgaXMg
+VVNCX1NQRUVEX1NVUEVSX1BMVVMgYW5kIHNzcF9yYXRlIGlzIFVTQl9TU1BfR0VOXzJ4MiwgYSBu
+ZXcKc3BlZWQgZm9yIHVzYmRldmZzIHNob3VsZCBiZSAjZGVmaW5lZCBhbmQgbGV0J3MgY2FsbCBp
+dCBVU0JERVZGU19TUEVFRF9TVVBFUl9QTFVTX0JZMi4KVGhpcyB2YWx1ZSB3b24ndCBiZSBvdmVy
+bGFwcGVkIHdpdGggYW55IHZhbHVlIGluIGVudW0gdXNiX2RldmljZV9zcGVlZCwgZm9yIGV4YW1w
+bGUgNy4KSW4gdGhpcyBjYXNlLCByZXR1cm4gVVNCREVWRlNfU1BFRURfU1VQRVJfUExVU19CWTIu
+CgpUaGUgY29kZSBjb3VsZCBiZSBsaWtlOgoKICAgICAgICBjYXNlIFVTQkRFVkZTX0dFVF9TUEVF
+RDoKICAgICAgICAgICAgICAgIHJldCA9IHBzLT5kZXYtPnNwZWVkOworICAgICAgICAgICAgICAg
+aWYgKHJldCA9PSBVU0JfU1BFRURfU1VQRVJfUExVUyAmJgorICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgIHBzLT5kZXYtPnNzcF9yYXRlID09IFVTQl9TU1BfR0VOXzJ4MikKKyAgICAgICAg
+ICAgICAgICAgICAgICAgcmV0ID0gVVNCREVWRlNfU1BFRURfU1VQRVJfUExVU19CWTI7CiAgICAg
+ICAgICAgICAgICBicmVhazsKCkJ5IHRoaXMgd2F5LCBubyBuZWVkIHRvIGFkZCBhIG5ldyBpb2N0
+bC4gTm8gbmVlZCB0byB0b3VjaCBzbyBtYW55IGZpbGVzLiBBbmQgd2hlbiBuZXcKc3BlZWRzIGFy
+ZSBhZGRlZCBsYXRlciwganVzdCAjZGVmaW5lIG5ldyB2YWx1ZXMgYW5kIGV4dGVuZCB0aGUgY2hl
+Y2tzIGluIGFib3ZlIGNvZGUuCkNvbXBhdGliaWxpdHkgaXMgYWxzbyBtYWludGFpbmVkLiBCZWZv
+cmUgdGhpcyBjaGFuZ2UsIFVTQkRFVkZTX0dFVF9TUEVFRCBjb3VsZApyZXR1cm4gMC02LiBBZnRl
+ciB0aGlzIGNoYW5nZSwgd2UgY2FuIHN0aWxsIHJldHVybiAwLTYgZm9yIG1vc3Qgb2YgdGhlIGNh
+c2VzLCBhbmQgNyBmb3IKR0VOXzJ4MiBkZXZpY2VzLgoKUmVnYXJkcywKRGluZ3lhbgo=
