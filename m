@@ -2,73 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75F88781CB9
-	for <lists+linux-usb@lfdr.de>; Sun, 20 Aug 2023 08:57:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 319F4781D55
+	for <lists+linux-usb@lfdr.de>; Sun, 20 Aug 2023 12:12:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbjHTG5k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 20 Aug 2023 02:57:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51222 "EHLO
+        id S230295AbjHTKMt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 20 Aug 2023 06:12:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbjHTG5j (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 20 Aug 2023 02:57:39 -0400
-Received: from m1344.mail.163.com (m1344.mail.163.com [220.181.13.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9BE994C26;
-        Sat, 19 Aug 2023 23:31:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
-        Message-ID; bh=MGMC5FFzeauFcLuqEiBTXCO7Tw+fo101a2jc/J9g6/Q=; b=E
-        MnEn+clWqITMwplcxtsTvSSmSYX3F1plHA4jXZdwIYKBQejUBv7sx/RMzmtG0Tg5
-        syNspZbi3OoX0HwWCcPlgqS8n5Yup1PkL/Zz6E8BqiEfDdMAP1izqNK5nYoPXQP1
-        3jJ9aXgc3nyMCCPaRHFbgXvw+rNJ4ypbqsUq9j1ZTI=
-Received: from 18500469033$163.com ( [114.250.138.216] ) by
- ajax-webmail-wmsvr44 (Coremail) ; Sun, 20 Aug 2023 14:30:59 +0800 (CST)
-X-Originating-IP: [114.250.138.216]
-Date:   Sun, 20 Aug 2023 14:30:59 +0800 (CST)
-From:   "Dingyan Li" <18500469033@163.com>
-To:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re:[PATCH] USB: add new speed value to USB debugfs
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20230109(dcb5de15)
- Copyright (c) 2002-2023 www.mailtech.cn 163com
-In-Reply-To: <20230818153509.38814-1-18500469033@163.com>
-References: <20230818153509.38814-1-18500469033@163.com>
-X-NTES-SC: AL_QuySAPmavEgu7yWebekXkkYVgew6WsC4vf4k3IReOps0hiny4CAMcER9EX322d2yNSa+iyO5dCBx98JffqdAZa2nVxTdQjPRv0PoHNoDPfLp
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+        with ESMTP id S229700AbjHTKMs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 20 Aug 2023 06:12:48 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 692B7123
+        for <linux-usb@vger.kernel.org>; Sat, 19 Aug 2023 12:03:06 -0700 (PDT)
+Received: (qmail 67274 invoked by uid 1000); 19 Aug 2023 15:03:05 -0400
+Date:   Sat, 19 Aug 2023 15:03:05 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Dingyan Li <18500469033@163.com>
+Cc:     gregkh@linuxfoundation.org, hdegoede@redhat.com,
+        xiaofanc@gmail.com, oneukum@suse.com, lists.tormod@gmail.com,
+        sebastian.reichel@collabora.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] USB: Support 20Gbps speed for ioctl USBDEVFS_GET_SPEED
+Message-ID: <07c821ae-2391-474c-aec9-65f47d3fecf2@rowland.harvard.edu>
+References: <79f3ec25.fa3.18a0c111fa9.Coremail.18500469033@163.com>
+ <20230819054655.5495-1-18500469033@163.com>
 MIME-Version: 1.0
-Message-ID: <563084ba.e93.18a11a3c2f2.Coremail.18500469033@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: LMGowAC38ukjs+Fkr14XAA--.41110W
-X-CM-SenderInfo: jprykiiquwmiitt6il2tof0z/xtbBZwfRy1et-+4uAwABs9
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230819054655.5495-1-18500469033@163.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-QXQgMjAyMy0wOC0xOCAyMzozNTowOSwgIkRpbmd5YW4gTGkiIDwxODUwMDQ2OTAzM0AxNjMuY29t
-PiB3cm90ZToKPkN1cnJlbnQgbWF4IHNwZWVkIHN1cHBvcnRlZCBpbiBVU0IgZGVidWdmcyBpcyAx
-MDAwMC4KPlNpbmNlIFVTQiAzLjIgR0VOXzJ4MiBoYXMgcmVhY2hlZCAyMDAwMCwgaXQncyBiZXR0
-ZXIKPnRvIGFkZCBpdC4gVGhlIGlkZWEgaXMgYm9ycm93ZWQgZnJvbSBVU0Igc3lzZnMsIHdpdGgK
-PmEgY29tYmluYXRpb24gb2YgVVNCX1NQRUVEX1NVUEVSX1BMVVMgYW5kCj5VU0JfU1NQX0dFTl8y
-eDIsIHRoZSBhY3R1YWwgc3BlZWQgc2hvdWxkIGJlIDIwMDAwLgo+Cj5TaWduZWQtb2ZmLWJ5OiBE
-aW5neWFuIExpIDwxODUwMDQ2OTAzM0AxNjMuY29tPgo+LS0tCj4gZHJpdmVycy91c2IvY29yZS9k
-ZXZpY2VzLmMgfCA2ICsrKysrLQo+IDEgZmlsZSBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKyksIDEg
-ZGVsZXRpb24oLSkKPgo+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2NvcmUvZGV2aWNlcy5jIGIv
-ZHJpdmVycy91c2IvY29yZS9kZXZpY2VzLmMKPmluZGV4IGEyNDdkYTczZjM0ZC4uNzhlYmNiNjU3
-ZGNlIDEwMDY0NAo+LS0tIGEvZHJpdmVycy91c2IvY29yZS9kZXZpY2VzLmMKPisrKyBiL2RyaXZl
-cnMvdXNiL2NvcmUvZGV2aWNlcy5jCj5AQCAtNDI5LDcgKzQyOSwxMSBAQCBzdGF0aWMgc3NpemVf
-dCB1c2JfZGV2aWNlX2R1bXAoY2hhciBfX3VzZXIgKipidWZmZXIsIHNpemVfdCAqbmJ5dGVzLAo+
-IAljYXNlIFVTQl9TUEVFRF9TVVBFUjoKPiAJCXNwZWVkID0gIjUwMDAiOyBicmVhazsKPiAJY2Fz
-ZSBVU0JfU1BFRURfU1VQRVJfUExVUzoKPi0JCXNwZWVkID0gIjEwMDAwIjsgYnJlYWs7Cj4rCQlp
-ZiAodXNiZGV2LT5zc3BfcmF0ZSA9PSBVU0JfU1NQX0dFTl8yeDIpCj4rCQkJc3BlZWQgPSAiMjAw
-MDAiOwo+KwkJZWxzZQo+KwkJCXNwZWVkID0gIjEwMDAwIjsKPisJCWJyZWFrOwo+IAlkZWZhdWx0
-Ogo+IAkJc3BlZWQgPSAiPz8iOwo+IAl9Cj4tLSAKPjIuMjUuMQoKUGxlYXNlIGlnbm9yZSB0aGlz
-IHBhdGNoLCB3aGljaCB3aWxsIGJlIGNvdmVyZWQgaW4gYW5vdGhlciBwYXRjaC4KU29ycnkgZm9y
-IHRoZSBpbmNvbnZlbmllbmNlLgoKUmVnYXJkcywKRGluZ3lhbg==
+On Sat, Aug 19, 2023 at 01:46:55PM +0800, Dingyan Li wrote:
+> Currently ioctl USBDEVFS_GET_SPEED can only return
+> USB_SPEED_SUPER_PLUS at most. However, there are also
+> ssp rates to indicate different connection speeds, which
+> we can not tell further via USBDEVFS_GET_SPEED.
+> 
+> To fix it, this patch still uses USB_SPEED_SUPER_PLUS
+> to indicate USB_SSP_GEN_UNKNOWN, USB_SSP_GEN_2x1, and
+> USB_SSP_GEN_1x2. But need to #define a new value for
+> USB_SSP_GEN_2x2. Besides, move the definition of enum
+> usb_ssp_rate from include/linux/usb/ch9.h to
+> include/uapi/linux/usb/ch9.h, which is a better place
+> to hold it.
+> 
+> Signed-off-by: Dingyan Li <18500469033@163.com>
+
+I'm not going to ACK this.  It's clumsy -- having two separate 
+enumerations for USB device speeds just looks ridiculous.
+
+We should fix the whole situation once and for all, recognizing that any 
+code which depends on the speed needs to be upward compatible because 
+new speeds and bus technologies may be added at any time.
+
+> --- a/include/uapi/linux/usb/ch9.h
+> +++ b/include/uapi/linux/usb/ch9.h
+> @@ -1185,6 +1185,14 @@ enum usb_device_speed {
+>  	USB_SPEED_SUPER_PLUS,			/* usb 3.1 */
+>  };
+>  
+> +/* USB 3.2 SuperSpeed Plus phy signaling rate generation and lane count */
+> +
+> +enum usb_ssp_rate {
+> +	USB_SSP_GEN_UNKNOWN = 0,
+> +	USB_SSP_GEN_2x1,
+> +	USB_SSP_GEN_1x2,
+> +	USB_SSP_GEN_2x2,
+> +};
+
+This would make more sense if you kept very clear the distinction 
+between the overall speed and the physical communication mechanism.  In 
+other words, 10000 bps is 10000 bps, no matter whether the underlying 
+technology uses one lane carrying 10000 bits per second or two lanes 
+each carrying 5000 bits per second.
+
+I'm not sure if anything in the kernel or userspace really cares about 
+the number of lanes, as opposed to the total speed.  If it turns out 
+that nothing does, the usb_ssp_rate enumeration could be removed.  
+Besides, it should named something else, like usb_ssp_gen or 
+usb_sp_generation, since it isn't just a rate designation.  (Whereas as 
+enum usb_device_speed _is_ just a rate designation.)
+
+Regardless of what happens to usb_ssp_rate, usb_device_speed should be 
+enlarged to encompass all possible existing speeds.  That would 
+immediately fix the ioctl problem.  Doing this in an upward-compatible 
+way might end up being a little awkward but it ought to be possible.
+
+Alan Stern
