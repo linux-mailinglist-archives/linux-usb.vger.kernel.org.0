@@ -2,75 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA08F781CAD
-	for <lists+linux-usb@lfdr.de>; Sun, 20 Aug 2023 08:31:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75F88781CB9
+	for <lists+linux-usb@lfdr.de>; Sun, 20 Aug 2023 08:57:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229789AbjHTGbz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 20 Aug 2023 02:31:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49418 "EHLO
+        id S229892AbjHTG5k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 20 Aug 2023 02:57:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229992AbjHTGbm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 20 Aug 2023 02:31:42 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00D352120B
-        for <linux-usb@vger.kernel.org>; Sat, 19 Aug 2023 23:24:21 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-9a1681fa868so225134066b.3
-        for <linux-usb@vger.kernel.org>; Sat, 19 Aug 2023 23:24:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692512660; x=1693117460;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=joLgLL1PJeNBYVJ1vdHU5vdt5oa9jpreW5jsUy4YGmw=;
-        b=Ym/WkQc3DaAmwTEY/w0L8y29ougMW9IOz9Ol6pw9gVLPQVplWvTpfeBvYTK4YyADJt
-         U7esD7gJD354LFpM8UlIbVALTXv5lvSe4r9EOel+gMG/KU/pLcnrFuNAGrenWWhVI66k
-         /8XBtitBUZXuy652oJopfBsTRFMbG98hJoe5w8RAuUlDk5uj5X5hb4hVQutGXeUnErOL
-         IuXz5J2nE6CefMjWvGH7nC7r9Cq9aVEsp0OW5VECNZJTT9csZ1PkMqGI1y78CsJwHZUQ
-         c5l3Z8RmxQgHOd0yyIwMUSNEdky0rreZfevL8rMInO8sPXjnGpjNcEsM90/cvLIZCfhA
-         mM/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692512660; x=1693117460;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=joLgLL1PJeNBYVJ1vdHU5vdt5oa9jpreW5jsUy4YGmw=;
-        b=g03YGLqWEv1oqBNmMLkyW4vKPrL4pNyoTV1IkVBKRUF8i0JUbLOFg2R0h45xTxvhwn
-         c4lU87QFkmFIB1+ICSzIc06VR3zitTkz/EaxRafRPTqrlOXNc9qWHc6bBycQDxn+vtCk
-         kDHl/++3dIU39T7DU7L7HSECSZruRQegdH25a452OQ6SaCxuPULjKsn2RZcFdogcpKkr
-         M732ZHxRjotx5yxSYOYvlu4kJ52GwuhxokT4YR6uTat1qEBUQW34xk2CobwNJua+VobJ
-         Qkwm2YvOqAeSnbvWoS7rASQIfGG3FCczCbtVDm/m6Ktyo5lVtygLb8Ta/d608KHUl7MG
-         0R7Q==
-X-Gm-Message-State: AOJu0YydKn1yzVnE+qDxhpg1yUzlfNCAlYmlz6E8nZEprvRWL7MjpnST
-        HEuYq9ZGZOEbM6dtakPYLBTRmw==
-X-Google-Smtp-Source: AGHT+IEXzXHWO65GWmnQ4NiP0DImCrr2SQNIoQJOUj1oPQV6MhaCWuuQqfH18Ua9Noffj1moWLI2mQ==
-X-Received: by 2002:a17:906:3051:b0:99c:f47a:2354 with SMTP id d17-20020a170906305100b0099cf47a2354mr2686060ejd.70.1692512660451;
-        Sat, 19 Aug 2023 23:24:20 -0700 (PDT)
-Received: from [192.168.0.22] ([77.252.47.198])
-        by smtp.gmail.com with ESMTPSA id q20-20020a17090622d400b0099cce6f7d50sm4034493eja.64.2023.08.19.23.24.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 19 Aug 2023 23:24:19 -0700 (PDT)
-Message-ID: <a13e829e-f238-41e8-1877-50c8cf009547@linaro.org>
-Date:   Sun, 20 Aug 2023 08:24:18 +0200
+        with ESMTP id S229661AbjHTG5j (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 20 Aug 2023 02:57:39 -0400
+Received: from m1344.mail.163.com (m1344.mail.163.com [220.181.13.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9BE994C26;
+        Sat, 19 Aug 2023 23:31:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
+        Message-ID; bh=MGMC5FFzeauFcLuqEiBTXCO7Tw+fo101a2jc/J9g6/Q=; b=E
+        MnEn+clWqITMwplcxtsTvSSmSYX3F1plHA4jXZdwIYKBQejUBv7sx/RMzmtG0Tg5
+        syNspZbi3OoX0HwWCcPlgqS8n5Yup1PkL/Zz6E8BqiEfDdMAP1izqNK5nYoPXQP1
+        3jJ9aXgc3nyMCCPaRHFbgXvw+rNJ4ypbqsUq9j1ZTI=
+Received: from 18500469033$163.com ( [114.250.138.216] ) by
+ ajax-webmail-wmsvr44 (Coremail) ; Sun, 20 Aug 2023 14:30:59 +0800 (CST)
+X-Originating-IP: [114.250.138.216]
+Date:   Sun, 20 Aug 2023 14:30:59 +0800 (CST)
+From:   "Dingyan Li" <18500469033@163.com>
+To:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re:[PATCH] USB: add new speed value to USB debugfs
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20230109(dcb5de15)
+ Copyright (c) 2002-2023 www.mailtech.cn 163com
+In-Reply-To: <20230818153509.38814-1-18500469033@163.com>
+References: <20230818153509.38814-1-18500469033@163.com>
+X-NTES-SC: AL_QuySAPmavEgu7yWebekXkkYVgew6WsC4vf4k3IReOps0hiny4CAMcER9EX322d2yNSa+iyO5dCBx98JffqdAZa2nVxTdQjPRv0PoHNoDPfLp
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH v3 2/2] USB: typec: Add TI TPS25750 USB Type-C controller
-Content-Language: en-US
-To:     Abdel Alkuor <alkuor@gmail.com>, heikki.krogerus@linux.intel.com,
-        devicetree@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        abdelalkuor@geotab.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1692507038.git.abdelalkuor@geotab.com>
- <9ad92e760e67dfdc740f5b0a32a9c1dbb2342fed.1692507038.git.abdelalkuor@geotab.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <9ad92e760e67dfdc740f5b0a32a9c1dbb2342fed.1692507038.git.abdelalkuor@geotab.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Message-ID: <563084ba.e93.18a11a3c2f2.Coremail.18500469033@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: LMGowAC38ukjs+Fkr14XAA--.41110W
+X-CM-SenderInfo: jprykiiquwmiitt6il2tof0z/xtbBZwfRy1et-+4uAwABs9
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,89 +52,23 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 20/08/2023 07:23, Abdel Alkuor wrote:
-> From: Abdel Alkuor <abdelalkuor@geotab.com>
-> 
-> TPS25750 is USB Type-C controller and Power Delivery controller.
-> 
-> TPS25750 needs to be configured after a cold reset. The configuration
-> can be applied either from an external EEPROM connected to the
-> controller or by a host using I2C. TI provides an online GUI that
-> can be used to generate the configuration binary.
-> Tool link: https://tinyurl.com/2s3watcm
-> P.S. It requires a TI account to be able to use the tool.
-> 
-...
-
-
-> +
-> +static void tps25750_remove(struct i2c_client *client)
-> +{
-> +	struct tps25750 *tps = i2c_get_clientdata(client);
-> +
-> +	tps25750_disconnect(tps, 0);
-> +	typec_unregister_port(tps->port);
-> +	usb_role_switch_put(tps->role_sw);
-> +
-> +	/* clear the patch by a hard reset */
-> +	tps25750_exec_normal_cmd(tps, TPS_4CC_GAID);
-> +}
-> +
-> +static int __maybe_unused tps25750_suspend(struct device *dev)
-> +{
-> +	/* TODO: should we remove the patch? */
-> +	return 0;
-> +}
-> +
-> +static int __maybe_unused tps25750_resume(struct device *dev)
-> +{
-> +	struct i2c_client *client = to_i2c_client(dev);
-> +	struct tps25750 *tps = i2c_get_clientdata(client);
-> +
-> +	/* The controller needs to be reinitialized again
-
-Format is:
-
-/*
- * The....
-
-> +	 * if it is powered off as config is not persisted
-> +	 */
-> +	return tps25750_init(tps);
-> +}
-> +
-> +static const struct dev_pm_ops tps25750_pm_ops = {
-> +	SET_SYSTEM_SLEEP_PM_OPS(tps25750_suspend, tps25750_resume)
-> +};
-> +
-> +static const struct of_device_id tps25750_of_match[] = {
-> +	{ .compatible = "ti,tps25750", },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, tps25750_of_match);
-> +
-> +static const struct i2c_device_id tps25750_id[] = {
-> +	{ "tps25750" },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(i2c, tps25750_id);
-> +
-> +static struct i2c_driver tps25750_i2c_driver = {
-> +	.driver = {
-> +		.name = "tps25750",
-> +		.pm = pm_ptr(&tps25750_pm_ops),
-> +		.of_match_table = of_match_ptr(tps25750_of_match),
-
-Drop of_match_ptr(). It will cause warnings.
-
-> +	},
-> +	.probe_new = tps25750_probe,
-> +	.remove = tps25750_remove,
-> +	.id_table = tps25750_id,
-> +};
-> +module_i2c_driver(tps25750_i2c_driver);
-
-
-Best regards,
-Krzysztof
-
+QXQgMjAyMy0wOC0xOCAyMzozNTowOSwgIkRpbmd5YW4gTGkiIDwxODUwMDQ2OTAzM0AxNjMuY29t
+PiB3cm90ZToKPkN1cnJlbnQgbWF4IHNwZWVkIHN1cHBvcnRlZCBpbiBVU0IgZGVidWdmcyBpcyAx
+MDAwMC4KPlNpbmNlIFVTQiAzLjIgR0VOXzJ4MiBoYXMgcmVhY2hlZCAyMDAwMCwgaXQncyBiZXR0
+ZXIKPnRvIGFkZCBpdC4gVGhlIGlkZWEgaXMgYm9ycm93ZWQgZnJvbSBVU0Igc3lzZnMsIHdpdGgK
+PmEgY29tYmluYXRpb24gb2YgVVNCX1NQRUVEX1NVUEVSX1BMVVMgYW5kCj5VU0JfU1NQX0dFTl8y
+eDIsIHRoZSBhY3R1YWwgc3BlZWQgc2hvdWxkIGJlIDIwMDAwLgo+Cj5TaWduZWQtb2ZmLWJ5OiBE
+aW5neWFuIExpIDwxODUwMDQ2OTAzM0AxNjMuY29tPgo+LS0tCj4gZHJpdmVycy91c2IvY29yZS9k
+ZXZpY2VzLmMgfCA2ICsrKysrLQo+IDEgZmlsZSBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKyksIDEg
+ZGVsZXRpb24oLSkKPgo+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2NvcmUvZGV2aWNlcy5jIGIv
+ZHJpdmVycy91c2IvY29yZS9kZXZpY2VzLmMKPmluZGV4IGEyNDdkYTczZjM0ZC4uNzhlYmNiNjU3
+ZGNlIDEwMDY0NAo+LS0tIGEvZHJpdmVycy91c2IvY29yZS9kZXZpY2VzLmMKPisrKyBiL2RyaXZl
+cnMvdXNiL2NvcmUvZGV2aWNlcy5jCj5AQCAtNDI5LDcgKzQyOSwxMSBAQCBzdGF0aWMgc3NpemVf
+dCB1c2JfZGV2aWNlX2R1bXAoY2hhciBfX3VzZXIgKipidWZmZXIsIHNpemVfdCAqbmJ5dGVzLAo+
+IAljYXNlIFVTQl9TUEVFRF9TVVBFUjoKPiAJCXNwZWVkID0gIjUwMDAiOyBicmVhazsKPiAJY2Fz
+ZSBVU0JfU1BFRURfU1VQRVJfUExVUzoKPi0JCXNwZWVkID0gIjEwMDAwIjsgYnJlYWs7Cj4rCQlp
+ZiAodXNiZGV2LT5zc3BfcmF0ZSA9PSBVU0JfU1NQX0dFTl8yeDIpCj4rCQkJc3BlZWQgPSAiMjAw
+MDAiOwo+KwkJZWxzZQo+KwkJCXNwZWVkID0gIjEwMDAwIjsKPisJCWJyZWFrOwo+IAlkZWZhdWx0
+Ogo+IAkJc3BlZWQgPSAiPz8iOwo+IAl9Cj4tLSAKPjIuMjUuMQoKUGxlYXNlIGlnbm9yZSB0aGlz
+IHBhdGNoLCB3aGljaCB3aWxsIGJlIGNvdmVyZWQgaW4gYW5vdGhlciBwYXRjaC4KU29ycnkgZm9y
+IHRoZSBpbmNvbnZlbmllbmNlLgoKUmVnYXJkcywKRGluZ3lhbg==
