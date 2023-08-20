@@ -2,64 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34E21781C92
-	for <lists+linux-usb@lfdr.de>; Sun, 20 Aug 2023 08:01:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D1DB781CA1
+	for <lists+linux-usb@lfdr.de>; Sun, 20 Aug 2023 08:25:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229883AbjHTGBY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 20 Aug 2023 02:01:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51746 "EHLO
+        id S229998AbjHTGZg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 20 Aug 2023 02:25:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229985AbjHTGBC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 20 Aug 2023 02:01:02 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79960D94F
-        for <linux-usb@vger.kernel.org>; Sat, 19 Aug 2023 21:45:00 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id 98e67ed59e1d1-26d5094188cso1923999a91.0
-        for <linux-usb@vger.kernel.org>; Sat, 19 Aug 2023 21:45:00 -0700 (PDT)
+        with ESMTP id S230001AbjHTGZX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 20 Aug 2023 02:25:23 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 912F62A3A4;
+        Sat, 19 Aug 2023 22:25:13 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id af79cd13be357-76d873c6e8aso156573785a.1;
+        Sat, 19 Aug 2023 22:25:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1692506700; x=1693111500;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=0FxH3RmVNebbCiuph+Bo6boQ8Nz4tprYlS7+OEsOmqw=;
-        b=5jmbfSXOvAMBjY7XcewJDVevQopgO54KQmbQ2iQKCPwWla6sUAswnrQug61V8hji0P
-         FaRA54BkkIuCNeFsp8E4UIG5T7V4sFSfFeatIfwF6jAXyA9xgu2mNc6TuPy513kAB3Rz
-         RiT7tiN4pfEvGwwI8oiuOlidELgMrLeYxDbWEaI7W5tajNVXMefLkGp05jOY8nS1ru9H
-         /pGsi97IyOxc244X4uetUs36QpUq+1OB6S4HvDZXotaICbhy4suLuW6xt5bXIl6MgD9v
-         DvC03mjIj0uwMuIRzFNUmiBWXBVYTlO6b+XCGLeqq8G0ERC4BwKeoxk3CCel2uiyUEGe
-         wvkg==
+        d=gmail.com; s=20221208; t=1692509112; x=1693113912;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8LyaQ7oU9VWxzPM0ZkIDX36hxN7jVO1qAMTjMceAauI=;
+        b=OjJywNdMBckIguEQkY0LO07+EIB7V+6fzVd2GeIsHCn0nxFW/mcO+XuGpke9PTqIgP
+         D7e2G/7uR5MftQlpE3CBoNwm63QjfTnIuPEh2dgBuZwyuasfGzhSfOmC0fM+BRQuTAQO
+         +dxGKGGWNhoMMZt0XOCETiO7qtRmgIHbbnzuYpIDpGhjIamklPWUSXcRnMCU+IhuSmnW
+         Vc1lY+0bnP1qhNx38jq9a9QWFcxoh4dqPVRWKauQyxApDS9UcOsnrcVJ97YzR88pk/YC
+         F51FVft0db6wXuodeTl8EcCbMnVSgc+yOHy+6Y0YwYO8J9M5ycJdcF2ETcvCptWAaXAL
+         9ujA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692506700; x=1693111500;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0FxH3RmVNebbCiuph+Bo6boQ8Nz4tprYlS7+OEsOmqw=;
-        b=EXT6ODOxtg/2ajhLYz7aF/NJHxK8zUeG2c8xXH6xHE4MvTIUQa/82CSvRqbRIBsPrX
-         q80c9SBxbMVIKbjxdT3hNgrZxK17SU5TJbKF3+ZmaISnLU/38Lx7LZiSFQhDV0Ms9OyH
-         YQ3mq5YVx3tN1KZpnzBbGmc4kPO4RihrPa/MYHIweFYVtUrtEmaTL3rGT21E25XiHiYP
-         MieB+r/zDxF/frSyw7gi/58/cbLOxP6dSNTMsjPDYJvhDfeD4drYtdaWHkBC0n7KAswG
-         RiHKWa+QZydvbwvfdEQBSlx4xlMXbEm9tBC4v1Ha0M6yO5GLr2eXLUDbdI+UzKWV9p8c
-         o4Fw==
-X-Gm-Message-State: AOJu0YzsrtmoB/E7PvL/6pspRVNRVRMVf7BxTmbRuagy5GNZxxmkUWzZ
-        /bowYfhk2MPCAX3ruqQ/WvVtX5XEInI=
-X-Google-Smtp-Source: AGHT+IEqOT3wwRMG5WwcbGjs5DHF28XuWoiMfoFuFwXlv5eZTJ+qF6GxclqG4t6qc2t8wDLRKskoRu3kjBA=
-X-Received: from badhri.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:6442])
- (user=badhri job=sendgmr) by 2002:a17:90a:f00b:b0:268:4dee:eba0 with SMTP id
- bt11-20020a17090af00b00b002684deeeba0mr669301pjb.8.1692506699855; Sat, 19 Aug
- 2023 21:44:59 -0700 (PDT)
-Date:   Sun, 20 Aug 2023 04:44:48 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.42.0.rc1.204.g551eb34607-goog
-Message-ID: <20230820044449.1005889-1-badhri@google.com>
-Subject: [PATCH v1] tcpm: Avoid soft reset when partner does not support get_status
-From:   Badhri Jagan Sridharan <badhri@google.com>
-To:     gregkh@linuxfoundation.org, linux@roeck-us.net,
-        heikki.krogerus@linux.intel.com
-Cc:     kyletso@google.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Badhri Jagan Sridharan <badhri@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        d=1e100.net; s=20221208; t=1692509112; x=1693113912;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8LyaQ7oU9VWxzPM0ZkIDX36hxN7jVO1qAMTjMceAauI=;
+        b=CnS/lNvx+9zJ+t/83s/d7I5GgQP3ykH/nbUcm0+tGSZosxDRapkeQQkp6DN6Nc+sru
+         KIL+6re09CgWtKeNYlbCyrsbL6WKD4eoD59xQkbTfeu3YzAGferhzUYWfxQ+NI5FeDOd
+         Gyxy2ChTAjfdJiV80UmJv4FA5ZTK6pH0cw9+FaqEGjoTrzd0AIPTxkiOB3x1v15/yQ5v
+         0OfMWdxfFZwzTYoRoqrhFdy0DLH5nYXk2E9wbxWtP8yEzBrdn4yk9jFxErEqIZRCp9J5
+         S27nrQTTV5MV7d9duBRkfxQiC+f+eA9KGNoqSk7ZMo1FMw4dxGqLI5xMCBvN16LBb5bf
+         yaaw==
+X-Gm-Message-State: AOJu0YxFEAt2/v1vL+4Du8MbiyHv5t0P7OBPlxi7nAl/CdZL+UFrExaH
+        zqPAfAqjyisSoUboN1gZuV4=
+X-Google-Smtp-Source: AGHT+IHmiDN79XXJbMYkN449EzB1GLvqqNw0J2hoPM/ZB45dIu9F687gntJ0/0QN1oJqF6B+an9Qkg==
+X-Received: by 2002:a05:620a:e9e:b0:76c:97b1:33b5 with SMTP id w30-20020a05620a0e9e00b0076c97b133b5mr3832997qkm.12.1692509112605;
+        Sat, 19 Aug 2023 22:25:12 -0700 (PDT)
+Received: from localhost.localdomain ([174.95.13.129])
+        by smtp.gmail.com with ESMTPSA id c16-20020a05620a165000b0076da29c4497sm307750qko.112.2023.08.19.22.25.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 19 Aug 2023 22:25:12 -0700 (PDT)
+From:   Abdel Alkuor <alkuor@gmail.com>
+To:     heikki.krogerus@linux.intel.com, devicetree@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        abdelalkuor@geotab.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/2] Add support for TPS25750
+Date:   Sun, 20 Aug 2023 01:23:14 -0400
+Message-Id: <cover.1692507038.git.abdelalkuor@geotab.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,60 +70,48 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When partner does not support get_status message, tcpm right now
-responds with soft reset message. This causes PD renegotiation to
-happen and resets PPS link. Avoid soft resetting the link when
-partner does not support get_status message to mitigate PPS resets.
+From: Abdel Alkuor <abdelalkuor@geotab.com>
 
-[  208.926752] Setting voltage/current limit 9500 mV 2450 mA
-[  208.930407] set_auto_vbus_discharge_threshold mode:3 pps_active:y vbus:9500 ret:0
-[  208.930418] state change SNK_TRANSITION_SINK -> SNK_READY [rev3 POWER_NEGOTIATION]
-[  208.930455] AMS POWER_NEGOTIATION finished
+TPS25750 is USB Type-C and PD controller. The device is
+highly configurable using App Customization online Tool 
+developed by TI to generate loadable binary.
 
-// ALERT message from the Source
-[  213.948442] PD RX, header: 0x19a6 [1]
-[  213.948451] state change SNK_READY -> GET_STATUS_SEND [rev3 GETTING_SOURCE_SINK_STATUS]
-[  213.948457] PD TX, header: 0x492
-[  213.950402] PD TX complete, status: 0
-[  213.950427] pending state change GET_STATUS_SEND -> GET_STATUS_SEND_TIMEOUT @ 60 ms [rev3 GETTING_SOURCE_SINK_STATUS]
+TPS25750 supports three modes; PTCH, APP, and BOOT. A configuration
+can only be applied when the controller is on PTCH mode.
 
-// NOT_SUPPORTED from the Source
-[  213.959954] PD RX, header: 0xbb0 [1]
+The controller attempts to load a configuration from EEPROM on
+I2Cm bus. If no EEPROM is detected, then the driver tries to load
+a configuration on I2Cs bus using a firmware file defined
+in DT.
 
-// sink sends SOFT_RESET
-[  213.959958] state change GET_STATUS_SEND -> SNK_SOFT_RESET [rev3 GETTING_SOURCE_SINK_STATUS]
-[  213.959962] AMS GETTING_SOURCE_SINK_STATUS finished
-[  213.959964] AMS SOFT_RESET_AMS start
-[  213.959966] state change SNK_SOFT_RESET -> AMS_START [rev3 SOFT_RESET_AMS]
-[  213.959969] state change AMS_START -> SOFT_RESET_SEND [rev3 SOFT_RESET_AMS]
+The driver implements the binary loading sequence which 
+can be found on pg.53 in TPS25750 Host Interface Technical
+Reference Manual (Rev. A) https://tinyurl.com/y9rkhu8a
 
-Cc: stable@vger.kernel.org
-Fixes: 8dea75e11380 ("usb: typec: tcpm: Protocol Error handling")
-Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
----
- drivers/usb/typec/tcpm/tcpm.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+The driver only supports resume pm callback as power management is
+automatically controlled by the device. See pg.47 in TPS25750
+datasheet https://tinyurl.com/3vfd2k43
 
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 5639b9a1e0bf..280ce1bd7b53 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -2753,6 +2753,13 @@ static void tcpm_pd_ctrl_request(struct tcpm_port *port,
- 			port->sink_cap_done = true;
- 			tcpm_set_state(port, ready_state(port), 0);
- 			break;
-+		/*
-+		 * Some port partners do not support GET_STATUS, avoid soft reset the link to
-+		 * prevent redundant power re-negotiation
-+		 */
-+		case GET_STATUS_SEND:
-+			tcpm_set_state(port, ready_state(port), 0);
-+			break;
- 		case SRC_READY:
- 		case SNK_READY:
- 			if (port->vdm_state > VDM_STATE_READY) {
+v3:
+ - PATCH 1: Fix node name
+ - PATCH 2: Upload tps25750 driver patch
+v2:
+ - PATCH 1: General properties clean up
 
-base-commit: bbb9e06d2c6435af9c62074ad7048910eeb2e7bc
+Abdel Alkuor (2):
+  dt-bindings: usb: Add ti,tps25750
+  USB: typec: Add TI TPS25750 USB Type-C controller
+
+ .../devicetree/bindings/usb/ti,tps25750.yaml  |   81 ++
+ drivers/usb/typec/Kconfig                     |   13 +
+ drivers/usb/typec/Makefile                    |    1 +
+ drivers/usb/typec/tps25750.c                  | 1065 +++++++++++++++++
+ drivers/usb/typec/tps25750.h                  |  162 +++
+ 5 files changed, 1322 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/ti,tps25750.yaml
+ create mode 100644 drivers/usb/typec/tps25750.c
+ create mode 100644 drivers/usb/typec/tps25750.h
+
 -- 
-2.42.0.rc1.204.g551eb34607-goog
+2.34.1
 
