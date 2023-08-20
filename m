@@ -2,191 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE263781F80
-	for <lists+linux-usb@lfdr.de>; Sun, 20 Aug 2023 21:23:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DEC2781F8F
+	for <lists+linux-usb@lfdr.de>; Sun, 20 Aug 2023 21:38:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231681AbjHTTXt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 20 Aug 2023 15:23:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46248 "EHLO
+        id S231721AbjHTTis (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 20 Aug 2023 15:38:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231670AbjHTTXq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 20 Aug 2023 15:23:46 -0400
-X-Greylist: delayed 446 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 20 Aug 2023 12:20:36 PDT
-Received: from genua.uuid.uk (genua.uuid.uk [78.47.120.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 998DD44BA;
-        Sun, 20 Aug 2023 12:20:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=octiron.net
-        ; s=20230424-rsa3072; h=Content-Transfer-Encoding:Content-Type:Cc:To:Subject:
-        From:MIME-Version:Date:Message-ID:From:Sender:Reply-To:Subject:Date:
-        Message-ID:To:Cc:Bcc:MIME-Version:Content-Type:Content-Disposition:
-        Content-Transfer-Encoding:In-Reply-To:References:Organization;
-        bh=7602GOT5HJSHFctKhxiw1oFiDhE0TEzn/TTKrnBioPM=; t=1692559237; b=uI1qcMXA6JCx
-        3Xd1MY0d6c57rJMnKEjQcltQ+2yP0+xGPvYjj6cgRXKbQZG9/oyqRoADi5a9dSJ7BS3Yx4zzeYSHT
-        FH9HWmF1HF2nICKrtMa2na88WqC+VnS+IwoQzsgU4V5cFoJgvvYEqwb9jJMRmRriL+sSXGZhvTGxE
-        4YuO864RMfE7KqllJDaIBHZP5M0Q5wcddM9cJfmn/v8Kk0q+W1KmodrtVJwEXfdreN9e+WA8J151S
-        i9nFAFJ4lxikeyaoj4EbQVc1XZccWG/VmPJ+VX5AL9vGOQHxO84uYcw9GsS7icAPyep6vtlw+3M/V
-        VcTsNZ/z7D6g7s5YOR4C2FPbjK9L3VVIgNsRMnzLQnn9tplNEFhYJD4eYsEFdzJG5C8UNLojUHmvQ
-        maOmoX33ud5GRE+cVHPwoEQEKpfPA1q3qenKjps7eBpKoZC1Za+mj/kx53HnkIxffn5MOpWqMU+9R
-        9tR3YlFa3K/QgNX8PFtoKcf0yC6ZGdtZxX0AtF;
-DKIM-Signature: v=1; a=ed25519-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=octiron.net; s=20230410-ed25519; h=Content-Transfer-Encoding:Content-Type:
-        Cc:To:Subject:From:MIME-Version:Date:Message-ID:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:Bcc:MIME-Version:Content-Type:Content-Disposition:
-        Content-Transfer-Encoding:In-Reply-To:References:Organization;
-        bh=7602GOT5HJSHFctKhxiw1oFiDhE0TEzn/TTKrnBioPM=; t=1692559237; b=tG96qLeP0CNi
-        IKl0U57KbzQ7I13T5w1J5JeHg0vmXs7n7d7U/o7cio4S6JCnMTNFS4jAO5j31ktzCRJNPkdUCQ==;
-Received: by genua.uuid.uk with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.93)
-        (envelope-from <simon@octiron.net>)
-        id 1qXnrG-007rUu-1S; Sun, 20 Aug 2023 20:13:07 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=octiron.net
-        ; s=20230424-rsa3072; h=Content-Transfer-Encoding:Content-Type:Cc:To:Subject:
-        From:MIME-Version:Date:Message-ID:From:Sender:Reply-To:Subject:Date:
-        Message-ID:To:Cc:Bcc:MIME-Version:Content-Type:Content-Disposition:
-        Content-Transfer-Encoding:In-Reply-To:References:Organization;
-        bh=7602GOT5HJSHFctKhxiw1oFiDhE0TEzn/TTKrnBioPM=; t=1692558786; b=kg5fLdU9S03S
-        xALXiHcnwX05C3xL92ZG5MdZT7bYXWPSsS7V0GUtN78Yb0zRGI8ht9ybpa9VkmadHG0pbTySnnn/k
-        UB8fyThPUhe6yim5Jb/smCBaoKCHoNp0LqxOmPDhD0tGrUROBbV8tR2n++B2ymdm3dpRktqoPzSNT
-        hWgvn65fj3oKsoUp2kjPNCoFC3kL/ayECFVQQ6sGcmJ1rMYquQbnVmEuxcDNB/xVtiKR04N97cSbc
-        lL+RkSL+EEtHtANpN+PdUBfOZ+a3MRandejnxkI6Rh55OwXDLJNHcEhyBx9kjxwatpg733nEz0aTT
-        r9E9/siRJaYCuYZ0D2vZaRYzZeYCN+9O4/C6em1ZD39aN72IRkV8wcomaGgbB8TAOQ+JnC81YQBKg
-        xT/XdcS5x1eCPwid0OII9FZHNJikUldBKccn0Has1aRbMr3t+B/D8RM4aeBe0c88PqaYiIHzbZtw1
-        qF3ERPU6RCqX8NO+XjT/jNVwJPd5iZA0YDFQWP;
-DKIM-Signature: v=1; a=ed25519-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=octiron.net; s=20230410-ed25519; h=Content-Transfer-Encoding:Content-Type:
-        Cc:To:Subject:From:MIME-Version:Date:Message-ID:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:Bcc:MIME-Version:Content-Type:Content-Disposition:
-        Content-Transfer-Encoding:In-Reply-To:References:Organization;
-        bh=7602GOT5HJSHFctKhxiw1oFiDhE0TEzn/TTKrnBioPM=; t=1692558786; b=FfeqeP0POutQ
-        91/fqvc7d7uB93jo36LF/nMRxw5s3bxrUiV8ZKX/3zzvc4cQa5IfwNwM1mOjgKXHS0ec70qnAA==;
-Received: by tsort.uuid.uk with esmtps (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128)
-        (Exim 4.93)
-        (envelope-from <simon@octiron.net>)
-        id 1qXnrB-003Sfp-PI; Sun, 20 Aug 2023 20:13:02 +0100
-Message-ID: <555fbc4c-043b-8932-fb9b-a208d61ffbe4@0882a8b5-c6c3-11e9-b005-00805fc181fe.uuid.home.arpa>
-Date:   Sun, 20 Aug 2023 20:13:01 +0100
+        with ESMTP id S231720AbjHTTip (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 20 Aug 2023 15:38:45 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 162741BD9;
+        Sun, 20 Aug 2023 12:32:51 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-58c5642701fso30503057b3.0;
+        Sun, 20 Aug 2023 12:32:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692559970; x=1693164770;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1q9ksZXGx9cXmR47rVp5qzEPJFyOpXFFD3HDKE+iG5M=;
+        b=hvp7wGkgVvBbMh5bu3CDNAbxvnZaqXaUY4NVgQSnYFic7SD4AL6hLKcsuX+toB2WTz
+         qdC1/lJ366Lp/t3ziau+LCAcz8Q5KXsgcdCK81dBeuqBEE/iB1+wy09Sp4qCfsuoWDeK
+         p3IjI6u3uSt9HbPauv4AO+i0Ic7/xbOZ/d1ha0scEN8QA/Z9iulBSDHAsjC7S5ueiRgd
+         QYa23fn2yOX2eO16rIqMUS1UETRFSdpi9xlOjHZn8oDB8mHqN+ogsSyzpIr8JER/4AY+
+         y+9MOAKM9YnSVDww1F12clMOn35YTAQQoQmgydyGpqQAY0hFxqkgq0IGDJefHrbkim4A
+         tWgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692559970; x=1693164770;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1q9ksZXGx9cXmR47rVp5qzEPJFyOpXFFD3HDKE+iG5M=;
+        b=aIzswbekUvT23VrXTAZhIWU9p0VfpQBRGVzArZOipmvFIlV4OTVhbqkZLLnPnqphQI
+         xW2KDMKH4Q/lsv1+WWwCMMEMa29VpfmbQM5M21vINMqF3ks/LKt/WqdFD2RsAn3d7dCo
+         i/kEYZVOaUFOM8x61gjFJDXELmh0YJ2doZFSG9QPSMPPyRlvYdB0qa2SW1l90+nJKH0z
+         4wF6w4TdTen1L+lHVOgkoov/+QEkqTBOa4R/mNvc7f5U2viYmNSp5xRkJ8ALpQqTyqMy
+         93WJNijrQA2mMHJ8nRwmG5UI3zGc+NkmffDJ4aOoaBLKwpl0T4BWfSc8CChjdapxAm/E
+         jZ2Q==
+X-Gm-Message-State: AOJu0YyoYkHCq7XoJuxat/TPAk9QMfoptJK9XPK8U1kZGthuDg//XBB0
+        T8J6jpDAUfkdwdt848VRaN4=
+X-Google-Smtp-Source: AGHT+IF90wSLGTeXZ5Bi6Vc8FoNylo1VMF8m+A3OMI1Ozs1N4HSGYsEiRtTQvQFjz7f0qmkoTJLQBA==
+X-Received: by 2002:a81:6e89:0:b0:58c:8b7e:a1ce with SMTP id j131-20020a816e89000000b0058c8b7ea1cemr5478891ywc.46.1692559970150;
+        Sun, 20 Aug 2023 12:32:50 -0700 (PDT)
+Received: from localhost.localdomain ([174.95.13.129])
+        by smtp.gmail.com with ESMTPSA id c16-20020a0cf2d0000000b0063d0159e1f6sm2308042qvm.109.2023.08.20.12.32.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Aug 2023 12:32:49 -0700 (PDT)
+From:   Abdel Alkuor <alkuor@gmail.com>
+To:     heikki.krogerus@linux.intel.com, devicetree@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        abdelalkuor@geotab.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Abdel Alkuor <alkuor@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v4 0/2] Add support for TPS25750
+Date:   Sun, 20 Aug 2023 15:32:25 -0400
+Message-Id: <cover.1692559293.git.alkuor@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-From:   Simon Arlott <simon@octiron.net>
-Subject: [PATCH] USB: cdc-acm: support flushing write buffers (TCOFLUSH)
-To:     Oliver Neukum <oneukum@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Language: en-GB
-X-Face: -|Y&Xues/.'(7\@`_\lFE/)pw"7..-Ur1^@pRL`Nad5a()6r+Y)18-pi'!`GI/zGn>6a6ik
- mcW-%sg_wM:4PXDw:(;Uu,n&!8=;A<P|QG`;AMu5ypJkN-Sa<eyt,Ap3q`5Z{D0BN3G`OmX^8x^++R
- Gr9G'%+PNM/w+w1+vB*a($wYgA%*cm3Hds`a7k)CQ7'"[\C|g2k]FQ-f*DDi{pU]v%5JZm
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If the serial device never reads data written to it (because it is "output
-only") then the write buffers will still be waiting for the URB to complete
-on close(), which will hang for 30s until the closing_wait timeout expires.
+TPS25750 is USB Type-C and PD controller. The device is
+highly configurable using App Customization online Tool 
+developed by TI to generate loadable binary.
 
-This can happen with the ESP32-H2/ESP32-C6 USB serial interface. Changing
-the port closing_wait timeout is a privileged operation but flushing the
-output buffer is not a privileged operation.
+TPS25750 supports three modes; PTCH, APP, and BOOT. A configuration
+can only be applied when the controller is on PTCH mode.
 
-Implement the flush_buffer tty operation to cancel in-progress writes so
-that tcflush(fd, TCOFLUSH) can be used to unblock the serial port before
-close.
+The controller attempts to load a configuration from EEPROM on
+I2Cm bus. If no EEPROM is detected, then the driver tries to load
+a configuration on I2Cs bus using a firmware file defined
+in DT.
 
-Signed-off-by: Simon Arlott <simon@octiron.net>
----
-There's no guarantee that the write buffers will be cancelled in an
-appropriate order because they could have been submitted in any order.
+The driver implements the binary loading sequence which 
+can be found on pg.53 in TPS25750 Host Interface Technical
+Reference Manual (Rev. A) https://tinyurl.com/y9rkhu8a
 
-If there are successful writes in progress or if only one of the URBs
-was stuck and later URBs could be completed, it's possible that an
-later write could complete after cancelling an earlier one.
+The driver only supports resume pm callback as power management is
+automatically controlled by the device. See pg.47 in TPS25750
+datasheet https://tinyurl.com/3vfd2k43
 
-Should I change "struct acm_wb wb[ACM_NW]" to a list so that writes can
-be cancelled in reverse order?
+v4:
+ - PATCH 1: No change
+ - PATCH 2: Fix comments style and drop of_match_ptr
+v3:
+ - PATCH 1: Fix node name
+ - PATCH 2: Upload tps25750 driver patch
+v2:
+ - PATCH 1: General properties clean up
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-With some extra debug, writing 6 individual bytes and then calling
-flush_buffer() looks like this:
-[1850121.576468] cdc_acm 5-2.5.4:1.1: 1 bytes from tty layer
-[1850121.576469] cdc_acm 5-2.5.4:1.1: writing 1 bytes
-[1850121.876857] cdc_acm 5-2.5.4:1.1: 1 bytes from tty layer
-[1850121.876858] cdc_acm 5-2.5.4:1.1: writing 1 bytes
-[1850122.177273] cdc_acm 5-2.5.4:1.1: 1 bytes from tty layer
-[1850122.177275] cdc_acm 5-2.5.4:1.1: writing 1 bytes
-[1850122.477678] cdc_acm 5-2.5.4:1.1: 1 bytes from tty layer
-[1850122.477679] cdc_acm 5-2.5.4:1.1: writing 1 bytes
-[1850122.778101] cdc_acm 5-2.5.4:1.1: 1 bytes from tty layer
-[1850122.778103] cdc_acm 5-2.5.4:1.1: writing 1 bytes
-[1850123.078510] cdc_acm 5-2.5.4:1.1: 1 bytes from tty layer
-[1850123.078512] cdc_acm 5-2.5.4:1.1: writing 1 bytes
-[1850123.563234] cdc_acm 5-2.5.4:1.0: acm_tty_flush_buffer: transmitting=6
-[1850123.563236] cdc_acm 5-2.5.4:1.0: acm_tty_flush_buffer: wb[0] .use=1
-[1850123.563245] cdc_acm 5-2.5.4:1.0: acm_tty_flush_buffer: wb[1] .use=1
-[1850123.563247] cdc_acm 5-2.5.4:1.0: acm_tty_flush_buffer: wb[2] .use=1
-[1850123.563249] cdc_acm 5-2.5.4:1.0: acm_tty_flush_buffer: wb[3] .use=1
-[1850123.563250] cdc_acm 5-2.5.4:1.0: acm_tty_flush_buffer: wb[4] .use=1
-[1850123.563252] cdc_acm 5-2.5.4:1.0: acm_tty_flush_buffer: wb[5] .use=1
-[1850123.563254] cdc_acm 5-2.5.4:1.0: acm_tty_flush_buffer: wb[6] .use=0
-[1850123.563255] cdc_acm 5-2.5.4:1.0: acm_tty_flush_buffer: wb[7] .use=0
-[1850123.563256] cdc_acm 5-2.5.4:1.0: acm_tty_flush_buffer: wb[8] .use=0
-[1850123.563256] cdc_acm 5-2.5.4:1.0: acm_tty_flush_buffer: wb[9] .use=0
-[1850123.563257] cdc_acm 5-2.5.4:1.0: acm_tty_flush_buffer: wb[10] .use=0
-[1850123.563257] cdc_acm 5-2.5.4:1.0: acm_tty_flush_buffer: wb[11] .use=0
-[1850123.563258] cdc_acm 5-2.5.4:1.0: acm_tty_flush_buffer: wb[12] .use=0
-[1850123.563258] cdc_acm 5-2.5.4:1.0: acm_tty_flush_buffer: wb[13] .use=0
-[1850123.563259] cdc_acm 5-2.5.4:1.0: acm_tty_flush_buffer: wb[14] .use=0
-[1850123.563260] cdc_acm 5-2.5.4:1.0: acm_tty_flush_buffer: wb[15] .use=0
-[1850123.563568] cdc_acm 5-2.5.4:1.1: wrote len 0/1, status -104
-[1850123.563571] cdc_acm 5-2.5.4:1.1: wrote len 0/1, status -104
-[1850123.563572] cdc_acm 5-2.5.4:1.1: wrote len 0/1, status -104
-[1850123.563574] cdc_acm 5-2.5.4:1.1: wrote len 0/1, status -104
-[1850123.563575] cdc_acm 5-2.5.4:1.1: wrote len 0/1, status -104
-[1850123.563577] cdc_acm 5-2.5.4:1.1: wrote len 0/1, status -104
+Abdel Alkuor (2):
+  dt-bindings: usb: Add ti,tps25750
+  USB: typec: Add TI TPS25750 USB Type-C controller
 
- drivers/usb/class/cdc-acm.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
-
-diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
-index 745de40310d2..00db9e1fc7ed 100644
---- a/drivers/usb/class/cdc-acm.c
-+++ b/drivers/usb/class/cdc-acm.c
-@@ -863,6 +863,19 @@ static unsigned int acm_tty_write_room(struct tty_struct *tty)
- 	return acm_wb_is_avail(acm) ? acm->writesize : 0;
- }
- 
-+static void acm_tty_flush_buffer(struct tty_struct *tty)
-+{
-+	struct acm *acm = tty->driver_data;
-+	unsigned long flags;
-+	int i;
-+
-+	spin_lock_irqsave(&acm->write_lock, flags);
-+	for (i = 0; i < ACM_NW; i++)
-+		if (acm->wb[i].use)
-+			usb_unlink_urb(acm->wb[i].urb);
-+	spin_unlock_irqrestore(&acm->write_lock, flags);
-+}
-+
- static unsigned int acm_tty_chars_in_buffer(struct tty_struct *tty)
- {
- 	struct acm *acm = tty->driver_data;
-@@ -2026,6 +2039,7 @@ static const struct tty_operations acm_ops = {
- 	.hangup =		acm_tty_hangup,
- 	.write =		acm_tty_write,
- 	.write_room =		acm_tty_write_room,
-+	.flush_buffer =		acm_tty_flush_buffer,
- 	.ioctl =		acm_tty_ioctl,
- 	.throttle =		acm_tty_throttle,
- 	.unthrottle =		acm_tty_unthrottle,
--- 
-2.37.0
+ .../devicetree/bindings/usb/ti,tps25750.yaml  |   81 ++
+ drivers/usb/typec/Kconfig                     |   13 +
+ drivers/usb/typec/Makefile                    |    1 +
+ drivers/usb/typec/tps25750.c                  | 1077 +++++++++++++++++
+ drivers/usb/typec/tps25750.h                  |  162 +++
+ 5 files changed, 1334 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/ti,tps25750.yaml
+ create mode 100644 drivers/usb/typec/tps25750.c
+ create mode 100644 drivers/usb/typec/tps25750.h
 
 -- 
-Simon Arlott
+2.34.1
+
