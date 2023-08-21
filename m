@@ -2,156 +2,218 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD69D782DFC
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Aug 2023 18:13:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70B99782E5A
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Aug 2023 18:25:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236356AbjHUQNU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Aug 2023 12:13:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33590 "EHLO
+        id S236619AbjHUQZW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Aug 2023 12:25:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232788AbjHUQNT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Aug 2023 12:13:19 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C476FF;
-        Mon, 21 Aug 2023 09:13:17 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id 41be03b00d2f7-5656a5c6721so1922223a12.1;
-        Mon, 21 Aug 2023 09:13:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692634396; x=1693239196;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e9mifx+UGkE0S0xzchpKkc4eAFsqEElU8pnoSlp1HjE=;
-        b=Kr++x1Q5c+VVlqGOpGdREoAyY7Rz9EybuoNnZx0rRQAdamseTB7czC/SOr6X6+M8e0
-         JsDvdGJhdyjR/pyqxgBOnJjTYR3t85l2Ju5ZNRXnDL0lIbc4ileDzbzlCv0Ya/fBVRy+
-         RMkCVaGoN3yUca48BHRQBERHuKtzQv/Wfmnr23V9mqD6eAWI07vsZ6K78AVR1/gHrN2c
-         NTCUQuds13x16QfgopvUBQTphbK6Rijwf28gATgawwazFNmgfs98rD+uH79i7IwbdfM2
-         n/VcwIYHwJF+rR/YaMnPtzdBmDbyg93kO9X8pxT93b6U9GWj8BI6txmUiU8HvhnrVfxp
-         8m+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692634396; x=1693239196;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=e9mifx+UGkE0S0xzchpKkc4eAFsqEElU8pnoSlp1HjE=;
-        b=L63OtBmRrWHGB+6Y2H+Iladprr1yQcISFug27dGEXuF6HxhdNGtG3psslVBErF79N0
-         azR4CyFmi5+hkK1dt6lNoZWS8VuhbxoXOZvqy1i6wHoetZokJcvrUJAO8u7rdggQNEak
-         /hhgKh7UZ82Suk3BCEZR6R+LBv9kVi44tbhudDpBX8bVc/QHRlF6v1E5RoAVbzka4k9F
-         F89R8CsPe3dxAn67/sLOOwGNrkRNCI5k9yIQbx8YMHomgkCBLkcdjtqnrr6I3Mwh7aRM
-         4OggnpNHKb6x/OWQ7NubMoDFKGXtgdjcm/qhm+ckzW98ZhAc6V8eB2vFE+7Hf7iDkeLE
-         BARg==
-X-Gm-Message-State: AOJu0Yx9DqEgL/To86llTcf7Lmg7NDQNo+OlzxKzxuesrXR867slTSUQ
-        RgOCAgiQK0hCwiO1QEzDfBeyexB323+ak00sHZs=
-X-Google-Smtp-Source: AGHT+IF15BDPIoOFdDsEOMQDbVtZnwck13z+KDafRvH5+e66BhdxZ9xKieeRJmgfCqlRj38YAo4LvbHq48d9PGqmxeM=
-X-Received: by 2002:a17:90b:e07:b0:269:2682:11fb with SMTP id
- ge7-20020a17090b0e0700b00269268211fbmr4259608pjb.8.1692634396071; Mon, 21 Aug
- 2023 09:13:16 -0700 (PDT)
+        with ESMTP id S231825AbjHUQZV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Aug 2023 12:25:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14503E4;
+        Mon, 21 Aug 2023 09:25:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D2F963E19;
+        Mon, 21 Aug 2023 16:25:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F864C433C7;
+        Mon, 21 Aug 2023 16:25:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692635119;
+        bh=oZ7WQRQ9itjy25Tt/rRhlhdNXYXUxndS4PkMFVRCZFY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CyHF7SPDkZ6ovolJzYQOcbwsmF0II6J72m2P+P6w2qyxivXmEcRz3V2yGeFWQdEao
+         7LCs811khkt6TKYCOU6SMNaRylk9AUphGjiYQaGEETmW8xWY4IfjcLgiO+XuDi5GeH
+         nXE2QZGHusr7PAhXy1trksze0ASTg8rpegrFlT80HrUTVobKp21fecGyefR8WMRwzf
+         YDNuwwj+yInw/z7eF9GLoRK473tZyIbHeaMxEC4Ps0Gg6YjSwsVVB6atW0YegAvRn8
+         AwxKjGvcUjJbbkGRzRinzdinaVoRgnPykCc/mNPQRrEVownudwITKsq4TGFz/WP51e
+         t+8lW320iAOVw==
+Received: (nullmailer pid 1844508 invoked by uid 1000);
+        Mon, 21 Aug 2023 16:25:17 -0000
+Date:   Mon, 21 Aug 2023 11:25:17 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Kyle Tso <kyletso@google.com>
+Cc:     krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org, badhri@google.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: connector: Add child nodes for
+ multiple PD capabilities
+Message-ID: <20230821162517.GA1832382-robh@kernel.org>
+References: <20230807174159.1140957-1-kyletso@google.com>
+ <20230807174159.1140957-2-kyletso@google.com>
 MIME-Version: 1.0
-References: <CA+fCnZcQSYy63ichdivAH5-fYvN2UMzTtZ--h=F6nK0jfVou3Q@mail.gmail.com>
- <20230818010815.4kcue67idma5yguf@synopsys.com> <bb470c47-c9dc-4dae-ae3f-c7d4736ee7e9@rowland.harvard.edu>
- <20230818031045.wovf5tj2un7nwf72@synopsys.com> <cfc7ae18-140b-4223-9cc2-7ee4b9ddea28@rowland.harvard.edu>
- <20230818194922.ys26zrqc4pocqq7q@synopsys.com> <45d9ef53-e2be-4740-a93a-d36f18a49b39@rowland.harvard.edu>
- <20230819000643.7mddkitzr4aqjsms@synopsys.com> <e63ba783-f5a4-4442-8736-987a3b134e7f@rowland.harvard.edu>
-In-Reply-To: <e63ba783-f5a4-4442-8736-987a3b134e7f@rowland.harvard.edu>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Mon, 21 Aug 2023 18:13:05 +0200
-Message-ID: <CA+fCnZcmb78DMaffb3cq2JeCNxcGBeyt8hxeJq3SaTTkbZ3ewA@mail.gmail.com>
-Subject: Re: dwc3: unusual handling of setup requests with wLength == 0
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Thinh Nguyen <thinh.nguyen@synopsys.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230807174159.1140957-2-kyletso@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Aug 20, 2023 at 4:20=E2=80=AFPM Alan Stern <stern@rowland.harvard.e=
-du> wrote:
->
-> > > > > This may be a holdover from the early days of the Gadget subsyste=
-m.  My
-> > > > > memory from back then isn't very good; I vaguely recall that the =
-first
-> > > > > UDC drivers would queue their automatic Status-stage requests if =
-wLength
-> > > > > was 0 and ->setup() returned 0 (which would explain why
-> > > > > USB_GADGET_DELAYED_STATUS had to be invented).  Unless I'm comple=
-tely
-> > > > > confused, that's not how UDC drivers are supposed to act now.
-> > >
-> > > I did a little checking.  The USB_GADGET_DELAYED_STATUS mechanism was
-> > > introduced for use by the composite framework -- not in order to make=
- a
-> > > UDC driver work properly.
-> >
-> > Hm... perhaps we can update so that it's applicable outside of the
-> > composite framework. Currently dwc3 treats it as such, which may not
-> > work if the gadget driver does not know about USB_GADGET_DELAYED_STATUS=
-.
->
-> I think USB_GADGET_DELAYED_STATUS belongs entirely inside the composite
-> framework and it should not be used by UDC drivers at all.
->
-> That return code makes some sense in composite.c, because the composite
-> framework juggles several function drivers in a single gadget.  It has
-> to know when all of them are ready to complete a configuration change;
-> it can't assume each function is ready when the callback returns.
+On Tue, Aug 08, 2023 at 01:41:58AM +0800, Kyle Tso wrote:
+> Define a new optional property "capabilities" which is a child node
+> under connector to contain multiple USB Power Delivery capabilities.
+> 
+> Define a new property with pattern (e.g. caps-0, caps-1) which is a
 
-Out of curiosity, I also did some digging around USB_GADGET_DELAYED_STATUS.
+A property in json-schema terms, but for DT it's a node not a property. 
+'Define a child node ...' would be clearer.
 
-1. USB_GADGET_DELAYED_STATUS was introduced in 1b9ba000177 ("usb:
-gadget: composite: Allow function drivers to pause control
-transfers"). It looks like it was indeed initially intended for the
-composite framework, as nor that commit nor the directly following
-commits use USB_GADGET_DELAYED_STATUS in any UDC drivers. However,
-this commit had an unintended (?) side-effect of returning
-USB_GADGET_DELAYED_STATUS from the ->setup() call of the composite
-framework gadget driver.
+> child node under "capabilities". Each node contains PDO data of a
+> selectable Power Delivery capability.
+> 
+> Also define common properties for source-pdos, sink-pdos, and
+> op-sink-microwatt that can be referenced.
 
-2. In 5bdb1dcc6330 ("usb: dwc3: ep0: handle delayed_status again"),
-the dwc3 driver was the first one to start relying on
-USB_GADGET_DELAYED_STATUS to decide when to avoid auto-completing the
-Status stage (+Sebastian). The commit description mentions some
-previous rework of the driver that made it lose the ability of handle
-delayed Status stage handling, but I couldn't figure out the exact
-commit it refers to.
+Why do we need this? What issue does this solve? The commit message 
+should answer those questions (always).
 
-3. Following that, a few other UDC drivers also started using
-USB_GADGET_DELAYED_STATUS, potentially using the dwc3 behavior as a
-reference.
+> Signed-off-by: Kyle Tso <kyletso@google.com>
+> ---
+> v1 -> v2:
+> - move source/sink-pdos to $defs and reference them in properties
+> 
+>  .../bindings/connector/usb-connector.yaml     | 80 +++++++++++++------
+>  1 file changed, 57 insertions(+), 23 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+> index 1c4d3eb87763..c6b02dbda83f 100644
+> --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
+> +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+> @@ -117,28 +117,10 @@ properties:
+>    # The following are optional properties for "usb-c-connector" with power
+>    # delivery support.
+>    source-pdos:
+> -    description: An array of u32 with each entry providing supported power
+> -      source data object(PDO), the detailed bit definitions of PDO can be found
+> -      in "Universal Serial Bus Power Delivery Specification" chapter 6.4.1.2
+> -      Source_Capabilities Message, the order of each entry(PDO) should follow
+> -      the PD spec chapter 6.4.1. Required for power source and power dual role.
+> -      User can specify the source PDO array via PDO_FIXED/BATT/VAR/PPS_APDO()
+> -      defined in dt-bindings/usb/pd.h.
+> -    minItems: 1
+> -    maxItems: 7
+> -    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    $ref: "#/$defs/source-pdos"
+>  
+>    sink-pdos:
+> -    description: An array of u32 with each entry providing supported power sink
+> -      data object(PDO), the detailed bit definitions of PDO can be found in
+> -      "Universal Serial Bus Power Delivery Specification" chapter 6.4.1.3
+> -      Sink Capabilities Message, the order of each entry(PDO) should follow the
+> -      PD spec chapter 6.4.1. Required for power sink and power dual role. User
+> -      can specify the sink PDO array via PDO_FIXED/BATT/VAR/PPS_APDO() defined
+> -      in dt-bindings/usb/pd.h.
+> -    minItems: 1
+> -    maxItems: 7
+> -    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    $ref: "#/$defs/sink-pdos"
+>  
+>    sink-vdos:
+>      description: An array of u32 with each entry, a Vendor Defined Message Object (VDO),
+> @@ -164,9 +146,7 @@ properties:
+>      $ref: /schemas/types.yaml#/definitions/uint32-array
+>  
+>    op-sink-microwatt:
+> -    description: Sink required operating power in microwatt, if source can't
+> -      offer the power, Capability Mismatch is set. Required for power sink and
+> -      power dual role.
+> +    $ref: "#/$defs/op-sink-microwatt"
+>  
+>    port:
+>      $ref: /schemas/graph.yaml#/properties/port
+> @@ -228,6 +208,30 @@ properties:
+>        SNK_READY for non-pd link.
+>      type: boolean
+>  
+> +  capabilities:
+> +    description: A child node to contain all the selectable USB Power Delivery capabilities.
+> +    type: object
+> +
+> +    patternProperties:
+> +      "^caps-[0-9]+$":
+> +        description: Child nodes under "capabilities" node. Each node contains a selectable USB
+> +          Power Delivery capability.
+> +        type: object
+> +
+> +        properties:
+> +          source-pdos:
+> +            $ref: "#/$defs/source-pdos"
+> +
+> +          sink-pdos:
+> +            $ref: "#/$defs/sink-pdos"
+> +
+> +          op-sink-microwatt:
+> +            $ref: "#/$defs/op-sink-microwatt"
+> +
+> +        additionalProperties: false
+> +
+> +    additionalProperties: false
+> +
+>  dependencies:
+>    sink-vdos-v1: [ 'sink-vdos' ]
+>    sink-vdos: [ 'sink-vdos-v1' ]
+> @@ -235,6 +239,36 @@ dependencies:
+>  required:
+>    - compatible
+>  
+> +$defs:
 
-Interestingly, in 946ef68ad4e4 ("usb: gadget: ffs: Let setup() return
-USB_GADGET_DELAYED_STATUS"), the FunctionFS composite driver had to
-add USB_GADGET_DELAYED_STATUS to specifically avoid failures when dwc3
-is used. This is the same "fix" that worked for me with Raw Gadget.
+Make this:
 
-Right now dwc2, dwc3, mtu3, cdns3, bdc, and renesas have special
-handling for USB_GADGET_DELAYED_STATUS. Surprisingly, dwc2 works with
-Raw Gadget as is nevertheless. dwc3 fails as I described. For the
-others, I don't have the hardware to test them.
+$defs:
+  capabilities:
+    properties:
+      ...
 
-I guess the proper solution would be to contain
-USB_GADGET_DELAYED_STATUS within the composite framework and make all
-UDCs not to handle the Status stage on their own. However, this would
-require a collaborative effort from the maintainers of the UDC drivers
-I mentioned.
+And then just reference "#/$defs/capabilities" at the top-level and in 
+caps-[0-9] node schema.
 
-An alternative would to declare USB_GADGET_DELAYED_STATUS to be usable
-outside of the composite framework and leave everything as is
-otherwise (but change Raw Gadget to return USB_GADGET_DELAYED_STATUS).
-The downside is the discrepancy in the interface of different UDCs
-(some require USB_GADGET_DELAYED_STATUS, others imply), but perhaps
-it's not that bad provided that this discrepancy is documented.
+You'll need to use unevaluatedProperties instead of additionalProperties 
+as well.
 
-Thank you!
+> +  source-pdos:
+> +    description: An array of u32 with each entry providing supported power
+> +      source data object(PDO), the detailed bit definitions of PDO can be found
+> +      in "Universal Serial Bus Power Delivery Specification" chapter 6.4.1.2
+> +      Source_Capabilities Message, the order of each entry(PDO) should follow
+> +      the PD spec chapter 6.4.1. Required for power source and power dual role.
+> +      User can specify the source PDO array via PDO_FIXED/BATT/VAR/PPS_APDO()
+> +      defined in dt-bindings/usb/pd.h.
+> +    minItems: 1
+> +    maxItems: 7
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +
+> +  sink-pdos:
+> +    description: An array of u32 with each entry providing supported power sink
+> +      data object(PDO), the detailed bit definitions of PDO can be found in
+> +      "Universal Serial Bus Power Delivery Specification" chapter 6.4.1.3
+> +      Sink Capabilities Message, the order of each entry(PDO) should follow the
+> +      PD spec chapter 6.4.1. Required for power sink and power dual role. User
+> +      can specify the sink PDO array via PDO_FIXED/BATT/VAR/PPS_APDO() defined
+> +      in dt-bindings/usb/pd.h.
+> +    minItems: 1
+> +    maxItems: 7
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +
+> +  op-sink-microwatt:
+> +    description: Sink required operating power in microwatt, if source can't
+> +      offer the power, Capability Mismatch is set. Required for power sink and
+> +      power dual role.
+> +
+>  allOf:
+>    - if:
+>        properties:
+> -- 
+> 2.41.0.585.gd2178a4bd4-goog
+> 
