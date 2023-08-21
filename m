@@ -2,183 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28A5D783179
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Aug 2023 21:52:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E45E7832C6
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Aug 2023 22:22:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbjHUT1W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Aug 2023 15:27:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48250 "EHLO
+        id S229716AbjHUTyp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Aug 2023 15:54:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbjHUT1V (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Aug 2023 15:27:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFA45C2;
-        Mon, 21 Aug 2023 12:27:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 42B5961CCB;
-        Mon, 21 Aug 2023 19:27:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D05DCC433C8;
-        Mon, 21 Aug 2023 19:27:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692646038;
-        bh=50DowOaWgtq3+xbaFIEFeIKo8jjSf+PPRMLLIeZpItQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=s2Zjxx8/sIHw9/PbdwrzIswW+vWoq49l/RVK21Bpn6xNv2DCyvyyuGzE5Wmq+y78e
-         lR4Z3lf8ezwcgEFqqT8XnzIrAq/Pr1cElisIXj6lKtcTXJx6tOeRkdBHBmmW0wrBek
-         LYcVex+O+WuownN/WP/Zi2SgzqIIGbpYZOsE0CJ+Pn9kgeJdGdxKOgwYa1Rl3eUWFp
-         Bx4FeEsqLR9lllzhIf3lzfkvAObs0mWxSemZ1cQ71HciTYfeAY4ERM2XV9c0fq4mJ6
-         eM29tPgYn3isOkTNg4xv8O0/B3sVDdCDNxtQn35k7CkuJlm5iiZCFWkPECy3Uw+Tag
-         EABzSLAgR5TJA==
-Received: (nullmailer pid 2156172 invoked by uid 1000);
-        Mon, 21 Aug 2023 19:27:16 -0000
-Date:   Mon, 21 Aug 2023 14:27:16 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Stanley Chang <stanley_chang@realtek.com>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] dt-bindings: usb: dwc3: Add Realtek DHC RTD SoC
- DWC3 USB
-Message-ID: <20230821192716.GA2128469-robh@kernel.org>
-References: <20230815095452.4146-1-stanley_chang@realtek.com>
- <20230815095452.4146-2-stanley_chang@realtek.com>
+        with ESMTP id S229619AbjHUTyo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Aug 2023 15:54:44 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1713710B;
+        Mon, 21 Aug 2023 12:54:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692647683; x=1724183683;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uojYPtSeSRn90ap/xQEo2sFrpcBYeD2eHRgnIC5QHXw=;
+  b=l+kSaqNp9X4uEyig7i2n+fOtUjTKAJPBVMayMtYEMO2+Q5sYOX+Wr8Wh
+   zOJ5287XM53nnuNgVV2OeTsyTQrnakU3kG9D4Ck3ku2LwfoOudW5Q+r71
+   YXC2UUsP288oaIXBLZGqbui/JICgJRRZciHzpisGEG7w86Yr64USPKiZe
+   vF5Ra8c1sAX4r080H6sQorD0D+ZhuOUeGJrmV0ISXT5KsCT2FAmsvMbNb
+   yNFgxoaVPCMq0NRDaK6jCqI+QI94g5erScNdPKwbePrMb0AT0LU4IVnDb
+   245hF//TcgR3SErac2XH4Ri0qg/+1Xy2i25X0YvvqG+bVWvny9A/T4i6y
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="460054998"
+X-IronPort-AV: E=Sophos;i="6.01,191,1684825200"; 
+   d="scan'208";a="460054998"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2023 12:54:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="859606457"
+X-IronPort-AV: E=Sophos;i="6.01,191,1684825200"; 
+   d="scan'208";a="859606457"
+Received: from lkp-server02.sh.intel.com (HELO 6809aa828f2a) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 21 Aug 2023 12:54:39 -0700
+Received: from kbuild by 6809aa828f2a with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qYAz0-0000rU-12;
+        Mon, 21 Aug 2023 19:54:38 +0000
+Date:   Tue, 22 Aug 2023 03:54:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hardik Gajjar <hgajjar@de.adit-jv.com>, gregkh@linuxfoundation.org,
+        mathias.nyman@intel.com, stern@rowland.harvard.edu,
+        yangyingliang@huawei.com
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        jinpu.wang@ionos.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, erosca@de.adit-jv.com
+Subject: Re: [PATCH] usb: hcd: xhci: Add set command timer delay API
+Message-ID: <202308220340.2SPzc4kd-lkp@intel.com>
+References: <20230818092353.124658-1-hgajjar@de.adit-jv.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230815095452.4146-2-stanley_chang@realtek.com>
+In-Reply-To: <20230818092353.124658-1-hgajjar@de.adit-jv.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 15, 2023 at 05:54:38PM +0800, Stanley Chang wrote:
-> Document the DWC3 USB bindings for Realtek SoCs.
-> 
-> Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
-> ---
-> v3 to v4 change:
->     Add reg for register set for pm control.
->     Remove maximum-speed in example.
-> v2 to v3 change:
->     Add description for reg
->     Remove property for realtek,unlink-usb3-port.
->     Remove property for realtek,disable-usb3-phy.
->     Use the maximum-speed instead of the above two properties.
-> v1 to v2 change:
->     Revise the subject.
->     Rename the file.
->     Fix dtschema warnings.
->     Remove the property realtek,enable-l4icg.
->     Drop status.
-> ---
->  .../bindings/usb/realtek,rtd-dwc3.yaml        | 80 +++++++++++++++++++
->  1 file changed, 80 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/realtek,rtd-dwc3.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/realtek,rtd-dwc3.yaml b/Documentation/devicetree/bindings/usb/realtek,rtd-dwc3.yaml
-> new file mode 100644
-> index 000000000000..345d0132d4a5
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/realtek,rtd-dwc3.yaml
-> @@ -0,0 +1,80 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +# Copyright 2023 Realtek Semiconductor Corporation
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/realtek,rtd-dwc3.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Realtek DWC3 USB SoC Controller Glue
-> +
-> +maintainers:
-> +  - Stanley Chang <stanley_chang@realtek.com>
-> +
-> +description:
-> +  The Realtek DHC SoC embeds a DWC3 USB IP Core configured for USB 2.0
-> +  and USB 3.0 in host or dual-role mode.
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - realtek,rtd1295-dwc3
-> +          - realtek,rtd1315e-dwc3
-> +          - realtek,rtd1319-dwc3
-> +          - realtek,rtd1319d-dwc3
-> +          - realtek,rtd1395-dwc3
-> +          - realtek,rtd1619-dwc3
-> +          - realtek,rtd1619b-dwc3
-> +      - const: realtek,rtd-dwc3
-> +
-> +  reg:
-> +    items:
-> +      - description: Address and length of register set for wrapper of dwc3 core.
-> +      - description: Address and length of register set for pm control.
-> +
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 1
-> +
-> +  ranges: true
-> +
-> +patternProperties:
-> +  "^usb@[0-9a-f]+$":
-> +    $ref: snps,dwc3.yaml#
-> +    description: Required child node
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - "#address-cells"
-> +  - "#size-cells"
-> +  - ranges
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    usb@98013e00 {
-> +        compatible = "realtek,rtd1319d-dwc3", "realtek,rtd-dwc3";
-> +        reg = <0x98013e00 0x140>, <0x98013f60 0x4>;
+Hi Hardik,
 
-These look like registers in some other block rather than a standalone 
-wrapper block. Are these part of some syscon block? If so, I don't think 
-a wrapper node is the right approach here, but a phandle to the syscon 
-would be instead.
+kernel test robot noticed the following build warnings:
 
-From the register definitions, much of it looks phy related, but this is 
-not part of the phys?
+[auto build test WARNING on usb/usb-testing]
+[also build test WARNING on usb/usb-next usb/usb-linus linus/master v6.5-rc7 next-20230821]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> +        #address-cells = <1>;
-> +        #size-cells = <1>;
-> +        ranges;
-> +
-> +        usb@98050000 {
-> +            compatible = "snps,dwc3";
-> +            reg = <0x98050000 0x9000>;
-> +            interrupts = <0 94 4>;
-> +            phys = <&usb2phy &usb3phy>;
-> +            phy-names = "usb2-phy", "usb3-phy";
-> +            dr_mode = "otg";
-> +            usb-role-switch;
-> +            role-switch-default-mode = "host";
-> +            snps,dis_u2_susphy_quirk;
-> +            snps,parkmode-disable-ss-quirk;
-> +            snps,parkmode-disable-hs-quirk;
-> +            maximum-speed = "high-speed";
-> +        };
-> +    };
-> -- 
-> 2.34.1
-> 
+url:    https://github.com/intel-lab-lkp/linux/commits/Hardik-Gajjar/usb-hcd-xhci-Add-set-command-timer-delay-API/20230821-094400
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20230818092353.124658-1-hgajjar%40de.adit-jv.com
+patch subject: [PATCH] usb: hcd: xhci: Add set command timer delay API
+config: x86_64-randconfig-013-20230821 (https://download.01.org/0day-ci/archive/20230822/202308220340.2SPzc4kd-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce: (https://download.01.org/0day-ci/archive/20230822/202308220340.2SPzc4kd-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308220340.2SPzc4kd-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/usb/core/hcd.c:3133: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+    * usb_hcd_set_cmd_timer_delay Set the delay of the command timer.
+
+
+vim +3133 drivers/usb/core/hcd.c
+
+  3131	
+  3132	/**
+> 3133	 * usb_hcd_set_cmd_timer_delay Set the delay of the command timer.
+  3134	 * @hcd - pointer to the HCD representing the controller
+  3135	 * @delay - Delay value to be used in command timer.
+  3136	 *
+  3137	 * wrapper function to call the set_cmd_timer_delay API of the host
+  3138	 * diver.
+  3139	 *
+  3140	 * return 0 on success; otherwise -ENODEV means the feature not
+  3141	 * supported by host driver.
+  3142	 */
+  3143	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
