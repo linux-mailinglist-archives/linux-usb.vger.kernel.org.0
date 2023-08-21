@@ -2,276 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 265B8782023
-	for <lists+linux-usb@lfdr.de>; Sun, 20 Aug 2023 23:13:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1E34782413
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Aug 2023 08:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231936AbjHTVNi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 20 Aug 2023 17:13:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40170 "EHLO
+        id S232495AbjHUG6N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Aug 2023 02:58:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232041AbjHTVNc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 20 Aug 2023 17:13:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD228A75
-        for <linux-usb@vger.kernel.org>; Sun, 20 Aug 2023 14:10:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E052060F16
-        for <linux-usb@vger.kernel.org>; Sun, 20 Aug 2023 21:10:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 497CDC433C8
-        for <linux-usb@vger.kernel.org>; Sun, 20 Aug 2023 21:10:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692565851;
-        bh=ljI0ls58xKCW536gE6UwkNw5cTsYhqKlgyiCovUPnpw=;
-        h=From:To:Subject:Date:From;
-        b=CPTFb881GLvbiyYWRP81ZjWhiywIumBAAFEXvJVL/9x8YDGPNCSOn4JUSvMfomthY
-         VunIFGo5vyYmV1NqeH6cwwAThLM0WJlNTAaIKQ6aM6JXvGgaadToektswO1LIx69Qn
-         mLsJNZXjH78DFGXWSn7dR6wtYxlXC2DhoVtFM5Mjb+DrCI8X8hB6eunP2146Czt+6/
-         F8S69p1mfzM+GylYxGAQGzUlgg0tRstjVKKFzs/mli9WOnIC8iTtU/t4MNWcc67r/t
-         ubu9u67CWU5nbGBbvrk8zvnoOAUMHLTtCzV5TJEWn2ygRxBig1fJMDlUpdFWA5WyHf
-         LRVDi2S73ltPA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 26C9AC4332E; Sun, 20 Aug 2023 21:10:51 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 217811] New: usbhid driver misses right-click event for Rapoo
- wireless mouse
-Date:   Sun, 20 Aug 2023 21:10:50 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: michal.byrecki@techniline.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter
- cf_regression
-Message-ID: <bug-217811-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S229666AbjHUG6N (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Aug 2023 02:58:13 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2073.outbound.protection.outlook.com [40.107.237.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA20AC
+        for <linux-usb@vger.kernel.org>; Sun, 20 Aug 2023 23:58:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=h1Ce4wLSbXFkunNHVEYrvvY7GkjF3KAD9ZeRRPbVl3YurQKQf4Uz/I5ZhCY5G9/D72cDONg9zL+qN3ZrBdD3dahiW+PnoodTNBIVp04YN21LIxZJBaQlAJsooq0LHpI2ji7YovvfKpjLlq1eTzIr2WfUI4Kc0KAuOrANoMQvIscwS0NlsG44M64Exhqe4YOsJiKm9JhTETSC2WhRoRFn+2k88qSdXUfe4nlKK9joewnSifFbSZbdWu35sb4NLYotjnyRt/f92HaS0IOx95U92Ph9hbFi1LZASA9puigW3JNPe5sDIVffGxDMGF5YoOMDQXUdbbQnvyeUHEHiqhaniA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Zqrik9efYT2xnp/Ey5UnEr+ZOgMtCbWrbzy5C1OK31s=;
+ b=BODj/FKOv7xprtBZtDeQ+1QGbgQbHoHlMF41BpPPVSAsUrA/ZXCoHzQ8wzbx2OQyIc0EBvrT0zLPiYBw+QxDi91Le+msONmjQY671sWb6rWnWQm7CurwYE+R+reSXwa+jDpHfpdHgByOy/cx/Izi4QjDOPospJXRmj8O2/L/EjOtISnG3GZ7wCTDTo8vgnT8wPLhZVp292BWDF20GLS9aYvtO3hNh7jwJM/6Yl9M5AxViXAIiR7pbve/sZf4ypbIKyetum3+Ird3ID4YN/rONsDiIjEamzY0yVHLebMW/VzBNj4Q+L1u+UQd8n2co5OweVuveyfJNLQgDJQuL0Mxdg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Zqrik9efYT2xnp/Ey5UnEr+ZOgMtCbWrbzy5C1OK31s=;
+ b=FMxQxM842V2X95h5B3ff1HccJLmKtcrIKtutg7EuaDt5/t9g1PCAtvWqfVShzbLP6stgM12t5DsH1ZTr95hT5z7mOa49jMBxFrSy+dC3fVOA2fI2Ri1z2Q2OedrSj+e1mc6fnov2e48s7x8nuCdI/XNHfbjX9EvoAFjfmBNNDBw=
+Received: from PH8PR07CA0030.namprd07.prod.outlook.com (2603:10b6:510:2cf::16)
+ by PH7PR12MB6393.namprd12.prod.outlook.com (2603:10b6:510:1ff::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.20; Mon, 21 Aug
+ 2023 06:58:06 +0000
+Received: from SA2PEPF000015CA.namprd03.prod.outlook.com
+ (2603:10b6:510:2cf:cafe::99) by PH8PR07CA0030.outlook.office365.com
+ (2603:10b6:510:2cf::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.20 via Frontend
+ Transport; Mon, 21 Aug 2023 06:58:06 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ SA2PEPF000015CA.mail.protection.outlook.com (10.167.241.200) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6699.14 via Frontend Transport; Mon, 21 Aug 2023 06:58:06 +0000
+Received: from jatayu.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 21 Aug
+ 2023 01:58:03 -0500
+From:   Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+To:     <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>,
+        <mika.westerberg@linux.intel.com>, <mario.limonciello@amd.com>,
+        <linux-usb@vger.kernel.org>
+CC:     Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+Subject: [PATCH 0/2] Handle RPM for xhci-pci
+Date:   Mon, 21 Aug 2023 12:27:40 +0530
+Message-ID: <20230821065742.2924681-1-Basavaraj.Natikar@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA2PEPF000015CA:EE_|PH7PR12MB6393:EE_
+X-MS-Office365-Filtering-Correlation-Id: 72192f76-8feb-42c6-4ceb-08dba213f896
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jlq8P9YpAvpXyPZefaZDbPtB5y1V5nqdNmv3bxRMnmHsb/rjr66zaufkoiUMsLZqbLaG4EXDnK7m59j2nL20LpZM06q2j3ZcUl2DExFlO1DvLTn4yi8Z47Ps5TSxgIzr/Z0wSvN88QpZYGoXyIdurRZou0PUQ7Zizn7eKzmKzk5+IWpgBzmdFxBizwvgaqsiZS9dY6hFZEq2s+GJ1tsHYPzrQJXEm5vkzXwPgJYNoeBamBrTpiaRybKXkIvJAHm1Ro6ynFrTH7P9ASCQtxJGVjbWTnJyk6a1BE7ZjVeAdSc6AEF/LJZllRJmWfX8Fuo2uX9U6g4OcOTFkiyyDAL5/YDKXgXVrZpPbWxTE/R+VG00x7dujcqJpbQvTxvX0b7wCtm5cjabPqshwIiFMcabRS3hLJnQ0h+jKyEVJ4YCHnRcIxkgydvinmQs+BQwuJm/yMm9ynPrPUPqa6uLsq5SFCc/dXylvuXwe6WzHs0+D2LsXpMFIE7F0ugFljIvM+FaGXQChsNzVNzZ6loeMsutCS4pDJL97gssC8ebGTnb+l0UlvbSxBQhyNLD3CRFppK10Ie+KnhWZy3soTG3gPRc7nTG0QR1BdGuT90aS2WnPSrt5XXbSergJ2Hhc1I4pHosJt16ibR+HiY7Z9yz5V9RqQWWxpQmCJ+B8WD52OgA2xg9xFD57pPYd9xyMg9dYBHg8BbUQJKy+Sza8H6HdN7YtdtHVM8ABVbSRhKOnzQ20lur9JhdGYVBwunGFiBd8jb1r9/FOVaCQ7PSAQp5llPQ96mRIjpAtabSJP+6Ekb2Ktk=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(346002)(39860400002)(136003)(396003)(376002)(82310400011)(451199024)(186009)(1800799009)(40470700004)(46966006)(36840700001)(2906002)(83380400001)(4744005)(7696005)(40480700001)(5660300002)(336012)(426003)(26005)(16526019)(86362001)(47076005)(36860700001)(8676002)(2616005)(8936002)(4326008)(70206006)(316002)(70586007)(110136005)(478600001)(82740400003)(356005)(81166007)(6666004)(36756003)(40460700003)(41300700001)(1076003)(2101003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Aug 2023 06:58:06.0485
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 72192f76-8feb-42c6-4ceb-08dba213f896
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: SA2PEPF000015CA.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6393
+X-Spam-Status: No, score=-0.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D217811
+This series includes fixes for PCI USB controllers that use RPM as their
+default policy, including enabling RPM for controllers that support
+low-power states.
 
-            Bug ID: 217811
-           Summary: usbhid driver misses right-click event for Rapoo
-                    wireless mouse
-           Product: Drivers
-           Version: 2.5
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P3
-         Component: USB
-          Assignee: drivers_usb@kernel-bugs.kernel.org
-          Reporter: michal.byrecki@techniline.com
-        Regression: No
+Basavaraj Natikar (2):
+  xhci: Loosen RPM as default policy to cover xHC 1.1 as well
+  xhci: Enable RPM on controllers that support low-power states
 
-Driver improperly creates event for wireless mouse (missing right click eve=
-nt).
-The driver is only recognizing the left and mid-clicks, but remains dead ca=
-lm
-on the right one. The mouse itself is ok.
+ drivers/usb/host/xhci-pci.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Linux crystal 5.13.0zeta #9 SMP Wed Jan 25 15:49:37 CET 2023 x86_64 GNU/Lin=
-ux
+-- 
+2.25.1
 
-Below is the output I've got using evtester. I've clicked consecutively lef=
-t,
-mid and right buttons of the mouse. The first two clicks generated events,w=
-hile
-the right one does not.
-
-
-Input driver version is 1.0.1
-Input device ID: bus 0x3 vendor 0x24ae product 0x2010 version 0x110
-Input device name: "RAPOO Rapoo 2.4G Wireless Device"
-Supported events:
-  Event type 0 (EV_SYN)
-  Event type 1 (EV_KEY)
-    Event code 272 (BTN_LEFT)
-    Event code 273 (BTN_RIGHT)
-    Event code 274 (BTN_MIDDLE)
-    Event code 275 (BTN_SIDE)
-    Event code 276 (BTN_EXTRA)
-  Event type 2 (EV_REL)
-    Event code 0 (REL_X)
-    Event code 1 (REL_Y)
-    Event code 8 (REL_WHEEL)
-    Event code 11 (REL_WHEEL_HI_RES)
-  Event type 4 (EV_MSC)
-    Event code 4 (MSC_SCAN)
-Properties:
-Testing ... (interrupt to exit)
-
-
-Event: time 1692563194.319720, -------------- SYN_REPORT ------------
-Event: time 1692563194.407719, type 4 (EV_MSC), code 4 (MSC_SCAN), value 90=
-001
-Event: time 1692563194.407719, type 1 (EV_KEY), code 272 (BTN_LEFT), value 0
-Event: time 1692563194.407719, -------------- SYN_REPORT ------------
-Event: time 1692563199.591686, type 4 (EV_MSC), code 4 (MSC_SCAN), value 90=
-003
-Event: time 1692563199.591686, type 1 (EV_KEY), code 274 (BTN_MIDDLE), valu=
-e 1
-
-Below is the lsusb output:
-
-Bus 001 Device 056: ID 24ae:2010 Shenzhen Rapoo Technology Co., Ltd. Rapoo =
-2.4G
-Wireless Device
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               2.00
-  bDeviceClass            0=20
-  bDeviceSubClass         0=20
-  bDeviceProtocol         0=20
-  bMaxPacketSize0        64
-  idVendor           0x24ae Shenzhen Rapoo Technology Co., Ltd.
-  idProduct          0x2010=20
-  bcdDevice            1.10
-  iManufacturer           1 RAPOO
-  iProduct                2 Rapoo 2.4G Wireless Device
-  iSerial                 0=20
-  bNumConfigurations      1
-  Configuration Descriptor:
-    bLength                 9
-    bDescriptorType         2
-    wTotalLength       0x0054
-    bNumInterfaces          3
-    bConfigurationValue     1
-    iConfiguration          0=20
-    bmAttributes         0xa0
-      (Bus Powered)
-      Remote Wakeup
-    MaxPower              100mA
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        0
-      bAlternateSetting       0
-      bNumEndpoints           1
-      bInterfaceClass         3 Human Interface Device
-      bInterfaceSubClass      1 Boot Interface Subclass
-      bInterfaceProtocol      2 Mouse
-      iInterface              0=20
-        HID Device Descriptor:
-          bLength                 9
-          bDescriptorType        33
-          bcdHID               1.10
-          bCountryCode            0 Not supported
-          bNumDescriptors         1
-          bDescriptorType        34 Report
-          wDescriptorLength      64
-         Report Descriptors:=20
-           ** UNAVAILABLE **
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x81  EP 1 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval              10
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        1
-      bAlternateSetting       0
-      bNumEndpoints           1
-      bInterfaceClass         3 Human Interface Device
-      bInterfaceSubClass      1 Boot Interface Subclass
-      bInterfaceProtocol      1 Keyboard
-      iInterface              0=20
-        HID Device Descriptor:
-          bLength                 9
-          bDescriptorType        33
-          bcdHID               1.10
-          bCountryCode            0 Not supported
-          bNumDescriptors         1
-          bDescriptorType        34 Report
-          wDescriptorLength      94
-         Report Descriptors:=20
-           ** UNAVAILABLE **
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x82  EP 2 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval              10
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        2
-      bAlternateSetting       0
-      bNumEndpoints           1
-      bInterfaceClass         3 Human Interface Device
-      bInterfaceSubClass      1 Boot Interface Subclass
-      bInterfaceProtocol      1 Keyboard
-      iInterface              0=20
-        HID Device Descriptor:
-          bLength                 9
-          bDescriptorType        33
-          bcdHID               1.10
-          bCountryCode            0 Not supported
-          bNumDescriptors         1
-          bDescriptorType        34 Report
-          wDescriptorLength      64
-         Report Descriptors:=20
-           ** UNAVAILABLE **
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x83  EP 3 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval              10
-Device Status:     0x0002
-  (Bus Powered)
-  Remote Wakeup Enabled
-
-and for the Device 56 the following driver is in use:
-lsusb -d 24ae:2010 -t |grep 56
-            |__ Port 1: Dev 56, If 1, Class=3DHuman Interface Device,
-Driver=3Dusbhid, 12M
-            |__ Port 1: Dev 56, If 2, Class=3DHuman Interface Device,
-Driver=3Dusbhid, 12M
-            |__ Port 1: Dev 56, If 0, Class=3DHuman Interface Device,
-Driver=3Dusbhid, 12M
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
