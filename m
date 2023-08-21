@@ -2,238 +2,184 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5011C782EB5
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Aug 2023 18:45:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74DEE782EBF
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Aug 2023 18:48:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236726AbjHUQpp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Aug 2023 12:45:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38782 "EHLO
+        id S233005AbjHUQsG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Aug 2023 12:48:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232912AbjHUQpo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Aug 2023 12:45:44 -0400
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2111.outbound.protection.outlook.com [40.107.114.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ECB4CC;
-        Mon, 21 Aug 2023 09:45:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QtDo6obnZRFyhfipHc9513KJcfC5+hfmEGrLuLFyjEwnNf7BHW7Jzf29IltOlCtDFC/R2AonViFzHBIwh3aNgdLGdsT3KSNW6lTlHnOrNFD8m0TujjkJj9FCUjgTToZu1dp0lFrHkCqPEtm14OWzIzYfnVYqe/Zjc8w+iA8AKQMkQFCGQwj7PPfkMYHiw0BHalw4MxgFMlLy8Q/B4UBAxlfRHcSuRwdzCy8yFMVQtv/fLSy6MPCEJRlPR3rj9ZpqqunrOttPUK5YevQCew6m93I28+bt+WMVOb6MKDs/n2PgmmXws4Kx/hFBK2qCf0Kq9u3nMURU1VFDGB5COhJXZg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vd9IEUjV+25YL6nktDMqJa0WG1ssYNr65Mt7GQjH4FA=;
- b=Hauz6HVNZOYktSs6EhWunOUsrm7dOQPgte326FYtW3eLjjBggmS48Gj8XGj4gT/hqaWliOa9IWoP6pVc3RmIUYDkzPlzYPm0ymAy3RrVqhiR4Pa69/bN41JcWP4uIXScnCjmr4PnzpIyWxlEXYaKIDBKvdjapaZPpR0fTbY97rzDoUJ2aSLDgEoB0iw0eznqhKDIT9PBhv7KOtK+TelW2dEmY9ML5I/RRxChkB+C3u6fPXjnUaDoKzllMuMD4epBVPTfPO39Sc94u6QTGkG8xpsfTjTfYfmp6RMhKQmPCeChsFdVQ1Hck9Iv5vffPwTnjSwS0A4gyzLLsdN9eLF+MQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vd9IEUjV+25YL6nktDMqJa0WG1ssYNr65Mt7GQjH4FA=;
- b=hr9cqu+/qvzYa/Q5s+Oe7yoacQizwvrWuP9R9n6J5rI3FlSaNfhqyPi3STMnBb6ptPmRpuWoJjUl/NKyYeZYk6JGeI/Pc2Gl379/L2gkU5pMgJcP5nnwaZbYz28UwCE/Yg6oiH9cRfkcW7IteFGLghAmta7fFcYKwZtMGF9q7Ms=
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com (2603:1096:604:bb::5)
- by TY3PR01MB11481.jpnprd01.prod.outlook.com (2603:1096:400:372::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.25; Mon, 21 Aug
- 2023 16:45:38 +0000
-Received: from OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::2168:623e:e186:4cf0]) by OS0PR01MB5922.jpnprd01.prod.outlook.com
- ([fe80::2168:623e:e186:4cf0%7]) with mapi id 15.20.6699.025; Mon, 21 Aug 2023
- 16:45:38 +0000
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Subject: RE: [PATCH 2/4] usb: typec: tcpci_rt1711h: Convert enum->pointer for
- data in the match tables
-Thread-Topic: [PATCH 2/4] usb: typec: tcpci_rt1711h: Convert enum->pointer for
- data in the match tables
-Thread-Index: AQHZ05ZTk3glzaSVW0+92976qL4cHa/0uMsAgAA73GA=
-Date:   Mon, 21 Aug 2023 16:45:38 +0000
-Message-ID: <OS0PR01MB59222CEB6A8EB0F44B87A80A861EA@OS0PR01MB5922.jpnprd01.prod.outlook.com>
-References: <20230820184402.102486-1-biju.das.jz@bp.renesas.com>
- <20230820184402.102486-3-biju.das.jz@bp.renesas.com>
- <ZONgzqlS8bGP0umn@smile.fi.intel.com>
-In-Reply-To: <ZONgzqlS8bGP0umn@smile.fi.intel.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OS0PR01MB5922:EE_|TY3PR01MB11481:EE_
-x-ms-office365-filtering-correlation-id: 1d6d04fb-f890-4cf9-4e42-08dba2660c5b
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: CAKD15GZ13fyRjc/5uFgseFyi9g8URVixj+nE6XYueU7EL0KmbqwIILXJBx9px5k4T0RJEWXPPzlIJGeBRDspfg6JXVhp4JI1MDuT4swnzeXHkDlBQi3d5O5whSiOa6Tv9HG7s21NuzZl/YcXqvzJcrtuKXnr0RFw7pSIyBaQQlJD5pMsTwpBziYXf7xGYOnmZJ4RVG9amYjTSh9dvTW7fMnDtMWEFmwIVKGwssWHv4Cgb+NJCO3/c/LoZLFzjmGZw/AQv8UmxC+smM+k7I7quQ0glxMqYgayDbiSSLmsBcLmI5H82QvFowF0GmbcmCLWbHcHCmD4Yd378/NSpmY+ObYN8LW2nnHakRabKtNUr3SWCjqWq5P89mCwt6E0rHjY8sBliZsqy+4ThIRdqVH0zffncI9nhHQQCWU47SWkodmvS2LkIQOq5ifwSlQxYhiFVOmzIth4ZPZc9pW5TfHavD+QjMypXR96Uj6MpA1gVSTvIXyC05abRDt/cUEgnMVZ6/u6xtCedElwtd/o9sPHgaGGJMYHjJJbGsaqmGrwQs3Dcj5HdlRycoTee+hdOA5oQeMaNEJTGTYdChEADdYEuGadsWC0xOScPfu7ALOR1b+EIUBCMWbTzodkYih70ET6ycbBbqQLkrffwajsOqMFA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS0PR01MB5922.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(39860400002)(396003)(376002)(346002)(366004)(451199024)(1800799009)(186009)(52536014)(2906002)(64756008)(54906003)(66556008)(66476007)(33656002)(76116006)(66446008)(6916009)(316002)(66946007)(8676002)(8936002)(4326008)(5660300002)(6506007)(7696005)(26005)(9686003)(41300700001)(55016003)(38070700005)(38100700002)(122000001)(71200400001)(83380400001)(86362001)(478600001)(21314003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?D6bYaMeq73b+N0OCUZau3Xs6+h6Ehw2T6ieYgd4O+ytWO79TDlu2rV0NhtSz?=
- =?us-ascii?Q?xJM/Ge8I2AasW8Ba5tCGuYQ3ODc4tMCSBFuiLz2MqA1xMzX4zernnfHvbqWp?=
- =?us-ascii?Q?eunQWNmGNAe2xv0jBoh2Zohu6PIoLB6eH9+Wh0LcJvSu65v2UR3WEmZ2wcYn?=
- =?us-ascii?Q?dULwNkFpMBFsUqBmC14BloCE2LFNlzZDmgBZWxJlnc1D+k/w34Uw8EsP2EBC?=
- =?us-ascii?Q?qMi/ne4duzegks1l2G+ammvr7fy7om+rEbDQKYCmbixlxKd2P6STPyoltLB/?=
- =?us-ascii?Q?Mrlg6rt7qxkgyzpa0/C24TikpN0Ew5pliMjzVKWGoW6XYdaOInrLiPrVVw5z?=
- =?us-ascii?Q?/CucvI7ToZ5NsW94OZIf6On8RtruP7cezh9TtKor7tfipyD/UL3OcgCZ+I3I?=
- =?us-ascii?Q?DYYs3VshA8DLa71P9MD5gfxNu7Dxk09s3HbILzSe3yEuoqRvu6yX8oMbzMI+?=
- =?us-ascii?Q?y8N2e5HGn9nB3ZAUl2Ke4z0vgRejwsT6M0jSam+Gdj5cOOl/Xh1xQ1pwF1Mc?=
- =?us-ascii?Q?2lba+C6TszxmF5+FW1RBe2zYhnEL/Mt6QTa+vWPTLIUnCu8DlAGMDMYIpwLy?=
- =?us-ascii?Q?u3csGVd/y46slLpaGph4Sp+wHYl6g52i6VOKLatxLt4MF2P0TEJ6F2+qUmDt?=
- =?us-ascii?Q?ab7ln3V4zlBY/xy4PkHbDFnQBwPIWecbt+2gJmbMOWfMhmV+ihT+sLKziW4h?=
- =?us-ascii?Q?U7LKXMXB9EIV+5/1RmhcyF4mPs9Wk1p9COHKQFPvT1SkHCk86Sm9djBTsXF6?=
- =?us-ascii?Q?yLOag1VEh7wWjFDj3mSL6ZYUs6/C6W9Kvv5o7YRdqUq94eC+CvEOh7xHlYUL?=
- =?us-ascii?Q?FmS77/bi6Wal45c7PbBOotoNQNK3TsnxNotevFA1uZbkTatfYBc6Kls67TTp?=
- =?us-ascii?Q?GI0XaiUEwjuARzYU9lIc47cEtMmPV0YTassV42nxpO1/zy+7e7OC4naZqh90?=
- =?us-ascii?Q?FXOPYBbCjkIskIoWQGNHHGSIO9TBp/o2v7gAEG4ITav6xuEjoPvexYB3b12r?=
- =?us-ascii?Q?WwfHkitvV5Xtf4/Vj7BjqusoNCX1vmskR2ULjISzm/diI+OyuheZTqnj/vzS?=
- =?us-ascii?Q?1mSjOw0tnh4E6Pn4UXHeSJWG2rXjUiE4ZvrUdLyJ2qMk/wZubWGpK+U2XmMu?=
- =?us-ascii?Q?Yf1wUzq8I2LnGq6FBnq4QCdPEn7mmXWzGeh6ocNHPVfw31awN90xoXuxOljz?=
- =?us-ascii?Q?yrary1sfl8LarC9ybjIlrX0ZMYJDLaQLVj4KzF9YqK0okQ5Jzg0WjrA3aFkX?=
- =?us-ascii?Q?RbL4NjBrxYydrBrZhOpgWCR0aR07bQ5oY4H8xgMzuaCstjAQo+I9DtdMzSKt?=
- =?us-ascii?Q?Kc0DRpNrF6UdZ80Godnb65ghE3HutoybxcG6LEGaviuZ5FdyNdkuK1iVfzLX?=
- =?us-ascii?Q?cJ9wHPhw9/CeMqvlnkCzWOCAfXxD1RsapnMMVk4S1EI8Ozp/bMFgHI+rGhSU?=
- =?us-ascii?Q?8PEWOJb0QeMYohXM3Fc/MPp+vn5NalUWM/22sj7EqES2BAZoWxh1ByQknhy2?=
- =?us-ascii?Q?LbUj0n3y24UF3MveM1N4isxrNImEnAxNjQ/P7+bXYhiQODc8zbAQPnjscaZF?=
- =?us-ascii?Q?XEuL8CODh2sF4FPBw5H84m6Od2jVp6mF7ecVhrWixDx9HQovI/VGIWykhQOJ?=
- =?us-ascii?Q?EQ=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S236739AbjHUQsF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Aug 2023 12:48:05 -0400
+Received: from mail-pf1-f205.google.com (mail-pf1-f205.google.com [209.85.210.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64EF2FA
+        for <linux-usb@vger.kernel.org>; Mon, 21 Aug 2023 09:48:02 -0700 (PDT)
+Received: by mail-pf1-f205.google.com with SMTP id d2e1a72fcca58-68a3d6ce105so1705974b3a.3
+        for <linux-usb@vger.kernel.org>; Mon, 21 Aug 2023 09:48:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692636482; x=1693241282;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=z6avjvyZDjVCRKOfj/6cbcAUyMuDBKp30LSpGvu//wg=;
+        b=Wo2q2VfC+nYQkSkiAsS7+GJY5bxgiVZBE1FvuLA0LGEnqy5A3QoB+Ae4lG8SWT/2xL
+         9I2IvHHOVJ8U/cd1R9Un3yVj7T9FZq7Yj8+Rk47VkRTvWqQRubvJuYPxODuQZEZat5Xr
+         tw4cFfooilC0OBrVkHPipDgAHc+0BJJUmnHKhc7XNr/foqBPrNjPcgXkDPSczzenkE4c
+         eAVJRuj6jPys4kjN6rucVA1Fql7xAXNIXYGk6soY+h9Hb0n3n7iGdi4BIiE6GiKKPJ8J
+         rctrK4BjfWqXk0FKxzCICHRoGsZk5TMN1kvfFMIWUDoAMCksMQ9X0OKzPXq2ZcAJQQLB
+         Uamg==
+X-Gm-Message-State: AOJu0YzqvJ8zXxp/UyIjoOhwNh+GqkwuodeYP74yI2nQ04FjdeWocR8w
+        oDS+4XEjGqQ3Udal9EtRC/qeuimu4UOk2ocvtGufIef3SE3Q
+X-Google-Smtp-Source: AGHT+IFhdmLZUVD+sMYSI3r6eU8dkdJUCwEZy/nD7+1BD1iKPKv2/irBsYknATITdC5fldU/xWpASGqWJKE0xDG7A+2y6vjpwzLv
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OS0PR01MB5922.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1d6d04fb-f890-4cf9-4e42-08dba2660c5b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Aug 2023 16:45:38.0532
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: db1Sg1OsgiXAIUhcDVGuFMn6fkB0rgtUDfXb9AiS3yPxkfY+s2CV/gm2woiIk9WuPql1OxXhSLb11Krl1/4Po113Cjn0tNSFNZNklPuPF40=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY3PR01MB11481
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6a00:1348:b0:687:da95:a15c with SMTP id
+ k8-20020a056a00134800b00687da95a15cmr4501711pfu.5.1692636481939; Mon, 21 Aug
+ 2023 09:48:01 -0700 (PDT)
+Date:   Mon, 21 Aug 2023 09:48:01 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003d73d3060371a47e@google.com>
+Subject: [syzbot] [usb?] INFO: task hung in get_bMaxPacketSize0
+From:   syzbot <syzbot+f7ac46d91cf13b4591a4@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Andy,
+Hello,
 
-Thanks for the feedback.
+syzbot found the following issue on:
 
-> Subject: Re: [PATCH 2/4] usb: typec: tcpci_rt1711h: Convert enum->pointer
-> for data in the match tables
->=20
-> On Sun, Aug 20, 2023 at 07:44:00PM +0100, Biju Das wrote:
-> > Convert enum->pointer for data in the match tables, so that
-> > device_get_match_data() can do match against OF/ACPI/I2C tables, once
-> > i2c bus type match support added to it and it returns NULL for non-matc=
-h.
-> >
-> > Therefore it is better to convert enum->pointer for data match and
-> > extend match support for both ID and OF tables by using
-> > i2c_get_match_data() by adding struct rt1711h_chip_info with did
-> > variable and replacing did->info in struct rt1711h_chip. Later patches
-> > will add more hw differences to struct rt1711h_chip_info and avoid
-> checking did for HW differences.
->=20
-> ...
->=20
-> > +struct rt1711h_chip_info {
-> > +	u16 did;
-> > +};
-> > +
-> >  struct rt1711h_chip {
-> >  	struct tcpci_data data;
-> >  	struct tcpci *tcpci;
-> >  	struct device *dev;
-> >  	struct regulator *vbus;
-> >  	bool src_en;
-> > -	u16 did;
-> > +	const struct rt1711h_chip_info *info;
->=20
-> Have you run pahole? I believe now you wasting a few more bytes (besides
-> the pointer requirement) due to (mis)placing a new member.
->=20
-> >  };
+HEAD commit:    7271b2a53042 Add linux-next specific files for 20230818
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=10e05763a80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1936af09cdef7dd6
+dashboard link: https://syzkaller.appspot.com/bug?extid=f7ac46d91cf13b4591a4
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1085e265a80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14290117a80000
 
-Just tried pahole for the first time.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/d81109bc02c1/disk-7271b2a5.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/4b3bf8e2a4f7/vmlinux-7271b2a5.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/6404cd473c1e/bzImage-7271b2a5.xz
 
-$ pahole -C rt1711h_chip drivers/usb/typec/tcpm/tcpci_rt1711h.o
-struct rt1711h_chip {
-	struct tcpci_data          data;                 /*     0    72 */
-	/* --- cacheline 1 boundary (64 bytes) was 8 bytes ago --- */
-	struct tcpci *             tcpci;                /*    72     8 */
-	struct device *            dev;                  /*    80     8 */
-	struct regulator *         vbus;                 /*    88     8 */
-	bool                       src_en;               /*    96     1 */
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+f7ac46d91cf13b4591a4@syzkaller.appspotmail.com
 
-	/* XXX 7 bytes hole, try to pack */
+INFO: task kworker/0:1:9 blocked for more than 143 seconds.
+      Not tainted 6.5.0-rc6-next-20230818-syzkaller #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:kworker/0:1     state:D stack:26768 pid:9     ppid:2      flags:0x00004000
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5382 [inline]
+ __schedule+0xee1/0x59f0 kernel/sched/core.c:6695
+ schedule+0xe7/0x1b0 kernel/sched/core.c:6771
+ usb_kill_urb.part.0+0x1c6/0x250 drivers/usb/core/urb.c:713
+ usb_kill_urb+0x83/0xa0 drivers/usb/core/urb.c:702
+ usb_start_wait_urb+0x251/0x4c0 drivers/usb/core/message.c:65
+ usb_internal_control_msg drivers/usb/core/message.c:103 [inline]
+ usb_control_msg+0x327/0x4a0 drivers/usb/core/message.c:154
+ get_bMaxPacketSize0.constprop.0+0xa5/0x1c0 drivers/usb/core/hub.c:4725
+ hub_port_init+0x680/0x3850 drivers/usb/core/hub.c:4921
+ hub_port_connect drivers/usb/core/hub.c:5369 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5580 [inline]
+ port_event drivers/usb/core/hub.c:5740 [inline]
+ hub_event+0x2b64/0x4e00 drivers/usb/core/hub.c:5822
+ process_one_work+0x887/0x15d0 kernel/workqueue.c:2630
+ process_scheduled_works kernel/workqueue.c:2703 [inline]
+ worker_thread+0x8bb/0x1290 kernel/workqueue.c:2784
+ kthread+0x33a/0x430 kernel/kthread.c:388
+ ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:304
+ </TASK>
+INFO: lockdep is turned off.
+NMI backtrace for cpu 0
+CPU: 0 PID: 29 Comm: khungtaskd Not tainted 6.5.0-rc6-next-20230818-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/26/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd9/0x1b0 lib/dump_stack.c:106
+ nmi_cpu_backtrace+0x277/0x380 lib/nmi_backtrace.c:113
+ nmi_trigger_cpumask_backtrace+0x299/0x300 lib/nmi_backtrace.c:62
+ trigger_all_cpu_backtrace include/linux/nmi.h:160 [inline]
+ check_hung_uninterruptible_tasks kernel/hung_task.c:222 [inline]
+ watchdog+0xfac/0x1230 kernel/hung_task.c:379
+ kthread+0x33a/0x430 kernel/kthread.c:388
+ ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:304
+ </TASK>
+Sending NMI from CPU 0 to CPUs 1:
+NMI backtrace for cpu 1
+CPU: 1 PID: 5041 Comm: strace-static-x Not tainted 6.5.0-rc6-next-20230818-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/26/2023
+RIP: 0010:wait_consider_task+0x94/0x4030 kernel/exit.c:1391
+Code: c7 40 08 00 f3 f3 f3 65 48 8b 04 25 28 00 00 00 48 89 84 24 f0 00 00 00 31 c0 e8 67 da 38 00 4c 89 f8 48 c1 e8 03 0f b6 14 28 <4c> 89 f8 83 e0 07 83 c0 03 38 d0 7c 08 84 d2 0f 85 d8 18 00 00 45
+RSP: 0018:ffffc90003cdfb30 EFLAGS: 00000a06
+RAX: 1ffff1100ddcfbcf RBX: ffffc90003cdfcf8 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff814ef909 RDI: ffffc90003cdfcf8
+RBP: dffffc0000000000 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: dffffc0000000000
+R13: ffff88806ee7d940 R14: 0000000000000000 R15: ffff88806ee7de78
+FS:  0000000000ad73c0(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fbbc40e6c00 CR3: 0000000027552000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <NMI>
+ </NMI>
+ <TASK>
+ ptrace_do_wait kernel/exit.c:1514 [inline]
+ do_wait+0x88c/0xc70 kernel/exit.c:1621
+ kernel_wait4+0x16d/0x280 kernel/exit.c:1780
+ __do_sys_wait4+0x15b/0x170 kernel/exit.c:1808
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x38/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x4d6ad6
+Code: 00 00 00 90 31 c9 e9 09 00 00 00 66 0f 1f 84 00 00 00 00 00 49 89 ca 64 8b 04 25 18 00 00 00 85 c0 75 11 b8 3d 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 5a c3 90 48 83 ec 28 89 54 24 14 48 89 74 24
+RSP: 002b:00007fff4d5e5ec8 EFLAGS: 00000246 ORIG_RAX: 000000000000003d
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00000000004d6ad6
+RDX: 0000000040000000 RSI: 00007fff4d5e5eec RDI: 00000000ffffffff
+RBP: 0000000000000000 R08: 0000000000000017 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000add3f0
+R13: 00007fff4d5e5eec R14: 0000000000ad8b90 R15: 000000000063f160
+ </TASK>
+INFO: NMI handler (nmi_cpu_backtrace_handler) took too long to run: 1.221 msecs
 
-	const struct rt1711h_chip_info  * info;          /*   104     8 */
 
-	/* size: 112, cachelines: 2, members: 6 */
-	/* sum members: 105, holes: 1, sum holes: 7 */
-	/* last cacheline: 48 bytes */
-};
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-biju@biju-VirtualBox:~/linux-next-test$ pahole -C rt1711h_chip_info drivers=
-/usb/typec/tcpm/tcpci_rt1711h.o
-struct rt1711h_chip_info {
-	u16                        did;                  /*     0     2 */
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-	/* XXX 2 bytes hole, try to pack */
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-	u32                        rxdz_sel;             /*     4     4 */
-	unsigned int               enable_pd30_extended_message:1; /*     8: 0  4 =
-*/
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
-	/* size: 12, cachelines: 1, members: 3 */
-	/* sum members: 6, holes: 1, sum holes: 2 */
-	/* sum bitfield members: 1 bits (0 bytes) */
-	/* bit_padding: 31 bits */
-	/* last cacheline: 12 bytes */
-};
+If you want to overwrite bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
-Currently size is 12 bytes, it can be reduced to 8 by adding bool.
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
 
-biju@biju-VirtualBox:~/linux-next-test$ pahole -C rt1711h_chip_info drivers=
-/usb/typec/tcpm/tcpci_rt1711h.o
-struct rt1711h_chip_info {
-	u32                        rxdz_sel;             /*     0     4 */
-	u16                        did;                  /*     4     2 */
-	bool                       enable_pd30_extended_message; /*     6     1 */
-
-	/* size: 8, cachelines: 1, members: 3 */
-	/* padding: 1 */
-	/* last cacheline: 8 bytes */
-};
-
-Cheers,
-Biju
-
-> ...
->=20
-> For all your work likes this as I noted in the reply to Guenter that the
-> couple of the selling points here are:
-> 1) avoidance of the pointer abuse in OF table
->    (we need that to be a valid pointer);
-> 2) preservation of the const qualifier (despite kernel_ulong_t
->    being used in the middle).
->=20
-> With that added I believe you can sell this much more easier.
->=20
-> --
-> With Best Regards,
-> Andy Shevchenko
->=20
-
+If you want to undo deduplication, reply with:
+#syz undup
