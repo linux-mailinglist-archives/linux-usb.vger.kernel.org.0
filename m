@@ -2,106 +2,156 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 392F1783B02
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Aug 2023 09:34:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21A3B783ACA
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Aug 2023 09:21:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233462AbjHVHeb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Aug 2023 03:34:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48600 "EHLO
+        id S233255AbjHVHVt convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 22 Aug 2023 03:21:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233406AbjHVHea (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Aug 2023 03:34:30 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DEC9B133;
-        Tue, 22 Aug 2023 00:34:28 -0700 (PDT)
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 37M79e232008175, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 37M79e232008175
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 22 Aug 2023 15:09:41 +0800
-Received: from RTEXDAG01.realtek.com.tw (172.21.6.100) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Tue, 22 Aug 2023 15:10:02 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXDAG01.realtek.com.tw (172.21.6.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Tue, 22 Aug 2023 15:10:02 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
- RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
- 15.01.2375.007; Tue, 22 Aug 2023 15:10:02 +0800
-From:   =?big5?B?U3RhbmxleSBDaGFuZ1up96h8vHdd?= <stanley_chang@realtek.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v4 2/2] dt-bindings: usb: dwc3: Add Realtek DHC RTD SoC DWC3 USB
-Thread-Topic: [PATCH v4 2/2] dt-bindings: usb: dwc3: Add Realtek DHC RTD SoC
- DWC3 USB
-Thread-Index: AQHZz16KCOHUUw9ObkCEILwScSxkD6/0piMAgAFJm0A=
-Date:   Tue, 22 Aug 2023 07:10:02 +0000
-Message-ID: <a2dc3ff4fe714f4a8463e3be65cd362c@realtek.com>
-References: <20230815095452.4146-1-stanley_chang@realtek.com>
- <20230815095452.4146-2-stanley_chang@realtek.com>
- <20230821192716.GA2128469-robh@kernel.org>
-In-Reply-To: <20230821192716.GA2128469-robh@kernel.org>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.190.159]
-x-kse-serverinfo: RTEXDAG01.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="big5"
-Content-Transfer-Encoding: base64
+        with ESMTP id S233306AbjHVHVo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Aug 2023 03:21:44 -0400
+Received: from mail-vk1-f181.google.com (mail-vk1-f181.google.com [209.85.221.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A08ECCD;
+        Tue, 22 Aug 2023 00:21:33 -0700 (PDT)
+Received: by mail-vk1-f181.google.com with SMTP id 71dfb90a1353d-48d0e739e32so746506e0c.3;
+        Tue, 22 Aug 2023 00:21:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692688892; x=1693293692;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tEqj/7VMYcFHe/k0i7FuQIhSZcp2uVDnPoA7oQf1bW4=;
+        b=L8d6Ep+PIdFwTDIdiKx5OJwgSObKATwC0NbD7IbnJfhmDMFtOZInIhMIEhQZr+ACrb
+         RqPlTfla2JB0vIUhcRQNeaoQCWJxA4alpOSzSLG3R7UeF6NnIpgoUA7JGgihIIIS0Pnn
+         ea0m5t4CekPSUgKPnIIAFwpPLMuTlBs5xtI/JW56XS5pjpcKwIOflk0ZToVUmY4ZnNxj
+         Qo1ANOexVRXJc+c9V9Nt/cZfrHjelBp6H38unEJ3QuSFeTRZnGFGYySDcqiVLrz0U1n2
+         nqzViE67Drh+WnVFulWYuSJZ4QtEtNqq7CDrhSfOyGjcPKKUapbJdpwJj1UGpA9ZAAi1
+         v1Yg==
+X-Gm-Message-State: AOJu0YyJU0arX4eyMnRpKAt9U3+tX8KeNo/CxxGcHmgipa+9Y+WdvEs1
+        1mL0yNs77zkGyZkesYkgNP8kdwq0+CQk8Q==
+X-Google-Smtp-Source: AGHT+IGhHYL1QXzaQc6nJh4ze05UBS5daFHUNbuUEYU1M8Bid91oCLBeQsuI9OpMhfP6qpvmXJp//A==
+X-Received: by 2002:a1f:dd44:0:b0:48d:2bcf:f959 with SMTP id u65-20020a1fdd44000000b0048d2bcff959mr4937878vkg.3.1692688892140;
+        Tue, 22 Aug 2023 00:21:32 -0700 (PDT)
+Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com. [209.85.221.179])
+        by smtp.gmail.com with ESMTPSA id w25-20020ac5cc79000000b0048d3a82a9dcsm502758vkm.28.2023.08.22.00.21.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Aug 2023 00:21:31 -0700 (PDT)
+Received: by mail-vk1-f179.google.com with SMTP id 71dfb90a1353d-48cfdfa7893so958093e0c.0;
+        Tue, 22 Aug 2023 00:21:31 -0700 (PDT)
+X-Received: by 2002:a1f:c5c4:0:b0:48d:9a8:e2f6 with SMTP id
+ v187-20020a1fc5c4000000b0048d09a8e2f6mr5726315vkf.14.1692688891082; Tue, 22
+ Aug 2023 00:21:31 -0700 (PDT)
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230820184402.102486-1-biju.das.jz@bp.renesas.com>
+ <20230820184402.102486-3-biju.das.jz@bp.renesas.com> <ZONgzqlS8bGP0umn@smile.fi.intel.com>
+ <CAMuHMdVY6VNFhMMzub9RrXd1zo=_7brQVtoBtogNuVfhbkg_tA@mail.gmail.com>
+ <ZOOBw/3fqdinIwCh@smile.fi.intel.com> <CAMuHMdW8mqtceDxuZ4Ccq0Wrg8ySfFzVC3OBB0AqvfSR-54KYA@mail.gmail.com>
+ <ZOOaFioDSpasda82@smile.fi.intel.com>
+In-Reply-To: <ZOOaFioDSpasda82@smile.fi.intel.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 22 Aug 2023 09:21:19 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdU_4Mg==Jh14K0ecVXfLCDt-RbNia5gCwLPjPj3tBQbsA@mail.gmail.com>
+Message-ID: <CAMuHMdU_4Mg==Jh14K0ecVXfLCDt-RbNia5gCwLPjPj3tBQbsA@mail.gmail.com>
+Subject: Re: [PATCH 2/4] usb: typec: tcpci_rt1711h: Convert enum->pointer for
+ data in the match tables
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        linux-renesas-soc@vger.kernel.org,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgUm9iLA0KDQo+ID4gK2V4YW1wbGVzOg0KPiA+ICsgIC0gfA0KPiA+ICsgICAgdXNiQDk4MDEz
-ZTAwIHsNCj4gPiArICAgICAgICBjb21wYXRpYmxlID0gInJlYWx0ZWsscnRkMTMxOWQtZHdjMyIs
-ICJyZWFsdGVrLHJ0ZC1kd2MzIjsNCj4gPiArICAgICAgICByZWcgPSA8MHg5ODAxM2UwMCAweDE0
-MD4sIDwweDk4MDEzZjYwIDB4ND47DQo+IA0KPiBUaGVzZSBsb29rIGxpa2UgcmVnaXN0ZXJzIGlu
-IHNvbWUgb3RoZXIgYmxvY2sgcmF0aGVyIHRoYW4gYSBzdGFuZGFsb25lIHdyYXBwZXINCj4gYmxv
-Y2suIEFyZSB0aGVzZSBwYXJ0IG9mIHNvbWUgc3lzY29uIGJsb2NrPyBJZiBzbywgSSBkb24ndCB0
-aGluayBhIHdyYXBwZXIgbm9kZQ0KPiBpcyB0aGUgcmlnaHQgYXBwcm9hY2ggaGVyZSwgYnV0IGEg
-cGhhbmRsZSB0byB0aGUgc3lzY29uIHdvdWxkIGJlIGluc3RlYWQuDQo+IA0KVGhleSBhcmUgdGhl
-IHNhbWUgYmxvY2sgb2YgcmVnaXN0ZXJzLg0KV2UgaGF2ZSB0aHJlZSBkd2MzIGNvbnRyb2xsZXJz
-IGluIG9uZSBTb0MuIFRoZSByZWdpc3RlciB3cmFwcGVyIGlzIGxvY2F0ZWQgYXQNClVTQjEuIDB4
-OTgwMTMyMDAgdG8gMHg5ODAxMzNmZg0KVVNCMi4gMHg5ODAxM2MwMCB0byAweDk4MDEzZGZmDQpV
-U0IzLiAweDk4MDEzZTAwIHRvIDB4OTgwMTNmZmYNCg0KV2h5IGFyZSB0aGV5IHNwbGl0IGludG8g
-dHdvIGJsb2Nrcz8NClNpbmNlIFVTQl9EQlVTX1BXUl9DVFJMX1JFRyBoYXMgYSBkaWZmZXJlbnQg
-b2Zmc2V0IGF0IHVzYjEgKDB4MTY0KSB0aGFuIG90aGVyIFVTQnMgKDB4MTYwKS4NCldlIHNwbGl0
-IHR3byBibG9ja3Mgb25lIDB4OTgwMTMyMDAgdG8gMHg5ODAxMzMzZiBhbmQgb25lIDB4OTgwMTMz
-NjQgdG8gMHg5ODAxMzM2NywgdG8gc29sdmUgdGhpcyBxdWVzdGlvbi4NCg0KPiBGcm9tIHRoZSBy
-ZWdpc3RlciBkZWZpbml0aW9ucywgbXVjaCBvZiBpdCBsb29rcyBwaHkgcmVsYXRlZCwgYnV0IHRo
-aXMgaXMgbm90IHBhcnQNCj4gb2YgdGhlIHBoeXM/DQoNCkluIG91ciBoYXJkd2FyZSBkZXNpZ24s
-IHRoZXNlIHBoeSBzZXR0aW5ncyBhcmUgbG9jYXRpb24gdGhlIHJlZ2lzdGVyIG9mIHdyYXBwZXIu
-DQoNClRoYW5rcywNClN0YW5sZXkNCg0KPiANCj4gPiArICAgICAgICAjYWRkcmVzcy1jZWxscyA9
-IDwxPjsNCj4gPiArICAgICAgICAjc2l6ZS1jZWxscyA9IDwxPjsNCj4gPiArICAgICAgICByYW5n
-ZXM7DQo+ID4gKw0KPiA+ICsgICAgICAgIHVzYkA5ODA1MDAwMCB7DQo+ID4gKyAgICAgICAgICAg
-IGNvbXBhdGlibGUgPSAic25wcyxkd2MzIjsNCj4gPiArICAgICAgICAgICAgcmVnID0gPDB4OTgw
-NTAwMDAgMHg5MDAwPjsNCj4gPiArICAgICAgICAgICAgaW50ZXJydXB0cyA9IDwwIDk0IDQ+Ow0K
-PiA+ICsgICAgICAgICAgICBwaHlzID0gPCZ1c2IycGh5ICZ1c2IzcGh5PjsNCj4gPiArICAgICAg
-ICAgICAgcGh5LW5hbWVzID0gInVzYjItcGh5IiwgInVzYjMtcGh5IjsNCj4gPiArICAgICAgICAg
-ICAgZHJfbW9kZSA9ICJvdGciOw0KPiA+ICsgICAgICAgICAgICB1c2Itcm9sZS1zd2l0Y2g7DQo+
-ID4gKyAgICAgICAgICAgIHJvbGUtc3dpdGNoLWRlZmF1bHQtbW9kZSA9ICJob3N0IjsNCj4gPiAr
-ICAgICAgICAgICAgc25wcyxkaXNfdTJfc3VzcGh5X3F1aXJrOw0KPiA+ICsgICAgICAgICAgICBz
-bnBzLHBhcmttb2RlLWRpc2FibGUtc3MtcXVpcms7DQo+ID4gKyAgICAgICAgICAgIHNucHMscGFy
-a21vZGUtZGlzYWJsZS1ocy1xdWlyazsNCj4gPiArICAgICAgICAgICAgbWF4aW11bS1zcGVlZCA9
-ICJoaWdoLXNwZWVkIjsNCj4gPiArICAgICAgICB9Ow0KPiA+ICsgICAgfTsNCj4gPiAtLQ0KDQo=
+Hi Andy,
+
+CC DT
+
+On Mon, Aug 21, 2023 at 7:09 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+> On Mon, Aug 21, 2023 at 05:40:05PM +0200, Geert Uytterhoeven wrote:
+> > On Mon, Aug 21, 2023 at 5:25 PM Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> wrote:
+> > > On Mon, Aug 21, 2023 at 03:27:43PM +0200, Geert Uytterhoeven wrote:
+> > > > On Mon, Aug 21, 2023 at 3:04 PM Andy Shevchenko
+> > > > <andriy.shevchenko@linux.intel.com> wrote:
+> > > > > On Sun, Aug 20, 2023 at 07:44:00PM +0100, Biju Das wrote:
+>
+> ...
+>
+> > > > > For all your work likes this as I noted in the reply to Guenter that
+> > > > > the couple of the selling points here are:
+> > > > > 1) avoidance of the pointer abuse in OF table
+> > > > >    (we need that to be a valid pointer);
+> > > >
+> > > > There is no pointer abuse: both const void * (in e.g. of_device_id)
+> > > > and kernel_ulong_t (in e.g. i2c_device_id) can be used by drivers
+> > > > to store a magic cookie, being either a pointer, or an integer value.
+> > > > The same is true for the various unsigned long and void * "driver_data"
+> > > > fields in subsystem-specific driver structures.
+> > >
+> > > (void *)5 is the abuse of the pointer.
+> > > We carry something which is not a valid pointer from kernel perspective.
+> >
+> > But the data field is not required to be a valid pointer.
+> > What kind and type of information it represents is specific to the driver.
+>
+> Where to find necessary information which is not always an integer constant.
+> For example, for the driver data that has callbacks it can't be invalid pointer.
+
+If the driver uses it to store callbacks, of course it needs to be a
+valid pointer. But that is internal to the driver.  It is not that
+we're passing random integer values to a function that expects a
+pointer that can actually be dereferenced.
+
+> Since OF ID table structure is universal, it uses pointers. Maybe you need to
+> update it to use plain integer instead?
+
+It is fairly common in the kernel to use void * to indicate a
+driver-specific cookie, being either a real pointer or an integral
+value, that is passed verbatim.  See also e.g. the "dev" parameter
+of request_irq().
+
+> I think there is no more sense to continue this. We have to admit we have
+> a good disagreement on this and I do not see any way I can agree with your
+> arguments. Note, I'm fine if you "fix" OF ID structure to use kernel_ulong_t.
+
+of_device_id is also used in userspace (e.g. modutils), but I believe
+that uses a copy of the structure definition, not the definition from
+the kernel headers. Still, changing the type would be a lot of work,
+for IMHO no real gain.
+
+> The only objection there is that it may not carry on the const qualifier,
+> which I personally find being a huge downside of the whole driver_data.
+> I believe you haven't objected that.
+
+Having const is nice, indeed.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
