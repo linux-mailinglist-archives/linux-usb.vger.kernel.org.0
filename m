@@ -2,52 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 817D4783EFE
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Aug 2023 13:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2862783F05
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Aug 2023 13:32:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234885AbjHVLcg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Aug 2023 07:32:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56424 "EHLO
+        id S234904AbjHVLcp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Aug 2023 07:32:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234873AbjHVLcf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Aug 2023 07:32:35 -0400
+        with ESMTP id S234893AbjHVLcp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Aug 2023 07:32:45 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B09CD5;
-        Tue, 22 Aug 2023 04:32:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C2BDCE6;
+        Tue, 22 Aug 2023 04:32:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E26B65293;
-        Tue, 22 Aug 2023 11:32:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F823C433C7;
-        Tue, 22 Aug 2023 11:32:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EEF7465273;
+        Tue, 22 Aug 2023 11:32:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAB4BC433BD;
+        Tue, 22 Aug 2023 11:32:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692703921;
-        bh=93CvJQ7GVmP36qHxWNaLcmrV8u+zkTaEJnC7LV4WR0A=;
+        s=k20201202; t=1692703933;
+        bh=oR0TJJ3G6QJf2dQpg9USa2OeHz6GOmiHv3WGPjMrlEM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Fl81dK7jyqkbtwiVAD2oPwMZFZdW9vJtbvChMcCJ1bl7ZTJn49EX3TEoLX5Y6BAUS
-         IfG0NdOM9Vm09xBpV/3XtxKj/8vJi+8uugAK7lqG3VZmkyorYZvJURMXKXWAOBUk2H
-         DwnmYKhuPu9dC2l5+fnUeJeZklv3OHcUjaCuVmyShVGfNJPAw3TvMT8carbtv8JDNL
-         Ie6k7AtXLyO+dU4XSC5ZIZ1SGRx/lYQORN+4t96C/bupbLvbuHe7U7iv1YRkNXwCFn
-         NfrmKc/rp9rK6FeuR/YOk+FYX6ustF0mSwyLO7DQCyh3Szv9Zc1Dyw8MghM/ldWyNx
-         AyO0f4LCIACwA==
+        b=FNbJKUfjv9dtCpY8wZtiPCYEUVRyqt58xvcmtPMaYiNNzfYncPapGXLqk8dYEBJz5
+         yS5d/Cy01vL36QP9NTkBa9wcjPUoIv8B89BPmgneOmxrGmj9KqmzlN2uYaSnA0Mpp0
+         oTzIxUroRnkS9vi1oqe8CR8myf0AspbWBoHN4cGQzB3YTo8QQ8ab7YNHOZroZNsugG
+         mCqU37w/T/vpyTiT1M1uhPDOCxKvpWqhuOv0M5vvF7ojQ0mzCRdU4iL48qMXQeE0zd
+         krTvUNAaavMX/lu3fKStmI+9mNk2FK2Ub0MRUvwDd09iwxehLt8BgQZ2AVw2DNcjnd
+         UQ8PEOZF0Rk2g==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Martin Kohn <m.kohn@welotec.com>, Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>, bjorn@mork.no,
         davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
         netdev@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 3/4] net: usb: qmi_wwan: add Quectel EM05GV2
-Date:   Tue, 22 Aug 2023 07:31:54 -0400
-Message-Id: <20230822113155.3550176-3-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 3/4] net: usb: qmi_wwan: add Quectel EM05GV2
+Date:   Tue, 22 Aug 2023 07:32:05 -0400
+Message-Id: <20230822113207.3550238-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230822113155.3550176-1-sashal@kernel.org>
-References: <20230822113155.3550176-1-sashal@kernel.org>
+In-Reply-To: <20230822113207.3550238-1-sashal@kernel.org>
+References: <20230822113207.3550238-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.15.127
+X-stable-base: Linux 5.10.191
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -104,10 +104,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index 9dde1f8358e3f..5c516bf4d3a5f 100644
+index de6c561535346..5cf7f389bf4ef 100644
 --- a/drivers/net/usb/qmi_wwan.c
 +++ b/drivers/net/usb/qmi_wwan.c
-@@ -1412,6 +1412,7 @@ static const struct usb_device_id products[] = {
+@@ -1351,6 +1351,7 @@ static const struct usb_device_id products[] = {
  	{QMI_QUIRK_SET_DTR(0x2c7c, 0x0191, 4)},	/* Quectel EG91 */
  	{QMI_QUIRK_SET_DTR(0x2c7c, 0x0195, 4)},	/* Quectel EG95 */
  	{QMI_FIXED_INTF(0x2c7c, 0x0296, 4)},	/* Quectel BG96 */
