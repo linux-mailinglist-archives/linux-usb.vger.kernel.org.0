@@ -2,85 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CD0F784433
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Aug 2023 16:30:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 048CC784495
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Aug 2023 16:42:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236720AbjHVOaO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Aug 2023 10:30:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51708 "EHLO
+        id S236893AbjHVOmq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Aug 2023 10:42:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236715AbjHVOaN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Aug 2023 10:30:13 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A7AD7;
-        Tue, 22 Aug 2023 07:30:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692714612; x=1724250612;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Xv76k+IpImzi2GS5574RwvcckYfvvKf4MGgWTpEnZNY=;
-  b=OxtsHr/L3fjXfWqawvIQMKIBLrUh3ncgWQ3MwNp2NbbyAWXskxD8yay1
-   w6g1Nq/oH2E1JovybXynuJ/hsPsjM3vYd6ZZnySnfwSlr+BD4ocDnmvAv
-   zZFQFH2K0AWdeUtzNKn+/xvr6uqw2M2HRv2MDtfO2FSuHSouq65dWUe2I
-   0rKm/zRVuvr342mVH6By7w4e5RqNHvbzN1npqYRYrrM8RSsSwbua2F8QI
-   Rij2MCf9vCOONkUO3r1qMXHIhq83bjIvHbiZKNwtKTYraIrttTtJMUj4s
-   CTLeYEwV81kog/q0nl+b7593sGEoy1q3mDROnYjDZC4LFUjW3N0dprTiS
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="373876385"
-X-IronPort-AV: E=Sophos;i="6.01,193,1684825200"; 
-   d="scan'208";a="373876385"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2023 07:30:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="910098004"
-X-IronPort-AV: E=Sophos;i="6.01,193,1684825200"; 
-   d="scan'208";a="910098004"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga005.jf.intel.com with ESMTP; 22 Aug 2023 07:30:09 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qYSOV-00EJFL-1r;
-        Tue, 22 Aug 2023 17:30:07 +0300
-Date:   Tue, 22 Aug 2023 17:30:07 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v1 1/1] usbip: Use platform_device_register_full()
-Message-ID: <ZOTGb7lNypG0DjV2@smile.fi.intel.com>
-References: <20230817121300.501637-1-andriy.shevchenko@linux.intel.com>
- <2726b488-5cca-50c0-ea09-92fb38ba2356@linuxfoundation.org>
+        with ESMTP id S236887AbjHVOmp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Aug 2023 10:42:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 043C8187;
+        Tue, 22 Aug 2023 07:42:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E2A46592A;
+        Tue, 22 Aug 2023 14:42:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A521C433C9;
+        Tue, 22 Aug 2023 14:42:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1692715362;
+        bh=JwRaFdXpBFPQvWg+7PAhwk5RLTvKjoAS3evEC/T1Ics=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=0euQLufgFNRSnjyplQRQhH6HbdZ16LqtVmuSb58MLZK863JtFKmETmzT7qsFuvx/1
+         7AZFXTdjbLMe+TvyViLIOikGnRQlyITSgy6SalJvI4fc9sZgJ1Gyv3f4zzqpVi5SkV
+         rMT1Wl/QM+uKVEgvzVXFUQNMsQRQCzzhGz5Nl3IY=
+Date:   Tue, 22 Aug 2023 16:42:39 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Grant B Adams <nemith592@gmail.com>
+Cc:     linux-omap@vger.kernel.org, tony@atomide.com,
+        Sebastian Reichel <sre@kernel.org>, Bin Liu <b-liu@ti.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 2/2] usb: musb: dsps: Fix vbus vs tps65217-charger irq
+ conflict
+Message-ID: <2023082256-judiciary-udder-6d06@gregkh>
+References: <20230822132202.19659-1-nemith592@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2726b488-5cca-50c0-ea09-92fb38ba2356@linuxfoundation.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230822132202.19659-1-nemith592@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 22, 2023 at 08:11:19AM -0600, Shuah Khan wrote:
-> On 8/17/23 06:13, Andy Shevchenko wrote:
-
-...
-
-> Please address the following problem and send v2.
+On Tue, Aug 22, 2023 at 03:22:02PM +0200, Grant B Adams wrote:
+> Enabling the tps65217-charger driver/module causes an interrupt conflict
+> with the vbus driver resulting in a probe failure.
+> The conflict is resolved by changing both driver's threaded interrupt
+> request function from IRQF_ONESHOT to IRQF_SHARED.
 > 
-> kernel test robot noticed "BUG:kernel_NULL_pointer_dereference,address" on:
+> Signed-off-by: Grant B Adams <nemith592@gmail.com>
+> ---
+>  drivers/usb/musb/musb_dsps.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/musb/musb_dsps.c b/drivers/usb/musb/musb_dsps.c
+> index 9119b1d51370..cbb45de5a76f 100644
+> --- a/drivers/usb/musb/musb_dsps.c
+> +++ b/drivers/usb/musb/musb_dsps.c
+> @@ -851,7 +851,7 @@ static int dsps_setup_optional_vbus_irq(struct platform_device *pdev,
+>  
+>  	error = devm_request_threaded_irq(glue->dev, glue->vbus_irq,
+>  					  NULL, dsps_vbus_threaded_irq,
+> -					  IRQF_ONESHOT,
+> +					  IRQF_SHARED,
+>  					  "vbus", glue);
+>  	if (error) {
+>  		glue->vbus_irq = 0;
+> -- 
+> 2.34.1
+> 
 
-Yep, I am aware of this, just haven't had time to look into.
+Why is the patch here talking about the tps65217-charger driver?  That's
+totally independent.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Also, your patches are not threaded, how did you send them?  Are they
+related in some way or not?
 
+thanks,
 
+greg k-h
