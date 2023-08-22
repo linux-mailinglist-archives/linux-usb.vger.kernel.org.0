@@ -2,163 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9390878366F
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Aug 2023 01:41:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6D6E783712
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Aug 2023 02:37:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231759AbjHUXlI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Aug 2023 19:41:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37580 "EHLO
+        id S231929AbjHVAht (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Aug 2023 20:37:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231773AbjHUXlI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Aug 2023 19:41:08 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D78D6180
-        for <linux-usb@vger.kernel.org>; Mon, 21 Aug 2023 16:41:05 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-1c4de3b9072so2531703fac.3
-        for <linux-usb@vger.kernel.org>; Mon, 21 Aug 2023 16:41:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1692661265; x=1693266065;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4t4twQrN4/XcfFQME5R5NFMMXoes4soP1FcV6+5sgL8=;
-        b=aZLu3Z/X/lPkIfBJo/wLHF1VjiCrHhX+WDNJCcZP2QHQaxfu2I1sQH23aaZ0neGODP
-         4aBGqDtnH+lhGB6jCf5GlCha2SbPS+q5i4NUJ2K/tQP0lHEABqUTHjGF+0wCH2AeaszQ
-         TJAo5UIYlYCif6o+MRAi6x3WbbO2cM9MU553k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692661265; x=1693266065;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4t4twQrN4/XcfFQME5R5NFMMXoes4soP1FcV6+5sgL8=;
-        b=gRLy7PTSMnc2h269jiHMt4qhamfmp1AsbOr9gAdXMZMGVvuSLdRYzH1OKlqTqHtGg8
-         MO4l2KTr1yx98NoTGC318+7nNJzQCEPfs+sbTNifslCiUluXqi6S2wQIEJxFecdJ6qEe
-         uWq4ewdMlgkbnJlo8fcvkzN46KGgcPYIpPle53MvRCLuHEetHZB3TuzZUkclf+5rSRXn
-         y4LnwXTeST8Jhk58otBgXEaSCbUrwjE/XSNJu5DdxIzaXUzW6M1RbHTgM8QPayPZC0zM
-         LKiwgOcUHAdAR2t6Yz6g7hCMfsbU6jjF2XNjVotQOFNNtP+dX1u+lwggZyDj6a7aS8zD
-         gK1A==
-X-Gm-Message-State: AOJu0Yzhk/roWRUcBlo7yyd49u1X4W+rHKXvqTvod07OoGoahm/zy4j0
-        S+hb7VzmVzm9iIZXar5bGnEADaWPZSOhpwjSeNSv+ntVOZI4zu9v
-X-Google-Smtp-Source: AGHT+IEf18sZL6oHJdiN3d4/TG4j0/AnxyO9TCU6xdEjynSCXn4yzhdTyDeQYC2UL7FF5v0+p5nKka2B/7P8tOZ0G6w=
-X-Received: by 2002:a05:6870:ec90:b0:1c4:e139:331 with SMTP id
- eo16-20020a056870ec9000b001c4e1390331mr9670539oab.55.1692661265110; Mon, 21
- Aug 2023 16:41:05 -0700 (PDT)
+        with ESMTP id S229513AbjHVAhr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Aug 2023 20:37:47 -0400
+X-Greylist: delayed 924 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 21 Aug 2023 17:37:44 PDT
+Received: from relay-bulk1.stackmail.com (relay-bulk1.stackmail.com [185.151.28.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02C7138;
+        Mon, 21 Aug 2023 17:37:44 -0700 (PDT)
+Authentication-Results: relay1.stackmail.com;
+        iprev=fail smtp.remote-ip=10.4.12.32
+Received: from [10.4.12.32] (helo=smtp1.lhr.stackcp.net)
+        by relay1.stackmail.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.96)
+        (envelope-from <account@acornsus.com>)
+        id 1qYEtN-00086N-0X;
+        Tue, 22 Aug 2023 01:05:05 +0100
+Received: from [45.8.227.175] (helo=www.stackmail.com)
+        by smtp1.lhr.stackcp.net with esmtpa (Exim 4.96)
+        (envelope-from <account@acornsus.com>)
+        id 1qYEtM-0007dO-1Z;
+        Tue, 22 Aug 2023 01:05:04 +0100
 MIME-Version: 1.0
-References: <20230811210735.159529-1-utkarsh.h.patel@intel.com>
- <20230811210735.159529-4-utkarsh.h.patel@intel.com> <ZN+nXGr3S0OL3Edn@chromium.org>
- <MWHPR11MB0048AF9CAA00D2A57C8CC533A91EA@MWHPR11MB0048.namprd11.prod.outlook.com>
-In-Reply-To: <MWHPR11MB0048AF9CAA00D2A57C8CC533A91EA@MWHPR11MB0048.namprd11.prod.outlook.com>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Mon, 21 Aug 2023 16:40:53 -0700
-Message-ID: <CACeCKaeEggChrqkN=izTySLRb75w0qkM1Xbnkyo3ZKVkGnZRTw@mail.gmail.com>
-Subject: Re: [PATCH 3/4] platform/chrome: cros_ec_typec: Add Displayport
- Alternatemode 2.1 Support
-To:     "Patel, Utkarsh H" <utkarsh.h.patel@intel.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "bleung@chromium.org" <bleung@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Date:   Mon, 21 Aug 2023 19:05:03 -0500
+From:   INEX Server Communications <account@acornsus.com>
+To:     michaelgary@inexserver.com
+Subject: WTS HDD
+Reply-To: michaelgary@inexserver.com
+Mail-Reply-To: michaelgary@inexserver.com
+Message-ID: <681b0616d2ec2aa68259c5171cea1063@acornsus.com>
+X-Sender: account@acornsus.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: account@acornsus.com
+X-Scan-Signature: 6d99ae91ff2f69a10b0829d63f3c66da
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Utkarsh,
+Hello,
 
-On Mon, Aug 21, 2023 at 10:34=E2=80=AFAM Patel, Utkarsh H
-<utkarsh.h.patel@intel.com> wrote:
->
-> Hi Prashant,
->
-> Thank you for the review and feedback.
->
-> > -----Original Message-----
-> > From: Prashant Malani <pmalani@chromium.org>
->>
-> > I don't understand why the conf VDO is being recreated here. cable_vdo
-> > should already contain the necessary bits. Just use the cable_vdo that =
-you get
-> > from cros_typec_get_cable_vdo(); it will have all the bits set correctl=
-y already
-> > (the EC should be doing that).
-> >
-> > The "if" condition should also be unnecessary.
-> >
-> > You are already doing something similar in the other patch for "active =
-retimer
-> > cable support" [1]
->
-> "if" condition is necessary because there are cables (LRD Gen3) with DPSI=
-D but does not support DPAM 2.1 and in that case we need to check TBTSID of=
- the cable and use the cable properties e.g. SPEED and Type.
+Want to sell .
+Clean pull tested working with 45 days warranty.
+Make us an offer.
 
-Ok, then grab the two VDOs distinctly (cable_dp_vdo and cable_tbt_vdo).
-Also, the explanation you gave above seems like a good candidate for a comm=
-ent
-above the "if" block.
 
-> Since that information is already available in pd_ctrl, we are leveraging=
- it.  I will remove the part where it's checking retimer cable as DP2.1 is =
-anyway not supported.
 
-As mentioned in earlier patches related to this, we want to avoid
-using EC-specific data structures
-as much as possible moving forward, especially if the information can
-be gleaned from the
-available DiscSVID VDOs. So, please use the required cable VDO
-(whether it is DP or TBT SID).
+intel E7-4850V2
+intel E7-4850
+Intel Xeon Silver 4110
+Intel Xeon Platinum 8270
+INTEL XEON 6240
+e5-2690v2
+INTEL XENON 5218
+intel 4210
+Intel Xeon Platinum 8164
 
->
-> >
-> > > +
-> > > +   port->state.data =3D &dp21_data;
-> > > +
-> > > +   return typec_mux_set(port->mux, &port->state);
-> >
-> > Note that now you have reversed the order in which the muxes are set (w=
-hich
-> > leads to subtle timing issues with Burnside Bridge and other similar re=
-timers).
-> > So please don't do this.
->
-> Are you suggesting to add same order here?
 
-Specifically, breaking out a separate function for DP 2.1 and then
-embedding that
-in the overall enable_dp() function makes things unnecessarily complex.
+These are original EMC - UNITY VMAX  Drives.  With Original
 
-Just craft the VDOs onew time, within enable_dp(), and then use the existin=
-g
-locations where cros_retimer_set and typec_mux_set() are called.
+EMC caddies.
 
-This will become more clear once you rebase this commit on top of the chang=
-es
-in [1]
+100 x 005051747 _ 1.92TB HDD - $90 PER w/ caddies $200 each
 
-Effectively cros_typec_enable_dp() should handle all DP cases, without need=
-ing
-a special function broken out for DP 2.1
 
-> > This entire feature isn't necessary. Regardless of whether dp2.1 is sup=
-ported
-> > or not, the port driver just needs to forward the cable_vdo it receives=
- faithfully
-> > to the mux driver, which can deal with internal details (based on wheth=
-er *it*
-> > supports DP 2.1 or not).
->
-> I am Okay with that.
-> We thought we can avoid unnecessary check for the cable_vdo for DP altern=
-ate mode on platform where DP2.1 is not supported.
+40 x   005052112 _  7.68TB HDD - PER w/ caddies $ 200 each
 
-The optimization is miniscule enough to not be worth it the added code
-verbosity.
+
+
+..............................................................
+
+Used Cisco (UCSB-B200-M5) Dual Intel Xeon Gold
+(6240) 2.60GHz - 3.90GHz 18-Core CPU Blade Server w/ 384GB ECC DDR4.
+QTY: 27PCS $1000 EACH.
+
+
+
+
+HP ZBOOK FIREFLY 15 G8 WORKSTATION LAPTOP
+15.6 inches display, Core i7-1185G7, 512 GB PCle NVme SSD,
+32GB DDR4-3200 MHz RAM, intel Iris Xe Graphic upto 8GB,
+
+
+
+
+Keyboard Backlight, Fingerprint sensor and face unlock.
+QTY:17PCS, $500 EACH.
+
+
+8GB DDR3 SODIMM 12800 PC3L 1.35V Samsung/Micron/Hyni
+QTY: 909Pcs... $1,800
+
+
+
+
+G.SKILL Trident Z5 RGB Series 32GB (2X16GB) 288-Pin PC RAM DDR5 6000 
+Desktop Memory
+Model F5-6000J3636F16GX2-TZ5RS. QTY: 126PCS $3700 ALL.
+
+
+
+
+
+Micron MTA18ASF2G72PZ-2G6E1 16GB 2666MHz DIMM Memory Module
+QTY: 347PCS, $1300 ALL.
+
+
+
+
+
+If you are interested, please contact Michael Gary EMAIL
+
+
+
+
+
+Regards,
+
+Michael Gary
+INEX Server Communications
+5331 Mt View Rd
+Unit #MAILBOX
+Antioch, TN 37013
+United States
+(423) 403-4777
+www.inexserver.com
+michaelgary@inexserver.com
+Cisco | Juniper | HP | Dell | IBM | NetApp | EMC
