@@ -2,60 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D63A7840E4
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Aug 2023 14:36:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C7C27840EA
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Aug 2023 14:38:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235731AbjHVMg3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Aug 2023 08:36:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46940 "EHLO
+        id S235683AbjHVMiO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Aug 2023 08:38:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjHVMg2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Aug 2023 08:36:28 -0400
+        with ESMTP id S229525AbjHVMiN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Aug 2023 08:38:13 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 827B4196;
-        Tue, 22 Aug 2023 05:36:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 788EA196;
+        Tue, 22 Aug 2023 05:38:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E7DD61036;
-        Tue, 22 Aug 2023 12:36:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACC8CC433C8;
-        Tue, 22 Aug 2023 12:36:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0CFBC615BE;
+        Tue, 22 Aug 2023 12:38:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA661C433C8;
+        Tue, 22 Aug 2023 12:38:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1692707786;
-        bh=fVkVptFFwKny9qQLoNX+rni3VwORsf2OzsmrJPMQR8s=;
+        s=korg; t=1692707891;
+        bh=Zgls8mquklkoOzDorcp2aKAcyrdPbOZyAYNdvU/uPis=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nHQURDprwfXLrElFhPraTkx7IlZHghXQFkoTmRGn+R39Hi6Fm5aA7j5J+LeVRpizU
-         KSohzQrTi5p1aQ+KDoiwox9nWGm9RTSvdLwvPBsqKBjSqgTsJvgXVusUBCjnbl6yLP
-         kl74zLu09r1Gc0Q4mftleY9r1+g48FLZvkXBJwMw=
-Date:   Tue, 22 Aug 2023 14:36:23 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
-        freedreno@lists.freedesktop.org
-Subject: Re: [PATCH v4 3/3] usb: typec: nb7vpq904m: switch to DRM_AUX_BRIDGE
-Message-ID: <2023082209-vitamins-unharmed-53ab@gregkh>
-References: <20230817145516.5924-1-dmitry.baryshkov@linaro.org>
- <20230817145516.5924-4-dmitry.baryshkov@linaro.org>
+        b=A2AO5nToyYcEsaAwLXznbuD5uFB25F7VFLfvwfg4+SHeJzUq4NrPFTrmzPx3JWUH+
+         ElP0ARg9Wra0zx9YgAuQVLrB3ElIhmxVDDaYAVFzjbi++5xLDk8iLSvKAdDnn3+Gn3
+         FEZB6fL8r9drcNLWFza/zvycr9bhR5fzpMEatfAY=
+Date:   Tue, 22 Aug 2023 14:38:08 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     RD Babiera <rdbabiera@google.com>
+Cc:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        kyletso@google.com, badhri@google.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2] usb: typec: tcpm: set initial svdm version based on
+ pd revision
+Message-ID: <2023082231-strode-pretty-f5a3@gregkh>
+References: <20230731165926.1815338-1-rdbabiera@google.com>
+ <CALzBnUFH=eQmhdpkt5_czKsZ22=u6yDoZZ0TX4eJkHGbjLANAw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230817145516.5924-4-dmitry.baryshkov@linaro.org>
+In-Reply-To: <CALzBnUFH=eQmhdpkt5_czKsZ22=u6yDoZZ0TX4eJkHGbjLANAw@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
@@ -66,18 +54,17 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 17, 2023 at 05:55:16PM +0300, Dmitry Baryshkov wrote:
-> Switch to using the new DRM_AUX_BRIDGE helper to create the
-> transparent DRM bridge device instead of handcoding corresponding
-> functionality.
+On Mon, Aug 21, 2023 at 10:09:14AM -0700, RD Babiera wrote:
+> Hello,
 > 
-> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
->  drivers/usb/typec/mux/Kconfig      |  2 +-
->  drivers/usb/typec/mux/nb7vpq904m.c | 44 ++----------------------------
->  2 files changed, 3 insertions(+), 43 deletions(-)
+> Just wanted to ping this patch for review in case it got lost/forgotten about.
 
-Just take this through the drm tree:
+What patch?
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+And note, people were on vacation.  If can, to help your patch get to
+the front of the review queue, please review other typec patches on the
+mailing list.
+
+thanks,
+
+greg k-h
