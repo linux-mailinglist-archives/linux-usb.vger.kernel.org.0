@@ -2,152 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4539178405B
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Aug 2023 14:08:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EDDE784068
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Aug 2023 14:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235555AbjHVMIs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Aug 2023 08:08:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35348 "EHLO
+        id S235576AbjHVMKO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Aug 2023 08:10:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234679AbjHVMIr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Aug 2023 08:08:47 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD6D391;
-        Tue, 22 Aug 2023 05:08:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692706125; x=1724242125;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=lflceObfNn/sO0Z4OMjLLSvLXV1qjgkqm1ONN/AVPKQ=;
-  b=M6WsalMxFzSL3Y+rOAU4Gf3K8hFWk0BlLUULRQ6M2sAnLNAVdU/Bjo1v
-   SWnWw9jy28eS9wgPfCm6gusZ4CZP8uVxlBl0akotneaeePP7iRQ1Q/6yR
-   bfW/1JWcDD8276lii17MqWk0ewUTBeKEu/VjFogjjpT7wHboUE64Sk8Ki
-   x8oHm98BOQ0KlgSKX5z7B/o4ksSj3xZMXylFVEfACfAbsrH6D0I1YriyT
-   5LiGUgqLLLJxQ8o8aru4Q2TPiSeHautppOWkVt6K/awtgJiqk9fMSc1ce
-   lkFcj3U29z1m9LnYrQJuDYPi4mxgnmZux6nXHrsovuGDjN0FvdAG2cd3A
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="373840114"
-X-IronPort-AV: E=Sophos;i="6.01,193,1684825200"; 
-   d="scan'208";a="373840114"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2023 05:08:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="1067041050"
-X-IronPort-AV: E=Sophos;i="6.01,193,1684825200"; 
-   d="scan'208";a="1067041050"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga005.fm.intel.com with ESMTP; 22 Aug 2023 05:08:40 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qYQBa-009TIi-2N;
-        Tue, 22 Aug 2023 15:08:38 +0300
-Date:   Tue, 22 Aug 2023 15:08:38 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        linux-renesas-soc@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Subject: Re: [PATCH 2/4] usb: typec: tcpci_rt1711h: Convert enum->pointer for
- data in the match tables
-Message-ID: <ZOSlRhLiYoZmcDfT@smile.fi.intel.com>
-References: <20230820184402.102486-1-biju.das.jz@bp.renesas.com>
- <20230820184402.102486-3-biju.das.jz@bp.renesas.com>
- <ZONgzqlS8bGP0umn@smile.fi.intel.com>
- <CAMuHMdVY6VNFhMMzub9RrXd1zo=_7brQVtoBtogNuVfhbkg_tA@mail.gmail.com>
- <ZOOBw/3fqdinIwCh@smile.fi.intel.com>
- <CAMuHMdW8mqtceDxuZ4Ccq0Wrg8ySfFzVC3OBB0AqvfSR-54KYA@mail.gmail.com>
- <ZOOaFioDSpasda82@smile.fi.intel.com>
- <CAMuHMdU_4Mg==Jh14K0ecVXfLCDt-RbNia5gCwLPjPj3tBQbsA@mail.gmail.com>
- <ZOSfrHUDpaax1FS4@smile.fi.intel.com>
- <CAMuHMdVwy72utSLBFro7emgG5Hx6xzD8MHwXczAyJJvBpVDgYg@mail.gmail.com>
+        with ESMTP id S235574AbjHVMKM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Aug 2023 08:10:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99012CD9;
+        Tue, 22 Aug 2023 05:10:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2ABD765530;
+        Tue, 22 Aug 2023 12:10:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1277AC433C7;
+        Tue, 22 Aug 2023 12:09:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1692706200;
+        bh=oIroAJWGpAoaXxQqj5B47vOkVLFc3Qej63Npk++iLT4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ayKbqyQ8w1V9qrLcqkiY6b6ldUXauWFOQ4vYytTyxaeZ0SGPUbBcg3dn150Rg8Llz
+         45OSSC8ZBqa5T8ZUbGXDqKAAeu/V4+9+Q1mWJMgWmT9joofIDgZFbJqNQTrx2OL47p
+         qz6qJZ80vfxctHuz4FeW3KLTorowBcJMnql5JoKw=
+Date:   Tue, 22 Aug 2023 14:09:57 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Utkarsh Patel <utkarsh.h.patel@intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        heikki.krogerus@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        pmalani@chromium.org, bleung@chromium.org
+Subject: Re: [PATCH 0/4]  Displayport Alternate Mode 2.1 Support
+Message-ID: <2023082231-expose-animating-bbd6@gregkh>
+References: <20230811210735.159529-1-utkarsh.h.patel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMuHMdVwy72utSLBFro7emgG5Hx6xzD8MHwXczAyJJvBpVDgYg@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230811210735.159529-1-utkarsh.h.patel@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 22, 2023 at 02:00:05PM +0200, Geert Uytterhoeven wrote:
-> On Tue, Aug 22, 2023 at 1:44 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> > On Tue, Aug 22, 2023 at 09:21:19AM +0200, Geert Uytterhoeven wrote:
-> > > On Mon, Aug 21, 2023 at 7:09 PM Andy Shevchenko
-> > > <andriy.shevchenko@linux.intel.com> wrote:
-> > > > On Mon, Aug 21, 2023 at 05:40:05PM +0200, Geert Uytterhoeven wrote:
-> > > > > On Mon, Aug 21, 2023 at 5:25 PM Andy Shevchenko
-> > > > > <andriy.shevchenko@linux.intel.com> wrote:
-> > > > > > On Mon, Aug 21, 2023 at 03:27:43PM +0200, Geert Uytterhoeven wrote:
-> > > > > > > On Mon, Aug 21, 2023 at 3:04 PM Andy Shevchenko
-> > > > > > > <andriy.shevchenko@linux.intel.com> wrote:
-> > > > > > > > On Sun, Aug 20, 2023 at 07:44:00PM +0100, Biju Das wrote:
-
-...
-
-> > > > > > > > For all your work likes this as I noted in the reply to Guenter that
-> > > > > > > > the couple of the selling points here are:
-> > > > > > > > 1) avoidance of the pointer abuse in OF table
-> > > > > > > >    (we need that to be a valid pointer);
-> > > > > > >
-> > > > > > > There is no pointer abuse: both const void * (in e.g. of_device_id)
-> > > > > > > and kernel_ulong_t (in e.g. i2c_device_id) can be used by drivers
-> > > > > > > to store a magic cookie, being either a pointer, or an integer value.
-> > > > > > > The same is true for the various unsigned long and void * "driver_data"
-> > > > > > > fields in subsystem-specific driver structures.
-> > > > > >
-> > > > > > (void *)5 is the abuse of the pointer.
-> > > > > > We carry something which is not a valid pointer from kernel perspective.
-> > > > >
-> > > > > But the data field is not required to be a valid pointer.
-> > > > > What kind and type of information it represents is specific to the driver.
-> > > >
-> > > > Where to find necessary information which is not always an integer constant.
-> > > > For example, for the driver data that has callbacks it can't be invalid pointer.
-> > >
-> > > If the driver uses it to store callbacks, of course it needs to be a
-> > > valid pointer. But that is internal to the driver.  It is not that
-> > > we're passing random integer values to a function that expects a
-> > > pointer that can actually be dereferenced.
-> > >
-> > > > Since OF ID table structure is universal, it uses pointers. Maybe you need to
-> > > > update it to use plain integer instead?
-> > >
-> > > It is fairly common in the kernel to use void * to indicate a
-> > > driver-specific cookie, being either a real pointer or an integral
-> > > value, that is passed verbatim.  See also e.g. the "dev" parameter
-> > > of request_irq().
-> >
-> > Yes, that parameter is void * due to calling kfree(free_irq(...)).
-> > So, that's argument for my concerns.
+On Fri, Aug 11, 2023 at 02:07:31PM -0700, Utkarsh Patel wrote:
+> This series enabels cable identification flow required for Displayport
+> Alternate Mode 2.1 support.
 > 
-> Sorry, I don't understand this comment.
-> (kfree(free_irq(...)) is only called in pci_free_irq()?)
+> In this series [PATCH 3/4] uses cros_typec_get_cable_vdo API from,
+> https://patchwork.kernel.org/project/linux-usb/list/?series=766752
+> 
+> Utkarsh Patel (4):
+>   usb: typec: Add Displayport Alternate Mode 2.1 Support
+>   platform/chrome: cros_ec: Add Displayport Alternatemode 2.1 feature
+>     flag
+>   platform/chrome: cros_ec_typec: Add Displayport Alternatemode 2.1
+>     Support
+>   usb: typec: intel_pmc_mux: Configure Displayport Alternate mode 2.1
+> 
+>  drivers/platform/chrome/cros_ec_typec.c       | 30 +++++++++++++++++++
+>  drivers/platform/chrome/cros_ec_typec.h       |  1 +
+>  drivers/usb/typec/altmodes/displayport.c      |  5 +++-
+>  drivers/usb/typec/mux/intel_pmc_mux.c         | 24 +++++++++++++++
+>  drivers/usb/typec/ucsi/displayport.c          |  2 +-
+>  drivers/usb/typec/ucsi/ucsi_ccg.c             |  4 +--
+>  .../linux/platform_data/cros_ec_commands.h    |  5 ++++
+>  include/linux/usb/typec_dp.h                  | 28 ++++++++++++++---
+>  8 files changed, 91 insertions(+), 8 deletions(-)
+> 
+> -- 
+> 2.25.1
+> 
 
-Passing void * for a "driver cookie" makes sense due to possibility of the
-passing it to other functions that want to have void * as your example shows.
-And that supports my idea of having void * over the unsigned long.
+What tree are you expecting to see this patch series go through?  Please
+be explicit when you resend the new version so we know who is
+responsible to take it (or not.)
 
--- 
-With Best Regards,
-Andy Shevchenko
+thanks,
 
-
+greg k-h
