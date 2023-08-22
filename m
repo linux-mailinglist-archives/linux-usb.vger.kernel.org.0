@@ -2,106 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBDDC78442D
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Aug 2023 16:29:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CD0F784433
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Aug 2023 16:30:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236697AbjHVO30 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Aug 2023 10:29:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32928 "EHLO
+        id S236720AbjHVOaO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Aug 2023 10:30:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235162AbjHVO30 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Aug 2023 10:29:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1402D1BE;
-        Tue, 22 Aug 2023 07:29:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A49AF65930;
-        Tue, 22 Aug 2023 14:29:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F0AFC433C7;
-        Tue, 22 Aug 2023 14:29:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692714563;
-        bh=h5zyHpspl7dpKFk5tUBL2QsxCFhjvr9+cr25M5nKD9I=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=QxDU/uzDRlUYUbPhQBOBBNOe4RoQYo8maLbY92IV4a6WbbFzfjJM3cYl8Hat8g73g
-         UmLCKlH0Kj/LyGcVQxXij4V3tz7tyT0FE+4/NiyJMLdMSKDCNee03y6trxBULGjTR+
-         J1waOCWynNSHUvA8yfdXUyw1NhYHFZE9Gvf9rcMd7AB+ZG4lkHOhuvhIFKlSkTHH/L
-         288bzbEype+o7jC7njo66bN46BOSpFsunj+ruMCsMkFCqp26n6bZkaefKfpb6+0Tjm
-         SKXazm5R8YWyoXBqFSteLX2rh90hRe+hBPiORU39cnqt/Jo5njkzBWaXbT4F2ejRUN
-         XqimrAsFVA1/w==
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Sam Protsenko <semen.protsenko@linaro.org>
-Cc:     JaeHun Jung <jh0801.jung@samsung.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Heiko Stuebner <heiko@sntech.de>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-In-Reply-To: <20230819031731.22618-1-semen.protsenko@linaro.org>
-References: <20230819031731.22618-1-semen.protsenko@linaro.org>
-Subject: Re: (subset) [PATCH 0/8] arm64: exynos: Enable USB for E850-96
- board
-Message-Id: <169271455700.280543.8632429647448619127.b4-ty@kernel.org>
-Date:   Tue, 22 Aug 2023 19:59:17 +0530
+        with ESMTP id S236715AbjHVOaN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Aug 2023 10:30:13 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A7AD7;
+        Tue, 22 Aug 2023 07:30:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692714612; x=1724250612;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Xv76k+IpImzi2GS5574RwvcckYfvvKf4MGgWTpEnZNY=;
+  b=OxtsHr/L3fjXfWqawvIQMKIBLrUh3ncgWQ3MwNp2NbbyAWXskxD8yay1
+   w6g1Nq/oH2E1JovybXynuJ/hsPsjM3vYd6ZZnySnfwSlr+BD4ocDnmvAv
+   zZFQFH2K0AWdeUtzNKn+/xvr6uqw2M2HRv2MDtfO2FSuHSouq65dWUe2I
+   0rKm/zRVuvr342mVH6By7w4e5RqNHvbzN1npqYRYrrM8RSsSwbua2F8QI
+   Rij2MCf9vCOONkUO3r1qMXHIhq83bjIvHbiZKNwtKTYraIrttTtJMUj4s
+   CTLeYEwV81kog/q0nl+b7593sGEoy1q3mDROnYjDZC4LFUjW3N0dprTiS
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="373876385"
+X-IronPort-AV: E=Sophos;i="6.01,193,1684825200"; 
+   d="scan'208";a="373876385"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2023 07:30:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="910098004"
+X-IronPort-AV: E=Sophos;i="6.01,193,1684825200"; 
+   d="scan'208";a="910098004"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005.jf.intel.com with ESMTP; 22 Aug 2023 07:30:09 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qYSOV-00EJFL-1r;
+        Tue, 22 Aug 2023 17:30:07 +0300
+Date:   Tue, 22 Aug 2023 17:30:07 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v1 1/1] usbip: Use platform_device_register_full()
+Message-ID: <ZOTGb7lNypG0DjV2@smile.fi.intel.com>
+References: <20230817121300.501637-1-andriy.shevchenko@linux.intel.com>
+ <2726b488-5cca-50c0-ea09-92fb38ba2356@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2726b488-5cca-50c0-ea09-92fb38ba2356@linuxfoundation.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Tue, Aug 22, 2023 at 08:11:19AM -0600, Shuah Khan wrote:
+> On 8/17/23 06:13, Andy Shevchenko wrote:
 
-On Fri, 18 Aug 2023 22:17:23 -0500, Sam Protsenko wrote:
-> This patch series enables USB gadget, USB host and Ethernet support for
-> E850-96 board. The most major change was done in USB PHY driver, as the
-> register layout of PHY block in Exynos850 is very different from
-> Exynos5 one.
+...
+
+> Please address the following problem and send v2.
 > 
-> Sam Protsenko (8):
->   dt-bindings: usb: samsung,exynos-dwc3: Add Exynos850 support
->   dt-bindings: phy: samsung,usb3-drd-phy: Add Exynos850 support
->   usb: dwc3: exynos: Add support for Exynos850 variant
->   phy: exynos5-usbdrd: Make it possible to pass custom phy ops
->   phy: exynos5-usbdrd: Add 26MHz ref clk support
->   phy: exynos5-usbdrd: Add Exynos850 support
->   arm64: dts: exynos: Enable USB in Exynos850
->   arm64: dts: exynos: Enable USB support on E850-96 board
-> 
-> [...]
+> kernel test robot noticed "BUG:kernel_NULL_pointer_dereference,address" on:
 
-Applied, thanks!
+Yep, I am aware of this, just haven't had time to look into.
 
-[2/8] dt-bindings: phy: samsung,usb3-drd-phy: Add Exynos850 support
-      commit: 0b76bdce32300a626dc796f656c085a786c5dab1
-[4/8] phy: exynos5-usbdrd: Make it possible to pass custom phy ops
-      commit: 6b34ec66e7e7351b9a0a1eba8f57eb46ddeabf1e
-[5/8] phy: exynos5-usbdrd: Add 26MHz ref clk support
-      commit: 255ec3879dd4d585799fd8d8a94a335eaf84d2ec
-[6/8] phy: exynos5-usbdrd: Add Exynos850 support
-      commit: 691525074db97d9b684dd1457fd8dc9842a36615
-
-Best regards,
 -- 
-~Vinod
+With Best Regards,
+Andy Shevchenko
 
 
