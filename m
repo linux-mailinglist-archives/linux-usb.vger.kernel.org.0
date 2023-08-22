@@ -2,92 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 048CC784495
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Aug 2023 16:42:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 237B97844DE
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Aug 2023 16:59:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236893AbjHVOmq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Aug 2023 10:42:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50250 "EHLO
+        id S237006AbjHVO71 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Aug 2023 10:59:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236887AbjHVOmp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Aug 2023 10:42:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 043C8187;
-        Tue, 22 Aug 2023 07:42:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        with ESMTP id S232185AbjHVO71 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Aug 2023 10:59:27 -0400
+X-Greylist: delayed 431 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 22 Aug 2023 07:59:25 PDT
+Received: from mp-relay-02.fibernetics.ca (mp-relay-02.fibernetics.ca [208.85.217.137])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 391A610B
+        for <linux-usb@vger.kernel.org>; Tue, 22 Aug 2023 07:59:25 -0700 (PDT)
+Received: from mailpool-fe-02.fibernetics.ca (mailpool-fe-02.fibernetics.ca [208.85.217.145])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E2A46592A;
-        Tue, 22 Aug 2023 14:42:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A521C433C9;
-        Tue, 22 Aug 2023 14:42:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1692715362;
-        bh=JwRaFdXpBFPQvWg+7PAhwk5RLTvKjoAS3evEC/T1Ics=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=0euQLufgFNRSnjyplQRQhH6HbdZ16LqtVmuSb58MLZK863JtFKmETmzT7qsFuvx/1
-         7AZFXTdjbLMe+TvyViLIOikGnRQlyITSgy6SalJvI4fc9sZgJ1Gyv3f4zzqpVi5SkV
-         rMT1Wl/QM+uKVEgvzVXFUQNMsQRQCzzhGz5Nl3IY=
-Date:   Tue, 22 Aug 2023 16:42:39 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Grant B Adams <nemith592@gmail.com>
-Cc:     linux-omap@vger.kernel.org, tony@atomide.com,
-        Sebastian Reichel <sre@kernel.org>, Bin Liu <b-liu@ti.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 2/2] usb: musb: dsps: Fix vbus vs tps65217-charger irq
- conflict
-Message-ID: <2023082256-judiciary-udder-6d06@gregkh>
-References: <20230822132202.19659-1-nemith592@gmail.com>
+        by mp-relay-02.fibernetics.ca (Postfix) with ESMTPS id 897B0761A8;
+        Tue, 22 Aug 2023 14:52:13 +0000 (UTC)
+Received: from localhost (mailpool-mx-02.fibernetics.ca [208.85.217.141])
+        by mailpool-fe-02.fibernetics.ca (Postfix) with ESMTP id 6FC7060A46;
+        Tue, 22 Aug 2023 14:52:13 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at 
+X-Spam-Score: -0.2
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
+Received: from mailpool-fe-02.fibernetics.ca ([208.85.217.145])
+        by localhost (mail-mx-02.fibernetics.ca [208.85.217.141]) (amavisd-new, port 10024)
+        with ESMTP id lxD4vK63rRjA; Tue, 22 Aug 2023 14:52:13 +0000 (UTC)
+Received: from [192.168.48.17] (host-104-157-193-42.dyn.295.ca [104.157.193.42])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dgilbert@interlog.com)
+        by mail.ca.inter.net (Postfix) with ESMTPSA id AE8F660A42;
+        Tue, 22 Aug 2023 14:52:12 +0000 (UTC)
+Message-ID: <860a352c-12da-25ce-5b9e-697382a93899@interlog.com>
+Date:   Tue, 22 Aug 2023 10:52:12 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230822132202.19659-1-nemith592@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Reply-To: dgilbert@interlog.com
+Subject: Re: [RFC PATCH 0/2] usb: Link USB devices with their USB Type-C
+ partner counterparts
+Content-Language: en-CA
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Benson Leung <bleung@google.com>
+Cc:     Jameson Thies <jthies@google.com>,
+        Prashant Malani <pmalani@google.com>,
+        Won Chung <wonchung@google.com>, linux-usb@vger.kernel.org
+References: <20230822133205.2063210-1-heikki.krogerus@linux.intel.com>
+From:   Douglas Gilbert <dgilbert@interlog.com>
+In-Reply-To: <20230822133205.2063210-1-heikki.krogerus@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 22, 2023 at 03:22:02PM +0200, Grant B Adams wrote:
-> Enabling the tps65217-charger driver/module causes an interrupt conflict
-> with the vbus driver resulting in a probe failure.
-> The conflict is resolved by changing both driver's threaded interrupt
-> request function from IRQF_ONESHOT to IRQF_SHARED.
+On 2023-08-22 09:32, Heikki Krogerus wrote:
+> Hi Benson,
 > 
-> Signed-off-by: Grant B Adams <nemith592@gmail.com>
-> ---
->  drivers/usb/musb/musb_dsps.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> RFC for now. I can't test these properly. If you guys could take over
+> this, I would much appreciated. I hope this is at least close to your
+> proposal.
 > 
-> diff --git a/drivers/usb/musb/musb_dsps.c b/drivers/usb/musb/musb_dsps.c
-> index 9119b1d51370..cbb45de5a76f 100644
-> --- a/drivers/usb/musb/musb_dsps.c
-> +++ b/drivers/usb/musb/musb_dsps.c
-> @@ -851,7 +851,7 @@ static int dsps_setup_optional_vbus_irq(struct platform_device *pdev,
->  
->  	error = devm_request_threaded_irq(glue->dev, glue->vbus_irq,
->  					  NULL, dsps_vbus_threaded_irq,
-> -					  IRQF_ONESHOT,
-> +					  IRQF_SHARED,
->  					  "vbus", glue);
->  	if (error) {
->  		glue->vbus_irq = 0;
-> -- 
-> 2.34.1
+> With this (or something like it) you should be able to get
+> notification about USB connections and disconnections to your port
+> driver by implementing the new "attach" and "deattach" callbacks in
+> struct typec_partner_desc. The typec partner devices will also have
+> symlinks to the enumerated USB devices and vise versa.
 > 
+> I took a little shortcut and did not implement a proper device list.
+> Instead there is now only a member for the USB2 device and a member
+> for the USB3 device in struct typec_port, so with this only USB is
+> supported. But the API does not deal with struct usb_device, so
+> extending this to support other devices (TBT, Displayport, etc.) by
+> adding the actual device list should be fairly easy.
 
-Why is the patch here talking about the tps65217-charger driver?  That's
-totally independent.
+On a related matter, I wonder why there aren't symlinks between typec ports
+(under /sys/class/typec ) and/or the corresponding pd objects (under
+/sys/class/usb_power_delivery ) to the related power_supply objects under
+/sys/class/power_supply . For example under the latter directory I see:
+     $ ls | more
+     AC
+     BAT0
+     hidpp_battery_1
+     ucsi-source-psy-USBC000:001
+     ucsi-source-psy-USBC000:002
 
-Also, your patches are not threaded, how did you send them?  Are they
-related in some way or not?
+Those last two power supplies are obviously connected to typec port0 and port1
+(but offset by 1). Those power_supply objects hold inaccurate data which I hope
+will improve in time. Significantly power_supply objects don't seem to report
+the direction of the power. Here is a little utility I have been working on
+to report the USB Type-C port/pd disposition on my machine:
+     $ lsucpd
+     port0 [pd0]  > {5V, 0.9A}
+     port1 [pd1]  <<===  partner: [pd8]
 
-thanks,
+My laptop (Thinkpad X13 G3) has two type-C ports and port1 is a sink with a
+PD contract. I would like that second line to have 20V, 3.25A appended to it
+but there are several issues:
+   - no typec or pd symlink to ucsi-source-psy-USBC000:002
+   - that power supply_object says it is online (correct) with a voltage_now:
+     5000000 uV (incorrect) and current_now: 3000000 uA (incorrect). See below.
 
-greg k-h
+   ucsi-source-psy-USBC000:002 $ ls_name_value
+     current_max : 3250000
+     current_now : 3000000
+     online : 1
+     scope : Unknown
+     type : USB
+     uevent : <removed>
+     usb_type : C [PD] PD_PPS
+     voltage_max : 20000000
+     voltage_min : 5000000
+     voltage_now : 5000000
+
+
+Doug Gilbert
+
+
+
+
