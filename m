@@ -2,132 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C05B378429B
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Aug 2023 15:57:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 116307842A3
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Aug 2023 15:59:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236156AbjHVN5N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Aug 2023 09:57:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47620 "EHLO
+        id S236210AbjHVN7J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Aug 2023 09:59:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234758AbjHVN5N (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Aug 2023 09:57:13 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB2241B2;
-        Tue, 22 Aug 2023 06:57:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692712630; x=1724248630;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xm+ChoDHCRRg92ZpEGU+hqMQz3A/PQV2UsdtIYTADCU=;
-  b=d4bSIupHoppOty8HcGbfYYdza3V9eSfv4XN3cWhWUfmSoKG76y7FSl/d
-   VKMlap8M5UBFwL28smW5Ezv5FulyaJfvB1gLfwy4W2oSAhSspEjpUociz
-   ABWpEn0DkANUTcVNRWVSSB6V3f4ShCksfe41HLvmOWamvS3K27y0geZio
-   vxRjLcJozYVOrN1ktNwy7V2ACaQON3aAPcaH56c40mxpceWjdd6qCbr11
-   4B2mwqsCX/NIdcxNEq8OldFiMgR45ND1R0m3Xx/AxdwHa2C/BntqHhyOv
-   4GnLZgma5STx7BSsRxmijBmQ3jaXvcUIM5NlHzCvp0/3EIqzw6jl0b1/W
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10809"; a="440250858"
-X-IronPort-AV: E=Sophos;i="6.01,193,1684825200"; 
-   d="scan'208";a="440250858"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2023 06:57:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
-   d="scan'208";a="879962605"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 22 Aug 2023 06:57:09 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 22 Aug 2023 16:57:04 +0300
-Date:   Tue, 22 Aug 2023 16:57:04 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     linux@roeck-us.net, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, m.felsch@pengutronix.de, jun.li@nxp.com,
-        xu.yang_2@nxp.com, angus@akkea.ca, stable@vger.kernel.org,
-        Christian Bach <christian.bach@scs.ch>,
-        Fabio Estevam <festevam@denx.de>
-Subject: Re: [PATCH v3] usb: typec: tcpci: clear the fault status bit
-Message-ID: <ZOS+sPN43cpMwd8e@kuha.fi.intel.com>
-References: <20230816172502.1155079-1-festevam@gmail.com>
+        with ESMTP id S236217AbjHVN7I (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Aug 2023 09:59:08 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9982A1B0
+        for <linux-usb@vger.kernel.org>; Tue, 22 Aug 2023 06:59:06 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-51e24210395so14055a12.0
+        for <linux-usb@vger.kernel.org>; Tue, 22 Aug 2023 06:59:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1692712745; x=1693317545;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GPGM5RVHi5jU+limoUaeJUjHT2RNv1A7hPggc62V3I4=;
+        b=XS+OgnEf49/14lamU0axwa3HkbbVCTdijXW7xATkRaqeuAwn2tzzGlQTfPiKhoqR+1
+         JmwYjClfgQwyEeXS+XbAPWaO9nQqsYGg0Ye5n5STs8l2OJI923hcQ2bWWN+p8mYxsd8E
+         e3EsA27C0cko2OC9bSAWW/VKJP0FGytxgeRhSWHzx6kRmAEpDT+oEwqigSt9DlYunvlp
+         6MrCUXF8zqN+onuIwQcNoONhN0abn+5ZuTBxbQ9p7vLe52fLFdkK4AG2spk5NAFdB2hk
+         FTgfYXPbg3yobXvQcSoHIR4hbzZTo1VQzPHKKP2ScR6SKn93tVQwzCivSySIedOtP1ua
+         wK8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692712745; x=1693317545;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GPGM5RVHi5jU+limoUaeJUjHT2RNv1A7hPggc62V3I4=;
+        b=H/ChtAYfNaO43QFAH+VFge0BPHChlhExS/8fWB2IYQYfHyvhl531i9T1l2/xNL/sU2
+         rAGylT8ZkfOlOfmPNXQMX8DU2UcZ+jyVQqkZfDoY9RCN5SisNR9lt/GdpaQvbTx8ZlDX
+         k/kAga4iJ8fsSMMUlCm6IiLdwlYy3Gzal6Uc1KnZjGkbIXTTKLYSfVHnaZemH286uM6C
+         w0MfqYvjjxd5e1cCmS6rrH6QGNBTy2xeI/Njb2e9URzJnYrg6Ws4YjnUYnxzp4tM0Gp+
+         iE5qsa9QZ/rlguUq1i53eKGfHIP02uxo8SOOQ0yqc3RyImaHDxZDs+pdM6tIJD03ZQkI
+         iPNA==
+X-Gm-Message-State: AOJu0YxoOiLef6tP+XLUTtCBiN0rOivlRhM1+WylL8oNCNu7PgNgSIoq
+        mbpBGBQphvVsTx60gwtRQ119iwN0qxwc2oRd2Cm4Yg==
+X-Google-Smtp-Source: AGHT+IEmv5mcdpnQaS8lFmuRhq5zxQ+OmAWLSEX052jQOosQoZXyiFB2C8spoUj8fsAiRl/5osUV+P+IQGAc/qrISiQ=
+X-Received: by 2002:a50:d5db:0:b0:522:41c9:9b9 with SMTP id
+ g27-20020a50d5db000000b0052241c909b9mr100866edj.5.1692712744855; Tue, 22 Aug
+ 2023 06:59:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230816172502.1155079-1-festevam@gmail.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230822133205.2063210-1-heikki.krogerus@linux.intel.com>
+In-Reply-To: <20230822133205.2063210-1-heikki.krogerus@linux.intel.com>
+From:   Benson Leung <bleung@google.com>
+Date:   Tue, 22 Aug 2023 06:58:52 -0700
+Message-ID: <CANLzEku0C9YuRHJLMnvOKUn5StYzn=1FD0-0aFyZM3CgE+kaSQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/2] usb: Link USB devices with their USB Type-C
+ partner counterparts
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Jameson Thies <jthies@google.com>,
+        Prashant Malani <pmalani@google.com>,
+        Won Chung <wonchung@google.com>, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 16, 2023 at 02:25:02PM -0300, Fabio Estevam wrote:
-> From: Marco Felsch <m.felsch@pengutronix.de>
-> 
-> According the "USB Type-C Port Controller Interface Specification v2.0"
-> the TCPC sets the fault status register bit-7
-> (AllRegistersResetToDefault) once the registers have been reset to
-> their default values.
-> 
-> This triggers an alert(-irq) on PTN5110 devices albeit we do mask the
-> fault-irq, which may cause a kernel hang. Fix this generically by writing
-> a one to the corresponding bit-7.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 74e656d6b055 ("staging: typec: Type-C Port Controller Interface driver (tcpci)")
-> Reported-by: Angus Ainslie (Purism) <angus@akkea.ca>
-> Closes: https://lore.kernel.org/all/20190508002749.14816-2-angus@akkea.ca/
-> Reported-by: Christian Bach <christian.bach@scs.ch>
-> Closes: https://lore.kernel.org/regressions/ZR0P278MB07737E5F1D48632897D51AC3EB329@ZR0P278MB0773.CHEP278.PROD.OUTLOOK.COM/t/
-> Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-> Signed-off-by: Fabio Estevam <festevam@denx.de>
+Hi Heikki,
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+On Tue, Aug 22, 2023 at 6:32=E2=80=AFAM Heikki Krogerus
+<heikki.krogerus@linux.intel.com> wrote:
+>
+> Hi Benson,
+>
+> RFC for now. I can't test these properly. If you guys could take over
+> this, I would much appreciated. I hope this is at least close to your
+> proposal.
 
-> ---
-> Changes since v2:
-> - Submitted it as a standalone patch.
-> - Explain that it may cause a kernel hang.
-> - Fixed typos in the commit log. (Guenter)
-> - Check the tcpci_write16() return value. (Guenter)
-> - Write to TCPC_FAULT_STATUS unconditionally. (Guenter)
-> - Added Fixes, Reported-by and Closes tags.
-> - CCed stable
-> 
->  drivers/usb/typec/tcpm/tcpci.c | 4 ++++
->  include/linux/usb/tcpci.h      | 1 +
->  2 files changed, 5 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-> index fc708c289a73..0ee3e6e29bb1 100644
-> --- a/drivers/usb/typec/tcpm/tcpci.c
-> +++ b/drivers/usb/typec/tcpm/tcpci.c
-> @@ -602,6 +602,10 @@ static int tcpci_init(struct tcpc_dev *tcpc)
->  	if (time_after(jiffies, timeout))
->  		return -ETIMEDOUT;
->  
-> +	ret = tcpci_write16(tcpci, TCPC_FAULT_STATUS, TCPC_FAULT_STATUS_ALL_REG_RST_TO_DEFAULT);
-> +	if (ret < 0)
-> +		return ret;
-> +
->  	/* Handle vendor init */
->  	if (tcpci->data->init) {
->  		ret = tcpci->data->init(tcpci, tcpci->data);
-> diff --git a/include/linux/usb/tcpci.h b/include/linux/usb/tcpci.h
-> index 85e95a3251d3..83376473ac76 100644
-> --- a/include/linux/usb/tcpci.h
-> +++ b/include/linux/usb/tcpci.h
-> @@ -103,6 +103,7 @@
->  #define TCPC_POWER_STATUS_SINKING_VBUS	BIT(0)
->  
->  #define TCPC_FAULT_STATUS		0x1f
-> +#define TCPC_FAULT_STATUS_ALL_REG_RST_TO_DEFAULT BIT(7)
->  
->  #define TCPC_ALERT_EXTENDED		0x21
->  
-> -- 
-> 2.34.1
+Much appreciated for the quick turnaround. Yes, I can test this on our
+systems that have subsystem linking enabled. (speaking of which, would
+be interested in getting a sample of one of our Chromebook systems
+that fully implement the typec subsystem linking)?
 
--- 
-heikki
+>
+> With this (or something like it) you should be able to get
+> notification about USB connections and disconnections to your port
+> driver by implementing the new "attach" and "deattach" callbacks in
+> struct typec_partner_desc. The typec partner devices will also have
+> symlinks to the enumerated USB devices and vise versa.
+>
+
+Got it, i'll modify the cros_ec_typec driver to implement these
+callbacks, and look for the new symlinks.
+
+
+> I took a little shortcut and did not implement a proper device list.
+> Instead there is now only a member for the USB2 device and a member
+> for the USB3 device in struct typec_port, so with this only USB is
+> supported. But the API does not deal with struct usb_device, so
+> extending this to support other devices (TBT, Displayport, etc.) by
+> adding the actual device list should be fairly easy.
+
+Excellent! Thank you.
+
+Benson
+
+>
+> thanks,
+>
+> Heikki Krogerus (2):
+>   usb: typec: Link enumerated USB devices with Type-C partner
+>   usb: Inform the USB Type-C class about enumerated devices
+>
+>  drivers/usb/core/hub.c          |   4 ++
+>  drivers/usb/core/hub.h          |   3 +
+>  drivers/usb/core/port.c         |  19 +++++-
+>  drivers/usb/typec/class.c       | 108 +++++++++++++++++++++++++++++---
+>  drivers/usb/typec/class.h       |  16 +++++
+>  drivers/usb/typec/port-mapper.c |   9 ++-
+>  include/linux/usb/typec.h       |  37 +++++++++++
+>  7 files changed, 184 insertions(+), 12 deletions(-)
+>
+> --
+> 2.40.1
+>
+
+
+--
+Benson Leung
+Staff Software Engineer
+Chrome OS Kernel
+Google Inc.
+bleung@google.com
+Chromium OS Project
+bleung@chromium.org
