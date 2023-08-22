@@ -2,128 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64C09784594
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Aug 2023 17:31:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64972784986
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Aug 2023 20:46:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237131AbjHVPbT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Aug 2023 11:31:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40022 "EHLO
+        id S229765AbjHVSqN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Aug 2023 14:46:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237135AbjHVPbR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Aug 2023 11:31:17 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0065ACD8
-        for <linux-usb@vger.kernel.org>; Tue, 22 Aug 2023 08:31:12 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3fed963273cso22946915e9.1
-        for <linux-usb@vger.kernel.org>; Tue, 22 Aug 2023 08:31:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692718271; x=1693323071;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8uosOUAxceoT7rDQGwT3620q675u/dmggpL1Oc/TVgg=;
-        b=GUZ7giCgdKP6AhmwT/JVkY64DYRgMauV+6U+N6onI7l1spNddyBseF8A0c0nnd7d5r
-         rmNkccfFrHpN938CryWtERXeAhsTEJa/YbLEvboiLbwhjl402/cO8drGYLBYPEfdmnXD
-         v/EwcGCf8pz4SD49sG6NCkRzJF1KuQqPisOZBha+wdaKY93+Sug/1wZH8D017QQbWLs1
-         my2JbQrOzgZOBQO+6PYtqCokDCayyeNIAFXNWf6zAcOaB25lEYXy04q4fhr0WSBZb63J
-         yH2xNF/ojnGSTs+rMvo9Ewk/edcExBuyDS0N3nTPQewBOXIthL4DTjODwODRzxnHv38Z
-         tcjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692718271; x=1693323071;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8uosOUAxceoT7rDQGwT3620q675u/dmggpL1Oc/TVgg=;
-        b=S4W0qvgpgcbk/orlOvtZ6hhOmepCMsBJSj1zJa0EyKhdjZXGOHN/N9SqULRlXbmEJY
-         e3YxodDPgBRZkMm+yuCtlk/mProQKD342shj0CnsNBlbVcOPfTqU41P7kChamDbRJZ2Q
-         vFqG20flNCnRAyxHPS9zmOIed/QGWBRJFQV4bkeLZ1+yflE4pKPJIAxgNu6o+fWwoxp5
-         2ky6X/KVfDej+o7ehn+65bYC88RuEf4cfCZj+tnBd89IKWBv3ZK6hH+BlTdF4qTsqewG
-         dHQ2N6x8pZSbDoOgNFwlXdE2cOxNb6C5Qny3WGTwbei6/AjdB9skth8x50hc+JRYgHkj
-         lCKw==
-X-Gm-Message-State: AOJu0YztJ1zYw5FtS44G85Wc9oCymVwBGCV8T1CiV2i8XcdqcFeUKXuG
-        J2IqNLWG7i/BNFapEtkMvIoFBA==
-X-Google-Smtp-Source: AGHT+IEUU1gRdjdHzr8Sc3oXci7an4zcTuXwebjVN+K5jGfZ4/8TEKLXoA5qZBkoZfGRTGFx/BLqkg==
-X-Received: by 2002:a5d:44c8:0:b0:317:e9d7:9387 with SMTP id z8-20020a5d44c8000000b00317e9d79387mr9599604wrr.25.1692718271428;
-        Tue, 22 Aug 2023 08:31:11 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id l15-20020a5d674f000000b00317909f9985sm16043357wrw.113.2023.08.22.08.31.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Aug 2023 08:31:10 -0700 (PDT)
-Message-ID: <2d989b98-8ab2-5204-d59a-ae7a8bd43906@linaro.org>
-Date:   Tue, 22 Aug 2023 16:31:09 +0100
+        with ESMTP id S229517AbjHVSqN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Aug 2023 14:46:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F3B610B;
+        Tue, 22 Aug 2023 11:46:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C1E4463F56;
+        Tue, 22 Aug 2023 18:46:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC552C433C8;
+        Tue, 22 Aug 2023 18:46:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1692729969;
+        bh=gcxI4uPRYqFNvEIHxSDvAhCX1x97ZeXzfeii3ZUp8VM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=A6/8TVkRuTgfk7aBdMDkCFirnjQKmn6VXFyAGv1F6sD+PcdoeUG/RqfZCPz8csJGT
+         O5HHhRmB+BIjWRugC2x+PLFQSbqDjj26bseCBPuKP+PKZVXXl8oN2g05G2ZLi4Afv9
+         NnqexUA8S1CFDFD3PYmjWTLaLXS/3wefxZXHLM48=
+Date:   Tue, 22 Aug 2023 20:46:06 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Grant Adams <nemith592@gmail.com>
+Cc:     linux-omap@vger.kernel.org, tony@atomide.com,
+        Sebastian Reichel <sre@kernel.org>, Bin Liu <b-liu@ti.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 2/2] usb: musb: dsps: Fix vbus vs tps65217-charger irq
+ conflict
+Message-ID: <2023082228-usable-strike-7f73@gregkh>
+References: <20230822132202.19659-1-nemith592@gmail.com>
+ <2023082256-judiciary-udder-6d06@gregkh>
+ <CAMg76N62CQq=VJ7jXHN4UnAv0NKo89VYnEJmVMXGPLzg8nvyag@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v5 2/2] usb: typec: qcom-pmic-typec: register drm_bridge
-Content-Language: en-US
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230817150824.14371-1-dmitry.baryshkov@linaro.org>
- <20230817150824.14371-3-dmitry.baryshkov@linaro.org>
- <ZOS+GnLeV6JJgpp8@kuha.fi.intel.com>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <ZOS+GnLeV6JJgpp8@kuha.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMg76N62CQq=VJ7jXHN4UnAv0NKo89VYnEJmVMXGPLzg8nvyag@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 22/08/2023 14:54, Heikki Krogerus wrote:
-> On Thu, Aug 17, 2023 at 06:08:24PM +0300, Dmitry Baryshkov wrote:
->> The current approach to handling DP on bridge-enabled platforms requires
->> a chain of DP bridges up to the USB-C connector. Register a last DRM
->> bridge for such chain.
->>
->> Acked-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
->> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->> ---
->>   drivers/usb/typec/tcpm/Kconfig                |  1 +
->>   drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c | 37 +++++++++++++++++++
->>   2 files changed, 38 insertions(+)
->>
->> diff --git a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec/tcpm/Kconfig
->> index 5d393f520fc2..0b2993fef564 100644
->> --- a/drivers/usb/typec/tcpm/Kconfig
->> +++ b/drivers/usb/typec/tcpm/Kconfig
->> @@ -79,6 +79,7 @@ config TYPEC_WCOVE
->>   config TYPEC_QCOM_PMIC
->>   	tristate "Qualcomm PMIC USB Type-C Port Controller Manager driver"
->>   	depends on ARCH_QCOM || COMPILE_TEST
->> +	depends on DRM || DRM=n
->>   	help
->>   	  A Type-C port and Power Delivery driver which aggregates two
->>   	  discrete pieces of silicon in the PM8150b PMIC block: the
+On Tue, Aug 22, 2023 at 08:20:56PM +0200, Grant Adams wrote:
+> On Tue, Aug 22, 2023 at 4:42 PM Greg Kroah-Hartman <
+> gregkh@linuxfoundation.org> wrote:
 > 
-> Would it be an option to put the below in separate c file that you
-> just compile based on CONFIG_DRM?
+> > On Tue, Aug 22, 2023 at 03:22:02PM +0200, Grant B Adams wrote:
+> > > Enabling the tps65217-charger driver/module causes an interrupt conflict
+> > > with the vbus driver resulting in a probe failure.
+> > > The conflict is resolved by changing both driver's threaded interrupt
+> > > request function from IRQF_ONESHOT to IRQF_SHARED.
+> > >
+> > > Signed-off-by: Grant B Adams <nemith592@gmail.com>
+> > > ---
+> > >  drivers/usb/musb/musb_dsps.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/usb/musb/musb_dsps.c b/drivers/usb/musb/musb_dsps.c
+> > > index 9119b1d51370..cbb45de5a76f 100644
+> > > --- a/drivers/usb/musb/musb_dsps.c
+> > > +++ b/drivers/usb/musb/musb_dsps.c
+> > > @@ -851,7 +851,7 @@ static int dsps_setup_optional_vbus_irq(struct
+> > platform_device *pdev,
+> > >
+> > >       error = devm_request_threaded_irq(glue->dev, glue->vbus_irq,
+> > >                                         NULL, dsps_vbus_threaded_irq,
+> > > -                                       IRQF_ONESHOT,
+> > > +                                       IRQF_SHARED,
+> > >                                         "vbus", glue);
+> > >       if (error) {
+> > >               glue->vbus_irq = 0;
+> > > --
+> > > 2.34.1
+> > >
+> >
+> > Why is the patch here talking about the tps65217-charger driver?  That's
+> > totally independent.
+> >
+> > Also, your patches are not threaded, how did you send them?  Are they
+> > related in some way or not?
+> >
+> > thanks,
+> >
+> > greg k-h
+> >
 > 
->          obj-$(CONFIG_TYPEC_QCOM_PMIC)           += qcom_pmic_tcpm.o
->          qcom_pmic_tcpm-y                        += qcom_pmic_typec.o \
->                                                     qcom_pmic_typec_port.o \
->                                                     qcom_pmic_typec_pdphy.o
->          ifneq ($(CONFIG_DRM),)
->                 qcom_pmic_tcpm-y                 += qcom_pmic_bridge_func.o
->          endif
+> Apologies Greg,
 > 
-> Thouse ifdefs in c file just look a bit rough to me.
+> This is my first patch and did not know about creating email threads for
+> multiple patches. I'll create an email thread for the patches and will
+> provide
+> an overview and better context in [PATCH 0/2].
 
-+1 if that's possible.
+That would be great, be sure to number this a v2 patch series as the
+documentation asks for as well :)
 
-Sounds nice.
+good luck!
 
----
-bod
-
+greg k-h
