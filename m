@@ -2,187 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C202D785C3B
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Aug 2023 17:36:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA21F785C78
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Aug 2023 17:48:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236995AbjHWPgq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Aug 2023 11:36:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44320 "EHLO
+        id S237318AbjHWPsO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Aug 2023 11:48:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234563AbjHWPgp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Aug 2023 11:36:45 -0400
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9785E4E;
-        Wed, 23 Aug 2023 08:36:43 -0700 (PDT)
-Received: by mail-qv1-xf35.google.com with SMTP id 6a1803df08f44-63f7c242030so28840746d6.3;
-        Wed, 23 Aug 2023 08:36:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692805003; x=1693409803;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=G5XEZspQ0af3L5iLDdPdO0en+k4F3L3wKwjw9DDXhkg=;
-        b=iWdOcdh5z/U06VuIrBCoBja7hFJ/AGlGolkUIpNjK5kzZ4/A7SoXg6ybGjpuG+8oZk
-         QXGZjP5xnndaMuTjMdwxpaWrayFgqQLe6MK8/Wf1K2tBdfsMS71tzW67KP17gYOXcjd5
-         Gy5th3MaLEy4TTyrGNq7yap4DafCyUOHWCn2IrR/1Oi3hr4u7oampDXodMh2jdFw/mLj
-         oVgpta/5fRJ//2KPA5GrAP94/nKE/khakh6adVQaxA4vOZWNRdfgYZ809YeYl4qFo9f1
-         6adGIx5A/yYGyT4i8lmFNldERdg2OZvc1AxXzs8Qyue/+D0WzzpV4hZ+uo/P7IOv4aMy
-         Tm+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692805003; x=1693409803;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=G5XEZspQ0af3L5iLDdPdO0en+k4F3L3wKwjw9DDXhkg=;
-        b=BuXzIRWRyY1bvTURPCafXh+hwu+F7/dBPHO0yjuXy5cShrlEqMC9CPkMMvraDqnn4e
-         o8JV9l3rFPzY5jqFs8cHR0nAVRJKEqbvh5Jdp86y2CxAHn9AsSoIcjSzWiCahTK416Sr
-         /SHTkSOPga5yxDvHxrjgOd6HEZFCWEm2EBBLjR43LEcU53vFOgmvlpkMmA66jtknXD8d
-         5i7GyV/rGIIY3fbmhH4ZrA7UsTDVwhQ0uEpAQkuKP++dniOEwUw3VwTbj8cUxB7rRZ8o
-         V/N+iIUV1nOr93rcucLbZYK513oAUAaKWqzihx5rhJ4SYOFZeA3ilOre2wm9SD+Hv7AM
-         OOGg==
-X-Gm-Message-State: AOJu0Yw5q572GX5WnwMT8fkeImonRhsDC7vNY9NgmUNsHyv4z7WEraZp
-        G5Gl7CrobS9XivCvUFJ7ihg=
-X-Google-Smtp-Source: AGHT+IFvmFm4Niz/eGVfH8POfrgqx95eyE/Oxr2Om+sD86FOq86o0elUzKPAkmtYUMiDRpJaHTLZMA==
-X-Received: by 2002:a05:6214:2cc2:b0:647:3387:fe44 with SMTP id lf2-20020a0562142cc200b006473387fe44mr11726108qvb.5.1692805002777;
-        Wed, 23 Aug 2023 08:36:42 -0700 (PDT)
-Received: from penguin ([205.220.129.23])
-        by smtp.gmail.com with ESMTPSA id i8-20020a0cf388000000b0063d5d173a51sm4645847qvk.50.2023.08.23.08.36.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Aug 2023 08:36:42 -0700 (PDT)
-Date:   Wed, 23 Aug 2023 08:36:18 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Andi Shyti <andi.shyti@kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        with ESMTP id S237311AbjHWPsN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Aug 2023 11:48:13 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id B0BCA10C2
+        for <linux-usb@vger.kernel.org>; Wed, 23 Aug 2023 08:48:09 -0700 (PDT)
+Received: (qmail 188465 invoked by uid 1000); 23 Aug 2023 11:48:08 -0400
+Date:   Wed, 23 Aug 2023 11:48:08 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Andrey Konovalov <andreyknvl@gmail.com>
+Cc:     Thinh Nguyen <thinh.nguyen@synopsys.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-renesas-soc@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Subject: Re: [PATCH 2/4] usb: typec: tcpci_rt1711h: Convert enum->pointer for
- data in the match tables
-Message-ID: <ZOYncrsD/EweSa8c@penguin>
-References: <ZONgzqlS8bGP0umn@smile.fi.intel.com>
- <CAMuHMdVY6VNFhMMzub9RrXd1zo=_7brQVtoBtogNuVfhbkg_tA@mail.gmail.com>
- <ZOOBw/3fqdinIwCh@smile.fi.intel.com>
- <CAMuHMdW8mqtceDxuZ4Ccq0Wrg8ySfFzVC3OBB0AqvfSR-54KYA@mail.gmail.com>
- <ZOOaFioDSpasda82@smile.fi.intel.com>
- <CAMuHMdU_4Mg==Jh14K0ecVXfLCDt-RbNia5gCwLPjPj3tBQbsA@mail.gmail.com>
- <ZOSfrHUDpaax1FS4@smile.fi.intel.com>
- <CAMuHMdVwy72utSLBFro7emgG5Hx6xzD8MHwXczAyJJvBpVDgYg@mail.gmail.com>
- <ZOSlRhLiYoZmcDfT@smile.fi.intel.com>
- <20230823144905.mep6w6fctwcxxrhz@intel.intel>
+        USB list <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: dwc3: unusual handling of setup requests with wLength == 0
+Message-ID: <bdf69b9d-fe82-48e2-9638-d84d00d4ef1d@rowland.harvard.edu>
+References: <bb470c47-c9dc-4dae-ae3f-c7d4736ee7e9@rowland.harvard.edu>
+ <20230818031045.wovf5tj2un7nwf72@synopsys.com>
+ <cfc7ae18-140b-4223-9cc2-7ee4b9ddea28@rowland.harvard.edu>
+ <20230818194922.ys26zrqc4pocqq7q@synopsys.com>
+ <45d9ef53-e2be-4740-a93a-d36f18a49b39@rowland.harvard.edu>
+ <20230819000643.7mddkitzr4aqjsms@synopsys.com>
+ <e63ba783-f5a4-4442-8736-987a3b134e7f@rowland.harvard.edu>
+ <CA+fCnZcmb78DMaffb3cq2JeCNxcGBeyt8hxeJq3SaTTkbZ3ewA@mail.gmail.com>
+ <3f52eb94-1d8c-4233-86ac-bbc78d4efce7@rowland.harvard.edu>
+ <CA+fCnZcJ0JHHY04By+PjYvofpefKtp1br63gJNsEL=J7n1_vCA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230823144905.mep6w6fctwcxxrhz@intel.intel>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CA+fCnZcJ0JHHY04By+PjYvofpefKtp1br63gJNsEL=J7n1_vCA@mail.gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 23, 2023 at 04:49:05PM +0200, Andi Shyti wrote:
-> Hi,
+On Wed, Aug 23, 2023 at 04:30:23AM +0200, Andrey Konovalov wrote:
+> I started looking into reworking the UDC drivers to drop the special
+> case for USB_GADGET_DELAYED_STATUS, but this seems more complicated.
 > 
-> On Tue, Aug 22, 2023 at 03:08:38PM +0300, Andy Shevchenko wrote:
-> > On Tue, Aug 22, 2023 at 02:00:05PM +0200, Geert Uytterhoeven wrote:
-> > > On Tue, Aug 22, 2023 at 1:44 PM Andy Shevchenko
-> > > <andriy.shevchenko@linux.intel.com> wrote:
-> > > > On Tue, Aug 22, 2023 at 09:21:19AM +0200, Geert Uytterhoeven wrote:
-> > > > > On Mon, Aug 21, 2023 at 7:09 PM Andy Shevchenko
-> > > > > <andriy.shevchenko@linux.intel.com> wrote:
-> > > > > > On Mon, Aug 21, 2023 at 05:40:05PM +0200, Geert Uytterhoeven wrote:
-> > > > > > > On Mon, Aug 21, 2023 at 5:25 PM Andy Shevchenko
-> > > > > > > <andriy.shevchenko@linux.intel.com> wrote:
-> > > > > > > > On Mon, Aug 21, 2023 at 03:27:43PM +0200, Geert Uytterhoeven wrote:
-> > > > > > > > > On Mon, Aug 21, 2023 at 3:04 PM Andy Shevchenko
-> > > > > > > > > <andriy.shevchenko@linux.intel.com> wrote:
-> > > > > > > > > > On Sun, Aug 20, 2023 at 07:44:00PM +0100, Biju Das wrote:
-> > 
-> > ...
-> > 
-> > > > > > > > > > For all your work likes this as I noted in the reply to Guenter that
-> > > > > > > > > > the couple of the selling points here are:
-> > > > > > > > > > 1) avoidance of the pointer abuse in OF table
-> > > > > > > > > >    (we need that to be a valid pointer);
-> > > > > > > > >
-> > > > > > > > > There is no pointer abuse: both const void * (in e.g. of_device_id)
-> > > > > > > > > and kernel_ulong_t (in e.g. i2c_device_id) can be used by drivers
-> > > > > > > > > to store a magic cookie, being either a pointer, or an integer value.
-> > > > > > > > > The same is true for the various unsigned long and void * "driver_data"
-> > > > > > > > > fields in subsystem-specific driver structures.
-> > > > > > > >
-> > > > > > > > (void *)5 is the abuse of the pointer.
-> > > > > > > > We carry something which is not a valid pointer from kernel perspective.
-> > > > > > >
-> > > > > > > But the data field is not required to be a valid pointer.
-> > > > > > > What kind and type of information it represents is specific to the driver.
-> > > > > >
-> > > > > > Where to find necessary information which is not always an integer constant.
-> > > > > > For example, for the driver data that has callbacks it can't be invalid pointer.
-> > > > >
-> > > > > If the driver uses it to store callbacks, of course it needs to be a
-> > > > > valid pointer. But that is internal to the driver.  It is not that
-> > > > > we're passing random integer values to a function that expects a
-> > > > > pointer that can actually be dereferenced.
-> > > > >
-> > > > > > Since OF ID table structure is universal, it uses pointers. Maybe you need to
-> > > > > > update it to use plain integer instead?
-> > > > >
-> > > > > It is fairly common in the kernel to use void * to indicate a
-> > > > > driver-specific cookie, being either a real pointer or an integral
-> > > > > value, that is passed verbatim.  See also e.g. the "dev" parameter
-> > > > > of request_irq().
-> > > >
-> > > > Yes, that parameter is void * due to calling kfree(free_irq(...)).
-> > > > So, that's argument for my concerns.
-> > > 
-> > > Sorry, I don't understand this comment.
-> > > (kfree(free_irq(...)) is only called in pci_free_irq()?)
-> > 
-> > Passing void * for a "driver cookie" makes sense due to possibility of the
-> > passing it to other functions that want to have void * as your example shows.
-> > And that supports my idea of having void * over the unsigned long.
+> First, I noticed that some of the UDC drivers only expect to handle a
+> delayed Status stage for SET_CONFIGURATION requests. (Which is
+
+That expectation is wrong; gadget drivers can also want to delay the 
+Status stage for a SET_INTERFACE request.  And in theory they might want 
+to delay any control-OUT transfer.
+
+> reasonable, as they were developed assuming that only the composite
+> framework might request to delay the Status stage.) In particular,
+> dwc3, cdns2, and cdns3 set the gadget state to USB_STATE_CONFIGURED
+> when handling a delayed Status stage:
 > 
-> I actually agree with Andy here... not much to add to his
-> arguments but if a void * is used as an integer then just change
-> the type.
+> dwc3/ep0.c:136: usb_gadget_set_state(dwc->gadget, USB_STATE_CONFIGURED);
+> cdns3/cdns3-ep0.c:739: usb_gadget_set_state(&priv_dev->gadget,
+> USB_STATE_CONFIGURED);
+> gadget/udc/cdns2/cdns2-ep0.c:572: usb_gadget_set_state(&pdev->gadget,
+> USB_STATE_CONFIGURED);
+
+This is also wrong.  SET_CONFIGURATION can tell a gadget to install 
+config 0, in which case the state should be changed to 
+USB_STATE_ADDRESS.
+
+For that matter, a gadget can undergo many state changes other than the 
+change into the CONFIGURED state.  It doesn't look like many of the UDC 
+drivers are careful about reporting them.
+
+> So I believe an additional check for whether the request was indeed
+> SET_CONFIGURATION is required. (cdns2 and cdns3 also do other things
+> besides setting the state to USB_STATE_CONFIGURED, but it should be
+> possible to hide that under the same check.)
 > 
-> I also was quite puzzled when I started seeing this flow of
-> patches.
+> I also looked into how other UDC drivers change the gadget state to
+> USB_STATE_CONFIGURED:
 > 
-> I would rather prefer to store pointers in u64 variables rather
-> than integers in a pointer.
+> 1. isp1760, mtu3, and bdc immediately set USB_STATE_CONFIGURED once
+> they receive a SET_CONFIGURATION request, before calling ->setup() for
+> the gadget driver;
+> 2. gr and mv_u3d do that after the ->setup() call;
+> 3. tegra does it after the first non-control endpoint is enabled;
+> 4. dwc3, cdns2, and cdns3 appear to not set USB_STATE_CONFIGURED if
+> the Status stage is not delayed;
+> 5. dwc2, cdnsp, and all other UDCs don't set USB_STATE_CONFIGURED at all.
+> 
+> I'm guessing the UDCs in #4 and #5 expect the gadget driver to set
+> USB_STATE_CONFIGURED.
+> 
+> I see that the composite framework sets the gadget state to
+> USB_STATE_CONFIGURED even if some of the functions request a delayed
+> Status stage via USB_GADGET_DELAYED_STATUS. And GadgetFS also sets the
+> state to USB_STATE_CONFIGURED before delegating the SET_CONFIGURATION
+> request to userspace. However, Raw Gadget expects the userspace to
+> issue an ioctl that sets USB_STATE_CONFIGURED before completing the
+> delayed SET_CONFIGURATION request.
+> 
+> So I am wondering: when is proper time to set USB_STATE_CONFIGURED?
+> And should this be handled by the UDC driver or the gadget driver?
 
-I think pointers should be stored in pointers, and preserve constness.
-The reason that many legacy device id structures use kernel_ulong_t to
-store driver "cookie" is shortsightedness on our part long time ago.
-Back then we just needed "a simple piece of data" to be attached, a
-true/false flag or maybe a combination of flags. Nowadays we often
-want to attach a structure describing a chip's parameters there with
-several flags, maybe some methods, etc. So OF/DT folks did the right
-thing, and used const void *, and we should try and convert the rest to
-use const void * as well.
+The proper time isn't really well defined.  As far as the gadget driver 
+is concerned, it's when the configuration change is completed (when it 
+tells the composite framework to stop delaying the status stage).  But 
+as far as the host is concerned, it's when the Status stage completes 
+successfully.
 
-I posted RFC for this for I2C here:
+If the Status stage of the control transfer gets corrupted, it's 
+possible to end up in a situation where the gadget believes it is 
+configured and the host believes it isn't.  Luckily this doesn't 
+happen very often, and if it does then the host should reissue the 
+transfer.
 
-https://lore.kernel.org/all/20230814-i2c-id-rework-v1-0-3e5bc71c49ee@gmail.com/
+All the other state changes are (or should be) handled by the UDC 
+drivers.  I guess they can handle the changes to/from the CONFIGURED 
+state as well, although they will have to be more careful about it than 
+they are now.
 
-And then we can unify OF and legacy handling if driver tables.
+> > > An alternative would to declare USB_GADGET_DELAYED_STATUS to be usable
+> > > outside of the composite framework and leave everything as is
+> > > otherwise (but change Raw Gadget to return USB_GADGET_DELAYED_STATUS).
+> > > The downside is the discrepancy in the interface of different UDCs
+> > > (some require USB_GADGET_DELAYED_STATUS, others imply), but perhaps
+> > > it's not that bad provided that this discrepancy is documented.
+> >
+> > This alternative is less desirable, because the legacy gadgets (some of
+> > which don't use the composite framework) may not be compatible with it.
+> 
+> I think GadgetFS and Raw Gadget are the only two such drivers?
 
-Thanks.
+Yes, that appears to be so.  I didn't realize those were the only 
+hold-outs.
 
--- 
-Dmitry
+> > And as a matter of general principle, allowing UDC drivers to start
+> > automatically send Status replies to 0-length control transfers is a
+> > step in the wrong direction.  What we really should focus our energy on
+> > is getting them to _stop_ sending automatic Status replies to
+> > non-zero-length control transfers!
+> 
+> Ack!
+> 
+> But I don't think it's within my capability to fix all UDCs,
+> considering the issues I mentioned above.
+
+One step at a time...
+
+Alan Stern
