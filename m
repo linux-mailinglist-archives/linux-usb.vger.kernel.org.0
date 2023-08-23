@@ -2,122 +2,153 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 860CC78604C
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Aug 2023 21:02:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2ADE786088
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Aug 2023 21:20:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238269AbjHWTBz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Aug 2023 15:01:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36874 "EHLO
+        id S238178AbjHWTUB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Aug 2023 15:20:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238279AbjHWTBc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Aug 2023 15:01:32 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41AECE79;
-        Wed, 23 Aug 2023 12:01:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692817290; x=1724353290;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=q8HqfOIX9FUQBqFQujvPJoo8ORZpfr5B1wEGzq2gXlY=;
-  b=HisyjFpqQjib+Is/zE/Ogko/gDBh0DJLo5QncpDRlK8nFVnr84nfB2ZF
-   Le1GceHLSyXMdejTIa+9f2Ccz/ATq6Q9TsOkDRRZrdXJYFAD+Z9cTvAZu
-   O/tNtynzzRWyclDxIIVaxS8Lg+b6M+4ex/l/EtfaDKOObBOHxxIxgxbXl
-   pKzKeQu9A3ts9KCvcYkILbhSA/ao9q0bBxHc2zi9cXYuO73mFfhDHJIBy
-   Kyp9hmBG0PPhsVDrWhsLJKOi+PN5c1lmDQ/zHsDK7o1/sYETj3DeiSLGW
-   /rRjsxgcEAaLVEu6PCLmW9NnGgCui/XHb++9Vg3PrN3RGEUU8xF4dsxQs
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10811"; a="364422883"
-X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="364422883"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2023 12:01:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10811"; a="730324844"
-X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="730324844"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2023 12:01:10 -0700
-Received: from kekkonen.localdomain (localhost [127.0.0.1])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id BCF7911F915;
-        Wed, 23 Aug 2023 22:01:07 +0300 (EEST)
-Date:   Wed, 23 Aug 2023 19:01:07 +0000
-From:   "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>
-To:     "Wu, Wentong" <wentong.wu@intel.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "mka@chromium.org" <mka@chromium.org>,
-        "oneukum@suse.com" <oneukum@suse.com>,
-        "lee@kernel.org" <lee@kernel.org>,
-        "wsa@kernel.org" <wsa@kernel.org>,
-        "kfting@nuvoton.com" <kfting@nuvoton.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "maz@kernel.org" <maz@kernel.org>, "brgl@bgdev.pl" <brgl@bgdev.pl>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
-        "andi.shyti@linux.intel.com" <andi.shyti@linux.intel.com>,
-        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
-        "linux-drivers-review@eclists.intel.com" 
-        <linux-drivers-review@eclists.intel.com>,
-        "Wang, Zhifeng" <zhifeng.wang@intel.com>
-Subject: Re: [PATCH v9 4/4] gpio: update Intel LJCA USB GPIO driver
-Message-ID: <ZOZXc8Vsa/aJQMIc@kekkonen.localdomain>
-References: <1692225111-19216-1-git-send-email-wentong.wu@intel.com>
- <1692225111-19216-5-git-send-email-wentong.wu@intel.com>
- <CACRpkda4Wrih_HPz6KjNf5rQ3A7jSRoPpMpQbm+ZWNv5P3WccA@mail.gmail.com>
- <DM6PR11MB43162BD4B856DF157D5F6F698D1AA@DM6PR11MB4316.namprd11.prod.outlook.com>
+        with ESMTP id S238336AbjHWTTv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Aug 2023 15:19:51 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 7211C10C3
+        for <linux-usb@vger.kernel.org>; Wed, 23 Aug 2023 12:19:48 -0700 (PDT)
+Received: (qmail 196398 invoked by uid 1000); 23 Aug 2023 15:19:47 -0400
+Date:   Wed, 23 Aug 2023 15:19:47 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: dwc3: unusual handling of setup requests with wLength == 0
+Message-ID: <08a3759d-4c6b-4034-8516-685e4d96a41e@rowland.harvard.edu>
+References: <bb470c47-c9dc-4dae-ae3f-c7d4736ee7e9@rowland.harvard.edu>
+ <20230818031045.wovf5tj2un7nwf72@synopsys.com>
+ <cfc7ae18-140b-4223-9cc2-7ee4b9ddea28@rowland.harvard.edu>
+ <20230818194922.ys26zrqc4pocqq7q@synopsys.com>
+ <45d9ef53-e2be-4740-a93a-d36f18a49b39@rowland.harvard.edu>
+ <20230819000643.7mddkitzr4aqjsms@synopsys.com>
+ <e63ba783-f5a4-4442-8736-987a3b134e7f@rowland.harvard.edu>
+ <20230823021429.rlgixqehry4rsqmm@synopsys.com>
+ <5d5973b9-d590-4567-b1d6-4b5f8aeca68b@rowland.harvard.edu>
+ <20230823175903.bpumanwv5fkpwc44@synopsys.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <DM6PR11MB43162BD4B856DF157D5F6F698D1AA@DM6PR11MB4316.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230823175903.bpumanwv5fkpwc44@synopsys.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Wentong, Linus,
-
-On Thu, Aug 17, 2023 at 07:07:54AM +0000, Wu, Wentong wrote:
-> > From: Linus Walleij <linus.walleij@linaro.org>
-> > 
-> > On Thu, Aug 17, 2023 at 12:32 AM Wentong Wu <wentong.wu@intel.com>
-> > wrote:
-> > 
-> > > This driver communicate with LJCA GPIO module with specific protocol
-> > > through interfaces exported by LJCA USB driver.
-> > > Update the driver according to LJCA USB driver's changes.
-> > >
-> > > Signed-off-by: Wentong Wu <wentong.wu@intel.com>
-> > > Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > 
-> > This patch does several things at the same time, consider the "one technical step
-> > per patch" approach, for some definition of a "technical step". The upside is that
-> > git bisect gets better precision when something goes sidewise.
+On Wed, Aug 23, 2023 at 05:59:07PM +0000, Thinh Nguyen wrote:
+> On Wed, Aug 23, 2023, Alan Stern wrote:
+> > STALL is not a valid status for usb_requests on the gadget side; it 
+> > applies only on the host side (the host doesn't halt its endpoints).
 > 
-> Ack, thanks. I will follow this going forward.
+> The host can send a CLEAR_FEATURE(halt_ep). This will reset the data
+> sequence of the endpoint. In xhci spec (section 4.6.8), it suggests to
+> send this when the endpoint is reset. The endpoint is reset typically
+> when there's a transaction error.
 
-The old LJCA GPIO driver got added without the rest of the LJCA, including
-the main driver (now 1st patch of this set). I might have just reverted the
-patch that added the old one and put the new one on top.
+It's important to be careful about the distinction between an actual 
+endpoint in the gadget and the logical representation of an endpoint 
+inside a host controller.  The host cannot reset the first; it can only 
+reset the second.
 
-The old driver was never usable AFAIU and there are many changes as Linus
-noted. It would be easier to review as new driver.
+So yes, the usb_clear_halt() routine on the host does a 
+CLEAR_FEATURE(HALT) control transfer and then calls 
+usb_reset_endpoint(), which calls usb_hcd_reset_endpoint().
 
-I wonder what others think.
+> The problem here is that typical protocol spec like MSC/UVC don't
+> specify how to handle CLEAR_FEATURE(halt_ep).
 
--- 
-Regards,
+MSC does specify this.  I don't know about UVC.
 
-Sakari Ailus
+> For Windows MSC driver, when the host recovers from the transaction
+> error, it sends CLEAR_FEATURE(halt_ep) and expects the transfer to be
+> cancelled. To synchronize with the host, the gadget driver needs to
+> cancel the request. Dwc3 needs to notify the gadget driver of this.
+
+No, that's not what happens in the Mass Storage Class.
+
+For the Bulk-Only Transport version of MSC, when a Windows or Linux host 
+detects a transaction error, it performs a USB port reset.  This clears 
+all the state on the gadget.  The gadget gets re-enumerated, and the 
+host proceeds to re-issue the MSC command.  The gadget driver doesn't 
+need any special notifications; outstanding requests get cancelled as a 
+normal part of the reset handling.
+
+(In fact, this is not what the BOT spec says to do.  It says that when 
+the host detects a transaction error, it should a Bulk-Only Mass Storage 
+Reset -- this is a special class-specific control transfer.  In 
+response, the gadget driver is supposed to reset its internal state and 
+cancel all of its outstanding requests.  Then the host issues 
+CLEAR_FEATURE(HALT) to both the bulk-IN and bulk-OUT endpoints and 
+proceeds to issue its next MSC command.  A lot of MSC devices don't 
+handle this properly, probably because Windows didn't use this 
+approach.)
+
+In the UAS version of MSC, the endpoints never halt.  If there's a 
+transaction error, the host simply re-issues the transaction.  If that 
+fails too, error recovery is started by the SCSI layer; it involves a 
+USB port reset.
+
+But as you can see, in each case the UDC driver doesn't have to cancel 
+anything in particular when it gets a Clear-Halt.
+
+> For other class driver, it may expect the transfer to resume after data
+> sequence reset.
+
+Indeed.  In which case, the UDC driver shouldn't cancel anything.
+
+> As a result, for an endpoint that's STALL (or not), and if the host
+> sends CLEAR_FEATURE(halt_ep), the dwc3 returns the request with some
+> status code and let the gadget driver handle it. If the gadget driver
+> wants to cancel the transfer, it can drop the transfer. If the gadget
+> driver wants to resume, it can requeue the same requests with the saved
+> status to resume where it left off.
+
+The UDC driver should not dequeue a request merely because the endpoint 
+is halted.  The gadget driver can take care of everything necessary.  
+After all, it knows when an endpoint gets halted, because the gadget 
+driver is what calls usb_ep_set_halt() or usb_ep_set_wedge() in the 
+first place.
+
+As for handling CLEAR_FEATURE(HALT), all the UDC driver needs to do is 
+clear the HALT feature for the endpoint.  (Although if the endpoint is 
+wedged, the HALT feature should not be cleared.)  It doesn't need to 
+cancel any outstanding requests or inform the gadget driver in any way.
+
+(Again, this is something that a lot of USB devices don't handle 
+properly.  They get very confused if the host sends a Clear-Halt 
+transfer for an endpoint that isn't halted.)
+
+> > Putting this together, I get the following status codes:
+> > 
+> > -ESHUTDOWN	Request aborted because ep was disabled
+> > -EREMOTEIO	Request was for an aborted control transfer
+> > -ECONNRESET	Request was cancelled by usb_ep_dequeue()
+> > -EXDEV		Data dropped (isoc only)
+> > -EOVERFLOW	The host sent more data than the request wanted
+> > 		(will never happen if the request's length is a
+> > 		nonzero multiple of the maxpacket size)
+> > 
+> > This applies only to the .status field of struct usb_request.  Calls to 
+> > usb_ep_queue() may return different error codes.
+> > 
+> > How does that sound?
+> > 
+> 
+> That looks great!
+
+At some point I'll write a patch adding this to the documentation.
+
+Alan Stern
