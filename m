@@ -2,119 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D7CF785110
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Aug 2023 09:03:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4621B785123
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Aug 2023 09:07:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233109AbjHWHDB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Aug 2023 03:03:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45130 "EHLO
+        id S233153AbjHWHHr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Aug 2023 03:07:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233106AbjHWHDA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Aug 2023 03:03:00 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E39E65;
-        Wed, 23 Aug 2023 00:02:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692774176; x=1724310176;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=q5D2ljU2JGIhPaZ1OlS467jEnnsJpuDAECJw5x3ZlBo=;
-  b=WUFbsjQwmK5KY2QmfYLG3MnB0LCrO72V9V14nq65zmnzXHWnLYYxfOj2
-   rblJWGFDw3Ect53mD9hTaR9fyKFYoL52XDmdMb5F7ExOdXw31zT0bFsH8
-   7UR11ZyjBdsH5cNsW2EcUhiOP/sB2U5tjoUess4CmVF7JZyQUEnfr1Z4t
-   7PoHMrafFvxxMtzlXcb4eGP9mRryna+A0jlAGOUY0SGepWLG0325ZeF5P
-   kZOQPc6MDCYKGj0sRR9k73bBioGdRdj7p0C5TbUMm1eygBsvDX6An6M17
-   RlBklyECC60V8mqzwbfHZ+ZzeGOnKN2jNnfUEwChl5GtIZVEfwrnn2Ryc
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10810"; a="359071539"
-X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="359071539"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2023 00:02:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
-   d="scan'208";a="880293467"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 23 Aug 2023 00:02:56 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 23 Aug 2023 10:02:51 +0300
-Date:   Wed, 23 Aug 2023 10:02:51 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Abdel Alkuor <alkuor@gmail.com>
-Cc:     devicetree@vger.kernel.org, gregkh@linuxfoundation.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, abdelalkuor@geotab.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v4 0/2] Add support for TPS25750
-Message-ID: <ZOWvG1MQw37IOHcM@kuha.fi.intel.com>
-References: <cover.1692559293.git.alkuor@gmail.com>
+        with ESMTP id S233160AbjHWHHq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Aug 2023 03:07:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EFBF128
+        for <linux-usb@vger.kernel.org>; Wed, 23 Aug 2023 00:07:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D33C16487D
+        for <linux-usb@vger.kernel.org>; Wed, 23 Aug 2023 07:07:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B0ADC433C7;
+        Wed, 23 Aug 2023 07:07:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692774463;
+        bh=GJDDzg3hXnGHw9lMt8nKxqYK6PPowSlth1tkW4YJ3u0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Yi/QJr5CYZ+nJgi82QirHsVXZG/a55OD5LnD4ySXcwkZ3PTib+BWu0PdMqeNpyDpi
+         63Itn5/2CPSxLfYgdMcG+gZQgPXINvvESPJ6QY8OJN1OV10j1sc5N6HUokURY9fdrQ
+         tewe9CaAeByTq1LCZiukOlGvw9/2lC+iuwO3oK2ioXWXU43MS72opsi5RYR/+mXmWR
+         v4Ldhernovy136d04CEgl/hkMedHdCRZAOwSeNNaewzyTSwlaqN60q3iYLzgMkHBHg
+         oR/ze5nms2S2yTPVqb0+f6Zf+x6/oowIRb4JBxMIIj+RQOoJ/7u7Sa1ohjm3ayO3G8
+         riYzPMSZd5i9Q==
+Received: from johan by theta with local (Exim 4.96)
+        (envelope-from <johan@kernel.org>)
+        id 1qYhxr-0007HI-2M;
+        Wed, 23 Aug 2023 09:07:39 +0200
+Date:   Wed, 23 Aug 2023 09:07:39 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Martin Kohn <m.kohn@welotec.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH V2] USB: serial: option: add Quectel EM05G module support
+ with product ID 0x030e
+Message-ID: <ZOWwOwRpZuCj7nHH@hovoldconsulting.com>
+References: <AM0PR04MB57646CBE67FD409F62BF0EF79701A@AM0PR04MB5764.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1692559293.git.alkuor@gmail.com>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <AM0PR04MB57646CBE67FD409F62BF0EF79701A@AM0PR04MB5764.eurprd04.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Aug 20, 2023 at 03:32:25PM -0400, Abdel Alkuor wrote:
-> TPS25750 is USB Type-C and PD controller. The device is
-> highly configurable using App Customization online Tool 
-> developed by TI to generate loadable binary.
-> 
-> TPS25750 supports three modes; PTCH, APP, and BOOT. A configuration
-> can only be applied when the controller is on PTCH mode.
-> 
-> The controller attempts to load a configuration from EEPROM on
-> I2Cm bus. If no EEPROM is detected, then the driver tries to load
-> a configuration on I2Cs bus using a firmware file defined
-> in DT.
-> 
-> The driver implements the binary loading sequence which 
-> can be found on pg.53 in TPS25750 Host Interface Technical
-> Reference Manual (Rev. A) https://tinyurl.com/y9rkhu8a
-> 
-> The driver only supports resume pm callback as power management is
-> automatically controlled by the device. See pg.47 in TPS25750
-> datasheet https://tinyurl.com/3vfd2k43
-> 
-> v4:
->  - PATCH 1: No change
->  - PATCH 2: Fix comments style and drop of_match_ptr
-> v3:
->  - PATCH 1: Fix node name
->  - PATCH 2: Upload tps25750 driver patch
-> v2:
->  - PATCH 1: General properties clean up
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> Abdel Alkuor (2):
->   dt-bindings: usb: Add ti,tps25750
->   USB: typec: Add TI TPS25750 USB Type-C controller
-> 
->  .../devicetree/bindings/usb/ti,tps25750.yaml  |   81 ++
->  drivers/usb/typec/Kconfig                     |   13 +
->  drivers/usb/typec/Makefile                    |    1 +
->  drivers/usb/typec/tps25750.c                  | 1077 +++++++++++++++++
->  drivers/usb/typec/tps25750.h                  |  162 +++
->  5 files changed, 1334 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/ti,tps25750.yaml
->  create mode 100644 drivers/usb/typec/tps25750.c
->  create mode 100644 drivers/usb/typec/tps25750.h
+On Thu, Jul 27, 2023 at 10:23:00PM +0000, Martin Kohn wrote:
+> Add Quectel EM05G with product ID 0x030e
+> Interface 4 is used for qmi.
 
-TPS25750 has the same host interface as TI TPS65xxx controllers, no?
-The register offsets at least are exactly the same.
+> Patch for qmi was also send to netdev mailing list.
 
-You need to first try to incorporate support for TI25750 support into
-the existing tipd driver (drivers/usb/typec/tipd/).
+This doesn't really belong in the commit message (could have gone below
+the --- line).
+ 
+> Signed-off-by: Martin Kohn <m.kohn@welotec.com>
+> ---
+> 
+> V1->V2: correct number of interfaces and reserve interface 4 for qmi.
 
-thanks,
+Thanks for the update. Now applied with a more succinct summary and
+amended commit message:
 
--- 
-heikki
+https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git/commit/?h=usb-next&id=873854c02364ebb991fc06f7148c14dfb5419e1b
+
+Johan
