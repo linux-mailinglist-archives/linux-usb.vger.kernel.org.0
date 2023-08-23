@@ -2,394 +2,216 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2108785511
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Aug 2023 12:14:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3C47785668
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Aug 2023 13:08:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233445AbjHWKOB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Aug 2023 06:14:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60424 "EHLO
+        id S234317AbjHWLHx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Aug 2023 07:07:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233701AbjHWKNe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Aug 2023 06:13:34 -0400
+        with ESMTP id S234300AbjHWLHv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Aug 2023 07:07:51 -0400
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF9AE10F3;
-        Wed, 23 Aug 2023 03:13:11 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37N61gPP015813;
-        Wed, 23 Aug 2023 10:12:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=content-type :
- message-id : date : mime-version : subject : from : to : cc : references :
- in-reply-to; s=qcppdkim1; bh=Kn11J/po7Bv0ugG4KbO7cKdv7T12tuf2D1I+gLy1JS0=;
- b=PHqu7mVkHd+krG5NwddkRX6ftruEItoARzEVQ0TjIzQ40Eic3W+/6owcB+Qhp5n9E9RC
- vpzRSSHUAT37WA4P4NVSAsf5RaOjgsQ4qAzDboKw15eJfma/9cBBdrteTetZ4esL4Tb5
- yjaG2VyVFH9jTnB6mN6SiuBZKf2pIzehIFu9biub2igJnSJ/EnuZzkFjEiE0X/ydYpHC
- hkrSUG3mUWrwv6krUbnMN4u1POeyIn+8Bl7viNOCKq4cmE9USBXBHJt0QdQkK/0de/Wg
- UKgmQ5ATTYSEv5RxK2Yj5+Fz8aHtcCEPuDTU+6mnfT2tz5D7RCporDV6fsOZ/Q/319Gl JQ== 
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15B4ACEF;
+        Wed, 23 Aug 2023 04:07:49 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37N0KkBU010548;
+        Wed, 23 Aug 2023 11:07:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=A548mUEL5+4M2kg4YdNE1YOZq3FYSzr7dLMV7n+uO/Q=;
+ b=YweH7+jckWj7w4Vt8Obq2PSDnhQ/uSxFb6xzeZvoWcdIPuk4dgfJN+8R+DsvauBlzOzr
+ Rx5V8F3sevnsrk9sGsvzPP3RTpJ7xkovB5R98jejfbaH5kkq6VTvysTqnvYzwGGZBvQr
+ iU0HYeJRAxVKjP07axgt8+/tnYo9eEkqnZdeiXcH+5bwBmx+InJW4ShIZDi0R/XFcg0a
+ Fm8oqI5jbSRc+xrB2a3lbJVrndnp8CqYJNfGeVnTewhcznZTLak+X5DdmtQd6Nvjmp6L
+ 0RkNViC8xxfjmblYlDClyPtjnrniODkUooGPXYIKHn0plSDCTmRJVeBdmjMASfjPxYMe pw== 
 Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3sn24j1rdb-1
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3sn208hwgx-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Aug 2023 10:12:47 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37NACkqD006521
+        Wed, 23 Aug 2023 11:07:28 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37NB7R2C009754
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Aug 2023 10:12:46 GMT
-Received: from [10.216.20.59] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Wed, 23 Aug
- 2023 03:12:39 -0700
-Content-Type: multipart/mixed;
-        boundary="------------2liajdYjhOPU0c7AlsUjp0XT"
-Message-ID: <80c77f7f-283b-ab1a-1c54-a6a203ae659e@quicinc.com>
-Date:   Wed, 23 Aug 2023 15:42:36 +0530
+        Wed, 23 Aug 2023 11:07:27 GMT
+Received: from [10.238.139.231] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Wed, 23 Aug
+ 2023 04:07:15 -0700
+Message-ID: <d376686c-b700-407c-9a88-88942ef3e776@quicinc.com>
+Date:   Wed, 23 Aug 2023 19:06:56 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.1
-Subject: Re: [PATCH v10 06/11] usb: dwc3: qcom: Refactor IRQ handling in QCOM
- Glue driver
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: typec: qcom: check regulator enable status before
+ disabling it
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Johan Hovold <johan@kernel.org>
-CC:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Andy Gross" <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>,
-        <quic_jackp@quicinc.com>, <ahalaney@redhat.com>,
-        <quic_shazhuss@quicinc.com>
-References: <20230727223307.8096-1-quic_kriskura@quicinc.com>
- <20230727223307.8096-7-quic_kriskura@quicinc.com>
- <pyxerd3lirbh2p43m74ohwocjjb7uh56xxmaxbrkay3svossik@ksd3yojw5wgr>
- <dc800b15-e35d-207b-73a8-9a3d2261f4f5@quicinc.com>
- <30b1fe67-bab5-4add-8d89-cc8e06cd8c7f@linaro.org>
- <3c8dff80-eec8-1721-8ab0-3cf12d4c1df4@quicinc.com>
- <c8d77d4f-6696-4dc9-8030-daf1d10b114b@linaro.org>
- <b29eee9b-69f6-b0e4-b114-a60a6c5876dc@quicinc.com>
-Content-Language: en-US
-In-Reply-To: <b29eee9b-69f6-b0e4-b114-a60a6c5876dc@quicinc.com>
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Heikki Krogerus" <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_fenglinw@quicinc.com>,
+        <subbaram@quicinc.com>
+References: <20230823-qcom-tcpc-v1-1-fa81a09ca056@quicinc.com>
+ <64b2a748-ea86-f804-9f8a-881b0dcc7050@linaro.org>
+From:   hui liu <quic_huliu@quicinc.com>
+In-Reply-To: <64b2a748-ea86-f804-9f8a-881b0dcc7050@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: CErGrWsLXKqET0rWhJgtTT3ICQjn8osh
-X-Proofpoint-GUID: CErGrWsLXKqET0rWhJgtTT3ICQjn8osh
+X-Proofpoint-GUID: EV0QApwSelhws4LyYaFRlBhIDsfGlMLj
+X-Proofpoint-ORIG-GUID: EV0QApwSelhws4LyYaFRlBhIDsfGlMLj
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
  definitions=2023-08-23_06,2023-08-22_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- lowpriorityscore=0 malwarescore=0 mlxlogscore=999 adultscore=0
- phishscore=0 priorityscore=1501 impostorscore=0 clxscore=1015 mlxscore=0
- bulkscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2308230092
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1011
+ bulkscore=0 impostorscore=0 mlxlogscore=503 spamscore=0 phishscore=0
+ lowpriorityscore=0 priorityscore=1501 adultscore=0 suspectscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2308100000 definitions=main-2308230101
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---------------2liajdYjhOPU0c7AlsUjp0XT
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
+Hi Bryan:
 
+This change is used to fix a real bug.
+In qcom tcpc driver probe function, "qcom_pmic_typec_pdphy_start" 
+function will be called, thus "qcom_pmic_typec_pdphy_disable" function 
+was called. But at that time the regulator was not enabled, so it lead 
+to unbalanced between enable and disable of regulator. Then below error 
+logs were output:
 
+[  150.485973] unbalanced disables for smb2352_dummy_reg
+[  150.486037] ------------[ cut here ]------------
+[  150.490020] WARNING: CPU: 1 PID: 2476 at 
+/local/mnt3/workspace/qcs405-087/build-qti-distro-fullstack-noselinux-debug/tmp-glibc/work-shared/qcs405-pine/kernel-source/drivers/regulator/core.c:2285 
+_regulatdisable+0x15c/0x164
+[  150.494751] Modules linked in: qcom_pmic_tcpm(+)
+[  150.514577] CPU: 1 PID: 2476 Comm: insmod Tainted: G        W 
+4.14.162 #1
+[  150.519268] Hardware name: Qualcomm Technologies, Inc. QCS405 Turbox 
+C405 DVT IOT WITH PINE (DT)
+[  150.526307] task: 000000004869024f task.stack: 00000000db4a9141
+[  150.535329] pc : _regulator_disable+0x15c/0x164
+[  150.540962] lr : _regulator_disable+0x158/0x164
+[  150.545475] sp : ffffff80109d3920 pstate : 60400145
+[  150.549988] x29: ffffff80109d3940 x28: ffffff80109d3e18
+[  150.554854] x27: ffffffd16adac0e8 x26: 0000000000000001
+[  150.560407] x25: 0000000000000001 x24: ffffffd171913680
+[  150.565702] x23: 0000000000000000 x22: ffffffd16ad16500
+[  150.570997] x21: ffffffd1718f1f10 x20: 00000000fffffffb
+[  150.576293] x19: ffffffd1718f1e80 x18: 00000000000000d8
+[  150.581588] x17: 00000000000000d8 x16: 0000000000000036
+[  150.586883] x15: ffffff91dfb54328 x14: 0000000000003733
+[  150.592178] x13: 0000000000000004 x12: 00000000ac3774ff
+[  150.597474] x11: 00000000ac3774ff x10: 0000000000000015
+[  150.602770] x9 : b5bcc964516bcc00 x8 : b5bcc964516bcc00
+[  150.608064] x7 : 5f32353332626d73 x6 : ffffff91e06e6171
+[  150.613359] x5 : 0000000000000000 x4 : 0000000000000008
+[  150.618654] x3 : 0000000000fd7195 x2 : ffffffd177487c78
+[  150.623949] x1 : ffffff91dff905bc x0 : 0000000000000029
+[  150.629244]
+[  150.629244] PC: 0xffffff91df3dda0c:
+[  150.634539] da0c  f84307f5 d65f03c0 f9421a68 b4000068 f9400101 
+b50000e1 f9400268 d0006129
+[  150.639496] da2c  9127c529 f9400108 f100011f 9a880121 90005900 
+9126d800 97ed1ccd 321d7bf4
+[  150.647568] da4c  d4210000 17ffffec f81c0ff7 a90157f6 a9024ff4 
+a9037bfd 9100c3fd f9402c17
+[  150.655729] da6c  aa0003f4 910242f3 aa1303e0 941df710 f9402e96 
+52808401 aa1f03e2 b9001e9f
+[  150.663890]
+[  150.663890] LR: 0xffffff91df3dda08:
+[  150.672039] da08  a9414ff4 f84307f5 d65f03c0 f9421a68 b4000068 
+f9400101 b50000e1 f9400268
+[  150.677082] da28  d0006129 9127c529 f9400108 f100011f 9a880121 
+90005900 9126d800 97ed1ccd
+[  150.685155] da48  321d7bf4 d4210000 17ffffec f81c0ff7 a90157f6 
+a9024ff4 a9037bfd 9100c3fd
+[  150.693316] da68  f9402c17 aa0003f4 910242f3 aa1303e0 941df710 
+f9402e96 52808401 aa1f03e2
+[  150.701475]
+[  150.701475] SP: 0xffffff80109d38e0:
+[  150.709624] 38e0  df3dda4c ffffff91 60400145 00000000 ffffffc8 
+ffffff80 516bcc00 b5bcc964
+[  150.714669] 3900  ffffffff 0000007f df512f6c ffffff91 109d3940 
+ffffff80 df3dda4c ffffff91
+[  150.722743] 3920  718f1f10 ffffffd1 dfb5b6dc ffffff91 6ffed980 
+ffffffd1 718f1e80 ffffffd1
+[  150.730903] 3940  109d3970 ffffff80 df3dd8a4 ffffff91 6ad16500 
+ffffffd1 00000000 00000000
+[  150.739062]
+[  150.747202] Call trace:
+[  150.748771]  _regulator_disable+0x15c/0x164
+[  150.750943]  regulator_disable+0x34/0x80
+[  150.755118]  qcom_pmic_typec_pdphy_start+0x40/0x144 [qcom_pmic_tcpm]
+[  150.759289]  qcom_pmic_typec_probe+0x2e8/0x300 [qcom_pmic_tcpm]
+[  150.765619]  platform_drv_probe+0x5c/0xb0
+[  150.771256]  driver_probe_device+0x2e8/0x41c
+[  150.775425]  __driver_attach+0x90/0x114
+[  150.779762]  bus_for_each_dev+0x80/0xc8
+[  150.783321]  driver_attach+0x20/0x28
+[  150.787140]  bus_add_driver+0x138/0x240
+[  150.790960]  driver_register+0x8c/0xd8
+[  150.794519]  __platform_driver_register+0x40/0x48
+[  150.798346]  init_module+0x2c/0x1000 [qcom_pmic_tcpm]
+[  150.803119]  do_one_initcall+0xdc/0x1b0
+[  150.808147]  do_init_module+0x60/0x1c4
+[  150.811793]  load_module+0x23cc/0x2790
+[  150.815613]  SyS_finit_module+0xbc/0x110
+[  150.819345]  el0_svc_naked+0x34/0x38
+[  150.823424] ---[ end trace b3846aa77ad5b668 ]---
 
-On 8/12/2023 2:14 PM, Krishna Kurapati PSSNV wrote:
->> So is "is it okay to add SoC-specific compatibles and add the port 
->> number in
->> match data" what you're asking?
+So we add a conditional judgment before disable the regulator to fix the 
+issue simply.
+
+在 8/23/2023 5:53 PM, Bryan O'Donoghue 写道:
+> On 23/08/2023 10:15, Hui Liu via B4 Relay wrote:
+>> From: Hui Liu <quic_huliu@quicinc.com>
 >>
->> If so, that doesn't seem right.
+>> Check regulator enable status before disabling it to avoid
+>> unbalanced regulator disable warnings.
 >>
->> The user should not "feel free to remove any IRQ", modifying the 
->> devicetree to
->> depict a subset of the hardware is not something we want to support. 
->> The driver
->> has to work with the "full" description in accordance with the bindings.
+>> Signed-off-by: Hui Liu <quic_huliu@quicinc.com>
+>> ---
+>>   drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c | 3 ++-
+>>   1 file changed, 2 insertions(+), 1 deletion(-)
 >>
+>> diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c 
+>> b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
+>> index bb0b8479d80f..ca616b17b5b6 100644
+>> --- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
+>> +++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
+>> @@ -422,7 +422,8 @@ static int qcom_pmic_typec_pdphy_disable(struct 
+>> pmic_typec_pdphy *pmic_typec_pdp
+>>       ret = regmap_write(pmic_typec_pdphy->regmap,
+>>                  pmic_typec_pdphy->base + USB_PDPHY_EN_CONTROL_REG, 0);
+>> -    regulator_disable(pmic_typec_pdphy->vdd_pdphy);
+>> +    if (regulator_is_enabled(pmic_typec_pdphy->vdd_pdphy))
+>> +        regulator_disable(pmic_typec_pdphy->vdd_pdphy);
+>>       return ret;
+>>   }
+>>
+>> ---
+>> base-commit: bbb9e06d2c6435af9c62074ad7048910eeb2e7bc
+>> change-id: 20230822-qcom-tcpc-d41954ac65fa
+>>
+>> Best regards,
 > 
-> Hi Konrad,
+> Is this a fix for a real bug you've seen or a hypothetical use-case fix ?
 > 
-> Thanks for the review.
-> 
-> While I agree with you that we must not skip any hw specifics in DT, 
-> there is nothing stopping the user from doing so right ?
-> 
-> And whatever be the case, we must be a fool-proof and fail safe system 
-> able to handle all such situations. While we can read interrupt IRQ 
-> prefixes to get port count in one way or other, adding a compatible 
-> would be the least ambiguous path. Is there any other concern you see in 
-> adding a compatible ? I might be missing something because even Bjorn's 
-> suggestion too was to try and avoid a new compatible addition and to add 
-> it only if we have no other way of reliably reading the port count 
-> (which I believe would be an issue if we need to rely on interrupt name 
-> reading).
-> 
-Hi Konrad. Came up with an implementation of reading the interrupt names 
-and parsing for port count and added them as attachments. I still feel 
-adding a compatible is a better option. Let me know which one is the 
-better path. The one in v10, or something similar to the attached patch. 
-(I tested it on sc7280/sc8280 and interrupts are registered properly)
-
-Regards,
-Krishna,
---------------2liajdYjhOPU0c7AlsUjp0XT
-Content-Type: text/plain; charset="UTF-8";
-	name="0001-usb-dwc3-qcom-Add-helper-function-to-request-threade.patch"
-Content-Disposition: attachment;
-	filename*0="0001-usb-dwc3-qcom-Add-helper-function-to-request-threade.pa";
-	filename*1="tch"
-Content-Transfer-Encoding: base64
-
-RnJvbSA2MGQ1ZDBhNjc4Yjg2NDc1NmExOGZmMTczMzdlY2RkYzI1N2M5YjQ0IE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBLcmlzaG5hIEt1cmFwYXRpIDxxdWljX2tyaXNrdXJh
-QHF1aWNpbmMuY29tPgpEYXRlOiBUdWUsIDIyIEF1ZyAyMDIzIDA5OjQyOjU5ICswNTMwClN1
-YmplY3Q6IFtQQVRDSCAxLzJdIHVzYjogZHdjMzogcWNvbTogQWRkIGhlbHBlciBmdW5jdGlv
-biB0byByZXF1ZXN0IHRocmVhZGVkCiBJUlEKCkNsZWFudXAgc2V0dXAgaXJxIGNhbGwgYnkg
-aW1wbGVtZW50aW5nIGEgbmV3IHByZXBfaXJxIGhlbHBlciBmdW5jdGlvbgphbmQgdXNpbmcg
-aXQgdG8gcmVxdWVzdCB0aHJlYWRlZCBJUlEncy4KClNpZ25lZC1vZmYtYnk6IEtyaXNobmEg
-S3VyYXBhdGkgPHF1aWNfa3Jpc2t1cmFAcXVpY2luYy5jb20+CkNoYW5nZS1JZDogSWMxMzZk
-MWNkYmY3MjYwMmEwYjhiMGJmN2VjNGQ2YTdhNzIzNDMxZGUKLS0tCiBkcml2ZXJzL3VzYi9k
-d2MzL2R3YzMtcWNvbS5jIHwgNjMgKysrKysrKysrKysrKysrKystLS0tLS0tLS0tLS0tLS0t
-LS0tCiAxIGZpbGUgY2hhbmdlZCwgMzAgaW5zZXJ0aW9ucygrKSwgMzMgZGVsZXRpb25zKC0p
-CgpkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvZHdjMy9kd2MzLXFjb20uYyBiL2RyaXZlcnMv
-dXNiL2R3YzMvZHdjMy1xY29tLmMKaW5kZXggM2RlNDNkZjZiYmU4Li5mMTRkZGM5YzU0MWQg
-MTAwNjQ0Ci0tLSBhL2RyaXZlcnMvdXNiL2R3YzMvZHdjMy1xY29tLmMKKysrIGIvZHJpdmVy
-cy91c2IvZHdjMy9kd2MzLXFjb20uYwpAQCAtNTM1LDYgKzUzNSwyNCBAQCBzdGF0aWMgaW50
-IGR3YzNfcWNvbV9nZXRfaXJxKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYsCiAJcmV0
-dXJuIHJldDsKIH0KIAorc3RhdGljIGludCBkd2MzX3Fjb21fcHJlcF9pcnEoc3RydWN0IGR3
-YzNfcWNvbSAqcWNvbSwgY2hhciAqaXJxX25hbWUsCisJCQkJY2hhciAqZGlzcF9uYW1lLCBp
-bnQgaXJxKQoreworCWludCByZXQ7CisKKwkvKiBLZWVwIHdha2V1cCBpbnRlcnJ1cHRzIGRp
-c2FibGVkIHVudGlsIHN1c3BlbmQgKi8KKwlpcnFfc2V0X3N0YXR1c19mbGFncyhpcnEsIElS
-UV9OT0FVVE9FTik7CisJcmV0ID0gZGV2bV9yZXF1ZXN0X3RocmVhZGVkX2lycShxY29tLT5k
-ZXYsIGlycSwgTlVMTCwKKwkJCQkJcWNvbV9kd2MzX3Jlc3VtZV9pcnEsCisJCQkJCUlSUUZf
-VFJJR0dFUl9ISUdIIHwgSVJRRl9PTkVTSE9ULAorCQkJCQlkaXNwX25hbWUsIHFjb20pOwor
-CisJaWYgKHJldCkKKwkJZGV2X2VycihxY29tLT5kZXYsICIlcyBmYWlsZWQ6ICVkXG4iLCBp
-cnFfbmFtZSwgcmV0KTsKKworCXJldHVybiByZXQ7Cit9CisKIHN0YXRpYyBpbnQgZHdjM19x
-Y29tX3NldHVwX2lycShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQogewogCXN0cnVj
-dCBkd2MzX3Fjb20gKnFjb20gPSBwbGF0Zm9ybV9nZXRfZHJ2ZGF0YShwZGV2KTsKQEAgLTU0
-NSw2MSArNTYzLDQwIEBAIHN0YXRpYyBpbnQgZHdjM19xY29tX3NldHVwX2lycShzdHJ1Y3Qg
-cGxhdGZvcm1fZGV2aWNlICpwZGV2KQogCWlycSA9IGR3YzNfcWNvbV9nZXRfaXJxKHBkZXYs
-ICJoc19waHlfaXJxIiwKIAkJCQlwZGF0YSA/IHBkYXRhLT5oc19waHlfaXJxX2luZGV4IDog
-LTEpOwogCWlmIChpcnEgPiAwKSB7Ci0JCS8qIEtlZXAgd2FrZXVwIGludGVycnVwdHMgZGlz
-YWJsZWQgdW50aWwgc3VzcGVuZCAqLwotCQlpcnFfc2V0X3N0YXR1c19mbGFncyhpcnEsIElS
-UV9OT0FVVE9FTik7Ci0JCXJldCA9IGRldm1fcmVxdWVzdF90aHJlYWRlZF9pcnEocWNvbS0+
-ZGV2LCBpcnEsIE5VTEwsCi0JCQkJCXFjb21fZHdjM19yZXN1bWVfaXJxLAotCQkJCQlJUlFG
-X1RSSUdHRVJfSElHSCB8IElSUUZfT05FU0hPVCwKLQkJCQkJInFjb21fZHdjMyBIUyIsIHFj
-b20pOwotCQlpZiAocmV0KSB7Ci0JCQlkZXZfZXJyKHFjb20tPmRldiwgImhzX3BoeV9pcnEg
-ZmFpbGVkOiAlZFxuIiwgcmV0KTsKKwkJcmV0ID0gZHdjM19xY29tX3ByZXBfaXJxKHFjb20s
-ICJoc19waHlfaXJxIiwKKwkJCQkJCSJxY29tX2R3YzMgSFMiLCBpcnEpOworCQlpZiAocmV0
-KQogCQkJcmV0dXJuIHJldDsKLQkJfQogCQlxY29tLT5oc19waHlfaXJxID0gaXJxOwogCX0K
-IAogCWlycSA9IGR3YzNfcWNvbV9nZXRfaXJxKHBkZXYsICJkcF9oc19waHlfaXJxIiwKIAkJ
-CQlwZGF0YSA/IHBkYXRhLT5kcF9oc19waHlfaXJxX2luZGV4IDogLTEpOwogCWlmIChpcnEg
-PiAwKSB7Ci0JCWlycV9zZXRfc3RhdHVzX2ZsYWdzKGlycSwgSVJRX05PQVVUT0VOKTsKLQkJ
-cmV0ID0gZGV2bV9yZXF1ZXN0X3RocmVhZGVkX2lycShxY29tLT5kZXYsIGlycSwgTlVMTCwK
-LQkJCQkJcWNvbV9kd2MzX3Jlc3VtZV9pcnEsCi0JCQkJCUlSUUZfVFJJR0dFUl9ISUdIIHwg
-SVJRRl9PTkVTSE9ULAotCQkJCQkicWNvbV9kd2MzIERQX0hTIiwgcWNvbSk7Ci0JCWlmIChy
-ZXQpIHsKLQkJCWRldl9lcnIocWNvbS0+ZGV2LCAiZHBfaHNfcGh5X2lycSBmYWlsZWQ6ICVk
-XG4iLCByZXQpOworCQlyZXQgPSBkd2MzX3Fjb21fcHJlcF9pcnEocWNvbSwgImRwX2hzX3Bo
-eV9pcnEiLAorCQkJCQkJInFjb21fZHdjMyBEUF9IUyIsIGlycSk7CisJCWlmIChyZXQpCiAJ
-CQlyZXR1cm4gcmV0OwotCQl9CiAJCXFjb20tPmRwX2hzX3BoeV9pcnEgPSBpcnE7CiAJfQog
-CiAJaXJxID0gZHdjM19xY29tX2dldF9pcnEocGRldiwgImRtX2hzX3BoeV9pcnEiLAogCQkJ
-CXBkYXRhID8gcGRhdGEtPmRtX2hzX3BoeV9pcnFfaW5kZXggOiAtMSk7CiAJaWYgKGlycSA+
-IDApIHsKLQkJaXJxX3NldF9zdGF0dXNfZmxhZ3MoaXJxLCBJUlFfTk9BVVRPRU4pOwotCQly
-ZXQgPSBkZXZtX3JlcXVlc3RfdGhyZWFkZWRfaXJxKHFjb20tPmRldiwgaXJxLCBOVUxMLAot
-CQkJCQlxY29tX2R3YzNfcmVzdW1lX2lycSwKLQkJCQkJSVJRRl9UUklHR0VSX0hJR0ggfCBJ
-UlFGX09ORVNIT1QsCi0JCQkJCSJxY29tX2R3YzMgRE1fSFMiLCBxY29tKTsKLQkJaWYgKHJl
-dCkgewotCQkJZGV2X2VycihxY29tLT5kZXYsICJkbV9oc19waHlfaXJxIGZhaWxlZDogJWRc
-biIsIHJldCk7CisJCXJldCA9IGR3YzNfcWNvbV9wcmVwX2lycShxY29tLCAiZG1faHNfcGh5
-X2lycSIsCisJCQkJCQkicWNvbV9kd2MzIERNX0hTIiwgaXJxKTsKKwkJaWYgKHJldCkKIAkJ
-CXJldHVybiByZXQ7Ci0JCX0KIAkJcWNvbS0+ZG1faHNfcGh5X2lycSA9IGlycTsKIAl9CiAK
-IAlpcnEgPSBkd2MzX3Fjb21fZ2V0X2lycShwZGV2LCAic3NfcGh5X2lycSIsCiAJCQkJcGRh
-dGEgPyBwZGF0YS0+c3NfcGh5X2lycV9pbmRleCA6IC0xKTsKIAlpZiAoaXJxID4gMCkgewot
-CQlpcnFfc2V0X3N0YXR1c19mbGFncyhpcnEsIElSUV9OT0FVVE9FTik7Ci0JCXJldCA9IGRl
-dm1fcmVxdWVzdF90aHJlYWRlZF9pcnEocWNvbS0+ZGV2LCBpcnEsIE5VTEwsCi0JCQkJCXFj
-b21fZHdjM19yZXN1bWVfaXJxLAotCQkJCQlJUlFGX1RSSUdHRVJfSElHSCB8IElSUUZfT05F
-U0hPVCwKLQkJCQkJInFjb21fZHdjMyBTUyIsIHFjb20pOwotCQlpZiAocmV0KSB7Ci0JCQlk
-ZXZfZXJyKHFjb20tPmRldiwgInNzX3BoeV9pcnEgZmFpbGVkOiAlZFxuIiwgcmV0KTsKKwkJ
-cmV0ID0gZHdjM19xY29tX3ByZXBfaXJxKHFjb20sICJzc19waHlfaXJxIiwKKwkJCQkJCSJx
-Y29tX2R3YzMgU1MiLCBpcnEpOworCQlpZiAocmV0KQogCQkJcmV0dXJuIHJldDsKLQkJfQog
-CQlxY29tLT5zc19waHlfaXJxID0gaXJxOwogCX0KIAotLSAKMi40MC4wCgo=
---------------2liajdYjhOPU0c7AlsUjp0XT
-Content-Type: text/plain; charset="UTF-8";
-	name="0002-usb-dwc3-qcom-Read-multiport-interrupts.patch"
-Content-Disposition: attachment;
-	filename="0002-usb-dwc3-qcom-Read-multiport-interrupts.patch"
-Content-Transfer-Encoding: base64
-
-RnJvbSA0MThhYzEwZTg4YzUzZjY3ZTk0N2Y3NTRhZWJkM2JkOTdlYTY3ZThhIE1vbiBTZXAg
-MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBLcmlzaG5hIEt1cmFwYXRpIDxxdWljX2tyaXNrdXJh
-QHF1aWNpbmMuY29tPgpEYXRlOiBUdWUsIDIyIEF1ZyAyMDIzIDE1OjI1OjEyICswNTMwClN1
-YmplY3Q6IFtQQVRDSCAyLzJdIHVzYjogZHdjMzogcWNvbTogUmVhZCBtdWx0aXBvcnQgaW50
-ZXJydXB0cwoKUmVhZCBtdWx0aXBvcnQgaW50ZXJydXB0cyBpbiBxY29tIGRyaXZlci4KClNp
-Z25lZC1vZmYtYnk6IEtyaXNobmEgS3VyYXBhdGkgPHF1aWNfa3Jpc2t1cmFAcXVpY2luYy5j
-b20+CkNoYW5nZS1JZDogSWMyYmY4Y2FkNzBjMTQ3OGM3OWViN2U5ZDNkYzVkOTA4MmM1YmIx
-ZjkKLS0tCiBkcml2ZXJzL3VzYi9kd2MzL2R3YzMtcWNvbS5jIHwgMTkzICsrKysrKysrKysr
-KysrKysrKysrKysrKy0tLS0tLS0tLS0tCiAxIGZpbGUgY2hhbmdlZCwgMTM0IGluc2VydGlv
-bnMoKyksIDU5IGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2R3YzMv
-ZHdjMy1xY29tLmMgYi9kcml2ZXJzL3VzYi9kd2MzL2R3YzMtcWNvbS5jCmluZGV4IGYxNGRk
-YzljNTQxZC4uYTBiYTcxZWE5NTQxIDEwMDY0NAotLS0gYS9kcml2ZXJzL3VzYi9kd2MzL2R3
-YzMtcWNvbS5jCisrKyBiL2RyaXZlcnMvdXNiL2R3YzMvZHdjMy1xY29tLmMKQEAgLTUzLDE0
-ICs1MywxOSBAQAogI2RlZmluZSBBUFBTX1VTQl9BVkdfQlcgMAogI2RlZmluZSBBUFBTX1VT
-Ql9QRUFLX0JXIE1CcHNfdG9faWNjKDQwKQogCisjZGVmaW5lIE5VTV9QSFlfSVJRCTQKKwor
-I2RlZmluZSBEUF9IU19QSFlfSVJRX0lOREVYCTAKKyNkZWZpbmUgRE1fSFNfUEhZX0lSUV9J
-TkRFWAkxCisjZGVmaW5lIFNTX1BIWV9JUlFfSU5ERVgJMgorI2RlZmluZSBIU19QSFlfSVJR
-X0lOREVYCTMKKwogc3RydWN0IGR3YzNfYWNwaV9wZGF0YSB7CiAJdTMyCQkJcXNjcmF0Y2hf
-YmFzZV9vZmZzZXQ7CiAJdTMyCQkJcXNjcmF0Y2hfYmFzZV9zaXplOwogCXUzMgkJCWR3YzNf
-Y29yZV9iYXNlX3NpemU7CisJaW50CQkJcGh5X2lycV9pbmRleFtOVU1fUEhZX0lSUSAtIDFd
-OwogCWludAkJCWhzX3BoeV9pcnFfaW5kZXg7Ci0JaW50CQkJZHBfaHNfcGh5X2lycV9pbmRl
-eDsKLQlpbnQJCQlkbV9oc19waHlfaXJxX2luZGV4OwotCWludAkJCXNzX3BoeV9pcnFfaW5k
-ZXg7CiAJYm9vbAkJCWlzX3VyczsKIH07CiAKQEAgLTczLDEwICs3OCw4IEBAIHN0cnVjdCBk
-d2MzX3Fjb20gewogCWludAkJCW51bV9jbG9ja3M7CiAJc3RydWN0IHJlc2V0X2NvbnRyb2wJ
-KnJlc2V0czsKIAotCWludAkJCWhzX3BoeV9pcnE7Ci0JaW50CQkJZHBfaHNfcGh5X2lycTsK
-LQlpbnQJCQlkbV9oc19waHlfaXJxOwotCWludAkJCXNzX3BoeV9pcnE7CisJaW50CQkJcGh5
-X2lycVtOVU1fUEhZX0lSUSAtIDFdW0RXQzNfTUFYX1BPUlRTXTsKKwlpbnQgCQkJaHNfcGh5
-X2lycTsKIAllbnVtIHVzYl9kZXZpY2Vfc3BlZWQJdXNiMl9zcGVlZDsKIAogCXN0cnVjdCBl
-eHRjb25fZGV2CSplZGV2OwpAQCAtOTEsNiArOTQsOCBAQCBzdHJ1Y3QgZHdjM19xY29tIHsK
-IAlib29sCQkJcG1fc3VzcGVuZGVkOwogCXN0cnVjdCBpY2NfcGF0aAkJKmljY19wYXRoX2Rk
-cjsKIAlzdHJ1Y3QgaWNjX3BhdGgJCSppY2NfcGF0aF9hcHBzOworCisJaW50CQkJbnVtX3Bv
-cnRzOwogfTsKIAogc3RhdGljIGlubGluZSB2b2lkIGR3YzNfcWNvbV9zZXRiaXRzKHZvaWQg
-X19pb21lbSAqYmFzZSwgdTMyIG9mZnNldCwgdTMyIHZhbCkKQEAgLTM3NSwxNiArMzgwLDE2
-IEBAIHN0YXRpYyB2b2lkIGR3YzNfcWNvbV9kaXNhYmxlX2ludGVycnVwdHMoc3RydWN0IGR3
-YzNfcWNvbSAqcWNvbSkKIAlkd2MzX3Fjb21fZGlzYWJsZV93YWtldXBfaXJxKHFjb20tPmhz
-X3BoeV9pcnEpOwogCiAJaWYgKHFjb20tPnVzYjJfc3BlZWQgPT0gVVNCX1NQRUVEX0xPVykg
-ewotCQlkd2MzX3Fjb21fZGlzYWJsZV93YWtldXBfaXJxKHFjb20tPmRtX2hzX3BoeV9pcnEp
-OworCQlkd2MzX3Fjb21fZGlzYWJsZV93YWtldXBfaXJxKHFjb20tPnBoeV9pcnFbRFBfSFNf
-UEhZX0lSUV9JTkRFWF1bMF0pOwogCX0gZWxzZSBpZiAoKHFjb20tPnVzYjJfc3BlZWQgPT0g
-VVNCX1NQRUVEX0hJR0gpIHx8CiAJCQkocWNvbS0+dXNiMl9zcGVlZCA9PSBVU0JfU1BFRURf
-RlVMTCkpIHsKLQkJZHdjM19xY29tX2Rpc2FibGVfd2FrZXVwX2lycShxY29tLT5kcF9oc19w
-aHlfaXJxKTsKKwkJZHdjM19xY29tX2Rpc2FibGVfd2FrZXVwX2lycShxY29tLT5waHlfaXJx
-W0RNX0hTX1BIWV9JUlFfSU5ERVhdWzBdKTsKIAl9IGVsc2UgewotCQlkd2MzX3Fjb21fZGlz
-YWJsZV93YWtldXBfaXJxKHFjb20tPmRwX2hzX3BoeV9pcnEpOwotCQlkd2MzX3Fjb21fZGlz
-YWJsZV93YWtldXBfaXJxKHFjb20tPmRtX2hzX3BoeV9pcnEpOworCQlkd2MzX3Fjb21fZGlz
-YWJsZV93YWtldXBfaXJxKHFjb20tPnBoeV9pcnFbRFBfSFNfUEhZX0lSUV9JTkRFWF1bMF0p
-OworCQlkd2MzX3Fjb21fZGlzYWJsZV93YWtldXBfaXJxKHFjb20tPnBoeV9pcnFbRE1fSFNf
-UEhZX0lSUV9JTkRFWF1bMF0pOwogCX0KIAotCWR3YzNfcWNvbV9kaXNhYmxlX3dha2V1cF9p
-cnEocWNvbS0+c3NfcGh5X2lycSk7CisJZHdjM19xY29tX2Rpc2FibGVfd2FrZXVwX2lycShx
-Y29tLT5waHlfaXJxW1NTX1BIWV9JUlFfSU5ERVhdWzBdKTsKIH0KIAogc3RhdGljIHZvaWQg
-ZHdjM19xY29tX2VuYWJsZV9pbnRlcnJ1cHRzKHN0cnVjdCBkd2MzX3Fjb20gKnFjb20pCkBA
-IC00MDEsMjAgKzQwNiwyMCBAQCBzdGF0aWMgdm9pZCBkd2MzX3Fjb21fZW5hYmxlX2ludGVy
-cnVwdHMoc3RydWN0IGR3YzNfcWNvbSAqcWNvbSkKIAkgKi8KIAogCWlmIChxY29tLT51c2Iy
-X3NwZWVkID09IFVTQl9TUEVFRF9MT1cpIHsKLQkJZHdjM19xY29tX2VuYWJsZV93YWtldXBf
-aXJxKHFjb20tPmRtX2hzX3BoeV9pcnEsCisJCWR3YzNfcWNvbV9lbmFibGVfd2FrZXVwX2ly
-cShxY29tLT5waHlfaXJxW0RQX0hTX1BIWV9JUlFfSU5ERVhdWzBdLAogCQkJCQkJSVJRX1RZ
-UEVfRURHRV9GQUxMSU5HKTsKIAl9IGVsc2UgaWYgKChxY29tLT51c2IyX3NwZWVkID09IFVT
-Ql9TUEVFRF9ISUdIKSB8fAogCQkJKHFjb20tPnVzYjJfc3BlZWQgPT0gVVNCX1NQRUVEX0ZV
-TEwpKSB7Ci0JCWR3YzNfcWNvbV9lbmFibGVfd2FrZXVwX2lycShxY29tLT5kcF9oc19waHlf
-aXJxLAorCQlkd2MzX3Fjb21fZW5hYmxlX3dha2V1cF9pcnEocWNvbS0+cGh5X2lycVtETV9I
-U19QSFlfSVJRX0lOREVYXVswXSwKIAkJCQkJCUlSUV9UWVBFX0VER0VfRkFMTElORyk7CiAJ
-fSBlbHNlIHsKLQkJZHdjM19xY29tX2VuYWJsZV93YWtldXBfaXJxKHFjb20tPmRwX2hzX3Bo
-eV9pcnEsCisJCWR3YzNfcWNvbV9lbmFibGVfd2FrZXVwX2lycShxY29tLT5waHlfaXJxW0RQ
-X0hTX1BIWV9JUlFfSU5ERVhdWzBdLAogCQkJCQkJSVJRX1RZUEVfRURHRV9SSVNJTkcpOwot
-CQlkd2MzX3Fjb21fZW5hYmxlX3dha2V1cF9pcnEocWNvbS0+ZG1faHNfcGh5X2lycSwKKwkJ
-ZHdjM19xY29tX2VuYWJsZV93YWtldXBfaXJxKHFjb20tPnBoeV9pcnFbRE1fSFNfUEhZX0lS
-UV9JTkRFWF1bMF0sCiAJCQkJCQlJUlFfVFlQRV9FREdFX1JJU0lORyk7CiAJfQogCi0JZHdj
-M19xY29tX2VuYWJsZV93YWtldXBfaXJxKHFjb20tPnNzX3BoeV9pcnEsIDApOworCWR3YzNf
-cWNvbV9lbmFibGVfd2FrZXVwX2lycShxY29tLT5waHlfaXJxW1NTX1BIWV9JUlFfSU5ERVhd
-WzBdLCAwKTsKIH0KIAogc3RhdGljIGludCBkd2MzX3Fjb21fc3VzcGVuZChzdHJ1Y3QgZHdj
-M19xY29tICpxY29tLCBib29sIHdha2V1cCkKQEAgLTU1Myw1MSArNTU4LDEyNSBAQCBzdGF0
-aWMgaW50IGR3YzNfcWNvbV9wcmVwX2lycShzdHJ1Y3QgZHdjM19xY29tICpxY29tLCBjaGFy
-ICppcnFfbmFtZSwKIAlyZXR1cm4gcmV0OwogfQogCitzdGF0aWMgaW50IGR3YzNfcWNvbV9n
-ZXRfaXJxX2luZGV4KGNvbnN0IGNoYXIgKmlycV9uYW1lKQoreworCS8qCisJICogSWYgd2Ug
-YXJlIHJlYWRpbmcgSVJRIG5vdCBzdXBwb3J0ZWQgYnkgdGhlIGRyaXZlcgorCSAqIGxpa2Ug
-cHdyX2V2ZW50X2lycSwgdGhlbiByZXR1cm4gLTEgaW5kaWNhdGluZyB0aGUgbmV4dAorCSAq
-IGhlbHBlciBmdW5jdGlvbiB0byBza2lwIHByb2Nlc3NpbmcgSVJRIG5hbWUgZnVydGhlci4K
-KwkgKi8KKwlpbnQgaXJxX2luZGV4ID0gLTE7CisKKwlpZiAoc3RybmNtcChpcnFfbmFtZSwg
-ImRwX2hzX3BoeSIsIDkpID09IDApCisJCWlycV9pbmRleCA9IERQX0hTX1BIWV9JUlFfSU5E
-RVg7CisJZWxzZSBpZihzdHJuY21wKGlycV9uYW1lLCAiZG1faHNfcGh5IiwgOSkgPT0gMCkK
-KwkJaXJxX2luZGV4ID0gRE1fSFNfUEhZX0lSUV9JTkRFWDsKKwllbHNlIGlmKHN0cm5jbXAo
-aXJxX25hbWUsICJzc19waHkiLCA2KSA9PSAwKQorCQlpcnFfaW5kZXggPSBTU19QSFlfSVJR
-X0lOREVYOworCWVsc2UgaWYoc3RybmNtcChpcnFfbmFtZSwgImhzX3BoeSIsIDYpID09IDAp
-CisJCWlycV9pbmRleCA9IEhTX1BIWV9JUlFfSU5ERVg7CisKKwlyZXR1cm4gaXJxX2luZGV4
-OworfQorCitzdGF0aWMgaW50IGR3YzNfcWNvbV9nZXRfcG9ydF9pbmRleChjb25zdCBjaGFy
-ICppcnFfbmFtZSwgaW50IGlycV9pbmRleCkKK3sKKwlpbnQgcG9ydF9pbmRleCA9IC0xOwor
-CisJc3dpdGNoIChpcnFfaW5kZXgpIHsKKwkJY2FzZSBEUF9IU19QSFlfSVJRX0lOREVYOgor
-CQkJaWYgKHN0cmNtcChpcnFfbmFtZSwgImRwX2hzX3BoeV9pcnEiKSA9PSAwKQorCQkJCXBv
-cnRfaW5kZXggPSAxOworCQkJZWxzZQorCQkJCXNzY2FuZihpcnFfbmFtZSwgImRwX2hzX3Bo
-eV8lZCIsICZwb3J0X2luZGV4KTsKKwkJCWJyZWFrOworCisJCWNhc2UgRE1fSFNfUEhZX0lS
-UV9JTkRFWDoKKwkJCWlmIChzdHJjbXAoaXJxX25hbWUsICJkbV9oc19waHlfaXJxIikgPT0g
-MCkKKwkJCQlwb3J0X2luZGV4ID0gMTsKKwkJCWVsc2UKKwkJCQlzc2NhbmYoaXJxX25hbWUs
-ICJkbV9oc19waHlfJWQiLCAmcG9ydF9pbmRleCk7CisJCQlicmVhazsKKworCQljYXNlIFNT
-X1BIWV9JUlFfSU5ERVg6CisJCQlpZiAoc3RyY21wKGlycV9uYW1lLCAic3NfcGh5X2lycSIp
-ID09IDApCisJCQkJcG9ydF9pbmRleCA9IDE7CisJCQllbHNlCisJCQkJc3NjYW5mKGlycV9u
-YW1lLCAic3NfcGh5XyVkIiwgJnBvcnRfaW5kZXgpOworCQkJYnJlYWs7CisKKwkJY2FzZSBI
-U19QSFlfSVJRX0lOREVYOgorCQkJcG9ydF9pbmRleCA9IDE7CisJCQlicmVhazsKKwl9CisK
-K2RvbmU6CisJcmV0dXJuIHBvcnRfaW5kZXg7Cit9CisKK3N0YXRpYyBpbnQgZHdjM19xY29t
-X2dldF9hY3BpX2luZGV4KHN0cnVjdCBkd2MzX3Fjb20gKnFjb20sIGludCBpcnFfaW5kZXgs
-CisJCQkJCWludCBwb3J0X2luZGV4KQoreworCWNvbnN0IHN0cnVjdCBkd2MzX2FjcGlfcGRh
-dGEgKnBkYXRhID0gcWNvbS0+YWNwaV9wZGF0YTsKKwlpbnQgYWNwaV9pbmRleCA9IC0xOwor
-CisJaWYgKChwZGF0YSA9PSBOVUxMKSB8fCAocG9ydF9pbmRleCAhPSAxKSkKKwkJZ290byBk
-b25lOworCisJaWYgKGlycV9pbmRleCA9PSBIU19QSFlfSVJRX0lOREVYKQorCQlhY3BpX2lu
-ZGV4ID0gcGRhdGEtPmhzX3BoeV9pcnFfaW5kZXg7CisJZWxzZSBpZiAocG9ydF9pbmRleCAh
-PSAtMSkKKwkJYWNwaV9pbmRleCA9IHBkYXRhLT5waHlfaXJxX2luZGV4W2lycV9pbmRleF07
-CisKK2RvbmU6CisJcmV0dXJuIGFjcGlfaW5kZXg7Cit9CisKIHN0YXRpYyBpbnQgZHdjM19x
-Y29tX3NldHVwX2lycShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQogewogCXN0cnVj
-dCBkd2MzX3Fjb20gKnFjb20gPSBwbGF0Zm9ybV9nZXRfZHJ2ZGF0YShwZGV2KTsKLQljb25z
-dCBzdHJ1Y3QgZHdjM19hY3BpX3BkYXRhICpwZGF0YSA9IHFjb20tPmFjcGlfcGRhdGE7CisJ
-c3RydWN0IGRldmljZV9ub2RlICpucCA9IHBkZXYtPmRldi5vZl9ub2RlOworCWNvbnN0IGNo
-YXIgKippcnFfbmFtZXM7CisJaW50IHBvcnRfaW5kZXg7CisJaW50IGFjcGlfaW5kZXg7CisJ
-aW50IGlycV9jb3VudDsKKwlpbnQgaXJxX2luZGV4OwogCWludCBpcnE7CiAJaW50IHJldDsK
-KwlpbnQgaTsKIAotCWlycSA9IGR3YzNfcWNvbV9nZXRfaXJxKHBkZXYsICJoc19waHlfaXJx
-IiwKLQkJCQlwZGF0YSA/IHBkYXRhLT5oc19waHlfaXJxX2luZGV4IDogLTEpOwotCWlmIChp
-cnEgPiAwKSB7Ci0JCXJldCA9IGR3YzNfcWNvbV9wcmVwX2lycShxY29tLCAiaHNfcGh5X2ly
-cSIsCi0JCQkJCQkicWNvbV9kd2MzIEhTIiwgaXJxKTsKLQkJaWYgKHJldCkKLQkJCXJldHVy
-biByZXQ7Ci0JCXFjb20tPmhzX3BoeV9pcnEgPSBpcnE7Ci0JfQorCWlycV9jb3VudCA9IG9m
-X3Byb3BlcnR5X2NvdW50X3N0cmluZ3MobnAsICJpbnRlcnJ1cHQtbmFtZXMiKTsKKwlpcnFf
-bmFtZXMgPSBkZXZtX2t6YWxsb2MoJnBkZXYtPmRldiwgc2l6ZW9mKCppcnFfbmFtZXMpICog
-aXJxX2NvdW50LCBHRlBfS0VSTkVMKTsKKwlpZiAoIWlycV9uYW1lcykKKwkJcmV0dXJuIC1F
-Tk9NRU07CiAKLQlpcnEgPSBkd2MzX3Fjb21fZ2V0X2lycShwZGV2LCAiZHBfaHNfcGh5X2ly
-cSIsCi0JCQkJcGRhdGEgPyBwZGF0YS0+ZHBfaHNfcGh5X2lycV9pbmRleCA6IC0xKTsKLQlp
-ZiAoaXJxID4gMCkgewotCQlyZXQgPSBkd2MzX3Fjb21fcHJlcF9pcnEocWNvbSwgImRwX2hz
-X3BoeV9pcnEiLAotCQkJCQkJInFjb21fZHdjMyBEUF9IUyIsIGlycSk7Ci0JCWlmIChyZXQp
-Ci0JCQlyZXR1cm4gcmV0OwotCQlxY29tLT5kcF9oc19waHlfaXJxID0gaXJxOwotCX0KKwly
-ZXQgPSBvZl9wcm9wZXJ0eV9yZWFkX3N0cmluZ19hcnJheShucCwgImludGVycnVwdC1uYW1l
-cyIsCisJCQkJCQlpcnFfbmFtZXMsIGlycV9jb3VudCk7CisJZm9yIChpID0gMDsgaSA8IGly
-cV9jb3VudDsgaSsrKSB7CisJCWlycV9pbmRleCA9IGR3YzNfcWNvbV9nZXRfaXJxX2luZGV4
-KGlycV9uYW1lc1tpXSk7CisJCWlmIChpcnFfaW5kZXggPT0gLTEpIHsKKwkJCWRldl9kYmco
-JnBkZXYtPmRldiwgIklSUSBub3QgaGFuZGxlZCIpOworCQkJY29udGludWU7CisJCX0KIAot
-CWlycSA9IGR3YzNfcWNvbV9nZXRfaXJxKHBkZXYsICJkbV9oc19waHlfaXJxIiwKLQkJCQlw
-ZGF0YSA/IHBkYXRhLT5kbV9oc19waHlfaXJxX2luZGV4IDogLTEpOwotCWlmIChpcnEgPiAw
-KSB7Ci0JCXJldCA9IGR3YzNfcWNvbV9wcmVwX2lycShxY29tLCAiZG1faHNfcGh5X2lycSIs
-Ci0JCQkJCQkicWNvbV9kd2MzIERNX0hTIiwgaXJxKTsKLQkJaWYgKHJldCkKLQkJCXJldHVy
-biByZXQ7Ci0JCXFjb20tPmRtX2hzX3BoeV9pcnEgPSBpcnE7Ci0JfQorCQlwb3J0X2luZGV4
-ID0gZHdjM19xY29tX2dldF9wb3J0X2luZGV4KGlycV9uYW1lc1tpXSwgaXJxX2luZGV4KTsK
-KwkJYWNwaV9pbmRleCA9IGR3YzNfcWNvbV9nZXRfYWNwaV9pbmRleChxY29tLCBpcnFfaW5k
-ZXgsIHBvcnRfaW5kZXgpOwogCi0JaXJxID0gZHdjM19xY29tX2dldF9pcnEocGRldiwgInNz
-X3BoeV9pcnEiLAotCQkJCXBkYXRhID8gcGRhdGEtPnNzX3BoeV9pcnFfaW5kZXggOiAtMSk7
-Ci0JaWYgKGlycSA+IDApIHsKLQkJcmV0ID0gZHdjM19xY29tX3ByZXBfaXJxKHFjb20sICJz
-c19waHlfaXJxIiwKLQkJCQkJCSJxY29tX2R3YzMgU1MiLCBpcnEpOwotCQlpZiAocmV0KQot
-CQkJcmV0dXJuIHJldDsKLQkJcWNvbS0+c3NfcGh5X2lycSA9IGlycTsKKwkJaXJxID0gZHdj
-M19xY29tX2dldF9pcnEocGRldiwgaXJxX25hbWVzW2ldLCBhY3BpX2luZGV4KTsKKwkJaWYg
-KGlycSA+IDApIHsKKwkJCXJldCA9IGR3YzNfcWNvbV9wcmVwX2lycShxY29tLCBpcnFfbmFt
-ZXNbaV0sCisJCQkJCQkJaXJxX25hbWVzW2ldLCBpcnEpOworCQkJaWYgKHJldCkKKwkJCQly
-ZXR1cm4gcmV0OworCisJCQlpZiAoaXJxX2luZGV4ID09IEhTX1BIWV9JUlFfSU5ERVgpCisJ
-CQkJcWNvbS0+aHNfcGh5X2lycSA9IGlycTsKKwkJCWVsc2UKKwkJCQlxY29tLT5waHlfaXJx
-W2lycV9pbmRleF1bcG9ydF9pbmRleC0xXSA9IGlycTsKKworCQkJaWYgKHFjb20tPm51bV9w
-b3J0cyA8IHBvcnRfaW5kZXgpCisJCQkJcWNvbS0+bnVtX3BvcnRzID0gcG9ydF9pbmRleDsK
-KwkJfQogCX0KIAogCXJldHVybiAwOwpAQCAtMTAzMCwyMCArMTEwOSwxNiBAQCBzdGF0aWMg
-Y29uc3Qgc3RydWN0IGR3YzNfYWNwaV9wZGF0YSBzZG04NDVfYWNwaV9wZGF0YSA9IHsKIAku
-cXNjcmF0Y2hfYmFzZV9vZmZzZXQgPSBTRE04NDVfUVNDUkFUQ0hfQkFTRV9PRkZTRVQsCiAJ
-LnFzY3JhdGNoX2Jhc2Vfc2l6ZSA9IFNETTg0NV9RU0NSQVRDSF9TSVpFLAogCS5kd2MzX2Nv
-cmVfYmFzZV9zaXplID0gU0RNODQ1X0RXQzNfQ09SRV9TSVpFLAorCS5waHlfaXJxX2luZGV4
-ID0gezQsIDMsIDJ9LAogCS5oc19waHlfaXJxX2luZGV4ID0gMSwKLQkuZHBfaHNfcGh5X2ly
-cV9pbmRleCA9IDQsCi0JLmRtX2hzX3BoeV9pcnFfaW5kZXggPSAzLAotCS5zc19waHlfaXJx
-X2luZGV4ID0gMgogfTsKIAogc3RhdGljIGNvbnN0IHN0cnVjdCBkd2MzX2FjcGlfcGRhdGEg
-c2RtODQ1X2FjcGlfdXJzX3BkYXRhID0gewogCS5xc2NyYXRjaF9iYXNlX29mZnNldCA9IFNE
-TTg0NV9RU0NSQVRDSF9CQVNFX09GRlNFVCwKIAkucXNjcmF0Y2hfYmFzZV9zaXplID0gU0RN
-ODQ1X1FTQ1JBVENIX1NJWkUsCiAJLmR3YzNfY29yZV9iYXNlX3NpemUgPSBTRE04NDVfRFdD
-M19DT1JFX1NJWkUsCisJLnBoeV9pcnFfaW5kZXggPSB7NCwgMywgMn0sCiAJLmhzX3BoeV9p
-cnFfaW5kZXggPSAxLAotCS5kcF9oc19waHlfaXJxX2luZGV4ID0gNCwKLQkuZG1faHNfcGh5
-X2lycV9pbmRleCA9IDMsCi0JLnNzX3BoeV9pcnFfaW5kZXggPSAyLAogCS5pc191cnMgPSB0
-cnVlLAogfTsKIAotLSAKMi40MC4wCgo=
-
---------------2liajdYjhOPU0c7AlsUjp0XT--
+> ---
+> bod
