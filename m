@@ -2,103 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 070B1785404
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Aug 2023 11:29:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01C63785444
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Aug 2023 11:33:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234920AbjHWJ3v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Aug 2023 05:29:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43568 "EHLO
+        id S235321AbjHWJdu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Aug 2023 05:33:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235589AbjHWJYE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Aug 2023 05:24:04 -0400
+        with ESMTP id S235506AbjHWJ2X (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Aug 2023 05:28:23 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7313C46AA;
-        Wed, 23 Aug 2023 02:12:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD5A4EC2;
+        Wed, 23 Aug 2023 02:15:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7BF0C65A81;
-        Wed, 23 Aug 2023 09:12:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46D3DC433C8;
-        Wed, 23 Aug 2023 09:12:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1692781938;
-        bh=c44X9b2EMrvztK4n2wp/z3wNrDUhUvVuhKC/5Q7w2h0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UjHzrSezgCdpjRBFv8B1WfGS937L04+t2+8HjCAvY2tjBSlNDSCBCTmxCTZE4GgAT
-         azndzyA24W9a3ca07bUH/gpIgJfhYcZNvodbs9CzG7OkAW3cKxPtQxKULNliHt/UP7
-         BiSXo2sQcbUZYAMPK03hFkRrIibWshWrZ1YzWiDo=
-Date:   Wed, 23 Aug 2023 11:12:15 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     RD Babiera <rdbabiera@google.com>
-Cc:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        kyletso@google.com, badhri@google.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2] usb: typec: tcpm: set initial svdm version based on
- pd revision
-Message-ID: <2023082311-squid-trailing-34dd@gregkh>
-References: <20230731165926.1815338-1-rdbabiera@google.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BC20861FCE;
+        Wed, 23 Aug 2023 09:15:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EB187C433C7;
+        Wed, 23 Aug 2023 09:15:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692782158;
+        bh=be/C8m+z+Od5rOnUlwnva1yDeuaE30t+Hcjy24kPcJk=;
+        h=From:Date:Subject:To:Cc:Reply-To:From;
+        b=NlPnwTz2fJqAG2DoYUFrG2gnnxjeqRhJsMevsyaoQQHDYnQRZoq36ibcFW34fWsUa
+         W5H3U6OnZ4xmgpYl8MEJOfV+e0y90T2jUJdSJV75erSHrt5c82ECabaWXr/U+miwh+
+         roqm1eUL29Kwm1XX+8EKeO3msL2Df2AsULwVcJkJxkN4IyFi05W6tbc8G+VBI1mKc/
+         j/Z/y4k/n+Pn5qGM0hs5SJLkC0nYOWMlsu/jcHMXZIMcDTlwn5zbTgZpZ3AOgFHyy9
+         80ZYDG080Fl8sLIaBGFfrjvkIYtTXe0gpws7BdMG4+EbrE2roX6yPoUZEWmBfEae6G
+         zdcOuEmnkuLFQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by smtp.lore.kernel.org (Postfix) with ESMTP id CC171EE4993;
+        Wed, 23 Aug 2023 09:15:57 +0000 (UTC)
+From:   Hui Liu via B4 Relay <devnull+quic_huliu.quicinc.com@kernel.org>
+Date:   Wed, 23 Aug 2023 17:15:53 +0800
+Subject: [PATCH] usb: typec: qcom: check regulator enable status before
+ disabling it
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230731165926.1815338-1-rdbabiera@google.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230823-qcom-tcpc-v1-1-fa81a09ca056@quicinc.com>
+X-B4-Tracking: v=1; b=H4sIAEnO5WQC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI2MDCyMj3cLk/FzdkuSCZN0UE0NLU5PEZDPTtEQloPqCotS0zAqwWdGxtbU
+ AqbU6oVsAAAA=
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_fenglinw@quicinc.com,
+        subbaram@quicinc.com, Hui Liu <quic_huliu@quicinc.com>
+X-Mailer: b4 0.13-dev-83828
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1692782156; l=1109;
+ i=quic_huliu@quicinc.com; s=20230823; h=from:subject:message-id;
+ bh=Eq7q1VhxzBMiiLW046ihxgswENpgBh2pfv7VGXtEKDE=;
+ b=7tSyma7eOKcwSWhtFR3YWbPboVUNtB1aFtgl+IJz8Z5x79QAvbVQgQRdLLt4yr2C5EQp28ApZ
+ +uFnUcgg7SYADBTV3R07hBfaXnBJsVtbi3JZo7lHwWYqkzHNvz5R+5u
+X-Developer-Key: i=quic_huliu@quicinc.com; a=ed25519;
+ pk=1z+A50UnTuKe/FdQv2c0W3ajDsJOYddwIHo2iivhTTA=
+X-Endpoint-Received: by B4 Relay for quic_huliu@quicinc.com/20230823 with auth_id=80
+X-Original-From: Hui Liu <quic_huliu@quicinc.com>
+Reply-To: <quic_huliu@quicinc.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 31, 2023 at 04:59:23PM +0000, RD Babiera wrote:
-> When sending Discover Identity messages to a Port Partner that uses Power
-> Delivery v2 and SVDM v1, we currently send PD v2 messages with SVDM v2.0,
-> expecting the port partner to respond with its highest supported SVDM
-> version as stated in Section 6.4.4.2.3 in the Power Delivery v3
-> specification. However, sending SVDM v2 to some Power Delivery v2 port
-> partners results in a NAK whereas sending SVDM v1 does not.
-> 
-> NAK messages can be handled by the initiator (PD v3 section 6.4.4.2.5.1),
-> and one solution could be to resend Discover Identity on a lower SVDM
-> version if possible. But, Section 6.4.4.3 of PD v2 states that "A NAK
-> response Should be taken as an indication not to retry that particular
-> Command."
-> 
-> Instead, we can set the SVDM version to the maximum one supported by the
-> negotiated PD revision. When operating in PD v2, this obeys Section
-> 6.4.4.2.3, which states the SVDM field "Shall be set to zero to indicate
-> Version 1.0." In PD v3, the SVDM field "Shall be set to 01b to indicate
-> Version 2.0."
-> 
-> Fixes: c34e85fa69b9 ("usb: typec: tcpm: Send DISCOVER_IDENTITY from dedicated work")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: RD Babiera <rdbabiera@google.com>
-> ---
-> Changes since v1:
-> * Fixed styling errors.
+From: Hui Liu <quic_huliu@quicinc.com>
 
-I'll take this now, but again, your email is failing to be
-authenticated.  Perhaps install patatt and sign them that way if
-google's email infrastructure isn't going to play nice with patches?
+Check regulator enable status before disabling it to avoid
+unbalanced regulator disable warnings.
 
-Grabbing thread from lore.kernel.org/all/20230731165926.1815338-1-rdbabiera@google.com/t.mbox.gz
-Analyzing 5 messages in the thread
-Checking attestation on all messages, may take a moment...
+Signed-off-by: Hui Liu <quic_huliu@quicinc.com>
 ---
-  ✗ [PATCH v2] usb: typec: tcpm: set initial svdm version based on pd revision
-    + Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com> (✓ DKIM/intel.com)
-  ---
-  ✗ BADSIG: DKIM/google.com
+ drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
+index bb0b8479d80f..ca616b17b5b6 100644
+--- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
++++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
+@@ -422,7 +422,8 @@ static int qcom_pmic_typec_pdphy_disable(struct pmic_typec_pdphy *pmic_typec_pdp
+ 	ret = regmap_write(pmic_typec_pdphy->regmap,
+ 			   pmic_typec_pdphy->base + USB_PDPHY_EN_CONTROL_REG, 0);
+ 
+-	regulator_disable(pmic_typec_pdphy->vdd_pdphy);
++	if (regulator_is_enabled(pmic_typec_pdphy->vdd_pdphy))
++		regulator_disable(pmic_typec_pdphy->vdd_pdphy);
+ 
+ 	return ret;
+ }
+
 ---
-Total patches: 1
----
+base-commit: bbb9e06d2c6435af9c62074ad7048910eeb2e7bc
+change-id: 20230822-qcom-tcpc-d41954ac65fa
 
-Hey, if Intel can do it, surely Google can :)
+Best regards,
+-- 
+Hui Liu <quic_huliu@quicinc.com>
 
-thanks,
-
-greg k-h
