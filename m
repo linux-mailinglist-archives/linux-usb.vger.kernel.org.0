@@ -2,165 +2,199 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4653C784EBA
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Aug 2023 04:30:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E91B7850A9
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Aug 2023 08:34:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232221AbjHWCai (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Aug 2023 22:30:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39162 "EHLO
+        id S232951AbjHWGea (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Aug 2023 02:34:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232172AbjHWCah (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Aug 2023 22:30:37 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7988FB;
-        Tue, 22 Aug 2023 19:30:35 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-1ccb6a69b13so594587fac.2;
-        Tue, 22 Aug 2023 19:30:35 -0700 (PDT)
+        with ESMTP id S232306AbjHWGea (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Aug 2023 02:34:30 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A8B1BE
+        for <linux-usb@vger.kernel.org>; Tue, 22 Aug 2023 23:34:27 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-5259cf39154so6717243a12.2
+        for <linux-usb@vger.kernel.org>; Tue, 22 Aug 2023 23:34:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692757835; x=1693362635;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+WChwMxafgo9YmuP6ZoQj+qOv65Zjvm+fDVoi6MSyrY=;
-        b=IN/JYu4m11ShjeahoGWaXSisuCarzDYTKyG6ytws8xONfHG0nTchv6SX7DHqvqJzTb
-         Jg1rBzWojPB5uKUsXzlUEhSCpunN2f9DHQ3zIUY8s8UDwnyz7X5zVlwTny6gGNw5Rhd+
-         jOUNH+qiR37S7DLNyiyNp9MxcOwXIca3KAz7BWs82RWnF1Ab+OblwRydSAPjDNo22Gb6
-         2KOrCI+lyjcIOHjnnMWBreovmly4J1OD8H5A9dCIJG1PaIyBKLiGm7eFU1ZovZ+/uUdJ
-         EkuL0fbHB1BWm8odVKhJMIOPBzlviqw+Jf8b74d7lp5qKvzHF0my1PD9iXRi9PG4gAzC
-         59Eg==
+        d=linaro.org; s=google; t=1692772466; x=1693377266;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MU3Isdowj+DsCsRlrrGGs3GBgTkRvi+kExV2JBgHR90=;
+        b=o23yHBgavqwsKfMWauqdS8zT9YMRxkVFjiEKXjmj4j6hUI4WdoccYudq9NvCIxELcf
+         QCej+RLHtSFdaoUMy9FcdIkhhaJgAryOukZvsAPAgf9YjDKf/Ric/YkAth8km0XawcUK
+         oVyn635o9URUI8KhCuHpYeprJiQFPBdcWdy5V2bq3Msv1t1+Rp7+o4YZc28AfIgDEmNc
+         TKhGGhelBDLji1b+CKOVCt52KRPDE0UvroOydQUzC2MrMq4R+8udpgYls8zju9SW3kAl
+         +dGWWz+tskr9KiNtfSLSKfVuMWWkzt4Z9Lsc2g05a1azi2p8jozV6xJzY8/3A5TtZMOX
+         ILcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692757835; x=1693362635;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+WChwMxafgo9YmuP6ZoQj+qOv65Zjvm+fDVoi6MSyrY=;
-        b=B+aGRTI2ZIxuiuBlxQ5xfiv7XupAS2ZCqOaCRkgkDWJ6hy/7nDSXZHXilCwrSxFCkJ
-         OAv90839iZh+Lnj8OtAkxEV6sryW5GGZhqBpqxNejT+tZ3YcFISDp+HkqIJvEOanVwN5
-         dXmD4/VFzwMKdh9F4gQF7BSBAvEMLuq8/sRG7dTLjRXV837d2eRinJ+dTPqERfEoFeuf
-         5wEA6E12ZUdJAUHYCF2BMa9W3TqHmgU7Qecs9+s7qyD0Pkizpzqu9/TxFJ+yrZiPgQmT
-         QZ12vxN8X+KBx80WtpgPfy9CvUTfWlUuhKokia9se7ctSLMekNLQJDXxOtuKkYkAmDAf
-         m5Aw==
-X-Gm-Message-State: AOJu0YwCGY04ZokWY7Eo69N3IMDIsDodJ+/HV20UPolEGbQjcqwoDcyw
-        dqR0EVdnHPNfEgP7xla5kylXqzzCVzvlK4adJ0jCoefV
-X-Google-Smtp-Source: AGHT+IF1jeZJwSqvuBO3HeNt/ev3hKVVWg/CpvsYUiJ+p2pJDJ4CR0DVrE7v7ueh8oUBA1p35RZN4lLoY2hje5UO9j0=
-X-Received: by 2002:a05:6870:56a8:b0:1be:c586:31ae with SMTP id
- p40-20020a05687056a800b001bec58631aemr13276048oao.40.1692757835033; Tue, 22
- Aug 2023 19:30:35 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1692772466; x=1693377266;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MU3Isdowj+DsCsRlrrGGs3GBgTkRvi+kExV2JBgHR90=;
+        b=P7zaW5Fd4tvIdQUPAXtx47Wsde0U40ILfLoORCJxZHnkxYw5sty3Y818eTWDXP60s+
+         xp2f8wsj7o9e3esQfZY+C+pHw2fc7wGPGEqUbcprfTuCm+MGX1dc5+NR90e+Idf+9Skr
+         Omc3SSOJLU18apLemzubnneMe7kwOyKk5w0YYnrWIOl1FqvDNvxW8EwBRknN5FQoj9dP
+         pCYvlG+P2Jp18xcQCuVLYkRlqJagYO4FWw7y7EtCOdH78cnjLRQF97CHyM0FrQ8hHBN+
+         D+Txqkv/ynwZo0G3wiUeBEJk92fAkkwtSJz+W+ZSrXUrGTXjPsV08auxS/cXB1FLRjsc
+         WFIA==
+X-Gm-Message-State: AOJu0YzMIhwpgz/dJHocblqpLbqREShYTLJxaP2mY3vKkGxRNnMwjREb
+        3YEyDGBtuvqXlLj6DpXQa6HhoQ==
+X-Google-Smtp-Source: AGHT+IHhCJI/QD2v/0J0GgF4dGdn1D5mczy3eQQZvyXb4T25R/URjCtxqGab14wd0CHLKC83O5A11A==
+X-Received: by 2002:aa7:d3d2:0:b0:525:528d:836f with SMTP id o18-20020aa7d3d2000000b00525528d836fmr8428350edr.18.1692772466186;
+        Tue, 22 Aug 2023 23:34:26 -0700 (PDT)
+Received: from [192.168.0.22] ([77.252.47.198])
+        by smtp.gmail.com with ESMTPSA id w3-20020a056402128300b005222c6fb512sm8862885edv.1.2023.08.22.23.34.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Aug 2023 23:34:25 -0700 (PDT)
+Message-ID: <5dfae814-7233-eb1f-cae7-f335e54ce1b6@linaro.org>
+Date:   Wed, 23 Aug 2023 08:34:24 +0200
 MIME-Version: 1.0
-References: <CA+fCnZcQSYy63ichdivAH5-fYvN2UMzTtZ--h=F6nK0jfVou3Q@mail.gmail.com>
- <20230818010815.4kcue67idma5yguf@synopsys.com> <bb470c47-c9dc-4dae-ae3f-c7d4736ee7e9@rowland.harvard.edu>
- <20230818031045.wovf5tj2un7nwf72@synopsys.com> <cfc7ae18-140b-4223-9cc2-7ee4b9ddea28@rowland.harvard.edu>
- <20230818194922.ys26zrqc4pocqq7q@synopsys.com> <45d9ef53-e2be-4740-a93a-d36f18a49b39@rowland.harvard.edu>
- <20230819000643.7mddkitzr4aqjsms@synopsys.com> <e63ba783-f5a4-4442-8736-987a3b134e7f@rowland.harvard.edu>
- <CA+fCnZcmb78DMaffb3cq2JeCNxcGBeyt8hxeJq3SaTTkbZ3ewA@mail.gmail.com> <3f52eb94-1d8c-4233-86ac-bbc78d4efce7@rowland.harvard.edu>
-In-Reply-To: <3f52eb94-1d8c-4233-86ac-bbc78d4efce7@rowland.harvard.edu>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Wed, 23 Aug 2023 04:30:23 +0200
-Message-ID: <CA+fCnZcJ0JHHY04By+PjYvofpefKtp1br63gJNsEL=J7n1_vCA@mail.gmail.com>
-Subject: Re: dwc3: unusual handling of setup requests with wLength == 0
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Thinh Nguyen <thinh.nguyen@synopsys.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH v4 2/3] dt-bindings: usb: snps,dwc3: Add
+ runtime-suspend-on-usb-suspend property
+Content-Language: en-US
+To:     Elson Serrao <quic_eserrao@quicinc.com>,
+        gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
+        rogerq@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        devicetree@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20230814185043.9252-1-quic_eserrao@quicinc.com>
+ <20230814185043.9252-3-quic_eserrao@quicinc.com>
+ <a77403f5-8b99-3012-3843-1999ee8d12ce@linaro.org>
+ <6b27cd55-4e44-7a26-30ff-9692344cae4c@quicinc.com>
+ <31fa930a-51fb-6a7f-300d-e71f6b399eb1@linaro.org>
+ <a0a6c561-6319-00ba-c6db-f1dec9f0f0aa@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <a0a6c561-6319-00ba-c6db-f1dec9f0f0aa@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 21, 2023 at 7:25=E2=80=AFPM Alan Stern <stern@rowland.harvard.e=
-du> wrote:
->
-> > I guess the proper solution would be to contain
-> > USB_GADGET_DELAYED_STATUS within the composite framework and make all
-> > UDCs not to handle the Status stage on their own. However, this would
-> > require a collaborative effort from the maintainers of the UDC drivers
-> > I mentioned.
->
-> Most if not all of the UDC drivers you listed are actively maintained.
-> It shouldn't be too hard to get people to remove the special treatment
-> of USB_GADGET_DELAYED_STATUS in them.
->
-> The necessary changes should be pretty small: Whenever wLength is 0,
-> treat any non-negative return value from ->setup() as if it were
-> USB_GADGET_DELAYED_STATUS.  This would probably end up shrinking the
-> UDC driver code a little.  :-)
+On 23/08/2023 01:58, Elson Serrao wrote:
+> 
+> 
+> On 8/19/2023 2:35 AM, Krzysztof Kozlowski wrote:
+>> On 18/08/2023 21:16, Elson Serrao wrote:
+>>>
+>>>
+>>> On 8/15/2023 10:44 PM, Krzysztof Kozlowski wrote:
+>>>> On 14/08/2023 20:50, Elson Roy Serrao wrote:
+>>>>> This property allows dwc3 runtime suspend when bus suspend interrupt
+>>>>> is received even with cable connected. This would allow the dwc3
+>>>>> controller to enter low power mode during bus suspend scenario.
+>>>>>
+>>>>> This property would particularly benefit dwc3 IPs where hibernation is
+>>>>> not enabled and the dwc3 low power mode entry/exit is handled by the
+>>>>> glue driver. The assumption here is that the platform using this dt
+>>>>> property is capable of detecting resume events to bring the controller
+>>>>> out of suspend.
+>>>>>
+>>>>> Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
+>>>>> ---
+>>>>>    Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 5 +++++
+>>>>>    1 file changed, 5 insertions(+)
+>>>>>
+>>>>> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+>>>>> index a696f23730d3..e19a60d06d2b 100644
+>>>>> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+>>>>> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+>>>>> @@ -403,6 +403,11 @@ properties:
+>>>>>        description:
+>>>>>          Enable USB remote wakeup.
+>>>>>    
+>>>>> +  snps,runtime-suspend-on-usb-suspend:
+>>>>> +    description:
+>>>>> +      If True then dwc3 runtime suspend is allowed during bus suspend
+>>>>> +      case even with the USB cable connected.
+>>>>
+>>>> This was no tested... but anyway, this is no a DT property but OS
+>>>> policy. There is no such thing as "runtime suspend" in the hardware,
+>>>> because you describe one particular OS.
+>>>>
+>>>> Sorry, no a DT property, drop the change entirely.
+>>>>
+>>>>
+>>> Hi Krzysztof
+>>>
+>>> Sorry my local dt checker had some issue and it did not catch these
+>>> errors. I have rectified it now.
+>>>
+>>> This dt property is mainly for skipping dwc3 controller halt when a USB
+>>> suspend interrupt is received with usb cable connected, so that we dont
+>>> trigger a DISCONNECT event. Perhaps a better name would reflect the true
+>>> usage of this?
+>>>
+>>> Something like snps,skip-dwc3-halt-on-usb-suspend. dwc3 cores where
+>>> hibernation feature is not enabled/supported can use this property
+>>
+>> So this is specific to DWC3 core, thus should be just implied by compatible.
+>>
+> 
+> Hi Krzysztof
+> 
+> Apologies for not being clear. Below is the reasoning behind this dt entry.
+> 
+> When bus suspend interrupt is received and if usb cable is connected, 
+> dwc3 driver does not suspend. The aim of this series is to handle this 
+> interrupt when USB cable is connected to achieve power savings. OEMs 
+> might have their own implementation in their glue driver to turn off 
+> clocks and other resources when USB is not in use, thus saving power. 
+> But since glue layer has dependency on dwc3 driver (parent-child 
+> relationship) we need to allow dwc3 driver to NOT ignore the bus suspend 
+> interrupt and let the dwc3 driver suspend (so that glue driver can 
+> suspend as well)
 
-I started looking into reworking the UDC drivers to drop the special
-case for USB_GADGET_DELAYED_STATUS, but this seems more complicated.
+All this describes current OS implementation so has nothing to do with
+bindings.
 
-First, I noticed that some of the UDC drivers only expect to handle a
-delayed Status stage for SET_CONFIGURATION requests. (Which is
-reasonable, as they were developed assuming that only the composite
-framework might request to delay the Status stage.) In particular,
-dwc3, cdns2, and cdns3 set the gadget state to USB_STATE_CONFIGURED
-when handling a delayed Status stage:
+> 
+> Now it is the responsibility of glue driver to detect USB wakeup signal 
+> from the host during resume (since dwc3 driver is suspended at this 
+> point and cannot handle interrupts). Every OEM may not have the 
+> capability to detect wakeup signal. 
 
-dwc3/ep0.c:136: usb_gadget_set_state(dwc->gadget, USB_STATE_CONFIGURED);
-cdns3/cdns3-ep0.c:739: usb_gadget_set_state(&priv_dev->gadget,
-USB_STATE_CONFIGURED);
-gadget/udc/cdns2/cdns2-ep0.c:572: usb_gadget_set_state(&pdev->gadget,
-USB_STATE_CONFIGURED);
+Again, driver architecture.
 
-So I believe an additional check for whether the request was indeed
-SET_CONFIGURATION is required. (cdns2 and cdns3 also do other things
-besides setting the state to USB_STATE_CONFIGURED, but it should be
-possible to hide that under the same check.)
+> The goal of this dt property is for 
+> the dwc3 driver to allow handling of the bus suspend interrupt when such 
 
-I also looked into how other UDC drivers change the gadget state to
-USB_STATE_CONFIGURED:
+DT properties are not "for the drivers".
 
-1. isp1760, mtu3, and bdc immediately set USB_STATE_CONFIGURED once
-they receive a SET_CONFIGURATION request, before calling ->setup() for
-the gadget driver;
-2. gr and mv_u3d do that after the ->setup() call;
-3. tegra does it after the first non-control endpoint is enabled;
-4. dwc3, cdns2, and cdns3 appear to not set USB_STATE_CONFIGURED if
-the Status stage is not delayed;
-5. dwc2, cdnsp, and all other UDCs don't set USB_STATE_CONFIGURED at all.
+> a capability exists on a given HW platform. When this property is
 
-I'm guessing the UDCs in #4 and #5 expect the gadget driver to set
-USB_STATE_CONFIGURED.
+Each platform has this capability. If not, then it is
+compatible-related, as I said before which you did not address.
 
-I see that the composite framework sets the gadget state to
-USB_STATE_CONFIGURED even if some of the functions request a delayed
-Status stage via USB_GADGET_DELAYED_STATUS. And GadgetFS also sets the
-state to USB_STATE_CONFIGURED before delegating the SET_CONFIGURATION
-request to userspace. However, Raw Gadget expects the userspace to
-issue an ioctl that sets USB_STATE_CONFIGURED before completing the
-delayed SET_CONFIGURATION request.
 
-So I am wondering: when is proper time to set USB_STATE_CONFIGURED?
-And should this be handled by the UDC driver or the gadget driver?
+> defined dwc3 driver knows that the low power mode entry/exit is 
+> controlled by the glue driver and thus it can allow the suspend 
+> operation when bus suspend interrupt is received.
+> 
+> For example on Qualcomm platforms there is a phy sideband signalling 
+> which detects the wakeup signal when resume is initiated by the host.
 
-> > An alternative would to declare USB_GADGET_DELAYED_STATUS to be usable
-> > outside of the composite framework and leave everything as is
-> > otherwise (but change Raw Gadget to return USB_GADGET_DELAYED_STATUS).
-> > The downside is the discrepancy in the interface of different UDCs
-> > (some require USB_GADGET_DELAYED_STATUS, others imply), but perhaps
-> > it's not that bad provided that this discrepancy is documented.
->
-> This alternative is less desirable, because the legacy gadgets (some of
-> which don't use the composite framework) may not be compatible with it.
+So compatible-specific.
 
-I think GadgetFS and Raw Gadget are the only two such drivers?
+> Thus qcom platforms can benefit from this feature by defining this dt 
+> property. (in a parallel discussion with Thinh N to come up with a 
+> better name for this dt entry).
 
-> And as a matter of general principle, allowing UDC drivers to start
-> automatically send Status replies to 0-length control transfers is a
-> step in the wrong direction.  What we really should focus our energy on
-> is getting them to _stop_ sending automatic Status replies to
-> non-zero-length control transfers!
+Thanks, with quite a long message you at the end admitted this is
+compatible-specific. Exactly what I wrote it one sentence previously.
 
-Ack!
+Best regards,
+Krzysztof
 
-But I don't think it's within my capability to fix all UDCs,
-considering the issues I mentioned above.
