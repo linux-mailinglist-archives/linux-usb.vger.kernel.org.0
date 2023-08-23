@@ -2,112 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36ECD785BD2
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Aug 2023 17:18:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57338785BEE
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Aug 2023 17:22:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237113AbjHWPSS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Aug 2023 11:18:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45514 "EHLO
+        id S237107AbjHWPWX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Aug 2023 11:22:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237075AbjHWPSG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Aug 2023 11:18:06 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 499F51987
-        for <linux-usb@vger.kernel.org>; Wed, 23 Aug 2023 08:17:46 -0700 (PDT)
-Received: (qmail 187319 invoked by uid 1000); 23 Aug 2023 11:17:14 -0400
-Date:   Wed, 23 Aug 2023 11:17:14 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: dwc3: unusual handling of setup requests with wLength == 0
-Message-ID: <5d5973b9-d590-4567-b1d6-4b5f8aeca68b@rowland.harvard.edu>
-References: <CA+fCnZcQSYy63ichdivAH5-fYvN2UMzTtZ--h=F6nK0jfVou3Q@mail.gmail.com>
- <20230818010815.4kcue67idma5yguf@synopsys.com>
- <bb470c47-c9dc-4dae-ae3f-c7d4736ee7e9@rowland.harvard.edu>
- <20230818031045.wovf5tj2un7nwf72@synopsys.com>
- <cfc7ae18-140b-4223-9cc2-7ee4b9ddea28@rowland.harvard.edu>
- <20230818194922.ys26zrqc4pocqq7q@synopsys.com>
- <45d9ef53-e2be-4740-a93a-d36f18a49b39@rowland.harvard.edu>
- <20230819000643.7mddkitzr4aqjsms@synopsys.com>
- <e63ba783-f5a4-4442-8736-987a3b134e7f@rowland.harvard.edu>
- <20230823021429.rlgixqehry4rsqmm@synopsys.com>
+        with ESMTP id S234657AbjHWPWX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Aug 2023 11:22:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5CF61716;
+        Wed, 23 Aug 2023 08:22:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D7C2964798;
+        Wed, 23 Aug 2023 15:20:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95DD0C433C7;
+        Wed, 23 Aug 2023 15:20:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1692804055;
+        bh=ZbuFpZHKJ34DZHImXuZ1HmMpbxu5FtNSIBSqQ3kg7Bc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mqv+jKE4zl9LIugIm+GseOTlaDZokEttmROlvTEJIRotkDa7uyP4BuJkZPq5J8GFk
+         UzX511GFAWfsC4YcuHGCG8I3B1FNYO3ZehhbP9ZpusNb3T4USz/Ozlq0rCigaEBe0M
+         Z/cqyw3hOw96VWFouvbqObSpBW0YK5V+iU4ecsDE=
+Date:   Wed, 23 Aug 2023 17:20:52 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Andi Shyti <andi.shyti@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-usb@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-renesas-soc@vger.kernel.org,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>
+Subject: Re: [PATCH 2/4] usb: typec: tcpci_rt1711h: Convert enum->pointer for
+ data in the match tables
+Message-ID: <2023082354-pledge-salary-0d6f@gregkh>
+References: <CAMuHMdVY6VNFhMMzub9RrXd1zo=_7brQVtoBtogNuVfhbkg_tA@mail.gmail.com>
+ <ZOOBw/3fqdinIwCh@smile.fi.intel.com>
+ <CAMuHMdW8mqtceDxuZ4Ccq0Wrg8ySfFzVC3OBB0AqvfSR-54KYA@mail.gmail.com>
+ <ZOOaFioDSpasda82@smile.fi.intel.com>
+ <CAMuHMdU_4Mg==Jh14K0ecVXfLCDt-RbNia5gCwLPjPj3tBQbsA@mail.gmail.com>
+ <ZOSfrHUDpaax1FS4@smile.fi.intel.com>
+ <CAMuHMdVwy72utSLBFro7emgG5Hx6xzD8MHwXczAyJJvBpVDgYg@mail.gmail.com>
+ <ZOSlRhLiYoZmcDfT@smile.fi.intel.com>
+ <20230823144905.mep6w6fctwcxxrhz@intel.intel>
+ <CAMuHMdWW_3Wmq-XFd6HCmHhE2RScWMEUas7O7XuSniXPb3k4Dg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230823021429.rlgixqehry4rsqmm@synopsys.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMuHMdWW_3Wmq-XFd6HCmHhE2RScWMEUas7O7XuSniXPb3k4Dg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 23, 2023 at 02:14:32AM +0000, Thinh Nguyen wrote:
-> On Sun, Aug 20, 2023, Alan Stern wrote:
-> > On Sat, Aug 19, 2023 at 12:06:53AM +0000, Thinh Nguyen wrote:
-> > > On Fri, Aug 18, 2023, Alan Stern wrote:
-> > > > Actually I agree with you.  When a new SETUP packet arrives before the 
-> > > > old control transfer has finished, the UDC driver should cancel all 
-> > > > pending requests and then invoke the ->setup() callback.  (I don't think 
-> > > > there is a standard error code for the cancelled requests; net2280 seems 
-> > > > to use -EPROTO whereas dummy-hcd seems to use -EOVERFLOW.)
-> > > 
-> > > Those are very odd choice of error codes for cancelled request. Even
-> > > though the gadget side doesn't have very defined error codes, I try to
-> > > follow the equivalent doc from the host side
-> > > (driver-api/usb/error-codes.rst), which is -ECONNRESET.
-> > > 
-> > > Whenever I see -EPROTO, I associate that to a specific host error:
-> > > transaction error. For -EOVERFLOW, I think of babble errors.
-> > 
-> > Do you have a suggestion for an error code that all the UDCs should use 
-> > in this situation?  -ECONNRESET is currently being used for requests 
-> > that were cancelled by usb_ep_dequeue().  Would -EREMOTEIO be more 
-> > suitable for requests attached to an aborted control transfer?
-> > 
+On Wed, Aug 23, 2023 at 05:10:22PM +0200, Geert Uytterhoeven wrote:
+> Hi Andi,
 > 
-> That works. It would be great if we can document the usb error codes for
-> gadget side and keep them consistent across UDC drivers. I think there
-> are only a few common errors:
+> On Wed, Aug 23, 2023 at 4:49 PM Andi Shyti <andi.shyti@kernel.org> wrote:
+> > I would rather prefer to store pointers in u64 variables rather
+> > than integers in a pointer.
 > 
-> * Request aborted
-> * Request dequeued
-> * STALL
-> * Data dropped (isoc only)
-> 
-> Any other?
+> "u64" is overkill, as it is too large on 32-bit platforms.
+> "uintptr_t" (or ("unsigned long") in legacy code) is the correct integer type.
 
-* Overflow
+"unsigned long" in kernel code is the guaranteed size of a pointer.
 
-STALL is not a valid status for usb_requests on the gadget side; it 
-applies only on the host side (the host doesn't halt its endpoints).
+unitptr_t is for userspace code, it should not be used here in the
+kernel as that's the wrong variable namespace.
 
-Requests can be aborted for two different reasons:
+thanks,
 
-	The endpoint is being disabled, either by an config/altsetting
-	change or because of a disconnect
-
-	The request was for an aborted control transfer
-
-Putting this together, I get the following status codes:
-
--ESHUTDOWN	Request aborted because ep was disabled
--EREMOTEIO	Request was for an aborted control transfer
--ECONNRESET	Request was cancelled by usb_ep_dequeue()
--EXDEV		Data dropped (isoc only)
--EOVERFLOW	The host sent more data than the request wanted
-		(will never happen if the request's length is a
-		nonzero multiple of the maxpacket size)
-
-This applies only to the .status field of struct usb_request.  Calls to 
-usb_ep_queue() may return different error codes.
-
-How does that sound?
-
-Alan Stern
+greg k-h
