@@ -2,180 +2,198 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5E6B784D8C
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Aug 2023 01:58:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3EF5784DC6
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Aug 2023 02:25:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231824AbjHVX6o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Aug 2023 19:58:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59460 "EHLO
+        id S231853AbjHWAZA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Aug 2023 20:25:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbjHVX6o (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Aug 2023 19:58:44 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 185D0CF9;
-        Tue, 22 Aug 2023 16:58:42 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37MNrc8w019427;
-        Tue, 22 Aug 2023 23:58:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=VwpTXaMNlC8r9DEmyDGakUHDwr2NYiRXS33qig45UEg=;
- b=BlnT3RUeJSq2qrbCtYswCZmpqAtFs3A16Fz/K2dKMaDM/8EiCn1wawsgKH7aViSxCRDm
- RS0txAjKsP7Wois+WgiY3KuHB9ZQN1QId1W3JjhvCMvBE4Nmi5ofO/1ZZHVMgwdLbVdU
- O+qe9lo4m4ut/nZ/Fz8eb87PF53BpxVQhV3ETbxd5jbZX2seASNtikPuTQp5lfU4aGkc
- VLNFjdIf56VRK2eBbV6denib8AtEW+mjhN+TTN27dhu+EN1PX5mF5CpPEJ5J5vmoEThS
- iJaxsOrAOmd12P5UOXNTM9qg8oMgk4KKrdXhlP/uZg93EXGgkZfWaF0Q2MNWMCLUdyLo wA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3sn2mvge89-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Aug 2023 23:58:34 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37MNwXxX007723
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 22 Aug 2023 23:58:33 GMT
-Received: from [10.110.87.122] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Tue, 22 Aug
- 2023 16:58:32 -0700
-Message-ID: <a0a6c561-6319-00ba-c6db-f1dec9f0f0aa@quicinc.com>
-Date:   Tue, 22 Aug 2023 16:58:32 -0700
+        with ESMTP id S231604AbjHWAY7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Aug 2023 20:24:59 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B7FCE8
+        for <linux-usb@vger.kernel.org>; Tue, 22 Aug 2023 17:24:57 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-529fa243739so6628a12.0
+        for <linux-usb@vger.kernel.org>; Tue, 22 Aug 2023 17:24:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1692750296; x=1693355096;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fEv6SqhDMSY2QsBHQRqllRyeGUGD2nbAqO1ejPeBQAc=;
+        b=o5rcLC6+bxqPms0xMyTiny9yYOfgAoVHwfsUhQCp/CbNFF5LQV3W5MrVWdWdq0CGdI
+         V2duZHWl4WuEOedR7iRiOljRwRDlQiJpr0hi/IOlRUE6yh97637yDNNn315LRi+RPy20
+         lTGI2sG8AJ2LQ/IppTfGX8oZa5dYbuo3f5c2XfRqa8lY5RFJKzfCwvr6VI10mDbvC3NS
+         +ydf61dOqKe3JjxBKYma16Wf26NfrFDZaaj/WNi/8eIDSExyNpVH+RfffCbTLgLnpB4E
+         hhGLxbuASLDw5yqa2rwuWtiiiLPrYABiM5a7kBFcVT0inmwnKp0qXIDUs/hbGB8sentG
+         QlMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692750296; x=1693355096;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fEv6SqhDMSY2QsBHQRqllRyeGUGD2nbAqO1ejPeBQAc=;
+        b=BLIWMASmXkvPe2tdnNLatXE00UH4pbU76nzQc5130tRbAqrKahaDhczYoK9qTZ9vJb
+         7YUCfhnA51tti+xu+cXncbEEdXZ4+ZEPMvVbG4HN19YtmCsAfjoWhAtkEty2zhkTv4IU
+         pUBU48Yn+Izcp140mHYYrtMPJbWxFPiszRWd7tg2X9IqMg1fiECKOfEDANcYBEBT6X8o
+         XnTnMqWvV88tj0JKCnEouw/kp+j/muPoKoiqJhLuge/ygudk/UlfrqLpUWPcqkllE7yH
+         Kak59sLlyZFzcnZM2/tdwiEx0FfSvvJ0fcHUYfmLNNpk+70Zr8xb7l2+IC1gYjv1ugx5
+         QqDg==
+X-Gm-Message-State: AOJu0YyzndFyVwCg+j5ibly6B6q7hoBecEdAp1/uWdqsmUzcDwPoIW+6
+        pfZGGhoxxL3ymCabShEYuwPljScoRQJqYVmB86h/cA==
+X-Google-Smtp-Source: AGHT+IHw/qKSdzDnVUs2KHpsrW0Lu47wh1MGqIoLlJRJN5AIQYxb77IB38AI9A20BKj0P+hTs74Z1u4Mrd1tEpFJl7M=
+X-Received: by 2002:a50:f690:0:b0:523:d5bc:8424 with SMTP id
+ d16-20020a50f690000000b00523d5bc8424mr184738edn.5.1692750296145; Tue, 22 Aug
+ 2023 17:24:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v4 2/3] dt-bindings: usb: snps,dwc3: Add
- runtime-suspend-on-usb-suspend property
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <gregkh@linuxfoundation.org>, <Thinh.Nguyen@synopsys.com>,
-        <rogerq@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <devicetree@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
-References: <20230814185043.9252-1-quic_eserrao@quicinc.com>
- <20230814185043.9252-3-quic_eserrao@quicinc.com>
- <a77403f5-8b99-3012-3843-1999ee8d12ce@linaro.org>
- <6b27cd55-4e44-7a26-30ff-9692344cae4c@quicinc.com>
- <31fa930a-51fb-6a7f-300d-e71f6b399eb1@linaro.org>
-From:   Elson Serrao <quic_eserrao@quicinc.com>
-In-Reply-To: <31fa930a-51fb-6a7f-300d-e71f6b399eb1@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: wOtcQ-jMWoVOhNoyIuQj7Dil_hFbl4_N
-X-Proofpoint-GUID: wOtcQ-jMWoVOhNoyIuQj7Dil_hFbl4_N
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-08-22_21,2023-08-22_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
- impostorscore=0 mlxscore=0 priorityscore=1501 lowpriorityscore=0
- suspectscore=0 spamscore=0 mlxlogscore=359 bulkscore=0 clxscore=1015
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2308220197
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230822133205.2063210-1-heikki.krogerus@linux.intel.com>
+In-Reply-To: <20230822133205.2063210-1-heikki.krogerus@linux.intel.com>
+From:   Benson Leung <bleung@google.com>
+Date:   Tue, 22 Aug 2023 17:24:44 -0700
+Message-ID: <CANLzEkvrg3F=T4jxqcNTMLNgwr8JoN1jCf05P--8oNbN3+56PA@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/2] usb: Link USB devices with their USB Type-C
+ partner counterparts
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Jameson Thies <jthies@google.com>,
+        Prashant Malani <pmalani@google.com>,
+        Won Chung <wonchung@google.com>, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Heikki,
+
+On Tue, Aug 22, 2023 at 6:32=E2=80=AFAM Heikki Krogerus
+<heikki.krogerus@linux.intel.com> wrote:
+>
+> Hi Benson,
+>
+> RFC for now. I can't test these properly. If you guys could take over
+> this, I would much appreciated. I hope this is at least close to your
+> proposal.
+>
+> With this (or something like it) you should be able to get
+> notification about USB connections and disconnections to your port
+> driver by implementing the new "attach" and "deattach" callbacks in
+> struct typec_partner_desc. The typec partner devices will also have
+> symlinks to the enumerated USB devices and vise versa.
+>
+> I took a little shortcut and did not implement a proper device list.
+> Instead there is now only a member for the USB2 device and a member
+> for the USB3 device in struct typec_port, so with this only USB is
+> supported. But the API does not deal with struct usb_device, so
+> extending this to support other devices (TBT, Displayport, etc.) by
+> adding the actual device list should be fairly easy.
+>
+> thanks,
+>
+> Heikki Krogerus (2):
+>   usb: typec: Link enumerated USB devices with Type-C partner
+>   usb: Inform the USB Type-C class about enumerated devices
+>
+>  drivers/usb/core/hub.c          |   4 ++
+>  drivers/usb/core/hub.h          |   3 +
+>  drivers/usb/core/port.c         |  19 +++++-
+>  drivers/usb/typec/class.c       | 108 +++++++++++++++++++++++++++++---
+>  drivers/usb/typec/class.h       |  16 +++++
+>  drivers/usb/typec/port-mapper.c |   9 ++-
+>  include/linux/usb/typec.h       |  37 +++++++++++
+>  7 files changed, 184 insertions(+), 12 deletions(-)
+>
+> --
+> 2.40.1
+>
+
+Tested-by: Benson Leung <bleung@chromium.org>
 
 
-On 8/19/2023 2:35 AM, Krzysztof Kozlowski wrote:
-> On 18/08/2023 21:16, Elson Serrao wrote:
->>
->>
->> On 8/15/2023 10:44 PM, Krzysztof Kozlowski wrote:
->>> On 14/08/2023 20:50, Elson Roy Serrao wrote:
->>>> This property allows dwc3 runtime suspend when bus suspend interrupt
->>>> is received even with cable connected. This would allow the dwc3
->>>> controller to enter low power mode during bus suspend scenario.
->>>>
->>>> This property would particularly benefit dwc3 IPs where hibernation is
->>>> not enabled and the dwc3 low power mode entry/exit is handled by the
->>>> glue driver. The assumption here is that the platform using this dt
->>>> property is capable of detecting resume events to bring the controller
->>>> out of suspend.
->>>>
->>>> Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
->>>> ---
->>>>    Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 5 +++++
->>>>    1 file changed, 5 insertions(+)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->>>> index a696f23730d3..e19a60d06d2b 100644
->>>> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->>>> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
->>>> @@ -403,6 +403,11 @@ properties:
->>>>        description:
->>>>          Enable USB remote wakeup.
->>>>    
->>>> +  snps,runtime-suspend-on-usb-suspend:
->>>> +    description:
->>>> +      If True then dwc3 runtime suspend is allowed during bus suspend
->>>> +      case even with the USB cable connected.
->>>
->>> This was no tested... but anyway, this is no a DT property but OS
->>> policy. There is no such thing as "runtime suspend" in the hardware,
->>> because you describe one particular OS.
->>>
->>> Sorry, no a DT property, drop the change entirely.
->>>
->>>
->> Hi Krzysztof
->>
->> Sorry my local dt checker had some issue and it did not catch these
->> errors. I have rectified it now.
->>
->> This dt property is mainly for skipping dwc3 controller halt when a USB
->> suspend interrupt is received with usb cable connected, so that we dont
->> trigger a DISCONNECT event. Perhaps a better name would reflect the true
->> usage of this?
->>
->> Something like snps,skip-dwc3-halt-on-usb-suspend. dwc3 cores where
->> hibernation feature is not enabled/supported can use this property
-> 
-> So this is specific to DWC3 core, thus should be just implied by compatible.
-> 
+I picked these two changes back to my Brya/Redrix Chromebook which has
+the PLD changes to link subsystems.
 
-Hi Krzysztof
+First I plugged in a USB-C to USB-A receptacle adapter with a USB3
+thumbdrive into port0, and went to the port0-partner path.
 
-Apologies for not being clear. Below is the reasoning behind this dt entry.
+redrix-rev3 /sys/class/typec/port0-partner # ls -lh
+total 0
+lrwxrwxrwx. 1 root root    0 Aug 22 17:16 2-1 ->
+../../../../../../../0000:00:0d.0/usb2/2-1
+-r--r--r--. 1 root root 4.0K Aug 22 17:14 accessory_mode
+lrwxrwxrwx. 1 root root    0 Aug 22 17:14 device -> ../../port0
+drwxr-xr-x. 2 root root    0 Aug 22 17:14 identity
+drwxr-xr-x. 2 root root    0 Aug 22 17:14 power
+lrwxrwxrwx. 1 root root    0 Aug 22 17:14 subsystem ->
+../../../../../../../../../class/typec
+-r--r--r--. 1 root root 4.0K Aug 22 17:14 supports_usb_power_delivery
+-r--r--r--. 1 root root 4.0K Aug 22 17:14 type
+-rw-r--r--. 1 root root 4.0K Aug 22 17:14 uevent
+-r--r--r--. 1 root root 4.0K Aug 22 17:14 usb_power_delivery_revision
 
-When bus suspend interrupt is received and if usb cable is connected, 
-dwc3 driver does not suspend. The aim of this series is to handle this 
-interrupt when USB cable is connected to achieve power savings. OEMs 
-might have their own implementation in their glue driver to turn off 
-clocks and other resources when USB is not in use, thus saving power. 
-But since glue layer has dependency on dwc3 driver (parent-child 
-relationship) we need to allow dwc3 driver to NOT ignore the bus suspend 
-interrupt and let the dwc3 driver suspend (so that glue driver can 
-suspend as well)
+2-1 symlink appears, which is the SuperSpeed usb device associated
+with the thumbdrive.
+Unplugging the USB3 thumbdrive without unplugging the C-to-A adapter,
+and then plugging in a USB2.0 security key:
 
-Now it is the responsibility of glue driver to detect USB wakeup signal 
-from the host during resume (since dwc3 driver is suspended at this 
-point and cannot handle interrupts). Every OEM may not have the 
-capability to detect wakeup signal. The goal of this dt property is for 
-the dwc3 driver to allow handling of the bus suspend interrupt when such 
-a capability exists on a given HW platform. When this property is 
-defined dwc3 driver knows that the low power mode entry/exit is 
-controlled by the glue driver and thus it can allow the suspend 
-operation when bus suspend interrupt is received.
+redrix-rev3 /sys/class/typec/port0-partner # ls -lh
+total 0
+lrwxrwxrwx. 1 root root    0 Aug 22 17:19 3-1 ->
+../../../../../../../0000:00:14.0/usb3/3-1
+-r--r--r--. 1 root root 4.0K Aug 22 17:14 accessory_mode
+lrwxrwxrwx. 1 root root    0 Aug 22 17:14 device -> ../../port0
+drwxr-xr-x. 2 root root    0 Aug 22 17:14 identity
+drwxr-xr-x. 2 root root    0 Aug 22 17:14 power
+lrwxrwxrwx. 1 root root    0 Aug 22 17:14 subsystem ->
+../../../../../../../../../class/typec
+-r--r--r--. 1 root root 4.0K Aug 22 17:14 supports_usb_power_delivery
+-r--r--r--. 1 root root 4.0K Aug 22 17:14 type
+-rw-r--r--. 1 root root 4.0K Aug 22 17:14 uevent
+-r--r--r--. 1 root root 4.0K Aug 22 17:14 usb_power_delivery_revision
 
-For example on Qualcomm platforms there is a phy sideband signalling 
-which detects the wakeup signal when resume is initiated by the host. 
-Thus qcom platforms can benefit from this feature by defining this dt 
-property. (in a parallel discussion with Thinh N to come up with a 
-better name for this dt entry).
+2-1 node disappears. 3-1 appears
 
-Thanks
-Elson
+Unplugging the adapter, plugging in a USB4 hub:
+redrix-rev3 /sys/class/typec/port0-partner # ls -lh
+total 0
+lrwxrwxrwx. 1 root root    0 Aug 22 17:21 2-1 ->
+../../../../../../../0000:00:0d.0/usb2/2-1
+lrwxrwxrwx. 1 root root    0 Aug 22 17:21 3-1 ->
+../../../../../../../0000:00:14.0/usb3/3-1
+-r--r--r--. 1 root root 4.0K Aug 22 17:21 accessory_mode
+lrwxrwxrwx. 1 root root    0 Aug 22 17:21 device -> ../../port0
+drwxr-xr-x. 2 root root    0 Aug 22 17:21 identity
+-r--r--r--. 1 root root 4.0K Aug 22 17:21 number_of_alternate_modes
+drwxr-xr-x. 5 root root    0 Aug 22 17:21 pd0
+drwxr-xr-x. 4 root root    0 Aug 22 17:21 port0-partner.0
+drwxr-xr-x. 2 root root    0 Aug 22 17:21 power
+lrwxrwxrwx. 1 root root    0 Aug 22 17:21 subsystem ->
+../../../../../../../../../class/typec
+-r--r--r--. 1 root root 4.0K Aug 22 17:21 supports_usb_power_delivery
+-r--r--r--. 1 root root 4.0K Aug 22 17:21 type
+-rw-r--r--. 1 root root 4.0K Aug 22 17:21 uevent
+lrwxrwxrwx. 1 root root    0 Aug 22 17:21 usb_power_delivery -> pd0
+-r--r--r--. 1 root root 4.0K Aug 22 17:21 usb_power_delivery_revision
 
+Both 2-1 and 3-1 are linked.
 
+Thanks so much for this, Heikki! I can look a little closer at the
+attach and deattach callbacks in our typec port driver in a little
+while.
+
+Benson
+--=20
+Benson Leung
+Staff Software Engineer
+Chrome OS Kernel
+Google Inc.
+bleung@google.com
+Chromium OS Project
+bleung@chromium.org
