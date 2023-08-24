@@ -2,207 +2,247 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63E02786457
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Aug 2023 02:56:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1752F78653C
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Aug 2023 04:23:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238896AbjHXAz2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Aug 2023 20:55:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37984 "EHLO
+        id S239432AbjHXCXS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Aug 2023 22:23:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238939AbjHXAy6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Aug 2023 20:54:58 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509DC10C7;
-        Wed, 23 Aug 2023 17:54:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692838496; x=1724374496;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=6+9KpsxG9bfof3E6gsnKaaRaGNZ9nmR+1o+FvV/BIZI=;
-  b=fEFXdo6quWvi8PkPsmNIDAOjA1ryTahrCibdvCkz5H11ig47rQEhEH0+
-   Uc0RRbKyUSav+xVfnFBB4bGs1MraEy540GL3d1GLI6bYPpn9uOR/o489q
-   RFxq8C86n1/9So/feitS8mRJ0RTthAjXQkB8wvnVpoX9BzUVsthcy3GiX
-   d/ApxNAi3tafylCSqXv2t3xF5+aogWNthmBCEVdTzFagr95TjKyVfMhji
-   HB+/S9rQJLgIWCYJWZ/2lj0hof+9XHgbec7tagIgYRCHYA6iUXRJ9FUQ6
-   bXo1p4H8Z9ZEgwittQbcGGOvwN85YdExDIV0U4IaBxt6lqRIZFyJ5U1TR
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10811"; a="438241363"
-X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="438241363"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2023 17:54:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10811"; a="771917156"
-X-IronPort-AV: E=Sophos;i="6.01,195,1684825200"; 
-   d="scan'208";a="771917156"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga001.jf.intel.com with ESMTP; 23 Aug 2023 17:54:55 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Wed, 23 Aug 2023 17:54:54 -0700
-Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Wed, 23 Aug 2023 17:54:54 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27 via Frontend Transport; Wed, 23 Aug 2023 17:54:54 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.174)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.27; Wed, 23 Aug 2023 17:54:53 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iKoGjn3lOF2IFRDcKfbEhZc5eLzkCvzrgJm/y8k8SIwgzoazE9xxPyGa40wUBoVNGvavu/KGUyofiQNkCZ9sNFTGjyOUBCt+azPQMh6kGGWscXEyeu1vlTBrSrHiixAAUTKtOT2jKvgfZbcaCGPsjj6kL5VC/oP787rroGriu/uvG0abs4uvBP+vprxjlmRdKLDqUCUqwSOq1O3anGcK+mr4rU3RxNZoAnf4GElbDd3czkTX1cthqSrc9Q498PNiKEuk3NPNInWhP4Cca1He4u4kDIMageOv3tUUT4tLHnH4ONMItz3E+vOF0LJqelKM9nf42nt8Nk5kKAE18NOelg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6+9KpsxG9bfof3E6gsnKaaRaGNZ9nmR+1o+FvV/BIZI=;
- b=VHrUr3tJF4tCNuaqTOoJsYWSuIvIs8NyxdVfGr7qLC4tHg6P3SIsBcOQjLpB6Gy4x9plhkR5rU0zXcrKnflPbkRGwzOr+d5qiQzdiWtciE7DwHzjVe5hPimouwuA7E1WO4T669xQJtOQvCoo3sSI5gcBAhQ4+ctRccsKnBT82rS0NVho9dJ//cZJ0h6kh4zhCyX/ykb+7tb8F8CgnkoSQy6FMWuLY/FNU+Ve8BjJZckWp0VbskjEcbVgowkLYXX31nIXDXg5PiCfcxyGShbLZZ6wyDexpofBmwimEVjB2arB3LJtWl61IvzhF4mQJfgTBXXo+dAYu87SVNDACN8vNQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DM6PR11MB4316.namprd11.prod.outlook.com (2603:10b6:5:205::16)
- by SA1PR11MB8447.namprd11.prod.outlook.com (2603:10b6:806:3ac::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.25; Thu, 24 Aug
- 2023 00:54:52 +0000
-Received: from DM6PR11MB4316.namprd11.prod.outlook.com
- ([fe80::e836:4003:6244:2466]) by DM6PR11MB4316.namprd11.prod.outlook.com
- ([fe80::e836:4003:6244:2466%6]) with mapi id 15.20.6699.025; Thu, 24 Aug 2023
- 00:54:52 +0000
-From:   "Wu, Wentong" <wentong.wu@intel.com>
-To:     "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
-        "Linus Walleij" <linus.walleij@linaro.org>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "mka@chromium.org" <mka@chromium.org>,
-        "oneukum@suse.com" <oneukum@suse.com>,
-        "lee@kernel.org" <lee@kernel.org>,
-        "wsa@kernel.org" <wsa@kernel.org>,
-        "kfting@nuvoton.com" <kfting@nuvoton.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "maz@kernel.org" <maz@kernel.org>, "brgl@bgdev.pl" <brgl@bgdev.pl>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
-        "andi.shyti@linux.intel.com" <andi.shyti@linux.intel.com>,
-        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
-        "Wang, Zhifeng" <zhifeng.wang@intel.com>
-Subject: RE: [PATCH v9 4/4] gpio: update Intel LJCA USB GPIO driver
-Thread-Topic: [PATCH v9 4/4] gpio: update Intel LJCA USB GPIO driver
-Thread-Index: AQHZ0JGYeq02xUBb+ESw5wMXh/fau6/uEJ8AgAAAVzCACjY+gIAAYorw
-Date:   Thu, 24 Aug 2023 00:54:51 +0000
-Message-ID: <DM6PR11MB43164146E1F28D2063E834C88D1DA@DM6PR11MB4316.namprd11.prod.outlook.com>
-References: <1692225111-19216-1-git-send-email-wentong.wu@intel.com>
- <1692225111-19216-5-git-send-email-wentong.wu@intel.com>
- <CACRpkda4Wrih_HPz6KjNf5rQ3A7jSRoPpMpQbm+ZWNv5P3WccA@mail.gmail.com>
- <DM6PR11MB43162BD4B856DF157D5F6F698D1AA@DM6PR11MB4316.namprd11.prod.outlook.com>
- <ZOZXc8Vsa/aJQMIc@kekkonen.localdomain>
-In-Reply-To: <ZOZXc8Vsa/aJQMIc@kekkonen.localdomain>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM6PR11MB4316:EE_|SA1PR11MB8447:EE_
-x-ms-office365-filtering-correlation-id: beb0f751-31e7-4828-9158-08dba43cb945
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: /6snAHptIKD8IbnFPHXLFZNzu/leAe/cOxj8RlkPSH5skGghfXQEp1frv7zK3aPwCKcxZtSWz/kmJOUtOWOZR2uLV+3XSCjJO6AthyaruJsq2GesvHjD1OD7y+cHsKh5dQsyMgMdDYiy9eaMaSUcclz3A+InzlGb07VXuS3Gj5T/Xxbx1mhPsdi+ItkVhK4gyvjmWtemWbIrGNZiLHKYFuKyDCFvyD7Dn3HWiApQ/lLM1PKRl/ZGzibEb78wqnpzBfhsQUaTzDci5DDNDNsGHE+y4k6nAkErEe5rz7OG71ty8Nnjq7xIcHh4qJn2aJZUN+GCfKzVgXGcA6YOEIu9bvm53ADBFSmMx6acFocVSKiBIoPp1m0EYTo2M9mjP9I9YODbd51VJfAF+AZg7V8rkYrC0SXQg/H6K/nJixdfH8BhZLmlMd3eUsyttJk8r4aRO2lA52qHDNFUiBTpsqLLv47L+FPQWC3Nxi/hyB+GAp5JBtNEFqG0hlZh3oNZtBnP1LliOMBc+l8dV8rq+WhPojqGJr83Xf2uuRhpEPjuUrje8rMUAn6Bsk5wQhIUB+1zk7JIIfc6zVtE6e8sopR4f+moSoS92Igohci+BMnwT+35eYgnb8lQn8xquvyks9X2
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB4316.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(39860400002)(376002)(136003)(346002)(396003)(1800799009)(186009)(451199024)(82960400001)(478600001)(71200400001)(110136005)(6506007)(9686003)(76116006)(7696005)(2906002)(41300700001)(7416002)(8936002)(26005)(4326008)(86362001)(64756008)(66446008)(54906003)(316002)(5660300002)(53546011)(8676002)(52536014)(66946007)(33656002)(66476007)(66556008)(15650500001)(38100700002)(83380400001)(38070700005)(122000001)(55016003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NTMyQVl2aUdLVng0YTVESjVGNjM5MlBUODVHOCtpRTZyK2ZHbFdHVnBtS2RV?=
- =?utf-8?B?TTZrV0wwSDMrSmVrS2lwM3NTam85bG5PL1l1ZFBSVWV2dCtLSnVLaVpVQjd1?=
- =?utf-8?B?M3BQa2pCSUZZa2JDaHliZnNocXVwY2lDM0s3OWxYay9zUUtkelVZdy9VYVMw?=
- =?utf-8?B?VXZ2M1BLUFY0NHFsazliTFQwZk0wWkhuVWlEcEZSdDRhRy9MWUVFRk5sazhP?=
- =?utf-8?B?THdCOXdXeU1mU2JqMkNzaFIyVEp4N1JCRUFPZkVKVFdYbzVSQ3NYbkZabkVR?=
- =?utf-8?B?L1o0Q2o5c2ZBS1doeGFQdUFOS2ZnT3lQYk9KRnBtYUlVQjFNcElFc0MxRTBu?=
- =?utf-8?B?b3lMOXM3L2V6bEVOUkt4ZENDcXJROTVZbkM5QjNNZ2NrcFVlb1cvUUc0ZDNk?=
- =?utf-8?B?YXJDamtTWTJxblMxZ1FrYXd0SkloV2VDc3V1dzZnUlNMeEp1dnEyT2VTUm5I?=
- =?utf-8?B?dndzRDdOV1JrZG9BOTdTM1dHZm14Y3NzblhUZjl3OUNsYVgyZVp1SFl6VUJU?=
- =?utf-8?B?OGpmSlhUU2g3MFJZNC94ZFFyRk9xMFZNd2FWNFhJWGlKd2FwVUZ0ZDI4bUFH?=
- =?utf-8?B?RVpzTkZyNk5LNG1xVWhROVJ3dE4vYitoU1FMZ1c5aWowdnFZRnl0TVFvYXB3?=
- =?utf-8?B?MUtrZlRqWVRVdnRGaDVVaU1YRG5KWlJxZVNKZ1hQN0ZCbE9jYm5iQzhReitI?=
- =?utf-8?B?LzhWaUNKWE4vTzlCM2VMNWRNcTd4aGpkQnRtc2VTMDZ4Q0JmdmRRNEZRcEJP?=
- =?utf-8?B?eXZ5WjdUanRiWGJQU0RuaTROa3lsdGZRZitHdzAzTG5YTzdnTzBvWW9ra3pM?=
- =?utf-8?B?dk85SU1zWVlVODBYbzhTOEhib1h5d21wNTR2SFJ3QjUvak5TQ1RIeXBJZEQx?=
- =?utf-8?B?WjVEbGVOK2VxTVZ2amNXN0xnbXZRN3c2eEo1R1pyQWtyZXdEUXhSM2pZcWdH?=
- =?utf-8?B?aFJPUmpJakM0R0JkdmRYZDdmWktoUzIxUDZnMG1lWm01MUI4QVM0QjJzVlRR?=
- =?utf-8?B?dmtkeVZ4cFVLSHdsV3d4VnYzbmFIYnpVSWVEbjVtbmlodERBNWExS1JjNURq?=
- =?utf-8?B?aS8yQ1I5dTV5M1JzbFBzbCtPNFYwcStCT25TWS9QYTNtMUNDYmU5Sll1cC9V?=
- =?utf-8?B?cERMUzlWcFhWZmMxeS9HdmNiUU9lbEljTlZtVmE4KzJBMGxXc3d6OEdlRnBU?=
- =?utf-8?B?MXRxRVVLZnRpdkY5VnRDVmpXMGk3YVNvM3pnc1R5Q3hoeTRJOTZwV0w0NTdV?=
- =?utf-8?B?S2paSjZrRzQ5NG5aY1NWQW9IOGhnaVFjdHJmN2MydHB0N2FFOXpZNkcrK0o5?=
- =?utf-8?B?SnVSdW5meTNhdml2MGNlMFdRT1JwQnhWODBpQzB6UlJlWEZXdkpRZzBKWVhk?=
- =?utf-8?B?SGhjVUtnUldSQmdpK3N5d3VycGE0YlFITEx4SDZLMTZDVEIxMm5YSysyUzRv?=
- =?utf-8?B?d0xjMU94UDJOdngwWFRBYjlrcytZVTkva05xR0YzV1IveHZXMWZlQVI1TFNr?=
- =?utf-8?B?THYwWkx1TmlNSkswM2VWRktEWk5wY3lWYkVKckpuWk1OL2RyOW5JekFjV3VO?=
- =?utf-8?B?UTZ6RHNINllWc2l5Qy9rK1JVdFc4MXdLMWNBalhkMnYraU5zSnY5cUZUUWlZ?=
- =?utf-8?B?NmUxb202NEo2Q2NrU3Vha0lBU3NaQnJYTnVycy9JNUpGeFhEQk1sV1hRNHhD?=
- =?utf-8?B?NWRndThLbk5Ca0RiS0dtcmFkV2FBYU4zUWtYMURkM0E0cHc2Y2plc3VoeDU3?=
- =?utf-8?B?RWVNUnh3bmRmRHQ5cFdjemZxT2dxT2treDYzL0svMFZHeTJWZThuTExPdTZ1?=
- =?utf-8?B?ckl2Wk9LRnZ5WFdQVkFQaEZUb0ZwbkE2TmVEdTREN1VJaHc0OE5FUWFWRVRK?=
- =?utf-8?B?RktZMnBSQWUyTE1WM1FzSGRDbTNySG5aRnBpaE1lWnphN2xVK0JEcEN6bG1K?=
- =?utf-8?B?cG4vK1hYSytYQWpkbm5nY0RMUGorWVZDQ2FTSVVQeGR0RFRTbXhGemt2blVI?=
- =?utf-8?B?U0hVWXlDcGNvWmxBUGRJYVNpc2c1NFFzRXJPdXpFRmVvdVBGNG8wbzl0TmNm?=
- =?utf-8?B?a2EvUWYzdHYrVjJ4Nmwra3o1aHhtYXArbU1mbzQxTStzY2RkdnRWa0hJNTQv?=
- =?utf-8?Q?WbQ1Qplq8IF3kt2EL7dxrWU+g?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S239433AbjHXCWu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Aug 2023 22:22:50 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id D8B4C199E
+        for <linux-usb@vger.kernel.org>; Wed, 23 Aug 2023 19:22:13 -0700 (PDT)
+Received: (qmail 209045 invoked by uid 1000); 23 Aug 2023 22:21:04 -0400
+Date:   Wed, 23 Aug 2023 22:21:04 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: dwc3: unusual handling of setup requests with wLength == 0
+Message-ID: <9b175f9e-ab70-47a3-a943-bfd05601aa23@rowland.harvard.edu>
+References: <cfc7ae18-140b-4223-9cc2-7ee4b9ddea28@rowland.harvard.edu>
+ <20230818194922.ys26zrqc4pocqq7q@synopsys.com>
+ <45d9ef53-e2be-4740-a93a-d36f18a49b39@rowland.harvard.edu>
+ <20230819000643.7mddkitzr4aqjsms@synopsys.com>
+ <e63ba783-f5a4-4442-8736-987a3b134e7f@rowland.harvard.edu>
+ <20230823021429.rlgixqehry4rsqmm@synopsys.com>
+ <5d5973b9-d590-4567-b1d6-4b5f8aeca68b@rowland.harvard.edu>
+ <20230823175903.bpumanwv5fkpwc44@synopsys.com>
+ <08a3759d-4c6b-4034-8516-685e4d96a41e@rowland.harvard.edu>
+ <20230823222202.k7y7hxndsbi7h4x7@synopsys.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB4316.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: beb0f751-31e7-4828-9158-08dba43cb945
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Aug 2023 00:54:51.5950
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: jhShS+lGnQ/WEVFsKN040GEXAQjQL//5msunVQh+qIY/n0FQLaPpM2IHrCsI7vt/JY16sU+b7AGuDMAxBsDkkA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB8447
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230823222202.k7y7hxndsbi7h4x7@synopsys.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-DQo+IEZyb206IHNha2FyaS5haWx1c0BsaW51eC5pbnRlbC5jb20gPHNha2FyaS5haWx1c0BsaW51
-eC5pbnRlbC5jb20+DQo+IA0KPiBIaSBXZW50b25nLCBMaW51cywNCj4gDQo+IE9uIFRodSwgQXVn
-IDE3LCAyMDIzIGF0IDA3OjA3OjU0QU0gKzAwMDAsIFd1LCBXZW50b25nIHdyb3RlOg0KPiA+ID4g
-RnJvbTogTGludXMgV2FsbGVpaiA8bGludXMud2FsbGVpakBsaW5hcm8ub3JnPg0KPiA+ID4NCj4g
-PiA+IE9uIFRodSwgQXVnIDE3LCAyMDIzIGF0IDEyOjMy4oCvQU0gV2VudG9uZyBXdSA8d2VudG9u
-Zy53dUBpbnRlbC5jb20+DQo+ID4gPiB3cm90ZToNCj4gPiA+DQo+ID4gPiA+IFRoaXMgZHJpdmVy
-IGNvbW11bmljYXRlIHdpdGggTEpDQSBHUElPIG1vZHVsZSB3aXRoIHNwZWNpZmljDQo+ID4gPiA+
-IHByb3RvY29sIHRocm91Z2ggaW50ZXJmYWNlcyBleHBvcnRlZCBieSBMSkNBIFVTQiBkcml2ZXIu
-DQo+ID4gPiA+IFVwZGF0ZSB0aGUgZHJpdmVyIGFjY29yZGluZyB0byBMSkNBIFVTQiBkcml2ZXIn
-cyBjaGFuZ2VzLg0KPiA+ID4gPg0KPiA+ID4gPiBTaWduZWQtb2ZmLWJ5OiBXZW50b25nIFd1IDx3
-ZW50b25nLnd1QGludGVsLmNvbT4NCj4gPiA+ID4gUmV2aWV3ZWQtYnk6IFNha2FyaSBBaWx1cyA8
-c2FrYXJpLmFpbHVzQGxpbnV4LmludGVsLmNvbT4NCj4gPiA+DQo+ID4gPiBUaGlzIHBhdGNoIGRv
-ZXMgc2V2ZXJhbCB0aGluZ3MgYXQgdGhlIHNhbWUgdGltZSwgY29uc2lkZXIgdGhlICJvbmUNCj4g
-PiA+IHRlY2huaWNhbCBzdGVwIHBlciBwYXRjaCIgYXBwcm9hY2gsIGZvciBzb21lIGRlZmluaXRp
-b24gb2YgYQ0KPiA+ID4gInRlY2huaWNhbCBzdGVwIi4gVGhlIHVwc2lkZSBpcyB0aGF0IGdpdCBi
-aXNlY3QgZ2V0cyBiZXR0ZXIgcHJlY2lzaW9uIHdoZW4NCj4gc29tZXRoaW5nIGdvZXMgc2lkZXdp
-c2UuDQo+ID4NCj4gPiBBY2ssIHRoYW5rcy4gSSB3aWxsIGZvbGxvdyB0aGlzIGdvaW5nIGZvcndh
-cmQuDQo+IA0KPiBUaGUgb2xkIExKQ0EgR1BJTyBkcml2ZXIgZ290IGFkZGVkIHdpdGhvdXQgdGhl
-IHJlc3Qgb2YgdGhlIExKQ0EsIGluY2x1ZGluZyB0aGUNCj4gbWFpbiBkcml2ZXIgKG5vdyAxc3Qg
-cGF0Y2ggb2YgdGhpcyBzZXQpLiBJIG1pZ2h0IGhhdmUganVzdCByZXZlcnRlZCB0aGUgcGF0Y2gg
-dGhhdA0KPiBhZGRlZCB0aGUgb2xkIG9uZSBhbmQgcHV0IHRoZSBuZXcgb25lIG9uIHRvcC4NCj4g
-DQo+IFRoZSBvbGQgZHJpdmVyIHdhcyBuZXZlciB1c2FibGUgQUZBSVUgYW5kIHRoZXJlIGFyZSBt
-YW55IGNoYW5nZXMgYXMgTGludXMNCj4gbm90ZWQuIEl0IHdvdWxkIGJlIGVhc2llciB0byByZXZp
-ZXcgYXMgbmV3IGRyaXZlci4NCj4gDQo+IEkgd29uZGVyIHdoYXQgb3RoZXJzIHRoaW5rLg0KDQpB
-Z3JlZSwgVGhhbmtzDQoNCkJSLA0KV2VudG9uZw0KPiANCj4gLS0NCj4gUmVnYXJkcywNCj4gDQo+
-IFNha2FyaSBBaWx1cw0K
+On Wed, Aug 23, 2023 at 10:22:07PM +0000, Thinh Nguyen wrote:
+> On Wed, Aug 23, 2023, Alan Stern wrote:
+> > On Wed, Aug 23, 2023 at 05:59:07PM +0000, Thinh Nguyen wrote:
+> > > On Wed, Aug 23, 2023, Alan Stern wrote:
+> > > > STALL is not a valid status for usb_requests on the gadget side; it 
+> > > > applies only on the host side (the host doesn't halt its endpoints).
+> > > 
+> > > The host can send a CLEAR_FEATURE(halt_ep). This will reset the data
+> > > sequence of the endpoint. In xhci spec (section 4.6.8), it suggests to
+> > > send this when the endpoint is reset. The endpoint is reset typically
+> > > when there's a transaction error.
+> > 
+> > It's important to be careful about the distinction between an actual 
+> > endpoint in the gadget and the logical representation of an endpoint 
+> > inside a host controller.  The host cannot reset the first; it can only 
+> > reset the second.
+> > 
+> > So yes, the usb_clear_halt() routine on the host does a 
+> > CLEAR_FEATURE(HALT) control transfer and then calls 
+> > usb_reset_endpoint(), which calls usb_hcd_reset_endpoint().
+> > 
+> > > The problem here is that typical protocol spec like MSC/UVC don't
+> > > specify how to handle CLEAR_FEATURE(halt_ep).
+> > 
+> > MSC does specify this.  I don't know about UVC.
+> 
+> No, from what I last recalled, it doesn't clearly define what should
+> happen here. It just indicates ClearFeature(halt_ep) for reset recovery.
+> However, the "reset recovery" can be implementation specific for how the
+> host can synchronize with the device.
+
+Read the BOT spec.  I quote some of the relevant parts below.
+
+> > > For Windows MSC driver, when the host recovers from the transaction
+> > > error, it sends CLEAR_FEATURE(halt_ep) and expects the transfer to be
+> > > cancelled. To synchronize with the host, the gadget driver needs to
+> > > cancel the request. Dwc3 needs to notify the gadget driver of this.
+> > 
+> > No, that's not what happens in the Mass Storage Class.
+> > 
+> > For the Bulk-Only Transport version of MSC, when a Windows or Linux host 
+> > detects a transaction error, it performs a USB port reset.  This clears 
+> 
+> No, that's implementation specific for reset recovery. Typically for
+
+I haven't tested recent versions of Windows.  Older versions did behave 
+this way.  I still have the logs to prove it.
+
+> Windows, for the first recovery, it sends a ClearFeature(halt_ep) and
+> sends a new MSC command.
+
+That's a violation of the BOT spec.  Are you sure Windows really does 
+this?
+
+>  If the transfer doesn't complete within a
+> specific time, there will be a timeout and a port reset, which is
+> another level of recovery.
+> 
+> > all the state on the gadget.  The gadget gets re-enumerated, and the 
+> > host proceeds to re-issue the MSC command.  The gadget driver doesn't 
+> > need any special notifications; outstanding requests get cancelled as a 
+> > normal part of the reset handling.
+> > 
+> > (In fact, this is not what the BOT spec says to do.  It says that when 
+> > the host detects a transaction error, it should a Bulk-Only Mass Storage 
+> > Reset -- this is a special class-specific control transfer.  In 
+> > response, the gadget driver is supposed to reset its internal state and 
+> > cancel all of its outstanding requests.  Then the host issues 
+> > CLEAR_FEATURE(HALT) to both the bulk-IN and bulk-OUT endpoints and 
+> > proceeds to issue its next MSC command.  A lot of MSC devices don't 
+> > handle this properly, probably because Windows didn't use this 
+> > approach.)
+> 
+> At the moment, the gadget driver doesn't handle CLEAR_FEATURE(halt_ep),
+> the UDC driver does.
+
+Correct.  My point is that it works this way because the gadget driver 
+doesn't _need_ to handle Clear-Halt.
+
+>   I don't recall this being handled in the composite
+> framework or in the f_mass_storage function driver. Unless we change
+> this, the UDC driver needs to notify the gadget driver somehow.
+
+No, f_mass_storage does not need to be notified about Clear-Halts.  As 
+you say, it isn't getting notified now, and yet it somehow still manages 
+to work with every type of host I'm aware of.
+
+> > In the UAS version of MSC, the endpoints never halt.  If there's a 
+> > transaction error, the host simply re-issues the transaction.  If that 
+> 
+> There are multiple levels of recovery. Different driver handles it
+> differently. For xHCI, Initially there's retry at the packet level
+> (typically set to retry 3 times in a row). If it fails, host controller
+> driver will get a transaction error event.
+
+That 3-strikes-and-you're-out thing is the normal USB low-level retry 
+mechanism.  We're talking about what happens when it fails and the HCD 
+reports a transaction error such as -EPROTO.
+
+> In Linux xHCI, the recovery for transaction error we perform soft-reset
+> (xhci reset ep command with TSP=1). If it still fails, we reset the
+> endpoint (TSP=0) and return the request with -EPROTO to the class
+> driver. However, we don't send ClearFeature(halt_ep). I don't recall
+> Linux MSC driver handle -EPROTO and do a port reset. However it does do
+> a port reset due to transfer timeout.
+
+In usb-storage, a -EPROTO error status causes interpret_urb_result() to 
+return USB_STOR_XFER_ERROR.  This causes usb_stor_invoke_transport() to 
+goto Handle_Errors:, which calls usb_stor_port_reset().
+
+In uas, a -EPROTO error will cause an error status to be returned to the 
+SCSI layer, which will invoke the SCSI error handler.  After enough 
+failures it will call the uas device-reset handler, and 
+uas_eh_device_reset_handler() calls usb_reset_device().
+
+> In Windows, it doesn't do soft-reset, but it does reset endpoint (TSP=0)
+> and send CLEAR_FEATURE(halt_ep) without port reset initially. It then
+> can send the a new MSC command expecting the device to be in sync based
+> on the CLEAR_FEATURE(halt_ep) request.
+
+That is not how the Bulk-Only Transport protocol resynchronizes after a 
+protocol error.  The BOT spec mentions in several places variations of:
+
+	If the host detects a STALL of the Bulk-Out endpoint during 
+	command transport, the host shall respond with a Reset Recovery
+	(see 5.3.4 - Reset Recovery).
+
+It doesn't say specifically what to do in case of other lower-level 
+protocol errors, but we have to assume that the intention is for the 
+host to follow the Reset Recovery procedure, because that's what the 
+device will expect to see.  The spec goes on to say:
+
+	5.3.4	Reset Recovery
+
+	For Reset Recovery the host shall issue in the following order:
+		(a) a Bulk-Only Mass Storage Reset
+		(b) a Clear Feature HALT to the Bulk-In endpoint
+		(c) a Clear Feature HALT to the Bulk-Out endpoint
+
+It most definitely does _not_ say that the host should do a Clear-Halt 
+without the Bulk-Only Mass Storage Reset.  By reading the spec carefully 
+you can see that such action would leave the host out of sync with the 
+device.
+
+>  If the recovery fails and the
+> transfer/command timed out, it will then do a port reset to recover.
+> 
+> > fails too, error recovery is started by the SCSI layer; it involves a 
+> > USB port reset.
+> > 
+> > But as you can see, in each case the UDC driver doesn't have to cancel 
+> > anything in particular when it gets a Clear-Halt.
+> > 
+> > > For other class driver, it may expect the transfer to resume after data
+> > > sequence reset.
+> > 
+> > Indeed.  In which case, the UDC driver shouldn't cancel anything.
+> > 
+> > > As a result, for an endpoint that's STALL (or not), and if the host
+> > > sends CLEAR_FEATURE(halt_ep), the dwc3 returns the request with some
+> > > status code and let the gadget driver handle it. If the gadget driver
+> > > wants to cancel the transfer, it can drop the transfer. If the gadget
+> > > driver wants to resume, it can requeue the same requests with the saved
+> > > status to resume where it left off.
+> > 
+> > The UDC driver should not dequeue a request merely because the endpoint 
+> > is halted.  The gadget driver can take care of everything necessary.  
+> > After all, it knows when an endpoint gets halted, because the gadget 
+> 
+> No, currently it doesn't know. That's the problem. The dwc3 driver
+> handles the CLEAR_FEATURE(halt_ep), not the gadget driver.
+
+You misunderstood what I wrote.  I said that the gadget driver knows 
+when an endpoint's halt feature gets _set_; I didn't say that it knows 
+when the halt feature gets _cleared_.
+
+(There is one exception: The gadget driver won't know if the host sends 
+a SET_FEATURE(halt_ep).  Hosts don't normally do this and I don't think 
+we need to worry about it.)
+
+> > driver is what calls usb_ep_set_halt() or usb_ep_set_wedge() in the 
+> > first place.
+> > 
+> > As for handling CLEAR_FEATURE(HALT), all the UDC driver needs to do is 
+> > clear the HALT feature for the endpoint.  (Although if the endpoint is 
+> > wedged, the HALT feature should not be cleared.)  It doesn't need to 
+> > cancel any outstanding requests or inform the gadget driver in any way.
+> 
+> The UDC driver needs to notify the gadget driver somehow, cancelling the
+> request and give it back is currently the way dwc3 handling it.
+
+And I'm saying that the UDC driver does _not_ need to notify the gadget 
+driver.
+
+The MSC gadget driver works just fine without any such notification.  
+Can you name any gadget driver that _does_ need a notification?
+
+Alan Stern
