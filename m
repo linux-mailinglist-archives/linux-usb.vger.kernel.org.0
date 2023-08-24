@@ -2,53 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AE4B787C40
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Aug 2023 01:57:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9195E787C3C
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Aug 2023 01:57:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238473AbjHXX5N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Aug 2023 19:57:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45378 "EHLO
+        id S239518AbjHXX5O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Aug 2023 19:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238641AbjHXX4n (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Aug 2023 19:56:43 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E661BD2
-        for <linux-usb@vger.kernel.org>; Thu, 24 Aug 2023 16:56:40 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4ff8f2630e3so521173e87.1
-        for <linux-usb@vger.kernel.org>; Thu, 24 Aug 2023 16:56:40 -0700 (PDT)
+        with ESMTP id S238786AbjHXX4o (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Aug 2023 19:56:44 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 994E819BF
+        for <linux-usb@vger.kernel.org>; Thu, 24 Aug 2023 16:56:41 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-500a398cda5so542874e87.0
+        for <linux-usb@vger.kernel.org>; Thu, 24 Aug 2023 16:56:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692921399; x=1693526199;
+        d=linaro.org; s=google; t=1692921400; x=1693526200;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LTYtN9ceXzi2tGhWn5q5e7ybJcm3lf5yDMeSzJkSqgc=;
-        b=m7m5bNqRLv2ildg7ypzCSl7pzD6YQ2ACEiyr/aKLXnvX3zq0mVdsOmy1hyaXDPTLzr
-         zOWOCUphWttuB6FiZXKEhy87cyNgL2D1hV6fTPfHItg17mDtCwf98piLHMJMyUgngLUp
-         dgl/1kiB3BWEnz3tz1DEQozj7XEpxfJicBRXlzxlODaHVg3R7gu454pBuSToDWNJCOB7
-         0+3/7VVaIH2R5TD0GzjfXnJPohKpfKbnQxmevWCZauIJDji+Hp00214wfkZhRZNb8o+P
-         RFflNDxkDvkg1U9NFB2E9dOMyOWu7Uwd9cKnHxMwYJbcMXPRD7Tv60s7TxgLFmQwxzqz
-         VJpg==
+        bh=tgQ26SpGxCjul3/ucufUtGqHh0AJSvMRyDnDlLgEQCY=;
+        b=ZiyVPwQGf8KeFARYnc8+ZXRz6KGJnBBdOjTL1zKAap3wzFDAyVfVHSmEVYNfke5wkb
+         MY2j+gjtI4zOnDaBvBDE234bbOk3qZLUi4X5McBT3wKple4nLaeOezx8U6zjU7IGs3ps
+         9TG7ni5OhdmN3Vc9ILO5s6bswKPlSFwTCAbz0jlMfmMmQERAanfKKSQ6mIOUl+kXNwJM
+         ykr7HeDeG2sCRbHVEr7v0x/jlg9mdSZh2tcdd4x+uecredaZ4K1uwzc/iVxgrm4fr00L
+         vZ4qohBxzSruCNFA+GtOKXxDzD0Hu9KLSckrjZsb8Gjj3x7kta0J1kw6CS6aE+7bP/mZ
+         +SVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692921399; x=1693526199;
+        d=1e100.net; s=20221208; t=1692921400; x=1693526200;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LTYtN9ceXzi2tGhWn5q5e7ybJcm3lf5yDMeSzJkSqgc=;
-        b=Tsv7+tph6BeGSfcBc8rjJOq6OnOMDt/8/Bt1PhNd/fbJTY0OSFs3UbHMM9qVdxE86G
-         E+aIAODstEIoj0cFvhQ9KMDbx3EmiNEAd2pxfdkbKGIKlOlXuywZZwmMiNZJ1fK4dush
-         pYxGUrrPBEcnbhUhyIbKObX9izi9TS1HmfsRD0vnotmyGlUFYdzyMDyh+33WrCYr3vy4
-         a1DlXUIMJOH/i7uAcYGwyQpfTxP8bwaUggtaHZ2SAx5+UafeL3ko7z+V30DYN0G6ZJdE
-         FRdnkqPQkSugyyQn/tNPJj2/24O7IJsm4SPa/V+bL/9BGlQp8NL28yWoBjtQDekxzlwS
-         0BlQ==
-X-Gm-Message-State: AOJu0Yy9sTGG5kUgs6ffqh9DeFeNq7A1AJKvTeZp5mq4/szBxR5T8BjJ
-        iGlSFOGg3SyrAeMMUkQYsWyvfg==
-X-Google-Smtp-Source: AGHT+IFizGXMYtPScMpdaqAAyY6sRQci93Si1x89ooTa46j60daVoKvz7MNehQcrSUwt2XRoMucG8A==
-X-Received: by 2002:a05:6512:31c8:b0:4fb:9772:6639 with SMTP id j8-20020a05651231c800b004fb97726639mr13796882lfe.6.1692921399056;
+        bh=tgQ26SpGxCjul3/ucufUtGqHh0AJSvMRyDnDlLgEQCY=;
+        b=iEG4rYTiWG+g2oN/9wq+n/NssK64RvitcpSzqmgrkL7/0xRzCvciP0zAnG4dilJ2AU
+         vq80kLuZxz0sb7CLw1ynpggmR37FvDrG5cBDnyy7fbv4PSWQEfc30kZpKEcCWarjJf6l
+         YTD3JKEsjkbjTsSR7DP/y/goZLlhiwc43U08HFxCWMeRNBX52emQpNo8w17sm5gbIwxi
+         E9ulRNuBMNLMVN/ejcPuMACYUnifpUcg/usRnM6MNCMZKsd2cSSBnVtWgui/BvQloxAN
+         +7n5h1C/qYg7mThf7arn9EMp0NbJ1WJokZUNpZ7+QhgLi9NlnMfJsMuFA6AlaCAKtfvv
+         VRBw==
+X-Gm-Message-State: AOJu0YxKKDexqabImAhzCGTkt2k88kbIGxmwEUdH5i66mIjtVeCi1dZr
+        Nm1hzAMTJHB8c16AjEC92GZh2w==
+X-Google-Smtp-Source: AGHT+IFwjAV10xg2ICIv+hpg687nHoaQFLWWRdI9p6K0pKXY0dRKyLzgeGtsRUJrMKT5YgwZ1BtpSQ==
+X-Received: by 2002:a05:6512:2524:b0:4f8:766f:8dc3 with SMTP id be36-20020a056512252400b004f8766f8dc3mr12708265lfb.32.1692921399883;
         Thu, 24 Aug 2023 16:56:39 -0700 (PDT)
 Received: from umbar.unikie.fi ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id j15-20020ac2454f000000b004fe5688b5dcsm57900lfm.150.2023.08.24.16.56.38
+        by smtp.gmail.com with ESMTPSA id j15-20020ac2454f000000b004fe5688b5dcsm57900lfm.150.2023.08.24.16.56.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Aug 2023 16:56:38 -0700 (PDT)
+        Thu, 24 Aug 2023 16:56:39 -0700 (PDT)
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Maxime Ripard <mripard@kernel.org>,
@@ -71,9 +71,9 @@ Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         intel-gfx@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
         linux-usb@vger.kernel.org
-Subject: [PATCH v7 2/3] drm/bridge_connector: stop filtering events in drm_bridge_connector_hpd_cb()
-Date:   Fri, 25 Aug 2023 02:56:35 +0300
-Message-Id: <20230824235636.1436665-3-dmitry.baryshkov@linaro.org>
+Subject: [PATCH v7 3/3] drm/bridge_connector: implement oob_hotplug_event
+Date:   Fri, 25 Aug 2023 02:56:36 +0300
+Message-Id: <20230824235636.1436665-4-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230824235636.1436665-1-dmitry.baryshkov@linaro.org>
 References: <20230824235636.1436665-1-dmitry.baryshkov@linaro.org>
@@ -89,39 +89,84 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In some cases the bridge drivers would like to receive hotplug events
-even in the case new status is equal to the old status. In the DP case
-this is used to deliver "attention" messages to the DP host. Stop
-filtering the events in the drm_bridge_connector_hpd_cb() and let
-drivers decide whether they would like to receive the event or not.
+Implement the oob_hotplug_event() callback. Translate it to the HPD
+notification sent to the HPD bridge in the chain.
 
-Reviewed-By: Janne Grunau <j@jannau.net>
+Reviewed-by: Janne Grunau <j@jannau.net>
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- drivers/gpu/drm/drm_bridge_connector.c | 5 -----
- 1 file changed, 5 deletions(-)
+ drivers/gpu/drm/drm_bridge_connector.c | 29 +++++++++++++++++++++++---
+ 1 file changed, 26 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/gpu/drm/drm_bridge_connector.c b/drivers/gpu/drm/drm_bridge_connector.c
-index 1da93d5a1f61..10b52224db37 100644
+index 10b52224db37..3aa129b3f8e9 100644
 --- a/drivers/gpu/drm/drm_bridge_connector.c
 +++ b/drivers/gpu/drm/drm_bridge_connector.c
-@@ -113,16 +113,11 @@ static void drm_bridge_connector_hpd_cb(void *cb_data,
- 	struct drm_bridge_connector *drm_bridge_connector = cb_data;
+@@ -5,6 +5,8 @@
+ 
+ #include <linux/kernel.h>
+ #include <linux/module.h>
++#include <linux/of.h>
++#include <linux/property.h>
+ #include <linux/slab.h>
+ 
+ #include <drm/drm_atomic_state_helper.h>
+@@ -107,10 +109,9 @@ static void drm_bridge_connector_hpd_notify(struct drm_connector *connector,
+ 	}
+ }
+ 
+-static void drm_bridge_connector_hpd_cb(void *cb_data,
+-					enum drm_connector_status status)
++static void drm_bridge_connector_handle_hpd(struct drm_bridge_connector *drm_bridge_connector,
++					    enum drm_connector_status status)
+ {
+-	struct drm_bridge_connector *drm_bridge_connector = cb_data;
  	struct drm_connector *connector = &drm_bridge_connector->base;
  	struct drm_device *dev = connector->dev;
--	enum drm_connector_status old_status;
  
- 	mutex_lock(&dev->mode_config.mutex);
--	old_status = connector->status;
- 	connector->status = status;
- 	mutex_unlock(&dev->mode_config.mutex);
- 
--	if (old_status == status)
--		return;
--
- 	drm_bridge_connector_hpd_notify(connector, status);
- 
+@@ -123,6 +124,21 @@ static void drm_bridge_connector_hpd_cb(void *cb_data,
  	drm_kms_helper_connector_hotplug_event(connector);
+ }
+ 
++static void drm_bridge_connector_hpd_cb(void *cb_data,
++					enum drm_connector_status status)
++{
++	drm_bridge_connector_handle_hpd(cb_data, status);
++}
++
++static void drm_bridge_connector_oob_hotplug_event(struct drm_connector *connector,
++						   enum drm_connector_status status)
++{
++	struct drm_bridge_connector *bridge_connector =
++		to_drm_bridge_connector(connector);
++
++	drm_bridge_connector_handle_hpd(bridge_connector, status);
++}
++
+ static void drm_bridge_connector_enable_hpd(struct drm_connector *connector)
+ {
+ 	struct drm_bridge_connector *bridge_connector =
+@@ -216,6 +232,7 @@ static const struct drm_connector_funcs drm_bridge_connector_funcs = {
+ 	.atomic_duplicate_state = drm_atomic_helper_connector_duplicate_state,
+ 	.atomic_destroy_state = drm_atomic_helper_connector_destroy_state,
+ 	.debugfs_init = drm_bridge_connector_debugfs_init,
++	.oob_hotplug_event = drm_bridge_connector_oob_hotplug_event,
+ };
+ 
+ /* -----------------------------------------------------------------------------
+@@ -352,6 +369,12 @@ struct drm_connector *drm_bridge_connector_init(struct drm_device *drm,
+ 		if (!drm_bridge_get_next_bridge(bridge))
+ 			connector_type = bridge->type;
+ 
++#ifdef CONFIG_OF
++		if (!drm_bridge_get_next_bridge(bridge) &&
++		    bridge->of_node)
++			connector->fwnode = fwnode_handle_get(of_fwnode_handle(bridge->of_node));
++#endif
++
+ 		if (bridge->ddc)
+ 			ddc = bridge->ddc;
+ 
 -- 
 2.39.2
 
