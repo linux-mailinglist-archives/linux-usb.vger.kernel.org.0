@@ -2,162 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08B5B787237
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Aug 2023 16:50:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8DFC787537
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Aug 2023 18:24:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241230AbjHXOuU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Aug 2023 10:50:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43504 "EHLO
+        id S242504AbjHXQYI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Aug 2023 12:24:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241871AbjHXOuD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Aug 2023 10:50:03 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C9251BD1;
-        Thu, 24 Aug 2023 07:49:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692888582; x=1724424582;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3tTg481giqbc76ab24kf268IRG/D48d54DgtcclG/Nw=;
-  b=VetZTP2IHBCUtTou9F6uVxmtsN8a9m7pdUUmGclc3FqjwdUVv1uHEAWA
-   91UfQiN/xSmnd3V1COy/WhVQMhspO4J2J8kiIZANnUKfTIjq7JBhbv8hX
-   EwEPwccvUuqd5Xxrut8sh23lrGO1NhroAoFP5grQ4S0EdAGC0ipqOLlhy
-   VZoxBpolIw0XZXs6zMV+aq+8w0mR/yG9erGITDgS8x0WPLQkfsyLMsuTf
-   +aUdPoDb/rQTxj0c8Z9DnDd0nFhGvqC5CaWnWgeCSuiTS1K9uDRgDZR1k
-   V2bN1170E+Cbo1vDUo9TVnfA9mJLOqjSS9/4OPiRPjOZ5xhju6xROcEw1
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10812"; a="374424998"
-X-IronPort-AV: E=Sophos;i="6.02,195,1688454000"; 
-   d="scan'208";a="374424998"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2023 07:49:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
-   d="scan'208";a="880835106"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 24 Aug 2023 07:49:35 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 24 Aug 2023 17:49:29 +0300
-Date:   Thu, 24 Aug 2023 17:49:29 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     quic_huliu@quicinc.com
-Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_fenglinw@quicinc.com,
-        subbaram@quicinc.com
-Subject: Re: [PATCH v2] usb: typec: qcom: check regulator enable status
- before disabling it
-Message-ID: <ZOdt+dz7XXljFJcK@kuha.fi.intel.com>
-References: <20230824-qcom-tcpc-v2-1-3dd8c3424564@quicinc.com>
- <ZOdlOQ+N2J7jyIEZ@kuha.fi.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZOdlOQ+N2J7jyIEZ@kuha.fi.intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S242505AbjHXQXv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Aug 2023 12:23:51 -0400
+X-Greylist: delayed 397 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 24 Aug 2023 09:23:48 PDT
+Received: from mailout1.hostsharing.net (mailout1.hostsharing.net [IPv6:2a01:37:1000::53df:5fcc:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7D31BE
+        for <linux-usb@vger.kernel.org>; Thu, 24 Aug 2023 09:23:48 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
+        by mailout1.hostsharing.net (Postfix) with ESMTPS id 7CAC3101920CC;
+        Thu, 24 Aug 2023 18:17:09 +0200 (CEST)
+Received: from localhost (unknown [89.246.108.87])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by h08.hostsharing.net (Postfix) with ESMTPSA id 4EDA4603DADA;
+        Thu, 24 Aug 2023 18:17:09 +0200 (CEST)
+X-Mailbox-Line: From e47eee6551e5866d586fa8d223e3d81323f81fdc Mon Sep 17 00:00:00 2001
+Message-Id: <cover.1692892942.git.lukas@wunner.de>
+From:   Lukas Wunner <lukas@wunner.de>
+Date:   Thu, 24 Aug 2023 18:15:00 +0200
+Subject: [PATCH v2 00/10] Multi-segment Event Ring support for XHCI
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org,
+        Jonathan Bell <jonathan@raspberrypi.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Philipp Rosenberger <p.rosenberger@kunbus.com>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        Peter Chen <peter.chen@kernel.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 24, 2023 at 05:12:14PM +0300, Heikki Krogerus wrote:
-> On Thu, Aug 24, 2023 at 10:32:03AM +0800, Hui Liu via B4 Relay wrote:
-> > From: Hui Liu <quic_huliu@quicinc.com>
-> > 
-> > Check regulator enable status before disabling it to avoid
-> > unbalanced regulator disable warnings.
-> > 
-> > Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-> > Fixes: a4422ff22142 ("usb: typec: qcom: Add Qualcomm PMIC Type-C driver")
-> > Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> > Signed-off-by: Hui Liu <quic_huliu@quicinc.com>
-> > ---
-> > Changes in v2:
-> > - Add Fixes tag
-> > - Link to v1: https://lore.kernel.org/r/20230823-qcom-tcpc-v1-1-fa81a09ca056@quicinc.com
-> > ---
-> >  drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
-> > index bb0b8479d80f..ca616b17b5b6 100644
-> > --- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
-> > +++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
-> > @@ -422,7 +422,8 @@ static int qcom_pmic_typec_pdphy_disable(struct pmic_typec_pdphy *pmic_typec_pdp
-> >  	ret = regmap_write(pmic_typec_pdphy->regmap,
-> >  			   pmic_typec_pdphy->base + USB_PDPHY_EN_CONTROL_REG, 0);
-> >  
-> > -	regulator_disable(pmic_typec_pdphy->vdd_pdphy);
-> > +	if (regulator_is_enabled(pmic_typec_pdphy->vdd_pdphy))
-> > +		regulator_disable(pmic_typec_pdphy->vdd_pdphy);
-> 
-> Would it be an option to just enable the regulator in
-> qcom_pmic_typec_pdphy_start() and disable it in
-> qcom_pmic_typec_pdphy_stop()?
-> 
-> Now the whole thing looks weird. That regulator is in practice
-> only disabled and then enabled in one and the same place -
-> pmic_typec_pdphy_reset(). It's not touched anywhere else. That makes
-> the above condition confusing to me. I may be missing something.
-> 
-> At least more explanation is needed.
+Enlarge the XHCI Event Ring to cope with high load situations
+by allowing more than one segment.
 
-I took a closer look at these drivers, and I think I understand the
-code path now. This driver is made with an assumption that the
-regulator is "on" when the driver is probed, but in your case it's
-actually "off".
+This second iteration seeks to address all of Mathias' review feedback on v1:
 
-So there is something wrong here, but I don't know where the root
-cause is. If the regulator is really "on" when this driver is probed,
-then there should be another user for it somewhere (no?). In that case
-the driver can't just switch off the regulator like it does now - this
-part I think really has to be fixed (or explained).
+* Patch [01/10]:
+  Use ERST_DESI_MASK instead of ERST_PTR_MASK when constructing the new
+  ERDP value to avoid carrying over a set EHB bit.
 
-The problem with your fix is that it will leave the regulator always
-on when the driver is removed, which it really can't do, not at least
-if the regulator was off by default.
+* Patch [04/10]:
+  Only use up to 2 Event Ring segments by default (instead of 8).
 
-I would propose this:
+* Patch [05/10]:
+  New patch to adjust segment numbers after ring expansion.
 
-diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
-index bb0b8479d80f..bbe40634e821 100644
---- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
-+++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
-@@ -449,6 +449,10 @@ int qcom_pmic_typec_pdphy_start(struct pmic_typec_pdphy *pmic_typec_pdphy,
- 
-        pmic_typec_pdphy->tcpm_port = tcpm_port;
- 
-+       ret = regulator_enable(pmic_typec_pdphy->vdd_pdphy);
-+       if (ret)
-+               return ret;
-+
-        ret = pmic_typec_pdphy_reset(pmic_typec_pdphy);
-        if (ret)
-                return ret;
-@@ -467,6 +471,7 @@ void qcom_pmic_typec_pdphy_stop(struct pmic_typec_pdphy *pmic_typec_pdphy)
-                disable_irq(pmic_typec_pdphy->irq_data[i].irq);
- 
-        qcom_pmic_typec_pdphy_reset_on(pmic_typec_pdphy);
-+       regulator_disable(pmic_typec_pdphy->vdd_pdphy);
- }
- 
- struct pmic_typec_pdphy *qcom_pmic_typec_pdphy_alloc(struct device *dev)
+* Patch [08/10]:
+  New patch to clean up ERST_PTR_MASK inversion.
+
+Several other issues caught my eye and I'm including fixes and cleanups
+for those as well.
+
+Link to v1:
+https://lore.kernel.org/all/cover.1692085657.git.lukas@wunner.de/
 
 
-The problem with it is that the regulator is not going to be disabled
-if there really is another user for it when the component is expected
-to be reset. But as said above, if there really is an other user, then
-this driver simply can't just turn off the regulator.
+Jonathan Bell (1):
+  xhci: Use more than one Event Ring segment
 
-thanks,
+Lukas Wunner (9):
+  xhci: Clear EHB bit only at end of interrupt handler
+  xhci: Preserve RsvdP bits in ERSTBA register correctly
+  xhci: Set DESI bits in ERDP register correctly
+  xhci: Adjust segment numbers after ring expansion
+  xhci: Update last segment pointer after Event Ring expansion
+  xhci: Expose segment numbers in debugfs
+  xhci: Clean up ERST_PTR_MASK inversion
+  xhci: Clean up stale comment on ERST_SIZE macro
+  xhci: Clean up xhci_{alloc,free}_erst() declarations
+
+ drivers/usb/host/xhci-debugfs.c |  2 +-
+ drivers/usb/host/xhci-mem.c     | 68 ++++++++++++++++++---------------
+ drivers/usb/host/xhci-ring.c    | 17 +++++----
+ drivers/usb/host/xhci.c         |  2 +-
+ drivers/usb/host/xhci.h         | 18 +++------
+ 5 files changed, 53 insertions(+), 54 deletions(-)
 
 -- 
-heikki
+2.39.2
+
