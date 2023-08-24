@@ -2,186 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F249D7871C8
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Aug 2023 16:38:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82663787232
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Aug 2023 16:50:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241634AbjHXOhb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Aug 2023 10:37:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39600 "EHLO
+        id S235970AbjHXOtr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Aug 2023 10:49:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239215AbjHXOh1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Aug 2023 10:37:27 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40EF01BC5
-        for <linux-usb@vger.kernel.org>; Thu, 24 Aug 2023 07:37:25 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3fee600dce6so49967225e9.1
-        for <linux-usb@vger.kernel.org>; Thu, 24 Aug 2023 07:37:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1692887844; x=1693492644;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hQuKsdXLbaauilsfKUsMg7WsVO/VKSU1VxyRk46IkT0=;
-        b=bJDwysfdRjFTLaBLhfLk8D0yKyZ0D03dgCg7Acb5aFYBDIjREG7zibGUkgzgfhzABY
-         A5c8EcxkRkljyueKctr0NXYRnzrsXBuJ+MTjJzFYdduR4384YpvJ+QN+N0W5/yf1naRX
-         oy2o2CZv+qJVyX8OMdfNAsww11o4ZnsjPnWgOBDIUZCEVhCP8foiQCnck0O5qpc/D3dN
-         MHOlBo4X3hUy6O4i+BMwKciEM5sMFl3cznZqVdfng3+Gi1qRDWObOsoRuvaYeoIgjxlU
-         XAwWloEHv89so80l6UH2NS/ymsKh7R1JcLDYZuPo0nl/fjCVslo66kPw53giIkrc9Ke9
-         2L7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692887844; x=1693492644;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hQuKsdXLbaauilsfKUsMg7WsVO/VKSU1VxyRk46IkT0=;
-        b=cndmpA6ngbObjh38WrcpOhCh2h3y4ythrX3JSpCVLFzjD6ekVlila8ghBSWj5hhwcp
-         fUu8QmZxujxpIg2Gc0OauBjaLIMqa9SjRzjsM+wiW2HiAgM71Ywjs5QB61o80O31bqit
-         EkFaOhlLCBUcVJtCLj8HQVyYy6fEMlh9dT8CDLttm9xqNGE//G4wfVWfgKPv3FEdYWMb
-         UfWp8fNADEhYPwdk8anAOXSoVKAFy6ty94WlOExmCKjwuQo47IfPjM61ZNvvD4muMhH6
-         JURAAZxKjNwle75mp/D+Un9946ZkOYh+hGamVCNKFwwt33yAKsoMzTY2R/qbSKA1DNHC
-         0yMA==
-X-Gm-Message-State: AOJu0Ywlc+hPTx1zFCtERHoAcug4Qt2dK6OSl9UMjSaGVtDxunBx5n1+
-        2W4dHat8bZVvT764D9SC6PanjJ/5PYoLD797Wy8=
-X-Google-Smtp-Source: AGHT+IG1Zmy9FiD6EGuNshteebwkJiVqUA4EOgVYV3DKG8lcdZvZlKIsdhMl2a27os9ORZTF6RnlGQ==
-X-Received: by 2002:a7b:c408:0:b0:401:aa8f:7565 with SMTP id k8-20020a7bc408000000b00401aa8f7565mr1238852wmi.34.1692887843655;
-        Thu, 24 Aug 2023 07:37:23 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id t15-20020a7bc3cf000000b004013797efb6sm2449378wmj.9.2023.08.24.07.37.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Aug 2023 07:37:23 -0700 (PDT)
-Message-ID: <9574a219-3abf-b2c9-7d90-e79d364134bb@linaro.org>
-Date:   Thu, 24 Aug 2023 15:37:22 +0100
+        with ESMTP id S241861AbjHXOta (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Aug 2023 10:49:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC1C01FF6;
+        Thu, 24 Aug 2023 07:49:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BDBE66218E;
+        Thu, 24 Aug 2023 14:48:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEA2CC433C8;
+        Thu, 24 Aug 2023 14:48:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1692888535;
+        bh=L9fXQr7c4dFKYs8jRg5OKffCpoKZVVSVI9obxkzOZmU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=K+4zOJ9Zl1uA3cjXOIEwMVdtYBVbj8qctsNEknNWV1zZW6MPhsyaDdmkuPE92sZ7y
+         CPf/dRSyiumUiROg5UQ93GxP0N1KFInKCJSU0f9wQliZSPXxylX4QODBMwcVepIq7A
+         W3mMILASDlKKo3MSgA2h4/94rJeLU/Sq0nT8eUcA=
+Date:   Thu, 24 Aug 2023 16:48:52 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Simon Arlott <simon@octiron.net>
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Subject: Re: [PATCH] USB: cdc-acm: expose serial close_delay and closing_wait
+ in sysfs
+Message-ID: <2023082403-masculine-scuttle-f0ad@gregkh>
+References: <ea1a13ad-a1e0-540a-e97a-4c44f6d2d33b@0882a8b5-c6c3-11e9-b005-00805fc181fe.uuid.home.arpa>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2] usb: typec: qcom: check regulator enable status before
- disabling it
-Content-Language: en-US
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        quic_huliu@quicinc.com
-Cc:     Guenter Roeck <linux@roeck-us.net>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_fenglinw@quicinc.com,
-        subbaram@quicinc.com
-References: <20230824-qcom-tcpc-v2-1-3dd8c3424564@quicinc.com>
- <ZOdlOQ+N2J7jyIEZ@kuha.fi.intel.com>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <ZOdlOQ+N2J7jyIEZ@kuha.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ea1a13ad-a1e0-540a-e97a-4c44f6d2d33b@0882a8b5-c6c3-11e9-b005-00805fc181fe.uuid.home.arpa>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 24/08/2023 15:12, Heikki Krogerus wrote:
-> On Thu, Aug 24, 2023 at 10:32:03AM +0800, Hui Liu via B4 Relay wrote:
->> From: Hui Liu <quic_huliu@quicinc.com>
->>
->> Check regulator enable status before disabling it to avoid
->> unbalanced regulator disable warnings.
->>
->> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
->> Fixes: a4422ff22142 ("usb: typec: qcom: Add Qualcomm PMIC Type-C driver")
->> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
->> Signed-off-by: Hui Liu <quic_huliu@quicinc.com>
->> ---
->> Changes in v2:
->> - Add Fixes tag
->> - Link to v1: https://lore.kernel.org/r/20230823-qcom-tcpc-v1-1-fa81a09ca056@quicinc.com
->> ---
->>   drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c | 3 ++-
->>   1 file changed, 2 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
->> index bb0b8479d80f..ca616b17b5b6 100644
->> --- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
->> +++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
->> @@ -422,7 +422,8 @@ static int qcom_pmic_typec_pdphy_disable(struct pmic_typec_pdphy *pmic_typec_pdp
->>   	ret = regmap_write(pmic_typec_pdphy->regmap,
->>   			   pmic_typec_pdphy->base + USB_PDPHY_EN_CONTROL_REG, 0);
->>   
->> -	regulator_disable(pmic_typec_pdphy->vdd_pdphy);
->> +	if (regulator_is_enabled(pmic_typec_pdphy->vdd_pdphy))
->> +		regulator_disable(pmic_typec_pdphy->vdd_pdphy);
+On Wed, Aug 23, 2023 at 09:37:45PM +0100, Simon Arlott wrote:
+> If the serial device never reads data written to it (because it is "output
+> only") then the write buffers will still be waiting for the URB to complete
+> on close(), which will hang for 30s until the closing_wait timeout expires.
 > 
-> Would it be an option to just enable the regulator in
-> qcom_pmic_typec_pdphy_start() and disable it in
-> qcom_pmic_typec_pdphy_stop()?
-> 
-> Now the whole thing looks weird. That regulator is in practice
-> only disabled and then enabled in one and the same place -
-> pmic_typec_pdphy_reset(). It's not touched anywhere else. That makes
-> the above condition confusing to me. I may be missing something.
-> 
-> At least more explanation is needed.
-> 
-> thanks,
-> 
+> This can happen with the ESP32-H2/ESP32-C6 USB serial interface. Instead of
+> changing all userspace applications to flush (discard) their output in this
+> specific scenario it would be easier to adjust the closing_wait timeout
+> with udev rules but the only available interface is the TIOCGSERIAL ioctl.
 
-I don't see why not.
+Then why not use that?
 
-The code would look neater that way too.
+> The serial_core driver (ttySx) exposes its supported ioctl values as
+> read-only sysfs attributes. Add read-write sysfs attributes "close_delay"
+> and "closing_wait" to cdc-acm (ttyACMx) devices. These are the same as the
+> attributes in serial_core except that the "closing_wait" sysfs values are
+> modified so that "-1" is used for "infinite wait" (instead of 0) and "0"
+> is used for "no wait" (instead of 65535).
 
-Can you give it a try Hui ?
+Adding tty-driver-specific sysfs files for tty devices is a big no-no,
+sorry.  We don't want to go down that rabbit hole at all.
 
-diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c 
-b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
-index 4e1b846627d20..d29f9506e5f12 100644
---- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
-+++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
-@@ -383,10 +383,6 @@ static int qcom_pmic_typec_pdphy_enable(struct 
-pmic_typec_pdphy *pmic_typec_pdph
-         struct device *dev = pmic_typec_pdphy->dev;
-         int ret;
+If any apis are needed, let's make them for all tty devices, through the
+existing ioctl api, so they work for all devices and userspace doesn't
+have to try to figure out just exactly what type of tty/serial device it
+is talking to (as that will not scale and is exactly the opposite of
+what common apis are for.)
 
--       ret = regulator_enable(pmic_typec_pdphy->vdd_pdphy);
--       if (ret)
--               return ret;
--
-         /* PD 2.0, DR=TYPEC_DEVICE, PR=TYPEC_SINK */
-         ret = regmap_update_bits(pmic_typec_pdphy->regmap,
-                                  pmic_typec_pdphy->base + 
-USB_PDPHY_MSG_CONFIG_REG,
-@@ -424,8 +420,6 @@ static int qcom_pmic_typec_pdphy_disable(struct 
-pmic_typec_pdphy *pmic_typec_pdp
-         ret = regmap_write(pmic_typec_pdphy->regmap,
-                            pmic_typec_pdphy->base + 
-USB_PDPHY_EN_CONTROL_REG, 0);
+sorry, we can't take this, and in the end, you don't want us to as it's
+not maintainable.
 
--       regulator_disable(pmic_typec_pdphy->vdd_pdphy);
--
-         return ret;
-  }
+thanks,
 
-@@ -449,6 +443,10 @@ int qcom_pmic_typec_pdphy_start(struct 
-pmic_typec_pdphy *pmic_typec_pdphy,
-         int i;
-         int ret;
-
-+       ret = regulator_enable(pmic_typec_pdphy->vdd_pdphy);
-+       if (ret)
-+               return ret;
-+
-         pmic_typec_pdphy->tcpm_port = tcpm_port;
-
-         ret = pmic_typec_pdphy_reset(pmic_typec_pdphy);
-@@ -469,6 +467,8 @@ void qcom_pmic_typec_pdphy_stop(struct 
-pmic_typec_pdphy *pmic_typec_pdphy)
-                 disable_irq(pmic_typec_pdphy->irq_data[i].irq);
-
-         qcom_pmic_typec_pdphy_reset_on(pmic_typec_pdphy);
-+
-+       regulator_disable(pmic_typec_pdphy->vdd_pdphy);
-  }
-
----
-bod
+greg k-h
