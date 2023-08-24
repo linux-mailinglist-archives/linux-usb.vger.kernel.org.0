@@ -2,101 +2,188 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC26E787616
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Aug 2023 18:54:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9AF0787606
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Aug 2023 18:52:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242318AbjHXQxm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Aug 2023 12:53:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53098 "EHLO
+        id S242719AbjHXQvd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Aug 2023 12:51:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242731AbjHXQxL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Aug 2023 12:53:11 -0400
-X-Greylist: delayed 559 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 24 Aug 2023 09:53:08 PDT
-Received: from mailout3.hostsharing.net (mailout3.hostsharing.net [IPv6:2a01:4f8:150:2161:1:b009:f236:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CEA01707
-        for <linux-usb@vger.kernel.org>; Thu, 24 Aug 2023 09:53:08 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+        with ESMTP id S242724AbjHXQvJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Aug 2023 12:51:09 -0400
+Received: from mp-relay-02.fibernetics.ca (mp-relay-02.fibernetics.ca [208.85.217.137])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075101B9
+        for <linux-usb@vger.kernel.org>; Thu, 24 Aug 2023 09:51:06 -0700 (PDT)
+Received: from mailpool-fe-01.fibernetics.ca (mailpool-fe-01.fibernetics.ca [208.85.217.144])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
-        by mailout3.hostsharing.net (Postfix) with ESMTPS id 84540101E6B30;
-        Thu, 24 Aug 2023 18:53:06 +0200 (CEST)
-Received: from localhost (unknown [89.246.108.87])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by h08.hostsharing.net (Postfix) with ESMTPSA id F35C3603DADA;
-        Thu, 24 Aug 2023 18:53:05 +0200 (CEST)
-X-Mailbox-Line: From e47eee6551e5866d586fa8d223e3d81323f81fdc Mon Sep 17 00:00:00 2001
-Message-Id: <e47eee6551e5866d586fa8d223e3d81323f81fdc.1692892942.git.lukas@wunner.de>
-In-Reply-To: <cover.1692892942.git.lukas@wunner.de>
-References: <cover.1692892942.git.lukas@wunner.de>
-From:   Lukas Wunner <lukas@wunner.de>
-Date:   Thu, 24 Aug 2023 18:15:10 +0200
-Subject: [PATCH v2 10/10] xhci: Clean up xhci_{alloc,free}_erst() declarations
-To:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org,
-        Jonathan Bell <jonathan@raspberrypi.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Philipp Rosenberger <p.rosenberger@kunbus.com>,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        by mp-relay-02.fibernetics.ca (Postfix) with ESMTPS id 196D67671D;
+        Thu, 24 Aug 2023 16:51:06 +0000 (UTC)
+Received: from localhost (mailpool-mx-01.fibernetics.ca [208.85.217.140])
+        by mailpool-fe-01.fibernetics.ca (Postfix) with ESMTP id 0C35E41783;
+        Thu, 24 Aug 2023 16:51:06 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at 
+X-Spam-Score: -0.2
+X-Spam-Level: 
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
+Received: from mailpool-fe-01.fibernetics.ca ([208.85.217.144])
+        by localhost (mail-mx-01.fibernetics.ca [208.85.217.140]) (amavisd-new, port 10024)
+        with ESMTP id 5jLpviUAfafW; Thu, 24 Aug 2023 16:51:05 +0000 (UTC)
+Received: from [192.168.48.17] (host-104-157-193-42.dyn.295.ca [104.157.193.42])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dgilbert@interlog.com)
+        by mail.ca.inter.net (Postfix) with ESMTPSA id 689DE41781;
+        Thu, 24 Aug 2023 16:51:05 +0000 (UTC)
+Message-ID: <58409169-dc24-accc-46e8-13402cd93f79@interlog.com>
+Date:   Thu, 24 Aug 2023 12:51:04 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Reply-To: dgilbert@interlog.com
+Subject: Re: [RFC PATCH 0/2] usb: Link USB devices with their USB Type-C
+ partner counterparts
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Benson Leung <bleung@google.com>,
+        Jameson Thies <jthies@google.com>,
+        Prashant Malani <pmalani@google.com>,
+        Won Chung <wonchung@google.com>, linux-usb@vger.kernel.org
+References: <20230822133205.2063210-1-heikki.krogerus@linux.intel.com>
+ <860a352c-12da-25ce-5b9e-697382a93899@interlog.com>
+ <ZOXJ2cs5dUBsSNjX@kuha.fi.intel.com>
+Content-Language: en-CA
+From:   Douglas Gilbert <dgilbert@interlog.com>
+In-Reply-To: <ZOXJ2cs5dUBsSNjX@kuha.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-xhci_alloc_erst() has global scope even though it's only used in
-xhci-mem.c.  Declare it static.
+On 2023-08-23 04:56, Heikki Krogerus wrote:
+> Hi Douglas,
+> 
+> On Tue, Aug 22, 2023 at 10:52:12AM -0400, Douglas Gilbert wrote:
+>> On 2023-08-22 09:32, Heikki Krogerus wrote:
+>> On a related matter, I wonder why there aren't symlinks between typec ports
+>> (under /sys/class/typec ) and/or the corresponding pd objects (under
+>> /sys/class/usb_power_delivery ) to the related power_supply objects under
+>> /sys/class/power_supply . For example under the latter directory I see:
+>>      $ ls | more
+>>      AC
+>>      BAT0
+>>      hidpp_battery_1
+>>      ucsi-source-psy-USBC000:001
+>>      ucsi-source-psy-USBC000:002
+>>
+>> Those last two power supplies are obviously connected to typec port0 and port1
+>> (but offset by 1). Those power_supply objects hold inaccurate data which I hope
+>> will improve in time. Significantly power_supply objects don't seem to report
+>> the direction of the power. Here is a little utility I have been working on
+>> to report the USB Type-C port/pd disposition on my machine:
+>>      $ lsucpd
+>>      port0 [pd0]  > {5V, 0.9A}
+>>      port1 [pd1]  <<===  partner: [pd8]
+>>
+>> My laptop (Thinkpad X13 G3) has two type-C ports and port1 is a sink with a
+>> PD contract. I would like that second line to have 20V, 3.25A appended to it
+>> but there are several issues:
+>>    - no typec or pd symlink to ucsi-source-psy-USBC000:002
+>>    - that power supply_object says it is online (correct) with a voltage_now:
+>>      5000000 uV (incorrect) and current_now: 3000000 uA (incorrect). See below.
+>>
+>>    ucsi-source-psy-USBC000:002 $ ls_name_value
+>>      current_max : 3250000
+>>      current_now : 3000000
+>>      online : 1
+>>      scope : Unknown
+>>      type : USB
+>>      uevent : <removed>
+>>      usb_type : C [PD] PD_PPS
+>>      voltage_max : 20000000
+>>      voltage_min : 5000000
+>>      voltage_now : 5000000
+> 
+> I'm glad you brought that up. The major problem with the Type-C power
+> supplies is that the Type-C connector class does not actually take
+> care of them. They are all registered by the device drivers, and all
+> of them seem to expose different kind of information. In your case the
+> power supplies are registered by the UCSI driver, and the above may
+> indicate a bug in that driver.
 
-xhci_free_erst() was removed by commit b17a57f89f69 ("xhci: Refactor
-interrupter code for initial multi interrupter support."), but a
-declaration in xhci.h still remains.  Drop it.
+Hi,
+Thanks for the background.
 
-Signed-off-by: Lukas Wunner <lukas@wunner.de>
----
- drivers/usb/host/xhci-mem.c | 2 +-
- drivers/usb/host/xhci.h     | 5 -----
- 2 files changed, 1 insertion(+), 6 deletions(-)
+My X13 Gen 3 (i5-1240P) uses the typec_ucsi and ucsi_acpi modules. Some time
+back in a post you explained how to use debugfs with ucsi. Following that
+procedure, just after a 20 Volt PD contract is negotiated on port 0 I see:
 
-diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index b133817ad180..4d0b1c0e61a8 100644
---- a/drivers/usb/host/xhci-mem.c
-+++ b/drivers/usb/host/xhci-mem.c
-@@ -1776,7 +1776,7 @@ void xhci_free_command(struct xhci_hcd *xhci,
- 	kfree(command);
- }
- 
--int xhci_alloc_erst(struct xhci_hcd *xhci,
-+static int xhci_alloc_erst(struct xhci_hcd *xhci,
- 		    struct xhci_ring *evt_ring,
- 		    struct xhci_erst *erst,
- 		    gfp_t flags)
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index effc80eb8fa9..7749499ed32a 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -2075,13 +2075,8 @@ struct xhci_ring *xhci_ring_alloc(struct xhci_hcd *xhci,
- void xhci_ring_free(struct xhci_hcd *xhci, struct xhci_ring *ring);
- int xhci_ring_expansion(struct xhci_hcd *xhci, struct xhci_ring *ring,
- 		unsigned int num_trbs, gfp_t flags);
--int xhci_alloc_erst(struct xhci_hcd *xhci,
--		struct xhci_ring *evt_ring,
--		struct xhci_erst *erst,
--		gfp_t flags);
- void xhci_initialize_ring_info(struct xhci_ring *ring,
- 			unsigned int cycle_state);
--void xhci_free_erst(struct xhci_hcd *xhci, struct xhci_erst *erst);
- void xhci_free_endpoint_ring(struct xhci_hcd *xhci,
- 		struct xhci_virt_device *virt_dev,
- 		unsigned int ep_index);
--- 
-2.39.2
+     # cat /sys/kernel/debug/tracing/trace
+     ....
+      kworker/0:1-18718   [000] ..... 137813.407189: ucsi_connector_change:
+         port0 status: change=0000, opmode=5, connected=1, sourcing=0,
+         partner_flags=1, partner_type=1,
+         request_data_obj=1304b12c, BC status=1
+
+That RDO is incorrect, the top nibble (1) is the index of the default Vsafe5v
+PDO. The correct PDO index would be 4 in this case. The source is an Apple 140W
+USB-C power adapter so I doubt that it is breaking any PD 3.0/3.1 protocol
+rules.
+
+According the a PD analyzer (km002c) only one Request is sent by the sink:
+82 10 d6 59 87 43 which it decodes as "Pos: 4 Fixed: 20V, 4.7A" which is
+Accepted and 200 ms later a PS RDY is sent by the source and Vbus
+transitions from from 5.17 Volts to 20.4 Volts. So I can see no Request for
+PDO index 1 being sent.
+
+With acpi_listen the following traffic occurs just after the power adapter
+is plugged into port 0:
+   battery PNP0C0A:00 00000080 00000001
+   battery PNP0C0A:00 00000080 00000001
+   ibm/hotkey LEN0268:00 00000080 00006032
+   ac_adapter ACPI0003:00 00000080 00000001
+   ac_adapter ACPI0003:00 00000080 00000001
+   ibm/hotkey LEN0268:00 00000080 00006030
+   thermal_zone LNXTHERM:00 00000081 00000000
+   ibm/hotkey LEN0268:00 00000080 00006030
+   thermal_zone LNXTHERM:00 00000081 00000000
+
+Hope this helps if you find time to look at this.
+
+Doug Gilbert
+
+> To improve the situation, I originally proposed that instead of
+> adding a separate device class for USB Power Delivery objects, we
+> would utilise the already existing power supply class. That proposal
+> was not seen acceptable by many (including Benson if I recall), and I
+> now tend to agree with that because of several reasons, starting from
+> the fact that USB PD objects supply other informations on top of power
+> delivery details (so completely unrelated to PM).
+> 
+> Even before that I had proposed that the Type-C connector class could
+> supply API for the drivers to take care of the registration of the
+> power supplies. I proposed that not only the Type-C ports should
+> register the power supplies but also the partners should represent
+> their own power supplies. That would make things much more clear for
+> the user space IMO. The port and partner would always create a "chain"
+> of supplies where the other is the supply the other the sink of power.
+> That is already supported by the power supply class. For some reason
+> this proposal was also not seen as a good idea at the time, but it may
+> be that I just failed to explain it properly.
+> 
+> Nevertheless, I still think that that is exactly how the Type-C power
+> supplies should be always presented - separate supplies for both ports
+> and partners - and that obviously the Type-C connector class should
+> take care of those supplies so that they always supply the same
+> information. Unfortunately I do not have any time at the moment to
+> work on this right now.
+> 
+> Br,
+> 
 
