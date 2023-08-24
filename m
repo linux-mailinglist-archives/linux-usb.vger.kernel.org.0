@@ -2,88 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82663787232
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Aug 2023 16:50:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08B5B787237
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Aug 2023 16:50:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235970AbjHXOtr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Aug 2023 10:49:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53146 "EHLO
+        id S241230AbjHXOuU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Aug 2023 10:50:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241861AbjHXOta (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Aug 2023 10:49:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC1C01FF6;
-        Thu, 24 Aug 2023 07:49:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BDBE66218E;
-        Thu, 24 Aug 2023 14:48:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEA2CC433C8;
-        Thu, 24 Aug 2023 14:48:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1692888535;
-        bh=L9fXQr7c4dFKYs8jRg5OKffCpoKZVVSVI9obxkzOZmU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=K+4zOJ9Zl1uA3cjXOIEwMVdtYBVbj8qctsNEknNWV1zZW6MPhsyaDdmkuPE92sZ7y
-         CPf/dRSyiumUiROg5UQ93GxP0N1KFInKCJSU0f9wQliZSPXxylX4QODBMwcVepIq7A
-         W3mMILASDlKKo3MSgA2h4/94rJeLU/Sq0nT8eUcA=
-Date:   Thu, 24 Aug 2023 16:48:52 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Simon Arlott <simon@octiron.net>
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Subject: Re: [PATCH] USB: cdc-acm: expose serial close_delay and closing_wait
- in sysfs
-Message-ID: <2023082403-masculine-scuttle-f0ad@gregkh>
-References: <ea1a13ad-a1e0-540a-e97a-4c44f6d2d33b@0882a8b5-c6c3-11e9-b005-00805fc181fe.uuid.home.arpa>
+        with ESMTP id S241871AbjHXOuD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Aug 2023 10:50:03 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C9251BD1;
+        Thu, 24 Aug 2023 07:49:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692888582; x=1724424582;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3tTg481giqbc76ab24kf268IRG/D48d54DgtcclG/Nw=;
+  b=VetZTP2IHBCUtTou9F6uVxmtsN8a9m7pdUUmGclc3FqjwdUVv1uHEAWA
+   91UfQiN/xSmnd3V1COy/WhVQMhspO4J2J8kiIZANnUKfTIjq7JBhbv8hX
+   EwEPwccvUuqd5Xxrut8sh23lrGO1NhroAoFP5grQ4S0EdAGC0ipqOLlhy
+   VZoxBpolIw0XZXs6zMV+aq+8w0mR/yG9erGITDgS8x0WPLQkfsyLMsuTf
+   +aUdPoDb/rQTxj0c8Z9DnDd0nFhGvqC5CaWnWgeCSuiTS1K9uDRgDZR1k
+   V2bN1170E+Cbo1vDUo9TVnfA9mJLOqjSS9/4OPiRPjOZ5xhju6xROcEw1
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10812"; a="374424998"
+X-IronPort-AV: E=Sophos;i="6.02,195,1688454000"; 
+   d="scan'208";a="374424998"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2023 07:49:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
+   d="scan'208";a="880835106"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 24 Aug 2023 07:49:35 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 24 Aug 2023 17:49:29 +0300
+Date:   Thu, 24 Aug 2023 17:49:29 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     quic_huliu@quicinc.com
+Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_fenglinw@quicinc.com,
+        subbaram@quicinc.com
+Subject: Re: [PATCH v2] usb: typec: qcom: check regulator enable status
+ before disabling it
+Message-ID: <ZOdt+dz7XXljFJcK@kuha.fi.intel.com>
+References: <20230824-qcom-tcpc-v2-1-3dd8c3424564@quicinc.com>
+ <ZOdlOQ+N2J7jyIEZ@kuha.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ea1a13ad-a1e0-540a-e97a-4c44f6d2d33b@0882a8b5-c6c3-11e9-b005-00805fc181fe.uuid.home.arpa>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ZOdlOQ+N2J7jyIEZ@kuha.fi.intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 23, 2023 at 09:37:45PM +0100, Simon Arlott wrote:
-> If the serial device never reads data written to it (because it is "output
-> only") then the write buffers will still be waiting for the URB to complete
-> on close(), which will hang for 30s until the closing_wait timeout expires.
+On Thu, Aug 24, 2023 at 05:12:14PM +0300, Heikki Krogerus wrote:
+> On Thu, Aug 24, 2023 at 10:32:03AM +0800, Hui Liu via B4 Relay wrote:
+> > From: Hui Liu <quic_huliu@quicinc.com>
+> > 
+> > Check regulator enable status before disabling it to avoid
+> > unbalanced regulator disable warnings.
+> > 
+> > Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> > Fixes: a4422ff22142 ("usb: typec: qcom: Add Qualcomm PMIC Type-C driver")
+> > Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> > Signed-off-by: Hui Liu <quic_huliu@quicinc.com>
+> > ---
+> > Changes in v2:
+> > - Add Fixes tag
+> > - Link to v1: https://lore.kernel.org/r/20230823-qcom-tcpc-v1-1-fa81a09ca056@quicinc.com
+> > ---
+> >  drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
+> > index bb0b8479d80f..ca616b17b5b6 100644
+> > --- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
+> > +++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
+> > @@ -422,7 +422,8 @@ static int qcom_pmic_typec_pdphy_disable(struct pmic_typec_pdphy *pmic_typec_pdp
+> >  	ret = regmap_write(pmic_typec_pdphy->regmap,
+> >  			   pmic_typec_pdphy->base + USB_PDPHY_EN_CONTROL_REG, 0);
+> >  
+> > -	regulator_disable(pmic_typec_pdphy->vdd_pdphy);
+> > +	if (regulator_is_enabled(pmic_typec_pdphy->vdd_pdphy))
+> > +		regulator_disable(pmic_typec_pdphy->vdd_pdphy);
 > 
-> This can happen with the ESP32-H2/ESP32-C6 USB serial interface. Instead of
-> changing all userspace applications to flush (discard) their output in this
-> specific scenario it would be easier to adjust the closing_wait timeout
-> with udev rules but the only available interface is the TIOCGSERIAL ioctl.
+> Would it be an option to just enable the regulator in
+> qcom_pmic_typec_pdphy_start() and disable it in
+> qcom_pmic_typec_pdphy_stop()?
+> 
+> Now the whole thing looks weird. That regulator is in practice
+> only disabled and then enabled in one and the same place -
+> pmic_typec_pdphy_reset(). It's not touched anywhere else. That makes
+> the above condition confusing to me. I may be missing something.
+> 
+> At least more explanation is needed.
 
-Then why not use that?
+I took a closer look at these drivers, and I think I understand the
+code path now. This driver is made with an assumption that the
+regulator is "on" when the driver is probed, but in your case it's
+actually "off".
 
-> The serial_core driver (ttySx) exposes its supported ioctl values as
-> read-only sysfs attributes. Add read-write sysfs attributes "close_delay"
-> and "closing_wait" to cdc-acm (ttyACMx) devices. These are the same as the
-> attributes in serial_core except that the "closing_wait" sysfs values are
-> modified so that "-1" is used for "infinite wait" (instead of 0) and "0"
-> is used for "no wait" (instead of 65535).
+So there is something wrong here, but I don't know where the root
+cause is. If the regulator is really "on" when this driver is probed,
+then there should be another user for it somewhere (no?). In that case
+the driver can't just switch off the regulator like it does now - this
+part I think really has to be fixed (or explained).
 
-Adding tty-driver-specific sysfs files for tty devices is a big no-no,
-sorry.  We don't want to go down that rabbit hole at all.
+The problem with your fix is that it will leave the regulator always
+on when the driver is removed, which it really can't do, not at least
+if the regulator was off by default.
 
-If any apis are needed, let's make them for all tty devices, through the
-existing ioctl api, so they work for all devices and userspace doesn't
-have to try to figure out just exactly what type of tty/serial device it
-is talking to (as that will not scale and is exactly the opposite of
-what common apis are for.)
+I would propose this:
 
-sorry, we can't take this, and in the end, you don't want us to as it's
-not maintainable.
+diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
+index bb0b8479d80f..bbe40634e821 100644
+--- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
++++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
+@@ -449,6 +449,10 @@ int qcom_pmic_typec_pdphy_start(struct pmic_typec_pdphy *pmic_typec_pdphy,
+ 
+        pmic_typec_pdphy->tcpm_port = tcpm_port;
+ 
++       ret = regulator_enable(pmic_typec_pdphy->vdd_pdphy);
++       if (ret)
++               return ret;
++
+        ret = pmic_typec_pdphy_reset(pmic_typec_pdphy);
+        if (ret)
+                return ret;
+@@ -467,6 +471,7 @@ void qcom_pmic_typec_pdphy_stop(struct pmic_typec_pdphy *pmic_typec_pdphy)
+                disable_irq(pmic_typec_pdphy->irq_data[i].irq);
+ 
+        qcom_pmic_typec_pdphy_reset_on(pmic_typec_pdphy);
++       regulator_disable(pmic_typec_pdphy->vdd_pdphy);
+ }
+ 
+ struct pmic_typec_pdphy *qcom_pmic_typec_pdphy_alloc(struct device *dev)
+
+
+The problem with it is that the regulator is not going to be disabled
+if there really is another user for it when the component is expected
+to be reset. But as said above, if there really is an other user, then
+this driver simply can't just turn off the regulator.
 
 thanks,
 
-greg k-h
+-- 
+heikki
