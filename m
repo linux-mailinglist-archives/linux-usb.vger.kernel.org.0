@@ -2,67 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB1EE788359
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Aug 2023 11:17:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EF887883DB
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Aug 2023 11:37:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbjHYJQl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Aug 2023 05:16:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41656 "EHLO
+        id S243698AbjHYJg2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Aug 2023 05:36:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244231AbjHYJQU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Aug 2023 05:16:20 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E24972115
-        for <linux-usb@vger.kernel.org>; Fri, 25 Aug 2023 02:15:59 -0700 (PDT)
-Received: from canpemm500007.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4RXDlf46PYzfbfq;
-        Fri, 25 Aug 2023 17:13:50 +0800 (CST)
-Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
- (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Fri, 25 Aug
- 2023 17:15:22 +0800
-From:   Yue Haibing <yuehaibing@huawei.com>
-To:     <gregkh@linuxfoundation.org>, <yuehaibing@huawei.com>
-CC:     <linux-usb@vger.kernel.org>
-Subject: [PATCH -next] USB: c67x00: Remove unused declaration c67x00_hcd_msg_received()
-Date:   Fri, 25 Aug 2023 17:15:18 +0800
-Message-ID: <20230825091518.22180-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
+        with ESMTP id S244405AbjHYJgQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Aug 2023 05:36:16 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 327AE1FEC;
+        Fri, 25 Aug 2023 02:36:13 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37P5nXB8007988;
+        Fri, 25 Aug 2023 09:35:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=nT86no/d9+8D4gWYVInaOyKap/Q6m4xCcwXiZPiBIm4=;
+ b=ny2rcvtY6lOzi0e4oglvT0R7dsS2AbYBS/Rvd34gwMH4NpmhWKIeZ0MIvEf1BFyLdjFC
+ K5UJZOlfm3RcIZTzf6ajwR/IEL2DKxGrmDbX0ayNNZB3JMsOZXE5s6AhWxlccHNGp8Q9
+ v9SKAmnoxjXs/EHhOryh18dek7MmXoZtMXj6KSpM7/dhlIUQY+L9KMudfVltdh5X+Wzx
+ Atot40gWeceMX+mnsUnrncNpJL4fL/IFbGZ4PifhJFNT9WmopMx81AVcj/4kDk87Ufd1
+ V/Am2wFoQjdZBZjKwcjUbaqqoW7OKGE+Ze1ohbAy16f6Bo8wrPjCM/K5YBcMv75SbTyj yg== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3spmpv0k3w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 25 Aug 2023 09:35:59 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37P9Zvlx019689
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 25 Aug 2023 09:35:57 GMT
+Received: from nsekar-linux.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.36; Fri, 25 Aug 2023 02:35:52 -0700
+From:   Nitheesh Sekar <quic_nsekar@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <gregkh@linuxfoundation.org>, <quic_srichara@quicinc.com>,
+        <quic_varada@quicinc.com>, <quic_wcheng@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>
+CC:     Nitheesh Sekar <quic_nsekar@quicinc.com>
+Subject: [PATCH 0/5] Enable IPQ5018 USB2 support
+Date:   Fri, 25 Aug 2023 15:05:26 +0530
+Message-ID: <20230825093531.7399-1-quic_nsekar@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [10.174.179.215]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500007.china.huawei.com (7.192.104.62)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: ZUS4u44MiVWJcJzA4qHwEcuZU33pZjvb
+X-Proofpoint-ORIG-GUID: ZUS4u44MiVWJcJzA4qHwEcuZU33pZjvb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-08-25_07,2023-08-24_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 adultscore=0
+ priorityscore=1501 impostorscore=0 malwarescore=0 spamscore=0 bulkscore=0
+ phishscore=0 suspectscore=0 mlxscore=0 mlxlogscore=459 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2308100000
+ definitions=main-2308250081
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Commit e9b29ffc519b ("USB: add Cypress c67x00 OTG controller HCD driver")
-declared but never implemented this.
+This patch series adds the relevant phy and controller
+DT configurations for enabling USB2 host mode support
+on IPQ5018.
 
-Signed-off-by: Yue Haibing <yuehaibing@huawei.com>
----
- drivers/usb/c67x00/c67x00-hcd.h | 1 -
- 1 file changed, 1 deletion(-)
+Tested with a USB Mass storage device.
 
-diff --git a/drivers/usb/c67x00/c67x00-hcd.h b/drivers/usb/c67x00/c67x00-hcd.h
-index 6332a6b5dce6..6ba5adced61c 100644
---- a/drivers/usb/c67x00/c67x00-hcd.h
-+++ b/drivers/usb/c67x00/c67x00-hcd.h
-@@ -109,7 +109,6 @@ int c67x00_urb_dequeue(struct usb_hcd *hcd, struct urb *urb, int status);
- void c67x00_endpoint_disable(struct usb_hcd *hcd,
- 			     struct usb_host_endpoint *ep);
- 
--void c67x00_hcd_msg_received(struct c67x00_sie *sie, u16 msg);
- void c67x00_sched_kick(struct c67x00_hcd *c67x00);
- int c67x00_sched_start_scheduler(struct c67x00_hcd *c67x00);
- void c67x00_sched_stop_scheduler(struct c67x00_hcd *c67x00);
+Nitheesh Sekar (5):
+  dt-bindings: phy: qcom,m31: Add IPQ5018 compatible
+  dt-bindings: usb: dwc3: Add IPQ5018 compatible
+  phy: qcom-m31: Add compatible, phy init sequence for IPQ5018
+  arm64: dts: qcom: ipq5018: Add USB related nodes
+  arm64: dts: qcom: ipq5018: Enable USB
+
+ .../bindings/phy/qcom,ipq5332-usb-hsphy.yaml  |  4 +-
+ .../devicetree/bindings/usb/qcom,dwc3.yaml    |  3 +
+ .../arm64/boot/dts/qcom/ipq5018-rdp432-c2.dts | 12 ++++
+ arch/arm64/boot/dts/qcom/ipq5018.dtsi         | 54 +++++++++++++++++
+ drivers/phy/qualcomm/phy-qcom-m31.c           | 60 +++++++++++++++++++
+ 5 files changed, 132 insertions(+), 1 deletion(-)
+
 -- 
-2.34.1
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
