@@ -2,38 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C087C787D5B
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Aug 2023 03:54:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6F3A787D8D
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Aug 2023 04:10:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239432AbjHYByB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Aug 2023 21:54:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59670 "EHLO
+        id S240738AbjHYCJg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Aug 2023 22:09:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239257AbjHYBxd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Aug 2023 21:53:33 -0400
+        with ESMTP id S241164AbjHYCJP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Aug 2023 22:09:15 -0400
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id AAFBF1BD1
-        for <linux-usb@vger.kernel.org>; Thu, 24 Aug 2023 18:53:29 -0700 (PDT)
-Received: (qmail 244637 invoked by uid 1000); 24 Aug 2023 21:53:28 -0400
-Date:   Thu, 24 Aug 2023 21:53:28 -0400
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 600FF2127
+        for <linux-usb@vger.kernel.org>; Thu, 24 Aug 2023 19:08:54 -0700 (PDT)
+Received: (qmail 244973 invoked by uid 1000); 24 Aug 2023 22:08:53 -0400
+Date:   Thu, 24 Aug 2023 22:08:53 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Simon Arlott <simon@octiron.net>,
+To:     Andrey Konovalov <andreyknvl@gmail.com>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Subject: Re: [PATCH] USB: cdc-acm: expose serial close_delay and closing_wait
- in sysfs
-Message-ID: <d1658254-b65b-4e2e-8c22-45008374d6eb@rowland.harvard.edu>
-References: <ea1a13ad-a1e0-540a-e97a-4c44f6d2d33b@0882a8b5-c6c3-11e9-b005-00805fc181fe.uuid.home.arpa>
- <2023082403-masculine-scuttle-f0ad@gregkh>
- <d313a1a9-833e-981e-b9d7-920989458d37@0882a8b5-c6c3-11e9-b005-00805fc181fe.uuid.home.arpa>
- <f1b001d8-4d6c-8c9d-a90c-7d97294b66b4@suse.com>
+        USB list <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: dwc3: unusual handling of setup requests with wLength == 0
+Message-ID: <8209aefa-5ab3-43dd-94f5-350e6d38cec2@rowland.harvard.edu>
+References: <20230818194922.ys26zrqc4pocqq7q@synopsys.com>
+ <45d9ef53-e2be-4740-a93a-d36f18a49b39@rowland.harvard.edu>
+ <20230819000643.7mddkitzr4aqjsms@synopsys.com>
+ <e63ba783-f5a4-4442-8736-987a3b134e7f@rowland.harvard.edu>
+ <CA+fCnZcmb78DMaffb3cq2JeCNxcGBeyt8hxeJq3SaTTkbZ3ewA@mail.gmail.com>
+ <3f52eb94-1d8c-4233-86ac-bbc78d4efce7@rowland.harvard.edu>
+ <CA+fCnZcJ0JHHY04By+PjYvofpefKtp1br63gJNsEL=J7n1_vCA@mail.gmail.com>
+ <bdf69b9d-fe82-48e2-9638-d84d00d4ef1d@rowland.harvard.edu>
+ <20230823171757.vegbktpkk23eg34z@synopsys.com>
+ <CA+fCnZdewxqN6jaOmah4Ptz5CaJoc6iKisFBMLujBGOD_6HoiA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f1b001d8-4d6c-8c9d-a90c-7d97294b66b4@suse.com>
+In-Reply-To: <CA+fCnZdewxqN6jaOmah4Ptz5CaJoc6iKisFBMLujBGOD_6HoiA@mail.gmail.com>
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,
         SPF_PASS autolearn=no autolearn_force=no version=3.4.6
@@ -43,26 +49,50 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 25, 2023 at 01:46:15AM +0200, Oliver Neukum wrote:
+On Fri, Aug 25, 2023 at 03:36:36AM +0200, Andrey Konovalov wrote:
+> So to summarize the issue wrt the 0-length requests:
 > 
-> 
-> On 24.08.23 20:02, Simon Arlott wrote:
-> > The ioctl can't be used without opening and closing the tty, which has
-> > side effects. On open() it'll raise DTR/RTS and activate it. For cdc-acm
-> > that will indicate to the device that the serial port has been opened
-> > which will be visible to the software running on the USB device. On
-> > close() it'll be delayed by the close_delay if any process is currently
-> > doing a blocking open() and there's no carrier, then the closing_wait
-> > time if there's been any incomplete transmitted data (by any process).
-> 
-> And that is an issue of the generic serial layer.
+> 1. UDC drivers must always delay the status stage for 0-length
+> requests until the gadget driver queues an empty request.
 
-Is it feasible to add a sysfs attribute for ttys or the serial layer to 
-control the side effect of opening (avoid raising DTR/RTS)?  If that 
-could be done, a program could use the existing ioctl to set close_delay 
-and closing_wait to 0 with no penalties.
+Any request, not necessarily empty (although it should be).  The request 
+queued by the gadget driver _is_ the Status stage response; in this 
+situation the UDC driver doesn't create one automatically.
 
-This would be racy, but for the purposes of udev that shouldn't matter 
-much.
+> 2. Many UDC drivers do not do this, and only delay the status stage
+> when USB_GADGET_DELAYED_STATUS is returned from ->setup(). Some
+> drivers also assume that only a SET_CONFIGURATION request can be
+> delayed.
+> 
+> 3. All such UDC drivers should be fixed and USB_GADGET_DELAYED_STATUS
+> should be contained within the composite framework.
+> 
+> 4. Fixing all such UDC drivers is a non-trivial amount of work, but
+> this is the goal to strive towards.
+> 
+> Alan, would it be acceptable if I add custom handling of
+> USB_GADGET_DELAYED_STATUS to Raw Gadget in the meantime? It would be
+
+Sure.  It's your driver; do whatever you want with it.  :-)
+
+> great to keep it at least somewhat working with dwc3. I can also do it
+> for GadgetFS, if you think it's a good idea.
+
+I suspect gadgetfs doesn't need it.  But go ahead and look through the 
+code to check for yourself; I might be wrong.
+
+> I can also add some clarifying comments for USB_GADGET_DELAYED_STATUS
+> and ->setup() to hopefully avoid having new UDC drivers being added
+> with the same issue (e.g. cdns2 and renesas_usbf with the same issue
+> were added just recently).
+
+Good idea, although mistakes like this tend to propagate more through 
+copy-and-paste than by failures of documentation.
+
+> Maybe it's also a good idea to add a checkpatch.pl check for using
+> USB_GADGET_DELAYED_STATUS in UDC drivers. Or maybe ask Greg to keep an
+> eye out for this?
+
+I wouldn't try to modify checkpatch.pl.
 
 Alan Stern
