@@ -2,136 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5A04787D3C
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Aug 2023 03:37:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C087C787D5B
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Aug 2023 03:54:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237994AbjHYBg4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Aug 2023 21:36:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37864 "EHLO
+        id S239432AbjHYByB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Aug 2023 21:54:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237857AbjHYBgv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Aug 2023 21:36:51 -0400
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 843021707;
-        Thu, 24 Aug 2023 18:36:48 -0700 (PDT)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-1ccc0d2e697so303457fac.0;
-        Thu, 24 Aug 2023 18:36:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692927408; x=1693532208;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MAj+Xn3dc9xjoz8edHYO8SCdBYUNyj8RASPwvjsgC10=;
-        b=OmpmEjU9trbSflUJPRuGHMuSuh1tPD3tbIRq5MMChBFDvE373Xxamjrn4vQUKW4eTH
-         yoWIHirNW2WNimNbNTVJHAE6rkx3ARvFPvax6DbydFIpWxPPJxTyforO6nRaLkbz7Y2Z
-         AImW6keo0vFb3KMiyxjNqqUB7sPSv7iWsla8+XiN31zGpO0Nk66+TOgA2CcgFrc39H20
-         oHZQrOoWnjvgKdcbnfC0EJJ+A7+9oZajw78BmlqL6mz29Fvbvf4nWwcfx+LCoidZHpxi
-         hKb2jI76c2SC1gG1SXtZ/0pjCYrNcBYA8SEDGOOkGgsrF3CmucRjz72mEChRRlWNdySS
-         kSvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692927408; x=1693532208;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MAj+Xn3dc9xjoz8edHYO8SCdBYUNyj8RASPwvjsgC10=;
-        b=H7Qu8JPS8JzbA8EW5xqxwlz9UdA6w1B5ZNd5O7n0feQpyPyQp5zD7+ieOzQk8Rr9Ea
-         gssmhqIUiN3hrfslgpMXSLununsRoZfF/uEE+wOtcZlArGANwzhNEFC4hsaF2UEgsRu7
-         oxttcfXN+BfxYNtKT/Xduk4qCn5oVnE0YjQ1zpoNemAQFfwHW1RFS/FT/UBUKw3/CXL3
-         eWnCBxWr02v/fhT7tWKgn8/BmTzKTCmM5TYKU1gjLNFcgu73qO0YESYQBj07r+/AhtS7
-         s/B01lxnj7a/Au7weKbr615bjwXbdvPEuXVm3cc/9UYniFL2AhmNVW9WDsdazqQNNCUs
-         xGhQ==
-X-Gm-Message-State: AOJu0YwZDeFmM/wPHkZsUv7TDp3HVeJvJJmPAKpxoGO+gS8n2FBMfjcz
-        AD9ut3CyvDhnN2U+8yr71yH750rQDuZwPtUWrhk=
-X-Google-Smtp-Source: AGHT+IG2N4Mp0HQwEXLsDsLQP3n3x9jc0/pqCXzobqKl6JN27VdJ5hlN3aSWvLLGMVSoEkn4ka2b5IDoytSVDD3+JXA=
-X-Received: by 2002:a05:6870:3322:b0:1a9:caa1:9571 with SMTP id
- x34-20020a056870332200b001a9caa19571mr1444334oae.34.1692927407719; Thu, 24
- Aug 2023 18:36:47 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230818031045.wovf5tj2un7nwf72@synopsys.com> <cfc7ae18-140b-4223-9cc2-7ee4b9ddea28@rowland.harvard.edu>
- <20230818194922.ys26zrqc4pocqq7q@synopsys.com> <45d9ef53-e2be-4740-a93a-d36f18a49b39@rowland.harvard.edu>
- <20230819000643.7mddkitzr4aqjsms@synopsys.com> <e63ba783-f5a4-4442-8736-987a3b134e7f@rowland.harvard.edu>
- <CA+fCnZcmb78DMaffb3cq2JeCNxcGBeyt8hxeJq3SaTTkbZ3ewA@mail.gmail.com>
- <3f52eb94-1d8c-4233-86ac-bbc78d4efce7@rowland.harvard.edu>
- <CA+fCnZcJ0JHHY04By+PjYvofpefKtp1br63gJNsEL=J7n1_vCA@mail.gmail.com>
- <bdf69b9d-fe82-48e2-9638-d84d00d4ef1d@rowland.harvard.edu> <20230823171757.vegbktpkk23eg34z@synopsys.com>
-In-Reply-To: <20230823171757.vegbktpkk23eg34z@synopsys.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Fri, 25 Aug 2023 03:36:36 +0200
-Message-ID: <CA+fCnZdewxqN6jaOmah4Ptz5CaJoc6iKisFBMLujBGOD_6HoiA@mail.gmail.com>
-Subject: Re: dwc3: unusual handling of setup requests with wLength == 0
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Felipe Balbi <balbi@kernel.org>,
+        with ESMTP id S239257AbjHYBxd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Aug 2023 21:53:33 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id AAFBF1BD1
+        for <linux-usb@vger.kernel.org>; Thu, 24 Aug 2023 18:53:29 -0700 (PDT)
+Received: (qmail 244637 invoked by uid 1000); 24 Aug 2023 21:53:28 -0400
+Date:   Thu, 24 Aug 2023 21:53:28 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     Simon Arlott <simon@octiron.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Subject: Re: [PATCH] USB: cdc-acm: expose serial close_delay and closing_wait
+ in sysfs
+Message-ID: <d1658254-b65b-4e2e-8c22-45008374d6eb@rowland.harvard.edu>
+References: <ea1a13ad-a1e0-540a-e97a-4c44f6d2d33b@0882a8b5-c6c3-11e9-b005-00805fc181fe.uuid.home.arpa>
+ <2023082403-masculine-scuttle-f0ad@gregkh>
+ <d313a1a9-833e-981e-b9d7-920989458d37@0882a8b5-c6c3-11e9-b005-00805fc181fe.uuid.home.arpa>
+ <f1b001d8-4d6c-8c9d-a90c-7d97294b66b4@suse.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f1b001d8-4d6c-8c9d-a90c-7d97294b66b4@suse.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 23, 2023 at 7:18=E2=80=AFPM Thinh Nguyen <Thinh.Nguyen@synopsys=
-.com> wrote:
->
-> > > First, I noticed that some of the UDC drivers only expect to handle a
-> > > delayed Status stage for SET_CONFIGURATION requests. (Which is
->
-> Just want to clarify that dwc3 would expect a delayed status for any
-> request returned with USB_GADGET_DELAYED_STATUS. The issue is that dwc3
-> assumes the _first_ delayed request would be SET_CONFIGURATION. Any
-> subsequence control request with delayed request, it assumes the device
-> is already in configured state.
->
-> > That expectation is wrong; gadget drivers can also want to delay the
-> > Status stage for a SET_INTERFACE request.  And in theory they might wan=
-t
-> > to delay any control-OUT transfer.
->
-> Agree. Thanks Andrey and Alan for looking into dwc3.
->
-> Regarding SET_INTERFACE, it should be fine because it should be done
-> while it's already in configured state, which is after
-> SET_CONFIGURATION. But it's true that dwc3 needs to fix this assumption
-> here.
+On Fri, Aug 25, 2023 at 01:46:15AM +0200, Oliver Neukum wrote:
+> 
+> 
+> On 24.08.23 20:02, Simon Arlott wrote:
+> > The ioctl can't be used without opening and closing the tty, which has
+> > side effects. On open() it'll raise DTR/RTS and activate it. For cdc-acm
+> > that will indicate to the device that the serial port has been opened
+> > which will be visible to the software running on the USB device. On
+> > close() it'll be delayed by the close_delay if any process is currently
+> > doing a blocking open() and there's no carrier, then the closing_wait
+> > time if there's been any incomplete transmitted data (by any process).
+> 
+> And that is an issue of the generic serial layer.
 
-Ack.
+Is it feasible to add a sysfs attribute for ttys or the serial layer to 
+control the side effect of opening (avoid raising DTR/RTS)?  If that 
+could be done, a program could use the existing ioctl to set close_delay 
+and closing_wait to 0 with no penalties.
 
-Thank you Thinh and Alan for taking the time to look into this!
+This would be racy, but for the purposes of udev that shouldn't matter 
+much.
 
-So to summarize the issue wrt the 0-length requests:
-
-1. UDC drivers must always delay the status stage for 0-length
-requests until the gadget driver queues an empty request.
-
-2. Many UDC drivers do not do this, and only delay the status stage
-when USB_GADGET_DELAYED_STATUS is returned from ->setup(). Some
-drivers also assume that only a SET_CONFIGURATION request can be
-delayed.
-
-3. All such UDC drivers should be fixed and USB_GADGET_DELAYED_STATUS
-should be contained within the composite framework.
-
-4. Fixing all such UDC drivers is a non-trivial amount of work, but
-this is the goal to strive towards.
-
-Alan, would it be acceptable if I add custom handling of
-USB_GADGET_DELAYED_STATUS to Raw Gadget in the meantime? It would be
-great to keep it at least somewhat working with dwc3. I can also do it
-for GadgetFS, if you think it's a good idea.
-
-I can also add some clarifying comments for USB_GADGET_DELAYED_STATUS
-and ->setup() to hopefully avoid having new UDC drivers being added
-with the same issue (e.g. cdns2 and renesas_usbf with the same issue
-were added just recently).
-
-Maybe it's also a good idea to add a checkpatch.pl check for using
-USB_GADGET_DELAYED_STATUS in UDC drivers. Or maybe ask Greg to keep an
-eye out for this?
+Alan Stern
