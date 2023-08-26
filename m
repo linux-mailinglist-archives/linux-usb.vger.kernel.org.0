@@ -2,144 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 286FE789613
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Aug 2023 12:50:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BBFD789774
+	for <lists+linux-usb@lfdr.de>; Sat, 26 Aug 2023 16:39:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232410AbjHZKtt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 26 Aug 2023 06:49:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44580 "EHLO
+        id S230098AbjHZOib (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 26 Aug 2023 10:38:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232521AbjHZKte (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 26 Aug 2023 06:49:34 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E9E7210B
-        for <linux-usb@vger.kernel.org>; Sat, 26 Aug 2023 03:49:30 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2bcb89b4767so25450881fa.3
-        for <linux-usb@vger.kernel.org>; Sat, 26 Aug 2023 03:49:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693046968; x=1693651768;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4lqvr23FFPcSYnIDpllCI1BC3DDx5xJk3OtR+XX356M=;
-        b=N4vJ31QHqX29zQIF3aRtNRkG0Ej+UlHAuJd7uWGxtfs031GO0FYTcpsTzNBq7BFTEz
-         15uHbNDQesdgQa6cmffmeSAQXGBr/uH6JgyoMXVynmh3mN2NBSo0nixe1xUAwOBmHd1b
-         qkZrFXWSUYGJjOn2sfOiNxyWvVFhtrjjIn0/IQdMF8wjh1BEWOqr60kqOPs6mM6Ve+6Q
-         VUK2bBXh2IwngoWdgT68iqMcW8qMGgRRn4FLsAbVtW9yZ9SqTAdumghQl61LFqk1xE8x
-         E5a/l/aaZI544mXSYrV+dMNCtbp/jXRnvjy34B5G+03ZiyJAqgYyjWRsVOGgRRxckbph
-         tn/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693046968; x=1693651768;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4lqvr23FFPcSYnIDpllCI1BC3DDx5xJk3OtR+XX356M=;
-        b=ZVEcS09nn87xFh+o0u5CDqQp6hwAisSeSECjZUYRGR8qdKkfaYa5DrGbO5ZY7+pXIP
-         akWJts5IxOo0bb2XrP+mPrw4CcUmqdBMsdn+mK92m6YkF9TQ1se5Ds25+JHFJpBg/gwb
-         N/aPsPB/3C4sONX9499l6WbTiz82x2SOa9ujTtCnjIvdVYQpvBrJMGu7N4uDnTZGxBPG
-         145n9QQkRU1c9xb3SvxV1bMdbjlRy27yCdESj0SgNUdY9zB9SwHcv/pGwxbk8+mUd2m0
-         ORB6VDIwWJ1XSZ1jmBfIyQj+W5f56tRoDPuT1VdBw+v8FqqFRrvEs2zY65EkcVl24BI8
-         gXlw==
-X-Gm-Message-State: AOJu0YyJ+fHbv1HCwcqBkyvHadPqa8+Do7ORw8yYx6UzWnElOckKsnoC
-        NOh3nOxiln7NkXh0OBHn8e4k3w==
-X-Google-Smtp-Source: AGHT+IFzZwrpN2SUzyqWq4RHjYYCjMwR4/3kpyqzubM8/jmF8NrOBbpauF53K3ZZJa2GchZZ2/evTw==
-X-Received: by 2002:a2e:a4b4:0:b0:2bc:feb6:6da4 with SMTP id g20-20020a2ea4b4000000b002bcfeb66da4mr1144871ljm.33.1693046968423;
-        Sat, 26 Aug 2023 03:49:28 -0700 (PDT)
-Received: from [192.168.1.101] (abyl74.neoplus.adsl.tpnet.pl. [83.9.31.74])
-        by smtp.gmail.com with ESMTPSA id v3-20020a2e9f43000000b002b6e15ccf88sm733615ljk.135.2023.08.26.03.49.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 26 Aug 2023 03:49:28 -0700 (PDT)
-Message-ID: <f9df2e02-9fae-4e16-9412-d378ef168903@linaro.org>
-Date:   Sat, 26 Aug 2023 12:49:27 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: misc: eud: Fix missing IRQ check in eud_probe()
-Content-Language: en-US
-To:     Zhang Shurong <zhang_shurong@foxmail.com>,
-        quic_schowdhu@quicinc.com
-Cc:     agross@kernel.org, andersson@kernel.org,
+        with ESMTP id S229821AbjHZOiY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 26 Aug 2023 10:38:24 -0400
+X-Greylist: delayed 1233 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 26 Aug 2023 07:38:21 PDT
+Received: from out203-205-221-231.mail.qq.com (out203-205-221-231.mail.qq.com [203.205.221.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6302109;
+        Sat, 26 Aug 2023 07:38:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1693060699;
+        bh=bBm3JZWtV19d5mTvY144XG0VpJxbcD0Lb6oNpBSzTKw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=Ze4oRoN1kIr3DhvJvQGgL256L3hzrppxLwmitikcQSK8BlZWnYSDUAXg4w1gqDko4
+         4i+PxpeIkBAGcPI187RzxUprkUxHWqe5c9QYKV0fkYo0qDs/fMqxBWcVFpJVQiSOMQ
+         ubkpqid8dTGGzn2gnB+bDUSafPYIGEQwFPDWxSvs=
+Received: from localhost.localdomain ([220.243.191.34])
+        by newxmesmtplogicsvrsza10-0.qq.com (NewEsmtp) with SMTP
+        id 46A86A0C; Sat, 26 Aug 2023 22:17:42 +0800
+X-QQ-mid: xmsmtpt1693059462tjsabkefh
+Message-ID: <tencent_D0AA2D25300E0F108559545E899C9B8EDA07@qq.com>
+X-QQ-XMAILINFO: M3X79PAqfpWTsaSODfveg0gn1w+AdJXCvBs4ZojKWmplo/bKlgY+Naa/Oa1kR9
+         iRth/98V87fdTt3810GEHAT/zmy9LZi0y2GANFUrBP1a2Rr0c/OuAGsLFSeSsQH8g+RKJi+uvRAb
+         MamYUOZUIV/3ag0vwguLtMu4OST5QeNWUkHT+cp5i6idQVWw0Lu6NWr87xSVgeT/NurrG0Vpzg9x
+         OeKAp6VkydQrFCH0t6NQAtxepVj/dH1+bglVrM3o2wRH1f8o2j+Dn2OY48ZJe35eFaK5t6GBIWbp
+         XtUA21+moSODPBt4DqYi0cIVgzRE0TP4JutrLJVC2Sg4DTBS8/2v/0RMGbRc/A/hdPFHhH5ENlEP
+         m2P2IipjG70IiKd7Y6jxt+6F+uCoKx12uxNxV8PwrTjOhWhg1dlb6/LCr/EsM0Q5u3nzKM538Mlg
+         b/MDeAwNtg/KrpCpJtY42uktniFiIBdVp/L9GpfzO0ipKwcjMHnsXOllR0RUwm0PIyne2UCBnSsm
+         bG/0jtj5yU571vHTjMSZjjhkThMJdtlUd/aFNz9nxqMyvAXXWLtXo7rkLldvfUmi3MKWEatWHGg9
+         yYQio28hv2wgabtO+48CucW/thjRivO6D21F+1GUN0B1v80zgBmDF/4+O4VvK4hUautQN6DxJxeU
+         BxTjMcM+w2slLrADMCK38eJoXoKxWw3020DooGOuNbFIPQfimYlWjV37Z2rKdLpb3Z6cyrrpt8qM
+         gQyoFhmegjDXhMcTMJ7ZcXj4ZJeXGSKlte2VIZYZAVvbOZZ2VqrIneI1EdMJgkciGmo/kUhBFy8l
+         YRA+UsJ8agPD2NsyKJ1PHwkbAEckIjxOQSHHo4HhxB2Zw0DKL0wKDwV8ys3Od0Fdw9wLCSRVB4el
+         kV78hU9GX8YKj8v/bAgsPA0GlUmWgoaGgzYetW2krNUh9rc5RKEA2k6TQRmQQDuKtOMKgcrbuWZf
+         JU8X4wiHnE3pk2AnQ6pSD27Wlb34W5vpe8Z4dGdpjBkdhv6nYiWRy7hpXA9ldlufkd20f1eRxJlV
+         jUmUzqoqufUHmOBRJIm0ckp0kgAPpM8KQGQ8TMlw==
+X-QQ-XMRINFO: NI4Ajvh11aEj8Xl/2s1/T8w=
+From:   Zhang Shurong <zhang_shurong@foxmail.com>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     quic_schowdhu@quicinc.com, agross@kernel.org, andersson@kernel.org,
         gregkh@linuxfoundation.org, linux-arm-msm@vger.kernel.org,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: misc: eud: Fix missing IRQ check in eud_probe()
+Date:   Sat, 26 Aug 2023 22:17:42 +0800
+X-OQ-MSGID: <4832339.GXAFRqVoOG@localhost.localdomain>
+In-Reply-To: <f9df2e02-9fae-4e16-9412-d378ef168903@linaro.org>
 References: <tencent_C40B301A0F71853A540809BE1BB85AB12D07@qq.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <tencent_C40B301A0F71853A540809BE1BB85AB12D07@qq.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+ <f9df2e02-9fae-4e16-9412-d378ef168903@linaro.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_BLOCKED,RDNS_DYNAMIC,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 26.08.2023 12:47, Zhang Shurong wrote:
-> This func misses checking for platform_get_irq()'s call and may passes the
-> negative error codes to request_irq(), which takes unsigned IRQ #,
-> causing it to fail with -EINVAL, overriding an original error code.
-> 
-> Fix this by stop calling request_irq() with invalid IRQ #s.
-> 
-> Fixes: 9a1bf58ccd44 ("usb: misc: eud: Add driver support for Embedded USB Debugger(EUD)")
-> Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
-> ---
->  drivers/usb/misc/qcom_eud.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/misc/qcom_eud.c b/drivers/usb/misc/qcom_eud.c
-> index 7f371ea1248c..b33c615a2037 100644
-> --- a/drivers/usb/misc/qcom_eud.c
-> +++ b/drivers/usb/misc/qcom_eud.c
-> @@ -204,7 +204,12 @@ static int eud_probe(struct platform_device *pdev)
->  	if (IS_ERR(chip->mode_mgr))
->  		return PTR_ERR(chip->mode_mgr);
->  
-> -	chip->irq = platform_get_irq(pdev, 0);
-> +	ret = platform_get_irq(pdev, 0);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	chip->irq = ret;chip->irq = plat..
-if (chip->irq < 0)
-	return chip->irq
+=E5=9C=A8 2023=E5=B9=B48=E6=9C=8826=E6=97=A5=E6=98=9F=E6=9C=9F=E5=85=AD CST=
+ =E4=B8=8B=E5=8D=886:49:27=EF=BC=8CKonrad Dybcio =E5=86=99=E9=81=93=EF=BC=9A
+> On 26.08.2023 12:47, Zhang Shurong wrote:
+> > This func misses checking for platform_get_irq()'s call and may passes =
+the
+> > negative error codes to request_irq(), which takes unsigned IRQ #,
+> > causing it to fail with -EINVAL, overriding an original error code.
+> >=20
+> > Fix this by stop calling request_irq() with invalid IRQ #s.
+> >=20
+> > Fixes: 9a1bf58ccd44 ("usb: misc: eud: Add driver support for Embedded U=
+SB
+> > Debugger(EUD)") Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
+> > ---
+> >=20
+> >  drivers/usb/misc/qcom_eud.c | 7 ++++++-
+> >  1 file changed, 6 insertions(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/usb/misc/qcom_eud.c b/drivers/usb/misc/qcom_eud.c
+> > index 7f371ea1248c..b33c615a2037 100644
+> > --- a/drivers/usb/misc/qcom_eud.c
+> > +++ b/drivers/usb/misc/qcom_eud.c
+> > @@ -204,7 +204,12 @@ static int eud_probe(struct platform_device *pdev)
+> >=20
+> >  	if (IS_ERR(chip->mode_mgr))
+> >  =09
+> >  		return PTR_ERR(chip->mode_mgr);
+> >=20
+> > -	chip->irq =3D platform_get_irq(pdev, 0);
+> > +	ret =3D platform_get_irq(pdev, 0);
+> > +	if (ret < 0)
+> > +		return ret;
+> > +
+> > +	chip->irq =3D ret;chip->irq =3D plat..
+>=20
+> if (chip->irq < 0)
+> 	return chip->irq
+>=20
+> ?
+>=20
+> Konrad
+Thank you for your thoughtful response. To clarify, are you suggesting that=
+ I=20
+replace the usage of `ret` with `chip->irq`? If that is the case, I will=20
+proceed with creating a patch for version 2.
 
-?
 
-Konrad
+
+
+
