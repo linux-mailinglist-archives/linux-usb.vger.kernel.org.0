@@ -2,150 +2,154 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1CE978A0F0
-	for <lists+linux-usb@lfdr.de>; Sun, 27 Aug 2023 20:25:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 570BD78A119
+	for <lists+linux-usb@lfdr.de>; Sun, 27 Aug 2023 20:57:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbjH0SXy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 27 Aug 2023 14:23:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35476 "EHLO
+        id S229887AbjH0S4O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 27 Aug 2023 14:56:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbjH0SXx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 27 Aug 2023 14:23:53 -0400
-Received: from genua.uuid.uk (genua.uuid.uk [78.47.120.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98DAB120;
-        Sun, 27 Aug 2023 11:23:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=octiron.net
-        ; s=20230424-rsa3072; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
-        From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:From:Sender:
-        Reply-To:Subject:Date:Message-ID:To:Cc:Bcc:MIME-Version:Content-Type:
-        Content-Disposition:Content-Transfer-Encoding:In-Reply-To:References:
-        Organization; bh=FtgBnnbL7InHN0jz7NDy+yS0z9cLS5ehECtcuFj7NI8=; t=1693160629; 
-        b=jFXVsHeuWUypCkn+vlI7akwk0isDuZFC9Kul9f2mVBOxmiUCiqqNY7lpbdBP/8vWAHfR7Xz1OOv
-        pRMGsVljjZNde6dirtgeNUM0Ha1ri2oXBLXPCKIrC9X3isgZoWIfWh9iQJpTnNu3ZjvZElZ4UX25U
-        zgvpUVjphPSFMn3O+9O2+Pi2Ur0V3qLbtoKP/c9+v+mJbUGsAct3QYxcjGy6jtJx3yakrid5Fpae/
-        TA66FSiLz25IloP3n28pxYIedicq5f3aekWgDKojlnRGqKR+NlxlX7d/RsOzPnPGX1IPNVAVDXNNz
-        dH5urQ3y6nZpdOZkLrw8MzNPasiMAfN39d41VCHC0QSKa2s0Z/OqwyEyq1I9zLrKGdtVWRk1esoa3
-        TKGbIMPS8yWLYZuQ3KHhB23tH0ZumVzAQhcmHiSfeh/rVjdBQFLyZtLYChnhYYOvo0IK1X90YB+mq
-        IhTcDkl7pjkxsyYvdwXnJPpDJ/JkxD+Jg6SvjvW2puuajL03jdFP;
-DKIM-Signature: v=1; a=ed25519-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=octiron.net; s=20230410-ed25519; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:From:
-        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:Bcc:MIME-Version:Content-Type:
-        Content-Disposition:Content-Transfer-Encoding:In-Reply-To:References:
-        Organization; bh=FtgBnnbL7InHN0jz7NDy+yS0z9cLS5ehECtcuFj7NI8=; t=1693160629; 
-        b=+WecUCb4yupXf6AmgzkmpTW/akp/RwiMdDtAkf3dkTGE7E+cVnEuJS+yQ9Khw4Aoap4NZbR/rng
-        P4PF5mDvNDg==;
-Received: by genua.uuid.uk with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.93)
-        (envelope-from <simon@octiron.net>)
-        id 1qaKQI-00DZDH-64; Sun, 27 Aug 2023 19:23:43 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=octiron.net
-        ; s=20230424-rsa3072; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
-        From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:From:Sender:
-        Reply-To:Subject:Date:Message-ID:To:Cc:Bcc:MIME-Version:Content-Type:
-        Content-Disposition:Content-Transfer-Encoding:In-Reply-To:References:
-        Organization; bh=FtgBnnbL7InHN0jz7NDy+yS0z9cLS5ehECtcuFj7NI8=; t=1693160622; 
-        b=MYH7qwdfcLoebqtX3yvGI+Wiv8BTc3NPMTcaT9hGhFdfxvxpSc7PYSnmcYtebr+DMEIJm0lCJlS
-        YEcghtB5OUzQ57KHGdj4Wm2yyN7xaCUlLbQKa/AZ9xMRZi3gwKRhA1mqP/IhBebJLhgIDw/baYPM3
-        29xzX2FFP/u1LmlzfybPoKncpoGZ10+BsZBwQQ0qSJmcIzupYqjZMRyLWn9CEVQ+dgBwE4zDl4enV
-        ZNm0uZg9pZjRoaj+QMFwtjWvNbXx50I6A0i9eLWrzfu/CoSDiGPGaYGejuH88QIysoqWikE4jjeHr
-        R9BwZpa0FPic7AuzWLH+nZUpIL88sFuNqua9gi4IHLwBgV+AHiDAQ6fP9IALwB7v6k6A3jKjY3Ygn
-        VkeQo7qOjWBQUqJD1j5/LfEjkxB3wbe3YiQ5u0LdpKZvfw9HtyHWY/ZMx37NTYu+oFaC1kHycW+x8
-        IY/l6wsP4UeeMh3fvDuGuSoRDyq4HIHNRKpCvd0cpENHt5/CtwO4;
-DKIM-Signature: v=1; a=ed25519-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=octiron.net; s=20230410-ed25519; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:From:
-        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:Bcc:MIME-Version:Content-Type:
-        Content-Disposition:Content-Transfer-Encoding:In-Reply-To:References:
-        Organization; bh=FtgBnnbL7InHN0jz7NDy+yS0z9cLS5ehECtcuFj7NI8=; t=1693160622; 
-        b=WcSQfzUwB3bUzrIds1MFcqXOEr6tGSjvefGBhOwD1Uq5mUEPMKow7fyBRfAVxR0EJo9OgmW5QUk
-        YYwZ9LUkfAg==;
-Received: by tsort.uuid.uk with esmtps (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128)
-        (Exim 4.93)
-        (envelope-from <simon@octiron.net>)
-        id 1qaKQF-005zuY-UE; Sun, 27 Aug 2023 19:23:40 +0100
-Message-ID: <30fa035a-709f-58cd-fc1e-fef1367dc6dd@0882a8b5-c6c3-11e9-b005-00805fc181fe.uuid.home.arpa>
-Date:   Sun, 27 Aug 2023 19:23:39 +0100
+        with ESMTP id S229874AbjH0Szx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 27 Aug 2023 14:55:53 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id CF0D4F4
+        for <linux-usb@vger.kernel.org>; Sun, 27 Aug 2023 11:55:50 -0700 (PDT)
+Received: (qmail 325084 invoked by uid 1000); 27 Aug 2023 14:55:50 -0400
+Date:   Sun, 27 Aug 2023 14:55:50 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Milan Broz <gmazyland@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: usb-storage: how to extend quirks flags to 64bit?
+Message-ID: <2d580337-eaf3-47fb-afa7-1006d9a257ea@rowland.harvard.edu>
+References: <f9e8acb5-32d5-4a30-859f-d4336a86b31a@gmail.com>
+ <6f8b825b-bc41-4080-8128-4a6f0a43f779@rowland.harvard.edu>
+ <34aa2eea-5417-4e46-91a0-aac1a46a84cf@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: [PATCH (v2)] docs: ABI: sysfs-tty: close times are in centiseconds
-Content-Language: en-GB
-To:     Jiri Slaby <jirislaby@kernel.org>,
-        Oliver Neukum <oneukum@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-serial@vger.kernel.org
-References: <ea1a13ad-a1e0-540a-e97a-4c44f6d2d33b@0882a8b5-c6c3-11e9-b005-00805fc181fe.uuid.home.arpa>
- <40c5c70f-46ff-c5f3-212b-2badc47e49a3@0882a8b5-c6c3-11e9-b005-00805fc181fe.uuid.home.arpa>
- <27304225-c8b0-9cac-94a3-e985e45aa41a@0882a8b5-c6c3-11e9-b005-00805fc181fe.uuid.home.arpa>
- <2a3647bf-91a8-7a5f-9edb-c792a6031f57@kernel.org>
-From:   Simon Arlott <simon@octiron.net>
-X-Face: -|Y&Xues/.'(7\@`_\lFE/)pw"7..-Ur1^@pRL`Nad5a()6r+Y)18-pi'!`GI/zGn>6a6ik
- mcW-%sg_wM:4PXDw:(;Uu,n&!8=;A<P|QG`;AMu5ypJkN-Sa<eyt,Ap3q`5Z{D0BN3G`OmX^8x^++R
- Gr9G'%+PNM/w+w1+vB*a($wYgA%*cm3Hds`a7k)CQ7'"[\C|g2k]FQ-f*DDi{pU]v%5JZm
-In-Reply-To: <2a3647bf-91a8-7a5f-9edb-c792a6031f57@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <34aa2eea-5417-4e46-91a0-aac1a46a84cf@gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The times for close_delay and closing_wait are in centiseconds, not
-milliseconds. Fix the documentation and add details of special values.
+On Sun, Aug 27, 2023 at 06:45:55PM +0200, Milan Broz wrote:
+> On 8/27/23 17:50, Alan Stern wrote:
+> > On Sun, Aug 27, 2023 at 11:32:05AM +0200, Milan Broz wrote:
+> > > Hello,
+> > > 
+> > > I tried to extend USB storage for the passthrough of Opal
+> > > security commands,
+> > 
+> > What sort of changes are needed?  Where is this passthrough mechanism
+> > documented?
+> 
+> We are currently adding support for optional OPAL hw encryption to
+> cryptsetup/LUKS2 (that uses kernel OPAL ioctl interface) and I tried
+> to make USB adapters to work with it too.
+> 
+> I'll send RFC patchset (it is quite simple) where I explain it in detail.
+> The patch for USB storage is actually one liner, the rest is in SCSI driver :)
+> 
+> Basically, USB adapters (not supporting UAS) cannot work as
+> required SCSI SECURITY IN/OUT SCSI commands do not work here.
+> 
+> But we can use ATA12 pass-thru (as used with original sedutils
+> and some other tools we used in research; it is a documented feature).
+> It works once ATA12 wrapper is added to block layer and USB storage enables
+> the "security_supported" bit.
+> 
+> > 
+> > >   and some adapters are clearly "not perfect".
+> > 
+> > Which ones?
+> 
+> Namely Realtek 9210 family (NVME to USB bridge). Everything OPAL related
+> works, but the adapter always set write-protected bit for the whole
+> drive (even if OPAL locking range is just covering part of the disk).
+> 
+> I spent quite a lot time trying new firmware versions - this issue is
+> still there.
 
-Signed-off-by: Simon Arlott <simon@octiron.net>
----
-On 25/08/2023 06:33, Jiri Slaby wrote:
-> And I would use "centiseconds" instead, which is used (IMO) in these cases.
+It sounds like the sort of thing that should be reported as a bug to 
+Realtek.  I can't imagine their customers would be very happy about this 
+behavior.
 
-It's used in a few places, but the documentation has no "centiseconds"
-and a couple of "hundredths". I've changed it anyway.
+> On the other side, many other USB to SATA bridges works nicely.
+> I think this is the exact situation where we should set a new quirks flag
+> to disable it. (The nasty thing is that for unbricking it you need PSID reset
+> - PSID is a number written on the label of the drive - followed by physical
+> disconnect for recovery.)
+> 
+> 
+> Anyway, I intentionally sent this 32bit flags question separately as it
+> is actually a generic issue - we are just out of flag space now...
+> 
+> Even if the patches mentioned above are rejected, someone will need
+> a new flag for something else later.
 
- Documentation/ABI/testing/sysfs-tty | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+Certainly.  We knew this was bound to come up eventually.
 
-diff --git a/Documentation/ABI/testing/sysfs-tty b/Documentation/ABI/testing/sysfs-tty
-index 820e412d38a8..895c47f05f6f 100644
---- a/Documentation/ABI/testing/sysfs-tty
-+++ b/Documentation/ABI/testing/sysfs-tty
-@@ -87,19 +87,22 @@ What:		/sys/class/tty/ttyS<x>/close_delay
- Date:		October 2012
- Contact:	Alan Cox <alan@linux.intel.com>
- Description:
--		 Show the closing delay time for this port in ms.
-+		Show the closing delay time for this port in centiseconds.
+> > > I would need to introduce a new quirks flag to turn it off.
+> > > 
+> > > Seems that we are already out of quirks flags on 32bit
+> > > for usb storage - in usb_usual.h the last entry in mainline is
+> > >    US_FLAG(SENSE_AFTER_SYNC, 0x80000000)
+> > > 
+> > > Adding a new flag will work for 64-bit systems but not
+> > > for platforms with 32-bit unsigned long like i686.
+> > > 
+> > > How do we allow new flag definitions?
+> > > 
+> > > Struct us_data fflags can be made 64bit (defined in
+> > > drivers/usb/storage/usb.h), but the major problem is that these
+> > > are transferred through the generic driver_info field
+> > > defined in linux/mod_devicetable.h as unsigned long).
+> > > Making this 64bit is IMO an extensive API change (if even possible).
+> > > I guess this is not the way to go.
+> > > 
+> > > Could USB maintainers please help to advise what is the correct
+> > > solution? I am not familiar with the USB driver model here
+> > > and I see no easy way how it can be solved by a trivial static
+> > > allocation inside the USB storage driver.
+> > > 
+> > > Someone will need a new quirks flag in the future anyway... :)
+> > 
+> > I can think of only one way to accomplish this on 32-bit systems: Change
+> > the driver_info field from a bit array to an index into a static table
+> > of 64-bit flags values.  Each unusual_devs structure would have its own
+> > entry in this table.  As far as I can tell, the other unusual_*.h tables
+> > could retain their current driver_info interpretations, since no new
+> > quirk bits are likely to be relevant to them.
+> > 
+> > Making this change would be an awkward nuisance, but it should be
+> > doable.
+> 
+> Hm, yes, thanks for the idea,that is a possible solution.
+> It will need to modify all unusual macros, though. Just I am not sure I want
+> to spent time patching all the drivers as I have not way how to test it.
+
+I don't think it will be necessary to change all those macros, just the 
+ones in usual_tables.c.  And to create the new table containing the 
+actual flag values, of course.
+
+There will also have to be a new argument to usb_stor_probe1() 
+specifying whether the id->driver_info field is standard (i.e., it 
+contains the flags directly) or is one of the new indirect index values.  
+
+And you'll have to figure out a comparable change to the dynamic device 
+ID table mechanism.
+
+(If you want to be really fancy about it, you could design things in 
+such a way that the indirect flags approach is used only on 32-bit 
+systems.  64-bit systems can put the new flag bits directly into the 
+driver_info field.  However, it's probably best not to worry about this 
+initially.)
  
--		 These sysfs values expose the TIOCGSERIAL interface via
--		 sysfs rather than via ioctls.
-+		These sysfs values expose the TIOCGSERIAL interface via
-+		sysfs rather than via ioctls.
- 
- What:		/sys/class/tty/ttyS<x>/closing_wait
- Date:		October 2012
- Contact:	Alan Cox <alan@linux.intel.com>
- Description:
--		 Show the close wait time for this port in ms.
-+		Show the close wait time for this port in centiseconds.
- 
--		 These sysfs values expose the TIOCGSERIAL interface via
--		 sysfs rather than via ioctls.
-+		Waiting forever is represented as 0. If waiting on close is
-+		disabled then the value is 65535.
-+
-+		These sysfs values expose the TIOCGSERIAL interface via
-+		sysfs rather than via ioctls.
- 
- What:		/sys/class/tty/ttyS<x>/custom_divisor
- Date:		October 2012
--- 
-2.37.0
-
--- 
-Simon Arlott
-
+Alan Stern
