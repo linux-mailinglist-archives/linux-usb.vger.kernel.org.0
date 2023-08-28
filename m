@@ -2,51 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9380C78A8E8
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Aug 2023 11:26:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C88B078A8E7
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Aug 2023 11:26:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbjH1J01 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        id S229666AbjH1J01 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
         Mon, 28 Aug 2023 05:26:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53924 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229938AbjH1J0S (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Aug 2023 05:26:18 -0400
+        with ESMTP id S229750AbjH1J0T (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Aug 2023 05:26:19 -0400
 Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-he1eur01on2049.outbound.protection.outlook.com [40.107.13.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87169E
-        for <linux-usb@vger.kernel.org>; Mon, 28 Aug 2023 02:26:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C093C2
+        for <linux-usb@vger.kernel.org>; Mon, 28 Aug 2023 02:26:17 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QQSRRjvXSYVmY38Hi4sDir2QHAgebEPfJLX2MTs14ztJJPMbK5nBz5p/bSfAbExIovlX4Rxkj4t6wCG/rJaw9wawA8RqA+uAD7WwHwwKDhKIstOlyMJ6rzDjuJnSK5D50T4b8yXKF7Bmy3wfTwIX4H1lirUftcnYWv7m1j+LhKu8IZQOAKU538GZtiPFf3f0+fEBFaBvdXL2wNM0JUjWZ04hAH7lWIsGLfWJozfpYwjSHZNqbJbTIrgaS+VP2mZEwEsLeBMUBAbMDbFZKSMD2Jt2xNGeTHEA4nzSh+DTLbsaWW19U53D+X9UJNg8eR+aLShpxe+EnMp6sI5wyKBWaQ==
+ b=OxrILR/ClTPKApw0E8i3mH0Uch9HAjH6m63Qlj1EZ2Du6LTpQDYSh7AAe7ESECLKFck2pq7WbOZlubn979OoUJgnmvyS/hmbxXHrRYUrSPIUIO3NUJEigZEtPUSUzwzlnrOMDQ8abutv/IYhM04x6jDIEx3lHkArBB5/BM9DzdUgjOSaeHEyPhw5DK7gsVwiBfOtdV4j0YCvnJyip321wDbx6qmCWOVbo8aYRGGzZWv92/3VoezftLP2+MKo4ih6lthvUaGyDjLkCEuvcPKecM64+hC8XntNycd+NR+gOqB2EWUlbgn7OrSKvTBjxKG5F1xNyoXuk2RzjPuiFmbDrA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vqG2sAUsXZHtbv8qQ1ls8RwmopjiDctR3H/C+4Fnkm8=;
- b=Mzd/N9ZgSEfNlhQzYZFX3syxrjr6NEYvJq58cyKoTLnwWDtr3pa6oKf6hVFB4klNqgBzqlqyt2u1JpVdtZhP4iVXrIwv1G914oUkyxWNqUaAu771A29y4NTGx7RpsVckjypmVyJnwaR/7sVgmJRIsXGFnjK56nvXv5cstt3IM2zmkpO1UT6WJ42XmQOnloxTm4+KaD9b/Sse94Owj/UR2vn4N2K8XHn9FtM8K8UFIe2+JQKnq/NdvTAptCsRdzCUvd6lEekWil0rVdSP1r+CgT185Y6TbRFyQXTAiHf+OcNfPQFbMUJYfrGM1OmU8I/w+TWOJe5ZjbW/+ug+tR/+cg==
+ bh=MT9syemS/1TFYVK9dzQldZPJrhmlkArm+zIAFcRUajo=;
+ b=Cba2/V3a+bZE45SpiEJf/hu2I634rwsyYcMpf8n3MVw13fmi/j/JSW/Zyf+EEXdTV7G/qLfUX5FuPNcBHN+XoegRPSGxUQQtwuXBeG3GbgljpzSNoR2BFXvNJ1ZKrXVn0h3wGTminWt7G6f02p6ufdghcs7EE0we1vQJfSb3D7OEuBo8EPLjOaGjtAK60h5My6skmVEvnOd4FpzHw5BikWGCp5kNTvT+Y7X159NGNme8+HWgyoXYlbP2k9A9f4P5mSWYg1WFrzg/uxPJ2supDOA9+abk1vlx/hRmEkb+mBCKF4zlNGeEbZPXFjP3ehn6V7I8LNhIgY4iEHTvjeqJww==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vqG2sAUsXZHtbv8qQ1ls8RwmopjiDctR3H/C+4Fnkm8=;
- b=hwIJfUwmgdBnVCOVIwY9kHboPSpQN8Vuegm05qh7GtnCn2dN4nORiBGIk+OgKrhID8qDtuJ6XMPNPJwUdSe7Gy7tIlqFPzBsBgKZNy3JxrBKxXXmNL9RzdEIVCOh1RmHAcwiXItQfsa3hkbaA528rsjhH0N1ygWhPrglgxljXME=
+ bh=MT9syemS/1TFYVK9dzQldZPJrhmlkArm+zIAFcRUajo=;
+ b=m38mikHrkmR20qjdFW/KVbokO3WGov1Tg59X+HPIED5yBUXwmhDfQ9TgvsmvPtdEqx5wqsUaWjhHXKpqCQK2Yx7zNVm7WIhRJ9ts1jyizxVDugxMPVqOfRn85jar5mQ9Gz26uRF1cTeHuZnkFkIURXNUOnXUnyzti9OvFTUrOyg=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from DB7PR04MB4505.eurprd04.prod.outlook.com (2603:10a6:5:39::26) by
  PA4PR04MB9246.eurprd04.prod.outlook.com (2603:10a6:102:2a1::16) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.34; Mon, 28 Aug
- 2023 09:26:13 +0000
+ 2023 09:26:15 +0000
 Received: from DB7PR04MB4505.eurprd04.prod.outlook.com
  ([fe80::6444:e07a:e7f7:3923]) by DB7PR04MB4505.eurprd04.prod.outlook.com
  ([fe80::6444:e07a:e7f7:3923%6]) with mapi id 15.20.6699.034; Mon, 28 Aug 2023
- 09:26:12 +0000
+ 09:26:15 +0000
 From:   Xu Yang <xu.yang_2@nxp.com>
 To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com
 Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
         jun.li@nxp.com
-Subject: [PATCH 1/2] usb: typec: tcpci: add check code for tcpci/regmap_read/write()
-Date:   Mon, 28 Aug 2023 17:30:34 +0800
-Message-Id: <20230828093035.1556639-1-xu.yang_2@nxp.com>
+Subject: [PATCH 2/2] usb: typec: tcpci: enable vSafe0v Detection and Auto Discharge Disconnect for PTN5110
+Date:   Mon, 28 Aug 2023 17:30:35 +0800
+Message-Id: <20230828093035.1556639-2-xu.yang_2@nxp.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230828093035.1556639-1-xu.yang_2@nxp.com>
+References: <20230828093035.1556639-1-xu.yang_2@nxp.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: SG2PR01CA0123.apcprd01.prod.exchangelabs.com
@@ -55,50 +57,50 @@ X-ClientProxiedBy: SG2PR01CA0123.apcprd01.prod.exchangelabs.com
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: DB7PR04MB4505:EE_|PA4PR04MB9246:EE_
-X-MS-Office365-Filtering-Correlation-Id: c6b712c7-2f01-4e28-b790-08dba7a8d226
+X-MS-Office365-Filtering-Correlation-Id: 41381d37-ad89-472f-7a65-08dba7a8d3f0
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: EGZUomoVVPT5Yxm+jcxai+axu33OtMWP+wlli1D7Hy9575xWcvX8A9N6q16sdVMCcP2E18zM4NZSOIf3GQQ+U0nU6eJt0x8JfpymBODPfW9MeHT5DcQftybYypVIvgOMxKt85fAVQH+L3vjRee8bkAF+ue8fy4wORUBodPsLVdmFFlYE7YYr1sxqFDXl1vbvtekF5HwovPYEosuD6acUSITV+mKwmwh60dirlZBVfTg7xPSl4k698xRpgi6xhxS4cJlVSTUIUy0iPZ+ruOIDCVrcw9fr7mpeWFV84872RAtuUp7VQr+vBlWwQmxleObPAQPFwAlaA4hglyO+1HredjRYfzWl57AEVma0tdq9sAouq2NB86c6I+Aextq2RkcYPEe+hAxI3V7MwePQBBAtpGZMlI7nN3oy1JnGOVfw/Sc5J2O94Na4SJ7sjnIBPUp8MX+fDoFgKxiey/DyS2IVKFaRmAFZBiqwfa9S2kkRKhQUah5VtQLzDJzXnf9lZRQgDX8C9FIvb+uaJAA24VJXkVOm/zPbYErvDfJbeuxKRRa137ebtGAjCtkD4a9uZWgkOgjce+ZlS374GROo5uoKel8lfr99oy8Ve5RxnB7HKi4GhP9yvIIdizwDZOVhNYq+
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR04MB4505.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(366004)(136003)(376002)(396003)(39860400002)(186009)(451199024)(1800799009)(41300700001)(38350700002)(38100700002)(6666004)(86362001)(83380400001)(478600001)(2616005)(26005)(1076003)(6512007)(52116002)(6506007)(6486002)(66946007)(36756003)(66476007)(2906002)(316002)(66556008)(5660300002)(8676002)(8936002)(4326008);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: sT4xscZnE1/yGvkCa8zn5mD3zRrAi/5/UT81OW4CrGLLK1a4SHGf2zH3u/jkCWIHc/uF+W9lvDjQOezooXfq7E9fQxB1XAALMyQbp+C4nlNyEI/xjcqLHVVEnMy69Vbq4MuN50LHr5hSUJVgTq9/Sx6z/bsb3LeWcGhsppZgDZC8abycV/VgiAKcvuABowpRB6lhWyyB9FxpvfnwQ0ELNvOHEcqaqIHI/ccwYIDKAL3vNJoSAyiCy7RZy/4CLeVZy+SkEEuZKG1E5Lhxpngf4ISftYA0u+f9F3mjzHf7gegR5UUjaoBfz+OSgT1/g5aGkhBqD0PMHiXsdk2fZpQynL8FWeGMjKhHzB2A3/84GRYwxxjsUgP2llocYMb53IhQYvsQl16rlpJL1HLq6CUqjXIcAGBGQRFje7Gq9HbcbTzhSXhs1iyW1utqvE6yKjF9akBvJV3Re5ejk3klpR1NbJHP/pb8MTOMWRI3w2kO+9bgEFfD9N9ijcRNyCdrbkR+pozFc3NvROQQsN9sOtNZO8vv0NssaCPdvlqEU34ssHaB54Djv8KxQpYTRizfhD8Xz8IOAtatxhuNDcKs5ZSqs2iSdYOSVj/hJU2g7U5BDXTuf13nO4ACLiA2OGVDLfT4/QzU4aHc6LWXsbrvTBcaoA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR04MB4505.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(366004)(136003)(376002)(396003)(39860400002)(186009)(451199024)(1800799009)(41300700001)(38350700002)(38100700002)(6666004)(86362001)(83380400001)(478600001)(2616005)(26005)(1076003)(6512007)(52116002)(6506007)(6486002)(4744005)(66946007)(36756003)(66476007)(2906002)(316002)(66556008)(5660300002)(8676002)(8936002)(4326008)(32563001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7+yhV5eMtvwZM19XiSZJO3kipHxnoLt7uBA7QaEsz8UuyUc8LeYEbIxoJYQj?=
- =?us-ascii?Q?WlJaZjTfrvDRd7y3M+lsmbzivAKR1nxxMNmk74bxECxp2zn31dD8YtpLZfGC?=
- =?us-ascii?Q?GCpjKB9WfNKtJKbNrg+kTBW04QbKGu6Ow54NzRVB6ZYOri4XGZlJKIJkTTrT?=
- =?us-ascii?Q?YCdflCZl8vWOKjkZ6ACe9tty6RG23rEPGckHAQxPaFnrxPGiebAeDOv8NM0q?=
- =?us-ascii?Q?QrUUHxLPtG2s9KUeSauwZtqRxPleooUKGOXR25JPczv40PWAeBsmOtWlzwjZ?=
- =?us-ascii?Q?0QmkhTdFe0IsPXiFPOCBBTmtAzXYqLXT4p7zhWAWnmfcBwgav8HhflFQU6Cy?=
- =?us-ascii?Q?wVZp3MeQDMbEDleHIzG9SsIt2yQ7fTkz2iqvj9jBBl6MDZrz0OdGfiFMzeLG?=
- =?us-ascii?Q?IzGVim8oicgMqsO2p7G2q0EDUKBoFX65qAHjY8N8b9O9y68U/B8iCFV115Nc?=
- =?us-ascii?Q?VLJhcqpXFN/lybQA0E7pKMY+IvNlJmW377/S8BN0dWSkiswI80B96uSjnvkn?=
- =?us-ascii?Q?YUT0sIjftZtflWnMXsI/nAxwWY4MpUevFLDoMPgMfsbzXoD9WUC57upF4p1z?=
- =?us-ascii?Q?EsTasnOlPVg/Xn6110MNk1NC8ffyrJFKJH/JGE8oZqQmCUOOopRNJOROblOU?=
- =?us-ascii?Q?FZxh97AU/QPRWKPssr1Qb+dkWaF52Y9fbW5e0GeE+9wpY14D2VGXEAQ1AMpU?=
- =?us-ascii?Q?M/KqLuWBsgBF2bdKUDJju273RxIU6//vO2wYvqwfHUaVgu0e/ekFt3CgCAOc?=
- =?us-ascii?Q?R3eEy0onS0X1FoVLNzcNgVbt/mySXMEewMUvzsK9XmvYG3mAD855p//Vepuj?=
- =?us-ascii?Q?SvnonAa3Sust/M7nK7eLm7NIMufoNqOz0XkbfS/ykxWg7UGcPGbDIiqMhzHp?=
- =?us-ascii?Q?Pl2SxVfOGOB7PluFxNUV5GReA1mq8HynY5akWF6mfZSlaqt/vXhobE6+8/+1?=
- =?us-ascii?Q?wbITI0/mKqsJGvBSOm3nEidBqmTAFyldwSl29aMXUfNMlwrYrKER44eXjm5+?=
- =?us-ascii?Q?2AZRR575mc/FPBElxTZ8oCAKyq1RE2t+vMJ/Y1NNpfPtBcboXlxRMwhI9fVx?=
- =?us-ascii?Q?6L37aVuduTlFY+UAYdoM0T3DDoAf1aFhjYJOEi3KXAc7BVs+jhnx+dJ16fa3?=
- =?us-ascii?Q?pgOGuDdF/vAqcseySfqw9qp0GkGhrPJnfcDCRjC+JMsstNXfvKfBOzIJO4TP?=
- =?us-ascii?Q?HGNe4RMLkJss1OfqIpZ07cGMYoCVI1M0iU6Uhq27n1H3vgML/jYiiiOQ8m3w?=
- =?us-ascii?Q?Twn6BC3truQ7r4VKvgv9W9yT34NVRYXkhRwgD2yIF85Qekvta/lqu7YP6EHd?=
- =?us-ascii?Q?/wh2htGWSNKZ4fXaEvzmxnrgV+66C/A6IDX8ZzwJBD9FIrVNJjGUbMJGZxHI?=
- =?us-ascii?Q?UxmuPE46F4EAB+geWK1wSVLnwJYwBuvuyGJM1PE8ONy+0OLzx4OBkUeZ/5jI?=
- =?us-ascii?Q?6ibPJ7DuxUWb49ox50fhPwJ+iCgrpcotQxPI+57rGBmP14GPtl0X3Yf2tqKN?=
- =?us-ascii?Q?PUkESv5hvIeRv4juXGKqsQMsUop9JG7AQKNwTznSBRv2D+H4XJmRk3JtMSjC?=
- =?us-ascii?Q?TA6YfCdYdoi6IqqgVAf4UqkgK3bD30EdfFJ2RKNY?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?fCkYUCgoJjRmGXJlivmDgYu28P7ok1D2QZ/8F7INAeQdaevW9GSuAIc0L3YR?=
+ =?us-ascii?Q?gBFXuORheK4Wf8Ctq7K/ueOkXpxO317V46aFLnv9apg5EhDHh9D/W8EPp/C5?=
+ =?us-ascii?Q?q0y0oe3yagL5GpCRiQMtIIVkQA1dy/3wI8y8I/tbOpqDXWqUA/wYzjG/qE2A?=
+ =?us-ascii?Q?YQ5xNINngeZ02hTUKn7vAMWlOvDhIP+Lhrcf86FF6TRYS9VnHgIDpZ9H0Cp2?=
+ =?us-ascii?Q?inlVIBLEfuEMx4zjnhYVd/Cv4vgvP/iTXrWsWgMR99kg0mqXbvIrtSYpZ8Tx?=
+ =?us-ascii?Q?xrwON46V3y5tqE17HDW0TDMVWfsmcnEAusmqtYH6XPuiT0iz+MyABXIOyQzJ?=
+ =?us-ascii?Q?aNRsGmQALLaMICkyv8Y42P3fRuGc2dtMYxIZt0r2LlnGwMseifKGnmERIL9/?=
+ =?us-ascii?Q?UKWsqBIyGeNp2ba1Mu7fUUEYdQvuZLoCvzeSxgC20pGBxZet0feYsGEn5cds?=
+ =?us-ascii?Q?Srn+cPtq6YZzE+Fwlw8/V1dwPnhtUtAMT8OCfAAIwzP6p/mMqtwjFtJonQS8?=
+ =?us-ascii?Q?8naEeaxfjviczWzE7mDL8yNF7/zLCr7lnBOmf6WcQ7A8ExddHEAnLZoLygdT?=
+ =?us-ascii?Q?IMNc/e0XLInrqPsPbRkPiUPqTfdShL4EIJGP4+NC0YeOkUncF0hOa7lk0ARz?=
+ =?us-ascii?Q?XTBfOKSAJvUTo1qMCUPDX566bFeYUE1+9pBFDF6T6MKvvvbBGXDy28dGJv1z?=
+ =?us-ascii?Q?/7kgjGeVxkBIb5b7UgnrpZ/V855lG+kNwNo0O5jgd/t19a+zn9khxOo2cD5j?=
+ =?us-ascii?Q?klG0I1WpjgHGGMaEH6dLyALskvQmNZhY9OpxA3i2X0+GZSJ7fl2isGEtAYWD?=
+ =?us-ascii?Q?wB053pxxB5hEuGo5n3F5ORaKeB1HvJiSL7S/9T/QnE2sQMJhjO+cIizoRN4k?=
+ =?us-ascii?Q?Epzqsfw16xf79IRvCV4SzsnfF5JMNFbeoqxe66LgECUYhTXuw0apOXft8MHw?=
+ =?us-ascii?Q?k3UBOJlKGvkuTSap+8heoeWyCObZ+jhBfFV82en5PYAokSBIFB2T9RPgd0sx?=
+ =?us-ascii?Q?r1nP2RFfTkA6Vr4+5TmBcauRxBDZ8cGUti4DKmnCLG9Vg9ot7rXSQpqR8mXC?=
+ =?us-ascii?Q?S23U1iNyZ1TLEVhbfvgoJbO/bWUvPsmvWdc/4WMq6LRT8K4D6a2Rpmn1ds1S?=
+ =?us-ascii?Q?FsDngvnaUdLbTNVTA7uyG86U0KVyfQ6GQ/SO6MB2BcVA4HoHAjtylGfed96q?=
+ =?us-ascii?Q?1dUjwkz6z5MfvlTZSFPFh1ShCUmrsPUl57zVopufy/8vfVcUI0EGE9hkMEMB?=
+ =?us-ascii?Q?HGgy7VNh6yAgz+x96YyfNqC4TOirm4yzYX6nCgEVTzpzzAieCEBJ9AlFRrOc?=
+ =?us-ascii?Q?0E7Yn6y/+8n7lf0t9moUJ3dSMYO+OObaGJpLz3xny/vd7zIjjLVyIuTrLJ6v?=
+ =?us-ascii?Q?BwtA/YVZWAlQ/H161GAK+ro5yYQPt/QBYmpZ4Nw9LW3lYTAGA9DQtZaHsfvo?=
+ =?us-ascii?Q?ZEwLWy3Xx1jZryom+h5xvqaXisZ1UUmJQKUN/sukg5uzRN2pTqjCHPNCBMFL?=
+ =?us-ascii?Q?tqOtB8ytE1EC6gFN5+SdkawKEwcfLnfmZguwYy1lLafSK7HOP6FbF+Z4NTQ0?=
+ =?us-ascii?Q?WzeunBC7sJzc/KnYqBbVIx9743QLhy0HfJmFgmh8?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c6b712c7-2f01-4e28-b790-08dba7a8d226
+X-MS-Exchange-CrossTenant-Network-Message-Id: 41381d37-ad89-472f-7a65-08dba7a8d3f0
 X-MS-Exchange-CrossTenant-AuthSource: DB7PR04MB4505.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Aug 2023 09:26:12.7689
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Aug 2023 09:26:15.8703
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: EJoF0OZItwez+WEhAzb8pc9Ee7ZeSwOXl1mUA91l8Z897HOtuNfGex1mvfeti+xq87/Zl9sNlZW5G9+OlNAldQ==
+X-MS-Exchange-CrossTenant-UserPrincipalName: eFTizL5E5puN+p3Y5ndaYSux9KfnUvnsV8hB52hRZ4+Fr5w6m1kFFJwp6F+XsDRPzoSJtgBI2H5t1EJ5oV3yNA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB9246
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
@@ -110,96 +112,28 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The return value from tcpci/regmap_read/write() must be checked to get
-rid of the bad influence of other modules. This will add check code for
-all of the rest read/write() callbacks and will show error when failed
-to get ALERT register.
+PTN5110 itself supports vSafe0V detection and auto discharge disconnect
+capabilities. This will enable these feature.
 
 Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
 ---
- drivers/usb/typec/tcpm/tcpci.c | 36 +++++++++++++++++++++++++---------
- 1 file changed, 27 insertions(+), 9 deletions(-)
+ drivers/usb/typec/tcpm/tcpci.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-index 0ee3e6e29bb1..698d00b7fce9 100644
+index 698d00b7fce9..c128c24f8603 100644
 --- a/drivers/usb/typec/tcpm/tcpci.c
 +++ b/drivers/usb/typec/tcpm/tcpci.c
-@@ -657,21 +657,30 @@ irqreturn_t tcpci_irq(struct tcpci *tcpci)
- 	int ret;
- 	unsigned int raw;
+@@ -863,6 +863,9 @@ static int tcpci_probe(struct i2c_client *client)
  
--	tcpci_read16(tcpci, TCPC_ALERT, &status);
-+	ret = tcpci_read16(tcpci, TCPC_ALERT, &status);
-+	if (ret < 0) {
-+		dev_err(tcpci->dev, "ALERT read failed\n");
-+		return ret;
-+	}
+ 	i2c_set_clientdata(client, chip);
  
- 	/*
- 	 * Clear alert status for everything except RX_STATUS, which shouldn't
- 	 * be cleared until we have successfully retrieved message.
- 	 */
--	if (status & ~TCPC_ALERT_RX_STATUS)
--		tcpci_write16(tcpci, TCPC_ALERT,
-+	if (status & ~TCPC_ALERT_RX_STATUS) {
-+		ret = tcpci_write16(tcpci, TCPC_ALERT,
- 			      status & ~TCPC_ALERT_RX_STATUS);
-+		if (ret < 0)
-+			return ret;
-+	}
- 
- 	if (status & TCPC_ALERT_CC_STATUS)
- 		tcpm_cc_change(tcpci->port);
- 
- 	if (status & TCPC_ALERT_POWER_STATUS) {
--		regmap_read(tcpci->regmap, TCPC_POWER_STATUS_MASK, &raw);
-+		ret = regmap_read(tcpci->regmap, TCPC_POWER_STATUS_MASK, &raw);
-+		if (ret < 0)
-+			return ret;
- 		/*
- 		 * If power status mask has been reset, then the TCPC
- 		 * has reset.
-@@ -687,7 +696,9 @@ irqreturn_t tcpci_irq(struct tcpci *tcpci)
- 		unsigned int cnt, payload_cnt;
- 		u16 header;
- 
--		regmap_read(tcpci->regmap, TCPC_RX_BYTE_CNT, &cnt);
-+		ret = regmap_read(tcpci->regmap, TCPC_RX_BYTE_CNT, &cnt);
-+		if (ret < 0)
-+			return ret;
- 		/*
- 		 * 'cnt' corresponds to READABLE_BYTE_COUNT in section 4.4.14
- 		 * of the TCPCI spec [Rev 2.0 Ver 1.0 October 2017] and is
-@@ -699,18 +710,25 @@ irqreturn_t tcpci_irq(struct tcpci *tcpci)
- 		else
- 			payload_cnt = 0;
- 
--		tcpci_read16(tcpci, TCPC_RX_HDR, &header);
-+		ret = tcpci_read16(tcpci, TCPC_RX_HDR, &header);
-+		if (ret < 0)
-+			return ret;
- 		msg.header = cpu_to_le16(header);
- 
- 		if (WARN_ON(payload_cnt > sizeof(msg.payload)))
- 			payload_cnt = sizeof(msg.payload);
- 
--		if (payload_cnt > 0)
--			regmap_raw_read(tcpci->regmap, TCPC_RX_DATA,
-+		if (payload_cnt > 0) {
-+			ret = regmap_raw_read(tcpci->regmap, TCPC_RX_DATA,
- 					&msg.payload, payload_cnt);
-+			if (ret < 0)
-+				return ret;
-+		}
- 
- 		/* Read complete, clear RX status alert bit */
--		tcpci_write16(tcpci, TCPC_ALERT, TCPC_ALERT_RX_STATUS);
-+		ret = tcpci_write16(tcpci, TCPC_ALERT, TCPC_ALERT_RX_STATUS);
-+		if (ret < 0)
-+			return ret;
- 
- 		tcpm_pd_receive(tcpci->port, &msg);
- 	}
++	chip->data.vbus_vsafe0v = 1;
++	chip->data.auto_discharge_disconnect = 1;
++
+ 	/* Disable chip interrupts before requesting irq */
+ 	err = regmap_raw_write(chip->data.regmap, TCPC_ALERT_MASK, &val,
+ 			       sizeof(u16));
 -- 
 2.34.1
 
