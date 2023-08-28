@@ -2,158 +2,219 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FFF678B64F
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Aug 2023 19:22:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB88578B837
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Aug 2023 21:25:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbjH1RVa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Aug 2023 13:21:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59052 "EHLO
+        id S231967AbjH1TYq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Aug 2023 15:24:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232838AbjH1RVN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Aug 2023 13:21:13 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5884DE1;
-        Mon, 28 Aug 2023 10:21:10 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37SEHFqi002313;
-        Mon, 28 Aug 2023 17:21:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=I0DTISILOn+O9DXCR29s3guG7mCG2+3VukUCjYlcKv4=;
- b=Fw7KxbzXkrEvX4wzzS94cmtOnCx1RwBCyTkR28pkAj0kWxngEjq2R5PaW6+9nHz1MNHu
- tp39wbN2+irmsIHkx1knsdxSSWOjidScnV9JJM9ChYbIfDMCiiu2avIN4aD8lnA1lL8W
- iaSJXN0+S2XvW+nALrgm0ctWDJUrCmQAYrF2b/qnygb3RGQWBXe4TpojD5zuBxrcpbi4
- X9n1/gvSLXpcQhA/VGcNGIQ96CJl5VU9TZpxurbYvHkdi63QHqL6qiqlg1FpUm+HZYkC
- tGxqc/96MjLOb+yj7aSOS2p06bIc2xtXkVa7g+GNkLg1Yq7eJyGdNutG4afAefC+odI+ Kg== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3sq8qrv13g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Aug 2023 17:21:02 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37SHL1LC000656
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Aug 2023 17:21:01 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Mon, 28 Aug 2023 10:21:00 -0700
-Date:   Mon, 28 Aug 2023 10:20:59 -0700
-From:   Bjorn Andersson <quic_bjorande@quicinc.com>
-To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-CC:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>
-Subject: Re: Disconnect interrupt generation for QC targets when role switch
- is enabled
-Message-ID: <20230828172059.GC818859@hu-bjorande-lv.qualcomm.com>
-References: <af60c05b-4a0f-51b8-486a-1fc601602515@quicinc.com>
+        with ESMTP id S233427AbjH1TYi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Aug 2023 15:24:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1691411A;
+        Mon, 28 Aug 2023 12:24:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9ECF064FE9;
+        Mon, 28 Aug 2023 19:24:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82665C433C7;
+        Mon, 28 Aug 2023 19:24:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1693250673;
+        bh=oO7Hnc8vjJIujNtucRloJMsZPg4jDEEzZi+T0wLOka4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tqruw12qT4a9cuifJ7lGZI49Lzmaftwq4BwYMR6D5rVbX9azYJW6weL908DXeNfoQ
+         eIMijvNSmBAylNGy7xJmWtF/nELen6vpZaKUOfvU2XfNjuAd450HC2Ce0H+BpRdAMy
+         4OTb0AYw2xjbTyx3GAUvPTKizEwFnkeAZmrUqy+zHMXu9E5HTv745Jl49hX5TfpyU5
+         uyEGnqbxIHyagLp5BKBM78YahD0GjBmm9999GiGUA4uxfK4qDt4QOwNr6FZNgIS5Z1
+         dKDy9mr6hUkqB5BNMf1bh1ETWgWG8XoJtoUhp6+NoEKyUDXx7NBYVscL7OuZfmC01t
+         OO1zwHEtOIABQ==
+Date:   Mon, 28 Aug 2023 21:24:30 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Wentong Wu <wentong.wu@intel.com>
+Cc:     gregkh@linuxfoundation.org, arnd@arndb.de, mka@chromium.org,
+        oneukum@suse.com, lee@kernel.org, kfting@nuvoton.com,
+        broonie@kernel.org, linus.walleij@linaro.org, maz@kernel.org,
+        brgl@bgdev.pl, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-gpio@vger.kernel.org, andriy.shevchenko@linux.intel.com,
+        heikki.krogerus@linux.intel.com, andi.shyti@linux.intel.com,
+        sakari.ailus@linux.intel.com, srinivas.pandruvada@intel.com,
+        zhifeng.wang@intel.com
+Subject: Re: [PATCH v10 2/4] i2c: Add support for Intel LJCA USB I2C driver
+Message-ID: <ZOz0bgJUZuAcUBWf@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Wentong Wu <wentong.wu@intel.com>, gregkh@linuxfoundation.org,
+        arnd@arndb.de, mka@chromium.org, oneukum@suse.com, lee@kernel.org,
+        kfting@nuvoton.com, broonie@kernel.org, linus.walleij@linaro.org,
+        maz@kernel.org, brgl@bgdev.pl, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-gpio@vger.kernel.org, andriy.shevchenko@linux.intel.com,
+        heikki.krogerus@linux.intel.com, andi.shyti@linux.intel.com,
+        sakari.ailus@linux.intel.com, srinivas.pandruvada@intel.com,
+        zhifeng.wang@intel.com
+References: <1693091643-20867-1-git-send-email-wentong.wu@intel.com>
+ <1693091643-20867-3-git-send-email-wentong.wu@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="JghyezFaQDHryAZP"
 Content-Disposition: inline
-In-Reply-To: <af60c05b-4a0f-51b8-486a-1fc601602515@quicinc.com>
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: BUiydJTMxZ3cpzlI387FWnzhb3fiOCe3
-X-Proofpoint-GUID: BUiydJTMxZ3cpzlI387FWnzhb3fiOCe3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-08-28_14,2023-08-28_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- priorityscore=1501 clxscore=1011 phishscore=0 mlxlogscore=999 bulkscore=0
- malwarescore=0 adultscore=0 lowpriorityscore=0 spamscore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2308100000
- definitions=main-2308280152
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1693091643-20867-3-git-send-email-wentong.wu@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 11, 2023 at 05:21:03PM +0530, Krishna Kurapati PSSNV wrote:
-> Hi Thinh, Johan, Bjorn, Konrad,
-> 
->   On QC targets today, the disconnect event in device mode is generated by
-> controller when software writes to QSCRATCH registers in qcom glue layer
-> rather than the vbus line being routed to dwc3 core IP for it to recognize
-> and generate conndone/disconnect events.
-> 
-> We need to write '1' to  UTMI_OTG_VBUS_VALID bit of QSCRATCH_HS_PHY_CTRL
-> register to generate a connection done event and "0" if we need to generate
-> a disconnect event during cable removal or mode switch. Exactly what is done
-> by "dwc3_qcom_vbus_override_enable" call in dwc3-qcom. In case the user
-> wants to enable runtime suspend for dwc3 and we don't generate a disconnect
-> event, the dwc->connected flag will be "true" and it would block suspend
-> entry.
-> 
-> Today, in dwc3-qcom, this qscratch modification is being done only for
-> vbus/host notifiers where I assume dwc3-qcom would be receiving these
-> notifications from charger driver regarding cable connect and removal and
-> since we are receiving a copy of the information in dwc3-qcom as well, we
-> would be knowing when to set/clear the VBUS_VALID bit.
-> 
-> But, when we have role switch in play, the role_set callback goes to DRD and
-> Qcom driver is agnostic of what is actually happening. While this doesn't
-> hinder mode switch, the role change notification never really reaches
-> dwc3-qcom and we would never set this bit to "0" and disconnect event is not
-> generated upon cable plug-out. Is there a way we can properly provide this
-> notification to qcom glue driver ?
-> 
-> I had some idea on how to get the role notification reach qcom glue driver
-> but wanted your opinion on whether they can be used or not:
-> 
-> 1. Register a vendor_hook from glue driver and invoke that during
-> __dwc3_set_mode.
-> 
-> 2. Let the role notification reach dwc3-qcom first and then let qcom driver
-> invoke role_set of drd. Something similar to what was implemented by Wesley
-> on [1].
-> 
-> But both the options require dwc3_probe to be done in sync with
-> of_platform_populate or we need to defer qcom probe if dwc3_probe is
-> deferred. Since we are leaning towards async probe, not sure if the above
-> two options would be proper.
-> 
-> Couple of more reasons to ask for the above two options:
-> 
-> 1. We would know when we are in device/host mode and we can avoid having any
-> layering violations in dwc3-qcom.
-> 
-> 2. When it comes to runtime pm implementation for dwc3-qcom, an effort was
-> done by Manivannan Sadhasivam previously [2], we can avoid modifying
-> xhci-plat.c to set autosuspend delay to any specific value. We would be able
-> to enable runtime/autosuspend for dwc->xhci->dev from dwc3-qcom itself upon
-> entering host mode.
-> 
-> Can you help let know your thoughts on the above two options or if there is
-> any way we can implement the role change / cable plug in(out) callback.
-> 
 
-As mentioned, this need has been identified a few times by now, so
-nothing strange in your request/proposal.
+--JghyezFaQDHryAZP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-But so far no one has come up with a good way to register glue code
-callbacks with the core; we can't pass arbitrary data (such as a
-function pointer to such callback), and we don't know when the core is
-registered, so we can't call a register operation when that happens.
+Hi,
 
-Regards,
-Bjorn
+thank you for your patches!
 
-> [1]: https://patchwork.kernel.org/project/linux-usb/patch/20201009082843.28503-4-wcheng@codeaurora.org/
-> [2]: https://patchwork.kernel.org/project/linux-usb/cover/20230325165217.31069-1-manivannan.sadhasivam@linaro.org/
-> 
-> Regards,
-> Krishna,
+=2E..
+
+> +static int ljca_i2c_start(struct ljca_i2c_dev *ljca_i2c, u8 slave_addr,
+> +			  enum ljca_xfer_type type)
+> +{
+> +	struct ljca_i2c_rw_packet *w_packet =3D
+> +			(struct ljca_i2c_rw_packet *)ljca_i2c->obuf;
+> +	struct ljca_i2c_rw_packet *r_packet =3D
+> +			(struct ljca_i2c_rw_packet *)ljca_i2c->ibuf;
+> +	s16 rp_len;
+> +	int ret;
+> +
+> +	w_packet->id =3D ljca_i2c->i2c_info->id;
+> +	w_packet->len =3D cpu_to_le16(sizeof(*w_packet->data));
+> +	w_packet->data[0] =3D (slave_addr << 1) | type;
+> +
+> +	ret =3D ljca_transfer(ljca_i2c->ljca, LJCA_I2C_START, w_packet,
+> +			    struct_size(w_packet, data, 1), r_packet,
+> +			    LJCA_I2C_BUF_SIZE);
+> +	if (ret < 0 || ret < sizeof(*r_packet))
+> +		return ret < 0 ? ret : -EIO;
+> +
+> +	rp_len =3D le16_to_cpu(r_packet->len);
+> +	if (rp_len < 0 || r_packet->id !=3D w_packet->id) {
+> +		dev_err(&ljca_i2c->adap.dev,
+> +			"i2c start failed len: %d id: %d %d\n",
+> +			rp_len, r_packet->id, w_packet->id);
+
+All dev_err look more like dev_dbg to me. They are not helpful for the
+regular user, I'd think.
+
+> +		return -EIO;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+
+=2E..
+
+> +static int ljca_i2c_pure_read(struct ljca_i2c_dev *ljca_i2c, u8 *data, u=
+8 len)
+> +{
+> +	struct ljca_i2c_rw_packet *w_packet =3D
+> +			(struct ljca_i2c_rw_packet *)ljca_i2c->obuf;
+> +	struct ljca_i2c_rw_packet *r_packet =3D
+> +			(struct ljca_i2c_rw_packet *)ljca_i2c->ibuf;
+> +	s16 rp_len;
+> +	int ret;
+> +
+> +	if (len > LJCA_I2C_MAX_XFER_SIZE)
+> +		return -EINVAL;
+
+You can remove this check. You already have a quirk structure, so the
+core will do it for you.
+
+=2E..
+
+> +static int ljca_i2c_pure_write(struct ljca_i2c_dev *ljca_i2c, u8 *data, =
+u8 len)
+> +{
+> +	struct ljca_i2c_rw_packet *w_packet =3D
+> +			(struct ljca_i2c_rw_packet *)ljca_i2c->obuf;
+> +	struct ljca_i2c_rw_packet *r_packet =3D
+> +			(struct ljca_i2c_rw_packet *)ljca_i2c->ibuf;
+> +	s16 rplen;
+> +	int ret;
+> +
+> +	if (len > LJCA_I2C_MAX_XFER_SIZE)
+> +		return -EINVAL;
+
+You can remove this check. You already have a quirk structure, so the
+core will do it for you.
+
+=2E..
+
+> +static u32 ljca_i2c_func(struct i2c_adapter *adap)
+> +{
+> +	return I2C_FUNC_I2C | I2C_FUNC_SMBUS_EMUL;
+> +}
+
+Have you successfully tried SMBUS_QUICK (e.g. with scanning a bus with
+'i2cdetect')?
+
+=2E..
+=20
+> +static int ljca_i2c_probe(struct auxiliary_device *auxdev,
+> +			  const struct auxiliary_device_id *aux_dev_id)
+> +{
+> +	struct ljca_client *ljca =3D auxiliary_dev_to_ljca_client(auxdev);
+> +	struct ljca_i2c_dev *ljca_i2c;
+> +	int ret;
+> +
+> +	ljca_i2c =3D devm_kzalloc(&auxdev->dev, sizeof(*ljca_i2c), GFP_KERNEL);
+> +	if (!ljca_i2c)
+> +		return -ENOMEM;
+> +
+> +	ljca_i2c->ljca =3D ljca;
+> +	ljca_i2c->i2c_info =3D dev_get_platdata(&auxdev->dev);
+> +
+> +	ljca_i2c->adap.owner =3D THIS_MODULE;
+> +	ljca_i2c->adap.class =3D I2C_CLASS_HWMON;
+
+Just to make sure: you want class based instantiation here because you
+have no other way of describing clients? I guess it makes sense for USB,
+just wanted to ask.
+
+Other than that, it looks good!
+
+All the best,
+
+   Wolfram
+
+
+--JghyezFaQDHryAZP
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmTs9G0ACgkQFA3kzBSg
+KbaXrhAAnD+ANaPFvZLW0bURxLj0iE/tsZJc9Cn+4yE719RBdzvLLg9rY2oCN4TU
+pkft37jYRyjwTVG3V3ZpzMqjtKPAWTuREPUl20OfE1FojYQzk3dyiwx1yZRkEurW
+LSd634QsdI49fdJv3WRzcxZsm4UgPXREkp6MpOONGx/yhDoWNc2VglmK5taXD/Mb
+R/ug/oKuEEw+5ogpGDimHhY/kAvMaDmnjwke00yyeB+b0tp1ep49Jl9L8HzQm7HN
+M1EWxYxtETFmanjs5ro1czyDBP88YyFzpv7HzU8KbO7qw0XWvRqwlcq3W1qyHjxQ
+8P0w2I5A3ID6T2S2/BNYIYNAAljYWyCb4nNqNba8CcYm+qzoFdULDp5O9LR0wX/2
+SDCRCHyB+0qf69tpd/ht9LyZp9LcunevDT1UiPEqLvRdEEJqlmFwIndSMhJ4SfsL
+Wa8MOzZvF2z9DwGjQ/AgIfNBG4Kb1tBa9XSzd7EKEnCKtrRY45qHNCNqSWkpTDqi
+7xpqBIJf/dKlMMuPUf86cAwQRQHnO3OvHgBb8Pn5V9skxU52ycOx3YxcLEgej4Qy
+4aed5AKHDxvYRnB5AdnNnltcA0Bnkz/azawSBJZqjjvfk7wYW3Px9naXFU2eELuB
+Sp/X4ggHCj7YbsO6qucShg5yBHtn8BxHawMxWJFH/dGMK25Ly/0=
+=FryW
+-----END PGP SIGNATURE-----
+
+--JghyezFaQDHryAZP--
