@@ -2,128 +2,167 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0576578A882
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Aug 2023 11:09:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8661378A8DA
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Aug 2023 11:24:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229836AbjH1JJK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Aug 2023 05:09:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38654 "EHLO
+        id S229912AbjH1JXr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Aug 2023 05:23:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbjH1JJC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Aug 2023 05:09:02 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B1CEC;
-        Mon, 28 Aug 2023 02:08:59 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 37S8ToSK019577;
-        Mon, 28 Aug 2023 11:08:50 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-        message-id:date:mime-version:subject:to:cc:references:from
-        :in-reply-to:content-type:content-transfer-encoding; s=
-        selector1; bh=RIeyJQL+u2vdhhZw1cZ55V2faZmr6SzcYSUzeq8kbnY=; b=YG
-        bB4tcvSz1iM/2DY4v+yACoJfYlkPGNoz6lJs22mvQuDWm8RtfvIDRAOOi+bOhFKJ
-        sR05/Z8gmUuyX3PKg7w7l/di3UPdWbiRfJZxH7T0ax/e3mZRFD0Yel0ZQy0i1XX9
-        PYYnbNFx+mxlpc6hn+32TQEpjH6yAF7C1E9PlZ/s0u1mx8Xi90JX8NKnmPIrJgfJ
-        Nsl6XrWzkJbrbdpcJeSdyBZhwx+QP/kUn+M6J+KU3M2dpPbfrOCk+C7eNJA/0KHS
-        A3UitZQIGI4BkT9fuBLFxI37li78Cr+qgB8zhpeqxa9K9zOlMedUEBrACPqGdd2c
-        kj8yj176vGiTyXeprbmw==
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3sq89bprxj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Aug 2023 11:08:50 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id DA42510005F;
-        Mon, 28 Aug 2023 11:08:49 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id CD64821861F;
-        Mon, 28 Aug 2023 11:08:49 +0200 (CEST)
-Received: from [10.201.20.38] (10.201.20.38) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Mon, 28 Aug
- 2023 11:08:49 +0200
-Message-ID: <b6f31665-a81b-0c6e-bef6-ee1f9fb78241@foss.st.com>
-Date:   Mon, 28 Aug 2023 11:08:48 +0200
+        with ESMTP id S229831AbjH1JXS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Aug 2023 05:23:18 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6929E
+        for <linux-usb@vger.kernel.org>; Mon, 28 Aug 2023 02:22:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693214556; x=1724750556;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZVwVZgRMke9BLWlQmJIUtzStiQQ1mKNI2mhRA3w/C9k=;
+  b=nezqVZXsOZbJnqVeccXzs9gENl2EN51vA9RLVK2rCwdSS+g0gUTmYyK+
+   V7uXecclNbcTiDYMrihIF7l9UDGo4ztw0wIhFV+eJarJep2ahmw/TrvKs
+   slROZAuZ/I1ZvoykfK6arPjvmL10c8tnmRysALlgy1Tw+VNYK17kbalHZ
+   mHGtXIiu0HtUp8s2ZawWYdzKZ6GJmqHdatM5E8etwCyImme2xC0dzlYqt
+   YgvI3xuep33L2UKNH3qaWBoDJMDvUoRlYoP3kb53Q/98OQ1hFU2LBPPaF
+   aGI6Qidc2J32t6xiH5Z1wjvpsZsWu9fdNJBxy3qyFNaq4pUgOdOJ8VB5A
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10815"; a="461428583"
+X-IronPort-AV: E=Sophos;i="6.02,207,1688454000"; 
+   d="scan'208";a="461428583"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2023 02:21:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.01,202,1684825200"; 
+   d="scan'208";a="881871473"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 28 Aug 2023 02:21:49 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 28 Aug 2023 12:21:43 +0300
+Date:   Mon, 28 Aug 2023 12:21:43 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Douglas Gilbert <dgilbert@interlog.com>
+Cc:     Benson Leung <bleung@google.com>,
+        Jameson Thies <jthies@google.com>,
+        Prashant Malani <pmalani@google.com>,
+        Won Chung <wonchung@google.com>, linux-usb@vger.kernel.org
+Subject: Re: [RFC PATCH 0/2] usb: Link USB devices with their USB Type-C
+ partner counterparts
+Message-ID: <ZOxnJxELyjZ7I5f5@kuha.fi.intel.com>
+References: <20230822133205.2063210-1-heikki.krogerus@linux.intel.com>
+ <860a352c-12da-25ce-5b9e-697382a93899@interlog.com>
+ <ZOXJ2cs5dUBsSNjX@kuha.fi.intel.com>
+ <58409169-dc24-accc-46e8-13402cd93f79@interlog.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH 30/30] usb: ohci-st: Use
- devm_platform_get_and_ioremap_resource()
-Content-Language: en-US
-To:     Yangtao Li <frank.li@vivo.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230726113816.888-1-frank.li@vivo.com>
- <20230726113816.888-30-frank.li@vivo.com>
-From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
-In-Reply-To: <20230726113816.888-30-frank.li@vivo.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.201.20.38]
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-08-28_06,2023-08-25_01,2023-05-22_02
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <58409169-dc24-accc-46e8-13402cd93f79@interlog.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On 7/26/23 13:38, Yangtao Li wrote:
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
+On Thu, Aug 24, 2023 at 12:51:04PM -0400, Douglas Gilbert wrote:
+> On 2023-08-23 04:56, Heikki Krogerus wrote:
+> > Hi Douglas,
+> > 
+> > On Tue, Aug 22, 2023 at 10:52:12AM -0400, Douglas Gilbert wrote:
+> > > On 2023-08-22 09:32, Heikki Krogerus wrote:
+> > > On a related matter, I wonder why there aren't symlinks between typec ports
+> > > (under /sys/class/typec ) and/or the corresponding pd objects (under
+> > > /sys/class/usb_power_delivery ) to the related power_supply objects under
+> > > /sys/class/power_supply . For example under the latter directory I see:
+> > >      $ ls | more
+> > >      AC
+> > >      BAT0
+> > >      hidpp_battery_1
+> > >      ucsi-source-psy-USBC000:001
+> > >      ucsi-source-psy-USBC000:002
+> > > 
+> > > Those last two power supplies are obviously connected to typec port0 and port1
+> > > (but offset by 1). Those power_supply objects hold inaccurate data which I hope
+> > > will improve in time. Significantly power_supply objects don't seem to report
+> > > the direction of the power. Here is a little utility I have been working on
+> > > to report the USB Type-C port/pd disposition on my machine:
+> > >      $ lsucpd
+> > >      port0 [pd0]  > {5V, 0.9A}
+> > >      port1 [pd1]  <<===  partner: [pd8]
+> > > 
+> > > My laptop (Thinkpad X13 G3) has two type-C ports and port1 is a sink with a
+> > > PD contract. I would like that second line to have 20V, 3.25A appended to it
+> > > but there are several issues:
+> > >    - no typec or pd symlink to ucsi-source-psy-USBC000:002
+> > >    - that power supply_object says it is online (correct) with a voltage_now:
+> > >      5000000 uV (incorrect) and current_now: 3000000 uA (incorrect). See below.
+> > > 
+> > >    ucsi-source-psy-USBC000:002 $ ls_name_value
+> > >      current_max : 3250000
+> > >      current_now : 3000000
+> > >      online : 1
+> > >      scope : Unknown
+> > >      type : USB
+> > >      uevent : <removed>
+> > >      usb_type : C [PD] PD_PPS
+> > >      voltage_max : 20000000
+> > >      voltage_min : 5000000
+> > >      voltage_now : 5000000
+> > 
+> > I'm glad you brought that up. The major problem with the Type-C power
+> > supplies is that the Type-C connector class does not actually take
+> > care of them. They are all registered by the device drivers, and all
+> > of them seem to expose different kind of information. In your case the
+> > power supplies are registered by the UCSI driver, and the above may
+> > indicate a bug in that driver.
 > 
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> ---
->  drivers/usb/host/ohci-st.c | 14 ++++----------
->  1 file changed, 4 insertions(+), 10 deletions(-)
+> Hi,
+> Thanks for the background.
 > 
-> diff --git a/drivers/usb/host/ohci-st.c b/drivers/usb/host/ohci-st.c
-> index 884e447a8098..214342013f7e 100644
-> --- a/drivers/usb/host/ohci-st.c
-> +++ b/drivers/usb/host/ohci-st.c
-> @@ -139,12 +139,6 @@ static int st_ohci_platform_probe(struct platform_device *dev)
->  	if (irq < 0)
->  		return irq;
->  
-> -	res_mem = platform_get_resource(dev, IORESOURCE_MEM, 0);
-> -	if (!res_mem) {
-> -		dev_err(&dev->dev, "no memory resource provided");
-> -		return -ENXIO;
-> -	}
-> -
->  	hcd = usb_create_hcd(&ohci_platform_hc_driver, &dev->dev,
->  			dev_name(&dev->dev));
->  	if (!hcd)
-> @@ -199,14 +193,14 @@ static int st_ohci_platform_probe(struct platform_device *dev)
->  			goto err_power;
->  	}
->  
-> -	hcd->rsrc_start = res_mem->start;
-> -	hcd->rsrc_len = resource_size(res_mem);
-> -
-> -	hcd->regs = devm_ioremap_resource(&dev->dev, res_mem);
-> +	hcd->regs = devm_platform_get_and_ioremap_resource(dev, 0, &res_mem);
->  	if (IS_ERR(hcd->regs)) {
->  		err = PTR_ERR(hcd->regs);
->  		goto err_power;
->  	}
-> +	hcd->rsrc_start = res_mem->start;
-> +	hcd->rsrc_len = resource_size(res_mem);
-> +
->  	err = usb_add_hcd(hcd, irq, IRQF_SHARED);
->  	if (err)
->  		goto err_power;
-Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
+> My X13 Gen 3 (i5-1240P) uses the typec_ucsi and ucsi_acpi modules. Some time
+> back in a post you explained how to use debugfs with ucsi. Following that
+> procedure, just after a 20 Volt PD contract is negotiated on port 0 I see:
+> 
+>     # cat /sys/kernel/debug/tracing/trace
+>     ....
+>      kworker/0:1-18718   [000] ..... 137813.407189: ucsi_connector_change:
+>         port0 status: change=0000, opmode=5, connected=1, sourcing=0,
+>         partner_flags=1, partner_type=1,
+>         request_data_obj=1304b12c, BC status=1
+> 
+> That RDO is incorrect, the top nibble (1) is the index of the default Vsafe5v
+> PDO. The correct PDO index would be 4 in this case. The source is an Apple 140W
+> USB-C power adapter so I doubt that it is breaking any PD 3.0/3.1 protocol
+> rules.
 
-Thanks
-Patrice
+The driver reads the RDO from the UCSI interface, so if it's wrong,
+there is possibly a problem in the Embedded Controller firmware :-(.
+
+> According the a PD analyzer (km002c) only one Request is sent by the sink:
+> 82 10 d6 59 87 43 which it decodes as "Pos: 4 Fixed: 20V, 4.7A" which is
+> Accepted and 200 ms later a PS RDY is sent by the source and Vbus
+> transitions from from 5.17 Volts to 20.4 Volts. So I can see no Request for
+> PDO index 1 being sent.
+> 
+> With acpi_listen the following traffic occurs just after the power adapter
+> is plugged into port 0:
+>   battery PNP0C0A:00 00000080 00000001
+>   battery PNP0C0A:00 00000080 00000001
+>   ibm/hotkey LEN0268:00 00000080 00006032
+>   ac_adapter ACPI0003:00 00000080 00000001
+>   ac_adapter ACPI0003:00 00000080 00000001
+>   ibm/hotkey LEN0268:00 00000080 00006030
+>   thermal_zone LNXTHERM:00 00000081 00000000
+>   ibm/hotkey LEN0268:00 00000080 00006030
+>   thermal_zone LNXTHERM:00 00000081 00000000
+> 
+> Hope this helps if you find time to look at this.
+
+Thank you. I'll try to reproduce the issue this week, but I don't have
+that exact model of Thinkpad available I'm afraid (UCSI tends to
+behave a little bit differently on every single platform).
+
+
+-- 
+heikki
