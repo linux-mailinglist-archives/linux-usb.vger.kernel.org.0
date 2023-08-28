@@ -2,124 +2,155 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FFD478A494
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Aug 2023 04:18:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74AA378A530
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Aug 2023 07:25:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbjH1CSK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 27 Aug 2023 22:18:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56224 "EHLO
+        id S229548AbjH1FZE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Aug 2023 01:25:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229654AbjH1CRs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 27 Aug 2023 22:17:48 -0400
-X-Greylist: delayed 349 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 27 Aug 2023 19:17:46 PDT
-Received: from out-246.mta1.migadu.com (out-246.mta1.migadu.com [95.215.58.246])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79EB9DA
-        for <linux-usb@vger.kernel.org>; Sun, 27 Aug 2023 19:17:46 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1693188644;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rtKvrVKkVQRnt5532V2eBTwRFEQ3kLH/lmwR/1FmH1s=;
-        b=nX51DTd6k2pYWpSmnb5tXrNcL7PyuZHU/VuPVXFkQycEyI73p4Ck5Zd3i6mIhYwxplI1OU
-        5x2GgSy80mXEG3edYDZ16LNYljPSqkJtJ54EuxeSCHqLUlv08XpVsouQghCSaIzq81AqLn
-        39nwhdXuhAOArDezqY66niYxhT+Ljmw=
-From:   andrey.konovalov@linux.dev
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        Justin Chen <justin.chen@broadcom.com>,
-        Al Cooper <alcooperx@gmail.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] usb: gadgetfs: return USB_GADGET_DELAYED_STATUS from setup()
-Date:   Mon, 28 Aug 2023 04:10:32 +0200
-Message-Id: <35c01a524b2eb6c3f01bc08f16bdff2d72256a1f.1693188390.git.andreyknvl@gmail.com>
-In-Reply-To: <5c2913d70556b03c9bb1893c6941e8ece04934b0.1693188390.git.andreyknvl@gmail.com>
-References: <5c2913d70556b03c9bb1893c6941e8ece04934b0.1693188390.git.andreyknvl@gmail.com>
+        with ESMTP id S229772AbjH1FYy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Aug 2023 01:24:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B7E4129;
+        Sun, 27 Aug 2023 22:24:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3033460AAF;
+        Mon, 28 Aug 2023 05:24:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8A537C433C7;
+        Mon, 28 Aug 2023 05:24:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1693200289;
+        bh=0Xk4uK/2TRf9VsLF/92kL0q0rtsuDOsk2AN3vjKX7jA=;
+        h=From:Date:Subject:To:Cc:Reply-To:From;
+        b=abUTbwgSeH3Oe6ZIl78vZ9Knd56LOALemfma5QsXC9wDcEx0KVsmi7CkgQzh4rcIx
+         qoXEKu03RIld5TNF1owSlkqIF+piz2cFMG4VxUIxf4E+ImZ0ngKOxr+0Lp9kpysyp5
+         6izzAXCJ66p6vNJ1tsehheY5PaTQKeCTBGOg5RmalSZK80hZclPMIf+g70luNJJ0zN
+         kLmZlSKQlafURgBNCW2MkTEN7YYOTXqnRBfmbH81VpguKJ03LP4+mDfNd0enhWVxkf
+         wYXCWdzWY1WwTv5pmiasYTkI6Rr3MDQ9AMDxr9SDmHM7CoBc+MAaIGgt6+u8JCjsWb
+         uxqvLWQMiT2KQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by smtp.lore.kernel.org (Postfix) with ESMTP id 6BC1BC83F13;
+        Mon, 28 Aug 2023 05:24:49 +0000 (UTC)
+From:   Hui Liu via B4 Relay <devnull+quic_huliu.quicinc.com@kernel.org>
+Date:   Mon, 28 Aug 2023 13:16:30 +0800
+Subject: [PATCH v3] usb: typec: qcom: check regulator enable status before
+ disabling it
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230828-qcom-tcpc-v3-1-e95b7afa34d9@quicinc.com>
+X-B4-Tracking: v=1; b=H4sIAK4t7GQC/1WMyw7CIBBFf6VhLQYGaFpX/odxQQZqZ2EfUImm4
+ d+lTUzq8tzcc1YWfSAf2aVaWfCJIo1DAXWqGPZ2eHhOrjADAUo0AHzG8ckXnJA7LVujLdams6z
+ 8p+A7eu+t271wT3EZw2dPJ7mtv4o6VJLkkne2kVa0aIWpr/OLkAY8lwvbOgmOrj66UFzlXINKg
+ za1/ndzzl/z4Xkg4AAAAA==
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_fenglinw@quicinc.com,
+        subbaram@quicinc.com, Hui Liu <quic_huliu@quicinc.com>
+X-Mailer: b4 0.13-dev-83828
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1693200287; l=2740;
+ i=quic_huliu@quicinc.com; s=20230823; h=from:subject:message-id;
+ bh=PhtbUNi497LxsIT+PR23WnfyXiZjybQwxlZzIfUUR5o=;
+ b=bCWEQzBXl080+WyLCKcjD4QwE7Jc4U3EfZtl4SMmaP4uobY/tBzbcihL2B/CSc8GrXaGvCs7L
+ oyP1VIASZIlCv9FXNhvkMmx5I99EYk1it1tDwbhIU6H6eFNX/h7KMBC
+X-Developer-Key: i=quic_huliu@quicinc.com; a=ed25519;
+ pk=1z+A50UnTuKe/FdQv2c0W3ajDsJOYddwIHo2iivhTTA=
+X-Endpoint-Received: by B4 Relay for quic_huliu@quicinc.com/20230823 with auth_id=80
+X-Original-From: Hui Liu <quic_huliu@quicinc.com>
+Reply-To: <quic_huliu@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Andrey Konovalov <andreyknvl@gmail.com>
+From: Hui Liu <quic_huliu@quicinc.com>
 
-Return USB_GADGET_DELAYED_STATUS from the setup() callback for 0-length
-transfers as a workaround to stop some UDC drivers (e.g. dwc3) from
-automatically proceeding with the status stage.
+Check regulator enable status before disabling it to avoid
+unbalanced regulator disable warnings.
 
-This workaround should be removed once all UDC drivers are fixed to
-always delay the status stage until a response is queued to EP0.
-
-Signed-off-by: Andrey Konovalov <andreyknvl@gmail.com>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Fixes: a4422ff22142 ("usb: typec: qcom: Add Qualcomm PMIC Type-C driver")
+Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Acked-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Signed-off-by: Hui Liu <quic_huliu@quicinc.com>
 ---
- drivers/usb/gadget/legacy/inode.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+Changes in v3:
+- Take Bryan's proposal to remove enable/disable operation in pdphy
+enable and pdphy disable function, then enable regulator in pdphy start
+function and disable it in pdphy stop function.
+- Link to v2: https://lore.kernel.org/r/20230824-qcom-tcpc-v2-1-3dd8c3424564@quicinc.com
 
-diff --git a/drivers/usb/gadget/legacy/inode.c b/drivers/usb/gadget/legacy/inode.c
-index 28249d0bf062..154bbf578ba2 100644
---- a/drivers/usb/gadget/legacy/inode.c
-+++ b/drivers/usb/gadget/legacy/inode.c
-@@ -31,6 +31,7 @@
+Changes in v2:
+- Add Fixes tag
+- Link to v1: https://lore.kernel.org/r/20230823-qcom-tcpc-v1-1-fa81a09ca056@quicinc.com
+---
+ drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
+index bb0b8479d80f..52c81378e36e 100644
+--- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
++++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
+@@ -381,10 +381,6 @@ static int qcom_pmic_typec_pdphy_enable(struct pmic_typec_pdphy *pmic_typec_pdph
+ 	struct device *dev = pmic_typec_pdphy->dev;
+ 	int ret;
  
- #include <linux/usb/gadgetfs.h>
- #include <linux/usb/gadget.h>
-+#include <linux/usb/composite.h>
+-	ret = regulator_enable(pmic_typec_pdphy->vdd_pdphy);
+-	if (ret)
+-		return ret;
+-
+ 	/* PD 2.0, DR=TYPEC_DEVICE, PR=TYPEC_SINK */
+ 	ret = regmap_update_bits(pmic_typec_pdphy->regmap,
+ 				 pmic_typec_pdphy->base + USB_PDPHY_MSG_CONFIG_REG,
+@@ -422,8 +418,6 @@ static int qcom_pmic_typec_pdphy_disable(struct pmic_typec_pdphy *pmic_typec_pdp
+ 	ret = regmap_write(pmic_typec_pdphy->regmap,
+ 			   pmic_typec_pdphy->base + USB_PDPHY_EN_CONTROL_REG, 0);
  
+-	regulator_disable(pmic_typec_pdphy->vdd_pdphy);
+-
+ 	return ret;
+ }
  
- /*
-@@ -241,6 +242,7 @@ static DEFINE_MUTEX(sb_mutex);		/* Serialize superblock operations */
- #define xprintk(d,level,fmt,args...) \
- 	printk(level "%s: " fmt , shortname , ## args)
+@@ -447,6 +441,10 @@ int qcom_pmic_typec_pdphy_start(struct pmic_typec_pdphy *pmic_typec_pdphy,
+ 	int i;
+ 	int ret;
  
-+#undef DBG
- #ifdef DEBUG
- #define DBG(dev,fmt,args...) \
- 	xprintk(dev , KERN_DEBUG , fmt , ## args)
-@@ -256,8 +258,10 @@ static DEFINE_MUTEX(sb_mutex);		/* Serialize superblock operations */
- 	do { } while (0)
- #endif /* DEBUG */
++	ret = regulator_enable(pmic_typec_pdphy->vdd_pdphy);
++	if (ret)
++		return ret;
++
+ 	pmic_typec_pdphy->tcpm_port = tcpm_port;
  
-+#undef ERROR
- #define ERROR(dev,fmt,args...) \
- 	xprintk(dev , KERN_ERR , fmt , ## args)
-+#undef INFO
- #define INFO(dev,fmt,args...) \
- 	xprintk(dev , KERN_INFO , fmt , ## args)
+ 	ret = pmic_typec_pdphy_reset(pmic_typec_pdphy);
+@@ -467,6 +465,8 @@ void qcom_pmic_typec_pdphy_stop(struct pmic_typec_pdphy *pmic_typec_pdphy)
+ 		disable_irq(pmic_typec_pdphy->irq_data[i].irq);
  
-@@ -1511,7 +1515,16 @@ gadgetfs_setup (struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
- 			event->u.setup = *ctrl;
- 			ep0_readable (dev);
- 			spin_unlock (&dev->lock);
--			return 0;
-+			/*
-+			 * Return USB_GADGET_DELAYED_STATUS as a workaround to
-+			 * stop some UDC drivers (e.g. dwc3) from automatically
-+			 * proceeding with the status stage for 0-length
-+			 * transfers.
-+			 * Should be removed once all UDC drivers are fixed to
-+			 * always delay the status stage until a response is
-+			 * queued to EP0.
-+			 */
-+			return w_length == 0 ? USB_GADGET_DELAYED_STATUS : 0;
- 		}
- 	}
+ 	qcom_pmic_typec_pdphy_reset_on(pmic_typec_pdphy);
++
++	regulator_disable(pmic_typec_pdphy->vdd_pdphy);
+ }
  
+ struct pmic_typec_pdphy *qcom_pmic_typec_pdphy_alloc(struct device *dev)
+
+---
+base-commit: bbb9e06d2c6435af9c62074ad7048910eeb2e7bc
+change-id: 20230822-qcom-tcpc-d41954ac65fa
+
+Best regards,
 -- 
-2.25.1
+Hui Liu <quic_huliu@quicinc.com>
 
