@@ -2,154 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 570BD78A119
-	for <lists+linux-usb@lfdr.de>; Sun, 27 Aug 2023 20:57:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCEE678A492
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Aug 2023 04:18:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbjH0S4O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 27 Aug 2023 14:56:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52426 "EHLO
+        id S229608AbjH1CSJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 27 Aug 2023 22:18:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbjH0Szx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 27 Aug 2023 14:55:53 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id CF0D4F4
-        for <linux-usb@vger.kernel.org>; Sun, 27 Aug 2023 11:55:50 -0700 (PDT)
-Received: (qmail 325084 invoked by uid 1000); 27 Aug 2023 14:55:50 -0400
-Date:   Sun, 27 Aug 2023 14:55:50 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Milan Broz <gmazyland@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: usb-storage: how to extend quirks flags to 64bit?
-Message-ID: <2d580337-eaf3-47fb-afa7-1006d9a257ea@rowland.harvard.edu>
-References: <f9e8acb5-32d5-4a30-859f-d4336a86b31a@gmail.com>
- <6f8b825b-bc41-4080-8128-4a6f0a43f779@rowland.harvard.edu>
- <34aa2eea-5417-4e46-91a0-aac1a46a84cf@gmail.com>
+        with ESMTP id S229656AbjH1CRt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 27 Aug 2023 22:17:49 -0400
+Received: from out-252.mta1.migadu.com (out-252.mta1.migadu.com [95.215.58.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82068DD
+        for <linux-usb@vger.kernel.org>; Sun, 27 Aug 2023 19:17:46 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1693188642;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=s3mKfn7GAN06ou/8BCH2fRTTl02YY6jrfUlWZqgBA1E=;
+        b=S5Jlqj9UFLejHmRcgZ4/6G80Kbyo2zYmVbxS5xaHtfuC0RMPPFDzZNvT4YJIcxF8JuS/2i
+        euoJ3VV4tyyadjGnrNlWL/5ZmHIXs/uPodvi63Kf6bFOecUoGVmWpg7R12NAXrOud5dBkO
+        ekAL9kWUDhgU02qM4vhBQz5ZD3xFLVY=
+From:   andrey.konovalov@linux.dev
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        Justin Chen <justin.chen@broadcom.com>,
+        Al Cooper <alcooperx@gmail.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/3] usb: gadget: clarify usage of USB_GADGET_DELAYED_STATUS
+Date:   Mon, 28 Aug 2023 04:10:30 +0200
+Message-Id: <5c2913d70556b03c9bb1893c6941e8ece04934b0.1693188390.git.andreyknvl@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <34aa2eea-5417-4e46-91a0-aac1a46a84cf@gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Aug 27, 2023 at 06:45:55PM +0200, Milan Broz wrote:
-> On 8/27/23 17:50, Alan Stern wrote:
-> > On Sun, Aug 27, 2023 at 11:32:05AM +0200, Milan Broz wrote:
-> > > Hello,
-> > > 
-> > > I tried to extend USB storage for the passthrough of Opal
-> > > security commands,
-> > 
-> > What sort of changes are needed?  Where is this passthrough mechanism
-> > documented?
-> 
-> We are currently adding support for optional OPAL hw encryption to
-> cryptsetup/LUKS2 (that uses kernel OPAL ioctl interface) and I tried
-> to make USB adapters to work with it too.
-> 
-> I'll send RFC patchset (it is quite simple) where I explain it in detail.
-> The patch for USB storage is actually one liner, the rest is in SCSI driver :)
-> 
-> Basically, USB adapters (not supporting UAS) cannot work as
-> required SCSI SECURITY IN/OUT SCSI commands do not work here.
-> 
-> But we can use ATA12 pass-thru (as used with original sedutils
-> and some other tools we used in research; it is a documented feature).
-> It works once ATA12 wrapper is added to block layer and USB storage enables
-> the "security_supported" bit.
-> 
-> > 
-> > >   and some adapters are clearly "not perfect".
-> > 
-> > Which ones?
-> 
-> Namely Realtek 9210 family (NVME to USB bridge). Everything OPAL related
-> works, but the adapter always set write-protected bit for the whole
-> drive (even if OPAL locking range is just covering part of the disk).
-> 
-> I spent quite a lot time trying new firmware versions - this issue is
-> still there.
+From: Andrey Konovalov <andreyknvl@gmail.com>
 
-It sounds like the sort of thing that should be reported as a bug to 
-Realtek.  I can't imagine their customers would be very happy about this 
-behavior.
+USB_GADGET_DELAYED_STATUS was introduced in commit 1b9ba000177e ("usb:
+gadget: composite: Allow function drivers to pause control transfers").
+It was initially intended for the composite framework to allow delaying
+completing the status stage of a SET_CONFIGURATION request until all
+functions are ready.
 
-> On the other side, many other USB to SATA bridges works nicely.
-> I think this is the exact situation where we should set a new quirks flag
-> to disable it. (The nasty thing is that for unbricking it you need PSID reset
-> - PSID is a number written on the label of the drive - followed by physical
-> disconnect for recovery.)
-> 
-> 
-> Anyway, I intentionally sent this 32bit flags question separately as it
-> is actually a generic issue - we are just out of flag space now...
-> 
-> Even if the patches mentioned above are rejected, someone will need
-> a new flag for something else later.
+Unfortunately, that commit had an unintended side-effect of returning
+USB_GADGET_DELAYED_STATUS from the ->setup() call of the composite
+framework gadget driver.
 
-Certainly.  We knew this was bound to come up eventually.
+As a result of this and the incomplete documentation, some UDC drivers
+started relying on USB_GADGET_DELAYED_STATUS to decide when to avoid
+autocompleting the status stage for 0-length control transfers. dwc3 was
+the first in commit 5bdb1dcc6330 ("usb: dwc3: ep0: handle delayed_status
+again"). And a number of other UDC drivers followed later, probably
+relying on the dwc3 behavior as a reference.
 
-> > > I would need to introduce a new quirks flag to turn it off.
-> > > 
-> > > Seems that we are already out of quirks flags on 32bit
-> > > for usb storage - in usb_usual.h the last entry in mainline is
-> > >    US_FLAG(SENSE_AFTER_SYNC, 0x80000000)
-> > > 
-> > > Adding a new flag will work for 64-bit systems but not
-> > > for platforms with 32-bit unsigned long like i686.
-> > > 
-> > > How do we allow new flag definitions?
-> > > 
-> > > Struct us_data fflags can be made 64bit (defined in
-> > > drivers/usb/storage/usb.h), but the major problem is that these
-> > > are transferred through the generic driver_info field
-> > > defined in linux/mod_devicetable.h as unsigned long).
-> > > Making this 64bit is IMO an extensive API change (if even possible).
-> > > I guess this is not the way to go.
-> > > 
-> > > Could USB maintainers please help to advise what is the correct
-> > > solution? I am not familiar with the USB driver model here
-> > > and I see no easy way how it can be solved by a trivial static
-> > > allocation inside the USB storage driver.
-> > > 
-> > > Someone will need a new quirks flag in the future anyway... :)
-> > 
-> > I can think of only one way to accomplish this on 32-bit systems: Change
-> > the driver_info field from a bit array to an index into a static table
-> > of 64-bit flags values.  Each unusual_devs structure would have its own
-> > entry in this table.  As far as I can tell, the other unusual_*.h tables
-> > could retain their current driver_info interpretations, since no new
-> > quirk bits are likely to be relevant to them.
-> > 
-> > Making this change would be an awkward nuisance, but it should be
-> > doable.
-> 
-> Hm, yes, thanks for the idea,that is a possible solution.
-> It will need to modify all unusual macros, though. Just I am not sure I want
-> to spent time patching all the drivers as I have not way how to test it.
+Unfortunately, this violated the interface between the UDC and the
+gadget driver for 0-length control transfers: the UDC driver must only
+proceed with the status stage for a 0-length control transfer once the
+gadget driver queued a response to EP0.
 
-I don't think it will be necessary to change all those macros, just the 
-ones in usual_tables.c.  And to create the new table containing the 
-actual flag values, of course.
+As a result, a few gadget drivers are partially broken when used with
+a UDC that only delays the status stage for 0-length transfers when
+USB_GADGET_DELAYED_STATUS is returned from the setup() callback.
 
-There will also have to be a new argument to usb_stor_probe1() 
-specifying whether the id->driver_info field is standard (i.e., it 
-contains the flags directly) or is one of the new indirect index values.  
+This includes Raw Gadget and GadgetFS. For FunctionFS, a workaround was
+added in commit 946ef68ad4e4 ("usb: gadget: ffs: Let setup() return
+USB_GADGET_DELAYED_STATUS") and commit 4d644abf2569 ("usb: gadget: f_fs:
+Only return delayed status when len is 0").
 
-And you'll have to figure out a comparable change to the dynamic device 
-ID table mechanism.
+The proper solution to this issue would be to contain
+USB_GADGET_DELAYED_STATUS within the composite framework and make all
+UDC drivers to not complete the status stage for 0-length requests on
+their own.
 
-(If you want to be really fancy about it, you could design things in 
-such a way that the indirect flags approach is used only on 32-bit 
-systems.  64-bit systems can put the new flag bits directly into the 
-driver_info field.  However, it's probably best not to worry about this 
-initially.)
+Unfortunately, there is quite a few UDC drivers that need to get fixed
+and the required changes for some of them are not trivial.
+
+For now, update the comments to clarify that USB_GADGET_DELAYED_STATUS
+must not be used by the UDC drivers.
+
+The following two commits also add workarounds to Raw Gadget and GadgetFS
+to make them compatible with the broken UDC drivers until they are fixed.
+
+Signed-off-by: Andrey Konovalov <andreyknvl@gmail.com>
+---
+ include/linux/usb/composite.h | 8 ++++++++
+ include/linux/usb/gadget.h    | 9 +++++++++
+ 2 files changed, 17 insertions(+)
+
+diff --git a/include/linux/usb/composite.h b/include/linux/usb/composite.h
+index 07531c4f4350..1d2cf6a070ac 100644
+--- a/include/linux/usb/composite.h
++++ b/include/linux/usb/composite.h
+@@ -35,6 +35,14 @@
+  * are ready. The control transfer will then be kept from completing till
+  * all the function drivers that requested for USB_GADGET_DELAYED_STAUS
+  * invoke usb_composite_setup_continue().
++ *
++ * NOTE: USB_GADGET_DELAYED_STATUS must not be used in UDC drivers: they
++ * must delay completing the status stage for 0-length control transfers
++ * regardless of the whether USB_GADGET_DELAYED_STATUS is returned from
++ * the gadget driver's setup() callback.
++ * Currently, a number of UDC drivers rely on USB_GADGET_DELAYED_STATUS,
++ * which is a bug. These drivers must be fixed and USB_GADGET_DELAYED_STATUS
++ * must be contained within the composite framework.
+  */
+ #define USB_GADGET_DELAYED_STATUS       0x7fff	/* Impossibly large value */
  
-Alan Stern
+diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
+index 75bda0783395..6532beb587b1 100644
+--- a/include/linux/usb/gadget.h
++++ b/include/linux/usb/gadget.h
+@@ -711,6 +711,15 @@ static inline int usb_gadget_check_config(struct usb_gadget *gadget)
+  * get_interface.  Setting a configuration (or interface) is where
+  * endpoints should be activated or (config 0) shut down.
+  *
++ * The gadget driver's setup() callback does not have to queue a response to
++ * ep0 within the setup() call, the driver can do it after setup() returns.
++ * The UDC driver must wait until such a response is queued before proceeding
++ * with the data/status stages of the control transfer.
++ *
++ * NOTE: Currently, a number of UDC drivers rely on USB_GADGET_DELAYED_STATUS
++ * being returned from the setup() callback, which is a bug. See the comment
++ * next to USB_GADGET_DELAYED_STATUS for details.
++ *
+  * (Note that only the default control endpoint is supported.  Neither
+  * hosts nor devices generally support control traffic except to ep0.)
+  *
+-- 
+2.25.1
+
