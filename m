@@ -2,60 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA4D978C9FE
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Aug 2023 18:56:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3506078CA08
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Aug 2023 18:58:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237284AbjH2Qz2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Aug 2023 12:55:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49868 "EHLO
+        id S237576AbjH2Q6K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Aug 2023 12:58:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237622AbjH2QzX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Aug 2023 12:55:23 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C9E1B6
-        for <linux-usb@vger.kernel.org>; Tue, 29 Aug 2023 09:55:20 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-52a1ce529fdso6154080a12.1
-        for <linux-usb@vger.kernel.org>; Tue, 29 Aug 2023 09:55:20 -0700 (PDT)
+        with ESMTP id S237568AbjH2Q5s (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Aug 2023 12:57:48 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE5CA107
+        for <linux-usb@vger.kernel.org>; Tue, 29 Aug 2023 09:57:45 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-99c93638322so1370166b.1
+        for <linux-usb@vger.kernel.org>; Tue, 29 Aug 2023 09:57:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693328119; x=1693932919;
+        d=linaro.org; s=google; t=1693328264; x=1693933064; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=3BpJgivS3dlGuz7t1+9iCEke02uZzCJ683AvwGIuOoo=;
-        b=tmGtO8ZTCn9K5zClsMbwhH/hKL3nvRuCXYjKmcjwde5Wwp78tv7UrrrXnc81b4MW21
-         pURng7CBFFmptMmXxVGEalJfHtBIzDcPgRXVL+e/Myfsu095i34PWzY+BhIKQDDz7aax
-         lTCspFt/UKeML95+kyrbtwqlGOFsEc6z2WlbMNlreIy4nNJCqxzC6bnkr1IXaVqtMc5e
-         tawyC/68XUzeyaYUbRtp2oT7uq8z31mfckmw39E4NV5mnfwbLlBUP18DlzKS5gcKs+G+
-         ApGPLCnqGczjxCqDmL+wGJEmPxL6kzAbPCJ1zxvgZRXMTdOdz5p5peSp9A2WkA4ciCQu
-         ShFg==
+        bh=USnPVHhTaTEKWMY0RI8COMBvSuzKiyupj+WtOVSWwH4=;
+        b=xozLu+XoMpQa847wsceNnGCC1gkwG5tw7MBvIwruVFu/QZSvY+5g+kc2yhMRoB+/2e
+         B+WFV4aLla/wkqO9AOaF2R+Vhe3bElNVsYtoQ3CVI0rkZyokNeC5G18eI4rUBFPdsIG1
+         8dzh85iyJLtYJF2LPTqlxITjCLvFM9SF0VsOAmF1S9CVMUdfnReg+F+1hDZPIlphv8T+
+         dsFmGu0xhlN2U8kE6uwTeJaqhBa2OVL6pPrBwjDTlrV6oOS6d18GrNslNS9UKEsWN13/
+         lf/O0s3aDmNgKBuQND/+7zjJ6PmBnrVUq/ZKj02F4TXOGyenZuvLHZZgqXwfC3NV3bk6
+         Vl0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693328119; x=1693932919;
+        d=1e100.net; s=20221208; t=1693328264; x=1693933064;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3BpJgivS3dlGuz7t1+9iCEke02uZzCJ683AvwGIuOoo=;
-        b=Fjl41/ntbxeanEIks2itgh5zUqZqUhyAOJJP3vUzuG82fBn/JAYJLj8mzk2JueNnKC
-         J4MbhKcAXIru4PyC33rxt2bRYPNG4syVUuDBT0MwJQ1UuShSZ2LkVkUEk8/K4O2SPwQ7
-         ZgbMPzadpvCOn4RYasB53NP17zeb3iwsWAYYNj9jav8qOM+w/WJ6WBW/i83uyd6mCT8a
-         6/iTdtvROWd9EjFzK+3E0LtzFognxrzPgOKKxt5tqfy88NMWLHmBvzfYrrXWspTEWRr8
-         lEKFf6jy9EZpNgsFe6KygVrsoqlqOR8HqytEQx3Mb+bHoLFE5sEkXpLQPdIU5UQVoQmR
-         LFIg==
-X-Gm-Message-State: AOJu0YzdlgE81TpJSLTIjtbmubA2a2mX9OYpGjYjudXSUhoax2YK7PYr
-        GQ4yNiKFSpdK+drrkiBNKLsDYg==
-X-Google-Smtp-Source: AGHT+IF0hK7L2NbSch0GNoms7PJA7260zSeTpFfKq5naoZ4uA3lJ3h0h8FizIDcR0esq873qWjKw+g==
-X-Received: by 2002:a50:ef0d:0:b0:52a:250e:a04a with SMTP id m13-20020a50ef0d000000b0052a250ea04amr15569445eds.7.1693328118928;
-        Tue, 29 Aug 2023 09:55:18 -0700 (PDT)
+        bh=USnPVHhTaTEKWMY0RI8COMBvSuzKiyupj+WtOVSWwH4=;
+        b=JPO8+5ZpeVV6TOQPolbv6VIPyuXy0vKfymQORarCC04qGMTq/2OI1HLh3xxHoAz+ba
+         JfknOVEQzA5j/hDs1v3NHuRtJZuqn8mrGcg4HHBMuqS2aYardeHJbKV9Z8Ux8rGqlGm8
+         B0ELHdv211v39N0cFl33uIrCM4iNaMNOTw1oTbNCjZD/TGZaiRbX0uRFVjseMcrBcuxc
+         PqKRk018+GLp4ywiWQZCm22MdPIKQIk4Nfl6BN63CI6+E2klpC/5J94+W3Tg6gTf/YwF
+         Wz7+HRzQjxUOkHUiH7apHPPVct5uT0eZLHk20PE9Hhd39+KpR7t4pxSHv/KjZwwziccB
+         J55g==
+X-Gm-Message-State: AOJu0YxK951oD2Sc9VbIWskINYA4TIUbq0qBln7YZK5sHxkxHpPa+6h0
+        eHFfA6RG10nGro9TpK9xwtfYKQ==
+X-Google-Smtp-Source: AGHT+IFUDlTg4lh2YVHAkkvvKYFu8vTL7QE7o7/B5+sdtauSDrekKlQkM8y9WlfNHo9QkAYi/Ti4TQ==
+X-Received: by 2002:a17:907:3e0d:b0:9a1:fed1:9b42 with SMTP id hp13-20020a1709073e0d00b009a1fed19b42mr4249879ejc.23.1693328264045;
+        Tue, 29 Aug 2023 09:57:44 -0700 (PDT)
 Received: from [192.168.0.22] ([77.252.47.196])
-        by smtp.gmail.com with ESMTPSA id r9-20020aa7da09000000b005236b47116asm5860050eds.70.2023.08.29.09.55.17
+        by smtp.gmail.com with ESMTPSA id v9-20020a170906488900b0099cc36c4681sm6146020ejq.157.2023.08.29.09.57.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Aug 2023 09:55:18 -0700 (PDT)
-Message-ID: <d30742d6-7fe2-c5fe-ac42-86642acc076e@linaro.org>
-Date:   Tue, 29 Aug 2023 18:55:16 +0200
+        Tue, 29 Aug 2023 09:57:43 -0700 (PDT)
+Message-ID: <97741bfd-70a3-f2ef-fd10-c1aadecd059b@linaro.org>
+Date:   Tue, 29 Aug 2023 18:57:41 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.14.0
-Subject: Re: [PATCH 2/9] phy: qcom: uniphy: Rename ipq4019 USB phy driver to
- UNIPHY driver
+Subject: Re: [PATCH 3/9] phy: qcom: uniphy: Update UNIPHY driver to be a
+ common driver
 Content-Language: en-US
 To:     Praveenkumar I <quic_ipkumar@quicinc.com>, robert.marko@sartura.hr,
         luka.perkov@sartura.hr, agross@kernel.org, andersson@kernel.org,
@@ -70,15 +70,14 @@ To:     Praveenkumar I <quic_ipkumar@quicinc.com>, robert.marko@sartura.hr,
         linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 Cc:     quic_varada@quicinc.com
 References: <20230829135818.2219438-1-quic_ipkumar@quicinc.com>
- <20230829135818.2219438-3-quic_ipkumar@quicinc.com>
+ <20230829135818.2219438-4-quic_ipkumar@quicinc.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230829135818.2219438-3-quic_ipkumar@quicinc.com>
+In-Reply-To: <20230829135818.2219438-4-quic_ipkumar@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -86,65 +85,64 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 On 29/08/2023 15:58, Praveenkumar I wrote:
-> UNIPHY / Combo PHY used on various qualcomm SoC's are very similar to
-> ipq4019 PHY. Hence renaming this driver to uniphy driver and can be
-> used for other SoC's which are having the similar UNIPHY.
-> 
-> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
-> ---
->  MAINTAINERS                                                | 7 ++++---
->  drivers/phy/qualcomm/Kconfig                               | 7 ++++---
->  drivers/phy/qualcomm/Makefile                              | 2 +-
->  .../qualcomm/{phy-qcom-ipq4019-usb.c => phy-qcom-uniphy.c} | 0
->  4 files changed, 9 insertions(+), 7 deletions(-)
->  rename drivers/phy/qualcomm/{phy-qcom-ipq4019-usb.c => phy-qcom-uniphy.c} (100%)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index ff1f273b4f36..7f4553c1a69a 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -17774,13 +17774,14 @@ F:	Documentation/devicetree/bindings/mailbox/qcom-ipcc.yaml
->  F:	drivers/mailbox/qcom-ipcc.c
->  F:	include/dt-bindings/mailbox/qcom-ipcc.h
->  
-> -QUALCOMM IPQ4019 USB PHY DRIVER
-> +QUALCOMM UNIPHY DRIVER
->  M:	Robert Marko <robert.marko@sartura.hr>
->  M:	Luka Perkov <luka.perkov@sartura.hr>
-> +M:	Praveenkumar I <quic_ipkumar@quicinc.com>
->  L:	linux-arm-msm@vger.kernel.org
->  S:	Maintained
-> -F:	Documentation/devicetree/bindings/phy/qcom-usb-ipq4019-phy.yaml
-> -F:	drivers/phy/qualcomm/phy-qcom-ipq4019-usb.c
-> +F:	Documentation/devicetree/bindings/phy/qcom,uniphy.yaml
+> This patch updates the UNIPHY driver to be a common driver to
 
-You broke the path in your previous commit, but anyway this will go away.
+Please do not use "This commit/patch", but imperative mood. See longer
+explanation here:
+https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
 
-> +F:	drivers/phy/qualcomm/phy-qcom-uniphy.c
->  
->  QUALCOMM IPQ4019 VQMMC REGULATOR DRIVER
->  M:	Robert Marko <robert.marko@sartura.hr>
-> diff --git a/drivers/phy/qualcomm/Kconfig b/drivers/phy/qualcomm/Kconfig
-> index d891058b7c39..e6981bc212b3 100644
-> --- a/drivers/phy/qualcomm/Kconfig
-> +++ b/drivers/phy/qualcomm/Kconfig
-> @@ -28,12 +28,13 @@ config PHY_QCOM_EDP
->  	  Enable this driver to support the Qualcomm eDP PHY found in various
->  	  Qualcomm chipsets.
->  
-> -config PHY_QCOM_IPQ4019_USB
-> -	tristate "Qualcomm IPQ4019 USB PHY driver"
-> +config PHY_QCOM_UNIPHY
-> +	tristate "Qualcomm UNIPHY driver"
->  	depends on OF && (ARCH_QCOM || COMPILE_TEST)
->  	select GENERIC_PHY
->  	help
-> -	  Support for the USB PHY-s on Qualcomm IPQ40xx SoC-s.
-> +	  Enable this driver to support the Qualcomm UNIPHY found in various
-> +	  Qualcomm chipsets.
+> accommodate all UNIPHY / Combo PHY. This driver can be used for
+> both USB and PCIe UNIPHY. Using phy-mul-sel from DTS MUX selection
+> for USB / PCIe can be acheived.
 
-I don't quite get why this is renamed, either. Just because you re-use
-it? Re-usage is not affected with old name...
+This patch is entirely unreadable. You speak "unify" but change much
+more. There is no code removal, so what are you unifying?
+
+...
+
+> -	phy->phy = devm_phy_create(dev, NULL, of_device_get_match_data(dev));
+> -	if (IS_ERR(phy->phy)) {
+> -		dev_err(dev, "failed to create PHY\n");
+> -		return PTR_ERR(phy->phy);
+> +	uniphy->phy = devm_phy_create(dev, NULL, &uniphy_phy_ops);
+
+NAK, really, this does not make sense, is not explained and not needed.
+If needed, then it would deserve its own patch with own justification.
+
+> +	if (IS_ERR(uniphy->phy)) {
+> +		ret = PTR_ERR(uniphy->phy);
+> +		dev_err_probe(dev, ret, "failed to create PHY\n");
+
+That's not even the syntax. By "unifying" you introduce different, wrong
+code.
+
+> +		goto err;
+>  	}
+> -	phy_set_drvdata(phy->phy, phy);
+> +
+> +	phy_set_drvdata(uniphy->phy, uniphy);
+>  
+>  	phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
+>  
+> -	return PTR_ERR_OR_ZERO(phy_provider);
+> +	ret = PTR_ERR_OR_ZERO(phy_provider);
+> +
+> +err:
+> +	if (uniphy->cfg->pipe_clk_rate)
+> +		of_node_put(np);
+> +	return ret;
+>  }
+>  
+> -static struct platform_driver ipq4019_usb_phy_driver = {
+> -	.probe	= ipq4019_usb_phy_probe,
+> +static const struct of_device_id qcom_uniphy_of_match[] = {
+> +	{ .compatible = "qcom,usb-hs-ipq4019-phy", .data = &ipq4019_usb_hsphy_cfg},
+> +	{ .compatible = "qcom,usb-ss-ipq4019-phy", .data = &ipq4019_usb_ssphy_cfg},
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(of, qcom_uniphy_of_match);
+
+What happens here?
 
 Best regards,
 Krzysztof
