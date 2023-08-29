@@ -2,117 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EFDD78CC57
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Aug 2023 20:47:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84AD878CC75
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Aug 2023 20:51:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238163AbjH2SrE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Aug 2023 14:47:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59628 "EHLO
+        id S235478AbjH2Suv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Aug 2023 14:50:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235952AbjH2Sqf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Aug 2023 14:46:35 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C8091A2
-        for <linux-usb@vger.kernel.org>; Tue, 29 Aug 2023 11:46:32 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-d7484cfdc11so4572939276.1
-        for <linux-usb@vger.kernel.org>; Tue, 29 Aug 2023 11:46:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693334791; x=1693939591;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6+ED0KXs67DGrmo6iXaWzPAJQDmbnXsYGdJFbasrMdI=;
-        b=ClWjzcAfjYvtZ8nl+s7yeWbc+hc5FJFSCfsmTr8wmd/zVGplocRb++tAmdLjdsc9zc
-         nfs6Ak/RS7XX2cggg/o75ialkDJwSUmqpoE0jlMeh3HrLPdu5cp3G0lkpB0XGMYE3XOC
-         s5Z3wGgOcqeZVH4rZ4Z18ix/VHAoHldddAp34xZc28soOqMULHblq4fl9sVDsgxIZLN1
-         UQWTMxiRjLNSy54jTnOGWiDCUivs75yf4KiJWzQlLbqvLyuPzW4fmCFix5ea17knoMq4
-         7Ov+viFXw9Qeb7kfTlBZ45jKJGGg1ngVZixWXIuhHigS6SN/T5lzODHIBbHBip0x5fcC
-         2OJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693334791; x=1693939591;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6+ED0KXs67DGrmo6iXaWzPAJQDmbnXsYGdJFbasrMdI=;
-        b=e9NL6OZQ+jNJ5CAuZjz2IWkVUfUYGtRVQI2pnJzoCPGj6pU8LkvpSX+LgIotYWFNg+
-         b+FKSf/7PJcx/0+oV45LqkiB9Jmff8wnNgjRsOOCgIfJP7vXdE+skviTIewZrcYKGC84
-         4xIfoRktmvbaeWgwtXXaIc4IiLt44QukGz8reFYmOoJDSdYs78YC7aPwmXNqxPKpPiA9
-         t7d08NyxnupCplbpCmIZRF4k3uwJguW5TrPdnT6NdLcmg49HlMTJY/6BICtyXY6ixnBA
-         6V6ac/TLIX/EPe4uECQr25uOkDbExMa+FnyDWtBt0KWhja7pCYbp/3twZA9JSKvwKald
-         onoQ==
-X-Gm-Message-State: AOJu0Yx4MLweWq9dQ+2j4jhCAD5HwJ+qODst6hKMtfRv54MI3r5Ecbkq
-        M+v9f3Tr0eKjwebNfH/3NqH4IZeTHXQwnbo2gg10Eg==
-X-Google-Smtp-Source: AGHT+IF7Q+2ONedva5BlExE5dN6mOQYTGK+793vpj6L4wQkNIymKBXWY+28Y72O3M02h08fxfWekTJ3xhcGsPQoR0RA=
-X-Received: by 2002:a25:d10a:0:b0:d62:b91b:10e3 with SMTP id
- i10-20020a25d10a000000b00d62b91b10e3mr30257956ybg.48.1693334791365; Tue, 29
- Aug 2023 11:46:31 -0700 (PDT)
+        with ESMTP id S238631AbjH2Su2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Aug 2023 14:50:28 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 0E224CFF
+        for <linux-usb@vger.kernel.org>; Tue, 29 Aug 2023 11:50:03 -0700 (PDT)
+Received: (qmail 396283 invoked by uid 1000); 29 Aug 2023 14:49:21 -0400
+Date:   Tue, 29 Aug 2023 14:49:21 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     USB list <linux-usb@vger.kernel.org>
+Subject: Re: alauda_check_media() doubts
+Message-ID: <001562e9-bc84-498f-a15a-8b4a01f172a7@rowland.harvard.edu>
+References: <eee774db-0cd1-5870-8909-b616d962791f@suse.com>
 MIME-Version: 1.0
-References: <20230829135818.2219438-1-quic_ipkumar@quicinc.com>
- <20230829135818.2219438-5-quic_ipkumar@quicinc.com> <169331975886.2142011.7345682428392154402.robh@kernel.org>
- <17e2413b-6d06-a113-e35b-30cc078a6e83@linaro.org>
-In-Reply-To: <17e2413b-6d06-a113-e35b-30cc078a6e83@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 29 Aug 2023 21:46:20 +0300
-Message-ID: <CAA8EJppNGs0UVhBJq_+RFt8pALEk0tEoKfUo1AxzbSu82A5_HA@mail.gmail.com>
-Subject: Re: [PATCH 4/9] dt-bindings: phy: qcom,uniphy: Add ipq5332 USB3 SS UNIPHY
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh@kernel.org>,
-        Praveenkumar I <quic_ipkumar@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kishon@kernel.org, robert.marko@sartura.hr, robh+dt@kernel.org,
-        geert+renesas@glider.be, peng.fan@nxp.com,
-        konrad.dybcio@linaro.org, devicetree@vger.kernel.org,
-        linux-phy@lists.infradead.org, will@kernel.org,
-        conor+dt@kernel.org, p.zabel@pengutronix.de,
-        quic_varada@quicinc.com, vkoul@kernel.org, nfraprado@collabora.com,
-        krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-kernel@lists.infradead.org, quic_wcheng@quicinc.com,
-        rafal@milecki.pl, gregkh@linuxfoundation.org,
-        luka.perkov@sartura.hr, andersson@kernel.org, arnd@arndb.de,
-        linux-usb@vger.kernel.org, agross@kernel.org,
-        catalin.marinas@arm.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <eee774db-0cd1-5870-8909-b616d962791f@suse.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 29 Aug 2023 at 20:09, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 29/08/2023 16:35, Rob Herring wrote:
-> >
-> > On Tue, 29 Aug 2023 19:28:13 +0530, Praveenkumar I wrote:
-> >> Add ipq5332 USB3 SS UNIPHY support.
-> >>
-> >> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
-> >> ---
-> >>  .../devicetree/bindings/phy/qcom,uniphy.yaml  | 117 +++++++++++++++++-
-> >>  1 file changed, 114 insertions(+), 3 deletions(-)
-> >>
-> >
-> > My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> > on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> >
-> > yamllint warnings/errors:
-> >
-> > dtschema/dtc warnings/errors:
-> > In file included from Documentation/devicetree/bindings/phy/qcom,uniphy.example.dts:45:
-> > ./scripts/dtc/include-prefixes/dt-bindings/clock/qcom,ipq5332-gcc.h:19: warning: "GCC_BLSP1_AHB_CLK" redefined
-> >    19 | #define GCC_BLSP1_AHB_CLK                               10
-> >       |
->
-> So the only patch which actually needed dependency information did not
-> have it. All other patches have something, even defconfig (!). Confusing.
+On Tue, Aug 29, 2023 at 08:14:05PM +0200, Oliver Neukum wrote:
+> Hi Alan,
+> 
+> as you did something on this driver, doesn't
+> this condition:
+> 
+> (status[0] & 0x80) ||
+>                 ((status[0] & 0x1F) == 0x10) || ((status[1] & 0x01) == 0)
+> 
+> look odd to you? Especially the parentheses?
 
-Much simpler. This patch adds a second example to the schema. Both
-examples include something-gcc.h. As both examples end up in the same
-example.dts file, second include conflicts with the first one.
+(The actual text in my copy of the file is:
 
--- 
-With best wishes
-Dmitry
+	if ((status[0] & 0x80) || ((status[0] & 0x1F) == 0x10)
+		|| ((status[1] & 0x01) == 0)) {
+
+This probably doesn't affect your point...)
+
+Certainly the layout is a little peculiar, and the extra parentheses 
+don't help any.  But they don't really hurt, either, and the meaning is 
+clear.  It doesn't look obviously wrong.
+
+Those two lines go back to the original version of the driver, added in 
+2005 by commit e80b0fade09e ("[PATCH] USB Storage: add alauda support"), 
+written by Daniel Drake and edited by Matt Dharm.  So it's been around 
+for quite a while and there may not be many devices left that need this 
+driver.
+
+Did you want to change it?
+
+Alan Stern
