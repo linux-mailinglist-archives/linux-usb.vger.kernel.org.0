@@ -2,85 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B42B278BF6B
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Aug 2023 09:43:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E27A278BF72
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Aug 2023 09:44:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233805AbjH2HnI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Aug 2023 03:43:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35964 "EHLO
+        id S233774AbjH2Hnm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Aug 2023 03:43:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233773AbjH2Hmd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Aug 2023 03:42:33 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A26F194
-        for <linux-usb@vger.kernel.org>; Tue, 29 Aug 2023 00:42:30 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-99cdb0fd093so527454466b.1
-        for <linux-usb@vger.kernel.org>; Tue, 29 Aug 2023 00:42:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693294949; x=1693899749;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fZidkGWNPi5BjyVLjLVMFpv4YzU60iSJ/Ecori1AkQ0=;
-        b=i5va1TsUR/sivxWYmTNw0ts25LKsB6R7S9P3dyzzTC+Fh7W68bccjTByx/vLozPCD7
-         It7sG2Ds7/CWT2/M7z8KA6r0Zx5v+Lqj0ks1AHc2YuE2LIFYmOyqdNSFemEYsWB6gd6v
-         dzAoiFpNymOG7WMSmamobMgoHU7JfXgdMmHXuDqKieR1cFTu6Fg4SonCIH6An8oTxsnQ
-         RqIL6KjiHnVgEEK3qiD/20g2v2VcSQkg25MLPb/ioLLr5TcP1rqanOpbrBeaRmA8PbAV
-         IQDFriKYp3OMel93CxJxtaaOwpESEjrNGmC0bs45BksGbVMWvgsiZEWgFeZHhTkn6X8R
-         eIHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693294949; x=1693899749;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fZidkGWNPi5BjyVLjLVMFpv4YzU60iSJ/Ecori1AkQ0=;
-        b=ILAWEHdNhLgIjF7QomIRLrdxYLOYddGf4oQ4c9O7ZYX/a6RUYpKr90hfE7b++lHPCG
-         Qzjy6eE0WgsMV8P82PpSxfby06Zk8wq1cA1GBmqBm2PSFfpULKLO/8rGqSd9vcWzP/Lj
-         uERP787Czpkvqt3XEwZbHfC7xVXeR0a7ISqVf5WHHhJC8BIe1P2nMPKbe6EJeseIu7E4
-         aA2uwbSb4de6rmXwSXyjA6RyPRBBV+1n0Ff0VTJ30H1pozTdv78TNvhfa8NF0IHaFepD
-         fTdWogzd4OoxBbu24zSWmY6mV7I1fqo8OdtmUrRH+yqB34RSYYyUZvwl4CX9yrBjlREE
-         r0Qw==
-X-Gm-Message-State: AOJu0YwdJvQsYH7XfDZKEWB7HeNJLZCScjqdLJzv6pKYj7efuFcqKD6Y
-        7HCkGhQ4xsa+NLsuBuzZJRqSig==
-X-Google-Smtp-Source: AGHT+IEWQr3QZ34jpK/5hL3ExGpvkPxLMtK2asR6mbFflpZ3LI8Ub6Apso9Cl+apOGcp3MwFMSZd6g==
-X-Received: by 2002:a17:906:2243:b0:9a1:8a39:c62d with SMTP id 3-20020a170906224300b009a18a39c62dmr20024316ejr.38.1693294948996;
-        Tue, 29 Aug 2023 00:42:28 -0700 (PDT)
-Received: from [192.168.0.22] ([77.252.47.196])
-        by smtp.gmail.com with ESMTPSA id s11-20020a170906354b00b00992bea2e9d2sm5615023eja.62.2023.08.29.00.42.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Aug 2023 00:42:28 -0700 (PDT)
-Message-ID: <e2b2f268-182a-5ba4-2541-f0a401eda1c8@linaro.org>
-Date:   Tue, 29 Aug 2023 09:42:27 +0200
+        with ESMTP id S233914AbjH2Hna (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Aug 2023 03:43:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6709A139;
+        Tue, 29 Aug 2023 00:43:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0524A63C36;
+        Tue, 29 Aug 2023 07:43:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0B01C433C9;
+        Tue, 29 Aug 2023 07:43:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1693295006;
+        bh=s8MNwVsNOgH66U7s4NjZvYCTL5Nxs7ECZ3KG9h92r4g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ciTvHp2pS9NV8185npCHcL4wqFA0+pY0ZF96naORa+nPcWKJvAXXt76BCe1fcW+NQ
+         JADkaDd6hRFlfE58+VBWuQslj7Ix3ozNt20893/1EbwqjdoCkrLSq0biyggz8OpivI
+         mtS+rGwc/FI9xDvJIg/sEXKBaLHZzd1mR38iy477pEBxCS6JZBmL80ALmHWHBsh/ms
+         YayTA+Y20LmUr30ror6IMwhVbqRyUuEKNHyplNC7zdTJS9lSm46bzAQHJqRN/j9CJS
+         cawVd/zv+zm1tJuNtA0DvyQJOQU2QXL76BqPRMM+v+IKBdO653RrKMpcduegomJFiF
+         Dq4CbsMBPziVg==
+Date:   Tue, 29 Aug 2023 09:43:23 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     "Wu, Wentong" <wentong.wu@intel.com>
+Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "mka@chromium.org" <mka@chromium.org>,
+        "oneukum@suse.com" <oneukum@suse.com>,
+        "lee@kernel.org" <lee@kernel.org>,
+        "kfting@nuvoton.com" <kfting@nuvoton.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "maz@kernel.org" <maz@kernel.org>, "brgl@bgdev.pl" <brgl@bgdev.pl>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
+        "andi.shyti@linux.intel.com" <andi.shyti@linux.intel.com>,
+        "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
+        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
+        "Wang, Zhifeng" <zhifeng.wang@intel.com>
+Subject: Re: [PATCH v10 2/4] i2c: Add support for Intel LJCA USB I2C driver
+Message-ID: <ZO2hm7rQonLyljud@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        "Wu, Wentong" <wentong.wu@intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "mka@chromium.org" <mka@chromium.org>,
+        "oneukum@suse.com" <oneukum@suse.com>,
+        "lee@kernel.org" <lee@kernel.org>,
+        "kfting@nuvoton.com" <kfting@nuvoton.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "maz@kernel.org" <maz@kernel.org>, "brgl@bgdev.pl" <brgl@bgdev.pl>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "andriy.shevchenko@linux.intel.com" <andriy.shevchenko@linux.intel.com>,
+        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
+        "andi.shyti@linux.intel.com" <andi.shyti@linux.intel.com>,
+        "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
+        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
+        "Wang, Zhifeng" <zhifeng.wang@intel.com>
+References: <1693091643-20867-1-git-send-email-wentong.wu@intel.com>
+ <1693091643-20867-3-git-send-email-wentong.wu@intel.com>
+ <ZOz0bgJUZuAcUBWf@ninjato>
+ <DM6PR11MB4316FC089596F44FB02314B18DE7A@DM6PR11MB4316.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH v3 11/28] dt-bindings: usb: dwc3: Add
- snps,num-hc-interrupters definition
-Content-Language: en-US
-To:     Wesley Cheng <quic_wcheng@quicinc.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
-        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
-        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
-        Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com,
-        andersson@kernel.org, gregkh@linuxfoundation.org, tiwai@suse.com,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
-        quic_plai@quicinc.com
-References: <20230308235751.495-1-quic_wcheng@quicinc.com>
- <20230308235751.495-12-quic_wcheng@quicinc.com>
- <20230311134008.GA20831-robh@kernel.org>
- <f7bd1ae7-fc38-0f29-546b-9ea4a323f42f@quicinc.com>
- <73655c17-5246-2c96-d415-6a30497966c3@linaro.org>
- <9d31db9c-4e58-767a-15c5-65f7c04bd989@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <9d31db9c-4e58-767a-15c5-65f7c04bd989@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="EUdPpm9z3og+Dz95"
+Content-Disposition: inline
+In-Reply-To: <DM6PR11MB4316FC089596F44FB02314B18DE7A@DM6PR11MB4316.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,24 +97,40 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 29/08/2023 09:19, Wesley Cheng wrote:
->>>
->>> This is a XHCI feature, but the DWC3 design is built in a way that DWC3
->>> host initializes the XHCI device and populates the properties associated
->>> to XHCI dev.
->>
->> You speak about driver now, not bindings. If driver has limitations,
->> change it. Not really problem of bindings.
->>
-> 
-> Its the limitation of the HW.  Depending on how the SNPS DWC3 controller 
-> was implemented the vendor it can support less than the value mentioned 
-> in the Synopsys databook.
 
-Then what is "XHCI dev"? A Linux device? Then a driver topic. What is
-"populates the properties" - what or whose properties? Of Linux device?
-Then a driver topic...
+--EUdPpm9z3og+Dz95
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Best regards,
-Krzysztof
 
+> Actually it's about the method 3 of instantiate I2C devices described in
+> https://www.kernel.org/doc/Documentation/i2c/instantiating-devices
+> and it's not preferred wherever possible. And below are the definitions
+> about i2c adapter class, we only have I2C_CLASS_HWMON class tested,
+> so just put it here.
+
+Yeah, as I mentioned before, it may make sense for a USB based device. I
+just wanted to make sure you did it intentionally. Keep it.
+
+
+--EUdPpm9z3og+Dz95
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmTtoZcACgkQFA3kzBSg
+Kba+TQ//Vhun0B/rSraRakVvbSlgBws8I9UZ3y5wYsGshJ7Y0tQVkr2vyKZvQHWq
+8xWbDoAbxkV2g4/jJG6zmSMV6FR6Vs88HgOGN9fGVFbON2uoieJhR+u/4pe1BmZK
+jhpQulgLqQCeJGGmb4zk927roooFp3GRIenuG8JXZC4YoSNrZk7hpuWvp8h9yhdb
+M/2ZsXRp8kL/29eQk4y5WWtsiFZ7BQNbLfVbOILzGUM0Tw9jetC0v/gtrFt5+INQ
+4zUWlcIgCdxYrRtmUIgrXvWNNf5ymqmDk1M7oWtV51VqcKDBNQUoc+gXZzxYzgbt
+eW4euo8ai5n09ch73mHZ9OPIH3zh44nTLEKBOHLGGNwbr4HkSuGJMIIjadgW5E7/
+K0J3g7tS1K8/LylKYHFXLvtKU5IHJyc6NwOC67Fe1C39mYDlM2bmXmgEZ3aTwgJk
+kkdoRbNSTxzfOdm3qYbn0ZfY/4ZZSHgCkN5cqes9qELLsm/aYoVJllntgAZh+DFq
+4XVkMUyWk0pGCEKFJeLwDQGHeOS3l3WYtVX8AbDwOlxMXIWLJi1EJ+biwCRxqyh7
+nxh/SKb4hMkoJMPLKYaLjDK2BzzCBD8TfqVgMeG6qDskyogIyyNhZLhBBPwXM5RE
+27WHvLV9EThFbu9oe53KvXlSBAWrdeXMpKh3cC+2gBtmevsc3AQ=
+=rPmf
+-----END PGP SIGNATURE-----
+
+--EUdPpm9z3og+Dz95--
