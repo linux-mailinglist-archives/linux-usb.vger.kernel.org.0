@@ -2,196 +2,193 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2793E78BB05
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Aug 2023 00:29:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7581078BC56
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Aug 2023 03:06:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232908AbjH1W3B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Aug 2023 18:29:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57638 "EHLO
+        id S234067AbjH2BFo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Aug 2023 21:05:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233304AbjH1W2o (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Aug 2023 18:28:44 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBC32184
-        for <linux-usb@vger.kernel.org>; Mon, 28 Aug 2023 15:28:39 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-d776e1f181bso3673689276.3
-        for <linux-usb@vger.kernel.org>; Mon, 28 Aug 2023 15:28:39 -0700 (PDT)
+        with ESMTP id S234853AbjH2BFg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Aug 2023 21:05:36 -0400
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F0FA124;
+        Mon, 28 Aug 2023 18:05:30 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id 6a1803df08f44-64cca551ae2so23605136d6.0;
+        Mon, 28 Aug 2023 18:05:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693261719; x=1693866519;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xKUwU2oEeYyr/7CXpC4DFOlZ+UQetO3s7tPsVqBorGM=;
-        b=lm1mc2LEXeE87zKgBNR7vU8dr9YWEbNheNquI057YL9JaTTE6USc+e203lJ8uPxiTB
-         9MjI0fKa7jTI0b0Y6Oxh1XWfIxIQL8gPtHZECfFu7HYQttiDXPOpnii3QQiU3mBl9FAr
-         Rs/CNMus90mkQ3tqVC4KjkruJ+IpB+BG0IH8OHNOUDb/rMRiaMKERKXpsJ94JhDhsjMl
-         IdkJN19p3C+qKsCnHR57b3SILv1BRPy4AOvoND5xwms2T4hWncddRjIBk55pjxXJvo2Z
-         w2KS35RYOO9q4ra6snWTjw9yd4bxp63vQWvWPQNwn4Qz/KyY3p/QxceUgCaSIqa4Sl/M
-         laeQ==
+        d=gmail.com; s=20221208; t=1693271129; x=1693875929;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ebMk15Wy2Hcknjq8/rCjthr9YeXRWQepOOBN5+AmSXo=;
+        b=TIMCIcAjVwg+Rf0mBT4JphIN2rVLNKa/5xWsAX/hepy5pkVIDSwBM0w8JdBd2m4dha
+         BlegNlyivPMbmk4qrIhT3LPcmj5DyTnAcbT+x8kjPepO2wtGptd48DzuERvAP47yxKJP
+         E/ZhQKG9rM4k9fYVI/HmbrceZvaHhVvD0MiDfkMzYbrx6sFWikYoyPBCgdP8wCFvrNh/
+         U9hgyhzxMtrMFHiXwtg7xTOS2+8ed8RQAJAGm/JUe4j6e226aUNWfqchzzlK+lCQe/w4
+         G1K44lJ+EWRjG/Pyhsk5Jf5CV0aMenkMFB2ZuGY3ynP3EV2BhvpRI57aiJFwySlxb7yo
+         9L+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693261719; x=1693866519;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xKUwU2oEeYyr/7CXpC4DFOlZ+UQetO3s7tPsVqBorGM=;
-        b=I8LkXk+tV1p/jrXh4fLhT7rKy+BiMUB5iXLteMwREm23oMgyERtqkyuloyrusKAy6b
-         4uaK3jehlVFOFORHCV/cmAbgy+ddPaf0vXXOVk4lz3Cz6NK4MRaMz8uSb7Ysy/NY2c2O
-         /4cwAmHgTi6zRJ4f2+JyetDoUwZ1IzhNoNnRjaayr8qi5/C3GsP8Lb7v/7c9+kPR1H+o
-         lEDlCB3E3vVwqD/BEZoDBPYt9tqKVk3jY9idrdNEKUX71Kcq8VVI5LMpPAZMwV/uDThT
-         6hYc9IKTkUJmFgsWbQ/1Z4b1/GZn0btf7306EOTnL1ns1koOQ5Hh+ozsRX58kQ+Eq36e
-         kAlw==
-X-Gm-Message-State: AOJu0YyloxTgu8FBKQQso/wYnHcTnlLh2JL1N5IHLI2dn29EGvj9ztgq
-        pxxSNfGhPRoERoD78ay4CaWG891YQGR7TxEBOt80ub9vE6tsM1wS
-X-Google-Smtp-Source: AGHT+IFJ9fvM0Zh6eTI95J9VlO3o1j21u36vUyYW5XG2cUNLfH+h3qmRhBVe/6MmbjJIHkuNkeDNLCQRQWaZNqI8OJA=
-X-Received: by 2002:a25:d2c1:0:b0:d74:6681:5c26 with SMTP id
- j184-20020a25d2c1000000b00d7466815c26mr27113880ybg.16.1693261719097; Mon, 28
- Aug 2023 15:28:39 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1693271129; x=1693875929;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ebMk15Wy2Hcknjq8/rCjthr9YeXRWQepOOBN5+AmSXo=;
+        b=etulLQUELPv+ih/ILuOyMkInqXxQML1hgq4S1LHOlapbqrBItgR7U/yN9oIAC7pw9p
+         rX4RwCKhmw/JDe/OpOXFpvBH1IKcplSFKvQcv+z5+zvqDgNZp89Sf9Ya9IdtMidtt4vN
+         1oleIkpJ7cqq+Xrj2Utn6+Amp3VIi9MmWel3SPDG1YM+7FoV0Uhuowrp7NyOfL1XdNJT
+         S5sv/Oy8K2tSnt3LItQA5aqjWPZNBSmvYYjsipayIeHpwPdgkSroxPIhViZlqLQp4WrS
+         nCBv2BXLUqCte+lcQNlx0ohv2t69ymRYiJQK/YnBeqGK0fd1EZGZ4PZeM7Rci9yEfoVC
+         SpyQ==
+X-Gm-Message-State: AOJu0YwHffmOT6GggmqkTky+lMIk6ntEQVlq4niNdecFpTbCGjryvfKr
+        Wp90mhluB65Xr13nETlTLHu7g5VXGD7n0w==
+X-Google-Smtp-Source: AGHT+IG5OrgDTjIrdtZ+2GwtL0kzj+0nPDaq9zVjJF0YFxh9K4+ZgY/soDOQdbaOR4/pGkayRvYjug==
+X-Received: by 2002:ac8:5712:0:b0:410:487:27f3 with SMTP id 18-20020ac85712000000b00410048727f3mr34678412qtw.27.1693271129380;
+        Mon, 28 Aug 2023 18:05:29 -0700 (PDT)
+Received: from abdel ([174.95.13.129])
+        by smtp.gmail.com with ESMTPSA id kf6-20020a05622a2a8600b0040ff234b9c4sm2678678qtb.25.2023.08.28.18.05.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Aug 2023 18:05:28 -0700 (PDT)
+Date:   Mon, 28 Aug 2023 21:05:18 -0400
+From:   Abdel Alkuor <alkuor@gmail.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        abdelalkuor@geotab.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, krzysztof.kozlowski@linaro.org,
+        ryanmacdonald@geotab.com
+Subject: Re: [PATCH v4 0/2] Add support for TPS25750
+Message-ID: <ZO1ETjtuKr3wImn1@abdel>
+References: <cover.1692559293.git.alkuor@gmail.com>
+ <ZOWvG1MQw37IOHcM@kuha.fi.intel.com>
 MIME-Version: 1.0
-References: <20230817145516.5924-1-dmitry.baryshkov@linaro.org>
- <20230822141735.GA14396@pendragon.ideasonboard.com> <20230822141918.GB14396@pendragon.ideasonboard.com>
-In-Reply-To: <20230822141918.GB14396@pendragon.ideasonboard.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 29 Aug 2023 01:28:28 +0300
-Message-ID: <CAA8EJpoAEyL3G41JPEV28siL=rVE+N5G7EedG4_up_oT0KKTPA@mail.gmail.com>
-Subject: Re: [PATCH v4 0/3] drm: simplify support for transparent DRM bridges
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
-        freedreno@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LONGWORDS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZOWvG1MQw37IOHcM@kuha.fi.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 22 Aug 2023 at 17:19, Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
+On Wed, Aug 23, 2023 at 10:02:51AM +0300, Heikki Krogerus wrote:
+> On Sun, Aug 20, 2023 at 03:32:25PM -0400, Abdel Alkuor wrote:
+> > TPS25750 is USB Type-C and PD controller. The device is
+> > highly configurable using App Customization online Tool 
+> > developed by TI to generate loadable binary.
+> > 
+> > TPS25750 supports three modes; PTCH, APP, and BOOT. A configuration
+> > can only be applied when the controller is on PTCH mode.
+> > 
+> > The controller attempts to load a configuration from EEPROM on
+> > I2Cm bus. If no EEPROM is detected, then the driver tries to load
+> > a configuration on I2Cs bus using a firmware file defined
+> > in DT.
+> > 
+> > The driver implements the binary loading sequence which 
+> > can be found on pg.53 in TPS25750 Host Interface Technical
+> > Reference Manual (Rev. A) https://tinyurl.com/y9rkhu8a
+> > 
+> > The driver only supports resume pm callback as power management is
+> > automatically controlled by the device. See pg.47 in TPS25750
+> > datasheet https://tinyurl.com/3vfd2k43
+> > 
+> > v4:
+> >  - PATCH 1: No change
+> >  - PATCH 2: Fix comments style and drop of_match_ptr
+> > v3:
+> >  - PATCH 1: Fix node name
+> >  - PATCH 2: Upload tps25750 driver patch
+> > v2:
+> >  - PATCH 1: General properties clean up
+> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > 
+> > Abdel Alkuor (2):
+> >   dt-bindings: usb: Add ti,tps25750
+> >   USB: typec: Add TI TPS25750 USB Type-C controller
+> > 
+> >  .../devicetree/bindings/usb/ti,tps25750.yaml  |   81 ++
+> >  drivers/usb/typec/Kconfig                     |   13 +
+> >  drivers/usb/typec/Makefile                    |    1 +
+> >  drivers/usb/typec/tps25750.c                  | 1077 +++++++++++++++++
+> >  drivers/usb/typec/tps25750.h                  |  162 +++
+> >  5 files changed, 1334 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/usb/ti,tps25750.yaml
+> >  create mode 100644 drivers/usb/typec/tps25750.c
+> >  create mode 100644 drivers/usb/typec/tps25750.h
+Hi Heikki,
+> 
+> TPS25750 has the same host interface as TI TPS65xxx controllers, no?
+> The register offsets at least are exactly the same.
+Correct, the register offsets are the same. That being said, TPS25750 is a 
+subset of TPS6598x where some registers are structured differently, and even some
+registers are not supported. Hence, Each has its own host interface manual.
+> 
+> You need to first try to incorporate support for TI25750 support into
+> the existing tipd driver (drivers/usb/typec/tipd/).
 >
-> On Tue, Aug 22, 2023 at 05:17:37PM +0300, Laurent Pinchart wrote:
-> > Hi Dmitry,
-> >
-> > Thank you for the patches.
-> >
-> > On Thu, Aug 17, 2023 at 05:55:13PM +0300, Dmitry Baryshkov wrote:
-> > > Supporting DP/USB-C can result in a chain of several transparent
-> > > bridges (PHY, redrivers, mux, etc). This results in drivers having
-> > > similar boilerplate code for such bridges.
-> >
-> > What do you mean by transparent bridge here ? Bridges are a DRM concept,
-> > and as far as I can tell, a PHY isn't a bridge. Why does it need to be
-> > handled as one, especially if it's completely transparent ?
-> >
-> > > Next, these drivers are susceptible to -EPROBE_DEFER loops: the next
-> > > bridge can either be probed from the bridge->attach callback, when it is
-> > > too late to return -EPROBE_DEFER, or from the probe() callback, when the
-> > > next bridge might not yet be available, because it depends on the
-> > > resources provided by the probing device.
-> >
-> > Can't device links help avoiding defer probing in those cases ?
-> >
-> > > Last, but not least, this results in the the internal knowledge of DRM
-> > > subsystem slowly diffusing into other subsystems, like PHY or USB/TYPEC.
-> >
-> > Why so ? The PHY subsystem should provide a PHY, without considering
-> > what subsystem it will be used by. This patch series seems to me to
-> > actually create this DRM dependency in other subsystems,
->
-> I was wrong on this one, there are indeed existing drm_bridge instances
-> in drivers/usb/ and drivers/phy/. That's certainly not nice. Why do we
-> even need drm_bridge there, why can't the PHYs be acquired by their
-> consumers in DRM (and anywhere else) using the PHY API ?
+Incorporating TPS25750 into TPS6598x driver is doable which requires the
+following changes:
 
-During the design of the DT bindings for DisplayPort on these
-platforms we have evaluated different approaches. First approach was
-to add a special 'displayport' property to the USB-C connector,
-pointing to DP. This approach was declined by DT maintainers. Then we
-tried different approaches towards building connection graphs between
-different parties. Finally it was determined that the easiest way is
-to describe all USB-C signal paths properly. SS lines start at the
-PHY, then they pass through different muxes and retimers and then end
-up at the usb-c-connector. SS lines are muxed by the USB+DP PHY and
-switched between USB-3 (SuperSpeed) and DP.
+- Only Check VID register (0x00) for TPS6598x and cd321x, as TPS25750 doesn't
+  have VID register.
 
-Then comes the question of binding everything together from the DRM
-point of view. The usb-c-connector is the logical place for the last
-drm_bridge, unfortunately. We need to send HPD events from the TypeC
-port driver (either directly or from the altmode driver). Then either
-we have to point the connector->fwnode to the DP port or build the
-full drm_bridge chain. Second path was selected, as it fits better
-into the overall framework.
+- TypeC port registration will be registered differently for each PD
+  controller. TPS6598x uses system configuration register (0x28) to get
+  pr/dr capabilities. On the other hand, TPS25750 will use data role property
+  and PD status register (0x40) to get pr/dr capabilities as TPS25750 doesn't
+  have register 0x28 supported.
 
->
-> > which I don't
-> > think is a very good idea. Resources should be registered in their own
-> > subsystem with the appropriate API, not in a way that is tied to a
-> > particular consumer.
-> >
-> > > To solve all these issues, define a separate DRM helper, which creates
-> > > separate aux device just for the bridge. During probe such aux device
-> > > doesn't result in the EPROBE_DEFER loops. Instead it allows the device
-> > > drivers to probe properly, according to the actual resource
-> > > dependencies. The bridge auxdevs are then probed when the next bridge
-> > > becomes available, sparing drivers from drm_bridge_attach() returning
-> > > -EPROBE_DEFER.
-> >
-> > I'm not thrilled :-( Let's discuss the questions above first.
-> >
-> > > Proposed merge strategy: immutable branch with the drm commit, which is
-> > > then merged into PHY and USB subsystems together with the corresponding
-> > > patch.
-> > >
-> > > Changes since v3:
-> > >  - Moved bridge driver to gpu/drm/bridge (Neil Armstrong)
-> > >  - Renamed it to aux-bridge (since there is already a simple_bridge driver)
-> > >  - Made CONFIG_OF mandatory for this driver (Neil Armstrong)
-> > >  - Added missing kfree and ida_free (Dan Carpenter)
-> > >
-> > > Changes since v2:
-> > >  - ifdef'ed bridge->of_node access (LKP)
-> > >
-> > > Changes since v1:
-> > >  - Added EXPORT_SYMBOL_GPL / MODULE_LICENSE / etc. to drm_simple_bridge
-> > >
-> > > Dmitry Baryshkov (3):
-> > >   drm/bridge: add transparent bridge helper
-> > >   phy: qcom: qmp-combo: switch to DRM_AUX_BRIDGE
-> > >   usb: typec: nb7vpq904m: switch to DRM_AUX_BRIDGE
-> > >
-> > >  drivers/gpu/drm/bridge/Kconfig            |   9 ++
-> > >  drivers/gpu/drm/bridge/Makefile           |   1 +
-> > >  drivers/gpu/drm/bridge/aux-bridge.c       | 132 ++++++++++++++++++++++
-> > >  drivers/phy/qualcomm/Kconfig              |   2 +-
-> > >  drivers/phy/qualcomm/phy-qcom-qmp-combo.c |  44 +-------
-> > >  drivers/usb/typec/mux/Kconfig             |   2 +-
-> > >  drivers/usb/typec/mux/nb7vpq904m.c        |  44 +-------
-> > >  include/drm/bridge/aux-bridge.h           |  19 ++++
-> > >  8 files changed, 167 insertions(+), 86 deletions(-)
-> > >  create mode 100644 drivers/gpu/drm/bridge/aux-bridge.c
-> > >  create mode 100644 include/drm/bridge/aux-bridge.h
->
-> --
-> Regards,
->
-> Laurent Pinchart
+- TPS25750 requires writing a binary configuration to switch PD
+  controller from PTCH mode to APP mode which needs the following changes: 
+  - Add PTCH mode to the modes list.
+  - Add an argument to tps6598x_check_mode to return the current mode.
+  - Currently, tps6598x_exec_cmd has cmd timeout hardcoded to 1 second,
+    and doesn't wait before checking DATA_OUT response. In TPS25750, patch 4CCs
+    take longer than 1 second to execute and some requires a delay before
+    checking DATA_OUT. To accommodate that, cmd_timeout and response_delay will
+    be added as arguments to tps6598x_exec_cmd.
+  - Implement applying patch sequence for TPS25750.
 
+- In pm suspend callback, patch mode needs to be checked and the binary 
+  configuration should be applied if needed.
 
+- For interrupt, TPS25750 has only one event register (0x14) and one mask
+  register (0x16) of 11 bytes each, where TPS6598x has two event
+  and two mask registers of 8 bytes each. Both TPS25750 and TPS65986x
+  shares the same bit field offsets for events/masks/clear but many of
+  there fields are reserved in TPS25750, the followings need to be done in 
+  tps6598x_interrupt:
+  - Read EVENT1 register as a block of 11 bytes when tps25750 is present
+  - Write CLEAR1 register as a block of 11 bytes when tps25750 is present
+  - Add trace_tps25750_irq
+  - During testing, I noticed that when a cable is plugged into the PD
+    controller and before PD controller switches to APP mode, there is a
+    lag between dr/pr updates and PlugInsertOrRemoval Event, so a check
+    for dr/pr change needs to be added along TPS_REG_INT_PLUG_EVENT check
 
--- 
-With best wishes
-Dmitry
+- Add TPS25750 traces for status and power status registers. Trace for
+  data register won't be added as it doesn't exist in the device.
+
+- Configure sleep mode for TPS25750.
+
+Before writing the binary configuration, PBMs command is used to set
+up the patch bundle which consists of binary length, timeout, and
+slave address. The slave address is not the device I2C address, the
+bundle slave address can be any value except the ones that are listed
+for possible device addresses which are 0x20, 0x21, 0x22, and 0x23 based
+on pg.44 in https://www.ti.com/lit/ds/symlink/tps25750.pdf.
+Currently, I'm using 0x0F for the bundle slave address which I think
+is not the right way of assigning such address as a conflict may arise
+when there is another device with 0x0F address is present on the same
+I2C bus. 
+
+Should the bundle address be set as property in the device node? Or
+should we use i2c_probe_func_quick_read to scan the bus and find an
+available address that is not used?
+
+Thanks,
+Abdel
