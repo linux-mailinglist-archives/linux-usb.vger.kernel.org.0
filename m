@@ -2,113 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA4E878D895
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Aug 2023 20:31:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69E3A78D8C4
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Aug 2023 20:31:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235151AbjH3Sau (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Aug 2023 14:30:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41736 "EHLO
+        id S234498AbjH3SbQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Aug 2023 14:31:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245208AbjH3OsH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Aug 2023 10:48:07 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id A729BFF
-        for <linux-usb@vger.kernel.org>; Wed, 30 Aug 2023 07:48:03 -0700 (PDT)
-Received: (qmail 423072 invoked by uid 1000); 30 Aug 2023 10:48:02 -0400
-Date:   Wed, 30 Aug 2023 10:48:02 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: dwc3: unusual handling of setup requests with wLength == 0
-Message-ID: <61cf24db-9dbb-4bf3-aafe-d515fc37cca8@rowland.harvard.edu>
-References: <e63ba783-f5a4-4442-8736-987a3b134e7f@rowland.harvard.edu>
- <20230823021429.rlgixqehry4rsqmm@synopsys.com>
- <5d5973b9-d590-4567-b1d6-4b5f8aeca68b@rowland.harvard.edu>
- <20230823175903.bpumanwv5fkpwc44@synopsys.com>
- <08a3759d-4c6b-4034-8516-685e4d96a41e@rowland.harvard.edu>
- <20230823222202.k7y7hxndsbi7h4x7@synopsys.com>
- <9b175f9e-ab70-47a3-a943-bfd05601aa23@rowland.harvard.edu>
- <20230826012024.mboftu3wk7fsrslp@synopsys.com>
- <ba06679f-93d2-4cb4-9218-9e288065bdfb@rowland.harvard.edu>
- <20230830013222.ukw5dtburjnrrjko@synopsys.com>
+        with ESMTP id S1343975AbjH3RnK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Aug 2023 13:43:10 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30771107;
+        Wed, 30 Aug 2023 10:43:07 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-401c90ed2ecso36481975e9.0;
+        Wed, 30 Aug 2023 10:43:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1693417385; x=1694022185; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3JSXWasOYO+IgsYBMXFWCY2VQ2JeAF0ezZhUsdBIZOU=;
+        b=VxvboSVngPIpuHNXkFJjZE2g8K1qwlGOtrG/y5i4laJsjKGTMOE9C14jybMmI3Cpke
+         D3YpzLUaPV4pcIpIFU7/JbijWCxUc+BPl2f1IOJ8TyRrhrVxU9agxWJqvQz/qDOTbznC
+         HNLtXcOEb1x762GfH17WQ9dwxvnBDawFye2QTanSJkVa2aAkKV8zuIryuIbTFzEeOY6f
+         qYXHwhSJRVdF3y2neXpKrv95dE3ewOOctDhgwVS5JMg2Ye2opIOIqyjv01cIN22eXqPt
+         TJ3AkVkHm7R1b5v8U+ac13IZtVhChX79OdVb65i1P4POB0lP9MtdiRa3pPDbAFmuwuU3
+         bBXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693417385; x=1694022185;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3JSXWasOYO+IgsYBMXFWCY2VQ2JeAF0ezZhUsdBIZOU=;
+        b=NhT/uQepDv5TU6ezX5hc1qG2TeLQtXEFuPi6udrkOSyWFFQI2p+kwbTnEgD0i3PRsG
+         ZtFIwq+p3P8gb+qZvJIEeKlEmpY36dczEq7WO0URD5PVeicXleIhk4SkUoqwXcuEon2C
+         8G8NpevrTu2rVCGnOwhW2XIWu+4qOzwDfxllWyKsGA7dskoqJJnxYnfib+QbC4VVARG4
+         vrWVbekksmlXluwg4zQm0LIy3SnFKpLtN0j0r96Icuy1nBJDGMj0U5kfziuFU/eGxtLe
+         rpqIzYC/c8Ma0p+0kryqxAQ5xrTCXs2xwR9vQsxgliW9kS8aZjKC9AhmIYVt6Xcd8HIF
+         /mYA==
+X-Gm-Message-State: AOJu0Yx4rtbjuP7NQB3FO1mKiGHh5Ud8PRtaICMKnDP53bsoeshi9P8e
+        vynq8kT0o/At163/idZRRVw=
+X-Google-Smtp-Source: AGHT+IGGn543ToY4d/XKjEsPa+tBnkoKxtYRQQQgLpPrRGf7ypUN2BHLOr9JUzJFAvm4rOwksQgWTw==
+X-Received: by 2002:a7b:ca47:0:b0:401:b6f6:d8fd with SMTP id m7-20020a7bca47000000b00401b6f6d8fdmr2578193wml.6.1693417385402;
+        Wed, 30 Aug 2023 10:43:05 -0700 (PDT)
+Received: from archbook.localnet (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
+        by smtp.gmail.com with ESMTPSA id o9-20020a05600c510900b003fbe791a0e8sm3043822wms.0.2023.08.30.10.43.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Aug 2023 10:43:04 -0700 (PDT)
+From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+To:     gregkh@linuxfoundation.org, johan@kernel.org,
+        Corentin Labbe <clabbe@baylibre.com>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        david@ixit.cz, Corentin Labbe <clabbe@baylibre.com>
+Subject: Re: [PATCH v6 0/2] usb: serial: add support for CH348
+Date:   Wed, 30 Aug 2023 19:43:03 +0200
+Message-ID: <2595072.9XhBIDAVAK@archbook>
+In-Reply-To: <20230628133834.1527941-1-clabbe@baylibre.com>
+References: <20230628133834.1527941-1-clabbe@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230830013222.ukw5dtburjnrrjko@synopsys.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 30, 2023 at 01:32:28AM +0000, Thinh Nguyen wrote:
-> That reminds me another thing, if the host (xhci in this case) does a
-> hard reset to the endpoint, it also resets the TRB pointer with dequeue
-> ep command. So, the transfer should not resume. It needs to be
-> cancelled. This xHCI behavior is the same for Windows and Linux.
-
-That's on the host side, right?  How does this affect the gadget side?
-
-That is, cancelling a transfer on the host doesn't necessarily mean it 
-has to be cancelled on the gadget.  Does it have any implications at all 
-for the gadget driver?
-
-> > I think it should be the opposite; the class protocol should specify
-> > how to recover from errors.  If for no other reason then to avoid the
-> > data duplication problem for USB-2.  However, if it doesn't specify a
-> > recovery procedure then there's not much else you can do.
+On Mittwoch, 28. Juni 2023 15:38:32 CEST Corentin Labbe wrote:
+> Hello
 > 
-> Right, unfortunately that's not always the case that class protocol
-> spell out how to handle transaction error.
-
-All too true...
-
-> > But regardless, how can the gadget driver make any use of the
-> > knowledge that the UDC received a Clear-Halt?  What would it do
-> > differently?  If the intent is simply to clear an error condition and
-> > continue with the existing transfer, the gadget driver doesn't need to
-> > do anything.
+> The CH348 is an octo serial to USB adapter.
+> The following patch adds a driver for supporting it.
+> Since there is no public datasheet, unfortunatly it remains some magic values.
 > 
-> It's not simple to clear an error. It is to notify the gadget driver to
-> cancel the active transfer and resync with the host.
+> It was tested with a large range of baud from 1200 to 1500000 and used with
+> success in one of our kernel CI testlab.
+> 
+> Regards
+> 
+> [...]
 
-How does the gadget driver sync with the host if the class protocol 
-doesn't say what should be done?
+Hello,
 
-Also, what if there is no active transfer?  That is, what if the 
-transaction that got an error on the host appeared to be successful on 
-the gadget and it was the last transaction in the final transfer queued 
-for the endpoint?  How would the UDC driver notify the gadget driver in 
-this situation?
+thank you for your work on this. I recently made myself a CH348
+board and used this patchset with a small test application[1]
+to see how it performs. Specifically, I ran this on an RK3566
+single board computer, connecting one serial adapter to the
+other, with the test as follows:
 
->  This is observed in
-> UASP driver in Windows and how various consumer UASP devices handle it.
+ ./serialtest /dev/ttyUSB0 9600 # UART0 of 1st CH348 board
+ ./serialtest /dev/ttyUSB8 9600 # UART0 of 2nd CH348 board
 
-I don't understand what you're saying here.  How can you observe whether 
-a transfer is cancelled in a consumer UAS device?  And how does the 
-consumer device resync with the host?
+One problem I've noticed is that writes to the tty fd never
+seem to block. On two CH340 adapters I have, they do seem to
+block, whereas here, you can see from the statistics at the
+end that magnitudes more bytes were written than read, with
+seemingly most of them being discarded. From my reading of
+the termios parameters I set, this shouldn't be the case,
+right?
 
-> There no eqivalent of Bulk-Only Mass Storage Reset request from the
-> class protocol. We still have the USB analyzer traces for this.
+You can see from the error percentage that it gets less
+bad as you increase the serial baudrate; I've tested up
+to 6 mbaud like this. I assume that's because less written
+bytes get discarded.
 
-Can you post an example?  Not necessarily in complete detail, but enough 
-so that we can see what's going on.
+Any ideas on whether I'm relying on weird driver behaviour
+with the blocking here or if this driver actually has a
+defect whereby it never signals to userspace that less
+bytes were written than have been submitted?
 
-> Regardless whether the class protocol spells out how to handle the
-> transaction error, if there's transaction error, the host may send
-> CLEAR_FEATURE(halt_ep) as observed in Windows. The gadget driver needs
-> to know about it to cancel the active transfer and resync with the host.
+Kind regards,
+Nicolas Frattaroli
 
-I'll be able to understand this better after seeing an example.  Do you 
-have any traces that were made for a High-speed connection (say, using 
-a USB-2 cable)?  It would probably be easier to follow than a SuperSpeed 
-example.
+[1]: https://github.com/CounterPillow/serialtest
 
-Alan Stern
+
