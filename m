@@ -2,69 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69E3A78D8C4
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Aug 2023 20:31:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ECF778E11F
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Aug 2023 23:04:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234498AbjH3SbQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Aug 2023 14:31:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34074 "EHLO
+        id S240005AbjH3VE0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Aug 2023 17:04:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343975AbjH3RnK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Aug 2023 13:43:10 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30771107;
-        Wed, 30 Aug 2023 10:43:07 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-401c90ed2ecso36481975e9.0;
-        Wed, 30 Aug 2023 10:43:07 -0700 (PDT)
+        with ESMTP id S239619AbjH3VEZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Aug 2023 17:04:25 -0400
+Received: from mail-vk1-f169.google.com (mail-vk1-f169.google.com [209.85.221.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98CAF1AE
+        for <linux-usb@vger.kernel.org>; Wed, 30 Aug 2023 14:03:54 -0700 (PDT)
+Received: by mail-vk1-f169.google.com with SMTP id 71dfb90a1353d-48d333a18b3so64197e0c.1
+        for <linux-usb@vger.kernel.org>; Wed, 30 Aug 2023 14:03:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693417385; x=1694022185; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3JSXWasOYO+IgsYBMXFWCY2VQ2JeAF0ezZhUsdBIZOU=;
-        b=VxvboSVngPIpuHNXkFJjZE2g8K1qwlGOtrG/y5i4laJsjKGTMOE9C14jybMmI3Cpke
-         D3YpzLUaPV4pcIpIFU7/JbijWCxUc+BPl2f1IOJ8TyRrhrVxU9agxWJqvQz/qDOTbznC
-         HNLtXcOEb1x762GfH17WQ9dwxvnBDawFye2QTanSJkVa2aAkKV8zuIryuIbTFzEeOY6f
-         qYXHwhSJRVdF3y2neXpKrv95dE3ewOOctDhgwVS5JMg2Ye2opIOIqyjv01cIN22eXqPt
-         TJ3AkVkHm7R1b5v8U+ac13IZtVhChX79OdVb65i1P4POB0lP9MtdiRa3pPDbAFmuwuU3
-         bBXA==
+        d=linaro.org; s=google; t=1693429040; x=1694033840; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=VJiEYvthVUOcpYJPy9yFGFD2aO5cf2VHnVMOssUOmRg=;
+        b=IumezxcRsuSUdUQFYUPwCR4jHC+H2yRtrgtYHW2UbUs6hFIxZ4J+pcqtZTe7xjJajX
+         S7DyPGWIIY458jgrwdL3j06ZtbjTZMkJQMB5cdxV3FQXgK+k2nuIO+/BTmjFq5NsMVa9
+         I3orFzoADH4wKvul4cOxjgmp9vXpdb325apt3NDisgUnM2nV58LA7iMC7LeHmjlOs82M
+         LloqSD70aMOOV00z/zHDcmxp96wQLbd4zAVK/IU1+dhgGSmlqoU9Igf9FXzrclsBjJu4
+         ZqcDGD9jAYz2A5vlUXAanyyimIxsTzs+PCQS977vVMjDjMlI1Br2UL0CnYG8l3FWQxfp
+         Vthg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693417385; x=1694022185;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3JSXWasOYO+IgsYBMXFWCY2VQ2JeAF0ezZhUsdBIZOU=;
-        b=NhT/uQepDv5TU6ezX5hc1qG2TeLQtXEFuPi6udrkOSyWFFQI2p+kwbTnEgD0i3PRsG
-         ZtFIwq+p3P8gb+qZvJIEeKlEmpY36dczEq7WO0URD5PVeicXleIhk4SkUoqwXcuEon2C
-         8G8NpevrTu2rVCGnOwhW2XIWu+4qOzwDfxllWyKsGA7dskoqJJnxYnfib+QbC4VVARG4
-         vrWVbekksmlXluwg4zQm0LIy3SnFKpLtN0j0r96Icuy1nBJDGMj0U5kfziuFU/eGxtLe
-         rpqIzYC/c8Ma0p+0kryqxAQ5xrTCXs2xwR9vQsxgliW9kS8aZjKC9AhmIYVt6Xcd8HIF
-         /mYA==
-X-Gm-Message-State: AOJu0Yx4rtbjuP7NQB3FO1mKiGHh5Ud8PRtaICMKnDP53bsoeshi9P8e
-        vynq8kT0o/At163/idZRRVw=
-X-Google-Smtp-Source: AGHT+IGGn543ToY4d/XKjEsPa+tBnkoKxtYRQQQgLpPrRGf7ypUN2BHLOr9JUzJFAvm4rOwksQgWTw==
-X-Received: by 2002:a7b:ca47:0:b0:401:b6f6:d8fd with SMTP id m7-20020a7bca47000000b00401b6f6d8fdmr2578193wml.6.1693417385402;
-        Wed, 30 Aug 2023 10:43:05 -0700 (PDT)
-Received: from archbook.localnet (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
-        by smtp.gmail.com with ESMTPSA id o9-20020a05600c510900b003fbe791a0e8sm3043822wms.0.2023.08.30.10.43.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Aug 2023 10:43:04 -0700 (PDT)
-From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-To:     gregkh@linuxfoundation.org, johan@kernel.org,
-        Corentin Labbe <clabbe@baylibre.com>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        david@ixit.cz, Corentin Labbe <clabbe@baylibre.com>
-Subject: Re: [PATCH v6 0/2] usb: serial: add support for CH348
-Date:   Wed, 30 Aug 2023 19:43:03 +0200
-Message-ID: <2595072.9XhBIDAVAK@archbook>
-In-Reply-To: <20230628133834.1527941-1-clabbe@baylibre.com>
-References: <20230628133834.1527941-1-clabbe@baylibre.com>
+        d=1e100.net; s=20221208; t=1693429040; x=1694033840;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VJiEYvthVUOcpYJPy9yFGFD2aO5cf2VHnVMOssUOmRg=;
+        b=giFoRPkQVjp8k9A+bwSOQY/0FjI9l9cWWYJn5onnoZR0qSNvl4hco2tjYxRMy0yucY
+         ZADIOVo1jJ2HCtIZjf4O/Ap2BLrEvh/Cp237jM2gLLSHde4T/qAHdoMC+oh6WVeO+af9
+         nvk8LsRMAPu/PYV9M2skpwckyQ+mOAlD8IOvX8BTt3G60o7Z4zL9vqdxzJFFrdZSrhpb
+         jLjqd6j38K/IT8ZwYQzGb4VkqeHWO9XcJUtaauDAaHUz8xKkU7c7jbBK0uauH6RUmNkw
+         1jNQPC+2fl2chkOLfXTLfJ8egZL61IKJKVn2pvnUvXJ3NsoThkunGg4JyxpmbaGRcliA
+         4QLg==
+X-Gm-Message-State: AOJu0Yxr0Q3Wh/eXGmDljd3vkdqrgg21zeDbgQYG4ustns3ddWKlRLp4
+        4homG5Gf8d1dYJA9xsx/Dgazl3Y+uDCjY3zZ1spJwBFIjkiNTnbZ
+X-Google-Smtp-Source: AGHT+IE2iDDTjFTVDoB3gZ4fX5lg6uyzcQRItrwWgsQ3B9T43cbbiyZMI0KSJ+aavpFonXZjy3iNu1t/WvVG3AWOXxc=
+X-Received: by 2002:a05:6902:18cd:b0:d78:48b0:21d2 with SMTP id
+ ck13-20020a05690218cd00b00d7848b021d2mr3630806ybb.3.1693424624644; Wed, 30
+ Aug 2023 12:43:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+References: <20230830111722.19380-1-quic_nsekar@quicinc.com> <20230830111722.19380-4-quic_nsekar@quicinc.com>
+In-Reply-To: <20230830111722.19380-4-quic_nsekar@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Wed, 30 Aug 2023 22:43:33 +0300
+Message-ID: <CAA8EJpr3SnEXRENAgzdemANnYWvwM7Z-xyZYe335O45Jps91kg@mail.gmail.com>
+Subject: Re: [PATCH V2 3/4] arm64: dts: qcom: ipq5018: Add USB related nodes
+To:     Nitheesh Sekar <quic_nsekar@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        vkoul@kernel.org, kishon@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        gregkh@linuxfoundation.org, quic_srichara@quicinc.com,
+        quic_varada@quicinc.com, quic_wcheng@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Amandeep Singh <quic_amansing@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,52 +73,103 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mittwoch, 28. Juni 2023 15:38:32 CEST Corentin Labbe wrote:
-> Hello
-> 
-> The CH348 is an octo serial to USB adapter.
-> The following patch adds a driver for supporting it.
-> Since there is no public datasheet, unfortunatly it remains some magic values.
-> 
-> It was tested with a large range of baud from 1200 to 1500000 and used with
-> success in one of our kernel CI testlab.
-> 
-> Regards
-> 
-> [...]
+On Wed, 30 Aug 2023 at 21:30, Nitheesh Sekar <quic_nsekar@quicinc.com> wrote:
+>
+> Add USB phy and controller nodes.
+>
+> Co-developed-by: Amandeep Singh <quic_amansing@quicinc.com>
+> Signed-off-by: Amandeep Singh <quic_amansing@quicinc.com>
+> Signed-off-by: Nitheesh Sekar <quic_nsekar@quicinc.com>
+> ---
+> V2:
+>         Fix ordering of the USB related nodes and use
+>         generic node names.
+> ---
+>  arch/arm64/boot/dts/qcom/ipq5018.dtsi | 54 +++++++++++++++++++++++++++
+>  1 file changed, 54 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/ipq5018.dtsi b/arch/arm64/boot/dts/qcom/ipq5018.dtsi
+> index 9f13d2dcdfd5..917e4a2d8e64 100644
+> --- a/arch/arm64/boot/dts/qcom/ipq5018.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/ipq5018.dtsi
+> @@ -93,6 +93,19 @@
+>                 #size-cells = <1>;
+>                 ranges = <0 0 0 0xffffffff>;
+>
+> +               usbphy0: phy@5b000 {
+> +                       compatible = "qcom,ipq5018-usb-hsphy";
+> +                       reg = <0x0005b000 0x120>;
+> +
+> +                       clocks = <&gcc GCC_USB0_PHY_CFG_AHB_CLK>;
+> +
+> +                       resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
+> +
+> +                       #phy-cells = <0>;
+> +
+> +                       status = "disabled";
+> +               };
+> +
+>                 tlmm: pinctrl@1000000 {
+>                         compatible = "qcom,ipq5018-tlmm";
+>                         reg = <0x01000000 0x300000>;
+> @@ -155,6 +168,47 @@
+>                         status = "disabled";
+>                 };
+>
+> +               usb: usb@8af8800 {
+> +                       compatible = "qcom,ipq5018-dwc3", "qcom,dwc3";
+> +                       reg = <0x08af8800 0x400>;
+> +
+> +                       interrupts = <GIC_SPI 62 IRQ_TYPE_LEVEL_HIGH>;
+> +                       interrupt-names = "hs_phy_irq";
+> +
+> +                       clocks = <&gcc GCC_USB0_MASTER_CLK>,
+> +                                <&gcc GCC_SYS_NOC_USB0_AXI_CLK>,
+> +                                <&gcc GCC_USB0_SLEEP_CLK>,
+> +                                <&gcc GCC_USB0_MOCK_UTMI_CLK>;
+> +                       clock-names = "core",
+> +                                     "iface",
+> +                                     "sleep",
+> +                                     "mock_utmi";
+> +
+> +                       resets = <&gcc GCC_USB0_BCR>;
+> +
+> +                       qcom,select-utmi-as-pipe-clk;
+> +                       #address-cells = <1>;
+> +                       #size-cells = <1>;
+> +                       ranges;
+> +
+> +                       status = "disabled";
+> +
+> +                       usb2_0_dwc: usb@8a00000 {
 
-Hello,
+As we have seen from the next patchset, this host supports USB 3.0.
+Can you please drop the 2_0 part of the label?
 
-thank you for your work on this. I recently made myself a CH348
-board and used this patchset with a small test application[1]
-to see how it performs. Specifically, I ran this on an RK3566
-single board computer, connecting one serial adapter to the
-other, with the test as follows:
-
- ./serialtest /dev/ttyUSB0 9600 # UART0 of 1st CH348 board
- ./serialtest /dev/ttyUSB8 9600 # UART0 of 2nd CH348 board
-
-One problem I've noticed is that writes to the tty fd never
-seem to block. On two CH340 adapters I have, they do seem to
-block, whereas here, you can see from the statistics at the
-end that magnitudes more bytes were written than read, with
-seemingly most of them being discarded. From my reading of
-the termios parameters I set, this shouldn't be the case,
-right?
-
-You can see from the error percentage that it gets less
-bad as you increase the serial baudrate; I've tested up
-to 6 mbaud like this. I assume that's because less written
-bytes get discarded.
-
-Any ideas on whether I'm relying on weird driver behaviour
-with the blocking here or if this driver actually has a
-defect whereby it never signals to userspace that less
-bytes were written than have been submitted?
-
-Kind regards,
-Nicolas Frattaroli
-
-[1]: https://github.com/CounterPillow/serialtest
+> +                               compatible = "snps,dwc3";
+> +                               reg = <0x08a00000 0xe000>;
+> +                               clocks = <&gcc GCC_USB0_MOCK_UTMI_CLK>;
+> +                               clock-names = "ref";
+> +                               interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
+> +                               phy-names = "usb2-phy";
+> +                               phys = <&usbphy0>;
+> +                               tx-fifo-resize;
+> +                               snps,is-utmi-l1-suspend;
+> +                               snps,hird-threshold = /bits/ 8 <0x0>;
+> +                               snps,dis_u2_susphy_quirk;
+> +                               snps,dis_u3_susphy_quirk;
+> +                       };
+> +               };
+> +
+>                 intc: interrupt-controller@b000000 {
+>                         compatible = "qcom,msm-qgic2";
+>                         reg = <0x0b000000 0x1000>,  /* GICD */
+> --
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
+>
 
 
+-- 
+With best wishes
+Dmitry
