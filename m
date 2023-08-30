@@ -2,75 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41B3C78D8C0
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Aug 2023 20:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EE2978D88F
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Aug 2023 20:30:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235519AbjH3SbO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Aug 2023 14:31:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37200 "EHLO
+        id S235050AbjH3Sas (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Aug 2023 14:30:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243639AbjH3LSq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Aug 2023 07:18:46 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70EA61BB
-        for <linux-usb@vger.kernel.org>; Wed, 30 Aug 2023 04:18:41 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-9a21b6d105cso702130366b.3
-        for <linux-usb@vger.kernel.org>; Wed, 30 Aug 2023 04:18:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693394320; x=1693999120; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AVQlKyhTAWljBmOWLEtpki/gm83Zth480mHz0wQApL4=;
-        b=VbmFgB0NlijfrrseWolllIfEB9mVp1ekpezuwRiAsBSmyKLNVwq/ZrwtzDAlxo/Vks
-         1hHHxnra8f6TNe3cdaRn00XA6i5/po1oFzcuTOYMDVQiDolBoZmXPLv/0RidWYa9LH17
-         7icbAzkOFZ4q0c3n3WDa0aHN8wlHRLDzX3hWNx2Q3Q1ZqiGM1w/hXmooUlyyp1dVyOXI
-         OFKghieDY7gx2enCFrBBCQsFvsvOfA33kWK3gcMu1A0vUOtSRzYrwydbaobMS/Fj039e
-         UVYpIE8OAA1cH0LYyQSQaULxl3W7N7yj/DHPuiSICaS0cr7s08QLoz1iR+/0Ca79lMA2
-         YKSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693394320; x=1693999120;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AVQlKyhTAWljBmOWLEtpki/gm83Zth480mHz0wQApL4=;
-        b=HL7PfQrhcUARz8VdvGIJwUDiGmilleKnd+nJkMGlg5jctbhCmb+0XGy9O1XV7hveIT
-         EJsQ5tRht3VBLwoltOfbunnV5oLBDOKex5cSq8oACfgOY5DjWrlg1KGlpvX1lRXOEPP3
-         5Fok0wY9kJz5JHtKBVbdKbTMuYHfXvmbYhmSFcYRLTttiipgQmobK9fDVjE9LrVSrIFt
-         K2syIOhfaxnZ1tVnzDUpzCf9ilbzdFKGnjtMDUE0PHs1AZLb//PSAm0gWPlixwXslqfs
-         MHiV2Wc+qj27E4pT1KrFcNZTLlKR5jIUBjQR9WGocucbWw27hN7OrBniBhh44L9XR5ES
-         mkMQ==
-X-Gm-Message-State: AOJu0Yymwzdh1+CZHp6Dq15y3chIek1fIVZVX5qqgb4HyyNodzt1rAhj
-        +QOSkIvMw5w+zojNIDVShXEaZw==
-X-Google-Smtp-Source: AGHT+IFBisXbMMM4zLaUdtQErTfdcluBuZqJlgfqztP9i7xG9h4hj34KV3TYrjEaid6TuIC/qcz5TQ==
-X-Received: by 2002:a17:906:32d8:b0:9a1:c9c5:5fa1 with SMTP id k24-20020a17090632d800b009a1c9c55fa1mr1296163ejk.4.1693394319912;
-        Wed, 30 Aug 2023 04:18:39 -0700 (PDT)
-Received: from [192.168.0.22] (77-252-46-238.static.ip.netia.com.pl. [77.252.46.238])
-        by smtp.gmail.com with ESMTPSA id d5-20020a1709067f0500b0099b7276235esm7060725ejr.93.2023.08.30.04.18.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Aug 2023 04:18:39 -0700 (PDT)
-Message-ID: <3b4c873a-a091-51dd-4ce1-84b40886b5cd@linaro.org>
-Date:   Wed, 30 Aug 2023 13:18:38 +0200
+        with ESMTP id S243676AbjH3L0a (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Aug 2023 07:26:30 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACFF8132;
+        Wed, 30 Aug 2023 04:26:27 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37UAKIU5021502;
+        Wed, 30 Aug 2023 11:26:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=39FSy9iMArq4qwujTHj5LNIHuUSVAhx3F/QVlkULB20=;
+ b=HALMrjKWsXLkQj6ygdDezub4Y/KPZquEMvsH44LYDDN9N1HGAxLXx97o2X0lm0gq22Zh
+ VcePBzMMiN/beu3hm5qSzhX9sc5y8Fjs1X5ysilJ4eh3LhOdguMlSIA04FRfIumEVG6o
+ nkoztBeBCuvlZyYg/0xSvrIerfn8rxVctzAX5o92pbgcmOwjO5P83uOqXNQ/pk+E+TOp
+ vMp8tUQf870o/xFpQEteWAByQsXKMl22SIHJ2IbgDdzBEIhlqT/+7O7IaqfRuZ6d3aqS
+ Vl9IdJ6cl0Jxn0Ay2TNLI3dAGTiZzaOGwP4ZgH3tIvLh1XM1M2Voawrwlyw2nZ77wpSI GA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3st3whr3dt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Aug 2023 11:26:23 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37UBQMqc004209
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Aug 2023 11:26:22 GMT
+Received: from [10.50.47.209] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Wed, 30 Aug
+ 2023 04:26:18 -0700
+Message-ID: <3f0d3997-effd-4f51-7aeb-a52428eca47e@quicinc.com>
+Date:   Wed, 30 Aug 2023 16:56:15 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.14.0
 Subject: Re: [PATCH] dt-bindings: usb: dwc3: Add IPQ5018 compatible
 Content-Language: en-US
-To:     Nitheesh Sekar <quic_nsekar@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        quic_wcheng@quicinc.com, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <gregkh@linuxfoundation.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <quic_wcheng@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 References: <20230830111641.19293-1-quic_nsekar@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230830111641.19293-1-quic_nsekar@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+ <3b4c873a-a091-51dd-4ce1-84b40886b5cd@linaro.org>
+From:   Nitheesh Sekar <quic_nsekar@quicinc.com>
+In-Reply-To: <3b4c873a-a091-51dd-4ce1-84b40886b5cd@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Fcegh49H6YntyNDQ36BoE_Mw_vIvi6R6
+X-Proofpoint-ORIG-GUID: Fcegh49H6YntyNDQ36BoE_Mw_vIvi6R6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-08-29_16,2023-08-29_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
+ bulkscore=0 lowpriorityscore=0 adultscore=0 phishscore=0 malwarescore=0
+ mlxlogscore=696 priorityscore=1501 impostorscore=0 suspectscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2308100000 definitions=main-2308300107
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,18 +83,19 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 30/08/2023 13:16, Nitheesh Sekar wrote:
-> Document the IPQ5018 dwc3 compatible.
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Nitheesh Sekar <quic_nsekar@quicinc.com>
-> ---
-> Link: https://lore.kernel.org/all/3e4e03b6-380c-ce61-dd93-30669e6f9b5c@linaro.org/
-> As per the review comments in the above series
-> created a new series for this patchset as per subsystem.
 
-Please provide changelog. This is not v1 anymore.
+On 8/30/2023 4:48 PM, Krzysztof Kozlowski wrote:
+> On 30/08/2023 13:16, Nitheesh Sekar wrote:
+>> Document the IPQ5018 dwc3 compatible.
+>>
+>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> Signed-off-by: Nitheesh Sekar <quic_nsekar@quicinc.com>
+>> ---
+>> Link: https://lore.kernel.org/all/3e4e03b6-380c-ce61-dd93-30669e6f9b5c@linaro.org/
+>> As per the review comments in the above series
+>> created a new series for this patchset as per subsystem.
+> Please provide changelog. This is not v1 anymore.
+ok. Will add tag "V2" and post another version.
 
-Best regards,
-Krzysztof
-
+Regards,
+Nitheesh
