@@ -2,164 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85C9D78D24E
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Aug 2023 05:03:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0751278D2BD
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Aug 2023 06:29:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241799AbjH3DCk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Aug 2023 23:02:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34646 "EHLO
+        id S239648AbjH3E2a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Aug 2023 00:28:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241806AbjH3DCQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Aug 2023 23:02:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0FE1185;
-        Tue, 29 Aug 2023 20:02:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7612B60F80;
-        Wed, 30 Aug 2023 03:02:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DCEF0C433C7;
-        Wed, 30 Aug 2023 03:02:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693364532;
-        bh=J4mUrRY5Op/EhssH/HUgu7KqHRXBFk6/tLLkN256mWU=;
-        h=From:Date:Subject:To:Cc:Reply-To:From;
-        b=OKy8C06DWdkURPUe9c5W+6X9hFJFzmCeJgfW6WZFwh+LkBzn3jNMbeWZNPP2BhKwP
-         /no6jOcIwq8OgheeXM2CMSzWoNlepwa0ods/ehY4XQwy3vXve3QD8n17wEkTvZOgsc
-         Xsihl91TjtFKtvZZHoSlIUo/fyZqh/TYbzBvSYBOK5Jn0kjeLmIdCFWMP5eV02yyMA
-         aP7LtRWOuCxjpyF80g2Z6MREa4GWt52H4wqfZECUbw80dkSPDbpra44wex2PWeyfaX
-         uXKAUUSkOvkxAWNE0Q1nf1Ust5LYEY9/oEw/+KX8YaaxDsQJqL7QBnOSYozqj/Ke52
-         xZlT+srUMmXOQ==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by smtp.lore.kernel.org (Postfix) with ESMTP id ACFA3C83F10;
-        Wed, 30 Aug 2023 03:02:12 +0000 (UTC)
-From:   Hui Liu via B4 Relay <devnull+quic_huliu.quicinc.com@kernel.org>
-Date:   Wed, 30 Aug 2023 11:00:56 +0800
-Subject: [PATCH v4] usb: typec: qcom: Update the logic of regulator enable
- and disable
+        with ESMTP id S233885AbjH3E2D (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Aug 2023 00:28:03 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D536A6;
+        Tue, 29 Aug 2023 21:27:59 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37U3fG1S004883;
+        Wed, 30 Aug 2023 04:27:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=AmxuY/t98hp4URJLDEoTGLsYOQkVHzVr0HJUYRk19Fs=;
+ b=f0W7S6KiFPYIkJq28lvjDnTBOsGUBqx8PMvDLitJgvIX6x0pPoGcdN9aPSPpH8nwbzs3
+ O6GGk8XYAIM2qHaIxpFNUM4VVjryZojvEPPnBsMVLeY2H22HB2JgtxM+nYYavX1XRWsR
+ XjROmQabtzhZvotJrBTKzLuVVLRzHADczUDZCzOPGOJby8nuLBBT1ac5Sm/EqkYT7wRe
+ 5zEh5PtCPdlSBXyU2yPeOf9IxrDWCYVlvynvDrcWRVMQjFJMfXMG+NfDQjdZm9sg2J0h
+ R/FivyMGliOpyHBsSj8pjCe3aejr9eP5AbzGMtdYlMoF5D5AH0JjE0e0urecdAGhT56B ug== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ssmcv94jt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Aug 2023 04:27:54 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37U4RrLv002124
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 30 Aug 2023 04:27:53 GMT
+Received: from [10.216.28.157] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Tue, 29 Aug
+ 2023 21:27:49 -0700
+Message-ID: <325cf945-4d1f-5591-1ef6-b28e803c134b@quicinc.com>
+Date:   Wed, 30 Aug 2023 09:57:46 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230830-qcom-tcpc-v4-1-c19b0984879b@quicinc.com>
-X-B4-Tracking: v=1; b=H4sIAOiw7mQC/2XMSw7CIBSF4a0YxmJ4VnDkPowDvIBlYB9Qiabp3
- qVNTDAOz839/hklF4NL6LSbUXQ5pNB3ZYj9DkFrurvDwZaNGGGcKMbwCP0DTzAAtoJqKQw00ht
- U/ofofHhtrcu17DakqY/vLZ3pev1WeFXJFFPsjaKGaDBENufxGSB0cCgvaO1kVltRW1Yst1YBF
- 0zIRvxbXltVW16s0/J2NN5wYfWvXZblA0LHVyocAQAA
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.1
+Subject: Re: Disconnect interrupt generation for QC targets when role switch
+ is enabled
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Johan Hovold <johan@kernel.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_fenglinw@quicinc.com,
-        subbaram@quicinc.com, Hui Liu <quic_huliu@quicinc.com>
-X-Mailer: b4 0.13-dev-83828
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1693364531; l=3183;
- i=quic_huliu@quicinc.com; s=20230823; h=from:subject:message-id;
- bh=sW9SVhPDWvfd2enRPcyusPbQVKd0LuSbX7srvMe6UZU=;
- b=NlMXLmyY7A12OZhYKX+dnlXgCU2fnjQ1/XWqZSXMkfPVV+1pK79/wMLzOMSHgEDWTdWVgnxys
- 5Moangy4iymAgAr8/5/9RgPeVWVXHumrPRyQEK1/23K+XAoV8iD8jl5
-X-Developer-Key: i=quic_huliu@quicinc.com; a=ed25519;
- pk=1z+A50UnTuKe/FdQv2c0W3ajDsJOYddwIHo2iivhTTA=
-X-Endpoint-Received: by B4 Relay for quic_huliu@quicinc.com/20230823 with auth_id=80
-X-Original-From: Hui Liu <quic_huliu@quicinc.com>
-Reply-To: <quic_huliu@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>
+References: <af60c05b-4a0f-51b8-486a-1fc601602515@quicinc.com>
+ <20230828172059.GC818859@hu-bjorande-lv.qualcomm.com>
+Content-Language: en-US
+From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <20230828172059.GC818859@hu-bjorande-lv.qualcomm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: yq4z2dUFSD8TXUrDUy8eAec7jBhn5Phz
+X-Proofpoint-GUID: yq4z2dUFSD8TXUrDUy8eAec7jBhn5Phz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-08-29_16,2023-08-29_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ bulkscore=0 phishscore=0 suspectscore=0 priorityscore=1501 clxscore=1015
+ mlxlogscore=802 spamscore=0 malwarescore=0 mlxscore=0 adultscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2308100000 definitions=main-2308300040
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Hui Liu <quic_huliu@quicinc.com>
 
-Removed the call logic of disable and enable regulator
-in reset function. Enable the regulator in qcom_pmic_typec_start
-function and disable it in qcom_pmic_typec_stop function to
-avoid unbalanced regulator disable warnings.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Fixes: a4422ff22142 ("usb: typec: qcom: Add Qualcomm PMIC Type-C driver")
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Acked-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Signed-off-by: Hui Liu <quic_huliu@quicinc.com>
----
-Changes in v4:
-- Removed regulator_enable and regulator_diable from
-pmic_typec_pdphy_reset function. And enable regulator in
-qcom_pmic_typec_pdphy_start function and disable it in
-qcom_pmic_typec_pdphy_stop function.
-- Link to v3: https://lore.kernel.org/r/20230828-qcom-tcpc-v3-1-e95b7afa34d9@quicinc.com
+On 8/28/2023 10:50 PM, Bjorn Andersson wrote:
+>>
+>> I had some idea on how to get the role notification reach qcom glue driver
+>> but wanted your opinion on whether they can be used or not:
+>>
+>> 1. Register a vendor_hook from glue driver and invoke that during
+>> __dwc3_set_mode.
+>>
+>> 2. Let the role notification reach dwc3-qcom first and then let qcom driver
+>> invoke role_set of drd. Something similar to what was implemented by Wesley
+>> on [1].
+>>
+>> But both the options require dwc3_probe to be done in sync with
+>> of_platform_populate or we need to defer qcom probe if dwc3_probe is
+>> deferred. Since we are leaning towards async probe, not sure if the above
+>> two options would be proper.
+>>
 
-Changes in v3:
-- Take Bryan's proposal to remove enable/disable operation in pdphy
-enable and pdphy disable function, then enable regulator in pdphy start
-function and disable it in pdphy stop function.
-- Link to v2: https://lore.kernel.org/r/20230824-qcom-tcpc-v2-1-3dd8c3424564@quicinc.com
+...
 
-Changes in v2:
-- Add Fixes tag
-- Link to v1: https://lore.kernel.org/r/20230823-qcom-tcpc-v1-1-fa81a09ca056@quicinc.com
----
- drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+> As mentioned, this need has been identified a few times by now, so
+> nothing strange in your request/proposal.
+> 
+> But so far no one has come up with a good way to register glue code
+> callbacks with the core; we can't pass arbitrary data (such as a
+> function pointer to such callback), and we don't know when the core is
+> registered, so we can't call a register operation when that happens.
+> 
+> Regards,
+> Bjorn
+> 
+>> [1]: https://patchwork.kernel.org/project/linux-usb/patch/20201009082843.28503-4-wcheng@codeaurora.org/
+>> [2]: https://patchwork.kernel.org/project/linux-usb/cover/20230325165217.31069-1-manivannan.sadhasivam@linaro.org/
+>>
 
-diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
-index bb0b8479d80f..52c81378e36e 100644
---- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
-+++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
-@@ -381,10 +381,6 @@ static int qcom_pmic_typec_pdphy_enable(struct pmic_typec_pdphy *pmic_typec_pdph
- 	struct device *dev = pmic_typec_pdphy->dev;
- 	int ret;
- 
--	ret = regulator_enable(pmic_typec_pdphy->vdd_pdphy);
--	if (ret)
--		return ret;
--
- 	/* PD 2.0, DR=TYPEC_DEVICE, PR=TYPEC_SINK */
- 	ret = regmap_update_bits(pmic_typec_pdphy->regmap,
- 				 pmic_typec_pdphy->base + USB_PDPHY_MSG_CONFIG_REG,
-@@ -422,8 +418,6 @@ static int qcom_pmic_typec_pdphy_disable(struct pmic_typec_pdphy *pmic_typec_pdp
- 	ret = regmap_write(pmic_typec_pdphy->regmap,
- 			   pmic_typec_pdphy->base + USB_PDPHY_EN_CONTROL_REG, 0);
- 
--	regulator_disable(pmic_typec_pdphy->vdd_pdphy);
--
- 	return ret;
- }
- 
-@@ -447,6 +441,10 @@ int qcom_pmic_typec_pdphy_start(struct pmic_typec_pdphy *pmic_typec_pdphy,
- 	int i;
- 	int ret;
- 
-+	ret = regulator_enable(pmic_typec_pdphy->vdd_pdphy);
-+	if (ret)
-+		return ret;
-+
- 	pmic_typec_pdphy->tcpm_port = tcpm_port;
- 
- 	ret = pmic_typec_pdphy_reset(pmic_typec_pdphy);
-@@ -467,6 +465,8 @@ void qcom_pmic_typec_pdphy_stop(struct pmic_typec_pdphy *pmic_typec_pdphy)
- 		disable_irq(pmic_typec_pdphy->irq_data[i].irq);
- 
- 	qcom_pmic_typec_pdphy_reset_on(pmic_typec_pdphy);
-+
-+	regulator_disable(pmic_typec_pdphy->vdd_pdphy);
- }
- 
- struct pmic_typec_pdphy *qcom_pmic_typec_pdphy_alloc(struct device *dev)
+Hi Bjorn,
 
----
-base-commit: bbb9e06d2c6435af9c62074ad7048910eeb2e7bc
-change-id: 20230822-qcom-tcpc-d41954ac65fa
+  How about we use Component framework to let the glue layer know that 
+the child probe is complete. That way we don't need to defer QCOM probe 
+and in the bind call back coming to master (in this case, the glue 
+layer), we can register the vendor hook or role switch we need and we 
+can pass the role notifications from core to glue as needed.
 
-Best regards,
--- 
-Hui Liu <quic_huliu@quicinc.com>
-
+Regards,
+Krishna,
