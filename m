@@ -2,82 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3049B78D8A4
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Aug 2023 20:31:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27BF178D8E5
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Aug 2023 20:32:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235427AbjH3SbB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Aug 2023 14:31:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51492 "EHLO
+        id S236026AbjH3Sbc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Aug 2023 14:31:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240013AbjH3GiC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Aug 2023 02:38:02 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3D48122;
-        Tue, 29 Aug 2023 23:37:59 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37U6PnDw010751;
-        Wed, 30 Aug 2023 06:37:39 GMT
+        with ESMTP id S241397AbjH3Gxv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Aug 2023 02:53:51 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3987D194;
+        Tue, 29 Aug 2023 23:53:49 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37U6HXiM009693;
+        Wed, 30 Aug 2023 06:53:38 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
+ mime-version : subject : to : references : from : in-reply-to :
  content-type : content-transfer-encoding; s=qcppdkim1;
- bh=HbcIR+Kn93/NlEajtbl5kBccafalrW1cbrcdrDksgBo=;
- b=MKL54ircd9rPYGhyGmfvok3FeE09VMOz2aaTJHtJZQH92pZTETkaNJXbsDuFT3axmqgN
- XcH3OKotR9RNqmuDa63fZ5M+DIQKSiSk91PRw5yCxVByYbVEd6AGXRuJkvk4x6piyd5O
- 9TwkTHhLzbTwvHWI5jwpMIvQ5Kp7iMQIfAFL4odxT3wIQtnrnpGjYwtQGQzNEubBbV7R
- t+deq9JWXiZpndLWvQ9JQB/eZJkBNTqI0aQSTSRfqjureEEu1FDg/r5FgcBOuKYShK1v
- ObHmAb7tnHAZPw68EaGagFP3PuOzjeScWVZ9dHShO33rohCmNs8dFd1rTyccFVXi0dJN hQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ss3fr3skm-1
+ bh=AR3LwVmiR7fUIw9Y7M81NThlnJOB2X7Gn0DBD2+0/mk=;
+ b=gt15Phm8BQzrvzmb+oL7PIBUuGddnDcW4Zb8PVLJ/XGcQBNiuIUowRWmi9ZThdHPReJo
+ zLAhe/qWgnRORTPC+9FrcdowUk01zRjMtXj07wjJXSpMZsudY3gBbp0HWSbVfq4UtP6b
+ lkSW2ugNds/SLSr6N7mkc7ImBxNclWYe5bO5KlMaHF/k1rIg2gDc2smbQ//nYOM5q/k4
+ UW021naJ7Gs9QYDzKU6wsxDgPzOTWXMAOcMI6NSp6dyNewtqffNAPgRKCv/eCOpCoWdp
+ TbdnR57BNJ8/Eh5MNLR0pXbk3TNqgq13qGX8PtzHH0HdThWJpM95L3LyOV5Eyjgsees2 PA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3sswbv0862-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 30 Aug 2023 06:37:38 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37U6bbdR009049
+        Wed, 30 Aug 2023 06:53:38 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37U6raEd027024
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 30 Aug 2023 06:37:38 GMT
-Received: from [10.238.139.231] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Tue, 29 Aug
- 2023 23:37:33 -0700
-Message-ID: <fea72c0f-f23d-493c-beae-6bc830b9c2a2@quicinc.com>
-Date:   Wed, 30 Aug 2023 14:37:08 +0800
+        Wed, 30 Aug 2023 06:53:36 GMT
+Received: from [10.50.47.209] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Tue, 29 Aug
+ 2023 23:53:31 -0700
+Message-ID: <ff71da5b-4553-0be5-950e-47a0d741f676@quicinc.com>
+Date:   Wed, 30 Aug 2023 12:23:22 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4] usb: typec: qcom: Update the logic of regulator enable
- and disable
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Heikki Krogerus" <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_fenglinw@quicinc.com>,
-        <subbaram@quicinc.com>
-References: <20230830-qcom-tcpc-v4-1-c19b0984879b@quicinc.com>
- <a2353ce6-bd39-f5ca-ad81-63b061147400@roeck-us.net>
-From:   hui liu <quic_huliu@quicinc.com>
-In-Reply-To: <a2353ce6-bd39-f5ca-ad81-63b061147400@roeck-us.net>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: [PATCH 2/5] dt-bindings: usb: dwc3: Add IPQ5018 compatible
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <gregkh@linuxfoundation.org>, <quic_srichara@quicinc.com>,
+        <quic_varada@quicinc.com>, <quic_wcheng@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>
+References: <20230825093531.7399-1-quic_nsekar@quicinc.com>
+ <20230825093531.7399-3-quic_nsekar@quicinc.com>
+ <3e4e03b6-380c-ce61-dd93-30669e6f9b5c@linaro.org>
+From:   Nitheesh Sekar <quic_nsekar@quicinc.com>
+In-Reply-To: <3e4e03b6-380c-ce61-dd93-30669e6f9b5c@linaro.org>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: q8MuJFT-bztLm8fDrssk0J-eRBY7gJxy
-X-Proofpoint-ORIG-GUID: q8MuJFT-bztLm8fDrssk0J-eRBY7gJxy
+X-Proofpoint-ORIG-GUID: uqWx4pXznQocG_ii8QRXUcatiDlM5Hea
+X-Proofpoint-GUID: uqWx4pXznQocG_ii8QRXUcatiDlM5Hea
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
  definitions=2023-08-29_16,2023-08-29_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
- adultscore=0 spamscore=0 phishscore=0 bulkscore=0 mlxlogscore=721
- impostorscore=0 suspectscore=0 lowpriorityscore=0 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2308300060
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ lowpriorityscore=0 phishscore=0 impostorscore=0 bulkscore=0 spamscore=0
+ mlxlogscore=548 adultscore=0 malwarescore=0 priorityscore=1501
+ clxscore=1011 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2308100000 definitions=main-2308300062
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -85,108 +88,15 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
+On 8/25/2023 4:07 PM, Krzysztof Kozlowski wrote:
+> On 25/08/2023 11:35, Nitheesh Sekar wrote:
+>> Document the IPQ5018 dwc3 compatible.
+>>
+>> Signed-off-by: Nitheesh Sekar <quic_nsekar@quicinc.com>
+> Split the series per subsystem. You are making applying process
+> unnecessarily more cumbersome for the maintainers and as result - delay
+> your patchset without any single reason.
+Sure. Will split this into a separate one.
 
-On 8/30/2023 2:25 PM, Guenter Roeck wrote:
-> On 8/29/23 20:00, Hui Liu via B4 Relay wrote:
->> From: Hui Liu <quic_huliu@quicinc.com>
->>
->> Removed the call logic of disable and enable regulator
->> in reset function. Enable the regulator in qcom_pmic_typec_start
->> function and disable it in qcom_pmic_typec_stop function to
->> avoid unbalanced regulator disable warnings.
->>
->> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-> 
-> Please drop.
-I didn't get your mean. would you please explain it?
-> 
->> Fixes: a4422ff22142 ("usb: typec: qcom: Add Qualcomm PMIC Type-C driver")
->> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
->> Acked-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
->> Signed-off-by: Hui Liu <quic_huliu@quicinc.com>
->> ---
->> Changes in v4:
->> - Removed regulator_enable and regulator_diable from
->> pmic_typec_pdphy_reset function. And enable regulator in
-> 
-> ... because I do not see the above change, and way too much changed
-> in the code since I sent a Reviewed-by: to make it appropriate
-> to keep it.
-> 
-> Actually, I don't see a difference between v3 and v4 of your patch.
-> 
-> Guenter
-Yes, The codes are same between V3 and V4, I just update the commit log 
-as Bryan said. How about I resend the V4 and update the cover letter 
-like "Fixed the commit log"
-> 
->> qcom_pmic_typec_pdphy_start function and disable it in
->> qcom_pmic_typec_pdphy_stop function.
->> - Link to v3: 
->> https://lore.kernel.org/r/20230828-qcom-tcpc-v3-1-e95b7afa34d9@quicinc.com
->>
->> Changes in v3:
->> - Take Bryan's proposal to remove enable/disable operation in pdphy
->> enable and pdphy disable function, then enable regulator in pdphy start
->> function and disable it in pdphy stop function.
->> - Link to v2: 
->> https://lore.kernel.org/r/20230824-qcom-tcpc-v2-1-3dd8c3424564@quicinc.com
->>
->> Changes in v2:
->> - Add Fixes tag
->> - Link to v1: 
->> https://lore.kernel.org/r/20230823-qcom-tcpc-v1-1-fa81a09ca056@quicinc.com
->> ---
->>   drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c | 12 ++++++------
->>   1 file changed, 6 insertions(+), 6 deletions(-)
->>
->> diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c 
->> b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
->> index bb0b8479d80f..52c81378e36e 100644
->> --- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
->> +++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
->> @@ -381,10 +381,6 @@ static int qcom_pmic_typec_pdphy_enable(struct 
->> pmic_typec_pdphy *pmic_typec_pdph
->>       struct device *dev = pmic_typec_pdphy->dev;
->>       int ret;
->> -    ret = regulator_enable(pmic_typec_pdphy->vdd_pdphy);
->> -    if (ret)
->> -        return ret;
->> -
->>       /* PD 2.0, DR=TYPEC_DEVICE, PR=TYPEC_SINK */
->>       ret = regmap_update_bits(pmic_typec_pdphy->regmap,
->>                    pmic_typec_pdphy->base + USB_PDPHY_MSG_CONFIG_REG,
->> @@ -422,8 +418,6 @@ static int qcom_pmic_typec_pdphy_disable(struct 
->> pmic_typec_pdphy *pmic_typec_pdp
->>       ret = regmap_write(pmic_typec_pdphy->regmap,
->>                  pmic_typec_pdphy->base + USB_PDPHY_EN_CONTROL_REG, 0);
->> -    regulator_disable(pmic_typec_pdphy->vdd_pdphy);
->> -
->>       return ret;
->>   }
->> @@ -447,6 +441,10 @@ int qcom_pmic_typec_pdphy_start(struct 
->> pmic_typec_pdphy *pmic_typec_pdphy,
->>       int i;
->>       int ret;
->> +    ret = regulator_enable(pmic_typec_pdphy->vdd_pdphy);
->> +    if (ret)
->> +        return ret;
->> +
->>       pmic_typec_pdphy->tcpm_port = tcpm_port;
->>       ret = pmic_typec_pdphy_reset(pmic_typec_pdphy);
->> @@ -467,6 +465,8 @@ void qcom_pmic_typec_pdphy_stop(struct 
->> pmic_typec_pdphy *pmic_typec_pdphy)
->>           disable_irq(pmic_typec_pdphy->irq_data[i].irq);
->>       qcom_pmic_typec_pdphy_reset_on(pmic_typec_pdphy);
->> +
->> +    regulator_disable(pmic_typec_pdphy->vdd_pdphy);
->>   }
->>   struct pmic_typec_pdphy *qcom_pmic_typec_pdphy_alloc(struct device 
->> *dev)
->>
->> ---
->> base-commit: bbb9e06d2c6435af9c62074ad7048910eeb2e7bc
->> change-id: 20230822-qcom-tcpc-d41954ac65fa
->>
->> Best regards,
-> 
+Regards,
+Nitheesh
