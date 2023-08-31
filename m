@@ -2,95 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E66DA78F0DD
-	for <lists+linux-usb@lfdr.de>; Thu, 31 Aug 2023 18:05:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50DC778F115
+	for <lists+linux-usb@lfdr.de>; Thu, 31 Aug 2023 18:20:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346714AbjHaQF2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 31 Aug 2023 12:05:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36804 "EHLO
+        id S238523AbjHaQUy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 31 Aug 2023 12:20:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346712AbjHaQF1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 31 Aug 2023 12:05:27 -0400
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7CEA1E71;
-        Thu, 31 Aug 2023 09:05:22 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="6.02,217,1688396400"; 
-   d="scan'208";a="178328444"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 01 Sep 2023 01:05:21 +0900
-Received: from localhost.localdomain (unknown [10.226.92.179])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id A783E40189C0;
-        Fri,  1 Sep 2023 01:05:19 +0900 (JST)
-From:   Biju Das <biju.das.jz@bp.renesas.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
+        with ESMTP id S231299AbjHaQUx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 31 Aug 2023 12:20:53 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AE46B0;
+        Thu, 31 Aug 2023 09:20:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693498851; x=1725034851;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=W95vrfEhM+tnCwAJgPQ7tpdnP/tAmrtfQ5NvhkpIxc0=;
+  b=OUsFl70mqTFnSTlR4ywmpLVFSBw16qgR0DqqFW+dB19kWEyqXEVO+PdK
+   kZSCmDkWGScduJaM7Ot/E6W1IjPvVWM/GPVWf+/BAU5vA3/w/zwytMWOJ
+   +FbOPDnZudQ+3ZY52G26Zht/fcLTFx58DOJZ3X/fqAWfPTXBXKrPLNv4n
+   u8hU4nPZ8+syT9G81bkKKebwWjrQ7FX2EyKSuRflwzqFc2pUCIYvUeKty
+   RWak+D6wDkRWV3ON/daURMqZYsNDkeOHt7XiEM0NRLQTzEv3Q54EsKtFF
+   x12/juOlyCOHHjj8lxBNR0f1OtXyhEr462cl4Dt9ax53ejVermbAh8feB
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10819"; a="439975102"
+X-IronPort-AV: E=Sophos;i="6.02,217,1688454000"; 
+   d="scan'208";a="439975102"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2023 09:18:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10819"; a="739596548"
+X-IronPort-AV: E=Sophos;i="6.02,217,1688454000"; 
+   d="scan'208";a="739596548"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2023 09:18:24 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qbkNB-005Qsk-1c;
+        Thu, 31 Aug 2023 19:18:21 +0300
+Date:   Thu, 31 Aug 2023 19:18:21 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v2 5/5] usb: typec: tcpci_rt1711h: Drop CONFIG_OF ifdeffery
-Date:   Thu, 31 Aug 2023 17:05:01 +0100
-Message-Id: <20230831160501.55081-6-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230831160501.55081-1-biju.das.jz@bp.renesas.com>
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/5] usb: typec: tcpci_rt1711h: Make similar OF and ID
+ table
+Message-ID: <ZPC9TY0kisFt47z8@smile.fi.intel.com>
 References: <20230831160501.55081-1-biju.das.jz@bp.renesas.com>
+ <20230831160501.55081-2-biju.das.jz@bp.renesas.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230831160501.55081-2-biju.das.jz@bp.renesas.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Drop of_match_ptr() from rt1711h_of_match and get rid of ugly CONFIG_OF
-ifdeffery. This slightly increases the size of rt1711h_of_match on non-OF
-system and shouldn't be an issue.
+On Thu, Aug 31, 2023 at 05:04:57PM +0100, Biju Das wrote:
+> Make similar OF and ID table to extend support for ID match
+> using i2c_match_data() later. Currently it works only for OF match
+> tables as the driver_data is wrong for ID match.
 
-Add mod_devicetable.h include.
+> While at it, drop a space from the terminator braces for ID table and
+> remove trailing comma in the terminator entry for OF table.
 
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
----
-v2:
- * New patch
----
- drivers/usb/typec/tcpm/tcpci_rt1711h.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+Just as simple as:
 
-diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-index 5d2dc7ead9d0..67422d45eb54 100644
---- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-+++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-@@ -7,6 +7,7 @@
- 
- #include <linux/bits.h>
- #include <linux/kernel.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/module.h>
- #include <linux/i2c.h>
- #include <linux/interrupt.h>
-@@ -411,19 +412,17 @@ static const struct i2c_device_id rt1711h_id[] = {
- };
- MODULE_DEVICE_TABLE(i2c, rt1711h_id);
- 
--#ifdef CONFIG_OF
- static const struct of_device_id rt1711h_of_match[] = {
- 	{ .compatible = "richtek,rt1711h", .data = &rt1711h },
- 	{ .compatible = "richtek,rt1715", .data = &rt1715 },
- 	{}
- };
- MODULE_DEVICE_TABLE(of, rt1711h_of_match);
--#endif
- 
- static struct i2c_driver rt1711h_i2c_driver = {
- 	.driver = {
- 		.name = "rt1711h",
--		.of_match_table = of_match_ptr(rt1711h_of_match),
-+		.of_match_table = rt1711h_of_match,
- 	},
- 	.probe = rt1711h_probe,
- 	.remove = rt1711h_remove,
+While at it, drop a space and remove trailing comma in the terminator entry
+for OF table.
+
 -- 
-2.25.1
+With Best Regards,
+Andy Shevchenko
+
 
