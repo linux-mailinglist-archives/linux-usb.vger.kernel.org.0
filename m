@@ -2,160 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 929D278EE1C
-	for <lists+linux-usb@lfdr.de>; Thu, 31 Aug 2023 15:09:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8339978EF27
+	for <lists+linux-usb@lfdr.de>; Thu, 31 Aug 2023 16:02:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243868AbjHaNJN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 31 Aug 2023 09:09:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38522 "EHLO
+        id S1344164AbjHaOCf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 31 Aug 2023 10:02:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230368AbjHaNJM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 31 Aug 2023 09:09:12 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A131A4;
-        Thu, 31 Aug 2023 06:09:08 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37VCeiMC027349;
-        Thu, 31 Aug 2023 13:08:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=OwzPjGSLhqM1CWMZJdC21er6tHXS2yZCDBB1mbhXGA0=;
- b=X/pyhYC9ho/T+ZALC+tXk/X9xREEDCZ3quHyTtYFR+j/GilEHV0T1yPg3fIxPneYtjz6
- rUoW2Ec9riIvn/1YGP6juSaFwS9FIHyfcFre9A5JpRs9Xf3od3BODwvVlbTae2SVoVzn
- AwMMHai3DUfPXKdbSGFVQrzL1lAThD/5y2ypDdx8kWWSzBLXiUuLAQR8owQr4K+Yc+X6
- KZBlmEzjtF6U3VtckGZ6lS4i7Y6lgpet9YMLBAtn9QYKYIcSZax78sajTuCJ2VPVv9N8
- 4KqNTvO54hBdzaF1+lZ7DZKKhQsG324/erE8pRH01HMaOKBXSEWthBH+jpOE5urYz2hY dQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3str1ngehn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 31 Aug 2023 13:08:12 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37VD8Bvp008094
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 31 Aug 2023 13:08:11 GMT
-Received: from [10.201.3.91] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Thu, 31 Aug
- 2023 06:08:04 -0700
-Message-ID: <36103bcd-fd4e-4a1a-b65e-238f6b63544c@quicinc.com>
-Date:   Thu, 31 Aug 2023 18:38:01 +0530
+        with ESMTP id S232604AbjHaOCe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 31 Aug 2023 10:02:34 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9706CF;
+        Thu, 31 Aug 2023 07:02:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693490550; x=1725026550;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=19BMzLvzIAcODxvVYIwHyw4tdWHI//iDLgoLUB2RU3s=;
+  b=Thbrkxv+o6tqPZ2Vpf5Uniom1mfBjqYXxK6mVsQIpM7uTU/hFbiBbi0B
+   AWTq75RLzGSZg7BBykjRtZefroMPV3IgUqNkkBf2cJeXaJtcZXQoHLiwF
+   vaxUG/3j7YiPRT1jcXoEA/qt6gJgHiI0SpR0cfuJiabr2mxZFchZf/svT
+   jI46OZeh0hBkiLX2H+8SMbWLkrqIugWzz8QaQvna9UzhxS5dYiCh56rHL
+   5Ph4AIkX67xElLs04c8snP17dbw4OOX8tof9+Ve/x1lxHlWlSaBVBKVMT
+   Ua7yFLaSi+opAsv0WVQMfkg3qEOdmyzKlMFXrqh/p1d/LIwLtmGj9AcrF
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="366169038"
+X-IronPort-AV: E=Sophos;i="6.02,217,1688454000"; 
+   d="scan'208";a="366169038"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2023 06:41:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="863078295"
+X-IronPort-AV: E=Sophos;i="6.02,216,1688454000"; 
+   d="scan'208";a="863078295"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by orsmga004.jf.intel.com with SMTP; 31 Aug 2023 06:41:29 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 31 Aug 2023 16:41:28 +0300
+Date:   Thu, 31 Aug 2023 16:41:28 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Nikolay Borisov <nik.borisov@suse.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Anthony Iliopoulos <ailiopoulos@suse.com>
+Subject: Re: [RESEND] USB PD broken on Lenovo P15gen2
+Message-ID: <ZPCYiMEzEUZrv2OR@kuha.fi.intel.com>
+References: <0da9d8a4-1761-20a3-ebd6-a47fe48b94f8@suse.com>
+ <04e8de7a-55e3-4d12-921d-537750fe6217@suse.com>
+ <9841c4f5-614e-bfff-e725-2398fad4e927@suse.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/9] phy: qcom: uniphy: Rename ipq4019 USB phy driver to
- UNIPHY driver
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <robert.marko@sartura.hr>, <luka.perkov@sartura.hr>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
-        <kishon@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <gregkh@linuxfoundation.org>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <p.zabel@pengutronix.de>, <arnd@arndb.de>,
-        <geert+renesas@glider.be>, <nfraprado@collabora.com>,
-        <rafal@milecki.pl>, <peng.fan@nxp.com>, <quic_wcheng@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
-CC:     <quic_varada@quicinc.com>
-References: <20230829135818.2219438-1-quic_ipkumar@quicinc.com>
- <20230829135818.2219438-3-quic_ipkumar@quicinc.com>
- <d30742d6-7fe2-c5fe-ac42-86642acc076e@linaro.org>
-From:   Praveenkumar I <quic_ipkumar@quicinc.com>
-In-Reply-To: <d30742d6-7fe2-c5fe-ac42-86642acc076e@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: dJH7yNdDb4WX9KE1xtrsPdKLIgklPI7U
-X-Proofpoint-ORIG-GUID: dJH7yNdDb4WX9KE1xtrsPdKLIgklPI7U
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-08-31_11,2023-08-31_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
- mlxlogscore=993 spamscore=0 malwarescore=0 priorityscore=1501
- suspectscore=0 adultscore=0 mlxscore=0 bulkscore=0 lowpriorityscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2308310117
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9841c4f5-614e-bfff-e725-2398fad4e927@suse.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Nikolay,
 
-On 8/29/2023 10:25 PM, Krzysztof Kozlowski wrote:
-> On 29/08/2023 15:58, Praveenkumar I wrote:
->> UNIPHY / Combo PHY used on various qualcomm SoC's are very similar to
->> ipq4019 PHY. Hence renaming this driver to uniphy driver and can be
->> used for other SoC's which are having the similar UNIPHY.
->>
->> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
->> ---
->>   MAINTAINERS                                                | 7 ++++---
->>   drivers/phy/qualcomm/Kconfig                               | 7 ++++---
->>   drivers/phy/qualcomm/Makefile                              | 2 +-
->>   .../qualcomm/{phy-qcom-ipq4019-usb.c => phy-qcom-uniphy.c} | 0
->>   4 files changed, 9 insertions(+), 7 deletions(-)
->>   rename drivers/phy/qualcomm/{phy-qcom-ipq4019-usb.c => phy-qcom-uniphy.c} (100%)
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index ff1f273b4f36..7f4553c1a69a 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -17774,13 +17774,14 @@ F:	Documentation/devicetree/bindings/mailbox/qcom-ipcc.yaml
->>   F:	drivers/mailbox/qcom-ipcc.c
->>   F:	include/dt-bindings/mailbox/qcom-ipcc.h
->>   
->> -QUALCOMM IPQ4019 USB PHY DRIVER
->> +QUALCOMM UNIPHY DRIVER
->>   M:	Robert Marko <robert.marko@sartura.hr>
->>   M:	Luka Perkov <luka.perkov@sartura.hr>
->> +M:	Praveenkumar I <quic_ipkumar@quicinc.com>
->>   L:	linux-arm-msm@vger.kernel.org
->>   S:	Maintained
->> -F:	Documentation/devicetree/bindings/phy/qcom-usb-ipq4019-phy.yaml
->> -F:	drivers/phy/qualcomm/phy-qcom-ipq4019-usb.c
->> +F:	Documentation/devicetree/bindings/phy/qcom,uniphy.yaml
-> You broke the path in your previous commit, but anyway this will go away.
->
->> +F:	drivers/phy/qualcomm/phy-qcom-uniphy.c
->>   
->>   QUALCOMM IPQ4019 VQMMC REGULATOR DRIVER
->>   M:	Robert Marko <robert.marko@sartura.hr>
->> diff --git a/drivers/phy/qualcomm/Kconfig b/drivers/phy/qualcomm/Kconfig
->> index d891058b7c39..e6981bc212b3 100644
->> --- a/drivers/phy/qualcomm/Kconfig
->> +++ b/drivers/phy/qualcomm/Kconfig
->> @@ -28,12 +28,13 @@ config PHY_QCOM_EDP
->>   	  Enable this driver to support the Qualcomm eDP PHY found in various
->>   	  Qualcomm chipsets.
->>   
->> -config PHY_QCOM_IPQ4019_USB
->> -	tristate "Qualcomm IPQ4019 USB PHY driver"
->> +config PHY_QCOM_UNIPHY
->> +	tristate "Qualcomm UNIPHY driver"
->>   	depends on OF && (ARCH_QCOM || COMPILE_TEST)
->>   	select GENERIC_PHY
->>   	help
->> -	  Support for the USB PHY-s on Qualcomm IPQ40xx SoC-s.
->> +	  Enable this driver to support the Qualcomm UNIPHY found in various
->> +	  Qualcomm chipsets.
-> I don't quite get why this is renamed, either. Just because you re-use
-> it? Re-usage is not affected with old name...
-Understood. As suggested by Dmitry Baryshkov, will add new driver for 
-Qualcomm IPQ5332 USB Gen3
-PHY driver.
+Thanks for the report.
 
-- Praveenkumar
->
-> Best regards,
-> Krzysztof
->
+On Wed, Aug 30, 2023 at 04:07:55PM +0300, Nikolay Borisov wrote:
+> 
+> 
+> On 28.08.23 г. 17:52 ч., Nikolay Borisov wrote:
+> > 
+> > [Resending as I had initially attached  a full acpi dump and it got
+> > bounced from the usb mailing list]
+> > 
+> > Hello,
+> > 
+> > I'm not able to use usb PD on a Lenovo Thinkpad P15gen2 laptop. It's
+> > equipped with 2 thunderbolt ports and a usb 3.2 gen2 usb port, all of
+> > which are supposed to support PD 2.0:
+> 
+> <snip>
+> So I've been debugging this and what the PPM reports is the following:
+> 
+> modprobe-529501  [004] ..... 33507.058332: ucsi_register: Supported UCSI spec: 100
+>      kworker/4:0-524223  [004] ..... 33507.486591: ucsi_init_work: Connectors supported: 3
+>      kworker/4:0-524223  [004] ..... 33507.486592: ucsi_init_work: GET_CAP: USB_PD: 0 TYPEC_CURRENT: 1 POWER_VBUS: 0, POWER_OTHER: 0, POWER_AC_SUPPLY: 1, BATTERY_CHARGING: 0 bcVersion: 0x102 typec_version: 0x100 pd_version: 0x200 PDO_DETAILS: 0
+>      kworker/4:0-524223  [004] ..... 33507.682726: ucsi_init_work: [Register port 1]: OPMODE: E4 flag:1
+>      kworker/4:0-524223  [004] ..... 33508.850438: ucsi_init_work: [Register port 2]: OPMODE: E4 flag:1
+>      kworker/4:0-524223  [004] ..... 33509.986672: ucsi_init_work: [Register port 3]: OPMODE: E4 flag:1
+> 
+> 
+> So all three ports support DRP/USB2/USB3/ALT_MODE and they can be a provider.
+> 
+> 
+> I find it strange that USB_PD is reported as 0 yet pd_version is reported as 2. I contacted Lenovo's support and they confirmed that this particular model indeed supports PD 3.0 on all USBC ports.
+> 
+> I see a couple of problems with the current upstream code:
+> 
+> 1. It assumes that USB_PD is valid because the PD version from pd_version is being propagated to several places (like in ucsi_register_port() cap->pd_revision = ucsi->cap.pd_version;)
+
+This part should be fixed.
+
+> 2. When typec_register_port() is called from ucsi_register_port() cap->pd is 0 hence the port->pd = cap->pd; assignment in typec_register_port is a noop. In fact I don't see where cap->pd is being initialized since we initialize con->pd when we call usb_power_delivery_register in ucsi_register_port().
+
+That "pd" member in struct typec_capability is optional. It can be
+used if the driver has a set of USB PD capabilities meant for USB
+Type-C port ready before the port is registered, but in UCSI driver
+the PD stuff are registered after the port.
+
+So I'm not sure there is anything wrong here.
+
+> Is it mandatory that GET_PDOS is supported if PD is supported, the UCSI spec doesn't say anything other than GET_PDOS is optional and signaled by bit in the GET_CAP call ?
+
+It looks like nobody ever checked is the command supported or not
+before using it. That's a bug.
+
+thanks,
+
+-- 
+heikki
