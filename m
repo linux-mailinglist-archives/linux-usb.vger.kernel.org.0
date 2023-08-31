@@ -2,80 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B2C778F1F0
-	for <lists+linux-usb@lfdr.de>; Thu, 31 Aug 2023 19:30:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E7BF78F268
+	for <lists+linux-usb@lfdr.de>; Thu, 31 Aug 2023 20:19:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346944AbjHaRaJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 31 Aug 2023 13:30:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46198 "EHLO
+        id S1346631AbjHaSTs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 31 Aug 2023 14:19:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235041AbjHaRaJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 31 Aug 2023 13:30:09 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE916E7A;
-        Thu, 31 Aug 2023 10:29:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 35A87CE216A;
-        Thu, 31 Aug 2023 17:29:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CD63C433C7;
-        Thu, 31 Aug 2023 17:29:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693502994;
-        bh=057dXhBltFNY+YXutamWEKDOENY+dS9838PYVA3CeIk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YAg2oRB2Hz4CCaDGqT+FpM5RsRuIyfObS5GYwv4qsjQsEN+HmzbDaTxJnvFpStRRd
-         b00tiO7VLBSRyilW0ijkSUxyBAa2sxb+FML2eTBhG35GFsAA7qf1hQtb5f+8vVKixa
-         yPAriWirIlFos9iq7I9p40aG0ObfpRrBETt185Z4c7+nye4Pl0kmDrhh4cl/A3sHh/
-         uIFwdmugmKkajgnRbu5f8yhjugaVMRr/Dg4NVmbzdayh5+tdFBYE/vs+XrMoncl889
-         BE5JBZn6DL45yNp3NIxH2AkFPcQseeitRtr7OnBCFYW3vK3UyAMTlZlPQsHU/n6nfz
-         2nYRKMW8Jas6Q==
-Received: (nullmailer pid 2472823 invoked by uid 1000);
-        Thu, 31 Aug 2023 17:29:51 -0000
-Date:   Thu, 31 Aug 2023 12:29:51 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Wesley Cheng <quic_wcheng@quicinc.com>
-Cc:     alsa-devel@alsa-project.org, andersson@kernel.org,
-        quic_plai@quicinc.com, linux-arm-msm@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        perex@perex.cz, bgoswami@quicinc.com, devicetree@vger.kernel.org,
-        tiwai@suse.com, linux-kernel@vger.kernel.org, agross@kernel.org,
-        lgirdwood@gmail.com, srinivas.kandagatla@linaro.org,
-        mathias.nyman@intel.com, linux-usb@vger.kernel.org,
-        broonie@kernel.org, gregkh@linuxfoundation.org,
-        Thinh.Nguyen@synopsys.com, quic_jackp@quicinc.com
-Subject: Re: [PATCH v5 24/32] ASoC: dt-bindings: Update example for enabling
- USB offload on SM8250
-Message-ID: <169350299098.2472764.11068604113616998755.robh@kernel.org>
-References: <20230829210657.9904-1-quic_wcheng@quicinc.com>
- <20230829210657.9904-25-quic_wcheng@quicinc.com>
+        with ESMTP id S233004AbjHaSTp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 31 Aug 2023 14:19:45 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA4CE63;
+        Thu, 31 Aug 2023 11:19:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693505983; x=1725041983;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=T78YspwzWrX2p/IRwKWPHz+urVC7whdLr4wWxeReeSQ=;
+  b=OqMCBR4LLvk6Tby6OHKD8+i8b+jtvcDyQdhKtxb740HmIN0s15SWb9r+
+   qlZAt11yOhSUvIjRzJcRJwsW9uyPduO8li7IoF8sqcFHNMWzz699rGviP
+   3t0XB/LSlxEEmuTPaLdmH5Wut6cyWm/gdj5/QuBiBDle/EGFKv6fOUSjX
+   oqFkJyXXWKxCvQTpagJ4JhpE1Y0V0lYGDYJTaUIIODh2RNI/BEs9a4eAt
+   5haXsf+Px5zQt7V3BnqfeS/o9dCWYrwmyhzcUd9ip3RNpyJIUrf8gLAmL
+   EdlVQ0QWxzfVpNJYbiW6dREE8WoS3yziHssZhbOFVjCeGQyu6dYmwkc1C
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10819"; a="374935409"
+X-IronPort-AV: E=Sophos;i="6.02,217,1688454000"; 
+   d="scan'208";a="374935409"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2023 11:19:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10819"; a="716454307"
+X-IronPort-AV: E=Sophos;i="6.02,217,1688454000"; 
+   d="scan'208";a="716454307"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2023 11:19:38 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qbmGU-005TOF-0l;
+        Thu, 31 Aug 2023 21:19:34 +0300
+Date:   Thu, 31 Aug 2023 21:19:33 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Luo Jiaxing <luojiaxing@huawei.com>
+Cc:     akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
+        linux-kernel@vger.kernel.org, martin.petersen@oracle.com,
+        john.garry@huawei.com, himanshu.madhani@cavium.com,
+        felipe.balbi@linux.intel.com, gregkh@linuxfoundation.org,
+        uma.shankar@intel.com, anshuman.gupta@intel.com,
+        animesh.manna@intel.com, linux-usb@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linuxarm@huawei.com
+Subject: Re: [PATCH v4 0/5] Introduce a new helper macro
+ DEFINE_SHOW_STORE_ATTRIBUTE at seq_file.c
+Message-ID: <ZPDZtR8W1TLcOHW+@smile.fi.intel.com>
+References: <1605164864-58944-1-git-send-email-luojiaxing@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230829210657.9904-25-quic_wcheng@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1605164864-58944-1-git-send-email-luojiaxing@huawei.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-On Tue, 29 Aug 2023 14:06:49 -0700, Wesley Cheng wrote:
-> Add an example on enabling of USB offload for the Q6DSP.  The routing can
-> be done by the mixer, which can pass the multimedia stream to the USB
-> backend.
+On Thu, Nov 12, 2020 at 03:07:38PM +0800, Luo Jiaxing wrote:
+> We already own DEFINE_SHOW_ATTRIBUTE() helper macro for defining attribute
+> for read-only file, but we found many of drivers also want a helper macro
+> for read-write file too.
 > 
-> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
-> ---
->  .../devicetree/bindings/sound/qcom,sm8250.yaml    | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
-> 
+> So we add this macro to help decrease code duplication.
 
-Acked-by: Rob Herring <robh@kernel.org>
+Are you going to pursue this one?
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
