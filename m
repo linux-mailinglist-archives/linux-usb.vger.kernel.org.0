@@ -2,195 +2,159 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6D1A78ECFE
-	for <lists+linux-usb@lfdr.de>; Thu, 31 Aug 2023 14:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A50A78ED1A
+	for <lists+linux-usb@lfdr.de>; Thu, 31 Aug 2023 14:30:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346227AbjHaMZJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 31 Aug 2023 08:25:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58686 "EHLO
+        id S1346254AbjHaMav (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 31 Aug 2023 08:30:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346228AbjHaMZI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 31 Aug 2023 08:25:08 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C28ACFE
-        for <linux-usb@vger.kernel.org>; Thu, 31 Aug 2023 05:25:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693484705; x=1725020705;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NBoEAovz5lw3OUvumLoyUwVmTk8uu+0JDdrFPV+LTfs=;
-  b=R/3Ng3p6D9B+OXaGyeQ7DPragXbBPEOHuZ97LQSNnJUyoNCBaEfY5VYt
-   RGcHpiOiDUbpob/8aTSH+7xM472BZfDXhdleJlSxkO9SP+hSKQVOVCW3S
-   kFgvdGAxwQcbTc1DQhmRLJht62P76iYfU/hkz8o3QGisgUlJi+7YyMvxx
-   d0fVOVS6l08Ub79cm5gIqjSMc95D/3HzO8zSwCbBQENOsUBhsk8HVxMnF
-   B6bH0kdJcW+HTZ9L3LXsS5PWD6OHfP+ILTfz3/fgTPvc5ivfET6ULMbTT
-   F60Oa320JVRPgoXp/6nLYHwx+HGBbwH/9b9vyDq9oBq2eqCEtaXkHWY/d
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="439871384"
-X-IronPort-AV: E=Sophos;i="6.02,216,1688454000"; 
-   d="scan'208";a="439871384"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2023 05:25:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="809582423"
-X-IronPort-AV: E=Sophos;i="6.02,216,1688454000"; 
-   d="scan'208";a="809582423"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga004.fm.intel.com with SMTP; 31 Aug 2023 05:25:01 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 31 Aug 2023 15:25:00 +0300
-Date:   Thu, 31 Aug 2023 15:25:00 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Douglas Gilbert <dgilbert@interlog.com>
-Cc:     Benson Leung <bleung@google.com>,
-        Jameson Thies <jthies@google.com>,
-        Prashant Malani <pmalani@google.com>,
-        Won Chung <wonchung@google.com>, linux-usb@vger.kernel.org
-Subject: Re: [RFC PATCH 0/2] usb: Link USB devices with their USB Type-C
- partner counterparts
-Message-ID: <ZPCGnL4zgAKh1mGA@kuha.fi.intel.com>
-References: <20230822133205.2063210-1-heikki.krogerus@linux.intel.com>
- <860a352c-12da-25ce-5b9e-697382a93899@interlog.com>
- <ZOXJ2cs5dUBsSNjX@kuha.fi.intel.com>
- <58409169-dc24-accc-46e8-13402cd93f79@interlog.com>
- <ZOxnJxELyjZ7I5f5@kuha.fi.intel.com>
- <c12b1eb4-a437-38fe-6abe-fdbe753739ea@interlog.com>
+        with ESMTP id S235106AbjHaMat (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 31 Aug 2023 08:30:49 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10F81A4;
+        Thu, 31 Aug 2023 05:30:46 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37VBp03P005935;
+        Thu, 31 Aug 2023 12:30:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=BU00vg17G76ircAg1xz3lhcsO7N9Z7ZT+RXru3K620c=;
+ b=ASJcHerclvq97OBC2NFYxwEecGWz4kfrHfYuEnqP6BUMkti/TjsPV6n5rREJ/exL02sF
+ boCk/3Z3az3nEyWV9P9COSKnXwECSF8PFhLBuPSPwMK0bN9TuhVlLtEXgt0SHuUuy4Ov
+ 2cId14V5WFwSrPdRseQRdi/uG5tUcYzTDimJV3hpc8v2VsU7w6huWfyOOM45u4rpmY4C
+ myEtaezW2RxXAonjp8l8NSmwHS3zuUQH7LeOfxtxz4RS68Yyml2716CBvlAmbdcPh6w0
+ ZRzW5FAVZqoi5h3K09FVvi0SdHaRe48YA8Eq18M2UO32jZVTURGk51AsdtwAgSQ5lXjE qA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3stpy98hnk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 31 Aug 2023 12:30:09 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 37VCU8Ss008797
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 31 Aug 2023 12:30:08 GMT
+Received: from [10.201.3.91] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Thu, 31 Aug
+ 2023 05:30:00 -0700
+Message-ID: <4e9a43c5-43ec-4a07-9053-366a517f5c54@quicinc.com>
+Date:   Thu, 31 Aug 2023 17:59:57 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c12b1eb4-a437-38fe-6abe-fdbe753739ea@interlog.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/9] dt-bindings: phy: qcom,uniphy: Rename ipq4019 usb PHY
+ to UNIPHY
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     <robert.marko@sartura.hr>, <luka.perkov@sartura.hr>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <gregkh@linuxfoundation.org>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <p.zabel@pengutronix.de>, <arnd@arndb.de>,
+        <geert+renesas@glider.be>, <nfraprado@collabora.com>,
+        <rafal@milecki.pl>, <peng.fan@nxp.com>, <quic_wcheng@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <quic_varada@quicinc.com>
+References: <20230829135818.2219438-1-quic_ipkumar@quicinc.com>
+ <20230829135818.2219438-2-quic_ipkumar@quicinc.com>
+ <CAA8EJpqA-poJ9=XKJa2s=yZUGbBbgOqgiDC-q9skJzBqLux84g@mail.gmail.com>
+ <73879012-581d-47fb-b741-577c90b31dfb@quicinc.com>
+ <CAA8EJpr3PJtvyYKRPqT=hO4sUd4oOjTvOjD3kOqffbjzHdByAw@mail.gmail.com>
+From:   Praveenkumar I <quic_ipkumar@quicinc.com>
+In-Reply-To: <CAA8EJpr3PJtvyYKRPqT=hO4sUd4oOjTvOjD3kOqffbjzHdByAw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 9ehDmc-1lt6mX6pcugNoo-YAcP_FWp96
+X-Proofpoint-GUID: 9ehDmc-1lt6mX6pcugNoo-YAcP_FWp96
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-08-31_11,2023-08-31_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ lowpriorityscore=0 spamscore=0 impostorscore=0 suspectscore=0 adultscore=0
+ mlxlogscore=999 clxscore=1015 malwarescore=0 phishscore=0 bulkscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2308100000 definitions=main-2308310111
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 29, 2023 at 02:42:29PM -0400, Douglas Gilbert wrote:
-> On 2023-08-28 05:21, Heikki Krogerus wrote:
-> > On Thu, Aug 24, 2023 at 12:51:04PM -0400, Douglas Gilbert wrote:
-> > > On 2023-08-23 04:56, Heikki Krogerus wrote:
-> > > > Hi Douglas,
-> > > > 
-> > > > On Tue, Aug 22, 2023 at 10:52:12AM -0400, Douglas Gilbert wrote:
-> > > > > On 2023-08-22 09:32, Heikki Krogerus wrote:
-> > > > > On a related matter, I wonder why there aren't symlinks between typec ports
-> > > > > (under /sys/class/typec ) and/or the corresponding pd objects (under
-> > > > > /sys/class/usb_power_delivery ) to the related power_supply objects under
-> > > > > /sys/class/power_supply . For example under the latter directory I see:
-> > > > >       $ ls | more
-> > > > >       AC
-> > > > >       BAT0
-> > > > >       hidpp_battery_1
-> > > > >       ucsi-source-psy-USBC000:001
-> > > > >       ucsi-source-psy-USBC000:002
-> > > > > 
-> > > > > Those last two power supplies are obviously connected to typec port0 and port1
-> > > > > (but offset by 1). Those power_supply objects hold inaccurate data which I hope
-> > > > > will improve in time. Significantly power_supply objects don't seem to report
-> > > > > the direction of the power. Here is a little utility I have been working on
-> > > > > to report the USB Type-C port/pd disposition on my machine:
-> > > > >       $ lsucpd
-> > > > >       port0 [pd0]  > {5V, 0.9A}
-> > > > >       port1 [pd1]  <<===  partner: [pd8]
-> > > > > 
-> > > > > My laptop (Thinkpad X13 G3) has two type-C ports and port1 is a sink with a
-> > > > > PD contract. I would like that second line to have 20V, 3.25A appended to it
-> > > > > but there are several issues:
-> > > > >     - no typec or pd symlink to ucsi-source-psy-USBC000:002
-> > > > >     - that power supply_object says it is online (correct) with a voltage_now:
-> > > > >       5000000 uV (incorrect) and current_now: 3000000 uA (incorrect). See below.
-> > > > > 
-> > > > >     ucsi-source-psy-USBC000:002 $ ls_name_value
-> > > > >       current_max : 3250000
-> > > > >       current_now : 3000000
-> > > > >       online : 1
-> > > > >       scope : Unknown
-> > > > >       type : USB
-> > > > >       uevent : <removed>
-> > > > >       usb_type : C [PD] PD_PPS
-> > > > >       voltage_max : 20000000
-> > > > >       voltage_min : 5000000
-> > > > >       voltage_now : 5000000
-> > > > 
-> > > > I'm glad you brought that up. The major problem with the Type-C power
-> > > > supplies is that the Type-C connector class does not actually take
-> > > > care of them. They are all registered by the device drivers, and all
-> > > > of them seem to expose different kind of information. In your case the
-> > > > power supplies are registered by the UCSI driver, and the above may
-> > > > indicate a bug in that driver.
-> > > 
-> > > Hi,
-> > > Thanks for the background.
-> > > 
-> > > My X13 Gen 3 (i5-1240P) uses the typec_ucsi and ucsi_acpi modules. Some time
-> > > back in a post you explained how to use debugfs with ucsi. Following that
-> > > procedure, just after a 20 Volt PD contract is negotiated on port 0 I see:
-> > > 
-> > >      # cat /sys/kernel/debug/tracing/trace
-> > >      ....
-> > >       kworker/0:1-18718   [000] ..... 137813.407189: ucsi_connector_change:
-> > >          port0 status: change=0000, opmode=5, connected=1, sourcing=0,
-> > >          partner_flags=1, partner_type=1,
-> > >          request_data_obj=1304b12c, BC status=1
-> > > 
-> > > That RDO is incorrect, the top nibble (1) is the index of the default Vsafe5v
-> > > PDO. The correct PDO index would be 4 in this case. The source is an Apple 140W
-> > > USB-C power adapter so I doubt that it is breaking any PD 3.0/3.1 protocol
-> > > rules.
-> > 
-> > The driver reads the RDO from the UCSI interface, so if it's wrong,
-> > there is possibly a problem in the Embedded Controller firmware :-(.
-> > 
-> > > According the a PD analyzer (km002c) only one Request is sent by the sink:
-> > > 82 10 d6 59 87 43 which it decodes as "Pos: 4 Fixed: 20V, 4.7A" which is
-> > > Accepted and 200 ms later a PS RDY is sent by the source and Vbus
-> > > transitions from from 5.17 Volts to 20.4 Volts. So I can see no Request for
-> > > PDO index 1 being sent.
-> > > 
-> > > With acpi_listen the following traffic occurs just after the power adapter
-> > > is plugged into port 0:
-> > >    battery PNP0C0A:00 00000080 00000001
-> > >    battery PNP0C0A:00 00000080 00000001
-> > >    ibm/hotkey LEN0268:00 00000080 00006032
-> > >    ac_adapter ACPI0003:00 00000080 00000001
-> > >    ac_adapter ACPI0003:00 00000080 00000001
-> > >    ibm/hotkey LEN0268:00 00000080 00006030
-> > >    thermal_zone LNXTHERM:00 00000081 00000000
-> > >    ibm/hotkey LEN0268:00 00000080 00006030
-> > >    thermal_zone LNXTHERM:00 00000081 00000000
-> > > 
-> > > Hope this helps if you find time to look at this.
-> > 
-> > Thank you. I'll try to reproduce the issue this week, but I don't have
-> > that exact model of Thinkpad available I'm afraid (UCSI tends to
-> > behave a little bit differently on every single platform).
-> 
-> Could it be a CPU generation thing? My CPU is 12th generation (2022) and
-> there is another report of a Lenovo P15gen2 (11th generation 2021 I assume)
-> not reporting PDOs at all. I have an older Dell XPS 9380 which has an 8th
-> generation CPU (3 USB-C port and no Type A ports) that has no UCSI support.
-> So do PDOs and the active RDO get properly reported on 13th generation
-> CPUs?
 
-Probable not. It really depends on the embedded controller or PD
-controller firmware, so ultimately the platform and product.
+On 8/31/2023 5:47 PM, Dmitry Baryshkov wrote:
+> On Thu, 31 Aug 2023 at 14:54, Praveenkumar I <quic_ipkumar@quicinc.com> wrote:
+>>
+>> On 8/29/2023 7:49 PM, Dmitry Baryshkov wrote:
+>>> On Tue, 29 Aug 2023 at 16:59, Praveenkumar I <quic_ipkumar@quicinc.com> wrote:
+>>>> UNIPHY / Combo PHY used on various qualcomm SoC's are very similar to
+>>>> ipq4019 PHY. Hence renaming this dt-binding to uniphy dt-binding and
+>>>> can be used for other qualcomm SoCs which are having similar UNIPHY.
+>>>>
+>>>> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+>>>> ---
+>>>>    .../phy/{qcom-usb-ipq4019-phy.yaml => qcom,uniphy.yaml}  | 9 +++++++--
+>>>>    1 file changed, 7 insertions(+), 2 deletions(-)
+>>>>    rename Documentation/devicetree/bindings/phy/{qcom-usb-ipq4019-phy.yaml => qcom,uniphy.yaml} (78%)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/phy/qcom-usb-ipq4019-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,uniphy.yaml
+>>>> similarity index 78%
+>>>> rename from Documentation/devicetree/bindings/phy/qcom-usb-ipq4019-phy.yaml
+>>>> rename to Documentation/devicetree/bindings/phy/qcom,uniphy.yaml
+>>>> index 09c614952fea..cbe2cc820009 100644
+>>>> --- a/Documentation/devicetree/bindings/phy/qcom-usb-ipq4019-phy.yaml
+>>>> +++ b/Documentation/devicetree/bindings/phy/qcom,uniphy.yaml
+>>>> @@ -1,13 +1,18 @@
+>>>>    # SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>>>>    %YAML 1.2
+>>>>    ---
+>>>> -$id: http://devicetree.org/schemas/phy/qcom-usb-ipq4019-phy.yaml#
+>>>> +$id: http://devicetree.org/schemas/phy/qcom,uniphy.yaml#
+>>>>    $schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>>
+>>>> -title: Qualcom IPQ40xx Dakota HS/SS USB PHY
+>>>> +title: Qualcomm UNIPHY
+>>> We know that UNIPHY was a common design / IP block used for APQ8064
+>>> SATA and MSM8974 DSI and HDMI PHYs. Is this the same design, or was
+>>> the name reused by the Qualcomm for some other PHYs?
+>>> Several latest generations have USB QMP PHYs which are called 'uni-phy'.
+>> This PHY is build on top of QCA Uniphy 22ull. A combo PHY used between
+>> USB Gen3 / PCIe Gen3 controller.
+>> It is different from USB QMP PHYs.
+> So we have now three different items called Qualcomm uniphy. Could you
+> please add some distinctive name?
+There is one more target called IPQ5018 which is also having similar USB 
+PHY built on top of
+Uniphy 28nm LP. That also can leverage this upcoming IPQ5332 USB PHY 
+driver. Considering that,
+given a common name 'uniphy'.
 
-It could be that the reference embedded controller firmware from Intel
-is only patched ones for every CPU generation (I don't know), but for
-example Dell does not use Intel's reference embedded controller
-firmware, or they at least patch it heavily for every product, so the
-CPU gen should not play a huge role there.
-
-Now some (most?) USB PD controllers also support UCSI natively, so the
-EC firmware may be just a proxy between the OS and the PD controller.
-The PD controller can be anything regardless of the CPU generation,
-and theare are several vendors, and on top of that, the PD controller
-firmwares may be customised for every single product line.
-
-thanks,
-
--- 
-heikki
+- Praveenkumar
+>
+>> - Praveenkumar
+>>>>    maintainers:
+>>>>      - Robert Marko <robert.marko@sartura.hr>
+>>>> +  - Praveenkumar I <quic_ipkumar@quicinc.com>
+>>>> +
+>>>> +description:
+>>>> +  UNIPHY / COMBO PHY supports physical layer functionality for USB and PCIe on
+>>>> +  Qualcomm chipsets.
+>>>>
+>>>>    properties:
+>>>>      compatible:
+>>>> --
+>>>> 2.34.1
+>>>>
+>
+>
