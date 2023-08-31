@@ -2,41 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE57578E94C
-	for <lists+linux-usb@lfdr.de>; Thu, 31 Aug 2023 11:20:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A17D78E96E
+	for <lists+linux-usb@lfdr.de>; Thu, 31 Aug 2023 11:31:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238368AbjHaJUy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 31 Aug 2023 05:20:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46820 "EHLO
+        id S238583AbjHaJb5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 31 Aug 2023 05:31:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbjHaJUw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 31 Aug 2023 05:20:52 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4614AE5D;
-        Thu, 31 Aug 2023 02:20:38 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1qbdqu-0004t5-SH; Thu, 31 Aug 2023 11:20:36 +0200
-Message-ID: <6a5f4d0d-c75a-1b92-b9ec-776c00081ad8@leemhuis.info>
-Date:   Thu, 31 Aug 2023 11:20:36 +0200
+        with ESMTP id S231946AbjHaJb5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 31 Aug 2023 05:31:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22161194
+        for <linux-usb@vger.kernel.org>; Thu, 31 Aug 2023 02:31:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C10D6B8201C
+        for <linux-usb@vger.kernel.org>; Thu, 31 Aug 2023 09:31:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 81D14C433C9
+        for <linux-usb@vger.kernel.org>; Thu, 31 Aug 2023 09:31:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1693474311;
+        bh=l52qP5FhJi7bpA7d21UZv4HDwNwri+FPtdC+Kr1Xr7g=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=X4xM+Vwgnwztl53mjjhS3qI393YltC/VmEUSGupYnkssTR3zZ4ElhJKKO3rMVdg0d
+         v64HANUO/rrHQgqJY8b9Jlmo3kZAQG/OhSYGFewEnVq1WOn25yXK+4muvM1YEYIQNn
+         ODSIesxPnAXXbRB7v39YuVnQA6ztjYVWbqSpSvaxEXOWTUGWURoFG3pM9WnVcpP+ST
+         p8U08K7xlsd9bbfQ38UHUAIqg3eQWFqDKelddj6l47u+d5a97XvE4OIH7DqdiENRFX
+         rK7JRMimsP/HZdKdufcOFVUlj6KpFwGr5QDlcBySTpH0cShRXim20BNZ8QVlVZLNsG
+         TstSsG3d/1kiA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id 5E8EBC4332E; Thu, 31 Aug 2023 09:31:51 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 217670] dwc3: regression in USB DWC3 driver in kernel 5.15
+ branch
+Date:   Thu, 31 Aug 2023 09:31:51 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: regressions@leemhuis.info
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-217670-208809-mthqKYqLLi@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-217670-208809@https.bugzilla.kernel.org/>
+References: <bug-217670-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: 6.1.30: thunderbolt: Clear registers properly when auto clear
- isn't in use cause call trace after resume
-Content-Language: en-US, de-DE
-To:     Linux Regressions <regressions@lists.linux.dev>
-Cc:     Linux USB <linux-usb@vger.kernel.org>, stable@vger.kernel.org
-References: <CAG7aomXv2KV9es2RiGwguesRnUTda-XzmeE42m0=GdpJ2qMOcg@mail.gmail.com>
- <ZHKW5NeabmfhgLbY@debian.me>
-From:   "Linux regression tracking #update (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <ZHKW5NeabmfhgLbY@debian.me>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1693473638;ff2f768a;
-X-HE-SMSGID: 1qbdqu-0004t5-SH
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -45,31 +72,29 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-[TLDR: This mail in primarily relevant for Linux kernel regression
-tracking. See link in footer if these mails annoy you.]
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217670
 
-On 28.05.23 01:48, Bagas Sanjaya wrote:
-> On Sat, May 27, 2023 at 04:15:51PM -0400, beld zhang wrote:
->> Upgrade to 6.1.30, got crash message after resume, but looks still
->> running normally
->>
->> After revert
->>     e16629c639d429e48c849808e59f1efcce886849
->>     thunderbolt: Clear registers properly when auto clear isn't in use
->> This error was gone.
-> 
-> Can you check latest mainline to see if this regression still happens?
-> [...]
-> #regzbot ^introduced: e16629c639d429
-> #regzbot title: Properly clearing Thunderbolt registers when not autoclearing triggers ring_interrupt_active crash on resume
+--- Comment #11 from The Linux kernel's regression tracker (Thorsten Leemhu=
+is) (regressions@leemhuis.info) ---
+Greg, guess it fell through the cracks on your side then. You afaics intend=
+ed
+to apply these to 5.15.y to fix the regression that was caused by backporti=
+ng=20
+5c3d5ecf48a ("arm64: dts: imx8mp: Add snps,gfladj-refclk-lpm-sel quirk to U=
+SB
+nodes") [v6.1-rc1] to 5.15.y:
 
-#regzbot fix: 5532962c9ed259daf6824041aa923452cfca6b
-#regzbot ignore-activity
+>>> 7bee318838890 usb: dwc3: reference clock period configuration
+>>> a5ae3cbe9dfcc usb: dwc3: Get clocks individually
+>>> 5114c3ee24875 usb: dwc3: Calculate REFCLKPER based on reference clock
+>>> 596c87856e08d usb: dwc3: Program GFLADJ
+>>> a6fc2f1b09278 usb: dwc3: core: add gfladj_refclk_lpm_sel quirk
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-That page also explains what to do if mails like this annoy you.
+Thomas confirmed that they fix the regression here:
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217670#c8
 
+--=20
+You may reply to this email to add a comment.
 
+You are receiving this mail because:
+You are watching the assignee of the bug.=
