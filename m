@@ -2,195 +2,226 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C7A778EF49
-	for <lists+linux-usb@lfdr.de>; Thu, 31 Aug 2023 16:08:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 610B578F037
+	for <lists+linux-usb@lfdr.de>; Thu, 31 Aug 2023 17:24:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344880AbjHaOIX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 31 Aug 2023 10:08:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43008 "EHLO
+        id S1346580AbjHaPYu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 31 Aug 2023 11:24:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242974AbjHaOIW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 31 Aug 2023 10:08:22 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2040.outbound.protection.outlook.com [40.107.21.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42618E8;
-        Thu, 31 Aug 2023 07:08:18 -0700 (PDT)
+        with ESMTP id S244888AbjHaPYs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 31 Aug 2023 11:24:48 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE9BAE72;
+        Thu, 31 Aug 2023 08:24:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693495477; x=1725031477;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=ISnIAiV3sQftjSWrFLSe+1rRrZSVhzSvoVMhGj2UrhE=;
+  b=Swaif+gNlzbqJqA/Ln0ocIWswj9QN8GXqXa60MaENYuxxmztN5kx7PCJ
+   4bIHEVc/4aDA6v2f0ECzPWDLcLAVmRYm5Rz5PAwqO3SGbO0Qajx0bC68j
+   hL1sHpxx8NfWtWHpc68KWEJazROuth1zygLoiCsygOya847B7790EiIi6
+   CSYfr8u1T4CrCYFrzZ39hDSc/stlqEaKXZDLUsbDdiAzcYRrzciL/XD1O
+   JqxLhZfyHFQCjoHNKlDCMaDPqsIJ05eMlziQP3jllOgoEKmS2Kdd6kkE0
+   JYmEUUwPlQr2jIDODra8vHJLniSOHouCyhm1MT+2I2NGeqXulahYJBCbo
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10819"; a="375918107"
+X-IronPort-AV: E=Sophos;i="6.02,217,1688454000"; 
+   d="scan'208";a="375918107"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2023 08:24:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10819"; a="863124066"
+X-IronPort-AV: E=Sophos;i="6.02,217,1688454000"; 
+   d="scan'208";a="863124066"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by orsmga004.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 31 Aug 2023 08:24:37 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Thu, 31 Aug 2023 08:24:36 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Thu, 31 Aug 2023 08:24:36 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27 via Frontend Transport; Thu, 31 Aug 2023 08:24:36 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.107)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.27; Thu, 31 Aug 2023 08:24:36 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HKTQ7mN7B0m1IA3+gpstpeSpKMizlK4uVV8LlwlfSDzB7OsoVFIrAwgPzO8RgV3FaSmDhE1Bf1w+DXZ7zehv3EFVqMr1lPeTfSMFvarEvE9fIWHU1sbnEAoymBQtAT8kSAZ78B6OU2/irwBJVY6oCfVikZUMBuryVXa9rbH0pHlTHl9vTUBjUquILGQEawqXp0OLld4Wf0hQiWi1gxuo7B+hkLUMNo3CEqorZliR9rh3w4k7XFvhJHqzddg72Lt+4sb7S23dDv5Td3STOaLY3Z5nzR/tI8RSQdPhPtQ0ZFO+fAe1ORqg7/HNHshwiA6aRCtJq3aSwI0m4Ijq1V+bPg==
+ b=kMujJZuI6pbTMIEU4yuUt13ro791/kIoqNHJb7jTvccRnAGqZpbRogYqOfUzRBLJLrGbdy8myVdYKXsgTNKgkreXm7qZqw7Pp2nkj8/wMGULtySdVB+5fmMHaz1cg+C33n3IrbMYZwMJf/8imXXVmUkyjB814jPMFp0HILbqLTUzy8HJMkW//m6Ms4uueCYYOubQ83GepAXNHbvs/JOHugs03+8T+Vw/DENlrkCWlm8BclKQX19G48A20DJJvCDogrYSbHBAnzeac999vaT400/+KPgLOU96eajqTmP6RTNuUIOotv8E2Tt1+CD4hwVSAGXwX3Wv1kCc+cqrqkMeXw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=d+6J/SBTnfomLD0rn2r+T4OZmNA457gu8XaILmAediI=;
- b=d/vpCy9f4eZfRYtydHtXP1w6AyCBsMeO2JF+SFjszjxcs/G8jJlOphJgB7NUP1zePQ4XuqV+zcCEnkWi09I9hUt3EWs6JQ+VMKYwI6fmwC1I5aC8SAZIDUDdONyBX2+DiI/cQ2Dx8mIcg4qI3LXxIi2TnR/t4IoPdAuE/b0SGHmbFbDtCAIgbkvFMpvvDhu8Emf8T3IVXBKj4Fz/kkrI68DNhifBpF3Fb7SndzWKv7UrmDKwR3P/lg5tlrCimtYXBMCspgfzcGDi8vIf6STmzB9J80hg/c1xuicvw+BnZa/7CCwEPJsCJB/+3tzzw3igXZZJ7LLczh/B7tr8WGE6Tw==
+ bh=pDXxd16qXkgFz+LNeohJN9KL1jOaX5JObMrOWx2xwf4=;
+ b=WDN0Sh/e8qXeVNOALkaiwqJpTA+FELq+Z6UFtdTXk588Wc6sv0mUd/pu1yZUhgi10u+g21M8ZQUXtUyHNbD6KF9QDoyUk6Xom1aqUrQ3/zT4T6BQdrClZeaaEIOxpQLw0tDbzHWtvBNelPpu/XpOPpBzhzvByiH1KDt5TR5PLrKxjM6IcqEk2Ec7esqhjplQkEJfbfLdFXtmedoD+hfqFGEInjnmS5DP2SEgnATlQWuBBuMa5wCNqwMv9Eco/XxHHqiuCrjKM7laX0hFJxyD+6sLhJ0rCGj4SwzF2IxxtXMk0+DRbKv23fEYShk/3vZg5zUL3EK6EXU7vkWNNBarSA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=d+6J/SBTnfomLD0rn2r+T4OZmNA457gu8XaILmAediI=;
- b=lIvFHe88GUT5cl14EIxxF/ybBob0m9ugYP4Vzh9u9pRx3ckM/1IeXUs7OAnxIfpwOk3ZgMiEHBK/FK/KZCZuSD/Fw3l+HDeUHpxRJ8aGUyoOn7nt2+q6HxuguWTxb00aAUopmjjqf/wLTSmQCNf227zuX58zF3hFPToeQWkqZgqlLELJrMh1pjnvLaKW4Cyr3LypmHq09+e2xe1XmV+IzwK/tJsiLUq18NUtuQhLCr3U8e70AWKB/d/wopMPlTCenu3kqr+MzEmNS27GT+2uPgGaYhaCRPzAPJ5eMvBuhEn1QvJNp80X7ChINqxHAGYQbpOXWhA26+QxcuwPg1+C9w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from PA4PR04MB7790.eurprd04.prod.outlook.com (2603:10a6:102:cc::8)
- by AM9PR04MB8714.eurprd04.prod.outlook.com (2603:10a6:20b:43d::8) with
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from MWHPR11MB0048.namprd11.prod.outlook.com (2603:10b6:301:6a::31)
+ by DM4PR11MB5517.namprd11.prod.outlook.com (2603:10b6:5:388::5) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.21; Thu, 31 Aug
- 2023 14:08:15 +0000
-Received: from PA4PR04MB7790.eurprd04.prod.outlook.com
- ([fe80::274c:c30b:ac8c:2361]) by PA4PR04MB7790.eurprd04.prod.outlook.com
- ([fe80::274c:c30b:ac8c:2361%2]) with mapi id 15.20.6745.021; Thu, 31 Aug 2023
- 14:08:15 +0000
-Message-ID: <acf21174-13b2-1114-28f2-2b2f3c038aa0@suse.com>
-Date:   Thu, 31 Aug 2023 17:08:12 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [RESEND] USB PD broken on Lenovo P15gen2
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.22; Thu, 31 Aug
+ 2023 15:24:34 +0000
+Received: from MWHPR11MB0048.namprd11.prod.outlook.com
+ ([fe80::da4:d67d:40ed:9786]) by MWHPR11MB0048.namprd11.prod.outlook.com
+ ([fe80::da4:d67d:40ed:9786%4]) with mapi id 15.20.6699.035; Thu, 31 Aug 2023
+ 15:24:34 +0000
+From:   "Patel, Utkarsh H" <utkarsh.h.patel@intel.com>
+To:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
+        "pmalani@chromium.org" <pmalani@chromium.org>,
+        "chrome-platform@lists.linux.dev" <chrome-platform@lists.linux.dev>
+CC:     "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "bleung@chromium.org" <bleung@chromium.org>
+Subject: RE: [PATCH v2 4/5] platform/chrome: cros_ec_typec: Add Displayport
+ Alternatemode 2.1 Support
+Thread-Topic: [PATCH v2 4/5] platform/chrome: cros_ec_typec: Add Displayport
+ Alternatemode 2.1 Support
+Thread-Index: AQHZ25LloUpSuUlFqEqhUDSvXhP6krAEhr0g
+Date:   Thu, 31 Aug 2023 15:24:34 +0000
+Message-ID: <MWHPR11MB0048D87555CACAC4DC7DF1DFA9E5A@MWHPR11MB0048.namprd11.prod.outlook.com>
+References: <20230830223950.1360865-1-utkarsh.h.patel@intel.com>
+ <20230830223950.1360865-5-utkarsh.h.patel@intel.com>
+In-Reply-To: <20230830223950.1360865-5-utkarsh.h.patel@intel.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Anthony Iliopoulos <ailiopoulos@suse.com>
-References: <0da9d8a4-1761-20a3-ebd6-a47fe48b94f8@suse.com>
- <04e8de7a-55e3-4d12-921d-537750fe6217@suse.com>
- <9841c4f5-614e-bfff-e725-2398fad4e927@suse.com>
- <ZPCYiMEzEUZrv2OR@kuha.fi.intel.com>
-From:   Nikolay Borisov <nik.borisov@suse.com>
-In-Reply-To: <ZPCYiMEzEUZrv2OR@kuha.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: VI1P195CA0040.EURP195.PROD.OUTLOOK.COM
- (2603:10a6:802:5a::29) To PA4PR04MB7790.eurprd04.prod.outlook.com
- (2603:10a6:102:cc::8)
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MWHPR11MB0048:EE_|DM4PR11MB5517:EE_
+x-ms-office365-filtering-correlation-id: 1c6ff42d-f7e3-4584-a7e2-08dbaa366194
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Ra0m/CriG1+i689cNe5DgF8d6Uoa8YlkgLTMfdxv0fIvMtyD5vFkCc5Jl9JN/B5dyWnfEjmwKV1tx6BNgagTec/ceADM5KYH1K8JUeKXLqgtGUXnUOKa82693LTTHwDJsxJ21+VoG0aZKsov0Nl4cC6Yizu7zcNwXrs+Pt910uxHE7PY+Cmf+ux9EUrqO348tqdBkkLdIWnIepA0bVjiWnnw64I0FyQjcnjMiiIL68NUuZTl5foUqTBLEbsIusXKEMU5F9sELN/mhYPQ8tp4GXLl7nBOqDrZPqLYGrX0S2y0Zkzdl3G4dwXAbzQuPkcVv8FengZZX58ITm9Yb8nMRkfCEVkmL28vOm6n96sjtPm7b6YI4jlZOHDka3HuAV1PzHb1Es6Fu3bsQc3AC2IPJdWVdpigjwnpfSWdlhLjNXskTuJHVwnNpU2KGvH8DC+vmB67LoPiGOVoB6IgyzfNEJeW7Bicr/8HD32Tdh1dxB+2ViRG6+kq4MCHL0GrRKSBkKwtJQhOQt+rpfRiR3rL5U84gbh7CNkEO8XalF2Sv8+uXtxDug6Ds7J79rtlrUdXd/shlGbAnyEzDWBZen9jX+fIfLUPNLQHZLVOW10OuXBZeu9rUxr69javz2nZG2qQ
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB0048.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(396003)(366004)(376002)(39860400002)(346002)(451199024)(1800799009)(186009)(6506007)(7696005)(2906002)(9686003)(41300700001)(76116006)(110136005)(71200400001)(5660300002)(52536014)(26005)(38070700005)(38100700002)(66946007)(66556008)(66476007)(54906003)(64756008)(66446008)(8676002)(4326008)(316002)(8936002)(82960400001)(122000001)(86362001)(478600001)(33656002)(55016003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?MFagmfKylMI7nW7eeZyM3Tv0wr5M049lSKjWU31F9jvwzuK/gPMuEAFxXNSu?=
+ =?us-ascii?Q?5jLxF2tAMNCsr4wYFeyCBi5fRY9aKVZ7rFmSK2MSgdl0bvrkFMwVE5nx71XA?=
+ =?us-ascii?Q?SbhV8IC7Wp8sFGmztelDk8x2z8SZBhXprZjeWovHd1SZHQUW7Sg5iskNp6ZA?=
+ =?us-ascii?Q?vQJWV1Q29gx1PyDzyBkf28ErwZF7a+WZgO5iLhTcvNKSgZEGCepWnS84q9jT?=
+ =?us-ascii?Q?BEPMyFfVZ8TIzWlyAbg/Iqd536Vj0zH1Ekahz+pavxWZiZp12+FSSFDtznDJ?=
+ =?us-ascii?Q?gkh8eu6ofCxKpNeDVRV2xPlBofOqWkGQkrojggownesz9EOGDHR/bvJDfiAX?=
+ =?us-ascii?Q?h6r3e/lJkLgBH2t9xTJj89B0xxR6r2jpn1rhuuEVBF93HygZDvdKU4fU3d1g?=
+ =?us-ascii?Q?ap6VMZxkAFIf+akyc/0pUaMYiqRLBUmUq/9oN7mT3UtQ/ksP0saJpAcFyalq?=
+ =?us-ascii?Q?P5zai5sr1IiyeuswllsXpewFhKfVgwkN4uQ0JmskATiijfg2quaEI5YFFTlH?=
+ =?us-ascii?Q?7NsVPKlpzTy1aRlX/wRimWWyy1/cMh2rk0e0EkEgyRWOXXTZ3JSBPAc1tRaE?=
+ =?us-ascii?Q?4zBS6skiwlWUgqqk+jOzk/fmmPc1tNro2ofRzT2sX2ex3YDf9IbQvfKFPkrT?=
+ =?us-ascii?Q?bn7coZ/lCjJc+Bq3Ux004TKKFEULZgLB8S1NxI1N9ASL8xIGfV/ew2oPGdDX?=
+ =?us-ascii?Q?UzV5fynz6JoYWRtF6JCrAhBaSe9yHAQE93sWicAkwfKuU4rUpJoauWkXuVzB?=
+ =?us-ascii?Q?w1m2C595xMcSqGQlZ/XXiV5f1aWM7+BWA8eNMVT5KNyML5n7DdpTP5iwvPsQ?=
+ =?us-ascii?Q?7GRodw2J008RexdaSQEuskca6BI0opRNxUl2DUCo7QL0qji4fd0OkHuEkRx1?=
+ =?us-ascii?Q?9CKPw4ZkpYtgjQDmisLnqwk6aIsae/Mh26gQ5ochzvQfY69cJ1U8AV3FoN2U?=
+ =?us-ascii?Q?0g5phzExpfqivS2aeKWAA3jVIUrzwcdChrChSUoAbA9YrAViWNFoWMYeKuRH?=
+ =?us-ascii?Q?fDRuJK5OPpeJGwEg6DrnwpDS//jYYY5fj6GJQgTUgOptOBhQBRGixCpMQ9vD?=
+ =?us-ascii?Q?DLqtqpqzBEXysW1NgxuhWEIPLXxbtaLcFg37xNQVEq4C5AjI6ZeDPzv7BMLt?=
+ =?us-ascii?Q?wXbCJoXZLrHoxywYBnmne3m2nkAw3YdkVQFYbVBZuvgo0KMNz6euZMKvlvBD?=
+ =?us-ascii?Q?9Ut6Iq+OmhHQrC7Hf3Hj7vr8p3OnW3gp+waSz8HVlLY4sxVEbgdAQdJ5qKyM?=
+ =?us-ascii?Q?QkFsFU97uq/RarwCkxgxzZ4Ms+QwOt5dz3PSBvZ8/XWn197XO1gifQMxgM21?=
+ =?us-ascii?Q?REwkRW7od7kLzAKKEJx9KZRWbuvmm3PCnv6O7HQWMQdahJQIH/6GoDLco9mZ?=
+ =?us-ascii?Q?ENJQAT2zvDkIgSzCos52ZhFefdgYw0PgNOjvBpItEiwPKoc8C/SLqzs+wM0X?=
+ =?us-ascii?Q?mJoo9yuUgGECQTeVmFEv5xU7Oksu5G63C0lvgtlIZQMi8UnPt7M1L90lLqYj?=
+ =?us-ascii?Q?y37zAWbNbAJrbAcU0SqierAZ2bjaihaXDI5SZLDNcCHbq7lm1C4MNHWBOr8Z?=
+ =?us-ascii?Q?oRRWgNyI6+tJbxH52sDNh8kOLN9Y2J1mlqNheg8C?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PA4PR04MB7790:EE_|AM9PR04MB8714:EE_
-X-MS-Office365-Filtering-Correlation-Id: a4e5a0ef-6453-4861-0172-08dbaa2bb7e6
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xyNNm7TdJnYgvsUV71XHCgWV/jTNiZdKX/CHhuxCS7Egtr4fEA8SVGPWlWDtxOXr5J5dHsasvrABA+X0t7X0mRFMwh9oGyRiOxkYL6ADLyPalTr1yKK6dJm9Jav1VbSD1+97KTG7lxmSg91leCG+1V+wTrqxUspgLlg0W13OtVxuS+vCYuPUSLadJnOPBydYmtW5brjVIDLB+GeCV7GCXJIF5TeIllnxT9e+lwbD0+2GzEWF9nOO/oxS4SzhmQ8fKKDP94Qw9J1OHvVzRvTW+IMt07tmrm+D1d+EGSsdcevM2tHam8yLN0HWUpyI0KFawY82CeP5Arli1yG3lXhjICdwIaD1Q6UFIuUbYcf4i08XxffC4bI+gOD5tX9fbrz1QrJzt8Ni1g+b0xKTrPBwbjDmGtfxBpVlsOLXKhffBQCtyDf1BVK5+aGkHqUXHuGEQF3FIiMb6Zsprm5ZdqxMZjw0/m1+xpmVp2D16Y7cy2i4yzhNk8RBWRbODbF1RWV2UMMi42mrc7NWtlWpJJTGeMG07ZMPT8Q0RBLfjXl9UVex+zCmpHysqWs5jqjMYs+4qcFgbJZquHU8bjmWphXsnTY5amEKQfzQnic0iWNg+h6gLH6RZ2zA6hXDZHLJYSRzzlWXZXrIT+0mdxgc9fZ9HA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR04MB7790.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(346002)(136003)(366004)(39860400002)(376002)(1800799009)(186009)(451199024)(41300700001)(38100700002)(6666004)(31696002)(86362001)(478600001)(2616005)(83380400001)(26005)(107886003)(6512007)(6486002)(6506007)(66556008)(66946007)(36756003)(54906003)(316002)(6916009)(66476007)(2906002)(4326008)(8676002)(8936002)(31686004)(5660300002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OFdFc2YyMzlNVGVDam9xM0xvVzNhV29iQnhTQVFuT0FnU2ZZcTZoL2hZZEx3?=
- =?utf-8?B?a1VYMkI4bWQybm0xTTdVQ2ttM2RzL0MzQVUzZ29ETEV3QUVuRHFLeWxCSitl?=
- =?utf-8?B?dlc5YTdaMEhSUjBWZWJJNU43Wlh1bFM3M3lQMmlEWVdzOHI3cHZQRUI3T3dE?=
- =?utf-8?B?elViMWsxVGppQ3l6MXEzZTE1REw4dmFjSnZZaUt1ZVREaDVxaUswZjJvNGVr?=
- =?utf-8?B?SC9GcFkwVkF0MVpVSjkwYktiOW9ZV2NRVk50K3RVMDZrK2NIR2NxQkVPNHkv?=
- =?utf-8?B?Z2RkOUVtbjVvNGxESUhrZDVRTE9BU0VRRS9WQmRDV2c3bFV0bzBLVlhwNkRR?=
- =?utf-8?B?YmYxb0poYnAvdjV3bTdwMFBhNDA0amxrMnhIMGExZzJRUXgxT0dxeG5uVnln?=
- =?utf-8?B?TVRqTEhIUkx3aElGbFZKNXVyc09sc3BBeHdObERHdmpVcEIyb2d5eVZLUW9C?=
- =?utf-8?B?YjZEVG0xd1FJa2dPTmdBaW0weTlFYnd5OHk0dkk4WC9wcGxjdGlEM2xjOWlp?=
- =?utf-8?B?UjBIQ3AvN2hnNW5uRUpINWp5dnFQU2xyeVNkT0dwbnhNc0lHdlF4STFlY1V6?=
- =?utf-8?B?WmUxOE9WaGNVb1RVcFAwbVlWcGJiR3FMV2MvN0pqS045Y3J1eFEzejAvOVdF?=
- =?utf-8?B?OEtXaVpNb2JRN0xpempnRGFJK1hLMmxYWmdkQmlUTHk2ZkdHTkNwM2tWVWhl?=
- =?utf-8?B?Ry9yQm82bWFGUlppTFlialNpZUtMU0o3aDBoSkFtbG0wTFQzNzR2ZzBxWEc3?=
- =?utf-8?B?K0pqeHlWM0FUS25CVWgrK2lINXlaR3BZR3RuZmlNdDdoMDlnOEZzcC9JZ09n?=
- =?utf-8?B?cjl3YVVQMHBtSEdEdGdRdGdSY1FLWExHbEdwUklQN0lFL2g4YXBFMzJPVFRR?=
- =?utf-8?B?M2lKd0F4cmNpK1VKVG1RRHdSRkVMS2hNdDk5N09zUFdxWW5nUElhbWJSYmlV?=
- =?utf-8?B?ZFBsZGtra013MTRRb3VCUjRCdUVDNmg1RGduMjh6RldXUitTOUR4NkhMS0w5?=
- =?utf-8?B?azBZRHdIaWgzMFE1YWdneGUwLys4M2h5QzVDSGlLL1hwV2p5aVVYKzBmaldR?=
- =?utf-8?B?clJJU2c5YUVTOUFaZy9pd3hWQzhuVUlnaEhqeWFOT1R1L2FCcEtrTzhqMUta?=
- =?utf-8?B?cU1iT3hRekhiSnFZN3dkVlArcmVKWEpJMHY3Y2ZzTGFsV1FOTmhySkVISXoz?=
- =?utf-8?B?S29DU3JablRETGNRakRGVlI0aTJMZGQvOE9DMHdhdms3YVk4UnVBdTNNamR6?=
- =?utf-8?B?RUcyVEtaYVRReDNIYXJzaGE4SnNVeXFIbnlhaTN2VlRRQTU4WlJNT3M1Qk84?=
- =?utf-8?B?a3d4NHRSVnBSWFNmeHpwMExKNkxtaXZEZytNWWVRamMrZTNzR1JFSG5aYm1V?=
- =?utf-8?B?VytnRkpCMFFYVW1pdUx5MWppZkVwNUs5VGRPNEFkdS9iazBkS2RLbTJLUkJv?=
- =?utf-8?B?dGVmbmpnNnZSNTRLaHF6cWgvdThkRk1ZRTMwNDVNMEtWWlprTThjWU10b2xY?=
- =?utf-8?B?dHl2bUhITFNRNDZiSnh5bndHdmxuczlBRUxKcnFnd2RadElNdjE3NTF5aDFr?=
- =?utf-8?B?T3JPUzRvc1VsT04vQ0QrYm5ETUFza2V3b2Z0R0FmdFY5eGNXeTg0ckRMM0U2?=
- =?utf-8?B?U2xVWjNIek0vMmsyei9xV0w3Q09PM1NQdFBtWVpwM1ovcGtacElYQ01UUWhi?=
- =?utf-8?B?UU51MllPVGx1OEp5VG1RNTVkQndqYUYvT3dZbUJldWJJZWhXeTBBb0xHRXAz?=
- =?utf-8?B?QldIb3UyMndvMGNTTTBwWjNHdzNnclVNOFZqdjJVRmExTXZ6ajVYVW1hMkVw?=
- =?utf-8?B?bzlydjc4Y1E5SGxDMGd1cWhybWd5eEIzdWQ3S0E5S2sxTUtNcnlsMVhMTDBQ?=
- =?utf-8?B?bWVKQzl1QXgxNVVxSWtJbzcySVl2dXNqNUpjSUYyaitOdHF1ZWhEelNHRE1R?=
- =?utf-8?B?L2Q5cGVXK1l6SkRhb2l2UTgxZUdqencwNEhwU3ZTazZ4RDBQVVFyUXcrSElI?=
- =?utf-8?B?WDhIS1NqbllKTUFlbkVlTDRZeVdWV2RDN1JEVTJmZW5pVzFjM0tVNDFXSkJY?=
- =?utf-8?B?UmtuK1NxK040RUNFT3hUTmVxZWVub0o5MTFzTzJCc3ZONVNQeS9ZNE5HMmVp?=
- =?utf-8?Q?gAew96jTASLwMHRFARJE14Ucq?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a4e5a0ef-6453-4861-0172-08dbaa2bb7e6
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB7790.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Aug 2023 14:08:15.0158
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB0048.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1c6ff42d-f7e3-4584-a7e2-08dbaa366194
+X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Aug 2023 15:24:34.4662
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rVPr1HfwpOSAY/Usa6aLupCKj+L3TXfrQJynQN5RqI1EzybkP41a5oro/SOLTBSIJ57kI61wMD87eWI1L/ZjPQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8714
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: g8C4UikZENvfCVE6hDJS93MX+nnUCrA0Xp49pQh9lC6Fi1JTvF2/I9QZg2M61m5DOwewxjLJ1jZdYL6TPYdeR+vXg4MPrFU1Nf9sr8WEPIw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5517
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hello,
 
+>  drivers/platform/chrome/cros_ec_typec.c | 31
+> +++++++++++++++++++++++++
+>  1 file changed, 31 insertions(+)
+>=20
+> diff --git a/drivers/platform/chrome/cros_ec_typec.c
+> b/drivers/platform/chrome/cros_ec_typec.c
+> index d0b4d3fc40ed..8372f13052a8 100644
+> --- a/drivers/platform/chrome/cros_ec_typec.c
+> +++ b/drivers/platform/chrome/cros_ec_typec.c
+> @@ -492,6 +492,8 @@ static int cros_typec_enable_dp(struct
+> cros_typec_data *typec,  {
+>  	struct cros_typec_port *port =3D typec->ports[port_num];
+>  	struct typec_displayport_data dp_data;
+> +	u32 cable_tbt_vdo;
+> +	u32 cable_dp_vdo;
+>  	int ret;
+>=20
+>  	if (typec->pd_ctrl_ver < 2) {
+> @@ -524,6 +526,35 @@ static int cros_typec_enable_dp(struct
+> cros_typec_data *typec,
+>  	port->state.data =3D &dp_data;
+>  	port->state.mode =3D TYPEC_MODAL_STATE(ffs(pd_ctrl->dp_mode));
+>=20
+> +	/* Get cable VDO for cables with DPSID to check DPAM2.1 is
+> supported */
+> +	cable_dp_vdo =3D cros_typec_get_cable_vdo(port,
+> USB_TYPEC_DP_SID);
+> +
+> +	/**
+> +	 * Get cable VDO for thunderbolt cables and cables with DPSID but
+> does not
+> +	 * support DPAM2.1.
+> +	 */
+> +	cable_tbt_vdo =3D cros_typec_get_cable_vdo(port,
+> USB_TYPEC_TBT_SID);
+> +
+> +	if (cable_dp_vdo & DP_CAP_DPAM_VERSION) {
+> +		dp_data.conf |=3D cable_dp_vdo;
+> +	} else if (cable_tbt_vdo) {
+> +		u8 cable_speed =3D TBT_CABLE_SPEED(cable_tbt_vdo);
+> +
+> +		dp_data.conf |=3D cable_speed <<
+> DP_CONF_SIGNALLING_SHIFT;
+> +
+> +		/* Cable Type */
+> +		if (cable_tbt_vdo & TBT_CABLE_OPTICAL)
+> +			dp_data.conf |=3D DP_CONF_CABLE_TYPE_OPTICAL <<
+> DP_CONF_CABLE_TYPE_SHIFT;
+> +		else if (cable_tbt_vdo & TBT_CABLE_RETIMER)
+> +			dp_data.conf |=3D DP_CONF_CABLE_TYPE_RE_TIMER <<
+> DP_CONF_CABLE_TYPE_SHIFT;
+> +		else if (cable_tbt_vdo & TBT_CABLE_ACTIVE_PASSIVE)
+> +			dp_data.conf |=3D DP_CONF_CABLE_TYPE_RE_DRIVER
+> << DP_CONF_CABLE_TYPE_SHIFT;
+> +	} else if (PD_IDH_PTYPE(port->c_identity.id_header) =3D=3D
+> IDH_PTYPE_PCABLE) {
+> +		u8 cable_speed =3D VDO_CABLE_SPEED(port-
+> >c_identity.vdo[0]);
 
-On 31.08.23 г. 16:41 ч., Heikki Krogerus wrote:
-> Hi Nikolay,
-> 
-> Thanks for the report.
-> 
-> On Wed, Aug 30, 2023 at 04:07:55PM +0300, Nikolay Borisov wrote:
->>
->>
->> On 28.08.23 г. 17:52 ч., Nikolay Borisov wrote:
->>>
->>> [Resending as I had initially attached  a full acpi dump and it got
->>> bounced from the usb mailing list]
->>>
->>> Hello,
->>>
->>> I'm not able to use usb PD on a Lenovo Thinkpad P15gen2 laptop. It's
->>> equipped with 2 thunderbolt ports and a usb 3.2 gen2 usb port, all of
->>> which are supposed to support PD 2.0:
->>
->> <snip>
->> So I've been debugging this and what the PPM reports is the following:
->>
->> modprobe-529501  [004] ..... 33507.058332: ucsi_register: Supported UCSI spec: 100
->>       kworker/4:0-524223  [004] ..... 33507.486591: ucsi_init_work: Connectors supported: 3
->>       kworker/4:0-524223  [004] ..... 33507.486592: ucsi_init_work: GET_CAP: USB_PD: 0 TYPEC_CURRENT: 1 POWER_VBUS: 0, POWER_OTHER: 0, POWER_AC_SUPPLY: 1, BATTERY_CHARGING: 0 bcVersion: 0x102 typec_version: 0x100 pd_version: 0x200 PDO_DETAILS: 0
->>       kworker/4:0-524223  [004] ..... 33507.682726: ucsi_init_work: [Register port 1]: OPMODE: E4 flag:1
->>       kworker/4:0-524223  [004] ..... 33508.850438: ucsi_init_work: [Register port 2]: OPMODE: E4 flag:1
->>       kworker/4:0-524223  [004] ..... 33509.986672: ucsi_init_work: [Register port 3]: OPMODE: E4 flag:1
->>
->>
->> So all three ports support DRP/USB2/USB3/ALT_MODE and they can be a provider.
->>
->>
->> I find it strange that USB_PD is reported as 0 yet pd_version is reported as 2. I contacted Lenovo's support and they confirmed that this particular model indeed supports PD 3.0 on all USBC ports.
->>
->> I see a couple of problems with the current upstream code:
->>
->> 1. It assumes that USB_PD is valid because the PD version from pd_version is being propagated to several places (like in ucsi_register_port() cap->pd_revision = ucsi->cap.pd_version;)
-> 
-> This part should be fixed.
-> 
->> 2. When typec_register_port() is called from ucsi_register_port() cap->pd is 0 hence the port->pd = cap->pd; assignment in typec_register_port is a noop. In fact I don't see where cap->pd is being initialized since we initialize con->pd when we call usb_power_delivery_register in ucsi_register_port().
-> 
-> That "pd" member in struct typec_capability is optional. It can be
-> used if the driver has a set of USB PD capabilities meant for USB
-> Type-C port ready before the port is registered, but in UCSI driver
-> the PD stuff are registered after the port.
-> 
-> So I'm not sure there is anything wrong here.
-> 
->> Is it mandatory that GET_PDOS is supported if PD is supported, the UCSI spec doesn't say anything other than GET_PDOS is optional and signaled by bit in the GET_CAP call ?
-> 
-> It looks like nobody ever checked is the command supported or not
-> before using it. That's a bug.
+I have wrong macro name here, will correct it in next version.
+It should be VDO_TYPEC_CABLE_SPEED.=20
 
+Sincerely,
+Utkarsh Patel.=20
 
-If we assume support of this command is checked based on the respective 
-bit in the optional capabilities member of GET_CAPS message. Is this 
-command actually mandatory to properly support PD. I'm currently in 
-contact with Lenovo as it seems there might be problems in their 
-firmware as well i.e what they are reporting.
-> 
-> thanks,
-> 
