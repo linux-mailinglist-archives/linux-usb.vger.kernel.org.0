@@ -2,166 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D24AB78EA13
-	for <lists+linux-usb@lfdr.de>; Thu, 31 Aug 2023 12:19:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 925A378EB27
+	for <lists+linux-usb@lfdr.de>; Thu, 31 Aug 2023 12:56:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245446AbjHaKT4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 31 Aug 2023 06:19:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60970 "EHLO
+        id S236511AbjHaK40 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 31 Aug 2023 06:56:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242212AbjHaKTz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 31 Aug 2023 06:19:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C61D9CF3;
-        Thu, 31 Aug 2023 03:19:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DE55DB82171;
-        Thu, 31 Aug 2023 10:19:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9C177C433C7;
-        Thu, 31 Aug 2023 10:19:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693477189;
-        bh=YkOxDXBCUDLl6Cguo4+rc9hRV8tH3QYa5BZ+A8uztWA=;
-        h=From:Date:Subject:To:Cc:Reply-To:From;
-        b=bRBzAiUkzGOjkp1o+lGoEBBKUuDzEpGZJWeKDbbWfrMueA9BPcSG8omcTONDiizi0
-         r/EBGGaC2EMxnjAgVWbCkD9XPJIiS87jqXmxVbr1u8t95YU1XapGAvPolyIp2rFy+P
-         OWGkQ330jnV5IbaVwuvvIpaMTo3OguF3BTy49JqeuIwtRj+JRxV8Lqy5t1xJt5ggqx
-         irRZCz/Lh80ZGLLSmXPZmLREdjYp23Cm47nm6uXApGZJZ13AnDoHwKbGjZ5Jp6/Va+
-         IB72gXhVKGQngK2vsJvNPBVbT7ovUMTm67Ax14nrfGc4ASHkhKvDu9uq2hBpCAeJ0W
-         hBg8P4HlEQsOw==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by smtp.lore.kernel.org (Postfix) with ESMTP id 7DE31C83F12;
-        Thu, 31 Aug 2023 10:19:49 +0000 (UTC)
-From:   Hui Liu via B4 Relay <devnull+quic_huliu.quicinc.com@kernel.org>
-Date:   Thu, 31 Aug 2023 18:19:45 +0800
-Subject: [PATCH v5] usb: typec: qcom: Update the logic of regulator enable
- and disable
+        with ESMTP id S229678AbjHaK40 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 31 Aug 2023 06:56:26 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05D5CDD
+        for <linux-usb@vger.kernel.org>; Thu, 31 Aug 2023 03:56:23 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 190975C00AB;
+        Thu, 31 Aug 2023 06:56:23 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Thu, 31 Aug 2023 06:56:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1693479383; x=1693565783; bh=8V
+        UNUtPjQnCpWyuAECKDpWp6L7NH3cJVpvav4oRL5/E=; b=ZW1eFj07PFw8kGZFsf
+        Lw0VQwYF4rcX4TjrR3CF4B9YiZxXm/9thlxGFEwPJE0DMWI2esmSZNJjewKSgaMN
+        sVDlNbpHh7wQevsHLGVKgXdzGReov59oyS7rwT/XZYWmTafWf3s++JWE5/1lCO+n
+        jk9afjDymvAQkFMrSCPpkBiGZBffsostyc49PXO2RDkmloZ5sjG6m/jmSvqDrgAM
+        7M/it33oVXWkKG4A5eL0IqLlNOEdaVddx5MmsoCATbKxUxwSi6h02+c/ClVg5TGJ
+        wmXU6CWr3bvz+WcHbm/H94L52y7vEQQobwSXQxZdPjbw50ZNyoRw0GZ2WBY9f+qE
+        KAFA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1693479383; x=1693565783; bh=8VUNUtPjQnCpW
+        yuAECKDpWp6L7NH3cJVpvav4oRL5/E=; b=ZC4Ad7N5p9KJb4z5EVYcI5i6itTxA
+        2EgDaVNcGiIZUPwSdGer2dyuun0P5vJ/aMo/+x8u70P8a2VaRFkNams7LABjKsxs
+        gwjhv887Ddzttk48sNdqfebOQ7SZBWgjpOiDoBMz4FqRjwVzRNAY8lQz+12BhX+K
+        sevyxKnrTXcaxIGBDJUwLtNc5F0rlg1n2ZPryWrWwhkdPpsOOmLq8KSMjICDnkew
+        4KVMLw549RWTM2QC7FjMnDbnzujwkLBck9cPzeIRuFgUlEaW5Ml8jki2POiy1uk7
+        WAIS+uA4+4Wl40VCLZNrAFgRUbwVtS/tCgGGPvCAO31vX9Tn/GW11T8pQ==
+X-ME-Sender: <xms:1nHwZGvoZzQyj-fLxQYIVlEzV8-wD-8LSgecP_WB3v6ewlX4HfVDvg>
+    <xme:1nHwZLczqP89Ct1KQTCpPI80lwm33SvkviEA0-LysxKUbcf3v_8L5HlLsUcg7MN_H
+    yBx7tvI2I5uFg>
+X-ME-Received: <xmr:1nHwZBzHKE8hGE9apipkcpoiNhwVPSolS2qM7HaA2Ox49wss3h1TW35lxPALXMxj6IoBmTXyDhUjtPkbBH6_qNsbD9LtUZuq-XQzUg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudegtddgfeegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvvefukfhfgggtuggjsehttd
+    ertddttddvnecuhfhrohhmpefirhgvghcumffjuceoghhrvghgsehkrhhorghhrdgtohhm
+    qeenucggtffrrghtthgvrhhnpeegheeuhefgtdeluddtleekfeegjeetgeeikeehfeduie
+    ffvddufeefleevtddtvdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
+    hhrdgtohhm
+X-ME-Proxy: <xmx:1nHwZBNb83Gq6YyS37TNghrrA2oapr5wPZvjY4zq9po-IkNLqUfhxQ>
+    <xmx:1nHwZG-dONQ1Ir6xy6mcpHyXPohtFqFmGAGVM4Kz8CruU5GMFQzf2g>
+    <xmx:1nHwZJVexx4C704koNaVJCVwmq8PjEFI_11zDrMbkeKuI_zpeJgzUA>
+    <xmx:13HwZIJJ6vMAhEtBsuoiXanqs0LRbc8P6_9i1mvH1cS5keKSq5wOeA>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 31 Aug 2023 06:56:22 -0400 (EDT)
+Date:   Thu, 31 Aug 2023 12:56:20 +0200
+From:   Greg KH <greg@kroah.com>
+To:     bugzilla-daemon@kernel.org
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [Bug 217670] dwc3: regression in USB DWC3 driver in kernel 5.15
+ branch
+Message-ID: <2023083140-filtrate-ebook-082f@gregkh>
+References: <bug-217670-208809@https.bugzilla.kernel.org/>
+ <bug-217670-208809-mthqKYqLLi@https.bugzilla.kernel.org/>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230831-qcom-tcpc-v5-1-5e2661dc6c1d@quicinc.com>
-X-B4-Tracking: v=1; b=H4sIAEJp8GQC/2XMyw6CMBCF4VchXVvTyxRaV76HcVGmRbqQu0RDe
- HcLiUkNyzOZ71/I6IfgR3LJFjL4OYyhbeJQp4xgbZuHp8HFTQQTkmkhaI/tk07YIXXAjQKLuao
- sif/d4Kvw3lu3e9x1GKd2+OzpmW/XX0UmlZlTTiuruWUGLVP5tX8FDA2e4wvZOrNILaRWRCud0
- yhBgMrhaGVqdWpltN6osrCVleDM0UJiJUstRIvclMxo0IUp/+26rl978+U1WAEAAA==
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_fenglinw@quicinc.com,
-        subbaram@quicinc.com, Hui Liu <quic_huliu@quicinc.com>
-X-Mailer: b4 0.13-dev-83828
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1693477188; l=3206;
- i=quic_huliu@quicinc.com; s=20230823; h=from:subject:message-id;
- bh=2oArl3p3f4nGra9OaL8wrTdlGSIGZy5nArkkLq2X1WQ=;
- b=wOFTaj5NpC1jhXmeOUvbOaohgy/Xu/GtXVUzhJKflZyqduIAuYv5G39xqA53jvCNzGTHHKqpR
- Bfc2iH5VL1UAyHiaeHQ/Ns4YOJLUt+SFai/7v3Un2em5H1yxHpyAkSq
-X-Developer-Key: i=quic_huliu@quicinc.com; a=ed25519;
- pk=1z+A50UnTuKe/FdQv2c0W3ajDsJOYddwIHo2iivhTTA=
-X-Endpoint-Received: by B4 Relay for quic_huliu@quicinc.com/20230823 with auth_id=80
-X-Original-From: Hui Liu <quic_huliu@quicinc.com>
-Reply-To: <quic_huliu@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bug-217670-208809-mthqKYqLLi@https.bugzilla.kernel.org/>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Hui Liu <quic_huliu@quicinc.com>
+On Thu, Aug 31, 2023 at 09:31:51AM +0000, bugzilla-daemon@kernel.org wrote:
+> https://bugzilla.kernel.org/show_bug.cgi?id=217670
+> 
+> --- Comment #11 from The Linux kernel's regression tracker (Thorsten Leemhuis) (regressions@leemhuis.info) ---
+> Greg, guess it fell through the cracks on your side then. You afaics intended
+> to apply these to 5.15.y to fix the regression that was caused by backporting 
+> 5c3d5ecf48a ("arm64: dts: imx8mp: Add snps,gfladj-refclk-lpm-sel quirk to USB
+> nodes") [v6.1-rc1] to 5.15.y:
+> 
+> >>> 7bee318838890 usb: dwc3: reference clock period configuration
+> >>> a5ae3cbe9dfcc usb: dwc3: Get clocks individually
+> >>> 5114c3ee24875 usb: dwc3: Calculate REFCLKPER based on reference clock
+> >>> 596c87856e08d usb: dwc3: Program GFLADJ
+> >>> a6fc2f1b09278 usb: dwc3: core: add gfladj_refclk_lpm_sel quirk
+> 
+> Thomas confirmed that they fix the regression here:
+> https://bugzilla.kernel.org/show_bug.cgi?id=217670#c8
 
-Removed the call logic of disable and enable regulator
-in reset function. Enable the regulator in qcom_pmic_typec_start
-function and disable it in qcom_pmic_typec_stop function to
-avoid unbalanced regulator disable warnings.
+Those ids do not match up properly.  Can we please take this to email on
+the stable@vger.kernel.org list?  I thought we resolved this there
+already, if not, I need a real list of ids, in the correct order, to
+apply please.
 
-Fixes: a4422ff22142 ("usb: typec: qcom: Add Qualcomm PMIC Type-C driver")
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Acked-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org> # rb5
-Signed-off-by: Hui Liu <quic_huliu@quicinc.com>
----
-Changes in v5:
-- Removed Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-- Updated V4 history
-- Link to v4: https://lore.kernel.org/r/20230830-qcom-tcpc-v4-1-c19b0984879b@quicinc.com
+thanks,
 
-Changes in v4:
-- Rephrased commit text
-- Link to v3: https://lore.kernel.org/r/20230828-qcom-tcpc-v3-1-e95b7afa34d9@quicinc.com
-
-Changes in v3:
-- Take Bryan's proposal to remove enable/disable operation in pdphy
-enable and pdphy disable function, then enable regulator in pdphy start
-function and disable it in pdphy stop function.
-- Link to v2: https://lore.kernel.org/r/20230824-qcom-tcpc-v2-1-3dd8c3424564@quicinc.com
-
-Changes in v2:
-- Add Fixes tag
-- Link to v1: https://lore.kernel.org/r/20230823-qcom-tcpc-v1-1-fa81a09ca056@quicinc.com
----
- drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
-index bb0b8479d80f..52c81378e36e 100644
---- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
-+++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
-@@ -381,10 +381,6 @@ static int qcom_pmic_typec_pdphy_enable(struct pmic_typec_pdphy *pmic_typec_pdph
- 	struct device *dev = pmic_typec_pdphy->dev;
- 	int ret;
- 
--	ret = regulator_enable(pmic_typec_pdphy->vdd_pdphy);
--	if (ret)
--		return ret;
--
- 	/* PD 2.0, DR=TYPEC_DEVICE, PR=TYPEC_SINK */
- 	ret = regmap_update_bits(pmic_typec_pdphy->regmap,
- 				 pmic_typec_pdphy->base + USB_PDPHY_MSG_CONFIG_REG,
-@@ -422,8 +418,6 @@ static int qcom_pmic_typec_pdphy_disable(struct pmic_typec_pdphy *pmic_typec_pdp
- 	ret = regmap_write(pmic_typec_pdphy->regmap,
- 			   pmic_typec_pdphy->base + USB_PDPHY_EN_CONTROL_REG, 0);
- 
--	regulator_disable(pmic_typec_pdphy->vdd_pdphy);
--
- 	return ret;
- }
- 
-@@ -447,6 +441,10 @@ int qcom_pmic_typec_pdphy_start(struct pmic_typec_pdphy *pmic_typec_pdphy,
- 	int i;
- 	int ret;
- 
-+	ret = regulator_enable(pmic_typec_pdphy->vdd_pdphy);
-+	if (ret)
-+		return ret;
-+
- 	pmic_typec_pdphy->tcpm_port = tcpm_port;
- 
- 	ret = pmic_typec_pdphy_reset(pmic_typec_pdphy);
-@@ -467,6 +465,8 @@ void qcom_pmic_typec_pdphy_stop(struct pmic_typec_pdphy *pmic_typec_pdphy)
- 		disable_irq(pmic_typec_pdphy->irq_data[i].irq);
- 
- 	qcom_pmic_typec_pdphy_reset_on(pmic_typec_pdphy);
-+
-+	regulator_disable(pmic_typec_pdphy->vdd_pdphy);
- }
- 
- struct pmic_typec_pdphy *qcom_pmic_typec_pdphy_alloc(struct device *dev)
-
----
-base-commit: bbb9e06d2c6435af9c62074ad7048910eeb2e7bc
-change-id: 20230822-qcom-tcpc-d41954ac65fa
-
-Best regards,
--- 
-Hui Liu <quic_huliu@quicinc.com>
-
+greg k-h
