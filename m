@@ -2,90 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4CFD78E689
-	for <lists+linux-usb@lfdr.de>; Thu, 31 Aug 2023 08:30:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA50878E922
+	for <lists+linux-usb@lfdr.de>; Thu, 31 Aug 2023 11:12:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbjHaGaG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 31 Aug 2023 02:30:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49948 "EHLO
+        id S241805AbjHaJMb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 31 Aug 2023 05:12:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343732AbjHaGaF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 31 Aug 2023 02:30:05 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8D2BE
-        for <linux-usb@vger.kernel.org>; Wed, 30 Aug 2023 23:30:01 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-52bcd4db4cbso488967a12.1
-        for <linux-usb@vger.kernel.org>; Wed, 30 Aug 2023 23:30:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693463400; x=1694068200; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WUwBGHC5VsjZQFl8xxzGqyyCgwF3lKTjHm0TdmJHFiA=;
-        b=haFc70tGz3VgZ/nhUm0F9/wqvr9YwKYVE0PC7hJK8YXRxAcfCKLRtx+AzGfRgStgpp
-         uSuxjo0NICpUAQXzeZxY/6cvqNxDngM+yPCMERv6RZBCfNqGTzrwhBiXokjN4O6XUe09
-         xdQYBLZi5ZwaWnrzKO7rgFi/GN9hdqJ+wCaKodt8xcVJyGbO614xxJI2XHkLXJuud+/4
-         gJT733sABLNzldLyINzRgRngdDREBVQnPO0yayVN4uZfvqSkqVfRzaPrBFziEZidG9wd
-         c7SYk5UJKY3L4HQ6wa0CkxfvEYup88HVxMQQS3U4xPE9jssDY7i0bqnZrRocB29ofpm4
-         AplQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693463400; x=1694068200;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WUwBGHC5VsjZQFl8xxzGqyyCgwF3lKTjHm0TdmJHFiA=;
-        b=B1/xbfDNWedteBKP+i6a4/5G+t1SIlX12bLcS1lWJR3dHRwBZBo/8SGFSVnqiWjTPP
-         f/oJRHOqo4tjWmu8b/CC/+xy5dNcZU4r2wWdrAYbyTtVtg1foOzW4ZoAH7JyjZXWWHtp
-         Z4bSbJVqoQ41SDjT5RogmRbklVcvAsbFfd/XzTKkR96EkhRe0Sdi2A+eILn/gXro6QAN
-         zE6Ag3NGd9PDNml1EO6d2ru8juKJKCw+lwcsbJ8QL9jMwyG8kN0ldNtCWu9aa0web2BM
-         xVvhvq/NTUtdojFngiCAFbTfaOVH7fbcjI3b1FD/L1LxCH2lnqrwKrhqISJIXuMpZ/3N
-         yuRQ==
-X-Gm-Message-State: AOJu0YwjIVwCZk/wtB93dgsrGdee6pgLyY3sAzqBH8j2OYM0BBQ/atNg
-        aDbLHKDy+b6+2gpOmnHltt3IHQ==
-X-Google-Smtp-Source: AGHT+IHp2w3tyUGuLVWtNA64xNLW9YemH8IoPOq4F/4imyApmLAKS8Dl+HuDQigZxMGX0xl+6mldEA==
-X-Received: by 2002:aa7:d7cf:0:b0:523:2df6:396a with SMTP id e15-20020aa7d7cf000000b005232df6396amr3637022eds.37.1693463399750;
-        Wed, 30 Aug 2023 23:29:59 -0700 (PDT)
-Received: from [192.168.0.22] (77-252-46-238.static.ip.netia.com.pl. [77.252.46.238])
-        by smtp.gmail.com with ESMTPSA id l26-20020a056402125a00b00525c01f91b0sm405241edw.42.2023.08.30.23.29.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Aug 2023 23:29:59 -0700 (PDT)
-Message-ID: <cea3472a-e9f7-39cb-419c-d042b3bf0682@linaro.org>
-Date:   Thu, 31 Aug 2023 08:29:57 +0200
+        with ESMTP id S232690AbjHaJMb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 31 Aug 2023 05:12:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6E96CE6
+        for <linux-usb@vger.kernel.org>; Thu, 31 Aug 2023 02:12:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 71FBC63684
+        for <linux-usb@vger.kernel.org>; Thu, 31 Aug 2023 09:12:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D3AF2C433C9
+        for <linux-usb@vger.kernel.org>; Thu, 31 Aug 2023 09:12:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1693473147;
+        bh=mCawVO47S0d4tYmdsSLMo/m68qqKmXYPV/c4QszwBzU=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=RLreFPvxPbClYACWybUq6sH7p4miBIzSusKeKyeDVtCdAiEdp2Kf8OrD/dzXkxenL
+         PYqMam9k91m8U7XXf7lQ5+qngcyba9puuen3PlQ85p4W9pMOLowxVcGngLzpmCicKu
+         tveGr9tGh2fvNz+1z2TtmR8FgEa8Jgo+nCvtON1Fabps/fjktqo80bZ6UQxTMV88OW
+         lJKW5oNTZUtaGmpVGeIJPY2bH7JgZOE4Rj9WJ3RD6jPBcF2/RDX6UF6fe0Cud3v9tm
+         sizstpJGJ4wqr12C+HtOlvKkVMG5jL7MUFWeqT4y2Msjh0O6/OjNjLXGJJjT/l0h9u
+         XYkzG+g3A39nw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id B5EC6C4332E; Thu, 31 Aug 2023 09:12:27 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 217670] dwc3: regression in USB DWC3 driver in kernel 5.15
+ branch
+Date:   Thu, 31 Aug 2023 09:12:27 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: regressions@leemhuis.info
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-217670-208809-b2ZDvbzNj2@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-217670-208809@https.bugzilla.kernel.org/>
+References: <bug-217670-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: [PATCH v4 2/3] dt-bindings: usb: snps,dwc3: Add
- runtime-suspend-on-usb-suspend property
-Content-Language: en-US
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Elson Serrao <quic_eserrao@quicinc.com>
-Cc:     Roger Quadros <rogerq@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-References: <31fa930a-51fb-6a7f-300d-e71f6b399eb1@linaro.org>
- <a0a6c561-6319-00ba-c6db-f1dec9f0f0aa@quicinc.com>
- <5dfae814-7233-eb1f-cae7-f335e54ce1b6@linaro.org>
- <cf0227c8-cd02-81b6-9e13-2e7fe6f505f2@kernel.org>
- <20230826015257.mbogiefsbz5474ft@synopsys.com>
- <afd4843b-427a-8535-78e2-f81879378371@linaro.org>
- <969988f6-f01f-0e31-6a98-7d02c5a3a4ad@quicinc.com>
- <20230830013739.srnh2uyhly66yvu2@synopsys.com>
- <d30a8d6a-236a-b6eb-76d7-115cc9950ce1@quicinc.com>
- <6f70a710-c409-23c0-890b-370ccd23e088@linaro.org>
- <20230831030134.z46fjwyr6edl3t7x@synopsys.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230831030134.z46fjwyr6edl3t7x@synopsys.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,48 +72,39 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 31/08/2023 05:01, Thinh Nguyen wrote:
-> On Wed, Aug 30, 2023, Krzysztof Kozlowski wrote:
->> On 30/08/2023 06:31, Elson Serrao wrote:
->>>
->>>
->>> On 8/29/2023 6:37 PM, Thinh Nguyen wrote:
->>>> Just want to clarify, there are dwc3 properties and there are dt binding
->>>> properties. Often the case that dt binding matches 1-to-1 with dwc3
->>>> driver property. Now, we need to enhance the checkers so that the dwc3
->>>> driver property to match cases where it is platform specific and through
->>>> compatible string.
->>>>
->>>
->>> Thank you for the clarification Thinh.
->>> To confirm, we would need to modify the driver to parse a new compatible 
->>> string (say "snps,dwc3-ext-wakeup") and add .data field so that the 
->>> driver is aware that this particular platform supports external wakeup 
->>> detection.Right ?
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217670
+
+The Linux kernel's regression tracker (Thorsten Leemhuis) (regressions@leem=
+huis.info) changed:
+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |regressions@leemhuis.info
+
+--- Comment #9 from The Linux kernel's regression tracker (Thorsten Leemhui=
+s) (regressions@leemhuis.info) ---
+(In reply to Tomasz Rostanski from comment #8)
+>>> 7bee318838890 usb: dwc3: reference clock period configuration
+>>> a5ae3cbe9dfcc usb: dwc3: Get clocks individually
+>>> 5114c3ee24875 usb: dwc3: Calculate REFCLKPER based on reference clock
+>>> 596c87856e08d usb: dwc3: Program GFLADJ
+>>> a6fc2f1b09278 usb: dwc3: core: add gfladj_refclk_lpm_sel quirk
 >>
->> No, it's not then platform specific. You said it depends on each
->> platform. Platform is Qualcomm SM8450 for example.
+>> Can you test this to verify that it does actually work for you?
+>> thanks,
 >>
-> 
-> Hi Elson,
-> 
-> Use the compatible string of your platform.
-> 
-> e.g.
-> if (dev->of_node) {
-> 	struct device_node *parent = of_get_parent(dev->of_node);
-> 
-> 	dwc->no_disconnect_on_usb_suspend =
-> 		of_device_is_compatible(parent, "qcom,your-compatible-string") ||
-> 		of_device_is_compatible(parent, "some-other-platform");
-> }
-> 
-> You need to enhance dwc3_get_properties(). This may get big as dwc3 adds
-> more properties. Perhaps you can help come up with ideas to keep this
-> clean. Perhaps we can separate this out of dwc3 core.c?
+>> greg k-h
+>
+> I confirm. It works for me.
 
-This should be a flag or quirk in device ID table match data.
+Tomasz, was a fix ever merged to 5.15.y =E2=80=93 either a revert or the ch=
+anges listed
+above? Doesn't look like it from here, but I have the strong suspicion that=
+ I'm
+missing something here.
 
-Best regards,
-Krzysztof
+--=20
+You may reply to this email to add a comment.
 
+You are receiving this mail because:
+You are watching the assignee of the bug.=
