@@ -2,569 +2,1354 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E277D78FFD1
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Sep 2023 17:19:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2E1D790082
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Sep 2023 18:09:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349149AbjIAPTc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 Sep 2023 11:19:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44344 "EHLO
+        id S1344635AbjIAQJM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 1 Sep 2023 12:09:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243395AbjIAPTb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Sep 2023 11:19:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D269210E5;
-        Fri,  1 Sep 2023 08:19:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BB4A61503;
-        Fri,  1 Sep 2023 15:19:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A59CC433C8;
-        Fri,  1 Sep 2023 15:19:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1693581565;
-        bh=bvVIhG6C9gwInm5Ew9R+Mu+moLulpYp+vGLCzqjeR0Q=;
-        h=Date:From:To:Cc:Subject:From;
-        b=t/ZUfdPbOiIpQExNGaGaxj2wRBzoGoP5y1X6qKupL09PUYcLY2BUr0uYqtmndxHzG
-         KqzGJ5Ddb3UqAzOV5IZRHtGymz6Ek63rcgKvKfUULxTV1FaYL7mrYZJmp0H/fnQ3zO
-         2tL8PY6od896Xtbd4FvaC3L4fQ1ir+U/7hsQZxQA=
-Date:   Fri, 1 Sep 2023 17:19:22 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB / Thunderbolt / PHY driver updates for 6.6-rc1
-Message-ID: <ZPIA-hKjQRX1le-b@kroah.com>
+        with ESMTP id S1343731AbjIAQJI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Sep 2023 12:09:08 -0400
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BC1B7CF3;
+        Fri,  1 Sep 2023 09:08:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:Reply-To:MIME-Version;
+        bh=Vmzu2CljRxiz++/tCmMxg1rZKkWM8sIRzFFEFEOaxX8=; b=Rdm1OIN0qApTS
+        I61hhLkW0IB4st5KtRSSkV4jTqv+QKAZ4fHUpj+6OapaEZ+FrLbrW3hJYftgC+X/
+        SxsMLt8ubwJSLXy3N5r0FhVIRwC+UA8mKFX6hPizEDHBHkmmtl+Jd7br2ywDZN9/
+        IrnmEN0sxw6KbNWy+sDo1dU8tlMFo8=
+Received: from sc9-mailhost1.vmware.com (unknown [114.250.138.216])
+        by zwqz-smtp-mta-g3-1 (Coremail) with SMTP id _____wDHw8jhC_Jk_VGaAw--.15069S2;
+        Sat, 02 Sep 2023 00:05:53 +0800 (CST)
+From:   Dingyan Li <18500469033@163.com>
+To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
+        mathias.nyman@intel.com, pawell@cadence.com
+Cc:     linux-mediatek@lists.infradead.org,
+        brcm80211-dev-list.pdl@broadcom.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mina86@mina86.com,
+        clemens@ladisch.de, ruslan.bilovol@gmail.com, balbi@ti.com,
+        bigeasy@linutronix.de, treding@nvidia.com, oneukum@suse.com,
+        laurent.pinchart@ideasonboard.com, nic_swsd@realtek.com,
+        marcel@holtmann.org
+Subject: [PATCH v3] USB: Extend usb_device_speed with new value USB_SPEED_SUPER_PLUS_BY2
+Date:   Sat,  2 Sep 2023 00:05:32 +0800
+Message-Id: <20230901160532.6313-1-18500469033@163.com>
+X-Mailer: git-send-email 2.25.1
+Reply-To: 07c821ae-2391-474c-aec9-65f47d3fecf2@rowland.harvard.edu
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: _____wDHw8jhC_Jk_VGaAw--.15069S2
+X-Coremail-Antispam: 1Uf129KBjvAXoWDAw48CF1rtrWfXw4xJry7ZFb_yoWrKF4xXo
+        Z7JF1fKF10yry2ga4kArn7tF9rWryDZan3t3y5Cw1DJ3y5urnxXF17G3Z8Zws8AF93Za18
+        Gw4xAw4rWrsxGw4xn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+        AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjxU35l1UUUUU
+X-Originating-IP: [114.250.138.216]
+X-CM-SenderInfo: jprykiiquwmiitt6il2tof0z/1tbiNgTdy1WBt83QjAAAsW
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L4,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit 2ccdd1b13c591d306f0401d98dedc4bdcd02b421:
+Currently there are there major generations when speaking of
+USB_SPEED_SUPER_PLUS devices. However, they actually stands
+for different physical speeds. GEN_2x2 means 20Gbps, while
+the others mean 10Gbps. So in order to confirm 20Gbps, both
+speed and generation need ti be checked. This causes a trouble
+for ioctl USBDEVFS_GET_SPEED since it can only return speed
+value to userspace.
 
-  Linux 6.5-rc6 (2023-08-13 11:29:55 -0700)
+In order not to add a new ioctl to get ssp generation, extending
+usb_device_speed is a good option. The side effect is that
+USB_SPEED_SUPER_PLUS has been used in lots of places and
+it also takes some effort to go through all of them and check
+whether the new speed should be used too.
 
-are available in the Git repository at:
+Besides, as suggested by Alen, ssp_rate is not a proper name,
+change it to ssp_gen. And change all functions/struct fileds
+ended with ssp_rate to ssp_gen. And there is also some code
+refactor to reduce duplicate definition of strings and increase
+the utilization of commonly defined utilities.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.6-rc1
+Signed-off-by: Dingyan Li <18500469033@163.com>
+---
+ drivers/bluetooth/btusb.c                     |  1 +
+ drivers/media/usb/uvc/uvc_video.c             |  1 +
+ drivers/net/usb/r8152.c                       |  1 +
+ drivers/net/usb/usbnet.c                      |  1 +
+ .../broadcom/brcm80211/brcmfmac/usb.c         | 21 +++--
+ drivers/phy/tegra/xusb.c                      |  2 +-
+ drivers/usb/cdns3/cdnsp-gadget.c              |  3 +
+ drivers/usb/cdns3/cdnsp-mem.c                 |  4 +-
+ drivers/usb/common/common.c                   | 85 ++++++++++++++++---
+ drivers/usb/core/config.c                     |  2 +
+ drivers/usb/core/devices.c                    | 14 ++-
+ drivers/usb/core/hcd.c                        |  8 +-
+ drivers/usb/core/hub.c                        | 32 ++++---
+ drivers/usb/core/sysfs.c                      | 24 ++----
+ drivers/usb/core/urb.c                        |  3 +-
+ drivers/usb/dwc3/core.c                       | 18 ++--
+ drivers/usb/dwc3/core.h                       |  4 +-
+ drivers/usb/dwc3/gadget.c                     | 58 +++++++------
+ drivers/usb/gadget/composite.c                | 12 ++-
+ drivers/usb/gadget/configfs.c                 | 22 ++---
+ drivers/usb/gadget/function/f_fs.c            |  1 +
+ drivers/usb/gadget/function/f_sourcesink.c    |  1 +
+ drivers/usb/gadget/function/f_uac2.c          | 14 +--
+ drivers/usb/gadget/udc/core.c                 |  4 +-
+ drivers/usb/host/xhci-mem.c                   | 17 ++--
+ drivers/usb/host/xhci-mtk-sch.c               |  1 +
+ drivers/usb/host/xhci.c                       |  7 +-
+ drivers/usb/host/xhci.h                       |  5 +-
+ drivers/usb/mtu3/mtu3_core.c                  |  2 +
+ drivers/usb/mtu3/mtu3_gadget.c                |  1 +
+ include/linux/usb.h                           |  2 +-
+ include/linux/usb/ch9.h                       | 14 +--
+ include/linux/usb/gadget.h                    |  8 +-
+ include/uapi/linux/usb/ch9.h                  | 13 ++-
+ sound/usb/card.c                              | 15 ++--
+ sound/usb/helper.c                            |  1 +
+ sound/usb/midi.c                              |  1 +
+ tools/usb/testusb.c                           |  6 +-
+ 38 files changed, 258 insertions(+), 171 deletions(-)
 
-for you to fetch changes up to 895ed7eb263d7ce2d2592fdd3e211464a556084a:
+diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
+index 764d176e9735..b926e9dbdbb9 100644
+--- a/drivers/bluetooth/btusb.c
++++ b/drivers/bluetooth/btusb.c
+@@ -1298,6 +1298,7 @@ static int btusb_submit_intr_urb(struct hci_dev *hdev, gfp_t mem_flags)
+ 	 * force_poll_sync changes.
+ 	 */
+ 	switch (urb->dev->speed) {
++	case USB_SPEED_SUPER_PLUS_BY2:
+ 	case USB_SPEED_SUPER_PLUS:
+ 	case USB_SPEED_SUPER:	/* units are 125us */
+ 		data->intr_interval = usecs_to_jiffies(urb->interval * 125);
+diff --git a/drivers/media/usb/uvc/uvc_video.c b/drivers/media/usb/uvc/uvc_video.c
+index 28dde08ec6c5..ede56f46881f 100644
+--- a/drivers/media/usb/uvc/uvc_video.c
++++ b/drivers/media/usb/uvc/uvc_video.c
+@@ -1791,6 +1791,7 @@ u16 uvc_endpoint_max_bpi(struct usb_device *dev, struct usb_host_endpoint *ep)
+ 	switch (dev->speed) {
+ 	case USB_SPEED_SUPER:
+ 	case USB_SPEED_SUPER_PLUS:
++	case USB_SPEED_SUPER_PLUS_BY2:
+ 		return le16_to_cpu(ep->ss_ep_comp.wBytesPerInterval);
+ 	default:
+ 		psize = usb_endpoint_maxp(&ep->desc);
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index 0738baa5b82e..e993ca78df09 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -7066,6 +7066,7 @@ static void r8153_init(struct r8152 *tp)
+ 	switch (tp->udev->speed) {
+ 	case USB_SPEED_SUPER:
+ 	case USB_SPEED_SUPER_PLUS:
++	case USB_SPEED_SUPER_PLUS_BY2:
+ 		tp->coalesce = COALESCE_SUPER;
+ 		break;
+ 	case USB_SPEED_HIGH:
+diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+index 2d14b0d78541..e9032c1cf66b 100644
+--- a/drivers/net/usb/usbnet.c
++++ b/drivers/net/usb/usbnet.c
+@@ -366,6 +366,7 @@ void usbnet_update_max_qlen(struct usbnet *dev)
+ 		break;
+ 	case USB_SPEED_SUPER:
+ 	case USB_SPEED_SUPER_PLUS:
++	case USB_SPEED_SUPER_PLUS_BY2:
+ 		/*
+ 		 * Not take default 5ms qlen for super speed HC to
+ 		 * save memory, and iperf tests show 2.5ms qlen can
+diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/usb.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/usb.c
+index 2178675ae1a4..43571daf3df0 100644
+--- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/usb.c
++++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/usb.c
+@@ -1427,14 +1427,19 @@ brcmf_usb_probe(struct usb_interface *intf, const struct usb_device_id *id)
+ 
+ 	devinfo->ifnum = desc->bInterfaceNumber;
+ 
+-	if (usb->speed == USB_SPEED_SUPER_PLUS)
+-		brcmf_dbg(USB, "Broadcom super speed plus USB WLAN interface detected\n");
+-	else if (usb->speed == USB_SPEED_SUPER)
+-		brcmf_dbg(USB, "Broadcom super speed USB WLAN interface detected\n");
+-	else if (usb->speed == USB_SPEED_HIGH)
+-		brcmf_dbg(USB, "Broadcom high speed USB WLAN interface detected\n");
+-	else
+-		brcmf_dbg(USB, "Broadcom full speed USB WLAN interface detected\n");
++	switch (usb->speed) {
++	case USB_SPEED_SUPER_PLUS_BY2:
++	case USB_SPEED_SUPER_PLUS:
++	case USB_SPEED_SUPER:
++	case USB_SPEED_HIGH:
++		brcmf_dbg(USB, "Broadcom %s USB WLAN interface detected\n",
++			  usb_speed_string(usb->speed));
++		break;
++	default:
++		brcmf_dbg(USB, "Broadcom %s USB WLAN interface detected\n",
++			  usb_speed_string(USB_SPEED_FULL));
++		break;
++	}
+ 
+ 	ret = brcmf_usb_probe_cb(devinfo, id->driver_info);
+ 	if (ret)
+diff --git a/drivers/phy/tegra/xusb.c b/drivers/phy/tegra/xusb.c
+index a296b87dced1..2f6d7fee17bd 100644
+--- a/drivers/phy/tegra/xusb.c
++++ b/drivers/phy/tegra/xusb.c
+@@ -977,7 +977,7 @@ static int tegra_xusb_usb3_port_parse_dt(struct tegra_xusb_usb3_port *usb3)
+ 		maximum_speed =  usb_get_maximum_speed(&port->dev);
+ 		if (maximum_speed == USB_SPEED_SUPER)
+ 			usb3->disable_gen2 = true;
+-		else if (maximum_speed == USB_SPEED_SUPER_PLUS)
++		else if (maximum_speed >= USB_SPEED_SUPER_PLUS)
+ 			usb3->disable_gen2 = false;
+ 		else
+ 			return -EINVAL;
+diff --git a/drivers/usb/cdns3/cdnsp-gadget.c b/drivers/usb/cdns3/cdnsp-gadget.c
+index fff9ec9c391f..f755b947d7d8 100644
+--- a/drivers/usb/cdns3/cdnsp-gadget.c
++++ b/drivers/usb/cdns3/cdnsp-gadget.c
+@@ -1250,6 +1250,7 @@ static int cdnsp_run(struct cdnsp_device *pdev,
+ 	temp = readl(&pdev->port3x_regs->mode_addr);
+ 
+ 	switch (speed) {
++	case USB_SPEED_SUPER_PLUS_BY2:
+ 	case USB_SPEED_SUPER_PLUS:
+ 		temp |= CFG_3XPORT_SSP_SUPPORT;
+ 		break;
+@@ -1745,6 +1746,7 @@ void cdnsp_irq_reset(struct cdnsp_device *pdev)
+ 	spin_lock(&pdev->lock);
+ 
+ 	switch (pdev->gadget.speed) {
++	case USB_SPEED_SUPER_PLUS_BY2:
+ 	case USB_SPEED_SUPER_PLUS:
+ 	case USB_SPEED_SUPER:
+ 		cdnsp_gadget_ep0_desc.wMaxPacketSize = cpu_to_le16(512);
+@@ -1873,6 +1875,7 @@ static int __cdnsp_gadget_init(struct cdns *cdns)
+ 	case USB_SPEED_HIGH:
+ 	case USB_SPEED_SUPER:
+ 	case USB_SPEED_SUPER_PLUS:
++	case USB_SPEED_SUPER_PLUS_BY2:
+ 		break;
+ 	default:
+ 		dev_err(cdns->dev, "invalid speed parameter %d\n", max_speed);
+diff --git a/drivers/usb/cdns3/cdnsp-mem.c b/drivers/usb/cdns3/cdnsp-mem.c
+index 97866bfb2da9..9cf3516eb9ce 100644
+--- a/drivers/usb/cdns3/cdnsp-mem.c
++++ b/drivers/usb/cdns3/cdnsp-mem.c
+@@ -736,6 +736,7 @@ int cdnsp_setup_addressable_priv_dev(struct cdnsp_device *pdev)
+ 	slot_ctx->dev_info |= cpu_to_le32(LAST_CTX(1));
+ 
+ 	switch (pdev->gadget.speed) {
++	case USB_SPEED_SUPER_PLUS_BY2:
+ 	case USB_SPEED_SUPER_PLUS:
+ 		slot_ctx->dev_info |= cpu_to_le32(SLOT_SPEED_SSP);
+ 		max_packets = MAX_PACKET(512);
+@@ -833,8 +834,9 @@ static unsigned int cdnsp_get_endpoint_interval(struct usb_gadget *g,
+ 
+ 	switch (g->speed) {
+ 	case USB_SPEED_HIGH:
+-	case USB_SPEED_SUPER_PLUS:
+ 	case USB_SPEED_SUPER:
++	case USB_SPEED_SUPER_PLUS:
++	case USB_SPEED_SUPER_PLUS_BY2:
+ 		if (usb_endpoint_xfer_int(pep->endpoint.desc) ||
+ 		    usb_endpoint_xfer_isoc(pep->endpoint.desc))
+ 			interval = cdnsp_parse_exponent_interval(g, pep);
+diff --git a/drivers/usb/common/common.c b/drivers/usb/common/common.c
+index b84efae26e15..41bd032fc139 100644
+--- a/drivers/usb/common/common.c
++++ b/drivers/usb/common/common.c
+@@ -67,22 +67,35 @@ const char *usb_otg_state_string(enum usb_otg_state state)
+ EXPORT_SYMBOL_GPL(usb_otg_state_string);
+ 
+ static const char *const speed_names[] = {
+-	[USB_SPEED_UNKNOWN] = "UNKNOWN",
++	[USB_SPEED_UNKNOWN] = "unknown-speed",
+ 	[USB_SPEED_LOW] = "low-speed",
+ 	[USB_SPEED_FULL] = "full-speed",
+ 	[USB_SPEED_HIGH] = "high-speed",
+ 	[USB_SPEED_WIRELESS] = "wireless",
+ 	[USB_SPEED_SUPER] = "super-speed",
+ 	[USB_SPEED_SUPER_PLUS] = "super-speed-plus",
++	[USB_SPEED_SUPER_PLUS_BY2] = "super-speed-plus-by2",
+ };
+ 
+-static const char *const ssp_rate[] = {
+-	[USB_SSP_GEN_UNKNOWN] = "UNKNOWN",
++static const char *const ssp_gen_names[] = {
++	[USB_SSP_GEN_UNKNOWN] = "super-speed-plus-gen-unknown",
+ 	[USB_SSP_GEN_2x1] = "super-speed-plus-gen2x1",
+ 	[USB_SSP_GEN_1x2] = "super-speed-plus-gen1x2",
+ 	[USB_SSP_GEN_2x2] = "super-speed-plus-gen2x2",
+ };
+ 
++/* Mbps */
++static const char *const speed_values[] = {
++	[USB_SPEED_UNKNOWN] = "unknown-value",
++	[USB_SPEED_LOW] = "1.5",
++	[USB_SPEED_FULL] = "12",
++	[USB_SPEED_HIGH] = "480",
++	[USB_SPEED_WIRELESS] = "480",
++	[USB_SPEED_SUPER] = "5000",
++	[USB_SPEED_SUPER_PLUS] = "10000",
++	[USB_SPEED_SUPER_PLUS_BY2] = "20000",
++};
++
+ /**
+  * usb_speed_string() - Returns human readable-name of the speed.
+  * @speed: The speed to return human-readable name for.  If it's not
+@@ -97,6 +110,56 @@ const char *usb_speed_string(enum usb_device_speed speed)
+ }
+ EXPORT_SYMBOL_GPL(usb_speed_string);
+ 
++/**
++ * usb_speed_value() - Returns human readable speed value.
++ * @speed: The speed to return human-readable value for. If it's not
++ *   any of the speeds defined in usb_device_speed enum, value for
++ *   USB_SPEED_UNKNOWN will be returned.
++ */
++const char *usb_speed_value(enum usb_device_speed speed)
++{
++	if (speed < 0 || speed >= ARRAY_SIZE(speed_values))
++		speed = USB_SPEED_UNKNOWN;
++	return speed_values[speed];
++}
++EXPORT_SYMBOL_GPL(usb_speed_value);
++
++/**
++ * usb_ssp_gen_name() - Returns human readable-name of ssp generation.
++ * @gen: The ssp generation to return human-readable name for. If it's
++ *   not any of the values defined in usb_ssp_gen enum, name for
++ *   USB_SSP_GEN_UNKNOWN will be returned.
++ */
++const char *usb_ssp_gen_name(enum usb_ssp_gen gen)
++{
++	if (gen < 0 || gen >= ARRAY_SIZE(ssp_gen_names))
++		gen = USB_SSP_GEN_UNKNOWN;
++	return ssp_gen_names[gen];
++}
++EXPORT_SYMBOL_GPL(usb_ssp_gen_name);
++
++/**
++ * usb_speed_from_name() - Returns usb_device_speed enum from human
++ * readable name.
++ * @speed_name: The speed name to return usb_device_speed enum for,
++ *   which can be defined in speed_names or ssp_gen_names. USB_SPEED_UNKNOWN
++ *   will be returned if the name can't be recognized.
++ */
++enum usb_device_speed usb_speed_from_name(const char *speed_name)
++{
++	int ret;
++
++	ret = match_string(ssp_gen_names, ARRAY_SIZE(ssp_gen_names), speed_name);
++	if (ret == USB_SSP_GEN_2x2)
++		return USB_SPEED_SUPER_PLUS_BY2;
++	else if (ret > 0)
++		return USB_SPEED_SUPER_PLUS;
++
++	ret = match_string(speed_names, ARRAY_SIZE(speed_names), speed_name);
++	return (ret < 0) ? USB_SPEED_UNKNOWN : ret;
++}
++EXPORT_SYMBOL_GPL(usb_speed_from_name);
++
+ /**
+  * usb_get_maximum_speed - Get maximum requested speed for a given USB
+  * controller.
+@@ -114,25 +177,21 @@ enum usb_device_speed usb_get_maximum_speed(struct device *dev)
+ 	if (ret < 0)
+ 		return USB_SPEED_UNKNOWN;
+ 
+-	ret = match_string(ssp_rate, ARRAY_SIZE(ssp_rate), maximum_speed);
+-	if (ret > 0)
+-		return USB_SPEED_SUPER_PLUS;
++	return usb_speed_from_name(maximum_speed);
+ 
+-	ret = match_string(speed_names, ARRAY_SIZE(speed_names), maximum_speed);
+-	return (ret < 0) ? USB_SPEED_UNKNOWN : ret;
+ }
+ EXPORT_SYMBOL_GPL(usb_get_maximum_speed);
+ 
+ /**
+- * usb_get_maximum_ssp_rate - Get the signaling rate generation and lane count
++ * usb_get_maximum_ssp_gen - Get the SSP signaling generation and lane count
+  *	of a SuperSpeed Plus capable device.
+  * @dev: Pointer to the given USB controller device
+  *
+  * If the string from "maximum-speed" property is super-speed-plus-genXxY where
+  * 'X' is the generation number and 'Y' is the number of lanes, then this
+- * function returns the corresponding enum usb_ssp_rate.
++ * function returns the corresponding enum usb_ssp_gen.
+  */
+-enum usb_ssp_rate usb_get_maximum_ssp_rate(struct device *dev)
++enum usb_ssp_gen usb_get_maximum_ssp_gen(struct device *dev)
+ {
+ 	const char *maximum_speed;
+ 	int ret;
+@@ -141,10 +200,10 @@ enum usb_ssp_rate usb_get_maximum_ssp_rate(struct device *dev)
+ 	if (ret < 0)
+ 		return USB_SSP_GEN_UNKNOWN;
+ 
+-	ret = match_string(ssp_rate, ARRAY_SIZE(ssp_rate), maximum_speed);
++	ret = match_string(ssp_gen_names, ARRAY_SIZE(ssp_gen_names), maximum_speed);
+ 	return (ret < 0) ? USB_SSP_GEN_UNKNOWN : ret;
+ }
+-EXPORT_SYMBOL_GPL(usb_get_maximum_ssp_rate);
++EXPORT_SYMBOL_GPL(usb_get_maximum_ssp_gen);
+ 
+ /**
+  * usb_state_string - Returns human readable name for the state.
+diff --git a/drivers/usb/core/config.c b/drivers/usb/core/config.c
+index b19e38d5fd10..71708ee7190c 100644
+--- a/drivers/usb/core/config.c
++++ b/drivers/usb/core/config.c
+@@ -323,6 +323,7 @@ static int usb_parse_endpoint(struct device *ddev, int cfgno,
+ 	if (usb_endpoint_xfer_int(d)) {
+ 		i = 1;
+ 		switch (udev->speed) {
++		case USB_SPEED_SUPER_PLUS_BY2:
+ 		case USB_SPEED_SUPER_PLUS:
+ 		case USB_SPEED_SUPER:
+ 		case USB_SPEED_HIGH:
+@@ -433,6 +434,7 @@ static int usb_parse_endpoint(struct device *ddev, int cfgno,
+ 		break;
+ 	case USB_SPEED_SUPER:
+ 	case USB_SPEED_SUPER_PLUS:
++	case USB_SPEED_SUPER_PLUS_BY2:
+ 		maxpacket_maxes = super_speed_maxpacket_maxes;
+ 		break;
+ 	}
+diff --git a/drivers/usb/core/devices.c b/drivers/usb/core/devices.c
+index a247da73f34d..62ab4dfa9a51 100644
+--- a/drivers/usb/core/devices.c
++++ b/drivers/usb/core/devices.c
+@@ -395,7 +395,8 @@ static ssize_t usb_device_dump(char __user **buffer, size_t *nbytes,
+ 	int chix;
+ 	int ret, cnt = 0;
+ 	int parent_devnum = 0;
+-	char *pages_start, *data_end, *speed;
++	char *pages_start, *data_end;
++	const char *speed;
+ 	unsigned int length;
+ 	ssize_t total_written = 0;
+ 	struct usb_device *childdev = NULL;
+@@ -419,19 +420,16 @@ static ssize_t usb_device_dump(char __user **buffer, size_t *nbytes,
+ 	 * plugged into the root hub has a parent of 0.
+ 	 */
+ 	switch (usbdev->speed) {
+-	case USB_SPEED_LOW:
+-		speed = "1.5"; break;
+ 	case USB_SPEED_UNKNOWN:		/* usb 1.1 root hub code */
+-	case USB_SPEED_FULL:
+ 		speed = "12"; break;
++	case USB_SPEED_LOW:
++	case USB_SPEED_FULL:
+ 	case USB_SPEED_HIGH:
+-		speed = "480"; break;
+ 	case USB_SPEED_SUPER:
+-		speed = "5000"; break;
+ 	case USB_SPEED_SUPER_PLUS:
+-		speed = "10000"; break;
++	case USB_SPEED_SUPER_PLUS_BY2:
+ 	default:
+-		speed = "??";
++		speed = usb_speed_value(usbdev->speed); break;
+ 	}
+ 	data_end = pages_start + sprintf(pages_start, format_topo,
+ 			bus->busnum, level, parent_devnum,
+diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+index 12b6dfeaf658..315bb6887a06 100644
+--- a/drivers/usb/core/hcd.c
++++ b/drivers/usb/core/hcd.c
+@@ -2865,7 +2865,7 @@ int usb_add_hcd(struct usb_hcd *hcd,
+ 
+ 	rhdev->rx_lanes = 1;
+ 	rhdev->tx_lanes = 1;
+-	rhdev->ssp_rate = USB_SSP_GEN_UNKNOWN;
++	rhdev->ssp_gen = USB_SSP_GEN_UNKNOWN;
+ 
+ 	switch (hcd->speed) {
+ 	case HCD_USB11:
+@@ -2880,11 +2880,11 @@ int usb_add_hcd(struct usb_hcd *hcd,
+ 	case HCD_USB32:
+ 		rhdev->rx_lanes = 2;
+ 		rhdev->tx_lanes = 2;
+-		rhdev->ssp_rate = USB_SSP_GEN_2x2;
+-		rhdev->speed = USB_SPEED_SUPER_PLUS;
++		rhdev->ssp_gen = USB_SSP_GEN_2x2;
++		rhdev->speed = USB_SPEED_SUPER_PLUS_BY2;
+ 		break;
+ 	case HCD_USB31:
+-		rhdev->ssp_rate = USB_SSP_GEN_2x1;
++		rhdev->ssp_gen = USB_SSP_GEN_2x1;
+ 		rhdev->speed = USB_SPEED_SUPER_PLUS;
+ 		break;
+ 	default:
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 3c54b218301c..76eb864f939c 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -2693,16 +2693,16 @@ int usb_authorize_device(struct usb_device *usb_dev)
+ }
+ 
+ /**
+- * get_port_ssp_rate - Match the extended port status to SSP rate
++ * get_port_ssp_gen - Match the extended port status to SSP generation
+  * @hdev: The hub device
+  * @ext_portstatus: extended port status
+  *
+  * Match the extended port status speed id to the SuperSpeed Plus sublink speed
+  * capability attributes. Base on the number of connected lanes and speed,
+- * return the corresponding enum usb_ssp_rate.
++ * return the corresponding enum usb_ssp_gen.
+  */
+-static enum usb_ssp_rate get_port_ssp_rate(struct usb_device *hdev,
+-					   u32 ext_portstatus)
++static enum usb_ssp_gen get_port_ssp_gen(struct usb_device *hdev,
++					  u32 ext_portstatus)
+ {
+ 	struct usb_ssp_cap_descriptor *ssp_cap = hdev->bos->ssp_cap;
+ 	u32 attr;
+@@ -2913,13 +2913,15 @@ static int hub_port_wait_reset(struct usb_hub *hub, int port1,
+ 		/* extended portstatus Rx and Tx lane count are zero based */
+ 		udev->rx_lanes = USB_EXT_PORT_RX_LANES(ext_portstatus) + 1;
+ 		udev->tx_lanes = USB_EXT_PORT_TX_LANES(ext_portstatus) + 1;
+-		udev->ssp_rate = get_port_ssp_rate(hub->hdev, ext_portstatus);
++		udev->ssp_gen = get_port_ssp_gen(hub->hdev, ext_portstatus);
+ 	} else {
+ 		udev->rx_lanes = 1;
+ 		udev->tx_lanes = 1;
+-		udev->ssp_rate = USB_SSP_GEN_UNKNOWN;
++		udev->ssp_gen = USB_SSP_GEN_UNKNOWN;
+ 	}
+-	if (udev->ssp_rate != USB_SSP_GEN_UNKNOWN)
++	if (udev->ssp_gen == USB_SSP_GEN_2x2)
++		udev->speed = USB_SPEED_SUPER_PLUS_BY2;
++	else if (udev->ssp_gen != USB_SSP_GEN_UNKNOWN)
+ 		udev->speed = USB_SPEED_SUPER_PLUS;
+ 	else if (hub_is_superspeed(hub->hdev))
+ 		udev->speed = USB_SPEED_SUPER;
+@@ -4830,6 +4832,7 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
+ 		 * it's fixed size except for full speed devices.
+ 		 */
+ 		switch (udev->speed) {
++		case USB_SPEED_SUPER_PLUS_BY2:
+ 		case USB_SPEED_SUPER_PLUS:
+ 		case USB_SPEED_SUPER:
+ 			udev->ep0.desc.wMaxPacketSize = cpu_to_le16(512);
+@@ -4960,16 +4963,11 @@ hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
+ 		if (udev->speed >= USB_SPEED_SUPER) {
+ 			devnum = udev->devnum;
+ 			dev_info(&udev->dev,
+-					"%s SuperSpeed%s%s USB device number %d using %s\n",
+-					(udev->config) ? "reset" : "new",
+-				 (udev->speed == USB_SPEED_SUPER_PLUS) ?
+-						" Plus" : "",
+-				 (udev->ssp_rate == USB_SSP_GEN_2x2) ?
+-						" Gen 2x2" :
+-				 (udev->ssp_rate == USB_SSP_GEN_2x1) ?
+-						" Gen 2x1" :
+-				 (udev->ssp_rate == USB_SSP_GEN_1x2) ?
+-						" Gen 1x2" : "",
++				 "%s %s USB device number %d using %s\n",
++				 (udev->config) ? "reset" : "new",
++				 (udev->speed == USB_SPEED_SUPER) ?
++					usb_speed_string(USB_SPEED_SUPER) :
++					usb_ssp_gen_name(udev->ssp_gen),
+ 				 devnum, driver_name);
+ 		}
+ 
+diff --git a/drivers/usb/core/sysfs.c b/drivers/usb/core/sysfs.c
+index 5d21718afb05..121c94fd3599 100644
+--- a/drivers/usb/core/sysfs.c
++++ b/drivers/usb/core/sysfs.c
+@@ -146,32 +146,21 @@ static ssize_t speed_show(struct device *dev, struct device_attribute *attr,
+ 			  char *buf)
+ {
+ 	struct usb_device *udev;
+-	char *speed;
++	const char *speed;
+ 
+ 	udev = to_usb_device(dev);
+ 
+ 	switch (udev->speed) {
+-	case USB_SPEED_LOW:
+-		speed = "1.5";
+-		break;
+ 	case USB_SPEED_UNKNOWN:
++		speed = "12"; break;
++	case USB_SPEED_LOW:
+ 	case USB_SPEED_FULL:
+-		speed = "12";
+-		break;
+ 	case USB_SPEED_HIGH:
+-		speed = "480";
+-		break;
+ 	case USB_SPEED_SUPER:
+-		speed = "5000";
+-		break;
+ 	case USB_SPEED_SUPER_PLUS:
+-		if (udev->ssp_rate == USB_SSP_GEN_2x2)
+-			speed = "20000";
+-		else
+-			speed = "10000";
+-		break;
++	case USB_SPEED_SUPER_PLUS_BY2:
+ 	default:
+-		speed = "unknown";
++		speed = usb_speed_value(udev->speed); break;
+ 	}
+ 	return sysfs_emit(buf, "%s\n", speed);
+ }
+@@ -656,8 +645,7 @@ static int add_power_attributes(struct device *dev)
+ 		if (udev->usb2_hw_lpm_capable == 1)
+ 			rc = sysfs_merge_group(&dev->kobj,
+ 					&usb2_hardware_lpm_attr_group);
+-		if ((udev->speed == USB_SPEED_SUPER ||
+-		     udev->speed == USB_SPEED_SUPER_PLUS) &&
++		if (udev->speed >= USB_SPEED_SUPER &&
+ 				udev->lpm_capable == 1)
+ 			rc = sysfs_merge_group(&dev->kobj,
+ 					&usb3_hardware_lpm_attr_group);
+diff --git a/drivers/usb/core/urb.c b/drivers/usb/core/urb.c
+index 7576920e2d5a..d90df1ca050c 100644
+--- a/drivers/usb/core/urb.c
++++ b/drivers/usb/core/urb.c
+@@ -459,7 +459,7 @@ int usb_submit_urb(struct urb *urb, gfp_t mem_flags)
+ 			max *= mult;
+ 		}
+ 
+-		if (dev->speed == USB_SPEED_SUPER_PLUS &&
++		if (dev->speed >= USB_SPEED_SUPER_PLUS &&
+ 		    USB_SS_SSP_ISOC_COMP(ep->ss_ep_comp.bmAttributes)) {
+ 			struct usb_ssp_isoc_ep_comp_descriptor *isoc_ep_comp;
+ 
+@@ -544,6 +544,7 @@ int usb_submit_urb(struct urb *urb, gfp_t mem_flags)
+ 
+ 		/* too big? */
+ 		switch (dev->speed) {
++		case USB_SPEED_SUPER_PLUS_BY2:
+ 		case USB_SPEED_SUPER_PLUS:
+ 		case USB_SPEED_SUPER:	/* units are 125us */
+ 			/* Handle up to 2^(16-1) microframes */
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 9c6bf054f15d..70ac85ad192d 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -1408,7 +1408,7 @@ static void dwc3_get_properties(struct dwc3 *dwc)
+ 	tx_fifo_resize_max_num = 6;
+ 
+ 	dwc->maximum_speed = usb_get_maximum_speed(dev);
+-	dwc->max_ssp_rate = usb_get_maximum_ssp_rate(dev);
++	dwc->max_ssp_gen = usb_get_maximum_ssp_gen(dev);
+ 	dwc->dr_mode = usb_get_dr_mode(dev);
+ 	dwc->hsphy_mode = of_usb_get_phy_mode(dev->of_node);
+ 
+@@ -1575,6 +1575,7 @@ static void dwc3_check_params(struct dwc3 *dwc)
+ 			dev_warn(dev, "UDC doesn't support Gen 1\n");
+ 		break;
+ 	case USB_SPEED_SUPER_PLUS:
++	case USB_SPEED_SUPER_PLUS_BY2:
+ 		if ((DWC3_IP_IS(DWC32) &&
+ 		     hwparam_gen == DWC3_GHWPARAMS3_SSPHY_IFC_DIS) ||
+ 		    (!DWC3_IP_IS(DWC32) &&
+@@ -1613,8 +1614,8 @@ static void dwc3_check_params(struct dwc3 *dwc)
+ 	 * set the default to support dual-lane for DWC_usb32 and single-lane
+ 	 * for DWC_usb31 for super-speed-plus.
+ 	 */
+-	if (dwc->maximum_speed == USB_SPEED_SUPER_PLUS) {
+-		switch (dwc->max_ssp_rate) {
++	if (dwc->maximum_speed >= USB_SPEED_SUPER_PLUS) {
++		switch (dwc->max_ssp_gen) {
+ 		case USB_SSP_GEN_2x1:
+ 			if (hwparam_gen == DWC3_GHWPARAMS3_SSPHY_IFC_GEN1)
+ 				dev_warn(dev, "UDC only supports Gen 1\n");
+@@ -1628,14 +1629,15 @@ static void dwc3_check_params(struct dwc3 *dwc)
+ 		default:
+ 			switch (hwparam_gen) {
+ 			case DWC3_GHWPARAMS3_SSPHY_IFC_GEN2:
+-				if (DWC3_IP_IS(DWC32))
+-					dwc->max_ssp_rate = USB_SSP_GEN_2x2;
+-				else
+-					dwc->max_ssp_rate = USB_SSP_GEN_2x1;
++				if (DWC3_IP_IS(DWC32)) {
++					dwc->max_ssp_gen = USB_SSP_GEN_2x2;
++					dwc->maximum_speed = USB_SPEED_SUPER_PLUS_BY2;
++				} else
++					dwc->max_ssp_gen = USB_SSP_GEN_2x1;
+ 				break;
+ 			case DWC3_GHWPARAMS3_SSPHY_IFC_GEN1:
+ 				if (DWC3_IP_IS(DWC32))
+-					dwc->max_ssp_rate = USB_SSP_GEN_1x2;
++					dwc->max_ssp_gen = USB_SSP_GEN_1x2;
+ 				break;
+ 			}
+ 			break;
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index a69ac67d89fe..414be70633df 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -1194,8 +1194,8 @@ struct dwc3 {
+ 	u32			u1u2;
+ 	u32			maximum_speed;
+ 	u32			gadget_max_speed;
+-	enum usb_ssp_rate	max_ssp_rate;
+-	enum usb_ssp_rate	gadget_ssp_rate;
++	enum usb_ssp_gen	max_ssp_gen;
++	enum usb_ssp_gen	gadget_ssp_gen;
+ 
+ 	u32			ip;
+ 
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 858fe4c299b7..a9998ea731b8 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -2498,23 +2498,23 @@ static void dwc3_stop_active_transfers(struct dwc3 *dwc)
+ 
+ static void __dwc3_gadget_set_ssp_rate(struct dwc3 *dwc)
+ {
+-	enum usb_ssp_rate	ssp_rate = dwc->gadget_ssp_rate;
++	enum usb_ssp_gen	ssp_gen = dwc->gadget_ssp_gen;
+ 	u32			reg;
+ 
+-	if (ssp_rate == USB_SSP_GEN_UNKNOWN)
+-		ssp_rate = dwc->max_ssp_rate;
++	if (ssp_gen == USB_SSP_GEN_UNKNOWN)
++		ssp_gen = dwc->max_ssp_gen;
+ 
+ 	reg = dwc3_readl(dwc->regs, DWC3_DCFG);
+ 	reg &= ~DWC3_DCFG_SPEED_MASK;
+ 	reg &= ~DWC3_DCFG_NUMLANES(~0);
+ 
+-	if (ssp_rate == USB_SSP_GEN_1x2)
++	if (ssp_gen == USB_SSP_GEN_1x2)
+ 		reg |= DWC3_DCFG_SUPERSPEED;
+-	else if (dwc->max_ssp_rate != USB_SSP_GEN_1x2)
++	else if (dwc->max_ssp_gen != USB_SSP_GEN_1x2)
+ 		reg |= DWC3_DCFG_SUPERSPEED_PLUS;
+ 
+-	if (ssp_rate != USB_SSP_GEN_2x1 &&
+-	    dwc->max_ssp_rate != USB_SSP_GEN_2x1)
++	if (ssp_gen != USB_SSP_GEN_2x1 &&
++	    dwc->max_ssp_gen != USB_SSP_GEN_2x1)
+ 		reg |= DWC3_DCFG_NUMLANES(1);
+ 
+ 	dwc3_writel(dwc->regs, DWC3_DCFG, reg);
+@@ -2529,7 +2529,7 @@ static void __dwc3_gadget_set_speed(struct dwc3 *dwc)
+ 	if (speed == USB_SPEED_UNKNOWN || speed > dwc->maximum_speed)
+ 		speed = dwc->maximum_speed;
+ 
+-	if (speed == USB_SPEED_SUPER_PLUS &&
++	if (speed >= USB_SPEED_SUPER_PLUS &&
+ 	    DWC3_IP_IS(DWC32)) {
+ 		__dwc3_gadget_set_ssp_rate(dwc);
+ 		return;
+@@ -2566,6 +2566,7 @@ static void __dwc3_gadget_set_speed(struct dwc3 *dwc)
+ 			reg |= DWC3_DCFG_SUPERSPEED;
+ 			break;
+ 		case USB_SPEED_SUPER_PLUS:
++		case USB_SPEED_SUPER_PLUS_BY2:
+ 			if (DWC3_IP_IS(DWC3))
+ 				reg |= DWC3_DCFG_SUPERSPEED;
+ 			else
+@@ -3028,15 +3029,22 @@ static void dwc3_gadget_set_speed(struct usb_gadget *g,
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ }
+ 
+-static void dwc3_gadget_set_ssp_rate(struct usb_gadget *g,
+-				     enum usb_ssp_rate rate)
++static void dwc3_gadget_set_ssp_gen(struct usb_gadget *g,
++				    enum usb_ssp_gen gen)
+ {
+ 	struct dwc3		*dwc = gadget_to_dwc(g);
+ 	unsigned long		flags;
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+-	dwc->gadget_max_speed = USB_SPEED_SUPER_PLUS;
+-	dwc->gadget_ssp_rate = rate;
++	switch (gen) {
++	case USB_SSP_GEN_2x2:
++		dwc->gadget_max_speed = USB_SPEED_SUPER_PLUS_BY2;
++		break;
++	default:
++		dwc->gadget_max_speed = USB_SPEED_SUPER_PLUS;
++		break;
++	}
++	dwc->gadget_ssp_gen = gen;
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+ }
+ 
+@@ -3123,7 +3131,7 @@ static const struct usb_gadget_ops dwc3_gadget_ops = {
+ 	.udc_start		= dwc3_gadget_start,
+ 	.udc_stop		= dwc3_gadget_stop,
+ 	.udc_set_speed		= dwc3_gadget_set_speed,
+-	.udc_set_ssp_rate	= dwc3_gadget_set_ssp_rate,
++	.udc_set_ssp_gen	= dwc3_gadget_set_ssp_gen,
+ 	.get_config_params	= dwc3_gadget_config_params,
+ 	.vbus_draw		= dwc3_gadget_vbus_draw,
+ 	.check_config		= dwc3_gadget_check_config,
+@@ -4071,7 +4079,7 @@ static void dwc3_gadget_conndone_interrupt(struct dwc3 *dwc)
+ 	if (DWC3_IP_IS(DWC32))
+ 		lanes = DWC3_DSTS_CONNLANES(reg) + 1;
+ 
+-	dwc->gadget->ssp_rate = USB_SSP_GEN_UNKNOWN;
++	dwc->gadget->ssp_gen = USB_SSP_GEN_UNKNOWN;
+ 
+ 	/*
+ 	 * RAMClkSel is reset to 0 after USB reset, so it must be reprogrammed
+@@ -4086,12 +4094,14 @@ static void dwc3_gadget_conndone_interrupt(struct dwc3 *dwc)
+ 	case DWC3_DSTS_SUPERSPEED_PLUS:
+ 		dwc3_gadget_ep0_desc.wMaxPacketSize = cpu_to_le16(512);
+ 		dwc->gadget->ep0->maxpacket = 512;
+-		dwc->gadget->speed = USB_SPEED_SUPER_PLUS;
+ 
+-		if (lanes > 1)
+-			dwc->gadget->ssp_rate = USB_SSP_GEN_2x2;
+-		else
+-			dwc->gadget->ssp_rate = USB_SSP_GEN_2x1;
++		if (lanes > 1) {
++			dwc->gadget->ssp_gen = USB_SSP_GEN_2x2;
++			dwc->gadget->speed = USB_SPEED_SUPER_PLUS_BY2;
++		} else {
++			dwc->gadget->ssp_gen = USB_SSP_GEN_2x1;
++			dwc->gadget->speed = USB_SPEED_SUPER_PLUS;
++		}
+ 		break;
+ 	case DWC3_DSTS_SUPERSPEED:
+ 		/*
+@@ -4116,7 +4126,7 @@ static void dwc3_gadget_conndone_interrupt(struct dwc3 *dwc)
+ 
+ 		if (lanes > 1) {
+ 			dwc->gadget->speed = USB_SPEED_SUPER_PLUS;
+-			dwc->gadget->ssp_rate = USB_SSP_GEN_1x2;
++			dwc->gadget->ssp_gen = USB_SSP_GEN_1x2;
+ 		}
+ 		break;
+ 	case DWC3_DSTS_HIGHSPEED:
+@@ -4592,7 +4602,7 @@ int dwc3_gadget_init(struct dwc3 *dwc)
+ 	dev->platform_data		= dwc;
+ 	dwc->gadget->ops		= &dwc3_gadget_ops;
+ 	dwc->gadget->speed		= USB_SPEED_UNKNOWN;
+-	dwc->gadget->ssp_rate		= USB_SSP_GEN_UNKNOWN;
++	dwc->gadget->ssp_gen		= USB_SSP_GEN_UNKNOWN;
+ 	dwc->gadget->sg_supported	= true;
+ 	dwc->gadget->name		= "dwc3-gadget";
+ 	dwc->gadget->lpm_capable	= !dwc->usb2_gadget_lpm_disable;
+@@ -4620,7 +4630,7 @@ int dwc3_gadget_init(struct dwc3 *dwc)
+ 				dwc->revision);
+ 
+ 	dwc->gadget->max_speed		= dwc->maximum_speed;
+-	dwc->gadget->max_ssp_rate	= dwc->max_ssp_rate;
++	dwc->gadget->max_ssp_gen	= dwc->max_ssp_gen;
+ 
+ 	/*
+ 	 * REVISIT: Here we should clear all pending IRQs to be
+@@ -4637,8 +4647,8 @@ int dwc3_gadget_init(struct dwc3 *dwc)
+ 		goto err5;
+ 	}
+ 
+-	if (DWC3_IP_IS(DWC32) && dwc->maximum_speed == USB_SPEED_SUPER_PLUS)
+-		dwc3_gadget_set_ssp_rate(dwc->gadget, dwc->max_ssp_rate);
++	if (DWC3_IP_IS(DWC32) && dwc->maximum_speed >= USB_SPEED_SUPER_PLUS)
++		dwc3_gadget_set_ssp_gen(dwc->gadget, dwc->max_ssp_gen);
+ 	else
+ 		dwc3_gadget_set_speed(dwc->gadget, dwc->maximum_speed);
+ 
+diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
+index 0ace45b66a31..17f3b5e968a7 100644
+--- a/drivers/usb/gadget/composite.c
++++ b/drivers/usb/gadget/composite.c
+@@ -71,6 +71,7 @@ function_descriptors(struct usb_function *f,
+ 	 */
+ 
+ 	switch (speed) {
++	case USB_SPEED_SUPER_PLUS_BY2:
+ 	case USB_SPEED_SUPER_PLUS:
+ 		descriptors = f->ssp_descriptors;
+ 		if (descriptors)
+@@ -169,6 +170,7 @@ int config_ep_by_speed_and_alt(struct usb_gadget *g,
+ 
+ 	/* select desired speed */
+ 	switch (g->speed) {
++	case USB_SPEED_SUPER_PLUS_BY2:
+ 	case USB_SPEED_SUPER_PLUS:
+ 		if (f->ssp_descriptors) {
+ 			speed_desc = f->ssp_descriptors;
+@@ -650,6 +652,7 @@ static int config_desc(struct usb_composite_dev *cdev, unsigned w_value)
+ check_config:
+ 		/* ignore configs that won't work at this speed */
+ 		switch (speed) {
++		case USB_SPEED_SUPER_PLUS_BY2:
+ 		case USB_SPEED_SUPER_PLUS:
+ 			if (!c->superspeed_plus)
+ 				continue;
+@@ -688,8 +691,9 @@ static int count_configs(struct usb_composite_dev *cdev, unsigned type)
+ 			hs = 1;
+ 		if (gadget->speed == USB_SPEED_SUPER)
+ 			ss = 1;
+-		if (gadget->speed == USB_SPEED_SUPER_PLUS)
++		if (gadget->speed >= USB_SPEED_SUPER_PLUS)
+ 			ssp = 1;
++
+ 		if (type == USB_DT_DEVICE_QUALIFIER)
+ 			hs = !hs;
+ 	}
+@@ -803,7 +807,7 @@ static int bos_desc(struct usb_composite_dev *cdev)
+ 		u8 ssic;
+ 		int i;
+ 
+-		if (cdev->gadget->max_ssp_rate == USB_SSP_GEN_2x2)
++		if (cdev->gadget->max_ssp_gen == USB_SSP_GEN_2x2)
+ 			ssac = 3;
+ 
+ 		/*
+@@ -850,8 +854,8 @@ static int bos_desc(struct usb_composite_dev *cdev)
+ 
+ 			ssid = i >> 1;
+ 
+-			if (cdev->gadget->max_ssp_rate == USB_SSP_GEN_2x1 ||
+-			    cdev->gadget->max_ssp_rate == USB_SSP_GEN_UNKNOWN)
++			if (cdev->gadget->max_ssp_gen == USB_SSP_GEN_2x1 ||
++			    cdev->gadget->max_ssp_gen == USB_SSP_GEN_UNKNOWN)
+ 				mantissa = 10;
+ 			else
+ 				mantissa = 5 << ssid;
+diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
+index 4c639e9ddedc..e85853bdacf7 100644
+--- a/drivers/usb/gadget/configfs.c
++++ b/drivers/usb/gadget/configfs.c
+@@ -327,18 +327,18 @@ static ssize_t gadget_dev_desc_max_speed_store(struct config_item *item,
+ 	if (gi->composite.gadget_driver.udc_name)
+ 		goto err;
+ 
+-	if (strncmp(page, "super-speed-plus", 16) == 0)
+-		gi->composite.max_speed = USB_SPEED_SUPER_PLUS;
+-	else if (strncmp(page, "super-speed", 11) == 0)
+-		gi->composite.max_speed = USB_SPEED_SUPER;
+-	else if (strncmp(page, "high-speed", 10) == 0)
+-		gi->composite.max_speed = USB_SPEED_HIGH;
+-	else if (strncmp(page, "full-speed", 10) == 0)
+-		gi->composite.max_speed = USB_SPEED_FULL;
+-	else if (strncmp(page, "low-speed", 9) == 0)
+-		gi->composite.max_speed = USB_SPEED_LOW;
+-	else
++	gi->composite.max_speed = usb_speed_from_name(page);
++	switch (gi->composite.max_speed) {
++	case USB_SPEED_SUPER_PLUS_BY2:
++	case USB_SPEED_SUPER_PLUS:
++	case USB_SPEED_SUPER:
++	case USB_SPEED_HIGH:
++	case USB_SPEED_FULL:
++	case USB_SPEED_LOW:
++		break;
++	default:
+ 		goto err;
++	}
+ 
+ 	gi->composite.gadget_driver.max_speed = gi->composite.max_speed;
+ 
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index f41a385a5c42..56e7b924f3c9 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -1321,6 +1321,7 @@ static long ffs_epfile_ioctl(struct file *file, unsigned code,
+ 		switch (epfile->ffs->gadget->speed) {
+ 		case USB_SPEED_SUPER:
+ 		case USB_SPEED_SUPER_PLUS:
++		case USB_SPEED_SUPER_PLUS_BY2:
+ 			desc_idx = 2;
+ 			break;
+ 		case USB_SPEED_HIGH:
+diff --git a/drivers/usb/gadget/function/f_sourcesink.c b/drivers/usb/gadget/function/f_sourcesink.c
+index 2edbd9b510d6..e9bc2b9a1542 100644
+--- a/drivers/usb/gadget/function/f_sourcesink.c
++++ b/drivers/usb/gadget/function/f_sourcesink.c
+@@ -582,6 +582,7 @@ static int source_sink_start_ep(struct f_sourcesink *ss, bool is_in,
+ 
+ 	if (is_iso) {
+ 		switch (speed) {
++		case USB_SPEED_SUPER_PLUS_BY2:
+ 		case USB_SPEED_SUPER_PLUS:
+ 		case USB_SPEED_SUPER:
+ 			size = ss->isoc_maxpacket *
+diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
+index 0219cd79493a..0937f55c9c88 100644
+--- a/drivers/usb/gadget/function/f_uac2.c
++++ b/drivers/usb/gadget/function/f_uac2.c
+@@ -124,16 +124,6 @@ static struct usb_string strings_fn[] = {
+ 	{ },
+ };
+ 
+-static const char *const speed_names[] = {
+-	[USB_SPEED_UNKNOWN] = "UNKNOWN",
+-	[USB_SPEED_LOW] = "LS",
+-	[USB_SPEED_FULL] = "FS",
+-	[USB_SPEED_HIGH] = "HS",
+-	[USB_SPEED_WIRELESS] = "W",
+-	[USB_SPEED_SUPER] = "SS",
+-	[USB_SPEED_SUPER_PLUS] = "SS+",
+-};
+-
+ static struct usb_gadget_strings str_fn = {
+ 	.language = 0x0409,	/* en-us */
+ 	.strings = strings_fn,
+@@ -763,11 +753,11 @@ static int set_ep_max_packet_size_bint(struct device *dev, const struct f_uac2_o
+ 	if (max_size_bw <= max_size_ep)
+ 		dev_dbg(dev,
+ 			"%s %s: Would use wMaxPacketSize %d and bInterval %d\n",
+-			speed_names[speed], dir, max_size_bw, bint);
++			usb_speed_string(speed), dir, max_size_bw, bint);
+ 	else {
+ 		dev_warn(dev,
+ 			"%s %s: Req. wMaxPacketSize %d at bInterval %d > max ISOC %d, may drop data!\n",
+-			speed_names[speed], dir, max_size_bw, bint, max_size_ep);
++			usb_speed_string(speed), dir, max_size_bw, bint, max_size_ep);
+ 		max_size_bw = max_size_ep;
+ 	}
+ 
+diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+index 7166d1117742..93773f60939b 100644
+--- a/drivers/usb/gadget/udc/core.c
++++ b/drivers/usb/gadget/udc/core.c
+@@ -1266,8 +1266,8 @@ static inline void usb_gadget_udc_set_speed(struct usb_udc *udc,
+ 	else
+ 		s = min(speed, gadget->max_speed);
+ 
+-	if (s == USB_SPEED_SUPER_PLUS && gadget->ops->udc_set_ssp_rate)
+-		gadget->ops->udc_set_ssp_rate(gadget, gadget->max_ssp_rate);
++	if (s >= USB_SPEED_SUPER_PLUS && gadget->ops->udc_set_ssp_gen)
++		gadget->ops->udc_set_ssp_gen(gadget, gadget->max_ssp_gen);
+ 	else if (gadget->ops->udc_set_speed)
+ 		gadget->ops->udc_set_speed(gadget, s);
+ }
+diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+index 8714ab5bf04d..e26384b24aa6 100644
+--- a/drivers/usb/host/xhci-mem.c
++++ b/drivers/usb/host/xhci-mem.c
+@@ -1087,25 +1087,31 @@ int xhci_setup_addressable_virt_dev(struct xhci_hcd *xhci, struct usb_device *ud
+ 	/* 3) Only the control endpoint is valid - one endpoint context */
+ 	slot_ctx->dev_info |= cpu_to_le32(LAST_CTX(1) | udev->route);
+ 	switch (udev->speed) {
++	case USB_SPEED_SUPER_PLUS_BY2:
+ 	case USB_SPEED_SUPER_PLUS:
+-		slot_ctx->dev_info |= cpu_to_le32(SLOT_SPEED_SSP);
++		slot_ctx->dev_info |= (xhci->hci_version < 0x120) ?
++					cpu_to_le32(SLOT_SPEED_SSP) : 0;
+ 		max_packets = MAX_PACKET(512);
+ 		break;
+ 	case USB_SPEED_SUPER:
+-		slot_ctx->dev_info |= cpu_to_le32(SLOT_SPEED_SS);
++		slot_ctx->dev_info |= (xhci->hci_version < 0x120) ?
++					cpu_to_le32(SLOT_SPEED_SS) : 0;
+ 		max_packets = MAX_PACKET(512);
+ 		break;
+ 	case USB_SPEED_HIGH:
+-		slot_ctx->dev_info |= cpu_to_le32(SLOT_SPEED_HS);
++		slot_ctx->dev_info |= (xhci->hci_version < 0x120) ?
++					cpu_to_le32(SLOT_SPEED_HS) : 0;
+ 		max_packets = MAX_PACKET(64);
+ 		break;
+ 	/* USB core guesses at a 64-byte max packet first for FS devices */
+ 	case USB_SPEED_FULL:
+-		slot_ctx->dev_info |= cpu_to_le32(SLOT_SPEED_FS);
++		slot_ctx->dev_info |= (xhci->hci_version < 0x120) ?
++					cpu_to_le32(SLOT_SPEED_FS) : 0;
+ 		max_packets = MAX_PACKET(64);
+ 		break;
+ 	case USB_SPEED_LOW:
+-		slot_ctx->dev_info |= cpu_to_le32(SLOT_SPEED_LS);
++		slot_ctx->dev_info |= (xhci->hci_version < 0x120) ?
++					cpu_to_le32(SLOT_SPEED_LS) : 0;
+ 		max_packets = MAX_PACKET(8);
+ 		break;
+ 	default:
+@@ -1276,6 +1282,7 @@ static unsigned int xhci_get_endpoint_interval(struct usb_device *udev,
+ 		}
+ 		fallthrough;	/* SS and HS isoc/int have same decoding */
+ 
++	case USB_SPEED_SUPER_PLUS_BY2:
+ 	case USB_SPEED_SUPER_PLUS:
+ 	case USB_SPEED_SUPER:
+ 		if (usb_endpoint_xfer_int(&ep->desc) ||
+diff --git a/drivers/usb/host/xhci-mtk-sch.c b/drivers/usb/host/xhci-mtk-sch.c
+index 579899eb24c1..97318537612a 100644
+--- a/drivers/usb/host/xhci-mtk-sch.c
++++ b/drivers/usb/host/xhci-mtk-sch.c
+@@ -89,6 +89,7 @@ static u32 get_bw_boundary(enum usb_device_speed speed)
+ 	u32 boundary;
+ 
+ 	switch (speed) {
++	case USB_SPEED_SUPER_PLUS_BY2:
+ 	case USB_SPEED_SUPER_PLUS:
+ 		boundary = SSP_BW_BOUNDARY;
+ 		break;
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index e1b1b64a0723..5483920a6ce9 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -2192,6 +2192,7 @@ static unsigned int xhci_get_block_size(struct usb_device *udev)
+ 		return HS_BLOCK;
+ 	case USB_SPEED_SUPER:
+ 	case USB_SPEED_SUPER_PLUS:
++	case USB_SPEED_SUPER_PLUS_BY2:
+ 		return SS_BLOCK;
+ 	case USB_SPEED_UNKNOWN:
+ 	default:
+@@ -5102,15 +5103,15 @@ static void xhci_hcd_init_usb3_data(struct xhci_hcd *xhci, struct usb_hcd *hcd)
+ 	switch (minor_rev) {
+ 	case 2:
+ 		hcd->speed = HCD_USB32;
+-		hcd->self.root_hub->speed = USB_SPEED_SUPER_PLUS;
++		hcd->self.root_hub->speed = USB_SPEED_SUPER_PLUS_BY2;
+ 		hcd->self.root_hub->rx_lanes = 2;
+ 		hcd->self.root_hub->tx_lanes = 2;
+-		hcd->self.root_hub->ssp_rate = USB_SSP_GEN_2x2;
++		hcd->self.root_hub->ssp_gen = USB_SSP_GEN_2x2;
+ 		break;
+ 	case 1:
+ 		hcd->speed = HCD_USB31;
+ 		hcd->self.root_hub->speed = USB_SPEED_SUPER_PLUS;
+-		hcd->self.root_hub->ssp_rate = USB_SSP_GEN_2x1;
++		hcd->self.root_hub->ssp_gen = USB_SSP_GEN_2x1;
+ 		break;
+ 	}
+ 	xhci_info(xhci, "Host supports USB 3.%x %sSuperSpeed\n",
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index 7e282b4522c0..ec507770a559 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -345,7 +345,10 @@ struct xhci_op_regs {
+ #define DEV_SUPERSPEED_ANY(p)	(((p) & DEV_SPEED_MASK) >= XDEV_SS)
+ #define DEV_PORT_SPEED(p)	(((p) >> 10) & 0x0f)
+ 
+-/* Bits 20:23 in the Slot Context are the speed for the device */
++/* Bits 20:23 in the Slot Context are the speed for the device.
++ * This field has been deprecated since xHCI spec revision 1.2
++ * and shall be reserved.
++ */
+ #define	SLOT_SPEED_FS		(XDEV_FS << 10)
+ #define	SLOT_SPEED_LS		(XDEV_LS << 10)
+ #define	SLOT_SPEED_HS		(XDEV_HS << 10)
+diff --git a/drivers/usb/mtu3/mtu3_core.c b/drivers/usb/mtu3/mtu3_core.c
+index a3a6282893d0..346df653a1e4 100644
+--- a/drivers/usb/mtu3/mtu3_core.c
++++ b/drivers/usb/mtu3/mtu3_core.c
+@@ -254,6 +254,7 @@ static void mtu3_set_speed(struct mtu3 *mtu, enum usb_device_speed speed)
+ 			     SSUSB_U3_PORT_SSP_SPEED);
+ 		break;
+ 	case USB_SPEED_SUPER_PLUS:
++	case USB_SPEED_SUPER_PLUS_BY2:
+ 		mtu3_setbits(mbase, U3D_POWER_MANAGEMENT, HS_ENABLE);
+ 		mtu3_setbits(mtu->ippc_base, SSUSB_U3_CTRL(0),
+ 			     SSUSB_U3_PORT_SSP_SPEED);
+@@ -831,6 +832,7 @@ static void mtu3_check_params(struct mtu3 *mtu)
+ 	case USB_SPEED_HIGH:
+ 	case USB_SPEED_SUPER:
+ 	case USB_SPEED_SUPER_PLUS:
++	case USB_SPEED_SUPER_PLUS_BY2:
+ 		break;
+ 	default:
+ 		dev_err(mtu->dev, "invalid max_speed: %s\n",
+diff --git a/drivers/usb/mtu3/mtu3_gadget.c b/drivers/usb/mtu3/mtu3_gadget.c
+index ad0eeac4332d..1545d139907c 100644
+--- a/drivers/usb/mtu3/mtu3_gadget.c
++++ b/drivers/usb/mtu3/mtu3_gadget.c
+@@ -74,6 +74,7 @@ static int mtu3_ep_enable(struct mtu3_ep *mep)
+ 	switch (mtu->g.speed) {
+ 	case USB_SPEED_SUPER:
+ 	case USB_SPEED_SUPER_PLUS:
++	case USB_SPEED_SUPER_PLUS_BY2:
+ 		if (usb_endpoint_xfer_int(desc) ||
+ 				usb_endpoint_xfer_isoc(desc)) {
+ 			interval = desc->bInterval;
+diff --git a/include/linux/usb.h b/include/linux/usb.h
+index a21074861f91..af8674d95820 100644
+--- a/include/linux/usb.h
++++ b/include/linux/usb.h
+@@ -657,7 +657,7 @@ struct usb_device {
+ 	enum usb_device_speed	speed;
+ 	unsigned int		rx_lanes;
+ 	unsigned int		tx_lanes;
+-	enum usb_ssp_rate	ssp_rate;
++	enum usb_ssp_gen	ssp_gen;
+ 
+ 	struct usb_tt	*tt;
+ 	int		ttport;
+diff --git a/include/linux/usb/ch9.h b/include/linux/usb/ch9.h
+index c93b410b314a..bf9d66399d46 100644
+--- a/include/linux/usb/ch9.h
++++ b/include/linux/usb/ch9.h
+@@ -32,21 +32,15 @@
+ 
+ #include <uapi/linux/usb/ch9.h>
+ 
+-/* USB 3.2 SuperSpeed Plus phy signaling rate generation and lane count */
+-
+-enum usb_ssp_rate {
+-	USB_SSP_GEN_UNKNOWN = 0,
+-	USB_SSP_GEN_2x1,
+-	USB_SSP_GEN_1x2,
+-	USB_SSP_GEN_2x2,
+-};
+-
+ struct device;
+ 
+ extern const char *usb_ep_type_string(int ep_type);
+ extern const char *usb_speed_string(enum usb_device_speed speed);
++extern const char *usb_speed_value(enum usb_device_speed speed);
++extern const char *usb_ssp_gen_name(enum usb_ssp_gen gen);
++extern enum usb_device_speed usb_speed_from_name(const char *speed_name);
+ extern enum usb_device_speed usb_get_maximum_speed(struct device *dev);
+-extern enum usb_ssp_rate usb_get_maximum_ssp_rate(struct device *dev);
++extern enum usb_ssp_gen usb_get_maximum_ssp_gen(struct device *dev);
+ extern const char *usb_state_string(enum usb_device_state state);
+ unsigned int usb_decode_interval(const struct usb_endpoint_descriptor *epd,
+ 				 enum usb_device_speed speed);
+diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
+index 75bda0783395..6f8040e3e29b 100644
+--- a/include/linux/usb/gadget.h
++++ b/include/linux/usb/gadget.h
+@@ -324,8 +324,8 @@ struct usb_gadget_ops {
+ 			struct usb_gadget_driver *);
+ 	int	(*udc_stop)(struct usb_gadget *);
+ 	void	(*udc_set_speed)(struct usb_gadget *, enum usb_device_speed);
+-	void	(*udc_set_ssp_rate)(struct usb_gadget *gadget,
+-			enum usb_ssp_rate rate);
++	void	(*udc_set_ssp_gen)(struct usb_gadget *gadget,
++			enum usb_ssp_gen gen);
+ 	void	(*udc_async_callbacks)(struct usb_gadget *gadget, bool enable);
+ 	struct usb_ep *(*match_ep)(struct usb_gadget *,
+ 			struct usb_endpoint_descriptor *,
+@@ -420,8 +420,8 @@ struct usb_gadget {
+ 	enum usb_device_speed		max_speed;
+ 
+ 	/* USB SuperSpeed Plus only */
+-	enum usb_ssp_rate		ssp_rate;
+-	enum usb_ssp_rate		max_ssp_rate;
++	enum usb_ssp_gen		ssp_gen;
++	enum usb_ssp_gen		max_ssp_gen;
+ 
+ 	enum usb_device_state		state;
+ 	const char			*name;
+diff --git a/include/uapi/linux/usb/ch9.h b/include/uapi/linux/usb/ch9.h
+index 8a147abfc680..3522e2c20599 100644
+--- a/include/uapi/linux/usb/ch9.h
++++ b/include/uapi/linux/usb/ch9.h
+@@ -1181,10 +1181,19 @@ enum usb_device_speed {
+ 	USB_SPEED_LOW, USB_SPEED_FULL,		/* usb 1.1 */
+ 	USB_SPEED_HIGH,				/* usb 2.0 */
+ 	USB_SPEED_WIRELESS,			/* wireless (usb 2.5) */
+-	USB_SPEED_SUPER,			/* usb 3.0 */
+-	USB_SPEED_SUPER_PLUS,			/* usb 3.1 */
++	USB_SPEED_SUPER,			/* usb 3.0 5Gbps */
++	USB_SPEED_SUPER_PLUS,			/* usb 3.1 10Gbps */
++	USB_SPEED_SUPER_PLUS_BY2,		/* usb 3.2 20Gbps */
+ };
+ 
++/* USB 3.2 SuperSpeed Plus phy signaling generation and lane count */
++
++enum usb_ssp_gen {
++	USB_SSP_GEN_UNKNOWN = 0,
++	USB_SSP_GEN_2x1,
++	USB_SSP_GEN_1x2,
++	USB_SSP_GEN_2x2,
++};
+ 
+ enum usb_device_state {
+ 	/* NOTATTACHED isn't in the USB spec, and this state acts
+diff --git a/sound/usb/card.c b/sound/usb/card.c
+index 1b2edc0fd2e9..13c7da24571b 100644
+--- a/sound/usb/card.c
++++ b/sound/usb/card.c
+@@ -571,19 +571,15 @@ static void usb_audio_make_longname(struct usb_device *dev,
+ 
+ 	switch (snd_usb_get_speed(dev)) {
+ 	case USB_SPEED_LOW:
+-		strlcat(card->longname, ", low speed", sizeof(card->longname));
+-		break;
+ 	case USB_SPEED_FULL:
+-		strlcat(card->longname, ", full speed", sizeof(card->longname));
+-		break;
+ 	case USB_SPEED_HIGH:
+-		strlcat(card->longname, ", high speed", sizeof(card->longname));
+-		break;
+ 	case USB_SPEED_SUPER:
+-		strlcat(card->longname, ", super speed", sizeof(card->longname));
+-		break;
+ 	case USB_SPEED_SUPER_PLUS:
+-		strlcat(card->longname, ", super speed plus", sizeof(card->longname));
++	case USB_SPEED_SUPER_PLUS_BY2:
++		strlcat(card->longname, ", ", sizeof(card->longname));
++		strlcat(card->longname,
++			usb_speed_string(snd_usb_get_speed(dev)),
++			sizeof(card->longname));
+ 		break;
+ 	default:
+ 		break;
+@@ -612,6 +608,7 @@ static int snd_usb_audio_create(struct usb_interface *intf,
+ 	case USB_SPEED_HIGH:
+ 	case USB_SPEED_SUPER:
+ 	case USB_SPEED_SUPER_PLUS:
++	case USB_SPEED_SUPER_PLUS_BY2:
+ 		break;
+ 	default:
+ 		dev_err(&dev->dev, "unknown device speed %d\n", snd_usb_get_speed(dev));
+diff --git a/sound/usb/helper.c b/sound/usb/helper.c
+index bf80e55d013a..0cac8e0177e4 100644
+--- a/sound/usb/helper.c
++++ b/sound/usb/helper.c
+@@ -110,6 +110,7 @@ unsigned char snd_usb_parse_datainterval(struct snd_usb_audio *chip,
+ 	case USB_SPEED_HIGH:
+ 	case USB_SPEED_SUPER:
+ 	case USB_SPEED_SUPER_PLUS:
++	case USB_SPEED_SUPER_PLUS_BY2:
+ 		if (get_endpoint(alts, 0)->bInterval >= 1 &&
+ 		    get_endpoint(alts, 0)->bInterval <= 4)
+ 			return get_endpoint(alts, 0)->bInterval - 1;
+diff --git a/sound/usb/midi.c b/sound/usb/midi.c
+index 6b0993258e03..47159aaba8d5 100644
+--- a/sound/usb/midi.c
++++ b/sound/usb/midi.c
+@@ -897,6 +897,7 @@ static void snd_usbmidi_us122l_output(struct snd_usb_midi_out_endpoint *ep,
+ 	case USB_SPEED_HIGH:
+ 	case USB_SPEED_SUPER:
+ 	case USB_SPEED_SUPER_PLUS:
++	case USB_SPEED_SUPER_PLUS_BY2:
+ 		count = 1;
+ 		break;
+ 	default:
+diff --git a/tools/usb/testusb.c b/tools/usb/testusb.c
+index cbaa1b9fdeac..6f6675c92e0c 100644
+--- a/tools/usb/testusb.c
++++ b/tools/usb/testusb.c
+@@ -98,8 +98,9 @@ enum usb_device_speed {
+ 	USB_SPEED_LOW, USB_SPEED_FULL,		/* usb 1.1 */
+ 	USB_SPEED_HIGH,				/* usb 2.0 */
+ 	USB_SPEED_WIRELESS,			/* wireless (usb 2.5) */
+-	USB_SPEED_SUPER,			/* usb 3.0 */
+-	USB_SPEED_SUPER_PLUS,			/* usb 3.1 */
++	USB_SPEED_SUPER,			/* usb 3.0 5Gbps */
++	USB_SPEED_SUPER_PLUS,			/* usb 3.1 10Gbps */
++	USB_SPEED_SUPER_PLUS_BY2,		/* usb 3.2 20Gbps */
+ };
+ 
+ /*-------------------------------------------------------------------------*/
+@@ -114,6 +115,7 @@ static char *speed (enum usb_device_speed s)
+ 	case USB_SPEED_WIRELESS:	return "wireless";
+ 	case USB_SPEED_SUPER:		return "super";
+ 	case USB_SPEED_SUPER_PLUS:	return "super-plus";
++	case USB_SPEED_SUPER_PLUS_BY2:	return "super-plus-by2";
+ 	default:			return "??";
+ 	}
+ }
+-- 
+2.25.1
 
-  Merge tag 'usb-serial-6.6-rc1' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-next (2023-08-27 13:11:05 +0200)
-
-----------------------------------------------------------------
-USB / Thunderbolt / PHY driver update for 6.6-rc1
-
-Here is the big set of USB, Thunderbolt, and PHY driver updates for
-6.6-rc1.  Included in here are:
-  - PHY driver additions and cleanups
-  - Thunderbolt minor additions and fixes
-  - USB MIDI 2 gadget support added
-  - dwc3 driver updates and additions
-  - Removal of some old USB wireless code that was missed when that
-    codebase was originally removed a few years ago, cleaning up some
-    core USB code paths
-  - USB core potential use-after-free fixes that syzbot from different
-    people/groups keeps tripping over
-  - typec updates and additions
-  - gadget fixes and cleanups
-  - loads of smaller USB core and driver cleanups all over the place
-
-Full details are in the shortlog.  All of these have been in linux-next
-for a while with no reported problems.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Alan Stern (9):
-      USB: core: Unite old scheme and new scheme descriptor reads
-      USB: core: Change usb_get_device_descriptor() API
-      USB: core: Fix race by not overwriting udev->descriptor in hub_port_init()
-      USB: Remove remnants of Wireless USB and UWB
-      USB: Remove Wireless USB and UWB documentation
-      USB: core: Fix unused variable warning in usb_alloc_dev()
-      USB: core: Fix oversight in SuperSpeed initialization
-      USB: gadget: core: Add missing kerneldoc for vbus_work
-      USB: gadget: f_mass_storage: Fix unused variable warning
-
-Anand Moon (1):
-      usb: misc: onboard_usb_hub: add Genesys Logic GL3523 hub support
-
-Andy Shevchenko (1):
-      usb: musb: Use read_poll_timeout()
-
-Badhri Jagan Sridharan (1):
-      tcpm: Avoid soft reset when partner does not support get_status
-
-Benjamin Bara (3):
-      usb: misc: onboard-hub: support multiple power supplies
-      usb: misc: onboard-hub: add support for Cypress HX3 USB 3.0 family
-      dt-bindings: usb: Add binding for Cypress HX3 USB 3.0 family
-
-Dan Drown (2):
-      usb: cdc-acm: add PPS support
-      usb: cdc-acm: move ldisc dcd notification outside of acm's read lock
-
-Dmitry Baryshkov (3):
-      usb: typec: qcom: properly detect Audio Accessory mode peripherals
-      usb: typec: altmodes/displayport: add support for embedded DP cases
-      usb: typec: qcom-pmic-typec: register drm_bridge
-
-Fabio Estevam (2):
-      dt-bindings: usb: ci-hdrc-usb2: Add the "fsl,imx35-usb" entry
-      dt-bindings: usb: ci-hdrc-usb2: Fix clocks/clock-names maxItems
-
-Greg Kroah-Hartman (4):
-      Merge 6.5-rc4 into usb-next
-      Merge 6.5-rc6 into usb-next
-      Merge tag 'thunderbolt-for-v6.6-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-next
-      Merge tag 'usb-serial-6.6-rc1' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-next
-
-Guiting Shen (1):
-      usb: ohci-at91: Fix the unhandle interrupt when resume
-
-Haotien Hsu (1):
-      usb: xhci: tegra: Add shutdown callback for Tegra XUSB
-
-Ivan Orlov (1):
-      USB: make usb class a const structure
-
-Jarkko Sonninen (1):
-      USB: serial: xr: add TIOCGRS485 and TIOCSRS485 ioctls
-
-Krzysztof Kozlowski (3):
-      dt-bindings: usb: qcom,dwc3: drop assigned-clocks
-      dt-bindings: usb: qcom,dwc3: correct SDM660 clocks
-      dt-bindings: usb: samsung,exynos-dwc3: fix order of clocks on Exynos5433
-
-Kyle Tso (1):
-      usb: typec: tcpm: Refactor the PPS APDO selection
-
-Ladislav Michl (9):
-      usb: dwc3-am62: Rename private data
-      usb: dwc3: dwc3-octeon: Convert to glue driver
-      usb: dwc3: dwc3-octeon: Use _ULL bitfields defines
-      usb: dwc3: dwc3-octeon: Pass dwc3_octeon to setup functions
-      usb: dwc3: dwc3-octeon: Avoid half-initialized controller state
-      usb: dwc3: dwc3-octeon: Move node parsing into driver probe
-      usb: dwc3: dwc3-octeon: Dump control register on clock init failure
-      usb: dwc3: dwc3-octeon: Add SPDX header and copyright
-      usb: dwc3: dwc3-octeon: Verify clock divider
-
-Li Zetao (2):
-      usb: gadget: udc: Remove redundant initialization for udc_driver
-      usb: core: Use module_led_trigger macro to simplify the code
-
-Linyu Yuan (7):
-      usb: gadget: use working speed to calcaulate network bitrate and qlen
-      usb: gadget: add a inline function gether_bitrate()
-      usb: gadget: f_uvc: change endpoint allocation in uvc_function_bind()
-      usb: gadget: unconditionally allocate hs/ss descriptor in bind operation
-      usb: gadget: config: remove max speed check in usb_assign_descriptors()
-      usb: gadget: composite: cleanup function config_ep_by_speed_and_alt()
-      usb: gadget: remove max support speed info in bind operation
-
-Luke Lu (1):
-      usb: dwc3: meson-g12a: do post init to fix broken usb after resumption
-
-Ma Ke (1):
-      usb: gadget: fsl_qe_udc: validate endpoint index for ch9 udc
-
-Madhu M (1):
-      usb: typec: intel_pmc_mux: Add new ACPI ID for Lunar Lake IOM device
-
-Marco Felsch (2):
-      dt-bindings: usb: Add binding for Genesys Logic GL3523 hub
-      usb: typec: tcpci: clear the fault status bit
-
-Martin Kohn (1):
-      USB: serial: option: add Quectel EM05G variant (0x030e)
-
-Mika Westerberg (3):
-      thunderbolt: Log a warning if device links are not found
-      thunderbolt: Check Intel vendor ID in tb_switch_get_generation()
-      Documentation/ABI: thunderbolt: Replace 01.org in contact
-
-Minda Chen (1):
-      usb: cdns3: Add PHY mode switch to usb2 PHY
-
-Oliver Neukum (2):
-      USB: document ioctl USBDEVFS_GET_SPEED
-      USB: dwc2: hande irq on dead controller correctly
-
-Piyush Mehta (3):
-      usb: gadget: udc-xilinx: fix restricted __le16 degrades to integer warning
-      usb: gadget: udc-xilinx: fix cast from restricted __le16 warning
-      usb: gadget: udc-xilinx: fix incorrect type in assignment warning
-
-RD Babiera (2):
-      usb: typec: bus: verify partner exists in typec_altmode_attention
-      usb: typec: tcpm: set initial svdm version based on pd revision
-
-Rob Herring (1):
-      usb: Explicitly include correct DT includes
-
-Ruan Jinjie (9):
-      USB: cytherm: Correct the code style issue of redundant spaces
-      usb: host: Do not check for 0 return after calling platform_get_irq()
-      usb: gadget: udc: Remove unnecessary NULL values
-      USB: misc: Remove unnecessary NULL values
-      usb: chipidea: udc: Remove an unnecessary NULL value
-      usb: musb: Remove an unnecessary NULL value
-      USB: usbip: Remove an unnecessary NULL value
-      USB: usbip: Remove an unnecessary goto
-      usb: gadget/snps_udc_plat: Remove redundant of_match_ptr()
-
-Sam Protsenko (3):
-      dt-bindings: usb: samsung,exynos-dwc3: Fix Exynos5433 compatible
-      usb: dwc3: exynos: Add support for Exynos850 variant
-      dt-bindings: usb: samsung,exynos-dwc3: Add Exynos850 support
-
-Saranya Gopal (1):
-      usb: typec: ucsi: Add debugfs for ucsi commands
-
-Simon Arlott (1):
-      USB: cdc-acm: support flushing write buffers (TCOFLUSH)
-
-Slark Xiao (1):
-      USB: serial: option: add FOXCONN T99W368/T99W373 product
-
-Stanley Chang (7):
-      usb: phy: add usb phy notify port status API
-      phy: realtek: usb: Add driver for the Realtek SoC USB 2.0 PHY
-      phy: realtek: usb: Add driver for the Realtek SoC USB 3.0 PHY
-      dt-bindings: phy: realtek: Add Realtek DHC RTD SoC USB 2.0 PHY
-      dt-bindings: phy: realtek: Add Realtek DHC RTD SoC USB 3.0 PHY
-      phy: realtek: usb: phy-rtk-usb2 and phy-rtk-usb3 needs USB_COMMON
-      phy: realtek: usb: add the error handler for nvmem_cell_read
-
-Takashi Iwai (7):
-      usb: gadget: Add support for USB MIDI 2.0 function driver
-      usb: gadget: midi2: Add configfs support
-      usb: gadget: midi2: Dynamically create MIDI 1.0 altset descriptors
-      usb: gadget: midi2: MIDI 1.0 interface (altset 0) support
-      usb: gadget: midi2: Add testing documentation
-      usb: gadget: midi2: Add "Operation Mode" control
-      usb: gadget: midi2: More flexible MIDI 1.0 configuration
-
-Tom Rix (1):
-      thunderbolt: Set variable tmu_params storage class specifier to static
-
-Utkarsh Patel (2):
-      usb: typec: intel_pmc_mux: Configure Active and Retimer Cable type
-      platform/chrome: cros_ec_typec: Configure Retimer cable type
-
-Uwe Kleine-König (2):
-      usb: typec: nb7vpq904m: Switch back to use struct i2c_driver::probe
-      usb: cdns3: starfive: Convert to platform remove callback returning void
-
-Varadarajan Narayanan (1):
-      dt-bindings: usb: dwc3: Add IPQ5332 compatible
-
-Varshini Rajendran (1):
-      dt-bindings: usb: ehci: Add atmel at91sam9g45-ehci compatible
-
-Xiaolei Wang (1):
-      usb: cdns3: Put the cdns set active part outside the spin lock
-
-Xu Yang (11):
-      usb: chipidea: imx: improve logic if samsung,picophy-* parameter is 0
-      dt-bindings: usb: ci-hdrc-usb2: add fsl,picophy-rise-fall-time-adjust property
-      usb: chipidea: imx: add one fsl picophy parameter tuning implementation
-      usb: chipidea: add USB PHY event
-      usb: phy: mxs: fix getting wrong state with mxs_phy_is_otg_host()
-      usb: phy: mxs: disconnect line when USB charger is attached
-      usb: typec: tcpm: not sink vbus if operational current is 0mA
-      usb: ehci: add workaround for chipidea PORTSC.PEC bug
-      usb: chipidea: add workaround for chipidea PEC bug
-      usb: host: ehci-sched: try to turn on io watchdog as long as periodic_count > 0
-      usb: typec: tcpm: reset counter when enter into unattached state after try role
-
-Yang Yingliang (3):
-      usb: gadget: midi2: fix missing unlock in f_midi2_block_opts_create()
-      USB: ohci-sm501: remove unnecessary check of mem
-      usb: dwc3: remove unnecessary platform_set_drvdata()
-
-Yangtao Li (30):
-      usb: ehci-npcm7xx: fix typo in npcm7xx_ehci_hcd_drv_probe()
-      usb: chipidea/core: Use devm_platform_get_and_ioremap_resource()
-      usb: ohci-at91: Use devm_platform_get_and_ioremap_resource()
-      usb: ohci-at91: Remove redundant msg at probe time
-      usb: gadget: udc: udc-xilinx: Use devm_platform_get_and_ioremap_resource()
-      usb: gadget: aspeed: Use devm_platform_get_and_ioremap_resource()
-      usb: gadget/snps_udc_plat: Use devm_platform_get_and_ioremap_resource()
-      usb: gadget/atmel_usba_udc: Use devm_platform_get_and_ioremap_resource()
-      usb: gadget: aspeed_udc: Convert to devm_platform_ioremap_resource()
-      usb: ehci-atmel: Use devm_platform_get_and_ioremap_resource()
-      usb: ehci-platform: Use devm_platform_get_and_ioremap_resource()
-      usb: ehci-spear: Use devm_platform_get_and_ioremap_resource()
-      usb: isp1362-hcd: Use devm_platform_get_and_ioremap_resource()
-      usb: ohci-da8xx: Use devm_platform_get_and_ioremap_resource()
-      usb: host: ohci-platform: Use devm_platform_get_and_ioremap_resource()
-      usb: ehci-sh: Use devm_platform_get_and_ioremap_resource()
-      usb: ohci-exynos: Use devm_platform_get_and_ioremap_resource()
-      usb: ehci-npcm7xx: Use devm_platform_get_and_ioremap_resource()
-      usb: ohci-nxp: Use devm_platform_get_and_ioremap_resource()
-      usb: ehci-orion: Use devm_platform_get_and_ioremap_resource()
-      usb: ehci-fsl: Use devm_platform_get_and_ioremap_resource()
-      usb: oxu210hp-hcd: Use devm_platform_get_and_ioremap_resource()
-      usb: ohci-pxa27x: Use devm_platform_get_and_ioremap_resource()
-      usb: ehci-omap: Use devm_platform_get_and_ioremap_resource()
-      usb: ohci-spear: Use devm_platform_get_and_ioremap_resource()
-      usb: ehci-mv: Use devm_platform_get_and_ioremap_resource()
-      usb: uhci-platform: Use devm_platform_get_and_ioremap_resource()
-      usb: ehci-st: Use devm_platform_get_and_ioremap_resource()
-      usb: ehci-exynos: Use devm_platform_get_and_ioremap_resource()
-      usb: ohci-st: Use devm_platform_get_and_ioremap_resource()
-
-Yinbo Zhu (1):
-      usb: dwc2: add pci_device_id driver_data parse support
-
-Yue Haibing (3):
-      usb: musb: Remove unused function declarations
-      USB: misc: Remove unused include file usb_u132.h
-      usb: gadget: function: Remove unused declarations
-
-Zhu Wang (3):
-      usb: musb: Fix deferred probing
-      usb: typec: tcpci_mt6370: remove redundant dev_err_probe()
-      usb: gadget: udc: gr_udc: Fix deferred probing
-
- CREDITS                                            |   11 -
- .../ABI/testing/configfs-usb-gadget-midi2          |   54 +
- Documentation/ABI/testing/sysfs-bus-thunderbolt    |   38 +-
- Documentation/ABI/testing/sysfs-bus-umc            |   28 -
- Documentation/ABI/testing/sysfs-bus-usb            |   34 -
- Documentation/ABI/testing/sysfs-class-uwb_rc       |  156 --
- .../ABI/testing/sysfs-class-uwb_rc-wusbhc          |   57 -
- Documentation/ABI/testing/sysfs-wusb_cbaf          |  101 -
- Documentation/admin-guide/kernel-parameters.txt    |    2 +-
- .../devicetree/bindings/phy/realtek,usb2phy.yaml   |  175 ++
- .../devicetree/bindings/phy/realtek,usb3phy.yaml   |  107 +
- .../devicetree/bindings/usb/ci-hdrc-usb2.yaml      |   17 +-
- .../devicetree/bindings/usb/cypress,hx3.yaml       |   77 +
- .../devicetree/bindings/usb/generic-ehci.yaml      |    1 +
- .../devicetree/bindings/usb/genesys,gl850g.yaml    |    1 +
- .../devicetree/bindings/usb/qcom,dwc3.yaml         |   36 +-
- .../bindings/usb/samsung,exynos-dwc3.yaml          |   20 +-
- Documentation/driver-api/usb/usb.rst               |    9 +-
- Documentation/usb/authorization.rst                |    9 +-
- Documentation/usb/gadget-testing.rst               |  154 ++
- arch/mips/cavium-octeon/Makefile                   |    1 -
- arch/mips/cavium-octeon/octeon-platform.c          |    1 -
- drivers/net/wireless/mediatek/mt76/usb.c           |    3 +-
- drivers/phy/Kconfig                                |    1 +
- drivers/phy/Makefile                               |    1 +
- drivers/phy/realtek/Kconfig                        |   27 +
- drivers/phy/realtek/Makefile                       |    3 +
- drivers/phy/realtek/phy-rtk-usb2.c                 | 1331 +++++++++
- drivers/phy/realtek/phy-rtk-usb3.c                 |  767 ++++++
- drivers/platform/chrome/cros_ec_typec.c            |   28 +-
- drivers/thunderbolt/acpi.c                         |   18 +-
- drivers/thunderbolt/switch.c                       |   73 +-
- drivers/thunderbolt/tb.c                           |   24 +-
- drivers/thunderbolt/tb.h                           |    4 +-
- drivers/thunderbolt/tmu.c                          |    2 +-
- drivers/usb/cdns3/cdns3-gadget.c                   |    1 +
- drivers/usb/cdns3/cdns3-plat.c                     |    4 +-
- drivers/usb/cdns3/cdns3-starfive.c                 |    6 +-
- drivers/usb/cdns3/cdns3-ti.c                       |    1 +
- drivers/usb/cdns3/cdnsp-pci.c                      |    3 +-
- drivers/usb/cdns3/core.c                           |   16 +-
- drivers/usb/cdns3/core.h                           |    7 +-
- drivers/usb/cdns3/drd.c                            |    4 +
- drivers/usb/chipidea/ci.h                          |   19 +-
- drivers/usb/chipidea/ci_hdrc_imx.c                 |   18 +-
- drivers/usb/chipidea/ci_hdrc_imx.h                 |    1 +
- drivers/usb/chipidea/ci_hdrc_tegra.c               |    3 +-
- drivers/usb/chipidea/core.c                        |    5 +-
- drivers/usb/chipidea/host.c                        |    1 +
- drivers/usb/chipidea/udc.c                         |   12 +-
- drivers/usb/chipidea/usbmisc_imx.c                 |   18 +-
- drivers/usb/class/cdc-acm.c                        |   25 +
- drivers/usb/common/common.c                        |    1 +
- drivers/usb/core/config.c                          |    3 -
- drivers/usb/core/devices.c                         |    1 -
- drivers/usb/core/file.c                            |   68 +-
- drivers/usb/core/hcd.c                             |   50 +-
- drivers/usb/core/hub.c                             |  513 ++--
- drivers/usb/core/ledtrig-usbport.c                 |   13 +-
- drivers/usb/core/message.c                         |   30 +-
- drivers/usb/core/of.c                              |    1 -
- drivers/usb/core/sysfs.c                           |    3 -
- drivers/usb/core/urb.c                             |   27 +-
- drivers/usb/core/usb.c                             |   20 +-
- drivers/usb/core/usb.h                             |    5 +-
- drivers/usb/dwc2/core.h                            |    1 +
- drivers/usb/dwc2/gadget.c                          |    1 -
- drivers/usb/dwc2/hcd_intr.c                        |    4 +-
- drivers/usb/dwc2/params.c                          |   39 +-
- drivers/usb/dwc2/pci.c                             |   14 +-
- drivers/usb/dwc2/platform.c                        |    2 +-
- drivers/usb/dwc3/Kconfig                           |   10 +
- drivers/usb/dwc3/Makefile                          |    1 +
- drivers/usb/dwc3/dwc3-am62.c                       |   96 +-
- drivers/usb/dwc3/dwc3-exynos.c                     |    9 +
- drivers/usb/dwc3/dwc3-imx8mp.c                     |    2 +-
- drivers/usb/dwc3/dwc3-keystone.c                   |    3 +-
- drivers/usb/dwc3/dwc3-meson-g12a.c                 |    6 +
- .../octeon-usb.c => drivers/usb/dwc3/dwc3-octeon.c |  434 ++-
- drivers/usb/dwc3/dwc3-of-simple.c                  |    1 -
- drivers/usb/gadget/Kconfig                         |   18 +
- drivers/usb/gadget/composite.c                     |   34 +-
- drivers/usb/gadget/config.c                        |    8 +-
- drivers/usb/gadget/function/Makefile               |    2 +
- drivers/usb/gadget/function/f_acm.c                |    4 +-
- drivers/usb/gadget/function/f_ecm.c                |   19 +-
- drivers/usb/gadget/function/f_eem.c                |    4 +-
- drivers/usb/gadget/function/f_loopback.c           |    4 +-
- drivers/usb/gadget/function/f_mass_storage.c       |    2 +-
- drivers/usb/gadget/function/f_midi.c               |   56 +-
- drivers/usb/gadget/function/f_midi2.c              | 2871 ++++++++++++++++++++
- drivers/usb/gadget/function/f_ncm.c                |   23 +-
- drivers/usb/gadget/function/f_obex.c               |    3 +-
- drivers/usb/gadget/function/f_rndis.c              |   19 +-
- drivers/usb/gadget/function/f_serial.c             |    4 +-
- drivers/usb/gadget/function/f_sourcesink.c         |    4 +-
- drivers/usb/gadget/function/f_subset.c             |    4 +-
- drivers/usb/gadget/function/f_uvc.c                |   36 +-
- drivers/usb/gadget/function/u_ether.c              |    5 +-
- drivers/usb/gadget/function/u_ether.h              |   13 +
- drivers/usb/gadget/function/u_midi2.h              |   81 +
- drivers/usb/gadget/function/u_phonet.h             |    1 -
- drivers/usb/gadget/function/u_serial.h             |    4 -
- drivers/usb/gadget/function/uvc.h                  |    2 -
- drivers/usb/gadget/udc/aspeed-vhub/core.c          |    3 +-
- drivers/usb/gadget/udc/aspeed_udc.c                |    4 +-
- drivers/usb/gadget/udc/atmel_usba_udc.c            |    6 +-
- drivers/usb/gadget/udc/core.c                      |    1 +
- drivers/usb/gadget/udc/fsl_qe_udc.c                |    2 +
- drivers/usb/gadget/udc/fsl_udc_core.c              |    3 +-
- drivers/usb/gadget/udc/gr_udc.c                    |   13 +-
- drivers/usb/gadget/udc/max3420_udc.c               |    4 +-
- drivers/usb/gadget/udc/mv_u3d_core.c               |    4 +-
- drivers/usb/gadget/udc/mv_udc_core.c               |    2 +-
- drivers/usb/gadget/udc/pxa27x_udc.c                |    2 +-
- drivers/usb/gadget/udc/renesas_usb3.c              |    2 +-
- drivers/usb/gadget/udc/renesas_usbf.c              |    6 +-
- drivers/usb/gadget/udc/snps_udc_plat.c             |    7 +-
- drivers/usb/gadget/udc/tegra-xudc.c                |    1 -
- drivers/usb/gadget/udc/udc-xilinx.c                |   35 +-
- drivers/usb/host/ehci-atmel.c                      |    7 +-
- drivers/usb/host/ehci-brcm.c                       |    4 +-
- drivers/usb/host/ehci-exynos.c                     |    3 +-
- drivers/usb/host/ehci-fsl.c                        |    5 +-
- drivers/usb/host/ehci-hcd.c                        |    8 +-
- drivers/usb/host/ehci-hub.c                        |   10 +-
- drivers/usb/host/ehci-mv.c                         |    3 +-
- drivers/usb/host/ehci-npcm7xx.c                    |    5 +-
- drivers/usb/host/ehci-omap.c                       |    3 +-
- drivers/usb/host/ehci-orion.c                      |    9 +-
- drivers/usb/host/ehci-platform.c                   |    3 +-
- drivers/usb/host/ehci-sched.c                      |    3 +-
- drivers/usb/host/ehci-sh.c                         |    7 +-
- drivers/usb/host/ehci-spear.c                      |    3 +-
- drivers/usb/host/ehci-st.c                         |   12 +-
- drivers/usb/host/ehci.h                            |   10 +
- drivers/usb/host/fhci-hcd.c                        |    3 +-
- drivers/usb/host/fsl-mph-dr-of.c                   |    3 +-
- drivers/usb/host/isp1362-hcd.c                     |    3 +-
- drivers/usb/host/ohci-at91.c                       |    9 +-
- drivers/usb/host/ohci-da8xx.c                      |    4 +-
- drivers/usb/host/ohci-exynos.c                     |    3 +-
- drivers/usb/host/ohci-nxp.c                        |    3 +-
- drivers/usb/host/ohci-platform.c                   |    3 +-
- drivers/usb/host/ohci-ppc-of.c                     |    3 +-
- drivers/usb/host/ohci-pxa27x.c                     |    3 +-
- drivers/usb/host/ohci-sm501.c                      |    3 +-
- drivers/usb/host/ohci-spear.c                      |    3 +-
- drivers/usb/host/ohci-st.c                         |   14 +-
- drivers/usb/host/oxu210hp-hcd.c                    |    3 +-
- drivers/usb/host/uhci-platform.c                   |    3 +-
- drivers/usb/host/xhci-mem.c                        |    3 -
- drivers/usb/host/xhci-plat.c                       |    1 -
- drivers/usb/host/xhci-rcar.c                       |    1 -
- drivers/usb/host/xhci-tegra.c                      |   30 +-
- drivers/usb/host/xhci.c                            |   11 +-
- drivers/usb/misc/cypress_cy7c63.c                  |    2 +-
- drivers/usb/misc/cytherm.c                         |   12 +-
- drivers/usb/misc/onboard_usb_hub.c                 |   41 +-
- drivers/usb/misc/onboard_usb_hub.h                 |   15 +
- drivers/usb/misc/usb251xb.c                        |    2 +-
- drivers/usb/misc/usb_u132.h                        |   97 -
- drivers/usb/misc/usbsevseg.c                       |    2 +-
- drivers/usb/mtu3/mtu3.h                            |    1 +
- drivers/usb/mtu3/mtu3_host.c                       |    1 +
- drivers/usb/musb/cppi_dma.h                        |    3 -
- drivers/usb/musb/jz4740.c                          |    2 +-
- drivers/usb/musb/mediatek.c                        |    1 +
- drivers/usb/musb/mpfs.c                            |    1 +
- drivers/usb/musb/musb_core.c                       |    4 +-
- drivers/usb/musb/musb_dma.h                        |    4 -
- drivers/usb/musb/musb_dsps.c                       |    2 -
- drivers/usb/musb/musb_gadget.c                     |    2 +-
- drivers/usb/musb/sunxi.c                           |    1 -
- drivers/usb/musb/tusb6010.c                        |   17 +-
- drivers/usb/phy/phy-mxs-usb.c                      |   16 +-
- drivers/usb/phy/phy-tegra-usb.c                    |    2 +-
- drivers/usb/renesas_usbhs/common.c                 |    2 +-
- drivers/usb/renesas_usbhs/rza.c                    |    2 +-
- drivers/usb/renesas_usbhs/rza2.c                   |    1 -
- drivers/usb/serial/option.c                        |    7 +
- drivers/usb/serial/xr_serial.c                     |   89 +-
- drivers/usb/typec/altmodes/displayport.c           |    5 +-
- drivers/usb/typec/bus.c                            |   12 +-
- drivers/usb/typec/mux/intel_pmc_mux.c              |   53 +-
- drivers/usb/typec/mux/nb7vpq904m.c                 |    2 +-
- drivers/usb/typec/tcpm/Kconfig                     |    1 +
- drivers/usb/typec/tcpm/fusb302.c                   |    2 +-
- drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c      |   39 +-
- .../usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c    |    2 -
- drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_port.c |    6 +-
- drivers/usb/typec/tcpm/tcpci.c                     |    4 +
- drivers/usb/typec/tcpm/tcpci_mt6370.c              |    2 +-
- drivers/usb/typec/tcpm/tcpm.c                      |  175 +-
- drivers/usb/typec/ucsi/Kconfig                     |    1 +
- drivers/usb/typec/ucsi/Makefile                    |    2 +
- drivers/usb/typec/ucsi/debugfs.c                   |   99 +
- drivers/usb/typec/ucsi/ucsi.c                      |   15 +
- drivers/usb/typec/ucsi/ucsi.h                      |   24 +
- drivers/usb/typec/ucsi/ucsi_glink.c                |    1 -
- drivers/usb/usbip/vudc_dev.c                       |    5 +-
- include/linux/usb.h                                |   12 -
- include/linux/usb/ch9.h                            |    5 +-
- include/linux/usb/chipidea.h                       |    1 +
- include/linux/usb/composite.h                      |   23 -
- include/linux/usb/hcd.h                            |    2 -
- include/linux/usb/phy.h                            |   13 +
- include/linux/usb/tcpci.h                          |    1 +
- include/linux/usb/typec_altmode.h                  |    2 +-
- include/uapi/linux/usb/ch11.h                      |    6 +-
- include/uapi/linux/usb/ch9.h                       |    5 +-
- 211 files changed, 7352 insertions(+), 1890 deletions(-)
- create mode 100644 Documentation/ABI/testing/configfs-usb-gadget-midi2
- delete mode 100644 Documentation/ABI/testing/sysfs-bus-umc
- delete mode 100644 Documentation/ABI/testing/sysfs-class-uwb_rc
- delete mode 100644 Documentation/ABI/testing/sysfs-class-uwb_rc-wusbhc
- delete mode 100644 Documentation/ABI/testing/sysfs-wusb_cbaf
- create mode 100644 Documentation/devicetree/bindings/phy/realtek,usb2phy.yaml
- create mode 100644 Documentation/devicetree/bindings/phy/realtek,usb3phy.yaml
- create mode 100644 Documentation/devicetree/bindings/usb/cypress,hx3.yaml
- create mode 100644 drivers/phy/realtek/Kconfig
- create mode 100644 drivers/phy/realtek/Makefile
- create mode 100644 drivers/phy/realtek/phy-rtk-usb2.c
- create mode 100644 drivers/phy/realtek/phy-rtk-usb3.c
- rename arch/mips/cavium-octeon/octeon-usb.c => drivers/usb/dwc3/dwc3-octeon.c (61%)
- create mode 100644 drivers/usb/gadget/function/f_midi2.c
- create mode 100644 drivers/usb/gadget/function/u_midi2.h
- delete mode 100644 drivers/usb/misc/usb_u132.h
- create mode 100644 drivers/usb/typec/ucsi/debugfs.c
