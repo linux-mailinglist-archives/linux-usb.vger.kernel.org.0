@@ -2,75 +2,150 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E74B0790135
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Sep 2023 19:10:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5843D790183
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Sep 2023 19:38:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350539AbjIARKb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 Sep 2023 13:10:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56814 "EHLO
+        id S1350429AbjIARhf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 1 Sep 2023 13:37:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350515AbjIARK2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Sep 2023 13:10:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9697E1711;
-        Fri,  1 Sep 2023 10:10:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 429CFB825CD;
-        Fri,  1 Sep 2023 17:10:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 07A2DC433C9;
-        Fri,  1 Sep 2023 17:10:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693588219;
-        bh=TGHz0mRYfsnlu58QNgvG8+a75gWBSIJymoDjZqF/64c=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=shmyIaceA3lzgYMAS0hAdz+dNkT8v4pO32P9YE7Y/sA5odN3eX2ftLMeZ8ri1LOu3
-         jd/GfVHsPggTJ1ngPXk9D1qnITvccPIdZ9bkpL4Asrn2BQtvC7UDm+rUfek06SCWX7
-         UWG291CbfW2kh0m43+WbpMFfkfYykhM+gPMVBLdzb4qIQdmt1QRGLj9FAxo6VDNWJZ
-         rGXqYXE8zF/o9RXoCB0Fs/u0DCQNGzJMDqKstc3U9sR+lOCNjidHXhFa8xwWqunqWo
-         gVlTDVaAdQ52VowsI+HSnpHfcwDk/gHHQny+HOuvOAWJJx1j/M8UMfEYYxLOcXXiUe
-         pbef3gkghNsjQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E6F49C595D2;
-        Fri,  1 Sep 2023 17:10:18 +0000 (UTC)
-Subject: Re: [GIT PULL] USB / Thunderbolt / PHY driver updates for 6.6-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <ZPIA-hKjQRX1le-b@kroah.com>
-References: <ZPIA-hKjQRX1le-b@kroah.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <ZPIA-hKjQRX1le-b@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.6-rc1
-X-PR-Tracked-Commit-Id: 895ed7eb263d7ce2d2592fdd3e211464a556084a
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 51e7accbe8ab51476fbe55fbb5616c12fb3a0beb
-Message-Id: <169358821893.1073.11332990207567990714.pr-tracker-bot@kernel.org>
-Date:   Fri, 01 Sep 2023 17:10:18 +0000
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S237385AbjIARhe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Sep 2023 13:37:34 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 2D71EE5C
+        for <linux-usb@vger.kernel.org>; Fri,  1 Sep 2023 10:37:30 -0700 (PDT)
+Received: (qmail 520676 invoked by uid 1000); 1 Sep 2023 13:37:28 -0400
+Date:   Fri, 1 Sep 2023 13:37:28 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: dwc3: unusual handling of setup requests with wLength == 0
+Message-ID: <4e67f96d-250a-4ee1-9f2c-ad321fa50fdc@rowland.harvard.edu>
+References: <08a3759d-4c6b-4034-8516-685e4d96a41e@rowland.harvard.edu>
+ <20230823222202.k7y7hxndsbi7h4x7@synopsys.com>
+ <9b175f9e-ab70-47a3-a943-bfd05601aa23@rowland.harvard.edu>
+ <20230826012024.mboftu3wk7fsrslp@synopsys.com>
+ <ba06679f-93d2-4cb4-9218-9e288065bdfb@rowland.harvard.edu>
+ <20230830013222.ukw5dtburjnrrjko@synopsys.com>
+ <61cf24db-9dbb-4bf3-aafe-d515fc37cca8@rowland.harvard.edu>
+ <20230831024345.lwd6ehcbjdlczjpa@synopsys.com>
+ <1a66bb8f-9680-424a-a051-27353b8a4130@rowland.harvard.edu>
+ <20230901012322.rwpj32rx36xjtlb6@synopsys.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230901012322.rwpj32rx36xjtlb6@synopsys.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The pull request you sent on Fri, 1 Sep 2023 17:19:22 +0200:
+On Fri, Sep 01, 2023 at 01:27:34AM +0000, Thinh Nguyen wrote:
+> > Does Windows really work this way?  Does it not send a task management 
+> > request?  That would definitely seem to be against the intent of the 
+> > spec, if not against the letter.
+> 
+> Unfortunately yes, I don't see any Task Management request aborting the
+> transfer.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.6-rc1
+Is it possible that the packets are there but you don't see them because 
+of the filtering or data presentation done by the USB analyzer?
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/51e7accbe8ab51476fbe55fbb5616c12fb3a0beb
+> Here's a snippet captured at the SCSI level from Samsung T7 device
+> response to CLEAR_FEATURE(halt-ep) to IN data endpoint from host
+> (Windows 10). Similar behavior is observed for OUT endpoint.
 
-Thank you!
+Hmmm.  The SCSI level may not provide enough detail.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+> _______|_______________________________________________________________________
+> SCSI Op(80) ADDR(3) Tag(0x0002) SCSI CDB READ(10) 
+> _______| Logical Block Addr(0x0928E800) STATUS(GOOD) Data(524288 bytes) 
+> _______| Time(  1.335 ms) Time Stamp(10 . 000 538 006) Metrics #Xfers(3) 
+> _______|_______________________________________________________________________
+> SCSI Op(81) ADDR(3) Tag(0x0002) SCSI CDB READ(10) 
+> _______| Logical Block Addr(0x0928EC00) STATUS(GOOD) Data(524288 bytes) 
+> _______| Time(  1.318 ms) Time Stamp(10 . 001 872 988) Metrics #Xfers(3) 
+> _______|_______________________________________________________________________
+> SCSI Op(82) ADDR(3) Tag(0x0002) SCSI CDB READ(10) 
+> _______| Logical Block Addr(0x0928F000) STATUS(GOOD) Data(524288 bytes) 
+> _______| Time(  1.343 ms) Time Stamp(10 . 003 191 188) Metrics #Xfers(3) 
+> _______|_______________________________________________________________________
+> SCSI Op(83) ADDR(3) Tag(0x0002) SCSI CDB READ(10) 
+> _______| Logical Block Addr(0x0928F400) STATUS(GOOD) Data(524288 bytes) 
+> _______| Time(  1.256 ms) Time Stamp(10 . 004 534 630) Metrics #Xfers(3) 
+> _______|_______________________________________________________________________
+> SCSI Op(84) ADDR(3) Tag(0x0002) SCSI CDB READ(10) 
+> _______| Logical Block Addr(0x0928F800) STATUS(GOOD) Data(524288 bytes) 
+> _______| Time(  1.178 ms) Time Stamp(10 . 005 791 128) Metrics #Xfers(3) 
+> _______|_______________________________________________________________________
+> SCSI Op(85) ADDR(3) Tag(0x0002) SCSI CDB READ(10) 
+> _______| Logical Block Addr(0x0928FC00) Data(146432 bytes) Status(Missing)-BAD 
+> _______| Time(  2.681 ms) Time Stamp(10 . 006 968 662) Metrics #Xfers(2) 
+> _______|_______________________________________________________________________
+> 
+> 
+> ## Transaction eror occurs here.
+> 
+> Transfer(289) Left("Left") G2(x1) Control(SET) ADDR(3) ENDP(0) 
+> _______| bRequest(CLEAR_FEATURE) wValue(ENDPOINT_HALT) wLength(0) 
+> _______| Time(166.322 us) Time Stamp(10 . 009 649 516) 
+> _______|_______________________________________________________________________
+> 
+> ## CLEAR_FEATURE happens here.
+> 
+> SCSI Op(99) ADDR(3) Tag(0x0002) SCSI CDB READ(10) 
+> _______| Logical Block Addr(0x09290000) RESPONSE_CODE(OVERLAPPED TAG) 
+> _______| Time(365.854 us) Time Stamp(10 . 009 815 838) Metrics #Xfers(2) 
+> _______|_______________________________________________________________________
+> SCSI Op(100) ADDR(3) Tag(0x0002) SCSI CDB READ(10) 
+> _______| Logical Block Addr(0x09290400) STATUS(GOOD) Data(524288 bytes) 
+> _______| Time(  1.012 sec) Time Stamp(10 . 010 181 692) Metrics #Xfers(3) 
+> _______|_______________________________________________________________________
+> SCSI Op(101) ADDR(3) Tag(0x0002) SCSI CDB READ(10) 
+> _______| Logical Block Addr(0x0928FC00) STATUS(GOOD) Data(524288 bytes) 
+> _______| Time(882.412 us) Time Stamp(11 . 022 469 104) Metrics #Xfers(3) 
+> _______|_______________________________________________________________________
+> 
+> ## Host retries transfer here. Check logical block address.
+> 
+> SCSI Op(102) ADDR(3) Tag(0x0002) SCSI CDB READ(10) 
+> _______| Logical Block Addr(0x09290000) STATUS(GOOD) Data(524288 bytes) 
+> _______| Time(  1.060 ms) Time Stamp(11 . 023 351 516) Metrics #Xfers(3) 
+> _______|_______________________________________________________________________
+> SCSI Op(103) ADDR(3) Tag(0x0002) SCSI CDB READ(10) 
+> _______| Logical Block Addr(0x09290800) STATUS(GOOD) Data(524288 bytes) 
+> _______| Time(  1.013 ms) Time Stamp(11 . 024 411 510) Metrics #Xfers(3) 
+> _______|_______________________________________________________________________
+> SCSI Op(104) ADDR(3) Tag(0x0002) SCSI CDB READ(10) 
+> _______| Logical Block Addr(0x09290C00) STATUS(GOOD) Data(524288 bytes) 
+> _______| Time(816.594 us) Time Stamp(11 . 025 424 600) Metrics #Xfers(3) 
+> _______|_______________________________________________________________________
+> SCSI Op(105) ADDR(3) Tag(0x0002) SCSI CDB READ(10) 
+> _______| Logical Block Addr(0x09291000) STATUS(GOOD) Data(524288 bytes) 
+> _______| Time(762.286 us) Time Stamp(11 . 026 241 194) Metrics #Xfers(3) 
+> _______|_______________________________________________________________________
+> SCSI Op(106) ADDR(3) Tag(0x0002) SCSI CDB READ(10) 
+> _______| Logical Block Addr(0x09291400) STATUS(GOOD) Data(524288 bytes) 
+> _______| Time(768.696 us) Time Stamp(11 . 027 003 480) Metrics #Xfers(3) 
+> _______|_______________________________________________________________________
+
+Is is possible to show all the data packets (not the token or 
+handshaking ones) for both the command and status endpoints?  I'm 
+particularly interested in seeing what sort of status message the device 
+sends for the failed command, and where it occurs in relation to the 
+other transfers.
+
+I wouldn't mind seeing a summary of the packets on the data-IN endpoint 
+as well.  Not a detailed view -- multiple 500-KB transfers aren't very 
+interesting -- but just to see what happens in the vicinity of the 
+transaction error.
+
+Alan Stern
