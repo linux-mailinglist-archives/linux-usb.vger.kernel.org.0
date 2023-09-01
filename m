@@ -2,103 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB82E78FE21
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Sep 2023 15:14:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6C9F78FFA2
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Sep 2023 17:05:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241640AbjIANOq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 Sep 2023 09:14:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37910 "EHLO
+        id S1350109AbjIAPFA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 1 Sep 2023 11:05:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjIANOp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Sep 2023 09:14:45 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC50510E0
-        for <linux-usb@vger.kernel.org>; Fri,  1 Sep 2023 06:14:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 1ED0ECE22C9
-        for <linux-usb@vger.kernel.org>; Fri,  1 Sep 2023 13:14:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7A3EFC433C8
-        for <linux-usb@vger.kernel.org>; Fri,  1 Sep 2023 13:14:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693574079;
-        bh=Ze9Zgdt/JiwDYRICzTyW769isPCBhEg+cDf9kPm66FU=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=cY35NYLvlnBcTgbiUxMNrcx92CdzD9cVgle/0OzvhTycUgDyeKGc2ylOWpvzFxfUz
-         BlxPTpyylGy3EcaDd1Ob6MYqY/vdMw2vucL4sozAdNQJ0FoRvVN+/YA8cigPwgewQz
-         /UTNqLCCYFL70Pd7jlseHLLOob12XJtrgZWLuG0Cw51iGEgmlPpypfAMH94hm9KGu0
-         N/c8V2kdNEIHpJi8CTAWfNJFeQyCSx6aN5ltNp9gmSQyPcQcZip0zmB6NCyQOkDI8Q
-         4QKg+I7qAoow2CKv2tuJd0sGiTqoj4V6aW1+LwtHK0LHj+DJmgqjXfTGlTm3CSTbHU
-         XFwaF82vpao6Q==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 6958DC53BCD; Fri,  1 Sep 2023 13:14:39 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 217670] dwc3: regression in USB DWC3 driver in kernel 5.15
- branch
-Date:   Fri, 01 Sep 2023 13:14:39 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: greg@kroah.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-217670-208809-3rjQQUH8Ey@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-217670-208809@https.bugzilla.kernel.org/>
-References: <bug-217670-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S243098AbjIAPFA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Sep 2023 11:05:00 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D9D10D2;
+        Fri,  1 Sep 2023 08:04:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693580696; x=1725116696;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4CyzzoubUESIDkAYvz+WoP396Qy3+MhZcGKRw8iCwoQ=;
+  b=CKaOmpH3NVBF0nwT1vKLfktyFPu+ldH922NLbX2FEp8ZlSg0PO7LzXdc
+   o8OOORJaMV8qFgtcH+O+tO0qsDp+k3Kr3tE/FlEf7sVh6U+aouUh0I+Qp
+   cxHfrvmP4/UstZQs3VKPFLK1USrc1ISFa3Upwo4dhML2h6cZEF7CSgFRt
+   n6y3bZ1ETov42cJjjBMPk6255zImh4yOS34GHjjeB1xX5FmE7gMZMVhiW
+   GFOAyn+LR/4/ogotZlUmEarF5PnVaNSzdYo2p8c6sVtes1TChvOoZpp72
+   IYPHTgElQJE7Akkx2szkzdvpGVxjB6zYx/04kmXHAxhvpwMgbYg1D5PCH
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10819"; a="376167646"
+X-IronPort-AV: E=Sophos;i="6.02,220,1688454000"; 
+   d="scan'208";a="376167646"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2023 08:04:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10819"; a="739960122"
+X-IronPort-AV: E=Sophos;i="6.02,220,1688454000"; 
+   d="scan'208";a="739960122"
+Received: from klitkey1-mobl1.ger.corp.intel.com (HELO intel.com) ([10.252.59.74])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2023 08:04:39 -0700
+Date:   Fri, 1 Sep 2023 17:04:36 +0200
+From:   Andi Shyti <andi.shyti@linux.intel.com>
+To:     Wentong Wu <wentong.wu@intel.com>
+Cc:     gregkh@linuxfoundation.org, arnd@arndb.de, mka@chromium.org,
+        oneukum@suse.com, lee@kernel.org, wsa@kernel.org,
+        kfting@nuvoton.com, broonie@kernel.org, linus.walleij@linaro.org,
+        maz@kernel.org, brgl@bgdev.pl, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-gpio@vger.kernel.org, andriy.shevchenko@linux.intel.com,
+        heikki.krogerus@linux.intel.com, andi.shyti@linux.intel.com,
+        sakari.ailus@linux.intel.com, bartosz.golaszewski@linaro.org,
+        srinivas.pandruvada@intel.com, zhifeng.wang@intel.com
+Subject: Re: [PATCH v12 1/4] usb: Add support for Intel LJCA device
+Message-ID: <ZPH9hLjQ9GrmfvXh@ashyti-mobl2.lan>
+References: <1693546577-17824-1-git-send-email-wentong.wu@intel.com>
+ <1693546577-17824-2-git-send-email-wentong.wu@intel.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1693546577-17824-2-git-send-email-wentong.wu@intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D217670
+Hi Wentong,
 
---- Comment #26 from Greg Kroah-Hartman (greg@kroah.com) ---
-On Fri, Sep 01, 2023 at 12:57:47PM +0000, bugzilla-daemon@kernel.org wrote:
-> https://bugzilla.kernel.org/show_bug.cgi?id=3D217670
->=20
-> --- Comment #24 from Tomasz Rostanski (tomasz.rostanski@thalesgroup.com) =
----
-> I have attached rebased patches against 5.15.129:
-> 0001-usb-dwc3-reference-clock-period-configuration.patch
-> 0002-usb-dwc3-Get-clocks-individually.patch
-> 0003-usb-dwc3-Calculate-REFCLKPER-based-on-reference-cloc.patch
-> 0004-usb-dwc3-Program-GFLADJ.patch
-> 0005-usb-dwc3-core-add-gfladj_refclk_lpm_sel-quirk.patch
-> apply with git am.
+On Fri, Sep 01, 2023 at 01:36:14PM +0800, Wentong Wu wrote:
+> Implements the USB part of Intel USB-I2C/GPIO/SPI adapter device
+> named "La Jolla Cove Adapter" (LJCA).
+> 
+> The communication between the various LJCA module drivers and the
+> hardware will be muxed/demuxed by this driver. Three modules (
+> I2C, GPIO, and SPI) are supported currently.
+> 
+> Each sub-module of LJCA device is identified by type field within
+> the LJCA message header.
+> 
+> The sub-modules of LJCA can use ljca_transfer() to issue a transfer
+> between host and hardware. And ljca_register_event_cb is exported
+> to LJCA sub-module drivers for hardware event subscription.
+> 
+> The minimum code in ASL that covers this board is
+> Scope (\_SB.PCI0.DWC3.RHUB.HS01)
+>     {
+>         Device (GPIO)
+>         {
+>             Name (_ADR, Zero)
+>             Name (_STA, 0x0F)
+>         }
+> 
+>         Device (I2C)
+>         {
+>             Name (_ADR, One)
+>             Name (_STA, 0x0F)
+>         }
+> 
+>         Device (SPI)
+>         {
+>             Name (_ADR, 0x02)
+>             Name (_STA, 0x0F)
+>         }
+>     }
+> 
+> Signed-off-by: Wentong Wu <wentong.wu@intel.com>
+> Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-<formletter>
+looks good:
 
-This is not the correct way to submit patches for inclusion in the
-stable kernel tree.  Please read:
-    https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
-for how to do this properly.
+Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com> 
 
-</formletter>
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Andi
