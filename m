@@ -2,43 +2,43 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A41A378FDC4
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Sep 2023 14:53:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5884878FDC6
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Sep 2023 14:53:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242633AbjIAMxH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 Sep 2023 08:53:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45468 "EHLO
+        id S243053AbjIAMx1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 1 Sep 2023 08:53:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233126AbjIAMxG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Sep 2023 08:53:06 -0400
+        with ESMTP id S245065AbjIAMxZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Sep 2023 08:53:25 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92FC1E7E
-        for <linux-usb@vger.kernel.org>; Fri,  1 Sep 2023 05:53:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2699E7E
+        for <linux-usb@vger.kernel.org>; Fri,  1 Sep 2023 05:53:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3158160DFF
-        for <linux-usb@vger.kernel.org>; Fri,  1 Sep 2023 12:53:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 91648C433C8
-        for <linux-usb@vger.kernel.org>; Fri,  1 Sep 2023 12:53:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4FF7F615D4
+        for <linux-usb@vger.kernel.org>; Fri,  1 Sep 2023 12:53:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B64D2C433C7
+        for <linux-usb@vger.kernel.org>; Fri,  1 Sep 2023 12:53:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693572782;
-        bh=2JyBvpaxih7lc6k7SDG0BWeos1paf1JVjup85IlPkOY=;
+        s=k20201202; t=1693572801;
+        bh=TvB/rqhXNr9lyyPp7mZIvdE7vdQT/d8JCS5p7uFhPyU=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=sY4tVWJuPqzxuKxBmcmmXNYwaACqvuQvORAYIsIsBQvU7C+5DTwI+N0ri7cwbj/PN
-         22/hK0podHV9xYKpSBs384f2vB+xq/6yQvQrBfVuvP0eXLNwjYGtJhS/nd7cWj+e8U
-         ryZkqKZIepQZYZCSMy47maSJ1c9sev9LrR0HkIGIhQ4Tk5SCnMc4A4fHLmX6lPWD5V
-         3Pwyc87OHsozvlfYp5BLby01jhbQVai0vIqvQifYW759qmA10PBAVBo/ehEgWjsm4Q
-         vk1CuJKSi544XCOvVpcTftdzmsJ8bO+FtePRMs5CFbZzCb5cIh9cW96sYv10dECuxo
-         6NIKvtabJ3ueA==
+        b=ZpdM4aQuvYoVQO+ywhuVpZAhrnRm3BVBpXb45o4ho2WAZL0qpefIRb8k+amS8kw8j
+         Qp34N/S5ydcfwEMci7/kW51qf8POzKRkcddDIFPUmCMFOZYiQ/ZDxU6ZpUfbaArFnN
+         D3W7MFXPx8ZcC4G0ksyjDaqf3G+eF2didILwwDl7cWpRgc+CnHgDk2Lre0/oHs7JwR
+         sKRTnBQq1xdG0GauqPlNkZEa5SbXy+++A/aqj1s2ITkE4DoJh+fTH+CWfaRtdH6RP+
+         ciWnp6Mb7OoDUAH5glvMcEPaXduhxrMXmLv6J0Xm0iqQcVv7GKFxgg1yipt4ru4zFw
+         G3oqH/0dcRVZg==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 7373FC4332E; Fri,  1 Sep 2023 12:53:02 +0000 (UTC)
+        id A0965C4332E; Fri,  1 Sep 2023 12:53:21 +0000 (UTC)
 From:   bugzilla-daemon@kernel.org
 To:     linux-usb@vger.kernel.org
 Subject: [Bug 217670] dwc3: regression in USB DWC3 driver in kernel 5.15
  branch
-Date:   Fri, 01 Sep 2023 12:53:02 +0000
+Date:   Fri, 01 Sep 2023 12:53:21 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -54,7 +54,7 @@ X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-217670-208809-avc9jtoqWz@https.bugzilla.kernel.org/>
+Message-ID: <bug-217670-208809-aT42jDRWdZ@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-217670-208809@https.bugzilla.kernel.org/>
 References: <bug-217670-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -74,10 +74,10 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D217670
 
---- Comment #14 from Tomasz Rostanski (tomasz.rostanski@thalesgroup.com) ---
-Created attachment 305003
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D305003&action=3Dedit
-0001-usb-dwc3-reference-clock-period-configuration.patch
+--- Comment #15 from Tomasz Rostanski (tomasz.rostanski@thalesgroup.com) ---
+Created attachment 305004
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D305004&action=3Dedit
+0002-usb-dwc3-Get-clocks-individually.patch
 
 --=20
 You may reply to this email to add a comment.
