@@ -2,125 +2,147 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21CC678FAC6
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Sep 2023 11:27:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8910B78FAF8
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Sep 2023 11:36:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348811AbjIAJ1z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 Sep 2023 05:27:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53308 "EHLO
+        id S1348172AbjIAJg0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 1 Sep 2023 05:36:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234850AbjIAJ1y (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Sep 2023 05:27:54 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D845D1730;
-        Fri,  1 Sep 2023 02:27:37 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3818w5JD015622;
-        Fri, 1 Sep 2023 09:27:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=z9h5OietALUlWpPG+Jm+Q/uVhH0CTwsoV5KDaBuoAuo=;
- b=AneeKo+Y+Ybp/YYTpX2YzgiPSWsHyz//OVX7VdlRZuxF0GH2YLwjgogOTJhFMtbBvuSl
- OFeJh5XydRXI+TpJ1ZmJZh7X2kiPYJ+NQcX0bqvbsiuCoyyLJlBd+RgjEXQwvSuH+I2E
- AbT/YcQZUr1J0gNCsfx3gRZsPv+ljnJ1b/T+vPVnXLXs0oqS1FPXwEvTBgObZHhziBYt
- 4gwUmPDpFoBbF9FtAiqXNWqhnD+vhqROhe0xOZSdmMMiG9OTA4E2HnMhBDEZbIMGAkBK
- LHTKX2brapoQYTwF8mgjgrM190suz8ujgIZoYKATeIXxzI58AqI8fqjk04mpEtkwFunB 1A== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3suc22g5fp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 01 Sep 2023 09:27:30 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3819RThM013037
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 1 Sep 2023 09:27:29 GMT
-Received: from nsekar-linux.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.36; Fri, 1 Sep 2023 02:27:23 -0700
-From:   Nitheesh Sekar <quic_nsekar@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
-        <kishon@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <gregkh@linuxfoundation.org>, <quic_srichara@quicinc.com>,
-        <quic_varada@quicinc.com>, <quic_wcheng@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>
-CC:     Nitheesh Sekar <quic_nsekar@quicinc.com>,
-        Amandeep Singh <quic_amansing@quicinc.com>
-Subject: [PATCH V3 4/4] arm64: dts: qcom: ipq5018: Enable USB
-Date:   Fri, 1 Sep 2023 14:56:45 +0530
-Message-ID: <20230901092645.20522-5-quic_nsekar@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230901092645.20522-1-quic_nsekar@quicinc.com>
-References: <20230901092645.20522-1-quic_nsekar@quicinc.com>
+        with ESMTP id S236077AbjIAJg0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Sep 2023 05:36:26 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5AAFC5;
+        Fri,  1 Sep 2023 02:36:22 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id d75a77b69052e-4122e42a76aso11539091cf.1;
+        Fri, 01 Sep 2023 02:36:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1693560982; x=1694165782; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uTRQG1+/zAJ7lIWvTYtqhGkQhkus5847tvqfQhvtoOc=;
+        b=JFLUvFFvMI/5Zz9typC2aAuKpdxKQLrxvLDYF1vtukKUNnvMx6BOmmRSHqIRm+O0NR
+         M4B9MnlTkz8rvMgShv1/AYgEDw7r9hEzHJd0J9BzIwbXXOGElaG99xNkO+yOSaKMNjfb
+         nz3nTK6n8IDhwYxLacasMLrenSZXViwS1wXe3OQqwqXDJBUoTv4aeStDdG6POEEUB+Xt
+         aUNuJDLgHex+hApjD98G1pLTOqpVU0+ZnU/HW2bwXGMLnzj8KjUSzbCGSCwbDQ6fvRDw
+         xABxOroz7/DouLF9WVnjgzPL32lZ9hcD+Dm6FeIeempkqol0UQY7fWbdJZNL9td5tSVx
+         Ta5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693560982; x=1694165782;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uTRQG1+/zAJ7lIWvTYtqhGkQhkus5847tvqfQhvtoOc=;
+        b=DGPqWjrl9wNn0zAb9dBSBKQCwF6XqLmutdzvCzIVAqVTPfwqZfG1t2U8ugmtZNBpXA
+         2UkDAWgEH+j4qB4O4a4SR+JDNq+H5Ys837lLxzy30+hgS5AFrY1+5HSPO2tDX2mTcEZm
+         +EwNnSNDjQfRHGu03MFoS+rNIWBL3M1d2S/OfHBuBRrIjT1c9lTzNmu9vEc37/dCaz6E
+         YdTz/UXhl7PKdCz3HEmtRgvEUYKACVKAkPtSrEEJ6lLsN1qUF/V7jKCmCmesErJzlnJs
+         z00aUX27fCagq1mbtKh99vPd4gH0q6Z/1MtsHsHUMQYzSC3Szgbf1dQj8+hcLqkB8ugw
+         8ytw==
+X-Gm-Message-State: AOJu0Yxo1R9TTiUKXXEVQ4QNZ8vJydJe+H/yKUAGD26pBcjZdGsIhE+l
+        oE62fH2VqMi23vpg+iZsY2NPqiMqgWGKK9VF
+X-Google-Smtp-Source: AGHT+IHPr+svbcwGAypvvN3zhI371quMWxwVuAfORSKfJaLPlDOZDl0w724FzBstEnoD7p8ccsbhFw==
+X-Received: by 2002:ac8:7d16:0:b0:402:2e84:f06e with SMTP id g22-20020ac87d16000000b004022e84f06emr2451321qtb.27.1693560981816;
+        Fri, 01 Sep 2023 02:36:21 -0700 (PDT)
+Received: from ght-Latitude-7640.. ([149.28.230.27])
+        by smtp.gmail.com with ESMTPSA id r11-20020ac87eeb000000b00403c82c609asm1310270qtc.14.2023.09.01.02.36.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Sep 2023 02:36:21 -0700 (PDT)
+From:   Puliang Lu <530194200.fh@gmail.com>
+X-Google-Original-From: Puliang Lu <puliang.lu@fibocom.com>
+To:     johan@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Puliang Lu <puliang.lu@fibocom.com>
+Subject: [PATCH] USB: serial: option: add Fibocom to DELL custom modem FM101R-GL
+Date:   Fri,  1 Sep 2023 17:36:10 +0800
+Message-Id: <20230901093610.67438-1-puliang.lu@fibocom.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 16vT5A4Uu2IxR5fXKMIUKp3rXCOwOfWJ
-X-Proofpoint-ORIG-GUID: 16vT5A4Uu2IxR5fXKMIUKp3rXCOwOfWJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-09-01_07,2023-08-31_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
- clxscore=1015 mlxscore=0 impostorscore=0 suspectscore=0 malwarescore=0
- mlxlogscore=553 phishscore=0 lowpriorityscore=0 priorityscore=1501
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2309010088
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FROM_STARTS_WITH_NUMS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Enable USB2 in host mode.
+Update the USB serial option driver support for the Fibocom
+FM101R-GL
+LTE modules as there are actually several different variants.
+- VID:PID 413C:8213, FM101R-GL are laptop M.2 cards (with
+MBIM interfaces for Linux)
+- VID:PID 413C:8215, FM101R-GL ESIM are laptop M.2 cards(with
+MBIM interface for Linux)
 
-Co-developed-by: Amandeep Singh <quic_amansing@quicinc.com>
-Signed-off-by: Amandeep Singh <quic_amansing@quicinc.com>
-Signed-off-by: Nitheesh Sekar <quic_nsekar@quicinc.com>
----
-V3:
-	Renamed usb2_0_dwc  to usb_dwc and sorted
-	the USB related nodes.
-V2:
-	Sort and reorder USB related nodes.
----
- arch/arm64/boot/dts/qcom/ipq5018-rdp432-c2.dts | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  2 Spd=5000 MxCh= 0
+D:  Ver= 3.20 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
+P:  Vendor=413c ProdID=8213 Rev= 5.04
+S:  Manufacturer=Fibocom Wireless Inc.
+S:  Product=Fibocom FM101-GL Module
+S:  SerialNumber=a3b7cbf0
+C:* #Ifs= 3 Cfg#= 1 Atr=a0 MxPwr=896mA
+A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
+I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00 Driver=cdc_mbim
+E:  Ad=81(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+I:  If#= 1 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+I:* If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+E:  Ad=8e(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=0f(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=40 Driver=(none)
+E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq5018-rdp432-c2.dts b/arch/arm64/boot/dts/qcom/ipq5018-rdp432-c2.dts
-index e636a1cb9b77..8460b538eb6a 100644
---- a/arch/arm64/boot/dts/qcom/ipq5018-rdp432-c2.dts
-+++ b/arch/arm64/boot/dts/qcom/ipq5018-rdp432-c2.dts
-@@ -67,6 +67,18 @@
- 	};
- };
+T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  3 Spd=5000 MxCh= 0
+D:  Ver= 3.20 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
+P:  Vendor=413c ProdID=8215 Rev= 5.04
+S:  Manufacturer=Fibocom Wireless Inc.
+S:  Product=Fibocom FM101-GL Module
+S:  SerialNumber=a3b7cbf0
+C:* #Ifs= 3 Cfg#= 1 Atr=a0 MxPwr=896mA
+A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
+I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00 Driver=cdc_mbim
+E:  Ad=81(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+I:  If#= 1 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+I:* If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+E:  Ad=8e(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=0f(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=40 Driver=(none)
+E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E:  Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+
+Signed-off-by: Puliang Lu <puliang.lu@fibocom.com>
+---
+ drivers/usb/serial/option.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index 8ac98e60fff5..1dcd1f068f23 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -203,6 +203,9 @@ static void option_instat_callback(struct urb *urb);
+ #define DELL_PRODUCT_5829E_ESIM			0x81e4
+ #define DELL_PRODUCT_5829E			0x81e6
  
-+&usb {
-+	status = "okay";
-+};
++#define DELL_PRODUCT_FM101R			0x8213
++#define DELL_PRODUCT_FM101R_ESIM		0x8215
 +
-+&usb_dwc {
-+	dr_mode = "host";
-+};
-+
-+&usbphy0 {
-+	status = "okay";
-+};
-+
- &xo_board_clk {
- 	clock-frequency = <24000000>;
- };
+ #define KYOCERA_VENDOR_ID			0x0c88
+ #define KYOCERA_PRODUCT_KPC650			0x17da
+ #define KYOCERA_PRODUCT_KPC680			0x180a
+@@ -1107,6 +1110,8 @@ static const struct usb_device_id option_ids[] = {
+ 	  .driver_info = RSVD(0) | RSVD(6) },
+ 	{ USB_DEVICE(DELL_VENDOR_ID, DELL_PRODUCT_5829E_ESIM),
+ 	  .driver_info = RSVD(0) | RSVD(6) },
++	{ USB_DEVICE_INTERFACE_CLASS(DELL_VENDOR_ID, DELL_PRODUCT_FM101R, 0xff) },
++	{ USB_DEVICE_INTERFACE_CLASS(DELL_VENDOR_ID, DELL_PRODUCT_FM101R_ESIM, 0xff) },
+ 	{ USB_DEVICE(ANYDATA_VENDOR_ID, ANYDATA_PRODUCT_ADU_E100A) },	/* ADU-E100, ADU-310 */
+ 	{ USB_DEVICE(ANYDATA_VENDOR_ID, ANYDATA_PRODUCT_ADU_500A) },
+ 	{ USB_DEVICE(ANYDATA_VENDOR_ID, ANYDATA_PRODUCT_ADU_620UW) },
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.34.1
 
