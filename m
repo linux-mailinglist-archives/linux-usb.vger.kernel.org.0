@@ -2,591 +2,274 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E45B78F81A
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Sep 2023 07:37:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F219778F8B1
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Sep 2023 08:47:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348282AbjIAFho (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 Sep 2023 01:37:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39080 "EHLO
+        id S1348390AbjIAGrW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 1 Sep 2023 02:47:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229981AbjIAFhn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Sep 2023 01:37:43 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8334010C0;
-        Thu, 31 Aug 2023 22:37:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693546658; x=1725082658;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=W7A4ln0N0DXTdAOU/BERqy+aFIBuUj6ciiSSS8B7fBI=;
-  b=lendnpVP1FpIS/DVBrRVZ6cthmpKhyn/Mr5yYhgMSUoXa3MCbPy+NbuJ
-   93xtsP6dScnQDsu8HqDr99Fl9uwx/W5gzmm9WnYf8Mdpe/6OuPmfcy5ON
-   jIqmK/gr+7u7eS0Nkqyl4GWHDXNPNTq4p5RO3CHguT/9jm4MYhjWac8xe
-   cDRakJJyP/Xd3iz9AJ/EaDDMusqygqE0S7xXU9SgrOZZO4gaRcygbLWOf
-   zpDUYgXgLXyOXnzglzf5rhT0e1fsGk5C8bfgaI+Ry8RuJavdEqfpD+5by
-   gbPveJ+Aj/1RazRDqOJLpZJHdpOTlkYi5Gj+4liHhgNxqaHAmr50+2CjB
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10819"; a="442535245"
-X-IronPort-AV: E=Sophos;i="6.02,218,1688454000"; 
-   d="scan'208";a="442535245"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2023 22:37:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10819"; a="774872037"
-X-IronPort-AV: E=Sophos;i="6.02,218,1688454000"; 
-   d="scan'208";a="774872037"
-Received: from shsensorbuild2.sh.intel.com ([10.239.134.197])
-  by orsmga001.jf.intel.com with ESMTP; 31 Aug 2023 22:37:32 -0700
-From:   Wentong Wu <wentong.wu@intel.com>
-To:     gregkh@linuxfoundation.org, arnd@arndb.de, mka@chromium.org,
-        oneukum@suse.com, lee@kernel.org, wsa@kernel.org,
-        kfting@nuvoton.com, broonie@kernel.org, linus.walleij@linaro.org,
-        maz@kernel.org, brgl@bgdev.pl, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-gpio@vger.kernel.org, andriy.shevchenko@linux.intel.com,
-        heikki.krogerus@linux.intel.com, andi.shyti@linux.intel.com,
-        sakari.ailus@linux.intel.com, bartosz.golaszewski@linaro.org,
-        srinivas.pandruvada@intel.com
-Cc:     zhifeng.wang@intel.com, Wentong Wu <wentong.wu@intel.com>
-Subject: [PATCH v12 4/4] gpio: update Intel LJCA USB GPIO driver
-Date:   Fri,  1 Sep 2023 13:36:17 +0800
-Message-Id: <1693546577-17824-5-git-send-email-wentong.wu@intel.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1693546577-17824-1-git-send-email-wentong.wu@intel.com>
-References: <1693546577-17824-1-git-send-email-wentong.wu@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S231775AbjIAGrW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Sep 2023 02:47:22 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2085.outbound.protection.outlook.com [40.107.93.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6033DCEB;
+        Thu, 31 Aug 2023 23:47:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=H+iduAgM86axFVCr76ly+Y6yvi44+xgQ8bxoFQ6upP1euNvoOAE+L2mGOiIRvvJAU31MICyC6Qv0a7gQDnOcsjUnORoDkVkAo3brllIhg1xn59g0hafbHDXdKJfJi03638VtZVdqMZCPiwb+SCZd7T0DB42Begfsa8fY6l0tSzGLMm7KsNIXuh4okVTGNCfoYeMGtzDKPBWKRuALVyxapN7fPk8utvOdTNiGkW1B2JLOJsfHeSdWU8uS/cVjXfZVX/CaQAr+sBk4kiM5LMzud9nB7D/S5wDukZvUCylPBs7DMrzLyYmewqXrFzK6XUI0048hvmaaArW+yt+CkIwNkw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rEiJceLlcKnVFrL/MsFC1Z+4IxFS8HmzvW6SPBNXmRc=;
+ b=Grtm3k4KSOe581+0g1rzTAgAAyZZTdwa5EOE+Z+Gv426iATUWvU2JwhOdvae6oJEVqlb0qdUelO/W5rQ3AR4tdw2xBsN3XXnROxUWXDmWmGnjC47Jh9p8GyUNhqRBSlruG3WYWxSSpQxQOm0sJBCtLCIoDZ2YBlPwFeqmf0JH5epyT9b6f1ahc4U5KcJT/rVzI7bAoB8+aK/Kd4jglJtM8so79w88fiB0ppgYxMG8r9kde1R9VCoAGaBdDm+7mdZYjGiRVMoA+xeVyK7M1H1mEiCQP0aD+9FXktmXR5keE60o4QDOoncmPlXGnY7GbLH0X1wDzfueDReHEjhX79tNw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rEiJceLlcKnVFrL/MsFC1Z+4IxFS8HmzvW6SPBNXmRc=;
+ b=nxOwck8hJxsinVxu0gxVgPYs+/IobAdMRhCFmAeEg02VQKpQgkWSq/1HP39lkFFsiYmPURwLPfAzOoBfsC8xYDXMXSbAF+/Xta/zM+SXocTcu5exZiCMeZwnscEyXm2SZuCX94lstCDuAhmfjfw/ikNIzFNix1KI7gJknqTte7Q=
+Received: from CY5P221CA0066.NAMP221.PROD.OUTLOOK.COM (2603:10b6:930:4::43) by
+ MN0PR12MB6002.namprd12.prod.outlook.com (2603:10b6:208:37e::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.37; Fri, 1 Sep
+ 2023 06:47:15 +0000
+Received: from CY4PEPF0000E9D6.namprd05.prod.outlook.com
+ (2603:10b6:930:4:cafe::e5) by CY5P221CA0066.outlook.office365.com
+ (2603:10b6:930:4::43) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.23 via Frontend
+ Transport; Fri, 1 Sep 2023 06:47:15 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ CY4PEPF0000E9D6.mail.protection.outlook.com (10.167.241.80) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6745.17 via Frontend Transport; Fri, 1 Sep 2023 06:47:15 +0000
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 1 Sep
+ 2023 01:47:14 -0500
+Received: from xhdpiyushm40.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.27 via Frontend
+ Transport; Fri, 1 Sep 2023 01:47:10 -0500
+From:   Piyush Mehta <piyush.mehta@amd.com>
+To:     <gregkh@linuxfoundation.org>, <michal.simek@amd.com>,
+        <u.kleine-koenig@pengutronix.de>, <linus.walleij@linaro.org>,
+        <robh@kernel.org>, <herve.codina@bootlin.com>, <frank.li@vivo.com>,
+        <balbi@ti.com>
+CC:     <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <git@amd.com>,
+        Piyush Mehta <piyush.mehta@amd.com>, <stable@vger.kernel.org>
+Subject: [PATCH V3] usb: gadget: udc-xilinx: replace memcpy with memcpy_toio
+Date:   Fri, 1 Sep 2023 12:16:41 +0530
+Message-ID: <20230901064641.7394-1-piyush.mehta@amd.com>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9D6:EE_|MN0PR12MB6002:EE_
+X-MS-Office365-Filtering-Correlation-Id: e1f5f6f8-7cdf-42b1-6cbd-08dbaab7472f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: MUaEScZrfw++aKcCEKpZRXXAYVY7QFzV4nO1lCectdPQ3Sp36sqVxV2tPAhEWXsqaHmAZdFIXbkX10k4VIxF9mWRz/4b++JMRFfiAoE4y/TNDHgmpbJyQaAC9R8skHtjjzBMueYmlbW3ZkUNGeIXnz8o0Hg8oL2sczE02vDUmA8xsKdIZJtxqBLmF6U+XSiUd8RTYkf5wsxgPvIGl1Wd3Nnm2k2rZ+TPGiZSmYvMGazbzEs6C1aNWiX6eAAtGOcB90DsrNvxZkUlUD4SeuuBjXI7CUAvb6t16wmRT/r/b4xNU4QMzPZctcHPCSMOyhBOKDVGC4uO9z8U3VGyRdAngIjRcvndATtVaeKSY2uy8A7m0MLa1hX55WIczL3/AITxiwYCR4e2FfXEiFuFygb53XfsdNnEsODl3HtyojsimLyOWFUo3V1dfOR55iXNbgtCi21O1gm3RqGFY9jzShR/7VN7xm1FL/yIRXVrbxS38wlTVVRAk0rbwpUkeNMrMLTThsL4E/+h3+LEdxZPhL5mrk7vpLHPISt/FXQ7ekjpq7ITrTP8UOEtE6rPb13n1x9nE/mpW6wrAYea1R1YMtM/bzA0bM4+rLNXDFi2+pfYimHCkTxBaagfJzL5O9JjRZAWP4HJ2agYdsTL5IXvZtvpsLF594+srqxJAsPmkTEBe/iyT2qbkwNgmIrF+jAqIGNtNRp3Ne51IegF0ZoKJVCGlc6vOw1Ts+ubHYdZcOEwPzN1ipRvpDart/vv0mwj9rL9gKF+hXEwmT3vrnBsf3sPNxVIy+fb5MXWHNOhtUtRBbs=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(136003)(376002)(39860400002)(396003)(346002)(451199024)(82310400011)(1800799009)(186009)(36840700001)(46966006)(40470700004)(82740400003)(356005)(54906003)(110136005)(70586007)(70206006)(966005)(6666004)(7416002)(426003)(336012)(81166007)(316002)(83380400001)(86362001)(2616005)(2906002)(45080400002)(1076003)(41300700001)(478600001)(36756003)(4326008)(8936002)(8676002)(47076005)(44832011)(26005)(36860700001)(40460700003)(5660300002)(40480700001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2023 06:47:15.2147
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e1f5f6f8-7cdf-42b1-6cbd-08dbaab7472f
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000E9D6.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6002
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This driver communicate with LJCA GPIO module with specific
-protocol through interfaces exported by LJCA USB driver.
-Update the driver according to LJCA USB driver's changes.
+For ARM processor, unaligned access to device memory is not allowed.
+Method memcpy does not take care of alignment.
 
-Signed-off-by: Wentong Wu <wentong.wu@intel.com>
-Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
-Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+USB detection failure with the unalingned address of memory, with
+below kernel crash. To fix the unalingned address kernel panic,
+replace memcpy with memcpy_toio method.
+
+Kernel crash:
+Unable to handle kernel paging request at virtual address ffff80000c05008a
+Mem abort info:
+  ESR = 0x96000061
+  EC = 0x25: DABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+  FSC = 0x21: alignment fault
+Data abort info:
+  ISV = 0, ISS = 0x00000061
+  CM = 0, WnR = 1
+swapper pgtable: 4k pages, 48-bit VAs, pgdp=000000000143b000
+[ffff80000c05008a] pgd=100000087ffff003, p4d=100000087ffff003,
+pud=100000087fffe003, pmd=1000000800bcc003, pte=00680000a0010713
+Internal error: Oops: 96000061 [#1] SMP
+Modules linked in:
+CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.15.19-xilinx-v2022.1 #1
+Hardware name: ZynqMP ZCU102 Rev1.0 (DT)
+pstate: 200000c5 (nzCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __memcpy+0x30/0x260
+lr : __xudc_ep0_queue+0xf0/0x110
+sp : ffff800008003d00
+x29: ffff800008003d00 x28: ffff800009474e80 x27: 00000000000000a0
+x26: 0000000000000100 x25: 0000000000000012 x24: ffff000800bc8080
+x23: 0000000000000001 x22: 0000000000000012 x21: ffff000800bc8080
+x20: 0000000000000012 x19: ffff000800bc8080 x18: 0000000000000000
+x17: ffff800876482000 x16: ffff800008004000 x15: 0000000000004000
+x14: 00001f09785d0400 x13: 0103020101005567 x12: 0781400000000200
+x11: 00000000c5672a10 x10: 00000000000008d0 x9 : ffff800009463cf0
+x8 : ffff8000094757b0 x7 : 0201010055670781 x6 : 4000000002000112
+x5 : ffff80000c05009a x4 : ffff000800a15012 x3 : ffff00080362ad80
+x2 : 0000000000000012 x1 : ffff000800a15000 x0 : ffff80000c050088
+Call trace:
+ __memcpy+0x30/0x260
+ xudc_ep0_queue+0x3c/0x60
+ usb_ep_queue+0x38/0x44
+ composite_ep0_queue.constprop.0+0x2c/0xc0
+ composite_setup+0x8d0/0x185c
+ configfs_composite_setup+0x74/0xb0
+ xudc_irq+0x570/0xa40
+ __handle_irq_event_percpu+0x58/0x170
+ handle_irq_event+0x60/0x120
+ handle_fasteoi_irq+0xc0/0x220
+ handle_domain_irq+0x60/0x90
+ gic_handle_irq+0x74/0xa0
+ call_on_irq_stack+0x2c/0x60
+ do_interrupt_handler+0x54/0x60
+ el1_interrupt+0x30/0x50
+ el1h_64_irq_handler+0x18/0x24
+ el1h_64_irq+0x78/0x7c
+ arch_cpu_idle+0x18/0x2c
+ do_idle+0xdc/0x15c
+ cpu_startup_entry+0x28/0x60
+ rest_init+0xc8/0xe0
+ arch_call_rest_init+0x10/0x1c
+ start_kernel+0x694/0x6d4
+ __primary_switched+0xa4/0xac
+
+Fixes: 1f7c51660034 ("usb: gadget: Add xilinx usb2 device support")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/all/202209020044.CX2PfZzM-lkp@intel.com/
+Cc: stable@vger.kernel.org
+Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
 ---
- drivers/gpio/Kconfig     |   4 +-
- drivers/gpio/gpio-ljca.c | 246 +++++++++++++++++++++++++++--------------------
- 2 files changed, 145 insertions(+), 105 deletions(-)
+Changes in V3:
+- Added "(void __iomem *)" proper type-cast for memcpy_toio API.
+- Resubmitting the patch because it was reverted due to a sparse error/warning.
+- Sparse error/warning fix available in usb-next branch:
+  Links:
+  https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?h=usb-next&id=52ecf812de2548ea0704e67f99cea1d0f3b8b173
+  https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?h=usb-next&id=0411fa8a5f655ebc0753e718fdfe68bc66a756f0
+  https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?h=usb-next&id=7f93e683bc0667a6b5e0da4b49fa07938a9ccad4
+- This patch created based on REPO:
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
+  Branch: usb-next 
+  base-commit: 895ed7eb263d7ce2d2592fdd3e211464a556084a
 
-diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-index e382dfe..c85843b 100644
---- a/drivers/gpio/Kconfig
-+++ b/drivers/gpio/Kconfig
-@@ -1294,9 +1294,9 @@ config GPIO_KEMPLD
- 
- config GPIO_LJCA
- 	tristate "INTEL La Jolla Cove Adapter GPIO support"
--	depends on MFD_LJCA
-+	depends on USB_LJCA
- 	select GPIOLIB_IRQCHIP
--	default MFD_LJCA
-+	default USB_LJCA
- 	help
- 	  Select this option to enable GPIO driver for the INTEL
- 	  La Jolla Cove Adapter (LJCA) board.
-diff --git a/drivers/gpio/gpio-ljca.c b/drivers/gpio/gpio-ljca.c
-index 87863f0..8965677 100644
---- a/drivers/gpio/gpio-ljca.c
-+++ b/drivers/gpio/gpio-ljca.c
-@@ -6,6 +6,7 @@
-  */
- 
- #include <linux/acpi.h>
-+#include <linux/auxiliary_bus.h>
- #include <linux/bitfield.h>
- #include <linux/bitops.h>
- #include <linux/dev_printk.h>
-@@ -13,19 +14,18 @@
- #include <linux/irq.h>
- #include <linux/kernel.h>
- #include <linux/kref.h>
--#include <linux/mfd/ljca.h>
- #include <linux/module.h>
--#include <linux/platform_device.h>
- #include <linux/slab.h>
- #include <linux/types.h>
-+#include <linux/usb/ljca.h>
- 
- /* GPIO commands */
--#define LJCA_GPIO_CONFIG	1
--#define LJCA_GPIO_READ		2
--#define LJCA_GPIO_WRITE		3
--#define LJCA_GPIO_INT_EVENT	4
--#define LJCA_GPIO_INT_MASK	5
--#define LJCA_GPIO_INT_UNMASK	6
-+#define LJCA_GPIO_CONFIG		1
-+#define LJCA_GPIO_READ			2
-+#define LJCA_GPIO_WRITE			3
-+#define LJCA_GPIO_INT_EVENT		4
-+#define LJCA_GPIO_INT_MASK		5
-+#define LJCA_GPIO_INT_UNMASK		6
- 
- #define LJCA_GPIO_CONF_DISABLE		BIT(0)
- #define LJCA_GPIO_CONF_INPUT		BIT(1)
-@@ -36,45 +36,49 @@
- #define LJCA_GPIO_CONF_INTERRUPT	BIT(6)
- #define LJCA_GPIO_INT_TYPE		BIT(7)
- 
--#define LJCA_GPIO_CONF_EDGE	FIELD_PREP(LJCA_GPIO_INT_TYPE, 1)
--#define LJCA_GPIO_CONF_LEVEL	FIELD_PREP(LJCA_GPIO_INT_TYPE, 0)
-+#define LJCA_GPIO_CONF_EDGE		FIELD_PREP(LJCA_GPIO_INT_TYPE, 1)
-+#define LJCA_GPIO_CONF_LEVEL		FIELD_PREP(LJCA_GPIO_INT_TYPE, 0)
- 
- /* Intentional overlap with PULLUP / PULLDOWN */
--#define LJCA_GPIO_CONF_SET	BIT(3)
--#define LJCA_GPIO_CONF_CLR	BIT(4)
-+#define LJCA_GPIO_CONF_SET		BIT(3)
-+#define LJCA_GPIO_CONF_CLR		BIT(4)
- 
--struct gpio_op {
-+#define LJCA_GPIO_BUF_SIZE		60u
-+
-+struct ljca_gpio_op {
- 	u8 index;
- 	u8 value;
- } __packed;
- 
--struct gpio_packet {
-+struct ljca_gpio_packet {
- 	u8 num;
--	struct gpio_op item[];
-+	struct ljca_gpio_op item[];
- } __packed;
- 
--#define LJCA_GPIO_BUF_SIZE 60
- struct ljca_gpio_dev {
--	struct platform_device *pdev;
-+	struct ljca_client *ljca;
- 	struct gpio_chip gc;
- 	struct ljca_gpio_info *gpio_info;
- 	DECLARE_BITMAP(unmasked_irqs, LJCA_MAX_GPIO_NUM);
- 	DECLARE_BITMAP(enabled_irqs, LJCA_MAX_GPIO_NUM);
- 	DECLARE_BITMAP(reenable_irqs, LJCA_MAX_GPIO_NUM);
-+	DECLARE_BITMAP(output_enabled, LJCA_MAX_GPIO_NUM);
- 	u8 *connect_mode;
--	/* mutex to protect irq bus */
-+	/* protect irq bus */
- 	struct mutex irq_lock;
- 	struct work_struct work;
--	/* lock to protect package transfer to Hardware */
-+	/* protect package transfer to hardware */
- 	struct mutex trans_lock;
- 
- 	u8 obuf[LJCA_GPIO_BUF_SIZE];
- 	u8 ibuf[LJCA_GPIO_BUF_SIZE];
- };
- 
--static int gpio_config(struct ljca_gpio_dev *ljca_gpio, u8 gpio_id, u8 config)
-+static int ljca_gpio_config(struct ljca_gpio_dev *ljca_gpio, u8 gpio_id,
-+			    u8 config)
- {
--	struct gpio_packet *packet = (struct gpio_packet *)ljca_gpio->obuf;
-+	struct ljca_gpio_packet *packet =
-+				(struct ljca_gpio_packet *)ljca_gpio->obuf;
- 	int ret;
- 
- 	mutex_lock(&ljca_gpio->trans_lock);
-@@ -82,43 +86,43 @@ static int gpio_config(struct ljca_gpio_dev *ljca_gpio, u8 gpio_id, u8 config)
- 	packet->item[0].value = config | ljca_gpio->connect_mode[gpio_id];
- 	packet->num = 1;
- 
--	ret = ljca_transfer(ljca_gpio->gpio_info->ljca, LJCA_GPIO_CONFIG, packet,
--			    struct_size(packet, item, packet->num), NULL, NULL);
-+	ret = ljca_transfer(ljca_gpio->ljca, LJCA_GPIO_CONFIG, packet,
-+			    struct_size(packet, item, packet->num), NULL, 0);
- 	mutex_unlock(&ljca_gpio->trans_lock);
--	return ret;
-+
-+	return ret < 0 ? ret : 0;
- }
- 
- static int ljca_gpio_read(struct ljca_gpio_dev *ljca_gpio, u8 gpio_id)
- {
--	struct gpio_packet *packet = (struct gpio_packet *)ljca_gpio->obuf;
--	struct gpio_packet *ack_packet = (struct gpio_packet *)ljca_gpio->ibuf;
--	unsigned int ibuf_len = LJCA_GPIO_BUF_SIZE;
-+	struct ljca_gpio_packet *ack_packet =
-+				(struct ljca_gpio_packet *)ljca_gpio->ibuf;
-+	struct ljca_gpio_packet *packet =
-+				(struct ljca_gpio_packet *)ljca_gpio->obuf;
- 	int ret;
- 
- 	mutex_lock(&ljca_gpio->trans_lock);
- 	packet->num = 1;
- 	packet->item[0].index = gpio_id;
--	ret = ljca_transfer(ljca_gpio->gpio_info->ljca, LJCA_GPIO_READ, packet,
--			    struct_size(packet, item, packet->num), ljca_gpio->ibuf, &ibuf_len);
--	if (ret)
--		goto out_unlock;
--
--	if (!ibuf_len || ack_packet->num != packet->num) {
--		dev_err(&ljca_gpio->pdev->dev, "failed gpio_id:%u %u", gpio_id, ack_packet->num);
--		ret = -EIO;
-+	ret = ljca_transfer(ljca_gpio->ljca, LJCA_GPIO_READ, packet,
-+			    struct_size(packet, item, packet->num),
-+			    ljca_gpio->ibuf, LJCA_GPIO_BUF_SIZE);
-+
-+	if (ret <= 0 || ack_packet->num != packet->num) {
-+		dev_err(&ljca_gpio->ljca->auxdev.dev,
-+			"read package error, gpio_id: %u num: %u ret: %d\n",
-+			gpio_id, ack_packet->num, ret);
-+		ret = ret < 0 ? ret : -EIO;
- 	}
--
--out_unlock:
- 	mutex_unlock(&ljca_gpio->trans_lock);
--	if (ret)
--		return ret;
--	return ack_packet->item[0].value > 0;
-+
-+	return ret < 0 ? ret : ack_packet->item[0].value > 0;
- }
- 
--static int ljca_gpio_write(struct ljca_gpio_dev *ljca_gpio, u8 gpio_id,
--			   int value)
-+static int ljca_gpio_write(struct ljca_gpio_dev *ljca_gpio, u8 gpio_id, int value)
- {
--	struct gpio_packet *packet = (struct gpio_packet *)ljca_gpio->obuf;
-+	struct ljca_gpio_packet *packet =
-+			(struct ljca_gpio_packet *)ljca_gpio->obuf;
- 	int ret;
- 
- 	mutex_lock(&ljca_gpio->trans_lock);
-@@ -126,10 +130,11 @@ static int ljca_gpio_write(struct ljca_gpio_dev *ljca_gpio, u8 gpio_id,
- 	packet->item[0].index = gpio_id;
- 	packet->item[0].value = value & 1;
- 
--	ret = ljca_transfer(ljca_gpio->gpio_info->ljca, LJCA_GPIO_WRITE, packet,
--			    struct_size(packet, item, packet->num), NULL, NULL);
-+	ret = ljca_transfer(ljca_gpio->ljca, LJCA_GPIO_WRITE, packet,
-+			    struct_size(packet, item, packet->num), NULL, 0);
- 	mutex_unlock(&ljca_gpio->trans_lock);
--	return ret;
-+
-+	return ret < 0 ? ret : 0;
- }
- 
- static int ljca_gpio_get_value(struct gpio_chip *chip, unsigned int offset)
-@@ -147,16 +152,24 @@ static void ljca_gpio_set_value(struct gpio_chip *chip, unsigned int offset,
- 
- 	ret = ljca_gpio_write(ljca_gpio, offset, val);
- 	if (ret)
--		dev_err(chip->parent, "offset:%u val:%d set value failed %d\n", offset, val, ret);
-+		dev_err(chip->parent,
-+			"set value failed offset: %u val: %d ret: %d\n",
-+			offset, val, ret);
- }
- 
--static int ljca_gpio_direction_input(struct gpio_chip *chip,
--				     unsigned int offset)
-+static int ljca_gpio_direction_input(struct gpio_chip *chip, unsigned int offset)
- {
- 	struct ljca_gpio_dev *ljca_gpio = gpiochip_get_data(chip);
- 	u8 config = LJCA_GPIO_CONF_INPUT | LJCA_GPIO_CONF_CLR;
-+	int ret;
- 
--	return gpio_config(ljca_gpio, offset, config);
-+	ret = ljca_gpio_config(ljca_gpio, offset, config);
-+	if (ret)
-+		return ret;
-+
-+	clear_bit(offset, ljca_gpio->output_enabled);
-+
-+	return 0;
- }
- 
- static int ljca_gpio_direction_output(struct gpio_chip *chip,
-@@ -166,14 +179,26 @@ static int ljca_gpio_direction_output(struct gpio_chip *chip,
- 	u8 config = LJCA_GPIO_CONF_OUTPUT | LJCA_GPIO_CONF_CLR;
- 	int ret;
- 
--	ret = gpio_config(ljca_gpio, offset, config);
-+	ret = ljca_gpio_config(ljca_gpio, offset, config);
- 	if (ret)
- 		return ret;
- 
- 	ljca_gpio_set_value(chip, offset, val);
-+	set_bit(offset, ljca_gpio->output_enabled);
-+
- 	return 0;
- }
- 
-+static int ljca_gpio_get_direction(struct gpio_chip *chip, unsigned int offset)
-+{
-+	struct ljca_gpio_dev *ljca_gpio = gpiochip_get_data(chip);
-+
-+	if (test_bit(offset, ljca_gpio->output_enabled))
-+		return GPIO_LINE_DIRECTION_OUT;
-+
-+	return GPIO_LINE_DIRECTION_IN;
-+}
-+
- static int ljca_gpio_set_config(struct gpio_chip *chip, unsigned int offset,
- 				unsigned long config)
- {
-@@ -197,7 +222,8 @@ static int ljca_gpio_set_config(struct gpio_chip *chip, unsigned int offset,
- 	return 0;
- }
- 
--static int ljca_gpio_init_valid_mask(struct gpio_chip *chip, unsigned long *valid_mask,
-+static int ljca_gpio_init_valid_mask(struct gpio_chip *chip,
-+				     unsigned long *valid_mask,
- 				     unsigned int ngpios)
- {
- 	struct ljca_gpio_dev *ljca_gpio = gpiochip_get_data(chip);
-@@ -208,15 +234,18 @@ static int ljca_gpio_init_valid_mask(struct gpio_chip *chip, unsigned long *vali
- 	return 0;
- }
- 
--static void ljca_gpio_irq_init_valid_mask(struct gpio_chip *chip, unsigned long *valid_mask,
-+static void ljca_gpio_irq_init_valid_mask(struct gpio_chip *chip,
-+					  unsigned long *valid_mask,
- 					  unsigned int ngpios)
- {
- 	ljca_gpio_init_valid_mask(chip, valid_mask, ngpios);
- }
- 
--static int ljca_enable_irq(struct ljca_gpio_dev *ljca_gpio, int gpio_id, bool enable)
-+static int ljca_enable_irq(struct ljca_gpio_dev *ljca_gpio, int gpio_id,
-+			   bool enable)
- {
--	struct gpio_packet *packet = (struct gpio_packet *)ljca_gpio->obuf;
-+	struct ljca_gpio_packet *packet =
-+			(struct ljca_gpio_packet *)ljca_gpio->obuf;
- 	int ret;
- 
- 	mutex_lock(&ljca_gpio->trans_lock);
-@@ -224,18 +253,20 @@ static int ljca_enable_irq(struct ljca_gpio_dev *ljca_gpio, int gpio_id, bool en
- 	packet->item[0].index = gpio_id;
- 	packet->item[0].value = 0;
- 
--	ret = ljca_transfer(ljca_gpio->gpio_info->ljca,
--			    enable ? LJCA_GPIO_INT_UNMASK : LJCA_GPIO_INT_MASK, packet,
--			    struct_size(packet, item, packet->num), NULL, NULL);
-+	ret = ljca_transfer(ljca_gpio->ljca,
-+			    enable ? LJCA_GPIO_INT_UNMASK : LJCA_GPIO_INT_MASK,
-+			    packet, struct_size(packet, item, packet->num),
-+			    NULL, 0);
- 	mutex_unlock(&ljca_gpio->trans_lock);
--	return ret;
-+
-+	return ret < 0 ? ret : 0;
- }
- 
- static void ljca_gpio_async(struct work_struct *work)
- {
--	struct ljca_gpio_dev *ljca_gpio = container_of(work, struct ljca_gpio_dev, work);
--	int gpio_id;
--	int unmasked;
-+	struct ljca_gpio_dev *ljca_gpio =
-+			container_of(work, struct ljca_gpio_dev, work);
-+	int gpio_id, unmasked;
- 
- 	for_each_set_bit(gpio_id, ljca_gpio->reenable_irqs, ljca_gpio->gc.ngpio) {
- 		clear_bit(gpio_id, ljca_gpio->reenable_irqs);
-@@ -245,20 +276,22 @@ static void ljca_gpio_async(struct work_struct *work)
- 	}
- }
- 
--static void ljca_gpio_event_cb(void *context, u8 cmd, const void *evt_data, int len)
-+static void ljca_gpio_event_cb(void *context, u8 cmd, const void *evt_data,
-+			       int len)
- {
--	const struct gpio_packet *packet = evt_data;
-+	const struct ljca_gpio_packet *packet = evt_data;
- 	struct ljca_gpio_dev *ljca_gpio = context;
--	int i;
--	int irq;
-+	int i, irq;
- 
- 	if (cmd != LJCA_GPIO_INT_EVENT)
- 		return;
- 
- 	for (i = 0; i < packet->num; i++) {
--		irq = irq_find_mapping(ljca_gpio->gc.irq.domain, packet->item[i].index);
-+		irq = irq_find_mapping(ljca_gpio->gc.irq.domain,
-+				       packet->item[i].index);
- 		if (!irq) {
--			dev_err(ljca_gpio->gc.parent, "gpio_id %u does not mapped to IRQ yet\n",
-+			dev_err(ljca_gpio->gc.parent,
-+				"gpio_id %u does not mapped to IRQ yet\n",
- 				packet->item[i].index);
- 			return;
- 		}
-@@ -299,18 +332,22 @@ static int ljca_irq_set_type(struct irq_data *irqd, unsigned int type)
- 	ljca_gpio->connect_mode[gpio_id] = LJCA_GPIO_CONF_INTERRUPT;
- 	switch (type) {
- 	case IRQ_TYPE_LEVEL_HIGH:
--		ljca_gpio->connect_mode[gpio_id] |= (LJCA_GPIO_CONF_LEVEL | LJCA_GPIO_CONF_PULLUP);
-+		ljca_gpio->connect_mode[gpio_id] |=
-+			(LJCA_GPIO_CONF_LEVEL | LJCA_GPIO_CONF_PULLUP);
- 		break;
- 	case IRQ_TYPE_LEVEL_LOW:
--		ljca_gpio->connect_mode[gpio_id] |= (LJCA_GPIO_CONF_LEVEL | LJCA_GPIO_CONF_PULLDOWN);
-+		ljca_gpio->connect_mode[gpio_id] |=
-+			(LJCA_GPIO_CONF_LEVEL | LJCA_GPIO_CONF_PULLDOWN);
- 		break;
- 	case IRQ_TYPE_EDGE_BOTH:
- 		break;
- 	case IRQ_TYPE_EDGE_RISING:
--		ljca_gpio->connect_mode[gpio_id] |= (LJCA_GPIO_CONF_EDGE | LJCA_GPIO_CONF_PULLUP);
-+		ljca_gpio->connect_mode[gpio_id] |=
-+			(LJCA_GPIO_CONF_EDGE | LJCA_GPIO_CONF_PULLUP);
- 		break;
- 	case IRQ_TYPE_EDGE_FALLING:
--		ljca_gpio->connect_mode[gpio_id] |= (LJCA_GPIO_CONF_EDGE | LJCA_GPIO_CONF_PULLDOWN);
-+		ljca_gpio->connect_mode[gpio_id] |=
-+			(LJCA_GPIO_CONF_EDGE | LJCA_GPIO_CONF_PULLDOWN);
- 		break;
- 	default:
- 		return -EINVAL;
-@@ -332,15 +369,14 @@ static void ljca_irq_bus_unlock(struct irq_data *irqd)
- 	struct gpio_chip *gc = irq_data_get_irq_chip_data(irqd);
- 	struct ljca_gpio_dev *ljca_gpio = gpiochip_get_data(gc);
- 	int gpio_id = irqd_to_hwirq(irqd);
--	int enabled;
--	int unmasked;
-+	int enabled, unmasked;
- 
- 	enabled = test_bit(gpio_id, ljca_gpio->enabled_irqs);
- 	unmasked = test_bit(gpio_id, ljca_gpio->unmasked_irqs);
- 
- 	if (enabled != unmasked) {
- 		if (unmasked) {
--			gpio_config(ljca_gpio, gpio_id, 0);
-+			ljca_gpio_config(ljca_gpio, gpio_id, 0);
- 			ljca_enable_irq(ljca_gpio, gpio_id, true);
- 			set_bit(gpio_id, ljca_gpio->enabled_irqs);
+Link: https://lore.kernel.org/all/202209020044.CX2PfZzM-lkp@intel.com/
+
+Changes in V2:
+- Address Greg KH review comments:
+ - Added information in the form of a Fixes: commit Id (commit message).
+ - Cc stable kernel.
+
+Link:https://lore.kernel.org/all/YwW8zE8ieLCsSxPN@kroah.com/
+---
+ drivers/usb/gadget/udc/udc-xilinx.c | 20 ++++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/usb/gadget/udc/udc-xilinx.c b/drivers/usb/gadget/udc/udc-xilinx.c
+index 56b8286a8009..74590f93ea61 100644
+--- a/drivers/usb/gadget/udc/udc-xilinx.c
++++ b/drivers/usb/gadget/udc/udc-xilinx.c
+@@ -497,11 +497,13 @@ static int xudc_eptxrx(struct xusb_ep *ep, struct xusb_req *req,
+ 		/* Get the Buffer address and copy the transmit data.*/
+ 		eprambase = (u32 __force *)(udc->addr + ep->rambase);
+ 		if (ep->is_in) {
+-			memcpy(eprambase, bufferptr, bytestosend);
++			memcpy_toio((void __iomem *)eprambase, bufferptr,
++				    bytestosend);
+ 			udc->write_fn(udc->addr, ep->offset +
+ 				      XUSB_EP_BUF0COUNT_OFFSET, bufferlen);
  		} else {
-@@ -363,43 +399,48 @@ static const struct irq_chip ljca_gpio_irqchip = {
- 	GPIOCHIP_IRQ_RESOURCE_HELPERS,
- };
+-			memcpy(bufferptr, eprambase, bytestosend);
++			memcpy_toio((void __iomem *)bufferptr, eprambase,
++				    bytestosend);
+ 		}
+ 		/*
+ 		 * Enable the buffer for transmission.
+@@ -515,11 +517,13 @@ static int xudc_eptxrx(struct xusb_ep *ep, struct xusb_req *req,
+ 		eprambase = (u32 __force *)(udc->addr + ep->rambase +
+ 			     ep->ep_usb.maxpacket);
+ 		if (ep->is_in) {
+-			memcpy(eprambase, bufferptr, bytestosend);
++			memcpy_toio((void __iomem *)eprambase, bufferptr,
++				    bytestosend);
+ 			udc->write_fn(udc->addr, ep->offset +
+ 				      XUSB_EP_BUF1COUNT_OFFSET, bufferlen);
+ 		} else {
+-			memcpy(bufferptr, eprambase, bytestosend);
++			memcpy_toio((void __iomem *)bufferptr, eprambase,
++				    bytestosend);
+ 		}
+ 		/*
+ 		 * Enable the buffer for transmission.
+@@ -1021,7 +1025,7 @@ static int __xudc_ep0_queue(struct xusb_ep *ep0, struct xusb_req *req)
+ 			   udc->addr);
+ 		length = req->usb_req.actual = min_t(u32, length,
+ 						     EP0_MAX_PACKET);
+-		memcpy(corebuf, req->usb_req.buf, length);
++		memcpy_toio((void __iomem *)corebuf, req->usb_req.buf, length);
+ 		udc->write_fn(udc->addr, XUSB_EP_BUF0COUNT_OFFSET, length);
+ 		udc->write_fn(udc->addr, XUSB_BUFFREADY_OFFSET, 1);
+ 	} else {
+@@ -1752,7 +1756,7 @@ static void xudc_handle_setup(struct xusb_udc *udc)
  
--static int ljca_gpio_probe(struct platform_device *pdev)
-+static int ljca_gpio_probe(struct auxiliary_device *auxdev,
-+			   const struct auxiliary_device_id *aux_dev_id)
- {
-+	struct ljca_client *ljca = auxiliary_dev_to_ljca_client(auxdev);
- 	struct ljca_gpio_dev *ljca_gpio;
- 	struct gpio_irq_chip *girq;
- 	int ret;
+ 	/* Load up the chapter 9 command buffer.*/
+ 	ep0rambase = (u32 __force *) (udc->addr + XUSB_SETUP_PKT_ADDR_OFFSET);
+-	memcpy(&setup, ep0rambase, 8);
++	memcpy_toio((void __iomem *)&setup, ep0rambase, 8);
  
--	ljca_gpio = devm_kzalloc(&pdev->dev, sizeof(*ljca_gpio), GFP_KERNEL);
-+	ljca_gpio = devm_kzalloc(&auxdev->dev, sizeof(*ljca_gpio), GFP_KERNEL);
- 	if (!ljca_gpio)
- 		return -ENOMEM;
+ 	udc->setup = setup;
+ 	udc->setup.wValue = cpu_to_le16((u16 __force)setup.wValue);
+@@ -1839,7 +1843,7 @@ static void xudc_ep0_out(struct xusb_udc *udc)
+ 			     (ep0->rambase << 2));
+ 		buffer = req->usb_req.buf + req->usb_req.actual;
+ 		req->usb_req.actual = req->usb_req.actual + bytes_to_rx;
+-		memcpy(buffer, ep0rambase, bytes_to_rx);
++		memcpy_toio((void __iomem *)buffer, ep0rambase, bytes_to_rx);
  
--	ljca_gpio->gpio_info = dev_get_platdata(&pdev->dev);
--	ljca_gpio->connect_mode = devm_kcalloc(&pdev->dev, ljca_gpio->gpio_info->num,
--					       sizeof(*ljca_gpio->connect_mode), GFP_KERNEL);
-+	ljca_gpio->ljca = ljca;
-+	ljca_gpio->gpio_info = dev_get_platdata(&auxdev->dev);
-+	ljca_gpio->connect_mode = devm_kcalloc(&auxdev->dev,
-+					       ljca_gpio->gpio_info->num,
-+					       sizeof(*ljca_gpio->connect_mode),
-+					       GFP_KERNEL);
- 	if (!ljca_gpio->connect_mode)
- 		return -ENOMEM;
- 
- 	mutex_init(&ljca_gpio->irq_lock);
- 	mutex_init(&ljca_gpio->trans_lock);
--	ljca_gpio->pdev = pdev;
- 	ljca_gpio->gc.direction_input = ljca_gpio_direction_input;
- 	ljca_gpio->gc.direction_output = ljca_gpio_direction_output;
-+	ljca_gpio->gc.get_direction = ljca_gpio_get_direction;
- 	ljca_gpio->gc.get = ljca_gpio_get_value;
- 	ljca_gpio->gc.set = ljca_gpio_set_value;
- 	ljca_gpio->gc.set_config = ljca_gpio_set_config;
- 	ljca_gpio->gc.init_valid_mask = ljca_gpio_init_valid_mask;
- 	ljca_gpio->gc.can_sleep = true;
--	ljca_gpio->gc.parent = &pdev->dev;
-+	ljca_gpio->gc.parent = &auxdev->dev;
- 
- 	ljca_gpio->gc.base = -1;
- 	ljca_gpio->gc.ngpio = ljca_gpio->gpio_info->num;
--	ljca_gpio->gc.label = ACPI_COMPANION(&pdev->dev) ?
--			      acpi_dev_name(ACPI_COMPANION(&pdev->dev)) :
--			      dev_name(&pdev->dev);
-+	ljca_gpio->gc.label = ACPI_COMPANION(&auxdev->dev) ?
-+			      acpi_dev_name(ACPI_COMPANION(&auxdev->dev)) :
-+			      dev_name(&auxdev->dev);
- 	ljca_gpio->gc.owner = THIS_MODULE;
- 
--	platform_set_drvdata(pdev, ljca_gpio);
--	ljca_register_event_cb(ljca_gpio->gpio_info->ljca, ljca_gpio_event_cb, ljca_gpio);
-+	auxiliary_set_drvdata(auxdev, ljca_gpio);
-+	ljca_register_event_cb(ljca, ljca_gpio_event_cb, ljca_gpio);
- 
- 	girq = &ljca_gpio->gc.irq;
- 	gpio_irq_chip_set_chip(girq, &ljca_gpio_irqchip);
-@@ -413,7 +454,7 @@ static int ljca_gpio_probe(struct platform_device *pdev)
- 	INIT_WORK(&ljca_gpio->work, ljca_gpio_async);
- 	ret = gpiochip_add_data(&ljca_gpio->gc, ljca_gpio);
- 	if (ret) {
--		ljca_unregister_event_cb(ljca_gpio->gpio_info->ljca);
-+		ljca_unregister_event_cb(ljca);
- 		mutex_destroy(&ljca_gpio->irq_lock);
- 		mutex_destroy(&ljca_gpio->trans_lock);
- 	}
-@@ -421,34 +462,33 @@ static int ljca_gpio_probe(struct platform_device *pdev)
- 	return ret;
- }
- 
--static int ljca_gpio_remove(struct platform_device *pdev)
-+static void ljca_gpio_remove(struct auxiliary_device *auxdev)
- {
--	struct ljca_gpio_dev *ljca_gpio = platform_get_drvdata(pdev);
-+	struct ljca_gpio_dev *ljca_gpio = auxiliary_get_drvdata(auxdev);
- 
- 	gpiochip_remove(&ljca_gpio->gc);
--	ljca_unregister_event_cb(ljca_gpio->gpio_info->ljca);
-+	ljca_unregister_event_cb(ljca_gpio->ljca);
-+	cancel_work_sync(&ljca_gpio->work);
- 	mutex_destroy(&ljca_gpio->irq_lock);
- 	mutex_destroy(&ljca_gpio->trans_lock);
--	return 0;
- }
- 
--#define LJCA_GPIO_DRV_NAME "ljca-gpio"
--static const struct platform_device_id ljca_gpio_id[] = {
--	{ LJCA_GPIO_DRV_NAME, 0 },
--	{ /* sentinel */ }
-+static const struct auxiliary_device_id ljca_gpio_id_table[] = {
-+	{ "usb_ljca.ljca-gpio", 0 },
-+	{ /* sentinel */ },
- };
--MODULE_DEVICE_TABLE(platform, ljca_gpio_id);
-+MODULE_DEVICE_TABLE(auxiliary, ljca_gpio_id_table);
- 
--static struct platform_driver ljca_gpio_driver = {
--	.driver.name = LJCA_GPIO_DRV_NAME,
-+static struct auxiliary_driver ljca_gpio_driver = {
- 	.probe = ljca_gpio_probe,
- 	.remove = ljca_gpio_remove,
-+	.id_table = ljca_gpio_id_table,
- };
--module_platform_driver(ljca_gpio_driver);
-+module_auxiliary_driver(ljca_gpio_driver);
- 
--MODULE_AUTHOR("Ye Xiang <xiang.ye@intel.com>");
--MODULE_AUTHOR("Wang Zhifeng <zhifeng.wang@intel.com>");
--MODULE_AUTHOR("Zhang Lixu <lixu.zhang@intel.com>");
-+MODULE_AUTHOR("Wentong Wu <wentong.wu@intel.com>");
-+MODULE_AUTHOR("Zhifeng Wang <zhifeng.wang@intel.com>");
-+MODULE_AUTHOR("Lixu Zhang <lixu.zhang@intel.com>");
- MODULE_DESCRIPTION("Intel La Jolla Cove Adapter USB-GPIO driver");
- MODULE_LICENSE("GPL");
- MODULE_IMPORT_NS(LJCA);
+ 		if (req->usb_req.length == req->usb_req.actual) {
+ 			/* Data transfer completed get ready for Status stage */
+@@ -1915,7 +1919,7 @@ static void xudc_ep0_in(struct xusb_udc *udc)
+ 				     (ep0->rambase << 2));
+ 			buffer = req->usb_req.buf + req->usb_req.actual;
+ 			req->usb_req.actual = req->usb_req.actual + length;
+-			memcpy(ep0rambase, buffer, length);
++			memcpy_toio((void __iomem *)ep0rambase, buffer, length);
+ 		}
+ 		udc->write_fn(udc->addr, XUSB_EP_BUF0COUNT_OFFSET, count);
+ 		udc->write_fn(udc->addr, XUSB_BUFFREADY_OFFSET, 1);
+
+base-commit: 895ed7eb263d7ce2d2592fdd3e211464a556084a
 -- 
-2.7.4
+2.17.1
 
