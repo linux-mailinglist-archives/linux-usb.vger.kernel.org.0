@@ -2,87 +2,178 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 333B87904C7
-	for <lists+linux-usb@lfdr.de>; Sat,  2 Sep 2023 04:49:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF3AE7905C9
+	for <lists+linux-usb@lfdr.de>; Sat,  2 Sep 2023 09:35:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347286AbjIBCt1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 Sep 2023 22:49:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42890 "EHLO
+        id S1351714AbjIBHfW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 2 Sep 2023 03:35:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjIBCt0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Sep 2023 22:49:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6F1E56
-        for <linux-usb@vger.kernel.org>; Fri,  1 Sep 2023 19:49:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D6020B826C7
-        for <linux-usb@vger.kernel.org>; Sat,  2 Sep 2023 02:49:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6E704C433C8
-        for <linux-usb@vger.kernel.org>; Sat,  2 Sep 2023 02:49:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693622961;
-        bh=kC8+o2gbmeYgPFhA9Q4LZa54AQgm3aMyj5Fdvttv/+Q=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=cCSV0SMD3xV+3GSNNluBQqxb3S2Gv15pbrYSVbY/N3E6iZPgJ/eD8myQ6R757zkuj
-         OqvURlQ/Fuqp57ogo0BcggmVL8uiuf9Pd5/TwNXnNXNGdJDFbcfN2fiCg+zbp0TU7A
-         UdtW5pGlgLb7E2ACJN/un5g4H470r1MR0KUmA9Yj52rKqhQ6mxoR6Nlc2e+3ZPFBPJ
-         tB5Fd3wzjTwsW8tzNgMFZ5Gnioi14FPBcGf39XtlEvq9f2t0Fe+/6kERDpvkMDELi1
-         oPZG1SQhNMM+Vos0rr89FWU2O0ZD6GBFHLjCThD1LMLB70+VpS6FQNuKNF2q5ab6Ne
-         FYDLesGtndraw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 59A0FC53BCD; Sat,  2 Sep 2023 02:49:21 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 217862] [BUG] Alauda driver causes oops when inserted with card
- in with transfer buffer is on stack, throws errors if card is inserted
- afterwards.
-Date:   Sat, 02 Sep 2023 02:49:21 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: stern@rowland.harvard.edu
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-217862-208809-3jbFzKIIFU@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-217862-208809@https.bugzilla.kernel.org/>
-References: <bug-217862-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S230513AbjIBHfU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 2 Sep 2023 03:35:20 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25DF290;
+        Sat,  2 Sep 2023 00:35:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1693640115;
+        bh=9xMdGiESgscmhwAbix3Q4d0UwO37JeCDRpwrHEAP68I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PBIuehy0Z3tktPa/0j8H/2O2yz6nKtakM5Dyhswz5zdjBnQk4m5zpsz3QYD4DlAAZ
+         9NzZ9SECeclDoTpJ7Fe7LGNaDf/7LSVTpHKUizktyYqdDulZ5R9CBCYVDJQD3HgiSw
+         ycdJkAhkv9nZNqs9P5mrP2f8PhZn5BVtgjZvjUGk=
+Date:   Sat, 2 Sep 2023 09:35:14 +0200
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v3] hwmon: add POWER-Z driver
+Message-ID: <2bdf5aa0-9fe6-40b1-bec2-3dedc9094949@t-8ch.de>
+References: <20230902-powerz-v3-1-ed78d450c6c3@weissschuh.net>
+ <61fae328-e56d-f999-1613-160987dcefa6@roeck-us.net>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <61fae328-e56d-f999-1613-160987dcefa6@roeck-us.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D217862
+On 2023-09-01 17:30:04-0700, Guenter Roeck wrote:
+> On 9/1/23 15:36, Thomas Weißschuh wrote:
+> [..]
 
---- Comment #2 from Alan Stern (stern@rowland.harvard.edu) ---
-Please try this again after applying the commit in
+> > diff --git a/drivers/hwmon/powerz.c b/drivers/hwmon/powerz.c
+> > new file mode 100644
+> > index 000000000000..6209339e5414
+> > --- /dev/null
+> > +++ b/drivers/hwmon/powerz.c
 
-https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?id=
-=3Da6ff6e7a9dd69364547751db0f626a10a6d628d2
+>[..]
 
---=20
-You may reply to this email to add a comment.
+> > +static int powerz_read_string(struct device *dev, enum hwmon_sensor_types type,
+> > +			      u32 attr, int channel, const char **str)
+> > +{
+> > +	if (type == hwmon_curr && attr == hwmon_curr_label) {
+> > +		*str = "IBUS";
+> > +	} else if (type == hwmon_in && attr == hwmon_in_label) {
+> > +		if (channel == 0)
+> > +			*str = "VBUS";
+> > +		else if (type == hwmon_in && attr == hwmon_in_label && channel == 1)
+> > +			*str = "VCC1";
+> > +		else if (type == hwmon_in && attr == hwmon_in_label && channel == 2)
+> > +			*str = "VCC2";
+> > +		else if (type == hwmon_in && attr == hwmon_in_label && channel == 3)
+> > +			*str = "VDP";
+> > +		else if (type == hwmon_in && attr == hwmon_in_label && channel == 4)
+> > +			*str = "VDM";
+> > +		else if (type == hwmon_in && attr == hwmon_in_label && channel == 5)
+> > +			*str = "VDD";
+> 
+> All those repeated "type == hwmon_in && attr == hwmon_in_label" checks are
+> unnecessary. Note that this could be much simpler written as
+> 
+> 	const char *in_labels[] = {
+> 		"VBUS", "VCC1", "VCC2", "VDP", "VDM", "VDD"
+> 	};
+> 	...
+> 	*str = in_labels[channel];
+> 
+> but I'll leave that up to you.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+I prefer the current style for consistency.
+But I dropped all the redundant comparisions of type and attr.
+
+> [..]
+
+> > +static int powerz_read(struct device *dev, enum hwmon_sensor_types type,
+> > +		       u32 attr, int channel, long *val)
+> > +{
+> > +	struct usb_interface *intf = to_usb_interface(dev->parent);
+> > +	struct usb_device *udev = interface_to_usbdev(intf);
+> > +	struct powerz_priv *priv = usb_get_intfdata(intf);
+> > +	struct powerz_sensor_data *data;
+> > +	int ret;
+> > +
+> > +	if (!priv)
+> > +		return -EIO; /* disconnected */
+> > +
+> > +	mutex_lock(&priv->mutex);
+> > +	ret = powerz_read_data(udev, priv);
+> > +	if (ret)
+> > +		goto out;
+> > +
+> > +	data = (struct powerz_sensor_data *)priv->transfer_buffer;
+> > +
+> > +	if (type == hwmon_curr) {
+> > +		if (attr == hwmon_curr_input)
+> > +			*val = ((s32)le32_to_cpu(data->I_bus)) / 1000;
+> > +		else if (attr == hwmon_curr_average)
+> > +			*val = ((s32)le32_to_cpu(data->I_bus_avg)) / 1000;
+> 
+> Just wondering ... does this device really report current in micro-amps ?
+
+Yes, the device has its own display and the values on the display and
+in hwmon match.
+
+> [..]
+
+> > +		else
+> > +			ret = -EOPNOTSUPP;
+> > +	} else if (type == hwmon_in) {
+> > +		if (attr == hwmon_in_input) {
+> > +			if (channel == 0)
+> > +				*val = le32_to_cpu(data->V_bus) / 1000;
+> 
+> and voltage in micro-volt ? Just asking, because I don't think I have
+> ever seen that.
+
+Yes, the same as for the current.
+
+> > +			else if (channel == 1)
+> > +				*val = le16_to_cpu(data->V_cc1) / 10;
+> > +			else if (channel == 2)
+> > +				*val = le16_to_cpu(data->V_cc2) / 10;
+> > +			else if (channel == 3)
+> > +				*val = le16_to_cpu(data->V_dp) / 10;
+> > +			else if (channel == 4)
+> > +				*val = le16_to_cpu(data->V_dm) / 10;
+> > +			else if (channel == 5)
+> > +				*val = le16_to_cpu(data->V_dd) / 10;
+> > +			else
+> > +				ret = -EOPNOTSUPP;
+> > +		} else if (attr == hwmon_in_average && channel == 0) {
+> > +			*val = le32_to_cpu(data->V_bus_avg) / 1000;
+> > +		} else if (attr == hwmon_in_min && channel == 0) {
+> > +			*val = -POWERZ_MAX_VOLTAGE;
+> > +		} else if (attr == hwmon_in_max && channel == 0) {
+> > +			*val = POWERZ_MAX_VOLTAGE;
+> > +		} else {
+> 
+> There are more repeated checks (for channel == 0) here. Not that it matters,
+> because the constants should not bre reported anyway. Also, I do wonder if
+> hwmon_in_min == -POWERZ_MAX_VOLTAGE is really correct.
+
+Current can flow in both directions through the device. The sign
+indicates the direction. I'll add a note for that to the documentation.
+
+> 
+> > +			ret = -EOPNOTSUPP;
+> > +		}
+> > +	} else if (type == hwmon_temp && attr == hwmon_temp_input) {
+> > +		*val =
+> > +		    ((long)data->temp[1]) * 2000 +
+> > +		    ((long)data->temp[0]) * 1000 / 128;
+> 
+> I guess this is really ((data->temp[1] << 8) + data->temp[0]) * 1000 / 128,
+> which might be easier to understand, but good enough. The typecasts are
+> unnecessary, though.
+
+No, it's really "* 2000".
+
+Dropped the casts.
