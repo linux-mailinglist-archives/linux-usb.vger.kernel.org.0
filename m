@@ -2,74 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9A52790E0F
-	for <lists+linux-usb@lfdr.de>; Sun,  3 Sep 2023 23:02:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BA66790E2C
+	for <lists+linux-usb@lfdr.de>; Sun,  3 Sep 2023 23:29:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348159AbjICVCf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 3 Sep 2023 17:02:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45950 "EHLO
+        id S1348545AbjICV3p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 3 Sep 2023 17:29:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231604AbjICVCe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 3 Sep 2023 17:02:34 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E896A102
-        for <linux-usb@vger.kernel.org>; Sun,  3 Sep 2023 14:02:30 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-d74a012e613so1124222276.1
-        for <linux-usb@vger.kernel.org>; Sun, 03 Sep 2023 14:02:30 -0700 (PDT)
+        with ESMTP id S1348523AbjICV3o (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 3 Sep 2023 17:29:44 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13627103
+        for <linux-usb@vger.kernel.org>; Sun,  3 Sep 2023 14:29:41 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-500bb392ab7so1449532e87.1
+        for <linux-usb@vger.kernel.org>; Sun, 03 Sep 2023 14:29:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693774950; x=1694379750; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wyrVivbOL8H2+2oy0DBeynxfE8rpivKsaojvi9l90MQ=;
-        b=p22sGb/i+SVGE9WanSm9rLz+/ozUiX0KBepGI1TwSXgw+RhLGpfaLNgZ8HrBsucKEI
-         k0hT8LK2f0v1U7lgz3ONEmt/v3JApVoB5WQ7Pox0E6QQ7o48xo63zsX/jMhl0OkRbNPp
-         2fwlEdYJlxifG91TuoJbBPGT6JyYAh1Gcyp+VqEGBOfmzvW2NhlkfWumZICd0LO0ooUg
-         kX+xwV1YZABzjrMZChWeTfepQNaIwdKjulXIsfJDnQxDFMGJ/9fJBzorKWhihbJk5rIb
-         C6+MKPX13hTsO3+hJ5t5F6Wuh0YXhTE42SrpeOplLHtZpoeCFwrEO28e+HYXRvSOszhE
-         sRZg==
+        d=linaro.org; s=google; t=1693776579; x=1694381379; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=aO7JcMbv/31Ao0IItAJcvJ97CXcaD4GQwRMPpX5ISig=;
+        b=bKKaQZZ/Nu3YE2Zy3zo6dks4xUeVNUqybvkloqbao2w0+SNsCM5AVTcQZJZPmrLI5s
+         qmvA5cgiZBGFMJUHKYPzlCTWsAPdhlgj8mSpRtFRuU7Tlvh6wbzKe14hohlQSI/PLnqV
+         lP8R7SebGNSTTp96ioI9ZpGKmRqmk8LMU5Z48Je10ILDI4bWP9LehTcey4O/dMrUFz9v
+         nNnNTYQMQ+jFN/1kCDLIIdjkVnEwQ0RbE//SNOfdXln5OjywWSz77xAIghluliZXPveH
+         wxtXBuqDBGo+oVRyjNTEE46Pwkn2DfNLFpA6gGieMCHoJmv0Ll13/nHGX2kQaDNaxm4H
+         NilA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693774950; x=1694379750;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1693776579; x=1694381379;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=wyrVivbOL8H2+2oy0DBeynxfE8rpivKsaojvi9l90MQ=;
-        b=JA5GX280nD6GQfmnmRrqOCVpcn73hoWfvUQRgzTS6eUIqhlUqPNZ1mMxh0a2HD0OWm
-         GtNv8Amcj6Sjd1kprDa7ksPG2I8QnvoniW6CWIHBRcjPcCST+A0Jwm1/fegkmwsS7wZj
-         HNv04ROKb72kgXNLjd5bLfdYGh570d07StGFPSdCo5yFi9WchWxRPc1tqHJngB92RKkX
-         UXn+q+qNR9xMLvk8bD3JYQ3VPCvehMT/CYT3E+q0RJfIy4bUtRMZ22LNzYVC7nggyzKN
-         9AW9feqy4n7rxElb+IIzqVzCnbUVWj+QayrXDINo4f6h19RLNebAj5ug0f9NRPWCMrKB
-         cuHg==
-X-Gm-Message-State: AOJu0YwZXuArLbEmBWdryKnVEE+GLy8EzTk1CYAIgP6yVhvUWodaq/Zx
-        IIGl6QvNOYUEfMdNh+9wVuozU8cIvKX7eezoe8qkRw==
-X-Google-Smtp-Source: AGHT+IEIksLV6i1JQnXxmFBaEbAx0vYPQzKu+YxnPk5mSfeHKOjrFxxCLATBwQ5f3mGZqO72LEeDFc4Kwock6sj7f10=
-X-Received: by 2002:a25:d20e:0:b0:d74:6cb3:bb77 with SMTP id
- j14-20020a25d20e000000b00d746cb3bb77mr10416043ybg.28.1693774950042; Sun, 03
- Sep 2023 14:02:30 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230817145516.5924-1-dmitry.baryshkov@linaro.org> <20230822141735.GA14396@pendragon.ideasonboard.com>
-In-Reply-To: <20230822141735.GA14396@pendragon.ideasonboard.com>
+        bh=aO7JcMbv/31Ao0IItAJcvJ97CXcaD4GQwRMPpX5ISig=;
+        b=TV2VE6L6hK3CgTs/nTLKFtmE18xbpc/swgRe8jCy7moRVvji9zt+jxN1kJKBY+4euN
+         5TinyjtjVVWLJ+JDhm9zWnM9fMhdpHaYTTM1rcv8C34Umz5HKA/pfZxMzJ2FPbuAgkfs
+         NMs40VFpAuPAsSwI5U9CPl48f8EHlxScUeUV5bJftrzw9olTZM15Ch8AActNP8HHq9xV
+         NgjDc+W2IpwvMCssI4cio3R0khDhM/e2FTKAO+/PED/ni7jEHKN3Ch8xSraKEM/I+spH
+         DLv9y7wcBImqMIXfzDnSBvBWVIyORGOO+wRNxcRUCK8HOhaA/oLwSoYATDsepHSo+u5L
+         /3Vg==
+X-Gm-Message-State: AOJu0YwpCOGldXdEdidhT2wOOhQKANnGs+chQRg98HIACDjUu4hpo3jA
+        hjTr/6no8PQwjcYlyHFKGlVb0w==
+X-Google-Smtp-Source: AGHT+IE1TS5PmWbbxqldzYnmj04E5wJiAVQrziZm2fN2wTg0sXGtBtxHtmvZVFyK6YP6ZwgEHbm6eg==
+X-Received: by 2002:a05:6512:230b:b0:500:96fc:129d with SMTP id o11-20020a056512230b00b0050096fc129dmr7034864lfu.14.1693776578713;
+        Sun, 03 Sep 2023 14:29:38 -0700 (PDT)
+Received: from umbar.unikie.fi ([192.130.178.91])
+        by smtp.gmail.com with ESMTPSA id eq11-20020a056512488b00b004ff8d9ed368sm1412352lfb.258.2023.09.03.14.29.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Sep 2023 14:29:38 -0700 (PDT)
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Mon, 4 Sep 2023 00:02:18 +0300
-Message-ID: <CAA8EJpp_FYOKHziHOWF6E1RTkHEJ8oXXH90EDmJbLG1UDO1ofA@mail.gmail.com>
-Subject: Re: [PATCH v4 0/3] drm: simplify support for transparent DRM bridges
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
-        freedreno@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Simon Ser <contact@emersion.fr>, Janne Grunau <j@jannau.net>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH v7 0/3] drm/bridge_connector: implement OOB HPD handling
+Date:   Mon,  4 Sep 2023 00:29:34 +0300
+Message-Id: <20230903212937.2876815-1-dmitry.baryshkov@linaro.org>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -79,73 +85,50 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 22 Aug 2023 at 17:17, Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
->
-> Hi Dmitry,
->
-> Thank you for the patches.
->
-> On Thu, Aug 17, 2023 at 05:55:13PM +0300, Dmitry Baryshkov wrote:
-> > Supporting DP/USB-C can result in a chain of several transparent
-> > bridges (PHY, redrivers, mux, etc). This results in drivers having
-> > similar boilerplate code for such bridges.
->
-> What do you mean by transparent bridge here ? Bridges are a DRM concept,
-> and as far as I can tell, a PHY isn't a bridge. Why does it need to be
-> handled as one, especially if it's completely transparent ?
->
-> > Next, these drivers are susceptible to -EPROBE_DEFER loops: the next
-> > bridge can either be probed from the bridge->attach callback, when it is
-> > too late to return -EPROBE_DEFER, or from the probe() callback, when the
-> > next bridge might not yet be available, because it depends on the
-> > resources provided by the probing device.
->
-> Can't device links help avoiding defer probing in those cases ?
+Note, numbering for this series starts from v5, since there were several
+revisions for this patchset under a different series title ([1]).
 
-It looks like both Neil and I missed this question.
+USB altmodes code would send OOB notifications to the drm_connector
+specified in the device tree. However as the MSM DP driver uses
+drm_bridge_connector, there is no way to receive these event directly.
+Implement a bridge between oob_hotplug_event and drm_bridge's
+hpd_notify.
 
-Two items wrt devlinks. First, I view them as a helper. So if one
-disables the devlinks enforcement, he'd still get a deferral loop.
+Merge strategy: since this series touches i915 code, it might make sense
+to merge it through drm-intel.
 
-Second, in this case we can not enforce devlinks (or return
--EPROBE_DEFER from the probe() function) because the next bridge is
-not yet available when the main driver probes. Unfortunately bridges
-are allocated in the opposite order. So, using AUX devices helps us to
-break it. Because first typec mux/retimer/switch/etc devices probe (in
-the direction from the typec source to the typec port). Then DRM
-bridge devices are probed starting from the end of the chain
-(connector) to the DP source (root DP bridge/controller).
+[1] https://patchwork.freedesktop.org/series/103449/
 
->
-> > Last, but not least, this results in the the internal knowledge of DRM
-> > subsystem slowly diffusing into other subsystems, like PHY or USB/TYPEC.
->
-> Why so ? The PHY subsystem should provide a PHY, without considering
-> what subsystem it will be used by. This patch series seems to me to
-> actually create this DRM dependency in other subsystems, which I don't
-> think is a very good idea. Resources should be registered in their own
-> subsystem with the appropriate API, not in a way that is tied to a
-> particular consumer.
->
-> > To solve all these issues, define a separate DRM helper, which creates
-> > separate aux device just for the bridge. During probe such aux device
-> > doesn't result in the EPROBE_DEFER loops. Instead it allows the device
-> > drivers to probe properly, according to the actual resource
-> > dependencies. The bridge auxdevs are then probed when the next bridge
-> > becomes available, sparing drivers from drm_bridge_attach() returning
-> > -EPROBE_DEFER.
->
-> I'm not thrilled :-( Let's discuss the questions above first.
+Changes since v6:
+- Fixed the fwnode refcount in drm/bridge-connector
 
-Laurent, please excuse me for the ping. Any further response from your side?
-I'd like to send the next iteration of this patchset.
+Changes since v5:
+- Fixed checkpatch warning in the first patch (noted by intel-gfx CI).
 
-> > Proposed merge strategy: immutable branch with the drm commit, which is
-> > then merged into PHY and USB subsystems together with the corresponding
-> > patch.
+Changes since v4:
+- Picked up the patchset
+- Dropped msm-specific patches
+- Changed drm_bridge_connector_oob_hotplug_event to call connector's HPD
+  callback directly, rather than going through the last bridge's
+  hpd_notify
+- Added proper fwnode for the drm_bridge_connector
 
+Bjorn Andersson (1):
+  drm: Add HPD state to drm_connector_oob_hotplug_event()
+
+Dmitry Baryshkov (2):
+  drm/bridge_connector: stop filtering events in
+    drm_bridge_connector_hpd_cb()
+  drm/bridge_connector: implement oob_hotplug_event
+
+ drivers/gpu/drm/drm_bridge_connector.c        | 36 ++++++++++++++-----
+ drivers/gpu/drm/drm_connector.c               |  6 ++--
+ .../gpu/drm/i915/display/intel_display_core.h |  3 ++
+ drivers/gpu/drm/i915/display/intel_dp.c       | 17 +++++++--
+ drivers/usb/typec/altmodes/displayport.c      | 17 ++++-----
+ include/drm/drm_connector.h                   |  6 ++--
+ 6 files changed, 62 insertions(+), 23 deletions(-)
 
 -- 
-With best wishes
-Dmitry
+2.39.2
+
