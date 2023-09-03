@@ -2,53 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5AE6790E57
-	for <lists+linux-usb@lfdr.de>; Sun,  3 Sep 2023 23:42:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B0AD790E58
+	for <lists+linux-usb@lfdr.de>; Sun,  3 Sep 2023 23:42:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349028AbjICVmE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 3 Sep 2023 17:42:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59318 "EHLO
+        id S1349188AbjICVmF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 3 Sep 2023 17:42:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348918AbjICVl6 (ORCPT
+        with ESMTP id S1348737AbjICVl6 (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Sun, 3 Sep 2023 17:41:58 -0400
 Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF9ACD
-        for <linux-usb@vger.kernel.org>; Sun,  3 Sep 2023 14:41:54 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-5007616b756so1449250e87.3
-        for <linux-usb@vger.kernel.org>; Sun, 03 Sep 2023 14:41:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3501CF2
+        for <linux-usb@vger.kernel.org>; Sun,  3 Sep 2023 14:41:55 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4ff8f2630e3so1429639e87.1
+        for <linux-usb@vger.kernel.org>; Sun, 03 Sep 2023 14:41:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google; t=1693777313; x=1694382113; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ma99b4LHGq53HSGcZQ6vjRnRZEGnePGsfNP3DlvaRh0=;
-        b=MYOlbi+JGeJYtrISEHYVNAZ7NpZm2f81saVxar4AyapqsYeo9BDcG1/09r2DRXNEwr
-         mbf6atiwzL2s0ypbJJ/s/IfiyvbdNhMmfBynyy9zq4Rf7vF/UKwNGdUfTRKiv76gxCL4
-         mE9f/P4GWaSqWgWg8Blc4HJR9dojKiw2um+uyr3Q+NCLydXKm/qP+nrucUF+8gcc0LUa
-         //eAsXd+bWEEnLFNEWZPuifwc6Em2sPC2YYH2qyga5l+JI3cHzbKS9tuyVzYtX/3wrA1
-         q6UYZNGQK1DVXTysf21XRs667gV4bf/tno9hwUtOQSBCWQKZUkQZU+7gjOhnFIxAnByJ
-         oXJw==
+        bh=f4CGlwIh3CaiNYfDE8T4/N3NKVw9L1KuLHleXxMGA8k=;
+        b=sL37z1nSxapwX1ACyQwJD5J17vIMjGOlYzI20UASAIey8kqRxI4mjpOLunNTr0u6KK
+         jvpNqVkjoqjPTMONMwLwlzQKkafFdk3xRAB7v7F2C71kjfWv3RZAq0uwdXFBRgW5Ablu
+         5qEtusCHwgTRJX0jw35/YtTrrnm483NhEudimhX/Y9mY6b1ypxLsOGIV2NXg1locgBn2
+         GT8LylBHFPlCJAw9wBeuHQ564qtXwoDgreruE+BCcep2hASO7HKsC8zNooFIvAMa6b7z
+         9wXUeRsY+cFjE1kA3IgrV4pnlZhjm+i9W7t1RIK5ziozF2te0A0ydoVmTyp2VCrfh/M7
+         rszA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20221208; t=1693777313; x=1694382113;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Ma99b4LHGq53HSGcZQ6vjRnRZEGnePGsfNP3DlvaRh0=;
-        b=L0PCELn/Mx4DSNX1KuZe7EJGm2NQidneAFAydyWqwUnkFmlTA9xHl7Jwz78toQg9aD
-         mVgkGMZfqw4WmPBTPdE0FwjnZdw3cuaoVVOwcy3Kmk0ODcVCj+roc2K/e8P5kqVYOJhm
-         ujAcxNhInmTw3eywAI+H8IxUlyCQMkfVoZeZ4Q6ehkVXwpRsjoQ/KD1ibs9gAIhMLZuw
-         qQ54dgltN+SLadzAlV+Q9aIGZPBk0lUrRBf77N4Eazt7J41+0gxnjBqPENFF2nvvy51p
-         x/LQ+bPjLNswCeA8uSXrL3ux1W1TjYtfTnbzR/WzdYbUMbnazBaShNXyigEQyZ9CQzmg
-         Thiw==
-X-Gm-Message-State: AOJu0YyaVzrFCwTgoh5AD3M0+pphVaoduEX8Yr7l8oSxB7y2HpzOrVQH
-        gCpJMqU5RO/XXDDHl1UbFlH9AQ==
-X-Google-Smtp-Source: AGHT+IHJVW1SRXqtDqVwoMB9XSCNYSPZYNLw0l5nqazh953B3y2RWKaTYGlv3/IkcL42Y/AtV9dO0g==
-X-Received: by 2002:a05:6512:44c:b0:4fd:d517:fbcd with SMTP id y12-20020a056512044c00b004fdd517fbcdmr4553861lfk.6.1693777312712;
-        Sun, 03 Sep 2023 14:41:52 -0700 (PDT)
+        bh=f4CGlwIh3CaiNYfDE8T4/N3NKVw9L1KuLHleXxMGA8k=;
+        b=gGVGCDm3F0LHZ3mnv5ogvZAZF529x5GoP4RJGZ9bvMOMm1fylz3kmOzU0hepAc1zzL
+         VG+NGuR4Q1JnqxS+N6jrXQGAgB44cgdn9Ve+1i9hid1qRNxmhwzABp1BqlMaPMnzyOn7
+         yLG066fXQIEOrTF4FFZEaT2xD/GI/1JdkOyoLdtmAmsh0La5Sy8Jfhw8SeE7Rtmjegf7
+         paOpEpWeYZ+dLxdpCGNXRD6FzM0K1kts0ytt0JdqMsXh8fSiUuYjdKeMT5BLjCZGNVnq
+         StdyQcGK/LYnGc01sGXApWXbErp60pXJmdJxU4iz2Bzu+fUn5EBD7hzK9+P81GXWZ/BO
+         Ylpg==
+X-Gm-Message-State: AOJu0YzKHMRlzRF6RcazAM9nkMq2bHVCiykmKfM28y6Aha4BpxhoYanm
+        T4fD2uIkr4oW7DTnBNrSoegGhw==
+X-Google-Smtp-Source: AGHT+IHZcZHwPmZz/G9GJYrJdaFt/yh7kFkMispc1XECmMNIp6Mo7eyJQIJfgGNG8gZdXS8BoslEpA==
+X-Received: by 2002:a05:6512:3444:b0:4fb:911b:4e19 with SMTP id j4-20020a056512344400b004fb911b4e19mr3890157lfr.35.1693777313473;
+        Sun, 03 Sep 2023 14:41:53 -0700 (PDT)
 Received: from umbar.unikie.fi ([192.130.178.91])
         by smtp.gmail.com with ESMTPSA id x17-20020ac25dd1000000b004f8555f7aa1sm1422506lfq.52.2023.09.03.14.41.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Sep 2023 14:41:52 -0700 (PDT)
+        Sun, 03 Sep 2023 14:41:53 -0700 (PDT)
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
         Andrzej Hajda <andrzej.hajda@intel.com>,
@@ -71,9 +71,9 @@ To:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
 Cc:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         freedreno@lists.freedesktop.org
-Subject: [RFC PATCH v1 02/12] drm/sysfs: link DRM connector device to the connector's fw nodes
-Date:   Mon,  4 Sep 2023 00:41:40 +0300
-Message-Id: <20230903214150.2877023-3-dmitry.baryshkov@linaro.org>
+Subject: [RFC PATCH v1 03/12] drm/connector: extend PATH property to covert Type-C case
+Date:   Mon,  4 Sep 2023 00:41:41 +0300
+Message-Id: <20230903214150.2877023-4-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230903214150.2877023-1-dmitry.baryshkov@linaro.org>
 References: <20230903214150.2877023-1-dmitry.baryshkov@linaro.org>
@@ -89,27 +89,48 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Setup the of_node and fwnode fields for the DRM connector device,
-making respective links to appear in /sys.
+Userspace needs to identify whether the DisplayPort connector is a
+native one or it is wrapped into the USB-C port. Moreover the userspace
+might need to point user to the exact location of this Type-C port on
+the laptop case.
+
+Existing USB-C altmode implementations (i915, amdgpu) have used the
+DRM_MODE_CONNECTOR_DisplayPort even for such ports. To keep backwards
+compatibility we can not change this to DRM_MODE_CONNECTOR_USB.
+Therefore the kernel needs some other way to represent this information.
+
+To facilitate this, reuse the 'PATH' property, which was used to
+describe the DP port in the DP MST configuration. Use either
+'typec:portN' to point out to the Type-C port class device, or just
+'typec:' if the corresponding port can not be identified.
 
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- drivers/gpu/drm/drm_sysfs.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/gpu/drm/drm_connector.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/drm_sysfs.c b/drivers/gpu/drm/drm_sysfs.c
-index 06662cc8d3f4..cb926d95ef0e 100644
---- a/drivers/gpu/drm/drm_sysfs.c
-+++ b/drivers/gpu/drm/drm_sysfs.c
-@@ -345,6 +345,8 @@ int drm_sysfs_connector_add(struct drm_connector *connector)
- 	kdev->class = drm_class;
- 	kdev->type = &drm_sysfs_device_connector;
- 	kdev->parent = dev->primary->kdev;
-+	kdev->of_node = to_of_node(connector->fwnode);
-+	kdev->fwnode = connector->fwnode;
- 	kdev->groups = connector_dev_groups;
- 	kdev->release = drm_sysfs_release;
- 	dev_set_drvdata(kdev, connector);
+diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connector.c
+index 05fc29a54801..a326782e936e 100644
+--- a/drivers/gpu/drm/drm_connector.c
++++ b/drivers/gpu/drm/drm_connector.c
+@@ -1185,10 +1185,14 @@ static const u32 dp_colorspaces =
+  * 	never read back the value of "DPMS" because it can be incorrect.
+  * PATH:
+  * 	Connector path property to identify how this sink is physically
+- * 	connected. Used by DP MST. This should be set by calling
+- * 	drm_connector_set_path_property(), in the case of DP MST with the
+- * 	path property the MST manager created. Userspace cannot change this
++ * 	connected. This should be set by calling
++ * 	drm_connector_set_path_property(). Userspace cannot change this
+  * 	property.
++ * 	In the case of DP MST this is equal to the path property the MST
++ * 	manager created. It is equal to 'mst:baseID-port-port...'.
++ * 	In the case of DP USB-C connector this is equal to the 'typec:portN',
++ * 	pointing to the corresponding Type-C port device or just 'typec' if the
++ * 	corresponding Type-C port can not be identified.
+  * TILE:
+  * 	Connector tile group property to indicate how a set of DRM connector
+  * 	compose together into one logical screen. This is used by both high-res
 -- 
 2.39.2
 
