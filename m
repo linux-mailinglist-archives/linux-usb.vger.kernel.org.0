@@ -2,205 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03BF2791423
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Sep 2023 10:57:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB5267914C4
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Sep 2023 11:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352626AbjIDI5C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Sep 2023 04:57:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59894 "EHLO
+        id S245366AbjIDJbV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Sep 2023 05:31:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352617AbjIDI46 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Sep 2023 04:56:58 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4450312A;
-        Mon,  4 Sep 2023 01:56:54 -0700 (PDT)
-Received: from dggpemm500012.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4RfMsR4Ddgz1M93t;
-        Mon,  4 Sep 2023 16:55:07 +0800 (CST)
-Received: from localhost.localdomain (10.50.163.32) by
- dggpemm500012.china.huawei.com (7.185.36.89) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.31; Mon, 4 Sep 2023 16:56:52 +0800
-From:   Xingui Yang <yangxingui@huawei.com>
-To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <john.g.garry@oracle.com>, <damien.lemoal@opensource.wdc.com>
-CC:     <andriy.shevchenko@linux.intel.com>, <akpm@linux-foundation.org>,
-        <viro@zeniv.linux.org.uk>, <himanshu.madhani@cavium.com>,
-        <felipe.balbi@linux.intel.com>, <gregkh@linuxfoundation.org>,
-        <uma.shankar@intel.com>, <anshuman.gupta@intel.com>,
-        <animesh.manna@intel.com>, <linux-usb@vger.kernel.org>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@huawei.com>, <yangxingui@huawei.com>,
-        <prime.zeng@hisilicon.com>, <kangfenglong@huawei.com>,
-        <chenxiang66@hisilicon.com>
-Subject: [PATCH v5 3/3] scsi: qla2xxx: Use DEFINE_SHOW_STORE_ATTRIBUTE helper for debugfs
-Date:   Mon, 4 Sep 2023 08:48:04 +0000
-Message-ID: <20230904084804.39564-4-yangxingui@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230904084804.39564-1-yangxingui@huawei.com>
-References: <20230904084804.39564-1-yangxingui@huawei.com>
+        with ESMTP id S236258AbjIDJbT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Sep 2023 05:31:19 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94741C4
+        for <linux-usb@vger.kernel.org>; Mon,  4 Sep 2023 02:31:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.at;
+ s=s31663417; t=1693819870; x=1694424670;
+ i=christian.schaubschlaeger@gmx.at;
+ bh=OjY/e8cUu6KychhrtQduEhYrgv0LC9t+Uogof78gwuo=;
+ h=X-UI-Sender-Class:Date:Subject:From:To:Cc:References:In-Reply-To;
+ b=RtAps4uEXNrRmlbwQVF2TZPD6aIGKn6Z5BywgkGfbhDO3rwp+HMugwTpdlC/TE9EGzoB6un
+ d2+ht/RYPln5M2NMagPBVyLggXbd+1zsriftyc5BIZ+1KRMFcA/oF66UtN3s4x+wYM91Nug5a
+ 0kZnZnYsrDmbrnwlrJccJRo7sFR1bMHxrMFWbD6o7NYjNoN1pBaNKv9pPNGTsXlxtubabCchH
+ Lkr8IbNyHW9/1VXedb/CPl+4KnDXCVDge4fnIO5rgARiE6U1biIm4gljBlcwGGbPLry+vUuXW
+ 8Zg3HD72d0NenmOoollJqY9kIc3f9/2+dyB0qNv8CXVePVMu47TA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.0.70] ([88.116.17.66]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N2V4P-1pemNF0nbr-013t9X; Mon, 04
+ Sep 2023 11:31:10 +0200
+Message-ID: <8c67d46b-38f3-dc62-df8f-bc6d7737787c@gmx.at>
+Date:   Mon, 4 Sep 2023 11:31:08 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.50.163.32]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500012.china.huawei.com (7.185.36.89)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.14.0
+Subject: Re: USB issue on a TB4 controller?
+From:   =?UTF-8?Q?Christian_Schaubschl=c3=a4ger?= 
+        <christian.schaubschlaeger@gmx.at>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org
+References: <a45b9989-c9da-bf4e-94c8-3e1341777b4d@gmx.at>
+ <20230526123655.GW45886@black.fi.intel.com>
+ <0bbb844d-3348-dc28-311a-d4111f8a7f81@linux.intel.com>
+ <2d12af30-4a7c-5fb3-fab8-5759296c68ac@gmx.at>
+ <20230530105039.GF45886@black.fi.intel.com>
+ <d6e7e0d5-0b30-d66c-2ee8-4f0c0caef0b9@gmx.at>
+ <20230530121756.GG45886@black.fi.intel.com>
+ <a22f8874-c2b3-92a5-e858-b877872e5284@gmx.at>
+ <894ba559-9233-4428-69e7-7c0bf5c7556e@gmx.at>
+ <b45b5e8a-756e-fd76-64af-d3e376997a31@linux.intel.com>
+ <618d9789-fc5a-10b3-6dc9-27be5bbff666@gmx.at>
+ <dd62787f-a04c-01ce-6a16-6a116f0f9c3b@linux.intel.com>
+ <36d37597-c0fb-cbaa-dd7c-0f3d6b4050c1@gmx.at>
+ <8b96cd69-324a-8f9e-fcd2-4681a43c2020@linux.intel.com>
+ <5bc24e26-ae55-3c8f-ea5b-6be7ebbcf957@gmx.at>
+Content-Language: en-US
+In-Reply-To: <5bc24e26-ae55-3c8f-ea5b-6be7ebbcf957@gmx.at>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:zBxeu49Pwdk86WxHWgYG1oF7fKyAr7P6yEDrHdkDnzwRuquqOv4
+ yzi7zsUf2xsG3bHGINEJMWYl6hiTiDDL5NZEpZjOOjSah8N5SDonRd1lJ4iFQ+zrZCNOTJM
+ 6WVykm8z3DRyyXr+oBYitfwXWwXIMZcZWTTerhXrBqYfpMecMSmQU6uZZvsaDOhdphRoytX
+ 18rtIycWl2xulo5Fu6vUQ==
+UI-OutboundReport: notjunk:1;M01:P0:exgvN4TbfHg=;k0eWpL9S54cddjhLf4zMdZKlVbb
+ DBwFthXQUu80JAoK8KK0eTzh3SSZk0N0ObznFaUotikMSWF3YoB5UgVK/oY7UOs6vIobZGnGj
+ mFMgoCcRkCSc9fDfUTFRxJ+4wMX7nf8K5d426HXHCT+yOfh1x5nj4nVl2+XzPbfeZ/uUDX8Km
+ p58ziDBI6JUNY9SA6keVtPHoLPy/v4Q6sOYYLF7OzWmwA+aMj0RLTEfGb4pNT3ClgtsgnkmiU
+ 4QLhPU9h+EESbjge73cKrcTiONAVdNSh3qgQD4uHU6+4YX0mQOFLuhfGuOlh5JMNGFOYZVRx4
+ o1EsTbMtwUZZN/NO4Bw6Lw3QtJfoqyfyeHV+W2fRan36ELXytlnps5sj6qk1utgXgTJlyjTQL
+ nbKEtJZFTuaemJCnbD8ghklG7Sq/xk6xXz2OnboisbQm6QZsnnvLRNcxEhunNDOJIavsptKXf
+ qnKi1DqPFu3am+AxoaRSIME9x/M+nwMUBhUVPVViCAgJbzRUcQdb0QCSEJM6xnTKsVHwkXvz8
+ BBQhboulSMxhjMkzw0Tw6vM/CB5q3TGBuD6hG+NlgHCWoDQAhP1qgwYIMwUOUXb3d3UF8jC4E
+ zj5czRiTZ7AS0pdkVMQBOlwjWVWu4C7gr9+G+sJ3xqcUzLq6Ls7ofjyk5S1pIFNtrFBSl1SpF
+ ovR+0mJBiOepiIJ+tHJ6LAKqa+c5Vv2G4W+v9fqOKlfjVxY9MujA2nMTZaHAdYgT0LGkYjDWs
+ pnFvQy5M028pER+SoFU3GHy5+VZNDq+Cy7lasmYBaCuLnNsI1mg5csFJEN30KRn/1eHWf9Xq1
+ WjSqmJmEz89CtLrVLUQ+48RrOKoGa7pYdPH0Tt4yBS15ENVqLEV1gAmLmICTZR3dNwDbYz9Bc
+ rUKskFbOylip0chacs5B7R4nbfPEF0ybuSDGU8YjS0OKGFH+W776o+WlPZkwwFsgEzmAJNfee
+ tlIaeQ==
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Use DEFINE_SHOW_STORE_ATTRIBUTE helper for read-write file to reduce some
-duplicated code and delete unused macros.
+Hello,
 
-Signed-off-by: Luo Jiaxing <luojiaxing@huawei.com>
-Signed-off-by: Xingui Yang <yangxingui@huawei.com>
----
- drivers/scsi/qla2xxx/qla_dfs.c | 113 +--------------------------------
- 1 file changed, 2 insertions(+), 111 deletions(-)
+I wanted to ask again if I could provide any useful support on this matter=
+.
 
-diff --git a/drivers/scsi/qla2xxx/qla_dfs.c b/drivers/scsi/qla2xxx/qla_dfs.c
-index f060e593685d..fca01d551876 100644
---- a/drivers/scsi/qla2xxx/qla_dfs.c
-+++ b/drivers/scsi/qla2xxx/qla_dfs.c
-@@ -505,107 +505,6 @@ qla_dfs_naqp_show(struct seq_file *s, void *unused)
- 	return 0;
- }
- 
--/*
-- * Helper macros for setting up debugfs entries.
-- * _name: The name of the debugfs entry
-- * _ctx_struct: The context that was passed when creating the debugfs file
-- *
-- * QLA_DFS_SETUP_RD could be used when there is only a show function.
-- * - show function take the name qla_dfs_<sysfs-name>_show
-- *
-- * QLA_DFS_SETUP_RW could be used when there are both show and write functions.
-- * - show function take the name  qla_dfs_<sysfs-name>_show
-- * - write function take the name qla_dfs_<sysfs-name>_write
-- *
-- * To have a new debugfs entry, do:
-- * 1. Create a "struct dentry *" in the appropriate structure in the format
-- * dfs_<sysfs-name>
-- * 2. Setup debugfs entries using QLA_DFS_SETUP_RD / QLA_DFS_SETUP_RW
-- * 3. Create debugfs file in qla2x00_dfs_setup() using QLA_DFS_CREATE_FILE
-- * or QLA_DFS_ROOT_CREATE_FILE
-- * 4. Remove debugfs file in qla2x00_dfs_remove() using QLA_DFS_REMOVE_FILE
-- * or QLA_DFS_ROOT_REMOVE_FILE
-- *
-- * Example for creating "TEST" sysfs file:
-- * 1. struct qla_hw_data { ... struct dentry *dfs_TEST; }
-- * 2. QLA_DFS_SETUP_RD(TEST, scsi_qla_host_t);
-- * 3. In qla2x00_dfs_setup():
-- * QLA_DFS_CREATE_FILE(ha, TEST, 0600, ha->dfs_dir, vha);
-- * 4. In qla2x00_dfs_remove():
-- * QLA_DFS_REMOVE_FILE(ha, TEST);
-- */
--#define QLA_DFS_SETUP_RD(_name, _ctx_struct)				\
--static int								\
--qla_dfs_##_name##_open(struct inode *inode, struct file *file)		\
--{									\
--	_ctx_struct *__ctx = inode->i_private;				\
--									\
--	return single_open(file, qla_dfs_##_name##_show, __ctx);	\
--}									\
--									\
--static const struct file_operations qla_dfs_##_name##_ops = {		\
--	.open           = qla_dfs_##_name##_open,			\
--	.read           = seq_read,					\
--	.llseek         = seq_lseek,					\
--	.release        = single_release,				\
--};
--
--#define QLA_DFS_SETUP_RW(_name, _ctx_struct)				\
--static int								\
--qla_dfs_##_name##_open(struct inode *inode, struct file *file)		\
--{									\
--	_ctx_struct *__ctx = inode->i_private;				\
--									\
--	return single_open(file, qla_dfs_##_name##_show, __ctx);	\
--}									\
--									\
--static const struct file_operations qla_dfs_##_name##_ops = {		\
--	.open           = qla_dfs_##_name##_open,			\
--	.read           = seq_read,					\
--	.llseek         = seq_lseek,					\
--	.release        = single_release,				\
--	.write		= qla_dfs_##_name##_write,			\
--};
--
--#define QLA_DFS_ROOT_CREATE_FILE(_name, _perm, _ctx)			\
--	do {								\
--		if (!qla_dfs_##_name)					\
--			qla_dfs_##_name = debugfs_create_file(#_name,	\
--					_perm, qla2x00_dfs_root, _ctx,	\
--					&qla_dfs_##_name##_ops);	\
--	} while (0)
--
--#define QLA_DFS_ROOT_REMOVE_FILE(_name)					\
--	do {								\
--		if (qla_dfs_##_name) {					\
--			debugfs_remove(qla_dfs_##_name);		\
--			qla_dfs_##_name = NULL;				\
--		}							\
--	} while (0)
--
--#define QLA_DFS_CREATE_FILE(_struct, _name, _perm, _parent, _ctx)	\
--	do {								\
--		(_struct)->dfs_##_name = debugfs_create_file(#_name,	\
--					_perm, _parent, _ctx,		\
--					&qla_dfs_##_name##_ops)		\
--	} while (0)
--
--#define QLA_DFS_REMOVE_FILE(_struct, _name)				\
--	do {								\
--		if ((_struct)->dfs_##_name) {				\
--			debugfs_remove((_struct)->dfs_##_name);		\
--			(_struct)->dfs_##_name = NULL;			\
--		}							\
--	} while (0)
--
--static int
--qla_dfs_naqp_open(struct inode *inode, struct file *file)
--{
--	struct scsi_qla_host *vha = inode->i_private;
--
--	return single_open(file, qla_dfs_naqp_show, vha);
--}
--
- static ssize_t
- qla_dfs_naqp_write(struct file *file, const char __user *buffer,
-     size_t count, loff_t *pos)
-@@ -653,15 +552,7 @@ qla_dfs_naqp_write(struct file *file, const char __user *buffer,
- 	kfree(buf);
- 	return rc;
- }
--
--static const struct file_operations dfs_naqp_ops = {
--	.open		= qla_dfs_naqp_open,
--	.read		= seq_read,
--	.llseek		= seq_lseek,
--	.release	= single_release,
--	.write		= qla_dfs_naqp_write,
--};
--
-+DEFINE_SHOW_STORE_ATTRIBUTE(qla_dfs_naqp);
- 
- int
- qla2x00_dfs_setup(scsi_qla_host_t *vha)
-@@ -707,7 +598,7 @@ qla2x00_dfs_setup(scsi_qla_host_t *vha)
- 
- 	if (IS_QLA27XX(ha) || IS_QLA83XX(ha) || IS_QLA28XX(ha)) {
- 		ha->tgt.dfs_naqp = debugfs_create_file("naqp",
--		    0400, ha->dfs_dir, vha, &dfs_naqp_ops);
-+		    0400, ha->dfs_dir, vha, &qla_dfs_naqp_fops);
- 		if (!ha->tgt.dfs_naqp) {
- 			ql_log(ql_log_warn, vha, 0xd011,
- 			       "Unable to create debugFS naqp node.\n");
--- 
-2.17.1
+Thanks and best regards,
+Christian
+
+
+Am 16.08.23 um 09:13 schrieb Christian Schaubschl=C3=A4ger:
+> Hello,
+>
+>> I have to check if we have similar machines and docks laying around.
+>> I'm away until August so there will be some delay on my side
+> I just want to ask, if you could find any machines / docks for testing t=
+his. Today I could reproduce the issue with a 6.5.0-rc6 kernel, also with =
+the lastest Ubuntu-22.04.03 which comes with a 6.2 kernel. As I said befor=
+e, if you need any logs or tests, I'd be happy to help debugging this.
+>
+> Thanks and best regards,
+> Christian
+>
 
