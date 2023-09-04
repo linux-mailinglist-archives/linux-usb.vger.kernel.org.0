@@ -2,126 +2,164 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EA52791183
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Sep 2023 08:37:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63F267911BF
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Sep 2023 09:05:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352384AbjIDGht (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Sep 2023 02:37:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46354 "EHLO
+        id S244512AbjIDHFB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Sep 2023 03:05:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352380AbjIDGhs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Sep 2023 02:37:48 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C800CE3;
-        Sun,  3 Sep 2023 23:37:26 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38464uwg021387;
-        Mon, 4 Sep 2023 06:37:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=5HQFSOe59vo/TNzIMTKysY43rBRwfQwiMhjaHeTQO7o=;
- b=cQQQ8saMngdursJp5L3XPV9oICHha9hSPrVc5oBAHSM0fEgrFcIDRA67JIIshSu3YQmy
- SeqpmUsvJz7l1HZlOmW/MJjXd0Iswa4NoIsJZmXGBlyB+NXZTNCk/sdMWg6zEGjl5ON3
- kOOocX9FFRa01exluWiPDaL05Joy1vvY6nsrmjs87o7iM7/FLUYFEkaD4Xc4WxEbm1cg
- +xrVa4GUGLcJwZxkMg3YkyuG0PjEaPzWzQLAHjp2PYLHVKy8rI+Je1i7bDYUFGAdw1z5
- QGppgBd5HazScnKiwLlXoWgYB5qpt9uO1fY1Q75QAu5G2YA76CX6z2FprrtBcmNYCc1e Nw== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3suwedampd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 04 Sep 2023 06:37:20 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3846bJSn021554
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 4 Sep 2023 06:37:19 GMT
-Received: from nsekar-linux.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.36; Sun, 3 Sep 2023 23:37:13 -0700
-From:   Nitheesh Sekar <quic_nsekar@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
-        <kishon@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <gregkh@linuxfoundation.org>, <quic_srichara@quicinc.com>,
-        <quic_varada@quicinc.com>, <quic_wcheng@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>
-CC:     Nitheesh Sekar <quic_nsekar@quicinc.com>,
-        Amandeep Singh <quic_amansing@quicinc.com>
-Subject: [PATCH V4 4/4] arm64: dts: qcom: ipq5018: Enable USB
-Date:   Mon, 4 Sep 2023 12:06:35 +0530
-Message-ID: <20230904063635.24975-5-quic_nsekar@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230904063635.24975-1-quic_nsekar@quicinc.com>
-References: <20230904063635.24975-1-quic_nsekar@quicinc.com>
+        with ESMTP id S231300AbjIDHFA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Sep 2023 03:05:00 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C76B11A;
+        Mon,  4 Sep 2023 00:04:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693811097; x=1725347097;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4eDDWz5tkHMgCyvYqnj9aGELY6NXC+giySFujrhuh7w=;
+  b=hL6saONAh1YAcrO+kVh2BAVmYxem35bYBKc0Slx0jjN7IAxF1g5zzIJl
+   6PhMLr0tNcdyF0yhBLxWyC+c8dej3e7zS+8LzQT8xN7YDX2S5oKg1hH1/
+   SaADx70ogY3Zx+kj0OP/JfEBOodCu+xTdxOJKBve/ixOB5Rzd+OHfPppt
+   WTJD7eLysKoB4+Ermz6B2OfI22V6meqExYcvfbtO1XB1Q/lo28KcCfKYp
+   /3NEu509fUzOh0W6LqQQNC6DEKlq3uvYVz+frN1T4w4KHUKhD8MfsIAsF
+   o6FWi6yvcgAPPpXXSGSpkxMKU2eCPWG+XU1f4K49IHS472A08nls/5MA2
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10822"; a="379247735"
+X-IronPort-AV: E=Sophos;i="6.02,225,1688454000"; 
+   d="scan'208";a="379247735"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2023 00:04:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10822"; a="734222228"
+X-IronPort-AV: E=Sophos;i="6.02,225,1688454000"; 
+   d="scan'208";a="734222228"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by orsmga007.jf.intel.com with SMTP; 04 Sep 2023 00:04:52 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 04 Sep 2023 10:04:51 +0300
+Date:   Mon, 4 Sep 2023 10:04:51 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     quic_huliu@quicinc.com
+Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_fenglinw@quicinc.com,
+        subbaram@quicinc.com
+Subject: Re: [PATCH v5] usb: typec: qcom: Update the logic of regulator
+ enable and disable
+Message-ID: <ZPWBk0JRzJivItav@kuha.fi.intel.com>
+References: <20230831-qcom-tcpc-v5-1-5e2661dc6c1d@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Ph43KCIauxVWHZAjcWj5iahcKHAHCHZX
-X-Proofpoint-GUID: Ph43KCIauxVWHZAjcWj5iahcKHAHCHZX
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-09-04_03,2023-08-31_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- lowpriorityscore=0 spamscore=0 suspectscore=0 mlxscore=0 adultscore=0
- mlxlogscore=568 impostorscore=0 clxscore=1015 phishscore=0 bulkscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2309040059
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230831-qcom-tcpc-v5-1-5e2661dc6c1d@quicinc.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Enable USB2 in host mode.
+On Thu, Aug 31, 2023 at 06:19:45PM +0800, Hui Liu via B4 Relay wrote:
+> From: Hui Liu <quic_huliu@quicinc.com>
+> 
+> Removed the call logic of disable and enable regulator
+> in reset function. Enable the regulator in qcom_pmic_typec_start
+> function and disable it in qcom_pmic_typec_stop function to
+> avoid unbalanced regulator disable warnings.
+> 
+> Fixes: a4422ff22142 ("usb: typec: qcom: Add Qualcomm PMIC Type-C driver")
+> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> Acked-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org> # rb5
+> Signed-off-by: Hui Liu <quic_huliu@quicinc.com>
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Co-developed-by: Amandeep Singh <quic_amansing@quicinc.com>
-Signed-off-by: Amandeep Singh <quic_amansing@quicinc.com>
-Signed-off-by: Nitheesh Sekar <quic_nsekar@quicinc.com>
----
-V3:
-	Renamed usb2_0_dwc  to usb_dwc and sorted
-	the USB related nodes.
-V2:
-	Sort and reorder USB related nodes.
----
- arch/arm64/boot/dts/qcom/ipq5018-rdp432-c2.dts | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq5018-rdp432-c2.dts b/arch/arm64/boot/dts/qcom/ipq5018-rdp432-c2.dts
-index e636a1cb9b77..8460b538eb6a 100644
---- a/arch/arm64/boot/dts/qcom/ipq5018-rdp432-c2.dts
-+++ b/arch/arm64/boot/dts/qcom/ipq5018-rdp432-c2.dts
-@@ -67,6 +67,18 @@
- 	};
- };
- 
-+&usb {
-+	status = "okay";
-+};
-+
-+&usb_dwc {
-+	dr_mode = "host";
-+};
-+
-+&usbphy0 {
-+	status = "okay";
-+};
-+
- &xo_board_clk {
- 	clock-frequency = <24000000>;
- };
+> ---
+> Changes in v5:
+> - Removed Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+> - Updated V4 history
+> - Link to v4: https://lore.kernel.org/r/20230830-qcom-tcpc-v4-1-c19b0984879b@quicinc.com
+> 
+> Changes in v4:
+> - Rephrased commit text
+> - Link to v3: https://lore.kernel.org/r/20230828-qcom-tcpc-v3-1-e95b7afa34d9@quicinc.com
+> 
+> Changes in v3:
+> - Take Bryan's proposal to remove enable/disable operation in pdphy
+> enable and pdphy disable function, then enable regulator in pdphy start
+> function and disable it in pdphy stop function.
+> - Link to v2: https://lore.kernel.org/r/20230824-qcom-tcpc-v2-1-3dd8c3424564@quicinc.com
+> 
+> Changes in v2:
+> - Add Fixes tag
+> - Link to v1: https://lore.kernel.org/r/20230823-qcom-tcpc-v1-1-fa81a09ca056@quicinc.com
+> ---
+>  drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
+> index bb0b8479d80f..52c81378e36e 100644
+> --- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
+> +++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
+> @@ -381,10 +381,6 @@ static int qcom_pmic_typec_pdphy_enable(struct pmic_typec_pdphy *pmic_typec_pdph
+>  	struct device *dev = pmic_typec_pdphy->dev;
+>  	int ret;
+>  
+> -	ret = regulator_enable(pmic_typec_pdphy->vdd_pdphy);
+> -	if (ret)
+> -		return ret;
+> -
+>  	/* PD 2.0, DR=TYPEC_DEVICE, PR=TYPEC_SINK */
+>  	ret = regmap_update_bits(pmic_typec_pdphy->regmap,
+>  				 pmic_typec_pdphy->base + USB_PDPHY_MSG_CONFIG_REG,
+> @@ -422,8 +418,6 @@ static int qcom_pmic_typec_pdphy_disable(struct pmic_typec_pdphy *pmic_typec_pdp
+>  	ret = regmap_write(pmic_typec_pdphy->regmap,
+>  			   pmic_typec_pdphy->base + USB_PDPHY_EN_CONTROL_REG, 0);
+>  
+> -	regulator_disable(pmic_typec_pdphy->vdd_pdphy);
+> -
+>  	return ret;
+>  }
+>  
+> @@ -447,6 +441,10 @@ int qcom_pmic_typec_pdphy_start(struct pmic_typec_pdphy *pmic_typec_pdphy,
+>  	int i;
+>  	int ret;
+>  
+> +	ret = regulator_enable(pmic_typec_pdphy->vdd_pdphy);
+> +	if (ret)
+> +		return ret;
+> +
+>  	pmic_typec_pdphy->tcpm_port = tcpm_port;
+>  
+>  	ret = pmic_typec_pdphy_reset(pmic_typec_pdphy);
+> @@ -467,6 +465,8 @@ void qcom_pmic_typec_pdphy_stop(struct pmic_typec_pdphy *pmic_typec_pdphy)
+>  		disable_irq(pmic_typec_pdphy->irq_data[i].irq);
+>  
+>  	qcom_pmic_typec_pdphy_reset_on(pmic_typec_pdphy);
+> +
+> +	regulator_disable(pmic_typec_pdphy->vdd_pdphy);
+>  }
+>  
+>  struct pmic_typec_pdphy *qcom_pmic_typec_pdphy_alloc(struct device *dev)
+> 
+> ---
+> base-commit: bbb9e06d2c6435af9c62074ad7048910eeb2e7bc
+> change-id: 20230822-qcom-tcpc-d41954ac65fa
+> 
+> Best regards,
+> -- 
+> Hui Liu <quic_huliu@quicinc.com>
+
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+heikki
