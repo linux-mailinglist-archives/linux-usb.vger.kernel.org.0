@@ -2,94 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A25C791241
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Sep 2023 09:33:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9011279125D
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Sep 2023 09:38:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352455AbjIDHdL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Sep 2023 03:33:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55664 "EHLO
+        id S236969AbjIDHir (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Sep 2023 03:38:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350962AbjIDHdK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Sep 2023 03:33:10 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD5D187
-        for <linux-usb@vger.kernel.org>; Mon,  4 Sep 2023 00:32:54 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-52a3ff5f0abso1397980a12.1
-        for <linux-usb@vger.kernel.org>; Mon, 04 Sep 2023 00:32:54 -0700 (PDT)
+        with ESMTP id S1350936AbjIDHiq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Sep 2023 03:38:46 -0400
+Received: from mail-vk1-xa33.google.com (mail-vk1-xa33.google.com [IPv6:2607:f8b0:4864:20::a33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58640ED
+        for <linux-usb@vger.kernel.org>; Mon,  4 Sep 2023 00:38:43 -0700 (PDT)
+Received: by mail-vk1-xa33.google.com with SMTP id 71dfb90a1353d-48ff372840aso240844e0c.0
+        for <linux-usb@vger.kernel.org>; Mon, 04 Sep 2023 00:38:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693812773; x=1694417573; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zhTAFGnsVoqLTcm8h8mzntPyuNhrH73QT8Eg7bcGb7k=;
-        b=NXk5yeDazbgPqQT+5s5CRAQz1KnhNLmGn+ZNjOyF3NBv93LBBYGXxR2XO8Iil5IGlv
-         9jQygbLikeMupQfQ7iwsrRVRj+lj/aKAq6kD/T4W/0XRWs3ThTUg/1SRhxeujeukRKRU
-         oNeH9V8hHoCf0f4mfAl8izG4zoEfhTjiIQzqA8DZf6chxc40A25Qk5cyYfM1NoMwcAG3
-         +G+XqIB/x3d++R45a3Goyh5Ia3f3kW+UxuxrQXnyck0i3/5rq65hSixpYgM4/sFuwtDp
-         2CHjeZ4gc3qPJDouzIa7FzsBr7+PO4oe/IhNTdVqFb6yVEndPFILDUKUUoaLXNWQ3Vkc
-         tEjA==
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1693813122; x=1694417922; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=J6cfeDL1D00ZwMrWYpJj73nQqWY40d8ljJGAFkaIlIQ=;
+        b=Apaa3IRVDJUiHW76w4srsOLl2DmJn/Y9jhzj0nA7SJ4JGiHCG+OxLVVuacF00Y22n3
+         TajqjQI29RU7Ho9d3nGBwi59Fvz++FrTU4RLYig/3pelzybsuPuz86kEt5ihwvOYOMdg
+         um6qtimEXb+uMDOMZ2aPG3Yn3dxjHOirAxad3DZLAhhr/snQ0vHGJyXgJ/b+1g81D/92
+         ymt6p0ojDKL2/Q+a1+tt2Q8kwHHfKTzkJNRaz6Q+NYxcoLPW6pHGAVeFDShXXsL92/Vb
+         7BUl8SR/BJotRpUsWU+CBcewOvDAQyx32MTftxMX5gLiKZls+wg6CcrOdYWzC6bpAmYA
+         5d2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693812773; x=1694417573;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zhTAFGnsVoqLTcm8h8mzntPyuNhrH73QT8Eg7bcGb7k=;
-        b=SBZBiENr9ehxVamoqWVTscDqEvSUt+HyVLDrWy3IKstx18n7hjL5NHJU36C3474ysm
-         FZp8IfzYkgMsVGaL6UqZNfdm4XgAnl2PGcSmc03c4znMluVw2SysNr9ziJUvWlLkwwWJ
-         DFNXBXV0/roMzMBptV63oqwW8rB4VWQpzNAZwSn533NJh5tqRqyub63LXa82e29I5Qug
-         oF7fiZ+9iYMcwZW28kIDML3Y1I9nO2UCHonQmLjiZQLW8QCjjqmAd8Ukey022tlZn7Fm
-         ax5CiPaHl8pRkvr56M8PJZ2FC21suu+eJvn++MuUS0Nrn8bTlTKbw3WVCuFeta7B7OjX
-         N57Q==
-X-Gm-Message-State: AOJu0YzGWcZZ5tb1WLKTt7Xspedjh5p4XCRAt36+/ABix1qBw5WIgwdz
-        KWYzsZ9Sci/Hi3XFjPOl+5Z09A==
-X-Google-Smtp-Source: AGHT+IHLCGU7QZ3/lBZzj0ivBPbzCaQpMJ4BLvGGZ5i7y+pf7z7KyjWQ3UpgOEwIEn3G4OfLNSnBAw==
-X-Received: by 2002:aa7:d6cb:0:b0:523:2274:91cb with SMTP id x11-20020aa7d6cb000000b00523227491cbmr6202273edr.12.1693812772975;
-        Mon, 04 Sep 2023 00:32:52 -0700 (PDT)
-Received: from [192.168.0.22] (77-252-46-238.static.ip.netia.com.pl. [77.252.46.238])
-        by smtp.gmail.com with ESMTPSA id a9-20020aa7d749000000b005257da6be23sm5499027eds.75.2023.09.04.00.32.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Sep 2023 00:32:52 -0700 (PDT)
-Message-ID: <fc410f25-dc98-6d2f-2ada-4ba2aa8c799d@linaro.org>
-Date:   Mon, 4 Sep 2023 09:32:51 +0200
+        d=1e100.net; s=20221208; t=1693813122; x=1694417922;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=J6cfeDL1D00ZwMrWYpJj73nQqWY40d8ljJGAFkaIlIQ=;
+        b=Isq8aagd9qDVVMrX/67uYaUVLsO9igkhfZnf4WH/xN+pRLahv9qEbBnRX6TYqJiW6V
+         WCj+XYtMisXtpsZO+n31pBHzimR3nmnQLxTYDIo8DT2CCeHTHCeVV5GjTIt31n4GbZ25
+         tN+oUW02BvDO667B8NLJKz80iRsH5zVdKTHRcbBlxH2NRBDRQJ6xAb0bo5H6r7RCGWsu
+         TrP497lNft3dVjqWBvUOcKmj1higWpo9A62op35UqhdU04pSvRFQwekCIRtGeZpjLig/
+         p3lZjAZ8Rkub3hK6In5t7DyohGQVby6ryx/ka88NMQNFfR8IuoXUUTieijyqxT1kJSJP
+         vm6g==
+X-Gm-Message-State: AOJu0YyFoDTBj62XbscO2Qg1YopaW1KYYJCIE+OTuOKp5juLUJSc5iNr
+        AfJALhS/D0dUe8EP8C0/o1obWxTF7SvhJCQ0FkyftQ==
+X-Google-Smtp-Source: AGHT+IFfV+0RL2PdfPa3BlyLaQiK+NrUpmGL5kdfR8zekPZ1itVYP6/P07f49j0SUwCxN0ng8vS6GlEjUsDM2/Qa1XI=
+X-Received: by 2002:a1f:6244:0:b0:490:553b:349 with SMTP id
+ w65-20020a1f6244000000b00490553b0349mr6717342vkb.5.1693813122333; Mon, 04 Sep
+ 2023 00:38:42 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [PATCH v3 2/2] dt-bindings: usb: Add Realtek DHC RTD SoC Type-C
-Content-Language: en-US
-To:     Stanley Chang <stanley_chang@realtek.com>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230904051253.23208-1-stanley_chang@realtek.com>
- <20230904051253.23208-2-stanley_chang@realtek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230904051253.23208-2-stanley_chang@realtek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1693806261-12958-1-git-send-email-wentong.wu@intel.com>
+In-Reply-To: <1693806261-12958-1-git-send-email-wentong.wu@intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Mon, 4 Sep 2023 09:38:31 +0200
+Message-ID: <CAMRc=Md2TBRNBrD+w7=tys9fUqNKT0XwHYMHUgJ5WATLiR4UYQ@mail.gmail.com>
+Subject: Re: [PATCH v14 0/4] Add Intel LJCA device driver
+To:     Wentong Wu <wentong.wu@intel.com>
+Cc:     gregkh@linuxfoundation.org, arnd@arndb.de, mka@chromium.org,
+        oneukum@suse.com, lee@kernel.org, wsa@kernel.org,
+        kfting@nuvoton.com, broonie@kernel.org, linus.walleij@linaro.org,
+        hdegoede@redhat.com, maz@kernel.org, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-gpio@vger.kernel.org, andriy.shevchenko@linux.intel.com,
+        heikki.krogerus@linux.intel.com, andi.shyti@linux.intel.com,
+        sakari.ailus@linux.intel.com, bartosz.golaszewski@linaro.org,
+        srinivas.pandruvada@intel.com, zhifeng.wang@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 04/09/2023 07:12, Stanley Chang wrote:
-> Document the device-tree bindings for Realtek SoCs Type-C.
-> Realtek DHC (digital home center) RTD SoCs support a Type-C module.
-> 
-> Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
-> ---
+On Mon, Sep 4, 2023 at 7:44=E2=80=AFAM Wentong Wu <wentong.wu@intel.com> wr=
+ote:
+>
+> Add driver for Intel La Jolla Cove Adapter (LJCA) device. This
+> IO-expander expands additional functions to the host system
+> such as GPIO, I2C and SPI with USB host interface. We add 4
+> drivers to support this device: a USB driver, a GPIO chip driver,
+> a I2C controller driver and a SPI controller driver.
+>
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Please stop spamming the list with resends. Give reviewers at least a
+couple days to respond.
 
-Best regards,
-Krzysztof
-
+Bartosz
