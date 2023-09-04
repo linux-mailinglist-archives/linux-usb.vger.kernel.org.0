@@ -2,152 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D758790F62
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Sep 2023 02:42:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EADA79104F
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Sep 2023 05:19:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349907AbjIDAmX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 3 Sep 2023 20:42:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42544 "EHLO
+        id S1351353AbjIDDTG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 3 Sep 2023 23:19:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349873AbjIDAmX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 3 Sep 2023 20:42:23 -0400
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF7CFB
-        for <linux-usb@vger.kernel.org>; Sun,  3 Sep 2023 17:42:19 -0700 (PDT)
-Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
-        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1qcxfS-0000Ff-KE; Mon, 04 Sep 2023 02:42:18 +0200
-Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1qcxfQ-004PXn-Fl; Mon, 04 Sep 2023 02:42:12 +0200
-Date:   Mon, 4 Sep 2023 02:42:12 +0200
-From:   Michael Grzeschik <mgr@pengutronix.de>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        stanley_chang@realtek.com
-Message-ID: <ZPUn5H0L/M7aBTZI@pengutronix.de>
-References: <20230831221242.GC20651@pengutronix.de>
- <20230901013118.iqpegkklfswdkoqc@synopsys.com>
- <ZPULnRSVgd5S3Cao@pengutronix.de>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="CbEh0KvJMxmTAY/K"
-Content-Disposition: inline
-In-Reply-To: <ZPULnRSVgd5S3Cao@pengutronix.de>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:2:b01:1d::c5
-X-SA-Exim-Mail-From: mgr@pengutronix.de
+        with ESMTP id S230464AbjIDDTF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 3 Sep 2023 23:19:05 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E17610D;
+        Sun,  3 Sep 2023 20:19:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693797542; x=1725333542;
+  h=from:to:cc:subject:date:message-id;
+  bh=nS/Dix9fg4UxkNx/su/yARy4Xhvi5hQiNHNNrW1OTXc=;
+  b=aE3zH+JaJqGklqf7CXlnLo4Sfu2q+5k/vaHuMFL2l1RILiXd2LcBZQtV
+   aGJ6WRoTSC6mdQCwZz/rCv1DyCgjffLlz3yOjhGrIR6teLuzjci4lqUb8
+   TGled+LI/H2BNq6lUDiRqC4PTZ+JsKZ+ILZGIZySE0HMtqwDMLDKxuCBN
+   sI5SL3znu7Nu+FeceAaS9Tfi+Sbf7Ysq2yF6bHVYZvOIR32OaGRFQXidA
+   3N/KB7SGVirbRxZXvVYciGFaLkFyMhXzTzMfsN/IjPT9MbrLKIuz85jHR
+   3cSlcmPjT0eNYk+BGhrUMeNKgSA8woqREc3rhivQo7axTYirTuyPhIJWb
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10822"; a="375405089"
+X-IronPort-AV: E=Sophos;i="6.02,225,1688454000"; 
+   d="scan'208";a="375405089"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2023 20:19:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10822"; a="810751372"
+X-IronPort-AV: E=Sophos;i="6.02,225,1688454000"; 
+   d="scan'208";a="810751372"
+Received: from shsensorbuild2.sh.intel.com ([10.239.134.197])
+  by fmsmga004.fm.intel.com with ESMTP; 03 Sep 2023 20:18:56 -0700
+From:   Wentong Wu <wentong.wu@intel.com>
+To:     gregkh@linuxfoundation.org, arnd@arndb.de, mka@chromium.org,
+        oneukum@suse.com, lee@kernel.org, wsa@kernel.org,
+        kfting@nuvoton.com, broonie@kernel.org, linus.walleij@linaro.org,
+        hdegoede@redhat.com, maz@kernel.org, brgl@bgdev.pl,
+        linux-usb@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        andriy.shevchenko@linux.intel.com, heikki.krogerus@linux.intel.com,
+        andi.shyti@linux.intel.com, sakari.ailus@linux.intel.com,
+        bartosz.golaszewski@linaro.org, srinivas.pandruvada@intel.com
+Cc:     zhifeng.wang@intel.com, Wentong Wu <wentong.wu@intel.com>
+Subject: [PATCH v13 0/4] Add Intel LJCA device driver
+Date:   Mon,  4 Sep 2023 11:17:38 +0800
+Message-Id: <1693797462-4833-1-git-send-email-wentong.wu@intel.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
-Subject: Re: DWC3-Gadget: Flickering with ISOC Streaming (UVC) while
- multiplier set on Superspeed
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on metis.whiteo.stw.pengutronix.de)
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Add driver for Intel La Jolla Cove Adapter (LJCA) device. This
+IO-expander expands additional functions to the host system such
+as GPIO, I2C and SPI with USB host interface. We add 4 drivers
+to support this device: a USB driver, a GPIO chip driver, a I2C
+controller driver and a SPI controller driver.
 
---CbEh0KvJMxmTAY/K
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+---
+v13:
+ - make ljca-usb more robust with the help of Hans de Goede
+ - call acpi_dev_clear_dependencies() to mark _DEP ACPI dependencies on
+the I2C controller as satisfied, and patch is from Hans de Goede
 
-Cc'ing: Stanley Chang <stanley_chang@realtek.com>
+v12:
+ - switch dev_err to dev_dbg for i2c-ljca driver
+ - avoid err printing because of calling usb_kill_urb when attempts to resubmit the rx urb
 
-On Mon, Sep 04, 2023 at 12:41:33AM +0200, Michael Grzeschik wrote:
->Hi Thinh
->
->On Fri, Sep 01, 2023 at 01:35:16AM +0000, Thinh Nguyen wrote:
->>On Fri, Sep 01, 2023, Michael Grzeschik wrote:
->>>I just stumbled over a similar issue we already solved for the High
->>>Speed Case when streaming ISOC packages and using a multiplier higher
->>>then one. Last time we saw some bad frame artefacts when using the
->>>higher multiplier value. The Frames were distorted due to truncated
->>>transfers.
->>>
->>>Since the last case we have patch
->>>
->>>8affe37c525d ("usb: dwc3: gadget: fix high speed multiplier setting")
->>>
->>>that fixes the calculation of the mult PCM1 parameter when using high
->>>speed transfers. After that no truncations were reported again.
->>>
->>>However I came across a similar issue which is just a little less easy
->>>to trigger and only occurs with Superspeed. Now, while the memory
->>>bandwidth of the machine runs on higher load, the UVC frames are
->>>similarly distorted when we use a multiplier higher then one.
->>>
->>>I looked over the implications the multiplier has on the Superspeed case
->>>in the dwc3 gadget driver, but could only find some TXFIFO adjustments
->>>and no other extra bits e.g. in the transfer descriptors. Do you have
->>>some pointers how the multiplier parameter of the endpoint is used in
->>>hardware?
->>>
->>
->>As you already know, PCM1 is only for highspeed not Superspeed. What
->>failure did the dwc3 driver reported? Missed isoc? What's the request
->>transfer size?
->
->Yes, I see missed isoc errors. But this is just a symptom in this case.
->
->I can increase the maxburst or maxpacket parameters stepwise and on
->one point see the flickering appear. But when I increase the TXFIFOSIZE
->for the endpoint the flickering is gone again. Until I increase one of
->the parameters maxpacket or maxburst to much again.
->
->So due to the memory bandwidth is under pressure, it seems like the
->hardware is not fast enough with sending the expected data per transfer,
->due to the txfifo is not long enough and needs to be refilled more
->often.
->
->This sounds like a fifo underrun issue in the hardware.
+v11:
+ - switch dev_err to dev_dbg for i2c-ljca driver
+ - remove message length check because of defined quirk structure
+ - remove I2C_FUNC_SMBUS_EMUL support
 
-This whole issue sound like a case of stanleys patches:
+v10:
+ - remove ljca_i2c_format_slave_addr
+ - remove memset before write write w_packet
+ - make ljca_i2c_stop void and print err message in case failure
+ - use dev_err_probe in ljca_i2c_probe function
 
-https://lore.kernel.org/all/20230828055212.5600-1-stanley_chang@realtek.com/
+v9:
+ - overhaul usb-ljca driver to make it more structured and easy understand
+ - fix memory leak issue for usb-ljca driver
+ - add spinlock to protect tx_buf and ex_buf
+ - change exported APIs for usb-ljca driver
+ - unify prefix for structures and functions for i2c-ljca driver
+ - unify prefix for structures and functions for spi-ljca driver
+ - unify prefix for structures and functions for gpio-ljca driver
+ - update gpio-ljca, i2c-ljca and spi-ljca drivers according to usb-ljca's changes
 
-For now I was unluky while adjusting the paramaters. Are those registers
-anywhere documented?
+Wentong Wu (4):
+  usb: Add support for Intel LJCA device
+  i2c: Add support for Intel LJCA USB I2C driver
+  spi: Add support for Intel LJCA USB SPI driver
+  gpio: update Intel LJCA USB GPIO driver
 
-Michael
+ drivers/gpio/Kconfig          |   4 +-
+ drivers/gpio/gpio-ljca.c      | 246 +++++++------
+ drivers/i2c/busses/Kconfig    |  11 +
+ drivers/i2c/busses/Makefile   |   1 +
+ drivers/i2c/busses/i2c-ljca.c | 333 +++++++++++++++++
+ drivers/spi/Kconfig           |  11 +
+ drivers/spi/Makefile          |   1 +
+ drivers/spi/spi-ljca.c        | 297 +++++++++++++++
+ drivers/usb/misc/Kconfig      |  14 +
+ drivers/usb/misc/Makefile     |   1 +
+ drivers/usb/misc/usb-ljca.c   | 834 ++++++++++++++++++++++++++++++++++++++++++
+ include/linux/usb/ljca.h      | 113 ++++++
+ 12 files changed, 1761 insertions(+), 105 deletions(-)
+ create mode 100644 drivers/i2c/busses/i2c-ljca.c
+ create mode 100644 drivers/spi/spi-ljca.c
+ create mode 100644 drivers/usb/misc/usb-ljca.c
+ create mode 100644 include/linux/usb/ljca.h
 
+-- 
+2.7.4
 
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
---CbEh0KvJMxmTAY/K
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmT1J94ACgkQC+njFXoe
-LGSOehAAyBIo35Z31KviTrOhyepYloXxVKTBJzgGyfHEOslbEM8MvKHo5NBFy08k
-aYLds3KQsypRa2REq8ncRawNx5V+UzOGrJ7x8/1r/gBFk/mzvugVFN+nEkngr2am
-TD8DvmLaT8pdpKZfUj3SmuUQDABX0EbKet5nAin5VD12jFJD6CswksDN+XiAzr0q
-dxIpg3ALFZpizDtFrq52EwZKeI9PeuJ7PhTfTLAoIaBmKmf/YyQXQbZTuzmb6AQI
-h+CSVWdNvyhgYC5ZXyuG6yuU0I+E5uHHNnb48KPGlk0mPANBvIhtEvjUSP7gbfNI
-dqRf1HfSj/XV9VBdhSWXGcbklXZu9eylgcOhcW+qgphzCBHJu8GZX77GM9O2asWc
-mZ2gdQP8RdgWUzOYIYoRdZ8U55n6dCeYD095KhwYQzE7lQpW3R0PrkoHk2+C6SVY
-q7/GwnjbsZeHjQP8zaPyHs7wJyGBtX+8uq3AejP1UiegwsPxkJl6U4LCZ1feM3vw
-Aids0qvIfMG7plngMCGk6Wzp4M+M1B9aM0FqZLDqy1NexADOUVUM0rfT82GmMNn4
-kk1iXq3OrZeFRbqLwIFJWwLt/QmrBZRMOIouL9xJbK5V+ZfTwqI1SGvLo1yFfMWk
-9aYVmBTjjxpLqg87v4KF53rwRGRGjKlZ2PnuSVL7dzB9RCyFNc0=
-=ExuG
------END PGP SIGNATURE-----
-
---CbEh0KvJMxmTAY/K--
