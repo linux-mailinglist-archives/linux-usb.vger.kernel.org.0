@@ -2,111 +2,198 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB5267914C4
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Sep 2023 11:31:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B251E791565
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Sep 2023 11:58:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245366AbjIDJbV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Sep 2023 05:31:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58956 "EHLO
+        id S1349665AbjIDJ6N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Sep 2023 05:58:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236258AbjIDJbT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Sep 2023 05:31:19 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94741C4
-        for <linux-usb@vger.kernel.org>; Mon,  4 Sep 2023 02:31:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.at;
- s=s31663417; t=1693819870; x=1694424670;
- i=christian.schaubschlaeger@gmx.at;
- bh=OjY/e8cUu6KychhrtQduEhYrgv0LC9t+Uogof78gwuo=;
- h=X-UI-Sender-Class:Date:Subject:From:To:Cc:References:In-Reply-To;
- b=RtAps4uEXNrRmlbwQVF2TZPD6aIGKn6Z5BywgkGfbhDO3rwp+HMugwTpdlC/TE9EGzoB6un
- d2+ht/RYPln5M2NMagPBVyLggXbd+1zsriftyc5BIZ+1KRMFcA/oF66UtN3s4x+wYM91Nug5a
- 0kZnZnYsrDmbrnwlrJccJRo7sFR1bMHxrMFWbD6o7NYjNoN1pBaNKv9pPNGTsXlxtubabCchH
- Lkr8IbNyHW9/1VXedb/CPl+4KnDXCVDge4fnIO5rgARiE6U1biIm4gljBlcwGGbPLry+vUuXW
- 8Zg3HD72d0NenmOoollJqY9kIc3f9/2+dyB0qNv8CXVePVMu47TA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.0.70] ([88.116.17.66]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N2V4P-1pemNF0nbr-013t9X; Mon, 04
- Sep 2023 11:31:10 +0200
-Message-ID: <8c67d46b-38f3-dc62-df8f-bc6d7737787c@gmx.at>
-Date:   Mon, 4 Sep 2023 11:31:08 +0200
+        with ESMTP id S236678AbjIDJ6L (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Sep 2023 05:58:11 -0400
+Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C5A1729;
+        Mon,  4 Sep 2023 02:57:48 -0700 (PDT)
+Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
+        by hi1smtp01.de.adit-jv.com (Postfix) with ESMTP id 4BFAF52016A;
+        Mon,  4 Sep 2023 11:57:46 +0200 (CEST)
+Received: from vmlxhi-118.adit-jv.com (10.72.93.77) by hi2exch02.adit-jv.com
+ (10.72.92.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.32; Mon, 4 Sep
+ 2023 11:57:46 +0200
+Date:   Mon, 4 Sep 2023 11:57:38 +0200
+From:   Hardik Gajjar <hgajjar@de.adit-jv.com>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+CC:     Hardik Gajjar <hgajjar@de.adit-jv.com>,
+        <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
+        <stern@rowland.harvard.edu>, <yangyingliang@huawei.com>,
+        <jinpu.wang@ionos.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <erosca@de.adit-jv.com>
+Subject: Re: [PATCH] usb: hcd: xhci: Add set command timer delay API
+Message-ID: <20230904095738.GA5312@vmlxhi-118.adit-jv.com>
+References: <20230818092353.124658-1-hgajjar@de.adit-jv.com>
+ <2c029018-a926-6fda-ed71-937ac74d00b0@linux.intel.com>
+ <20230821095547.GA9820@vmlxhi-118.adit-jv.com>
+ <d88dbe7e-4558-970d-5601-d4d906829d47@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: USB issue on a TB4 controller?
-From:   =?UTF-8?Q?Christian_Schaubschl=c3=a4ger?= 
-        <christian.schaubschlaeger@gmx.at>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org
-References: <a45b9989-c9da-bf4e-94c8-3e1341777b4d@gmx.at>
- <20230526123655.GW45886@black.fi.intel.com>
- <0bbb844d-3348-dc28-311a-d4111f8a7f81@linux.intel.com>
- <2d12af30-4a7c-5fb3-fab8-5759296c68ac@gmx.at>
- <20230530105039.GF45886@black.fi.intel.com>
- <d6e7e0d5-0b30-d66c-2ee8-4f0c0caef0b9@gmx.at>
- <20230530121756.GG45886@black.fi.intel.com>
- <a22f8874-c2b3-92a5-e858-b877872e5284@gmx.at>
- <894ba559-9233-4428-69e7-7c0bf5c7556e@gmx.at>
- <b45b5e8a-756e-fd76-64af-d3e376997a31@linux.intel.com>
- <618d9789-fc5a-10b3-6dc9-27be5bbff666@gmx.at>
- <dd62787f-a04c-01ce-6a16-6a116f0f9c3b@linux.intel.com>
- <36d37597-c0fb-cbaa-dd7c-0f3d6b4050c1@gmx.at>
- <8b96cd69-324a-8f9e-fcd2-4681a43c2020@linux.intel.com>
- <5bc24e26-ae55-3c8f-ea5b-6be7ebbcf957@gmx.at>
-Content-Language: en-US
-In-Reply-To: <5bc24e26-ae55-3c8f-ea5b-6be7ebbcf957@gmx.at>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:zBxeu49Pwdk86WxHWgYG1oF7fKyAr7P6yEDrHdkDnzwRuquqOv4
- yzi7zsUf2xsG3bHGINEJMWYl6hiTiDDL5NZEpZjOOjSah8N5SDonRd1lJ4iFQ+zrZCNOTJM
- 6WVykm8z3DRyyXr+oBYitfwXWwXIMZcZWTTerhXrBqYfpMecMSmQU6uZZvsaDOhdphRoytX
- 18rtIycWl2xulo5Fu6vUQ==
-UI-OutboundReport: notjunk:1;M01:P0:exgvN4TbfHg=;k0eWpL9S54cddjhLf4zMdZKlVbb
- DBwFthXQUu80JAoK8KK0eTzh3SSZk0N0ObznFaUotikMSWF3YoB5UgVK/oY7UOs6vIobZGnGj
- mFMgoCcRkCSc9fDfUTFRxJ+4wMX7nf8K5d426HXHCT+yOfh1x5nj4nVl2+XzPbfeZ/uUDX8Km
- p58ziDBI6JUNY9SA6keVtPHoLPy/v4Q6sOYYLF7OzWmwA+aMj0RLTEfGb4pNT3ClgtsgnkmiU
- 4QLhPU9h+EESbjge73cKrcTiONAVdNSh3qgQD4uHU6+4YX0mQOFLuhfGuOlh5JMNGFOYZVRx4
- o1EsTbMtwUZZN/NO4Bw6Lw3QtJfoqyfyeHV+W2fRan36ELXytlnps5sj6qk1utgXgTJlyjTQL
- nbKEtJZFTuaemJCnbD8ghklG7Sq/xk6xXz2OnboisbQm6QZsnnvLRNcxEhunNDOJIavsptKXf
- qnKi1DqPFu3am+AxoaRSIME9x/M+nwMUBhUVPVViCAgJbzRUcQdb0QCSEJM6xnTKsVHwkXvz8
- BBQhboulSMxhjMkzw0Tw6vM/CB5q3TGBuD6hG+NlgHCWoDQAhP1qgwYIMwUOUXb3d3UF8jC4E
- zj5czRiTZ7AS0pdkVMQBOlwjWVWu4C7gr9+G+sJ3xqcUzLq6Ls7ofjyk5S1pIFNtrFBSl1SpF
- ovR+0mJBiOepiIJ+tHJ6LAKqa+c5Vv2G4W+v9fqOKlfjVxY9MujA2nMTZaHAdYgT0LGkYjDWs
- pnFvQy5M028pER+SoFU3GHy5+VZNDq+Cy7lasmYBaCuLnNsI1mg5csFJEN30KRn/1eHWf9Xq1
- WjSqmJmEz89CtLrVLUQ+48RrOKoGa7pYdPH0Tt4yBS15ENVqLEV1gAmLmICTZR3dNwDbYz9Bc
- rUKskFbOylip0chacs5B7R4nbfPEF0ybuSDGU8YjS0OKGFH+W776o+WlPZkwwFsgEzmAJNfee
- tlIaeQ==
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <d88dbe7e-4558-970d-5601-d4d906829d47@linux.intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Originating-IP: [10.72.93.77]
+X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
+ hi2exch02.adit-jv.com (10.72.92.28)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Tue, Aug 29, 2023 at 04:57:54PM +0300, Mathias Nyman wrote:
+> On 21.8.2023 12.55, Hardik Gajjar wrote:
+> > On Fri, Aug 18, 2023 at 04:18:30PM +0300, Mathias Nyman wrote:
+> > > On 18.8.2023 12.23, Hardik Gajjar wrote:
+> > > > xHCI driver starts the response timer after sending each
+> > > > command to the device. The default value of this timer is
+> > > > 5 seconds (XHCI_CMD_DEFAULT_TIMEOUT = HZ*5). This seems
+> > > > too high in time crtical use case.
+> > > > 
+> > > > This patch provides an API to change the default value of
+> > > > the timer from the vendor USB driver.
+> > > > 
+> > > > The default value will be XHCI_CMD_DEFAULT_TIMEOUT (5 sec)
+> > > > 
+> > > > Use case:
+> > > > According to the Smartphone integration certification
+> > > > requirement in the automotive, the phone connected via USB
+> > > > should complete enumeration and user space handshake
+> > > > within 3 sec.
+> > > 
+> > > The above incorrectly makes it sound as if the command timeout
+> > > timer causes the delay.
+> > > 
+> > Thank you, Mathias, for your prompt response. I will enhance the message
+> > to provide more specificity in the subsequent patch.
+> > > > 
+> > > > Reducing the response waiting time by setting the smaller
+> > > > command timer delay helps to speed up overall re-enumeration
+> > > > process of the USB device in case of device is not responding
+> > > > properly in first enumeration iteration.
+> > > 
+> > > So is this a case where addressing a usb device behind xHC always
+> > > fail on the first attempt, i.e. address device command in xhci
+> > > never completes. Solution proposed here is to fail faster and
+> > > retry?
+> > > 
+> > > Is the rootcause known why first enumeration fails?
+> > > 
+> > > Does setting old_scheme_first module parameter help?
+> > > 
+> > Yes, you are correct. The problem occurs when setting the address,
+> > and in such cases, this patch helps to fail faster and retry.
+> > 
+> > Unfortunately, the root cause is unknown. This problem is mainly
+> > observed with Android phones. Upon analyzing the USB analyzer logs,
+> > it seems that the device is not responding to the SET_ADDRESS request.
+> 
+> Is this only seen when connecting the device to a Linux xHCI host at USB 3 speeds?
+> How about connecting to a windows machine? or USB 2 Linux machine with a EHCI host?
+I could not able to reproduce the issue when connecting the
+phone to x86 Ubuntu20.04 machine.
 
-I wanted to ask again if I could provide any useful support on this matter=
-.
+In our setup, we have a arm64 target with a DWC3 USB3 IP core,
+connected through a USB hub (specifically designed for automotive use)
+to the Android phone. Interestingly,when replicating this setup with
+the x86 Ubuntu machine, we encountered a discrepancy.
 
-Thanks and best regards,
-Christian
+The primary difference between the two setups lies in the utilization
+of the DWC3 USB IP core.
 
+Working Case:
 
-Am 16.08.23 um 09:13 schrieb Christian Schaubschl=C3=A4ger:
-> Hello,
->
->> I have to check if we have similar machines and docks laying around.
->> I'm away until August so there will be some delay on my side
-> I just want to ask, if you could find any machines / docks for testing t=
-his. Today I could reproduce the issue with a 6.5.0-rc6 kernel, also with =
-the lastest Ubuntu-22.04.03 which comes with a 6.2 kernel. As I said befor=
-e, if you need any logs or tests, I'd be happy to help debugging this.
->
-> Thanks and best regards,
-> Christian
->
+0,HS,202,0:17.672.512,1.333 us,8 B,I,00,00,SETUP txn (SPLIT),80 06 00 01 00 00 40 00
+1,HS,203,0:17.672.512,83 ns,4 B,,00,00,   SPLIT packet,78 0D 03 70
+1,HS,204,0:17.672.513,66 ns,3 B,,00,00,   SETUP packet,2D 00 10
+1,HS,205,0:17.672.513,200 ns,11 B,,00,00,   DATA0 packet,C3 80 06 00 01 00 00 40 00 DD 94
+1,HS,206,0:17.672.514,33 ns,1 B,,00,00,   ACK packet,D2
+0,HS,207,0:17.672.535,5.625.983 ms,,I,00,00,[256 CSPLIT-SETUP-NYET],
 
+Non-Working Case:
+
+0,HS,164,0:10.982.303,3.116 us,8 B,I,00,00,SETUP txn (SPLIT-STALL),00 05 04 00 00 00 00 00
+1,HS,165,0:10.982.303,83 ns,4 B,,00,00,   SPLIT packet,78 01 02 A0
+1,HS,166,0:10.982.303,66 ns,3 B,,00,00,   SETUP packet,2D 00 10
+1,HS,167,0:10.982.304,200 ns,11 B,,00,00,   DATA0 packet,C3 00 05 04 00 00 00 00 00 EB 70
+1,HS,168,0:10.982.304,50 ns,1 B,,00,00,   ACK packet,D2
+1,HS,169,0:10.982.305,866 ns,,,00,00,   CSPLIT-SETUP-STALL,
+2,HS,170,0:10.982.305,83 ns,4 B,,00,00,      SPLIT packet,78 81 02 78
+2,HS,171,0:10.982.306,66 ns,3 B,,00,00,      SETUP packet,2D 00 10
+2,HS,172,0:10.982.306,50 ns,1 B,,00,00,      STALL packet,1E
+
+Upon close inspection of the USB analyzer data for both cases,
+it becomes evident that a STALL packet consistently appears in
+the non-working scenario.
+
+This stands in contrast to the working case, where the channel
+remains open, allowing for the successful execution of the following
+high-speed enumeration commands.
+
+In the event of a stall, we require an interruption from the host to
+resume communication.
+Given that there is a fixed 5-second command delay, this interruption
+can only occur after this timeout period.
+
+Therefore, I would like to propose a solution: providing an additional
+API to control this command timeout or as you suggested, adding a timeout
+parameter to struct xhci_command, and use that when calling xhci_mod_cmd_timer()
+without the need to address any potential bugs in the xHCI driver.
+> 
+> > 
+> > I tried using "old_scheme_first=Y," but that did not help. Below are
+> > the short logs of the first iteration enumeration failure.
+> > > 
+> > > The xhci command timeout is more of a xhci internal thing, not sure it's a good
+> > > idea to add this to hcd.
+> > > 
+> > > Would it make sense to add a timeout parameter to hcd->driver->address_device(hcd, udev)
+> > > instead?
+> > > 
+> > > First priority should of course be finding out why the first enumeration fails,
+> > > and solve that.
+> > > 
+> > > Thanks
+> > > Mathias
+> > Thanks for the suggestion to modify hcd->driver->address_device.
+> > I will definitely implement it.However to confirm.
+> > 
+> > So, if I understand correctly, the idea is to avoid exposing any
+> > API from the xhci driver, but instead, create an interface in hcd.c (such as sysfs or API)
+> > and incorporate the delay in address_device as an additional parameter.
+> 
+> On second thought it only makes sense to do this if we can identify the device in advance
+> and make a quirk for it. But at this stage we don't know anything about the device.
+> 
+> So I guess this depends on the width of the problem.
+> 
+> If this works on windows then we need to figure out what we do differently.
+> 
+> If this fails with all hosts (well xHCI and EHCI) then hcd level change is probably needed.
+> For xhci we would pass timeout parameter when calling address_device, for other hosts
+> the timeout for the SET_ADDRESS control transfer would be adjusted.
+> 
+> If this only fails when connected behind a xHCI host then a local xHCI change should do.
+> 
+> > However, in that case, modifying xhci is still necessary as the timer is controlled from there.
+> 
+> Yes, xhci changes will be needed.
+> 
+> I suggest adding a timeout parameter to struct xhci_command, and use that when calling
+> xhci_mod_cmd_timer(). This way we can tailor different timeouts for different commands.
+> 
+> -Mathias
+Thank you, Mathias. I plan to proceed with the recommended approach and prepare the second
+version of the upstream patch for review
+
+Hardik
