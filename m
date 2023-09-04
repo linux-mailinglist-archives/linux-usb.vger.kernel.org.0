@@ -2,162 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2457D7917E9
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Sep 2023 15:21:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C41F79190E
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Sep 2023 15:46:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237104AbjIDNVP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Sep 2023 09:21:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58600 "EHLO
+        id S241768AbjIDNqR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Sep 2023 09:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353039AbjIDNVH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Sep 2023 09:21:07 -0400
-X-Greylist: delayed 390 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 04 Sep 2023 06:21:04 PDT
-Received: from vps.xff.cz (vps.xff.cz [195.181.215.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D56CD7
-        for <linux-usb@vger.kernel.org>; Mon,  4 Sep 2023 06:21:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xff.cz; s=mail;
-        t=1693833270; bh=gDBpREemWwh/Sf97HwwhYpChYytFGAOq73H9R8pTiiU=;
-        h=Date:From:To:Cc:Subject:X-My-GPG-KeyId:References:From;
-        b=jGDl2mLs8XaHP/k5n/WqFW2fJ6XoKXVC1HNWi/ybdzislyLuDWCn+PNFtaoiuQO/i
-         8ZtqYHqzAjwH0ppvG5TOHdPjWO/sMdED3TNxK/uu3xqwnLPJ2VNkOIBAZQLxa6au4d
-         i2mRboekr3P90tR+K0ZzsAkesYu0buUEfWpE7NL0=
-Date:   Mon, 4 Sep 2023 15:14:30 +0200
-From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>
-To:     Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH 1/2] usb: gadget: u_ether: Do not make UDC parent of the
- net device
-Message-ID: <miiwk4pah7tgdszugqmhnnaweyt7wrw3bxmuliyva3k7nccyab@lsyhvutbuzx2>
-Mail-Followup-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>, 
-        Sascha Hauer <s.hauer@pengutronix.de>, linux-usb@vger.kernel.org, 
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-kernel@vger.kernel.org, kernel@pengutronix.de
-X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
- <https://xff.cz/key.txt>
-References: <20221104131031.850850-1-s.hauer@pengutronix.de>
- <20221104131031.850850-2-s.hauer@pengutronix.de>
+        with ESMTP id S231881AbjIDNqQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Sep 2023 09:46:16 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D074CD7;
+        Mon,  4 Sep 2023 06:46:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693835173; x=1725371173;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Je0PTQIr7elkbrBKVWrn47OMjVkBHZODPGlR145fXzs=;
+  b=FkKx0c6jWTY8aV8VUV91BBJMx0Mm7GvVk/gEm70uRFgfrtz+DszQs0qT
+   T2/xGlAty00Eo0ijWNRbDUpqt7JGwxxFSAQseKh0VA2XuxP/G8QYVj7YV
+   rZG4IYpq0G9csEY57Hd5oAQMixG70iIEtuEDabNCGkN6Giku2gSsyP+Lv
+   T3Ga02UkCxGgvvPSVOb94EI1MfUToYCRtB3ApcmLR5YJj1YdHkZ877XvW
+   EvWAZ54pg0j+0TuBahmY2IyrfKHIgCngzerf26GobSGArkY5Ap8o7rCYv
+   ajSaFnyJVb48FERNBkUcfT1IrdAZdQIqd5YuwSbPHFZYa8rxX+r/iMuWx
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10823"; a="380397734"
+X-IronPort-AV: E=Sophos;i="6.02,226,1688454000"; 
+   d="scan'208";a="380397734"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2023 06:46:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10823"; a="1071621238"
+X-IronPort-AV: E=Sophos;i="6.02,226,1688454000"; 
+   d="scan'208";a="1071621238"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2023 06:45:57 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qd9tp-006Rbm-3A;
+        Mon, 04 Sep 2023 16:45:53 +0300
+Date:   Mon, 4 Sep 2023 16:45:53 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     yangxingui <yangxingui@huawei.com>
+Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
+        john.g.garry@oracle.com, damien.lemoal@opensource.wdc.com,
+        akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
+        himanshu.madhani@cavium.com, felipe.balbi@linux.intel.com,
+        gregkh@linuxfoundation.org, uma.shankar@intel.com,
+        anshuman.gupta@intel.com, animesh.manna@intel.com,
+        linux-usb@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linuxarm@huawei.com,
+        prime.zeng@hisilicon.com, kangfenglong@huawei.com,
+        chenxiang66@hisilicon.com
+Subject: Re: [PATCH v5 3/3] scsi: qla2xxx: Use DEFINE_SHOW_STORE_ATTRIBUTE
+ helper for debugfs
+Message-ID: <ZPXfkV7DYsxx179W@smile.fi.intel.com>
+References: <20230904084804.39564-1-yangxingui@huawei.com>
+ <20230904084804.39564-4-yangxingui@huawei.com>
+ <ZPW39NRmd0Z0WRwW@smile.fi.intel.com>
+ <6408e1c5-df6a-e257-26c8-2d100be6db97@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221104131031.850850-2-s.hauer@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <6408e1c5-df6a-e257-26c8-2d100be6db97@huawei.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On Mon, Sep 04, 2023 at 09:05:29PM +0800, yangxingui wrote:
+> On 2023/9/4 18:56, Andy Shevchenko wrote:
+> > On Mon, Sep 04, 2023 at 08:48:04AM +0000, Xingui Yang wrote:
 
-On Fri, Nov 04, 2022 at 02:10:30PM +0100, Sascha Hauer wrote:
-> ing-List: linux-kernel@vger.kernel.org
-> 
-> The UDC is not a suitable parent of the net device as the UDC can
-> change or vanish during the lifecycle of the ethernet gadget. This
-> can be illustrated with the following:
-> 
-> mkdir -p /sys/kernel/config/usb_gadget/mygadget
-> cd /sys/kernel/config/usb_gadget/mygadget
-> mkdir -p configs/c.1/strings/0x409
-> echo "C1:Composite Device" > configs/c.1/strings/0x409/configuration
-> mkdir -p functions/ecm.usb0
-> ln -s functions/ecm.usb0 configs/c.1/
-> echo "dummy_udc.0" > UDC
-> rmmod dummy_hcd
-> 
-> The 'rmmod' removes the UDC from the just created gadget, leaving
-> the still existing net device with a no longer existing parent.
+...
 
-I have an even simpler reproducer on Pinephone Pro/RK3399 SoC. All it takes to
-trigger the use after free and kernel panic in my case is to plug in a USB dock
-to make DWC3 DRD switch to host mode and then unplug it to make it switch back to
-peripheral mode.
+> > > -/*
+> > > - * Helper macros for setting up debugfs entries.
+> > > - * _name: The name of the debugfs entry
+> > > - * _ctx_struct: The context that was passed when creating the debugfs file
+> > > - *
+> > > - * QLA_DFS_SETUP_RD could be used when there is only a show function.
+> > > - * - show function take the name qla_dfs_<sysfs-name>_show
+> > > - *
+> > > - * QLA_DFS_SETUP_RW could be used when there are both show and write functions.
+> > > - * - show function take the name  qla_dfs_<sysfs-name>_show
+> > > - * - write function take the name qla_dfs_<sysfs-name>_write
+> > > - *
+> > > - * To have a new debugfs entry, do:
+> > > - * 1. Create a "struct dentry *" in the appropriate structure in the format
+> > > - * dfs_<sysfs-name>
+> > > - * 2. Setup debugfs entries using QLA_DFS_SETUP_RD / QLA_DFS_SETUP_RW
+> > > - * 3. Create debugfs file in qla2x00_dfs_setup() using QLA_DFS_CREATE_FILE
+> > > - * or QLA_DFS_ROOT_CREATE_FILE
+> > > - * 4. Remove debugfs file in qla2x00_dfs_remove() using QLA_DFS_REMOVE_FILE
+> > > - * or QLA_DFS_ROOT_REMOVE_FILE
+> > > - *
+> > > - * Example for creating "TEST" sysfs file:
+> > > - * 1. struct qla_hw_data { ... struct dentry *dfs_TEST; }
+> > > - * 2. QLA_DFS_SETUP_RD(TEST, scsi_qla_host_t);
+> > > - * 3. In qla2x00_dfs_setup():
+> > > - * QLA_DFS_CREATE_FILE(ha, TEST, 0600, ha->dfs_dir, vha);
+> > > - * 4. In qla2x00_dfs_remove():
+> > > - * QLA_DFS_REMOVE_FILE(ha, TEST);
+> > > - */
+> > 
+> > I believe this comment (in some form) has to be preserved.
+> > Try to rewrite it using reference to the new macro.
+> Thanks for your reply, I checked and these macros aren't being called
+> anywhere else, so I decided to delete them all. Of course, maybe this macro
+> will be used in the future, and I can resubmit another version based on your
+> suggestion.
 
-This triggers a call to dwc3_gadget_exit and then to dwc3_gadget_init later on
+Of course you need to rewrite it to use new approach.
 
-https://elixir.bootlin.com/linux/latest/source/drivers/usb/dwc3/gadget.c#L4546
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Then symlink to the net device becames broken in sysfs:
 
-  https://megous.com/dl/tmp/3d8061f1749a7b2b.png
-
-And after this happens, there's a kernel panic when removing the rndis gadget
-configuration from configfs: https://paste.mozilla.org/Z5DFP9BV
-(and possibly other issues, but the kernel panic is the most noticable :))
-
-Applaying this patch makes the issue go away. So there definitely seems to
-be some device lifetime issue somewhere in there.
-
-kind regards,
-	o.
-
-> Accessing the ethernet device with commands like:
-> 
-> ip --details link show usb0
-> 
-> will result in a KASAN splat:
-> 
-> ==================================================================
-> BUG: KASAN: use-after-free in if_nlmsg_size+0x3e8/0x528
-> Read of size 4 at addr c5c84754 by task ip/357
-> 
-> CPU: 3 PID: 357 Comm: ip Not tainted 6.1.0-rc3-00013-gd14953726b24-dirty #324
-> Hardware name: Freescale i.MX6 Quad/DualLite (Device Tree)
->  unwind_backtrace from show_stack+0x10/0x14
->  show_stack from dump_stack_lvl+0x58/0x70
->  dump_stack_lvl from print_report+0x134/0x4d4
->  print_report from kasan_report+0x78/0x10c
->  kasan_report from if_nlmsg_size+0x3e8/0x528
->  if_nlmsg_size from rtnl_getlink+0x2b4/0x4d0
->  rtnl_getlink from rtnetlink_rcv_msg+0x1f4/0x674
->  rtnetlink_rcv_msg from netlink_rcv_skb+0xb4/0x1f8
->  netlink_rcv_skb from netlink_unicast+0x294/0x478
->  netlink_unicast from netlink_sendmsg+0x328/0x640
->  netlink_sendmsg from ____sys_sendmsg+0x2a4/0x3b4
->  ____sys_sendmsg from ___sys_sendmsg+0xc8/0x12c
->  ___sys_sendmsg from sys_sendmsg+0xa0/0x120
->  sys_sendmsg from ret_fast_syscall+0x0/0x1c
-> 
-> Solve this by not setting the parent of the ethernet device.
-> 
-> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-> ---
->  drivers/usb/gadget/function/u_ether.c | 4 ----
->  1 file changed, 4 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
-> index e06022873df16..8f12f3f8f6eeb 100644
-> --- a/drivers/usb/gadget/function/u_ether.c
-> +++ b/drivers/usb/gadget/function/u_ether.c
-> @@ -798,7 +798,6 @@ struct eth_dev *gether_setup_name(struct usb_gadget *g,
->  	net->max_mtu = GETHER_MAX_MTU_SIZE;
->  
->  	dev->gadget = g;
-> -	SET_NETDEV_DEV(net, &g->dev);
->  	SET_NETDEV_DEVTYPE(net, &gadget_type);
->  
->  	status = register_netdev(net);
-> @@ -873,8 +872,6 @@ int gether_register_netdev(struct net_device *net)
->  	struct usb_gadget *g;
->  	int status;
->  
-> -	if (!net->dev.parent)
-> -		return -EINVAL;
->  	dev = netdev_priv(net);
->  	g = dev->gadget;
->  
-> @@ -905,7 +902,6 @@ void gether_set_gadget(struct net_device *net, struct usb_gadget *g)
->  
->  	dev = netdev_priv(net);
->  	dev->gadget = g;
-> -	SET_NETDEV_DEV(net, &g->dev);
->  }
->  EXPORT_SYMBOL_GPL(gether_set_gadget);
->  
-> -- 
-> 2.30.2
-> 
