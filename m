@@ -2,126 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D52697915F2
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Sep 2023 12:57:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09A657916F8
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Sep 2023 14:17:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345534AbjIDK5H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Sep 2023 06:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43654 "EHLO
+        id S1352927AbjIDMRn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Sep 2023 08:17:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236333AbjIDK5G (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Sep 2023 06:57:06 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B42A899;
-        Mon,  4 Sep 2023 03:57:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693825022; x=1725361022;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=F6bMJv0iuSajV+sMvvlKQf/YvMy2t++WwT6Fl2VIPlI=;
-  b=PzU0HXmmMSuonm1Z6It4cFhLOeuKRCa6sUNA+RTBRj4ew2AGGgRyqaZg
-   8ZHOOMXVx4fWy7L4EcG26SQuXJFDOj+esEB2rzT2TyfWP9bwfN9PKozYv
-   Lnzw4QMK5+bLBLZ5HM53cUdrkm9VyA/HwVaxuc7klZgWWmvByImmIstzM
-   VINgFGMuQ4VDP9tJsn4drY+n2MnetMVhgyZLZKPcEIeZCfbvqnAMvInma
-   7WXbBHe0qk8+6nxJlOKU9RV/r/KU4JQ2eFTVc1XyR5BOeG8yBfTLf2quT
-   6p/4OEn+HoCSOjm2tX4GVO1DB+kVx/mpKeCqu39W/5uDcOF+Pszs3sUrh
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10822"; a="361598974"
-X-IronPort-AV: E=Sophos;i="6.02,226,1688454000"; 
-   d="scan'208";a="361598974"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2023 03:57:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10822"; a="734279861"
-X-IronPort-AV: E=Sophos;i="6.02,226,1688454000"; 
-   d="scan'208";a="734279861"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga007.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2023 03:56:56 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qd7GH-006PAi-0I;
-        Mon, 04 Sep 2023 13:56:53 +0300
-Date:   Mon, 4 Sep 2023 13:56:52 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Xingui Yang <yangxingui@huawei.com>
-Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
-        john.g.garry@oracle.com, damien.lemoal@opensource.wdc.com,
-        akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
-        himanshu.madhani@cavium.com, felipe.balbi@linux.intel.com,
-        gregkh@linuxfoundation.org, uma.shankar@intel.com,
-        anshuman.gupta@intel.com, animesh.manna@intel.com,
-        linux-usb@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linuxarm@huawei.com,
-        prime.zeng@hisilicon.com, kangfenglong@huawei.com,
-        chenxiang66@hisilicon.com
-Subject: Re: [PATCH v5 3/3] scsi: qla2xxx: Use DEFINE_SHOW_STORE_ATTRIBUTE
- helper for debugfs
-Message-ID: <ZPW39NRmd0Z0WRwW@smile.fi.intel.com>
-References: <20230904084804.39564-1-yangxingui@huawei.com>
- <20230904084804.39564-4-yangxingui@huawei.com>
+        with ESMTP id S229660AbjIDMRm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Sep 2023 08:17:42 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 429CFCD0;
+        Mon,  4 Sep 2023 05:17:35 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 384CGoTbA007845, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 384CGoTbA007845
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 4 Sep 2023 20:16:50 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Mon, 4 Sep 2023 20:17:18 +0800
+Received: from fc38.localdomain (172.22.228.98) by RTEXMBS04.realtek.com.tw
+ (172.21.6.97) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Mon, 4 Sep 2023
+ 20:17:14 +0800
+From:   Hayes Wang <hayeswang@realtek.com>
+To:     <kuba@kernel.org>, <davem@davemloft.net>
+CC:     <netdev@vger.kernel.org>, <nic_swsd@realtek.com>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        Hayes Wang <hayeswang@realtek.com>
+Subject: [PATCH net] r8152: avoid the driver drops a lot of packets
+Date:   Mon, 4 Sep 2023 20:17:06 +0800
+Message-ID: <20230904121706.7132-420-nic_swsd@realtek.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230904084804.39564-4-yangxingui@huawei.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [172.22.228.98]
+X-ClientProxiedBy: RTEXH36506.realtek.com.tw (172.21.6.27) To
+ RTEXMBS04.realtek.com.tw (172.21.6.97)
+X-KSE-ServerInfo: RTEXMBS04.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 04, 2023 at 08:48:04AM +0000, Xingui Yang wrote:
-> Use DEFINE_SHOW_STORE_ATTRIBUTE helper for read-write file to reduce some
-> duplicated code and delete unused macros.
+Stop submitting rx, if the driver queue more than 256 packets.
 
-> Signed-off-by: Luo Jiaxing <luojiaxing@huawei.com>
-> Signed-off-by: Xingui Yang <yangxingui@huawei.com>
+If the hardware is more fast than the software, the driver would start
+queuing the packets. And, the driver starts dropping the packets, if it
+queues more than 1000 packets.
 
-Same comments as per previous patch.
+Increase the weight of NAPI could improve the situation. However, the
+weight has been changed to 64, so we have to stop submitting rx when the
+driver queues too many packets. Then,the device may send the pause frame
+to slow down the receiving, when the FIFO of the device is full.
 
-...
+Fixes: cf74eb5a5bc8 ("eth: r8152: try to use a normal budget")
+Signed-off-by: Hayes Wang <hayeswang@realtek.com>
+---
+ drivers/net/usb/r8152.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-> -/*
-> - * Helper macros for setting up debugfs entries.
-> - * _name: The name of the debugfs entry
-> - * _ctx_struct: The context that was passed when creating the debugfs file
-> - *
-> - * QLA_DFS_SETUP_RD could be used when there is only a show function.
-> - * - show function take the name qla_dfs_<sysfs-name>_show
-> - *
-> - * QLA_DFS_SETUP_RW could be used when there are both show and write functions.
-> - * - show function take the name  qla_dfs_<sysfs-name>_show
-> - * - write function take the name qla_dfs_<sysfs-name>_write
-> - *
-> - * To have a new debugfs entry, do:
-> - * 1. Create a "struct dentry *" in the appropriate structure in the format
-> - * dfs_<sysfs-name>
-> - * 2. Setup debugfs entries using QLA_DFS_SETUP_RD / QLA_DFS_SETUP_RW
-> - * 3. Create debugfs file in qla2x00_dfs_setup() using QLA_DFS_CREATE_FILE
-> - * or QLA_DFS_ROOT_CREATE_FILE
-> - * 4. Remove debugfs file in qla2x00_dfs_remove() using QLA_DFS_REMOVE_FILE
-> - * or QLA_DFS_ROOT_REMOVE_FILE
-> - *
-> - * Example for creating "TEST" sysfs file:
-> - * 1. struct qla_hw_data { ... struct dentry *dfs_TEST; }
-> - * 2. QLA_DFS_SETUP_RD(TEST, scsi_qla_host_t);
-> - * 3. In qla2x00_dfs_setup():
-> - * QLA_DFS_CREATE_FILE(ha, TEST, 0600, ha->dfs_dir, vha);
-> - * 4. In qla2x00_dfs_remove():
-> - * QLA_DFS_REMOVE_FILE(ha, TEST);
-> - */
-
-I believe this comment (in some form) has to be preserved.
-Try to rewrite it using reference to the new macro.
-
-Otherwise looks good to me.
-
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index 332c853ca99b..b5ed55938b1c 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -2484,10 +2484,6 @@ static int rx_bottom(struct r8152 *tp, int budget)
+ 			unsigned int pkt_len, rx_frag_head_sz;
+ 			struct sk_buff *skb;
+ 
+-			/* limit the skb numbers for rx_queue */
+-			if (unlikely(skb_queue_len(&tp->rx_queue) >= 1000))
+-				break;
+-
+ 			pkt_len = le32_to_cpu(rx_desc->opts1) & RX_LEN_MASK;
+ 			if (pkt_len < ETH_ZLEN)
+ 				break;
+@@ -2556,7 +2552,7 @@ static int rx_bottom(struct r8152 *tp, int budget)
+ 		}
+ 
+ submit:
+-		if (!ret) {
++		if (!ret && likely(skb_queue_len(&tp->rx_queue) < 256)) {
+ 			ret = r8152_submit_rx(tp, agg, GFP_ATOMIC);
+ 		} else {
+ 			urb->actual_length = 0;
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.41.0
 
