@@ -2,148 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2D7C7927E7
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Sep 2023 18:41:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 322E17925E0
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Sep 2023 18:24:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235749AbjIEQC2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Sep 2023 12:02:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34256 "EHLO
+        id S235936AbjIEQCl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Sep 2023 12:02:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354354AbjIEK5Q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Sep 2023 06:57:16 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ABE11AB
-        for <linux-usb@vger.kernel.org>; Tue,  5 Sep 2023 03:57:12 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-d78328bc2abso2011682276.2
-        for <linux-usb@vger.kernel.org>; Tue, 05 Sep 2023 03:57:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693911431; x=1694516231; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=nFp9JN673sSpwa45B4q2HQSN730WX8grbrKR4m9d76A=;
-        b=EUXkgM9iKYXkdGIhIzbe0Itxp2yGw47ebDol5/1/y+FAIKyO0+TNzTkz2rcND3U6fS
-         jckDEAQeYd5rZR9WWdHcOokHRuwM4/z/i7YsuVJF1KXbPYYLbDJecjbmt9lPW9RQP9O5
-         WyQz5iq0B8r4JXgUbrzzAPBByLp5L5SFEGQ7Wnpb5y/eeeZOluqSkfbhPULLLxMOcakP
-         NnQtRwyeB7bIoB+/I7d1OhvvSqaxFfTpNPqiyU03tUMnyf2DsHDW6q377XRkNzFriyLI
-         8KbRILHkmBs9rbilXa5PiIXF9ob+IfoTdcOh8ynfamc5OFRq/yaJvJJHbCZDozTk/xHF
-         itKA==
+        with ESMTP id S1354399AbjIELWA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Sep 2023 07:22:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F471AD
+        for <linux-usb@vger.kernel.org>; Tue,  5 Sep 2023 04:21:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1693912870;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CnmxN6wdOs0OTw/mMrxBK5I43rixoIsLKQZXA7I2EWc=;
+        b=PPpsyO0NtBwpFjLtSDOT8vCLhiDGyUtJRahpdmAI6li0GjbN6bTggivk7/L06Mhj27IbDA
+        RIh75ZzhcW2XeGYX3R004D7U1b9SEjsnN3lqr1GT4kA6QiJqWh/G6hR7gyJZ0eSbVqyD0k
+        M1brf+eiWhrSeCzrWfyt0yUqgRB+Oyw=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-382-E1LtRFqDP3Ciwd6gROgWAw-1; Tue, 05 Sep 2023 07:21:09 -0400
+X-MC-Unique: E1LtRFqDP3Ciwd6gROgWAw-1
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-9a62b121c43so49671166b.0
+        for <linux-usb@vger.kernel.org>; Tue, 05 Sep 2023 04:21:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693911431; x=1694516231;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nFp9JN673sSpwa45B4q2HQSN730WX8grbrKR4m9d76A=;
-        b=RahJIDGnOUZwUDJYZESXscJhSOKJFgglv5cd9JMy0wyulZNLzWiwRjIw644t8rAE3w
-         Zcfx2w3QtZ6VFtxZIQV+gTSI62sKmquVMjpmmFPFdooCL4PNmbtEmHTqHoIYFx+xMwGv
-         3YIBUT8meZSatZG9As9hIuVG0wl3jtVSDKp+QdKkfDcPQ9YecyZzD/y4/tD7LcUNOxzi
-         cC1cuFFaHzUkEhsQWACkGbyQ6v9dnAriae+UsgjlQxnRf8FV/rkMH4dCCHLUsbiMjxif
-         6ilt/D4ajrL29YCmr9LTAfzGUkwJ0QUX+e371yKGZs3MCPdmbSeo8YCrFoUFHg2zW9cd
-         jO1g==
-X-Gm-Message-State: AOJu0YzKuQMvOkun/edRfqrKoGmswNGPUYjZyAXjsqH5QBfYwMaWid5a
-        6n58h6fibybJYcENd3zC+nqBOvuD+ftqaUgBk5kYlg==
-X-Google-Smtp-Source: AGHT+IGZHwMQlo/ityKImZ2VeEtB90rqhklF5U6Gv8PiiU7XpveUbpNUVJmNlPMw3mBk4Obk/SUY2ph1gPYN6jbIHDo=
-X-Received: by 2002:a25:ac20:0:b0:d53:f98f:8018 with SMTP id
- w32-20020a25ac20000000b00d53f98f8018mr13526068ybi.65.1693911431284; Tue, 05
- Sep 2023 03:57:11 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230903214150.2877023-1-dmitry.baryshkov@linaro.org>
- <20230903214150.2877023-2-dmitry.baryshkov@linaro.org> <ZPbrtAlO2Y+bjDhf@kuha.fi.intel.com>
-In-Reply-To: <ZPbrtAlO2Y+bjDhf@kuha.fi.intel.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 5 Sep 2023 13:56:59 +0300
-Message-ID: <CAA8EJpqUg2-k7LLBL38RHU1sThkXB54ca68xEMd1yMnHQcQ++w@mail.gmail.com>
-Subject: Re: [RFC PATCH v1 01/12] Revert "drm/sysfs: Link DRM connectors to
- corresponding Type-C connectors"
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Janne Grunau <j@jannau.net>, Simon Ser <contact@emersion.fr>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        freedreno@lists.freedesktop.org, Won Chung <wonchung@google.com>
+        d=1e100.net; s=20221208; t=1693912868; x=1694517668;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CnmxN6wdOs0OTw/mMrxBK5I43rixoIsLKQZXA7I2EWc=;
+        b=LQSfr5DBOqKvg9ndG0fB0ELX3K1e/j1YEHjNifunhGrQbijcF2Dtlqp4voZtGUGagR
+         6J+/Rk9wu05SDwICTr9R4hjksq7QR/lcFb/bEVLwKFp0KT3kZ3sJ7QLi7jZYVgzt9lSy
+         Os0ktLl3Dj2mFk94dkEskcbmLENWNoqg2CVJOEnANujD0t6cdDV9BaA8D7XKUh+gT/6n
+         HTmRr6NunfTy2bFe8O3eVe+KmXQGN14lJ+p2ZV52t9/JqDCM1crAlPEyhU/9C8zdowzb
+         BRCkvKDgnTaHwh0dqAHWOSWVB9ZCUJjCStLaEIDgZILlhuzbXJKEk+kmGhis7JwisMzj
+         a8mA==
+X-Gm-Message-State: AOJu0Yw/5AJJXkXvmkdWKD1QYJ7/Sqmc6LWN+f2Mj1nM7dsT23O1QTWI
+        r7jhBGpMbaGF8L+RMWHmvh64YJK145BAInoDcnKnsXkl1nXGry8yi6em0RZhIyebmDuaSnZVLUJ
+        tKGAFIXrGq+nqeYW4KsP7
+X-Received: by 2002:a17:906:212:b0:9a1:d79a:4190 with SMTP id 18-20020a170906021200b009a1d79a4190mr9465382ejd.2.1693912868253;
+        Tue, 05 Sep 2023 04:21:08 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IF/2JNpRm3ICUmbaI95oTYHDX/wRK2j5nb1uLhZMDTcx0zla0a42LuJEDAP+RUjDfkLj0lIyQ==
+X-Received: by 2002:a17:906:212:b0:9a1:d79a:4190 with SMTP id 18-20020a170906021200b009a1d79a4190mr9465373ejd.2.1693912867909;
+        Tue, 05 Sep 2023 04:21:07 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-254-194.dyn.eolo.it. [146.241.254.194])
+        by smtp.gmail.com with ESMTPSA id a1-20020a170906684100b009920e9a3a73sm7453309ejs.115.2023.09.05.04.21.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Sep 2023 04:21:07 -0700 (PDT)
+Message-ID: <223569649ad4ded66786fcc424156b2115b8ccd8.camel@redhat.com>
+Subject: Re: [PATCH net] r8152: avoid the driver drops a lot of packets
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Hayes Wang <hayeswang@realtek.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>
+Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        nic_swsd <nic_swsd@realtek.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Date:   Tue, 05 Sep 2023 13:21:06 +0200
+In-Reply-To: <48d03f3134bf49c0b04b34464cd7487b@realtek.com>
+References: <20230904121706.7132-420-nic_swsd@realtek.com>
+         <32c71d3245127b4aa02b8abd75edcb8f5767e966.camel@redhat.com>
+         <48d03f3134bf49c0b04b34464cd7487b@realtek.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Heikki,
+On Tue, 2023-09-05 at 10:37 +0000, Hayes Wang wrote:
+> Paolo Abeni <pabeni@redhat.com>
+> > Sent: Tuesday, September 5, 2023 6:11 PM
+> [...]
+> > > -                     /* limit the skb numbers for rx_queue */
+> > > -                     if (unlikely(skb_queue_len(&tp->rx_queue) >=3D
+> > 1000))
+> > > -                             break;
+> > > -
+> >=20
+> > Dropping this check looks dangerous to me. What if pause frames are
+> > disabled on the other end or dropped? It looks like this would cause
+> > unlimited memory consumption?!?
+>=20
+> When the driver stops submitting rx, the driver wouldn't get any packet
+> from the device after the previous urbs which have been submitted return.
+> That is, skb_queue_len(&tp->rx_queue) wouldn't increase any more until
+> the driver starts submitting rx again.
+>=20
+> Now, the driver stops submitting rx when the skb_queue_len more than 256,
+> so the check becomes redundant. The skb_queue_len has been limited less
+> than 1000.
 
-On Tue, 5 Sept 2023 at 11:50, Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
->
-> Hi Dmitry,
->
-> On Mon, Sep 04, 2023 at 12:41:39AM +0300, Dmitry Baryshkov wrote:
-> > The kdev->fwnode pointer is never set in drm_sysfs_connector_add(), so
-> > dev_fwnode() checks never succeed, making the respective commit NOP.
->
-> That's not true. The dev->fwnode is assigned when the device is
-> created on ACPI platforms automatically. If the drm_connector fwnode
-> member is assigned before the device is registered, then that fwnode
-> is assigned also to the device - see drm_connector_acpi_find_companion().
->
-> But please note that even if drm_connector does not have anything in
-> its fwnode member, the device may still be assigned fwnode, just based
-> on some other logic (maybe in drivers/acpi/acpi_video.c?).
->
-> > And if drm_sysfs_connector_add() is modified to set kdev->fwnode, it
-> > breaks drivers already using components (as it was pointed at [1]),
-> > resulting in a deadlock. Lockdep trace is provided below.
-> >
-> > Granted these two issues, it seems impractical to fix this commit in any
-> > sane way. Revert it instead.
->
-> I think there is already user space stuff that relies on these links,
-> so I'm not sure you can just remove them like that. If the component
-> framework is not the correct tool here, then I think you need to
-> suggest some other way of creating them.
+I'm sorry, I have a very superficial knowledge of the USB layer, but it
+looks like that when such condition is reached, in the worst condition
+there could be up to urbs in flight. AFAICS each of them carries a 16K
+buffer, can be up to 10 standard-mtu packets - or much more small ones.
 
-The issue (that was pointed out during review) is that having a
-component code in the framework code can lead to lockups. With the
-patch #2 in place (which is the only logical way to set kdev->fwnode
-for non-ACPI systems) probing of drivers which use components and set
-drm_connector::fwnode breaks immediately.
+Setting an upper limits to the rx_queue still looks like a reasonable
+safeguard.
 
-Can we move the component part to the respective drivers? With the
-patch 2 in place, connector->fwnode will be copied to the created
-kdev's fwnode pointer.
+> Besides, if the flow control is disabled, the packets may be dropped by
+> the hardware when the FIFO of the device is full, after the driver stops
+> submitting rx.
 
-Another option might be to make this drm_sysfs component registration optional.
+If the incoming rate exceeds the H/W processing capacity, packets are
+dropped: that is expected and unavoidable.
 
-> Side note. The problem you are describing here is a limitation in the
-> component framework - right now it's made with the idea that a device
-> can represent a single component, but it really should allow a device
-> to represent multiple components. I'm not saying that you should try
-> to fix the component framework, but I just wanted to make a note about
-> this (and this is not the only problem with the component framework).
->
-> I like the component framework as a concept, but I think it needs a
-> lot of improvements - possibly rewrite.
+Possibly exposing the root cause for such drops to user space via
+appropriate stats would be useful.
 
-Yes. There were several attempts to rewrite the component framework,
-but none succeeded up to now. Anyway, I consider rewriting components
-framework to be a bigger topic compared to drm connector fwnode setup.
+Cheers,
 
---
-With best wishes
-Dmitry
+Paolo
+
