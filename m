@@ -2,44 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AF25792AC6
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Sep 2023 19:01:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AD95792C36
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Sep 2023 19:11:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233552AbjIEQmZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Sep 2023 12:42:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50650 "EHLO
+        id S240009AbjIERJG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Sep 2023 13:09:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243302AbjIEQUR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Sep 2023 12:20:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA6D211E
-        for <linux-usb@vger.kernel.org>; Tue,  5 Sep 2023 09:17:57 -0700 (PDT)
+        with ESMTP id S241946AbjIERBo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Sep 2023 13:01:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D04EA2703
+        for <linux-usb@vger.kernel.org>; Tue,  5 Sep 2023 09:23:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F34160A27
-        for <linux-usb@vger.kernel.org>; Tue,  5 Sep 2023 16:16:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F2942C433C7
-        for <linux-usb@vger.kernel.org>; Tue,  5 Sep 2023 16:16:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D29B6B81263
+        for <linux-usb@vger.kernel.org>; Tue,  5 Sep 2023 16:17:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 70163C433C8
+        for <linux-usb@vger.kernel.org>; Tue,  5 Sep 2023 16:17:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693930579;
-        bh=BZ2p72bI3wSy7DLye4jxnUTx9/yxaMmIiriXWJYWgVc=;
+        s=k20201202; t=1693930633;
+        bh=oRK8Y7zNWm7aI846cXwSCqx2iJlTq9BFO5xTL0t0zrQ=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=FrKrRzi2EdioChq5YJIUVQTpjhIBgVmAmAphPUUylpqbjvFbSFkN4j3X8WCwCf/S0
-         uOXqi0VCMG+mZP3WuWbg3noRy76ThB4MCow3bnBTqCIJ2b92fw+O5A6RFafHnk6B++
-         d3rEL/bGCUTNrtzaSVUrABzHk+CsOGs1E5TVkC6NVjO5B+8V/6ikwyezjPVjd2LMmO
-         c7cwYg+r97zhxTp8RUPCvct0TxapFHtiO6FQUmzjmz2g2zlDuR/BQgs277j/In17Pt
-         dZYplFsSPj8HDy0sUqpkRXPfJppW/SDEE0jLmzaN8isz2aOElauQa+ZWNl7he1AiRV
-         mjqz0lw/NHBOg==
+        b=HvImLPvBPh8e82XuHt5U3JgSvC6pPZmDEbTFjKRX0u3CKJMYUs4L52omkoT2S1HTK
+         0dtwCKQwRd9hWjx0vvSwrABOT/r2n8cF47JCzsJb65q1a1fQ0IMuaAgaOtrP67xd+L
+         zICUC52KyNbmOQJrO7K8ldX6SwjIpl+9On4/2cAmXHwzo4jiSq1SofL7S2sCpSOPqa
+         P5PeKOlobwfl6Qn2nrOoR1hj6NOi0m8Qiowi99qDTh9789jcpfaZxyp5hAQiMCuZ9e
+         0X0pm7Zk5fuuU+EShtU0gMdh7AF2TKiu0XRH7pg5ZA+TjJC85QQlpg5t+Nmw1HtMGT
+         qgIaL1Kk0SXFA==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id D3FBFC4332E; Tue,  5 Sep 2023 16:16:18 +0000 (UTC)
+        id 5FAF9C4332E; Tue,  5 Sep 2023 16:17:13 +0000 (UTC)
 From:   bugzilla-daemon@kernel.org
 To:     linux-usb@vger.kernel.org
 Subject: [Bug 217862] [BUG] Alauda driver causes oops when inserted with card
  in with transfer buffer is on stack, throws errors if card is inserted
  afterwards.
-Date:   Tue, 05 Sep 2023 16:16:18 +0000
+Date:   Tue, 05 Sep 2023 16:17:13 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -55,7 +55,7 @@ X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-217862-208809-LRDMLqPEXk@https.bugzilla.kernel.org/>
+Message-ID: <bug-217862-208809-N7Eb3e7Qeo@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-217862-208809@https.bugzilla.kernel.org/>
 References: <bug-217862-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -75,17 +75,10 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D217862
 
---- Comment #7 from pawlick3r@proton.me ---
-Created attachment 305037
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D305037&action=3Dedit
-entire dmesg
-
-I enabled debug messages for the mass storage driver and USB, recompiled, a=
-nd
-this is what I got. Instead of oopsing it instead ran past the error and fa=
-iled
-to read the 8mb card. I'm going to test the reader on a second computer with
-the proper OS to rule out any reader issues as well.
+--- Comment #8 from pawlick3r@proton.me ---
+Created attachment 305038
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D305038&action=3Dedit
+usbmon output
 
 --=20
 You may reply to this email to add a comment.
