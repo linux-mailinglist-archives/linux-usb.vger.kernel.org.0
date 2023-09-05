@@ -2,78 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB1EB792528
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Sep 2023 18:01:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67CCA792532
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Sep 2023 18:01:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232606AbjIEQBl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Sep 2023 12:01:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41472 "EHLO
+        id S235098AbjIEQBr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Sep 2023 12:01:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353624AbjIEGyW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Sep 2023 02:54:22 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC2741B4
-        for <linux-usb@vger.kernel.org>; Mon,  4 Sep 2023 23:54:18 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-99de884ad25so324579566b.3
-        for <linux-usb@vger.kernel.org>; Mon, 04 Sep 2023 23:54:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1693896857; x=1694501657; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CnhlhLhE/Awy7OSGd1LKlGWZhliLjEnOAa8ccfaPRH4=;
-        b=BwFZjPsPIoA4J4JCdvGGGWdNQw9G4bMX5mJRvtHMlyB+XvcZKsbmNE5WS4oSklcOBe
-         1LVGixYBSvVroZpcYFZEDOu6TysKd4gSXgkM9LP5f0RCRbxYnO80y5bfO89nKTILkoHP
-         EtSZt8mjPTIMrllnoFzWWDC+umSQHRkG3+44A9scor8fdIFUzSKm/mhPQM4O5gIIUzut
-         XXBc+CyLx4dr+PY6cHFh9BkjCM+gsxpCAHsZtQkoYaY3E6Hs936Hs3P/7Hu+EA4Dg6Fc
-         WRMLphgw4KTeNw8hNCO55XTLCuyAXsr9IDv9LCBZhyYkAb+IhUALcQxaB0AbY+7ShEoa
-         DdCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693896857; x=1694501657;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CnhlhLhE/Awy7OSGd1LKlGWZhliLjEnOAa8ccfaPRH4=;
-        b=UqnMQFcCt+/TFY6YFPsKfdR5gmf2yoXFGnNGk2M++ISHdxSdc014RPggwMrjgehX55
-         0/vTf4IOLWnQjcuAfaepwz/H1EgDRHp46d/ez5plPaNkgNQW0dZpRctugu/Zq98veX7o
-         cJBjmyRtr37KfbS1LQIAuDVHm1F2bud61v/6U/M5Y5oJ/eJa3uLjwUnCTrX0rf1PY/3C
-         8+sOSbr7lxKUFphSz+0248BXC6Y+nYSyMEs1ptHalMee3LIVA133pcDS/jszG0L1ouEV
-         1DVRu74fITtEh+vrNIRIRmb/XueWyQSjzHQghbIVJqQCeDMB4X2rL7oXUhLKA7+ARiim
-         UW6g==
-X-Gm-Message-State: AOJu0YwDI7mkcF1A38gtAzuVy7sEPJXRr50BW5SD9MnbIwGKZTCtPIc9
-        csI1dXNgL9bhlWenp/4oaKAFng==
-X-Google-Smtp-Source: AGHT+IEnUt712GLa7l6H3ls8ICRUbtE/Y6r3iAIzhxkPkhXkmuW0uCxLL9ywUhnD4fUrSBpo+16v7w==
-X-Received: by 2002:a17:907:2cf1:b0:9a5:cb18:3b11 with SMTP id hz17-20020a1709072cf100b009a5cb183b11mr8093371ejc.17.1693896857246;
-        Mon, 04 Sep 2023 23:54:17 -0700 (PDT)
-Received: from [192.168.0.22] (77-252-46-238.static.ip.netia.com.pl. [77.252.46.238])
-        by smtp.gmail.com with ESMTPSA id g24-20020a170906395800b00992e265495csm7161204eje.212.2023.09.04.23.54.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Sep 2023 23:54:16 -0700 (PDT)
-Message-ID: <f348a896-93dc-8181-adfe-77ff73ae6c3a@linaro.org>
-Date:   Tue, 5 Sep 2023 08:54:15 +0200
+        with ESMTP id S1353673AbjIEHLI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Sep 2023 03:11:08 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1012ACCB;
+        Tue,  5 Sep 2023 00:11:05 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3856YYvi029908;
+        Tue, 5 Sep 2023 07:10:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=CicEJnznBAhMloNzVL9Wyk+0gAikM4+YSKPIwH/GY3I=;
+ b=XFpwLYQjzHNGih18/OTEsHtfqNvjAWfNU6VYiygLgKMrsfEJ57vG2Us4cgzJ0Vd5hx0C
+ hUBQoPb/ItRJx+Lew2f4L6W00alHJHXmwSK6zsFWxPAWgg8P40/IlBQMhBuZuuISmLWb
+ 4Ak1fQlou20NzMjhDuiZN2s1HvkmGSfRS1t0XbUmioZPIzzNyPLokuoiNaS8B+LGwC3Q
+ Cb76r+1ZgcMDk97iLzF2sW1dOBgAYqZm5M8KUO6iAiOrX5CiE2gcY+ZcsPdirsNu0cEk
+ 26qjFvEsdg7Kzqi6o8CrH8NWF3R6MfyV+aMC8Xek6hHhpmAhCroick3ajzS4XM6uP9es Ww== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3swpr6gqck-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 05 Sep 2023 07:10:57 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3857Autu012502
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 5 Sep 2023 07:10:56 GMT
+Received: from [10.216.59.199] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Tue, 5 Sep
+ 2023 00:10:47 -0700
+Message-ID: <e864890e-89cc-a37a-99c1-73a521790673@quicinc.com>
+Date:   Tue, 5 Sep 2023 12:40:42 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [PATCH 4/5] dt-bindings: usb: dwc3: Add SDX75 compatible
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH 3/5] dt-bindings: usb: dwc3: Add missing SDX65 compatible
 Content-Language: en-US
-To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, vkoul@kernel.org,
-        kishon@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        gregkh@linuxfoundation.org, abel.vesa@linaro.org,
-        quic_wcheng@quicinc.com
-Cc:     linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, kernel@quicinc.com
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <gregkh@linuxfoundation.org>, <abel.vesa@linaro.org>,
+        <quic_wcheng@quicinc.com>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <kernel@quicinc.com>
 References: <1693889028-6485-1-git-send-email-quic_rohiagar@quicinc.com>
- <1693889028-6485-5-git-send-email-quic_rohiagar@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1693889028-6485-5-git-send-email-quic_rohiagar@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+ <1693889028-6485-4-git-send-email-quic_rohiagar@quicinc.com>
+ <96c76c55-d5d4-e4ef-e7c3-ee35b2d7ad78@linaro.org>
+ <b8bb019d-6832-a956-b314-e7861748d188@linaro.org>
+From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
+In-Reply-To: <b8bb019d-6832-a956-b314-e7861748d188@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: sHU1DPaVwMOgJiexu9Pdp_UmQwFjUnyJ
+X-Proofpoint-GUID: sHU1DPaVwMOgJiexu9Pdp_UmQwFjUnyJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-09-05_05,2023-08-31_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
+ lowpriorityscore=0 malwarescore=0 suspectscore=0 bulkscore=0
+ impostorscore=0 mlxlogscore=668 clxscore=1015 adultscore=0
+ priorityscore=1501 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2308100000 definitions=main-2309050063
 X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,14 +88,33 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 05/09/2023 06:43, Rohit Agarwal wrote:
-> Document the SDX75 dwc3 compatible.
-> 
-> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
-> ---
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On 9/5/2023 12:21 PM, Krzysztof Kozlowski wrote:
+> On 05/09/2023 08:49, Krzysztof Kozlowski wrote:
+>> On 05/09/2023 06:43, Rohit Agarwal wrote:
+>>> Add missing SDX65 compatible for specifying the clocks used.
+>>>
+>>> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
+>>> ---
+>>>   Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 1 +
+>>>   1 file changed, 1 insertion(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+>>> index 5c13229..fa51f50 100644
+>>> --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+>>> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+>>> @@ -186,6 +186,7 @@ allOf:
+>>>                 - qcom,sdm670-dwc3
+>>>                 - qcom,sdm845-dwc3
+>>>                 - qcom,sdx55-dwc3
+>>> +              - qcom,sdx65-dwc3
+>> That's not a complete change. Update the rest of the file.
+> Hm, your subject is confusing. The SDX65 is not missing and you do not
+> add missing compatible.
+Sure will rephrase the subject for this.
 
-Best regards,
-Krzysztof
-
+Thanks,
+Rohit.
+> Best regards,
+> Krzysztof
+>
