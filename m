@@ -2,69 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11D82791DC2
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Sep 2023 21:41:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E8D1791FC7
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Sep 2023 02:12:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234650AbjIDTlp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Sep 2023 15:41:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39292 "EHLO
+        id S237910AbjIEANA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Sep 2023 20:13:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234618AbjIDTlo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Sep 2023 15:41:44 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D643BB4
-        for <linux-usb@vger.kernel.org>; Mon,  4 Sep 2023 12:41:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D08E6CE0EA6
-        for <linux-usb@vger.kernel.org>; Mon,  4 Sep 2023 19:41:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 238EEC433C8
-        for <linux-usb@vger.kernel.org>; Mon,  4 Sep 2023 19:41:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693856497;
-        bh=an+7dMuefPMqijVFq36QSkFfgBVscWxisqmHZpSB6Go=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=uaZv3xvf+qmzgfKodpopkThCvb308eC9vwsRo2DmG1Pqb03iKdJ+uWbFC256M8iYt
-         yys8oRDo3bdSuCiYck7jrIyHvzHIRYxTrxkWuF5PVFLdWvZjKi4aU9fQbvpJak9KxC
-         w131OtBDKBNO2gQpUCMhAQBAWKbxy966LNKmd7hj+s4PLcp8WvZ4Ryns2qoZSmCC98
-         smAb46DM6EWvzipiyWTvcKX9LoTcaulMArrBmNX13jOMx+zQKJhHd5k5AoLaTSYz/u
-         1EsidPzY6whT1DvK/Fe9Vq3lXZkf3qrUkIUuUOMrvrSLSohKyEGw1vNAg/ODPphU4h
-         oNhD+H1xuTGTQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id EEC90C4332E; Mon,  4 Sep 2023 19:41:36 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 217862] [BUG] Alauda driver causes oops when inserted with card
- in with transfer buffer is on stack, throws errors if card is inserted
- afterwards.
-Date:   Mon, 04 Sep 2023 19:41:36 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: pawlick3r@proton.me
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-217862-208809-0MUfEtFBKM@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-217862-208809@https.bugzilla.kernel.org/>
-References: <bug-217862-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S237503AbjIEAM7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Sep 2023 20:12:59 -0400
+Received: from vps.xff.cz (vps.xff.cz [195.181.215.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0CCFE4D;
+        Mon,  4 Sep 2023 17:12:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xff.cz; s=mail;
+        t=1693872761; bh=BdHr5xYzJaXpVVjrVQyCyMhqKo0QPrh0h1mxW+BeCdk=;
+        h=Date:From:To:Subject:X-My-GPG-KeyId:References:From;
+        b=sCAZbCxG4vDYd8PkSat1sRd/mrRSogl2lERQpDPcT0EpkfGeutxnj0JDslll30xMP
+         SUFbCkURxw4uAOAP+fSPk7VL24AZe+I1tyxIfgR1rhN8JlSWFFqNMgqUyJewpC+lih
+         w28bXq0ZLiHQhLX5YFnqIIDZjFwmoPkDKwqWh6M0=
+Date:   Tue, 5 Sep 2023 02:12:40 +0200
+From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>
+To:     Sascha Hauer <s.hauer@pengutronix.de>, linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH 1/2] usb: gadget: u_ether: Do not make UDC parent of the
+ net device
+Message-ID: <gu73djslgompoxoouph337njqoe67mntrneupbqwdoy7b2sf7e@zdj5bncze6q2>
+Mail-Followup-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>, 
+        Sascha Hauer <s.hauer@pengutronix.de>, linux-usb@vger.kernel.org, 
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-kernel@vger.kernel.org, kernel@pengutronix.de
+X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
+ <https://xff.cz/key.txt>
+References: <20221104131031.850850-1-s.hauer@pengutronix.de>
+ <20221104131031.850850-2-s.hauer@pengutronix.de>
+ <miiwk4pah7tgdszugqmhnnaweyt7wrw3bxmuliyva3k7nccyab@lsyhvutbuzx2>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <miiwk4pah7tgdszugqmhnnaweyt7wrw3bxmuliyva3k7nccyab@lsyhvutbuzx2>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,157 +49,144 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D217862
+On Mon, Sep 04, 2023 at 03:14:30PM +0200, megi xff wrote:
+> 
+> Hi,
+> 
+> On Fri, Nov 04, 2022 at 02:10:30PM +0100, Sascha Hauer wrote:
+> > ing-List: linux-kernel@vger.kernel.org
+> > 
+> > The UDC is not a suitable parent of the net device as the UDC can
+> > change or vanish during the lifecycle of the ethernet gadget. This
+> > can be illustrated with the following:
+> > 
+> > mkdir -p /sys/kernel/config/usb_gadget/mygadget
+> > cd /sys/kernel/config/usb_gadget/mygadget
+> > mkdir -p configs/c.1/strings/0x409
+> > echo "C1:Composite Device" > configs/c.1/strings/0x409/configuration
+> > mkdir -p functions/ecm.usb0
+> > ln -s functions/ecm.usb0 configs/c.1/
+> > echo "dummy_udc.0" > UDC
+> > rmmod dummy_hcd
+> > 
+> > The 'rmmod' removes the UDC from the just created gadget, leaving
+> > the still existing net device with a no longer existing parent.
+> 
+> I have an even simpler reproducer on Pinephone Pro/RK3399 SoC. All it takes to
+> trigger the use after free and kernel panic in my case is to plug in a USB dock
+> to make DWC3 DRD switch to host mode and then unplug it to make it switch back to
+> peripheral mode.
+> 
+> This triggers a call to dwc3_gadget_exit and then to dwc3_gadget_init later on
+> 
+> https://elixir.bootlin.com/linux/latest/source/drivers/usb/dwc3/gadget.c#L4546
+> 
+> Then symlink to the net device becames broken in sysfs:
+> 
+>   https://megous.com/dl/tmp/3d8061f1749a7b2b.png
+> 
+> And after this happens, there's a kernel panic when removing the rndis gadget
+> configuration from configfs: https://paste.mozilla.org/Z5DFP9BV
+> (and possibly other issues, but the kernel panic is the most noticable :))
+> 
+> Applaying this patch makes the issue go away. So there definitely seems to
+> be some device lifetime issue somewhere in there.
 
---- Comment #5 from pawlick3r@proton.me ---
-(In reply to Alan Stern from comment #4)
-> Created attachment 305027 [details]
-> Fix IO buffer on stack in alauda subdriver
->=20
-> Try the attached patch.  It should fix all the other instances of I/O done
-> to a buffer on the stack in the alauda driver.
+Looks like this patch just masks an underlying issue. Eg. with DWC3 as UDC,
+rndis_bind/rndis_unbind is called multiple times (each time USB role switches
+from host to peripheral). This is because DWC3 re-creates the gadget device
+each time. During every call rndis_bind gets a pointer to a newly created
+gadget, but gether_set_gadget() is only called:
 
-It fixes that error, but not the deference error:
+  if (!rndis_opts->bound) {
+  	...
+  }
 
-[   63.134053] usb 1-1.2: new full-speed USB device number 6 using ehci-pci
-[   63.260694] usb 1-1.2: New USB device found, idVendor=3D0584, idProduct=
-=3D0008,
-bcdDevice=3D 1.02
-[   63.260715] usb 1-1.2: New USB device strings: Mfr=3D1, Product=3D2,
-SerialNumber=3D0
-[   63.260721] usb 1-1.2: Product: USB SmartMedia Adapter
-[   63.260726] usb 1-1.2: Manufacturer: YAMAICHI ELECTRONICS Co.,Ltd.
-[   63.341974] usbcore: registered new interface driver usb-storage
-[   63.348722] ums-alauda 1-1.2:1.0: USB Mass Storage device detected
-[   63.348926] scsi host6: usb-storage 1-1.2:1.0
-[   63.349032] usbcore: registered new interface driver ums-alauda
-[   64.355307] scsi 6:0:0:0: Direct-Access     Fujifilm DPC-R1 (Alauda)  01=
-02
-PQ: 0 ANSI: 0 CCS
-[   64.355494] scsi 6:0:0:1: Direct-Access     Fujifilm DPC-R1 (Alauda)  01=
-02
-PQ: 0 ANSI: 0 CCS
-[   64.356335] sd 6:0:0:0: Attached scsi generic sg1 type 0
-[   64.356814] sd 6:0:0:0: [sdb] Media removed, stopped polling
-[   64.356970] sd 6:0:0:1: Attached scsi generic sg2 type 0
-[   64.357651] sd 6:0:0:0: [sdb] Attached SCSI removable disk
-[   95.571120] usb 1-1.2: reset full-speed USB device number 6 using ehci-p=
-ci
-[   95.686034] sd 6:0:0:1: [sdc] 16000 512-byte logical blocks: (8.19 MB/7.=
-81
-MiB)
-[   95.686147] sd 6:0:0:1: [sdc] Test WP failed, assume Write Enabled
-[   95.686243] sd 6:0:0:1: [sdc] Asking for cache data failed
-[   95.686260] sd 6:0:0:1: [sdc] Assuming drive cache: write through
-[  126.209261] BUG: kernel NULL pointer dereference, address: 0000000000000=
-000
-[  126.209295] #PF: supervisor read access in kernel mode
-[  126.209306] #PF: error_code(0x0000) - not-present page
-[  126.209453] PGD 0 P4D 0=20
-[  126.209474] Oops: 0000 [#1] PREEMPT SMP PTI
-[  126.209491] CPU: 3 PID: 2777 Comm: usb-storage Not tainted 6.5.1-custom =
-#3
-[  126.209507] Hardware name: LENOVO 42872VU/42872VU, BIOS 8DET54WW (1.24 )
-10/18/2011
-[  126.209513] RIP: 0010:alauda_transport+0x4e6/0x12e2 [ums_alauda]
-[  126.209538] Code: 0f 4c 8b b1 98 00 00 00 49 83 fe 01 0f 87 6f 0a 00 00 =
-4b
-8d 0c 76 44 89 e8 44 8b 6d a8 48 c1 e1 04 48 8b 4c 0b 20 48 8b 04 c1 <42> 0=
-f b7
-04 68 66 83 f8 ff 0f 84 18 ff ff ff 44 0f b7 f8 49 83 fe
-[  126.209546] RSP: 0018:ffffa17ac0bb3cd0 EFLAGS: 00010206
-[  126.209555] RAX: 0000000000000000 RBX: ffff8ab097457a80 RCX:
-ffff8ab1913c6ac8
-[  126.209561] RDX: 00000000019c2003 RSI: ffffd88bc0000000 RDI:
-0000000000000000
-[  126.209567] RBP: ffffa17ac0bb3db0 R08: 0000000000000000 R09:
-0000000000000000
-[  126.209573] R10: 0000000000000001 R11: 0000000000000000 R12:
-ffff8ab08121c000
-[  126.209578] R13: 0000000000000000 R14: 0000000000000001 R15:
-ffff8ab081915138
-[  126.209584] FS:  0000000000000000(0000) GS:ffff8ab19a2c0000(0000)
-knlGS:0000000000000000
-[  126.209591] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  126.209597] CR2: 0000000000000000 CR3: 000000008e03c006 CR4:
-00000000000606e0
-[  126.209604] Call Trace:
-[  126.209610]  <TASK>
-[  126.209618]  ? show_regs+0x6e/0x80
-[  126.209632]  ? __die+0x29/0x70
-[  126.209641]  ? page_fault_oops+0x154/0x4a0
-[  126.209654]  ? alauda_transport+0x4e6/0x12e2 [ums_alauda]
-[  126.209671]  ? search_exception_tables+0x65/0x70
-[  126.209686]  ? kernelmode_fixup_or_oops+0xa2/0x120
-[  126.209697]  ? __bad_area_nosemaphore+0x179/0x280
-[  126.209712]  ? bad_area_nosemaphore+0x16/0x20
-[  126.209725]  ? do_user_addr_fault+0x2ce/0x6b0
-[  126.209741]  ? exc_page_fault+0x7d/0x190
-[  126.209755]  ? asm_exc_page_fault+0x2b/0x30
-[  126.209774]  ? alauda_transport+0x4e6/0x12e2 [ums_alauda]
-[  126.209799]  ? __schedule+0x3cb/0x15d0
-[  126.209825]  usb_stor_invoke_transport+0x45/0x520 [usb_storage]
-[  126.209856]  ? __wait_for_common+0x15b/0x190
-[  126.209868]  ? __pfx_schedule_timeout+0x10/0x10
-[  126.209881]  usb_stor_transparent_scsi_command+0x12/0x20 [usb_storage]
-[  126.209905]  usb_stor_control_thread+0x20b/0x2d0 [usb_storage]
-[  126.209931]  ? __pfx_usb_stor_control_thread+0x10/0x10 [usb_storage]
-[  126.209955]  kthread+0xfb/0x130
-[  126.209967]  ? __pfx_kthread+0x10/0x10
-[  126.209978]  ret_from_fork+0x40/0x60
-[  126.209988]  ? __pfx_kthread+0x10/0x10
-[  126.209998]  ret_from_fork_asm+0x1b/0x30
-[  126.210016]  </TASK>
-[  126.210020] Modules linked in: ums_alauda usb_storage rfcomm ccm bnep
-intel_rapl_msr mei_hdcp snd_hda_codec_hdmi snd_ctl_led snd_hda_codec_conexa=
-nt
-snd_hda_codec_generic uvcvideo videobuf2_vmalloc uvc snd_hda_intel btusb
-snd_intel_dspcfg btrtl snd_intel_sdw_acpi videobuf2_memops btbcm btintel bt=
-mtk
-videobuf2_v4l2 bluetooth snd_hda_codec videodev videobuf2_common mc
-ecdh_generic intel_rapl_common x86_pkg_temp_thermal intel_powerclamp corete=
-mp
-binfmt_misc snd_hda_core rapl snd_hwdep intel_cstate iwldvm snd_pcm
-nls_iso8859_1 think_lmi input_leds joydev mac80211 at24 serio_raw
-firmware_attributes_class wmi_bmof libarc4 snd_seq_midi snd_seq_midi_event
-iwlwifi snd_rawmidi thinkpad_acpi snd_seq snd_seq_device nvram snd_timer
-ledtrig_audio mei_me platform_profile cfg80211 snd mei soundcore mac_hid
-sch_fq_codel msr parport_pc ppdev lp pstore_blk parport ramoops pstore_zone
-reed_solomon efi_pstore ip_tables x_tables autofs4 i915 drm_buddy i2c_algo_=
-bit
-ttm crct10dif_pclmul drm_display_helper crc32_pclmul ghash_clmulni_intel cec
-[  126.210212]  sha512_ssse3 rc_core aesni_intel sdhci_pci crypto_simd
-drm_kms_helper ahci cryptd cqhci psmouse i2c_i801 libahci drm i2c_smbus lpc=
-_ich
-e1000e sdhci video wmi
-[  126.210262] CR2: 0000000000000000
-[  126.210270] ---[ end trace 0000000000000000 ]---
-[  126.974625] RIP: 0010:alauda_transport+0x4e6/0x12e2 [ums_alauda]
-[  126.974660] Code: 0f 4c 8b b1 98 00 00 00 49 83 fe 01 0f 87 6f 0a 00 00 =
-4b
-8d 0c 76 44 89 e8 44 8b 6d a8 48 c1 e1 04 48 8b 4c 0b 20 48 8b 04 c1 <42> 0=
-f b7
-04 68 66 83 f8 ff 0f 84 18 ff ff ff 44 0f b7 f8 49 83 fe
-[  126.974670] RSP: 0018:ffffa17ac0bb3cd0 EFLAGS: 00010206
-[  126.974680] RAX: 0000000000000000 RBX: ffff8ab097457a80 RCX:
-ffff8ab1913c6ac8
-[  126.974687] RDX: 00000000019c2003 RSI: ffffd88bc0000000 RDI:
-0000000000000000
-[  126.974693] RBP: ffffa17ac0bb3db0 R08: 0000000000000000 R09:
-0000000000000000
-[  126.974698] R10: 0000000000000001 R11: 0000000000000000 R12:
-ffff8ab08121c000
-[  126.974703] R13: 0000000000000000 R14: 0000000000000001 R15:
-ffff8ab081915138
-[  126.974709] FS:  0000000000000000(0000) GS:ffff8ab19a2c0000(0000)
-knlGS:0000000000000000
-[  126.974716] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  126.974722] CR2: 0000000000000000 CR3: 0000000113a8a005 CR4:
-00000000000606e0
-[  126.974729] note: usb-storage[2777] exited with irqs disabled
+which only happens on the first call to rndis_bind.
 
---=20
-You may reply to this email to add a comment.
+On any further calls to rndis_bind(), gether_set_gadget is not called, because
+rndis_opts->bound is already set and thus netdev private data keep pointing to
+some old, deleted gadget device.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+https://elixir.bootlin.com/linux/latest/source/drivers/usb/gadget/function/f_rndis.c#L704
+https://elixir.bootlin.com/linux/latest/source/drivers/usb/gadget/function/u_ether.c#L890
+
+It looks like this whole code was not really written with assumption that
+gadget devices can be deleted and re-added like this.
+
+Not sure where the bug really is... if f_* drivers should better handle gadget changes,
+or DWC3 should not re-create the gadget like it does on mode changes, or
+elsewhere.
+
+kind regards,
+	o.
+
+> kind regards,
+> 	o.
+> 
+> > Accessing the ethernet device with commands like:
+> > 
+> > ip --details link show usb0
+> > 
+> > will result in a KASAN splat:
+> > 
+> > ==================================================================
+> > BUG: KASAN: use-after-free in if_nlmsg_size+0x3e8/0x528
+> > Read of size 4 at addr c5c84754 by task ip/357
+> > 
+> > CPU: 3 PID: 357 Comm: ip Not tainted 6.1.0-rc3-00013-gd14953726b24-dirty #324
+> > Hardware name: Freescale i.MX6 Quad/DualLite (Device Tree)
+> >  unwind_backtrace from show_stack+0x10/0x14
+> >  show_stack from dump_stack_lvl+0x58/0x70
+> >  dump_stack_lvl from print_report+0x134/0x4d4
+> >  print_report from kasan_report+0x78/0x10c
+> >  kasan_report from if_nlmsg_size+0x3e8/0x528
+> >  if_nlmsg_size from rtnl_getlink+0x2b4/0x4d0
+> >  rtnl_getlink from rtnetlink_rcv_msg+0x1f4/0x674
+> >  rtnetlink_rcv_msg from netlink_rcv_skb+0xb4/0x1f8
+> >  netlink_rcv_skb from netlink_unicast+0x294/0x478
+> >  netlink_unicast from netlink_sendmsg+0x328/0x640
+> >  netlink_sendmsg from ____sys_sendmsg+0x2a4/0x3b4
+> >  ____sys_sendmsg from ___sys_sendmsg+0xc8/0x12c
+> >  ___sys_sendmsg from sys_sendmsg+0xa0/0x120
+> >  sys_sendmsg from ret_fast_syscall+0x0/0x1c
+> > 
+> > Solve this by not setting the parent of the ethernet device.
+> > 
+> > Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+> > ---
+> >  drivers/usb/gadget/function/u_ether.c | 4 ----
+> >  1 file changed, 4 deletions(-)
+> > 
+> > diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
+> > index e06022873df16..8f12f3f8f6eeb 100644
+> > --- a/drivers/usb/gadget/function/u_ether.c
+> > +++ b/drivers/usb/gadget/function/u_ether.c
+> > @@ -798,7 +798,6 @@ struct eth_dev *gether_setup_name(struct usb_gadget *g,
+> >  	net->max_mtu = GETHER_MAX_MTU_SIZE;
+> >  
+> >  	dev->gadget = g;
+> > -	SET_NETDEV_DEV(net, &g->dev);
+> >  	SET_NETDEV_DEVTYPE(net, &gadget_type);
+> >  
+> >  	status = register_netdev(net);
+> > @@ -873,8 +872,6 @@ int gether_register_netdev(struct net_device *net)
+> >  	struct usb_gadget *g;
+> >  	int status;
+> >  
+> > -	if (!net->dev.parent)
+> > -		return -EINVAL;
+> >  	dev = netdev_priv(net);
+> >  	g = dev->gadget;
+> >  
+> > @@ -905,7 +902,6 @@ void gether_set_gadget(struct net_device *net, struct usb_gadget *g)
+> >  
+> >  	dev = netdev_priv(net);
+> >  	dev->gadget = g;
+> > -	SET_NETDEV_DEV(net, &g->dev);
+> >  }
+> >  EXPORT_SYMBOL_GPL(gether_set_gadget);
+> >  
+> > -- 
+> > 2.30.2
+> > 
