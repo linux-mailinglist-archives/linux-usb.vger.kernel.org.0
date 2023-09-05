@@ -2,80 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DB447927D7
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Sep 2023 18:38:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6055E792742
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Sep 2023 18:35:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232285AbjIEQC7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Sep 2023 12:02:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35232 "EHLO
+        id S236267AbjIEQCu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Sep 2023 12:02:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354274AbjIEKa7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Sep 2023 06:30:59 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1C71E8;
-        Tue,  5 Sep 2023 03:30:56 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3859mW5d013785;
-        Tue, 5 Sep 2023 10:30:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=vt4HQkzBRhpNc52cASEe6rG3/9p26Oq4MI20JoPy4ZY=;
- b=EJGo4gVsLQpSOyh+o2GHr7C+8wrOE6/TZuyIMyK/LJVkC5VdpxqtV/j+kWPnK1OBvMyg
- F48y5Uo3Hu0qZKthIz2FwKdq23M6wV8ZnxUDcZ/CJ20PEVNGhSa8cShZv/TXPEDDqFL8
- rLJhYFpJMhguttVX//lPbR3VKGVfWQ1hVou0uosmZtfp1q6Hkrh5ptqCTbPDML8Zb+UC
- uucoPUZjX8U237fljpxxTpfMMujOW4IzkIUDBr7RU5OqQydwprq94sSzNYes7b55s46S
- KHz/nhzbfQgqG+cuPD+4BKLtA0VTBN7kJY1CKuxRK1KkRSNfZIvoJuH05mlvsCrRm8PM SA== 
-Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3sweb521t1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 05 Sep 2023 10:30:44 +0000
-Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 385AUfJA018133;
-        Tue, 5 Sep 2023 10:30:41 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3sux4km170-1;
-        Tue, 05 Sep 2023 10:30:41 +0000
-Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 385AUeHO018094;
-        Tue, 5 Sep 2023 10:30:41 GMT
-Received: from hu-sgudaval-hyd.qualcomm.com (hu-rohiagar-hyd.qualcomm.com [10.213.106.138])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 385AUfMH018117;
-        Tue, 05 Sep 2023 10:30:41 +0000
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3970568)
-        id 856721D0C; Tue,  5 Sep 2023 16:00:40 +0530 (+0530)
-From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
-To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        vkoul@kernel.org, kishon@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        gregkh@linuxfoundation.org, abel.vesa@linaro.org,
-        quic_wcheng@quicinc.com
-Cc:     linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, kernel@quicinc.com,
-        Rohit Agarwal <quic_rohiagar@quicinc.com>
-Subject: [PATCH v2 4/5] dt-bindings: usb: dwc3: Add SDX75 compatible
-Date:   Tue,  5 Sep 2023 16:00:37 +0530
-Message-Id: <1693909838-6682-5-git-send-email-quic_rohiagar@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1693909838-6682-1-git-send-email-quic_rohiagar@quicinc.com>
-References: <1693909838-6682-1-git-send-email-quic_rohiagar@quicinc.com>
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: IDBf--MoXeEL5nB88w5hg8CklhE5Rl0v
-X-Proofpoint-GUID: IDBf--MoXeEL5nB88w5hg8CklhE5Rl0v
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-09-05_08,2023-08-31_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- lowpriorityscore=0 mlxscore=0 priorityscore=1501 clxscore=1015
- mlxlogscore=582 bulkscore=0 phishscore=0 malwarescore=0 spamscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2309050093
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=no
+        with ESMTP id S1354301AbjIEKiS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Sep 2023 06:38:18 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B3891E8;
+        Tue,  5 Sep 2023 03:38:13 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 385AbJBS1008732, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 385AbJBS1008732
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 5 Sep 2023 18:37:19 +0800
+Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32; Tue, 5 Sep 2023 18:37:47 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS01.realtek.com.tw (172.21.6.94) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Tue, 5 Sep 2023 18:37:45 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::7445:d92b:d0b3:f79c]) by
+ RTEXMBS04.realtek.com.tw ([fe80::7445:d92b:d0b3:f79c%5]) with mapi id
+ 15.01.2375.007; Tue, 5 Sep 2023 18:37:45 +0800
+From:   Hayes Wang <hayeswang@realtek.com>
+To:     Paolo Abeni <pabeni@redhat.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        nic_swsd <nic_swsd@realtek.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [PATCH net] r8152: avoid the driver drops a lot of packets
+Thread-Topic: [PATCH net] r8152: avoid the driver drops a lot of packets
+Thread-Index: AQHZ3ynCVnk5WSMfQUWpVA7+s1E7KrALfhaAgACIBVA=
+Date:   Tue, 5 Sep 2023 10:37:45 +0000
+Message-ID: <48d03f3134bf49c0b04b34464cd7487b@realtek.com>
+References: <20230904121706.7132-420-nic_swsd@realtek.com>
+ <32c71d3245127b4aa02b8abd75edcb8f5767e966.camel@redhat.com>
+In-Reply-To: <32c71d3245127b4aa02b8abd75edcb8f5767e966.camel@redhat.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.22.228.6]
+x-kse-serverinfo: RTEXMBS01.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,42 +72,22 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Document the SDX75 dwc3 compatible.
-
-Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-index 018117b..d78b721 100644
---- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-@@ -34,6 +34,7 @@ properties:
-           - qcom,sdm845-dwc3
-           - qcom,sdx55-dwc3
-           - qcom,sdx65-dwc3
-+          - qcom,sdx75-dwc3
-           - qcom,sm4250-dwc3
-           - qcom,sm6115-dwc3
-           - qcom,sm6125-dwc3
-@@ -181,6 +182,7 @@ allOf:
-               - qcom,sdm845-dwc3
-               - qcom,sdx55-dwc3
-               - qcom,sdx65-dwc3
-+              - qcom,sdx75-dwc3
-               - qcom,sm6350-dwc3
-     then:
-       properties:
-@@ -364,6 +366,7 @@ allOf:
-               - qcom,sdm845-dwc3
-               - qcom,sdx55-dwc3
-               - qcom,sdx65-dwc3
-+              - qcom,sdx75-dwc3
-               - qcom,sm4250-dwc3
-               - qcom,sm6125-dwc3
-               - qcom,sm6350-dwc3
--- 
-2.7.4
-
+UGFvbG8gQWJlbmkgPHBhYmVuaUByZWRoYXQuY29tPg0KPiBTZW50OiBUdWVzZGF5LCBTZXB0ZW1i
+ZXIgNSwgMjAyMyA2OjExIFBNDQpbLi4uXQ0KPiA+IC0gICAgICAgICAgICAgICAgICAgICAvKiBs
+aW1pdCB0aGUgc2tiIG51bWJlcnMgZm9yIHJ4X3F1ZXVlICovDQo+ID4gLSAgICAgICAgICAgICAg
+ICAgICAgIGlmICh1bmxpa2VseShza2JfcXVldWVfbGVuKCZ0cC0+cnhfcXVldWUpID49DQo+IDEw
+MDApKQ0KPiA+IC0gICAgICAgICAgICAgICAgICAgICAgICAgICAgIGJyZWFrOw0KPiA+IC0NCj4g
+DQo+IERyb3BwaW5nIHRoaXMgY2hlY2sgbG9va3MgZGFuZ2Vyb3VzIHRvIG1lLiBXaGF0IGlmIHBh
+dXNlIGZyYW1lcyBhcmUNCj4gZGlzYWJsZWQgb24gdGhlIG90aGVyIGVuZCBvciBkcm9wcGVkPyBJ
+dCBsb29rcyBsaWtlIHRoaXMgd291bGQgY2F1c2UNCj4gdW5saW1pdGVkIG1lbW9yeSBjb25zdW1w
+dGlvbj8hPw0KDQpXaGVuIHRoZSBkcml2ZXIgc3RvcHMgc3VibWl0dGluZyByeCwgdGhlIGRyaXZl
+ciB3b3VsZG4ndCBnZXQgYW55IHBhY2tldA0KZnJvbSB0aGUgZGV2aWNlIGFmdGVyIHRoZSBwcmV2
+aW91cyB1cmJzIHdoaWNoIGhhdmUgYmVlbiBzdWJtaXR0ZWQgcmV0dXJuLg0KVGhhdCBpcywgc2ti
+X3F1ZXVlX2xlbigmdHAtPnJ4X3F1ZXVlKSB3b3VsZG4ndCBpbmNyZWFzZSBhbnkgbW9yZSB1bnRp
+bA0KdGhlIGRyaXZlciBzdGFydHMgc3VibWl0dGluZyByeCBhZ2Fpbi4NCg0KTm93LCB0aGUgZHJp
+dmVyIHN0b3BzIHN1Ym1pdHRpbmcgcnggd2hlbiB0aGUgc2tiX3F1ZXVlX2xlbiBtb3JlIHRoYW4g
+MjU2LA0Kc28gdGhlIGNoZWNrIGJlY29tZXMgcmVkdW5kYW50LiBUaGUgc2tiX3F1ZXVlX2xlbiBo
+YXMgYmVlbiBsaW1pdGVkIGxlc3MNCnRoYW4gMTAwMC4NCg0KQmVzaWRlcywgaWYgdGhlIGZsb3cg
+Y29udHJvbCBpcyBkaXNhYmxlZCwgdGhlIHBhY2tldHMgbWF5IGJlIGRyb3BwZWQgYnkNCnRoZSBo
+YXJkd2FyZSB3aGVuIHRoZSBGSUZPIG9mIHRoZSBkZXZpY2UgaXMgZnVsbCwgYWZ0ZXIgdGhlIGRy
+aXZlciBzdG9wcw0Kc3VibWl0dGluZyByeC4NCg0KQmVzdCBSZWdhcmRzLA0KSGF5ZXMNCg0K
