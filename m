@@ -2,92 +2,148 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6055E792742
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Sep 2023 18:35:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2D7C7927E7
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Sep 2023 18:41:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236267AbjIEQCu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Sep 2023 12:02:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43296 "EHLO
+        id S235749AbjIEQC2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Sep 2023 12:02:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354301AbjIEKiS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Sep 2023 06:38:18 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B3891E8;
-        Tue,  5 Sep 2023 03:38:13 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 385AbJBS1008732, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 385AbJBS1008732
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 5 Sep 2023 18:37:19 +0800
-Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Tue, 5 Sep 2023 18:37:47 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS01.realtek.com.tw (172.21.6.94) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Tue, 5 Sep 2023 18:37:45 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::7445:d92b:d0b3:f79c]) by
- RTEXMBS04.realtek.com.tw ([fe80::7445:d92b:d0b3:f79c%5]) with mapi id
- 15.01.2375.007; Tue, 5 Sep 2023 18:37:45 +0800
-From:   Hayes Wang <hayeswang@realtek.com>
-To:     Paolo Abeni <pabeni@redhat.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>
-CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        nic_swsd <nic_swsd@realtek.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH net] r8152: avoid the driver drops a lot of packets
-Thread-Topic: [PATCH net] r8152: avoid the driver drops a lot of packets
-Thread-Index: AQHZ3ynCVnk5WSMfQUWpVA7+s1E7KrALfhaAgACIBVA=
-Date:   Tue, 5 Sep 2023 10:37:45 +0000
-Message-ID: <48d03f3134bf49c0b04b34464cd7487b@realtek.com>
-References: <20230904121706.7132-420-nic_swsd@realtek.com>
- <32c71d3245127b4aa02b8abd75edcb8f5767e966.camel@redhat.com>
-In-Reply-To: <32c71d3245127b4aa02b8abd75edcb8f5767e966.camel@redhat.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.22.228.6]
-x-kse-serverinfo: RTEXMBS01.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        with ESMTP id S1354354AbjIEK5Q (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Sep 2023 06:57:16 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ABE11AB
+        for <linux-usb@vger.kernel.org>; Tue,  5 Sep 2023 03:57:12 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-d78328bc2abso2011682276.2
+        for <linux-usb@vger.kernel.org>; Tue, 05 Sep 2023 03:57:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1693911431; x=1694516231; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=nFp9JN673sSpwa45B4q2HQSN730WX8grbrKR4m9d76A=;
+        b=EUXkgM9iKYXkdGIhIzbe0Itxp2yGw47ebDol5/1/y+FAIKyO0+TNzTkz2rcND3U6fS
+         jckDEAQeYd5rZR9WWdHcOokHRuwM4/z/i7YsuVJF1KXbPYYLbDJecjbmt9lPW9RQP9O5
+         WyQz5iq0B8r4JXgUbrzzAPBByLp5L5SFEGQ7Wnpb5y/eeeZOluqSkfbhPULLLxMOcakP
+         NnQtRwyeB7bIoB+/I7d1OhvvSqaxFfTpNPqiyU03tUMnyf2DsHDW6q377XRkNzFriyLI
+         8KbRILHkmBs9rbilXa5PiIXF9ob+IfoTdcOh8ynfamc5OFRq/yaJvJJHbCZDozTk/xHF
+         itKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693911431; x=1694516231;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nFp9JN673sSpwa45B4q2HQSN730WX8grbrKR4m9d76A=;
+        b=RahJIDGnOUZwUDJYZESXscJhSOKJFgglv5cd9JMy0wyulZNLzWiwRjIw644t8rAE3w
+         Zcfx2w3QtZ6VFtxZIQV+gTSI62sKmquVMjpmmFPFdooCL4PNmbtEmHTqHoIYFx+xMwGv
+         3YIBUT8meZSatZG9As9hIuVG0wl3jtVSDKp+QdKkfDcPQ9YecyZzD/y4/tD7LcUNOxzi
+         cC1cuFFaHzUkEhsQWACkGbyQ6v9dnAriae+UsgjlQxnRf8FV/rkMH4dCCHLUsbiMjxif
+         6ilt/D4ajrL29YCmr9LTAfzGUkwJ0QUX+e371yKGZs3MCPdmbSeo8YCrFoUFHg2zW9cd
+         jO1g==
+X-Gm-Message-State: AOJu0YzKuQMvOkun/edRfqrKoGmswNGPUYjZyAXjsqH5QBfYwMaWid5a
+        6n58h6fibybJYcENd3zC+nqBOvuD+ftqaUgBk5kYlg==
+X-Google-Smtp-Source: AGHT+IGZHwMQlo/ityKImZ2VeEtB90rqhklF5U6Gv8PiiU7XpveUbpNUVJmNlPMw3mBk4Obk/SUY2ph1gPYN6jbIHDo=
+X-Received: by 2002:a25:ac20:0:b0:d53:f98f:8018 with SMTP id
+ w32-20020a25ac20000000b00d53f98f8018mr13526068ybi.65.1693911431284; Tue, 05
+ Sep 2023 03:57:11 -0700 (PDT)
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230903214150.2877023-1-dmitry.baryshkov@linaro.org>
+ <20230903214150.2877023-2-dmitry.baryshkov@linaro.org> <ZPbrtAlO2Y+bjDhf@kuha.fi.intel.com>
+In-Reply-To: <ZPbrtAlO2Y+bjDhf@kuha.fi.intel.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Tue, 5 Sep 2023 13:56:59 +0300
+Message-ID: <CAA8EJpqUg2-k7LLBL38RHU1sThkXB54ca68xEMd1yMnHQcQ++w@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 01/12] Revert "drm/sysfs: Link DRM connectors to
+ corresponding Type-C connectors"
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Janne Grunau <j@jannau.net>, Simon Ser <contact@emersion.fr>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        freedreno@lists.freedesktop.org, Won Chung <wonchung@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-UGFvbG8gQWJlbmkgPHBhYmVuaUByZWRoYXQuY29tPg0KPiBTZW50OiBUdWVzZGF5LCBTZXB0ZW1i
-ZXIgNSwgMjAyMyA2OjExIFBNDQpbLi4uXQ0KPiA+IC0gICAgICAgICAgICAgICAgICAgICAvKiBs
-aW1pdCB0aGUgc2tiIG51bWJlcnMgZm9yIHJ4X3F1ZXVlICovDQo+ID4gLSAgICAgICAgICAgICAg
-ICAgICAgIGlmICh1bmxpa2VseShza2JfcXVldWVfbGVuKCZ0cC0+cnhfcXVldWUpID49DQo+IDEw
-MDApKQ0KPiA+IC0gICAgICAgICAgICAgICAgICAgICAgICAgICAgIGJyZWFrOw0KPiA+IC0NCj4g
-DQo+IERyb3BwaW5nIHRoaXMgY2hlY2sgbG9va3MgZGFuZ2Vyb3VzIHRvIG1lLiBXaGF0IGlmIHBh
-dXNlIGZyYW1lcyBhcmUNCj4gZGlzYWJsZWQgb24gdGhlIG90aGVyIGVuZCBvciBkcm9wcGVkPyBJ
-dCBsb29rcyBsaWtlIHRoaXMgd291bGQgY2F1c2UNCj4gdW5saW1pdGVkIG1lbW9yeSBjb25zdW1w
-dGlvbj8hPw0KDQpXaGVuIHRoZSBkcml2ZXIgc3RvcHMgc3VibWl0dGluZyByeCwgdGhlIGRyaXZl
-ciB3b3VsZG4ndCBnZXQgYW55IHBhY2tldA0KZnJvbSB0aGUgZGV2aWNlIGFmdGVyIHRoZSBwcmV2
-aW91cyB1cmJzIHdoaWNoIGhhdmUgYmVlbiBzdWJtaXR0ZWQgcmV0dXJuLg0KVGhhdCBpcywgc2ti
-X3F1ZXVlX2xlbigmdHAtPnJ4X3F1ZXVlKSB3b3VsZG4ndCBpbmNyZWFzZSBhbnkgbW9yZSB1bnRp
-bA0KdGhlIGRyaXZlciBzdGFydHMgc3VibWl0dGluZyByeCBhZ2Fpbi4NCg0KTm93LCB0aGUgZHJp
-dmVyIHN0b3BzIHN1Ym1pdHRpbmcgcnggd2hlbiB0aGUgc2tiX3F1ZXVlX2xlbiBtb3JlIHRoYW4g
-MjU2LA0Kc28gdGhlIGNoZWNrIGJlY29tZXMgcmVkdW5kYW50LiBUaGUgc2tiX3F1ZXVlX2xlbiBo
-YXMgYmVlbiBsaW1pdGVkIGxlc3MNCnRoYW4gMTAwMC4NCg0KQmVzaWRlcywgaWYgdGhlIGZsb3cg
-Y29udHJvbCBpcyBkaXNhYmxlZCwgdGhlIHBhY2tldHMgbWF5IGJlIGRyb3BwZWQgYnkNCnRoZSBo
-YXJkd2FyZSB3aGVuIHRoZSBGSUZPIG9mIHRoZSBkZXZpY2UgaXMgZnVsbCwgYWZ0ZXIgdGhlIGRy
-aXZlciBzdG9wcw0Kc3VibWl0dGluZyByeC4NCg0KQmVzdCBSZWdhcmRzLA0KSGF5ZXMNCg0K
+Hi Heikki,
+
+On Tue, 5 Sept 2023 at 11:50, Heikki Krogerus
+<heikki.krogerus@linux.intel.com> wrote:
+>
+> Hi Dmitry,
+>
+> On Mon, Sep 04, 2023 at 12:41:39AM +0300, Dmitry Baryshkov wrote:
+> > The kdev->fwnode pointer is never set in drm_sysfs_connector_add(), so
+> > dev_fwnode() checks never succeed, making the respective commit NOP.
+>
+> That's not true. The dev->fwnode is assigned when the device is
+> created on ACPI platforms automatically. If the drm_connector fwnode
+> member is assigned before the device is registered, then that fwnode
+> is assigned also to the device - see drm_connector_acpi_find_companion().
+>
+> But please note that even if drm_connector does not have anything in
+> its fwnode member, the device may still be assigned fwnode, just based
+> on some other logic (maybe in drivers/acpi/acpi_video.c?).
+>
+> > And if drm_sysfs_connector_add() is modified to set kdev->fwnode, it
+> > breaks drivers already using components (as it was pointed at [1]),
+> > resulting in a deadlock. Lockdep trace is provided below.
+> >
+> > Granted these two issues, it seems impractical to fix this commit in any
+> > sane way. Revert it instead.
+>
+> I think there is already user space stuff that relies on these links,
+> so I'm not sure you can just remove them like that. If the component
+> framework is not the correct tool here, then I think you need to
+> suggest some other way of creating them.
+
+The issue (that was pointed out during review) is that having a
+component code in the framework code can lead to lockups. With the
+patch #2 in place (which is the only logical way to set kdev->fwnode
+for non-ACPI systems) probing of drivers which use components and set
+drm_connector::fwnode breaks immediately.
+
+Can we move the component part to the respective drivers? With the
+patch 2 in place, connector->fwnode will be copied to the created
+kdev's fwnode pointer.
+
+Another option might be to make this drm_sysfs component registration optional.
+
+> Side note. The problem you are describing here is a limitation in the
+> component framework - right now it's made with the idea that a device
+> can represent a single component, but it really should allow a device
+> to represent multiple components. I'm not saying that you should try
+> to fix the component framework, but I just wanted to make a note about
+> this (and this is not the only problem with the component framework).
+>
+> I like the component framework as a concept, but I think it needs a
+> lot of improvements - possibly rewrite.
+
+Yes. There were several attempts to rewrite the component framework,
+but none succeeded up to now. Anyway, I consider rewriting components
+framework to be a bigger topic compared to drm connector fwnode setup.
+
+--
+With best wishes
+Dmitry
