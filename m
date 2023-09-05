@@ -2,124 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E13B179251C
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Sep 2023 18:01:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69C0C792524
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Sep 2023 18:01:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232740AbjIEQB0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Sep 2023 12:01:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37440 "EHLO
+        id S234873AbjIEQBg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Sep 2023 12:01:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354224AbjIEKLv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Sep 2023 06:11:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E4CE199
-        for <linux-usb@vger.kernel.org>; Tue,  5 Sep 2023 03:11:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1693908661;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GQdWO1HDrc5GSIvIHSQgMIQsBgppoW3wramLkpYKpHg=;
-        b=eN3jc+hBb+Nu0AkQ82G8cz58B8vofRpza5wPFCal1jY9TS6hVTInVl28EuJr5Y4hbFZHG7
-        mmhPW+60xgSpAd+6xv1YWL3G8ysobl5ILlnG0qf4oFa/x9MTOAD+GahI5l+4Dow4CY12gw
-        G/Sd+rVOdSFTjWxax2n/Bp/Po2vUuek=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-436-x7tIPQi4MYC-RjISV4lSDw-1; Tue, 05 Sep 2023 06:11:00 -0400
-X-MC-Unique: x7tIPQi4MYC-RjISV4lSDw-1
-Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-52c0134dfcdso432685a12.1
-        for <linux-usb@vger.kernel.org>; Tue, 05 Sep 2023 03:11:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693908659; x=1694513459;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GQdWO1HDrc5GSIvIHSQgMIQsBgppoW3wramLkpYKpHg=;
-        b=R8YLsl9BNMekMgzA3eDGFWFnK+en7sQHfLD8VQISc2OY+zQIY/sGXM6tJwfKcqVt7G
-         32LaDaX6zJ5nrYVH7V2IlSRfiQ4gr5hDGhE7qJfhb+mVsQbcAUq91/BAdgawywBjemDP
-         fz+/k0a7isBrGG7xB6ccdAsl/VDfmH6xn5Syps3ILKkW+nPffQIevmcRqIzND+e9Ttq8
-         2ezXAv/0MX2veNgitSdVr1dgg18NVbSWGdMqajG8im/wIcXFdua6gxC38v+61k+aWqeF
-         YhCfWf/42GF2C5ykMJlNUwll0yFwuxs/aVyZ3X5wxC9JLLzi4gJRT8i+seoiO/vmpXD5
-         B4tQ==
-X-Gm-Message-State: AOJu0YxREjd47ZVU8P+pBZ/nrg6mtRaVSn8Zwv5TRBHDQL0CTRri+q6U
-        K9Egf5PBMqztAm6mWfG3sqnOQGa/NL1JxHyFAz1farnsbGPRiVNuSCgzUYe88oNenQoJz9wGS39
-        53Cl1nWAVOjQ30IGaXjZu
-X-Received: by 2002:a05:6402:50cf:b0:523:f69:9a0d with SMTP id h15-20020a05640250cf00b005230f699a0dmr9451054edb.4.1693908659094;
-        Tue, 05 Sep 2023 03:10:59 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IE6aGBnhekg22nlCvU2kF5kNulTXZk+b95Z2pPwYKc4FHamoUqVIRjdWI3V8NiUNW153C9yzQ==
-X-Received: by 2002:a05:6402:50cf:b0:523:f69:9a0d with SMTP id h15-20020a05640250cf00b005230f699a0dmr9451032edb.4.1693908658710;
-        Tue, 05 Sep 2023 03:10:58 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-254-194.dyn.eolo.it. [146.241.254.194])
-        by smtp.gmail.com with ESMTPSA id k22-20020a056402049600b0050488d1d376sm6940864edv.0.2023.09.05.03.10.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Sep 2023 03:10:58 -0700 (PDT)
-Message-ID: <32c71d3245127b4aa02b8abd75edcb8f5767e966.camel@redhat.com>
-Subject: Re: [PATCH net] r8152: avoid the driver drops a lot of packets
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Hayes Wang <hayeswang@realtek.com>, kuba@kernel.org,
-        davem@davemloft.net
-Cc:     netdev@vger.kernel.org, nic_swsd@realtek.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Date:   Tue, 05 Sep 2023 12:10:57 +0200
-In-Reply-To: <20230904121706.7132-420-nic_swsd@realtek.com>
-References: <20230904121706.7132-420-nic_swsd@realtek.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        with ESMTP id S1354275AbjIEKbB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Sep 2023 06:31:01 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 159CA199;
+        Tue,  5 Sep 2023 03:30:58 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3859GuGc011892;
+        Tue, 5 Sep 2023 10:30:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references; s=qcppdkim1;
+ bh=SQF5C2NJfh/co1MCDc5C0RAmx2CmQWbDHC3NvPPqHGc=;
+ b=QE1tTHz68xn492X2wOz+q74BSgMoquIU/f/3J0UEO7+h4URBeSH5bS4PzOEskKq/epGO
+ +m5i7KXxa6TQa6txxCwG5riwCb354NyU1oJ+5lnVB7CLQU62KRwwAHie3AnrCoAk2xIq
+ VzlPEwjTaDdFF6F3sui7s4vANpsCKABF3AhhGxNl4Jdny5RkX0k8346vBvAlC+KVEbsp
+ HmMuHevvuZoBwGj4UvTjZzDHjGCFuH58U+y1g8lVpQzDgB9mbx1n8yOz9lfjCG7i9Opi
+ QRDlKdIQpTGk1f44MPSFlgUOf/MJDZd3lD3hnC9bWEcjcq1R4JPsp/iSSOKn77VKodz1 Vw== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3sx0t7r7k1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 05 Sep 2023 10:30:44 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 385AUehk018088;
+        Tue, 5 Sep 2023 10:30:40 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3sux4km16f-1;
+        Tue, 05 Sep 2023 10:30:40 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 385AUeYJ018076;
+        Tue, 5 Sep 2023 10:30:40 GMT
+Received: from hu-sgudaval-hyd.qualcomm.com (hu-rohiagar-hyd.qualcomm.com [10.213.106.138])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 385AUdoe018072;
+        Tue, 05 Sep 2023 10:30:40 +0000
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3970568)
+        id 868F21D1B; Tue,  5 Sep 2023 16:00:39 +0530 (+0530)
+From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        vkoul@kernel.org, kishon@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        gregkh@linuxfoundation.org, abel.vesa@linaro.org,
+        quic_wcheng@quicinc.com
+Cc:     linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, kernel@quicinc.com,
+        Rohit Agarwal <quic_rohiagar@quicinc.com>
+Subject: [PATCH v2 1/5] dt-bindings: phy: qcom,snps-eusb2-phy: Add compatible for SDX75
+Date:   Tue,  5 Sep 2023 16:00:34 +0530
+Message-Id: <1693909838-6682-2-git-send-email-quic_rohiagar@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1693909838-6682-1-git-send-email-quic_rohiagar@quicinc.com>
+References: <1693909838-6682-1-git-send-email-quic_rohiagar@quicinc.com>
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: fciXxZn2Zdpyg3v-OwE2HCwmBMMRfxT_
+X-Proofpoint-ORIG-GUID: fciXxZn2Zdpyg3v-OwE2HCwmBMMRfxT_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-09-05_08,2023-08-31_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
+ bulkscore=0 phishscore=0 malwarescore=0 suspectscore=0 adultscore=0
+ clxscore=1015 impostorscore=0 mlxlogscore=771 lowpriorityscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2308100000 definitions=main-2309050093
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Add a dt-bindings compatible string for the SDX75 SoC that
+uses Synopsis eUSB2 PHY.
 
-On Mon, 2023-09-04 at 20:17 +0800, Hayes Wang wrote:
-> Stop submitting rx, if the driver queue more than 256 packets.
->=20
-> If the hardware is more fast than the software, the driver would start
-> queuing the packets. And, the driver starts dropping the packets, if it
-> queues more than 1000 packets.
->=20
-> Increase the weight of NAPI could improve the situation. However, the
-> weight has been changed to 64, so we have to stop submitting rx when the
-> driver queues too many packets. Then,the device may send the pause frame
-> to slow down the receiving, when the FIFO of the device is full.
->=20
-> Fixes: cf74eb5a5bc8 ("eth: r8152: try to use a normal budget")
-> Signed-off-by: Hayes Wang <hayeswang@realtek.com>
-> ---
->  drivers/net/usb/r8152.c | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
->=20
-> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-> index 332c853ca99b..b5ed55938b1c 100644
-> --- a/drivers/net/usb/r8152.c
-> +++ b/drivers/net/usb/r8152.c
-> @@ -2484,10 +2484,6 @@ static int rx_bottom(struct r8152 *tp, int budget)
->  			unsigned int pkt_len, rx_frag_head_sz;
->  			struct sk_buff *skb;
-> =20
-> -			/* limit the skb numbers for rx_queue */
-> -			if (unlikely(skb_queue_len(&tp->rx_queue) >=3D 1000))
-> -				break;
-> -
+Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ Documentation/devicetree/bindings/phy/qcom,snps-eusb2-phy.yaml | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-Dropping this check looks dangerous to me. What if pause frames are
-disabled on the other end or dropped? It looks like this would cause
-unlimited memory consumption?!?
-
-If this limit is not supposed to be reached under normal conditions,
-perhaps is worthy changing it into a WARN_ON_ONCE()?
-
-Thanks!
-
-Paolo
+diff --git a/Documentation/devicetree/bindings/phy/qcom,snps-eusb2-phy.yaml b/Documentation/devicetree/bindings/phy/qcom,snps-eusb2-phy.yaml
+index c53bab1..c958286 100644
+--- a/Documentation/devicetree/bindings/phy/qcom,snps-eusb2-phy.yaml
++++ b/Documentation/devicetree/bindings/phy/qcom,snps-eusb2-phy.yaml
+@@ -14,7 +14,12 @@ description:
+ 
+ properties:
+   compatible:
+-    const: qcom,sm8550-snps-eusb2-phy
++    oneOf:
++      - items:
++          - enum:
++              - qcom,sdx75-snps-eusb2-phy
++          - const: qcom,sm8550-snps-eusb2-phy
++      - const: qcom,sm8550-snps-eusb2-phy
+ 
+   reg:
+     maxItems: 1
+-- 
+2.7.4
 
