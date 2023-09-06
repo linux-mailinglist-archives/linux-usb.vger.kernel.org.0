@@ -2,91 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF2B5793786
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Sep 2023 10:57:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 150207937D4
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Sep 2023 11:14:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235440AbjIFI5P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Sep 2023 04:57:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58940 "EHLO
+        id S236354AbjIFJOe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Sep 2023 05:14:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230115AbjIFI5O (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Sep 2023 04:57:14 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0224D184;
-        Wed,  6 Sep 2023 01:57:11 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DB7FC433C7;
-        Wed,  6 Sep 2023 08:57:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1693990630;
-        bh=JZGUePwl6/0DjGndwCMmh1J3++0RqMmIei8uSU9hbD8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=itF05d9VXRjSiPj62d0CqBBiUTScgKvirVgpg8Uz9kUxNHH6/XJaZ/2hupha+ktyb
-         DzPAB4/0JWmQrr3Ar3n9p/xt+IXHg3Kbf5CFFHdyOERoLIpUStvsEk3fVd15COCIS3
-         vrVMsu7jxb8pv/JSp4BSyHvn5NOxImM3jopFtDVI=
-Date:   Wed, 6 Sep 2023 09:57:07 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Mario Limonciello <mario.limonciello@amd.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Saranya Gopal <saranya.gopal@intel.com>,
-        Rajaram Regupathy <rajaram.regupathy@intel.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Wayne Chang <waynec@nvidia.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: ucsi: Fix NULL pointer dereference
-Message-ID: <2023090638-overexert-endearing-3726@gregkh>
-References: <20230906084842.1922052-1-heikki.krogerus@linux.intel.com>
+        with ESMTP id S236326AbjIFJOe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Sep 2023 05:14:34 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA9B81AB;
+        Wed,  6 Sep 2023 02:14:27 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-99c1d03e124so482822966b.2;
+        Wed, 06 Sep 2023 02:14:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1693991666; x=1694596466; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=H/i9Rx6cJePLlrXqQQE3rJ8pHiKqveK77lqYog72tc4=;
+        b=VUsH8kdpgDGA58taeHDc9QrB+SJh2NhOV16uTZ1P5zHlLg0y92x9V4LHv3MPoIP4Hz
+         O+5RpxNmTiUOHNTUWEQETE5cLAPqievlcbXL17DbrZqIvL0F8hwyChZ32gxY9XNEAZ3i
+         Q59F6VcoIVqDzXK42o/NyoeHrSS6Cih2M5OZOAaGJYFWZnl5n4b1YieM+Z3JsCnx7ul+
+         sj+wMapYlQJ7HZNoEd5YhV/JyED53slKr5WFzxUMKdco+jgeeAgRGEAZFNW31lhlYWRg
+         zz45/NPNP6043iYrzZhbWytbnbJjAJ496cXFHoKhUDBababs0cP8x+8G+OKxKPshqLK+
+         y/8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693991666; x=1694596466;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=H/i9Rx6cJePLlrXqQQE3rJ8pHiKqveK77lqYog72tc4=;
+        b=XdNCNaltqwC8V60v8B7Ohqi9h4gVJGjvgH7VQvCJRoZFWKjmFy/LXdiQD6j5F8hISS
+         fvbN/6XURszmvQNff0XkeQBgIU44KX66x5lA+M9pyVJvzOlJH7duZ8cWfADGfIQvVad6
+         3rLbLwKgkM7/Fa7ViF8chSul/1dsvwBw9IrWpsdbjW/BHBDrWxrPbS4y2tQR0kx+6Qpe
+         4fOsfoWJUTRwSxtNNwQU3OKyEP1ZBwkwWkCbTaIBhkYa3j7A4IBbNwEDMer9tEo5XdVm
+         iwtfGMeQ4EN64FeDGyVE4V2nCGw9yTh5CHWaV+sOQif2Q04O5nOE4BuMuL+0WDQ46aIV
+         TWOA==
+X-Gm-Message-State: AOJu0YytzHlIqdy+Cf1avWRjRqhvAjC8o8WXZ8ylYiYcsVivi/wYx/D3
+        6QuUGP13XRiURS8QbKIL9/ixYysVvjSMSyYEmMPcBjOH7aI=
+X-Google-Smtp-Source: AGHT+IHoJKKd/cmbZPfgEY/YExtF4EVPHtK38KTRdm0zAE4+KN5GgQiRXE7NO6CnE5tz1JCfDh147sB1Cs1cmmCMzeY=
+X-Received: by 2002:a17:907:d1c:b0:9a1:e58d:73b8 with SMTP id
+ gn28-20020a1709070d1c00b009a1e58d73b8mr2147910ejc.72.1693991665979; Wed, 06
+ Sep 2023 02:14:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230906084842.1922052-1-heikki.krogerus@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230905073724.52272-1-fabio.porcedda@gmail.com>
+In-Reply-To: <20230905073724.52272-1-fabio.porcedda@gmail.com>
+From:   Daniele Palmas <dnlplm@gmail.com>
+Date:   Wed, 6 Sep 2023 11:02:22 +0200
+Message-ID: <CAGRyCJEzKn13gbBYfoF9H5XKJ_OSXJh0+h3U6SMa6c5S6kAVtQ@mail.gmail.com>
+Subject: Re: [PATCH] USB: serial: option: add Telit LE910C4-WWX 0x1035 composition
+To:     Fabio Porcedda <fabio.porcedda@gmail.com>
+Cc:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 06, 2023 at 11:48:42AM +0300, Heikki Krogerus wrote:
-> Making sure the UCSI debugfs entry actually exists before
-> attempting to remove it.
-> 
-> Fixes: df0383ffad64 ("usb: typec: ucsi: Add debugfs for ucsi commands")
-> Reported-by: Dave Hansen <dave.hansen@intel.com>
-> Closes: https://lore.kernel.org/linux-usb/700df3c4-2f6c-85f9-6c61-065bc5b2db3a@intel.com/
-> Suggested-by: Dave Hansen <dave.hansen@intel.com>
-> Suggested-by: Mario Limonciello <mario.limonciello@amd.com>
-> Cc: Saranya Gopal <saranya.gopal@intel.com>
-> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> ---
->  drivers/usb/typec/ucsi/debugfs.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/ucsi/debugfs.c b/drivers/usb/typec/ucsi/debugfs.c
-> index 0c7bf88d4a7f..f67733cecfdf 100644
-> --- a/drivers/usb/typec/ucsi/debugfs.c
-> +++ b/drivers/usb/typec/ucsi/debugfs.c
-> @@ -84,6 +84,9 @@ void ucsi_debugfs_register(struct ucsi *ucsi)
->  
->  void ucsi_debugfs_unregister(struct ucsi *ucsi)
->  {
-> +	if (IS_ERR_OR_NULL(ucsi) || !ucsi->debugfs)
-> +		return;
-> +
->  	debugfs_remove_recursive(ucsi->debugfs->dentry);
+Il giorno mar 5 set 2023 alle ore 09:37 Fabio Porcedda
+<fabio.porcedda@gmail.com> ha scritto:
+>
+> Add support for the following Telit LE910C4-WWX composition:
+>
+> 0x1035: TTY, TTY, ECM
+>
+> Signed-off-by: Fabio Porcedda <fabio.porcedda@gmail.com>
+> Cc: stable@vger.kernel.org
 
-Why are you saving the dentry at all?  Why not just have debugfs look it
-up when you want to remove it based on the filename?
-
-Anyway, not a big deal here, just a comment.  I'll queue this up after
--rc1 is out.
-
-thanks,
-
-greg k-h
+Reviewed-by: Daniele Palmas <dnlplm@gmail.com>
