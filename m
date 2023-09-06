@@ -2,199 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E92E7794197
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Sep 2023 18:41:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A55967941C5
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Sep 2023 18:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236044AbjIFQl3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Sep 2023 12:41:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50944 "EHLO
+        id S241821AbjIFQ6x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Sep 2023 12:58:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231196AbjIFQl1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Sep 2023 12:41:27 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC451724;
-        Wed,  6 Sep 2023 09:41:23 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57DA5C433C9;
-        Wed,  6 Sep 2023 16:41:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694018483;
-        bh=NuL6shSLCdNL6dKxOIie4Ul+UUR6aTvMrRV22jZr+YI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rUyss/CiLvU2lC8qd0dBq6/hANwNZAvFqTENK2F1ilTAtNBuos3dFEE+haGaRblXE
-         jJnDeKrJsBQPDf/8WQ76tHQJor8D5KtBtrXDEVRNpsUTBHvVm2OMpZNo96Nokirii7
-         DpJ8dLr7vTrPgT1IdsJzxzx7QumGpJIucvY4AVESsrD9jRoEldlVxlhUQHX4eB2mcr
-         rCv70OUTseIAR1GkvYe/44ncWfvOEdMMqUQhv8PK7Y2Llu3WAIFMUIZrcCOWaHuSDo
-         ihYe4kQ9DuPUH19o1X4Vuz9TB/Lglrnp3DW3wnxPAoSdibZsuUfZrPAWfq+DjTqbv8
-         1U+22gs13WgGg==
-Date:   Thu, 7 Sep 2023 00:29:29 +0800
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Kenta Sato <tosainu.maple@gmail.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux USB <linux-usb@vger.kernel.org>,
-        Linux Stable <stable@vger.kernel.org>
-Subject: Re: usb: dwc3: some USB devices not working after 6.4.8
-Message-ID: <ZPio6QD64cjJza29@xhacker>
-References: <CAF1eZtsBzGb_UxOqZpNiEsk8Uk7DkqPh5AnYRRNc_kkr-tFasQ@mail.gmail.com>
- <ZPUciRLUcjDywMVS@debian.me>
- <20230906013209.jlcxluxemyg3va6l@synopsys.com>
+        with ESMTP id S240252AbjIFQ6w (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Sep 2023 12:58:52 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 683391739
+        for <linux-usb@vger.kernel.org>; Wed,  6 Sep 2023 09:58:48 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-52889bc61b6so5556372a12.0
+        for <linux-usb@vger.kernel.org>; Wed, 06 Sep 2023 09:58:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1694019527; x=1694624327; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+YZuuq224HVhWlxgKlSWCn+foZqdm/dLAWCsSmU0DN0=;
+        b=F8AYBQRi5Dl+ycOI9VCcGHKmv1gbYi9lAfiGrORTR6rtP2pshYE7ee4vdNRz8R7Z7L
+         lWEKoAyegnwJlqeN5OnMaSnoiLAnS9QfT2vUDO/tO53UxCNCntiZxgdaURGYjb8xYApa
+         az1l8bXHwJSwCM9w9WbVvUfkRSJoKzLxQ2zEj5LEIZsvmdF3c3cGMPOFCeR0YnwHN2Po
+         pOV34dmhtv2yCa4PSw3n4mnG530tVHKTYUom+0V/sJHWiZuttE54wTuP79xq3IoYZoIu
+         95WWMAUEe6pe9ea7caKraLkrL0kmlemqwagT21Dci2wTzuGLnUWYvFk4jApTSlbHC7Uo
+         55yQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1694019527; x=1694624327;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+YZuuq224HVhWlxgKlSWCn+foZqdm/dLAWCsSmU0DN0=;
+        b=XJjM9ZXJe/JZzLo+uTbLpJblUgWJ+mTq2BM2/jIjyHni5vLW4nNVoLIU4wo/5rj1On
+         gTjsOzw6tQ2WiOhsC2o6tT1gAl74Yj7vplUlStlKqB/Jn0Nfy5tPVg9CX2GCIzwkt1E4
+         XbHUZcUIVplZ484qqr9GGPZ9ORFd9+YxbOa69d3EjJ9q/vKYRbAmECO5/bdQf3VimGom
+         ZTlOaM0ENRLLdUhg5W06+65w3Kw/kuTwjl+ZSfTYcPBNcPzIVYINc/dPuIkEUgH/Q1Ou
+         BNMVI/opNfJA6U8iY/F3oh5gESNCD6bsOWItwiwdBBwZ3X25YmUqSakV62yrIbjUNz4B
+         0G5g==
+X-Gm-Message-State: AOJu0YxbUJyE20FXQCuTbckwPUv9820ZNA5zqXgOPtZiCO1CR6Z5g+rZ
+        q/3Q3JhThnfzY7sNblZ/Yctjbw==
+X-Google-Smtp-Source: AGHT+IErMKReDgCn8zpILAzX10QNjbEeDts6tXmpyzlyQCIwbVZWS2IwN4jXXGR9FdXh9Q814c7JNQ==
+X-Received: by 2002:a50:ef17:0:b0:522:1e24:afb6 with SMTP id m23-20020a50ef17000000b005221e24afb6mr3027095eds.0.1694019526822;
+        Wed, 06 Sep 2023 09:58:46 -0700 (PDT)
+Received: from [192.168.37.154] (178235177204.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.204])
+        by smtp.gmail.com with ESMTPSA id i14-20020aa7dd0e000000b0052bcdbe263esm8727242edv.36.2023.09.06.09.58.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Sep 2023 09:58:46 -0700 (PDT)
+Message-ID: <f19fa545-0ccb-4670-af77-7c034b1016ef@linaro.org>
+Date:   Wed, 6 Sep 2023 18:58:43 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230906013209.jlcxluxemyg3va6l@synopsys.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v11 13/13] arm64: dts: qcom: sa8540-ride: Enable first
+ port of tertiary usb controller
+Content-Language: en-US
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Johan Hovold <johan@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
+        quic_jackp@quicinc.com, ahalaney@redhat.com,
+        quic_shazhuss@quicinc.com
+References: <20230828133033.11988-1-quic_kriskura@quicinc.com>
+ <20230828133033.11988-14-quic_kriskura@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
+ 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
+ izWDgYvmBE8=
+In-Reply-To: <20230828133033.11988-14-quic_kriskura@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 06, 2023 at 01:32:22AM +0000, Thinh Nguyen wrote:
-> On Mon, Sep 04, 2023, Bagas Sanjaya wrote:
-> > On Sun, Sep 03, 2023 at 09:19:13PM +0900, Kenta Sato wrote:
-> > > Hi,
-> > > 
-> > > I am using the FriendlyElec NanoPi R4S board.
-> > > When I update the kernel from 6.4.7 to 6.4.11, 6.4.13, and 6.5.1, it
-> > > doesn't recognize some USB devices.
-> > > 
-> > > The board has two USB 3.0 ports. I connected 1) BUFFALO USB Flash Disk
-> > > (high-speed) and 2) NETGEAR A6210 (SuperSpeed) to each port.
-> > > 1) is often not recognized. On the other hand, 2) was working while I
-> > > was testing.
-> > > Regardless of whether a USB device is connected, I could see the below
-> > > message on dmesg:
-
-Hi Kenta,
-
-
-Besides the comments and patch from Thinh, may I know some details of 
-your HW and SW env? Such as
-
-From HW support points of view, is the usb3.0 ports dual mode or host only?
-
-From SW side, how do you configure the host controller? I.E set dual
-mode or host only?
-
-Lastly, did you have modifications or local patches to dwc3 driver?
-
-Thanks in advance
-
-> > > 
-> > > [    0.740993] phy phy-ff7c0000.phy.8: phy poweron failed --> -110
-> > > [    0.741585] dwc3 fe800000.usb: error -ETIMEDOUT: failed to initialize core
-> > > [    0.742334] dwc3: probe of fe800000.usb failed with error -110
-> > > [    0.751635] rockchip-usb2phy ff770000.syscon:usb2phy@e460:
-> > > Requested PHY is disabled
-> > > 
-> > > Is there any idea on this?
-> > > 
-> > > The cause seems to be related to this commit. I tried reverting this
-> > > change and the issue seemed to be solved.
-> > > 
-> > > >From 317d6e4c12b46bde61248ea4ab5e19f68cbd1c57 Mon Sep 17 00:00:00 2001
-> > > From: Jisheng Zhang <jszhang@kernel.org>
-> > > Date: Wed, 28 Jun 2023 00:20:18 +0800
-> > > Subject: usb: dwc3: don't reset device side if dwc3 was configured as
-> > >  host-only
-> > > 
-> > > commit e835c0a4e23c38531dcee5ef77e8d1cf462658c7 upstream.
-> > > 
-> > > Commit c4a5153e87fd ("usb: dwc3: core: Power-off core/PHYs on
-> > > system_suspend in host mode") replaces check for HOST only dr_mode with
-> > > current_dr_role. But during booting, the current_dr_role isn't
-> > > initialized, thus the device side reset is always issued even if dwc3
-> > > was configured as host-only. What's more, on some platforms with host
-> > > only dwc3, aways issuing device side reset by accessing device register
-> > > block can cause kernel panic.
-> > > 
-> > > Fixes: c4a5153e87fd ("usb: dwc3: core: Power-off core/PHYs on
-> > > system_suspend in host mode")
-> > > Cc: stable <stable@kernel.org>
-> > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> > > Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-> > > Link: https://lore.kernel.org/r/20230627162018.739-1-jszhang@kernel.org
-> > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > ---
-> > >  drivers/usb/dwc3/core.c | 4 ++--
-> > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > > 
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=v6.4.8&id=317d6e4c12b46bde61248ea4ab5e19f68cbd1c57
-> > > 
-> > 
-> > Thanks for the regression report. I'm adding it to regzbot:
-> > 
-> > #regzbot ^introduced: e835c0a4e23c38
-> > #regzbot title: some USB devices unrecognized caused by not resetting dwc3 device if it is host-only
-> > 
+On 28.08.2023 15:30, Krishna Kurapati wrote:
+> From: Andrew Halaney <ahalaney@redhat.com>
 > 
-> When there's phy reconfiguration, we need follow through a soft reset
-> sequence. It may be done when we pass to xHCI driver through its
-> initialization of USBCMD.HCRST. However, looks like we need to do a
-> soft reset before setting more core parameters in dwc3.
+> There is now support for the multiport USB controller this uses so
+> enable it.
 > 
-> Can we try to just reset the phy instead to see if it helps? If not, we
-> may have to teach dwc3 about xHCI's USBCMD.HCRST.
+> The board only has a single port hooked up (despite it being wired up to
+> the multiport IP on the SoC). There's also a USB 2.0 mux hooked up,
+> which by default on boot is selected to mux properly. Grab the gpio
+> controlling that and ensure it stays in the right position so USB 2.0
+> continues to be routed from the external port to the SoC.
 > 
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index 9c6bf054f15d..66186ef34c6d 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -1104,9 +1104,42 @@ static int dwc3_core_init(struct dwc3 *dwc)
->  	if (ret)
->  		goto err_exit_ulpi;
->  
-> -	ret = dwc3_core_soft_reset(dwc);
-> -	if (ret)
-> -		goto err_exit_phy;
-> +	/*
-> +	 * Note: GUSB3PIPECTL[n] and GUSB2PHYCFG[n] are port settings where n
-> +	 * is port index. If this is a multiport host, then we need to reset
-> +	 * all active ports.
-> +	 */
-> +	reg = dwc3_readl(dwc->regs, DWC3_GUSB3PIPECTL(0));
-> +	reg |= DWC3_GUSB3PIPECTL_PHYSOFTRST;
-> +	dwc3_writel(dwc->regs, DWC3_GUSB3PIPECTL(0), reg);
-> +
-> +	/*
-> +	 * Must meet usb3 phy reset assertion timing,
-> +	 * should be much less than 20ms.
-> +	 */
-> +	msleep(20);
-> +
-> +	reg &= ~DWC3_GUSB3PIPECTL_PHYSOFTRST;
-> +	dwc3_writel(dwc->regs, DWC3_GUSB3PIPECTL(0), reg);
-> +
-> +	reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
-> +	reg |= DWC3_GUSB2PHYCFG_PHYSOFTRST;
-> +	dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), reg);
-> +
-> +	/*
-> +	 * Must meet usb2 phy reset assertion timing,
-> +	 * should be much less than 20ms.
-> +	 */
-> +	msleep(20);
-> +
-> +	reg &= ~DWC3_GUSB3PIPECTL_PHYSOFTRST;
-> +	dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), reg);
-> +
-> +	/*
-> +	 * Some platforms may need more time to synchronize the clocks,
-> +	 * 100ms should be enough for all.
-> +	 */
-> +	msleep(100);
->  
->  	if (hw_mode == DWC3_GHWPARAMS0_MODE_DRD &&
->  	    !DWC3_VER_IS_WITHIN(DWC3, ANY, 194A)) {
-> 
-> 
-> --
-> 
-> Thanks,
-> Thinh
+> Co-developed-by: Andrew Halaney <ahalaney@redhat.com>
+> Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
+> [Krishna: Rebased on top of usb-next]
+> Co-developed-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> ---
+Is there any benefit to removing the other ports?
+
+i.e. are ports 1-3 not parked properly by the dwc3 driver if
+they're never connected to anything?
+
+Konrad
