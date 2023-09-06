@@ -2,57 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7360F7933F9
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Sep 2023 05:12:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FBFC793409
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Sep 2023 05:23:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233969AbjIFDMo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Sep 2023 23:12:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40436 "EHLO
+        id S235869AbjIFDXP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Sep 2023 23:23:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbjIFDMm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Sep 2023 23:12:42 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E0DBB199;
-        Tue,  5 Sep 2023 20:12:34 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 3863Bp3R2030400, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 3863Bp3R2030400
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 6 Sep 2023 11:11:51 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Wed, 6 Sep 2023 11:12:13 +0800
-Received: from fc38.localdomain (172.22.228.98) by RTEXMBS04.realtek.com.tw
- (172.21.6.97) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Wed, 6 Sep 2023
- 11:12:12 +0800
-From:   Hayes Wang <hayeswang@realtek.com>
-To:     <kuba@kernel.org>, <davem@davemloft.net>
-CC:     <netdev@vger.kernel.org>, <nic_swsd@realtek.com>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        Hayes Wang <hayeswang@realtek.com>
-Subject: [PATCH net v2] r8152: avoid the driver drops a lot of packets
-Date:   Wed, 6 Sep 2023 11:11:48 +0800
-Message-ID: <20230906031148.16774-421-nic_swsd@realtek.com>
-X-Mailer: git-send-email 2.41.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [172.22.228.98]
-X-ClientProxiedBy: RTEXH36506.realtek.com.tw (172.21.6.27) To
- RTEXMBS04.realtek.com.tw (172.21.6.97)
-X-KSE-ServerInfo: RTEXMBS04.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_PASS,T_SPF_HELO_TEMPERROR autolearn=ham
+        with ESMTP id S229767AbjIFDXO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Sep 2023 23:23:14 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C268E1A4;
+        Tue,  5 Sep 2023 20:23:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693970592; x=1725506592;
+  h=from:to:cc:subject:date:message-id;
+  bh=KVQQR3LjvitSrjCd+IA7TcnlZfBfv7lTWawQn3g+piM=;
+  b=VsgMd+E6yTZe4YLRGbnTZYk8UDkw7ttLQf5fQB/Cq3ju6GP+lbdyKXHs
+   G8WNyt3ZQa0DyUaeDd5z2NUdrluUb/BCxiB1PeI9hcaAbttXucqS3JNRJ
+   UFXafFnz1XfRuJTcKbgm5CQiocdoxufYNy39EuDMC4DbxPPuDDspj3oPu
+   A8KRkLkx220/tcIZNpdaDl4itrEL/YaLX/nVi7CsqXUcUs6F8ObVrxMUQ
+   L1DVWYJnA2sS4g06hD+T6z8Vp/25cnOMUbhi/AWD0d949gna5IgslcSmS
+   lS1Y9UaNNljiBIPwBzc6p9s/yL2Dmx5GEcWD5kKpJ/8+/b7jKjoXwUQ5s
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10824"; a="443352922"
+X-IronPort-AV: E=Sophos;i="6.02,230,1688454000"; 
+   d="scan'208";a="443352922"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2023 20:23:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10824"; a="691150438"
+X-IronPort-AV: E=Sophos;i="6.02,230,1688454000"; 
+   d="scan'208";a="691150438"
+Received: from shsensorbuild2.sh.intel.com ([10.239.134.197])
+  by orsmga003.jf.intel.com with ESMTP; 05 Sep 2023 20:23:04 -0700
+From:   Wentong Wu <wentong.wu@intel.com>
+To:     gregkh@linuxfoundation.org, arnd@arndb.de, mka@chromium.org,
+        oneukum@suse.com, lee@kernel.org, wsa@kernel.org,
+        kfting@nuvoton.com, broonie@kernel.org, linus.walleij@linaro.org,
+        hdegoede@redhat.com, maz@kernel.org, brgl@bgdev.pl,
+        linux-usb@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
+        andriy.shevchenko@linux.intel.com, heikki.krogerus@linux.intel.com,
+        andi.shyti@linux.intel.com, sakari.ailus@linux.intel.com,
+        bartosz.golaszewski@linaro.org, srinivas.pandruvada@intel.com
+Cc:     zhifeng.wang@intel.com, Wentong Wu <wentong.wu@intel.com>
+Subject: [PATCH v15 0/4] Add Intel LJCA device driver
+Date:   Wed,  6 Sep 2023 11:22:56 +0800
+Message-Id: <1693970580-18967-1-git-send-email-wentong.wu@intel.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,57 +62,73 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Stop submitting rx, if the driver queue more than 256 packets.
+Add driver for Intel La Jolla Cove Adapter (LJCA) device. This
+IO-expander adds additional functions to the host system such
+as GPIO, I2C and SPI with USB host interface. We add 4 drivers
+to support this device: a USB driver, a GPIO chip driver, a I2C
+controller driver and a SPI controller driver.
 
-If the hardware is more fast than the software, the driver would start
-queuing the packets. And, the driver starts dropping the packets, if it
-queues more than 1000 packets.
-
-Increase the weight of NAPI could improve the situation. However, the
-weight has been changed to 64, so we have to stop submitting rx when the
-driver queues too many packets. Then, the device may send the pause frame
-to slow down the receiving, when the FIFO of the device is full.
-
-Fixes: cf74eb5a5bc8 ("eth: r8152: try to use a normal budget")
-Signed-off-by: Hayes Wang <hayeswang@realtek.com>
 ---
-v2:
-Add WARN_ON_ONCE() and debug message for the skb_queue_len(&tp->rx_queue).
+v15:
+ - enhance disconnect() of usb-ljca driver
+ - change memchr to strchr in ljca_match_device_ids() of usb-ljca driver
 
- drivers/net/usb/r8152.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+v14:
+ - fix build error: implicit declaration of function 'acpi_dev_clear_dependencies'
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 332c853ca99b..4a62e420a7be 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -2484,10 +2484,6 @@ static int rx_bottom(struct r8152 *tp, int budget)
- 			unsigned int pkt_len, rx_frag_head_sz;
- 			struct sk_buff *skb;
- 
--			/* limit the skb numbers for rx_queue */
--			if (unlikely(skb_queue_len(&tp->rx_queue) >= 1000))
--				break;
--
- 			pkt_len = le32_to_cpu(rx_desc->opts1) & RX_LEN_MASK;
- 			if (pkt_len < ETH_ZLEN)
- 				break;
-@@ -2556,9 +2552,14 @@ static int rx_bottom(struct r8152 *tp, int budget)
- 		}
- 
- submit:
--		if (!ret) {
-+		if (!ret && likely(skb_queue_len(&tp->rx_queue) < 256)) {
- 			ret = r8152_submit_rx(tp, agg, GFP_ATOMIC);
- 		} else {
-+			WARN_ON_ONCE(skb_queue_len(&tp->rx_queue) >= 1000);
-+			if (net_ratelimit())
-+				netif_dbg(tp, rx_err, tp->netdev,
-+					  "submit_rx=%d, rx_queue=%u\n",
-+					  ret, skb_queue_len(&tp->rx_queue));
- 			urb->actual_length = 0;
- 			list_add_tail(&agg->list, next);
- 		}
+v13:
+ - make ljca-usb more robust with the help of Hans de Goede
+ - call acpi_dev_clear_dependencies() to mark _DEP ACPI dependencies on the I2C controller as satisfied, and patch is from Hans de Goede
+
+v12:
+ - switch dev_err to dev_dbg for i2c-ljca driver
+ - avoid err printing because of calling usb_kill_urb when attempts to resubmit the rx urb
+
+v11:
+ - switch dev_err to dev_dbg for i2c-ljca driver
+ - remove message length check because of defined quirk structure
+ - remove I2C_FUNC_SMBUS_EMUL support
+
+v10:
+ - remove ljca_i2c_format_slave_addr
+ - remove memset before write write w_packet
+ - make ljca_i2c_stop void and print err message in case failure
+ - use dev_err_probe in ljca_i2c_probe function
+
+v9:
+ - overhaul usb-ljca driver to make it more structured and easy understand
+ - fix memory leak issue for usb-ljca driver
+ - add spinlock to protect tx_buf and ex_buf
+ - change exported APIs for usb-ljca driver
+ - unify prefix for structures and functions for i2c-ljca driver
+ - unify prefix for structures and functions for spi-ljca driver
+ - unify prefix for structures and functions for gpio-ljca driver
+ - update gpio-ljca, i2c-ljca and spi-ljca drivers according to usb-ljca's changes
+
+Wentong Wu (4):
+  usb: Add support for Intel LJCA device
+  i2c: Add support for Intel LJCA USB I2C driver
+  spi: Add support for Intel LJCA USB SPI driver
+  gpio: update Intel LJCA USB GPIO driver
+
+ drivers/gpio/Kconfig          |   4 +-
+ drivers/gpio/gpio-ljca.c      | 246 +++++++-----
+ drivers/i2c/busses/Kconfig    |  11 +
+ drivers/i2c/busses/Makefile   |   1 +
+ drivers/i2c/busses/i2c-ljca.c | 342 +++++++++++++++++
+ drivers/spi/Kconfig           |  11 +
+ drivers/spi/Makefile          |   1 +
+ drivers/spi/spi-ljca.c        | 297 +++++++++++++++
+ drivers/usb/misc/Kconfig      |  14 +
+ drivers/usb/misc/Makefile     |   1 +
+ drivers/usb/misc/usb-ljca.c   | 852 ++++++++++++++++++++++++++++++++++++++++++
+ include/linux/usb/ljca.h      | 113 ++++++
+ 12 files changed, 1788 insertions(+), 105 deletions(-)
+ create mode 100644 drivers/i2c/busses/i2c-ljca.c
+ create mode 100644 drivers/spi/spi-ljca.c
+ create mode 100644 drivers/usb/misc/usb-ljca.c
+ create mode 100644 include/linux/usb/ljca.h
+
 -- 
-2.41.0
+2.7.4
 
