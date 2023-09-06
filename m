@@ -2,139 +2,199 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 896F87940C9
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Sep 2023 17:52:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E92E7794197
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Sep 2023 18:41:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241787AbjIFPwf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Sep 2023 11:52:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41062 "EHLO
+        id S236044AbjIFQl3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Sep 2023 12:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbjIFPwd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Sep 2023 11:52:33 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 672161724;
-        Wed,  6 Sep 2023 08:52:30 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 386FTX98019312;
-        Wed, 6 Sep 2023 15:52:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=Nl74PhkRTAiQB4cjYZX+m7zutlK9FVL/bFNGUldZSWQ=;
- b=JNME+ZZilJqbL4FqYp2ge16vBY3NtOyD5nh62jJXUYYLlQTL+Ti+DR/IOavcNG35eSQ6
- ngZV7U5TbAtTlXslXNK6uFN3ieM8rER4LwF4Jo07D6776AmGwyLLBRK+/Rb2JWeSWeN9
- yAeS6hq7Ayss+rPO1sXEBG19D41FWSvcpJsNlF1HwW/8yhpx2iI1ihBfR4vs/BCIGAzd
- tpV3RrUlufnphBZHLEEYrfkbjGmpyyI7ls/U4CJ0CV2hnfeCfsLf4ApZ4+rOXSsrdNj+
- 6t9b6ln0KIsjENVDX9CQlhj/Tjtwk+mC92EfBuKYSMd/Xs0k4RiB5kqRBWyHPdN2dT// 5Q== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3sxhjfa11a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 06 Sep 2023 15:52:21 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 386FqLr9004930
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 6 Sep 2023 15:52:21 GMT
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.36; Wed, 6 Sep 2023 08:52:17 -0700
-Date:   Wed, 6 Sep 2023 21:22:14 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-CC:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Johan Hovold <johan@kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>
-Subject: Re: Disconnect interrupt generation for QC targets when role switch
- is enabled
-Message-ID: <cfa39be4-2b33-4900-800c-9884010f5e75@quicinc.com>
-References: <af60c05b-4a0f-51b8-486a-1fc601602515@quicinc.com>
- <20230828172059.GC818859@hu-bjorande-lv.qualcomm.com>
- <325cf945-4d1f-5591-1ef6-b28e803c134b@quicinc.com>
+        with ESMTP id S231196AbjIFQl1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Sep 2023 12:41:27 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC451724;
+        Wed,  6 Sep 2023 09:41:23 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57DA5C433C9;
+        Wed,  6 Sep 2023 16:41:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1694018483;
+        bh=NuL6shSLCdNL6dKxOIie4Ul+UUR6aTvMrRV22jZr+YI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rUyss/CiLvU2lC8qd0dBq6/hANwNZAvFqTENK2F1ilTAtNBuos3dFEE+haGaRblXE
+         jJnDeKrJsBQPDf/8WQ76tHQJor8D5KtBtrXDEVRNpsUTBHvVm2OMpZNo96Nokirii7
+         DpJ8dLr7vTrPgT1IdsJzxzx7QumGpJIucvY4AVESsrD9jRoEldlVxlhUQHX4eB2mcr
+         rCv70OUTseIAR1GkvYe/44ncWfvOEdMMqUQhv8PK7Y2Llu3WAIFMUIZrcCOWaHuSDo
+         ihYe4kQ9DuPUH19o1X4Vuz9TB/Lglrnp3DW3wnxPAoSdibZsuUfZrPAWfq+DjTqbv8
+         1U+22gs13WgGg==
+Date:   Thu, 7 Sep 2023 00:29:29 +0800
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Kenta Sato <tosainu.maple@gmail.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux USB <linux-usb@vger.kernel.org>,
+        Linux Stable <stable@vger.kernel.org>
+Subject: Re: usb: dwc3: some USB devices not working after 6.4.8
+Message-ID: <ZPio6QD64cjJza29@xhacker>
+References: <CAF1eZtsBzGb_UxOqZpNiEsk8Uk7DkqPh5AnYRRNc_kkr-tFasQ@mail.gmail.com>
+ <ZPUciRLUcjDywMVS@debian.me>
+ <20230906013209.jlcxluxemyg3va6l@synopsys.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <325cf945-4d1f-5591-1ef6-b28e803c134b@quicinc.com>
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: XGtOx_M2ACJumWO8KIPFdPR7FgnkiQOE
-X-Proofpoint-GUID: XGtOx_M2ACJumWO8KIPFdPR7FgnkiQOE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-09-06_06,2023-09-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- phishscore=0 lowpriorityscore=0 clxscore=1011 bulkscore=0 adultscore=0
- mlxscore=0 impostorscore=0 priorityscore=1501 mlxlogscore=706
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2309060138
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230906013209.jlcxluxemyg3va6l@synopsys.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 30, 2023 at 09:57:46AM +0530, Krishna Kurapati PSSNV wrote:
-> 
-> 
-> On 8/28/2023 10:50 PM, Bjorn Andersson wrote:
+On Wed, Sep 06, 2023 at 01:32:22AM +0000, Thinh Nguyen wrote:
+> On Mon, Sep 04, 2023, Bagas Sanjaya wrote:
+> > On Sun, Sep 03, 2023 at 09:19:13PM +0900, Kenta Sato wrote:
+> > > Hi,
 > > > 
-> > > I had some idea on how to get the role notification reach qcom glue driver
-> > > but wanted your opinion on whether they can be used or not:
+> > > I am using the FriendlyElec NanoPi R4S board.
+> > > When I update the kernel from 6.4.7 to 6.4.11, 6.4.13, and 6.5.1, it
+> > > doesn't recognize some USB devices.
 > > > 
-> > > 1. Register a vendor_hook from glue driver and invoke that during
-> > > __dwc3_set_mode.
-> > > 
-> > > 2. Let the role notification reach dwc3-qcom first and then let qcom driver
-> > > invoke role_set of drd. Something similar to what was implemented by Wesley
-> > > on [1].
-> > > 
-> > > But both the options require dwc3_probe to be done in sync with
-> > > of_platform_populate or we need to defer qcom probe if dwc3_probe is
-> > > deferred. Since we are leaning towards async probe, not sure if the above
-> > > two options would be proper.
-> > > 
-> 
-> ...
-> 
-> > As mentioned, this need has been identified a few times by now, so
-> > nothing strange in your request/proposal.
-> > 
-> > But so far no one has come up with a good way to register glue code
-> > callbacks with the core; we can't pass arbitrary data (such as a
-> > function pointer to such callback), and we don't know when the core is
-> > registered, so we can't call a register operation when that happens.
-> > 
-> > Regards,
-> > Bjorn
-> > 
-> > > [1]: https://patchwork.kernel.org/project/linux-usb/patch/20201009082843.28503-4-wcheng@codeaurora.org/
-> > > [2]: https://patchwork.kernel.org/project/linux-usb/cover/20230325165217.31069-1-manivannan.sadhasivam@linaro.org/
-> > > 
-> 
-> Hi Bjorn,
-> 
->  How about we use Component framework to let the glue layer know that the
-> child probe is complete. That way we don't need to defer QCOM probe and in
-> the bind call back coming to master (in this case, the glue layer), we can
-> register the vendor hook or role switch we need and we can pass the role
-> notifications from core to glue as needed.
-> 
+> > > The board has two USB 3.0 ports. I connected 1) BUFFALO USB Flash Disk
+> > > (high-speed) and 2) NETGEAR A6210 (SuperSpeed) to each port.
+> > > 1) is often not recognized. On the other hand, 2) was working while I
+> > > was testing.
+> > > Regardless of whether a USB device is connected, I could see the below
+> > > message on dmesg:
 
-Would device_driver::sync_state() help here? The qcom glue driver
-creates a DL_FLAG_SYNC_STATE_ONLY device link with dwc3 core. If it
-works, we can avoid component framework related changes in dwc3 core.
+Hi Kenta,
 
 
-Thanks,
-Pavan
+Besides the comments and patch from Thinh, may I know some details of 
+your HW and SW env? Such as
+
+From HW support points of view, is the usb3.0 ports dual mode or host only?
+
+From SW side, how do you configure the host controller? I.E set dual
+mode or host only?
+
+Lastly, did you have modifications or local patches to dwc3 driver?
+
+Thanks in advance
+
+> > > 
+> > > [    0.740993] phy phy-ff7c0000.phy.8: phy poweron failed --> -110
+> > > [    0.741585] dwc3 fe800000.usb: error -ETIMEDOUT: failed to initialize core
+> > > [    0.742334] dwc3: probe of fe800000.usb failed with error -110
+> > > [    0.751635] rockchip-usb2phy ff770000.syscon:usb2phy@e460:
+> > > Requested PHY is disabled
+> > > 
+> > > Is there any idea on this?
+> > > 
+> > > The cause seems to be related to this commit. I tried reverting this
+> > > change and the issue seemed to be solved.
+> > > 
+> > > >From 317d6e4c12b46bde61248ea4ab5e19f68cbd1c57 Mon Sep 17 00:00:00 2001
+> > > From: Jisheng Zhang <jszhang@kernel.org>
+> > > Date: Wed, 28 Jun 2023 00:20:18 +0800
+> > > Subject: usb: dwc3: don't reset device side if dwc3 was configured as
+> > >  host-only
+> > > 
+> > > commit e835c0a4e23c38531dcee5ef77e8d1cf462658c7 upstream.
+> > > 
+> > > Commit c4a5153e87fd ("usb: dwc3: core: Power-off core/PHYs on
+> > > system_suspend in host mode") replaces check for HOST only dr_mode with
+> > > current_dr_role. But during booting, the current_dr_role isn't
+> > > initialized, thus the device side reset is always issued even if dwc3
+> > > was configured as host-only. What's more, on some platforms with host
+> > > only dwc3, aways issuing device side reset by accessing device register
+> > > block can cause kernel panic.
+> > > 
+> > > Fixes: c4a5153e87fd ("usb: dwc3: core: Power-off core/PHYs on
+> > > system_suspend in host mode")
+> > > Cc: stable <stable@kernel.org>
+> > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> > > Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> > > Link: https://lore.kernel.org/r/20230627162018.739-1-jszhang@kernel.org
+> > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > ---
+> > >  drivers/usb/dwc3/core.c | 4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > > 
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=v6.4.8&id=317d6e4c12b46bde61248ea4ab5e19f68cbd1c57
+> > > 
+> > 
+> > Thanks for the regression report. I'm adding it to regzbot:
+> > 
+> > #regzbot ^introduced: e835c0a4e23c38
+> > #regzbot title: some USB devices unrecognized caused by not resetting dwc3 device if it is host-only
+> > 
+> 
+> When there's phy reconfiguration, we need follow through a soft reset
+> sequence. It may be done when we pass to xHCI driver through its
+> initialization of USBCMD.HCRST. However, looks like we need to do a
+> soft reset before setting more core parameters in dwc3.
+> 
+> Can we try to just reset the phy instead to see if it helps? If not, we
+> may have to teach dwc3 about xHCI's USBCMD.HCRST.
+> 
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index 9c6bf054f15d..66186ef34c6d 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -1104,9 +1104,42 @@ static int dwc3_core_init(struct dwc3 *dwc)
+>  	if (ret)
+>  		goto err_exit_ulpi;
+>  
+> -	ret = dwc3_core_soft_reset(dwc);
+> -	if (ret)
+> -		goto err_exit_phy;
+> +	/*
+> +	 * Note: GUSB3PIPECTL[n] and GUSB2PHYCFG[n] are port settings where n
+> +	 * is port index. If this is a multiport host, then we need to reset
+> +	 * all active ports.
+> +	 */
+> +	reg = dwc3_readl(dwc->regs, DWC3_GUSB3PIPECTL(0));
+> +	reg |= DWC3_GUSB3PIPECTL_PHYSOFTRST;
+> +	dwc3_writel(dwc->regs, DWC3_GUSB3PIPECTL(0), reg);
+> +
+> +	/*
+> +	 * Must meet usb3 phy reset assertion timing,
+> +	 * should be much less than 20ms.
+> +	 */
+> +	msleep(20);
+> +
+> +	reg &= ~DWC3_GUSB3PIPECTL_PHYSOFTRST;
+> +	dwc3_writel(dwc->regs, DWC3_GUSB3PIPECTL(0), reg);
+> +
+> +	reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
+> +	reg |= DWC3_GUSB2PHYCFG_PHYSOFTRST;
+> +	dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), reg);
+> +
+> +	/*
+> +	 * Must meet usb2 phy reset assertion timing,
+> +	 * should be much less than 20ms.
+> +	 */
+> +	msleep(20);
+> +
+> +	reg &= ~DWC3_GUSB3PIPECTL_PHYSOFTRST;
+> +	dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), reg);
+> +
+> +	/*
+> +	 * Some platforms may need more time to synchronize the clocks,
+> +	 * 100ms should be enough for all.
+> +	 */
+> +	msleep(100);
+>  
+>  	if (hw_mode == DWC3_GHWPARAMS0_MODE_DRD &&
+>  	    !DWC3_VER_IS_WITHIN(DWC3, ANY, 194A)) {
+> 
+> 
+> --
+> 
+> Thanks,
+> Thinh
