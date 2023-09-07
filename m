@@ -2,125 +2,150 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02603797B2F
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Sep 2023 20:08:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EF78797DA3
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Sep 2023 23:00:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237322AbjIGSIO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Sep 2023 14:08:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60952 "EHLO
+        id S233735AbjIGVAM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Sep 2023 17:00:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjIGSHm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Sep 2023 14:07:42 -0400
-Received: from mail-pf1-f205.google.com (mail-pf1-f205.google.com [209.85.210.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D1D01FE9
-        for <linux-usb@vger.kernel.org>; Thu,  7 Sep 2023 11:07:21 -0700 (PDT)
-Received: by mail-pf1-f205.google.com with SMTP id d2e1a72fcca58-68bf27251b7so1600517b3a.0
-        for <linux-usb@vger.kernel.org>; Thu, 07 Sep 2023 11:07:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694110018; x=1694714818;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zqIHP5Atx4E10XOKrkLhp5j/znUfTqtEUAaZEP+CeQw=;
-        b=Z0veWzSvB0Qx3TUvRz4ZyVl0Y0NzHzWZVwLxDF8i0JYP5C8PcUBHsPf7V/Se7zVtaO
-         jyFJSq83F/RJd9ot1l2XQI1zqVdqJHfNLC0cmvG/3oGqxzHinXHpG4g/33SznFqnN7fX
-         u14/4F3v58pN36oCtqjzPZgBRU1IvJ9VJYPW1SJbOHC0hrKLqLIEI4UGnMUZgm4Py7q+
-         1weIPuRIMCA3Jix783AnrTvTz97mOnAu+nB6q9qL5k5CChx1trARB6vxl4YYy8AvryCH
-         +hyRdLe7IW5vAxxga1Pn2n/BLIsnpyWmzAsEWYI84bU3qUfIYkxUgN6fKH7CK4S3pV5H
-         yKRw==
-X-Gm-Message-State: AOJu0YzR3IncBxplcLZJQnnNO3tKyCRCEGNjBRsqsowfySibvSdEy6lu
-        HUOW0Z6SvgJ2ZZWkYNJWve+o+Wd1tZxHYRCWCrpg/CZUnX+F
-X-Google-Smtp-Source: AGHT+IFjPvYdL6yJ0T9RSw8wXgbzzm4aQgq4yAZjXwtG6lh8tmWk/dSQvsey2Cq+JzMdkY6lBH1o5i38YWcZcU9ohInMvFejN3az
+        with ESMTP id S230091AbjIGVAL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Sep 2023 17:00:11 -0400
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081941990
+        for <linux-usb@vger.kernel.org>; Thu,  7 Sep 2023 14:00:08 -0700 (PDT)
+Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
+        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1qeM6f-0003mx-5w; Thu, 07 Sep 2023 23:00:06 +0200
+Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1qeM6e-009Sbe-2F; Thu, 07 Sep 2023 23:00:04 +0200
+Date:   Thu, 7 Sep 2023 23:00:04 +0200
+From:   Michael Grzeschik <mgr@pengutronix.de>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>
+Message-ID: <ZPo51EUtBgH+qw44@pengutronix.de>
+References: <20230831221242.GC20651@pengutronix.de>
+ <20230901013118.iqpegkklfswdkoqc@synopsys.com>
+ <ZPULnRSVgd5S3Cao@pengutronix.de>
+ <20230906004144.4igr4akglxxqahc3@synopsys.com>
+ <ZPgnwlOV1XP82kAY@pengutronix.de>
+ <20230906230510.vi7d4wnjeiapgtyk@synopsys.com>
+ <20230906230900.tmyhlxomrhsm3kna@synopsys.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6a00:1989:b0:68b:a137:3738 with SMTP id
- d9-20020a056a00198900b0068ba1373738mr33354pfl.5.1694110018575; Thu, 07 Sep
- 2023 11:06:58 -0700 (PDT)
-Date:   Thu, 07 Sep 2023 11:06:58 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000de219d0604c8b9b0@google.com>
-Subject: [syzbot] [usb?] WARNING in wdm_rxwork/usb_submit_urb
-From:   syzbot <syzbot+44a9ac69913e0758fbc1@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="eeEWcrWDtQ+LJLkG"
+Content-Disposition: inline
+In-Reply-To: <20230906230900.tmyhlxomrhsm3kna@synopsys.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-SA-Exim-Connect-IP: 2a0a:edc0:2:b01:1d::c5
+X-SA-Exim-Mail-From: mgr@pengutronix.de
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
+Subject: Re: DWC3-Gadget: Flickering with ISOC Streaming (UVC) while
+ multiplier set on Superspeed
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on metis.whiteo.stw.pengutronix.de)
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
 
-syzbot found the following issue on:
+--eeEWcrWDtQ+LJLkG
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-HEAD commit:    0468be89b3fa Merge tag 'iommu-updates-v6.6' of git://git.k..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=161a0924680000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=89dc1df75beb4d84
-dashboard link: https://syzkaller.appspot.com/bug?extid=44a9ac69913e0758fbc1
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+Hi Thinh
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Thanks for the update!
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/1079f65481a7/disk-0468be89.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/7eb3c6765fda/vmlinux-0468be89.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/92e68aa81913/bzImage-0468be89.xz
+On Wed, Sep 06, 2023 at 11:09:03PM +0000, Thinh Nguyen wrote:
+>On Wed, Sep 06, 2023, Thinh Nguyen wrote:
+>> On Wed, Sep 06, 2023, Michael Grzeschik wrote:
+>> >
+>> > > 2) Burst setting
+>> > > 	I think this is self-explainatory. Large data request needs
+>> > > 	higher burst.
+>> >
+>> > I will have to find out if the burst setting can be changed on the
+>> > rk3568 somehow. This sounds very likely.
+>> >
+>>
+>> The dwc3 driver checks the endpoint descriptor from the UVC function
+>> driver to setup the burst. So just setup the max 16 bursts (or 15 in the
+>> descriptor). The dwc3 controller supports that. Whether the host would
+>> do 16 bursts is another thing. Note that there's no "mult" setting for
+>> SuperSpeed.
+>
+>Clarification: no mult setting for the dwc3 controller when operate in
+>SuperSpeed.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+44a9ac69913e0758fbc1@syzkaller.appspotmail.com
+I was somehow mistaken by the wording "burst setting" and thought of the
+axi-bus burst setting to the controller instead of the usb3 maxburst
+setting as you ment actually.
 
-WARNING: CPU: 1 PID: 5266 at drivers/usb/core/urb.c:379 usb_submit_urb+0x14cb/0x1720 drivers/usb/core/urb.c:379
-Modules linked in:
-CPU: 1 PID: 5266 Comm: kworker/1:4 Not tainted 6.5.0-syzkaller-10885-g0468be89b3fa #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/26/2023
-Workqueue: events wdm_rxwork
-RIP: 0010:usb_submit_urb+0x14cb/0x1720 drivers/usb/core/urb.c:379
-Code: 27 4b fe eb cb bb fe ff ff ff e9 ca f3 ff ff e8 4b f6 4b fd 48 89 de 48 c7 c7 e0 f1 ee 86 c6 05 45 85 25 05 01 e8 95 af 15 fd <0f> 0b e9 ba fe ff ff bb f8 ff ff ff e9 9e f3 ff ff 48 89 ef e8 6c
-RSP: 0018:ffffc90001f57c40 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: ffff88810efe6b00 RCX: 0000000000000000
-RDX: ffff88811e413a00 RSI: ffffffff811725a6 RDI: 0000000000000001
-RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000001 R11: 205d363632355420 R12: 0000000000000293
-R13: ffff8881013c7090 R14: ffff8881013c7050 R15: ffff8881f673acc0
-FS:  0000000000000000(0000) GS:ffff8881f6700000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f89395c0c98 CR3: 00000001405e6000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- wdm_rxwork+0xf3/0x200 drivers/usb/class/cdc-wdm.c:989
- process_one_work+0x887/0x15d0 kernel/workqueue.c:2630
- process_scheduled_works kernel/workqueue.c:2703 [inline]
- worker_thread+0x8bb/0x1290 kernel/workqueue.c:2784
- kthread+0x33a/0x430 kernel/kthread.c:388
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:304
- </TASK>
+However. This is usefull input anyway. I never thought of maximizing the
+burst and packagesize and let the host side make the decision.
+But we will probably will eat up a lot of usb bandwidth by doing so.
 
+Before your note I was somehow mistaken that the maxpacket and maxburst
+size had to correlate with the actually transfered data we queue into
+the hardware per request.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+>> I recall that UVC tries to pack a lot of data in a single request. All
+>> the while some intervals it would send 0-length data because of idle
+>> time. I would spread to more requests with a little less data to give
+>> the host a little more breathing room and bandwidth.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+The higher load per request is due to the fact that the uvc gadget is
+using the multiplier, maxpacket and maxburst parameters for the size
+calculation of the request.
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/dri=
+vers/usb/gadget/function/uvc_video.c#n331
 
-If you want to overwrite bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
+Since it is clear now that those parameters are not necessary coupled
+it makes total sense to split the requests into smaller chunks.
 
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
+Thanks,
+Michael
 
-If you want to undo deduplication, reply with:
-#syz undup
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+--eeEWcrWDtQ+LJLkG
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmT6OdAACgkQC+njFXoe
+LGQ8BxAAomTiIT4C5/43fDVR1hRIcHA8PMuhTvws5qejhYz1KBBWTL9rwNBdSsaD
+x/dpqEJg7qe8Sk8kMF4BIXkyp56r9prs206vdjqzKePDJm0T+UVaFVrkuGAuZgXp
+QEHvLywCkLu/qK3Y2m/IpD0s4BMpRcmn1RWjS+Rn81VMU34qN2lD2bqngq22VyTV
+rakqRz1KCpWnroqnM1JS8/9JKgIlIXv5aLd4EBZJ+Rjsc1b6nodrLT9JwFLKbXgZ
+DjaArfLkRuZ3+S4sUbQz3rjbF+CtJ1CprfdYGoADN9XdxXUPhidDYnyVa4V1eM40
+MSq//M1q9N7eUhv6737XjClrZ9JaGx+bopp24b65Vgr5LSA/XnxQdQEe14ReGFtu
+y9mxnyhTvujdDfoeSU/5Yebdr7hZX/iQsMIyIJTHhpwW+juAtx5pAHnrO8ToPg1F
+8YGqUrQoyXAcNOdDrrmX94NdEpRLENKnnOnzi+U24YFDOhP6ziWgnsu/20PyFQCu
+0W2+yIz07H4L0jlwRV4sBJe0os331DJb3JR0HI1vgrkEcNAcaGt6LmjP0Xr64Kms
+fRkz9NHwoHr7zFYcOkd6t9FfCqLwHha084oL+4kdCof6/5RA+OQK+ejHIqtnCjvc
+A6ZxlLxhovv8OoV4X6R6O2pVQBEroblLUYb6gsqUU+aoDgciW6c=
+=gcY+
+-----END PGP SIGNATURE-----
+
+--eeEWcrWDtQ+LJLkG--
