@@ -2,64 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C212A797BF0
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Sep 2023 20:33:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02603797B2F
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Sep 2023 20:08:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244107AbjIGSda convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Thu, 7 Sep 2023 14:33:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46348 "EHLO
+        id S237322AbjIGSIO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Sep 2023 14:08:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241110AbjIGSd2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Sep 2023 14:33:28 -0400
-X-Greylist: delayed 1536 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 07 Sep 2023 11:33:03 PDT
-Received: from rtits2.realtek.com.tw (211-75-126-66.hinet-ip.hinet.net [211.75.126.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 56D5F1BE6;
-        Thu,  7 Sep 2023 11:33:02 -0700 (PDT)
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 3877GN1m8002884, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 3877GN1m8002884
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 7 Sep 2023 15:16:23 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Thu, 7 Sep 2023 15:16:51 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Thu, 7 Sep 2023 15:16:50 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::7445:d92b:d0b3:f79c]) by
- RTEXMBS04.realtek.com.tw ([fe80::7445:d92b:d0b3:f79c%5]) with mapi id
- 15.01.2375.007; Thu, 7 Sep 2023 15:16:50 +0800
-From:   Hayes Wang <hayeswang@realtek.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     "davem@davemloft.net" <davem@davemloft.net>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        nic_swsd <nic_swsd@realtek.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH net v2] r8152: avoid the driver drops a lot of packets
-Thread-Topic: [PATCH net v2] r8152: avoid the driver drops a lot of packets
-Thread-Index: AQHZ4G/uLCHLeDMawES5jAj/REiJSrAN/YuAgADpM2A=
-Date:   Thu, 7 Sep 2023 07:16:50 +0000
-Message-ID: <7f8b32a91f5849c99609f78520b23535@realtek.com>
-References: <20230906031148.16774-421-nic_swsd@realtek.com>
- <20230906172847.2b3b749a@kernel.org>
-In-Reply-To: <20230906172847.2b3b749a@kernel.org>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.22.228.6]
-x-kse-serverinfo: RTEXMBS04.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        with ESMTP id S229609AbjIGSHm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Sep 2023 14:07:42 -0400
+Received: from mail-pf1-f205.google.com (mail-pf1-f205.google.com [209.85.210.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D1D01FE9
+        for <linux-usb@vger.kernel.org>; Thu,  7 Sep 2023 11:07:21 -0700 (PDT)
+Received: by mail-pf1-f205.google.com with SMTP id d2e1a72fcca58-68bf27251b7so1600517b3a.0
+        for <linux-usb@vger.kernel.org>; Thu, 07 Sep 2023 11:07:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694110018; x=1694714818;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zqIHP5Atx4E10XOKrkLhp5j/znUfTqtEUAaZEP+CeQw=;
+        b=Z0veWzSvB0Qx3TUvRz4ZyVl0Y0NzHzWZVwLxDF8i0JYP5C8PcUBHsPf7V/Se7zVtaO
+         jyFJSq83F/RJd9ot1l2XQI1zqVdqJHfNLC0cmvG/3oGqxzHinXHpG4g/33SznFqnN7fX
+         u14/4F3v58pN36oCtqjzPZgBRU1IvJ9VJYPW1SJbOHC0hrKLqLIEI4UGnMUZgm4Py7q+
+         1weIPuRIMCA3Jix783AnrTvTz97mOnAu+nB6q9qL5k5CChx1trARB6vxl4YYy8AvryCH
+         +hyRdLe7IW5vAxxga1Pn2n/BLIsnpyWmzAsEWYI84bU3qUfIYkxUgN6fKH7CK4S3pV5H
+         yKRw==
+X-Gm-Message-State: AOJu0YzR3IncBxplcLZJQnnNO3tKyCRCEGNjBRsqsowfySibvSdEy6lu
+        HUOW0Z6SvgJ2ZZWkYNJWve+o+Wd1tZxHYRCWCrpg/CZUnX+F
+X-Google-Smtp-Source: AGHT+IFjPvYdL6yJ0T9RSw8wXgbzzm4aQgq4yAZjXwtG6lh8tmWk/dSQvsey2Cq+JzMdkY6lBH1o5i38YWcZcU9ohInMvFejN3az
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-Received: by 2002:a05:6a00:1989:b0:68b:a137:3738 with SMTP id
+ d9-20020a056a00198900b0068ba1373738mr33354pfl.5.1694110018575; Thu, 07 Sep
+ 2023 11:06:58 -0700 (PDT)
+Date:   Thu, 07 Sep 2023 11:06:58 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000de219d0604c8b9b0@google.com>
+Subject: [syzbot] [usb?] WARNING in wdm_rxwork/usb_submit_urb
+From:   syzbot <syzbot+44a9ac69913e0758fbc1@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,50 +53,74 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Jakub Kicinski <kuba@kernel.org>
-> Sent: Thursday, September 7, 2023 8:29 AM
-[...]
-> Good to see that you can repro the problem.
+Hello,
 
-I don't reproduce the problem. I just find some information about it.
+syzbot found the following issue on:
 
-> Before we tweak the heuristics let's make sure rx_bottom() behaves
-> correctly. Could you make sure that
->  - we don't perform _any_ rx processing when budget is 0
->    (see the NAPI documentation under Documentation/networking)
+HEAD commit:    0468be89b3fa Merge tag 'iommu-updates-v6.6' of git://git.k..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=161a0924680000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=89dc1df75beb4d84
+dashboard link: https://syzkaller.appspot.com/bug?extid=44a9ac69913e0758fbc1
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
 
-The work_done would be 0, and napi_complete_done() wouldn't be called.
-However, skb_queue_len(&tp->rx_queue) may be increased. I think it is
-not acceptable, right?
+Unfortunately, I don't have any reproducer for this issue yet.
 
->  - finish the current aggregate even if budget run out, return
->    work_done = budget in that case.
->    With this change the rx_queue thing should be gone completely.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/1079f65481a7/disk-0468be89.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/7eb3c6765fda/vmlinux-0468be89.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/92e68aa81913/bzImage-0468be89.xz
 
-Excuse me. I don't understand this part. I know that when the packets are
-more than budget, the maximum packets which could be handled is budget.
-That is, return work_done = budget. However, the extra packets would be queued
-to rx_queue. I don't understand what you mean about " the rx_queue thing
-should be gone completely". I think the current driver would return
-work_done = budget, and queue the other packets. I don't sure what you
-want me to change.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+44a9ac69913e0758fbc1@syzkaller.appspotmail.com
 
->  - instead of copying the head use napi_get_frags() + napi_gro_frags()
->    it gives you an skb, you just attach the page to it as a frag and
->    hand it back to GRO. This makes sure you never pull data into head
->    rather than just headers.
+WARNING: CPU: 1 PID: 5266 at drivers/usb/core/urb.c:379 usb_submit_urb+0x14cb/0x1720 drivers/usb/core/urb.c:379
+Modules linked in:
+CPU: 1 PID: 5266 Comm: kworker/1:4 Not tainted 6.5.0-syzkaller-10885-g0468be89b3fa #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/26/2023
+Workqueue: events wdm_rxwork
+RIP: 0010:usb_submit_urb+0x14cb/0x1720 drivers/usb/core/urb.c:379
+Code: 27 4b fe eb cb bb fe ff ff ff e9 ca f3 ff ff e8 4b f6 4b fd 48 89 de 48 c7 c7 e0 f1 ee 86 c6 05 45 85 25 05 01 e8 95 af 15 fd <0f> 0b e9 ba fe ff ff bb f8 ff ff ff e9 9e f3 ff ff 48 89 ef e8 6c
+RSP: 0018:ffffc90001f57c40 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: ffff88810efe6b00 RCX: 0000000000000000
+RDX: ffff88811e413a00 RSI: ffffffff811725a6 RDI: 0000000000000001
+RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000001 R11: 205d363632355420 R12: 0000000000000293
+R13: ffff8881013c7090 R14: ffff8881013c7050 R15: ffff8881f673acc0
+FS:  0000000000000000(0000) GS:ffff8881f6700000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f89395c0c98 CR3: 00000001405e6000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ wdm_rxwork+0xf3/0x200 drivers/usb/class/cdc-wdm.c:989
+ process_one_work+0x887/0x15d0 kernel/workqueue.c:2630
+ process_scheduled_works kernel/workqueue.c:2703 [inline]
+ worker_thread+0x8bb/0x1290 kernel/workqueue.c:2784
+ kthread+0x33a/0x430 kernel/kthread.c:388
+ ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:304
+ </TASK>
 
-I would study about them. Thanks.
 
-Should I include above changes for this patch?
-I think I have to submit another patches for above.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-> Please share the performance results with those changes.
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-I couldn't reproduce the problem, so I couldn't provide the result
-with the differences.
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
+If you want to overwrite bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
-Best Regards,
-Hayes
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
 
+If you want to undo deduplication, reply with:
+#syz undup
