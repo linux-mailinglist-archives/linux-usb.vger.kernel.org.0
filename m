@@ -2,43 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FCE3796DFD
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Sep 2023 02:28:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEF5E796E92
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Sep 2023 03:35:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238697AbjIGA2w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Sep 2023 20:28:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48574 "EHLO
+        id S231976AbjIGBfo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Sep 2023 21:35:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbjIGA2w (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Sep 2023 20:28:52 -0400
+        with ESMTP id S229902AbjIGBfn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Sep 2023 21:35:43 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56F510C8;
-        Wed,  6 Sep 2023 17:28:48 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2849AC433C8;
-        Thu,  7 Sep 2023 00:28:48 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37A351998
+        for <linux-usb@vger.kernel.org>; Wed,  6 Sep 2023 18:35:40 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 27D97C433C8
+        for <linux-usb@vger.kernel.org>; Thu,  7 Sep 2023 01:35:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694046528;
-        bh=lwdKw3Qf1YKcwjr7eKdfXB/NP6Lq8MHNdgXQ9a66tuI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=PXb+QyUvr0t6vsv+f/Q3f9znSt3ncrMljOP1OCQmWHIuP+Mvk2WEsTwM9rjxTin5J
-         Gz87+uCy509NoNoxj7G8SI1nz8sqbw+VMg/ZU/L1d9Zs96mG/7/lBrEGIp6unKgRye
-         5QVmSC1JwQI5rMc6/e6jCowIGw13zd556bfFhEzxqFo5bL4DHSdhU4rjQ9abiI+bop
-         freFAttdg0hocam3nCR3e5L68QxN/QyPayx+0aNdMCl0DbQ2QLsA5hHUL0HBiU8B6G
-         bpGE55FNtlMwkNCpXDjQnPmHabG2LrgSWU4XjkHcXGvfJgK6ZoZjAMq47dSckgedsU
-         eo1m1Puix9mzw==
-Date:   Wed, 6 Sep 2023 17:28:47 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Hayes Wang <hayeswang@realtek.com>
-Cc:     <davem@davemloft.net>, <netdev@vger.kernel.org>,
-        <nic_swsd@realtek.com>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH net v2] r8152: avoid the driver drops a lot of packets
-Message-ID: <20230906172847.2b3b749a@kernel.org>
-In-Reply-To: <20230906031148.16774-421-nic_swsd@realtek.com>
-References: <20230906031148.16774-421-nic_swsd@realtek.com>
+        s=k20201202; t=1694050539;
+        bh=4hRtGshgxnT8dJoZceTiqMQ85sb6zPPanrbKBZfqObo=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=mXyZwCfouSpwarnXNYqxxdWTmrhx70rxxvtH73BJuUnXWA37W5OkmyK83BD3OPTVS
+         jpRCKo+JTuVTHcHS2jcTGGPYACg6kBsWSN//JzOy2veRA1NDSDnWZETVhonP2+IUR3
+         Ac1gMZkqmhtd1Df3fl1Hy8ABRBBz6mIiOUaG/6tmADRc4Bo11oYDFilSHDCS1ng8NK
+         ZlqXw73c4IMuwGBHpYyzjIizIq2o17sogl9lCpakyWwYIRcN6VUl7fwRiLK7MYQ7XN
+         02cR5M1afFlTpvxo3SABej+V0sVTUMehsFUDfnyTag/yFrC1XKs0UWqQLi+jiaNoeM
+         uUQAFqESFm0ZQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+        id EFD29C4332E; Thu,  7 Sep 2023 01:35:38 +0000 (UTC)
+From:   bugzilla-daemon@kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 217862] [BUG] Alauda driver causes oops when inserted with card
+ in with transfer buffer is on stack, throws errors if card is inserted
+ afterwards.
+Date:   Thu, 07 Sep 2023 01:35:38 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: pawlick3r@proton.me
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-217862-208809-jc4bLHYPuR@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-217862-208809@https.bugzilla.kernel.org/>
+References: <bug-217862-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -48,32 +66,99 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 6 Sep 2023 11:11:48 +0800 Hayes Wang wrote:
-> Stop submitting rx, if the driver queue more than 256 packets.
-> 
-> If the hardware is more fast than the software, the driver would start
-> queuing the packets. And, the driver starts dropping the packets, if it
-> queues more than 1000 packets.
-> 
-> Increase the weight of NAPI could improve the situation. However, the
-> weight has been changed to 64, so we have to stop submitting rx when the
-> driver queues too many packets. Then, the device may send the pause frame
-> to slow down the receiving, when the FIFO of the device is full.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217862
 
-Good to see that you can repro the problem.
+--- Comment #14 from pawlick3r@proton.me ---
+(In reply to Alan Stern from comment #13)
+> There is a significant difference between the two reports: the bulk endpo=
+int
+> numbers.  The Windows output shows it using endpoint 3 for bulk OUT where=
+as
+> Linux uses endpoint 1.  That's got to be the reason why the Bulk Reset Me=
+dia
+> and Bulk Get Redundancy Data commands are failing.
+>=20
+> Let's see what "lsusb -v" shows for this device.  I expect it will list b=
+oth
+> endpoints, and the Windows driver uses one but the Linux driver uses the
+> other.
 
-Before we tweak the heuristics let's make sure rx_bottom() behaves
-correctly. Could you make sure that 
- - we don't perform _any_ rx processing when budget is 0
-   (see the NAPI documentation under Documentation/networking)
- - finish the current aggregate even if budget run out, return
-   work_done = budget in that case.
-   With this change the rx_queue thing should be gone completely.
- - instead of copying the head use napi_get_frags() + napi_gro_frags() 
-   it gives you an skb, you just attach the page to it as a frag and
-   hand it back to GRO. This makes sure you never pull data into head
-   rather than just headers.
+Here is the lsusb -v output for this device and there are in fact two diffe=
+rent
+endpoints.=20
 
-Please share the performance results with those changes.
--- 
-pw-bot: cr
+Bus 001 Device 006: ID 0584:0008 RATOC System, Inc. Fujifilm MemoryCard
+ReaderWriter
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               1.00
+  bDeviceClass            0=20
+  bDeviceSubClass         0=20
+  bDeviceProtocol         0=20
+  bMaxPacketSize0        64
+  idVendor           0x0584 RATOC System, Inc.
+  idProduct          0x0008 Fujifilm MemoryCard ReaderWriter
+  bcdDevice            1.02
+  iManufacturer           1 YAMAICHI ELECTRONICS Co.,Ltd.
+  iProduct                2 USB SmartMedia Adapter
+  iSerial                 0=20
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0027
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0=20
+    bmAttributes         0x80
+      (Bus Powered)
+    MaxPower               80mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           3
+      bInterfaceClass       255 Vendor Specific Class
+      bInterfaceSubClass      0=20
+      bInterfaceProtocol      0=20
+      iInterface              0=20
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x01  EP 1 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x82  EP 2 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x03  EP 3 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               0
+Device Status:     0x0000
+  (Bus Powered)
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
