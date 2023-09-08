@@ -2,101 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62DC1798A1A
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Sep 2023 17:40:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACCF7798A3E
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Sep 2023 17:54:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241530AbjIHPkk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Sep 2023 11:40:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56600 "EHLO
+        id S244531AbjIHPy7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Sep 2023 11:54:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239384AbjIHPkj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Sep 2023 11:40:39 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05olkn20831.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e1a::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A9E91BFF;
-        Fri,  8 Sep 2023 08:40:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Wt4pVDMw6gLOUVDmvplEAlZSEbx73tDquH8d6gKb5JdhjLImMrN73tC270RKDRUFa2U7j8EnySSoztVIu8/PL6BeTXgIH5L2Gj4A9ROwS5RtUimUxcuJBe1HjDkpetF/Y/uFws9RLhXNqROldTayrf3f8GLsZU9+gV4K0n/ayY1uazTLsPszZTfoQPgcAmFwr+CyXqxw95lYWoKTWGWHsaJf0iq+6fbZXOFlc/Ia8AiCjbfADfRB2GBzo1YM9uKCeI3qozO5HmxNLu4AqRuB8Kkhb5tOVSR9vMIOCEGVzjtBZ3hDXlBH5kyiq88cHYehVDibjRv0sPgcjtIgWtUokw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PMxdzWJBfP6gO4p6HdqJJ5eRAprvG2SMg7tXHARoeJ4=;
- b=VH4yMwR4a7fuvyCQUVSocDN1JiDkkSIMTPN/3qZw+pI9ZxD9eJjLR7rTyOgKAyEQWBKnEZR2TqblbAngjxOigYakF/Jf6SjvDgF0U9HIlfXFL8jERjW4rowiBcpEDJ682hFc16V8+wglzbjIGN9u8jnC2edhf6ueoA/CREPWgj+Dxod3Gd0mSn4FHR7yLlqPuUr0SepFdYyP6LDWtyiOCImAkTMxyRlfOiooCKtO/6hZckW7RTH5G7tn81q4gqfmhIcI8VtJwkDZhINWt4tJUJFt0TbySjuEplhJp5QP2vCH4HdjqEwN52fqkVqaFbjbM0nTjAyerYvg3yZyWHmaxg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PMxdzWJBfP6gO4p6HdqJJ5eRAprvG2SMg7tXHARoeJ4=;
- b=m19HAsX2eI84YT4TsrCvT1iT/laX+NaEcUTNPqZdVletow66O3HbKw51RxH7nL3hP7KUMSKTFxQzP6JMT6EhZpPaTS9mAaEsOhqEjRp+OAnR/nSOG+Xd2217unIaFZl+qePLtJUflnhGG/ofORq4mhqCiD2lKud6AfuAwQlCLqcO542UEhj71DUwbEHf1sGTDbw6pM8r0U5DP+1TPAATmOGHaIzNJcbViYRJ1c3z5Hpnj7eI9FZDbvVAb0VvAY2GAXNmpom1vtXh0RKG9GfICKzIa99PhEaNxIgutDT6PMCp5NdkxaZtw88+cld5KEJ4IgBnrWiDg+FD4VXLy1GsOA==
-Received: from AS8P192MB1269.EURP192.PROD.OUTLOOK.COM (2603:10a6:20b:3ca::5)
- by AS8P192MB1191.EURP192.PROD.OUTLOOK.COM (2603:10a6:20b:3d0::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.30; Fri, 8 Sep
- 2023 15:40:32 +0000
-Received: from AS8P192MB1269.EURP192.PROD.OUTLOOK.COM
- ([fe80::6fd3:22b4:117d:a5a9]) by AS8P192MB1269.EURP192.PROD.OUTLOOK.COM
- ([fe80::6fd3:22b4:117d:a5a9%2]) with mapi id 15.20.6745.035; Fri, 8 Sep 2023
- 15:40:32 +0000
-From:   Yuran Pereira <yuran.pereira@hotmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     Yuran Pereira <yuran.pereira@hotmail.com>,
-        stern@rowland.harvard.edu, royluo@google.com,
-        christophe.jaillet@wanadoo.fr, raychi@google.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzbot+c063a4e176681d2e0380@syzkaller.appspotmail.com
-Subject: [PATCH] USB: core: Fix a NULL pointer dereference
-Date:   Fri,  8 Sep 2023 21:09:37 +0530
-Message-ID: <AS8P192MB12697886EC8DF1650AD56A57E8EDA@AS8P192MB1269.EURP192.PROD.OUTLOOK.COM>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TMN:  [8r7N4A654WAbBOIsNwNcL1jVtF0FfFfC]
-X-ClientProxiedBy: JNAP275CA0061.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:4f::19)
- To AS8P192MB1269.EURP192.PROD.OUTLOOK.COM (2603:10a6:20b:3ca::5)
-X-Microsoft-Original-Message-ID: <20230908153937.153306-1-yuran.pereira@hotmail.com>
+        with ESMTP id S230309AbjIHPy6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Sep 2023 11:54:58 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234011BC1
+        for <linux-usb@vger.kernel.org>; Fri,  8 Sep 2023 08:54:54 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-99c1c66876aso280797766b.2
+        for <linux-usb@vger.kernel.org>; Fri, 08 Sep 2023 08:54:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1694188492; x=1694793292; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mAW2eAnwKpql55bSICYaR4XGw1QtPbIRnS2ZZ8yTGWo=;
+        b=432Qq6e6S3mkeeJQudmSqzLAQoweZ0TySid+pg8QC9kBtB/16u96LSeeL5mVddJeqD
+         /H1C27nWci7frov3/Rws5ES/LUrxkfrD4MFCFNqrSonOauMyLLLO3/iMvbDx8QbN5VV3
+         zxcQ2pgnwaLqaAr+amMITtNyd9EVIoV7oTJwNgfpZz9Wa66jJ36GyCwHayN6Mz1elH7q
+         dBfdJxPh0W9UDDXc4nB0DUpAK7QDIRatMdiLNaIjtNvi/RBIixmZ1T7plS7ubISz5l9N
+         dkKo0je0ZoM0TWWV15LjrfHYofq5PJ1rKaYowpOIs/myrfvUc9EWKO0Ss7FkfhSs+w2z
+         JKaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694188492; x=1694793292;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mAW2eAnwKpql55bSICYaR4XGw1QtPbIRnS2ZZ8yTGWo=;
+        b=dRGFtc88qO1/dHNQ2R51qjEO5vI45zlYVWspbM4YMM0RJRjsqQFVn5byZcuTXASN3S
+         JMAcHnu7U4Vn5TX68Q3pVeHwtpxBbeZ7+yNAoTHlzZ3lmLmd3DnTJmo1fA9bAUSFGUPj
+         BVxo7G4YqqoO2laHle6oAwA+ZDkbPrezZk3VLKz6639hrmhvSwCnT2nh1S0mYDKrgYja
+         0Q8HNEiVQTrjqZpcMwIRpEDW5Mw/a8ipByW6C0X4Mrosj8c3HegvPegabiu6AdFXToIg
+         JIXIFXKCqm9oziYpAGiCfLkOYUjPoWWVW30gWgOjr9QpkDM03ZcKP5Oo/2G3OKMMtYAc
+         1hkw==
+X-Gm-Message-State: AOJu0YwhV2vECxbq47QZO23VVHh3vKvMMoMvL1hFgmdJr9j0LSDfwGle
+        NJ3cmcPK8/GpWZAljeJnMiLawrnw/bKThkTAOVmXbQ==
+X-Google-Smtp-Source: AGHT+IHhp4OplVsciZa+ZZQHcLWT2VyKnOD/Lc86S03vJwPYc4BHkUa5ph7q1G2WBAJWKHsCaA9MDEI1Hw92yHrVreE=
+X-Received: by 2002:a17:906:3111:b0:9a1:e941:6f49 with SMTP id
+ 17-20020a170906311100b009a1e9416f49mr2185740ejx.44.1694188492444; Fri, 08 Sep
+ 2023 08:54:52 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS8P192MB1269:EE_|AS8P192MB1191:EE_
-X-MS-Office365-Filtering-Correlation-Id: 53508e2c-a3db-4912-e5df-08dbb081ef95
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QTy/vZ83dre6Sn7U0xkpm3ZifORm1pritQNri3u99OYEUz4EcVWj0IjCqjV6o8onBv8ZnLsZ/WdVxsyJUiI/bsqTjEN35FdWMw4h5Kx03atDk1c3NVHNAWhu69UTME3iWz3FRN6Zqcbxioel3IIYmpSFt2gio5ouKLDRJpxFgN/jKzJODzLA3mSSOIeZNtsL6ZxnE+lFLLbSi2OStjDKvqcwV9rZpU9gFjcZMOlcpfdrGFXJyMBUBB/xgmNm6WDiRXN9c37ybtmFHhmQDg5+3SmLDksEucKUxs8t+6SMKN9cqoXtgYMz4OU1TnCuk4jpoJKG2zGp3Enxz26w/1sxTAZZPMFrvigihBYqtGchY35+V5r5OVeuqOzC9ygH1fXebZmwkWhEXrbjeDm0kR2/Jr30zuw7RMEwhflpU+SjE27o1cRtE9TR/NDvbcX8s+AUMuUxYjKGtDMeiNWlSSs8pt3nwFhgB7p2byvi6Od9qLT3tkJ4Je/3V82/p9gVl7a//0PIA4x7q7xgB7jYiJJLzmu6zamvemKDurVXC6u043nr5mPe4c1XHLF1Z3PL+lnFNMUncpdIsMNdgMrOSZPzW8YrukYZyKOMDkIng8+7gIo=
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?eo52L0J1GN4qXljOV7TqpxF8r5c1SGHxiSyOUjWooDVPOZfFW3CfOwua0k+k?=
- =?us-ascii?Q?H4N67xnIUbDXeStA30O2VCjItZLt0Chq+gobo4fkV9v9zXF1R/imytI/0enP?=
- =?us-ascii?Q?FlvqdHw0G0H+jc6NCH/OO83Rtsdnn8HqcjqQJLRHys/aff9zstc9thJAXnY6?=
- =?us-ascii?Q?yx6adMXk5J+Z9X7Tnke71NnfAVBu6m/qmXsAKxZ3gOPSyF9bDz7p3zFAgFGb?=
- =?us-ascii?Q?S2/WONdEVEMUn0feRYUnjl0dHaGqJWoFr3ZasFHe1r+1boyj2MtR1F+LIRzh?=
- =?us-ascii?Q?E/tPtWzatGFoZ+zBKzoCd0wIa25W5ZnDlETR/IhVQcA2/uwkWeeFqBB0CXbM?=
- =?us-ascii?Q?mMcWbQPrbAzbVvJ67Xr82Q+nyjs8FeN/conDRXVWQboGi2k09F3xGaDIBgYt?=
- =?us-ascii?Q?BKjS55hxJoTwNdhGxb58t/c+Vjlu6SF1BlCpIrbczm7YiGWCpIBaJtKcXB4K?=
- =?us-ascii?Q?oBgSLHlQ3zuZyXBQ/g5ePAiiy6nDMCayQ9uyllPcTNMu3Tknj8hJMLg67kQ7?=
- =?us-ascii?Q?nzCHMIV+dcvbwbC1o9rimL26REoHOC3RwICEcmd0D7RLbFuy2/e69VdPcmG6?=
- =?us-ascii?Q?cz20cS/ydn9ogBvGjuiSgcr5gNHDWYbMWE3BP6KQryGPUHaZWnJMiD2ev3PL?=
- =?us-ascii?Q?7WIFzOnneHh6Zj5xTIWtMjXmc2CDiMP52+ob2h0irLD7AWfedK3dHqkkDILZ?=
- =?us-ascii?Q?eVSmiNl2VcigI/s+c21X8xrZurWtDBIj6VzbCaPZAdiBAVc0sRjNYDEmXGbe?=
- =?us-ascii?Q?7xP2jun1533IpsZces2+YApOwEUGeib8hfcBTC/Fm4LfNkmvv5oUhitrgynX?=
- =?us-ascii?Q?9tA8fOX6cQ1zYhmUZtVR/DywmoGXIQRaC971vsMW3kDsH7l/7w9V+E+iM8OM?=
- =?us-ascii?Q?mT5TJ9A4iy8XJejzX3gTf0pTqyYoGVkAgA99t5mh5Psk7JRQNzhzFY0CPXPw?=
- =?us-ascii?Q?bOnJ+qs1SvTL9++5/BTHjeTUPGSqBZMfaQijueDo4qcXe2kv+Mvu/pv+84tE?=
- =?us-ascii?Q?z+SwvRsdqz11Ow7qhYW/sPeyl0i4m7S6U8CwyW3i2ot6vnRnCyP6tqmbX/my?=
- =?us-ascii?Q?7AM330XQthEn2Q8eFjvgFQkUaIF38rsBzFHvTvqICv4Zu7zFBZagnEtjdHdl?=
- =?us-ascii?Q?pGr12ltkvpwB42TwfNwzjOi6UZNrrDmZbgdlQ+YZ4Cs9jpM2r6gPJFbtCaMx?=
- =?us-ascii?Q?SLiPgzHwjec/KRJj8EChJaBFpzyNcJxkiE8ouZwt9QtMoDrFOylBOSv6S3s?=
- =?us-ascii?Q?=3D?=
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-fb43a.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: 53508e2c-a3db-4912-e5df-08dbb081ef95
-X-MS-Exchange-CrossTenant-AuthSource: AS8P192MB1269.EURP192.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Sep 2023 15:40:32.3455
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8P192MB1191
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <20230615093406.80195-1-dan.scally@ideasonboard.com>
+ <20230615171558.GK741@pendragon.ideasonboard.com> <dbf1e426-cf86-46c4-afb9-9d6983f0fb6d@google.com>
+ <ZPXrceImaT9GevmA@pengutronix.de>
+In-Reply-To: <ZPXrceImaT9GevmA@pengutronix.de>
+From:   Avichal Rakesh <arakesh@google.com>
+Date:   Fri, 8 Sep 2023 23:54:40 +0800
+Message-ID: <CAMHf4WJ6hBEzPUCOX8wbnGZ7pUuG1a+mwR3h=d6=kyyf9W7p+g@mail.gmail.com>
+Subject: Re: [PATCH] usb: gadget: uvc: Move usb_ep_disable() to uvcg_video_enable()
+To:     Michael Grzeschik <mgr@pengutronix.de>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Daniel Scally <dan.scally@ideasonboard.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org,
+        Jayant Chowdhary <jchowdhary@google.com>,
+        "Eino-Ville Talvala (Eddy)" <etalvala@google.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -104,55 +76,174 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Michael,
 
-When the call to dev_set_name() in the usb_hub_create_port_device 
-function fails to set the device's kobject's name field, 
-the subsequent call to device_register() is bound to fail and cause
-a NULL pointer derefference, because kobject_add(), which is in the 
-call sequence, expects the name field to be set before it is called
+Apologies for the late reply, I have been out travelling.
 
+On Mon, Sep 4, 2023 at 10:36=E2=80=AFPM Michael Grzeschik <mgr@pengutronix.=
+de> wrote:
+>
+> Hi Avichal
+>
+> Cc'ing: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+>
+> On Wed, Aug 30, 2023 at 01:38:23PM -0700, Avichal Rakesh wrote:
+> >On 6/15/23 10:15, Laurent Pinchart wrote:
+> >> On Thu, Jun 15, 2023 at 10:34:06AM +0100, Daniel Scally wrote:
+> >>> Currently the UVC Gadget's .set_alt() callback disables the USB
+> >>> endpoint, following which a V4L2 event is queued that closes
+> >>> down the workqueue. This ordering results in repeated calls to
+> >>> usb_ep_queue() from the workqueue whilst usb_ep_disable() is
+> >>> running - behaviour that the documentation for usb_ep_disable()
+> >>> specifically prohibits.
+> >>>
+> >>> Move the call to usb_ep_disable() until after cancel_work_sync(),
+> >>> which will guarantee the endpoint is no longer in use when
+> >>> usb_ep_disable() is called.
+> >>>
+> >>> Signed-off-by: Daniel Scally <dan.scally@ideasonboard.com>
+> >>> ---
+> >>>  drivers/usb/gadget/function/f_uvc.c     | 3 ---
+> >>>  drivers/usb/gadget/function/uvc_video.c | 4 ++++
+> >>>  2 files changed, 4 insertions(+), 3 deletions(-)
+> >>>
+> >>> diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget=
+/function/f_uvc.c
+> >>> index 5e919fb65833..4b91bd572a83 100644
+> >>> --- a/drivers/usb/gadget/function/f_uvc.c
+> >>> +++ b/drivers/usb/gadget/function/f_uvc.c
+> >>> @@ -337,9 +337,6 @@ uvc_function_set_alt(struct usb_function *f, unsi=
+gned interface, unsigned alt)
+> >>>             if (uvc->state !=3D UVC_STATE_STREAMING)
+> >>>                     return 0;
+> >>>
+> >>> -           if (uvc->video.ep)
+> >>> -                   usb_ep_disable(uvc->video.ep);
+> >>> -
+> >>>             memset(&v4l2_event, 0, sizeof(v4l2_event));
+> >>>             v4l2_event.type =3D UVC_EVENT_STREAMOFF;
+> >>>             v4l2_event_queue(&uvc->vdev, &v4l2_event);
+> >>
+> >> If we don't disable the endpoint here, should we return
+> >> USB_GADGET_DELAYED_STATUS here (and call uvc_function_setup_continue()
+> >> in uvc_v4l2_streamoff()) or is that not needed ? The uvc->state update=
+d
+> >> should then possibly be moved to uvc_v4l2_streamoff() (checking if thi=
+s
+> >> would cause any race condition would also be a nice bonus :-)).
+> >>
+> >
+> >Hey all,
+> >
+> >First off, apologies for reviving an old thread. We've also been seeing =
+the
+> >"no resource for ep2in" warning from dwc3 controller, followed by the UV=
+C gadget
+> >not streaming any frames, when there is a quick STREAMOFF->STREAMON sequ=
+ence.
+> >
+> >It looks like this is the same root cause as what Dan mentioned in
+> >https://lore.kernel.org/20230531085544.253363-1-dan.scally@ideasonboard.=
+com/
+> >and this patch seems to solve. (Thank you Dan, for posting the stacktrac=
+e in
+> >that email thread! I had been banging my head for a couple of days befor=
+e
+> >thinking of looking up the exact stack :|)
+> >
+> >IIUC, this stems from workqueue not fully shutting down by the time the =
+usb
+> >endpoint is disabled and we need stronger guarantees that the workqueue =
+pumping
+> >usb_requests doesn't accidentally queue usb_requests _after_ we've disab=
+led
+> >the streaming endpoint on the usb controller.
+> >
+> >Attached is a patch that attempts to address the concerns raised here an=
+d sets
+> >up some stronger timing and memory guarantees.
+> >
+> >So here are the list of changes over what Dan had already started:
+> >
+> > - Return USB_GADGET_DELAYED_STATUS from set_alt. This is to ensure ther=
+e are no
+> >   more control transfers while we're waiting on the workqueue to wind d=
+own.
+> >
+> > - Move updating uvc->state to uvc_v4l2_streamoff as Laurent suggested.
+> >   This ensures that setting uvc->state to STREAMING or CONNECTED
+> >   happens as a result of streamoff and streamon events which makes thin=
+gs
+> >   easier to reason about.
+> >
+> > - Guard video_pump with uvc->state so the thread can be stopped by sett=
+ing
+> >   uvc->state to anything other than UVC_STATE_STREAMING. This effective=
+ly makes
+> >   uvc->state a flag for the video_pump loop to exit. This is the same f=
+lag that
+> >   the complete callback uses to restart the workqueue, so all interacti=
+ons
+> >   with the controller are effectively guarded by the same flag now.
+> >
+> > - Set uvc->state to UVC_STATE_CONNECTED before winding down the work qu=
+eue.
+> >   Now that all usb logic is guarded by the same flag, setting the flag =
+should
+> >   stop all usb packet queuing once current execution finishes.
+> >
+> > - Add some memory guarantees in uvcg_video_enable(). At the moment, we =
+don't
+> >   really consider the fact that usb_ep_dequeue is async, which means th=
+at the
+> >   usb_requests may not have been returned to the gadget before we start
+> >   deallocating them. With this patch, we wait until all usb_requests ha=
+ve been
+> >   returned to us before deallocating them (this adds a little bit of
+> >   bookkeeping, but nothing too complicated).
+>
+> I am currently trying to solve that by preparing a patch that is
+> fixing the use of the requests when deallocating them. Since currently
+> the uvc_gadget is also running into wild use after free issues because
+> of exactly that async dequeue and dealloc situation.
 
-This patch adds code to perform error checking for dev_set_name()'s
-return value. If the call to dev_set_name() was unsuccessful, 
-usb_hub_create_port_device() returns with an error.
+Do you already have a patch up for this? It seems my LKML-fu is
+failing and I can't seem to find the thread. If you aren't too deep
+into the patch, can you take a look at the request counting mechanism
+added in my patch? If you have a (somewhat) consistent repro of the
+use-after-dealloc issue, runnin it through the whole patch would be
+very appreciated! It is supposed to fix the exact problem you've
+described.
 
+> IMHO it should be
+> save to call dealloc after calling dequeue. Which is probably true for
+> other usb device controller driver other then dwc3.
 
-PS: The patch also frees port_dev->req and port_dev before returning.
-However, I am not sure if that is necessary, because port_dev->req
-and port_dev are not freed when device_register() fails. Would be
-happy if someone could help me understand why that is, and whether I
-should keep those kfree calls in my patch.
+Perhaps Thinh or someone better versed in Gadget API can chime in on
+this, but as it stands usb_ep_dequeue specifically says that it is
+async, and gadget drivers must wait on the complete callbacks to
+regain ownership of the usb_request. Until the API change is made, UVC
+should adhere to the current API?
 
-dashboard link: https://syzkaller.appspot.com/bug?extid=c063a4e176681d2e0380
+>
+> For some background. The dwc3 is putting the requests into a cancelled li=
+st
+> that will be cleared by the interrupt handler and that is dequeuing them
+> instead. In between the dequeue call and the interrupt call the uvc layer=
+ could
+> dealloc the request which leads the interrupt handler to dequeue an
+> already freed request.
 
-Reported-by: syzbot+c063a4e176681d2e0380@syzkaller.appspotmail.com
+This roughly tracks with what I gleaned from skimming the DWC3 code as
+well. In local tests the complete calls were always timely and I never
+actually ran into the situation where UVC deallocated an unowned
+request, but as someone (I think it was Alan?)  said in a previous
+thread: technically possible just means it will happen eventually
 
-Signed-off-by: Yuran Pereira <yuran.pereira@hotmail.com>
----
- drivers/usb/core/port.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+Please do review/test the patch. I'll send out a formal patch on
+Monday once I am back, but would love to have some early eyes take a
+look in case there is something obvious I missed.
 
-diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
-index 77be0dc28da9..e546e92e31a7 100644
---- a/drivers/usb/core/port.c
-+++ b/drivers/usb/core/port.c
-@@ -707,8 +707,14 @@ int usb_hub_create_port_device(struct usb_hub *hub, int port1)
- 	port_dev->dev.driver = &usb_port_driver;
- 	if (hub_is_superspeed(hub->hdev))
- 		port_dev->is_superspeed = 1;
--	dev_set_name(&port_dev->dev, "%s-port%d", dev_name(&hub->hdev->dev),
--			port1);
-+
-+	retval = dev_set_name(&port_dev->dev, "%s-port%d", 
-+			dev_name(&hub->hdev->dev), port1);
-+	if (retval < 0) {
-+		kfree(port_dev->req);
-+		kfree(port_dev);
-+		return retval;
-+	}
- 	mutex_init(&port_dev->status_lock);
- 	retval = device_register(&port_dev->dev);
- 	if (retval) {
--- 
-2.25.1
+Thank you.
 
+- Avi
