@@ -2,331 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B994C798803
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Sep 2023 15:38:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D845279880F
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Sep 2023 15:45:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236581AbjIHNim (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Sep 2023 09:38:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59230 "EHLO
+        id S241557AbjIHNpI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Sep 2023 09:45:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231284AbjIHNil (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Sep 2023 09:38:41 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F2A1BC1;
-        Fri,  8 Sep 2023 06:38:35 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93061C433C9;
-        Fri,  8 Sep 2023 13:38:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1694180315;
-        bh=NG4rqQ6PfFJGjVqvVxbbwLmhlW1GjZSPIPxS8rHc7u4=;
+        with ESMTP id S231284AbjIHNpH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Sep 2023 09:45:07 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1731BC6
+        for <linux-usb@vger.kernel.org>; Fri,  8 Sep 2023 06:45:01 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (unknown [93.93.133.154])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9AAF63F1;
+        Fri,  8 Sep 2023 15:43:31 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1694180611;
+        bh=n+9aSxWI3oNNo1baYMbF1z/yC0UBEe1dVxjfjOPlf5I=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=0OxEf4Rw4yiibpMgZXDIq48csVzV+4kxc9HrJcibFpQdoW1eYT991oNfVeqD8FO6f
-         F2ZHEGt2Y9KksFBk6IdzcFScUPP3iHCA+vo/kZN58Y4t+UPhuLaPqG04D2wPiMohoY
-         T+Tnu7OXt2pIQK2t6DcOAiDFNvyB3F2ghhFG0ZFs=
-Date:   Fri, 8 Sep 2023 14:38:31 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Wentong Wu <wentong.wu@intel.com>
-Cc:     arnd@arndb.de, mka@chromium.org, oneukum@suse.com, lee@kernel.org,
-        wsa@kernel.org, kfting@nuvoton.com, broonie@kernel.org,
-        linus.walleij@linaro.org, hdegoede@redhat.com, maz@kernel.org,
-        brgl@bgdev.pl, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-gpio@vger.kernel.org, andriy.shevchenko@linux.intel.com,
-        heikki.krogerus@linux.intel.com, andi.shyti@linux.intel.com,
-        sakari.ailus@linux.intel.com, bartosz.golaszewski@linaro.org,
-        srinivas.pandruvada@intel.com, zhifeng.wang@intel.com
-Subject: Re: [PATCH v15 1/4] usb: Add support for Intel LJCA device
-Message-ID: <2023090854-verse-crabmeat-bf14@gregkh>
-References: <1693970580-18967-1-git-send-email-wentong.wu@intel.com>
- <1693970580-18967-2-git-send-email-wentong.wu@intel.com>
+        b=O1RG14nFZ8dg2uY20M6e505RlFDQ1pd12DClyJJUSv9aWjEUoL7fdgFbVDwXdlGW/
+         VSpYmADnPDNkcoYQa0+tZ0ASGsOz9hLN5HGLp7PcA3HXgR3e98w3vTLgg8frngpvq3
+         BXRNLQ9F3oX/RY2a4sV8Pmulj4khY0YbBYWULOb8=
+Date:   Fri, 8 Sep 2023 16:45:13 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Andrzej Pietrasiewicz <andrzej.p@collabora.com>
+Cc:     Yue Haibing <yuehaibing@huawei.com>, gregkh@linuxfoundation.org,
+        dan.scally@ideasonboard.com, linux-usb@vger.kernel.org
+Subject: Re: [PATCH -next] usb: gadget: function: Remove unused declarations
+Message-ID: <20230908134513.GA15721@pendragon.ideasonboard.com>
+References: <20230818124025.51576-1-yuehaibing@huawei.com>
+ <aaef84e5-4845-eeab-3d72-0b95966ac001@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1693970580-18967-2-git-send-email-wentong.wu@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <aaef84e5-4845-eeab-3d72-0b95966ac001@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 06, 2023 at 11:22:57AM +0800, Wentong Wu wrote:
-> +struct ljca_bank_descriptor {
-> +	u8 bank_id;
-> +	u8 pin_num;
-> +
-> +	/* 1 bit for each gpio, 1 means valid */
-> +	u32 valid_pins;
-> +} __packed;
+On Fri, Sep 08, 2023 at 03:33:29PM +0200, Andrzej Pietrasiewicz wrote:
+> Hi,
+> 
+> Nice catches!
+> 
+> You probably want 4 separate patches. In particular...
+> 
+> W dniu 18.08.2023 o 14:40, Yue Haibing pisze:
+> > These declarations are not implemented anymore, remove them.
+> > 
+> > Signed-off-by: Yue Haibing <yuehaibing@huawei.com>
+> > ---
+> >   drivers/usb/gadget/function/u_phonet.h | 1 -
+> >   drivers/usb/gadget/function/u_serial.h | 4 ----
+> >   drivers/usb/gadget/function/uvc.h      | 2 --
+> >   3 files changed, 7 deletions(-)
+> > 
+> > diff --git a/drivers/usb/gadget/function/u_phonet.h b/drivers/usb/gadget/function/u_phonet.h
+> > index c53233b37192..ff62ca22c40d 100644
+> > --- a/drivers/usb/gadget/function/u_phonet.h
+> > +++ b/drivers/usb/gadget/function/u_phonet.h
+> > @@ -20,7 +20,6 @@ struct f_phonet_opts {
+> >   struct net_device *gphonet_setup_default(void);
+> >   void gphonet_set_gadget(struct net_device *net, struct usb_gadget *g);
+> >   int gphonet_register_netdev(struct net_device *net);
+> > -int phonet_bind_config(struct usb_configuration *c, struct net_device *dev);
+> 
+> ...this fixes 0383070e8d904f006b6eaffceb3fae4cdd25c01a
+> 
+> >   void gphonet_cleanup(struct net_device *dev);
+> >   
+> >   #endif /* __U_PHONET_H */
+> > diff --git a/drivers/usb/gadget/function/u_serial.h b/drivers/usb/gadget/function/u_serial.h
+> > index 102a7323a1fd..901d99310bc4 100644
+> > --- a/drivers/usb/gadget/function/u_serial.h
+> > +++ b/drivers/usb/gadget/function/u_serial.h
+> > @@ -71,8 +71,4 @@ void gserial_disconnect(struct gserial *);
+> >   void gserial_suspend(struct gserial *p);
+> >   void gserial_resume(struct gserial *p);
+> >   
+> > -/* functions are bound to configurations by a config or gadget driver */
+> > -int gser_bind_config(struct usb_configuration *c, u8 port_num);
+> 
+> ... this fixes 9786b4561228099f579ad88912aa305812526ea1
+> 
+> > -int obex_bind_config(struct usb_configuration *c, u8 port_num);
+> 
+> ... and this fixes 9b2252cace741e4843983d77ead80c3cf1d74e20
+> > -
+> >   #endif /* __U_SERIAL_H */
+> > diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
+> > index 100475b1363e..6751de8b63ad 100644
+> > --- a/drivers/usb/gadget/function/uvc.h
+> > +++ b/drivers/usb/gadget/function/uvc.h
+> > @@ -178,8 +178,6 @@ struct uvc_file_handle {
+> >    */
+> >   
+> >   extern void uvc_function_setup_continue(struct uvc_device *uvc);
+> > -extern void uvc_endpoint_stream(struct uvc_device *dev);
+> > -
+> 
+> @Laurent: I was unable to track this one.
 
-This is an unaligned access, do you mean to have that?
+The issue has been there from the start. It doesn't matter much though,
+this patch has been merged already.
 
-> +struct ljca_adapter {
-> +	struct usb_interface *intf;
-> +	struct usb_device *usb_dev;
-> +	struct device *dev;
-> +
-> +	unsigned int rx_pipe;
-> +	unsigned int tx_pipe;
-> +
-> +	/* urb for recv */
-> +	struct urb *rx_urb;
-> +	/* buffer for recv */
-> +	void *rx_buf;
-> +	unsigned int rx_len;
-> +
-> +	/* external buffer for recv */
-> +	void *ex_buf;
+> >   extern void uvc_function_connect(struct uvc_device *uvc);
+> >   extern void uvc_function_disconnect(struct uvc_device *uvc);
+> >   
 
-Shouldn't buffers be u8*?
+-- 
+Regards,
 
-> +static void ljca_handle_event(struct ljca_adapter *adap,
-> +			      struct ljca_msg *header)
-> +{
-> +	struct ljca_client *client;
-> +
-> +	list_for_each_entry(client, &adap->client_list, link) {
-> +		/*
-> +		 * FIXME: currently only GPIO register event callback.
-
-When is this fixme going to be addressed?
-
-> +		 * firmware message structure should include id when
-> +		 * multiple same type clients register event callback.
-> +		 */
-> +		if (client->type == header->type) {
-> +			unsigned long flags;
-> +
-> +			spin_lock_irqsave(&client->event_cb_lock, flags);
-> +			client->event_cb(client->context, header->cmd,
-> +					 header->data, header->len);
-> +			spin_unlock_irqrestore(&client->event_cb_lock, flags);
-> +
-> +			break;
-> +		}
-> +	}
-> +}
-> +
-> +/* process command ack */
-> +static void ljca_handle_cmd_ack(struct ljca_adapter *adap,
-> +				struct ljca_msg *header)
-> +{
-> +	struct ljca_msg *tx_header = adap->tx_buf;
-> +	unsigned int actual_len = 0;
-> +	unsigned int ibuf_len;
-> +	unsigned long flags;
-> +	void *ibuf;
-> +
-> +	spin_lock_irqsave(&adap->lock, flags);
-
-Why not use the functionality in cleanup.h for this lock?  Makes this
-function much simpler.
-
-> +
-> +	if (tx_header->type != header->type || tx_header->cmd != header->cmd) {
-> +		spin_unlock_irqrestore(&adap->lock, flags);
-> +
-
-No need for a blank line.
-
-And how can these things happen?  No need to return an error if this is
-the case?
-
-> +static int ljca_send(struct ljca_adapter *adap, u8 type, u8 cmd,
-> +		     const void *obuf, unsigned int obuf_len, void *ibuf,
-> +		     unsigned int ibuf_len, bool ack, unsigned long timeout)
-
-That's a lot of function parameters, whyh so many?
-
-And why void *?  That should never be used in an internal function where
-you know the real type.
-
-> +{
-> +	unsigned int msg_len = sizeof(struct ljca_msg) + obuf_len;
-> +	struct ljca_msg *header = adap->tx_buf;
-> +	unsigned long flags;
-> +	unsigned int actual;
-> +	int ret = 0;
-> +
-> +	if (adap->disconnect)
-> +		return -ENODEV;
-> +
-> +	if (msg_len > adap->tx_buf_len)
-> +		return -EINVAL;
-> +
-> +	mutex_lock(&adap->mutex);
-> +
-> +	spin_lock_irqsave(&adap->lock, flags);
-
-2 locks?  Why 2 locks for the same structure?
-
-> +
-> +	header->type = type;
-> +	header->cmd = cmd;
-> +	header->len = obuf_len;
-> +	if (obuf)
-> +		memcpy(header->data, obuf, obuf_len);
-> +
-> +	header->flags = LJCA_CMPL_FLAG | (ack ? LJCA_ACK_FLAG : 0);
-> +
-> +	adap->ex_buf = ibuf;
-> +	adap->ex_buf_len = ibuf_len;
-> +	adap->actual_length = 0;
-> +
-> +	spin_unlock_irqrestore(&adap->lock, flags);
-> +
-> +	reinit_completion(&adap->cmd_completion);
-> +
-> +	usb_autopm_get_interface(adap->intf);
-> +
-> +	ret = usb_bulk_msg(adap->usb_dev, adap->tx_pipe, header,
-> +			   msg_len, &actual, LJCA_WRITE_TIMEOUT_MS);
-
-This function is slow.  Really slow.  You drop the spinlock which is
-good, but the mutex is still held.  Does this call have to be
-synchronous?
-
-> +
-> +	usb_autopm_put_interface(adap->intf);
-> +
-> +	if (!ret && ack) {
-> +		ret = wait_for_completion_timeout(&adap->cmd_completion,
-> +						  timeout);
-> +		if (ret < 0) {
-> +			goto out;
-> +		} if (!ret) {
-> +			ret = -ETIMEDOUT;
-> +			goto out;
-> +		}
-> +	}
-> +	ret = adap->actual_length;
-> +
-> +out:
-> +	spin_lock_irqsave(&adap->lock, flags);
-> +	adap->ex_buf = NULL;
-> +	adap->ex_buf_len = 0;
-> +
-> +	memset(header, 0, sizeof(*header));
-
-Why?
-
-> +	spin_unlock_irqrestore(&adap->lock, flags);
-> +
-> +	mutex_unlock(&adap->mutex);
-> +
-> +	return ret;
-> +}
-> +
-> +int ljca_transfer(struct ljca_client *client, u8 cmd, const void *obuf,
-
-Again, drop all void * please, use real types in your apis.
-
-> +#else
-> +static void ljca_auxdev_acpi_bind(struct ljca_adapter *adap,
-> +				  struct auxiliary_device *auxdev,
-> +				  u64 adr, u8 id)
-> +{
-> +}
-> +#endif
-
-Can't this go in a .h file?  #ifdef in .c files are frowned apon.
-
-> +static int ljca_enumerate_clients(struct ljca_adapter *adap)
-> +{
-> +	int ret;
-> +
-> +	ret = ljca_reset_handshake(adap);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = ljca_enumerate_gpio(adap);
-> +	if (ret)
-> +		dev_warn(adap->dev, "enumerate GPIO error\n");
-> +
-> +	ret = ljca_enumerate_i2c(adap);
-> +	if (ret)
-> +		dev_warn(adap->dev, "enumerate I2C error\n");
-> +
-> +	ret = ljca_enumerate_spi(adap);
-> +	if (ret)
-> +		dev_warn(adap->dev, "enumerate SPI error\n");
-
-You warn about these things, but keep on saying the code is working
-properly with a return of:
-
-> +	return 0;
-
-That's not good.  Why not unwind properly and handle the error?
-
-> --- /dev/null
-> +++ b/include/linux/usb/ljca.h
-> @@ -0,0 +1,113 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (c) 2023, Intel Corporation. All rights reserved.
-> + */
-> +#ifndef _LINUX_USB_LJCA_H_
-> +#define _LINUX_USB_LJCA_H_
-> +
-> +#include <linux/auxiliary_bus.h>
-> +#include <linux/list.h>
-> +#include <linux/spinlock.h>
-> +#include <linux/types.h>
-> +
-> +#define LJCA_MAX_GPIO_NUM 64
-> +
-> +#define auxiliary_dev_to_ljca_client(auxiliary_dev)			\
-> +		container_of(auxiliary_dev, struct ljca_client, auxdev)
-> +
-> +struct ljca_adapter;
-> +
-> +/**
-> + * typedef ljca_event_cb_t - event callback function signature
-> + *
-> + * @context: the execution context of who registered this callback
-> + * @cmd: the command from device for this event
-> + * @evt_data: the event data payload
-> + * @len: the event data payload length
-> + *
-> + * The callback function is called in interrupt context and the data payload is
-> + * only valid during the call. If the user needs later access of the data, it
-> + * must copy it.
-> + */
-> +typedef void (*ljca_event_cb_t)(void *context, u8 cmd, const void *evt_data, int len);
-> +
-> +struct ljca_client {
-> +	u8 type;
-> +	u8 id;
-> +	struct list_head link;
-> +	struct auxiliary_device auxdev;
-> +	struct ljca_adapter *adapter;
-> +
-> +	void *context;
-> +	ljca_event_cb_t event_cb;
-> +	/* lock to protect event_cb */
-> +	spinlock_t event_cb_lock;
-> +};
-> +
-> +struct ljca_gpio_info {
-> +	unsigned int num;
-> +	DECLARE_BITMAP(valid_pin_map, LJCA_MAX_GPIO_NUM);
-> +};
-> +
-> +struct ljca_i2c_info {
-> +	u8 id;
-> +	u8 capacity;
-> +	u8 intr_pin;
-> +};
-> +
-> +struct ljca_spi_info {
-> +	u8 id;
-> +	u8 capacity;
-> +};
-
-No documentation for these other public structures?
-
-thanks,
-
-greg k-h
+Laurent Pinchart
