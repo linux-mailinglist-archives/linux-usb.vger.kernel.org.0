@@ -2,80 +2,155 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99FF6798AC7
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Sep 2023 18:42:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C146798B22
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Sep 2023 19:03:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244993AbjIHQmX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Sep 2023 12:42:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56732 "EHLO
+        id S245083AbjIHRDS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Sep 2023 13:03:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243809AbjIHQmW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Sep 2023 12:42:22 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 399C11FD5
-        for <linux-usb@vger.kernel.org>; Fri,  8 Sep 2023 09:42:17 -0700 (PDT)
-Received: (qmail 789180 invoked by uid 1000); 8 Sep 2023 12:42:16 -0400
-Date:   Fri, 8 Sep 2023 12:42:16 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Yuran Pereira <yuran.pereira@hotmail.com>
-Cc:     gregkh@linuxfoundation.org, royluo@google.com,
-        christophe.jaillet@wanadoo.fr, raychi@google.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzbot+c063a4e176681d2e0380@syzkaller.appspotmail.com
-Subject: Re: [PATCH] USB: core: Fix a NULL pointer dereference
-Message-ID: <d3ffde1a-e0da-4f3f-ac34-659cbcf41258@rowland.harvard.edu>
-References: <AS8P192MB12697886EC8DF1650AD56A57E8EDA@AS8P192MB1269.EURP192.PROD.OUTLOOK.COM>
+        with ESMTP id S229713AbjIHRDR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Sep 2023 13:03:17 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D15C199F
+        for <linux-usb@vger.kernel.org>; Fri,  8 Sep 2023 10:03:13 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1bf6ea270b2so17416275ad.0
+        for <linux-usb@vger.kernel.org>; Fri, 08 Sep 2023 10:03:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1694192592; x=1694797392; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=R5jao51/Y0l1+96mjFOat1xOO+2+m4Y2di/OCWSkew4=;
+        b=Tm28zd3gZNV9M0g3vagYSokyQMdujbLeluqxHsVAQX5PEbJpv3qbjz/e5qk6l/a2E2
+         7EhTvxWUDGt9RzO+JZNbbAzhoiQ9VBxDNYeCMp2+FKgXotdzj//cOAvS4M4uCdZqiKb5
+         veQJz45Oxmz708LcLLRmH5XKrJKkOd1q+1s0Q=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694192592; x=1694797392;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R5jao51/Y0l1+96mjFOat1xOO+2+m4Y2di/OCWSkew4=;
+        b=UNKy4pO8Xq/WYIjoOYsWzfSARfLZR/SshsDu8vlJlAJmG4fWdkTB/NynLgxYSU6vDq
+         JTPlheOW/s5zml1TNz27G9hjLRSYwtJLoeoLRJmmRNh4qPf+sJDdkCvdOVGJj5zjj8lb
+         /DzBQtNxHu2afWS/8N9w+Z3CoWe2ip0FuLMHo+4GDEw3zPA0s8VbVUYtU/DTw4HRrJfq
+         l8+D4vcGpvb7f2y/sx8AXnKXZ4+tu1aOPIL1wTzPgdmEJQutx7I310Rfe3t0LcjXc1LV
+         xr7AcZBEjzxWHAyrSQK/GyAsPIZODjhKad929dqluuvQLCX1fB9XXnm0/Ghg3P+symDx
+         KfgQ==
+X-Gm-Message-State: AOJu0YxrN/cg2On3OmE7oHdfkE+H81EsSl959BYDUOU3i2dXWrcWxZ9i
+        1IQ0ztwPoW+Btk7f8sd+G//Fag==
+X-Google-Smtp-Source: AGHT+IHs0K/2VG7TwS32NJgQ8vtkJ6LomrMNB5EEzacZHpSrUlBge4RKMp+7hHeVt/tJl2YloYnPsA==
+X-Received: by 2002:a17:903:258b:b0:1bd:b79:3068 with SMTP id jb11-20020a170903258b00b001bd0b793068mr3235977plb.48.1694192592448;
+        Fri, 08 Sep 2023 10:03:12 -0700 (PDT)
+Received: from chromium.org (77.62.105.34.bc.googleusercontent.com. [34.105.62.77])
+        by smtp.gmail.com with ESMTPSA id jf20-20020a170903269400b001b80760fd04sm1806896plb.112.2023.09.08.10.03.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Sep 2023 10:03:11 -0700 (PDT)
+Date:   Fri, 8 Sep 2023 17:03:10 +0000
+From:   Prashant Malani <pmalani@chromium.org>
+To:     "Patel, Utkarsh H" <utkarsh.h.patel@intel.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
+        "chrome-platform@lists.linux.dev" <chrome-platform@lists.linux.dev>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "bleung@chromium.org" <bleung@chromium.org>
+Subject: Re: [PATCH v2 4/5] platform/chrome: cros_ec_typec: Add Displayport
+ Alternatemode 2.1 Support
+Message-ID: <ZPtTzovOMJ2gmPdy@chromium.org>
+References: <20230830223950.1360865-1-utkarsh.h.patel@intel.com>
+ <20230830223950.1360865-5-utkarsh.h.patel@intel.com>
+ <MWHPR11MB0048D87555CACAC4DC7DF1DFA9E5A@MWHPR11MB0048.namprd11.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <AS8P192MB12697886EC8DF1650AD56A57E8EDA@AS8P192MB1269.EURP192.PROD.OUTLOOK.COM>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <MWHPR11MB0048D87555CACAC4DC7DF1DFA9E5A@MWHPR11MB0048.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Sep 08, 2023 at 09:09:37PM +0530, Yuran Pereira wrote:
-> 
-> When the call to dev_set_name() in the usb_hub_create_port_device 
-> function fails to set the device's kobject's name field, 
-> the subsequent call to device_register() is bound to fail and cause
-> a NULL pointer derefference, because kobject_add(), which is in the 
-> call sequence, expects the name field to be set before it is called
-> 
-> 
-> This patch adds code to perform error checking for dev_set_name()'s
-> return value. If the call to dev_set_name() was unsuccessful, 
-> usb_hub_create_port_device() returns with an error.
-> 
-> 
-> PS: The patch also frees port_dev->req and port_dev before returning.
-> However, I am not sure if that is necessary, because port_dev->req
-> and port_dev are not freed when device_register() fails. Would be
-> happy if someone could help me understand why that is, and whether I
-> should keep those kfree calls in my patch.
-> 
-> dashboard link: https://syzkaller.appspot.com/bug?extid=c063a4e176681d2e0380
-> 
-> Reported-by: syzbot+c063a4e176681d2e0380@syzkaller.appspotmail.com
+Hi Utkarsh,
 
-It shouldn't be necessary to check the return value from dev_set_name().  
-Most of its other call sites ignore the return value.  In fact, only one 
-of the call sites in drivers/base/core.c does check the return value!
+Just a minor thing you can fix for the next version (since it looks
+like there will be one).
 
-Furthermore, device_add() includes the following test for whether the 
-device's name has been set:
+On Aug 31 15:24, Patel, Utkarsh H wrote:
+> Hello,
+> 
+> >  drivers/platform/chrome/cros_ec_typec.c | 31
+> > +++++++++++++++++++++++++
+> >  1 file changed, 31 insertions(+)
+> > 
+> > diff --git a/drivers/platform/chrome/cros_ec_typec.c
+> > b/drivers/platform/chrome/cros_ec_typec.c
+> > index d0b4d3fc40ed..8372f13052a8 100644
+> > --- a/drivers/platform/chrome/cros_ec_typec.c
+> > +++ b/drivers/platform/chrome/cros_ec_typec.c
+> > @@ -492,6 +492,8 @@ static int cros_typec_enable_dp(struct
+> > cros_typec_data *typec,  {
+> >  	struct cros_typec_port *port = typec->ports[port_num];
+> >  	struct typec_displayport_data dp_data;
+> > +	u32 cable_tbt_vdo;
+> > +	u32 cable_dp_vdo;
+> >  	int ret;
+> > 
+> >  	if (typec->pd_ctrl_ver < 2) {
+> > @@ -524,6 +526,35 @@ static int cros_typec_enable_dp(struct
+> > cros_typec_data *typec,
+> >  	port->state.data = &dp_data;
+> >  	port->state.mode = TYPEC_MODAL_STATE(ffs(pd_ctrl->dp_mode));
+> > 
+> > +	/* Get cable VDO for cables with DPSID to check DPAM2.1 is
+> > supported */
+> > +	cable_dp_vdo = cros_typec_get_cable_vdo(port,
+> > USB_TYPEC_DP_SID);
+> > +
+> > +	/**
+> > +	 * Get cable VDO for thunderbolt cables and cables with DPSID but
+> > does not
+> > +	 * support DPAM2.1.
+> > +	 */
+> > +	cable_tbt_vdo = cros_typec_get_cable_vdo(port,
+> > USB_TYPEC_TBT_SID);
+> > +
+> > +	if (cable_dp_vdo & DP_CAP_DPAM_VERSION) {
+> > +		dp_data.conf |= cable_dp_vdo;
+> > +	} else if (cable_tbt_vdo) {
+> > +		u8 cable_speed = TBT_CABLE_SPEED(cable_tbt_vdo);
+Can we declare this variable at the top? That is the style in this
+file and quite commonly seen elsewhere.
 
-	if (!dev_name(dev)) {
-		error = -EINVAL;
-		goto name_error;
-	}
+Or better yet, just inline this and get rid of the extra variable altogether:
 
-The real question is why this test did not prevent the bug from 
-occurring.  Until you can answer that question, any fix you propose is 
-highly questionable.
+	dp_data.conf |= TBT_CABLE_SPEED(...) << DP_CONF_SIGNALLING_SHIFT;
 
-Alan Stern
+> > +
+> > +		dp_data.conf |= cable_speed <<
+> > DP_CONF_SIGNALLING_SHIFT;
+> > +
+> > +		/* Cable Type */
+> > +		if (cable_tbt_vdo & TBT_CABLE_OPTICAL)
+> > +			dp_data.conf |= DP_CONF_CABLE_TYPE_OPTICAL <<
+> > DP_CONF_CABLE_TYPE_SHIFT;
+> > +		else if (cable_tbt_vdo & TBT_CABLE_RETIMER)
+> > +			dp_data.conf |= DP_CONF_CABLE_TYPE_RE_TIMER <<
+> > DP_CONF_CABLE_TYPE_SHIFT;
+> > +		else if (cable_tbt_vdo & TBT_CABLE_ACTIVE_PASSIVE)
+> > +			dp_data.conf |= DP_CONF_CABLE_TYPE_RE_DRIVER
+> > << DP_CONF_CABLE_TYPE_SHIFT;
+> > +	} else if (PD_IDH_PTYPE(port->c_identity.id_header) ==
+> > IDH_PTYPE_PCABLE) {
+> > +		u8 cable_speed = VDO_CABLE_SPEED(port-
+> > >c_identity.vdo[0]);
+Same here, you can inline this without affecting readability too much.
+
+
+BR,
+
+-Prashant
