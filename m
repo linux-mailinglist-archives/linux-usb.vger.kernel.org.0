@@ -2,123 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D299798468
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Sep 2023 10:49:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79B4E7985D8
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Sep 2023 12:28:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239256AbjIHItJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Sep 2023 04:49:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56024 "EHLO
+        id S240870AbjIHK2P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Sep 2023 06:28:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238867AbjIHItI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Sep 2023 04:49:08 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFFFA1BF0;
-        Fri,  8 Sep 2023 01:49:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694162944; x=1725698944;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7cVzb2yOL63fVT104TCf9JL08t/cv38yvqwU2YkIGHA=;
-  b=asiKFz86ZGlrUofp+CC3ga/hhszzq9/sDigkrsW6Hw8Ij6pjvifJK/wx
-   K/PkZt7q1DYg88Biszb2twCCpUZOjbWPBLbalRLDp9+5BWNkr9RaUHGlo
-   CX8L2BqY+NBvEpSciSX2BCdebfyJkJNpXzuOz7LlN+Hbrh1gha3avaxlh
-   DsrPJmBWwY5qCeASF4cspxzZXLZ9YWwCs+RGaeFwUWLUInHcByUS2HSTG
-   xP/mIqY10mlmFkNPEJu91gdZbobhqaJZE6h7fKhAWF7+aFhmkIXLT5Rdd
-   i6J9tKvi7yZ7gsLES4r+4M6InZfesQ2cSy/bh7fXsiqc9zkC7Z+asAzUw
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10826"; a="357062080"
-X-IronPort-AV: E=Sophos;i="6.02,236,1688454000"; 
-   d="scan'208";a="357062080"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2023 01:49:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10826"; a="745543592"
-X-IronPort-AV: E=Sophos;i="6.02,236,1688454000"; 
-   d="scan'208";a="745543592"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga007.fm.intel.com with SMTP; 08 Sep 2023 01:49:01 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 08 Sep 2023 11:49:00 +0300
-Date:   Fri, 8 Sep 2023 11:49:00 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.au@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH v3 3/5] usb: typec: tcpci_rt1711h: Add rxdz_sel variable
- to struct rt1711h_chip_info
-Message-ID: <ZPrf/IVuVRU6Y1S8@kuha.fi.intel.com>
-References: <20230906080619.36930-1-biju.das.jz@bp.renesas.com>
- <20230906080619.36930-4-biju.das.jz@bp.renesas.com>
+        with ESMTP id S231193AbjIHK2P (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Sep 2023 06:28:15 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9191C1FDD
+        for <linux-usb@vger.kernel.org>; Fri,  8 Sep 2023 03:27:38 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28A53C433C7;
+        Fri,  8 Sep 2023 10:26:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1694168786;
+        bh=otATmKpqASfoIXt8nFB5MZkHzVHbSNpHDLGJ0goO+TY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JarDw4ex+4rzT7xg/gGdU6i4emPD3o0AE8F6X5zDq3ZNWAd/yJqO0M9+3z5Wd93RP
+         9ceklvLbDa+JPHeOmU41kxbame4FJSWQxZHcd5eUgOxBXNfipy9x7giFKc+kc5ddEA
+         K4zfYz9EbjFZ8oCE00GeL2zLB52q7BvU7y99i3DNEA4zfCiuaxWWKeOvzubWwdXS1n
+         d6LJZev7AkD5FLVG1W69M40d6bgJGOH3FUp+l2yr3J07FyrV4v8pqbrQAjMAT1xOED
+         Vi9D9BCAca4Iz/wSOqRg31XgUxR6x51bLmRp8AGlh7bUr5qEFPb9T4mInH5L7iB8Wo
+         1hmuWpzQFTcIQ==
+Date:   Fri, 8 Sep 2023 18:26:18 +0800
+From:   Peter Chen <peter.chen@kernel.org>
+To:     "tomer.maimon@nuvoton.com" <tomer.maimon@nuvoton.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: Advise for adding Nuvoton BMC Synopsys USB 2.0 device
+ controllers to Linux kernel USB Chipidea driver
+Message-ID: <20230908102618.GA1134975@nchen-desktop>
+References: <TY0PR03MB627615C146DF1CCED0BCAA2C84EEA@TY0PR03MB6276.apcprd03.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230906080619.36930-4-biju.das.jz@bp.renesas.com>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <TY0PR03MB627615C146DF1CCED0BCAA2C84EEA@TY0PR03MB6276.apcprd03.prod.outlook.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 06, 2023 at 09:06:17AM +0100, Biju Das wrote:
-> The RT1715 needs 0.35V/0.75V rx threshold for rd/rp whereas it is 0.4V/0.7V
-> for RT1711H. Add rxdz_sel variable to struct rt1711h_chip_info for
-> handling this difference.
+On 23-09-07 14:33:29, tomer.maimon@nuvoton.com wrote:
+> Hi Peter
 > 
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
-> ---
-> v2->v3:
->  * Added Rb tag from Andy.
-> v1->v2:
->  * Swapped the rxdz_sel variable in struct rt1711h_chip_info to avoid
->    holes.
-> ---
->  drivers/usb/typec/tcpm/tcpci_rt1711h.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
+> My name is Tomer I am working in Nuvoton system in the Linux kernel, our project developing BMC SoC for servers.
+> In Nuvoton BMC (NPCM) there are ten identical Synopsys USB 2.0 device controllers called NPCM UDC.
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-> index 2b7258d3cb4e..40822bae9ae8 100644
-> --- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-> +++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-> @@ -52,6 +52,7 @@
->  #define BMCIO_RXDZEN	BIT(0)
->  
->  struct rt1711h_chip_info {
-> +	u32 rxdz_sel;
->  	u16 did;
->  };
->  
-> @@ -204,10 +205,7 @@ static inline int rt1711h_init_cc_params(struct rt1711h_chip *chip, u8 status)
->  	if ((cc1 >= TYPEC_CC_RP_1_5 && cc2 < TYPEC_CC_RP_DEF) ||
->  	    (cc2 >= TYPEC_CC_RP_1_5 && cc1 < TYPEC_CC_RP_DEF)) {
->  		rxdz_en = BMCIO_RXDZEN;
-> -		if (chip->info->did == RT1715_DID)
-> -			rxdz_sel = RT1711H_BMCIO_RXDZSEL;
-> -		else
-> -			rxdz_sel = 0;
-> +		rxdz_sel = chip->info->rxdz_sel;
->  	} else {
->  		rxdz_en = 0;
->  		rxdz_sel = RT1711H_BMCIO_RXDZSEL;
-> @@ -400,6 +398,7 @@ static const struct rt1711h_chip_info rt1711h = {
->  };
->  
->  static const struct rt1711h_chip_info rt1715 = {
-> +	.rxdz_sel = RT1711H_BMCIO_RXDZSEL,
->  	.did = RT1715_DID,
->  };
->  
-> -- 
-> 2.25.1
+> Lately we started to work with USB Chipidea driver to add NPCM UDC as well.
+> The NPCM BMC using only the UDC and not the USB host.
+> 
+> Using the default compatible<https://elixir.bootlin.com/linux/v5.15.130/C/ident/compatible> = "chipidea,usb2<https://elixir.bootlin.com/linux/v5.15.130/B/ident/chipidea%2Cusb2>" didn't work for us since:
+> 
+> 1.       The USB_MODE should be set at boot or after reset since the reset The USB_MODE is incorrect (0x15002)
+> 
+> [cid:image002.jpg@01D9E1B1.691030B0]
+> 
+> 
+> It solved by setting USB_MODE during NPCM reset ci_hdrc_npcm_notify_event, now using unique npcm-udc compatible :)
+> 
+> 
+> 
+> 2.      vbus_active parameter don't change, stay 0.
+> 
+> The Device Control Capability Parameters Register (DCCPARAMS) is a read only register that indicate the module is only DC (Device Capable)
+> 
+> This is why the driver didn't indicate the driver is OTG
+> 
+> https://elixir.bootlin.com/linux/v6.5.2/source/drivers/usb/chipidea/core.c#L948
+> 
+>               ci<https://elixir.bootlin.com/linux/v6.5.2/C/ident/ci>->is_otg<https://elixir.bootlin.com/linux/v6.5.2/C/ident/is_otg> = (hw_read<https://elixir.bootlin.com/linux/v6.5.2/C/ident/hw_read>(ci<https://elixir.bootlin.com/linux/v6.5.2/C/ident/ci>, CAP_DCCPARAMS<https://elixir.bootlin.com/linux/v6.5.2/C/ident/CAP_DCCPARAMS>,
+> 
+>                            DCCPARAMS_DC<https://elixir.bootlin.com/linux/v6.5.2/C/ident/DCCPARAMS_DC> | DCCPARAMS_HC<https://elixir.bootlin.com/linux/v6.5.2/C/ident/DCCPARAMS_HC>)
+> 
+>                                   == (DCCPARAMS_DC<https://elixir.bootlin.com/linux/v6.5.2/C/ident/DCCPARAMS_DC> | DCCPARAMS_HC<https://elixir.bootlin.com/linux/v6.5.2/C/ident/DCCPARAMS_HC>));
+> 
+> Why otg is set only when DC and HC is set?
+> 
+> By enabling ci<https://elixir.bootlin.com/linux/v6.5.2/C/ident/ci>->is_otg<https://elixir.bootlin.com/linux/v6.5.2/C/ident/is_otg> = true we see we need to set the extcon in the device tree, why we need extcon to handle the vbus? Can the vbus be permanent?
+> 
+> 
+> 
+> Even after setting extcon vbus to dummy GPIO we succeed to modify the vbus_active parameter to is_active but it didn't worked in the end because it a dummy GPIO that not related to the USB vbus.
+> 
+> 
+> 
+> BTW,
+> 
+> If we adding ci->vbus_active = true at probe stage the UDC Chipidea driver works fine.
+> 
+> https://elixir.bootlin.com/linux/v6.5.2/source/drivers/usb/chipidea/core.c#L1123
+> 
+> 
+> 
+> Appreciate if you could you advise how should we overcome this issue
+
+After loading the gadget driver, try to force "connect" udc using /sys
+entry. See the below code at file: drivers/usb/gadget/udc/core.c
+
+static ssize_t soft_connect_store(struct device *dev,
+		struct device_attribute *attr, const char *buf, size_t n)
+
+
+Your issue is probably due to the UDC don't know it is connected, so DP
+is not pulled up.
 
 -- 
-heikki
+
+Thanks,
+Peter Chen
