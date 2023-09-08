@@ -2,87 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 432AF79831F
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Sep 2023 09:15:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A2C17983E7
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Sep 2023 10:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242440AbjIHHPF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Sep 2023 03:15:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36820 "EHLO
+        id S236931AbjIHIUk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Sep 2023 04:20:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230503AbjIHHPE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Sep 2023 03:15:04 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5BF91BCB;
-        Fri,  8 Sep 2023 00:15:00 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 132DCC433D9;
-        Fri,  8 Sep 2023 07:14:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1694157300;
-        bh=IZ47q+is+FwYQqUkK7ML06kda5TdpnlDQaP49BoFpMc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dmjKGyFVyjbh96WgEm3Zn86UgSacB1BrVwJlP0BcMJHZ/bEyc05feeisM3YFEN9p2
-         EzT0wuwMmVJGTiuf8HLBQ2Gdc3XOO7hsW7wVT0q12CDjmhfKiU9YpmeDrxGsfNRdVa
-         exIruX5qr8PngLdezhU7QFG/pm1RwlgwFTwFBz+c=
-Date:   Fri, 8 Sep 2023 08:14:57 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Hayes Wang <hayeswang@realtek.com>
-Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
-        nic_swsd@realtek.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH net] r8152: check budget for r8152_poll()
-Message-ID: <2023090823-fog-giddy-548d@gregkh>
-References: <20230908070152.26484-422-nic_swsd@realtek.com>
+        with ESMTP id S233092AbjIHIUj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Sep 2023 04:20:39 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49B7173B;
+        Fri,  8 Sep 2023 01:20:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694161235; x=1725697235;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mvNQ9uU/kK3N8/bDrmxpdKy+upygvoAdffwYay19gfA=;
+  b=ieK3cCp8BReMV6svQsVjbE8GOv3lkZPmwbs9CaZ+XQX0xMgFABiqAw7v
+   tzN62+L2rQTNivgjXovbQoQQ+l3BaQZrnIe0W+2CppnDhZB5nMScfFqbE
+   Ozqtdurbag5bHSxka+tHjK42Hh4Gi+NZOLFDYA/HJX7M3ALcFfhKuyXT6
+   M3TLGKg0ZN2Tzg4wKb31dq649Ys0yGasGVnfQ+VTrFyu82FO2FfohWcC9
+   A/u4C2HI/3ztll6fExAimEYcWZtnzsZOHLe9oYtiBeustAJClVVpfWurY
+   ZOx+Z35A/Ihx8iwfKLegd4NqcG16QjMSYKd22lBNQ4QiyxB+ihUuaL7M7
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10826"; a="444027467"
+X-IronPort-AV: E=Sophos;i="6.02,236,1688454000"; 
+   d="scan'208";a="444027467"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2023 01:20:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10826"; a="742428329"
+X-IronPort-AV: E=Sophos;i="6.02,236,1688454000"; 
+   d="scan'208";a="742428329"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by orsmga002.jf.intel.com with SMTP; 08 Sep 2023 01:20:32 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 08 Sep 2023 11:20:31 +0300
+Date:   Fri, 8 Sep 2023 11:20:30 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.au@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v3 1/5] usb: typec: tcpci_rt1711h: Remove trailing comma
+ in the terminator entry for OF table
+Message-ID: <ZPrZTgx7nVxhHean@kuha.fi.intel.com>
+References: <20230906080619.36930-1-biju.das.jz@bp.renesas.com>
+ <20230906080619.36930-2-biju.das.jz@bp.renesas.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230908070152.26484-422-nic_swsd@realtek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230906080619.36930-2-biju.das.jz@bp.renesas.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Sep 08, 2023 at 03:01:52PM +0800, Hayes Wang wrote:
-> According to the document of napi, there is no rx process when the
-> budget is 0. Therefore, r8152_poll() has to return 0 directly when the
-> budget is equal to 0.
+On Wed, Sep 06, 2023 at 09:06:15AM +0100, Biju Das wrote:
+> Remove trailing comma in the terminator entry for OF table.
+> While at it, drop a space in the terminator for ID table.
 > 
-> Fixes: d2187f8e4454 ("r8152: divide the tx and rx bottom functions")
-> Signed-off-by: Hayes Wang <hayeswang@realtek.com>
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
 > ---
->  drivers/net/usb/r8152.c | 3 +++
->  1 file changed, 3 insertions(+)
+> v2->v3:
+>  * Dropped updating I2C driver data in ID table as there is no user yet.
+>  * Updated commit header and description.
+>  * Added Rb tag from Andy.
+>  * Retained the Rb tag as it is trivial change.
+> v1->v2:
+>  * Drop space from ID table
+>  * Remove trailing comma in the terminator entry for OF table.
+> ---
+>  drivers/usb/typec/tcpm/tcpci_rt1711h.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> index 17ebc5fb684f..6146bca8e55f 100644
+> --- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> +++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> @@ -394,7 +394,7 @@ static void rt1711h_remove(struct i2c_client *client)
+>  static const struct i2c_device_id rt1711h_id[] = {
+>  	{ "rt1711h", 0 },
+>  	{ "rt1715", 0 },
+> -	{ }
+> +	{}
+>  };
+>  MODULE_DEVICE_TABLE(i2c, rt1711h_id);
+>  
+> @@ -402,7 +402,7 @@ MODULE_DEVICE_TABLE(i2c, rt1711h_id);
+>  static const struct of_device_id rt1711h_of_match[] = {
+>  	{ .compatible = "richtek,rt1711h", .data = (void *)RT1711H_DID },
+>  	{ .compatible = "richtek,rt1715", .data = (void *)RT1715_DID },
+> -	{},
+> +	{}
+>  };
+>  MODULE_DEVICE_TABLE(of, rt1711h_of_match);
+>  #endif
+> -- 
+> 2.25.1
 
-Hi,
-
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
-
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- You have marked a patch with a "Fixes:" tag for a commit that is in an
-  older released kernel, yet you do not have a cc: stable line in the
-  signed-off-by area at all, which means that the patch will not be
-  applied to any older kernel releases.  To properly fix this, please
-  follow the documented rules in the
-  Documetnation/process/stable-kernel-rules.rst file for how to resolve
-  this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+-- 
+heikki
