@@ -2,116 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79B4E7985D8
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Sep 2023 12:28:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4490B7985EA
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Sep 2023 12:34:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240870AbjIHK2P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Sep 2023 06:28:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41862 "EHLO
+        id S241976AbjIHKec (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Sep 2023 06:34:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231193AbjIHK2P (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Sep 2023 06:28:15 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9191C1FDD
-        for <linux-usb@vger.kernel.org>; Fri,  8 Sep 2023 03:27:38 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28A53C433C7;
-        Fri,  8 Sep 2023 10:26:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694168786;
-        bh=otATmKpqASfoIXt8nFB5MZkHzVHbSNpHDLGJ0goO+TY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JarDw4ex+4rzT7xg/gGdU6i4emPD3o0AE8F6X5zDq3ZNWAd/yJqO0M9+3z5Wd93RP
-         9ceklvLbDa+JPHeOmU41kxbame4FJSWQxZHcd5eUgOxBXNfipy9x7giFKc+kc5ddEA
-         K4zfYz9EbjFZ8oCE00GeL2zLB52q7BvU7y99i3DNEA4zfCiuaxWWKeOvzubWwdXS1n
-         d6LJZev7AkD5FLVG1W69M40d6bgJGOH3FUp+l2yr3J07FyrV4v8pqbrQAjMAT1xOED
-         Vi9D9BCAca4Iz/wSOqRg31XgUxR6x51bLmRp8AGlh7bUr5qEFPb9T4mInH5L7iB8Wo
-         1hmuWpzQFTcIQ==
-Date:   Fri, 8 Sep 2023 18:26:18 +0800
-From:   Peter Chen <peter.chen@kernel.org>
-To:     "tomer.maimon@nuvoton.com" <tomer.maimon@nuvoton.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: Advise for adding Nuvoton BMC Synopsys USB 2.0 device
- controllers to Linux kernel USB Chipidea driver
-Message-ID: <20230908102618.GA1134975@nchen-desktop>
-References: <TY0PR03MB627615C146DF1CCED0BCAA2C84EEA@TY0PR03MB6276.apcprd03.prod.outlook.com>
+        with ESMTP id S232099AbjIHKeb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Sep 2023 06:34:31 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F09F11BF0;
+        Fri,  8 Sep 2023 03:34:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694169267; x=1725705267;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Lt9/l8LfGMpTc9AbtXr/yiF27RStf8Q1zDhFTijERZw=;
+  b=jk1dzNxgPdpF4/xZv/8kUokQZuPmVkJZe8bIOxoLfW7aXAaVz+1/NKQ0
+   MJPPFuUM0xo2i9O4WEQpq/GKJiks4ZGOcLhrRtxmIBxQ/JArkXQizwaf/
+   GpH5LRAXTDj99YiVZtqdalyg2Gk2gHwAwh/ntPrZQmtXdLZ91UO5ZoM54
+   ennr1DVzVg1osnlmz3/SAGMEdIVuf+EyTsDgF4vlfQUq1AAgDhbWbvHJy
+   Ekiod3PZMzHJJU4ftA5Bg8TomeuOWvIvxtmIs3/sqAgCUkP1qCdKivRh0
+   T0TZvAVsN0H4WI6LitKCivjUK3mBYdpKezFEwcBrVb4fvwYWqEa9+rbGD
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10826"; a="381432178"
+X-IronPort-AV: E=Sophos;i="6.02,236,1688454000"; 
+   d="scan'208";a="381432178"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2023 03:34:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10826"; a="745565658"
+X-IronPort-AV: E=Sophos;i="6.02,236,1688454000"; 
+   d="scan'208";a="745565658"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga007.fm.intel.com with SMTP; 08 Sep 2023 03:34:22 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 08 Sep 2023 13:34:21 +0300
+Date:   Fri, 8 Sep 2023 13:34:21 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Biju Das <biju.das.au@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v3 4/5] usb: typec: tcpci_rt1711h: Add
+ enable_pd30_extended_message variable to struct rt1711h_chip_info
+Message-ID: <ZPr4rf2uMXd/CoG6@kuha.fi.intel.com>
+References: <20230906080619.36930-1-biju.das.jz@bp.renesas.com>
+ <20230906080619.36930-5-biju.das.jz@bp.renesas.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <TY0PR03MB627615C146DF1CCED0BCAA2C84EEA@TY0PR03MB6276.apcprd03.prod.outlook.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230906080619.36930-5-biju.das.jz@bp.renesas.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 23-09-07 14:33:29, tomer.maimon@nuvoton.com wrote:
-> Hi Peter
+On Wed, Sep 06, 2023 at 09:06:18AM +0100, Biju Das wrote:
+> The RT1715 has PD30 extended message compared to RT1711H. Add a variable
+> enable_pd30_extended_message to struct rt1711h_chip_info to enable this
+> feature for RT1715.
 > 
-> My name is Tomer I am working in Nuvoton system in the Linux kernel, our project developing BMC SoC for servers.
-> In Nuvoton BMC (NPCM) there are ten identical Synopsys USB 2.0 device controllers called NPCM UDC.
-> 
-> Lately we started to work with USB Chipidea driver to add NPCM UDC as well.
-> The NPCM BMC using only the UDC and not the USB host.
-> 
-> Using the default compatible<https://elixir.bootlin.com/linux/v5.15.130/C/ident/compatible> = "chipidea,usb2<https://elixir.bootlin.com/linux/v5.15.130/B/ident/chipidea%2Cusb2>" didn't work for us since:
-> 
-> 1.       The USB_MODE should be set at boot or after reset since the reset The USB_MODE is incorrect (0x15002)
-> 
-> [cid:image002.jpg@01D9E1B1.691030B0]
-> 
-> 
-> It solved by setting USB_MODE during NPCM reset ci_hdrc_npcm_notify_event, now using unique npcm-udc compatible :)
-> 
-> 
-> 
-> 2.      vbus_active parameter don't change, stay 0.
-> 
-> The Device Control Capability Parameters Register (DCCPARAMS) is a read only register that indicate the module is only DC (Device Capable)
-> 
-> This is why the driver didn't indicate the driver is OTG
-> 
-> https://elixir.bootlin.com/linux/v6.5.2/source/drivers/usb/chipidea/core.c#L948
-> 
->               ci<https://elixir.bootlin.com/linux/v6.5.2/C/ident/ci>->is_otg<https://elixir.bootlin.com/linux/v6.5.2/C/ident/is_otg> = (hw_read<https://elixir.bootlin.com/linux/v6.5.2/C/ident/hw_read>(ci<https://elixir.bootlin.com/linux/v6.5.2/C/ident/ci>, CAP_DCCPARAMS<https://elixir.bootlin.com/linux/v6.5.2/C/ident/CAP_DCCPARAMS>,
-> 
->                            DCCPARAMS_DC<https://elixir.bootlin.com/linux/v6.5.2/C/ident/DCCPARAMS_DC> | DCCPARAMS_HC<https://elixir.bootlin.com/linux/v6.5.2/C/ident/DCCPARAMS_HC>)
-> 
->                                   == (DCCPARAMS_DC<https://elixir.bootlin.com/linux/v6.5.2/C/ident/DCCPARAMS_DC> | DCCPARAMS_HC<https://elixir.bootlin.com/linux/v6.5.2/C/ident/DCCPARAMS_HC>));
-> 
-> Why otg is set only when DC and HC is set?
-> 
-> By enabling ci<https://elixir.bootlin.com/linux/v6.5.2/C/ident/ci>->is_otg<https://elixir.bootlin.com/linux/v6.5.2/C/ident/is_otg> = true we see we need to set the extcon in the device tree, why we need extcon to handle the vbus? Can the vbus be permanent?
-> 
-> 
-> 
-> Even after setting extcon vbus to dummy GPIO we succeed to modify the vbus_active parameter to is_active but it didn't worked in the end because it a dummy GPIO that not related to the USB vbus.
-> 
-> 
-> 
-> BTW,
-> 
-> If we adding ci->vbus_active = true at probe stage the UDC Chipidea driver works fine.
-> 
-> https://elixir.bootlin.com/linux/v6.5.2/source/drivers/usb/chipidea/core.c#L1123
-> 
-> 
-> 
-> Appreciate if you could you advise how should we overcome this issue
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-After loading the gadget driver, try to force "connect" udc using /sys
-entry. See the below code at file: drivers/usb/gadget/udc/core.c
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-static ssize_t soft_connect_store(struct device *dev,
-		struct device_attribute *attr, const char *buf, size_t n)
-
-
-Your issue is probably due to the UDC don't know it is connected, so DP
-is not pulled up.
+> ---
+> v2->v3:
+>  * Added Rb tag from Andy.
+> v1->v2:
+>  * Changed enable_pd30_extended_message variable type to bool.
+> ---
+>  drivers/usb/typec/tcpm/tcpci_rt1711h.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> index 40822bae9ae8..5d2dc7ead9d0 100644
+> --- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> +++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> @@ -54,6 +54,7 @@
+>  struct rt1711h_chip_info {
+>  	u32 rxdz_sel;
+>  	u16 did;
+> +	bool enable_pd30_extended_message;
+>  };
+>  
+>  struct rt1711h_chip {
+> @@ -110,7 +111,7 @@ static int rt1711h_init(struct tcpci *tcpci, struct tcpci_data *tdata)
+>  		return ret;
+>  
+>  	/* Enable PD30 extended message for RT1715 */
+> -	if (chip->info->did == RT1715_DID) {
+> +	if (chip->info->enable_pd30_extended_message) {
+>  		ret = regmap_update_bits(regmap, RT1711H_RTCTRL8,
+>  					 RT1711H_ENEXTMSG, RT1711H_ENEXTMSG);
+>  		if (ret < 0)
+> @@ -400,6 +401,7 @@ static const struct rt1711h_chip_info rt1711h = {
+>  static const struct rt1711h_chip_info rt1715 = {
+>  	.rxdz_sel = RT1711H_BMCIO_RXDZSEL,
+>  	.did = RT1715_DID,
+> +	.enable_pd30_extended_message = true,
+>  };
+>  
+>  static const struct i2c_device_id rt1711h_id[] = {
+> -- 
+> 2.25.1
 
 -- 
-
-Thanks,
-Peter Chen
+heikki
