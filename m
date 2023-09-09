@@ -2,107 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0FA479998C
-	for <lists+linux-usb@lfdr.de>; Sat,  9 Sep 2023 18:25:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD8D7799991
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Sep 2023 18:25:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231567AbjIIQZT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        id S231772AbjIIQZT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
         Sat, 9 Sep 2023 12:25:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48796 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233895AbjIIPfe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 9 Sep 2023 11:35:34 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D42D3138;
-        Sat,  9 Sep 2023 08:35:29 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0145C433C8;
-        Sat,  9 Sep 2023 15:35:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1694273729;
-        bh=LZz+tmcgF9fWYqabYSOw8moDmQGvpH5W7FKHUWOOjvA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZYUxgLZIKsHLUZsKePPYkDj0wgN6OXQQe4ejXAjxZTcTtjPui/dY+mes0/xb8jeig
-         5Hm6KZo6sDmj3vA5tA94L8ao9eyuJ1L7US1iqEt3uor8sbi1vAReWoz+KoWjkfIMqY
-         0GWhaMbkpGJkVyz1wXEna36h3IBQeDVA4nu/1h7s=
-Date:   Sat, 9 Sep 2023 16:35:26 +0100
-From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Yuran Pereira <yuran.pereira@hotmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "royluo@google.com" <royluo@google.com>,
-        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
-        "raychi@google.com" <raychi@google.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "syzbot+c063a4e176681d2e0380@syzkaller.appspotmail.com" 
-        <syzbot+c063a4e176681d2e0380@syzkaller.appspotmail.com>
-Subject: Re: [PATCH] USB: core: Fix a NULL pointer dereference
-Message-ID: <2023090955-sandy-yummy-3d1e@gregkh>
-References: <AS8P192MB12697886EC8DF1650AD56A57E8EDA@AS8P192MB1269.EURP192.PROD.OUTLOOK.COM>
- <d3ffde1a-e0da-4f3f-ac34-659cbcf41258@rowland.harvard.edu>
- <AM9P192MB12670D185D208AFA51B8348EE8ECA@AM9P192MB1267.EURP192.PROD.OUTLOOK.COM>
- <c072b373-0368-4f49-a4da-da309955cb7a@rowland.harvard.edu>
+        with ESMTP id S229603AbjIIQOy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 9 Sep 2023 12:14:54 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 1FC59197
+        for <linux-usb@vger.kernel.org>; Sat,  9 Sep 2023 09:14:50 -0700 (PDT)
+Received: (qmail 820116 invoked by uid 1000); 9 Sep 2023 12:14:49 -0400
+Date:   Sat, 9 Sep 2023 12:14:49 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Jonathan Woithe <jwoithe@just42.net>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: Samsung T5 SSD: "Synchronize Cache(10) failed" on removal
+Message-ID: <62aaef13-c782-4d18-a59e-f8c1b24b595f@rowland.harvard.edu>
+References: <ZPwnmHV6rIV7Nsg9@marvin.atrad.com.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c072b373-0368-4f49-a4da-da309955cb7a@rowland.harvard.edu>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ZPwnmHV6rIV7Nsg9@marvin.atrad.com.au>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Sep 09, 2023 at 10:36:53AM -0400, Alan Stern wrote:
-> On Sat, Sep 09, 2023 at 06:28:12AM +0000, Yuran Pereira wrote:
-> > Hello Alan,
-> > 
-> > Thank you for elucidating that.
-> > 
-> > So, this bug is present on the mainline tree which is where syzkaller 
-> > found it. My patch was also based on the mainline tree.
-> > 
-> > I just ran the same reproducer against a kernel compiled from the usb 
-> > tree, and, as you suggested, the test you mentioned does in fact, 
-> > prevent the bug from occurring.
-> > 
-> > Please forgive my ignorance; I am a new contributor to the community. 
-> > But in this situation how should I proceed? Is there even a need to 
-> > submit a patch, or will the code currently present in the usb tree 
-> > eventually be reflected in the mainline?
+On Sat, Sep 09, 2023 at 05:36:48PM +0930, Jonathan Woithe wrote:
+> Hi all
 > 
-> The first step is to find the difference between the mainline and USB 
-> trees that is responsible for this change in behavior.  A quick check of 
-> the Git logs shows that the change was caused by commit d21fdd07cea4 
-> ("driver core: Return proper error code when dev_set_name() fails"), 
-> written by Andy Shevchenko.  As a result of this commit, the code in 
-> device_add() now says:
+> Recently I became aware that my system reports a "Synchronize Cache(10)
+> failed" error whenever a Samsung T5 500 GB SSD is unplugged:
 > 
-> 	if (dev_name(dev))
-> 		error = 0;
-> 	/* subsystems can specify simple device enumeration */
-> 	else if (dev->bus && dev->bus->dev_name)
-> 		error = dev_set_name(dev, "%s%u", dev->bus->dev_name, dev->id);
-> 	if (error)
-> 		goto name_error;
+>      sd 11:0:0:0: [sdg] Synchronizing SCSI cache
+>      sd 11:0:0:0: [sdg] Synchronize Cache(10) failed: Result: hostbyte=0x07
+>                   driverbyte=DRIVER_OK
 > 
-> This obviously omits a final "else" clause; it should say:
+> Occasionally the "hostbyte" is 0x01 instead of 0x07.  I don't think this is
+> a new problem since it's been occuring possibly since I started using the T5
+> in early 2021.  A second Samsung T5 (a 250 GB model) triggers the
+> same messages when removed.
 > 
-> 	if (dev_name(dev))
-> 		error = 0;
-> 	/* subsystems can specify simple device enumeration */
-> 	else if (dev->bus && dev->bus->dev_name)
-> 		error = dev_set_name(dev, "%s%u", dev->bus->dev_name, dev->id);
-> +	else
-> +		error = -EINVAL;
-> 	if (error)
-> 		goto name_error;
+> To produce the failure message it is necessary to simply connect the drive
+> and then remove it.  Mounting a filesystem from the drive is not required. 
+> The Linux system does not auto-mount these drives.
+> 
+> I have seen the problem under kernels 5.15.38, 5.15.72, 5.15.117 and 6.1.52.
+> 
+> The T5 uses uas by default.  I have tried forcing the use of usb-storage
+> with
+> 
+>   options usb-storage quirks=04e8:61f5:u
+> 
+> This binds the device to usb-storage instead of uas (according to dmesg) but
+> the error is still reported on removal.
+> 
+> I guess the fundamental question is whether this error is significant in any
+> way.  If it's of no consequence then I'll happily ignore it and move on.
 
-And:
-  https://lore.kernel.org/r/20230828145824.3895288-1-andriy.shevchenko@linux.intel.com
-is the fix for this which will show up in time for 6.6-final.
+The significance is this: When you remove a drive from the system, the 
+kernel tries to make sure that any data sent to the drive and still in 
+the drive's cache gets safely written out to permanent storage.  It does 
+this by sending a SYNCHRONIZE CACHE command to the drive.  Of course, if 
+you haven't written anything to the drive then there will be no data to 
+synchronize.  Also, if you unmounted a filesystem on the drive just 
+before removing it then there will be no data to synchronize, because 
+unmounting automatically performs a SYNCHRONIZE CACHE.  In either case, 
+failure of the command will have no bad effects.
 
-thanks,
+The reason the error message shows up at all is that the kernel doesn't 
+know you're removing the drive until the USB cable gets unplugged.  And 
+by then, it's too late to send anything to the drive -- the attempted 
+command fails because the computer obviously can't communicate with a 
+device that has been unplugged.
 
-greg k-h
+> If on the other hand it' is something best fixed, please let me know how I
+> can assist with this.
+
+The most likely situation where this would indicate a real problem would 
+be if you had mounted a filesystem on the drive, written some data, and 
+then unplugged it without unmounting first.  If you haven't done that 
+then you don't have to worry about anything.
+
+On the other hand, if you would like to get rid of those annoying error 
+messages, you can do so by telling the kernel that the drive is about to 
+be removed before you unplug it.  You do this by writing to the "remove" 
+attribute file in the USB device's sysfs device directory; this is the 
+equivalent of using the "Safely remove a device" button in Windows.  
+Some GUIs may provide an easy-to-use mechanism for doing this, such as 
+an "eject" selection on a device menu.
+
+Alan Stern
