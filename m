@@ -2,49 +2,47 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 510E9799542
-	for <lists+linux-usb@lfdr.de>; Sat,  9 Sep 2023 02:52:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F336799402
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Sep 2023 02:39:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344183AbjIIAw6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Sep 2023 20:52:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50692 "EHLO
+        id S236122AbjIIAim (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Sep 2023 20:38:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346316AbjIIAwu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Sep 2023 20:52:50 -0400
+        with ESMTP id S239795AbjIIAia (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Sep 2023 20:38:30 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A10EF26A2;
-        Fri,  8 Sep 2023 17:52:20 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C539FC116A4;
-        Sat,  9 Sep 2023 00:36:53 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C132729;
+        Fri,  8 Sep 2023 17:38:01 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48678C116AA;
+        Sat,  9 Sep 2023 00:37:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694219815;
-        bh=fCfs+gXgrw2Z+CC1ucAzqDhlJlWuD448yET0zL0XWTQ=;
+        s=k20201202; t=1694219859;
+        bh=i5ekX9ffQk337N8EgxWQZtzRvmPnFzNxRVWQmADw7ag=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vLneOeQhooyN8wYPdDLSldEVAYG49ink3w6PWtqcNaX44gKu5FpOvgo4gonzkRVv0
-         2ybSDwItFS7YPud/WEhPPk2fP/4R/9+B3mZAz/Pfx3G+G2wNn2IwGljQ584bMwdkPh
-         rw+xt1U5QRjFczjlmrWjcz23eU4umMgt7b5fZGcdW9msfNO6ITx7SmzkC5RBKAHE2Y
-         UJ9zbA2buxJzL8S7RdkBb5vGGiJ9z/gtjEw+6TVj3NJb+YjR/Q0AFkMFsNzJWQUk1g
-         jwPVawYrVHjZKQSl9zp8dyWo8GHSna+N0BaiYuN1edVIi/UuEQiofFm7UMoUn9jKzN
-         sJQAbAAlO4EXA==
+        b=OqJVmVCMH0tnR0kFAldZYStUyOJMIeNgxerKdX40uOSDdZ95/TBU8l3SxNBqbceNJ
+         vDLgRAVH6LIV+gcwTrYv0yyrREvEHIoTmSadlHR4PrVKOE/0n7OLLd3oohQvrEsTA8
+         QFi3t7lA9afYbARI7eF05jlFgH8RD8dKqiuCzptx1kfdKUU0hPQpK8sm/0LS3aDZmP
+         YEjnWN9ZD2G9SrI4ob9wK5yrL2qm1VsDrfMlVaxmebfMvzJzvmuVA8ojmNW2PmisUw
+         yY/DHiI3C055/+8P1IYFzCu2kL1iDV2r+TwG2UmK6civ6CU08Pxmln8QZcIkuzajA4
+         q4ILYNAG/14cA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+Cc:     Xiaolei Wang <xiaolei.wang@windriver.com>,
+        Peter Chen <peter.chen@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux@roeck-us.net,
-        heikki.krogerus@linux.intel.com, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.5 27/28] usb: typec: qcom-pmic-typec: register drm_bridge
-Date:   Fri,  8 Sep 2023 20:36:01 -0400
-Message-Id: <20230909003604.3579407-27-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, pawell@cadence.com,
+        linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.4 12/25] usb: cdns3: Put the cdns set active part outside the spin lock
+Date:   Fri,  8 Sep 2023 20:37:00 -0400
+Message-Id: <20230909003715.3579761-12-sashal@kernel.org>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230909003604.3579407-1-sashal@kernel.org>
-References: <20230909003604.3579407-1-sashal@kernel.org>
+In-Reply-To: <20230909003715.3579761-1-sashal@kernel.org>
+References: <20230909003715.3579761-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.5.2
+X-stable-base: Linux 6.4.15
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -56,105 +54,141 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+From: Xiaolei Wang <xiaolei.wang@windriver.com>
 
-[ Upstream commit 4b3cd783808bb327d931bbb1324d6c367443b721 ]
+[ Upstream commit 2319b9c87fe243327285f2fefd7374ffd75a65fc ]
 
-The current approach to handling DP on bridge-enabled platforms requires
-a chain of DP bridges up to the USB-C connector. Register a last DRM
-bridge for such chain.
+The device may be scheduled during the resume process,
+so this cannot appear in atomic operations. Since
+pm_runtime_set_active will resume suppliers, put set
+active outside the spin lock, which is only used to
+protect the struct cdns data structure, otherwise the
+kernel will report the following warning:
 
-Acked-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Link: https://lore.kernel.org/r/20230817150824.14371-3-dmitry.baryshkov@linaro.org
+  BUG: sleeping function called from invalid context at drivers/base/power/runtime.c:1163
+  in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 651, name: sh
+  preempt_count: 1, expected: 0
+  RCU nest depth: 0, expected: 0
+  CPU: 0 PID: 651 Comm: sh Tainted: G        WC         6.1.20 #1
+  Hardware name: Freescale i.MX8QM MEK (DT)
+  Call trace:
+    dump_backtrace.part.0+0xe0/0xf0
+    show_stack+0x18/0x30
+    dump_stack_lvl+0x64/0x80
+    dump_stack+0x1c/0x38
+    __might_resched+0x1fc/0x240
+    __might_sleep+0x68/0xc0
+    __pm_runtime_resume+0x9c/0xe0
+    rpm_get_suppliers+0x68/0x1b0
+    __pm_runtime_set_status+0x298/0x560
+    cdns_resume+0xb0/0x1c0
+    cdns3_controller_resume.isra.0+0x1e0/0x250
+    cdns3_plat_resume+0x28/0x40
+
+Signed-off-by: Xiaolei Wang <xiaolei.wang@windriver.com>
+Acked-by: Peter Chen <peter.chen@kernel.org>
+Link: https://lore.kernel.org/r/20230616021952.1025854-1-xiaolei.wang@windriver.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/typec/tcpm/Kconfig                |  1 +
- drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c | 37 +++++++++++++++++++
- 2 files changed, 38 insertions(+)
+ drivers/usb/cdns3/cdns3-plat.c |  3 ++-
+ drivers/usb/cdns3/cdnsp-pci.c  |  3 ++-
+ drivers/usb/cdns3/core.c       | 15 +++++++++++----
+ drivers/usb/cdns3/core.h       |  7 +++++--
+ 4 files changed, 20 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec/tcpm/Kconfig
-index 5d393f520fc2f..0b2993fef564b 100644
---- a/drivers/usb/typec/tcpm/Kconfig
-+++ b/drivers/usb/typec/tcpm/Kconfig
-@@ -79,6 +79,7 @@ config TYPEC_WCOVE
- config TYPEC_QCOM_PMIC
- 	tristate "Qualcomm PMIC USB Type-C Port Controller Manager driver"
- 	depends on ARCH_QCOM || COMPILE_TEST
-+	depends on DRM || DRM=n
- 	help
- 	  A Type-C port and Power Delivery driver which aggregates two
- 	  discrete pieces of silicon in the PM8150b PMIC block: the
-diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
-index 9b467a346114e..273b4811b4ac8 100644
---- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
-+++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
-@@ -17,6 +17,9 @@
- #include <linux/usb/role.h>
- #include <linux/usb/tcpm.h>
- #include <linux/usb/typec_mux.h>
-+
-+#include <drm/drm_bridge.h>
-+
- #include "qcom_pmic_typec_pdphy.h"
- #include "qcom_pmic_typec_port.h"
+diff --git a/drivers/usb/cdns3/cdns3-plat.c b/drivers/usb/cdns3/cdns3-plat.c
+index 2bc5d094548b6..726b2e4f67e4d 100644
+--- a/drivers/usb/cdns3/cdns3-plat.c
++++ b/drivers/usb/cdns3/cdns3-plat.c
+@@ -256,9 +256,10 @@ static int cdns3_controller_resume(struct device *dev, pm_message_t msg)
+ 	cdns3_set_platform_suspend(cdns->dev, false, false);
  
-@@ -33,6 +36,7 @@ struct pmic_typec {
- 	struct pmic_typec_port	*pmic_typec_port;
- 	bool			vbus_enabled;
- 	struct mutex		lock;		/* VBUS state serialization */
-+	struct drm_bridge	bridge;
- };
+ 	spin_lock_irqsave(&cdns->lock, flags);
+-	cdns_resume(cdns, !PMSG_IS_AUTO(msg));
++	cdns_resume(cdns);
+ 	cdns->in_lpm = false;
+ 	spin_unlock_irqrestore(&cdns->lock, flags);
++	cdns_set_active(cdns, !PMSG_IS_AUTO(msg));
+ 	if (cdns->wakeup_pending) {
+ 		cdns->wakeup_pending = false;
+ 		enable_irq(cdns->wakeup_irq);
+diff --git a/drivers/usb/cdns3/cdnsp-pci.c b/drivers/usb/cdns3/cdnsp-pci.c
+index 7b151f5af3ccb..0725668ffea4c 100644
+--- a/drivers/usb/cdns3/cdnsp-pci.c
++++ b/drivers/usb/cdns3/cdnsp-pci.c
+@@ -208,8 +208,9 @@ static int __maybe_unused cdnsp_pci_resume(struct device *dev)
+ 	int ret;
  
- #define tcpc_to_tcpm(_tcpc_) container_of(_tcpc_, struct pmic_typec, tcpc)
-@@ -146,6 +150,35 @@ static int qcom_pmic_typec_init(struct tcpc_dev *tcpc)
- 	return 0;
+ 	spin_lock_irqsave(&cdns->lock, flags);
+-	ret = cdns_resume(cdns, 1);
++	ret = cdns_resume(cdns);
+ 	spin_unlock_irqrestore(&cdns->lock, flags);
++	cdns_set_active(cdns, 1);
+ 
+ 	return ret;
  }
+diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
+index dbcdf3b24b477..7b20d2d5c262e 100644
+--- a/drivers/usb/cdns3/core.c
++++ b/drivers/usb/cdns3/core.c
+@@ -522,9 +522,8 @@ int cdns_suspend(struct cdns *cdns)
+ }
+ EXPORT_SYMBOL_GPL(cdns_suspend);
  
-+#if IS_ENABLED(CONFIG_DRM)
-+static int qcom_pmic_typec_attach(struct drm_bridge *bridge,
-+				     enum drm_bridge_attach_flags flags)
-+{
-+	return flags & DRM_BRIDGE_ATTACH_NO_CONNECTOR ? 0 : -EINVAL;
-+}
-+
-+static const struct drm_bridge_funcs qcom_pmic_typec_bridge_funcs = {
-+	.attach = qcom_pmic_typec_attach,
-+};
-+
-+static int qcom_pmic_typec_init_drm(struct pmic_typec *tcpm)
-+{
-+	tcpm->bridge.funcs = &qcom_pmic_typec_bridge_funcs;
-+#ifdef CONFIG_OF
-+	tcpm->bridge.of_node = of_get_child_by_name(tcpm->dev->of_node, "connector");
-+#endif
-+	tcpm->bridge.ops = DRM_BRIDGE_OP_HPD;
-+	tcpm->bridge.type = DRM_MODE_CONNECTOR_DisplayPort;
-+
-+	return devm_drm_bridge_add(tcpm->dev, &tcpm->bridge);
-+}
-+#else
-+static int qcom_pmic_typec_init_drm(struct pmic_typec *tcpm)
-+{
+-int cdns_resume(struct cdns *cdns, u8 set_active)
++int cdns_resume(struct cdns *cdns)
+ {
+-	struct device *dev = cdns->dev;
+ 	enum usb_role real_role;
+ 	bool role_changed = false;
+ 	int ret = 0;
+@@ -556,15 +555,23 @@ int cdns_resume(struct cdns *cdns, u8 set_active)
+ 	if (cdns->roles[cdns->role]->resume)
+ 		cdns->roles[cdns->role]->resume(cdns, cdns_power_is_lost(cdns));
+ 
 +	return 0;
 +}
-+#endif
++EXPORT_SYMBOL_GPL(cdns_resume);
 +
- static int qcom_pmic_typec_probe(struct platform_device *pdev)
- {
- 	struct pmic_typec *tcpm;
-@@ -208,6 +241,10 @@ static int qcom_pmic_typec_probe(struct platform_device *pdev)
- 	mutex_init(&tcpm->lock);
- 	platform_set_drvdata(pdev, tcpm);
++void cdns_set_active(struct cdns *cdns, u8 set_active)
++{
++	struct device *dev = cdns->dev;
++
+ 	if (set_active) {
+ 		pm_runtime_disable(dev);
+ 		pm_runtime_set_active(dev);
+ 		pm_runtime_enable(dev);
+ 	}
  
-+	ret = qcom_pmic_typec_init_drm(tcpm);
-+	if (ret)
-+		return ret;
-+
- 	tcpm->tcpc.fwnode = device_get_named_child_node(tcpm->dev, "connector");
- 	if (!tcpm->tcpc.fwnode)
- 		return -EINVAL;
+-	return 0;
++	return;
+ }
+-EXPORT_SYMBOL_GPL(cdns_resume);
++EXPORT_SYMBOL_GPL(cdns_set_active);
+ #endif /* CONFIG_PM_SLEEP */
+ 
+ MODULE_AUTHOR("Peter Chen <peter.chen@nxp.com>");
+diff --git a/drivers/usb/cdns3/core.h b/drivers/usb/cdns3/core.h
+index 2d332a788871e..4a4dbc2c15615 100644
+--- a/drivers/usb/cdns3/core.h
++++ b/drivers/usb/cdns3/core.h
+@@ -125,10 +125,13 @@ int cdns_init(struct cdns *cdns);
+ int cdns_remove(struct cdns *cdns);
+ 
+ #ifdef CONFIG_PM_SLEEP
+-int cdns_resume(struct cdns *cdns, u8 set_active);
++int cdns_resume(struct cdns *cdns);
+ int cdns_suspend(struct cdns *cdns);
++void cdns_set_active(struct cdns *cdns, u8 set_active);
+ #else /* CONFIG_PM_SLEEP */
+-static inline int cdns_resume(struct cdns *cdns, u8 set_active)
++static inline int cdns_resume(struct cdns *cdns)
++{ return 0; }
++static inline int cdns_set_active(struct cdns *cdns, u8 set_active)
+ { return 0; }
+ static inline int cdns_suspend(struct cdns *cdns)
+ { return 0; }
 -- 
 2.40.1
 
