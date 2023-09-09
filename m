@@ -2,262 +2,193 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4664F7990E1
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Sep 2023 22:11:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8055B7993E6
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Sep 2023 02:38:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344501AbjIHULi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Sep 2023 16:11:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40622 "EHLO
+        id S1345683AbjIIAh5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Sep 2023 20:37:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232528AbjIHULh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Sep 2023 16:11:37 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 206A69C;
-        Fri,  8 Sep 2023 13:11:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694203893; x=1725739893;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=1i1KfBFiSTUY7x496pUWhUcOiahc2+FwwF/1+70/gGM=;
-  b=fTFYIkDL0alFOT8feaUVRMNAmONqzAAGFyYTf66zelj8Xr5+7kx4NxGQ
-   3+FTG60kh2BoYW51yXK83u/LeJBAkYxId0ptOMLW79OJai0CMidAa0aTw
-   hcqU4Nm3yCqYXErXAHX/cEiRJNWVTTcqiWynTkWrNUobE5K1Y75hueXYR
-   YKOa7r93iratwULOGZQR94WAog3mmPSnbacKP+O3L0WGpOIBoM3SXOzPv
-   Gst4YTxeAJa5RceWpq7SnypFOAvp1XHZI2h9SafPCauj05PUkBCa7iODu
-   67HVVJNqr4FDSoh8VnLDnT2svMam3Xge/xfe+RiNFVKzomL1UJoQHNSTV
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="408716962"
-X-IronPort-AV: E=Sophos;i="6.02,237,1688454000"; 
-   d="scan'208";a="408716962"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2023 13:11:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="692386255"
-X-IronPort-AV: E=Sophos;i="6.02,237,1688454000"; 
-   d="scan'208";a="692386255"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orsmga003.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 08 Sep 2023 13:11:31 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32; Fri, 8 Sep 2023 13:11:31 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32; Fri, 8 Sep 2023 13:11:31 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32 via Frontend Transport; Fri, 8 Sep 2023 13:11:31 -0700
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.172)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.27; Fri, 8 Sep 2023 13:11:30 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=D79bWHIHcAGao8+s0xnExEZJ5kTCG2ovEywuYsC9EAUY5HdJW3MeJ6O+YKY9eR0D6Rt1r3bTXAObr2zV4PNexKDmf7phfUzhS++pMcPOypzBP3QxrWZw8oBqee8yWKTbqBbL73tqnhTagk2WKXOm1oQ26e/G9fcgxsCj6WR9wjEgCvcYO310V+efVAJeHjWiPJogXnA6zC8Vo0rNRHwQkguOxf8M3NnePTKb4SBYuNp1Ye3Yb3Ceet8xaM4Nr2BJI9/7rMNwth/6AEB1dtaQuH6FPrvmkXk+bvo56qCPtq1l/RY9VRyC14nT1h4m61oja2FFaX9/zt4e3/vJj7Gb2A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ITsFKc6viREIUi4oY2tHCbJwrPfUOalpknLnhP0+Xqc=;
- b=OIKfvLHcLiIja5KqvwF/nzRIvjxs26BGWkBzueD2B3ITLOqfd7POoLlH4MIJksLHv0F/kSl4rwrvX9Dw2wzDDXeSgcqtIuqU1nLuyzANiUsd4P1N3QnspRSZ0OzzHYtq0xXMYto1BdBW1PWMjRzh5NwExpbz7+J9mntYRdGtgiv906cJsS5kCa2ANg1iR4akpryRvHr3YeV6cNp4VHwAW2s9FK/AtK/F71v6XMe/gBj3ZsPvR9KDwXnDOdr/5+I2tngerocTp+UoR76lu9jPB2nwxoaP5rXed2PZgHmm1I4k5asX0yGrU6zqikzsAFGePVLNiYeXtsdM0X4QpHfsHg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MWHPR11MB0048.namprd11.prod.outlook.com (2603:10b6:301:6a::31)
- by CH0PR11MB5505.namprd11.prod.outlook.com (2603:10b6:610:d4::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.30; Fri, 8 Sep
- 2023 20:11:27 +0000
-Received: from MWHPR11MB0048.namprd11.prod.outlook.com
- ([fe80::da4:d67d:40ed:9786]) by MWHPR11MB0048.namprd11.prod.outlook.com
- ([fe80::da4:d67d:40ed:9786%4]) with mapi id 15.20.6768.029; Fri, 8 Sep 2023
- 20:11:27 +0000
-From:   "Patel, Utkarsh H" <utkarsh.h.patel@intel.com>
-To:     Prashant Malani <pmalani@chromium.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
-        "chrome-platform@lists.linux.dev" <chrome-platform@lists.linux.dev>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "bleung@chromium.org" <bleung@chromium.org>
-Subject: RE: [PATCH v2 4/5] platform/chrome: cros_ec_typec: Add Displayport
- Alternatemode 2.1 Support
-Thread-Topic: [PATCH v2 4/5] platform/chrome: cros_ec_typec: Add Displayport
- Alternatemode 2.1 Support
-Thread-Index: AQHZ25LloUpSuUlFqEqhUDSvXhP6krAEhr0ggAyuzQCAADQvcA==
-Date:   Fri, 8 Sep 2023 20:11:27 +0000
-Message-ID: <MWHPR11MB004837C6D40AD0315A5EB3DFA9EDA@MWHPR11MB0048.namprd11.prod.outlook.com>
-References: <20230830223950.1360865-1-utkarsh.h.patel@intel.com>
- <20230830223950.1360865-5-utkarsh.h.patel@intel.com>
- <MWHPR11MB0048D87555CACAC4DC7DF1DFA9E5A@MWHPR11MB0048.namprd11.prod.outlook.com>
- <ZPtTzovOMJ2gmPdy@chromium.org>
-In-Reply-To: <ZPtTzovOMJ2gmPdy@chromium.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MWHPR11MB0048:EE_|CH0PR11MB5505:EE_
-x-ms-office365-filtering-correlation-id: 73cae1ad-b4c4-4686-a4db-08dbb0a7c8a9
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: pNPmJHS4Ashaetz1ob/qfhpyPFeKKwgw4RV1iGsdQThf7C+Oyi2zHZLfx/aND9bDon9+YlbyMoCE67JAikxBM3sUu2KriawG21aXjTXKhbBbJhockTOjSFMk8MSu32sLWttgwnzfkdamdxQennBVv0LBpFrL3ZnW7trJcAPmBaSasJJXod6d8biCR/NppVT6sWdLIH+7pMa9rAuR267H68SuX3SGvF0tMgsHYD0v9/YrhwQbfZ2feZ2uIOavb3XiIffYuGZ+5DIY/+dMIG8C4n1mohk4BHo66zRYRgOj24OHb7M/L9lGU8pESLm/aKxtEXOILV2ES+V5GsKl7mE4rfBLB/bgRRDnHuu7Yv2MvBXUcwtxYB8aMMrhyofyYSrm0Mt+aA50yl9h5jPKOJXtMffgIZvBcUNiFAQaZX0i4j4W9MhBXOK87bQXEyoSYVsAIziHk/uFFylhriX/MK74dDoCmdusw14PfbBS+deTGleZYTCuXydJAasrnPBIik/fmr6W5AfYY3Iaq/e+LJmZ65L6pCwJLAzHeUoE/7W2csT91GZSIE/4igi1dLQcb+ltR3bxcfwSgNlC8GlmluWVT9l8a3Mh7XIt4Ydwfu7GVXG855oyKUcenYCey4MYGtJj
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB0048.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(396003)(346002)(376002)(366004)(136003)(451199024)(186009)(1800799009)(122000001)(82960400001)(38100700002)(55016003)(86362001)(33656002)(478600001)(2906002)(9686003)(71200400001)(53546011)(7696005)(4326008)(6506007)(8936002)(52536014)(8676002)(38070700005)(5660300002)(316002)(66476007)(66556008)(54906003)(66446008)(6916009)(66946007)(41300700001)(64756008)(83380400001)(76116006)(26005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?wk1qyMDCRBAQGa/B1H9dDNmF6UijuWcSybUOmkLrJZmewsyNabm6pkfchPGE?=
- =?us-ascii?Q?ni43Ny+Axi/FDL/KFWgfscDS7exojgOu+u394VVGMmHvL678vrAXdtdLZn8W?=
- =?us-ascii?Q?USwgxpLSiiwkBXEIuY/D5oT1gHFrmEhTJqaCXzRfJQofVl0HS9qh/yKOHOEb?=
- =?us-ascii?Q?+Uv/JPeDmyk3PHaGIII8rlZ2cIhGSgnJaml8GJUF8vDy1rKIzw0sPmnQi3gj?=
- =?us-ascii?Q?oEFkZ2jA052rKUwpCQEkvuHX3u9gDQDQrQNzjXJWx0XUP1jRhWTgCRyXHDFn?=
- =?us-ascii?Q?eOuVvcwf7OAnNL2+R+LaZkeOjCbCgm33CTClDU7TN1HSouG3erbFQdNLwcbb?=
- =?us-ascii?Q?ng7XaZFV8zI4YNUQth5HzUZsWpmg9+96pDU7DOucUIx57IBts9Ssyz3VJGvM?=
- =?us-ascii?Q?mpWXeuW3KwU5d9Xi5L0uGQJ8mA+BXIIn2XGyJiqrHwbvfV145/sND83ih4A1?=
- =?us-ascii?Q?mTtG3veKDYehlm8DHhm5FH2y224eDjUgDnNCNSFf2u9JMs4pMt8KFoOaXmEi?=
- =?us-ascii?Q?1QGthfhpcTRJ7IF8lWiTasw+a3d4faauyR0gSDy6IFiL4/ZqHUnxkek/Tp1k?=
- =?us-ascii?Q?pJdPcKp+PsOXFRhOMEEEBHLn7ToSlUU/vh6Yjh8U8V4SE9YLhRomES8J+LCu?=
- =?us-ascii?Q?Mztb4fKYsAJ2TyS94cv1lp1O/Ja/3YMUbDdTiHOCHe60FNwRDLglfUJ2dPvb?=
- =?us-ascii?Q?rThj/Vn1vX+vomWFI6vsy7srsfzuNzZFPPBA3PAJK8M0saNLV5j7463Ifrcj?=
- =?us-ascii?Q?nuoadpFRb4J1TNYPct5n1bSwufhZxbkit19vc4iKWLe+XpaTmG9Dptg7YCi8?=
- =?us-ascii?Q?p/3C23GgeDfMaF+4D6ZY1b7DDAoMKjjvuEw4DH4kFVbo1wg1vtfDuxLdGFsZ?=
- =?us-ascii?Q?CckLRN3kQaKXFl/lMIFHIvl7IaDGJUf33VJBFFx7oc/DMvbjcZp3hwmjUkfc?=
- =?us-ascii?Q?tdAjOnvM6R8G2snRslFQg+09Wptpt4hu/q7+Kpx3pnzVlJZp2zX7nzbuG0A4?=
- =?us-ascii?Q?zYZIaxetHtbc39k3UoEqgl/rGpfNoMdlVI7Oi+iIOLGispLcUdvs2ORTpGdr?=
- =?us-ascii?Q?3Mz+fOHygsjgaagYtZeNXJzOPESnVtWmYti2Ng9clZphjvEfkk6zDAMyvHxL?=
- =?us-ascii?Q?RUPQrTEHfTjasXpLbzRZ61TaNzPyz+ePtMXPf6qfl48OqW/0OmmdsiQmakDL?=
- =?us-ascii?Q?yskwyNF9Ore9flv2cefwYgTbqHFwbCRdUXaUWbYW0rDmz0lglilHalhVtKat?=
- =?us-ascii?Q?xru0fXMO3By9vMGeXuqh61n2ooGJRqkyliHtzJ+qD1PHjfN4Opg53aoSdzc0?=
- =?us-ascii?Q?P/aREGA/A3ZEPf05UpebE7x11ULwJ/Us7tCgAVEzFNgPXv743AD0nROCnyof?=
- =?us-ascii?Q?Jx5UINfeT91lYnXopmt85X52sfjRZKZER+fj9totMlLxcOh2l3O6BlitSpF9?=
- =?us-ascii?Q?fauidCb/GEbRlZamj5aUpiO50cJvfW66G+AbCApkEweRKnyCJnVbFzu89iWQ?=
- =?us-ascii?Q?ju+cAvm825RSGNz/APysv2lFTfr7o2jbPw/g+R3kKN33M4yLkoCcktMmyWJE?=
- =?us-ascii?Q?41ItLgnf72mKWaYiOSVZkSMdmyRNg+LLZ8wsx3m7?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S1345637AbjIIAhr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Sep 2023 20:37:47 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CE142113;
+        Fri,  8 Sep 2023 17:37:23 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52EB0C433BA;
+        Sat,  9 Sep 2023 00:36:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1694219788;
+        bh=OnI8TW+z1Rk6cUZg2rW3CeYNlL0cZjubF6KRUIos7jY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=H7OV5n78V5DHZ3wea7PbP9Xi3T/ryXrrCG45xtVXb20Vf5d9fMV29y5VJ1BDZq5gA
+         R20XTxsyrTiE+04SnBvV7SADgGWMeDkEF1UpZtkx+mNCQaM98W/GjD25KHsSOzN5k9
+         MnpXib7ye5cd1HL26YDNG/jIOYWC1ojH3lqBAKIVAo9ROFqwGaNoDovvhYpYPJ4Mq3
+         K0Og+pTGwMc9Dp6pNo+MZ6eCvGqrb089AdAFMX7PbG3x1t+ESDH+GGnTyhHtszLcud
+         R16qTeI3B+R/KQFnHrWUY4RYjGwpwQfmotSpWoq88qUJ8rBum2wNFRqcVNC+17AnU/
+         DRfhyhzoGqyvg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Xiaolei Wang <xiaolei.wang@windriver.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>, pawell@cadence.com,
+        linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.5 12/28] usb: cdns3: Put the cdns set active part outside the spin lock
+Date:   Fri,  8 Sep 2023 20:35:46 -0400
+Message-Id: <20230909003604.3579407-12-sashal@kernel.org>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230909003604.3579407-1-sashal@kernel.org>
+References: <20230909003604.3579407-1-sashal@kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB0048.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 73cae1ad-b4c4-4686-a4db-08dbb0a7c8a9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Sep 2023 20:11:27.5590
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: cUr3pLg8YNLzjQ5VpFCtAp/S/8Ka9DWv4RKNWIeMp1LyULSgiV3VBGHnO7lPH9bC9Z7MXUCJXzPpOrJZcKbOxvC4GmKVdjUAKC/A4mqsVFQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5505
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.5.2
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Prashant,
+From: Xiaolei Wang <xiaolei.wang@windriver.com>
 
-Thank you for the review and feedback.
+[ Upstream commit 2319b9c87fe243327285f2fefd7374ffd75a65fc ]
 
-> -----Original Message-----
-> From: Prashant Malani <pmalani@chromium.org>
-> Sent: Friday, September 8, 2023 10:03 AM
-> To: Patel, Utkarsh H <utkarsh.h.patel@intel.com>
-> Cc: linux-kernel@vger.kernel.org; linux-usb@vger.kernel.org;
-> heikki.krogerus@linux.intel.com; chrome-platform@lists.linux.dev;
-> andriy.shevchenko@linux.intel.com; bleung@chromium.org
-> Subject: Re: [PATCH v2 4/5] platform/chrome: cros_ec_typec: Add Displaypo=
-rt
-> Alternatemode 2.1 Support
->=20
-> Hi Utkarsh,
->=20
-> Just a minor thing you can fix for the next version (since it looks like =
-there will
-> be one).
->=20
-> On Aug 31 15:24, Patel, Utkarsh H wrote:
-> > Hello,
-> >
-> > >  drivers/platform/chrome/cros_ec_typec.c | 31
-> > > +++++++++++++++++++++++++
-> > >  1 file changed, 31 insertions(+)
-> > >
-> > > diff --git a/drivers/platform/chrome/cros_ec_typec.c
-> > > b/drivers/platform/chrome/cros_ec_typec.c
-> > > index d0b4d3fc40ed..8372f13052a8 100644
-> > > --- a/drivers/platform/chrome/cros_ec_typec.c
-> > > +++ b/drivers/platform/chrome/cros_ec_typec.c
-> > > @@ -492,6 +492,8 @@ static int cros_typec_enable_dp(struct
-> > > cros_typec_data *typec,  {
-> > >  	struct cros_typec_port *port =3D typec->ports[port_num];
-> > >  	struct typec_displayport_data dp_data;
-> > > +	u32 cable_tbt_vdo;
-> > > +	u32 cable_dp_vdo;
-> > >  	int ret;
-> > >
-> > >  	if (typec->pd_ctrl_ver < 2) {
-> > > @@ -524,6 +526,35 @@ static int cros_typec_enable_dp(struct
-> > > cros_typec_data *typec,
-> > >  	port->state.data =3D &dp_data;
-> > >  	port->state.mode =3D TYPEC_MODAL_STATE(ffs(pd_ctrl->dp_mode));
-> > >
-> > > +	/* Get cable VDO for cables with DPSID to check DPAM2.1 is
-> > > supported */
-> > > +	cable_dp_vdo =3D cros_typec_get_cable_vdo(port,
-> > > USB_TYPEC_DP_SID);
-> > > +
-> > > +	/**
-> > > +	 * Get cable VDO for thunderbolt cables and cables with DPSID but
-> > > does not
-> > > +	 * support DPAM2.1.
-> > > +	 */
-> > > +	cable_tbt_vdo =3D cros_typec_get_cable_vdo(port,
-> > > USB_TYPEC_TBT_SID);
-> > > +
-> > > +	if (cable_dp_vdo & DP_CAP_DPAM_VERSION) {
-> > > +		dp_data.conf |=3D cable_dp_vdo;
-> > > +	} else if (cable_tbt_vdo) {
-> > > +		u8 cable_speed =3D TBT_CABLE_SPEED(cable_tbt_vdo);
-> Can we declare this variable at the top? That is the style in this file a=
-nd quite
-> commonly seen elsewhere.
->=20
-> Or better yet, just inline this and get rid of the extra variable altoget=
-her:
->=20
-> 	dp_data.conf |=3D TBT_CABLE_SPEED(...) <<
-> DP_CONF_SIGNALLING_SHIFT;
+The device may be scheduled during the resume process,
+so this cannot appear in atomic operations. Since
+pm_runtime_set_active will resume suppliers, put set
+active outside the spin lock, which is only used to
+protect the struct cdns data structure, otherwise the
+kernel will report the following warning:
 
-Ack.
+  BUG: sleeping function called from invalid context at drivers/base/power/runtime.c:1163
+  in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 651, name: sh
+  preempt_count: 1, expected: 0
+  RCU nest depth: 0, expected: 0
+  CPU: 0 PID: 651 Comm: sh Tainted: G        WC         6.1.20 #1
+  Hardware name: Freescale i.MX8QM MEK (DT)
+  Call trace:
+    dump_backtrace.part.0+0xe0/0xf0
+    show_stack+0x18/0x30
+    dump_stack_lvl+0x64/0x80
+    dump_stack+0x1c/0x38
+    __might_resched+0x1fc/0x240
+    __might_sleep+0x68/0xc0
+    __pm_runtime_resume+0x9c/0xe0
+    rpm_get_suppliers+0x68/0x1b0
+    __pm_runtime_set_status+0x298/0x560
+    cdns_resume+0xb0/0x1c0
+    cdns3_controller_resume.isra.0+0x1e0/0x250
+    cdns3_plat_resume+0x28/0x40
 
->=20
-> > > +
-> > > +		dp_data.conf |=3D cable_speed <<
-> > > DP_CONF_SIGNALLING_SHIFT;
-> > > +
-> > > +		/* Cable Type */
-> > > +		if (cable_tbt_vdo & TBT_CABLE_OPTICAL)
-> > > +			dp_data.conf |=3D DP_CONF_CABLE_TYPE_OPTICAL <<
-> > > DP_CONF_CABLE_TYPE_SHIFT;
-> > > +		else if (cable_tbt_vdo & TBT_CABLE_RETIMER)
-> > > +			dp_data.conf |=3D DP_CONF_CABLE_TYPE_RE_TIMER <<
-> > > DP_CONF_CABLE_TYPE_SHIFT;
-> > > +		else if (cable_tbt_vdo & TBT_CABLE_ACTIVE_PASSIVE)
-> > > +			dp_data.conf |=3D DP_CONF_CABLE_TYPE_RE_DRIVER
-> > > << DP_CONF_CABLE_TYPE_SHIFT;
-> > > +	} else if (PD_IDH_PTYPE(port->c_identity.id_header) =3D=3D
-> > > IDH_PTYPE_PCABLE) {
-> > > +		u8 cable_speed =3D VDO_CABLE_SPEED(port-
-> > > >c_identity.vdo[0]);
-> Same here, you can inline this without affecting readability too much.
+Signed-off-by: Xiaolei Wang <xiaolei.wang@windriver.com>
+Acked-by: Peter Chen <peter.chen@kernel.org>
+Link: https://lore.kernel.org/r/20230616021952.1025854-1-xiaolei.wang@windriver.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/usb/cdns3/cdns3-plat.c |  3 ++-
+ drivers/usb/cdns3/cdnsp-pci.c  |  3 ++-
+ drivers/usb/cdns3/core.c       | 15 +++++++++++----
+ drivers/usb/cdns3/core.h       |  7 +++++--
+ 4 files changed, 20 insertions(+), 8 deletions(-)
 
-Ack.
+diff --git a/drivers/usb/cdns3/cdns3-plat.c b/drivers/usb/cdns3/cdns3-plat.c
+index 884e2301237f4..1168dbeed2ce0 100644
+--- a/drivers/usb/cdns3/cdns3-plat.c
++++ b/drivers/usb/cdns3/cdns3-plat.c
+@@ -255,9 +255,10 @@ static int cdns3_controller_resume(struct device *dev, pm_message_t msg)
+ 	cdns3_set_platform_suspend(cdns->dev, false, false);
+ 
+ 	spin_lock_irqsave(&cdns->lock, flags);
+-	cdns_resume(cdns, !PMSG_IS_AUTO(msg));
++	cdns_resume(cdns);
+ 	cdns->in_lpm = false;
+ 	spin_unlock_irqrestore(&cdns->lock, flags);
++	cdns_set_active(cdns, !PMSG_IS_AUTO(msg));
+ 	if (cdns->wakeup_pending) {
+ 		cdns->wakeup_pending = false;
+ 		enable_irq(cdns->wakeup_irq);
+diff --git a/drivers/usb/cdns3/cdnsp-pci.c b/drivers/usb/cdns3/cdnsp-pci.c
+index 7b151f5af3ccb..0725668ffea4c 100644
+--- a/drivers/usb/cdns3/cdnsp-pci.c
++++ b/drivers/usb/cdns3/cdnsp-pci.c
+@@ -208,8 +208,9 @@ static int __maybe_unused cdnsp_pci_resume(struct device *dev)
+ 	int ret;
+ 
+ 	spin_lock_irqsave(&cdns->lock, flags);
+-	ret = cdns_resume(cdns, 1);
++	ret = cdns_resume(cdns);
+ 	spin_unlock_irqrestore(&cdns->lock, flags);
++	cdns_set_active(cdns, 1);
+ 
+ 	return ret;
+ }
+diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
+index dbcdf3b24b477..7b20d2d5c262e 100644
+--- a/drivers/usb/cdns3/core.c
++++ b/drivers/usb/cdns3/core.c
+@@ -522,9 +522,8 @@ int cdns_suspend(struct cdns *cdns)
+ }
+ EXPORT_SYMBOL_GPL(cdns_suspend);
+ 
+-int cdns_resume(struct cdns *cdns, u8 set_active)
++int cdns_resume(struct cdns *cdns)
+ {
+-	struct device *dev = cdns->dev;
+ 	enum usb_role real_role;
+ 	bool role_changed = false;
+ 	int ret = 0;
+@@ -556,15 +555,23 @@ int cdns_resume(struct cdns *cdns, u8 set_active)
+ 	if (cdns->roles[cdns->role]->resume)
+ 		cdns->roles[cdns->role]->resume(cdns, cdns_power_is_lost(cdns));
+ 
++	return 0;
++}
++EXPORT_SYMBOL_GPL(cdns_resume);
++
++void cdns_set_active(struct cdns *cdns, u8 set_active)
++{
++	struct device *dev = cdns->dev;
++
+ 	if (set_active) {
+ 		pm_runtime_disable(dev);
+ 		pm_runtime_set_active(dev);
+ 		pm_runtime_enable(dev);
+ 	}
+ 
+-	return 0;
++	return;
+ }
+-EXPORT_SYMBOL_GPL(cdns_resume);
++EXPORT_SYMBOL_GPL(cdns_set_active);
+ #endif /* CONFIG_PM_SLEEP */
+ 
+ MODULE_AUTHOR("Peter Chen <peter.chen@nxp.com>");
+diff --git a/drivers/usb/cdns3/core.h b/drivers/usb/cdns3/core.h
+index 2d332a788871e..4a4dbc2c15615 100644
+--- a/drivers/usb/cdns3/core.h
++++ b/drivers/usb/cdns3/core.h
+@@ -125,10 +125,13 @@ int cdns_init(struct cdns *cdns);
+ int cdns_remove(struct cdns *cdns);
+ 
+ #ifdef CONFIG_PM_SLEEP
+-int cdns_resume(struct cdns *cdns, u8 set_active);
++int cdns_resume(struct cdns *cdns);
+ int cdns_suspend(struct cdns *cdns);
++void cdns_set_active(struct cdns *cdns, u8 set_active);
+ #else /* CONFIG_PM_SLEEP */
+-static inline int cdns_resume(struct cdns *cdns, u8 set_active)
++static inline int cdns_resume(struct cdns *cdns)
++{ return 0; }
++static inline int cdns_set_active(struct cdns *cdns, u8 set_active)
+ { return 0; }
+ static inline int cdns_suspend(struct cdns *cdns)
+ { return 0; }
+-- 
+2.40.1
 
-Sincerely,
-Utkarsh Patel.
