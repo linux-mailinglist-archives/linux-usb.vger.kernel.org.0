@@ -2,48 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 531F8799633
-	for <lists+linux-usb@lfdr.de>; Sat,  9 Sep 2023 06:15:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B09D5799693
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Sep 2023 08:30:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229706AbjIIEPh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 9 Sep 2023 00:15:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40498 "EHLO
+        id S243226AbjIIGaS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 9 Sep 2023 02:30:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjIIEPf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 9 Sep 2023 00:15:35 -0400
-X-Greylist: delayed 509 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 08 Sep 2023 21:15:29 PDT
-Received: from mail-m15578.qiye.163.com (mail-m15578.qiye.163.com [101.71.155.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA5F01BF4
-        for <linux-usb@vger.kernel.org>; Fri,  8 Sep 2023 21:15:29 -0700 (PDT)
-DKIM-Signature: a=rsa-sha256;
-        b=T3MGvGt2CB/aHPxjHAnaYzNQCUeGA5K0vRS3SnEa0+RMjTuTcfRjqR/YwAsku1lj8UhZKSDbJfcG2cohLO9O27jtR7/oml42guaBaYCmePO/iHELVfkukWX1P1TSsW4hh0IZQcVleiv4vnTc5b28tzsE0QNIW0uKar1kVdPrbps=;
-        s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
-        bh=L7IJmAxMDs+wBSdmSin3bID9RGrTvuvyEX5zEBmFhWI=;
-        h=date:mime-version:subject:message-id:from;
-Received: from localhost.localdomain (unknown [58.22.7.114])
-        by mail-m11880.qiye.163.com (Hmail) with ESMTPA id C966E202DE;
-        Sat,  9 Sep 2023 12:06:48 +0800 (CST)
-From:   William Wu <william.wu@rock-chips.com>
-To:     Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        william.wu@rock-chips.com, frank.wang@rock-chips.com,
+        with ESMTP id S233815AbjIIGaR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 9 Sep 2023 02:30:17 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26C311BC5;
+        Fri,  8 Sep 2023 23:30:12 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A41AC433C7;
+        Sat,  9 Sep 2023 06:30:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1694241011;
+        bh=CpMJD8Fdvs8i0D8AdgC4R4zpvfsPkNH72axloON+30w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=T5UsbJFuKZi970QivQsGy+WAnofak/BvhTfrNYmE58IUhu7fjuG0ny6LhjfOqLEsv
+         Y5idP9BwYDDBszi+L6rjpQ8PFmCceSNcXLvmS9nThoumqA9xFPRP23NLhh/ZXsNoSC
+         WY3s242t5zOMeKWzCXV9+jZ1Awx+SaJGODZPa6EI=
+Date:   Sat, 9 Sep 2023 07:30:09 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     William Wu <william.wu@rock-chips.com>
+Cc:     Thinh.Nguyen@synopsys.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, frank.wang@rock-chips.com,
         jianwei.zheng@rock-chips.com, yangbin@rock-chips.com
-Subject: [PATCH] usb: dwc3: core: Avoid resume dwc3 if already suspended in pm resume
-Date:   Sat,  9 Sep 2023 12:06:28 +0800
-Message-Id: <20230909040628.31398-1-william.wu@rock-chips.com>
-X-Mailer: git-send-email 2.17.1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQ01MHVYYH05LHh5OSEwfTkJVEwETFh
-        oSFyQUDg9ZV1kYEgtZQVlOQ1VJSVVMVUpKT1lXWRYaDxIVHRRZQVlPS0hVSkpLQ0hJVUpLS1VLWQ
-        Y+
-X-HM-Tid: 0a8a781ef3a72eb6kusnc966e202de
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NiI6Aio4Lj1KLxAoEBYPSCsO
-        ODwaCzJVSlVKTUJPSUhJT0tCTkJDVTMWGhIXVQwSFxcSGhZVDA47CRQYEFYYExILCFUYFBZFWVdZ
-        EgtZQVlOQ1VJSVVMVUpKT1lXWQgBWUFJQklKNwY+
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
+Subject: Re: [PATCH] usb: dwc3: core: Avoid resume dwc3 if already suspended
+ in pm resume
+Message-ID: <2023090938-bobbed-rearview-c406@gregkh>
+References: <20230909040628.31398-1-william.wu@rock-chips.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230909040628.31398-1-william.wu@rock-chips.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,66 +47,12 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If we enable PM runtime auto suspend for dwc3 on rockchip
-platforms (e.g. RK3562), it allows the dwc3 controller to
-enter runtime suspend if usb cable detached and power off
-the power domain of the controller. When system resume, if
-the dwc3 already in runtime suspended, it Shouldn't access
-the dwc3 registers in dwc3_resume() because its power domain
-maybe power off.
+On Sat, Sep 09, 2023 at 12:06:28PM +0800, William Wu wrote:
+> Change-Id: Ia699a1388b28baf9feeae316097c6c309db08b45
 
-Test on RK3562 tablet, this patch can help to avoid kernel
-panic when accessing the dwc3 registers in dwc3_resume() if
-the dwc3 is in runtime suspended and it's power domain is
-power off.
+This is not needed.  Please always run checkpatch.pl on your patches
+before submitting them.
 
-Kernel panic - not syncing: Asynchronous SError Interrupt
-Hardware name: Rockchip RK3562 RK817 TABLET LP4 Board (DT)
-Call trace:
-dump_backtrace.cfi_jt+0x0/0x8
-  dump_stack_lvl+0xc0/0x13c
-  panic+0x174/0x468
-  arm64_serror_panic+0x1b0/0x200
-  do_serror+0x184/0x1e4
-  el1_error+0x94/0x118
-  el1_abort+0x40/0x68
-  el1_sync_handler+0x58/0x88
-  el1_sync+0x8c/0x140
-  dwc3_readl+0x30/0x1a0
-  dwc3_phy_setup+0x38/0x510
-  dwc3_core_init+0x68/0xcd4
-  dwc3_core_init_for_resume+0x10c/0x25c
-  dwc3_resume_common+0x44/0x3d0
-  dwc3_resume+0x5c/0xb8
-  dpm_run_callback+0x70/0x488
-  device_resume+0x250/0x2f8
-  dpm_resume+0x258/0x9dc
+thanks,
 
-Change-Id: Ia699a1388b28baf9feeae316097c6c309db08b45
-Signed-off-by: William Wu <william.wu@rock-chips.com>
----
- drivers/usb/dwc3/core.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 9c6bf054f15d..8274a44f2d6a 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -2185,9 +2185,11 @@ static int dwc3_resume(struct device *dev)
- 
- 	pinctrl_pm_select_default_state(dev);
- 
--	ret = dwc3_resume_common(dwc, PMSG_RESUME);
--	if (ret)
--		return ret;
-+	if (!pm_runtime_suspended(dwc->dev)) {
-+		ret = dwc3_resume_common(dwc, PMSG_RESUME);
-+		if (ret)
-+			return ret;
-+	}
- 
- 	pm_runtime_disable(dev);
- 	pm_runtime_set_active(dev);
--- 
-2.17.1
-
+greg k-h
