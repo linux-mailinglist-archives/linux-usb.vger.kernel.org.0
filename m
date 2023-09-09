@@ -2,52 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B9D4799B25
+	by mail.lfdr.de (Postfix) with ESMTP id C1BEC799B27
 	for <lists+linux-usb@lfdr.de>; Sat,  9 Sep 2023 22:30:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238834AbjIIUa7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 9 Sep 2023 16:30:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55698 "EHLO
+        id S239702AbjIIUbB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 9 Sep 2023 16:31:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbjIIUa6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 9 Sep 2023 16:30:58 -0400
-Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DD6E19E;
-        Sat,  9 Sep 2023 13:30:53 -0700 (PDT)
-Received: by mail-oo1-xc30.google.com with SMTP id 006d021491bc7-56e280cc606so625551eaf.1;
-        Sat, 09 Sep 2023 13:30:53 -0700 (PDT)
+        with ESMTP id S239398AbjIIUbA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 9 Sep 2023 16:31:00 -0400
+Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E8FC19F;
+        Sat,  9 Sep 2023 13:30:56 -0700 (PDT)
+Received: by mail-oo1-xc34.google.com with SMTP id 006d021491bc7-5733d11894dso627151eaf.0;
+        Sat, 09 Sep 2023 13:30:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694291452; x=1694896252; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=z+jFTGPtNIFqEVr30ts3XPd1wAf58v/VZw34R2U5exk=;
-        b=P72yPnktDFQdOUh9WL6oN+Im4bX2hqbAvqphKL93qwQpJYRadRP80Eb928n4pVWKiP
-         A9WSQE+H6Gl2OSAObnUTy3bAQs3Yuf/aC4GFg4PeDAV/oe1/oWDpazVDX18Z/7aSRt5T
-         bQAU3N5NNbsS7TTv1CvoQ1drq2OLdeLfALZM6Ug6F5K4BpkszOP0Uk0iMlymjDxiNaIy
-         jEpdqDOh06w+Smy9FR3t3RF4atpDkrz1JZko4sahGDcUtbeOEP3x/vscJevlbmJwPQqh
-         wdCEvizPhOb/yqjZR5ZdEvuy54UOPDVAXARr77GGso9BrM1OgdYPM+q4QZY03WeQfooI
-         0DGQ==
+        d=gmail.com; s=20221208; t=1694291455; x=1694896255; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1l/MFkk2nisyvIIR1hIhVrSYLlCvsOuM+mCe0mJqGOk=;
+        b=fHgaVsGZ9+cUypPupI9CIqY4UcAISvNwTA1eDbn4zk7mhbUSL+q9ZzzfntsR2i6MIn
+         Q813XaAwQJuUcO5RbGyg/rTNmkavJ+wI/MVUOoTfc7YJ1R8zlaaryrqnUTVL8pWilWE3
+         SEejknrzFs7jnn/e93bAOcQLqhxhJJenxiL/Lg5VLNNt4dCrfgZejn4e+34PcwdDYcOp
+         mEbfnxsPvQc1qdQc8CXl+FphDKzXQt7Tp1ONx56Chc1ifCYQdj0+JmbbyB79NFt5ae6H
+         8hYrFrxSL2wcTZqvDlc1RLCLRerR7iqTVk3AINdDYlQMFY62zqAFkh2JxZ6MkoWpoShw
+         yqIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694291452; x=1694896252;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=z+jFTGPtNIFqEVr30ts3XPd1wAf58v/VZw34R2U5exk=;
-        b=t9N0p7/DCBwyqInLgjb+c4bZDKzjFQ3+b6NcpJkFF+A4npPnZLaJiT4WBRd82xpLC4
-         EDvxpaiTKdzM28iiVwqSvWxE6QZc1++Vn6u5PHJDtKnXZiyNOmhjZldWpamKikpaQeo7
-         x3aQQUrtrs6UrIWc3x0FX0AAhOLr8X+UY2fRD7+Qt3bAcJpNFHKmWuMgK7Bq8vOeaBVs
-         jBfpbcatH/31p5tkFwlPoZThYPDYmktb+uaGOAAOi3qM3uG4XjBSrV/NR9PnUXiUUk2W
-         cwx/eiSb3mQMn/q9vEHy6Sjq+3NF3v2RE81IKbGNrxDcRN6fJC6sXFwB+T1KuVkJpJje
-         2DLw==
-X-Gm-Message-State: AOJu0Yxr7AP+EzS7kUJc9mYKqIIt3a8Tjx6KIBJJvxEg3DRh36nzuYqc
-        tl/xVV4ciP29h7bQ+CDQOSI=
-X-Google-Smtp-Source: AGHT+IG0J+QYAA4sjAXeEwhLboerUCGeBoewzbLNw2JJAoNpfRnxMXs4tyCEp49u1rPDauJyh9QpKQ==
-X-Received: by 2002:a05:6808:218f:b0:3a1:d457:83b5 with SMTP id be15-20020a056808218f00b003a1d45783b5mr6904452oib.3.1694291452269;
-        Sat, 09 Sep 2023 13:30:52 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1694291455; x=1694896255;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1l/MFkk2nisyvIIR1hIhVrSYLlCvsOuM+mCe0mJqGOk=;
+        b=P8g1BigyF1lrRWgVrranj86e6LZ97CSOxNejvYxsURj0wICcF6TNuJezS/e/SF+mdg
+         ai8h4ocx6Uoyf7ja/cGEYCsk0xjzNY1MU+07ea9j16UuwVYZaBDBrRY0N5AHCOdgyLY7
+         iV78WAQnhn9B8e0cZqgGtwERuZEFBvqg9AerDS3FzQmQkhqz/7qCKRpfIJqSMqWw5iIs
+         H7N5D2W6ms+s+CcTBNyFZc2o3XA7nk/FwgufNBxuIvLelUO00wpw/oDiKfWo43iPnucp
+         YtxuMlZOxZvaexzx541oPnW6riCyDeIyMZEMWpanhnt0mPSxCYCdMEoYUnzIOeXCoNo1
+         FiPQ==
+X-Gm-Message-State: AOJu0Yxp4I3tEikd5m18V1D2fhbz0hlb0zZdZk3HLC7U8rUPbEF3Tr2E
+        /R6XTm6EEpWhTQ/qe5x+o7c=
+X-Google-Smtp-Source: AGHT+IGUz/nvLT50r/rkSKMYKw+D1jGdtUKVkOlEktAuqBd/H5sFIaXHSUuaHtQvhHYyCqct+JJg1w==
+X-Received: by 2002:a05:6808:218f:b0:3a1:d457:83b5 with SMTP id be15-20020a056808218f00b003a1d45783b5mr6904548oib.3.1694291455462;
+        Sat, 09 Sep 2023 13:30:55 -0700 (PDT)
 Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:8ae8:e729:67d1:f8d9])
-        by smtp.gmail.com with ESMTPSA id d12-20020a05680813cc00b00396050dca14sm1873509oiw.28.2023.09.09.13.30.49
+        by smtp.gmail.com with ESMTPSA id d12-20020a05680813cc00b00396050dca14sm1873509oiw.28.2023.09.09.13.30.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Sep 2023 13:30:51 -0700 (PDT)
+        Sat, 09 Sep 2023 13:30:55 -0700 (PDT)
 From:   Fabio Estevam <festevam@gmail.com>
 To:     shawnguo@kernel.org
 Cc:     andersson@kernel.org, linux-usb@vger.kernel.org,
@@ -55,10 +56,12 @@ Cc:     andersson@kernel.org, linux-usb@vger.kernel.org,
         conor+dt@kernel.org, linux-imx@nxp.com, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         Fabio Estevam <festevam@denx.de>
-Subject: [PATCH 1/3] dt-bindings: usb: gpio-sbu-mux: Add an entry for CBDTU02043
-Date:   Sat,  9 Sep 2023 17:29:55 -0300
-Message-Id: <20230909202957.1120153-1-festevam@gmail.com>
+Subject: [PATCH 2/3] arm64: dts: imx8qxp-mek: Fix gpio-sbu-mux compatible
+Date:   Sat,  9 Sep 2023 17:29:56 -0300
+Message-Id: <20230909202957.1120153-2-festevam@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230909202957.1120153-1-festevam@gmail.com>
+References: <20230909202957.1120153-1-festevam@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,29 +76,34 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 From: Fabio Estevam <festevam@denx.de>
 
-Add a compatible entry for the NXP CBDTU02043 GPIO-based mux hardware
-used for connecting, disconnecting and switching orientation of
-the SBU lines in USB Type-C applications.
+Per gpio-sbu-mux.yaml, the compatible entry is incomplete.
 
-CBTU02043 datasheet: https://www.nxp.com/docs/en/data-sheet/CBTU02043.pdf
+The imx8qxp-mek board uses a CBDTU02043, so complete the gpio-sbu-mux
+compatible accordingly.
 
+This fixes the following schema warning:
+
+imx8qxp-mek.dtb: gpio-sbu-mux: compatible:0: 'gpio-sbu-mux' is not one of ['onnn,fsusb43l10x', 'pericom,pi3usb102']
+	from schema $id: http://devicetree.org/schemas/usb/gpio-sbu-mux.yaml#
+	
 Signed-off-by: Fabio Estevam <festevam@denx.de>
 ---
- Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm64/boot/dts/freescale/imx8qxp-mek.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml b/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml
-index f196beb826d8..b61dcf8b4aad 100644
---- a/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml
-+++ b/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml
-@@ -19,6 +19,7 @@ properties:
-   compatible:
-     items:
-       - enum:
-+          - nxp,cbdtu02043
-           - onnn,fsusb43l10x
-           - pericom,pi3usb102
-       - const: gpio-sbu-mux
+diff --git a/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts b/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts
+index 7924b0969ad8..a06a6491ef20 100644
+--- a/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts
++++ b/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts
+@@ -31,7 +31,7 @@ reg_usdhc2_vmmc: usdhc2-vmmc {
+ 	};
+ 
+ 	gpio-sbu-mux {
+-		compatible = "gpio-sbu-mux";
++		compatible = "nxp,cbdtu02043","gpio-sbu-mux";
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&pinctrl_typec_mux>;
+ 		select-gpios = <&lsio_gpio5 9 GPIO_ACTIVE_HIGH>;
 -- 
 2.34.1
 
