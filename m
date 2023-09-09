@@ -2,40 +2,38 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 963DA799464
-	for <lists+linux-usb@lfdr.de>; Sat,  9 Sep 2023 02:44:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C147799479
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Sep 2023 02:44:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345874AbjIIAkg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Sep 2023 20:40:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37490 "EHLO
+        id S1346063AbjIIAku (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Sep 2023 20:40:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345974AbjIIAjn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Sep 2023 20:39:43 -0400
+        with ESMTP id S1345921AbjIIAj4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Sep 2023 20:39:56 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF892702;
-        Fri,  8 Sep 2023 17:39:08 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96EB9C43395;
-        Sat,  9 Sep 2023 00:38:56 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E9BC2D48;
+        Fri,  8 Sep 2023 17:39:17 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15836C116B0;
+        Sat,  9 Sep 2023 00:39:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694219937;
-        bh=Y/ISiaucj3+ICO1s3gCunKBzMCXtI3K26os9XY+U+AI=;
+        s=k20201202; t=1694219942;
+        bh=wJ6xfI5wtwNtpNIc8qhqMs2gIRhyZ8ARzS3NOYLcKek=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GF+OIjz0G8SjlfXQiQJvYBY3u9l6Am1W4E3zwfZgP0Q/V7bcNQ/f3hRwMSmT+zUw8
-         HSZIK7M7/u8AKAfIIMcOysHQLTWdBYTrHYnNXCAH6SASwy0PEE6Faj/HJEGud8gAyV
-         sWI8PVms4gS6/sRvvNOwFHHZKWaFqtk5Q3HjBv49Fg2JEeO/xwY2VXFz6T5Ypccl0r
-         sNT8FM0XndzYPHRg4lJOjQ+VrKI0BeK9UiCPlnaKaDRM/xToZgj9YGnPH+BgTrUp7W
-         fK4J1KL8yS4x0QxD4bYYFHCLnoZxvH+DC6AQGB50WyKDxAoGDfjfcPUj+Bmx4cKo1E
-         psCPNeE6PeouQ==
+        b=HsMR9Qvshq2mAEDSokyIIbDJFza2PEIudME2EaulrBv0jPTH4t7Cj8nCX3WtLXBH4
+         yJcyCiCzOymFULZu/lcW+ya5Wv6xJluqYEs0tzJPQl2FJ+4fb6kMFjTFuAWcy3qSyW
+         HdzovnwVoow0jR+WgAEkpYmm2qphgmPotWVyZPQZbpiDDGLZY4uSdvrbcAdJ+boj7h
+         /5aCxeKn7rUHCmiRkF5v5U2j2Ntcbi96kLrAoRMPun5MX0Qznq0qs9EiY27PnA86q8
+         G63t8TkQXmPyFtd77cBWTOetnUreyRnfpo0wrX/73gReKbNPTIWeiMaeioOZF0Rs3i
+         3QX2cV6o251aA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Xu Yang <xu.yang_2@nxp.com>,
+Cc:     Dan Drown <dan-netdev@drown.org>, Oliver Neukum <oneukum@suse.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, peter.chen@kernel.org,
-        shawnguo@kernel.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 6.1 20/24] usb: chipidea: add workaround for chipidea PEC bug
-Date:   Fri,  8 Sep 2023 20:38:12 -0400
-Message-Id: <20230909003818.3580081-20-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 24/24] usb: cdc-acm: move ldisc dcd notification outside of acm's read lock
+Date:   Fri,  8 Sep 2023 20:38:16 -0400
+Message-Id: <20230909003818.3580081-24-sashal@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230909003818.3580081-1-sashal@kernel.org>
 References: <20230909003818.3580081-1-sashal@kernel.org>
@@ -54,104 +52,43 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Xu Yang <xu.yang_2@nxp.com>
+From: Dan Drown <dan-netdev@drown.org>
 
-[ Upstream commit 12e6ac69cc7e7d3367599ae26a92a0f9a18bc728 ]
+[ Upstream commit f72ae60881ff685004d7de7152517607fcd9968f ]
 
-Some NXP processors using ChipIdea USB IP have a bug when frame babble is
-detected.
+dcd_change notification call moved outside of the acm->read_lock
+to protect any future tty ldisc that calls wait_serial_change()
 
-Issue description:
-In USB camera test, our controller is host in HS mode. In ISOC IN, when
-device sends data across the micro frame, it causes the babble in host
-controller. This will clear the PE bit. In spec, it also requires to set
-the PEC bit and then set the PCI bit. Without the PCI interrupt, the
-software does not know the PE is cleared.
-
-This will add a flag CI_HDRC_HAS_PORTSC_PEC_MISSED to some impacted
-platform datas. And the ehci host driver will assert PEC by SW when
-specific conditions are satisfied.
-
-Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-Link: https://lore.kernel.org/r/20230809024432.535160-2-xu.yang_2@nxp.com
+Signed-off-by: Dan Drown <dan-netdev@drown.org>
+Acked-by: Oliver Neukum <oneukum@suse.com>
+Link: https://lore.kernel.org/r/ZN1zV/zjPgpGlHXo@vps3.drown.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/chipidea/ci.h          | 1 +
- drivers/usb/chipidea/ci_hdrc_imx.c | 4 +++-
- drivers/usb/chipidea/core.c        | 2 ++
- drivers/usb/chipidea/host.c        | 1 +
- include/linux/usb/chipidea.h       | 1 +
- 5 files changed, 8 insertions(+), 1 deletion(-)
+ drivers/usb/class/cdc-acm.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/usb/chipidea/ci.h b/drivers/usb/chipidea/ci.h
-index 85a803c135ab3..2ff83911219f8 100644
---- a/drivers/usb/chipidea/ci.h
-+++ b/drivers/usb/chipidea/ci.h
-@@ -253,6 +253,7 @@ struct ci_hdrc {
- 	bool				id_event;
- 	bool				b_sess_valid_event;
- 	bool				imx28_write_fix;
-+	bool				has_portsc_pec_bug;
- 	bool				supports_runtime_pm;
- 	bool				in_lpm;
- 	bool				wakeup_int;
-diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci_hdrc_imx.c
-index 60b4de0a4f76d..6f04c2399dfd8 100644
---- a/drivers/usb/chipidea/ci_hdrc_imx.c
-+++ b/drivers/usb/chipidea/ci_hdrc_imx.c
-@@ -67,11 +67,13 @@ static const struct ci_hdrc_imx_platform_flag imx7d_usb_data = {
+diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
+index 36bf051b345b8..630669a27ef5e 100644
+--- a/drivers/usb/class/cdc-acm.c
++++ b/drivers/usb/class/cdc-acm.c
+@@ -318,6 +318,16 @@ static void acm_process_notification(struct acm *acm, unsigned char *buf)
+ 		}
  
- static const struct ci_hdrc_imx_platform_flag imx7ulp_usb_data = {
- 	.flags = CI_HDRC_SUPPORTS_RUNTIME_PM |
-+		CI_HDRC_HAS_PORTSC_PEC_MISSED |
- 		CI_HDRC_PMQOS,
- };
- 
- static const struct ci_hdrc_imx_platform_flag imx8ulp_usb_data = {
--	.flags = CI_HDRC_SUPPORTS_RUNTIME_PM,
-+	.flags = CI_HDRC_SUPPORTS_RUNTIME_PM |
-+		CI_HDRC_HAS_PORTSC_PEC_MISSED,
- };
- 
- static const struct of_device_id ci_hdrc_imx_dt_ids[] = {
-diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
-index 71f172ecfaabc..b9227f41cf1c0 100644
---- a/drivers/usb/chipidea/core.c
-+++ b/drivers/usb/chipidea/core.c
-@@ -1038,6 +1038,8 @@ static int ci_hdrc_probe(struct platform_device *pdev)
- 		CI_HDRC_IMX28_WRITE_FIX);
- 	ci->supports_runtime_pm = !!(ci->platdata->flags &
- 		CI_HDRC_SUPPORTS_RUNTIME_PM);
-+	ci->has_portsc_pec_bug = !!(ci->platdata->flags &
-+		CI_HDRC_HAS_PORTSC_PEC_MISSED);
- 	platform_set_drvdata(pdev, ci);
- 
- 	ret = hw_device_init(ci, base);
-diff --git a/drivers/usb/chipidea/host.c b/drivers/usb/chipidea/host.c
-index bc3634a54c6b7..3b08c5e811707 100644
---- a/drivers/usb/chipidea/host.c
-+++ b/drivers/usb/chipidea/host.c
-@@ -151,6 +151,7 @@ static int host_start(struct ci_hdrc *ci)
- 	ehci->has_hostpc = ci->hw_bank.lpm;
- 	ehci->has_tdi_phy_lpm = ci->hw_bank.lpm;
- 	ehci->imx28_write_fix = ci->imx28_write_fix;
-+	ehci->has_ci_pec_bug = ci->has_portsc_pec_bug;
- 
- 	priv = (struct ehci_ci_priv *)ehci->priv;
- 	priv->reg_vbus = NULL;
-diff --git a/include/linux/usb/chipidea.h b/include/linux/usb/chipidea.h
-index ee38835ed77cc..0b4f2d5faa080 100644
---- a/include/linux/usb/chipidea.h
-+++ b/include/linux/usb/chipidea.h
-@@ -63,6 +63,7 @@ struct ci_hdrc_platform_data {
- #define CI_HDRC_IMX_IS_HSIC		BIT(14)
- #define CI_HDRC_PMQOS			BIT(15)
- #define CI_HDRC_PHY_VBUS_CONTROL	BIT(16)
-+#define CI_HDRC_HAS_PORTSC_PEC_MISSED	BIT(17)
- 	enum usb_dr_mode	dr_mode;
- #define CI_HDRC_CONTROLLER_RESET_EVENT		0
- #define CI_HDRC_CONTROLLER_STOPPED_EVENT	1
+ 		difference = acm->ctrlin ^ newctrl;
++
++		if ((difference & USB_CDC_SERIAL_STATE_DCD) && acm->port.tty) {
++			struct tty_ldisc *ld = tty_ldisc_ref(acm->port.tty);
++			if (ld) {
++				if (ld->ops->dcd_change)
++					ld->ops->dcd_change(acm->port.tty, newctrl & USB_CDC_SERIAL_STATE_DCD);
++				tty_ldisc_deref(ld);
++			}
++		}
++
+ 		spin_lock_irqsave(&acm->read_lock, flags);
+ 		acm->ctrlin = newctrl;
+ 		acm->oldcount = acm->iocount;
 -- 
 2.40.1
 
