@@ -2,113 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D734799DB7
-	for <lists+linux-usb@lfdr.de>; Sun, 10 Sep 2023 12:52:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8B67799EA9
+	for <lists+linux-usb@lfdr.de>; Sun, 10 Sep 2023 16:35:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346600AbjIJKwX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 10 Sep 2023 06:52:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52466 "EHLO
+        id S1345753AbjIJOf4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 10 Sep 2023 10:35:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345214AbjIJKwW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 10 Sep 2023 06:52:22 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23698CD1
-        for <linux-usb@vger.kernel.org>; Sun, 10 Sep 2023 03:52:18 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-52bcd4db4e6so4582373a12.0
-        for <linux-usb@vger.kernel.org>; Sun, 10 Sep 2023 03:52:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694343136; x=1694947936; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eT9j+frCSTkj1005bwu2HtB6PUCSDjOepczmwk8Folg=;
-        b=CXXzRhakqm7SGxjeHxOnZI4vyTA6UVPSwU3NKWAg2b6Y/fZOrKwxbNMf45Vh86k8q+
-         PSwocqsOHmXDtcVygJdq6iOgfj1TULCDHPBqoL7Ei7apA8kt3pCizozja8HdUhuae4Tg
-         olLzGJ+w4Wj8NLkQqM+P2I5sBM3nYjiAVIdb4uBSzC6DkGPhTbYLBOAM2hJOzaJAVsiI
-         S6S/dpD4rLEW7HZOaB4sfsdiJXMZlpl/UpUWXxLcWLmMRymv/C3Sdodd/s5Fzm/8Lnt+
-         DfKJL2Ov24YNLBUJWoWEKJo9NhyDpJ4tuuCOfFDvn9DFYpS5PxFFgIiJsqVFr+cWGhIV
-         SQHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694343136; x=1694947936;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eT9j+frCSTkj1005bwu2HtB6PUCSDjOepczmwk8Folg=;
-        b=O0T17+tR8qkakA5D0UgPNeFFCWIA3OCYZXPS2jHWQRQZBxVjfmKJR/KYCXP+746gL9
-         oDz80LGLTx007n7mvkBlGDLwPZrVHDVQOJGqnmfpgJmEhq1VVuQqyjKjmWiKFXIDnPL6
-         gc9m21KPynP4Z7dZXEgzUWb1KUknbPvK+bVjcFXdueA3CKP6qVWB3g9wnaEcQHB70Iu+
-         +pmWOjLXdAlx3ORAwHpCpKscrJMGcG0zqL/9CCq74k5U53tuKGavzZhk8kVJMhq94i/f
-         3RO3AvnLhkO+qW7ZsSpPMl0ssyhumUm3q/1TZXGj4GS6q07/fVt3QobyuVyJknHSA1sn
-         EBXg==
-X-Gm-Message-State: AOJu0YzK7PTAj8x1xUTNv8ToTNucp/icZpyMmDan17LWGgiUx5j/9J3F
-        fjEgzXJAXS+0gnzE/qsoOy9lQBvK7tQjccDnoB4=
-X-Google-Smtp-Source: AGHT+IGUc5jqdfkPhcVvRV6sbJBNxlXjoRoV3hzDPp/mXkWjeyZ+OLdEhHat3k7DMxKiDnrnd7eYdw==
-X-Received: by 2002:a17:906:7486:b0:99e:1581:6437 with SMTP id e6-20020a170906748600b0099e15816437mr5816246ejl.46.1694343136278;
-        Sun, 10 Sep 2023 03:52:16 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.214.188])
-        by smtp.gmail.com with ESMTPSA id e14-20020a1709067e0e00b0098f33157e7dsm3630076ejr.82.2023.09.10.03.52.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 10 Sep 2023 03:52:15 -0700 (PDT)
-Message-ID: <012ae913-0be3-e38a-9070-c75ae2d64468@linaro.org>
-Date:   Sun, 10 Sep 2023 12:52:12 +0200
+        with ESMTP id S229437AbjIJOfy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 10 Sep 2023 10:35:54 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 8EFCDCCC
+        for <linux-usb@vger.kernel.org>; Sun, 10 Sep 2023 07:35:50 -0700 (PDT)
+Received: (qmail 849698 invoked by uid 1000); 10 Sep 2023 10:35:49 -0400
+Date:   Sun, 10 Sep 2023 10:35:49 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Jonathan Woithe <jwoithe@just42.net>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: Samsung T5 SSD: "Synchronize Cache(10) failed" on removal
+Message-ID: <2d11948e-c809-4990-8ebd-e479cc282b90@rowland.harvard.edu>
+References: <ZPwnmHV6rIV7Nsg9@marvin.atrad.com.au>
+ <62aaef13-c782-4d18-a59e-f8c1b24b595f@rowland.harvard.edu>
+ <ZP2IQxeiAZpC+578@marvin.atrad.com.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [PATCH 2/3] arm64: dts: imx8qxp-mek: Fix gpio-sbu-mux compatible
-Content-Language: en-US
-To:     Fabio Estevam <festevam@gmail.com>, shawnguo@kernel.org
-Cc:     andersson@kernel.org, linux-usb@vger.kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, linux-imx@nxp.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Fabio Estevam <festevam@denx.de>
-References: <20230909202957.1120153-1-festevam@gmail.com>
- <20230909202957.1120153-2-festevam@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230909202957.1120153-2-festevam@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZP2IQxeiAZpC+578@marvin.atrad.com.au>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 09/09/2023 22:29, Fabio Estevam wrote:
-> From: Fabio Estevam <festevam@denx.de>
+On Sun, Sep 10, 2023 at 06:41:31PM +0930, Jonathan Woithe wrote:
+> Hi Alan
 > 
-> Per gpio-sbu-mux.yaml, the compatible entry is incomplete.
+> On Sat, Sep 09, 2023 at 12:14:49PM -0400, Alan Stern wrote:
+> > > If on the other hand it' is something best fixed, please let me know how I
+> > > can assist with this.
+> > 
+> > The most likely situation where this would indicate a real problem would 
+> > be if you had mounted a filesystem on the drive, written some data, and 
+> > then unplugged it without unmounting first.  If you haven't done that 
+> > then you don't have to worry about anything.
 > 
-> The imx8qxp-mek board uses a CBDTU02043, so complete the gpio-sbu-mux
-> compatible accordingly.
-> 
-> This fixes the following schema warning:
-> 
-> imx8qxp-mek.dtb: gpio-sbu-mux: compatible:0: 'gpio-sbu-mux' is not one of ['onnn,fsusb43l10x', 'pericom,pi3usb102']
-> 	from schema $id: http://devicetree.org/schemas/usb/gpio-sbu-mux.yaml#
-> 	
-> Signed-off-by: Fabio Estevam <festevam@denx.de>
-> ---
->  arch/arm64/boot/dts/freescale/imx8qxp-mek.dts | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts b/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts
-> index 7924b0969ad8..a06a6491ef20 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts
-> +++ b/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts
-> @@ -31,7 +31,7 @@ reg_usdhc2_vmmc: usdhc2-vmmc {
->  	};
->  
->  	gpio-sbu-mux {
-> -		compatible = "gpio-sbu-mux";
-> +		compatible = "nxp,cbdtu02043","gpio-sbu-mux";
+> Thanks for confirming this.  The scenarios I've outlined all involve drives
+> which have definitely been unmounted before they were unplugged.  Thus, so
+> long as the unmount has been done then this error can be ignored.
 
-Missing space after ,
+In principle you can write to a drive without mounting it first.  
+Perhaps the most common examples are creating/modifying a partition 
+table, doing a filesystem repair, or copying an OS install image.  Then 
+there wouldn't be an unmount to automatically synchronize the cache.
 
-Best regards,
-Krzysztof
+However, I believe the partitioning and repair utilities do their own 
+cache synchronization, so again it's not an issue in those cases.  
+Mostly it's just necessary to be careful about your own raw-disk 
+accesses -- something most of us very rarely do.
 
+> I guess what drew my attention to the message is that USB flash drives do
+> not show the "Synchronize Cache(10) failed" error when unplugged.  I guess
+> the different behaviour may be the result of varying caching arrangements
+> (or other low level structural details) across the devices.
+
+Yes.  Most likely the flash drives don't claim to have caches, so the 
+kernel doesn't try to issue a SYNCHRONIZE CACHE command.
+
+> > On the other hand, if you would like to get rid of those annoying error 
+> > messages, you can do so by telling the kernel that the drive is about to 
+> > be removed before you unplug it.  You do this by writing to the "remove" 
+> > attribute file in the USB device's sysfs device directory; this is the 
+> > equivalent of using the "Safely remove a device" button in Windows.  
+> > Some GUIs may provide an easy-to-use mechanism for doing this, such as 
+> > an "eject" selection on a device menu.
+> 
+> I've noticed separate "Eject" and "Unmount" items under various desktop
+> environments and always wondered why they were separated.  Thanks for
+> providing the missing information.  I personally run a very simple window
+> manager (fvwm2) so don't get device menus.  If the message gets to me I'll
+> look into arranging for the sysfs attribute write.  However, knowing now
+> that it's essentially a quirk of the way the device interacts with the
+> subsystem I will be happy to simply leave things as they are.
+> 
+> Thank you again for taking the time to respond.
+
+You're welcome.
+
+Alan Stern
