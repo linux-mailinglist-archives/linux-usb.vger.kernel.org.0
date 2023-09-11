@@ -2,44 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD6F779B622
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Sep 2023 02:04:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4649679BA1A
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Sep 2023 02:11:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350384AbjIKVhq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Sep 2023 17:37:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39586 "EHLO
+        id S1350524AbjIKVi5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Sep 2023 17:38:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236254AbjIKKEz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Sep 2023 06:04:55 -0400
+        with ESMTP id S236267AbjIKKE7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Sep 2023 06:04:59 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C1D0E68
-        for <linux-usb@vger.kernel.org>; Mon, 11 Sep 2023 03:04:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC04DE68
+        for <linux-usb@vger.kernel.org>; Mon, 11 Sep 2023 03:04:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694426691; x=1725962691;
+  t=1694426694; x=1725962694;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=b0hAZciQJZLXXC8aetb8VC3iZTftmHhM+W5FL9Kyf4s=;
-  b=cqhKUenQgLwqrkOXoOG0kUNmM6g4nROpdAlBuBXuO6RaGyp+UCOSs9ZK
-   dz7kZ9qz167paPa8Th9SuGaYnwS/bGLRUdJ2rFDRuBWdg3cenqmVQHMCW
-   QMpo758IJRrAK4HJnO9lCXEpy5SlAHhH2RaXed/UMcDDumZbICDajeyAg
-   b57lLPyrPjFAMVtzhJidR3m34+YD11Seowjb4SWG9cuUQ0Wfv6AIUrfSO
-   fQDPV20t0pHpYnN+RVV5uw0ds0sivfbQZwfOd+yXoTtfvL6YA0q7kIXbm
-   i5ye0u/EJaMqXGQ8UmFwzz/LRQBURRxox9B7cwrCuq+AOiiXslHrHNn1g
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10829"; a="376956500"
+  bh=olqd5D6SDR+8ZXuR/27r/+Aj51VW9eFTcGWbtc9x7sw=;
+  b=afKllJ9Z4tLXkGc4O5uiBZwP7M5aXsavs8pAmYvibsutSBlMLODUe0vJ
+   Fw7N3RVFyorVu52FSy8W6ZNYxy60/5sO4hZ7kWbLy3E5By5jpp8R2jH6r
+   Gn18WKJAWwUMVNNVWdYVCYckdyoULd/jOJTGOkNRSMSpkTMNmBOKMJDIs
+   peAAdS2JJ0VwbleLHxfiP0YJs8QDlEszgpn5W/oEpniHM+0A0V29zdLdT
+   CB+QeKXEQvQg4dpgBZ97woiA8xZL3ojRIi5MW0gfmLqOI1AKskN4VNcck
+   aCAQrpyDphi04LmPeH72P4sAqihyuUxjnrzlS71ZjuhEJubllf9GMdeWu
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10829"; a="376956532"
 X-IronPort-AV: E=Sophos;i="6.02,243,1688454000"; 
-   d="scan'208";a="376956500"
+   d="scan'208";a="376956532"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 03:04:50 -0700
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 03:04:54 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10829"; a="916964180"
+X-IronPort-AV: E=McAfee;i="6600,9927,10829"; a="916964203"
 X-IronPort-AV: E=Sophos;i="6.02,243,1688454000"; 
-   d="scan'208";a="916964180"
+   d="scan'208";a="916964203"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga005.jf.intel.com with ESMTP; 11 Sep 2023 03:04:47 -0700
+  by orsmga005.jf.intel.com with ESMTP; 11 Sep 2023 03:04:51 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id D4E94A22; Mon, 11 Sep 2023 13:04:45 +0300 (EEST)
+        id EE7DDB84; Mon, 11 Sep 2023 13:04:45 +0300 (EEST)
 From:   Mika Westerberg <mika.westerberg@linux.intel.com>
 To:     linux-usb@vger.kernel.org
 Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
@@ -53,9 +53,9 @@ Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
         David Binderman <dcb314@hotmail.com>,
         Alex Balcanquall <alex@alexbal.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH 3/5] thunderbolt: Correct TMU mode initialization from hardware
-Date:   Mon, 11 Sep 2023 13:04:43 +0300
-Message-Id: <20230911100445.3612655-4-mika.westerberg@linux.intel.com>
+Subject: [PATCH 5/5] thunderbolt: Restart XDomain discovery handshake after failure
+Date:   Mon, 11 Sep 2023 13:04:45 +0300
+Message-Id: <20230911100445.3612655-6-mika.westerberg@linux.intel.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230911100445.3612655-1-mika.westerberg@linux.intel.com>
 References: <20230911100445.3612655-1-mika.westerberg@linux.intel.com>
@@ -70,35 +70,131 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-David reported that cppcheck found following possible copy & paste
-error from tmu_mode_init():
+Alex reported that after rebooting the other host the peer-to-peer link
+does not come up anymore. The reason for this is that the host that was
+not rebooted tries to send the UUID request only 10 times according to
+the USB4 Inter-Domain spec and gives up if it does not get reply. Then
+when the other side is actually ready it cannot get the link established
+anymore. The USB4 Inter-Domain spec requires that the discovery protocol
+is restarted in that case so implement this now.
 
-  tmu.c:385:50: style: Expression is always false because 'else if' condition matches previous condition at line 383. [multiCondition]
-
-And indeed this is a bug. Fix it to use correct index
-(TB_SWITCH_TMU_MODE_HIFI_UNI).
-
-Reported-by: David Binderman <dcb314@hotmail.com>
-Fixes: d49b4f043d63 ("thunderbolt: Add support for enhanced uni-directional TMU mode")
-Cc: stable@vger.kernel.org
+Reported-by: Alex Balcanquall <alex@alexbal.com>
 Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- drivers/thunderbolt/tmu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/thunderbolt/xdomain.c | 58 +++++++++++++++++++++++++----------
+ 1 file changed, 41 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/thunderbolt/tmu.c b/drivers/thunderbolt/tmu.c
-index 747f88703d5c..11f2aec2a5d3 100644
---- a/drivers/thunderbolt/tmu.c
-+++ b/drivers/thunderbolt/tmu.c
-@@ -382,7 +382,7 @@ static int tmu_mode_init(struct tb_switch *sw)
- 		} else if (ucap && tb_port_tmu_is_unidirectional(up)) {
- 			if (tmu_rates[TB_SWITCH_TMU_MODE_LOWRES] == rate)
- 				sw->tmu.mode = TB_SWITCH_TMU_MODE_LOWRES;
--			else if (tmu_rates[TB_SWITCH_TMU_MODE_LOWRES] == rate)
-+			else if (tmu_rates[TB_SWITCH_TMU_MODE_HIFI_UNI] == rate)
- 				sw->tmu.mode = TB_SWITCH_TMU_MODE_HIFI_UNI;
- 		} else if (rate) {
- 			sw->tmu.mode = TB_SWITCH_TMU_MODE_HIFI_BI;
+diff --git a/drivers/thunderbolt/xdomain.c b/drivers/thunderbolt/xdomain.c
+index 5b5566862318..9803f0bbf20d 100644
+--- a/drivers/thunderbolt/xdomain.c
++++ b/drivers/thunderbolt/xdomain.c
+@@ -703,6 +703,27 @@ static void update_property_block(struct tb_xdomain *xd)
+ 	mutex_unlock(&xdomain_lock);
+ }
+ 
++static void start_handshake(struct tb_xdomain *xd)
++{
++	xd->state = XDOMAIN_STATE_INIT;
++	queue_delayed_work(xd->tb->wq, &xd->state_work,
++			   msecs_to_jiffies(XDOMAIN_SHORT_TIMEOUT));
++}
++
++/* Can be called from state_work */
++static void __stop_handshake(struct tb_xdomain *xd)
++{
++	cancel_delayed_work_sync(&xd->properties_changed_work);
++	xd->properties_changed_retries = 0;
++	xd->state_retries = 0;
++}
++
++static void stop_handshake(struct tb_xdomain *xd)
++{
++	cancel_delayed_work_sync(&xd->state_work);
++	__stop_handshake(xd);
++}
++
+ static void tb_xdp_handle_request(struct work_struct *work)
+ {
+ 	struct xdomain_request_work *xw = container_of(work, typeof(*xw), work);
+@@ -765,6 +786,15 @@ static void tb_xdp_handle_request(struct work_struct *work)
+ 	case UUID_REQUEST:
+ 		tb_dbg(tb, "%llx: received XDomain UUID request\n", route);
+ 		ret = tb_xdp_uuid_response(ctl, route, sequence, uuid);
++		/*
++		 * If we've stopped the discovery with an error such as
++		 * timing out, we will restart the handshake now that we
++		 * received UUID request from the remote host.
++		 */
++		if (!ret && xd && xd->state == XDOMAIN_STATE_ERROR) {
++			dev_dbg(&xd->dev, "restarting handshake\n");
++			start_handshake(xd);
++		}
+ 		break;
+ 
+ 	case LINK_STATE_STATUS_REQUEST:
+@@ -1521,6 +1551,13 @@ static void tb_xdomain_queue_properties_changed(struct tb_xdomain *xd)
+ 			   msecs_to_jiffies(XDOMAIN_SHORT_TIMEOUT));
+ }
+ 
++static void tb_xdomain_failed(struct tb_xdomain *xd)
++{
++	xd->state = XDOMAIN_STATE_ERROR;
++	queue_delayed_work(xd->tb->wq, &xd->state_work,
++			   msecs_to_jiffies(XDOMAIN_DEFAULT_TIMEOUT));
++}
++
+ static void tb_xdomain_state_work(struct work_struct *work)
+ {
+ 	struct tb_xdomain *xd = container_of(work, typeof(*xd), state_work.work);
+@@ -1547,7 +1584,7 @@ static void tb_xdomain_state_work(struct work_struct *work)
+ 		if (ret) {
+ 			if (ret == -EAGAIN)
+ 				goto retry_state;
+-			xd->state = XDOMAIN_STATE_ERROR;
++			tb_xdomain_failed(xd);
+ 		} else {
+ 			tb_xdomain_queue_properties_changed(xd);
+ 			if (xd->bonding_possible)
+@@ -1612,7 +1649,7 @@ static void tb_xdomain_state_work(struct work_struct *work)
+ 		if (ret) {
+ 			if (ret == -EAGAIN)
+ 				goto retry_state;
+-			xd->state = XDOMAIN_STATE_ERROR;
++			tb_xdomain_failed(xd);
+ 		} else {
+ 			xd->state = XDOMAIN_STATE_ENUMERATED;
+ 		}
+@@ -1623,6 +1660,8 @@ static void tb_xdomain_state_work(struct work_struct *work)
+ 		break;
+ 
+ 	case XDOMAIN_STATE_ERROR:
++		dev_dbg(&xd->dev, "discovery failed, stopping handshake\n");
++		__stop_handshake(xd);
+ 		break;
+ 
+ 	default:
+@@ -1833,21 +1872,6 @@ static void tb_xdomain_release(struct device *dev)
+ 	kfree(xd);
+ }
+ 
+-static void start_handshake(struct tb_xdomain *xd)
+-{
+-	xd->state = XDOMAIN_STATE_INIT;
+-	queue_delayed_work(xd->tb->wq, &xd->state_work,
+-			   msecs_to_jiffies(XDOMAIN_SHORT_TIMEOUT));
+-}
+-
+-static void stop_handshake(struct tb_xdomain *xd)
+-{
+-	cancel_delayed_work_sync(&xd->properties_changed_work);
+-	cancel_delayed_work_sync(&xd->state_work);
+-	xd->properties_changed_retries = 0;
+-	xd->state_retries = 0;
+-}
+-
+ static int __maybe_unused tb_xdomain_suspend(struct device *dev)
+ {
+ 	stop_handshake(tb_to_xdomain(dev));
 -- 
 2.40.1
 
