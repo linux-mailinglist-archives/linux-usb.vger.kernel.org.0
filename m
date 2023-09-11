@@ -2,147 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E585879C0F0
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Sep 2023 02:21:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 521AC79BC22
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Sep 2023 02:14:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350863AbjIKVly (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Sep 2023 17:41:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33832 "EHLO
+        id S1350636AbjIKVkI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Sep 2023 17:40:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242407AbjIKPau (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Sep 2023 11:30:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 80AC3FA
-        for <linux-usb@vger.kernel.org>; Mon, 11 Sep 2023 08:30:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1694446199;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=beFb4jOtgVaCPAjALRMLom3ODylTFoGFqg6zPcwa1kU=;
-        b=OxVSjlRJikvRKcoUu+fre0mMhOjb3KrTbGjU8J6ap2VFe3urPH/0ZnQn4eB+0TiicD4Vms
-        7Sic+dirwFyM2nMAsuQNY94xTu1UiiUxmMrtBhb2WSFbS5W0IpLwcGVNSLadTpl1WyuXSr
-        B7nqDETrHQuGZNwAYAdVv9JIAHLVIug=
-Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
- [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-541-tBh6nOUiPDuLsPEe3E_66w-1; Mon, 11 Sep 2023 11:29:58 -0400
-X-MC-Unique: tBh6nOUiPDuLsPEe3E_66w-1
-Received: by mail-lj1-f200.google.com with SMTP id 38308e7fff4ca-2b710c5677eso51355261fa.0
-        for <linux-usb@vger.kernel.org>; Mon, 11 Sep 2023 08:29:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694446196; x=1695050996;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=beFb4jOtgVaCPAjALRMLom3ODylTFoGFqg6zPcwa1kU=;
-        b=NxzJVvMcJjjFEN4zvxRHnP4zHVzqmI9G/eSvUBfkcz9i/U2qaxdgNtd12lRDfqQri6
-         HlxjWbYSw3IEdZnfkX0615mbFS7r5FG7szVbg6pY7xuk7Ghr0xKmJwg2vKiAxtAvNMr6
-         I1kMkW/ZD3gGqAhBEmRxsqKWGs6HLac6p3LKVMOQhn5ko6rLhVStuhAMjsgQUcFRCeEd
-         XbQI4UGozt+SlF9bTid/OA8vDUpJT0MRg4ik+SBVe8xamyJhH1l/P9hxZhGJgODsZRKW
-         YpYq1sGSLmHCwMvus0WArwUoq5FYma12+vaO+chh/ItsXPMq3OuLJTaTcxP01waDQsZs
-         ykRg==
-X-Gm-Message-State: AOJu0YynbdSKPs4yXvm2+DIVy9AsqkQBTQQDFdpZ3LcLkJETXQRB31ny
-        +bc0hSljD1HHWUQzujeLz17LAPjCQHSrsSz/lNdEkbdrN+o5B2gmTZBttkw2+6+t1YaaT/PKmVg
-        MZl6dgcIa3J0mfFLrOlvMxyrjM/Uq
-X-Received: by 2002:a2e:9a86:0:b0:2b9:d28c:9c2d with SMTP id p6-20020a2e9a86000000b002b9d28c9c2dmr7888766lji.23.1694446196339;
-        Mon, 11 Sep 2023 08:29:56 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFCnYmSBBt/79HOY6oG86XzJSUTORWQ+TBN3kldt1k+nkoJjPzYCmkfeSD1Dy0l69/ipFgEMw==
-X-Received: by 2002:a2e:9a86:0:b0:2b9:d28c:9c2d with SMTP id p6-20020a2e9a86000000b002b9d28c9c2dmr7888747lji.23.1694446196036;
-        Mon, 11 Sep 2023 08:29:56 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id m27-20020a1709060d9b00b009a5f7fb51d1sm5497936eji.40.2023.09.11.08.29.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Sep 2023 08:29:55 -0700 (PDT)
-Message-ID: <3c54154f-dd9d-f74c-9852-5135b4bda297@redhat.com>
-Date:   Mon, 11 Sep 2023 17:29:54 +0200
+        with ESMTP id S243049AbjIKQpu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Sep 2023 12:45:50 -0400
+Received: from mp-relay-01.fibernetics.ca (mp-relay-01.fibernetics.ca [208.85.217.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA07E4
+        for <linux-usb@vger.kernel.org>; Mon, 11 Sep 2023 09:45:45 -0700 (PDT)
+Received: from mailpool-fe-02.fibernetics.ca (mailpool-fe-02.fibernetics.ca [208.85.217.145])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mp-relay-01.fibernetics.ca (Postfix) with ESMTPS id 306F2E1883;
+        Mon, 11 Sep 2023 16:45:44 +0000 (UTC)
+Received: from localhost (mailpool-mx-01.fibernetics.ca [208.85.217.140])
+        by mailpool-fe-02.fibernetics.ca (Postfix) with ESMTP id 0B92E60A47;
+        Mon, 11 Sep 2023 16:45:44 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at 
+X-Spam-Score: -0.2
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
+Received: from mailpool-fe-02.fibernetics.ca ([208.85.217.145])
+        by localhost (mail-mx-01.fibernetics.ca [208.85.217.140]) (amavisd-new, port 10024)
+        with ESMTP id BfbOjcxbikKh; Mon, 11 Sep 2023 16:45:43 +0000 (UTC)
+Received: from [192.168.48.17] (host-104-157-209-188.dyn.295.ca [104.157.209.188])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dgilbert@interlog.com)
+        by mail.ca.inter.net (Postfix) with ESMTPSA id 2071A601E4;
+        Mon, 11 Sep 2023 16:45:42 +0000 (UTC)
+Message-ID: <b503eb21-3850-0072-65b3-977be98e58d0@interlog.com>
+Date:   Mon, 11 Sep 2023 12:45:42 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH] USB: add ignore remote wakeup quirk for one of Logitech's
- receivers
-To:     Hamza Mahfooz <someguy@effective-light.com>
-Cc:     linux-usb@vger.kernel.org, stable@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Bastien Nocera <hadess@hadess.net>,
-        =?UTF-8?Q?=c5=81ukasz_Bartosik?= <lb@semihalf.com>,
-        Nicolas Dumazet <ndumazet@google.com>,
-        Jean-Francois Le Fillatre <jflf_kernel@gmx.com>,
-        Mark Pearson <mpearson-lenovo@squebb.ca>,
-        Hannu Hartikainen <hannu@hrtk.in>, linux-kernel@vger.kernel.org
-References: <20230910163751.4210-1-someguy@effective-light.com>
- <9d2dff10-5a3b-b24a-c3d8-3c843891966d@redhat.com>
- <ZKUT0S.QB90NRXC7O1R1@effective-light.com>
-Content-Language: en-US, nl
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <ZKUT0S.QB90NRXC7O1R1@effective-light.com>
-Content-Type: text/plain; charset=UTF-8
+ Thunderbird/102.15.0
+Reply-To: dgilbert@interlog.com
+Subject: Re: [typec] pd: fixed source capability: peak_current field
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Benson Leung <bleung@google.com>,
+        Prashant Malani <pmalani@chromium.org>,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Saranya Gopal <saranya.gopal@intel.com>,
+        linux-usb@vger.kernel.org
+References: <9b87f828-cf1d-e370-f4ca-e0c53c9a35c5@interlog.com>
+ <ZP8Z+1Kn+RagnFNq@kuha.fi.intel.com>
+Content-Language: en-CA
+From:   Douglas Gilbert <dgilbert@interlog.com>
+In-Reply-To: <ZP8Z+1Kn+RagnFNq@kuha.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Hamza,
-
-On 9/11/23 17:19, Hamza Mahfooz wrote:
-> Hey Hans,
+On 2023-09-11 09:45, Heikki Krogerus wrote:
+> +linux-usb ml, Guenter and others.
 > 
-> On Mon, Sep 11 2023 at 09:32:42 AM +02:00:00, Hans de Goede <hdegoede@redhat.com> wrote:
->> Hi Hamza,
+> On Sun, Sep 10, 2023 at 09:29:04PM -0400, Douglas Gilbert wrote:
+>> Hi,
+>> The Peak current 2 bit field has been present in the fixed source PDO
+>> since PD 2.0 . It is commented out in typec/pd.c with a note to revisit
+>> as it needs the Operational current field from the active RDO.
 >>
->> On 9/10/23 18:37, Hamza Mahfooz wrote:
->>>  This device causes the system to wake up from suspend, as soon as it
->>>  enters it (even if the device attached to the receiver is powered off).
->>>  So, ignore remote wakeup events from it.
->>>
->>>  Cc: stable@vger.kernel.org
->>>  Signed-off-by: Hamza Mahfooz <someguy@effective-light.com>
->>>  ---
->>>   drivers/usb/core/quirks.c | 4 ++++
->>>   1 file changed, 4 insertions(+)
->>>
->>>  diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
->>>  index 15e9bd180a1d..d2e2a2873f34 100644
->>>  --- a/drivers/usb/core/quirks.c
->>>  +++ b/drivers/usb/core/quirks.c
->>>  @@ -264,6 +264,10 @@ static const struct usb_device_id usb_quirk_list[] = {
->>>       /* Logitech Harmony 700-series */
->>>       { USB_DEVICE(0x046d, 0xc122), .driver_info = USB_QUIRK_DELAY_INIT },
->>>
->>>  +    /* Logitech lightspeed receiver (0xc547) */
->>>  +    { USB_DEVICE(0x046d, 0xc547), .driver_info =
->>>  +            USB_QUIRK_IGNORE_REMOTE_WAKEUP },
->>>  +
->>>       /* Philips PSC805 audio device */
->>>       { USB_DEVICE(0x0471, 0x0155), .driver_info = USB_QUIRK_RESET_RESUME },
->>>
+>> Not sure I agree with that: the 2 bit field is unit-less and could easily
+>> be displayed as such. At the moment the active RDO is not directly
+>> available through sysfs and would certainly be a useful addition for
+>> many reasons.
 >>
->> If this is a lightspeed receiver then it really should be handled by
->> hid-logitech-dj.c unless this new receiver is using a new protocol ?
+>> So my vote (not that I get one) would be to output peak_current in
+>> sysfs with no unit. Then in the ABI peak_current could be explained
+>> by reference to a table in the spec (e.g. "USB Power Delivery
+>> Specification Revision 3.1, Version 1.8, table 6-10 Fixed Power
+>> Source Peak Current Capability"). Then the issue of what it means
+>> is handed off to the user space :-)
 >>
->> I wonder if adding it there also fixes the remote
->> wakeup issue (I doubt it fixes it but worth a try) ?
+>> Also of note is that the Peak current field is B21..B20 which is
+>> below B23 (obviously) so all fixed source PDOs have that field
+>> (and thus those unit-less values could differ), not just
+>> PDO #1 .
 > 
+> I agree with you. I don't think it makes sense to try to interpret the
+> peak current value in kernel, so we could just expose the value as-is.
 > 
-> Seems like the following series does indeed fix this issue:
-> https://lore.kernel.org/linux-input/20230716182320.85483-1-mavchatz@protonmail.com/T/#u
+> But first giving the others heads-up on this, just in case somebody
+> disagrees.
 
-Great, thank you for letting us know that this is resolved with
-that patch series.
+Similar situation with fast_role_swap in the fixed sink PDO. It is not really a
+current but an index to a table embedded in the r31_v18's table 6-16.
+Importantly the value 0 implies the sink does not support FRS. So again it
+seems to be unit-less so the suffix "_current" in its sysfs name is
+questionable. The spec does help much here formally naming it: the "Fast Role
+Swap USB Type-C® Current" field in section 6.4.1.3.1.6 . The show function
+for the fast_role_swap_current is defined in typec/pd.c but I didn't see any
+invocations.
 
-Regards,
-
-Hans
-
+Doug Gilbert
 
 
