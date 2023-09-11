@@ -2,65 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4368179A113
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Sep 2023 03:53:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 372AE79A1E6
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Sep 2023 05:40:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232120AbjIKBxt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 10 Sep 2023 21:53:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36918 "EHLO
+        id S232685AbjIKDki (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 10 Sep 2023 23:40:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjIKBxs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 10 Sep 2023 21:53:48 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DECE1123;
-        Sun, 10 Sep 2023 18:53:40 -0700 (PDT)
-X-SpamFilter-By: ArmorX SpamTrap 5.78 with qID 38B1rHcM5583842, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.92/5.92) with ESMTPS id 38B1rHcM5583842
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 11 Sep 2023 09:53:17 +0800
-Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Mon, 11 Sep 2023 09:53:18 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Mon, 11 Sep 2023 09:53:18 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::7445:d92b:d0b3:f79c]) by
- RTEXMBS04.realtek.com.tw ([fe80::7445:d92b:d0b3:f79c%5]) with mapi id
- 15.01.2375.007; Mon, 11 Sep 2023 09:53:18 +0800
-From:   =?big5?B?U3RhbmxleSBDaGFuZ1up96h8vHdd?= <stanley_chang@realtek.com>
-To:     =?big5?B?U3RhbmxleSBDaGFuZ1up96h8vHdd?= <stanley_chang@realtek.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 RESEND 1/2] usb: dwc3: core: configure TX/RX threshold for DWC3_IP
-Thread-Topic: [PATCH v2 RESEND 1/2] usb: dwc3: core: configure TX/RX threshold
- for DWC3_IP
-Thread-Index: AQHZ2XPLXhNkYatA80OF+c6YFdmS4bAU8hUg
-Date:   Mon, 11 Sep 2023 01:53:17 +0000
-Message-ID: <08d7c57b71df47aeb1f8c2ece725e22f@realtek.com>
-References: <20230828055212.5600-1-stanley_chang@realtek.com>
-In-Reply-To: <20230828055212.5600-1-stanley_chang@realtek.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-x-originating-ip: [172.21.190.159]
-x-kse-serverinfo: RTEXMBS03.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="big5"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        with ESMTP id S229517AbjIKDkh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 10 Sep 2023 23:40:37 -0400
+X-Greylist: delayed 542 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 10 Sep 2023 20:40:31 PDT
+Received: from mail-m3137.qiye.163.com (mail-m3137.qiye.163.com [103.74.31.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F215B11A;
+        Sun, 10 Sep 2023 20:40:31 -0700 (PDT)
+DKIM-Signature: a=rsa-sha256;
+        b=ZWP9zoHe+DX5RxpMpCDvktXejZkc/mXd3WUzK83Kb/0HH9PEdF6I4ISrT5GZ5hjMgh289NLHxa6K4VCxPpPGda3Uy/H35COe2M8xCqyXKBZCRj62AF/ctCqP5OO2ZPJAnRH5fzOjCNG2Woeg+Q9l+SYP499fNofGzzFm9c3qW84=;
+        s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
+        bh=yTyYR259NicqyaHlLq9RVb03xhYZ/gDfQr/E+onC0KM=;
+        h=date:mime-version:subject:message-id:from;
+Received: from localhost.localdomain (unknown [58.22.7.114])
+        by mail-m11880.qiye.163.com (Hmail) with ESMTPA id 976BC204F6;
+        Mon, 11 Sep 2023 11:31:16 +0800 (CST)
+From:   William Wu <william.wu@rock-chips.com>
+To:     Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        william.wu@rock-chips.com, frank.wang@rock-chips.com,
+        jianwei.zheng@rock-chips.com, yangbin@rock-chips.com
+Subject: [PATCH v2] usb: dwc3: core: Avoid resume dwc3 if already suspended in pm resume
+Date:   Mon, 11 Sep 2023 11:31:12 +0800
+Message-Id: <20230911033112.3321-1-william.wu@rock-chips.com>
+X-Mailer: git-send-email 2.17.1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGRhCHlYZQhkdQkJPGUNMSExVEwETFh
+        oSFyQUDg9ZV1kYEgtZQVlOQ1VJSVVMVUpKT1lXWRYaDxIVHRRZQVlPS0hVSkpLQ0hJVUpLS1VLWQ
+        Y+
+X-HM-Tid: 0a8a824b22c72eb6kusn976bc204f6
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PUk6Mzo5Hz0CQhYPGj8YFzMQ
+        Mi4wCwNVSlVKTUJPT0tIS0xMSEJJVTMWGhIXVQwSFxcSGhZVDA47CRQYEFYYExILCFUYFBZFWVdZ
+        EgtZQVlOQ1VJSVVMVUpKT1lXWQgBWUFJQkpLNwY+
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,107 +51,68 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgVGhpbmgsDQoNCkNhbiB5b3UgaGVscCByZXZpZXcgdGhpcyBwYXRjaD8NCg0KVGhhbmtzLA0K
-U3RhbmxleQ0KDQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IFN0YW5sZXkg
-Q2hhbmcgPHN0YW5sZXlfY2hhbmdAcmVhbHRlay5jb20+DQo+IFNlbnQ6IE1vbmRheSwgQXVndXN0
-IDI4LCAyMDIzIDE6NTIgUE0NCj4gVG86IFRoaW5oIE5ndXllbiA8VGhpbmguTmd1eWVuQHN5bm9w
-c3lzLmNvbT4NCj4gQ2M6IFN0YW5sZXkgQ2hhbmdbqfeofLx3XSA8c3RhbmxleV9jaGFuZ0ByZWFs
-dGVrLmNvbT47IEdyZWcNCj4gS3JvYWgtSGFydG1hbiA8Z3JlZ2toQGxpbnV4Zm91bmRhdGlvbi5v
-cmc+OyBSb2IgSGVycmluZw0KPiA8cm9iaCtkdEBrZXJuZWwub3JnPjsgS3J6eXN6dG9mIEtvemxv
-d3NraQ0KPiA8a3J6eXN6dG9mLmtvemxvd3NraStkdEBsaW5hcm8ub3JnPjsgQ29ub3IgRG9vbGV5
-IDxjb25vcitkdEBrZXJuZWwub3JnPjsNCj4gRmVsaXBlIEJhbGJpIDxiYWxiaUBrZXJuZWwub3Jn
-PjsgbGludXgtdXNiQHZnZXIua2VybmVsLm9yZzsNCj4gZGV2aWNldHJlZUB2Z2VyLmtlcm5lbC5v
-cmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcNCj4gU3ViamVjdDogW1BBVENIIHYyIFJF
-U0VORCAxLzJdIHVzYjogZHdjMzogY29yZTogY29uZmlndXJlIFRYL1JYIHRocmVzaG9sZCBmb3IN
-Cj4gRFdDM19JUA0KPiANCj4gSW4gU3lub3BzeXMncyBkd2MzIGRhdGEgYm9vazoNCj4gVG8gYXZv
-aWQgdW5kZXJydW4gYW5kIG92ZXJydW4gZHVyaW5nIHRoZSBidXJzdCwgaW4gYSBoaWdoLWxhdGVu
-Y3kgYnVzIHN5c3RlbQ0KPiAobGlrZSBVU0IpLCB0aHJlc2hvbGQgYW5kIGJ1cnN0IHNpemUgY29u
-dHJvbCBpcyBwcm92aWRlZCB0aHJvdWdoIEdUWFRIUkNGRyBhbmQNCj4gR1JYVEhSQ0ZHIHJlZ2lz
-dGVycy4NCj4gDQo+IEluIFJlYWx0ZWsgREhDIFNvQywgRFdDMyBVU0IgMy4wIHVzZXMgQUhCIHN5
-c3RlbSBidXMuIFdoZW4gZHdjMyBpcw0KPiBjb25uZWN0ZWQgd2l0aCBVU0IgMi41RyBFdGhlcm5l
-dCwgdGhlcmUgd2lsbCBiZSBvdmVycnVuIHByb2JsZW0uDQo+IFRoZXJlZm9yZSwgc2V0dGluZyBU
-WC9SWCB0aHJlc2hvbGRzIGNhbiBhdm9pZCB0aGlzIGlzc3VlLg0KPiANCj4gU2lnbmVkLW9mZi1i
-eTogU3RhbmxleSBDaGFuZyA8c3RhbmxleV9jaGFuZ0ByZWFsdGVrLmNvbT4NCj4gLS0tDQo+IHYx
-IHRvIHYyIGNoYW5nZToNCj4gICAgIEFkZCB0aGUgcHJvcGVydGllcyBmb3IgVFgvUlggdGhyZXNo
-b2xkIHNldHRpbmcNCj4gLS0tDQo+ICBkcml2ZXJzL3VzYi9kd2MzL2NvcmUuYyB8IDUxDQo+ICsr
-KysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrDQo+ICBkcml2ZXJzL3VzYi9k
-d2MzL2NvcmUuaCB8IDEzICsrKysrKysrKysrDQo+ICAyIGZpbGVzIGNoYW5nZWQsIDY0IGluc2Vy
-dGlvbnMoKykNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9kd2MzL2NvcmUuYyBiL2Ry
-aXZlcnMvdXNiL2R3YzMvY29yZS5jIGluZGV4DQo+IDljNmJmMDU0ZjE1ZC4uMWY3NGE1MzgxNmMz
-IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL3VzYi9kd2MzL2NvcmUuYw0KPiArKysgYi9kcml2ZXJz
-L3VzYi9kd2MzL2NvcmUuYw0KPiBAQCAtMTI0Niw2ICsxMjQ2LDM5IEBAIHN0YXRpYyBpbnQgZHdj
-M19jb3JlX2luaXQoc3RydWN0IGR3YzMgKmR3YykNCj4gIAkJfQ0KPiAgCX0NCj4gDQo+ICsJaWYg
-KERXQzNfSVBfSVMoRFdDMykpIHsNCj4gKwkJdTggcnhfdGhyX251bSA9IGR3Yy0+cnhfdGhyX251
-bV9wa3Q7DQo+ICsJCXU4IHJ4X21heGJ1cnN0ID0gZHdjLT5yeF9tYXhfYnVyc3Q7DQo+ICsJCXU4
-IHR4X3Rocl9udW0gPSBkd2MtPnR4X3Rocl9udW1fcGt0Ow0KPiArCQl1OCB0eF9tYXhidXJzdCA9
-IGR3Yy0+dHhfbWF4X2J1cnN0Ow0KPiArDQo+ICsJCWlmIChyeF90aHJfbnVtICYmIHJ4X21heGJ1
-cnN0KSB7DQo+ICsJCQlyZWcgPSBkd2MzX3JlYWRsKGR3Yy0+cmVncywgRFdDM19HUlhUSFJDRkcp
-Ow0KPiArCQkJcmVnIHw9IERXQzNfR1JYVEhSQ0ZHX1BLVENOVFNFTDsNCj4gKw0KPiArCQkJcmVn
-ICY9IH5EV0MzX0dSWFRIUkNGR19SWFBLVENOVCh+MCk7DQo+ICsJCQlyZWcgfD0gRFdDM19HUlhU
-SFJDRkdfUlhQS1RDTlQocnhfdGhyX251bSk7DQo+ICsNCj4gKwkJCXJlZyAmPSB+RFdDM19HUlhU
-SFJDRkdfTUFYUlhCVVJTVFNJWkUofjApOw0KPiArCQkJcmVnIHw9IERXQzNfR1JYVEhSQ0ZHX01B
-WFJYQlVSU1RTSVpFKHJ4X21heGJ1cnN0KTsNCj4gKw0KPiArCQkJZHdjM193cml0ZWwoZHdjLT5y
-ZWdzLCBEV0MzX0dSWFRIUkNGRywgcmVnKTsNCj4gKwkJfQ0KPiArDQo+ICsJCWlmICh0eF90aHJf
-bnVtICYmIHR4X21heGJ1cnN0KSB7DQo+ICsJCQlyZWcgPSBkd2MzX3JlYWRsKGR3Yy0+cmVncywg
-RFdDM19HVFhUSFJDRkcpOw0KPiArCQkJcmVnIHw9IERXQzNfR1RYVEhSQ0ZHX1BLVENOVFNFTDsN
-Cj4gKw0KPiArCQkJcmVnICY9IH5EV0MzX0dUWFRIUkNGR19UWFBLVENOVCh+MCk7DQo+ICsJCQly
-ZWcgfD0gRFdDM19HVFhUSFJDRkdfVFhQS1RDTlQodHhfdGhyX251bSk7DQo+ICsNCj4gKwkJCXJl
-ZyAmPSB+RFdDM19HVFhUSFJDRkdfTUFYVFhCVVJTVFNJWkUofjApOw0KPiArCQkJcmVnIHw9IERX
-QzNfR1RYVEhSQ0ZHX01BWFRYQlVSU1RTSVpFKHR4X21heGJ1cnN0KTsNCj4gKw0KPiArCQkJZHdj
-M193cml0ZWwoZHdjLT5yZWdzLCBEV0MzX0dUWFRIUkNGRywgcmVnKTsNCj4gKwkJfQ0KPiArCX0N
-Cj4gKw0KPiAgCXJldHVybiAwOw0KPiANCj4gIGVycl9wb3dlcl9vZmZfcGh5Og0KPiBAQCAtMTM4
-MCw2ICsxNDEzLDEwIEBAIHN0YXRpYyB2b2lkIGR3YzNfZ2V0X3Byb3BlcnRpZXMoc3RydWN0IGR3
-YzMgKmR3YykNCj4gIAl1OAkJCWxwbV9ueWV0X3RocmVzaG9sZDsNCj4gIAl1OAkJCXR4X2RlX2Vt
-cGhhc2lzOw0KPiAgCXU4CQkJaGlyZF90aHJlc2hvbGQ7DQo+ICsJdTgJCQlyeF90aHJfbnVtX3Br
-dCA9IDA7DQo+ICsJdTgJCQlyeF9tYXhfYnVyc3QgPSAwOw0KPiArCXU4CQkJdHhfdGhyX251bV9w
-a3QgPSAwOw0KPiArCXU4CQkJdHhfbWF4X2J1cnN0ID0gMDsNCj4gIAl1OAkJCXJ4X3Rocl9udW1f
-cGt0X3ByZCA9IDA7DQo+ICAJdTgJCQlyeF9tYXhfYnVyc3RfcHJkID0gMDsNCj4gIAl1OAkJCXR4
-X3Rocl9udW1fcGt0X3ByZCA9IDA7DQo+IEBAIC0xNDQyLDYgKzE0NzksMTQgQEAgc3RhdGljIHZv
-aWQgZHdjM19nZXRfcHJvcGVydGllcyhzdHJ1Y3QgZHdjMyAqZHdjKQ0KPiAgCQkJCSJzbnBzLHVz
-YjItbHBtLWRpc2FibGUiKTsNCj4gIAlkd2MtPnVzYjJfZ2FkZ2V0X2xwbV9kaXNhYmxlID0gZGV2
-aWNlX3Byb3BlcnR5X3JlYWRfYm9vbChkZXYsDQo+ICAJCQkJInNucHMsdXNiMi1nYWRnZXQtbHBt
-LWRpc2FibGUiKTsNCj4gKwlkZXZpY2VfcHJvcGVydHlfcmVhZF91OChkZXYsICJzbnBzLHJ4LXRo
-ci1udW0tcGt0IiwNCj4gKwkJCQkmcnhfdGhyX251bV9wa3QpOw0KPiArCWRldmljZV9wcm9wZXJ0
-eV9yZWFkX3U4KGRldiwgInNucHMscngtbWF4LWJ1cnN0IiwNCj4gKwkJCQkmcnhfbWF4X2J1cnN0
-KTsNCj4gKwlkZXZpY2VfcHJvcGVydHlfcmVhZF91OChkZXYsICJzbnBzLHR4LXRoci1udW0tcGt0
-IiwNCj4gKwkJCQkmdHhfdGhyX251bV9wa3QpOw0KPiArCWRldmljZV9wcm9wZXJ0eV9yZWFkX3U4
-KGRldiwgInNucHMsdHgtbWF4LWJ1cnN0IiwNCj4gKwkJCQkmdHhfbWF4X2J1cnN0KTsNCj4gIAlk
-ZXZpY2VfcHJvcGVydHlfcmVhZF91OChkZXYsICJzbnBzLHJ4LXRoci1udW0tcGt0LXByZCIsDQo+
-ICAJCQkJJnJ4X3Rocl9udW1fcGt0X3ByZCk7DQo+ICAJZGV2aWNlX3Byb3BlcnR5X3JlYWRfdTgo
-ZGV2LCAic25wcyxyeC1tYXgtYnVyc3QtcHJkIiwgQEAgLTE1MjMsNg0KPiArMTU2OCwxMiBAQCBz
-dGF0aWMgdm9pZCBkd2MzX2dldF9wcm9wZXJ0aWVzKHN0cnVjdCBkd2MzICpkd2MpDQo+IA0KPiAg
-CWR3Yy0+aGlyZF90aHJlc2hvbGQgPSBoaXJkX3RocmVzaG9sZDsNCj4gDQo+ICsJZHdjLT5yeF90
-aHJfbnVtX3BrdCA9IHJ4X3Rocl9udW1fcGt0Ow0KPiArCWR3Yy0+cnhfbWF4X2J1cnN0ID0gcnhf
-bWF4X2J1cnN0Ow0KPiArDQo+ICsJZHdjLT50eF90aHJfbnVtX3BrdCA9IHR4X3Rocl9udW1fcGt0
-Ow0KPiArCWR3Yy0+dHhfbWF4X2J1cnN0ID0gdHhfbWF4X2J1cnN0Ow0KPiArDQo+ICAJZHdjLT5y
-eF90aHJfbnVtX3BrdF9wcmQgPSByeF90aHJfbnVtX3BrdF9wcmQ7DQo+ICAJZHdjLT5yeF9tYXhf
-YnVyc3RfcHJkID0gcnhfbWF4X2J1cnN0X3ByZDsNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJz
-L3VzYi9kd2MzL2NvcmUuaCBiL2RyaXZlcnMvdXNiL2R3YzMvY29yZS5oIGluZGV4DQo+IGE2OWFj
-NjdkODlmZS4uNjc4MmVjOGJmZDY0IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL3VzYi9kd2MzL2Nv
-cmUuaA0KPiArKysgYi9kcml2ZXJzL3VzYi9kd2MzL2NvcmUuaA0KPiBAQCAtMjExLDYgKzIxMSwx
-MSBAQA0KPiAgI2RlZmluZSBEV0MzX0dSWFRIUkNGR19SWFBLVENOVChuKSAoKChuKSAmIDB4Zikg
-PDwgMjQpICAjZGVmaW5lDQo+IERXQzNfR1JYVEhSQ0ZHX1BLVENOVFNFTCBCSVQoMjkpDQo+IA0K
-PiArLyogR2xvYmFsIFRYIFRocmVzaG9sZCBDb25maWd1cmF0aW9uIFJlZ2lzdGVyICovICNkZWZp
-bmUNCj4gK0RXQzNfR1RYVEhSQ0ZHX01BWFRYQlVSU1RTSVpFKG4pICgoKG4pICYgMHhmZikgPDwg
-MTYpICNkZWZpbmUNCj4gK0RXQzNfR1RYVEhSQ0ZHX1RYUEtUQ05UKG4pICgoKG4pICYgMHhmKSA8
-PCAyNCkgI2RlZmluZQ0KPiArRFdDM19HVFhUSFJDRkdfUEtUQ05UU0VMIEJJVCgyOSkNCj4gKw0K
-PiAgLyogR2xvYmFsIFJYIFRocmVzaG9sZCBDb25maWd1cmF0aW9uIFJlZ2lzdGVyIGZvciBEV0Nf
-dXNiMzEgb25seSAqLw0KPiAgI2RlZmluZSBEV0MzMV9HUlhUSFJDRkdfTUFYUlhCVVJTVFNJWkUo
-bikJKCgobikgJiAweDFmKSA8PCAxNikNCj4gICNkZWZpbmUgRFdDMzFfR1JYVEhSQ0ZHX1JYUEtU
-Q05UKG4pCQkoKChuKSAmIDB4MWYpIDw8IDIxKQ0KPiBAQCAtMTA0NSw2ICsxMDUwLDEwIEBAIHN0
-cnVjdCBkd2MzX3NjcmF0Y2hwYWRfYXJyYXkgew0KPiAgICogQHRlc3RfbW9kZV9ucjogdGVzdCBm
-ZWF0dXJlIHNlbGVjdG9yDQo+ICAgKiBAbHBtX255ZXRfdGhyZXNob2xkOiBMUE0gTllFVCByZXNw
-b25zZSB0aHJlc2hvbGQNCj4gICAqIEBoaXJkX3RocmVzaG9sZDogSElSRCB0aHJlc2hvbGQNCj4g
-KyAqIEByeF90aHJfbnVtX3BrdDogVVNCIHJlY2VpdmUgcGFja2V0IGNvdW50DQo+ICsgKiBAcnhf
-bWF4X2J1cnN0OiBtYXggVVNCIHJlY2VpdmUgYnVyc3Qgc2l6ZQ0KPiArICogQHR4X3Rocl9udW1f
-cGt0OiBVU0IgdHJhbnNtaXQgcGFja2V0IGNvdW50DQo+ICsgKiBAdHhfbWF4X2J1cnN0OiBtYXgg
-VVNCIHRyYW5zbWl0IGJ1cnN0IHNpemUNCj4gICAqIEByeF90aHJfbnVtX3BrdF9wcmQ6IHBlcmlv
-ZGljIEVTUyByZWNlaXZlIHBhY2tldCBjb3VudA0KPiAgICogQHJ4X21heF9idXJzdF9wcmQ6IG1h
-eCBwZXJpb2RpYyBFU1MgcmVjZWl2ZSBidXJzdCBzaXplDQo+ICAgKiBAdHhfdGhyX251bV9wa3Rf
-cHJkOiBwZXJpb2RpYyBFU1MgdHJhbnNtaXQgcGFja2V0IGNvdW50IEBAIC0xMjczLDYNCj4gKzEy
-ODIsMTAgQEAgc3RydWN0IGR3YzMgew0KPiAgCXU4CQkJdGVzdF9tb2RlX25yOw0KPiAgCXU4CQkJ
-bHBtX255ZXRfdGhyZXNob2xkOw0KPiAgCXU4CQkJaGlyZF90aHJlc2hvbGQ7DQo+ICsJdTgJCQly
-eF90aHJfbnVtX3BrdDsNCj4gKwl1OAkJCXJ4X21heF9idXJzdDsNCj4gKwl1OAkJCXR4X3Rocl9u
-dW1fcGt0Ow0KPiArCXU4CQkJdHhfbWF4X2J1cnN0Ow0KPiAgCXU4CQkJcnhfdGhyX251bV9wa3Rf
-cHJkOw0KPiAgCXU4CQkJcnhfbWF4X2J1cnN0X3ByZDsNCj4gIAl1OAkJCXR4X3Rocl9udW1fcGt0
-X3ByZDsNCj4gLS0NCj4gMi4zNC4xDQoNCg==
+If we enable PM runtime auto suspend for dwc3 on rockchip
+platforms (e.g. RK3562), it allows the dwc3 controller to
+enter runtime suspend if usb cable detached and power off
+the power domain of the controller. When system resume, if
+the dwc3 already in runtime suspended, it Shouldn't access
+the dwc3 registers in dwc3_resume() because its power domain
+maybe power off.
+
+Test on RK3562 tablet, this patch can help to avoid kernel
+panic when accessing the dwc3 registers in dwc3_resume() if
+the dwc3 is in runtime suspended and it's power domain is
+power off.
+
+Kernel panic - not syncing: Asynchronous SError Interrupt
+Hardware name: Rockchip RK3562 RK817 TABLET LP4 Board (DT)
+Call trace:
+dump_backtrace.cfi_jt+0x0/0x8
+  dump_stack_lvl+0xc0/0x13c
+  panic+0x174/0x468
+  arm64_serror_panic+0x1b0/0x200
+  do_serror+0x184/0x1e4
+  el1_error+0x94/0x118
+  el1_abort+0x40/0x68
+  el1_sync_handler+0x58/0x88
+  el1_sync+0x8c/0x140
+  dwc3_readl+0x30/0x1a0
+  dwc3_phy_setup+0x38/0x510
+  dwc3_core_init+0x68/0xcd4
+  dwc3_core_init_for_resume+0x10c/0x25c
+  dwc3_resume_common+0x44/0x3d0
+  dwc3_resume+0x5c/0xb8
+  dpm_run_callback+0x70/0x488
+  device_resume+0x250/0x2f8
+  dpm_resume+0x258/0x9dc
+
+Signed-off-by: William Wu <william.wu@rock-chips.com>
+---
+Changes in v2:
+- Remove Change-Id.
+
+ drivers/usb/dwc3/core.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 9c6bf054f15d..8274a44f2d6a 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -2185,9 +2185,11 @@ static int dwc3_resume(struct device *dev)
+ 
+ 	pinctrl_pm_select_default_state(dev);
+ 
+-	ret = dwc3_resume_common(dwc, PMSG_RESUME);
+-	if (ret)
+-		return ret;
++	if (!pm_runtime_suspended(dwc->dev)) {
++		ret = dwc3_resume_common(dwc, PMSG_RESUME);
++		if (ret)
++			return ret;
++	}
+ 
+ 	pm_runtime_disable(dev);
+ 	pm_runtime_set_active(dev);
+-- 
+2.17.1
+
