@@ -2,111 +2,214 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 629CB79AE5D
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Sep 2023 01:44:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92B0F79B485
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Sep 2023 02:02:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349895AbjIKVhg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Sep 2023 17:37:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36636 "EHLO
+        id S1350459AbjIKVig (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Sep 2023 17:38:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237421AbjIKMtz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Sep 2023 08:49:55 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A70CEB;
-        Mon, 11 Sep 2023 05:49:51 -0700 (PDT)
+        with ESMTP id S237458AbjIKMwU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Sep 2023 08:52:20 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C431AE40
+        for <linux-usb@vger.kernel.org>; Mon, 11 Sep 2023 05:52:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694436591; x=1725972591;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RbPcSFPHs/Ylahk1ZJintbe/kjOnFWdoOtyNfLzf+VA=;
-  b=mdvYbuqNGCpfG7rIfUM/nrM4PjuSwW2QKz9Wb1CZsLkbm1LJCuZTM4EV
-   7Hv7tzEzzB4xK+voPtzJ/xy3Cce4QH4MXfW8QlH6fh4CNRhE6ufAXlrrb
-   JXqd5R0kT5LCBOHE3vIhTl2xQcSyPicvlN/jW9TRLDUW7De6uIh/tr1R8
-   gk6SQv8AMLm8eda25ID91Ii1vrc3LVKS6ValpT9R2lYsOEBCEdyax5RIt
-   dNuxUncGNLIiWDEQEFoyOoUoiYVhmTBLjPVHc1PXqhr6HXXvWJ4WQdfIb
-   inVCsnS3D/FOj6GdRh8+j5YOcb/mqxm0W8D6JwSm7ua2pQk288YcqcHCV
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="380771099"
+  t=1694436735; x=1725972735;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=0ESsV65QRvRM+OdWgO3nR4ex5HwzPnOiORwoJ7VcH94=;
+  b=nccfkbwX22OxUBJEkm4jSPDnpoHhel7oNq31Z1tu10cozaeGG19a9/KE
+   CARJVMq8rALxaa6ChUKQTI6xazHqUf96cvFvqI/4pqub2qjP5krBQkrlj
+   SuOaaf+3d7zleCEMYeWfUtKtcRd1sRQJLEH2XBvAN8kuJYEPkndv1q9u2
+   JjCcgtXYn7GGARU5epLTopI+itS9Z3VsmN68jLNHkmTPhVciN4enhUW/r
+   DKysSTT6Rs8EpRpbe+X06z+/gBmp0lNROd90Qoj4dCz62tM6GSnh64fFO
+   06LfHPLYQ10A41w8pFGC60WmMocyKm+F28KHqQi5+utXFD2Fc6Iy7ZkcN
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="381875833"
 X-IronPort-AV: E=Sophos;i="6.02,244,1688454000"; 
-   d="scan'208";a="380771099"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 05:49:50 -0700
+   d="scan'208";a="381875833"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 05:52:15 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="833491262"
+X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="866930102"
 X-IronPort-AV: E=Sophos;i="6.02,244,1688454000"; 
-   d="scan'208";a="833491262"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by FMSMGA003.fm.intel.com with SMTP; 11 Sep 2023 05:49:48 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 11 Sep 2023 15:49:47 +0300
-Date:   Mon, 11 Sep 2023 15:49:47 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Prashanth K <quic_prashk@quicinc.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "# 5 . 16" <stable@vger.kernel.org>
-Subject: Re: usb: typec: ucsi: Clear EVENT_PENDING bit if ucsi_send_command
- fails
-Message-ID: <ZP8M6zqgsLTK25PI@kuha.fi.intel.com>
-References: <1694423055-8440-1-git-send-email-quic_prashk@quicinc.com>
+   d="scan'208";a="866930102"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga004.jf.intel.com with ESMTP; 11 Sep 2023 05:52:13 -0700
+Message-ID: <0957c21d-144b-1d84-2f79-f4cc6ba2a493@linux.intel.com>
+Date:   Mon, 11 Sep 2023 15:53:34 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1694423055-8440-1-git-send-email-quic_prashk@quicinc.com>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.13.0
+Content-Language: en-US
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Cc:     Florian Fainelli <f.fainelli@gmail.com>
+References: <e0459058-5ca5-1c1a-c06a-47100c176ba2@omp.ru>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH v4] usb: host: xhci-plat: fix possible kernel oops while
+ resuming
+In-Reply-To: <e0459058-5ca5-1c1a-c06a-47100c176ba2@omp.ru>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 11, 2023 at 02:34:15PM +0530, Prashanth K wrote:
-> Currently if ucsi_send_command() fails, then we bail out without
-> clearing EVENT_PENDING flag. So when the next connector change
-> event comes, ucsi_connector_change() won't queue the con->work,
-> because of which none of the new events will be processed.
+Hi
+
+Sorry about the delay
+
+On 11.7.2023 22.18, Sergey Shtylyov wrote:
+> If this driver enables the xHC clocks while resuming from sleep, it calls
+> clk_prepare_enable() without checking for errors and blithely goes on to
+> read/write the xHC's registers -- which, with the xHC not being clocked,
+> at least on ARM32 usually causes an imprecise external abort exceptions
+> which cause kernel oops.  Currently, the chips for which the driver does
+> the clock dance on suspend/resume seem to be the Broadcom STB SoCs, based
+> on ARM32 CPUs, as it seems...
 > 
-> Fix this by clearing EVENT_PENDING flag if ucsi_send_command()
-> fails.
+> In order to fix this issue, add the result checks for clk_prepare_enable()
+> calls in xhci_plat_resume(), add conditional clk_disable_unprepare() calls
+> on the error path of xhci_plat_resume(); then factor out the common clock
+> disabling code from the suspend() and resume() driver PM methods into a
+> separate function to avoid code duplication.
+
+Minor nitpick, but not sure a separate function is helpful here.
+It's two lines of code called twice.
+
 > 
-> Cc: <stable@vger.kernel.org> # 5.16
-> Fixes: 512df95b9432 ("usb: typec: ucsi: Better fix for missing unplug events issue")
-> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+> Found by Linux Verification Center (linuxtesting.org) with the Svace static
+> analysis tool.
+> 
+> Fixes: 8bd954c56197 ("usb: host: xhci-plat: suspend and resume clocks")
+> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+
+If I understood correctly this issue hasn't been seen in real life,
+and this patch only changes how we fail?
+
+So I guess this would be more suitable for usb-next than usb-linus.
+
+> 
 > ---
->  drivers/usb/typec/ucsi/ucsi.c | 1 +
->  1 file changed, 1 insertion(+)
+> This patch is against the 'usb-linus' branch of Greg KH's 'usb.git' repo...
 > 
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index c6dfe3d..509c67c 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -884,6 +884,7 @@ static void ucsi_handle_connector_change(struct work_struct *work)
->  	if (ret < 0) {
->  		dev_err(ucsi->dev, "%s: GET_CONNECTOR_STATUS failed (%d)\n",
->  			__func__, ret);
-> +		clear_bit(EVENT_PENDING, &con->ucsi->flags);
->  		goto out_unlock;
->  	}
+> Changes in version 4:
+> - resolved reject in xhci_plat_resume() due to the changed xhci_resume() call;
+> - added the __maybe_unused attribute to xhci_plat_disable_clocks().
+> 
+> Changes in version 3:
+> - sanitized the clock enabling error paths in xhci_plat_resume() WRT the
+>    applicability checks;
+> - factored out the common clock disabling code from the suspend() and resume()
+>    driver PM methods;
+> - added to the patch sescriptiun a passage describing the change being done.
+> 
+> Changes in version 2:
+> - fixed up the error path for clk_prepare_enable() calls in xhci_plat_resume().
+> 
+>   drivers/usb/host/xhci-plat.c |   35 +++++++++++++++++++++++++++--------
+>   1 file changed, 27 insertions(+), 8 deletions(-)
+> 
+> Index: usb/drivers/usb/host/xhci-plat.c
+> ===================================================================
+> --- usb.orig/drivers/usb/host/xhci-plat.c
+> +++ usb/drivers/usb/host/xhci-plat.c
+> @@ -424,6 +424,14 @@ void xhci_plat_remove(struct platform_de
+>   }
+>   EXPORT_SYMBOL_GPL(xhci_plat_remove);
+>   
+> +static void __maybe_unused xhci_plat_disable_clocks(struct xhci_hcd *xhci)
+> +{
+> +	if (xhci->quirks & XHCI_SUSPEND_RESUME_CLKS) {
+> +		clk_disable_unprepare(xhci->clk);
+> +		clk_disable_unprepare(xhci->reg_clk);
+> +	}
+> +}
+> +
 
-I think it would be better to just move that label (out_unlock) above
-the point where clear_bit() is already called instead of separately
-calling it like that. That way the Connector Change Event will
-also get acknowledged.
+xhci_plat_disable_clocks() name is a bit misleading, it only disables the clocks
+if clocks are set to be disabled/enabled during suspend/resume.
 
-If this really can happen, then I think it would be good to also
-schedule a task for ucsi_check_connection():
+>   static int __maybe_unused xhci_plat_suspend(struct device *dev)
+>   {
+>   	struct usb_hcd	*hcd = dev_get_drvdata(dev);
+> @@ -444,10 +452,8 @@ static int __maybe_unused xhci_plat_susp
+>   	if (ret)
+>   		return ret;
+>   
+> -	if (!device_may_wakeup(dev) && (xhci->quirks & XHCI_SUSPEND_RESUME_CLKS)) {
+> -		clk_disable_unprepare(xhci->clk);
+> -		clk_disable_unprepare(xhci->reg_clk);
+> -	}
+> +	if (!device_may_wakeup(dev))
+> +		xhci_plat_disable_clocks(xhci);
 
-        if (ret < 0) {
-                dev_err(ucsi->dev, "%s: GET_CONNECTOR_STATUS failed (%d)\n",
-                        __func__, ret);
-+               ucsi_partner_task(con, ucsi_check_connection, 1, HZ);
-                goto out_unlock;
-        }
+Not sure this change improves things
 
-thanks,
+>   
+>   	return 0;
+>   }
+> @@ -459,23 +465,36 @@ static int __maybe_unused xhci_plat_resu
+>   	int ret;
+>   
+>   	if (!device_may_wakeup(dev) && (xhci->quirks & XHCI_SUSPEND_RESUME_CLKS)) {
+> -		clk_prepare_enable(xhci->clk);
+> -		clk_prepare_enable(xhci->reg_clk);
+> +		ret = clk_prepare_enable(xhci->clk);
+> +		if (ret)
+> +			return ret;
+> +
+> +		ret = clk_prepare_enable(xhci->reg_clk);
+> +		if (ret) {
+> +			clk_disable_unprepare(xhci->clk);
+> +			return ret;
+> +		}
+>   	}
+>   
+>   	ret = xhci_priv_resume_quirk(hcd);
+>   	if (ret)
+> -		return ret;
+> +		goto disable_clks;
+>   
+>   	ret = xhci_resume(xhci, PMSG_RESUME);
+>   	if (ret)
+> -		return ret;
+> +		goto disable_clks;
+>   
+>   	pm_runtime_disable(dev);
+>   	pm_runtime_set_active(dev);
+>   	pm_runtime_enable(dev);
+>   
+>   	return 0;
+> +
+> +disable_clks:
+> +	if (!device_may_wakeup(dev))
+> +		xhci_plat_disable_clocks(xhci);
 
--- 
-heikki
+I'd skip the helper and just do:
+
+if (!device_may_wakeup(dev) && (xhci->quirks & XHCI_SUSPEND_RESUME_CLKS)) {
+	clk_disable_unprepare(xhci->clk);
+	clk_disable_unprepare(xhci->reg_clk);
+}
+
+It better matches the if condition when enabling the clocks:
+if (!device_may_wakeup(dev) && (xhci->quirks & XHCI_SUSPEND_RESUME_CLKS)) {
+	ret = clk_prepare_enable(xhci->clk);
+	...
+
+We also don't save any lines of code by adding the helper.
+
+Thanks
+Mathias
+
