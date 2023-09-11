@@ -2,85 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C94DB79BA36
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Sep 2023 02:11:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95DBA79BBFB
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Sep 2023 02:13:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350404AbjIKViD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Sep 2023 17:38:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34530 "EHLO
+        id S1350601AbjIKVjg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Sep 2023 17:39:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237544AbjIKM5M (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Sep 2023 08:57:12 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ED41E40;
-        Mon, 11 Sep 2023 05:57:07 -0700 (PDT)
-Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38BCrWjG011979;
-        Mon, 11 Sep 2023 12:56:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=rkDyQv343orC0cQFIXV5N+lupfGRjwECBc5Y8Lev190=;
- b=XKq2XI+uF0HBNQW67ZOFz5q/OV2IBaf1a9nL1pt7Yiw4EEwTmScy0FVNn4ldd5rrl4lY
- 1C2IOr3Q1OGqB8axy7Nlq0av/Z9l1qb9JaBi0zb0LF7ISPGdw9dwqnKEPUaf+TK8lqio
- 5bkznObJOwbMfILTrvbczz54Ww4XdRo99jamIOddUyYgcnhK43p99PTmCCjasE2Xjp6M
- z3iuZTvMgec7ZNqT2hpbMyd4Q0n5MF190FK/tsKC9A93IbMqiaRaGROv+KzT+7XpT1v7
- aTQ3yHwihjsgkljxdEgSgELMOChGik1CeOcSWfJn11V2nGhOe8vuy4To3NxXtjfdma52 sQ== 
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3t23a1g2rj-1
+        with ESMTP id S237910AbjIKNVY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Sep 2023 09:21:24 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB40212A
+        for <linux-usb@vger.kernel.org>; Mon, 11 Sep 2023 06:21:19 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38BCfVHs004136;
+        Mon, 11 Sep 2023 13:20:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=5AH1pBeFQPxEQxyUy1F7efHM0yq8x/YeHbUckyklo4c=;
+ b=Cc2JGUijPjHaGFrMBmnDYQCfzK8O+KWX2LuXkIy0LNJyK9S8A6LWLE8DLIim6Ny/CdgG
+ fAYnBeb/VdbEvurNpvm3oH5q2VynL5XCInkTcZrJz1goKoZmWZM7buBXChy5YRWj4Zsi
+ mW+DyGG35MqrUrbxOaG4rulNLV14laSUb++oG8lqw1MKyqzkZvWdL2MzT7gw7yNhx+9s
+ jMfl1L+JzIl4xUJdGvzJh6rwtVrbYE6hBGUVwVeFf5O23qTLb9hj7NxEvk8Hbl+1vymF
+ Z7Rmw3PuV8oKgDVvPj0ywFCkQ1xinwuiZ5RWIFSPZw/RbtUL0V3mIBkmMC3XlU4yQUVk 5Q== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t0h3dueyf-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 11 Sep 2023 12:56:57 +0000
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-        by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 38BBD8cO002362;
-        Mon, 11 Sep 2023 12:56:57 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3t158jt5uf-1
+        Mon, 11 Sep 2023 13:20:30 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38BDKTtw001698
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 11 Sep 2023 12:56:56 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 38BCus5v62390734
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 11 Sep 2023 12:56:54 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0CBF420040;
-        Mon, 11 Sep 2023 12:56:54 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D4FE32004B;
-        Mon, 11 Sep 2023 12:56:53 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 11 Sep 2023 12:56:53 +0000 (GMT)
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Heiko Carstens <hca@linux.ibm.com>
-Subject: [PATCH 3/3] usb: pci-quirks: handle HAS_IOPORT dependency for UHCI handoff
-Date:   Mon, 11 Sep 2023 14:56:53 +0200
-Message-Id: <20230911125653.1393895-4-schnelle@linux.ibm.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230911125653.1393895-1-schnelle@linux.ibm.com>
-References: <20230911125653.1393895-1-schnelle@linux.ibm.com>
+        Mon, 11 Sep 2023 13:20:29 GMT
+Received: from [10.253.77.20] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Mon, 11 Sep
+ 2023 06:20:22 -0700
+Message-ID: <be3509d6-0dcf-0964-1566-03dd176a4820@quicinc.com>
+Date:   Mon, 11 Sep 2023 21:20:20 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: RnysB8aE3xJrkAE3y0c36Xl9OswPN3n8
-X-Proofpoint-ORIG-GUID: RnysB8aE3xJrkAE3y0c36Xl9OswPN3n8
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH v2 01/11] usb: gadget: add anonymous definition in struct
+ usb_gadget
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Neal Liu <neal_liu@aspeedtech.com>,
+        Cristian Birsan <cristian.birsan@microchip.com>,
+        Bin Liu <b-liu@ti.com>, Kevin Cernekee <cernekee@gmail.com>,
+        Justin Chen <justin.chen@broadcom.com>,
+        Al Cooper <alcooperx@gmail.com>, Li Yang <leoyang.li@nxp.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Herve Codina <herve.codina@bootlin.com>,
+        hierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Michal Simek <michal.simek@amd.com>,
+        Rui Miguel Silva <rui.silva@linaro.org>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>,
+        <linux-usb@vger.kernel.org>
+References: <20230911112446.1791-1-quic_linyyuan@quicinc.com>
+ <20230911112446.1791-2-quic_linyyuan@quicinc.com>
+ <2023091137-babble-chaffing-553c@gregkh>
+Content-Language: en-US
+From:   Linyu Yuan <quic_linyyuan@quicinc.com>
+In-Reply-To: <2023091137-babble-chaffing-553c@gregkh>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: tyWUm4Ewz-1Q6LxXdrLMg2qEQsqC3G5I
+X-Proofpoint-ORIG-GUID: tyWUm4Ewz-1Q6LxXdrLMg2qEQsqC3G5I
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-09-11_06,2023-09-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=537
- clxscore=1015 priorityscore=1501 spamscore=0 malwarescore=0
- lowpriorityscore=0 mlxscore=0 suspectscore=0 phishscore=0 bulkscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2309110114
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
+ definitions=2023-09-11_07,2023-09-05_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ bulkscore=0 phishscore=0 mlxlogscore=740 adultscore=0 spamscore=0
+ suspectscore=0 impostorscore=0 malwarescore=0 mlxscore=0
+ lowpriorityscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2308100000 definitions=main-2309110121
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,69 +103,113 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-not being declared. With the AMD quirk handled USB PCI quirks still use
-inw() in uhci_check_and_reset_hc() and thus indirectly in
-quirk_usb_handoff_uhci(). Handle this by conditionally compiling
-uhci_check_and_reset_hc() and stubbing out quirk_usb_handoff_uhci() when
-HAS_IOPORT is not available.
 
-Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
----
- drivers/usb/host/pci-quirks.c | 23 ++++++++++++++++-------
- 1 file changed, 16 insertions(+), 7 deletions(-)
+On 9/11/2023 7:37 PM, Greg Kroah-Hartman wrote:
+> On Mon, Sep 11, 2023 at 07:24:36PM +0800, Linyu Yuan wrote:
+>> Some UDC trace event will save usb gadget information, but it will use
+>> one int size buffer to save one bit information of usb gadget, so more
+>> than one int buffer to save several bit fields which is not good.
+>>
+>> Add one anonymous union have three u32 members which can be used by trace
+>> event during fast assign stage to reduce trace buffer usage, and add
+>> related macro to extract bit fields from u32 members for later trace event
+>> output state usage.
+>>
+>> Also move sg_supported and other bit fields into one anonymous struct
+>> which inside anonymous union and Change bit fields from unsigned to u32
+>> type, it will make sure union member have expected u32 size.
+>>
+>> Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+>> ---
+>> v2: no change
+>>
+>>   include/linux/usb/gadget.h | 63 ++++++++++++++++++++++++++------------
+>>   1 file changed, 44 insertions(+), 19 deletions(-)
+>>
+>> diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
+>> index 75bda0783395..cdf62e7f34e7 100644
+>> --- a/include/linux/usb/gadget.h
+>> +++ b/include/linux/usb/gadget.h
+>> @@ -357,6 +357,7 @@ struct usb_gadget_ops {
+>>    * @in_epnum: last used in ep number
+>>    * @mA: last set mA value
+>>    * @otg_caps: OTG capabilities of this gadget.
+>> + * @dw1: trace event purpose
+>>    * @sg_supported: true if we can handle scatter-gather
+>>    * @is_otg: True if the USB device port uses a Mini-AB jack, so that the
+>>    *	gadget driver must provide a USB OTG descriptor.
+>> @@ -432,25 +433,49 @@ struct usb_gadget {
+>>   	unsigned			mA;
+>>   	struct usb_otg_caps		*otg_caps;
+>>   
+>> -	unsigned			sg_supported:1;
+>> -	unsigned			is_otg:1;
+>> -	unsigned			is_a_peripheral:1;
+>> -	unsigned			b_hnp_enable:1;
+>> -	unsigned			a_hnp_support:1;
+>> -	unsigned			a_alt_hnp_support:1;
+>> -	unsigned			hnp_polling_support:1;
+>> -	unsigned			host_request_flag:1;
+>> -	unsigned			quirk_ep_out_aligned_size:1;
+>> -	unsigned			quirk_altset_not_supp:1;
+>> -	unsigned			quirk_stall_not_supp:1;
+>> -	unsigned			quirk_zlp_not_supp:1;
+>> -	unsigned			quirk_avoids_skb_reserve:1;
+>> -	unsigned			is_selfpowered:1;
+>> -	unsigned			deactivated:1;
+>> -	unsigned			connected:1;
+>> -	unsigned			lpm_capable:1;
+>> -	unsigned			wakeup_capable:1;
+>> -	unsigned			wakeup_armed:1;
+>> +	union {
+>> +		struct {
+>> +			u32		sg_supported:1;
+>> +			u32		is_otg:1;
+>> +			u32		is_a_peripheral:1;
+>> +			u32		b_hnp_enable:1;
+>> +			u32		a_hnp_support:1;
+>> +			u32		a_alt_hnp_support:1;
+>> +			u32		hnp_polling_support:1;
+>> +			u32		host_request_flag:1;
+>> +			u32		quirk_ep_out_aligned_size:1;
+>> +			u32		quirk_altset_not_supp:1;
+>> +			u32		quirk_stall_not_supp:1;
+>> +			u32		quirk_zlp_not_supp:1;
+>> +			u32		quirk_avoids_skb_reserve:1;
+>> +			u32		is_selfpowered:1;
+>> +			u32		deactivated:1;
+>> +			u32		connected:1;
+>> +			u32		lpm_capable:1;
+>> +			u32		wakeup_capable:1;
+>> +			u32		wakeup_armed:1;
+>> +		} __packed;
+>> +		u32			dw1;
+>> +#define		USB_GADGET_SG_SUPPORTED(n)			((n) & BIT(0))
+>> +#define		USB_GADGET_IS_OTG(n)				((n) & BIT(1))
+>> +#define		USB_GADGET_IS_A_PERIPHERAL(n)			((n) & BIT(2))
+>> +#define		USB_GADGET_B_HNP_ENABLE(n)			((n) & BIT(3))
+>> +#define		USB_GADGET_A_HNP_SUPPORT(n)			((n) & BIT(4))
+>> +#define		USB_GADGET_A_ALT_HNP_SUPPORT(n)			((n) & BIT(5))
+>> +#define		USB_GADGET_HNP_POLLING_SUPPORT(n)		((n) & BIT(6))
+>> +#define		USB_GADGET_HOST_REQUEST_FLAG(n)			((n) & BIT(7))
+>> +#define		USB_GADGET_QUIRK_EP_OUT_ALIGNED_SIZE(n)		((n) & BIT(8))
+>> +#define		USB_GADGET_QUIRK_ALTSET_NOT_SUPP(n)		((n) & BIT(9))
+>> +#define		USB_GADGET_QUIRK_STALL_NOT_SUPP(n)		((n) & BIT(10))
+>> +#define		USB_GADGET_QUIRK_ZLP_NOT_SUPP(n)		((n) & BIT(11))
+>> +#define		USB_GADGET_QUIRK_AVOIDS_SKB_RESERVE(n)		((n) & BIT(12))
+>> +#define		USB_GADGET_IS_SELFPOWERED(n)			((n) & BIT(13))
+>> +#define		USB_GADGET_DEACTIVATED(n)			((n) & BIT(14))
+>> +#define		USB_GADGET_CONNECTED(n)				((n) & BIT(15))
+>> +#define		USB_GADGET_LPM_CAPABLE(n)			((n) & BIT(16))
+>> +#define		USB_GADGET_WAKEUP_CAPABLE(n)			((n) & BIT(17))
+>> +#define		USB_GADGET_WAKEUP_ARMED(n)			((n) & BIT(18))
+> Does this actually work on both types of endian-ness?
 
-diff --git a/drivers/usb/host/pci-quirks.c b/drivers/usb/host/pci-quirks.c
-index 10813096d00c..1f9c1b1435d8 100644
---- a/drivers/usb/host/pci-quirks.c
-+++ b/drivers/usb/host/pci-quirks.c
-@@ -634,6 +634,16 @@ void usb_asmedia_modifyflowcontrol(struct pci_dev *pdev)
- }
- EXPORT_SYMBOL_GPL(usb_asmedia_modifyflowcontrol);
- 
-+static inline int io_type_enabled(struct pci_dev *pdev, unsigned int mask)
-+{
-+	u16 cmd;
-+
-+	return !pci_read_config_word(pdev, PCI_COMMAND, &cmd) && (cmd & mask);
-+}
-+
-+#define mmio_enabled(dev) io_type_enabled(dev, PCI_COMMAND_MEMORY)
-+
-+#if defined(CONFIG_HAS_IOPORT) && IS_ENABLED(CONFIG_USB_UHCI_HCD)
- /*
-  * Make sure the controller is completely inactive, unable to
-  * generate interrupts or do DMA.
-@@ -715,14 +725,7 @@ int uhci_check_and_reset_hc(struct pci_dev *pdev, unsigned long base)
- }
- EXPORT_SYMBOL_GPL(uhci_check_and_reset_hc);
- 
--static inline int io_type_enabled(struct pci_dev *pdev, unsigned int mask)
--{
--	u16 cmd;
--	return !pci_read_config_word(pdev, PCI_COMMAND, &cmd) && (cmd & mask);
--}
--
- #define pio_enabled(dev) io_type_enabled(dev, PCI_COMMAND_IO)
--#define mmio_enabled(dev) io_type_enabled(dev, PCI_COMMAND_MEMORY)
- 
- static void quirk_usb_handoff_uhci(struct pci_dev *pdev)
- {
-@@ -742,6 +745,12 @@ static void quirk_usb_handoff_uhci(struct pci_dev *pdev)
- 		uhci_check_and_reset_hc(pdev, base);
- }
- 
-+#else /* defined(CONFIG_HAS_IOPORT && IS_ENABLED(CONFIG_USB_UHCI_HCD) */
-+
-+static void quirk_usb_handoff_uhci(struct pci_dev *pdev) {}
-+
-+#endif /* defined(CONFIG_HAS_IOPORT && IS_ENABLED(CONFIG_USB_UHCI_HCD) */
-+
- static int mmio_resource_enabled(struct pci_dev *pdev, int idx)
- {
- 	return pci_resource_start(pdev, idx) && mmio_enabled(pdev);
--- 
-2.39.2
 
+sorry, only test little endian on ARM64, will consider big endian.
+
+
+>
+> thanks,
+>
+> greg k-h
