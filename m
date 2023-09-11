@@ -2,44 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 561F379AFCF
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Sep 2023 01:48:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45D2879BDC5
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Sep 2023 02:16:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350598AbjIKVjd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Sep 2023 17:39:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60774 "EHLO
+        id S1350666AbjIKVkb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Sep 2023 17:40:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244053AbjIKS70 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Sep 2023 14:59:26 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 114781B6;
-        Mon, 11 Sep 2023 11:59:22 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FD79C433C8;
-        Mon, 11 Sep 2023 18:59:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1694458761;
-        bh=BiU1W+RBB06NcMTa0T9geOWsmY6i5RpjwrAWcchH+0M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=P1Xq4jwua6sz95mhYk1kGatnq68WOYHUEev4ZBkG5PzKnCunqt2cv2kz0k8lE+PW3
-         HpdFM+Z8A2sBg4zOqp+aXwpiZ7AHCUfc3Oqq4VUZ/L2fYvAKBhbkkCezeILT0AnsW2
-         i+wnMk4PG1WVRSZJhFV3hO/N1xBuGt0Wu73heduE=
-Date:   Mon, 11 Sep 2023 20:59:18 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Chen Yu <yu.c.chen@intel.com>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Saranya Gopal <saranya.gopal@intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: ucsi: Release debugfs only if it has been
- allocated
-Message-ID: <2023091112-elevation-immature-8f9f@gregkh>
-References: <20230911162706.2856910-1-yu.c.chen@intel.com>
+        with ESMTP id S235614AbjIKJEb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Sep 2023 05:04:31 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5285BCCC;
+        Mon, 11 Sep 2023 02:04:27 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38B7XMh6005610;
+        Mon, 11 Sep 2023 09:04:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=cWaDRN7ZWbf9bSgQ+TGVZpgFp59ybLzgWZRvwNOhHwM=;
+ b=dHUY7rsTft988QuB2bb/z7gEprXGgOM4dN8MmnRIrSTENaD6lDGpFIhdhQ9VXX5Syu6C
+ SIUwEZQ950rxUVNPrfgO3ZguZBxE9RB1/ifYb4uCOoKV5aRZYThrLpXIASsPGQDzy4Jq
+ LfpCTpj7SWjo4UlrXlKuy1UHyzzVXL5fNzv1iugwdZXeAkuSodZhYwEOnVgTQNQIZf1U
+ fwEhP7bwoGE485PphGW2GHvjllMebEgkN05pDtzT62CIn3L3XDiMXSp2wFF3dy+DZNKG
+ UFt1/oU5nPBvg/BeVP1uJ5c37TRIWet75ij8iKUjlVPwNWZAtbvjO4hbpex9zR65SKzE 1w== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t1xjmr56a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 11 Sep 2023 09:04:24 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38B94NZB004134
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 11 Sep 2023 09:04:23 GMT
+Received: from hu-prashk-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.36; Mon, 11 Sep 2023 02:04:20 -0700
+From:   Prashanth K <quic_prashk@quicinc.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Prashanth K <quic_prashk@quicinc.com>,
+        "# 5 . 16" <stable@vger.kernel.org>
+Subject: usb: typec: ucsi: Clear EVENT_PENDING bit if ucsi_send_command fails
+Date:   Mon, 11 Sep 2023 14:34:15 +0530
+Message-ID: <1694423055-8440-1-git-send-email-quic_prashk@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230911162706.2856910-1-yu.c.chen@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: BBC4WeTFvO5MZ6S0ePRr4g_SRmYjLD0F
+X-Proofpoint-GUID: BBC4WeTFvO5MZ6S0ePRr4g_SRmYjLD0F
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-09-11_06,2023-09-05_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
+ phishscore=0 lowpriorityscore=0 suspectscore=0 mlxlogscore=999
+ malwarescore=0 adultscore=0 priorityscore=1501 clxscore=1011 bulkscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2308100000 definitions=main-2309110082
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,48 +73,33 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 12, 2023 at 12:27:06AM +0800, Chen Yu wrote:
-> The following NULL pointer exception was found during boot up:
-> 
->  calling  ucsi_acpi_platform_driver_init+0x0/0xff0 [ucsi_acpi] @ 394
->  initcall mac_hid_init+0x0/0xff0 [mac_hid] returned 0 after 5 usecs
->  BUG: kernel NULL pointer dereference, address: 0000000000000020
->  Call Trace:
->   ? ucsi_debugfs_unregister+0x15/0x30 [typec_ucsi]
->   ucsi_destroy+0x17/0x30 [typec_ucsi]
->   ucsi_acpi_probe+0x1d5/0x230 [ucsi_acpi]
-> 
-> It is possible that ucsi_acpi_probe() fails to install the notifier,
-> and calls ucsi_destroy() to release the resource. However at that
-> moment the debugfs has not been registered yet, thus the NULL pointer
-> exception is triggered. Add the check for debugfs pointer.
-> 
-> Fixes: Commit df0383ffad64 ("usb: typec: ucsi: Add debugfs for ucsi commands")
+Currently if ucsi_send_command() fails, then we bail out without
+clearing EVENT_PENDING flag. So when the next connector change
+event comes, ucsi_connector_change() won't queue the con->work,
+because of which none of the new events will be processed.
 
-Incorrect format :(
+Fix this by clearing EVENT_PENDING flag if ucsi_send_command()
+fails.
 
-> Signed-off-by: Chen Yu <yu.c.chen@intel.com>
-> ---
->  drivers/usb/typec/ucsi/debugfs.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/ucsi/debugfs.c b/drivers/usb/typec/ucsi/debugfs.c
-> index 0c7bf88d4a7f..55533dc3d539 100644
-> --- a/drivers/usb/typec/ucsi/debugfs.c
-> +++ b/drivers/usb/typec/ucsi/debugfs.c
-> @@ -84,7 +84,8 @@ void ucsi_debugfs_register(struct ucsi *ucsi)
->  
->  void ucsi_debugfs_unregister(struct ucsi *ucsi)
->  {
-> -	debugfs_remove_recursive(ucsi->debugfs->dentry);
-> +	if (ucsi->debugfs)
-> +		debugfs_remove_recursive(ucsi->debugfs->dentry);
->  	kfree(ucsi->debugfs);
->  }
+Cc: <stable@vger.kernel.org> # 5.16
+Fixes: 512df95b9432 ("usb: typec: ucsi: Better fix for missing unplug events issue")
+Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+---
+ drivers/usb/typec/ucsi/ucsi.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-What's wrong with this patch instead:
-	https://lore.kernel.org/all/20230906084842.1922052-1-heikki.krogerus@linux.intel.com/
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index c6dfe3d..509c67c 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -884,6 +884,7 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+ 	if (ret < 0) {
+ 		dev_err(ucsi->dev, "%s: GET_CONNECTOR_STATUS failed (%d)\n",
+ 			__func__, ret);
++		clear_bit(EVENT_PENDING, &con->ucsi->flags);
+ 		goto out_unlock;
+ 	}
+ 
+-- 
+2.7.4
 
-thanks,
-
-greg k-h
