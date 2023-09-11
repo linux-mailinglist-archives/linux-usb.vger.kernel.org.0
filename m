@@ -2,70 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45D2879BDC5
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Sep 2023 02:16:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6FE879BCAA
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Sep 2023 02:14:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350666AbjIKVkb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Sep 2023 17:40:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58008 "EHLO
+        id S1350469AbjIKVio (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Sep 2023 17:38:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235614AbjIKJEb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Sep 2023 05:04:31 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5285BCCC;
-        Mon, 11 Sep 2023 02:04:27 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38B7XMh6005610;
-        Mon, 11 Sep 2023 09:04:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=cWaDRN7ZWbf9bSgQ+TGVZpgFp59ybLzgWZRvwNOhHwM=;
- b=dHUY7rsTft988QuB2bb/z7gEprXGgOM4dN8MmnRIrSTENaD6lDGpFIhdhQ9VXX5Syu6C
- SIUwEZQ950rxUVNPrfgO3ZguZBxE9RB1/ifYb4uCOoKV5aRZYThrLpXIASsPGQDzy4Jq
- LfpCTpj7SWjo4UlrXlKuy1UHyzzVXL5fNzv1iugwdZXeAkuSodZhYwEOnVgTQNQIZf1U
- fwEhP7bwoGE485PphGW2GHvjllMebEgkN05pDtzT62CIn3L3XDiMXSp2wFF3dy+DZNKG
- UFt1/oU5nPBvg/BeVP1uJ5c37TRIWet75ij8iKUjlVPwNWZAtbvjO4hbpex9zR65SKzE 1w== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t1xjmr56a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 11 Sep 2023 09:04:24 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38B94NZB004134
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 11 Sep 2023 09:04:23 GMT
-Received: from hu-prashk-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.36; Mon, 11 Sep 2023 02:04:20 -0700
-From:   Prashanth K <quic_prashk@quicinc.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Prashanth K <quic_prashk@quicinc.com>,
-        "# 5 . 16" <stable@vger.kernel.org>
-Subject: usb: typec: ucsi: Clear EVENT_PENDING bit if ucsi_send_command fails
-Date:   Mon, 11 Sep 2023 14:34:15 +0530
-Message-ID: <1694423055-8440-1-git-send-email-quic_prashk@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        with ESMTP id S235675AbjIKJTV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Sep 2023 05:19:21 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91764CD3;
+        Mon, 11 Sep 2023 02:19:16 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A538C433C7;
+        Mon, 11 Sep 2023 09:19:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1694423956;
+        bh=CMfUhNrtWuDI24j8Rms6Yate8XX09AcwZIWD3r2Z/zQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QmoFmUhxt/yiEd8G4jeOoUDXygJumzb975APomu67gdlwxo5cS2WCXKyVSTrBqa/M
+         NR4IkGbrcCIzRa5UWolX8IyFd5w/w+wzMiEFpXCRf/nP6lLHaHpfmnD4josve/7vFm
+         MYUzhzVJaHdlkUeAiGNmJNunEe9UeIf/Fxt3k/MWPuMSmB8Mi/9FvNpBezFQhKKjf/
+         QotFPklwBoxQ2wGiLd/AhmauC3KX10AJ6ZJRYfYUIugPeITN9qdKwd5ZCj2u1d3W9y
+         6ciI1UHwEy6LiLKoT/bNyVPb/lpwXHo77YK1VVQUV9kZ65C5/QCx7d1+U1L2BkTJGJ
+         8nC3vpdKXpiBw==
+Received: from johan by xi.lan with local (Exim 4.96)
+        (envelope-from <johan@kernel.org>)
+        id 1qfd4b-00005f-0p;
+        Mon, 11 Sep 2023 11:19:13 +0200
+Date:   Mon, 11 Sep 2023 11:19:13 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Dan Drown <dan-netdev@drown.org>,
+        Oliver Neukum <oneukum@suse.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 6.4 24/25] usb: cdc-acm: move ldisc dcd
+ notification outside of acm's read lock
+Message-ID: <ZP7bkRc-1U8-M6X1@hovoldconsulting.com>
+References: <20230909003715.3579761-1-sashal@kernel.org>
+ <20230909003715.3579761-24-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: BBC4WeTFvO5MZ6S0ePRr4g_SRmYjLD0F
-X-Proofpoint-GUID: BBC4WeTFvO5MZ6S0ePRr4g_SRmYjLD0F
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-09-11_06,2023-09-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- phishscore=0 lowpriorityscore=0 suspectscore=0 mlxlogscore=999
- malwarescore=0 adultscore=0 priorityscore=1501 clxscore=1011 bulkscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2309110082
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230909003715.3579761-24-sashal@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,33 +56,48 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Currently if ucsi_send_command() fails, then we bail out without
-clearing EVENT_PENDING flag. So when the next connector change
-event comes, ucsi_connector_change() won't queue the con->work,
-because of which none of the new events will be processed.
+On Fri, Sep 08, 2023 at 08:37:12PM -0400, Sasha Levin wrote:
+> From: Dan Drown <dan-netdev@drown.org>
+> 
+> [ Upstream commit f72ae60881ff685004d7de7152517607fcd9968f ]
+> 
+> dcd_change notification call moved outside of the acm->read_lock
+> to protect any future tty ldisc that calls wait_serial_change()
+> 
+> Signed-off-by: Dan Drown <dan-netdev@drown.org>
+> Acked-by: Oliver Neukum <oneukum@suse.com>
+> Link: https://lore.kernel.org/r/ZN1zV/zjPgpGlHXo@vps3.drown.org
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> ---
+>  drivers/usb/class/cdc-acm.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
+> index 11da5fb284d0a..ca51230f44409 100644
+> --- a/drivers/usb/class/cdc-acm.c
+> +++ b/drivers/usb/class/cdc-acm.c
+> @@ -318,6 +318,16 @@ static void acm_process_notification(struct acm *acm, unsigned char *buf)
+>  		}
+>  
+>  		difference = acm->ctrlin ^ newctrl;
+> +
+> +		if ((difference & USB_CDC_SERIAL_STATE_DCD) && acm->port.tty) {
+> +			struct tty_ldisc *ld = tty_ldisc_ref(acm->port.tty);
+> +			if (ld) {
+> +				if (ld->ops->dcd_change)
+> +					ld->ops->dcd_change(acm->port.tty, newctrl & USB_CDC_SERIAL_STATE_DCD);
+> +				tty_ldisc_deref(ld);
+> +			}
+> +		}
+> +
+>  		spin_lock_irqsave(&acm->read_lock, flags);
+>  		acm->ctrlin = newctrl;
+>  		acm->oldcount = acm->iocount;
 
-Fix this by clearing EVENT_PENDING flag if ucsi_send_command()
-fails.
+This is a fix for a commit in 6.6-rc1 (3b563b901eef ("usb: cdc-acm: add
+PPS support")) so a backport of it makes no sense.
 
-Cc: <stable@vger.kernel.org> # 5.16
-Fixes: 512df95b9432 ("usb: typec: ucsi: Better fix for missing unplug events issue")
-Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
----
- drivers/usb/typec/ucsi/ucsi.c | 1 +
- 1 file changed, 1 insertion(+)
+Please drop.
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index c6dfe3d..509c67c 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -884,6 +884,7 @@ static void ucsi_handle_connector_change(struct work_struct *work)
- 	if (ret < 0) {
- 		dev_err(ucsi->dev, "%s: GET_CONNECTOR_STATUS failed (%d)\n",
- 			__func__, ret);
-+		clear_bit(EVENT_PENDING, &con->ucsi->flags);
- 		goto out_unlock;
- 	}
- 
--- 
-2.7.4
-
+Johan
