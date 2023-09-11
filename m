@@ -2,102 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6FE879BCAA
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Sep 2023 02:14:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0FBF79B9B2
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Sep 2023 02:10:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350469AbjIKVio (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Sep 2023 17:38:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44602 "EHLO
+        id S1350819AbjIKVlg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Sep 2023 17:41:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235675AbjIKJTV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Sep 2023 05:19:21 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91764CD3;
-        Mon, 11 Sep 2023 02:19:16 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A538C433C7;
-        Mon, 11 Sep 2023 09:19:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694423956;
-        bh=CMfUhNrtWuDI24j8Rms6Yate8XX09AcwZIWD3r2Z/zQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QmoFmUhxt/yiEd8G4jeOoUDXygJumzb975APomu67gdlwxo5cS2WCXKyVSTrBqa/M
-         NR4IkGbrcCIzRa5UWolX8IyFd5w/w+wzMiEFpXCRf/nP6lLHaHpfmnD4josve/7vFm
-         MYUzhzVJaHdlkUeAiGNmJNunEe9UeIf/Fxt3k/MWPuMSmB8Mi/9FvNpBezFQhKKjf/
-         QotFPklwBoxQ2wGiLd/AhmauC3KX10AJ6ZJRYfYUIugPeITN9qdKwd5ZCj2u1d3W9y
-         6ciI1UHwEy6LiLKoT/bNyVPb/lpwXHo77YK1VVQUV9kZ65C5/QCx7d1+U1L2BkTJGJ
-         8nC3vpdKXpiBw==
-Received: from johan by xi.lan with local (Exim 4.96)
-        (envelope-from <johan@kernel.org>)
-        id 1qfd4b-00005f-0p;
-        Mon, 11 Sep 2023 11:19:13 +0200
-Date:   Mon, 11 Sep 2023 11:19:13 +0200
-From:   Johan Hovold <johan@kernel.org>
+        with ESMTP id S236225AbjIKKAI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Sep 2023 06:00:08 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465E4E67;
+        Mon, 11 Sep 2023 03:00:02 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 161041C0004; Mon, 11 Sep 2023 12:00:01 +0200 (CEST)
+Date:   Mon, 11 Sep 2023 12:00:00 +0200
+From:   Pavel Machek <pavel@denx.de>
 To:     Sasha Levin <sashal@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Dan Drown <dan-netdev@drown.org>,
-        Oliver Neukum <oneukum@suse.com>,
+        Xiaolei Wang <xiaolei.wang@windriver.com>,
+        Peter Chen <peter.chen@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 6.4 24/25] usb: cdc-acm: move ldisc dcd
- notification outside of acm's read lock
-Message-ID: <ZP7bkRc-1U8-M6X1@hovoldconsulting.com>
-References: <20230909003715.3579761-1-sashal@kernel.org>
- <20230909003715.3579761-24-sashal@kernel.org>
+        pawell@cadence.com, linux-usb@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.15 10/19] usb: cdns3: Put the cdns set active
+ part outside the spin lock
+Message-ID: <ZP7lIKUzD68XA91j@duo.ucw.cz>
+References: <20230909003903.3580394-1-sashal@kernel.org>
+ <20230909003903.3580394-10-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="wqD7Cph2pbmvmiU2"
 Content-Disposition: inline
-In-Reply-To: <20230909003715.3579761-24-sashal@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230909003903.3580394-10-sashal@kernel.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_NEUTRAL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Sep 08, 2023 at 08:37:12PM -0400, Sasha Levin wrote:
-> From: Dan Drown <dan-netdev@drown.org>
-> 
-> [ Upstream commit f72ae60881ff685004d7de7152517607fcd9968f ]
-> 
-> dcd_change notification call moved outside of the acm->read_lock
-> to protect any future tty ldisc that calls wait_serial_change()
-> 
-> Signed-off-by: Dan Drown <dan-netdev@drown.org>
-> Acked-by: Oliver Neukum <oneukum@suse.com>
-> Link: https://lore.kernel.org/r/ZN1zV/zjPgpGlHXo@vps3.drown.org
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->  drivers/usb/class/cdc-acm.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
-> index 11da5fb284d0a..ca51230f44409 100644
-> --- a/drivers/usb/class/cdc-acm.c
-> +++ b/drivers/usb/class/cdc-acm.c
-> @@ -318,6 +318,16 @@ static void acm_process_notification(struct acm *acm, unsigned char *buf)
->  		}
->  
->  		difference = acm->ctrlin ^ newctrl;
+
+--wqD7Cph2pbmvmiU2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi!
+
+> From: Xiaolei Wang <xiaolei.wang@windriver.com>
+>=20
+> [ Upstream commit 2319b9c87fe243327285f2fefd7374ffd75a65fc ]
+>=20
+> The device may be scheduled during the resume process,
+> so this cannot appear in atomic operations. Since
+> pm_runtime_set_active will resume suppliers, put set
+> active outside the spin lock, which is only used to
+> protect the struct cdns data structure, otherwise the
+> kernel will report the following warning:
+
+There's something wrong with this patch: cdns_set_active returns
+either void or int depending on config. That can't be intentional.
+
+Best regards,
+								Pavel
+
+> +++ b/drivers/usb/cdns3/core.c
+> @@ -556,15 +555,23 @@ int cdns_resume(struct cdns *cdns, u8 set_active)
+=2E..
 > +
-> +		if ((difference & USB_CDC_SERIAL_STATE_DCD) && acm->port.tty) {
-> +			struct tty_ldisc *ld = tty_ldisc_ref(acm->port.tty);
-> +			if (ld) {
-> +				if (ld->ops->dcd_change)
-> +					ld->ops->dcd_change(acm->port.tty, newctrl & USB_CDC_SERIAL_STATE_DCD);
-> +				tty_ldisc_deref(ld);
-> +			}
-> +		}
+> +void cdns_set_active(struct cdns *cdns, u8 set_active)
+> +{
+> +	struct device *dev =3D cdns->dev;
 > +
->  		spin_lock_irqsave(&acm->read_lock, flags);
->  		acm->ctrlin = newctrl;
->  		acm->oldcount = acm->iocount;
+>  	if (set_active) {
+>  		pm_runtime_disable(dev);
+>  		pm_runtime_set_active(dev);
+>  		pm_runtime_enable(dev);
+>  	}
+> =20
+> -	return 0;
+> +	return;
+>  }
 
-This is a fix for a commit in 6.6-rc1 (3b563b901eef ("usb: cdc-acm: add
-PPS support")) so a backport of it makes no sense.
+> +++ b/drivers/usb/cdns3/core.h
+> @@ -125,10 +125,13 @@ int cdns_init(struct cdns *cdns);
+>  int cdns_remove(struct cdns *cdns);
+> =20
+>  #ifdef CONFIG_PM_SLEEP
+=2E..
+>  int cdns_suspend(struct cdns *cdns);
+> +void cdns_set_active(struct cdns *cdns, u8 set_active);
+>  #else /* CONFIG_PM_SLEEP */
+=2E..
+> +static inline int cdns_set_active(struct cdns *cdns, u8 set_active)
+>  { return 0; }
+>  static inline int cdns_suspend(struct cdns *cdns)
+>  { return 0; }
 
-Please drop.
+--=20
+DENX Software Engineering GmbH,        Managing Director: Erika Unter
+HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
 
-Johan
+--wqD7Cph2pbmvmiU2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZP7lIAAKCRAw5/Bqldv6
+8uyWAJ40lI1lM3v257gQVvAQHRibAqeWkQCfQU6EJSPUflkZaJ2qX4r5mj5pKx0=
+=R7Gr
+-----END PGP SIGNATURE-----
+
+--wqD7Cph2pbmvmiU2--
