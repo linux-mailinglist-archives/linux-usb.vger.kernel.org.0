@@ -2,42 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DDBE79AEA1
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Sep 2023 01:45:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD4B779B46B
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Sep 2023 02:02:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238365AbjIKVkV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Sep 2023 17:40:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42944 "EHLO
+        id S1350390AbjIKVhs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Sep 2023 17:37:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236798AbjIKL00 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Sep 2023 07:26:26 -0400
+        with ESMTP id S236807AbjIKL0g (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Sep 2023 07:26:36 -0400
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D642F5
-        for <linux-usb@vger.kernel.org>; Mon, 11 Sep 2023 04:26:21 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38B5A0Pf019639;
-        Mon, 11 Sep 2023 11:25:41 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3230CDD
+        for <linux-usb@vger.kernel.org>; Mon, 11 Sep 2023 04:26:31 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38B59Z3g004353;
+        Mon, 11 Sep 2023 11:25:47 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=qcppdkim1;
- bh=Zkl3ttN5OaupEcCcEtjtUfMKq714srXPQ8MVQBvof0I=;
- b=DLiVRK/2RG3ZlQcs6yNSAsEaIM6C024pS9ax3CM6Dd7JgRPKuR9f9f8ha8HuaXuuxa9R
- auJyynXGfpIvUe29VkbpYFHAplmqJ0M8U4FmqDjNZNFH7+9HNLQO7WQFVYfqt/6g8Z/k
- hryySa0CIpLCYVgFvmQNEKMP/U6mb2ddQ9gj/RhfVqhOjCtf8lT5DrKJhvNksLO1PLMv
- tDCHpS/0BORdE79izIkbTw64P5WaD4/AJmIPRmEtGZfTlDniZvFDEjggp9txyKNuP9dP
- WIylMLk34HDxG0FZWIe3teYGXomIT6AFVetUkL7NFCQa9wm31MNVjgfvuT6lwe2Bozv9 3A== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t0edmks23-1
+ bh=ZvwbpkIxR73XmZik9g47tnEPCfgf7/Dln40hXoKuGyI=;
+ b=M4QQcvBt3UbKWxnhhZe9+qKBMqeV0osQf9yeso7bwaiYcmpdihdLe8b2FML5EgE114IG
+ LtCZ8hdU6ecr7ZgNVXdpkWtxA4EMKO9oA1RHW2XfdgaTsmk3zFWfoMu53sTC6XeEQh67
+ l0ZVX/qiB5Emg/Pldl6uBF26NVoW28pZqv1GbN66p/qi5LiXkj+UIInmRsKeKU31M7ud
+ 31jc/adW/UiFr8lmovvHO6jdjQ1sUPpK50uJY1CZZ+V9noKFIi9Uourp2uPDY52ul06i
+ SRJsBgDHGj7B9adcBi4jcK0fVtJiRXUaElujFMayCnRD1rcjpirhBqImEYSp0NTvATc2 LQ== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t0j0fkhbx-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 11 Sep 2023 11:25:40 +0000
+        Mon, 11 Sep 2023 11:25:47 +0000
 Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38BBPdXq015512
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38BBPkHN002297
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 11 Sep 2023 11:25:39 GMT
+        Mon, 11 Sep 2023 11:25:46 GMT
 Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
  nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.36; Mon, 11 Sep 2023 04:25:32 -0700
+ 15.2.1118.36; Mon, 11 Sep 2023 04:25:39 -0700
 From:   Linyu Yuan <quic_linyyuan@quicinc.com>
 To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         Peter Chen <peter.chen@kernel.org>,
@@ -64,9 +64,9 @@ To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         "Shuah Khan" <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 CC:     <linux-usb@vger.kernel.org>, Linyu Yuan <quic_linyyuan@quicinc.com>
-Subject: [PATCH v2 05/11] usb: udc: trace: reduce buffer usage of trace event
-Date:   Mon, 11 Sep 2023 19:24:40 +0800
-Message-ID: <20230911112446.1791-6-quic_linyyuan@quicinc.com>
+Subject: [PATCH v2 06/11] usb: cdns3: cdnsp: reduce buffer usage of trace event
+Date:   Mon, 11 Sep 2023 19:24:41 +0800
+Message-ID: <20230911112446.1791-7-quic_linyyuan@quicinc.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230911112446.1791-1-quic_linyyuan@quicinc.com>
 References: <20230911112446.1791-1-quic_linyyuan@quicinc.com>
@@ -78,16 +78,16 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01b.na.qualcomm.com (10.47.209.197)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: h1lpL6uCBBYX1o35CCDF6X3f6fVqFhCZ
-X-Proofpoint-GUID: h1lpL6uCBBYX1o35CCDF6X3f6fVqFhCZ
+X-Proofpoint-ORIG-GUID: DTrmEbqvgUIcpMY2izKYj86EliCQKsRa
+X-Proofpoint-GUID: DTrmEbqvgUIcpMY2izKYj86EliCQKsRa
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
  definitions=2023-09-11_06,2023-09-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- priorityscore=1501 mlxlogscore=611 malwarescore=0 spamscore=0
- impostorscore=0 lowpriorityscore=0 clxscore=1015 phishscore=0 mlxscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2309110104
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
+ malwarescore=0 clxscore=1015 impostorscore=0 mlxlogscore=399 bulkscore=0
+ lowpriorityscore=0 adultscore=0 spamscore=0 phishscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2308100000
+ definitions=main-2309110104
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -98,187 +98,176 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 Save u32 members into trace event ring buffer and parse it for possible
-bit fields.
+bit information.
 
 Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
 ---
 v2: no change
 
- drivers/usb/gadget/udc/trace.h | 106 +++++++++++----------------------
- 1 file changed, 35 insertions(+), 71 deletions(-)
+ drivers/usb/cdns3/cdnsp-trace.h | 45 +++++++++++++++------------------
+ 1 file changed, 20 insertions(+), 25 deletions(-)
 
-diff --git a/drivers/usb/gadget/udc/trace.h b/drivers/usb/gadget/udc/trace.h
-index a5ed26fbc2da..10cc6437432d 100644
---- a/drivers/usb/gadget/udc/trace.h
-+++ b/drivers/usb/gadget/udc/trace.h
-@@ -25,20 +25,7 @@ DECLARE_EVENT_CLASS(udc_log_gadget,
- 		__field(enum usb_device_speed, max_speed)
- 		__field(enum usb_device_state, state)
- 		__field(unsigned, mA)
--		__field(unsigned, sg_supported)
--		__field(unsigned, is_otg)
--		__field(unsigned, is_a_peripheral)
--		__field(unsigned, b_hnp_enable)
--		__field(unsigned, a_hnp_support)
--		__field(unsigned, hnp_polling_support)
--		__field(unsigned, host_request_flag)
--		__field(unsigned, quirk_ep_out_aligned_size)
--		__field(unsigned, quirk_altset_not_supp)
--		__field(unsigned, quirk_stall_not_supp)
--		__field(unsigned, quirk_zlp_not_supp)
--		__field(unsigned, is_selfpowered)
--		__field(unsigned, deactivated)
--		__field(unsigned, connected)
-+		__field(u32, gdw1)
- 		__field(int, ret)
- 	),
- 	TP_fast_assign(
-@@ -46,38 +33,25 @@ DECLARE_EVENT_CLASS(udc_log_gadget,
- 		__entry->max_speed = g->max_speed;
- 		__entry->state = g->state;
- 		__entry->mA = g->mA;
--		__entry->sg_supported = g->sg_supported;
--		__entry->is_otg = g->is_otg;
--		__entry->is_a_peripheral = g->is_a_peripheral;
--		__entry->b_hnp_enable = g->b_hnp_enable;
--		__entry->a_hnp_support = g->a_hnp_support;
--		__entry->hnp_polling_support = g->hnp_polling_support;
--		__entry->host_request_flag = g->host_request_flag;
--		__entry->quirk_ep_out_aligned_size = g->quirk_ep_out_aligned_size;
--		__entry->quirk_altset_not_supp = g->quirk_altset_not_supp;
--		__entry->quirk_stall_not_supp = g->quirk_stall_not_supp;
--		__entry->quirk_zlp_not_supp = g->quirk_zlp_not_supp;
--		__entry->is_selfpowered = g->is_selfpowered;
--		__entry->deactivated = g->deactivated;
--		__entry->connected = g->connected;
-+		__entry->gdw1 = g->dw1;
- 		__entry->ret = ret;
- 	),
- 	TP_printk("speed %d/%d state %d %dmA [%s%s%s%s%s%s%s%s%s%s%s%s%s%s] --> %d",
- 		__entry->speed, __entry->max_speed, __entry->state, __entry->mA,
--		__entry->sg_supported ? "sg:" : "",
--		__entry->is_otg ? "OTG:" : "",
--		__entry->is_a_peripheral ? "a_peripheral:" : "",
--		__entry->b_hnp_enable ? "b_hnp:" : "",
--		__entry->a_hnp_support ? "a_hnp:" : "",
--		__entry->hnp_polling_support ? "hnp_poll:" : "",
--		__entry->host_request_flag ? "hostreq:" : "",
--		__entry->quirk_ep_out_aligned_size ? "out_aligned:" : "",
--		__entry->quirk_altset_not_supp ? "no_altset:" : "",
--		__entry->quirk_stall_not_supp ? "no_stall:" : "",
--		__entry->quirk_zlp_not_supp ? "no_zlp" : "",
--		__entry->is_selfpowered ? "self-powered:" : "bus-powered:",
--		__entry->deactivated ? "deactivated:" : "activated:",
--		__entry->connected ? "connected" : "disconnected",
-+		USB_GADGET_SG_SUPPORTED(__entry->gdw1) ? "sg:" : "",
-+		USB_GADGET_IS_OTG(__entry->gdw1) ? "OTG:" : "",
-+		USB_GADGET_IS_A_PERIPHERAL(__entry->gdw1) ? "a_peripheral:" : "",
-+		USB_GADGET_B_HNP_ENABLE(__entry->gdw1) ? "b_hnp:" : "",
-+		USB_GADGET_A_HNP_SUPPORT(__entry->gdw1) ? "a_hnp:" : "",
-+		USB_GADGET_HNP_POLLING_SUPPORT(__entry->gdw1) ? "hnp_poll:" : "",
-+		USB_GADGET_HOST_REQUEST_FLAG(__entry->gdw1) ? "hostreq:" : "",
-+		USB_GADGET_QUIRK_EP_OUT_ALIGNED_SIZE(__entry->gdw1) ? "out_aligned:" : "",
-+		USB_GADGET_QUIRK_ALTSET_NOT_SUPP(__entry->gdw1) ? "no_altset:" : "",
-+		USB_GADGET_QUIRK_STALL_NOT_SUPP(__entry->gdw1) ? "no_stall:" : "",
-+		USB_GADGET_QUIRK_ZLP_NOT_SUPP(__entry->gdw1) ? "no_zlp" : "",
-+		USB_GADGET_IS_SELFPOWERED(__entry->gdw1) ? "self-powered:" : "bus-powered:",
-+		USB_GADGET_DEACTIVATED(__entry->gdw1) ? "deactivated:" : "activated:",
-+		USB_GADGET_CONNECTED(__entry->gdw1) ? "connected" : "disconnected",
- 		__entry->ret)
- );
- 
-@@ -145,32 +119,28 @@ DECLARE_EVENT_CLASS(udc_log_ep,
- 	TP_PROTO(struct usb_ep *ep, int ret),
- 	TP_ARGS(ep, ret),
+diff --git a/drivers/usb/cdns3/cdnsp-trace.h b/drivers/usb/cdns3/cdnsp-trace.h
+index 4b51011eb00b..b1ceb6755e6d 100644
+--- a/drivers/usb/cdns3/cdnsp-trace.h
++++ b/drivers/usb/cdns3/cdnsp-trace.h
+@@ -38,7 +38,7 @@ DECLARE_EVENT_CLASS(cdnsp_log_ep,
+ 	TP_PROTO(struct cdnsp_ep *pep, u32 stream_id),
+ 	TP_ARGS(pep, stream_id),
  	TP_STRUCT__entry(
--		__string(name, ep->name)
--		__field(unsigned, maxpacket)
--		__field(unsigned, maxpacket_limit)
--		__field(unsigned, max_streams)
--		__field(unsigned, mult)
--		__field(unsigned, maxburst)
+-		__string(name, pep->name)
 +		__field(u32, edw3)
-+		__field(u32, edw1)
-+		__field(u32, edw2)
- 		__field(u8, address)
- 		__field(bool, claimed)
- 		__field(bool, enabled)
- 		__field(int, ret)
+ 		__field(unsigned int, state)
+ 		__field(u32, stream_id)
+ 		__field(u8, enabled)
+@@ -48,7 +48,7 @@ DECLARE_EVENT_CLASS(cdnsp_log_ep,
+ 		__field(u8, drbls_count)
  	),
  	TP_fast_assign(
--		__assign_str(name, ep->name);
--		__entry->maxpacket = ep->maxpacket;
--		__entry->maxpacket_limit = ep->maxpacket_limit;
--		__entry->max_streams = ep->max_streams;
--		__entry->mult = ep->mult;
--		__entry->maxburst = ep->maxburst;
-+		__entry->edw3 = ep->dw3;
-+		__entry->edw1 = ep->dw1;
-+		__entry->edw2 = ep->dw2;
- 		__entry->address = ep->address,
- 		__entry->claimed = ep->claimed;
- 		__entry->enabled = ep->enabled;
- 		__entry->ret = ret;
+-		__assign_str(name, pep->name);
++		__entry->edw3 = pep->endpoint.dw3;
+ 		__entry->state = pep->ep_state;
+ 		__entry->stream_id = stream_id;
+ 		__entry->enabled = pep->ep_state & EP_HAS_STREAMS;
+@@ -59,7 +59,7 @@ DECLARE_EVENT_CLASS(cdnsp_log_ep,
  	),
- 	TP_printk("%s: mps %d/%d streams %d mult %d burst %d addr %02x %s%s --> %d",
--		__get_str(name), __entry->maxpacket, __entry->maxpacket_limit,
--		__entry->max_streams, __entry->mult, __entry->maxburst,
-+		USB_EP_NAME(__entry->edw3), USB_EP_MAXPACKET(__entry->edw1),
-+		USB_EP_MAXPACKET_LIMIT(__entry->edw1),
-+		USB_EP_MAX_STREAMS(__entry->edw2), USB_EP_MULT(__entry->edw2),
-+		USB_EP_MAXBURST(__entry->edw2),
- 		__entry->address, __entry->claimed ? "claimed:" : "released:",
- 		__entry->enabled ? "enabled" : "disabled", ret)
+ 	TP_printk("%s: SID: %08x, ep state: %x, stream: enabled: %d num %d "
+ 		  "tds %d, first prime: %d drbls %d",
+-		  __get_str(name), __entry->stream_id, __entry->state,
++		  USB_EP_NAME(__entry->edw3), __entry->stream_id, __entry->state,
+ 		  __entry->enabled, __entry->num_streams, __entry->td_count,
+ 		  __entry->first_prime_det, __entry->drbls_count)
  );
-@@ -219,39 +189,33 @@ DECLARE_EVENT_CLASS(udc_log_req,
- 	TP_PROTO(struct usb_ep *ep, struct usb_request *req, int ret),
- 	TP_ARGS(ep, req, ret),
+@@ -296,21 +296,21 @@ DECLARE_EVENT_CLASS(cdnsp_log_bounce,
+ 		 dma_addr_t dma, unsigned int unalign),
+ 	TP_ARGS(preq, new_buf_len, offset, dma, unalign),
  	TP_STRUCT__entry(
--		__string(name, ep->name)
+-		__string(name, preq->pep->name)
 +		__field(u32, edw3)
- 		__field(unsigned, length)
- 		__field(unsigned, actual)
- 		__field(unsigned, num_sgs)
- 		__field(unsigned, num_mapped_sgs)
--		__field(unsigned, stream_id)
--		__field(unsigned, no_interrupt)
--		__field(unsigned, zero)
--		__field(unsigned, short_not_ok)
-+		__field(u32, rdw1)
- 		__field(int, status)
- 		__field(int, ret)
- 		__field(struct usb_request *, req)
+ 		__field(u32, new_buf_len)
+ 		__field(u32, offset)
+ 		__field(dma_addr_t, dma)
+ 		__field(unsigned int, unalign)
  	),
  	TP_fast_assign(
--		__assign_str(name, ep->name);
-+		__entry->edw3 = ep->dw3;
- 		__entry->length = req->length;
- 		__entry->actual = req->actual;
- 		__entry->num_sgs = req->num_sgs;
- 		__entry->num_mapped_sgs = req->num_mapped_sgs;
--		__entry->stream_id = req->stream_id;
--		__entry->no_interrupt = req->no_interrupt;
--		__entry->zero = req->zero;
--		__entry->short_not_ok = req->short_not_ok;
-+		__entry->rdw1 = req->dw1;
- 		__entry->status = req->status;
- 		__entry->ret = ret;
- 		__entry->req = req;
+-		__assign_str(name, preq->pep->name);
++		__entry->edw3 = preq->pep->endpoint.dw3;
+ 		__entry->new_buf_len = new_buf_len;
+ 		__entry->offset = offset;
+ 		__entry->dma = dma;
+ 		__entry->unalign = unalign;
  	),
- 	TP_printk("%s: req %p length %d/%d sgs %d/%d stream %d %s%s%s status %d --> %d",
--		__get_str(name),__entry->req,  __entry->actual, __entry->length,
--		__entry->num_mapped_sgs, __entry->num_sgs, __entry->stream_id,
--		__entry->zero ? "Z" : "z",
--		__entry->short_not_ok ? "S" : "s",
--		__entry->no_interrupt ? "i" : "I",
-+		USB_EP_NAME(__entry->edw3), __entry->req, __entry->actual, __entry->length,
-+		__entry->num_mapped_sgs, __entry->num_sgs, USB_REQ_STREAM_ID(__entry->rdw1),
-+		USB_REQ_ZERO(__entry->rdw1) ? "Z" : "z",
-+		USB_REQ_SHORT_NOT_OK(__entry->rdw1) ? "S" : "s",
-+		USB_REQ_NO_INTERRUPT(__entry->rdw1) ? "i" : "I",
- 		__entry->status, __entry->ret
+ 	TP_printk("%s buf len %d, offset %d, dma %pad, unalign %d",
+-		  __get_str(name), __entry->new_buf_len,
++		  USB_EP_NAME(__entry->edw3), __entry->new_buf_len,
+ 		  __entry->offset, &__entry->dma, __entry->unalign
  	)
  );
+@@ -452,7 +452,7 @@ DECLARE_EVENT_CLASS(cdnsp_log_request,
+ 	TP_PROTO(struct cdnsp_request *req),
+ 	TP_ARGS(req),
+ 	TP_STRUCT__entry(
+-		__string(name, req->pep->name)
++		__field(u32, edw3)
+ 		__field(struct usb_request *, request)
+ 		__field(struct cdnsp_request *, preq)
+ 		__field(void *, buf)
+@@ -460,17 +460,14 @@ DECLARE_EVENT_CLASS(cdnsp_log_request,
+ 		__field(unsigned int, length)
+ 		__field(int, status)
+ 		__field(dma_addr_t, dma)
+-		__field(unsigned int, stream_id)
+-		__field(unsigned int, zero)
+-		__field(unsigned int, short_not_ok)
+-		__field(unsigned int, no_interrupt)
++		__field(u32, rdw1)
+ 		__field(struct scatterlist*, sg)
+ 		__field(unsigned int, num_sgs)
+ 		__field(unsigned int, num_mapped_sgs)
+ 
+ 	),
+ 	TP_fast_assign(
+-		__assign_str(name, req->pep->name);
++		__entry->edw3 = req->pep->endpoint.dw3;
+ 		__entry->request = &req->request;
+ 		__entry->preq = req;
+ 		__entry->buf = req->request.buf;
+@@ -478,10 +475,7 @@ DECLARE_EVENT_CLASS(cdnsp_log_request,
+ 		__entry->length = req->request.length;
+ 		__entry->status = req->request.status;
+ 		__entry->dma = req->request.dma;
+-		__entry->stream_id = req->request.stream_id;
+-		__entry->zero = req->request.zero;
+-		__entry->short_not_ok = req->request.short_not_ok;
+-		__entry->no_interrupt = req->request.no_interrupt;
++		__entry->rdw1 = req->request.dw1;
+ 		__entry->sg = req->request.sg;
+ 		__entry->num_sgs = req->request.num_sgs;
+ 		__entry->num_mapped_sgs = req->request.num_mapped_sgs;
+@@ -489,12 +483,12 @@ DECLARE_EVENT_CLASS(cdnsp_log_request,
+ 	TP_printk("%s; req U:%p/P:%p, req buf %p, length %u/%u, status %d, "
+ 		  "buf dma (%pad), SID %u, %s%s%s, sg %p, num_sg %d,"
+ 		  " num_m_sg %d",
+-		  __get_str(name), __entry->request, __entry->preq,
++		  USB_EP_NAME(__entry->edw3), __entry->request, __entry->preq,
+ 		  __entry->buf, __entry->actual, __entry->length,
+ 		  __entry->status, &__entry->dma,
+-		  __entry->stream_id, __entry->zero ? "Z" : "z",
+-		  __entry->short_not_ok ? "S" : "s",
+-		  __entry->no_interrupt ? "I" : "i",
++		  USB_REQ_STREAM_ID(__entry->rdw1), USB_REQ_ZERO(__entry->rdw1) ? "Z" : "z",
++		  USB_REQ_SHORT_NOT_OK(__entry->rdw1) ? "S" : "s",
++		  USB_REQ_NO_INTERRUPT(__entry->rdw1) ? "I" : "i",
+ 		  __entry->sg, __entry->num_sgs, __entry->num_mapped_sgs
+ 		)
+ );
+@@ -666,7 +660,7 @@ DECLARE_EVENT_CLASS(cdnsp_log_td_info,
+ 	TP_PROTO(struct cdnsp_request *preq),
+ 	TP_ARGS(preq),
+ 	TP_STRUCT__entry(
+-		__string(name, preq->pep->name)
++		__field(u32, edw3)
+ 		__field(struct usb_request *, request)
+ 		__field(struct cdnsp_request *, preq)
+ 		__field(union cdnsp_trb *, first_trb)
+@@ -674,7 +668,7 @@ DECLARE_EVENT_CLASS(cdnsp_log_td_info,
+ 		__field(dma_addr_t, trb_dma)
+ 	),
+ 	TP_fast_assign(
+-		__assign_str(name, preq->pep->name);
++		__entry->edw3 = preq->pep->endpoint.dw3;
+ 		__entry->request = &preq->request;
+ 		__entry->preq = preq;
+ 		__entry->first_trb = preq->td.first_trb;
+@@ -683,7 +677,7 @@ DECLARE_EVENT_CLASS(cdnsp_log_td_info,
+ 							 preq->td.first_trb)
+ 	),
+ 	TP_printk("%s req/preq:  %p/%p, first trb %p[vir]/%pad(dma), last trb %p",
+-		  __get_str(name), __entry->request, __entry->preq,
++		  USB_EP_NAME(__entry->edw3), __entry->request, __entry->preq,
+ 		  __entry->first_trb, &__entry->trb_dma,
+ 		  __entry->last_trb
+ 		)
+@@ -800,16 +794,17 @@ TRACE_EVENT(cdnsp_stream_number,
+ 	TP_PROTO(struct cdnsp_ep *pep, int num_stream_ctxs, int num_streams),
+ 	TP_ARGS(pep, num_stream_ctxs, num_streams),
+ 	TP_STRUCT__entry(
+-		__string(name, pep->name)
++		__field(u32, edw3)
+ 		__field(int, num_stream_ctxs)
+ 		__field(int, num_streams)
+ 	),
+ 	TP_fast_assign(
++		__entry->edw3 = pep->endpoint.dw3;
+ 		__entry->num_stream_ctxs = num_stream_ctxs;
+ 		__entry->num_streams = num_streams;
+ 	),
+ 	TP_printk("%s Need %u stream ctx entries for %u stream IDs.",
+-		  __get_str(name), __entry->num_stream_ctxs,
++		  USB_EP_NAME(__entry->edw3), __entry->num_stream_ctxs,
+ 		  __entry->num_streams)
+ );
+ 
 -- 
 2.17.1
 
