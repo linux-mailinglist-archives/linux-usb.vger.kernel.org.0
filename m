@@ -2,62 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45AC679AF40
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Sep 2023 01:47:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D9AB79AE4C
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Sep 2023 01:44:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350608AbjIKVjl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Sep 2023 17:39:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56350 "EHLO
+        id S241100AbjIKVjy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Sep 2023 17:39:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237617AbjIKNBa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Sep 2023 09:01:30 -0400
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F8F6CD
-        for <linux-usb@vger.kernel.org>; Mon, 11 Sep 2023 06:01:25 -0700 (PDT)
-Received: by mail-il1-x130.google.com with SMTP id e9e14a558f8ab-34deefc2016so13541725ab.2
-        for <linux-usb@vger.kernel.org>; Mon, 11 Sep 2023 06:01:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1694437285; x=1695042085; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vpNZPcx3bjDHiQSM0MkVh372Rmrhu59xNLcZbNnj7uQ=;
-        b=QHjDrnYQIX+ME6Itr80hHF04z0PPVnDlAwWiqaBcJW4rkmPC5Nqff1WBvL0visCW63
-         zS4rfNYDqAMDZeerkXtgRrP0o3EnbLwci98aeZK77be8BYCODkh5pRmmdMMIa9cASVEM
-         CWbme7xi52oW2A0CTwY6vhPAX/s7wioXZTltY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694437285; x=1695042085;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vpNZPcx3bjDHiQSM0MkVh372Rmrhu59xNLcZbNnj7uQ=;
-        b=GSjWTCJyxqXc5KbXme2ENk7/OF6XX2ylJH8TNUnpPMJ1ynT+KDm/77wFQT7EedfG8j
-         ukA340CK5gt+xpavDnFhBUFB0kUwOFJ3p+FUIc1ygFPyGjio+jNiYqoz8sbXmsg1ihGq
-         mxEvbt4mlqeZUWDsepr/aGK2j3t+hFko3fofTZKcMWxn3zOQ5aX5Bl6GuKeHwGUEP0X9
-         00r8ehPE/41y9TM3Qv5970cSaYGeYq9e+aaIqUuaigDm+IJk3ZDk6qjY8OkkymqottN9
-         K7fRJqyFsLaTiW7HIT6ivQavjY6FYju4IE1E7Ylb2nL2cBC1ED5mOUY25R318BA4sKoP
-         iGGg==
-X-Gm-Message-State: AOJu0YyQxnud7suywjG6q14cNeQ5IK5l+4nXLr/uao5ERzFqqLG5GYFv
-        PDdS731YDKi9MZu7MNt7ifHimg==
-X-Google-Smtp-Source: AGHT+IFGzwi1w5oe71D2cbB1u9WZWLs+LMA8N7bKRNCnsIeRjk7c07VTBcGLxjPIPYMtujZqyupEsA==
-X-Received: by 2002:a92:d34e:0:b0:348:e9e4:4902 with SMTP id a14-20020a92d34e000000b00348e9e44902mr10477274ilh.0.1694437284827;
-        Mon, 11 Sep 2023 06:01:24 -0700 (PDT)
-Received: from localhost (110.41.72.34.bc.googleusercontent.com. [34.72.41.110])
-        by smtp.gmail.com with UTF8SMTPSA id a24-20020a02ac18000000b00430245071ddsm2153329jao.176.2023.09.11.06.01.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Sep 2023 06:01:23 -0700 (PDT)
-Date:   Mon, 11 Sep 2023 13:01:21 +0000
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Javier Carrasco <javier.carrasco@wolfvision.net>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: misc: onboard_hub: add support for Microchip
- USB2412 USB 2.0 hub
-Message-ID: <ZP8PobwGAG+PlLQH@google.com>
-References: <20230911-topic-2412_onboard_hub-v1-1-7704181ddfff@wolfvision.net>
+        with ESMTP id S238008AbjIKNcv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Sep 2023 09:32:51 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 284A7CD7
+        for <linux-usb@vger.kernel.org>; Mon, 11 Sep 2023 06:32:47 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CD29C433C7;
+        Mon, 11 Sep 2023 13:32:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1694439166;
+        bh=MPApL/+gobvCuCmAJt3xzTUKMEoLbO4uIhWk8WoHyAE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=v8IxIOA6VhQ6Er5h4+zcyWFFR7odSqJFqTEvjLH5sXWDXndeDFacwk8S6txpuy+Qd
+         gHCWill+O78Ux8OCMrVHyTAHc2MZTKr/DEJTDNXZnPy/ZFEkLyFTTDcMMXvKx2YoMn
+         vstSL5uNC+Pn6siSuTqgbKZEeDAU0TzTYqRuXyRA=
+Date:   Mon, 11 Sep 2023 15:32:42 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Linyu Yuan <quic_linyyuan@quicinc.com>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Neal Liu <neal_liu@aspeedtech.com>,
+        Cristian Birsan <cristian.birsan@microchip.com>,
+        Bin Liu <b-liu@ti.com>, Kevin Cernekee <cernekee@gmail.com>,
+        Justin Chen <justin.chen@broadcom.com>,
+        Al Cooper <alcooperx@gmail.com>, Li Yang <leoyang.li@nxp.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Herve Codina <herve.codina@bootlin.com>,
+        hierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Michal Simek <michal.simek@amd.com>,
+        Rui Miguel Silva <rui.silva@linaro.org>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 00/11] usb: gadget: reduce usb gadget trace event
+ buffer usage
+Message-ID: <2023091141-outbound-turmoil-edda@gregkh>
+References: <20230911112446.1791-1-quic_linyyuan@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230911-topic-2412_onboard_hub-v1-1-7704181ddfff@wolfvision.net>
+In-Reply-To: <20230911112446.1791-1-quic_linyyuan@quicinc.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -68,14 +68,24 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 11, 2023 at 10:22:38AM +0200, Javier Carrasco wrote:
-> The USB2412 is a 2-Port USB 2.0 hub controller that provides a reset pin
-> and a single 3v3 powre source, which makes it suitable to be controlled
-> by the onboard_hub driver.
+On Mon, Sep 11, 2023 at 07:24:35PM +0800, Linyu Yuan wrote:
+> some trace event use an interger to to save a bit field info of gadget,
+> also some trace save endpoint name in string forat, it all can be
+> chagned to other way at trace event store phase.
 > 
-> This hub has the same reset timings as USB2514/2517 and the same
-> onboard hub specific-data can be reused for USB2412.
+> bit field can be replace with a union interger member which include
+> multiple bit fields.
 > 
-> Signed-off-by: Javier Carrasco <javier.carrasco@wolfvision.net>
+> ep name stringe can be replace to a interger which contaion number
+> and dir info.
 
-Acked-by: Matthias Kaehlcke <mka@chromium.org>
+Ok, but how much memory did you actually save here?  Is the memory saved
+only if tracing is enbaled, or it is always?  Is there a speed penality
+for these changes or is it the same?
+
+You are doing a lot of code reorginization without any real explaination
+of why this is needed, nor proof about it.
+
+thanks,
+
+greg k-h
