@@ -2,188 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 100FE79C213
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Sep 2023 04:00:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FE2A79C185
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Sep 2023 03:15:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235045AbjILCAI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Sep 2023 22:00:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56522 "EHLO
+        id S234241AbjILBPY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Sep 2023 21:15:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235972AbjILB7x (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Sep 2023 21:59:53 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3437FB331
-        for <linux-usb@vger.kernel.org>; Mon, 11 Sep 2023 18:31:09 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-500bbe3ef0eso6124326e87.1
-        for <linux-usb@vger.kernel.org>; Mon, 11 Sep 2023 18:31:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694482268; x=1695087068; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EzaancVSFfUidUOe21cHWlakGP7DZJNGuUTO/mcEdwE=;
-        b=r7y+KM2AHZmXvz8243MUlZgHrEbIJsj7xTJJNULiEfTcpg6YYjXKjllhKLymZUp7OW
-         FiI7Pmr1VmJlowMVeA/mIqEeZ77riRucDHfHJ3wRQ1IUozcI3PGxLFssaTODEmpVlM8m
-         7j4CHFcuHBH2N6QJp8mGOshjODpiodk1yM5a0Vwa0jwHcJX5cAwOWeomaxyKyFaSUZCU
-         VV3zTze6qmyiSHcnEJHCdCdrLxMvcCHo0fekagPaiyo5gEZQAiP/1bwIFCfdUm+ti6LZ
-         6jYJj7Z6BL1ZMboiWb+3afDxZiVel2CyDl6yeWC2qcAvrQOnS9vmISFtBKdCU/rdq/tT
-         yrcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694482268; x=1695087068;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EzaancVSFfUidUOe21cHWlakGP7DZJNGuUTO/mcEdwE=;
-        b=vEZo4WjGGHlY+HOIKi0zqZGdyc33WR6sNpr10Ocf2/0STK0JOX4ctW1xuU4djkCSmj
-         dAWwUV90foNkyJvCj5uJYko9q8vGn7nyOzBBDQ19k8HSpVSfMikx79cVDVfkWSnHPrkx
-         aK3Zc6YbICkpnL8Nu1fN2gjA3p4lomZe+8OkdNjLxj6vawE1tCphAUXYZot+52fziwrB
-         JLIuMYOCSl7KAA5743ma5TG1CRL12iewwlDIYoVFeXD+ocaXj72T+Sc2RerLPkSfOsaG
-         XHfnoo74uclk3tGK3rQ/CfKlBrUBjD84mDr5y8KrmtOrBV4eFB/4Q1lvH+UR3PDZCgKL
-         PV4g==
-X-Gm-Message-State: AOJu0YxtHK8DgIcdm+70SFsgvWKFsjCTCvI6c0BY11emk4edf35jFaa5
-        OWBLh6zGlXLaNS+CCh+W4eD4gNzcMGywmfnsaGw=
-X-Google-Smtp-Source: AGHT+IETWWawdiEO2xkwIL7nt23BxWlpmnqPOF3sikig+xaeKeM9I+kDLN/rZ03iVnX9tQbikD28Ig==
-X-Received: by 2002:a05:6512:3d0d:b0:502:a964:84b1 with SMTP id d13-20020a0565123d0d00b00502a96484b1mr302575lfv.25.1694466911540;
-        Mon, 11 Sep 2023 14:15:11 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id 23-20020ac24837000000b005008286c06bsm1483944lft.91.2023.09.11.14.15.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Sep 2023 14:15:11 -0700 (PDT)
-Message-ID: <6b6bacee-f7b6-4cfe-be3d-24bda44bfbcf@linaro.org>
-Date:   Tue, 12 Sep 2023 00:15:10 +0300
+        with ESMTP id S232959AbjILBPL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Sep 2023 21:15:11 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F81217A9F3;
+        Mon, 11 Sep 2023 18:02:18 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38BNPkoX026380;
+        Mon, 11 Sep 2023 23:41:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=OAKZowELMuTGKnR3vCC2jgfxXUTvEmcpCXqGHpnuwxw=;
+ b=QiNeGZnnFkgUr5bLatGDZ3L/hLj7ocODy7sHRKTKt+0oTGA26Y+W7IILD92lWUCeueOO
+ fPpayg3hf7CMho7ziO1+zowQr+K8qzt9dwghgR+nu/nRUv/VEnu4dpwiS2ne+ZkRWkOV
+ AT/Wxb87oajjUA9uMCCnSRYwvjXzlpQSxOiByknadCt29bun17ha2YhtLEjXWv+QKbv4
+ e8h8BZ8moSyVgEI4Q50HfcSedr/Nw57X4d/0hN7hnHnLvfqfckQ5VHvLOhW8Py18Pl7K
+ J3ustVdeeClc5l5zX82c1+o9Pira2RtgrLacu5HuXf+8FDo1z0SNjKt7VW2bNShiKfss lA== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t1xkjt2s8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 11 Sep 2023 23:41:34 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38BNfXww030391
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 11 Sep 2023 23:41:33 GMT
+Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.36; Mon, 11 Sep 2023 16:41:32 -0700
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+To:     <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <quic_jackp@quicinc.com>, Wesley Cheng <quic_wcheng@quicinc.com>,
+        <stable@vger.kernel.org>
+Subject: [PATCH] usb: xhci: xhci-ring: Use sysdev for mapping bounce buffer
+Date:   Mon, 11 Sep 2023 16:41:22 -0700
+Message-ID: <20230911234122.1408-1-quic_wcheng@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v1 01/12] Revert "drm/sysfs: Link DRM connectors to
- corresponding Type-C connectors"
-Content-Language: en-GB
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Janne Grunau <j@jannau.net>, Simon Ser <contact@emersion.fr>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        freedreno@lists.freedesktop.org, Won Chung <wonchung@google.com>
-References: <20230903214150.2877023-1-dmitry.baryshkov@linaro.org>
- <20230903214150.2877023-2-dmitry.baryshkov@linaro.org>
- <ZPbrtAlO2Y+bjDhf@kuha.fi.intel.com>
- <CAA8EJpqUg2-k7LLBL38RHU1sThkXB54ca68xEMd1yMnHQcQ++w@mail.gmail.com>
- <ZPh0Ps9UJ3HLzdeR@kuha.fi.intel.com>
- <CAA8EJpratbBybgk8woD3maA=J_HuQis44Unq0n+c_UvaFs__AA@mail.gmail.com>
- <ZPiAwOf00RREiYPr@kuha.fi.intel.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <ZPiAwOf00RREiYPr@kuha.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: zZnjhJT5fv20qI2n5qC9w05YDJj8v4Ag
+X-Proofpoint-ORIG-GUID: zZnjhJT5fv20qI2n5qC9w05YDJj8v4Ag
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-09-11_19,2023-09-05_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 impostorscore=0
+ suspectscore=0 phishscore=0 spamscore=0 lowpriorityscore=0 bulkscore=0
+ adultscore=0 malwarescore=0 mlxlogscore=742 mlxscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2308100000
+ definitions=main-2309110217
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 06/09/2023 16:38, Heikki Krogerus wrote:
-> On Wed, Sep 06, 2023 at 03:48:35PM +0300, Dmitry Baryshkov wrote:
->> On Wed, 6 Sept 2023 at 15:44, Heikki Krogerus
->> <heikki.krogerus@linux.intel.com> wrote:
->>>
->>> On Tue, Sep 05, 2023 at 01:56:59PM +0300, Dmitry Baryshkov wrote:
->>>> Hi Heikki,
->>>>
->>>> On Tue, 5 Sept 2023 at 11:50, Heikki Krogerus
->>>> <heikki.krogerus@linux.intel.com> wrote:
->>>>>
->>>>> Hi Dmitry,
->>>>>
->>>>> On Mon, Sep 04, 2023 at 12:41:39AM +0300, Dmitry Baryshkov wrote:
->>>>>> The kdev->fwnode pointer is never set in drm_sysfs_connector_add(), so
->>>>>> dev_fwnode() checks never succeed, making the respective commit NOP.
->>>>>
->>>>> That's not true. The dev->fwnode is assigned when the device is
->>>>> created on ACPI platforms automatically. If the drm_connector fwnode
->>>>> member is assigned before the device is registered, then that fwnode
->>>>> is assigned also to the device - see drm_connector_acpi_find_companion().
->>>>>
->>>>> But please note that even if drm_connector does not have anything in
->>>>> its fwnode member, the device may still be assigned fwnode, just based
->>>>> on some other logic (maybe in drivers/acpi/acpi_video.c?).
->>>>>
->>>>>> And if drm_sysfs_connector_add() is modified to set kdev->fwnode, it
->>>>>> breaks drivers already using components (as it was pointed at [1]),
->>>>>> resulting in a deadlock. Lockdep trace is provided below.
->>>>>>
->>>>>> Granted these two issues, it seems impractical to fix this commit in any
->>>>>> sane way. Revert it instead.
->>>>>
->>>>> I think there is already user space stuff that relies on these links,
->>>>> so I'm not sure you can just remove them like that. If the component
->>>>> framework is not the correct tool here, then I think you need to
->>>>> suggest some other way of creating them.
->>>>
->>>> The issue (that was pointed out during review) is that having a
->>>> component code in the framework code can lead to lockups. With the
->>>> patch #2 in place (which is the only logical way to set kdev->fwnode
->>>> for non-ACPI systems) probing of drivers which use components and set
->>>> drm_connector::fwnode breaks immediately.
->>>>
->>>> Can we move the component part to the respective drivers? With the
->>>> patch 2 in place, connector->fwnode will be copied to the created
->>>> kdev's fwnode pointer.
->>>>
->>>> Another option might be to make this drm_sysfs component registration optional.
->>>
->>> You don't need to use the component framework at all if there is
->>> a better way of determining the connection between the DP and its
->>> Type-C connector (I'm assuming that that's what this series is about).
->>> You just need the symlinks, not the component.
->>
->> The problem is that right now this component registration has become
->> mandatory. And if I set the kdev->fwnode manually (like in the patch
->> 2), the kernel hangs inside the component code.
->> That's why I proposed to move the components to the place where they
->> are really necessary, e.g. i915 and amd drivers.
-> 
-> So why can't we replace the component with the method you are
-> proposing in this series of finding out the Type-C port also with
-> i915, AMD, or whatever driver and platform (that's the only thing that
-> component is used for)?
+As mentioned in:
+  commit 474ed23a6257 ("xhci: align the last trb before link if it is
+easily splittable.")
 
-The drm/msm driver uses drm_bridge for the pipeline (including the last 
-DP entry) and the drm_bridge_connector to create the connector. I think 
-that enabling i915 and AMD drivers to use drm_bridge fells out of scope 
-for this series.
+A bounce buffer is utilized for ensuring that transfers that span across
+ring segments are aligned to the EP's max packet size.  However, the device
+that is used to map the DMA buffer to is currently using the XHCI HCD,
+which does not carry any DMA operations in certain configrations.
+Migration to using the sysdev entry was introduced for DWC3 based
+implementations where the IOMMU operations are present.
 
+Replace the reference to the controller device to sysdev instead.  This
+allows the bounce buffer to be properly mapped to any implementations that
+have an IOMMU involved.
 
-> Determining the connection between a DP and its Type-C connector is
-> starting to get really important, so ideally we have a common solution
-> for that.
+cc: <stable@vger.kernel.org>
+Fixes: 4c39d4b949d3 ("usb: xhci: use bus->sysdev for DMA configuration")
+Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+---
+ drivers/usb/host/xhci-ring.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Yes. This is what we have been discussing with Simon for quite some time 
-on #dri-devel.
-
-Unfortunately I think the solution that got merged was pretty much 
-hastened in instead of being well-thought. For example, it is also not 
-always possible to provide the drm_connector / typec_connector links (as 
-you can see from the patch7. Sometimes we can only express that this is 
-a Type-C DP connector, but we can not easily point it to the particular 
-USB-C port.
-
-So, I'm not sure, how can we proceed here. Currently merged patch breaks 
-drm/msm if we even try to use it by setting kdef->fwnode to 
-drm_connector->fwnode. The pointed out `drivers/usb/typec/port-mapper.c` 
-is an ACPI-only thing, which is not expected to work in a non-ACPI cases.
-
--- 
-With best wishes
-Dmitry
-
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index 1dde53f6eb31..98389b568633 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -798,7 +798,7 @@ static void xhci_giveback_urb_in_irq(struct xhci_hcd *xhci,
+ static void xhci_unmap_td_bounce_buffer(struct xhci_hcd *xhci,
+ 		struct xhci_ring *ring, struct xhci_td *td)
+ {
+-	struct device *dev = xhci_to_hcd(xhci)->self.controller;
++	struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
+ 	struct xhci_segment *seg = td->bounce_seg;
+ 	struct urb *urb = td->urb;
+ 	size_t len;
+@@ -3469,7 +3469,7 @@ static u32 xhci_td_remainder(struct xhci_hcd *xhci, int transferred,
+ static int xhci_align_td(struct xhci_hcd *xhci, struct urb *urb, u32 enqd_len,
+ 			 u32 *trb_buff_len, struct xhci_segment *seg)
+ {
+-	struct device *dev = xhci_to_hcd(xhci)->self.controller;
++	struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
+ 	unsigned int unalign;
+ 	unsigned int max_pkt;
+ 	u32 new_buff_len;
