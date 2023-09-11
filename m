@@ -2,117 +2,176 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 372AE79A1E6
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Sep 2023 05:40:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A281C79A268
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Sep 2023 06:29:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232685AbjIKDki (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 10 Sep 2023 23:40:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42096 "EHLO
+        id S231132AbjIKE3m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Sep 2023 00:29:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjIKDkh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 10 Sep 2023 23:40:37 -0400
-X-Greylist: delayed 542 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 10 Sep 2023 20:40:31 PDT
-Received: from mail-m3137.qiye.163.com (mail-m3137.qiye.163.com [103.74.31.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F215B11A;
-        Sun, 10 Sep 2023 20:40:31 -0700 (PDT)
-DKIM-Signature: a=rsa-sha256;
-        b=ZWP9zoHe+DX5RxpMpCDvktXejZkc/mXd3WUzK83Kb/0HH9PEdF6I4ISrT5GZ5hjMgh289NLHxa6K4VCxPpPGda3Uy/H35COe2M8xCqyXKBZCRj62AF/ctCqP5OO2ZPJAnRH5fzOjCNG2Woeg+Q9l+SYP499fNofGzzFm9c3qW84=;
-        s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
-        bh=yTyYR259NicqyaHlLq9RVb03xhYZ/gDfQr/E+onC0KM=;
-        h=date:mime-version:subject:message-id:from;
-Received: from localhost.localdomain (unknown [58.22.7.114])
-        by mail-m11880.qiye.163.com (Hmail) with ESMTPA id 976BC204F6;
-        Mon, 11 Sep 2023 11:31:16 +0800 (CST)
-From:   William Wu <william.wu@rock-chips.com>
-To:     Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        william.wu@rock-chips.com, frank.wang@rock-chips.com,
-        jianwei.zheng@rock-chips.com, yangbin@rock-chips.com
-Subject: [PATCH v2] usb: dwc3: core: Avoid resume dwc3 if already suspended in pm resume
-Date:   Mon, 11 Sep 2023 11:31:12 +0800
-Message-Id: <20230911033112.3321-1-william.wu@rock-chips.com>
+        with ESMTP id S229437AbjIKE3k (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Sep 2023 00:29:40 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CDE010C
+        for <linux-usb@vger.kernel.org>; Sun, 10 Sep 2023 21:29:36 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38B3blnc032176;
+        Mon, 11 Sep 2023 04:29:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=hlICoDiEGev4Cz0AmAVGXmrJfvbRETuIwaR+e/Q/azI=;
+ b=bLAK2gQvuAfeMCaTlx4VRdO4TxSDgmnRZYLyxm4GkLmz2mLUsXmw/4TfKxM7C65FjgIj
+ STOqFP2cxI/uRQz21gY1lk+GgSji0TcnRWo1HWuYuNRnlijBNC8CBOAZWTbyhIUtvtgX
+ DcSprKJGO9z0MLNOfdDaA5vmoCDoCAd6hDdx7A6h0WUBwdsl2LZuBBtabLTmk1liKtfZ
+ PVX8fSxlTaqFGGHWl39aIffw0qOUGl7uhTE/IY4EL4/DrHRJi7Hc0E6te4ybTbHVl6f3
+ GCQTfw2mi7+kuUYFsDeVJSseoJAWhv73DTDKczmRvIN49TIA6xzLmASPAgMRyK4Uvo4i rA== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t0h3dtfbm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 11 Sep 2023 04:29:04 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38B4T2tL012701
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 11 Sep 2023 04:29:02 GMT
+Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.36; Sun, 10 Sep 2023 21:28:55 -0700
+From:   Linyu Yuan <quic_linyyuan@quicinc.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Neal Liu <neal_liu@aspeedtech.com>,
+        "Cristian Birsan" <cristian.birsan@microchip.com>,
+        Bin Liu <b-liu@ti.com>, "Kevin Cernekee" <cernekee@gmail.com>,
+        Justin Chen <justin.chen@broadcom.com>,
+        "Al Cooper" <alcooperx@gmail.com>, Li Yang <leoyang.li@nxp.com>,
+        "Vladimir Zapolskiy" <vz@mleia.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        Herve Codina <herve.codina@bootlin.com>,
+        hierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Michal Simek <michal.simek@amd.com>,
+        Rui Miguel Silva <rui.silva@linaro.org>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        "Shuah Khan" <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, Linyu Yuan <quic_linyyuan@quicinc.com>
+Subject: [PATCH 00/11] reduce usb gadget trace event buffer usage
+Date:   Mon, 11 Sep 2023 12:28:32 +0800
+Message-ID: <20230911042843.2711-1-quic_linyyuan@quicinc.com>
 X-Mailer: git-send-email 2.17.1
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGRhCHlYZQhkdQkJPGUNMSExVEwETFh
-        oSFyQUDg9ZV1kYEgtZQVlOQ1VJSVVMVUpKT1lXWRYaDxIVHRRZQVlPS0hVSkpLQ0hJVUpLS1VLWQ
-        Y+
-X-HM-Tid: 0a8a824b22c72eb6kusn976bc204f6
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PUk6Mzo5Hz0CQhYPGj8YFzMQ
-        Mi4wCwNVSlVKTUJPT0tIS0xMSEJJVTMWGhIXVQwSFxcSGhZVDA47CRQYEFYYExILCFUYFBZFWVdZ
-        EgtZQVlOQ1VJSVVMVUpKT1lXWQgBWUFJQkpLNwY+
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 9mFY6OrT23d735S_3aAk6v8LPLXTYL-t
+X-Proofpoint-ORIG-GUID: 9mFY6OrT23d735S_3aAk6v8LPLXTYL-t
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-09-11_01,2023-09-05_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ bulkscore=0 phishscore=0 mlxlogscore=281 adultscore=0 spamscore=0
+ suspectscore=0 impostorscore=0 malwarescore=0 mlxscore=0
+ lowpriorityscore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2308100000 definitions=main-2309110040
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If we enable PM runtime auto suspend for dwc3 on rockchip
-platforms (e.g. RK3562), it allows the dwc3 controller to
-enter runtime suspend if usb cable detached and power off
-the power domain of the controller. When system resume, if
-the dwc3 already in runtime suspended, it Shouldn't access
-the dwc3 registers in dwc3_resume() because its power domain
-maybe power off.
+some trace event use an interger to to save a bit field info of gadet,
+also some trace save endpoint name in string forat, it all can be
+chagned to other way at trace event store phase.
 
-Test on RK3562 tablet, this patch can help to avoid kernel
-panic when accessing the dwc3 registers in dwc3_resume() if
-the dwc3 is in runtime suspended and it's power domain is
-power off.
+bit field can be replace with a union interger member which include
+multiple bit fields.
 
-Kernel panic - not syncing: Asynchronous SError Interrupt
-Hardware name: Rockchip RK3562 RK817 TABLET LP4 Board (DT)
-Call trace:
-dump_backtrace.cfi_jt+0x0/0x8
-  dump_stack_lvl+0xc0/0x13c
-  panic+0x174/0x468
-  arm64_serror_panic+0x1b0/0x200
-  do_serror+0x184/0x1e4
-  el1_error+0x94/0x118
-  el1_abort+0x40/0x68
-  el1_sync_handler+0x58/0x88
-  el1_sync+0x8c/0x140
-  dwc3_readl+0x30/0x1a0
-  dwc3_phy_setup+0x38/0x510
-  dwc3_core_init+0x68/0xcd4
-  dwc3_core_init_for_resume+0x10c/0x25c
-  dwc3_resume_common+0x44/0x3d0
-  dwc3_resume+0x5c/0xb8
-  dpm_run_callback+0x70/0x488
-  device_resume+0x250/0x2f8
-  dpm_resume+0x258/0x9dc
+ep name stringe can be replace to a interger which contaion number
+and dir info.
 
-Signed-off-by: William Wu <william.wu@rock-chips.com>
----
-Changes in v2:
-- Remove Change-Id.
 
- drivers/usb/dwc3/core.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 9c6bf054f15d..8274a44f2d6a 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -2185,9 +2185,11 @@ static int dwc3_resume(struct device *dev)
- 
- 	pinctrl_pm_select_default_state(dev);
- 
--	ret = dwc3_resume_common(dwc, PMSG_RESUME);
--	if (ret)
--		return ret;
-+	if (!pm_runtime_suspended(dwc->dev)) {
-+		ret = dwc3_resume_common(dwc, PMSG_RESUME);
-+		if (ret)
-+			return ret;
-+	}
- 
- 	pm_runtime_disable(dev);
- 	pm_runtime_set_active(dev);
+
+Linyu Yuan (11):
+  usb: gadget: add anonymous definition in struct usb_gadget
+  usb: gadget: add anonymous definition in struct usb_request
+  usb: gadget: add anonymous definition in struct usb_ep
+  usb: udc: assign epnum for each usb endpoint
+  usb: udc: trace: reduce buffer usage of trace event
+  usb: cdns3: cdnsp: reduce buffer usage of trace event
+  usb: cdns3: trace: reduce buffer usage of trace event
+  usb: dwc3: trace: reduce buffer usage of trace event
+  usb: cdns2: trace: reduce buffer usage of trace event
+  usb: mtu3: trace: reduce buffer usage of trace event
+  usb: musb: trace: reduce buffer usage of trace event
+
+ drivers/usb/cdns3/cdns3-gadget.c            |   1 +
+ drivers/usb/cdns3/cdns3-trace.h             |  93 +++++------
+ drivers/usb/cdns3/cdnsp-gadget.c            |   1 +
+ drivers/usb/cdns3/cdnsp-trace.h             |  45 +++---
+ drivers/usb/chipidea/udc.c                  |   1 +
+ drivers/usb/dwc2/gadget.c                   |   2 +-
+ drivers/usb/dwc3/gadget.c                   |   1 +
+ drivers/usb/dwc3/trace.h                    |  54 +++----
+ drivers/usb/fotg210/fotg210-udc.c           |   1 +
+ drivers/usb/gadget/udc/aspeed-vhub/epn.c    |   1 +
+ drivers/usb/gadget/udc/aspeed_udc.c         |   1 +
+ drivers/usb/gadget/udc/at91_udc.c           |   1 +
+ drivers/usb/gadget/udc/atmel_usba_udc.c     |   1 +
+ drivers/usb/gadget/udc/bcm63xx_udc.c        |   1 +
+ drivers/usb/gadget/udc/bdc/bdc_ep.c         |   1 +
+ drivers/usb/gadget/udc/cdns2/cdns2-gadget.c |   2 +-
+ drivers/usb/gadget/udc/cdns2/cdns2-trace.h  |  77 +++++-----
+ drivers/usb/gadget/udc/dummy_hcd.c          |   1 +
+ drivers/usb/gadget/udc/fsl_qe_udc.c         |   1 +
+ drivers/usb/gadget/udc/fsl_udc_core.c       |   1 +
+ drivers/usb/gadget/udc/fusb300_udc.c        |   1 +
+ drivers/usb/gadget/udc/goku_udc.c           |   1 +
+ drivers/usb/gadget/udc/gr_udc.c             |   1 +
+ drivers/usb/gadget/udc/lpc32xx_udc.c        |   1 +
+ drivers/usb/gadget/udc/m66592-udc.c         |   1 +
+ drivers/usb/gadget/udc/max3420_udc.c        |   1 +
+ drivers/usb/gadget/udc/mv_u3d_core.c        |   2 +
+ drivers/usb/gadget/udc/mv_udc_core.c        |   2 +
+ drivers/usb/gadget/udc/net2272.c            |   1 +
+ drivers/usb/gadget/udc/net2280.c            |   2 +
+ drivers/usb/gadget/udc/omap_udc.c           |   1 +
+ drivers/usb/gadget/udc/pch_udc.c            |   1 +
+ drivers/usb/gadget/udc/pxa25x_udc.c         |   1 +
+ drivers/usb/gadget/udc/pxa27x_udc.c         |   1 +
+ drivers/usb/gadget/udc/r8a66597-udc.c       |   1 +
+ drivers/usb/gadget/udc/renesas_usb3.c       |   1 +
+ drivers/usb/gadget/udc/renesas_usbf.c       |   1 +
+ drivers/usb/gadget/udc/snps_udc_core.c      |   1 +
+ drivers/usb/gadget/udc/tegra-xudc.c         |   2 +
+ drivers/usb/gadget/udc/trace.h              | 106 +++++--------
+ drivers/usb/gadget/udc/udc-xilinx.c         |   1 +
+ drivers/usb/isp1760/isp1760-udc.c           |   1 +
+ drivers/usb/mtu3/mtu3_gadget.c              |   1 +
+ drivers/usb/mtu3/mtu3_trace.h               |  42 +++--
+ drivers/usb/musb/musb_gadget.c              |   1 +
+ drivers/usb/musb/musb_trace.h               |  14 +-
+ drivers/usb/renesas_usbhs/mod_gadget.c      |   1 +
+ drivers/usb/usbip/vudc_dev.c                |   1 +
+ include/linux/usb/gadget.h                  | 161 +++++++++++++++-----
+ 49 files changed, 344 insertions(+), 295 deletions(-)
+
 -- 
 2.17.1
 
