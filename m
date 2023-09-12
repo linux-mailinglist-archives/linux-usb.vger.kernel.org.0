@@ -2,76 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A3AD79CF89
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Sep 2023 13:11:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B79A79D002
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Sep 2023 13:32:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234179AbjILLLy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Sep 2023 07:11:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59124 "EHLO
+        id S234643AbjILLci (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Sep 2023 07:32:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233912AbjILLKv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Sep 2023 07:10:51 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 504CC2702
-        for <linux-usb@vger.kernel.org>; Tue, 12 Sep 2023 04:09:54 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F700C433C8;
-        Tue, 12 Sep 2023 11:09:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1694516994;
-        bh=bLyLi+faxk7w/LhaEb7Jj9AlCgcR0UU8R7jozk1dfWA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VUJVocaj+xa7EyGHw4eTXFFe2CTFC+NZ15GDQZ78kTveeDK6jtGfGyN7f09ws62mp
-         oSY/iU8YlYn3Wb3MF2Y+26melWLQtmqmAWP3+odGYeeG3xbz/oEjmnAs8+R7A/Wi6v
-         csnUNlfGe2QkNs6muuO3I0BAymR51m0/otWDZ6rU=
-Date:   Tue, 12 Sep 2023 13:09:51 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Linyu Yuan <quic_linyyuan@quicinc.com>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Neal Liu <neal_liu@aspeedtech.com>,
-        Cristian Birsan <cristian.birsan@microchip.com>,
-        Bin Liu <b-liu@ti.com>, Kevin Cernekee <cernekee@gmail.com>,
-        Justin Chen <justin.chen@broadcom.com>,
-        Al Cooper <alcooperx@gmail.com>, Li Yang <leoyang.li@nxp.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Herve Codina <herve.codina@bootlin.com>,
-        hierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Michal Simek <michal.simek@amd.com>,
-        Rui Miguel Silva <rui.silva@linaro.org>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3 10/10] usb: musb: trace: reduce buffer usage of trace
- event
-Message-ID: <2023091221-symphonic-vindicate-e7f3@gregkh>
-References: <20230912104455.7737-1-quic_linyyuan@quicinc.com>
- <20230912104455.7737-11-quic_linyyuan@quicinc.com>
+        with ESMTP id S234719AbjILLcH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Sep 2023 07:32:07 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31C1910C9;
+        Tue, 12 Sep 2023 04:32:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694518323; x=1726054323;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=JG4GmfnpXv90VCpDbO3rQysAp8JtiQPJgT+rVgDM8H8=;
+  b=bZPYQPBqm4xexx4GcWM3uSmowIDfjHVEYsPIbXrStsyJVNn0uq170BT/
+   eQY8TOQ3sMQzGnWnm51y1+Pmkq/8HX+Yas8pi5Dr3Xg8peFxUY+t21K6Y
+   lFTD9IJEvdGzQ4aszprSeOtE1Ont6a+p/RoU08uZfGInjXp3ivGoK82SZ
+   wRDr5GajExUx5RhW9sVFrPJYA1xsy/qOv/DaKHkol6OoBNCF6FsIxRKXq
+   M09kSnp+ygQ7oLdguVJejwBHLcScvVJxmDEzbmR29N0EWIT57b1E9V7WY
+   WLDLmGWI6cRTeAERgeduHgra0Wg94cUjER/Kb7E8fIlGt1NZZg4HzajQk
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="464716678"
+X-IronPort-AV: E=Sophos;i="6.02,139,1688454000"; 
+   d="scan'208";a="464716678"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2023 04:32:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="772963220"
+X-IronPort-AV: E=Sophos;i="6.02,139,1688454000"; 
+   d="scan'208";a="772963220"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga008.jf.intel.com with ESMTP; 12 Sep 2023 04:32:00 -0700
+Message-ID: <7c388791-e4cd-28da-3d98-5cc233bec165@linux.intel.com>
+Date:   Tue, 12 Sep 2023 14:33:20 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230912104455.7737-11-quic_linyyuan@quicinc.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.13.0
+Subject: Re: [PATCH] usb: xhci: xhci-ring: Use sysdev for mapping bounce
+ buffer
+Content-Language: en-US
+To:     Wesley Cheng <quic_wcheng@quicinc.com>, mathias.nyman@intel.com,
+        gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        quic_jackp@quicinc.com, stable@vger.kernel.org
+References: <20230911234122.1408-1-quic_wcheng@quicinc.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20230911234122.1408-1-quic_wcheng@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 12, 2023 at 06:44:55PM +0800, Linyu Yuan wrote:
-> Save u32 member into trace event ring buffer and parse it for possible
-> bit information.
+On 12.9.2023 2.41, Wesley Cheng wrote:
+> As mentioned in:
+>    commit 474ed23a6257 ("xhci: align the last trb before link if it is
+> easily splittable.")
 > 
-> Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+> A bounce buffer is utilized for ensuring that transfers that span across
+> ring segments are aligned to the EP's max packet size.  However, the device
+> that is used to map the DMA buffer to is currently using the XHCI HCD,
+> which does not carry any DMA operations in certain configrations.
+> Migration to using the sysdev entry was introduced for DWC3 based
+> implementations where the IOMMU operations are present.
+> 
+> Replace the reference to the controller device to sysdev instead.  This
+> allows the bounce buffer to be properly mapped to any implementations that
+> have an IOMMU involved.
+> 
+> cc: <stable@vger.kernel.org>
+> Fixes: 4c39d4b949d3 ("usb: xhci: use bus->sysdev for DMA configuration")
+> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
 > ---
-> v2: no change
-> v3: no change
 
-I asked you to change previous versions of this patch (and other patches
-in this series.)  Why you ignored my review comments is odd...
+Thanks, adding to queue
+
+-Mathias
+
+
 
