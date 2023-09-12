@@ -2,61 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B155F79D259
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Sep 2023 15:32:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5421379D25F
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Sep 2023 15:32:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235690AbjILNcv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Sep 2023 09:32:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56544 "EHLO
+        id S235543AbjILNdA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Sep 2023 09:33:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235831AbjILNce (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Sep 2023 09:32:34 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 632041708
-        for <linux-usb@vger.kernel.org>; Tue, 12 Sep 2023 06:32:10 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-5029e4bfa22so6823922e87.3
-        for <linux-usb@vger.kernel.org>; Tue, 12 Sep 2023 06:32:10 -0700 (PDT)
+        with ESMTP id S235854AbjILNcf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Sep 2023 09:32:35 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CD1A171B
+        for <linux-usb@vger.kernel.org>; Tue, 12 Sep 2023 06:32:12 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-52c9be5e6f0so6806184a12.1
+        for <linux-usb@vger.kernel.org>; Tue, 12 Sep 2023 06:32:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694525528; x=1695130328; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1694525531; x=1695130331; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=PiGJwPcZWY5VFG9v0qbCB9581xCL0QMtTuQflRx2rlo=;
-        b=rwlspgKbTHeAoR8D5UGzJVuOKstVV9HkEf9GzwtQFU3ksup5wu4ZdwN3B6oDHDcojo
-         lXihjRpbymdTbRHaVPz9+KEQskfGmIpNGRd+L8qzvhWZ8PuuIpXCu+wumDPGL/OZCjVo
-         WwmFsCHbif5j1L3ItbbOf07t4LeBQ0iwnPyc5omlyYGXZ+4VTFjFfFP57eHXSDk0g/yG
-         iRwyqkarTuOMKwYChxOnfwK8ukAmRLweuhamoBLRROZIMvTWz7XnGCQJFQOYvHuI8Jf5
-         isKkOjwvLGmNE6oab3KJZTXOw2toU4H4Fits7yT30C1ceKK2BDbYQnkeZKKswodKMV0n
-         Cmsg==
+        bh=UxtccacpBwGixpSIy230e0q5PgRxGFascOoiViGLP3k=;
+        b=qAJM56IwJ4yiKwdjx6+cf4c3RGogvlLXWHdXGE1PgUUovkc0nCuV4I4aw0eWOzzjtO
+         L5/DKUrsX7YsIr4vbwipNwsuMrSDZUHttczUieo/gRfVmfPMv4ZM2UE/FMDQZ1ysQmI0
+         me8oQRZGukNzU4F7eDILek9Y0cdqS8IP/f9DGeS3iWPZxJNLd2GIhHh5FqJwgKESJX5j
+         XIN4/KIgMZhSwq5avsrhSKnEYnW9X78oCKCpw5z61EhRxYsZ6nXJJVf0RZkumYvEIAld
+         fvmNYWHiJyNVND+EXM9rujXY8dhtLUDzxD6I1zVksO+a3iYswoKeuK2a4S+83W91ddll
+         q0Kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694525528; x=1695130328;
+        d=1e100.net; s=20230601; t=1694525531; x=1695130331;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=PiGJwPcZWY5VFG9v0qbCB9581xCL0QMtTuQflRx2rlo=;
-        b=ItEC8r/s4uo29WJgrbnICDtwHrh4cTiajhFgosKGUp7JMeQ/pQ/GEfwkoxdEF85lCb
-         PZfsM6VVbOlPeiHD8ei6VNLTN4C91mvsRxfhOt04Zpxp0R4G+AfEnK8c7uzGznvzsu47
-         HW8PgXBMbn1ZFasyR+2Z/jZ8yIuvqd+4DT8LGmVj8HafmkPdjwP/nEDJ/CWzEQpEPEM7
-         Y9WypXp43ew1HvK/0RBPvkwUOHjiv8hys4WUR1NfJ4eCeEkDKYZ0mofOieawRAouenXw
-         5zIIC5ypxsWcT7NsyR/kpfds09bNGZP1Rw28GrrExYwMVF223gXDqGPNEQRd3rzqZMN1
-         luUA==
-X-Gm-Message-State: AOJu0Yzz0HRDDUE5wS0nBBzCUxRP04cwq0+Ta+7PtwU6InGWn/7jqdGF
-        esnOFF+1nqfaR2pw6RE5IF2yTg==
-X-Google-Smtp-Source: AGHT+IG7MGV+5yfrfIbUAxlq/0SmpPmXJT7+m3AUNMaYZswy9Ud9cLdNvH7ShAE6dHY1LLBW3r7AlQ==
-X-Received: by 2002:ac2:48b4:0:b0:500:ac0b:8d51 with SMTP id u20-20020ac248b4000000b00500ac0b8d51mr9236642lfg.37.1694525528735;
-        Tue, 12 Sep 2023 06:32:08 -0700 (PDT)
+        bh=UxtccacpBwGixpSIy230e0q5PgRxGFascOoiViGLP3k=;
+        b=Nc3bAUIfcINoxq+fIvYHsS3+rTuDeAYxkuM/76o6FEdQO3kPJo3OZSO6+7ML20Hth+
+         f8v8033SdHn4HJ/zOcjugNWLTfd6SJu1R4m6BaxQuSAZJuIxxDzzFdATmujku2wifuPX
+         8j+MVhFd+q1iNEDkg5HxyC0VaeVkCv+TJy3I7cct+CncqBHYAJD4iLDF/bAuZJM8I+F4
+         n3gXLMbsQLeYsWiyFoDJ44fsoyd2gI+Fl/aAZreNXkqFsA+7P0FTv6B9HkHfxR7cQoRO
+         IXZi+aYvmI3klgI7yg+22tqRv8CKx8g6fumKmHrr6ErIrDtHanukHSWdGsL3QnY1Whdc
+         8FTw==
+X-Gm-Message-State: AOJu0YxZ0JF3UUVqcFvHY+jjEUXGNZ5SwCk8kF5jK1yCtVF6EmALkvuv
+        OQaRUDPjTgMwIeLi14MiqrUQAA==
+X-Google-Smtp-Source: AGHT+IGDdLlH6QMNo0LesrvW7tqQ3UhLo5jMkBHR5ISm+pmrwc0Td7mwqYE6zY6eveDY64WIEHBQDg==
+X-Received: by 2002:aa7:d508:0:b0:51e:ed6:df38 with SMTP id y8-20020aa7d508000000b0051e0ed6df38mr10476262edq.13.1694525531150;
+        Tue, 12 Sep 2023 06:32:11 -0700 (PDT)
 Received: from [10.167.154.1] (178235177248.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.248])
-        by smtp.gmail.com with ESMTPSA id j2-20020aa7ca42000000b0052a401d8ef6sm5983830edt.71.2023.09.12.06.32.06
+        by smtp.gmail.com with ESMTPSA id j2-20020aa7ca42000000b0052a401d8ef6sm5983830edt.71.2023.09.12.06.32.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Sep 2023 06:32:08 -0700 (PDT)
+        Tue, 12 Sep 2023 06:32:10 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Tue, 12 Sep 2023 15:31:48 +0200
-Subject: [PATCH v2 10/14] remoteproc: qcom: q6v5-mss: Remove PNoC clock
- from 8996 MSS
+Date:   Tue, 12 Sep 2023 15:31:49 +0200
+Subject: [PATCH v2 11/14] arm64: dts: qcom: msm8998: Remove AGGRE2 clock
+ from SLPI
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230721-topic-rpm_clk_cleanup-v2-10-1e506593b1bd@linaro.org>
+Message-Id: <20230721-topic-rpm_clk_cleanup-v2-11-1e506593b1bd@linaro.org>
 References: <20230721-topic-rpm_clk_cleanup-v2-0-1e506593b1bd@linaro.org>
 In-Reply-To: <20230721-topic-rpm_clk_cleanup-v2-0-1e506593b1bd@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
@@ -79,38 +79,42 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
         linux-usb@vger.kernel.org, Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1694525501; l=688;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1694525501; l=889;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=aEImegp4VH04wiEIbWvbE829Mpli30o1nbaGMff5Zgc=;
- b=AVtSFIWouOh61cF+kWzE/4pk4pk1JFUIbhy8p+mvaicS0P3Fv0cisTztSIqBouk5Z2VD03M5t
- DbdGLDFX0efAVTM0Ehd1vRbWtAp8k8qq+I2pe2bSWW3P6lQurp2F3iQ
+ bh=APDJWKGv0OM8xkXbz6kn7MnEY9F1MTCZxMvBScddrP8=;
+ b=fm7ExDvbRT0Sd/IS/guUrW0VKUsM5an7PF7RCJbaYOVZf0humdCmaqSivS8PZcBVQ8jHJJVQP
+ gaA9Ee5eVxDCUutCLYzu7eMoDF6RCNm3MutO/ynMxiuRHlPqxZGgrxS
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The PNoC clock is a clock for the entire PNoC bus, managed from
-within the interconnect driver. Attaching it to MSS was a total hack.
+The AGGRE2 clock is a clock for the entire AGGRE2 bus, managed from
+within the interconnect driver. Attaching it to SLPI was a total hack.
 Get rid of it.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- drivers/remoteproc/qcom_q6v5_mss.c | 1 -
- 1 file changed, 1 deletion(-)
+ arch/arm64/boot/dts/qcom/msm8998.dtsi | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
-index 22fe7b5f5236..394b2c1cb5e2 100644
---- a/drivers/remoteproc/qcom_q6v5_mss.c
-+++ b/drivers/remoteproc/qcom_q6v5_mss.c
-@@ -2322,7 +2322,6 @@ static const struct rproc_hexagon_res msm8996_mss = {
- 	},
- 	.proxy_clk_names = (char*[]){
- 			"xo",
--			"pnoc",
- 			"qdss",
- 			NULL
- 	},
+diff --git a/arch/arm64/boot/dts/qcom/msm8998.dtsi b/arch/arm64/boot/dts/qcom/msm8998.dtsi
+index f180047cacb0..5667ffa83ce5 100644
+--- a/arch/arm64/boot/dts/qcom/msm8998.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8998.dtsi
+@@ -1618,9 +1618,8 @@ remoteproc_slpi: remoteproc@5800000 {
+ 
+ 			px-supply = <&vreg_lvs2a_1p8>;
+ 
+-			clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>,
+-				 <&rpmcc RPM_SMD_AGGR2_NOC_CLK>;
+-			clock-names = "xo", "aggre2";
++			clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>;
++			clock-names = "xo";
+ 
+ 			memory-region = <&slpi_mem>;
+ 
 
 -- 
 2.42.0
