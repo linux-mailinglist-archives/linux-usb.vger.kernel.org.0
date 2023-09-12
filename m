@@ -2,143 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07EB479CEC5
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Sep 2023 12:48:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FC0D79CED8
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Sep 2023 12:50:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234604AbjILKse (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Sep 2023 06:48:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50208 "EHLO
+        id S234292AbjILKue (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Sep 2023 06:50:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234457AbjILKr4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Sep 2023 06:47:56 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC27910DE
-        for <linux-usb@vger.kernel.org>; Tue, 12 Sep 2023 03:47:04 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38C2Ne8T017096;
-        Tue, 12 Sep 2023 10:46:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=oVk0P267mQ86mjS2U2GKhyfaOms92J4SLm9FSDw3ykc=;
- b=Nlrm1+kDn4MEZEBJmV/YbeJg9cRx7WZteo8PyX4dnA7vqNzetBM73433gA4tHq7AzXI6
- Gz+6EkFiiFAH6g+ulWHs02beCU5XFoESJcl2w3YSz7KsBCvT/sbjP70UEbjfbBFICrqj
- DA67TmMKioybyz9kXRKX7fDXLC4JrAoXQnpx3CjJomIrJvvtzLqFPVlIMB39NX0hWJA+
- 5FszbWORSz9rWxYaiNtFOxSrmOX4UUXmD/G2Jc6FK0d5j6CmFEeR28ZVhIBnPJIhxpP5
- 6Cmfj5fNP2XU1fGm9oHKgPCkAhrJ7RFmNZUSNgF3eA6m5Suf6MBPY/zwSwLW4+ulQ7qS NA== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t24raae6y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Sep 2023 10:46:23 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38CAkMe0019019
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 12 Sep 2023 10:46:22 GMT
-Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.36; Tue, 12 Sep 2023 03:46:15 -0700
-From:   Linyu Yuan <quic_linyyuan@quicinc.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Neal Liu <neal_liu@aspeedtech.com>,
-        "Cristian Birsan" <cristian.birsan@microchip.com>,
-        Bin Liu <b-liu@ti.com>, "Kevin Cernekee" <cernekee@gmail.com>,
-        Justin Chen <justin.chen@broadcom.com>,
-        "Al Cooper" <alcooperx@gmail.com>, Li Yang <leoyang.li@nxp.com>,
-        "Vladimir Zapolskiy" <vz@mleia.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        "Philipp Zabel" <p.zabel@pengutronix.de>,
-        Herve Codina <herve.codina@bootlin.com>,
-        hierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Michal Simek <michal.simek@amd.com>,
-        Rui Miguel Silva <rui.silva@linaro.org>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        "Shuah Khan" <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, Linyu Yuan <quic_linyyuan@quicinc.com>
-Subject: [PATCH v3 10/10] usb: musb: trace: reduce buffer usage of trace event
-Date:   Tue, 12 Sep 2023 18:44:55 +0800
-Message-ID: <20230912104455.7737-11-quic_linyyuan@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230912104455.7737-1-quic_linyyuan@quicinc.com>
-References: <20230912104455.7737-1-quic_linyyuan@quicinc.com>
+        with ESMTP id S229912AbjILKuc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Sep 2023 06:50:32 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B6669F
+        for <linux-usb@vger.kernel.org>; Tue, 12 Sep 2023 03:50:27 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C22DC433C7;
+        Tue, 12 Sep 2023 10:50:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1694515826;
+        bh=vn3kYt0i8broKLMSbj2WI2nhrZVxVuF92QN5By/HLxE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lgopkJCoTTHltQxzwCiZinxzp4TvTHhX4vBmo8ksIbr9c5yRQ2Wkcn3CRZZ42SrhA
+         Jg3/e3c3mzseMkChrmysF243MP+jYLQMnaB+foekJ2AwK3sJQp/XG/DYcLL3pkXBBl
+         QDRJTMX5wxfaga4LouFJR2NSSz/DtbAu6An6qIx4=
+Date:   Tue, 12 Sep 2023 12:50:24 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Jiazi.Li" <jqqlijiazi@gmail.com>
+Cc:     "Jiazi.Li" <jiazi.li@transsion.com>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: f_fs: increase eps_revmap length
+Message-ID: <2023091248-shady-wavy-847d@gregkh>
+References: <20230912103417.18839-1-jiazi.li@transsion.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 3n3PV__XY0VzQkV0RFkd6Lw_uR806Mwy
-X-Proofpoint-ORIG-GUID: 3n3PV__XY0VzQkV0RFkd6Lw_uR806Mwy
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-09-12_08,2023-09-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
- clxscore=1015 mlxscore=0 bulkscore=0 suspectscore=0 phishscore=0
- impostorscore=0 mlxlogscore=454 priorityscore=1501 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2309120090
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230912103417.18839-1-jiazi.li@transsion.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Save u32 member into trace event ring buffer and parse it for possible
-bit information.
+On Tue, Sep 12, 2023 at 06:34:17PM +0800, Jiazi.Li wrote:
+> Commit 41dc9ac163e7 ("usb: gadget: f_fs: Accept up to 30 endpoints.")
+> increase eps_addrmap length to 31, eps_revmap also need to increase.
+> Increase it's length to 32.
 
-Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
----
-v2: no change
-v3: no change
+Why 32?
 
- drivers/usb/musb/musb_trace.h | 14 +++++---------
- 1 file changed, 5 insertions(+), 9 deletions(-)
+> 
+> For same-address, opposite-direction endpoints, will use same idx in
+> eps_revmap, so add new marco REVMAP_IDX to calculate idx for endpoints.
+> 
+> Signed-off-by: Jiazi.Li <jiazi.li@transsion.com>
 
-diff --git a/drivers/usb/musb/musb_trace.h b/drivers/usb/musb/musb_trace.h
-index f246b14394c4..6986a89767a2 100644
---- a/drivers/usb/musb/musb_trace.h
-+++ b/drivers/usb/musb/musb_trace.h
-@@ -243,9 +243,7 @@ DECLARE_EVENT_CLASS(musb_req,
- 		__field(int, status)
- 		__field(unsigned int, buf_len)
- 		__field(unsigned int, actual_len)
--		__field(unsigned int, zero)
--		__field(unsigned int, short_not_ok)
--		__field(unsigned int, no_interrupt)
-+		__field(u32, rdw1)
- 	),
- 	TP_fast_assign(
- 		__entry->req = &req->request;
-@@ -254,16 +252,14 @@ DECLARE_EVENT_CLASS(musb_req,
- 		__entry->status = req->request.status;
- 		__entry->buf_len = req->request.length;
- 		__entry->actual_len = req->request.actual;
--		__entry->zero = req->request.zero;
--		__entry->short_not_ok = req->request.short_not_ok;
--		__entry->no_interrupt = req->request.no_interrupt;
-+		__entry->rdw1 = req->request.dw1;
- 	),
- 	TP_printk("%p, ep%d %s, %s%s%s, len %d/%d, status %d",
- 			__entry->req, __entry->epnum,
- 			__entry->is_tx ? "tx/IN" : "rx/OUT",
--			__entry->zero ? "Z" : "z",
--			__entry->short_not_ok ? "S" : "s",
--			__entry->no_interrupt ? "I" : "i",
-+			USB_REQ_ZERO(__entry->rdw1) ? "Z" : "z",
-+			USB_REQ_SHORT_NOT_OK(__entry->rdw1) ? "S" : "s",
-+			USB_REQ_NO_INTERRUPT(__entry->rdw1) ? "I" : "i",
- 			__entry->actual_len, __entry->buf_len,
- 			__entry->status
- 	)
--- 
-2.17.1
+Please use your real name here, not your email alias.  Same for the
+ From: line in your email
 
+
+> ---
+>  drivers/usb/gadget/function/f_fs.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+> index 6e9ef35a43a7..4a210368bd33 100644
+> --- a/drivers/usb/gadget/function/f_fs.c
+> +++ b/drivers/usb/gadget/function/f_fs.c
+> @@ -71,12 +71,14 @@ struct ffs_function {
+>  	struct ffs_data			*ffs;
+>  
+>  	struct ffs_ep			*eps;
+> -	u8				eps_revmap[16];
+> +	u8				eps_revmap[32];
+>  	short				*interfaces_nums;
+>  
+>  	struct usb_function		function;
+>  };
+>  
+> +#define REVMAP_IDX(epaddr)	((epaddr & USB_ENDPOINT_NUMBER_MASK) \
+> +				* 2 + ((epaddr & USB_DIR_IN) ? 1 : 0))
+
+What is the * 2 for?  Also, this macro is hard to read, can you make
+this an inline function instead, explaining what you are trying to
+calculate?
+
+thanks,
+
+greg k-h
