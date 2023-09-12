@@ -2,80 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EF9C79CC31
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Sep 2023 11:46:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B782979CE71
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Sep 2023 12:35:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232422AbjILJqL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Sep 2023 05:46:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58106 "EHLO
+        id S234209AbjILKgB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Sep 2023 06:36:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232241AbjILJqK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Sep 2023 05:46:10 -0400
-Received: from dilbert.mork.no (dilbert.mork.no [IPv6:2a01:4f9:c010:a439::d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 470F312E;
-        Tue, 12 Sep 2023 02:46:06 -0700 (PDT)
-Received: from canardo.dyn.mork.no ([IPv6:2a01:799:964:4b04:3697:f6ff:fe5d:314])
-        (authenticated bits=0)
-        by dilbert.mork.no (8.17.1.9/8.17.1.9) with ESMTPSA id 38C9jlhs2694909
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-        Tue, 12 Sep 2023 10:45:48 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1694511942; bh=X2URSJTAIH9XGYPY5u1jK+7QAYG+vRNE7Qvlgkh1qt0=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=JH0xqut8NY90pGGDTJYGyax7Gv3P+H09MElGcEp9/TaJWHotRk4FhBleIS1rGQyci
-         cAPdOuuckn7mKuQ+fjUBZ9oBYiu7AZ/krshVMf0MDzD93+47eDBdAdSaG+V1RNsKT+
-         H5TsJIvZD1SOZt4ByFYprV10jaNn5R1f/BQjv5Js=
-Received: from miraculix.mork.no ([IPv6:2a01:799:10e0:8300:13c:9450:7f1:fd90])
-        (authenticated bits=0)
-        by canardo.dyn.mork.no (8.17.1.9/8.17.1.9) with ESMTPSA id 38C9jfUu133726
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-        Tue, 12 Sep 2023 11:45:41 +0200
-Received: (nullmailer pid 142914 invoked by uid 1000);
-        Tue, 12 Sep 2023 09:45:36 -0000
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     Stefan x Nilsson <stefan.x.nilsson@axis.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@axis.com>
-Subject: Re: [PATCH net-next] qmi_wwan: Add rawip module param
-Organization: m
-References: <20230912-qmiraw-v1-1-21bc812fa0cf@axis.com>
-        <87a5tramab.fsf@miraculix.mork.no>
-        <42522712-b739-3db4-9111-a4b378a65809@axis.com>
-Date:   Tue, 12 Sep 2023 11:45:36 +0200
-In-Reply-To: <42522712-b739-3db4-9111-a4b378a65809@axis.com> (Stefan
-        x. Nilsson's message of "Tue, 12 Sep 2023 09:44:26 +0200")
-Message-ID: <874jjzafnj.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 1.0.1 at canardo
-X-Virus-Status: Clean
+        with ESMTP id S234094AbjILKe3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Sep 2023 06:34:29 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD394210D
+        for <linux-usb@vger.kernel.org>; Tue, 12 Sep 2023 03:34:22 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1c1ff5b741cso49316265ad.2
+        for <linux-usb@vger.kernel.org>; Tue, 12 Sep 2023 03:34:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1694514862; x=1695119662; darn=vger.kernel.org;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=25pMmv0eFGnACBWimpT959NfTJ1UsBBxTXZ9YN0t6B4=;
+        b=j+9F+muG3kteMCuLyRTFVFeD7q+LWqfubgwvrUEYuHNR1o2ea5uwmUZVNe1975Awr0
+         xQuqlHdS0eOEsgekvFk84rXRRnYBN/3SuTasPNHFTyrOxGMg0XPuBacjTgjr8KY+VUvh
+         GtfB4u848VU7xF0QdnMs21DDd5aiJagffOa+ycP5IvAVR4jrRHPTA5bJx7m1zoGcjtZ2
+         WkbjLyNr/rK5xHUGdvRHUmAh1kLqhFV9JTijnjbziWb7Jn6rslZBk3WpeydFnXmSQYq5
+         vofCjHzAuUdJ9zOu9w6CxZoJwHbCasR+Phy0TpO/lKBHrvvmgK+Gf6TODwrRueO4Vqr5
+         kIAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694514862; x=1695119662;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=25pMmv0eFGnACBWimpT959NfTJ1UsBBxTXZ9YN0t6B4=;
+        b=neN+CJ3gCqXD5fpnKU2TlMfaaGJ6xwLTOoxGgTI+V+FFRvNF8T7j+uZHCZr0AJpzD6
+         uf3Ii598hbivVOC/ZPWn3u0ZelGs0b6W34WZtf1JsoyRZ8KfwVuWv9K7QT5ef6XqgUQn
+         f2bAUH74/Dii1j9CMOBza9n5JCOACWgYZtirPZ1dibfhm52aqbXM3z9LnodntJ/tSTm8
+         qB/7o4pcbFaqc9QAEPKE8xNIwXrlCBvIEU0VXJJVRXxJH+S+EZJDH6uISZM/NvQ/l6fs
+         zbxNsTjwzqZJdZp0Zx7RoOYrH/myMn7cAKgsdaHkxg/LZ+Wfki+yjyj84ejbj8fWxhvh
+         zCPA==
+X-Gm-Message-State: AOJu0YxRKkalZ912UOuWJibSPmluB2EHQNWn4HD9eMi4szTGlvYS2YXH
+        1b4iksZjBV4a9KwxMFfJpIr+JElpvHg=
+X-Google-Smtp-Source: AGHT+IGuOvYhmrQ93u9xsBguauQ4GgdSDkipFGTYahTGZv+wk6NDgp+/M/m4q5dC/ac558uZyc2AKA==
+X-Received: by 2002:a17:902:9a4b:b0:1c0:bf62:c921 with SMTP id x11-20020a1709029a4b00b001c0bf62c921mr12617976plv.18.1694514862146;
+        Tue, 12 Sep 2023 03:34:22 -0700 (PDT)
+Received: from localhost ([103.40.76.4])
+        by smtp.gmail.com with ESMTPSA id s16-20020a170902ea1000b001bf095dfb76sm1176775plg.237.2023.09.12.03.34.21
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 12 Sep 2023 03:34:21 -0700 (PDT)
+From:   "Jiazi.Li" <jqqlijiazi@gmail.com>
+X-Google-Original-From: "Jiazi.Li" <jiazi.li@transsion.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "Jiazi.Li" <jiazi.li@transsion.com>, linux-usb@vger.kernel.org
+Subject: [PATCH] usb: gadget: f_fs: increase eps_revmap length
+Date:   Tue, 12 Sep 2023 18:34:17 +0800
+Message-Id: <20230912103417.18839-1-jiazi.li@transsion.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Stefan x Nilsson <stefan.x.nilsson@axis.com> writes:
+Commit 41dc9ac163e7 ("usb: gadget: f_fs: Accept up to 30 endpoints.")
+increase eps_addrmap length to 31, eps_revmap also need to increase.
+Increase it's length to 32.
 
-> Would a quirk on the affected modem be an better/acceptable solution?
+For same-address, opposite-direction endpoints, will use same idx in
+eps_revmap, so add new marco REVMAP_IDX to calculate idx for endpoints.
 
-More acceptable but still needs justification.
+Signed-off-by: Jiazi.Li <jiazi.li@transsion.com>
+---
+ drivers/usb/gadget/function/f_fs.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-I'm probably missing something, but I don't see the described issue even
-if I assume a device crashing if it sees an ethernet header.
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index 6e9ef35a43a7..4a210368bd33 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -71,12 +71,14 @@ struct ffs_function {
+ 	struct ffs_data			*ffs;
+ 
+ 	struct ffs_ep			*eps;
+-	u8				eps_revmap[16];
++	u8				eps_revmap[32];
+ 	short				*interfaces_nums;
+ 
+ 	struct usb_function		function;
+ };
+ 
++#define REVMAP_IDX(epaddr)	((epaddr & USB_ENDPOINT_NUMBER_MASK) \
++				* 2 + ((epaddr & USB_DIR_IN) ? 1 : 0))
+ 
+ static struct ffs_function *ffs_func_from_usb(struct usb_function *f)
+ {
+@@ -2843,8 +2845,7 @@ static int __ffs_func_bind_do_descs(enum ffs_entity_type type, u8 *valuep,
+ 
+ 		ffs_ep->ep  = ep;
+ 		ffs_ep->req = req;
+-		func->eps_revmap[ds->bEndpointAddress &
+-				 USB_ENDPOINT_NUMBER_MASK] = idx + 1;
++		func->eps_revmap[REVMAP_IDX(ds->bEndpointAddress)] = idx + 1;
+ 		/*
+ 		 * If we use virtual address mapping, we restore
+ 		 * original bEndpointAddress value.
+@@ -3371,7 +3372,7 @@ static void ffs_func_resume(struct usb_function *f)
+ 
+ static int ffs_func_revmap_ep(struct ffs_function *func, u8 num)
+ {
+-	num = func->eps_revmap[num & USB_ENDPOINT_NUMBER_MASK];
++	num = func->eps_revmap[REVMAP_IDX(num)];
+ 	return num ? num : -EDOM;
+ }
+ 
+-- 
+2.17.1
 
-The netdev and associated chardev are created when a USB device is
-connected.  The device knows nothing about this.  It answers a few USB
-descriptor requests and that's it.  The host is free to switch the
-netdev to raw-ip framing before bringing it up.  There is no need to
-send any frames with eithernet header.  There is no relationship between
-framing and the QMI control channel.  But the host is in complete
-control of any communication there too, so it wouldn't be a problam if
-there were.
-
-
-Bj=C3=B8rn
