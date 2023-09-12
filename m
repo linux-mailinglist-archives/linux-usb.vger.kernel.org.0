@@ -2,115 +2,219 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10A6B79D4FA
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Sep 2023 17:32:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D226079D7C0
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Sep 2023 19:39:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236451AbjILPc6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Sep 2023 11:32:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33348 "EHLO
+        id S236836AbjILRj4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Sep 2023 13:39:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236616AbjILPcu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Sep 2023 11:32:50 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 54C9F1FC3
-        for <linux-usb@vger.kernel.org>; Tue, 12 Sep 2023 08:32:31 -0700 (PDT)
-Received: (qmail 920103 invoked by uid 1000); 12 Sep 2023 11:32:28 -0400
-Date:   Tue, 12 Sep 2023 11:32:28 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Linyu Yuan <quic_linyyuan@quicinc.com>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Neal Liu <neal_liu@aspeedtech.com>,
-        Cristian Birsan <cristian.birsan@microchip.com>,
-        Bin Liu <b-liu@ti.com>, Kevin Cernekee <cernekee@gmail.com>,
-        Justin Chen <justin.chen@broadcom.com>,
-        Al Cooper <alcooperx@gmail.com>, Li Yang <leoyang.li@nxp.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Herve Codina <herve.codina@bootlin.com>,
-        hierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Michal Simek <michal.simek@amd.com>,
-        Rui Miguel Silva <rui.silva@linaro.org>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3 01/10] usb: gadget: add anonymous definition in struct
- usb_gadget
-Message-ID: <fbc43e1a-8882-43d4-a1f3-f26c61decc0d@rowland.harvard.edu>
-References: <20230912104455.7737-1-quic_linyyuan@quicinc.com>
- <20230912104455.7737-2-quic_linyyuan@quicinc.com>
+        with ESMTP id S236817AbjILRjx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Sep 2023 13:39:53 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD6CE59
+        for <linux-usb@vger.kernel.org>; Tue, 12 Sep 2023 10:39:49 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-501bd6f7d11so9701023e87.1
+        for <linux-usb@vger.kernel.org>; Tue, 12 Sep 2023 10:39:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1694540387; x=1695145187; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qfWN69mP00ualtZXK+0LNWzFxGf625lUtnnMX/7yIhI=;
+        b=M+I/RmgU8xsyVSXy0yh8auVtBOcMVq2c+HuwneqMon6pMuLz1n1pljG5OwcZ+uU5k7
+         9mV5QoPbIdVATsPtjQ8zTSEiYaIINuFynjLdQIRhwhmGek8oFQQvq3idT+q8L1zTFBQ6
+         IV65+0ir+nI9z+kj7ODAket0TTk8lCMcHudxhX1Gp/3t8TRqWO+I4/TtzC+kFYS+PCFb
+         cwCkpp7by+Hk6kwWCxd+PDhHsWlvR8eIvkmGx8yiiCiDF0RrAX9oxdqGTRiiNdUIJwQq
+         bRGhhfLDuKnQ46wDz75hFV73/Laqi3aL6X9AKbyGW4j6QXGMsMDhlleYMXshJP4ZcfH4
+         ZviQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694540387; x=1695145187;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qfWN69mP00ualtZXK+0LNWzFxGf625lUtnnMX/7yIhI=;
+        b=DaIze+xHb6wM0nLpi+/vFce0/vxFyarVWxmmZvReJYfr6+IVPC7FwVOj7+tnQP7kf5
+         bK7JvK5KlwcrM8qQ2uD2Y371mwtQ4PLfuivE56nJIkgIagZ7sO7FofYBJODpTBf4yi9Y
+         rzsYVYi4O1P5/Y0LpOBNWZGHQC5jNUJrL/6ebyp6t3UDMTiEAipCyFAABqgavxMe3jiw
+         6ZeRPfxu8SwmJyIMy736G0Bm1+nEaYhOgKeIge2GOja1cnw9bboQfKtIC+azQr5xytvi
+         ih2+MsQmigHr7m/0Xi+9c3J9YZc8nMZzf+tSANHm9TCMM7MBmELJzrkxFrW26JHijw7c
+         m9Xw==
+X-Gm-Message-State: AOJu0Yyq+vCSJh+mFS9ZC3vjpLh1lo0buzppB3QLCvzlj9NGIX5GHY2f
+        IJ7G4e28bbRtsZtjQPvd+2+shQ==
+X-Google-Smtp-Source: AGHT+IEQaseG2rf4Y8KarQ54blJ2LOjJc85S2m6s1jkQf4/FdTFjuHmSSpQAwZkzERZ3HZ5LfTcEjw==
+X-Received: by 2002:a05:6512:3698:b0:501:bf30:714c with SMTP id d24-20020a056512369800b00501bf30714cmr163908lfs.24.1694540387403;
+        Tue, 12 Sep 2023 10:39:47 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id u6-20020ac24c26000000b005008757cd6csm1828256lfq.241.2023.09.12.10.39.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Sep 2023 10:39:46 -0700 (PDT)
+Message-ID: <a97a33f4-71f3-4610-a59e-0c2d5ae86670@linaro.org>
+Date:   Tue, 12 Sep 2023 20:39:45 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230912104455.7737-2-quic_linyyuan@quicinc.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v1 01/12] Revert "drm/sysfs: Link DRM connectors to
+ corresponding Type-C connectors"
+Content-Language: en-GB
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Janne Grunau <j@jannau.net>, Simon Ser <contact@emersion.fr>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        freedreno@lists.freedesktop.org, Won Chung <wonchung@google.com>
+References: <20230903214150.2877023-1-dmitry.baryshkov@linaro.org>
+ <20230903214150.2877023-2-dmitry.baryshkov@linaro.org>
+ <ZPbrtAlO2Y+bjDhf@kuha.fi.intel.com>
+ <CAA8EJpqUg2-k7LLBL38RHU1sThkXB54ca68xEMd1yMnHQcQ++w@mail.gmail.com>
+ <ZPh0Ps9UJ3HLzdeR@kuha.fi.intel.com>
+ <CAA8EJpratbBybgk8woD3maA=J_HuQis44Unq0n+c_UvaFs__AA@mail.gmail.com>
+ <ZPiAwOf00RREiYPr@kuha.fi.intel.com>
+ <6b6bacee-f7b6-4cfe-be3d-24bda44bfbcf@linaro.org>
+ <ZQBGD8CY5OVKYX63@kuha.fi.intel.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <ZQBGD8CY5OVKYX63@kuha.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 12, 2023 at 06:44:46PM +0800, Linyu Yuan wrote:
-> Some UDC trace event will save usb gadget information, but it use one int
-> size buffer to save one bit information of usb gadget, so 19 int buffers
-> needed to save 19 bit fields which is not good.
+On 12/09/2023 14:05, Heikki Krogerus wrote:
+> On Tue, Sep 12, 2023 at 12:15:10AM +0300, Dmitry Baryshkov wrote:
+>> On 06/09/2023 16:38, Heikki Krogerus wrote:
+>>> On Wed, Sep 06, 2023 at 03:48:35PM +0300, Dmitry Baryshkov wrote:
+>>>> On Wed, 6 Sept 2023 at 15:44, Heikki Krogerus
+>>>> <heikki.krogerus@linux.intel.com> wrote:
+>>>>>
+>>>>> On Tue, Sep 05, 2023 at 01:56:59PM +0300, Dmitry Baryshkov wrote:
+>>>>>> Hi Heikki,
+>>>>>>
+>>>>>> On Tue, 5 Sept 2023 at 11:50, Heikki Krogerus
+>>>>>> <heikki.krogerus@linux.intel.com> wrote:
+>>>>>>>
+>>>>>>> Hi Dmitry,
+>>>>>>>
+>>>>>>> On Mon, Sep 04, 2023 at 12:41:39AM +0300, Dmitry Baryshkov wrote:
+>>>>>>>> The kdev->fwnode pointer is never set in drm_sysfs_connector_add(), so
+>>>>>>>> dev_fwnode() checks never succeed, making the respective commit NOP.
+>>>>>>>
+>>>>>>> That's not true. The dev->fwnode is assigned when the device is
+>>>>>>> created on ACPI platforms automatically. If the drm_connector fwnode
+>>>>>>> member is assigned before the device is registered, then that fwnode
+>>>>>>> is assigned also to the device - see drm_connector_acpi_find_companion().
+>>>>>>>
+>>>>>>> But please note that even if drm_connector does not have anything in
+>>>>>>> its fwnode member, the device may still be assigned fwnode, just based
+>>>>>>> on some other logic (maybe in drivers/acpi/acpi_video.c?).
+>>>>>>>
+>>>>>>>> And if drm_sysfs_connector_add() is modified to set kdev->fwnode, it
+>>>>>>>> breaks drivers already using components (as it was pointed at [1]),
+>>>>>>>> resulting in a deadlock. Lockdep trace is provided below.
+>>>>>>>>
+>>>>>>>> Granted these two issues, it seems impractical to fix this commit in any
+>>>>>>>> sane way. Revert it instead.
+>>>>>>>
+>>>>>>> I think there is already user space stuff that relies on these links,
+>>>>>>> so I'm not sure you can just remove them like that. If the component
+>>>>>>> framework is not the correct tool here, then I think you need to
+>>>>>>> suggest some other way of creating them.
+>>>>>>
+>>>>>> The issue (that was pointed out during review) is that having a
+>>>>>> component code in the framework code can lead to lockups. With the
+>>>>>> patch #2 in place (which is the only logical way to set kdev->fwnode
+>>>>>> for non-ACPI systems) probing of drivers which use components and set
+>>>>>> drm_connector::fwnode breaks immediately.
+>>>>>>
+>>>>>> Can we move the component part to the respective drivers? With the
+>>>>>> patch 2 in place, connector->fwnode will be copied to the created
+>>>>>> kdev's fwnode pointer.
+>>>>>>
+>>>>>> Another option might be to make this drm_sysfs component registration optional.
+>>>>>
+>>>>> You don't need to use the component framework at all if there is
+>>>>> a better way of determining the connection between the DP and its
+>>>>> Type-C connector (I'm assuming that that's what this series is about).
+>>>>> You just need the symlinks, not the component.
+>>>>
+>>>> The problem is that right now this component registration has become
+>>>> mandatory. And if I set the kdev->fwnode manually (like in the patch
+>>>> 2), the kernel hangs inside the component code.
+>>>> That's why I proposed to move the components to the place where they
+>>>> are really necessary, e.g. i915 and amd drivers.
+>>>
+>>> So why can't we replace the component with the method you are
+>>> proposing in this series of finding out the Type-C port also with
+>>> i915, AMD, or whatever driver and platform (that's the only thing that
+>>> component is used for)?
+>>
+>> The drm/msm driver uses drm_bridge for the pipeline (including the last DP
+>> entry) and the drm_bridge_connector to create the connector. I think that
+>> enabling i915 and AMD drivers to use drm_bridge fells out of scope for this
+>> series.
+>>
+>>
+>>> Determining the connection between a DP and its Type-C connector is
+>>> starting to get really important, so ideally we have a common solution
+>>> for that.
+>>
+>> Yes. This is what we have been discussing with Simon for quite some time on
+>> #dri-devel.
+>>
+>> Unfortunately I think the solution that got merged was pretty much hastened
+>> in instead of being well-thought. For example, it is also not always
+>> possible to provide the drm_connector / typec_connector links (as you can
+>> see from the patch7. Sometimes we can only express that this is a Type-C DP
+>> connector, but we can not easily point it to the particular USB-C port.
+>>
+>> So, I'm not sure, how can we proceed here. Currently merged patch breaks
+>> drm/msm if we even try to use it by setting kdef->fwnode to
+>> drm_connector->fwnode. The pointed out `drivers/usb/typec/port-mapper.c` is
+>> an ACPI-only thing, which is not expected to work in a non-ACPI cases.
 > 
-> Add one anonymous union which have one u32 member 'dw1' to struct
-> 'usb_gadget', it inlclude all 19 bits and can be used by trace event
-> during fast assign stage to save more entries with same trace ring buffer
-> size.
+> You really have to always supply not only the Type-C ports and partners,
+> but also the alt modes. You need them, firstly to keep things sane
+> inside kernel, but more importantly, so they are always exposed to the
+> user space, AND, always the same way. We have ABIs for all this stuff,
+> including the DP alt mode. Use them. No shortcuts.
 > 
-> Also move all original 19 bit fields into one anonymous struct which
-> inside struct 'usb_gadget'.
-> 
-> In order to allow trace event output stage access the bit from saved u32
-> 'dw1', add following macro,
-> define USB_GADGET_BITFIELD(n, name) \
-> 	({\
-> 	union {\
-> 		struct {\
-> 			u32	sg_supported:1;\
-> 			u32	is_otg:1;\
-> 			u32	is_a_peripheral:1;\
-> 			u32	b_hnp_enable:1;\
-> 			u32	a_hnp_support:1;\
-> 			u32	a_alt_hnp_support:1;\
-> 			u32	hnp_polling_support:1;\
-> 			u32	host_request_flag:1;\
-> 			u32	quirk_ep_out_aligned_size:1;\
-> 			u32	quirk_altset_not_supp:1;\
-> 			u32	quirk_stall_not_supp:1;\
-> 			u32	quirk_zlp_not_supp:1;\
-> 			u32	quirk_avoids_skb_reserve:1;\
-> 			u32	is_selfpowered:1;\
-> 			u32	deactivated:1;\
-> 			u32	connected:1;\
-> 			u32	lpm_capable:1;\
-> 			u32	wakeup_capable:1;\
-> 			u32	wakeup_armed:1;\
-> 		} __packed;\
-> 		u32		dw1;\
-> 	} __aligned(4) __g_u_##name;\
-> 	u32 __g_##name; \
-> 	BUILD_BUG_ON(sizeof(__g_u_##name) != 4);\
-> 	__g_u_##name.dw1 = (n); __g_##name = __g_u_##name.name;\
-> 	__g_##name; })
-> 
-> define USB_GADGET_SG_SUPPORTED(n) USB_GADGET_BITFIELD((n), sg_supported)
-> ...
-> change to use this kind of macro for all related trace files later.
+> So here's what you need to do. UCSI does not seem to bring you
+> anything useful, so just disable it for now. You don't need it. Your
+> port driver is clearly drivers/soc/qcom/pmic_glink_altmode.c, so
+> that's where you need to register all these components - the ports,
+> partners and alt modes. You have all the needed information there.
 
-This macro usage is a real mess.  Can't you find a better way to do it?
+To make things even more complicate, UCSI is necessary for the USB part 
+of the story. It handles vbus and direction.
 
-For instance, in the code that parses the trace buffer, define a 
-temporary usb_gadget structure and copy the dw1 field from the trace 
-buffer to the temporary structure.  Then you can access the fields in 
-that structure directly by their original names, with no macros.
+> Only after you've done that we can start to look at how should the
+> connection between the DPs and their USB Type-C connectors be handled.
 
-Alan Stern
+But sure enough, I can add typec port registration to the altmode 
+driver. This will solve the 'port not existing' part of the story.
+
+I'd like to hear your opinion on:
+
+- components. Using them breaks drm/msm. How can we proceed?
+
+- PATH property usage. This way we make USB-C DisplayPort behave like 
+the MST ports.
+
+-- 
+With best wishes
+Dmitry
+
