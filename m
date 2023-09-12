@@ -2,169 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B14AD79C4BF
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Sep 2023 06:26:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 093BF79C50D
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Sep 2023 06:53:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232448AbjILE0U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Sep 2023 00:26:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48544 "EHLO
+        id S229850AbjILExD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Sep 2023 00:53:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232011AbjILE0Q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Sep 2023 00:26:16 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 704EDAC
-        for <linux-usb@vger.kernel.org>; Mon, 11 Sep 2023 21:26:12 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1c39bc0439bso17110755ad.0
-        for <linux-usb@vger.kernel.org>; Mon, 11 Sep 2023 21:26:12 -0700 (PDT)
+        with ESMTP id S229441AbjILEw3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Sep 2023 00:52:29 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12FD8196
+        for <linux-usb@vger.kernel.org>; Mon, 11 Sep 2023 21:52:25 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1c0d5b16aacso42432205ad.1
+        for <linux-usb@vger.kernel.org>; Mon, 11 Sep 2023 21:52:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1694492772; x=1695097572; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=google.com; s=20230601; t=1694494344; x=1695099144; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=K/0rxg0+vHd53VN3VMlLp1ejjn6Smv43yD42Ah/G3VQ=;
-        b=b6OeDOmjwObh2fNZMbWG2ExfRAW8We3XJWbE4X7X5n1Ealatp46WJBDUY+UEHT5Hjj
-         7Zqg26xOYq76NosBMcq5aSKCEUJPDeVDjOnhtNmv9c8q3vNElBuCj3BShy+UfFFze6qy
-         N3W3UvjuuMyS7RJzhnY4H7IXjA3zMv9azWf5zFsBToMZIElKH44IZTDnpCIbb3cdc3jD
-         7WAvncwRg9OsKj3RH6gSl4LrlbqhDJN4PrdHAEh9cyVMtmCIjKGQwys3GBB6InKEpX0Q
-         ZM92a4fYHKOCDhbKWA6aivqChxldR0SfcQ+JLbe8fu2tSH+ZLVohGeJ591i9tfj0xG9U
-         reTw==
+        bh=pCJ8KYCXw7NsEnwWAsSLTHOcGDS6ZTh29m1HntYNSuU=;
+        b=FdbvvfIW0kmjwVsHiDAJybHWkphj1tab5i6hOtlUdsGc5qUQ+c38QNk5lQD7DfdYcF
+         ySC2axJ4p6LQhUfN8d1mMvaM8rV7NCOC9/+duS0jqUNtOXNAqge7cYJPOoF4+BMJZDop
+         VDrtzSqUzN3/W/DiW1d7niPFDTWNlFQgV+NXMnRzxoU0JJyQuB6RYPjTL1I4dJ+2ld6G
+         THlPk4S/uBMI4Ozhj3+kDz3i5rMiH9Td47F7/m/Ge8CPglxILw/KhTREmrvdDiqPAtWz
+         wCrmcw4MTW1UEpDTHjzqc8SlMS/FOYP3y+K3E/fB6P+2+8SnoL4qXPQDCRAzX8dxsEid
+         29rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694492772; x=1695097572;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1694494344; x=1695099144;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=K/0rxg0+vHd53VN3VMlLp1ejjn6Smv43yD42Ah/G3VQ=;
-        b=PfKGBkrTsbHL+XMlm1hEe/mU2ytwflHl04t9zR5mDjaOBheRy1dDP2NbeTu3DHvtk6
-         paXIT07FpToSE0p3aRe822MUvNkCnf81oCoPPbBHbbKNXsQOu6wHrVQ78GrG73EG9XnG
-         zH/LaHYjDj0mI4+lDUmp6F0HDzEU9PvJn4bZ49JvxkFZLTK2sHHsdxUiPEDKwYrEAjDS
-         DEJr8YqaOQ5qBN9FiJEj5r2UWfBULxFllJ/5gZ8qwBXSIik2poOjNzM15vk/HXy0bLmp
-         VYgTAj/k5oNasGAYbZ3n0+GjTOGVHBHF3sc3apTEY47CePTV/1aT+Q3LP02Lu3RVAKR7
-         3ytQ==
-X-Gm-Message-State: AOJu0YzQ0aWzLI7rs5kQ0Qiivdy5NlZrSTGsSvsPNB9Fq9fsdH4TBfp8
-        yUlAWwNLjlMTWFFsEnFNcYg5oA==
-X-Google-Smtp-Source: AGHT+IE7Mi6bn887OP7gSkPIh39wdc2Tptl1siXQFA1vinyAOUONKdsLqrEP8Sqa/EU4svZ2LRmesw==
-X-Received: by 2002:a17:903:1cb:b0:1bd:f69e:a407 with SMTP id e11-20020a17090301cb00b001bdf69ea407mr2175814plh.8.1694492771560;
-        Mon, 11 Sep 2023 21:26:11 -0700 (PDT)
+        bh=pCJ8KYCXw7NsEnwWAsSLTHOcGDS6ZTh29m1HntYNSuU=;
+        b=MD/gMG8FfMvnz/F384AzYquVjt2bHcwk6f304Dhieg73fEihoNmwIZsOY9rEqPa17y
+         AZBUmAZ/85UE2Ud3YoYYrpDaux1okbxt9XC9qiepCD3w2Y/V9eNpIHUy2ZUVYqDP3rL4
+         UESYp7XbiiPC89UA4qDuYQx5uwHXjbfJmYeKAKl3pVGk2hvNHp0ndiWmCLwLW3/uMkRX
+         A2dnhO3rvjWY2dRJQirEYYyKDNUqfKEdzQwMkIKmvG8f3x8KtquKJLw/U4tulBsD3Y7z
+         wJ5MtqSj+YDtsvqMi2CkOn9otgn9QEbtTDXimKs02XbSuBFYHr1PT9XW54AOHxNUmje5
+         iS6A==
+X-Gm-Message-State: AOJu0Yyk7o4uNrIi415EwqVCCPdOuFryMbv38W925y6hnifgXQjQ0ti0
+        9Y8Dslb790nRr3W091KyS9RV0w==
+X-Google-Smtp-Source: AGHT+IHRq1eU5iRIzGmCghBvgIYt3a7PqHAy2No9rFqnep8OOZci3KUJmaop+aZPHxaXNMkKvIzKtw==
+X-Received: by 2002:a17:902:f7cb:b0:1c1:de2b:e1d0 with SMTP id h11-20020a170902f7cb00b001c1de2be1d0mr8587539plw.32.1694494344236;
+        Mon, 11 Sep 2023 21:52:24 -0700 (PDT)
 Received: from [192.168.60.239] (124.190.199.35.bc.googleusercontent.com. [35.199.190.124])
-        by smtp.gmail.com with ESMTPSA id q1-20020a170902dac100b001bdb85291casm7238397plx.208.2023.09.11.21.26.10
+        by smtp.gmail.com with ESMTPSA id p15-20020a170902e74f00b001bb8be10a84sm3398860plf.304.2023.09.11.21.52.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Sep 2023 21:26:11 -0700 (PDT)
-Message-ID: <df65040f-fbd9-4e9a-be38-1e30f7f613d4@google.com>
-Date:   Mon, 11 Sep 2023 21:26:09 -0700
+        Mon, 11 Sep 2023 21:52:23 -0700 (PDT)
+Message-ID: <a55b3b0c-2306-4591-8613-7be4927f0d4e@google.com>
+Date:   Mon, 11 Sep 2023 21:52:22 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: gadget: uvc: Move usb_ep_disable() to
- uvcg_video_enable()
+Subject: Re: [PATCH 2/3] usb: gadget: uvc: cleanup request when not in correct
+ state
+To:     Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        laurent.pinchart@ideasonboard.com
+Cc:     linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+        dan.scally@ideasonboard.com, gregkh@linuxfoundation.org,
+        nicolas@ndufresne.ca, kernel@pengutronix.de,
+        Jayant Chowdhary <jchowdhary@google.com>
+References: <20230911002451.2860049-1-m.grzeschik@pengutronix.de>
+ <20230911002451.2860049-3-m.grzeschik@pengutronix.de>
 Content-Language: en-US
-To:     Michael Grzeschik <mgr@pengutronix.de>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Daniel Scally <dan.scally@ideasonboard.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        Jayant Chowdhary <jchowdhary@google.com>,
-        "Eino-Ville Talvala (Eddy)" <etalvala@google.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-References: <20230615093406.80195-1-dan.scally@ideasonboard.com>
- <20230615171558.GK741@pendragon.ideasonboard.com>
- <dbf1e426-cf86-46c4-afb9-9d6983f0fb6d@google.com>
- <ZPXrceImaT9GevmA@pengutronix.de>
- <CAMHf4WJ6hBEzPUCOX8wbnGZ7pUuG1a+mwR3h=d6=kyyf9W7p+g@mail.gmail.com>
- <ZP5kOcuKykSY8ycr@pengutronix.de>
 From:   Avichal Rakesh <arakesh@google.com>
-In-Reply-To: <ZP5kOcuKykSY8ycr@pengutronix.de>
+In-Reply-To: <20230911002451.2860049-3-m.grzeschik@pengutronix.de>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Michael,
+Hey Michael,
 
-On 9/10/23 17:50, Michael Grzeschik wrote:
-> Hi Avichal
+On 9/10/23 17:24, Michael Grzeschik wrote:
+> The uvc_video_enable function of the uvc-gadget driver is dequeing and
+> immediately deallocs all requests on its disable codepath. This is not
+> save since the dequeue function is async and does not ensure that the
+> requests are left unlinked in the controller driver.
 > 
-> On Fri, Sep 08, 2023 at 11:54:40PM +0800, Avichal Rakesh wrote:
->> Apologies for the late reply, I have been out travelling.
->> On Mon, Sep 4, 2023 at 10:36 PM Michael Grzeschik <mgr@pengutronix.de> wrote:
->>> Cc'ing: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
->>>
->>> ...
->>> I am currently trying to solve that by preparing a patch that is
->>> fixing the use of the requests when deallocating them. Since currently
->>> the uvc_gadget is also running into wild use after free issues because
->>> of exactly that async dequeue and dealloc situation.
->>
->> Do you already have a patch up for this? It seems my LKML-fu is
->> failing and I can't seem to find the thread. If you aren't too deep
->> into the patch, can you take a look at the request counting mechanism
->> added in my patch? If you have a (somewhat) consistent repro of the
->> use-after-dealloc issue, runnin it through the whole patch would be
->> very appreciated! It is supposed to fix the exact problem you've
->> described.
+> By adding the ep_free_request into the completion path of the requests
+> we ensure that the request will be properly deallocated.
 > 
-> I just send out v1:
+> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+> ---
+>  drivers/usb/gadget/function/uvc_video.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-> https://lore.kernel.org/linux-usb/20230911002451.2860049-1-m.grzeschik@pengutronix.de/
+> diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
+> index 4b6e854e30c58c..52e3666b51f743 100644
+> --- a/drivers/usb/gadget/function/uvc_video.c
+> +++ b/drivers/usb/gadget/function/uvc_video.c
+> @@ -256,6 +256,12 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
+>  	struct uvc_device *uvc = video->uvc;
+>  	unsigned long flags;
+>  
+> +	if (uvc->state == UVC_STATE_CONNECTED) {
+> +		usb_ep_free_request(video->ep, ureq->req);
+nit: You can probably just call usb_ep_free_request with req instead of ureq->req.
+> +		ureq->req = NULL;
+> +		return;
+> +	}
+> +
+>  	switch (req->status) {
+>  	case 0:
+>  		break;
 
-Thank you for the patch. I do have a few comments on it, will respond on that thread.
+Perhaps I am missing something here, but I am not sure how this alone 
+fixes the use-after-free issue. uvcg_video_enable still deallocates 
+_all_ usb_requests right after calling usb_ep_dequeue, so it is still 
+possible that an unreturned request is deallocated, and now it is 
+possible that the complete callback accesses a deallocated ureq :(
 
-> 
-> My patches did go back and forth between changes in the uvc-gadget
-> driver and the device-controller driver. My latest version was including
-> calling free_request from the complete handler. I found that option
-> while looking into the uac2 gadget code. It took away a lot of
-> pain while trying to fix the issue in the dwc3 gadget driver.
-> 
->>> IMHO it should be
->>> save to call dealloc after calling dequeue. Which is probably true for
->>> other usb device controller driver other then dwc3.
->>
->> Perhaps Thinh or someone better versed in Gadget API can chime in on
->> this, but as it stands usb_ep_dequeue specifically says that it is
->> async, and gadget drivers must wait on the complete callbacks to
->> regain ownership of the usb_request. Until the API change is made, UVC
->> should adhere to the current API?
-> 
-> Since you mention that usb_ep_dequeue is async I am very confident
-> that it is safe to free the request in the completion handler.
-> 
-> Although we could cleanup and improve the uvc_video_free_requests
-> function itself. But with the patches I have here the use
-> after free was gone so far. So they should be good so far.
-> 
->>> For some background. The dwc3 is putting the requests into a cancelled list
->>> that will be cleared by the interrupt handler and that is dequeuing them
->>> instead. In between the dequeue call and the interrupt call the uvc layer could
->>> dealloc the request which leads the interrupt handler to dequeue an
->>> already freed request.
->>
->> This roughly tracks with what I gleaned from skimming the DWC3 code as
->> well. In local tests the complete calls were always timely and I never
->> actually ran into the situation where UVC deallocated an unowned
->> request, but as someone (I think it was Alan?)  said in a previous
->> thread: technically possible just means it will happen eventually
->>
->> Please do review/test the patch. I'll send out a formal patch on
->> Monday once I am back, but would love to have some early eyes take a
->> look in case there is something obvious I missed.
-> 
-> First I tested your patch with my sketchy setup where I more then once
-> run into the use after free condition. But with the patch this was not
-> gone.
-
-Just to confirm, use-after-free issue was _not_ fixed with this patch?
-
-> 
-> I also looked over the patch. As what I saw this is a possible
-> alternative to my patches. The changes are doing some similar things.
-> But the code is changing to many things at once. Please split the code
-> up into more logical chunks. Perhaps you could try to rebase it on
-> my patches. And start from there.
-
-You're right, there are two issues this patch fixes. One of which is the 
-same as that fixed by your series of patches. Uploaded v1 of the series at
-https://lore.kernel.org/20230912041910.726442-1-arakesh@google.com/ 
-(cc'ed to you) which splits the fixes into two separate patches.
-
-Thanks!
-- Avi.
+Regards,
+Avi
