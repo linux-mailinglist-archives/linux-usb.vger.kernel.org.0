@@ -1,127 +1,185 @@
-Return-Path: <linux-usb+bounces-4-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-5-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D154079F375
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Sep 2023 23:08:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30E2F79F37A
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Sep 2023 23:09:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 79E68B20527
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Sep 2023 21:08:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A95821C20A77
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Sep 2023 21:09:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2465122EEA;
-	Wed, 13 Sep 2023 21:05:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AECE222EE7;
+	Wed, 13 Sep 2023 21:09:22 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72B3F29CA
-	for <linux-usb@vger.kernel.org>; Wed, 13 Sep 2023 21:05:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC3BDC433CB;
-	Wed, 13 Sep 2023 21:05:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1694639145;
-	bh=LL5FYKc5sc5mqMIzOACAM0sCDQLeDKF/HFS3zAkNTeY=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=mqsgIeRcqpFlcKt2tajdTe/FOO+M4p5u/mu4wUmnCceWx04TwBwnN+DSRIrL5NhoE
-	 Ph6kxd6IL2d8D7CFgPjFvmIt54H5L/D1zZF8eaAoG4ps3gcc00NlemmzIxhtLwZb74
-	 HT6i+mloliVYnscUFfbDW0KlAs1709tjGzzjTIBhlPFCCKYN0x6QGHn2ral7iCdLDP
-	 TxpIdE764wJBr6U0Vc4aSDQItvJe2MwKdPql4/s9m+T5ZUH2FvFmpjY2/WqVGmzJ3b
-	 f2FSPq/CMyxAatDcpGJOdUN8ilEd2jzYn/o0RddLVy1obmEj568tGRWHvDB61qn7Xl
-	 DPfL0Jp7X/AVA==
-Date: Wed, 13 Sep 2023 16:05:43 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Mario Limonciello <mario.limonciello@amd.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	"Rafael J . Wysocki" <rjw@rjwysocki.net>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-	"open list:X86 PLATFORM DRIVERS" <platform-driver-x86@vger.kernel.org>,
-	"open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
-	linux-pm@vger.kernel.org,
-	"open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-	iain@orangesquash.org.uk
-Subject: Re: [PATCH v18 2/2] PCI: Add a quirk for AMD PCIe root ports w/ USB4
- controllers
-Message-ID: <20230913210543.GA440503@bhelgaas>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7658029CA
+	for <linux-usb@vger.kernel.org>; Wed, 13 Sep 2023 21:09:22 +0000 (UTC)
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA4E19B;
+	Wed, 13 Sep 2023 14:09:21 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38DKoTWo006924;
+	Wed, 13 Sep 2023 21:08:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Lbqq6WFsgoO1N9j1FW7OzsN+59oAcjFTOnvcO7zfshU=;
+ b=KRsv6/yByL7N2TN4Jri09QHS3Df8mJZ3x5TnxO9xPos8bFlboH8bIaQFTjrBm+kicGFS
+ HwK8/Y82b6ceNY4iME8nVyqX2310NAual7TwqgMHsunE7i8sg9G3dacUqbqtOi+gHuXT
+ 1v/wj8MZt+sXbzBjdUf5H1kIbYmukLensYcZtGWR8r/Xh/VD3mEhz61S0cHMHBR9D3Sr
+ j48hjBuuJp9Nt9PsXws5I7MOl6hs9PrteKtyO+AzqfsllhCNjsBXdjvNQgaI3RIqc1WK
+ 9vhozZMati5ahxPLf/PoTESNKK/nfDzYkW1W4g9PpCtTAcOINSNmzSb3QSLf0bbfxv84 BQ== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t2y8q2p9x-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 13 Sep 2023 21:08:34 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38DL8XkH028113
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 13 Sep 2023 21:08:33 GMT
+Received: from [10.71.114.108] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Wed, 13 Sep
+ 2023 14:08:32 -0700
+Message-ID: <291f2270-5afc-7570-91cd-049c590b704f@quicinc.com>
+Date: Wed, 13 Sep 2023 14:08:27 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2] usb: host: xhci: Avoid XHCI resume delay if SSUSB
+ device is not present
+Content-Language: en-US
+To: Mathias Nyman <mathias.nyman@linux.intel.com>, <mathias.nyman@intel.com>,
+        <gregkh@linuxfoundation.org>
+CC: <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <quic_jackp@quicinc.com>
+References: <20230901001518.25403-1-quic_wcheng@quicinc.com>
+ <8dd86cf5-6337-b8f5-34d5-dcd290dc2d38@linux.intel.com>
+ <ee47814e-969b-a96c-9323-e47bbf89297e@quicinc.com>
+ <d68aa806-b26a-0e43-42fb-b8067325e967@quicinc.com>
+ <fa815665-5b50-87b9-eb21-535f1f883061@linux.intel.com>
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <fa815665-5b50-87b9-eb21-535f1f883061@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0hzdNYOLeOoM-4PZMQtr5J93kGA6Gidn_DVbFweMLb8vw@mail.gmail.com>
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 3ywC2N2-sm5XFRuVRTolKzNU0CBOXy_b
+X-Proofpoint-GUID: 3ywC2N2-sm5XFRuVRTolKzNU0CBOXy_b
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-09-13_16,2023-09-13_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 malwarescore=0 clxscore=1015 priorityscore=1501
+ adultscore=0 phishscore=0 suspectscore=0 mlxlogscore=907 bulkscore=0
+ spamscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2308100000 definitions=main-2309130177
 
-On Wed, Sep 13, 2023 at 07:42:05PM +0200, Rafael J. Wysocki wrote:
-> On Wed, Sep 13, 2023 at 6:35 PM Mario Limonciello
-> <mario.limonciello@amd.com> wrote:
-> >
-> > On 9/13/2023 10:40, Bjorn Helgaas wrote:
-> > > On Wed, Sep 13, 2023 at 12:20:14PM +0200, Rafael J. Wysocki wrote:
-> > >> On Wed, Sep 13, 2023 at 6:11 AM Mario Limonciello
-> > >> <mario.limonciello@amd.com> wrote:
-> 
-> [cut]
-> 
-> > >
-> > > Also, do we have some indication that this is specific to Ryzen?  If
-> > > not, I assume this is an ongoing issue, and matching on Device IDs
-> > > just means we'll have to debug the same problem again and add more
-> > > IDs.
-> >
-> > This is why my earlier attempts (v16 and v17) tried to tie it to
-> > constraints.  These are what the uPEP driver in Windows uses to make the
-> > decision of what power state to put integrated devices like the root
-> > port into.
-> >
-> > In Windows if no uPEP driver is installed "Windows internal policy"
-> > dictates what happens.  If the uPEP driver is installed then it
-> > influences the policy based upon the constraints.
-> >
-> > Rafael had feedback against constraints in v17, which is why I'm back to
-> > a quirk for v18.
-> >
-> > This issue as I've described it is specific to AMD Ryzen.
-> 
-> OK, so a quirk is the way to go IMO, because starting to rely on LPI
-> constraints in general retroactively is almost guaranteed to regress
-> things this way or another.
-> 
-> Whatever is done, it needs to be Ryzen-specific, unless there is
-> evidence that other (and in particular non-AMD) platforms are
-> affected.
-> 
-> > I expect it to be an ongoing issue.  I also expect unless we use
-> > constraints or convince the firmware team to add a _S0W object with a
-> > value of "0" for the sake of Linux that we will be adding IDs every year
-> > to wherever this lands as we reproduce it on newer SoCs.
-> 
-> So maybe the way to go is to make the AMD PMC driver set a flag for
-> Root Ports on suspend or similar.
+Hi Mathias,
 
-I like the quirk approach.  When PMC is involved, the device behavior
-doesn't conform to what it advertised via PME_Support.
+On 9/13/2023 7:21 AM, Mathias Nyman wrote:
+> Hi
+> 
+> On 13.9.2023 0.51, Wesley Cheng wrote:
+>> Hi Mathias,
+>>
+>>>> This is one way, but we can probably avoid re-reading all the usb3 
+>>>> portsc registers
+>>>> by checking if any bit is set in either:
+>>>>
+>>>>   // bitfield, set if xhci usb3 port neatly set to U3 with a hub 
+>>>> request
+>>>> xhci->usb3_rhub.bus_state.suspended_ports
+>>>>
+>>>> // bitfield, set if xhci usb3 port is forced to U3 during xhci suspend.
+>>>> xhci->usb3_rhub.bus_state.bus_suspended
+>>>>
+>>>> But haven't checked this works in all corner cases.
+>>>>
+>>> Thanks for the suggestion.  I think I also looked at seeing if we 
+>>> could use the suspended_ports param, and it was missing one of the 
+>>> use cases we had.  I haven't thought on combining it with the 
+>>> bus_suspend param also to see if it could work.  Let me give it a 
+>>> try, and I'll get back to you.
+>>>
+>>
+>> So in one of our normal use cases, which is to use an USB OTG adapter 
+>> with our devices, we can have this connected with no device.  In this 
+>> situation, the XHCI HCD and root hub are enumerated, and is in a state 
+>> where nothing is connected to the port.  I added a print to the 
+>> xhci_resume() path to check the status of "suspended_ports" and 
+>> "bus_suspended" and they seem to reflect the same status as when there 
+>> is something connected (to a device that supports autosuspend).  
+>> Here's some pointers I've found on why these parameters may not work:
+>>
+>> 1.  bus_suspended is only set (for the bus) if we reach the 
+>> bus_suspend() callback from USB HCD if the link is still in U0.  If 
+>> USB autosuspend is enabled, then the suspending of the root hub udev, 
+>> would have caused a call to suspend the port (usb_port_suspend()), and 
+>> that would set "suspended_ports" and placed the link in U3 already.
+>>
+>> 2. "suspended_ports" can't differentiate if a device is connected or 
+>> not after plugging in a USB3 device that has autosuspend enabled.  It 
+>> looks like on device disconnection, the suspended_ports isn't cleared 
+>> for that port number.  It is only cleared during the resume path where 
+>> a get port status is queried:
+>>
+>> static void xhci_get_usb3_port_status(struct xhci_port *port, u32 
+>> *status,
+>>                        u32 portsc)
+>> {
+>> ...
+>>       /* USB3 specific wPortStatus bits */
+>>       if (portsc & PORT_POWER) {
+>>           *status |= USB_SS_PORT_STAT_POWER;
+>>           /* link state handling */
+>>           if (link_state == XDEV_U0)
+>>               bus_state->suspended_ports &= ~(1 << portnum);
+>>       }
+>>
+>> IMO, this seems kind of weird, because the PLS shows that the port is 
+>> in the RxDetect state, so it technically isn't suspended.  If you 
+>> think we should clear suspended_ports on disconnect, then I think we 
+>> can also change the logic to rely on it for avoiding the unnecessary 
+>> delay in xhci_resume().
+> 
+> I think you found a bug.
+> 
+> We should clear suspended_ports bit if link state in portsc is anything 
+> other than U3, Resume or Recovery.
+> 
+> Not doing so might cause USB_PORT_STAT_C_SUSPEND bit to be set 
+> incorrectly in a USB2 get port status request.
+> 
+> So we want something like:
+> if (suspended_ports bit is set) {
+>      if (U3 || Resume || Recovery) {
+>          don't touch anything
+>      } else {
+>          clear suspended_port bit
+>          if ((U2 || U0) && USB2)
+>              set bus_state->port_c_suspend bit
+> }
+> 
+> I'll look into it
+> 
 
-The v18 quirk isn't connected to PMC at all, so IIUC it avoids
-D3hot/D3cold unnecessarily when amd/pmc is not loaded.
+Thanks, Mathias.  Will take some time to take a look as well since I 
+have a reliable set up that observes this issue.  If you have any test 
+code you might want to try, let me know!
 
-I don't object to avoiding D3hot/D3cold unconditionally.  Presumably
-we *could* save a little power by using them when amd/pci isn't
-loaded, but amd/pci would have to iterate through all PCI devices when
-it loads, save previous state, do the quirk, and then restore the
-previous state on module unload.  And it would have to use notifiers
-or assume no Root Port hotplug.  All sounds kind of complicated.
-
-Maybe it would even be enough to just clear dev->pme_support so we
-know wakeups don't work.  It would be a pretty big benefit if we
-didn't have to add another bit and complicate pci_prepare_to_sleep()
-or pci_target_state().
-
-Bjorn
+Thanks
+Wesley Cheng
 
