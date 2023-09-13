@@ -2,161 +2,148 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB84079E7AD
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Sep 2023 14:11:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBE5979E864
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Sep 2023 14:55:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233296AbjIMMLt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Sep 2023 08:11:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36746 "EHLO
+        id S240655AbjIMMzQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Sep 2023 08:55:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235500AbjIMMLs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Sep 2023 08:11:48 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4AE19B4
-        for <linux-usb@vger.kernel.org>; Wed, 13 Sep 2023 05:11:44 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2bf5bf33bcdso108713551fa.0
-        for <linux-usb@vger.kernel.org>; Wed, 13 Sep 2023 05:11:44 -0700 (PDT)
+        with ESMTP id S239951AbjIMMzP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Sep 2023 08:55:15 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995E619B9
+        for <linux-usb@vger.kernel.org>; Wed, 13 Sep 2023 05:55:11 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-501ce655fcbso10952191e87.2
+        for <linux-usb@vger.kernel.org>; Wed, 13 Sep 2023 05:55:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694607102; x=1695211902; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google; t=1694609709; x=1695214509; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=q3K1Nls0KcoT9xh2kC7N040+hi/MqUqF+7oTGY6x81w=;
-        b=PiaVrrfj6i59VIzWhRs7SjvHhgMVGNlY0mMrZ0XAF7ub2OQwQEywqxYaxaSsHGI2TP
-         6iWobdXJzqdRtwrMjBlH5qLKzDsA+Y6eu6yR/2FJT6NWm+LfhrX+GdpopAe6d5kEHLWC
-         9howduRmaxx1afcOkSUtWEsQU/tFyEZJ/fWCQEGBk8zoz8KqxKuUUAGQ/dxepVdcx+fr
-         iQi8XyICpy8KHLCvdxxDb3vZSUwZxpt+JZ4MbZGRv/64QcHWDG8Pw79iIb0uh2UvZDe4
-         OwF5mAT74FdGwLhn7fCtn87ysDoCdYHpXOlyfr/3GUToyKj4dz98LjVQ/EwDoSJdf1L1
-         IfzQ==
+        bh=FBLmprqMznqvsNo4BlY3BI8teGbJT5a4oyp31xLgPZc=;
+        b=EfvuG5IhpO9s/BOLvdfd9W1RBXSQqtnVEVrxcd5SxrcEEqNGKcxAn5p9qyJC+kCrlI
+         160iV0iuwsgdyhyfstozKoZvICCjkuCzyZBma/nBD1cHX8cgU6edJaPGLIqc1weKxfef
+         4ad+vNdbrplJGjX4W+JhAR7VB7MOSibQ/sUcmEZa8aj4s5YT385PwbbIcUpchqjLEetW
+         QuzXEDTPy7RUSFkQmbo9A5G9DlHyGcjSrb5XzU1PCks/9hJT2iVMfy8pzTEdZnkQmnX2
+         85Os8DEzTIQrk2n1I5JVIM/uvqndSLte5KltUPqV00FLVeCj/FxlHBHZp2K+5CFwmAo8
+         ZtBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694607102; x=1695211902;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1694609709; x=1695214509;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=q3K1Nls0KcoT9xh2kC7N040+hi/MqUqF+7oTGY6x81w=;
-        b=HcaqmwWrn8aQe1Rb2wtCoJp5MHA25sCQE4dLX6/uuLZz+fU8hsmLn5Av9ZENWP4c4y
-         l/2WM4us0DeQXGlTtLN742sKqHzfqhO4I5y9DvW/L4xGgmVbRzZHVxbd8OfCp6fEmMj8
-         +5HE5Xrf5Qj8dnKQYWvx2cSwAsZ6f65++DJh6W3br04cEBsO0yuVt1M8aQkElSB/Lucm
-         IZOC5UPfq5YN88XmoNZaopnQfQ3bOfcqQ0TMqDs6bRnUYUIplDHhwE4mgLeNb43pKnnE
-         OrghgbN5+U2TTJdlGtDdnkHAitgbABC7z1mVK3ZODB7gyKXpPEleOoR+ak8WSAadWuWJ
-         zUjg==
-X-Gm-Message-State: AOJu0YyWf88/FjT4nRGVmp4O7D9bhX4xHODxFrvPqhAY/IpkzaXWRHBa
-        I86SYI8d3y0ouhDhQKIHoI16uw==
-X-Google-Smtp-Source: AGHT+IFFBA+lO2mQ5FKWt/u4QbpvfYOfKnkOobimjUCGx0UV4Y49uf8jyKCC92z4ssRQPa8l7BzBjw==
-X-Received: by 2002:a2e:8903:0:b0:2b9:f1ad:9503 with SMTP id d3-20020a2e8903000000b002b9f1ad9503mr2211220lji.35.1694607102448;
-        Wed, 13 Sep 2023 05:11:42 -0700 (PDT)
-Received: from [192.168.37.232] (178235177106.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.106])
-        by smtp.gmail.com with ESMTPSA id p21-20020a170906229500b00992b8d56f3asm8319579eja.105.2023.09.13.05.11.39
+        bh=FBLmprqMznqvsNo4BlY3BI8teGbJT5a4oyp31xLgPZc=;
+        b=H2PtCsk2nBb38UYD7wXi+tugzXs5rtad5e/K+pVhPkL4Af77Wq1J3DrDijQmRpc3E2
+         +4qgj2KNx8QfEHopWBJjeaXSNd3W9uqZFc2OZRN3z5L7TXsZVzXXvDcNlrd8pd6IoOJJ
+         oAAFebxrUQjsV+USBCPPa3c5/y+wVFq0XENCtC3uaIru297MVcIkAAdygWmsf41rGoQS
+         BmEAhopAh8xe9q3vRp6oVhDK4M7AesyIJJeeO0CxlA7gayaBNnXWUi/a3Uj6ScCE3s46
+         b6a9YB5qIrKaorieWFpWzTcYpx7wG2LrWrQr4kphpYnl0688NK/rZMobSF8s36oJumTB
+         xZ+g==
+X-Gm-Message-State: AOJu0Ywgb6DDBXdx7CdHvKMPKuOjD2UwwhLKVpOe4UKUZy4kdjTaQ20c
+        XN5j6LvU39YnQMMZp/pL4ESGcw==
+X-Google-Smtp-Source: AGHT+IEg2jjdFCghXpK0VKM5rNLUqnXfSFdE9B4y6LBztGWV/ddOAMCFxBCTTvTQ53MRyH3o0P6YKQ==
+X-Received: by 2002:a05:6512:3f15:b0:500:bffa:5b85 with SMTP id y21-20020a0565123f1500b00500bffa5b85mr2378368lfa.32.1694609709518;
+        Wed, 13 Sep 2023 05:55:09 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id r21-20020ac252b5000000b00501be736dc8sm2138848lfm.300.2023.09.13.05.55.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Sep 2023 05:11:41 -0700 (PDT)
-Message-ID: <f57229ea-69be-4df4-871e-65dfb0d56f5f@linaro.org>
-Date:   Wed, 13 Sep 2023 14:11:39 +0200
+        Wed, 13 Sep 2023 05:55:08 -0700 (PDT)
+Message-ID: <e16ebefd-2014-4089-baad-6c0d09813144@linaro.org>
+Date:   Wed, 13 Sep 2023 15:55:08 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v11 12/13] arm64: dts: qcom: sa8295p: Enable tertiary
- controller and its 4 USB ports
-Content-Language: en-US
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
+Subject: Re: [PATCH v7 0/3] drm/bridge_connector: implement OOB HPD handling
+Content-Language: en-GB
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Johan Hovold <johan@kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com,
-        quic_jackp@quicinc.com, ahalaney@redhat.com,
-        quic_shazhuss@quicinc.com
-References: <20230828133033.11988-1-quic_kriskura@quicinc.com>
- <20230828133033.11988-13-quic_kriskura@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <20230828133033.11988-13-quic_kriskura@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Simon Ser <contact@emersion.fr>, Janne Grunau <j@jannau.net>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org
+References: <20230824235636.1436665-1-dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230824235636.1436665-1-dmitry.baryshkov@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 28.08.2023 15:30, Krishna Kurapati wrote:
-> Enable tertiary controller for SA8295P (based on SC8280XP).
-> Add pinctrl support for usb ports to provide VBUS to connected peripherals.
+On 25/08/2023 02:56, Dmitry Baryshkov wrote:
+> Note, numbering for this series starts from v5, since there were several
+> revisions for this patchset under a different series title ([1]).
 > 
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> ---
->  arch/arm64/boot/dts/qcom/sa8295p-adp.dts | 53 ++++++++++++++++++++++++
->  1 file changed, 53 insertions(+)
+> USB altmodes code would send OOB notifications to the drm_connector
+> specified in the device tree. However as the MSM DP driver uses
+> drm_bridge_connector, there is no way to receive these event directly.
+> Implement a bridge between oob_hotplug_event and drm_bridge's
+> hpd_notify.
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sa8295p-adp.dts b/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
-> index fd253942e5e5..473fe858fbed 100644
-> --- a/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
-> +++ b/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
-> @@ -9,6 +9,7 @@
->  #include <dt-bindings/gpio/gpio.h>
->  #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
->  #include <dt-bindings/spmi/spmi.h>
-> +#include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
->  
->  #include "sa8540p.dtsi"
->  #include "sa8540p-pmics.dtsi"
-> @@ -584,6 +585,20 @@ &usb_1_qmpphy {
->  	status = "okay";
->  };
->  
-> +&usb_2 {
-> +	pinctrl-0 = <&usb2_en_state>,
-> +		    <&usb3_en_state>,
-> +		    <&usb4_en_state>,
-> +		    <&usb5_en_state>;
-> +	pinctrl-names = "default";
-> +
-> +	status = "okay";
-> +};
-> +
-> +&usb_2_dwc3 {
-> +	dr_mode = "host";
-I believe you mentioned that the MP controller is host-only
-by design. If that's true, move this property to the SoC dtsi
-and leave an appropriate comment.
+> Merge strategy: since this series touches i915 code, it might make sense
+> to merge all three patches through drm-intel.
 
-Konrad
+Dear drm-misc and drm-intel maintainers. Since the merge window has 
+ended and the trees are fully open for the patches, I'd like to massage 
+this patch series. We have R-B on all three patches. Heikki has acked 
+the first patch, so it seems to be fine from the i915 point of view.
+
+Is it fine to be merged via drm-misc? Would you like to pick it up into 
+drm-intel?
+
+
+> 
+> [1] https://patchwork.freedesktop.org/series/103449/
+> 
+> Changes since v6:
+> - Rebased on top of linux-next. Fixed the freshly added
+>    new drm_connector_oob_hotplug_event() call.
+> 
+> Changes since v5:
+> - Fixed checkpatch warning in the first patch (noted by intel-gfx CI).
+> 
+> Changes since v4:
+> - Picked up the patchset
+> - Dropped msm-specific patches
+> - Changed drm_bridge_connector_oob_hotplug_event to call connector's HPD
+>    callback directly, rather than going through the last bridge's
+>    hpd_notify
+> - Added proper fwnode for the drm_bridge_connector
+> 
+> Bjorn Andersson (1):
+>    drm: Add HPD state to drm_connector_oob_hotplug_event()
+> 
+> Dmitry Baryshkov (2):
+>    drm/bridge_connector: stop filtering events in
+>      drm_bridge_connector_hpd_cb()
+>    drm/bridge_connector: implement oob_hotplug_event
+> 
+>   drivers/gpu/drm/drm_bridge_connector.c        | 34 ++++++++++++++-----
+>   drivers/gpu/drm/drm_connector.c               |  6 ++--
+>   .../gpu/drm/i915/display/intel_display_core.h |  3 ++
+>   drivers/gpu/drm/i915/display/intel_dp.c       | 17 ++++++++--
+>   drivers/usb/typec/altmodes/displayport.c      | 17 +++++-----
+>   include/drm/drm_connector.h                   |  6 ++--
+>   6 files changed, 60 insertions(+), 23 deletions(-)
+> 
+
+-- 
+With best wishes
+Dmitry
+
