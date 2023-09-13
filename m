@@ -1,80 +1,95 @@
-Return-Path: <linux-usb+bounces-1-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0ED479F2CE
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Sep 2023 22:24:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D121779F2E8
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Sep 2023 22:32:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 657691F20EE5
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Sep 2023 20:24:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6AAA81F20F94
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Sep 2023 20:32:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FAC5200A0;
-	Wed, 13 Sep 2023 20:23:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D36871F182;
+	Wed, 13 Sep 2023 20:32:16 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10D601DA42
-	for <linux-usb@vger.kernel.org>; Wed, 13 Sep 2023 20:23:46 +0000 (UTC)
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA37D1BCA
-	for <linux-usb@vger.kernel.org>; Wed, 13 Sep 2023 13:23:45 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id af79cd13be357-770ef0f51ccso17436785a.1
-        for <linux-usb@vger.kernel.org>; Wed, 13 Sep 2023 13:23:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1694636625; x=1695241425; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=i6XY8wIMD7LjGNpegRcCUKrZA0w1gq5GxQRY7mj2AIc=;
-        b=ag95XfCMSjmSa+KD55TQwEfBv5uUo1cvrq8swC9Y9L6+vmtAzGysPaI+FRYKjhKJwQ
-         XLIVjVao/EwcFSHY3TxfTbNkcJlEF4CN0MLlRz7AeQxjVryO7LzH7hSakzNMwhaBzKPe
-         4UPoh6u0pdhY5qSS4rJjCXW/OT8x9H6UsfyBE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694636625; x=1695241425;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=i6XY8wIMD7LjGNpegRcCUKrZA0w1gq5GxQRY7mj2AIc=;
-        b=kUSidl4muDL6Yola45nSHYZf/AAmilHfPc87SeT4S27nYhTPTK7NKA9bcpAnTKmH34
-         zx/b21Wqr4Aync5os4KEQBIjJAYO2RD7mW1RMEov9iHao8/zJ2GtM4kk1Atx2FtfKKQ8
-         16AXgh/l041oEo+9TP738pKVGPX3atTP3WtuHsUIJ2FzdWErezHEpIGCt0TTZvMxQH+8
-         NQTPAESqeKIf38n/DtvaQsbJqoABFsUX9o7UffxbXYI3ZTaNoWh1RDtRFaliUUNzj7ZC
-         xXAv74dQAKFN3b92/uvC56s9+uBwAirGQsPBvFddDfeC42dvpaORgprcgTdQhc7YdAxZ
-         b05A==
-X-Gm-Message-State: AOJu0YwaiSHkj/2jpk1NNJVAc/RO/PeMpENejYH93V9WAD0IOKK47t+d
-	3ycabYKgPlyFVEqRJqKK34Ub/e2IheoFrHmcWaU=
-X-Google-Smtp-Source: AGHT+IFnh5tXdvAG9bXRFjcRCwtUyfVz81P/6bycyuiP6qCifzFnuhaQGnKsNJ4RjlY4uLYWJ33y3A==
-X-Received: by 2002:a05:620a:2809:b0:76f:509:c78a with SMTP id f9-20020a05620a280900b0076f0509c78amr3827309qkp.22.1694636624855;
-        Wed, 13 Sep 2023 13:23:44 -0700 (PDT)
-Received: from meerkat.local (bras-base-mtrlpq5031w-grc-30-209-226-106-110.dsl.bell.ca. [209.226.106.110])
-        by smtp.gmail.com with ESMTPSA id z22-20020ac87116000000b004108f6788a6sm23408qto.41.2023.09.13.13.23.44
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Sep 2023 13:23:44 -0700 (PDT)
-Date: Wed, 13 Sep 2023 16:23:43 -0400
-From: Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-To: linux-usb@vger.kernel.org
-Subject: This list is being migrated to the new infrastructure
-Message-ID: <20230913-early-gloomily-4066a8@meerkat>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5B3C37D
+	for <linux-usb@vger.kernel.org>; Wed, 13 Sep 2023 20:32:16 +0000 (UTC)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B6C31BC6;
+	Wed, 13 Sep 2023 13:32:16 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31378C433C7;
+	Wed, 13 Sep 2023 20:32:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1694637135;
+	bh=uY+EB846F61CVw8N9dFpG1XQqtaFWYaybWPzlomSKaQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LY81LAsQEBg6NW9vY0d0R/w4li29m0xY3wqU138w79z3CSIUdMNBVdR6CcFMiyjps
+	 E7/koIxPZyApqe4VL+Tq6A3IXGxVkyCmD5qXh4FvuVe1HEN67xx+2ZVJFahzFMeyV9
+	 fYhxUhF/UADPH1lOeEq4t7BCl6+bRjOdZs2qaGcY=
+Date: Wed, 13 Sep 2023 22:32:12 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Randy Li <ayaka@soulik.info>
+Cc: linux-usb@vger.kernel.org,
+	Linux Media Mailing List <linux-media@vger.kernel.org>,
+	linux-kernel@vger.kernel.org, corbet@lwn.net,
+	linux-doc@vger.kernel.org
+Subject: Re: USB: DMA: mapping existing buffer is not supported?
+Message-ID: <2023091306-affection-lifter-3d9d@gregkh>
+References: <1e783efe-8659-8be1-82b7-15186302e88c@soulik.info>
+ <2023091323-trombone-storeroom-cbd3@gregkh>
+ <c0f75cbb-4d5d-0954-4bb6-20a82cfe5e2f@soulik.info>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c0f75cbb-4d5d-0954-4bb6-20a82cfe5e2f@soulik.info>
 
-Hello, all:
+On Thu, Sep 14, 2023 at 04:09:06AM +0800, Randy Li wrote:
+> 
+> On 2023/9/14 03:19, Greg KH wrote:
+> > On Thu, Sep 14, 2023 at 03:06:58AM +0800, Randy Li wrote:
+> > > Hello
+> > > 
+> > > I was trying to understand why USB webcams (UVC) have to copy video data
+> > > through the CPU (uvc_video_complete() schedules uvc_video_copy_data_work()
+> > > for this purpose). During my investigation, I noticed that functions
+> > > like|usb_sg_*() and |usb_buffer_*() are not available since kernel version
+> > > 2.6.12.
+> > What do you mean by "not available"?  I see them in the tree today, why
+> > do you think they are not present?
+> > 
+> usb_buffer_dmasync_sg(), usb_buffer_map(), usb_buffer_dmasync() and usb_buffer_unmap() are all disabled
+> by #if 0 in include/usb/usb.h
+> 
+> usb_buffer_map_sg() and usb_buffer_unmap_sg() are just declaration without definition.
 
-This list is being migrated to the new vger infrastructure. This should be a
-fully transparent process and you don't need to change anything about how you
-participate with the list or how you receive mail.
+Sorry, I was looking at the usb_sg_* calls, those are there if you want
+to use them.
 
-There will be a brief 20-minute delay with archives on lore.kernel.org. I will
-follow up once the archive migration has been completed.
+But again, why not just use the normal sg field in the urb itself for
+the scatter-gather pointer?  Will that not work for you?
 
-Best regards,
-Konstantin
+> > > If the USB subsystem can no longer work with existing buffers, I propose
+> > > that we consider removing the remaining documentation in the "Working with
+> > > existing buffers" section of Documentation/driver-api/usb/dma.rst.
+> > I don't understand, what is wrong with the information there exactly?
+> > Have you tried following the suggestions there?
+> Besides my answer to first question, I found no code use them today.
+
+The old-style usb-storage driver uses the usb_sg_* calls, and the uas.c
+driver uses the sg fields and provides line-speed transfers (the speed
+limit is in the device, not the kernel).
+
+thanks,
+
+greg k-h
 
