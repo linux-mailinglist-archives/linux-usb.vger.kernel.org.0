@@ -2,208 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BE6C79DE6C
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Sep 2023 05:00:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACD6B79DEAF
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Sep 2023 05:35:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233584AbjIMDAw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Sep 2023 23:00:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48492 "EHLO
+        id S238247AbjIMDfN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Sep 2023 23:35:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231181AbjIMDAv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Sep 2023 23:00:51 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89F16171E;
-        Tue, 12 Sep 2023 20:00:47 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-52e5900cf77so8111602a12.2;
-        Tue, 12 Sep 2023 20:00:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694574046; x=1695178846; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B0Ql+Umm198s7EODjUTAFVn1Eek/7t8Ja/ENb4v1xqU=;
-        b=TemaMNVNrUp9WnJKSE+nzrvh+fLsA133vDvMBSDIs/EznNFxYyceoiXoV6eHSAI1IG
-         FfyOwA2dhB2Lc9fQZMn+k1CPaNZmM7M6y5XRFQ1IXbLBZblMwAMXUL8JOlzGq/aT5Ehv
-         lVxL+3xYIfH30XEaksvAvpQ2iyqqZPF/flOLVbxrsPOsrHdDj3oWBuH698ASRUHDgM5o
-         rrfvaSsI3jYJEXQDV9lyHCUj8YVYZ8oPXlR3JwQLX3HvqbP3RA8Nxd7HS8s6fchgfoLc
-         mJwO46sQQBQCFMl79H8hIsvLznGjmIjxNlVnCluF1L0Q90XbKzpIPesZqzd95jSO4K3+
-         xNDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694574046; x=1695178846;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=B0Ql+Umm198s7EODjUTAFVn1Eek/7t8Ja/ENb4v1xqU=;
-        b=R55HVhcsMtcmqhMI074IaiXfuTTstgcZNTGCfyO5xGJJhAFgW+9BTi5SB8dF8R4KDf
-         NGxtdX+QKRCrIGArmW/+EqRnKg4YW0FmtGjvNnqFX9u+gYXzVfDnagcKnHuHIUSyskrM
-         UcIehyC26mjAZqIMbm2dtDZajCZ4RayVfeM7dDkSjwO4rXvsGYQjmIWLd6j7TFxrtQhg
-         m6bLGGFHGYMqyn+/sZcmcEagjjBeG03ZiKCiso3hM1uadNqkb4CpOioxDv2tGm0DIsmE
-         0HojFQolGu3dFD0ato8ceYhnULDZp/IkgpxQgu2GGpN1tafOJ691rBqxV2NlBFkJc38U
-         /xdQ==
-X-Gm-Message-State: AOJu0Yx7TiNMym7fJc80/4G92zMqnPgVXAmsvJS9qD8MJCoOj+dMaX1A
-        EGf2RVO4CMaXak/f/AvFNUUyMxdczo6RhjsY9e8=
-X-Google-Smtp-Source: AGHT+IF0JSzHjtYwGdSyOBax8j/JP+0/XQuGOwuSzxEWvZ+fOgRCHl3kCpfR7eSsYL6DFD5DKB7OxY64M0Kcu7YHNxI=
-X-Received: by 2002:a05:6402:6c7:b0:525:570c:566b with SMTP id
- n7-20020a05640206c700b00525570c566bmr1017895edy.22.1694574045793; Tue, 12 Sep
- 2023 20:00:45 -0700 (PDT)
+        with ESMTP id S238244AbjIMDfK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Sep 2023 23:35:10 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1701719;
+        Tue, 12 Sep 2023 20:35:05 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38D3JPZN016703;
+        Wed, 13 Sep 2023 03:35:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=zGwc/4NW+5sTeq1afR2q5Sg4Ygu0rpAQCMcO6lgCMd8=;
+ b=IsVsEA43PRFJK32qN8+Dm4ns6UD8Adb3IuGKaO5uf2RE1ff6lF29HQFlA6wVJKE7ofWg
+ 2L1HKHhoOcdkisXKebtynxpCifNgVjlQP90ldsM8XeR8VbECttP8k2mh5/+6NkuxB5Rc
+ Nx1CSe6NOdLvuQWRg4do9jXbhj0UCDhexZoZ0lsSCn0wTJgXLe6f5T3RvSl72hOtdhi1
+ Ow8vBOeQrvu+WPRyekSOEtL3z12NHm1XIE/C26NfWILKYDK0/uqa43yMbv1dTgAXTawz
+ ZALBsgPbQAcN/ycsvD9imqzEjI2oY1WIFqHvFiGEwapXp81XI5sd5008YaMMmk4w/AYw qQ== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t3003ggmf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 13 Sep 2023 03:35:00 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38D3YxN2007057
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 13 Sep 2023 03:34:59 GMT
+Received: from [10.216.46.24] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Tue, 12 Sep
+ 2023 20:34:55 -0700
+Message-ID: <8c149fc5-3fb4-f9a2-9512-6cab2503aaa9@quicinc.com>
+Date:   Wed, 13 Sep 2023 09:04:52 +0530
 MIME-Version: 1.0
-References: <20230903214150.2877023-1-dmitry.baryshkov@linaro.org>
- <20230903214150.2877023-2-dmitry.baryshkov@linaro.org> <ZPbrtAlO2Y+bjDhf@kuha.fi.intel.com>
- <CAA8EJpqUg2-k7LLBL38RHU1sThkXB54ca68xEMd1yMnHQcQ++w@mail.gmail.com>
- <ZPh0Ps9UJ3HLzdeR@kuha.fi.intel.com> <CAA8EJpratbBybgk8woD3maA=J_HuQis44Unq0n+c_UvaFs__AA@mail.gmail.com>
- <ZPiAwOf00RREiYPr@kuha.fi.intel.com> <6b6bacee-f7b6-4cfe-be3d-24bda44bfbcf@linaro.org>
-In-Reply-To: <6b6bacee-f7b6-4cfe-be3d-24bda44bfbcf@linaro.org>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Tue, 12 Sep 2023 20:00:33 -0700
-Message-ID: <CAF6AEGvjPBETONoNet_wfR2c1o38eJ1JuajLYheMA-zvObeYBg@mail.gmail.com>
-Subject: Re: [Freedreno] [RFC PATCH v1 01/12] Revert "drm/sysfs: Link DRM
- connectors to corresponding Type-C connectors"
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        dri-devel@lists.freedesktop.org,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Janne Grunau <j@jannau.net>, Robert Foss <rfoss@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.1
+Subject: Re: Disconnect interrupt generation for QC targets when role switch
+ is enabled
+Content-Language: en-US
+To:     Pavan Kondeti <quic_pkondeti@quicinc.com>
+CC:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Johan Hovold <johan@kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
         Andy Gross <agross@kernel.org>,
-        "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jonas Karlman <jonas@kwiboo.se>, linux-arm-msm@vger.kernel.org,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Won Chung <wonchung@google.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Simon Ser <contact@emersion.fr>,
-        freedreno@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>
+References: <af60c05b-4a0f-51b8-486a-1fc601602515@quicinc.com>
+ <20230828172059.GC818859@hu-bjorande-lv.qualcomm.com>
+ <325cf945-4d1f-5591-1ef6-b28e803c134b@quicinc.com>
+ <cfa39be4-2b33-4900-800c-9884010f5e75@quicinc.com>
+From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <cfa39be4-2b33-4900-800c-9884010f5e75@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: JA50tHAnCRDGoT2N04CDxigQBXZ18coz
+X-Proofpoint-GUID: JA50tHAnCRDGoT2N04CDxigQBXZ18coz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-09-12_24,2023-09-05_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=618 clxscore=1015
+ adultscore=0 malwarescore=0 priorityscore=1501 lowpriorityscore=0
+ spamscore=0 phishscore=0 bulkscore=0 suspectscore=0 mlxscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2308100000 definitions=main-2309130027
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 11, 2023 at 2:15=E2=80=AFPM Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
->
-> On 06/09/2023 16:38, Heikki Krogerus wrote:
-> > On Wed, Sep 06, 2023 at 03:48:35PM +0300, Dmitry Baryshkov wrote:
-> >> On Wed, 6 Sept 2023 at 15:44, Heikki Krogerus
-> >> <heikki.krogerus@linux.intel.com> wrote:
-> >>>
-> >>> On Tue, Sep 05, 2023 at 01:56:59PM +0300, Dmitry Baryshkov wrote:
-> >>>> Hi Heikki,
-> >>>>
-> >>>> On Tue, 5 Sept 2023 at 11:50, Heikki Krogerus
-> >>>> <heikki.krogerus@linux.intel.com> wrote:
-> >>>>>
-> >>>>> Hi Dmitry,
-> >>>>>
-> >>>>> On Mon, Sep 04, 2023 at 12:41:39AM +0300, Dmitry Baryshkov wrote:
-> >>>>>> The kdev->fwnode pointer is never set in drm_sysfs_connector_add()=
-, so
-> >>>>>> dev_fwnode() checks never succeed, making the respective commit NO=
-P.
-> >>>>>
-> >>>>> That's not true. The dev->fwnode is assigned when the device is
-> >>>>> created on ACPI platforms automatically. If the drm_connector fwnod=
-e
-> >>>>> member is assigned before the device is registered, then that fwnod=
-e
-> >>>>> is assigned also to the device - see drm_connector_acpi_find_compan=
-ion().
-> >>>>>
-> >>>>> But please note that even if drm_connector does not have anything i=
-n
-> >>>>> its fwnode member, the device may still be assigned fwnode, just ba=
-sed
-> >>>>> on some other logic (maybe in drivers/acpi/acpi_video.c?).
-> >>>>>
-> >>>>>> And if drm_sysfs_connector_add() is modified to set kdev->fwnode, =
-it
-> >>>>>> breaks drivers already using components (as it was pointed at [1])=
-,
-> >>>>>> resulting in a deadlock. Lockdep trace is provided below.
-> >>>>>>
-> >>>>>> Granted these two issues, it seems impractical to fix this commit =
-in any
-> >>>>>> sane way. Revert it instead.
-> >>>>>
-> >>>>> I think there is already user space stuff that relies on these link=
-s,
-> >>>>> so I'm not sure you can just remove them like that. If the componen=
-t
-> >>>>> framework is not the correct tool here, then I think you need to
-> >>>>> suggest some other way of creating them.
-> >>>>
-> >>>> The issue (that was pointed out during review) is that having a
-> >>>> component code in the framework code can lead to lockups. With the
-> >>>> patch #2 in place (which is the only logical way to set kdev->fwnode
-> >>>> for non-ACPI systems) probing of drivers which use components and se=
-t
-> >>>> drm_connector::fwnode breaks immediately.
-> >>>>
-> >>>> Can we move the component part to the respective drivers? With the
-> >>>> patch 2 in place, connector->fwnode will be copied to the created
-> >>>> kdev's fwnode pointer.
-> >>>>
-> >>>> Another option might be to make this drm_sysfs component registratio=
-n optional.
-> >>>
-> >>> You don't need to use the component framework at all if there is
-> >>> a better way of determining the connection between the DP and its
-> >>> Type-C connector (I'm assuming that that's what this series is about)=
-.
-> >>> You just need the symlinks, not the component.
-> >>
-> >> The problem is that right now this component registration has become
-> >> mandatory. And if I set the kdev->fwnode manually (like in the patch
-> >> 2), the kernel hangs inside the component code.
-> >> That's why I proposed to move the components to the place where they
-> >> are really necessary, e.g. i915 and amd drivers.
-> >
-> > So why can't we replace the component with the method you are
-> > proposing in this series of finding out the Type-C port also with
-> > i915, AMD, or whatever driver and platform (that's the only thing that
-> > component is used for)?
->
-> The drm/msm driver uses drm_bridge for the pipeline (including the last
-> DP entry) and the drm_bridge_connector to create the connector. I think
-> that enabling i915 and AMD drivers to use drm_bridge fells out of scope
-> for this series.
->
->
-> > Determining the connection between a DP and its Type-C connector is
-> > starting to get really important, so ideally we have a common solution
-> > for that.
->
-> Yes. This is what we have been discussing with Simon for quite some time
-> on #dri-devel.
->
-> Unfortunately I think the solution that got merged was pretty much
-> hastened in instead of being well-thought. For example, it is also not
-> always possible to provide the drm_connector / typec_connector links (as
-> you can see from the patch7. Sometimes we can only express that this is
-> a Type-C DP connector, but we can not easily point it to the particular
-> USB-C port.
->
-> So, I'm not sure, how can we proceed here. Currently merged patch breaks
-> drm/msm if we even try to use it by setting kdef->fwnode to
-> drm_connector->fwnode. The pointed out `drivers/usb/typec/port-mapper.c`
-> is an ACPI-only thing, which is not expected to work in a non-ACPI cases.
 
-In these cases we revert and try again next cycle
 
-BR,
--R
+On 9/6/2023 9:22 PM, Pavan Kondeti wrote:
 
->
-> --
-> With best wishes
-> Dmitry
->
+>>> As mentioned, this need has been identified a few times by now, so
+>>> nothing strange in your request/proposal.
+>>>
+>>> But so far no one has come up with a good way to register glue code
+>>> callbacks with the core; we can't pass arbitrary data (such as a
+>>> function pointer to such callback), and we don't know when the core is
+>>> registered, so we can't call a register operation when that happens.
+>>>
+>>> Regards,
+>>> Bjorn
+>>>
+>>>> [1]: https://patchwork.kernel.org/project/linux-usb/patch/20201009082843.28503-4-wcheng@codeaurora.org/
+>>>> [2]: https://patchwork.kernel.org/project/linux-usb/cover/20230325165217.31069-1-manivannan.sadhasivam@linaro.org/
+>>>>
+>>
+>> Hi Bjorn,
+>>
+>>   How about we use Component framework to let the glue layer know that the
+>> child probe is complete. That way we don't need to defer QCOM probe and in
+>> the bind call back coming to master (in this case, the glue layer), we can
+>> register the vendor hook or role switch we need and we can pass the role
+>> notifications from core to glue as needed.
+>>
+> 
+> Would device_driver::sync_state() help here? The qcom glue driver
+> creates a DL_FLAG_SYNC_STATE_ONLY device link with dwc3 core. If it
+> works, we can avoid component framework related changes in dwc3 core.
+> 
+> 
+
+Hi Pavan,
+
+  Thanks for the suggestion. We can use sync state but we might need to 
+suppress unbind path for dwc3 core to prevent remove from being called 
+(not sure if that is fine on upstream). Reason being if remove is 
+called, we won't get any sync state callback for us to un-register glue 
+hook. Other ideas that came from team internally were to add a list and 
+iterate through in core probe to find out required glue ops and invoke 
+them when required.
+
+Regards,
+Krishna,
