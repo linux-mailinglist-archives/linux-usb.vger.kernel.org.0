@@ -1,185 +1,96 @@
-Return-Path: <linux-usb+bounces-5-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-6-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30E2F79F37A
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Sep 2023 23:09:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86F2379F381
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Sep 2023 23:11:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A95821C20A77
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Sep 2023 21:09:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 306581F2141C
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Sep 2023 21:11:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AECE222EE7;
-	Wed, 13 Sep 2023 21:09:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C79622EE9;
+	Wed, 13 Sep 2023 21:11:24 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7658029CA
-	for <linux-usb@vger.kernel.org>; Wed, 13 Sep 2023 21:09:22 +0000 (UTC)
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA4E19B;
-	Wed, 13 Sep 2023 14:09:21 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38DKoTWo006924;
-	Wed, 13 Sep 2023 21:08:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Lbqq6WFsgoO1N9j1FW7OzsN+59oAcjFTOnvcO7zfshU=;
- b=KRsv6/yByL7N2TN4Jri09QHS3Df8mJZ3x5TnxO9xPos8bFlboH8bIaQFTjrBm+kicGFS
- HwK8/Y82b6ceNY4iME8nVyqX2310NAual7TwqgMHsunE7i8sg9G3dacUqbqtOi+gHuXT
- 1v/wj8MZt+sXbzBjdUf5H1kIbYmukLensYcZtGWR8r/Xh/VD3mEhz61S0cHMHBR9D3Sr
- j48hjBuuJp9Nt9PsXws5I7MOl6hs9PrteKtyO+AzqfsllhCNjsBXdjvNQgaI3RIqc1WK
- 9vhozZMati5ahxPLf/PoTESNKK/nfDzYkW1W4g9PpCtTAcOINSNmzSb3QSLf0bbfxv84 BQ== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t2y8q2p9x-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 13 Sep 2023 21:08:34 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38DL8XkH028113
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 13 Sep 2023 21:08:33 GMT
-Received: from [10.71.114.108] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Wed, 13 Sep
- 2023 14:08:32 -0700
-Message-ID: <291f2270-5afc-7570-91cd-049c590b704f@quicinc.com>
-Date: Wed, 13 Sep 2023 14:08:27 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20DD729CA
+	for <linux-usb@vger.kernel.org>; Wed, 13 Sep 2023 21:11:23 +0000 (UTC)
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by lindbergh.monkeyblade.net (Postfix) with SMTP id 0754D1738
+	for <linux-usb@vger.kernel.org>; Wed, 13 Sep 2023 14:11:22 -0700 (PDT)
+Received: (qmail 969791 invoked by uid 1000); 13 Sep 2023 17:11:22 -0400
+Date: Wed, 13 Sep 2023 17:11:22 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Randy Li <ayaka@soulik.info>, linux-usb@vger.kernel.org,
+  Linux Media Mailing List <linux-media@vger.kernel.org>,
+  linux-kernel@vger.kernel.org, corbet@lwn.net, linux-doc@vger.kernel.org
+Subject: Re: USB: DMA: mapping existing buffer is not supported?
+Message-ID: <52643326-3a43-43b3-9be1-f13a255a7fc8@rowland.harvard.edu>
+References: <1e783efe-8659-8be1-82b7-15186302e88c@soulik.info>
+ <2023091323-trombone-storeroom-cbd3@gregkh>
+ <c0f75cbb-4d5d-0954-4bb6-20a82cfe5e2f@soulik.info>
+ <2023091306-affection-lifter-3d9d@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2] usb: host: xhci: Avoid XHCI resume delay if SSUSB
- device is not present
-Content-Language: en-US
-To: Mathias Nyman <mathias.nyman@linux.intel.com>, <mathias.nyman@intel.com>,
-        <gregkh@linuxfoundation.org>
-CC: <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <quic_jackp@quicinc.com>
-References: <20230901001518.25403-1-quic_wcheng@quicinc.com>
- <8dd86cf5-6337-b8f5-34d5-dcd290dc2d38@linux.intel.com>
- <ee47814e-969b-a96c-9323-e47bbf89297e@quicinc.com>
- <d68aa806-b26a-0e43-42fb-b8067325e967@quicinc.com>
- <fa815665-5b50-87b9-eb21-535f1f883061@linux.intel.com>
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <fa815665-5b50-87b9-eb21-535f1f883061@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 3ywC2N2-sm5XFRuVRTolKzNU0CBOXy_b
-X-Proofpoint-GUID: 3ywC2N2-sm5XFRuVRTolKzNU0CBOXy_b
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-09-13_16,2023-09-13_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- lowpriorityscore=0 malwarescore=0 clxscore=1015 priorityscore=1501
- adultscore=0 phishscore=0 suspectscore=0 mlxlogscore=907 bulkscore=0
- spamscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2309130177
+In-Reply-To: <2023091306-affection-lifter-3d9d@gregkh>
 
-Hi Mathias,
+On Wed, Sep 13, 2023 at 10:32:12PM +0200, Greg KH wrote:
+> On Thu, Sep 14, 2023 at 04:09:06AM +0800, Randy Li wrote:
+> > 
+> > On 2023/9/14 03:19, Greg KH wrote:
+> > > On Thu, Sep 14, 2023 at 03:06:58AM +0800, Randy Li wrote:
+> > > > Hello
+> > > > 
+> > > > I was trying to understand why USB webcams (UVC) have to copy video data
+> > > > through the CPU (uvc_video_complete() schedules uvc_video_copy_data_work()
+> > > > for this purpose). During my investigation, I noticed that functions
+> > > > like|usb_sg_*() and |usb_buffer_*() are not available since kernel version
+> > > > 2.6.12.
+> > > What do you mean by "not available"?  I see them in the tree today, why
+> > > do you think they are not present?
+> > > 
+> > usb_buffer_dmasync_sg(), usb_buffer_map(), usb_buffer_dmasync() and usb_buffer_unmap()�are all disabled
+> > by #if 0 in include/usb/usb.h
+> > 
+> > usb_buffer_map_sg() and usb_buffer_unmap_sg() are just declaration without definition.
+> 
+> Sorry, I was looking at the usb_sg_* calls, those are there if you want
+> to use them.
+> 
+> But again, why not just use the normal sg field in the urb itself for
+> the scatter-gather pointer?  Will that not work for you?
+> 
+> > > > If the USB subsystem can no longer work with existing buffers, I propose
+> > > > that we consider removing the remaining documentation in the "Working with
+> > > > existing buffers" section of Documentation/driver-api/usb/dma.rst.
+> > > I don't understand, what is wrong with the information there exactly?
+> > > Have you tried following the suggestions there?
+> > Besides my answer to first question, I found no code use them today.
 
-On 9/13/2023 7:21 AM, Mathias Nyman wrote:
-> Hi
-> 
-> On 13.9.2023 0.51, Wesley Cheng wrote:
->> Hi Mathias,
->>
->>>> This is one way, but we can probably avoid re-reading all the usb3 
->>>> portsc registers
->>>> by checking if any bit is set in either:
->>>>
->>>>   // bitfield, set if xhci usb3 port neatly set to U3 with a hub 
->>>> request
->>>> xhci->usb3_rhub.bus_state.suspended_ports
->>>>
->>>> // bitfield, set if xhci usb3 port is forced to U3 during xhci suspend.
->>>> xhci->usb3_rhub.bus_state.bus_suspended
->>>>
->>>> But haven't checked this works in all corner cases.
->>>>
->>> Thanks for the suggestion.  I think I also looked at seeing if we 
->>> could use the suspended_ports param, and it was missing one of the 
->>> use cases we had.  I haven't thought on combining it with the 
->>> bus_suspend param also to see if it could work.  Let me give it a 
->>> try, and I'll get back to you.
->>>
->>
->> So in one of our normal use cases, which is to use an USB OTG adapter 
->> with our devices, we can have this connected with no device.  In this 
->> situation, the XHCI HCD and root hub are enumerated, and is in a state 
->> where nothing is connected to the port.  I added a print to the 
->> xhci_resume() path to check the status of "suspended_ports" and 
->> "bus_suspended" and they seem to reflect the same status as when there 
->> is something connected (to a device that supports autosuspend).  
->> Here's some pointers I've found on why these parameters may not work:
->>
->> 1.  bus_suspended is only set (for the bus) if we reach the 
->> bus_suspend() callback from USB HCD if the link is still in U0.  If 
->> USB autosuspend is enabled, then the suspending of the root hub udev, 
->> would have caused a call to suspend the port (usb_port_suspend()), and 
->> that would set "suspended_ports" and placed the link in U3 already.
->>
->> 2. "suspended_ports" can't differentiate if a device is connected or 
->> not after plugging in a USB3 device that has autosuspend enabled.  It 
->> looks like on device disconnection, the suspended_ports isn't cleared 
->> for that port number.  It is only cleared during the resume path where 
->> a get port status is queried:
->>
->> static void xhci_get_usb3_port_status(struct xhci_port *port, u32 
->> *status,
->>                        u32 portsc)
->> {
->> ...
->>       /* USB3 specific wPortStatus bits */
->>       if (portsc & PORT_POWER) {
->>           *status |= USB_SS_PORT_STAT_POWER;
->>           /* link state handling */
->>           if (link_state == XDEV_U0)
->>               bus_state->suspended_ports &= ~(1 << portnum);
->>       }
->>
->> IMO, this seems kind of weird, because the PLS shows that the port is 
->> in the RxDetect state, so it technically isn't suspended.  If you 
->> think we should clear suspended_ports on disconnect, then I think we 
->> can also change the logic to rely on it for avoiding the unnecessary 
->> delay in xhci_resume().
-> 
-> I think you found a bug.
-> 
-> We should clear suspended_ports bit if link state in portsc is anything 
-> other than U3, Resume or Recovery.
-> 
-> Not doing so might cause USB_PORT_STAT_C_SUSPEND bit to be set 
-> incorrectly in a USB2 get port status request.
-> 
-> So we want something like:
-> if (suspended_ports bit is set) {
->      if (U3 || Resume || Recovery) {
->          don't touch anything
->      } else {
->          clear suspended_port bit
->          if ((U2 || U0) && USB2)
->              set bus_state->port_c_suspend bit
-> }
-> 
-> I'll look into it
-> 
+That's exactly what it says at the end of the file:
 
-Thanks, Mathias.  Will take some time to take a look as well since I 
-have a reliable set up that observes this issue.  If you have any test 
-code you might want to try, let me know!
+----------------------------------------------------------------------------
+Note that several of those interfaces are currently commented out, since
+they don't have current users.  See the source code.  Other than the dmasync
+calls (where the underlying DMA primitives have changed), most of them can
+easily be commented back in if you want to use them.
+----------------------------------------------------------------------------
 
-Thanks
-Wesley Cheng
+So Randy, the answer to your question is that those routines are not 
+available any more because nothing needs to use them.  If you would like 
+to submit a patch removing the "Working with existing buffers" section 
+from the documentation file, feel free to do so.
+
+Alan Stern
 
