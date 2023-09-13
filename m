@@ -2,146 +2,211 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 315FE79E52E
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Sep 2023 12:48:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FCC179E5D6
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Sep 2023 13:10:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239728AbjIMKsm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Sep 2023 06:48:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51000 "EHLO
+        id S239886AbjIMLKw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Sep 2023 07:10:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232545AbjIMKsl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Sep 2023 06:48:41 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00A6419AD
-        for <linux-usb@vger.kernel.org>; Wed, 13 Sep 2023 03:48:36 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-500c7796d8eso11111028e87.1
-        for <linux-usb@vger.kernel.org>; Wed, 13 Sep 2023 03:48:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694602115; x=1695206915; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=p16cqlEMd92dBAoEF5vuQJ+lywDLoY/B9Jgb5zxp2p0=;
-        b=LjQ4YNxwyEuEVVbZCl3cbXU1A0qTSXmzVEJS0wxnrY3B6inoa1zwiTXIxw61iAq+uP
-         j4IMkBOaFPAm2ivvdw3G1UNzETiNTfMejxPT2/vGCvoHeNrPCJlpqQBuhd1yMEdPMv+r
-         hxamMG5ByWA4+KwRXCkoDtyeHvbp1oGJuPXQxFZQvvnvgO9dt3EvdcZI5tMdkr/h0PIY
-         igoqcctZwamnak3rk6PcJCzklS5xnWEAcqrvuWGXkzCTTJ+QOm4Yprp8DPovkq11BLnT
-         WobdSyAC/Ax0vCQ8owGwgGruZi1KNFefx19Rp1bOBLFbf47sU7mPXS4huenCcAPFGC+0
-         wjuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694602115; x=1695206915;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=p16cqlEMd92dBAoEF5vuQJ+lywDLoY/B9Jgb5zxp2p0=;
-        b=Mf39hkYxIPn83CvHfJ89yjsX2SXbK2nbb1I906PirtWqCkSs8wPfx2dc5Ic06RJ2t2
-         JdYgTyH1JvJ/SB9iK7mcL/PWqZ3hreJTOyPrBL5UvfsMmxsvUeFQiwVmiHAEv7azMhvX
-         KC9D3Q+5VAHWj/Tbl2EMMQpNrQZvbJKh38naPr2ZFh36x85IFaS5Wf61fS0iLuix5zRW
-         f0DLvhYSkpcejdxmP3DKmR5tdjB7vaQalMdSAr/rKL4WXzmV42lNJiE5yUKuJ5Vs4ODU
-         2MQ9vfb6AEyhcod7D1K/zdQWs+InrPijtjr+gl41CeOFjH6H+LiL5ah38r/mxFUa6Irl
-         1Myg==
-X-Gm-Message-State: AOJu0YxLtvhCFED9VJlTYnOZ4WXI77xPqpPHS773168Fv4ESxtbsc/Lc
-        Z6CBYQmQgwmnrG/3a3vkCYmC6Q==
-X-Google-Smtp-Source: AGHT+IG48WWjkEWSjFk2Tm3UfkWLLr5E+apDU8n7m6FZ9NqSOJmFHWSuYVjzkSlqyQtdjNNAxFQjHw==
-X-Received: by 2002:a19:2d08:0:b0:4fe:1681:9378 with SMTP id k8-20020a192d08000000b004fe16819378mr1770190lfj.66.1694602115188;
-        Wed, 13 Sep 2023 03:48:35 -0700 (PDT)
-Received: from [192.168.37.232] (178235177106.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.106])
-        by smtp.gmail.com with ESMTPSA id f10-20020a170906390a00b00992e94bcfabsm8185483eje.167.2023.09.13.03.48.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Sep 2023 03:48:34 -0700 (PDT)
-Message-ID: <9a0ab5a9-d4d8-41b8-94b0-9c62bd686254@linaro.org>
-Date:   Wed, 13 Sep 2023 12:48:32 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 01/14] arm64: dts: qcom: msm8916: Drop RPM bus clocks
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
+        with ESMTP id S234271AbjIMLKv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Sep 2023 07:10:51 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51C4E1726;
+        Wed, 13 Sep 2023 04:10:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=nwxvhePSI4O3hJwwz1qJAPg+IxcEp7hp7V2ZuemGbT4=; b=AxvCDTSZiE0Xs+Htfm3g3JBFdP
+        BiXj2qFvqlimvBej4GlcseaIKcISfQQm3r1+fph44LmkcH3SSNrkSm3jcxRCTpnIdkvfI3cEhF6Z5
+        OZY2BHrY4f4GZNrrgS0wb1V1aEXFrE2qXsjXvhKTNKOiF1VSJun5nLN2qTNLcHqUtsfrf9EnhO4YT
+        wMrAuotcOn1ddny7PmlgocHsySDM7QMLWvQQ6esNDALBMlPELnr26IVsauM2prws467TV8n7OKbtx
+        yjYkLTDNTHKdb19eIlw08sACGrLc0oFg/w/A4qCErgSvHhzfb2b6w7DIHtNV1apb5NBU4W4dlR3sg
+        xlndN3KQ==;
+Received: from [190.210.221.22] (helo=localhost)
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qgNlG-005huq-0U;
+        Wed, 13 Sep 2023 11:10:22 +0000
+From:   Christoph Hellwig <hch@lst.de>
+To:     Christian Brauner <brauner@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Tejun Heo <tj@kernel.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Naohiro Aota <naohiro.aota@wdc.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Alexey Minnekhanov <alexeymin@postmarketos.org>,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        linux-usb@vger.kernel.org
-References: <20230721-topic-rpm_clk_cleanup-v2-0-1e506593b1bd@linaro.org>
- <20230721-topic-rpm_clk_cleanup-v2-1-1e506593b1bd@linaro.org>
- <bd11d1b1-efe5-4f96-43e7-163fca5d3278@linaro.org>
- <ac501bcc-80a1-4b65-ba24-272152d1c95c@linaro.org>
- <7b500bba-3091-f425-a60d-e58a3d9e4c1a@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <7b500bba-3091-f425-a60d-e58a3d9e4c1a@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-hardening@vger.kernel.org,
+        cgroups@vger.kernel.org
+Subject: split up ->kill_sb
+Date:   Wed, 13 Sep 2023 08:09:54 -0300
+Message-Id: <20230913111013.77623-1-hch@lst.de>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 13.09.2023 10:53, Krzysztof Kozlowski wrote:
-> On 13/09/2023 10:47, Konrad Dybcio wrote:
->> On 13.09.2023 09:07, Krzysztof Kozlowski wrote:
->>> On 12/09/2023 15:31, Konrad Dybcio wrote:
->>>> These clocks are now handled from within the icc framework and are
->>>
->>> That's a driver behavior, not hardware.
->> I believe we've been over this already..
->>
->> The rationale behind this change is: that hardware, which falls
->> under the "interconnect" class, was previously misrepresented as
->> a bunch of clocks. There are clocks underneath, but accessing them
->> directly would be equivalent to e.g. circumventing the PHY subsystem
->> and initializing your UFS PHY from within the UFS device.
-> 
-> And every time one write such commit msg, how should we remember there
-> is some exception and actually it is about clock representation not CCF
-> or ICC framework.
-So is your reply essentially "fine, but please make it clear in
-each commit message"?
+Hi Al and Christian,
 
-Konrad
+this series splits ->kill_sb into separate ->shutdown_sb and ->free_sb
+methods and then calls generic_shutdown_super from common code to clean
+up the file system shutdown interface.
+
+As a first step towards that it moves allocating and freeing the
+anonymous block device dev_t into common code. As every super_block must
+have a valid s_dev it makes sense to just do that if the file system
+didn't set one by itself, and we can also detect if one was assigned
+easily when shutting down.
+
+A git tree is available here:
+
+    git://git.infradead.org/users/hch/misc.git fs-kill_sb
+
+Gitweb:
+
+    http://git.infradead.org/users/hch/misc.git/shortlog/refs/heads/fs-kill_sb
+
+Diffstat:
+ Documentation/filesystems/locking.rst     |    9 -
+ Documentation/filesystems/vfs.rst         |   15 ++
+ arch/powerpc/platforms/cell/spufs/inode.c |   10 -
+ arch/s390/hypfs/inode.c                   |   43 --------
+ arch/x86/kernel/cpu/resctrl/rdtgroup.c    |    7 -
+ block/bdev.c                              |    1 
+ drivers/android/binderfs.c                |   12 --
+ drivers/base/devtmpfs.c                   |    8 -
+ drivers/dax/super.c                       |    1 
+ drivers/dma-buf/dma-buf.c                 |    1 
+ drivers/gpu/drm/drm_drv.c                 |    1 
+ drivers/infiniband/hw/qib/qib.h           |    4 
+ drivers/infiniband/hw/qib/qib_fs.c        |  105 ++++---------------
+ drivers/infiniband/hw/qib/qib_init.c      |   32 ++----
+ drivers/misc/cxl/api.c                    |    1 
+ drivers/misc/ibmasm/ibmasmfs.c            |    8 -
+ drivers/mtd/mtdsuper.c                    |   12 --
+ drivers/scsi/cxlflash/ocxl_hw.c           |    1 
+ drivers/usb/gadget/function/f_fs.c        |    6 -
+ drivers/usb/gadget/legacy/inode.c         |   18 +--
+ drivers/xen/xenfs/super.c                 |    8 -
+ fs/9p/vfs_super.c                         |   16 ---
+ fs/adfs/super.c                           |    2 
+ fs/affs/super.c                           |    7 -
+ fs/afs/super.c                            |   27 ++---
+ fs/aio.c                                  |    1 
+ fs/anon_inodes.c                          |    1 
+ fs/autofs/autofs_i.h                      |    3 
+ fs/autofs/init.c                          |    3 
+ fs/autofs/inode.c                         |   24 ++--
+ fs/befs/linuxvfs.c                        |    2 
+ fs/bfs/inode.c                            |    2 
+ fs/binfmt_misc.c                          |    8 -
+ fs/btrfs/super.c                          |   16 +--
+ fs/btrfs/tests/btrfs-tests.c              |    1 
+ fs/ceph/super.c                           |   20 +--
+ fs/coda/inode.c                           |    1 
+ fs/configfs/mount.c                       |    8 -
+ fs/cramfs/inode.c                         |    6 -
+ fs/debugfs/inode.c                        |    8 -
+ fs/devpts/inode.c                         |    6 -
+ fs/ecryptfs/main.c                        |   14 --
+ fs/efivarfs/super.c                       |   13 +-
+ fs/efs/super.c                            |    7 -
+ fs/erofs/super.c                          |   25 +---
+ fs/exfat/super.c                          |    6 -
+ fs/ext2/super.c                           |    2 
+ fs/ext4/super.c                           |   12 +-
+ fs/f2fs/super.c                           |    6 -
+ fs/fat/namei_msdos.c                      |    2 
+ fs/fat/namei_vfat.c                       |    2 
+ fs/freevxfs/vxfs_super.c                  |    2 
+ fs/fuse/control.c                         |   12 +-
+ fs/fuse/inode.c                           |   19 +--
+ fs/fuse/virtio_fs.c                       |   21 ++-
+ fs/gfs2/ops_fstype.c                      |   11 --
+ fs/hfs/super.c                            |    2 
+ fs/hfsplus/super.c                        |    2 
+ fs/hostfs/hostfs_kern.c                   |    5 
+ fs/hpfs/super.c                           |    2 
+ fs/hugetlbfs/inode.c                      |    2 
+ fs/isofs/inode.c                          |    2 
+ fs/jffs2/super.c                          |   22 ++--
+ fs/jfs/super.c                            |    2 
+ fs/kernfs/mount.c                         |   20 +--
+ fs/minix/inode.c                          |    2 
+ fs/nfs/client.c                           |    2 
+ fs/nfs/fs_context.c                       |   19 +++
+ fs/nfs/internal.h                         |    1 
+ fs/nfs/nfs4proc.c                         |    8 -
+ fs/nfs/nfs4trace.h                        |    6 -
+ fs/nfs/nfs4xdr.c                          |    2 
+ fs/nfs/super.c                            |   26 ----
+ fs/nfs/sysfs.h                            |    2 
+ fs/nfsd/nfsctl.c                          |   22 ++--
+ fs/nilfs2/super.c                         |    2 
+ fs/nsfs.c                                 |    1 
+ fs/ntfs/super.c                           |    2 
+ fs/ntfs3/super.c                          |    6 -
+ fs/ocfs2/dlmfs/dlmfs.c                    |    2 
+ fs/ocfs2/super.c                          |    2 
+ fs/omfs/inode.c                           |    2 
+ fs/openpromfs/inode.c                     |    1 
+ fs/orangefs/orangefs-kernel.h             |    2 
+ fs/orangefs/orangefs-mod.c                |    2 
+ fs/orangefs/super.c                       |   13 --
+ fs/overlayfs/super.c                      |    1 
+ fs/pipe.c                                 |    1 
+ fs/proc/root.c                            |   16 +--
+ fs/pstore/inode.c                         |    8 -
+ fs/qnx4/inode.c                           |    7 -
+ fs/qnx6/inode.c                           |    2 
+ fs/ramfs/inode.c                          |    6 -
+ fs/reiserfs/super.c                       |    7 -
+ fs/romfs/super.c                          |    6 -
+ fs/smb/client/cifsfs.c                    |   17 ++-
+ fs/squashfs/super.c                       |    2 
+ fs/super.c                                |  159 ++++++++++++++++--------------
+ fs/sysfs/mount.c                          |    7 -
+ fs/sysv/super.c                           |    4 
+ fs/tracefs/inode.c                        |    2 
+ fs/ubifs/super.c                          |   10 -
+ fs/udf/super.c                            |    2 
+ fs/ufs/super.c                            |    2 
+ fs/vboxsf/super.c                         |    1 
+ fs/xfs/xfs_buf.c                          |    2 
+ fs/xfs/xfs_super.c                        |    6 -
+ fs/zonefs/super.c                         |   34 ++----
+ include/linux/fs.h                        |   11 --
+ include/linux/kernfs.h                    |    5 
+ include/linux/mtd/super.h                 |    2 
+ include/linux/nfs_fs_sb.h                 |    1 
+ include/linux/ramfs.h                     |    2 
+ init/do_mounts.c                          |    6 -
+ ipc/mqueue.c                              |    2 
+ kernel/bpf/inode.c                        |    2 
+ kernel/cgroup/cgroup.c                    |   10 +
+ kernel/resource.c                         |    1 
+ mm/secretmem.c                            |    1 
+ mm/shmem.c                                |    5 
+ net/socket.c                              |    1 
+ net/sunrpc/rpc_pipe.c                     |   19 ++-
+ security/apparmor/apparmorfs.c            |    1 
+ security/inode.c                          |    8 -
+ security/selinux/selinuxfs.c              |   15 --
+ security/smack/smackfs.c                  |    6 -
+ 126 files changed, 524 insertions(+), 679 deletions(-)
