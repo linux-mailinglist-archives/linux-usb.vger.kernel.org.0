@@ -2,61 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41E7C79E7A3
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Sep 2023 14:10:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB84079E7AD
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Sep 2023 14:11:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240281AbjIMMKr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Sep 2023 08:10:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44628 "EHLO
+        id S233296AbjIMMLt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Sep 2023 08:11:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239383AbjIMMKq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Sep 2023 08:10:46 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9C6119AD
-        for <linux-usb@vger.kernel.org>; Wed, 13 Sep 2023 05:10:41 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b95d5ee18dso116989991fa.1
-        for <linux-usb@vger.kernel.org>; Wed, 13 Sep 2023 05:10:41 -0700 (PDT)
+        with ESMTP id S235500AbjIMMLs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Sep 2023 08:11:48 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D4AE19B4
+        for <linux-usb@vger.kernel.org>; Wed, 13 Sep 2023 05:11:44 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2bf5bf33bcdso108713551fa.0
+        for <linux-usb@vger.kernel.org>; Wed, 13 Sep 2023 05:11:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694607039; x=1695211839; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1694607102; x=1695211902; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=SQIM+kqMG9ytOOMoiN7yuL7xJYjBwxdRQr4Do42aFXE=;
-        b=mCdOxodGzfbOAhIXjY+KogNqwrxUJr5TxT7bHhdDnhclvsBUSgcBB9B/r6bqqAwH9L
-         V/1K4u1NkWPtirunMj9/2TzQ2yZmhNgy/wlUzyc2FXjbdLqaAewnZcyx5fYwav8ufK/J
-         FSyFmKv3g0vLYph9rwUT4IQmJ3lSKCFZR2T1wDuj6nOuQ+FhO7Ey3JvKpjmvFdRyZ2rH
-         NTtJ7cNY/tFTFSbsbhNjML2YMKT+6aHZ3CJwGJZBDwcgdhlfuUoGNzEwfkehWODLsztZ
-         qmg0saGEs6qH4l2AO2L0dbhQ/qpiZrdOS68eIT+mtPYuQ5NqPpc/m4hXO0Ayaii8HtgS
-         1xQw==
+        bh=q3K1Nls0KcoT9xh2kC7N040+hi/MqUqF+7oTGY6x81w=;
+        b=PiaVrrfj6i59VIzWhRs7SjvHhgMVGNlY0mMrZ0XAF7ub2OQwQEywqxYaxaSsHGI2TP
+         6iWobdXJzqdRtwrMjBlH5qLKzDsA+Y6eu6yR/2FJT6NWm+LfhrX+GdpopAe6d5kEHLWC
+         9howduRmaxx1afcOkSUtWEsQU/tFyEZJ/fWCQEGBk8zoz8KqxKuUUAGQ/dxepVdcx+fr
+         iQi8XyICpy8KHLCvdxxDb3vZSUwZxpt+JZ4MbZGRv/64QcHWDG8Pw79iIb0uh2UvZDe4
+         OwF5mAT74FdGwLhn7fCtn87ysDoCdYHpXOlyfr/3GUToyKj4dz98LjVQ/EwDoSJdf1L1
+         IfzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694607039; x=1695211839;
+        d=1e100.net; s=20230601; t=1694607102; x=1695211902;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SQIM+kqMG9ytOOMoiN7yuL7xJYjBwxdRQr4Do42aFXE=;
-        b=NCkc7gvcQVYVvF6LKwjTLMSJsG27cDEItnT6W20VEOoIYfxDYD0fjolJScIbG1ohpI
-         HHIL09jRvnY0eXxK4SLYaZ//I2hEcgIX7x3ZpSZcVymkqsn+ITAmgK++Diue6RPAM3RM
-         BwUI7eGRRuFAsAIgIBQiQ3WPPRuhLYQDvC7ZO3VlxE3NXQ/xCL0ryRMsiIpRdX8cEYHP
-         y7HD37bHiYZ7KD6g3vaTNlzeG9jvJ2UlxJ4lRdRzkPKR0z6xd21xRc1d5RKuzlQRlDr/
-         /j0yyhEeThjei/p0+vOIOKDpVEm+omuKOkujhGQPyDNxaUB4ifVUrb2NRpvfbRlmfHG7
-         nb0g==
-X-Gm-Message-State: AOJu0Yz5r1bFQyaZNJUSUkBLpLeM7UodZp6wcRx+7OQQewJ4huD5m09s
-        ZUivF9jo6jyiUPueFWUmfmQFAg==
-X-Google-Smtp-Source: AGHT+IEHVECWvv1uWhyOqRUFyoZhQUOvMAPZZoteTJ5oOo8s3pvcNbh9qxE07ML7hsTq55A+nMZokw==
-X-Received: by 2002:a2e:9606:0:b0:2bd:2260:46ab with SMTP id v6-20020a2e9606000000b002bd226046abmr1943754ljh.50.1694607039359;
-        Wed, 13 Sep 2023 05:10:39 -0700 (PDT)
+        bh=q3K1Nls0KcoT9xh2kC7N040+hi/MqUqF+7oTGY6x81w=;
+        b=HcaqmwWrn8aQe1Rb2wtCoJp5MHA25sCQE4dLX6/uuLZz+fU8hsmLn5Av9ZENWP4c4y
+         l/2WM4us0DeQXGlTtLN742sKqHzfqhO4I5y9DvW/L4xGgmVbRzZHVxbd8OfCp6fEmMj8
+         +5HE5Xrf5Qj8dnKQYWvx2cSwAsZ6f65++DJh6W3br04cEBsO0yuVt1M8aQkElSB/Lucm
+         IZOC5UPfq5YN88XmoNZaopnQfQ3bOfcqQ0TMqDs6bRnUYUIplDHhwE4mgLeNb43pKnnE
+         OrghgbN5+U2TTJdlGtDdnkHAitgbABC7z1mVK3ZODB7gyKXpPEleOoR+ak8WSAadWuWJ
+         zUjg==
+X-Gm-Message-State: AOJu0YyWf88/FjT4nRGVmp4O7D9bhX4xHODxFrvPqhAY/IpkzaXWRHBa
+        I86SYI8d3y0ouhDhQKIHoI16uw==
+X-Google-Smtp-Source: AGHT+IFFBA+lO2mQ5FKWt/u4QbpvfYOfKnkOobimjUCGx0UV4Y49uf8jyKCC92z4ssRQPa8l7BzBjw==
+X-Received: by 2002:a2e:8903:0:b0:2b9:f1ad:9503 with SMTP id d3-20020a2e8903000000b002b9f1ad9503mr2211220lji.35.1694607102448;
+        Wed, 13 Sep 2023 05:11:42 -0700 (PDT)
 Received: from [192.168.37.232] (178235177106.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.106])
-        by smtp.gmail.com with ESMTPSA id p21-20020a170906229500b00992b8d56f3asm8319579eja.105.2023.09.13.05.10.36
+        by smtp.gmail.com with ESMTPSA id p21-20020a170906229500b00992b8d56f3asm8319579eja.105.2023.09.13.05.11.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Sep 2023 05:10:38 -0700 (PDT)
-Message-ID: <3920bc96-fe58-4e3b-96ab-706f00edb2ee@linaro.org>
-Date:   Wed, 13 Sep 2023 14:10:36 +0200
+        Wed, 13 Sep 2023 05:11:41 -0700 (PDT)
+Message-ID: <f57229ea-69be-4df4-871e-65dfb0d56f5f@linaro.org>
+Date:   Wed, 13 Sep 2023 14:11:39 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v11 13/13] arm64: dts: qcom: sa8540-ride: Enable first
- port of tertiary usb controller
+Subject: Re: [PATCH v11 12/13] arm64: dts: qcom: sa8295p: Enable tertiary
+ controller and its 4 USB ports
 Content-Language: en-US
-To:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>,
         Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Philipp Zabel <p.zabel@pengutronix.de>,
@@ -74,9 +74,7 @@ Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         quic_jackp@quicinc.com, ahalaney@redhat.com,
         quic_shazhuss@quicinc.com
 References: <20230828133033.11988-1-quic_kriskura@quicinc.com>
- <20230828133033.11988-14-quic_kriskura@quicinc.com>
- <f19fa545-0ccb-4670-af77-7c034b1016ef@linaro.org>
- <e7bd3aa9-b8ee-4b8a-2354-e786f9a9ff47@quicinc.com>
+ <20230828133033.11988-13-quic_kriskura@quicinc.com>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
 Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  xsFNBF9ALYUBEADWAhxdTBWrwAgDQQzc1O/bJ5O7b6cXYxwbBd9xKP7MICh5YA0DcCjJSOum
@@ -113,45 +111,52 @@ Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  bGqMHex48FVZhexNPYOd58EY9/7mL5u0sJmo+jTeb4JBgIbFPJCFyng4HwbniWgQJZ1WqaUC
  nas9J77uICis2WH7N8Bs9jy0wQYezNzqS+FxoNXmDQg2jetX8en4bO2Di7Pmx0jXA4TOb9TM
  izWDgYvmBE8=
-In-Reply-To: <e7bd3aa9-b8ee-4b8a-2354-e786f9a9ff47@quicinc.com>
+In-Reply-To: <20230828133033.11988-13-quic_kriskura@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 7.09.2023 05:36, Krishna Kurapati PSSNV wrote:
+On 28.08.2023 15:30, Krishna Kurapati wrote:
+> Enable tertiary controller for SA8295P (based on SC8280XP).
+> Add pinctrl support for usb ports to provide VBUS to connected peripherals.
 > 
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> ---
+>  arch/arm64/boot/dts/qcom/sa8295p-adp.dts | 53 ++++++++++++++++++++++++
+>  1 file changed, 53 insertions(+)
 > 
-> On 9/6/2023 10:28 PM, Konrad Dybcio wrote:
->> On 28.08.2023 15:30, Krishna Kurapati wrote:
->>> From: Andrew Halaney <ahalaney@redhat.com>
->>>
->>> There is now support for the multiport USB controller this uses so
->>> enable it.
->>>
->>> The board only has a single port hooked up (despite it being wired up to
->>> the multiport IP on the SoC). There's also a USB 2.0 mux hooked up,
->>> which by default on boot is selected to mux properly. Grab the gpio
->>> controlling that and ensure it stays in the right position so USB 2.0
->>> continues to be routed from the external port to the SoC.
->>>
->>> Co-developed-by: Andrew Halaney <ahalaney@redhat.com>
->>> Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
->>> [Krishna: Rebased on top of usb-next]
->>> Co-developed-by: Krishna Kurapati <quic_kriskura@quicinc.com>
->>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
->>> ---
->> Is there any benefit to removing the other ports?
->>
->> i.e. are ports 1-3 not parked properly by the dwc3 driver if
->> they're never connected to anything?
->>
-> Hi Konrad,
-> 
->  Whether or not the phy is connected to a port, the controller would modify the GUSB2PHYCFG/GUSB3PIPECTL registers. But if we don't specify only one phy and let phys from base DTSI take effect (4 HS / 2 SS), we would end up initializing and powering on phy's which are never connected to a port. To avoid that we need to specify only one phy for this platform.
-And does that have any major effect on power use?
-
-Do these PHYs not have some dormant/low power mode?
+> diff --git a/arch/arm64/boot/dts/qcom/sa8295p-adp.dts b/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
+> index fd253942e5e5..473fe858fbed 100644
+> --- a/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
+> +++ b/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
+> @@ -9,6 +9,7 @@
+>  #include <dt-bindings/gpio/gpio.h>
+>  #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
+>  #include <dt-bindings/spmi/spmi.h>
+> +#include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
+>  
+>  #include "sa8540p.dtsi"
+>  #include "sa8540p-pmics.dtsi"
+> @@ -584,6 +585,20 @@ &usb_1_qmpphy {
+>  	status = "okay";
+>  };
+>  
+> +&usb_2 {
+> +	pinctrl-0 = <&usb2_en_state>,
+> +		    <&usb3_en_state>,
+> +		    <&usb4_en_state>,
+> +		    <&usb5_en_state>;
+> +	pinctrl-names = "default";
+> +
+> +	status = "okay";
+> +};
+> +
+> +&usb_2_dwc3 {
+> +	dr_mode = "host";
+I believe you mentioned that the MP controller is host-only
+by design. If that's true, move this property to the SoC dtsi
+and leave an appropriate comment.
 
 Konrad
