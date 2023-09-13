@@ -2,58 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A78179E65E
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Sep 2023 13:16:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B03179E797
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Sep 2023 14:09:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239962AbjIMLQI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Sep 2023 07:16:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55374 "EHLO
+        id S240221AbjIMMJE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Sep 2023 08:09:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240116AbjIMLPx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Sep 2023 07:15:53 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 969652688
-        for <linux-usb@vger.kernel.org>; Wed, 13 Sep 2023 04:14:57 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-99c136ee106so837763266b.1
-        for <linux-usb@vger.kernel.org>; Wed, 13 Sep 2023 04:14:57 -0700 (PDT)
+        with ESMTP id S240220AbjIMMJC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Sep 2023 08:09:02 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A92519AC
+        for <linux-usb@vger.kernel.org>; Wed, 13 Sep 2023 05:08:58 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-9a9f139cd94so784083466b.2
+        for <linux-usb@vger.kernel.org>; Wed, 13 Sep 2023 05:08:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694603696; x=1695208496; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1694606937; x=1695211737; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=35Jh6hBwOpQxONFibbiJVQP3eMSJ7hdKNbYbRO9M0Ew=;
-        b=jbTY97u2o1xZYDXw1CAA1Md38G17Ls3Lo6FRNiN8tANJjxMEatnocV+nCJ1U1NvRdI
-         zIiF/wCR7OM2F3TdJaWI7QidsnHnyBCEp8M3YPPgAPeqj18qchdlkKd/90Lfg/QwtpdQ
-         au5eElvea1IwxCM9TMu7Q7qJJnmpsR7UHBsUG6DYFFLFzqcNLOT1WhiNprVwLQ27wO9s
-         VYndc4NpxdKJCnWdeCmVJ05O+u03hpaUOhfP9JcAb51e9FDB8kmtoLonC1IQeOutwRuM
-         fLaZDwMIfQi30misUp2hhg2On9PQRmb/mL8MInN1eF4fCPPuo+bc3bfhKNiREXfbzgqK
-         2iog==
+        bh=Dsc3mJorN3B/h1Vd1XyRMUNMxmDX6BmM8Ul2Dt3JUqg=;
+        b=p6zPVxHY9UsEHQvmZ7RjoFRellJ+R2Jww0DGrDEd0zIbcpOP6ZM1rV4lAy6kq482fP
+         EP5ogy9Nf8zYxoZP7MWXE+tamko2bBrN4m1F5r/i/5WnbOx5i+lRtpJYKq696K2A6pdV
+         8n5laNn0KgSuG7U4INoFU/4Vk34Z9QhSmH1uf6Gmr/brpOGfsgKHM7GKIcBPHs9P8lse
+         NdlREm9PieRqCARvL7wOiyiA3KoX3ox31pZ+jIf6kGAXrN4aSwuFkEDfx3yLfc9AKKSO
+         kMxWD/l8No2nUAP86z+x7Dn85SvfUruPjIqABSd6/8OZ7W3KAET8qBFxX1eG3f5Hgbbc
+         MUVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694603696; x=1695208496;
+        d=1e100.net; s=20230601; t=1694606937; x=1695211737;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=35Jh6hBwOpQxONFibbiJVQP3eMSJ7hdKNbYbRO9M0Ew=;
-        b=jDCSBGhAZbFzGDETw0iN6OVk9U459+pO5XpQqHnkHv7vGJv5ZCsy7XOtzAjAu/xT5e
-         NGGf3F5/3ZjW5eyls6H1V6JxsmRGeGvzG+pm1TU8Hal7oqoyh3ntrz4vVP+P9PDtal5Y
-         8EOIPig40/nTi02USO5rP6IRqkS0FoquFrH9QkgVGF59adxijM7UCX+jK1Ckwfd6udk8
-         pB1iM5xhhnVsTngeFWiRUrKKmdK1YFaIHw/G9b2+jmtdMHb6u3cnuc4d3Maa7IchYjqF
-         hG2SL3NzRosdXoWa5E5wiyLe5FpZw0DmIGftAN75IEKf0Vjbqgf/b/+xpUVyu2qaTfpL
-         6VGA==
-X-Gm-Message-State: AOJu0YxBivqPfrbwx6OqKA6r9R6hU9cULG3r5tTRWqvhkOxnMcT1ry23
-        lwexV98fjvaN6K5aF0YWlNLkfw==
-X-Google-Smtp-Source: AGHT+IH4tWmuFJU4lDUDmzfIRDr9cvvAY7/q8Aw7sUDvq3Z/4hYnw2ZLqpW1l8wfK9hIGeuaAGpiRg==
-X-Received: by 2002:a17:906:101a:b0:99b:ead0:2733 with SMTP id 26-20020a170906101a00b0099bead02733mr1702880ejm.72.1694603696034;
-        Wed, 13 Sep 2023 04:14:56 -0700 (PDT)
+        bh=Dsc3mJorN3B/h1Vd1XyRMUNMxmDX6BmM8Ul2Dt3JUqg=;
+        b=Ht1o3RZbjdG5YZTSIngvOgpC9U6CdYbqsYlV6wCrEqZV+xnpK+y/PQjkVudo/DYKk7
+         odkEeQuMXcbzuAadxQBtRO7Z85hk/64jiVto2ry2ACYeCPYcjpUfpv68b+oY0um0nwXl
+         +uV9CmKBYXIfbvAspuB8iZjZ+gRp59leMHTCgxgSY7mM2YNC1y4aMyv+QyLBrydMjuhZ
+         lLE2LoAJrtNuCG+mXMlv5jzicy/FIqzJst4iBFSRZ3giUGKtq5XwL+eBmiDrneTi4gzV
+         16+FzwngbWOzA9iN7vhT3TKxxNcXeJNdoFwxq4l5WIaN6WZa++kd973qDOh8Ghyg/G01
+         D7Hg==
+X-Gm-Message-State: AOJu0Yx6egKd+mB9WosA58LTxxndJ3YzwTLliq3Q7PW+nt/1qpbiyzjU
+        Yht0bPtvQA2XRgl2eT0AWXpXjg==
+X-Google-Smtp-Source: AGHT+IFeIWTz7zH3NNiZGG8GawoWgTPZnX8SM7DBQPmw79zI1P9+hmA7uTN3L/vILKVy/rLiMXcj8Q==
+X-Received: by 2002:a17:906:cc16:b0:9a2:23cd:f052 with SMTP id ml22-20020a170906cc1600b009a223cdf052mr1668521ejb.7.1694606936783;
+        Wed, 13 Sep 2023 05:08:56 -0700 (PDT)
 Received: from [192.168.37.232] (178235177106.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.106])
-        by smtp.gmail.com with ESMTPSA id v14-20020a17090690ce00b0099c53c44083sm8235385ejw.79.2023.09.13.04.14.53
+        by smtp.gmail.com with ESMTPSA id p21-20020a170906229500b00992b8d56f3asm8319579eja.105.2023.09.13.05.08.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Sep 2023 04:14:55 -0700 (PDT)
-Message-ID: <70b19df7-c70c-41ea-ac4c-8af6956f4fc6@linaro.org>
-Date:   Wed, 13 Sep 2023 13:14:52 +0200
+        Wed, 13 Sep 2023 05:08:56 -0700 (PDT)
+Message-ID: <c3dd5f68-af75-4880-83c2-ca7723561ae9@linaro.org>
+Date:   Wed, 13 Sep 2023 14:08:53 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 01/14] arm64: dts: qcom: msm8916: Drop RPM bus clocks
+Subject: Re: [PATCH v2 06/14] arm64: dts: qcom: sdm630: Drop RPM bus clocks
 Content-Language: en-US
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Andy Gross <agross@kernel.org>,
@@ -76,12 +76,8 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
         linux-usb@vger.kernel.org
 References: <20230721-topic-rpm_clk_cleanup-v2-0-1e506593b1bd@linaro.org>
- <20230721-topic-rpm_clk_cleanup-v2-1-1e506593b1bd@linaro.org>
- <bd11d1b1-efe5-4f96-43e7-163fca5d3278@linaro.org>
- <ac501bcc-80a1-4b65-ba24-272152d1c95c@linaro.org>
- <7b500bba-3091-f425-a60d-e58a3d9e4c1a@linaro.org>
- <9a0ab5a9-d4d8-41b8-94b0-9c62bd686254@linaro.org>
- <30bb6068-6bb8-9a2c-af19-b989960d0be9@linaro.org>
+ <20230721-topic-rpm_clk_cleanup-v2-6-1e506593b1bd@linaro.org>
+ <70b2a9d7-1a3e-25da-3d78-7bfa5d3a1e05@linaro.org>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
 Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  xsFNBF9ALYUBEADWAhxdTBWrwAgDQQzc1O/bJ5O7b6cXYxwbBd9xKP7MICh5YA0DcCjJSOum
@@ -118,38 +114,45 @@ Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  bGqMHex48FVZhexNPYOd58EY9/7mL5u0sJmo+jTeb4JBgIbFPJCFyng4HwbniWgQJZ1WqaUC
  nas9J77uICis2WH7N8Bs9jy0wQYezNzqS+FxoNXmDQg2jetX8en4bO2Di7Pmx0jXA4TOb9TM
  izWDgYvmBE8=
-In-Reply-To: <30bb6068-6bb8-9a2c-af19-b989960d0be9@linaro.org>
+In-Reply-To: <70b2a9d7-1a3e-25da-3d78-7bfa5d3a1e05@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 13.09.2023 13:14, Krzysztof Kozlowski wrote:
-> On 13/09/2023 12:48, Konrad Dybcio wrote:
->> On 13.09.2023 10:53, Krzysztof Kozlowski wrote:
->>> On 13/09/2023 10:47, Konrad Dybcio wrote:
->>>> On 13.09.2023 09:07, Krzysztof Kozlowski wrote:
->>>>> On 12/09/2023 15:31, Konrad Dybcio wrote:
->>>>>> These clocks are now handled from within the icc framework and are
->>>>>
->>>>> That's a driver behavior, not hardware.
->>>> I believe we've been over this already..
->>>>
->>>> The rationale behind this change is: that hardware, which falls
->>>> under the "interconnect" class, was previously misrepresented as
->>>> a bunch of clocks. There are clocks underneath, but accessing them
->>>> directly would be equivalent to e.g. circumventing the PHY subsystem
->>>> and initializing your UFS PHY from within the UFS device.
->>>
->>> And every time one write such commit msg, how should we remember there
->>> is some exception and actually it is about clock representation not CCF
->>> or ICC framework.
->> So is your reply essentially "fine, but please make it clear in
->> each commit message"?
+On 13.09.2023 09:13, Krzysztof Kozlowski wrote:
+> On 12/09/2023 15:31, Konrad Dybcio wrote:
+>> These clocks are now handled from within the icc framework and are
+>> no longer registered from within the CCF. Remove them.
+>>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+[...]
+
+>>  		anoc2_smmu: iommu@16c0000 {
+>>  			compatible = "qcom,sdm630-smmu-v2", "qcom,smmu-v2";
+>>  			reg = <0x016c0000 0x40000>;
+>> -
+>> -			assigned-clocks = <&rpmcc RPM_SMD_AGGR2_NOC_CLK>;
+>> -			assigned-clock-rates = <1000>;
+>> -			clocks = <&rpmcc RPM_SMD_AGGR2_NOC_CLK>;
+>> -			clock-names = "bus";
 > 
-> I am fine with this change. If commit msg had such statement, I would
-> not have doubts :/
-Ok, I'll resend, thanks for confirming!
+> This is also against bindings. After your patch #4, such bus clock (or
+> other combinations) is still required.
+So, we have 4 SMMU instances on this platform:
+
+MMSS (described, iface, mem, mem_iface)
+GPU (described, iface-mm, iface-smmu, bus-smmu)
+
+ANOC2 (this one, no clocks after removing rpmcc bus)
+LPASS (no clocks)
+
+Should I then create a new entry in the bindings, replicating
+what's there for msm8998[1] and dropping the entry with just "bus"
+from anyOf?
 
 Konrad
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/Documentation/devicetree/bindings/iommu/arm,smmu.yaml?h=next-20230913#n272
