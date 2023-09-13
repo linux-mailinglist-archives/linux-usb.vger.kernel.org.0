@@ -2,99 +2,147 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E24EA79E272
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Sep 2023 10:44:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0362279E283
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Sep 2023 10:47:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238266AbjIMIop (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Sep 2023 04:44:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44242 "EHLO
+        id S239080AbjIMIrn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Sep 2023 04:47:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232464AbjIMIoo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Sep 2023 04:44:44 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A03196;
-        Wed, 13 Sep 2023 01:44:40 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 535D0C433C7;
-        Wed, 13 Sep 2023 08:44:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694594679;
-        bh=aJJCLiUbkRCcRoJVLk1mhA8Q0ZY2oyaqKQncAtNAau0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=i7mFiz9CXvbIaRr8YXBVjNOKtRC/SSu+994BC4w8VRNxaD8Tx3U9I6XGtc9CVpNwL
-         +y8xFvi7vvZt5zL5J0H8Z8heI3aYLkg+hoHMW+UL91zz/9LSSrsgTO25Vo8i2dqFNh
-         06MU2wRf721XAx3Lp87LDDk6Erp15rbLTFApSjyXtdUH/Ilo1xf+tCq+ORzM+bZSjb
-         kTLHWpaxol+p+uV3AhtHRCnGhuxgUIQu/WFDcbWS0mJgVg1vFz15a1xaG2rnmreJ+K
-         adXC+ZHqcqTnsuH5JGSwLQyu7UpVHWqWux15pBGVadarZ6Bj3WUA6hlZp+cXSvJKRd
-         iZtZpSLhV+4Eg==
-Date:   Wed, 13 Sep 2023 10:44:35 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Andi Shyti <andi.shyti@kernel.org>
-Cc:     Wentong Wu <wentong.wu@intel.com>, gregkh@linuxfoundation.org,
-        arnd@arndb.de, mka@chromium.org, oneukum@suse.com, lee@kernel.org,
-        kfting@nuvoton.com, broonie@kernel.org, linus.walleij@linaro.org,
-        maz@kernel.org, brgl@bgdev.pl, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-gpio@vger.kernel.org, andriy.shevchenko@linux.intel.com,
-        heikki.krogerus@linux.intel.com, andi.shyti@linux.intel.com,
-        sakari.ailus@linux.intel.com, bartosz.golaszewski@linaro.org,
-        srinivas.pandruvada@intel.com, zhifeng.wang@intel.com
-Subject: Re: [PATCH v12 2/4] i2c: Add support for Intel LJCA USB I2C driver
-Message-ID: <ZQF2c/bKmU9/BDAx@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Wentong Wu <wentong.wu@intel.com>, gregkh@linuxfoundation.org,
-        arnd@arndb.de, mka@chromium.org, oneukum@suse.com, lee@kernel.org,
-        kfting@nuvoton.com, broonie@kernel.org, linus.walleij@linaro.org,
-        maz@kernel.org, brgl@bgdev.pl, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-gpio@vger.kernel.org, andriy.shevchenko@linux.intel.com,
-        heikki.krogerus@linux.intel.com, andi.shyti@linux.intel.com,
-        sakari.ailus@linux.intel.com, bartosz.golaszewski@linaro.org,
-        srinivas.pandruvada@intel.com, zhifeng.wang@intel.com
-References: <1693546577-17824-1-git-send-email-wentong.wu@intel.com>
- <1693546577-17824-3-git-send-email-wentong.wu@intel.com>
- <20230902181954.xgdth4flatyn6cip@zenone.zhora.eu>
+        with ESMTP id S239007AbjIMIrl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Sep 2023 04:47:41 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF7C1993
+        for <linux-usb@vger.kernel.org>; Wed, 13 Sep 2023 01:47:37 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-9a64619d8fbso836204166b.0
+        for <linux-usb@vger.kernel.org>; Wed, 13 Sep 2023 01:47:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1694594856; x=1695199656; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PQEFQQxMh0h+78yTeEwiIcC35VL/vG6Gf1kdzuQcwiU=;
+        b=p4jmRGoQRTk7hzVY/UkUNPTTv6AxQI+W8/gXt3BPy2Hj+9is4bLh2ermIO33E3wRTa
+         Q0w/5WBsR04ikKQ8CdtX5NL4VgxjbexFvk0VaM+6XNrXSQCZyFGCJbuAQI7WEFyC7Gbw
+         MVyxTOTGkZjrqmyiEDCc8Bbnmuu5k/4WJIEpTqmX+rLLt+KvA0RxlpyXeq4qlU5mklLU
+         F8ITEFxQXA3UkfvnCL5TAdpZxjp2RilgNL/nVS6GkZDMKWieXel7XGCnlPqDGTBY7O3l
+         1mjohY8iNjdS2/bs8Hqa+NWhFKS2rQPLCfwZ99dvdsL99AaZeHmqOilZoFMlevjpXhA1
+         c7kA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694594856; x=1695199656;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PQEFQQxMh0h+78yTeEwiIcC35VL/vG6Gf1kdzuQcwiU=;
+        b=r045BlcE4fg9GHXoQsAdM1t5Whfpm9sj2fQaV9WlCUUvUv+yjPqb2VC2sT7Pc6NXSd
+         G/J0kOMYdWVu8WjBtfq9w20E3YkRJWkmlTpT7EQv+iC05MND2rXPRfKAQHTSpm6NA2+p
+         HITHB9WT66RiIMks9oKwZEiptcN5miuLsl6V8lg+V1MrAcFrfWIJhyQekBC7Ess0k1go
+         2obbK3sAz9YMmKY9fqmR4lmTksBgSb7ZHM76EKKKXm2RDpy29Eylmlkofqge/CK5/CAs
+         nkxXQhR6x3eqtL1tCT+mW8gj3NFxIS4pRDNB3ne0/iilglL+0PTJ+iCahqVdZIvmImro
+         cJxg==
+X-Gm-Message-State: AOJu0YwM4kaMX6UA9rTBz968tpQOSJAFQet6aiNVB63Hf10k2svPcNen
+        xVJtx+rz845/2GH5wgp8BWB8xA==
+X-Google-Smtp-Source: AGHT+IHq8G/vDNKzkpyTrGivbPniBIGyuPjI+ArBrWWcige0YNQz3a3Kfta7CjCjsNCGDZAP+7Uqvg==
+X-Received: by 2002:a17:906:d8:b0:9aa:186:959a with SMTP id 24-20020a17090600d800b009aa0186959amr1364510eji.31.1694594855877;
+        Wed, 13 Sep 2023 01:47:35 -0700 (PDT)
+Received: from [192.168.37.232] (178235177106.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.106])
+        by smtp.gmail.com with ESMTPSA id mb8-20020a170906eb0800b00992b71d8f19sm7983312ejb.133.2023.09.13.01.47.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Sep 2023 01:47:35 -0700 (PDT)
+Message-ID: <ac501bcc-80a1-4b65-ba24-272152d1c95c@linaro.org>
+Date:   Wed, 13 Sep 2023 10:47:33 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="R76JO3gO6y2NCsKB"
-Content-Disposition: inline
-In-Reply-To: <20230902181954.xgdth4flatyn6cip@zenone.zhora.eu>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 01/14] arm64: dts: qcom: msm8916: Drop RPM bus clocks
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Alexey Minnekhanov <alexeymin@postmarketos.org>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        linux-usb@vger.kernel.org
+References: <20230721-topic-rpm_clk_cleanup-v2-0-1e506593b1bd@linaro.org>
+ <20230721-topic-rpm_clk_cleanup-v2-1-1e506593b1bd@linaro.org>
+ <bd11d1b1-efe5-4f96-43e7-163fca5d3278@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
+ xsFNBF9ALYUBEADWAhxdTBWrwAgDQQzc1O/bJ5O7b6cXYxwbBd9xKP7MICh5YA0DcCjJSOum
+ BB/OmIWU6X+LZW6P88ZmHe+KeyABLMP5s1tJNK1j4ntT7mECcWZDzafPWF4F6m4WJOG27kTJ
+ HGWdmtO+RvadOVi6CoUDqALsmfS3MUG5Pj2Ne9+0jRg4hEnB92AyF9rW2G3qisFcwPgvatt7
+ TXD5E38mLyOPOUyXNj9XpDbt1hNwKQfiidmPh5e7VNAWRnW1iCMMoKqzM1Anzq7e5Afyeifz
+ zRcQPLaqrPjnKqZGL2BKQSZDh6NkI5ZLRhhHQf61fkWcUpTp1oDC6jWVfT7hwRVIQLrrNj9G
+ MpPzrlN4YuAqKeIer1FMt8cq64ifgTzxHzXsMcUdclzq2LTk2RXaPl6Jg/IXWqUClJHbamSk
+ t1bfif3SnmhA6TiNvEpDKPiT3IDs42THU6ygslrBxyROQPWLI9IL1y8S6RtEh8H+NZQWZNzm
+ UQ3imZirlPjxZtvz1BtnnBWS06e7x/UEAguj7VHCuymVgpl2Za17d1jj81YN5Rp5L9GXxkV1
+ aUEwONM3eCI3qcYm5JNc5X+JthZOWsbIPSC1Rhxz3JmWIwP1udr5E3oNRe9u2LIEq+wH/toH
+ kpPDhTeMkvt4KfE5m5ercid9+ZXAqoaYLUL4HCEw+HW0DXcKDwARAQABzShLb25yYWQgRHli
+ Y2lvIDxrb25yYWQuZHliY2lvQGxpbmFyby5vcmc+wsGOBBMBCAA4FiEEU24if9oCL2zdAAQV
+ R4cBcg5dfFgFAmQ5bqwCGwMFCwkIBwIGFQoJCAsCBBYCAwECHgECF4AACgkQR4cBcg5dfFjO
+ BQ//YQV6fkbqQCceYebGg6TiisWCy8LG77zV7DB0VMIWJv7Km7Sz0QQrHQVzhEr3trNenZrf
+ yy+o2tQOF2biICzbLM8oyQPY8B///KJTWI2khoB8IJSJq3kNG68NjPg2vkP6CMltC/X3ohAo
+ xL2UgwN5vj74QnlNneOjc0vGbtA7zURNhTz5P/YuTudCqcAbxJkbqZM4WymjQhe0XgwHLkiH
+ 5LHSZ31MRKp/+4Kqs4DTXMctc7vFhtUdmatAExDKw8oEz5NbskKbW+qHjW1XUcUIrxRr667V
+ GWH6MkVceT9ZBrtLoSzMLYaQXvi3sSAup0qiJiBYszc/VOu3RbIpNLRcXN3KYuxdQAptacTE
+ mA+5+4Y4DfC3rUSun+hWLDeac9z9jjHm5rE998OqZnOU9aztbd6zQG5VL6EKgsVXAZD4D3RP
+ x1NaAjdA3MD06eyvbOWiA5NSzIcC8UIQvgx09xm7dThCuQYJR4Yxjd+9JPJHI6apzNZpDGvQ
+ BBZzvwxV6L1CojUEpnilmMG1ZOTstktWpNzw3G2Gis0XihDUef0MWVsQYJAl0wfiv/0By+XK
+ mm2zRR+l/dnzxnlbgJ5pO0imC2w0TVxLkAp0eo0LHw619finad2u6UPQAkZ4oj++iIGrJkt5
+ Lkn2XgB+IW8ESflz6nDY3b5KQRF8Z6XLP0+IEdLOOARkOW7yEgorBgEEAZdVAQUBAQdAwmUx
+ xrbSCx2ksDxz7rFFGX1KmTkdRtcgC6F3NfuNYkYDAQgHwsF2BBgBCAAgFiEEU24if9oCL2zd
+ AAQVR4cBcg5dfFgFAmQ5bvICGwwACgkQR4cBcg5dfFju1Q//Xta1ShwL0MLSC1KL1lXGXeRM
+ 8arzfyiB5wJ9tb9U/nZvhhdfilEDLe0jKJY0RJErbdRHsalwQCrtq/1ewQpMpsRxXzAjgfRN
+ jc4tgxRWmI+aVTzSRpywNahzZBT695hMz81cVZJoZzaV0KaMTlSnBkrviPz1nIGHYCHJxF9r
+ cIu0GSIyUjZ/7xslxdvjpLth16H27JCWDzDqIQMtg61063gNyEyWgt1qRSaK14JIH/DoYRfn
+ jfFQSC8bffFjat7BQGFz4ZpRavkMUFuDirn5Tf28oc5ebe2cIHp4/kajTx/7JOxWZ80U70mA
+ cBgEeYSrYYnX+UJsSxpzLc/0sT1eRJDEhI4XIQM4ClIzpsCIN5HnVF76UQXh3a9zpwh3dk8i
+ bhN/URmCOTH+LHNJYN/MxY8wuukq877DWB7k86pBs5IDLAXmW8v3gIDWyIcgYqb2v8QO2Mqx
+ YMqL7UZxVLul4/JbllsQB8F/fNI8AfttmAQL9cwo6C8yDTXKdho920W4WUR9k8NT/OBqWSyk
+ bGqMHex48FVZhexNPYOd58EY9/7mL5u0sJmo+jTeb4JBgIbFPJCFyng4HwbniWgQJZ1WqaUC
+ nas9J77uICis2WH7N8Bs9jy0wQYezNzqS+FxoNXmDQg2jetX8en4bO2Di7Pmx0jXA4TOb9TM
+ izWDgYvmBE8=
+In-Reply-To: <bd11d1b1-efe5-4f96-43e7-163fca5d3278@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 13.09.2023 09:07, Krzysztof Kozlowski wrote:
+> On 12/09/2023 15:31, Konrad Dybcio wrote:
+>> These clocks are now handled from within the icc framework and are
+> 
+> That's a driver behavior, not hardware.
+I believe we've been over this already..
 
---R76JO3gO6y2NCsKB
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+The rationale behind this change is: that hardware, which falls
+under the "interconnect" class, was previously misrepresented as
+a bunch of clocks. There are clocks underneath, but accessing them
+directly would be equivalent to e.g. circumventing the PHY subsystem
+and initializing your UFS PHY from within the UFS device.
 
-Hi Andi,
-
-> your comment here has been addressed. This commit depends on
-> the first patch how do we get this in?
-
-Wentong Wu confirmed my assumption that the auxiliary bus hides away the
-dependencies. So, we can simply merge it into for-mergewindow AFAIU.
-
-
---R76JO3gO6y2NCsKB
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmUBdm0ACgkQFA3kzBSg
-Kbb01A/7BSCPiQ1ty+iGwuJKxyvlGe6KZFXj+qWmtf0xHpBcuKqSeW0w3iwDOfB/
-1Vq3vM1PBjuuA7/q6eRFz6cdY2yodC2bbXm+dQ6VXPUSpzhl6wvRi6Wlc4jnRMfB
-PazfkUGFSOxzcoTKXh5Wm2jJYIH4W45s/Wp0S+nv1q3PpcsI/MdSIc9im2AZjr4C
-sMaonxkW7FQGqM0mse/z/LWFW8gjNNHIBoST8X58ecUkJGThfpqUXWBCYLdF7ljL
-7xUWgdejms8g3KOR33Ldxj3my1+TBJ849KifZTaXHNnJ391W59DRBQmH6oMqdd4S
-JPef3Ei5hjF4yvrqfrBAEScRy6qoPMr4UkBk1a+Ac+oOa7OvNPnP1JW1uOboLIUK
-bQIAEBl9PYdsvcmGrCNUNNAeaZgG8YGVNV8pP85kO8XrGYHXBKkBLWeTTVj7Go0w
-msBCAOoH8nvuxkjEB2x9UFOYH6HY249HsPj8bqMC7hZNFPfA3/3A3/4NOawISbpU
-pHrsL+2YsjlJ4/s5GCWtQpFga3kUoTA+QkwUlOTU9YPcdQwRPUUyDnZhKvr2SQhq
-KLccjV7y/hkLoCKn8nhH9K/z/gMxg2QCNO7PU5/S3qcqExSvFYtsx9QkXFVMbBeP
-a2h7yhsb4TS4Wz1TIFEbotshtpKIoJgOiNKcUdW+mBwdLLLcTe0=
-=Lzn5
------END PGP SIGNATURE-----
-
---R76JO3gO6y2NCsKB--
+Konrad
+> 
+>> no longer registered from within the CCF. Remove them.
+>>
+> 
+> Changes in Linux clock drivers should not cause some clocks to disappear
+> from DTS...
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
