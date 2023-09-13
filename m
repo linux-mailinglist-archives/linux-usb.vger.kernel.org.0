@@ -2,102 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 027C679E0A0
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Sep 2023 09:16:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03DD279E0A2
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Sep 2023 09:16:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238542AbjIMHQl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Sep 2023 03:16:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50666 "EHLO
+        id S238477AbjIMHQr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Sep 2023 03:16:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238427AbjIMHQk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Sep 2023 03:16:40 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411041728
-        for <linux-usb@vger.kernel.org>; Wed, 13 Sep 2023 00:16:36 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-52a3ff5f0abso8309061a12.1
-        for <linux-usb@vger.kernel.org>; Wed, 13 Sep 2023 00:16:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694589395; x=1695194195; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yn21ujmkr4Sp+EA0gnf8dygODVc/XuXdjn0LI3sjZCE=;
-        b=CpYHGOyHsVw3HAVKXZXFkjMqXx7MIGEFKEb57tnO79+DU2I0WpCz8e3ZlcxWM6w2kg
-         YXFz74qnmSBnKL05oD2EST9HW3ax8yTOSKsvZh+eNMYRnSX/vfdHonqYbq59LKysVKrg
-         OONjz9Y6SP+QbFo92+ytJsobL0nR7NZADxXzv6XcIB5cAV1ECzaxusJ9lmGhIyutwdwT
-         j4xC/CWuGTh6hh9hGubUqEUgsm44KCNuzyey37Vnlz2UkUAkaoRiUH+qE+GtNaVEoNAE
-         J5dLL8X/4Y+xifrUVIQ8unFEQr/Lc1ljdbxjcpKLVtM3vCAllHzkoi/9G7QS/P8FmvMT
-         ksJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694589395; x=1695194195;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yn21ujmkr4Sp+EA0gnf8dygODVc/XuXdjn0LI3sjZCE=;
-        b=YITY0bjVzArIVPVObA3NjA+m5yTNwHKmjNltaOk/Ez5JkMwMXfiSlKSfGWXsQ1mgwT
-         JeZPc6WZnz8Q4I2WdvDwiYbq9GoWCXiuDhGSl4Nolg2U2UtB/xrL1cSYOTA4BRBdlOIb
-         wlQyutPzCe3U3NRWyLGxkgSgFET9FQWjBdz4z55aUynw7u/HMRq3AKU1VNAB0s9BqyMx
-         Mm8GSrFDboEueAznb62d5R7jZmPkxKvUuWqwId0ToXMh33fHpt46rT5xARVSpssPKJxC
-         ptwdwlAx+c2zD58WQyH/sh8yYSBACEzKbLFXXVfbrYKkpZQwa6PPnRpgfKY++R/4QDaU
-         mL/w==
-X-Gm-Message-State: AOJu0Yzd64Id8fqRjrLuq3aqFZ+xhDl4UbPEOuJBG6g8dr7+QMhpU4eZ
-        RXpIc1DdZx+mGHB+JPnzPa3hrA==
-X-Google-Smtp-Source: AGHT+IFyf9Fx/pf35KrNLfez0lmkNaBYKL0JSrB9CFz9ETZ9MnkjYUX40l83RXA8JXM9raiowLn7Ng==
-X-Received: by 2002:a50:ec8a:0:b0:523:2274:91cb with SMTP id e10-20020a50ec8a000000b00523227491cbmr1504709edr.12.1694589394834;
-        Wed, 13 Sep 2023 00:16:34 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.214.188])
-        by smtp.gmail.com with ESMTPSA id eg27-20020a056402289b00b0052f3e8c84fesm4786096edb.29.2023.09.13.00.16.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Sep 2023 00:16:34 -0700 (PDT)
-Message-ID: <af5b83c7-94af-1779-68da-78976fc68fc7@linaro.org>
-Date:   Wed, 13 Sep 2023 09:16:32 +0200
+        with ESMTP id S238551AbjIMHQo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Sep 2023 03:16:44 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4BC1982;
+        Wed, 13 Sep 2023 00:16:40 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B651C433C8;
+        Wed, 13 Sep 2023 07:16:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1694589400;
+        bh=jbMSHPEy4vx/r2wm/ygIl/jEIoje24uhM4eGXw0OuRo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oXnH0fp5+9oely5ZhPDGV40JD4mjLCFM54IsFTQ/bghhl7pxnimSDXtcNxLgDCZ6m
+         eRp0QKq3M1goQKez2s+zLM1eKjql9o0Hlz3whDAvdFKNRCoOdeYVoT9kKY8kMvtfc1
+         gx9yxeaT9BXqobZAEpbjKe5zoLmUr0oGDWuAvygM=
+Date:   Wed, 13 Sep 2023 09:16:36 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Prashanth K <quic_prashk@quicinc.com>
+Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        linux-usb@vger.kernel.org, Hongyu Xie <xy521521@gmail.com>,
+        stable@kernel.org, Hongyu Xie <xiehongyu1@kylinos.cn>,
+        "# 5 . 15" <stable@vger.kernel.org>
+Subject: Re: [PATCH 1/4] xhci: Keep interrupt disabled in initialization
+ until host is running.
+Message-ID: <2023091323-splinter-skinless-7c57@gregkh>
+References: <20220623111945.1557702-1-mathias.nyman@linux.intel.com>
+ <20220623111945.1557702-2-mathias.nyman@linux.intel.com>
+ <42bcb910-7748-cf73-a40d-217c39a63dd1@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [PATCH v2 08/14] dt-bindings: remoteproc: qcom,adsp: Remove
- AGGRE2 clock
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Alexey Minnekhanov <alexeymin@postmarketos.org>,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        linux-usb@vger.kernel.org
-References: <20230721-topic-rpm_clk_cleanup-v2-0-1e506593b1bd@linaro.org>
- <20230721-topic-rpm_clk_cleanup-v2-8-1e506593b1bd@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230721-topic-rpm_clk_cleanup-v2-8-1e506593b1bd@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <42bcb910-7748-cf73-a40d-217c39a63dd1@quicinc.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 12/09/2023 15:31, Konrad Dybcio wrote:
-> The AGGRE2 clock is a clock for the entire AGGRE2 bus, managed from
-> within the interconnect driver. Attaching it to SLPI was a total hack.
-> Get rid of it.
+On Wed, Sep 13, 2023 at 11:30:41AM +0530, Prashanth K wrote:
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
+> 
+> On 23-06-22 04:49 pm, Mathias Nyman wrote:
+> > From: Hongyu Xie <xy521521@gmail.com>
+> > 
+> > irq is disabled in xhci_quiesce(called by xhci_halt, with bit:2 cleared
+> > in USBCMD register), but xhci_run(called by usb_add_hcd) re-enable it.
+> > It's possible that you will receive thousands of interrupt requests
+> > after initialization for 2.0 roothub. And you will get a lot of
+> > warning like, "xHCI dying, ignoring interrupt. Shouldn't IRQs be
+> > disabled?". This amount of interrupt requests will cause the entire
+> > system to freeze.
+> > This problem was first found on a device with ASM2142 host controller
+> > on it.
+> > 
+> > [tidy up old code while moving it, reword header -Mathias]
+> > Cc: stable@kernel.org
+> > Signed-off-by: Hongyu Xie <xiehongyu1@kylinos.cn>
+> > Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+> > ---
+> >   drivers/usb/host/xhci.c | 35 ++++++++++++++++++++++-------------
+> >   1 file changed, 22 insertions(+), 13 deletions(-)
+> > 
+> > diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> > index 9ac56e9ffc64..cb99bed5f755 100644
+> > --- a/drivers/usb/host/xhci.c
+> > +++ b/drivers/usb/host/xhci.c
+> > @@ -611,15 +611,37 @@ static int xhci_init(struct usb_hcd *hcd)
+> >   static int xhci_run_finished(struct xhci_hcd *xhci)
+> >   {
+> > +	unsigned long	flags;
+> > +	u32		temp;
+> > +
+> > +	/*
+> > +	 * Enable interrupts before starting the host (xhci 4.2 and 5.5.2).
+> > +	 * Protect the short window before host is running with a lock
+> > +	 */
+> > +	spin_lock_irqsave(&xhci->lock, flags);
+> > +
+> > +	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Enable interrupts");
+> > +	temp = readl(&xhci->op_regs->command);
+> > +	temp |= (CMD_EIE);
+> > +	writel(temp, &xhci->op_regs->command);
+> > +
+> > +	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "Enable primary interrupter");
+> > +	temp = readl(&xhci->ir_set->irq_pending);
+> > +	writel(ER_IRQ_ENABLE(temp), &xhci->ir_set->irq_pending);
+> > +
+> >   	if (xhci_start(xhci)) {
+> >   		xhci_halt(xhci);
+> > +		spin_unlock_irqrestore(&xhci->lock, flags);
+> >   		return -ENODEV;
+> >   	}
+> > +
+> >   	xhci->cmd_ring_state = CMD_RING_STATE_RUNNING;
+> >   	if (xhci->quirks & XHCI_NEC_HOST)
+> >   		xhci_ring_cmd_db(xhci);
+> > +	spin_unlock_irqrestore(&xhci->lock, flags);
+> > +
+> >   	return 0;
+> >   }
+> > @@ -668,19 +690,6 @@ int xhci_run(struct usb_hcd *hcd)
+> >   	temp |= (xhci->imod_interval / 250) & ER_IRQ_INTERVAL_MASK;
+> >   	writel(temp, &xhci->ir_set->irq_control);
+> > -	/* Set the HCD state before we enable the irqs */
+> > -	temp = readl(&xhci->op_regs->command);
+> > -	temp |= (CMD_EIE);
+> > -	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
+> > -			"// Enable interrupts, cmd = 0x%x.", temp);
+> > -	writel(temp, &xhci->op_regs->command);
+> > -
+> > -	temp = readl(&xhci->ir_set->irq_pending);
+> > -	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
+> > -			"// Enabling event ring interrupter %p by writing 0x%x to irq_pending",
+> > -			xhci->ir_set, (unsigned int) ER_IRQ_ENABLE(temp));
+> > -	writel(ER_IRQ_ENABLE(temp), &xhci->ir_set->irq_pending);
+> > -
+> >   	if (xhci->quirks & XHCI_NEC_HOST) {
+> >   		struct xhci_command *command;
+> This is not available to older kernels [< 5.19]. Can we get this backported
+> to 5.15 as well? Please let me know if there is some other way to do it.
+> 
+> Cc: <stable@vger.kernel.org> # 5.15
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+<formletter>
 
-Best regards,
-Krzysztof
+This is not the correct way to submit patches for inclusion in the
+stable kernel tree.  Please read:
+    https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
+for how to do this properly.
 
+</formletter>
