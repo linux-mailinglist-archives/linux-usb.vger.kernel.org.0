@@ -2,145 +2,232 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54D7679E2E6
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Sep 2023 11:03:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4B8879E3A0
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Sep 2023 11:27:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239185AbjIMJDp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Sep 2023 05:03:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47734 "EHLO
+        id S232466AbjIMJ1m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Sep 2023 05:27:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236929AbjIMJDo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Sep 2023 05:03:44 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2041.outbound.protection.outlook.com [40.107.22.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79C981999;
-        Wed, 13 Sep 2023 02:03:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aYwGOsm1epW3nh+wkSRjycB5Eree0jFDwkDZMnw0qKaqKwCXAHp045KZmJYBH+4V0x5BnIMgBzB01FVwb5XaYDXNh0VGT/VVwXmMKKXJjD2YcxARU1KxTJHpSISqpHdI0RdAhSWvT2Q9Sq8hcU0SYWLXZ/lOpNc3gAfHfaOtquSpf+dO5lyTZ5G+fwRnWgxMF0lGKl5BVt9yZ6uIyvrhgypfa87Sv1VTBb+asNRHldMnBhsGLnrjmPz+gywie0eNeS86urT6rkKwEEgoJNzq0tZk2TQbRAJ/VAy6DE8ECZgpn1e8KkWvibndQlHSBXs7tMr+Jrflftw3o8tLuec5bw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=06ifFsRjV6Z+WBvcnzrCqn+tMldI/1dlAf8O/lWipfA=;
- b=cRty3FNsOX9zp1sdrLfBJXZv2+X4qHchnXMJ/ZeKrjZa4DASpFjpIpv3ShgAfSzE2yJ18ClyCmlXzDeDXDH81p01N/2Tn4NDDkotqL7Qx1INEOhUV2m3383BOVO7siw6YbP7xJ9X62OZABklBNXVIswpwbjK3Npq4/GAsReS5+3UVMUsamar202tm5kpz1BtF1eHdQZAgcStRLxD6BF9rEhvnOPzI7O2Oj4VgPFYqpbtU9UaZFaPIB1OgoYnEHXPEIiRuqLRkoqz7EajbYd+pjKYwggdZm1QHwlY5BCwnxLIvzKuEh5P4PY4xzga8g24BAIWrNHCgR5qLNA+3WxkFQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=06ifFsRjV6Z+WBvcnzrCqn+tMldI/1dlAf8O/lWipfA=;
- b=vmgMAT7YUs1u/gCZsXt65mFDILx4RVmIe7NRzuIMmS28bi9ZC2DT5QkZSIwp1WHnGHPfLY6s8eMgEyY1lwl2SV0B4aPKjteohrxHCjZvXmTTYZitc4MFagTSgklYTln721AraNQXTSJ0OT5U+iidBU/D4YLz7hvu86AbtG3J44q+j3vUHfKYviljQeRHcx2ZHojqlIZTN3Nfgj5XsCUWzRcQ7sPHekj+9rdO9ZM1LUiM0Qyt44FIDEbpy0snikKQYtxY+EmfJhAmJxVjr9MrI/+viGM6FI6cp0rqCwA5xcUTtCKQgjsalN7HcnszG7sMAtno9z9zefaYa6bjozeNGA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
- by PA4PR04MB7536.eurprd04.prod.outlook.com (2603:10a6:102:e1::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.34; Wed, 13 Sep
- 2023 09:03:37 +0000
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com
- ([fe80::cc91:7bb7:2f06:1cb2]) by VI1PR04MB7104.eurprd04.prod.outlook.com
- ([fe80::cc91:7bb7:2f06:1cb2%4]) with mapi id 15.20.6745.030; Wed, 13 Sep 2023
- 09:03:37 +0000
-Message-ID: <a3b75e11-9cf0-4ee3-be90-fba73bd5df3d@suse.com>
-Date:   Wed, 13 Sep 2023 11:03:33 +0200
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v16 1/4] usb: Add support for Intel LJCA device
-To:     Wentong Wu <wentong.wu@intel.com>, gregkh@linuxfoundation.org,
-        arnd@arndb.de, mka@chromium.org, oneukum@suse.com, lee@kernel.org,
-        wsa@kernel.org, kfting@nuvoton.com, broonie@kernel.org,
-        linus.walleij@linaro.org, hdegoede@redhat.com, maz@kernel.org,
-        brgl@bgdev.pl, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-gpio@vger.kernel.org, andriy.shevchenko@linux.intel.com,
-        heikki.krogerus@linux.intel.com, andi.shyti@linux.intel.com,
-        sakari.ailus@linux.intel.com, bartosz.golaszewski@linaro.org,
-        srinivas.pandruvada@intel.com
-Cc:     zhifeng.wang@intel.com
-References: <1694569212-10080-1-git-send-email-wentong.wu@intel.com>
- <1694569212-10080-2-git-send-email-wentong.wu@intel.com>
-Content-Language: en-US
-From:   Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <1694569212-10080-2-git-send-email-wentong.wu@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR2P281CA0048.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:92::19) To VI1PR04MB7104.eurprd04.prod.outlook.com
- (2603:10a6:800:126::9)
+        with ESMTP id S239300AbjIMJ1j (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Sep 2023 05:27:39 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C91C19A3;
+        Wed, 13 Sep 2023 02:27:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694597255; x=1726133255;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=a4uKZbRKFX14nqUBbrKXjQ6CnagpGtaDDf+A0Lhl1Sg=;
+  b=Z4AbwIGOcXuW5xM+2RmVScED0ABeBgur+d1Im9q1Yu7ZfGHjlCA6fvcY
+   76CHX4YkCARta0hr17GPaXg4iPaxihvdxgWUYwvKVTNaSVa7wm98EwIb7
+   Ak8u/2l/G7KiJiqArYn5b85WZXQCF+TMk4PZAwU8zMwRr3t1KavQ01lx6
+   Ohmnh0AkY72hxklaDTVuJz+/DJWvmngh7pKi8BzpxN6x7Mae/fersFRSg
+   uao57dKry0SmEdmy98YrkEfPTVWlzy3yAYSJEUvWa0TqUsowSxatfk0TV
+   mxKIsm9HCpg+krr5Tqq3H4CcMAyc3UgWt/s4W2bROS2c8726wQl2mM5mV
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="382417268"
+X-IronPort-AV: E=Sophos;i="6.02,142,1688454000"; 
+   d="scan'208";a="382417268"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2023 02:27:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="814154015"
+X-IronPort-AV: E=Sophos;i="6.02,142,1688454000"; 
+   d="scan'208";a="814154015"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga004.fm.intel.com with SMTP; 13 Sep 2023 02:27:27 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 13 Sep 2023 12:27:26 +0300
+Date:   Wed, 13 Sep 2023 12:27:26 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Janne Grunau <j@jannau.net>, Simon Ser <contact@emersion.fr>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        freedreno@lists.freedesktop.org, Won Chung <wonchung@google.com>
+Subject: Re: [RFC PATCH v1 01/12] Revert "drm/sysfs: Link DRM connectors to
+ corresponding Type-C connectors"
+Message-ID: <ZQGAfnKt9HMB7j6H@kuha.fi.intel.com>
+References: <20230903214150.2877023-1-dmitry.baryshkov@linaro.org>
+ <20230903214150.2877023-2-dmitry.baryshkov@linaro.org>
+ <ZPbrtAlO2Y+bjDhf@kuha.fi.intel.com>
+ <CAA8EJpqUg2-k7LLBL38RHU1sThkXB54ca68xEMd1yMnHQcQ++w@mail.gmail.com>
+ <ZPh0Ps9UJ3HLzdeR@kuha.fi.intel.com>
+ <CAA8EJpratbBybgk8woD3maA=J_HuQis44Unq0n+c_UvaFs__AA@mail.gmail.com>
+ <ZPiAwOf00RREiYPr@kuha.fi.intel.com>
+ <6b6bacee-f7b6-4cfe-be3d-24bda44bfbcf@linaro.org>
+ <ZQBGD8CY5OVKYX63@kuha.fi.intel.com>
+ <a97a33f4-71f3-4610-a59e-0c2d5ae86670@linaro.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|PA4PR04MB7536:EE_
-X-MS-Office365-Filtering-Correlation-Id: 544a5dbb-1aa1-407d-a3a9-08dbb438509d
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Tq166y4M8MKXmUfJKhoO3jZFJQCv7ya9XLzS5LeLNn8NmruFC9woPsGiYb/CTC3lZvYgzscltxTsFfZTa23R2argD7qPI9SMDkjDxN7wQzMP5HwhkWWAbT2PuzAdrE9nSWbx0tknxMHq+NAo6W33zyBE6CxPydeSZm5YaYtjC7iYrtt7KwansaMQo13x4LEQp61DLj1dm+5QUtZELlyQwViRf1onHsUQEa+WRm4M0LPuFsR0v9cY0wVqLEYUYyEe36Ww7DvTGi4Bs002vEM0lwa5BuuP3pE+VHNvzBDu9XDeDYgLeznwIqYoDkyLiDIfjShdx1E47niofTi4FkkFSxGcRPgrNchedyu1oFA3Ay2RlLIJ4P+9QOG448aNQ9/+ATo5Au2vUuoO/nw2KsgUXdUKGukpvFL4DEwkq6DpYhKvd2IMSl9i+7654Ff9SqtsvEs9OjZmFr0RpjyUl87+uv5N04feZcJDKIpeb7Xgs05Pc4lf3gjQucPQU9t/azXqfbOZeHUNAvgWfdPJdjcImyd1Kkxv+JshJUZaOtbf72KK0lsyFR3iGK00jZy703EARJPTa5pMJxlpR2AVwuWXbXxPOz9otKJcHVvL0R4VjYi5ybEBPJevjaE7UD2ZazffsLyQs+/nr7vFzNuJ3KRkq2zUVjgUXXwY3IGx86ap5dc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(39860400002)(366004)(376002)(396003)(346002)(186009)(1800799009)(451199024)(53546011)(6486002)(6506007)(6512007)(6666004)(83380400001)(86362001)(921005)(558084003)(38100700002)(31696002)(36756003)(2616005)(66556008)(66476007)(7416002)(316002)(41300700001)(66946007)(2906002)(31686004)(8936002)(8676002)(4326008)(5660300002)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eXR5RE1pOWM2MXhJaG5rSEkrSk5ZTkJUcjBMUXd5d3o5R1VkQXZIYWlRL05i?=
- =?utf-8?B?MVoxQUFINC9LbHpmNWlmb2hFZ3N5cmVIbW5SM0FkQkZGbzVCMGRzZWZMVmZE?=
- =?utf-8?B?emM4RzBQbTh2aXJtWmN5M042dHNsZHdSM2lpTW9icEc4YmtoM2dEblI3QXk1?=
- =?utf-8?B?VlBlTDVJNVp3V1NjN0tlQ0FDa1A1Q1o5bjVxZUJUWmc0WUQvRWFCRkFQNmtX?=
- =?utf-8?B?ZjlUeGxHb1Y5RVI1Mm5iQ2pLaFlvRWt6eFluU3FyL0xwSWJSQkFJdDZyV0o4?=
- =?utf-8?B?MldWSWN1bFdHZGwrd1o4NC9WaCtmMSs0VDl1ZzR6aHJBNXpycEhQc1ZpQ3dx?=
- =?utf-8?B?RndTL1k5QnhaNlUxMU52ZFp0Z0hvYWEzZzRJendFRzA1dTNFUDh0ejRKanp6?=
- =?utf-8?B?V3ptbnR3M01RclY1THNEZVVsd0o4alJmaHc4SlNaLzNncjRnbEU1Z0NUV2x0?=
- =?utf-8?B?NHVLNndwajFnQ1A2YXpNb04vRGdLajY5M3hjcFNMYkNoS0V2aW1HTmlVbVRD?=
- =?utf-8?B?b2trcmRVTTJhOHZOUGdTdkora1VZY0ZSdFgveHM5SGNSSzliMldUME9oK0wz?=
- =?utf-8?B?OUM4ajBMNkFpdjFraGtMK2RsNkE3SDFBWUtiSitJQ1ZMdFpDTUk3RTBNVTln?=
- =?utf-8?B?SWFRYWpIb3c1eDBFRlRxV3p6cHMxb2piblB5THFuMmczOHVFM1F4bGRORlhX?=
- =?utf-8?B?VGY2RXdjcEdBQzA0UjQydXVHR0xQc29kaUdwRHhwY2plS3JBQ3dtblExdkVT?=
- =?utf-8?B?WmlGTXpLRkN1TGdSWUd1MUMreXBqMUtVSGpWM0JVNTFjSEpCZXdENHRMWjRL?=
- =?utf-8?B?MVdqZFlseXV3V3BwVEhNRVh4M0JhTldDYWs3ck9GYlE2UVlXMzJRa25nQm51?=
- =?utf-8?B?M0xDZVM4NnJQcm9lZEROaWVBVU9wODlNUzRibDNSMHNTOC80WVhtRHFxK3Ba?=
- =?utf-8?B?Z3QxcU9vRk1SUkUwdnhockVBUk9vdlFGL0ZqVzJIUG1obTI1VTVUMWFySHVy?=
- =?utf-8?B?S3M0ck4wVjFYd1U5MHZ4Y2I4dmgxcHAxOE9sUTRkSHhsUFNKaTZVSDVJNWh3?=
- =?utf-8?B?cVFHWHh6dkNTaTZQODk5TnRBQnQxWGxHaUxhZG42MlBvcDQzYktpbjlpbVFO?=
- =?utf-8?B?OUJBY3RNTFdmYzhyWEVqV1lDOVpWekhJOWVrbDJCMHhPWTNpdElWbGZqQ01M?=
- =?utf-8?B?bWc4VVlhQTBqc2hqaGxUQmk4WTcvOWhXaWFVSHZYYTBvcjNmZndsTjMrQmlH?=
- =?utf-8?B?d0dITTJYWkV4dFVFVEF1N3IvUEJEaEpsQk11RWo4cm9xTjFvcGNObWkwR2VG?=
- =?utf-8?B?S3JBUERWT05MM01zZ3JRMEYxeWpwRzUvT1hOcnJPeHVWR1pwdm81TmpDb1Ay?=
- =?utf-8?B?dkNETm85allabzl4S2Y5QVk4VHdiV1BPRXc5M2p0Sk8weCt6S0JObi9WU0Z3?=
- =?utf-8?B?V2JPaW8yYi9zV1k3Q0pNQnNETEQ0bVh1bHVQQUJQb05oM3R1MEhuT0hHalpO?=
- =?utf-8?B?Smw2ZnZLakhHY0E0R2Y3RmFIWnJyTjVXQjhCVVR6WFR2dlNSZWpkbHczR3Y5?=
- =?utf-8?B?L0MvdmtVdWxkS1AvcXluYzZobEYvaVEyTndZTEo4SHlYVEIvL09naWk2NVd3?=
- =?utf-8?B?b1JQakc0T2I3RnhhYTdpMmxwNEN5ZGFQeFBIUXBTdmNBazl0QVNqTHl2b1pO?=
- =?utf-8?B?QWFjVjF1UDdRR1dmL3ROK2RmcnF1UlRqMlFyb09ERmJHalMySEtNeWs2TXNM?=
- =?utf-8?B?em0xcmpaOXpqdjQxRzFRYjltZExwNGc3dEVzNGpHTmlZOFc4NEpSME03QnFX?=
- =?utf-8?B?ZkJ2M1pOVUltWS94NzRuZzczUlZwWTg5cElBaGt6d3NXVWdOREtxZC83ZjlO?=
- =?utf-8?B?Y3RTd25NQzlIL2EwZWF2SXZpcEJXZU1KNDUzR3Ryck5PZ1R2dlJLRWUxUzFK?=
- =?utf-8?B?ZXNCRUtXUjdsSitOMnBMQUZtaExNd2VsaDhlSUVJRGtIbTNXMjRrdDFRNCtW?=
- =?utf-8?B?bUdSUndZN0lEcDdIOHViTFM1SGpyN3E2dzJMMW00RFd6M3ZWSmcyMUc1NzZL?=
- =?utf-8?B?NzdkQ0NUTVFkUDdXY2FuRXc0VjZWbWNLMnZOdTFvMWlUaFBjSXR0Mll6c3FM?=
- =?utf-8?B?L2Q5SnBHZzRQQ3BXcUhMWHA4L1JRRzdQcmV5ZysvTVY2bkJxeXJxbEdBVGFx?=
- =?utf-8?Q?CBmtm/LPVokXJzLMDDYL8dw/lR+KcL9IbXqr8E2OZwLJ?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 544a5dbb-1aa1-407d-a3a9-08dbb438509d
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Sep 2023 09:03:37.0571
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: efKCT05i3nyCaOx1l2ggR1RoNJF2Tb9QyQjC1rXkD3k0F3Im0J9mcX2rdHGIu253K0I/aAaHTdUv9+Nj4+rMwg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7536
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a97a33f4-71f3-4610-a59e-0c2d5ae86670@linaro.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Dmitry,
 
+On Tue, Sep 12, 2023 at 08:39:45PM +0300, Dmitry Baryshkov wrote:
+> On 12/09/2023 14:05, Heikki Krogerus wrote:
+> > On Tue, Sep 12, 2023 at 12:15:10AM +0300, Dmitry Baryshkov wrote:
+> > > On 06/09/2023 16:38, Heikki Krogerus wrote:
+> > > > On Wed, Sep 06, 2023 at 03:48:35PM +0300, Dmitry Baryshkov wrote:
+> > > > > On Wed, 6 Sept 2023 at 15:44, Heikki Krogerus
+> > > > > <heikki.krogerus@linux.intel.com> wrote:
+> > > > > > 
+> > > > > > On Tue, Sep 05, 2023 at 01:56:59PM +0300, Dmitry Baryshkov wrote:
+> > > > > > > Hi Heikki,
+> > > > > > > 
+> > > > > > > On Tue, 5 Sept 2023 at 11:50, Heikki Krogerus
+> > > > > > > <heikki.krogerus@linux.intel.com> wrote:
+> > > > > > > > 
+> > > > > > > > Hi Dmitry,
+> > > > > > > > 
+> > > > > > > > On Mon, Sep 04, 2023 at 12:41:39AM +0300, Dmitry Baryshkov wrote:
+> > > > > > > > > The kdev->fwnode pointer is never set in drm_sysfs_connector_add(), so
+> > > > > > > > > dev_fwnode() checks never succeed, making the respective commit NOP.
+> > > > > > > > 
+> > > > > > > > That's not true. The dev->fwnode is assigned when the device is
+> > > > > > > > created on ACPI platforms automatically. If the drm_connector fwnode
+> > > > > > > > member is assigned before the device is registered, then that fwnode
+> > > > > > > > is assigned also to the device - see drm_connector_acpi_find_companion().
+> > > > > > > > 
+> > > > > > > > But please note that even if drm_connector does not have anything in
+> > > > > > > > its fwnode member, the device may still be assigned fwnode, just based
+> > > > > > > > on some other logic (maybe in drivers/acpi/acpi_video.c?).
+> > > > > > > > 
+> > > > > > > > > And if drm_sysfs_connector_add() is modified to set kdev->fwnode, it
+> > > > > > > > > breaks drivers already using components (as it was pointed at [1]),
+> > > > > > > > > resulting in a deadlock. Lockdep trace is provided below.
+> > > > > > > > > 
+> > > > > > > > > Granted these two issues, it seems impractical to fix this commit in any
+> > > > > > > > > sane way. Revert it instead.
+> > > > > > > > 
+> > > > > > > > I think there is already user space stuff that relies on these links,
+> > > > > > > > so I'm not sure you can just remove them like that. If the component
+> > > > > > > > framework is not the correct tool here, then I think you need to
+> > > > > > > > suggest some other way of creating them.
+> > > > > > > 
+> > > > > > > The issue (that was pointed out during review) is that having a
+> > > > > > > component code in the framework code can lead to lockups. With the
+> > > > > > > patch #2 in place (which is the only logical way to set kdev->fwnode
+> > > > > > > for non-ACPI systems) probing of drivers which use components and set
+> > > > > > > drm_connector::fwnode breaks immediately.
+> > > > > > > 
+> > > > > > > Can we move the component part to the respective drivers? With the
+> > > > > > > patch 2 in place, connector->fwnode will be copied to the created
+> > > > > > > kdev's fwnode pointer.
+> > > > > > > 
+> > > > > > > Another option might be to make this drm_sysfs component registration optional.
+> > > > > > 
+> > > > > > You don't need to use the component framework at all if there is
+> > > > > > a better way of determining the connection between the DP and its
+> > > > > > Type-C connector (I'm assuming that that's what this series is about).
+> > > > > > You just need the symlinks, not the component.
+> > > > > 
+> > > > > The problem is that right now this component registration has become
+> > > > > mandatory. And if I set the kdev->fwnode manually (like in the patch
+> > > > > 2), the kernel hangs inside the component code.
+> > > > > That's why I proposed to move the components to the place where they
+> > > > > are really necessary, e.g. i915 and amd drivers.
+> > > > 
+> > > > So why can't we replace the component with the method you are
+> > > > proposing in this series of finding out the Type-C port also with
+> > > > i915, AMD, or whatever driver and platform (that's the only thing that
+> > > > component is used for)?
+> > > 
+> > > The drm/msm driver uses drm_bridge for the pipeline (including the last DP
+> > > entry) and the drm_bridge_connector to create the connector. I think that
+> > > enabling i915 and AMD drivers to use drm_bridge fells out of scope for this
+> > > series.
+> > > 
+> > > 
+> > > > Determining the connection between a DP and its Type-C connector is
+> > > > starting to get really important, so ideally we have a common solution
+> > > > for that.
+> > > 
+> > > Yes. This is what we have been discussing with Simon for quite some time on
+> > > #dri-devel.
+> > > 
+> > > Unfortunately I think the solution that got merged was pretty much hastened
+> > > in instead of being well-thought. For example, it is also not always
+> > > possible to provide the drm_connector / typec_connector links (as you can
+> > > see from the patch7. Sometimes we can only express that this is a Type-C DP
+> > > connector, but we can not easily point it to the particular USB-C port.
+> > > 
+> > > So, I'm not sure, how can we proceed here. Currently merged patch breaks
+> > > drm/msm if we even try to use it by setting kdef->fwnode to
+> > > drm_connector->fwnode. The pointed out `drivers/usb/typec/port-mapper.c` is
+> > > an ACPI-only thing, which is not expected to work in a non-ACPI cases.
+> > 
+> > You really have to always supply not only the Type-C ports and partners,
+> > but also the alt modes. You need them, firstly to keep things sane
+> > inside kernel, but more importantly, so they are always exposed to the
+> > user space, AND, always the same way. We have ABIs for all this stuff,
+> > including the DP alt mode. Use them. No shortcuts.
+> > 
+> > So here's what you need to do. UCSI does not seem to bring you
+> > anything useful, so just disable it for now. You don't need it. Your
+> > port driver is clearly drivers/soc/qcom/pmic_glink_altmode.c, so
+> > that's where you need to register all these components - the ports,
+> > partners and alt modes. You have all the needed information there.
+> 
+> To make things even more complicate, UCSI is necessary for the USB part of
+> the story. It handles vbus and direction.
+> 
+> > Only after you've done that we can start to look at how should the
+> > connection between the DPs and their USB Type-C connectors be handled.
+> 
+> But sure enough, I can add typec port registration to the altmode driver.
+> This will solve the 'port not existing' part of the story.
+> 
+> I'd like to hear your opinion on:
+> 
+> - components. Using them breaks drm/msm. How can we proceed?
 
-On 13.09.23 03:40, Wentong Wu wrote:
+I don't think replacing the components is going to be a problem once
+you have described everything properly in you DT. I'm fairly certain now
+that that is the main problem here. You don't have this connection
+described in your DT as it should.
 
-> +struct ljca_bank_descriptor {
-> +	u8 bank_id;
-> +	u8 pin_num;
-> +
-> +	/* 1 bit for each gpio, 1 means valid */
-> +	u32 valid_pins;
+> - PATH property usage. This way we make USB-C DisplayPort behave like the
+> MST ports.
 
-No endianness?
+That looks to me like an attempt to exploit a feature that is not
+designed for this purposes at all. Just drop all that.
 
-> +} __packed;
+The connection has to be first described in your DT, and the way you
+usually describe connections in DT is by using the device graph (OF
+graph). It seems that you have everything needed for that - the USB
+Type-C connectors have their own OF nodes (what you register as
+drm_bridges are in fact USB Type-C connectors), and presumable you
+also have OF nodes for all your video ports (DisplayPorts) - so
+applying the graph between the two really should not be a problem. The
+DP is endpoint for the USB Type-C connector, and vice versa.
 
-	Regards
-		Oliver
+After you have everything needed in your DT, the problem here isn't
+actually much of a problem at all. We will have options how to move
+forward after that.
+
+Br,
+
+-- 
+heikki
