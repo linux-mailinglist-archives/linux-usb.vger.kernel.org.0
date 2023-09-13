@@ -2,213 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DE2A79E64E
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Sep 2023 13:13:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8A1079E659
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Sep 2023 13:15:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240346AbjIMLM1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Sep 2023 07:12:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51844 "EHLO
+        id S240072AbjIMLP5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Sep 2023 07:15:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240084AbjIMLMH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Sep 2023 07:12:07 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA78D1BCE;
-        Wed, 13 Sep 2023 04:11:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender
-        :Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=S1SFy87Tal1zjTMpG/B1YzaZjyHevEyx/Ud+hlEwuTk=; b=ZAxP4t/djhRJyUxTiB1g1/4wNn
-        Jy/Xo+IIkj7ixqhSE1v83lesrSKtdCY7mtxiQpdDWaA47Ad++ERcNIAoDq2vVNzeVPvQbWXtvvLM6
-        t/UO4IUIIeR8why07hc075q8lHsrKJI7D7mNsK+en+fXUEiPi0sUSYFaYxchkQ79W/EEUGGmwNJ+x
-        DABx1LwgpU4GjE/l8YtCJy55AK2oNY5aPc3B1GTiJgyFJfms8hvozRaT9sViD54yzQ1nCUczSlOb4
-        CHMuF0drthpu+kXBBjg9uc0tJgUiLZA97kWEUVl45SwGmIFrXSS/HTgtHdzV3aMao1S4jWOC29Yio
-        34Xi/lzw==;
-Received: from [190.210.221.22] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qgNmL-005iD3-11;
-        Wed, 13 Sep 2023 11:11:29 +0000
-From:   Christoph Hellwig <hch@lst.de>
-To:     Christian Brauner <brauner@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Tejun Heo <tj@kernel.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Damien Le Moal <dlemoal@kernel.org>,
-        Naohiro Aota <naohiro.aota@wdc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-hardening@vger.kernel.org,
-        cgroups@vger.kernel.org
-Subject: [PATCH 19/19] fs: remove ->kill_sb
-Date:   Wed, 13 Sep 2023 08:10:13 -0300
-Message-Id: <20230913111013.77623-20-hch@lst.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230913111013.77623-1-hch@lst.de>
-References: <20230913111013.77623-1-hch@lst.de>
+        with ESMTP id S239921AbjIMLPk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Sep 2023 07:15:40 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0913C22
+        for <linux-usb@vger.kernel.org>; Wed, 13 Sep 2023 04:14:25 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-31dca134c83so6743519f8f.3
+        for <linux-usb@vger.kernel.org>; Wed, 13 Sep 2023 04:14:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1694603663; x=1695208463; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=X4j22lmDBEdz68x3qUhl5gJ0drA+YexofLKRZQjwWfs=;
+        b=MsJTl3hH4aJNrK5tFeLAxICWDzLg91wl3pT/mKCW+Vb19en/I/7/yG0MEMIoEwBxTG
+         7j7n6R1q3u/vNeitp7ccZoqRIUlBvyzPL1Sm3EKawQBtuNKeew02N48cyZo/wYOKCOzu
+         WboobLHLEpW95M5poDU+qbwX39v5xJwzlLwdAj3+7ujFDnrguB6DhcAMXy7OWzIwZUXp
+         v0cPajGP40D1TFXYhNlutjrJF7Siaes0SHtPWicV2i5ott0XXCr5MD+3O9ggspqfh8Ul
+         qXHlbeB2xzpT7xviOxeQ24af1ulbvqpm4lYlYLiMPqhNA1lh/oVrvOVDd5qculDqH48D
+         JDgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694603663; x=1695208463;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=X4j22lmDBEdz68x3qUhl5gJ0drA+YexofLKRZQjwWfs=;
+        b=LCRSQz0ZklhKnnSUC5sWGY+1blsJTl01L08v8uAjgQaF553/Gl+ojek2cTuYGdbNce
+         Y+9JtX3UmalHyMzp1i93FSH3RKh/vQcyRJBPFk7M6h4R52Ww/TmtpPHF6XgW6H6og4oE
+         QKxmZb4rmupPMQoOLlpYAxJ+65+89msHsf2YA8/chE2038YuiTWw2a677+hcMQuxmot4
+         9cteREsV8RWag98EB800xeF5IxuLaUlJAEA7LJ5TBTmIii4VNSRuZM5B/19Tl8VSccDs
+         VzjXe+n7irpFn5qQNsxWReBOZnD8CcWvonRrIOL+Y2MDSAuvhItq+TutBoorU8Nug+j7
+         ZMMA==
+X-Gm-Message-State: AOJu0YzOFQ+aHY3Scx8rbaZRNPLXsDEVLInz/XQXO5gk33rRNQvOpOw2
+        WPm0NRMhQpBDLo3eYsMeCTaPig==
+X-Google-Smtp-Source: AGHT+IFJlSnmnVty++JAQlMdedVZw+ig39ydIHFfYUarwozinwRjAGGXz3bvVLJ7KKgGWK++b7J6OQ==
+X-Received: by 2002:a5d:4a09:0:b0:317:70da:abdd with SMTP id m9-20020a5d4a09000000b0031770daabddmr1727674wrq.59.1694603663440;
+        Wed, 13 Sep 2023 04:14:23 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.214.188])
+        by smtp.gmail.com with ESMTPSA id l5-20020adfe585000000b0031759e6b43fsm15246555wrm.39.2023.09.13.04.14.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Sep 2023 04:14:22 -0700 (PDT)
+Message-ID: <30bb6068-6bb8-9a2c-af19-b989960d0be9@linaro.org>
+Date:   Wed, 13 Sep 2023 13:14:20 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH v2 01/14] arm64: dts: qcom: msm8916: Drop RPM bus clocks
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Alexey Minnekhanov <alexeymin@postmarketos.org>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        linux-usb@vger.kernel.org
+References: <20230721-topic-rpm_clk_cleanup-v2-0-1e506593b1bd@linaro.org>
+ <20230721-topic-rpm_clk_cleanup-v2-1-1e506593b1bd@linaro.org>
+ <bd11d1b1-efe5-4f96-43e7-163fca5d3278@linaro.org>
+ <ac501bcc-80a1-4b65-ba24-272152d1c95c@linaro.org>
+ <7b500bba-3091-f425-a60d-e58a3d9e4c1a@linaro.org>
+ <9a0ab5a9-d4d8-41b8-94b0-9c62bd686254@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <9a0ab5a9-d4d8-41b8-94b0-9c62bd686254@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Now that no instances are left, remove ->kill_sb and mark
-generic_shutdown_super static.
+On 13/09/2023 12:48, Konrad Dybcio wrote:
+> On 13.09.2023 10:53, Krzysztof Kozlowski wrote:
+>> On 13/09/2023 10:47, Konrad Dybcio wrote:
+>>> On 13.09.2023 09:07, Krzysztof Kozlowski wrote:
+>>>> On 12/09/2023 15:31, Konrad Dybcio wrote:
+>>>>> These clocks are now handled from within the icc framework and are
+>>>>
+>>>> That's a driver behavior, not hardware.
+>>> I believe we've been over this already..
+>>>
+>>> The rationale behind this change is: that hardware, which falls
+>>> under the "interconnect" class, was previously misrepresented as
+>>> a bunch of clocks. There are clocks underneath, but accessing them
+>>> directly would be equivalent to e.g. circumventing the PHY subsystem
+>>> and initializing your UFS PHY from within the UFS device.
+>>
+>> And every time one write such commit msg, how should we remember there
+>> is some exception and actually it is about clock representation not CCF
+>> or ICC framework.
+> So is your reply essentially "fine, but please make it clear in
+> each commit message"?
 
-Signed-off-by: Christoph Hellwig <hch@lst.de>
----
- Documentation/filesystems/locking.rst |  5 -----
- Documentation/filesystems/vfs.rst     |  5 -----
- fs/super.c                            | 25 +++++++++----------------
- include/linux/fs.h                    |  2 --
- 4 files changed, 9 insertions(+), 28 deletions(-)
+I am fine with this change. If commit msg had such statement, I would
+not have doubts :/
 
-diff --git a/Documentation/filesystems/locking.rst b/Documentation/filesystems/locking.rst
-index c33e2f03ed1f69..e4ca99c0828d00 100644
---- a/Documentation/filesystems/locking.rst
-+++ b/Documentation/filesystems/locking.rst
-@@ -221,7 +221,6 @@ prototypes::
- 	struct dentry *(*mount) (struct file_system_type *, int,
- 		       const char *, void *);
- 	void (*shutdown_sb) (struct super_block *);
--	void (*kill_sb) (struct super_block *);
- 	void (*free_sb) (struct super_block *);
- 
- locking rules:
-@@ -231,16 +230,12 @@ ops		may block
- =======		=========
- mount		yes
- shutdown_sb	yes
--kill_sb		yes
- free_sb		yes
- =======		=========
- 
- ->mount() returns ERR_PTR or the root dentry; its superblock should be locked
- on return.
- 
--->kill_sb() takes a write-locked superblock, does all shutdown work on it,
--unlocks and drops the reference.
--
- address_space_operations
- ========================
- prototypes::
-diff --git a/Documentation/filesystems/vfs.rst b/Documentation/filesystems/vfs.rst
-index 1a7c6926c31f34..29513ee1d34ede 100644
---- a/Documentation/filesystems/vfs.rst
-+++ b/Documentation/filesystems/vfs.rst
-@@ -120,7 +120,6 @@ members are defined:
- 		struct dentry *(*mount) (struct file_system_type *, int,
- 			const char *, void *);
- 		void (*shutdown_sb) (struct super_block *);
--		void (*kill_sb) (struct super_block *);
- 		void (*free_sb) (struct super_block *);
- 		struct module *owner;
- 		struct file_system_type * next;
-@@ -164,10 +163,6 @@ members are defined:
- 	Note: dentries and inodes are normally taken care of and do not need
- 	specific handling unless they are pinned by kernel users.
- 
--``kill_sb``
--	the method to call when an instance of this filesystem should be
--	shut down
--
- ``free_sb``
- 	Free file system specific resources like sb->s_fs_info that are
- 	still needed while inodes are freed during umount.
-diff --git a/fs/super.c b/fs/super.c
-index 805ca1dd1e23f2..d9c564e70ffcd5 100644
---- a/fs/super.c
-+++ b/fs/super.c
-@@ -458,6 +458,8 @@ static void kill_super_notify(struct super_block *sb)
- 	super_wake(sb, SB_DEAD);
- }
- 
-+static void generic_shutdown_super(struct super_block *sb);
-+
- /**
-  *	deactivate_locked_super	-	drop an active reference to superblock
-  *	@s: superblock to deactivate
-@@ -480,15 +482,11 @@ void deactivate_locked_super(struct super_block *s)
- 
- 	unregister_shrinker(&s->s_shrink);
- 
--	if (fs->kill_sb) {
--		fs->kill_sb(s);
--	} else {
--		if (fs->shutdown_sb)
--			fs->shutdown_sb(s);
--		generic_shutdown_super(s);
--		if (fs->free_sb)
--			fs->free_sb(s);
--	}
-+	if (fs->shutdown_sb)
-+		fs->shutdown_sb(s);
-+	generic_shutdown_super(s);
-+	if (fs->free_sb)
-+		fs->free_sb(s);
- 
- 	kill_super_notify(s);
- 
-@@ -661,16 +659,13 @@ EXPORT_SYMBOL(retire_super);
-  *	@sb: superblock to kill
-  *
-  *	generic_shutdown_super() does all fs-independent work on superblock
-- *	shutdown.  Typical ->kill_sb() should pick all fs-specific objects
-- *	that need destruction out of superblock, call generic_shutdown_super()
-- *	and release aforementioned objects.  Note: dentries and inodes _are_
-- *	taken care of and do not need specific handling.
-+ *	shutdown. 
-  *
-  *	Upon calling this function, the filesystem may no longer alter or
-  *	rearrange the set of dentries belonging to this super_block, nor may it
-  *	change the attachments of dentries to inodes.
-  */
--void generic_shutdown_super(struct super_block *sb)
-+static void generic_shutdown_super(struct super_block *sb)
- {
- 	const struct super_operations *sop = sb->s_op;
- 
-@@ -743,8 +738,6 @@ void generic_shutdown_super(struct super_block *sb)
- 	}
- }
- 
--EXPORT_SYMBOL(generic_shutdown_super);
--
- bool mount_capable(struct fs_context *fc)
- {
- 	if (!(fc->fs_type->fs_flags & FS_USERNS_MOUNT))
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index 302be5dfc1a04a..f57d3a27b488f7 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -2340,7 +2340,6 @@ struct file_system_type {
- 	const struct fs_parameter_spec *parameters;
- 	struct dentry *(*mount) (struct file_system_type *, int,
- 		       const char *, void *);
--	void (*kill_sb) (struct super_block *);
- 	void (*shutdown_sb)(struct super_block *sb);
- 	void (*free_sb)(struct super_block *sb);
- 	struct module *owner;
-@@ -2382,7 +2381,6 @@ extern struct dentry *mount_nodev(struct file_system_type *fs_type,
- 	int (*fill_super)(struct super_block *, void *, int));
- extern struct dentry *mount_subtree(struct vfsmount *mnt, const char *path);
- void retire_super(struct super_block *sb);
--void generic_shutdown_super(struct super_block *sb);
- void block_free_sb(struct super_block *sb);
- void litter_shutdown_sb(struct super_block *sb);
- void deactivate_super(struct super_block *sb);
--- 
-2.39.2
+Best regards,
+Krzysztof
 
