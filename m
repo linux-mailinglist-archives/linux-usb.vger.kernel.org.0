@@ -2,60 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0362279E283
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Sep 2023 10:47:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48CFC79E2A8
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Sep 2023 10:54:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239080AbjIMIrn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Sep 2023 04:47:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51246 "EHLO
+        id S234678AbjIMIyF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Sep 2023 04:54:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239007AbjIMIrl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Sep 2023 04:47:41 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF7C1993
-        for <linux-usb@vger.kernel.org>; Wed, 13 Sep 2023 01:47:37 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-9a64619d8fbso836204166b.0
-        for <linux-usb@vger.kernel.org>; Wed, 13 Sep 2023 01:47:37 -0700 (PDT)
+        with ESMTP id S237826AbjIMIyD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Sep 2023 04:54:03 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2CA51999
+        for <linux-usb@vger.kernel.org>; Wed, 13 Sep 2023 01:53:59 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-401da71b85eso71227985e9.1
+        for <linux-usb@vger.kernel.org>; Wed, 13 Sep 2023 01:53:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694594856; x=1695199656; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google; t=1694595238; x=1695200038; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=PQEFQQxMh0h+78yTeEwiIcC35VL/vG6Gf1kdzuQcwiU=;
-        b=p4jmRGoQRTk7hzVY/UkUNPTTv6AxQI+W8/gXt3BPy2Hj+9is4bLh2ermIO33E3wRTa
-         Q0w/5WBsR04ikKQ8CdtX5NL4VgxjbexFvk0VaM+6XNrXSQCZyFGCJbuAQI7WEFyC7Gbw
-         MVyxTOTGkZjrqmyiEDCc8Bbnmuu5k/4WJIEpTqmX+rLLt+KvA0RxlpyXeq4qlU5mklLU
-         F8ITEFxQXA3UkfvnCL5TAdpZxjp2RilgNL/nVS6GkZDMKWieXel7XGCnlPqDGTBY7O3l
-         1mjohY8iNjdS2/bs8Hqa+NWhFKS2rQPLCfwZ99dvdsL99AaZeHmqOilZoFMlevjpXhA1
-         c7kA==
+        bh=GhHrKGkwknmn53kTVek0J706okQHEDAGQ9NnXjohhwc=;
+        b=GWk6iuSEuCFhD9ZoTd4XeA4MjqL1LK7EgPPji+7OEk/t9odzZH2F/Em8IVwJQqbaUT
+         +ahBRgAigrkRmH2FVAbGdW2mpbrF5O0C2a5B4AomxE3RMZeSFGbHGf5Q4ZGUsXrdizWq
+         wkuVOKPke9doXDRoX2CbQZtEjai5MWKz0uhgm2Ul4QXqqIQWMrRy9fZrg/5Q0iuOfcPK
+         97Fz8O+OzeJejuIitDR6PBMZW0a1+AwwVeChGGqbqnC6FjiJ6ZrJaBbDnKMQ7xcYDhCD
+         gsEEZeEbx21wMCl/e+ZzadVH43TiEgm3WSexaLwqlVG2LfOoATiFdTtw2f+EpZqmtorJ
+         Qjcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694594856; x=1695199656;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1694595238; x=1695200038;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PQEFQQxMh0h+78yTeEwiIcC35VL/vG6Gf1kdzuQcwiU=;
-        b=r045BlcE4fg9GHXoQsAdM1t5Whfpm9sj2fQaV9WlCUUvUv+yjPqb2VC2sT7Pc6NXSd
-         G/J0kOMYdWVu8WjBtfq9w20E3YkRJWkmlTpT7EQv+iC05MND2rXPRfKAQHTSpm6NA2+p
-         HITHB9WT66RiIMks9oKwZEiptcN5miuLsl6V8lg+V1MrAcFrfWIJhyQekBC7Ess0k1go
-         2obbK3sAz9YMmKY9fqmR4lmTksBgSb7ZHM76EKKKXm2RDpy29Eylmlkofqge/CK5/CAs
-         nkxXQhR6x3eqtL1tCT+mW8gj3NFxIS4pRDNB3ne0/iilglL+0PTJ+iCahqVdZIvmImro
-         cJxg==
-X-Gm-Message-State: AOJu0YwM4kaMX6UA9rTBz968tpQOSJAFQet6aiNVB63Hf10k2svPcNen
-        xVJtx+rz845/2GH5wgp8BWB8xA==
-X-Google-Smtp-Source: AGHT+IHq8G/vDNKzkpyTrGivbPniBIGyuPjI+ArBrWWcige0YNQz3a3Kfta7CjCjsNCGDZAP+7Uqvg==
-X-Received: by 2002:a17:906:d8:b0:9aa:186:959a with SMTP id 24-20020a17090600d800b009aa0186959amr1364510eji.31.1694594855877;
-        Wed, 13 Sep 2023 01:47:35 -0700 (PDT)
-Received: from [192.168.37.232] (178235177106.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.106])
-        by smtp.gmail.com with ESMTPSA id mb8-20020a170906eb0800b00992b71d8f19sm7983312ejb.133.2023.09.13.01.47.33
+        bh=GhHrKGkwknmn53kTVek0J706okQHEDAGQ9NnXjohhwc=;
+        b=EER1m5+yyaa0QrYLiQ0rZlyXZ3X6szD+XVrMtxKybBSdjxNGcAjDKrwyihcLIqkTqd
+         S7MdWZ7kcE9OMl9T9T6QZeNpzTq9Iq89R7ah9GjgMxwzcavtZJwWCnvukW9YfjQGiCBE
+         Kdg+NMQGoDog2Ic+waFI7oJAdbZmJWNPVic1+hOjZoSBzgSJdYGAnblyyqNV5mkrKV2g
+         dRx6zC5pXeTCb9dwM7HId4WlDb/2Bnh/C10jGnXQfbjrB3v6pWSZmkSu2LYbCpZ3XQEN
+         SjVRFMVkM0kPPVm2NeHZa2FDm6jMYMCYMHqtleBQZn6zglS2ve99KAU4MBS6gG3a3Ewc
+         8vqQ==
+X-Gm-Message-State: AOJu0Yw1GvNKBUvWe8d8aF6IbHgHC1pQF1nBiaN66d/tt5rFraB7YwCy
+        agDt16SI8H7KHveY4VHfGhiLJg==
+X-Google-Smtp-Source: AGHT+IHlx1wBmhFt+Xhr2HaUbSAyTT3NDErkIFWBlr4Be2MBvo6kfY/pyhgj249iwl6Zy5PgBzaFXg==
+X-Received: by 2002:a7b:cbc8:0:b0:3fe:111a:d1d9 with SMTP id n8-20020a7bcbc8000000b003fe111ad1d9mr1571454wmi.25.1694595238135;
+        Wed, 13 Sep 2023 01:53:58 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.214.188])
+        by smtp.gmail.com with ESMTPSA id k23-20020a05600c0b5700b00402fa98abe3sm1369905wmr.46.2023.09.13.01.53.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Sep 2023 01:47:35 -0700 (PDT)
-Message-ID: <ac501bcc-80a1-4b65-ba24-272152d1c95c@linaro.org>
-Date:   Wed, 13 Sep 2023 10:47:33 +0200
+        Wed, 13 Sep 2023 01:53:57 -0700 (PDT)
+Message-ID: <7b500bba-3091-f425-a60d-e58a3d9e4c1a@linaro.org>
+Date:   Wed, 13 Sep 2023 10:53:54 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
 Subject: Re: [PATCH v2 01/14] arm64: dts: qcom: msm8916: Drop RPM bus clocks
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Mathieu Poirier <mathieu.poirier@linaro.org>,
@@ -78,71 +79,33 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
 References: <20230721-topic-rpm_clk_cleanup-v2-0-1e506593b1bd@linaro.org>
  <20230721-topic-rpm_clk_cleanup-v2-1-1e506593b1bd@linaro.org>
  <bd11d1b1-efe5-4f96-43e7-163fca5d3278@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <bd11d1b1-efe5-4f96-43e7-163fca5d3278@linaro.org>
+ <ac501bcc-80a1-4b65-ba24-272152d1c95c@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <ac501bcc-80a1-4b65-ba24-272152d1c95c@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 13.09.2023 09:07, Krzysztof Kozlowski wrote:
-> On 12/09/2023 15:31, Konrad Dybcio wrote:
->> These clocks are now handled from within the icc framework and are
-> 
-> That's a driver behavior, not hardware.
-I believe we've been over this already..
-
-The rationale behind this change is: that hardware, which falls
-under the "interconnect" class, was previously misrepresented as
-a bunch of clocks. There are clocks underneath, but accessing them
-directly would be equivalent to e.g. circumventing the PHY subsystem
-and initializing your UFS PHY from within the UFS device.
-
-Konrad
-> 
->> no longer registered from within the CCF. Remove them.
+On 13/09/2023 10:47, Konrad Dybcio wrote:
+> On 13.09.2023 09:07, Krzysztof Kozlowski wrote:
+>> On 12/09/2023 15:31, Konrad Dybcio wrote:
+>>> These clocks are now handled from within the icc framework and are
 >>
+>> That's a driver behavior, not hardware.
+> I believe we've been over this already..
 > 
-> Changes in Linux clock drivers should not cause some clocks to disappear
-> from DTS...
-> 
-> 
-> Best regards,
-> Krzysztof
-> 
+> The rationale behind this change is: that hardware, which falls
+> under the "interconnect" class, was previously misrepresented as
+> a bunch of clocks. There are clocks underneath, but accessing them
+> directly would be equivalent to e.g. circumventing the PHY subsystem
+> and initializing your UFS PHY from within the UFS device.
+
+And every time one write such commit msg, how should we remember there
+is some exception and actually it is about clock representation not CCF
+or ICC framework.
+
+Best regards,
+Krzysztof
+
