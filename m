@@ -2,297 +2,170 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C2EC79DEB6
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Sep 2023 05:47:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 430AA79DF0D
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Sep 2023 06:10:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232700AbjIMDrC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Sep 2023 23:47:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55430 "EHLO
+        id S238524AbjIMEKG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Sep 2023 00:10:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230302AbjIMDrB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Sep 2023 23:47:01 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 389291719
-        for <linux-usb@vger.kernel.org>; Tue, 12 Sep 2023 20:46:57 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38D3cYvC003622;
-        Wed, 13 Sep 2023 03:46:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=vioX24uVe6qsssknvq1SLHksfTHUZcjjWxMIRZDaJus=;
- b=VkVVKBJUjEqWybARDcPSr7gXboh1jJyA9aRJm3iOx4gjJdcdNFZhcfy8+vW734Ieanp8
- ALTyEQ7Ruww+Nd8H5l+qjgJ+rooexzERX2nIwQ3sapY9QhTCah8T5JyMwU8XYOjhGwbA
- T6NvtIZ5SjSaZXuG1U6/Oaj+zPsEwy0WedvOWsTRlZlWD5D10CV0rEg9qsm+O9TfG0Xe
- pxnZWMoFK4o9Tghpc0/uXVuCojUNd4Ck4MMVZORQoCF/UJVXGpKugutfxtOzn8OZDGvH
- X3M1Mcyi2gK/qkZNp8P/+NJzuWwSK6cj7Cpmwogjrssddez7RdM0sbZ8Gy0g0OaxSl5v ag== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t2y8e0m5d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 13 Sep 2023 03:46:24 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38D3kNok021030
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 13 Sep 2023 03:46:23 GMT
-Received: from [10.253.38.124] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Tue, 12 Sep
- 2023 20:46:15 -0700
-Message-ID: <d1c34d15-e598-5f86-bc86-cd5e656225c9@quicinc.com>
-Date:   Wed, 13 Sep 2023 11:46:12 +0800
+        with ESMTP id S238355AbjIMEJO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Sep 2023 00:09:14 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2041.outbound.protection.outlook.com [40.107.92.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7E2A8;
+        Tue, 12 Sep 2023 21:09:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=A1NfeAg5xYeUGvzyZMhG27pJShUeJrxbXEoYUS0xMpeyasF0WPNxjRapzqSnkmVthtRkT5ifa7XYXAxkI9veT30bAglma64QO5IB/ZgKZlE9gcrUYw+9aB1N958a+ecv5azROpMj1+2S4ia/yGhCWFozUFWrbV3HHuCXEs7SOeKx01qEzYxkzJcOTZvNiiRwOqyACqPpmdRy6USesrZG9H/02ABFEAgcv5ZF5Xtf7aOWk9LDTYH6PwAUPdKYowisEtOwD46tqYQ9pur/oAdt96f3czerL8zmu2Y4OJVX8cBFN29qHkfekuTYOYN5aU+vpYoCytqtJK7edlimQUlcYw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=co05OyDJ5rrh0aNDPlIvWZjbDGN87E+41XO3D6jAviI=;
+ b=OvpiaI3R2pUjmUVMVE37cBIYRlJ31RLNJ/eSRFMQKs/pWRG0jLA8wuiyPxh9+95A5lcsDpHaZ0Udb0b/tKQAsCqOjGDIMws2eyfdem84DuQNEI5GS8DJIvb4XCLV62bEUdmTY7MEWrgy2nimkt9Z5mkszLUCdJOnogUckWueCv30TNA2zxU1AFRDdvVJfZ2QFirNtVGCZTlUn3z243xSoMpKJj+46EoHjj3wL74dCRxvJnj6FE/Y3Kkcxc9nx2hu65u6k0Fqzv32UeVnknxJTm74eloTAjv1cAqFkKpvEs/RpcmqoPEVJoQFPX68wn64iRn02CIux7uGqxr7eOPhmQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=temperror (sender ip
+ is 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com;
+ dmarc=temperror action=none header.from=amd.com; dkim=none (message not
+ signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=co05OyDJ5rrh0aNDPlIvWZjbDGN87E+41XO3D6jAviI=;
+ b=FMy0tV/bfaCofx5mU0WGS3ClzJG7YFTCFmWRB0gGozzSVM8vu14i4v/IrsOTc81mwfwJl8f00GOvaSJW6lIRMPRF4zpJzONSBOqTqVt7WI+1VdAWOjGurirCKVMIaGPgfeZ9LvSQrl8/2wlXCtYh1uM32P20WXLN5PUErFJsWKg=
+Received: from BL1PR13CA0141.namprd13.prod.outlook.com (2603:10b6:208:2bb::26)
+ by BY5PR12MB5016.namprd12.prod.outlook.com (2603:10b6:a03:1c5::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.19; Wed, 13 Sep
+ 2023 04:08:59 +0000
+Received: from BL02EPF0001A107.namprd05.prod.outlook.com
+ (2603:10b6:208:2bb:cafe::b6) by BL1PR13CA0141.outlook.office365.com
+ (2603:10b6:208:2bb::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.17 via Frontend
+ Transport; Wed, 13 Sep 2023 04:08:58 +0000
+X-MS-Exchange-Authentication-Results: spf=temperror (sender IP is
+ 165.204.84.17) smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=temperror action=none header.from=amd.com;
+Received-SPF: TempError (protection.outlook.com: error in processing during
+ lookup of amd.com: DNS Timeout)
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL02EPF0001A107.mail.protection.outlook.com (10.167.241.136) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6792.19 via Frontend Transport; Wed, 13 Sep 2023 04:08:57 +0000
+Received: from AUS-P9-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 12 Sep
+ 2023 23:08:55 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+CC:     Hans de Goede <hdegoede@redhat.com>,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        "open list:X86 PLATFORM DRIVERS" 
+        <platform-driver-x86@vger.kernel.org>,
+        "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>,
+        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+        <iain@orangesquash.org.uk>,
+        "Mario Limonciello" <mario.limonciello@amd.com>
+Subject: [PATCH v18 0/2] Add quirk for PCIe root port on AMD systems
+Date:   Tue, 12 Sep 2023 23:08:30 -0500
+Message-ID: <20230913040832.114610-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [PATCH v3 01/10] usb: gadget: add anonymous definition in struct
- usb_gadget
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Neal Liu <neal_liu@aspeedtech.com>,
-        Cristian Birsan <cristian.birsan@microchip.com>,
-        Bin Liu <b-liu@ti.com>, Kevin Cernekee <cernekee@gmail.com>,
-        Justin Chen <justin.chen@broadcom.com>,
-        Al Cooper <alcooperx@gmail.com>, Li Yang <leoyang.li@nxp.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Herve Codina <herve.codina@bootlin.com>,
-        hierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Michal Simek <michal.simek@amd.com>,
-        Rui Miguel Silva <rui.silva@linaro.org>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>,
-        <linux-usb@vger.kernel.org>, Alan Stern <stern@rowland.harvard.edu>
-References: <20230912104455.7737-1-quic_linyyuan@quicinc.com>
- <20230912104455.7737-2-quic_linyyuan@quicinc.com>
- <2023091255-unsubtly-daisy-7426@gregkh>
-Content-Language: en-US
-From:   Linyu Yuan <quic_linyyuan@quicinc.com>
-In-Reply-To: <2023091255-unsubtly-daisy-7426@gregkh>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 0cB_zPyY-AJsEsGLVM4VbNUKq5-bFYA7
-X-Proofpoint-GUID: 0cB_zPyY-AJsEsGLVM4VbNUKq5-bFYA7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-09-12_24,2023-09-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- mlxlogscore=247 phishscore=0 impostorscore=0 lowpriorityscore=0 mlxscore=0
- clxscore=1015 adultscore=0 suspectscore=0 priorityscore=1501 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2308100000
- definitions=main-2309130030
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF0001A107:EE_|BY5PR12MB5016:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7a4b815d-b4e1-462a-8508-08dbb40f26e1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: CyZcAsEbGzdU9OIcE8aifkjwbKzCGPYnErJAh9KNw93VwSyosMODZZSGDe+6aG4lK4P+THVqY7nksSjM7v1MvkLGxt/eQA1aJDGOgwDyoUvcYuMen9ySzFJjNb6T1kPi/o1JhOCo5LKzQIT3vFEuT/wjfLp9wCfQxVx2puwyvsgEiX/+V1y+TbmoEyrNG6APCZ2AoUTxEAQ0IJxVqoffS5oMKLjOsEsjdLaKGKt+SNb1NnlOebg1W/iDQz72NE6dp/mK/I6lwsxuwiVfOsY1UIyXWhkIlWXxrElyzgr4fUNmJsBrJPZoOduJKiu+0mOp0bmX9youY7xktGYEA9IBiGut4CLLB505ikbVGIotuQRHThYcXOkobBulOG6hruXMqVO3/ru96HuSrb4pYUp6XnIg56QjfNybim7HRo1YoXoRRhjm3PBvDdljVWckkfBtk5qb1gsNVnc+k+o8JCarVyVNZ0+KlZbVIaSmLrYsIhtmr04sB/syr+u4m3Rvnla8Au2IXZkswp/no4KsJmnF0G6J8x9tq613DrsQ+V4iP2zZPKurxcBIGoRZJaGwoyY0oameGY7Hr5SxCAKWqlVTjbXQvvVoXE3JZvn6AUxlqP3JV6p+bR88pKWSWedAxGs9hHMB6fGW/Tm9wvWOx2gdINrmXycU4yPWHwCPGCfeJa0SNDEn6mi1hlCWWjw97lfwh3tcLnJA8trYaGdA/nU5eMM0hvdBSCVLBRz0SAZ0/6o5bZrNLmSZt4A0nGcpyC82IewD7QnMFQfrm27fJp+XYMSHPE4WRTfjHJEp2//Ajhc=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(396003)(136003)(376002)(39860400002)(346002)(82310400011)(186009)(451199024)(1800799009)(40470700004)(36840700001)(46966006)(40460700003)(2906002)(63370400001)(63350400001)(316002)(54906003)(36756003)(4326008)(41300700001)(8676002)(8936002)(40480700001)(44832011)(5660300002)(110136005)(70206006)(70586007)(6666004)(7696005)(2616005)(1076003)(426003)(336012)(36860700001)(82740400003)(356005)(16526019)(26005)(81166007)(478600001)(966005)(86362001)(47076005)(83380400001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Sep 2023 04:08:57.2567
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7a4b815d-b4e1-462a-8508-08dbb40f26e1
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL02EPF0001A107.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB5016
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Iain reports that USB devices can't be used to wake a Lenovo Z13
+from suspend. This is because the PCIe root port has been put
+into D3hot and AMD's platform can't handle USB devices waking the
+platform from a hardware sleep state in this case.
 
-On 9/12/2023 7:09 PM, Greg Kroah-Hartman wrote:
-> On Tue, Sep 12, 2023 at 06:44:46PM +0800, Linyu Yuan wrote:
->> Some UDC trace event will save usb gadget information, but it use one int
->> size buffer to save one bit information of usb gadget, so 19 int buffers
->> needed to save 19 bit fields which is not good.
->>
->> Add one anonymous union which have one u32 member 'dw1' to struct
->> 'usb_gadget', it inlclude all 19 bits and can be used by trace event
->> during fast assign stage to save more entries with same trace ring buffer
->> size.
->>
->> Also move all original 19 bit fields into one anonymous struct which
->> inside struct 'usb_gadget'.
->>
->> In order to allow trace event output stage access the bit from saved u32
->> 'dw1', add following macro,
->> define USB_GADGET_BITFIELD(n, name) \
->> 	({\
->> 	union {\
->> 		struct {\
->> 			u32	sg_supported:1;\
->> 			u32	is_otg:1;\
->> 			u32	is_a_peripheral:1;\
->> 			u32	b_hnp_enable:1;\
->> 			u32	a_hnp_support:1;\
->> 			u32	a_alt_hnp_support:1;\
->> 			u32	hnp_polling_support:1;\
->> 			u32	host_request_flag:1;\
->> 			u32	quirk_ep_out_aligned_size:1;\
->> 			u32	quirk_altset_not_supp:1;\
->> 			u32	quirk_stall_not_supp:1;\
->> 			u32	quirk_zlp_not_supp:1;\
->> 			u32	quirk_avoids_skb_reserve:1;\
->> 			u32	is_selfpowered:1;\
->> 			u32	deactivated:1;\
->> 			u32	connected:1;\
->> 			u32	lpm_capable:1;\
->> 			u32	wakeup_capable:1;\
->> 			u32	wakeup_armed:1;\
->> 		} __packed;\
->> 		u32		dw1;\
->> 	} __aligned(4) __g_u_##name;\
->> 	u32 __g_##name; \
->> 	BUILD_BUG_ON(sizeof(__g_u_##name) != 4);\
->> 	__g_u_##name.dw1 = (n); __g_##name = __g_u_##name.name;\
->> 	__g_##name; })
->>
->> define USB_GADGET_SG_SUPPORTED(n) USB_GADGET_BITFIELD((n), sg_supported)
->> ...
->> change to use this kind of macro for all related trace files later.
-> I'm sorry, but that's horrible, and is NOT how you deal with bitfields
-> in an endian-neutral way at all.
->
-> There are much simpler, and easier, ways to do this properly.
+The firmware doesn't express this limitation in a way that Linux
+recognizes so this series introduces a quirk for this problem.
 
+Previous submissions:
+* v17 
+  https://lore.kernel.org/platform-driver-x86/20230906184354.45846-1-mario.limonciello@amd.com/
+  This version implemented constraints for the amd-pmc driver and introduced
+  a veto/optin system for the PCI core as suggested by Hans.
+  Rafael suggested not to use the veto/optin system and instead use a quirk.
+* v16
+  https://lore.kernel.org/platform-driver-x86/20230829171212.156688-1-mario.limonciello@amd.com/
+  This version implemented constraints for the amd-pmc driver.
+* v15
+  https://lore.kernel.org/platform-driver-x86/20230828042819.47013-1-mario.limonciello@amd.com/#t
+  This version hardcoded the quirk into amd-pmc driver as part of suspend
+  callback.
+* v14
+  https://lore.kernel.org/linux-pci/20230818193932.27187-1-mario.limonciello@amd.com/
+  https://lore.kernel.org/linux-pci/20230818194007.27410-1-mario.limonciello@amd.com/
+  https://lore.kernel.org/linux-pci/20230818194027.27559-1-mario.limonciello@amd.com/
+  This version implemented constraints exporting and limited the policy for
+  >= 2015 to Intel only. It also added support for constraints optin.
+  V13 was split into multiple parts to make it easier to land. 14.b was
+  merged.
+* v13
+  https://lore.kernel.org/linux-pci/20230818051319.551-1-mario.limonciello@amd.com/
+* v12
+  https://lore.kernel.org/linux-pci/20230816204143.66281-1-mario.limonciello@amd.com/
+* v11
+  https://lore.kernel.org/linux-pci/20230809185453.40916-1-mario.limonciello@amd.com/
+* v10
+  https://lore.kernel.org/linux-pci/20230804210129.5356-1-mario.limonciello@amd.com/
+* v9
+  https://lore.kernel.org/linux-pci/20230804010229.3664-1-mario.limonciello@amd.com/
+* v8
+  https://lore.kernel.org/linux-pci/20230802201013.910-1-mario.limonciello@amd.com/
+* v7
+  https://lore.kernel.org/linux-pci/20230711005325.1499-1-mario.limonciello@amd.com/
+* v6
+  https://lore.kernel.org/linux-pci/20230708214457.1229-1-mario.limonciello@amd.com/
+* v5
+  https://lore.kernel.org/linux-pci/20230530163947.230418-1-mario.limonciello@amd.com/
+* v4
+  https://lore.kernel.org/linux-pci/20230524190726.17012-1-mario.limonciello@amd.com/
+* v3
+  https://lore.kernel.org/linux-pci/20230524152136.1033-1-mario.limonciello@amd.com/
+* v2
+  https://lore.kernel.org/linux-pci/20230517150827.89819-1-mario.limonciello@amd.com/
+* v1
+  https://lore.kernel.org/linux-pci/20230515231515.1440-1-mario.limonciello@amd.com/
+Mario Limonciello (2):
+  PCI: Move the `PCI_CLASS_SERIAL_USB_USB4` definition to common header
+  PCI: Add a quirk for AMD PCIe root ports w/ USB4 controllers
 
-do you mean define two sets of ordering bit field according BIG and 
-LITTLE ENDIAN like below ?
-
-
-#if defined(__LITTLE_ENDIAN_BITFIELD)
-
-         struct {
-             u32        sg_supported:1;
-
-            u32        is_otg:1;
-
-             ..
-
-             u32        :13;
-
-         } __packed;
-
-#else
-
-         struct {
-             u32        :13;
-             ..
-
-             u32        is_otg:1;
-
-             u32        sg_supported:1;
-
-         } __packed;
-
-#endif
-
-but Alan Stern have one comment,   do it mean the bit position number is 
-not expect and we can't use it ?
-
-@Alan Stern ,  BIT(0), BIT(1) is not the member we expect ?
-
-"
-
-  As far as I
-know, the C compiler does not specify that bit fields in packed
-structures will be assigned starting from the low-order bit position
-
-"
+ drivers/pci/pci.c         |  5 +++++
+ drivers/pci/quirks.c      | 28 ++++++++++++++++++++++++++++
+ drivers/thunderbolt/nhi.h |  2 --
+ include/linux/pci.h       |  2 ++
+ include/linux/pci_ids.h   |  1 +
+ 5 files changed, 36 insertions(+), 2 deletions(-)
 
 
+base-commit: 0bb80ecc33a8fb5a682236443c1e740d5c917d1d
+-- 
+2.34.1
 
->
-> But I'm still missing the huge _WHY_ any of this is needed.  You are not
-> showing any real advantage at all that I have noticed.
->
-> You need to step back and see if any of this is even anything that needs
-> to change, and if you feel it does need to change, you need to be able
-> to properly justify _why_ it needs to change.
-
-
-indeed this is a small optimization.
-
-
-I think i explain the benefit in previous version, when user not 
-increase system trace event buffer space,
-
-or in lower system trace event buffer space, it allow more trace event 
-entries  to be saved.
-
-
-in normal condition, the usb request is most frequent things after 
-enumeration with useful operation,
-
-so take below trace event class for explanation,
-
-
-DECLARE_EVENT_CLASS(udc_log_req,
-     TP_PROTO(struct usb_ep *ep, struct usb_request *req, int ret),
-     TP_ARGS(ep, req, ret),
-     TP_STRUCT__entry(
-         __string(name, ep->name)
-         __field(unsigned, length)
-         __field(unsigned, actual)
-         __field(unsigned, num_sgs)
-         __field(unsigned, num_mapped_sgs)
-         __field(unsigned, stream_id)
-         __field(unsigned, no_interrupt)
-         __field(unsigned, zero)
-         __field(unsigned, short_not_ok)
-         __field(int, status)
-         __field(int, ret)
-         __field(struct usb_request *, req)
-     ),
-     TP_fast_assign(
-         __assign_str(name, ep->name);
-         __entry->length = req->length;
-         __entry->actual = req->actual;
-         __entry->num_sgs = req->num_sgs;
-         __entry->num_mapped_sgs = req->num_mapped_sgs;
-         __entry->stream_id = req->stream_id;
-         __entry->no_interrupt = req->no_interrupt;
-         __entry->zero = req->zero;
-         __entry->short_not_ok = req->short_not_ok;
-         __entry->status = req->status;
-         __entry->ret = ret;
-         __entry->req = req;
-     ),
-     TP_printk("%s: req %p length %d/%d sgs %d/%d stream %d %s%s%s 
-status %d --> %d",
-         __get_str(name),__entry->req,  __entry->actual, __entry->length,
-         __entry->num_mapped_sgs, __entry->num_sgs, __entry->stream_id,
-         __entry->zero ? "Z" : "z",
-         __entry->short_not_ok ? "S" : "s",
-         __entry->no_interrupt ? "i" : "I",
-         __entry->status, __entry->ret
-     )
-);
-
-
-consider 32 bit ARCH,
-
-without change, one trace entry size is:
-
-4 (ring buffer event header ) + 8 (trace event header ) + 48 (trace 
-class header) + 9 (ep string name) = 69 bytes.
-
-
-with change,
-
-4 (ring buffer event header ) + 8 (trace event header ) + 36 (trace 
-class header)  = 48 bytes.
-
-
-
-consider there is 1MB trace buffer space,
-
-without change, it can save 15196 entries,
-
-with change, it can save 21845 entries.
-
-
-
-
->
-> good luck!
->
-> greg k-h
