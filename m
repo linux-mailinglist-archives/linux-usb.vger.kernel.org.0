@@ -2,80 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EA9B79EDE6
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Sep 2023 18:03:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAD1D79EDFF
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Sep 2023 18:10:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230314AbjIMQDF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Sep 2023 12:03:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52676 "EHLO
+        id S229809AbjIMQLB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Sep 2023 12:11:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjIMQDE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Sep 2023 12:03:04 -0400
+        with ESMTP id S229794AbjIMQLA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Sep 2023 12:11:00 -0400
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 817C095
-        for <linux-usb@vger.kernel.org>; Wed, 13 Sep 2023 09:03:00 -0700 (PDT)
-Received: (qmail 959784 invoked by uid 1000); 13 Sep 2023 12:02:57 -0400
-Date:   Wed, 13 Sep 2023 12:02:57 -0400
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id C376BE6D
+        for <linux-usb@vger.kernel.org>; Wed, 13 Sep 2023 09:10:56 -0700 (PDT)
+Received: (qmail 960084 invoked by uid 1000); 13 Sep 2023 12:10:56 -0400
+Date:   Wed, 13 Sep 2023 12:10:56 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Linyu Yuan <quic_linyyuan@quicinc.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Neal Liu <neal_liu@aspeedtech.com>,
-        Cristian Birsan <cristian.birsan@microchip.com>,
-        Bin Liu <b-liu@ti.com>, Kevin Cernekee <cernekee@gmail.com>,
-        Justin Chen <justin.chen@broadcom.com>,
-        Al Cooper <alcooperx@gmail.com>, Li Yang <leoyang.li@nxp.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Herve Codina <herve.codina@bootlin.com>,
-        hierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Michal Simek <michal.simek@amd.com>,
-        Rui Miguel Silva <rui.silva@linaro.org>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3 01/10] usb: gadget: add anonymous definition in struct
- usb_gadget
-Message-ID: <ef99b328-926c-4696-83bf-9ccd6a38984e@rowland.harvard.edu>
-References: <20230912104455.7737-1-quic_linyyuan@quicinc.com>
- <20230912104455.7737-2-quic_linyyuan@quicinc.com>
- <2023091255-unsubtly-daisy-7426@gregkh>
- <d1c34d15-e598-5f86-bc86-cd5e656225c9@quicinc.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Tejun Heo <tj@kernel.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        Naohiro Aota <naohiro.aota@wdc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-hardening@vger.kernel.org,
+        cgroups@vger.kernel.org
+Subject: Re: [PATCH 10/19] USB: gadget/legacy: remove sb_mutex
+Message-ID: <7f839be1-4898-41ad-8eda-10d5a0350bdf@rowland.harvard.edu>
+References: <20230913111013.77623-1-hch@lst.de>
+ <20230913111013.77623-11-hch@lst.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d1c34d15-e598-5f86-bc86-cd5e656225c9@quicinc.com>
+In-Reply-To: <20230913111013.77623-11-hch@lst.de>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 13, 2023 at 11:46:12AM +0800, Linyu Yuan wrote:
-> but Alan Stern have one comment,   do it mean the bit position number is not
-> expect and we can't use it ?
+On Wed, Sep 13, 2023 at 08:10:04AM -0300, Christoph Hellwig wrote:
+> Creating new a new super_block vs freeing the old one for single instance
+> file systems is serialized by the wait for SB_DEAD.
 > 
-> @Alan Stern ,  BIT(0), BIT(1) is not the member we expect ?
-
-They might not be.  If you can avoid making this assumption, you should.
-
-> > This macro usage is a real mess.  Can't you find a better way to do it?
-> >
-> > For instance, in the code that parses the trace buffer, define a
-> > temporary usb_gadget structure and copy the dw1 field from the trace
-> > buffer to the temporary structure.  Then you can access the fields in
-> > that structure directly by their original names, with no macros.
+> Remove the superfluous sb_mutex.
 > 
-> do it same idea just move it outside of gadget.h ?
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
+> ---
 
-Keep the anonymous union in gadget.h, but get rid of the macros.
+You might mention that this is essentially a reversion of commit 
+d18dcfe9860e ("USB: gadgetfs: Fix race between mounting and 
+unmounting").
 
 Alan Stern
+
+>  drivers/usb/gadget/legacy/inode.c | 6 ------
+>  1 file changed, 6 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/legacy/inode.c b/drivers/usb/gadget/legacy/inode.c
+> index ce9e31f3d26bcc..a203266bc0dc82 100644
+> --- a/drivers/usb/gadget/legacy/inode.c
+> +++ b/drivers/usb/gadget/legacy/inode.c
+> @@ -229,7 +229,6 @@ static void put_ep (struct ep_data *data)
+>   */
+>  
+>  static const char *CHIP;
+> -static DEFINE_MUTEX(sb_mutex);		/* Serialize superblock operations */
+>  
+>  /*----------------------------------------------------------------------*/
+>  
+> @@ -2012,8 +2011,6 @@ gadgetfs_fill_super (struct super_block *sb, struct fs_context *fc)
+>  	struct dev_data	*dev;
+>  	int		rc;
+>  
+> -	mutex_lock(&sb_mutex);
+> -
+>  	if (the_device) {
+>  		rc = -ESRCH;
+>  		goto Done;
+> @@ -2069,7 +2066,6 @@ gadgetfs_fill_super (struct super_block *sb, struct fs_context *fc)
+>  	rc = -ENOMEM;
+>  
+>   Done:
+> -	mutex_unlock(&sb_mutex);
+>  	return rc;
+>  }
+>  
+> @@ -2092,7 +2088,6 @@ static int gadgetfs_init_fs_context(struct fs_context *fc)
+>  static void
+>  gadgetfs_kill_sb (struct super_block *sb)
+>  {
+> -	mutex_lock(&sb_mutex);
+>  	kill_litter_super (sb);
+>  	if (the_device) {
+>  		put_dev (the_device);
+> @@ -2100,7 +2095,6 @@ gadgetfs_kill_sb (struct super_block *sb)
+>  	}
+>  	kfree(CHIP);
+>  	CHIP = NULL;
+> -	mutex_unlock(&sb_mutex);
+>  }
+>  
+>  /*----------------------------------------------------------------------*/
+> -- 
+> 2.39.2
+> 
