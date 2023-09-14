@@ -1,472 +1,183 @@
-Return-Path: <linux-usb+bounces-67-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-66-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 468A27A0843
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 17:00:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2451B7A076C
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 16:35:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 92778B2092E
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 15:00:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 78E8CB20ADE
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 14:34:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1073210FD;
-	Thu, 14 Sep 2023 14:41:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E33C7266D5;
+	Thu, 14 Sep 2023 14:31:44 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9176E28E11
-	for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 14:41:45 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62DC1BE1;
-	Thu, 14 Sep 2023 07:41:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694702504; x=1726238504;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=P5DXsd0TMGfqFd+C6H6RKHDA4+v0/d2EZ1KKD3WiMpE=;
-  b=Z6opXE7KNk8Oxw2el547uDIenWNZJI7JKpFmc2MOecoYGOnFnuq+yZ61
-   aUxkRByAr+K3kXaIvcYCt3k1Fj5MJ22AMgkklfHcqh6WopEwlN85dPMkW
-   epbPmLvYD0y6r9XrUlRXxRmZ51+W0Ko/7RE4M5KBNWakxe9rw8Isjukdl
-   ymohJe2JDS4Ks/uE34uBw5wUQf3IUQeTHZuzXtfkbjSmzfTZ1+nLY2UH2
-   Oj7E9xOAHAlnr0W15DMHWoiRaT6XdwuHNDKj3rT02PiB2utrCqmBPhvV0
-   bROcvCk++Bp8ovnMmEnLWDwCkzeBCpbhIJXNz4VqoL0uN+Ablv3ccjm2F
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="443015659"
-X-IronPort-AV: E=Sophos;i="6.02,146,1688454000"; 
-   d="scan'208";a="443015659"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2023 07:30:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="991408227"
-X-IronPort-AV: E=Sophos;i="6.02,146,1688454000"; 
-   d="scan'208";a="991408227"
-Received: from lkp-server02.sh.intel.com (HELO 9ef86b2655e5) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 14 Sep 2023 07:30:08 -0700
-Received: from kbuild by 9ef86b2655e5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qgnM5-0001gx-35;
-	Thu, 14 Sep 2023 14:30:05 +0000
-Date: Thu, 14 Sep 2023 22:29:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: Linyu Yuan <quic_linyyuan@quicinc.com>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Chunfeng Yun <chunfeng.yun@mediatek.com>, Bin Liu <b-liu@ti.com>,
-	Peter Chen <peter.chen@kernel.org>,
-	Pawel Laszczak <pawell@cadence.com>,
-	Roger Quadros <rogerq@kernel.org>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	Linyu Yuan <quic_linyyuan@quicinc.com>
-Subject: Re: [PATCH 1/8] trace: add new DECLARE_EVENT_CLASS_PRINT_INIT class
- type
-Message-ID: <202309142216.GwM6Q6l0-lkp@intel.com>
-References: <20230914100302.30274-2-quic_linyyuan@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF5A3266CC
+	for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 14:31:44 +0000 (UTC)
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2050.outbound.protection.outlook.com [40.107.220.50])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 258FC1A2;
+	Thu, 14 Sep 2023 07:31:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=g1eLTFkgYY0ZZ7w6RFzXoCVwPZepltO5RNxUt5caOf0gKuG+sBR5TeVxsEuWbWIaSV2YB4ihN5s5qVmD9CoHkJFB/ASijC+Gj1OHsXr1WjRmfwTaekzvLQTsZ7yaqTJvwOIuV4u2BprJRTetWy76K355aO4Xx4TxiSGtCBmLKDvc93kmzbniYDqgepzoXGClmOShpaFgjsauERvro7F9jKGsWsZY+vYp7dlnp0B0uvoymsenFAbSQi3xZM9uAR3Z9i7rlPOp6+EPiIXUyB825Ep+1i2hOG3cHbwgTxR9XrZyIMYSINaM+CTXhdSy2Il1wahXoWPmndehLge3kT6v5w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HsRaWFP5t0JcgypsJGiIvyzpuebRQrRNmIXK1THUD/o=;
+ b=AprR6xnkcjrZeIFAgaeyKP/9whQ762veYtatPFiLHPFJkqYRlLlFWGh9JY+uFvG7eCk6FdJlaUStcO6i4+4ZBptuLd6q1niYqZ+poeqyJvBPVKsePlESYTrMs2pIgnPq2Rt+NcZ+0OPBYP/ueHQ97L5jZ4FCthx0U27gfebTcAoD4ggs1KHPFuVYoFukayyH2CVO7qJg7489s8dVTJ7jui0ZRs2SXsnvJtB6UL/iJRqPh4NbfiSAMCXfy8jeGQDiFhbiYQ6DJ7sLuuDgtQVWDhE8Q0hU+F6g9LYTjpXbFfN9YW9WXxknAccLU8b6Jjlc03dhyJbaDZDiRRDOl9346g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HsRaWFP5t0JcgypsJGiIvyzpuebRQrRNmIXK1THUD/o=;
+ b=OFaQqktswiBUXyvFvKtmS4or8Em6mI8PafpgX+WL3aOFapoV1M8EJXObZCiS5jO5KmaSVDQqKIywdkj/2in4+eqHLN2gAt6u5jeT1UX0T0VvfFSSYxV7jpmIJttO2jyqLHPx+UvxKdejTRsx+QPMDyeHwrVdKhpk5MZzVOE871c=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by LV2PR12MB5750.namprd12.prod.outlook.com (2603:10b6:408:17e::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.33; Thu, 14 Sep
+ 2023 14:31:41 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::36f9:ffa7:c770:d146]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::36f9:ffa7:c770:d146%7]) with mapi id 15.20.6768.029; Thu, 14 Sep 2023
+ 14:31:41 +0000
+Message-ID: <1db16da9-568d-4492-8b2c-cdabf7a18f3b@amd.com>
+Date: Thu, 14 Sep 2023 09:31:38 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v18 2/2] PCI: Add a quirk for AMD PCIe root ports w/ USB4
+ controllers
+Content-Language: en-US
+To: Lukas Wunner <lukas@wunner.de>
+Cc: Bjorn Helgaas <bhelgaas@google.com>,
+ "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+ Mika Westerberg <mika.westerberg@linux.intel.com>,
+ Hans de Goede <hdegoede@redhat.com>,
+ Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+ "open list:X86 PLATFORM DRIVERS" <platform-driver-x86@vger.kernel.org>,
+ "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+ linux-pm@vger.kernel.org,
+ "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+ iain@orangesquash.org.uk
+References: <20230913040832.114610-1-mario.limonciello@amd.com>
+ <20230913040832.114610-3-mario.limonciello@amd.com>
+ <20230913042522.GB1359@wunner.de>
+ <fd981219-d864-4c46-a348-61f73a9df596@amd.com>
+ <20230913143128.GA29059@wunner.de>
+ <76dfea89-e386-45e9-851c-8e87f9470c4f@amd.com>
+ <20230914141705.GA27051@wunner.de>
+From: Mario Limonciello <mario.limonciello@amd.com>
+In-Reply-To: <20230914141705.GA27051@wunner.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SA1PR02CA0007.namprd02.prod.outlook.com
+ (2603:10b6:806:2cf::18) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230914100302.30274-2-quic_linyyuan@quicinc.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|LV2PR12MB5750:EE_
+X-MS-Office365-Filtering-Correlation-Id: 33f72d0c-ea8c-42b0-9509-08dbb52f4ff6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	2XCXhyiJhiiZmORbMynDxIeVgROvUdKy8pxA2R7GB+1UD02mI589u6G1fGm2i2wDiTBICJ1nrEVm1z97UiBlZyPp+6nVyXSh7Ak4kw/7Qsq2Nne8mKggkxUIqur9UrjyVILXnoVhpdem5hj/S3+cjpwK68emFGJq87/X2zAyVXlPR67ROKY4JYsZnIQ9jmwQgFyCmgvB4Rx8vNyecVnwJr4MPAXH9dnWGmyZ1KPY8ACggSuupnB6xQA9Yikj2i2QT/rm8jYpDTVJkpOJVKYj9xJO40HA744TyNbbixORQ9cez6rD4LR6mcNhnWGU2U14pE5wgF8/aBUTEL9r6v7gwKSnVZIeNWPjhhwlUj81ja9waiUCy5A04pgkeormUvZCyAIntE7Vk9688fcX23iT4pELdLCeapKdAnTnsqI789ItKzY+IJhZw9TY+fmBKW1EXNpe8gJ74YyXuQXqGvgvC1Qyzlg0zUgiDcQ6NFi4FxuzwRzukzcgCpDmWRn9SGKMhXRtjb+EedfvaVEQFl+uESsDAyORq0mVydZGFPKCqTfAqDvrBIoO5sOidAyj5CKUIsQxNdH2k5TXdRG9TyDEhN0sGUstoKzpP7utWl7Lr8htqfhCbycS5fg8lBPzzIfvIiiqOgZ7Cm0pkIV8QH1k3g==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(376002)(346002)(39860400002)(366004)(396003)(1800799009)(451199024)(186009)(44832011)(8676002)(4326008)(8936002)(6916009)(66476007)(66556008)(66946007)(2616005)(6506007)(6512007)(53546011)(6486002)(41300700001)(6666004)(316002)(26005)(5660300002)(7416002)(54906003)(83380400001)(31686004)(478600001)(2906002)(31696002)(86362001)(38100700002)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?aGNmUGJxMml0V2xNT1VZM21qOUFpdTA3eVFyb2FkWFc3TVhaQ214aXQzKzZY?=
+ =?utf-8?B?V2pmc1BFcFNJSTlGKzhNSW5qeGJVU0RKTStESUJsM1M5VDF2VjZCazNqVUJZ?=
+ =?utf-8?B?T0MrU2tuTlRwQm0yWkdCcVRMR09hN0pZekhUR3dYSmZMY3FZZkNBMnBHblZ6?=
+ =?utf-8?B?bW0rYnVmcm9DQm9TcE96WDdiVlhEVitvcjhZZ0NON1FJSFh4RDlwSzV6aUcr?=
+ =?utf-8?B?YUFkOXo0SHZtTWNXbGU3OUJIalVVWUV0NUd5OWxOTWtISjRjMTRtZHFsSmNr?=
+ =?utf-8?B?NlVWTEFhMUpUYi83a2RHWTVLQjFIL3dlTFYzKzJrVFM5YWc3WEJCU01RYmMr?=
+ =?utf-8?B?UUxUaE42aUs4SmVOMVpwa0xMMGJsd0J5Z2ZvNUhrWWRJZ0lTNTAxbmdLVFlQ?=
+ =?utf-8?B?dTBrZllWZU9WZG5xY2RiaWNWL0FLQ3lpUXh5QXpkVnFhQXYyQjlRbDFyTThI?=
+ =?utf-8?B?NEM2ditJYS85eFpPbzVDMGU4T216NGpVc2owRDRIQXNxdGhjNzRTQjNad1dr?=
+ =?utf-8?B?TUhUa1JlMkN4U05rOGpwSUk2aFNER05aREU3M2RNcmUxMlYyWENGV21EQ2FV?=
+ =?utf-8?B?Tlg4VFNJVVRMRnY0aFFmMTluNHFiM280N1VkR05ldktJbURUaWs3bGMzSzJn?=
+ =?utf-8?B?MWZUNUVZYThCUWUvZk9rYy9hVHl4K3BFb1VSa29zT3pvQ2Exb29rckFNeTRm?=
+ =?utf-8?B?bHlzRVYzVkFLQ0xkMmNHNDlYbWpNSWczZkN5NGFIdnFCU3k0allaRkZLSHYx?=
+ =?utf-8?B?RWl5SWFpY0Z2RlJYVHdiT3p0dGVNRVkzT3pzTzdsWmJPaFRQNy81ck1tU2V4?=
+ =?utf-8?B?WjRJVTRQTVZBcEFobVB3SGYvZnR1S0s5Z3Vtc0ZtZTcvNFZMSDdFRlZwVkMr?=
+ =?utf-8?B?a2VOdkRtOTVBSHo5M0pwZE9TenlrOE0wOFFZWjZVYjJ3NTdGSzQ0cGdkcHpE?=
+ =?utf-8?B?dmgxY1QxYjNaUFVkcFRmT1Q1czhQQW9KNUlkazVTcUNCVzRUaXhNVUZyOTlm?=
+ =?utf-8?B?SFQvM0JPOEpCNkpmREU3OGFFMnpVeldJS2FuMWtZYzNONmVWQ3p5TXpaUnNP?=
+ =?utf-8?B?ZEZBTXpoVkJLL0JlU0hlZUllOEpIMzYzVmtTc2tFRGlDVHFWRkxUeS9YZEs4?=
+ =?utf-8?B?RG45NEo4VVNBRDdZSXRKNWMycjdrYTN3UHRHVTFGSVU4YmZCVjhWZDRpVE9E?=
+ =?utf-8?B?UWtZNHowL0FGTlRLeEhTTjZhVWp6NmxWQzBQaFY0S01kSGFGekNFYzN1VDFp?=
+ =?utf-8?B?OVh1NGtPemlkSTEzS2xBd1dtTW5sREVlZXdLRHhXSml1K1hBc0tRcDh4WjNy?=
+ =?utf-8?B?OGpqbjRpcW50ZDdDN3dJOGRUSTIyRmNIT2lzbnVBMnJINkpCcEdXd2ZCY1BL?=
+ =?utf-8?B?bjA2RTdNQ281TXFTRkpKTHlqZGxQd3k3RG1VUHBDSHJNMVZ0ZzdWR2tIcFU4?=
+ =?utf-8?B?eVRCS0VjU0lRU2Vubm1uT3grQ1BvQzd3V2FlRFYwUEI5ZHNzQXlUZFg0dkZT?=
+ =?utf-8?B?OCs2ZVZsUVJVTEx2K2F4TFZ3VTM3ZGFyazhMMFVtellpMDd0UDBUam44ak10?=
+ =?utf-8?B?TllLcWpVZ2xYbGh3NUMwT0FUaVZJaURiS0owRDNyM2txMnNkOHhIcVJxRzMv?=
+ =?utf-8?B?MkdKYnl2a1oxdGUvd0dmMTgvWE1VQ0N6REF2ditvN0RFYmRmcU5IYURTRUhD?=
+ =?utf-8?B?S3dOaWZqWS92d2k4RkRWcnNBc0duTTBCTzJBVDZvajJqcSt4bGdndGlkMFEz?=
+ =?utf-8?B?TDErdkl2VldORlpjZXcwdGgzTkVxMW01NUZNN0xNdnVhUUhtbDF5MEpKWWsv?=
+ =?utf-8?B?UHJoUFhjSVNqTjREaXBWUlBhUGJyUzBVakFmckNGbkVoNzNUNzRQZ3I5d3Q0?=
+ =?utf-8?B?TmxnQzlleTZlNEVWQ2lKa0M1M2RlR3F2VHNCRHNhMllzS05ha2xiYUJYbGVZ?=
+ =?utf-8?B?VUQwaVFLT0xveTBibmlrSDJhU0paRkVjYzhSL3ZkaDVxV0lVYzhCcWpMODJW?=
+ =?utf-8?B?ZTNPcmM4OGpybGF1R2lqbXRZK0t3OFI2ank0cjVBYWxzZnI1c0lyelB3Tm1P?=
+ =?utf-8?B?V3prbzk3bTR5NXAvc2lNY3Vod2JWRVFaNXEvSU5qL1dzWWRVN1pBRFgyVnl3?=
+ =?utf-8?Q?jmyRLgUdM3KXNFqgya3zIqg2s?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 33f72d0c-ea8c-42b0-9509-08dbb52f4ff6
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Sep 2023 14:31:41.4666
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jI81ULfipeZ5Od36XyX0KYtWNs6QuNBXpGTpc0sOhBExcdZU+Nq/qQvmn1vnqjqVhwvsGwRpS8Ct81TkqtDaaQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5750
 
-Hi Linyu,
+On 9/14/2023 09:17, Lukas Wunner wrote:
+> On Wed, Sep 13, 2023 at 11:36:49AM -0500, Mario Limonciello wrote:
+>> On 9/13/2023 09:31, Lukas Wunner wrote:
+>>> If this only affects system sleep, not runtime PM, what you can do is
+>>> define a DECLARE_PCI_FIXUP_SUSPEND_LATE() which calls pci_d3cold_disable()
+>>> and also define a DECLARE_PCI_FIXUP_CLASS_RESUME_EARLY() which calls
+>>> pci_d3cold_enable().
+>>>
+>>> And I think you can make those calls conditional on pm_suspend_no_platform()
+>>> to constrain to s2idle.
+>>>
+>>> User space should still be able to influence runtime PM via the
+>>> d3cold_allowed flag (unless I'm missing something).
+>>
+>> The part you're missing is that D3hot is affected by this issue too,
+>> otherwise it would be a good proposal.
+> 
+> I recall that in an earlier version of the patch, you solved the issue
+> by amending pci_bridge_d3_possible().
+> 
+> Changing the dev->no_d3cold flag indirectly influences the bridge_d3
+> flag (through pci_dev_check_d3cold() and pci_bridge_d3_update()).
+> 
+> If dev->no_d3cold is set on a device below a port, that port is
+> prevented from entring D3hot because it would result in the
+> device effectively being in D3cold.
+> 
+> So you might want to take a closer look at this approach despite
+> the flag suggesting that it only influences D3cold.
+> 
 
-kernel test robot noticed the following build warnings:
+Ah; I hadn't considered setting it on a device below the port. In this 
+particular situation the only devices below the root port are USB 
+controllers.
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on usb/usb-next usb/usb-linus linus/master v6.6-rc1 next-20230914]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+If those devices don't go into D3 the system can't enter hardware sleep.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Linyu-Yuan/trace-add-new-DECLARE_EVENT_CLASS_PRINT_INIT-class-type/20230914-180924
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20230914100302.30274-2-quic_linyyuan%40quicinc.com
-patch subject: [PATCH 1/8] trace: add new DECLARE_EVENT_CLASS_PRINT_INIT class type
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20230914/202309142216.GwM6Q6l0-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230914/202309142216.GwM6Q6l0-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309142216.GwM6Q6l0-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from include/trace/events/migrate.h:8,
-                    from mm/rmap.c:83:
->> include/linux/tracepoint.h:554: warning: "DECLARE_EVENT_CLASS_PRINT_INIT" redefined
-     554 | #define DECLARE_EVENT_CLASS_PRINT_INIT(name, proto, args, tstruct, assign, print, init)
-         | 
-   In file included from include/trace/define_trace.h:103,
-                    from include/trace/events/tlb.h:62,
-                    from mm/rmap.c:82:
-   include/trace/perf.h:59: note: this is the location of the previous definition
-      59 | #define DECLARE_EVENT_CLASS_PRINT_INIT(call, proto, args, tstruct, assign, print, init) \
-         | 
->> include/linux/tracepoint.h:580: warning: "TRACE_EVENT_PRINT_INIT" redefined
-     580 | #define TRACE_EVENT_PRINT_INIT(name, proto, args, struct, assign, print, init)  \
-         | 
-   In file included from include/trace/define_trace.h:102:
-   include/trace/trace_events.h:49: note: this is the location of the previous definition
-      49 | #define TRACE_EVENT_PRINT_INIT(name, proto, args, tstruct, assign, print, init) \
-         | 
---
-   In file included from include/trace/events/net.h:12,
-                    from net/core/net-traces.c:31:
->> include/linux/tracepoint.h:554: warning: "DECLARE_EVENT_CLASS_PRINT_INIT" redefined
-     554 | #define DECLARE_EVENT_CLASS_PRINT_INIT(name, proto, args, tstruct, assign, print, init)
-         | 
-   In file included from include/trace/define_trace.h:103,
-                    from include/trace/events/skb.h:95,
-                    from net/core/net-traces.c:30:
-   include/trace/perf.h:59: note: this is the location of the previous definition
-      59 | #define DECLARE_EVENT_CLASS_PRINT_INIT(call, proto, args, tstruct, assign, print, init) \
-         | 
->> include/linux/tracepoint.h:580: warning: "TRACE_EVENT_PRINT_INIT" redefined
-     580 | #define TRACE_EVENT_PRINT_INIT(name, proto, args, struct, assign, print, init)  \
-         | 
-   In file included from include/trace/define_trace.h:102:
-   include/trace/trace_events.h:49: note: this is the location of the previous definition
-      49 | #define TRACE_EVENT_PRINT_INIT(name, proto, args, tstruct, assign, print, init) \
-         | 
-   In file included from include/trace/events/napi.h:9,
-                    from net/core/net-traces.c:32:
->> include/linux/tracepoint.h:554: warning: "DECLARE_EVENT_CLASS_PRINT_INIT" redefined
-     554 | #define DECLARE_EVENT_CLASS_PRINT_INIT(name, proto, args, tstruct, assign, print, init)
-         | 
-   In file included from include/trace/define_trace.h:103,
-                    from include/trace/events/net.h:319:
-   include/trace/perf.h:59: note: this is the location of the previous definition
-      59 | #define DECLARE_EVENT_CLASS_PRINT_INIT(call, proto, args, tstruct, assign, print, init) \
-         | 
->> include/linux/tracepoint.h:580: warning: "TRACE_EVENT_PRINT_INIT" redefined
-     580 | #define TRACE_EVENT_PRINT_INIT(name, proto, args, struct, assign, print, init)  \
-         | 
-   In file included from include/trace/define_trace.h:102:
-   include/trace/trace_events.h:49: note: this is the location of the previous definition
-      49 | #define TRACE_EVENT_PRINT_INIT(name, proto, args, tstruct, assign, print, init) \
-         | 
-   In file included from include/trace/events/sock.h:10,
-                    from net/core/net-traces.c:33:
->> include/linux/tracepoint.h:554: warning: "DECLARE_EVENT_CLASS_PRINT_INIT" redefined
-     554 | #define DECLARE_EVENT_CLASS_PRINT_INIT(name, proto, args, tstruct, assign, print, init)
-         | 
-   In file included from include/trace/define_trace.h:103,
-                    from include/trace/events/napi.h:44:
-   include/trace/perf.h:59: note: this is the location of the previous definition
-      59 | #define DECLARE_EVENT_CLASS_PRINT_INIT(call, proto, args, tstruct, assign, print, init) \
-         | 
->> include/linux/tracepoint.h:580: warning: "TRACE_EVENT_PRINT_INIT" redefined
-     580 | #define TRACE_EVENT_PRINT_INIT(name, proto, args, struct, assign, print, init)  \
-         | 
-   In file included from include/trace/define_trace.h:102:
-   include/trace/trace_events.h:49: note: this is the location of the previous definition
-      49 | #define TRACE_EVENT_PRINT_INIT(name, proto, args, tstruct, assign, print, init) \
-         | 
-   In file included from include/trace/events/udp.h:9,
-                    from net/core/net-traces.c:34:
->> include/linux/tracepoint.h:554: warning: "DECLARE_EVENT_CLASS_PRINT_INIT" redefined
-     554 | #define DECLARE_EVENT_CLASS_PRINT_INIT(name, proto, args, tstruct, assign, print, init)
-         | 
-   In file included from include/trace/define_trace.h:103,
-                    from include/trace/events/sock.h:338:
-   include/trace/perf.h:59: note: this is the location of the previous definition
-      59 | #define DECLARE_EVENT_CLASS_PRINT_INIT(call, proto, args, tstruct, assign, print, init) \
-         | 
->> include/linux/tracepoint.h:580: warning: "TRACE_EVENT_PRINT_INIT" redefined
-     580 | #define TRACE_EVENT_PRINT_INIT(name, proto, args, struct, assign, print, init)  \
-         | 
-   In file included from include/trace/define_trace.h:102:
-   include/trace/trace_events.h:49: note: this is the location of the previous definition
-      49 | #define TRACE_EVENT_PRINT_INIT(name, proto, args, tstruct, assign, print, init) \
-         | 
-   In file included from include/trace/events/tcp.h:10,
-                    from net/core/net-traces.c:35:
->> include/linux/tracepoint.h:554: warning: "DECLARE_EVENT_CLASS_PRINT_INIT" redefined
-     554 | #define DECLARE_EVENT_CLASS_PRINT_INIT(name, proto, args, tstruct, assign, print, init)
-         | 
-   In file included from include/trace/define_trace.h:103,
-                    from include/trace/events/udp.h:33:
-   include/trace/perf.h:59: note: this is the location of the previous definition
-      59 | #define DECLARE_EVENT_CLASS_PRINT_INIT(call, proto, args, tstruct, assign, print, init) \
-         | 
->> include/linux/tracepoint.h:580: warning: "TRACE_EVENT_PRINT_INIT" redefined
-     580 | #define TRACE_EVENT_PRINT_INIT(name, proto, args, struct, assign, print, init)  \
-         | 
-   In file included from include/trace/define_trace.h:102:
-   include/trace/trace_events.h:49: note: this is the location of the previous definition
-      49 | #define TRACE_EVENT_PRINT_INIT(name, proto, args, tstruct, assign, print, init) \
-         | 
-   In file included from include/trace/events/fib.h:11,
-                    from net/core/net-traces.c:36:
->> include/linux/tracepoint.h:554: warning: "DECLARE_EVENT_CLASS_PRINT_INIT" redefined
-     554 | #define DECLARE_EVENT_CLASS_PRINT_INIT(name, proto, args, tstruct, assign, print, init)
-         | 
-   In file included from include/trace/define_trace.h:103,
-                    from include/trace/events/tcp.h:425:
-   include/trace/perf.h:59: note: this is the location of the previous definition
-      59 | #define DECLARE_EVENT_CLASS_PRINT_INIT(call, proto, args, tstruct, assign, print, init) \
-         | 
->> include/linux/tracepoint.h:580: warning: "TRACE_EVENT_PRINT_INIT" redefined
-     580 | #define TRACE_EVENT_PRINT_INIT(name, proto, args, struct, assign, print, init)  \
-         | 
-   In file included from include/trace/define_trace.h:102:
-   include/trace/trace_events.h:49: note: this is the location of the previous definition
-      49 | #define TRACE_EVENT_PRINT_INIT(name, proto, args, tstruct, assign, print, init) \
-         | 
-   In file included from include/trace/events/qdisc.h:9,
-                    from net/core/net-traces.c:37:
->> include/linux/tracepoint.h:554: warning: "DECLARE_EVENT_CLASS_PRINT_INIT" redefined
-     554 | #define DECLARE_EVENT_CLASS_PRINT_INIT(name, proto, args, tstruct, assign, print, init)
-         | 
-   In file included from include/trace/define_trace.h:103,
-                    from include/trace/events/fib.h:102:
-   include/trace/perf.h:59: note: this is the location of the previous definition
-      59 | #define DECLARE_EVENT_CLASS_PRINT_INIT(call, proto, args, tstruct, assign, print, init) \
-         | 
->> include/linux/tracepoint.h:580: warning: "TRACE_EVENT_PRINT_INIT" redefined
-     580 | #define TRACE_EVENT_PRINT_INIT(name, proto, args, struct, assign, print, init)  \
-         | 
-   In file included from include/trace/define_trace.h:102:
-   include/trace/trace_events.h:49: note: this is the location of the previous definition
-      49 | #define TRACE_EVENT_PRINT_INIT(name, proto, args, tstruct, assign, print, init) \
-         | 
-   In file included from include/trace/events/page_pool.h:9,
-                    from net/core/net-traces.c:48:
->> include/linux/tracepoint.h:554: warning: "DECLARE_EVENT_CLASS_PRINT_INIT" redefined
-     554 | #define DECLARE_EVENT_CLASS_PRINT_INIT(name, proto, args, tstruct, assign, print, init)
-         | 
-   In file included from include/trace/define_trace.h:103,
-                    from include/trace/events/qdisc.h:153:
-   include/trace/perf.h:59: note: this is the location of the previous definition
-      59 | #define DECLARE_EVENT_CLASS_PRINT_INIT(call, proto, args, tstruct, assign, print, init) \
-         | 
->> include/linux/tracepoint.h:580: warning: "TRACE_EVENT_PRINT_INIT" redefined
-     580 | #define TRACE_EVENT_PRINT_INIT(name, proto, args, struct, assign, print, init)  \
-         | 
-   In file included from include/trace/define_trace.h:102:
-   include/trace/trace_events.h:49: note: this is the location of the previous definition
-      49 | #define TRACE_EVENT_PRINT_INIT(name, proto, args, tstruct, assign, print, init) \
-         | 
-   In file included from include/trace/events/neigh.h:9,
-                    from net/core/net-traces.c:51:
->> include/linux/tracepoint.h:554: warning: "DECLARE_EVENT_CLASS_PRINT_INIT" redefined
-     554 | #define DECLARE_EVENT_CLASS_PRINT_INIT(name, proto, args, tstruct, assign, print, init)
-         | 
-   In file included from include/trace/define_trace.h:103,
-                    from include/trace/events/page_pool.h:117:
-   include/trace/perf.h:59: note: this is the location of the previous definition
-      59 | #define DECLARE_EVENT_CLASS_PRINT_INIT(call, proto, args, tstruct, assign, print, init) \
-         | 
->> include/linux/tracepoint.h:580: warning: "TRACE_EVENT_PRINT_INIT" redefined
-     580 | #define TRACE_EVENT_PRINT_INIT(name, proto, args, struct, assign, print, init)  \
-         | 
-   In file included from include/trace/define_trace.h:102:
-   include/trace/trace_events.h:49: note: this is the location of the previous definition
-      49 | #define TRACE_EVENT_PRINT_INIT(name, proto, args, tstruct, assign, print, init) \
-         | 
---
-   In file included from include/trace/events/ipi.h:8,
-                    from kernel/sched/core.c:83:
->> include/linux/tracepoint.h:554: warning: "DECLARE_EVENT_CLASS_PRINT_INIT" redefined
-     554 | #define DECLARE_EVENT_CLASS_PRINT_INIT(name, proto, args, tstruct, assign, print, init)
-         | 
-   In file included from include/trace/define_trace.h:103,
-                    from include/trace/events/sched.h:741,
-                    from kernel/sched/core.c:82:
-   include/trace/perf.h:59: note: this is the location of the previous definition
-      59 | #define DECLARE_EVENT_CLASS_PRINT_INIT(call, proto, args, tstruct, assign, print, init) \
-         | 
->> include/linux/tracepoint.h:580: warning: "TRACE_EVENT_PRINT_INIT" redefined
-     580 | #define TRACE_EVENT_PRINT_INIT(name, proto, args, struct, assign, print, init)  \
-         | 
-   In file included from include/trace/define_trace.h:102:
-   include/trace/trace_events.h:49: note: this is the location of the previous definition
-      49 | #define TRACE_EVENT_PRINT_INIT(name, proto, args, tstruct, assign, print, init) \
-         | 
-   In file included from include/trace/events/power.h:11,
-                    from kernel/sched/sched.h:72,
-                    from kernel/sched/core.c:86:
->> include/linux/tracepoint.h:554: warning: "DECLARE_EVENT_CLASS_PRINT_INIT" redefined
-     554 | #define DECLARE_EVENT_CLASS_PRINT_INIT(name, proto, args, tstruct, assign, print, init)
-         | 
-   In file included from include/trace/define_trace.h:103,
-                    from include/trace/events/ipi.h:134:
-   include/trace/perf.h:59: note: this is the location of the previous definition
-      59 | #define DECLARE_EVENT_CLASS_PRINT_INIT(call, proto, args, tstruct, assign, print, init) \
-         | 
->> include/linux/tracepoint.h:580: warning: "TRACE_EVENT_PRINT_INIT" redefined
-     580 | #define TRACE_EVENT_PRINT_INIT(name, proto, args, struct, assign, print, init)  \
-         | 
-   In file included from include/trace/define_trace.h:102:
-   include/trace/trace_events.h:49: note: this is the location of the previous definition
-      49 | #define TRACE_EVENT_PRINT_INIT(name, proto, args, tstruct, assign, print, init) \
-         | 
-
-
-vim +/DECLARE_EVENT_CLASS_PRINT_INIT +554 include/linux/tracepoint.h
-
-   446	
-   447	#ifndef TRACE_EVENT
-   448	/*
-   449	 * For use with the TRACE_EVENT macro:
-   450	 *
-   451	 * We define a tracepoint, its arguments, its printk format
-   452	 * and its 'fast binary record' layout.
-   453	 *
-   454	 * Firstly, name your tracepoint via TRACE_EVENT(name : the
-   455	 * 'subsystem_event' notation is fine.
-   456	 *
-   457	 * Think about this whole construct as the
-   458	 * 'trace_sched_switch() function' from now on.
-   459	 *
-   460	 *
-   461	 *  TRACE_EVENT(sched_switch,
-   462	 *
-   463	 *	*
-   464	 *	* A function has a regular function arguments
-   465	 *	* prototype, declare it via TP_PROTO():
-   466	 *	*
-   467	 *
-   468	 *	TP_PROTO(struct rq *rq, struct task_struct *prev,
-   469	 *		 struct task_struct *next),
-   470	 *
-   471	 *	*
-   472	 *	* Define the call signature of the 'function'.
-   473	 *	* (Design sidenote: we use this instead of a
-   474	 *	*  TP_PROTO1/TP_PROTO2/TP_PROTO3 ugliness.)
-   475	 *	*
-   476	 *
-   477	 *	TP_ARGS(rq, prev, next),
-   478	 *
-   479	 *	*
-   480	 *	* Fast binary tracing: define the trace record via
-   481	 *	* TP_STRUCT__entry(). You can think about it like a
-   482	 *	* regular C structure local variable definition.
-   483	 *	*
-   484	 *	* This is how the trace record is structured and will
-   485	 *	* be saved into the ring buffer. These are the fields
-   486	 *	* that will be exposed to user-space in
-   487	 *	* /sys/kernel/tracing/events/<*>/format.
-   488	 *	*
-   489	 *	* The declared 'local variable' is called '__entry'
-   490	 *	*
-   491	 *	* __field(pid_t, prev_pid) is equivalent to a standard declaration:
-   492	 *	*
-   493	 *	*	pid_t	prev_pid;
-   494	 *	*
-   495	 *	* __array(char, prev_comm, TASK_COMM_LEN) is equivalent to:
-   496	 *	*
-   497	 *	*	char	prev_comm[TASK_COMM_LEN];
-   498	 *	*
-   499	 *
-   500	 *	TP_STRUCT__entry(
-   501	 *		__array(	char,	prev_comm,	TASK_COMM_LEN	)
-   502	 *		__field(	pid_t,	prev_pid			)
-   503	 *		__field(	int,	prev_prio			)
-   504	 *		__array(	char,	next_comm,	TASK_COMM_LEN	)
-   505	 *		__field(	pid_t,	next_pid			)
-   506	 *		__field(	int,	next_prio			)
-   507	 *	),
-   508	 *
-   509	 *	*
-   510	 *	* Assign the entry into the trace record, by embedding
-   511	 *	* a full C statement block into TP_fast_assign(). You
-   512	 *	* can refer to the trace record as '__entry' -
-   513	 *	* otherwise you can put arbitrary C code in here.
-   514	 *	*
-   515	 *	* Note: this C code will execute every time a trace event
-   516	 *	* happens, on an active tracepoint.
-   517	 *	*
-   518	 *
-   519	 *	TP_fast_assign(
-   520	 *		memcpy(__entry->next_comm, next->comm, TASK_COMM_LEN);
-   521	 *		__entry->prev_pid	= prev->pid;
-   522	 *		__entry->prev_prio	= prev->prio;
-   523	 *		memcpy(__entry->prev_comm, prev->comm, TASK_COMM_LEN);
-   524	 *		__entry->next_pid	= next->pid;
-   525	 *		__entry->next_prio	= next->prio;
-   526	 *	),
-   527	 *
-   528	 *	*
-   529	 *	* Formatted output of a trace record via TP_printk().
-   530	 *	* This is how the tracepoint will appear under ftrace
-   531	 *	* plugins that make use of this tracepoint.
-   532	 *	*
-   533	 *	* (raw-binary tracing wont actually perform this step.)
-   534	 *	*
-   535	 *
-   536	 *	TP_printk("task %s:%d [%d] ==> %s:%d [%d]",
-   537	 *		__entry->prev_comm, __entry->prev_pid, __entry->prev_prio,
-   538	 *		__entry->next_comm, __entry->next_pid, __entry->next_prio),
-   539	 *
-   540	 * );
-   541	 *
-   542	 * This macro construct is thus used for the regular printk format
-   543	 * tracing setup, it is used to construct a function pointer based
-   544	 * tracepoint callback (this is used by programmatic plugins and
-   545	 * can also by used by generic instrumentation like SystemTap), and
-   546	 * it is also used to expose a structured trace record in
-   547	 * /sys/kernel/tracing/events/.
-   548	 *
-   549	 * A set of (un)registration functions can be passed to the variant
-   550	 * TRACE_EVENT_FN to perform any (un)registration work.
-   551	 */
-   552	
-   553	#define DECLARE_EVENT_CLASS(name, proto, args, tstruct, assign, print)
- > 554	#define DECLARE_EVENT_CLASS_PRINT_INIT(name, proto, args, tstruct, assign, print, init)
-   555	#define DEFINE_EVENT(template, name, proto, args)		\
-   556		DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
-   557	#define DEFINE_EVENT_FN(template, name, proto, args, reg, unreg)\
-   558		DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
-   559	#define DEFINE_EVENT_PRINT(template, name, proto, args, print)	\
-   560		DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
-   561	#define DEFINE_EVENT_CONDITION(template, name, proto,		\
-   562				       args, cond)			\
-   563		DECLARE_TRACE_CONDITION(name, PARAMS(proto),		\
-   564					PARAMS(args), PARAMS(cond))
-   565	
-   566	#define TRACE_EVENT(name, proto, args, struct, assign, print)	\
-   567		DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
-   568	#define TRACE_EVENT_FN(name, proto, args, struct,		\
-   569			assign, print, reg, unreg)			\
-   570		DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
-   571	#define TRACE_EVENT_FN_COND(name, proto, args, cond, struct,		\
-   572			assign, print, reg, unreg)			\
-   573		DECLARE_TRACE_CONDITION(name, PARAMS(proto),	\
-   574				PARAMS(args), PARAMS(cond))
-   575	#define TRACE_EVENT_CONDITION(name, proto, args, cond,		\
-   576				      struct, assign, print)		\
-   577		DECLARE_TRACE_CONDITION(name, PARAMS(proto),		\
-   578					PARAMS(args), PARAMS(cond))
-   579	
- > 580	#define TRACE_EVENT_PRINT_INIT(name, proto, args, struct, assign, print, init)	\
-   581		DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
-   582	#define TRACE_EVENT_FN_PRINT_INIT(name, proto, args, struct,		\
-   583			assign, print, reg, unreg, init)			\
-   584		DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
-   585	#define TRACE_EVENT_FN_COND_PRINT_INIT(name, proto, args, cond, struct,		\
-   586			assign, print, reg, unreg, init)			\
-   587		DECLARE_TRACE_CONDITION(name, PARAMS(proto),	\
-   588				PARAMS(args), PARAMS(cond))
-   589	#define TRACE_EVENT_CONDITION_PRINT_INIT(name, proto, args, cond,		\
-   590				      struct, assign, print, init)		\
-   591		DECLARE_TRACE_CONDITION(name, PARAMS(proto),		\
-   592					PARAMS(args), PARAMS(cond))
-   593	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
