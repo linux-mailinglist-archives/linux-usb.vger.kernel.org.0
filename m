@@ -1,59 +1,42 @@
-Return-Path: <linux-usb+bounces-69-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-70-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E1DC7A089D
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 17:08:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12BD57A08B0
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 17:10:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3C399281EE2
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 15:08:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD9C11F2403A
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 15:10:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 276632134D;
-	Thu, 14 Sep 2023 14:53:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5371A2137C;
+	Thu, 14 Sep 2023 14:54:42 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F095F28E11
-	for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 14:53:37 +0000 (UTC)
-Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [IPv6:2a01:37:1000::53df:5f64:0])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49B6F1FC4;
-	Thu, 14 Sep 2023 07:53:37 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
-	(Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
-	by bmailout1.hostsharing.net (Postfix) with ESMTPS id BC31C30008F0D;
-	Thu, 14 Sep 2023 16:53:32 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-	id B157250FA4E; Thu, 14 Sep 2023 16:53:32 +0200 (CEST)
-Date: Thu, 14 Sep 2023 16:53:32 +0200
-From: Lukas Wunner <lukas@wunner.de>
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: Bjorn Helgaas <bhelgaas@google.com>,
-	"Rafael J . Wysocki" <rjw@rjwysocki.net>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-	"open list:X86 PLATFORM DRIVERS" <platform-driver-x86@vger.kernel.org>,
-	"open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
-	linux-pm@vger.kernel.org,
-	"open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-	iain@orangesquash.org.uk
-Subject: Re: [PATCH v18 2/2] PCI: Add a quirk for AMD PCIe root ports w/ USB4
- controllers
-Message-ID: <20230914145332.GA5261@wunner.de>
-References: <20230913040832.114610-1-mario.limonciello@amd.com>
- <20230913040832.114610-3-mario.limonciello@amd.com>
- <20230913042522.GB1359@wunner.de>
- <fd981219-d864-4c46-a348-61f73a9df596@amd.com>
- <20230913143128.GA29059@wunner.de>
- <76dfea89-e386-45e9-851c-8e87f9470c4f@amd.com>
- <20230914141705.GA27051@wunner.de>
- <1db16da9-568d-4492-8b2c-cdabf7a18f3b@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F5AD210E9
+	for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 14:54:41 +0000 (UTC)
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by lindbergh.monkeyblade.net (Postfix) with SMTP id 362F11FC8
+	for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 07:54:41 -0700 (PDT)
+Received: (qmail 996460 invoked by uid 1000); 14 Sep 2023 10:54:40 -0400
+Date: Thu, 14 Sep 2023 10:54:40 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Linyu Yuan <quic_linyyuan@quicinc.com>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+  Chunfeng Yun <chunfeng.yun@mediatek.com>, Bin Liu <b-liu@ti.com>,
+  Peter Chen <peter.chen@kernel.org>, Pawel Laszczak <pawell@cadence.com>,
+  Roger Quadros <rogerq@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+  Masami Hiramatsu <mhiramat@kernel.org>,
+  Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+  linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/8] usb: gadget: add anonymous definition in some struct
+ for trace purpose
+Message-ID: <073cbfb2-2f18-4bf7-a313-b16bbcefa8e0@rowland.harvard.edu>
+References: <20230914100302.30274-1-quic_linyyuan@quicinc.com>
+ <20230914100302.30274-3-quic_linyyuan@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -62,54 +45,31 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1db16da9-568d-4492-8b2c-cdabf7a18f3b@amd.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20230914100302.30274-3-quic_linyyuan@quicinc.com>
 
-On Thu, Sep 14, 2023 at 09:31:38AM -0500, Mario Limonciello wrote:
-> On 9/14/2023 09:17, Lukas Wunner wrote:
-> > On Wed, Sep 13, 2023 at 11:36:49AM -0500, Mario Limonciello wrote:
-> > > On 9/13/2023 09:31, Lukas Wunner wrote:
-> > > > If this only affects system sleep, not runtime PM, what you can do is
-> > > > define a DECLARE_PCI_FIXUP_SUSPEND_LATE() which calls pci_d3cold_disable()
-> > > > and also define a DECLARE_PCI_FIXUP_CLASS_RESUME_EARLY() which calls
-> > > > pci_d3cold_enable().
-> > > > 
-> > > > And I think you can make those calls conditional on pm_suspend_no_platform()
-> > > > to constrain to s2idle.
-> > > > 
-> > > > User space should still be able to influence runtime PM via the
-> > > > d3cold_allowed flag (unless I'm missing something).
-> > > 
-> > > The part you're missing is that D3hot is affected by this issue too,
-> > > otherwise it would be a good proposal.
-> > 
-> > I recall that in an earlier version of the patch, you solved the issue
-> > by amending pci_bridge_d3_possible().
-> > 
-> > Changing the dev->no_d3cold flag indirectly influences the bridge_d3
-> > flag (through pci_dev_check_d3cold() and pci_bridge_d3_update()).
-> > 
-> > If dev->no_d3cold is set on a device below a port, that port is
-> > prevented from entring D3hot because it would result in the
-> > device effectively being in D3cold.
-> > 
-> > So you might want to take a closer look at this approach despite
-> > the flag suggesting that it only influences D3cold.
-> > 
+You didn't include the version number in the Subject: line.  Undoubtedly 
+Greg's automatic error checker will warn you about this.  Unless the 
+version number is clearly marked for each patch, it's difficult for his 
+programs to tell which email message contains the most recent version.
+
+On Thu, Sep 14, 2023 at 06:02:56PM +0800, Linyu Yuan wrote:
+> Some UDC trace event will save usb udc information, but it use one int
+> size buffer to save one bit information of usb udc, it is wast trace
+> buffer.
 > 
-> Ah; I hadn't considered setting it on a device below the port. In this
-> particular situation the only devices below the root port are USB
-> controllers.
+> Add anonymous union which have one u32 member can be used by trace event
+> during fast assign stage to save more entries with same trace ring buffer
+> size.
 > 
-> If those devices don't go into D3 the system can't enter hardware sleep.
+> Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+> ---
 
-If you set dev->no_d3cold on the USB controllers, they should still
-be able to go to D3hot, but not D3cold, which perhaps might be sufficient.
-It should prevent D3cold *and* D3hot on the Root Port above.  And if you
-set that on system sleep in a quirk and clear it on resume, runtime PM
-shouldn't be affected.
+And you didn't include the version change information here, below the 
+"---" line.
 
-Thanks,
+Apart from that, this is a _lot_ better than before!  I don't know if 
+Greg will think this change is worth merging, but at least now it's 
+possible to read the code and understand what's going on.
 
-Lukas
+Alan Stern
 
