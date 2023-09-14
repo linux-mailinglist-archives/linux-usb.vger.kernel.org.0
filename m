@@ -1,187 +1,272 @@
-Return-Path: <linux-usb+bounces-15-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB30179F619
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 03:06:10 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2532A79F629
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 03:09:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C211E1C20BB3
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 01:06:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EFCACB20BFF
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 01:09:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0047B388;
-	Thu, 14 Sep 2023 01:05:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89C7738B;
+	Thu, 14 Sep 2023 01:09:05 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFA59369
-	for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 01:05:42 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 028EF1713;
-	Wed, 13 Sep 2023 18:05:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694653542; x=1726189542;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=DqMXU4EfykY8MQbyCl2wEakuGLnzUm1u4bzb7BKeVS8=;
-  b=QB2wemUQvKIenH1nodWJt8ptOweFA4SYqB7nFUwC8XmqGt9I7xgAaeYH
-   2ggRa0OI2Ug/dXEb2TVill1zNr7AFbVqzkVBEfXkQyvU79b/mSuF45MK8
-   Rb1N4MSD49DzgIXCs7Z+FpnF6SaK+Im/3Oj8CzQ8rJQtMFn6361mPaXR2
-   8gAHewbAqXc2nJZXfqrt78HhMrmmDhadHBNQByW2aD3zswdUUPM8pCxic
-   DT63mQHNOU7PsTpLJklNEKsMoWgKKO3iquPdFtG0EyD6Io2O51rwNgvGs
-   NJbGva9ryugh9yJPePlSFjglYBDxzpvO8ES+XeZ7PNXUo48wABGZB8lK1
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="369096026"
-X-IronPort-AV: E=Sophos;i="6.02,144,1688454000"; 
-   d="scan'208";a="369096026"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2023 18:05:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="694040192"
-X-IronPort-AV: E=Sophos;i="6.02,144,1688454000"; 
-   d="scan'208";a="694040192"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga003.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 13 Sep 2023 18:05:41 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32; Wed, 13 Sep 2023 18:05:40 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32 via Frontend Transport; Wed, 13 Sep 2023 18:05:40 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.168)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.32; Wed, 13 Sep 2023 18:05:39 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JNNPeIOOg3yc2nh6aGrWiwE/ZS6fq/jK4UHG0j7rDPIaB7geAWdB7Tx/XQZyShdnoVLGJx0dEmdzNgnkj6a9gQIKpwUtLAeac22fOlTONSgI4JBRA1AcTtthwkNO2hx0lCVoqj+xdLPLCRAQNn6sUCnkain/8Z3jmFxmh1PgQikIIHeo4hKs6s3P/d9hY3TeBedPKStW65cOQwzJynezU2gawe3zW8XoKqQrORxQO2FtvPwr9YBD9I5GsZlfGHmzAe8hS99QWElG0MCE15d7zTcMmiLHd6NfFnwQIOtXiHoJTDFyn1zbkM7WfIsM4YGsnhyZacgAdt7k6KAd4H8A0Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DqMXU4EfykY8MQbyCl2wEakuGLnzUm1u4bzb7BKeVS8=;
- b=JDYAivH/EjoqTkwhxTBJokaQHNmFlBb+J4bkS3UeWTLCxdV51ikG9cfQNGHrCJWhWZ5RoSNYboltjPJJx4JvsI6Vil7nM4S9pszRRmbH/g8+DgfLPSLXGDidVRzCjEZ+zVDQCe+w+WLmizEeEz3AkAMTU5e3nXznb1jtFhTJFKDf9wfM9/R7XD6n2RBaQx40LgIVKjLI2cVyXHlFwbb2q1+WhHc28NZeQhpiFQxPx7Xq4m0CSIrtEfvoO8Sgz+82Gu2rXR7uZ3h1jG2YbRyazZI1hdSWg2ynEP4UAKcjgcCQvsFpTsoyaSMEvhKWbpmOasdst+YH8XUm1y3hU5xT3A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DM6PR11MB4316.namprd11.prod.outlook.com (2603:10b6:5:205::16)
- by DS0PR11MB6543.namprd11.prod.outlook.com (2603:10b6:8:d1::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.30; Thu, 14 Sep
- 2023 01:05:38 +0000
-Received: from DM6PR11MB4316.namprd11.prod.outlook.com
- ([fe80::e836:4003:6244:2466]) by DM6PR11MB4316.namprd11.prod.outlook.com
- ([fe80::e836:4003:6244:2466%7]) with mapi id 15.20.6792.020; Thu, 14 Sep 2023
- 01:05:38 +0000
-From: "Wu, Wentong" <wentong.wu@intel.com>
-To: Oliver Neukum <oneukum@suse.com>, "gregkh@linuxfoundation.org"
-	<gregkh@linuxfoundation.org>
-CC: "arnd@arndb.de" <arnd@arndb.de>, "mka@chromium.org" <mka@chromium.org>,
-	"lee@kernel.org" <lee@kernel.org>, "wsa@kernel.org" <wsa@kernel.org>,
-	"kfting@nuvoton.com" <kfting@nuvoton.com>, "broonie@kernel.org"
-	<broonie@kernel.org>, "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-	"hdegoede@redhat.com" <hdegoede@redhat.com>, "maz@kernel.org"
-	<maz@kernel.org>, "brgl@bgdev.pl" <brgl@bgdev.pl>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-	"linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-	"linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-	"andriy.shevchenko@linux.intel.com" <andriy.shevchenko@linux.intel.com>,
-	"heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
-	"andi.shyti@linux.intel.com" <andi.shyti@linux.intel.com>,
-	"sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
-	"bartosz.golaszewski@linaro.org" <bartosz.golaszewski@linaro.org>,
-	"Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>, "Wang, Zhifeng"
-	<zhifeng.wang@intel.com>
-Subject: RE: [PATCH v16 1/4] usb: Add support for Intel LJCA device
-Thread-Topic: [PATCH v16 1/4] usb: Add support for Intel LJCA device
-Thread-Index: AQHZ5eNQYYYhXKCANUeYzCUjonX6erAYdpGAgAEKJ7A=
-Date: Thu, 14 Sep 2023 01:05:37 +0000
-Message-ID: <DM6PR11MB43162A9B2AC68B2686BBE2598DF7A@DM6PR11MB4316.namprd11.prod.outlook.com>
-References: <1694569212-10080-1-git-send-email-wentong.wu@intel.com>
- <1694569212-10080-2-git-send-email-wentong.wu@intel.com>
- <a3b75e11-9cf0-4ee3-be90-fba73bd5df3d@suse.com>
-In-Reply-To: <a3b75e11-9cf0-4ee3-be90-fba73bd5df3d@suse.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM6PR11MB4316:EE_|DS0PR11MB6543:EE_
-x-ms-office365-filtering-correlation-id: 90290152-ce3f-4bcc-b7a0-08dbb4beb4fd
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: PqBG6TdXxQLqruAXuK2ISGihwJiyUibE5FTQEnmMPyp5zoLCSgfCyNX7aslW/DGtMvoDyRktuptHAcMrgR50P0Ht7v1L4rwQrBOfz14SCc2l+HGlPZFZKojxjkCXyewbn/79C2SVh9+QMqkCt4C+65yGS3/6TGEv8RpHHW7mSkmTCqUMmTtfC9y07UOKXz1C8H91LTLKAQONJXdaUW4RuaSvah4uKY84ZOdLri/n+FeWfYp+5knPoOwJ+nMZMXuzgVxuBvIM9p2+3tuhdpeuHb5JlnX3R4pBM39fY8y8wWcrqMc5dBzhHZ4YJG2H4EYEBAIwn1y1mig2cDScwesdVCEz/T11Ia0xF+1Mgzyo8Li75W0lKVlErNhqLddadvd38cQGe2W5/O3o6Mcul1531MoiCyUmLh4NOyO1FYPQp9D6Woz+aMW2gnbVqUQFJvVKcP9i7PbqSvqVES4uKGt9LxgtWnlfv0fvkauCxLzfmUij+zqThNPAwouSmBHNbFPLVKNieF65q2WMU2K3fLzfPFHyRxAXbex2WWjKJeDdfq93oAy/AAIMYG8L7ryUf8AS7nbytCkiuYP1ul8TbMCw0/bWy/IXeqJ6PO0oS8Ob5gAk9h6bB7WZVEbPOL67ofiJ
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB4316.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(396003)(376002)(366004)(136003)(39860400002)(186009)(1800799009)(451199024)(5660300002)(122000001)(6506007)(71200400001)(7696005)(53546011)(83380400001)(2906002)(86362001)(55016003)(38070700005)(38100700002)(82960400001)(33656002)(66556008)(4326008)(9686003)(4744005)(26005)(76116006)(478600001)(66476007)(66946007)(66446008)(8936002)(110136005)(7416002)(8676002)(64756008)(41300700001)(52536014)(54906003)(316002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UlR0ckhTVzNxQVpNWnBVSVNXWHBFTlRTSks2bG52MGNIL2p2Zldocmh6Y2lG?=
- =?utf-8?B?eDZGNGo5OC9tY0VNK3d2ZzROQUV4clc0dnZnS2ZkeHZCTzdyZy9RbzViazJw?=
- =?utf-8?B?KzBTMS9UMXFDNjhqSWpoenJPektPWnhnalhmYWNJZE44c0VtQUtpc3p2djlG?=
- =?utf-8?B?WmY2eFJUWmEyRjdRMDd0Ylp4YVZPUENpZXdGK2JkRVpVcGUwajNoSDU4eVdl?=
- =?utf-8?B?SEJQRkJCYy9KNy93elpaU3VxdDVaS0pvaVArUFhxUXJXQlJsVW5sZmtCUEdq?=
- =?utf-8?B?YXI0R2VpWVFQb2xaWC9QRXg0TFgvdm1xUjVaSDdSbHpMaWh0eFIxMUJ2djBI?=
- =?utf-8?B?RTdLRFJQWFg3MHZLanJGeUxQbmtBd3Zkbmh0NmU5YnJrMG5GVUIrUW9CSm5B?=
- =?utf-8?B?REtkQ0xNU1J5eUR5RWlqV1lxNHQyVGlKT0xSd0FkdG1ITjFPVy9kK0Fhd2M1?=
- =?utf-8?B?M05ibENEZk15RlZHREVuaGt2SFZNNGgwU25VTWtzand6YkRIajgxYlVyWjRw?=
- =?utf-8?B?Z1M5NkxhVmlFRXlaRDhDL0Y5M1FoS1d3UmkxV3R6UXAzTzdkRWNJKzBjRU8y?=
- =?utf-8?B?ZnhNUTQwT29hUkJoUktUeGE1b0hPNEVRbk45Q3BEWm9HUGZEL1ZkZGxTU0NY?=
- =?utf-8?B?anpjWGZ3eHcvVW9tMXhhQjVFQ0h4bmowUldtcmt3TzBtbmRMMHVBZHNGcW5V?=
- =?utf-8?B?QU8wQU1FNHFSVDJXWXowc3R5Q3JJRmpRMXQxbWlEK3BIcmtZWlBLOHc0TTVy?=
- =?utf-8?B?RWJXY0tlb29MNm1GQk8xM2Q5aFBId0dLbU0yc2pKVTZSOU1CcmRwYjBQSTA0?=
- =?utf-8?B?QWNaK2JlYzFGd0tMOEV1b1hPZWJrbW9hOFBBbkJhK2dRbzVNRzFralZMWjdB?=
- =?utf-8?B?Qi9zb2FVbzZkV3ZpOE9INlY2Ni9YYTdDazgzTUZBTklBMmFOUTBHeEVEWEhu?=
- =?utf-8?B?bTVJYU5VNSsxT2lvOGp4eWhoM0pxTFIzckplbCtHN2JneTVxbS9QZ2pXcE1h?=
- =?utf-8?B?eHE1UU5qT0xhT3FuZ0dJZzU3M2d6RXZHcy96Sk9CTTlZZlJOQ1hRZUtXc2RB?=
- =?utf-8?B?enNxbHhsSlhvVHFYZ3NRWjZPdWNHK1RqMVh5aUFEK0NyQTh3WU92SXNMWm42?=
- =?utf-8?B?dkszSlZ0Tzdoam85bFFTRmYrV3JIWXhzVHBlUVNBZVRpUGR0Vm5ndTAzTlhM?=
- =?utf-8?B?Rlh1cDZzbFBpMGZKaXNEem1EUXRPY1Z5eHZIM0JRdDRoUVhpTlBYN2xqWmhE?=
- =?utf-8?B?cXMwb0ZidTlNalZJV3F4NU95SytQcTF2QVdwV0k0WHQzUG5CeEdKV25ieDJ2?=
- =?utf-8?B?TEhvQ3BmTDdEVkxOQkRrOXY4VjJib0RvK3FaZi92UWhVTUxFQzV0QXBkUVZJ?=
- =?utf-8?B?K3dKNC9STzdTbGJKMTN2L21xS2ZqczFPdHBPOEhZSHBpSEtXNVdscyswU1Bv?=
- =?utf-8?B?Mk5ocWVHYjhxTE1QVXNMVlJsK05LN1hGQ25DUE52cURXMFh5a0l0RWV5c0hC?=
- =?utf-8?B?eUQxbWl2S2tkMDVUTVY0TGV5bUt0NmcvODNMRXhMZ09OanRQV2FPdTI3ZTc3?=
- =?utf-8?B?UEpEb1lhQ3JRN2oySFQ5VW9PQXpDR29tUzRvSmsvcmVlZThkWVl3TXVwZGJD?=
- =?utf-8?B?TmJ0L0tsYzg5WDV1NWVuRGJLWUZmT0pYM3JTTWZaYWpjVVc0N244VmlMMHdO?=
- =?utf-8?B?eFZZeUtma28wT0xJemcxWENKazVpZXdyd1ZSKzNmaERuTi9iRHlkaXRRNDRr?=
- =?utf-8?B?WGZ3eFV4eGlJWlhDY2dpN0ZWaWExL0ZkREkxamxxcm1VaG5Gc0RIT2U5NmpO?=
- =?utf-8?B?MGZEK3NhVjM5TjNOdG02MEY1T0RkS09Vc2l3amNEZXB3UVNNYmNxajBHdHRw?=
- =?utf-8?B?TnR5dXNsWGFUcTVTRERPWVYzbHJacFdqcTJIQTI0UjFlOXV6YWFJYW9HK293?=
- =?utf-8?B?M091VnhiR1pxVVptRWlrbnpvblJrdDVQZ2s2V1J4cnA4Nm9qaVhrN3F0cnVT?=
- =?utf-8?B?V3hEYWhDUUJLZ2t2ZW5Nc3dkdTBtS0NhTUZTMm5ha0QrQXM3QmJtTU9PZTVk?=
- =?utf-8?B?SEZLYUpyVEFCZkRLajRjNXo2UTVGN0hXclpRS3JSSkE2Ly9EU2VKUmd5dFZD?=
- =?utf-8?Q?7ArnAGG85122awUgwM7jGszlp?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4585837C
+	for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 01:09:05 +0000 (UTC)
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A610D170F
+	for <linux-usb@vger.kernel.org>; Wed, 13 Sep 2023 18:09:04 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38E104MX029920;
+	Thu, 14 Sep 2023 01:08:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=4rxo5hnTbCfmzMT2KC9ZOi0tBijj7gQP19q7KKFgz24=;
+ b=TeVgS7u/k1cBso7xNSnW90SbbJO0AqmSuQcIAoTq/s8GkNgg+nfKkGp4jYSDsB1q8WWa
+ eoCazu7u9AHra43dHjEmp/l8i8q3JyEp9WQomuzBs4HtLhEZ6dJtX4J9wG0rF5cCnPep
+ u6jcuFschl9nB9sl/LrLetGAfwtfpcfzLgUT9iGurJSXJzCWhn+KSuX8uPrTzp7ML5gm
+ 4tmSjuBPen6O2VfDla7SMQl7M4msPDY7E75a09ES8+55/NRpJWuU6zEvjtZVTc8SUKUl
+ FBw4XOB5NQGUqpK5oJYlk4jj5MzQ5tmceQ3suAasUHbykjxQJ2FxT6fMiSoyiBS2cVyb Yg== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t3h0dgwh7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 14 Sep 2023 01:08:14 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38E18DuJ026546
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 14 Sep 2023 01:08:14 GMT
+Received: from [10.253.74.98] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Wed, 13 Sep
+ 2023 18:08:07 -0700
+Message-ID: <be818ccf-96fd-2fa0-8f95-1f49e3aa2dfc@quicinc.com>
+Date: Thu, 14 Sep 2023 09:08:04 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB4316.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 90290152-ce3f-4bcc-b7a0-08dbb4beb4fd
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Sep 2023 01:05:37.5799
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: PSZcjJpSZiuTwy1JfaspqRborSd5H0tah8Cy8LWVICIFgnLEpYRraPp14nwO/oR6SlGuvNCVNhEFcL7vx9clIw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB6543
-X-OriginatorOrg: intel.com
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.0
+Subject: Re: [PATCH v3 01/10] usb: gadget: add anonymous definition in struct
+ usb_gadget
+To: Alan Stern <stern@rowland.harvard.edu>
+CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen
+	<Thinh.Nguyen@synopsys.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Pawel
+ Laszczak <pawell@cadence.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Linus
+ Walleij <linus.walleij@linaro.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Neal Liu <neal_liu@aspeedtech.com>,
+        Cristian Birsan
+	<cristian.birsan@microchip.com>,
+        Bin Liu <b-liu@ti.com>, Kevin Cernekee
+	<cernekee@gmail.com>,
+        Justin Chen <justin.chen@broadcom.com>,
+        Al Cooper
+	<alcooperx@gmail.com>, Li Yang <leoyang.li@nxp.com>,
+        Vladimir Zapolskiy
+	<vz@mleia.com>, Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang
+	<haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Philipp
+ Zabel <p.zabel@pengutronix.de>,
+        Herve Codina <herve.codina@bootlin.com>,
+        hierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter
+	<jonathanh@nvidia.com>,
+        Michal Simek <michal.simek@amd.com>,
+        Rui Miguel Silva
+	<rui.silva@linaro.org>,
+        Valentina Manea <valentina.manea.m@gmail.com>,
+        Shuah
+ Khan <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>,
+        <linux-usb@vger.kernel.org>
+References: <20230912104455.7737-1-quic_linyyuan@quicinc.com>
+ <20230912104455.7737-2-quic_linyyuan@quicinc.com>
+ <2023091255-unsubtly-daisy-7426@gregkh>
+ <d1c34d15-e598-5f86-bc86-cd5e656225c9@quicinc.com>
+ <ef99b328-926c-4696-83bf-9ccd6a38984e@rowland.harvard.edu>
+Content-Language: en-US
+From: Linyu Yuan <quic_linyyuan@quicinc.com>
+In-Reply-To: <ef99b328-926c-4696-83bf-9ccd6a38984e@rowland.harvard.edu>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 7pDkqppLK14MAfYpLXwiBEuVWppuHumM
+X-Proofpoint-GUID: 7pDkqppLK14MAfYpLXwiBEuVWppuHumM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-09-13_19,2023-09-13_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
+ suspectscore=0 mlxlogscore=253 phishscore=0 priorityscore=1501
+ lowpriorityscore=0 spamscore=0 malwarescore=0 bulkscore=0 impostorscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2308100000 definitions=main-2309140008
 
-PiBGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPg0KPg0KPiBPbiAxMy4wOS4y
-MyAwMzo0MCwgV2VudG9uZyBXdSB3cm90ZToNCj4gDQo+ID4gK3N0cnVjdCBsamNhX2JhbmtfZGVz
-Y3JpcHRvciB7DQo+ID4gKwl1OCBiYW5rX2lkOw0KPiA+ICsJdTggcGluX251bTsNCj4gPiArDQo+
-ID4gKwkvKiAxIGJpdCBmb3IgZWFjaCBncGlvLCAxIG1lYW5zIHZhbGlkICovDQo+ID4gKwl1MzIg
-dmFsaWRfcGluczsNCj4gDQo+IE5vIGVuZGlhbm5lc3M/DQoNCk9uIGJvdGggc2lkZXMsIHRoZSBl
-bmRpYW5uZXNzIGlzIHNhbWUuDQoNCkJUVywgdGhlIGNvZGUgaGFzIGJlZW4gdGVzdGVkIG9uIHNl
-dmVyYWwgcmVhbCBwcm9kdWN0aW9ucy4NCg0KQlIsDQpXZW50b25nDQo+IA0KPiA+ICt9IF9fcGFj
-a2VkOw0KPiANCj4gCVJlZ2FyZHMNCj4gCQlPbGl2ZXINCg==
+
+On 9/14/2023 12:02 AM, Alan Stern wrote:
+> On Wed, Sep 13, 2023 at 11:46:12AM +0800, Linyu Yuan wrote:
+>> but Alan Stern have one comment,   do it mean the bit position number is not
+>> expect and we can't use it ?
+>>
+>> @Alan Stern ,  BIT(0), BIT(1) is not the member we expect ?
+> They might not be.  If you can avoid making this assumption, you should.
+
+
+i don't know if it is true or not, seem some driver expect there is no 
+hole for this kind of bit field definition.
+
+
+>
+>>> This macro usage is a real mess.  Can't you find a better way to do it?
+>>>
+>>> For instance, in the code that parses the trace buffer, define a
+>>> temporary usb_gadget structure and copy the dw1 field from the trace
+>>> buffer to the temporary structure.  Then you can access the fields in
+>>> that structure directly by their original names, with no macros.
+>> do it same idea just move it outside of gadget.h ?
+> Keep the anonymous union in gadget.h, but get rid of the macros.
+
+
+do you expect below ?
+
+
+--- a/include/linux/usb/gadget.h
++++ b/include/linux/usb/gadget.h
+@@ -357,6 +357,7 @@ struct usb_gadget_ops {
+   * @in_epnum: last used in ep number
+   * @mA: last set mA value
+   * @otg_caps: OTG capabilities of this gadget.
++ * @dw1: trace event purpose
+   * @sg_supported: true if we can handle scatter-gather
+   * @is_otg: True if the USB device port uses a Mini-AB jack, so that the
+   *     gadget driver must provide a USB OTG descriptor.
+@@ -432,30 +433,88 @@ struct usb_gadget {
+         unsigned                        mA;
+         struct usb_otg_caps             *otg_caps;
+
+-       unsigned                        sg_supported:1;
+-       unsigned                        is_otg:1;
+-       unsigned                        is_a_peripheral:1;
+-       unsigned                        b_hnp_enable:1;
+-       unsigned                        a_hnp_support:1;
+-       unsigned                        a_alt_hnp_support:1;
+-       unsigned                        hnp_polling_support:1;
+-       unsigned                        host_request_flag:1;
+-       unsigned quirk_ep_out_aligned_size:1;
+-       unsigned                        quirk_altset_not_supp:1;
+-       unsigned                        quirk_stall_not_supp:1;
+-       unsigned                        quirk_zlp_not_supp:1;
+-       unsigned quirk_avoids_skb_reserve:1;
+-       unsigned                        is_selfpowered:1;
+-       unsigned                        deactivated:1;
+-       unsigned                        connected:1;
+-       unsigned                        lpm_capable:1;
+-       unsigned                        wakeup_capable:1;
+-       unsigned                        wakeup_armed:1;
++       union {
++               struct {
++                       unsigned        sg_supported:1;
++                       unsigned        is_otg:1;
++                       unsigned        is_a_peripheral:1;
++                       unsigned        b_hnp_enable:1;
++                       unsigned        a_hnp_support:1;
++                       unsigned        a_alt_hnp_support:1;
++                       unsigned        hnp_polling_support:1;
++                       unsigned        host_request_flag:1;
++                       unsigned quirk_ep_out_aligned_size:1;
++                       unsigned        quirk_altset_not_supp:1;
++                       unsigned        quirk_stall_not_supp:1;
++                       unsigned        quirk_zlp_not_supp:1;
++                       unsigned quirk_avoids_skb_reserve:1;
++                       unsigned        is_selfpowered:1;
++                       unsigned        deactivated:1;
++                       unsigned        connected:1;
++                       unsigned        lpm_capable:1;
++                       unsigned        wakeup_capable:1;
++                       unsigned        wakeup_armed:1;
++               } __packed;
++
++               u32                     dw1;
++       } __aligned(4);
+         int                             irq;
+         int                             id_number;
+  };
+  #define work_to_gadget(w)      (container_of((w), struct usb_gadget, 
+work))
+
++#define USB_GADGET_BITFIELD(field)                             \
++static inline u32 usb_gadget_bit_##field(u32 dw1)              \
++{                                                              \
++       union {                                                 \
++               struct {                                        \
++                       u32     sg_supported:1;                 \
++                       u32     is_otg:1;                       \
++                       u32     is_a_peripheral:1;              \
++                       u32     b_hnp_enable:1;                 \
++                       u32     a_hnp_support:1;                \
++                       u32     a_alt_hnp_support:1;            \
++                       u32     hnp_polling_support:1;          \
++                       u32     host_request_flag:1;            \
++                       u32     quirk_ep_out_aligned_size:1;    \
++                       u32     quirk_altset_not_supp:1;        \
++                       u32     quirk_stall_not_supp:1;         \
++                       u32     quirk_zlp_not_supp:1;           \
++                       u32     quirk_avoids_skb_reserve:1;     \
++                       u32     is_selfpowered:1;               \
++                       u32     deactivated:1;                  \
++                       u32     connected:1;                    \
++                       u32     lpm_capable:1;                  \
++                       u32     wakeup_capable:1;               \
++                       u32     wakeup_armed:1;                 \
++               } __packed;                                     \
++               u32             dw1;                            \
++       } __aligned(4) u;                                       \
++       BUILD_BUG_ON(sizeof(u) != 4);                           \
++       u.dw1 = dw1;                                            \
++       return u.field;                                         \
++}
++
++USB_GADGET_BITFIELD(sg_supported)
++USB_GADGET_BITFIELD(is_otg)
++USB_GADGET_BITFIELD(is_a_peripheral)
++USB_GADGET_BITFIELD(b_hnp_enable)
++USB_GADGET_BITFIELD(a_hnp_support)
++USB_GADGET_BITFIELD(a_alt_hnp_support)
++USB_GADGET_BITFIELD(hnp_polling_support)
++USB_GADGET_BITFIELD(host_request_flag)
++USB_GADGET_BITFIELD(quirk_ep_out_aligned_size)
++USB_GADGET_BITFIELD(quirk_altset_not_supp)
++USB_GADGET_BITFIELD(quirk_stall_not_supp)
++USB_GADGET_BITFIELD(quirk_zlp_not_supp)
++USB_GADGET_BITFIELD(quirk_avoids_skb_reserve)
++USB_GADGET_BITFIELD(is_selfpowered)
++USB_GADGET_BITFIELD(deactivated)
++USB_GADGET_BITFIELD(connected)
++USB_GADGET_BITFIELD(lpm_capable)
++USB_GADGET_BITFIELD(wakeup_capable)
++USB_GADGET_BITFIELD(wakeup_armed)
++
+
+
+
+>
+> Alan Stern
 
