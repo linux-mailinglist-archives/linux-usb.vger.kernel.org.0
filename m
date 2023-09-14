@@ -1,101 +1,147 @@
-Return-Path: <linux-usb+bounces-17-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0540679F726
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 03:59:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C80F79F799
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 04:09:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A8AABB20C60
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 01:59:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 082C81F21C28
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 02:09:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B754A38;
-	Thu, 14 Sep 2023 01:58:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4B3C1391;
+	Thu, 14 Sep 2023 02:07:54 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFFB1369
-	for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 01:58:11 +0000 (UTC)
-Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 956405FD4;
-	Wed, 13 Sep 2023 18:58:10 -0700 (PDT)
-Received: from dlp.unisoc.com ([10.29.3.86])
-	by SHSQR01.spreadtrum.com with ESMTP id 38E1viQB007448;
-	Thu, 14 Sep 2023 09:57:44 +0800 (+08)
-	(envelope-from xingxing.luo@unisoc.com)
-Received: from SHDLP.spreadtrum.com (shmbx06.spreadtrum.com [10.0.1.11])
-	by dlp.unisoc.com (SkyGuard) with ESMTPS id 4RmL3f1Nrpz2Rssxt;
-	Thu, 14 Sep 2023 09:54:38 +0800 (CST)
-Received: from zebjkernups01.spreadtrum.com (10.0.93.153) by
- shmbx06.spreadtrum.com (10.0.1.11) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Thu, 14 Sep 2023 09:57:43 +0800
-From: Xingxing Luo <xingxing.luo@unisoc.com>
-To: <b-liu@ti.com>, <gregkh@linuxfoundation.org>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <xingxing0070.luo@gmail.com>, <Zhiyong.Liu@unisoc.com>,
-        <Cixi.Geng1@unisoc.com>, <Orson.Zhai@unisoc.com>,
-        <zhang.lyra@gmail.com>
-Subject: [PATCH] usb: musb: Get the musb_qh poniter after musb_giveback
-Date: Thu, 14 Sep 2023 09:56:56 +0800
-Message-ID: <20230914015656.20856-1-xingxing.luo@unisoc.com>
-X-Mailer: git-send-email 2.17.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A75B610F3
+	for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 02:07:54 +0000 (UTC)
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AB792709;
+	Wed, 13 Sep 2023 19:07:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=zukjnbI0ncupAzDuzJlDSnQOCr1VCHsYHxFZu9nHeVo=; b=TMwdwl4gsfFqIQ2Hr49QNfqGNw
+	H0N2CpxgS8iu2zTuvH1gYOE/Aelnyu6DKJr/WIH/H8WywHdkpZtIK/6qkmYkAyGBl6A9wXgV8T7Hx
+	F4R28vv9+Mr1bcGPPgBjvg3RLPP2CAaYJXGfz3qdr49MpFrVSdt4ee2yS4kxJze4s4kg5Tx6hCkSs
+	iYY8Hrj3pSUx121HWeGVaX6tW4g52qOyRMw3/rqJItAIWRJXkFLku/61pna1AC+a2u6HwxHv5llpA
+	V02VS6bWXBIAn6AjiLfGFx4WsKED6hEtdOasjzUyHrM0rqnWh6KuSDARvsYQSe7TsNT/MVtxFgbix
+	yshJCcGA==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+	id 1qgblQ-005tcd-36;
+	Thu, 14 Sep 2023 02:07:29 +0000
+Date: Thu, 14 Sep 2023 03:07:28 +0100
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Christoph Hellwig <hch@lst.de>
+Cc: Christian Brauner <brauner@kernel.org>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Fenghua Yu <fenghua.yu@intel.com>,
+	Reinette Chatre <reinette.chatre@intel.com>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+	Tejun Heo <tj@kernel.org>,
+	Trond Myklebust <trond.myklebust@hammerspace.com>,
+	Anna Schumaker <anna@kernel.org>, Kees Cook <keescook@chromium.org>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Naohiro Aota <naohiro.aota@wdc.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-s390@vger.kernel.org, linux-rdma@vger.kernel.org,
+	linux-nfs@vger.kernel.org, linux-hardening@vger.kernel.org,
+	cgroups@vger.kernel.org
+Subject: Re: [PATCH 11/19] fs: add new shutdown_sb and free_sb methods
+Message-ID: <20230914020728.GF800259@ZenIV>
+References: <20230913111013.77623-1-hch@lst.de>
+ <20230913111013.77623-12-hch@lst.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.0.93.153]
-X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
- shmbx06.spreadtrum.com (10.0.1.11)
-X-MAIL:SHSQR01.spreadtrum.com 38E1viQB007448
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230913111013.77623-12-hch@lst.de>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-When multiple threads are performing USB transmission, musb->lock will be
-unlocked when musb_giveback is executed. At this time, qh may be released
-in the dequeue process in other threads, resulting in a wild pointer, so
-it needs to be here get qh again, and judge whether qh is NULL, and when
-dequeue, you need to set qh to NULL.
+On Wed, Sep 13, 2023 at 08:10:05AM -0300, Christoph Hellwig wrote:
+> Currently super_blocks are shut down using the ->kill_sb method, which
+> must call generic_shutdown_super, but allows the file system to
+> add extra work before or after the call to generic_shutdown_super.
+> 
+> File systems tend to get rather confused by this, so add an alternative
+> shutdown sequence where generic_shutdown_super is called by the core
+> code, and there are extra ->shutdown_sb and ->free_sb hooks before and
+> after it.  To remove the amount of boilerplate code ->shutdown_sb is only
+> called if the super has finished initialization and ->d_root is set.
 
-Fixes: dbac5d07d13e ("usb: musb: host: don't start next rx urb if current one failed")
-Signed-off-by: Xingxing Luo <xingxing.luo@unisoc.com>
----
- drivers/usb/musb/musb_host.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+The last sentence doesn't match the patchset.  That aside, there
+is an issue with method names.
 
-diff --git a/drivers/usb/musb/musb_host.c b/drivers/usb/musb/musb_host.c
-index a02c29216955..9df27db5847a 100644
---- a/drivers/usb/musb/musb_host.c
-+++ b/drivers/usb/musb/musb_host.c
-@@ -321,10 +321,16 @@ static void musb_advance_schedule(struct musb *musb, struct urb *urb,
- 	musb_giveback(musb, urb, status);
- 	qh->is_ready = ready;
- 
-+	/*
-+	 * musb->lock had been unlocked in musb_giveback, so somtimes qh
-+	 * may freed, need get it again
-+	 */
-+	qh = musb_ep_get_qh(hw_ep, is_in);
-+
- 	/* reclaim resources (and bandwidth) ASAP; deschedule it, and
- 	 * invalidate qh as soon as list_empty(&hep->urb_list)
- 	 */
--	if (list_empty(&qh->hep->urb_list)) {
-+	if (qh != NULL && list_empty(&qh->hep->urb_list)) {
- 		struct list_head	*head;
- 		struct dma_controller	*dma = musb->dma_controller;
- 
-@@ -2398,6 +2404,7 @@ static int musb_urb_dequeue(struct usb_hcd *hcd, struct urb *urb, int status)
- 		 * and its URB list has emptied, recycle this qh.
- 		 */
- 		if (ready && list_empty(&qh->hep->urb_list)) {
-+			musb_ep_set_qh(qh->hw_ep, is_in, NULL);
- 			qh->hep->hcpriv = NULL;
- 			list_del(&qh->ring);
- 			kfree(qh);
--- 
-2.17.1
+->shutdown_sb() is... odd.  ->begin_shutdown_sb(), perhaps?  For the
+majority of filesystems it's NULL, after all...
 
+Worse, ->free_sb() is seriously misguiding - the name implies that
+we are, well, freeing a superblock passed to it.  Which is not what is
+happening here - superblock itself is freed only when all passive
+references go away.  It's asking for trouble down the road.
+
+We already have more than enough confusion in the area.  Note, BTW,
+that there's a delicate issue around RCU accesses and freeing stuff -
+->d_compare() can bloody well be called when superblock is getting
+shut down.  For anything that might be needed by it (or by other
+RCU'd methods) we must arrange for RCU-delayed destruction.
+E.g. in case of fatfs we have sbi freeing done via call_rcu() (from
+fat_put_super(), called by generic_shutdown_super()).
+
+<checks the current tree>
+
+Oh, bugger...  AFAICS, exfat has a problem - exfat_free_sbi() is called
+directly from exfat_kill_sb(), without any concern for this:
+static int exfat_utf8_d_cmp(const struct dentry *dentry, unsigned int len,
+                const char *str, const struct qstr *name)
+{
+        struct super_block *sb = dentry->d_sb;
+        unsigned int alen = exfat_striptail_len(name->len, name->name,
+                                EXFAT_SB(sb)->options.keep_last_dots);
+
+That kfree() needs to be RCU-delayed...  While we are at it, there's
+this:
+static int exfat_d_hash(const struct dentry *dentry, struct qstr *qstr)
+{
+        struct super_block *sb = dentry->d_sb;
+        struct nls_table *t = EXFAT_SB(sb)->nls_io;
+and we need this
+        unload_nls(sbi->nls_io);
+in exfat_put_super() RCU-delayed as well.  And I suspect that
+        exfat_free_upcase_table(sbi);
+right after it needs the same treatment.
+
+AFFS: similar problem, wants ->s_fs_info freeing RCU-delayed.
+
+hfsplus: similar, including non-delayed unlock_nls() calls.
+
+ntfs3:
+        /*
+         * Try slow way with current upcase table
+         */
+        sbi = dentry->d_sb->s_fs_info;
+        uni1 = __getname();
+        if (!uni1)
+                return -ENOMEM;
+__getname().  "Give me a page and you might block, while you are
+at it".  Done from ->d_compare().  Called under dentry->d_lock
+and rcu_read_lock().  OK, any further investigation of that
+one is... probably not worth bothering with at that point.
+
+Other in-tree instances appear to be correct.  I'll push fixes for
+those (well, ntfs3 aside) out tomorrow.
 
