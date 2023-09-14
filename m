@@ -1,117 +1,155 @@
-Return-Path: <linux-usb+bounces-72-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-73-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17A2F7A0978
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 17:38:44 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 243117A09B9
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 17:50:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C6318281EA6
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 15:38:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A3B97B20E2B
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 15:50:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34FBD1D536;
-	Thu, 14 Sep 2023 15:33:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1051921368;
+	Thu, 14 Sep 2023 15:44:44 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C570B39C
-	for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 15:33:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6658C433C8;
-	Thu, 14 Sep 2023 15:33:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1694705586;
-	bh=8FABy4QEHgIh/D0+D8dBsiY5dWtOqxQIKA/BQugluDE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=Lx6a4XE5GVqm8ZNhPC/4n/oIWpFVOS0nu2r1Y+KfrdcJXi0bM9FPb+ta7f11LCZ7E
-	 EEj9Tgz8D0SbR0WYDrmo/fEumU7wRuwD0qObs/ZFztLMh1JWmIWpjgt/HMK0mYUi93
-	 pzx6p1fsAlJ8fYxLGMNEj/H8J7nJJn/NmaC5vtvHMfh2Q+KJdV+Z0ynW4mKiSkd73g
-	 pZqbEDI9E98Idx5YrvtMrirWx38pNP6Y7txya1+m/jresTlkprw9cw3eTffLLQB8qY
-	 aa2R1gknGNsoX7jSflDVKiQVtoW8a7oqGQtGe9df9pnd6oHD15OXGWCJNCuMiWX6KY
-	 NY7F9aNFFzCqA==
-Date: Thu, 14 Sep 2023 10:33:03 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Lukas Wunner <lukas@wunner.de>
-Cc: Mario Limonciello <mario.limonciello@amd.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	"Rafael J . Wysocki" <rjw@rjwysocki.net>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-	platform-driver-x86@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-	iain@orangesquash.org.uk
-Subject: Re: [PATCH v18 2/2] PCI: Add a quirk for AMD PCIe root ports w/ USB4
- controllers
-Message-ID: <20230914153303.GA30424@bhelgaas>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8673CA78;
+	Thu, 14 Sep 2023 15:44:43 +0000 (UTC)
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B2B99;
+	Thu, 14 Sep 2023 08:44:42 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38EFE4kh019136;
+	Thu, 14 Sep 2023 15:44:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=3URuZ09QSAKbBw6gINqV6mSQ/w4QlMbyqprEySlnHgk=;
+ b=LAdnh+d4ilMfzDSnW9b1pUJOafFqnCIqMNX55X46+zzfI1pnrQ71DYNCEMHae8FFTr2D
+ kjL7/gGyVy7LvJX8edGENEQ4a0P/4KtF4eMp7++hz8hckp1Kc/1hTX7pAPX0xITttxeX
+ CFRu9vnnfTUj9zAwRXREqD1xe8W+0gbKndFumN1h0sw8PM/mIV30Hz3D72pfKMRe9hRb
+ ANf7bLh9b48W27Vm08gNm3DTomHg/mhnW3K2Y4DK+qZQs4k9n5wPH8gUZm+jZ5PubOAS
+ hugCLhNzdOjkeuI8ld9JvPJCGKStn0X5EvlO+qzpIy1EiwcbEKoxEbMEVG9eczygN79S GA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t3h0dk63x-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 14 Sep 2023 15:44:16 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38EFiFSN011248
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 14 Sep 2023 15:44:15 GMT
+Received: from [10.216.57.92] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Thu, 14 Sep
+ 2023 08:44:07 -0700
+Message-ID: <d69d480a-181b-52d8-e9f1-a80f1bdcb96c@quicinc.com>
+Date: Thu, 14 Sep 2023 21:14:03 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230914145332.GA5261@wunner.de>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.1
+Subject: Re: [PATCH v11 12/13] arm64: dts: qcom: sa8295p: Enable tertiary
+ controller and its 4 USB ports
+To: Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Thinh Nguyen
+	<Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>, Andy Gross <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi
+	<balbi@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Johan Hovold
+	<johan@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>,
+        <quic_jackp@quicinc.com>, <ahalaney@redhat.com>,
+        <quic_shazhuss@quicinc.com>
+References: <20230828133033.11988-1-quic_kriskura@quicinc.com>
+ <20230828133033.11988-13-quic_kriskura@quicinc.com>
+ <f57229ea-69be-4df4-871e-65dfb0d56f5f@linaro.org>
+Content-Language: en-US
+From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <f57229ea-69be-4df4-871e-65dfb0d56f5f@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: _6q4ql8E1qgd2ZUlJawOgsWiQpJ_J39I
+X-Proofpoint-GUID: _6q4ql8E1qgd2ZUlJawOgsWiQpJ_J39I
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-09-14_09,2023-09-14_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
+ suspectscore=0 mlxlogscore=850 phishscore=0 priorityscore=1501
+ lowpriorityscore=0 spamscore=0 malwarescore=0 bulkscore=0 impostorscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2308100000 definitions=main-2309140135
 
-On Thu, Sep 14, 2023 at 04:53:32PM +0200, Lukas Wunner wrote:
-> On Thu, Sep 14, 2023 at 09:31:38AM -0500, Mario Limonciello wrote:
-> > On 9/14/2023 09:17, Lukas Wunner wrote:
-> > > On Wed, Sep 13, 2023 at 11:36:49AM -0500, Mario Limonciello wrote:
-> > > > On 9/13/2023 09:31, Lukas Wunner wrote:
-> > > > > If this only affects system sleep, not runtime PM, what you can do is
-> > > > > define a DECLARE_PCI_FIXUP_SUSPEND_LATE() which calls pci_d3cold_disable()
-> > > > > and also define a DECLARE_PCI_FIXUP_CLASS_RESUME_EARLY() which calls
-> > > > > pci_d3cold_enable().
-> > > > > 
-> > > > > And I think you can make those calls conditional on pm_suspend_no_platform()
-> > > > > to constrain to s2idle.
-> > > > > 
-> > > > > User space should still be able to influence runtime PM via the
-> > > > > d3cold_allowed flag (unless I'm missing something).
-> > > > 
-> > > > The part you're missing is that D3hot is affected by this issue too,
-> > > > otherwise it would be a good proposal.
-> > > 
-> > > I recall that in an earlier version of the patch, you solved the issue
-> > > by amending pci_bridge_d3_possible().
-> > > 
-> > > Changing the dev->no_d3cold flag indirectly influences the bridge_d3
-> > > flag (through pci_dev_check_d3cold() and pci_bridge_d3_update()).
-> > > 
-> > > If dev->no_d3cold is set on a device below a port, that port is
-> > > prevented from entring D3hot because it would result in the
-> > > device effectively being in D3cold.
-> > > 
-> > > So you might want to take a closer look at this approach despite
-> > > the flag suggesting that it only influences D3cold.
-> > 
-> > Ah; I hadn't considered setting it on a device below the port. In this
-> > particular situation the only devices below the root port are USB
-> > controllers.
-> > 
-> > If those devices don't go into D3 the system can't enter hardware sleep.
+
+
+On 9/13/2023 5:41 PM, Konrad Dybcio wrote:
+> On 28.08.2023 15:30, Krishna Kurapati wrote:
+>> Enable tertiary controller for SA8295P (based on SC8280XP).
+>> Add pinctrl support for usb ports to provide VBUS to connected peripherals.
+>>
+>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>> ---
+>>   arch/arm64/boot/dts/qcom/sa8295p-adp.dts | 53 ++++++++++++++++++++++++
+>>   1 file changed, 53 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/sa8295p-adp.dts b/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
+>> index fd253942e5e5..473fe858fbed 100644
+>> --- a/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
+>> +++ b/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
+>> @@ -9,6 +9,7 @@
+>>   #include <dt-bindings/gpio/gpio.h>
+>>   #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
+>>   #include <dt-bindings/spmi/spmi.h>
+>> +#include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
+>>   
+>>   #include "sa8540p.dtsi"
+>>   #include "sa8540p-pmics.dtsi"
+>> @@ -584,6 +585,20 @@ &usb_1_qmpphy {
+>>   	status = "okay";
+>>   };
+>>   
+>> +&usb_2 {
+>> +	pinctrl-0 = <&usb2_en_state>,
+>> +		    <&usb3_en_state>,
+>> +		    <&usb4_en_state>,
+>> +		    <&usb5_en_state>;
+>> +	pinctrl-names = "default";
+>> +
+>> +	status = "okay";
+>> +};
+>> +
+>> +&usb_2_dwc3 {
+>> +	dr_mode = "host";
+> I believe you mentioned that the MP controller is host-only
+> by design. If that's true, move this property to the SoC dtsi
+> and leave an appropriate comment.
 > 
-> If you set dev->no_d3cold on the USB controllers, they should still
-> be able to go to D3hot, but not D3cold, which perhaps might be sufficient.
-> It should prevent D3cold *and* D3hot on the Root Port above.  And if you
-> set that on system sleep in a quirk and clear it on resume, runtime PM
-> shouldn't be affected.
+Hi Konrad,
 
-dev->no_d3cold appears to be mainly an administrative policy knob
-twidded via sysfs.
+  Yes, it is host only controller. We can move this to sc8280xp.dtsi but 
+wanted to keep uniformity, so made the change here. I can move it to 
+base DT.
 
-There *are* a few cases where drivers (i915, nouveau, xhci) update it
-via pci_d3cold_enable() or pci_d3cold_disable(), but they all look
-vulnerable to issues if people use the sysfs knob, and I'm a little
-dubious that they're legit in the first place.
-
-This AMD Root Port issue is not an administrative choice; it's purely
-a functional problem of the device advertising that it supports PME#
-but not actually being able to do it.  So if we can do this by fixing
-dev->pme_support (i.e., the copy of what it advertised), I'd rather do
-that.
-
-Bjorn
+Regards,
+Krishna,
 
