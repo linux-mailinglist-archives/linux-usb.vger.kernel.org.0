@@ -1,131 +1,85 @@
-Return-Path: <linux-usb+bounces-74-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-75-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC1A37A09BB
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 17:51:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F3497A09C3
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 17:51:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A85FC282471
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 15:51:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CD0E82824CF
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 15:51:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7ED1219F4;
-	Thu, 14 Sep 2023 15:45:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EF2822F0C;
+	Thu, 14 Sep 2023 15:46:10 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82673CA78;
-	Thu, 14 Sep 2023 15:45:52 +0000 (UTC)
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E847D1FDA;
-	Thu, 14 Sep 2023 08:45:51 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38EFE4hK003959;
-	Thu, 14 Sep 2023 15:45:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=25aS0EJkCskLRfxjNaNCLueqzUMPVBM9At3Cq6IJbeQ=;
- b=J9p+U6Llth2WLxI40mR4dwbssC6++wfnrtGkHxGqZ04A3ihglaORcBUZN5qQU/eM8vNP
- 2fjTLeII18kbE1vZ6zB4EJ9p/0ROenvOb6xIEv7C1zs1oxuIrDLIwScfGcxTlG6v47eg
- csy+T0o79tHLBZhVo4vi01jBlZPuEHobioCLPZjUWy5Sg6PrApDZm4dciHWkW8Y9U4s7
- etSJxVT+lMoknPSm4TqD9F/TM+H8LBmRswTfYU0tMRUterqkuOMyo1epRfQ1OJ1F9tZ8
- OC+8VmJnYv3UgT4NeYNDQ0wmcT3AtsPCjfLenen5DQwGexEiVZow6hrItVjB7u1gEDqK 5w== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t3x6mseav-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 14 Sep 2023 15:45:33 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38EFjXxj021265
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 14 Sep 2023 15:45:33 GMT
-Received: from [10.216.57.92] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Thu, 14 Sep
- 2023 08:45:25 -0700
-Message-ID: <e7e4fc1e-661a-fd62-e8b1-1e173cbfcd3e@quicinc.com>
-Date: Thu, 14 Sep 2023 21:15:21 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD003CA78
+	for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 15:46:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 22BECC433CD
+	for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 15:46:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1694706368;
+	bh=ARdtiFE4a9t6U0JFvdJLbQ0yaaVLRAEvGZl6E8WEdcM=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=fIuTxlsCTHBBVHNyeJUsDXEoKA/1vYXlabyDmyyAeVge8QbIHOgzTFMrNm7NxFkm7
+	 A7FK+gVq3+NKC3WrdY0w/Pg99qkkZJONbKBryc/QXiY6pNvNHz4VB0uvgGX3shsIeF
+	 6YJY4kl1FWWPl1UlMGgltTlBm7MLMYOeHc3ELtli3/Od4dznommCdkmWz3n8PUf3K1
+	 JoOiwxIz0bo9wWO7dbgnPDHv6x6PsTKzz4ijyMOcftPCrxyGy74+82uSzLEMHTZ09T
+	 M3tYnBA2PghKvalmpr3D4QY/+gUqtaEinXuALJNlVJCD9M/pBkHUCnarwqYnRheJ50
+	 KJUuXpILwDErA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 1513AC53BD4; Thu, 14 Sep 2023 15:46:08 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 216728] Thunderbolt USB Controller died after resume on Intel
+ CometLake platform
+Date: Thu, 14 Sep 2023 15:46:07 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: mika.westerberg@linux.intel.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-216728-208809-iPNJoeUXGa@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-216728-208809@https.bugzilla.kernel.org/>
+References: <bug-216728-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.1
-Subject: Re: [PATCH v11 13/13] arm64: dts: qcom: sa8540-ride: Enable first
- port of tertiary usb controller
-Content-Language: en-US
-To: Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Thinh Nguyen
-	<Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>, Andy Gross <agross@kernel.org>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi
-	<balbi@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Johan Hovold
-	<johan@kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>,
-        <quic_jackp@quicinc.com>, <ahalaney@redhat.com>,
-        <quic_shazhuss@quicinc.com>
-References: <20230828133033.11988-1-quic_kriskura@quicinc.com>
- <20230828133033.11988-14-quic_kriskura@quicinc.com>
- <f19fa545-0ccb-4670-af77-7c034b1016ef@linaro.org>
- <e7bd3aa9-b8ee-4b8a-2354-e786f9a9ff47@quicinc.com>
- <3920bc96-fe58-4e3b-96ab-706f00edb2ee@linaro.org>
-From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <3920bc96-fe58-4e3b-96ab-706f00edb2ee@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: C3-6HXJM9MvGEdsAnyfnrF0grhv9JR47
-X-Proofpoint-ORIG-GUID: C3-6HXJM9MvGEdsAnyfnrF0grhv9JR47
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-09-14_09,2023-09-14_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- phishscore=0 mlxlogscore=493 malwarescore=0 mlxscore=0 priorityscore=1501
- suspectscore=0 bulkscore=0 spamscore=0 adultscore=0 impostorscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2309140136
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D216728
 
+--- Comment #39 from Mika Westerberg (mika.westerberg@linux.intel.com) ---
+Hi, yes the delay happens because the PCIe link does not come up and this is
+the actual reason, not the patch that increased the delay. Can you add
+"thunderbolt.dyndbg=3D+p" in the kernel command line, reproduce and attach =
+full
+dmesg so we can hopefully see why the PCIe tunnel is not created properly.
 
-On 9/13/2023 5:40 PM, Konrad Dybcio wrote:
-> On 7.09.2023 05:36, Krishna Kurapati PSSNV wrote:
->>
->>
->>> Is there any benefit to removing the other ports?
->>>
->>> i.e. are ports 1-3 not parked properly by the dwc3 driver if
->>> they're never connected to anything?
->>>
->> Hi Konrad,
->>
->>   Whether or not the phy is connected to a port, the controller would modify the GUSB2PHYCFG/GUSB3PIPECTL registers. But if we don't specify only one phy and let phys from base DTSI take effect (4 HS / 2 SS), we would end up initializing and powering on phy's which are never connected to a port. To avoid that we need to specify only one phy for this platform.
-> And does that have any major effect on power use?
-> 
-> Do these PHYs not have some dormant/low power mode?
-> 
-Hi Konrad,
+Also, did you tweak any BIOS settings from the defaults?
 
-  I believe there will be some minimal power use. IMO its best to keep 
-only one phy enabled for this variant instead of giving all and 
-initializing/powering-on all 4 of them.
+--=20
+You may reply to this email to add a comment.
 
-Regards,
-Krishna,
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
