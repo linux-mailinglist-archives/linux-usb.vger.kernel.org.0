@@ -1,147 +1,251 @@
-Return-Path: <linux-usb+bounces-18-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C80F79F799
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 04:09:19 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A910479F7DB
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 04:18:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 082C81F21C28
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 02:09:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3529CB2079C
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 02:18:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4B3C1391;
-	Thu, 14 Sep 2023 02:07:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FB2717F4;
+	Thu, 14 Sep 2023 02:16:59 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A75B610F3
-	for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 02:07:54 +0000 (UTC)
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AB792709;
-	Wed, 13 Sep 2023 19:07:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=zukjnbI0ncupAzDuzJlDSnQOCr1VCHsYHxFZu9nHeVo=; b=TMwdwl4gsfFqIQ2Hr49QNfqGNw
-	H0N2CpxgS8iu2zTuvH1gYOE/Aelnyu6DKJr/WIH/H8WywHdkpZtIK/6qkmYkAyGBl6A9wXgV8T7Hx
-	F4R28vv9+Mr1bcGPPgBjvg3RLPP2CAaYJXGfz3qdr49MpFrVSdt4ee2yS4kxJze4s4kg5Tx6hCkSs
-	iYY8Hrj3pSUx121HWeGVaX6tW4g52qOyRMw3/rqJItAIWRJXkFLku/61pna1AC+a2u6HwxHv5llpA
-	V02VS6bWXBIAn6AjiLfGFx4WsKED6hEtdOasjzUyHrM0rqnWh6KuSDARvsYQSe7TsNT/MVtxFgbix
-	yshJCcGA==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-	id 1qgblQ-005tcd-36;
-	Thu, 14 Sep 2023 02:07:29 +0000
-Date: Thu, 14 Sep 2023 03:07:28 +0100
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: Christoph Hellwig <hch@lst.de>
-Cc: Christian Brauner <brauner@kernel.org>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Fenghua Yu <fenghua.yu@intel.com>,
-	Reinette Chatre <reinette.chatre@intel.com>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-	Tejun Heo <tj@kernel.org>,
-	Trond Myklebust <trond.myklebust@hammerspace.com>,
-	Anna Schumaker <anna@kernel.org>, Kees Cook <keescook@chromium.org>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Naohiro Aota <naohiro.aota@wdc.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-s390@vger.kernel.org, linux-rdma@vger.kernel.org,
-	linux-nfs@vger.kernel.org, linux-hardening@vger.kernel.org,
-	cgroups@vger.kernel.org
-Subject: Re: [PATCH 11/19] fs: add new shutdown_sb and free_sb methods
-Message-ID: <20230914020728.GF800259@ZenIV>
-References: <20230913111013.77623-1-hch@lst.de>
- <20230913111013.77623-12-hch@lst.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E81BA38
+	for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 02:16:59 +0000 (UTC)
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by lindbergh.monkeyblade.net (Postfix) with SMTP id 8CEAF1BCB
+	for <linux-usb@vger.kernel.org>; Wed, 13 Sep 2023 19:16:58 -0700 (PDT)
+Received: (qmail 976896 invoked by uid 1000); 13 Sep 2023 22:16:56 -0400
+Date: Wed, 13 Sep 2023 22:16:56 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Linyu Yuan <quic_linyyuan@quicinc.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+  Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+  Peter Chen <peter.chen@kernel.org>, Pawel Laszczak <pawell@cadence.com>,
+  Roger Quadros <rogerq@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
+  Chunfeng Yun <chunfeng.yun@mediatek.com>,
+  Neal Liu <neal_liu@aspeedtech.com>,
+  Cristian Birsan <cristian.birsan@microchip.com>, Bin Liu <b-liu@ti.com>,
+  Kevin Cernekee <cernekee@gmail.com>, Justin Chen <justin.chen@broadcom.com>,
+  Al Cooper <alcooperx@gmail.com>, Li Yang <leoyang.li@nxp.com>,
+  Vladimir Zapolskiy <vz@mleia.com>, Daniel Mack <daniel@zonque.org>,
+  Haojian Zhuang <haojian.zhuang@gmail.com>,
+  Robert Jarzmik <robert.jarzmik@free.fr>,
+  Philipp Zabel <p.zabel@pengutronix.de>,
+  Herve Codina <herve.codina@bootlin.com>,
+  hierry Reding <thierry.reding@gmail.com>,
+  Jonathan Hunter <jonathanh@nvidia.com>, Michal Simek <michal.simek@amd.com>,
+  Rui Miguel Silva <rui.silva@linaro.org>,
+  Valentina Manea <valentina.manea.m@gmail.com>,
+  Shuah Khan <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>,
+  linux-usb@vger.kernel.org
+Subject: Re: [PATCH v3 01/10] usb: gadget: add anonymous definition in struct
+ usb_gadget
+Message-ID: <a735ee44-e030-4c58-a929-dc11292997bd@rowland.harvard.edu>
+References: <20230912104455.7737-1-quic_linyyuan@quicinc.com>
+ <20230912104455.7737-2-quic_linyyuan@quicinc.com>
+ <2023091255-unsubtly-daisy-7426@gregkh>
+ <d1c34d15-e598-5f86-bc86-cd5e656225c9@quicinc.com>
+ <ef99b328-926c-4696-83bf-9ccd6a38984e@rowland.harvard.edu>
+ <be818ccf-96fd-2fa0-8f95-1f49e3aa2dfc@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230913111013.77623-12-hch@lst.de>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <be818ccf-96fd-2fa0-8f95-1f49e3aa2dfc@quicinc.com>
 
-On Wed, Sep 13, 2023 at 08:10:05AM -0300, Christoph Hellwig wrote:
-> Currently super_blocks are shut down using the ->kill_sb method, which
-> must call generic_shutdown_super, but allows the file system to
-> add extra work before or after the call to generic_shutdown_super.
+On Thu, Sep 14, 2023 at 09:08:04AM +0800, Linyu Yuan wrote:
 > 
-> File systems tend to get rather confused by this, so add an alternative
-> shutdown sequence where generic_shutdown_super is called by the core
-> code, and there are extra ->shutdown_sb and ->free_sb hooks before and
-> after it.  To remove the amount of boilerplate code ->shutdown_sb is only
-> called if the super has finished initialization and ->d_root is set.
+> On 9/14/2023 12:02 AM, Alan Stern wrote:
+> > On Wed, Sep 13, 2023 at 11:46:12AM +0800, Linyu Yuan wrote:
+> > > but Alan Stern have one comment,   do it mean the bit position number is not
+> > > expect and we can't use it ?
+> > > 
+> > > @Alan Stern ,  BIT(0), BIT(1) is not the member we expect ?
+> > They might not be.  If you can avoid making this assumption, you should.
+> 
+> 
+> i don't know if it is true or not, seem some driver expect there is no hole
+> for this kind of bit field definition.
 
-The last sentence doesn't match the patchset.  That aside, there
-is an issue with method names.
+I didn't say there would be a hole; I said that BIT(0) might not be the 
+member you expect.  For example, sg_supported might be BIT(31) instead 
+of BIT(0).
 
-->shutdown_sb() is... odd.  ->begin_shutdown_sb(), perhaps?  For the
-majority of filesystems it's NULL, after all...
+> > > > This macro usage is a real mess.  Can't you find a better way to do it?
+> > > > 
+> > > > For instance, in the code that parses the trace buffer, define a
+> > > > temporary usb_gadget structure and copy the dw1 field from the trace
+> > > > buffer to the temporary structure.  Then you can access the fields in
+> > > > that structure directly by their original names, with no macros.
+> > > do it same idea just move it outside of gadget.h ?
+> > Keep the anonymous union in gadget.h, but get rid of the macros.
+> 
+> 
+> do you expect below ?
+> 
+> 
+> --- a/include/linux/usb/gadget.h
+> +++ b/include/linux/usb/gadget.h
+> @@ -357,6 +357,7 @@ struct usb_gadget_ops {
+>   * @in_epnum: last used in ep number
+>   * @mA: last set mA value
+>   * @otg_caps: OTG capabilities of this gadget.
+> + * @dw1: trace event purpose
+>   * @sg_supported: true if we can handle scatter-gather
+>   * @is_otg: True if the USB device port uses a Mini-AB jack, so that the
+>   *     gadget driver must provide a USB OTG descriptor.
+> @@ -432,30 +433,88 @@ struct usb_gadget {
+>         unsigned                        mA;
+>         struct usb_otg_caps             *otg_caps;
+> 
+> -       unsigned                        sg_supported:1;
+> -       unsigned                        is_otg:1;
+> -       unsigned                        is_a_peripheral:1;
+> -       unsigned                        b_hnp_enable:1;
+> -       unsigned                        a_hnp_support:1;
+> -       unsigned                        a_alt_hnp_support:1;
+> -       unsigned                        hnp_polling_support:1;
+> -       unsigned                        host_request_flag:1;
+> -       unsigned quirk_ep_out_aligned_size:1;
+> -       unsigned                        quirk_altset_not_supp:1;
+> -       unsigned                        quirk_stall_not_supp:1;
+> -       unsigned                        quirk_zlp_not_supp:1;
+> -       unsigned quirk_avoids_skb_reserve:1;
+> -       unsigned                        is_selfpowered:1;
+> -       unsigned                        deactivated:1;
+> -       unsigned                        connected:1;
+> -       unsigned                        lpm_capable:1;
+> -       unsigned                        wakeup_capable:1;
+> -       unsigned                        wakeup_armed:1;
+> +       union {
+> +               struct {
+> +                       unsigned        sg_supported:1;
+> +                       unsigned        is_otg:1;
+> +                       unsigned        is_a_peripheral:1;
+> +                       unsigned        b_hnp_enable:1;
+> +                       unsigned        a_hnp_support:1;
+> +                       unsigned        a_alt_hnp_support:1;
+> +                       unsigned        hnp_polling_support:1;
+> +                       unsigned        host_request_flag:1;
+> +                       unsigned quirk_ep_out_aligned_size:1;
+> +                       unsigned        quirk_altset_not_supp:1;
+> +                       unsigned        quirk_stall_not_supp:1;
+> +                       unsigned        quirk_zlp_not_supp:1;
+> +                       unsigned quirk_avoids_skb_reserve:1;
+> +                       unsigned        is_selfpowered:1;
+> +                       unsigned        deactivated:1;
+> +                       unsigned        connected:1;
+> +                       unsigned        lpm_capable:1;
+> +                       unsigned        wakeup_capable:1;
+> +                       unsigned        wakeup_armed:1;
+> +               } __packed;
+> +
+> +               u32                     dw1;
+> +       } __aligned(4);
+>         int                             irq;
+>         int                             id_number;
+>  };
+>  #define work_to_gadget(w)      (container_of((w), struct usb_gadget, work))
 
-Worse, ->free_sb() is seriously misguiding - the name implies that
-we are, well, freeing a superblock passed to it.  Which is not what is
-happening here - superblock itself is freed only when all passive
-references go away.  It's asking for trouble down the road.
+Stop here.  The above is what I expect.  Don't include any of the 
+material below.
 
-We already have more than enough confusion in the area.  Note, BTW,
-that there's a delicate issue around RCU accesses and freeing stuff -
-->d_compare() can bloody well be called when superblock is getting
-shut down.  For anything that might be needed by it (or by other
-RCU'd methods) we must arrange for RCU-delayed destruction.
-E.g. in case of fatfs we have sbi freeing done via call_rcu() (from
-fat_put_super(), called by generic_shutdown_super()).
+(BTW, you don't need the __aligned(4) thing, do you?  Since the union 
+includes a 32-bit integer field, it will naturally be aligned on a 
+4-byte boundary.)
 
-<checks the current tree>
+> +#define USB_GADGET_BITFIELD(field)                             \
+> +static inline u32 usb_gadget_bit_##field(u32 dw1)              \
+> +{                                                              \
+> +       union {                                                 \
+> +               struct {                                        \
+> +                       u32     sg_supported:1;                 \
+> +                       u32     is_otg:1;                       \
+> +                       u32     is_a_peripheral:1;              \
+> +                       u32     b_hnp_enable:1;                 \
+> +                       u32     a_hnp_support:1;                \
+> +                       u32     a_alt_hnp_support:1;            \
+> +                       u32     hnp_polling_support:1;          \
+> +                       u32     host_request_flag:1;            \
+> +                       u32     quirk_ep_out_aligned_size:1;    \
+> +                       u32     quirk_altset_not_supp:1;        \
+> +                       u32     quirk_stall_not_supp:1;         \
+> +                       u32     quirk_zlp_not_supp:1;           \
+> +                       u32     quirk_avoids_skb_reserve:1;     \
+> +                       u32     is_selfpowered:1;               \
+> +                       u32     deactivated:1;                  \
+> +                       u32     connected:1;                    \
+> +                       u32     lpm_capable:1;                  \
+> +                       u32     wakeup_capable:1;               \
+> +                       u32     wakeup_armed:1;                 \
+> +               } __packed;                                     \
+> +               u32             dw1;                            \
+> +       } __aligned(4) u;                                       \
+> +       BUILD_BUG_ON(sizeof(u) != 4);                           \
+> +       u.dw1 = dw1;                                            \
+> +       return u.field;                                         \
+> +}
+> +
+> +USB_GADGET_BITFIELD(sg_supported)
+> +USB_GADGET_BITFIELD(is_otg)
+> +USB_GADGET_BITFIELD(is_a_peripheral)
+> +USB_GADGET_BITFIELD(b_hnp_enable)
+> +USB_GADGET_BITFIELD(a_hnp_support)
+> +USB_GADGET_BITFIELD(a_alt_hnp_support)
+> +USB_GADGET_BITFIELD(hnp_polling_support)
+> +USB_GADGET_BITFIELD(host_request_flag)
+> +USB_GADGET_BITFIELD(quirk_ep_out_aligned_size)
+> +USB_GADGET_BITFIELD(quirk_altset_not_supp)
+> +USB_GADGET_BITFIELD(quirk_stall_not_supp)
+> +USB_GADGET_BITFIELD(quirk_zlp_not_supp)
+> +USB_GADGET_BITFIELD(quirk_avoids_skb_reserve)
+> +USB_GADGET_BITFIELD(is_selfpowered)
+> +USB_GADGET_BITFIELD(deactivated)
+> +USB_GADGET_BITFIELD(connected)
+> +USB_GADGET_BITFIELD(lpm_capable)
+> +USB_GADGET_BITFIELD(wakeup_capable)
+> +USB_GADGET_BITFIELD(wakeup_armed)
 
-Oh, bugger...  AFAICS, exfat has a problem - exfat_free_sbi() is called
-directly from exfat_kill_sb(), without any concern for this:
-static int exfat_utf8_d_cmp(const struct dentry *dentry, unsigned int len,
-                const char *str, const struct qstr *name)
-{
-        struct super_block *sb = dentry->d_sb;
-        unsigned int alen = exfat_striptail_len(name->len, name->name,
-                                EXFAT_SB(sb)->options.keep_last_dots);
+So ignore all of that.
 
-That kfree() needs to be RCU-delayed...  While we are at it, there's
-this:
-static int exfat_d_hash(const struct dentry *dentry, struct qstr *qstr)
-{
-        struct super_block *sb = dentry->d_sb;
-        struct nls_table *t = EXFAT_SB(sb)->nls_io;
-and we need this
-        unload_nls(sbi->nls_io);
-in exfat_put_super() RCU-delayed as well.  And I suspect that
-        exfat_free_upcase_table(sbi);
-right after it needs the same treatment.
+Now in your patch 4/10, do something that will have this effect:
 
-AFFS: similar problem, wants ->s_fs_info freeing RCU-delayed.
++	struct usb_gadget g;
++
++	g.dw1 = __entry->dw1;
++
+	TP_printk(....
+-		__entry->sg_supported ? "sg:" : "",
++		g.sg_supported ? "sg:" : "",
+...
 
-hfsplus: similar, including non-delayed unlock_nls() calls.
+You probably can't do it exactly this way, because this won't work with 
+the tracing macros, but maybe something that is equivalent will work.
 
-ntfs3:
-        /*
-         * Try slow way with current upcase table
-         */
-        sbi = dentry->d_sb->s_fs_info;
-        uni1 = __getname();
-        if (!uni1)
-                return -ENOMEM;
-__getname().  "Give me a page and you might block, while you are
-at it".  Done from ->d_compare().  Called under dentry->d_lock
-and rcu_read_lock().  OK, any further investigation of that
-one is... probably not worth bothering with at that point.
+For example, you could try:
 
-Other in-tree instances appear to be correct.  I'll push fixes for
-those (well, ntfs3 aside) out tomorrow.
++#define USB_GADGET_BITFIELD(field)		\
++	({struct usb_gadget g;			\
++		g.dw1 = __entry->dw1;		\
++		g.field;})
+
+	TP_printk(....
+-		__entry->sg_supported ? "sg:" : "",
++		USB_GADGET_BITFIELD(sg_supported) ? "sg:" : "",
+
+Do you get the idea now?
+
+Alan Stern
 
