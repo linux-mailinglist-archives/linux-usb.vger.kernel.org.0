@@ -1,142 +1,103 @@
-Return-Path: <linux-usb+bounces-76-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-77-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 507C37A0A4C
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 18:06:33 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FA8D7A0AFB
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 18:45:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2BA381C20C22
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 16:06:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8ED72B20E77
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 16:45:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82C022134F;
-	Thu, 14 Sep 2023 16:06:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF8BF26287;
+	Thu, 14 Sep 2023 16:42:41 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43FCC18C34
-	for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 16:06:12 +0000 (UTC)
-Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC651FD2;
-	Thu, 14 Sep 2023 09:06:11 -0700 (PDT)
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-57328758a72so243055eaf.1;
-        Thu, 14 Sep 2023 09:06:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694707571; x=1695312371;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FmHCW3v32xS4WL1S5k6AX41XPjZGwiitKf0kAwr1Rlc=;
-        b=W3/TFdKMyLv2Qbfewvo/nOkIUDly9DIOlDort66H+nf8XDcdtdq/VYFcInEitUHchv
-         So5u56XFFnynr6yohRHD3trORpF0WcJXuT7OtA5U4dPccl5QaUT/iggpgqicGme80byK
-         GNBr/U3pdUhouu68jqvqvMftWsJzU2cl8q94RvX1zAEhAheZMoy+vgjErSaHbToikT5W
-         y3LhGGN8yO9dk7Shx++lKxTHZa14BcI+Vje4MbbhqZOdkZ6RQBKJtO46tLJSdxE3pwNl
-         udVqZg4OyWWNAEKBFwYEuPcwX5BFXX78FmQHjD61GUmMotqV74L8OYZB3fzZMFbg/+a6
-         /sKA==
-X-Gm-Message-State: AOJu0Yz7EQ34E1h/2aEAmRTTj8bjnNKyjKiZM6nc6wQlpMyoFovgjkhp
-	2/Gev5vbigOaj+DDK4rMQnzd1K4ut1Oyc9zzRj5Rwode
-X-Google-Smtp-Source: AGHT+IG0RZARy8vKXQB5Ab/irjTMfYo/ToT585rySqeD1fPahfRGLWsoQ2iemNxEnY2XNtU9LXPwv6UdP4T6R7C7yhM=
-X-Received: by 2002:a05:6870:889f:b0:1c3:c45b:92a7 with SMTP id
- m31-20020a056870889f00b001c3c45b92a7mr5656166oam.0.1694707570731; Thu, 14 Sep
- 2023 09:06:10 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 382CCC8F3
+	for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 16:42:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55899C433C8;
+	Thu, 14 Sep 2023 16:42:38 +0000 (UTC)
+Date: Thu, 14 Sep 2023 12:42:59 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Linyu Yuan <quic_linyyuan@quicinc.com>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Chunfeng Yun
+ <chunfeng.yun@mediatek.com>, Bin Liu <b-liu@ti.com>, Peter Chen
+ <peter.chen@kernel.org>, Pawel Laszczak <pawell@cadence.com>, Roger Quadros
+ <rogerq@kernel.org>, Alan Stern <stern@rowland.harvard.edu>, Masami
+ Hiramatsu <mhiramat@kernel.org>, "Greg Kroah-Hartman"
+ <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+ <linux-trace-kernel@vger.kernel.org>
+Subject: Re: [PATCH 0/8] usb: gadget: reduce usb gadget trace event buffer
+ usage
+Message-ID: <20230914124259.7bc383f8@gandalf.local.home>
+In-Reply-To: <20230914100302.30274-1-quic_linyyuan@quicinc.com>
+References: <20230914100302.30274-1-quic_linyyuan@quicinc.com>
+X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230914145332.GA5261@wunner.de> <20230914153303.GA30424@bhelgaas>
-In-Reply-To: <20230914153303.GA30424@bhelgaas>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 14 Sep 2023 18:05:59 +0200
-Message-ID: <CAJZ5v0gbRoDx5bdc9u6o=dq6HPecfBUokq_D1mO8SZo_ob=DAg@mail.gmail.com>
-Subject: Re: [PATCH v18 2/2] PCI: Add a quirk for AMD PCIe root ports w/ USB4 controllers
-To: Bjorn Helgaas <helgaas@kernel.org>, Lukas Wunner <lukas@wunner.de>
-Cc: Mario Limonciello <mario.limonciello@amd.com>, Bjorn Helgaas <bhelgaas@google.com>, 
-	"Rafael J . Wysocki" <rjw@rjwysocki.net>, Mika Westerberg <mika.westerberg@linux.intel.com>, 
-	Hans de Goede <hdegoede@redhat.com>, Shyam Sundar S K <Shyam-sundar.S-k@amd.com>, 
-	platform-driver-x86@vger.kernel.org, linux-pci@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-usb@vger.kernel.org, iain@orangesquash.org.uk
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, Sep 14, 2023 at 5:33=E2=80=AFPM Bjorn Helgaas <helgaas@kernel.org> =
-wrote:
->
-> On Thu, Sep 14, 2023 at 04:53:32PM +0200, Lukas Wunner wrote:
-> > On Thu, Sep 14, 2023 at 09:31:38AM -0500, Mario Limonciello wrote:
-> > > On 9/14/2023 09:17, Lukas Wunner wrote:
-> > > > On Wed, Sep 13, 2023 at 11:36:49AM -0500, Mario Limonciello wrote:
-> > > > > On 9/13/2023 09:31, Lukas Wunner wrote:
-> > > > > > If this only affects system sleep, not runtime PM, what you can=
- do is
-> > > > > > define a DECLARE_PCI_FIXUP_SUSPEND_LATE() which calls pci_d3col=
-d_disable()
-> > > > > > and also define a DECLARE_PCI_FIXUP_CLASS_RESUME_EARLY() which =
-calls
-> > > > > > pci_d3cold_enable().
-> > > > > >
-> > > > > > And I think you can make those calls conditional on pm_suspend_=
-no_platform()
-> > > > > > to constrain to s2idle.
-> > > > > >
-> > > > > > User space should still be able to influence runtime PM via the
-> > > > > > d3cold_allowed flag (unless I'm missing something).
-> > > > >
-> > > > > The part you're missing is that D3hot is affected by this issue t=
-oo,
-> > > > > otherwise it would be a good proposal.
-> > > >
-> > > > I recall that in an earlier version of the patch, you solved the is=
-sue
-> > > > by amending pci_bridge_d3_possible().
-> > > >
-> > > > Changing the dev->no_d3cold flag indirectly influences the bridge_d=
-3
-> > > > flag (through pci_dev_check_d3cold() and pci_bridge_d3_update()).
-> > > >
-> > > > If dev->no_d3cold is set on a device below a port, that port is
-> > > > prevented from entring D3hot because it would result in the
-> > > > device effectively being in D3cold.
-> > > >
-> > > > So you might want to take a closer look at this approach despite
-> > > > the flag suggesting that it only influences D3cold.
-> > >
-> > > Ah; I hadn't considered setting it on a device below the port. In thi=
-s
-> > > particular situation the only devices below the root port are USB
-> > > controllers.
-> > >
-> > > If those devices don't go into D3 the system can't enter hardware sle=
-ep.
-> >
-> > If you set dev->no_d3cold on the USB controllers, they should still
-> > be able to go to D3hot, but not D3cold, which perhaps might be sufficie=
-nt.
-> > It should prevent D3cold *and* D3hot on the Root Port above.  And if yo=
-u
-> > set that on system sleep in a quirk and clear it on resume, runtime PM
-> > shouldn't be affected.
->
-> dev->no_d3cold appears to be mainly an administrative policy knob
-> twidded via sysfs.
->
-> There *are* a few cases where drivers (i915, nouveau, xhci) update it
-> via pci_d3cold_enable() or pci_d3cold_disable(), but they all look
-> vulnerable to issues if people use the sysfs knob, and I'm a little
-> dubious that they're legit in the first place.
->
-> This AMD Root Port issue is not an administrative choice; it's purely
-> a functional problem of the device advertising that it supports PME#
-> but not actually being able to do it.  So if we can do this by fixing
-> dev->pme_support (i.e., the copy of what it advertised), I'd rather do
-> that.
+On Thu, 14 Sep 2023 18:02:54 +0800
+Linyu Yuan <quic_linyyuan@quicinc.com> wrote:
 
-Besides, it is not really necessary to prevent D3hot on the Root Port
-in question in all cases. It can go into D3 just fine if there are no
-wakeup devices under it and I suppose that the platform can achieve
-more energy savings (over the case when the port is always held in
-D0).
+> some trace event use an interger to to save a bit field info of gadget,
+> also some trace save endpoint name in string forat, it all can be
+> chagned to other way at trace event store phase.
+> 
+> bit field can be replace with a union interger member which include
+> multiple bit fields.
+> 
+> ep name stringe can be replace to a interger which contaion number
+> and dir info.
+> 
+> to allow trace output stage can get bit info from save interger,
+> add DECLARE_EVENT_CLASS_PRINT_INIT() clas which allow user defined
+> operation before print.
+> 
+> v1: https://lore.kernel.org/linux-usb/20230911042843.2711-1-quic_linyyuan@quicinc.com/
+> v2: fix two compile issues that COMPILE_TEST not covered
+>     https://lore.kernel.org/linux-usb/20230911112446.1791-1-quic_linyyuan@quicinc.com/
+> v3: fix reviewer comments, allow bit fields work on both little and big endian
+>     https://lore.kernel.org/linux-usb/20230912104455.7737-1-quic_linyyuan@quicinc.com/
+> v4: add DECLARE_EVENT_CLASS_PRINT_INIT() new trace class and use it
+> 
+
+All these changes make it useless for user space. :-(
+
+-- Steve
+
+> Linyu Yuan (8):
+>   trace: add new DECLARE_EVENT_CLASS_PRINT_INIT class type
+>   usb: gadget: add anonymous definition in some struct for trace purpose
+>   usb: udc: trace: reduce buffer usage of trace event
+>   usb: cdns3: trace: reduce buffer usage of trace event
+>   usb: dwc3: trace: reduce buffer usage of trace event
+>   usb: cdns2: trace: reduce buffer usage of trace event
+>   usb: mtu3: trace: reduce buffer usage of trace event
+>   usb: musb: trace: reduce buffer usage of trace event
+> 
+>  drivers/usb/cdns3/cdns3-trace.h            | 201 ++++++++++++++-------
+>  drivers/usb/cdns3/cdnsp-trace.h            | 105 +++++++----
+>  drivers/usb/dwc3/trace.h                   |  99 ++++++----
+>  drivers/usb/gadget/udc/cdns2/cdns2-trace.h | 175 ++++++++++++------
+>  drivers/usb/gadget/udc/trace.h             | 154 +++++++---------
+>  drivers/usb/mtu3/mtu3_trace.h              |  76 +++++---
+>  drivers/usb/musb/musb_trace.h              |  20 +-
+>  include/linux/tracepoint.h                 |  22 +++
+>  include/linux/usb/gadget.h                 | 113 +++++++-----
+>  include/trace/bpf_probe.h                  |   4 +
+>  include/trace/perf.h                       |  43 +++++
+>  include/trace/stages/stage3_trace_output.h |   3 +
+>  include/trace/trace_events.h               | 118 ++++++++++++
+>  13 files changed, 784 insertions(+), 349 deletions(-)
+> 
+
 
