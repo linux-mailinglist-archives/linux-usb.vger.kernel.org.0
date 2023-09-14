@@ -1,339 +1,202 @@
-Return-Path: <linux-usb+bounces-23-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-24-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D97D179F8FE
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 05:45:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DDF2879F9B4
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 06:59:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 31AADB2080B
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 03:45:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B147B1C2099D
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 04:59:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AEE61379;
-	Thu, 14 Sep 2023 03:44:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D0E91873;
+	Thu, 14 Sep 2023 04:59:09 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDC047F
-	for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 03:44:51 +0000 (UTC)
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BCA9193
-	for <linux-usb@vger.kernel.org>; Wed, 13 Sep 2023 20:44:51 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38E2aft8006295;
-	Thu, 14 Sep 2023 03:44:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=M82+JA6b1G/k0fHJYX0epaVsOYlL8vE+yw3omLt9M68=;
- b=RYei1KHhRG+pLk+PX4nuIPn8vbE8GsWBmJ6N4sfFei9vLoGe5UKzmonL4uU85OoZ9cUL
- 50s/N+yzQeCuRnvyeZp8HQQyYnDV4h5l6pGOTRTqpMuWN5cK5/Z9qCiWKwOvUMzZyBnU
- RxZeqf08BHN06VlXxKTq/6VvBrk8Jdh8iJzCzGZUy2xHF7g2jQBLXBUY5QO6Ob71qBnb
- JQwQjyCFRyhB1CjUzzAKRZXF+bEc5fN9dwzQC/2dcFQHP/lnPqROi2yFZFLjHh7PCGWI
- 0JH1WGCUKXxJ5k7oKaw6zsW2z17GC7f7Cunv/12eVkj3IgKGbpD9AD7Bmb4+Tdcys2JT pw== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t3r15r9dr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 14 Sep 2023 03:44:16 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38E3iF1r019487
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 14 Sep 2023 03:44:15 GMT
-Received: from [10.253.74.98] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Wed, 13 Sep
- 2023 20:44:07 -0700
-Message-ID: <964a5eaf-acac-be1a-cd0b-d4141f22ba87@quicinc.com>
-Date: Thu, 14 Sep 2023 11:44:05 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AFE117F4
+	for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 04:59:08 +0000 (UTC)
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2043.outbound.protection.outlook.com [40.107.101.43])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 456FB1BCA;
+	Wed, 13 Sep 2023 21:59:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=STGtIcLNZ0Ut7disxN1dLkYDx9LBm8C/ZCVuEajhwc8yaiK6hCj7Z2Xa997EUbQXpgoG3Sfdrth5eLD01F4nBmpN+1oODf8WVN31HdSMtC/a/oIjmopktbHlbViQWZirkTqtX1oJpisSgBTM1d1L3L3yFS3CI2Bob2lkftex63I4Us7LBdATXeip16hRz0URBY9LbnLl/Ne8kN3k0Fp011zel7CCzoKWGTe4N+qL/gMW5GwKovl4qJsqSzVhzXh38e7pguwTPSgVsOR8IjaRDBgU3HfA+C5sA9BqUr/jMo6IhahaerVApZ2VrdpcJZK9gDb5wuDgIiTKsOCkHJxLlQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=r1xN1jqPPca/wNnha+ycdzioh2bf9pSwuB49S1gVMI4=;
+ b=lcloX7BtSYjuSmhHDMRmWveBjx8kMhi6FEjraT+lmNIOjPa/Tv1xXLqUN/XYerSbFP9tv9pSYbrK6bk0TE8+XNeqcaCCQRooA895GCrZ4k3x9+WFbZ9p5L/jWHbF1KVMya5DG5kI7W391SsPTuPLyKR83M0gk2DQHXz9Is+8UBBFmMGDU9rEUiuSGN9Q4RoRktP/vxd75SDKLJYLNK7vZ1laxd4t6RJlWzf+R9mL17autTRUHoKJSzF4449sM0ZMlLBSpwTsOdLWXMgV9BGVywJqCnQceZXbrAunvs2YyHTDAAvJFidRto6PSpCWTeTN1tYi/ekpNO8C1fYL+PC1mg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=r1xN1jqPPca/wNnha+ycdzioh2bf9pSwuB49S1gVMI4=;
+ b=jbncDjNDeC0FkPXyPnKCi1gbOQyA3NaVlSy4a/zY4kIrVT5JDg3cgKDoprMD+BzbdtPIkIBQyTedZZoZvmrcV69k904ZNxW3Qc/uAqAzBFyiSVDOW8nf9GbCKTuP7zvEVtFrRXYHxXhZZ6vp95mkwy7Au7P17YU/EUCHetpVRMc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by DM6PR12MB4497.namprd12.prod.outlook.com (2603:10b6:5:2a5::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.20; Thu, 14 Sep
+ 2023 04:59:05 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::36f9:ffa7:c770:d146]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::36f9:ffa7:c770:d146%7]) with mapi id 15.20.6768.029; Thu, 14 Sep 2023
+ 04:59:05 +0000
+Message-ID: <75e5175e-406e-41dd-90c7-3dc30741897e@amd.com>
+Date: Wed, 13 Sep 2023 23:59:00 -0500
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v18 2/2] PCI: Add a quirk for AMD PCIe root ports w/ USB4
+ controllers
+From: Mario Limonciello <mario.limonciello@amd.com>
+To: Bjorn Helgaas <helgaas@kernel.org>, "Rafael J. Wysocki"
+ <rafael@kernel.org>
+Cc: Bjorn Helgaas <bhelgaas@google.com>,
+ "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+ Mika Westerberg <mika.westerberg@linux.intel.com>,
+ Hans de Goede <hdegoede@redhat.com>,
+ Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+ "open list:X86 PLATFORM DRIVERS" <platform-driver-x86@vger.kernel.org>,
+ "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+ linux-pm@vger.kernel.org,
+ "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+ iain@orangesquash.org.uk
+References: <20230913210543.GA440503@bhelgaas>
+ <001d9c72-49df-4a8d-a9bd-10311887c60d@amd.com>
+Content-Language: en-US
+In-Reply-To: <001d9c72-49df-4a8d-a9bd-10311887c60d@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SN7PR04CA0020.namprd04.prod.outlook.com
+ (2603:10b6:806:f2::25) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.0
-Subject: Re: [PATCH v3 01/10] usb: gadget: add anonymous definition in struct
- usb_gadget
-Content-Language: en-US
-From: Linyu Yuan <quic_linyyuan@quicinc.com>
-To: Alan Stern <stern@rowland.harvard.edu>
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen
-	<Thinh.Nguyen@synopsys.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Pawel
- Laszczak <pawell@cadence.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Linus
- Walleij <linus.walleij@linaro.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Neal Liu <neal_liu@aspeedtech.com>,
-        Cristian Birsan
-	<cristian.birsan@microchip.com>,
-        Bin Liu <b-liu@ti.com>, Kevin Cernekee
-	<cernekee@gmail.com>,
-        Justin Chen <justin.chen@broadcom.com>,
-        Al Cooper
-	<alcooperx@gmail.com>, Li Yang <leoyang.li@nxp.com>,
-        Vladimir Zapolskiy
-	<vz@mleia.com>, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang
-	<haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Philipp
- Zabel <p.zabel@pengutronix.de>,
-        Herve Codina <herve.codina@bootlin.com>,
-        hierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter
-	<jonathanh@nvidia.com>,
-        Michal Simek <michal.simek@amd.com>,
-        Rui Miguel Silva
-	<rui.silva@linaro.org>,
-        Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah
- Khan <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>,
-        <linux-usb@vger.kernel.org>
-References: <20230912104455.7737-1-quic_linyyuan@quicinc.com>
- <20230912104455.7737-2-quic_linyyuan@quicinc.com>
- <2023091255-unsubtly-daisy-7426@gregkh>
- <d1c34d15-e598-5f86-bc86-cd5e656225c9@quicinc.com>
- <ef99b328-926c-4696-83bf-9ccd6a38984e@rowland.harvard.edu>
- <be818ccf-96fd-2fa0-8f95-1f49e3aa2dfc@quicinc.com>
- <a735ee44-e030-4c58-a929-dc11292997bd@rowland.harvard.edu>
- <fcaaa5c6-7c72-439d-c881-acd9cbe4d6da@quicinc.com>
-In-Reply-To: <fcaaa5c6-7c72-439d-c881-acd9cbe4d6da@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: j8Kgr319pMVx_jaShLlllH9BJK8svBJx
-X-Proofpoint-ORIG-GUID: j8Kgr319pMVx_jaShLlllH9BJK8svBJx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-09-13_19,2023-09-13_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- malwarescore=0 adultscore=0 spamscore=0 lowpriorityscore=0 suspectscore=0
- phishscore=0 priorityscore=1501 mlxlogscore=492 bulkscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2308100000
- definitions=main-2309140030
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|DM6PR12MB4497:EE_
+X-MS-Office365-Filtering-Correlation-Id: b2b93305-1f76-457f-cf93-08dbb4df51d8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	pivnjlCCr3n4hmmCHgPq3C4Kz7umZNObLPV8IopOpd6QOlZ3nzZvuD1TtQ5TcV5GW0IjMaAEYDP2oP4lUH4NuC+WsWs94xL4cylxZezAl8FoWvQY3rmXS7QVOgYvY482bvkqXhL/TJsLtP0doUPrcyeMAbMM7XUtQ6fYyp7eG4F+Lw9LPEbbXlsX+CtM9RI4JG3Puh2WksC2y3P2ANHyJNsWnzesucV80C1eLDcdtYADLQ82mXl30Vuuv+LNkgcVaDaQKWHwRjqtJdTJXzk788zVSzCKXf591I4IZsln2G0YHvtVw4ltn8++vP570tKkb23PCyyImuGLqNgjh8/E5B3gWZwKp7JHsq3IhUeQej7CPi0GszD2h4U/H4Fcnv9IO6zhdrI2JuRxSndQKLcNtjph2dRi9tiDQCHE8IfC52iFOSBDJCyGpJZooLNpe4emgLeduwvH2SsEDG3i1uuzD7oXjb+yo5LoyVLz2wZoVjRcqi8+HYybo0RFJS9lP6F3BC5lafJRCMZkAoAEZxGdeA35wuMr4BETdVifmkwWC8nQFd3l8W/4FFTpMP5KY1leQChybW7+cCzlzZ8D0ZmrZHiHf1FfEo6mTQbRBKmNTIZjq1g+0woayg7QFD3bRcWdpB8f1ws3MAwxD7r8ddUkCw==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(346002)(136003)(366004)(376002)(39860400002)(186009)(1800799009)(451199024)(2906002)(86362001)(31696002)(53546011)(26005)(2616005)(36756003)(478600001)(6506007)(6486002)(6666004)(6512007)(83380400001)(38100700002)(7416002)(41300700001)(31686004)(8936002)(8676002)(4326008)(5660300002)(54906003)(316002)(110136005)(66476007)(66946007)(66556008)(44832011)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?TkJldUdGTGhyVnJwYnl2U0ZvK041QXJUYnNiTDgyL21IU0RUSEFsWnVFOFE5?=
+ =?utf-8?B?UUJib08wcUZad0FtMlhZQ3YyM2xNTGc2TlpiM0JqdmhiNkRZUHQ2ekY2SHFN?=
+ =?utf-8?B?cWR2OTdtVncxWFlNM0pQZ0hMNm1yZXh3clhNbm1yaFJxZDVQY1k3bnY0SkJj?=
+ =?utf-8?B?RGJUZmlpK3ZkZVdYaGhGQ3hFNmwvKzJQY2QrVGJ2Z21zSkp2SnFndUlSTEJp?=
+ =?utf-8?B?a0g1TVYzdFlsTHlOSjFrTE14NUYzUnp0Yit3VXVncWxabDY1WVh6aEVEZGlY?=
+ =?utf-8?B?cjJpcE1YQldMUTJVY0tqS3U0b3F5eFY3bFB4dTVJNzljSnRoTndCMkRMNS85?=
+ =?utf-8?B?aGxtTE9sRDNtcURRVUQyc21jVUZEUng0b3IxSGZkQWxuL0lzeDBmVTZidTE5?=
+ =?utf-8?B?cmhPclNES01rLzRHZUx2dEVHL0xOaXZjQ3ZDemxUdklVWTFXYUE4UXRiTEkx?=
+ =?utf-8?B?QkZLOWZVQmg3VHoybFdyZERlaWhGS01lekx0aTZrTG9IQVVJQXpIVlBvYXFQ?=
+ =?utf-8?B?RHN5RmlXMThsRzlrOUk2N0VFaTR4OG5pTC9YenBzeDhURG5tSmc4Qm4xUlVI?=
+ =?utf-8?B?Ri81ek5JMXQ5MHZuVDZ4VEtubkh1bkNXVUdSdTBRd2NjVGZqYzl4R3pQcVlC?=
+ =?utf-8?B?azZvZTNMZVV0K0RGN0FScUhoeFpWKzFVSFJ2UjJzVkdrck1HOXI1MHpOdHdT?=
+ =?utf-8?B?MU12RWgrVUFCNEdMRGkyOVg5QVNrcTNRWUYyVFpZclJuQUNuN1BidGZSWXhh?=
+ =?utf-8?B?RUVkM3dlMWJOS3h0Z3pDZ1ZPdGZzaTFhQXMyT1E3b3lvNDFpNjM2dGM4NDcw?=
+ =?utf-8?B?Z0VRY0hvdDgvQ0hBSG5UeTI5ejVYQW5vMEhJaG9oTlVnS0l4MU10NnlwTVFZ?=
+ =?utf-8?B?VmpnWG1hUno0d3RVQ2tOVmRFQU4yUFV5VVp2RGdNVHpBNk81U0VKWitSUVdK?=
+ =?utf-8?B?RU11WXJFY1pjWXkxNFZLbnlaNUNaVEVFSnlEbDBxYWd1TWdlTkNuTE1JOUxt?=
+ =?utf-8?B?KzdBTEZEa0lmUFN3TzJUR1hPY2RQUjJybXlOOSt1aVR5Z3lINzVhL0FUMjg1?=
+ =?utf-8?B?MUFPejk2SXV1WXBrYlRNYTFxcm5JMHk4Z1pyZ1g3NFBMci9BUEJubUgybW1y?=
+ =?utf-8?B?cFBoZllNUjM1V3ZiQ3Bmb0JIa1ZvM3ZGMEV3aGY2bFFBc0g4RC9aT1JCVnJ2?=
+ =?utf-8?B?OWl4TVhDekpObEd1ckNNandKRG8xdU1EdG5YZ2E1MVR0VXZmcExPQlp5NjN6?=
+ =?utf-8?B?VFBacklsZ1dvcHA5ZHN5K1RyWFZ1VTdZaiszcXg3MUE5U1BGNnBSS3ZpSXlu?=
+ =?utf-8?B?aUFBQURiSnBCdWNDYWlPVmRyZUZjL08za0p2UXdXV3VTdEZEbGNmUzlLQU1O?=
+ =?utf-8?B?Q1p6T2lCRjB1amRBSDk2Q29UNW5oNWpKcjgxSnNGQjdZbS9lS2hwcDNhSE0z?=
+ =?utf-8?B?bXR2cWdTb0ZpZ2dOWnAwVlZCY1FsY2pGbE8zWHhaSEsxN0JoOTVvZW51bEtk?=
+ =?utf-8?B?d1pleTlqbFcvTjU1YUZnb3pra3BRVVo2QWwvQlpoVklEem13eEIxckVicU9u?=
+ =?utf-8?B?NkFNdlQzaERZZzRITXZ0RjJQZ0g2STl2N3Fwa1hYRSt5d1p0UTZTczdHQ0VB?=
+ =?utf-8?B?R2pSbk5FNWhmMDZBMDU2RGEra3QrS1VUMTdHZHZIK1JFK04yd3dseEsrTUw4?=
+ =?utf-8?B?SWhNdlBWdDF4RVpOWnFhWXVMSEhDdmNadUVhVlRsMTR1d05COWVPbnlaSHpF?=
+ =?utf-8?B?ZjdTMUlXbWdPTjhVWXNBaXZrWkF2MzFMU1ZKcEMwVUJjNG95alJEN1diYWpG?=
+ =?utf-8?B?Vk9TbXVLdVppeTNVaXZ2VkJ5cHlXN1ZlZkFRdVgyNXBITzVyY1UvUHhtbkVG?=
+ =?utf-8?B?K2d6M2l6VzZUUy9OMkdrcURiamJjS3pKRXFWNnpkRGg1alZBR2tUZzJZMnA1?=
+ =?utf-8?B?RFRuMnRidUQxUkYrVW9QUTBOVzRVa001OGRWYnNITU5jd2swcWVZZGM3WDJ0?=
+ =?utf-8?B?WmY4akQzajVPRWErNUZWM09NSDRBYW5sRUJ1NWhRdStpZ2tUUm9uTVVVZXNU?=
+ =?utf-8?B?UmJub04vZ1hWd2FmT0VOV0p6RGVIZjZwLzlpYlNQWTZESWVraFpjcmFyZ2hk?=
+ =?utf-8?Q?loceccrRe6kLey+FoXvXNo4aD?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b2b93305-1f76-457f-cf93-08dbb4df51d8
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Sep 2023 04:59:04.8723
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3nsar/gf3pHxlED6mtShC+x3zMlzHYVoUSo7m1qX671hxVjBplRpaQX6eTLH48TtiZ1E3yrB4flbtI73Hp+RxA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4497
 
-
-On 9/14/2023 10:25 AM, Linyu Yuan wrote:
->
-> On 9/14/2023 10:16 AM, Alan Stern wrote:
->> On Thu, Sep 14, 2023 at 09:08:04AM +0800, Linyu Yuan wrote:
->>> On 9/14/2023 12:02 AM, Alan Stern wrote:
->>>> On Wed, Sep 13, 2023 at 11:46:12AM +0800, Linyu Yuan wrote:
->>>>> but Alan Stern have one comment, do it mean the bit position 
->>>>> number is not
->>>>> expect and we can't use it ?
->>>>>
->>>>> @Alan Stern ,  BIT(0), BIT(1) is not the member we expect ?
->>>> They might not be.  If you can avoid making this assumption, you 
->>>> should.
+On 9/13/2023 16:16, Mario Limonciello wrote:
+> On 9/13/2023 16:05, Bjorn Helgaas wrote:
+> [cut]
+>>>> I expect it to be an ongoing issue.  I also expect unless we use
+>>>> constraints or convince the firmware team to add a _S0W object with a
+>>>> value of "0" for the sake of Linux that we will be adding IDs every 
+>>>> year
+>>>> to wherever this lands as we reproduce it on newer SoCs.
 >>>
->>> i don't know if it is true or not, seem some driver expect there is 
->>> no hole
->>> for this kind of bit field definition.
->> I didn't say there would be a hole; I said that BIT(0) might not be the
->> member you expect.  For example, sg_supported might be BIT(31) instead
->> of BIT(0).
->
->
-> got it, it is same concern of Greg.
->
->
+>>> So maybe the way to go is to make the AMD PMC driver set a flag for
+>>> Root Ports on suspend or similar.
 >>
->>>>>> This macro usage is a real mess. Can't you find a better way to 
->>>>>> do it?
->>>>>>
->>>>>> For instance, in the code that parses the trace buffer, define a
->>>>>> temporary usb_gadget structure and copy the dw1 field from the trace
->>>>>> buffer to the temporary structure.  Then you can access the 
->>>>>> fields in
->>>>>> that structure directly by their original names, with no macros.
->>>>> do it same idea just move it outside of gadget.h ?
->>>> Keep the anonymous union in gadget.h, but get rid of the macros.
->>>
->>> do you expect below ?
->>>
->>>
->>> --- a/include/linux/usb/gadget.h
->>> +++ b/include/linux/usb/gadget.h
->>> @@ -357,6 +357,7 @@ struct usb_gadget_ops {
->>>    * @in_epnum: last used in ep number
->>>    * @mA: last set mA value
->>>    * @otg_caps: OTG capabilities of this gadget.
->>> + * @dw1: trace event purpose
->>>    * @sg_supported: true if we can handle scatter-gather
->>>    * @is_otg: True if the USB device port uses a Mini-AB jack, so 
->>> that the
->>>    *     gadget driver must provide a USB OTG descriptor.
->>> @@ -432,30 +433,88 @@ struct usb_gadget {
->>>          unsigned                        mA;
->>>          struct usb_otg_caps             *otg_caps;
->>>
->>> -       unsigned                        sg_supported:1;
->>> -       unsigned                        is_otg:1;
->>> -       unsigned                        is_a_peripheral:1;
->>> -       unsigned                        b_hnp_enable:1;
->>> -       unsigned                        a_hnp_support:1;
->>> -       unsigned                        a_alt_hnp_support:1;
->>> -       unsigned                        hnp_polling_support:1;
->>> -       unsigned                        host_request_flag:1;
->>> -       unsigned quirk_ep_out_aligned_size:1;
->>> -       unsigned quirk_altset_not_supp:1;
->>> -       unsigned quirk_stall_not_supp:1;
->>> -       unsigned                        quirk_zlp_not_supp:1;
->>> -       unsigned quirk_avoids_skb_reserve:1;
->>> -       unsigned                        is_selfpowered:1;
->>> -       unsigned                        deactivated:1;
->>> -       unsigned                        connected:1;
->>> -       unsigned                        lpm_capable:1;
->>> -       unsigned                        wakeup_capable:1;
->>> -       unsigned                        wakeup_armed:1;
->>> +       union {
->>> +               struct {
->>> +                       unsigned        sg_supported:1;
->>> +                       unsigned        is_otg:1;
->>> +                       unsigned        is_a_peripheral:1;
->>> +                       unsigned        b_hnp_enable:1;
->>> +                       unsigned        a_hnp_support:1;
->>> +                       unsigned        a_alt_hnp_support:1;
->>> +                       unsigned        hnp_polling_support:1;
->>> +                       unsigned        host_request_flag:1;
->>> +                       unsigned quirk_ep_out_aligned_size:1;
->>> +                       unsigned quirk_altset_not_supp:1;
->>> +                       unsigned quirk_stall_not_supp:1;
->>> +                       unsigned        quirk_zlp_not_supp:1;
->>> +                       unsigned quirk_avoids_skb_reserve:1;
->>> +                       unsigned        is_selfpowered:1;
->>> +                       unsigned        deactivated:1;
->>> +                       unsigned        connected:1;
->>> +                       unsigned        lpm_capable:1;
->>> +                       unsigned        wakeup_capable:1;
->>> +                       unsigned        wakeup_armed:1;
->>> +               } __packed;
->>> +
->>> +               u32                     dw1;
->>> +       } __aligned(4);
->>>          int                             irq;
->>>          int                             id_number;
->>>   };
->>>   #define work_to_gadget(w)      (container_of((w), struct 
->>> usb_gadget, work))
->> Stop here.  The above is what I expect.  Don't include any of the
->> material below.
+>> I like the quirk approach.  When PMC is involved, the device behavior
+>> doesn't conform to what it advertised via PME_Support.
 >>
->> (BTW, you don't need the __aligned(4) thing, do you?  Since the union
->> includes a 32-bit integer field, it will naturally be aligned on a
->> 4-byte boundary.)
->
->
-> sure, will remove it.
->
->
+>> The v18 quirk isn't connected to PMC at all, so IIUC it avoids
+>> D3hot/D3cold unnecessarily when amd/pmc is not loaded.
 >>
->>> +#define USB_GADGET_BITFIELD(field)                             \
->>> +static inline u32 usb_gadget_bit_##field(u32 dw1)              \
->>> +{                                                              \
->>> +       union {                                                 \
->>> +               struct {                                        \
->>> +                       u32 sg_supported:1;                 \
->>> +                       u32 is_otg:1;                       \
->>> +                       u32 is_a_peripheral:1;              \
->>> +                       u32 b_hnp_enable:1;                 \
->>> +                       u32 a_hnp_support:1;                \
->>> +                       u32 a_alt_hnp_support:1;            \
->>> +                       u32 hnp_polling_support:1;          \
->>> +                       u32 host_request_flag:1;            \
->>> +                       u32 quirk_ep_out_aligned_size:1;    \
->>> +                       u32 quirk_altset_not_supp:1;        \
->>> +                       u32 quirk_stall_not_supp:1;         \
->>> +                       u32 quirk_zlp_not_supp:1;           \
->>> +                       u32 quirk_avoids_skb_reserve:1;     \
->>> +                       u32 is_selfpowered:1;               \
->>> +                       u32 deactivated:1;                  \
->>> +                       u32 connected:1;                    \
->>> +                       u32 lpm_capable:1;                  \
->>> +                       u32 wakeup_capable:1;               \
->>> +                       u32 wakeup_armed:1;                 \
->>> +               } __packed;                                     \
->>> +               u32 dw1;                            \
->>> +       } __aligned(4) u;                                       \
->>> +       BUILD_BUG_ON(sizeof(u) != 4);                           \
->>> +       u.dw1 = dw1;                                            \
->>> +       return u.field;                                         \
->>> +}
->>> +
->>> +USB_GADGET_BITFIELD(sg_supported)
->>> +USB_GADGET_BITFIELD(is_otg)
->>> +USB_GADGET_BITFIELD(is_a_peripheral)
->>> +USB_GADGET_BITFIELD(b_hnp_enable)
->>> +USB_GADGET_BITFIELD(a_hnp_support)
->>> +USB_GADGET_BITFIELD(a_alt_hnp_support)
->>> +USB_GADGET_BITFIELD(hnp_polling_support)
->>> +USB_GADGET_BITFIELD(host_request_flag)
->>> +USB_GADGET_BITFIELD(quirk_ep_out_aligned_size)
->>> +USB_GADGET_BITFIELD(quirk_altset_not_supp)
->>> +USB_GADGET_BITFIELD(quirk_stall_not_supp)
->>> +USB_GADGET_BITFIELD(quirk_zlp_not_supp)
->>> +USB_GADGET_BITFIELD(quirk_avoids_skb_reserve)
->>> +USB_GADGET_BITFIELD(is_selfpowered)
->>> +USB_GADGET_BITFIELD(deactivated)
->>> +USB_GADGET_BITFIELD(connected)
->>> +USB_GADGET_BITFIELD(lpm_capable)
->>> +USB_GADGET_BITFIELD(wakeup_capable)
->>> +USB_GADGET_BITFIELD(wakeup_armed)
->> So ignore all of that.
+> 
+> Technically someone could; but realistically no one will be using these 
+> machines without amd-pmc.
+> 
+> The battery life over suspend would be abhorrent.
+> 
+>> I don't object to avoiding D3hot/D3cold unconditionally.  Presumably
+>> we *could* save a little power by using them when amd/pci isn't
+>> loaded, but amd/pci would have to iterate through all PCI devices when
+>> it loads, save previous state, do the quirk, and then restore the
+>> previous state on module unload.  And it would have to use notifiers
+>> or assume no Root Port hotplug.  All sounds kind of complicated.
 >>
->> Now in your patch 4/10, do something that will have this effect:
+> 
+> Yeah this does sound needlessly complicated.
+> 
+>> Maybe it would even be enough to just clear dev->pme_support so we
+>> know wakeups don't work.  It would be a pretty big benefit if we
+>> didn't have to add another bit and complicate pci_prepare_to_sleep()
+>> or pci_target_state().
 >>
->> +    struct usb_gadget g;
->> +
->> +    g.dw1 = __entry->dw1;
->> +
->>     TP_printk(....
->> -        __entry->sg_supported ? "sg:" : "",
->> +        g.sg_supported ? "sg:" : "",
->> ...
->>
->> You probably can't do it exactly this way, because this won't work with
->> the tracing macros, but maybe something that is equivalent will work.
->>
->> For example, you could try:
->>
->> +#define USB_GADGET_BITFIELD(field)        \
->> +    ({struct usb_gadget g;            \
->> +        g.dw1 = __entry->dw1;        \
->> +        g.field;})
->>
->>     TP_printk(....
->> -        __entry->sg_supported ? "sg:" : "",
->> +        USB_GADGET_BITFIELD(sg_supported) ? "sg:" : "",
->>
->> Do you get the idea now?
->
->
-> this is good idea, it is more simple.
->
-> but still one question, why can't put in gadget.h, or not it need in 
-> every trace file, right ?
+> 
+> I don't think clearing PME support entirely is going to help.  The 
+> reason is that pci_target_state() will fall back to PCI_D3hot when 
+> dev->pme_support is fully cleared.
+> 
+> I think that clearing *just the bits* for D3hot and D3cold in PME 
+> support should work though.  I'll test this.
 
+I did confirm this works properly.
 
-i will add new trace event macro to cover this special case.
+> 
+> Assuming it works how about if we put the quirk to clear the 
+> D3hot/D3cold PME support bit in drivers/platform/x86/amd/pmc/pmc-quirks.c?
+> 
+> It's still a quirk file and it makes it very clear that this behavior is 
+> caused by what amd-pmc does.
 
-will send next version.
+I've got it coded up like this and working, so please let me know if 
+this approach is amenable and I'll drop an updated version.
 
-
->
->
->>
->> Alan Stern
+If you would prefer it to be in pci/quirks.c I believe I can do either.
 
