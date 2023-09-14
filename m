@@ -1,304 +1,143 @@
-Return-Path: <linux-usb+bounces-78-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-79-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 257E87A0B09
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 18:54:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DABC27A0B1F
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 18:59:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 25F3FB20D15
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 16:54:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F03C81C20B6A
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 16:59:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5684F224FF;
-	Thu, 14 Sep 2023 16:53:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4ECD924202;
+	Thu, 14 Sep 2023 16:58:38 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 702EEC8F3
-	for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 16:53:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66406C433C8;
-	Thu, 14 Sep 2023 16:53:49 +0000 (UTC)
-Date: Thu, 14 Sep 2023 12:54:10 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Linyu Yuan <quic_linyyuan@quicinc.com>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Chunfeng Yun
- <chunfeng.yun@mediatek.com>, Bin Liu <b-liu@ti.com>, Peter Chen
- <peter.chen@kernel.org>, Pawel Laszczak <pawell@cadence.com>, Roger Quadros
- <rogerq@kernel.org>, Alan Stern <stern@rowland.harvard.edu>, Masami
- Hiramatsu <mhiramat@kernel.org>, "Greg Kroah-Hartman"
- <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
- <linux-trace-kernel@vger.kernel.org>
-Subject: Re: [PATCH 3/8] usb: udc: trace: reduce buffer usage of trace event
-Message-ID: <20230914125410.432ca343@gandalf.local.home>
-In-Reply-To: <20230914100302.30274-4-quic_linyyuan@quicinc.com>
-References: <20230914100302.30274-1-quic_linyyuan@quicinc.com>
-	<20230914100302.30274-4-quic_linyyuan@quicinc.com>
-X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21C1F208A1
+	for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 16:58:37 +0000 (UTC)
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 270858E;
+	Thu, 14 Sep 2023 09:58:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=OegaqNYe7r/8g+jxupTPdfeZq9KJj2OTDDvHBPIaVRM=; b=RaDan93BbmgqvP/klzEFdds2eX
+	b7IkvPoHF6e1c3Qwa5SEuXQNKpqse3rk12yT18ICKdfI7a3VckJMEILdWLlbPuVYu2ikn++I4wXvt
+	w+i7SX8a1a6dW7cMTedrWSnk40HFt49t9T/tHHEsDSZTulc9VAD6mfnRu95MdKXU6o+4gx8ccOYCl
+	tzR3nVCHyShKKJCvDGpl2tGT/4EnlVLt+glK08TUPmS5nCJyZcU67evdh1flfJb6C4+28BCONKdlH
+	o2QcR8W9m9qZ3e3/lEoYnSGID6WJVx2XavJ6wJ2qDN3BMDjs3iQqHL/hIjEVtRJN3bEfYNC532EZP
+	98mkJSUw==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+	id 1qgpfJ-0064a2-0E;
+	Thu, 14 Sep 2023 16:58:05 +0000
+Date: Thu, 14 Sep 2023 17:58:05 +0100
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Christoph Hellwig <hch@lst.de>, Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Fenghua Yu <fenghua.yu@intel.com>,
+	Reinette Chatre <reinette.chatre@intel.com>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+	Tejun Heo <tj@kernel.org>,
+	Trond Myklebust <trond.myklebust@hammerspace.com>,
+	Anna Schumaker <anna@kernel.org>, Kees Cook <keescook@chromium.org>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Naohiro Aota <naohiro.aota@wdc.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-s390@vger.kernel.org, linux-rdma@vger.kernel.org,
+	linux-nfs@vger.kernel.org, linux-hardening@vger.kernel.org,
+	cgroups@vger.kernel.org, Jan Kara <jack@suse.cz>
+Subject: Re: [PATCH 03/19] fs: release anon dev_t in deactivate_locked_super
+Message-ID: <20230914165805.GJ800259@ZenIV>
+References: <20230913111013.77623-1-hch@lst.de>
+ <20230913111013.77623-4-hch@lst.de>
+ <20230913232712.GC800259@ZenIV>
+ <20230914023705.GH800259@ZenIV>
+ <20230914053843.GI800259@ZenIV>
+ <20230914-munkeln-pelzmantel-3e3a761acb72@brauner>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230914-munkeln-pelzmantel-3e3a761acb72@brauner>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-On Thu, 14 Sep 2023 18:02:57 +0800
-Linyu Yuan <quic_linyyuan@quicinc.com> wrote:
+On Thu, Sep 14, 2023 at 04:02:25PM +0200, Christian Brauner wrote:
 
-> Save u32 members into trace event ring buffer and parse it for possible
-> bit fields.
+> Yes, you're right that making the superblock and not the filesytem type
+> the bd_holder changes the logic and we are aware of that of course. And
+> it requires changes such as moving additional block device closing from
+> where some callers currently do it.
+
+Details, please?
+
+> But the filesytem type is not a very useful holder itself and has other
+> drawbacks. The obvious one being that it requires us to wade through all
+> superblocks on the system trying to find the superblock associated with
+> a given block device continously grabbing and dropping sb_lock and
+> s_umount. None of that is very pleasant nor elegant and it is for sure
+> not very easy to understand (Plus, it's broken for btrfs freezing and
+> syncing via block level ioctls.).
+
+"Constantly" is a bit of a stretch - IIRC, we grabbed sb_lock once, then
+went through the list comparing ->s_bdev (without any extra locking),
+then bumped ->s_count on the found superblock, dropped sb_lock,
+grabbed ->s_umount on the sucker and verified it's still alive.
+
+Repeated grabbing of any lock happened only on a race with fs shutdown;
+normal case is one spin_lock, one spin_unlock, one down_read().
+
+Oh, well...
+
+> Using the superblock as holder makes this go away and is overall a lot
+> more useful and intuitive and can be extended to filesystems with
+> multiple devices (Of which we apparently are bound to get more.).
+>
+> So I think this change is worth the pain.
 > 
-> Use new DECLARE_EVENT_CLASS_PRINT_INIT() class macro for output stage.
-> 
-> Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
-> ---
->  drivers/usb/gadget/udc/trace.h | 154 +++++++++++++++------------------
->  1 file changed, 69 insertions(+), 85 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/udc/trace.h b/drivers/usb/gadget/udc/trace.h
-> index a5ed26fbc2da..e1754667f1d2 100644
-> --- a/drivers/usb/gadget/udc/trace.h
-> +++ b/drivers/usb/gadget/udc/trace.h
-> @@ -17,7 +17,7 @@
->  #include <asm/byteorder.h>
->  #include <linux/usb/gadget.h>
->  
-> -DECLARE_EVENT_CLASS(udc_log_gadget,
-> +DECLARE_EVENT_CLASS_PRINT_INIT(udc_log_gadget,
->  	TP_PROTO(struct usb_gadget *g, int ret),
->  	TP_ARGS(g, ret),
->  	TP_STRUCT__entry(
-> @@ -25,20 +25,7 @@ DECLARE_EVENT_CLASS(udc_log_gadget,
->  		__field(enum usb_device_speed, max_speed)
->  		__field(enum usb_device_state, state)
->  		__field(unsigned, mA)
-> -		__field(unsigned, sg_supported)
-> -		__field(unsigned, is_otg)
-> -		__field(unsigned, is_a_peripheral)
-> -		__field(unsigned, b_hnp_enable)
-> -		__field(unsigned, a_hnp_support)
-> -		__field(unsigned, hnp_polling_support)
-> -		__field(unsigned, host_request_flag)
-> -		__field(unsigned, quirk_ep_out_aligned_size)
-> -		__field(unsigned, quirk_altset_not_supp)
-> -		__field(unsigned, quirk_stall_not_supp)
-> -		__field(unsigned, quirk_zlp_not_supp)
-> -		__field(unsigned, is_selfpowered)
-> -		__field(unsigned, deactivated)
-> -		__field(unsigned, connected)
-> +		__field(u32, gdw1)
->  		__field(int, ret)
->  	),
->  	TP_fast_assign(
-> @@ -46,39 +33,35 @@ DECLARE_EVENT_CLASS(udc_log_gadget,
->  		__entry->max_speed = g->max_speed;
->  		__entry->state = g->state;
->  		__entry->mA = g->mA;
-> -		__entry->sg_supported = g->sg_supported;
-> -		__entry->is_otg = g->is_otg;
-> -		__entry->is_a_peripheral = g->is_a_peripheral;
-> -		__entry->b_hnp_enable = g->b_hnp_enable;
-> -		__entry->a_hnp_support = g->a_hnp_support;
-> -		__entry->hnp_polling_support = g->hnp_polling_support;
-> -		__entry->host_request_flag = g->host_request_flag;
-> -		__entry->quirk_ep_out_aligned_size = g->quirk_ep_out_aligned_size;
-> -		__entry->quirk_altset_not_supp = g->quirk_altset_not_supp;
-> -		__entry->quirk_stall_not_supp = g->quirk_stall_not_supp;
-> -		__entry->quirk_zlp_not_supp = g->quirk_zlp_not_supp;
-> -		__entry->is_selfpowered = g->is_selfpowered;
-> -		__entry->deactivated = g->deactivated;
-> -		__entry->connected = g->connected;
-> +		__entry->gdw1 = g->dw1;
->  		__entry->ret = ret;
->  	),
-> -	TP_printk("speed %d/%d state %d %dmA [%s%s%s%s%s%s%s%s%s%s%s%s%s%s] --> %d",
-> +	TP_printk("speed %d/%d state %d %dmA [%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s] --> %d",
->  		__entry->speed, __entry->max_speed, __entry->state, __entry->mA,
-> -		__entry->sg_supported ? "sg:" : "",
-> -		__entry->is_otg ? "OTG:" : "",
-> -		__entry->is_a_peripheral ? "a_peripheral:" : "",
-> -		__entry->b_hnp_enable ? "b_hnp:" : "",
-> -		__entry->a_hnp_support ? "a_hnp:" : "",
-> -		__entry->hnp_polling_support ? "hnp_poll:" : "",
-> -		__entry->host_request_flag ? "hostreq:" : "",
-> -		__entry->quirk_ep_out_aligned_size ? "out_aligned:" : "",
-> -		__entry->quirk_altset_not_supp ? "no_altset:" : "",
-> -		__entry->quirk_stall_not_supp ? "no_stall:" : "",
-> -		__entry->quirk_zlp_not_supp ? "no_zlp" : "",
-> -		__entry->is_selfpowered ? "self-powered:" : "bus-powered:",
-> -		__entry->deactivated ? "deactivated:" : "activated:",
-> -		__entry->connected ? "connected" : "disconnected",
-> -		__entry->ret)
-> +		tg.sg_supported ? "sg:" : "",
-> +		tg.is_otg ? "OTG:" : "",
-> +		tg.is_a_peripheral ? "a_peripheral:" : "",
-> +		tg.b_hnp_enable ? "b_hnp:" : "",
-> +		tg.a_hnp_support ? "a_hnp:" : "",
-> +		tg.a_alt_hnp_support ? "a_alt_hnp:" : "",
-> +		tg.hnp_polling_support ? "hnp_poll:" : "",
-> +		tg.host_request_flag ? "hostreq:" : "",
-> +		tg.quirk_ep_out_aligned_size ? "out_aligned:" : "",
-> +		tg.quirk_altset_not_supp ? "no_altset:" : "",
-> +		tg.quirk_stall_not_supp ? "no_stall:" : "",
-> +		tg.quirk_zlp_not_supp ? "no_zlp" : "",
-> +		tg.quirk_avoids_skb_reserve ? "no_skb_reserve" : "",
-> +		tg.is_selfpowered ? "self-powered:" : "bus-powered:",
-> +		tg.deactivated ? "deactivated:" : "activated:",
-> +		tg.connected ? "connected" : "disconnected",
-> +		tg.lpm_capable ? "lpm-capable" : "",
-> +		tg.wakeup_capable ? "wakeup-capable" : "",
-> +		tg.wakeup_armed ? "wakeup-armed" : "",
+> It's a fair point that these lifetime rules should be documented in
+> Documentation/filesystems/. The old lifetime documentation is too sparse
+> to be useful though.
 
-You can accomplish the above using __print_flags(), if you make it into a
-bitmask, and that make a macro for each bit.
+What *are* these lifetime rules?  Seriously, you have 3 chunks of
+fs-dependent actions at the moment:
+	* the things needed to get rid of internal references pinning
+inodes/dentries + whatever else we need done before generic_shutdown_super()
+	* the stuff to be done between generic_shutdown_super() and
+making the sucker invisible to sget()/sget_fc()
+	* the stuff that must be done after we are sure that sget
+callbacks won't be looking at this instance.
 
-> +		__entry->ret),
-> +	TP_printk_init(
-> +		struct usb_gadget tg;
-> +		tg.dw1 = __entry->gdw1;
-> +	)
->  );
->  
->  DEFINE_EVENT(udc_log_gadget, usb_gadget_frame_number,
-> @@ -141,38 +124,36 @@ DEFINE_EVENT(udc_log_gadget, usb_gadget_activate,
->  	TP_ARGS(g, ret)
->  );
->  
-> -DECLARE_EVENT_CLASS(udc_log_ep,
-> +DECLARE_EVENT_CLASS_PRINT_INIT(udc_log_ep,
->  	TP_PROTO(struct usb_ep *ep, int ret),
->  	TP_ARGS(ep, ret),
->  	TP_STRUCT__entry(
-> -		__string(name, ep->name)
-> -		__field(unsigned, maxpacket)
-> -		__field(unsigned, maxpacket_limit)
-> -		__field(unsigned, max_streams)
-> -		__field(unsigned, mult)
-> -		__field(unsigned, maxburst)
-> -		__field(u8, address)
-> -		__field(bool, claimed)
-> -		__field(bool, enabled)
-> +		__field(u32, edw3)
-> +		__field(u32, edw1)
-> +		__field(u32, edw2)
->  		__field(int, ret)
->  	),
->  	TP_fast_assign(
-> -		__assign_str(name, ep->name);
-> -		__entry->maxpacket = ep->maxpacket;
-> -		__entry->maxpacket_limit = ep->maxpacket_limit;
-> -		__entry->max_streams = ep->max_streams;
-> -		__entry->mult = ep->mult;
-> -		__entry->maxburst = ep->maxburst;
-> -		__entry->address = ep->address,
-> -		__entry->claimed = ep->claimed;
-> -		__entry->enabled = ep->enabled;
-> +		__entry->edw3 = ep->dw3;
-> +		__entry->edw1 = ep->dw1;
-> +		__entry->edw2 = ep->dw2;
->  		__entry->ret = ret;
->  	),
->  	TP_printk("%s: mps %d/%d streams %d mult %d burst %d addr %02x %s%s --> %d",
-> -		__get_str(name), __entry->maxpacket, __entry->maxpacket_limit,
-> -		__entry->max_streams, __entry->mult, __entry->maxburst,
-> -		__entry->address, __entry->claimed ? "claimed:" : "released:",
-> -		__entry->enabled ? "enabled" : "disabled", ret)
-> +		__s, te.maxpacket, te.maxpacket_limit,
-> +		te.max_streams, te.mult, te.maxburst,
-> +		te.address, te.claimed ? "claimed:" : "released:",
-> +		te.enabled ? "enabled" : "disabled", ret),
-> +	TP_printk_init(
-> +		struct usb_ep te;
-> +		char __s[9];
-> +		te.dw1 = __entry->edw1;
-> +		te.dw2 = __entry->edw2;
-> +		te.dw3 = __entry->edw3;
-> +		snprintf(__s, 9, "ep%d%s", te.address, \
-> +			(te.caps.dir_in && te.caps.dir_out) ? "" : \
-> +			te.caps.dir_in ? "in" : "out");
+Note that Christoph's series has mashed (2) and (3) together, resulting
+in UAF in a bunch of places.  And I'm dead serious about
+Documentation/filesystems/porting being the right place; any development
+tree of any filesystem (in-tree one or not) will have to go through the
+changes and figure out WTF to do with their existing code.  We are
+going to play whack-a-mole for at least several years as development
+branches get rebased and merged.
 
-Note, there's a temp buffer trace_seq 'p' available for use as well. See
-both include/trace/events/libata.h and include/trace/events/scsi.h:
+Incidentally, I'm going to add a (belated by 10 years) chunk in porting.rst
+re making sure that anything in superblock that might be needed by methods
+called in RCU mode should *not* be freed without an RCU delay...  Should've
+done that back in 3.12 merge window when RCU'd vfsmounts went in; as it
+is, today we have several filesystems with exact same kind of breakage.
+hfsplus and affs breakage had been there in 3.13 (missed those two), exfat
+and ntfs3 - introduced later, by initial merges of filesystems in question.
+Missed on review...
 
-  const char *libata_trace_parse_status(struct trace_seq*, unsigned char);
-  #define __parse_status(s) libata_trace_parse_status(p, s)
-
-I think that can be used instead of adding this TP_printk_init().
-
--- Steve
-
-
-> +	)
->  );
->  
->  DEFINE_EVENT(udc_log_ep, usb_ep_set_maxpacket_limit,
-> @@ -215,44 +196,47 @@ DEFINE_EVENT(udc_log_ep, usb_ep_fifo_flush,
->  	TP_ARGS(ep, ret)
->  );
->  
-> -DECLARE_EVENT_CLASS(udc_log_req,
-> +DECLARE_EVENT_CLASS_PRINT_INIT(udc_log_req,
->  	TP_PROTO(struct usb_ep *ep, struct usb_request *req, int ret),
->  	TP_ARGS(ep, req, ret),
->  	TP_STRUCT__entry(
-> -		__string(name, ep->name)
-> +		__field(u32, edw3)
->  		__field(unsigned, length)
->  		__field(unsigned, actual)
->  		__field(unsigned, num_sgs)
->  		__field(unsigned, num_mapped_sgs)
-> -		__field(unsigned, stream_id)
-> -		__field(unsigned, no_interrupt)
-> -		__field(unsigned, zero)
-> -		__field(unsigned, short_not_ok)
-> +		__field(u32, rdw1)
->  		__field(int, status)
->  		__field(int, ret)
->  		__field(struct usb_request *, req)
->  	),
->  	TP_fast_assign(
-> -		__assign_str(name, ep->name);
-> +		__entry->edw3 = ep->dw3;
->  		__entry->length = req->length;
->  		__entry->actual = req->actual;
->  		__entry->num_sgs = req->num_sgs;
->  		__entry->num_mapped_sgs = req->num_mapped_sgs;
-> -		__entry->stream_id = req->stream_id;
-> -		__entry->no_interrupt = req->no_interrupt;
-> -		__entry->zero = req->zero;
-> -		__entry->short_not_ok = req->short_not_ok;
-> +		__entry->rdw1 = req->dw1;
->  		__entry->status = req->status;
->  		__entry->ret = ret;
->  		__entry->req = req;
->  	),
->  	TP_printk("%s: req %p length %d/%d sgs %d/%d stream %d %s%s%s status %d --> %d",
-> -		__get_str(name),__entry->req,  __entry->actual, __entry->length,
-> -		__entry->num_mapped_sgs, __entry->num_sgs, __entry->stream_id,
-> -		__entry->zero ? "Z" : "z",
-> -		__entry->short_not_ok ? "S" : "s",
-> -		__entry->no_interrupt ? "i" : "I",
-> -		__entry->status, __entry->ret
-> +		__s,__entry->req,  __entry->actual, __entry->length,
-> +		__entry->num_mapped_sgs, __entry->num_sgs, tr.stream_id,
-> +		tr.zero ? "Z" : "z",
-> +		tr.short_not_ok ? "S" : "s",
-> +		tr.no_interrupt ? "i" : "I",
-> +		__entry->status, __entry->ret),
-> +	TP_printk_init(
-> +		struct usb_ep te;
-> +		struct usb_request tr;
-> +		char __s[9];
-> +		te.dw3 = __entry->edw3;
-> +		tr.dw1 = __entry->rdw1;
-> +		snprintf(__s, 9, "ep%d%s", te.address, \
-> +			(te.caps.dir_in && te.caps.dir_out) ? "" : \
-> +			te.caps.dir_in ? "in" : "out");
->  	)
->  );
->  
-
+Hell knows - perhaps Documentation/filesystems/whack-a-mole might be a good
+idea...
 
