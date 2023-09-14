@@ -1,242 +1,219 @@
-Return-Path: <linux-usb+bounces-92-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-93-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE4AF7A109A
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 00:10:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7F057A10F4
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 00:28:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C71301C210C9
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 22:10:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 64342281B80
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 22:28:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22DE0273D4;
-	Thu, 14 Sep 2023 22:10:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BA07273E5;
+	Thu, 14 Sep 2023 22:28:28 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1A1126E24
-	for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 22:10:36 +0000 (UTC)
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8BEB1FE5
-	for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 15:10:35 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id 3f1490d57ef6-d7225259f52so1502810276.0
-        for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 15:10:35 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 337EC26E3C
+	for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 22:28:25 +0000 (UTC)
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC7F2100;
+	Thu, 14 Sep 2023 15:28:25 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id ca18e2360f4ac-79565370a93so54867539f.0;
+        Thu, 14 Sep 2023 15:28:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694729435; x=1695334235; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ydz4VNWHxl7vquKRgl2cF7wVYd1wnbI72/KihA7USaQ=;
-        b=RnsOATJWMEfBx0+rCA7ysgGavV7tWEgGoqtTunxJyGd4bPOFh8GUKnZVtRg4YiY434
-         2yGKDXhut9OXG5vScAnBNkaA1FjF1/vG0UwCKylp5Vfi79pBq3qnPqDcq4zzk49X6VtM
-         fkrgUNJ36yPJoVWaorE1pjGNXuQ3x2F/fSni/AJjPrLYmA9F7i+z4rgblP/uwaPtVKC2
-         2ZFlKkN9gFUwO6JOl74yNB85lHlo/5Oc9CAJdZLqFnqBkZDk56HlFaSypZZXU7chQ/iC
-         xbV29mup82kL+nnE5Tz84hDUV782wOi7e4G+gsWl8c8dPp/wNKZAx3mV+Hok8M0P2IGY
-         69hw==
+        d=gmail.com; s=20230601; t=1694730504; x=1695335304; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ikDIJLUecCkV3WtFu7/oHCQdEcq7hrPWZ64V7X/Ijos=;
+        b=aSwoQ9/fdR/auzhSeJ08WrYR2Li5EB4J2wx5daWGYoeRRHTV7m7n4WXhDAU0KzETeM
+         Ryfg5MZkPdp72Im3ydoG8B+4klMOIaspbh8OMB8OahgMt4k/5dq86V04ce/zKS721x0g
+         iINNtFFlHIx1641tUjA3nqwb+7ZFrLJ2MQwqfSnMJZrzYuAcl4aytDRs4i2gw1fR/jtU
+         Jq7EDv9LQ+cdAlNowJZqR0JVXISoDSB3Oarks0Vsk9nPb/3zdvWOz72KsvEOknWyYgCM
+         +Wlj/2jVkt5Im+ktBYYU2u3w1R5yP8A/sgu5ggLIXBUVSfZfBLItOZU/DVK64IXeuCo6
+         SS8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694729435; x=1695334235;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1694730504; x=1695335304;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ydz4VNWHxl7vquKRgl2cF7wVYd1wnbI72/KihA7USaQ=;
-        b=TP2Y0c4+2VftixYOwOFTIJMOrdWwLsn0KYYxKSc0EdxEmLh0KHAW4tH7vLaIERrnZU
-         STSqRZsy5ByxzoOE/1DeouWusbTXsoCf58X1zzl4qlJ+KY+quaY6pMkaBWARr4k23BU8
-         EmWY6trJZ+VyOWbiLD4zNHbpigqOerpufbGl/zoWFbIkIkJvuRDpJV+iFeiHoISg/sHp
-         t+MM2NCGB1dxbBDhvvu/PuXDnKWBOhKjkjQgkRQn+4EqXSiXdNjTZbc169bju5H71PTg
-         IJ2GwMgMgh7hmXeEn7zYFky343/PPoFyhp+LF+u5SxqK1FEPmkvwd76/xXIi9CGK0FNt
-         KKCA==
-X-Gm-Message-State: AOJu0Yw/Fecb8gu6asKLAnIty6pycn8cRv50nxnaDc2woxB9bDfLc6Rw
-	rZ0saPbkBozpwh6+v8b72xc1C09Cnca6YXhdo+aF0Q==
-X-Google-Smtp-Source: AGHT+IGXs3YdLZIpSHR4XnGKwzk3ARY+nqGST2uf+bqwIFUcO/ZO1Nfc2mvXSXIJT9v00dyqaQJIj4SjhBurj1bltNY=
-X-Received: by 2002:a5b:84f:0:b0:d77:c0b9:b182 with SMTP id
- v15-20020a5b084f000000b00d77c0b9b182mr6188622ybq.46.1694729434741; Thu, 14
- Sep 2023 15:10:34 -0700 (PDT)
+        bh=ikDIJLUecCkV3WtFu7/oHCQdEcq7hrPWZ64V7X/Ijos=;
+        b=eVrN2A7Nu0ssQlxaiBZrsI5xgQ8IlyO8Ksc+fEC/3NPF1PBxE8FjwSso8JotTg9Gbi
+         gqTtKRbhFJJV2WPN4SKSyb4gH7UQoHk80+4ACC2+WwtjU5zjgwzD7etkoNhJnVsSPfcM
+         FbM0XVMqErmYmHasXImbeJmQCjDX40q8ore87UT0t6EQC61qxSSvN3H7ZV0I1fUVbUnu
+         0oBWWYiZw84gr0gogkj6hPzinfOw1Qsau13ygjDtbHRaMrdk1JZAMOguPKaPY5o+OIeX
+         IRAin++N3jN07o4fLw4wnoc7Qg81IXkbyFAKL/T4Z86O+97U31U23KKHRTpjHXCyhAsO
+         VBvA==
+X-Gm-Message-State: AOJu0YySsq1rK0VQJVjqV7AhdZBvuf8P/HuFOYvNFA80SCFG6BWECnv0
+	xDslV/xxh7usNI8xSC2nG0oniQy2BHK8pw==
+X-Google-Smtp-Source: AGHT+IFK2gos0DNjVgHBixlcfuHS0l0nutHhuM42Sprkse5i9He/u20GTsRB0zwye5h7Lgo5By6DQQ==
+X-Received: by 2002:a5e:c803:0:b0:786:25a3:ef30 with SMTP id y3-20020a5ec803000000b0078625a3ef30mr7515272iol.7.1694730504428;
+        Thu, 14 Sep 2023 15:28:24 -0700 (PDT)
+Received: from doomerbox.lan (c-76-154-162-109.hsd1.co.comcast.net. [76.154.162.109])
+        by smtp.gmail.com with ESMTPSA id m9-20020a6b7b49000000b0079199e52035sm671886iop.52.2023.09.14.15.28.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Sep 2023 15:28:24 -0700 (PDT)
+From: James Gruber <jimmyjgruber@gmail.com>
+To: linux-usb@vger.kernel.org
+Cc: linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Felipe Balbi <balbi@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Pratham Pratap <quic_ppratap@quicinc.com>,
+	Prashanth K <quic_prashk@quicinc.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Jeff Evanson <jeff.evanson@qsc.com>,
+	Yadwinder Singh <yadi.brar01@gmail.com>,
+	Jaswinder Singh <jaswinder.singh@linaro.org>,
+	Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+	James Gruber <jimmyjgruber@gmail.com>
+Subject: [PATCH] usb: gadget: f_uac2: allow changing terminal types through configfs
+Date: Thu, 14 Sep 2023 15:27:46 -0700
+Message-Id: <20230914222746.155126-1-jimmyjgruber@gmail.com>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230817145516.5924-1-dmitry.baryshkov@linaro.org>
- <20230822141735.GA14396@pendragon.ideasonboard.com> <20230822141918.GB14396@pendragon.ideasonboard.com>
- <c266b761-ddd3-4b29-aeb7-fc40348f0662@linaro.org> <20230914212339.GA11890@pendragon.ideasonboard.com>
-In-Reply-To: <20230914212339.GA11890@pendragon.ideasonboard.com>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Fri, 15 Sep 2023 01:10:23 +0300
-Message-ID: <CAA8EJpqzGimMmD=jbGQVsuJTfgoCjUf3HV0JGCFimaS73Qq6VQ@mail.gmail.com>
-Subject: Re: [PATCH v4 0/3] drm: simplify support for transparent DRM bridges
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Neil Armstrong <neil.armstrong@linaro.org>, David Airlie <airlied@gmail.com>, 
-	Daniel Vetter <daniel@ffwll.ch>, Andrzej Hajda <andrzej.hajda@intel.com>, 
-	Robert Foss <rfoss@kernel.org>, Jonas Karlman <jonas@kwiboo.se>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Andy Gross <agross@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, dri-devel@lists.freedesktop.org, 
-	linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org, 
-	linux-usb@vger.kernel.org, freedreno@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Fri, 15 Sept 2023 at 00:23, Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
->
-> Hi Neil,
->
-> Sorry about the delay, the series got burried in my inbox.
->
-> On Tue, Aug 22, 2023 at 04:27:37PM +0200, Neil Armstrong wrote:
-> > On 22/08/2023 16:19, Laurent Pinchart wrote:
-> > > On Tue, Aug 22, 2023 at 05:17:37PM +0300, Laurent Pinchart wrote:
-> > >> On Thu, Aug 17, 2023 at 05:55:13PM +0300, Dmitry Baryshkov wrote:
-> > >>> Supporting DP/USB-C can result in a chain of several transparent
-> > >>> bridges (PHY, redrivers, mux, etc). This results in drivers having
-> > >>> similar boilerplate code for such bridges.
-> > >>
-> > >> What do you mean by transparent bridge here ? Bridges are a DRM concept,
-> > >> and as far as I can tell, a PHY isn't a bridge. Why does it need to be
-> > >> handled as one, especially if it's completely transparent ?
-> > >>
-> > >>> Next, these drivers are susceptible to -EPROBE_DEFER loops: the next
-> > >>> bridge can either be probed from the bridge->attach callback, when it is
-> > >>> too late to return -EPROBE_DEFER, or from the probe() callback, when the
-> > >>> next bridge might not yet be available, because it depends on the
-> > >>> resources provided by the probing device.
-> > >>
-> > >> Can't device links help avoiding defer probing in those cases ?
-> > >>
-> > >>> Last, but not least, this results in the the internal knowledge of DRM
-> > >>> subsystem slowly diffusing into other subsystems, like PHY or USB/TYPEC.
-> > >>
-> > >> Why so ? The PHY subsystem should provide a PHY, without considering
-> > >> what subsystem it will be used by. This patch series seems to me to
-> > >> actually create this DRM dependency in other subsystems,
-> > >
-> > > I was wrong on this one, there are indeed existing drm_bridge instances
-> > > in drivers/usb/ and drivers/phy/. That's certainly not nice. Why do we
-> > > even need drm_bridge there, why can't the PHYs be acquired by their
-> > > consumers in DRM (and anywhere else) using the PHY API ?
-> >
-> > Because with USB-C Altmode/USB4/Thunderbolt, DisplayPort is one of the
-> > data streams handled by PHYs, USB-C PD manager, re-timers, SBU muxes...
-> > and all this must be coordinated with the display controller and can
-> > be considered as bridges between the DP controller and the USB-C connector.
-> >
-> > As of today, it has been handled by OOB events on Intel & AMD, but the entirety
-> > of USB-C chain is handled in firmare, so this scales.
-> > When we need to describe the entire USB-C data stream chain as port/endpoint
-> > in DT, OOB handling doesn't work anymore since we need to sync the entire
-> > USB-C chain (muxes, switches, retimers, phys...) handled by Linux before
-> > starting the DP stream.
->
-> No disagreement here. Handling the component as part of the bridges
-> chain certainly helps. Ideally, this should be done without spreading
-> usage of drm_bridge outside of the DRM subsystem. For instance, we
-> handle (some) D-PHYs in DRM and V4L2 by exposing them as PHYs, and
-> acquiring them in DSI or CSI-2 controller drivers.
+Add "c_terminal_type" and "p_terminal_type" configfs entries
+in order to allow the user to change the capture and playback terminal
+type codes.
 
-This is true. We tried doing that. This quickly results in DT not
-describing the actual hardware.
-Consider the SS lanes of the USB-C controller. They should go to some
-kind of mux that switches them between DP and USB-SS controllers. In
-our case such a mux is the USB+DP PHY. So it becomes used both via tha
-phys = <> property and via the OF graph. And as we do not want to
-circumvent the drm_bridge OF-related code, this OF graph link results
-in an extra drm_bridge being created on the path to the final
-drm_bridge in TCPM, which actually implements HPD ops.
+These fields affect the type of audio device that Windows detects, so
+being able to modify this is useful when it would be advantageous for
+a gadget to be detected as something other than a generic
+speaker/microphone.
 
-> Do I understand correctly that, in this case, the video stream is fully
-> handled by the PHY (& related) component, without any other device (in
-> the OF sense) wrapping the PHY like the DSI and CSI-2 controllers do ?
-> If so that would indeed make it difficult to create the drm_bridge in a
-> DRM driver that would acquire the PHY. We could come up with a different
-> mechanism, but that's likely overkill to solve this particular issue (at
-> least until other similar use cases create a critical mass that will
-> call for a major refactoring).
->
-> In this specific case, however, I'm a bit puzzled. What coordination is
-> required between the PHYs and the display controller ? The two drivers
-> modified in patches 2/3 and 3/3 indeed create bridges, but those bridges
-> don't implement any operation other than attach. Is this needed only
-> because the PHY has an OF node that sits between the display controller
-> and the connector, requiring a drm_bridge to exist to bridge the gap and
-> create a complete chain of bridges up to the connector ? This would
-> simplify the use case, but probably still call for creating a
-> drm_bridge in the PHY driver, as other solutions are likely still too
-> complex.
+The fields default to microphone for the capture type field and speaker
+for the playback type field as was the case before.
 
-Yes, these bridges just fill gaps in the bridge chain. HPD events are
-generated in the TCPM / altmode driver, so there should be a bridge
-there.
+Signed-off-by: James Gruber <jimmyjgruber@gmail.com>
+---
+ .../ABI/testing/configfs-usb-gadget-uac2         |  2 ++
+ Documentation/usb/gadget-testing.rst             |  2 ++
+ drivers/usb/gadget/function/f_uac2.c             | 16 ++++++++++++++--
+ drivers/usb/gadget/function/u_uac2.h             |  8 ++++++++
+ 4 files changed, 26 insertions(+), 2 deletions(-)
 
->
-> It seems to me that this series tries to address two issues. One of them
-> is minimizing the DRM-specific amount of code needed in the PHY drivers.
-> The second one is to avoid probe deferrals. For the first issue, I agree
-> that a helper is currently a good option. For the second issue, however,
-> couldn't device links help avoiding probe deferral ? If so, the helper
-> could be simplified, avoiding the need to create an auxiliary device.
-
-This is largely discussed in the other subthread.
-
->
-> > >> which I don't
-> > >> think is a very good idea. Resources should be registered in their own
-> > >> subsystem with the appropriate API, not in a way that is tied to a
-> > >> particular consumer.
-> > >>
-> > >>> To solve all these issues, define a separate DRM helper, which creates
-> > >>> separate aux device just for the bridge. During probe such aux device
-> > >>> doesn't result in the EPROBE_DEFER loops. Instead it allows the device
-> > >>> drivers to probe properly, according to the actual resource
-> > >>> dependencies. The bridge auxdevs are then probed when the next bridge
-> > >>> becomes available, sparing drivers from drm_bridge_attach() returning
-> > >>> -EPROBE_DEFER.
-> > >>
-> > >> I'm not thrilled :-( Let's discuss the questions above first.
-> > >>
-> > >>> Proposed merge strategy: immutable branch with the drm commit, which is
-> > >>> then merged into PHY and USB subsystems together with the corresponding
-> > >>> patch.
-> > >>>
-> > >>> Changes since v3:
-> > >>>   - Moved bridge driver to gpu/drm/bridge (Neil Armstrong)
-> > >>>   - Renamed it to aux-bridge (since there is already a simple_bridge driver)
-> > >>>   - Made CONFIG_OF mandatory for this driver (Neil Armstrong)
-> > >>>   - Added missing kfree and ida_free (Dan Carpenter)
-> > >>>
-> > >>> Changes since v2:
-> > >>>   - ifdef'ed bridge->of_node access (LKP)
-> > >>>
-> > >>> Changes since v1:
-> > >>>   - Added EXPORT_SYMBOL_GPL / MODULE_LICENSE / etc. to drm_simple_bridge
-> > >>>
-> > >>> Dmitry Baryshkov (3):
-> > >>>    drm/bridge: add transparent bridge helper
-> > >>>    phy: qcom: qmp-combo: switch to DRM_AUX_BRIDGE
-> > >>>    usb: typec: nb7vpq904m: switch to DRM_AUX_BRIDGE
-> > >>>
-> > >>>   drivers/gpu/drm/bridge/Kconfig            |   9 ++
-> > >>>   drivers/gpu/drm/bridge/Makefile           |   1 +
-> > >>>   drivers/gpu/drm/bridge/aux-bridge.c       | 132 ++++++++++++++++++++++
-> > >>>   drivers/phy/qualcomm/Kconfig              |   2 +-
-> > >>>   drivers/phy/qualcomm/phy-qcom-qmp-combo.c |  44 +-------
-> > >>>   drivers/usb/typec/mux/Kconfig             |   2 +-
-> > >>>   drivers/usb/typec/mux/nb7vpq904m.c        |  44 +-------
-> > >>>   include/drm/bridge/aux-bridge.h           |  19 ++++
-> > >>>   8 files changed, 167 insertions(+), 86 deletions(-)
-> > >>>   create mode 100644 drivers/gpu/drm/bridge/aux-bridge.c
-> > >>>   create mode 100644 include/drm/bridge/aux-bridge.h
->
-> --
-> Regards,
->
-> Laurent Pinchart
-
-
-
+diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uac2 b/Documentation/ABI/testing/configfs-usb-gadget-uac2
+index 3371c39f651d..a2bf4fd82a5b 100644
+--- a/Documentation/ABI/testing/configfs-usb-gadget-uac2
++++ b/Documentation/ABI/testing/configfs-usb-gadget-uac2
+@@ -35,4 +35,6 @@ Description:
+ 		req_number		the number of pre-allocated requests
+ 					for both capture and playback
+ 		function_name		name of the interface
++		c_terminal_type		code of the capture terminal type
++		p_terminal_type		code of the playback terminal type
+ 		=====================	=======================================
+diff --git a/Documentation/usb/gadget-testing.rst b/Documentation/usb/gadget-testing.rst
+index 2fca40443dc9..471e9264d82b 100644
+--- a/Documentation/usb/gadget-testing.rst
++++ b/Documentation/usb/gadget-testing.rst
+@@ -754,6 +754,8 @@ The uac2 function provides these attributes in its function directory:
+ 	req_number       the number of pre-allocated request for both capture
+ 	                 and playback
+ 	function_name    name of the interface
++	c_terminal_type  code of the capture terminal type
++	p_terminal_type  code of the playback terminal type
+ 	================ ====================================================
+ 
+ The attributes have sane default values.
+diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
+index 0219cd79493a..f9a0f07a7476 100644
+--- a/drivers/usb/gadget/function/f_uac2.c
++++ b/drivers/usb/gadget/function/f_uac2.c
+@@ -212,7 +212,7 @@ static struct uac2_input_terminal_descriptor io_in_it_desc = {
+ 
+ 	.bDescriptorSubtype = UAC_INPUT_TERMINAL,
+ 	/* .bTerminalID = DYNAMIC */
+-	.wTerminalType = cpu_to_le16(UAC_INPUT_TERMINAL_MICROPHONE),
++	/* .wTerminalType = DYNAMIC */
+ 	.bAssocTerminal = 0,
+ 	/* .bCSourceID = DYNAMIC */
+ 	.iChannelNames = 0,
+@@ -240,7 +240,7 @@ static struct uac2_output_terminal_descriptor io_out_ot_desc = {
+ 
+ 	.bDescriptorSubtype = UAC_OUTPUT_TERMINAL,
+ 	/* .bTerminalID = DYNAMIC */
+-	.wTerminalType = cpu_to_le16(UAC_OUTPUT_TERMINAL_SPEAKER),
++	/* .wTerminalType = DYNAMIC */
+ 	.bAssocTerminal = 0,
+ 	/* .bSourceID = DYNAMIC */
+ 	/* .bCSourceID = DYNAMIC */
+@@ -977,6 +977,9 @@ static void setup_descriptor(struct f_uac2_opts *opts)
+ 		iad_desc.bInterfaceCount++;
+ 	}
+ 
++	io_in_it_desc.wTerminalType = cpu_to_le16(opts->c_terminal_type);
++	io_out_ot_desc.wTerminalType = cpu_to_le16(opts->p_terminal_type);
++
+ 	setup_headers(opts, fs_audio_desc, USB_SPEED_FULL);
+ 	setup_headers(opts, hs_audio_desc, USB_SPEED_HIGH);
+ 	setup_headers(opts, ss_audio_desc, USB_SPEED_SUPER);
+@@ -2095,6 +2098,9 @@ UAC2_ATTRIBUTE(s16, c_volume_res);
+ UAC2_ATTRIBUTE(u32, fb_max);
+ UAC2_ATTRIBUTE_STRING(function_name);
+ 
++UAC2_ATTRIBUTE(s16, p_terminal_type);
++UAC2_ATTRIBUTE(s16, c_terminal_type);
++
+ static struct configfs_attribute *f_uac2_attrs[] = {
+ 	&f_uac2_opts_attr_p_chmask,
+ 	&f_uac2_opts_attr_p_srate,
+@@ -2122,6 +2128,9 @@ static struct configfs_attribute *f_uac2_attrs[] = {
+ 
+ 	&f_uac2_opts_attr_function_name,
+ 
++	&f_uac2_opts_attr_p_terminal_type,
++	&f_uac2_opts_attr_c_terminal_type,
++
+ 	NULL,
+ };
+ 
+@@ -2180,6 +2189,9 @@ static struct usb_function_instance *afunc_alloc_inst(void)
+ 
+ 	snprintf(opts->function_name, sizeof(opts->function_name), "Source/Sink");
+ 
++	opts->p_terminal_type = UAC2_DEF_P_TERM_TYPE;
++	opts->c_terminal_type = UAC2_DEF_C_TERM_TYPE;
++
+ 	return &opts->func_inst;
+ }
+ 
+diff --git a/drivers/usb/gadget/function/u_uac2.h b/drivers/usb/gadget/function/u_uac2.h
+index 0510c9bad58d..5e81bdd6c5fb 100644
+--- a/drivers/usb/gadget/function/u_uac2.h
++++ b/drivers/usb/gadget/function/u_uac2.h
+@@ -35,6 +35,11 @@
+ #define UAC2_DEF_REQ_NUM 2
+ #define UAC2_DEF_INT_REQ_NUM	10
+ 
++#define UAC2_DEF_P_TERM_TYPE 0x301
++	/* UAC_OUTPUT_TERMINAL_SPEAKER */
++#define UAC2_DEF_C_TERM_TYPE 0x201
++	/* UAC_INPUT_TERMINAL_MICROPHONE*/
++
+ struct f_uac2_opts {
+ 	struct usb_function_instance	func_inst;
+ 	int				p_chmask;
+@@ -65,6 +70,9 @@ struct f_uac2_opts {
+ 
+ 	char			function_name[32];
+ 
++	s16				p_terminal_type;
++	s16				c_terminal_type;
++
+ 	struct mutex			lock;
+ 	int				refcnt;
+ };
 -- 
-With best wishes
-Dmitry
+2.30.2
+
 
