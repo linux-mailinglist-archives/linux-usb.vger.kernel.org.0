@@ -1,154 +1,201 @@
-Return-Path: <linux-usb+bounces-88-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-89-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 738857A0EA9
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 22:03:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93F227A0FC6
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 23:23:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 589951C20A96
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 20:03:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 59D5F1C21156
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 21:23:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14F2A266C6;
-	Thu, 14 Sep 2023 20:03:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD67B26E31;
+	Thu, 14 Sep 2023 21:23:31 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42655266A5
-	for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 20:03:01 +0000 (UTC)
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7391E26BC
-	for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 13:03:00 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1qgsYE-00006F-4T; Thu, 14 Sep 2023 22:02:58 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1qgsYB-006NGb-4l; Thu, 14 Sep 2023 22:02:55 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1qgsYA-001fbf-Rc; Thu, 14 Sep 2023 22:02:54 +0200
-From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Chunfeng Yun <chunfeng.yun@mediatek.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org,
-	linux-mediatek@lists.infradead.org,
-	kernel@pengutronix.de
-Subject: [PATCH v2] usb: mtu3: Convert to platform remove callback returning void
-Date: Thu, 14 Sep 2023 22:02:51 +0200
-Message-Id: <20230914200251.919584-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.40.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85996266C7
+	for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 21:23:29 +0000 (UTC)
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2224CEB;
+	Thu, 14 Sep 2023 14:23:28 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 73DA0DE5;
+	Thu, 14 Sep 2023 23:21:53 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1694726513;
+	bh=8BED75KJ60zUIDoeejYozq3VfmyLGSG2b2VZhDTtZ+M=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=L6s/HrTflDm1RcQByNZ7Ate1n8JnN/TubWF9b4BowBJ1HGya4KBYXbhEM/ObqVk86
+	 zu/pLtRPRoTyORJkzNJ03mEiww6MdApEjfn0Z7yHoQeDWsvTH0FSP6D3jqzvYLQ7I8
+	 geGvX5N6gz9LgYB+9Mm9KA5NMkG6D74nz8AtU1Jo=
+Date: Fri, 15 Sep 2023 00:23:39 +0300
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Neil Armstrong <neil.armstrong@linaro.org>
+Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Robert Foss <rfoss@kernel.org>, Jonas Karlman <jonas@kwiboo.se>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+	linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
+	freedreno@lists.freedesktop.org
+Subject: Re: [PATCH v4 0/3] drm: simplify support for transparent DRM bridges
+Message-ID: <20230914212339.GA11890@pendragon.ideasonboard.com>
+References: <20230817145516.5924-1-dmitry.baryshkov@linaro.org>
+ <20230822141735.GA14396@pendragon.ideasonboard.com>
+ <20230822141918.GB14396@pendragon.ideasonboard.com>
+ <c266b761-ddd3-4b29-aeb7-fc40348f0662@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3339; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=vg8gEBT4C1SlsEfqTCxI/0BtXyuADwBrBVPRdO7Vs3E=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlA2bqdPimOIqh+KW+CD5TPCoIzjtlCjSSxLwRz A0PiPugYVSJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZQNm6gAKCRCPgPtYfRL+ TrtTB/9aRs+Bmk4Iy2g0xqVRF748Mi7m3xP001hO9GGYUzB8srUWVD3CbRdqeErI3UddogWFVWS kXAYTYqdBImIEwxovEjO2Ce6dcP7JXx57TWaJWXKv+Q3fGjGAYe070+erxZYSrIXvMLmg4DmCbe esCjIfAieiHo632Nk+6tNEHkZtOdHYDo0aGt1cFBFGboxcI6x2iBgRWK++Q0LSTUito6lO+87am PEpJeylyVIARPY8CDGd9S+Gq1MCmDcJm83BlThsXreDj3vDYTLRwi4+7qUkniFRA+UVCUdtAZVB Lz4AH+Hw9GpYKf3K4YXfo6+r5iT4T/FFk59suToL8aMIDycm
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <c266b761-ddd3-4b29-aeb7-fc40348f0662@linaro.org>
 
-The .remove() callback for a platform driver returns an int which makes
-many driver authors wrongly assume it's possible to do error handling by
-returning an error code. However the value returned is (mostly) ignored
-and this typically results in resource leaks. To improve here there is a
-quest to make the remove callback return void. In the first step of this
-quest all drivers are converted to .remove_new() which already returns
-void.
+Hi Neil,
 
-The function mtu3_remove() can only return a non-zero value if
-ssusb->dr_mode is neiter USB_DR_MODE_PERIPHERAL nor USB_DR_MODE_HOST nor
-USB_DR_MODE_OTG. In this case however the probe callback doesn't succeed
-and so the remove callback isn't called at all. So the code branch
-resulting in this error path could just be dropped were it not for the
-compiler choking on "enumeration value 'USB_DR_MODE_UNKNOWN' not handled
-in switch [-Werror=switch]". So instead replace this code path by a
-WARN_ON and then mtu3_remove() be converted to return void trivially.
+Sorry about the delay, the series got burried in my inbox.
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
-Changes since (implicit) v1 sent with Message-Id:
-20230709163335.3458886-1-u.kleine-koenig@pengutronix.de:
+On Tue, Aug 22, 2023 at 04:27:37PM +0200, Neil Armstrong wrote:
+> On 22/08/2023 16:19, Laurent Pinchart wrote:
+> > On Tue, Aug 22, 2023 at 05:17:37PM +0300, Laurent Pinchart wrote:
+> >> On Thu, Aug 17, 2023 at 05:55:13PM +0300, Dmitry Baryshkov wrote:
+> >>> Supporting DP/USB-C can result in a chain of several transparent
+> >>> bridges (PHY, redrivers, mux, etc). This results in drivers having
+> >>> similar boilerplate code for such bridges.
+> >>
+> >> What do you mean by transparent bridge here ? Bridges are a DRM concept,
+> >> and as far as I can tell, a PHY isn't a bridge. Why does it need to be
+> >> handled as one, especially if it's completely transparent ?
+> >>
+> >>> Next, these drivers are susceptible to -EPROBE_DEFER loops: the next
+> >>> bridge can either be probed from the bridge->attach callback, when it is
+> >>> too late to return -EPROBE_DEFER, or from the probe() callback, when the
+> >>> next bridge might not yet be available, because it depends on the
+> >>> resources provided by the probing device.
+> >>
+> >> Can't device links help avoiding defer probing in those cases ?
+> >>
+> >>> Last, but not least, this results in the the internal knowledge of DRM
+> >>> subsystem slowly diffusing into other subsystems, like PHY or USB/TYPEC.
+> >>
+> >> Why so ? The PHY subsystem should provide a PHY, without considering
+> >> what subsystem it will be used by. This patch series seems to me to
+> >> actually create this DRM dependency in other subsystems,
+> > 
+> > I was wrong on this one, there are indeed existing drm_bridge instances
+> > in drivers/usb/ and drivers/phy/. That's certainly not nice. Why do we
+> > even need drm_bridge there, why can't the PHYs be acquired by their
+> > consumers in DRM (and anywhere else) using the PHY API ?
+> 
+> Because with USB-C Altmode/USB4/Thunderbolt, DisplayPort is one of the
+> data streams handled by PHYs, USB-C PD manager, re-timers, SBU muxes...
+> and all this must be coordinated with the display controller and can
+> be considered as bridges between the DP controller and the USB-C connector.
+> 
+> As of today, it has been handled by OOB events on Intel & AMD, but the entirety
+> of USB-C chain is handled in firmare, so this scales.
+> When we need to describe the entire USB-C data stream chain as port/endpoint
+> in DT, OOB handling doesn't work anymore since we need to sync the entire
+> USB-C chain (muxes, switches, retimers, phys...) handled by Linux before
+> starting the DP stream.
 
- - Keep case USB_DR_MODE_UNKNOWN to cope for the compiler being called
-   with -Werror=switch.
- - Rebase to a newer tree
+No disagreement here. Handling the component as part of the bridges
+chain certainly helps. Ideally, this should be done without spreading
+usage of drm_bridge outside of the DRM subsystem. For instance, we
+handle (some) D-PHYs in DRM and V4L2 by exposing them as PHYs, and
+acquiring them in DSI or CSI-2 controller drivers.
 
-Just to evaluate the options, I tried with a BUG_ON(ssusb->dr_mode ==
-USB_DR_MODE_UNKNOWN) before the switch, but even then gcc insists on the
-case label for this value.
+Do I understand correctly that, in this case, the video stream is fully
+handled by the PHY (& related) component, without any other device (in
+the OF sense) wrapping the PHY like the DSI and CSI-2 controllers do ?
+If so that would indeed make it difficult to create the drm_bridge in a
+DRM driver that would acquire the PHY. We could come up with a different
+mechanism, but that's likely overkill to solve this particular issue (at
+least until other similar use cases create a critical mass that will
+call for a major refactoring).
 
-Best regards
-Uwe
+In this specific case, however, I'm a bit puzzled. What coordination is
+required between the PHYs and the display controller ? The two drivers
+modified in patches 2/3 and 3/3 indeed create bridges, but those bridges
+don't implement any operation other than attach. Is this needed only
+because the PHY has an OF node that sits between the display controller
+and the connector, requiring a drm_bridge to exist to bridge the gap and
+create a complete chain of bridges up to the connector ? This would
+simplify the use case, but probably still call for creating a
+drm_bridge in the PHY driver, as other solutions are likely still too
+complex.
 
- drivers/usb/mtu3/mtu3_plat.c | 19 +++++++++++++------
- 1 file changed, 13 insertions(+), 6 deletions(-)
+It seems to me that this series tries to address two issues. One of them
+is minimizing the DRM-specific amount of code needed in the PHY drivers.
+The second one is to avoid probe deferrals. For the first issue, I agree
+that a helper is currently a good option. For the second issue, however,
+couldn't device links help avoiding probe deferral ? If so, the helper
+could be simplified, avoiding the need to create an auxiliary device.
 
-diff --git a/drivers/usb/mtu3/mtu3_plat.c b/drivers/usb/mtu3/mtu3_plat.c
-index 6f264b129243..18c6cf9a2d71 100644
---- a/drivers/usb/mtu3/mtu3_plat.c
-+++ b/drivers/usb/mtu3/mtu3_plat.c
-@@ -451,7 +451,7 @@ static int mtu3_probe(struct platform_device *pdev)
- 	return ret;
- }
- 
--static int mtu3_remove(struct platform_device *pdev)
-+static void mtu3_remove(struct platform_device *pdev)
- {
- 	struct ssusb_mtk *ssusb = platform_get_drvdata(pdev);
- 
-@@ -469,8 +469,17 @@ static int mtu3_remove(struct platform_device *pdev)
- 		ssusb_gadget_exit(ssusb);
- 		ssusb_host_exit(ssusb);
- 		break;
--	default:
--		return -EINVAL;
-+	case USB_DR_MODE_UNKNOWN:
-+		/*
-+		 * This cannot happen because with dr_mode ==
-+		 * USB_DR_MODE_UNKNOWN, .probe() doesn't succeed and so
-+		 * .remove() wouldn't be called at all. However (little
-+		 * surprising) the compiler isn't smart enough to see that, so
-+		 * we explicitly have this case item to not make the compiler
-+		 * wail about an unhandled enumeration value.
-+		 */
-+		WARN_ON(1);
-+		break;
- 	}
- 
- 	ssusb_rscs_exit(ssusb);
-@@ -478,8 +487,6 @@ static int mtu3_remove(struct platform_device *pdev)
- 	pm_runtime_disable(&pdev->dev);
- 	pm_runtime_put_noidle(&pdev->dev);
- 	pm_runtime_set_suspended(&pdev->dev);
--
--	return 0;
- }
- 
- static int resume_ip_and_ports(struct ssusb_mtk *ssusb, pm_message_t msg)
-@@ -615,7 +622,7 @@ MODULE_DEVICE_TABLE(of, mtu3_of_match);
- 
- static struct platform_driver mtu3_driver = {
- 	.probe = mtu3_probe,
--	.remove = mtu3_remove,
-+	.remove_new = mtu3_remove,
- 	.driver = {
- 		.name = MTU3_DRIVER_NAME,
- 		.pm = DEV_PM_OPS,
+> >> which I don't
+> >> think is a very good idea. Resources should be registered in their own
+> >> subsystem with the appropriate API, not in a way that is tied to a
+> >> particular consumer.
+> >>
+> >>> To solve all these issues, define a separate DRM helper, which creates
+> >>> separate aux device just for the bridge. During probe such aux device
+> >>> doesn't result in the EPROBE_DEFER loops. Instead it allows the device
+> >>> drivers to probe properly, according to the actual resource
+> >>> dependencies. The bridge auxdevs are then probed when the next bridge
+> >>> becomes available, sparing drivers from drm_bridge_attach() returning
+> >>> -EPROBE_DEFER.
+> >>
+> >> I'm not thrilled :-( Let's discuss the questions above first.
+> >>
+> >>> Proposed merge strategy: immutable branch with the drm commit, which is
+> >>> then merged into PHY and USB subsystems together with the corresponding
+> >>> patch.
+> >>>
+> >>> Changes since v3:
+> >>>   - Moved bridge driver to gpu/drm/bridge (Neil Armstrong)
+> >>>   - Renamed it to aux-bridge (since there is already a simple_bridge driver)
+> >>>   - Made CONFIG_OF mandatory for this driver (Neil Armstrong)
+> >>>   - Added missing kfree and ida_free (Dan Carpenter)
+> >>>
+> >>> Changes since v2:
+> >>>   - ifdef'ed bridge->of_node access (LKP)
+> >>>
+> >>> Changes since v1:
+> >>>   - Added EXPORT_SYMBOL_GPL / MODULE_LICENSE / etc. to drm_simple_bridge
+> >>>
+> >>> Dmitry Baryshkov (3):
+> >>>    drm/bridge: add transparent bridge helper
+> >>>    phy: qcom: qmp-combo: switch to DRM_AUX_BRIDGE
+> >>>    usb: typec: nb7vpq904m: switch to DRM_AUX_BRIDGE
+> >>>
+> >>>   drivers/gpu/drm/bridge/Kconfig            |   9 ++
+> >>>   drivers/gpu/drm/bridge/Makefile           |   1 +
+> >>>   drivers/gpu/drm/bridge/aux-bridge.c       | 132 ++++++++++++++++++++++
+> >>>   drivers/phy/qualcomm/Kconfig              |   2 +-
+> >>>   drivers/phy/qualcomm/phy-qcom-qmp-combo.c |  44 +-------
+> >>>   drivers/usb/typec/mux/Kconfig             |   2 +-
+> >>>   drivers/usb/typec/mux/nb7vpq904m.c        |  44 +-------
+> >>>   include/drm/bridge/aux-bridge.h           |  19 ++++
+> >>>   8 files changed, 167 insertions(+), 86 deletions(-)
+> >>>   create mode 100644 drivers/gpu/drm/bridge/aux-bridge.c
+> >>>   create mode 100644 include/drm/bridge/aux-bridge.h
 
-base-commit: 98897dc735cf6635f0966f76eb0108354168fb15
 -- 
-2.40.1
+Regards,
 
+Laurent Pinchart
 
