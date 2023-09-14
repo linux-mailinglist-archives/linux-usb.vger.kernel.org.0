@@ -1,160 +1,137 @@
-Return-Path: <linux-usb+bounces-43-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-45-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 493527A013F
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 12:08:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 692E67A0142
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 12:09:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 00B931F21A3F
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 10:08:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F0D3B1F227C4
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 10:09:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 083043D39B;
-	Thu, 14 Sep 2023 10:04:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A37A1D53D;
+	Thu, 14 Sep 2023 10:06:22 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6C3A20B34
-	for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 10:04:01 +0000 (UTC)
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546301BFA;
-	Thu, 14 Sep 2023 03:04:01 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38E8rR8B020024;
-	Thu, 14 Sep 2023 10:03:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=w7k/A+rWELP81LFtvSGccaamwsLAy8ZMoFv2TZCeTf4=;
- b=dllZ9OYQxfWogyMKIy9NkusOu4uOt9nOndgHZuzrCHGBnhFgj4rb8yttyVxHlRzJVSAq
- ddjQgcSPT1xzuJO4guC2V8QBNK3ztfIPWjgwlmV0PKQ5g2kEz43u9eNwEWel8GKSXPFX
- 22VktFNwzYPQrGcLnw4tiV2xgdJqaBaUBseitZx91STJFqCLCLDJ2Zrg6iTPWNAmAcAC
- aKApazhJzZPNx6lifgQS3i0SkJ8DnJhBMc7+NY4qWg9zVvngnwic/GClLJnzqS5RmyhR
- w/foGRMj0yjVaZB6BhasELnkYswJ+2q4VNTi401b+MR2/BsM6C9FGKxevczR26pzeXOi Nw== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t3h0dj3bd-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 14 Sep 2023 10:03:50 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38EA3nBq023886
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 14 Sep 2023 10:03:49 GMT
-Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.36; Thu, 14 Sep 2023 03:03:45 -0700
-From: Linyu Yuan <quic_linyyuan@quicinc.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Chunfeng Yun
-	<chunfeng.yun@mediatek.com>, Bin Liu <b-liu@ti.com>,
-        Peter Chen
-	<peter.chen@kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Roger Quadros
-	<rogerq@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Steven Rostedt
-	<rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        "Greg
- Kroah-Hartman" <gregkh@linuxfoundation.org>
-CC: <linux-usb@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
-        "Linyu
- Yuan" <quic_linyyuan@quicinc.com>
-Subject: [PATCH 8/8] usb: musb: trace: reduce buffer usage of trace event
-Date: Thu, 14 Sep 2023 18:03:02 +0800
-Message-ID: <20230914100302.30274-9-quic_linyyuan@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230914100302.30274-1-quic_linyyuan@quicinc.com>
-References: <20230914100302.30274-1-quic_linyyuan@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E13201D523
+	for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 10:06:21 +0000 (UTC)
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 799F41BE3;
+	Thu, 14 Sep 2023 03:06:20 -0700 (PDT)
+Received: from [192.168.1.103] (178.176.78.252) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Thu, 14 Sep
+ 2023 13:06:15 +0300
+Subject: Re: [PATCH] usb: musb: Get the musb_qh poniter after musb_giveback
+To: Xingxing Luo <xingxing.luo@unisoc.com>, <b-liu@ti.com>,
+	<gregkh@linuxfoundation.org>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<xingxing0070.luo@gmail.com>, <Zhiyong.Liu@unisoc.com>,
+	<Cixi.Geng1@unisoc.com>, <Orson.Zhai@unisoc.com>, <zhang.lyra@gmail.com>
+References: <20230914015656.20856-1-xingxing.luo@unisoc.com>
+From: Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <8365ba2a-8ecd-d055-e962-3a7f2bfdbfb0@omp.ru>
+Date: Thu, 14 Sep 2023 13:06:14 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+In-Reply-To: <20230914015656.20856-1-xingxing.luo@unisoc.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: F0vLxjhdMS2uH-rUTnEKdbJ3mUVkT6VW
-X-Proofpoint-GUID: F0vLxjhdMS2uH-rUTnEKdbJ3mUVkT6VW
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-09-14_08,2023-09-13_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
- suspectscore=0 mlxlogscore=711 phishscore=0 priorityscore=1501
- lowpriorityscore=0 spamscore=0 malwarescore=0 bulkscore=0 impostorscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2309140085
+X-Originating-IP: [178.176.78.252]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 09/14/2023 09:39:25
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 179856 [Sep 14 2023]
+X-KSE-AntiSpam-Info: Version: 5.9.59.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 530 530 ecb1547b3f72d1df4c71c0b60e67ba6b4aea5432
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.78.252 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.78.252 in (user)
+ dbl.spamhaus.org}
+X-KSE-AntiSpam-Info:
+	127.0.0.199:7.1.2;omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
+X-KSE-AntiSpam-Info: FromAlignment: s
+X-KSE-AntiSpam-Info: {rdns complete}
+X-KSE-AntiSpam-Info: {fromrtbl complete}
+X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.78.252
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=none header.from=omp.ru;spf=none
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 09/14/2023 09:47:00
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 9/14/2023 9:01:00 AM
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
 
-Save u32 member into trace event ring buffer and parse it for possible
-bit information.
+Hello!
 
-Use DECLARE_EVENT_CLASS_PRINT_INIT() related macro for output stage.
+On 9/14/23 4:56 AM, Xingxing Luo wrote:
 
-Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
----
- drivers/usb/musb/musb_trace.h | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+> When multiple threads are performing USB transmission, musb->lock will be
+> unlocked when musb_giveback is executed. At this time, qh may be released
+> in the dequeue process in other threads, resulting in a wild pointer, so
+> it needs to be here get qh again, and judge whether qh is NULL, and when
+> dequeue, you need to set qh to NULL.
+> 
+> Fixes: dbac5d07d13e ("usb: musb: host: don't start next rx urb if current one failed")
+> Signed-off-by: Xingxing Luo <xingxing.luo@unisoc.com>
+> ---
+>  drivers/usb/musb/musb_host.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/musb/musb_host.c b/drivers/usb/musb/musb_host.c
+> index a02c29216955..9df27db5847a 100644
+> --- a/drivers/usb/musb/musb_host.c
+> +++ b/drivers/usb/musb/musb_host.c
+> @@ -321,10 +321,16 @@ static void musb_advance_schedule(struct musb *musb, struct urb *urb,
+>  	musb_giveback(musb, urb, status);
+>  	qh->is_ready = ready;
+>  
+> +	/*
+> +	 * musb->lock had been unlocked in musb_giveback, so somtimes qh
 
-diff --git a/drivers/usb/musb/musb_trace.h b/drivers/usb/musb/musb_trace.h
-index f246b14394c4..8add5e81ed8d 100644
---- a/drivers/usb/musb/musb_trace.h
-+++ b/drivers/usb/musb/musb_trace.h
-@@ -233,7 +233,7 @@ DEFINE_EVENT(musb_urb, musb_urb_deq,
- 	TP_ARGS(musb, urb)
- );
- 
--DECLARE_EVENT_CLASS(musb_req,
-+DECLARE_EVENT_CLASS_PRINT_INIT(musb_req,
- 	TP_PROTO(struct musb_request *req),
- 	TP_ARGS(req),
- 	TP_STRUCT__entry(
-@@ -243,9 +243,7 @@ DECLARE_EVENT_CLASS(musb_req,
- 		__field(int, status)
- 		__field(unsigned int, buf_len)
- 		__field(unsigned int, actual_len)
--		__field(unsigned int, zero)
--		__field(unsigned int, short_not_ok)
--		__field(unsigned int, no_interrupt)
-+		__field(u32, rdw1)
- 	),
- 	TP_fast_assign(
- 		__entry->req = &req->request;
-@@ -254,18 +252,20 @@ DECLARE_EVENT_CLASS(musb_req,
- 		__entry->status = req->request.status;
- 		__entry->buf_len = req->request.length;
- 		__entry->actual_len = req->request.actual;
--		__entry->zero = req->request.zero;
--		__entry->short_not_ok = req->request.short_not_ok;
--		__entry->no_interrupt = req->request.no_interrupt;
-+		__entry->rdw1 = req->request.dw1;
- 	),
- 	TP_printk("%p, ep%d %s, %s%s%s, len %d/%d, status %d",
- 			__entry->req, __entry->epnum,
- 			__entry->is_tx ? "tx/IN" : "rx/OUT",
--			__entry->zero ? "Z" : "z",
--			__entry->short_not_ok ? "S" : "s",
--			__entry->no_interrupt ? "I" : "i",
-+			tr.zero ? "Z" : "z",
-+			tr.short_not_ok ? "S" : "s",
-+			tr.no_interrupt ? "I" : "i",
- 			__entry->actual_len, __entry->buf_len,
- 			__entry->status
-+	),
-+	TP_printk_init(
-+		struct usb_request tr;
-+		tr.dw1 = __entry->rdw1;
- 	)
- );
- 
--- 
-2.17.1
+   Sometimes?
 
+> +	 * may freed, need get it again
+> +	 */
+> +	qh = musb_ep_get_qh(hw_ep, is_in);
+> +
+>  	/* reclaim resources (and bandwidth) ASAP; deschedule it, and
+>  	 * invalidate qh as soon as list_empty(&hep->urb_list)
+>  	 */
+> -	if (list_empty(&qh->hep->urb_list)) {
+> +	if (qh != NULL && list_empty(&qh->hep->urb_list)) {
+
+   Just qh, perhaps?
+
+[...]
+
+MBR, Sergey
 
