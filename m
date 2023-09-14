@@ -1,97 +1,86 @@
-Return-Path: <linux-usb+bounces-10-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-11-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9D2679F57A
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 01:28:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC2BB79F5E4
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 02:32:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6E5E71F21821
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Sep 2023 23:28:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4FAE328180C
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 00:32:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AD6423CE;
-	Wed, 13 Sep 2023 23:27:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE64D37C;
+	Thu, 14 Sep 2023 00:31:53 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2A3717F4
-	for <linux-usb@vger.kernel.org>; Wed, 13 Sep 2023 23:27:40 +0000 (UTC)
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDEDC1BCB;
-	Wed, 13 Sep 2023 16:27:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=pRKVep8tw/s8sIQ3F3dLcxRmfmkpqBcJ/0UUTodWZc8=; b=FSfwnimiuTJG9Nm4GWjPkE+/Wl
-	tdV1zvdS6cLMU1eSiUbY8aNFgyY7VQe+ltAjMNDv/dFOBn2zXb2GJmoM0Q+HqNaldcCxZJd/HHbLS
-	BS2Utl/AQSnkp62Hq1Ba8VSl5CAjDs4/vWgUYs7tXto9ItzMznllk1eotmCw7YFN4Yb//dDV7CVvc
-	54SMFgAY1WobfE2n6xKuFEMcX8ZzeTOuD9dnL52KitAk8ad/sVhORTWorrkMhkBDt+Q0w1pZFo2rk
-	hA7/Xa6WGJW4FOIuxYkjT6WFQJl2lC/Rrm2ri36l78qEwhTEW/mywJIOwB8jeGiEic5YnFO/2b7PA
-	fXYiSf1A==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-	id 1qgZGK-005rzK-1u;
-	Wed, 13 Sep 2023 23:27:12 +0000
-Date: Thu, 14 Sep 2023 00:27:12 +0100
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: Christoph Hellwig <hch@lst.de>
-Cc: Christian Brauner <brauner@kernel.org>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Fenghua Yu <fenghua.yu@intel.com>,
-	Reinette Chatre <reinette.chatre@intel.com>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-	Tejun Heo <tj@kernel.org>,
-	Trond Myklebust <trond.myklebust@hammerspace.com>,
-	Anna Schumaker <anna@kernel.org>, Kees Cook <keescook@chromium.org>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Naohiro Aota <naohiro.aota@wdc.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-s390@vger.kernel.org, linux-rdma@vger.kernel.org,
-	linux-nfs@vger.kernel.org, linux-hardening@vger.kernel.org,
-	cgroups@vger.kernel.org
-Subject: Re: [PATCH 03/19] fs: release anon dev_t in deactivate_locked_super
-Message-ID: <20230913232712.GC800259@ZenIV>
-References: <20230913111013.77623-1-hch@lst.de>
- <20230913111013.77623-4-hch@lst.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81FF2363
+	for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 00:31:53 +0000 (UTC)
+Received: from out28-122.mail.aliyun.com (out28-122.mail.aliyun.com [115.124.28.122])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6695F1727;
+	Wed, 13 Sep 2023 17:31:52 -0700 (PDT)
+X-Alimail-AntiSpam:AC=CONTINUE;BC=0.3083717|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.00366759-0.000116842-0.996216;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047203;MF=michael@allwinnertech.com;NM=1;PH=DS;RN=5;RT=5;SR=0;TI=SMTPD_---.UeY3CYB_1694651508;
+Received: from SunxiBot.allwinnertech.com(mailfrom:michael@allwinnertech.com fp:SMTPD_---.UeY3CYB_1694651508)
+          by smtp.aliyun-inc.com;
+          Thu, 14 Sep 2023 08:31:49 +0800
+From: Michael Wu <michael@allwinnertech.com>
+To: linux@roeck-us.net,
+	heikki.krogerus@linux.intel.com,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] usb:typec:tcpm:support double Rp to Vbus cable as sink
+Date: Thu, 14 Sep 2023 08:31:54 +0800
+Message-Id: <20230914003154.27977-1-michael@allwinnertech.com>
+X-Mailer: git-send-email 2.29.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230913111013.77623-4-hch@lst.de>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Sep 13, 2023 at 08:09:57AM -0300, Christoph Hellwig wrote:
-> Releasing an anon dev_t is a very common thing when freeing a
-> super_block, as that's done for basically any not block based file
-> system (modulo the odd mtd special case).  So instead of requiring
-> a special ->kill_sb helper and a lot of boilerplate in more complicated
-> file systems, just release the anon dev_t in deactivate_locked_super if
-> the super_block was using one.
-> 
-> As the freeing is done after the main call to kill_super_notify, this
-> removes the need for having two slightly different call sites for it.
+The USB Type-C Cable and Connector Specification defines the wire
+connections for the USB Type-C to USB 2.0 Standard-A cable assembly
+(Release 2.2, Chapter 3.5.2).
+The Notes says that Pin A5 (CC) of the USB Type-C plug shall be connected
+to Vbus through a resister Rp.
+However, there is a large amount of such double Rp connected to Vbus
+non-standard cables which produced by UGREEN circulating on the market, and
+it can affects the normal operations of the state machine easily,
+especially to CC1 and CC2 be pulled up at the same time.
+In fact, we can regard those cables as sink to avoid abnormal state.
 
-Huh?  At this stage in your series freeing is still in ->kill_sb()
-instances, after the calls of kill_anon_super() you've turned into
-the calls of generic_shutdown_super().
+Message as follow:
+[   58.900212] VBUS on
+[   59.265433] CC1: 0 -> 3, CC2: 0 -> 3 [state TOGGLING, polarity 0, connected]
+[   62.623308] CC1: 3 -> 0, CC2: 3 -> 0 [state TOGGLING, polarity 0, disconnected]
+[   62.625006] VBUS off
+[   62.625012] VBUS VSAFE0V
 
-You do split it off into a separate method later in the series, but
-at this point you are reopening the same UAF that had been dealt with
-in dc3216b14160 "super: ensure valid info".
+Signed-off-by: Michael Wu <michael@allwinnertech.com>
+---
+ drivers/usb/typec/tcpm/tcpm.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Either move the introduction of ->free_sb() before that one, or
-split it into lifting put_anon_bdev() (left here) and getting rid
-of kill_anon_super() (after ->free_sb() introduction).
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index d962f67c95ae6..beb7143128667 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -519,7 +519,8 @@ static const char * const pd_rev[] = {
+ 
+ #define tcpm_port_is_sink(port) \
+ 	((tcpm_cc_is_sink((port)->cc1) && !tcpm_cc_is_sink((port)->cc2)) || \
+-	 (tcpm_cc_is_sink((port)->cc2) && !tcpm_cc_is_sink((port)->cc1)))
++	 (tcpm_cc_is_sink((port)->cc2) && !tcpm_cc_is_sink((port)->cc1)) || \
++	 (tcpm_cc_is_sink((port)->cc1) && tcpm_cc_is_sink((port)->cc2)))
+ 
+ #define tcpm_cc_is_source(cc) ((cc) == TYPEC_CC_RD)
+ #define tcpm_cc_is_audio(cc) ((cc) == TYPEC_CC_RA)
+-- 
+2.29.0
+
 
