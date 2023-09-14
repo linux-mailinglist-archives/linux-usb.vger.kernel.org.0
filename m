@@ -1,52 +1,43 @@
-Return-Path: <linux-usb+bounces-84-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-85-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 967E77A0DCD
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 21:04:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD2B97A0DD7
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 21:09:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3FC2B1C20A66
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 19:04:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7AF472819C7
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 19:09:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CB6C241F8;
-	Thu, 14 Sep 2023 19:04:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40644266A7;
+	Thu, 14 Sep 2023 19:09:43 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D400A10A2F
-	for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 19:04:31 +0000 (UTC)
-Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [IPv6:2a01:37:1000::53df:5f64:0])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA25C9B;
-	Thu, 14 Sep 2023 12:04:30 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
-	(Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
-	by bmailout1.hostsharing.net (Postfix) with ESMTPS id 874D630007934;
-	Thu, 14 Sep 2023 21:04:29 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-	id 7B0C542AC06; Thu, 14 Sep 2023 21:04:29 +0200 (CEST)
-Date: Thu, 14 Sep 2023 21:04:29 +0200
-From: Lukas Wunner <lukas@wunner.de>
-To: Bjorn Helgaas <helgaas@kernel.org>
-Cc: Mario Limonciello <mario.limonciello@amd.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	"Rafael J . Wysocki" <rjw@rjwysocki.net>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-	platform-driver-x86@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-	iain@orangesquash.org.uk
-Subject: Re: [PATCH v18 2/2] PCI: Add a quirk for AMD PCIe root ports w/ USB4
- controllers
-Message-ID: <20230914190429.GA15568@wunner.de>
-References: <20230914145332.GA5261@wunner.de>
- <20230914153303.GA30424@bhelgaas>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED82AD307
+	for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 19:09:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8740C433C8;
+	Thu, 14 Sep 2023 19:09:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1694718581;
+	bh=ZXhlR282k21FtlFffFcSOZAyyO7r6KgiTBBr5eW6JWU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fbrtVLanZX4aOxFLDP9i9sRu/clKXELS+7GemkPgxAV+1wLAKDTgcW3vq1Tw35TzX
+	 +Nd35HtvhG9Y8nEHQGpYpOXT0rB3/HmSVWP+bc4kzlQ82U4E1OIHtB9hBGfCz+VeDU
+	 UypVfs5kRl7JO6GhibdweQwVDGQ1WFmUZR899BVM=
+Date: Thu, 14 Sep 2023 21:09:35 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Carl Spitzer <lynuxrocks@gmail.com>
+Cc: Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+	linux-usb@vger.kernel.org
+Subject: Re: This list is being migrated to the new infrastructure
+Message-ID: <2023091422-supremacy-devotedly-8560@gregkh>
+References: <20230913-early-gloomily-4066a8@meerkat>
+ <CAMwyc-T=33CmqabnWdG1PO-OZpDeQr9i7yfT5uhJWYiiyu+jww@mail.gmail.com>
+ <2023091442-material-afternoon-50d6@gregkh>
+ <CAHeBFz1+4J+DnR4KW-1uUaCwDpqYOukE7PwpDdkNMbH8t6Zzgw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -55,25 +46,12 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230914153303.GA30424@bhelgaas>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAHeBFz1+4J+DnR4KW-1uUaCwDpqYOukE7PwpDdkNMbH8t6Zzgw@mail.gmail.com>
 
-On Thu, Sep 14, 2023 at 10:33:03AM -0500, Bjorn Helgaas wrote:
-> dev->no_d3cold appears to be mainly an administrative policy knob
-> twidded via sysfs.
+On Thu, Sep 14, 2023 at 05:56:34AM -0700, Carl Spitzer wrote:
+> somehow this list thinks I am sending html which I do not remember turning
+> on with gmail.
+> lets see if remove formatting is the fix.
 
-Actually the user space choice to disable D3cold is stored in a
-different flag called pdev->d3cold_allowed.
-
-The fact that d3cold_allowed_store() indirectly modifies the
-no_d3cold flag as well looks like a bug that went unnoticed
-for a couple of years.  From a quick look, d3cold_allowed_store()
-should probably call pci_bridge_d3_update() instead of
-pci_d3cold_enable() / pci_d3cold_disable().  This was introduced by
-commit 9d26d3a8f1b0 ("PCI: Put PCIe ports into D3 during suspend").
-Perhaps Mika can chime in whether this is indeed wrong.
-
-Thanks,
-
-Lukas
+You sent html email here, please fix your email client.
 
