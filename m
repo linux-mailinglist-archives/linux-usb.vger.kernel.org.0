@@ -1,125 +1,99 @@
-Return-Path: <linux-usb+bounces-64-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-65-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEEEA7A06CE
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 16:03:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 050077A0712
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 16:17:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 848F9B207F9
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 14:03:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1CC751C208BB
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Sep 2023 14:17:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72AE221A1E;
-	Thu, 14 Sep 2023 14:02:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7EE322EE9;
+	Thu, 14 Sep 2023 14:17:08 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA2F7241E3
-	for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 14:02:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BC42C433C7;
-	Thu, 14 Sep 2023 14:02:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1694700153;
-	bh=UbILtaDX6YaX9dgq96QTqXtymCmpeldgjR+T2oK3xaM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PNO+aHUgNDxHMtKVOjlzcOL7tLf+z9y1Iq9XnBkmWBc2p/Apxp3ZmIFvKQ7+UYpIj
-	 vGqVGuRuqwz0WOI8F1gzCKpdQPNfFHmxOHmz3dSp8GqSj3cE46pwgm94yOyHfEGDiv
-	 t9y7eUZSydl/+7e2w+r2yGmTZg5C3zcJTsLzrZROns45s7RhKOT5/mOoOYhEY9tIY0
-	 aW5X29QrkwlJ6PisxRbW4j8ftjNKzQ2NS5JZkV/8+DbW86yP6ME2DQBOHUELgyT2nn
-	 rGGSMchIIOuzQfCiLakKwcTxGR0UeiFBwERYJSLsssW7J/ySM61igFF7UL6hlSMHj2
-	 OLKep8D3SXHCA==
-Date: Thu, 14 Sep 2023 16:02:25 +0200
-From: Christian Brauner <brauner@kernel.org>
-To: Al Viro <viro@zeniv.linux.org.uk>
-Cc: Christoph Hellwig <hch@lst.de>, Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Fenghua Yu <fenghua.yu@intel.com>,
-	Reinette Chatre <reinette.chatre@intel.com>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-	Tejun Heo <tj@kernel.org>,
-	Trond Myklebust <trond.myklebust@hammerspace.com>,
-	Anna Schumaker <anna@kernel.org>, Kees Cook <keescook@chromium.org>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Naohiro Aota <naohiro.aota@wdc.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-s390@vger.kernel.org, linux-rdma@vger.kernel.org,
-	linux-nfs@vger.kernel.org, linux-hardening@vger.kernel.org,
-	cgroups@vger.kernel.org, Jan Kara <jack@suse.cz>
-Subject: Re: [PATCH 03/19] fs: release anon dev_t in deactivate_locked_super
-Message-ID: <20230914-munkeln-pelzmantel-3e3a761acb72@brauner>
-References: <20230913111013.77623-1-hch@lst.de>
- <20230913111013.77623-4-hch@lst.de>
- <20230913232712.GC800259@ZenIV>
- <20230914023705.GH800259@ZenIV>
- <20230914053843.GI800259@ZenIV>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90CCA8F40
+	for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 14:17:08 +0000 (UTC)
+X-Greylist: delayed 121901 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 14 Sep 2023 07:17:07 PDT
+Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [83.223.78.240])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C87DD;
+	Thu, 14 Sep 2023 07:17:07 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
+	(Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
+	by bmailout2.hostsharing.net (Postfix) with ESMTPS id EE0382800BC11;
+	Thu, 14 Sep 2023 16:17:05 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+	id E051950E35C; Thu, 14 Sep 2023 16:17:05 +0200 (CEST)
+Date: Thu, 14 Sep 2023 16:17:05 +0200
+From: Lukas Wunner <lukas@wunner.de>
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: Bjorn Helgaas <bhelgaas@google.com>,
+	"Rafael J . Wysocki" <rjw@rjwysocki.net>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+	"open list:X86 PLATFORM DRIVERS" <platform-driver-x86@vger.kernel.org>,
+	"open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+	linux-pm@vger.kernel.org,
+	"open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+	iain@orangesquash.org.uk
+Subject: Re: [PATCH v18 2/2] PCI: Add a quirk for AMD PCIe root ports w/ USB4
+ controllers
+Message-ID: <20230914141705.GA27051@wunner.de>
+References: <20230913040832.114610-1-mario.limonciello@amd.com>
+ <20230913040832.114610-3-mario.limonciello@amd.com>
+ <20230913042522.GB1359@wunner.de>
+ <fd981219-d864-4c46-a348-61f73a9df596@amd.com>
+ <20230913143128.GA29059@wunner.de>
+ <76dfea89-e386-45e9-851c-8e87f9470c4f@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230914053843.GI800259@ZenIV>
+In-Reply-To: <76dfea89-e386-45e9-851c-8e87f9470c4f@amd.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-> Christoph, could you explain what the hell do we need that for?  It does
-> create the race in question and AFAICS 2c18a63b760a (and followups trying
-> to plug holes in it) had been nothing but headache.
+On Wed, Sep 13, 2023 at 11:36:49AM -0500, Mario Limonciello wrote:
+> On 9/13/2023 09:31, Lukas Wunner wrote:
+> > If this only affects system sleep, not runtime PM, what you can do is
+> > define a DECLARE_PCI_FIXUP_SUSPEND_LATE() which calls pci_d3cold_disable()
+> > and also define a DECLARE_PCI_FIXUP_CLASS_RESUME_EARLY() which calls
+> > pci_d3cold_enable().
+> > 
+> > And I think you can make those calls conditional on pm_suspend_no_platform()
+> > to constrain to s2idle.
+> > 
+> > User space should still be able to influence runtime PM via the
+> > d3cold_allowed flag (unless I'm missing something).
 > 
-> Old logics: if mount attempt with a different fs type happens, -EBUSY
-> is precisely corrent - we would've gotten just that if mount() came
-> before umount().  If the type matches, we might
-> 	1) come before deactivate_locked_super() by umount(2).
-> No problem, we succeed.
-> 	2) come after the beginning of shutdown, but before the
-> removal from the list; fine, we'll wait for the sucker to be
-> unlocked (which happens in the end of generic_shutdown_super()),
-> notice it's dead and create a new superblock.  Since the only
-> part left on the umount side is closing the device, we are
-> just fine.
-> 	3) come after the removal from the list.  So we won't
-> wait for the old superblock to be unlocked, other than that
-> it's exactly the same as (2).  It doesn't matter whether we
-> open the device before or after close by umount - same owner
-> anyway, no -EBUSY.
-> 
-> Your "owner shall be the superblock" breaks that...
-> 
-> If you want to mess with _three_-way split of ->kill_sb(),
-> please start with writing down the rules re what should
-> go into each of those parts; such writeup should go into
-> Documentation/filesystems/porting anyway, even if the
-> split is a two-way one, BTW.
+> The part you're missing is that D3hot is affected by this issue too,
+> otherwise it would be a good proposal.
 
-Hm, I think that characterization of Christoph's changes is a bit harsh.
+I recall that in an earlier version of the patch, you solved the issue
+by amending pci_bridge_d3_possible().
 
-Yes, you're right that making the superblock and not the filesytem type
-the bd_holder changes the logic and we are aware of that of course. And
-it requires changes such as moving additional block device closing from
-where some callers currently do it.
+Changing the dev->no_d3cold flag indirectly influences the bridge_d3
+flag (through pci_dev_check_d3cold() and pci_bridge_d3_update()).
 
-But the filesytem type is not a very useful holder itself and has other
-drawbacks. The obvious one being that it requires us to wade through all
-superblocks on the system trying to find the superblock associated with
-a given block device continously grabbing and dropping sb_lock and
-s_umount. None of that is very pleasant nor elegant and it is for sure
-not very easy to understand (Plus, it's broken for btrfs freezing and
-syncing via block level ioctls.).
+If dev->no_d3cold is set on a device below a port, that port is
+prevented from entring D3hot because it would result in the
+device effectively being in D3cold.
 
-Using the superblock as holder makes this go away and is overall a lot
-more useful and intuitive and can be extended to filesystems with
-multiple devices (Of which we apparently are bound to get more.).
+So you might want to take a closer look at this approach despite
+the flag suggesting that it only influences D3cold.
 
-So I think this change is worth the pain.
+Thanks,
 
-It's a fair point that these lifetime rules should be documented in
-Documentation/filesystems/. The old lifetime documentation is too sparse
-to be useful though.
+Lukas
 
