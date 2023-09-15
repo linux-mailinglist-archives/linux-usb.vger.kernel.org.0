@@ -1,171 +1,156 @@
-Return-Path: <linux-usb+bounces-173-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-174-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E18EB7A27F6
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 22:20:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95D5C7A27FA
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 22:21:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 999BC282354
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 20:20:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8C8141C20EEF
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 20:21:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C0461B27B;
-	Fri, 15 Sep 2023 20:20:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB1071B27B;
+	Fri, 15 Sep 2023 20:21:34 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00DD218E09
-	for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 20:20:11 +0000 (UTC)
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E14330C4;
-	Fri, 15 Sep 2023 13:17:57 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38FKGPlS027253;
-	Fri, 15 Sep 2023 20:17:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=4iyMK8yURRpW6wHtBGMckqRocChvhmWY4LY6hP5z4SA=;
- b=WHZ5nr5hoEa7mYjtoTaQTiOkh3Q/4CCmt63ldro8facP/O15pJMHvH/zlVxNQWzXScNn
- fY+gWCOLTI2RO15bRx99mgKqGVlZu5a2YEUv8n1B8NsLwxYy1cT++0iFj7A/3pQUAqrG
- KpHbvi7Njkou4LMV6u4u9S+6hoo1D6jTF9q9ORsN66hcDhWODegbVEZq+5pD6Iv2/yrY
- m9Vni1qAU8H6F/arkakVENDigW3bz637mC0rY9jd383jFt4t2L4mLIPLPH63sv+00V2n
- PVIlVvJUW8Kh5IbbUcgbIHDQovf1LoUORzHCpyj1WhJanZNNarPHiT1ErNPRxV6Oo8OX tA== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t4g86t218-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 15 Sep 2023 20:17:50 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38FKHnHe016283
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 15 Sep 2023 20:17:49 GMT
-Received: from [10.110.47.184] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Fri, 15 Sep
- 2023 13:17:49 -0700
-Message-ID: <bed7d2d2-3c66-b174-7b4e-9a2f2c0d5f1c@quicinc.com>
-Date: Fri, 15 Sep 2023 13:17:43 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB05E11CA6
+	for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 20:21:32 +0000 (UTC)
+Received: from omta036.useast.a.cloudfilter.net (omta036.useast.a.cloudfilter.net [44.202.169.35])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A791270A
+	for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 13:21:05 -0700 (PDT)
+Received: from eig-obgw-6004a.ext.cloudfilter.net ([10.0.30.197])
+	by cmsmtp with ESMTP
+	id hAOdqzo6eDKaKhFJJqISsx; Fri, 15 Sep 2023 20:21:05 +0000
+Received: from gator4166.hostgator.com ([108.167.133.22])
+	by cmsmtp with ESMTPS
+	id hFJIqEGCyp9rehFJIqaCLq; Fri, 15 Sep 2023 20:21:04 +0000
+X-Authority-Analysis: v=2.4 cv=Ztv+lv3G c=1 sm=1 tr=0 ts=6504bcb0
+ a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=WzbPXH4gqzPVN0x6HrNMNA==:17
+ a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
+ a=IkcTkHD0fZMA:10 a=zNV7Rl7Rt7sA:10 a=wYkD_t78qR0A:10 a=NEAV23lmAAAA:8
+ a=ag1SF4gXAAAA:8 a=pF3H81QlAAAA:8 a=COk6AnOGAAAA:8 a=VwQbUJbxAAAA:8
+ a=cm27Pg_UAAAA:8 a=HvF037n1xESchLcPDVoA:9 a=QEXdDO2ut3YA:10
+ a=Yupwre4RP9_Eg_Bd0iYG:22 a=6mx6MrwIfq_fzEhb4BAB:22 a=TjNXssC_j7lpFel5tvFf:22
+ a=AjGcO6oz07-iQ99wixmX:22 a=xmb-EsYY8bH0VWELuYED:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=nfbBbmChWyKNzoVj9/7lddkMlBXcM7IRZVK5hnelGKY=; b=L0dzUqc2X5mdOQrmM9CUYp+Ptm
+	W9pqrDo8YisAJrcQWf7OqliJM64b/It0e2DZEwZS9SgmMuTfGQpOrMGuQqqQdYQPZS0ggYPMJRlBS
+	L2nDON/27v1LN38z9OQZDOlIDShRL39XIrhfsYHdX//UlZLT22A4e4d8L0ufSiZNuPUNHHmBamPIU
+	YxqWO4WAyUrLDHuB1keNHFAE//OCHXaH3tHUqCOkf5FNPnrQla0zw4lOpHj2ihJ91CT501bC/3SiY
+	y1myxqw6wFh+/FzeIXFfIoUNkAm8ybXGsLihM/KJ8RwRs2KMt0isryxYtgUBUMa2+fyrMrssgy2Ei
+	xoz2Dsgg==;
+Received: from 187-162-21-192.static.axtel.net ([187.162.21.192]:58950 helo=[192.168.15.8])
+	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.96)
+	(envelope-from <gustavo@embeddedor.com>)
+	id 1qhFJG-002EO4-32;
+	Fri, 15 Sep 2023 15:21:02 -0500
+Message-ID: <0b48fe61-7d05-1520-d77e-81ad39bc80b4@embeddedor.com>
+Date: Fri, 15 Sep 2023 14:21:58 -0600
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2] usb: dwc3: core: Avoid resume dwc3 if already
- suspended in pm resume
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] usb: gadget: f_fs: Annotate struct ffs_buffer with
+ __counted_by
 Content-Language: en-US
-To: William Wu <william.wu@rock-chips.com>, <Thinh.Nguyen@synopsys.com>,
-        <gregkh@linuxfoundation.org>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <frank.wang@rock-chips.com>, <jianwei.zheng@rock-chips.com>,
-        <yangbin@rock-chips.com>
-References: <20230911033112.3321-1-william.wu@rock-chips.com>
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <20230911033112.3321-1-william.wu@rock-chips.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To: Kees Cook <keescook@chromium.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: John Keeping <john@keeping.me.uk>,
+ Udipto Goswami <quic_ugoswami@quicinc.com>,
+ Linyu Yuan <quic_linyyuan@quicinc.com>, linux-usb@vger.kernel.org,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>,
+ Krishna Kurapati <quic_kriskura@quicinc.com>,
+ Jeff Layton <jlayton@kernel.org>,
+ Uttkarsh Aggarwal <quic_uaggarwa@quicinc.com>,
+ Yuta Hayama <hayama@lineo.co.jp>, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+References: <20230915195849.never.275-kees@kernel.org>
+From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+In-Reply-To: <20230915195849.never.275-kees@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 5TrgP3HF_RkO9fHa3nZBuwKTVtjMNU8B
-X-Proofpoint-ORIG-GUID: 5TrgP3HF_RkO9fHa3nZBuwKTVtjMNU8B
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-09-15_16,2023-09-15_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1011
- bulkscore=0 impostorscore=0 adultscore=0 suspectscore=0 malwarescore=0
- spamscore=0 mlxscore=0 priorityscore=1501 mlxlogscore=413
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2309150181
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 187.162.21.192
+X-Source-L: No
+X-Exim-ID: 1qhFJG-002EO4-32
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: 187-162-21-192.static.axtel.net ([192.168.15.8]) [187.162.21.192]:58950
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 30
+X-Org: HG=hgshared;ORG=hostgator;
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfJgckMOl+mEZZfsoD2t/qhLycct6CH7pNNflnluJuTX5iIPGB1tb3S6WMVAi0PMQj2v7UXMXYuP3Sl5HY1cJ7BdrNtBEBoPzlz3HNZrYjHOVNEPQC5GJ
+ ujXbFgiN+7gcrgxCzjcpfzTgH8Cu3QsgCElQ1lKk/INfD9ucij0vouI1n+utNcrZQcAAPj4RUffzVaReqvqxRyPpcAH558vZrbs=
 X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
+	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Hi William,
 
-On 9/10/2023 8:31 PM, William Wu wrote:
-> If we enable PM runtime auto suspend for dwc3 on rockchip
-> platforms (e.g. RK3562), it allows the dwc3 controller to
-> enter runtime suspend if usb cable detached and power off
-> the power domain of the controller. When system resume, if
-> the dwc3 already in runtime suspended, it Shouldn't access
-> the dwc3 registers in dwc3_resume() because its power domain
-> maybe power off.
-> 
-> Test on RK3562 tablet, this patch can help to avoid kernel
-> panic when accessing the dwc3 registers in dwc3_resume() if
-> the dwc3 is in runtime suspended and it's power domain is
-> power off.
-> 
-> Kernel panic - not syncing: Asynchronous SError Interrupt
-> Hardware name: Rockchip RK3562 RK817 TABLET LP4 Board (DT)
-> Call trace:
-> dump_backtrace.cfi_jt+0x0/0x8
->    dump_stack_lvl+0xc0/0x13c
->    panic+0x174/0x468
->    arm64_serror_panic+0x1b0/0x200
->    do_serror+0x184/0x1e4
->    el1_error+0x94/0x118
->    el1_abort+0x40/0x68
->    el1_sync_handler+0x58/0x88
->    el1_sync+0x8c/0x140
->    dwc3_readl+0x30/0x1a0
->    dwc3_phy_setup+0x38/0x510
->    dwc3_core_init+0x68/0xcd4
->    dwc3_core_init_for_resume+0x10c/0x25c
->    dwc3_resume_common+0x44/0x3d0
->    dwc3_resume+0x5c/0xb8
->    dpm_run_callback+0x70/0x488
->    device_resume+0x250/0x2f8
->    dpm_resume+0x258/0x9dc
-> 
-> Signed-off-by: William Wu <william.wu@rock-chips.com>
-> ---
-> Changes in v2:
-> - Remove Change-Id.
-> 
->   drivers/usb/dwc3/core.c | 8 +++++---
->   1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index 9c6bf054f15d..8274a44f2d6a 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -2185,9 +2185,11 @@ static int dwc3_resume(struct device *dev)
->   
->   	pinctrl_pm_select_default_state(dev);
->   
-> -	ret = dwc3_resume_common(dwc, PMSG_RESUME);
-> -	if (ret)
-> -		return ret;
-> +	if (!pm_runtime_suspended(dwc->dev)) {
-> +		ret = dwc3_resume_common(dwc, PMSG_RESUME);
-> +		if (ret)
-> +			return ret;
-> +	}
->   
->   	pm_runtime_disable(dev);
->   	pm_runtime_set_active(dev);
 
-In case DWC3 is runtime suspended, then we will avoid the 
-dwc3_resume_common() call, but the current flow would also set the RPM 
-state to RPM_ACTIVE. (from pm_runtime_set_active())  In this case, what 
-happens if there is a pm_runtime_get/resume on the DWC3 device?
+On 9/15/23 13:58, Kees Cook wrote:
+> Prepare for the coming implementation by GCC and Clang of the __counted_by
+> attribute. Flexible array members annotated with __counted_by can have
+> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
+> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+> functions).
+> 
+> As found with Coccinelle[1], add __counted_by for struct ffs_buffer.
+> 
+> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
+> 
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: John Keeping <john@keeping.me.uk>
+> Cc: Udipto Goswami <quic_ugoswami@quicinc.com>
+> Cc: Linyu Yuan <quic_linyyuan@quicinc.com>
+> Cc: linux-usb@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-I think it would avoid calling rpm_resume() since the RPM state is 
-already active, so we wouldn't be calling dwc3_runtime_resume().  Do you 
-want to also extend the RPM suspended check to cover if we need to force 
-PM runtime state back to active?
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
 Thanks
-Wesley Cheng
+-- 
+Gustavo
+
+> ---
+>   drivers/usb/gadget/function/f_fs.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+> index 6e9ef35a43a7..af400d083777 100644
+> --- a/drivers/usb/gadget/function/f_fs.c
+> +++ b/drivers/usb/gadget/function/f_fs.c
+> @@ -202,7 +202,7 @@ struct ffs_epfile {
+>   struct ffs_buffer {
+>   	size_t length;
+>   	char *data;
+> -	char storage[];
+> +	char storage[] __counted_by(length);
+>   };
+>   
+>   /*  ffs_io_data structure ***************************************************/
 
