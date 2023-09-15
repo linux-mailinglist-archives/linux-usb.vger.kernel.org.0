@@ -1,369 +1,161 @@
-Return-Path: <linux-usb+bounces-100-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-101-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7F467A12CC
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 03:11:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F16BF7A12E6
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 03:24:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A4AA2821AC
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 01:11:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B212280D38
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 01:24:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF9A47EF;
-	Fri, 15 Sep 2023 01:11:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE95D7F4;
+	Fri, 15 Sep 2023 01:24:32 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EEDB36A
-	for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 01:11:28 +0000 (UTC)
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9DC02121;
-	Thu, 14 Sep 2023 18:11:27 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38F1Ai9Q031712;
-	Fri, 15 Sep 2023 01:11:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=A9Je5DHbju3PIRn6npMgs9cdtVJaXnAqZXk2krpKcTE=;
- b=F+eKQLQpp/J1r6F2Qw8y933dy3My9jhSPgrUVpL7y9m53jRZbridlbsFCPGoUgposCaS
- bC+pYlXTtbbs7aLe/SEAHX8x6AUw7cZUcvi+2I0tHlLBhi2kI4ieUNiUZ9dlLty+aq2K
- azhLc61ok6SXONUMjKxaG86KNZyilQmpDyPID7oWht1EtrJXrz73Fsnim59NuyhWzmmt
- RemabYRh7QQIzX2C/mq6x/PGzWKRxjIy4K2i136mM2gfOoobL+eQiuuXP3R9CPQ7pKnW
- +PkzAn2DxVZXPq/YWSoYDgMMzarTI9YSkKTiqtnUFMNkUR5BZZ3LgtkPjkpG6UfdIGXS 1g== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t4dc7r02w-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 15 Sep 2023 01:11:13 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38F1BCdN000914
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 15 Sep 2023 01:11:13 GMT
-Received: from [10.253.37.179] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Thu, 14 Sep
- 2023 18:11:09 -0700
-Message-ID: <dc54b48f-f2ad-9948-f50f-a6f2c004c77c@quicinc.com>
-Date: Fri, 15 Sep 2023 09:11:06 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C63436A
+	for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 01:24:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49779C433C7;
+	Fri, 15 Sep 2023 01:24:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1694741070;
+	bh=vS3iu08Cwn5zp58ICQbFGVM/ExFnYRepOJGvP5mCAm8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=OGrLN7oEYwE+06uYD2I3VrYYBqPNuK7Y2vZsZ7zWOBxzMbgRLd3Yy646Jf5mAgIDc
+	 jWIR05G2vvRqUJ668iYVw0mF4mndxyjsHw9k74MCWMc6UcezRXZsd3dmjQ/Dyji/I1
+	 xKYguQQOXlyVrnG0zS+Edbkw3V2M2nukT/dru00Ea5qPxEuD955hIMfzKk0VRTTQpr
+	 D2hQaBAttssfX575Wr7dlcVsrtVnCtarmJuj2JY49pZa0gvim8gUwQK31OVddiGOqT
+	 hJuICLCzKmSUO6H7WXOFf8nFKX397Z5fzLMRHA7GbmzLuGBhDrUuhFJqom/6yvLUzt
+	 ZNg98N5TABXmQ==
+Date: Thu, 14 Sep 2023 20:24:27 -0500
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	"Rafael J . Wysocki" <rjw@rjwysocki.net>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+	"open list:X86 PLATFORM DRIVERS" <platform-driver-x86@vger.kernel.org>,
+	"open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+	linux-pm@vger.kernel.org,
+	"open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+	iain@orangesquash.org.uk
+Subject: Re: [PATCH v18 2/2] PCI: Add a quirk for AMD PCIe root ports w/ USB4
+ controllers
+Message-ID: <20230915012427.GA87601@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH 3/8] usb: udc: trace: reduce buffer usage of trace event
-Content-Language: en-US
-To: Steven Rostedt <rostedt@goodmis.org>
-CC: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Chunfeng Yun
-	<chunfeng.yun@mediatek.com>, Bin Liu <b-liu@ti.com>,
-        Peter Chen
-	<peter.chen@kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Roger Quadros
-	<rogerq@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Masami Hiramatsu
-	<mhiramat@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>
-References: <20230914100302.30274-1-quic_linyyuan@quicinc.com>
- <20230914100302.30274-4-quic_linyyuan@quicinc.com>
- <20230914125410.432ca343@gandalf.local.home>
-From: Linyu Yuan <quic_linyyuan@quicinc.com>
-In-Reply-To: <20230914125410.432ca343@gandalf.local.home>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: L1xaavHPCW2MO4F3Ns-YKkoZK2Z4JMiZ
-X-Proofpoint-ORIG-GUID: L1xaavHPCW2MO4F3Ns-YKkoZK2Z4JMiZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-09-14_13,2023-09-14_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
- suspectscore=0 malwarescore=0 lowpriorityscore=0 mlxlogscore=792
- phishscore=0 priorityscore=1501 clxscore=1015 spamscore=0 adultscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2309150009
+In-Reply-To: <67fe444c-e3e4-4063-a7ad-e0c3c835bc68@amd.com>
 
+On Thu, Sep 14, 2023 at 07:55:46PM -0500, Mario Limonciello wrote:
+> On 9/13/2023 23:59, Mario Limonciello wrote:
+> > On 9/13/2023 16:16, Mario Limonciello wrote:
+> > > On 9/13/2023 16:05, Bjorn Helgaas wrote:
+> > > [cut]
+> > > > > > I expect it to be an ongoing issue.  I also expect unless we use
+> > > > > > constraints or convince the firmware team to add a _S0W object with a
+> > > > > > value of "0" for the sake of Linux that we will be
+> > > > > > adding IDs every year
+> > > > > > to wherever this lands as we reproduce it on newer SoCs.
+> > > > > 
+> > > > > So maybe the way to go is to make the AMD PMC driver set a flag for
+> > > > > Root Ports on suspend or similar.
+> > > > 
+> > > > I like the quirk approach.  When PMC is involved, the device behavior
+> > > > doesn't conform to what it advertised via PME_Support.
+> > > > 
+> > > > The v18 quirk isn't connected to PMC at all, so IIUC it avoids
+> > > > D3hot/D3cold unnecessarily when amd/pmc is not loaded.
+> > > > 
+> > > 
+> > > Technically someone could; but realistically no one will be using
+> > > these machines without amd-pmc.
+> > > 
+> > > The battery life over suspend would be abhorrent.
+> > > 
+> > > > I don't object to avoiding D3hot/D3cold unconditionally.  Presumably
+> > > > we *could* save a little power by using them when amd/pci isn't
+> > > > loaded, but amd/pci would have to iterate through all PCI devices when
+> > > > it loads, save previous state, do the quirk, and then restore the
+> > > > previous state on module unload.  And it would have to use notifiers
+> > > > or assume no Root Port hotplug.  All sounds kind of complicated.
+> > > > 
+> > > 
+> > > Yeah this does sound needlessly complicated.
+> > > 
+> > > > Maybe it would even be enough to just clear dev->pme_support so we
+> > > > know wakeups don't work.  It would be a pretty big benefit if we
+> > > > didn't have to add another bit and complicate pci_prepare_to_sleep()
+> > > > or pci_target_state().
+> > > > 
+> > > 
+> > > I don't think clearing PME support entirely is going to help.  The
+> > > reason is that pci_target_state() will fall back to PCI_D3hot when
+> > > dev->pme_support is fully cleared.
+> > > 
+> > > I think that clearing *just the bits* for D3hot and D3cold in PME
+> > > support should work though.  I'll test this.
+> > 
+> > I did confirm this works properly.
+> > 
+> > > 
+> > > Assuming it works how about if we put the quirk to clear the
+> > > D3hot/D3cold PME support bit in
+> > > drivers/platform/x86/amd/pmc/pmc-quirks.c?
+> > > 
+> > > It's still a quirk file and it makes it very clear that this
+> > > behavior is caused by what amd-pmc does.
+> > 
+> > I've got it coded up like this and working, so please let me know if
+> > this approach is amenable and I'll drop an updated version.
+> > 
+> > If you would prefer it to be in pci/quirks.c I believe I can do either.
+> 
+> I've also got a variation with pci/quirks.c working too.
+> 
+> Here's the trade offs:
+> 
+> pci/quirks.c
+> ------------
+> * Two lines for every platform affected by this.  IE:
+> DECLARE_PCI_FIXUP_SUSPEND(PCI_VENDOR_ID_AMD, 0x14b9,
+> quirk_disable_pme_suspend);
+> DECLARE_PCI_FIXUP_RESUME(PCI_VENDOR_ID_AMD, 0x14b9, quirk_reenable_pme);
+> * D3hot/D3cold works at runtime (since PME works at runtime)
+> * Only runs if s2idle is used
+> * Runs whether amd-pmc is bound or not.
+> 
+> drivers/platform/x86/amd/pmc/pmc-quirks.c
+> -----------------------------------------
+> * 1 line for adding new affected platforms
+> * Runs at probe; PME is disabled for D3hot/D3cold at runtime.
+> * Only runs if s2idle is used
+> * Only runs if amd-pmc is bound.
+> 
+> Having implemented both ways and given users will effectively always use
+> amd-pmc, I have a preference towards pci/quirks.c which only patches
+> dev->pme_support to drop D3hot/cold at suspend time and restores it at
+> resume.
+> 
+> Please let me know which way you prefer.
 
-On 9/15/2023 12:54 AM, Steven Rostedt wrote:
-> On Thu, 14 Sep 2023 18:02:57 +0800
-> Linyu Yuan <quic_linyyuan@quicinc.com> wrote:
->
->> Save u32 members into trace event ring buffer and parse it for possible
->> bit fields.
->>
->> Use new DECLARE_EVENT_CLASS_PRINT_INIT() class macro for output stage.
->>
->> Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
->> ---
->>   drivers/usb/gadget/udc/trace.h | 154 +++++++++++++++------------------
->>   1 file changed, 69 insertions(+), 85 deletions(-)
->>
->> diff --git a/drivers/usb/gadget/udc/trace.h b/drivers/usb/gadget/udc/trace.h
->> index a5ed26fbc2da..e1754667f1d2 100644
->> --- a/drivers/usb/gadget/udc/trace.h
->> +++ b/drivers/usb/gadget/udc/trace.h
->> @@ -17,7 +17,7 @@
->>   #include <asm/byteorder.h>
->>   #include <linux/usb/gadget.h>
->>   
->> -DECLARE_EVENT_CLASS(udc_log_gadget,
->> +DECLARE_EVENT_CLASS_PRINT_INIT(udc_log_gadget,
->>   	TP_PROTO(struct usb_gadget *g, int ret),
->>   	TP_ARGS(g, ret),
->>   	TP_STRUCT__entry(
->> @@ -25,20 +25,7 @@ DECLARE_EVENT_CLASS(udc_log_gadget,
->>   		__field(enum usb_device_speed, max_speed)
->>   		__field(enum usb_device_state, state)
->>   		__field(unsigned, mA)
->> -		__field(unsigned, sg_supported)
->> -		__field(unsigned, is_otg)
->> -		__field(unsigned, is_a_peripheral)
->> -		__field(unsigned, b_hnp_enable)
->> -		__field(unsigned, a_hnp_support)
->> -		__field(unsigned, hnp_polling_support)
->> -		__field(unsigned, host_request_flag)
->> -		__field(unsigned, quirk_ep_out_aligned_size)
->> -		__field(unsigned, quirk_altset_not_supp)
->> -		__field(unsigned, quirk_stall_not_supp)
->> -		__field(unsigned, quirk_zlp_not_supp)
->> -		__field(unsigned, is_selfpowered)
->> -		__field(unsigned, deactivated)
->> -		__field(unsigned, connected)
->> +		__field(u32, gdw1)
->>   		__field(int, ret)
->>   	),
->>   	TP_fast_assign(
->> @@ -46,39 +33,35 @@ DECLARE_EVENT_CLASS(udc_log_gadget,
->>   		__entry->max_speed = g->max_speed;
->>   		__entry->state = g->state;
->>   		__entry->mA = g->mA;
->> -		__entry->sg_supported = g->sg_supported;
->> -		__entry->is_otg = g->is_otg;
->> -		__entry->is_a_peripheral = g->is_a_peripheral;
->> -		__entry->b_hnp_enable = g->b_hnp_enable;
->> -		__entry->a_hnp_support = g->a_hnp_support;
->> -		__entry->hnp_polling_support = g->hnp_polling_support;
->> -		__entry->host_request_flag = g->host_request_flag;
->> -		__entry->quirk_ep_out_aligned_size = g->quirk_ep_out_aligned_size;
->> -		__entry->quirk_altset_not_supp = g->quirk_altset_not_supp;
->> -		__entry->quirk_stall_not_supp = g->quirk_stall_not_supp;
->> -		__entry->quirk_zlp_not_supp = g->quirk_zlp_not_supp;
->> -		__entry->is_selfpowered = g->is_selfpowered;
->> -		__entry->deactivated = g->deactivated;
->> -		__entry->connected = g->connected;
->> +		__entry->gdw1 = g->dw1;
->>   		__entry->ret = ret;
->>   	),
->> -	TP_printk("speed %d/%d state %d %dmA [%s%s%s%s%s%s%s%s%s%s%s%s%s%s] --> %d",
->> +	TP_printk("speed %d/%d state %d %dmA [%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s] --> %d",
->>   		__entry->speed, __entry->max_speed, __entry->state, __entry->mA,
->> -		__entry->sg_supported ? "sg:" : "",
->> -		__entry->is_otg ? "OTG:" : "",
->> -		__entry->is_a_peripheral ? "a_peripheral:" : "",
->> -		__entry->b_hnp_enable ? "b_hnp:" : "",
->> -		__entry->a_hnp_support ? "a_hnp:" : "",
->> -		__entry->hnp_polling_support ? "hnp_poll:" : "",
->> -		__entry->host_request_flag ? "hostreq:" : "",
->> -		__entry->quirk_ep_out_aligned_size ? "out_aligned:" : "",
->> -		__entry->quirk_altset_not_supp ? "no_altset:" : "",
->> -		__entry->quirk_stall_not_supp ? "no_stall:" : "",
->> -		__entry->quirk_zlp_not_supp ? "no_zlp" : "",
->> -		__entry->is_selfpowered ? "self-powered:" : "bus-powered:",
->> -		__entry->deactivated ? "deactivated:" : "activated:",
->> -		__entry->connected ? "connected" : "disconnected",
->> -		__entry->ret)
->> +		tg.sg_supported ? "sg:" : "",
->> +		tg.is_otg ? "OTG:" : "",
->> +		tg.is_a_peripheral ? "a_peripheral:" : "",
->> +		tg.b_hnp_enable ? "b_hnp:" : "",
->> +		tg.a_hnp_support ? "a_hnp:" : "",
->> +		tg.a_alt_hnp_support ? "a_alt_hnp:" : "",
->> +		tg.hnp_polling_support ? "hnp_poll:" : "",
->> +		tg.host_request_flag ? "hostreq:" : "",
->> +		tg.quirk_ep_out_aligned_size ? "out_aligned:" : "",
->> +		tg.quirk_altset_not_supp ? "no_altset:" : "",
->> +		tg.quirk_stall_not_supp ? "no_stall:" : "",
->> +		tg.quirk_zlp_not_supp ? "no_zlp" : "",
->> +		tg.quirk_avoids_skb_reserve ? "no_skb_reserve" : "",
->> +		tg.is_selfpowered ? "self-powered:" : "bus-powered:",
->> +		tg.deactivated ? "deactivated:" : "activated:",
->> +		tg.connected ? "connected" : "disconnected",
->> +		tg.lpm_capable ? "lpm-capable" : "",
->> +		tg.wakeup_capable ? "wakeup-capable" : "",
->> +		tg.wakeup_armed ? "wakeup-armed" : "",
-> You can accomplish the above using __print_flags(), if you make it into a
-> bitmask, and that make a macro for each bit.
+I think the pci/quirks.c one sounds nicer.  I was envisioning a
+one-time quirk where it'd be easy to log a note about this issue, but
+I see why the suspend/resume quirk has advantages.  I don't really
+like opaque magic behavior (like D3hot/D3cold not being used when
+dmesg and lspci claim that PME in those states *should* work), but
+maybe we can figure out some way to make that visible.
 
-
-thanks for suggestion, good idea.
-
-
->
->> +		__entry->ret),
->> +	TP_printk_init(
->> +		struct usb_gadget tg;
->> +		tg.dw1 = __entry->gdw1;
->> +	)
->>   );
->>   
->>   DEFINE_EVENT(udc_log_gadget, usb_gadget_frame_number,
->> @@ -141,38 +124,36 @@ DEFINE_EVENT(udc_log_gadget, usb_gadget_activate,
->>   	TP_ARGS(g, ret)
->>   );
->>   
->> -DECLARE_EVENT_CLASS(udc_log_ep,
->> +DECLARE_EVENT_CLASS_PRINT_INIT(udc_log_ep,
->>   	TP_PROTO(struct usb_ep *ep, int ret),
->>   	TP_ARGS(ep, ret),
->>   	TP_STRUCT__entry(
->> -		__string(name, ep->name)
->> -		__field(unsigned, maxpacket)
->> -		__field(unsigned, maxpacket_limit)
->> -		__field(unsigned, max_streams)
->> -		__field(unsigned, mult)
->> -		__field(unsigned, maxburst)
->> -		__field(u8, address)
->> -		__field(bool, claimed)
->> -		__field(bool, enabled)
->> +		__field(u32, edw3)
->> +		__field(u32, edw1)
->> +		__field(u32, edw2)
->>   		__field(int, ret)
->>   	),
->>   	TP_fast_assign(
->> -		__assign_str(name, ep->name);
->> -		__entry->maxpacket = ep->maxpacket;
->> -		__entry->maxpacket_limit = ep->maxpacket_limit;
->> -		__entry->max_streams = ep->max_streams;
->> -		__entry->mult = ep->mult;
->> -		__entry->maxburst = ep->maxburst;
->> -		__entry->address = ep->address,
->> -		__entry->claimed = ep->claimed;
->> -		__entry->enabled = ep->enabled;
->> +		__entry->edw3 = ep->dw3;
->> +		__entry->edw1 = ep->dw1;
->> +		__entry->edw2 = ep->dw2;
->>   		__entry->ret = ret;
->>   	),
->>   	TP_printk("%s: mps %d/%d streams %d mult %d burst %d addr %02x %s%s --> %d",
->> -		__get_str(name), __entry->maxpacket, __entry->maxpacket_limit,
->> -		__entry->max_streams, __entry->mult, __entry->maxburst,
->> -		__entry->address, __entry->claimed ? "claimed:" : "released:",
->> -		__entry->enabled ? "enabled" : "disabled", ret)
->> +		__s, te.maxpacket, te.maxpacket_limit,
->> +		te.max_streams, te.mult, te.maxburst,
->> +		te.address, te.claimed ? "claimed:" : "released:",
->> +		te.enabled ? "enabled" : "disabled", ret),
->> +	TP_printk_init(
->> +		struct usb_ep te;
->> +		char __s[9];
->> +		te.dw1 = __entry->edw1;
->> +		te.dw2 = __entry->edw2;
->> +		te.dw3 = __entry->edw3;
->> +		snprintf(__s, 9, "ep%d%s", te.address, \
->> +			(te.caps.dir_in && te.caps.dir_out) ? "" : \
->> +			te.caps.dir_in ? "in" : "out");
-> Note, there's a temp buffer trace_seq 'p' available for use as well. See
-> both include/trace/events/libata.h and include/trace/events/scsi.h:
->
->    const char *libata_trace_parse_status(struct trace_seq*, unsigned char);
->    #define __parse_status(s) libata_trace_parse_status(p, s)
->
-> I think that can be used instead of adding this TP_printk_init().
-
-
-the reason add TP_printk_init() because when i first design some macro 
-which not
-
-related to tracepoint,  it use too much stack.
-
-
-but i think  TP_printk_init()  is good as it following most common way 
-to print.
-
-
->
-> -- Steve
->
->
->> +	)
->>   );
->>   
->>   DEFINE_EVENT(udc_log_ep, usb_ep_set_maxpacket_limit,
->> @@ -215,44 +196,47 @@ DEFINE_EVENT(udc_log_ep, usb_ep_fifo_flush,
->>   	TP_ARGS(ep, ret)
->>   );
->>   
->> -DECLARE_EVENT_CLASS(udc_log_req,
->> +DECLARE_EVENT_CLASS_PRINT_INIT(udc_log_req,
->>   	TP_PROTO(struct usb_ep *ep, struct usb_request *req, int ret),
->>   	TP_ARGS(ep, req, ret),
->>   	TP_STRUCT__entry(
->> -		__string(name, ep->name)
->> +		__field(u32, edw3)
->>   		__field(unsigned, length)
->>   		__field(unsigned, actual)
->>   		__field(unsigned, num_sgs)
->>   		__field(unsigned, num_mapped_sgs)
->> -		__field(unsigned, stream_id)
->> -		__field(unsigned, no_interrupt)
->> -		__field(unsigned, zero)
->> -		__field(unsigned, short_not_ok)
->> +		__field(u32, rdw1)
->>   		__field(int, status)
->>   		__field(int, ret)
->>   		__field(struct usb_request *, req)
->>   	),
->>   	TP_fast_assign(
->> -		__assign_str(name, ep->name);
->> +		__entry->edw3 = ep->dw3;
->>   		__entry->length = req->length;
->>   		__entry->actual = req->actual;
->>   		__entry->num_sgs = req->num_sgs;
->>   		__entry->num_mapped_sgs = req->num_mapped_sgs;
->> -		__entry->stream_id = req->stream_id;
->> -		__entry->no_interrupt = req->no_interrupt;
->> -		__entry->zero = req->zero;
->> -		__entry->short_not_ok = req->short_not_ok;
->> +		__entry->rdw1 = req->dw1;
->>   		__entry->status = req->status;
->>   		__entry->ret = ret;
->>   		__entry->req = req;
->>   	),
->>   	TP_printk("%s: req %p length %d/%d sgs %d/%d stream %d %s%s%s status %d --> %d",
->> -		__get_str(name),__entry->req,  __entry->actual, __entry->length,
->> -		__entry->num_mapped_sgs, __entry->num_sgs, __entry->stream_id,
->> -		__entry->zero ? "Z" : "z",
->> -		__entry->short_not_ok ? "S" : "s",
->> -		__entry->no_interrupt ? "i" : "I",
->> -		__entry->status, __entry->ret
->> +		__s,__entry->req,  __entry->actual, __entry->length,
->> +		__entry->num_mapped_sgs, __entry->num_sgs, tr.stream_id,
->> +		tr.zero ? "Z" : "z",
->> +		tr.short_not_ok ? "S" : "s",
->> +		tr.no_interrupt ? "i" : "I",
->> +		__entry->status, __entry->ret),
->> +	TP_printk_init(
->> +		struct usb_ep te;
->> +		struct usb_request tr;
->> +		char __s[9];
->> +		te.dw3 = __entry->edw3;
->> +		tr.dw1 = __entry->rdw1;
->> +		snprintf(__s, 9, "ep%d%s", te.address, \
->> +			(te.caps.dir_in && te.caps.dir_out) ? "" : \
->> +			te.caps.dir_in ? "in" : "out");
->>   	)
->>   );
->>   
+Bjorn
 
