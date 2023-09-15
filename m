@@ -1,51 +1,44 @@
-Return-Path: <linux-usb+bounces-180-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-181-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95DA07A2AE5
-	for <lists+linux-usb@lfdr.de>; Sat, 16 Sep 2023 01:13:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 51CA87A2AEB
+	for <lists+linux-usb@lfdr.de>; Sat, 16 Sep 2023 01:16:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4B4772821A8
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 23:13:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F3E3C2821EF
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 23:16:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FF431BDCE;
-	Fri, 15 Sep 2023 23:13:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3C371BDD0;
+	Fri, 15 Sep 2023 23:16:38 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 786601B264
-	for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 23:13:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E0651A70D
+	for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 23:16:36 +0000 (UTC)
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A964B196
-	for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 16:13:08 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D41F8E4D
+	for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 16:16:34 -0700 (PDT)
 Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mgr@pengutronix.de>)
-	id 1qhHzl-0007Xg-Mt; Sat, 16 Sep 2023 01:13:06 +0200
+	id 1qhI35-0007jC-QB; Sat, 16 Sep 2023 01:16:32 +0200
 Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.94.2)
 	(envelope-from <mgr@pengutronix.de>)
-	id 1qhHzk-003sWC-AA; Sat, 16 Sep 2023 01:13:04 +0200
-Date: Sat, 16 Sep 2023 01:13:04 +0200
+	id 1qhI35-003sY4-DK; Sat, 16 Sep 2023 01:16:31 +0200
+Date: Sat, 16 Sep 2023 01:16:31 +0200
 From: Michael Grzeschik <mgr@pengutronix.de>
 To: Avichal Rakesh <arakesh@google.com>
 Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
 	Daniel Scally <dan.scally@ideasonboard.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, Jayant Chowdhary <jchowdhary@google.com>,
-	"Eino-Ville Talvala (Eddy)" <etalvala@google.com>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Message-ID: <ZQTlAGuGw3bTFiLs@pengutronix.de>
-References: <20230615093406.80195-1-dan.scally@ideasonboard.com>
- <20230615171558.GK741@pendragon.ideasonboard.com>
- <dbf1e426-cf86-46c4-afb9-9d6983f0fb6d@google.com>
- <ZPXrceImaT9GevmA@pengutronix.de>
- <CAMHf4WJ6hBEzPUCOX8wbnGZ7pUuG1a+mwR3h=d6=kyyf9W7p+g@mail.gmail.com>
- <ZP5kOcuKykSY8ycr@pengutronix.de>
- <df65040f-fbd9-4e9a-be38-1e30f7f613d4@google.com>
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-ID: <ZQTlz9Koe2CQIsrC@pengutronix.de>
+References: <20230912041910.726442-1-arakesh@google.com>
+ <CAMHf4WLeSC9m05XOU54yL=2xUcSqbWP0f7evM0rZRsJ=J-btWw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -53,9 +46,9 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="rlnRXAcd4TUYimXE"
+	protocol="application/pgp-signature"; boundary="q9JWgXnV+XEfBRBA"
 Content-Disposition: inline
-In-Reply-To: <df65040f-fbd9-4e9a-be38-1e30f7f613d4@google.com>
+In-Reply-To: <CAMHf4WLeSC9m05XOU54yL=2xUcSqbWP0f7evM0rZRsJ=J-btWw@mail.gmail.com>
 X-Sent-From: Pengutronix Hildesheim
 X-URL: http://www.pengutronix.de/
 X-Accept-Language: de,en
@@ -68,117 +61,115 @@ X-Spam-Level:
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
 	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.6
-Subject: Re: [PATCH] usb: gadget: uvc: Move usb_ep_disable() to
- uvcg_video_enable()
+Subject: Re: [PATCH v1 0/2] usb: gadget: uvc: stability fixes when stopping
+ streams
 X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
 X-SA-Exim-Scanned: Yes (on metis.whiteo.stw.pengutronix.de)
 X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
 
---rlnRXAcd4TUYimXE
+--q9JWgXnV+XEfBRBA
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi Avichal
 
-On Mon, Sep 11, 2023 at 09:26:09PM -0700, Avichal Rakesh wrote:
->On 9/10/23 17:50, Michael Grzeschik wrote:
->> On Fri, Sep 08, 2023 at 11:54:40PM +0800, Avichal Rakesh wrote:
->>> Apologies for the late reply, I have been out travelling.
->>> On Mon, Sep 4, 2023 at 10:36=E2=80=AFPM Michael Grzeschik <mgr@pengutro=
-nix.de> wrote:
->>>> Cc'ing: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
->>>>
->>>> ...
->>>> I am currently trying to solve that by preparing a patch that is
->>>> fixing the use of the requests when deallocating them. Since currently
->>>> the uvc_gadget is also running into wild use after free issues because
->>>> of exactly that async dequeue and dealloc situation.
->>>
->>> Do you already have a patch up for this? It seems my LKML-fu is
->>> failing and I can't seem to find the thread. If you aren't too deep
->>> into the patch, can you take a look at the request counting mechanism
->>> added in my patch? If you have a (somewhat) consistent repro of the
->>> use-after-dealloc issue, runnin it through the whole patch would be
->>> very appreciated! It is supposed to fix the exact problem you've
->>> described.
+On Thu, Sep 14, 2023 at 04:05:36PM -0700, Avichal Rakesh wrote:
+>On Mon, Sep 11, 2023 at 9:19=E2=80=AFPM Avichal Rakesh <arakesh@google.com=
+> wrote:
 >>
->> I just send out v1:
+>> We have been seeing two main bugs when stopping stream:
+>> 1. attempting to queue usb_requests on a disabled usb endpoint, and
+>> 2. use-after-free problems for inflight requests
 >>
->> https://lore.kernel.org/linux-usb/20230911002451.2860049-1-m.grzeschik@p=
-engutronix.de/
+>> Avichal Rakesh (2):
+>>   usb: gadget: uvc: prevent use of disabled endpoint
+>>   usb: gadget: uvc: prevent de-allocating inflight usb_requests
+>>
+>>  drivers/usb/gadget/function/f_uvc.c     | 11 ++++----
+>>  drivers/usb/gadget/function/f_uvc.h     |  2 +-
+>>  drivers/usb/gadget/function/uvc.h       |  5 +++-
+>>  drivers/usb/gadget/function/uvc_v4l2.c  | 21 ++++++++++++---
+>>  drivers/usb/gadget/function/uvc_video.c | 34 +++++++++++++++++++++++--
+>>  5 files changed, 60 insertions(+), 13 deletions(-)
+>>
 >
->Thank you for the patch. I do have a few comments on it, will respond on t=
-hat thread.
+>Bumping this thread up. Laurent, Dan, and Michael could you take a look?
 
-Thanks for the comments.
+I tested the patches against my setup and it did not help.
 
->>
->> My patches did go back and forth between changes in the uvc-gadget
->> driver and the device-controller driver. My latest version was including
->> calling free_request from the complete handler. I found that option
->> while looking into the uac2 gadget code. It took away a lot of
->> pain while trying to fix the issue in the dwc3 gadget driver.
->>
->>>> IMHO it should be
->>>> save to call dealloc after calling dequeue. Which is probably true for
->>>> other usb device controller driver other then dwc3.
->>>
->>> Perhaps Thinh or someone better versed in Gadget API can chime in on
->>> this, but as it stands usb_ep_dequeue specifically says that it is
->>> async, and gadget drivers must wait on the complete callbacks to
->>> regain ownership of the usb_request. Until the API change is made, UVC
->>> should adhere to the current API?
->>
->> Since you mention that usb_ep_dequeue is async I am very confident
->> that it is safe to free the request in the completion handler.
->>
->> Although we could cleanup and improve the uvc_video_free_requests
->> function itself. But with the patches I have here the use
->> after free was gone so far. So they should be good so far.
->>
->>>> For some background. The dwc3 is putting the requests into a cancelled=
- list
->>>> that will be cleared by the interrupt handler and that is dequeuing th=
-em
->>>> instead. In between the dequeue call and the interrupt call the uvc la=
-yer could
->>>> dealloc the request which leads the interrupt handler to dequeue an
->>>> already freed request.
->>>
->>> This roughly tracks with what I gleaned from skimming the DWC3 code as
->>> well. In local tests the complete calls were always timely and I never
->>> actually ran into the situation where UVC deallocated an unowned
->>> request, but as someone (I think it was Alan?)=C2=A0 said in a previous
->>> thread: technically possible just means it will happen eventually
->>>
->>> Please do review/test the patch. I'll send out a formal patch on
->>> Monday once I am back, but would love to have some early eyes take a
->>> look in case there is something obvious I missed.
->>
->> First I tested your patch with my sketchy setup where I more then once
->> run into the use after free condition. But with the patch this was not
->> gone.
->
->Just to confirm, use-after-free issue was _not_ fixed with this patch?
+In fact I saw two different issues when calling the streamoff event.
 
-Yes, it did somehow not help the issues I see.
+One issue was a stalled pipeline after the streamoff from the host came in.
+The streaming application did not handle any events anymore.
 
-I will come back with the issues I saw on your actual patch series.
+The second issue was when the streamoff event is triggered sometimes the
+following trace is shown, even with your patches applied.
 
->> I also looked over the patch. As what I saw this is a possible
->> alternative to my patches. The changes are doing some similar things.
->> But the code is changing to many things at once. Please split the code
->> up into more logical chunks. Perhaps you could try to rebase it on
->> my patches. And start from there.
->
->You're right, there are two issues this patch fixes. One of which is the
->same as that fixed by your series of patches. Uploaded v1 of the series at
->https://lore.kernel.org/20230912041910.726442-1-arakesh@google.com/
->(cc'ed to you) which splits the fixes into two separate patches.
 
-Thanks for seperating them.
+[  104.202689] Unable to handle kernel paging request at virtual address 00=
+5bf43a692a5fd5
+[  104.235122] Mem abort info:
+[  104.238257]   ESR =3D 0x0000000096000004
+[  104.242449]   EC =3D 0x25: DABT (current EL), IL =3D 32 bits
+[  104.248391]   SET =3D 0, FnV =3D 0
+[  104.251803]   EA =3D 0, S1PTW =3D 0
+[  104.255313]   FSC =3D 0x04: level 0 translation fault
+[  104.260765] Data abort info:
+[  104.263982]   ISV =3D 0, ISS =3D 0x00000004, ISS2 =3D 0x00000000
+[  104.270114]   CM =3D 0, WnR =3D 0, TnD =3D 0, TagAccess =3D 0
+[  104.275760]   GCS =3D 0, Overlay =3D 0, DirtyBit =3D 0, Xs =3D 0
+[  104.281698] [005bf43a692a5fd5] address between user and kernel address r=
+anges
+[  104.290042] Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
+[  104.297060] Dumping ftrace buffer:
+[  104.300869]    (ftrace buffer empty)
+[  104.304862] Modules linked in: st1232 hantro_vpu v4l2_vp9 v4l2_h264 uio_=
+pdrv_genirq fuse [last unloaded: rockchip_vpu(C)]
+[  104.312080] panfrost fde60000.gpu: Panfrost Dump: BO has no sgt, cannot =
+dump
+[  104.317137] CPU: 0 PID: 465 Comm: irq/46-dwc3 Tainted: G         C      =
+   6.5.0-20230831-2+ #5
+[  104.317144] Hardware name: WolfVision PF5 (DT)
+[  104.317148] pstate: 604000c9 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=
+=3D--)
+[  104.317154] pc : __list_del_entry_valid+0x48/0xe8
+[  104.352728] lr : dwc3_gadget_giveback+0x3c/0x1b0
+[  104.357893] sp : ffffffc08381bc60
+[  104.361593] x29: ffffffc08381bc60 x28: ffffff80047d4000 x27: ffffff80047=
+de440
+[  104.369576] x26: 0000000000000000 x25: ffffffc08135b2d0 x24: ffffffc0838=
+1bd00
+[  104.377559] x23: 00000000ffffff98 x22: ffffff8004204880 x21: ffffff80047=
+d4000
+[  104.385541] x20: ffffff800718dea0 x19: ffffff800718dea0 x18: 00000000000=
+00000
+[  104.393523] x17: 7461747320687469 x16: 7720646574656c70 x15: 6d6f6320747=
+36575
+[  104.401504] x14: 716572205356203a x13: 2e3430312d207375 x12: 74617473206=
+87469
+[  104.409486] x11: ffffffc0815c98f0 x10: 0000000000000000 x9 : ffffffc0808=
+f4fa0
+[  104.417468] x8 : ffffffc082415000 x7 : ffffffc0808f4e2c x6 : ffffffc0823=
+d0928
+[  104.425450] x5 : 0000000000000282 x4 : 0000000000000201 x3 : d85bf43a692=
+a5fcd
+[  104.433431] x2 : ffffff80047d4048 x1 : ffffff800718dea0 x0 : dead0000000=
+00122
+[  104.441413] Call trace:
+[  104.444142]  __list_del_entry_valid+0x48/0xe8
+[  104.449013]  dwc3_gadget_giveback+0x3c/0x1b0
+[  104.453786]  dwc3_gadget_ep_cleanup_cancelled_requests+0xe0/0x170
+[  104.460599]  dwc3_process_event_buf+0x2a8/0xbb0
+[  104.465662]  dwc3_thread_interrupt+0x4c/0x90
+[  104.470435]  irq_thread_fn+0x34/0xb8
+[  104.474431]  irq_thread+0x1a0/0x290
+[  104.478327]  kthread+0x10c/0x120
+[  104.481933]  ret_from_fork+0x10/0x20
+
+The error path triggering these list errors are usually in the
+dwc3 driver handling the cancelled or completed list.
 
 Regards,
 Michael
@@ -189,25 +180,25 @@ Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
 Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
---rlnRXAcd4TUYimXE
+--q9JWgXnV+XEfBRBA
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmUE5P0ACgkQC+njFXoe
-LGQO/Q//Qb3nD1enbzZLjVI3UhqFbNmCd8WO1gZlwQyN7MS4FEbpKlTu3jKHxCyL
-qJQ8yq/bnKpMZoeh+fQH/xNxHgV4zjN2LuuBN3xZc62er9ZV22Wlh1yn91/frt27
-PyjsDBkSUiSh2kk4sugzoSyxGfpXuMaJjynqTNXjw3mXH6KdiePusvNlWwDm2a7t
-UQrsUnj71LmoRB6/LaM8bnUh3VoxRse38nF/plxGNgzEdjMY29IexkV2MSc07EPi
-nyfGOuar6ctQXFFJsDdtk4+oCsTaVXMNdjnip0DWiZAXAoaPpdyTKCBJpn+D3MM6
-Z4zaz/2vpAdeB9/X0WWeB1Trbry1uT0kfdQcjfCoN1UIaMdngu+HDCaa4u5S6ca4
-fYbk5n5ewlLOoZCnIm/vpijQpWzM7Iw0wRlsSQe+GLtyHuHMwWue3rzb/bvDOrCm
-IofS4teJ1Tn43VZYiRW9R8bS88hdBj/mB3dEfd2eaBgMZT78WgSNentrdtsS9hOB
-akpUye9JXoWvKw/Xvts1jOQB+FlBby5EtnsvszPwkKmanRhJYO1YYy9y6sNwD84r
-scj5IuePAAPu6rpfurSvVG0ONafADgOzKhJ06clyBcdaLPszW+FI+VCe6siOKOsy
-B7UfnnbIVGdO6SWbT1h2DKo1j/28n2z0kC04w9pDn5NyyVuG8No=
-=WHt4
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmUE5c8ACgkQC+njFXoe
+LGRdJRAAj580qBvWF1tftaNM/7YxxbvMYTSKQt4a5/wXyxS5QUrggJ87woQ73E8z
+kkPXezZBkibQZo/1CMjxwAib4F0lMS2/Srkvm3ctjoCcWWrhGUkBmMz4SCXVfI2j
+Tv5ZiVaYqaasM8zQNU5aaixxNUJd+un8EddwIHznQF1z+hgRIqwnfjNIW3Hck2i9
+5errJffT00gG8riFJ0i47Dzdltd+V69paHyDfCoeazFC3TMKDp3BZJ/iRU1TGFj7
+Lv8RZ5qdyLJh4LDoH23VANdGvUMtz019adqarXLkeA4Sof9n5KsaZNm2mWxpw0of
+j1imGD57qTa0KUk0gZAAplc2j80ZY9Ypd9bFeyF7xqc3z7vvJEyKVw+ImBy4bEJJ
+JXm9PHvP6bRv/aEqAre9oKwTWd2HgB+W4BjLfOQ/VQlJx64rq+My4sUachBYjQmN
+nv/RjU2T47WaEjhUr6hk9ZXesqg4kjYTsu61rm7gYVgZlNFEQCSDEnhxJSZ0EUNf
+fKxxnObuDwjxjjWfrz2CQwwB0i8760Y6EyT41Y0rTyGzJoj28lDkRgXwWodfqqbX
+fgAw99reXHxrmttO75DZ3L7ki4d0uDpYSqq0vNflxNbRZATC1xZ8cKyhWAa76Rkl
+v/iw5q2JWRKW+//CRBGfIUYOu1y8ErWrRq/V2xZ4w7gfaFyRkjY=
+=6z+2
 -----END PGP SIGNATURE-----
 
---rlnRXAcd4TUYimXE--
+--q9JWgXnV+XEfBRBA--
 
