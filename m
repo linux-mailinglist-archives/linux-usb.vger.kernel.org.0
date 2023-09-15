@@ -1,62 +1,60 @@
-Return-Path: <linux-usb+bounces-113-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-114-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AEC567A152B
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 07:12:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3AAC7A1565
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 07:27:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A1A811C20F1E
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 05:12:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F2F3282253
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 05:27:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 972D5611C;
-	Fri, 15 Sep 2023 05:11:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDCA0468E;
+	Fri, 15 Sep 2023 05:27:35 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE48146B1
-	for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 05:11:49 +0000 (UTC)
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B3602710
-	for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 22:11:48 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38F4hMcY006807;
-	Fri, 15 Sep 2023 05:11:42 GMT
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E733D3FFE
+	for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 05:27:33 +0000 (UTC)
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 439842711
+	for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 22:27:32 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38F48HjX019415;
+	Fri, 15 Sep 2023 05:27:29 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=SyXYlUkhGG0OrhLvZfVfWYCi+mvsDXmg2/t9cQPGZkk=;
- b=G5oP4ZP3XfWw6ytRjXOFG8fEqAlNIdZIWC7mpl0Dn9WrvpKNmOtqEOJpI+qyIcRXwGqU
- 12LaXbqoiCAQ/tqW2TfpRLATkYQJkkHNmeC4bmPzc3qHYcsD4dj+1+TbC/zuvIslskRp
- svNLM+pdmQ3tHdSkFqBvOUMxTNnDNhlrcu0FWdnU2/5+1MU2xkCYx4RlmcTX0nvGtvMq
- 0XME+gMrZQ/yPVcZgF1ufB070heeVNK0v8YVAMgcMBb+XLHNc+CIbnTuyoubj+wTsiUT
- Md3P7Sli7w/ezvQXswPMZCc1UHMt6uJ9pNGwiLGISml9VEzunUmWnQYwhMrV6RmCbDbk Nw== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t4g2xg329-1
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=qMgFERbKDxENXeuxj82NlH/j5DthyGn3SvlbQiA8Wog=;
+ b=ITMcFw9K3ev6nMUcHlqtKw/+jUHde8LT6k4pJ1ekkySwhH/6jmAbZsxM+RTVcWeHTRe6
+ KJfhH2QIISe8S2P4cg6G/phNDY+masBuYSU7As50XyW/Lk6po0M90Hymwrru/P6/jTGM
+ mEJxO3H8XDt+MdpknpLlITXVs+HUGiroiLhTKDv8aaRe9GuvwAq37/kpPPyUgokxY2Bl
+ 0IAtBkYe2FfLUQH2DwAeA1o+JmzBJoPoELMXzjVwOnPwyWQGP4l+V8gORWuzF79VxXeU
+ BXC5fUdDZtia+IpS5yFnQCvG8Owo0mJDLtSVPmqaw0zSIi9Jnbd78z5ZlxedikkKqZpt vQ== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t4fwn05pc-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 15 Sep 2023 05:11:42 +0000
+	Fri, 15 Sep 2023 05:27:29 +0000
 Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38F5BfKg030745
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38F5RRjQ031347
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 15 Sep 2023 05:11:41 GMT
+	Fri, 15 Sep 2023 05:27:27 GMT
 Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
  nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.36; Thu, 14 Sep 2023 22:11:39 -0700
+ 15.2.1118.36; Thu, 14 Sep 2023 22:27:25 -0700
 From: Linyu Yuan <quic_linyyuan@quicinc.com>
 To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         Alan Stern
 	<stern@rowland.harvard.edu>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 CC: <linux-usb@vger.kernel.org>, Linyu Yuan <quic_linyyuan@quicinc.com>
-Subject: [PATCH v5 3/3] usb: dwc3: trace: reduce buffer usage of trace event
-Date: Fri, 15 Sep 2023 13:11:23 +0800
-Message-ID: <20230915051123.26486-4-quic_linyyuan@quicinc.com>
+Subject: [PATCH v6 0/3] usb: gadget: reduce usb gadget trace event buffer usage
+Date: Fri, 15 Sep 2023 13:27:13 +0800
+Message-ID: <20230915052716.28540-1-quic_linyyuan@quicinc.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230915051123.26486-1-quic_linyyuan@quicinc.com>
-References: <20230915051123.26486-1-quic_linyyuan@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -70,185 +68,123 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01b.na.qualcomm.com (10.47.209.197)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: DPQaBxEaUMmbAeJ5VjY7BACIIj5MIAP6
-X-Proofpoint-ORIG-GUID: DPQaBxEaUMmbAeJ5VjY7BACIIj5MIAP6
+X-Proofpoint-GUID: QeVGie4GSEexqQot0KghPzi460aPuNto
+X-Proofpoint-ORIG-GUID: QeVGie4GSEexqQot0KghPzi460aPuNto
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
  definitions=2023-09-15_05,2023-09-14_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
- phishscore=0 impostorscore=0 adultscore=0 mlxlogscore=549 bulkscore=0
- mlxscore=0 lowpriorityscore=0 priorityscore=1501 spamscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2309150045
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1015
+ mlxscore=0 phishscore=0 malwarescore=0 priorityscore=1501 impostorscore=0
+ spamscore=0 mlxlogscore=418 bulkscore=0 suspectscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2308100000
+ definitions=main-2309150048
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
 	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Save u32 members in __le32 format into trace event ring buffer and parse
-it for possible bit fields.
+some trace event use an interger to to save a bit field info of gadget,
+also some trace save endpoint name in string forat, it all can be
+chagned to other way at trace event store phase.
 
-Use new common trace event macro in gadget.h for output stage.
+bit field can be replace with a union interger member which include
+multiple bit fields.
 
-Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
----
- drivers/usb/dwc3/trace.h | 63 ++++++++++++++++++----------------------
- 1 file changed, 29 insertions(+), 34 deletions(-)
+ep name stringe can be replace to a interger which contaion number
+and dir info.
 
-diff --git a/drivers/usb/dwc3/trace.h b/drivers/usb/dwc3/trace.h
-index d2997d17cfbe..cfa8cc8be68d 100644
---- a/drivers/usb/dwc3/trace.h
-+++ b/drivers/usb/dwc3/trace.h
-@@ -102,30 +102,25 @@ DECLARE_EVENT_CLASS(dwc3_log_request,
- 	TP_PROTO(struct dwc3_request *req),
- 	TP_ARGS(req),
- 	TP_STRUCT__entry(
--		__string(name, req->dep->name)
-+		__field(u32, edw3)
- 		__field(struct dwc3_request *, req)
- 		__field(unsigned int, actual)
- 		__field(unsigned int, length)
- 		__field(int, status)
--		__field(int, zero)
--		__field(int, short_not_ok)
--		__field(int, no_interrupt)
-+		__field(u32, rdw1)
- 	),
- 	TP_fast_assign(
--		__assign_str(name, req->dep->name);
-+		__entry->edw3 = cpu_to_le32(req->dep->endpoint.dw3);
- 		__entry->req = req;
- 		__entry->actual = req->request.actual;
- 		__entry->length = req->request.length;
- 		__entry->status = req->request.status;
--		__entry->zero = req->request.zero;
--		__entry->short_not_ok = req->request.short_not_ok;
--		__entry->no_interrupt = req->request.no_interrupt;
-+		__entry->rdw1 = cpu_to_le32(req->request.dw1);
- 	),
--	TP_printk("%s: req %p length %u/%u %s%s%s ==> %d",
--		__get_str(name), __entry->req, __entry->actual, __entry->length,
--		__entry->zero ? "Z" : "z",
--		__entry->short_not_ok ? "S" : "s",
--		__entry->no_interrupt ? "i" : "I",
-+	TP_printk("%s: req %p length %u/%u %s ==> %d",
-+		usb_gadget_ep_name(__get_buf(USB_EP_MAX_NAME_LEN), __entry->edw3),
-+		__entry->req, __entry->actual, __entry->length,
-+		__print_flags(__entry->rdw1, ":", USB_REQ_FLAGS),
- 		__entry->status
- 	)
- );
-@@ -185,7 +180,7 @@ DECLARE_EVENT_CLASS(dwc3_log_gadget_ep_cmd,
- 		struct dwc3_gadget_ep_cmd_params *params, int cmd_status),
- 	TP_ARGS(dep, cmd, params, cmd_status),
- 	TP_STRUCT__entry(
--		__string(name, dep->name)
-+		__field(u32, edw3)
- 		__field(unsigned int, cmd)
- 		__field(u32, param0)
- 		__field(u32, param1)
-@@ -193,7 +188,7 @@ DECLARE_EVENT_CLASS(dwc3_log_gadget_ep_cmd,
- 		__field(int, cmd_status)
- 	),
- 	TP_fast_assign(
--		__assign_str(name, dep->name);
-+		__entry->edw3 = cpu_to_le32(dep->endpoint.dw3);
- 		__entry->cmd = cmd;
- 		__entry->param0 = params->param0;
- 		__entry->param1 = params->param1;
-@@ -201,7 +196,8 @@ DECLARE_EVENT_CLASS(dwc3_log_gadget_ep_cmd,
- 		__entry->cmd_status = cmd_status;
- 	),
- 	TP_printk("%s: cmd '%s' [%x] params %08x %08x %08x --> status: %s",
--		__get_str(name), dwc3_gadget_ep_cmd_string(__entry->cmd),
-+		usb_gadget_ep_name(__get_buf(USB_EP_MAX_NAME_LEN), __entry->edw3),
-+		dwc3_gadget_ep_cmd_string(__entry->cmd),
- 		__entry->cmd, __entry->param0,
- 		__entry->param1, __entry->param2,
- 		dwc3_ep_cmd_status_string(__entry->cmd_status)
-@@ -218,7 +214,7 @@ DECLARE_EVENT_CLASS(dwc3_log_trb,
- 	TP_PROTO(struct dwc3_ep *dep, struct dwc3_trb *trb),
- 	TP_ARGS(dep, trb),
- 	TP_STRUCT__entry(
--		__string(name, dep->name)
-+		__field(u32, edw3)
- 		__field(struct dwc3_trb *, trb)
- 		__field(u32, bpl)
- 		__field(u32, bph)
-@@ -229,7 +225,7 @@ DECLARE_EVENT_CLASS(dwc3_log_trb,
- 		__field(u32, dequeue)
- 	),
- 	TP_fast_assign(
--		__assign_str(name, dep->name);
-+		__entry->edw3 = cpu_to_le32(dep->endpoint.dw3);
- 		__entry->trb = trb;
- 		__entry->bpl = trb->bpl;
- 		__entry->bph = trb->bph;
-@@ -240,7 +236,8 @@ DECLARE_EVENT_CLASS(dwc3_log_trb,
- 		__entry->dequeue = dep->trb_dequeue;
- 	),
- 	TP_printk("%s: trb %p (E%d:D%d) buf %08x%08x size %s%d ctrl %08x sofn %08x (%c%c%c%c:%c%c:%s)",
--		__get_str(name), __entry->trb, __entry->enqueue,
-+		usb_gadget_ep_name(__get_buf(USB_EP_MAX_NAME_LEN), __entry->edw3),
-+		__entry->trb, __entry->enqueue,
- 		__entry->dequeue, __entry->bph, __entry->bpl,
- 		({char *s;
- 		int pcm = ((__entry->size >> 24) & 3) + 1;
-@@ -272,7 +269,7 @@ DECLARE_EVENT_CLASS(dwc3_log_trb,
- 		__entry->ctrl & DWC3_TRB_CTRL_CSP ? 'S' : 's',
- 		__entry->ctrl & DWC3_TRB_CTRL_ISP_IMI ? 'S' : 's',
- 		__entry->ctrl & DWC3_TRB_CTRL_IOC ? 'C' : 'c',
--		  dwc3_trb_type_string(DWC3_TRBCTL_TYPE(__entry->ctrl))
-+		dwc3_trb_type_string(DWC3_TRBCTL_TYPE(__entry->ctrl))
- 	)
- );
- 
-@@ -290,32 +287,30 @@ DECLARE_EVENT_CLASS(dwc3_log_ep,
- 	TP_PROTO(struct dwc3_ep *dep),
- 	TP_ARGS(dep),
- 	TP_STRUCT__entry(
--		__string(name, dep->name)
--		__field(unsigned int, maxpacket)
--		__field(unsigned int, maxpacket_limit)
--		__field(unsigned int, max_streams)
--		__field(unsigned int, maxburst)
-+		__field(u32, edw3)
-+		__field(u32, edw1)
-+		__field(u32, edw2)
- 		__field(unsigned int, flags)
- 		__field(unsigned int, direction)
- 		__field(u8, trb_enqueue)
- 		__field(u8, trb_dequeue)
- 	),
- 	TP_fast_assign(
--		__assign_str(name, dep->name);
--		__entry->maxpacket = dep->endpoint.maxpacket;
--		__entry->maxpacket_limit = dep->endpoint.maxpacket_limit;
--		__entry->max_streams = dep->endpoint.max_streams;
--		__entry->maxburst = dep->endpoint.maxburst;
-+		__entry->edw3 = dep->endpoint.dw3;
-+		__entry->edw1 = dep->endpoint.dw1;
-+		__entry->edw2 = dep->endpoint.dw2;
- 		__entry->flags = dep->flags;
- 		__entry->direction = dep->direction;
- 		__entry->trb_enqueue = dep->trb_enqueue;
- 		__entry->trb_dequeue = dep->trb_dequeue;
- 	),
- 	TP_printk("%s: mps %d/%d streams %d burst %d ring %d/%d flags %c:%c%c%c%c:%c",
--		__get_str(name), __entry->maxpacket,
--		__entry->maxpacket_limit, __entry->max_streams,
--		__entry->maxburst, __entry->trb_enqueue,
--		__entry->trb_dequeue,
-+		usb_gadget_ep_name(__get_buf(USB_EP_MAX_NAME_LEN), __entry->edw3),
-+		u32_get_bits(__entry->edw1, USB_EP_MAXPACKET),
-+		u32_get_bits(__entry->edw1, USB_EP_MAXPACKET_LIMIT),
-+		u32_get_bits(__entry->edw2, USB_EP_MAX_STREAMS),
-+		u32_get_bits(__entry->edw2, USB_EP_MAXBURST),
-+		__entry->trb_enqueue, __entry->trb_dequeue,
- 		__entry->flags & DWC3_EP_ENABLED ? 'E' : 'e',
- 		__entry->flags & DWC3_EP_STALL ? 'S' : 's',
- 		__entry->flags & DWC3_EP_WEDGE ? 'W' : 'w',
+in order to avoid big endian issue, save interger data into ring
+buffer in __le32 format.
+
+backgroud:
+the benefit is when user not increase system trace event buffer space,
+or in lower system trace event buffer space, it allow more trace event
+entries to be saved.
+
+
+in normal condition, the usb request is most frequent things after
+enumeration with useful operation,
+so take below trace event class for explanation,
+
+
+DECLARE_EVENT_CLASS(udc_log_req,
+    TP_PROTO(struct usb_ep *ep, struct usb_request *req, int ret),
+    TP_ARGS(ep, req, ret),
+    TP_STRUCT__entry(
+        __string(name, ep->name)
+        __field(unsigned, length)
+        __field(unsigned, actual)
+        __field(unsigned, num_sgs)
+        __field(unsigned, num_mapped_sgs)
+        __field(unsigned, stream_id)
+        __field(unsigned, no_interrupt)
+        __field(unsigned, zero)
+        __field(unsigned, short_not_ok)
+        __field(int, status)
+        __field(int, ret)
+        __field(struct usb_request *, req)
+    ),
+    TP_fast_assign(
+        __assign_str(name, ep->name);
+        __entry->length = req->length;
+        __entry->actual = req->actual;
+        __entry->num_sgs = req->num_sgs;
+        __entry->num_mapped_sgs = req->num_mapped_sgs;
+        __entry->stream_id = req->stream_id;
+        __entry->no_interrupt = req->no_interrupt;
+        __entry->zero = req->zero;
+        __entry->short_not_ok = req->short_not_ok;
+        __entry->status = req->status;
+        __entry->ret = ret;
+        __entry->req = req;
+    ),
+    TP_printk("%s: req %p length %d/%d sgs %d/%d stream %d %s%s%s status %d --> %d",
+        __get_str(name),__entry->req,  __entry->actual, __entry->length,
+        __entry->num_mapped_sgs, __entry->num_sgs, __entry->stream_id,
+        __entry->zero ? "Z" : "z",
+        __entry->short_not_ok ? "S" : "s",
+        __entry->no_interrupt ? "i" : "I",
+        __entry->status, __entry->ret
+    )
+);
+
+
+consider 32 bit ARCH,
+without change, one trace entry size is:
+4 (ring buffer event header ) + 8 (trace event header ) +
+48 (trace class header) + 9 (ep string name) = 69 bytes.
+
+with change,
+4 (ring buffer event header ) + 8 (trace event header ) +
+36 (trace class header)  = 48 bytes.
+
+consider there is 1MB trace buffer space,
+without change, it can save 15196 entries,
+with change, it can save 21845 entries. 
+
+
+v1: https://lore.kernel.org/linux-usb/20230911042843.2711-1-quic_linyyuan@quicinc.com/
+v2: fix two compile issues that COMPILE_TEST not covered
+    https://lore.kernel.org/linux-usb/20230911112446.1791-1-quic_linyyuan@quicinc.com/
+v3: fix reviewer comments, allow bit fields work on both little and big endian
+    https://lore.kernel.org/linux-usb/20230912104455.7737-1-quic_linyyuan@quicinc.com/
+v4: add DECLARE_EVENT_CLASS_PRINT_INIT() new trace class and use it
+    https://lore.kernel.org/linux-usb/20230914100302.30274-1-quic_linyyuan@quicinc.com/
+v5: use cpu_to_le32() at fast assign stage to fix endian issue
+    https://lore.kernel.org/linux-usb/20230915051123.26486-1-quic_linyyuan@quicinc.com/
+v6: missing three cpu_to_le32() usage in dwc3 trace
+
+Linyu Yuan (3):
+  usb: gadget: add anonymous definition in some struct for trace purpose
+  usb: udc: trace: reduce buffer usage of trace event
+  usb: dwc3: trace: reduce buffer usage of trace event
+
+ drivers/usb/dwc3/trace.h       |  63 +++++------
+ drivers/usb/gadget/udc/trace.h | 114 +++++--------------
+ include/linux/usb/gadget.h     | 201 ++++++++++++++++++++++++++-------
+ 3 files changed, 219 insertions(+), 159 deletions(-)
+
 -- 
 2.17.1
 
