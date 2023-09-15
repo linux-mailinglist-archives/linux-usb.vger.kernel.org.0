@@ -1,45 +1,44 @@
-Return-Path: <linux-usb+bounces-103-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-104-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09B547A1301
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 03:43:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B4A47A134B
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 03:51:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AE9141C2117D
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 01:43:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 628441C20A17
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 01:51:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F22BF806;
-	Fri, 15 Sep 2023 01:42:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9A4B81F;
+	Fri, 15 Sep 2023 01:51:23 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1D8C36A
-	for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 01:42:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE94B808
+	for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 01:51:21 +0000 (UTC)
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by lindbergh.monkeyblade.net (Postfix) with SMTP id C6B5C2709
-	for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 18:42:50 -0700 (PDT)
-Received: (qmail 1019415 invoked by uid 1000); 14 Sep 2023 21:42:49 -0400
-Date: Thu, 14 Sep 2023 21:42:48 -0400
+	by lindbergh.monkeyblade.net (Postfix) with SMTP id B3FBE7D8C
+	for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 18:51:20 -0700 (PDT)
+Received: (qmail 1019565 invoked by uid 1000); 14 Sep 2023 21:51:19 -0400
+Date: Thu, 14 Sep 2023 21:51:19 -0400
 From: Alan Stern <stern@rowland.harvard.edu>
-To: Yuran Pereira <yuran.pereira@hotmail.com>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-  "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-  "royluo@google.com" <royluo@google.com>,
-  "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
-  "raychi@google.com" <raychi@google.com>,
-  "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-  "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-  "syzbot+c063a4e176681d2e0380@syzkaller.appspotmail.com" <syzbot+c063a4e176681d2e0380@syzkaller.appspotmail.com>
-Subject: Re: [PATCH] USB: core: Fix a NULL pointer dereference
-Message-ID: <530c4be4-ccaa-4e6e-b0ac-68c896060766@rowland.harvard.edu>
-References: <AS8P192MB12697886EC8DF1650AD56A57E8EDA@AS8P192MB1269.EURP192.PROD.OUTLOOK.COM>
- <d3ffde1a-e0da-4f3f-ac34-659cbcf41258@rowland.harvard.edu>
- <AM9P192MB12670D185D208AFA51B8348EE8ECA@AM9P192MB1267.EURP192.PROD.OUTLOOK.COM>
- <c072b373-0368-4f49-a4da-da309955cb7a@rowland.harvard.edu>
- <AS8P192MB1269A9732001D142F3272ACDE8F6A@AS8P192MB1269.EURP192.PROD.OUTLOOK.COM>
+To: Linyu Yuan <quic_linyyuan@quicinc.com>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+  Chunfeng Yun <chunfeng.yun@mediatek.com>, Bin Liu <b-liu@ti.com>,
+  Peter Chen <peter.chen@kernel.org>, Pawel Laszczak <pawell@cadence.com>,
+  Roger Quadros <rogerq@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+  Masami Hiramatsu <mhiramat@kernel.org>,
+  Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+  linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/8] usb: gadget: add anonymous definition in some struct
+ for trace purpose
+Message-ID: <eae2be47-f489-4f1b-91c7-f2f81304bfdb@rowland.harvard.edu>
+References: <20230914100302.30274-1-quic_linyyuan@quicinc.com>
+ <20230914100302.30274-3-quic_linyyuan@quicinc.com>
+ <073cbfb2-2f18-4bf7-a313-b16bbcefa8e0@rowland.harvard.edu>
+ <0c2ba115-826e-40d6-73ac-7ed67302c8eb@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -48,78 +47,52 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <AS8P192MB1269A9732001D142F3272ACDE8F6A@AS8P192MB1269.EURP192.PROD.OUTLOOK.COM>
+In-Reply-To: <0c2ba115-826e-40d6-73ac-7ed67302c8eb@quicinc.com>
 
-On Fri, Sep 15, 2023 at 12:57:58AM +0000, Yuran Pereira wrote:
-> Hello Alan,
+On Fri, Sep 15, 2023 at 09:02:48AM +0800, Linyu Yuan wrote:
 > 
-> Thank you for the detailed explanation.
+> On 9/14/2023 10:54 PM, Alan Stern wrote:
+> > You didn't include the version number in the Subject: line.  Undoubtedly
+> > Greg's automatic error checker will warn you about this.  Unless the
+> > version number is clearly marked for each patch, it's difficult for his
+> > programs to tell which email message contains the most recent version.
+> > 
+> > On Thu, Sep 14, 2023 at 06:02:56PM +0800, Linyu Yuan wrote:
+> > > Some UDC trace event will save usb udc information, but it use one int
+> > > size buffer to save one bit information of usb udc, it is wast trace
+> > > buffer.
+> > > 
+> > > Add anonymous union which have one u32 member can be used by trace event
+> > > during fast assign stage to save more entries with same trace ring buffer
+> > > size.
+> > > 
+> > > Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+> > > ---
+> > And you didn't include the version change information here, below the
+> > "---" line.
+> > 
+> > Apart from that, this is a _lot_ better than before!  I don't know if
+> > Greg will think this change is worth merging, but at least now it's
+> > possible to read the code and understand what's going on.
 > 
-> Apologies for the delay replying.
-> Please, feel free to submit the patch.
+> 
+> according Steven's comment, maybe will always save data in little endian at
+> trace event
+> 
+> fast assign stage.
+> 
+> it will add definition of bit field back.
 
-No need; Andy Shevchenko already submitted the same patch some time ago 
-and it has been merged.
+Yes, that would be even better because you wouldn't have to change the 
+definition of struct usb_gadget or struct usb_endpoint at all.  The fast 
+assign stage can simply do:
+
+	__entry->dw1 = (g->sg_supported << 0) |
+			(g->is_otg << 1) |
+			...
+
+and then you can easily access the individual bits in __entry.  It 
+wouldn't be as fast but it would still save a lot of space.
 
 Alan Stern
-
-> ________________________________
-> De: Alan Stern <stern@rowland.harvard.edu>
-> Enviado: 9 de setembro de 2023 14:36
-> Para: Yuran Pereira <yuran.pereira@hotmail.com>; Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: gregkh@linuxfoundation.org <gregkh@linuxfoundation.org>; royluo@google.com <royluo@google.com>; christophe.jaillet@wanadoo.fr <christophe.jaillet@wanadoo.fr>; raychi@google.com <raychi@google.com>; linux-usb@vger.kernel.org <linux-usb@vger.kernel.org>; linux-kernel@vger.kernel.org <linux-kernel@vger.kernel.org>; syzbot+c063a4e176681d2e0380@syzkaller.appspotmail.com <syzbot+c063a4e176681d2e0380@syzkaller.appspotmail.com>
-> Assunto: Re: [PATCH] USB: core: Fix a NULL pointer dereference
-> 
-> On Sat, Sep 09, 2023 at 06:28:12AM +0000, Yuran Pereira wrote:
-> > Hello Alan,
-> >
-> > Thank you for elucidating that.
-> >
-> > So, this bug is present on the mainline tree which is where syzkaller
-> > found it. My patch was also based on the mainline tree.
-> >
-> > I just ran the same reproducer against a kernel compiled from the usb
-> > tree, and, as you suggested, the test you mentioned does in fact,
-> > prevent the bug from occurring.
-> >
-> > Please forgive my ignorance; I am a new contributor to the community.
-> > But in this situation how should I proceed? Is there even a need to
-> > submit a patch, or will the code currently present in the usb tree
-> > eventually be reflected in the mainline?
-> 
-> The first step is to find the difference between the mainline and USB
-> trees that is responsible for this change in behavior.  A quick check of
-> the Git logs shows that the change was caused by commit d21fdd07cea4
-> ("driver core: Return proper error code when dev_set_name() fails"),
-> written by Andy Shevchenko.  As a result of this commit, the code in
-> device_add() now says:
-> 
->         if (dev_name(dev))
->                 error = 0;
->         /* subsystems can specify simple device enumeration */
->         else if (dev->bus && dev->bus->dev_name)
->                 error = dev_set_name(dev, "%s%u", dev->bus->dev_name, dev->id);
->         if (error)
->                 goto name_error;
-> 
-> This obviously omits a final "else" clause; it should say:
-> 
->         if (dev_name(dev))
->                 error = 0;
->         /* subsystems can specify simple device enumeration */
->         else if (dev->bus && dev->bus->dev_name)
->                 error = dev_set_name(dev, "%s%u", dev->bus->dev_name, dev->id);
-> +       else
-> +               error = -EINVAL;
->         if (error)
->                 goto name_error;
-> 
-> So to answer your questions: No, the code in the USB tree will not find
-> its way into mainline.  The opposite will happen: The mainline code will
-> land in the USB tree.  Which means that yes, there is a need to submit a
-> patch.  You can go ahead and write this up for submission, or I can
-> submit it for you.  Or you can check with Andy and see if he wants to
-> fix the problem in a different way.
-> 
-> Alan Stern
 
