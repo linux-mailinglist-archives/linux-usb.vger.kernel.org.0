@@ -1,186 +1,265 @@
-Return-Path: <linux-usb+bounces-118-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-119-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B2847A15E7
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 08:10:33 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FD8E7A162A
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 08:33:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1F16A281BD7
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 06:10:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A33E91C20BFA
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 06:33:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB090611E;
-	Fri, 15 Sep 2023 06:10:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8274A523A;
+	Fri, 15 Sep 2023 06:32:57 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDEA3566D
-	for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 06:10:20 +0000 (UTC)
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CDBF1BD0;
-	Thu, 14 Sep 2023 23:10:18 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38F5lLQr022421;
-	Fri, 15 Sep 2023 06:10:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type :
- content-transfer-encoding; s=qcppdkim1;
- bh=L/Y1nO9PHzxKa+60GpGl8/DXiZwZ5uTO9iL91cbIaDc=;
- b=KFxBCccVuwKueoiQUDLhMHsLaco6ZMWGf5Xz5hJgCMZf2A3S29YRbIxZokn7LfEoPdZJ
- eZgaBVQNYNGYKka+8ML8++vArzPL//jFA6ihM1LdjM2iT7cksGdrFwtXMPjPc4kRmLXt
- GbF/nDBxYmgUkFSsfj7jUs7dFULtLguNZD+qMVvQLEEUIPe16soqSB82Pw+W+JEwHY0b
- QB6tynnfBvqfrtXj5rgEpkC27qGAF5xev9j8MC2dqAFZLrdukfm+vWz3dmSD4Uelj8Fs
- /mWNobC4nJMbqZ1wwhznog6A1+6l98KWKkg0UHW7Fy7igWJ9MGZXzIcBnXmJag2Y37rv Tw== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t4g86r6b3-1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8E7A7F3
+	for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 06:32:55 +0000 (UTC)
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67AA9CCD;
+	Thu, 14 Sep 2023 23:32:54 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38F6591J011488;
+	Fri, 15 Sep 2023 06:32:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=UPTzuiyLbqpY2BazsAY5AJUexVNIMqd123LNalCL4Gc=;
+ b=WjjEoS8Lh5PxhLLm4fD8hxuH+drxEeTjdW6Dr3G+PATCk9Ei9MnfmBQuB/QrzgecmEo8
+ JBpmIy0+sj0cPL1/EUXvvua34bExAEOpacZMSsnv5chwaPmZ1ONPCUokp/jwAbCJtrVt
+ 6dWPxrSyKGDtO78ycDdO2LOiCE/Pmm+50Ffz5mZ1zxH1/jhSASUQQGYu/vH1wqiGeeZB
+ x7haVu/3rku5Rp3U62surKknTGZGnges58W6wZl49aY5QV3dlzH3Nz7boR8vPpI+qvyR
+ erUmtT4N1Qc96keoArXgZt+ssgMZqezVw/SSDDfgUpNKVTBPbJkObOmNwd7z7N+e8Qcf fQ== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t4g0709dq-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 15 Sep 2023 06:10:16 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38F6AFAc009862
+	Fri, 15 Sep 2023 06:32:47 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38F6Wkkb006921
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 15 Sep 2023 06:10:15 GMT
-Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.36; Thu, 14 Sep 2023 23:10:12 -0700
-From: Krishna Kurapati <quic_kriskura@quicinc.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linyu Yuan
-	<quic_linyyuan@quicinc.com>,
-        =?UTF-8?q?Maciej=20=C5=BBenczykowski?=
-	<maze@google.com>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
-        <quic_jackp@quicinc.com>, Krishna Kurapati <quic_kriskura@quicinc.com>,
-        <stable@vger.kernel.org>
-Subject: [PATCH v2] usb: gadget: ncm: Handle decoding of multiple NTB's in unwrap call
-Date: Fri, 15 Sep 2023 11:39:48 +0530
-Message-ID: <20230915061001.18884-1-quic_kriskura@quicinc.com>
-X-Mailer: git-send-email 2.42.0
+	Fri, 15 Sep 2023 06:32:46 GMT
+Received: from [10.216.46.193] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Thu, 14 Sep
+ 2023 23:32:43 -0700
+Message-ID: <fb257d0f-2e6e-400f-a654-18e3c59af1a3@quicinc.com>
+Date: Fri, 15 Sep 2023 12:02:12 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="y"
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] [PATCH v3] usb: gadget: f_uac2: uevent changes for uac2
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Jing Leng <jleng@ambarella.com>, Felipe Balbi
+	<balbi@kernel.org>
+CC: Pratham Pratap <quic_ppratap@quicinc.com>,
+        Jack Pham
+	<quic_jackp@quicinc.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230829092132.1940-1-quic_akakum@quicinc.com>
+Content-Language: en-US
+From: AKASH KUMAR <quic_akakum@quicinc.com>
+In-Reply-To: <20230829092132.1940-1-quic_akakum@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: cLGA2U9WY19T-f71Sg8ZeCxizqz5QQfU
-X-Proofpoint-ORIG-GUID: cLGA2U9WY19T-f71Sg8ZeCxizqz5QQfU
+X-Proofpoint-GUID: 3ivyhkxh3t-zT6RDpLKj-8W4OBAGxPxN
+X-Proofpoint-ORIG-GUID: 3ivyhkxh3t-zT6RDpLKj-8W4OBAGxPxN
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
  definitions=2023-09-15_05,2023-09-14_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1011
- bulkscore=0 impostorscore=0 adultscore=0 suspectscore=0 malwarescore=0
- spamscore=0 mlxscore=0 priorityscore=1501 mlxlogscore=999
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2309150053
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 clxscore=1011 phishscore=0 spamscore=0 mlxscore=0
+ adultscore=0 suspectscore=0 lowpriorityscore=0 malwarescore=0 bulkscore=0
+ mlxlogscore=924 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2308100000 definitions=main-2309150057
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
 	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-When NCM is used with hosts like Windows PC, it is observed that there are
-multiple NTB's contained in one usb request giveback. Since the driver
-unwraps the obtained request data assuming only one NTB is present, we loose
-the subsequent NTB's present resulting in data loss.
+Gentle Reminder!!!
 
-Fix this by checking the parsed block length with the obtained data length
-in usb request and continue parsing after the last byte of current NTB.
-
-Cc: stable@vger.kernel.org
-Reviewed-by: Maciej Żenczykowski <maze@google.com>
-Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
----
- drivers/usb/gadget/function/f_ncm.c | 26 +++++++++++++++++++-------
- 1 file changed, 19 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/f_ncm.c b/drivers/usb/gadget/function/f_ncm.c
-index feccf4c8cc4f..f00f051438ec 100644
---- a/drivers/usb/gadget/function/f_ncm.c
-+++ b/drivers/usb/gadget/function/f_ncm.c
-@@ -1156,7 +1156,8 @@ static int ncm_unwrap_ntb(struct gether *port,
- 			  struct sk_buff_head *list)
- {
- 	struct f_ncm	*ncm = func_to_ncm(&port->func);
--	__le16		*tmp = (void *) skb->data;
-+	unsigned char	*ntb_ptr = (void *) skb->data;
-+	__le16		*tmp;
- 	unsigned	index, index2;
- 	int		ndp_index;
- 	unsigned	dg_len, dg_len2;
-@@ -1169,6 +1170,10 @@ static int ncm_unwrap_ntb(struct gether *port,
- 	const struct ndp_parser_opts *opts = ncm->parser_opts;
- 	unsigned	crc_len = ncm->is_crc ? sizeof(uint32_t) : 0;
- 	int		dgram_counter;
-+	int		to_process = skb->len;
-+
-+parse_ntb:
-+	tmp = (void *) ntb_ptr;
- 
- 	/* dwSignature */
- 	if (get_unaligned_le32(tmp) != opts->nth_sign) {
-@@ -1215,7 +1220,7 @@ static int ncm_unwrap_ntb(struct gether *port,
- 		 * walk through NDP
- 		 * dwSignature
- 		 */
--		tmp = (void *)(skb->data + ndp_index);
-+		tmp = (void *)(ntb_ptr + ndp_index);
- 		if (get_unaligned_le32(tmp) != ncm->ndp_sign) {
- 			INFO(port->func.config->cdev, "Wrong NDP SIGN\n");
- 			goto err;
-@@ -1272,11 +1277,11 @@ static int ncm_unwrap_ntb(struct gether *port,
- 			if (ncm->is_crc) {
- 				uint32_t crc, crc2;
- 
--				crc = get_unaligned_le32(skb->data +
-+				crc = get_unaligned_le32(ntb_ptr +
- 							 index + dg_len -
- 							 crc_len);
- 				crc2 = ~crc32_le(~0,
--						 skb->data + index,
-+						 ntb_ptr + index,
- 						 dg_len - crc_len);
- 				if (crc != crc2) {
- 					INFO(port->func.config->cdev,
-@@ -1303,7 +1308,7 @@ static int ncm_unwrap_ntb(struct gether *port,
- 							 dg_len - crc_len);
- 			if (skb2 == NULL)
- 				goto err;
--			skb_put_data(skb2, skb->data + index,
-+			skb_put_data(skb2, ntb_ptr + index,
- 				     dg_len - crc_len);
- 
- 			skb_queue_tail(list, skb2);
-@@ -1316,10 +1321,17 @@ static int ncm_unwrap_ntb(struct gether *port,
- 		} while (ndp_len > 2 * (opts->dgram_item_len * 2));
- 	} while (ndp_index);
- 
--	dev_consume_skb_any(skb);
--
- 	VDBG(port->func.config->cdev,
- 	     "Parsed NTB with %d frames\n", dgram_counter);
-+
-+	to_process -= block_len;
-+	if (to_process != 0) {
-+		ntb_ptr = (unsigned char *) (ntb_ptr + block_len);
-+		goto parse_ntb;
-+	}
-+
-+	dev_consume_skb_any(skb);
-+
- 	return 0;
- err:
- 	skb_queue_purge(list);
--- 
-2.42.0
-
+On 8/29/2023 2:51 PM, Akash Kumar wrote:
+> Adding uevent from usb audio gadget driver for uac2 playback/capture
+> events, which userspace reads and later reads sysfs entry to know if
+> playback or capture has stopped or started by host application.
+>
+> /config/usb_gadget/g1/functions/uac2.0 # cat c_status
+> 1  --> capture started
+> 0  --> capture stopped
+> /config/usb_gadget/g1/functions/uac2.0 # cat p_status
+> 1 --> playback started
+> 0 --> playback stopped
+>
+> Signed-off-by: Akash Kumar <quic_akakum@quicinc.com>
+> ---
+>   Documentation/usb/gadget-testing.rst |  6 ++++
+>   drivers/usb/gadget/function/f_uac2.c | 47 ++++++++++++++++++++++++++++
+>   drivers/usb/gadget/function/u_uac2.h |  5 +++
+>   3 files changed, 58 insertions(+)
+>
+> diff --git a/Documentation/usb/gadget-testing.rst b/Documentation/usb/gadget-testing.rst
+> index 2eeb3e9299e4..b2fded232ced 100644
+> --- a/Documentation/usb/gadget-testing.rst
+> +++ b/Documentation/usb/gadget-testing.rst
+> @@ -733,6 +733,12 @@ The uac2 function provides these attributes in its function directory:
+>   	p_ssize		playback sample size (bytes)
+>   	req_number	the number of pre-allocated request for both capture
+>   			and playback
+> +        c_status        audio capture state
+> +                        (0: capture stopped, 1: capture started)
+> +        p_status        audio playback state
+> +                        (0: playback stopped, 1: playback started)
+> +        c_status        audio capture state
+> +        p_status        audio playback state
+>   	=============== ====================================================
+>   
+>   The attributes have sane default values.
+> diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
+> index db2d4980cb35..f1f7631e9380 100644
+> --- a/drivers/usb/gadget/function/f_uac2.c
+> +++ b/drivers/usb/gadget/function/f_uac2.c
+> @@ -739,6 +739,8 @@ afunc_set_alt(struct usb_function *fn, unsigned intf, unsigned alt)
+>   	struct usb_gadget *gadget = cdev->gadget;
+>   	struct device *dev = &gadget->dev;
+>   	int ret = 0;
+> +	struct f_uac2_opts *audio_opts =
+> +		container_of(fn->fi, struct f_uac2_opts, func_inst);
+>   
+>   	/* No i/f has more than 2 alt settings */
+>   	if (alt > 1) {
+> @@ -762,6 +764,8 @@ afunc_set_alt(struct usb_function *fn, unsigned intf, unsigned alt)
+>   			ret = u_audio_start_capture(&uac2->g_audio);
+>   		else
+>   			u_audio_stop_capture(&uac2->g_audio);
+> +		audio_opts->c_status = alt;
+> +		schedule_work(&audio_opts->work);
+>   	} else if (intf == uac2->as_in_intf) {
+>   		uac2->as_in_alt = alt;
+>   
+> @@ -769,6 +773,8 @@ afunc_set_alt(struct usb_function *fn, unsigned intf, unsigned alt)
+>   			ret = u_audio_start_playback(&uac2->g_audio);
+>   		else
+>   			u_audio_stop_playback(&uac2->g_audio);
+> +		audio_opts->p_status = alt;
+> +		schedule_work(&audio_opts->work);
+>   	} else {
+>   		dev_err(dev, "%s:%d Error!\n", __func__, __LINE__);
+>   		return -EINVAL;
+> @@ -801,11 +807,16 @@ static void
+>   afunc_disable(struct usb_function *fn)
+>   {
+>   	struct f_uac2 *uac2 = func_to_uac2(fn);
+> +	struct f_uac2_opts *audio_opts =
+> +		container_of(fn->fi, struct f_uac2_opts, func_inst);
+>   
+>   	uac2->as_in_alt = 0;
+>   	uac2->as_out_alt = 0;
+> +	audio_opts->p_status = 0;//alt;
+> +	audio_opts->c_status = 0; //alt;
+>   	u_audio_stop_capture(&uac2->g_audio);
+>   	u_audio_stop_playback(&uac2->g_audio);
+> +	schedule_work(&audio_opts->work);
+>   }
+>   
+>   static int
+> @@ -1036,6 +1047,25 @@ UAC2_ATTRIBUTE(c_srate);
+>   UAC2_ATTRIBUTE(c_ssize);
+>   UAC2_ATTRIBUTE(req_number);
+>   
+> +#define UAC2_ATTRIBUTE_RO(name)                                         \
+> +	static ssize_t f_uac2_opts_##name##_show(                       \
+> +			struct config_item *item,                       \
+> +			char *page)                                     \
+> +{                                                                       \
+> +	struct f_uac2_opts *opts = to_f_uac2_opts(item);                \
+> +	int result;                                                     \
+> +									\
+> +	mutex_lock(&opts->lock);                                        \
+> +	result = scnprintf(page, PAGE_SIZE, "%u\n", opts->name);        \
+> +	mutex_unlock(&opts->lock);                                      \
+> +									\
+> +	return result;                                                  \
+> +}                                                                       \
+> +CONFIGFS_ATTR_RO(f_uac2_opts_, name)
+> +
+> +UAC2_ATTRIBUTE_RO(c_status);
+> +UAC2_ATTRIBUTE_RO(p_status);
+> +
+>   static struct configfs_attribute *f_uac2_attrs[] = {
+>   	&f_uac2_opts_attr_p_chmask,
+>   	&f_uac2_opts_attr_p_srate,
+> @@ -1044,6 +1074,8 @@ static struct configfs_attribute *f_uac2_attrs[] = {
+>   	&f_uac2_opts_attr_c_srate,
+>   	&f_uac2_opts_attr_c_ssize,
+>   	&f_uac2_opts_attr_req_number,
+> +	&f_uac2_opts_attr_c_status,
+> +	&f_uac2_opts_attr_p_status,
+>   	NULL,
+>   };
+>   
+> @@ -1053,11 +1085,23 @@ static const struct config_item_type f_uac2_func_type = {
+>   	.ct_owner	= THIS_MODULE,
+>   };
+>   
+> +static void f_uac2_audio_status_change_work(struct work_struct *data)
+> +{
+> +	struct f_uac2_opts *audio_opts =
+> +		container_of(data, struct f_uac2_opts, work);
+> +	char *envp[2] = { "UAC2_STATE=Changed", NULL };
+> +
+> +	kobject_uevent_env(&audio_opts->device->kobj,
+> +			KOBJ_CHANGE, envp);
+> +}
+> +
+>   static void afunc_free_inst(struct usb_function_instance *f)
+>   {
+>   	struct f_uac2_opts *opts;
+>   
+>   	opts = container_of(f, struct f_uac2_opts, func_inst);
+> +	device_destroy(opts->device->class, opts->device->devt);
+> +	cancel_work_sync(&opts->work);
+>   	kfree(opts);
+>   }
+>   
+> @@ -1082,6 +1126,9 @@ static struct usb_function_instance *afunc_alloc_inst(void)
+>   	opts->c_srate = UAC2_DEF_CSRATE;
+>   	opts->c_ssize = UAC2_DEF_CSSIZE;
+>   	opts->req_number = UAC2_DEF_REQ_NUM;
+> +	INIT_WORK(&opts->work, f_uac2_audio_status_change_work);
+> +	opts->device = create_function_device("f_uac2");
+> +
+>   	return &opts->func_inst;
+>   }
+>   
+> diff --git a/drivers/usb/gadget/function/u_uac2.h b/drivers/usb/gadget/function/u_uac2.h
+> index b5035711172d..3ccf2eb002f1 100644
+> --- a/drivers/usb/gadget/function/u_uac2.h
+> +++ b/drivers/usb/gadget/function/u_uac2.h
+> @@ -36,6 +36,11 @@ struct f_uac2_opts {
+>   
+>   	struct mutex			lock;
+>   	int				refcnt;
+> +	int				c_status;
+> +	int				p_status;
+> +	struct device			*device;
+> +	struct work_struct		work;
+>   };
+>   
+> +extern struct device *create_function_device(char *name);
+>   #endif
 
