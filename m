@@ -1,126 +1,114 @@
-Return-Path: <linux-usb+bounces-163-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-164-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80D1F7A2108
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 16:32:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9BA4E7A2119
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 16:34:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6628D1C219A1
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 14:32:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 55BD328358F
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 14:34:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20B251C6BB;
-	Fri, 15 Sep 2023 14:30:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9F5933E8;
+	Fri, 15 Sep 2023 14:34:05 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD87B1C68A
-	for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 14:30:26 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70B42271D;
-	Fri, 15 Sep 2023 07:30:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694788205; x=1726324205;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=4Twaa+I9J7E+qi1waH9WvJrsoz3TE/A+bOsXnZ0lAD0=;
-  b=BfiKHJ5OzN2A6nExLqaJpb2W2YkDw5MaHf7aZMKuqv36Zj2sBirId1v3
-   C+I4jXA+hoXQmMDzhey83fYx8OcsEznA6v/69FKq/cjGO4W8CevdODAZl
-   /7JtRS/a5o1zWR6r1Al6FmtRWdk4tmeO4u52bthYeKmLNyQKimsZSz09Z
-   8QMj87PwbKbbpaw5kqUoucnRCGfBW6wT5fL9o+cwLHYM66Q+iKMe3u5Nj
-   mT0kaGJjtPs7W2F/E64oUPdfNRqeSAll1jRThe1jK+PpG/nx2jwcRNwxO
-   iDQcQRw66tIgu88ZR9HzN4BpBbNj9sOh2GcDw+xW98bms8zJhabSi0srQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10834"; a="378171624"
-X-IronPort-AV: E=Sophos;i="6.02,149,1688454000"; 
-   d="scan'208";a="378171624"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2023 07:29:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10834"; a="888252663"
-X-IronPort-AV: E=Sophos;i="6.02,149,1688454000"; 
-   d="scan'208";a="888252663"
-Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
-  by fmsmga001.fm.intel.com with ESMTP; 15 Sep 2023 07:29:21 -0700
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-To: <gregkh@linuxfoundation.org>
-Cc: <linux-usb@vger.kernel.org>,
-	Lukas Wunner <lukas@wunner.de>,
-	stable@vger.kernel.org,
-	Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 4/4] xhci: Preserve RsvdP bits in ERSTBA register correctly
-Date: Fri, 15 Sep 2023 17:31:08 +0300
-Message-Id: <20230915143108.1532163-5-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230915143108.1532163-1-mathias.nyman@linux.intel.com>
-References: <20230915143108.1532163-1-mathias.nyman@linux.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D417630CE0
+	for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 14:34:02 +0000 (UTC)
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111311AC;
+	Fri, 15 Sep 2023 07:34:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=tqcCFg+GZbSgwZKnqTUl8J8yKTkkr5or8a2TzqKdwfE=; b=fI03x0kfMwTyWxXp0q9RswfM3A
+	kbA9MXFRf4J4DxmUwHoBdDY8tdCbQDKmmRR0wSeZ/O5QcnoQ/OO7EAWa2cT/b5N/VqRspAalCW9x7
+	f+Wm67Sdn+ONcURBcbs7KKK7upRaV+2FlkVVuyK/sRhy7ddvUV56FEvtMaGUnI/F8F2p7b/+noDyT
+	jczSmUTmHrCWdQANori9mXgiTJ3Mg54g4LDIXCW6OrIGlzNfwGvn+gKJvLG5vvGji8SvjvZzxf5eX
+	mrJlm/8G9rWZmQ+0cv4Lj91/6YyMGTkxIfW5GAGSzneczvuVPPWV8ffiFIKmlaN4R5ROY1siEVCv0
+	xE6+/x8A==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+	id 1qh9t9-006Kf9-2j;
+	Fri, 15 Sep 2023 14:33:43 +0000
+Date: Fri, 15 Sep 2023 15:33:43 +0100
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Fenghua Yu <fenghua.yu@intel.com>,
+	Reinette Chatre <reinette.chatre@intel.com>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+	Tejun Heo <tj@kernel.org>,
+	Trond Myklebust <trond.myklebust@hammerspace.com>,
+	Anna Schumaker <anna@kernel.org>, Kees Cook <keescook@chromium.org>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Naohiro Aota <naohiro.aota@wdc.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-s390@vger.kernel.org, linux-rdma@vger.kernel.org,
+	linux-nfs@vger.kernel.org, linux-hardening@vger.kernel.org,
+	cgroups@vger.kernel.org
+Subject: Re: [PATCH 03/19] fs: release anon dev_t in deactivate_locked_super
+Message-ID: <20230915143343.GM800259@ZenIV>
+References: <20230913111013.77623-1-hch@lst.de>
+ <20230913111013.77623-4-hch@lst.de>
+ <20230913232712.GC800259@ZenIV>
+ <20230914023705.GH800259@ZenIV>
+ <20230914053843.GI800259@ZenIV>
+ <20230914-munkeln-pelzmantel-3e3a761acb72@brauner>
+ <20230914165805.GJ800259@ZenIV>
+ <20230915-elstern-etatplanung-906c6780af19@brauner>
+ <20230915-zweit-frech-0e06394208a3@brauner>
+ <20230915142814.GL800259@ZenIV>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230915142814.GL800259@ZenIV>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-From: Lukas Wunner <lukas@wunner.de>
+On Fri, Sep 15, 2023 at 03:28:14PM +0100, Al Viro wrote:
+> On Fri, Sep 15, 2023 at 04:12:07PM +0200, Christian Brauner wrote:
+> > +	static void some_fs_kill_sb(struct super_block *sb)
+> > +	{
+> > +		struct some_fs_info *info = sb->s_fs_info;
+> > +
+> > +		kill_*_super(sb);
+> > +		kfree(info);
+> > +	}
+> > +
+> > +It's best practice to never deviate from this pattern.
+> 
+> The last part is flat-out incorrect.  If e.g. fatfs or cifs ever switches
+> to that pattern, you'll get UAF - they need freeing of ->s_fs_info
+> of anything that ever had been mounted done with RCU delay; moreover,
+> unload_nls() in fatfs needs to be behind the same.
+> 
+> Lifetime rules for fs-private parts of superblock are really private to
+> filesystem; their use by sget/sget_fc callbacks might impose restrictions
+> on those, but that again is none of the VFS business.
 
-xhci_add_interrupter() erroneously preserves only the lowest 4 bits when
-writing the ERSTBA register, not the lowest 6 bits.  Fix it.
-
-Migrate the ERST_BASE_RSVDP macro to the modern GENMASK_ULL() syntax to
-avoid a u64 cast.
-
-This was previously fixed by commit 8c1cbec9db1a ("xhci: fix event ring
-segment table related masks and variables in header"), but immediately
-undone by commit b17a57f89f69 ("xhci: Refactor interrupter code for
-initial multi interrupter support.").
-
-Fixes: b17a57f89f69 ("xhci: Refactor interrupter code for initial multi interrupter support.")
-Signed-off-by: Lukas Wunner <lukas@wunner.de>
-Cc: stable@vger.kernel.org # v6.3+
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
----
- drivers/usb/host/xhci-mem.c | 4 ++--
- drivers/usb/host/xhci.h     | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index 8714ab5bf04d..0a37f0d511cf 100644
---- a/drivers/usb/host/xhci-mem.c
-+++ b/drivers/usb/host/xhci-mem.c
-@@ -2285,8 +2285,8 @@ xhci_add_interrupter(struct xhci_hcd *xhci, struct xhci_interrupter *ir,
- 	writel(erst_size, &ir->ir_set->erst_size);
- 
- 	erst_base = xhci_read_64(xhci, &ir->ir_set->erst_base);
--	erst_base &= ERST_PTR_MASK;
--	erst_base |= (ir->erst.erst_dma_addr & (u64) ~ERST_PTR_MASK);
-+	erst_base &= ERST_BASE_RSVDP;
-+	erst_base |= ir->erst.erst_dma_addr & ~ERST_BASE_RSVDP;
- 	xhci_write_64(xhci, erst_base, &ir->ir_set->erst_base);
- 
- 	/* Set the event ring dequeue address of this interrupter */
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 7e282b4522c0..5df370482521 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -514,7 +514,7 @@ struct xhci_intr_reg {
- #define	ERST_SIZE_MASK		(0xffff << 16)
- 
- /* erst_base bitmasks */
--#define ERST_BASE_RSVDP		(0x3f)
-+#define ERST_BASE_RSVDP		(GENMASK_ULL(5, 0))
- 
- /* erst_dequeue bitmasks */
- /* Dequeue ERST Segment Index (DESI) - Segment number (or alias)
--- 
-2.25.1
-
+PS: and no, we don't want to impose such RCU delay on every filesystem
+out there; what's more, there's nothing to prohibit e.g. having ->s_fs_info
+pointing to a refcounted fs-private object (possibly shared by various
+superblocks), so freeing might very well be "drop the reference and destroy
+if refcount has reached 0".
 
