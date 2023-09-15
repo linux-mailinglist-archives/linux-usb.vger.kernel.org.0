@@ -1,233 +1,134 @@
-Return-Path: <linux-usb+bounces-98-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-99-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38C507A129F
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 02:56:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D642E7A12B5
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 03:03:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AFD90281B53
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 00:56:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8FAC5281B1B
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 01:03:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A66D65B;
-	Fri, 15 Sep 2023 00:55:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 864C87ED;
+	Fri, 15 Sep 2023 01:03:24 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5612336A
-	for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 00:55:53 +0000 (UTC)
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2068.outbound.protection.outlook.com [40.107.95.68])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9528F1FE8;
-	Thu, 14 Sep 2023 17:55:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fx+yLvCXEJE0K2JOjTShGwJ/RNuulR5wMVDRbj1MCFERV+9czUOXoaug3B6GY6x8aGmb2XsIi26ilz/QXE9Qsy8xlC1JKiYeivM+akMylz1RTFoe6TJUd5+NIhqKU+JnhO3O8Dprmv8PY1dQNGxJlXxhUB3cSAiR+WFMi/xYDxUsnI5WoRTjQfJdmvMXElpPiAje57aOhDo9Abe/Rv/Fn12OhzV2Q/fnSqmjg4g+Z1UbEc4X6y5Vv1lyNpNl7YwOs3t0zWKkKZmJmMATsC+9sg1nVtwgzrJIJK/m43rhONU6DRkX9QBDU9wETu0N0WiGHcSKYnEj5aAjeivqXto/QA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=P5NuakR+bJMglYxMin+C2fzMN7pMR6VcJKxxMByRGMM=;
- b=fxMeQ5o6ngIS4a98zbv3s6cA2b7cwCSE8CH3061HQCaTxs+BVWffNM5xzzFr38e7X4kyZveK85CJ7ip1QMnI+EjTpf6wtFbb6e8KA3wUybPP+zeCGMwjY5lCAAEhgKsECnU5ngjJAK+Fx1mYEQ+oOiY/9sftcw16NufeHQ9ez61OkdYeriWIoqjaaLB5j+61zEC6duHKMeG0qnGZEFoaCEgdwn8hjTSLjs0NU2lp8Hkff/bzLpCiSr7ZyNbB7qMIEb+YksNEYrMVINkTC7X1+775cRR/R+hMuA9KpRD3IVzOah8LbSdsOG55/cdqVIr+q1MtnN6MYIAjWTszUcs8zw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=P5NuakR+bJMglYxMin+C2fzMN7pMR6VcJKxxMByRGMM=;
- b=FYNi3ajNSZuR47f4cOplK/otFpTjmS8Qk5uHNEc4RfP2gfMgbjdfiCa0zFroTeaHPz+I7pB1XRk8Pb+3oP2IA/Y9EguDMDJPJ5PR5T+/RAQBc3+qWPP8NmxmMXvnoMK7zai1LqiRsWqbaFv5gzwJvGLTky1q+zy3LteQjp3AIcs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by SN7PR12MB8770.namprd12.prod.outlook.com (2603:10b6:806:34b::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.30; Fri, 15 Sep
- 2023 00:55:49 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::36f9:ffa7:c770:d146]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::36f9:ffa7:c770:d146%7]) with mapi id 15.20.6768.029; Fri, 15 Sep 2023
- 00:55:49 +0000
-Message-ID: <67fe444c-e3e4-4063-a7ad-e0c3c835bc68@amd.com>
-Date: Thu, 14 Sep 2023 19:55:46 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v18 2/2] PCI: Add a quirk for AMD PCIe root ports w/ USB4
- controllers
-From: Mario Limonciello <mario.limonciello@amd.com>
-To: Bjorn Helgaas <helgaas@kernel.org>, "Rafael J. Wysocki"
- <rafael@kernel.org>
-Cc: Bjorn Helgaas <bhelgaas@google.com>,
- "Rafael J . Wysocki" <rjw@rjwysocki.net>,
- Mika Westerberg <mika.westerberg@linux.intel.com>,
- Hans de Goede <hdegoede@redhat.com>,
- Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
- "open list:X86 PLATFORM DRIVERS" <platform-driver-x86@vger.kernel.org>,
- "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
- linux-pm@vger.kernel.org,
- "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
- iain@orangesquash.org.uk
-References: <20230913210543.GA440503@bhelgaas>
- <001d9c72-49df-4a8d-a9bd-10311887c60d@amd.com>
- <75e5175e-406e-41dd-90c7-3dc30741897e@amd.com>
-Content-Language: en-US
-In-Reply-To: <75e5175e-406e-41dd-90c7-3dc30741897e@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: DS7PR03CA0166.namprd03.prod.outlook.com
- (2603:10b6:5:3b2::21) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C01436A
+	for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 01:03:22 +0000 (UTC)
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D0B62701;
+	Thu, 14 Sep 2023 18:03:21 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38F13AJu003969;
+	Fri, 15 Sep 2023 01:03:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=rLjzwPj1LfT4JwZQbqkx+0bG5CckwAD2wtNxHJQAW0Q=;
+ b=Hp19j4choIKUkmrxMepI2ZZevMbWoxma0v+eKPqXbcVVt5Zx3flL1IdlpBDuMN9ZDtOA
+ prVK+MY6q0hWlM+hf+HAmvWvtoNjr4bPL7jdpFAX5rj95gg6a6rQFMq+pLRPEHhoLZPg
+ +hjJLXXFjSZEmQs67CnhWCiLw1/BolCqi/8998T2BGY6ECRq2sjCE0aVLxd2yKlb7emQ
+ zExKz8YG5UJgAANQrPZ9/3I/45+3RNOkQTqUQW+NZAmaUyn0vFbxyG0ECkAFnPKXOu0C
+ 6coRvwrsCpatgvZ97z/HuDg0PStrETeq9P5+sx0rpmHzU78DOdHn2PG+SowEKgpqkmyM CA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t4d65806s-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 15 Sep 2023 01:03:10 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38F12tuF011467
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 15 Sep 2023 01:02:55 GMT
+Received: from [10.253.37.179] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Thu, 14 Sep
+ 2023 18:02:51 -0700
+Message-ID: <0c2ba115-826e-40d6-73ac-7ed67302c8eb@quicinc.com>
+Date: Fri, 15 Sep 2023 09:02:48 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|SN7PR12MB8770:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3f48f8c1-58b4-4a53-e155-08dbb58680b9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	VwNQidGeborrjfMlQylde3JufEG0BDrdjgaTLAnWxyxRjgQGyfedQQGcG1RnPB3X6YGW+U3UKQaxTbaVN5H/UbW6vvBtYW9crwI3+r/RbGpTiwcIcgnEHjB6iFpFeFKa23euxFQ15/Xgvj5Epr5QTVt6DR+m7z2UxHlhjgZmF7/nUyA8x79IAFaWCiySoMGT9oi8axUaUGStsYoTgjR5RPkvSsIQA8GG3Gh2j7at8VOlEplKP6exUBaD7ryLFGEksZpniIZ7gSkHg4iqhKuJN+P+3rX2CDyTHb/DIIxsBwrpvLTwa8jIcuR8TxnKQetoH+Z76vRmEbJw2lyRkk8j1/9Z4l2lnJAnXlq5YjqGCXflxgDcW/psnYlNjkiqeoqH6GerKVP5mvxMQdkiN0JqwqnlfPIaaZf8Le9zJsTq/LQvNK5KpHA+YBMlHP1XV1atTCBZKN63xAkLUKTVe4jJI3L4Jcc8YXbGiRPIETmjeSC2JBdVJ7wDJc4x8SD05i4Qb+48016itLR6D4jVnFsUee6UNmS4p0uiSzpLZ8zTVZmmuqD47IlmQD7QpNfIx1C+qN82D7ns+v3Zo7DXeouw5fkm7xq25Hbv8fcN4ckysAgRC2xIlJe6N7yqQF1K+qSK94q68v9I8CMhgM+mdHGecA==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(136003)(346002)(396003)(366004)(39860400002)(186009)(1800799009)(451199024)(5660300002)(31686004)(6506007)(6512007)(6666004)(53546011)(83380400001)(2906002)(6486002)(86362001)(36756003)(2616005)(38100700002)(66556008)(4326008)(26005)(8676002)(478600001)(66476007)(44832011)(31696002)(110136005)(8936002)(66946007)(7416002)(41300700001)(316002)(54906003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?VzE1QzkvTmNyS0JEMGhhTkhPVTM3RmZ1UHVFQ3dkMmdoeDNTaXhVSnl1eE1B?=
- =?utf-8?B?NVNWVVVjVlNBRHlKQkpxZlk0SStTU1N2RjE4OEFaOEZrSytLK3g5WkRoOGRl?=
- =?utf-8?B?ak9tTHhkYUYzTkFZcVFzUGlDN2l1c056Nk1jN1RhSUVYb1lmQUV6MmNScG9D?=
- =?utf-8?B?ODBrQzg3WGZEeVprRURPR1VJWW0yT2JhdzAzck5wTEhsdTV6bEtWK2dMYUJ1?=
- =?utf-8?B?SkdGSHBpQTRsTmpTU3VMYTczcGhnakFadHZTbnIyeVh6VzBuZmFvc2N3WWdo?=
- =?utf-8?B?ZjU1eW02LzRYelZwYUQ3K29wK293YytGeHVJOG85NC9WSE5KcG5PcVFxN3pa?=
- =?utf-8?B?czhGTFNiUG1nWUJnMTRBMkQ2dk1nSjJJRUFwWngyYkp1VkhzNGZ2WkoyVVdu?=
- =?utf-8?B?SFJsQlZneXJDd3o4Tmc3Rk1yS0JWa2o1d3BaN0Y3QXJDSS80U1VVMTlyeUJ6?=
- =?utf-8?B?RVQ1RFBMRUliOFVnMSs0QmYrM3V0NnNMdHBXRWNpOCtiZFBzUnZ1QnJYeVJn?=
- =?utf-8?B?VVBWSmRTY044ZmNFby9OZEZaTHJXY1ZRTmlFcVRxU1RNUStGU2xIaXNwRC9O?=
- =?utf-8?B?QXBnMWgrSFdDZUdlcFVhdVJxckVyY3JrZ251bzlGUGtEK21WRHpxVXo4UkVn?=
- =?utf-8?B?c1VHcTFlRVZkcXF4SDZub0d4OW1Udk9GLzdBVGJyNUJ4MmZ6YWVneTBSR2VT?=
- =?utf-8?B?YVord3gyWGFLNk9qYzhObGFKSkRqeEkxOGkrTE1ndGF0SXlNRE1Sb1FnVUlZ?=
- =?utf-8?B?T2JaVTlHS1k5c0hzYlRoSXBLRk9XWmgwVno1WjRZNTNoNFJaNHI2TFhNYjIz?=
- =?utf-8?B?M3U2YXdmbU12WDBVTU5NellpamJ2b0dBN3l2Zk9KYWJQQkVMTm04K2VONTFU?=
- =?utf-8?B?T1NXc0J0YVNnNS8yUkJMQ2tXZW1MNDd5dlVMQlpYZWhEdkZhUm1FMVhFYnJt?=
- =?utf-8?B?SHRTZWJySGxjdlhMYmlwajV1RGFrSXZZV2wyeE9QLzRhaUFDbGE2ZXkvdHJp?=
- =?utf-8?B?R1U3N2lZMWwyU0liQkYvNzkvc3BDek5oVkJHcHNteWNzUFdOUXJvbWZYVlg2?=
- =?utf-8?B?b1RieDNpcDBXR09oM1E0MXAwS1kvQ3RmWGFNemJJdnFEZWJiUnVFU2JYbk5v?=
- =?utf-8?B?WTNxS0c5NkxJNnBva1J6Y21Rc0VkUHJhcjc1NFFTZnp1aE5aWUo3T01DbXRw?=
- =?utf-8?B?bGZRTkRxaXV5TG1BZldzVVZQdDczRDQ5WUs0OUx4NWpIa0F6VFdXd2NPYjMx?=
- =?utf-8?B?ZlJPUTIwOVI5NC9uNHUydW9sbEd5ZC9IWUwzUkFTUWFnQVQ3ZmJSSFRPNlU4?=
- =?utf-8?B?a1NmSjV4NmUyQTdRRGl4eU5OZFJaZlkxWmdSaGdUc0QrQlNsbGU0ekNBb1cr?=
- =?utf-8?B?bXY1Z1lELzJQYjZ4NlVOUEtISWVDU0ZhZDgwN1ZsZzNNQzFvOGpIeDJ4bXFY?=
- =?utf-8?B?cm05M2p4S1N4ZGFkcU5vWEcydkNVd2tMMlVuWVU2SkFqNjBQc3ZxUXY3UkRC?=
- =?utf-8?B?TGJYYXRyOGRHd3RaMVlxMTdFbVJqYTIrMzZyVzNFTGt1eC9NQmZtbWh6RTh5?=
- =?utf-8?B?ZEVrVENpODNXUm16RUZYRnJSV0VvZG9NTU1VSUZsWUhLaDB1WVpUSmhGcW1i?=
- =?utf-8?B?TEVlSkRwa1JUR0lUNzVjT0cwb3FPY2RScTI4Y1doQ2Foc3hXYWx6cHhKazRC?=
- =?utf-8?B?NXFUZHFnNWloc0RwYTJFRythTUFOM25rTXVXTXdVQnM1cG5IdXFwM0FOR0Jl?=
- =?utf-8?B?K0NRb09ZaERQd3cyZ1JHekh6UDRtM3p3NWY0azVNeEorMVBialN2KzEyOXZK?=
- =?utf-8?B?R3J3Z0JMZ2k3TElKY2JrYW9jQmtydWNIQUxQY3liZldUcituNzcvM2Y3WUVX?=
- =?utf-8?B?NkowSzRacSszSkpLTHl2TTFhN2VNd1pReFByRGpuVSsxTk5zMHcvckFlM2FM?=
- =?utf-8?B?R1JmU1ZkQXdDSGNzNE84Nm5JSDdJNnBZY2hJOUw3T2lUMTlzZWI4TWY3QXNT?=
- =?utf-8?B?VVNSVStPeHBwY3pBMUVtUDFndjhIZjZXditLM25ubFk4Q2tvR0RGR1g3WkZh?=
- =?utf-8?B?Qk1QVlE5QVpnM0o1ZGljS0JZSjhHdTZHTktjZkxzcnhmeUJuZVh2VlBkVE9t?=
- =?utf-8?Q?OmE3jjcnBjaA+FPLcLJa4ruON?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3f48f8c1-58b4-4a53-e155-08dbb58680b9
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Sep 2023 00:55:49.5292
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qHoAIW2aUNlB7U0RKhgs/bAWLO6lAsF+S+fHz3vGroOKXjHh0+xGHKiFEoxREH639XPM9Vq+YEpkO+JpMO8asA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB8770
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH 2/8] usb: gadget: add anonymous definition in some struct
+ for trace purpose
+Content-Language: en-US
+To: Alan Stern <stern@rowland.harvard.edu>
+CC: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Chunfeng Yun
+	<chunfeng.yun@mediatek.com>, Bin Liu <b-liu@ti.com>,
+        Peter Chen
+	<peter.chen@kernel.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Roger Quadros
+	<rogerq@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu
+	<mhiramat@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>
+References: <20230914100302.30274-1-quic_linyyuan@quicinc.com>
+ <20230914100302.30274-3-quic_linyyuan@quicinc.com>
+ <073cbfb2-2f18-4bf7-a313-b16bbcefa8e0@rowland.harvard.edu>
+From: Linyu Yuan <quic_linyyuan@quicinc.com>
+In-Reply-To: <073cbfb2-2f18-4bf7-a313-b16bbcefa8e0@rowland.harvard.edu>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: xXTFhN6ndxQQYKJu9lApdS0REtxRP1F7
+X-Proofpoint-ORIG-GUID: xXTFhN6ndxQQYKJu9lApdS0REtxRP1F7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-09-14_13,2023-09-14_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=1 adultscore=0 mlxlogscore=204
+ mlxscore=1 impostorscore=0 lowpriorityscore=0 spamscore=1 suspectscore=0
+ bulkscore=0 phishscore=0 priorityscore=1501 malwarescore=0 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2308100000
+ definitions=main-2309150007
 
-On 9/13/2023 23:59, Mario Limonciello wrote:
-> On 9/13/2023 16:16, Mario Limonciello wrote:
->> On 9/13/2023 16:05, Bjorn Helgaas wrote:
->> [cut]
->>>>> I expect it to be an ongoing issue.  I also expect unless we use
->>>>> constraints or convince the firmware team to add a _S0W object with a
->>>>> value of "0" for the sake of Linux that we will be adding IDs every 
->>>>> year
->>>>> to wherever this lands as we reproduce it on newer SoCs.
->>>>
->>>> So maybe the way to go is to make the AMD PMC driver set a flag for
->>>> Root Ports on suspend or similar.
->>>
->>> I like the quirk approach.  When PMC is involved, the device behavior
->>> doesn't conform to what it advertised via PME_Support.
->>>
->>> The v18 quirk isn't connected to PMC at all, so IIUC it avoids
->>> D3hot/D3cold unnecessarily when amd/pmc is not loaded.
->>>
->>
->> Technically someone could; but realistically no one will be using 
->> these machines without amd-pmc.
->>
->> The battery life over suspend would be abhorrent.
->>
->>> I don't object to avoiding D3hot/D3cold unconditionally.  Presumably
->>> we *could* save a little power by using them when amd/pci isn't
->>> loaded, but amd/pci would have to iterate through all PCI devices when
->>> it loads, save previous state, do the quirk, and then restore the
->>> previous state on module unload.  And it would have to use notifiers
->>> or assume no Root Port hotplug.  All sounds kind of complicated.
->>>
->>
->> Yeah this does sound needlessly complicated.
->>
->>> Maybe it would even be enough to just clear dev->pme_support so we
->>> know wakeups don't work.  It would be a pretty big benefit if we
->>> didn't have to add another bit and complicate pci_prepare_to_sleep()
->>> or pci_target_state().
->>>
->>
->> I don't think clearing PME support entirely is going to help.  The 
->> reason is that pci_target_state() will fall back to PCI_D3hot when 
->> dev->pme_support is fully cleared.
->>
->> I think that clearing *just the bits* for D3hot and D3cold in PME 
->> support should work though.  I'll test this.
-> 
-> I did confirm this works properly.
-> 
->>
->> Assuming it works how about if we put the quirk to clear the 
->> D3hot/D3cold PME support bit in 
->> drivers/platform/x86/amd/pmc/pmc-quirks.c?
->>
->> It's still a quirk file and it makes it very clear that this behavior 
->> is caused by what amd-pmc does.
-> 
-> I've got it coded up like this and working, so please let me know if 
-> this approach is amenable and I'll drop an updated version.
-> 
-> If you would prefer it to be in pci/quirks.c I believe I can do either.
 
-I've also got a variation with pci/quirks.c working too.
+On 9/14/2023 10:54 PM, Alan Stern wrote:
+> You didn't include the version number in the Subject: line.  Undoubtedly
+> Greg's automatic error checker will warn you about this.  Unless the
+> version number is clearly marked for each patch, it's difficult for his
+> programs to tell which email message contains the most recent version.
+>
+> On Thu, Sep 14, 2023 at 06:02:56PM +0800, Linyu Yuan wrote:
+>> Some UDC trace event will save usb udc information, but it use one int
+>> size buffer to save one bit information of usb udc, it is wast trace
+>> buffer.
+>>
+>> Add anonymous union which have one u32 member can be used by trace event
+>> during fast assign stage to save more entries with same trace ring buffer
+>> size.
+>>
+>> Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+>> ---
+> And you didn't include the version change information here, below the
+> "---" line.
+>
+> Apart from that, this is a _lot_ better than before!  I don't know if
+> Greg will think this change is worth merging, but at least now it's
+> possible to read the code and understand what's going on.
 
-Here's the trade offs:
 
-pci/quirks.c
-------------
-* Two lines for every platform affected by this.  IE:
-DECLARE_PCI_FIXUP_SUSPEND(PCI_VENDOR_ID_AMD, 0x14b9, 
-quirk_disable_pme_suspend);
-DECLARE_PCI_FIXUP_RESUME(PCI_VENDOR_ID_AMD, 0x14b9, quirk_reenable_pme);
-* D3hot/D3cold works at runtime (since PME works at runtime)
-* Only runs if s2idle is used
-* Runs whether amd-pmc is bound or not.
+according Steven's comment, maybe will always save data in little endian 
+at trace event
 
-drivers/platform/x86/amd/pmc/pmc-quirks.c
------------------------------------------
-* 1 line for adding new affected platforms
-* Runs at probe; PME is disabled for D3hot/D3cold at runtime.
-* Only runs if s2idle is used
-* Only runs if amd-pmc is bound.
+fast assign stage.
 
-Having implemented both ways and given users will effectively always use 
-amd-pmc, I have a preference towards pci/quirks.c which only patches 
-dev->pme_support to drop D3hot/cold at suspend time and restores it at 
-resume.
+it will add definition of bit field back.
 
-Please let me know which way you prefer.
+
+>
+> Alan Stern
 
