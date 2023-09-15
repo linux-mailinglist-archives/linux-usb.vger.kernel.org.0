@@ -1,190 +1,144 @@
-Return-Path: <linux-usb+bounces-151-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-152-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B4617A2023
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 15:49:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 253CE7A204E
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 15:58:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 00DEF1C21391
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 13:48:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EDE781C2104F
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 13:58:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47D4810A09;
-	Fri, 15 Sep 2023 13:48:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 640AC10A2E;
+	Fri, 15 Sep 2023 13:58:03 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 792D610949
-	for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 13:48:41 +0000 (UTC)
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C24DA268A
-	for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 06:48:25 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2bd0d135ca3so35740691fa.3
-        for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 06:48:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694785704; x=1695390504; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WLoVQHNPO7ESrRbvHvtdSLnA8ygdJfPRZs36Hp3fy4s=;
-        b=FV4Xn30eJWjT4XSxr49L88eXC220LAuKU8s19MwXzB06eV6pbWm8OwA2gL+TyJ+5Hz
-         yOFhvK3EnDvksUyi8mEpLPevYTC0JzAtyYNnKWEn9XO4+/jCy+f1PL8TQnzBCrc/ZCxV
-         AR9Rlf8qSHQQ7Sq+0468KQbLT/Zu1D2MbjGDUn93WslsPFZfKKCAGSroo9L4jXye4s83
-         WFiOb5ZFafQtwaBIjpLnvCqIta8oHi21C5AOVI934LZK9cbkTyE9DcW9cCwwyyByDOXx
-         /wSzKJ2JdxayZRlZAcp0SUNzJWwc7qbMKTlHUcsSbS03kzE+2Z9ko+zoaERBMZOPInNp
-         WxJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694785704; x=1695390504;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WLoVQHNPO7ESrRbvHvtdSLnA8ygdJfPRZs36Hp3fy4s=;
-        b=NhafL0p+58R6DV8CglZVFrWISwCLSoJ98AjZqhcQ587Zwjq6apWiI9jE35GXJOCl7Z
-         jzfNbSbkyQRCP9X2GCjMhHAEoU64nXorqsIXkDUVXiuN3gxqmOmIbMdCS1VTscGT+OKG
-         myRPH0AI6gXdd81Msi85ecUYodwseEXDW5YM1tpgNDaiQOeLqhl/AYgQ5LTM+1Bwq/r2
-         4QiY3TfVJy87dYrodPHhBKPNVrN+vHFyw0J27BecxdJdRv5ExwnvRlK5z1wtkeMlE71c
-         AUt02MaLMsnMdGkf0vU9Wno++AhFb+F10L1/cELbNk3wvu7dhgI40mxItRE7wZrVed8g
-         LKlQ==
-X-Gm-Message-State: AOJu0YziyzHEidOmVLKGpbyg/x+Mooj4kY2ptSO3Z3WuA3lzlfTc9J1I
-	bdJd4zEPs7kG2aAn2q7UdiG9VQ==
-X-Google-Smtp-Source: AGHT+IEYEq1P0psQTkdX/nX4ET1GV+WxWYIW6UFBZT4mI5ipXyYF8ygfjV+nw61ugc3545DB6rGHOg==
-X-Received: by 2002:a2e:95d4:0:b0:2b6:ea3b:f082 with SMTP id y20-20020a2e95d4000000b002b6ea3bf082mr1580793ljh.38.1694785704010;
-        Fri, 15 Sep 2023 06:48:24 -0700 (PDT)
-Received: from [192.168.37.232] (178235177024.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.24])
-        by smtp.gmail.com with ESMTPSA id u11-20020a170906068b00b00991faf3810esm2444001ejb.146.2023.09.15.06.48.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Sep 2023 06:48:23 -0700 (PDT)
-Message-ID: <825bc60b-2067-43e2-8b43-9d38b7cebf02@linaro.org>
-Date: Fri, 15 Sep 2023 15:48:21 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E4DE8485
+	for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 13:58:00 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E411FCC;
+	Fri, 15 Sep 2023 06:57:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694786279; x=1726322279;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=51q7+p6dAkVEPA2ULlkDzpUZ/83tyHXQyFDeaZwHaSE=;
+  b=Ktz7RrvsbrYDxigFOw5mW5bF6Nc4e/6ZkVqYc6ci6yEATFqzg/9ysQPA
+   bTsUprueaJdkTJBcKBRmt0jOssKqrlNzT++F43RCGsAtG6XEd3gVxEMTl
+   wBkDyYgaQCmvxtme321CAqF5kCY6th88mmmYvzbaxpDH3LmVhvPwkGu1T
+   gkpJP7/lIo7XkJ3YJHSg0nlREzKovmrg6d+yggx6q68Dt6MHmoFoFO1Y5
+   HXjFJZG2DvpTA5Bag4aPNX1pZSaDbuJEGAkk/CBg37iu91nyPBqmakDlQ
+   khmK+Fy/3yEH1U9fZv3mBu8OGSZfa0Npr0pp71TKLu38Y3Hq1QwzMgLkk
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10834"; a="378165579"
+X-IronPort-AV: E=Sophos;i="6.02,149,1688454000"; 
+   d="scan'208";a="378165579"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2023 06:57:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10834"; a="738332618"
+X-IronPort-AV: E=Sophos;i="6.02,149,1688454000"; 
+   d="scan'208";a="738332618"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by orsmga007.jf.intel.com with SMTP; 15 Sep 2023 06:57:48 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 15 Sep 2023 16:57:47 +0300
+Date: Fri, 15 Sep 2023 16:57:47 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Prashanth K <quic_prashk@quicinc.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	"# 5 . 16" <stable@vger.kernel.org>
+Subject: Re: usb: typec: ucsi: Clear EVENT_PENDING bit if ucsi_send_command
+ fails
+Message-ID: <ZQRi20nC0j5c4LGI@kuha.fi.intel.com>
+References: <1694423055-8440-1-git-send-email-quic_prashk@quicinc.com>
+ <ZP8M6zqgsLTK25PI@kuha.fi.intel.com>
+ <21d247d3-83be-ba53-c982-2ab0e2e4ffb3@quicinc.com>
+ <ZQROzNqr7fbmJC87@kuha.fi.intel.com>
+ <4e876097-aed1-2b0d-ecb4-6434add4ef26@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v11 10/13] usb: dwc3: qcom: Add multiport suspend/resume
- support for wrapper
-Content-Language: en-US
-To: Krishna Kurapati <quic_kriskura@quicinc.com>,
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Philipp Zabel <p.zabel@pengutronix.de>, Andy Gross <agross@kernel.org>,
- Bjorn Andersson <andersson@kernel.org>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Felipe Balbi <balbi@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>,
- Johan Hovold <johan@kernel.org>, Mathias Nyman <mathias.nyman@intel.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
- quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com, quic_jackp@quicinc.com,
- ahalaney@redhat.com, quic_shazhuss@quicinc.com
-References: <20230828133033.11988-1-quic_kriskura@quicinc.com>
- <20230828133033.11988-11-quic_kriskura@quicinc.com>
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <20230828133033.11988-11-quic_kriskura@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-	version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4e876097-aed1-2b0d-ecb4-6434add4ef26@quicinc.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+	SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On 28.08.2023 15:30, Krishna Kurapati wrote:
-> QCOM SoC SA8295P's tertiary quad port controller supports 2 HS+SS
-> ports and 2 HS only ports. Add support for configuring PWR_EVENT_IRQ's
-> for all the ports during suspend/resume.
-> 
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> ---
->  drivers/usb/dwc3/dwc3-qcom.c | 39 +++++++++++++++++++++++++++++-------
->  1 file changed, 32 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index f8f8c5e39a01..34eeebb74a6a 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -37,7 +37,11 @@
->  #define PIPE3_PHYSTATUS_SW			BIT(3)
->  #define PIPE_UTMI_CLK_DIS			BIT(8)
->  
-> -#define PWR_EVNT_IRQ_STAT_REG			0x58
-> +#define PWR_EVNT_IRQ1_STAT_REG			0x58
-> +#define PWR_EVNT_IRQ2_STAT_REG			0x1dc
-> +#define PWR_EVNT_IRQ3_STAT_REG			0x228
-> +#define PWR_EVNT_IRQ4_STAT_REG			0x238
-> +
->  #define PWR_EVNT_LPM_IN_L2_MASK			BIT(4)
->  #define PWR_EVNT_LPM_OUT_L2_MASK		BIT(5)
->  
-> @@ -107,6 +111,19 @@ struct dwc3_qcom {
->  	int			num_ports;
->  };
->  
-> +/*
-> + * SA8295 has 4 power event IRQ STAT registers to be checked
-> + * during suspend resume.
-> + */
-But this driver supports much more than just SA8295?
+Hi Prashanth,
 
-> +#define NUM_PWR_EVENT_STAT_REGS	4
-> +
-> +static u32 pwr_evnt_irq_stat_reg_offset[NUM_PWR_EVENT_STAT_REGS] = {
-> +	PWR_EVNT_IRQ1_STAT_REG,
-> +	PWR_EVNT_IRQ2_STAT_REG,
-> +	PWR_EVNT_IRQ3_STAT_REG,
-> +	PWR_EVNT_IRQ4_STAT_REG,
-> +};
-> +
->  static inline void dwc3_qcom_setbits(void __iomem *base, u32 offset, u32 val)
->  {
->  	u32 reg;
-> @@ -440,15 +457,19 @@ static void dwc3_qcom_enable_interrupts(struct dwc3_qcom *qcom)
->  
->  static int dwc3_qcom_suspend(struct dwc3_qcom *qcom, bool wakeup)
->  {
-> +	u8 num_ports;
-Maybe I'm picky, but I'm not sure defining a variable for
-a single use of an object with a rather short name
-(qcom->num_ports) is justified, here and below..
+On Fri, Sep 15, 2023 at 07:10:25PM +0530, Prashanth K wrote:
+> On 15-09-23 06:02 pm, Heikki Krogerus wrote:
+> > On Tue, Sep 12, 2023 at 04:37:47PM +0530, Prashanth K wrote:
+> > > 
+> > > 
+> > > On 11-09-23 06:19 pm, Heikki Krogerus wrote:
+> > > > On Mon, Sep 11, 2023 at 02:34:15PM +0530, Prashanth K wrote:
+> > > > > Currently if ucsi_send_command() fails, then we bail out without
+> > > > > clearing EVENT_PENDING flag. So when the next connector change
+> > > > > event comes, ucsi_connector_change() won't queue the con->work,
+> > > > > because of which none of the new events will be processed.
+> > > > > 
+> > > > > Fix this by clearing EVENT_PENDING flag if ucsi_send_command()
+> > > > > fails.
+> > > > > 
+> > > > > Cc: <stable@vger.kernel.org> # 5.16
+> > > > > Fixes: 512df95b9432 ("usb: typec: ucsi: Better fix for missing unplug events issue")
+> > > > > Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+> > > > > ---
+> > > > >    drivers/usb/typec/ucsi/ucsi.c | 1 +
+> > > > >    1 file changed, 1 insertion(+)
+> > > > > 
+> > > > > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> > > > > index c6dfe3d..509c67c 100644
+> > > > > --- a/drivers/usb/typec/ucsi/ucsi.c
+> > > > > +++ b/drivers/usb/typec/ucsi/ucsi.c
+> > > > > @@ -884,6 +884,7 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+> > > > >    	if (ret < 0) {
+> > > > >    		dev_err(ucsi->dev, "%s: GET_CONNECTOR_STATUS failed (%d)\n",
+> > > > >    			__func__, ret);
+> > > > > +		clear_bit(EVENT_PENDING, &con->ucsi->flags);
+> > > > >    		goto out_unlock;
+> > > > >    	}
+> > > > 
+> > > > I think it would be better to just move that label (out_unlock) above
+> > > > the point where clear_bit() is already called instead of separately
+> > > > calling it like that. That way the Connector Change Event will
+> > > > also get acknowledged.
+> > > Do we really need to ACK in this case since we didn't process the current
+> > > connector change event
+> > 
+> > You won't get the next event before the first one was ACK'd, right?
+> > 
+> 
+> The spec says that we need to ACK if we received AND processed a CCI
+> 
+> "4.5.4 Acknowledge Command Completion and/or Change Indication (R)
+> This command is used to acknowledge to the PPM that the OPM received and
+> processed a Command Completion and/or a Connector Change Indication."
+> 
+> And here in this case, we have received, but not processed the event.
+> So I'm not really sure what to do here in this case. If we don't send an
+> ACK, then would the PPM think that OPM is not responding and reset it?
+> OR would it resend the previous event again since we didn't ACK?
 
-Konrad
+Every PPM behaves differently.
+
+Did you actually see that happening - GET_CONNECTOR_STATUS failed? Can
+you reproduce it?
+
+thanks,
+
+-- 
+heikki
 
