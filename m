@@ -1,84 +1,266 @@
-Return-Path: <linux-usb+bounces-165-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-166-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8FC57A2134
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 16:40:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A88D7A2325
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 18:01:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9C7EC2833E1
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 14:40:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F3C6C1C20ACE
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 16:01:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAB4F30D01;
-	Fri, 15 Sep 2023 14:40:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE9D311CAE;
+	Fri, 15 Sep 2023 16:00:56 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62B2F30CEB
-	for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 14:40:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6453C433C9;
-	Fri, 15 Sep 2023 14:40:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1694788814;
-	bh=PvlOjbLkc3tgSHNCaVnS82ty1H0lvym1p0dyZTkOFDQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GsMXd6mZ8RM6Ehv3+oeXSFdJBK4XfA1s5jG3qJW397E3aH+o329rZ/VtgcJhEI2Ek
-	 GIJfdrxXDV/D+2h214W5hbDliVTBm3yN1eUgvtUVVZ1/ZgLJyELtBnprCB74Mvp2bO
-	 Y9yAjyDUJYhLQ2LABIiRFS7SjQAloadGL5GvZIH6h3ow+QooG9ilUBP37mYSe/gnfx
-	 Oe0um8v+i1YG5HcXkyDRJwPVS8rwGOnzAUkEZB8JlS5KwPI8HWoWokIviZ30JYSJLI
-	 VjWkPZQ6+IEwE3hlmnfM8EB719A4Al+/b90kwWaliUnxciX021zodiQcb+zRxyFzBc
-	 v2OPDzI9ovPwA==
-Date: Fri, 15 Sep 2023 16:40:06 +0200
-From: Christian Brauner <brauner@kernel.org>
-To: Al Viro <viro@zeniv.linux.org.uk>
-Cc: Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Fenghua Yu <fenghua.yu@intel.com>,
-	Reinette Chatre <reinette.chatre@intel.com>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-	Tejun Heo <tj@kernel.org>,
-	Trond Myklebust <trond.myklebust@hammerspace.com>,
-	Anna Schumaker <anna@kernel.org>, Kees Cook <keescook@chromium.org>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Naohiro Aota <naohiro.aota@wdc.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-s390@vger.kernel.org, linux-rdma@vger.kernel.org,
-	linux-nfs@vger.kernel.org, linux-hardening@vger.kernel.org,
-	cgroups@vger.kernel.org
-Subject: Re: [PATCH 03/19] fs: release anon dev_t in deactivate_locked_super
-Message-ID: <20230915-brust-gratis-156b7572a7c9@brauner>
-References: <20230913111013.77623-1-hch@lst.de>
- <20230913111013.77623-4-hch@lst.de>
- <20230913232712.GC800259@ZenIV>
- <20230914023705.GH800259@ZenIV>
- <20230914053843.GI800259@ZenIV>
- <20230914-munkeln-pelzmantel-3e3a761acb72@brauner>
- <20230914165805.GJ800259@ZenIV>
- <20230915-elstern-etatplanung-906c6780af19@brauner>
- <20230915-zweit-frech-0e06394208a3@brauner>
- <20230915142814.GL800259@ZenIV>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6523310959
+	for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 16:00:52 +0000 (UTC)
+X-Greylist: delayed 422 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 15 Sep 2023 09:00:11 PDT
+Received: from mail-m49227.qiye.163.com (mail-m49227.qiye.163.com [45.254.49.227])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9291B2D64;
+	Fri, 15 Sep 2023 09:00:11 -0700 (PDT)
+DKIM-Signature: a=rsa-sha256;
+	b=b38iHaZW11Obeoep46pVsdPnzK8Hi3vY2j8FBDvuf6NFpNKa3ZOTIDWTGvZf1m5jm7v9wvYaD97IfnUlJ9msBxfL7LD0Qp9Uzb9BGAIJIp+BeuYAsXaFxBMSiIKsCqTYagzOdbONcPmY8YJVj34/fCi28hkWd1N0X+DOjuMa2Q4=;
+	c=relaxed/relaxed; s=default; d=rock-chips.com; v=1;
+	bh=Dfd3pIm8sRcvgPlo2tega07NPBHgrA1NQnilsqUXb1s=;
+	h=date:mime-version:subject:message-id:from;
+Received: from [10.10.10.174] (unknown [61.241.200.242])
+	by mail-m12785.qiye.163.com (Hmail) with ESMTPA id F2D30B808F0;
+	Fri, 15 Sep 2023 23:53:05 +0800 (CST)
+Message-ID: <471bd277-3047-4157-a27d-f2fd203fb9b8@rock-chips.com>
+Date: Fri, 15 Sep 2023 23:53:03 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230915142814.GL800259@ZenIV>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] usb: dwc3: core: Avoid resume dwc3 if already
+ suspended in pm resume
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+ "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "frank.wang@rock-chips.com" <frank.wang@rock-chips.com>,
+ "jianwei.zheng@rock-chips.com" <jianwei.zheng@rock-chips.com>,
+ "yangbin@rock-chips.com" <yangbin@rock-chips.com>
+References: <20230911033112.3321-1-william.wu@rock-chips.com>
+ <20230912000802.nb5mk4e5toojyqis@synopsys.com>
+From: wuliangfeng <william.wu@rock-chips.com>
+In-Reply-To: <20230912000802.nb5mk4e5toojyqis@synopsys.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkZQkJNVk0ZSU5OQhlMTx4YQlUTARMWGhIXJBQOD1
+	lXWRgSC1lBWU1KVUlPSlVJS0tVSU9JWVdZFhoPEhUdFFlBWU9LSFVKSEpCSE9VSktLVUtZBg++
+X-HM-Tid: 0a8a998bbb9fb255kuuuf2d30b808f0
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6N0k6Fjo*AT1CKwEuNCI4EhVL
+	Oh8aCThVSlVKTUJPTEJISkNNTEJPVTMWGhIXVQwSFxcSGhZVDA47CRQYEFYYExILCFUYFBZFWVdZ
+	EgtZQVlNSlVJT0pVSUtLVUlPSVlXWQgBWUFCSUlCNwY+
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-> Lifetime rules for fs-private parts of superblock are really private to
+Hi Thinh,
 
-Fine, I'll drop that. It's still correct that a filesystem needs to take
-care when it frees sb->s_fs_info. See the RCU fun you just encountered.
+On 2023/9/12 8:08, Thinh Nguyen wrote:
+> Hi,
+>
+> On Mon, Sep 11, 2023, William Wu wrote:
+>> If we enable PM runtime auto suspend for dwc3 on rockchip
+>> platforms (e.g. RK3562), it allows the dwc3 controller to
+>> enter runtime suspend if usb cable detached and power off
+>> the power domain of the controller. When system resume, if
+>> the dwc3 already in runtime suspended, it Shouldn't access
+>> the dwc3 registers in dwc3_resume() because its power domain
+>> maybe power off.
+>>
+>> Test on RK3562 tablet, this patch can help to avoid kernel
+>> panic when accessing the dwc3 registers in dwc3_resume() if
+>> the dwc3 is in runtime suspended and it's power domain is
+>> power off.
+> The controller should be woken up before this step. Can you provide more
+> detail on what led to this?
+
+Yes, the power domain of the usb controller will be enabled by the 
+framework of  the pm generic domain before dwc3 resume if the system 
+enter suspend and exit suspend normally. However, in my test case，if the 
+system fail to enter suspend because of some devices's problem, and then 
+goto recovery process, the power domain of the usb controller will not 
+be enable before dwc3 resume.
+
+> e.g. some questions:
+> Who handles the waking up of the controller? Is it the phy driver? Is
+> the phy driver not detecting a resume? Or did the resume fail? Does this
+> occur consistently?
+>
+> Thanks,
+> Thinh
+
+This issue occurs occasionally on RK3562 EVB with Type-C USB, and enable 
+autosuspend for dwc3 controller.
+
+Here is the test steps:
+
+1. Power on the RK3562 EVB and the Type-C USB interface is in 
+unconnected state.
+
+2. Makesure the dwc3 controller enter runtime suspend, and its power 
+domain is disabled.
+
+3. Do system suspend/resume stress test.
+
+4. The issue occurs occasionally  with the following log:
+
+[  251.681091][ T4331] PM: suspend entry (deep)
+[  251.778975][ T4331] Filesystems sync: 0.097 seconds
+[  251.779025][ T4331] Freezing user space processes ... (elapsed 0.005 
+seconds) done.
+[  251.784819][ T4331] OOM killer disabled.
+[  251.784851][ T4331] Freezing remaining freezable tasks ... (elapsed 
+0.004 seconds) done.
+[  251.792719][  T503] [SKWIFI DBG] skw_suspend: WoW: enabled, skw 
+flags: 0x302
+[  251.803701][ T4331] PM: dpm_run_callback(): 
+platform_pm_suspend.cfi_jt+0x0/0x8 returns -16
+[  251.803779][   T75] PM: PM: Pending Wakeup Sources: alarmtimer.0.auto
+[  251.803789][ T4331] PM: Device alarmtimer.0.a
+[  251.803928][ T4331] PM: Some devices failed to suspend, or early wake 
+event detected
+[  251.804141][   T75] [SKWIFI DBG] skw_resume: skw flags: 0x300
+[  251.804715][    C2] SError Interrupt on CPU2, code 0xbf000000 -- SError
+[  251.804725][    C2] CPU: 2 PID: 4331 Comm: binder:251_4 Tainted: 
+G        WC  E 5.10.157-android13-4-00006-g73f337804fbc-ab9881769 #1
+[  251.804732][    C2] Hardware name: Rockchip RK3562 RK817 TABLET LP4 
+Board (DT)
+[  251.804738][    C2] pstate: 80400005 (Nzcv daif +PAN -UAO -TCO BTYPE=--)
+[  251.804743][    C2] pc : el1_abort+0x40/0x68
+[  251.804748][    C2] lr : el1_abort+0x28/0x68
+
+......
+
+[  251.804965][    C2] Kernel panic - not syncing: Asynchronous SError 
+Interrupt
+[  251.804974][    C2] CPU: 2 PID: 4331 Comm: binder:251_4 Tainted: 
+G        WC  E 5.10.157-android13-4-00006-g73f337804fbc-ab9881769 #1
+[  251.804980][    C2] Hardware name: Rockchip RK3562 RK817 TABLET LP4 
+Board (DT)
+[  251.804984][    C2] Call trace:
+[  251.804990][    C2]  dump_backtrace.cfi_jt+0x0/0x8
+[  251.804995][    C2]  dump_stack_lvl+0xc0/0x13c
+[  251.805000][    C2]  panic+0x174/0x468
+[  251.805006][    C2]  arm64_serror_panic+0x1b0/0x200
+[  251.805010][    C2]  do_serror+0x184/0x1e4
+[  251.805016][    C2]  el1_error+0x94/0x118
+[  251.805020][    C2]  el1_abort+0x40/0x68
+[  251.805026][    C2]  el1_sync_handler+0x58/0x88
+[  251.805031][    C2]  el1_sync+0x8c/0x140
+[  251.805035][    C2]  dwc3_readl+0x30/0x1a0
+[  251.805040][    C2]  dwc3_phy_setup+0x38/0x510
+[  251.805045][    C2]  dwc3_core_init+0x68/0xcd4
+[  251.805051][    C2]  dwc3_core_init_for_resume+0x10c/0x25c
+[  251.805056][    C2]  dwc3_resume_common+0x44/0x3d0
+[  251.805061][    C2]  dwc3_resume+0x5c/0xb8
+[  251.805067][    C2]  dpm_run_callback+0x70/0x488
+[  251.805071][    C2]  device_resume+0x250/0x2f8
+[  251.805077][    C2]  dpm_resume+0x258/0x9dc
+[  251.805082][    C2]  suspend_devices_and_enter+0x850/0xcac
+
+In this case, during suspend process, because the device alarmtimer 
+failed to suspend, it break the system suspend in the funciton 
+suspend_devices_and_enter(), and goto platform_recover() directly 
+without enable the power domain of the controller, then trigger the 
+Kernel panic in dwc3_resume().
 
 
+For a comparison, in the normal case, if the system enter suspend 
+normally, and after the system wakeup, the power domain of the 
+controller will be enable by the framework of  the pm generic domain 
+before dwc3 resume.
+
+The function call stack like this:
+
+suspend_devices_and_enter -->
+
+     suspend_enter -->
+
+          dpm_resume_noirq --> dpm_noirq_resume_devices --> 
+device_resume_noirq --> genpd_resume_noirq --> rockchip_pd_power （enable 
+the power domain of the controller）
+
+     dpm_resume_end -->
+
+          dpm_resume --> device_resume --> dpm_run_callback --> 
+dwc3_resume (access the controller safely)
+
+          dpm_complete --> genpd_complete --> genpd_queue_power_off_work
+
+suspend_finish --> suspend_thaw_processes --> genpd_power_off_work_fn 
+--> (diable the power domain of the controller to maintain the original 
+runtime  suspend state)
+
+
+Thanks,
+
+William
+
+>
+>> Kernel panic - not syncing: Asynchronous SError Interrupt
+>> Hardware name: Rockchip RK3562 RK817 TABLET LP4 Board (DT)
+>> Call trace:
+>> dump_backtrace.cfi_jt+0x0/0x8
+>>    dump_stack_lvl+0xc0/0x13c
+>>    panic+0x174/0x468
+>>    arm64_serror_panic+0x1b0/0x200
+>>    do_serror+0x184/0x1e4
+>>    el1_error+0x94/0x118
+>>    el1_abort+0x40/0x68
+>>    el1_sync_handler+0x58/0x88
+>>    el1_sync+0x8c/0x140
+>>    dwc3_readl+0x30/0x1a0
+>>    dwc3_phy_setup+0x38/0x510
+>>    dwc3_core_init+0x68/0xcd4
+>>    dwc3_core_init_for_resume+0x10c/0x25c
+>>    dwc3_resume_common+0x44/0x3d0
+>>    dwc3_resume+0x5c/0xb8
+>>    dpm_run_callback+0x70/0x488
+>>    device_resume+0x250/0x2f8
+>>    dpm_resume+0x258/0x9dc
+>>
+>> Signed-off-by: William Wu <william.wu@rock-chips.com>
+>> ---
+>> Changes in v2:
+>> - Remove Change-Id.
+>>
+>>   drivers/usb/dwc3/core.c | 8 +++++---
+>>   1 file changed, 5 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+>> index 9c6bf054f15d..8274a44f2d6a 100644
+>> --- a/drivers/usb/dwc3/core.c
+>> +++ b/drivers/usb/dwc3/core.c
+>> @@ -2185,9 +2185,11 @@ static int dwc3_resume(struct device *dev)
+>>   
+>>   	pinctrl_pm_select_default_state(dev);
+>>   
+>> -	ret = dwc3_resume_common(dwc, PMSG_RESUME);
+>> -	if (ret)
+>> -		return ret;
+>> +	if (!pm_runtime_suspended(dwc->dev)) {
+>> +		ret = dwc3_resume_common(dwc, PMSG_RESUME);
+>> +		if (ret)
+>> +			return ret;
+>> +	}
+>>   
+>>   	pm_runtime_disable(dev);
+>>   	pm_runtime_set_active(dev);
+>> -- 
+>> 2.17.1
 
