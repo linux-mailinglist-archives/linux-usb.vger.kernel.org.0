@@ -1,142 +1,101 @@
-Return-Path: <linux-usb+bounces-142-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-143-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9A1F7A1EC6
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 14:32:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C57B67A1F48
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 14:54:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 93E482825D7
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 12:32:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F9A52823C2
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 12:54:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0ECFFBF2;
-	Fri, 15 Sep 2023 12:32:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8B6C10948;
+	Fri, 15 Sep 2023 12:53:57 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1BD029CA
-	for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 12:32:18 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A7121A5;
-	Fri, 15 Sep 2023 05:32:16 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBC6910945
+	for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 12:53:55 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F8A8173A
+	for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 05:53:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694781136; x=1726317136;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xhzmIM0A6FvMonQOUj08NuTR8MxP5gbC35qu4BkzgQU=;
-  b=hvhXrms8WOU4AwB8pu+wENpl2CmBTiEb2ubzan2wYhsy8e7scvSunAaH
-   rdIeEaNfyXKE+nM3hddpSD4ROtJnvmElnwUExpLoLtoPLY0QFet3YJkz0
-   72yy/CrBxmOHbBghLYzgCMcGgWwIY6nS4ZqlNxpkHjgopPMWcUwPeDPYk
-   lKoQwyYoYyCHJaDpaJWZJt21Vkb8nFBujyhGCvbShNV3ynhD9ztaJ8eJM
-   zuPcWuoBVm8Rlat+00+5nFRrWJ6Dg/QJvbseZH3odKMVkVBT9LNiQBrAl
-   p89h1tFFSn0cqtVsMDWJgrne/siU5Q8szGXWPlIXzsAT+Z+hJHxbSpamC
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10834"; a="358651885"
+  t=1694782435; x=1726318435;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=zj98OgDvFp1vyqEMLoWQz39z7Wl4r5dRfHX46VXmgxQ=;
+  b=ZZLoAC9Yt+AwKz61vIodpHvM1sXdv6ivF7Ycvtr2PBL1O3rZmlgbW8ZM
+   dj2X6XrVCKxfJrypxfTmIydDtddnIaslvnlffeMC3pH3o9rxlbc85zF+I
+   1vl+EQTV4rrlgCWm8W32ewzqthk7Jb8/Kzq9Ze7M6RIfKrRiE6poXVPc6
+   VSQiR6wVgz2M0uYADF2JTUuj2DJAIPrDHxYJh2+sDjQDAtB6qqyf0HfHN
+   TSuIqjTDWtr7uwgzaR36FSOWM1CF4w+vOry6KxW1+8C+JKb8EmDnBzkWY
+   kezN88Qx4hqWfMHbu/z/frArvi5AGPi/9i8+LsuvrbInMRCf3NXq0sZy3
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10834"; a="364286897"
 X-IronPort-AV: E=Sophos;i="6.02,149,1688454000"; 
-   d="scan'208";a="358651885"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2023 05:32:16 -0700
+   d="scan'208";a="364286897"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2023 05:53:54 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10834"; a="774301594"
+X-IronPort-AV: E=McAfee;i="6600,9927,10834"; a="738316378"
 X-IronPort-AV: E=Sophos;i="6.02,149,1688454000"; 
-   d="scan'208";a="774301594"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by orsmga008.jf.intel.com with SMTP; 15 Sep 2023 05:32:13 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 15 Sep 2023 15:32:12 +0300
-Date: Fri, 15 Sep 2023 15:32:12 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Prashanth K <quic_prashk@quicinc.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	"# 5 . 16" <stable@vger.kernel.org>
-Subject: Re: usb: typec: ucsi: Clear EVENT_PENDING bit if ucsi_send_command
- fails
-Message-ID: <ZQROzNqr7fbmJC87@kuha.fi.intel.com>
-References: <1694423055-8440-1-git-send-email-quic_prashk@quicinc.com>
- <ZP8M6zqgsLTK25PI@kuha.fi.intel.com>
- <21d247d3-83be-ba53-c982-2ab0e2e4ffb3@quicinc.com>
+   d="scan'208";a="738316378"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga007.jf.intel.com with ESMTP; 15 Sep 2023 05:53:52 -0700
+Message-ID: <88095d46-8522-1391-dccf-7de67c7bf777@linux.intel.com>
+Date: Fri, 15 Sep 2023 15:55:14 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <21d247d3-83be-ba53-c982-2ab0e2e4ffb3@quicinc.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-	SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.13.0
+Subject: Re: [PATCH 0/2] Handle RPM for xhci-pci
+Content-Language: en-US
+To: Mario Limonciello <mario.limonciello@amd.com>, mathias.nyman@intel.com
+Cc: Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+ gregkh@linuxfoundation.org, mika.westerberg@linux.intel.com,
+ linux-usb@vger.kernel.org
+References: <20230821065742.2924681-1-Basavaraj.Natikar@amd.com>
+ <00dff98e-a990-4b55-82d6-62d4b7866d71@amd.com>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <00dff98e-a990-4b55-82d6-62d4b7866d71@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Tue, Sep 12, 2023 at 04:37:47PM +0530, Prashanth K wrote:
+On 15.9.2023 7.38, Mario Limonciello wrote:
+> On 8/21/2023 01:57, Basavaraj Natikar wrote:
+>> This series includes fixes for PCI USB controllers that use RPM as their
+>> default policy, including enabling RPM for controllers that support
+>> low-power states.
+>>
+>> Basavaraj Natikar (2):
+>>    xhci: Loosen RPM as default policy to cover xHC 1.1 as well
+>>    xhci: Enable RPM on controllers that support low-power states
+>>
+>>   drivers/usb/host/xhci-pci.c | 6 ++++--
+>>   1 file changed, 4 insertions(+), 2 deletions(-)
+>>
 > 
+> Hi Matthias,
 > 
-> On 11-09-23 06:19 pm, Heikki Krogerus wrote:
-> > On Mon, Sep 11, 2023 at 02:34:15PM +0530, Prashanth K wrote:
-> > > Currently if ucsi_send_command() fails, then we bail out without
-> > > clearing EVENT_PENDING flag. So when the next connector change
-> > > event comes, ucsi_connector_change() won't queue the con->work,
-> > > because of which none of the new events will be processed.
-> > > 
-> > > Fix this by clearing EVENT_PENDING flag if ucsi_send_command()
-> > > fails.
-> > > 
-> > > Cc: <stable@vger.kernel.org> # 5.16
-> > > Fixes: 512df95b9432 ("usb: typec: ucsi: Better fix for missing unplug events issue")
-> > > Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
-> > > ---
-> > >   drivers/usb/typec/ucsi/ucsi.c | 1 +
-> > >   1 file changed, 1 insertion(+)
-> > > 
-> > > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> > > index c6dfe3d..509c67c 100644
-> > > --- a/drivers/usb/typec/ucsi/ucsi.c
-> > > +++ b/drivers/usb/typec/ucsi/ucsi.c
-> > > @@ -884,6 +884,7 @@ static void ucsi_handle_connector_change(struct work_struct *work)
-> > >   	if (ret < 0) {
-> > >   		dev_err(ucsi->dev, "%s: GET_CONNECTOR_STATUS failed (%d)\n",
-> > >   			__func__, ret);
-> > > +		clear_bit(EVENT_PENDING, &con->ucsi->flags);
-> > >   		goto out_unlock;
-> > >   	}
-> > 
-> > I think it would be better to just move that label (out_unlock) above
-> > the point where clear_bit() is already called instead of separately
-> > calling it like that. That way the Connector Change Event will
-> > also get acknowledged.
-> Do we really need to ACK in this case since we didn't process the current
-> connector change event
+> Can you take a look at this series?  It's been on the list about a month.
+> 
+> Thanks,
+> 
 
-You won't get the next event before the first one was ACK'd, right?
+Yes, sorry about the delay
 
-> > 
-> > If this really can happen, then I think it would be good to also
-> > schedule a task for ucsi_check_connection():
-> > 
-> >          if (ret < 0) {
-> >                  dev_err(ucsi->dev, "%s: GET_CONNECTOR_STATUS failed (%d)\n",
-> >                          __func__, ret);
-> > +               ucsi_partner_task(con, ucsi_check_connection, 1, HZ);
-> >                  goto out_unlock;
-> >          }
-> > 
-> > thanks,
-> > 
-> Retrying is a good idea, but ucsi_check_connection() doesn't have the full
-> functionality compared to handle_connector_change. I guess
-> ucsi_check_connection() will send a set_role, but won't handle the
-> connector_change scenarios happening due to PR/DR swap, which will lead to
-> deadlocks (due to wait_for_completion). This is just an example. So its
-> better to bail out and process the next events, because the failure here is
-> from the glink layer.
-
-Fair enough.
-
--- 
-heikki
+-Mathias
 
