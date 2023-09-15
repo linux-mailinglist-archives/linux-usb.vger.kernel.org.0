@@ -1,101 +1,188 @@
-Return-Path: <linux-usb+bounces-143-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-144-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C57B67A1F48
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 14:54:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1ABA27A1F56
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 14:57:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F9A52823C2
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 12:54:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C8D172820FF
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 12:57:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8B6C10948;
-	Fri, 15 Sep 2023 12:53:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 685491094C;
+	Fri, 15 Sep 2023 12:57:29 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBC6910945
-	for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 12:53:55 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F8A8173A
-	for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 05:53:55 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7409C101EB;
+	Fri, 15 Sep 2023 12:57:27 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D419DA8;
+	Fri, 15 Sep 2023 05:57:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694782435; x=1726318435;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=zj98OgDvFp1vyqEMLoWQz39z7Wl4r5dRfHX46VXmgxQ=;
-  b=ZZLoAC9Yt+AwKz61vIodpHvM1sXdv6ivF7Ycvtr2PBL1O3rZmlgbW8ZM
-   dj2X6XrVCKxfJrypxfTmIydDtddnIaslvnlffeMC3pH3o9rxlbc85zF+I
-   1vl+EQTV4rrlgCWm8W32ewzqthk7Jb8/Kzq9Ze7M6RIfKrRiE6poXVPc6
-   VSQiR6wVgz2M0uYADF2JTUuj2DJAIPrDHxYJh2+sDjQDAtB6qqyf0HfHN
-   TSuIqjTDWtr7uwgzaR36FSOWM1CF4w+vOry6KxW1+8C+JKb8EmDnBzkWY
-   kezN88Qx4hqWfMHbu/z/frArvi5AGPi/9i8+LsuvrbInMRCf3NXq0sZy3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10834"; a="364286897"
+  t=1694782645; x=1726318645;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AHr0t4Sal2ucwSsHwruU8cvNvmrzYdJZAc7YNJHAzt4=;
+  b=UmeE0O3uv2IwFAk5IZ7gVLMmsjnj8xDlJyHOpSU+b2WbmoLRfQaxODLI
+   UBroCMRFpEpnznRG/XIIjo4D34CP6ttNAIohadHvxImwdJjzvUYTuW6y7
+   EqWX6sNlcaKVlW0khSIboSanNnL2zAjp/kzdNitHtxsFA2EryZcnNfO8K
+   A2qBOonVd4KSrO55HTAwsXLqIeBPOhfnl3/xVa099yoeeZ8DSJs4Xaa5F
+   r+9jdOhOiIIq/NLm2JgP4QfBV3vxZAPu1firgDKY377eVA/6arxZtmDX9
+   aeuSQOT3WEeve19d3NJbtBTnQw9AI8EwNyPCcjeGHqjhj1V5UWUrNrR8i
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10834"; a="369558289"
 X-IronPort-AV: E=Sophos;i="6.02,149,1688454000"; 
-   d="scan'208";a="364286897"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2023 05:53:54 -0700
+   d="scan'208";a="369558289"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2023 05:57:25 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10834"; a="738316378"
+X-IronPort-AV: E=McAfee;i="6600,9927,10834"; a="748195802"
 X-IronPort-AV: E=Sophos;i="6.02,149,1688454000"; 
-   d="scan'208";a="738316378"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga007.jf.intel.com with ESMTP; 15 Sep 2023 05:53:52 -0700
-Message-ID: <88095d46-8522-1391-dccf-7de67c7bf777@linux.intel.com>
-Date: Fri, 15 Sep 2023 15:55:14 +0300
+   d="scan'208";a="748195802"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga007.fm.intel.com with SMTP; 15 Sep 2023 05:57:21 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 15 Sep 2023 15:57:20 +0300
+Date: Fri, 15 Sep 2023 15:57:20 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Javier Carrasco <javier.carrasco@wolfvision.net>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] usb: typec: tps6598x: add reset gpio support
+Message-ID: <ZQRUsD1QLke70VG2@kuha.fi.intel.com>
+References: <20230912-topic-tps6598x_reset-v2-0-02a12e2ec50a@wolfvision.net>
+ <20230912-topic-tps6598x_reset-v2-1-02a12e2ec50a@wolfvision.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.13.0
-Subject: Re: [PATCH 0/2] Handle RPM for xhci-pci
-Content-Language: en-US
-To: Mario Limonciello <mario.limonciello@amd.com>, mathias.nyman@intel.com
-Cc: Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
- gregkh@linuxfoundation.org, mika.westerberg@linux.intel.com,
- linux-usb@vger.kernel.org
-References: <20230821065742.2924681-1-Basavaraj.Natikar@amd.com>
- <00dff98e-a990-4b55-82d6-62d4b7866d71@amd.com>
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <00dff98e-a990-4b55-82d6-62d4b7866d71@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-	autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230912-topic-tps6598x_reset-v2-1-02a12e2ec50a@wolfvision.net>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On 15.9.2023 7.38, Mario Limonciello wrote:
-> On 8/21/2023 01:57, Basavaraj Natikar wrote:
->> This series includes fixes for PCI USB controllers that use RPM as their
->> default policy, including enabling RPM for controllers that support
->> low-power states.
->>
->> Basavaraj Natikar (2):
->>    xhci: Loosen RPM as default policy to cover xHC 1.1 as well
->>    xhci: Enable RPM on controllers that support low-power states
->>
->>   drivers/usb/host/xhci-pci.c | 6 ++++--
->>   1 file changed, 4 insertions(+), 2 deletions(-)
->>
+On Fri, Sep 15, 2023 at 02:23:48PM +0200, Javier Carrasco wrote:
+> The TPS6598x PD controller provides an active-high hardware reset input
+> that reinitializes all device settings. If it is not grounded by
+> design, the driver must be able to de-assert it in order to initialize
+> the device.
 > 
-> Hi Matthias,
+> The PD controller is not ready for registration right after the reset
+> de-assertion and a delay must be introduced in that case. According to
+> TI, the delay can reach up to 1000 ms [1], which is in line with the
+> experimental results obtained with a TPS65987D.
 > 
-> Can you take a look at this series?  It's been on the list about a month.
+> Add a GPIO descriptor for the reset signal and basic reset management
+> for initialization and suspend/resume.
 > 
-> Thanks,
+> [1] https://e2e.ti.com/support/power-management-group/power-management/
+> f/power-management-forum/1269856/tps65987d-tps65987d-reset-de-assert-
+> to-normal-operation/4809389#4809389
 > 
+> Signed-off-by: Javier Carrasco <javier.carrasco@wolfvision.net>
+> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> ---
+>  drivers/usb/typec/tipd/core.c | 20 ++++++++++++++++++++
+>  1 file changed, 20 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+> index 37b56ce75f39..3068ef300073 100644
+> --- a/drivers/usb/typec/tipd/core.c
+> +++ b/drivers/usb/typec/tipd/core.c
+> @@ -8,6 +8,7 @@
+>  
+>  #include <linux/i2c.h>
+>  #include <linux/acpi.h>
+> +#include <linux/gpio/consumer.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/power_supply.h>
+> @@ -43,6 +44,9 @@
+>  /* TPS_REG_SYSTEM_CONF bits */
+>  #define TPS_SYSCONF_PORTINFO(c)		((c) & 7)
+>  
+> +/* reset de-assertion to ready for operation */
+> +#define SETUP_MS			1000
+> +
+>  enum {
+>  	TPS_PORTINFO_SINK,
+>  	TPS_PORTINFO_SINK_ACCESSORY,
+> @@ -86,6 +90,7 @@ struct tps6598x {
+>  	struct mutex lock; /* device lock */
+>  	u8 i2c_protocol:1;
+>  
+> +	struct gpio_desc *reset;
+>  	struct typec_port *port;
+>  	struct typec_partner *partner;
+>  	struct usb_pd_identity partner_identity;
+> @@ -717,6 +722,13 @@ static int tps6598x_probe(struct i2c_client *client)
+>  	mutex_init(&tps->lock);
+>  	tps->dev = &client->dev;
+>  
+> +	tps->reset = devm_gpiod_get_optional(tps->dev, "reset", GPIOD_OUT_LOW);
+> +	if (IS_ERR(tps->reset))
+> +		return dev_err_probe(tps->dev, PTR_ERR(tps->reset),
+> +				     "failed to get reset GPIO\n");
+> +	if (tps->reset)
+> +		msleep(SETUP_MS);
+> +
+>  	tps->regmap = devm_regmap_init_i2c(client, &tps6598x_regmap_config);
+>  	if (IS_ERR(tps->regmap))
+>  		return PTR_ERR(tps->regmap);
+> @@ -892,6 +904,9 @@ static void tps6598x_remove(struct i2c_client *client)
+>  	tps6598x_disconnect(tps, 0);
+>  	typec_unregister_port(tps->port);
+>  	usb_role_switch_put(tps->role_sw);
+> +
+> +	if (tps->reset)
+> +		gpiod_set_value_cansleep(tps->reset, 1);
 
-Yes, sorry about the delay
+Do you need that "if (tps->reset)" in this case? That function is NULL safe,
+right?
 
--Mathias
+>  }
+>  
+>  static int __maybe_unused tps6598x_suspend(struct device *dev)
+> @@ -902,6 +917,8 @@ static int __maybe_unused tps6598x_suspend(struct device *dev)
+>  	if (tps->wakeup) {
+>  		disable_irq(client->irq);
+>  		enable_irq_wake(client->irq);
+> +	} else if (tps->reset) {
+> +		gpiod_set_value_cansleep(tps->reset, 1);
+>  	}
+>  
+>  	if (!client->irq)
+> @@ -918,6 +935,9 @@ static int __maybe_unused tps6598x_resume(struct device *dev)
+>  	if (tps->wakeup) {
+>  		disable_irq_wake(client->irq);
+>  		enable_irq(client->irq);
+> +	} else if (tps->reset) {
+> +		gpiod_set_value_cansleep(tps->reset, 0);
+> +		msleep(SETUP_MS);
+>  	}
+>  
+>  	if (!client->irq)
+> 
+> -- 
+> 2.39.2
+
+thanks,
+
+-- 
+heikki
 
