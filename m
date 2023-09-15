@@ -1,106 +1,98 @@
-Return-Path: <linux-usb+bounces-158-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-159-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D5527A20EC
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 16:29:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 935E07A20FD
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 16:30:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 854241C2174D
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 14:29:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4D4C828316E
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 14:30:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34CFF111B7;
-	Fri, 15 Sep 2023 14:28:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D268111A0;
+	Fri, 15 Sep 2023 14:30:05 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25565111A6
-	for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 14:28:42 +0000 (UTC)
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 314181FCE;
-	Fri, 15 Sep 2023 07:28:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=LQfJYvE2Csoxjb0lVlLN4FcWufcYVyyJCyyuwAbWOnU=; b=KQXtAOeuJAErVKd6uCAVlHA6pg
-	YEjxPW8qCQSdnT0BpMPpiEQUqoWgnx96ACyemvrrs070Hx49chE8bD/RX6bVGcgAlD6+Fhi1XO6xX
-	Z7rkRFy5u2HkFO69DEB0fz1XiCQ6zqT0Ehti6NRcEE4vBRecafV5pY9/6maldCvxzy9GqM2PkwGUO
-	zlWUKy5Hawds6CoeWyMvCxmVhsjtC1qzXqXjtAmxjElm/ZsL0IqcA07elyzjW84yZ98nj+bPoR6K2
-	eCbtX9jR50Qsk1JCgWNbndDpqTBH5bhOB+TqRtHzjkA2YK2vLvSMHdrNBIgByv8unzvp4sIU6+y/M
-	YHMHee/A==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-	id 1qh9nq-006KYh-18;
-	Fri, 15 Sep 2023 14:28:14 +0000
-Date: Fri, 15 Sep 2023 15:28:14 +0100
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Fenghua Yu <fenghua.yu@intel.com>,
-	Reinette Chatre <reinette.chatre@intel.com>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-	Tejun Heo <tj@kernel.org>,
-	Trond Myklebust <trond.myklebust@hammerspace.com>,
-	Anna Schumaker <anna@kernel.org>, Kees Cook <keescook@chromium.org>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Naohiro Aota <naohiro.aota@wdc.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-s390@vger.kernel.org, linux-rdma@vger.kernel.org,
-	linux-nfs@vger.kernel.org, linux-hardening@vger.kernel.org,
-	cgroups@vger.kernel.org
-Subject: Re: [PATCH 03/19] fs: release anon dev_t in deactivate_locked_super
-Message-ID: <20230915142814.GL800259@ZenIV>
-References: <20230913111013.77623-1-hch@lst.de>
- <20230913111013.77623-4-hch@lst.de>
- <20230913232712.GC800259@ZenIV>
- <20230914023705.GH800259@ZenIV>
- <20230914053843.GI800259@ZenIV>
- <20230914-munkeln-pelzmantel-3e3a761acb72@brauner>
- <20230914165805.GJ800259@ZenIV>
- <20230915-elstern-etatplanung-906c6780af19@brauner>
- <20230915-zweit-frech-0e06394208a3@brauner>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8FAD111AF
+	for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 14:30:03 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED47A2724
+	for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 07:29:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694788190; x=1726324190;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=4VJkSIKaI8cuyV8O7SBUE0D3dTq3sVn2C85gmD1geqo=;
+  b=F3osNzCNyaKGJqRODKEFIPyAUZbzfs21OYtTFt1n8i103bpCySDvH20C
+   fRqLUhyMPxdgFytcG2CFG35whYzYdiHI0zqrE9kcyv8ZpP2naAweVBL0L
+   rKTHUKSkoTYoKytgs1LtNkEZKlTTqnUKtHBonb2uQsZCA6oDZW3ZByvvL
+   HhjpoREAQ9HXLjWU7sWRgQr4vaxPJviPIGFti6scN2P2T72Rj9D1vLdx9
+   AbOwkwn0UZusEIHE/iBxUnm6bu8LJYdSsB7bpszYVAS6iVy2o1OQ7bD3W
+   uLAHBwZsf3bF85Wn/l1HY0IdukF8iHD3QzetICC3jjtChNNqNW0HaUenJ
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10834"; a="378171595"
+X-IronPort-AV: E=Sophos;i="6.02,149,1688454000"; 
+   d="scan'208";a="378171595"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2023 07:29:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10834"; a="888252654"
+X-IronPort-AV: E=Sophos;i="6.02,149,1688454000"; 
+   d="scan'208";a="888252654"
+Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
+  by fmsmga001.fm.intel.com with ESMTP; 15 Sep 2023 07:29:14 -0700
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+To: <gregkh@linuxfoundation.org>
+Cc: <linux-usb@vger.kernel.org>,
+	Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 0/4] xhci fixes for usb-linus
+Date: Fri, 15 Sep 2023 17:31:04 +0300
+Message-Id: <20230915143108.1532163-1-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230915-zweit-frech-0e06394208a3@brauner>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE
-	autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Fri, Sep 15, 2023 at 04:12:07PM +0200, Christian Brauner wrote:
-> +	static void some_fs_kill_sb(struct super_block *sb)
-> +	{
-> +		struct some_fs_info *info = sb->s_fs_info;
-> +
-> +		kill_*_super(sb);
-> +		kfree(info);
-> +	}
-> +
-> +It's best practice to never deviate from this pattern.
+Hi Greg
 
-The last part is flat-out incorrect.  If e.g. fatfs or cifs ever switches
-to that pattern, you'll get UAF - they need freeing of ->s_fs_info
-of anything that ever had been mounted done with RCU delay; moreover,
-unload_nls() in fatfs needs to be behind the same.
+A few small xhci fixes for 6.6
 
-Lifetime rules for fs-private parts of superblock are really private to
-filesystem; their use by sget/sget_fc callbacks might impose restrictions
-on those, but that again is none of the VFS business.
+Use correct dev in dma bounce buffer mapping, fix event handling
+issues, and track suspended ports correctly in software
+
+Thanks
+Mathias
+
+Lukas Wunner (2):
+  xhci: Clear EHB bit only at end of interrupt handler
+  xhci: Preserve RsvdP bits in ERSTBA register correctly
+
+Mathias Nyman (1):
+  xhci: track port suspend state correctly in unsuccessful resume cases
+
+Wesley Cheng (1):
+  usb: xhci: xhci-ring: Use sysdev for mapping bounce buffer
+
+ drivers/usb/host/xhci-hub.c  | 19 ++++++++++---------
+ drivers/usb/host/xhci-mem.c  |  4 ++--
+ drivers/usb/host/xhci-ring.c | 16 +++++++++-------
+ drivers/usb/host/xhci.h      |  2 +-
+ 4 files changed, 22 insertions(+), 19 deletions(-)
+
+-- 
+2.25.1
+
 
