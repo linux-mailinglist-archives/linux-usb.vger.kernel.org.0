@@ -1,81 +1,125 @@
-Return-Path: <linux-usb+bounces-102-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-103-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 504BD7A12E8
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 03:25:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 09B547A1301
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 03:43:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5C6D11C20868
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 01:25:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AE9141C2117D
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 01:43:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9381815;
-	Fri, 15 Sep 2023 01:24:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F22BF806;
+	Fri, 15 Sep 2023 01:42:53 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08393808
-	for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 01:24:42 +0000 (UTC)
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11FEB268F
-	for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 18:24:42 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id d75a77b69052e-41513d2cca7so156511cf.0
-        for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 18:24:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1694741081; x=1695345881; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=74CtxUCIYHKHg9tWUr4iQH71rMCgTYq33VCTDKT+9KU=;
-        b=SnYJtr+lnAINHypdcPq/d/if5PcWVnEjwBp+G8vsN2bjy59rTNel9a9GI5EoaRBW9n
-         Rvukc3AP/SP8ikfd9vRaEzhUuDZ/9bObHjxXSknIr6D5mIK19zeUkkqip9PGW5i5ex3c
-         7hemnDRVuqHwis1y0zfG59uVsulZNq3MiFrNgVgOGDDKiG5rMfss3+9IQ2BdV7VGDCwg
-         TdAqEqSlXGzz4CLwHrFHmryDGcAonRp2oSBLc1xfi4SYDnWdUSwB+AS0cxtacRFwJy0Z
-         aMaU4mbYT+AVRWuE4lX5GKNZih2a6GROvO9Xy7lXWxHjkW1GWlWmxZ1MMcoU/at1AVSl
-         AEmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694741081; x=1695345881;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=74CtxUCIYHKHg9tWUr4iQH71rMCgTYq33VCTDKT+9KU=;
-        b=grIDxuJy4nDY9umqZa7n8Q/oEMZ8H3OOEgiLRM2AQ1XWjqM0nevXzxu3D3XQF/QL8e
-         PghzJYv5oA6z+Ao+gNwlFYygzC8GByow6NqmEtnc/IMSCRmXYnu0A0o9xQBOdZ3aLvMW
-         QyAGmMoSq/FaLQ2sdXmsxmalIFlP8rg+CFXr0182VldsiYlxkdrIpHmnhdn0pDez61Df
-         K7aayWL1ugb95cDuKm4xb4yKgsIHYwzkzRZTTsLNOTYLtpw9tOuaBY0zbsR+pB52t7a5
-         DMnHEXSw2PfiqoD4QvXX8XljBBr1pwrh+n7fWLEx4PdACgKTRdL80ah4+Kymh8uSapxp
-         +yTw==
-X-Gm-Message-State: AOJu0YzFIqrXswWIpZLFe0Lqg/cSNyKnGz3ku2fxtwKwlRKVuP4eSPF7
-	tEvU0vcykmW4793Vfj6/xIRVCqv/XJmipqBlkeVGSQ==
-X-Google-Smtp-Source: AGHT+IGFwUSKsgWRp7QDr28sTxEcIygWw9HdJsiUKYG75UfmKQUC0mX+HXPSLwhkIeiL3CIYCl7XZdzp0KHoRjzRn9Q=
-X-Received: by 2002:a05:622a:13c7:b0:410:8ba3:21c7 with SMTP id
- p7-20020a05622a13c700b004108ba321c7mr160183qtk.18.1694741081098; Thu, 14 Sep
- 2023 18:24:41 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1D8C36A
+	for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 01:42:51 +0000 (UTC)
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by lindbergh.monkeyblade.net (Postfix) with SMTP id C6B5C2709
+	for <linux-usb@vger.kernel.org>; Thu, 14 Sep 2023 18:42:50 -0700 (PDT)
+Received: (qmail 1019415 invoked by uid 1000); 14 Sep 2023 21:42:49 -0400
+Date: Thu, 14 Sep 2023 21:42:48 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Yuran Pereira <yuran.pereira@hotmail.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+  "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+  "royluo@google.com" <royluo@google.com>,
+  "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
+  "raychi@google.com" <raychi@google.com>,
+  "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+  "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+  "syzbot+c063a4e176681d2e0380@syzkaller.appspotmail.com" <syzbot+c063a4e176681d2e0380@syzkaller.appspotmail.com>
+Subject: Re: [PATCH] USB: core: Fix a NULL pointer dereference
+Message-ID: <530c4be4-ccaa-4e6e-b0ac-68c896060766@rowland.harvard.edu>
+References: <AS8P192MB12697886EC8DF1650AD56A57E8EDA@AS8P192MB1269.EURP192.PROD.OUTLOOK.COM>
+ <d3ffde1a-e0da-4f3f-ac34-659cbcf41258@rowland.harvard.edu>
+ <AM9P192MB12670D185D208AFA51B8348EE8ECA@AM9P192MB1267.EURP192.PROD.OUTLOOK.COM>
+ <c072b373-0368-4f49-a4da-da309955cb7a@rowland.harvard.edu>
+ <AS8P192MB1269A9732001D142F3272ACDE8F6A@AS8P192MB1269.EURP192.PROD.OUTLOOK.COM>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230914182922.27157-1-quic_kriskura@quicinc.com>
-In-Reply-To: <20230914182922.27157-1-quic_kriskura@quicinc.com>
-From: =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
-Date: Thu, 14 Sep 2023 18:24:30 -0700
-Message-ID: <CANP3RGeMFnBdQ3yS3i_QqWCuQB34Ma8ToEnfH-WjZQBeNgqoFw@mail.gmail.com>
-Subject: Re: [RFC] usb: gadget: ncm: Handle decoding of multiple NTB's in
- unwrap call
-To: Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Linyu Yuan <quic_linyyuan@quicinc.com>, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	quic_ppratap@quicinc.com, quic_wcheng@quicinc.com, quic_jackp@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <AS8P192MB1269A9732001D142F3272ACDE8F6A@AS8P192MB1269.EURP192.PROD.OUTLOOK.COM>
 
-Reviewed-by: Maciej =C5=BBenczykowski <maze@google.com>
+On Fri, Sep 15, 2023 at 12:57:58AM +0000, Yuran Pereira wrote:
+> Hello Alan,
+> 
+> Thank you for the detailed explanation.
+> 
+> Apologies for the delay replying.
+> Please, feel free to submit the patch.
 
-The casts should probably use the actual correct ptr type instead of void*
+No need; Andy Shevchenko already submitted the same patch some time ago 
+and it has been merged.
 
-Feels like this should go to stable@
+Alan Stern
+
+> ________________________________
+> De: Alan Stern <stern@rowland.harvard.edu>
+> Enviado: 9 de setembro de 2023 14:36
+> Para: Yuran Pereira <yuran.pereira@hotmail.com>; Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: gregkh@linuxfoundation.org <gregkh@linuxfoundation.org>; royluo@google.com <royluo@google.com>; christophe.jaillet@wanadoo.fr <christophe.jaillet@wanadoo.fr>; raychi@google.com <raychi@google.com>; linux-usb@vger.kernel.org <linux-usb@vger.kernel.org>; linux-kernel@vger.kernel.org <linux-kernel@vger.kernel.org>; syzbot+c063a4e176681d2e0380@syzkaller.appspotmail.com <syzbot+c063a4e176681d2e0380@syzkaller.appspotmail.com>
+> Assunto: Re: [PATCH] USB: core: Fix a NULL pointer dereference
+> 
+> On Sat, Sep 09, 2023 at 06:28:12AM +0000, Yuran Pereira wrote:
+> > Hello Alan,
+> >
+> > Thank you for elucidating that.
+> >
+> > So, this bug is present on the mainline tree which is where syzkaller
+> > found it. My patch was also based on the mainline tree.
+> >
+> > I just ran the same reproducer against a kernel compiled from the usb
+> > tree, and, as you suggested, the test you mentioned does in fact,
+> > prevent the bug from occurring.
+> >
+> > Please forgive my ignorance; I am a new contributor to the community.
+> > But in this situation how should I proceed? Is there even a need to
+> > submit a patch, or will the code currently present in the usb tree
+> > eventually be reflected in the mainline?
+> 
+> The first step is to find the difference between the mainline and USB
+> trees that is responsible for this change in behavior.  A quick check of
+> the Git logs shows that the change was caused by commit d21fdd07cea4
+> ("driver core: Return proper error code when dev_set_name() fails"),
+> written by Andy Shevchenko.  As a result of this commit, the code in
+> device_add() now says:
+> 
+>         if (dev_name(dev))
+>                 error = 0;
+>         /* subsystems can specify simple device enumeration */
+>         else if (dev->bus && dev->bus->dev_name)
+>                 error = dev_set_name(dev, "%s%u", dev->bus->dev_name, dev->id);
+>         if (error)
+>                 goto name_error;
+> 
+> This obviously omits a final "else" clause; it should say:
+> 
+>         if (dev_name(dev))
+>                 error = 0;
+>         /* subsystems can specify simple device enumeration */
+>         else if (dev->bus && dev->bus->dev_name)
+>                 error = dev_set_name(dev, "%s%u", dev->bus->dev_name, dev->id);
+> +       else
+> +               error = -EINVAL;
+>         if (error)
+>                 goto name_error;
+> 
+> So to answer your questions: No, the code in the USB tree will not find
+> its way into mainline.  The opposite will happen: The mainline code will
+> land in the USB tree.  Which means that yes, there is a need to submit a
+> patch.  You can go ahead and write this up for submission, or I can
+> submit it for you.  Or you can check with Andy and see if he wants to
+> fix the problem in a different way.
+> 
+> Alan Stern
 
