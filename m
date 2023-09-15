@@ -1,144 +1,235 @@
-Return-Path: <linux-usb+bounces-152-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-153-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 253CE7A204E
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 15:58:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 047D17A2090
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 16:12:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EDE781C2104F
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 13:58:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 010E11C209A8
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Sep 2023 14:12:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 640AC10A2E;
-	Fri, 15 Sep 2023 13:58:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 645FB11189;
+	Fri, 15 Sep 2023 14:12:17 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E4DE8485
-	for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 13:58:00 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E411FCC;
-	Fri, 15 Sep 2023 06:57:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694786279; x=1726322279;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=51q7+p6dAkVEPA2ULlkDzpUZ/83tyHXQyFDeaZwHaSE=;
-  b=Ktz7RrvsbrYDxigFOw5mW5bF6Nc4e/6ZkVqYc6ci6yEATFqzg/9ysQPA
-   bTsUprueaJdkTJBcKBRmt0jOssKqrlNzT++F43RCGsAtG6XEd3gVxEMTl
-   wBkDyYgaQCmvxtme321CAqF5kCY6th88mmmYvzbaxpDH3LmVhvPwkGu1T
-   gkpJP7/lIo7XkJ3YJHSg0nlREzKovmrg6d+yggx6q68Dt6MHmoFoFO1Y5
-   HXjFJZG2DvpTA5Bag4aPNX1pZSaDbuJEGAkk/CBg37iu91nyPBqmakDlQ
-   khmK+Fy/3yEH1U9fZv3mBu8OGSZfa0Npr0pp71TKLu38Y3Hq1QwzMgLkk
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10834"; a="378165579"
-X-IronPort-AV: E=Sophos;i="6.02,149,1688454000"; 
-   d="scan'208";a="378165579"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2023 06:57:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10834"; a="738332618"
-X-IronPort-AV: E=Sophos;i="6.02,149,1688454000"; 
-   d="scan'208";a="738332618"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by orsmga007.jf.intel.com with SMTP; 15 Sep 2023 06:57:48 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 15 Sep 2023 16:57:47 +0300
-Date: Fri, 15 Sep 2023 16:57:47 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Prashanth K <quic_prashk@quicinc.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B812D10A01
+	for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 14:12:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 717D9C433C9;
+	Fri, 15 Sep 2023 14:12:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1694787135;
+	bh=/HmAzgm/+XfH2LHmsna9iSpae4XQo0btQtAdXOJ8lmI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mjYxRMQNwaQHIKQyYqQlgdWqCfnn9IZcTlEUtfZyLYqAA8oxvZV68JJrPo0oh4EU4
+	 qE3X4RPLodL+YxmytKft3urNRQvw8EPPPH3HAwKX2yBZB3zGvHGs/+IduNDyKBBbow
+	 QuhJk/wvqrH3k9B90Zpu5zsZQIBgqVGR+mYFK84Gsf6pcSGVhGScXYV5+3z6xVEBf/
+	 oNL0GGCMG6glpSM0mBHJU/C/3ByYZIxqHkDjj7XWdyKEv5C1vsjrWl2Pv7YeHNVN0w
+	 3oirLCA0Aem0LuUgx4+aDtkfgK5H5gz6yC9ZH+Qq1gcUYC6xhhht/1NJ9PYsBDN6rV
+	 QxAi18p1Ej6Bg==
+Date: Fri, 15 Sep 2023 16:12:07 +0200
+From: Christian Brauner <brauner@kernel.org>
+To: Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>
+Cc: Christoph Hellwig <hch@lst.de>, Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Fenghua Yu <fenghua.yu@intel.com>,
+	Reinette Chatre <reinette.chatre@intel.com>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+	Tejun Heo <tj@kernel.org>,
+	Trond Myklebust <trond.myklebust@hammerspace.com>,
+	Anna Schumaker <anna@kernel.org>, Kees Cook <keescook@chromium.org>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Naohiro Aota <naohiro.aota@wdc.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	"# 5 . 16" <stable@vger.kernel.org>
-Subject: Re: usb: typec: ucsi: Clear EVENT_PENDING bit if ucsi_send_command
- fails
-Message-ID: <ZQRi20nC0j5c4LGI@kuha.fi.intel.com>
-References: <1694423055-8440-1-git-send-email-quic_prashk@quicinc.com>
- <ZP8M6zqgsLTK25PI@kuha.fi.intel.com>
- <21d247d3-83be-ba53-c982-2ab0e2e4ffb3@quicinc.com>
- <ZQROzNqr7fbmJC87@kuha.fi.intel.com>
- <4e876097-aed1-2b0d-ecb4-6434add4ef26@quicinc.com>
+	linux-s390@vger.kernel.org, linux-rdma@vger.kernel.org,
+	linux-nfs@vger.kernel.org, linux-hardening@vger.kernel.org,
+	cgroups@vger.kernel.org
+Subject: Re: [PATCH 03/19] fs: release anon dev_t in deactivate_locked_super
+Message-ID: <20230915-zweit-frech-0e06394208a3@brauner>
+References: <20230913111013.77623-1-hch@lst.de>
+ <20230913111013.77623-4-hch@lst.de>
+ <20230913232712.GC800259@ZenIV>
+ <20230914023705.GH800259@ZenIV>
+ <20230914053843.GI800259@ZenIV>
+ <20230914-munkeln-pelzmantel-3e3a761acb72@brauner>
+ <20230914165805.GJ800259@ZenIV>
+ <20230915-elstern-etatplanung-906c6780af19@brauner>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <4e876097-aed1-2b0d-ecb4-6434add4ef26@quicinc.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-	SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+In-Reply-To: <20230915-elstern-etatplanung-906c6780af19@brauner>
 
-Hi Prashanth,
-
-On Fri, Sep 15, 2023 at 07:10:25PM +0530, Prashanth K wrote:
-> On 15-09-23 06:02 pm, Heikki Krogerus wrote:
-> > On Tue, Sep 12, 2023 at 04:37:47PM +0530, Prashanth K wrote:
-> > > 
-> > > 
-> > > On 11-09-23 06:19 pm, Heikki Krogerus wrote:
-> > > > On Mon, Sep 11, 2023 at 02:34:15PM +0530, Prashanth K wrote:
-> > > > > Currently if ucsi_send_command() fails, then we bail out without
-> > > > > clearing EVENT_PENDING flag. So when the next connector change
-> > > > > event comes, ucsi_connector_change() won't queue the con->work,
-> > > > > because of which none of the new events will be processed.
-> > > > > 
-> > > > > Fix this by clearing EVENT_PENDING flag if ucsi_send_command()
-> > > > > fails.
-> > > > > 
-> > > > > Cc: <stable@vger.kernel.org> # 5.16
-> > > > > Fixes: 512df95b9432 ("usb: typec: ucsi: Better fix for missing unplug events issue")
-> > > > > Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
-> > > > > ---
-> > > > >    drivers/usb/typec/ucsi/ucsi.c | 1 +
-> > > > >    1 file changed, 1 insertion(+)
-> > > > > 
-> > > > > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> > > > > index c6dfe3d..509c67c 100644
-> > > > > --- a/drivers/usb/typec/ucsi/ucsi.c
-> > > > > +++ b/drivers/usb/typec/ucsi/ucsi.c
-> > > > > @@ -884,6 +884,7 @@ static void ucsi_handle_connector_change(struct work_struct *work)
-> > > > >    	if (ret < 0) {
-> > > > >    		dev_err(ucsi->dev, "%s: GET_CONNECTOR_STATUS failed (%d)\n",
-> > > > >    			__func__, ret);
-> > > > > +		clear_bit(EVENT_PENDING, &con->ucsi->flags);
-> > > > >    		goto out_unlock;
-> > > > >    	}
-> > > > 
-> > > > I think it would be better to just move that label (out_unlock) above
-> > > > the point where clear_bit() is already called instead of separately
-> > > > calling it like that. That way the Connector Change Event will
-> > > > also get acknowledged.
-> > > Do we really need to ACK in this case since we didn't process the current
-> > > connector change event
-> > 
-> > You won't get the next event before the first one was ACK'd, right?
-> > 
+> > tree of any filesystem (in-tree one or not) will have to go through the
+> > changes and figure out WTF to do with their existing code.  We are
+> > going to play whack-a-mole for at least several years as development
+> > branches get rebased and merged.
 > 
-> The spec says that we need to ACK if we received AND processed a CCI
-> 
-> "4.5.4 Acknowledge Command Completion and/or Change Indication (R)
-> This command is used to acknowledge to the PPM that the OPM received and
-> processed a Command Completion and/or a Connector Change Indication."
-> 
-> And here in this case, we have received, but not processed the event.
-> So I'm not really sure what to do here in this case. If we don't send an
-> ACK, then would the PPM think that OPM is not responding and reset it?
-> OR would it resend the previous event again since we didn't ACK?
+> Let me write something up.
 
-Every PPM behaves differently.
+So here I've written two porting.rst patches that aim to reflect the
+current state of things (They do _not_ reflect what's in Christoph's
+series here as that'ss again pretty separate and will require additional
+spelling out.).
 
-Did you actually see that happening - GET_CONNECTOR_STATUS failed? Can
-you reproduce it?
+I'm adding explanation for both the old and new logic fwiw. I hope to
+upstream these docs soon so we all have something to point to.
 
-thanks,
+From 200666901f53db74edf309d48e3c74fd275a822a Mon Sep 17 00:00:00 2001
+From: Christian Brauner <brauner@kernel.org>
+Date: Fri, 15 Sep 2023 16:01:02 +0200
+Subject: [PATCH 1/2] porting: document new block device opening order
 
+Signed-off-by: Christian Brauner <brauner@kernel.org>
+---
+ Documentation/filesystems/porting.rst | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+
+diff --git a/Documentation/filesystems/porting.rst b/Documentation/filesystems/porting.rst
+index deac4e973ddc..f436b64b77bf 100644
+--- a/Documentation/filesystems/porting.rst
++++ b/Documentation/filesystems/porting.rst
+@@ -949,3 +949,27 @@ mmap_lock held.  All in-tree users have been audited and do not seem to
+ depend on the mmap_lock being held, but out of tree users should verify
+ for themselves.  If they do need it, they can return VM_FAULT_RETRY to
+ be called with the mmap_lock held.
++
++---
++
++**mandatory**
++
++The order of opening block devices and matching or creating superblocks has
++changed.
++
++The old logic opened block devices first and then tried to find a
++suitable superblock to reuse based on the block device pointer.
++
++The new logic finds or creates a superblock first, opening block devices
++afterwards. Since opening block devices cannot happen under s_umount because of
++lock ordering requirements s_umount is now dropped while opening block
++devices and reacquired before calling fill_super().
++
++In the old logic concurrent mounters would find the superblock on the list of
++active superblock for the filesystem type. Since the first opener of the block
++device would hold s_umount they would wait until the superblock became either
++born or died prematurely due to initialization failure.
++
++Since the new logic drops s_umount concurrent mounters could grab s_umount and
++would spin. Instead they are now made to wait using an explicit wait-wake
++mechanism without having to hold s_umount.
 -- 
-heikki
+2.34.1
+
+From 1f09898322b4402219d8d3219d399c9e56a76bae Mon Sep 17 00:00:00 2001
+From: Christian Brauner <brauner@kernel.org>
+Date: Fri, 15 Sep 2023 16:01:40 +0200
+Subject: [PATCH 2/2] porting: document superblock as block device holder
+
+Signed-off-by: Christian Brauner <brauner@kernel.org>
+---
+ Documentation/filesystems/porting.rst | 79 +++++++++++++++++++++++++++
+ 1 file changed, 79 insertions(+)
+
+diff --git a/Documentation/filesystems/porting.rst b/Documentation/filesystems/porting.rst
+index f436b64b77bf..fefefaf289b4 100644
+--- a/Documentation/filesystems/porting.rst
++++ b/Documentation/filesystems/porting.rst
+@@ -973,3 +973,82 @@ born or died prematurely due to initialization failure.
+ Since the new logic drops s_umount concurrent mounters could grab s_umount and
+ would spin. Instead they are now made to wait using an explicit wait-wake
+ mechanism without having to hold s_umount.
++
++---
++
++**mandatory**
++
++The holder of a block device is now the superblock.
++
++The holder of a block device used to be the file_system_type which wasn't
++particularly useful. It wasn't possible to go from block device to owning
++superblock without matching on the device pointer stored in the superblock.
++This mechanism would only work for a single device so the block layer couldn't
++find the owning superblock associated with additional devices.
++
++In the old mechanism reusing or creating a superblock for racing mount(2) and
++umount(2) relied on the file_system_type as the holder. This was severly
++underdocumented however:
++
++(1) If the concurrent mount(2) managed to grab an active reference before the
++    umount(2) dropped the last active reference in deactivate_locked_super()
++    the mounter would simply reuse the existing superblock.
++
++(2) If the mounter came after deactivate_locked_super() but before
++    the superblock had been removed from the list of superblocks of the
++    filesystem type the mounter would wait until the superblock was shutdown
++    and allocated a new superblock.
++
++(3) If the mounter came after deactivate_locked_super() and after
++    the superblock had been removed from the list of superblocks of the
++    filesystem type the mounter would allocate a new superblock.
++
++Because the holder of the block device was the filesystem type any concurrent
++mounter could open the block device without risking seeing EBUSY because the
++block device was still in use.
++
++Making the superblock the owner of the block device changes this as the holder
++is now a unique superblock and not shared among all superblocks of the
++filesystem type. So a concurrent mounter in (2) could suddenly see EBUSY when
++trying to open a block device whose holder was a different superblock.
++
++The new logic thus waits until the superblock and the devices are shutdown in
++->kill_sb(). Removal of the superblock from the list of superblocks of the
++filesystem type is now moved to a later point when the devices are closed:
++
++(1) Any concurrent mounter managing to grab an active reference on an existing
++    superblock is made to wait until the superblock is either ready or until
++    the superblock and all devices are shutdown in ->kill_sb().
++
++(2) If the mounter came after deactivate_locked_super() but before
++    the superblock had been removed from the list of superblocks of the
++    filesystem type the mounter is made to wait until the superblock and the
++    devices are shut down in ->kill_sb() and the superblock is removed from the
++    list of superblocks of the filesystem type.
++
++(3) This case is now collapsed into (2) as the superblock is left on the list
++    of superblocks of the filesystem type until all devices are shutdown in
++    ->kill_sb().
++
++As this is a VFS level change it has no practical consequences for filesystems
++other than that all of them must use one of the provided kill_litter_super(),
++kill_anon_super(), or kill_block_super() helpers.
++
++Filesystems that reuse superblocks based on non-static keys such as
++sb->s_fs_info must ensure that these keys remain valid across kill_*_super()
++calls. The expected pattern is::
++
++	static struct file_system_type some_fs_type = {
++		.name 		= "somefs",
++		.kill_sb 	= some_fs_kill_sb,
++	};
++
++	static void some_fs_kill_sb(struct super_block *sb)
++	{
++		struct some_fs_info *info = sb->s_fs_info;
++
++		kill_*_super(sb);
++		kfree(info);
++	}
++
++It's best practice to never deviate from this pattern.
+-- 
+2.34.1
+
 
