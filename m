@@ -1,87 +1,129 @@
-Return-Path: <linux-usb+bounces-246-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-247-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0335C7A3196
-	for <lists+linux-usb@lfdr.de>; Sat, 16 Sep 2023 19:14:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C24717A31AE
+	for <lists+linux-usb@lfdr.de>; Sat, 16 Sep 2023 19:40:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E74901C20935
-	for <lists+linux-usb@lfdr.de>; Sat, 16 Sep 2023 17:14:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D961E281DDD
+	for <lists+linux-usb@lfdr.de>; Sat, 16 Sep 2023 17:40:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74C101BDC5;
-	Sat, 16 Sep 2023 17:14:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B05C1BDCF;
+	Sat, 16 Sep 2023 17:40:35 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4778414264
-	for <linux-usb@vger.kernel.org>; Sat, 16 Sep 2023 17:14:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DED5FC433C9
-	for <linux-usb@vger.kernel.org>; Sat, 16 Sep 2023 17:14:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1694884482;
-	bh=q07/sGTdBFDzNNhvYTWa5ZoFKzeuegoA93c3kpcDiGY=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=OYkED2jet8RE1kvoNrjPUPTuzW9FBPFCNlh5YnFLWoRRQNp4vXBhvAFpdHNmO/FVA
-	 1Wk7b1KiAASxbnPzwHtKwiO70R39f8qZPjOxHDkNu6lmNPzzYzj+dfTpwg/5aiqYxD
-	 s9T5hMXHiPS0pkYotJ2rD9dKLx2009iJIFyZnnyDiyoOAVKMDBFZXeWeE7+EW6Fybm
-	 j0arZ5J+5U69RCkldj5A3ZECHCkUI71S5mQ931Z+ggTWiazTMrNm+2VT+fJpPAptYY
-	 2LKFd87K82vGaQMnVHNUhuJctKdNe0k330KbyUCEnmUHYcnUhypIJIBdfhRQBBixXB
-	 wfiSh3tT03zNg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id C65F6C53BD4; Sat, 16 Sep 2023 17:14:42 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 217915] System fails to resume correctly after Thunderbolt dock
- disconnected while sleeping
-Date: Sat, 16 Sep 2023 17:14:42 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: mario.limonciello@amd.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-217915-208809-S1Ykd02od4@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-217915-208809@https.bugzilla.kernel.org/>
-References: <bug-217915-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B59E26FC8
+	for <linux-usb@vger.kernel.org>; Sat, 16 Sep 2023 17:40:33 +0000 (UTC)
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE615C6;
+	Sat, 16 Sep 2023 10:40:31 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1c3d6d88231so26728885ad.0;
+        Sat, 16 Sep 2023 10:40:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1694886031; x=1695490831; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vi+mGijyjbgpVHMNYDnt4aB3+x2apvr+TvA/PakrFOg=;
+        b=esSQ/R/UXRrISTnfHGNO5eJpgO8SKyN4lgfZxax+3X90Zm5CQDwaEQxXEQDpc130WD
+         z3BmzJ6hSicQ8Ni2xUuroWsSkbqEnFvxgXVOCsFTKqeEGfMIz3ri0DF8kYhmFYtn5bXf
+         ouIr57nna95ws/SfzC9aNDBIXyhMq4b7aTCREXbucz4T6Hojqs8XxyN1pKeu/d6+3XQg
+         6OdGlhyma0r7EsOzjuTtxozhIInUe7xtqfcLLJ6rf+y4gLG0AukOfjSgabhKyPSWzKqY
+         ig1Kw8MxYQNoG9rRKGS0aSA0U6qpKUaWmKIYealR0LarW5tGdYb66t25p/7d+uOnebFb
+         XfHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694886031; x=1695490831;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Vi+mGijyjbgpVHMNYDnt4aB3+x2apvr+TvA/PakrFOg=;
+        b=RYnuFpemVeI+CDa0MUTr5lPRmmB2+2KDHy0Q/51Bao9e4Y6Q8DZhv0xy1g+5aMOQnF
+         d7wbwf//WmS+QcQmgRSUUQqdkJoe9/xj5ueoGh9Tfqf0itXNSs8n5U2s9jzt03+Hfu/O
+         hwqWqWiRD6EXivbBhWMgAs6Wv7vDqhj4gGwSmu05L4cnBwv7RMkx1Pf/sJ6eVDtYL9v9
+         YigxzQY+9I8or1avBncfoZB8mrfW3ANnwh0PF8Eie9PzfWIrpX3+NpU5jQTBFPjww8Qt
+         QNSDicWdiianQxJrEl+1I4ASka10psdeDgY7ymCf+lPCRt7q6DXYsVDWbw0vP9QL6OuU
+         bzRg==
+X-Gm-Message-State: AOJu0YywiqklHAincxbFCai4UR5eqcpKduJTXcOYvxMdsrfVjylFWEFM
+	BHQkM93wk3sOTGh6sbCInGQX7U2mpsc=
+X-Google-Smtp-Source: AGHT+IH8exMXQrNZfWnlkftpFAfxhGSTSHdEi/imho30/d9fwW+/BkfTFfS1clrxsaEX1x3M+qucTg==
+X-Received: by 2002:a17:903:182:b0:1bc:6861:d746 with SMTP id z2-20020a170903018200b001bc6861d746mr5288831plg.58.1694886031248;
+        Sat, 16 Sep 2023 10:40:31 -0700 (PDT)
+Received: from brag-vm.localdomain ([117.243.88.184])
+        by smtp.gmail.com with ESMTPSA id i9-20020a17090332c900b001bb9bc8d232sm5481513plr.61.2023.09.16.10.40.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 16 Sep 2023 10:40:30 -0700 (PDT)
+From: Bragatheswaran Manickavel <bragathemanick0908@gmail.com>
+To: valentina.manea.m@gmail.com,
+	shuah@kernel.org,
+	i@zenithal.me,
+	gregkh@linuxfoundation.org
+Cc: Bragatheswaran Manickavel <bragathemanick0908@gmail.com>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] usb/usbip : fixing warnings in stub_dev.c
+Date: Sat, 16 Sep 2023 23:10:20 +0530
+Message-Id: <20230916174020.3218-1-bragathemanick0908@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+	FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D217915
+Fix some checkpatch complaints in usb/usbip/stub_dev.c
 
-Mario Limonciello (AMD) (mario.limonciello@amd.com) changed:
+Signed-off-by: Bragatheswaran Manickavel <bragathemanick0908@gmail.com>
+---
+ drivers/usb/usbip/stub_dev.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |mario.limonciello@amd.com
+diff --git a/drivers/usb/usbip/stub_dev.c b/drivers/usb/usbip/stub_dev.c
+index 9c6954aad6c8..3a5771f74a3f 100644
+--- a/drivers/usb/usbip/stub_dev.c
++++ b/drivers/usb/usbip/stub_dev.c
+@@ -495,24 +495,25 @@ static void stub_disconnect(struct usb_device *udev)
+ 		busid_priv->status = STUB_BUSID_ADDED;
+ 	/* release busid_lock */
+ 	spin_unlock(&busid_priv->busid_lock);
+-	return;
+ }
+ 
+ #ifdef CONFIG_PM
+ 
+-/* These functions need usb_port_suspend and usb_port_resume,
+- * which reside in drivers/usb/core/usb.h. Skip for now. */
++/*
++ * These functions need usb_port_suspend and usb_port_resume,
++ * which reside in drivers/usb/core/usb.h. Skip for now.
++ */
+ 
+ static int stub_suspend(struct usb_device *udev, pm_message_t message)
+ {
+-	dev_dbg(&udev->dev, "stub_suspend\n");
++	dev_dbg(&udev->dev, "stub suspend\n");
+ 
+ 	return 0;
+ }
+ 
+ static int stub_resume(struct usb_device *udev, pm_message_t message)
+ {
+-	dev_dbg(&udev->dev, "stub_resume\n");
++	dev_dbg(&udev->dev, "stub resume\n");
+ 
+ 	return 0;
+ }
+-- 
+2.34.1
 
---- Comment #6 from Mario Limonciello (AMD) (mario.limonciello@amd.com) ---
-Since you've already identified two relatively close targets of 6.3.9 to 6.=
-4.1
-would you be able to bisect between?
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
 
