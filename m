@@ -1,146 +1,87 @@
-Return-Path: <linux-usb+bounces-245-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-246-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C55B57A30F4
-	for <lists+linux-usb@lfdr.de>; Sat, 16 Sep 2023 16:47:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0335C7A3196
+	for <lists+linux-usb@lfdr.de>; Sat, 16 Sep 2023 19:14:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CB2BD1C20BAB
-	for <lists+linux-usb@lfdr.de>; Sat, 16 Sep 2023 14:47:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E74901C20935
+	for <lists+linux-usb@lfdr.de>; Sat, 16 Sep 2023 17:14:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE14F1400A;
-	Sat, 16 Sep 2023 14:46:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74C101BDC5;
+	Sat, 16 Sep 2023 17:14:43 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AEE83C38;
-	Sat, 16 Sep 2023 14:46:43 +0000 (UTC)
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5294218E;
-	Sat, 16 Sep 2023 07:46:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
-	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
-	In-Reply-To:References; bh=kKrlL3psbhaCacm+GqwkX8wPmM3l79IE3hZOV3TRBaI=; b=zE
-	HVhZz4uTqMJMVJcu3KYGmi2MLjVRMMHNyLX6kcjia1n2F2IQc5io9HeXGOfGGKvZH8iRZIPVZcp77
-	LYzk7HhHXaOsCZo9gQEC4pSqcpkLutxR9IK8JXRLqlbCiDWp1ZE+40PSHsw0ZI0x9t45osDZMRWM0
-	Cd2D5NLvGyYD+O8=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1qhWZ9-006dsL-DM; Sat, 16 Sep 2023 16:46:35 +0200
-Date: Sat, 16 Sep 2023 16:46:35 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Bagas Sanjaya <bagasdotme@gmail.com>
-Cc: Louis-Marie <rauline.lm@protonmail.com>,
-	Linux USB <linux-usb@vger.kernel.org>,
-	Linux Networking <netdev@vger.kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Hayes Wang <hayeswang@realtek.com>, Simon Horman <horms@kernel.org>,
-	Antonio Napolitano <anton@polit.no>,
-	Douglas Anderson <dianders@chromium.org>,
-	Andrew Gaul <gaul@gaul.org>,
-	=?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
-	Jean-Francois Le Fillatre <jflf_kernel@gmx.com>,
-	Dennis Wassenberg <dennis.wassenberg@secunet.com>,
-	Nicolas Dumazet <ndumazet@google.com>,
-	Mark Pearson <mpearson-lenovo@squebb.ca>,
-	Hannu Hartikainen <hannu@hrtk.in>,
-	=?utf-8?Q?=C5=81ukasz?= Bartosik <lb@semihalf.com>
-Subject: Re: Lenovo Hybrid Dock MAC passtrough patch
-Message-ID: <a4d79eb6-ebab-4a7e-9b57-81c8e68b7c41@lunn.ch>
-References: <guK8MKcjWbPsZ1LuRVYxFf7WfsWa025shmVj7iq289LHf59N6i6OlkD0N9KhICJzbMfFW2aXYbguZ1NtZNn6PlA_-JvF3k7uJtG89THdZ6w=@protonmail.com>
- <ZQWcQTQahx-QEGDl@debian.me>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4778414264
+	for <linux-usb@vger.kernel.org>; Sat, 16 Sep 2023 17:14:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DED5FC433C9
+	for <linux-usb@vger.kernel.org>; Sat, 16 Sep 2023 17:14:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1694884482;
+	bh=q07/sGTdBFDzNNhvYTWa5ZoFKzeuegoA93c3kpcDiGY=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=OYkED2jet8RE1kvoNrjPUPTuzW9FBPFCNlh5YnFLWoRRQNp4vXBhvAFpdHNmO/FVA
+	 1Wk7b1KiAASxbnPzwHtKwiO70R39f8qZPjOxHDkNu6lmNPzzYzj+dfTpwg/5aiqYxD
+	 s9T5hMXHiPS0pkYotJ2rD9dKLx2009iJIFyZnnyDiyoOAVKMDBFZXeWeE7+EW6Fybm
+	 j0arZ5J+5U69RCkldj5A3ZECHCkUI71S5mQ931Z+ggTWiazTMrNm+2VT+fJpPAptYY
+	 2LKFd87K82vGaQMnVHNUhuJctKdNe0k330KbyUCEnmUHYcnUhypIJIBdfhRQBBixXB
+	 wfiSh3tT03zNg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id C65F6C53BD4; Sat, 16 Sep 2023 17:14:42 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 217915] System fails to resume correctly after Thunderbolt dock
+ disconnected while sleeping
+Date: Sat, 16 Sep 2023 17:14:42 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: mario.limonciello@amd.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-217915-208809-S1Ykd02od4@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-217915-208809@https.bugzilla.kernel.org/>
+References: <bug-217915-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZQWcQTQahx-QEGDl@debian.me>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
 
-On Sat, Sep 16, 2023 at 07:14:57PM +0700, Bagas Sanjaya wrote:
-> On Sat, Sep 16, 2023 at 11:41:49AM +0000, Louis-Marie wrote:
-> > Hi,
-> > I would like to submit a patch for enabling mac passtrough for the Lenovo Hybrid Dock.
-> > Tested with Fedora 6.4.12.
-> > 
-> > 
-> > 
-> > diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.cindex 0c13d9950cd8..02e6404bf6ea 100644
-> > --- a/drivers/net/usb/r8152.c
-> > +++ b/drivers/net/usb/r8152.c
-> > @@ -781,6 +781,7 @@ enum rtl8152_flags {
-> >  #define DEVICE_ID_THINKPAD_USB_C_DONGLE            0x720c
-> >  #define DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2     0xa387
-> >  #define DEVICE_ID_THINKPAD_USB_C_DOCK_GEN3     0x3062
-> > +#define DEVICE_ID_THINKPAD_HYBRID_USB_C_DOCK       0xa359
-> > 
-> >  struct tally_counter {
-> >     __le64  tx_packets;
-> > @@ -9583,6 +9584,7 @@ static bool rtl8152_supports_lenovo_macpassthru(struct usb_device *udev)
-> >         case DEVICE_ID_THINKPAD_THUNDERBOLT3_DOCK_GEN2:
-> >         case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN2:
-> >         case DEVICE_ID_THINKPAD_USB_C_DOCK_GEN3:
-> > +       case DEVICE_ID_THINKPAD_HYBRID_USB_C_DOCK:
-> >         case DEVICE_ID_THINKPAD_USB_C_DONGLE:
-> >             return 1;
-> >         }
-> > @@ -9832,6 +9834,7 @@ static const struct usb_device_id rtl8152_table[] = {
-> >     { USB_DEVICE(VENDOR_ID_LENOVO,  0x7214) },
-> >     { USB_DEVICE(VENDOR_ID_LENOVO,  0x721e) },
-> >     { USB_DEVICE(VENDOR_ID_LENOVO,  0xa387) },
-> > +   { USB_DEVICE(VENDOR_ID_LENOVO,  0xa359) },
-> >     { USB_DEVICE(VENDOR_ID_LINKSYS, 0x0041) },
-> >     { USB_DEVICE(VENDOR_ID_NVIDIA,  0x09ff) },
-> >     { USB_DEVICE(VENDOR_ID_TPLINK,  0x0601) },
-> > diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-> > index 15e9bd180a1d..ad98c8ffbc69 100644
-> > --- a/drivers/usb/core/quirks.c
-> > +++ b/drivers/usb/core/quirks.c
-> > @@ -470,6 +470,9 @@ static const struct usb_device_id usb_quirk_list[] = {
-> >     /* Lenovo ThinkPad USB-C Dock Gen2 Ethernet (RTL8153 GigE) */
-> >     { USB_DEVICE(0x17ef, 0xa387), .driver_info = USB_QUIRK_NO_LPM },
-> > 
-> > +   /* Lenovo ThinkPad Hydrid USB-C Dock */
-> > +   { USB_DEVICE(0x17ef, 0xa359), .driver_info = USB_QUIRK_NO_LPM },
-> > +
-> >     /* BUILDWIN Photo Frame */
-> >     { USB_DEVICE(0x1908, 0x1315), .driver_info =
-> >             USB_QUIRK_HONOR_BNUMINTERFACES },
-> > 
-> > Signed-off-by: Louis-Marie Rauline <rauline.lm@protonmail.com>
-> > 
-> 
-> Can you send above suggestion as formal patch instead? See
-> Documentation/process/submitting-patches.rst for how to properly submit
-> patches. And also, use git-send-email(1) when sending them so that patch
-> corruption (like tabs converting to spaces and line wrapping as in above
-> diff) doesn't occur.
-> 
-> Thanks.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217915
 
-This appears to do more than MAC passthrough, e.g. adding a quirk for
-LPM. Please split the patch up. The MAC passthrough part is likely to
-be rejected, because MAC pass through is a mess, but the quirk part
-looks O.K.
+Mario Limonciello (AMD) (mario.limonciello@amd.com) changed:
 
-      Andrew
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |mario.limonciello@amd.com
+
+--- Comment #6 from Mario Limonciello (AMD) (mario.limonciello@amd.com) ---
+Since you've already identified two relatively close targets of 6.3.9 to 6.=
+4.1
+would you be able to bisect between?
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
