@@ -1,63 +1,63 @@
-Return-Path: <linux-usb+bounces-224-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-225-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 712A77A2C78
-	for <lists+linux-usb@lfdr.de>; Sat, 16 Sep 2023 02:35:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7195E7A2C93
+	for <lists+linux-usb@lfdr.de>; Sat, 16 Sep 2023 02:39:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2BE182837CB
-	for <lists+linux-usb@lfdr.de>; Sat, 16 Sep 2023 00:35:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9A69D1C22C98
+	for <lists+linux-usb@lfdr.de>; Sat, 16 Sep 2023 00:39:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BF6A1109;
-	Sat, 16 Sep 2023 00:34:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D86FC1117;
+	Sat, 16 Sep 2023 00:39:45 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 330C3A47
-	for <linux-usb@vger.kernel.org>; Sat, 16 Sep 2023 00:34:49 +0000 (UTC)
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9813AAF
-	for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 17:34:22 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-99bdeae1d0aso326565266b.1
-        for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 17:34:22 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E83ED10F1
+	for <linux-usb@vger.kernel.org>; Sat, 16 Sep 2023 00:39:43 +0000 (UTC)
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C7C30DF
+	for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 17:36:27 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-9936b3d0286so353401866b.0
+        for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 17:36:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1694824461; x=1695429261; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1694824539; x=1695429339; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=PKWI1/9uW8B4xBhYUhaMnOR3gT8g2FpjpC0atQQWm14=;
-        b=tEMXlHWEaibPwptTDS2q8pnJSeF9LPqua4TKBloKTv1fm2CgDPNYSR0dmEorv1lUuO
-         AMYAv0Z/VrtG+0Y8/6Rz1CFEXrdnTAioN3wxRElJ4Gy3JYjxpX2GBtbHPaSLrpIp3+v7
-         9aRiYYp+uHgYBB2L1/Qc3itd2NP3EkPqYV5O5j3Ve8Nn4si4oomWssdO0kS0rw6KqsRh
-         NzIP3wyqa/WZIgCpPkPBiPof7+jPlB6oxI0VlwxrjiOJRiERSSY/f/Z/MEPUQfwGrNQE
-         CdrKdN7vQ2Iy85P9vLX+13w12iP3v2y1wwDh1CxJpyEHDpvNUaTET3/X6HZVphnJe4kO
-         +R+w==
+        bh=iXuRcmz9wFRVf0opm5Y/r1mXGp6VsOD0Ok9XbCh2sOc=;
+        b=YWXD7iCTpvJA2fu4UbmEkHJZLe58UGx2rhu+XBmQnVUexKHQ3QCk2EBjZvG+xBd7ie
+         JaPVoqWuYM2PMHlouVoLCsqjgoy0yOWZXbYimuNi1AbcTwKbyJeJUQbHtGKHXwC30vO5
+         /FthlHOq1dFZYiHKywCXNuPtuYfFmm7U2i5jIhwQq5IN/QcYHGpr32L8WsqcJi9hmYCf
+         sTFC7Rti/hcBxDwQpfhs8ksYM8aswoW12YkWuTcHeSU+y0x028gsouMNqUeVa0WbuG6+
+         /onwz4Pz/nZekqMf/pd+RbSvNRbxkszjEdklYysgfCJpV6ux4Ig/+IszmgzOZ0P49xTz
+         1miA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694824461; x=1695429261;
+        d=1e100.net; s=20230601; t=1694824539; x=1695429339;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PKWI1/9uW8B4xBhYUhaMnOR3gT8g2FpjpC0atQQWm14=;
-        b=Tz47Vvjvi+8Dw9pKjjtFJgVYOr/MRuEH2uj3KLHho5wYeSfiHNjKk5vhTzvP6RBehl
-         zSSizlAXC9+hy0Py1+5D38T0Be9E0JuhQ40BarHIg5jXGFXOl6NIPoLOZAGICARsrdLz
-         X0An4t0Db1DLsWWKPkuJcnAIjah/kdhFU+Qr0YZ3O3wBPkWV+tWY9QGxwdFtrllsISNJ
-         FZrtCkmFkfci95de5k5BuVIiJ4o+9PZDVTyHT/+T5YE6Bpwuvn6+MdgGTQmTkxj7J4LC
-         gRPF1mhQJJ83fUQU00jd41ZM57aJOGz+vp1axDJ+ZmXdMR/AfdwRdaMDNzPW8sKTgwm3
-         9C2A==
-X-Gm-Message-State: AOJu0Yw2uQ8OAKKaUcJBUfiA4tMLxT3bTYjS9xlt2mI1H6wHTe8MJHdM
-	FdHc7PTavyKo3F0DJqd6EKo+Pg==
-X-Google-Smtp-Source: AGHT+IG/6e5icQ1FKKOHQ8EpeI6y/tsc8LIx1fuPOHY7vrdOJcOP4rH2jhD27RYjXQ7pFgZxef6SBw==
-X-Received: by 2002:a17:907:2cce:b0:99d:f2dc:97e3 with SMTP id hg14-20020a1709072cce00b0099df2dc97e3mr2667553ejc.20.1694824461266;
-        Fri, 15 Sep 2023 17:34:21 -0700 (PDT)
+        bh=iXuRcmz9wFRVf0opm5Y/r1mXGp6VsOD0Ok9XbCh2sOc=;
+        b=tn2rq+CKY5S6VHq7rO1j9+2cD8Me2d2O01FdJdkaC/iIZ/GhOVgSkIt+BiE7ueCCW3
+         9A70LiuqMO0cE/trmYaNz66lELAzou2/tMGQTTSocbZC96G7U68ZJ38xmvUyPB3hvS9N
+         qLjOyaZQmyTQnwoSSrmoxoT4hdHmvC/neM7xvxSCjhBZ9Ld+L+zS3vgvmKp+GRRuykhi
+         HR326eqBxq7VUMqtNFMb/UvK5xgTdfwci4FkyvnfgjeDwaLztet3IMxG6rG8PG0GnTty
+         LhG6epMAHuKutaPV//NFzIZzw6wP/Qul4bK1gdEWgS/pdfvP/PH7vM0hn6Jm9Rg4qkjw
+         rIgw==
+X-Gm-Message-State: AOJu0Yz6GOxlEVCSiILEAKJCzGkMKMW4fwuAoZkcjJVKCg19f+x1MDju
+	dn3uWKlO1d6Oyf7v93XAQmnO/Q==
+X-Google-Smtp-Source: AGHT+IHzn5BzHsdnc6mQ+RCTL/g/12pdzqDKmc1xZslP3PEa2jUU9guE2A4T1Uy2y3QYG3d9gswQ8w==
+X-Received: by 2002:a17:906:3099:b0:9a1:d5de:5e3 with SMTP id 25-20020a170906309900b009a1d5de05e3mr2686078ejv.54.1694824538825;
+        Fri, 15 Sep 2023 17:35:38 -0700 (PDT)
 Received: from [192.168.37.154] (178235177186.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.186])
-        by smtp.gmail.com with ESMTPSA id jw24-20020a17090776b800b009a168ab6ee2sm3035669ejc.164.2023.09.15.17.34.18
+        by smtp.gmail.com with ESMTPSA id jw24-20020a17090776b800b009a168ab6ee2sm3035669ejc.164.2023.09.15.17.35.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Sep 2023 17:34:20 -0700 (PDT)
-Message-ID: <fc3cecda-72dd-4b7f-8839-95bd04481038@linaro.org>
-Date: Sat, 16 Sep 2023 02:34:17 +0200
+        Fri, 15 Sep 2023 17:35:38 -0700 (PDT)
+Message-ID: <6e66d821-1275-4830-a898-bb82c333dcc5@linaro.org>
+Date: Sat, 16 Sep 2023 02:35:38 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -65,8 +65,8 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 10/33] ASoC: qcom: qdsp6: Add USB backend ASoC driver
- for Q6
+Subject: Re: [PATCH v6 13/33] dt-bindings: usb: dwc3: Add
+ snps,num-hc-interrupters definition
 Content-Language: en-US
 To: Wesley Cheng <quic_wcheng@quicinc.com>, mathias.nyman@intel.com,
  gregkh@linuxfoundation.org, lgirdwood@gmail.com, broonie@kernel.org,
@@ -78,7 +78,7 @@ Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
  alsa-devel@alsa-project.org, linux-arm-msm@vger.kernel.org,
  devicetree@vger.kernel.org
 References: <20230916001026.315-1-quic_wcheng@quicinc.com>
- <20230916001026.315-11-quic_wcheng@quicinc.com>
+ <20230916001026.315-14-quic_wcheng@quicinc.com>
 From: Konrad Dybcio <konrad.dybcio@linaro.org>
 Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  xsFNBF9ALYUBEADWAhxdTBWrwAgDQQzc1O/bJ5O7b6cXYxwbBd9xKP7MICh5YA0DcCjJSOum
@@ -115,7 +115,7 @@ Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  bGqMHex48FVZhexNPYOd58EY9/7mL5u0sJmo+jTeb4JBgIbFPJCFyng4HwbniWgQJZ1WqaUC
  nas9J77uICis2WH7N8Bs9jy0wQYezNzqS+FxoNXmDQg2jetX8en4bO2Di7Pmx0jXA4TOb9TM
  izWDgYvmBE8=
-In-Reply-To: <20230916001026.315-11-quic_wcheng@quicinc.com>
+In-Reply-To: <20230916001026.315-14-quic_wcheng@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -126,20 +126,16 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
 On 16.09.2023 02:10, Wesley Cheng wrote:
-> Create a USB BE component that will register a new USB port to the ASoC USB
-> framework.  This will handle determination on if the requested audio
-> profile is supported by the USB device currently selected.
+> Add a new definition for specifying how many XHCI secondary interrupters
+> can be allocated.  XHCI in general can potentially support up to 1024
+> interrupters, which some uses may want to limit depending on how many
+> users utilize the interrupters.
 > 
 > Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
 > ---
-[...]
-
-> +	ret = of_parse_phandle_with_fixed_args(node, "iommus", 1, 0, &args);
-> +	if (ret < 0)
-> +		data->priv.sid = -1;
-> +	else
-> +		data->priv.sid = args.args[0] & SID_MASK;
-SID masking is done in the devicetree.
+Any reason for a DWC3-specific property? Why not just
+use the XHCI-common one from patch 14 and error out if
+a value of more than 8 is found?
 
 Konrad
 
