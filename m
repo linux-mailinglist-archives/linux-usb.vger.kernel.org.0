@@ -1,69 +1,137 @@
-Return-Path: <linux-usb+bounces-259-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-260-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E17947A3211
-	for <lists+linux-usb@lfdr.de>; Sat, 16 Sep 2023 21:00:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E56FD7A321B
+	for <lists+linux-usb@lfdr.de>; Sat, 16 Sep 2023 21:17:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E31EB1C208E5
-	for <lists+linux-usb@lfdr.de>; Sat, 16 Sep 2023 19:00:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 965E1282A2E
+	for <lists+linux-usb@lfdr.de>; Sat, 16 Sep 2023 19:17:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8D7B1BDF4;
-	Sat, 16 Sep 2023 19:00:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF34B1BDF8;
+	Sat, 16 Sep 2023 19:17:05 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91C1E13ACC
-	for <linux-usb@vger.kernel.org>; Sat, 16 Sep 2023 19:00:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 187F5C43395;
-	Sat, 16 Sep 2023 19:00:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1694890816;
-	bh=sIp41fVoPgffH1qOcV9gSsBIhctjbuX3pmGBSxP0XIo=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=d64wwx1aXRLG5w1SojYtzlxNLJp4kffm5ZlfosdatZ2HfYXTnhlND7gPaQFk1LnpK
-	 ZXaIFXBoB9zkT1i/MlZ2TqY51Yq5kY6DiL4xBOdgreoHq2YpKg/VBKu33qvUSLWBfu
-	 FtNShKq6tgi2yIrCwowSSWKWy4Jyem79fX+uAF4FulyG9PqBfM2diIVQC1/xG0i2xB
-	 ZASddr3oZ+736+Ntfjw0qhCQmAt5BGbPTC46AKc6W6F1jA5KPg2RPM3yM/kBJDZd1+
-	 flAMDf7ZOtP0HnfX0FQsGlN390+nNsTy+Ru7QlThGQgfFyC1UxNyF0QG/yemppL+SA
-	 E9w51YBYLA5Cw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 00350E26884;
-	Sat, 16 Sep 2023 19:00:16 +0000 (UTC)
-Subject: Re: [GIT PULL] USB fix for 6.6-rc2
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <ZQWYu7xf_8KTWXFu@kroah.com>
-References: <ZQWYu7xf_8KTWXFu@kroah.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <ZQWYu7xf_8KTWXFu@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.6-rc2
-X-PR-Tracked-Commit-Id: f26a679ed799deef9e2934a6b60b8f38bdbf4921
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: cce67b6bedd3e28939446508ebd94d91305b8ace
-Message-Id: <169489081599.3998.8454913923088827295.pr-tracker-bot@kernel.org>
-Date: Sat, 16 Sep 2023 19:00:15 +0000
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D229414018
+	for <linux-usb@vger.kernel.org>; Sat, 16 Sep 2023 19:17:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5492C433C7;
+	Sat, 16 Sep 2023 19:17:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1694891825;
+	bh=KNCWSzmod9aM3xB/4gvd2mfB0pCaFsgNdqQUI1NNB38=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Nkg0fUGQ+SpOPSRkCea7UXDF1rKKGzEIMAeV1nG6omIeQrRrM3M6zoxmJD83DWpKm
+	 MB9ZgpXLwhb7kZyh8bNbP6WdzpLjYuXxQ77F1hBEQWVxJ+wMv9yo2TJhS7u8991zKZ
+	 /AA6qyQehk3vqS7Kpboyxo7QvReRYjfYPDO/+jqs=
+Date: Sat, 16 Sep 2023 21:17:02 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Bragatheswaran Manickavel <bragathemanick0908@gmail.com>
+Cc: valentina.manea.m@gmail.com, shuah@kernel.org, i@zenithal.me,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb/usbip : fixing warnings in stub_dev.c
+Message-ID: <2023091601-mulch-linoleum-a4c7@gregkh>
+References: <20230916174020.3218-1-bragathemanick0908@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230916174020.3218-1-bragathemanick0908@gmail.com>
 
-The pull request you sent on Sat, 16 Sep 2023 13:59:55 +0200:
+On Sat, Sep 16, 2023 at 11:10:20PM +0530, Bragatheswaran Manickavel wrote:
+> Fix some checkpatch complaints in usb/usbip/stub_dev.c
+> 
+> Signed-off-by: Bragatheswaran Manickavel <bragathemanick0908@gmail.com>
+> ---
+>  drivers/usb/usbip/stub_dev.c | 11 ++++++-----
+>  1 file changed, 6 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/usb/usbip/stub_dev.c b/drivers/usb/usbip/stub_dev.c
+> index 9c6954aad6c8..3a5771f74a3f 100644
+> --- a/drivers/usb/usbip/stub_dev.c
+> +++ b/drivers/usb/usbip/stub_dev.c
+> @@ -495,24 +495,25 @@ static void stub_disconnect(struct usb_device *udev)
+>  		busid_priv->status = STUB_BUSID_ADDED;
+>  	/* release busid_lock */
+>  	spin_unlock(&busid_priv->busid_lock);
+> -	return;
+>  }
+>  
+>  #ifdef CONFIG_PM
+>  
+> -/* These functions need usb_port_suspend and usb_port_resume,
+> - * which reside in drivers/usb/core/usb.h. Skip for now. */
+> +/*
+> + * These functions need usb_port_suspend and usb_port_resume,
+> + * which reside in drivers/usb/core/usb.h. Skip for now.
+> + */
+>  
+>  static int stub_suspend(struct usb_device *udev, pm_message_t message)
+>  {
+> -	dev_dbg(&udev->dev, "stub_suspend\n");
+> +	dev_dbg(&udev->dev, "stub suspend\n");
+>  
+>  	return 0;
+>  }
+>  
+>  static int stub_resume(struct usb_device *udev, pm_message_t message)
+>  {
+> -	dev_dbg(&udev->dev, "stub_resume\n");
+> +	dev_dbg(&udev->dev, "stub resume\n");
+>  
+>  	return 0;
+>  }
+> -- 
+> 2.34.1
+> 
+> 
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.6-rc2
+Hi,
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/cce67b6bedd3e28939446508ebd94d91305b8ace
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-Thank you!
+You are receiving this message because of the following common error(s)
+as indicated below:
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+- Your patch did many different things all at once, making it difficult
+  to review.  All Linux kernel patches need to only do one thing at a
+  time.  If you need to do multiple things (such as clean up all coding
+  style issues in a file/driver), do it in a sequence of patches, each
+  one doing only one thing.  This will make it easier to review the
+  patches to ensure that they are correct, and to help alleviate any
+  merge issues that larger patches can cause.
+
+- You did not specify a description of why the patch is needed, or
+  possibly, any description at all, in the email body.  Please read the
+  section entitled "The canonical patch format" in the kernel file,
+  Documentation/process/submitting-patches.rst for what is needed in
+  order to properly describe the change.
+
+- You did not write a descriptive Subject: for the patch, allowing Greg,
+  and everyone else, to know what this patch is all about.  Please read
+  the section entitled "The canonical patch format" in the kernel file,
+  Documentation/process/submitting-patches.rst for what a proper
+  Subject: line should look like.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
 
