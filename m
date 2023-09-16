@@ -1,174 +1,174 @@
-Return-Path: <linux-usb+bounces-236-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-237-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 333367A2D88
-	for <lists+linux-usb@lfdr.de>; Sat, 16 Sep 2023 04:41:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 577BA7A2ED7
+	for <lists+linux-usb@lfdr.de>; Sat, 16 Sep 2023 10:28:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C72C5282504
-	for <lists+linux-usb@lfdr.de>; Sat, 16 Sep 2023 02:41:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0FEEE282204
+	for <lists+linux-usb@lfdr.de>; Sat, 16 Sep 2023 08:28:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 215E1568B;
-	Sat, 16 Sep 2023 02:41:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E242125A3;
+	Sat, 16 Sep 2023 08:28:47 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9E931107
-	for <linux-usb@vger.kernel.org>; Sat, 16 Sep 2023 02:41:10 +0000 (UTC)
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE68A115
-	for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 19:41:08 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id af79cd13be357-773b8a3ba70so45237485a.1
-        for <linux-usb@vger.kernel.org>; Fri, 15 Sep 2023 19:41:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1694832068; x=1695436868; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=s7CgLAXDOJ9e6WmF60CbAuG+eWk/KQRBydtpsnTThtA=;
-        b=paTa3fTTwcgz2o8F1WHzsSRD3CsYna9mFbA9oHjO00DxICuVQrwtvFCNbEEr5QA0vo
-         lsuR7vKiRTv21gy2KKl0NpZC/E8+8tKACaVddEMGFRczBcIf/ewHQNvRE88YN+IXk8uW
-         69VdhCrMXhA7ujnLRNCg5UJV/g8nWTKO54noVFlYhEVT96i7dcKve3GSmvwtGptZyZet
-         5ioZyfsNk9gikdekpjfq2l5cpPjQwlQXh+lQj2FCPc2sSLToTtCpIoQA4ERvjLXuOLN4
-         M3d+kTPg1qsAtHS7zbvyNEMej+Hn6QA4SCyx+bmmXK3RQbNBZOmNv+hGl4OvSOwcOn/P
-         9lag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694832068; x=1695436868;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=s7CgLAXDOJ9e6WmF60CbAuG+eWk/KQRBydtpsnTThtA=;
-        b=AndVQSKAVvmGN1/95dujy1SfmATaIbZU403wxMfF6SHHglxxuJAlsMiDkm2ItJdddb
-         hy1pRlNw0q/IQkKDc7fMyuRN7J0mSjjzmib3GwDcLmgZjr6hLXmAGSE8NLnrJqfwX2l+
-         hJpKPOslNu7N7JxYzWDGGfvK3U3i+QIwCgzHl4yPXDN34vHjyz0GZ7LggTmGjnIneBpB
-         selEsNuP2tO/n+jncqxCLGMLOoIGSvE6+xQKl5G/QwMGMPFaCzZg8FONMdPC1idRG0G2
-         8JfTF7Zccmao3fm32LPHsg9apGfWu9ZKzpaZx+p8lnOUui94IChzIuKs/csvmhy/r0uv
-         rUSg==
-X-Gm-Message-State: AOJu0YyCVLNxV8BbP5Y8hoGG3aH1qfqj/zp2cNAkl5g1ccBjmgxfj1FD
-	A3sPWgalGuK5QslIx1p0wNmRVg==
-X-Google-Smtp-Source: AGHT+IEthQw2CH9y8Ip3DrZKo9O2XRFB3jpd7fRpmKsa8EFzVQJxBhqXTtxDX3MqoLSM77RrJYiUuA==
-X-Received: by 2002:a05:620a:222e:b0:76c:fc7c:ac5e with SMTP id n14-20020a05620a222e00b0076cfc7cac5emr2963108qkh.74.1694832067759;
-        Fri, 15 Sep 2023 19:41:07 -0700 (PDT)
-Received: from [192.168.60.239] (124.190.199.35.bc.googleusercontent.com. [35.199.190.124])
-        by smtp.gmail.com with ESMTPSA id s24-20020aa78298000000b0068be348e35fsm3578264pfm.166.2023.09.15.19.41.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Sep 2023 19:41:06 -0700 (PDT)
-Message-ID: <587c9b95-a80c-4bf9-b1a0-fe7ef0f4cd60@google.com>
-Date: Fri, 15 Sep 2023 19:41:05 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A477BD507
+	for <linux-usb@vger.kernel.org>; Sat, 16 Sep 2023 08:28:45 +0000 (UTC)
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E9A719AE;
+	Sat, 16 Sep 2023 01:28:43 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38G8A51S021215;
+	Sat, 16 Sep 2023 08:28:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=3/VLjhkwt0QqhWw5T9+rjmKa67Xi2aWkcGRIUM8bQCI=;
+ b=JBn22dwywyqt1fNtPpfhZm+WqfD990JLD3nJhP4429ZgyVC30lZbqr+zVt/4NskQaUY/
+ NNF1IvxwLqGcrpxR9Gl8juN4kk2wdwbkcFvDxehXQ2OLz/OgW/QnNu5O4tiD/Qz9Uboc
+ Y3Jx1IfS9XI27/rgywyiGUt/pVjkg3FSPLGPbM4x+zTsay1glRJQz/pUUxBYbrQbiNOw
+ 37lvKKWCu9hwZBMrJENPc3G//JdCe30c9p8zzi8lI4AgDd7g5ekMaFJ2nMKSHgEsqood
+ hKJTzN9aJ3agF6ESev9+gBi21jzB2/ZrJ1zNiQqFX4xycubqGe9EAp9H2G4Gh6EKnfrd rA== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t55neg6xp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 16 Sep 2023 08:28:38 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38G8SbjE032669
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 16 Sep 2023 08:28:37 GMT
+Received: from [10.216.28.42] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Sat, 16 Sep
+ 2023 01:28:35 -0700
+Message-ID: <d0c27255-fcd2-39ed-f7af-b3b79d965ddf@quicinc.com>
+Date: Sat, 16 Sep 2023 13:58:30 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] usb: gadget: uvc: cleanup request when not in correct
- state
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: usb: typec: ucsi: Clear EVENT_PENDING bit if ucsi_send_command
+ fails
 Content-Language: en-US
-To: Michael Grzeschik <mgr@pengutronix.de>
-Cc: laurent.pinchart@ideasonboard.com, linux-usb@vger.kernel.org,
- linux-media@vger.kernel.org, dan.scally@ideasonboard.com,
- gregkh@linuxfoundation.org, nicolas@ndufresne.ca, kernel@pengutronix.de,
- Jayant Chowdhary <jchowdhary@google.com>
-References: <20230911002451.2860049-1-m.grzeschik@pengutronix.de>
- <20230911002451.2860049-3-m.grzeschik@pengutronix.de>
- <a55b3b0c-2306-4591-8613-7be4927f0d4e@google.com>
- <ZQTpnJvTV+8Ye1si@pengutronix.de>
-From: Avichal Rakesh <arakesh@google.com>
-In-Reply-To: <ZQTpnJvTV+8Ye1si@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-	ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-	USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-	autolearn_force=no version=3.4.6
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "# 5 . 16"
+	<stable@vger.kernel.org>
+References: <1694423055-8440-1-git-send-email-quic_prashk@quicinc.com>
+ <ZP8M6zqgsLTK25PI@kuha.fi.intel.com>
+ <21d247d3-83be-ba53-c982-2ab0e2e4ffb3@quicinc.com>
+ <ZQROzNqr7fbmJC87@kuha.fi.intel.com>
+ <4e876097-aed1-2b0d-ecb4-6434add4ef26@quicinc.com>
+ <ZQRi20nC0j5c4LGI@kuha.fi.intel.com>
+From: Prashanth K <quic_prashk@quicinc.com>
+In-Reply-To: <ZQRi20nC0j5c4LGI@kuha.fi.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: OSxz2XB6x66nQ7hWg2xl-IcZbkHMNS8R
+X-Proofpoint-ORIG-GUID: OSxz2XB6x66nQ7hWg2xl-IcZbkHMNS8R
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-09-15_20,2023-09-15_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
+ adultscore=0 spamscore=0 impostorscore=0 malwarescore=0 mlxlogscore=999
+ lowpriorityscore=0 suspectscore=0 priorityscore=1501 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2308100000 definitions=main-2309160072
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
 
 
-On 9/15/23 16:32, Michael Grzeschik wrote:
-> Hi Avichal
+On 15-09-23 07:27 pm, Heikki Krogerus wrote:
+> Hi Prashanth,
 > 
-> On Mon, Sep 11, 2023 at 09:52:22PM -0700, Avichal Rakesh wrote:
->> On 9/10/23 17:24, Michael Grzeschik wrote:
->>> The uvc_video_enable function of the uvc-gadget driver is dequeing and
->>> immediately deallocs all requests on its disable codepath. This is not
->>> save since the dequeue function is async and does not ensure that the
->>> requests are left unlinked in the controller driver.
+> On Fri, Sep 15, 2023 at 07:10:25PM +0530, Prashanth K wrote:
+>> On 15-09-23 06:02 pm, Heikki Krogerus wrote:
+>>> On Tue, Sep 12, 2023 at 04:37:47PM +0530, Prashanth K wrote:
+>>>>
+>>>>
+>>>> On 11-09-23 06:19 pm, Heikki Krogerus wrote:
+>>>>> On Mon, Sep 11, 2023 at 02:34:15PM +0530, Prashanth K wrote:
+>>>>>> Currently if ucsi_send_command() fails, then we bail out without
+>>>>>> clearing EVENT_PENDING flag. So when the next connector change
+>>>>>> event comes, ucsi_connector_change() won't queue the con->work,
+>>>>>> because of which none of the new events will be processed.
+>>>>>>
+>>>>>> Fix this by clearing EVENT_PENDING flag if ucsi_send_command()
+>>>>>> fails.
+>>>>>>
+>>>>>> Cc: <stable@vger.kernel.org> # 5.16
+>>>>>> Fixes: 512df95b9432 ("usb: typec: ucsi: Better fix for missing unplug events issue")
+>>>>>> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+>>>>>> ---
+>>>>>>     drivers/usb/typec/ucsi/ucsi.c | 1 +
+>>>>>>     1 file changed, 1 insertion(+)
+>>>>>>
+>>>>>> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+>>>>>> index c6dfe3d..509c67c 100644
+>>>>>> --- a/drivers/usb/typec/ucsi/ucsi.c
+>>>>>> +++ b/drivers/usb/typec/ucsi/ucsi.c
+>>>>>> @@ -884,6 +884,7 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+>>>>>>     	if (ret < 0) {
+>>>>>>     		dev_err(ucsi->dev, "%s: GET_CONNECTOR_STATUS failed (%d)\n",
+>>>>>>     			__func__, ret);
+>>>>>> +		clear_bit(EVENT_PENDING, &con->ucsi->flags);
+>>>>>>     		goto out_unlock;
+>>>>>>     	}
+>>>>>
+>>>>> I think it would be better to just move that label (out_unlock) above
+>>>>> the point where clear_bit() is already called instead of separately
+>>>>> calling it like that. That way the Connector Change Event will
+>>>>> also get acknowledged.
+>>>> Do we really need to ACK in this case since we didn't process the current
+>>>> connector change event
 >>>
->>> By adding the ep_free_request into the completion path of the requests
->>> we ensure that the request will be properly deallocated.
+>>> You won't get the next event before the first one was ACK'd, right?
 >>>
->>> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
->>> ---
->>>  drivers/usb/gadget/function/uvc_video.c | 6 ++++++
->>>  1 file changed, 6 insertions(+)
->>>
->>> diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
->>> index 4b6e854e30c58c..52e3666b51f743 100644
->>> --- a/drivers/usb/gadget/function/uvc_video.c
->>> +++ b/drivers/usb/gadget/function/uvc_video.c
->>> @@ -256,6 +256,12 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
->>>      struct uvc_device *uvc = video->uvc;
->>>      unsigned long flags;
->>>
->>> +    if (uvc->state == UVC_STATE_CONNECTED) {
->>> +        usb_ep_free_request(video->ep, ureq->req);
->> nit: You can probably just call usb_ep_free_request with req instead of ureq->req.
-> 
-> Thanks, thats a good point.
-> 
->>> +        ureq->req = NULL;
->>> +        return;
->>> +    }
->>> +
->>>      switch (req->status) {
->>>      case 0:
->>>          break;
 >>
->> Perhaps I am missing something here, but I am not sure how this alone
->> fixes the use-after-free issue. uvcg_video_enable still deallocates
->> _all_ usb_requests right after calling usb_ep_dequeue, so it is still
->> possible that an unreturned request is deallocated, and now it is
->> possible that the complete callback accesses a deallocated ureq :(
+>> The spec says that we need to ACK if we received AND processed a CCI
+>>
+>> "4.5.4 Acknowledge Command Completion and/or Change Indication (R)
+>> This command is used to acknowledge to the PPM that the OPM received and
+>> processed a Command Completion and/or a Connector Change Indication."
+>>
+>> And here in this case, we have received, but not processed the event.
+>> So I'm not really sure what to do here in this case. If we don't send an
+>> ACK, then would the PPM think that OPM is not responding and reset it?
+>> OR would it resend the previous event again since we didn't ACK?
 > 
-> Since the issue I saw was usually coming from the list_del_entry_valid check in
-> the list_del_entry of the giveback function, the issue was probably just not
-> triggered anymore as the complete function did exit early.
+> Every PPM behaves differently.
 > 
-> So this fix alone is actually bogus without a second patch I had in the stack.
-> The second patch I am refering should change the actual overall issue:
+> Did you actually see that happening - GET_CONNECTOR_STATUS failed? Can
+> you reproduce it?
 > 
-> https://lore.kernel.org/linux-usb/20230915233113.2903645-1-m.grzeschik@pengutronix.de/T/#u
-> 
-> This early list_del and this patch here should ensure that the
-> concurrent functions are not handling already freed memory.
 
-Oh, the patch linked above is interesting. It effectively force removes the dwc3_request
-from whatever list it belongs to? So if DWC3's interrupt handler is delayed past 
-UVC gadget's ep_free_request call, then it won't see the requests in its cancelled 
-list at all. However, this setup is still prone to errors. For example, there is now
-a chance that gadget_ep_free_request is called twice for one request. A scheduling
-like the following might cause double kfree:
+Yea we actually hit the issue once where GET_CONNECTOR_STATUS failed and 
+subsequent events didn't get queued since EVENT_PENDING wasn't cleared. 
+Its not easily reproducible (<1%) though.
 
-1. uvcg_video_enable calls usb_ep_dequeue for all usb_requests
-2. While the usb_ep_dequeues are being processed, dwc3's interrupt handler starts 
-   calling the complete callbacks.
-3. The complete callback calls gadget_ep_free_request (calling kfree as a result)
-4. Meanwhile, uvcg_video_enable has moved to uvc_video_free_requests which also
-   calls gadget_ep_free_request (calling kfree).
+[4948:kworker/0:3]UCSI: ucsi_qti_glink_write: timed out
+[4948:kworker/0:3]ucsi_glink soc:qcom,pmic_glink:qcom,ucsi: 
+ucsi_handle_connector_change: GET_CONNECTOR_STATUS failed (-110)
 
-There is currently (even in your patches) no synchronization between calls to 
-gadget_ep_free_request via complete callback and uvcg_video_enable, which will 
-inevitably call usb_ep_free_request twice for one request. 
-
-Does that make sense, or am I misunderstanding some part of the patch?
-
-- Avi.
-
+Regards,
+Prashanth K
 
