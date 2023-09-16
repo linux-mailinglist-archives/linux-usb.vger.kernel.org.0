@@ -1,174 +1,101 @@
-Return-Path: <linux-usb+bounces-237-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-238-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 577BA7A2ED7
-	for <lists+linux-usb@lfdr.de>; Sat, 16 Sep 2023 10:28:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A1D787A2EE9
+	for <lists+linux-usb@lfdr.de>; Sat, 16 Sep 2023 11:05:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0FEEE282204
-	for <lists+linux-usb@lfdr.de>; Sat, 16 Sep 2023 08:28:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4D60C2821AA
+	for <lists+linux-usb@lfdr.de>; Sat, 16 Sep 2023 09:05:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E242125A3;
-	Sat, 16 Sep 2023 08:28:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65328125DC;
+	Sat, 16 Sep 2023 09:05:34 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A477BD507
-	for <linux-usb@vger.kernel.org>; Sat, 16 Sep 2023 08:28:45 +0000 (UTC)
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E9A719AE;
-	Sat, 16 Sep 2023 01:28:43 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38G8A51S021215;
-	Sat, 16 Sep 2023 08:28:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=3/VLjhkwt0QqhWw5T9+rjmKa67Xi2aWkcGRIUM8bQCI=;
- b=JBn22dwywyqt1fNtPpfhZm+WqfD990JLD3nJhP4429ZgyVC30lZbqr+zVt/4NskQaUY/
- NNF1IvxwLqGcrpxR9Gl8juN4kk2wdwbkcFvDxehXQ2OLz/OgW/QnNu5O4tiD/Qz9Uboc
- Y3Jx1IfS9XI27/rgywyiGUt/pVjkg3FSPLGPbM4x+zTsay1glRJQz/pUUxBYbrQbiNOw
- 37lvKKWCu9hwZBMrJENPc3G//JdCe30c9p8zzi8lI4AgDd7g5ekMaFJ2nMKSHgEsqood
- hKJTzN9aJ3agF6ESev9+gBi21jzB2/ZrJ1zNiQqFX4xycubqGe9EAp9H2G4Gh6EKnfrd rA== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t55neg6xp-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 16 Sep 2023 08:28:38 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38G8SbjE032669
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 16 Sep 2023 08:28:37 GMT
-Received: from [10.216.28.42] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Sat, 16 Sep
- 2023 01:28:35 -0700
-Message-ID: <d0c27255-fcd2-39ed-f7af-b3b79d965ddf@quicinc.com>
-Date: Sat, 16 Sep 2023 13:58:30 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EAC66134
+	for <linux-usb@vger.kernel.org>; Sat, 16 Sep 2023 09:05:32 +0000 (UTC)
+X-Greylist: delayed 143 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 16 Sep 2023 02:05:27 PDT
+Received: from r3-24.sinamail.sina.com.cn (r3-24.sinamail.sina.com.cn [202.108.3.24])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AECC1170E
+	for <linux-usb@vger.kernel.org>; Sat, 16 Sep 2023 02:05:27 -0700 (PDT)
+X-SMAIL-HELO: localhost.localdomain
+Received: from unknown (HELO localhost.localdomain)([112.97.59.200])
+	by sina.com (172.16.97.23) with ESMTP
+	id 65056F4200018B57; Sat, 16 Sep 2023 17:03:00 +0800 (CST)
+X-Sender: hdanton@sina.com
+X-Auth-ID: hdanton@sina.com
+Authentication-Results: sina.com;
+	 spf=none smtp.mailfrom=hdanton@sina.com;
+	 dkim=none header.i=none;
+	 dmarc=none action=none header.from=hdanton@sina.com
+X-SMAIL-MID: 88986931458004
+X-SMAIL-UIID: 52ABD7A421C44218A7C2853B1F2CFB49-20230916-170300-1
+From: Hillf Danton <hdanton@sina.com>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: Wesley Cheng <quic_wcheng@quicinc.com>,
+	Greg KH <gregkh@linuxfoundation.org>,
+	Christoph Hellwig <hch@lst.de>,
+	LKML <linux-kernel@vger.kernel.org>,
+	USB <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH v6 03/33] xhci: sideband: add initial api to register a sideband entity
+Date: Sat, 16 Sep 2023 17:02:49 +0800
+Message-Id: <20230916090249.94-1-hdanton@sina.com>
+In-Reply-To: <20230916001026.315-4-quic_wcheng@quicinc.com>
+References: <20230916001026.315-1-quic_wcheng@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: usb: typec: ucsi: Clear EVENT_PENDING bit if ucsi_send_command
- fails
-Content-Language: en-US
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "# 5 . 16"
-	<stable@vger.kernel.org>
-References: <1694423055-8440-1-git-send-email-quic_prashk@quicinc.com>
- <ZP8M6zqgsLTK25PI@kuha.fi.intel.com>
- <21d247d3-83be-ba53-c982-2ab0e2e4ffb3@quicinc.com>
- <ZQROzNqr7fbmJC87@kuha.fi.intel.com>
- <4e876097-aed1-2b0d-ecb4-6434add4ef26@quicinc.com>
- <ZQRi20nC0j5c4LGI@kuha.fi.intel.com>
-From: Prashanth K <quic_prashk@quicinc.com>
-In-Reply-To: <ZQRi20nC0j5c4LGI@kuha.fi.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: OSxz2XB6x66nQ7hWg2xl-IcZbkHMNS8R
-X-Proofpoint-ORIG-GUID: OSxz2XB6x66nQ7hWg2xl-IcZbkHMNS8R
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-09-15_20,2023-09-15_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
- adultscore=0 spamscore=0 impostorscore=0 malwarescore=0 mlxlogscore=999
- lowpriorityscore=0 suspectscore=0 priorityscore=1501 mlxscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2309160072
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
+On Fri, 15 Sep 2023 17:09:56 -0700 Wesley Cheng <quic_wcheng@quicinc.com>
+> +static int
+> +xhci_ring_to_sgtable(struct xhci_sideband *sb, struct xhci_ring *ring, struct device *dev)
+> +{
+> +	struct sg_table	*sgt;
+> +	struct xhci_segment *seg;
+> +	struct page **pages;
+> +	unsigned int n_pages;
+> +	size_t sz;
+> +	int i;
+> +
+> +	sz = ring->num_segs * TRB_SEGMENT_SIZE;
+> +	n_pages = PAGE_ALIGN(sz) >> PAGE_SHIFT;
+> +	pages = kvmalloc_array(n_pages, sizeof(struct page *), GFP_KERNEL);
+> +	if (!pages)
+> +		return 0;
+> +
+> +	sgt = kzalloc(sizeof(struct sg_table), GFP_KERNEL);
+> +	if (!sgt) {
+> +		kvfree(pages);
+> +		return 0;
+> +	}
+> +
+> +	seg = ring->first_seg;
+> +
+> +	/*
+> +	 * Rings can potentially have multiple segments, create an array that
+> +	 * carries page references to allocated segments.  Utilize the
+> +	 * sg_alloc_table_from_pages() to create the sg table, and to ensure
+> +	 * that page links are created.
+> +	 */
+> +	for (i = 0; i < ring->num_segs; i++) {
+> +		pages[i] = vmalloc_to_page(seg->trbs);
+> +		seg = seg->next;
+> +	}
 
-
-On 15-09-23 07:27 pm, Heikki Krogerus wrote:
-> Hi Prashanth,
-> 
-> On Fri, Sep 15, 2023 at 07:10:25PM +0530, Prashanth K wrote:
->> On 15-09-23 06:02 pm, Heikki Krogerus wrote:
->>> On Tue, Sep 12, 2023 at 04:37:47PM +0530, Prashanth K wrote:
->>>>
->>>>
->>>> On 11-09-23 06:19 pm, Heikki Krogerus wrote:
->>>>> On Mon, Sep 11, 2023 at 02:34:15PM +0530, Prashanth K wrote:
->>>>>> Currently if ucsi_send_command() fails, then we bail out without
->>>>>> clearing EVENT_PENDING flag. So when the next connector change
->>>>>> event comes, ucsi_connector_change() won't queue the con->work,
->>>>>> because of which none of the new events will be processed.
->>>>>>
->>>>>> Fix this by clearing EVENT_PENDING flag if ucsi_send_command()
->>>>>> fails.
->>>>>>
->>>>>> Cc: <stable@vger.kernel.org> # 5.16
->>>>>> Fixes: 512df95b9432 ("usb: typec: ucsi: Better fix for missing unplug events issue")
->>>>>> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
->>>>>> ---
->>>>>>     drivers/usb/typec/ucsi/ucsi.c | 1 +
->>>>>>     1 file changed, 1 insertion(+)
->>>>>>
->>>>>> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
->>>>>> index c6dfe3d..509c67c 100644
->>>>>> --- a/drivers/usb/typec/ucsi/ucsi.c
->>>>>> +++ b/drivers/usb/typec/ucsi/ucsi.c
->>>>>> @@ -884,6 +884,7 @@ static void ucsi_handle_connector_change(struct work_struct *work)
->>>>>>     	if (ret < 0) {
->>>>>>     		dev_err(ucsi->dev, "%s: GET_CONNECTOR_STATUS failed (%d)\n",
->>>>>>     			__func__, ret);
->>>>>> +		clear_bit(EVENT_PENDING, &con->ucsi->flags);
->>>>>>     		goto out_unlock;
->>>>>>     	}
->>>>>
->>>>> I think it would be better to just move that label (out_unlock) above
->>>>> the point where clear_bit() is already called instead of separately
->>>>> calling it like that. That way the Connector Change Event will
->>>>> also get acknowledged.
->>>> Do we really need to ACK in this case since we didn't process the current
->>>> connector change event
->>>
->>> You won't get the next event before the first one was ACK'd, right?
->>>
->>
->> The spec says that we need to ACK if we received AND processed a CCI
->>
->> "4.5.4 Acknowledge Command Completion and/or Change Indication (R)
->> This command is used to acknowledge to the PPM that the OPM received and
->> processed a Command Completion and/or a Connector Change Indication."
->>
->> And here in this case, we have received, but not processed the event.
->> So I'm not really sure what to do here in this case. If we don't send an
->> ACK, then would the PPM think that OPM is not responding and reset it?
->> OR would it resend the previous event again since we didn't ACK?
-> 
-> Every PPM behaves differently.
-> 
-> Did you actually see that happening - GET_CONNECTOR_STATUS failed? Can
-> you reproduce it?
-> 
-
-Yea we actually hit the issue once where GET_CONNECTOR_STATUS failed and 
-subsequent events didn't get queued since EVENT_PENDING wasn't cleared. 
-Its not easily reproducible (<1%) though.
-
-[4948:kworker/0:3]UCSI: ucsi_qti_glink_write: timed out
-[4948:kworker/0:3]ucsi_glink soc:qcom,pmic_glink:qcom,ucsi: 
-ucsi_handle_connector_change: GET_CONNECTOR_STATUS failed (-110)
-
-Regards,
-Prashanth K
+Given dma_pool_zalloc() in xhci_segment_alloc() and dma_alloc_coherent() in
+pool_alloc_page(), it is incorrect to get page from the cpu address returned
+by the dma alloc routine.
 
