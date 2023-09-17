@@ -1,256 +1,94 @@
-Return-Path: <linux-usb+bounces-267-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-268-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36F5B7A3520
-	for <lists+linux-usb@lfdr.de>; Sun, 17 Sep 2023 12:17:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F8957A3528
+	for <lists+linux-usb@lfdr.de>; Sun, 17 Sep 2023 12:37:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 87D8D2812F8
-	for <lists+linux-usb@lfdr.de>; Sun, 17 Sep 2023 10:17:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 914381C20834
+	for <lists+linux-usb@lfdr.de>; Sun, 17 Sep 2023 10:37:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DA6A23C9;
-	Sun, 17 Sep 2023 10:17:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8C4B23DE;
+	Sun, 17 Sep 2023 10:37:42 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D59023B0
-	for <linux-usb@vger.kernel.org>; Sun, 17 Sep 2023 10:17:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E188C433C7;
-	Sun, 17 Sep 2023 10:17:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1694945847;
-	bh=E18AkEQod1yCcIHs6KsYIjCqBZKEf0RRYz+ytGA5u+Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iEhUouuZCUei1U38fYN0Jjt1wy1T1hEMWRfMwvOaOhpJFFibCaADW7hV0I9lURlXF
-	 XRIG7xUiYsQXjzI7OswVGEMy84lFY/PuCQmNQa68fYjSPhvgmOgL+nVeFFE2KAZ9Tr
-	 xdP1t/sRfhpUJ517HQuigX8EyAoaQIxAuMID8VSw=
-Date: Sun, 17 Sep 2023 12:17:24 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Akash Kumar <quic_akakum@quicinc.com>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Jing Leng <jleng@ambarella.com>, Felipe Balbi <balbi@kernel.org>,
-	Pratham =?iso-8859-1?Q?Pratap=A0?= <quic_ppratap@quicinc.com>,
-	Jack Pham <quic_jackp@quicinc.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] [PATCH v3] usb: gadget: f_uac2: uevent changes for uac2
-Message-ID: <2023091702-unbutton-handoff-558d@gregkh>
-References: <20230829092132.1940-1-quic_akakum@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C33041841
+	for <linux-usb@vger.kernel.org>; Sun, 17 Sep 2023 10:37:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AD33C433C7;
+	Sun, 17 Sep 2023 10:37:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1694947062;
+	bh=4/Gw1SFTBjci8OQuJMKDefl9/7GmcrRv2LjfNFXEdd4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=secIg48vVa1OpmDXDivflir36SyP+d3WRXohoPWDtVq+yJ4PG52qthhvMSylNXA1k
+	 0G/GQ3kSFTJKZioI/4qM4j60uD11yxLiB306RxohDIZgRgXMMxn62QxF3Upb6wK3nl
+	 3XJugAbZ8zwVAQihdDkbfBlK2MGaNaWjBh1j1TOsS7n7PlbDJJdpPKRVbnbDPWWJuz
+	 5x6dM7LT/4kI01ND7SXwfO0ts092DX1U6rxyWPJtWIIyjZxxP2Nd4U51v6F4tJqOq1
+	 I6DEb3tw0DUaEpkIs2KKtvgl6H5ZB/lIgilqB79C1dijvzTjmWuO+6cqt5HICpYefO
+	 U5kqFaAfrcmgw==
+Received: from disco-boy.misterjones.org ([217.182.43.188] helo=www.loen.fr)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1qhp9n-00Dh3t-91;
+	Sun, 17 Sep 2023 11:37:39 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230829092132.1940-1-quic_akakum@quicinc.com>
+Date: Sun, 17 Sep 2023 11:37:38 +0100
+From: Marc Zyngier <maz@kernel.org>
+To: Wentong Wu <wentong.wu@intel.com>
+Cc: gregkh@linuxfoundation.org, arnd@arndb.de, mka@chromium.org,
+ oneukum@suse.com, lee@kernel.org, wsa@kernel.org, kfting@nuvoton.com,
+ broonie@kernel.org, linus.walleij@linaro.org, hdegoede@redhat.com,
+ brgl@bgdev.pl, linux-usb@vger.kernel.org, linux-i2c@vger.kernel.org,
+ linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
+ andriy.shevchenko@linux.intel.com, heikki.krogerus@linux.intel.com,
+ andi.shyti@linux.intel.com, sakari.ailus@linux.intel.com,
+ bartosz.golaszewski@linaro.org, srinivas.pandruvada@intel.com,
+ zhifeng.wang@intel.com
+Subject: Re: [PATCH v19 0/4] Add Intel LJCA device driver
+In-Reply-To: <1694890416-14409-1-git-send-email-wentong.wu@intel.com>
+References: <1694890416-14409-1-git-send-email-wentong.wu@intel.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <e0e40b3603525266d585a276f50a6879@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 217.182.43.188
+X-SA-Exim-Rcpt-To: wentong.wu@intel.com, gregkh@linuxfoundation.org, arnd@arndb.de, mka@chromium.org, oneukum@suse.com, lee@kernel.org, wsa@kernel.org, kfting@nuvoton.com, broonie@kernel.org, linus.walleij@linaro.org, hdegoede@redhat.com, brgl@bgdev.pl, linux-usb@vger.kernel.org, linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org, andriy.shevchenko@linux.intel.com, heikki.krogerus@linux.intel.com, andi.shyti@linux.intel.com, sakari.ailus@linux.intel.com, bartosz.golaszewski@linaro.org, srinivas.pandruvada@intel.com, zhifeng.wang@intel.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Tue, Aug 29, 2023 at 02:51:32PM +0530, Akash Kumar wrote:
-> Adding uevent from usb audio gadget driver for uac2 playback/capture
-> events, which userspace reads and later reads sysfs entry to know if
-> playback or capture has stopped or started by host application.
-> 
-> /config/usb_gadget/g1/functions/uac2.0 # cat c_status
-> 1  --> capture started
-> 0  --> capture stopped
-> /config/usb_gadget/g1/functions/uac2.0 # cat p_status
-> 1 --> playback started
-> 0 --> playback stopped
-> 
-> Signed-off-by: Akash Kumar <quic_akakum@quicinc.com>
-> ---
->  Documentation/usb/gadget-testing.rst |  6 ++++
->  drivers/usb/gadget/function/f_uac2.c | 47 ++++++++++++++++++++++++++++
->  drivers/usb/gadget/function/u_uac2.h |  5 +++
->  3 files changed, 58 insertions(+)
-> 
-> diff --git a/Documentation/usb/gadget-testing.rst b/Documentation/usb/gadget-testing.rst
-> index 2eeb3e9299e4..b2fded232ced 100644
-> --- a/Documentation/usb/gadget-testing.rst
-> +++ b/Documentation/usb/gadget-testing.rst
-> @@ -733,6 +733,12 @@ The uac2 function provides these attributes in its function directory:
->  	p_ssize		playback sample size (bytes)
->  	req_number	the number of pre-allocated request for both capture
->  			and playback
-> +        c_status        audio capture state
-> +                        (0: capture stopped, 1: capture started)
-> +        p_status        audio playback state
-> +                        (0: playback stopped, 1: playback started)
-> +        c_status        audio capture state
-> +        p_status        audio playback state
+On 2023-09-16 19:53, Wentong Wu wrote:
+> Add driver for Intel La Jolla Cove Adapter (LJCA) device. This
+> IO-expander adds additional functions to the host system such
+> as GPIO, I2C and SPI with USB host interface. We add 4 drivers
+> to support this device: a USB driver, a GPIO chip driver, a I2C
+> controller driver and a SPI controller driver.
 
-spaces not tabs?
+Can I be a pain and ask you to limit the rate at which you
+repost this series? You send it every other day, hence
+actively discouraging people from reviewing it (why would
+they, there's another version coming).
 
-And shouldn't this also be documented in Documentation/ABI/ as well with
-the other attributes?
+Once a week is a perfectly good rate, and would probably
+lead to better results.
 
->  	=============== ====================================================
->  
->  The attributes have sane default values.
-> diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
-> index db2d4980cb35..f1f7631e9380 100644
-> --- a/drivers/usb/gadget/function/f_uac2.c
-> +++ b/drivers/usb/gadget/function/f_uac2.c
-> @@ -739,6 +739,8 @@ afunc_set_alt(struct usb_function *fn, unsigned intf, unsigned alt)
->  	struct usb_gadget *gadget = cdev->gadget;
->  	struct device *dev = &gadget->dev;
->  	int ret = 0;
-> +	struct f_uac2_opts *audio_opts =
-> +		container_of(fn->fi, struct f_uac2_opts, func_inst);
+Alternatively, if you decide that you really want to keep
+sending it that often, please drop me from the Cc list.
 
-Why assign it here and not below?
+Thanks,
 
-
->  
->  	/* No i/f has more than 2 alt settings */
->  	if (alt > 1) {
-> @@ -762,6 +764,8 @@ afunc_set_alt(struct usb_function *fn, unsigned intf, unsigned alt)
->  			ret = u_audio_start_capture(&uac2->g_audio);
->  		else
->  			u_audio_stop_capture(&uac2->g_audio);
-> +		audio_opts->c_status = alt;
-> +		schedule_work(&audio_opts->work);
-
-You are changing functionality here, not just adding statistics, why is
-work needed here?
-
->  	} else if (intf == uac2->as_in_intf) {
->  		uac2->as_in_alt = alt;
->  
-> @@ -769,6 +773,8 @@ afunc_set_alt(struct usb_function *fn, unsigned intf, unsigned alt)
->  			ret = u_audio_start_playback(&uac2->g_audio);
->  		else
->  			u_audio_stop_playback(&uac2->g_audio);
-> +		audio_opts->p_status = alt;
-> +		schedule_work(&audio_opts->work);
-
-Same here?
-
->  	} else {
->  		dev_err(dev, "%s:%d Error!\n", __func__, __LINE__);
->  		return -EINVAL;
-> @@ -801,11 +807,16 @@ static void
->  afunc_disable(struct usb_function *fn)
->  {
->  	struct f_uac2 *uac2 = func_to_uac2(fn);
-> +	struct f_uac2_opts *audio_opts =
-> +		container_of(fn->fi, struct f_uac2_opts, func_inst);
-
-Normally the bigger line goes at top.
-
->  
->  	uac2->as_in_alt = 0;
->  	uac2->as_out_alt = 0;
-> +	audio_opts->p_status = 0;//alt;
-> +	audio_opts->c_status = 0; //alt;
-
-You didn't actually mean to do this, right?
-
-Please get review from someone else in your group before sending this
-out for us to find obvious problems.
-
->  	u_audio_stop_capture(&uac2->g_audio);
->  	u_audio_stop_playback(&uac2->g_audio);
-> +	schedule_work(&audio_opts->work);
->  }
->  
->  static int
-> @@ -1036,6 +1047,25 @@ UAC2_ATTRIBUTE(c_srate);
->  UAC2_ATTRIBUTE(c_ssize);
->  UAC2_ATTRIBUTE(req_number);
->  
-> +#define UAC2_ATTRIBUTE_RO(name)                                         \
-> +	static ssize_t f_uac2_opts_##name##_show(                       \
-> +			struct config_item *item,                       \
-> +			char *page)                                     \
-> +{                                                                       \
-> +	struct f_uac2_opts *opts = to_f_uac2_opts(item);                \
-> +	int result;                                                     \
-> +									\
-> +	mutex_lock(&opts->lock);                                        \
-> +	result = scnprintf(page, PAGE_SIZE, "%u\n", opts->name);        \
-> +	mutex_unlock(&opts->lock);                                      \
-> +									\
-> +	return result;                                                  \
-> +}                                                                       \
-> +CONFIGFS_ATTR_RO(f_uac2_opts_, name)
-> +
-> +UAC2_ATTRIBUTE_RO(c_status);
-> +UAC2_ATTRIBUTE_RO(p_status);
-> +
->  static struct configfs_attribute *f_uac2_attrs[] = {
->  	&f_uac2_opts_attr_p_chmask,
->  	&f_uac2_opts_attr_p_srate,
-> @@ -1044,6 +1074,8 @@ static struct configfs_attribute *f_uac2_attrs[] = {
->  	&f_uac2_opts_attr_c_srate,
->  	&f_uac2_opts_attr_c_ssize,
->  	&f_uac2_opts_attr_req_number,
-> +	&f_uac2_opts_attr_c_status,
-> +	&f_uac2_opts_attr_p_status,
->  	NULL,
->  };
->  
-> @@ -1053,11 +1085,23 @@ static const struct config_item_type f_uac2_func_type = {
->  	.ct_owner	= THIS_MODULE,
->  };
->  
-> +static void f_uac2_audio_status_change_work(struct work_struct *data)
-> +{
-> +	struct f_uac2_opts *audio_opts =
-> +		container_of(data, struct f_uac2_opts, work);
-> +	char *envp[2] = { "UAC2_STATE=Changed", NULL };
-> +
-> +	kobject_uevent_env(&audio_opts->device->kobj,
-> +			KOBJ_CHANGE, envp);
-> +}
-> +
->  static void afunc_free_inst(struct usb_function_instance *f)
->  {
->  	struct f_uac2_opts *opts;
->  
->  	opts = container_of(f, struct f_uac2_opts, func_inst);
-> +	device_destroy(opts->device->class, opts->device->devt);
-
-Wait, why?
-
-> +	cancel_work_sync(&opts->work);
->  	kfree(opts);
->  }
->  
-> @@ -1082,6 +1126,9 @@ static struct usb_function_instance *afunc_alloc_inst(void)
->  	opts->c_srate = UAC2_DEF_CSRATE;
->  	opts->c_ssize = UAC2_DEF_CSSIZE;
->  	opts->req_number = UAC2_DEF_REQ_NUM;
-> +	INIT_WORK(&opts->work, f_uac2_audio_status_change_work);
-> +	opts->device = create_function_device("f_uac2");
-
-A whole new device?  Why?  There should already be a device for this, if
-not, you now need to document your new device as this is a whole new
-thing for sysfs to show, right?
-
-> +
->  	return &opts->func_inst;
->  }
->  
-> diff --git a/drivers/usb/gadget/function/u_uac2.h b/drivers/usb/gadget/function/u_uac2.h
-> index b5035711172d..3ccf2eb002f1 100644
-> --- a/drivers/usb/gadget/function/u_uac2.h
-> +++ b/drivers/usb/gadget/function/u_uac2.h
-> @@ -36,6 +36,11 @@ struct f_uac2_opts {
->  
->  	struct mutex			lock;
->  	int				refcnt;
-> +	int				c_status;
-> +	int				p_status;
-> +	struct device			*device;
-> +	struct work_struct		work;
-
-Some documentation please for what these new fields are for.
-
-thanks,
-
-greg k-h
+         M.
+-- 
+Jazz is not dead. It just smells funny...
 
