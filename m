@@ -1,55 +1,55 @@
-Return-Path: <linux-usb+bounces-288-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-289-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA2CE7A36AE
-	for <lists+linux-usb@lfdr.de>; Sun, 17 Sep 2023 19:04:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E88F7A36C6
+	for <lists+linux-usb@lfdr.de>; Sun, 17 Sep 2023 19:25:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D0F621C20D9C
-	for <lists+linux-usb@lfdr.de>; Sun, 17 Sep 2023 17:04:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B5FB81C2108C
+	for <lists+linux-usb@lfdr.de>; Sun, 17 Sep 2023 17:25:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FAAA63B1;
-	Sun, 17 Sep 2023 17:04:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71A5563D4;
+	Sun, 17 Sep 2023 17:25:40 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95032636;
-	Sun, 17 Sep 2023 17:04:40 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A55D185;
-	Sun, 17 Sep 2023 10:04:36 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6A9F5683;
+	Sun, 17 Sep 2023 17:25:38 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11BB0129;
+	Sun, 17 Sep 2023 10:25:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694970277; x=1726506277;
+  t=1694971537; x=1726507537;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=lUdRrCzCzrzZX5qO19ypnvIUs5uI+f7tFWK36JaomuM=;
-  b=Doyn3C4Fc2L9R1TgoWWWHONQrVVZW53vuVxxSP6k0yO3mQNeFyt/3kw8
-   ifShEA6BcUOTrKERV8RoPhnJud/ajhWdCacmYhtME9D9keZXTZEywgQ+W
-   gD/3Yi3H1DdMlJQdG0lAO1yS5oqHVfuuW16wgYx1d9woYfseAek+6ZiUW
-   q3dFl95tysgacfql8iaZR+SJyBxJRpsOlXiDk+vamwVZ5J56ACJX2G3RP
-   2PZlPIACSyIP2ETytWzERva11Y6WoUL862nvXy2qX232yJGxtC75KpTHQ
-   SWDVDm6XErcwTDHEpxgWWOJkjhIuVRXzmJQ/HsMLRKOeLoqe/B8vGnaDG
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10836"; a="382247954"
+  bh=ENv6ZjlIdXEExHDoykoerWZ3HKSu0pMx/fFt1/9mHTQ=;
+  b=XqDrpaDQziB4HsjkV7ShmDnJ41C44Z5/pTiCt1OJHqxmP7719yU2ti0b
+   srx2W6Es2R/Gk1bj87D86KyUDcLzI4nh7fWHtj9Lce8Wn6jwnps2dRXNf
+   5ekN9TdJMd106MJxoBwEgIIf+Y/WMywBDUebnsIb49tsvIdXD7MHLIRHp
+   dazLT6g6ebXcUc/FdmGvBcvzMO93dVHs9tezpdmW0zwfT/AdiBJPiVL6C
+   JZ8NcTFXzbpZi1lSNMKPaPbdlpO/yp/P6zUjqR2r0h9HQQ9j7X9Pa7c+D
+   57FhnmwSNwFYEdD9i2kIVbrke4WvVFsoGZgF7mJFzGuGNphzscBukNDSo
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10836"; a="376835043"
 X-IronPort-AV: E=Sophos;i="6.02,154,1688454000"; 
-   d="scan'208";a="382247954"
+   d="scan'208";a="376835043"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2023 10:04:36 -0700
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2023 10:25:36 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10836"; a="774882915"
+X-IronPort-AV: E=McAfee;i="6600,9927,10836"; a="774885484"
 X-IronPort-AV: E=Sophos;i="6.02,154,1688454000"; 
-   d="scan'208";a="774882915"
+   d="scan'208";a="774885484"
 Received: from lkp-server02.sh.intel.com (HELO 9ef86b2655e5) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 17 Sep 2023 10:04:32 -0700
+  by orsmga008.jf.intel.com with ESMTP; 17 Sep 2023 10:25:33 -0700
 Received: from kbuild by 9ef86b2655e5 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qhvCA-0005Lc-0u;
-	Sun, 17 Sep 2023 17:04:30 +0000
-Date: Mon, 18 Sep 2023 01:04:18 +0800
+	id 1qhvWU-0005MK-2l;
+	Sun, 17 Sep 2023 17:25:30 +0000
+Date: Mon, 18 Sep 2023 01:24:45 +0800
 From: kernel test robot <lkp@intel.com>
 To: Abdel Alkuor <alkuor@gmail.com>, heikki.krogerus@linux.intel.com,
 	krzysztof.kozlowski+dt@linaro.org, bryan.odonoghue@linaro.org
@@ -58,7 +58,7 @@ Cc: oe-kbuild-all@lists.linux.dev, gregkh@linuxfoundation.org,
 	devicetree@vger.kernel.org, conor+dt@kernel.org,
 	linux-kernel@vger.kernel.org, abdelalkuor@geotab.com
 Subject: Re: [PATCH v5 04/15] USB: typec: Load TPS25750 patch bundle
-Message-ID: <202309180034.fV0JkOAu-lkp@intel.com>
+Message-ID: <202309180124.ZkZ5E7oC-lkp@intel.com>
 References: <20230917152639.21443-5-alkuor@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -69,10 +69,10 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20230917152639.21443-5-alkuor@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-	RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
@@ -81,7 +81,7 @@ Hi Abdel,
 kernel test robot noticed the following build warnings:
 
 [auto build test WARNING on usb/usb-testing]
-[also build test WARNING on linus/master v6.6-rc1 next-20230915]
+[also build test WARNING on usb/usb-next usb/usb-linus linus/master v6.6-rc1 next-20230915]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
@@ -90,14 +90,14 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Abdel-Alkuor/dt-bindings-
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
 patch link:    https://lore.kernel.org/r/20230917152639.21443-5-alkuor%40gmail.com
 patch subject: [PATCH v5 04/15] USB: typec: Load TPS25750 patch bundle
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230918/202309180034.fV0JkOAu-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230918/202309180034.fV0JkOAu-lkp@intel.com/reproduce)
+config: i386-buildonly-randconfig-006-20230917 (https://download.01.org/0day-ci/archive/20230918/202309180124.ZkZ5E7oC-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230918/202309180124.ZkZ5E7oC-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309180034.fV0JkOAu-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309180124.ZkZ5E7oC-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
@@ -106,24 +106,24 @@ All warnings (new ones prefixed by >>):
                     from include/linux/i2c.h:13,
                     from drivers/usb/typec/tipd/core.c:9:
    drivers/usb/typec/tipd/core.c: In function 'tps25750_start_patch_burst_mode':
->> drivers/usb/typec/tipd/core.c:844:35: warning: format '%lu' expects argument of type 'long unsigned int', but argument 4 has type 'size_t' {aka 'unsigned int'} [-Wformat=]
-     844 |                 dev_err(tps->dev, "Failed to write patch %s of %lu bytes\n",
-         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
-   include/linux/dev_printk.h:144:56: note: in expansion of macro 'dev_fmt'
-     144 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                        ^~~~~~~
-   drivers/usb/typec/tipd/core.c:844:17: note: in expansion of macro 'dev_err'
-     844 |                 dev_err(tps->dev, "Failed to write patch %s of %lu bytes\n",
-         |                 ^~~~~~~
-   drivers/usb/typec/tipd/core.c:844:66: note: format string is defined here
-     844 |                 dev_err(tps->dev, "Failed to write patch %s of %lu bytes\n",
-         |                                                                ~~^
-         |                                                                  |
-         |                                                                  long unsigned int
-         |                                                                %u
+>> drivers/usb/typec/tipd/core.c:844:21: warning: format '%lu' expects argument of type 'long unsigned int', but argument 4 has type 'size_t' {aka 'const unsigned int'} [-Wformat=]
+     844 |   dev_err(tps->dev, "Failed to write patch %s of %lu bytes\n",
+         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:110:16: note: in definition of macro 'dev_printk_index_wrap'
+     110 |   _p_func(dev, fmt, ##__VA_ARGS__);   \
+         |                ^~~
+   include/linux/dev_printk.h:144:49: note: in expansion of macro 'dev_fmt'
+     144 |  dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                 ^~~~~~~
+   drivers/usb/typec/tipd/core.c:844:3: note: in expansion of macro 'dev_err'
+     844 |   dev_err(tps->dev, "Failed to write patch %s of %lu bytes\n",
+         |   ^~~~~~~
+   drivers/usb/typec/tipd/core.c:844:52: note: format string is defined here
+     844 |   dev_err(tps->dev, "Failed to write patch %s of %lu bytes\n",
+         |                                                  ~~^
+         |                                                    |
+         |                                                    long unsigned int
+         |                                                  %u
 
 
 vim +844 drivers/usb/typec/tipd/core.c
