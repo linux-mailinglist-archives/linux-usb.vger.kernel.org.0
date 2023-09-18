@@ -1,93 +1,155 @@
-Return-Path: <linux-usb+bounces-295-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-296-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 598707A407F
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 07:36:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 397A17A409C
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 07:50:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8144D1C2091C
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 05:36:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4B8A01C2097B
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 05:50:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAD615225;
-	Mon, 18 Sep 2023 05:36:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B40835234;
+	Mon, 18 Sep 2023 05:50:31 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E6E94C86
-	for <linux-usb@vger.kernel.org>; Mon, 18 Sep 2023 05:36:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1A799C433C8
-	for <linux-usb@vger.kernel.org>; Mon, 18 Sep 2023 05:36:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1695015385;
-	bh=xKUy8np9qvMzzg8NWLA66G8r14V8/MC8ivBtJeOgc18=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=VjC1H5KchHGp1Q75Ub4R5d4FRLMwiLw3SqGaGrSlX+qQJO4KYwedcLmSEGDquuw6S
-	 ahbfbyso7gasiFTi7cZztTeS+zpTe04dIwTj5vDfarLM/RhYP8lPAR85/r5nwCrVMU
-	 +MeNWfwCgCNh/JXQGKnJ8cv4wyR1m/ohrOEArra+bA8MtBZv/Umlq+YK3bF2A40PdU
-	 vbaT7cqs4qXYoLnpyE8wBbVksdojpjxJDIqYhxkuoxWYkKTTIYXBqfQfsy/rhvazci
-	 Qsrd4A2G8CNhso3TSkVsQecIF4BKS6MpB6ciotBK4ldArBJBNGDSGYmSPeG1aSCqj1
-	 Gpr5K7hoXD0aw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 02A26C53BD3; Mon, 18 Sep 2023 05:36:25 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 217915] System fails to resume correctly after Thunderbolt dock
- disconnected while sleeping
-Date: Mon, 18 Sep 2023 05:36:24 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: mika.westerberg@linux.intel.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-217915-208809-adLZEvqPGH@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-217915-208809@https.bugzilla.kernel.org/>
-References: <bug-217915-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B13A715D4
+	for <linux-usb@vger.kernel.org>; Mon, 18 Sep 2023 05:50:29 +0000 (UTC)
+Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6EE713E;
+	Sun, 17 Sep 2023 22:50:23 -0700 (PDT)
+Received: by mail-oo1-xc2a.google.com with SMTP id 006d021491bc7-57656330b80so2741812eaf.3;
+        Sun, 17 Sep 2023 22:50:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1695016223; x=1695621023; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kg83dkCIcOfafRCLkMeI+KwToQlkTDJezwxVxKbajGo=;
+        b=MYNkTO4WyCd/g0JRXQtpGPcCDtRPxXU+Au/ADDQO5pVjG1SUT+rge4isnAaYzVauSM
+         h01j7+s28hiYZKFa+14KQ6sJwKiumX/iyJUhzh0FkuJhjlziDwO0b8gWJ7qyNHm7BCJ5
+         I08UVme7L7t2+AYMXFi+PfYytmeMz4jC94gCfqRMq7qAUr0QSLsLUvP5TE2htNun9lX6
+         +UxqqXXJrvAWK+sD2LZj3mwIhVsZWq+YF5+8zxnqVl7GRG4CHnnofmNQOVm+TpO6XpcT
+         NjfK/rUD66HORMukdqizhBWDVNFw+puxpt7lUtyh2tLuVjyNEAWXi/uonB2gI6of9w0Z
+         bbXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695016223; x=1695621023;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kg83dkCIcOfafRCLkMeI+KwToQlkTDJezwxVxKbajGo=;
+        b=Mk9SWpq3dvb3XHcYxBo004dMe0dclv3Bnnrsc9rOh/Lq8uJwx3P5+cnuxVVL1H0yiX
+         whv6b1xQE1+VhF5FKhKFHkyx308x5gYQoPiU+Uke9Tat7JT8ZZgcAxGnrR3JX8HJYqU3
+         upddOy4644JZj/4tRjPZkoSEyooSRz/lZvfDGrPq53RwrwAB0k3UbD1fPfK/y3JtrDIy
+         AzusimkbkZsCKltsoz53X1ljZiL9sO6L3xBTObjVYxP58a7yblAZr0N/MvBEz43JC0RH
+         XsIRgDRdtToRIHw5iJO3NLOoT79yGxaIKBBp74d61UlnCqinGRPw4Sa8U0RoSLONhaR8
+         Kq1g==
+X-Gm-Message-State: AOJu0Yx3vAQLTGFjw3e/kGJfF+HcaonNGHdQNdp3Ol/j3Rf5hZ6RTRlS
+	D03ntEvmvR3GDMM1+eJ4nHHH7WyfP9hpXbPXTgw=
+X-Google-Smtp-Source: AGHT+IEktDAOhzIcsp0IVS4swygpc0i6EqPnPtmP6Kxon2cECDV9LWFl8TWNTln5WlFtZoDOjoP+XzV1lE6S/dPVcBk=
+X-Received: by 2002:a4a:6c12:0:b0:56e:4ddd:e333 with SMTP id
+ q18-20020a4a6c12000000b0056e4ddde333mr7419649ooc.9.1695016223045; Sun, 17 Sep
+ 2023 22:50:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20230914015656.20856-1-xingxing.luo@unisoc.com>
+ <8365ba2a-8ecd-d055-e962-3a7f2bfdbfb0@omp.ru> <CANnj+8S6AXjkdO3sQnK-H7a-TSOxbqUQi3U5H+q_8wA-JcAV5g@mail.gmail.com>
+ <f3463cff-c6d5-07e7-2f94-cdcbc76d3957@omp.ru> <CANnj+8R8ueWOOE=yA-pug7EEs0DRyh65dyRV8owQae1pZv5b9g@mail.gmail.com>
+In-Reply-To: <CANnj+8R8ueWOOE=yA-pug7EEs0DRyh65dyRV8owQae1pZv5b9g@mail.gmail.com>
+From: xingxing luo <xingxing0070.luo@gmail.com>
+Date: Mon, 18 Sep 2023 13:50:11 +0800
+Message-ID: <CANnj+8TNryKgq8MZ+Kx9-TE6SgNEjjfP-ZzVMd_KpYn4-F9_Og@mail.gmail.com>
+Subject: Re: [PATCH] usb: musb: Get the musb_qh poniter after musb_giveback
+To: Sergey Shtylyov <s.shtylyov@omp.ru>, b-liu@ti.com
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	xingxing luo <xingxing0070.luo@gmail.com>, Zhiyong.Liu@unisoc.com, Cixi.Geng1@unisoc.com, 
+	Orson.Zhai@unisoc.com, Chunyan Zhang <zhang.lyra@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D217915
+Add more.
 
---- Comment #11 from Mika Westerberg (mika.westerberg@linux.intel.com) ---
-Thanks for testing!
+On Mon, Sep 18, 2023 at 1:22=E2=80=AFPM xingxing luo <xingxing0070.luo@gmai=
+l.com> wrote:
+>
+> On Fri, Sep 15, 2023 at 4:48=E2=80=AFPM Sergey Shtylyov <s.shtylyov@omp.r=
+u> wrote:
+> >
+> > On 9/15/23 5:59 AM, xingxing luo wrote:
+> > [...]
+> >
+> > >>> When multiple threads are performing USB transmission, musb->lock w=
+ill be
+> > >>> unlocked when musb_giveback is executed. At this time, qh may be re=
+leased
+> > >>> in the dequeue process in other threads, resulting in a wild pointe=
+r, so
+> > >>> it needs to be here get qh again, and judge whether qh is NULL, and=
+ when
+> > >>> dequeue, you need to set qh to NULL.
+> > >>>
+> > >>> Fixes: dbac5d07d13e ("usb: musb: host: don't start next rx urb if c=
+urrent one failed")
+> > >>> Signed-off-by: Xingxing Luo <xingxing.luo@unisoc.com>
+> > >>> ---
+> > >>>  drivers/usb/musb/musb_host.c | 9 ++++++++-
+> > >>>  1 file changed, 8 insertions(+), 1 deletion(-)
+> > >>>
+> > >>> diff --git a/drivers/usb/musb/musb_host.c b/drivers/usb/musb/musb_h=
+ost.c
+> > >>> index a02c29216955..9df27db5847a 100644
+> > >>> --- a/drivers/usb/musb/musb_host.c
+> > >>> +++ b/drivers/usb/musb/musb_host.c
+> > >>> @@ -321,10 +321,16 @@ static void musb_advance_schedule(struct musb=
+ *musb, struct urb *urb,
+> > >>>       musb_giveback(musb, urb, status);
+> > >>>       qh->is_ready =3D ready;
+> > >>>
+> > >>> +     /*
+> > >>> +      * musb->lock had been unlocked in musb_giveback, so somtimes=
+ qh
+> > >>
+> > >>    Sometimes?
+> >
+> >    You have a typo...
+> >
+> > >>
+> > >>> +      * may freed, need get it again
+> > >>> +      */
+> > >>> +     qh =3D musb_ep_get_qh(hw_ep, is_in);
+> > >>> +
+> > >>>       /* reclaim resources (and bandwidth) ASAP; deschedule it, and
+> > >>>        * invalidate qh as soon as list_empty(&hep->urb_list)
+> > >>>        */
+> > >>> -     if (list_empty(&qh->hep->urb_list)) {
+> > >>> +     if (qh !=3D NULL && list_empty(&qh->hep->urb_list)) {
+> > >>
+> > >>    Just qh, perhaps?
+> > >
+> > > Could you elaborate a little more?
+> > > Thanks.
+> >
+> >    Just 'qh' gives you the same as 'qh !=3D NULL'.
+>
+> Ok, I will address this in the next version.
+>
+> >
+> > [...]
+> >
+> > MBR, Sergey
 
-Yes, this can happen on any dock with PCIe devices (typically that's
-Thunderbolt/USB4). I'm also surprised that we did not see this because this=
- is
-pretty common use case with laptops especially. Sorry about that.
-
-I've submitted the patch upstream now:
-
-https://lore.kernel.org/linux-pci/20230918053041.1018876-1-mika.westerberg@=
-linux.intel.com/
-
-It is up to the PCI maintainer to decide when it lands to mainline and the
-stable trees but in this case I would expect it to be sooner rather than la=
-ter.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+B.R Xingxing.Luo
 
