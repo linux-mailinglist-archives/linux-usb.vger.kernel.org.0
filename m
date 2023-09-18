@@ -1,331 +1,428 @@
-Return-Path: <linux-usb+bounces-318-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-320-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 402C07A4861
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 13:28:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C5807A487C
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 13:33:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2FFF01C21140
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 11:28:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CAD9D28290C
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 11:33:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A60EA1C695;
-	Mon, 18 Sep 2023 11:28:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CFA31C6BC;
+	Mon, 18 Sep 2023 11:33:15 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D050B38F8F
-	for <linux-usb@vger.kernel.org>; Mon, 18 Sep 2023 11:28:07 +0000 (UTC)
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72EBA171C
-	for <linux-usb@vger.kernel.org>; Mon, 18 Sep 2023 04:26:21 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38IAUX61019139;
-	Mon, 18 Sep 2023 11:25:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=vG3MOycD+ZTUyjbBirEcUduBOFBsZic3dakMOBshEXw=;
- b=KAEbh/8KsZcJenAqw0nAwRsYKvridjpBsRsdZWHu9D5CFN8GzEhSc+lMFlgB3gcmQkTy
- zIsRQScQSB/iKu5bL1oZPNRKpUJTzqcEOx4BLWJl2YmvDyzow9sBlQlLy4myV2rBc27d
- OgjW0eAg4WQv5U9NEFqAEEaq9RYTamxIQXXiFWxqwOjYqHJpQ0IQURhlzL7VS/ZlpRq4
- KWzkL07Ifg9dRiSAMnNT6sOACZl3kjJJyGkabNkzjlIkAOpfrN25Z8hSMQxU01CiDoh8
- bToMuQr+/gvF81F7QtR/Lb/nowvW4bxqbCBf9GXezM4BUhEMj753Se+FESf8yurNWyGd JA== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t6mv1r31w-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 18 Sep 2023 11:25:55 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38IBPsst031896
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 18 Sep 2023 11:25:54 GMT
-Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Mon, 18 Sep 2023 04:25:52 -0700
-From: Linyu Yuan <quic_linyyuan@quicinc.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Alan Stern
-	<stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC: <linux-usb@vger.kernel.org>, Linyu Yuan <quic_linyyuan@quicinc.com>
-Subject: [PATCH v7 4/4] usb: dwc3: trace: reduce buffer usage of trace event
-Date: Mon, 18 Sep 2023 19:25:34 +0800
-Message-ID: <20230918112534.2108-5-quic_linyyuan@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230918112534.2108-1-quic_linyyuan@quicinc.com>
-References: <20230918112534.2108-1-quic_linyyuan@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D104F38F83;
+	Mon, 18 Sep 2023 11:33:12 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D13ACC4;
+	Mon, 18 Sep 2023 04:32:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695036742; x=1726572742;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TOMYLS1qN5l6pVaWhuff1MJ5EKpIo64HMXFcJ37IiuY=;
+  b=QoTx7BMlQI6EwpIeSBm+4KcVvKBqsNICQH1y3VGcuLiOkDXDR+MSv8Xn
+   h195iVz6yWULeJcnnTqg/ACAB5u+DzzUaF/E+INmkIu5jqZMBzIEEefMo
+   Y/5wA7gAbzAoL6P2Pqp/UFu19Qzn94CnsA6BhQq/4AleCwEE5YLAcxstz
+   vwYZybzGTPauLM9yVxtswTLlzXRf+FvT+JZxzX7udmxTYyB0ZAciTGPYO
+   Efwz6XAL0fJl+pnEK9RscJxu2GJt7RfYa1WI69YaB+HP0TnroDga3IjCi
+   TcZLEikyqfBoxwVZtSPVQHVXXX8wv3hxnYBHYBsWMYiay7Q4gMmahtXqX
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10836"; a="359881887"
+X-IronPort-AV: E=Sophos;i="6.02,156,1688454000"; 
+   d="scan'208";a="359881887"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2023 04:31:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10836"; a="748981155"
+X-IronPort-AV: E=Sophos;i="6.02,156,1688454000"; 
+   d="scan'208";a="748981155"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga007.fm.intel.com with SMTP; 18 Sep 2023 04:31:55 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 18 Sep 2023 14:31:54 +0300
+Date: Mon, 18 Sep 2023 14:31:54 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Abdel Alkuor <alkuor@gmail.com>
+Cc: krzysztof.kozlowski+dt@linaro.org, bryan.odonoghue@linaro.org,
+	gregkh@linuxfoundation.org, robh+dt@kernel.org,
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+	conor+dt@kernel.org, linux-kernel@vger.kernel.org,
+	abdelalkuor@geotab.com
+Subject: Re: [PATCH v5 04/15] USB: typec: Load TPS25750 patch bundle
+Message-ID: <ZQg1KjinxBRxwUSM@kuha.fi.intel.com>
+References: <20230917152639.21443-1-alkuor@gmail.com>
+ <20230917152639.21443-5-alkuor@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: k0Qgd-L5rIPLhPup6ObmYWw2uf4q167A
-X-Proofpoint-ORIG-GUID: k0Qgd-L5rIPLhPup6ObmYWw2uf4q167A
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-09-18_02,2023-09-18_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- priorityscore=1501 spamscore=0 malwarescore=0 phishscore=0
- lowpriorityscore=0 bulkscore=0 mlxlogscore=559 suspectscore=0 mlxscore=0
- adultscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2308100000 definitions=main-2309180100
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230917152639.21443-5-alkuor@gmail.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Save u32 members into trace event ring buffer and parse it for bit fields.
+On Sun, Sep 17, 2023 at 11:26:28AM -0400, Abdel Alkuor wrote:
+> From: Abdel Alkuor <abdelalkuor@geotab.com>
+> 
+> TPS25750 controller requires a binary to be loaded with a configuration
+> binary by an EEPROM or a host.
+> 
+> Appling a patch bundling using a host is implemented based on the flow
+> diagram pg.62 in TPS25750 host interface manual.
+> https://www.ti.com/lit/ug/slvuc05a/slvuc05a.pdf
+> 
+> The flow diagram can be summarized as following:
+> - Start the patch loading sequence with patch bundle information by
+>   executing PBMs
+> - Write the whole patch at once
+> - When writing the patch fails, execute PBMe which instructs the PD controller
+>   to end the patching process
+> - After writing the patch successfully, execute PBMc which verifies the patch
+>   integrity and applies the patch internally
+> - Wait for the device to switch into APP mode (normal operation)
+> 
+> The execuation flow diagram polls the events register and then polls the
+> corresponding register related to the event as well before advancing to the next
+> state. Polling the events register is a redundant step, in this implementation
+> only the corresponding register related to the event is polled.
+> 
+> Signed-off-by: Abdel Alkuor <abdelalkuor@geotab.com>
+> ---
+>  drivers/usb/typec/tipd/core.c | 237 +++++++++++++++++++++++++++++++++-
+>  1 file changed, 236 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+> index 6d2151325fbb..fea139c72d6d 100644
+> --- a/drivers/usb/typec/tipd/core.c
+> +++ b/drivers/usb/typec/tipd/core.c
+> @@ -17,6 +17,7 @@
+>  #include <linux/usb/typec_altmode.h>
+>  #include <linux/usb/role.h>
+>  #include <linux/workqueue.h>
+> +#include <linux/firmware.h>
+>  
+>  #include "tps6598x.h"
+>  #include "trace.h"
+> @@ -43,6 +44,23 @@
+>  /* TPS_REG_SYSTEM_CONF bits */
+>  #define TPS_SYSCONF_PORTINFO(c)		((c) & 7)
+>  
+> +/*
+> + * BPMs task timeout, recommended 5 seconds
+> + * pg.48 TPS2575 Host Interface Technical Reference
+> + * Manual (Rev. A)
+> + * https://www.ti.com/lit/ug/slvuc05a/slvuc05a.pdf
+> + */
+> +#define TPS_BUNDLE_TIMEOUT	0x32
+> +
+> +/* BPMs return code */
+> +#define TPS_TASK_BPMS_INVALID_BUNDLE_SIZE	0x4
+> +#define TPS_TASK_BPMS_INVALID_SLAVE_ADDR	0x5
+> +#define TPS_TASK_BPMS_INVALID_TIMEOUT		0x6
+> +
+> +/* PBMc data out */
+> +#define TPS_PBMC_RC	0 /* Return code */
+> +#define TPS_PBMC_DPCS	2 /* device patch complete status */
+> +
+>  enum {
+>  	TPS_PORTINFO_SINK,
+>  	TPS_PORTINFO_SINK_ACCESSORY,
+> @@ -88,6 +106,8 @@ struct tps6598x {
+>  	struct mutex lock; /* device lock */
+>  	u8 i2c_protocol:1;
+>  
+> +	u8 is_tps25750:1;
+> +
+>  	struct typec_port *port;
+>  	struct typec_partner *partner;
+>  	struct usb_pd_identity partner_identity;
+> @@ -708,6 +728,203 @@ static int devm_tps6598_psy_register(struct tps6598x *tps)
+>  	return PTR_ERR_OR_ZERO(tps->psy);
+>  }
+>  
+> +static int
+> +tps25750_write_firmware(struct tps6598x *tps,
+> +			u8 bpms_addr, const u8 *data, size_t len)
+> +{
+> +	struct i2c_client *client = to_i2c_client(tps->dev);
+> +	int ret;
+> +	u8 slave_addr;
+> +	int timeout;
+> +
+> +	slave_addr = client->addr;
+> +	timeout = client->adapter->timeout;
+> +
+> +	/*
+> +	 * binary configuration size is around ~16Kbytes
+> +	 * which might take some time to finish writing it
+> +	 */
+> +	client->adapter->timeout = msecs_to_jiffies(5000);
+> +	client->addr = bpms_addr;
+> +
+> +	ret = regmap_raw_write(tps->regmap, data[0], &data[1], len - 1);
+> +
+> +	client->addr = slave_addr;
+> +	client->adapter->timeout = timeout;
+> +
+> +	return ret;
+> +}
+> +
+> +static int
+> +tps25750_exec_pbms(struct tps6598x *tps, u8 *in_data, size_t in_len)
+> +{
+> +	int ret;
+> +	u8 rc;
+> +
+> +	ret = tps6598x_exec_cmd(tps, "PBMs", in_len, in_data,
+> +				sizeof(rc), &rc, 4000, 0);
+> +	if (ret)
+> +		return ret;
+> +
+> +	switch (rc) {
+> +	case TPS_TASK_BPMS_INVALID_BUNDLE_SIZE:
+> +		dev_err(tps->dev, "%s: invalid fw size\n", __func__);
+> +		return -EINVAL;
+> +	case TPS_TASK_BPMS_INVALID_SLAVE_ADDR:
+> +		dev_err(tps->dev, "%s: invalid slave address\n", __func__);
+> +		return -EINVAL;
+> +	case TPS_TASK_BPMS_INVALID_TIMEOUT:
+> +		dev_err(tps->dev, "%s: timed out\n", __func__);
+> +		return -ETIMEDOUT;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int tps25750_abort_patch_process(struct tps6598x *tps)
+> +{
+> +	int ret;
+> +	u8 mode;
+> +
+> +	ret = tps6598x_exec_cmd(tps, "PBMe", 0, NULL, 0, NULL, 1000, 0);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = tps6598x_check_mode(tps, &mode);
+> +	if (mode != TPS_MODE_PTCH)
+> +		dev_err(tps->dev, "failed to switch to \"PTCH\" mode\n");
+> +
+> +	return ret;
+> +}
+> +
+> +static int tps25750_start_patch_burst_mode(struct tps6598x *tps)
+> +{
+> +	int ret;
+> +	const struct firmware *fw;
+> +	const char *firmware_name;
+> +	struct {
+> +		u32 fw_size;
+> +		u8 addr;
+> +		u8 timeout;
+> +	} __packed bpms_data;
+> +
+> +	ret = device_property_read_string(tps->dev, "firmware-name",
+> +					  &firmware_name);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = request_firmware(&fw, firmware_name, tps->dev);
+> +	if (ret) {
+> +		dev_err(tps->dev, "failed to retrieve \"%s\"\n", firmware_name);
+> +		return ret;
+> +	}
+> +
+> +	if (fw->size == 0) {
+> +		ret = -EINVAL;
+> +		goto release_fw;
+> +	}
+> +
+> +	ret = device_property_read_u8(tps->dev, "ti,patch-address", &bpms_data.addr);
+> +	if (ret) {
+> +		dev_err(tps->dev, "failed to get patch address\n");
+> +		return ret;
+> +	}
+> +
+> +	bpms_data.fw_size = fw->size;
+> +	bpms_data.timeout = TPS_BUNDLE_TIMEOUT;
+> +
+> +	ret = tps25750_exec_pbms(tps, (u8 *)&bpms_data, sizeof(bpms_data));
+> +	if (ret)
+> +		goto release_fw;
+> +
+> +	ret = tps25750_write_firmware(tps, bpms_data.addr, fw->data, fw->size);
+> +	if (ret) {
+> +		dev_err(tps->dev, "Failed to write patch %s of %lu bytes\n",
+> +			firmware_name, fw->size);
+> +		goto release_fw;
+> +	}
+> +
+> +	/*
+> +	 * A delay of 500us is required after the firmware is written
+> +	 * based on pg.62 in tps6598x Host Interface Technical
+> +	 * Reference Manual
+> +	 * https://www.ti.com/lit/ug/slvuc05a/slvuc05a.pdf
+> +	 */
+> +	udelay(500);
+> +
+> +release_fw:
+> +	release_firmware(fw);
+> +
+> +	return ret;
+> +}
+> +
+> +static int tps25750_complete_patch_process(struct tps6598x *tps)
+> +{
+> +	int ret;
+> +	u8 out_data[40];
+> +	u8 dummy[2] = { };
+> +
+> +	/*
+> +	 * Without writing something to DATA_IN, this command would
+> +	 * return an error
+> +	 */
+> +	ret = tps6598x_exec_cmd(tps, "PBMc", sizeof(dummy), dummy,
+> +				sizeof(out_data), out_data, 2000, 20);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (out_data[TPS_PBMC_RC]) {
+> +		dev_err(tps->dev,
+> +			"%s: pbmc failed: %u\n", __func__,
+> +			out_data[TPS_PBMC_RC]);
+> +		return -EIO;
+> +	}
+> +
+> +	if (out_data[TPS_PBMC_DPCS]) {
+> +		dev_err(tps->dev,
+> +			"%s: failed device patch complete status: %u\n",
+> +			__func__, out_data[TPS_PBMC_DPCS]);
+> +		return -EIO;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int tps25750_apply_patch(struct tps6598x *tps)
+> +{
+> +	int ret;
+> +	unsigned long timeout;
+> +	u8 mode;
+> +
+> +	ret = tps25750_start_patch_burst_mode(tps);
+> +	if (ret) {
+> +		tps25750_abort_patch_process(tps);
+> +		return ret;
+> +	}
+> +
+> +	ret = tps25750_complete_patch_process(tps);
+> +	if (ret)
+> +		return ret;
+> +
+> +	timeout = jiffies + msecs_to_jiffies(1000);
+> +
+> +	do {
+> +		ret = tps6598x_check_mode(tps, &mode);
+> +		if (ret)
+> +			return ret;
+> +
+> +		if (time_is_before_jiffies(timeout))
+> +			return -ETIMEDOUT;
+> +
+> +	} while (mode != TPS_MODE_APP);
+> +
+> +	dev_info(tps->dev, "controller switched to \"APP\" mode\n");
+> +
+> +	return 0;
+> +};
+> +
+>  static int tps6598x_probe(struct i2c_client *client)
+>  {
+>  	irq_handler_t irq_handler = tps6598x_interrupt;
+> @@ -757,6 +974,8 @@ static int tps6598x_probe(struct i2c_client *client)
+>  
+>  		irq_handler = cd321x_interrupt;
+>  	} else {
+> +
+> +		tps->is_tps25750 = of_device_is_compatible(np, "ti,tps25750");
+>  		/* Enable power status, data status and plug event interrupts */
+>  		mask1 = TPS_REG_INT_POWER_STATUS_UPDATE |
+>  			TPS_REG_INT_DATA_STATUS_UPDATE |
+> @@ -769,9 +988,15 @@ static int tps6598x_probe(struct i2c_client *client)
+>  	if (ret)
+>  		return ret;
+>  
+> +	if (tps->is_tps25750 && mode == TPS_MODE_PTCH) {
+> +		ret = tps25750_apply_patch(tps);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+>  	ret = tps6598x_write64(tps, TPS_REG_INT_MASK1, mask1);
+>  	if (ret)
+> -		return ret;
+> +		goto err_reset_controller;
+>  
+>  	ret = tps6598x_read32(tps, TPS_REG_STATUS, &status);
+>  	if (ret < 0)
+> @@ -891,6 +1116,10 @@ static int tps6598x_probe(struct i2c_client *client)
+>  	fwnode_handle_put(fwnode);
+>  err_clear_mask:
+>  	tps6598x_write64(tps, TPS_REG_INT_MASK1, 0);
+> +err_reset_controller:
+> +	/* Reset PD controller to remove any applied patch */
+> +	if (tps->is_tps25750)
+> +		tps6598x_exec_cmd(tps, "GAID", 0, NULL, 0, NULL, 2000, 0);
+>  	return ret;
+>  }
+>  
+> @@ -901,9 +1130,14 @@ static void tps6598x_remove(struct i2c_client *client)
+>  	if (!client->irq)
+>  		cancel_delayed_work_sync(&tps->wq_poll);
+>  
+> +	devm_free_irq(tps->dev, client->irq, tps);
+>  	tps6598x_disconnect(tps, 0);
+>  	typec_unregister_port(tps->port);
+>  	usb_role_switch_put(tps->role_sw);
+> +
+> +	/* Reset PD controller to remove any applied patch */
+> +	if (tps->is_tps25750)
+> +		tps6598x_exec_cmd(tps, "GAID", 0, NULL, 0, NULL, 2000, 0);
+>  }
+>  
+>  static int __maybe_unused tps6598x_suspend(struct device *dev)
+> @@ -946,6 +1180,7 @@ static const struct dev_pm_ops tps6598x_pm_ops = {
+>  static const struct of_device_id tps6598x_of_match[] = {
+>  	{ .compatible = "ti,tps6598x", },
+>  	{ .compatible = "apple,cd321x", },
+> +	{ .compatible = "ti,tps25750", },
 
-take below trace event class for explanation, save two u32 members and
-parse it to generate ep name and other information.
+This is probable OK for now, we can mix this stuff into core.c now, but
+later I want this driver (core.c) to be converted into a library that
+contains only the common functionality. TPS5750 will at that point have
+its own probe/glue driver.
 
-old:
-DECLARE_EVENT_CLASS(dwc3_log_request,
-	TP_PROTO(struct dwc3_request *req),
-	TP_ARGS(req),
-	TP_STRUCT__entry(
-		__string(name, req->dep->name)
-		__field(struct dwc3_request *, req)
-		__field(unsigned int, actual)
-		__field(unsigned int, length)
-		__field(int, status)
-		__field(int, zero)
-		__field(int, short_not_ok)
-		__field(int, no_interrupt)
-	),
-	TP_fast_assign(
-		__assign_str(name, req->dep->name);
-		__entry->req = req;
-		__entry->actual = req->request.actual;
-		__entry->length = req->request.length;
-		__entry->status = req->request.status;
-		__entry->zero = req->request.zero;
-		__entry->short_not_ok = req->request.short_not_ok;
-		__entry->no_interrupt = req->request.no_interrupt;
-	),
-	TP_printk("%s: req %p length %u/%u %s%s%s ==> %d",
-		__get_str(name), __entry->req, __entry->actual, __entry->length,
-		__entry->zero ? "Z" : "z",
-		__entry->short_not_ok ? "S" : "s",
-		__entry->no_interrupt ? "i" : "I",
-		__entry->status
-	)
-);
+>  	{}
+>  };
+>  MODULE_DEVICE_TABLE(of, tps6598x_of_match);
+> -- 
+> 2.34.1
 
-new:
-DECLARE_EVENT_CLASS(dwc3_log_request,
-	TP_PROTO(struct dwc3_request *req),
-	TP_ARGS(req),
-	TP_STRUCT__entry(
-		__field(u32, edw3)
-		__field(struct dwc3_request *, req)
-		__field(unsigned int, actual)
-		__field(unsigned int, length)
-		__field(int, status)
-		__field(u32, rdw1)
-	),
-	TP_fast_assign(
-		__entry->edw3 = req->dep->endpoint.dw3;
-		__entry->req = req;
-		__entry->actual = req->request.actual;
-		__entry->length = req->request.length;
-		__entry->status = req->request.status;
-		__entry->rdw1 = req->request.dw1;
-	),
-	TP_printk("%s: req %p length %u/%u %s ==> %d",
-		usb_gadget_ep_name(__get_buf(USB_EP_MAX_NAME_LEN), __entry->edw3),
-		__entry->req, __entry->actual, __entry->length,
-		__print_flags(__entry->rdw1, ":", USB_REQ_FLAGS),
-		__entry->status
-	)
-);
+thanks,
 
-consider 32 bit ARCH,
-for old definition, one trace entry size is:
-4 (ring buffer event header ) + 8 (trace event header ) +
-32 (trace class header) + 9 (ep string name) = 53 bytes.
-
-for new definition, one trace entry size is:
-4 (ring buffer event header ) + 8 (trace event header ) +
-24 (trace class header)  = 36 bytes.
-
-consider there is 1MB trace buffer space,
-for old definition, it can save 19784 entries,
-for new definition, it can save 29127 entries.
-
-Use new common trace event macro in gadget.h for output stage.
-
-Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
----
- drivers/usb/dwc3/trace.h | 63 ++++++++++++++++++----------------------
- 1 file changed, 29 insertions(+), 34 deletions(-)
-
-diff --git a/drivers/usb/dwc3/trace.h b/drivers/usb/dwc3/trace.h
-index d2997d17cfbe..1dbd56e98463 100644
---- a/drivers/usb/dwc3/trace.h
-+++ b/drivers/usb/dwc3/trace.h
-@@ -102,30 +102,25 @@ DECLARE_EVENT_CLASS(dwc3_log_request,
- 	TP_PROTO(struct dwc3_request *req),
- 	TP_ARGS(req),
- 	TP_STRUCT__entry(
--		__string(name, req->dep->name)
-+		__field(u32, edw3)
- 		__field(struct dwc3_request *, req)
- 		__field(unsigned int, actual)
- 		__field(unsigned int, length)
- 		__field(int, status)
--		__field(int, zero)
--		__field(int, short_not_ok)
--		__field(int, no_interrupt)
-+		__field(u32, rdw1)
- 	),
- 	TP_fast_assign(
--		__assign_str(name, req->dep->name);
-+		__entry->edw3 = req->dep->endpoint.dw3;
- 		__entry->req = req;
- 		__entry->actual = req->request.actual;
- 		__entry->length = req->request.length;
- 		__entry->status = req->request.status;
--		__entry->zero = req->request.zero;
--		__entry->short_not_ok = req->request.short_not_ok;
--		__entry->no_interrupt = req->request.no_interrupt;
-+		__entry->rdw1 = req->request.dw1;
- 	),
--	TP_printk("%s: req %p length %u/%u %s%s%s ==> %d",
--		__get_str(name), __entry->req, __entry->actual, __entry->length,
--		__entry->zero ? "Z" : "z",
--		__entry->short_not_ok ? "S" : "s",
--		__entry->no_interrupt ? "i" : "I",
-+	TP_printk("%s: req %p length %u/%u %s ==> %d",
-+		usb_gadget_ep_name(__get_buf(USB_EP_MAX_NAME_LEN), __entry->edw3),
-+		__entry->req, __entry->actual, __entry->length,
-+		__print_flags(__entry->rdw1, ":", USB_REQ_FLAGS),
- 		__entry->status
- 	)
- );
-@@ -185,7 +180,7 @@ DECLARE_EVENT_CLASS(dwc3_log_gadget_ep_cmd,
- 		struct dwc3_gadget_ep_cmd_params *params, int cmd_status),
- 	TP_ARGS(dep, cmd, params, cmd_status),
- 	TP_STRUCT__entry(
--		__string(name, dep->name)
-+		__field(u32, edw3)
- 		__field(unsigned int, cmd)
- 		__field(u32, param0)
- 		__field(u32, param1)
-@@ -193,7 +188,7 @@ DECLARE_EVENT_CLASS(dwc3_log_gadget_ep_cmd,
- 		__field(int, cmd_status)
- 	),
- 	TP_fast_assign(
--		__assign_str(name, dep->name);
-+		__entry->edw3 = dep->endpoint.dw3;
- 		__entry->cmd = cmd;
- 		__entry->param0 = params->param0;
- 		__entry->param1 = params->param1;
-@@ -201,7 +196,8 @@ DECLARE_EVENT_CLASS(dwc3_log_gadget_ep_cmd,
- 		__entry->cmd_status = cmd_status;
- 	),
- 	TP_printk("%s: cmd '%s' [%x] params %08x %08x %08x --> status: %s",
--		__get_str(name), dwc3_gadget_ep_cmd_string(__entry->cmd),
-+		usb_gadget_ep_name(__get_buf(USB_EP_MAX_NAME_LEN), __entry->edw3),
-+		dwc3_gadget_ep_cmd_string(__entry->cmd),
- 		__entry->cmd, __entry->param0,
- 		__entry->param1, __entry->param2,
- 		dwc3_ep_cmd_status_string(__entry->cmd_status)
-@@ -218,7 +214,7 @@ DECLARE_EVENT_CLASS(dwc3_log_trb,
- 	TP_PROTO(struct dwc3_ep *dep, struct dwc3_trb *trb),
- 	TP_ARGS(dep, trb),
- 	TP_STRUCT__entry(
--		__string(name, dep->name)
-+		__field(u32, edw3)
- 		__field(struct dwc3_trb *, trb)
- 		__field(u32, bpl)
- 		__field(u32, bph)
-@@ -229,7 +225,7 @@ DECLARE_EVENT_CLASS(dwc3_log_trb,
- 		__field(u32, dequeue)
- 	),
- 	TP_fast_assign(
--		__assign_str(name, dep->name);
-+		__entry->edw3 = dep->endpoint.dw3;
- 		__entry->trb = trb;
- 		__entry->bpl = trb->bpl;
- 		__entry->bph = trb->bph;
-@@ -240,7 +236,8 @@ DECLARE_EVENT_CLASS(dwc3_log_trb,
- 		__entry->dequeue = dep->trb_dequeue;
- 	),
- 	TP_printk("%s: trb %p (E%d:D%d) buf %08x%08x size %s%d ctrl %08x sofn %08x (%c%c%c%c:%c%c:%s)",
--		__get_str(name), __entry->trb, __entry->enqueue,
-+		usb_gadget_ep_name(__get_buf(USB_EP_MAX_NAME_LEN), __entry->edw3),
-+		__entry->trb, __entry->enqueue,
- 		__entry->dequeue, __entry->bph, __entry->bpl,
- 		({char *s;
- 		int pcm = ((__entry->size >> 24) & 3) + 1;
-@@ -272,7 +269,7 @@ DECLARE_EVENT_CLASS(dwc3_log_trb,
- 		__entry->ctrl & DWC3_TRB_CTRL_CSP ? 'S' : 's',
- 		__entry->ctrl & DWC3_TRB_CTRL_ISP_IMI ? 'S' : 's',
- 		__entry->ctrl & DWC3_TRB_CTRL_IOC ? 'C' : 'c',
--		  dwc3_trb_type_string(DWC3_TRBCTL_TYPE(__entry->ctrl))
-+		dwc3_trb_type_string(DWC3_TRBCTL_TYPE(__entry->ctrl))
- 	)
- );
- 
-@@ -290,32 +287,30 @@ DECLARE_EVENT_CLASS(dwc3_log_ep,
- 	TP_PROTO(struct dwc3_ep *dep),
- 	TP_ARGS(dep),
- 	TP_STRUCT__entry(
--		__string(name, dep->name)
--		__field(unsigned int, maxpacket)
--		__field(unsigned int, maxpacket_limit)
--		__field(unsigned int, max_streams)
--		__field(unsigned int, maxburst)
-+		__field(u32, edw3)
-+		__field(u32, edw1)
-+		__field(u32, edw2)
- 		__field(unsigned int, flags)
- 		__field(unsigned int, direction)
- 		__field(u8, trb_enqueue)
- 		__field(u8, trb_dequeue)
- 	),
- 	TP_fast_assign(
--		__assign_str(name, dep->name);
--		__entry->maxpacket = dep->endpoint.maxpacket;
--		__entry->maxpacket_limit = dep->endpoint.maxpacket_limit;
--		__entry->max_streams = dep->endpoint.max_streams;
--		__entry->maxburst = dep->endpoint.maxburst;
-+		__entry->edw3 = dep->endpoint.dw3;
-+		__entry->edw1 = dep->endpoint.dw1;
-+		__entry->edw2 = dep->endpoint.dw2;
- 		__entry->flags = dep->flags;
- 		__entry->direction = dep->direction;
- 		__entry->trb_enqueue = dep->trb_enqueue;
- 		__entry->trb_dequeue = dep->trb_dequeue;
- 	),
- 	TP_printk("%s: mps %d/%d streams %d burst %d ring %d/%d flags %c:%c%c%c%c:%c",
--		__get_str(name), __entry->maxpacket,
--		__entry->maxpacket_limit, __entry->max_streams,
--		__entry->maxburst, __entry->trb_enqueue,
--		__entry->trb_dequeue,
-+		usb_gadget_ep_name(__get_buf(USB_EP_MAX_NAME_LEN), __entry->edw3),
-+		u32_get_bits(__entry->edw1, USB_EP_MAXPACKET),
-+		u32_get_bits(__entry->edw1, USB_EP_MAXPACKET_LIMIT),
-+		u32_get_bits(__entry->edw2, USB_EP_MAX_STREAMS),
-+		u32_get_bits(__entry->edw2, USB_EP_MAXBURST),
-+		__entry->trb_enqueue, __entry->trb_dequeue,
- 		__entry->flags & DWC3_EP_ENABLED ? 'E' : 'e',
- 		__entry->flags & DWC3_EP_STALL ? 'S' : 's',
- 		__entry->flags & DWC3_EP_WEDGE ? 'W' : 'w',
 -- 
-2.17.1
-
+heikki
 
