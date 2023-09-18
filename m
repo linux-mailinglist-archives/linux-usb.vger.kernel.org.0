@@ -1,181 +1,80 @@
-Return-Path: <linux-usb+bounces-300-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-304-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D995B7A42F6
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 09:40:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 974AD7A4365
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 09:47:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 003F01C20EFA
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 07:40:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 526AB2815BC
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 07:47:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF6C679FF;
-	Mon, 18 Sep 2023 07:40:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CD1613AE7;
+	Mon, 18 Sep 2023 07:45:44 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67C47749D
-	for <linux-usb@vger.kernel.org>; Mon, 18 Sep 2023 07:40:27 +0000 (UTC)
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27AA61708;
-	Mon, 18 Sep 2023 00:38:05 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38I7SOD0030988;
-	Mon, 18 Sep 2023 07:37:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=r2hWKlEpKe/JKJubx7igl+rfCDrfvf22cMzTlHAy4t8=;
- b=XiZhIz1xqNMtaNAHZTmPN3N11LA57HogMY2oYOkI+ApYuLrvc7ZoP4cCVjrFHSCr/smM
- vZLtLppQoXrMsDNJnGSEwM9HHYwLQu9JwG61qOXeTkPaPONBfRstGE47IwIXImSpfjZw
- w/8XvdBORFna5qkHpQ7u2T47PpbhxFCY0nx80gQZ063TpeAjYUN0PXe2pLsgtRxcJnSt
- S6P0mw6OGWhpT8e8x8BWIJwwBNK8DdcmDm2imRcJ7Eulc4zAoytNJt1+qFbKGRzcSttB
- wqAcSDmR+LEzC1wLd7o6hT6RqbHZFdESpwf0WLGP1VAZ99f+X6DZeoJRscYDsB70XMhz xw== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t53ayaqb1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 18 Sep 2023 07:37:56 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38I7btsL009318
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 18 Sep 2023 07:37:55 GMT
-Received: from [10.216.25.71] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Mon, 18 Sep
- 2023 00:37:52 -0700
-Message-ID: <a890ac60-0562-48c3-9aa1-eb06ec21c69d@quicinc.com>
-Date: Mon, 18 Sep 2023 13:07:26 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2FD4111A1;
+	Mon, 18 Sep 2023 07:45:42 +0000 (UTC)
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7AC10DE;
+	Mon, 18 Sep 2023 00:43:12 -0700 (PDT)
+X-SpamFilter-By: ArmorX SpamTrap 5.78 with qID 38I7gUqV51835290, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+	by rtits2.realtek.com.tw (8.15.2/2.92/5.92) with ESMTPS id 38I7gUqV51835290
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 18 Sep 2023 15:42:30 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32; Mon, 18 Sep 2023 15:42:30 +0800
+Received: from fc38.localdomain (172.22.228.98) by RTEXMBS04.realtek.com.tw
+ (172.21.6.97) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Mon, 18 Sep
+ 2023 15:42:29 +0800
+From: Hayes Wang <hayeswang@realtek.com>
+To: <kuba@kernel.org>, <davem@davemloft.net>
+CC: <netdev@vger.kernel.org>, <nic_swsd@realtek.com>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <edumazet@google.com>, <bjorn@mork.no>, <pabeni@redhat.com>,
+        Hayes Wang
+	<hayeswang@realtek.com>
+Subject: [PATCH net-next resend 0/2] r8152: modify rx_bottom
+Date: Mon, 18 Sep 2023 15:41:59 +0800
+Message-ID: <20230918074202.2461-426-nic_swsd@realtek.com>
+X-Mailer: git-send-email 2.41.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] usb: gadget: ncm: Handle decoding of multiple NTB's in
- unwrap call
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC: Linyu Yuan <quic_linyyuan@quicinc.com>,
-        =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
-        <quic_jackp@quicinc.com>, <stable@vger.kernel.org>
-References: <20230915061001.18884-1-quic_kriskura@quicinc.com>
- <2023091743-tightly-drivable-4360@gregkh>
-Content-Language: en-US
-From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <2023091743-tightly-drivable-4360@gregkh>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: A_gBGT8CUmtoqORQV7dXy2fqtBhJWHR6
-X-Proofpoint-ORIG-GUID: A_gBGT8CUmtoqORQV7dXy2fqtBhJWHR6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-09-15_20,2023-09-15_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
- spamscore=0 mlxscore=0 impostorscore=0 malwarescore=0 bulkscore=0
- clxscore=1015 priorityscore=1501 mlxlogscore=999 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2309180066
+Content-Type: text/plain
+X-Originating-IP: [172.22.228.98]
+X-ClientProxiedBy: RTEXH36505.realtek.com.tw (172.21.6.25) To
+ RTEXMBS04.realtek.com.tw (172.21.6.97)
+X-KSE-ServerInfo: RTEXMBS04.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
 
+These patches are used to improve rx_bottom().
 
+Hayes Wang (2):
+  r8152: remove queuing rx packets in driver
+  r8152: use napi_gro_frags
 
-On 9/17/2023 1:34 PM, Greg Kroah-Hartman wrote:
->> Cc: stable@vger.kernel.org
-> 
-> What commit id does this fix?
-> 
+ drivers/net/usb/r8152.c | 80 +++++++++++++++++------------------------
+ 1 file changed, 32 insertions(+), 48 deletions(-)
 
-Hi Greg,
+-- 
+2.41.0
 
-This fixes the initial patch that added the driver:
-9f6ce4240a2bf456402c15c06768059e5973f28c
-
->> Reviewed-by: Maciej Żenczykowski <maze@google.com>
->> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
->> ---
->>   drivers/usb/gadget/function/f_ncm.c | 26 +++++++++++++++++++-------
->>   1 file changed, 19 insertions(+), 7 deletions(-)
->>
->> diff --git a/drivers/usb/gadget/function/f_ncm.c b/drivers/usb/gadget/function/f_ncm.c
->> index feccf4c8cc4f..f00f051438ec 100644
->> --- a/drivers/usb/gadget/function/f_ncm.c
->> +++ b/drivers/usb/gadget/function/f_ncm.c
->> @@ -1156,7 +1156,8 @@ static int ncm_unwrap_ntb(struct gether *port,
->>   			  struct sk_buff_head *list)
->>   {
->>   	struct f_ncm	*ncm = func_to_ncm(&port->func);
->> -	__le16		*tmp = (void *) skb->data;
->> +	unsigned char	*ntb_ptr = (void *) skb->data;
-> 
-> Why persist with the extra ' ', didn't checkpatch complain about this?
-> 
-> And why the cast at all?
-> 
-My bad. I ran the checkpatch and got the following result:
-
-kriskura@hu-kriskura-hyd:/local/mnt/workspace/krishna/510/testncm/kernel$ 
-./scripts/checkpatch.pl --strict 
-0001-usb-gadget-ncm-Handle-decoding-of-multiple-NTB-s-in-.patch
-WARNING: Prefer a maximum 75 chars per line (possible unwrapped commit 
-description?)
-#12:
-unwraps the obtained request data assuming only one NTB is present, we loose
-
-CHECK: No space is necessary after a cast
-#34: FILE: drivers/usb/gadget/function/f_ncm.c:1159:
-+       unsigned char   *ntb_ptr = (void *) skb->data;
-
-CHECK: No space is necessary after a cast
-#46: FILE: drivers/usb/gadget/function/f_ncm.c:1176:
-+       tmp = (void *) ntb_ptr;
-
-CHECK: No space is necessary after a cast
-#93: FILE: drivers/usb/gadget/function/f_ncm.c:1329:
-+               ntb_ptr = (unsigned char *) (ntb_ptr + block_len);
-
-total: 0 errors, 1 warnings, 3 checks, 67 lines checked
-
-
-I ignored the checks and saw only that errors are 0. Seems like I missed 
-fixing the commit text wrapping to 75 chars (On line 12 it has 76 
-chars). Will fix it up in v3.
-
-As per the cast, I initially didn't add any cast and saw that the code 
-was not able to parse the dwSignature of the NTH and decoding of all 
-packets was failing. Only when I added the cast, was the function able 
-to decode all packets properly.
-
->> +	__le16		*tmp;
->>   	unsigned	index, index2;
->>   	int		ndp_index;
->>   	unsigned	dg_len, dg_len2;
->> @@ -1169,6 +1170,10 @@ static int ncm_unwrap_ntb(struct gether *port,
->>   	const struct ndp_parser_opts *opts = ncm->parser_opts;
->>   	unsigned	crc_len = ncm->is_crc ? sizeof(uint32_t) : 0;
->>   	int		dgram_counter;
->> +	int		to_process = skb->len;
->> +
->> +parse_ntb:
->> +	tmp = (void *) ntb_ptr;
-> 
-> Again, no blank space please.
-> 
-> And why the cast?
-> 
-the second cast here was just to be in sync with the original code;
-__le16		*tmp = (void *) skb->data;
-
-I didn't try removing this and running the test. Will check if the 
-second one is required or if decoding is proper without it or not.
-
-Regards,
-Krishna,
 
