@@ -1,105 +1,120 @@
-Return-Path: <linux-usb+bounces-306-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-307-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B0607A43D3
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 10:04:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57A997A44EF
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 10:40:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8E5F51C20C1D
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 08:04:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 74CD81C20AF7
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 08:40:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F65C14276;
-	Mon, 18 Sep 2023 08:04:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E92914AA8;
+	Mon, 18 Sep 2023 08:39:58 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A9287466
-	for <linux-usb@vger.kernel.org>; Mon, 18 Sep 2023 08:04:35 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE59E55;
-	Mon, 18 Sep 2023 01:04:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695024242; x=1726560242;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IOZ5ST0b115tZcGqcBmYtjTOXXLGsl37rzvNJdPtNrQ=;
-  b=bl2sQZq4uXKYMUkzNg4evqfgSI/op5RzCKhuW1OTKi5iCY2xoOSfHECJ
-   +twNAiSINxaeK/dhqFRZr25S2PpLzGe2aRGWHC6/UuOEhuO1fRNv0Qyvo
-   uGTsgIb++mZZ6H3PHn2wGoVmm/fAwMzF6oeT/rNIKPFuw8l6b3XrRlIVA
-   bfTdJKyen1pVhVPEsS6OeTZMTUtmoNExSIf7F9dwpxJshODmLjxTdCIpX
-   aOmV+/MURSxTWQSLWiCFKk6K1s1s0vXKqEmj7I50xOkoUuIaIjs3s341c
-   8fNpDHeipY0E5mi/Y1TNe9HoMDD7cdACfsNct3ZN1+M/ymtJkKYrg+Rpz
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10836"; a="443670758"
-X-IronPort-AV: E=Sophos;i="6.02,156,1688454000"; 
-   d="scan'208";a="443670758"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2023 01:04:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10836"; a="992621087"
-X-IronPort-AV: E=Sophos;i="6.02,156,1688454000"; 
-   d="scan'208";a="992621087"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga006.fm.intel.com with SMTP; 18 Sep 2023 01:03:58 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 18 Sep 2023 11:03:57 +0300
-Date: Mon, 18 Sep 2023 11:03:57 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: "Patel, Utkarsh H" <utkarsh.h.patel@intel.com>
-Cc: Prashant Malani <pmalani@chromium.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"chrome-platform@lists.linux.dev" <chrome-platform@lists.linux.dev>,
-	"andriy.shevchenko@linux.intel.com" <andriy.shevchenko@linux.intel.com>,
-	"bleung@chromium.org" <bleung@chromium.org>
-Subject: Re: [PATCH v3 3/4] platform/chrome: cros_ec_typec: Add Displayport
- Alternatemode 2.1 Support
-Message-ID: <ZQgEbXDNZ+Ap/HiV@kuha.fi.intel.com>
-References: <20230912005752.1532888-1-utkarsh.h.patel@intel.com>
- <20230912005752.1532888-4-utkarsh.h.patel@intel.com>
- <CACeCKacmH19niA7gWTZCj89ZmFth0LWvkMYasYwUvVHrmFKCZw@mail.gmail.com>
- <MWHPR11MB0048848CD12DC750417E7264A9F6A@MWHPR11MB0048.namprd11.prod.outlook.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F5D313AEE;
+	Mon, 18 Sep 2023 08:39:56 +0000 (UTC)
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8BE2E4;
+	Mon, 18 Sep 2023 01:39:54 -0700 (PDT)
+X-SpamFilter-By: ArmorX SpamTrap 5.78 with qID 38I8dEjO51893931, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+	by rtits2.realtek.com.tw (8.15.2/2.92/5.92) with ESMTPS id 38I8dEjO51893931
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 18 Sep 2023 16:39:14 +0800
+Received: from RTEXDAG01.realtek.com.tw (172.21.6.100) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32; Mon, 18 Sep 2023 16:38:32 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXDAG01.realtek.com.tw (172.21.6.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Mon, 18 Sep 2023 16:38:31 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::7445:d92b:d0b3:f79c]) by
+ RTEXMBS04.realtek.com.tw ([fe80::7445:d92b:d0b3:f79c%5]) with mapi id
+ 15.01.2375.007; Mon, 18 Sep 2023 16:38:31 +0800
+From: Hayes Wang <hayeswang@realtek.com>
+To: Eric Dumazet <edumazet@google.com>
+CC: "kuba@kernel.org" <kuba@kernel.org>,
+        "davem@davemloft.net"
+	<davem@davemloft.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        nic_swsd <nic_swsd@realtek.com>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org"
+	<linux-usb@vger.kernel.org>,
+        "bjorn@mork.no" <bjorn@mork.no>,
+        "pabeni@redhat.com" <pabeni@redhat.com>
+Subject: RE: [PATCH net-next resend 1/2] r8152: remove queuing rx packets in driver
+Thread-Topic: [PATCH net-next resend 1/2] r8152: remove queuing rx packets in
+ driver
+Thread-Index: AQHZ6gOv5dotXJafx06AY5ZZ4fOWz7AfsJgAgACIv9A=
+Date: Mon, 18 Sep 2023 08:38:31 +0000
+Message-ID: <7235821eb09242adaa651172729f76aa@realtek.com>
+References: <20230918074202.2461-426-nic_swsd@realtek.com>
+ <20230918074202.2461-427-nic_swsd@realtek.com>
+ <CANn89iJmdkyn8_hU4esycRG-XvPa_Djsp6PyaOX5cYP1Obdr4g@mail.gmail.com>
+In-Reply-To: <CANn89iJmdkyn8_hU4esycRG-XvPa_Djsp6PyaOX5cYP1Obdr4g@mail.gmail.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+x-originating-ip: [172.22.228.6]
+x-kse-serverinfo: RTEXDAG01.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <MWHPR11MB0048848CD12DC750417E7264A9F6A@MWHPR11MB0048.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-	SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Fri, Sep 15, 2023 at 04:01:44PM +0000, Patel, Utkarsh H wrote:
-
-> > > b057250704e8..3a747938cdab 100644
-> > > --- a/include/linux/usb/pd_vdo.h
-> > > +++ b/include/linux/usb/pd_vdo.h
-> > > @@ -376,6 +376,7 @@
-> > >          | ((vbm) & 0x3) << 9 | (sbu) << 8 | (sbut) << 7 | ((cur) & 0x3) << 5   \
-> > >          | (vbt) << 4 | (sopp) << 3 | ((spd) & 0x7))
-> > >
-> > > +#define VDO_TYPEC_CABLE_SPEED(vdo)     ((vdo) & 0x7)
-> > 
-> > I would suggest putting this header modification in a separate patch; if for
-> > some reason we have to revert the Chrome part of the change, then we won't
-> > rip this part out too (some other driver down the road may use the macro and
-> > would break if it were to be removed). But I'll leave it to Heikki to determine
-> > whether that is preferred.
-> > 
-> Heikki,  What's your preference here?
-
-I think separate patch for this like Prashant said.
-
-thanks,
-
--- 
-heikki
+RXJpYyBEdW1hemV0IDxlZHVtYXpldEBnb29nbGUuY29tPg0KPiBTZW50OiBNb25kYXksIFNlcHRl
+bWJlciAxOCwgMjAyMyAzOjU1IFBNDQpbLi4uXQ0KPiA+ICAgICAgICAgICAgICAgICAgICAgICAg
+IHVyYi0+YWN0dWFsX2xlbmd0aCA9IDA7DQo+ID4gICAgICAgICAgICAgICAgICAgICAgICAgbGlz
+dF9hZGRfdGFpbCgmYWdnLT5saXN0LCBuZXh0KTsNCj4gPiAgICAgICAgICAgICAgICAgfQ0KPiA+
+ICsNCj4gPiArICAgICAgICAgICAgICAgLyogQnJlYWsgaWYgYnVkZ2V0IGlzIGV4aGF1c3RlZC4g
+Ki8NCj4gDQo+IFsxXSBNb3JlIGNvbnZlbnRpb25hbCB3YXkgdG8gdG8gcHV0IHRoaXMgY29uZGl0
+aW9uIGF0IHRoZSBiZWdpbm5pbmcgb2YNCj4gdGhlIHdoaWxlICgpIGxvb3AsDQo+IGJlY2F1c2Ug
+dGhlIGJ1ZGdldCBjb3VsZCBiZSB6ZXJvLg0KDQpJZiB0aGUgYnVkZ2V0IGlzIHplcm8sIHRoZSBm
+dW5jdGlvbiB3b3VsZG4ndCBiZSBjYWxsZWQuDQphN2I4ZDYwYjM3MjMgKCJyODE1MjogY2hlY2sg
+YnVkZ2V0IGZvciByODE1Ml9wb2xsIikgYXZvaWRzIGl0Lg0KDQo+ID4gKyAgICAgICAgICAgICAg
+IGlmICh3b3JrX2RvbmUgPj0gYnVkZ2V0KQ0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgIGJy
+ZWFrOw0KPiA+ICAgICAgICAgfQ0KPiA+DQo+ID4gKyAgICAgICAvKiBTcGxpY2UgdGhlIHJlbWFp
+bmVkIGxpc3QgYmFjayB0byByeF9kb25lICovDQo+ID4gICAgICAgICBpZiAoIWxpc3RfZW1wdHko
+JnJ4X3F1ZXVlKSkgew0KPiA+ICAgICAgICAgICAgICAgICBzcGluX2xvY2tfaXJxc2F2ZSgmdHAt
+PnJ4X2xvY2ssIGZsYWdzKTsNCj4gPiAtICAgICAgICAgICAgICAgbGlzdF9zcGxpY2VfdGFpbCgm
+cnhfcXVldWUsICZ0cC0+cnhfZG9uZSk7DQo+ID4gKyAgICAgICAgICAgICAgIGxpc3Rfc3BsaWNl
+KCZyeF9xdWV1ZSwgJnRwLT5yeF9kb25lKTsNCj4gPiAgICAgICAgICAgICAgICAgc3Bpbl91bmxv
+Y2tfaXJxcmVzdG9yZSgmdHAtPnJ4X2xvY2ssIGZsYWdzKTsNCj4gPiAgICAgICAgIH0NCj4gPg0K
+PiA+ICBvdXQxOg0KPiA+IC0gICAgICAgcmV0dXJuIHdvcmtfZG9uZTsNCj4gPiArICAgICAgIGlm
+ICh3b3JrX2RvbmUgPiBidWRnZXQpDQo+IA0KPiBUaGlzICh3b3JrX2RvbmUgPmJ1ZGdldCkgY29u
+ZGl0aW9uIHdvdWxkIG5ldmVyIGJlIHRydWUgaWYgcG9pbnQgWzFdIGlzDQo+IGFkZHJlc3NlZC4N
+Cg0KQSBidWxrIHRyYW5zZmVyIG1heSBjb250YWluIG1hbnkgcGFja2V0cywgc28gdGhlIHdvcmtf
+ZG9uZSBtYXkgYmUgbW9yZSB0aGFuIGJ1ZGdldC4NClRoYXQgaXMgd2h5IEkgcXVldWUgdGhlIHBh
+Y2tldHMgaW4gdGhlIGRyaXZlciBiZWZvcmUgdGhpcyBwYXRjaC4NCkZvciBleGFtcGxlLCBpZiBh
+IGJ1bGsgdHJhbnNmZXIgY29udGFpbnMgNzAgcGFja2V0IGFuZCBidWRnZXQgaXMgNjQsDQpuYXBp
+X2dyb19yZWNlaXZlIHdvdWxkIGJlIGNhbGxlZCBmb3IgdGhlIGZpcnN0IDY0IHBhY2tldHMgYW5k
+IDYgcGFja2V0cyB3b3VsZA0KYmUgcXVldWVkIGluIGRyaXZlciBmb3IgbmV4dCBzY2hlZHVsZS4g
+QWZ0ZXIgdGhpcyBwYXRjaCwgbmFwaV9ncm9fcmVjZWl2ZSgpIHdvdWxkDQpiZSBjYWxsZWQgZm9y
+IHRoZSA3MCBwYWNrZXRzLCBldmVuIHRoZSBidWRnZXQgaXMgNjQuIEFuZCB0aGUgcmVtYWluZWQg
+YnVsayB0cmFuc2ZlcnMNCndvdWxkIGJlIGhhbmRsZWQgZm9yIG5leHQgc2NoZWR1bGUuDQoNCj4g
+PiArICAgICAgICAgICAgICAgcmV0dXJuIGJ1ZGdldDsNCj4gPiArICAgICAgIGVsc2UNCj4gPiAr
+ICAgICAgICAgICAgICAgcmV0dXJuIHdvcmtfZG9uZTsNCj4gPiAgfQ0KDQpCZXN0IFJlZ2FyZHMs
+DQpIYXllcw0KDQo=
 
