@@ -1,105 +1,164 @@
-Return-Path: <linux-usb+bounces-333-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-334-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5A9D7A4E14
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 18:06:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9401A7A4E61
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 18:13:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5F10D281C0F
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 16:06:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4D937282B67
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 16:13:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92B8522EFC;
-	Mon, 18 Sep 2023 16:05:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7A642374D;
+	Mon, 18 Sep 2023 16:13:27 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C8BD1F61A
-	for <linux-usb@vger.kernel.org>; Mon, 18 Sep 2023 16:05:20 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F5C230DD;
-	Mon, 18 Sep 2023 09:05:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695053114; x=1726589114;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xUKO1lA8xYmCgJHL6wMNL16CXTAfwplxErKfnHb19GI=;
-  b=f1i6XjRvUTd3EiAj/632XiBuujLOiU6CwE3rfX6xJv0zvlh1ovP4iRCa
-   5T2PjGPdWbjm6KjONegS5CJGE8p4U4iV648hFc4fhHkp4b8oKvaKHizxZ
-   pZAg8didG0TZZEjlBO1rOuOj+d+wsADtwHRSEavTWM4D7HhPG1N40LZqB
-   f9TUEtwJNWXfS3KzBTdLVYcTLi+ttJTRq9i3fu1ACAbSxlxe4Ib04hkMg
-   SeffLr0mMNQ7xsjxIq+vxrM9srWO7Ue+QZH6E1Hst9V7lXz41ltqeEaq8
-   4PVvzFGjcdDD1h0UelZa9Rq71pFdpA/wxFr3uf+9xuVDvU5GU6hsZ8S4H
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10837"; a="382417277"
-X-IronPort-AV: E=Sophos;i="6.02,156,1688454000"; 
-   d="scan'208";a="382417277"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2023 07:26:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10837"; a="749040284"
-X-IronPort-AV: E=Sophos;i="6.02,156,1688454000"; 
-   d="scan'208";a="749040284"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga007.fm.intel.com with SMTP; 18 Sep 2023 07:26:13 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 18 Sep 2023 17:26:12 +0300
-Date: Mon, 18 Sep 2023 17:26:12 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Prashanth K <quic_prashk@quicinc.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	"# 5 . 16" <stable@vger.kernel.org>
-Subject: Re: usb: typec: ucsi: Clear EVENT_PENDING bit if ucsi_send_command
- fails
-Message-ID: <ZQheBL4jjXUbNQ3M@kuha.fi.intel.com>
-References: <1694423055-8440-1-git-send-email-quic_prashk@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D19B421A14
+	for <linux-usb@vger.kernel.org>; Mon, 18 Sep 2023 16:13:24 +0000 (UTC)
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2050.outbound.protection.outlook.com [40.107.255.50])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D861FC7;
+	Mon, 18 Sep 2023 09:11:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EPPORKZYKgw5tds0bJGXEUIL0INRexU8Rezjk1CHFBWuyEOL2tgOkOwSkkCJMikUhGn4aOwHwknHiHXfDFAdIEdyaRL7kxrKi26s6np8d5HgwM3BDSHnseOxLWbvHP2gk+tVT9NrspTPEBn1yUe+CAjtNc5ikWzOnvYt3b1ol84I95lTmNQ6vMmiBtk6zUasxvARyjQy3c3fYzqhKEdtH2lWMGgwJxjiOYItsE7BuluiAoK9+T13Lal4qmO4aPqhT5LEMHxYifTo3ht2aLnSZRGXEkb8zl2dfQhOiMlGDyrIz2iURiwoInn48YQrFaLp2uiNbSb9PXNwyTHeUF97gg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ha7N9+kxyJqPvCwXnGMv0DWCxgnCvthjbFMurCUrm2A=;
+ b=nuNnFaJpiM6I8/Zqq6wtGNjFf0q3qc6kgF1QU4m5SacfYZu/cNJQZ9f749uhb4s1waGzZJP3fEmtNqYjlxeoKyBgVwbcVDkhbXB2PyoXG3uCIhXUiOgeE01s89tLWKT1Curx65RzBh1t8WneqXe4vz9iG2x8vcs0LnMZtyjrdWiW88vC3Z4ZNO8VgkZ3KvyF4q0aBThGgTa8XlKvLpzqQV1F/jcXMz1fGOt4jYdnUye+zqWHd1yNaf1HiNPWOtaa8H7tmPBOgP/ieXK6wtHjSjxZCJ7BZVQQ4oRmY0x+Pry95dAGkddHf13ZBAayisufTqJEl4F1YKBcbm8jPD24LA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 211.75.126.7) smtp.rcpttodomain=gmail.com smtp.mailfrom=nuvoton.com;
+ dmarc=fail (p=none sp=quarantine pct=100) action=none header.from=gmail.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=nuvoton.onmicrosoft.com; s=selector2-nuvoton-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ha7N9+kxyJqPvCwXnGMv0DWCxgnCvthjbFMurCUrm2A=;
+ b=h2+d4cl9QhYRvg1/FhXGua25t2Gm1G5vJwcMFxHbbhlgcMirfpRGCNT288h8aZRncXlXxq6wt9tLtBqLHS/KPmSXcFolUkuweOFogLf9fwa7GBsC/Bnw44lY7M8kuo+Y/AfHb8lM6mH6yaB9gg3ekx1OQa9QJZYR4GjLJ5DbYfA=
+Received: from SGXP274CA0019.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b8::31) by
+ JH0PR03MB8211.apcprd03.prod.outlook.com (2603:1096:990:4f::12) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6792.27; Mon, 18 Sep 2023 16:10:33 +0000
+Received: from HK3PEPF0000021F.apcprd03.prod.outlook.com
+ (2603:1096:4:b8:cafe::d9) by SGXP274CA0019.outlook.office365.com
+ (2603:1096:4:b8::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.26 via Frontend
+ Transport; Mon, 18 Sep 2023 16:10:33 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 211.75.126.7)
+ smtp.mailfrom=nuvoton.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=none header.from=gmail.com;
+Received-SPF: Pass (protection.outlook.com: domain of nuvoton.com designates
+ 211.75.126.7 as permitted sender) receiver=protection.outlook.com;
+ client-ip=211.75.126.7; helo=NTHCCAS01.nuvoton.com; pr=C
+Received: from NTHCCAS01.nuvoton.com (211.75.126.7) by
+ HK3PEPF0000021F.mail.protection.outlook.com (10.167.8.41) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6792.20 via Frontend Transport; Mon, 18 Sep 2023 16:10:32 +0000
+Received: from NTHCML01B.nuvoton.com (10.1.8.178) by NTHCCAS01.nuvoton.com
+ (10.1.8.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 19 Sep
+ 2023 00:10:32 +0800
+Received: from NTHCCAS01.nuvoton.com (10.1.8.28) by NTHCML01B.nuvoton.com
+ (10.1.8.178) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.14; Tue, 19 Sep
+ 2023 00:10:31 +0800
+Received: from taln60.nuvoton.co.il (10.191.1.180) by NTHCCAS01.nuvoton.com
+ (10.1.8.28) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
+ Transport; Tue, 19 Sep 2023 00:10:31 +0800
+Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
+	id 04D366473F; Mon, 18 Sep 2023 19:10:30 +0300 (IDT)
+From: Tomer Maimon <tmaimon77@gmail.com>
+To: <peter.chen@kernel.org>, <gregkh@linuxfoundation.org>,
+	<avifishman70@gmail.com>, <tali.perry1@gmail.com>, <joel@jms.id.au>,
+	<venture@google.com>, <yuenn@google.com>, <benjaminfair@google.com>,
+	<j.neuschaefer@gmx.net>
+CC: <openbmc@lists.ozlabs.org>, <linux-usb@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, Tomer Maimon <tmaimon77@gmail.com>
+Subject: [PATCH v1] usb: chipidea: add CI_HDRC_FORCE_VBUS_ACTIVE_ALWAYS flag
+Date: Mon, 18 Sep 2023 19:10:28 +0300
+Message-ID: <20230918161028.264650-1-tmaimon77@gmail.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1694423055-8440-1-git-send-email-quic_prashk@quicinc.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NotSetDelaration: True
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: HK3PEPF0000021F:EE_|JH0PR03MB8211:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3567cec4-9447-42c5-f97e-08dbb861c8fd
+X-MS-Exchange-SenderADCheck: 0
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	bnmq9tjTVF/lhN37NrjTx6bW4zghbYyAott5tM5iCK661S0CA9FmHl1PgAS24TdholOg1DEXokSsb/TzuIIGaMHP/1JHTBTiUOexLTNlTZ23FDzc/prxZESrkGJidVHqAQW6u3Fak4R4PVUySzoMbfBFa52iCOSbpv7iufecyYtbm1Z6F+h2iZjXyRPZuB2dLBY8FUUlAMfXDScaA6g4PW34d1V53Aq5HGKx8vlqBAbuC/ItVMuKiLXhFIBP5xobDbV+jYf4R5QgqlozdX7ytnho4A5P6JPy/G4yJxYc+yAEzrwF5IfnoF6dRyq4OYJ5YmALb6M1edGDR2ouB4KR8RPc29jCIDDKxE+pILAKeXD9V/OaCfufxLtmFkOFq7/ZHRbjHbyq+jxjn7JG0HgC02CIw8KBmnwmwsW1kdWOxFiED9RSNd3OAkgD6sThfz2gExM7txe2xn1xWr2RznyePSbvWkdOZqNLUOrZrwKUX+xiRAuALnA6FAY/frZvggGb9rGldDkXv5pDmsUcaOaIsxGSwrH0iR1ljChbRLY911FzMnbk9fhq140UlMLf2LaT6qGazbj6q3u+GdTvldZiFVxkTyO2DcOmvkTeH1Q0gS1c205YzU4+xXQJtPwIAsbm4p9K5sKSKehLE6XD804e3RhQuFE/PDRkN7i1gy2APaKam4JrtVxbLKc9+tbgJi8FYKXMR212TLCLJDbz3XcF6+ybVpHRRGYdC3fwQqSpWhyW+7xmjQl3G3EDFPNgG5VPOXKYFf69oTtSSWmAXSMtnpszaMOhEY/6113XGU9gfqzZTTBSUqg0FN3tccOtPzOabs7o5t/9wvE4PXjxFNV5XGChZQl2jHmU9rnTM1mxP3SFyTgBNHGF0G/kSHgzvmzr
+X-Forefront-Antispam-Report:
+	CIP:211.75.126.7;CTRY:TW;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:NTHCCAS01.nuvoton.com;PTR:211-75-126-7.hinet-ip.hinet.net;CAT:NONE;SFS:(13230031)(4636009)(376002)(136003)(396003)(346002)(39860400002)(186009)(61400799006)(48200799006)(451199024)(82310400011)(46966006)(36840700001)(40470700004)(4326008)(2906002)(8936002)(7416002)(8676002)(47076005)(356005)(26005)(478600001)(41300700001)(81166007)(36860700001)(5660300002)(76482006)(70206006)(54906003)(83380400001)(70586007)(316002)(42186006)(83170400001)(336012)(6266002)(73392003)(40480700001)(42882007)(1076003)(82202003)(2616005)(82740400003)(40460700003)(36756003)(110136005)(55446002)(45356006)(35450700002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: nuvoton.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Sep 2023 16:10:32.6170
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3567cec4-9447-42c5-f97e-08dbb861c8fd
+X-MS-Exchange-CrossTenant-Id: a3f24931-d403-4b4a-94f1-7d83ac638e07
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=a3f24931-d403-4b4a-94f1-7d83ac638e07;Ip=[211.75.126.7];Helo=[NTHCCAS01.nuvoton.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	HK3PEPF0000021F.apcprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: JH0PR03MB8211
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+	DKIM_SIGNED,DKIM_VALID,FORGED_GMAIL_RCVD,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,NML_ADSP_CUSTOM_MED,
+	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-On Mon, Sep 11, 2023 at 02:34:15PM +0530, Prashanth K wrote:
-> Currently if ucsi_send_command() fails, then we bail out without
-> clearing EVENT_PENDING flag. So when the next connector change
-> event comes, ucsi_connector_change() won't queue the con->work,
-> because of which none of the new events will be processed.
-> 
-> Fix this by clearing EVENT_PENDING flag if ucsi_send_command()
-> fails.
-> 
-> Cc: <stable@vger.kernel.org> # 5.16
-> Fixes: 512df95b9432 ("usb: typec: ucsi: Better fix for missing unplug events issue")
-> Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+Adding CI_HDRC_FORCE_VBUS_ACTIVE_ALWAYS flag to modify the vbus_active
+parameter to active in case the ChipIdea USB IP role is device-only and
+there is no otgsc register.
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+---
+ drivers/usb/chipidea/otg.c   | 5 ++++-
+ include/linux/usb/chipidea.h | 1 +
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
-> ---
->  drivers/usb/typec/ucsi/ucsi.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index c6dfe3d..509c67c 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -884,6 +884,7 @@ static void ucsi_handle_connector_change(struct work_struct *work)
->  	if (ret < 0) {
->  		dev_err(ucsi->dev, "%s: GET_CONNECTOR_STATUS failed (%d)\n",
->  			__func__, ret);
-> +		clear_bit(EVENT_PENDING, &con->ucsi->flags);
->  		goto out_unlock;
->  	}
->  
-
-thanks,
-
+diff --git a/drivers/usb/chipidea/otg.c b/drivers/usb/chipidea/otg.c
+index f5490f2a5b6b..647e98f4e351 100644
+--- a/drivers/usb/chipidea/otg.c
++++ b/drivers/usb/chipidea/otg.c
+@@ -130,8 +130,11 @@ enum ci_role ci_otg_role(struct ci_hdrc *ci)
+ 
+ void ci_handle_vbus_change(struct ci_hdrc *ci)
+ {
+-	if (!ci->is_otg)
++	if (!ci->is_otg) {
++		if (ci->platdata->flags & CI_HDRC_FORCE_VBUS_ACTIVE_ALWAYS)
++			usb_gadget_vbus_connect(&ci->gadget);
+ 		return;
++	}
+ 
+ 	if (hw_read_otgsc(ci, OTGSC_BSV) && !ci->vbus_active)
+ 		usb_gadget_vbus_connect(&ci->gadget);
+diff --git a/include/linux/usb/chipidea.h b/include/linux/usb/chipidea.h
+index 0b4f2d5faa08..5a7f96684ea2 100644
+--- a/include/linux/usb/chipidea.h
++++ b/include/linux/usb/chipidea.h
+@@ -64,6 +64,7 @@ struct ci_hdrc_platform_data {
+ #define CI_HDRC_PMQOS			BIT(15)
+ #define CI_HDRC_PHY_VBUS_CONTROL	BIT(16)
+ #define CI_HDRC_HAS_PORTSC_PEC_MISSED	BIT(17)
++#define CI_HDRC_FORCE_VBUS_ACTIVE_ALWAYS	BIT(18)
+ 	enum usb_dr_mode	dr_mode;
+ #define CI_HDRC_CONTROLLER_RESET_EVENT		0
+ #define CI_HDRC_CONTROLLER_STOPPED_EVENT	1
 -- 
-heikki
+2.33.0
+
 
