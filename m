@@ -1,60 +1,59 @@
-Return-Path: <linux-usb+bounces-310-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-311-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E99317A46E6
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 12:27:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5EE457A4750
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 12:40:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E99FA1C20B45
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 10:27:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 180FA2819A7
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 10:40:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57F821C6A2;
-	Mon, 18 Sep 2023 10:27:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C11C36C00;
+	Mon, 18 Sep 2023 10:31:31 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 954DE1C687
-	for <linux-usb@vger.kernel.org>; Mon, 18 Sep 2023 10:27:03 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D8CD1
-	for <linux-usb@vger.kernel.org>; Mon, 18 Sep 2023 03:27:01 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15F1A2B1DB
+	for <linux-usb@vger.kernel.org>; Mon, 18 Sep 2023 10:31:29 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F81D9;
+	Mon, 18 Sep 2023 03:31:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695032821; x=1726568821;
+  t=1695033088; x=1726569088;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=JQmufLGR5fmrLvM5oKrA2FVqksr8peM/TJOgolt5oTY=;
-  b=FFIVcKBFfX8/FQMdRPLgr1PsvZtqhil2zzp/zBDxs6ur49wqlzq+rgab
-   tWGdIlHUZVB0Vij1ADGZvyS0OHDvMlCVX8ZJ5b05K+VFAATw8+Y0bCdP/
-   wOwzgkzbnhgUuliB/Thd5kT7bs7kBvXizIhsNB6sHdYmSu07zl07Ytj2t
-   6gFBNkIguEbeCKUavszzZMKjkFOsKbHXd36R75X94s1n17uv88LApBFiv
-   h/qtab40B7uKRLkO9P8z+1iVz/Ov/kq8sj0pI6O+YXXiZNUMhOBVhmW2a
-   U4dWcVqxHeZ5WJEeqvZtnCEHl6NtgQM7Vec1dDzkVZxUe4w9KNL4vSnVl
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10836"; a="379527547"
+  bh=MdFmQamjzg5uG3QQj1WFkrbL/ippuubUhgQZmGyME44=;
+  b=MomIUwP/LikLmhP+HSh7JOR38xLye4bvicFoQL17BZ2DwsCbqYIlIZil
+   exaUsH7A+221ZgxOGM8osDtu334y1hMOENMDQ58JHA3B5YbsomI9aGheZ
+   rWqDqeITO/wzEGQ145lUK5YaVCM0j5YvDVGBHtAQgPYF3T/c52keZHYA4
+   Jp/2zDdDTrnhAbJT0v2VDJoH0tM5hLbwrTFr7K/fRp8kwXdKqa9/65x4Z
+   B4hywHnIBe0kDWb0Q1lpv6Jh2WEXDr1AI7S9anO3JKa2NE7g7gf1AuZ/F
+   b84UN07KTMqegVa/EQppuYlqL7qMiHnezHYYHn4aGErBIgYIPI55fOI09
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10836"; a="359036235"
 X-IronPort-AV: E=Sophos;i="6.02,156,1688454000"; 
-   d="scan'208";a="379527547"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2023 03:27:01 -0700
+   d="scan'208";a="359036235"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2023 03:31:28 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10836"; a="869500860"
+X-IronPort-AV: E=McAfee;i="6600,9927,10836"; a="835970674"
 X-IronPort-AV: E=Sophos;i="6.02,156,1688454000"; 
-   d="scan'208";a="869500860"
+   d="scan'208";a="835970674"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by orsmga004.jf.intel.com with SMTP; 18 Sep 2023 03:26:58 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 18 Sep 2023 13:26:57 +0300
-Date: Mon, 18 Sep 2023 13:26:57 +0300
+  by FMSMGA003.fm.intel.com with SMTP; 18 Sep 2023 03:31:25 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 18 Sep 2023 13:31:24 +0300
+Date: Mon, 18 Sep 2023 13:31:24 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: linux@roeck-us.net, linux-usb@vger.kernel.org,
-	gregkh@linuxfoundation.org, jun.li@nxp.com
-Subject: Re: [PATCH v2 1/2] usb: typec: tcpci: add check code for
- tcpci/regmap_read/write()
-Message-ID: <ZQgl8byyZNqe5Af1@kuha.fi.intel.com>
-References: <20230914121158.2955900-1-xu.yang_2@nxp.com>
+To: Michael Wu <michael@allwinnertech.com>
+Cc: linux@roeck-us.net, gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb:typec:tcpm:support double Rp to Vbus cable as sink
+Message-ID: <ZQgm/Lb4iZtWrWbs@kuha.fi.intel.com>
+References: <20230914003154.27977-1-michael@allwinnertech.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -63,112 +62,56 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230914121158.2955900-1-xu.yang_2@nxp.com>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230914003154.27977-1-michael@allwinnertech.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+	SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Thu, Sep 14, 2023 at 08:11:57PM +0800, Xu Yang wrote:
-> The return value from tcpci/regmap_read/write() must be checked to get
-> rid of the bad influence of other modules. This will add check code for
-> all of the rest read/write() callbacks and will show error when failed
-> to get ALERT register.
+On Thu, Sep 14, 2023 at 08:31:54AM +0800, Michael Wu wrote:
+> The USB Type-C Cable and Connector Specification defines the wire
+> connections for the USB Type-C to USB 2.0 Standard-A cable assembly
+> (Release 2.2, Chapter 3.5.2).
+> The Notes says that Pin A5 (CC) of the USB Type-C plug shall be connected
+> to Vbus through a resister Rp.
+> However, there is a large amount of such double Rp connected to Vbus
+> non-standard cables which produced by UGREEN circulating on the market, and
+> it can affects the normal operations of the state machine easily,
+> especially to CC1 and CC2 be pulled up at the same time.
+> In fact, we can regard those cables as sink to avoid abnormal state.
 > 
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> Message as follow:
+> [   58.900212] VBUS on
+> [   59.265433] CC1: 0 -> 3, CC2: 0 -> 3 [state TOGGLING, polarity 0, connected]
+> [   62.623308] CC1: 3 -> 0, CC2: 3 -> 0 [state TOGGLING, polarity 0, disconnected]
+> [   62.625006] VBUS off
+> [   62.625012] VBUS VSAFE0V
 > 
+> Signed-off-by: Michael Wu <michael@allwinnertech.com>
 > ---
-> Changes in v2:
->  - remove printing code
-> ---
->  drivers/usb/typec/tcpm/tcpci.c | 34 +++++++++++++++++++++++++---------
->  1 file changed, 25 insertions(+), 9 deletions(-)
+>  drivers/usb/typec/tcpm/tcpm.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-> index 0ee3e6e29bb1..8ccc2d1a8ffc 100644
-> --- a/drivers/usb/typec/tcpm/tcpci.c
-> +++ b/drivers/usb/typec/tcpm/tcpci.c
-> @@ -657,21 +657,28 @@ irqreturn_t tcpci_irq(struct tcpci *tcpci)
->  	int ret;
->  	unsigned int raw;
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index d962f67c95ae6..beb7143128667 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -519,7 +519,8 @@ static const char * const pd_rev[] = {
 >  
-> -	tcpci_read16(tcpci, TCPC_ALERT, &status);
-> +	ret = tcpci_read16(tcpci, TCPC_ALERT, &status);
-> +	if (ret < 0)
-> +		return ret;
+>  #define tcpm_port_is_sink(port) \
+>  	((tcpm_cc_is_sink((port)->cc1) && !tcpm_cc_is_sink((port)->cc2)) || \
+> -	 (tcpm_cc_is_sink((port)->cc2) && !tcpm_cc_is_sink((port)->cc1)))
+> +	 (tcpm_cc_is_sink((port)->cc2) && !tcpm_cc_is_sink((port)->cc1)) || \
+> +	 (tcpm_cc_is_sink((port)->cc1) && tcpm_cc_is_sink((port)->cc2)))
 >  
->  	/*
->  	 * Clear alert status for everything except RX_STATUS, which shouldn't
->  	 * be cleared until we have successfully retrieved message.
->  	 */
-> -	if (status & ~TCPC_ALERT_RX_STATUS)
-> -		tcpci_write16(tcpci, TCPC_ALERT,
-> +	if (status & ~TCPC_ALERT_RX_STATUS) {
-> +		ret = tcpci_write16(tcpci, TCPC_ALERT,
->  			      status & ~TCPC_ALERT_RX_STATUS);
-> +		if (ret < 0)
-> +			return ret;
-> +	}
->  
->  	if (status & TCPC_ALERT_CC_STATUS)
->  		tcpm_cc_change(tcpci->port);
->  
->  	if (status & TCPC_ALERT_POWER_STATUS) {
-> -		regmap_read(tcpci->regmap, TCPC_POWER_STATUS_MASK, &raw);
-> +		ret = regmap_read(tcpci->regmap, TCPC_POWER_STATUS_MASK, &raw);
-> +		if (ret < 0)
-> +			return ret;
->  		/*
->  		 * If power status mask has been reset, then the TCPC
->  		 * has reset.
-> @@ -687,7 +694,9 @@ irqreturn_t tcpci_irq(struct tcpci *tcpci)
->  		unsigned int cnt, payload_cnt;
->  		u16 header;
->  
-> -		regmap_read(tcpci->regmap, TCPC_RX_BYTE_CNT, &cnt);
-> +		ret = regmap_read(tcpci->regmap, TCPC_RX_BYTE_CNT, &cnt);
-> +		if (ret < 0)
-> +			return ret;
+>  #define tcpm_cc_is_source(cc) ((cc) == TYPEC_CC_RD)
+>  #define tcpm_cc_is_audio(cc) ((cc) == TYPEC_CC_RA)
 
-I think you still need to clear TCPC_ALERT_RX_STATUS in this case.
-Guenter, can you check this?
+This look OK to me, but I would still like to wait for comments from
+Guenter - just in case.
 
->  		/*
->  		 * 'cnt' corresponds to READABLE_BYTE_COUNT in section 4.4.14
->  		 * of the TCPCI spec [Rev 2.0 Ver 1.0 October 2017] and is
-> @@ -699,18 +708,25 @@ irqreturn_t tcpci_irq(struct tcpci *tcpci)
->  		else
->  			payload_cnt = 0;
->  
-> -		tcpci_read16(tcpci, TCPC_RX_HDR, &header);
-> +		ret = tcpci_read16(tcpci, TCPC_RX_HDR, &header);
-> +		if (ret < 0)
-> +			return ret;
->  		msg.header = cpu_to_le16(header);
->  
->  		if (WARN_ON(payload_cnt > sizeof(msg.payload)))
->  			payload_cnt = sizeof(msg.payload);
->  
-> -		if (payload_cnt > 0)
-> -			regmap_raw_read(tcpci->regmap, TCPC_RX_DATA,
-> +		if (payload_cnt > 0) {
-> +			ret = regmap_raw_read(tcpci->regmap, TCPC_RX_DATA,
->  					&msg.payload, payload_cnt);
-> +			if (ret < 0)
-> +				return ret;
-> +		}
->  
->  		/* Read complete, clear RX status alert bit */
-> -		tcpci_write16(tcpci, TCPC_ALERT, TCPC_ALERT_RX_STATUS);
-> +		ret = tcpci_write16(tcpci, TCPC_ALERT, TCPC_ALERT_RX_STATUS);
-> +		if (ret < 0)
-> +			return ret;
->  
->  		tcpm_pd_receive(tcpci->port, &msg);
->  	}
-> -- 
-> 2.34.1
+thanks,
 
 -- 
 heikki
