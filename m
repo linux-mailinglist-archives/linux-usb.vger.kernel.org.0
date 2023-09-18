@@ -1,63 +1,42 @@
-Return-Path: <linux-usb+bounces-321-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-322-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F9D17A4899
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 13:41:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 933E77A4930
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 14:06:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2E0411C211AB
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 11:41:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 47A12281812
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 12:06:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14A901CA84;
-	Mon, 18 Sep 2023 11:41:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9C4B1CAAD;
+	Mon, 18 Sep 2023 12:06:39 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEC745227
-	for <linux-usb@vger.kernel.org>; Mon, 18 Sep 2023 11:41:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3F2FC433C7;
-	Mon, 18 Sep 2023 11:41:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1695037293;
-	bh=k5whRDb703pFSoW6vBuZiC/uLzAA5qCrmwIb0niMTaw=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8D7D1CA88
+	for <linux-usb@vger.kernel.org>; Mon, 18 Sep 2023 12:06:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E46C2C433C7;
+	Mon, 18 Sep 2023 12:06:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1695038799;
+	bh=JA8ImSCoa1Akn2EcO+w/VW+LE8TU6wMpSL+lt9FkX60=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Aq8BDUPTeZUbSi6r80BUN/6MwH1BAmiHYY4SHfZ7onFlzdMGfEKZJql8eJgFd8kcU
-	 VSUGCximU6yLeulyz9sCP0KhTKpgfeEuARR1qg4bJb/2c3E2+Aaq/FI7E9KE3mXGPA
-	 mMkzDccqY/MfireMOZxTAFoqx04P3/eEENahXkm++IxXno8NknhrffAlyV8usX4nkg
-	 fRFkfnnveLguRIcv9+LTO4c7dt1uE+rem3E3BlUrXtrNJpo5JMLyLk57Bw4w+y0H+Q
-	 CpPUMugfzFQ2rqTkkxwCEL03tDYtT39/xBNsmqTbEmsL2yuFfD5IL+86z+BlChrW+f
-	 YsxfJTuf+MXoQ==
-Date: Mon, 18 Sep 2023 14:41:29 +0300
-From: Leon Romanovsky <leon@kernel.org>
-To: Christoph Hellwig <hch@lst.de>
-Cc: Christian Brauner <brauner@kernel.org>,
-	Al Viro <viro@zeniv.linux.org.uk>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Fenghua Yu <fenghua.yu@intel.com>,
-	Reinette Chatre <reinette.chatre@intel.com>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-	Tejun Heo <tj@kernel.org>,
-	Trond Myklebust <trond.myklebust@hammerspace.com>,
-	Anna Schumaker <anna@kernel.org>, Kees Cook <keescook@chromium.org>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Naohiro Aota <naohiro.aota@wdc.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-s390@vger.kernel.org, linux-rdma@vger.kernel.org,
-	linux-nfs@vger.kernel.org, linux-hardening@vger.kernel.org,
-	cgroups@vger.kernel.org
-Subject: Re: [PATCH 06/19] qibfs: use simple_release_fs
-Message-ID: <20230918114129.GA103601@unreal>
-References: <20230913111013.77623-1-hch@lst.de>
- <20230913111013.77623-7-hch@lst.de>
+	b=LwH9rlId3WpcRM9/GuMshIoS21LpqWu+G3vjeb1s0cm0ueidndqX/Hw+w9bW8tEjc
+	 3knTVBvD207NWx6uF9mWAMayCVmPkw3OKdJ6m/IZ6sZC5ROAVFh93Y2DEUR7iXNqBw
+	 B+7Nxxx9rilLzV2lV3PxWFWY6VuLGG1wQPuTts64=
+Date: Mon, 18 Sep 2023 14:06:34 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Linyu Yuan <quic_linyyuan@quicinc.com>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v7 2/4] usb: gadget: add anonymous definition in some
+ struct for trace purpose
+Message-ID: <2023091831-applause-headless-8e91@gregkh>
+References: <20230918112534.2108-1-quic_linyyuan@quicinc.com>
+ <20230918112534.2108-3-quic_linyyuan@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -66,22 +45,34 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230913111013.77623-7-hch@lst.de>
+In-Reply-To: <20230918112534.2108-3-quic_linyyuan@quicinc.com>
 
-On Wed, Sep 13, 2023 at 08:10:00AM -0300, Christoph Hellwig wrote:
-> qibfs currently has convoluted code to allow registering HCAs while qibfs
-> is not mounted and vice versa.  Switch to using simple_release_fs every
-> time an entry is added to pin the fs instance and remove all the boiler
-> plate code.
+On Mon, Sep 18, 2023 at 07:25:32PM +0800, Linyu Yuan wrote:
+> Some UDC trace event will save usb udc information, but it use one int
+> size buffer to save one bit information of usb udc, it waste trace buffer.
 > 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> ---
->  drivers/infiniband/hw/qib/qib.h      |   4 +-
->  drivers/infiniband/hw/qib/qib_fs.c   | 105 ++++++---------------------
->  drivers/infiniband/hw/qib/qib_init.c |  32 +++-----
->  3 files changed, 36 insertions(+), 105 deletions(-)
+> Add anonymous union which have u32 members can be used by trace event
+> during fast assign stage to save more entries with same trace ring buffer
+> size.
 > 
+> In order to access each bit with BIT() macro, add different definition for
+> each bit fields according host little/big endian to make sure it has same
+> eacho bit field have same bit position in memory.
 
-Thanks,
-Reviewed-by: Leon Romanovsky <leon@kernel.org>
+typo?
+
+> Add some macros or helper for later trace event usage which follow the
+> udc structs, As when possible future changes to udc related structs,
+> developers will easy notice them.
+
+This isn't going to work at all, there's nothing to keep the two in
+sync.
+
+As you are using bitmasks now, wonderful, just use those only and ignore
+the bitfield definitions, that's not going to work mixing the two at
+all.
+
+thanks,
+
+greg k-h
 
