@@ -1,133 +1,181 @@
-Return-Path: <linux-usb+bounces-299-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-300-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D1E97A41B3
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 09:03:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D995B7A42F6
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 09:40:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 835771C20D8A
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 07:03:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 003F01C20EFA
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 07:40:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35BFA7468;
-	Mon, 18 Sep 2023 07:03:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF6C679FF;
+	Mon, 18 Sep 2023 07:40:28 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AF0A46A5
-	for <linux-usb@vger.kernel.org>; Mon, 18 Sep 2023 07:03:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16DF4C433C7;
-	Mon, 18 Sep 2023 07:03:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1695020624;
-	bh=opjulFiGRuWJn3Kbr+JNW9QH6jk0wc+wSlz5wGS+cYs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=p5Ywz1ZVlBdMvCo2Xj/XXT0VztyffGjTs4GlZ/6PVUk3jCNSZTu/Z8ZLYXNq7PmMA
-	 Pzec9PzHCI/f0czfR43ykFT0m8aTYGTjUITwx5N7Mc04RDkaIaXpe2WigxUQIeF6XM
-	 BsDgoJWZA64LiCtb6GXp65VCn+AMpbJmQTOjkfTk=
-Date: Mon, 18 Sep 2023 09:03:39 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Xingxing Luo <xingxing.luo@unisoc.com>
-Cc: b-liu@ti.com, s.shtylyov@omp.ru, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, xingxing0070.luo@gmail.com,
-	Zhiyong.Liu@unisoc.com, Cixi.Geng1@unisoc.com,
-	Orson.Zhai@unisoc.com, zhang.lyra@gmail.com
-Subject: Re: [PATCH V2] usb: musb: Get the musb_qh poniter after musb_giveback
-Message-ID: <2023091824-balancing-drizzly-4921@gregkh>
-References: <20230918061038.30949-1-xingxing.luo@unisoc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67C47749D
+	for <linux-usb@vger.kernel.org>; Mon, 18 Sep 2023 07:40:27 +0000 (UTC)
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27AA61708;
+	Mon, 18 Sep 2023 00:38:05 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38I7SOD0030988;
+	Mon, 18 Sep 2023 07:37:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=r2hWKlEpKe/JKJubx7igl+rfCDrfvf22cMzTlHAy4t8=;
+ b=XiZhIz1xqNMtaNAHZTmPN3N11LA57HogMY2oYOkI+ApYuLrvc7ZoP4cCVjrFHSCr/smM
+ vZLtLppQoXrMsDNJnGSEwM9HHYwLQu9JwG61qOXeTkPaPONBfRstGE47IwIXImSpfjZw
+ w/8XvdBORFna5qkHpQ7u2T47PpbhxFCY0nx80gQZ063TpeAjYUN0PXe2pLsgtRxcJnSt
+ S6P0mw6OGWhpT8e8x8BWIJwwBNK8DdcmDm2imRcJ7Eulc4zAoytNJt1+qFbKGRzcSttB
+ wqAcSDmR+LEzC1wLd7o6hT6RqbHZFdESpwf0WLGP1VAZ99f+X6DZeoJRscYDsB70XMhz xw== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t53ayaqb1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 18 Sep 2023 07:37:56 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38I7btsL009318
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 18 Sep 2023 07:37:55 GMT
+Received: from [10.216.25.71] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Mon, 18 Sep
+ 2023 00:37:52 -0700
+Message-ID: <a890ac60-0562-48c3-9aa1-eb06ec21c69d@quicinc.com>
+Date: Mon, 18 Sep 2023 13:07:26 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230918061038.30949-1-xingxing.luo@unisoc.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] usb: gadget: ncm: Handle decoding of multiple NTB's in
+ unwrap call
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC: Linyu Yuan <quic_linyyuan@quicinc.com>,
+        =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
+        <quic_jackp@quicinc.com>, <stable@vger.kernel.org>
+References: <20230915061001.18884-1-quic_kriskura@quicinc.com>
+ <2023091743-tightly-drivable-4360@gregkh>
+Content-Language: en-US
+From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <2023091743-tightly-drivable-4360@gregkh>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: A_gBGT8CUmtoqORQV7dXy2fqtBhJWHR6
+X-Proofpoint-ORIG-GUID: A_gBGT8CUmtoqORQV7dXy2fqtBhJWHR6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-09-15_20,2023-09-15_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
+ spamscore=0 mlxscore=0 impostorscore=0 malwarescore=0 bulkscore=0
+ clxscore=1015 priorityscore=1501 mlxlogscore=999 phishscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2308100000 definitions=main-2309180066
 
-On Mon, Sep 18, 2023 at 02:10:38PM +0800, Xingxing Luo wrote:
-> When multiple threads are performing USB transmission, musb->lock will be
-> unlocked when musb_giveback is executed. At this time, qh may be released
-> in the dequeue process in other threads, resulting in a wild pointer, so
-> it needs to be here get qh again, and judge whether qh is NULL, and when
-> dequeue, you need to set qh to NULL.
+
+
+On 9/17/2023 1:34 PM, Greg Kroah-Hartman wrote:
+>> Cc: stable@vger.kernel.org
 > 
-> Fixes: dbac5d07d13e ("usb: musb: host: don't start next rx urb if current one failed")
-> Signed-off-by: Xingxing Luo <xingxing.luo@unisoc.com>
-> ---
->  drivers/usb/musb/musb_host.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/musb/musb_host.c b/drivers/usb/musb/musb_host.c
-> index a02c29216955..bc4507781167 100644
-> --- a/drivers/usb/musb/musb_host.c
-> +++ b/drivers/usb/musb/musb_host.c
-> @@ -321,10 +321,16 @@ static void musb_advance_schedule(struct musb *musb, struct urb *urb,
->  	musb_giveback(musb, urb, status);
->  	qh->is_ready = ready;
->  
-> +	/*
-> +	 * musb->lock had been unlocked in musb_giveback, so qh may
-> +	 * be freed, need to get it again
-> +	 */
-> +	qh = musb_ep_get_qh(hw_ep, is_in);
-> +
->  	/* reclaim resources (and bandwidth) ASAP; deschedule it, and
->  	 * invalidate qh as soon as list_empty(&hep->urb_list)
->  	 */
-> -	if (list_empty(&qh->hep->urb_list)) {
-> +	if (qh && list_empty(&qh->hep->urb_list)) {
->  		struct list_head	*head;
->  		struct dma_controller	*dma = musb->dma_controller;
->  
-> @@ -2398,6 +2404,7 @@ static int musb_urb_dequeue(struct usb_hcd *hcd, struct urb *urb, int status)
->  		 * and its URB list has emptied, recycle this qh.
->  		 */
->  		if (ready && list_empty(&qh->hep->urb_list)) {
-> +			musb_ep_set_qh(qh->hw_ep, is_in, NULL);
->  			qh->hep->hcpriv = NULL;
->  			list_del(&qh->ring);
->  			kfree(qh);
-> -- 
-> 2.17.1
-> 
+> What commit id does this fix?
 > 
 
-Hi,
+Hi Greg,
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+This fixes the initial patch that added the driver:
+9f6ce4240a2bf456402c15c06768059e5973f28c
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+>> Reviewed-by: Maciej Żenczykowski <maze@google.com>
+>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>> ---
+>>   drivers/usb/gadget/function/f_ncm.c | 26 +++++++++++++++++++-------
+>>   1 file changed, 19 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/drivers/usb/gadget/function/f_ncm.c b/drivers/usb/gadget/function/f_ncm.c
+>> index feccf4c8cc4f..f00f051438ec 100644
+>> --- a/drivers/usb/gadget/function/f_ncm.c
+>> +++ b/drivers/usb/gadget/function/f_ncm.c
+>> @@ -1156,7 +1156,8 @@ static int ncm_unwrap_ntb(struct gether *port,
+>>   			  struct sk_buff_head *list)
+>>   {
+>>   	struct f_ncm	*ncm = func_to_ncm(&port->func);
+>> -	__le16		*tmp = (void *) skb->data;
+>> +	unsigned char	*ntb_ptr = (void *) skb->data;
+> 
+> Why persist with the extra ' ', didn't checkpatch complain about this?
+> 
+> And why the cast at all?
+> 
+My bad. I ran the checkpatch and got the following result:
 
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/process/submitting-patches.rst for what
-  needs to be done here to properly describe this.
+kriskura@hu-kriskura-hyd:/local/mnt/workspace/krishna/510/testncm/kernel$ 
+./scripts/checkpatch.pl --strict 
+0001-usb-gadget-ncm-Handle-decoding-of-multiple-NTB-s-in-.patch
+WARNING: Prefer a maximum 75 chars per line (possible unwrapped commit 
+description?)
+#12:
+unwraps the obtained request data assuming only one NTB is present, we loose
 
-- You have marked a patch with a "Fixes:" tag for a commit that is in an
-  older released kernel, yet you do not have a cc: stable line in the
-  signed-off-by area at all, which means that the patch will not be
-  applied to any older kernel releases.  To properly fix this, please
-  follow the documented rules in the
-  Documetnation/process/stable-kernel-rules.rst file for how to resolve
-  this.
+CHECK: No space is necessary after a cast
+#34: FILE: drivers/usb/gadget/function/f_ncm.c:1159:
++       unsigned char   *ntb_ptr = (void *) skb->data;
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+CHECK: No space is necessary after a cast
+#46: FILE: drivers/usb/gadget/function/f_ncm.c:1176:
++       tmp = (void *) ntb_ptr;
 
-thanks,
+CHECK: No space is necessary after a cast
+#93: FILE: drivers/usb/gadget/function/f_ncm.c:1329:
++               ntb_ptr = (unsigned char *) (ntb_ptr + block_len);
 
-greg k-h's patch email bot
+total: 0 errors, 1 warnings, 3 checks, 67 lines checked
+
+
+I ignored the checks and saw only that errors are 0. Seems like I missed 
+fixing the commit text wrapping to 75 chars (On line 12 it has 76 
+chars). Will fix it up in v3.
+
+As per the cast, I initially didn't add any cast and saw that the code 
+was not able to parse the dwSignature of the NTH and decoding of all 
+packets was failing. Only when I added the cast, was the function able 
+to decode all packets properly.
+
+>> +	__le16		*tmp;
+>>   	unsigned	index, index2;
+>>   	int		ndp_index;
+>>   	unsigned	dg_len, dg_len2;
+>> @@ -1169,6 +1170,10 @@ static int ncm_unwrap_ntb(struct gether *port,
+>>   	const struct ndp_parser_opts *opts = ncm->parser_opts;
+>>   	unsigned	crc_len = ncm->is_crc ? sizeof(uint32_t) : 0;
+>>   	int		dgram_counter;
+>> +	int		to_process = skb->len;
+>> +
+>> +parse_ntb:
+>> +	tmp = (void *) ntb_ptr;
+> 
+> Again, no blank space please.
+> 
+> And why the cast?
+> 
+the second cast here was just to be in sync with the original code;
+__le16		*tmp = (void *) skb->data;
+
+I didn't try removing this and running the test. Will check if the 
+second one is required or if decoding is proper without it or not.
+
+Regards,
+Krishna,
 
