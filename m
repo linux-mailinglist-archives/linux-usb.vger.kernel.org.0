@@ -1,132 +1,175 @@
-Return-Path: <linux-usb+bounces-309-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-310-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE5DA7A45E4
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 11:29:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E99317A46E6
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 12:27:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1409C1C20E0B
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 09:29:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E99FA1C20B45
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 10:27:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8BBE1BDD8;
-	Mon, 18 Sep 2023 09:28:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57F821C6A2;
+	Mon, 18 Sep 2023 10:27:05 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C8F514AA4;
-	Mon, 18 Sep 2023 09:28:53 +0000 (UTC)
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A47118;
-	Mon, 18 Sep 2023 02:28:49 -0700 (PDT)
-X-SpamFilter-By: ArmorX SpamTrap 5.78 with qID 38I9S5Nq81942313, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-	by rtits2.realtek.com.tw (8.15.2/2.92/5.92) with ESMTPS id 38I9S5Nq81942313
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 18 Sep 2023 17:28:05 +0800
-Received: from RTEXMBS06.realtek.com.tw (172.21.6.99) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Mon, 18 Sep 2023 17:28:04 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS06.realtek.com.tw (172.21.6.99) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Mon, 18 Sep 2023 17:28:03 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::7445:d92b:d0b3:f79c]) by
- RTEXMBS04.realtek.com.tw ([fe80::7445:d92b:d0b3:f79c%5]) with mapi id
- 15.01.2375.007; Mon, 18 Sep 2023 17:28:03 +0800
-From: Hayes Wang <hayeswang@realtek.com>
-To: Eric Dumazet <edumazet@google.com>
-CC: "kuba@kernel.org" <kuba@kernel.org>,
-        "davem@davemloft.net"
-	<davem@davemloft.net>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        nic_swsd <nic_swsd@realtek.com>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org"
-	<linux-usb@vger.kernel.org>,
-        "bjorn@mork.no" <bjorn@mork.no>,
-        "pabeni@redhat.com" <pabeni@redhat.com>
-Subject: RE: [PATCH net-next resend 1/2] r8152: remove queuing rx packets in driver
-Thread-Topic: [PATCH net-next resend 1/2] r8152: remove queuing rx packets in
- driver
-Thread-Index: AQHZ6gOv5dotXJafx06AY5ZZ4fOWz7AfsJgAgACIv9D//4eLAIAAi13g
-Date: Mon, 18 Sep 2023 09:28:03 +0000
-Message-ID: <e3ad16c0e8414af6be25f4bf9ab5e1e3@realtek.com>
-References: <20230918074202.2461-426-nic_swsd@realtek.com>
- <20230918074202.2461-427-nic_swsd@realtek.com>
- <CANn89iJmdkyn8_hU4esycRG-XvPa_Djsp6PyaOX5cYP1Obdr4g@mail.gmail.com>
- <7235821eb09242adaa651172729f76aa@realtek.com>
- <CANn89i+Tou=YwteEd5ceaHP54sZpkRotwcV6YWAs4jAUq=ocJg@mail.gmail.com>
-In-Reply-To: <CANn89i+Tou=YwteEd5ceaHP54sZpkRotwcV6YWAs4jAUq=ocJg@mail.gmail.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-x-originating-ip: [172.22.228.6]
-x-kse-serverinfo: RTEXMBS06.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 954DE1C687
+	for <linux-usb@vger.kernel.org>; Mon, 18 Sep 2023 10:27:03 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D8CD1
+	for <linux-usb@vger.kernel.org>; Mon, 18 Sep 2023 03:27:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695032821; x=1726568821;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JQmufLGR5fmrLvM5oKrA2FVqksr8peM/TJOgolt5oTY=;
+  b=FFIVcKBFfX8/FQMdRPLgr1PsvZtqhil2zzp/zBDxs6ur49wqlzq+rgab
+   tWGdIlHUZVB0Vij1ADGZvyS0OHDvMlCVX8ZJ5b05K+VFAATw8+Y0bCdP/
+   wOwzgkzbnhgUuliB/Thd5kT7bs7kBvXizIhsNB6sHdYmSu07zl07Ytj2t
+   6gFBNkIguEbeCKUavszzZMKjkFOsKbHXd36R75X94s1n17uv88LApBFiv
+   h/qtab40B7uKRLkO9P8z+1iVz/Ov/kq8sj0pI6O+YXXiZNUMhOBVhmW2a
+   U4dWcVqxHeZ5WJEeqvZtnCEHl6NtgQM7Vec1dDzkVZxUe4w9KNL4vSnVl
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10836"; a="379527547"
+X-IronPort-AV: E=Sophos;i="6.02,156,1688454000"; 
+   d="scan'208";a="379527547"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2023 03:27:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10836"; a="869500860"
+X-IronPort-AV: E=Sophos;i="6.02,156,1688454000"; 
+   d="scan'208";a="869500860"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by orsmga004.jf.intel.com with SMTP; 18 Sep 2023 03:26:58 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 18 Sep 2023 13:26:57 +0300
+Date: Mon, 18 Sep 2023 13:26:57 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: linux@roeck-us.net, linux-usb@vger.kernel.org,
+	gregkh@linuxfoundation.org, jun.li@nxp.com
+Subject: Re: [PATCH v2 1/2] usb: typec: tcpci: add check code for
+ tcpci/regmap_read/write()
+Message-ID: <ZQgl8byyZNqe5Af1@kuha.fi.intel.com>
+References: <20230914121158.2955900-1-xu.yang_2@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-	SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230914121158.2955900-1-xu.yang_2@nxp.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-RXJpYyBEdW1hemV0IDxlZHVtYXpldEBnb29nbGUuY29tPg0KPiBTZW50OiBNb25kYXksIFNlcHRl
-bWJlciAxOCwgMjAyMyA0OjUzIFBNDQpbLi4uXQ0KPiA+ID4gWzFdIE1vcmUgY29udmVudGlvbmFs
-IHdheSB0byB0byBwdXQgdGhpcyBjb25kaXRpb24gYXQgdGhlIGJlZ2lubmluZyBvZg0KPiA+ID4g
-dGhlIHdoaWxlICgpIGxvb3AsDQo+ID4gPiBiZWNhdXNlIHRoZSBidWRnZXQgY291bGQgYmUgemVy
-by4NCj4gPg0KPiA+IElmIHRoZSBidWRnZXQgaXMgemVybywgdGhlIGZ1bmN0aW9uIHdvdWxkbid0
-IGJlIGNhbGxlZC4NCj4gPiBhN2I4ZDYwYjM3MjMgKCJyODE1MjogY2hlY2sgYnVkZ2V0IGZvciBy
-ODE1Ml9wb2xsIikgYXZvaWRzIGl0Lg0KPiANCj4gWWVzLCBhbmQgd2UgY291bGQgcmV2ZXJ0ICB0
-aGlzIHBhdGNoIDovDQo+IA0KPiBNb3ZpbmcgdGhlIHRlc3QgYXQgdGhlIGZyb250IG9mIHRoZSBs
-b29wIGxpa2UgbW9zdCBvdGhlciBkcml2ZXJzIHdvdWxkDQo+IGhhdmUgYXZvaWRlZCB0aGlzIGlz
-c3VlLA0KPiBhbmQgYXZvaWRlZCB0aGlzIGRpc2N1c3Npb24uDQoNCkkgZG9uJ3QgZG8gdGhhdCBi
-ZWNhdXNlIEkgd2FudCB0byBhdm9pZCBzb21lIGNoZWNrcyBhbmQgc3BpbiBsb2NrIGJlZm9yZSBh
-bmQgYWZ0ZXINCnRoZSBsb29wLiBGb3IgZXhhbXBsZSwNCg0KMS4gc3BpbiBsb2NrDQoyLiBtb3Zl
-IHRoZSByZWFkeSBsaXN0cyB0byBsb2NhbA0KMy4gc3BpbiB1bmxvY2sNCjQuIGxvb3AgdGhlIGxp
-c3RzDQo1LiBicmVhayB0aGUgbG9vcCBpZiBidWRnZXQgaXMgemVybw0KNi4gc3BpbiBsb2NrDQo3
-LiBtb3ZlIHRoZSByZW1haW5lZCBsaXN0IGJhY2sgZm9yIG5leHQgc2NoZWR1bGUNCjguIHNwaW4g
-dW5sb2NrDQoNCkkgY291bGQgYXZvaWQgdGhlIHJlZHVuZGFudCBiZWhhdmlvci4NCg0KPiA+ID4g
-PiArICAgICAgICAgICAgICAgaWYgKHdvcmtfZG9uZSA+PSBidWRnZXQpDQo+ID4gPiA+ICsgICAg
-ICAgICAgICAgICAgICAgICAgIGJyZWFrOw0KPiA+ID4gPiAgICAgICAgIH0NCj4gPiA+ID4NCj4g
-PiA+ID4gKyAgICAgICAvKiBTcGxpY2UgdGhlIHJlbWFpbmVkIGxpc3QgYmFjayB0byByeF9kb25l
-ICovDQo+ID4gPiA+ICAgICAgICAgaWYgKCFsaXN0X2VtcHR5KCZyeF9xdWV1ZSkpIHsNCj4gPiA+
-ID4gICAgICAgICAgICAgICAgIHNwaW5fbG9ja19pcnFzYXZlKCZ0cC0+cnhfbG9jaywgZmxhZ3Mp
-Ow0KPiA+ID4gPiAtICAgICAgICAgICAgICAgbGlzdF9zcGxpY2VfdGFpbCgmcnhfcXVldWUsICZ0
-cC0+cnhfZG9uZSk7DQo+ID4gPiA+ICsgICAgICAgICAgICAgICBsaXN0X3NwbGljZSgmcnhfcXVl
-dWUsICZ0cC0+cnhfZG9uZSk7DQo+ID4gPiA+ICAgICAgICAgICAgICAgICBzcGluX3VubG9ja19p
-cnFyZXN0b3JlKCZ0cC0+cnhfbG9jaywgZmxhZ3MpOw0KPiA+ID4gPiAgICAgICAgIH0NCj4gPiA+
-ID4NCj4gPiA+ID4gIG91dDE6DQo+ID4gPiA+IC0gICAgICAgcmV0dXJuIHdvcmtfZG9uZTsNCj4g
-PiA+ID4gKyAgICAgICBpZiAod29ya19kb25lID4gYnVkZ2V0KQ0KPiA+ID4NCj4gPiA+IFRoaXMg
-KHdvcmtfZG9uZSA+YnVkZ2V0KSBjb25kaXRpb24gd291bGQgbmV2ZXIgYmUgdHJ1ZSBpZiBwb2lu
-dCBbMV0gaXMNCj4gPiA+IGFkZHJlc3NlZC4NCj4gPg0KPiA+IEEgYnVsayB0cmFuc2ZlciBtYXkg
-Y29udGFpbiBtYW55IHBhY2tldHMsIHNvIHRoZSB3b3JrX2RvbmUgbWF5IGJlIG1vcmUNCj4gdGhh
-biBidWRnZXQuDQo+ID4gVGhhdCBpcyB3aHkgSSBxdWV1ZSB0aGUgcGFja2V0cyBpbiB0aGUgZHJp
-dmVyIGJlZm9yZSB0aGlzIHBhdGNoLg0KPiA+IEZvciBleGFtcGxlLCBpZiBhIGJ1bGsgdHJhbnNm
-ZXIgY29udGFpbnMgNzAgcGFja2V0IGFuZCBidWRnZXQgaXMgNjQsDQo+ID4gbmFwaV9ncm9fcmVj
-ZWl2ZSB3b3VsZCBiZSBjYWxsZWQgZm9yIHRoZSBmaXJzdCA2NCBwYWNrZXRzIGFuZCA2IHBhY2tl
-dHMNCj4gd291bGQNCj4gPiBiZSBxdWV1ZWQgaW4gZHJpdmVyIGZvciBuZXh0IHNjaGVkdWxlLiBB
-ZnRlciB0aGlzIHBhdGNoLCBuYXBpX2dyb19yZWNlaXZlKCkNCj4gd291bGQNCj4gPiBiZSBjYWxs
-ZWQgZm9yIHRoZSA3MCBwYWNrZXRzLCBldmVuIHRoZSBidWRnZXQgaXMgNjQuIEFuZCB0aGUgcmVt
-YWluZWQgYnVsaw0KPiB0cmFuc2ZlcnMNCj4gPiB3b3VsZCBiZSBoYW5kbGVkIGZvciBuZXh0IHNj
-aGVkdWxlLg0KPiANCj4gQSBjb21tZW50IHdvdWxkIGJlIG5pY2UuIE5BUEkgbG9naWMgc2hvdWxk
-IGxvb2sgdGhlIHNhbWUgaW4gYWxsIGRyaXZlcnMuDQo+IA0KPiBJZiBhIGRyaXZlciBoYXMgc29t
-ZSBwZWN1bGlhcml0aWVzLCBjb21tZW50cyB3b3VsZCBoZWxwIHRvIG1haW50YWluDQo+IHRoZSBj
-b2RlIGluIHRoZSBsb25nIHJ1bi4NCg0KSSB3b3VsZCB1cGRhdGUgaXQuIFRoYW5rcy4NCg0KQmVz
-dCBSZWdhcmRzLA0KSGF5ZXMNCg0KDQo=
+On Thu, Sep 14, 2023 at 08:11:57PM +0800, Xu Yang wrote:
+> The return value from tcpci/regmap_read/write() must be checked to get
+> rid of the bad influence of other modules. This will add check code for
+> all of the rest read/write() callbacks and will show error when failed
+> to get ALERT register.
+> 
+> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> 
+> ---
+> Changes in v2:
+>  - remove printing code
+> ---
+>  drivers/usb/typec/tcpm/tcpci.c | 34 +++++++++++++++++++++++++---------
+>  1 file changed, 25 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
+> index 0ee3e6e29bb1..8ccc2d1a8ffc 100644
+> --- a/drivers/usb/typec/tcpm/tcpci.c
+> +++ b/drivers/usb/typec/tcpm/tcpci.c
+> @@ -657,21 +657,28 @@ irqreturn_t tcpci_irq(struct tcpci *tcpci)
+>  	int ret;
+>  	unsigned int raw;
+>  
+> -	tcpci_read16(tcpci, TCPC_ALERT, &status);
+> +	ret = tcpci_read16(tcpci, TCPC_ALERT, &status);
+> +	if (ret < 0)
+> +		return ret;
+>  
+>  	/*
+>  	 * Clear alert status for everything except RX_STATUS, which shouldn't
+>  	 * be cleared until we have successfully retrieved message.
+>  	 */
+> -	if (status & ~TCPC_ALERT_RX_STATUS)
+> -		tcpci_write16(tcpci, TCPC_ALERT,
+> +	if (status & ~TCPC_ALERT_RX_STATUS) {
+> +		ret = tcpci_write16(tcpci, TCPC_ALERT,
+>  			      status & ~TCPC_ALERT_RX_STATUS);
+> +		if (ret < 0)
+> +			return ret;
+> +	}
+>  
+>  	if (status & TCPC_ALERT_CC_STATUS)
+>  		tcpm_cc_change(tcpci->port);
+>  
+>  	if (status & TCPC_ALERT_POWER_STATUS) {
+> -		regmap_read(tcpci->regmap, TCPC_POWER_STATUS_MASK, &raw);
+> +		ret = regmap_read(tcpci->regmap, TCPC_POWER_STATUS_MASK, &raw);
+> +		if (ret < 0)
+> +			return ret;
+>  		/*
+>  		 * If power status mask has been reset, then the TCPC
+>  		 * has reset.
+> @@ -687,7 +694,9 @@ irqreturn_t tcpci_irq(struct tcpci *tcpci)
+>  		unsigned int cnt, payload_cnt;
+>  		u16 header;
+>  
+> -		regmap_read(tcpci->regmap, TCPC_RX_BYTE_CNT, &cnt);
+> +		ret = regmap_read(tcpci->regmap, TCPC_RX_BYTE_CNT, &cnt);
+> +		if (ret < 0)
+> +			return ret;
+
+I think you still need to clear TCPC_ALERT_RX_STATUS in this case.
+Guenter, can you check this?
+
+>  		/*
+>  		 * 'cnt' corresponds to READABLE_BYTE_COUNT in section 4.4.14
+>  		 * of the TCPCI spec [Rev 2.0 Ver 1.0 October 2017] and is
+> @@ -699,18 +708,25 @@ irqreturn_t tcpci_irq(struct tcpci *tcpci)
+>  		else
+>  			payload_cnt = 0;
+>  
+> -		tcpci_read16(tcpci, TCPC_RX_HDR, &header);
+> +		ret = tcpci_read16(tcpci, TCPC_RX_HDR, &header);
+> +		if (ret < 0)
+> +			return ret;
+>  		msg.header = cpu_to_le16(header);
+>  
+>  		if (WARN_ON(payload_cnt > sizeof(msg.payload)))
+>  			payload_cnt = sizeof(msg.payload);
+>  
+> -		if (payload_cnt > 0)
+> -			regmap_raw_read(tcpci->regmap, TCPC_RX_DATA,
+> +		if (payload_cnt > 0) {
+> +			ret = regmap_raw_read(tcpci->regmap, TCPC_RX_DATA,
+>  					&msg.payload, payload_cnt);
+> +			if (ret < 0)
+> +				return ret;
+> +		}
+>  
+>  		/* Read complete, clear RX status alert bit */
+> -		tcpci_write16(tcpci, TCPC_ALERT, TCPC_ALERT_RX_STATUS);
+> +		ret = tcpci_write16(tcpci, TCPC_ALERT, TCPC_ALERT_RX_STATUS);
+> +		if (ret < 0)
+> +			return ret;
+>  
+>  		tcpm_pd_receive(tcpci->port, &msg);
+>  	}
+> -- 
+> 2.34.1
+
+-- 
+heikki
 
