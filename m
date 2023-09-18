@@ -1,127 +1,147 @@
-Return-Path: <linux-usb+bounces-328-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-335-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7B767A4C33
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 17:29:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA9E77A4E65
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 18:15:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F44E1C2083C
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 15:29:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C83E91C218C8
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 16:15:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C95571D6B7;
-	Mon, 18 Sep 2023 15:28:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6256323764;
+	Mon, 18 Sep 2023 16:15:06 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F001D1D6B2
-	for <linux-usb@vger.kernel.org>; Mon, 18 Sep 2023 15:28:36 +0000 (UTC)
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C1DC12A;
-	Mon, 18 Sep 2023 08:26:56 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 1F9761FF93;
-	Mon, 18 Sep 2023 15:24:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1695050653; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ZTsaizh9uJKTEcz6c5p2g2QGw5JzmlLl2sAISOCHTb0=;
-	b=uNDNyyEycKJBCT8u9QqHT2QXUZQSV7KEwqPhRKMT8g78tvewNow7/PM0Dx8tyzi3UtSwzx
-	cITrOJ3w7steQa1htyVtogiSbMXtJDg/hwSQ96Jf43HJYSsCYwhj25c8Sf6DEVuyfURH1Y
-	aU9810o4zzQKZkEvrA6beovh34oBypU=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-	(No client certificate requested)
-	by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A48001358A;
-	Mon, 18 Sep 2023 15:24:12 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-	by imap2.suse-dmz.suse.de with ESMTPSA
-	id 7NFIJ5xrCGVOWQAAMHmgww
-	(envelope-from <mkoutny@suse.com>); Mon, 18 Sep 2023 15:24:12 +0000
-Date: Mon, 18 Sep 2023 17:24:11 +0200
-From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To: Christoph Hellwig <hch@lst.de>
-Cc: Christian Brauner <brauner@kernel.org>, 
-	Al Viro <viro@zeniv.linux.org.uk>, Heiko Carstens <hca@linux.ibm.com>, 
-	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Fenghua Yu <fenghua.yu@intel.com>, Reinette Chatre <reinette.chatre@intel.com>, 
-	Miquel Raynal <miquel.raynal@bootlin.com>, Richard Weinberger <richard@nod.at>, 
-	Vignesh Raghavendra <vigneshr@ti.com>, Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>, 
-	Tejun Heo <tj@kernel.org>, Trond Myklebust <trond.myklebust@hammerspace.com>, 
-	Anna Schumaker <anna@kernel.org>, Kees Cook <keescook@chromium.org>, 
-	Damien Le Moal <dlemoal@kernel.org>, Naohiro Aota <naohiro.aota@wdc.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-s390@vger.kernel.org, linux-rdma@vger.kernel.org, linux-nfs@vger.kernel.org, 
-	linux-hardening@vger.kernel.org, cgroups@vger.kernel.org
-Subject: Re: [PATCH 15/19] kernfs: split ->kill_sb
-Message-ID: <vqax7efvf5h4agxge5g43pdl6tsa5on5mob74bydydd5vdxwb5@5fj2qgmuxjj3>
-References: <20230913111013.77623-1-hch@lst.de>
- <20230913111013.77623-16-hch@lst.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39F1C1D6AE;
+	Mon, 18 Sep 2023 16:15:03 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6D821E8E;
+	Mon, 18 Sep 2023 09:14:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695053686; x=1726589686;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rz7hwpvPJr7EsX6bLHvizHZrUJ5CLw4yAUS+Akg4Xt8=;
+  b=BMdsWY4tgYK4f9ObblMqytaJ6k6ZHh22TWOa8E71jg2p3yQER4OpCmSS
+   VzC20WoKD2PHGYscQrnCdYpPxmRZIQbDD77a9U7LEa0feRINCAAxOL5LT
+   S4sXgmABgCVJc7RxlVNdC0qEU5qZmN3svqbB80y49Y6dFqHYq2ZC+1zxI
+   YaZcu46iNV3yi2xPLMuky57LPnGxYz40DtaOxNQcU8YOLg7PRM6RcZdT/
+   3kbKfMXR5O834tMZV69HdOhDFAGsxXVgZPecI/RbbDbLZ8v6tlnHLJoQY
+   pHxyJbKykX1lBbqEDrYcFK7dOJcC9GsAZJM5TUourvnWzPzHnzKguoD4o
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10837"; a="379566445"
+X-IronPort-AV: E=Sophos;i="6.02,156,1688454000"; 
+   d="scan'208";a="379566445"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2023 06:57:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10837"; a="1076597159"
+X-IronPort-AV: E=Sophos;i="6.02,156,1688454000"; 
+   d="scan'208";a="1076597159"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga005.fm.intel.com with SMTP; 18 Sep 2023 06:57:50 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 18 Sep 2023 16:57:49 +0300
+Date: Mon, 18 Sep 2023 16:57:49 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Abdel Alkuor <alkuor@gmail.com>
+Cc: krzysztof.kozlowski+dt@linaro.org, bryan.odonoghue@linaro.org,
+	gregkh@linuxfoundation.org, robh+dt@kernel.org,
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+	conor+dt@kernel.org, linux-kernel@vger.kernel.org,
+	abdelalkuor@geotab.com
+Subject: Re: [PATCH v5 00/15] Add TPS25750 USB type-C PD controller support
+Message-ID: <ZQhXXeVo6LaZe20a@kuha.fi.intel.com>
+References: <20230917152639.21443-1-alkuor@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="fb5cgu6m55xbwjgl"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230913111013.77623-16-hch@lst.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230917152639.21443-1-alkuor@gmail.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
+On Sun, Sep 17, 2023 at 11:26:24AM -0400, Abdel Alkuor wrote:
+> From: Abdel Alkuor <abdelalkuor@geotab.com>
+> 
+> TPS25750 USB type-C PD controller has the same register offsets as
+> tps6598x. The following is a summary of incorporating TPS25750 into
+> TPS6598x driver:
+> 
+> - Only Check VID register (0x00) for TPS6598x and cd321x, as TPS25750 doesn't
+>   have VID register.
+> 
+> - TypeC port registration will be registered differently for each PD
+>   controller. TPS6598x uses system configuration register (0x28) to get
+>   pr/dr capabilities. On the other hand, TPS25750 will use data role property
+>   and PD status register (0x40) to get pr/dr capabilities as TPS25750 doesn't
+>   have register 0x28 supported.
+> 
+> - TPS25750 requires writing a binary configuration to switch PD
+>   controller from PTCH mode to APP mode which needs the following changes:
+>   - Add PTCH mode to the modes list.
+>   - Add an argument to tps6598x_check_mode to return the current mode.
+>   - Currently, tps6598x_exec_cmd has cmd timeout hardcoded to 1 second,
+>     and doesn't wait before checking DATA_OUT response. In TPS25750, patch 4CCs
+>     take longer than 1 second to execute and some requires a delay before
+>     checking DATA_OUT. To accommodate that, cmd_timeout and response_delay will
+>     be added as arguments to tps6598x_exec_cmd.
+>   - Implement applying patch sequence for TPS25750.
+> 
+> - In pm suspend callback, patch mode needs to be checked and the binary
+>   configuration should be applied if needed.
+> 
+> - For interrupt, TPS25750 has only one event register (0x14) and one mask
+>   register (0x16) of 11 bytes each, where TPS6598x has two event
+>   and two mask registers of 8 bytes each. Both TPS25750 and TPS65986x
+>   shares the same bit field offsets for events/masks/clear but many of
+>   there fields are reserved in TPS25750, the following needs to be done in
+>   tps6598x_interrupt:
+>   - Read EVENT1 register as a block of 11 bytes when tps25750 is present
+>   - Write CLEAR1 register as a block of 11 bytes when tps25750 is present
+>   - Add trace_tps25750_irq
+>   - During testing, I noticed that when a cable is plugged into the PD
+>     controller and before PD controller switches to APP mode, there is a
+>     lag between dr/pr updates and PlugInsertOrRemoval Event, so a check
+>     for dr/pr change needs to be added along TPS_REG_INT_PLUG_EVENT check
+> 
+> - Add TPS25750 traces for status and power status registers. Trace for
+>   data register won't be added as it doesn't exist in the device.
+> 
+> - Configure sleep mode for TPS25750.
 
---fb5cgu6m55xbwjgl
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This looks mostly okay, but I'm a bit uncomfortable with flags like
+is_tps25750.
 
-On Wed, Sep 13, 2023 at 08:10:09AM -0300, Christoph Hellwig <hch@lst.de> wr=
-ote:
-> Split the kernfs_kill_sb helper into helpers for the new split
-> shutdown_sb and free_sb methods.  Note that resctrl has very odd
-> locking in ->kill_sb, so this commit only releases the locking
-> acquired in rdt_shutdown_sb in rdt_free_sb.  This is not very good
-> code and relies on ->shutdown_sb and ->free_sb to always be called
-> in pairs, which it currently is.  The next commit will try to clean
-> this up.
->=20
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> ---
->  arch/x86/kernel/cpu/resctrl/rdtgroup.c | 12 +++++++++---
->  fs/kernfs/mount.c                      | 18 ++++++++----------
->  fs/sysfs/mount.c                       |  7 ++++---
->  include/linux/kernfs.h                 |  5 ++---
->  kernel/cgroup/cgroup.c                 | 10 ++++++----
->  5 files changed, 29 insertions(+), 23 deletions(-)
+I think a better way would be to supply driver data. In it you would
+have a callback for everything that needs to be customised.
 
-Reviewed-by: Michal Koutn=FD <mkoutny@suse.com>
+struct tipd_data {
+        int (*interrupt)(int irq, void *data);
+        ...
+};
+...
+static const struct tipd_data tps25750_data = {
+        .interrupt = tps25750_interrupt,
+...
 
-(Also, I didn't find a necessity to have kernfs_free_sb(sb) under
-rdtgroup_mutex, so folding the following patch of the series may be fine
-too.)
+Something like that. You can on top of that still check
+device_is_compatible(dev, "...") in some places.
 
 
---fb5cgu6m55xbwjgl
-Content-Type: application/pgp-signature; name="signature.asc"
+thanks,
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQQpEWyjXuwGT2dDBqAGvrMr/1gcjgUCZQhrmQAKCRAGvrMr/1gc
-joA0AQCDANwuvql51NVbMvBdMPjFI6Th8lDr5goiUMJIkDInfAEAgIpZtJp32qUD
-1HpNpPzzwxVHRHauSQjOpc8j5wdn+Qk=
-=yjqf
------END PGP SIGNATURE-----
-
---fb5cgu6m55xbwjgl--
+-- 
+heikki
 
