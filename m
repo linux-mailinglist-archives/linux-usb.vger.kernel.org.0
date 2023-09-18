@@ -1,301 +1,223 @@
-Return-Path: <linux-usb+bounces-340-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-342-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA5C87A5032
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 19:01:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 66EC27A52C2
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 21:11:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48A9D282241
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 17:01:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BB160281CDD
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 19:10:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C9C82629D;
-	Mon, 18 Sep 2023 17:00:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D66CF273F2;
+	Mon, 18 Sep 2023 19:04:38 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1C3820B0F;
-	Mon, 18 Sep 2023 17:00:19 +0000 (UTC)
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2082.outbound.protection.outlook.com [40.107.117.82])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A75F95;
-	Mon, 18 Sep 2023 10:00:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Y8KdJNMikKJfObxRyfgFNzmd/33RBk5rUhHc9X2Vs5R5zxqYCAogrgwFqCH2ofcVUkwFEQh0BYaWu+I8X/eTvaxRxuG5b7ZHFPamYhzY3SXAt/qdO1bo9jgBaKETiWMxryWMMOav+kJrXKx/UNqxnZQIt9RK2ArVHreotO8CCfhqN4fNWqCiae3OSGc2E4HDQBoKFXGe/+IW9x7oNW9zAzi6zGRbh4u6HyZCpHgOxpgWWSTBsQLd9IdoLuaL0QQ8aaRKRqfYx4UI7He4fV12OEYcaM+zzl+rsSKPvtEgXgJvaJTxcdz5qFb06FMdJc3pt0IIAY4uG6CsA3/NCWoz+Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DOqOMGTmJpthW2Uqreeehqg9BcUS8kh3LUPBQksWZN8=;
- b=Zyj51pizDmNUxisZB5KfosHDwH4oHBCEJnBhk/wpcN7SBjHuAJi5rcyTJmLO8xQ9PTCABe6MDrCCEPYj23D6Em3dUn2RgV9XENWYpKbJCpEe6TIwzlj3x0Q5+v6DJPCnEpoNcRcO1BRt4hBu6tSO0uI+G1mFmGlmqlLKI+Y0KIMdOIvTWMGDMCE018oxfJRRwHsUcdgOa0nI6YOsxGDzjFwH2RItwIsKrFgdxobu2tvgFH4uUeO9P259CpwbL7Wibylstdelth3Ro59tZwzHkHtLdIDkijwp3jcTIcRCXplxsidhk543vYUBqcmTthrciOHqFDWnySj8lJQfhoqXgQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 175.98.123.7) smtp.rcpttodomain=gmail.com smtp.mailfrom=nuvoton.com;
- dmarc=fail (p=none sp=quarantine pct=100) action=none header.from=gmail.com;
- dkim=none (message not signed); arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D3021F5E3
+	for <linux-usb@vger.kernel.org>; Mon, 18 Sep 2023 19:04:37 +0000 (UTC)
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 968AD2D57
+	for <linux-usb@vger.kernel.org>; Mon, 18 Sep 2023 12:02:16 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1c451541f23so13516255ad.2
+        for <linux-usb@vger.kernel.org>; Mon, 18 Sep 2023 12:02:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=nuvoton.onmicrosoft.com; s=selector2-nuvoton-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DOqOMGTmJpthW2Uqreeehqg9BcUS8kh3LUPBQksWZN8=;
- b=sG6vJwd+qBbmkCXSjiIRXgX5lbmoKbwGWVaOtaQUUMWZffde1Gam3LS/ypmGfeZ1d+oJRMRMm1fhwKleWeYnj/ndMrojcgJk3m+8R8DZRhKwqtAQrzW/pjmWa/s3h3nMHNmcagSDp9iKZC7BffWKpAZcALj6EUt+i5kA2vlJfcg=
-Received: from SI2PR02CA0054.apcprd02.prod.outlook.com (2603:1096:4:196::13)
- by SEYPR03MB7697.apcprd03.prod.outlook.com (2603:1096:101:147::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.27; Mon, 18 Sep
- 2023 17:00:09 +0000
-Received: from SG2PEPF000B66CB.apcprd03.prod.outlook.com
- (2603:1096:4:196:cafe::54) by SI2PR02CA0054.outlook.office365.com
- (2603:1096:4:196::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.26 via Frontend
- Transport; Mon, 18 Sep 2023 17:00:09 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 175.98.123.7)
- smtp.mailfrom=nuvoton.com; dkim=none (message not signed)
- header.d=none;dmarc=fail action=none header.from=gmail.com;
-Received-SPF: Pass (protection.outlook.com: domain of nuvoton.com designates
- 175.98.123.7 as permitted sender) receiver=protection.outlook.com;
- client-ip=175.98.123.7; helo=NTHCCAS04.nuvoton.com; pr=C
-Received: from NTHCCAS04.nuvoton.com (175.98.123.7) by
- SG2PEPF000B66CB.mail.protection.outlook.com (10.167.240.24) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.20.6792.20 via Frontend Transport; Mon, 18 Sep 2023 17:00:09 +0000
-Received: from NTHCML01B.nuvoton.com (10.1.8.178) by NTHCCAS04.nuvoton.com
- (10.1.8.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.14; Tue, 19
- Sep 2023 01:00:04 +0800
-Received: from NTHCCAS01.nuvoton.com (10.1.8.28) by NTHCML01B.nuvoton.com
- (10.1.8.178) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.14; Tue, 19 Sep
- 2023 01:00:03 +0800
-Received: from taln60.nuvoton.co.il (10.191.1.180) by NTHCCAS01.nuvoton.com
- (10.1.8.28) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
- Transport; Tue, 19 Sep 2023 01:00:03 +0800
-Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
-	id DEC7D64741; Mon, 18 Sep 2023 20:00:02 +0300 (IDT)
-From: Tomer Maimon <tmaimon77@gmail.com>
-To: <peter.chen@kernel.org>, <gregkh@linuxfoundation.org>,
-	<robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-	<xu.yang_2@nxp.com>, <peng.fan@nxp.com>, <avifishman70@gmail.com>,
-	<tali.perry1@gmail.com>, <joel@jms.id.au>, <venture@google.com>,
-	<yuenn@google.com>, <benjaminfair@google.com>, <j.neuschaefer@gmx.net>
-CC: <openbmc@lists.ozlabs.org>, <linux-usb@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>, Tomer Maimon
-	<tmaimon77@gmail.com>
-Subject: [PATCH v1 2/2] usb: chipidea: Add support for NPCM
-Date: Mon, 18 Sep 2023 19:59:58 +0300
-Message-ID: <20230918165958.2659-3-tmaimon77@gmail.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20230918165958.2659-1-tmaimon77@gmail.com>
-References: <20230918165958.2659-1-tmaimon77@gmail.com>
+        d=google.com; s=20230601; t=1695063734; x=1695668534; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=G6c9Dw+H6bZNAtp6nyetpcWDVm9T7feZvhUEFUNvPro=;
+        b=suF1G+4fpQZVz0VAsaLyanBNMnWd7sEMOg1VT2nkIEuDAPcCI5SYzVYd2GiKnm2B37
+         HFooJw8RlMjq5Tlo0cny8LfB7ZCZVxz/J1aFf9HiFb0ZOmm/TVPzlzbtY60aS1xjej0K
+         9IGb4urjUO+qrc8amcRcs9RAsEH9pKsI9ktP44prDMSBalPZzEbJuZKKorH1qbNFTGaq
+         ougVrFrZkf9/hRVHbycvVV+leeb46fSAO5A057xKnFiG7QWwyDWhpwdrRjgjADHhR16z
+         glN8H0NhCeEsQJG860ygVLxAvPcWdiYrCN19Wrg4X5jgQJjb9+QSHjU4gIRIC43QIydi
+         hLXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695063734; x=1695668534;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=G6c9Dw+H6bZNAtp6nyetpcWDVm9T7feZvhUEFUNvPro=;
+        b=I677H6wQ2Eox+zDSF/FM6YRb1rLzVex02xHV6kvMeEX9NyJBJZs4jXRNyY7pzPF7Bq
+         /Mvo3PAxiXPdrwJSSpYoDgvP06LSoEU77mqkWZtfGdfyDZqk3vySsx8B6lvs/7WuehUG
+         nc53/FEIiPoSw5VlFQSzPZw4kSzoLNRkon1hnYM2/i+f2qCJqSkcneg429z6rnvto9rI
+         YGCEgHJ+X2KUBYAEiGODGhEyQWaX0+38PjdkmICbFeuU9inQB0p0llkTb97Aw3LaUuLq
+         YCAgJpbyUluvep/zkhtNH5McHRs/6XyCLu2qCHdKo2m2tCFw/sRPNAWdBV47DS2cj+BS
+         Wrow==
+X-Gm-Message-State: AOJu0YwLCzrQ6Jupwy+LY1RGIa3GCxQOI1w0VoYFHcRznlkLaY5mx9Nc
+	+VopHKQvouFx8/k3ojBHME8p9xFjnDxKXVDSIuz7bw==
+X-Google-Smtp-Source: AGHT+IFgvI8Gx7pJQuu+4F35rTPcO0HTycpb3vyegabZKdF1s/i8Ak7x8KvboiAT+yhu6mkpeswZJA==
+X-Received: by 2002:a17:903:2783:b0:1b5:561a:5ca9 with SMTP id jw3-20020a170903278300b001b5561a5ca9mr8111664plb.50.1695063734035;
+        Mon, 18 Sep 2023 12:02:14 -0700 (PDT)
+Received: from [192.168.60.239] (124.190.199.35.bc.googleusercontent.com. [35.199.190.124])
+        by smtp.gmail.com with ESMTPSA id b7-20020a170902d50700b001a80ad9c599sm8613261plg.294.2023.09.18.12.02.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Sep 2023 12:02:13 -0700 (PDT)
+Message-ID: <d678b644-5f66-4c23-b2ba-6c84ba56012f@google.com>
+Date: Mon, 18 Sep 2023 12:02:11 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/3] usb: gadget: uvc: cleanup request when not in correct
+ state
+Content-Language: en-US
+To: Michael Grzeschik <mgr@pengutronix.de>
+Cc: laurent.pinchart@ideasonboard.com, linux-usb@vger.kernel.org,
+ linux-media@vger.kernel.org, dan.scally@ideasonboard.com,
+ gregkh@linuxfoundation.org, nicolas@ndufresne.ca, kernel@pengutronix.de,
+ Jayant Chowdhary <jchowdhary@google.com>
+References: <20230911002451.2860049-1-m.grzeschik@pengutronix.de>
+ <20230911002451.2860049-3-m.grzeschik@pengutronix.de>
+ <a55b3b0c-2306-4591-8613-7be4927f0d4e@google.com>
+ <ZQTpnJvTV+8Ye1si@pengutronix.de>
+ <587c9b95-a80c-4bf9-b1a0-fe7ef0f4cd60@google.com>
+ <ZQY5Ab+YB9FLHoQq@pengutronix.de>
+From: Avichal Rakesh <arakesh@google.com>
+In-Reply-To: <ZQY5Ab+YB9FLHoQq@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NotSetDelaration: True
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SG2PEPF000B66CB:EE_|SEYPR03MB7697:EE_
-X-MS-Office365-Filtering-Correlation-Id: 82f53c75-1d14-4877-8764-08dbb868b77c
-X-MS-Exchange-SenderADCheck: 0
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	F8LtVg8s3+WgALI8Ec1vpfTFbyqGbm/PVy1K9GkD3PiHnQFvSAB01xqcn5QfYYplA4jUsHtam4MbzeWNjnzwTPT5xoSgDaqt7XPdtzyqYh80sSvS0KNkaUk3VcHzZ+HLYw8fsxlkVNhXOQ8ZfNXIRKx3Xsh9PzApdCOtCXt7RQxEOvCOJ4teFN5Bg1olloEpW04KolZ44rpzxzckNeBIUUHMyoj9ysuBjsO2z7vYiYaTZ28BEtn476zXheNfofPhvifTck4vvxJAuZMgKdQMAN57ew1pxBW8Ts38r/BAOwWiYRWc5d+e8x7DtM+6eGAeiQ9i3Nj1yr5BvZLOmxRP0LKjT2YtuLI8Q7hfqG3H4FjYqaTz26okfy+N2fWWW+mE1tAMQ1lrwuPjWCfILxjRMWfHTw7P+ybkV9t8Q8k1twboerjMvQCHouUn5FRikLnLjAv7P5FzRoslA6L7t359On29MqEhFfS4aEoiUCYY/Zos2Q8mD9udG0WFJ0nFZ6izeDO1jjaREcufDmMmGYlFBkfXkQzyjmW6dKmLnP6vTXcwGUxOLDpStWLKdF0/7hdi0qhmmkjlK5ZrgDNibnXH8IATU/R7w02ywanqbs5HNoDUxCsQbYG3QQUn7EqqIYxpaINK0GtHhFqWehEJTaw+13RFbMdvjINhsiWQO3lDnAt3G4gWtRjbKTSs+enoqbXnxLyncOVR3OtF9rSjT54E18sWUfluVMyGMSaZbyII+V1Oao/cpUJOgADMi4w+1cJRQdv2baOUFNu5PeMi/vKvHBqxaPkXX2XSHeDOPRmTgerE4XZcAIcPk9odNPDcrPJw+tGtzh98x03oNStHLqb28DVfNeTmgsJH1KglxHXffPca2IOEiVyE8kxJPAbullsuUscWd/G2Rne3I6+yu16sEw==
-X-Forefront-Antispam-Report:
-	CIP:175.98.123.7;CTRY:TW;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:NTHCCAS04.nuvoton.com;PTR:175-98-123-7.static.tfn.net.tw;CAT:NONE;SFS:(13230031)(4636009)(346002)(376002)(136003)(396003)(39860400002)(186009)(61400799006)(451199024)(48200799006)(82310400011)(40470700004)(46966006)(36840700001)(2906002)(40460700003)(76482006)(83380400001)(82202003)(1076003)(36756003)(55446002)(6666004)(2616005)(478600001)(42882007)(73392003)(336012)(6266002)(26005)(40480700001)(8936002)(8676002)(36860700001)(4326008)(41300700001)(83170400001)(47076005)(70586007)(5660300002)(7416002)(316002)(356005)(82740400003)(921005)(81166007)(42186006)(54906003)(110136005)(70206006)(45356006)(35450700002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: nuvoton.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Sep 2023 17:00:09.5839
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 82f53c75-1d14-4877-8764-08dbb868b77c
-X-MS-Exchange-CrossTenant-Id: a3f24931-d403-4b4a-94f1-7d83ac638e07
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=a3f24931-d403-4b4a-94f1-7d83ac638e07;Ip=[175.98.123.7];Helo=[NTHCCAS04.nuvoton.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SG2PEPF000B66CB.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR03MB7697
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-	DKIM_SIGNED,DKIM_VALID,FORGED_GMAIL_RCVD,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,NML_ADSP_CUSTOM_MED,
-	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+	ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+	USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Add Nuvoton NPCM BMC SoCs support to USB ChipIdea driver.
-NPCM SoC include ChipIdea IP block that used for USB device controller
-mode.
 
-Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
----
- drivers/usb/chipidea/Kconfig        |   4 +
- drivers/usb/chipidea/Makefile       |   1 +
- drivers/usb/chipidea/ci_hdrc_npcm.c | 126 ++++++++++++++++++++++++++++
- 3 files changed, 131 insertions(+)
- create mode 100644 drivers/usb/chipidea/ci_hdrc_npcm.c
 
-diff --git a/drivers/usb/chipidea/Kconfig b/drivers/usb/chipidea/Kconfig
-index c815824a0b2d..bab45bc62361 100644
---- a/drivers/usb/chipidea/Kconfig
-+++ b/drivers/usb/chipidea/Kconfig
-@@ -43,6 +43,10 @@ config USB_CHIPIDEA_MSM
- 	tristate "Enable MSM hsusb glue driver" if EXPERT
- 	default USB_CHIPIDEA
- 
-+config USB_CHIPIDEA_NPCM
-+	tristate "Enable NPCM hsusb glue driver" if EXPERT
-+	default USB_CHIPIDEA
-+
- config USB_CHIPIDEA_IMX
- 	tristate "Enable i.MX USB glue driver" if EXPERT
- 	depends on OF
-diff --git a/drivers/usb/chipidea/Makefile b/drivers/usb/chipidea/Makefile
-index 71afeab97e83..718cb24603dd 100644
---- a/drivers/usb/chipidea/Makefile
-+++ b/drivers/usb/chipidea/Makefile
-@@ -13,6 +13,7 @@ ci_hdrc-$(CONFIG_USB_OTG_FSM)		+= otg_fsm.o
- 
- obj-$(CONFIG_USB_CHIPIDEA_GENERIC)	+= ci_hdrc_usb2.o
- obj-$(CONFIG_USB_CHIPIDEA_MSM)		+= ci_hdrc_msm.o
-+obj-$(CONFIG_USB_CHIPIDEA_NPCM)		+= ci_hdrc_npcm.o
- obj-$(CONFIG_USB_CHIPIDEA_PCI)		+= ci_hdrc_pci.o
- obj-$(CONFIG_USB_CHIPIDEA_IMX)		+= usbmisc_imx.o ci_hdrc_imx.o
- obj-$(CONFIG_USB_CHIPIDEA_TEGRA)	+= ci_hdrc_tegra.o
-diff --git a/drivers/usb/chipidea/ci_hdrc_npcm.c b/drivers/usb/chipidea/ci_hdrc_npcm.c
-new file mode 100644
-index 000000000000..8214a4d1e418
---- /dev/null
-+++ b/drivers/usb/chipidea/ci_hdrc_npcm.c
-@@ -0,0 +1,126 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2023 Nuvoton Technology corporation.
-+
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/usb/chipidea.h>
-+#include <linux/clk.h>
-+#include <linux/mfd/syscon.h>
-+#include <linux/regmap.h>
-+#include <linux/io.h>
-+#include <linux/reset-controller.h>
-+#include <linux/of.h>
-+
-+#include "ci.h"
-+
-+struct npcm_udc_data {
-+	struct platform_device	*ci;
-+	struct clk		*core_clk;
-+	struct ci_hdrc_platform_data pdata;
-+};
-+
-+static int npcm_udc_notify_event(struct ci_hdrc *ci, unsigned event)
-+{
-+	struct device *dev = ci->dev->parent;
-+
-+	switch (event) {
-+	case CI_HDRC_CONTROLLER_RESET_EVENT:
-+		/* clear all mode bits */
-+		hw_write(ci, OP_USBMODE, 0xffffffff, 0x0);
-+		break;
-+	default:
-+		dev_dbg(dev, "unknown ci_hdrc event\n");
-+		break;
-+	}
-+
-+	return 0;
-+}
-+
-+static int npcm_udc_probe(struct platform_device *pdev)
-+{
-+	int ret;
-+	unsigned int args[3];
-+	struct regmap *gcr_regmap;
-+	struct npcm_udc_data *ci;
-+	struct platform_device *plat_ci;
-+	struct device *dev = &pdev->dev;
-+	struct device_node *np = dev->of_node;
-+
-+	ci = devm_kzalloc(&pdev->dev, sizeof(*ci), GFP_KERNEL);
-+	if (!ci)
-+		return -ENOMEM;
-+	platform_set_drvdata(pdev, ci);
-+
-+	ci->core_clk = devm_clk_get_optional(dev, NULL);
-+	if (IS_ERR(ci->core_clk))
-+		return PTR_ERR(ci->core_clk);
-+
-+	ret = clk_prepare_enable(ci->core_clk);
-+	if (ret) {
-+		dev_err(dev, "failed to enable the clock: %d\n", ret);
-+		return ret;
-+	}
-+
-+	ci->pdata.name = dev_name(dev);
-+	ci->pdata.capoffset = DEF_CAPOFFSET;
-+	ci->pdata.flags	= CI_HDRC_REQUIRES_ALIGNED_DMA |
-+		CI_HDRC_FORCE_VBUS_ACTIVE_ALWAYS;
-+	ci->pdata.phy_mode = USBPHY_INTERFACE_MODE_UTMI;
-+	ci->pdata.notify_event = npcm_udc_notify_event;
-+
-+	gcr_regmap = syscon_regmap_lookup_by_phandle_args(np, "nuvoton,sysgcr",
-+							  3, args);
-+	if (!IS_ERR(gcr_regmap))
-+		regmap_update_bits(gcr_regmap, args[0], args[1], args[2]);
-+
-+	plat_ci = ci_hdrc_add_device(dev, pdev->resource, pdev->num_resources,
-+				     &ci->pdata);
-+	if (IS_ERR(plat_ci)) {
-+		ret = PTR_ERR(plat_ci);
-+		dev_err(dev, "failed to register HDRC NPCM device: %d\n", ret);
-+		goto clk_err;
-+	}
-+
-+	pm_runtime_no_callbacks(dev);
-+	pm_runtime_enable(dev);
-+
-+	return 0;
-+
-+clk_err:
-+	clk_disable_unprepare(ci->core_clk);
-+	return ret;
-+}
-+
-+static int npcm_udc_remove(struct platform_device *pdev)
-+{
-+	struct npcm_udc_data *ci = platform_get_drvdata(pdev);
-+
-+	pm_runtime_disable(&pdev->dev);
-+	ci_hdrc_remove_device(ci->ci);
-+	clk_disable_unprepare(ci->core_clk);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id npcm_udc_dt_match[] = {
-+	{ .compatible = "nuvoton,npcm-udc", },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, npcm_udc_dt_match);
-+
-+static struct platform_driver npcm_udc_driver = {
-+	.probe = npcm_udc_probe,
-+	.remove = npcm_udc_remove,
-+	.driver = {
-+		.name = "npcm_udc",
-+		.of_match_table = npcm_udc_dt_match,
-+	},
-+};
-+
-+module_platform_driver(npcm_udc_driver);
-+
-+MODULE_DESCRIPTION("NPCM USB device controller driver");
-+MODULE_AUTHOR("Tomer Maimon <tomer.maimon@nuvoton.com>");
-+MODULE_ALIAS("platform:npcm-udc");
-+MODULE_LICENSE("GPL v2");
--- 
-2.33.0
+On 9/16/23 16:23, Michael Grzeschik wrote:
+> On Fri, Sep 15, 2023 at 07:41:05PM -0700, Avichal Rakesh wrote:
+>> On 9/15/23 16:32, Michael Grzeschik wrote:
+>>> On Mon, Sep 11, 2023 at 09:52:22PM -0700, Avichal Rakesh wrote:
+>>>> On 9/10/23 17:24, Michael Grzeschik wrote:
+>>>>> The uvc_video_enable function of the uvc-gadget driver is dequeing and
+>>>>> immediately deallocs all requests on its disable codepath. This is not
+>>>>> save since the dequeue function is async and does not ensure that the
+>>>>> requests are left unlinked in the controller driver.
+>>>>>
+>>>>> By adding the ep_free_request into the completion path of the requests
+>>>>> we ensure that the request will be properly deallocated.
+>>>>>
+>>>>> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+>>>>> ---
+>>>>>  drivers/usb/gadget/function/uvc_video.c | 6 ++++++
+>>>>>  1 file changed, 6 insertions(+)
+>>>>>
+>>>>> diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
+>>>>> index 4b6e854e30c58c..52e3666b51f743 100644
+>>>>> --- a/drivers/usb/gadget/function/uvc_video.c
+>>>>> +++ b/drivers/usb/gadget/function/uvc_video.c
+>>>>> @@ -256,6 +256,12 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
+>>>>>      struct uvc_device *uvc = video->uvc;
+>>>>>      unsigned long flags;
+>>>>>
+>>>>> +    if (uvc->state == UVC_STATE_CONNECTED) {
+>>>>> +        usb_ep_free_request(video->ep, ureq->req);
+>>>> nit: You can probably just call usb_ep_free_request with req instead of ureq->req.
+>>>
+>>> Thanks, thats a good point.
+>>>
+>>>>> +        ureq->req = NULL;
+>>>>> +        return;
+>>>>> +    }
+>>>>> +
+>>>>>      switch (req->status) {
+>>>>>      case 0:
+>>>>>          break;
+>>>>
+>>>> Perhaps I am missing something here, but I am not sure how this alone
+>>>> fixes the use-after-free issue. uvcg_video_enable still deallocates
+>>>> _all_ usb_requests right after calling usb_ep_dequeue, so it is still
+>>>> possible that an unreturned request is deallocated, and now it is
+>>>> possible that the complete callback accesses a deallocated ureq :(
+>>>
+>>> Since the issue I saw was usually coming from the list_del_entry_valid check in
+>>> the list_del_entry of the giveback function, the issue was probably just not
+>>> triggered anymore as the complete function did exit early.
+>>>
+>>> So this fix alone is actually bogus without a second patch I had in the stack.
+>>> The second patch I am refering should change the actual overall issue:
+>>>
+>>> https://lore.kernel.org/linux-usb/20230915233113.2903645-1-m.grzeschik@pengutronix.de/T/#u
+>>>
+>>> This early list_del and this patch here should ensure that the
+>>> concurrent functions are not handling already freed memory.
+>>
+>> Oh, the patch linked above is interesting. It effectively force removes the dwc3_request
+>> from whatever list it belongs to? So if DWC3's interrupt handler is delayed past
+>> UVC gadget's ep_free_request call, then it won't see the requests in its cancelled
+>> list at all. However, this setup is still prone to errors. For example, there is now
+>> a chance that gadget_ep_free_request is called twice for one request. A scheduling
+>> like the following might cause double kfree:
+>>
+>> 1. uvcg_video_enable calls usb_ep_dequeue for all usb_requests
+>> 2. While the usb_ep_dequeues are being processed, dwc3's interrupt handler starts
+>>   calling the complete callbacks.
+>> 3. The complete callback calls gadget_ep_free_request (calling kfree as a result)
+>> 4. Meanwhile, uvcg_video_enable has moved to uvc_video_free_requests which also
+>>   calls gadget_ep_free_request (calling kfree).
+>>
+>> There is currently (even in your patches) no synchronization between calls to
+>> gadget_ep_free_request via complete callback and uvcg_video_enable, which will
+>> inevitably call usb_ep_free_request twice for one request.
+>>
+>> Does that make sense, or am I misunderstanding some part of the patch?
+> 
+> The overall concept is correct. But in detail the
+> uvc_video_free_requests is checking that video->ureq[i].req is not NULL.
+> 
+> With our previous call of ep_free_request in the complete handler, the
+> ureq->req pointer in focus was already set to NULL. So the
+> uvc_video_free_requests function will skip that extra free.
+> 
+
+Is there any form of synchronization between uvc_video_request and the 
+complete callback? As I see it, the dwc3 interrupt thread and the v4l2 
+ioctl thread (which calls uvcg_video_enable) are fully independent, so
+the calls made by them are free to be interleaved arbitrarily, so an
+interleaving like this is technically possible:
+
++------+------------------------------------+---------------------------------------------+
+| time |            ioctl_thread            |            dwc3 interrupt handler           |
++======+====================================+=============================================+
+|   1  | -uvc_v4l2_streamoff                |                                             |
+|   2  | |-uvcg_video_enable                |                                             |
+|   3  | ||-usb_ep_dequeue                  |                                             |
+|   4  | ||                                 | -dwc3_process_event_buf                     |
+|   5  | ||-uvc_video_free_requests         | |                                           |
+|   6  | |||                                | |-dwc3_gadget_ep_cleanup_cancelled_requests |
+|   7  | |||                                | ||-dwc3_gadget_giveback                     |
+|   8  | |||                                | |||-uvc_video_complete                      |
+|   9  | |||-check ureq->req != NULL [true] | ||||                                        |
+|  10  | ||||-usb_ep_free_request           | ||||                                        |
+|  11  | |||||-dwc3_ep_free_request         | ||||                                        |
+|  12  | ||||||-kfree [first call]          | ||||                                        |
+|  13  | ||||                               | ||||-usb_ep_free_request                    |
+|  14  | ||||                               | |||||-dwc3_ep_free_request                  |
+|  15  | ||||                               | ||||||-kfree [second call]                  |
+|  16  | ||||                               | ||||-set ureq->req = NULL                   |
+|  17  | ||||-set ureq->req = NULL          |                                             |
++------+------------------------------------+---------------------------------------------+
+
+A situation like this means that dwc3_ep_free_request can be called
+twice for a particular usb_request. This is obviously low probability,
+but a race condition here means we'll start seeing very vague and hard 
+to repro crashes or memory inconsistencies when using the uvc gadget.
+
+I do apologize if I've missed something obvious with your changes that 
+prevents such interleaving. I don't currently see any locking or 
+other synchronization mechanism in your changes. Is there something
+in dwc3 that prevents this situation?
+
+Best Regards,
+Avi. 
 
 
