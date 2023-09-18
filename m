@@ -1,164 +1,210 @@
-Return-Path: <linux-usb+bounces-334-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-336-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9401A7A4E61
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 18:13:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 034027A4EC0
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 18:25:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4D937282B67
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 16:13:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B1261282038
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 16:25:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7A642374D;
-	Mon, 18 Sep 2023 16:13:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 600B0250F5;
+	Mon, 18 Sep 2023 16:25:32 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D19B421A14
-	for <linux-usb@vger.kernel.org>; Mon, 18 Sep 2023 16:13:24 +0000 (UTC)
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2050.outbound.protection.outlook.com [40.107.255.50])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D861FC7;
-	Mon, 18 Sep 2023 09:11:05 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC7662376E
+	for <linux-usb@vger.kernel.org>; Mon, 18 Sep 2023 16:25:28 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792563527E;
+	Mon, 18 Sep 2023 09:24:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695054267; x=1726590267;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=l54zxGpG+8D4yLPOAcANR8QL/i8EDNPgk2ihzsIXus0=;
+  b=UgIp/SW3MtyarbRecAaTCKY4b/mlwqBxotIsxRDbBUOsm/shHUu5BeNy
+   CObbIhSLWTJv1XMVnVunDc82S/7OrZHt4kKzT6xzJmeYcr+6mXZtHSL1C
+   G0dahxH0c8klf/TLphxYqjWjse0RIUx8DnBuZp8YaoXWU/8U9ejXi3RJB
+   1FFMg4qo25K8dwZMdQp6KSxnvz7VcFeIQsbuOH4NG2J44KlAbjCfMyzEb
+   LK8UJ0Az/02Ci51vxWOx/oe7wx5MN6+w3iLe8/uen653s3PAo2nYEfw2d
+   GEPU8ubQaPg3UZNGCUlTqikZid6LUKRdHeeKdh5KHE+hu6VTu8v6qQHaA
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10837"; a="443781386"
+X-IronPort-AV: E=Sophos;i="6.02,156,1688454000"; 
+   d="scan'208";a="443781386"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2023 09:19:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10837"; a="861129618"
+X-IronPort-AV: E=Sophos;i="6.02,156,1688454000"; 
+   d="scan'208";a="861129618"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga002.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 18 Sep 2023 09:19:33 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32; Mon, 18 Sep 2023 09:19:27 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32 via Frontend Transport; Mon, 18 Sep 2023 09:19:27 -0700
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.45) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.32; Mon, 18 Sep 2023 09:19:27 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EPPORKZYKgw5tds0bJGXEUIL0INRexU8Rezjk1CHFBWuyEOL2tgOkOwSkkCJMikUhGn4aOwHwknHiHXfDFAdIEdyaRL7kxrKi26s6np8d5HgwM3BDSHnseOxLWbvHP2gk+tVT9NrspTPEBn1yUe+CAjtNc5ikWzOnvYt3b1ol84I95lTmNQ6vMmiBtk6zUasxvARyjQy3c3fYzqhKEdtH2lWMGgwJxjiOYItsE7BuluiAoK9+T13Lal4qmO4aPqhT5LEMHxYifTo3ht2aLnSZRGXEkb8zl2dfQhOiMlGDyrIz2iURiwoInn48YQrFaLp2uiNbSb9PXNwyTHeUF97gg==
+ b=LkiBAyHqiezUY7T54qSaKNT7L3AVh9UhGYD9dHdH2LugEeZhk6rY8plpzxqT+ExE9yn2RxWQSpfpnwiH/OyykyDRGiCCwyTx7X25fxw3NasxtVOmYaI+LAcZgW2DH87oWykBut+YcJaW4eqeNDg2UiSwu/rVK6DSjfdSgIhffagH3KVUws44TYNhelbnz47nCow3G0OD2ieX3/O1RfdAZ6DWH5E6BZXzPMbm1eL/TQNDHJYIGrT4M+mdzvyvtqc+S1hx9xeEDoSP7oaKD9mUcjWORZL9rzqTrjlqu5IxJfTQlLImWm+WjiVbdM87fSZsvm4Dwte3FK4onPsT1ZOuTw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ha7N9+kxyJqPvCwXnGMv0DWCxgnCvthjbFMurCUrm2A=;
- b=nuNnFaJpiM6I8/Zqq6wtGNjFf0q3qc6kgF1QU4m5SacfYZu/cNJQZ9f749uhb4s1waGzZJP3fEmtNqYjlxeoKyBgVwbcVDkhbXB2PyoXG3uCIhXUiOgeE01s89tLWKT1Curx65RzBh1t8WneqXe4vz9iG2x8vcs0LnMZtyjrdWiW88vC3Z4ZNO8VgkZ3KvyF4q0aBThGgTa8XlKvLpzqQV1F/jcXMz1fGOt4jYdnUye+zqWHd1yNaf1HiNPWOtaa8H7tmPBOgP/ieXK6wtHjSjxZCJ7BZVQQ4oRmY0x+Pry95dAGkddHf13ZBAayisufTqJEl4F1YKBcbm8jPD24LA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 211.75.126.7) smtp.rcpttodomain=gmail.com smtp.mailfrom=nuvoton.com;
- dmarc=fail (p=none sp=quarantine pct=100) action=none header.from=gmail.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=nuvoton.onmicrosoft.com; s=selector2-nuvoton-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ha7N9+kxyJqPvCwXnGMv0DWCxgnCvthjbFMurCUrm2A=;
- b=h2+d4cl9QhYRvg1/FhXGua25t2Gm1G5vJwcMFxHbbhlgcMirfpRGCNT288h8aZRncXlXxq6wt9tLtBqLHS/KPmSXcFolUkuweOFogLf9fwa7GBsC/Bnw44lY7M8kuo+Y/AfHb8lM6mH6yaB9gg3ekx1OQa9QJZYR4GjLJ5DbYfA=
-Received: from SGXP274CA0019.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b8::31) by
- JH0PR03MB8211.apcprd03.prod.outlook.com (2603:1096:990:4f::12) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6792.27; Mon, 18 Sep 2023 16:10:33 +0000
-Received: from HK3PEPF0000021F.apcprd03.prod.outlook.com
- (2603:1096:4:b8:cafe::d9) by SGXP274CA0019.outlook.office365.com
- (2603:1096:4:b8::31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.26 via Frontend
- Transport; Mon, 18 Sep 2023 16:10:33 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 211.75.126.7)
- smtp.mailfrom=nuvoton.com; dkim=none (message not signed)
- header.d=none;dmarc=fail action=none header.from=gmail.com;
-Received-SPF: Pass (protection.outlook.com: domain of nuvoton.com designates
- 211.75.126.7 as permitted sender) receiver=protection.outlook.com;
- client-ip=211.75.126.7; helo=NTHCCAS01.nuvoton.com; pr=C
-Received: from NTHCCAS01.nuvoton.com (211.75.126.7) by
- HK3PEPF0000021F.mail.protection.outlook.com (10.167.8.41) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6792.20 via Frontend Transport; Mon, 18 Sep 2023 16:10:32 +0000
-Received: from NTHCML01B.nuvoton.com (10.1.8.178) by NTHCCAS01.nuvoton.com
- (10.1.8.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 19 Sep
- 2023 00:10:32 +0800
-Received: from NTHCCAS01.nuvoton.com (10.1.8.28) by NTHCML01B.nuvoton.com
- (10.1.8.178) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.14; Tue, 19 Sep
- 2023 00:10:31 +0800
-Received: from taln60.nuvoton.co.il (10.191.1.180) by NTHCCAS01.nuvoton.com
- (10.1.8.28) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
- Transport; Tue, 19 Sep 2023 00:10:31 +0800
-Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
-	id 04D366473F; Mon, 18 Sep 2023 19:10:30 +0300 (IDT)
-From: Tomer Maimon <tmaimon77@gmail.com>
-To: <peter.chen@kernel.org>, <gregkh@linuxfoundation.org>,
-	<avifishman70@gmail.com>, <tali.perry1@gmail.com>, <joel@jms.id.au>,
-	<venture@google.com>, <yuenn@google.com>, <benjaminfair@google.com>,
-	<j.neuschaefer@gmx.net>
-CC: <openbmc@lists.ozlabs.org>, <linux-usb@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, Tomer Maimon <tmaimon77@gmail.com>
-Subject: [PATCH v1] usb: chipidea: add CI_HDRC_FORCE_VBUS_ACTIVE_ALWAYS flag
-Date: Mon, 18 Sep 2023 19:10:28 +0300
-Message-ID: <20230918161028.264650-1-tmaimon77@gmail.com>
-X-Mailer: git-send-email 2.33.0
+ bh=WIZn1SLmgIcY2d5RdsTWNUE1nS77iyaEM+AlQzHV7vs=;
+ b=E0ejErDpzxjT91mB/JDMsY7JcyIEpI5a614g9zjWiU+1DiL7Zsdz33FtvV6n7j4dgXUuQxpae5bugbFID8yBzc+Ca3L9tof3lM0MKBWR/EdmTYqjlX13d9yf99F3qPFTRyGHMzjDFRPEbMPNF3FLdijc8vc0nChjQzNdk+IOwCIz61ap83aRQWpBpPPW1v1k4xuWEzfxIi/2cwIto6G5ts0Va5ncMTOB4S4aAffLlUMo5+LH3KzMjpuNMr8g5J5yXHyQsp7mZ96jBN5QBA2L472i+tiws1FOvgsv7x/4NvCVMMQWCoB8uv9raVKtCknndx1ibwMf9uAuyzZs3zR/Qw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from MWHPR11MB0048.namprd11.prod.outlook.com (2603:10b6:301:6a::31)
+ by CH0PR11MB5393.namprd11.prod.outlook.com (2603:10b6:610:b8::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.27; Mon, 18 Sep
+ 2023 16:19:25 +0000
+Received: from MWHPR11MB0048.namprd11.prod.outlook.com
+ ([fe80::dccd:a041:a764:21f4]) by MWHPR11MB0048.namprd11.prod.outlook.com
+ ([fe80::dccd:a041:a764:21f4%3]) with mapi id 15.20.6792.026; Mon, 18 Sep 2023
+ 16:19:25 +0000
+From: "Patel, Utkarsh H" <utkarsh.h.patel@intel.com>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+CC: Prashant Malani <pmalani@chromium.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-usb@vger.kernel.org"
+	<linux-usb@vger.kernel.org>, "chrome-platform@lists.linux.dev"
+	<chrome-platform@lists.linux.dev>, "andriy.shevchenko@linux.intel.com"
+	<andriy.shevchenko@linux.intel.com>, "bleung@chromium.org"
+	<bleung@chromium.org>
+Subject: RE: [PATCH v3 3/4] platform/chrome: cros_ec_typec: Add Displayport
+ Alternatemode 2.1 Support
+Thread-Topic: [PATCH v3 3/4] platform/chrome: cros_ec_typec: Add Displayport
+ Alternatemode 2.1 Support
+Thread-Index: AQHZ5RQ8pkufV0PHy0qNPGaCC0iZ37AWY6qAgAWtvqCABDHIgIAAibbg
+Date: Mon, 18 Sep 2023 16:19:24 +0000
+Message-ID: <MWHPR11MB00487D601B4CDD3A387BA0E3A9FBA@MWHPR11MB0048.namprd11.prod.outlook.com>
+References: <20230912005752.1532888-1-utkarsh.h.patel@intel.com>
+ <20230912005752.1532888-4-utkarsh.h.patel@intel.com>
+ <CACeCKacmH19niA7gWTZCj89ZmFth0LWvkMYasYwUvVHrmFKCZw@mail.gmail.com>
+ <MWHPR11MB0048848CD12DC750417E7264A9F6A@MWHPR11MB0048.namprd11.prod.outlook.com>
+ <ZQgEbXDNZ+Ap/HiV@kuha.fi.intel.com>
+In-Reply-To: <ZQgEbXDNZ+Ap/HiV@kuha.fi.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MWHPR11MB0048:EE_|CH0PR11MB5393:EE_
+x-ms-office365-filtering-correlation-id: e3b09329-5b30-406c-b773-08dbb8630653
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: AOBvOtHJlxbGqU7hjph34cF7gB6ZqRifZ3eOtaktOQE3xgdNvObkjlEdUzVZOjDkW7kY7ahjtgLQqqTAFTzu/m4lDgQT9Ye7iTpE33hxlzjHr8j36nA7zyy7uWsZtaGpF7Ok7kNi4jK8nO99IyfgS6u/PEaPGXpg4BPwemw/et40kSv262xWJsBuKJHEhJPLX6ebNvuMoCw9D014MZ6b85YElCRZajp2PGu8w6WsJ45ReLXG6YK+vARKQfZaZope3DsH6LWgiYD+vCUyCZXRMkTemrJ21RVUkPybfx1WnW9SUSy6z5CVFyOEaNkY4iIEXGaKiHzSLN8LBbkJ+OJT0Y1hPYqc+0oycc0ct/KOoA0Q8Mhs2q6ZIOg+8IxQ8Olm1nm8cvEF86DWLy+abnUVSHzA9m9EkgKWGq7fZVdBAhM/tF/buBZ3bckyPQf3FMHFr9Vt+KWiBEqWjPwKFTFamHo9Jwe56fbWIS44/xnN/5S5+GmbzHVo1fxDZvSCvRIm39OJfJtLPs8MkoxP4OecZEGwYiPcqWRdrgQYMeIbdyTcMKgsgRBc2myma5/YD1y8IqrRnYppAfFRq8oBDsVHbSq1FF+m9R2My1AiP2scnmIYbpBICRS3PRx4Y0A2Skrg
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB0048.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(376002)(346002)(39860400002)(136003)(366004)(451199024)(186009)(1800799009)(6506007)(478600001)(55016003)(71200400001)(26005)(316002)(86362001)(2906002)(83380400001)(5660300002)(52536014)(7696005)(82960400001)(122000001)(76116006)(66946007)(9686003)(53546011)(6916009)(54906003)(41300700001)(64756008)(66556008)(66476007)(66446008)(38070700005)(38100700002)(8676002)(4326008)(8936002)(33656002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?/XC8B7mLpJgx2CaHaioEujyl9jZF3krORUKY3PaL0pFAyoDBJf1rdy6Z7MED?=
+ =?us-ascii?Q?uXjrTLZXTUX07isAbXZiyfem94jPKQzq8LmWOKrTCfIo8xCNUobEst9xJMmq?=
+ =?us-ascii?Q?bUw5maO/IGW4CDry1R8cziRG3rTe6p18dBvVgOhLcGN6/xxo/WgSDhbyb8gB?=
+ =?us-ascii?Q?JIF6Wy5287rCnYMd/GQN4lpma6K7K2t6SMt9kYa5PyK0Mi23pSwbaeJ/ZAcK?=
+ =?us-ascii?Q?Ck2rsUF97tG0e8YKWm83Jz9vaXXhvXYYJ7NF6qIr7bdnpIhhVaCgtelQrHGJ?=
+ =?us-ascii?Q?bXvwBQ61DhWiqFrCw67yAg0ZR0XSp4rGdEsmlvijTJyeF22cdb8/zI67He8u?=
+ =?us-ascii?Q?m7eP3o8k1+PT/onOJnCtweyHNIkxNEvrNIedYJtazKTGEV+wZTpOYHXCv/kG?=
+ =?us-ascii?Q?JKjIQpxyLe05zYOSt8JO8aJ0N7ezQ0ZQzCN3Z96jHu38wnvlTRIxg0dA+fHX?=
+ =?us-ascii?Q?5M1knn9nhpDPJNyZnIXSMnUg0xUCD1sqLv5nSLnd1KtD/iLfBz6rwqO2qPCE?=
+ =?us-ascii?Q?bNHiYsCmXrn53lh4VnjqGalAVPr5IEbgle5PNwAGtbFLNGEZTcxfuc29gXAc?=
+ =?us-ascii?Q?jpIxVuHlqzgkdI8nd4ij+97hAx+pln/+oMZWinnb+7Mop9zPgjnh9DOXeIWV?=
+ =?us-ascii?Q?FkCLWZZ5yBVN+bB6B/ULbocrj4eP5Mca6ymkLs3SPgJfBV8snTxZz/yApfKU?=
+ =?us-ascii?Q?LSNqyJ+tORKvipdpG9XBn/968hyqwrnKj2q94D5e5djoFaBXHdgLQHIdiV80?=
+ =?us-ascii?Q?a335AAggNPDlZGZdYc2be8cQv6pQ5sR82pLcjldzc+36mCYDLeiffhUbLI8T?=
+ =?us-ascii?Q?IjDDmieQpIjpFB9faROUA6ZmGwHtf9YiUp0dSV7ER/gcAqM5//hW0bl1WHE+?=
+ =?us-ascii?Q?DJaAs4MmwP+iA40X2QR0TDVXi2RvBywC/KtjGueXsPrHexYFbs3cWbHGTZ5Q?=
+ =?us-ascii?Q?BLg/yxusEYU8Fw+ZSFHi1PCgRMmed9r5vxbQ6FO8xK7xSmK4X6nUr2b+g1LU?=
+ =?us-ascii?Q?yRmeFNfI16mLK7nKhC7aor4tbRZs+Vp1ozOEsk1afUf565M1O72ZDvmbWBMJ?=
+ =?us-ascii?Q?YtyBxaWe49Y8GXn+QzGtdSnPjgNpgqZhC1XIbDhLtn2HlvXd+EnTCig6Rx8k?=
+ =?us-ascii?Q?bUESO7m/F3SqapeeKHnhxWgDNduwd1+3n8yFL0zRhQOwid6c2J98lUVms/oA?=
+ =?us-ascii?Q?5aEyepMsfl0zbg6PWmjRfy1rz5OC6FFY17Kf88dDP5mv+pjBEtrcvRqNatMb?=
+ =?us-ascii?Q?GVksWA0oo6vjt2CgIZFTq3BTjs5egIFj8eeLEra76KnVXRyKF3xV1kQ1LpRx?=
+ =?us-ascii?Q?zg3Ih4v0PJsjNYbWjwaJJ9nDC1RR6ujzVVL/DGbwh87LzeBgtZCSf5MvkUso?=
+ =?us-ascii?Q?VIuPkr92/VXI9yRyzOVI2Jzf9nlznCvMbxY83764+q/HyrXQKMW+008nOLDa?=
+ =?us-ascii?Q?KmqOg3ZBLSPCR6AKG16x1szXYkGyOGaNvvw2iZRdL01cfxKx9HH5YwNsc+wf?=
+ =?us-ascii?Q?NUd254tPieBffM+nPAik3RmtmveyVnM/Pupp6Kn8A+LEDKxBxT7nfe/evljJ?=
+ =?us-ascii?Q?RqFmJIQyB4qW6zOSDVcAe7j6iwqNq5TrGDpYReUA?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NotSetDelaration: True
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: HK3PEPF0000021F:EE_|JH0PR03MB8211:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3567cec4-9447-42c5-f97e-08dbb861c8fd
-X-MS-Exchange-SenderADCheck: 0
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	bnmq9tjTVF/lhN37NrjTx6bW4zghbYyAott5tM5iCK661S0CA9FmHl1PgAS24TdholOg1DEXokSsb/TzuIIGaMHP/1JHTBTiUOexLTNlTZ23FDzc/prxZESrkGJidVHqAQW6u3Fak4R4PVUySzoMbfBFa52iCOSbpv7iufecyYtbm1Z6F+h2iZjXyRPZuB2dLBY8FUUlAMfXDScaA6g4PW34d1V53Aq5HGKx8vlqBAbuC/ItVMuKiLXhFIBP5xobDbV+jYf4R5QgqlozdX7ytnho4A5P6JPy/G4yJxYc+yAEzrwF5IfnoF6dRyq4OYJ5YmALb6M1edGDR2ouB4KR8RPc29jCIDDKxE+pILAKeXD9V/OaCfufxLtmFkOFq7/ZHRbjHbyq+jxjn7JG0HgC02CIw8KBmnwmwsW1kdWOxFiED9RSNd3OAkgD6sThfz2gExM7txe2xn1xWr2RznyePSbvWkdOZqNLUOrZrwKUX+xiRAuALnA6FAY/frZvggGb9rGldDkXv5pDmsUcaOaIsxGSwrH0iR1ljChbRLY911FzMnbk9fhq140UlMLf2LaT6qGazbj6q3u+GdTvldZiFVxkTyO2DcOmvkTeH1Q0gS1c205YzU4+xXQJtPwIAsbm4p9K5sKSKehLE6XD804e3RhQuFE/PDRkN7i1gy2APaKam4JrtVxbLKc9+tbgJi8FYKXMR212TLCLJDbz3XcF6+ybVpHRRGYdC3fwQqSpWhyW+7xmjQl3G3EDFPNgG5VPOXKYFf69oTtSSWmAXSMtnpszaMOhEY/6113XGU9gfqzZTTBSUqg0FN3tccOtPzOabs7o5t/9wvE4PXjxFNV5XGChZQl2jHmU9rnTM1mxP3SFyTgBNHGF0G/kSHgzvmzr
-X-Forefront-Antispam-Report:
-	CIP:211.75.126.7;CTRY:TW;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:NTHCCAS01.nuvoton.com;PTR:211-75-126-7.hinet-ip.hinet.net;CAT:NONE;SFS:(13230031)(4636009)(376002)(136003)(396003)(346002)(39860400002)(186009)(61400799006)(48200799006)(451199024)(82310400011)(46966006)(36840700001)(40470700004)(4326008)(2906002)(8936002)(7416002)(8676002)(47076005)(356005)(26005)(478600001)(41300700001)(81166007)(36860700001)(5660300002)(76482006)(70206006)(54906003)(83380400001)(70586007)(316002)(42186006)(83170400001)(336012)(6266002)(73392003)(40480700001)(42882007)(1076003)(82202003)(2616005)(82740400003)(40460700003)(36756003)(110136005)(55446002)(45356006)(35450700002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: nuvoton.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Sep 2023 16:10:32.6170
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB0048.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e3b09329-5b30-406c-b773-08dbb8630653
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Sep 2023 16:19:25.0118
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3567cec4-9447-42c5-f97e-08dbb861c8fd
-X-MS-Exchange-CrossTenant-Id: a3f24931-d403-4b4a-94f1-7d83ac638e07
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=a3f24931-d403-4b4a-94f1-7d83ac638e07;Ip=[211.75.126.7];Helo=[NTHCCAS01.nuvoton.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	HK3PEPF0000021F.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: JH0PR03MB8211
-X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-	DKIM_SIGNED,DKIM_VALID,FORGED_GMAIL_RCVD,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,NML_ADSP_CUSTOM_MED,
-	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: m2X+r3I3v90EYMts85xCnmgS5t/nylsp49HCP4qs2+jaEQ80pFqKCwU5MpZ7r4kmFYAqTPLo9pfn10YnViR+birGgkwI4B9o8kySz31hTp8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5393
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Adding CI_HDRC_FORCE_VBUS_ACTIVE_ALWAYS flag to modify the vbus_active
-parameter to active in case the ChipIdea USB IP role is device-only and
-there is no otgsc register.
+Hi Heikki,
 
-Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
----
- drivers/usb/chipidea/otg.c   | 5 ++++-
- include/linux/usb/chipidea.h | 1 +
- 2 files changed, 5 insertions(+), 1 deletion(-)
+Thank you for the feedback.
 
-diff --git a/drivers/usb/chipidea/otg.c b/drivers/usb/chipidea/otg.c
-index f5490f2a5b6b..647e98f4e351 100644
---- a/drivers/usb/chipidea/otg.c
-+++ b/drivers/usb/chipidea/otg.c
-@@ -130,8 +130,11 @@ enum ci_role ci_otg_role(struct ci_hdrc *ci)
- 
- void ci_handle_vbus_change(struct ci_hdrc *ci)
- {
--	if (!ci->is_otg)
-+	if (!ci->is_otg) {
-+		if (ci->platdata->flags & CI_HDRC_FORCE_VBUS_ACTIVE_ALWAYS)
-+			usb_gadget_vbus_connect(&ci->gadget);
- 		return;
-+	}
- 
- 	if (hw_read_otgsc(ci, OTGSC_BSV) && !ci->vbus_active)
- 		usb_gadget_vbus_connect(&ci->gadget);
-diff --git a/include/linux/usb/chipidea.h b/include/linux/usb/chipidea.h
-index 0b4f2d5faa08..5a7f96684ea2 100644
---- a/include/linux/usb/chipidea.h
-+++ b/include/linux/usb/chipidea.h
-@@ -64,6 +64,7 @@ struct ci_hdrc_platform_data {
- #define CI_HDRC_PMQOS			BIT(15)
- #define CI_HDRC_PHY_VBUS_CONTROL	BIT(16)
- #define CI_HDRC_HAS_PORTSC_PEC_MISSED	BIT(17)
-+#define CI_HDRC_FORCE_VBUS_ACTIVE_ALWAYS	BIT(18)
- 	enum usb_dr_mode	dr_mode;
- #define CI_HDRC_CONTROLLER_RESET_EVENT		0
- #define CI_HDRC_CONTROLLER_STOPPED_EVENT	1
--- 
-2.33.0
+> -----Original Message-----
+> From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Sent: Monday, September 18, 2023 1:04 AM
+> To: Patel, Utkarsh H <utkarsh.h.patel@intel.com>
+> Cc: Prashant Malani <pmalani@chromium.org>; linux-kernel@vger.kernel.org;
+> linux-usb@vger.kernel.org; chrome-platform@lists.linux.dev;
+> andriy.shevchenko@linux.intel.com; bleung@chromium.org
+> Subject: Re: [PATCH v3 3/4] platform/chrome: cros_ec_typec: Add Displaypo=
+rt
+> Alternatemode 2.1 Support
+>=20
+> On Fri, Sep 15, 2023 at 04:01:44PM +0000, Patel, Utkarsh H wrote:
+>=20
+> > > > b057250704e8..3a747938cdab 100644
+> > > > --- a/include/linux/usb/pd_vdo.h
+> > > > +++ b/include/linux/usb/pd_vdo.h
+> > > > @@ -376,6 +376,7 @@
+> > > >          | ((vbm) & 0x3) << 9 | (sbu) << 8 | (sbut) << 7 | ((cur) &=
+ 0x3) << 5   \
+> > > >          | (vbt) << 4 | (sopp) << 3 | ((spd) & 0x7))
+> > > >
+> > > > +#define VDO_TYPEC_CABLE_SPEED(vdo)     ((vdo) & 0x7)
+> > >
+> > > I would suggest putting this header modification in a separate
+> > > patch; if for some reason we have to revert the Chrome part of the
+> > > change, then we won't rip this part out too (some other driver down
+> > > the road may use the macro and would break if it were to be
+> > > removed). But I'll leave it to Heikki to determine whether that is pr=
+eferred.
+> > >
+> > Heikki,  What's your preference here?
+>=20
+> I think separate patch for this like Prashant said.
 
+I will add and re-send the removed [PATCH v2 3/5]  in the next version. =20
+
+Sincerely,
+Utkarsh Patel.
 
