@@ -1,42 +1,63 @@
-Return-Path: <linux-usb+bounces-322-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-323-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 933E77A4930
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 14:06:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 151287A4A00
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 14:47:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 47A12281812
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 12:06:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C27F0281271
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Sep 2023 12:47:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9C4B1CAAD;
-	Mon, 18 Sep 2023 12:06:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BF551CF95;
+	Mon, 18 Sep 2023 12:47:01 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8D7D1CA88
-	for <linux-usb@vger.kernel.org>; Mon, 18 Sep 2023 12:06:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E46C2C433C7;
-	Mon, 18 Sep 2023 12:06:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1695038799;
-	bh=JA8ImSCoa1Akn2EcO+w/VW+LE8TU6wMpSL+lt9FkX60=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LwH9rlId3WpcRM9/GuMshIoS21LpqWu+G3vjeb1s0cm0ueidndqX/Hw+w9bW8tEjc
-	 3knTVBvD207NWx6uF9mWAMayCVmPkw3OKdJ6m/IZ6sZC5ROAVFh93Y2DEUR7iXNqBw
-	 B+7Nxxx9rilLzV2lV3PxWFWY6VuLGG1wQPuTts64=
-Date: Mon, 18 Sep 2023 14:06:34 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Linyu Yuan <quic_linyyuan@quicinc.com>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v7 2/4] usb: gadget: add anonymous definition in some
- struct for trace purpose
-Message-ID: <2023091831-applause-headless-8e91@gregkh>
-References: <20230918112534.2108-1-quic_linyyuan@quicinc.com>
- <20230918112534.2108-3-quic_linyyuan@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 972D91B269;
+	Mon, 18 Sep 2023 12:46:59 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F41E10CA;
+	Mon, 18 Sep 2023 05:45:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695041127; x=1726577127;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=evExW3bG5vKXvR/8ACHxSz8qanjHLTzC/i7m/KWMGPU=;
+  b=jNEe/K/tjRdDVQSZFAHti12RwNyt/9yOc9zTo+coGnQd1e3xkWKbU4v0
+   Gr8xwXQaEZumSdJ8sk7CxQexORIy/i4ob8fAJORMrbECv2G7ARjcZm9Aq
+   nwV+6KCnaEmEIjSSE6l0snIPdj8cebDM76pd2S2Bv2NAcly26JOjTFjBV
+   cqO8sjIp+1dw1k0oT+E3DRG9FF4qgqbkvgc/M15i/BLVK4ubEcWHtVQnc
+   XXhzJg7lkNwYvAcFyFibuTYi3XDfXArTz/EPUCfDQXTSJVSEXcWXXVJYX
+   zwm2puByPRW3c5PgxS3Cf7MylaBhyt0+bHnljLRSVPqyrew2VuUO2+NmM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10837"; a="465990154"
+X-IronPort-AV: E=Sophos;i="6.02,156,1688454000"; 
+   d="scan'208";a="465990154"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2023 05:45:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10837"; a="695496315"
+X-IronPort-AV: E=Sophos;i="6.02,156,1688454000"; 
+   d="scan'208";a="695496315"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by orsmga003.jf.intel.com with SMTP; 18 Sep 2023 05:45:05 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 18 Sep 2023 15:45:04 +0300
+Date: Mon, 18 Sep 2023 15:45:04 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Abdel Alkuor <alkuor@gmail.com>
+Cc: krzysztof.kozlowski+dt@linaro.org, bryan.odonoghue@linaro.org,
+	gregkh@linuxfoundation.org, robh+dt@kernel.org,
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+	conor+dt@kernel.org, linux-kernel@vger.kernel.org,
+	abdelalkuor@geotab.com
+Subject: Re: [PATCH v5 05/15] USB: typec: Check for EEPROM present
+Message-ID: <ZQhGUKocVc+yjOVL@kuha.fi.intel.com>
+References: <20230917152639.21443-1-alkuor@gmail.com>
+ <20230917152639.21443-6-alkuor@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -45,34 +66,80 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230918112534.2108-3-quic_linyyuan@quicinc.com>
+In-Reply-To: <20230917152639.21443-6-alkuor@gmail.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-On Mon, Sep 18, 2023 at 07:25:32PM +0800, Linyu Yuan wrote:
-> Some UDC trace event will save usb udc information, but it use one int
-> size buffer to save one bit information of usb udc, it waste trace buffer.
+On Sun, Sep 17, 2023 at 11:26:29AM -0400, Abdel Alkuor wrote:
+> From: Abdel Alkuor <abdelalkuor@geotab.com>
 > 
-> Add anonymous union which have u32 members can be used by trace event
-> during fast assign stage to save more entries with same trace ring buffer
-> size.
+> When an EEPROM is present, tps25750 loads the binary configuration from
+> EEPROM. Hence, all we need to do is wait for the device to switch to APP
+> mode
 > 
-> In order to access each bit with BIT() macro, add different definition for
-> each bit fields according host little/big endian to make sure it has same
-> eacho bit field have same bit position in memory.
+> Signed-off-by: Abdel Alkuor <abdelalkuor@geotab.com>
+> ---
+>  drivers/usb/typec/tipd/core.c     | 13 +++++++++++++
+>  drivers/usb/typec/tipd/tps6598x.h |  3 +++
+>  2 files changed, 16 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+> index fea139c72d6d..b3d4b2b5bf5f 100644
+> --- a/drivers/usb/typec/tipd/core.c
+> +++ b/drivers/usb/typec/tipd/core.c
+> @@ -37,6 +37,7 @@
+>  #define TPS_REG_STATUS			0x1a
+>  #define TPS_REG_SYSTEM_CONF		0x28
+>  #define TPS_REG_CTRL_CONF		0x29
+> +#define TPS_REG_BOOT_STATUS		0x2D
+>  #define TPS_REG_POWER_STATUS		0x3f
+>  #define TPS_REG_RX_IDENTITY_SOP		0x48
+>  #define TPS_REG_DATA_STATUS		0x5f
+> @@ -897,6 +898,17 @@ static int tps25750_apply_patch(struct tps6598x *tps)
+>  	int ret;
+>  	unsigned long timeout;
+>  	u8 mode;
+> +	u64 status = 0;
+> +
+> +	ret = tps6598x_block_read(tps, TPS_REG_BOOT_STATUS, &status, 5);
+> +	if (ret)
+> +		return ret;
+> +	/*
+> +	 * Nothing to be done if the configuration
+> +	 * is being loaded from EERPOM
+> +	 */
+> +	if (status & TPS25750_BOOT_STATUS_I2C_EEPROM_PRESENT)
+> +		goto wait_for_app;
+>  
+>  	ret = tps25750_start_patch_burst_mode(tps);
+>  	if (ret) {
+> @@ -908,6 +920,7 @@ static int tps25750_apply_patch(struct tps6598x *tps)
+>  	if (ret)
+>  		return ret;
+>  
+> +wait_for_app:
+>  	timeout = jiffies + msecs_to_jiffies(1000);
+>  
+>  	do {
+> diff --git a/drivers/usb/typec/tipd/tps6598x.h b/drivers/usb/typec/tipd/tps6598x.h
+> index 527857549d69..5e942c089c27 100644
+> --- a/drivers/usb/typec/tipd/tps6598x.h
+> +++ b/drivers/usb/typec/tipd/tps6598x.h
+> @@ -199,4 +199,7 @@
+>  #define TPS_DATA_STATUS_DP_SPEC_PIN_ASSIGNMENT_A    BIT(2)
+>  #define TPS_DATA_STATUS_DP_SPEC_PIN_ASSIGNMENT_B    (BIT(2) | BIT(1))
+>  
+> +/* BOOT STATUS REG*/
+> +#define TPS25750_BOOT_STATUS_I2C_EEPROM_PRESENT	BIT(3)
 
-typo?
-
-> Add some macros or helper for later trace event usage which follow the
-> udc structs, As when possible future changes to udc related structs,
-> developers will easy notice them.
-
-This isn't going to work at all, there's nothing to keep the two in
-sync.
-
-As you are using bitmasks now, wonderful, just use those only and ignore
-the bitfield definitions, that's not going to work mixing the two at
-all.
+That's not TPS25750 specific bit, so please rename that to
+TPS_BOOT_STATUS_I2C_EEPROM_PRESENT
 
 thanks,
 
-greg k-h
+-- 
+heikki
 
