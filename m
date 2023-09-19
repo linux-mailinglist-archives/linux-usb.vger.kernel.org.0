@@ -1,147 +1,444 @@
-Return-Path: <linux-usb+bounces-388-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-389-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11F607A6ACB
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 20:40:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BEDEA7A6B38
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 21:13:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 784CA2817B4
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 18:40:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6E37D2815ED
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 19:13:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 586DA1863B;
-	Tue, 19 Sep 2023 18:40:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A64028E15;
+	Tue, 19 Sep 2023 19:13:17 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9AE7A4E
-	for <linux-usb@vger.kernel.org>; Tue, 19 Sep 2023 18:40:41 +0000 (UTC)
-Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com [209.85.167.199])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 329C7BD
-	for <linux-usb@vger.kernel.org>; Tue, 19 Sep 2023 11:40:39 -0700 (PDT)
-Received: by mail-oi1-f199.google.com with SMTP id 5614622812f47-3a88fd9ef66so129786b6e.1
-        for <linux-usb@vger.kernel.org>; Tue, 19 Sep 2023 11:40:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695148838; x=1695753638;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IaIoKNYeLS5sH/XJ+eUU4nVbsgYjjg2oMliRDd8I4aE=;
-        b=xParsu8w5m5bDr79CdeiTPmVk3891bBNlq8d5bAVbquMdti0G+zysSo3ut9ILvbJU5
-         E+BGZ/09pEX5PhP/zv0oz2BQ8cfu/qZQWJNjs3buTbFA5ylvu60FjeOgdW8zl5OjpZlS
-         jLrymjk5/kCuslK3mq5fyQ/bCU4xHnqOUJ6AUbz73mvLaVkvDDrwbQoXQbQVeRoN5MZg
-         UPOhYAyuD3FV3Z0Am3J6qx8TF3qCwX3RcrxLb55cq0kGCNU4jGjg2qKm326HSeLZepwm
-         H3gXgcTplGoVg6pepchSG6x5nvqHiXot9QZYtXoORJCcWhTvj4EEO3EaIqQYV0a35f/S
-         Owog==
-X-Gm-Message-State: AOJu0YxfsPi9bNv57S14DKeG1BXiZquYkq6UXE2HdcMEYA5A+e0nyqz8
-	CNbE92UmvJMiN9qZs9UjA20Es5fdy9T9gZ2EOaqmqHD4GztX
-X-Google-Smtp-Source: AGHT+IHElozDWZ4ARLzJqH8kpR1ziTXW32liJCwAjlNBPb4ayKMDwuq534Hzpig5uKKXP2Mma1N03Ttr0TNb3hY7/9F5v9jPC8ap
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D07681D6A7
+	for <linux-usb@vger.kernel.org>; Tue, 19 Sep 2023 19:13:14 +0000 (UTC)
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A899AE1
+	for <linux-usb@vger.kernel.org>; Tue, 19 Sep 2023 12:13:11 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1qig9m-0007kN-4s; Tue, 19 Sep 2023 21:13:10 +0200
+Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1qig9l-007WBp-11; Tue, 19 Sep 2023 21:13:09 +0200
+Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.94.2)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1qig9k-009n6E-LF; Tue, 19 Sep 2023 21:13:08 +0200
+Date: Tue, 19 Sep 2023 21:13:08 +0200
+From: Michael Grzeschik <mgr@pengutronix.de>
+To: Avichal Rakesh <arakesh@google.com>
+Cc: laurent.pinchart@ideasonboard.com, linux-usb@vger.kernel.org,
+	linux-media@vger.kernel.org, dan.scally@ideasonboard.com,
+	gregkh@linuxfoundation.org, nicolas@ndufresne.ca,
+	kernel@pengutronix.de, Jayant Chowdhary <jchowdhary@google.com>
+Subject: Re: [PATCH 2/3] usb: gadget: uvc: cleanup request when not in
+ correct state
+Message-ID: <ZQnyxA1WldcqQ+k5@pengutronix.de>
+References: <20230911002451.2860049-1-m.grzeschik@pengutronix.de>
+ <20230911002451.2860049-3-m.grzeschik@pengutronix.de>
+ <a55b3b0c-2306-4591-8613-7be4927f0d4e@google.com>
+ <ZQTpnJvTV+8Ye1si@pengutronix.de>
+ <587c9b95-a80c-4bf9-b1a0-fe7ef0f4cd60@google.com>
+ <ZQY5Ab+YB9FLHoQq@pengutronix.de>
+ <d678b644-5f66-4c23-b2ba-6c84ba56012f@google.com>
+ <ZQjEZlk2UFQgA0TF@pengutronix.de>
+ <7cd81649-2795-45b6-8c10-b7df1055020d@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6808:30a1:b0:3a7:361:f50 with SMTP id
- bl33-20020a05680830a100b003a703610f50mr1523003oib.3.1695148838485; Tue, 19
- Sep 2023 11:40:38 -0700 (PDT)
-Date: Tue, 19 Sep 2023 11:40:38 -0700
-In-Reply-To: <albu6mqbrom746yngcfgtuhn6ydpf4ewapqj6wk6etlkw7qda4@tzlqwq6u5s54>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005c048a0605ba98f0@google.com>
-Subject: Re: [syzbot] [media?] [usb?] KASAN: slab-out-of-bounds Read in imon_probe
-From: syzbot <syzbot+59875ffef5cb9c9b29e9@syzkaller.appspotmail.com>
-To: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
-	linux-usb@vger.kernel.org, mchehab@kernel.org, ricardo@marliere.net, 
-	sean@mess.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=2.4 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-	HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
-	RCVD_IN_SORBS_WEB,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="DqD8sUUSySz3ajyR"
+Content-Disposition: inline
+In-Reply-To: <7cd81649-2795-45b6-8c10-b7df1055020d@google.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.6
-X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Hello,
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-WARNING in imon_probe
+--DqD8sUUSySz3ajyR
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-WARNING: CPU: 0 PID: 1384 at kernel/locking/mutex.c:582 __mutex_lock_common kernel/locking/mutex.c:582 [inline]
-WARNING: CPU: 0 PID: 1384 at kernel/locking/mutex.c:582 __mutex_lock+0x63e/0xa56 kernel/locking/mutex.c:747
-Modules linked in:
-CPU: 0 PID: 1384 Comm: kworker/0:2 Not tainted 6.6.0-rc2-next-20230919-syzkaller-g29e400e3ea48 #0
-Hardware name: riscv-virtio,qemu (DT)
-Workqueue: usb_hub_wq hub_event
-epc : __mutex_lock_common kernel/locking/mutex.c:582 [inline]
-epc : __mutex_lock+0x63e/0xa56 kernel/locking/mutex.c:747
- ra : __mutex_lock_common kernel/locking/mutex.c:582 [inline]
- ra : __mutex_lock+0x63e/0xa56 kernel/locking/mutex.c:747
-epc : ffffffff8362613e ra : ffffffff8362613e sp : ff200000040e6bc0
- gp : ffffffff861a8a20 tp : ff60000013168000 t0 : ffffffff852a92a0
- t1 : 00000000000f0000 t2 : 2d2d2d2d2d2d2d2d s0 : ff200000040e6d40
- s1 : ff600000223f69a8 a0 : 0000000000000001 a1 : 00000000000f0000
- a2 : ffffffff80077fb0 a3 : 0000000000000002 a4 : 0000000000000000
- a5 : 0000000000000000 a6 : 0000000000000003 a7 : 0000000000000000
- s2 : ff200000040e6cc0 s3 : 0000000000000000 s4 : ff200000040e6c50
- s5 : ffffffff861d5880 s6 : 0000000000000002 s7 : 0000000000000000
- s8 : 1fe400000081cd80 s9 : ff60000022f6b000 s10: 0000000000000001
- s11: ffffffffffffffed t3 : ffffffff80158656 t4 : ffebffff0f9ac56a
- t5 : ffebffff0f9ac56b t6 : ff200000040e6778
-status: 0000000200000120 badaddr: 0000000000000000 cause: 0000000000000003
-[<ffffffff8362613e>] __mutex_lock_common kernel/locking/mutex.c:582 [inline]
-[<ffffffff8362613e>] __mutex_lock+0x63e/0xa56 kernel/locking/mutex.c:747
-[<ffffffff8362656a>] mutex_lock_nested+0x14/0x1c kernel/locking/mutex.c:799
-[<ffffffff82205abc>] imon_init_intf1 drivers/media/rc/imon.c:2321 [inline]
-[<ffffffff82205abc>] imon_probe+0x128/0x1ab2 drivers/media/rc/imon.c:2449
-[<ffffffff81d8ec8c>] usb_probe_interface+0x208/0x552 drivers/usb/core/driver.c:396
-[<ffffffff816837fa>] call_driver_probe drivers/base/dd.c:579 [inline]
-[<ffffffff816837fa>] really_probe+0x1c8/0x7c6 drivers/base/dd.c:658
-[<ffffffff81683f36>] __driver_probe_device+0x13e/0x2ae drivers/base/dd.c:800
-[<ffffffff81684106>] driver_probe_device+0x60/0x1a6 drivers/base/dd.c:830
-[<ffffffff816843b4>] __device_attach_driver+0x168/0x218 drivers/base/dd.c:958
-[<ffffffff8167f734>] bus_for_each_drv+0x12c/0x1ae drivers/base/bus.c:457
-[<ffffffff81684c30>] __device_attach+0x184/0x390 drivers/base/dd.c:1030
-[<ffffffff81685146>] device_initial_probe+0x1c/0x26 drivers/base/dd.c:1079
-[<ffffffff816817f8>] bus_probe_device+0x120/0x122 drivers/base/bus.c:532
-[<ffffffff8167c302>] device_add+0xce6/0x105c drivers/base/core.c:3624
-[<ffffffff81d8acba>] usb_set_configuration+0xb48/0xfb6 drivers/usb/core/message.c:2207
-[<ffffffff81da5b7a>] usb_generic_driver_probe+0xb2/0x124 drivers/usb/core/generic.c:238
-[<ffffffff81d8e09e>] usb_probe_device+0x9e/0x1fc drivers/usb/core/driver.c:293
-[<ffffffff816837fa>] call_driver_probe drivers/base/dd.c:579 [inline]
-[<ffffffff816837fa>] really_probe+0x1c8/0x7c6 drivers/base/dd.c:658
-[<ffffffff81683f36>] __driver_probe_device+0x13e/0x2ae drivers/base/dd.c:800
-[<ffffffff81684106>] driver_probe_device+0x60/0x1a6 drivers/base/dd.c:830
-[<ffffffff816843b4>] __device_attach_driver+0x168/0x218 drivers/base/dd.c:958
-[<ffffffff8167f734>] bus_for_each_drv+0x12c/0x1ae drivers/base/bus.c:457
-[<ffffffff81684c30>] __device_attach+0x184/0x390 drivers/base/dd.c:1030
-[<ffffffff81685146>] device_initial_probe+0x1c/0x26 drivers/base/dd.c:1079
-[<ffffffff816817f8>] bus_probe_device+0x120/0x122 drivers/base/bus.c:532
-[<ffffffff8167c302>] device_add+0xce6/0x105c drivers/base/core.c:3624
-[<ffffffff81d73702>] usb_new_device+0x5c8/0xd38 drivers/usb/core/hub.c:2589
-[<ffffffff81d77fdc>] hub_port_connect drivers/usb/core/hub.c:5440 [inline]
-[<ffffffff81d77fdc>] hub_port_connect_change drivers/usb/core/hub.c:5580 [inline]
-[<ffffffff81d77fdc>] port_event drivers/usb/core/hub.c:5740 [inline]
-[<ffffffff81d77fdc>] hub_event+0x2016/0x30aa drivers/usb/core/hub.c:5822
-[<ffffffff800c4484>] process_one_work+0x54c/0xd66 kernel/workqueue.c:2630
-[<ffffffff800c51a4>] process_scheduled_works kernel/workqueue.c:2703 [inline]
-[<ffffffff800c51a4>] worker_thread+0x506/0x980 kernel/workqueue.c:2784
-[<ffffffff800db770>] kthread+0x1bc/0x22c kernel/kthread.c:388
-[<ffffffff80005d5a>] ret_from_fork+0xa/0x1c arch/riscv/kernel/entry.S:264
+On Mon, Sep 18, 2023 at 04:40:07PM -0700, Avichal Rakesh wrote:
+>
+>
+>On 9/18/23 14:43, Michael Grzeschik wrote:
+>> On Mon, Sep 18, 2023 at 12:02:11PM -0700, Avichal Rakesh wrote:
+>>> On 9/16/23 16:23, Michael Grzeschik wrote:
+>>>> On Fri, Sep 15, 2023 at 07:41:05PM -0700, Avichal Rakesh wrote:
+>>>>> On 9/15/23 16:32, Michael Grzeschik wrote:
+>>>>>> On Mon, Sep 11, 2023 at 09:52:22PM -0700, Avichal Rakesh wrote:
+>>>>>>> On 9/10/23 17:24, Michael Grzeschik wrote:
+>>>>>>>> The uvc_video_enable function of the uvc-gadget driver is dequeing=
+ and
+>>>>>>>> immediately deallocs all requests on its disable codepath. This is=
+ not
+>>>>>>>> save since the dequeue function is async and does not ensure that =
+the
+>>>>>>>> requests are left unlinked in the controller driver.
+>>>>>>>>
+>>>>>>>> By adding the ep_free_request into the completion path of the requ=
+ests
+>>>>>>>> we ensure that the request will be properly deallocated.
+>>>>>>>>
+>>>>>>>> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+>>>>>>>> ---
+>>>>>>>> =A0drivers/usb/gadget/function/uvc_video.c | 6 ++++++
+>>>>>>>> =A01 file changed, 6 insertions(+)
+>>>>>>>>
+>>>>>>>> diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb=
+/gadget/function/uvc_video.c
+>>>>>>>> index 4b6e854e30c58c..52e3666b51f743 100644
+>>>>>>>> --- a/drivers/usb/gadget/function/uvc_video.c
+>>>>>>>> +++ b/drivers/usb/gadget/function/uvc_video.c
+>>>>>>>> @@ -256,6 +256,12 @@ uvc_video_complete(struct usb_ep *ep, struct =
+usb_request *req)
+>>>>>>>> =A0=A0=A0=A0 struct uvc_device *uvc =3D video->uvc;
+>>>>>>>> =A0=A0=A0=A0 unsigned long flags;
+>>>>>>>>
+>>>>>>>> +=A0=A0=A0 if (uvc->state =3D=3D UVC_STATE_CONNECTED) {
+>>>>>>>> +=A0=A0=A0=A0=A0=A0=A0 usb_ep_free_request(video->ep, ureq->req);
+>>>>>>> nit: You can probably just call usb_ep_free_request with req instea=
+d of ureq->req.
+>>>>>>
+>>>>>> Thanks, thats a good point.
+>>>>>>
+>>>>>>>> +=A0=A0=A0=A0=A0=A0=A0 ureq->req =3D NULL;
+>>>>>>>> +=A0=A0=A0=A0=A0=A0=A0 return;
+>>>>>>>> +=A0=A0=A0 }
+>>>>>>>> +
+>>>>>>>> =A0=A0=A0=A0 switch (req->status) {
+>>>>>>>> =A0=A0=A0=A0 case 0:
+>>>>>>>> =A0=A0=A0=A0=A0=A0=A0=A0 break;
+>>>>>>>
+>>>>>>> Perhaps I am missing something here, but I am not sure how this alo=
+ne
+>>>>>>> fixes the use-after-free issue. uvcg_video_enable still deallocates
+>>>>>>> _all_ usb_requests right after calling usb_ep_dequeue, so it is sti=
+ll
+>>>>>>> possible that an unreturned request is deallocated, and now it is
+>>>>>>> possible that the complete callback accesses a deallocated ureq :(
+>>>>>>
+>>>>>> Since the issue I saw was usually coming from the list_del_entry_val=
+id check in
+>>>>>> the list_del_entry of the giveback function, the issue was probably =
+just not
+>>>>>> triggered anymore as the complete function did exit early.
+>>>>>>
+>>>>>> So this fix alone is actually bogus without a second patch I had in =
+the stack.
+>>>>>> The second patch I am refering should change the actual overall issu=
+e:
+>>>>>>
+>>>>>> https://lore.kernel.org/linux-usb/20230915233113.2903645-1-m.grzesch=
+ik@pengutronix.de/T/#u
+>>>>>>
+>>>>>> This early list_del and this patch here should ensure that the
+>>>>>> concurrent functions are not handling already freed memory.
+>>>>>
+>>>>> Oh, the patch linked above is interesting. It effectively force remov=
+es the dwc3_request
+>>>>> from whatever list it belongs to? So if DWC3's interrupt handler is d=
+elayed past
+>>>>> UVC gadget's ep_free_request call, then it won't see the requests in =
+its cancelled
+>>>>> list at all. However, this setup is still prone to errors. For exampl=
+e, there is now
+>>>>> a chance that gadget_ep_free_request is called twice for one request.=
+ A scheduling
+>>>>> like the following might cause double kfree:
+>>>>>
+>>>>> 1. uvcg_video_enable calls usb_ep_dequeue for all usb_requests
+>>>>> 2. While the usb_ep_dequeues are being processed, dwc3's interrupt ha=
+ndler starts
+>>>>> =A0 calling the complete callbacks.
+>>>>> 3. The complete callback calls gadget_ep_free_request (calling kfree =
+as a result)
+>>>>> 4. Meanwhile, uvcg_video_enable has moved to uvc_video_free_requests =
+which also
+>>>>> =A0 calls gadget_ep_free_request (calling kfree).
+>>>>>
+>>>>> There is currently (even in your patches) no synchronization between =
+calls to
+>>>>> gadget_ep_free_request via complete callback and uvcg_video_enable, w=
+hich will
+>>>>> inevitably call usb_ep_free_request twice for one request.
+>>>>>
+>>>>> Does that make sense, or am I misunderstanding some part of the patch?
+>>>>
+>>>> The overall concept is correct. But in detail the
+>>>> uvc_video_free_requests is checking that video->ureq[i].req is not NUL=
+L.
+>>>>
+>>>> With our previous call of ep_free_request in the complete handler, the
+>>>> ureq->req pointer in focus was already set to NULL. So the
+>>>> uvc_video_free_requests function will skip that extra free.
+>>>>
+>>>
+>>> Is there any form of synchronization between uvc_video_request and the
+>>> complete callback? As I see it, the dwc3 interrupt thread and the v4l2
+>>> ioctl thread (which calls uvcg_video_enable) are fully independent, so
+>>> the calls made by them are free to be interleaved arbitrarily, so an
+>>> interleaving like this is technically possible:
+>>>
+>>> +------+------------------------------------+--------------------------=
+-------------------+
+>>> | time |=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 ioctl_thread=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0 |=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 dwc3 interrupt handle=
+r=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |
+>>> +=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+
+>>> |=A0=A0 1=A0 | -uvc_v4l2_streamoff=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0 |=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |
+>>> |=A0=A0 2=A0 | |-uvcg_video_enable=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0 |=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |
+>>> |=A0=A0 3=A0 | ||-usb_ep_dequeue=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0 |=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |
+>>> |=A0=A0 4=A0 | ||=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 | -dwc3_process_event_buf=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |
+>>> |=A0=A0 5=A0 | ||-uvc_video_free_requests=A0=A0=A0=A0=A0=A0=A0=A0 | |=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |
+>>> |=A0=A0 6=A0 | |||=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 | |-dwc3_gadget_ep_cleanup_cance=
+lled_requests |
+>>> |=A0=A0 7=A0 | |||=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 | ||-dwc3_gadget_giveback=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |
+>>> |=A0=A0 8=A0 | |||=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 | |||-uvc_video_complete=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |
+>>> |=A0=A0 9=A0 | |||-check ureq->req !=3D NULL [true] | ||||=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |
+>>> |=A0 10=A0 | ||||-usb_ep_free_request=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 | |=
+|||=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |
+>>> |=A0 11=A0 | |||||-dwc3_ep_free_request=A0=A0=A0=A0=A0=A0=A0=A0 | ||||=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |
+>>> |=A0 12=A0 | ||||||-kfree [first call]=A0=A0=A0=A0=A0=A0=A0=A0=A0 | |||=
+|=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |
+>>> |=A0 13=A0 | ||||=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 | ||||-usb_ep_free_request=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |
+>>> |=A0 14=A0 | ||||=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 | |||||-dwc3_ep_free_request=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |
+>>> |=A0 15=A0 | ||||=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 | ||||||-kfree [second call]=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |
+>>> |=A0 16=A0 | ||||=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 | ||||-set ureq->req =3D NULL=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |
+>>> |=A0 17=A0 | ||||-set ureq->req =3D NULL=A0=A0=A0=A0=A0=A0=A0=A0=A0 |=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 |
+>>> +------+------------------------------------+--------------------------=
+-------------------+
+>>>
+>>> A situation like this means that dwc3_ep_free_request can be called
+>>> twice for a particular usb_request. This is obviously low probability,
+>>> but a race condition here means we'll start seeing very vague and hard
+>>> to repro crashes or memory inconsistencies when using the uvc gadget.
+>>>
+>>> I do apologize if I've missed something obvious with your changes that
+>>> prevents such interleaving. I don't currently see any locking or
+>>> other synchronization mechanism in your changes. Is there something
+>>> in dwc3 that prevents this situation?
+>>
+>> I think you have pointed it out totally clear. This is obviously the
+>> case. It just did not trigger here. But the window is there and has to
+>> be locked in some way.
+>>
+>> For now we have two options to solve it.
+>>
+>> 1) Trying to avoid this double code path of the complete callback and
+>> uvc_video_free_requests. This is what your patches are already doing.
+>>
+>> But for now I am not so pleased with the timeout concept by waiting for
+>> the complete interrupt to be called. This is also a shot in the dark as
+>> the latency depends on the scheduler and the amount of potential
+>> requests that are being handled.
+>
+>I agree, a timeout is not the most elegant of solutions and given a
+>weird enough scheduler, will run into issues as well.
+>
+>>
+>> 2) Locking both codepathes around the resource in question so the issue
+>> is avoided.
+>>
+>> However, I am also not a fried of many locks.
+>>
+>> Perhaps it is possible to use a combination of wait_for_completion in
+>> the uvc_video_free_requests and a complete callback in
+>> uvc_video_complete for those requests that are not listed in the
+>> req_free list.
+>>
+>> What do you think?
+>>
+>There might be a way that builds on your idea of cleaning up in the comple=
+te callback.
+>It would rely on having a uvc_requests that aren't bulk allocated, which m=
+ay have a
+>performance impact.
+
+Since the allocation will only be done once, this performance impact is
+should not be critical.
+
+>I am imagining something like the following:
+>  1. Instead of allocating a bulk of uvc_requests, we allocate them
+>     one at a time and add them to uvc_video.ureq
+>  2. uvc_video.ureq becomes a list_head containing all the individual
+>     requests
+>  3. We add a sentinel flag in uvc_request that says the request is
+>     now stale. This flag is protected by uvc_video->req_lock
+>  4. uvc_video_complete looks at  this flag to deallocate both
+>     usb_request and uvc_request.
+>  5. uvcg_video_enable looks something like the following:
+>       uvcg_video_enable(...) {
+>         ...
+>         lock(req_lock);
+>         forall (uvc_requests->ureqs) {ureq->stale =3D true}
+>         unlock(req_lock);
+>         usb_ep_dequeue all reqs
+>
+>         uvc_video_free_requests(...)
+>         ...
+>       }
+>  6. uvc_video_complete looks something like:
+>       uvc_video_complete(...) {
+>         // at the start
+>         lock(req_lock)
+>         is_stale =3D ureq->stale;
+>         unlock(req_lock);
+>
+>         if (is_stale) {
+>           usb_ep_free_request();
+>           dealloc corresponding uvc_request();
+>           return;
+>         }
+>
+>         ...
+>
+>         lock(req_lock);
+>         // possible that request became stale while we were handling stuff
+>         if (!ureq->stale) {
+>           list_add_tail(&req->list, &video->req_free);
+>         } else {
+>           usb_ep_free_request();
+>           dealloc corresponding uvc_request();
+>         }
+>         unlock(req_lock);
+>       }
+>  7. uvc_video_free_requests can freely dealloc usb_requests/uvc_requests =
+in
+>     req_free because we can be certain that uvc_video_complete won't modi=
+fy
+>     it once requests have been marked stale, and the stale requests in fl=
+ight
+>     will be cleaned up by the complete callback.
+>
+>Effectively, we freeze the state of req_free before dequeuing, and all
+>inflight requests are considered the responsibility of the complete handler
+>from that point onwards. The gadget is only responsible for freeing reques=
+ts it
+>currently owns.
+>
+>I think this should ensure that we never have a situation where the owners=
+hip of the
+>requests are undefined, and only one thread is responsible for freeing any=
+ given request.
+>
+>Hope that makes sense!
+
+So you found a way to secure this also with the already available
+req_lock then. Nice!
+
+Also what you suggest is to move from the array model we currently have
+to dynamic allocation in a linked list.
+
+I would suggest some more adaptions.
+
+Keep to allocate all requests dynamicaly as you suggest instead of the
+bulk array.
+
+Rewrite the uvc_video_free_requests to iterate over the video->req_free
+list instead of all available requests to take care of all requests
+that are truely freed.
+
+Take this patch we started this thread with and expand it to
+clean up not only the usb_request but also the uvc_request
+like you suggested in your pseudo code.
+
+Since we check for UVC_STATE_CONNECTED already in the comlete handler
+this is a superset of your stale flag anyway. And every request
+that is currently in flight is not part of the req_free list, which
+makes the uvc_video_free_requests function free to run without making
+no harm.
+
+Does this sound better?
+
+Regards,
+Michael
 
 
-Tested on:
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
-commit:         29e400e3 Add linux-next specific files for 20230919
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git next-20230919
-console output: https://syzkaller.appspot.com/x/log.txt?x=15aa5754680000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=cb7d3cfa08298a9
-dashboard link: https://syzkaller.appspot.com/bug?extid=59875ffef5cb9c9b29e9
-compiler:       riscv64-linux-gnu-gcc (Debian 12.2.0-13) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-userspace arch: riscv64
+--DqD8sUUSySz3ajyR
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Note: no patches were applied.
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmUJ8sIACgkQC+njFXoe
+LGRT6Q//WZ1lp5B4eJ2ZlAm4v0rYB002MWjH1Y39oVZmDqz8BE0K+N1gtqif7xzl
+CEmHY6UelU6yrx6IANx8chVIHhGUZw8WQ7x74kkkbUO930FTckry/iJeeRRAc+2o
+fIK5uTFxcprefKdge8e0mzrnbj1WaTwgz4ElJos7BVWP/K7D/jM6MndlCkaqMEKz
+BtwHdi6tlWJ6a5eVbF9nksS3C3dmAe4I2wOq4IyztME5xqBToULheI9xXSLGzxTt
+xlS5ESMSxc2uzU3tDN8Aho7BeB5NBVnP4xhNdRREPoNoBlVdlYz2xJpaHv/n+8a4
+59Zw9P/xcv8562n/3+tXclwuFagxFlo0QT7XO2GrSTYKWxauC45SfY0Jaa2xWk0t
+ppuA3YKWWoq1K8TLDltfZ341HMzQ9Xa3RpmsDaJOB7la6VtgsllV0vtusxqWg/Gg
+0C6ST90YtftYgoGpXhvz2wUC3Gsb7YEjuU7bEqFu4+j71tJXmkRvKE1wQbp4gN2m
+oBN0wx+DH1nll3tgfNZs6lDCJiSD8MNAu7iA7tbETUR8FYlauwtFg+vRG4ajnvJh
+aXKufZJerIyzS6Bq7IviRcSDyAq+KuTDQnpXG5x3ee5QSMSNrPJBMHTsuxA8Pmtl
+ztM62qsxGozf+pVmms3wEAWB4cJINyxhbwOZjl8yGQak8FlMN9g=
+=ZZrm
+-----END PGP SIGNATURE-----
+
+--DqD8sUUSySz3ajyR--
 
