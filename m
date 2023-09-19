@@ -1,131 +1,148 @@
-Return-Path: <linux-usb+bounces-380-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-382-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 750DB7A653F
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 15:34:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 846F97A65A9
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 15:48:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2CF22281AAE
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 13:34:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C376528205A
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 13:48:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B015936AF1;
-	Tue, 19 Sep 2023 13:34:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85A1B374D4;
+	Tue, 19 Sep 2023 13:48:07 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19F6E36AE8
-	for <linux-usb@vger.kernel.org>; Tue, 19 Sep 2023 13:34:31 +0000 (UTC)
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB2C0F5
-	for <linux-usb@vger.kernel.org>; Tue, 19 Sep 2023 06:34:30 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-307d20548adso5493404f8f.0
-        for <linux-usb@vger.kernel.org>; Tue, 19 Sep 2023 06:34:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695130469; x=1695735269; darn=vger.kernel.org;
-        h=user-agent:mime-version:date:content-transfer-encoding:face:to
-         :reply-to:subject:message-id:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QBy3W4RSk7kZKsneze/v+0iZrBSFcrvL4jSpYOypbrc=;
-        b=Pi8KtE1YaEGJFK7t0U3UvVm2lspA33Johxa2v+KYpoZ49ZFOoI4u+vCV5lqrJ+Mu5h
-         abqVCryfAYvaQDHIeKAiHymo0KDbUhAh+YoOQc4KEx+XXxbF2vSV1zkGqFeo3PegQLkU
-         xBvNGbXiPB0uSA4BD7qUlfBwtFc0A641BIEWx6ktlUL8bNeL1+MiVA0Ka7Xue1zFhAeo
-         R790FWy0RIAH04qpkjT+ffLfYuw1x1B1oBNYGhawvyow/xWFEeTu9Q4F+EGQISoJ4om9
-         s+u9YL6LX14s8BgJRXYUJTMBzOBFDjZYja6hI6qokWDei1vfWfAkv+d358SohCNQXyN7
-         fD/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695130469; x=1695735269;
-        h=user-agent:mime-version:date:content-transfer-encoding:face:to
-         :reply-to:subject:message-id:from:sender:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=QBy3W4RSk7kZKsneze/v+0iZrBSFcrvL4jSpYOypbrc=;
-        b=v20NWyB28GZRhii6Vj1T/SGTzIZhN6f3XIuNNplXXGNYZNjmMc0fLiW2ozoTYzzUI/
-         qmx9/JpbcSqJjro9QXI1xo3OkfggjiRi2HaxgQMNzKk+yf0XUJ0ZNt5+HdpVKz5VzREf
-         K1PZ1gaXOtdCk7z2yo1AKUaZlufOYJVpsVc1Ur85RmNjG0FR0Tae/n8EMcMveP0JQKbk
-         uZz+kH1Q84Zb9dIoTS4UtB7XOUTSEie3Om4hR5Au8hSfvV+mSgKwF3/7kqYs61yPteBK
-         G1+nUe0jef+pZSl9nDhGGRdacZkyA1lj07ojbLuIOQPcik+4CEo8wkHmS/x0aGhXGnOP
-         YJKA==
-X-Gm-Message-State: AOJu0Yxh01JQX0SE8LtbGgo838iJono3zSieJAucgX/OtdKAqU+L41qg
-	aTkXR1XeI83C30FF+Qv9Wq6WyVsxc+k=
-X-Google-Smtp-Source: AGHT+IEDWinHek3H2X7rHLYNZrERbrFr6UNiYlDJoCSr2tLZWni0ozksAAklBiJplUZWxJs6qqouUA==
-X-Received: by 2002:adf:e78d:0:b0:314:17cc:31d0 with SMTP id n13-20020adfe78d000000b0031417cc31d0mr9890405wrm.34.1695130468721;
-        Tue, 19 Sep 2023 06:34:28 -0700 (PDT)
-Received: from mobalindesk.lan.lan (dynamic-077-006-049-035.77.6.pool.telefonica.de. [77.6.49.35])
-        by smtp.googlemail.com with ESMTPSA id w4-20020a5d5444000000b0031f3b04e7cdsm15411788wrv.109.2023.09.19.06.34.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Sep 2023 06:34:28 -0700 (PDT)
-Sender: Massimo B <burcheri.massimo@gmail.com>
-From: Massimo Burcheri <massimo@burcheri.de>
-X-Google-Original-From: Massimo Burcheri <burcheri.massimo+linux-usb@gmail.com>
-Message-ID: <5d8cad13445172d02a371f162ceaea1a68819819.camel@gmail.com>
-Subject: JMicron JMS567 and UAS
-Reply-To: burcheri.massimo+linux-usb@gmail.com
-To: linux-usb <linux-usb@vger.kernel.org>
-Face:
- iVBORw0KGgoAAAANSUhEUgAAADAAAAAwAQMAAABtzGvEAAAAA3NCSVQICAjb4U/gAAAABlBMVEX///8AAABVwtN+AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABGUlEQVQYlUWQsUoDQRCGv71LjB7KSSBwwZCTgFhY2EYIHmJnZRMLo5AXUMRCBMHcE6iPoGBlINpoZXGVeQTFKqSxMgYtTBFcZw7EKfZn2Z2Z7//hr2ysZ+5tqFLmWKVaKKs0vWd9TJx2AibmoQcupj6CCZirqTgzA5hmsdtQWe5/xAREX7uJ3MLP9x4lyieNO5mcOxyM8HH79y/4Cdn9R3JDsts/uGO82yOMJf/ah1Y8tfQEIQt7Z7rCawtNiUpHFgYUdgTxgI1NAW6SvxoqWabbw0Bd5jpQibTNBC1F4nIMk2TWhTqIs+fSVpzfCsVR9eaiJf5W6mtWXK7O+vKR4nWkSYSuFbP4No3Ht6dpSN9pSMYmaXI1/usXT0FM3SoTKAAAAAAASUVORK5CYII=
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 19 Sep 2023 15:34:21 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 231FB3C07
+	for <linux-usb@vger.kernel.org>; Tue, 19 Sep 2023 13:48:05 +0000 (UTC)
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2060.outbound.protection.outlook.com [40.107.20.60])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9135183
+	for <linux-usb@vger.kernel.org>; Tue, 19 Sep 2023 06:48:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XjUtysDnvESdyvJCUbYPpCqgqYf3hpPDSfwZwZ5GTPlWmpabh8pEjnGEwXI1ilPG3yR990ZDb6TntvINPIm6d8gbd6ShEZ7+y4Vq1h3q5BlSPhIfy/+qhg3C4mV343R8SeGaAQwoeXtguhBG85H3BoGgJPqOiuX8XHEiruFXSxKpC6hWHuG0oXzOlU3sDYF7aXxyb06MvbI/zZ0Piakr+ggZGVQqo6grfR7ow+ZHTSj7HjjIzta1Iisin9LRbQLqOJL/SunsfXy6g6C2rhOWvHaH3HU2G2lWpKJDhf1p8+VRa/6QnJtw/dw81X/6VTaEMbRNyQprRJzUoGEVJ0VwVw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1z3Fc0WzP9zLpWt3PzDkpIvf3j5qPB3wAUgdpZ4/BS0=;
+ b=hOsjO6pgqmjJWw8EB8dMlaJiVaE9vi+5iNFKDNW8SAevYUtZi+wWHiWE/7byD8e2EOSvGMYm5po/W/K+i3kZGf83n3vsVoa9tghpAvB0TCW8l+FXLvhOYakYSrlkGfXTpDOAqLM6hjaeSGaj0/9ODAGe784CHRmmHO+9mSA0zA2hUA/Vs4tMRyUVnZjq7NTLZkkRXrxeD3e5/wwcE/QG6CMbv+e1H6HcJRGea0FhMPzQCjoiDeT4UOdnF4d3s8GoEcgZF1gWLozVgDD5zl0a48+gQGDATM5XS3OxL8ungYWHlKKOqLE/cw2n8PxCfoVYQew1tqFczZUYy/PiEIEPVw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1z3Fc0WzP9zLpWt3PzDkpIvf3j5qPB3wAUgdpZ4/BS0=;
+ b=KJ1a5WG04J4n2eVdtRUSdB3y7bwWSCEumMwyq/3Jq/PDM9coD91Pueh6CDf/uyDuNxomy4hO14rI1s4vuughGe1JCwbiqyQGHMnmZy9YxZ97GpyGkkiPXNzNtb6o7tvS0T8zZHOG1/PQ5w8EgGBtH3pkS8VIKGMhUnD3hC+cWf8K61JBioaPQNnrUNK+Uit9zHzoKVM9eXmaoEPZTwoBeGvlimDoNbrbYqeYMhSzoVChFDFrps3h7M8WLxfKzZQyw6SfsEE8xorQbsIDCdF4/F5R1FoAn8l5nqGv6sgegvJfhYqOygjkLnzYnxPd7mQqDLAUjvV2xji6BUHtYt1a3g==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
+ by PA4PR04MB7630.eurprd04.prod.outlook.com (2603:10a6:102:ec::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.26; Tue, 19 Sep
+ 2023 13:47:59 +0000
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com
+ ([fe80::527e:f98b:e8c5:2562]) by VI1PR04MB7104.eurprd04.prod.outlook.com
+ ([fe80::527e:f98b:e8c5:2562%4]) with mapi id 15.20.6792.026; Tue, 19 Sep 2023
+ 13:47:59 +0000
+Message-ID: <d910b948-7448-46d3-ba98-42bc6e644626@suse.com>
+Date: Tue, 19 Sep 2023 15:47:56 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: SanDisk Extreme Pro 55AF and UAS
+Content-Language: en-US
+To: burcheri.massimo+linux-usb@gmail.com,
+ linux-usb <linux-usb@vger.kernel.org>
+References: <8d8df33f29e9abc0c20909c028863e3b9674921d.camel@gmail.com>
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <8d8df33f29e9abc0c20909c028863e3b9674921d.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR2P281CA0134.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:9e::13) To VI1PR04MB7104.eurprd04.prod.outlook.com
+ (2603:10a6:800:126::9)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Evolution 3.48.4 
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|PA4PR04MB7630:EE_
+X-MS-Office365-Filtering-Correlation-Id: c3ef1397-5e06-481f-45ca-08dbb91708dc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	Y9RJRVymXxkwJrm3BwDYp/BmrPeKF+hO+6F9KyZ7RRWhaowQAamrZvaqXbyB0bVqPKCt8P2eyo6iZjgm2rgKn2UpNZZArywPDD8Pru0y9qanpLVJ8DKATcVKXASoo9X8iRJa10cs8OJtqRIphoHz1LUV/G4zSATJGx3XpDoP7TPLsUON+0n5pUcAenAApwy0vjJR44iQNpC2KiK9wzz3qzWHEWxbcxxPJAQTa1jG6v3TXhFzXfUlUE7Ch+dt9sz5KieGmyRoiiPah01XW7fpnPpG59T8wkL4OVIJvw3Wl4CcKCEeZgPG+KGATN794Wo8YdRnNBKuMAPeOD8mlkR9O9dgP+uslMkUlz7Qy4Fy1Wdf++HYVUwHIU89KUiIXSgh4qQGhHP6IPQ78yGrVElELmHl0rTrx9zeIRU5o0airaKOkWNdjpvsMAMS9wu9o6ekQkZ7uWaW2/7LcyGgE/D1Yl2xXcJmDtSuewegysKMmGXbqUdfHlHlWw2e13YQkJ0MMfOKQTKxpR7g4PN13E9gG6MEDUX7MByY92nDjA8Nu+2REf+owm4EGbdPXuMEy1pu+GXLrlWWnaxScY0fZt7EtLXJq32OAJ5BFHRx1B48mTefSM32diiysLrYMaZ7Rf3FojyHbBpBVWl82FpElB4j6g==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(376002)(366004)(396003)(39860400002)(136003)(1800799009)(186009)(451199024)(6506007)(5660300002)(6512007)(83380400001)(2616005)(41300700001)(316002)(6916009)(4744005)(66946007)(66476007)(8936002)(8676002)(2906002)(6666004)(66556008)(53546011)(478600001)(6486002)(38100700002)(31696002)(86362001)(36756003)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?KzNLRDcyWktxbklFaEU2eWxTRTExbk1qUk5jT1JZK3J4S0hDMVAyWmNvU1c0?=
+ =?utf-8?B?S1BSa25HUnMwbG9VQlk1VWZHR01yNTljQlo3SnlVWmx6Q1BaVmo0K3V2Y040?=
+ =?utf-8?B?aFhZN1ZUSTQrMkNsVkxRNkh4NzhNVmF1WTQzQndVNzIya3NBTmNGejRLWGlp?=
+ =?utf-8?B?anRlWUE2eERwNmxhdzl2M3ljN2JTRGpsM0ROazJxVkJVa1lwdk1MLy9ySTZD?=
+ =?utf-8?B?SnFJY2xzSWVTUHl6ajUzYklEemRBMXhEM0JHZ29va1JDeU9EWm1xWDZaeHhN?=
+ =?utf-8?B?cVZrRDZUYzJQaVVCRElla3pSNXYrdGsyd1YyTzJhRXRBWXpLWXA2aXJ6NGlo?=
+ =?utf-8?B?am9yK2o5Uk9TVEUzUzY0czlyazliRTZNV1dsVlo5S2xoN3FKVmMycDVrdU14?=
+ =?utf-8?B?Tk1NaWd1ZkwxdHR6QU5YNjNwUkVUM2RLTFY0UmV5RTU2WU1sN1JXUG9mNXZv?=
+ =?utf-8?B?eUxmWWlvWWliSjlRNlQvRjVKbDQvMXM4MmZYMndlUVFZWlZBWUg3VnV0T3hm?=
+ =?utf-8?B?Mkt2ZTBxMGFjdDdQNE1LdWU5dHJIeGkxVmE3ZVE0dEt1aFNSeXR2MmRlSENR?=
+ =?utf-8?B?N1RwenJyQlYvcStFVEdRTXMxdEVBUlVIbGtpZDQzb2NZNE4vZVd3N0gycmVX?=
+ =?utf-8?B?WWxRVk1BcDFOYmFGUWRTOVpBRFFzMVJBeDQ3bnBuMXZnb2pQVTlDRktWNVBl?=
+ =?utf-8?B?eFFqM2FCR05nMjZaZ2xiS2JNZlBWRTlFb2FNMDhIYmF1WlFqdzlWTGUxQWlG?=
+ =?utf-8?B?WDUyVmZkd2habDdpMVhpbFdISlF0YzRFVW5jV2h5NEIzRDlyVEZBb01lWkNr?=
+ =?utf-8?B?RnovQVhjL3pHUVFRaFdrZ1NaNWhza0w0MmlKOExVeXBVMURmRUN1TnRXOVd0?=
+ =?utf-8?B?NkxBU3loVXU3OUhaNVJqMGZBb1lLTjFjNFhQaWV0TGJZZ1k0ZmcwdWlHYlZm?=
+ =?utf-8?B?aGZNc1QzaHBMb0lpanJtaFRUdXQvWUxsTHlyOGpTalFsUEJMbVdjeHNJMlVn?=
+ =?utf-8?B?NEYvcDQ1S2RINVJJSDE4bFBRTXFnRW4vZTdtbVVobDczQUptY213VTV5Y2pW?=
+ =?utf-8?B?TDVxZU9XZ2h3bWlpcTVEalg0eUQ5MndBODNBa3Y3THZRcDBkQkpEcFRLN2VK?=
+ =?utf-8?B?NkQ4bng5bUZPQTY1aU9jeVNXTjYzalMzdHBHbHJkMSt6R0xkNnRsajNpM1Yv?=
+ =?utf-8?B?b2FzZW9tbTBua3lJcFp5cEFTcVFXNFluSGdYM25TRS9QQjNMSW9tSkN2QmF2?=
+ =?utf-8?B?c1BGdldqSmdFUVlaUzE4WU1TTVFTNWRYSUowRVowdVVubnllcU9MWGlPdDdN?=
+ =?utf-8?B?TmJHUkxRaGNwNEZTcmlQbmIrbWRpaHM4eUtEZmlnM2JVWXEwQytKazFBUmg1?=
+ =?utf-8?B?eFZNa3VrK1JGNStQQk0vZXdYcW1YazVhdjJ4dzhyZzJKWGxsVFZWUWw5bndJ?=
+ =?utf-8?B?RlMzYWd4R3ZubW1Kd012enJXU2lxMkNHYko5VnhpaXBDTFlITEo2UEVZNVRk?=
+ =?utf-8?B?bytpeHluTWdSSTVNMkZseFU2VzE4TnRpR0lVKzBBWlgrNmNVb1YydU5rdGpr?=
+ =?utf-8?B?a1NNQ0ZrOXdQWkgzRUFvRnhSMVc4N2J1YmZKa2UrckZsb0FLMnFhV0NHSHB6?=
+ =?utf-8?B?NEpUOEI5OUN6QWlySmNrdStDY0FFS2ZFcnBsbGpGOTlTZWR2YXVJY1FscGZw?=
+ =?utf-8?B?RjVIN0tjRjNLaGdKekIvNzBHNXlVcVZ4ZkFzNFp2YnhodE9kaTBIdXJzcmNK?=
+ =?utf-8?B?eHR0WVpWZG5wM1FPak9hQy9KenB3ZEZCUC9CQWNZWHM2SHM2SERiZWQvMkIw?=
+ =?utf-8?B?eUJhSldGV2xqc1BmcmVRTTJFTnVwRy9BWXB1WUxoSTRibFlaUWtER290dXNQ?=
+ =?utf-8?B?SDFzVHlkK3lFRVp1bUFDUktNMENVc2RkK0ROdjZjRFAvNHlEM1J3VmVDZE13?=
+ =?utf-8?B?UFVYNUUzamNZbEwzampiOEN3U0hBL1FFVkF1QWN3ei9PcldUQ1Z1d0ZJbEE3?=
+ =?utf-8?B?SmI3dDVyZ0F0NndKcWNvWFVENStBZEFKMGVZV2ZMbjcwVW9YU3RKWlk1MzMr?=
+ =?utf-8?B?cHJyZVUyQkpoZG5PWjIvTXpxNmI4Tkt4b2F4MFppajlyd1ZaYlhHQ2cwbkY2?=
+ =?utf-8?B?VzIyUzNiUmlqMWgvTDhSVWpHK2Y3OGpxbTNCZTVLSUdUMzRBYkRvWVlqZ2Rj?=
+ =?utf-8?Q?1FGypAO8Qcc68GqpSAYgmlXpe8Dar5RetUqEEMUgrOxb?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c3ef1397-5e06-481f-45ca-08dbb91708dc
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Sep 2023 13:47:59.0726
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: PdmHfT0psO8wIt7j49Z5gSjwsuBKCcgzwQKHFfqaWJV6HMwiWVcsbzJCvnJ2VQro3lnalgsAqNnqV4g7nloS6Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7630
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Hi,
+On 19.09.23 15:34, Massimo Burcheri wrote:
+  
+> Searching the web for these error messages I found I needed to disable UAS and continue with usb-storage:
+> options usb-storage quirks=0781:55af:u
+> That works, but reduces the performance a lot. What is broken?
 
-coming from https://lore.kernel.org/all/20200818041324.GA3173@Susan/
+Probably your device. Are you using bus powered devices?
 
-as I understand UAS was working for JMicron JMS567 in the past, then was
-disabled in the kernel, now using usb-storage.
-Why? The hardware should support UAS and does so on Windows. Before 5.4 it =
-was
-working with UAS on Linux as well.
+	Regards
+		Oliver
 
-I purchased a 5-bay USB enclosure "ORICO DS500U3" but UAS is not working:
-  4-5               152d:0567 00 1IF  [USB 3.00,  5000 Mbps,   8mA] (JMicro=
-n
-External USB 3.0 20170331000C3)
-
-    |__ Port 5: Dev 8, If 0, Class=3DMass Storage, Driver=3Dusb-storage, 50=
-00M
-
-Aug 28 18:47:09 [kernel] usb 4-5: new SuperSpeed USB device number 8 using =
-xhci_hcd
-Aug 28 18:47:09 [kernel] usb 4-5: New USB device found, idVendor=3D152d, id=
-Product=3D0567, bcdDevice=3D52.03
-Aug 28 18:47:09 [kernel] usb 4-5: New USB device strings: Mfr=3D1, Product=
-=3D2, SerialNumber=3D3
-Aug 28 18:47:09 [kernel] usb 4-5: Product: External USB 3.0
-Aug 28 18:47:09 [kernel] usb 4-5: Manufacturer: JMicron
-Aug 28 18:47:09 [kernel] usb 4-5: SerialNumber: 20170220000C3
-Aug 28 18:47:09 [kernel] usb-storage 4-5:1.0: USB Mass Storage device detec=
-ted
-Aug 28 18:47:09 [kernel] usb-storage 4-5:1.0: Quirks match for vid 152d pid=
- 0567: 5000000
-Aug 28 18:47:09 [kernel] scsi host8: usb-storage 4-5:1.0
-Aug 28 18:47:09 [mtp-probe] checking bus 4, device 8: "/sys/devices/pci0000=
-:00/0000:00:14.0/usb4/4-5"
-Aug 28 18:47:09 [mtp-probe] bus: 4, device: 8 was not an MTP device
-
-With a mdraid raid0 and 5x1TB discs I get only about 72MiB/s to the raid0 w=
-hich
-is really slow. UAS could do more.
-
-Is there any chance UAS could get fixed for that device in the future? At l=
-east
-is seems to have worked someday with older kernels?
-
-Best regards,
-Massimo
 
