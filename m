@@ -1,94 +1,137 @@
-Return-Path: <linux-usb+bounces-367-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-369-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E9897A5BF0
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 10:07:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F7267A5C6A
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 10:23:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 27EF0281D31
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 08:07:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 844121C20CBC
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 08:23:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EB0838DF4;
-	Tue, 19 Sep 2023 08:06:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DEDD3D382;
+	Tue, 19 Sep 2023 08:23:39 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41BC938BD3
-	for <linux-usb@vger.kernel.org>; Tue, 19 Sep 2023 08:06:55 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68401102
-	for <linux-usb@vger.kernel.org>; Tue, 19 Sep 2023 01:06:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695110814; x=1726646814;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=XNhqh4Yg4pHmfWSe0+E3lEed9pnv+zo+7BzL+aePhwk=;
-  b=L+sZPt9pkZOixO8baPDTk2RO2rZKsw3jSqTPYiwUC4pkFiZwznjvOpW7
-   DbgGXXYPI6hzy4uFRv6gHgIoQYqZ76zZ29tYPgZdCVnWDZY3oC5b2/y48
-   d8hTexq/Eo05gwN790TAExy6iNJy2BrP+Rsd2HbTZ711qyOL6dP1ZfnBr
-   lXyMWy7RBaOXxIviU7PRsVNfPTQteomuF85FnpoVuyJT8Gx2FEp2L8Rf/
-   mX4cOKkyeg3ddqFQj0nHCgB3JpCi3iJj1zFTCrf8S722zzlAst1R0ErhI
-   dBGw/RHIB/TEGhUimCiDCoTli9NxCzw7uBQ1OL883iI6gBlINRrjcoY+U
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10837"; a="379784078"
-X-IronPort-AV: E=Sophos;i="6.02,159,1688454000"; 
-   d="scan'208";a="379784078"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2023 01:06:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10837"; a="775452283"
-X-IronPort-AV: E=Sophos;i="6.02,159,1688454000"; 
-   d="scan'208";a="775452283"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga008.jf.intel.com with ESMTP; 19 Sep 2023 01:06:44 -0700
-Message-ID: <eec7a2dd-6c6b-5d00-55c1-527645404675@linux.intel.com>
-Date: Tue, 19 Sep 2023 11:08:06 +0300
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A505B30F96
+	for <linux-usb@vger.kernel.org>; Tue, 19 Sep 2023 08:23:37 +0000 (UTC)
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 423A7114
+	for <linux-usb@vger.kernel.org>; Tue, 19 Sep 2023 01:23:36 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1qiW18-0005EM-2u; Tue, 19 Sep 2023 10:23:34 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1qiW14-007PaD-3Q; Tue, 19 Sep 2023 10:23:30 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1qiW13-002vrk-Q6; Tue, 19 Sep 2023 10:23:29 +0200
+Date: Tue, 19 Sep 2023 10:23:27 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Chunfeng Yun =?utf-8?B?KOS6keaYpeWzsCk=?= <Chunfeng.Yun@mediatek.com>
+Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-mediatek@lists.infradead.org" <linux-mediatek@lists.infradead.org>,
+	"kernel@pengutronix.de" <kernel@pengutronix.de>
+Subject: Re: [PATCH v2] usb: mtu3: Convert to platform remove callback
+ returning void
+Message-ID: <20230919082327.pe32kmjuiqdkorn7@pengutronix.de>
+References: <20230914200251.919584-1-u.kleine-koenig@pengutronix.de>
+ <3cdb8de0223327b820b5344945ce53c0555f4882.camel@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.13.0
-Subject: Re: [PATCH v2 0/2] Handle RPM for xhci-pci
-To: Basavaraj Natikar <Basavaraj.Natikar@amd.com>, mathias.nyman@intel.com,
- gregkh@linuxfoundation.org, mika.westerberg@linux.intel.com,
- mario.limonciello@amd.com, linux-usb@vger.kernel.org
-References: <20230915141530.1974640-1-Basavaraj.Natikar@amd.com>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20230915141530.1974640-1-Basavaraj.Natikar@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="dgisloszaa65nqhb"
+Content-Disposition: inline
+In-Reply-To: <3cdb8de0223327b820b5344945ce53c0555f4882.camel@mediatek.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On 15.9.2023 17.15, Basavaraj Natikar wrote:
-> This series includes fixes for PCI AMD USB controllers that use RPM as
-> their default policy, including enabling RPM for controllers that support
-> low-power states.
-> 
-> v1->v2:
-> *Enable RPM also for all AMD xHC 1.1
-> 
-> Basavaraj Natikar (2):
->    xhci: Loosen RPM as default policy to cover for AMD xHC 1.1
->    xhci: Enable RPM on controllers that support low-power states
-> 
->   drivers/usb/host/xhci-pci.c | 6 +++++-
->   1 file changed, 5 insertions(+), 1 deletion(-)
-> 
 
-Thanks, added to queue
+--dgisloszaa65nqhb
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--Mathias
+Hello,
+
+On Tue, Sep 19, 2023 at 07:52:04AM +0000, Chunfeng Yun (=E4=BA=91=E6=98=A5=
+=E5=B3=B0) wrote:
+> On Thu, 2023-09-14 at 22:02 +0200, Uwe Kleine-K=C3=B6nig wrote:
+> > @@ -469,8 +469,17 @@ static int mtu3_remove(struct platform_device
+> > *pdev)
+> >  ssusb_gadget_exit(ssusb);
+> >  ssusb_host_exit(ssusb);
+> >  break;
+> > -default:
+> > -return -EINVAL;
+> > +case USB_DR_MODE_UNKNOWN:
+> > +/*
+> > + * This cannot happen because with dr_mode =3D=3D
+> > + * USB_DR_MODE_UNKNOWN, .probe() doesn't succeed and so
+> > + * .remove() wouldn't be called at all. However (little
+> > + * surprising) the compiler isn't smart enough to see that, so
+> > + * we explicitly have this case item to not make the compiler
+> > + * wail about an unhandled enumeration value.
+> > + */
+> > +WARN_ON(1);
+> > +break;
+> How about changing as below:
+>     defualt:
+>        break;
+> >  }
+
+I think a warning is a good idea as today that case cannot happen
+(unless I missed something) and if it still happened, you'd want to know
+as the handling is insufficient then. And I also think that if the enum
+usb_dr_mode should ever be expanded, this code location should be
+revisited, so the explicit "case USB_DR_MODE_UNKNOWN" is better in my
+opinion.
+
+As you suggest this variant you seem to have some upside in mind, didn't
+put it into your message though. Would you share your thoughts?
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig         =
+   |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--dgisloszaa65nqhb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmUJWn8ACgkQj4D7WH0S
+/k7KAAf6A/b5sNPF54k+Ma3oN7Fax1Z2w856jPyHME6jLc7u/AG9osjTHvunNeAA
+EcI/eIN8DKaB/uxZefCKy9Ei9fV5E/1rnExa/4VwG2HMzTkGAbIK3hMxwKFm/fkt
+BE0z61M6xMvxCj53r0SI/Zz6IlJtM1qsrzCEYJMyvsLafun/jUFHQS0mbYHtnts7
+nor6AoG83yWWrc0vd0pfjV+QnjzYVl767H9ws1I5o+3Hlu/Nat6CfGs1a2ma8ArB
+6p0tVnS1jiwzZY2R3TCOIFy2QKFJNb/vPSKvqy9MRrYrGZUIRPgDXWrkO7LLnac+
+dFxjJfjs8z+QRCJpr51crY2sjjTKXQ==
+=f/ok
+-----END PGP SIGNATURE-----
+
+--dgisloszaa65nqhb--
 
