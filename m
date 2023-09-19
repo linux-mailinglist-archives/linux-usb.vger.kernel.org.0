@@ -1,153 +1,111 @@
-Return-Path: <linux-usb+bounces-354-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-356-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7D107A57CC
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 05:15:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B95637A57E9
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 05:32:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 81A7B281215
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 03:15:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D532B1C2092B
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 03:32:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F875341A9;
-	Tue, 19 Sep 2023 03:15:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A61534194;
+	Tue, 19 Sep 2023 03:32:09 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFDC9328D7;
-	Tue, 19 Sep 2023 03:14:58 +0000 (UTC)
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4DD111;
-	Mon, 18 Sep 2023 20:14:54 -0700 (PDT)
-X-SpamFilter-By: ArmorX SpamTrap 5.78 with qID 38J3EMDj82933326, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-	by rtits2.realtek.com.tw (8.15.2/2.92/5.92) with ESMTPS id 38J3EMDj82933326
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 19 Sep 2023 11:14:22 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Tue, 19 Sep 2023 11:14:05 +0800
-Received: from fc38.localdomain (172.22.228.98) by RTEXMBS04.realtek.com.tw
- (172.21.6.97) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Tue, 19 Sep
- 2023 11:14:04 +0800
-From: Hayes Wang <hayeswang@realtek.com>
-To: <kuba@kernel.org>, <davem@davemloft.net>
-CC: <netdev@vger.kernel.org>, <nic_swsd@realtek.com>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <edumazet@google.com>, <bjorn@mork.no>, <pabeni@redhat.com>,
-        Hayes Wang
-	<hayeswang@realtek.com>
-Subject: [PATCH net-next v2 2/2] r8152: use napi_gro_frags
-Date: Tue, 19 Sep 2023 11:13:51 +0800
-Message-ID: <20230919031351.7334-431-nic_swsd@realtek.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230919031351.7334-429-nic_swsd@realtek.com>
-References: <20230919031351.7334-429-nic_swsd@realtek.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C41530F94
+	for <linux-usb@vger.kernel.org>; Tue, 19 Sep 2023 03:32:04 +0000 (UTC)
+Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F851112;
+	Mon, 18 Sep 2023 20:32:03 -0700 (PDT)
+Received: from dlp.unisoc.com ([10.29.3.86])
+	by SHSQR01.spreadtrum.com with ESMTP id 38J3VERv084976;
+	Tue, 19 Sep 2023 11:31:14 +0800 (+08)
+	(envelope-from xingxing.luo@unisoc.com)
+Received: from SHDLP.spreadtrum.com (shmbx06.spreadtrum.com [10.0.1.11])
+	by dlp.unisoc.com (SkyGuard) with ESMTPS id 4RqRv22qlzz2SGkjR;
+	Tue, 19 Sep 2023 11:27:58 +0800 (CST)
+Received: from zebjkernups01.spreadtrum.com (10.0.93.153) by
+ shmbx06.spreadtrum.com (10.0.1.11) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.23; Tue, 19 Sep 2023 11:31:13 +0800
+From: Xingxing Luo <xingxing.luo@unisoc.com>
+To: <b-liu@ti.com>, <gregkh@linuxfoundation.org>, <s.shtylyov@omp.ru>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <xingxing0070.luo@gmail.com>, <Zhiyong.Liu@unisoc.com>,
+        <Cixi.Geng1@unisoc.com>, <Orson.Zhai@unisoc.com>,
+        <zhang.lyra@gmail.com>
+Subject: [PATCH V3] usb: musb: Get the musb_qh poniter after musb_giveback
+Date: Tue, 19 Sep 2023 11:30:55 +0800
+Message-ID: <20230919033055.14085-1-xingxing.luo@unisoc.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [172.22.228.98]
-X-ClientProxiedBy: RTEXH36506.realtek.com.tw (172.21.6.27) To
- RTEXMBS04.realtek.com.tw (172.21.6.97)
-X-KSE-ServerInfo: RTEXMBS04.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Originating-IP: [10.0.93.153]
+X-ClientProxiedBy: SHCAS01.spreadtrum.com (10.0.1.201) To
+ shmbx06.spreadtrum.com (10.0.1.11)
+X-MAIL:SHSQR01.spreadtrum.com 38J3VERv084976
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
 	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Use napi_gro_frags() for the skb of fragments.
+When multiple threads are performing USB transmission, musb->lock will be
+unlocked when musb_giveback is executed. At this time, qh may be released
+in the dequeue process in other threads, resulting in a wild pointer, so
+it needs to be here get qh again, and judge whether qh is NULL, and when
+dequeue, you need to set qh to NULL.
 
-Signed-off-by: Hayes Wang <hayeswang@realtek.com>
+Fixes: dbac5d07d13e ("usb: musb: host: don't start next rx urb if current one failed")
+Cc: stable@vger.kernel.org
+Signed-off-by: Xingxing Luo <xingxing.luo@unisoc.com>
 ---
- drivers/net/usb/r8152.c | 32 +++++++++++++++++++-------------
- 1 file changed, 19 insertions(+), 13 deletions(-)
+v2 -> v3: Add Cc: stable
+v1 -> v2: - Modified the comments section.
+          - Modified "if (qh != NULL && ..." to "if (qh && ...".
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 03bb3a58f2a6..00dac52dea44 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -2462,8 +2462,9 @@ static int rx_bottom(struct r8152 *tp, int budget)
- 		while (urb->actual_length > len_used) {
- 			struct net_device *netdev = tp->netdev;
- 			struct net_device_stats *stats = &netdev->stats;
--			unsigned int pkt_len, rx_frag_head_sz;
-+			unsigned int pkt_len;
- 			struct sk_buff *skb;
-+			bool use_frags;
+ drivers/usb/musb/musb_host.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/musb/musb_host.c b/drivers/usb/musb/musb_host.c
+index a02c29216955..bc4507781167 100644
+--- a/drivers/usb/musb/musb_host.c
++++ b/drivers/usb/musb/musb_host.c
+@@ -321,10 +321,16 @@ static void musb_advance_schedule(struct musb *musb, struct urb *urb,
+ 	musb_giveback(musb, urb, status);
+ 	qh->is_ready = ready;
  
- 			pkt_len = le32_to_cpu(rx_desc->opts1) & RX_LEN_MASK;
- 			if (pkt_len < ETH_ZLEN)
-@@ -2477,35 +2478,40 @@ static int rx_bottom(struct r8152 *tp, int budget)
- 			rx_data += sizeof(struct rx_desc);
- 
- 			if (!agg_free || tp->rx_copybreak > pkt_len)
--				rx_frag_head_sz = pkt_len;
-+				use_frags = false;
- 			else
--				rx_frag_head_sz = tp->rx_copybreak;
-+				use_frags = true;
++	/*
++	 * musb->lock had been unlocked in musb_giveback, so qh may
++	 * be freed, need to get it again
++	 */
++	qh = musb_ep_get_qh(hw_ep, is_in);
 +
-+			if (use_frags)
-+				skb = napi_get_frags(napi);
-+			else
-+				skb = napi_alloc_skb(napi, pkt_len);
+ 	/* reclaim resources (and bandwidth) ASAP; deschedule it, and
+ 	 * invalidate qh as soon as list_empty(&hep->urb_list)
+ 	 */
+-	if (list_empty(&qh->hep->urb_list)) {
++	if (qh && list_empty(&qh->hep->urb_list)) {
+ 		struct list_head	*head;
+ 		struct dma_controller	*dma = musb->dma_controller;
  
--			skb = napi_alloc_skb(napi, rx_frag_head_sz);
- 			if (!skb) {
- 				stats->rx_dropped++;
- 				goto find_next_rx;
- 			}
- 
- 			skb->ip_summed = r8152_rx_csum(tp, rx_desc);
--			memcpy(skb->data, rx_data, rx_frag_head_sz);
--			skb_put(skb, rx_frag_head_sz);
--			pkt_len -= rx_frag_head_sz;
--			rx_data += rx_frag_head_sz;
--			if (pkt_len) {
-+			rtl_rx_vlan_tag(rx_desc, skb);
-+
-+			if (use_frags) {
- 				skb_add_rx_frag(skb, 0, agg->page,
- 						agg_offset(agg, rx_data),
- 						pkt_len,
- 						SKB_DATA_ALIGN(pkt_len));
- 				get_page(agg->page);
-+				napi_gro_frags(napi);
-+			} else {
-+				memcpy(skb->data, rx_data, pkt_len);
-+				skb_put(skb, pkt_len);
-+				skb->protocol = eth_type_trans(skb, netdev);
-+				napi_gro_receive(napi, skb);
- 			}
- 
--			skb->protocol = eth_type_trans(skb, netdev);
--			rtl_rx_vlan_tag(rx_desc, skb);
- 			work_done++;
- 			stats->rx_packets++;
--			stats->rx_bytes += skb->len;
--			napi_gro_receive(napi, skb);
-+			stats->rx_bytes += pkt_len;
- 
- find_next_rx:
- 			rx_data = rx_agg_align(rx_data + pkt_len + ETH_FCS_LEN);
+@@ -2398,6 +2404,7 @@ static int musb_urb_dequeue(struct usb_hcd *hcd, struct urb *urb, int status)
+ 		 * and its URB list has emptied, recycle this qh.
+ 		 */
+ 		if (ready && list_empty(&qh->hep->urb_list)) {
++			musb_ep_set_qh(qh->hw_ep, is_in, NULL);
+ 			qh->hep->hcpriv = NULL;
+ 			list_del(&qh->ring);
+ 			kfree(qh);
 -- 
-2.41.0
+2.17.1
 
 
