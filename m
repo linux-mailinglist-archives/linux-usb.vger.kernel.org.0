@@ -1,226 +1,120 @@
-Return-Path: <linux-usb+bounces-373-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-374-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C2697A5D9F
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 11:18:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DF597A5DB8
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 11:25:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C15171C20FD0
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 09:18:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BD03F2815A6
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 09:25:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D03203FB06;
-	Tue, 19 Sep 2023 09:18:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 438173FB02;
+	Tue, 19 Sep 2023 09:25:17 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D70883D3AD
-	for <linux-usb@vger.kernel.org>; Tue, 19 Sep 2023 09:18:19 +0000 (UTC)
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 117DADA
-	for <linux-usb@vger.kernel.org>; Tue, 19 Sep 2023 02:18:18 -0700 (PDT)
-Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1qiWrw-0008AB-7P; Tue, 19 Sep 2023 11:18:08 +0200
-Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.94.2)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1qiWru-009c0Q-E5; Tue, 19 Sep 2023 11:18:06 +0200
-Date: Tue, 19 Sep 2023 11:18:06 +0200
-From: Michael Grzeschik <mgr@pengutronix.de>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Jeff Vanhoof <jdv1029@gmail.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dan Vacura <w36195@motorola.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	Daniel Scally <dan.scally@ideasonboard.com>,
-	Jeff Vanhoof <qjv001@motorola.com>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Felipe Balbi <balbi@kernel.org>,
-	Paul Elder <paul.elder@ideasonboard.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Message-ID: <ZQlnTsLriLGvZPfo@pengutronix.de>
-References: <20221018215044.765044-1-w36195@motorola.com>
- <20221018215044.765044-3-w36195@motorola.com>
- <Y1PUjO99fcgaN0tc@kroah.com>
- <20221022133541.GA26431@qjv001-XeonWs>
- <20221024224748.3aao6cox5y4ptmob@synopsys.com>
- <ZQlln94I7MPlX0ff@pengutronix.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00C9738DED
+	for <linux-usb@vger.kernel.org>; Tue, 19 Sep 2023 09:25:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8683C433C8;
+	Tue, 19 Sep 2023 09:25:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1695115516;
+	bh=wOd+SarwGP4T3vpwPLPNeCYjoyb6XTJraOKvPadONUQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=v81CP53hmUlxPIGQp7N0Zh09cVBZOoiEWJmNyv6UfoIwEyGMm0zAJfOPS4pXwFbrc
+	 qfzeh7VWTHmFJtwUcneD7Ghs7Fqp8zavFWUhX6gqEAY8hprxSVmDUCmaQh0KWTo5vZ
+	 lNv0ODY+wBcyW9SQAf2aC12y3g/PysmHOhsOft98=
+Date: Tue, 19 Sep 2023 11:25:13 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Michael Wu <michael@allwinnertech.com>
+Cc: linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb:typec:tcpm:support double Rp to Vbus cable as sink
+Message-ID: <2023091900-dilation-bully-c56b@gregkh>
+References: <20230919090632.42517-1-michael@allwinnertech.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="sr2zawqPPoJoClMC"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZQlln94I7MPlX0ff@pengutronix.de>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:2:b01:1d::c5
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v4 2/6] usb: dwc3: gadget: cancel requests instead of
- release after missed isoc
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on metis.whiteo.stw.pengutronix.de)
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+In-Reply-To: <20230919090632.42517-1-michael@allwinnertech.com>
 
+On Tue, Sep 19, 2023 at 05:06:32PM +0800, Michael Wu wrote:
+> The USB Type-C Cable and Connector Specification defines the wire
+> connections for the USB Type-C to USB 2.0 Standard-A cable assembly
+> (Release 2.2, Chapter 3.5.2).
+> The Notes says that Pin A5 (CC) of the USB Type-C plug shall be connected
+> to Vbus through a resister Rp.
+> However, there is a large amount of such double Rp connected to Vbus
+> non-standard cables which produced by UGREEN circulating on the market, and
+> it can affects the normal operations of the state machine easily,
+> especially to CC1 and CC2 be pulled up at the same time.
+> In fact, we can regard those cables as sink to avoid abnormal state.
+> 
+> Message as follow:
+> [   58.900212] VBUS on
+> [   59.265433] CC1: 0 -> 3, CC2: 0 -> 3 [state TOGGLING, polarity 0, connected]
+> [   62.623308] CC1: 3 -> 0, CC2: 3 -> 0 [state TOGGLING, polarity 0, disconnected]
+> [   62.625006] VBUS off
+> [   62.625012] VBUS VSAFE0V
+> 
+> Signed-off-by: Michael Wu <michael@allwinnertech.com>
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index d962f67c95ae6..6e843c511b856 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -517,9 +517,9 @@ static const char * const pd_rev[] = {
+>  	((cc) == TYPEC_CC_RP_DEF || (cc) == TYPEC_CC_RP_1_5 || \
+>  	 (cc) == TYPEC_CC_RP_3_0)
+>  
+> +/* As long as cc is pulled up, we can consider it as sink. */
+>  #define tcpm_port_is_sink(port) \
+> -	((tcpm_cc_is_sink((port)->cc1) && !tcpm_cc_is_sink((port)->cc2)) || \
+> -	 (tcpm_cc_is_sink((port)->cc2) && !tcpm_cc_is_sink((port)->cc1)))
+> +	(tcpm_cc_is_sink((port)->cc1) || tcpm_cc_is_sink((port)->cc2))
+>  
+>  #define tcpm_cc_is_source(cc) ((cc) == TYPEC_CC_RD)
+>  #define tcpm_cc_is_audio(cc) ((cc) == TYPEC_CC_RA)
+> -- 
+> 2.29.0
+> 
+> 
 
---sr2zawqPPoJoClMC
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi,
 
-On Tue, Sep 19, 2023 at 11:10:55AM +0200, Michael Grzeschik wrote:
->On Mon, Oct 24, 2022 at 10:47:53PM +0000, Thinh Nguyen wrote:
->>On Sat, Oct 22, 2022, Jeff Vanhoof wrote:
->>>Hi Greg,
->>>
->>>On Sat, Oct 22, 2022 at 01:31:24PM +0200, Greg Kroah-Hartman wrote:
->>>> On Tue, Oct 18, 2022 at 04:50:38PM -0500, Dan Vacura wrote:
->>>> > From: Jeff Vanhoof <qjv001@motorola.com>
->>>> >
->>>> > arm-smmu related crashes seen after a Missed ISOC interrupt when
->>>> > no_interrupt=3D1 is used. This can happen if the hardware is still u=
-sing
->>>> > the data associated with a TRB after the usb_request's ->complete ca=
-ll
->>>> > has been made.  Instead of immediately releasing a request when a Mi=
-ssed
->>>> > ISOC interrupt has occurred, this change will add logic to cancel the
->>>> > request instead where it will eventually be released when the
->>>> > END_TRANSFER command has completed. This logic is similar to some of=
- the
->>>> > cleanup done in dwc3_gadget_ep_dequeue.
->>>> >
->>>> > Fixes: 6d8a019614f3 ("usb: dwc3: gadget: check for Missed Isoc from =
-event status")
->>>> > Cc: <stable@vger.kernel.org>
->>>> > Signed-off-by: Jeff Vanhoof <qjv001@motorola.com>
->>>> > Co-developed-by: Dan Vacura <w36195@motorola.com>
->>>> > Signed-off-by: Dan Vacura <w36195@motorola.com>
->>>> > ---
->>>> > V1 -> V3:
->>>> > - no change, new patch in series
->>>> > V3 -> V4:
->>>> > - no change
->>>>
->>>> I need an ack from the dwc3 maintainer before I can take this one.
->>>>
->>>> thanks,
->>>>
->>>> greg k-h
->>>
->>>Thinh has rejected this version of the patch. He has provided an alterna=
-tive
->>>implementation which has been testing well for us so far. Either Thinh o=
-r Dan
->>>will formalize this patch within the next few days.
->>>The latest proposed changes are:
->>>
->>>diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->>>index dfaf9ac24c4f..50287437d6de 100644
->>>--- a/drivers/usb/dwc3/gadget.c
->>>+++ b/drivers/usb/dwc3/gadget.c
->>>@@ -3195,6 +3195,9 @@ static int dwc3_gadget_ep_reclaim_completed_trb(st=
-ruct dwc3_ep *dep,
->>>        if (event->status & DEPEVT_STATUS_SHORT && !chain)
->>>                return 1;
->>>
->>>+       if (DWC3_TRB_SIZE_TRBSTS(trb->size) =3D=3D DWC3_TRBSTS_MISSED_IS=
-OC && !chain)
->>>+               return 1;
->>>+
->>>        if ((trb->ctrl & DWC3_TRB_CTRL_IOC) ||
->>>            (trb->ctrl & DWC3_TRB_CTRL_LST))
->>>                return 1;
->>>@@ -3211,6 +3214,7 @@ static int dwc3_gadget_ep_reclaim_trb_sg(struct dw=
-c3_ep *dep,
->>>        struct scatterlist *s;
->>>        unsigned int num_queued =3D req->num_queued_sgs;
->>>        unsigned int i;
->>>+       bool missed_isoc =3D false;
->>>        int ret =3D 0;
->>>
->>>        for_each_sg(sg, s, num_queued, i) {
->>>@@ -3219,12 +3223,18 @@ static int dwc3_gadget_ep_reclaim_trb_sg(struct =
-dwc3_ep *dep,
->>>                req->sg =3D sg_next(s);
->>>                req->num_queued_sgs--;
->>>
->>>+               if (DWC3_TRB_SIZE_TRBSTS(trb->size) =3D=3D DWC3_TRBSTS_M=
-ISSED_ISOC)
->>>+                       missed_isoc =3D true;
->>>+
->>>                ret =3D dwc3_gadget_ep_reclaim_completed_trb(dep, req,
->>>                                trb, event, status, true);
->>>                if (ret)
->>>                        break;
->>>        }
->>>
->>>+       if (missed_isoc)
->>>+               ret =3D 1;
->>>+
->>>        return ret;
->>> }
->>>
->>>
->>
->>That's just a debug patch. I'll send out proper fix patches.
->
->Ping!
->
->While digging out this thread, I did not find any followup patch
->for this suggestion. Did it hit the mailinglist anywhere?
->
->If not, will you send one?
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-Nevermind, I think I found the hunk in a variated version in this series.
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-https://lore.kernel.org/linux-usb/cover.1666735451.git.Thinh.Nguyen@synopsy=
-s.com/
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/process/submitting-patches.rst for what
+  needs to be done here to properly describe this.
 
-Michael
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+thanks,
 
---sr2zawqPPoJoClMC
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmUJZ0gACgkQC+njFXoe
-LGSIIBAAhZlRUqMeCB683Wh9mhpH9TldcDgLVwYvLrbgjA369sDRvnp0Bq/UHunS
-Y6GxMg6NU2hZCF21Fo5KT7KOJcaBzU5oKmMsuaEGIpPEKekdglBmhtzNzWwZ6b3w
-kC+D+AaG3dF1QZDc1Wr2FK7uV2y4qHRqecTXFfKNJYAl/hRNSzz/lsNsbiW3Rcu/
-8j5C7FnlW8AB1SB6MNrQkYhMlJpS54pcnvJGSTj66Unotet1Qjc5VALiDnJlvBlw
-M0BdZy+vhOXyjpNshOe+vwujXKwIYz3gLcg8F4SyCY2p22BoiWGMrq/b5oviBuwT
-CwfjO0R/W0V5A11TEHeqd480M/3EUHhiwPVzepxHCBeplCSL8xMAmvPc/aaWdlov
-F3YbEeEe7m1WRGbiyiFvJyZQJrsLHwJEdcGwNrbjCgYBQlAlIpG8rH0VLgxavDg+
-8/8vOgCxbU1wFXy8z5gL3j1bilnuYH80DrBC/x8+/Or5NpmjiRCLGl1OpRtlS04l
-sgb9HJBn1poXrhrT7/gheQba7NszcUVlZlhMolo5KJ6xdceAYESsGw0rUo8r2DfG
-UxId9xPb9FlPbsV9e78Rukiri3Zzj5n27okY24RmcLOLR5m2a+Ha0D0qH7sbcbrR
-tqqH3uRag5Z02JPbNzOUTqPQpt/5ezXdygoAZi49IrZSajPQUA4=
-=bEGO
------END PGP SIGNATURE-----
-
---sr2zawqPPoJoClMC--
+greg k-h's patch email bot
 
