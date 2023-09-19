@@ -1,34 +1,50 @@
-Return-Path: <linux-usb+bounces-383-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-384-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D9057A67BD
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 17:14:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13C397A68DF
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 18:29:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EA0F028187F
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 15:14:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2A6171C2096D
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 16:29:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD9FB3B7B4;
-	Tue, 19 Sep 2023 15:13:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B00B43AC0A;
+	Tue, 19 Sep 2023 16:28:46 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5C343B793
-	for <linux-usb@vger.kernel.org>; Tue, 19 Sep 2023 15:13:46 +0000 (UTC)
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by lindbergh.monkeyblade.net (Postfix) with SMTP id EB34CBE
-	for <linux-usb@vger.kernel.org>; Tue, 19 Sep 2023 08:13:43 -0700 (PDT)
-Received: (qmail 1192133 invoked by uid 1000); 19 Sep 2023 11:13:43 -0400
-Date: Tue, 19 Sep 2023 11:13:43 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: burcheri.massimo+linux-usb@gmail.com
-Cc: linux-usb <linux-usb@vger.kernel.org>
-Subject: Re: JMicron JMS567 and UAS
-Message-ID: <a5b48a53-9dff-4a84-9a58-1c08f0e0781b@rowland.harvard.edu>
-References: <5d8cad13445172d02a371f162ceaea1a68819819.camel@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72E9636AEF;
+	Tue, 19 Sep 2023 16:28:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BBAFC433C8;
+	Tue, 19 Sep 2023 16:28:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1695140926;
+	bh=Gs2VeKYvanEmhRbfroqQm1XNSDENhOjKx9E77X+qzDw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=WImvJ0PNoZteN42w7al/gnnH+lwAzvx7thtk8cjvknG2YkrhW/o+QsmNUwQER6jrS
+	 8DlDdEMHAA7qTT3YAMwRH6UU96mUJBfl5CDSI+k8dgNNiBqAcqx7aOOSHLiq1iXCfq
+	 /pWeAq4E2YoLuxbB5c7bVdaIWj/hYqy7jRwC5/1rtgdIxnJFcRi/azKy5vfkbGRAEO
+	 vXlV24Sf4DcR7UoJH0/TysoI69PK9k+u7pdgH1OYtI4juxuEBjTlRU7JzfRnfNpsYC
+	 MnM6VYFzy0BGBSZ36Tz/EI54ujxh/LQUitvrn3MI/rzsvsxkyX1vva9i9uaf0OhA/f
+	 R0wBWR4b07glA==
+Received: (nullmailer pid 4059576 invoked by uid 1000);
+	Tue, 19 Sep 2023 16:28:37 -0000
+Date: Tue, 19 Sep 2023 11:28:37 -0500
+From: Rob Herring <robh@kernel.org>
+To: Tomer Maimon <tmaimon77@gmail.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, peter.chen@kernel.org, gregkh@linuxfoundation.org, krzysztof.kozlowski+dt@linaro.org, xu.yang_2@nxp.com, peng.fan@nxp.com, avifishman70@gmail.com, tali.perry1@gmail.com, joel@jms.id.au, venture@google.com, yuenn@google.com, benjaminfair@google.com, j.neuschaefer@gmx.net, openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] dt-binding: usb: ci-hdrc-usb2: document Nuvoton
+ NPCM supprt
+Message-ID: <20230919162837.GA4051010-robh@kernel.org>
+References: <20230918165958.2659-1-tmaimon77@gmail.com>
+ <20230918165958.2659-2-tmaimon77@gmail.com>
+ <b7a337f2-a810-d14c-e7cd-15e33a9ecb5d@linaro.org>
+ <CAP6Zq1gSJYsNUuD-bexFW_1VpAUuF_WZkicNzZms6hVdo9LnMQ@mail.gmail.com>
+ <e0d42d13-b307-9915-97c8-948261b39ce1@linaro.org>
+ <CAP6Zq1g0=-h0PFg2a8bqao+XjdNHoxGMdYSRRPAnfY_6WdemAw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -37,58 +53,51 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5d8cad13445172d02a371f162ceaea1a68819819.camel@gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+In-Reply-To: <CAP6Zq1g0=-h0PFg2a8bqao+XjdNHoxGMdYSRRPAnfY_6WdemAw@mail.gmail.com>
 
-On Tue, Sep 19, 2023 at 03:34:21PM +0200, Massimo Burcheri wrote:
-> Hi,
-> 
-> coming from https://lore.kernel.org/all/20200818041324.GA3173@Susan/
-> 
-> as I understand UAS was working for JMicron JMS567 in the past, then was
-> disabled in the kernel, now using usb-storage.
+On Tue, Sep 19, 2023 at 04:31:56PM +0300, Tomer Maimon wrote:
+> On Tue, 19 Sept 2023 at 15:39, Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+> >
+> > On 19/09/2023 07:14, Tomer Maimon wrote:
+> > >>>            - nvidia,tegra20-ehci
+> > >>>            - nvidia,tegra20-udc
+> > >>>            - nvidia,tegra30-ehci
+> > >>> @@ -325,6 +326,20 @@ properties:
+> > >>>      type: boolean
+> > >>>      deprecated: true
+> > >>>
+> > >>> +  nuvoton,sysgcr:
+> > >>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> > >>> +    items:
+> > >>> +      - items:
+> > >>> +          - description: phandle to syscon that configures usb phy mux.
+> > >>> +          - description: offset of usb phy mux selection.
+> > >>> +          - description: mask usb phy mux selection.
+> > >>> +          - description: value usb phy mux selection.
+> > >>> +    description:
+> > >>> +      A phandle to syscon with three arguments that configure usb phy mux.
+> > >>> +      The argument one is the offset of usb phy mux selection, the argument two
+> > >>> +      is the mask usb phy mux selection, the argument three is the mask usb phy
+> > >>> +      mux selection.
+> > >>
+> > >> Sorry, you miss phy driver. Don't use syscon instead of proper hardware
+> > >> devices.
+> > > Sorry the role of nuvoton,sysgcr property is to handle a mux between
+> > > the different devices and not the handle the phy itself, handle the
+> > > mux done in the GCR.
+> > > Should we move the nuvoton,sysgcr description to another place in the
+> > > ci-hdrc-usb2.yaml
+> > > or
+> > > Should we use a different driver to handle the mux and call it from
+> > > the ci-hdrc-npcm driver, If yes which driver should we use?
+> >
+> > What is an "usb phy mux"?
+> We have USB phy that could be connected to USB host (different driver)
+> or it can be connected to the UDC driver(ChipIdea)
 
-How did you get that idea?  After looking through the email archives, I 
-found this bug report from 2015:
+Isn't that just role switching? There is a driver framework for that in 
+drivers/usb/roles/. Though it doesn't seem widely used yet.
 
-	https://bugzilla.redhat.com/show_bug.cgi?id=1260207
-
-> Why? The hardware should support UAS and does so on Windows. Before 5.4 it was
-> working with UAS on Linux as well.
-
-That bug report indicates that the device wasn't working properly with a 
-4.1.4 kernel.  Of course, it's possible that the problem had more to do 
-with the drive inside the enclosure than the enclosure itself.
-
-> I purchased a 5-bay USB enclosure "ORICO DS500U3" but UAS is not working:
->   4-5               152d:0567 00 1IF  [USB 3.00,  5000 Mbps,   8mA] (JMicron
-> External USB 3.0 20170331000C3)
-> 
->     |__ Port 5: Dev 8, If 0, Class=Mass Storage, Driver=usb-storage, 5000M
-> 
-> Aug 28 18:47:09 [kernel] usb 4-5: new SuperSpeed USB device number 8 using xhci_hcd
-> Aug 28 18:47:09 [kernel] usb 4-5: New USB device found, idVendor=152d, idProduct=0567, bcdDevice=52.03
-> Aug 28 18:47:09 [kernel] usb 4-5: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-> Aug 28 18:47:09 [kernel] usb 4-5: Product: External USB 3.0
-> Aug 28 18:47:09 [kernel] usb 4-5: Manufacturer: JMicron
-> Aug 28 18:47:09 [kernel] usb 4-5: SerialNumber: 20170220000C3
-> Aug 28 18:47:09 [kernel] usb-storage 4-5:1.0: USB Mass Storage device detected
-> Aug 28 18:47:09 [kernel] usb-storage 4-5:1.0: Quirks match for vid 152d pid 0567: 5000000
-> Aug 28 18:47:09 [kernel] scsi host8: usb-storage 4-5:1.0
-> Aug 28 18:47:09 [mtp-probe] checking bus 4, device 8: "/sys/devices/pci0000:00/0000:00:14.0/usb4/4-5"
-> Aug 28 18:47:09 [mtp-probe] bus: 4, device: 8 was not an MTP device
-> 
-> With a mdraid raid0 and 5x1TB discs I get only about 72MiB/s to the raid0 which
-> is really slow. UAS could do more.
-> 
-> Is there any chance UAS could get fixed for that device in the future? At least
-> is seems to have worked someday with older kernels?
-
-How do you know this?
-
-Alan Stern
+Rob
 
