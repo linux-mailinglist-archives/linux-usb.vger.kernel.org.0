@@ -1,114 +1,179 @@
-Return-Path: <linux-usb+bounces-359-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-360-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BDD47A597B
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 07:44:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8112E7A5A10
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 08:41:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1836B281F05
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 05:44:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9CBE01C20922
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 06:41:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC6E735883;
-	Tue, 19 Sep 2023 05:44:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 373E734197;
+	Tue, 19 Sep 2023 06:41:27 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D04AA3B
-	for <linux-usb@vger.kernel.org>; Tue, 19 Sep 2023 05:44:08 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC51100
-	for <linux-usb@vger.kernel.org>; Mon, 18 Sep 2023 22:44:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695102247; x=1726638247;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2JSxPd0iDgK0rRcLhmUxXOd/myooTf3Xhn8uneTCi/s=;
-  b=JgKlYYRrJmE91XZhpq6VG+6QvlFEf8ZnsOoes5RMn/ecP3oy5sg21UtC
-   il9PNUh/43q9cDmqFu6PSRm3FIXeZYjmRCYRzwQ8BKd4WzFfrEXsYmzu2
-   BBdrjXlmFn7uqgYH4ofp2OhPGaVuPpxADlTQFHahRwQrClf/5e14uo0IY
-   aDIB++O8DFOq8YzFJGDjqY1UFTJDWM5R3p1ZvEUF+Y78ljGCUIwgZEMan
-   lPgK558pqzoZLwtPishGLp7ZNdcYCYhb6m6yC90hCi1jwZkEJyvIx2GhX
-   8keUN+OozIa7sdhHLpu6JZMz+3/NdZ4brAEmUo4EelT3wPoUdWK0bJ8Av
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10837"; a="410789321"
-X-IronPort-AV: E=Sophos;i="6.02,158,1688454000"; 
-   d="scan'208";a="410789321"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2023 22:44:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10837"; a="861391103"
-X-IronPort-AV: E=Sophos;i="6.02,158,1688454000"; 
-   d="scan'208";a="861391103"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 18 Sep 2023 22:44:04 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 78B89128; Tue, 19 Sep 2023 08:44:03 +0300 (EEST)
-Date: Tue, 19 Sep 2023 08:44:03 +0300
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	linux-usb@vger.kernel.org,
-	Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [GIT PULL] USB4/Thunderbolt fixes for v6.6-rc3
-Message-ID: <20230919054403.GX1599918@black.fi.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DF8479C0
+	for <linux-usb@vger.kernel.org>; Tue, 19 Sep 2023 06:41:25 +0000 (UTC)
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A86A116
+	for <linux-usb@vger.kernel.org>; Mon, 18 Sep 2023 23:41:22 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38J5j4kd029011;
+	Tue, 19 Sep 2023 06:41:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=S8DOQNJ/euyiNGksYfKalyrHNlUdw5ZXpBrMMC/pU/k=;
+ b=ln4VOCMrutmBzEu9wKa17+0NioEEU2bokiUvrzn+Z7sb4qMM0MJ06mWc/a3kC1kz6NQR
+ Y1Oo3EhVMpa1XmxIYtsF3EYgImGdomzewk/bPd/mY8iVCCs7IDsoEqZ6OMRuLoRFktpL
+ P3oZVSWIQiuMu9uhblv5Wz+bmLmaNcB918FNlCi45S9Di+3nxBFWsSH9biSbEDulKtNu
+ DvVlW/kLkp7I1MT8/wICvi+V2j194KzfxPRmTGxTMvoFjTc3KHbMesrn1eXMwzz1uQni
+ 9dLSKvSh967E2/K/wrmS2uy7h6yyzwUuL80NhsbFHTGs9NmMBN5gl6pLkUa7n1qEAuzw FA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t6mv1t54n-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 19 Sep 2023 06:41:17 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38J6fGDV004734
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 19 Sep 2023 06:41:16 GMT
+Received: from [10.217.219.221] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Mon, 18 Sep
+ 2023 23:41:15 -0700
+Message-ID: <daeaedc7-0fff-43f5-8fb3-d5355125f566@quicinc.com>
+Date: Tue, 19 Sep 2023 12:11:12 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-	autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: XHCI: Implement xhci_handshake_check_state() API
+Content-Language: en-US
+To: Mathias Nyman <mathias.nyman@intel.com>
+CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>
+References: <20230919053934.18037-1-quic_ugoswami@quicinc.com>
+From: Udipto Goswami <quic_ugoswami@quicinc.com>
+In-Reply-To: <20230919053934.18037-1-quic_ugoswami@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: NBgXTdW6NzSuf2f7KvzX5_2yAtjoKlH4
+X-Proofpoint-ORIG-GUID: NBgXTdW6NzSuf2f7KvzX5_2yAtjoKlH4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-09-18_11,2023-09-18_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ priorityscore=1501 spamscore=0 malwarescore=0 phishscore=0
+ lowpriorityscore=0 bulkscore=0 mlxlogscore=578 suspectscore=0 mlxscore=0
+ adultscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2308100000 definitions=main-2309190055
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Hi Greg,
 
-The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
 
-  Linux 6.6-rc1 (2023-09-10 16:28:41 -0700)
+On 9/19/2023 11:09 AM, Udipto Goswami wrote:
+> In some situations where xhci removal happens parallel to
+> xhci_handshake, we enoughter a scenario where the
+> xhci_handshake will fails because the status does not change
+> the entire duration of polling. This causes the xhci_handshake
+> to timeout resulting in long wait which might lead to watchdog
+> timeout.
+> 
+> The API  handles command timeout which may happen upon XHCI
+> stack removal. Check for xhci state and exit the handshake if
+> xhci is removed.
+> 
+> Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+> ---
+>   drivers/usb/host/xhci-ring.c |  2 +-
+>   drivers/usb/host/xhci.c      | 20 +++++++++++++++++++-
+>   drivers/usb/host/xhci.h      |  2 ++
+>   3 files changed, 22 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+> index 1dde53f6eb31..af9e27d3d303 100644
+> --- a/drivers/usb/host/xhci-ring.c
+> +++ b/drivers/usb/host/xhci-ring.c
+> @@ -450,7 +450,7 @@ static int xhci_abort_cmd_ring(struct xhci_hcd *xhci, unsigned long flags)
+>   	 * In the future we should distinguish between -ENODEV and -ETIMEDOUT
+>   	 * and try to recover a -ETIMEDOUT with a host controller reset.
+>   	 */
+> -	ret = xhci_handshake(&xhci->op_regs->cmd_ring,
+> +	ret = xhci_handshake_check_state(xhci, &xhci->op_regs->cmd_ring,
+>   			CMD_RING_RUNNING, 0, 5 * 1000 * 1000);
+>   	if (ret < 0) {
+>   		xhci_err(xhci, "Abort failed to stop command ring: %d\n", ret);
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index e1b1b64a0723..b3407fdce288 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+> @@ -84,6 +84,23 @@ int xhci_handshake(void __iomem *ptr, u32 mask, u32 done, u64 timeout_us)
+>   /*
+>    * Disable interrupts and begin the xHCI halting process.
+>    */
+> +int xhci_handshake_check_state(struct xhci_hcd *xhci,
+> +	void __iomem *ptr, u32 mask, u32 done, int usec)
+> +{
+> +	u32	result;
+> +
+> +	ret = readl_poll_timeout_atomic(ptr, result,
+> +				(result & mask) == done ||
+> +				result == U32_MAX ||
+> +				xhci->xhc_state & exit_state,
+> +				1, timeout_us);
+> +
+> +	if (result == U32_MAX || xhci->xch_state & exit_state)
+> +		return -ENODEV;
+> +
+> +	return ret;
+> +}
+> +
+>   void xhci_quiesce(struct xhci_hcd *xhci)
+>   {
+>   	u32 halted;
+> @@ -201,7 +218,8 @@ int xhci_reset(struct xhci_hcd *xhci, u64 timeout_us)
+>   	if (xhci->quirks & XHCI_INTEL_HOST)
+>   		udelay(1000);
+>   
+> -	ret = xhci_handshake(&xhci->op_regs->command, CMD_RESET, 0, timeout_us);
+> +	ret = xhci_handshake_check_state(xhci, &xhci->op_regs->command,
+> +						CMD_RESET, 0, timeout_us);
+>   	if (ret)
+>   		return ret;
+>   
+> diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+> index 7e282b4522c0..504c04d19c05 100644
+> --- a/drivers/usb/host/xhci.h
+> +++ b/drivers/usb/host/xhci.h
+> @@ -2119,6 +2119,8 @@ void xhci_free_container_ctx(struct xhci_hcd *xhci,
+>   /* xHCI host controller glue */
+>   typedef void (*xhci_get_quirks_t)(struct device *, struct xhci_hcd *);
+>   int xhci_handshake(void __iomem *ptr, u32 mask, u32 done, u64 timeout_us);
+> +int xhci_handshake_check_state(struct xhci_hcd *xhci,
+> +			void __iomem *ptr, u32 mask, u32 done, int usec);
+>   void xhci_quiesce(struct xhci_hcd *xhci);
+>   int xhci_halt(struct xhci_hcd *xhci);
+>   int xhci_start(struct xhci_hcd *xhci);
 
-are available in the Git repository at:
+Please ignore this one, seems the changes isn't correct.
+Will push a v2 for the same.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v6.6-rc3
-
-for you to fetch changes up to 308092d080852f8997126e5b3507536162416f4a:
-
-  thunderbolt: Restart XDomain discovery handshake after failure (2023-09-15 13:01:18 +0300)
-
-----------------------------------------------------------------
-thunderbolt: Fixes for v6.6-rc3
-
-This includes following fixes for v6.6-rc3:
-
-  - Add a workaround for IOMMU faults for certain systems with Intel
-    Maple Ridge
-  - Make sure lane 1 is in CL0 before bonding lanes
-  - Correct TMU mode initialization from hardware
-  - Restart XDomain discovery handshake after failure.
-
-All these have been in linux-next with no reported issues.
-
-----------------------------------------------------------------
-Mika Westerberg (4):
-      thunderbolt: Workaround an IOMMU fault on certain systems with Intel Maple Ridge
-      thunderbolt: Check that lane 1 is in CL0 before enabling lane bonding
-      thunderbolt: Correct TMU mode initialization from hardware
-      thunderbolt: Restart XDomain discovery handshake after failure
-
- drivers/thunderbolt/icm.c     | 40 ++++++++++++++---------------
- drivers/thunderbolt/switch.c  |  7 ++++++
- drivers/thunderbolt/tmu.c     |  2 +-
- drivers/thunderbolt/xdomain.c | 58 ++++++++++++++++++++++++++++++-------------
- 4 files changed, 69 insertions(+), 38 deletions(-)
+Thanks,
+-Udipto
 
