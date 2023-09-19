@@ -1,202 +1,244 @@
-Return-Path: <linux-usb+bounces-366-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-368-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E0597A5BC8
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 09:57:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8A2C7A5BFA
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 10:08:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C58ED281BF3
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 07:57:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B39831C2115D
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 08:08:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DB9038DD4;
-	Tue, 19 Sep 2023 07:57:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82C5E38DF5;
+	Tue, 19 Sep 2023 08:08:11 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A472979CF
-	for <linux-usb@vger.kernel.org>; Tue, 19 Sep 2023 07:57:42 +0000 (UTC)
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3037F100;
-	Tue, 19 Sep 2023 00:57:39 -0700 (PDT)
-X-UUID: 2ef32e5656c211ee8051498923ad61e6-20230919
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=y3UNZRZkStE/oix1LW2KuEpLXthO62RoZaycpGsl93A=;
-	b=S+tmBpRWJaG/+3fDgFDc8InWjrpzqonJJvlLa0vsht3IhRCKeUbw6Za9H3OzU6nXFRU/3+0435CaTVBLFy+l7Ylf5gsRLTIC4oBJsDTNt1hwxx59IxGs/7Gz+hYkqI+SIEH2sTQlf/cHgV2yJ03pK55W3SHkbpkDEaOYQfOGxVE=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.32,REQID:5dc60e79-0cd3-4684-999c-27a7b11095aa,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:5f78ec9,CLOUDID:ffd201bf-14cc-44ca-b657-2d2783296e72,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-	RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:
-	NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
-X-UUID: 2ef32e5656c211ee8051498923ad61e6-20230919
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-	(envelope-from <chunfeng.yun@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1102026814; Tue, 19 Sep 2023 15:57:30 +0800
-Received: from mtkmbs10n1.mediatek.inc (172.21.101.34) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Tue, 19 Sep 2023 15:57:29 +0800
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (172.21.101.237)
- by mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Tue, 19 Sep 2023 15:57:29 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QttUI+cQx8H1D+gMzyh0XD/ZdlwxBqOePgoKEsNyw+9pMNXcgzMGLVhPEBHnty1RBJAPHt9FfFBxXtNpG3c01YLbiBXc+tBIdvqXpCsmgTQH02jAecXIr4lTCbD9bPv/daIWE7BIgyINXr3bHsVRbmnRMFR9KeQE0TKAnYLj9LIQZEAYoNJE1DDLNKMj/TXGTrb23+wxM4GUMeD3uJgPAkGg0asjYt//Z4HoM2/MNtblLbm91KANCIO6CZnHQeZ06jAEVjKMCRZ/SEP/vMkFYd/vrdpuEnCjexw8LED8PWzugBbUaoHQoVNP/7Z9Bj7ECsAA2VHXf2t27vDFwIGDdQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=y3UNZRZkStE/oix1LW2KuEpLXthO62RoZaycpGsl93A=;
- b=lg/rln7Ly7OoUWjmcpZ52+EJnhE0LHJ4IEsisT2cGLSQYxFSJZhlZe7EmhVNcygCW+zQUiYvSVEsu4VViF6wgAHtin549fAH/62hJ+eTWnCRzvMYWm/LqoKcYanwh3WfFmw5ekHkbdVTwcg3M946wPSCKSRttyI5//VRSRVU9HGZcvYfpFJYgaTlms0WBL7ZOps5aKfD/SVxU+dintLjAoaOHKKcZfz0+zVzGNttSSjGXNnQVdYByGKAY5qhhiBPEczrarqwaiVcFvWt68I11rNaec/sxkpwsfxu/j/Yvhcfyw3ydh67TYZ42/peWkPJhPVeVkIM5wubQltJWGSiSQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
- dkim=pass header.d=mediatek.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC4844697
+	for <linux-usb@vger.kernel.org>; Tue, 19 Sep 2023 08:08:09 +0000 (UTC)
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11AD6114
+	for <linux-usb@vger.kernel.org>; Tue, 19 Sep 2023 01:08:08 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1c4194f769fso38234115ad.3
+        for <linux-usb@vger.kernel.org>; Tue, 19 Sep 2023 01:08:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=y3UNZRZkStE/oix1LW2KuEpLXthO62RoZaycpGsl93A=;
- b=sJUOZfZ3ZLFI3VrNiRJXZRfypVlrucQLxYfITRIhAQTQ+sx7pbtIxwiaFJxu5DrJ9ulSTjd3z5DtH7bvjDbwjNBhDRu8WsvTN+ohfliw2DibhhLS3VxBxgEFO2pbrVmjQh6MZtEm9SXH+SDmDuGPpj3Is1Vd6K2u4M9ryIsbbro=
-Received: from TYZPR03MB7153.apcprd03.prod.outlook.com (2603:1096:400:33c::6)
- by JH0PR03MB7656.apcprd03.prod.outlook.com (2603:1096:990:b::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.27; Tue, 19 Sep
- 2023 07:57:27 +0000
-Received: from TYZPR03MB7153.apcprd03.prod.outlook.com
- ([fe80::ca92:ecfd:d3bd:a9d3]) by TYZPR03MB7153.apcprd03.prod.outlook.com
- ([fe80::ca92:ecfd:d3bd:a9d3%5]) with mapi id 15.20.6768.029; Tue, 19 Sep 2023
- 07:57:26 +0000
-From: =?utf-8?B?Q2h1bmZlbmcgWXVuICjkupHmmKXls7Ap?= <Chunfeng.Yun@mediatek.com>
-To: "angelogioacchino.delregno@collabora.com"
-	<angelogioacchino.delregno@collabora.com>, "gregkh@linuxfoundation.org"
-	<gregkh@linuxfoundation.org>, "mathias.nyman@intel.com"
-	<mathias.nyman@intel.com>
-CC: "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "matthias.bgg@gmail.com"
-	<matthias.bgg@gmail.com>, "linux-mediatek@lists.infradead.org"
-	<linux-mediatek@lists.infradead.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-usb@vger.kernel.org"
-	<linux-usb@vger.kernel.org>
-Subject: Re: [PATCH 1/2] usb: xhci-mtk: add a bandwidth budget table
-Thread-Topic: [PATCH 1/2] usb: xhci-mtk: add a bandwidth budget table
-Thread-Index: AQHZ2z15Jmfk9XeA8E+8+1vP3dvpyrAaMeSAgAe1dQA=
-Date: Tue, 19 Sep 2023 07:57:26 +0000
-Message-ID: <51d4f160ea5d99c310f88381a1e0a3cd2ebd9f05.camel@mediatek.com>
-References: <20230830122820.18859-1-chunfeng.yun@mediatek.com>
-	 <712ab5f3-eb61-f7e5-fc67-c6c175beaac0@collabora.com>
-In-Reply-To: <712ab5f3-eb61-f7e5-fc67-c6c175beaac0@collabora.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=mediatek.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYZPR03MB7153:EE_|JH0PR03MB7656:EE_
-x-ms-office365-filtering-correlation-id: 0fc158f2-318a-451d-0ab2-08dbb8e610e7
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Wla+3kaG7wfn1Z/vu17Yv3s+lURlTdLiQrNiZzIG3qbDQHylNoI2loGfis6nfiJLJrolsrTD9HFDWuEIllyR7IZ0AEncn6/0HPxLFnP67/XnZQSzNCSjb1Xqh/Y8yMJED9X2GZ2AaaEJZ/V7PTnSmDt7J2psZP4/dDhDo+Pu8ip9lg8EE/EzR0ygSWGlxZYIQ4D/iKv61nYReNV0uai3rna+Z5ovQygVE4GsV3mNv0s2wDUITwWRQ1LgjGb6Qgu4KPkkSEJiBLsdro8T5AT+8JP4zr0/097waTuIpBU1fyNYKNdZhA87K/8iaFWF5x4TqnCjIGQCKvo4YGuT1MDgQCyvMBvThiYrNnCkaWBusCU1O1n9WD0QvhvpUlTEjAqo3HvWAub6G3dfT4aqjud1NcfHvzoRk9HaSd0HV36mouWMve448aUtaUa7EmcYMir+ZidZBR60XKRk+Cs0EZoOtMLFjXHrQhL8h+nhRMGrlmHVYpn3BjrF5J4ZsA9RavMq9t/Zh3RAZQQ21oQe4rNY9RJdF/BDE5uNdo+fRhmu3OnIEhBK+X7F92jArMlPv5Cco0rcaAt/hF2pjyXEu34R/IdXgUD8ed9I1z/iZdOvCQAMM+7ld9Yf3fSy2Yn0orNtKW0iUrKb49eka+DlCMilonpBaXuc7zED6eTmo0lnET+qSeLQBzGd3Cwnu/ghyv9g
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR03MB7153.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(396003)(376002)(346002)(39860400002)(136003)(451199024)(1800799009)(186009)(2906002)(5660300002)(66446008)(110136005)(26005)(66946007)(66556008)(41300700001)(316002)(66476007)(64756008)(54906003)(91956017)(4744005)(76116006)(478600001)(8936002)(4326008)(8676002)(71200400001)(6486002)(6506007)(6512007)(2616005)(36756003)(85182001)(38070700005)(122000001)(38100700002)(86362001)(83380400001)(99106002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?citnNUFHMHpEd1R1Z1M3YVI1cWxSS0tlMWlDNmg2bFBEL0VmZUVrU1ZoRnJF?=
- =?utf-8?B?RTBib0NTNEJvaEwvbGZma0FqNlJEaW01TUY3NGNPOWRMOGFKenIrYlowcFZx?=
- =?utf-8?B?OUEyR1Jpc3ZNR1FDWVprZzFNeWNRRmRETFN3eE4wWUttcWZlMW9VZUtpdHph?=
- =?utf-8?B?SzE3N1ZpaHh2WmVmb1Z2akg0d2dFWFFEbHBNRnIxa2QwT2dxVTVYUG5jOFZh?=
- =?utf-8?B?ZkUrYjlVL1lPODJ5clV5VEZrWlJHZU96ZmRqZVZ4aUFLQk9sNHJoZGdoMVh3?=
- =?utf-8?B?YXlvc3FWNHdFQ2RzM2k1bHEzNGlGY2pRTU9aSnB2SkI5Q3IvdldBeWZReXZj?=
- =?utf-8?B?bmpkVjhwUm5yTUIvZzl1N2Y5cG14c2hldmVzUEwvWW9WVGxoUHZSRUluNGpM?=
- =?utf-8?B?UWkvVEx4N0l2RHU5TGVRUnlTZnBZY0V6ZjF4aC9uNndxcFdIbklSM0xEazZ5?=
- =?utf-8?B?d2FlUEVzQS8rV2JiQzcvenAveUJaTWNpNnU5VUhHdjZQaGZ2WWwrWnBuVDhh?=
- =?utf-8?B?TmVRR1hYb2hGTFg1b0VORzNCZFIybUdsUjBja3d6NXhSeU0vVWM1QjcwMTRx?=
- =?utf-8?B?eWs1OVh1aHhwKzRGd09qZGtPWjErK3c5MUw1cjlmSWRvcHh6cW5obzVSVU0y?=
- =?utf-8?B?bkdZekNIT1VuRlA2MldaallDd3lCSjN4ZDhjYnNHcVZFTFJJQ2NUQ0VHczc1?=
- =?utf-8?B?SXRBK0tlRjBHbkxVN0Z6ZXVhZzRXZ0IxVXlsMTRsTyszZm1QZ1BPQnVwcU9W?=
- =?utf-8?B?eFpQemk0QmtXY1greU8vMlcrTmhZQ3ErUUd4Qk83VEJCL291aEk4bWlSYW1m?=
- =?utf-8?B?NW9Iejd0RjVxdGhmeTRHMWlQMlBUbGxwTTJKdTNOM01xd0FQU01yZ3RpQzF3?=
- =?utf-8?B?Zmt2TFdwMVZSVVprTlhKRC9sc3J3Q0s0SmlQYTlrbDZtdHpoaEVZT1BKOVI0?=
- =?utf-8?B?MTF1VG5qZWtJMTZCUWxvc3BQRVFDNjVobFN1QncwUWFhUnZ2cXIzV1pSZ1dS?=
- =?utf-8?B?dllpd2JOanU0a2NXZ0EzLzZpU3U2cndBWm5mWTExYlZ4a3VYeGY3eHdjUnhZ?=
- =?utf-8?B?ek1BTXp4QmF1M0pERlZjZE40NjN6WTJ3VU9uSVFtR0NuSFd6QnZQUzFGOUVj?=
- =?utf-8?B?T0pzNDJmeVJnZmFVbVBtUFY5ZGNBLy9sWG5mQndqOXN2bkRLUzRmN0Zod3JT?=
- =?utf-8?B?T1VJWWFYTTVSQmQ1Z0ZkYnJaWU0ybkpodUF0ejZOZmF3OEF1LzZYTGh1NnNS?=
- =?utf-8?B?bGJCVENIdzdwZ08zVWgxK3JYZi9FK2pGRHpDWWFrRjdQQ01zVXlYaDl4bCti?=
- =?utf-8?B?VldETEgybEdkTUljMUU0eHRab2ZLdEt1aFBQZzZyMGY1R3I0dktmVXpsYWVi?=
- =?utf-8?B?c0J2YUR0aWI0dmFHOEF1MVJvSW9wWnlpVkZUSUJDVFlzVUFuSHliSnJCWGQy?=
- =?utf-8?B?d2xrUkxxc1FIby9PRkNsYnJaaWhmNXJjMDkrdHk1NG5BUWxkdlg2WE0wRXg4?=
- =?utf-8?B?bElFRGRXcW1Wcys0Vm5tYmw3UklyN3BWOXhESFRkNEY5Q0RieG5nVjgyNTlt?=
- =?utf-8?B?em5LczRJbWdJOCtiODhJZ05DNlJCZTZRUkJ1bmNiT0ROSUdvVjh6TDE5Q3RK?=
- =?utf-8?B?S3NISXNpUlFjVjBzYllxQ2V1TmtJNEN1cnZsVit3T01ycnBTMjB5MW80QURn?=
- =?utf-8?B?WXJZTUx4VE8xVXcwZHdKQlBVZmtBSURmZ29tci9veEhOclBGRWtGQmtkcU15?=
- =?utf-8?B?VVI2WTRVbThjMU5XcGJxOUkvcVZzMS9IU3NicFl6OEpsNTF2a1dhZ0Mzd1B5?=
- =?utf-8?B?YTNlaUYwZE1KN0wzVmdoRHhTTEZ1ZmVZK0VLbzRIT2F0TXRxM3pPcnBMTjhU?=
- =?utf-8?B?OUJTN2gwVGY0eFJPUFNYUXNZR1ZEUXpiV0IzZDJibVF6YXpjWE1TS2ViVjgx?=
- =?utf-8?B?ODZsdjJNTEpmR1BzL21kRXh0ankwT0xSN1hSZzkwdDM5SE5PMnZDTUgwWVBP?=
- =?utf-8?B?QkpXYjdpL0ZDVE9HQTY4RGlhVHRxVjRkdTlVQnQ5NXlidEcrbGJTVURmZ20r?=
- =?utf-8?B?OGk3aElYQW1DdS95a3ZQbmo1VFV2TzJWdFhqL2QvcTB5RHRWRFdjcFFFQzJ5?=
- =?utf-8?B?YTNkL3JtUUduTng3QVdvSGtDWkJGL1dEVzErOU5SdW5TTzJqV3pZT3J3VWNz?=
- =?utf-8?B?YkE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <FE1CF312BE610741BFFA7ADBCB23AF77@apcprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        d=google.com; s=20230601; t=1695110887; x=1695715687; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Xo0QCYH4wkdMzRKO9glnSSgct/wZRd3shLKK4I8on7A=;
+        b=lc50bnf7kHB9vG2h/ethqdVRANF5+XSRUDrAb74id2uFXHd6O53xxSKzSqV3hzgNSN
+         7AyJMyzFCidTZNUzWHiZs6tClfnDvQyo5pkYW27P7TkuBogJKhTxp5xwtU+TmZHSZV0S
+         mF/T5FeOMi6UU7+Jg6GwHjj9pBahb5jRxGFMpHUavfzWj4h6ZXz5BE7DmZ+MWWuB9+8R
+         TkQbCXMxHW4k3awYKtG795s/f26+Qw57tEOIQ2+eJdbvnJGUt262rDrtUXmrIdDfAzFp
+         7nLrmRjPm3jzDB2efi6pfdVNa4FZzBugekyFTUHDv+1rfK1TUnsqMcREJcUm0rOiD2Jq
+         AX6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695110887; x=1695715687;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xo0QCYH4wkdMzRKO9glnSSgct/wZRd3shLKK4I8on7A=;
+        b=YtukCJsxEQCv29R7xQopKSUZLH7W38vyzpNscW8do55JzYRcdTbW5VrVeMly4hfAi9
+         UMjMdlrl1xJ34Csfm3E/JfAxly7cVEQbxguRZnqNxJ/+khTEbPqfE6hfuZrf/TwwO033
+         WAPsrMfWBZ+nk/4E7me690ny25LHOhtDBopL1eNwMkNUzb9B7DoJ1eUOW6z3wjH6q9sx
+         84G1diE6YZTuNY9vtPziqyeu97jPH2C2tWImd3a6ig1d2YMcP0yEwcMv6KbFhOlZvz/C
+         pT5ZV4oLi8BYNZprKxe6d2Bp7eIRprFeScMa5GKoWvRBMiT3ZhTwCG8SOTRvfR0q3Ptm
+         2kJA==
+X-Gm-Message-State: AOJu0Yx09/wiNs7Nn3kFNnlsctFWIG2p/8bIYr2gwQcwyCFUgvT4rAsI
+	Bahn2iTrDLfnnjTJ+etB7sDssg==
+X-Google-Smtp-Source: AGHT+IF6z2D97WD5NMFOHhc6nVLxCzqnbFlTtzNY4CqRtLCGmOJkoPqb3HNSC7mEeDMNgTMVyjvgMQ==
+X-Received: by 2002:a17:902:eaca:b0:1c4:2271:55c3 with SMTP id p10-20020a170902eaca00b001c4227155c3mr10212774pld.38.1695110887159;
+        Tue, 19 Sep 2023 01:08:07 -0700 (PDT)
+Received: from [192.168.60.239] (124.190.199.35.bc.googleusercontent.com. [35.199.190.124])
+        by smtp.gmail.com with ESMTPSA id e6-20020a170902d38600b001bdb167f6ebsm9510565pld.94.2023.09.19.01.08.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Sep 2023 01:08:06 -0700 (PDT)
+Message-ID: <a6a3266d-8b19-4f24-839b-4483738c728e@google.com>
+Date: Tue, 19 Sep 2023 01:08:05 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR03MB7153.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0fc158f2-318a-451d-0ab2-08dbb8e610e7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Sep 2023 07:57:26.8118
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: HwOUIKVcsUA2FGQSYfqUDd0GVgp3gqu9OKGwgW+ZCyVC19Jx2Rtc8LxpxuY1waI+Y6Z6cR2tB3ZV5JirJQC1vcVXGRA+nu8yjNvlM+gCmtU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: JH0PR03MB7656
-X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-AS-Result: No-10--16.098100-8.000000
-X-TMASE-MatchedRID: dwNgap4H9hjUL3YCMmnG4kD6z8N1m1ALjLOy13Cgb4/TEy+FT1zrl4RB
-	2ZnwTN8bUmsNbSHn8eC6zbhlzid4ERaIShUFI4YdHcQQBuf4ZFtQCOsAlaxN71eilmPI7oJlmAI
-	yWr6xn59ZI0kOn/pCEdN2QZGIqLOvN0IbjpLRv2AP+h/WmwyDEcnlJe2gk8vIqPm/sjj9KBhdpM
-	SiKlvaL+LzNWBegCW2PZex/kxUIHVmIVC+RmEW7Wrz/G/ZSbVq+gtHj7OwNO0CpgETeT0ynA==
-X-TM-AS-User-Approved-Sender: No
-X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--16.098100-8.000000
-X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-SNTS-SMTP:
-	85293322F3B0F22C6A6ABFE7C453781841646E40AE1B6C67D2BE050CDE460DF72000:8
-X-MTK: N
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RDNS_NONE,
-	SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=no
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/3] usb: gadget: uvc: cleanup request when not in correct
+ state
+Content-Language: en-US
+From: Avichal Rakesh <arakesh@google.com>
+To: Michael Grzeschik <mgr@pengutronix.de>,
+ laurent.pinchart@ideasonboard.com, dan.scally@ideasonboard.com
+Cc: linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+ gregkh@linuxfoundation.org, nicolas@ndufresne.ca, kernel@pengutronix.de,
+ Jayant Chowdhary <jchowdhary@google.com>
+References: <20230911002451.2860049-1-m.grzeschik@pengutronix.de>
+ <20230911002451.2860049-3-m.grzeschik@pengutronix.de>
+ <a55b3b0c-2306-4591-8613-7be4927f0d4e@google.com>
+ <ZQTpnJvTV+8Ye1si@pengutronix.de>
+ <587c9b95-a80c-4bf9-b1a0-fe7ef0f4cd60@google.com>
+ <ZQY5Ab+YB9FLHoQq@pengutronix.de>
+ <d678b644-5f66-4c23-b2ba-6c84ba56012f@google.com>
+ <ZQjEZlk2UFQgA0TF@pengutronix.de>
+ <7cd81649-2795-45b6-8c10-b7df1055020d@google.com>
+In-Reply-To: <7cd81649-2795-45b6-8c10-b7df1055020d@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+	ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+	USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
 	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-T24gVGh1LCAyMDIzLTA5LTE0IGF0IDEyOjE0ICswMjAwLCBBbmdlbG9HaW9hY2NoaW5vIERlbCBS
-ZWdubyB3cm90ZToNCj4gSWwgMzAvMDgvMjMgMTQ6MjgsIENodW5mZW5nIFl1biBoYSBzY3JpdHRv
-Og0KPiA+IEluIG9yZGVyIHRvIGVzdGltYXRlIHdoZW4gZnMvbHMgdHJhbnNhY3Rpb25zIGFwcGVh
-ciBvbiBhIGRvd25zdHJlYW0NCj4gPiBidXMsDQo+ID4gdGhlIGhvc3QgbXVzdCBjYWxjdWxhdGUg
-YSBiZXN0IGNhc2UgZnVsbC1zcGVlZCBidWRnZXQsIHVzZSBhIHRhYmxlDQo+ID4gdG8NCj4gPiB0
-cmFjayBob3cgbWFueSBieXRlcyBvY2N1cmUgaW4gZWFjaCBtaWNyb2ZyYW1lLg0KPiA+IFRoaXMg
-cGF0Y2ggaXMgcHJlcGFyZWQgZm9yIGludHJvZHVjaW5nIGFuIGltcHJvdmVkIGJhbmR3aWR0aA0K
-PiA+IHNjaGVkdWxpbmcuDQo+ID4gDQo+IA0KPiBIZWxsbyBDaHVuZmVuZywNCj4gDQo+IGl0IHdv
-dWxkIGJlIGhlbHBmdWwgaWYgeW91IGFkZCBhIGNvdmVyIGxldHRlciB3aXRoIHNvbWUgdGVzdCBy
-ZXN1bHRzDQo+IGZvcg0KPiB0aGUgQlcgaW1wcm92ZW1lbnRzIHRoYXQgeW91J3JlIHNlZWluZyBo
-ZXJlLg0KT2sNCj4gDQo+IFRoYW5rcywNCj4gQW5nZWxvDQo+IA0KPiA+IFNpZ25lZC1vZmYtYnk6
-IENodW5mZW5nIFl1biA8Y2h1bmZlbmcueXVuQG1lZGlhdGVrLmNvbT4NCj4gPiAtLS0NCj4gPiAg
-IGRyaXZlcnMvdXNiL2hvc3QveGhjaS1tdGstc2NoLmMgfCAxMTMgKysrKysrKysrKysrKysrKysr
-KysrKystLQ0KPiA+IC0tLS0tLS0NCj4gPiAgIGRyaXZlcnMvdXNiL2hvc3QveGhjaS1tdGsuaCAg
-ICAgfCAgIDQgKy0NCj4gPiAgIDIgZmlsZXMgY2hhbmdlZCwgODUgaW5zZXJ0aW9ucygrKSwgMzIg
-ZGVsZXRpb25zKC0pDQo+ID4gDQo+IA0KPiANCg==
+
+
+On 9/18/23 16:40, Avichal Rakesh wrote:
+> 
+> 
+> On 9/18/23 14:43, Michael Grzeschik wrote:
+>> On Mon, Sep 18, 2023 at 12:02:11PM -0700, Avichal Rakesh wrote:
+>>> On 9/16/23 16:23, Michael Grzeschik wrote:
+>>>> On Fri, Sep 15, 2023 at 07:41:05PM -0700, Avichal Rakesh wrote:
+>>>>> On 9/15/23 16:32, Michael Grzeschik wrote:
+>>>>>> On Mon, Sep 11, 2023 at 09:52:22PM -0700, Avichal Rakesh wrote:
+>>>>>>> On 9/10/23 17:24, Michael Grzeschik wrote:
+>>>>>>>> The uvc_video_enable function of the uvc-gadget driver is dequeing and
+>>>>>>>> immediately deallocs all requests on its disable codepath. This is not
+>>>>>>>> save since the dequeue function is async and does not ensure that the
+>>>>>>>> requests are left unlinked in the controller driver.
+>>>>>>>>
+>>>>>>>> ...
+>>>
+>>> I do apologize if I've missed something obvious with your changes that
+>>> prevents such interleaving. I don't currently see any locking or
+>>> other synchronization mechanism in your changes. Is there something
+>>> in dwc3 that prevents this situation?
+>>
+>> I think you have pointed it out totally clear. This is obviously the
+>> case. It just did not trigger here. But the window is there and has to
+>> be locked in some way.
+>>
+>> For now we have two options to solve it.
+>>
+>> 1) Trying to avoid this double code path of the complete callback and
+>> uvc_video_free_requests. This is what your patches are already doing.
+>>
+>> But for now I am not so pleased with the timeout concept by waiting for
+>> the complete interrupt to be called. This is also a shot in the dark as
+>> the latency depends on the scheduler and the amount of potential
+>> requests that are being handled.
+> 
+> I agree, a timeout is not the most elegant of solutions and given a
+> weird enough scheduler, will run into issues as well
+
+.
+Thinking about this some more: I still agree that a timeout seems arbitrary
+and will (rightly) lead to questions along the lines of "If we can safely move
+on after 500ms, why not safely move on immediately?". 
+
+However, to me it seems more reasonable to put an indefinite wait. The uvc gadget
+can wait forever for the complete callbacks to come through. This basically says
+that until the usb controller returns the usb_requests back to uvc gadget, it 
+can't guarantee a consistent memory state as it is responsible for managing the
+usb_requests it has allocated. 
+
+Of course there is no such thing as an indefinite wait, the watchdog will 
+eventually kick in to reap the subsystem (potentially causing a kernel panic).
+But it seems reasonable to say that if the usb controller is unable to 
+return the usb_requests in however long it takes the watchdog to bite, 
+it has no business running uvc gadget anyway.
+
+My changes in https://lore.kernel.org/20230912041910.726442-2-arakesh@google.com
+will ensure that no other control request comes in while uvc gadget is waiting,
+and it should be relatively trivial to update
+https://lore.kernel.org/20230912041910.726442-3-arakesh@google.com to wait 
+indefinitely.
+
+Laurent and Dan, does an indefinite wait seem more reasonable than an arbitrary wait,
+or would something like the suggestion in previous email be better?
+
+> 
+>>
+>> 2) Locking both codepathes around the resource in question so the issue
+>> is avoided.
+>>
+>> However, I am also not a fried of many locks.
+>>
+>> Perhaps it is possible to use a combination of wait_for_completion in
+>> the uvc_video_free_requests and a complete callback in
+>> uvc_video_complete for those requests that are not listed in the
+>> req_free list.
+>>
+>> What do you think?
+>>
+> There might be a way that builds on your idea of cleaning up in the complete callback. 
+> It would rely on having a uvc_requests that aren't bulk allocated, which may have a
+> performance impact. 
+> 
+> I am imagining something like the following:
+>   1. Instead of allocating a bulk of uvc_requests, we allocate them
+>      one at a time and add them to uvc_video.ureq
+>   2. uvc_video.ureq becomes a list_head containing all the individual
+>      requests
+>   3. We add a sentinel flag in uvc_request that says the request is
+>      now stale. This flag is protected by uvc_video->req_lock
+>   4. uvc_video_complete looks at  this flag to deallocate both
+>      usb_request and uvc_request.
+>   5. uvcg_video_enable looks something like the following:
+>        uvcg_video_enable(...) {
+>          ...
+>          lock(req_lock);
+>          forall (uvc_requests->ureqs) {ureq->stale = true}
+>          unlock(req_lock);
+>          usb_ep_dequeue all reqs
+> 
+>          uvc_video_free_requests(...)
+>          ...
+>        }
+>   6. uvc_video_complete looks something like:
+>        uvc_video_complete(...) {
+>          // at the start
+>          lock(req_lock)
+>          is_stale = ureq->stale;
+>          unlock(req_lock);
+> 
+>          if (is_stale) {
+>            usb_ep_free_request();
+>            dealloc corresponding uvc_request();
+>            return;
+>          }
+> 
+>          ...
+> 
+>          lock(req_lock);
+>          // possible that request became stale while we were handling stuff
+>          if (!ureq->stale) {
+>            list_add_tail(&req->list, &video->req_free);
+>          } else {
+>            usb_ep_free_request();
+>            dealloc corresponding uvc_request();
+>          }
+>          unlock(req_lock);
+>        }
+>   7. uvc_video_free_requests can freely dealloc usb_requests/uvc_requests in 
+>      req_free because we can be certain that uvc_video_complete won't modify 
+>      it once requests have been marked stale, and the stale requests in flight 
+>      will be cleaned up by the complete callback.
+> 
+> Effectively, we freeze the state of req_free before dequeuing, and all
+> inflight requests are considered the responsibility of the complete handler 
+> from that point onwards. The gadget is only responsible for freeing requests it 
+> currently owns.
+> 
+> I think this should ensure that we never have a situation where the ownership of the
+> requests are undefined, and only one thread is responsible for freeing any given request.
+> 
+> Hope that makes sense!
+> 
+
+- Avi.
 
