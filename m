@@ -1,80 +1,56 @@
-Return-Path: <linux-usb+bounces-385-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-386-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1B6B7A699D
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 19:27:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63D817A69B3
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 19:39:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C9E7C1C20BD4
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 17:27:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1D9E9281AEE
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 17:39:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28BBE37CBA;
-	Tue, 19 Sep 2023 17:27:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19F9F38BAF;
+	Tue, 19 Sep 2023 17:39:20 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D4F3374DF;
-	Tue, 19 Sep 2023 17:27:07 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 682EE9F;
-	Tue, 19 Sep 2023 10:27:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695144426; x=1726680426;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/GfKecIDbouGTE7n4315amFnYOI3c0tRqeNu43t9cFw=;
-  b=Cm9dyKwXGdwFPawE+t8KoqNWXi4KrTIsqC8eGmVjqET3QPgOPTHlRJ6B
-   8bfMK1Wzkq+kXKBT8kH+7Wu/JaKH1JrsJvBlUsWqOnI+Nza/dUMrOw0qH
-   70k4m0cgeu3+GNJ/AEeZwDIZFtSClHYsuUfqlyfn/0psoS2KnZTYddQk/
-   KwEi+omLlWFLyNVLu4wx2Xjvt3EjEVtihylxD7Uv/pz0S5LfN1SO2jtc8
-   XEkRvDdZvj1ZWT6mgGUphr450FEMD0WhXpjQmyP6bmvn5ZsRdJynhfPkM
-   +rHCa6i+8RcWxNN+1ZAyDfT3qoONsB3z5/s4lS1POAlsGrrSJCrtGpgwC
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10838"; a="410936065"
-X-IronPort-AV: E=Sophos;i="6.02,160,1688454000"; 
-   d="scan'208";a="410936065"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2023 10:27:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10838"; a="746316089"
-X-IronPort-AV: E=Sophos;i="6.02,160,1688454000"; 
-   d="scan'208";a="746316089"
-Received: from lkp-server02.sh.intel.com (HELO 9ef86b2655e5) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 19 Sep 2023 10:27:00 -0700
-Received: from kbuild by 9ef86b2655e5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qieV0-0007jz-15;
-	Tue, 19 Sep 2023 17:26:58 +0000
-Date: Wed, 20 Sep 2023 01:26:33 +0800
-From: kernel test robot <lkp@intel.com>
-To: Krishna Kurapati <quic_kriskura@quicinc.com>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Felipe Balbi <balbi@kernel.org>,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	Johan Hovold <johan@kernel.org>,
-	Mathias Nyman <mathias.nyman@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
-	quic_ppratap@quicinc.com, quic_jackp@quicinc.com,
-	ahalaney@redhat.com, quic_shazhuss@quicinc.com,
-	Harsh Agarwal <quic_harshq@quicinc.com>,
-	Krishna Kurapati <quic_kriskura@quicinc.com>
-Subject: Re: [PATCH v11 06/13] usb: dwc3: core: Refactor PHY logic to support
- Multiport Controller
-Message-ID: <202309200156.CxQ3yaLY-lkp@intel.com>
-References: <20230828133033.11988-7-quic_kriskura@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8287747C
+	for <linux-usb@vger.kernel.org>; Tue, 19 Sep 2023 17:39:18 +0000 (UTC)
+Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C64FAD;
+	Tue, 19 Sep 2023 10:39:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1695145152; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=QdHbBLLn+tiPHsQULmPbOn6OBooc6H5vxiZWz4W+fqWZbICjaF7DpzJ3/fwYKcTpg/WvJGOKQEcx84b4nWHSbdu1Ep2gM386gMibr6oGLVOUjntgHWffvD/DY22aiHv5kulMIjrlgrIQWI2G65/41XwKrcFc32uQESDDobNSmMk=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1695145152; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=0IAP0s+RT7GZFRPLNdV3G0ElvDn5rBd3toR6u/oZ7UE=; 
+	b=M9/PhhM9I7hqsewz3/VPoYPdvlGQ62QHkA/jZMBHm4d2ProZzQz47XwB93NQFGvxtnaFUvaQzyQabelHtz7TLZStDuuIp+PGrdVy6o+ha1yvZOFX9wcRxePJUUjKCSbA8O4r70PP43bXVlmbH0jWcFbVDuHb8F63f0Bkbz0rLtY=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=marliere.net;
+	spf=pass  smtp.mailfrom=ricardo@marliere.net;
+	dmarc=pass header.from=<ricardo@marliere.net>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1695145152;
+	s=zmail; d=marliere.net; i=ricardo@marliere.net;
+	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
+	bh=0IAP0s+RT7GZFRPLNdV3G0ElvDn5rBd3toR6u/oZ7UE=;
+	b=F9+wr7Fc3a7fOb1iB0k4UxWASWuxg4D6d8suw5fFRNKcoRFt58ufFSOjDeGPaifO
+	qkMjVzB4r0AV09tIYz5e/d2D8xrUPDKL/rFL5dPjT0vMYqfpieJWPwjaimvsKBDgyqH
+	fofwXfdkWQ/LkSXCybkyjnq2lVspOjv66aliatNI=
+Received: from localhost (177.104.93.54 [177.104.93.54]) by mx.zohomail.com
+	with SMTPS id 1695145150671314.9472263153632; Tue, 19 Sep 2023 10:39:10 -0700 (PDT)
+Date: Tue, 19 Sep 2023 14:39:20 -0300
+From: "Ricardo B. Marliere" <ricardo@marliere.net>
+To: syzbot <syzbot+59875ffef5cb9c9b29e9@syzkaller.appspotmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+	linux-usb@vger.kernel.org, mchehab@kernel.org, sean@mess.org, 
+	syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [media?] [usb?] KASAN: slab-out-of-bounds Read in
+ imon_probe
+Message-ID: <albu6mqbrom746yngcfgtuhn6ydpf4ewapqj6wk6etlkw7qda4@tzlqwq6u5s54>
+References: <000000000000a838aa0603cc74d6@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -83,133 +59,14 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230828133033.11988-7-quic_kriskura@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-	SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <000000000000a838aa0603cc74d6@google.com>
+X-ZohoMailClient: External
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	RCVD_IN_MSPIKE_H2,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Hi Krishna,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on usb/usb-next usb/usb-linus robh/for-next pza/reset/next linus/master v6.6-rc2 next-20230919]
-[cannot apply to pza/imx-drm/next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Krishna-Kurapati/dt-bindings-usb-qcom-dwc3-Add-bindings-for-SC8280-Multiport/20230828-214326
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20230828133033.11988-7-quic_kriskura%40quicinc.com
-patch subject: [PATCH v11 06/13] usb: dwc3: core: Refactor PHY logic to support Multiport Controller
-config: x86_64-randconfig-011-20230902 (https://download.01.org/0day-ci/archive/20230920/202309200156.CxQ3yaLY-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230920/202309200156.CxQ3yaLY-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309200156.CxQ3yaLY-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/usb/dwc3/core.c: In function 'dwc3_core_get_phy':
->> drivers/usb/dwc3/core.c:1375:53: warning: '%d' directive writing between 1 and 3 bytes into a region of size 2 [-Wformat-overflow=]
-    1375 |                         sprintf(phy_name, "usb2-port%d", i);
-         |                                                     ^~
-   drivers/usb/dwc3/core.c:1375:43: note: directive argument in the range [0, 254]
-    1375 |                         sprintf(phy_name, "usb2-port%d", i);
-         |                                           ^~~~~~~~~~~~~
-   drivers/usb/dwc3/core.c:1375:25: note: 'sprintf' output between 11 and 13 bytes into a destination of size 11
-    1375 |                         sprintf(phy_name, "usb2-port%d", i);
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/usb/dwc3/core.c:1390:53: warning: '%d' directive writing between 1 and 3 bytes into a region of size 2 [-Wformat-overflow=]
-    1390 |                         sprintf(phy_name, "usb3-port%d", i);
-         |                                                     ^~
-   drivers/usb/dwc3/core.c:1390:43: note: directive argument in the range [0, 254]
-    1390 |                         sprintf(phy_name, "usb3-port%d", i);
-         |                                           ^~~~~~~~~~~~~
-   drivers/usb/dwc3/core.c:1390:25: note: 'sprintf' output between 11 and 13 bytes into a destination of size 11
-    1390 |                         sprintf(phy_name, "usb3-port%d", i);
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +1375 drivers/usb/dwc3/core.c
-
-  1338	
-  1339	static int dwc3_core_get_phy(struct dwc3 *dwc)
-  1340	{
-  1341		struct device		*dev = dwc->dev;
-  1342		struct device_node	*node = dev->of_node;
-  1343		char phy_name[11];
-  1344		int ret;
-  1345		int i;
-  1346	
-  1347		if (node) {
-  1348			dwc->usb2_phy = devm_usb_get_phy_by_phandle(dev, "usb-phy", 0);
-  1349			dwc->usb3_phy = devm_usb_get_phy_by_phandle(dev, "usb-phy", 1);
-  1350		} else {
-  1351			dwc->usb2_phy = devm_usb_get_phy(dev, USB_PHY_TYPE_USB2);
-  1352			dwc->usb3_phy = devm_usb_get_phy(dev, USB_PHY_TYPE_USB3);
-  1353		}
-  1354	
-  1355		if (IS_ERR(dwc->usb2_phy)) {
-  1356			ret = PTR_ERR(dwc->usb2_phy);
-  1357			if (ret == -ENXIO || ret == -ENODEV)
-  1358				dwc->usb2_phy = NULL;
-  1359			else
-  1360				return dev_err_probe(dev, ret, "no usb2 phy configured\n");
-  1361		}
-  1362	
-  1363		if (IS_ERR(dwc->usb3_phy)) {
-  1364			ret = PTR_ERR(dwc->usb3_phy);
-  1365			if (ret == -ENXIO || ret == -ENODEV)
-  1366				dwc->usb3_phy = NULL;
-  1367			else
-  1368				return dev_err_probe(dev, ret, "no usb3 phy configured\n");
-  1369		}
-  1370	
-  1371		for (i = 0; i < dwc->num_usb2_ports; i++) {
-  1372			if (dwc->num_usb2_ports == 1)
-  1373				sprintf(phy_name, "usb2-phy");
-  1374			else
-> 1375				sprintf(phy_name, "usb2-port%d", i);
-  1376	
-  1377			dwc->usb2_generic_phy[i] = devm_phy_get(dev, phy_name);
-  1378			if (IS_ERR(dwc->usb2_generic_phy[i])) {
-  1379				ret = PTR_ERR(dwc->usb2_generic_phy[i]);
-  1380				if (ret == -ENOSYS || ret == -ENODEV)
-  1381					dwc->usb2_generic_phy[i] = NULL;
-  1382				else
-  1383					return dev_err_probe(dev, ret,
-  1384						"failed to lookup phy %s\n", phy_name);
-  1385			}
-  1386	
-  1387			if (dwc->num_usb2_ports == 1)
-  1388				sprintf(phy_name, "usb3-phy");
-  1389			else
-  1390				sprintf(phy_name, "usb3-port%d", i);
-  1391	
-  1392			dwc->usb3_generic_phy[i] = devm_phy_get(dev, phy_name);
-  1393			if (IS_ERR(dwc->usb3_generic_phy[i])) {
-  1394				ret = PTR_ERR(dwc->usb3_generic_phy[i]);
-  1395				if (ret == -ENOSYS || ret == -ENODEV)
-  1396					dwc->usb3_generic_phy[i] = NULL;
-  1397				else
-  1398					return dev_err_probe(dev, ret,
-  1399						"failed to lookup phy %s\n", phy_name);
-  1400			}
-  1401		}
-  1402	
-  1403		return 0;
-  1404	}
-  1405	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git next-20230919
 
