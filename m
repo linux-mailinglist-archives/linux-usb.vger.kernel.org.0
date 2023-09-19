@@ -1,137 +1,175 @@
-Return-Path: <linux-usb+bounces-369-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-370-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F7267A5C6A
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 10:23:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95A047A5D31
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 11:00:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 844121C20CBC
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 08:23:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4F1AE282186
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Sep 2023 09:00:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DEDD3D382;
-	Tue, 19 Sep 2023 08:23:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08B3F3D39A;
+	Tue, 19 Sep 2023 08:59:59 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A505B30F96
-	for <linux-usb@vger.kernel.org>; Tue, 19 Sep 2023 08:23:37 +0000 (UTC)
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 423A7114
-	for <linux-usb@vger.kernel.org>; Tue, 19 Sep 2023 01:23:36 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1qiW18-0005EM-2u; Tue, 19 Sep 2023 10:23:34 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1qiW14-007PaD-3Q; Tue, 19 Sep 2023 10:23:30 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1qiW13-002vrk-Q6; Tue, 19 Sep 2023 10:23:29 +0200
-Date: Tue, 19 Sep 2023 10:23:27 +0200
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Chunfeng Yun =?utf-8?B?KOS6keaYpeWzsCk=?= <Chunfeng.Yun@mediatek.com>
-Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-mediatek@lists.infradead.org" <linux-mediatek@lists.infradead.org>,
-	"kernel@pengutronix.de" <kernel@pengutronix.de>
-Subject: Re: [PATCH v2] usb: mtu3: Convert to platform remove callback
- returning void
-Message-ID: <20230919082327.pe32kmjuiqdkorn7@pengutronix.de>
-References: <20230914200251.919584-1-u.kleine-koenig@pengutronix.de>
- <3cdb8de0223327b820b5344945ce53c0555f4882.camel@mediatek.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76A6C538C
+	for <linux-usb@vger.kernel.org>; Tue, 19 Sep 2023 08:59:57 +0000 (UTC)
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D07AC102
+	for <linux-usb@vger.kernel.org>; Tue, 19 Sep 2023 01:59:55 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38J0xvvS011336;
+	Tue, 19 Sep 2023 08:59:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=ahskw6RhXfDN0qg3iC+HZTdS65u2uNMxtcpOTuN5BBc=;
+ b=Ruyqgy0xMpD4GE+uhJm4sbfoXpytAq75K9tJbhFkxbtsv1MZgi530TJyoxsHoLfHCoMC
+ G2zJlgtTVQL0DCSJotj3ew0SYw8eahyE8km9tNXiQkTF7PFGF3AUfWj6U/YFHxSM/s3z
+ Z8abcwS5XzSmJd3t2SrGC8nPvM8cG2KSLl0j0S8RGtyQVBeamd8APPQz7p46tWtE1Gsz
+ w3GSu+phHbHDawi+fFsTUh9WcddifPPjENCYDwgo78mkY2ymRWRxHd71oF+NQxkQDW3I
+ 8UQSw5HjwB1UL5BZyyxYnkqtwHPX02boRED3DPWFKUfSOB3uFUEd8Lx2ds0MYONq5OAg RQ== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t6qf6j35q-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 19 Sep 2023 08:59:50 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38J8xE9b025580
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 19 Sep 2023 08:59:14 GMT
+Received: from hu-ugoswami-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.36; Tue, 19 Sep 2023 01:59:11 -0700
+From: Udipto Goswami <quic_ugoswami@quicinc.com>
+To: Mathias Nyman <mathias.nyman@intel.com>
+CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>,
+        Udipto Goswami <quic_ugoswami@quicinc.com>
+Subject: [PATCH v2] usb: XHCI: Implement xhci_handshake_check_state() API
+Date: Tue, 19 Sep 2023 14:28:47 +0530
+Message-ID: <20230919085847.8210-1-quic_ugoswami@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="dgisloszaa65nqhb"
-Content-Disposition: inline
-In-Reply-To: <3cdb8de0223327b820b5344945ce53c0555f4882.camel@mediatek.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: MuiRCQx5LVpCJ40kC2ymp4W9-Rff3OlD
+X-Proofpoint-ORIG-GUID: MuiRCQx5LVpCJ40kC2ymp4W9-Rff3OlD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-09-19_03,2023-09-18_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
+ priorityscore=1501 clxscore=1015 suspectscore=0 spamscore=0 phishscore=0
+ lowpriorityscore=0 malwarescore=0 mlxlogscore=327 mlxscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2308100000
+ definitions=main-2309190075
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
+In some situations where xhci removal happens parallel to
+xhci_handshake, we enoughter a scenario where the
+xhci_handshake will fails because the status does not change
+the entire duration of polling. This causes the xhci_handshake
+to timeout resulting in long wait which might lead to watchdog
+timeout.
 
---dgisloszaa65nqhb
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The API  handles command timeout which may happen upon XHCI
+stack removal. Check for xhci state and exit the handshake if
+xhci is removed.
 
-Hello,
+Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
+---
+v2: Fixed compilation error.
 
-On Tue, Sep 19, 2023 at 07:52:04AM +0000, Chunfeng Yun (=E4=BA=91=E6=98=A5=
-=E5=B3=B0) wrote:
-> On Thu, 2023-09-14 at 22:02 +0200, Uwe Kleine-K=C3=B6nig wrote:
-> > @@ -469,8 +469,17 @@ static int mtu3_remove(struct platform_device
-> > *pdev)
-> >  ssusb_gadget_exit(ssusb);
-> >  ssusb_host_exit(ssusb);
-> >  break;
-> > -default:
-> > -return -EINVAL;
-> > +case USB_DR_MODE_UNKNOWN:
-> > +/*
-> > + * This cannot happen because with dr_mode =3D=3D
-> > + * USB_DR_MODE_UNKNOWN, .probe() doesn't succeed and so
-> > + * .remove() wouldn't be called at all. However (little
-> > + * surprising) the compiler isn't smart enough to see that, so
-> > + * we explicitly have this case item to not make the compiler
-> > + * wail about an unhandled enumeration value.
-> > + */
-> > +WARN_ON(1);
-> > +break;
-> How about changing as below:
->     defualt:
->        break;
-> >  }
+ drivers/usb/host/xhci-ring.c |  5 +++--
+ drivers/usb/host/xhci.c      | 21 ++++++++++++++++++++-
+ drivers/usb/host/xhci.h      |  2 ++
+ 3 files changed, 25 insertions(+), 3 deletions(-)
 
-I think a warning is a good idea as today that case cannot happen
-(unless I missed something) and if it still happened, you'd want to know
-as the handling is insufficient then. And I also think that if the enum
-usb_dr_mode should ever be expanded, this code location should be
-revisited, so the explicit "case USB_DR_MODE_UNKNOWN" is better in my
-opinion.
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index 1dde53f6eb31..26add6c23a1d 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -450,8 +450,9 @@ static int xhci_abort_cmd_ring(struct xhci_hcd *xhci, unsigned long flags)
+ 	 * In the future we should distinguish between -ENODEV and -ETIMEDOUT
+ 	 * and try to recover a -ETIMEDOUT with a host controller reset.
+ 	 */
+-	ret = xhci_handshake(&xhci->op_regs->cmd_ring,
+-			CMD_RING_RUNNING, 0, 5 * 1000 * 1000);
++	ret = xhci_handshake_check_state(xhci, &xhci->op_regs->cmd_ring,
++			CMD_RING_RUNNING, 0, 5 * 1000 * 1000,
++			XHCI_STATE_REMOVING);
+ 	if (ret < 0) {
+ 		xhci_err(xhci, "Abort failed to stop command ring: %d\n", ret);
+ 		xhci_halt(xhci);
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index e1b1b64a0723..95b4c63dbeba 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -84,6 +84,24 @@ int xhci_handshake(void __iomem *ptr, u32 mask, u32 done, u64 timeout_us)
+ /*
+  * Disable interrupts and begin the xHCI halting process.
+  */
++int xhci_handshake_check_state(struct xhci_hcd *xhci, void __iomem *ptr,
++		u32 mask, u32 done, int usec, unsigned int exit_state)
++{
++	u32	result;
++	int	ret;
++
++	ret = readl_poll_timeout_atomic(ptr, result,
++				(result & mask) == done ||
++				result == U32_MAX ||
++				xhci->xhc_state & exit_state,
++				1, usec);
++
++	if (result == U32_MAX || xhci->xhc_state & exit_state)
++		return -ENODEV;
++
++	return ret;
++}
++
+ void xhci_quiesce(struct xhci_hcd *xhci)
+ {
+ 	u32 halted;
+@@ -201,7 +219,8 @@ int xhci_reset(struct xhci_hcd *xhci, u64 timeout_us)
+ 	if (xhci->quirks & XHCI_INTEL_HOST)
+ 		udelay(1000);
+ 
+-	ret = xhci_handshake(&xhci->op_regs->command, CMD_RESET, 0, timeout_us);
++	ret = xhci_handshake_check_state(xhci, &xhci->op_regs->command,
++				CMD_RESET, 0, timeout_us, XHCI_STATE_REMOVING);
+ 	if (ret)
+ 		return ret;
+ 
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index 7e282b4522c0..06d5a90dedd5 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -2119,6 +2119,8 @@ void xhci_free_container_ctx(struct xhci_hcd *xhci,
+ /* xHCI host controller glue */
+ typedef void (*xhci_get_quirks_t)(struct device *, struct xhci_hcd *);
+ int xhci_handshake(void __iomem *ptr, u32 mask, u32 done, u64 timeout_us);
++int xhci_handshake_check_state(struct xhci_hcd *xhci, void __iomem *ptr,
++		u32 mask, u32 done, int usec, unsigned int exit_state);
+ void xhci_quiesce(struct xhci_hcd *xhci);
+ int xhci_halt(struct xhci_hcd *xhci);
+ int xhci_start(struct xhci_hcd *xhci);
+-- 
+2.17.1
 
-As you suggest this variant you seem to have some upside in mind, didn't
-put it into your message though. Would you share your thoughts?
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig         =
-   |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---dgisloszaa65nqhb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmUJWn8ACgkQj4D7WH0S
-/k7KAAf6A/b5sNPF54k+Ma3oN7Fax1Z2w856jPyHME6jLc7u/AG9osjTHvunNeAA
-EcI/eIN8DKaB/uxZefCKy9Ei9fV5E/1rnExa/4VwG2HMzTkGAbIK3hMxwKFm/fkt
-BE0z61M6xMvxCj53r0SI/Zz6IlJtM1qsrzCEYJMyvsLafun/jUFHQS0mbYHtnts7
-nor6AoG83yWWrc0vd0pfjV+QnjzYVl767H9ws1I5o+3Hlu/Nat6CfGs1a2ma8ArB
-6p0tVnS1jiwzZY2R3TCOIFy2QKFJNb/vPSKvqy9MRrYrGZUIRPgDXWrkO7LLnac+
-dFxjJfjs8z+QRCJpr51crY2sjjTKXQ==
-=f/ok
------END PGP SIGNATURE-----
-
---dgisloszaa65nqhb--
 
