@@ -1,147 +1,138 @@
-Return-Path: <linux-usb+bounces-411-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-412-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90E897A76E6
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Sep 2023 11:10:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 286BB7A76EE
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Sep 2023 11:12:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A2D051C209C9
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Sep 2023 09:10:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 51B4A1C20D5D
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Sep 2023 09:12:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0CF511735;
-	Wed, 20 Sep 2023 09:10:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C60B1173B;
+	Wed, 20 Sep 2023 09:12:00 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24E6011729
-	for <linux-usb@vger.kernel.org>; Wed, 20 Sep 2023 09:10:26 +0000 (UTC)
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A93E91;
-	Wed, 20 Sep 2023 02:10:25 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2c012232792so46063511fa.0;
-        Wed, 20 Sep 2023 02:10:25 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93B7E4420;
+	Wed, 20 Sep 2023 09:11:58 +0000 (UTC)
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85CC11AA;
+	Wed, 20 Sep 2023 02:11:56 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2bffc55af02so54650011fa.2;
+        Wed, 20 Sep 2023 02:11:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695201024; x=1695805824; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2h7cs036UrR/eQjftEBWFTHYb+KQvYnSOLcHTnPuW8s=;
-        b=OCK4EQGI1LT1YorN75EJHABksvlHSWHSVTHv+NyWB000qjc8D1gTneiJ5LrXiKfvrk
-         YgkEpOsSZv6YulvqiSp+GlA5LC1VuCUOFCQheckjQGGxNObDIVWmxE5HhBaXW4xknXhW
-         q2HRSEyERX+VapSf7ARM6ZqLMuxYVCV5tWkXVaTvpbBA0dyAapMufDnPgiEltHjsfpnJ
-         /ch7XMXdlBbBNneUe2AZPOwtF2OGsw3CtONch34WE0P5TUNJmCpLiL3WNJW2/S1YqyZc
-         bPauSUwrT0HDzNiJMVw20VeXzCsB0yahK6NMrqEqSIwZ1AT3O0Hcn9LSVppBRrAXMN6U
-         fhNA==
+        d=gmail.com; s=20230601; t=1695201114; x=1695805914; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=p1x4ulOTEjSOQ+Fhe0wwtsVsIHWMLD1pUZs5tuTFtbg=;
+        b=mGJ1giGJV4Jh7vsCvgHWeReRdciXSRc5v9zT3ROSY03Z3SfWat+3f+pmesxXk0JIXi
+         7j4tu39VsFsZytYq0jhrnZF80zPiPFUfi2GQhedCQlp1jcZ0jN917b4G4PczpB8FQzro
+         nefpqh/tADvyOOYqgB+TbGCyitVWEHctNTpYkUPm0fWo7Prn6RzT4Yi8YYPlJk2ne6JL
+         xv+yirbCe/3m7ubTiV5GoTk4b5YmWYqgnsal/VgxNkwnkSmMiUwlYQemXQs76k05QLTs
+         asoH5+Nol8TQw2XqumyuPmVl3mjQCyaWrsCtkC0xQEYP/I41Yd0uSzQOgY7x9yssvviM
+         cVXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695201024; x=1695805824;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2h7cs036UrR/eQjftEBWFTHYb+KQvYnSOLcHTnPuW8s=;
-        b=l3HCmOMktK2hYpkS+5TDtlpk0rcAf8NEZSmCbwhpa+bChDW7US+3sz9YX7B+5JxfKc
-         011W77dF4Y78YyyvfV4+iRq3oMw/EQefjKb9eElOygnAnnfotPofWud1uVHKchnKQJAw
-         83SmRDNcDJ53idrZmj6eMmsBJ/k9sF4YQIrjo9G866Uka+0X5+9IBRcVSR77lO0ftwYQ
-         ITWpTbe+iOqmhLQZXNxxqZriIF2WJ99dg1nm27uXNbLtPlzAcL+s2ajMmsxNDQ2HS+vL
-         3SRA+gaNOistz9uAHxIp9KCW4IpgY/1fmi86dR0qPyuV2ePWu0W3zlxgH6DIj+DSw9kA
-         BPkQ==
-X-Gm-Message-State: AOJu0YyHqsy9c/TNPqldVpErIAxLDAZ5R5WsB3ct+qI3Uyshk1XjWIey
-	LrGQaIxEsDDUh77AiSw9cgw=
-X-Google-Smtp-Source: AGHT+IE61TkCmGwn0OosPff6JVitQ32jcllylkHwIbApW8CSo7sYCCWxxzkmjYV95OPAVmm3JOoIIQ==
-X-Received: by 2002:ac2:5041:0:b0:503:2623:7cfc with SMTP id a1-20020ac25041000000b0050326237cfcmr1489636lfm.34.1695201023290;
-        Wed, 20 Sep 2023 02:10:23 -0700 (PDT)
-Received: from [192.168.1.103] ([178.176.76.10])
-        by smtp.gmail.com with ESMTPSA id p12-20020ac246cc000000b004ff9ee35739sm2609505lfo.283.2023.09.20.02.10.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Sep 2023 02:10:22 -0700 (PDT)
-Subject: Re: [PATCH v4 5/5] usb: typec: intel_pmc_mux: Configure Displayport
- Alternate mode 2.1
-To: Utkarsh Patel <utkarsh.h.patel@intel.com>, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org
-Cc: heikki.krogerus@linux.intel.com, pmalani@chromium.org,
- chrome-platform@lists.linux.dev, andriy.shevchenko@linux.intel.com,
- bleung@chromium.org
-References: <20230920023243.2494410-1-utkarsh.h.patel@intel.com>
- <20230920023243.2494410-6-utkarsh.h.patel@intel.com>
-From: Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <086a35c5-6402-3e3e-1ac4-fade2797b63a@gmail.com>
-Date: Wed, 20 Sep 2023 12:10:21 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        d=1e100.net; s=20230601; t=1695201114; x=1695805914;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=p1x4ulOTEjSOQ+Fhe0wwtsVsIHWMLD1pUZs5tuTFtbg=;
+        b=IQsLsCI6Bc2siSC3va5TQUb/oF7AiNBMS7tXf+ajQDlwtSntoOhEgVjaj2ASdu1HIE
+         Q2z8JfE0KZVYMeXC6Vb7ZwAiSMWR82dYsAxaC7e3FdO00rwK2pqc1GuJAz22fPvgBQZM
+         S+7yybl7crfnYnjNgCkKd1QIZJjv10uirn5aJENdJ+Yrf6gE9sTzUSkCU83moaIQnqCK
+         zMD9vjFBQfPj6BDbIFNpVl6qufcAdfrAraE9zW19UmRx+IVT4BErY3/Di8uweaOKO0Lo
+         frmqXY2Dv4rYDPFkzwm5nnZ13teNMLh/TvoGngeOzHceWwcYsCowqvyibD1J0QWvaZOc
+         g6pA==
+X-Gm-Message-State: AOJu0YzSNrtZReQHFoUrGPHy5JEBUfXFKLjBaomkFWPGFbI//lPWNlx8
+	9sb4EuDqOMC+MokgEj3G2OxZ7sMVng2VMHuVKCA=
+X-Google-Smtp-Source: AGHT+IFlh2NMaNjIOP8F/dYh1vzEh1bzqCv3IbyFy9N9OxrC9YilV6QuzTIVZeKPc31ouZElzHmBQXyCZ6wUhyRpZKo=
+X-Received: by 2002:a2e:9b86:0:b0:2bf:fb49:6619 with SMTP id
+ z6-20020a2e9b86000000b002bffb496619mr1513872lji.23.1695201114215; Wed, 20 Sep
+ 2023 02:11:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20230920023243.2494410-6-utkarsh.h.patel@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
+References: <20230918165958.2659-1-tmaimon77@gmail.com> <20230918165958.2659-2-tmaimon77@gmail.com>
+ <b7a337f2-a810-d14c-e7cd-15e33a9ecb5d@linaro.org> <CAP6Zq1gSJYsNUuD-bexFW_1VpAUuF_WZkicNzZms6hVdo9LnMQ@mail.gmail.com>
+ <e0d42d13-b307-9915-97c8-948261b39ce1@linaro.org> <CAP6Zq1g0=-h0PFg2a8bqao+XjdNHoxGMdYSRRPAnfY_6WdemAw@mail.gmail.com>
+ <20230919162837.GA4051010-robh@kernel.org>
+In-Reply-To: <20230919162837.GA4051010-robh@kernel.org>
+From: Tomer Maimon <tmaimon77@gmail.com>
+Date: Wed, 20 Sep 2023 12:11:42 +0300
+Message-ID: <CAP6Zq1hJPPAtKw8auC22wViHGQHTi0SufPJoBiqYtGWomnNUYQ@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] dt-binding: usb: ci-hdrc-usb2: document Nuvoton
+ NPCM supprt
+To: Rob Herring <robh@kernel.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, peter.chen@kernel.org, 
+	gregkh@linuxfoundation.org, krzysztof.kozlowski+dt@linaro.org, 
+	xu.yang_2@nxp.com, peng.fan@nxp.com, avifishman70@gmail.com, 
+	tali.perry1@gmail.com, joel@jms.id.au, venture@google.com, yuenn@google.com, 
+	benjaminfair@google.com, j.neuschaefer@gmx.net, openbmc@lists.ozlabs.org, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+	FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On 9/20/23 5:32 AM, Utkarsh Patel wrote:
+Thanks Rob,
 
-> Mux agent driver can configure cable details such as cable type and
-> cable speed received as a part of displayport configuration to support
-> Displayport Alternate mode 2.1.
-> 
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Signed-off-by: Utkarsh Patel <utkarsh.h.patel@intel.com>
-> ---
-> Changes in v4:
-> - No change.
-> 
-> Changes in v3:
-> - No change.
-> 
-> Changes in v2:
-> - No change.
-> 
->  drivers/usb/typec/mux/intel_pmc_mux.c | 24 ++++++++++++++++++++++++
->  1 file changed, 24 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
-> index 60ed1f809130..233958084b43 100644
-> --- a/drivers/usb/typec/mux/intel_pmc_mux.c
-> +++ b/drivers/usb/typec/mux/intel_pmc_mux.c
-[...]
-> @@ -293,6 +299,24 @@ pmc_usb_mux_dp(struct pmc_usb_port *port, struct typec_mux_state *state)
->  	req.mode_data |= (state->mode - TYPEC_STATE_MODAL) <<
->  			 PMC_USB_ALTMODE_DP_MODE_SHIFT;
->  
-> +	if (!is_pmc_mux_tbt(port->pmc->iom_adev)) {
-> +		u8 cable_speed = (data->conf & DP_CONF_SIGNALLING_MASK) >>
-> +				  DP_CONF_SIGNALLING_SHIFT;
-> +
-> +		u8 cable_type = (data->conf & DP_CONF_CABLE_TYPE_MASK) >>
-> +				 DP_CONF_CABLE_TYPE_SHIFT;
-> +
-> +		req.mode_data |= PMC_USB_ALTMODE_CABLE_SPD(cable_speed);
-> +
-> +		if (cable_type == DP_CONF_CABLE_TYPE_OPTICAL)
-> +			req.mode_data |= PMC_USB_ALTMODE_CABLE_TYPE;
-> +		else if (cable_type == DP_CONF_CABLE_TYPE_RE_TIMER)
-> +			req.mode_data |= PMC_USB_ALTMODE_ACTIVE_CABLE |
-> +					 PMC_USB_ALTMODE_RETIMER_CABLE;
-> +		else if (cable_type == DP_CONF_CABLE_TYPE_RE_DRIVER)
-> +			req.mode_data |= PMC_USB_ALTMODE_ACTIVE_CABLE;
+I will check drivers/usb/roles
 
-   Why not *switch* instead of string of *if*s?
-
-> +	}
-> +
->  	ret = pmc_usb_command(port, (void *)&req, sizeof(req));
->  	if (ret)
->  		return ret;
-
-MBR, Sergey
+On Tue, 19 Sept 2023 at 19:28, Rob Herring <robh@kernel.org> wrote:
+>
+> On Tue, Sep 19, 2023 at 04:31:56PM +0300, Tomer Maimon wrote:
+> > On Tue, 19 Sept 2023 at 15:39, Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> > >
+> > > On 19/09/2023 07:14, Tomer Maimon wrote:
+> > > >>>            - nvidia,tegra20-ehci
+> > > >>>            - nvidia,tegra20-udc
+> > > >>>            - nvidia,tegra30-ehci
+> > > >>> @@ -325,6 +326,20 @@ properties:
+> > > >>>      type: boolean
+> > > >>>      deprecated: true
+> > > >>>
+> > > >>> +  nuvoton,sysgcr:
+> > > >>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> > > >>> +    items:
+> > > >>> +      - items:
+> > > >>> +          - description: phandle to syscon that configures usb phy mux.
+> > > >>> +          - description: offset of usb phy mux selection.
+> > > >>> +          - description: mask usb phy mux selection.
+> > > >>> +          - description: value usb phy mux selection.
+> > > >>> +    description:
+> > > >>> +      A phandle to syscon with three arguments that configure usb phy mux.
+> > > >>> +      The argument one is the offset of usb phy mux selection, the argument two
+> > > >>> +      is the mask usb phy mux selection, the argument three is the mask usb phy
+> > > >>> +      mux selection.
+> > > >>
+> > > >> Sorry, you miss phy driver. Don't use syscon instead of proper hardware
+> > > >> devices.
+> > > > Sorry the role of nuvoton,sysgcr property is to handle a mux between
+> > > > the different devices and not the handle the phy itself, handle the
+> > > > mux done in the GCR.
+> > > > Should we move the nuvoton,sysgcr description to another place in the
+> > > > ci-hdrc-usb2.yaml
+> > > > or
+> > > > Should we use a different driver to handle the mux and call it from
+> > > > the ci-hdrc-npcm driver, If yes which driver should we use?
+> > >
+> > > What is an "usb phy mux"?
+> > We have USB phy that could be connected to USB host (different driver)
+> > or it can be connected to the UDC driver(ChipIdea)
+>
+> Isn't that just role switching? There is a driver framework for that in
+> drivers/usb/roles/. Though it doesn't seem widely used yet.
+>
+> Rob
 
