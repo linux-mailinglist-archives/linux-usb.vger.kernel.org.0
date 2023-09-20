@@ -1,72 +1,51 @@
-Return-Path: <linux-usb+bounces-424-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-425-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 880B37A8825
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Sep 2023 17:22:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7267B7A89BB
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Sep 2023 18:46:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8E2751C21334
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Sep 2023 15:22:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2E4BD281C0E
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Sep 2023 16:46:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FF203B7BB;
-	Wed, 20 Sep 2023 15:21:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C97CE3E484;
+	Wed, 20 Sep 2023 16:46:32 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 256413B78C;
-	Wed, 20 Sep 2023 15:21:46 +0000 (UTC)
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AECEFF1;
-	Wed, 20 Sep 2023 08:21:43 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-404314388ceso74827955e9.2;
-        Wed, 20 Sep 2023 08:21:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695223302; x=1695828102; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7ndytcNwjogwuE9vld+zk4GipkAa+bZ+yvXsaST4Qa4=;
-        b=mU5MtFcPsEz1Suw8Cs6gzx+xPJo+gW1GoTAbvkIIqMMGjdnZkChub/XCR2DeI1wDl5
-         DnHmcr/w1qSiVdGLYOifNvKuJwePOAzTclOWYHG3iChVUaJbc5LQvYWyuGjjAmizFoG1
-         KtDoIEoJieHZS4Cty1AwpihlU2CuJDoif2GpFKTLPJyTWS2IPEC35PUwB8Q+kmhAzbuo
-         wDvRGNgtKlAoneVZFsq23CvKWp/f7W20kRBR6Uv/6EgUkCRqXJjndQadBhAa2RTFVgAr
-         XKh/uioisOtTxwvBEVmbyTfVPFLZM+PqFrVqIRe7931X0tODCRBC7UgOKBCXfIv2IU+6
-         WU3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695223302; x=1695828102;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7ndytcNwjogwuE9vld+zk4GipkAa+bZ+yvXsaST4Qa4=;
-        b=qNtHMhwlpL5o+B0lNATc8qPmvPTVdz48JA3lTb4aQVAZZSuJPTxBsOBOKUJJoGhZuF
-         TZNMpeNMUwJVCRuOMhUlH1hselJ51ToDGmNp/TcufEufnwMmdtsfS1TSyD60k7mbQVLe
-         zfnO6CULMTJdrBzvQ3elcLyve53nBBISTxwLZ8ASb1mTkWDUTcNnKwYf5gkKWI+d6x/2
-         TGDjcxPwmlHbQrOcx0V5mQAA+33fXtAcOHBHxJ9sZp54gWXsv6gIqF9k5wyN1V8mTB1/
-         3wI43XsBb0IQ3oObguZdBGHtz4GCQ8ciIzp7XU4NlalQwq1nkWc4lWpAJ+Cy+8YowyyL
-         ci3w==
-X-Gm-Message-State: AOJu0Yx8f1VBG9LLyhtDejib2y4VzXWjubXHq95devqqEn/0/KRmR1Vl
-	ENjao39nm2GKYbFwq+qgjGo=
-X-Google-Smtp-Source: AGHT+IFqlLk7XhluQ0MPa1+L883EOj4GTHCKbmC7suG1Q8L8HSn3/4TKpm+v92OpbRxvZRhbbZp4kA==
-X-Received: by 2002:a5d:51cd:0:b0:317:3c89:7f03 with SMTP id n13-20020a5d51cd000000b003173c897f03mr2726596wrv.5.1695223301943;
-        Wed, 20 Sep 2023 08:21:41 -0700 (PDT)
-Received: from primary ([212.34.23.120])
-        by smtp.gmail.com with ESMTPSA id o9-20020a5d62c9000000b00317afc7949csm18775710wrv.50.2023.09.20.08.21.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Sep 2023 08:21:41 -0700 (PDT)
-Date: Wed, 20 Sep 2023 11:21:38 -0400
-From: Abdel Alkuor <alkuor@gmail.com>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: krzysztof.kozlowski+dt@linaro.org, bryan.odonoghue@linaro.org,
-	gregkh@linuxfoundation.org, robh+dt@kernel.org,
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-	conor+dt@kernel.org, linux-kernel@vger.kernel.org,
-	abdelalkuor@geotab.com, ryan.eleceng@gmail.com
-Subject: Re: [PATCH v5 00/15] Add TPS25750 USB type-C PD controller support
-Message-ID: <ZQsOAi2bkBk8zHMr@primary>
-References: <20230917152639.21443-1-alkuor@gmail.com>
- <ZQhXXeVo6LaZe20a@kuha.fi.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 688EA3E475;
+	Wed, 20 Sep 2023 16:46:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0329EC433C7;
+	Wed, 20 Sep 2023 16:46:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1695228391;
+	bh=v2nZUFJb75Eok75BEHLZ6a+wtZb+ffY5WGQfd+Wp6vY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Ef6SlilF31FSgPKwuu0WfymO6HNgzAimtyNgVfXKfqv7AxemX3k92g7NZKKmqxQdD
+	 4SYlOUJ3NC19NmGATgQLggWeCEqmQIj0Dp076wmr1fDow5nW7QNrs5X3UOMv5stdW4
+	 go6Pi4M76ibE/k/1ED9234/0h+LlBe98GE6wJ2S0His1lg6Nui0QNZZBeBYbaHNqzr
+	 Xzxxgou53z6XDr51xCg0v5RJ7qzTqlldli/pzFbLObGzy59GAC+dDDH2rysvGW0OIH
+	 6lRJlV/6Y5Ly4EMtOru/RNpBt18cUeQ/A4SdQf3kDd6px94oLuELcR/sB8x+tWYf1L
+	 lkgWknBLOspSg==
+Date: Wed, 20 Sep 2023 09:50:39 -0700
+From: Bjorn Andersson <andersson@kernel.org>
+To: Neil Armstrong <neil.armstrong@linaro.org>
+Cc: Andy Gross <agross@kernel.org>, 
+	Konrad Dybcio <konrad.dybcio@linaro.org>, Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/4] dt-bindings: soc: qcom: qcom,pmic-glink: add a gpio
+ used to determine the Type-C port plug orientation
+Message-ID: <zigqqjepj54v5vnmhm3r3knwrjd2rfw2njds4ul7vmxq3nfrua@rkupccyyxziw>
+References: <20230804-topic-sm8550-upstream-type-c-orientation-v1-0-36dd3edec7bf@linaro.org>
+ <20230804-topic-sm8550-upstream-type-c-orientation-v1-1-36dd3edec7bf@linaro.org>
+ <zhm72wrjg7yazutkinv5lx55dgqtm4hmuexw2ht24fu6txxk3d@oum27inbk7si>
+ <7fc7371a-1b2d-ccce-1e73-6bfe70ea2b20@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -75,90 +54,88 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZQhXXeVo6LaZe20a@kuha.fi.intel.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+In-Reply-To: <7fc7371a-1b2d-ccce-1e73-6bfe70ea2b20@linaro.org>
 
-On Mon, Sep 18, 2023 at 04:57:49PM +0300, Heikki Krogerus wrote:
-> On Sun, Sep 17, 2023 at 11:26:24AM -0400, Abdel Alkuor wrote:
-> > From: Abdel Alkuor <abdelalkuor@geotab.com>
+On Mon, Aug 14, 2023 at 10:09:41AM +0200, Neil Armstrong wrote:
+> On 04/08/2023 18:03, Bjorn Andersson wrote:
+> > On Fri, Aug 04, 2023 at 03:50:07PM +0200, Neil Armstrong wrote:
+> > > On SM8450 and SM8550 based platforms, the Type-C plug orientation is given on a
+> > > GPIO line set by the PMIC.
+> > > 
+> > > Document this optional Type-C connector property, and take the
+> > > assumption an active level represents an inverted/flipped orientation.
+> > > 
+> > > Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> > > ---
+> > >   .../devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml  | 18 ++++++++++++++++++
+> > >   1 file changed, 18 insertions(+)
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
+> > > index bceb479f74c5..1b0a00b19a54 100644
+> > > --- a/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
+> > > +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
+> > > @@ -35,6 +35,11 @@ properties:
+> > >     '#size-cells':
+> > >       const: 0
+> > > +  orientation-gpios:
+> > > +    description: An input gpio for Type-C connector orientation, used to detect orientation
+> > > +      of the Type-C connector. GPIO active level means "CC2" or Reversed/Flipped orientation.
 > > 
-> > TPS25750 USB type-C PD controller has the same register offsets as
-> > tps6598x. The following is a summary of incorporating TPS25750 into
-> > TPS6598x driver:
-> > 
-> > - Only Check VID register (0x00) for TPS6598x and cd321x, as TPS25750 doesn't
-> >   have VID register.
-> > 
-> > - TypeC port registration will be registered differently for each PD
-> >   controller. TPS6598x uses system configuration register (0x28) to get
-> >   pr/dr capabilities. On the other hand, TPS25750 will use data role property
-> >   and PD status register (0x40) to get pr/dr capabilities as TPS25750 doesn't
-> >   have register 0x28 supported.
-> > 
-> > - TPS25750 requires writing a binary configuration to switch PD
-> >   controller from PTCH mode to APP mode which needs the following changes:
-> >   - Add PTCH mode to the modes list.
-> >   - Add an argument to tps6598x_check_mode to return the current mode.
-> >   - Currently, tps6598x_exec_cmd has cmd timeout hardcoded to 1 second,
-> >     and doesn't wait before checking DATA_OUT response. In TPS25750, patch 4CCs
-> >     take longer than 1 second to execute and some requires a delay before
-> >     checking DATA_OUT. To accommodate that, cmd_timeout and response_delay will
-> >     be added as arguments to tps6598x_exec_cmd.
-> >   - Implement applying patch sequence for TPS25750.
-> > 
-> > - In pm suspend callback, patch mode needs to be checked and the binary
-> >   configuration should be applied if needed.
-> > 
-> > - For interrupt, TPS25750 has only one event register (0x14) and one mask
-> >   register (0x16) of 11 bytes each, where TPS6598x has two event
-> >   and two mask registers of 8 bytes each. Both TPS25750 and TPS65986x
-> >   shares the same bit field offsets for events/masks/clear but many of
-> >   there fields are reserved in TPS25750, the following needs to be done in
-> >   tps6598x_interrupt:
-> >   - Read EVENT1 register as a block of 11 bytes when tps25750 is present
-> >   - Write CLEAR1 register as a block of 11 bytes when tps25750 is present
-> >   - Add trace_tps25750_irq
-> >   - During testing, I noticed that when a cable is plugged into the PD
-> >     controller and before PD controller switches to APP mode, there is a
-> >     lag between dr/pr updates and PlugInsertOrRemoval Event, so a check
-> >     for dr/pr change needs to be added along TPS_REG_INT_PLUG_EVENT check
-> > 
-> > - Add TPS25750 traces for status and power status registers. Trace for
-> >   data register won't be added as it doesn't exist in the device.
-> > 
-> > - Configure sleep mode for TPS25750.
+> > This is a per-connector/port property, as such be part of the connector
+> > sub nodes rather than as a property of the shared pmic_glink entity.
 > 
-> This looks mostly okay, but I'm a bit uncomfortable with flags like
-> is_tps25750.
+> This has been rejected by Rob, Dmitry & Krzysztof in:
+> https://lore.kernel.org/all/0fbf55e7-2140-751d-5347-f907a46ef78c@linaro.org/
+> &
+> https://lore.kernel.org/all/20230608154751.GA2750742-robh@kernel.org/
 > 
-> I think a better way would be to supply driver data. In it you would
-> have a callback for everything that needs to be customised.
+> Indeed the "GPIO" is not part of the physical USB-C connector, but a property,
+> and it's not part of the PMIC GLINK firmware either, so ?
 > 
-> struct tipd_data {
->         int (*interrupt)(int irq, void *data);
->         ...
-> };
-> ...
-> static const struct tipd_data tps25750_data = {
->         .interrupt = tps25750_interrupt,
-> ...
+> The PMIC function which generates this signal is handled by the PMIC GLINK
+> firmware, so this representation is the most accurate.
 > 
-> Something like that. You can on top of that still check
-> device_is_compatible(dev, "...") in some places.
->
-Sounds good. I will create callbacks factory struct as you suggested
-and remove the flag.
-> 
-> thanks,
-> 
-> -- 
-> heikki
+
+I don't think we reached a conclusion on the discussion that followed.
+If this indeed is the path forward, please document clearly how the next
+person should proceed when the need for handling multiple ports with
+this scheme arise.
 
 Thanks,
-Abdel
+Bjorn
+
+> Neil
+> 
+> > 
+> > Regards,
+> > Bjorn
+> > 
+> > > +    maxItems: 1
+> > > +
+> > >   patternProperties:
+> > >     '^connector@\d$':
+> > >       $ref: /schemas/connector/usb-connector.yaml#
+> > > @@ -44,6 +49,19 @@ patternProperties:
+> > >   required:
+> > >     - compatible
+> > > +allOf:
+> > > +  - if:
+> > > +      not:
+> > > +        properties:
+> > > +          compatible:
+> > > +            contains:
+> > > +              enum:
+> > > +                - qcom,sm8450-pmic-glink
+> > > +                - qcom,sm8550-pmic-glink
+> > > +    then:
+> > > +      properties:
+> > > +        orientation-gpios: false
+> > > +
+> > >   additionalProperties: false
+> > >   examples:
+> > > 
+> > > -- 
+> > > 2.34.1
+> > > 
+> 
 
