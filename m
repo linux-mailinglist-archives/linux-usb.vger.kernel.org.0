@@ -1,87 +1,69 @@
-Return-Path: <linux-usb+bounces-405-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-406-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FC597A7395
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Sep 2023 09:02:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 273207A73F0
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Sep 2023 09:23:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EEBD928178B
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Sep 2023 07:02:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D5CFB281A74
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Sep 2023 07:23:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CD1D749C;
-	Wed, 20 Sep 2023 07:02:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2C2E8829;
+	Wed, 20 Sep 2023 07:23:47 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D131953AA
-	for <linux-usb@vger.kernel.org>; Wed, 20 Sep 2023 07:02:29 +0000 (UTC)
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F8590;
-	Wed, 20 Sep 2023 00:02:26 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-	id 2DBDD1C0006; Wed, 20 Sep 2023 09:02:24 +0200 (CEST)
-Date: Wed, 20 Sep 2023 09:02:23 +0200
-From: Pavel Machek <pavel@denx.de>
-To: Xiaolei Wang <xiaolei.wang@windriver.com>
-Cc: peter.chen@kernel.org, pawell@cadence.com, rogerq@kernel.org,
-	gregkh@linuxfoundation.org, pavel@denx.de,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: cdns3: Modify the return value of cdns_set_active
- () to void when CONFIG_PM_SLEEP is disabled
-Message-ID: <ZQqY/+eoVtPJ+i0N@duo.ucw.cz>
-References: <20230912064946.1405848-1-xiaolei.wang@windriver.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9657E8487
+	for <linux-usb@vger.kernel.org>; Wed, 20 Sep 2023 07:23:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A44EC433C8;
+	Wed, 20 Sep 2023 07:23:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1695194627;
+	bh=Fr3JD9GG9Pv2NhbFBRrIecMlB8b/cJd3MubePCRDoBI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=ryGeX7ybQANwCRQBuGONr8oqGV/MlwcqmdsvDiBCp1EA3XCldLTifNAk6E9xuHhd0
+	 XLQSc+8R4cV4UYfjlWw5K5qs4+lBxQtP1xXX8HTJV9tA1RwzNK5j1kjvnviV9glm3o
+	 2bFlIkiuHTM8nDUIfvwVxSToXqIvEr+3Y+vQ0xBmBnl5CP0UGuXOkGW2LbUX1NDsJ/
+	 4gpYh4aPITARMMwak1NiZd74A80fNTOoP/ZP1npKmqtzuaSrb98v8KQHb0f224WWj9
+	 LF2cwkbtb0kOGYFJrGw3HcqKGc8Px2TAy10aAy2S8OAWT90QRgUOw8zW8DWYkbKkSz
+	 x3eqE3NsxQ8TA==
+Message-ID: <f25b7cd6-90e9-1d81-d135-38bb3df408c5@kernel.org>
+Date: Wed, 20 Sep 2023 10:23:43 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-	protocol="application/pgp-signature"; boundary="xjpou7buZ022lZeG"
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH] usb: cdns3: Modify the return value of cdns_set_active ()
+ to void when CONFIG_PM_SLEEP is disabled
+Content-Language: en-US
+To: Xiaolei Wang <xiaolei.wang@windriver.com>, peter.chen@kernel.org,
+ pawell@cadence.com, gregkh@linuxfoundation.org, pavel@denx.de
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230912064946.1405848-1-xiaolei.wang@windriver.com>
+From: Roger Quadros <rogerq@kernel.org>
 In-Reply-To: <20230912064946.1405848-1-xiaolei.wang@windriver.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-	SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
 
---xjpou7buZ022lZeG
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hi!
-
+On 12/09/2023 09:49, Xiaolei Wang wrote:
 > The return type of cdns_set_active () is inconsistent
 > depending on whether CONFIG_PM_SLEEP is enabled, so the
 > return value is modified to void type.
->=20
-
-Reviewed-by: Pavel Machek <pavel@denx.de>
-
+> 
+> Reported-by: Pavel Machek <pavel@denx.de>
 > Closes: https://lore.kernel.org/all/ZP7lIKUzD68XA91j@duo.ucw.cz/
-> Fixes: 2319b9c87fe2 ("usb: cdns3: Put the cdns set active part outside th=
-e spin lock")
+> Fixes: 2319b9c87fe2 ("usb: cdns3: Put the cdns set active part outside the spin lock")
+> Signed-off-by: Xiaolei Wang <xiaolei.wang@windriver.com>
+> ---
 
-Best regards,
-								Pavel
---=20
-DENX Software Engineering GmbH,        Managing Director: Erika Unter
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---xjpou7buZ022lZeG
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZQqY/wAKCRAw5/Bqldv6
-8mp0AKC8PaWORDidjoMqy+qLkVvGsgsaigCeOahafaKK79kITBtUCtrZ72JWjCI=
-=pEC7
------END PGP SIGNATURE-----
-
---xjpou7buZ022lZeG--
+Reviewed-by: Roger Quadros <rogerq@kernel.org>
 
