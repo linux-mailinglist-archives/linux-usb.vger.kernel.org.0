@@ -1,61 +1,61 @@
-Return-Path: <linux-usb+bounces-420-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-421-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82F287A87C4
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Sep 2023 17:01:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B80A57A87D3
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Sep 2023 17:04:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9BA2A1C2109A
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Sep 2023 15:01:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 720E72826C5
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Sep 2023 15:04:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4086E3B2BA;
-	Wed, 20 Sep 2023 15:01:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DA073B2BD;
+	Wed, 20 Sep 2023 15:03:53 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 299CB29A1;
-	Wed, 20 Sep 2023 15:01:11 +0000 (UTC)
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ADF191;
-	Wed, 20 Sep 2023 08:01:09 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-402d499580dso75008185e9.1;
-        Wed, 20 Sep 2023 08:01:09 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9289529A1;
+	Wed, 20 Sep 2023 15:03:51 +0000 (UTC)
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93F44A1;
+	Wed, 20 Sep 2023 08:03:49 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-404fbfac998so45836175e9.3;
+        Wed, 20 Sep 2023 08:03:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695222068; x=1695826868; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1695222228; x=1695827028; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=D0MPgiZbxZbSzUsXqTDVKwoPGRFcJqc+1YPwRP9UNJI=;
-        b=hZgj0W6EFlCR2WlTMr4kM7OM6nYpWxXNPWDaopCx+kGFzO2E/6+QXLF/rVHqFt9Ac6
-         6vSn2vw06OREX0jBG14HpyYwLeRH01o+BuSqNx4PpC+wDwirKnJpXZdQIF3W2tbcKaep
-         7zVUikc9wQ8rQBWQfvxdk22W+pLRjfsWH40mRXIocMrKUcxdRunkBJZN/wN9vmLID3t3
-         wsiz6J1Cl0ID9KBfM+M7SbQRNgXnSLb/Z+U79nI8IfveyyyU20JJTw43Q/SnDV/5H7Bs
-         3xeypfEh4jmwp8V3QXG73qn8On6ZUlOF6F6Qbl5bqKseygHFf1JawvbzLJD+dcp2+Bal
-         XznQ==
+        bh=I98A8Eic46rO8tiZ9osV0szBa2CeIR57yFuC8bpVBNk=;
+        b=B9cXE7h0HA61eaxC66MeNhC5raf7n2ob8jHEnTzN3ccRpfgTdVFDzUQJXFPscgpY1P
+         zGo14SfCu4wpV9QMyMDlM808OILZhTezeJsedb3f/0eg25btUAk3frHCbCr2xWmHhVZE
+         NS0wHkX0jtOvm4ZCmFvPjhB2mEIFn9W0DcAvjjd6ZWUO+Gz8xrzbdA5X0DMdlAttrLuQ
+         ej6/fgeGIPYASpt1E3Pi35507CvnjrMvA9w7Fmdd20T6wXSWYTJWQWaRYbVviQO+zldo
+         3mWC0arIPatUb4s9njxjj54FEV3+cQMB8QMYutjHGeyMvIajP/GHqfa1GHIlTdDLalV0
+         2Tzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695222068; x=1695826868;
+        d=1e100.net; s=20230601; t=1695222228; x=1695827028;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=D0MPgiZbxZbSzUsXqTDVKwoPGRFcJqc+1YPwRP9UNJI=;
-        b=olRrtFhdY2E7qidtFx2dMj/Lx3NEqn4LdPvkAqL3TbtNt2+NoE+cUdDR+gdIwY1HYK
-         akbHl+PIOm5o2/+KYqVF/UOkmJA8VSy86SDJHq76NREytCS/Sm/vkMWb5Zup+sJyQSA1
-         XlUUHKlsyzKb/mHun6l0r5cwQgS2EyDzWOMeRQBlZtrGT5u+SwBLk6oCOQs+yiHR0L1+
-         dFXfP9w7gdilG3fmz7ddeWSjeAcbqdBUElc3TLedh0unQzoE/tJqRA/Yn5fADS10tW7W
-         pryQIP0Vyrehek2fBLuWunBmGqLwdIoMJLFBFhBnFXMhZbpiQ0X+K+A6u1A73BKJ8rzp
-         TFgg==
-X-Gm-Message-State: AOJu0Yx1GJtD5dMT+0SIBWSmrcK4wFU8cnBtGJvRRsaI/hG9l0efZ7YC
-	oGnV4BJuTE/+GXodOYe5bkH+mfMhurRQGNs7fEc=
-X-Google-Smtp-Source: AGHT+IER8+VELFzpEVI2XHFwY0rPDpYyCVCmhJX++vO0mopYjoeBzOgJ7ln8g04ac+lGVxO2UpImhg==
-X-Received: by 2002:a7b:c859:0:b0:402:95a0:b2ae with SMTP id c25-20020a7bc859000000b0040295a0b2aemr2444890wml.32.1695222067223;
-        Wed, 20 Sep 2023 08:01:07 -0700 (PDT)
+        bh=I98A8Eic46rO8tiZ9osV0szBa2CeIR57yFuC8bpVBNk=;
+        b=ICstIjJKer9W8MqcIc7tx3Cv7OmMZ29q6Wd39HACsI/BC8shth+D0lSnfPeRTxB0gd
+         zx/gVXPgyg4ZCzBefTbRyNtbV2p4iRe5To9Jbf3qvCTZMbEXE9yAtDOiHVm+g0yPvStV
+         /mCLuudaQGU1R4ONZZO6LK4XfYDTCj3p9ejysenA121lAxc2ITlqWtyzHrrt4fZSdp0h
+         f9onSOKYavzFrkBJ6ENwexlHMdkC3qAg69VdZM2ETCQbZf5gNmWr+uevymglP0HvzAx5
+         ZyIkcZ9sEuN9bTczorr7e12Lrl2DrBo3D34O2pOcPh/HRmfdNp/bUOq8Pp2wKEvrLakl
+         uojw==
+X-Gm-Message-State: AOJu0YxLI7cC4YxRzP7oR7MI05ExkbPcfnWJt40v2iwSRHLc75xXj9cF
+	Qbb/29FFMO/VQzGRFYNIrEI=
+X-Google-Smtp-Source: AGHT+IHYQMMTNsPPlYocx1D3a+VMp/3BOUl2c4yeh6KKjbzkbCD1WgPOy7peE1KUNvIFAykI4kp0vg==
+X-Received: by 2002:a7b:cd0e:0:b0:402:f500:fcee with SMTP id f14-20020a7bcd0e000000b00402f500fceemr2718867wmj.0.1695222226928;
+        Wed, 20 Sep 2023 08:03:46 -0700 (PDT)
 Received: from primary ([212.34.23.120])
-        by smtp.gmail.com with ESMTPSA id a24-20020a05600c225800b00402d7105035sm2170550wmm.26.2023.09.20.08.01.05
+        by smtp.gmail.com with ESMTPSA id y15-20020a1c4b0f000000b003fe2a40d287sm2226705wma.1.2023.09.20.08.03.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Sep 2023 08:01:06 -0700 (PDT)
-Date: Wed, 20 Sep 2023 10:47:38 -0400
+        Wed, 20 Sep 2023 08:03:46 -0700 (PDT)
+Date: Wed, 20 Sep 2023 10:50:17 -0400
 From: Abdel Alkuor <alkuor@gmail.com>
 To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 Cc: krzysztof.kozlowski+dt@linaro.org, bryan.odonoghue@linaro.org,
@@ -63,11 +63,11 @@ Cc: krzysztof.kozlowski+dt@linaro.org, bryan.odonoghue@linaro.org,
 	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
 	conor+dt@kernel.org, linux-kernel@vger.kernel.org,
 	abdelalkuor@geotab.com
-Subject: Re: [PATCH v5 05/15] USB: typec: Check for EEPROM present
-Message-ID: <ZQsGChGBq93Rh35U@primary>
+Subject: Re: [PATCH v5 08/15] USB: typec: Add interrupt support for TPS25750
+Message-ID: <ZQsGqfKGDVoBXgj2@primary>
 References: <20230917152639.21443-1-alkuor@gmail.com>
- <20230917152639.21443-6-alkuor@gmail.com>
- <ZQhGUKocVc+yjOVL@kuha.fi.intel.com>
+ <20230917152639.21443-9-alkuor@gmail.com>
+ <ZQhGsA4PyiaUy7+7@kuha.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -76,82 +76,147 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZQhGUKocVc+yjOVL@kuha.fi.intel.com>
+In-Reply-To: <ZQhGsA4PyiaUy7+7@kuha.fi.intel.com>
 X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+	RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
 	autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Mon, Sep 18, 2023 at 03:45:04PM +0300, Heikki Krogerus wrote:
-> On Sun, Sep 17, 2023 at 11:26:29AM -0400, Abdel Alkuor wrote:
+On Mon, Sep 18, 2023 at 03:46:40PM +0300, Heikki Krogerus wrote:
+> Hi,
+> 
+> On Sun, Sep 17, 2023 at 11:26:32AM -0400, Abdel Alkuor wrote:
 > > From: Abdel Alkuor <abdelalkuor@geotab.com>
 > > 
-> > When an EEPROM is present, tps25750 loads the binary configuration from
-> > EEPROM. Hence, all we need to do is wait for the device to switch to APP
-> > mode
-> > 
+> > Update tps6598x interrupt handler to accommodate tps25750 interrupt
+> 
+> You have the "why" explained here, but please also explain what you
+> are doing - in this case it's not completely clear.
+>
+Makes sense. I will add an explanation in v6.
 > > Signed-off-by: Abdel Alkuor <abdelalkuor@geotab.com>
 > > ---
-> >  drivers/usb/typec/tipd/core.c     | 13 +++++++++++++
-> >  drivers/usb/typec/tipd/tps6598x.h |  3 +++
-> >  2 files changed, 16 insertions(+)
+> >  drivers/usb/typec/tipd/core.c | 49 +++++++++++++++++++++++++----------
+> >  1 file changed, 35 insertions(+), 14 deletions(-)
 > > 
 > > diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-> > index fea139c72d6d..b3d4b2b5bf5f 100644
+> > index bd5436fd88fd..17b3bc480f97 100644
 > > --- a/drivers/usb/typec/tipd/core.c
 > > +++ b/drivers/usb/typec/tipd/core.c
-> > @@ -37,6 +37,7 @@
-> >  #define TPS_REG_STATUS			0x1a
-> >  #define TPS_REG_SYSTEM_CONF		0x28
-> >  #define TPS_REG_CTRL_CONF		0x29
-> > +#define TPS_REG_BOOT_STATUS		0x2D
-> >  #define TPS_REG_POWER_STATUS		0x3f
-> >  #define TPS_REG_RX_IDENTITY_SOP		0x48
-> >  #define TPS_REG_DATA_STATUS		0x5f
-> > @@ -897,6 +898,17 @@ static int tps25750_apply_patch(struct tps6598x *tps)
-> >  	int ret;
-> >  	unsigned long timeout;
-> >  	u8 mode;
-> > +	u64 status = 0;
+> > @@ -120,6 +120,7 @@ struct tps6598x {
+> >  	enum power_supply_usb_type usb_type;
+> >  
+> >  	int wakeup;
+> > +	u32 status; /* status reg */
+> >  	u16 pwr_status;
+> >  	struct delayed_work	wq_poll;
+> >  	irq_handler_t irq_handler;
+> > @@ -539,50 +540,71 @@ static irqreturn_t cd321x_interrupt(int irq, void *data)
+> >  	return IRQ_NONE;
+> >  }
+> >  
+> > +static bool tps6598x_has_role_changed(struct tps6598x *tps, u32 status)
+> > +{
+> > +	status ^= tps->status;
 > > +
-> > +	ret = tps6598x_block_read(tps, TPS_REG_BOOT_STATUS, &status, 5);
-> > +	if (ret)
-> > +		return ret;
-> > +	/*
-> > +	 * Nothing to be done if the configuration
-> > +	 * is being loaded from EERPOM
-> > +	 */
-> > +	if (status & TPS25750_BOOT_STATUS_I2C_EEPROM_PRESENT)
-> > +		goto wait_for_app;
+> > +	return status & (TPS_STATUS_PORTROLE | TPS_STATUS_DATAROLE);
+> > +}
+> > +
+> >  static irqreturn_t tps6598x_interrupt(int irq, void *data)
+> >  {
+> >  	struct tps6598x *tps = data;
+> > -	u64 event1 = 0;
+> > -	u64 event2 = 0;
+> > +	u64 event[2] = { };
+> >  	u32 status;
+> >  	int ret;
 > >  
-> >  	ret = tps25750_start_patch_burst_mode(tps);
+> >  	mutex_lock(&tps->lock);
+> >  
+> > -	ret = tps6598x_read64(tps, TPS_REG_INT_EVENT1, &event1);
+> > -	ret |= tps6598x_read64(tps, TPS_REG_INT_EVENT2, &event2);
+> > +	if (tps->is_tps25750) {
+> > +		ret = tps6598x_block_read(tps, TPS_REG_INT_EVENT1, event, 11);
+> > +	} else {
+> > +		ret = tps6598x_read64(tps, TPS_REG_INT_EVENT1, &event[0]);
+> > +		ret |= tps6598x_read64(tps, TPS_REG_INT_EVENT2, &event[1]);
+> > +	}
+> > +
 > >  	if (ret) {
-> > @@ -908,6 +920,7 @@ static int tps25750_apply_patch(struct tps6598x *tps)
-> >  	if (ret)
-> >  		return ret;
+> >  		dev_err(tps->dev, "%s: failed to read events\n", __func__);
+> >  		goto err_unlock;
+> >  	}
+> > -	trace_tps6598x_irq(event1, event2);
+> > +	trace_tps6598x_irq(event[0], event[1]);
 > >  
-> > +wait_for_app:
-> >  	timeout = jiffies + msecs_to_jiffies(1000);
+> > -	if (!(event1 | event2))
+> > +	if (!(event[0] | event[1]))
+> >  		goto err_unlock;
 > >  
-> >  	do {
-> > diff --git a/drivers/usb/typec/tipd/tps6598x.h b/drivers/usb/typec/tipd/tps6598x.h
-> > index 527857549d69..5e942c089c27 100644
-> > --- a/drivers/usb/typec/tipd/tps6598x.h
-> > +++ b/drivers/usb/typec/tipd/tps6598x.h
-> > @@ -199,4 +199,7 @@
-> >  #define TPS_DATA_STATUS_DP_SPEC_PIN_ASSIGNMENT_A    BIT(2)
-> >  #define TPS_DATA_STATUS_DP_SPEC_PIN_ASSIGNMENT_B    (BIT(2) | BIT(1))
+> >  	if (!tps6598x_read_status(tps, &status))
+> >  		goto err_clear_ints;
 > >  
-> > +/* BOOT STATUS REG*/
-> > +#define TPS25750_BOOT_STATUS_I2C_EEPROM_PRESENT	BIT(3)
+> > -	if ((event1 | event2) & TPS_REG_INT_POWER_STATUS_UPDATE)
+> > +	if ((event[0] | event[1]) & TPS_REG_INT_POWER_STATUS_UPDATE)
+> >  		if (!tps6598x_read_power_status(tps))
+> >  			goto err_clear_ints;
+> >  
+> > -	if ((event1 | event2) & TPS_REG_INT_DATA_STATUS_UPDATE)
+> > +	if ((event[0] | event[1]) & TPS_REG_INT_DATA_STATUS_UPDATE)
+> >  		if (!tps6598x_read_data_status(tps))
+> >  			goto err_clear_ints;
+> >  
+> > -	/* Handle plug insert or removal */
+> > -	if ((event1 | event2) & TPS_REG_INT_PLUG_EVENT)
+> > +	/*
+> > +	 * data/port roles could be updated independently after
+> > +	 * a plug event. Therefore, we need to check
+> > +	 * for pr/dr status change to set TypeC dr/pr accordingly.
+> > +	 */
+> > +	if ((event[0] | event[1]) & TPS_REG_INT_PLUG_EVENT ||
+> > +		tps6598x_has_role_changed(tps, status))
 > 
-> That's not TPS25750 specific bit, so please rename that to
-> TPS_BOOT_STATUS_I2C_EEPROM_PRESENT
+> Alignment.
+Will be fixed in v6.
 > 
-I will fix it in v6.
-> thanks,
+> >  		tps6598x_handle_plug_event(tps, status);
+> >  
+> > +	tps->status = status;
+> >  err_clear_ints:
+> > -	tps6598x_write64(tps, TPS_REG_INT_CLEAR1, event1);
+> > -	tps6598x_write64(tps, TPS_REG_INT_CLEAR2, event2);
+> > +	if (tps->is_tps25750) {
+> > +		tps6598x_block_write(tps, TPS_REG_INT_CLEAR1, event, 11);
+> > +	} else {
+> > +		tps6598x_write64(tps, TPS_REG_INT_CLEAR1, event[0]);
+> > +		tps6598x_write64(tps, TPS_REG_INT_CLEAR2, event[1]);
+> > +	}
+> >  
+> >  err_unlock:
+> >  	mutex_unlock(&tps->lock);
+> >  
+> > -	if (event1 | event2)
+> > +	if (event[0] | event[1])
+> >  		return IRQ_HANDLED;
+> >  	return IRQ_NONE;
+> >  }
+> > @@ -1003,7 +1025,6 @@ static int tps6598x_probe(struct i2c_client *client)
+> >  
+> >  		irq_handler = cd321x_interrupt;
+> >  	} else {
+> > -
+> 
+> You need to fix patch 4 instead - that's where you add that empty
+> line.
+Will be fixed in v6.
+> 
+> >  		tps->is_tps25750 = of_device_is_compatible(np, "ti,tps25750");
+> >  		/* Enable power status, data status and plug event interrupts */
+> >  		mask1 = TPS_REG_INT_POWER_STATUS_UPDATE |
+> > -- 
+> > 2.34.1
 > 
 > -- 
 > heikki
