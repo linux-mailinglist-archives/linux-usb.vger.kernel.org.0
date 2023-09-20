@@ -1,73 +1,72 @@
-Return-Path: <linux-usb+bounces-423-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-424-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5E9A7A87EE
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Sep 2023 17:11:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 880B37A8825
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Sep 2023 17:22:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 620282828D7
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Sep 2023 15:11:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8E2751C21334
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Sep 2023 15:22:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F7CF3B78C;
-	Wed, 20 Sep 2023 15:11:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FF203B7BB;
+	Wed, 20 Sep 2023 15:21:48 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFFEF29A1;
-	Wed, 20 Sep 2023 15:11:06 +0000 (UTC)
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B887FAD;
-	Wed, 20 Sep 2023 08:11:04 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-31427ddd3fbso6252974f8f.0;
-        Wed, 20 Sep 2023 08:11:04 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 256413B78C;
+	Wed, 20 Sep 2023 15:21:46 +0000 (UTC)
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AECEFF1;
+	Wed, 20 Sep 2023 08:21:43 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-404314388ceso74827955e9.2;
+        Wed, 20 Sep 2023 08:21:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695222663; x=1695827463; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1695223302; x=1695828102; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vS/ZehT2TTq4OUBvmWF2X4je+TwLLsMe5wfLtKOCYts=;
-        b=VN+PUHZl34w9xLh60lhTPIhqwSiAbW95rNu+t++URLfOv0msRHxyvWqxeVWqq6h4fh
-         ZDs1MYUnSqE2NOUmaCimcKoUMY2iWZ742nEpVHA6giwDTFHhiq7g83ZWv0LdURkxoiLS
-         j9qq62YS7TGviqb+vGsK+ASS2c6Z6R28yAGLQ2ex9avUUsbUsqJVABaXRHrr/B7pFfQt
-         fZvdVplYoUd9z4M3UGlwScisp5BE45NPPfJgw0UPfbVhZAoPa1LJbgQlejumDr17hJaK
-         +BBdmxIo46vTPTl05ZSkGemSU/aHR5qIyan+RU8T/O2PjT5WZlHH0h26N74l29tEhUl0
-         QaEA==
+        bh=7ndytcNwjogwuE9vld+zk4GipkAa+bZ+yvXsaST4Qa4=;
+        b=mU5MtFcPsEz1Suw8Cs6gzx+xPJo+gW1GoTAbvkIIqMMGjdnZkChub/XCR2DeI1wDl5
+         DnHmcr/w1qSiVdGLYOifNvKuJwePOAzTclOWYHG3iChVUaJbc5LQvYWyuGjjAmizFoG1
+         KtDoIEoJieHZS4Cty1AwpihlU2CuJDoif2GpFKTLPJyTWS2IPEC35PUwB8Q+kmhAzbuo
+         wDvRGNgtKlAoneVZFsq23CvKWp/f7W20kRBR6Uv/6EgUkCRqXJjndQadBhAa2RTFVgAr
+         XKh/uioisOtTxwvBEVmbyTfVPFLZM+PqFrVqIRe7931X0tODCRBC7UgOKBCXfIv2IU+6
+         WU3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695222663; x=1695827463;
+        d=1e100.net; s=20230601; t=1695223302; x=1695828102;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vS/ZehT2TTq4OUBvmWF2X4je+TwLLsMe5wfLtKOCYts=;
-        b=iMInKcOL6igCM25y9XINrBf/LwVhHeJ4pfTmOa3o2vJkVLl4eZz5YcdKJ3t0+rmOTp
-         qwpF7k4mQIovoZEE3Wpvl0NiSkC7j9q7QCeZ2hw1ra+P5wxytHpLdwusiq9/grIEGJNr
-         KxJTuI70rAhbDQ3OBEiVKCn6jKC7MxWbDVSEF/87lW0H9hXUEvslo+LY2HzvMs2Aj21g
-         gqTQzXarBGRUJG1wBpO7wfcYD4ZgWS05epml7C3lDQ7KfG+v8hNfteE7mOS8JReZb0ER
-         m3iwDxnphJHqlB8boRenMBtNeoYo/5r/yV9vqt6a68fpH1GLys5LJKdgBDch+UMfWYlU
-         5gag==
-X-Gm-Message-State: AOJu0YxQywAi37QjwGn2StNBNB7GcVER/QAGT6h0RRI8MPRQZgNLe4Jb
-	D7A91W0K4GE+aq0kUag0JP4=
-X-Google-Smtp-Source: AGHT+IEuaTp58UUxWhtjR3bhQg43i715jPEkQvNrgysHyIpBWlXa0yzz6NK6UhU0LkhiBO3cN/anfA==
-X-Received: by 2002:a5d:4292:0:b0:31f:f753:5897 with SMTP id k18-20020a5d4292000000b0031ff7535897mr2462917wrq.59.1695222662854;
-        Wed, 20 Sep 2023 08:11:02 -0700 (PDT)
+        bh=7ndytcNwjogwuE9vld+zk4GipkAa+bZ+yvXsaST4Qa4=;
+        b=qNtHMhwlpL5o+B0lNATc8qPmvPTVdz48JA3lTb4aQVAZZSuJPTxBsOBOKUJJoGhZuF
+         TZNMpeNMUwJVCRuOMhUlH1hselJ51ToDGmNp/TcufEufnwMmdtsfS1TSyD60k7mbQVLe
+         zfnO6CULMTJdrBzvQ3elcLyve53nBBISTxwLZ8ASb1mTkWDUTcNnKwYf5gkKWI+d6x/2
+         TGDjcxPwmlHbQrOcx0V5mQAA+33fXtAcOHBHxJ9sZp54gWXsv6gIqF9k5wyN1V8mTB1/
+         3wI43XsBb0IQ3oObguZdBGHtz4GCQ8ciIzp7XU4NlalQwq1nkWc4lWpAJ+Cy+8YowyyL
+         ci3w==
+X-Gm-Message-State: AOJu0Yx8f1VBG9LLyhtDejib2y4VzXWjubXHq95devqqEn/0/KRmR1Vl
+	ENjao39nm2GKYbFwq+qgjGo=
+X-Google-Smtp-Source: AGHT+IFqlLk7XhluQ0MPa1+L883EOj4GTHCKbmC7suG1Q8L8HSn3/4TKpm+v92OpbRxvZRhbbZp4kA==
+X-Received: by 2002:a5d:51cd:0:b0:317:3c89:7f03 with SMTP id n13-20020a5d51cd000000b003173c897f03mr2726596wrv.5.1695223301943;
+        Wed, 20 Sep 2023 08:21:41 -0700 (PDT)
 Received: from primary ([212.34.23.120])
-        by smtp.gmail.com with ESMTPSA id l16-20020adffe90000000b0031aef72a021sm4213234wrr.86.2023.09.20.08.11.01
+        by smtp.gmail.com with ESMTPSA id o9-20020a5d62c9000000b00317afc7949csm18775710wrv.50.2023.09.20.08.21.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Sep 2023 08:11:02 -0700 (PDT)
-Date: Wed, 20 Sep 2023 11:10:58 -0400
+        Wed, 20 Sep 2023 08:21:41 -0700 (PDT)
+Date: Wed, 20 Sep 2023 11:21:38 -0400
 From: Abdel Alkuor <alkuor@gmail.com>
 To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 Cc: krzysztof.kozlowski+dt@linaro.org, bryan.odonoghue@linaro.org,
 	gregkh@linuxfoundation.org, robh+dt@kernel.org,
 	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
 	conor+dt@kernel.org, linux-kernel@vger.kernel.org,
-	abdelalkuor@geotab.com
-Subject: Re: [PATCH v5 15/15] USB: typec: Do not check VID for tps25750
-Message-ID: <ZQsLgnNnBP3SVDXy@primary>
+	abdelalkuor@geotab.com, ryan.eleceng@gmail.com
+Subject: Re: [PATCH v5 00/15] Add TPS25750 USB type-C PD controller support
+Message-ID: <ZQsOAi2bkBk8zHMr@primary>
 References: <20230917152639.21443-1-alkuor@gmail.com>
- <20230917152639.21443-16-alkuor@gmail.com>
- <ZQhQxzJfJmjbR02B@kuha.fi.intel.com>
+ <ZQhXXeVo6LaZe20a@kuha.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -76,7 +75,7 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZQhQxzJfJmjbR02B@kuha.fi.intel.com>
+In-Reply-To: <ZQhXXeVo6LaZe20a@kuha.fi.intel.com>
 X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
 	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
@@ -84,67 +83,82 @@ X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Mon, Sep 18, 2023 at 04:29:43PM +0300, Heikki Krogerus wrote:
-> Hi,
-> 
-> On Sun, Sep 17, 2023 at 11:26:39AM -0400, Abdel Alkuor wrote:
+On Mon, Sep 18, 2023 at 04:57:49PM +0300, Heikki Krogerus wrote:
+> On Sun, Sep 17, 2023 at 11:26:24AM -0400, Abdel Alkuor wrote:
 > > From: Abdel Alkuor <abdelalkuor@geotab.com>
 > > 
-> > tps25750 doesn't have VID register, check VID for PD controllers
-> > other than tps25750
+> > TPS25750 USB type-C PD controller has the same register offsets as
+> > tps6598x. The following is a summary of incorporating TPS25750 into
+> > TPS6598x driver:
 > > 
-> > Signed-off-by: Abdel Alkuor <abdelalkuor@geotab.com>
-> > ---
-> >  drivers/usb/typec/tipd/core.c | 10 ++++++----
-> >  1 file changed, 6 insertions(+), 4 deletions(-)
+> > - Only Check VID register (0x00) for TPS6598x and cd321x, as TPS25750 doesn't
+> >   have VID register.
 > > 
-> > diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-> > index 326c23bfa8e6..c1399e12a170 100644
-> > --- a/drivers/usb/typec/tipd/core.c
-> > +++ b/drivers/usb/typec/tipd/core.c
-> > @@ -1142,10 +1142,6 @@ static int tps6598x_probe(struct i2c_client *client)
-> >  	if (IS_ERR(tps->regmap))
-> >  		return PTR_ERR(tps->regmap);
-> >  
-> > -	ret = tps6598x_read32(tps, TPS_REG_VID, &vid);
-> > -	if (ret < 0 || !vid)
-> > -		return -ENODEV;
-> > -
-> >  	/*
-> >  	 * Checking can the adapter handle SMBus protocol. If it can not, the
-> >  	 * driver needs to take care of block reads separately.
-> > @@ -1176,6 +1172,12 @@ static int tps6598x_probe(struct i2c_client *client)
-> >  
-> >  	tps->irq_handler = irq_handler;
-> >  
-> > +	if (!tps->is_tps25750) {
-> > +		ret = tps6598x_read32(tps, TPS_REG_VID, &vid);
-> > +		if (ret < 0 || !vid)
-> > +			return -ENODEV;
-> > +	}
+> > - TypeC port registration will be registered differently for each PD
+> >   controller. TPS6598x uses system configuration register (0x28) to get
+> >   pr/dr capabilities. On the other hand, TPS25750 will use data role property
+> >   and PD status register (0x40) to get pr/dr capabilities as TPS25750 doesn't
+> >   have register 0x28 supported.
+> > 
+> > - TPS25750 requires writing a binary configuration to switch PD
+> >   controller from PTCH mode to APP mode which needs the following changes:
+> >   - Add PTCH mode to the modes list.
+> >   - Add an argument to tps6598x_check_mode to return the current mode.
+> >   - Currently, tps6598x_exec_cmd has cmd timeout hardcoded to 1 second,
+> >     and doesn't wait before checking DATA_OUT response. In TPS25750, patch 4CCs
+> >     take longer than 1 second to execute and some requires a delay before
+> >     checking DATA_OUT. To accommodate that, cmd_timeout and response_delay will
+> >     be added as arguments to tps6598x_exec_cmd.
+> >   - Implement applying patch sequence for TPS25750.
+> > 
+> > - In pm suspend callback, patch mode needs to be checked and the binary
+> >   configuration should be applied if needed.
+> > 
+> > - For interrupt, TPS25750 has only one event register (0x14) and one mask
+> >   register (0x16) of 11 bytes each, where TPS6598x has two event
+> >   and two mask registers of 8 bytes each. Both TPS25750 and TPS65986x
+> >   shares the same bit field offsets for events/masks/clear but many of
+> >   there fields are reserved in TPS25750, the following needs to be done in
+> >   tps6598x_interrupt:
+> >   - Read EVENT1 register as a block of 11 bytes when tps25750 is present
+> >   - Write CLEAR1 register as a block of 11 bytes when tps25750 is present
+> >   - Add trace_tps25750_irq
+> >   - During testing, I noticed that when a cable is plugged into the PD
+> >     controller and before PD controller switches to APP mode, there is a
+> >     lag between dr/pr updates and PlugInsertOrRemoval Event, so a check
+> >     for dr/pr change needs to be added along TPS_REG_INT_PLUG_EVENT check
+> > 
+> > - Add TPS25750 traces for status and power status registers. Trace for
+> >   data register won't be added as it doesn't exist in the device.
+> > 
+> > - Configure sleep mode for TPS25750.
 > 
-> You need to do this at the same time you enable tps25750, so I'm
-> guessing in patch 4.
+> This looks mostly okay, but I'm a bit uncomfortable with flags like
+> is_tps25750.
 > 
-> You are also changing the execution order just because of that
-> is_tps25750. Instead you need to make sure you have that flag set as
-> soon as possible in the first place, so right after "tps" is
-> allocated:
+> I think a better way would be to supply driver data. In it you would
+> have a callback for everything that needs to be customised.
+> 
+> struct tipd_data {
+>         int (*interrupt)(int irq, void *data);
+>         ...
+> };
+> ...
+> static const struct tipd_data tps25750_data = {
+>         .interrupt = tps25750_interrupt,
+> ...
+> 
+> Something like that. You can on top of that still check
+> device_is_compatible(dev, "...") in some places.
 >
-Good point. I will move the check in patch 4 and check it after allocating
-tps.
->         mutex_init(&tps->lock);
->         tps->dev = &client->dev;
-> +       tps->is_tps25750 = of_device_is_compatible(np, "ti,tps25750");
->  
->         tps->regmap = devm_regmap_init_i2c(client, &tps6598x_regmap_config);
->         if (IS_ERR(tps->regmap))
-> 
+Sounds good. I will create callbacks factory struct as you suggested
+and remove the flag.
 > 
 > thanks,
 > 
 > -- 
 > heikki
+
 Thanks,
 Abdel
 
