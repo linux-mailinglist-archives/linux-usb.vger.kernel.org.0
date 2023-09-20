@@ -1,137 +1,128 @@
-Return-Path: <linux-usb+bounces-414-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-415-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFF737A7994
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Sep 2023 12:46:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 77BEB7A868C
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Sep 2023 16:29:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 69D37281635
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Sep 2023 10:46:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 34380281A8C
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Sep 2023 14:29:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4015415ADE;
-	Wed, 20 Sep 2023 10:46:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29FC33B2A9;
+	Wed, 20 Sep 2023 14:29:43 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3257811733
-	for <linux-usb@vger.kernel.org>; Wed, 20 Sep 2023 10:45:57 +0000 (UTC)
-Received: from out28-73.mail.aliyun.com (out28-73.mail.aliyun.com [115.124.28.73])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 048DECF8;
-	Wed, 20 Sep 2023 03:45:51 -0700 (PDT)
-X-Alimail-AntiSpam:AC=CONTINUE;BC=0.07524619|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0665893-0.00179403-0.931617;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047212;MF=michael@allwinnertech.com;NM=1;PH=DS;RN=5;RT=5;SR=0;TI=SMTPD_---.UjzWuGe_1695206747;
-Received: from 192.168.220.129(mailfrom:michael@allwinnertech.com fp:SMTPD_---.UjzWuGe_1695206747)
-          by smtp.aliyun-inc.com;
-          Wed, 20 Sep 2023 18:45:49 +0800
-Message-ID: <56e26444-f289-d017-6225-24658e81ab84@allwinnertech.com>
-Date: Wed, 20 Sep 2023 18:45:47 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D7873B28F;
+	Wed, 20 Sep 2023 14:29:41 +0000 (UTC)
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 091FAAF;
+	Wed, 20 Sep 2023 07:29:40 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-40475103519so66396225e9.0;
+        Wed, 20 Sep 2023 07:29:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1695220178; x=1695824978; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cbEDq7up+2av+UowrxSaLUVDq8oiBtv48vtfULYOFCc=;
+        b=fcbfos+K01Yaw+4vgMVUWIFqT6WAvtWjjhcnVr0eTl7pIhslK33Nprx+9aLYSEpaO4
+         0/jL49nAOAL3vwyVYCzFnpi7Et45dbM5tYZtElZwdGisvoUF3u7gXBSYWDspoolAqO31
+         1TT5NRzC5yI1hD9JNKLszo/zxPO7gfng3Oj2ZhvcAFqMRWUJfmF2APiENfw+rC/RvtgI
+         /56EWpnoZfNDID7dUQuzusmCKv4+g1hUxJKxMWdwBhD3pdx1w7bz35/oiXRKS7rqWCMn
+         PyhplPBMcpUlzPRYNjm3cRfLplDWBGwRjF7ouT3oGDgPPtua50ODfkRDEEMImWgCFRdG
+         uMWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695220178; x=1695824978;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cbEDq7up+2av+UowrxSaLUVDq8oiBtv48vtfULYOFCc=;
+        b=HV6k0rO8jQQRy6dggkSPfIpXXLlw0ze/+Cg3r19EMqbh6ofb1yA9sOEZMJFDF5Hqja
+         vUSmtWu8PrY0nYcglwwKQyvqVNaLmQFT8rmjg3/GUyUzU+yUbPr8oa+TnX5csCS9sxYz
+         a5mLjys+kVzhYTSo1lHjZQ9WAOfvJL6ytmzdvr4WyCNtTt1k2CQ+z3CcUWdE2JjwNji+
+         HHleVdK2OoH/fbILd/cNz3lCLLtTh2zl0duwexYZTuigcJu9OicbSBu5sPn/hW2ZvRXv
+         0w2pbpIzOAvN1yVy6V+K4s+BuBiFKDwS1T+YSwiotQy6rSiLxl7kLXKeYRWdDuFP759D
+         pvDg==
+X-Gm-Message-State: AOJu0YzOP7kXRt9oqJt8ZOtQ7QDdDzdNpPoMKV7CX6aAVU6OCgzpxLMK
+	b/tgolhMtIwiLkXDBtuPWbY=
+X-Google-Smtp-Source: AGHT+IHFnj3OMWSAXxv8HTF+t0ucfprw6Yty9B4mSM036wvuJLVMh4HapMjxkWqeP5T3FJHwb0t3AA==
+X-Received: by 2002:a7b:cb86:0:b0:402:f07c:4b48 with SMTP id m6-20020a7bcb86000000b00402f07c4b48mr2266845wmi.28.1695220177989;
+        Wed, 20 Sep 2023 07:29:37 -0700 (PDT)
+Received: from primary ([212.34.23.120])
+        by smtp.gmail.com with ESMTPSA id f11-20020adff58b000000b003180027d67asm18670891wro.19.2023.09.20.07.29.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Sep 2023 07:29:37 -0700 (PDT)
+Date: Wed, 20 Sep 2023 10:29:34 -0400
+From: Abdel Alkuor <alkuor@gmail.com>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: krzysztof.kozlowski+dt@linaro.org, bryan.odonoghue@linaro.org,
+	gregkh@linuxfoundation.org, robh+dt@kernel.org,
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+	conor+dt@kernel.org, linux-kernel@vger.kernel.org,
+	abdelalkuor@geotab.com, ryanmacdonald@geotab.com
+Subject: Re: [PATCH v5 02/15] USB: typec: Add cmd timeout and response delay
+Message-ID: <ZQsBzl2LBj0SQAqt@primary>
+References: <20230917152639.21443-1-alkuor@gmail.com>
+ <20230917152639.21443-3-alkuor@gmail.com>
+ <ZQgqII6+wplL8AjG@kuha.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] usb:typec:tcpm:support double Rp to Vbus cable as sink
-Content-Language: en-US
-To: Guenter Roeck <linux@roeck-us.net>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20230914003154.27977-1-michael@allwinnertech.com>
- <ZQgm/Lb4iZtWrWbs@kuha.fi.intel.com>
- <c52acbd0-e8e3-83e7-d87b-939b47aa39c1@roeck-us.net>
-From: Michael Wu <michael@allwinnertech.com>
-In-Reply-To: <c52acbd0-e8e3-83e7-d87b-939b47aa39c1@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-	SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
-	autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZQgqII6+wplL8AjG@kuha.fi.intel.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On 2023/9/18 22:22, Guenter Roeck wrote:
-> On 9/18/23 03:31, Heikki Krogerus wrote:
->> On Thu, Sep 14, 2023 at 08:31:54AM +0800, Michael Wu wrote:
->>> The USB Type-C Cable and Connector Specification defines the wire
->>> connections for the USB Type-C to USB 2.0 Standard-A cable assembly
->>> (Release 2.2, Chapter 3.5.2).
->>> The Notes says that Pin A5 (CC) of the USB Type-C plug shall be 
->>> connected
->>> to Vbus through a resister Rp.
->>> However, there is a large amount of such double Rp connected to Vbus
->>> non-standard cables which produced by UGREEN circulating on the 
->>> market, and
->>> it can affects the normal operations of the state machine easily,
->>> especially to CC1 and CC2 be pulled up at the same time.
->>> In fact, we can regard those cables as sink to avoid abnormal state.
->>>
->>> Message as follow:
->>> [   58.900212] VBUS on
->>> [   59.265433] CC1: 0 -> 3, CC2: 0 -> 3 [state TOGGLING, polarity 0, 
->>> connected]
->>> [   62.623308] CC1: 3 -> 0, CC2: 3 -> 0 [state TOGGLING, polarity 0, 
->>> disconnected]
->>> [   62.625006] VBUS off
->>> [   62.625012] VBUS VSAFE0V
->>>
->>> Signed-off-by: Michael Wu <michael@allwinnertech.com>
->>> ---
->>>   drivers/usb/typec/tcpm/tcpm.c | 3 ++-
->>>   1 file changed, 2 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/usb/typec/tcpm/tcpm.c 
->>> b/drivers/usb/typec/tcpm/tcpm.c
->>> index d962f67c95ae6..beb7143128667 100644
->>> --- a/drivers/usb/typec/tcpm/tcpm.c
->>> +++ b/drivers/usb/typec/tcpm/tcpm.c
->>> @@ -519,7 +519,8 @@ static const char * const pd_rev[] = {
->>>   #define tcpm_port_is_sink(port) \
->>>       ((tcpm_cc_is_sink((port)->cc1) && 
->>> !tcpm_cc_is_sink((port)->cc2)) || \
->>> -     (tcpm_cc_is_sink((port)->cc2) && !tcpm_cc_is_sink((port)->cc1)))
->>> +     (tcpm_cc_is_sink((port)->cc2) && !tcpm_cc_is_sink((port)->cc1)) 
->>> || \
->>> +     (tcpm_cc_is_sink((port)->cc1) && tcpm_cc_is_sink((port)->cc2)))
->>>   #define tcpm_cc_is_source(cc) ((cc) == TYPEC_CC_RD)
->>>   #define tcpm_cc_is_audio(cc) ((cc) == TYPEC_CC_RA)
->>
->> This look OK to me, but I would still like to wait for comments from
->> Guenter - just in case.
->>
+On Mon, Sep 18, 2023 at 01:44:48PM +0300, Heikki Krogerus wrote:
+> On Sun, Sep 17, 2023 at 11:26:26AM -0400, Abdel Alkuor wrote:
+> > Some commands in tps25750 take longer than 1 second
+> > to complete, and some responses need some delay before
+> > the result becomes available.
+> > 
+> > Signed-off-by: Abdel Alkuor <alkuor@gmail.com>
+> > ---
+> >  drivers/usb/typec/tipd/core.c | 18 ++++++++++++------
+> >  1 file changed, 12 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+> > index 37b56ce75f39..a8aee4e1aeba 100644
+> > --- a/drivers/usb/typec/tipd/core.c
+> > +++ b/drivers/usb/typec/tipd/core.c
+> > @@ -284,7 +284,8 @@ static void tps6598x_disconnect(struct tps6598x *tps, u32 status)
+> >  
+> >  static int tps6598x_exec_cmd(struct tps6598x *tps, const char *cmd,
+> >  			     size_t in_len, u8 *in_data,
+> > -			     size_t out_len, u8 *out_data)
+> > +			     size_t out_len, u8 *out_data,
+> > +			     u32 cmd_timeout_ms, u32 res_delay_ms)
 > 
-> Look at the conditions. Reordered, we end up with
->      (tcpm_cc_is_sink((port)->cc1) && !tcpm_cc_is_sink((port)->cc2)) ||
->      (tcpm_cc_is_sink((port)->cc1) && tcpm_cc_is_sink((port)->cc2))
-> which simplifies to
->      tcpm_cc_is_sink((port)->cc1)
-> making the complete expression
->      tcpm_cc_is_sink((port)->cc1) ||
->      (tcpm_cc_is_sink((port)->cc2) && !tcpm_cc_is_sink((port)->cc1))
-> which simplifies further to
->      tcpm_cc_is_sink((port)->cc1) || tcpm_cc_is_sink((port)->cc2)
+> It looks like 1s/0s is still the "default", so you could have just
+> made this old function a wrapper:
 > 
-> The simplified expression doesn't conflict with other detections, so I am
-> ok with it. It might be worthwhile adding a comment to the code, though,
-> explaining the reason
-> Guenter
+> static int tps6598x_exec_cmd(struct tps6598x *tps, const char *cmd,
+> 			     size_t in_len, u8 *in_data,
+> 			     size_t out_len, u8 *out_data)
+> {
+>         return tps6598x_exec_cmd_tmo(tps, cmd, in_len, in_data, out_len, out_data, 1000, 0);
+> }
+Sounds good. I will change it in v6.
 > 
->> thanks,
->>
-Dear Guenter,
+> thanks,
+> 
+> -- 
+> heikki
 
-I have modified it according to your opinion, and resend it as patch 
-v2[1]. Please review.
-
-[1] 
-https://lore.kernel.org/all/20230920063030.66312-1-michael@allwinnertech.com/
-
--- 
-Regards,
-Michael Wu
+Thanks,
+Abdel
 
