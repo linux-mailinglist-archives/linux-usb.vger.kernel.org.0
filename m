@@ -1,161 +1,135 @@
-Return-Path: <linux-usb+bounces-441-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-447-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AAF5F7A9A7D
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Sep 2023 20:41:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA4887A9C7C
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Sep 2023 21:19:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 650ED281EC7
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Sep 2023 18:41:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 722571F215D2
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Sep 2023 19:19:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94C6715484;
-	Thu, 21 Sep 2023 17:49:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42F9F4C870;
+	Thu, 21 Sep 2023 18:11:26 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 586F41641D;
-	Thu, 21 Sep 2023 17:49:00 +0000 (UTC)
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7879900C5;
-	Thu, 21 Sep 2023 10:46:13 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-405361bb9cdso8134805e9.0;
-        Thu, 21 Sep 2023 10:46:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695318372; x=1695923172; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=s0MtmUBoFFRZ1KaXa+vO728c+OI89EgadZUVnpzkFf4=;
-        b=X+BepzHeCjzhs4L1DMOfAQowXf7P16VfBhNkIMv5oBZmVN6hluILGhsH24wymo/bI/
-         Tw2VcoP9DzWSqccJPAGDUAJSD0Bb4O6gfoKAm5+UOQiwS+3T31RQNnx6B+GpTSlOSKN4
-         sbDwpOvindodMv3vmv/b89A7MlTVD0ZHJX64iH0w93nF/9g9PExlyy/KKpz/orFej/TP
-         C4CLmb+Xe8PvgbK8rKLlY/y13Gdo0mL0+PB7A3G3VFtdnOHW6r9KXDWMYslchm+xzeo1
-         1C50/PA3Rz1u0OOzEID5Ux6rLSx9+hIetETka1agqIrBvqu30XodBCBE2qZb/5XWSoXf
-         b4qA==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A17C94BDA5
+	for <linux-usb@vger.kernel.org>; Thu, 21 Sep 2023 18:11:21 +0000 (UTC)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29DE79D45B
+	for <linux-usb@vger.kernel.org>; Thu, 21 Sep 2023 10:56:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1695318962;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=GW0FxKMlEbyyqLVslDTbsm2PoLR7WFqvyt3jzMjJMK8=;
+	b=ZxZsTbgiy8MZrdvhje9koE7PDxY8+EC6ow+UufsyPt6kEwtvSyHEnN8YkPQk7C0278duGl
+	cIuqf2pKgZj9Q2xm62cNQ0Hx4T1VT6H97AsnyVwXXHnbs8v9lTrjAwkyakwGtQ4/knNlcE
+	ghfsYF/3I3AqTn9n3NBtJaBdvcXkAig=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-591-r-E3VIp8OheIT_5iukJuKA-1; Thu, 21 Sep 2023 09:39:19 -0400
+X-MC-Unique: r-E3VIp8OheIT_5iukJuKA-1
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-3214d1d4bbcso71363f8f.0
+        for <linux-usb@vger.kernel.org>; Thu, 21 Sep 2023 06:39:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695318372; x=1695923172;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=s0MtmUBoFFRZ1KaXa+vO728c+OI89EgadZUVnpzkFf4=;
-        b=UUkSJGJap7Jzxp1YZDBdgURrCZa367a3CY7JcWH7AOfQ4TRL4/t9bx0yq4GJ2Ymp8L
-         kbJukLJVmjvhtLpadlMga0Mw8EMmcdTK3tZzIww9cYAsmTI9cpdZj1k3HmkQBVqkjOX1
-         iQ7WR+dWmrR3PjCWjJlev9FDESpPDWJaRXh9WF8GSi5+01GRSqGU0OhDbVxkqLzZ2uXk
-         c4fMWoVn/3zgd50s27IHoiatGV//YbeC496G1uFbA2yqc1YHjI7gTXES+6pOqSO2PMqT
-         7vedwjYyGlLIct14hAjy10a1DRLVYtLpz7M+mGf+ncb3IZVKO6HGwvf3ttwa92CoPsMo
-         6ezA==
-X-Gm-Message-State: AOJu0YzmUYSJb22WQf8uTP9+aB3vgy2Ds7/EuIMID9J5iaI8mCkmHs+L
-	RTwH/spsftMTnIGKa94CkBPs+A0vrIhkU5ZNrNtZMWBZFV4=
-X-Google-Smtp-Source: AGHT+IHYE8uHuhQAgOlNj2srv9Tl2K8NyVVKPejvFT4qvqp4BRCyx0VcWD+BRKbx2vEX0j1DXh6BQNj1kGISfZexFHU=
-X-Received: by 2002:a2e:b713:0:b0:2b9:aa4d:3728 with SMTP id
- j19-20020a2eb713000000b002b9aa4d3728mr4606064ljo.29.1695302280319; Thu, 21
- Sep 2023 06:18:00 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1695303558; x=1695908358;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GW0FxKMlEbyyqLVslDTbsm2PoLR7WFqvyt3jzMjJMK8=;
+        b=OfhPmYOs3b/3OBXceor92jiAi77TIX250Jl03cLV7AdRDOcbwE/1bFRpf0qZ8oweZL
+         +8uVtXQcbfWglt5LreW+ygJoWK9irh+8G16pElP3+FtaHo402wt40vu1iKerfyoH/4Eg
+         NITunoJF00QbDXSSBSqY5p/xN1VEn5/GM/peZ2QjGAPAEWAy8tPQKHseToXBsP2MAOUj
+         gBEan8iauvJFlTf3ZDk2/yzelhzU4hC1rKIasR2smeNfBTFS8gw2zhQ3RieYXxQOeKIW
+         +vBonjqF4x2JXBP+Bm/TxRppVUz/rqly+oi6bqUZMFOVt2plW0SOMkYTq1lbMBDMVrWk
+         q3Ew==
+X-Gm-Message-State: AOJu0Yz29cEprtWI18dQ4VNywXErIumWgfWLVp5kRxQWt7+QR2xmK95D
+	fVGcJv/BJPImhzp+u+eqPNozIQNahQrUHDTHPFdW1SOzsgxALSn8ptwYuYa8+mUXt8Y1kZ5uTur
+	0D9exLE7+3lMfs36AHvX3
+X-Received: by 2002:adf:f688:0:b0:319:7624:4ca2 with SMTP id v8-20020adff688000000b0031976244ca2mr4576725wrp.0.1695303558368;
+        Thu, 21 Sep 2023 06:39:18 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IF17zexuhF9lQgbUMZlJkczKiweixlp/YM0Tz4cyQ9l/8XZueYGNkMJfqJ937KA3+cIlKRGKg==
+X-Received: by 2002:adf:f688:0:b0:319:7624:4ca2 with SMTP id v8-20020adff688000000b0031976244ca2mr4576712wrp.0.1695303557921;
+        Thu, 21 Sep 2023 06:39:17 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-251-4.dyn.eolo.it. [146.241.251.4])
+        by smtp.gmail.com with ESMTPSA id y2-20020adffa42000000b0031423a8f4f7sm1824147wrr.56.2023.09.21.06.39.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Sep 2023 06:39:17 -0700 (PDT)
+Message-ID: <50a8ec7dece0100c931fd187e19e14dd1ca1a0e9.camel@redhat.com>
+Subject: Re: [PATCH net-next v2 1/2] r8152: remove queuing rx packets in
+ driver
+From: Paolo Abeni <pabeni@redhat.com>
+To: Hayes Wang <hayeswang@realtek.com>, Andrew Lunn <andrew@lunn.ch>
+Cc: "kuba@kernel.org" <kuba@kernel.org>, "davem@davemloft.net"
+ <davem@davemloft.net>, "netdev@vger.kernel.org" <netdev@vger.kernel.org>, 
+ nic_swsd <nic_swsd@realtek.com>, "linux-kernel@vger.kernel.org"
+ <linux-kernel@vger.kernel.org>,  "linux-usb@vger.kernel.org"
+ <linux-usb@vger.kernel.org>, "edumazet@google.com" <edumazet@google.com>, 
+ "bjorn@mork.no" <bjorn@mork.no>
+Date: Thu, 21 Sep 2023 15:39:15 +0200
+In-Reply-To: <1a57cf3f867d4dfd991ef1d4024c931b@realtek.com>
+References: <20230919031351.7334-429-nic_swsd@realtek.com>
+	 <20230919031351.7334-430-nic_swsd@realtek.com>
+	 <369f3139-4e63-4327-8745-2d72d7dfea8f@lunn.ch>
+	 <1a57cf3f867d4dfd991ef1d4024c931b@realtek.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230918165958.2659-1-tmaimon77@gmail.com> <20230918165958.2659-2-tmaimon77@gmail.com>
- <b7a337f2-a810-d14c-e7cd-15e33a9ecb5d@linaro.org> <CAP6Zq1gSJYsNUuD-bexFW_1VpAUuF_WZkicNzZms6hVdo9LnMQ@mail.gmail.com>
- <e0d42d13-b307-9915-97c8-948261b39ce1@linaro.org> <CAP6Zq1g0=-h0PFg2a8bqao+XjdNHoxGMdYSRRPAnfY_6WdemAw@mail.gmail.com>
- <20230919162837.GA4051010-robh@kernel.org> <CAP6Zq1hJPPAtKw8auC22wViHGQHTi0SufPJoBiqYtGWomnNUYQ@mail.gmail.com>
-In-Reply-To: <CAP6Zq1hJPPAtKw8auC22wViHGQHTi0SufPJoBiqYtGWomnNUYQ@mail.gmail.com>
-From: Tomer Maimon <tmaimon77@gmail.com>
-Date: Thu, 21 Sep 2023 16:17:48 +0300
-Message-ID: <CAP6Zq1iUj8UfLZutyOVxbKgF42rMoF9ig3dViy7ApTHcqVoP7g@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] dt-binding: usb: ci-hdrc-usb2: document Nuvoton
- NPCM supprt
-To: Rob Herring <robh@kernel.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, peter.chen@kernel.org, 
-	gregkh@linuxfoundation.org, krzysztof.kozlowski+dt@linaro.org, 
-	xu.yang_2@nxp.com, peng.fan@nxp.com, avifishman70@gmail.com, 
-	tali.perry1@gmail.com, joel@jms.id.au, venture@google.com, yuenn@google.com, 
-	benjaminfair@google.com, j.neuschaefer@gmx.net, openbmc@lists.ozlabs.org, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-	FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+	SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Hi Rob,
+On Tue, 2023-09-19 at 12:26 +0000, Hayes Wang wrote:
+> Andrew Lunn <andrew@lunn.ch>
+> > Sent: Tuesday, September 19, 2023 8:08 PM
+> [...]
+> > > -     return work_done;
+> > > +     if (work_done > budget)
+> > > +             return budget;
+> > > +     else
+> > > +             return work_done;
+> > >  }
+> >=20
+> > I don't know NAPI too well. Are there implications of not telling it
+> > the truth?
+>=20
+> You could check the reply from Jakub Kicinski, as following link.
+> https://www.spinics.net/lists/netdev/msg933846.html
+> https://www.spinics.net/lists/netdev/msg933923.html
+>=20
+> If the work_done is more than budget, I should return budget.
 
-Again thanks for your suggestion I took a look at the
-drivers/usb/roles and I am not sure it answers NPCM ChipIdae case.
-For example, in the NPCM845 we have ten UDC ChipIdea modules (UDC0-9).
-Only UDC8 and UDC9 are muxed with USB host0 and USB host1.
-NPCM UDC and NPCM USB host are different HW modules therefore different drivers.
+One of the key points in Jakub's reply is that the burst must exceed
+the budget by a limited number of packets:
 
-The ChipIdea driver uses its own internal USB role function to switch
-between ChipIdea UDC and ChipIdea USB host and we can't replace it
-with a unique NPCM USB role function also we need to set the mux only
-at the probe stage.
+"Nothing will explode if we process a few more packets than budget
+(assuming budget > 0)"
 
-This is why I have added nuvoton,sysgcr property to the NPCM ChipIdea driver.
+How many packets can contain at most a single URB?
 
-With the above do you think I should do it differently?
+If that number can be significant greater then the napi budget, I think
+we are better off keeping the packet in the queue - otherwise the whole
+system latency/stability would be affected.
 
-On Wed, 20 Sept 2023 at 12:11, Tomer Maimon <tmaimon77@gmail.com> wrote:
->
-> Thanks Rob,
->
-> I will check drivers/usb/roles
->
-> On Tue, 19 Sept 2023 at 19:28, Rob Herring <robh@kernel.org> wrote:
-> >
-> > On Tue, Sep 19, 2023 at 04:31:56PM +0300, Tomer Maimon wrote:
-> > > On Tue, 19 Sept 2023 at 15:39, Krzysztof Kozlowski
-> > > <krzysztof.kozlowski@linaro.org> wrote:
-> > > >
-> > > > On 19/09/2023 07:14, Tomer Maimon wrote:
-> > > > >>>            - nvidia,tegra20-ehci
-> > > > >>>            - nvidia,tegra20-udc
-> > > > >>>            - nvidia,tegra30-ehci
-> > > > >>> @@ -325,6 +326,20 @@ properties:
-> > > > >>>      type: boolean
-> > > > >>>      deprecated: true
-> > > > >>>
-> > > > >>> +  nuvoton,sysgcr:
-> > > > >>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> > > > >>> +    items:
-> > > > >>> +      - items:
-> > > > >>> +          - description: phandle to syscon that configures usb phy mux.
-> > > > >>> +          - description: offset of usb phy mux selection.
-> > > > >>> +          - description: mask usb phy mux selection.
-> > > > >>> +          - description: value usb phy mux selection.
-> > > > >>> +    description:
-> > > > >>> +      A phandle to syscon with three arguments that configure usb phy mux.
-> > > > >>> +      The argument one is the offset of usb phy mux selection, the argument two
-> > > > >>> +      is the mask usb phy mux selection, the argument three is the mask usb phy
-> > > > >>> +      mux selection.
-> > > > >>
-> > > > >> Sorry, you miss phy driver. Don't use syscon instead of proper hardware
-> > > > >> devices.
-> > > > > Sorry the role of nuvoton,sysgcr property is to handle a mux between
-> > > > > the different devices and not the handle the phy itself, handle the
-> > > > > mux done in the GCR.
-> > > > > Should we move the nuvoton,sysgcr description to another place in the
-> > > > > ci-hdrc-usb2.yaml
-> > > > > or
-> > > > > Should we use a different driver to handle the mux and call it from
-> > > > > the ci-hdrc-npcm driver, If yes which driver should we use?
-> > > >
-> > > > What is an "usb phy mux"?
-> > > We have USB phy that could be connected to USB host (different driver)
-> > > or it can be connected to the UDC driver(ChipIdea)
-> >
-> > Isn't that just role switching? There is a driver framework for that in
-> > drivers/usb/roles/. Though it doesn't seem widely used yet.
-> >
-> > Rob
+Cheers,
 
-Best regards,
+Paolo
 
-Tomer
 
