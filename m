@@ -1,149 +1,156 @@
-Return-Path: <linux-usb+bounces-449-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-446-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EACD07A9CB2
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Sep 2023 21:24:02 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CECB37A9C94
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Sep 2023 21:22:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B7235284E39
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Sep 2023 19:21:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3CAEBB23AF7
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Sep 2023 19:15:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E43D513B6;
-	Thu, 21 Sep 2023 18:34:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EA3A29429;
+	Thu, 21 Sep 2023 17:50:09 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24A0C513B5
-	for <linux-usb@vger.kernel.org>; Thu, 21 Sep 2023 18:34:35 +0000 (UTC)
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15FDCD9D05
-	for <linux-usb@vger.kernel.org>; Thu, 21 Sep 2023 11:30:36 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-3226b8de467so581926f8f.3
-        for <linux-usb@vger.kernel.org>; Thu, 21 Sep 2023 11:30:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695321034; x=1695925834; darn=vger.kernel.org;
-        h=user-agent:mime-version:date:content-transfer-encoding:face
-         :references:in-reply-to:cc:to:subject:message-id:from:sender:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Iu3Arz1gTZWueOzqhKtwdCFEXOrNjH4JN6xgMQxZHeI=;
-        b=P+sjfWYfgN+dgjYa5Ux1pKi5t517tv5Rr+N/c1QLfD33W1NfQT/WcuHGZREFDm5ZW6
-         8GDwtP9XJSnR97Kuaz6IRbpZMQX56v7d2C6D9546CgTeU9XyMKBY3NgxAqr3xWJWAorY
-         0xfhrijSV+bnD5oQfbygxK2A/IVxPqKSWMT0PUPfgqiVkUhimNdOShUogGKb+wz5MnMM
-         gepKS4ZphzwofPR9CWwL4OLUUxxWr8qiOFHLc2O43EBg+YMn4NvB8T8QyWzpYNWNFZYM
-         TCvRRlz4PrNKP8HvL8hBRD7nkCzpSUO2Bkny549zTsbCaf3NzvtO8eppqsoqGYd+kkAh
-         v3qQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695321034; x=1695925834;
-        h=user-agent:mime-version:date:content-transfer-encoding:face
-         :references:in-reply-to:cc:to:subject:message-id:from:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Iu3Arz1gTZWueOzqhKtwdCFEXOrNjH4JN6xgMQxZHeI=;
-        b=pWZYIRcj72Go2a2MMXkzeBPbJboNbMqhTHr+3QV5tJZGKGcteU7y+LUBs80qlUBxGD
-         m3Olq32xbLqvfbBQDkKn7y9/Nqh73xWm+36BncQTOV+0u2Tl85O2+GX6KhNHo3ox8sQ6
-         l6LJg2pC/wUlYynvT3iy1FV6GVq9J5H8towP5TySzBmAYPDIg4ZT7yRgcWKe8TAC9DMz
-         YEvwDtH07y83pjVJIMuZpKxKHAniZVYf8u6pEX4zK/1K6OIce3JYVWl6JThCmkOO7akg
-         dJVczlb+J0mW9dz1snAftWmMCTbxffaMclmhmOP0mExfA14DjA2vNQjd6AG8zesNsVyE
-         1S2A==
-X-Gm-Message-State: AOJu0YzQH2s8IiuBnlpRZ0tya/5sbqb91wKVBqkR5FWxMxgDxJ8UW965
-	UzpZ0fIcRQhArg7M5xNouTouLWlINj0=
-X-Google-Smtp-Source: AGHT+IGnK+KAcnUdZXLCQfuKOS3ye8x9EbsSDbNPCWDw1Lhv0CYvBYRP7uhs0Sj+/UVr4x+Hi780NA==
-X-Received: by 2002:a7b:ca56:0:b0:402:cf9f:c02d with SMTP id m22-20020a7bca56000000b00402cf9fc02dmr5362449wml.8.1695298936840;
-        Thu, 21 Sep 2023 05:22:16 -0700 (PDT)
-Received: from mobalindesk.lan.lan (dynamic-077-001-061-125.77.1.pool.telefonica.de. [77.1.61.125])
-        by smtp.googlemail.com with ESMTPSA id d18-20020a05600c251200b003fed7fa6c00sm4682682wma.7.2023.09.21.05.22.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Sep 2023 05:22:16 -0700 (PDT)
-Sender: Massimo B <burcheri.massimo@gmail.com>
-From: Massimo Burcheri <massimo@burcheri.de>
-X-Google-Original-From: Massimo Burcheri <burcheri.massimo+linux-usb@gmail.com>
-Message-ID: <072417fd7806d86e930bccb882460dbbfaa5ca52.camel@gmail.com>
-Subject: Re: JMicron JMS567 and UAS
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: linux-usb <linux-usb@vger.kernel.org>
-In-Reply-To: <a5b48a53-9dff-4a84-9a58-1c08f0e0781b@rowland.harvard.edu>
-References: <5d8cad13445172d02a371f162ceaea1a68819819.camel@gmail.com>
-	 <a5b48a53-9dff-4a84-9a58-1c08f0e0781b@rowland.harvard.edu>
-Face:
- iVBORw0KGgoAAAANSUhEUgAAADAAAAAwAQMAAABtzGvEAAAAA3NCSVQICAjb4U/gAAAABlBMVEX///8AAABVwtN+AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABGUlEQVQYlUWQsUoDQRCGv71LjB7KSSBwwZCTgFhY2EYIHmJnZRMLo5AXUMRCBMHcE6iPoGBlINpoZXGVeQTFKqSxMgYtTBFcZw7EKfZn2Z2Z7//hr2ysZ+5tqFLmWKVaKKs0vWd9TJx2AibmoQcupj6CCZirqTgzA5hmsdtQWe5/xAREX7uJ3MLP9x4lyieNO5mcOxyM8HH79y/4Cdn9R3JDsts/uGO82yOMJf/ah1Y8tfQEIQt7Z7rCawtNiUpHFgYUdgTxgI1NAW6SvxoqWabbw0Bd5jpQibTNBC1F4nIMk2TWhTqIs+fSVpzfCsVR9eaiJf5W6mtWXK7O+vKR4nWkSYSuFbP4No3Ht6dpSN9pSMYmaXI1/usXT0FM3SoTKAAAAAAASUVORK5CYII=
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 21 Sep 2023 14:22:13 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 117714998C
+	for <linux-usb@vger.kernel.org>; Thu, 21 Sep 2023 17:50:06 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFC6E19B9;
+	Thu, 21 Sep 2023 10:49:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695318594; x=1726854594;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=blnPFyBCmuj49NnWuIH57vg9ki5lW+1BgUnV5MZfDW4=;
+  b=CmeEmsrL8xns8rbJ8J/gNtiBlayut9T5t5sXsQ13mQOAfVRStrfXJyF5
+   QaCAbPWSfM7lDUkC1qa4A/ZziJ2LDdvPaIbycW9G95RC+PrvODisflzGR
+   w8Zm+4HmJGs74QCmlfDhzz6hNuyYbXoNYfyPXJ/mqADdB4iVgLHcvv2Vx
+   AP4wSStD/9e+j3Kg+wcwlvDqhe9X9JwAkEDg8Y+C6z8gnM/MBaRnGtb0v
+   v71Rec8qkwnpRrCpeaCUl0bLV9nh5DqRmZcNyqPvTPbQ4aafsrGqZ5Ehg
+   Ho7sHCGx4Elc7aZ/i9BP3qlK7X1kJJd+W34f6h0EI2ViUVECXw2zKbUR9
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10840"; a="446976775"
+X-IronPort-AV: E=Sophos;i="6.03,165,1694761200"; 
+   d="scan'208";a="446976775"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 05:37:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10840"; a="920709593"
+X-IronPort-AV: E=Sophos;i="6.03,165,1694761200"; 
+   d="scan'208";a="920709593"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga005.jf.intel.com with ESMTP; 21 Sep 2023 05:37:31 -0700
+Message-ID: <2bb2122e-e91c-868c-5385-a1b84549a154@intel.com>
+Date: Thu, 21 Sep 2023 15:38:53 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Evolution 3.48.4 
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.13.0
+Subject: Re: [PATCH v2] usb: xhci-plat: fix usb disconnect issue after s4
+Content-Language: en-US
+To: Yinbo Zhu <zhuyinbo@loongson.cn>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+ loongson-kernel@lists.loongnix.cn
+References: <20230809095826.18183-1-zhuyinbo@loongson.cn>
+ <4862ba2c-fa6b-de12-2ad9-4099d2eddbb1@loongson.cn>
+From: Mathias Nyman <mathias.nyman@intel.com>
+In-Reply-To: <4862ba2c-fa6b-de12-2ad9-4099d2eddbb1@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Tue, 2023-09-19 at 11:13 -0400, Alan Stern wrote:
+On 21.9.2023 4.58, Yinbo Zhu wrote:
+> 
+> 
+> Friendly ping ?
+> 
+> 
+> 在 2023/8/9 下午5:58, Yinbo Zhu 写道:
+>> The xhci retaining bogus hardware states cause usb disconnect devices
+>> connected before hibernation(s4) and refer to the commit 'f3d478858be
+>> ("usb: ohci-platform: fix usb disconnect issue after s4")' which set
+>> flag "hibernated" as true when resume-from-hibernation and that the
+>> drivers will reset the hardware to get rid of any existing state and
+>> make sure resume from hibernation re-enumerates everything for xhci.
+>>
+>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>> ---
+>> Change in v2:
+>>         1. Add CONFIG_PM_SLEEP in xhci_plat_pm_ops that for fix
+>>            compile issue when CONFIG_PM not enable.
+>>
+>>   drivers/usb/host/xhci-plat.c | 24 ++++++++++++++++++++----
+>>   1 file changed, 20 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+>> index 28218c8f1837..112468fdcca2 100644
+>> --- a/drivers/usb/host/xhci-plat.c
+>> +++ b/drivers/usb/host/xhci-plat.c
+>> @@ -451,7 +451,7 @@ static int __maybe_unused xhci_plat_suspend(struct device *dev)
+>>       return 0;
+>>   }
+>> -static int __maybe_unused xhci_plat_resume(struct device *dev)
+>> +static int __maybe_unused xhci_plat_resume_common(struct device *dev, struct pm_message pmsg)
+>>   {
+>>       struct usb_hcd    *hcd = dev_get_drvdata(dev);
+>>       struct xhci_hcd    *xhci = hcd_to_xhci(hcd);
+>> @@ -466,7 +466,7 @@ static int __maybe_unused xhci_plat_resume(struct device *dev)
+>>       if (ret)
+>>           return ret;
+>> -    ret = xhci_resume(xhci, PMSG_RESUME);
+>> +    ret = xhci_resume(xhci, pmsg);
+>>       if (ret)
+>>           return ret;
+>> @@ -477,6 +477,16 @@ static int __maybe_unused xhci_plat_resume(struct device *dev)
+>>       return 0;
+>>   }
+>> +static int __maybe_unused xhci_plat_resume(struct device *dev)
+>> +{
+>> +    return xhci_plat_resume_common(dev, PMSG_RESUME);
+>> +}
+>> +
+>> +static int __maybe_unused xhci_plat_restore(struct device *dev)
+>> +{
+>> +    return xhci_plat_resume_common(dev, PMSG_RESTORE);
+>> +}
+>> +
+>>   static int __maybe_unused xhci_plat_runtime_suspend(struct device *dev)
+>>   {
+>>       struct usb_hcd  *hcd = dev_get_drvdata(dev);
+>> @@ -499,8 +509,14 @@ static int __maybe_unused xhci_plat_runtime_resume(struct device *dev)
+>>   }
+>>   const struct dev_pm_ops xhci_plat_pm_ops = {
+>> -    SET_SYSTEM_SLEEP_PM_OPS(xhci_plat_suspend, xhci_plat_resume)
+>> -
+>> +#ifdef CONFIG_PM_SLEEP
+>> +    .suspend = xhci_plat_suspend,
+>> +    .resume = xhci_plat_resume,
+>> +    .freeze = xhci_plat_suspend,
+>> +    .thaw = xhci_plat_resume,
+>> +    .poweroff = xhci_plat_suspend,
+>> +    .restore = xhci_plat_restore,
+>> +#endif
 
-> > coming from https://lore.kernel.org/all/20200818041324.GA3173@Susan/
+How about using pm_ptr() and pm_sleep_ptr() macros instead of the #ifdef CONFIG_PM_SLEEP?
+should be able to get rif of the __maybe_unused flags as well.
 
-> > as I understand UAS was working for JMicron JMS567 in the past, then wa=
-s
-> > disabled in the kernel, now using usb-storage.
+Thanks
+-Mathias
 
-> How did you get that idea?=C2=A0 After looking through the email archives=
-, I=20
-> found this bug report from 2015:
->=20
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0https://bugzilla.redhat.c=
-om/show_bug.cgi?id=3D1260207
-
-I got the idea from my original thread.
-I did not test it on old kernel.
-
-> That bug report indicates that the device wasn't working properly with a=
-=20
-> 4.1.4 kernel.=C2=A0 Of course, it's possible that the problem had more to=
- do=20
-> with the drive inside the enclosure than the enclosure itself.
-
-From the report the idProduct is different from my product, might be a diff=
-erent
-bridge.
-
-So from what I understand it is blacklisted currently because of issues.
-
-Is there a way I can bypass the blacklisting, like forcing to use uas simil=
-ar to
-the workaround by forcing usb-storage? I would like to know if there are st=
-ill
-issues in uas mode with this bridge.
-
-The (chinese?) product is sold with UAS support. I know this is no warranty=
-. The
-JMicron bridge itself should support UASP:
-https://pcper.com/wp-content/uploads/2014/12/0813-jms567.pdf
-
-I found someone that fixed it by flashing an older firmware:
-https://forum.openmediavault.org/index.php?user-post-list/36559-sanjager/
-(Version 20.06.00.01, before 138.01.00.01)
-
-It seems a similar device Icybox 4HDD enclosure is also using the JMS567:
-https://answers.launchpad.net/ubuntu/+source/linux/+question/688498
-
-This all sounds like UAS is not entirely missing but somehow faulty in this
-bridge.
-
-I'm going to test with a Windows machine soon, if UAS is working stable the=
-re.
-But that won't help me on Linux, just for saying the enclosure hardware is =
-UAS
-capable.
-
-How can I help exploring / debugging this?
-
-Best regards,
-Massimo
 
