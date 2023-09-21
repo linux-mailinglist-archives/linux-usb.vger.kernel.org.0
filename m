@@ -1,105 +1,111 @@
-Return-Path: <linux-usb+bounces-445-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-440-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64C497A9C84
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Sep 2023 21:20:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8F287A99CB
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Sep 2023 20:23:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BDBA7B22A13
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Sep 2023 19:14:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C2FF71C210B8
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Sep 2023 18:23:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CA204998F;
-	Thu, 21 Sep 2023 17:50:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CCC345F66;
+	Thu, 21 Sep 2023 17:24:27 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DA9F48EA5
-	for <linux-usb@vger.kernel.org>; Thu, 21 Sep 2023 17:49:56 +0000 (UTC)
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 097D06DE3A
-	for <linux-usb@vger.kernel.org>; Thu, 21 Sep 2023 10:32:43 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-32155a45957so1261038f8f.0
-        for <linux-usb@vger.kernel.org>; Thu, 21 Sep 2023 10:32:43 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 762D045F60
+	for <linux-usb@vger.kernel.org>; Thu, 21 Sep 2023 17:24:25 +0000 (UTC)
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0314B3C3F
+	for <linux-usb@vger.kernel.org>; Thu, 21 Sep 2023 10:23:54 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-3214de9cd8bso1118664f8f.2
+        for <linux-usb@vger.kernel.org>; Thu, 21 Sep 2023 10:23:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695317561; x=1695922361; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uEg9oi9fsFQj5N/t7+XiCLJ8W8KXemvDmRrScebryl0=;
-        b=nfEVUno9bLRVshiVqm6BTIPCJk0JekpCSRa5QkJgG3iHaalF4DUvfNivC2rTydQOPv
-         /2oxWYvY4C5HLRrHFhusEtprUcHG++Il4cVdbED+gw5xgoDuBQ7OxQuZ0zRXFl/IFDj8
-         AZjwER6QXb4QkSTDvPmUiLFXOdm8OCnhFCA4zAkIMS1i45WWfWgvSClURtcAHhj2m/8E
-         NkRsVhf+xQ8St+E/bj5GvhAffQQVIo0FWy+0z1GRJJ5vMEDUxoOVdM+cIXbFE53VI0zo
-         bm89It++r/xbQCswSrSFU7mXpWM4kT/wFudTMCKL/QX5F2/ABg73/QKWFylCVqHzrk+/
-         pgqA==
+        d=gmail.com; s=20230601; t=1695317033; x=1695921833; darn=vger.kernel.org;
+        h=user-agent:mime-version:date:content-transfer-encoding:face
+         :references:in-reply-to:cc:to:subject:message-id:from:sender:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=aWAN5MZv4veBg7aWwcGtnoxuJQ30Vg0ZNnM5f3Uv3Tg=;
+        b=Ze2OmTuBubIlclLAUZDpcUAOMAirz7G/w9JfeSNacGbE628zvO0gtoBJ5s4OPTIyyr
+         3Esa6107dranPimqO1CJwp540kB9rfB5WAxpUTMwmKtQ7z89T925fKVwBnMjXF0paAUZ
+         HBHJKBDdXsLtjBSf3czfh7/wsTtTKOfct3Auu9KbjAABVCNf7kdd4PIm2IWwyJTzNOx5
+         zYkrL9O4IfF3fx/+27UOZLrVZbSnt7az58dtAF2nuKzU6y7tDz5KJN/3bwremvm/Eeyj
+         uBL9ESvcNV6eS65K0n6dJsV+nfqDZeM397Z6DXR99vS473EKWEbJ3rHtkBKZhthlVVSE
+         dccQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695317561; x=1695922361;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1695317033; x=1695921833;
+        h=user-agent:mime-version:date:content-transfer-encoding:face
+         :references:in-reply-to:cc:to:subject:message-id:from:sender
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uEg9oi9fsFQj5N/t7+XiCLJ8W8KXemvDmRrScebryl0=;
-        b=ryNs4a3W0Mb0VYzM1OrFU8t5yOQUnXnXp+gf/Tpwi7TVtmLmYkpySBV6dLECR9vhJI
-         UeXjA1orxZjKd1jQ3wsFwOVAsL1NlybsJQYU5t6x8lW2+hh1JpKpwWo5uLPSL4iu5cT0
-         ZejElF/vbu9t4xvNMBKc5Kqm73hBVyi9NQD0HkDna0gADkAjmTx+B3rUNpa5MiGOWI62
-         jorhfZAj/FQ723lJ9jFBjvbes6PWMuqck5/mVQMLG8AAeq3+RLIw+cyVA647e/bkpg7D
-         QArCi90CJ3oSMX3rxem32TBjGYoBlkXQlgW5Uf6R3k58iU5D+292uFLnevw4xd/pxhFt
-         dDFw==
-X-Gm-Message-State: AOJu0Yyw72OgNcWLmrsteKlETmLo+PTKS/6n6N2vxH6lmgAyXTz4iz3i
-	7I3mwtc+rxIGrNDEUvyVIYroLYOyC89wiG2snCBZ2g==
-X-Google-Smtp-Source: AGHT+IHQrrrIHyHEDSkfYu9SO7d0pvsOVdZ1oGCXmoscM6UKG4H7ogFMpzJNut6Kcge3kLh4skQepQ==
-X-Received: by 2002:a2e:86d6:0:b0:2bc:cc1a:139c with SMTP id n22-20020a2e86d6000000b002bccc1a139cmr4675996ljj.11.1695297522786;
-        Thu, 21 Sep 2023 04:58:42 -0700 (PDT)
-Received: from [172.20.24.238] (static-212-193-78-212.thenetworkfactory.nl. [212.78.193.212])
-        by smtp.gmail.com with ESMTPSA id h10-20020a17090634ca00b00997e00e78e6sm931391ejb.112.2023.09.21.04.58.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Sep 2023 04:58:41 -0700 (PDT)
-Message-ID: <707f3f85-d38d-f112-16a7-2c602c453298@linaro.org>
-Date: Thu, 21 Sep 2023 13:58:41 +0200
+        bh=aWAN5MZv4veBg7aWwcGtnoxuJQ30Vg0ZNnM5f3Uv3Tg=;
+        b=sPwkmHecgeP21LvTQtGPrW9as5dsFZ+/DYNjcaF5Q1Q2Nb6j+lDJnZy+KpFT9A3kQ4
+         Toc9Ufn2K7rY4A1DPz2YJkHJPGI6y+uB5a53NaDekftjk+szHEfEkFKpdcoiK6uoczjD
+         JFufkJkP/5WZ3vQ4xfUm4T9tcjjlI4Kq2XId/+FDv/ew7bfgCcVC54/eHRi4KnAKPi99
+         H/2Bbh18V1afQrVwxoe+jsXfIQV5ECsDnrwWKwJxdkOSSM76nc+UeYZoXFz8MfIvyWQA
+         IUJFHHiX7hSQ1UdySM7Hn43/e1XN66R2Wwf3NE7d8hZIhCJK7W/FZcIAay1W4JHjTRq9
+         rP7Q==
+X-Gm-Message-State: AOJu0YzhfKasyAiY+DnZgtBFt/Yl9rOAs6W64C95jIcOgNuPDDdk0WbV
+	rJkFvBXAw1QSYBYEu38anbM9dQHQEdo=
+X-Google-Smtp-Source: AGHT+IFKgVokb8cPWxftRTqQPMUMqh+b5czoriv3o4z4jdXbCqCnNFM0gD4LhHiYZSYNaiivgM+Kug==
+X-Received: by 2002:a05:600c:24e:b0:401:b204:3b98 with SMTP id 14-20020a05600c024e00b00401b2043b98mr5777678wmj.19.1695297979883;
+        Thu, 21 Sep 2023 05:06:19 -0700 (PDT)
+Received: from mobalindesk.lan.lan (dynamic-077-001-061-125.77.1.pool.telefonica.de. [77.1.61.125])
+        by smtp.googlemail.com with ESMTPSA id m15-20020a7bce0f000000b003fed4fa0c19sm4639133wmc.5.2023.09.21.05.06.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Sep 2023 05:06:19 -0700 (PDT)
+Sender: Massimo B <burcheri.massimo@gmail.com>
+From: Massimo Burcheri <massimo@burcheri.de>
+X-Google-Original-From: Massimo Burcheri <burcheri.massimo+linux-usb@gmail.com>
+Message-ID: <ab4b54381f1237d3ebe087433971c26af7265aa1.camel@gmail.com>
+Subject: Re: SanDisk Extreme Pro 55AF and UAS
+To: Oliver Neukum <oneukum@suse.com>
+Cc: linux-usb <linux-usb@vger.kernel.org>
+In-Reply-To: <d910b948-7448-46d3-ba98-42bc6e644626@suse.com>
+References: <8d8df33f29e9abc0c20909c028863e3b9674921d.camel@gmail.com>
+	 <d910b948-7448-46d3-ba98-42bc6e644626@suse.com>
+Face:
+ iVBORw0KGgoAAAANSUhEUgAAADAAAAAwAQMAAABtzGvEAAAAA3NCSVQICAjb4U/gAAAABlBMVEX///8AAABVwtN+AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABGUlEQVQYlUWQsUoDQRCGv71LjB7KSSBwwZCTgFhY2EYIHmJnZRMLo5AXUMRCBMHcE6iPoGBlINpoZXGVeQTFKqSxMgYtTBFcZw7EKfZn2Z2Z7//hr2ysZ+5tqFLmWKVaKKs0vWd9TJx2AibmoQcupj6CCZirqTgzA5hmsdtQWe5/xAREX7uJ3MLP9x4lyieNO5mcOxyM8HH79y/4Cdn9R3JDsts/uGO82yOMJf/ah1Y8tfQEIQt7Z7rCawtNiUpHFgYUdgTxgI1NAW6SvxoqWabbw0Bd5jpQibTNBC1F4nIMk2TWhTqIs+fSVpzfCsVR9eaiJf5W6mtWXK7O+vKR4nWkSYSuFbP4No3Ht6dpSN9pSMYmaXI1/usXT0FM3SoTKAAAAAAASUVORK5CYII=
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 21 Sep 2023 14:01:17 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH v3 2/5] dt-bindings: phy: qcom,qmp-usb: Add SDX75 USB3 PHY
-To: Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
- andersson@kernel.org, konrad.dybcio@linaro.org, vkoul@kernel.org,
- kishon@kernel.org, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
- conor+dt@kernel.org, gregkh@linuxfoundation.org, abel.vesa@linaro.org,
- quic_wcheng@quicinc.com, dmitry.baryshkov@linaro.org
-Cc: linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, kernel@quicinc.com
-References: <1695291692-18850-1-git-send-email-quic_rohiagar@quicinc.com>
- <1695291692-18850-3-git-send-email-quic_rohiagar@quicinc.com>
-Content-Language: en-US
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1695291692-18850-3-git-send-email-quic_rohiagar@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+User-Agent: Evolution 3.48.4 
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On 21/09/2023 12:21, Rohit Agarwal wrote:
-> Add dt-bindings for USB3 PHY found on Qualcomm SDX75.
-> 
-> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
-> ---
+On Tue, 2023-09-19 at 15:47 +0200, Oliver Neukum wrote:
+> On 19.09.23 15:34, Massimo Burcheri wrote:
 
+> > Searching the web for these error messages I found I needed to disable =
+UAS
+> > and continue with usb-storage:
+> > options usb-storage quirks=3D0781:55af:u
+> > That works, but reduces the performance a lot. What is broken?
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Probably your device. Are you using bus powered devices?
+
+Which device, Linux machine or NVMedrive/enclosure?
+Yes, the drive is bus powered.
+The drive with same cable still works fine with UAS on my other Linux machi=
+ne.
+The drive with same cable works on the failing machine with usb-storage mod=
+ule,
+only uas is failing.
+
+What could that be?
 
 Best regards,
-Krzysztof
-
+Massimo
 
