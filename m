@@ -1,152 +1,153 @@
-Return-Path: <linux-usb+bounces-430-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-431-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5DD517A8DA4
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Sep 2023 22:15:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70F637A9078
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Sep 2023 03:31:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 173D5281873
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Sep 2023 20:15:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 18C941F20F3D
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Sep 2023 01:31:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEA8841223;
-	Wed, 20 Sep 2023 20:15:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88EF51115;
+	Thu, 21 Sep 2023 01:30:56 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4353A41205
-	for <linux-usb@vger.kernel.org>; Wed, 20 Sep 2023 20:15:24 +0000 (UTC)
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F05A9
-	for <linux-usb@vger.kernel.org>; Wed, 20 Sep 2023 13:15:23 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id 46e09a7af769-6c0b3cea424so158787a34.2
-        for <linux-usb@vger.kernel.org>; Wed, 20 Sep 2023 13:15:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695240922; x=1695845722; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FW45CPg1jDYpvMYB5E8yFnoTPDOHi1lGsORRcFqJO8c=;
-        b=GiqK2g2mmi4VfZ9TKT2dz8lcevTUUfGVeKFTuq6q8pvKI4rEwhjgPrCOlI7CJkBKvM
-         6nuS4zePPUtXzxgz5+GAaK8IPb9CSmktBVi5TxiRo3vi9AseDuBhjObTc5Xyn93Nmj/B
-         JI/bv89ARzu3H++V+0Y2gJOpMEBLMWTIpWsuBrIEvzdReKyzbQaEAmiAvlDBhHpVUs4Z
-         eKDSvj/tHt2ymlXcbOJZDbuLM9CH7I9jbXUuoJFh2SM2xwWGgbWtCARG/OPvC54iQD2T
-         ZJwtoSpUid55WiSiTVlPAybbmdL2fmyV/KhIwSopJqAl0jQ7FvdigzQ124gLihO+3PVa
-         Beyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695240922; x=1695845722;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FW45CPg1jDYpvMYB5E8yFnoTPDOHi1lGsORRcFqJO8c=;
-        b=w9npn76zH3IX+1fTz0UOOyxMlG44Rs/m3ZavNrsjuXFY84RzTTSoQSdbcCrlSk0yT5
-         w0mFuQAVZsDZVtc+TfmMlM8fIiXEVdFLvqG42kT7MrpjR2O276ONJ2o8HtQBPusFx6HD
-         nhvXD/ahY6Aqf9xWJgwRbZKVzEf2lOuUsUYQudDl1tuHpUlho+Qtc3z5QUv8l8IYaHSb
-         zmEloRjOpwqH3XQwz8VNc9LI9VlYils+AIrECFlQfrtdGg8wLoe4HT35dcvEiDcGTG5S
-         NUXHmAYSJAbAafBWsqa55siRMKgLLrzYLcrtWZxcOmLDOutSZlF9fUsHJ/upKVfdz0lZ
-         x8Aw==
-X-Gm-Message-State: AOJu0Yxs9JWUNUde4GJE9M6vajVT1AInOMFjZqj8fafPL/gDXF3hPz8u
-	Smp8nEjRV4AWxOOioQRRyTrG7w==
-X-Google-Smtp-Source: AGHT+IF037oLyVtGpRARZRKr7/PcrWJFhSX+CXfP7hz/9UpL8DqhTz7M+2aFxEQuJpP+qc1HFwV4/Q==
-X-Received: by 2002:a05:6358:888:b0:134:e777:c78b with SMTP id m8-20020a056358088800b00134e777c78bmr3953257rwj.5.1695240921989;
-        Wed, 20 Sep 2023 13:15:21 -0700 (PDT)
-Received: from [192.168.60.239] (124.190.199.35.bc.googleusercontent.com. [35.199.190.124])
-        by smtp.gmail.com with ESMTPSA id s14-20020a63924e000000b0057825bd3448sm8286996pgn.51.2023.09.20.13.15.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Sep 2023 13:15:21 -0700 (PDT)
-Message-ID: <c948cf51-7e1d-4bbc-b760-2cc8e850d801@google.com>
-Date: Wed, 20 Sep 2023 13:15:20 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F198622
+	for <linux-usb@vger.kernel.org>; Thu, 21 Sep 2023 01:30:53 +0000 (UTC)
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF9AA1
+	for <linux-usb@vger.kernel.org>; Wed, 20 Sep 2023 18:30:52 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+	by mailout.nyi.internal (Postfix) with ESMTP id 271FB5C01D6;
+	Wed, 20 Sep 2023 21:30:50 -0400 (EDT)
+Received: from imap41 ([10.202.2.91])
+  by compute4.internal (MEProxy); Wed, 20 Sep 2023 21:30:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	arunraghavan.net; h=cc:cc:content-type:content-type:date:date
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+	1695259850; x=1695346250; bh=Cy8axBU3vxnCHjfl7adQi2VwBVKT+BJsIOq
+	s0gMjHWk=; b=uBZGAvBSd4PGhFmP+esV1eC4TLQFyUGo07t+zrWBLEVWoSnieVf
+	Z1/6bbOh156oXSU67w6hHRgzCw8WwxBa78zAbOPxMP94XXcaYX41lig+4w+shtcW
+	wOPWtYrhhI3OufEVojepFGXqfOy+bSPL4D6wqVX/CVXc6npejdjaOEW2qnFun9FT
+	7dtA/sMbwVkCX1f34WW9FUudsWzEEMg5Tzk5L0pM0d7fpXxV7a6H9o3GJSbL0BNQ
+	JVlRgJxDW9DGDLSXxGt3IAlP/+Cpw/3I9dIm7rHro3z1HPRIV6GUmTGqOYoW38Pq
+	hgD+7YxztDOawIE3on0j25wNKtm5qCF+nRQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:sender:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm2; t=1695259850; x=1695346250; bh=Cy8axBU3vxnCH
+	jfl7adQi2VwBVKT+BJsIOqs0gMjHWk=; b=H70+llZ4kD/Tf+aDWac6+huMZZa8k
+	1HBNQj0LEjjQgfpRWUJN3g9Y4TRcKXZg3N/LsuIv++u658ef0TJY+jDvfE6VjjqU
+	VMz/nybF5zAkmDPSXrr07VpzyATgAe+d9eoHtarF3gI/XIhTzJpM0jv32wZafz8n
+	Fr/zfiKbRN0IeSg2hpyVtfKvFtS4kRhP9I/+hsKFhAfacWkQ9+i9jliH48ilx/4o
+	rx1+a5dM5kaNRHGKvLcIu1Ibu3bkcb0idKyM+GysRH/W+nPFG2wJ/sBIbD329nNE
+	RvaxzGPtG8px8jvwJWjkTk8tJyrfOzf1ZqLMEwTnIs3tXh0qXw+397EIA==
+X-ME-Sender: <xms:yZwLZRWZDQrJUPksTx33ZWBYwa900zUo9zfnDFip58Y3PDPly7COuA>
+    <xme:yZwLZRkopRwu9DG-4SRlWhLaQSgWRZpQs5eskOpsQ0YmNzmnOkEuWnOZiU-AhU1hE
+    80cTBiIHF5zFcNixQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudekgedggeeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    uhhnucftrghghhgrvhgrnhdfuceorghruhhnsegrrhhunhhrrghghhgrvhgrnhdrnhgvth
+    eqnecuggftrfgrthhtvghrnhepkefhvdeuheeljeehgfefffduteehheetgeefgfetuedv
+    lefgkeeggeekueejtdffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
+    hilhhfrhhomheprghruhhnsegrrhhunhhrrghghhgrvhgrnhdrnhgvth
+X-ME-Proxy: <xmx:yZwLZdbgxDBxLoDgJVQcfSPtqbTLx1Nj0zACV2Bq3GcVImdtwDrd6A>
+    <xmx:yZwLZUVr_8OuE484vnZAs3WFTm6PpEoo48KriWUYdCDMSxX7OExb3g>
+    <xmx:yZwLZbluAOT-Yc3b343ZytY5F93jo7dJ8Vt_AlubWVfZd7GnKMcfsA>
+    <xmx:ypwLZWsJu5MJuzRpf2HWDsGP8lfy0V7cE_8OXnYKs6U2LUOEa31tRQ>
+Feedback-ID: i42c0435e:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 1DBE1234007E; Wed, 20 Sep 2023 21:30:49 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-761-gece9e40c48-fm-20230913.001-gece9e40c
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] usb: gadget: uvc: cleanup request when not in correct
- state
-Content-Language: en-US
-To: Michael Grzeschik <mgr@pengutronix.de>
-Cc: laurent.pinchart@ideasonboard.com, linux-usb@vger.kernel.org,
- linux-media@vger.kernel.org, dan.scally@ideasonboard.com,
- gregkh@linuxfoundation.org, nicolas@ndufresne.ca, kernel@pengutronix.de,
- Jayant Chowdhary <jchowdhary@google.com>
-References: <ZQTpnJvTV+8Ye1si@pengutronix.de>
- <587c9b95-a80c-4bf9-b1a0-fe7ef0f4cd60@google.com>
- <ZQY5Ab+YB9FLHoQq@pengutronix.de>
- <d678b644-5f66-4c23-b2ba-6c84ba56012f@google.com>
- <ZQjEZlk2UFQgA0TF@pengutronix.de>
- <7cd81649-2795-45b6-8c10-b7df1055020d@google.com>
- <ZQnyxA1WldcqQ+k5@pengutronix.de>
- <1d32914c-3a67-439f-b15d-7c7b7d6fc99b@google.com>
- <ZQn/eSaSqd8cgux5@pengutronix.de>
- <45add13c-ffa4-4cd1-be1b-6888fb011534@google.com>
- <ZQoPqLUfDBaO9VIh@pengutronix.de>
-From: Avichal Rakesh <arakesh@google.com>
-In-Reply-To: <ZQoPqLUfDBaO9VIh@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-	ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-	USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-	autolearn_force=no version=3.4.6
+Message-Id: <27b4b607-5d71-4e5d-a0ff-530c25752213@app.fastmail.com>
+In-Reply-To: <35766f0f-784d-d37a-6d07-665f9ee88331@ivitera.com>
+References: <6ebc2456-a46b-bc47-da76-7a341414c1fb@ivitera.com>
+ <35766f0f-784d-d37a-6d07-665f9ee88331@ivitera.com>
+Date: Wed, 20 Sep 2023 21:30:28 -0400
+From: "Arun Raghavan" <arun@arunraghavan.net>
+To: "Pavel Hofman" <pavel.hofman@ivitera.com>,
+ "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+ "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>
+Cc: "Julian Scheel" <julian@jusst.de>, "Takashi Iwai" <tiwai@suse.de>,
+ "Ruslan Bilovol" <ruslan.bilovol@gmail.com>,
+ "Jerome Brunet" <jbrunet@baylibre.com>
+Subject: Re: RFC: usb: gadget: u_audio: Notifying gadget that host started
+ playback/capture?
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
+Hi folks,
 
+On Fri, 1 Oct 2021, at 8:38 AM, Pavel Hofman wrote:
+> Hi,
+>
+> Dne 08. 09. 21 v 10:21 Pavel Hofman napsal(a):
+>> Hi,
+>> 
+>> The current audio gadget has no way to inform the gadget side that the 
+>> host side has started playback/capture and that gadget-side alsa 
+>> processes should be started.
+>> 
+>> Playback/capture processes on the host side do not get stuck without the 
+>> gadget side consuming/producing data (OUT requests are ignored in 
+>> u_audio_iso_complete, IN ones send initial zeros in their req->buf).
+>> 
+>> However, playback/capture processes on the gadget side get stuck without 
+>> the host side sending playback OUT packets or capture IN requests and 
+>> time out with error. If there was a way to inform the gadget side that 
+>> playback/capture has started on the host side, the gadget clients could 
+>> react accordingly.
+>> 
+>
+> I drafted a simple patch for u_audio.c which defines read-only boolean 
+> ctl elems "Capture Requested" and "Playback Requested". Their values are 
+> set/reset in methods u_audio_start_capture/playback and 
+> u_audio_stop_capture/playback, i.e. at changes of respective altsettings 
+> from 0 to 1 and back. Every ctl elem value change sends notification via 
+> snd_ctl_notify. The principle works OK for capture/playback start/stop 
+> on the host, as monitored by alsactl:
+>
+> pi@raspberrypi:~ $ alsactl monitor hw:UAC2Gadget
+> node hw:UAC2Gadget, #4 (3,0,0,Capture Requested,0) VALUE
+> node hw:UAC2Gadget, #4 (3,0,0,Capture Requested,0) VALUE
+> node hw:UAC2Gadget, #3 (3,0,0,Playback Requested,0) VALUE
+> node hw:UAC2Gadget, #3 (3,0,0,Playback Requested,0) VALUE
+>
+> However at enumeration the USB host switches both playback and capture 
+> altsettings repeatedly, generating "fake" events from the gadget side 
+> POW. The host even sends regular-sized EP-OUT packets filled with zeros 
+> during enumeration (tested on linux only for now).
+>
+> Please is there any way to "detect" the enumeration stage to mask out 
+> the "fake" playback/capture start/stop events?
+>
+> The attached patch does not apply cleanly to mainline u_audio.c because 
+> it's rebased on other patches not submitted yet but it's only a 
+> discussion inducer for now.
 
-On 9/19/23 14:16, Michael Grzeschik wrote:
-> On Tue, Sep 19, 2023 at 01:22:42PM -0700, Avichal Rakesh wrote:
->>
->>
->> On 9/19/23 13:07, Michael Grzeschik wrote:
->>> On Tue, Sep 19, 2023 at 12:55:02PM -0700, Avichal Rakesh wrote:
->>>> On 9/19/23 12:13, Michael Grzeschik wrote:
->>>>> On Mon, Sep 18, 2023 at 04:40:07PM -0700, Avichal Rakesh wrote:
->>>>>>
->>>>>>
->>>>>> On 9/18/23 14:43, Michael Grzeschik wrote:
->>>>>>> On Mon, Sep 18, 2023 at 12:02:11PM -0700, Avichal Rakesh wrote:
->>>>>>>> On 9/16/23 16:23, Michael Grzeschik wrote:
->>>>>>>>> On Fri, Sep 15, 2023 at 07:41:05PM -0700, Avichal Rakesh wrote:
->>>>>>>>>> On 9/15/23 16:32, Michael Grzeschik wrote:
->>>>>>>>>>> On Mon, Sep 11, 2023 at 09:52:22PM -0700, Avichal Rakesh wrote:
->>>>>>>>>>>> On 9/10/23 17:24, Michael Grzeschik wrote:
->>>>>>>>>>>>> The uvc_video_enable function of the uvc-gadget driver is dequeing and
->>>>>>>>>>>>> immediately deallocs all requests on its disable codepath. This is not
->>>>>>>>>>>>> save since the dequeue function is async and does not ensure that the
->>>>>>>>>>>>> requests are left unlinked in the controller driver.
->>>>>>>>>>>>>
->>>>>>>>>>>>> <snip>
->>
->> Agreed, uvc_video_free_requests should only free the requests in
->> req_free.
->>
->> Just to clear any confusion: are you working on incorporating these changes
->> into your patchset, or do you want me to include them in
->> https://lore.kernel.org/20230912041910.726442-3-arakesh@google.com/
->> instead?
-> 
-> As I am busy on a different topic at the moment, and you have suggested
-> the main walkthrough for the solution, it would be great if you could
-> come up with the proper patch.
-> 
-> But it would be great to find my Suggested-by in the patches. :)
+Resurrecting this one -- is there any input on how we want to deal wit letting UAC gadgets know when the host is sending/receiving data?
 
-Just sent out https://lore.kernel.org/20230920200335.63709-1-arakesh@google.com
-with the changes discussed in this thread. The patch should work without
-requiring any changes to dwc3. 
-
-I didn't run into any crashes when testing the changes locally, but if you can,
-I'd appreciate you testing the patches on your crash-prone setup as my setup's
-crash rate was pretty low to begin with.
-
-Thank you!
-
-- Avi.
-
-
+Cheers,
+Arun
 
