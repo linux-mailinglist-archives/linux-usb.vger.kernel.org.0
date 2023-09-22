@@ -1,140 +1,148 @@
-Return-Path: <linux-usb+bounces-472-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-487-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05DB47AA353
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Sep 2023 23:50:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B627B7AA62E
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Sep 2023 02:45:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id AC93B283ED5
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Sep 2023 21:50:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTP id 863871C2092D
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Sep 2023 00:45:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 037F620328;
-	Thu, 21 Sep 2023 21:49:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0454638C;
+	Fri, 22 Sep 2023 00:45:11 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BE662031B;
-	Thu, 21 Sep 2023 21:49:44 +0000 (UTC)
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9901410C6;
-	Thu, 21 Sep 2023 14:49:41 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38LJp8sC021537;
-	Thu, 21 Sep 2023 21:49:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=jt0oIgTyqjbTXFE8R+uBXHTwbnogDehsEUidVF5fLmc=;
- b=MepJ+upGMC1sdTcJTSVbHR4RoDqNx6wVoRzmygug+04KquPz9HEL7lRSToIR0rsC9fX9
- C5mY3pk8tiXTyL3cPecy9FBFpfIyZbVNdqhaEsS5EAa5gEDA74vaf836/dJWmBuGAn5I
- dGYJgPZTUcOFQeZTK4mpVPSgK/RA7NUj3WIxeGg6HdmFF2/CgJNiUsPT+SvvVzw+/wJE
- x1Y2U7iOjT9gXMVYRUsg8KztGRfaGldOab8l6JOFWLCX83DsgQ7X88s5mtzFhLsEsSqG
- ycmoHrGJlPxdHNCtlx01i+/mgnXYny9LvK+E1IYmkptE9OpvPMW7RYA1H/mJWlQ0wMN3 FA== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t8u5n0bqa-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 21 Sep 2023 21:49:18 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38LLn36L012662
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 21 Sep 2023 21:49:03 GMT
-Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.36; Thu, 21 Sep 2023 14:49:02 -0700
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-To: <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>,
-        <lgirdwood@gmail.com>, <broonie@kernel.org>, <perex@perex.cz>,
-        <tiwai@suse.com>, <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <srinivas.kandagatla@linaro.org>, <bgoswami@quicinc.com>,
-        <Thinh.Nguyen@synopsys.com>
-CC: <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>
-Subject: [PATCH v7 33/33] ASoC: usb: Rediscover USB SND devices on USB port add
-Date: Thu, 21 Sep 2023 14:48:43 -0700
-Message-ID: <20230921214843.18450-34-quic_wcheng@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230921214843.18450-1-quic_wcheng@quicinc.com>
-References: <20230921214843.18450-1-quic_wcheng@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDF47377
+	for <linux-usb@vger.kernel.org>; Fri, 22 Sep 2023 00:45:08 +0000 (UTC)
+X-Greylist: delayed 781 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 21 Sep 2023 17:45:06 PDT
+Received: from r9110.ps.combzmail.jp (r9110.ps.combzmail.jp [49.212.36.116])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D210DF5
+	for <linux-usb@vger.kernel.org>; Thu, 21 Sep 2023 17:45:06 -0700 (PDT)
+Received: by r9110.ps.combzmail.jp (Postfix, from userid 99)
+	id 6207418535A; Fri, 22 Sep 2023 09:31:02 +0900 (JST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 r9110.ps.combzmail.jp 6207418535A
+To: linux-usb@vger.kernel.org
+From: info@ibj-bridal.biz
+X-Ip: 2591791024653430
+X-Ip-source: k85gj7p648dnsa2wu0p6gd
+Precedence: bulk
+List-Unsubscribe: <https://regssl.combzmail.jp/d/p62w&m=linux-usb@vger.kernel.org>
+Subject: =?ISO-2022-JP?B?GyRCPzc1LDt2NkgkSCQ3JEYkTjdrOidBakNMGyhC?=
+ =?ISO-2022-JP?B?GyRCPWobKEIgGyRCQGJMQDJxGyhC?=
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Ge7Hcxdn640ava6jWa6SIXk8D6arxYXD
-X-Proofpoint-GUID: Ge7Hcxdn640ava6jWa6SIXk8D6arxYXD
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-09-21_19,2023-09-21_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- priorityscore=1501 malwarescore=0 spamscore=0 bulkscore=0 impostorscore=0
- lowpriorityscore=0 mlxscore=0 clxscore=1015 adultscore=0 phishscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2309210189
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Mime-Version: 1.0
+Content-Type: text/plain; charset=iso-2022-jp
+Content-Transfer-Encoding: 7bit
+X-MagazineId: p62w
+X-uId: 6761306038485765754157501007
+X-Sender: CombzMailSender
+X-Url: http://www.combzmail.jp/
+Message-Id: <20230922003115.6207418535A@r9110.ps.combzmail.jp>
+Date: Fri, 22 Sep 2023 09:31:02 +0900 (JST)
+X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_20,
+	HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED,X_IP autolearn=no autolearn_force=no
+	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-In case the USB backend device has not been initialized/probed, USB SND
-device connections can still occur.  When the USB backend is eventually
-made available, previous USB SND device connections are not communicated to
-the USB backend.  Call snd_usb_rediscover_devices() to generate the connect
-callbacks for all USB SND devices connected.  This will allow for the USB
-backend to be updated with the current set of devices available.
+　―　婚活ビジネス説明会　―
 
-The chip array entries are all populated and removed while under the
-register_mutex, so going over potential race conditions:
+　◇　9月・10月度 開催地
+　　　東京／神奈川／埼玉
+　　　愛知／静岡／岐阜／三重
+　　　大阪／岡山／広島
+　　　福岡／長崎／熊本／鹿児島
 
-Thread#1:
-  q6usb_component_probe()
-    --> snd_soc_usb_add_port()
-      --> snd_usb_rediscover_devices()
-        --> mutex_lock(register_mutex)
 
-Thread#2
-  --> usb_audio_disconnect()
-    --> mutex_lock(register_mutex)
+いつもお世話になります。
 
-So either thread#1 or thread#2 will complete first.  If
 
-Thread#1 completes before thread#2:
-  SOC USB will notify DPCM backend of the device connection.  Shortly
-  after, once thread#2 runs, we will get a disconnect event for the
-  connected device.
+異業種からでも、新規事業として低リスクで始められる
 
-Thread#2 completes before thread#1:
-  Then during snd_usb_rediscover_devices() it won't notify of any
-  connection for that particular chip index.
+“　結婚相談所ビジネス　”
 
-Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
----
- sound/soc/soc-usb.c | 2 ++
- 1 file changed, 2 insertions(+)
+の説明会ご案内につきご連絡差し上げました。
 
-diff --git a/sound/soc/soc-usb.c b/sound/soc/soc-usb.c
-index 619f9bfd6999..7df7f93cf5a2 100644
---- a/sound/soc/soc-usb.c
-+++ b/sound/soc/soc-usb.c
-@@ -115,6 +115,8 @@ struct snd_soc_usb *snd_soc_usb_add_port(struct device *dev, void *priv,
- 	list_add_tail(&usb->list, &usb_ctx_list);
- 	mutex_unlock(&ctx_mutex);
- 
-+	snd_usb_rediscover_devices();
-+
- 	return usb;
- }
- EXPORT_SYMBOL_GPL(snd_soc_usb_add_port);
+
+設備投資もいらず、本業のスタッフが兼務も
+できるので、個人の独立開業だけでなく
+異業種から新規事業として取り組む企業も増えています。
+
+
+説明会では詳しいビジネスモデルや
+収益性などをお伝えします。
+
+
+新たな事業をお考えの方は
+この機会に是非ご参加ください。
+
+
+　▼　セミナー詳細情報＆申込はこちら　▼
+　　　https://bridal-network.net/22a/
+
+
+　9月・10月度　各エリアにて開催
+　―――――――――――――――――――――
+
+
+　◇　婚活ビジネス　説明会
+　設備投資ゼロ／本業スタッフ兼務
+　ミニマムスタートできる「 結婚相談所 」
+
+
+　◇　主催
+　株式会社IBJ
+　(加盟相談所数:4,020社／登録会員数:86,002名)
+
+
+　◇　9月・10月度 開催地
+　　　東京／神奈川／埼玉
+　　　愛知／静岡／岐阜／三重
+　　　大阪／岡山／広島
+　　　福岡／長崎／熊本／鹿児島
+
+　※　日程・会場の詳細情報は
+　　　セミナーページにてご確認ください。
+
+
+　▼　セミナー詳細情報＆申込はこちら　▼
+　　　https://bridal-network.net/22a/
+
+
+　―――――――――――――――――――――
+　 参加費：　無料
+　 対　象：　法人／個人　どちらでも可能です
+　―――――――――――――――――――――
+
+　※　全日程・会場とも内容は同じです。
+　　　会場詳細情報はURL内にてご確認ください。
+　　　開催枠ごとに定員に達し次第受付終了となります。
+　　　ご希望会場・開催枠が満席の際は、本メール宛に
+　　　次回参加希望の旨を返信ください。
+　　　日程が決まり次第優先してお知らせします。
+
+━━━━━━━━━━━━━━━━━━━━━━
+
+　株式会社IBJ　セミナー事務局
+　東京都新宿区西新宿1-23-7
+　新宿ファーストウエスト 12F
+　080-7027-7621
+
+‥‥‥‥‥‥‥‥‥‥‥‥‥‥‥‥‥‥‥‥‥‥
+　本メールのご不要な方には大変
+　ご迷惑をおかけいたしました。
+　今後、ご案内が不要な方は、お手数ですが
+　「配信不要」とご返信いただくか、
+　下記URLより配信停止登録を承っておりますので
+　お手続きをお願いいたします。
+　　https://bridal-network.net/mail/
+
+━━━━━━━━━━━━━━━━━━━━━━
 
