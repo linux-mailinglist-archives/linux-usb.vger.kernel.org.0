@@ -1,157 +1,145 @@
-Return-Path: <linux-usb+bounces-500-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-501-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 308C67AA9EC
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Sep 2023 09:18:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D50D7AAA37
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Sep 2023 09:27:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by ny.mirrors.kernel.org (Postfix) with ESMTP id 199F61C20B2F
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Sep 2023 07:18:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id D43F4282F1D
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Sep 2023 07:27:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03FDB179AF;
-	Fri, 22 Sep 2023 07:18:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9560E18AF9;
+	Fri, 22 Sep 2023 07:27:20 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 670C62F3A
-	for <linux-usb@vger.kernel.org>; Fri, 22 Sep 2023 07:18:23 +0000 (UTC)
-X-Greylist: delayed 528 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 22 Sep 2023 00:18:21 PDT
-Received: from mail.insite.cz (smtp.ivitera.com [88.101.85.59])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37853C2
-	for <linux-usb@vger.kernel.org>; Fri, 22 Sep 2023 00:18:20 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-	by mail.insite.cz (Postfix) with ESMTP id 4B1F5A1A32301;
-	Fri, 22 Sep 2023 09:13:35 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-	t=1695366815; bh=E7qTeQvG+VsEQSWTs5jOYmqzdrkrv2hPDom7F2xtE1A=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=qIayzXgj6sOs1eqqd7CwhZd7Ub+mNTJ7gqT3+pd4eHX5bMJu5J/wtmKprwZU29R0T
-	 YE+lTczG2m9T2JDTvYNLOkhTImF1zRXByFrPKJflTYlMgb2hqPhqRSfDlfnsV3IQAh
-	 h8JZd1dGuKmifdckYctokzvaM+Nyk270doKOemgI=
-Received: from mail.insite.cz ([10.0.1.254])
-	by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id tEf46MNYUTBv; Fri, 22 Sep 2023 09:13:29 +0200 (CEST)
-Received: from [192.168.105.22] (dustin.pilsfree.net [81.201.58.138])
-	(Authenticated sender: pavel)
-	by mail.insite.cz (Postfix) with ESMTPSA id 31565A1A32300;
-	Fri, 22 Sep 2023 09:13:28 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-	t=1695366808; bh=E7qTeQvG+VsEQSWTs5jOYmqzdrkrv2hPDom7F2xtE1A=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=NpZ3RoSVIG+BBzyN1rKpTn+GFKa3gBzh/5d6n4gWaN4xQd5cfyiVQyoRutSZV1Cum
-	 6M32Uex9HvS0IHQt2bAJmXwPgVrnzu7UwvQNdG7+BF7kDB1QuNQjXcs23ydD0JMEyC
-	 gNBXwohLRPwE0wkjFBYGRXijUodOJLELOmLgqiHI=
-Message-ID: <4154b125-35c8-b15a-8706-54b9eb3cb5e0@ivitera.com>
-Date: Fri, 22 Sep 2023 09:09:22 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E7B315AC7
+	for <linux-usb@vger.kernel.org>; Fri, 22 Sep 2023 07:27:18 +0000 (UTC)
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9171AB;
+	Fri, 22 Sep 2023 00:27:17 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id 41be03b00d2f7-578cc95db68so1098283a12.1;
+        Fri, 22 Sep 2023 00:27:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1695367636; x=1695972436; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0JwtvcMX0Vd+Xc7guGazpkfS0KLQ5uU83L1DMPcX7c0=;
+        b=TyTvhvxxuwRNqM/Rph87+4tLo5evjFQi5MGEgDJ9qeq+sOUWSzPha8rnN+EeRf6WYX
+         R0XDpZUwqV05JYeFftjreIRQKT3YZBCl5NEevljGty9sqSj/cKqKXnC05ucS5qb3JZhF
+         QE7nobBvTS1TvB/rVzvs8BSeheou4MqAqTKyXcVhzfDM5dMdkmf4DNTThkMASsQAd4Qy
+         lpuafkTczBiM3Np3RRhzrppQGlz11kwL4wp5mHlka1wlrqzYA0oMiSElmKmeF+0c0kAU
+         Uy2uenWf1I+vvPRJyP/dVQajPatdYQbspv0mUlzE6T8+ofojhxHuFj/T1qtInpR5bTJk
+         oziw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695367636; x=1695972436;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0JwtvcMX0Vd+Xc7guGazpkfS0KLQ5uU83L1DMPcX7c0=;
+        b=wxH6w1USulOb/y987XaVJqtPz0BLF60yArQEQkb4tMR7ptC897zH3jjknuhM3nyhKy
+         UOWZSBXh0aM9yqFj6nSxHN//t7iuN/fNeH9uAn8RdZvyF7jXp/osgM94TrLnDvMaiIa5
+         Pq6uBup2xSU25ftrDrOXG3Zk6TJCmx/sW4cXaRgm8p6yYZ9kUWPq0miIShVlTy8SmA3J
+         W+iNNLKn2JQ5f06V+te+62c6UayrrqErJLc/qmkG0JhqpjHCyxNSOoNY1aZaW4XNapB2
+         HOxhGf88W8c9EnKZU7tLtvHfZFWhApbYlPqU3mSGI79uUVm15XizH6xawXWh/YZ9AETI
+         I1Bg==
+X-Gm-Message-State: AOJu0YxkM+AwPGmqRnFTSivMmcKuwySGUA0H99Dltl8bmNPqj6z5HzEZ
+	8stOJ+c4QCuMOtq0q/V0UyM=
+X-Google-Smtp-Source: AGHT+IFbYG6pVjqpMpgJyBCuwhUS40Y/AbHgpCrvrwP3q5cCTs2qJY5nAHnR9EEHahteB8WiHojLRA==
+X-Received: by 2002:a17:90a:ec12:b0:276:86e0:2e45 with SMTP id l18-20020a17090aec1200b0027686e02e45mr7722483pjy.43.1695367636179;
+        Fri, 22 Sep 2023 00:27:16 -0700 (PDT)
+Received: from debian.me ([103.124.138.83])
+        by smtp.gmail.com with ESMTPSA id 9-20020a17090a190900b0026fa1931f66sm2826648pjg.9.2023.09.22.00.27.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Sep 2023 00:27:14 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+	id EF58F81B96CF; Fri, 22 Sep 2023 14:18:18 +0700 (WIB)
+Date: Fri, 22 Sep 2023 14:18:18 +0700
+From: Bagas Sanjaya <bagasdotme@gmail.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Johan Hovold <johan@kernel.org>, primalmotion <primalmotion@pm.me>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux USB <linux-usb@vger.kernel.org>
+Subject: Re: Fwd: unable to boot when monitor is attached
+Message-ID: <ZQ0_upwsFTIduIRQ@debian.me>
+References: <5eb57bfe-94a4-136b-497e-deeb31846db1@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: RFC: usb: gadget: u_audio: Notifying gadget that host started
- playback/capture?
-Content-Language: en-US
-To: Arun Raghavan <arun@arunraghavan.net>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>
-Cc: Julian Scheel <julian@jusst.de>, Takashi Iwai <tiwai@suse.de>,
- Ruslan Bilovol <ruslan.bilovol@gmail.com>,
- Jerome Brunet <jbrunet@baylibre.com>
-References: <6ebc2456-a46b-bc47-da76-7a341414c1fb@ivitera.com>
- <35766f0f-784d-d37a-6d07-665f9ee88331@ivitera.com>
- <27b4b607-5d71-4e5d-a0ff-530c25752213@app.fastmail.com>
-From: Pavel Hofman <pavel.hofman@ivitera.com>
-In-Reply-To: <27b4b607-5d71-4e5d-a0ff-530c25752213@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="5zNn6a6lC8WX+A05"
+Content-Disposition: inline
+In-Reply-To: <5eb57bfe-94a4-136b-497e-deeb31846db1@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
 
-Dne 21. 09. 23 v 3:30 Arun Raghavan napsal(a):
-> Hi folks,
-> 
-> On Fri, 1 Oct 2021, at 8:38 AM, Pavel Hofman wrote:
->> Hi,
->>
->> Dne 08. 09. 21 v 10:21 Pavel Hofman napsal(a):
->>> Hi,
->>>
->>> The current audio gadget has no way to inform the gadget side that the
->>> host side has started playback/capture and that gadget-side alsa
->>> processes should be started.
->>>
->>> Playback/capture processes on the host side do not get stuck without the
->>> gadget side consuming/producing data (OUT requests are ignored in
->>> u_audio_iso_complete, IN ones send initial zeros in their req->buf).
->>>
->>> However, playback/capture processes on the gadget side get stuck without
->>> the host side sending playback OUT packets or capture IN requests and
->>> time out with error. If there was a way to inform the gadget side that
->>> playback/capture has started on the host side, the gadget clients could
->>> react accordingly.
->>>
->>
->> I drafted a simple patch for u_audio.c which defines read-only boolean
->> ctl elems "Capture Requested" and "Playback Requested". Their values are
->> set/reset in methods u_audio_start_capture/playback and
->> u_audio_stop_capture/playback, i.e. at changes of respective altsettings
->> from 0 to 1 and back. Every ctl elem value change sends notification via
->> snd_ctl_notify. The principle works OK for capture/playback start/stop
->> on the host, as monitored by alsactl:
->>
->> pi@raspberrypi:~ $ alsactl monitor hw:UAC2Gadget
->> node hw:UAC2Gadget, #4 (3,0,0,Capture Requested,0) VALUE
->> node hw:UAC2Gadget, #4 (3,0,0,Capture Requested,0) VALUE
->> node hw:UAC2Gadget, #3 (3,0,0,Playback Requested,0) VALUE
->> node hw:UAC2Gadget, #3 (3,0,0,Playback Requested,0) VALUE
->>
->> However at enumeration the USB host switches both playback and capture
->> altsettings repeatedly, generating "fake" events from the gadget side
->> POW. The host even sends regular-sized EP-OUT packets filled with zeros
->> during enumeration (tested on linux only for now).
->>
->> Please is there any way to "detect" the enumeration stage to mask out
->> the "fake" playback/capture start/stop events?
->>
->> The attached patch does not apply cleanly to mainline u_audio.c because
->> it's rebased on other patches not submitted yet but it's only a
->> discussion inducer for now.
-> 
-> Resurrecting this one -- is there any input on how we want to deal wit letting UAC gadgets know when the host is sending/receiving data?
+--5zNn6a6lC8WX+A05
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The current version uses the Playback/Capture Rate alsa ctls with 
-notifications 
-https://lore.kernel.org/all/20220121155308.48794-8-pavel.hofman@ivitera.com/
+On Fri, Jul 07, 2023 at 07:10:13AM +0700, Bagas Sanjaya wrote:
+> Hi,
+>=20
+> I notice a regression report on Bugzilla [1]. Quoting from it:
+>=20
+> >=20
+> > In the latest 6.3 and 6.4, it is impossible for me to boot my laptop if=
+ my DELL U2720Q monitor is plugged in (USB-C). I have to unplug it, then bo=
+ot. As soon as the first second of boot went through, I can plug in my moni=
+tor and there is no issue afterward. There is no issue waking up after susp=
+end. Only when it boots.
+> >=20
+> > See the attached pictures of the trace. The trace itself seems random (=
+at least to me :)). I tried several things, like removing any attached USB =
+devices from the monitor built-in USB-hub, but that does not change anythin=
+g. (there is a keyboard and trackpad attached).
+>=20
+> See Bugzilla for the full thread.
+>=20
+> Unfortunately, the reporter can only provide photos of kernel trace
+> (as he doesn't have any other means to extract kernel logs, maybe
+> connecting over serial helps; see Bugzilla for these attachments).
+>=20
+> Anyway, I'm adding it to regzbot so that it doesn't fall through
+> cracks unnoticed:
+>=20
+> #regzbot introduced: v6.1..v6.3 https://bugzilla.kernel.org/show_bug.cgi?=
+id=3D217637
+> #regzbot title: unable to boot with Dell U2720Q monitor attached
+>=20
 
-Example of handling is e.g. https://github.com/pavhofman/gaudio_ctl , 
-the controller is being used in a number of projects, mostly DIY.
+A PureBoot developer noted that this regression is firmware bug
+(see Bugzilla), thus:
 
-Recently Qualcomm devs have submitted patches for alternative approach 
-using uevents 
-https://lore.kernel.org/lkml/2023050801-handshake-refusing-0367@gregkh/T/#mcd6b346f3ddab6ab34792be0141633bb362d168f 
-and later versions. The detection is identical, monitoring change in 
-altsetting from 0 to non zero and back (methods 
-u_audio_[start/stop]_[capture/playback]), just a different means of 
-communicating the events to userspace.
+#regzbot inconclusive: firmware bug, fixing the kernel only workarounds bug=
+gy firmware
 
-Both methods (using the same principle) suffer from not knowing what's 
-going on the host side and cannot differentiate between player really 
-starting playback vs. UAC2 host driver or Pulseaudio shortly checking 
-device availability. That's why the gaudio_ctl controller can debounce 
-the playback/capture start 
-https://github.com/pavhofman/gaudio_ctl#debouncing . But that is just an 
-ugly workaround...
+Thanks.
 
-With regards,
 
-Pavel.
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--5zNn6a6lC8WX+A05
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZQ0/tAAKCRD2uYlJVVFO
+oytiAQDhMFXIMa+wDyLn9PG9q2fzQL4Vy+IYfbh3qAPSVGCrVAD8CbahBPeHB79o
+TJQTY3QecxcTIqJMtI7lVcfRLbYCQAQ=
+=DCBu
+-----END PGP SIGNATURE-----
+
+--5zNn6a6lC8WX+A05--
 
