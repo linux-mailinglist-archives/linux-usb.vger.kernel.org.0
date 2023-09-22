@@ -1,53 +1,53 @@
-Return-Path: <linux-usb+bounces-493-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-495-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2139E7AA823
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Sep 2023 07:12:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD1EE7AA827
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Sep 2023 07:12:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by am.mirrors.kernel.org (Postfix) with ESMTP id 8BA5D1F21EB9
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Sep 2023 05:12:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTP id B35251C20BC7
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Sep 2023 05:12:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C427C14F95;
-	Fri, 22 Sep 2023 05:12:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D21EE56B;
+	Fri, 22 Sep 2023 05:12:28 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64FC9C8F7;
-	Fri, 22 Sep 2023 05:12:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A01C1EAC3;
+	Fri, 22 Sep 2023 05:12:24 +0000 (UTC)
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BFCC18F;
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE3A719B;
 	Thu, 21 Sep 2023 22:12:22 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38M51ngV008240;
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38M4datl014966;
 	Fri, 22 Sep 2023 05:12:13 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=kIXT93jtSG7Dcf7+1ZpE4PRl3rCSTipTWKODSpQmGGY=;
- b=Wv3jiOocOfDn/tog4rDUS5Sr2m0EAQQ7cjtBb+i4Vblb1sMz2OXP5dVO7aEDGyBg1pon
- PKz88sL4KbHY5TJSElbpDrpHbDrZ/G3XdEpIiGWnSfS73pZK/Nn8DZkvjOpVpVweXbMp
- m+Zm/o6adwynAps81k/DAbD6cOwPHW0mhak0dp+SGwh8mro5p/T6N3hfbJhvlqKGk/TV
- +ue/HkBT8vXb+Q73h6K0AyfTTwdqnou63e6WTaAkC5JK3qi0YAWopNUYmywKAZlVNQAV
- ZReCs8MsOQUsbVmodI/JhHGh2Hzp/A/vjLtpYJQ3yP+x4RoNJqZqixlMo65rODdF3dZy ig== 
+ bh=vt4HQkzBRhpNc52cASEe6rG3/9p26Oq4MI20JoPy4ZY=;
+ b=kZTfmkduYH/YAy7XtPFUygwCjkGkZFMIQaVV1BVeJV+yflCATP86ztGUvOPXvbxw3drz
+ sNOsxsMiQhMmbSY0RmJ1yX9Q8fVvWGNVj/Mhy2aCZ+49NFxTk3g2HZk9mU/ctXq23r+j
+ mwVUXbwSRnIb6tuQa0RwYGAOj3hBfUukd8WPLbtqj2QzDdh22zheRJijS/DwnsAFxuSx
+ xXtm1J22h4Px2lqgt22l6WXsGDPki1/0uhyCyf+fyiWcvfPEydX7ef0a2p7o63QDbPee
+ NghBwXtt5ViGnTxoatSoSQw+YZI/rguncCpHrtA3yBv5Vd5zxBsSr/s4HZmKehED7jqs NQ== 
 Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t8uknrxd7-1
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3t8um1rxbx-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
 	Fri, 22 Sep 2023 05:12:12 +0000
 Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-	by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 38M57QYg012560;
+	by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 38M5C8RT018677;
 	Fri, 22 Sep 2023 05:12:08 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3t55em90v1-1;
+	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3t55em90v3-1;
 	Fri, 22 Sep 2023 05:12:08 +0000
 Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 38M5C7BY018616;
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 38M57PMe012555;
 	Fri, 22 Sep 2023 05:12:08 GMT
 Received: from hu-sgudaval-hyd.qualcomm.com (hu-rohiagar-hyd.qualcomm.com [10.213.106.138])
-	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 38M5C8v7018637;
+	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 38M5C8J7018646;
 	Fri, 22 Sep 2023 05:12:08 +0000
 Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3970568)
-	id 9A5C11E49; Fri, 22 Sep 2023 10:42:07 +0530 (+0530)
+	id D8F781E4B; Fri, 22 Sep 2023 10:42:07 +0530 (+0530)
 From: Rohit Agarwal <quic_rohiagar@quicinc.com>
 To: agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
         vkoul@kernel.org, kishon@kernel.org, robh+dt@kernel.org,
@@ -58,9 +58,9 @@ Cc: linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-usb@vger.kernel.org, kernel@quicinc.com,
         Rohit Agarwal <quic_rohiagar@quicinc.com>
-Subject: [PATCH v4 3/5] dt-bindings: usb: qcom,dwc3: Fix SDX65 clocks
-Date: Fri, 22 Sep 2023 10:42:03 +0530
-Message-Id: <1695359525-4548-4-git-send-email-quic_rohiagar@quicinc.com>
+Subject: [PATCH v4 4/5] dt-bindings: usb: dwc3: Add SDX75 compatible
+Date: Fri, 22 Sep 2023 10:42:04 +0530
+Message-Id: <1695359525-4548-5-git-send-email-quic_rohiagar@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1695359525-4548-1-git-send-email-quic_rohiagar@quicinc.com>
 References: <1695359525-4548-1-git-send-email-quic_rohiagar@quicinc.com>
@@ -68,14 +68,14 @@ X-QCInternal: smtphost
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 9pWl3IZNXiWpKqBfP8xmOu-ahIIs359u
-X-Proofpoint-ORIG-GUID: 9pWl3IZNXiWpKqBfP8xmOu-ahIIs359u
+X-Proofpoint-ORIG-GUID: z0p45zdMSpIjFKpBoZ3A03RbU3dbemqD
+X-Proofpoint-GUID: z0p45zdMSpIjFKpBoZ3A03RbU3dbemqD
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-09-22_03,2023-09-21_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
- bulkscore=0 adultscore=0 impostorscore=0 spamscore=0 lowpriorityscore=0
- mlxlogscore=731 priorityscore=1501 phishscore=0 mlxscore=0 malwarescore=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ mlxlogscore=567 spamscore=0 priorityscore=1501 bulkscore=0 phishscore=0
+ impostorscore=0 lowpriorityscore=0 clxscore=1015 adultscore=0 mlxscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2309180000
  definitions=main-2309220045
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -90,27 +90,42 @@ List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 
-SDX65 has 5 clocks so mention in the bindings.
+Document the SDX75 dwc3 compatible.
 
-Fixes: 16946a60715c ("dt-bindings: usb: qcom,dwc3: fix clock matching")
 Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
-Acked-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-index 6759105..018117b 100644
+index 018117b..d78b721 100644
 --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
 +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-@@ -180,6 +180,7 @@ allOf:
-               - qcom,sdm670-dwc3
+@@ -34,6 +34,7 @@ properties:
+           - qcom,sdm845-dwc3
+           - qcom,sdx55-dwc3
+           - qcom,sdx65-dwc3
++          - qcom,sdx75-dwc3
+           - qcom,sm4250-dwc3
+           - qcom,sm6115-dwc3
+           - qcom,sm6125-dwc3
+@@ -181,6 +182,7 @@ allOf:
                - qcom,sdm845-dwc3
                - qcom,sdx55-dwc3
-+              - qcom,sdx65-dwc3
+               - qcom,sdx65-dwc3
++              - qcom,sdx75-dwc3
                - qcom,sm6350-dwc3
      then:
        properties:
+@@ -364,6 +366,7 @@ allOf:
+               - qcom,sdm845-dwc3
+               - qcom,sdx55-dwc3
+               - qcom,sdx65-dwc3
++              - qcom,sdx75-dwc3
+               - qcom,sm4250-dwc3
+               - qcom,sm6125-dwc3
+               - qcom,sm6350-dwc3
 -- 
 2.7.4
 
