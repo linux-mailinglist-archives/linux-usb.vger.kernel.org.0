@@ -1,145 +1,89 @@
-Return-Path: <linux-usb+bounces-501-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-502-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D50D7AAA37
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Sep 2023 09:27:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id F0B477AAB18
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Sep 2023 10:00:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id D43F4282F1D
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Sep 2023 07:27:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id AA1DD28369A
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Sep 2023 07:59:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9560E18AF9;
-	Fri, 22 Sep 2023 07:27:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A4BD1DA26;
+	Fri, 22 Sep 2023 07:59:56 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E7B315AC7
-	for <linux-usb@vger.kernel.org>; Fri, 22 Sep 2023 07:27:18 +0000 (UTC)
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9171AB;
-	Fri, 22 Sep 2023 00:27:17 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id 41be03b00d2f7-578cc95db68so1098283a12.1;
-        Fri, 22 Sep 2023 00:27:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695367636; x=1695972436; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0JwtvcMX0Vd+Xc7guGazpkfS0KLQ5uU83L1DMPcX7c0=;
-        b=TyTvhvxxuwRNqM/Rph87+4tLo5evjFQi5MGEgDJ9qeq+sOUWSzPha8rnN+EeRf6WYX
-         R0XDpZUwqV05JYeFftjreIRQKT3YZBCl5NEevljGty9sqSj/cKqKXnC05ucS5qb3JZhF
-         QE7nobBvTS1TvB/rVzvs8BSeheou4MqAqTKyXcVhzfDM5dMdkmf4DNTThkMASsQAd4Qy
-         lpuafkTczBiM3Np3RRhzrppQGlz11kwL4wp5mHlka1wlrqzYA0oMiSElmKmeF+0c0kAU
-         Uy2uenWf1I+vvPRJyP/dVQajPatdYQbspv0mUlzE6T8+ofojhxHuFj/T1qtInpR5bTJk
-         oziw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695367636; x=1695972436;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0JwtvcMX0Vd+Xc7guGazpkfS0KLQ5uU83L1DMPcX7c0=;
-        b=wxH6w1USulOb/y987XaVJqtPz0BLF60yArQEQkb4tMR7ptC897zH3jjknuhM3nyhKy
-         UOWZSBXh0aM9yqFj6nSxHN//t7iuN/fNeH9uAn8RdZvyF7jXp/osgM94TrLnDvMaiIa5
-         Pq6uBup2xSU25ftrDrOXG3Zk6TJCmx/sW4cXaRgm8p6yYZ9kUWPq0miIShVlTy8SmA3J
-         W+iNNLKn2JQ5f06V+te+62c6UayrrqErJLc/qmkG0JhqpjHCyxNSOoNY1aZaW4XNapB2
-         HOxhGf88W8c9EnKZU7tLtvHfZFWhApbYlPqU3mSGI79uUVm15XizH6xawXWh/YZ9AETI
-         I1Bg==
-X-Gm-Message-State: AOJu0YxkM+AwPGmqRnFTSivMmcKuwySGUA0H99Dltl8bmNPqj6z5HzEZ
-	8stOJ+c4QCuMOtq0q/V0UyM=
-X-Google-Smtp-Source: AGHT+IFbYG6pVjqpMpgJyBCuwhUS40Y/AbHgpCrvrwP3q5cCTs2qJY5nAHnR9EEHahteB8WiHojLRA==
-X-Received: by 2002:a17:90a:ec12:b0:276:86e0:2e45 with SMTP id l18-20020a17090aec1200b0027686e02e45mr7722483pjy.43.1695367636179;
-        Fri, 22 Sep 2023 00:27:16 -0700 (PDT)
-Received: from debian.me ([103.124.138.83])
-        by smtp.gmail.com with ESMTPSA id 9-20020a17090a190900b0026fa1931f66sm2826648pjg.9.2023.09.22.00.27.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Sep 2023 00:27:14 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-	id EF58F81B96CF; Fri, 22 Sep 2023 14:18:18 +0700 (WIB)
-Date: Fri, 22 Sep 2023 14:18:18 +0700
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Johan Hovold <johan@kernel.org>, primalmotion <primalmotion@pm.me>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux USB <linux-usb@vger.kernel.org>
-Subject: Re: Fwd: unable to boot when monitor is attached
-Message-ID: <ZQ0_upwsFTIduIRQ@debian.me>
-References: <5eb57bfe-94a4-136b-497e-deeb31846db1@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3DD61A70E
+	for <linux-usb@vger.kernel.org>; Fri, 22 Sep 2023 07:59:52 +0000 (UTC)
+Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28AF31B2;
+	Fri, 22 Sep 2023 00:59:50 -0700 (PDT)
+Received: from dlp.unisoc.com ([10.29.3.86])
+	by SHSQR01.spreadtrum.com with ESMTP id 38M7xSp7099081;
+	Fri, 22 Sep 2023 15:59:28 +0800 (+08)
+	(envelope-from xingxing.luo@unisoc.com)
+Received: from SHDLP.spreadtrum.com (shmbx06.spreadtrum.com [10.0.1.11])
+	by dlp.unisoc.com (SkyGuard) with ESMTPS id 4RsPj16F78z2SgZQG;
+	Fri, 22 Sep 2023 15:56:05 +0800 (CST)
+Received: from zebjkernups01.spreadtrum.com (10.0.93.153) by
+ shmbx06.spreadtrum.com (10.0.1.11) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.23; Fri, 22 Sep 2023 15:59:26 +0800
+From: Xingxing Luo <xingxing.luo@unisoc.com>
+To: <b-liu@ti.com>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <xingxing0070.luo@gmail.com>, <Zhiyong.Liu@unisoc.com>,
+        <Cixi.Geng1@unisoc.com>, <Orson.Zhai@unisoc.com>,
+        <zhang.lyra@gmail.com>
+Subject: [PATCH] usb: musb: Modify the "HWVers" register address
+Date: Fri, 22 Sep 2023 15:59:29 +0800
+Message-ID: <20230922075929.31074-1-xingxing.luo@unisoc.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="5zNn6a6lC8WX+A05"
-Content-Disposition: inline
-In-Reply-To: <5eb57bfe-94a4-136b-497e-deeb31846db1@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain
+X-Originating-IP: [10.0.93.153]
+X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
+ shmbx06.spreadtrum.com (10.0.1.11)
+X-MAIL:SHSQR01.spreadtrum.com 38M7xSp7099081
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
 	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
+musb HWVers rgister address is not 0x69, if we operate the
+wrong address 0x69, it will cause a kernel crash, because
+there is no register corresponding to this address in the
+additional control register of musb. In fact, HWVers has
+been defined in musb_register.h, and the name is
+"MUSB_HWVERS", so We need to use this macro instead of 0x69.
 
---5zNn6a6lC8WX+A05
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fixes: c2365ce5d5a0 ("usb: musb: replace hard coded registers with defines")
+Cc: stable@vger.kernel.org
+Signed-off-by: Xingxing Luo <xingxing.luo@unisoc.com>
+---
+ drivers/usb/musb/musb_debugfs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Fri, Jul 07, 2023 at 07:10:13AM +0700, Bagas Sanjaya wrote:
-> Hi,
->=20
-> I notice a regression report on Bugzilla [1]. Quoting from it:
->=20
-> >=20
-> > In the latest 6.3 and 6.4, it is impossible for me to boot my laptop if=
- my DELL U2720Q monitor is plugged in (USB-C). I have to unplug it, then bo=
-ot. As soon as the first second of boot went through, I can plug in my moni=
-tor and there is no issue afterward. There is no issue waking up after susp=
-end. Only when it boots.
-> >=20
-> > See the attached pictures of the trace. The trace itself seems random (=
-at least to me :)). I tried several things, like removing any attached USB =
-devices from the monitor built-in USB-hub, but that does not change anythin=
-g. (there is a keyboard and trackpad attached).
->=20
-> See Bugzilla for the full thread.
->=20
-> Unfortunately, the reporter can only provide photos of kernel trace
-> (as he doesn't have any other means to extract kernel logs, maybe
-> connecting over serial helps; see Bugzilla for these attachments).
->=20
-> Anyway, I'm adding it to regzbot so that it doesn't fall through
-> cracks unnoticed:
->=20
-> #regzbot introduced: v6.1..v6.3 https://bugzilla.kernel.org/show_bug.cgi?=
-id=3D217637
-> #regzbot title: unable to boot with Dell U2720Q monitor attached
->=20
+diff --git a/drivers/usb/musb/musb_debugfs.c b/drivers/usb/musb/musb_debugfs.c
+index 78c726a71b17..2d623284edf6 100644
+--- a/drivers/usb/musb/musb_debugfs.c
++++ b/drivers/usb/musb/musb_debugfs.c
+@@ -39,7 +39,7 @@ static const struct musb_register_map musb_regmap[] = {
+ 	{ "IntrUsbE",	MUSB_INTRUSBE,	8 },
+ 	{ "DevCtl",	MUSB_DEVCTL,	8 },
+ 	{ "VControl",	0x68,		32 },
+-	{ "HWVers",	0x69,		16 },
++	{ "HWVers",	MUSB_HWVERS,	16 },
+ 	{ "LinkInfo",	MUSB_LINKINFO,	8 },
+ 	{ "VPLen",	MUSB_VPLEN,	8 },
+ 	{ "HS_EOF1",	MUSB_HS_EOF1,	8 },
+-- 
+2.17.1
 
-A PureBoot developer noted that this regression is firmware bug
-(see Bugzilla), thus:
-
-#regzbot inconclusive: firmware bug, fixing the kernel only workarounds bug=
-gy firmware
-
-Thanks.
-
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---5zNn6a6lC8WX+A05
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZQ0/tAAKCRD2uYlJVVFO
-oytiAQDhMFXIMa+wDyLn9PG9q2fzQL4Vy+IYfbh3qAPSVGCrVAD8CbahBPeHB79o
-TJQTY3QecxcTIqJMtI7lVcfRLbYCQAQ=
-=DCBu
------END PGP SIGNATURE-----
-
---5zNn6a6lC8WX+A05--
 
