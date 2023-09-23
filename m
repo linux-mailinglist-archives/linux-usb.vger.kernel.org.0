@@ -1,193 +1,136 @@
-Return-Path: <linux-usb+bounces-529-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-530-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A99567ABEBC
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Sep 2023 10:01:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D51C97AC0E0
+	for <lists+linux-usb@lfdr.de>; Sat, 23 Sep 2023 12:54:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 5A6972853A9
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Sep 2023 08:01:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 887F0282293
+	for <lists+linux-usb@lfdr.de>; Sat, 23 Sep 2023 10:54:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42B9063DF;
-	Sat, 23 Sep 2023 08:01:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3BDB10A3E;
+	Sat, 23 Sep 2023 10:54:34 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E1896132
-	for <linux-usb@vger.kernel.org>; Sat, 23 Sep 2023 08:01:47 +0000 (UTC)
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F97B1BE
-	for <linux-usb@vger.kernel.org>; Sat, 23 Sep 2023 01:01:45 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-4054496bde3so14375635e9.1
-        for <linux-usb@vger.kernel.org>; Sat, 23 Sep 2023 01:01:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695456104; x=1696060904; darn=vger.kernel.org;
-        h=user-agent:mime-version:date:content-transfer-encoding:face
-         :references:in-reply-to:cc:to:reply-to:subject:message-id:from
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=cmJZ5MvU4l2O5w581tF17PsY56n0VBOR+Y2qaWbmfGE=;
-        b=eFqmIvYvnkDH2n6iOuGvYCnzrupVBsldXssZmxgbua/oLiXJGQNunimzPWem4A48QY
-         9CoI8bF1TkcqBdz9h84enoIcAPv+WsSPx2zTryFQNuV5A0s4GNYKcCwlxV74PVyT+8O4
-         LiSrtZj+LxhJ45TsY9+Ugl5jkij+jqkJ6ECyfGEFur0f5wuq0OQPkgBgS6NR7wi59HVD
-         ssy2YXVVdfn5TPzweDDpjkl5LPmr6grsc8Db4B10cNpq5sh/kqu7qtqDyejDPkb4ich2
-         IFqKFoyx8kDx48aOce8Ss2xaGG0ceqehH7IYtSIIKiOGhpLHGDNGnW75ZyENYEUd5T0J
-         kV+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695456104; x=1696060904;
-        h=user-agent:mime-version:date:content-transfer-encoding:face
-         :references:in-reply-to:cc:to:reply-to:subject:message-id:from
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cmJZ5MvU4l2O5w581tF17PsY56n0VBOR+Y2qaWbmfGE=;
-        b=ehi6/V/fGPK/dt+HOSDp9lbp6VzQZlhZcUReKufAjKD26HUyCgePHzeZw6JvOqX9+6
-         /C+aaxRlfJxGNQWIm1bc7TEDc1m0uCr426y+tosp9cChMLnA81hb81CZRwbXjHUkPCl/
-         HoChDabfoob0uqkxrZ8VNfoLHCMzDpECGlhVixKUf7vrJAUMyt3h5Y7oKv1pngsMDlS+
-         V2D0c7dbtOe2LGS0xu5uJOpBR//6GLHCsP2aB+zcJf8A7NONd/+jrtRsAiOMbWS/1PgW
-         F77Z57VQAT/l3It3+gCHS2/96I5hsaySMYTcT8EqGtXsMc55eP93+cxGJ+iGZ9oshTst
-         jUIQ==
-X-Gm-Message-State: AOJu0Ywod9ah7gE6iUobIHrU4inQHB7S2kVzy4qEHsEp/koY8hmUpGr9
-	3opVl0L0iBxjzmTxICHr8lClztVci8g=
-X-Google-Smtp-Source: AGHT+IF9q4j21qobnsZahafvYKFgpaVWt8dk3Z+tSj9mTd2KeJmRrnOdIRTIPjeubeWWU9XSQyH8Ag==
-X-Received: by 2002:a7b:cd0a:0:b0:401:8225:14ee with SMTP id f10-20020a7bcd0a000000b00401822514eemr1295105wmj.41.1695456103392;
-        Sat, 23 Sep 2023 01:01:43 -0700 (PDT)
-Received: from mobalindesk.lan.lan (dynamic-077-006-155-024.77.6.pool.telefonica.de. [77.6.155.24])
-        by smtp.googlemail.com with ESMTPSA id o17-20020a05600c379100b003fe1a96845bsm9412696wmr.2.2023.09.23.01.01.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Sep 2023 01:01:42 -0700 (PDT)
-Sender: Massimo B <burcheri.massimo@gmail.com>
-From: Massimo Burcheri <massimo@burcheri.de>
-X-Google-Original-From: Massimo Burcheri <burcheri.massimo+linux-usb@gmail.com>
-Message-ID: <1352baa835ecd1a6b7f49e0d08f440858a99189d.camel@gmail.com>
-Subject: Re: JMicron JMS567 and UAS
-Reply-To: burcheri.massimo+linux-usb@gmail.com
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: linux-usb <linux-usb@vger.kernel.org>
-In-Reply-To: <40f5fdcb-9de5-42a6-9898-a428c0116adf@rowland.harvard.edu>
-References: <5d8cad13445172d02a371f162ceaea1a68819819.camel@gmail.com>
-	 <a5b48a53-9dff-4a84-9a58-1c08f0e0781b@rowland.harvard.edu>
-	 <072417fd7806d86e930bccb882460dbbfaa5ca52.camel@gmail.com>
-	 <0919e02b-e395-438c-b4d6-314d7e108639@rowland.harvard.edu>
-	 <7f8396ae597a78969811011034a7e5f759a6564e.camel@gmail.com>
-	 <40f5fdcb-9de5-42a6-9898-a428c0116adf@rowland.harvard.edu>
-Face:
- iVBORw0KGgoAAAANSUhEUgAAADAAAAAwAQMAAABtzGvEAAAAA3NCSVQICAjb4U/gAAAABlBMVEX///8AAABVwtN+AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABGUlEQVQYlUWQsUoDQRCGv71LjB7KSSBwwZCTgFhY2EYIHmJnZRMLo5AXUMRCBMHcE6iPoGBlINpoZXGVeQTFKqSxMgYtTBFcZw7EKfZn2Z2Z7//hr2ysZ+5tqFLmWKVaKKs0vWd9TJx2AibmoQcupj6CCZirqTgzA5hmsdtQWe5/xAREX7uJ3MLP9x4lyieNO5mcOxyM8HH79y/4Cdn9R3JDsts/uGO82yOMJf/ah1Y8tfQEIQt7Z7rCawtNiUpHFgYUdgTxgI1NAW6SvxoqWabbw0Bd5jpQibTNBC1F4nIMk2TWhTqIs+fSVpzfCsVR9eaiJf5W6mtWXK7O+vKR4nWkSYSuFbP4No3Ht6dpSN9pSMYmaXI1/usXT0FM3SoTKAAAAAAASUVORK5CYII=
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 23 Sep 2023 10:01:32 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A40A92117
+	for <linux-usb@vger.kernel.org>; Sat, 23 Sep 2023 10:54:32 +0000 (UTC)
+Received: from smtp.smtpout.orange.fr (smtp-16.smtpout.orange.fr [80.12.242.16])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F8ADC2
+	for <linux-usb@vger.kernel.org>; Sat, 23 Sep 2023 03:54:28 -0700 (PDT)
+Received: from pop-os.home ([86.243.2.178])
+	by smtp.orange.fr with ESMTPA
+	id k0HKqXroxN7Qtk0HKqgwxU; Sat, 23 Sep 2023 12:54:27 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1695466467;
+	bh=o6dXl6wZ2p8h+DtX0RSVtic+N8fFWJdpYZ/8V5pO/+o=;
+	h=From:To:Cc:Subject:Date;
+	b=mcQykgLvv5hKI2mZozZzRXVLylMgYxnioHBSXfRif9ZDjE83Z/OAuwY+RqsnqOzpM
+	 Q68eBhNpcMD3XG+M/8YAjS9naOqitumOm5q4mvb78YMGynFQTHdaaExjWFnVBxO9Gj
+	 SQr626Hk9TehEbEinQ7CSVJbmBhL6sV93okVDGlKXVcsLRW52qDyde59c5zzkBf79l
+	 pXA+8Np6xLdKu+z9sgMh91E25QQ3z0U1PZicqI15p26rDfiqUhPUWBG7HYO3WMj8zw
+	 qSF5HPBSe1BCEX3yMey2QOBg8RkJzalbPZvVlI4vWGORh2jOhE/qGwzIFyAH5su7S7
+	 ybkC0BMuGIQJA==
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 23 Sep 2023 12:54:27 +0200
+X-ME-IP: 86.243.2.178
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To: Minas Harutyunyan <hminas@synopsys.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Ben Dooks <ben@simtec.co.uk>
+Cc: linux-kernel@vger.kernel.org,
+	kernel-janitors@vger.kernel.org,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Greg Kroah-Hartman <gregkh@suse.de>,
+	linux-usb@vger.kernel.org
+Subject: [PATCH] usb: dwc2: gadget: Fix a warning when compiling with W=1
+Date: Sat, 23 Sep 2023 12:54:24 +0200
+Message-Id: <5cf603809388aa04c9a02bbfe3cf531c20bb043e.1695466447.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Evolution 3.48.4 
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Fri, 2023-09-22 at 09:59 -0400, Alan Stern wrote:
-> Maybe the problem isn't blacklisting at all; maybe your JMS567 device's=
-=20
-> firmware just doesn't support UAS.
->=20
-> I don't think you have posted the "lsusb -v" output for this device.=C2=
-=A0=20
-> What does it say?
+In order to teach the compiler that 'hs_ep->name' will never be truncated,
+we need to tell it that 'epnum' is not negative.
 
-Bus 004 Device 012: ID 152d:0567 JMicron Technology Corp. / JMicron USA Tec=
-hnology Corp. JMS567 SATA 6Gb/s bridge
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               3.00
-  bDeviceClass            0=20
-  bDeviceSubClass         0=20
-  bDeviceProtocol         0=20
-  bMaxPacketSize0         9
-  idVendor           0x152d JMicron Technology Corp. / JMicron USA Technolo=
-gy Corp.
-  idProduct          0x0567 JMS567 SATA 6Gb/s bridge
-  bcdDevice           52.03
-  iManufacturer           1 JMicron
-  iProduct                2 External USB 3.0
-  iSerial                 3 20170220000C3
-  bNumConfigurations      1
-  Configuration Descriptor:
-    bLength                 9
-    bDescriptorType         2
-    wTotalLength       0x002c
-    bNumInterfaces          1
-    bConfigurationValue     1
-    iConfiguration          0=20
-    bmAttributes         0xc0
-      Self Powered
-    MaxPower                8mA
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        0
-      bAlternateSetting       0
-      bNumEndpoints           2
-      bInterfaceClass         8 Mass Storage
-      bInterfaceSubClass      6 SCSI
-      bInterfaceProtocol     80 Bulk-Only
-      iInterface              0=20
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x81  EP 1 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0400  1x 1024 bytes
-        bInterval               0
-        bMaxBurst              15
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x02  EP 2 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0400  1x 1024 bytes
-        bInterval               0
-        bMaxBurst              15
-Binary Object Store Descriptor:
-  bLength                 5
-  bDescriptorType        15
-  wTotalLength       0x0016
-  bNumDeviceCaps          2
-  USB 2.0 Extension Device Capability:
-    bLength                 7
-    bDescriptorType        16
-    bDevCapabilityType      2
-    bmAttributes   0x00000f0e
-      BESL Link Power Management (LPM) Supported
-    BESL value     3840 us=20
-  SuperSpeed USB Device Capability:
-    bLength                10
-    bDescriptorType        16
-    bDevCapabilityType      3
-    bmAttributes         0x00
-    wSpeedsSupported   0x000e
-      Device can operate at Full Speed (12Mbps)
-      Device can operate at High Speed (480Mbps)
-      Device can operate at SuperSpeed (5Gbps)
-    bFunctionalitySupport   1
-      Lowest fully-functional device speed is Full Speed (12Mbps)
-    bU1DevExitLat          10 micro seconds
-    bU2DevExitLat          32 micro seconds
-Device Status:     0x000d
-  Self Powered
-  U1 Enabled
-  U2 Enabled
+'epnum' comes from in a 'for' loop in dwc2_gadget_init(), starting at 0
+and ending at 255. (hsotg->num_of_eps is a char)
 
-Best regards,
-Massimo
+When building with W=1, this fixes the following warnings:
+
+  drivers/usb/dwc2/gadget.c: In function ‘dwc2_hsotg_initep’:
+  drivers/usb/dwc2/gadget.c:4804:55: error: ‘%d’ directive output may be truncated writing between 1 and 11 bytes into a region of size 8 [-Werror=format-truncation=]
+   4804 |         snprintf(hs_ep->name, sizeof(hs_ep->name), "ep%d%s", epnum, dir);
+        |                                                       ^~
+  drivers/usb/dwc2/gadget.c:4804:52: note: directive argument in the range [-2147483645, 255]
+   4804 |         snprintf(hs_ep->name, sizeof(hs_ep->name), "ep%d%s", epnum, dir);
+        |                                                    ^~~~~~~~
+  drivers/usb/dwc2/gadget.c:4804:9: note: ‘snprintf’ output between 6 and 17 bytes into a destination of size 10
+   4804 |         snprintf(hs_ep->name, sizeof(hs_ep->name), "ep%d%s", epnum, dir);
+        |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Fixes: 5b7d70c6dbf2 ("USB: Gadget driver for Samsung HS/OtG block")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+Only changing:
+  -	int epnum;
+  +	unsigned int epnum;
+is enought to fix the build warning.
+
+But changing the prototype of dwc2_hsotg_initep() and the printf() format
+as well, to make obvious that epnum is >= 0, looks more logical to me.
+---
+ drivers/usb/dwc2/gadget.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index b517a7216de2..102b2dd8113e 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -4786,8 +4786,8 @@ static const struct usb_gadget_ops dwc2_hsotg_gadget_ops = {
+  */
+ static void dwc2_hsotg_initep(struct dwc2_hsotg *hsotg,
+ 			      struct dwc2_hsotg_ep *hs_ep,
+-				       int epnum,
+-				       bool dir_in)
++			      unsigned int epnum,
++			      bool dir_in)
+ {
+ 	char *dir;
+ 
+@@ -4801,7 +4801,7 @@ static void dwc2_hsotg_initep(struct dwc2_hsotg *hsotg,
+ 	hs_ep->dir_in = dir_in;
+ 	hs_ep->index = epnum;
+ 
+-	snprintf(hs_ep->name, sizeof(hs_ep->name), "ep%d%s", epnum, dir);
++	snprintf(hs_ep->name, sizeof(hs_ep->name), "ep%u%s", epnum, dir);
+ 
+ 	INIT_LIST_HEAD(&hs_ep->queue);
+ 	INIT_LIST_HEAD(&hs_ep->ep.ep_list);
+@@ -4965,7 +4965,7 @@ static void dwc2_hsotg_dump(struct dwc2_hsotg *hsotg)
+ int dwc2_gadget_init(struct dwc2_hsotg *hsotg)
+ {
+ 	struct device *dev = hsotg->dev;
+-	int epnum;
++	unsigned int epnum;
+ 	int ret;
+ 
+ 	/* Dump fifo information */
+-- 
+2.34.1
+
 
