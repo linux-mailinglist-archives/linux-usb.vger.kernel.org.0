@@ -1,185 +1,159 @@
-Return-Path: <linux-usb+bounces-532-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-533-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02D937AC166
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Sep 2023 13:49:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9758F7AC309
+	for <lists+linux-usb@lfdr.de>; Sat, 23 Sep 2023 17:02:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id CC03C2825A3
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Sep 2023 11:49:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTP id 9CB721C2091B
+	for <lists+linux-usb@lfdr.de>; Sat, 23 Sep 2023 15:02:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F6C4179A0;
-	Sat, 23 Sep 2023 11:49:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B0C51D6AB;
+	Sat, 23 Sep 2023 15:02:48 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81E7915E96
-	for <linux-usb@vger.kernel.org>; Sat, 23 Sep 2023 11:49:28 +0000 (UTC)
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 269A81A5
-	for <linux-usb@vger.kernel.org>; Sat, 23 Sep 2023 04:49:26 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-9ad8bba8125so470300266b.3
-        for <linux-usb@vger.kernel.org>; Sat, 23 Sep 2023 04:49:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695469764; x=1696074564; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GbjDHTHeQvNKBZv/8lID9zOviuVPTSuhipCFv7HoZZw=;
-        b=qAhF5x/wQUOWeeVuUuWKV5kng5p4jRhZ5JBk69gA4vHOhkmbL0M5qaP8E03I9F3veJ
-         Pi5w3n0qjVuR/pOKilLQs1iPpF69WFfnBni43JPB2bZfPuGfkaJGoUyUf5xT2W3s6pCq
-         YPpHXhKJwA9YZ1VjPWwy8uCk21krdYPEKZ80SuXgXa6PCpzM4t03oZud2n+kuIl+D346
-         kfVWe6/CPcyxnRTzbkf/Bnxl4Fyqq+FU097Fb2VzYTxLcvypqegQYAalvkvBLf5+NyJk
-         VaJGAx10ZMva99boHMP9kAbSj5IAutvVPHBR6yGsHlTs2OFxZDYfWxE6uyqCnCaPTNfl
-         I9eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695469764; x=1696074564;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GbjDHTHeQvNKBZv/8lID9zOviuVPTSuhipCFv7HoZZw=;
-        b=eV1Jl1bnlo/X4p82rAnn/GzgzK/XlHaDex9JxujC4ysOivVjDDPTHO0PMnPVTDoLY3
-         AdNHo9/WkNr2F/8DJyI6mDiVjqFk8mBX/RbnK5F8VxNcUFwVqzEXgr8qdxAUH3/xIj/N
-         NWsHN4aFh2EmMCQhu4U7BKgLpvMHdNoZobSY2ZB/I3wTsnfeymgPZnyMKAL7ICDj+3EK
-         vB0WGfxemxs0wgFyw/ZTE0afh+IsX+BPVkequYb1AxdauiDpAuS0yGu9LB9LZ10KHZVX
-         vDMww/lqGJEd83xnC7AHvltFEXiwDCpO0Fj+cbACLwtqP0tpg5TPPmum24tbpUM1xGZI
-         eQKw==
-X-Gm-Message-State: AOJu0YwZuYRYneOsxuK7smb4OpkkVBR8GlFZd5sTPVF9IpP68bbT1kF/
-	XqtCQ3JOrGlsvLQ8VoeWh02ZTw==
-X-Google-Smtp-Source: AGHT+IFYzeDASr/AjsnCqe+x2OPCcr54QmgexSCbdQD5IIx5jqCWPJuXfCY1280EbooxNihVP9Y1Xw==
-X-Received: by 2002:a17:906:ae81:b0:9ae:961a:de7f with SMTP id md1-20020a170906ae8100b009ae961ade7fmr1781632ejb.30.1695469764578;
-        Sat, 23 Sep 2023 04:49:24 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.100])
-        by smtp.gmail.com with ESMTPSA id gu20-20020a170906f29400b009ad8796a6aesm3872479ejb.56.2023.09.23.04.49.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 23 Sep 2023 04:49:24 -0700 (PDT)
-Message-ID: <0fe357a3-c2c7-f642-30ba-a068a9c04e66@linaro.org>
-Date: Sat, 23 Sep 2023 13:49:22 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBC401D522
+	for <linux-usb@vger.kernel.org>; Sat, 23 Sep 2023 15:02:45 +0000 (UTC)
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by lindbergh.monkeyblade.net (Postfix) with SMTP id 185611B9
+	for <linux-usb@vger.kernel.org>; Sat, 23 Sep 2023 08:02:39 -0700 (PDT)
+Received: (qmail 1349757 invoked by uid 1000); 23 Sep 2023 11:02:38 -0400
+Date: Sat, 23 Sep 2023 11:02:38 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: burcheri.massimo+linux-usb@gmail.com
+Cc: linux-usb <linux-usb@vger.kernel.org>
+Subject: Re: JMicron JMS567 and UAS
+Message-ID: <f5f01c3d-04d7-4cbd-af03-7dcf6030e327@rowland.harvard.edu>
+References: <5d8cad13445172d02a371f162ceaea1a68819819.camel@gmail.com>
+ <a5b48a53-9dff-4a84-9a58-1c08f0e0781b@rowland.harvard.edu>
+ <072417fd7806d86e930bccb882460dbbfaa5ca52.camel@gmail.com>
+ <0919e02b-e395-438c-b4d6-314d7e108639@rowland.harvard.edu>
+ <7f8396ae597a78969811011034a7e5f759a6564e.camel@gmail.com>
+ <40f5fdcb-9de5-42a6-9898-a428c0116adf@rowland.harvard.edu>
+ <1352baa835ecd1a6b7f49e0d08f440858a99189d.camel@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH v6 01/14] dt-bindings: usb: tps6598x: Add tps25750
-Content-Language: en-US
-To: Abdel Alkuor <alkuor@gmail.com>, heikki.krogerus@linux.intel.com,
- krzysztof.kozlowski+dt@linaro.org, bryan.odonoghue@linaro.org
-Cc: gregkh@linuxfoundation.org, robh+dt@kernel.org,
- linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, conor+dt@kernel.org, ryan.eleceng@gmail.com,
- Abdel Alkuor <abdelalkuor@geotab.com>
-References: <20230923073959.86660-1-alkuor@gmail.com>
- <20230923073959.86660-2-alkuor@gmail.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230923073959.86660-2-alkuor@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-	autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1352baa835ecd1a6b7f49e0d08f440858a99189d.camel@gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On 23/09/2023 09:39, Abdel Alkuor wrote:
-> From: Abdel Alkuor <abdelalkuor@geotab.com>
+On Sat, Sep 23, 2023 at 10:01:32AM +0200, Massimo Burcheri wrote:
+> On Fri, 2023-09-22 at 09:59 -0400, Alan Stern wrote:
+> > Maybe the problem isn't blacklisting at all; maybe your JMS567 device's 
+> > firmware just doesn't support UAS.
+> > 
+> > I don't think you have posted the "lsusb -v" output for this device.  
+> > What does it say?
 > 
-> TPS25750 is USB TypeC PD controller which is a subset of TPS6598x.
-> 
-> Signed-off-by: Abdel Alkuor <abdelalkuor@geotab.com>
-> ---
-> Changes in v6:
->   - Use reg property for patch address
-> Changes in v5:
->   - Add tps25750 bindings
-> 
->  .../devicetree/bindings/usb/ti,tps6598x.yaml  | 80 ++++++++++++++++++-
->  1 file changed, 78 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml b/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
-> index 5497a60cddbc..da299a2bb19e 100644
-> --- a/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
-> +++ b/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
-> @@ -20,8 +20,7 @@ properties:
->      enum:
->        - ti,tps6598x
->        - apple,cd321x
-> -  reg:
-> -    maxItems: 1
+> Bus 004 Device 012: ID 152d:0567 JMicron Technology Corp. / JMicron USA Technology Corp. JMS567 SATA 6Gb/s bridge
+> Device Descriptor:
+>   bLength                18
+>   bDescriptorType         1
+>   bcdUSB               3.00
+>   bDeviceClass            0 
+>   bDeviceSubClass         0 
+>   bDeviceProtocol         0 
+>   bMaxPacketSize0         9
+>   idVendor           0x152d JMicron Technology Corp. / JMicron USA Technology Corp.
+>   idProduct          0x0567 JMS567 SATA 6Gb/s bridge
+>   bcdDevice           52.03
+>   iManufacturer           1 JMicron
+>   iProduct                2 External USB 3.0
+>   iSerial                 3 20170220000C3
+>   bNumConfigurations      1
+>   Configuration Descriptor:
+>     bLength                 9
+>     bDescriptorType         2
+>     wTotalLength       0x002c
+>     bNumInterfaces          1
+>     bConfigurationValue     1
+>     iConfiguration          0 
+>     bmAttributes         0xc0
+>       Self Powered
+>     MaxPower                8mA
+>     Interface Descriptor:
+>       bLength                 9
+>       bDescriptorType         4
+>       bInterfaceNumber        0
+>       bAlternateSetting       0
+>       bNumEndpoints           2
+>       bInterfaceClass         8 Mass Storage
+>       bInterfaceSubClass      6 SCSI
+>       bInterfaceProtocol     80 Bulk-Only
 
-reg must be defined in top-level.
+This is the Bulk-Only Transport interface (usb-storage).
 
-https://elixir.bootlin.com/linux/v5.19-rc6/source/Documentation/devicetree/bindings/clock/samsung,exynos7-clock.yaml#L57
+>       iInterface              0 
+>       Endpoint Descriptor:
+>         bLength                 7
+>         bDescriptorType         5
+>         bEndpointAddress     0x81  EP 1 IN
+>         bmAttributes            2
+>           Transfer Type            Bulk
+>           Synch Type               None
+>           Usage Type               Data
+>         wMaxPacketSize     0x0400  1x 1024 bytes
+>         bInterval               0
+>         bMaxBurst              15
+>       Endpoint Descriptor:
+>         bLength                 7
+>         bDescriptorType         5
+>         bEndpointAddress     0x02  EP 2 OUT
+>         bmAttributes            2
+>           Transfer Type            Bulk
+>           Synch Type               None
+>           Usage Type               Data
+>         wMaxPacketSize     0x0400  1x 1024 bytes
+>         bInterval               0
+>         bMaxBurst              15
 
-> +      - ti,tps25750
->  
->    wakeup-source: true
->  
-> @@ -32,10 +31,55 @@ properties:
->      items:
->        - const: irq
->  
-> +  firmware-name:
-> +    description: |
-> +      Should contain the name of the default patch binary
-> +      file located on the firmware search path which is
-> +      used to switch the controller into APP mode.
-> +      This is used when tps25750 doesn't have an EEPROM
-> +      connected to it.
-> +    maxItems: 1
-> +
->  required:
->    - compatible
->    - reg
->  
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: ti,tps25750
-> +    then:
-> +      properties:
-> +        reg:
-> +          maxItems: 2
-> +
-> +        reg-names:
-> +          description: |
-> +            The first reg is PD device address and the second
-> +            reg is I2C slave address field in PBMs input data
-> +            which is used as the device address when writing the
-> +            patch for TPS25750.
-> +            The patch address can be any value except 0x00, 0x20,
-> +            0x21, 0x22, and 0x23
+And there's no UAS interface.  If one existed, this is where it would 
+show up.
 
-Entire description is not suitable here, but should be used as
-description of items in reg: (instead of maxItems).
+> Binary Object Store Descriptor:
+>   bLength                 5
+>   bDescriptorType        15
+>   wTotalLength       0x0016
+>   bNumDeviceCaps          2
+>   USB 2.0 Extension Device Capability:
+>     bLength                 7
+>     bDescriptorType        16
+>     bDevCapabilityType      2
+>     bmAttributes   0x00000f0e
+>       BESL Link Power Management (LPM) Supported
+>     BESL value     3840 us 
+>   SuperSpeed USB Device Capability:
+>     bLength                10
+>     bDescriptorType        16
+>     bDevCapabilityType      3
+>     bmAttributes         0x00
+>     wSpeedsSupported   0x000e
+>       Device can operate at Full Speed (12Mbps)
+>       Device can operate at High Speed (480Mbps)
+>       Device can operate at SuperSpeed (5Gbps)
+>     bFunctionalitySupport   1
+>       Lowest fully-functional device speed is Full Speed (12Mbps)
+>     bU1DevExitLat          10 micro seconds
+>     bU2DevExitLat          32 micro seconds
+> Device Status:     0x000d
+>   Self Powered
+>   U1 Enabled
+>   U2 Enabled
 
-> +          items:
-> +            - const: main
-> +            - const: patch-address
-> +
-> +        connector:
-> +          required:
-> +            - data-role
-> +
-> +      required:
-> +        - connector
-> +        - reg-names
-> +    else:
-> +      properties:
-> +        reg:
-> +          maxItems: 1
-> +
-> +
+So that's very clear; the device's firmware does not support UAS.  You 
+might be able to fix it with a firmware update.
 
-Only one blank line.
-
-Best regards,
-Krzysztof
-
+Alan Stern
 
