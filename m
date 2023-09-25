@@ -1,106 +1,128 @@
-Return-Path: <linux-usb+bounces-557-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-558-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97F6A7AD4A1
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Sep 2023 11:38:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93ABE7AD557
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Sep 2023 12:07:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id D359828196A
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Sep 2023 09:38:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 45A262825BE
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Sep 2023 10:07:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E98C13FF0;
-	Mon, 25 Sep 2023 09:38:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DBB814A84;
+	Mon, 25 Sep 2023 10:07:54 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C35C2320D
-	for <linux-usb@vger.kernel.org>; Mon, 25 Sep 2023 09:38:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FBEDC433C7;
-	Mon, 25 Sep 2023 09:38:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1695634722;
-	bh=w98WX9GtUfJr2k0V0ZENqYfnjhsG5byDSk+WCEeWMiA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CXkKKrc0fzsVjfzljmFv06D2WO8dJoUKDI8raenhe71O2BYHK67s0K2Pk9vrSXU8R
-	 RMF5oiDvKAtpwOuNJzb9Qc0CVZWPQFtB8uVKnRYhJeaaJFKf9jVZlqXlNOgQWEC1rQ
-	 tKss7wtHEa0s2AL/fInrkIDomLsZs3e3OtPJrXlA=
-Date: Mon, 25 Sep 2023 11:38:38 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Jia-Ju Bai <baijiaju@buaa.edu.cn>
-Cc: hminas@synopsys.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc2: fix possible NULL pointer dereference caused
- by driver concurrency
-Message-ID: <2023092552-tulip-yo-yo-cbb3@gregkh>
-References: <20230925091741.797863-1-baijiaju@buaa.edu.cn>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EC4D1428A
+	for <linux-usb@vger.kernel.org>; Mon, 25 Sep 2023 10:07:52 +0000 (UTC)
+X-Greylist: delayed 2990 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 25 Sep 2023 03:07:49 PDT
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.237.72.81])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 18DE8103;
+	Mon, 25 Sep 2023 03:07:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=buaa.edu.cn; s=buaa; h=Received:From:To:Cc:Subject:Date:
+	Message-Id:MIME-Version:Content-Transfer-Encoding; bh=+kCNSxOBtK
+	Fo3bQtcKjOZ2njZoqoze+X3lnLoi4kf04=; b=hMuvsbidoEj8QQO9FUrVs2HioB
+	4gdjV7QA/c1PmvItguQRUSLdQwG3XSCkvIg+BINw5mh01Kooz9v0S3Clgo9sphNA
+	fc6g1JQ68fqA46chx0ucxBqTjC3MEnez5IfZ2Gu0WR7Rd38E98QtsNh6HgbAo2bn
+	3/d4vf4iAQF/nsFLQ=
+Received: from oslab.. (unknown [10.130.159.144])
+	by coremail-app2 (Coremail) with SMTP id Nyz+CgAn6N3vWxFlrHavAA--.1350S4;
+	Mon, 25 Sep 2023 18:07:43 +0800 (CST)
+From: Jia-Ju Bai <baijiaju@buaa.edu.cn>
+To: hminas@synopsys.com,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Jia-Ju Bai <baijiaju@buaa.edu.cn>
+Subject: [PATCH v2] usb: dwc2: fix possible NULL pointer dereference caused by driver concurrency
+Date: Mon, 25 Sep 2023 18:07:41 +0800
+Message-Id: <20230925100741.799856-1-baijiaju@buaa.edu.cn>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230925091741.797863-1-baijiaju@buaa.edu.cn>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:Nyz+CgAn6N3vWxFlrHavAA--.1350S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7Aw48XF4UZr4xtr43tF4fZrb_yoW8Aw4Dpa
+	1IqFyIvw1qvFsxtw45XFs5Wa13JwsrWryUCr4xtayrAws2vryfJ3WfGFWF9rs0vrs5AanI
+	gF1DZrW8CrWDta7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUkE1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+	w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+	IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
+	z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
+	Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j
+	6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
+	vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCF
+	04k20xvE74AGY7Cv6cx26F1DJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+	0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1l
+	IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
+	AFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j
+	6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHU
+	DUUUUU=
+X-CM-SenderInfo: yrruji46exttoohg3hdfq/
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+	RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-On Mon, Sep 25, 2023 at 05:17:41PM +0800, Jia-Ju Bai wrote:
-> In _dwc2_hcd_urb_enqueue(), "urb->hcpriv = NULL" is executed without 
-> holding the lock "hsotg->lock". In _dwc2_hcd_urb_dequeue():
-> 
->     spin_lock_irqsave(&hsotg->lock, flags);
->     ...
-> 	if (!urb->hcpriv) {
-> 		dev_dbg(hsotg->dev, "## urb->hcpriv is NULL ##\n");
-> 		goto out;
-> 	}
->     rc = dwc2_hcd_urb_dequeue(hsotg, urb->hcpriv); // Use urb->hcpriv
->     ...
-> out:
->     spin_unlock_irqrestore(&hsotg->lock, flags);
-> 
-> When _dwc2_hcd_urb_enqueue() and _dwc2_hcd_urb_dequeue() are 
-> concurrently executed, the NULL check of "urb->hcpriv" can be executed
-> before "urb->hcpriv = NULL". After urb->hcpriv is NULL, it can be used 
-> in the function call to dwc2_hcd_urb_dequeue(), which can cause a NULL 
-> pointer dereference. 
+In _dwc2_hcd_urb_enqueue(), "urb->hcpriv = NULL" is executed without
+holding the lock "hsotg->lock". In _dwc2_hcd_urb_dequeue():
 
-Odd trailing spaces in your changelog text, is that intentional?
+    spin_lock_irqsave(&hsotg->lock, flags);
+    ...
+	if (!urb->hcpriv) {
+		dev_dbg(hsotg->dev, "## urb->hcpriv is NULL ##\n");
+		goto out;
+	}
+    rc = dwc2_hcd_urb_dequeue(hsotg, urb->hcpriv); // Use urb->hcpriv
+    ...
+out:
+    spin_unlock_irqrestore(&hsotg->lock, flags);
 
-> 
-> To fix this possible bug, "urb->hcpriv = NULL" should be executed with
-> holding the lock "hsotg->lock".
-> 
-> Signed-off-by: Jia-Ju Bai <baijiaju@buaa.edu.cn>
-> ---
->  drivers/usb/dwc2/hcd.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
-> index 657f1f659ffa..35c7a4df8e71 100644
-> --- a/drivers/usb/dwc2/hcd.c
-> +++ b/drivers/usb/dwc2/hcd.c
-> @@ -4769,8 +4769,8 @@ static int _dwc2_hcd_urb_enqueue(struct usb_hcd *hcd, struct urb *urb,
->  	if (qh_allocated && qh->channel && qh->channel->qh == qh)
->  		qh->channel->qh = NULL;
->  fail2:
-> -	spin_unlock_irqrestore(&hsotg->lock, flags);
->  	urb->hcpriv = NULL;
-> +	spin_unlock_irqrestore(&hsotg->lock, flags);
->  	kfree(qtd);
->  fail1:
->  	if (qh_allocated) {
-> -- 
-> 2.34.1
-> 
+When _dwc2_hcd_urb_enqueue() and _dwc2_hcd_urb_dequeue() are
+concurrently executed, the NULL check of "urb->hcpriv" can be executed
+before "urb->hcpriv = NULL". After urb->hcpriv is NULL, it can be used
+in the function call to dwc2_hcd_urb_dequeue(), which can cause a NULL
+pointer dereference. 
 
-What commit id does this fix?
+This possible bug is found by a static tool developed by myself.
 
-And how did you test this to verify it works properly?
+To fix this possible bug, "urb->hcpriv = NULL" should be executed with
+holding the lock "hsotg->lock". Because I have no associated hardware,
+I cannot test the patch in real execution, and just verify it according
+to the code logic.
 
-And how was it found?
+Fixes: 33ad261aa62b ("usb: dwc2: host: spinlock urb_enqueue")
+Signed-off-by: Jia-Ju Bai <baijiaju@buaa.edu.cn>
+---
+v2:
+* Add more details in the description.
+---
+ drivers/usb/dwc2/hcd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-thanks,
+diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
+index 657f1f659ffa..35c7a4df8e71 100644
+--- a/drivers/usb/dwc2/hcd.c
++++ b/drivers/usb/dwc2/hcd.c
+@@ -4769,8 +4769,8 @@ static int _dwc2_hcd_urb_enqueue(struct usb_hcd *hcd, struct urb *urb,
+ 	if (qh_allocated && qh->channel && qh->channel->qh == qh)
+ 		qh->channel->qh = NULL;
+ fail2:
+-	spin_unlock_irqrestore(&hsotg->lock, flags);
+ 	urb->hcpriv = NULL;
++	spin_unlock_irqrestore(&hsotg->lock, flags);
+ 	kfree(qtd);
+ fail1:
+ 	if (qh_allocated) {
+-- 
+2.34.1
 
-greg k-h
 
