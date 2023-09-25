@@ -1,87 +1,101 @@
-Return-Path: <linux-usb+bounces-554-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-555-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 937267AD1DC
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Sep 2023 09:37:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A18A37AD21B
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Sep 2023 09:44:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sy.mirrors.kernel.org (Postfix) with ESMTP id 5BA9BB20A2E
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Sep 2023 07:37:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 5349828177F
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Sep 2023 07:44:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1EC910A00;
-	Mon, 25 Sep 2023 07:37:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E936F10A16;
+	Mon, 25 Sep 2023 07:44:44 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 258C310968
-	for <linux-usb@vger.kernel.org>; Mon, 25 Sep 2023 07:37:52 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B64FCFC;
-	Mon, 25 Sep 2023 00:37:51 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="445296691"
-X-IronPort-AV: E=Sophos;i="6.03,174,1694761200"; 
-   d="scan'208";a="445296691"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2023 00:37:48 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="741836747"
-X-IronPort-AV: E=Sophos;i="6.03,174,1694761200"; 
-   d="scan'208";a="741836747"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga007.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2023 00:37:35 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC0)
-	(envelope-from <andy@kernel.org>)
-	id 1qkg9q-00000000HTy-3f0F;
-	Mon, 25 Sep 2023 10:37:30 +0300
-Date: Mon, 25 Sep 2023 10:37:30 +0300
-From: Andy Shevchenko <andy@kernel.org>
-To: Duje =?utf-8?Q?Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
-Cc: Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	Russell King <linux@armlinux.org.uk>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org
-Subject: Re: [PATCH RFC 0/6] ARM: pxa: GPIO descriptor conversions
-Message-ID: <ZRE4upyghsVEIMU7@smile.fi.intel.com>
-References: <20230924-pxa-gpio-v1-0-2805b87d8894@skole.hr>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FCAC53BA
+	for <linux-usb@vger.kernel.org>; Mon, 25 Sep 2023 07:44:42 +0000 (UTC)
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BCDCB3;
+	Mon, 25 Sep 2023 00:44:41 -0700 (PDT)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-59be6bcf408so67896217b3.2;
+        Mon, 25 Sep 2023 00:44:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695627880; x=1696232680;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iGlxeF3mvqh10+aDJP6sgcuQtFs8Uq5hua0HbhUOEJc=;
+        b=iPKswbU4uA050Norm3TL6bsmzZ8Iknp5Mdx5O0QEZiZ7Cax9UNKfUzH99vPbF8sf+4
+         LF/7hQkR8NlThgLchileT+CY6B0AIB7gd8kpFcHO25+YpMo97j5LTMrU9HBJVT7TcH3i
+         IQnmf5K4rQBZ5diQAOrhA4nxps246KKdJrhKaLDVOiWOI8gYGiTLEY4i8HDJuccIsH+q
+         5UbB5bMa4jgaUZzgL61WzaWPVZyP7PWMhqf03+5oeDJvQz84Au6RN/g9N8g2X04Z850G
+         XyJdBe2TvqpmP9e6OMxX2RAQwFXF3SHN6cXtwLI8+nbcl/ZLIN1fGLVEVOtfI4DamRtM
+         Zf1w==
+X-Gm-Message-State: AOJu0Yx+fbhmPPshE1RZ4Y6oJSA0tDJ7qJm2JiWGIFMMuNKDh7vFkooG
+	XN1BNP3C18oyHlArcC9lnwPSxkb8s4uA1w==
+X-Google-Smtp-Source: AGHT+IGKgu31hM/9VX6A1nkYglZVi8xyxmuWBdM7nzk91mDbwxYk6dbH/QycBxvgtpWqw6qu7HQjQA==
+X-Received: by 2002:a81:b206:0:b0:59f:4c55:efa3 with SMTP id q6-20020a81b206000000b0059f4c55efa3mr5193737ywh.12.1695627880230;
+        Mon, 25 Sep 2023 00:44:40 -0700 (PDT)
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
+        by smtp.gmail.com with ESMTPSA id gq10-20020a05690c444a00b0059f5828346csm1061744ywb.3.2023.09.25.00.44.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Sep 2023 00:44:39 -0700 (PDT)
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-59c0a7d54bdso68063247b3.1;
+        Mon, 25 Sep 2023 00:44:39 -0700 (PDT)
+X-Received: by 2002:a81:b60f:0:b0:59f:5614:ebe8 with SMTP id
+ u15-20020a81b60f000000b0059f5614ebe8mr4799116ywh.9.1695627879642; Mon, 25 Sep
+ 2023 00:44:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230924-pxa-gpio-v1-0-2805b87d8894@skole.hr>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-	SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
-	version=3.4.6
+References: <20230922080421.35145-1-wsa+renesas@sang-engineering.com> <20230922080421.35145-2-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20230922080421.35145-2-wsa+renesas@sang-engineering.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Mon, 25 Sep 2023 09:44:26 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdW=y9i=36r-WHgpB9RhCF1rsfQ=qsosTbjwPCTHo9PrYQ@mail.gmail.com>
+Message-ID: <CAMuHMdW=y9i=36r-WHgpB9RhCF1rsfQ=qsosTbjwPCTHo9PrYQ@mail.gmail.com>
+Subject: Re: [PATCH 1/3] usb: typec: drop check because i2c_unregister_device()
+ is NULL safe
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-renesas-soc@vger.kernel.org, 
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Sun, Sep 24, 2023 at 06:42:53PM +0200, Duje Mihanović wrote:
-> Hello,
-> 
-> Small series to convert some of the board files in the mach-pxa directory
-> to use the new GPIO descriptor interface.
-> 
-> Most notably, the am200epd, am300epd and Spitz matrix keypad among
-> others are not converted in this series.
+On Fri, Sep 22, 2023 at 12:44=E2=80=AFPM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> No need to check the argument of i2c_unregister_device() because the
+> function itself does it.
+>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Log waited clean up, thank you for doing it!
-My comments are placed per individual patches.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
--- 
-With Best Regards,
-Andy Shevchenko
+Gr{oetje,eeting}s,
+
+                        Geert
 
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
