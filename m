@@ -1,105 +1,132 @@
-Return-Path: <linux-usb+bounces-601-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-602-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A8DF7AF0CA
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Sep 2023 18:32:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25B667AF11D
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Sep 2023 18:47:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id AFD8B281D4B
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Sep 2023 16:32:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id E1AE6281C42
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Sep 2023 16:47:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9A221BDE6;
-	Tue, 26 Sep 2023 16:32:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FC663418C;
+	Tue, 26 Sep 2023 16:47:53 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35AAD1FA1
-	for <linux-usb@vger.kernel.org>; Tue, 26 Sep 2023 16:32:53 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C584B3;
-	Tue, 26 Sep 2023 09:32:52 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="384389707"
-X-IronPort-AV: E=Sophos;i="6.03,178,1694761200"; 
-   d="scan'208";a="384389707"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2023 09:32:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="778188774"
-X-IronPort-AV: E=Sophos;i="6.03,178,1694761200"; 
-   d="scan'208";a="778188774"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga008.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2023 09:32:38 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC0)
-	(envelope-from <andy@kernel.org>)
-	id 1qlAmR-00000000f0W-3RkJ;
-	Tue, 26 Sep 2023 19:19:23 +0300
-Date: Tue, 26 Sep 2023 19:19:23 +0300
-From: Andy Shevchenko <andy@kernel.org>
-To: Duje =?utf-8?Q?Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
-Cc: Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	Russell King <linux@armlinux.org.uk>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org
-Subject: Re: [PATCH RFC v2 5/6] ARM: pxa: Convert Spitz hsync to GPIO
- descriptors
-Message-ID: <ZRMEi6pACEx5HQZ/@smile.fi.intel.com>
-References: <20230926-pxa-gpio-v2-0-984464d165dd@skole.hr>
- <20230926-pxa-gpio-v2-5-984464d165dd@skole.hr>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B04A53AB
+	for <linux-usb@vger.kernel.org>; Tue, 26 Sep 2023 16:47:51 +0000 (UTC)
+Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF414BF;
+	Tue, 26 Sep 2023 09:47:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1695746866; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=OnQd4WqA2GB6Lcrp0tFFUy691/vlPbhqVqVDzstcpIvdbVVAer/fmVv9jBsIAzad7KDsQSZ+buY3M5qDg/b7nowrhVRO7MPCQVFRIAN6V40rraG1iByOL7YuxySqItwFZL6RzO+Ie8GhZWgxi9z56EB840ACL2GE615cR+sN128=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1695746866; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=Fxku4X/pFN8SumO4OH+NUMweW6lMrpUaYAPaOCQumfE=; 
+	b=MtNbtARd2NaG3jdiorYYfKqwht/9mTLG5d5E26ZS7CPuSBjqyw+hPF7JYukKqwcEVFkpJBsg0CRNYEGPOZ5AjOuUE12lMmoKY0buXqFrtagkJ5lNmqjvpZYW/gbm2APBgcLPPnqJ7zQFwbg/h0DWrDeXpzri+t26hRi2EQwA0xw=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=marliere.net;
+	spf=pass  smtp.mailfrom=ricardo@marliere.net;
+	dmarc=pass header.from=<ricardo@marliere.net>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1695746866;
+	s=zmail; d=marliere.net; i=ricardo@marliere.net;
+	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
+	bh=Fxku4X/pFN8SumO4OH+NUMweW6lMrpUaYAPaOCQumfE=;
+	b=E4Kzuh7vOT7GLR7/DoeGfL1ELP7BGusNE4CNOSp+xTcArdopYJYTp2n4HYHwCWLG
+	9eqZrffaLF64Y5ZtfPA+uWH7AKuu7cezc4B5fXWxlt6oDum+tcjGAkPqXUeKFjOA+A4
+	2B98La42m2zgxABXiktFpfMmsvlqtY3H4BcW1Lmk=
+Received: from localhost (177.104.93.54 [177.104.93.54]) by mx.zohomail.com
+	with SMTPS id 1695746863564397.6564975775259; Tue, 26 Sep 2023 09:47:43 -0700 (PDT)
+Date: Tue, 26 Sep 2023 13:47:47 -0300
+From: "Ricardo B. Marliere" <ricardo@marliere.net>
+To: syzbot <syzbot+1c41b2e045dc086f58be@syzkaller.appspotmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+	linux-usb@vger.kernel.org, mchehab@kernel.org, sean@mess.org, 
+	syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [usb?] [media?] WARNING in imon_probe
+Message-ID: <mrce6emi7jvmoe4fgxt7lgrgkswkinc5u3hpl57gr5oaxau55o@fdvuaqxcsgu6>
+References: <kwwrx7p4nfr4qkv5xxpo5nidyyjdbytsulpu7lj6yujmzrnxb6@q63vtmlo3dqa>
+ <0000000000009a28dd0606455a6b@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/mixed; boundary="mrz4i3ueryb5h6h4"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230926-pxa-gpio-v2-5-984464d165dd@skole.hr>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-	SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
-	version=3.4.6
+In-Reply-To: <0000000000009a28dd0606455a6b@google.com>
+X-Zoho-Virus-Status: 1
+X-ZohoMailClient: External
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	RCVD_IN_MSPIKE_H2,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Tue, Sep 26, 2023 at 05:46:26PM +0200, Duje Mihanović wrote:
-> Sharp's Spitz still uses the legacy GPIO interface in its
-> wait_for_hsync() function.
-> 
-> Convert it to use the GPIO descriptor interface.
 
-...
+--mrz4i3ueryb5h6h4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> +static struct gpio_desc *hsync = NULL;
+#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git a48fa7efaf1161c1c898931fe4c7f0070964233a
 
-Assignment is redundant.
+--mrz4i3ueryb5h6h4
+Content-Type: text/x-diff; charset=us-ascii
+Content-Disposition: attachment;
+	filename="0001-media-imon-fix-access-to-invalid-resource-for-the-se.patch"
 
-...
+From de69b3143facb3280f144fe88e1a7e6dfae9f97e Mon Sep 17 00:00:00 2001
+From: Takashi Iwai <tiwai@suse.de>
+Date: Fri, 22 Sep 2023 14:38:07 +0200
+Subject: [PATCH] media: imon: fix access to invalid resource for the second
+ interface
 
->  	gpiod_add_lookup_table(&spitz_ads7846_gpio_table);
->  	gpiod_add_lookup_table(&spitz_spi_gpio_table);
-> +	hsync = gpiod_get(NULL, "hsync", GPIOD_IN);
-> +	if (IS_ERR(hsync)) {
-> +		pr_err("Failed to get hsync GPIO: %ld\n", PTR_ERR(hsync));
-> +		return;
-> +	}
->  	pxa2xx_set_spi_info(2, &spitz_spi_info);
->  	spi_register_board_info(ARRAY_AND_SIZE(spitz_spi_devices));
+imon driver probes two USB interfaces, and at the probe of the second
+interface, the driver assumes blindly that the first interface got
+bound with the same imon driver.  It's usually true, but it's still
+possible that the first interface is bound with another driver via a
+malformed descriptor.  Then it may lead to a memory corruption, as
+spotted by syzkaller; imon driver accesses the data from drvdata as
+struct imon_context object although it's a completely different one
+that was assigned by another driver.
 
-Yeah, but the question is, if GPIO request fails, can we instantiate at least
-one device and move on?
+This patch adds a sanity check -- whether the first interface is
+really bound with the imon driver or not -- for avoiding the problem
+above at the probe time.
 
+Reported-by: syzbot+59875ffef5cb9c9b29e9@syzkaller.appspotmail.com
+Closes: https://lore.kernel.org/all/000000000000a838aa0603cc74d6@google.com/
+Tested-by: Ricardo B. Marliere <ricardo@marliere.net>
+Link: https://lore.kernel.org/r/20230922005152.163640-1-ricardo@marliere.net
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+---
+ drivers/media/rc/imon.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/media/rc/imon.c b/drivers/media/rc/imon.c
+index 74546f7e3469..5719dda6e0f0 100644
+--- a/drivers/media/rc/imon.c
++++ b/drivers/media/rc/imon.c
+@@ -2427,6 +2427,12 @@ static int imon_probe(struct usb_interface *interface,
+ 		goto fail;
+ 	}
+ 
++	if (first_if->dev.driver != interface->dev.driver) {
++		dev_err(&interface->dev, "inconsistent driver matching\n");
++		ret = -EINVAL;
++		goto fail;
++	}
++
+ 	if (ifnum == 0) {
+ 		ictx = imon_init_intf0(interface, id);
+ 		if (!ictx) {
 -- 
-With Best Regards,
-Andy Shevchenko
+2.40.1
 
 
+--mrz4i3ueryb5h6h4--
 
