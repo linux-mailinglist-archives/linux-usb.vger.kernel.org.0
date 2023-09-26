@@ -1,95 +1,84 @@
-Return-Path: <linux-usb+bounces-597-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-598-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 789797AF055
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Sep 2023 18:10:40 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 558097AF05F
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Sep 2023 18:13:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 0625928163C
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Sep 2023 16:10:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTP id 3EBA8B20A27
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Sep 2023 16:13:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8432D30FBC;
-	Tue, 26 Sep 2023 16:10:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFBEE31A63;
+	Tue, 26 Sep 2023 16:13:26 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C52E32E65A
-	for <linux-usb@vger.kernel.org>; Tue, 26 Sep 2023 16:10:33 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2142511D;
-	Tue, 26 Sep 2023 09:10:32 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="381503634"
-X-IronPort-AV: E=Sophos;i="6.03,178,1694761200"; 
-   d="scan'208";a="381503634"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2023 09:09:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="892247973"
-X-IronPort-AV: E=Sophos;i="6.03,178,1694761200"; 
-   d="scan'208";a="892247973"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2023 09:07:59 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC0)
-	(envelope-from <andy@kernel.org>)
-	id 1qlAcP-00000000esb-1Jq4;
-	Tue, 26 Sep 2023 19:09:01 +0300
-Date: Tue, 26 Sep 2023 19:09:01 +0300
-From: Andy Shevchenko <andy@kernel.org>
-To: Duje =?utf-8?Q?Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
-Cc: Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	Russell King <linux@armlinux.org.uk>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org
-Subject: Re: [PATCH RFC v2 1/6] ARM: pxa: Convert Spitz OHCI to GPIO
- descriptors
-Message-ID: <ZRMCHX+glalZv1Sh@smile.fi.intel.com>
-References: <20230926-pxa-gpio-v2-0-984464d165dd@skole.hr>
- <20230926-pxa-gpio-v2-1-984464d165dd@skole.hr>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 255772E65A
+	for <linux-usb@vger.kernel.org>; Tue, 26 Sep 2023 16:13:24 +0000 (UTC)
+Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com [209.85.167.198])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71EA1AF
+	for <linux-usb@vger.kernel.org>; Tue, 26 Sep 2023 09:13:23 -0700 (PDT)
+Received: by mail-oi1-f198.google.com with SMTP id 5614622812f47-3ae5ee6624dso1321195b6e.1
+        for <linux-usb@vger.kernel.org>; Tue, 26 Sep 2023 09:13:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695744802; x=1696349602;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ghMxj6Q7DUFUv4QcWBQyCNlsSSFlP9qfCWzVXyW67xc=;
+        b=oeZVND+8HBd4Pu0tw1yeEZ69AHEWgef9KdveY+LH5391gfvxsvz/5fZjtAOrM44wHw
+         4QknmzhmbFPpm+7+YBz+MuwhPWgzlYvslKlA7Asa7WM86ebvvHpuF6jPWL8b1dyhRWTW
+         2Y3Gzu0DD6INKWMrytRRna3T+Ehnudg1uh1yMkg26cynUQl9+eXlAasj6F8hOvPJPf5r
+         d5oyAS9Aav/BjE4luUTe0abHfUiSZmQ1iPELDvSHTvotj0/uGC/bDkl7VV6r49OP8XHe
+         Z718kliu/RepI8r3Xdl8SVLm0fKlrdVtm0a3dTDEhMK6ILl2dWg+4kifYs+ccebv/0a3
+         UHIA==
+X-Gm-Message-State: AOJu0Yws7S62YNJ0eHq/LE1K3tx3MaQtWDQpKdvihHAz1UG0SV+zuR5V
+	Znbz48wZoJIWfiCGXkTNbKJXbeITtvcBQ57Zdd0aEE5z9aKq
+X-Google-Smtp-Source: AGHT+IFJu8R7r6R/i2Zmu5Lzt88ngYl65Fkgewf10P4lhSnqWqJcx4CHcghNoc/QOaFcSeISwiqKvZzltzos2fW8FQSYP/dbTcd2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230926-pxa-gpio-v2-1-984464d165dd@skole.hr>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-	SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+X-Received: by 2002:a05:6808:2a65:b0:3ae:526e:2634 with SMTP id
+ fu5-20020a0568082a6500b003ae526e2634mr1596935oib.9.1695744802823; Tue, 26 Sep
+ 2023 09:13:22 -0700 (PDT)
+Date: Tue, 26 Sep 2023 09:13:22 -0700
+In-Reply-To: <kwwrx7p4nfr4qkv5xxpo5nidyyjdbytsulpu7lj6yujmzrnxb6@q63vtmlo3dqa>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000009a28dd0606455a6b@google.com>
+Subject: Re: [syzbot] [usb?] [media?] WARNING in imon_probe
+From: syzbot <syzbot+1c41b2e045dc086f58be@syzkaller.appspotmail.com>
+To: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+	linux-usb@vger.kernel.org, mchehab@kernel.org, ricardo@marliere.net, 
+	sean@mess.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+	HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
+	SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
 	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Tue, Sep 26, 2023 at 05:46:22PM +0200, Duje Mihanović wrote:
-> Sharp's Spitz board still uses the legacy GPIO interface for controlling
-> a GPIO pin related to the USB host controller.
-> 
-> Convert this function to use the new GPIO descriptor interface.
+Hello,
 
-...
+syzbot tried to test the proposed patch but the build/boot failed:
 
-> +	pxa_ohci->usb_host = gpiod_get_optional(&pdev->dev, "usb-host", GPIOD_OUT_LOW);
-> +	if (IS_ERR(pxa_ohci->usb_host))
-> +		dev_warn(&pdev->dev, "failed to get USB host GPIO with %pe\n",
-> +				pxa_ohci->usb_host);
+failed to apply patch:
+checking file drivers/media/rc/imon.c
+patch: **** unexpected end of file in patch
 
-No, with _optional() you should terminate the execution and bail out. The idea
-behind *optional* is that we skip errors only for the cases when GPIO is not
-provided. Otherwise we need to handle the errors (yes, the dev_err() has to
-be used).
 
--- 
-With Best Regards,
-Andy Shevchenko
 
+Tested on:
+
+commit:         a48fa7ef Merge tag 'drm-next-2023-09-08' of git://anon..
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+kernel config:  https://syzkaller.appspot.com/x/.config?x=150188feee7071a7
+dashboard link: https://syzkaller.appspot.com/bug?extid=1c41b2e045dc086f58be
+compiler:       
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=17cadccc680000
 
 
