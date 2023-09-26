@@ -1,163 +1,121 @@
-Return-Path: <linux-usb+bounces-588-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-595-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AAF7E7AEC36
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Sep 2023 14:12:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9769C7AEFF4
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Sep 2023 17:46:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 52ADF2816DB
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Sep 2023 12:12:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTP id 15EC11F25CFC
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Sep 2023 15:46:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EC1D2770B;
-	Tue, 26 Sep 2023 12:12:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B88530D0E;
+	Tue, 26 Sep 2023 15:46:53 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F46D107B9
-	for <linux-usb@vger.kernel.org>; Tue, 26 Sep 2023 12:12:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC5A4C433C7;
-	Tue, 26 Sep 2023 12:12:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1695730323;
-	bh=4gshwzCPEkOGDm7Y/2pNlO1HGa6D9u9xDYT4Qd0MLHE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=anB5NgnuK8gXT1e0KMSbPuRVF7vfyBh4Vfc3TluzpTWr0xz+7ZYENG3hcPVQh1Dnc
-	 kl0+PnlgFhH+6WpEtywqoMRMXwcvVuU8KmkqBNb6s5DaBvTpyM2mvJH5WCm+2oLob5
-	 /RnMy9N4/f8H017Q2A3t76jYDtQtUShIXSRvjXZFhByxAfdb+NSV5xrdgtxzjVmVLD
-	 lNu3AzYPotfql5EGb/Ffzr/15zFT+zgr21ygVLxZKw5Dssgg2tJaCLsqwKzHnVljka
-	 HSIBAM5lEU1rVwWAdxJN4rJ3hvTK5MkU6R7IfjpSw5ouLFJVDNOztwusOrAWrfvg1g
-	 Y1DlI1FdYtJIQ==
-Date: Tue, 26 Sep 2023 20:11:52 +0800
-From: Peter Chen <peter.chen@kernel.org>
-To: =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Thierry Reding <treding@nvidia.com>,
-	Dmitry Osipenko <digetx@gmail.com>,
-	Peter Geis <pgwipeout@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-tegra@vger.kernel.org
-Subject: Re: [PATCH 1/3] usb: chipidea: Fix DMA overwrite for Tegra
-Message-ID: <20230926121152.GA2074070@nchen-desktop>
-References: <cover.1695497666.git.mirq-linux@rere.qmqm.pl>
- <d93fc79f2fcc8da5166ccb99c5703ff3fdb46259.1695497666.git.mirq-linux@rere.qmqm.pl>
- <20230925114522.GA2070044@nchen-desktop>
- <ZRIdg29ADFmKnlAQ@qmqm.qmqm.pl>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92E7F30CFC
+	for <linux-usb@vger.kernel.org>; Tue, 26 Sep 2023 15:46:49 +0000 (UTC)
+Received: from mx.skole.hr (mx2.hosting.skole.hr [161.53.165.186])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D56127;
+	Tue, 26 Sep 2023 08:46:46 -0700 (PDT)
+Received: from mx2.hosting.skole.hr (localhost.localdomain [127.0.0.1])
+	by mx.skole.hr (mx.skole.hr) with ESMTP id 3D67E833AA;
+	Tue, 26 Sep 2023 17:46:33 +0200 (CEST)
+From: =?utf-8?q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
+Subject: [PATCH RFC v2 0/6] ARM: pxa: GPIO descriptor conversions
+Date: Tue, 26 Sep 2023 17:46:21 +0200
+Message-Id: <20230926-pxa-gpio-v2-0-984464d165dd@skole.hr>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZRIdg29ADFmKnlAQ@qmqm.qmqm.pl>
+X-B4-Tracking: v=1; b=H4sIAM38EmUC/0XM3QrCIBQH8FcZ5zpDnaLrKgh6gG5jF2ue5qGYQ
+ 0MWY++eeNPl/4PfBgkjYYJTs0HETInCXII8NDD6YZ6QkSsZJJctt9ywZR3YtFBg7YhSO22UFQr
+ KfYn4pLVSd7hdL9CX0lP6hPitfBZ1qlIn1V/KgnEmLdcPa5y1nTqnV3jj0Ufo933/AWgyee6kA
+ AAA
+To: Daniel Mack <daniel@zonque.org>, 
+ Haojian Zhuang <haojian.zhuang@gmail.com>, 
+ Robert Jarzmik <robert.jarzmik@free.fr>, 
+ Russell King <linux@armlinux.org.uk>, 
+ Alan Stern <stern@rowland.harvard.edu>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Linus Walleij <linus.walleij@linaro.org>, 
+ Bartosz Golaszewski <brgl@bgdev.pl>, Andy Shevchenko <andy@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org, 
+ =?utf-8?q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1636;
+ i=duje.mihanovic@skole.hr; h=from:subject:message-id;
+ bh=kqhcIgA+c1p20ruAULqaoqV6whyH4z56OXFjmXMMryE=;
+ b=owEBbQKS/ZANAwAIAZoRnrBCLZbhAcsmYgBlEvzWBQEqqKBPaHb7u5f9p6t5jZu+JSmFjLYIP
+ ESkLEzJC66JAjMEAAEIAB0WIQRT351NnD/hEPs2LXiaEZ6wQi2W4QUCZRL81gAKCRCaEZ6wQi2W
+ 4frvEACSdmt58LurhpjyINqYLP8c6F4nNjDdEdaKG+h2Iha5JQ0BIbtr3evh7ZH/m0EI4uBKvok
+ AsEb5gcypshbuCiTBY3bF5sOupIgiNlFtoAEyXNAbXXgjYap1GV2CXc0RUJQF5J5AJB1V6MafFB
+ ZOBnwXBpvCGqTCiVFYE0d9Wp3RDR7tYbvQ2shDvXFxyg+Mw3ky2ho7jCFH10PZNh9TgJkyHA5Rz
+ QZ9Q5euqdKl5XEeRT7ro1aDO65kIvrNiMTrDo0QwA3UtGdI18sPHWFSmemw5lafrUE2OMJZVE0H
+ 0b5nu4qzI574hm7u7n/YqbBqdUO5h8d9EBr5inb+jcFl0hJ5hnF8S3fisUEKwdtC3q9DFghI3ZJ
+ Ctrij4pjKquiz/O3W12WWe2NcN1KRKOHMVTfaHt1H3qCkXMPL5ZUQDfNNOSY+NBEtujfHOUqKh1
+ YmyqXeAMjRpUyc+kjwbnNLN44+Z4SKBhnH2X4spBpvWyJOjPITU+PH3KAJV7+vlxwBdZDrMZlT3
+ duwowZQHKf7IMx+jZQ+CdrK5msKFSKnYad/ebSyYwSmyLchW8euXUwMm/jEADNZrWXdvhZ7yvXk
+ YeZXKMR8Rctwi/uo9iP0brtT9cG7bVV6Y2pIq6AVq7Vq8mMHUlu8kBmKle75+cWZKQTvaoN68ni
+ 1UdyUM3845LLdgA==
+X-Developer-Key: i=duje.mihanovic@skole.hr; a=openpgp;
+ fpr=53DF9D4D9C3FE110FB362D789A119EB0422D96E1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-On 23-09-26 01:53:39, Michał Mirosław wrote:
-> On Mon, Sep 25, 2023 at 07:45:22PM +0800, Peter Chen wrote:
-> > On 23-09-23 21:41:55, Michał Mirosław wrote:
-> > > Tegra USB controllers seem to issue DMA in doubleword-sized chunks and thus
-> > > may write past the buffer provided. This is detected by SLUB:
-> > > 
-> > > =============================================================================
-> > > BUG kmalloc-64 (Tainted: G    B             ): kmalloc Redzone overwritten
-> > > -----------------------------------------------------------------------------
-> > > 
-> > > 0x8555cd02-0x8555cd03 @offset=3330. First byte 0x0 instead of 0xcc
-> > > Allocated in usb_get_status+0x2b/0xac age=1 cpu=3 pid=41
-> > >  __kmem_cache_alloc_node+0x12f/0x1e4
-> > >  __kmalloc+0x33/0x8c
-> > >  usb_get_status+0x2b/0xac
-> > >  hub_probe+0x5e9/0xcec
-> > >  usb_probe_interface+0xbf/0x21c
-> > >  really_probe+0xa5/0x2c4
-> > >  __driver_probe_device+0x75/0x174
-> > >  driver_probe_device+0x31/0x94
-> > >  __device_attach_driver+0x65/0xc0
-> > >  bus_for_each_drv+0x4b/0x74
-> > >  __device_attach+0x69/0x120
-> > >  bus_probe_device+0x65/0x6c
-> > >  device_add+0x48b/0x5f8
-> > >  usb_set_configuration+0x37b/0x6b4
-> > >  usb_generic_driver_probe+0x37/0x68
-> > >  usb_probe_device+0x35/0xb4
-> > > Slab 0xbf622b80 objects=21 used=18 fp=0x8555cdc0 flags=0x800(slab|zone=0)
-> > > Object 0x8555cd00 @offset=3328 fp=0x00000000
-> > > 
-> > > Redzone  8555ccc0: cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc  ................
-> > > Redzone  8555ccd0: cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc  ................
-> > > Redzone  8555cce0: cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc  ................
-> > > Redzone  8555ccf0: cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc  ................
-> > > Object   8555cd00: 01 00 00 00 cc cc cc cc cc cc cc cc cc cc cc cc  ................
-> > > Object   8555cd10: cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc  ................
-> > > Object   8555cd20: cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc  ................
-> > > Object   8555cd30: cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc  ................
-> > > Redzone  8555cd40: cc cc cc cc                                      ....
-> > > Padding  8555cd74: 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a              ZZZZZZZZZZZZ
-> > > CPU: 3 PID: 41 Comm: kworker/3:1 Tainted: G    B              6.6.0-rc1mq-00118-g59786f827ea1 #1115
-> > > Hardware name: NVIDIA Tegra SoC (Flattened Device Tree)
-> > > Workqueue: usb_hub_wq hub_event
-> > > [<8010ca28>] (unwind_backtrace) from [<801090a5>] (show_stack+0x11/0x14)
-> > > [<801090a5>] (show_stack) from [<805da2fb>] (dump_stack_lvl+0x4d/0x7c)
-> > > [<805da2fb>] (dump_stack_lvl) from [<8026464f>] (check_bytes_and_report+0xb3/0xe4)
-> > > [<8026464f>] (check_bytes_and_report) from [<802648e1>] (check_object+0x261/0x290)
-> > > [<802648e1>] (check_object) from [<802671b1>] (free_to_partial_list+0x105/0x3f8)
-> > > [<802671b1>] (free_to_partial_list) from [<80268613>] (__kmem_cache_free+0x103/0x128)
-> > > [<80268613>] (__kmem_cache_free) from [<80425a67>] (usb_get_status+0x73/0xac)
-> > > [<80425a67>] (usb_get_status) from [<80421b31>] (hub_probe+0x5e9/0xcec)
-> > > [<80421b31>] (hub_probe) from [<80428bbb>] (usb_probe_interface+0xbf/0x21c)
-> > > [<80428bbb>] (usb_probe_interface) from [<803ee13d>] (really_probe+0xa5/0x2c4)
-> > > [<803ee13d>] (really_probe) from [<803ee3d1>] (__driver_probe_device+0x75/0x174)
-> > > [<803ee3d1>] (__driver_probe_device) from [<803ee501>] (driver_probe_device+0x31/0x94)
-> > > usb 1-1: device descriptor read/8, error -71
-> > > 
-> > > Fixes: fc53d5279094 ("usb: chipidea: tegra: Support host mode")
-> > > Signed-off-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
-> > > ---
-> > >  drivers/usb/chipidea/host.c | 7 ++++---
-> > >  1 file changed, 4 insertions(+), 3 deletions(-)
-> > > 
-> > > diff --git a/drivers/usb/chipidea/host.c b/drivers/usb/chipidea/host.c
-> > > index 08af26b762a2..abddd39d1ff1 100644
-> > > --- a/drivers/usb/chipidea/host.c
-> > > +++ b/drivers/usb/chipidea/host.c
-> > > @@ -411,12 +411,13 @@ static int ci_hdrc_alloc_dma_aligned_buffer(struct urb *urb, gfp_t mem_flags)
-> > >  	const unsigned int ci_hdrc_usb_dma_align = 32;
-> > >  	size_t kmalloc_size;
-> > >  
-> > > -	if (urb->num_sgs || urb->sg || urb->transfer_buffer_length == 0 ||
-> > > -	    !((uintptr_t)urb->transfer_buffer & (ci_hdrc_usb_dma_align - 1)))
-> > > +	if (urb->num_sgs || urb->sg || urb->transfer_buffer_length == 0)
-> > > +		return 0;
-> > > +	if (!((uintptr_t)urb->transfer_buffer & (ci_hdrc_usb_dma_align - 1)) && !(urb->transfer_buffer_length & 3))
-> > >  		return 0;
-> > >  
-> > >  	/* Allocate a buffer with enough padding for alignment */
-> > > -	kmalloc_size = urb->transfer_buffer_length +
-> > > +	kmalloc_size = ALIGN(urb->transfer_buffer_length, 4) +
-> > >  		       sizeof(struct ci_hdrc_dma_aligned_buffer) +
-> > >  		       ci_hdrc_usb_dma_align - 1;
-> > >  
-> > 
-> > Would you please explain why you make these changes?
-> 
-> Can you point out what's unclear in the commit message?
+Hello,
 
-You may appended below words to commit log, current commit log looks too
-simple.
+Small series to convert some of the board files in the mach-pxa directory
+to use the new GPIO descriptor interface.
 
-> This is to fix
-> a buffer overflow by DMA from the USB controller as it seems to write
-> data 32-bit word at a time. What the patch does is extend the workaround
-> code to account for the extra room needed at the tail of the buffer.
-> 
-> Best Regards
-> Michał Mirosław
+Most notably, the am200epd, am300epd and Spitz matrix keypad among
+others are not converted in this series.
 
+Signed-off-by: Duje Mihanović <duje.mihanovic@skole.hr>
+---
+Changes in v2:
+- Address maintainer comments:
+  - Change mentions of function to function()
+  - Drop cast in OHCI driver dev_warn() call
+  - Use %pe in OHCI and reset drivers
+  - Use GPIO _optional() API in OHCI driver
+  - Drop unnecessary not-null check in OHCI driver
+  - Use pr_err() instead of printk() in reset driver
+- Rebase on v6.6-rc3
+- Link to v1: https://lore.kernel.org/r/20230924-pxa-gpio-v1-0-2805b87d8894@skole.hr
+
+---
+Duje Mihanović (6):
+      ARM: pxa: Convert Spitz OHCI to GPIO descriptors
+      ARM: pxa: Convert Spitz LEDs to GPIO descriptors
+      ARM: pxa: Convert Spitz CF power control to GPIO descriptors
+      ARM: pxa: Convert reset driver to GPIO descriptors
+      ARM: pxa: Convert Spitz hsync to GPIO descriptors
+      ARM: pxa: Convert gumstix Bluetooth to GPIO descriptors
+
+ arch/arm/mach-pxa/gumstix.c    | 24 ++++++++-------
+ arch/arm/mach-pxa/reset.c      | 39 ++++++++---------------
+ arch/arm/mach-pxa/reset.h      |  3 +-
+ arch/arm/mach-pxa/spitz.c      | 70 +++++++++++++++++++++++++++++++++---------
+ drivers/usb/host/ohci-pxa27x.c |  7 +++++
+ 5 files changed, 90 insertions(+), 53 deletions(-)
+---
+base-commit: 6465e260f48790807eef06b583b38ca9789b6072
+change-id: 20230807-pxa-gpio-3ce25d574814
+
+Best regards,
 -- 
+Duje Mihanović <duje.mihanovic@skole.hr>
 
-Thanks,
-Peter Chen
+
 
