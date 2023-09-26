@@ -1,64 +1,39 @@
-Return-Path: <linux-usb+bounces-606-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-607-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 254247AF46F
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Sep 2023 21:50:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3618E7AF47C
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Sep 2023 21:54:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by ny.mirrors.kernel.org (Postfix) with ESMTP id 30AC31C20805
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Sep 2023 19:50:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id A2147281B23
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Sep 2023 19:54:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 094D948EB8;
-	Tue, 26 Sep 2023 19:50:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DF734998A;
+	Tue, 26 Sep 2023 19:54:13 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D55488498
-	for <linux-usb@vger.kernel.org>; Tue, 26 Sep 2023 19:50:34 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96CD4A3;
-	Tue, 26 Sep 2023 12:50:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695757833; x=1727293833;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2yuwy3Y57nWqXAlW1YASdDQfdwt4RIuFLba+rx8HU+w=;
-  b=ADoBhADvXk+6Qmv5Cy/sOUCIN5Kgxj+e+DA0XWractRfYbciC/+s2qmZ
-   1ZO5NYxytLRdpw91aLS2NCsG0DApzaXA5V5XZnldOchD6LWAyZcH5S0A1
-   t9iHPCiGcau2KY234zK0r/ymcWO1vxCujeERRIsr29hWhwg89j9mmJnXM
-   WfprBpnZdDECbhHWVMqSqln7jyZK690o2c34xDbIFhr/nMO/KZ609Nyi/
-   bDJzcwrLMg8Mgf0Pi85liOHVe5vPB8iWCLk8QsId+iLY6qejZp98LZyoi
-   EEYQbm+Mg3qnNgwGwFoKPluJbbt9QFIt8F5AE6dJ9VqAP1IXgqhwXR0Un
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="445786846"
-X-IronPort-AV: E=Sophos;i="6.03,178,1694761200"; 
-   d="scan'208";a="445786846"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2023 12:50:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.03,178,1694761200"; 
-   d="scan'208";a="274191"
-Received: from lkp-server02.sh.intel.com (HELO 32c80313467c) ([10.239.97.151])
-  by fmviesa001.fm.intel.com with ESMTP; 26 Sep 2023 12:50:31 -0700
-Received: from kbuild by 32c80313467c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qlE4g-0003Iz-3C;
-	Tue, 26 Sep 2023 19:50:27 +0000
-Date: Wed, 27 Sep 2023 03:49:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Minas Harutyunyan <hminas@synopsys.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Ben Dooks <ben@simtec.co.uk>
-Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc2: gadget: Fix a warning when compiling with W=1
-Message-ID: <202309270325.uqGsh5Cw-lkp@intel.com>
-References: <5cf603809388aa04c9a02bbfe3cf531c20bb043e.1695466447.git.christophe.jaillet@wanadoo.fr>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07B7433E5
+	for <linux-usb@vger.kernel.org>; Tue, 26 Sep 2023 19:54:09 +0000 (UTC)
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by lindbergh.monkeyblade.net (Postfix) with SMTP id 43727F3
+	for <linux-usb@vger.kernel.org>; Tue, 26 Sep 2023 12:54:07 -0700 (PDT)
+Received: (qmail 1473364 invoked by uid 1000); 26 Sep 2023 15:54:06 -0400
+Date: Tue, 26 Sep 2023 15:54:06 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+  Francesco Dolcini <francesco.dolcini@toradex.com>,
+  Badhri Jagan Sridharan <badhri@google.com>,
+  Michael Grzeschik <m.grzeschik@pengutronix.de>,
+  Ivan Orlov <ivan.orlov0322@gmail.com>, linux-usb@vger.kernel.org,
+  linux-kernel@vger.kernel.org, quic_ppratap@quicinc.com,
+  quic_wcheng@quicinc.com, quic_jackp@quicinc.com
+Subject: Re: [PATCH v4] usb: gadget: udc: Handle gadget_connect failure
+ during bind operation
+Message-ID: <2178cf29-5e5c-4ed6-8d1c-916bc7036589@rowland.harvard.edu>
+References: <20230926193708.22405-1-quic_kriskura@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,133 +42,105 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5cf603809388aa04c9a02bbfe3cf531c20bb043e.1695466447.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-	autolearn_force=no version=3.4.6
+In-Reply-To: <20230926193708.22405-1-quic_kriskura@quicinc.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Hi Christophe,
+On Wed, Sep 27, 2023 at 01:07:08AM +0530, Krishna Kurapati wrote:
+> In the event, gadget_connect call (which invokes pullup) fails,
 
-kernel test robot noticed the following build warnings:
+s/event,/event/
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.6-rc3 next-20230926]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> propagate the error to udc bind operation which inturn sends the
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Christophe-JAILLET/usb-dwc2-gadget-Fix-a-warning-when-compiling-with-W-1/20230923-185559
-base:   linus/master
-patch link:    https://lore.kernel.org/r/5cf603809388aa04c9a02bbfe3cf531c20bb043e.1695466447.git.christophe.jaillet%40wanadoo.fr
-patch subject: [PATCH] usb: dwc2: gadget: Fix a warning when compiling with W=1
-config: x86_64-buildonly-randconfig-004-20230927 (https://download.01.org/0day-ci/archive/20230927/202309270325.uqGsh5Cw-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230927/202309270325.uqGsh5Cw-lkp@intel.com/reproduce)
+s/inturn/in turn/
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309270325.uqGsh5Cw-lkp@intel.com/
+> error to configfs. The userspace can then retry enumeartion if
 
-All warnings (new ones prefixed by >>):
+s/enumeartion/enumeration/
 
-   drivers/usb/dwc2/gadget.c: In function 'dwc2_hsotg_initep':
->> drivers/usb/dwc2/gadget.c:4804:55: warning: '%u' directive output may be truncated writing between 1 and 10 bytes into a region of size 8 [-Wformat-truncation=]
-    4804 |         snprintf(hs_ep->name, sizeof(hs_ep->name), "ep%u%s", epnum, dir);
-         |                                                       ^~
-   drivers/usb/dwc2/gadget.c:4804:52: note: directive argument in the range [1, 4294967295]
-    4804 |         snprintf(hs_ep->name, sizeof(hs_ep->name), "ep%u%s", epnum, dir);
-         |                                                    ^~~~~~~~
-   drivers/usb/dwc2/gadget.c:4804:9: note: 'snprintf' output between 6 and 16 bytes into a destination of size 10
-    4804 |         snprintf(hs_ep->name, sizeof(hs_ep->name), "ep%u%s", epnum, dir);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> it chooses to.
+> 
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> ---
+> Changes in v4: Fixed mutex locking imbalance during connect_control
+> failure
+> Link to v3: https://lore.kernel.org/all/20230510075252.31023-3-quic_kriskura@quicinc.com/
+> 
+>  drivers/usb/gadget/udc/core.c | 23 +++++++++++++++++++----
+>  1 file changed, 19 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+> index 7d49d8a0b00c..53af25a333a1 100644
+> --- a/drivers/usb/gadget/udc/core.c
+> +++ b/drivers/usb/gadget/udc/core.c
+> @@ -1125,12 +1125,16 @@ EXPORT_SYMBOL_GPL(usb_gadget_set_state);
+>  /* ------------------------------------------------------------------------- */
+>  
+>  /* Acquire connect_lock before calling this function. */
+> -static void usb_udc_connect_control_locked(struct usb_udc *udc) __must_hold(&udc->connect_lock)
+> +static int usb_udc_connect_control_locked(struct usb_udc *udc) __must_hold(&udc->connect_lock)
+>  {
+> +	int ret;
+> +
+>  	if (udc->vbus)
+> -		usb_gadget_connect_locked(udc->gadget);
+> +		ret = usb_gadget_connect_locked(udc->gadget);
+>  	else
+> -		usb_gadget_disconnect_locked(udc->gadget);
+> +		ret = usb_gadget_disconnect_locked(udc->gadget);
+> +
+> +	return ret;
 
+You don't actually need the new variable ret.  You can just do:
 
-vim +4804 drivers/usb/dwc2/gadget.c
+	if (udc->vbus)
+		return usb_gadget_connect_locked(udc->gadget);
+	else
+		return usb_gadget_disconnect_locked(udc->gadget);
 
-  4775	
-  4776	/**
-  4777	 * dwc2_hsotg_initep - initialise a single endpoint
-  4778	 * @hsotg: The device state.
-  4779	 * @hs_ep: The endpoint to be initialised.
-  4780	 * @epnum: The endpoint number
-  4781	 * @dir_in: True if direction is in.
-  4782	 *
-  4783	 * Initialise the given endpoint (as part of the probe and device state
-  4784	 * creation) to give to the gadget driver. Setup the endpoint name, any
-  4785	 * direction information and other state that may be required.
-  4786	 */
-  4787	static void dwc2_hsotg_initep(struct dwc2_hsotg *hsotg,
-  4788				      struct dwc2_hsotg_ep *hs_ep,
-  4789				      unsigned int epnum,
-  4790				      bool dir_in)
-  4791	{
-  4792		char *dir;
-  4793	
-  4794		if (epnum == 0)
-  4795			dir = "";
-  4796		else if (dir_in)
-  4797			dir = "in";
-  4798		else
-  4799			dir = "out";
-  4800	
-  4801		hs_ep->dir_in = dir_in;
-  4802		hs_ep->index = epnum;
-  4803	
-> 4804		snprintf(hs_ep->name, sizeof(hs_ep->name), "ep%u%s", epnum, dir);
-  4805	
-  4806		INIT_LIST_HEAD(&hs_ep->queue);
-  4807		INIT_LIST_HEAD(&hs_ep->ep.ep_list);
-  4808	
-  4809		/* add to the list of endpoints known by the gadget driver */
-  4810		if (epnum)
-  4811			list_add_tail(&hs_ep->ep.ep_list, &hsotg->gadget.ep_list);
-  4812	
-  4813		hs_ep->parent = hsotg;
-  4814		hs_ep->ep.name = hs_ep->name;
-  4815	
-  4816		if (hsotg->params.speed == DWC2_SPEED_PARAM_LOW)
-  4817			usb_ep_set_maxpacket_limit(&hs_ep->ep, 8);
-  4818		else
-  4819			usb_ep_set_maxpacket_limit(&hs_ep->ep,
-  4820						   epnum ? 1024 : EP0_MPS_LIMIT);
-  4821		hs_ep->ep.ops = &dwc2_hsotg_ep_ops;
-  4822	
-  4823		if (epnum == 0) {
-  4824			hs_ep->ep.caps.type_control = true;
-  4825		} else {
-  4826			if (hsotg->params.speed != DWC2_SPEED_PARAM_LOW) {
-  4827				hs_ep->ep.caps.type_iso = true;
-  4828				hs_ep->ep.caps.type_bulk = true;
-  4829			}
-  4830			hs_ep->ep.caps.type_int = true;
-  4831		}
-  4832	
-  4833		if (dir_in)
-  4834			hs_ep->ep.caps.dir_in = true;
-  4835		else
-  4836			hs_ep->ep.caps.dir_out = true;
-  4837	
-  4838		/*
-  4839		 * if we're using dma, we need to set the next-endpoint pointer
-  4840		 * to be something valid.
-  4841		 */
-  4842	
-  4843		if (using_dma(hsotg)) {
-  4844			u32 next = DXEPCTL_NEXTEP((epnum + 1) % 15);
-  4845	
-  4846			if (dir_in)
-  4847				dwc2_writel(hsotg, next, DIEPCTL(epnum));
-  4848			else
-  4849				dwc2_writel(hsotg, next, DOEPCTL(epnum));
-  4850		}
-  4851	}
-  4852	
+>  }
+>  
+>  static void vbus_event_work(struct work_struct *work)
+> @@ -1604,12 +1608,23 @@ static int gadget_bind_driver(struct device *dev)
+>  	}
+>  	usb_gadget_enable_async_callbacks(udc);
+>  	udc->allow_connect = true;
+> -	usb_udc_connect_control_locked(udc);
+> +	ret = usb_udc_connect_control_locked(udc);
+> +	if (ret) {
+> +		mutex_unlock(&udc->connect_lock);
+> +		goto err_connect_control;
+> +	}
+> +
+>  	mutex_unlock(&udc->connect_lock);
+>  
+>  	kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
+>  	return 0;
+>  
+> + err_connect_control:
+> +	usb_gadget_disable_async_callbacks(udc);
+> +	if (gadget->irq)
+> +		synchronize_irq(gadget->irq);
+> +	usb_gadget_udc_stop_locked(udc);
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Not good -- usb_gadget_udc_stop_locked() expects you to be holding 
+udc->connect_lock, but you just dropped the lock!  Also, you never set 
+udc->allow_connect back to false.
+
+You should move the mutex_unlock() call from inside the "if" statement 
+to down here, and add a line for udc->allow_connect.
+
+Alan Stern
+
+> +
+>   err_start:
+>  	driver->unbind(udc->gadget);
+>  
+> -- 
+> 2.42.0
+> 
 
