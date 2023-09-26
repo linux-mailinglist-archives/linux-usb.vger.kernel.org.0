@@ -1,96 +1,131 @@
-Return-Path: <linux-usb+bounces-612-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-613-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA9D67AF50D
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Sep 2023 22:27:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 62ECB7AF5AC
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Sep 2023 23:25:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 77800282403
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Sep 2023 20:27:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id B421D282E18
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Sep 2023 21:25:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DEE04A535;
-	Tue, 26 Sep 2023 20:27:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5B8B499A3;
+	Tue, 26 Sep 2023 21:25:48 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F919374CE
-	for <linux-usb@vger.kernel.org>; Tue, 26 Sep 2023 20:27:08 +0000 (UTC)
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCAA0121
-	for <linux-usb@vger.kernel.org>; Tue, 26 Sep 2023 13:27:07 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-59f1dff5298so109406367b3.3
-        for <linux-usb@vger.kernel.org>; Tue, 26 Sep 2023 13:27:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695760027; x=1696364827; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wgr0elKj9lSA9DaoOQmGSleBXdUJYBk6OqVSBI3fCoo=;
-        b=aawmHcirD8DsgSzYr46dSgc4RX94o0O2lew5iksT9aga1rcSVvJ/hnXDM8V6FitWsq
-         Zcuv2+/iFeZwd7H4RNkuMTTpIR7BroGfS/2DmW90GH6GPs8eNY4csyymim1Z/hfPwRYh
-         FBN9QAUERNuKBknhnJK4B/6aOMTy8eiCqnEiskfVtEG/mouwUm0iTHhHxDXF6JfMpAan
-         zZDGphm7arpqIv4aBe8pwh1VQMAy/v9ootmIrttgW/l/3e09PoEHA+oB5vxEvacZ9F/9
-         wxwwF4mWGcVCcNgVyNlNC11xRoei6//gAW5jqnQNvIPKxlGJTTqGOGAbGcY3Zt/50qT0
-         +wNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695760027; x=1696364827;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wgr0elKj9lSA9DaoOQmGSleBXdUJYBk6OqVSBI3fCoo=;
-        b=blMD1db6oh9Gf506Rkqwx2J0hZBvpYLBmqDQ7krvsaklKSiuUMxUG4BowL932jTUar
-         E2yOJBPU7Y4WhRfjjXJR82891bzSvuJ4Be4pA//vFoAQzzkvVL6Z6nHRuKECICnZuDbj
-         MwR0DzSVjEb0L5Qhc30aED7ydn5I7xXoP+JZS3I85vDQeI3l9lAz08L/K0AQnBnGIMPm
-         4ZtJ6+HkxvyuZpl5aGWuWuyAx5VJyPfaHWPDcb+f+fMmuaBZDOZXCLch8AAAPU5waJ+H
-         3UWxkGEXst7i4rTlZz/RbUiK9fsv0ZBCVV8NXBQyi/xGHeGEQbUv5d4p/glRIjRKe+Kr
-         71Zw==
-X-Gm-Message-State: AOJu0Ywj/vkfsMeXkzy3K+cCI7JGW+kdrAo4Kob27qsYGNaKilSDFXZ/
-	38K3c2zeNgpaCZZcCDIi86kW9TNWv+JnecZJZl2ycQ==
-X-Google-Smtp-Source: AGHT+IE9ToDynTpmGcT5P/uZKHvPeXXQc+bPT+qu/G4gEmvRth4jAWXdjvJ1oG4ktxEO98GYZKAnKHIrOYHNrw3dF/A=
-X-Received: by 2002:a0d:e442:0:b0:59f:4f56:59bc with SMTP id
- n63-20020a0de442000000b0059f4f5659bcmr59412ywe.42.1695760026911; Tue, 26 Sep
- 2023 13:27:06 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6914846D;
+	Tue, 26 Sep 2023 21:25:45 +0000 (UTC)
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A76A2900F;
+	Tue, 26 Sep 2023 14:25:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=WccGIMN5Qv0lQD3hgxuM1vcIL4JfsNLSXHYfA6JcKbA=; b=OsDkrrtpZVXrV5cPooFVpQ+DsW
+	efu7lcfWUFBZQaHC0VFHyjjlC9IDm/yz/ZSlLHkS56BIBF1rqS35BSa4iOCFAMWKpcXpAAhZiLrpb
+	/5MwxV8qJttJgFtRzaN+w6Z85LOr7HVhGxkZL88Sv5A/SkYZv7JMKEyrCWFeL2Yf9rWDNOyHisFva
+	qNGTFJp2isj0JVlKyHCS19X3cR12y4OMvncSwP7i60r/thlVuHEHxR25fZSDXn83II/AWC7INUFn6
+	8+uAPErM2QG6BrRdCCZ6OQ8tCEmDrSMgrY6TSaupVewWlaEaPlhNXIhz6JXLVcFKp8/OKJhckJeHZ
+	DAUjL3zQ==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+	id 1qlFYR-00Bljq-2w;
+	Tue, 26 Sep 2023 21:25:16 +0000
+Date: Tue, 26 Sep 2023 22:25:15 +0100
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Christoph Hellwig <hch@lst.de>
+Cc: Christian Brauner <brauner@kernel.org>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Fenghua Yu <fenghua.yu@intel.com>,
+	Reinette Chatre <reinette.chatre@intel.com>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+	Tejun Heo <tj@kernel.org>,
+	Trond Myklebust <trond.myklebust@hammerspace.com>,
+	Anna Schumaker <anna@kernel.org>, Kees Cook <keescook@chromium.org>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Naohiro Aota <naohiro.aota@wdc.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-s390@vger.kernel.org, linux-rdma@vger.kernel.org,
+	linux-nfs@vger.kernel.org, linux-hardening@vger.kernel.org,
+	cgroups@vger.kernel.org
+Subject: Re: [PATCH 03/19] fs: release anon dev_t in deactivate_locked_super
+Message-ID: <20230926212515.GN800259@ZenIV>
+References: <20230913111013.77623-1-hch@lst.de>
+ <20230913111013.77623-4-hch@lst.de>
+ <20230913232712.GC800259@ZenIV>
+ <20230926093834.GB13806@lst.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230926-pxa-gpio-v2-0-984464d165dd@skole.hr> <20230926-pxa-gpio-v2-3-984464d165dd@skole.hr>
-In-Reply-To: <20230926-pxa-gpio-v2-3-984464d165dd@skole.hr>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Tue, 26 Sep 2023 22:26:56 +0200
-Message-ID: <CACRpkdb8SwC=W6=Tiz0Uxk1MeQq2gBmDYQYyeKbWFzvaGA2mGQ@mail.gmail.com>
-Subject: Re: [PATCH RFC v2 3/6] ARM: pxa: Convert Spitz CF power control to
- GPIO descriptors
-To: =?UTF-8?Q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
-Cc: Daniel Mack <daniel@zonque.org>, Haojian Zhuang <haojian.zhuang@gmail.com>, 
-	Robert Jarzmik <robert.jarzmik@free.fr>, Russell King <linux@armlinux.org.uk>, 
-	Alan Stern <stern@rowland.harvard.edu>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, Andy Shevchenko <andy@kernel.org>, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230926093834.GB13806@lst.de>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Tue, Sep 26, 2023 at 5:46=E2=80=AFPM Duje Mihanovi=C4=87 <duje.mihanovic=
-@skole.hr> wrote:
+On Tue, Sep 26, 2023 at 11:38:34AM +0200, Christoph Hellwig wrote:
 
-> Sharp's Spitz board still uses the legacy GPIO interface for controlling
-> the power supply to its CF and SD card slots.
->
-> Convert it to use the GPIO descriptor interface.
->
-> Signed-off-by: Duje Mihanovi=C4=87 <duje.mihanovic@skole.hr>
+> How?
+> 
+> Old sequence before his patch:
+> 
+> 	deactivate_locked_super()
+> 	  -> kill_anon_super()
+> 	    -> generic_shutdown_super()
+> 	    -> kill_super_notify()
+> 	    -> free_anon_bdev()
+> 	  -> kill_super_notify()
+> 
+> New sequence with this patch:
+> 
+> 	deactivate_locked_super()
+> 	  -> generic_shutdown_super()
+> 	    -> kill_super_notify()
+> 	    -> free_anon_bdev()
+> 
 
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
+Before your patch: foo_kill_super() calls kill_anon_super(),
+which calls kill_super_notify(), which removes the sucker from
+the list, then frees ->s_fs_info.  After your patch:
+removal from the lists happens via the call of kill_super_notify()
+*after* both of your methods had been called, while freeing
+->s_fs_info happens from the method call.  IOW, you've restored
+the situation prior to "super: ensure valid info".  The whole
+point of that commit had been to make sure that we have nothing
+in the lists with ->s_fs_info pointing to a freed object.
 
-Yours,
-Linus Walleij
+It's not about free_anon_bdev(); that part is fine - it's the
+"we can drop the weird second call site of kill_super_notify()"
+thing that is broken.
+
+Al, still slogging through the rcu pathwalk races in the methods...
+The latest catch: nfs_set_verifier() can get called on a dentry
+that had just been seen to have positive parent, but is not
+pinned down.
+	grab ->d_lock; OK, we know that dentry won't get freed under us
+	fetch ->d_parent->d_inode
+	pass that to nfs_verify_change_attribute()
+... which assumes that inode it's been given is not NULL.  Normally it
+would've been - ->d_lock stabilizes ->d_parent, and negative dentries
+obviously have no children.  Except that we might've been just hit
+by dentry_kill() due to eviction on memory pressure, got ->d_lock
+right after that and proceeded to play with ->d_parent, just as
+that parent is going through dentry_kill() from the same eviction on
+memory pressure...  If it gets to dentry_unlink_inode() before we get to
+fetching ->d_parent->d_inode, nfs_verify_change_attribute(NULL, whatever)
+is going to oops...
 
