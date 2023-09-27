@@ -1,236 +1,122 @@
-Return-Path: <linux-usb+bounces-650-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-651-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B5537B076A
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 16:55:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 100BC7B078C
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 17:02:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id D05B6281C3C
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 14:55:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 1EEBF281D7C
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 15:02:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A5A633982;
-	Wed, 27 Sep 2023 14:55:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4C4C36B0B;
+	Wed, 27 Sep 2023 15:02:13 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DBDC15A8
-	for <linux-usb@vger.kernel.org>; Wed, 27 Sep 2023 14:55:27 +0000 (UTC)
-Received: from mail-oa1-f70.google.com (mail-oa1-f70.google.com [209.85.160.70])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 159A7F4
-	for <linux-usb@vger.kernel.org>; Wed, 27 Sep 2023 07:55:26 -0700 (PDT)
-Received: by mail-oa1-f70.google.com with SMTP id 586e51a60fabf-1dd96cab3e9so3373024fac.0
-        for <linux-usb@vger.kernel.org>; Wed, 27 Sep 2023 07:55:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695826525; x=1696431325;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lBWVgveX+Gy18voOjfm0pQ+cpi+lx5U5ZfTJiFJTenI=;
-        b=HFIP9pSbRuYiMmWvsFSP32M9vEcYd6U2o5n7ftGRWQeQyBTPzYLj1IhpA42VnJ5QAn
-         yyS3mPOCXDZXRlfVO5xDR2XzfgwnrUzhr8C0pekJfdVbCLCxX8TS8wX44sMiTn1jXWS4
-         6TBoGDX3mGJBDi/kUDaiDERl55NrHQQFYcYLsqycezONC/sK74YThF6zrAy7y/BtfQqj
-         jBVmkZkge3G5IovKtq6yIGG3F+q9VMEtJey846q1Q0y2zy/EPrbEGplRVAi6nnVOsARr
-         8qFD8uBzPl7JxaAsDrTLNEv5Uhu0p2RiXRPSUBKpQl1y++qEFOcCxq6A/EWAYMoP4JdS
-         714Q==
-X-Gm-Message-State: AOJu0Yx0iuv9SUzchZ8ribA7G1JtrJrH/4ohgq9QfM1JHR+ih4xofDq+
-	IpZ8YSlZALZnu8X7CCsoiTYNKpdH/hwajKBTCbKUcoPlzUSZ
-X-Google-Smtp-Source: AGHT+IFu+UhBkt/FQcj8P5/rQdxSln4WN9Ws82IxG014NHtA0BQTNz7umpFu7HPlIFEY687z1hb4nsZODK+6rTOnGPtkGasNMu4b
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91CE6224FB;
+	Wed, 27 Sep 2023 15:02:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A96E6C433C7;
+	Wed, 27 Sep 2023 15:02:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1695826933;
+	bh=r8NJqB+Eskoh9K1MkrQnG5srH7gWNZFeblzEWCKg2ek=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dF1x9v6FR31R1fdTryZ3/4xKYsKnyb5iunoYG4CVwJ5i098D+gDiHo3u6uZUhAdvJ
+	 cTpvMuST3Lli3Py9ecOWHMbwtisIuicQUhgBopTU+JRcNTLvwb6W4B3QU/feEoCv9p
+	 GnMUkhO9AnInoB761J+f21N+VBhkhCReHrcZGtBTEcnK+THjD7jl6/aIGC15LTh6aZ
+	 spJ6J/R4Em4Un+nyAsTkdvEN+QY/OeXE4e9ASC1RrsIUHff6I8dH1C9kghGG5Zpmku
+	 5+zl8WSbP69JzRtaq457YiCW3w25jxluEN+Se+Y920RqssBM9dBkqYzDkcPamot36G
+	 UgZPe2sXHMamw==
+Date: Wed, 27 Sep 2023 17:02:09 +0200
+From: Mark Brown <broonie@kernel.org>
+To: Wesley Cheng <quic_wcheng@quicinc.com>
+Cc: mathias.nyman@intel.com, gregkh@linuxfoundation.org,
+	lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+	agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org, srinivas.kandagatla@linaro.org,
+	bgoswami@quicinc.com, Thinh.Nguyen@synopsys.com,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	alsa-devel@alsa-project.org, linux-arm-msm@vger.kernel.org,
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH v7 29/33] ASoC: qcom: qdsp6: Add SND kcontrol for
+ fetching offload status
+Message-ID: <ZRRD8eFZugh/+dex@finisterre.sirena.org.uk>
+References: <20230921214843.18450-1-quic_wcheng@quicinc.com>
+ <20230921214843.18450-30-quic_wcheng@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6870:5a99:b0:1d6:8292:b0f9 with SMTP id
- dt25-20020a0568705a9900b001d68292b0f9mr783361oab.7.1695826525491; Wed, 27 Sep
- 2023 07:55:25 -0700 (PDT)
-Date: Wed, 27 Sep 2023 07:55:25 -0700
-In-Reply-To: <gugiuvjgpoogf3k5cm4px4jwevg5torsu3d7afbbhvnrxho4zu@wkcxeb5sr5ez>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a71ad80606586122@google.com>
-Subject: Re: [syzbot] [pvrusb2?] KASAN: slab-use-after-free Read in pvr2_context_set_notify
-From: syzbot <syzbot+621409285c4156a009b3@syzkaller.appspotmail.com>
-To: isely@pobox.com, linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
-	linux-usb@vger.kernel.org, mchehab@kernel.org, pvrusb2@isely.net, 
-	ricardo@marliere.net, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-	HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
-	RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no
-	autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
-
-Hello,
-
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-KASAN: slab-use-after-free Read in pvr2_context_set_notify
-
-pvrusb2: Important functionality might not be entirely working.
-pvrusb2: Please consider contacting the driver author to help with further stabilization of the driver.
-pvrusb2: **********
-usb 1-1: USB disconnect, device number 102
-pvrusb2: Device being rendered inoperable
-==================================================================
-BUG: KASAN: slab-use-after-free in pvr2_context_set_notify+0x2fa/0x350 drivers/media/usb/pvrusb2/pvrusb2-context.c:42
-Read of size 4 at addr ffff8881093becd8 by task kworker/0:0/8
-
-CPU: 0 PID: 8 Comm: kworker/0:0 Not tainted 6.6.0-rc2-syzkaller-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/06/2023
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x1b0 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:364 [inline]
- print_report+0xc4/0x620 mm/kasan/report.c:475
- kasan_report+0xda/0x110 mm/kasan/report.c:588
- pvr2_context_set_notify+0x2fa/0x350 drivers/media/usb/pvrusb2/pvrusb2-context.c:42
- pvr_disconnect+0x80/0xf0 drivers/media/usb/pvrusb2/pvrusb2-main.c:79
- usb_unbind_interface+0x1dd/0x8d0 drivers/usb/core/driver.c:458
- device_remove drivers/base/dd.c:569 [inline]
- device_remove+0x11f/0x170 drivers/base/dd.c:561
- __device_release_driver drivers/base/dd.c:1272 [inline]
- device_release_driver_internal+0x44a/0x610 drivers/base/dd.c:1295
- bus_remove_device+0x22c/0x420 drivers/base/bus.c:574
- device_del+0x39a/0xa50 drivers/base/core.c:3813
- usb_disable_device+0x36c/0x7f0 drivers/usb/core/message.c:1416
- usb_disconnect+0x2e1/0x890 drivers/usb/core/hub.c:2252
- hub_port_connect drivers/usb/core/hub.c:5280 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5580 [inline]
- port_event drivers/usb/core/hub.c:5740 [inline]
- hub_event+0x1be0/0x4f30 drivers/usb/core/hub.c:5822
- process_one_work+0x884/0x15c0 kernel/workqueue.c:2630
- process_scheduled_works kernel/workqueue.c:2703 [inline]
- worker_thread+0x8b9/0x1290 kernel/workqueue.c:2784
- kthread+0x33c/0x440 kernel/kthread.c:388
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:304
- </TASK>
-
-Allocated by task 8:
- kasan_save_stack+0x33/0x50 mm/kasan/common.c:45
- kasan_set_track+0x25/0x30 mm/kasan/common.c:52
- ____kasan_kmalloc mm/kasan/common.c:374 [inline]
- __kasan_kmalloc+0x87/0x90 mm/kasan/common.c:383
- kmalloc include/linux/slab.h:599 [inline]
- kzalloc include/linux/slab.h:720 [inline]
- pvr2_context_create+0x53/0x2a0 drivers/media/usb/pvrusb2/pvrusb2-context.c:208
- pvr_probe+0x25/0xe0 drivers/media/usb/pvrusb2/pvrusb2-main.c:54
- usb_probe_interface+0x307/0x930 drivers/usb/core/driver.c:396
- call_driver_probe drivers/base/dd.c:579 [inline]
- really_probe+0x234/0xc90 drivers/base/dd.c:658
- __driver_probe_device+0x1de/0x4b0 drivers/base/dd.c:800
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:830
- __device_attach_driver+0x1d4/0x300 drivers/base/dd.c:958
- bus_for_each_drv+0x157/0x1d0 drivers/base/bus.c:457
- __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1030
- bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
- device_add+0x117e/0x1aa0 drivers/base/core.c:3624
- usb_set_configuration+0x10cb/0x1c40 drivers/usb/core/message.c:2207
- usb_generic_driver_probe+0xca/0x130 drivers/usb/core/generic.c:238
- usb_probe_device+0xda/0x2c0 drivers/usb/core/driver.c:293
- call_driver_probe drivers/base/dd.c:579 [inline]
- really_probe+0x234/0xc90 drivers/base/dd.c:658
- __driver_probe_device+0x1de/0x4b0 drivers/base/dd.c:800
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:830
- __device_attach_driver+0x1d4/0x300 drivers/base/dd.c:958
- bus_for_each_drv+0x157/0x1d0 drivers/base/bus.c:457
- __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1030
- bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
- device_add+0x117e/0x1aa0 drivers/base/core.c:3624
- usb_new_device+0xd80/0x1960 drivers/usb/core/hub.c:2589
- hub_port_connect drivers/usb/core/hub.c:5440 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5580 [inline]
- port_event drivers/usb/core/hub.c:5740 [inline]
- hub_event+0x2e62/0x4f30 drivers/usb/core/hub.c:5822
- process_one_work+0x884/0x15c0 kernel/workqueue.c:2630
- process_scheduled_works kernel/workqueue.c:2703 [inline]
- worker_thread+0x8b9/0x1290 kernel/workqueue.c:2784
- kthread+0x33c/0x440 kernel/kthread.c:388
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:304
-
-Freed by task 901:
- kasan_save_stack+0x33/0x50 mm/kasan/common.c:45
- kasan_set_track+0x25/0x30 mm/kasan/common.c:52
- kasan_save_free_info+0x2b/0x40 mm/kasan/generic.c:522
- ____kasan_slab_free mm/kasan/common.c:236 [inline]
- ____kasan_slab_free+0x13c/0x190 mm/kasan/common.c:200
- kasan_slab_free include/linux/kasan.h:164 [inline]
- slab_free_hook mm/slub.c:1800 [inline]
- slab_free_freelist_hook mm/slub.c:1826 [inline]
- slab_free mm/slub.c:3809 [inline]
- __kmem_cache_free+0xff/0x330 mm/slub.c:3822
- pvr2_context_check drivers/media/usb/pvrusb2/pvrusb2-context.c:144 [inline]
- pvr2_context_thread_func+0x69d/0x960 drivers/media/usb/pvrusb2/pvrusb2-context.c:159
- kthread+0x33c/0x440 kernel/kthread.c:388
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:304
-
-The buggy address belongs to the object at ffff8881093bec00
- which belongs to the cache kmalloc-256 of size 256
-The buggy address is located 216 bytes inside of
- freed 256-byte region [ffff8881093bec00, ffff8881093bed00)
-
-The buggy address belongs to the physical page:
-page:ffffea000424ef80 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1093be
-head:ffffea000424ef80 order:1 entire_mapcount:0 nr_pages_mapped:0 pincount:0
-anon flags: 0x200000000000840(slab|head|node=0|zone=2)
-page_type: 0xffffffff()
-raw: 0200000000000840 ffff888100041b40 0000000000000000 dead000000000001
-raw: 0000000000000000 0000000000100010 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 1, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 1, tgid 1 (swapper/0), ts 8817323426, free_ts 0
- set_page_owner include/linux/page_owner.h:31 [inline]
- post_alloc_hook+0x2cf/0x340 mm/page_alloc.c:1536
- prep_new_page mm/page_alloc.c:1543 [inline]
- get_page_from_freelist+0x10e1/0x2fd0 mm/page_alloc.c:3170
- __alloc_pages+0x1d0/0x4a0 mm/page_alloc.c:4426
- alloc_page_interleave+0x1e/0x230 mm/mempolicy.c:2131
- alloc_pages+0x22a/0x270 mm/mempolicy.c:2293
- alloc_slab_page mm/slub.c:1870 [inline]
- allocate_slab+0x251/0x380 mm/slub.c:2017
- new_slab mm/slub.c:2070 [inline]
- ___slab_alloc+0x8c7/0x1580 mm/slub.c:3223
- __slab_alloc.constprop.0+0x56/0xa0 mm/slub.c:3322
- __slab_alloc_node mm/slub.c:3375 [inline]
- slab_alloc_node mm/slub.c:3468 [inline]
- __kmem_cache_alloc_node+0x12c/0x310 mm/slub.c:3517
- kmalloc_trace+0x25/0xe0 mm/slab_common.c:1114
- kmalloc include/linux/slab.h:599 [inline]
- kzalloc include/linux/slab.h:720 [inline]
- bus_add_driver+0x92/0x630 drivers/base/bus.c:657
- driver_register+0x15c/0x4a0 drivers/base/driver.c:246
- usb_register_driver+0x24f/0x500 drivers/usb/core/driver.c:1062
- do_one_initcall+0x117/0x630 init/main.c:1232
- do_initcall_level init/main.c:1294 [inline]
- do_initcalls init/main.c:1310 [inline]
- do_basic_setup init/main.c:1329 [inline]
- kernel_init_freeable+0x5bd/0x8f0 init/main.c:1547
- kernel_init+0x1c/0x2a0 init/main.c:1437
-page_owner free stack trace missing
-
-Memory state around the buggy address:
- ffff8881093beb80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff8881093bec00: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->ffff8881093bec80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                                    ^
- ffff8881093bed00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff8881093bed80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-==================================================================
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="2qid1YG4vVF/Hdr6"
+Content-Disposition: inline
+In-Reply-To: <20230921214843.18450-30-quic_wcheng@quicinc.com>
+X-Cookie: Save energy:  Drive a smaller shell.
 
 
-Tested on:
+--2qid1YG4vVF/Hdr6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-commit:         ce9ecca0 Linux 6.6-rc2
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=13f01d0a680000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=59eae8406319284a
-dashboard link: https://syzkaller.appspot.com/bug?extid=621409285c4156a009b3
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=12ca2656680000
+On Thu, Sep 21, 2023 at 02:48:39PM -0700, Wesley Cheng wrote:
 
+> Add a kcontrol to the platform sound card to fetch the current offload
+> status.  This can allow for userspace to ensure/check which USB SND
+> resources are actually busy versus having to attempt opening the USB SND
+> devices, which will result in an error if offloading is active.
+
+> +static int q6usb_prepare(struct snd_pcm_substream *substream,
+> +               struct snd_soc_dai *dai)
+> +{
+> +       struct q6usb_port_data *data =3D dev_get_drvdata(dai->dev);
+> +=20
+> +       mutex_lock(&data->mutex);
+> +       data->status[data->sel_card_idx].running =3D true;
+> +       mutex_unlock(&data->mutex);
+
+These updates of running should really have a snd_ctl_notify() so that
+UIs can know to update when the value changes while they're open.
+
+> +static int q6usb_mixer_get_offload_status(struct snd_kcontrol *kcontrol,
+> +				   struct snd_ctl_elem_value *ucontrol)
+> +{
+
+> +	running =3D q6usb_find_running(data);
+> +	if (running < 0) {
+> +		card_idx =3D -1;
+> +		pcm_idx =3D -1;
+> +	} else {
+> +		card_idx =3D running;
+> +		pcm_idx =3D data->status[running].pcm_index;
+> +	}
+> +
+> +	ucontrol->value.integer.value[0] =3D card_idx;
+> +	ucontrol->value.integer.value[1] =3D pcm_idx;
+
+This feels a bit messy but I'm not sure what we'd do that's better so
+unless someone else has better ideas let's go with this.  Possibly we
+should standardise this as a new control type for joining cards up so at
+least if there's further needs for this we can use the same solution?
+
+--2qid1YG4vVF/Hdr6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmUUQ+0ACgkQJNaLcl1U
+h9Bd4gf/SmW7ryUa29e71/V9HuX7Jew2MdnRQDuXz6STFyi1WM6tcjFJSRGg0qG4
++JqN2fHT/gRP7Bflr/Bn+DVjr4ms8Rp0KS98kfKk4gHHoJr+Y7yDROhNJ3gMUxP7
+V7c/ZtQoP32PyNcM8K2x48fbOm1PBkZS8ch/BRzaIV0Jswv9aArfeP30ApjrIZb+
+tG7/Qrgeyao2F7u4J4wd74HaFKdp0HXk3csDcXlZ8bqit2/zx5de1UBVnmHzRaVS
+g0dubyNXyFQVTJRYfAphnLkmg7T7Cknn17SxaEmlkfMTKoS6kXB+t04e3NsyvuvM
+Tt1rVGB3hzwIPa1u8VT5/HgysV7eFQ==
+=JgtR
+-----END PGP SIGNATURE-----
+
+--2qid1YG4vVF/Hdr6--
 
