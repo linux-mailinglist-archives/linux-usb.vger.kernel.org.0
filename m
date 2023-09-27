@@ -1,159 +1,196 @@
-Return-Path: <linux-usb+bounces-621-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-622-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3DAD7AFBCD
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 09:18:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 395F57AFC17
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 09:29:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by ny.mirrors.kernel.org (Postfix) with ESMTP id B6C841C2089B
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 07:18:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTP id F40FC1C20905
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 07:29:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD9E11C2BE;
-	Wed, 27 Sep 2023 07:18:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FD331C69C;
+	Wed, 27 Sep 2023 07:29:10 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A47933D6;
-	Wed, 27 Sep 2023 07:18:11 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FE0011D;
-	Wed, 27 Sep 2023 00:18:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695799090; x=1727335090;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3lvZvOml3+lEkRnYV3uf47vqcra7BFoLiBhptCYXrwk=;
-  b=PYY6nDg/HE0YT/Gk9TlMuBhZWRevzNQNj2VbkSG7WXn8RE9ORp8d2IFa
-   C0qXgfYSeJSGG75zek2BfwaLpBFQPXrwAAsMI0uqwzYquM/sKXTpORf8/
-   F5cQYEzqniycoVv/fM7W9yOpmfgLaX1MZuIKlS05PJ/lj451w6gJKKVk+
-   lnSuj8Rc+c4bQ0qO1NMzklCBGhymJKAbAXW4y7PZQi3OYSN4davZT1nGx
-   U+ad7TN2D3mTvRSASLQAEJfsrF56lvrjZ92IQMI8CYGJ3gKlkrSqGLAgu
-   L77F6patHAR7iqfbCfmY4fqder0XdALrmta2w9J+Qa+AoQFLIg6E7VrNo
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="381652801"
-X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
-   d="scan'208";a="381652801"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2023 00:18:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="819319694"
-X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
-   d="scan'208";a="819319694"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga004.fm.intel.com with SMTP; 27 Sep 2023 00:18:05 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 27 Sep 2023 10:18:04 +0300
-Date: Wed, 27 Sep 2023 10:18:04 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Abdel Alkuor <alkuor@gmail.com>
-Cc: krzysztof.kozlowski+dt@linaro.org, bryan.odonoghue@linaro.org,
-	gregkh@linuxfoundation.org, robh+dt@kernel.org,
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, conor+dt@kernel.org,
-	ryan.eleceng@gmail.com
-Subject: Re: [PATCH v6 02/14] USB: typec: Add cmd timeout and response delay
-Message-ID: <ZRPXLBj/Y6+yiwf8@kuha.fi.intel.com>
-References: <20230923073959.86660-1-alkuor@gmail.com>
- <20230923073959.86660-3-alkuor@gmail.com>
- <ZRPTHeYhdtdtKZ1/@kuha.fi.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D78FD1C680
+	for <linux-usb@vger.kernel.org>; Wed, 27 Sep 2023 07:29:08 +0000 (UTC)
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CBDF1B0;
+	Wed, 27 Sep 2023 00:29:06 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38R4kUmr024276;
+	Wed, 27 Sep 2023 07:28:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=BLTmAj9c74uRGVTtwdPNUwAzx0B4vAqvHGoZje3AMhw=;
+ b=hyfHnEMtJKdjXJ/zjLCLjIc1mGURp2BJHubn/wXejPhokL58kH/gmjf+FSnNwp0p4uE/
+ uZ3xlyUgR2y8f7hhi2p9uaI9xOURDk3yjOqG/4frOtN3BJAWuTIJVBRS9NMgQKXUG5km
+ wDFvtgb+MFfnzNdGuOydG+nCBeLjbn2fORxpbuDHT40bcoYbnV7rXGtXSwHxfdKPlZfa
+ dg9snYAembWG7qY3ljdOM+d3H/G0mqC8GuwVU0w88uOW0oz7fWm96MVo8QvA9L9sMOtJ
+ 9BBhFZzQRXWdJuuOkueBSECcBiqIjxHodv066K81A6j/Pi5NtHf8pqVh3FdDCJaAqH2z nA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tc43ms7yn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 27 Sep 2023 07:28:57 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38R7SulE021380
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 27 Sep 2023 07:28:56 GMT
+Received: from [10.216.34.233] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Wed, 27 Sep
+ 2023 00:28:52 -0700
+Message-ID: <05201136-5c67-47e7-a3f1-a7af051a2a00@quicinc.com>
+Date: Wed, 27 Sep 2023 12:58:49 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZRPTHeYhdtdtKZ1/@kuha.fi.intel.com>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4] usb: gadget: udc: Handle gadget_connect failure during
+ bind operation
+To: Alan Stern <stern@rowland.harvard.edu>
+CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Francesco Dolcini
+	<francesco.dolcini@toradex.com>,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Ivan Orlov
+	<ivan.orlov0322@gmail.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_ppratap@quicinc.com>,
+        <quic_wcheng@quicinc.com>, <quic_jackp@quicinc.com>
+References: <20230926193708.22405-1-quic_kriskura@quicinc.com>
+ <2178cf29-5e5c-4ed6-8d1c-916bc7036589@rowland.harvard.edu>
+ <62083b55-0b78-4ebc-ab78-1c1d99f92507@quicinc.com>
+ <f2bd7593-eff9-46ac-a94b-964eb4787740@quicinc.com>
+ <9384ac6a-f877-4835-b1ec-0e620a5ba8ba@rowland.harvard.edu>
+Content-Language: en-US
+From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <9384ac6a-f877-4835-b1ec-0e620a5ba8ba@rowland.harvard.edu>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: Y-0oaYrekRWC7HjRSZcQ2K7VzQZe7P89
+X-Proofpoint-GUID: Y-0oaYrekRWC7HjRSZcQ2K7VzQZe7P89
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-09-27_03,2023-09-26_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ impostorscore=0 bulkscore=0 phishscore=0 mlxlogscore=820 malwarescore=0
+ adultscore=0 spamscore=0 clxscore=1015 priorityscore=1501 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2309270060
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Wed, Sep 27, 2023 at 10:00:50AM +0300, Heikki Krogerus wrote:
-> On Sat, Sep 23, 2023 at 03:39:47AM -0400, Abdel Alkuor wrote:
-> > Some commands in tps25750 take longer than 1 second
-> > to complete, and some responses need some delay before
-> > the result becomes available.
-> > 
-> > Signed-off-by: Abdel Alkuor <alkuor@gmail.com>
+
+
+On 9/27/2023 2:54 AM, Alan Stern wrote:
+> On Wed, Sep 27, 2023 at 01:54:34AM +0530, Krishna Kurapati PSSNV wrote:
+>>
+>>
+>> On 9/27/2023 1:36 AM, Krishna Kurapati PSSNV wrote:
+>>>>>    drivers/usb/gadget/udc/core.c | 23 +++++++++++++++++++----
+>>>>>    1 file changed, 19 insertions(+), 4 deletions(-)
+>>>>>
+>>>>>    static void vbus_event_work(struct work_struct *work)
+>>>>> @@ -1604,12 +1608,23 @@ static int gadget_bind_driver(struct
+>>>>> device *dev)
+>>>>>        }
+>>>>>        usb_gadget_enable_async_callbacks(udc);
+>>>>>        udc->allow_connect = true;
+>>>>> -    usb_udc_connect_control_locked(udc);
+>>>>> +    ret = usb_udc_connect_control_locked(udc);
+>>>>> +    if (ret) {
+>>>>> +        mutex_unlock(&udc->connect_lock);
+>>>>> +        goto err_connect_control;
+>>>>> +    }
+>>>>> +
+>>>>>        mutex_unlock(&udc->connect_lock);
+>>>>>        kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
+>>>>>        return 0;
+>>>>> + err_connect_control:
+>>>>> +    usb_gadget_disable_async_callbacks(udc);
+>>>>> +    if (gadget->irq)
+>>>>> +        synchronize_irq(gadget->irq);
+>>>>> +    usb_gadget_udc_stop_locked(udc);
+>>>>
+>>>> Not good -- usb_gadget_udc_stop_locked() expects you to be holding
+>>>> udc->connect_lock, but you just dropped the lock!  Also, you never set
+>>>> udc->allow_connect back to false.
+>>>>
+>>>> You should move the mutex_unlock() call from inside the "if" statement
+>>>> to down here, and add a line for udc->allow_connect.
+>>>>
+>>>
+>>> Hi Alan,
+>>>
+>>>    Thanks for the review. Will push v5 addressing the changes.
+>>>
+>>>
+>> Hi Alan,
+>>
+>> I tried out the following diff:
+>>
+>> -       usb_udc_connect_control_locked(udc);
+>> +       ret = usb_udc_connect_control_locked(udc);
+>> +       if (ret)
+>> +               goto err_connect_control;
+>> +
+>>          mutex_unlock(&udc->connect_lock);
+>>
+>>          kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
+>>          return 0;
+>>
+>> + err_connect_control:
+>> +       udc->allow_connect = false;
+>> +       usb_gadget_disable_async_callbacks(udc);
+>> +       if (gadget->irq)
+>> +               synchronize_irq(gadget->irq);
+>> +       usb_gadget_udc_stop_locked(udc);
+>> +       mutex_unlock(&udc->connect_lock);
+>> +
+>>
+>> If I clear UDC and fail dwc3 soft reset on purpose, I see UDC_store failing:
+>>
+>> #echo a600000.usb > /sys/kernel/config/usb_gadget/g1/UDC
+>> [  127.394087] dwc3 a600000.usb: request 000000003f43f907 was not queued to
+>> ep0out
+>> [  127.401637] udc a600000.usb: failed to start g1: -110
+>> [  127.406841] configfs-gadget.g1: probe of gadget.0 failed with error -110
+>> [  127.413809] UDC core: g1: couldn't find an available UDC or it's busy
+>>
+>> The same output came when I tested v4 as well. Every time soft_reset would
+>> fail when I try to write to UDC, UDC_store fails and above log will come up.
 > 
-> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
-Hold on!
-
-You are not specifying the driver in the subject. You need to fix
-that.
-
-> > ---
-> > Changes in v6:
-> >   - Use tps6598x_exec_cmd as a wrapper
-> > Changes in v5:
-> >   - Incorporating tps25750 into tps6598x driver
-> > 
-> >  drivers/usb/typec/tipd/core.c | 19 +++++++++++++++----
-> >  1 file changed, 15 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-> > index 37b56ce75f39..32420c61660d 100644
-> > --- a/drivers/usb/typec/tipd/core.c
-> > +++ b/drivers/usb/typec/tipd/core.c
-> > @@ -282,9 +282,10 @@ static void tps6598x_disconnect(struct tps6598x *tps, u32 status)
-> >  	power_supply_changed(tps->psy);
-> >  }
-> >  
-> > -static int tps6598x_exec_cmd(struct tps6598x *tps, const char *cmd,
-> > +static int tps6598x_exec_cmd_tmo(struct tps6598x *tps, const char *cmd,
-> >  			     size_t in_len, u8 *in_data,
-> > -			     size_t out_len, u8 *out_data)
-> > +			     size_t out_len, u8 *out_data,
-> > +			     u32 cmd_timeout_ms, u32 res_delay_ms)
-> >  {
-> >  	unsigned long timeout;
-> >  	u32 val;
-> > @@ -307,8 +308,7 @@ static int tps6598x_exec_cmd(struct tps6598x *tps, const char *cmd,
-> >  	if (ret < 0)
-> >  		return ret;
-> >  
-> > -	/* XXX: Using 1s for now, but it may not be enough for every command. */
-> > -	timeout = jiffies + msecs_to_jiffies(1000);
-> > +	timeout = jiffies + msecs_to_jiffies(cmd_timeout_ms);
-> >  
-> >  	do {
-> >  		ret = tps6598x_read32(tps, TPS_REG_CMD1, &val);
-> > @@ -321,6 +321,9 @@ static int tps6598x_exec_cmd(struct tps6598x *tps, const char *cmd,
-> >  			return -ETIMEDOUT;
-> >  	} while (val);
-> >  
-> > +	/* some commands require delay for the result to be available */
-> > +	mdelay(res_delay_ms);
-> > +
-> >  	if (out_len) {
-> >  		ret = tps6598x_block_read(tps, TPS_REG_DATA1,
-> >  					  out_data, out_len);
-> > @@ -345,6 +348,14 @@ static int tps6598x_exec_cmd(struct tps6598x *tps, const char *cmd,
-> >  	return 0;
-> >  }
-> >  
-> > +static int tps6598x_exec_cmd(struct tps6598x *tps, const char *cmd,
-> > +			     size_t in_len, u8 *in_data,
-> > +			     size_t out_len, u8 *out_data)
-> > +{
-> > +	return tps6598x_exec_cmd_tmo(tps, cmd, in_len, in_data,
-> > +				     out_len, out_data, 1000, 0);
-> > +}
-> > +
-> >  static int tps6598x_dr_set(struct typec_port *port, enum typec_data_role role)
-> >  {
-> >  	const char *cmd = (role == TYPEC_DEVICE) ? "SWUF" : "SWDF";
-> > -- 
-> > 2.34.1
+> Isn't that what you want?  I thought the whole purpose of this patch was
+> to make it so that configfs would realize when
+> usb_udc_connect_control_locked() had failed.   So you should be happy
+> that the log shows a failure occurred.
+>  >> Can you help confirm if the diff above is proper as I don't see any 
+diff in
+>> the logs in v4 and about to push v5.
 > 
-> -- 
-> heikki
+> "Diff in the logs in v4"?  What does that mean?  A diff is a comparison
+> between two text files (often between before-and-after versions of a
+> source code file).  Why would you expect a diff to show up in the logs?
+> 
+> This revised patch looks okay to me.
+> 
+Thanks for the confirmation. Will push v5.
 
--- 
-heikki
+Regards,
+Krishna,
 
