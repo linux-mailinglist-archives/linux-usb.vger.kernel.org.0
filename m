@@ -1,93 +1,87 @@
-Return-Path: <linux-usb+bounces-622-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-623-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 395F57AFC17
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 09:29:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0196A7AFC1A
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 09:31:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by ny.mirrors.kernel.org (Postfix) with ESMTP id F40FC1C20905
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 07:29:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTP id 198491C208CB
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 07:31:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FD331C69C;
-	Wed, 27 Sep 2023 07:29:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B29E1C6A2;
+	Wed, 27 Sep 2023 07:30:58 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D78FD1C680
-	for <linux-usb@vger.kernel.org>; Wed, 27 Sep 2023 07:29:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 101514C9B
+	for <linux-usb@vger.kernel.org>; Wed, 27 Sep 2023 07:30:55 +0000 (UTC)
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CBDF1B0;
-	Wed, 27 Sep 2023 00:29:06 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38R4kUmr024276;
-	Wed, 27 Sep 2023 07:28:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=BLTmAj9c74uRGVTtwdPNUwAzx0B4vAqvHGoZje3AMhw=;
- b=hyfHnEMtJKdjXJ/zjLCLjIc1mGURp2BJHubn/wXejPhokL58kH/gmjf+FSnNwp0p4uE/
- uZ3xlyUgR2y8f7hhi2p9uaI9xOURDk3yjOqG/4frOtN3BJAWuTIJVBRS9NMgQKXUG5km
- wDFvtgb+MFfnzNdGuOydG+nCBeLjbn2fORxpbuDHT40bcoYbnV7rXGtXSwHxfdKPlZfa
- dg9snYAembWG7qY3ljdOM+d3H/G0mqC8GuwVU0w88uOW0oz7fWm96MVo8QvA9L9sMOtJ
- 9BBhFZzQRXWdJuuOkueBSECcBiqIjxHodv066K81A6j/Pi5NtHf8pqVh3FdDCJaAqH2z nA== 
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE953BF;
+	Wed, 27 Sep 2023 00:30:54 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38R4D74d028176;
+	Wed, 27 Sep 2023 07:30:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=3uH8tkNO63y+IIorgBzPxHyBrMidEpZshNsVgVuQAgs=;
+ b=cO8gEkETKZaDNBXKinaCowNAa+dpyB/HzIZu1dnoOXuE/yOQEKnp5aePjQG/WTMyW8GY
+ hrmYviWGtabEuxkSL77wUzQtKb97asvxSuGp8dPLtB7KlkZlIMI+zYQpTjW0zvBKAM2S
+ LOAEcJ3J9OgokuvCqCAhl/R+oVweAqeLyd6YL6IWIx1y1/gK/0i9vdfp+v7VrlI2jhKB
+ HZ52o1s1yzJCxEYUmTQC9P39aVq0IpKWCneH6/XE+I+3wASaMWZ1M45LEPRdhiVzrM7J
+ WLwAV8qhfzuRtvrAXH1MsaSTi4l9wiBbyR+gV/oPEKUTsFg9ZvC4JDnK+B0Bo6YvMfYZ 6Q== 
 Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tc43ms7yn-1
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tc179hv2p-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 27 Sep 2023 07:28:57 +0000
+	Wed, 27 Sep 2023 07:30:46 +0000
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38R7SulE021380
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38R7UjoB024716
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 27 Sep 2023 07:28:56 GMT
-Received: from [10.216.34.233] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Wed, 27 Sep
- 2023 00:28:52 -0700
-Message-ID: <05201136-5c67-47e7-a3f1-a7af051a2a00@quicinc.com>
-Date: Wed, 27 Sep 2023 12:58:49 +0530
+	Wed, 27 Sep 2023 07:30:45 GMT
+Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.36; Wed, 27 Sep 2023 00:30:41 -0700
+From: Krishna Kurapati <quic_kriskura@quicinc.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern
+	<stern@rowland.harvard.edu>,
+        Francesco Dolcini
+	<francesco.dolcini@toradex.com>,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Ivan Orlov
+	<ivan.orlov0322@gmail.com>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
+        <quic_jackp@quicinc.com>, Krishna Kurapati <quic_kriskura@quicinc.com>
+Subject: [PATCH v5] usb: gadget: udc: Handle gadget_connect failure during bind operation
+Date: Wed, 27 Sep 2023 13:00:27 +0530
+Message-ID: <20230927073027.27952-1-quic_kriskura@quicinc.com>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4] usb: gadget: udc: Handle gadget_connect failure during
- bind operation
-To: Alan Stern <stern@rowland.harvard.edu>
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Francesco Dolcini
-	<francesco.dolcini@toradex.com>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Ivan Orlov
-	<ivan.orlov0322@gmail.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_ppratap@quicinc.com>,
-        <quic_wcheng@quicinc.com>, <quic_jackp@quicinc.com>
-References: <20230926193708.22405-1-quic_kriskura@quicinc.com>
- <2178cf29-5e5c-4ed6-8d1c-916bc7036589@rowland.harvard.edu>
- <62083b55-0b78-4ebc-ab78-1c1d99f92507@quicinc.com>
- <f2bd7593-eff9-46ac-a94b-964eb4787740@quicinc.com>
- <9384ac6a-f877-4835-b1ec-0e620a5ba8ba@rowland.harvard.edu>
-Content-Language: en-US
-From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <9384ac6a-f877-4835-b1ec-0e620a5ba8ba@rowland.harvard.edu>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Y-0oaYrekRWC7HjRSZcQ2K7VzQZe7P89
-X-Proofpoint-GUID: Y-0oaYrekRWC7HjRSZcQ2K7VzQZe7P89
+X-Proofpoint-GUID: 9VRe691i13mLZFHa-NumTPlkrc7PHs9Y
+X-Proofpoint-ORIG-GUID: 9VRe691i13mLZFHa-NumTPlkrc7PHs9Y
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-09-27_03,2023-09-26_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- impostorscore=0 bulkscore=0 phishscore=0 mlxlogscore=820 malwarescore=0
- adultscore=0 spamscore=0 clxscore=1015 priorityscore=1501 mlxscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ impostorscore=0 lowpriorityscore=0 suspectscore=0 mlxlogscore=996
+ clxscore=1015 spamscore=0 bulkscore=0 priorityscore=1501 adultscore=0
+ phishscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2309180000 definitions=main-2309270060
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
@@ -95,102 +89,64 @@ X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
+In the event gadget_connect call (which invokes pullup) fails,
+propagate the error to udc bind operation which in turn sends the
+error to configfs. The userspace can then retry enumeration if
+it chooses to.
 
+Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+---
+Changes in v5: Addressed proper unlocking of control_lock mutex
 
-On 9/27/2023 2:54 AM, Alan Stern wrote:
-> On Wed, Sep 27, 2023 at 01:54:34AM +0530, Krishna Kurapati PSSNV wrote:
->>
->>
->> On 9/27/2023 1:36 AM, Krishna Kurapati PSSNV wrote:
->>>>>    drivers/usb/gadget/udc/core.c | 23 +++++++++++++++++++----
->>>>>    1 file changed, 19 insertions(+), 4 deletions(-)
->>>>>
->>>>>    static void vbus_event_work(struct work_struct *work)
->>>>> @@ -1604,12 +1608,23 @@ static int gadget_bind_driver(struct
->>>>> device *dev)
->>>>>        }
->>>>>        usb_gadget_enable_async_callbacks(udc);
->>>>>        udc->allow_connect = true;
->>>>> -    usb_udc_connect_control_locked(udc);
->>>>> +    ret = usb_udc_connect_control_locked(udc);
->>>>> +    if (ret) {
->>>>> +        mutex_unlock(&udc->connect_lock);
->>>>> +        goto err_connect_control;
->>>>> +    }
->>>>> +
->>>>>        mutex_unlock(&udc->connect_lock);
->>>>>        kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
->>>>>        return 0;
->>>>> + err_connect_control:
->>>>> +    usb_gadget_disable_async_callbacks(udc);
->>>>> +    if (gadget->irq)
->>>>> +        synchronize_irq(gadget->irq);
->>>>> +    usb_gadget_udc_stop_locked(udc);
->>>>
->>>> Not good -- usb_gadget_udc_stop_locked() expects you to be holding
->>>> udc->connect_lock, but you just dropped the lock!  Also, you never set
->>>> udc->allow_connect back to false.
->>>>
->>>> You should move the mutex_unlock() call from inside the "if" statement
->>>> to down here, and add a line for udc->allow_connect.
->>>>
->>>
->>> Hi Alan,
->>>
->>>    Thanks for the review. Will push v5 addressing the changes.
->>>
->>>
->> Hi Alan,
->>
->> I tried out the following diff:
->>
->> -       usb_udc_connect_control_locked(udc);
->> +       ret = usb_udc_connect_control_locked(udc);
->> +       if (ret)
->> +               goto err_connect_control;
->> +
->>          mutex_unlock(&udc->connect_lock);
->>
->>          kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
->>          return 0;
->>
->> + err_connect_control:
->> +       udc->allow_connect = false;
->> +       usb_gadget_disable_async_callbacks(udc);
->> +       if (gadget->irq)
->> +               synchronize_irq(gadget->irq);
->> +       usb_gadget_udc_stop_locked(udc);
->> +       mutex_unlock(&udc->connect_lock);
->> +
->>
->> If I clear UDC and fail dwc3 soft reset on purpose, I see UDC_store failing:
->>
->> #echo a600000.usb > /sys/kernel/config/usb_gadget/g1/UDC
->> [  127.394087] dwc3 a600000.usb: request 000000003f43f907 was not queued to
->> ep0out
->> [  127.401637] udc a600000.usb: failed to start g1: -110
->> [  127.406841] configfs-gadget.g1: probe of gadget.0 failed with error -110
->> [  127.413809] UDC core: g1: couldn't find an available UDC or it's busy
->>
->> The same output came when I tested v4 as well. Every time soft_reset would
->> fail when I try to write to UDC, UDC_store fails and above log will come up.
-> 
-> Isn't that what you want?  I thought the whole purpose of this patch was
-> to make it so that configfs would realize when
-> usb_udc_connect_control_locked() had failed.   So you should be happy
-> that the log shows a failure occurred.
->  >> Can you help confirm if the diff above is proper as I don't see any 
-diff in
->> the logs in v4 and about to push v5.
-> 
-> "Diff in the logs in v4"?  What does that mean?  A diff is a comparison
-> between two text files (often between before-and-after versions of a
-> source code file).  Why would you expect a diff to show up in the logs?
-> 
-> This revised patch looks okay to me.
-> 
-Thanks for the confirmation. Will push v5.
+ drivers/usb/gadget/udc/core.c | 19 +++++++++++++++----
+ 1 file changed, 15 insertions(+), 4 deletions(-)
 
-Regards,
-Krishna,
+diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+index 7d49d8a0b00c..824fe64e078a 100644
+--- a/drivers/usb/gadget/udc/core.c
++++ b/drivers/usb/gadget/udc/core.c
+@@ -1125,12 +1125,12 @@ EXPORT_SYMBOL_GPL(usb_gadget_set_state);
+ /* ------------------------------------------------------------------------- */
+ 
+ /* Acquire connect_lock before calling this function. */
+-static void usb_udc_connect_control_locked(struct usb_udc *udc) __must_hold(&udc->connect_lock)
++static int usb_udc_connect_control_locked(struct usb_udc *udc) __must_hold(&udc->connect_lock)
+ {
+ 	if (udc->vbus)
+-		usb_gadget_connect_locked(udc->gadget);
++		return usb_gadget_connect_locked(udc->gadget);
+ 	else
+-		usb_gadget_disconnect_locked(udc->gadget);
++		return usb_gadget_disconnect_locked(udc->gadget);
+ }
+ 
+ static void vbus_event_work(struct work_struct *work)
+@@ -1604,12 +1604,23 @@ static int gadget_bind_driver(struct device *dev)
+ 	}
+ 	usb_gadget_enable_async_callbacks(udc);
+ 	udc->allow_connect = true;
+-	usb_udc_connect_control_locked(udc);
++	ret = usb_udc_connect_control_locked(udc);
++	if (ret)
++		goto err_connect_control;
++
+ 	mutex_unlock(&udc->connect_lock);
+ 
+ 	kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
+ 	return 0;
+ 
++ err_connect_control:
++	udc->allow_connect = false;
++	usb_gadget_disable_async_callbacks(udc);
++	if (gadget->irq)
++		synchronize_irq(gadget->irq);
++	usb_gadget_udc_stop_locked(udc);
++	mutex_unlock(&udc->connect_lock);
++
+  err_start:
+ 	driver->unbind(udc->gadget);
+ 
+-- 
+2.42.0
+
 
