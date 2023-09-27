@@ -1,152 +1,106 @@
-Return-Path: <linux-usb+bounces-623-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-624-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0196A7AFC1A
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 09:31:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4CEB7AFC4C
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 09:47:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by ny.mirrors.kernel.org (Postfix) with ESMTP id 198491C208CB
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 07:31:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 2C5162821FD
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 07:47:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B29E1C6A2;
-	Wed, 27 Sep 2023 07:30:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B95BD1C6BF;
+	Wed, 27 Sep 2023 07:47:08 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 101514C9B
-	for <linux-usb@vger.kernel.org>; Wed, 27 Sep 2023 07:30:55 +0000 (UTC)
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE953BF;
-	Wed, 27 Sep 2023 00:30:54 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38R4D74d028176;
-	Wed, 27 Sep 2023 07:30:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=3uH8tkNO63y+IIorgBzPxHyBrMidEpZshNsVgVuQAgs=;
- b=cO8gEkETKZaDNBXKinaCowNAa+dpyB/HzIZu1dnoOXuE/yOQEKnp5aePjQG/WTMyW8GY
- hrmYviWGtabEuxkSL77wUzQtKb97asvxSuGp8dPLtB7KlkZlIMI+zYQpTjW0zvBKAM2S
- LOAEcJ3J9OgokuvCqCAhl/R+oVweAqeLyd6YL6IWIx1y1/gK/0i9vdfp+v7VrlI2jhKB
- HZ52o1s1yzJCxEYUmTQC9P39aVq0IpKWCneH6/XE+I+3wASaMWZ1M45LEPRdhiVzrM7J
- WLwAV8qhfzuRtvrAXH1MsaSTi4l9wiBbyR+gV/oPEKUTsFg9ZvC4JDnK+B0Bo6YvMfYZ 6Q== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tc179hv2p-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 27 Sep 2023 07:30:46 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38R7UjoB024716
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 27 Sep 2023 07:30:45 GMT
-Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.36; Wed, 27 Sep 2023 00:30:41 -0700
-From: Krishna Kurapati <quic_kriskura@quicinc.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern
-	<stern@rowland.harvard.edu>,
-        Francesco Dolcini
-	<francesco.dolcini@toradex.com>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Ivan Orlov
-	<ivan.orlov0322@gmail.com>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
-        <quic_jackp@quicinc.com>, Krishna Kurapati <quic_kriskura@quicinc.com>
-Subject: [PATCH v5] usb: gadget: udc: Handle gadget_connect failure during bind operation
-Date: Wed, 27 Sep 2023 13:00:27 +0530
-Message-ID: <20230927073027.27952-1-quic_kriskura@quicinc.com>
-X-Mailer: git-send-email 2.42.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 414C51C2BA;
+	Wed, 27 Sep 2023 07:47:07 +0000 (UTC)
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 176E6BF;
+	Wed, 27 Sep 2023 00:47:06 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-533df112914so7992155a12.0;
+        Wed, 27 Sep 2023 00:47:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1695800824; x=1696405624; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wumS1C3PQQ5KYgcSNmBkqyM+nn4oC9GlvcQr5Dhuxtc=;
+        b=jjRD59SUHioTrUlr69fYdlT34xDMGivOEZaxpHc8rEGEHm2SlerQqSQC6J3BwtdLZy
+         kAtTUWjGZkXoleGLT39sGnf1muloz7noIduiq27Y3T5udg4EMCHP7OqyfsQQ84ONnTmV
+         MAAFFGglsv3sNVEthrRnUodc2jualN8XZYM2ZhQeXlUxgNWaKlXTt1V1D36npSVkD1Ih
+         KGSWiYbKI6qw+9Fzq72mmZ9f1JNZAeiudKbO0X8eLftwXGZ3wooNxGcU5kCmWYMqveO4
+         TszYdHOyiCgVbes3UOb4V+QqJCOTM9ukObITm06L1/+uywU2Rj7WZGBaejbo3+3liZhb
+         IHKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695800824; x=1696405624;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wumS1C3PQQ5KYgcSNmBkqyM+nn4oC9GlvcQr5Dhuxtc=;
+        b=s2aAaVY+4HmUegnLYUiFKjEiWYq1/Z6ZloF72LhGIX68Mr9sqX1YVjY+mj+71yKFHl
+         B286DduznpI2FKxZ6xrIi3X/Q3dnDgqeyOlQd7gZ/3P5TTnL8nNwTeHeQyNbSszBYx1U
+         hAfSJFZDsBjEpMDNJuThusjN7zKd6EcVjIZsdk3R1y1OBJC7duEuLQTiWJ8oqzEENuEZ
+         1HfnYV472vNSVpIXwborGKyeEuaRQI69T3U7MugElffXDcJFSGpC3m2re3DEi6PhVADt
+         7kSTAEPIXwhVBMzLSewduWwBLT5PCoXcUXm79yFyKnhvR/tf8GFZZUf6b+M2uWSYAIMR
+         Fgdw==
+X-Gm-Message-State: AOJu0Yw9PtBS9PMWIbdW4G/NaJKMpbD8vJIrSrKDVIFxB6TNAsRacfsh
+	rQljvc9Kv5gFvnGNX8/OOf4=
+X-Google-Smtp-Source: AGHT+IHusU7lhGicPBVuLh3sb4Co896Bmmyzi9Xm4IsELthpKSUab7WBmJMnyROQZ8rQ/Mfm/1zFRA==
+X-Received: by 2002:a17:907:c241:b0:9ae:513d:47bd with SMTP id tj1-20020a170907c24100b009ae513d47bdmr990456ejc.26.1695800824350;
+        Wed, 27 Sep 2023 00:47:04 -0700 (PDT)
+Received: from primary ([212.34.12.50])
+        by smtp.gmail.com with ESMTPSA id t16-20020a1709066bd000b009ad8d444be4sm8816176ejs.43.2023.09.27.00.47.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Sep 2023 00:47:03 -0700 (PDT)
+Date: Wed, 27 Sep 2023 03:47:00 -0400
+From: Abdel Alkuor <alkuor@gmail.com>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: krzysztof.kozlowski+dt@linaro.org, bryan.odonoghue@linaro.org,
+	gregkh@linuxfoundation.org, robh+dt@kernel.org,
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, conor+dt@kernel.org,
+	ryan.eleceng@gmail.com
+Subject: Re: [PATCH v6 02/14] USB: typec: Add cmd timeout and response delay
+Message-ID: <ZRPd9IHwBsDOJqJv@primary>
+References: <20230923073959.86660-1-alkuor@gmail.com>
+ <20230923073959.86660-3-alkuor@gmail.com>
+ <ZRPTHeYhdtdtKZ1/@kuha.fi.intel.com>
+ <ZRPXLBj/Y6+yiwf8@kuha.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 9VRe691i13mLZFHa-NumTPlkrc7PHs9Y
-X-Proofpoint-ORIG-GUID: 9VRe691i13mLZFHa-NumTPlkrc7PHs9Y
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-09-27_03,2023-09-26_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- impostorscore=0 lowpriorityscore=0 suspectscore=0 mlxlogscore=996
- clxscore=1015 spamscore=0 bulkscore=0 priorityscore=1501 adultscore=0
- phishscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2309270060
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZRPXLBj/Y6+yiwf8@kuha.fi.intel.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-In the event gadget_connect call (which invokes pullup) fails,
-propagate the error to udc bind operation which in turn sends the
-error to configfs. The userspace can then retry enumeration if
-it chooses to.
+On Wed, Sep 27, 2023 at 10:18:04AM +0300, Heikki Krogerus wrote:
+> On Wed, Sep 27, 2023 at 10:00:50AM +0300, Heikki Krogerus wrote:
+> > On Sat, Sep 23, 2023 at 03:39:47AM -0400, Abdel Alkuor wrote:
+> > > Some commands in tps25750 take longer than 1 second
+> > > to complete, and some responses need some delay before
+> > > the result becomes available.
+> > > 
+> > > Signed-off-by: Abdel Alkuor <alkuor@gmail.com>
+> > 
+> > Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> 
+> Hold on!
+> 
+> You are not specifying the driver in the subject. You need to fix
+> that.
+> 
+I will send new patches with their subject updated.
 
-Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
----
-Changes in v5: Addressed proper unlocking of control_lock mutex
-
- drivers/usb/gadget/udc/core.c | 19 +++++++++++++++----
- 1 file changed, 15 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-index 7d49d8a0b00c..824fe64e078a 100644
---- a/drivers/usb/gadget/udc/core.c
-+++ b/drivers/usb/gadget/udc/core.c
-@@ -1125,12 +1125,12 @@ EXPORT_SYMBOL_GPL(usb_gadget_set_state);
- /* ------------------------------------------------------------------------- */
- 
- /* Acquire connect_lock before calling this function. */
--static void usb_udc_connect_control_locked(struct usb_udc *udc) __must_hold(&udc->connect_lock)
-+static int usb_udc_connect_control_locked(struct usb_udc *udc) __must_hold(&udc->connect_lock)
- {
- 	if (udc->vbus)
--		usb_gadget_connect_locked(udc->gadget);
-+		return usb_gadget_connect_locked(udc->gadget);
- 	else
--		usb_gadget_disconnect_locked(udc->gadget);
-+		return usb_gadget_disconnect_locked(udc->gadget);
- }
- 
- static void vbus_event_work(struct work_struct *work)
-@@ -1604,12 +1604,23 @@ static int gadget_bind_driver(struct device *dev)
- 	}
- 	usb_gadget_enable_async_callbacks(udc);
- 	udc->allow_connect = true;
--	usb_udc_connect_control_locked(udc);
-+	ret = usb_udc_connect_control_locked(udc);
-+	if (ret)
-+		goto err_connect_control;
-+
- 	mutex_unlock(&udc->connect_lock);
- 
- 	kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
- 	return 0;
- 
-+ err_connect_control:
-+	udc->allow_connect = false;
-+	usb_gadget_disable_async_callbacks(udc);
-+	if (gadget->irq)
-+		synchronize_irq(gadget->irq);
-+	usb_gadget_udc_stop_locked(udc);
-+	mutex_unlock(&udc->connect_lock);
-+
-  err_start:
- 	driver->unbind(udc->gadget);
- 
--- 
-2.42.0
-
+Thanks,
+Abdel
 
