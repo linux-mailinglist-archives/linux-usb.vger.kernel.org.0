@@ -1,192 +1,123 @@
-Return-Path: <linux-usb+bounces-675-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-676-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB09B7B0D14
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 22:01:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1F177B0D19
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 22:02:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 9B5E1282F3E
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 20:01:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 860F2283359
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 20:02:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE2654BDD5;
-	Wed, 27 Sep 2023 20:01:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93C034C848;
+	Wed, 27 Sep 2023 20:02:17 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FD8A450F4
-	for <linux-usb@vger.kernel.org>; Wed, 27 Sep 2023 20:01:07 +0000 (UTC)
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F3E18F
-	for <linux-usb@vger.kernel.org>; Wed, 27 Sep 2023 13:01:02 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id af79cd13be357-77409065623so726928385a.0
-        for <linux-usb@vger.kernel.org>; Wed, 27 Sep 2023 13:01:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1695844861; x=1696449661; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jDVLMXBa2XfaEHREeVH6PICOgKFD+LcSP9ho+5+MSRo=;
-        b=BSBiJnXg3jxAIe0bY0iizR/xMIJYQvgpeh1v0bShE0cEHhr04rIdEmivMNZzpCUins
-         4FwG8laG7MH1ZmyV9cPq/DCLrNjdnZ5uLe3nKXboDJbg9uhe/8Vm+r4nqi2XDyW9AoCE
-         ni5WUnTh5EqvnCjq+mpUU7yl59m8QrSkuHrpx8ckl1El8Fsnj0coIsqWfo4pq6hSfCsV
-         RETceEsJpzgpsk++rUf1tDpyadDwTqJT3qlUasMS53k5n6YAtPl6YVQMeagjplZcbMPe
-         3V9ShIpKKzSw4jqEdlyxLdHNTni5EZazQ/Wl1Ucn4kPRYLGOWOhSvpX8rD5alHsXghQF
-         CbGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695844861; x=1696449661;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jDVLMXBa2XfaEHREeVH6PICOgKFD+LcSP9ho+5+MSRo=;
-        b=GcFFCtNYzRnetB8T5EWKmMYTn6tp8sthrA0ayK6E6jfF06Joh9ZP5VmNMY/vYOs7m+
-         ouFRHgolBdutPk0T6jZkxQ4jhhqPp0m4XWuw9BqG68jvHNCsQUd8rhN4WarQy8YjgzUL
-         cgVNAmUXKFZCne3A3+ZULijoTQd9xlP0odTtRBCHhuB/XyTwzps6G+d7i7eTLWqKyx+T
-         nFYaFHPd9EjXXMYsUoVF3Da2GsWDA9NnJaxKQCNQULXT1KWRjo4EcPPRVjZSxNb8YE70
-         egGv7uHKvVSiVvco5wJWuVysKrfvmAXYWqr1MiqLQmxNTpzq+gCINpnDR4Fk+lprlqwp
-         Txww==
-X-Gm-Message-State: AOJu0Yx6UiCd5lNWubJm3hBO8uutcPqbI8hSco9LO0xTqASnvwSLedBs
-	zZSKTkZX9ywKn3xX2UWp0afklzNzJG9qRcKzQHChdw==
-X-Google-Smtp-Source: AGHT+IESw2wqCLleqmOMMct8rcQaxMts2l4nFzmNamRccfP/nZV4TTrMJ3qu+Nurw6mbsWjhkSVjbQ==
-X-Received: by 2002:ac8:5f12:0:b0:417:a74f:69b6 with SMTP id x18-20020ac85f12000000b00417a74f69b6mr2365851qta.65.1695844861069;
-        Wed, 27 Sep 2023 13:01:01 -0700 (PDT)
-Received: from ?IPV6:2600:1700:2000:b002:40d8:421c:60ef:36d5? ([2600:1700:2000:b002:40d8:421c:60ef:36d5])
-        by smtp.gmail.com with ESMTPSA id d8-20020ac81188000000b00411fcc18cc1sm5560876qtj.64.2023.09.27.13.00.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Sep 2023 13:01:00 -0700 (PDT)
-Message-ID: <cf68f6f1-e405-4c20-b4e1-da04189d0e2f@sifive.com>
-Date: Wed, 27 Sep 2023 15:00:59 -0500
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B96BD1A586;
+	Wed, 27 Sep 2023 20:02:15 +0000 (UTC)
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E82121;
+	Wed, 27 Sep 2023 13:02:14 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38RJkZ32011894;
+	Wed, 27 Sep 2023 20:01:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=ryZutAebLaGLyVKZ1wZ2WPr3DnN8n1DAG80EGJowehs=;
+ b=DBixV+Y6w/MthTtGGUv8auiu7df9weX4/brq78PevdvCw1sECoaaM+5R4iT87qhjSgL+
+ hdUy7zS256Ojq/xQg1E24st0QXoY1ajZdkiusKkHt7Vbwfj1xqq2gFt7Ns6UoJNFyIj/
+ HiSY6CNFUnKlQQnmdx7JspuYLT1yy5xTrSUieZ82n8DMw+y/vitVMD0nSnyRX7Hnk5sm
+ OYdfyzdbVtKfVyLsCxEbwfhVYrqc57iLygWAd8RA6f9KfjIVktV39sn1t0UVmqk/tdbl
+ B5gxgMR1foTSmnryE6xuzaU/7mNgIdqbzCS4+LAK6n19h8E7iY41q4Tlf7eBotdYbDBd Cg== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tcpkgrrh7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 27 Sep 2023 20:01:42 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38RK1fxj004565
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 27 Sep 2023 20:01:41 GMT
+Received: from [10.110.25.80] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Wed, 27 Sep
+ 2023 13:01:40 -0700
+Message-ID: <29584061-a7e9-5db4-a024-eaf7774a03dd@quicinc.com>
+Date: Wed, 27 Sep 2023 13:01:40 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: usb: Add T-HEAD TH1520 USB controller
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v7 09/33] ASoC: qdsp6: q6afe: Increase APR timeout
 Content-Language: en-US
-To: Jisheng Zhang <jszhang@kernel.org>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>,
- Fu Wei <wefu@redhat.com>, linux-riscv@lists.infradead.org,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-References: <20230927164222.3505-1-jszhang@kernel.org>
- <20230927164222.3505-2-jszhang@kernel.org>
-From: Samuel Holland <samuel.holland@sifive.com>
-In-Reply-To: <20230927164222.3505-2-jszhang@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+To: Mark Brown <broonie@kernel.org>
+CC: <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>,
+        <lgirdwood@gmail.com>, <perex@perex.cz>, <tiwai@suse.com>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <srinivas.kandagatla@linaro.org>, <bgoswami@quicinc.com>,
+        <Thinh.Nguyen@synopsys.com>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>
+References: <20230921214843.18450-1-quic_wcheng@quicinc.com>
+ <20230921214843.18450-10-quic_wcheng@quicinc.com>
+ <ZRRBIa+bVSqTHprO@finisterre.sirena.org.uk>
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <ZRRBIa+bVSqTHprO@finisterre.sirena.org.uk>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: wmE0swXrHDd9mXk1xvEgSZNzbdkoY5Fi
+X-Proofpoint-ORIG-GUID: wmE0swXrHDd9mXk1xvEgSZNzbdkoY5Fi
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-09-27_12,2023-09-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ bulkscore=0 phishscore=0 spamscore=0 malwarescore=0 impostorscore=0
+ mlxlogscore=324 suspectscore=0 lowpriorityscore=0 adultscore=0
+ clxscore=1015 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2309270170
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
 	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On 2023-09-27 11:42 AM, Jisheng Zhang wrote:
-> T-HEAD TH1520 platform's USB has a wrapper module around
-> the DesignWare USB3 DRD controller. Add binding information doc for
-> it.
+Hi Mark,
+
+On 9/27/2023 7:50 AM, Mark Brown wrote:
+> On Thu, Sep 21, 2023 at 02:48:19PM -0700, Wesley Cheng wrote:
+>> For USB offloading situations, the AFE port start command will result in a
+>> QMI handshake between the Q6DSP and the main processor.  Depending on if
+>> the USB bus is suspended, this routine would require more time to complete,
+>> as resuming the USB bus has some overhead associated with it.  Increase the
+>> timeout to 3s to allow for sufficient time for the USB QMI stream enable
+>> handshake to complete.
 > 
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> ---
->  .../bindings/usb/thead,th1520-usb.yaml        | 73 +++++++++++++++++++
->  1 file changed, 73 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/thead,th1520-usb.yaml
+> ...
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/thead,th1520-usb.yaml b/Documentation/devicetree/bindings/usb/thead,th1520-usb.yaml
-> new file mode 100644
-> index 000000000000..afb618eb5013
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/thead,th1520-usb.yaml
-> @@ -0,0 +1,73 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/thead,th1520-usb.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: T-HEAD TH1520 DWC3 USB Controller Glue
-> +
-> +maintainers:
-> +  - Jisheng Zhang <jszhang@kernel.org>
-> +
-> +properties:
-> +  compatible:
-> +    const: thead,th1520-usb
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 4
-> +
-> +  clock-names:
-> +    items:
-> +      - const: ref
-> +      - const: bus_early
-> +      - const: phy
-> +      - const: suspend
+>> -#define TIMEOUT_MS 1000
+>> +#define TIMEOUT_MS 3000
+> 
+> That seems worryingly large but if it's what the hardware/firmware needs
+> I guess there's nothing doing - even the 1s that's being replaced would
+> be nasty if we ever actually hit it.
 
-Except for "phy", these clocks are already documented in snps,dwc3.yaml. Are
-they necessary for the glue/PHY, or do they belong only in the controller node?
-They are not used by the driver in patch 2. Also, the PHY clock probably belongs
-with the PHY node.
+I may have gone overkill with the delay, but when I measured the 
+duration of the AFE start command it took ~1.5-2s.  It has to also 
+account for the overhead within handling the USB QMI request in the 
+qc_audio_offload driver.
 
-> +
-> +  ranges: true
-> +
-> +  '#address-cells':
-> +    enum: [ 1, 2 ]
-> +
-> +  '#size-cells':
-> +    enum: [ 1, 2 ]
-> +
-> +# Required child node:
-> +
-> +patternProperties:
-> +  "^usb@[0-9a-f]+$":
-> +    $ref: snps,dwc3.yaml#
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - ranges
-> +
-> +additionalProperties: false
-
-The driver in patch 2 uses the thead,misc-sysreg and vbus-supply properties,
-neither of which is documented here. Also, depending on the other bindings, the
-VBUS supply should be referenced from the USB PHY or connector node, not here.
-
-Regards,
-Samuel
-
-> +examples:
-> +  - |
-> +
-> +    usb {
-> +          compatible = "thead,th1520-usb";
-> +          reg = <0xec03f000 0x1000>;
-> +          clocks = <&clk 1>,
-> +                   <&clk 2>,
-> +                   <&clk 3>,
-> +                   <&clk 4>;
-> +          clock-names = "ref", "bus_early", "phy", "suspend";
-> +          ranges;
-> +          #address-cells = <1>;
-> +          #size-cells = <1>;
-> +
-> +          usb@e7040000 {
-> +                compatible = "snps,dwc3";
-> +                reg = <0xe7040000 0x10000>;
-> +                interrupts = <68>;
-> +                dr_mode = "host";
-> +          };
-> +    };
-
+Thanks
+Wesley Cheng
 
