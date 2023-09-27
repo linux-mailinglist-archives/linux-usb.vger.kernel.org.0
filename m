@@ -1,74 +1,132 @@
-Return-Path: <linux-usb+bounces-626-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-627-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D26C67AFE94
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 10:32:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 819497AFEE6
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 10:47:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 5CDF92842F6
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 08:32:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTP id 8F16E1C2074D
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 08:47:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B59C1CAB6;
-	Wed, 27 Sep 2023 08:32:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A48911BDCC;
+	Wed, 27 Sep 2023 08:47:50 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51E381CA86
-	for <linux-usb@vger.kernel.org>; Wed, 27 Sep 2023 08:32:54 +0000 (UTC)
-Received: from mail.socialglobal.pl (mail.socialglobal.pl [51.195.90.253])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E275A1A8
-	for <linux-usb@vger.kernel.org>; Wed, 27 Sep 2023 01:32:51 -0700 (PDT)
-Received: by mail.socialglobal.pl (Postfix, from userid 1002)
-	id 7944A22B04; Wed, 27 Sep 2023 08:31:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=socialglobal.pl;
-	s=mail; t=1695803525;
-	bh=XwhyqI/moZPDJ7KCfcA6Gip8fA7ZKcg5SWsKuF/26zk=;
-	h=Date:From:To:Subject:From;
-	b=aOIjiQr9Pw948j4TgrBwhnNFdYlOQ03SHgJxqHNcTSE2mLbs4sNhbTVm5SI3EJqJL
-	 GHyjET/MIWA0OIrYLxqMOJaYGkFUMkPdYmL9ngmYIp/98QUMr0xmxdzVwbyZzXnrAu
-	 fEUBJ/rSJ37auxvBRsM2Jyj4dsEkGFicgNdoMI6SR6SfEW6q9eFXhF3crgTfdHZOGp
-	 aWcyB37aKw/WP3xTwk/5PkXClw3nkIBHcWuKuAgQmFlEND/ZVjyFg127X4e4n5nPxS
-	 hhI6rGwPfk0wl75EBeMYfU2OXqiZdLjkO5sHazXoKu+uSDfJVbwJ4Kjs/WDV9qKaMy
-	 DzQNqpEHstgYQ==
-Received: by mail.socialglobal.pl for <linux-usb@vger.kernel.org>; Wed, 27 Sep 2023 08:30:56 GMT
-Message-ID: <20230927075535-0.1.8p.2ys9o.0.7euodcwq0j@socialglobal.pl>
-Date: Wed, 27 Sep 2023 08:30:56 GMT
-From: "Dominik Perkowski" <dominik.perkowski@socialglobal.pl>
-To: <linux-usb@vger.kernel.org>
-Subject: Pozycjonowanie- informacja
-X-Mailer: mail.socialglobal.pl
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFB5F23CB
+	for <linux-usb@vger.kernel.org>; Wed, 27 Sep 2023 08:47:48 +0000 (UTC)
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6133ECC;
+	Wed, 27 Sep 2023 01:47:47 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38R7Qg6M027364;
+	Wed, 27 Sep 2023 08:47:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=DFClMcz23Gf8da0D7pNHglGNlh8JbZ50VURIo0Bxb8k=;
+ b=npEqrAHBiyP32TW6/Yu+8ZBRAzBT+ka/hXE2azEJoMbjrM2GKvaWa3TMYcXKsxl4WKMY
+ NsggJbrdePDD5pPOp1Zo9h2BFV5AwvWv37YrECLGJK3PzWToEcxDqZ4M3fSR5HDJlA/A
+ /yv3IKAWmeME62jLrnNxGG1hpbqRx2dt1FYQDkXMdU+01WvbALpSjnPQdNlJ+90OwIwZ
+ yxQxfNwa8q12OCQFfO4rd81TRp39RLiqnJUE1e5RTfLpgmhRF/juJI8J6m1GZPp8HMz8
+ orhI4oXAXb0H4XU8/2KNMHAcsdbvztZvpepAGKu2kZvQ90qfLZ0jFNXGCp7t19oRHmmV WA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tcda7rena-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 27 Sep 2023 08:47:22 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38R8lL1b004704
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 27 Sep 2023 08:47:22 GMT
+Received: from [10.216.34.233] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Wed, 27 Sep
+ 2023 01:47:17 -0700
+Message-ID: <3c18614f-eb77-4eff-be1d-068cde655b0a@quicinc.com>
+Date: Wed, 27 Sep 2023 14:17:14 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5] usb: gadget: udc: Handle gadget_connect failure during
+ bind operation
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC: Alan Stern <stern@rowland.harvard.edu>,
+        Francesco Dolcini
+	<francesco.dolcini@toradex.com>,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Ivan Orlov
+	<ivan.orlov0322@gmail.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_ppratap@quicinc.com>,
+        <quic_wcheng@quicinc.com>, <quic_jackp@quicinc.com>
+References: <20230927073027.27952-1-quic_kriskura@quicinc.com>
+ <2023092701-facelift-projector-d1d4@gregkh>
+Content-Language: en-US
+From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <2023092701-facelift-projector-d1d4@gregkh>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: nP6WagGRzemSeX86E-Bhsd90GT-U81k0
+X-Proofpoint-GUID: nP6WagGRzemSeX86E-Bhsd90GT-U81k0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-09-27_03,2023-09-26_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
+ clxscore=1015 lowpriorityscore=0 impostorscore=0 bulkscore=0
+ mlxlogscore=498 priorityscore=1501 mlxscore=0 suspectscore=0 spamscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2309270071
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-	autolearn=unavailable autolearn_force=no version=3.4.6
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Dzie=C5=84 dobry,=20
-
-jaki=C5=9B czas temu zg=C5=82osi=C5=82a si=C4=99 do nas firma, kt=C3=B3re=
-j strona internetowa nie pozycjonowa=C5=82a si=C4=99 wysoko w wyszukiwarc=
-e Google.=20
-
-Na podstawie wykonanego przez nas audytu SEO zoptymalizowali=C5=9Bmy tre=C5=
-=9Bci na stronie pod k=C4=85tem wcze=C5=9Bniej opracowanych s=C5=82=C3=B3=
-w kluczowych. Nasz wewn=C4=99trzny system codziennie analizuje prawid=C5=82=
-owe dzia=C5=82anie witryny.  Dzi=C4=99ki indywidualnej strategii, firma z=
-dobywa coraz wi=C4=99cej Klient=C3=B3w. =20
-
-Czy chcieliby Pa=C5=84stwo zwi=C4=99kszy=C4=87 liczb=C4=99 os=C3=B3b odwi=
-edzaj=C4=85cych stron=C4=99 internetow=C4=85 firmy? M=C3=B3g=C5=82bym prz=
-edstawi=C4=87 ofert=C4=99?=20
 
 
-Pozdrawiam serdecznie,
-Dominik Perkowski
+On 9/27/2023 1:46 PM, Greg Kroah-Hartman wrote:
+> On Wed, Sep 27, 2023 at 01:00:27PM +0530, Krishna Kurapati wrote:
+>> In the event gadget_connect call (which invokes pullup) fails,
+>> propagate the error to udc bind operation which in turn sends the
+>> error to configfs. The userspace can then retry enumeration if
+>> it chooses to.
+> 
+> Will this break userspace that is not expecting error codes to be
+> returned?  What userspace code will now be modified to handle this?
+> Where is that work happening?
+> 
+> thanks,
+
+Hi Greg,
+
+  This only handles cases where the pullup failed but the error code 
+wasn't returned to configfs_udc_store approrpiately. In userspace when 
+we do the following:
+
+echo "UDC NAME" > /usb_gadget/<>/UDC
+
+in the issue I was facing, the core soft reset was failing and we return 
+-110 from dwc3/core.c to udc's bind_to_driver call, but it is not 
+checked any where today and we return 0 to udc_store in configfs. The 
+userspace assumes the UDC write went through (and enum happened) but it 
+actually doesn't. If we propagate the -ETIMEDOUT coming from dwc3-core 
+all the way to configfs_udc_store, it will reach userspace as well 
+indicating that the echo command was not successful which then the user 
+can choose to retry or not. On Android devices, I saw userspace retry 
+happening when we propagate dwc3-core error to userspace. So nothing in 
+userspace breaks. It can stay as it but this time, the echo in userspace 
+will fail if pullup fails for some reason.
+
+Regards,
+Krishna,
 
