@@ -1,105 +1,132 @@
-Return-Path: <linux-usb+bounces-644-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-645-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A23D47B05BA
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 15:47:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4F897B05FE
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 16:02:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 33629282D3F
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 13:46:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 96E57282C52
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 14:02:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B80E537151;
-	Wed, 27 Sep 2023 13:46:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A390038F90;
+	Wed, 27 Sep 2023 14:02:15 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0765B107BE
-	for <linux-usb@vger.kernel.org>; Wed, 27 Sep 2023 13:46:54 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6A52121;
-	Wed, 27 Sep 2023 06:46:53 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6600,9927,10846"; a="412740175"
-X-IronPort-AV: E=Sophos;i="6.03,181,1694761200"; 
-   d="scan'208";a="412740175"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2023 06:46:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10846"; a="752601458"
-X-IronPort-AV: E=Sophos;i="6.03,181,1694761200"; 
-   d="scan'208";a="752601458"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga007.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2023 06:46:48 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC0)
-	(envelope-from <andy@kernel.org>)
-	id 1qlUsH-00000000ttl-0fli;
-	Wed, 27 Sep 2023 16:46:45 +0300
-Date: Wed, 27 Sep 2023 16:46:44 +0300
-From: Andy Shevchenko <andy@kernel.org>
-To: Duje =?utf-8?Q?Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
-Cc: Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	Russell King <linux@armlinux.org.uk>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org
-Subject: Re: [PATCH RFC v2 3/6] ARM: pxa: Convert Spitz CF power control to
- GPIO descriptors
-Message-ID: <ZRQyREMrfCaDMnI0@smile.fi.intel.com>
-References: <20230926-pxa-gpio-v2-0-984464d165dd@skole.hr>
- <20230926-pxa-gpio-v2-3-984464d165dd@skole.hr>
- <ZRMDqVCtrUyhcqaw@smile.fi.intel.com>
- <5984688.lOV4Wx5bFT@radijator>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06E6437CAC
+	for <linux-usb@vger.kernel.org>; Wed, 27 Sep 2023 14:02:13 +0000 (UTC)
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC778121
+	for <linux-usb@vger.kernel.org>; Wed, 27 Sep 2023 07:02:11 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-59f6e6b206fso87739117b3.3
+        for <linux-usb@vger.kernel.org>; Wed, 27 Sep 2023 07:02:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1695823331; x=1696428131; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TBnyuiDOj3yAHdZQ44pdmLniIewRmVISdqXbyoGpKk0=;
+        b=TZGhz3D9g85w+FGYnx1rBvQ+Kal7RELhFpKLXL1BCPDdRX/yiDDBhOzZqbQOImw0fX
+         YHdADvGt2+kbguBEnlYKB9sNVIx9lelr4QqjDTwqFR+UTn8/79IAu1TRYfWTz7aOpCeB
+         hP2H0G0bQQNOcbBX6RpLH9jLtRjy6xSqqFXOYlspmYNNSPmmWhijfR9Nm02QFJWzbCCI
+         RuBPdKtbZDYkRg0F8qUqV+Zl1+W7o0wZhwRdNrP7qUw9zpCyT8St/KgmHTwmF7ZCEB8Z
+         VCXlkpJPwIcQY1vxt4ZCz6PvRcI9YC6p3bk1A2hFQDRxdgDEeLJZs5ydr6N4Ef8vA+KM
+         gK5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695823331; x=1696428131;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TBnyuiDOj3yAHdZQ44pdmLniIewRmVISdqXbyoGpKk0=;
+        b=eEtnH+TnTttnF0BxFFEcw3MRsveVl/iZC6xXHSx9yQE5ixGcDJkT7E5Z6mb+mErxMQ
+         BeIveac/Wgdb/OfW5GrX5f69sdRDmi14SwHx3/uiecaIMakt+5c4wtmw8nc3S5uZRtAj
+         /AL8u7DFeUd/epDECdjl0EiTMOAB0LUIdt5+wTOP31hJfbsS26Bz8yb4BP1UBPjySloq
+         hjJOyh07ZRqmlKqNhLPyB6Il4ZSYi1TBVnUvvU7C8qKOY0Gph96V2DRlKMzneGdWy79o
+         b3N7Dp7tzO5UU9umMcZ2LdZXyGoHYDsZKm1/FJqQanmih+Ux587oepJIrNOkHcOPerou
+         zE9g==
+X-Gm-Message-State: AOJu0YyJ5gkcjPnEyCexotY1jWWBsZJyklHlvdwa+jdA5Wj8QB8Cra++
+	/OLQ5Qz02z9ffvqr4+LL/jsPI0VujejY7jk3oBIgdw==
+X-Google-Smtp-Source: AGHT+IG3NIoS6t9C0t4P+lYpvc2BAFnmgw/owkIpeAAJonSeGsCHw+DvTSU0bTM47IDgbJEqaN0QxEtIvSU3OMHue9A=
+X-Received: by 2002:a05:6902:4f2:b0:d4b:6a0:fe2b with SMTP id
+ w18-20020a05690204f200b00d4b06a0fe2bmr2221423ybs.36.1695823330766; Wed, 27
+ Sep 2023 07:02:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5984688.lOV4Wx5bFT@radijator>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-	RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_SOFTFAIL
-	autolearn=ham autolearn_force=no version=3.4.6
+References: <20230924-pxa-gpio-v1-0-2805b87d8894@skole.hr> <20230924-pxa-gpio-v1-1-2805b87d8894@skole.hr>
+ <ZRE3JNVNqFN0knHl@smile.fi.intel.com>
+In-Reply-To: <ZRE3JNVNqFN0knHl@smile.fi.intel.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Wed, 27 Sep 2023 16:01:58 +0200
+Message-ID: <CACRpkdZdSTCeobuFdXNbJcHTKJp1V=t1sfp2tp25Mb0FBh74pA@mail.gmail.com>
+Subject: Re: [PATCH RFC 1/6] ARM: pxa: Convert Spitz OHCI to GPIO descriptors
+To: Andy Shevchenko <andy@kernel.org>, Kent Gibson <warthog618@gmail.com>
+Cc: =?UTF-8?Q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>, 
+	Daniel Mack <daniel@zonque.org>, Haojian Zhuang <haojian.zhuang@gmail.com>, 
+	Robert Jarzmik <robert.jarzmik@free.fr>, Russell King <linux@armlinux.org.uk>, 
+	Alan Stern <stern@rowland.harvard.edu>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-gpio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Wed, Sep 27, 2023 at 02:56:07PM +0200, Duje Mihanović wrote:
-> On Tuesday, September 26, 2023 6:15:37 PM CEST Andy Shevchenko wrote:
-> > On Tue, Sep 26, 2023 at 05:46:24PM +0200, Duje Mihanović wrote:
+On Mon, Sep 25, 2023 at 9:30=E2=80=AFAM Andy Shevchenko <andy@kernel.org> w=
+rote:
 
-...
+> > +     if (pxa_ohci->usb_host)
+> > +             gpiod_put(pxa_ohci->usb_host);
+>
+> Linus, Bart, do we have misdesigned _optinal() GPIO APIs?
+>
+> In GPIOLIB=3Dn, the above requires that redundant check. Shouldn't we rep=
+lace
+> gpiod_put() stub to be simply no-op?
 
-> > > +	cf_power = gpiod_get(&pxa_device_mci.dev, "cf_power", GPIOD_ASIS);
-> > > +	if (IS_ERR(cf_power)) {
-> > > +		dev_err(&pxa_device_mci.dev,
-> > > +				"failed to get power control GPIO with 
-> %ld\n",
-> > > +				PTR_ERR(cf_power));
-> > > +		return;
-> > > +	}
-> > > 
-> > > +	gpiod_put(cf_power);
-> > 
-> > Don't you want to use guarded gpiod_get()?
-> > Okay, it seems not yet in the pending list, but we can survive without that.
-> 
-> Can you please elaborate? If I understand correctly, the if statement right 
-> after gpiod_get is a guard.
+You mean the WARN_ON(desc) in gpiod_put() in the static inline
+stub version?
 
-It's about RAII version of the gpiod_get(). It's quite a new thing
-in the Linux kernel.
+I thought about it for a bit, drafted a patch removing them, and then
+realized the following:
 
--- 
-With Best Regards,
-Andy Shevchenko
+If someone is making the gpiolib optional for a driver, i.e. neither
+DEPENDS ON GPIOLIB nor SELECT GPIOLIB, they are a quite
+narrow segment. I would say in 9 cases out of 10 or more this is
+just a driver that should depend on or select GPIOLIB.
 
+I think such drivers should actually do the NULL checks and not be
+too convenient, the reason is readability: someone reading that
+driver will be thinking gpios are not optional if they can call
+gpiod_set_value(), gpiod_put() etc without any sign that the
+desc is optional.
 
+If the driver uses [devm_]gpiod_get_optional() the library is not
+using the stubs and does the right thing, and it is clear that
+the GPIO is *runtime* optional.
+
+But *compile time* optional, *combined* with runtime optional -
+I'm not so happy if we try to avoid warnings around that. I think
+it leads to confusing configs and code that looks like gpiolib is
+around despite it wasn't selected.
+
+If the code isn't depending on or selecting GPIOLIB and still
+use _optional() calls, it better be ready to do some extra checks,
+because this is a weird combo, it can't be common.
+
+Could be a documentation update making this clear though.
+
+What do you other people think?
+
+Yours,
+Linus Walleij
 
