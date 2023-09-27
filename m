@@ -1,229 +1,161 @@
-Return-Path: <linux-usb+bounces-673-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-674-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F2997B0B83
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 19:58:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 953527B0D07
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 21:58:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by ny.mirrors.kernel.org (Postfix) with ESMTP id 90FB71C20AFD
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 17:58:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 94F38282D07
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 19:58:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C206A4C843;
-	Wed, 27 Sep 2023 17:58:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 221E84BDD5;
+	Wed, 27 Sep 2023 19:58:22 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF1644BDD0;
-	Wed, 27 Sep 2023 17:58:04 +0000 (UTC)
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3E2210F5;
-	Wed, 27 Sep 2023 10:57:56 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-40572aeb6d0so82792905e9.1;
-        Wed, 27 Sep 2023 10:57:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695837475; x=1696442275; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p2109S4Uz2+NkDCuRu0GcYLAXs7x3Far7ylOe5EHoOY=;
-        b=m933ANgxGQiFXpCXC3/svDWVuqeg5IQTId42hA/fM0FJcK9KNZ61FcfSDHbJb89Dn9
-         +5toSYVtp+9KgbFbHoGzIJ/oFCQdPxQcgvD6vC0JeOjY2zTX89bnNUHeuL+5M294glb9
-         qZ6FjdvIdXc7J0B3fP62cUnVe5sQ8UmOnPOVUeSiGq7145azUXg2Hz64I668B6fsu9BF
-         z2YG7Iqpmk5OfhkU1utDEyq3PclPNesQkTRjoaJgTY5y4dyv63xXfakARjZ/9LNQ+wqb
-         SfG6GJHsWunODdlkhaevLNLBhzTVcstmS5OK/iM6r0PxPM1pGQQgZ9jowFV4CJ5WyhUw
-         2b8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695837475; x=1696442275;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=p2109S4Uz2+NkDCuRu0GcYLAXs7x3Far7ylOe5EHoOY=;
-        b=PSi/Q3434HFH/X+n3GSg00cEUh+TEMtTOZyOPLVxeuRmC/iYqeLgkgxAIh+OIBjkcs
-         PMMXQ3Ee4x++E3zSK2YdO+LTnPGdbVB/AwFY32ns1XdGL4e5OQFA2enCWgSmQUA0DbVH
-         8htjeMeyIEBoAm3e9bOJU+Qvocz7yv66kjaYUL+VoRZckfYTiaZAS5ga5Nh8l2m/STCo
-         ggmPWe+gpdEzW9tWIWBO9njOvltusubsutjyrWr6e6TOcqW6vMv0OEO/ch48fEB+yThe
-         mC/wild8AluzP9qFFa2m+p+V3A6GLiZh17pzJIsmayDzPc5Gw2WjW1CqCw+nMJC0tTSL
-         l1ow==
-X-Gm-Message-State: AOJu0YyrqZme5IcvZSmci1cSkFiJATTiiLSC5xLnlVDO8jRMwRcobqYw
-	5zu2a9DCLQvcFYwtcOq3zqzx3ytsnjrYTsiI4FI=
-X-Google-Smtp-Source: AGHT+IEyA1kIm+4XHyPVDovtqS8aoOhNRFsAZnA/J3cBYYroo9LS1q548ikrMFrHYRDyfl6RPHB1og==
-X-Received: by 2002:a5d:6782:0:b0:31f:b79a:c4b7 with SMTP id v2-20020a5d6782000000b0031fb79ac4b7mr2420469wru.24.1695837475101;
-        Wed, 27 Sep 2023 10:57:55 -0700 (PDT)
-Received: from primary.. ([212.34.12.50])
-        by smtp.gmail.com with ESMTPSA id d4-20020a170906370400b0099bd8c1f67esm9654593ejc.109.2023.09.27.10.57.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Sep 2023 10:57:54 -0700 (PDT)
-From: Abdel Alkuor <alkuor@gmail.com>
-To: heikki.krogerus@linux.intel.com,
-	krzysztof.kozlowski+dt@linaro.org,
-	bryan.odonoghue@linaro.org
-Cc: gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	ryan.eleceng@gmail.com,
-	robh+dt@kernel.org,
-	conor+dt@kernel.org,
-	devicetree@vger.kernel.org,
-	Abdel Alkuor <abdelalkuor@geotab.com>
-Subject: [PATCH v7 14/14] USB: typec: tps6598x: Add status trace for tps25750
-Date: Wed, 27 Sep 2023 13:53:48 -0400
-Message-Id: <20230927175348.18041-15-alkuor@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230927175348.18041-1-alkuor@gmail.com>
-References: <20230927175348.18041-1-alkuor@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EE911A586;
+	Wed, 27 Sep 2023 19:58:19 +0000 (UTC)
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F9110E;
+	Wed, 27 Sep 2023 12:58:17 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38RJRS1m018853;
+	Wed, 27 Sep 2023 19:57:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=rYcnAHiw6usl3QH9sjFDJFDGeRzeKYUgES1JtPSdelw=;
+ b=I2Tcn7LVEa0xJm0dobfdy3MRwSAvjCXeSjk6bcEKgzVEFJe7As6IgXbfMOl9iu6zh2gP
+ c9pQX7TYcpEJqKf48ohFp6LBwDVw3sBIeJ85rP8bl4lzmsNa8gj56SmUAMIklooW78NI
+ b+6nGkufnORaiQVOXJy3YpNMIB+m3kteyeMjl8ZLX9sEGBV2i9xqs4L1I4CSj1fkZpI6
+ DrCRoW4HCFvaTSab4LfCmrtbxVOa0gc0g/b7SLVCgDTwJbV6HzFqo+trC8kk4GS4gaBv
+ NtSDWCqZIFh0j6N6LemFJq0MXyATfTfOL9AvUhuE1F1JkiPqYP7dGA4uVbYWz0O5U0tS iQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tcfp6hhcq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 27 Sep 2023 19:57:54 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38RJvqZn029066
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 27 Sep 2023 19:57:52 GMT
+Received: from [10.110.25.80] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Wed, 27 Sep
+ 2023 12:57:52 -0700
+Message-ID: <cdd947b2-0272-723b-77ad-c81c5417eac7@quicinc.com>
+Date: Wed, 27 Sep 2023 12:57:48 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-	autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v7 06/33] ASoC: Add SOC USB APIs for adding an USB backend
+Content-Language: en-US
+To: Mark Brown <broonie@kernel.org>
+CC: <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>,
+        <lgirdwood@gmail.com>, <perex@perex.cz>, <tiwai@suse.com>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <srinivas.kandagatla@linaro.org>, <bgoswami@quicinc.com>,
+        <Thinh.Nguyen@synopsys.com>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>
+References: <20230921214843.18450-1-quic_wcheng@quicinc.com>
+ <20230921214843.18450-7-quic_wcheng@quicinc.com>
+ <ZRRAxSlk8uvsfMcx@finisterre.sirena.org.uk>
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <ZRRAxSlk8uvsfMcx@finisterre.sirena.org.uk>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: QlIsD3uzMaugVSohs0dpbsgua4zKq2wZ
+X-Proofpoint-GUID: QlIsD3uzMaugVSohs0dpbsgua4zKq2wZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-09-27_12,2023-09-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
+ clxscore=1011 adultscore=0 impostorscore=0 lowpriorityscore=0 spamscore=0
+ phishscore=0 priorityscore=1501 suspectscore=0 malwarescore=0
+ mlxlogscore=482 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2309270169
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-From: Abdel Alkuor <abdelalkuor@geotab.com>
+Hi Mark,
 
-tps25750 status register is a subset of tps6598x status register, hence
-a trace for tps25750 status register is added.
+On 9/27/2023 7:48 AM, Mark Brown wrote:
+> On Thu, Sep 21, 2023 at 02:48:16PM -0700, Wesley Cheng wrote:
+> 
+>> +static struct device_node *snd_soc_find_phandle(struct device *dev)
+>> +{
+>> +	struct device_node *node;
+>> +
+>> +	node = of_parse_phandle(dev->of_node, "usb-soc-be", 0);
+> 
+> Very nitpicky but this function possibly wants a _usb_ in the name, not
+> that it *super* matters with it being static.  Or it could just be
+> inlined into the only user and not worry about the naming at all.
+> 
 
-Signed-off-by: Abdel Alkuor <abdelalkuor@geotab.com>
----
-Changes in v7:
-  - Add driver name to commit subject
-Changes in v6:
- - Add trace status to tipd data factory
-Changes in v5:
-  - Incorporating tps25750 into tps6598x driver
+Thanks for the review!  Sure, let me reshuffle things around a bit and 
+just get rid of this function entirely and inline it to the API below.
 
- drivers/usb/typec/tipd/core.c  | 12 +++++++----
- drivers/usb/typec/tipd/trace.h | 37 ++++++++++++++++++++++++++++++++++
- 2 files changed, 45 insertions(+), 4 deletions(-)
+>> +/**
+>> + * snd_soc_usb_get_priv_data() - Retrieve private data stored
+>> + * @dev: device reference
+>> + *
+>> + * Fetch the private data stored in the USB SND SOC structure.
+>> + *
+>> + */
+>> +void *snd_soc_usb_get_priv_data(struct device *dev)
+>> +{
+>> +	struct snd_soc_usb *ctx;
+>> +
+>> +	ctx = snd_soc_find_usb_ctx(dev);
+>> +	if (!ctx) {
+>> +		/* Check if backend device */
+>> +		mutex_lock(&ctx_mutex);
+>> +		list_for_each_entry(ctx, &usb_ctx_list, list) {
+>> +			if (dev->of_node == ctx->dev->of_node) {
+>> +				mutex_unlock(&ctx_mutex);
+>> +				goto out;
+>> +			}
+>> +		}
+>> +		mutex_unlock(&ctx_mutex);
+>> +		ctx = NULL;
+>> +	}
+> 
+> This seems a lot more expensive than I'd expect for a get_priv_data
+> operation, usually it's just a container_of() or other constant time
+> pulling out of a pointer rather than a linked list walk - the sort of
+> thing that people put at the start of functions and do all the time.
+> If we need this I think it needs a name that's more clearly tied to the
+> use case.
+> 
+> I didn't actually find the user of this though?
 
-diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-index c9c30de6e77a..59a4ba797a2c 100644
---- a/drivers/usb/typec/tipd/core.c
-+++ b/drivers/usb/typec/tipd/core.c
-@@ -109,6 +109,7 @@ struct tipd_data {
- 	irq_handler_t irq_handler;
- 	int (*register_port)(struct tps6598x *tps, struct fwnode_handle *node);
- 	void (*trace_power_status)(u16 status);
-+	void (*trace_status)(u32 status);
- };
- 
- struct tps6598x {
-@@ -468,7 +469,9 @@ static bool tps6598x_read_status(struct tps6598x *tps, u32 *status)
- 		dev_err(tps->dev, "%s: failed to read status\n", __func__);
- 		return false;
- 	}
--	trace_tps6598x_status(*status);
-+
-+	if (tps->cb.trace_status)
-+		tps->cb.trace_status(*status);
- 
- 	return true;
- }
-@@ -1173,18 +1176,21 @@ static const struct tipd_data cd321x_data = {
- 	.irq_handler = cd321x_interrupt,
- 	.register_port = tps6598x_register_port,
- 	.trace_power_status = trace_tps6598x_power_status,
-+	.trace_status = trace_tps6598x_status,
- };
- 
- static const struct tipd_data tps6598x_data = {
- 	.irq_handler = tps6598x_interrupt,
- 	.register_port = tps6598x_register_port,
- 	.trace_power_status = trace_tps6598x_power_status,
-+	.trace_status = trace_tps6598x_status,
- };
- 
- static const struct tipd_data tps25750_data = {
- 	.irq_handler = tps25750_interrupt,
- 	.register_port = tps25750_register_port,
- 	.trace_power_status = trace_tps25750_power_status,
-+	.trace_status = trace_tps25750_status,
- };
- 
- static int tps6598x_probe(struct i2c_client *client)
-@@ -1261,10 +1267,8 @@ static int tps6598x_probe(struct i2c_client *client)
- 	if (ret)
- 		goto err_reset_controller;
- 
--	ret = tps6598x_read32(tps, TPS_REG_STATUS, &status);
--	if (ret < 0)
-+	if (!tps6598x_read_status(tps, &status))
- 		goto err_clear_mask;
--	trace_tps6598x_status(status);
- 
- 	/*
- 	 * This fwnode has a "compatible" property, but is never populated as a
-diff --git a/drivers/usb/typec/tipd/trace.h b/drivers/usb/typec/tipd/trace.h
-index 739b0a2a867d..0669cca12ea1 100644
---- a/drivers/usb/typec/tipd/trace.h
-+++ b/drivers/usb/typec/tipd/trace.h
-@@ -91,6 +91,14 @@
- 						      TPS_STATUS_USB_HOST_PRESENT_MASK | \
- 						      TPS_STATUS_LEGACY_MASK))
- 
-+#define TPS25750_STATUS_FLAGS_MASK (GENMASK(31, 0) ^ (TPS_STATUS_CONN_STATE_MASK | \
-+						      GENMASK(19, 7) | \
-+						      TPS_STATUS_VBUS_STATUS_MASK | \
-+						      TPS_STATUS_USB_HOST_PRESENT_MASK | \
-+						      TPS_STATUS_LEGACY_MASK | \
-+						      BIT(26) | \
-+						      GENMASK(31, 28)))
-+
- #define show_status_conn_state(status) \
- 	__print_symbolic(TPS_STATUS_CONN_STATE((status)), \
- 		{ TPS_STATUS_CONN_STATE_CONN_WITH_R_A,	"conn-Ra"  }, \
-@@ -148,6 +156,14 @@
- 		      { TPS_STATUS_HIGH_VOLAGE_WARNING,	"HIGH_VOLAGE_WARNING" }, \
- 		      { TPS_STATUS_HIGH_LOW_VOLTAGE_WARNING, "HIGH_LOW_VOLTAGE_WARNING" })
- 
-+#define show_tps25750_status_flags(flags) \
-+	__print_flags((flags & TPS25750_STATUS_FLAGS_MASK), "|", \
-+		      { TPS_STATUS_PLUG_PRESENT,	"PLUG_PRESENT" }, \
-+		      { TPS_STATUS_PLUG_UPSIDE_DOWN,	"UPSIDE_DOWN" }, \
-+		      { TPS_STATUS_PORTROLE,		"PORTROLE" }, \
-+		      { TPS_STATUS_DATAROLE,		"DATAROLE" }, \
-+		      { TPS_STATUS_BIST,		"BIST" })
-+
- #define show_power_status_source_sink(power_status) \
- 	__print_symbolic(TPS_POWER_STATUS_SOURCESINK(power_status), \
- 		{ 1, "sink" }, \
-@@ -292,6 +308,27 @@ TRACE_EVENT(tps6598x_status,
- 		    )
- );
- 
-+TRACE_EVENT(tps25750_status,
-+	    TP_PROTO(u32 status),
-+	    TP_ARGS(status),
-+
-+	    TP_STRUCT__entry(
-+			     __field(u32, status)
-+			     ),
-+
-+	    TP_fast_assign(
-+			   __entry->status = status;
-+			   ),
-+
-+	    TP_printk("conn: %s, vbus: %s, usb-host: %s, legacy: %s, flags: %s",
-+		      show_status_conn_state(__entry->status),
-+		      show_status_vbus_status(__entry->status),
-+		      show_status_usb_host_present(__entry->status),
-+		      show_status_legacy(__entry->status),
-+		      show_tps25750_status_flags(__entry->status)
-+		    )
-+);
-+
- TRACE_EVENT(tps6598x_power_status,
- 	    TP_PROTO(u16 power_status),
- 	    TP_ARGS(power_status),
--- 
-2.34.1
+So the end user of this would be the qc_audio_offload driver, within 
+prepare_qmi_response().  This is to fetch some information about the 
+DPCM backend during the stream enable request.
+
+Previously, I limited the # of snd_soc_usb ports to be registered to 
+one, but that would affect the scalability of this layer.  Hence, adding 
+a list instead increased the complexity.  Will rename this accordingly.
+
+Thanks
+Wesley Cheng
 
 
