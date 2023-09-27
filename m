@@ -1,51 +1,74 @@
-Return-Path: <linux-usb+bounces-658-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-659-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 171247B0AB8
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 18:54:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E56FA7B0B60
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 19:57:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sy.mirrors.kernel.org (Postfix) with ESMTP id 4AA78B20B64
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 16:54:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTP id B56651C209F3
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 17:57:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42FDE4A547;
-	Wed, 27 Sep 2023 16:54:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FB694B209;
+	Wed, 27 Sep 2023 17:57:31 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1C131BDE0;
-	Wed, 27 Sep 2023 16:54:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27B43C433CC;
-	Wed, 27 Sep 2023 16:54:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1695833670;
-	bh=pfq+SQ5jW2o9nXakRgvSgmaqn3orOhnaopBx/4PGPjM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=dI0YrIfy3jXCRX8+l+D2FjpPKNs3YV7+hSTiGlNtpGtV7CQS6bd586Pt3ZyMoUV7i
-	 jICgsB1K+tZwYyfcHX3fcqS+EjQyqfKN56lB5rxmhPJY1u5C5yqAJzH2Y+Sh7GcCnA
-	 Wsjh/mt9gs90sacL9QsJdnhEDORTDgAeSQlZkhrVAQHBgxfLa5jj1XVu8ZHqzgIdZB
-	 zk0Ns+qhq+xNHB0bKRIrrb335lwvV5BvXwFSnl0oaVCz5cqX0mwtAQkzs+FzxjX+2m
-	 gh/D3N+yoUM4HM2so+vq6e9HXDseLImFHeWW1gISm9LFOO+4RJWBhgwJur/o7zClzJ
-	 ononDWm9zlqqw==
-From: Jisheng Zhang <jszhang@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51C9F14F69;
+	Wed, 27 Sep 2023 17:57:29 +0000 (UTC)
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711A1A1;
+	Wed, 27 Sep 2023 10:57:26 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-5333fb34be3so13821665a12.1;
+        Wed, 27 Sep 2023 10:57:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1695837445; x=1696442245; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=V1C5NoxWdrmo2WR3CcVLRiRtgNXMmf8SHNkj8akGdeA=;
+        b=SVDmJAy0EZYbh/oN5RJ0g/inrduKu6DmnuAT2itgRhv6RVFeQA8msZoerCvTme/7r8
+         ffoHUM4vuXBJkGntOzEh7Et6zNrYtL/W4m/Kyau5Yh7Texb4PFlehltZBWO0L3ACx8VQ
+         dQ6nDeXR2HZhKfr43N6AReugZ5nAhT23b7Lb/RO864vtXNzuAfjFLLPMr/BGjETKZP9H
+         yIg3RHe9XuAm1YGqGUZ12LhPpBIdJI21J6ypik7HfuvOBnZIqocyzpU8dLGgSA/UuCsE
+         hqcRqRPKPPSYrGWJqNXN0fFRZl2WFVn5qet3ZBbNmRXQu0x5BWUoW/4WjlQoRzskyPgQ
+         loHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695837445; x=1696442245;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=V1C5NoxWdrmo2WR3CcVLRiRtgNXMmf8SHNkj8akGdeA=;
+        b=UJrcc0owCYPlAINwToPMu35+30Paf5hRPkijI4MjqBQZsPFvVCrx/3VORc4FReeob9
+         1I+AqWlwDJ2/ZKmjSbI6eMKvxnZvZY4vZyIEgKeZMHuD//J8yc6gD8ALJAnJY3JYRtEy
+         aMCAU8Bi4UIGJHZYv8Pswy6FW9HOn9C1YIVxKO4ncNg0pcmPSd18pxjtLzz0i2VHYfTQ
+         SqfzKoDuJQVqeMbkIbp6HBZ1lHlzS6Dx5lXcH9gaou8cg+j3scryBi5DlhGovhuKmScT
+         GUqaA1f1Cvk+Fdm+aXMhPkme4uBgrXerQZvkQVqVeCliLxgZ53OgXP4JKpEvte8Tn0cA
+         crRw==
+X-Gm-Message-State: AOJu0YzXAOjpdt0YH/vpW5/0wKRyOS/ewlxYNGUY8dQnEDeMr4lQBmxa
+	iRz3jX5gflIu68l+nqaLF6g=
+X-Google-Smtp-Source: AGHT+IFv1U4GuNVN7D9gIfVsHA6c6ZTVTBoJcd8l4Iq+OlFaL4DuuXjeE8AWJU3OV53Abc7VbIMbUg==
+X-Received: by 2002:a17:907:2cc1:b0:9ae:5fe1:ef01 with SMTP id hg1-20020a1709072cc100b009ae5fe1ef01mr2121403ejc.37.1695837444660;
+        Wed, 27 Sep 2023 10:57:24 -0700 (PDT)
+Received: from primary.. ([212.34.12.50])
+        by smtp.gmail.com with ESMTPSA id d4-20020a170906370400b0099bd8c1f67esm9654593ejc.109.2023.09.27.10.57.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Sep 2023 10:57:23 -0700 (PDT)
+From: Abdel Alkuor <alkuor@gmail.com>
+To: heikki.krogerus@linux.intel.com,
+	krzysztof.kozlowski+dt@linaro.org,
+	bryan.odonoghue@linaro.org
+Cc: gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Guo Ren <guoren@kernel.org>,
-	Fu Wei <wefu@redhat.com>,
-	linux-riscv@lists.infradead.org
-Subject: [PATCH 2/2] usb: dwc3: add T-HEAD TH1520 usb driver
-Date: Thu, 28 Sep 2023 00:42:22 +0800
-Message-Id: <20230927164222.3505-3-jszhang@kernel.org>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230927164222.3505-1-jszhang@kernel.org>
-References: <20230927164222.3505-1-jszhang@kernel.org>
+	ryan.eleceng@gmail.com,
+	robh+dt@kernel.org,
+	conor+dt@kernel.org,
+	devicetree@vger.kernel.org,
+	Abdel Alkuor <abdelalkuor@geotab.com>
+Subject: [PATCH v7 00/14] Add TPS25750 USB type-C PD controller support
+Date: Wed, 27 Sep 2023 13:53:34 -0400
+Message-Id: <20230927175348.18041-1-alkuor@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -53,185 +76,132 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-Adds TH1520 Glue layer to support USB controller on T-HEAD TH1520 SoC.
-There is a DesignWare USB3 DRD core in TH1520 SoCs, the dwc3 core is
-the child of this USB wrapper module device.
+From: Abdel Alkuor <abdelalkuor@geotab.com>
 
-Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
----
- MAINTAINERS                   |   1 +
- drivers/usb/dwc3/Kconfig      |   9 +++
- drivers/usb/dwc3/Makefile     |   1 +
- drivers/usb/dwc3/dwc3-thead.c | 119 ++++++++++++++++++++++++++++++++++
- 4 files changed, 130 insertions(+)
- create mode 100644 drivers/usb/dwc3/dwc3-thead.c
+TPS25750 USB type-C PD controller has the same register offsets as
+tps6598x. The following is a summary of incorporating TPS25750 into
+TPS6598x driver:
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 90f13281d297..d55e40060c46 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -18481,6 +18481,7 @@ M:	Fu Wei <wefu@redhat.com>
- L:	linux-riscv@lists.infradead.org
- S:	Maintained
- F:	arch/riscv/boot/dts/thead/
-+F:	drivers/usb/dwc3/dwc3-thead.c
- 
- RNBD BLOCK DRIVERS
- M:	Md. Haris Iqbal <haris.iqbal@ionos.com>
-diff --git a/drivers/usb/dwc3/Kconfig b/drivers/usb/dwc3/Kconfig
-index 98efcbb76c88..1b02f4f55b47 100644
---- a/drivers/usb/dwc3/Kconfig
-+++ b/drivers/usb/dwc3/Kconfig
-@@ -178,4 +178,13 @@ config USB_DWC3_OCTEON
- 	  Only the host mode is currently supported.
- 	  Say 'Y' or 'M' here if you have one such device.
- 
-+config USB_DWC3_THEAD
-+	tristate "T-HEAD Platform"
-+	depends on ARCH_THEAD || COMPILE_TEST
-+	default USB_DWC3
-+	help
-+	  Support T-HEAD platform with DesignWare Core USB3 IP.
-+	  Only the host mode is currently supported.
-+	  Say 'Y' or 'M' here if you have one such device.
-+
- endif
-diff --git a/drivers/usb/dwc3/Makefile b/drivers/usb/dwc3/Makefile
-index fe1493d4bbe5..9523a51dd279 100644
---- a/drivers/usb/dwc3/Makefile
-+++ b/drivers/usb/dwc3/Makefile
-@@ -55,3 +55,4 @@ obj-$(CONFIG_USB_DWC3_QCOM)		+= dwc3-qcom.o
- obj-$(CONFIG_USB_DWC3_IMX8MP)		+= dwc3-imx8mp.o
- obj-$(CONFIG_USB_DWC3_XILINX)		+= dwc3-xilinx.o
- obj-$(CONFIG_USB_DWC3_OCTEON)		+= dwc3-octeon.o
-+obj-$(CONFIG_USB_DWC3_THEAD)		+= dwc3-thead.o
-diff --git a/drivers/usb/dwc3/dwc3-thead.c b/drivers/usb/dwc3/dwc3-thead.c
-new file mode 100644
-index 000000000000..999b1e319c72
---- /dev/null
-+++ b/drivers/usb/dwc3/dwc3-thead.c
-@@ -0,0 +1,119 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * dwc3-thead.c - T-HEAD platform specific glue layer
-+ *
-+ * Inspired by dwc3-of-simple.c
-+ *
-+ * Copyright (C) 2021 Alibaba Group Holding Limited.
-+ * Copyright (C) 2023 Jisheng Zhang <jszhang@kernel.org>
-+ * Copyright (c) 2018, The Linux Foundation. All rights reserved.
-+ */
-+
-+#include <linux/io.h>
-+#include <linux/kernel.h>
-+#include <linux/mfd/syscon.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/of_platform.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+
-+#include "core.h"
-+
-+#define USB_SSP_EN		0x34
-+#define  REF_SSP_EN		BIT(0)
-+#define USB_SYS			0x3c
-+#define  COMMONONN		BIT(0)
-+
-+#define USB3_DRD_SWRST		0x14
-+#define  USB3_DRD_PRST		BIT(0)
-+#define  USB3_DRD_PHYRST	BIT(1)
-+#define  USB3_DRD_VCCRST	BIT(2)
-+#define  USB3_DRD_RSTMASK	(USB3_DRD_PRST | USB3_DRD_PHYRST | USB3_DRD_VCCRST)
-+
-+struct dwc3_thead {
-+	void __iomem		*base;
-+	struct regmap		*misc_sysreg;
-+	struct regulator	*vbus;
-+};
-+
-+static void dwc3_thead_optimize_power(struct dwc3_thead *thead)
-+{
-+	u32 val;
-+
-+	/* config usb top within USB ctrl & PHY reset */
-+	regmap_update_bits(thead->misc_sysreg, USB3_DRD_SWRST,
-+			   USB3_DRD_RSTMASK, USB3_DRD_PRST);
-+
-+	/*
-+	 * dwc reg also need to be configed to save power
-+	 * 1. set USB_SYS[COMMONONN]
-+	 * 2. set DWC3_GCTL[SOFITPSYNC](done by core.c)
-+	 * 3. set GUSB3PIPECTL[SUSPENDEN] (done by core.c)
-+	 */
-+	val = readl(thead->base + USB_SYS);
-+	val |= COMMONONN;
-+	writel(val, thead->base + USB_SYS);
-+	val = readl(thead->base + USB_SSP_EN);
-+	val |= REF_SSP_EN;
-+	writel(val, thead->base + USB_SSP_EN);
-+
-+	regmap_update_bits(thead->misc_sysreg, USB3_DRD_SWRST,
-+			   USB3_DRD_RSTMASK, USB3_DRD_RSTMASK);
-+}
-+
-+static int dwc3_thead_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct device_node *np = dev->of_node;
-+	struct dwc3_thead *thead;
-+	int ret;
-+
-+	thead = devm_kzalloc(&pdev->dev, sizeof(*thead), GFP_KERNEL);
-+	if (!thead)
-+		return -ENOMEM;
-+
-+	platform_set_drvdata(pdev, thead);
-+
-+	ret = devm_regulator_get_enable_optional(dev, "vbus");
-+	if (ret < 0 && ret != -ENODEV)
-+		return ret;
-+
-+	thead->misc_sysreg = syscon_regmap_lookup_by_phandle(np, "thead,misc-sysreg");
-+	if (IS_ERR(thead->misc_sysreg))
-+		return PTR_ERR(thead->misc_sysreg);
-+
-+	thead->base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(thead->base))
-+		return PTR_ERR(thead->base);
-+
-+	dwc3_thead_optimize_power(thead);
-+
-+	return of_platform_populate(np, NULL, NULL, dev);
-+}
-+
-+static void dwc3_thead_remove(struct platform_device *pdev)
-+{
-+	of_platform_depopulate(&pdev->dev);
-+}
-+
-+static const struct of_device_id dwc3_thead_of_match[] = {
-+	{ .compatible = "thead,th1520-usb" },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, dwc3_thead_of_match);
-+
-+static struct platform_driver dwc3_thead_driver = {
-+	.probe		= dwc3_thead_probe,
-+	.remove_new	= dwc3_thead_remove,
-+	.driver		= {
-+		.name	= "dwc3-thead",
-+		.of_match_table	= dwc3_thead_of_match,
-+	},
-+};
-+module_platform_driver(dwc3_thead_driver);
-+
-+MODULE_ALIAS("platform:dwc3-thead");
-+MODULE_LICENSE("GPL v2");
-+MODULE_DESCRIPTION("DesignWare DWC3 T-HEAD Glue Driver");
-+MODULE_AUTHOR("Jisheng Zhang <jszhang@kernel.org>");
+- Only Check VID register (0x00) for TPS6598x and cd321x, as TPS25750 doesn't
+  have VID register.
+
+- TypeC port registration will be registered differently for each PD
+  controller. TPS6598x uses system configuration register (0x28) to get
+  pr/dr capabilities. On the other hand, TPS25750 will use data role property
+  and PD status register (0x40) to get pr/dr capabilities as TPS25750 doesn't
+  have register 0x28 supported.
+
+- TPS25750 requires writing a binary configuration to switch PD
+  controller from PTCH mode to APP mode which needs the following changes:
+  - Add PTCH mode to the modes list.
+  - Add an argument to tps6598x_check_mode to return the current mode.
+  - Currently, tps6598x_exec_cmd has cmd timeout hardcoded to 1 second,
+    and doesn't wait before checking DATA_OUT response. In TPS25750, patch 4CCs
+    take longer than 1 second to execute and some requires a delay before
+    checking DATA_OUT. To accommodate that, cmd_timeout and response_delay will
+    be added as arguments to tps6598x_exec_cmd.
+  - Implement applying patch sequence for TPS25750.
+
+- In pm suspend callback, patch mode needs to be checked and the binary
+  configuration should be applied if needed.
+
+- For interrupt, TPS25750 has only one event register (0x14) and one mask
+  register (0x16) of 11 bytes each, where TPS6598x has two event
+  and two mask registers of 8 bytes each. Both TPS25750 and TPS65986x
+  shares the same bit field offsets for events/masks/clear but many of
+  there fields are reserved in TPS25750, the following needs to be done in
+  tps6598x_interrupt:
+  - Read EVENT1 register as a block of 11 bytes when tps25750 is present
+  - Write CLEAR1 register as a block of 11 bytes when tps25750 is present
+  - Add trace_tps25750_irq
+  - During testing, I noticed that when a cable is plugged into the PD
+    controller and before PD controller switches to APP mode, there is a
+    lag between dr/pr updates and PlugInsertOrRemoval Event, so a check
+    for dr/pr change needs to be added along TPS_REG_INT_PLUG_EVENT check
+
+- Add TPS25750 traces for status and power status registers. Trace for
+  data register won't be added as it doesn't exist in the device.
+
+- Configure sleep mode for TPS25750.
+
+v7:
+ - PATCH 1: 
+    - Define reg at top-level
+    - Remove description from reg-names
+ - PATCH 2..7: Add tps6598x to the subject
+ - PATCH 8:
+    - Add tps6598x to the subject
+    - Create tps25750 interrupt handler
+ - PATCH 9..11: Add tps6598x to the subject
+ - PATCH 12: 
+    - Add driver name to commit subject
+    - Call trace_tps25750_irq directly from tps25750 interrupt
+      handler
+ - PATCH 13-14: Add tps6598x to the subject
+      
+v6:
+ - PATCH 1: Use reg property for patch address
+ - PATCH 2: Use tps6598x_exec_cmd as a wrapper
+ - PATCH 3: Return current mode and check it directly
+ - PATCH 4:
+    - Don't check VID for tps25750 as the VID register doesn't exist
+    - Remove is_tps25750 flag from tps6598x struct
+    - Get patch address from reg property
+ - PATCH 5: Update eeprom macro to use TPS instead
+ - PATCH 6: No changes
+ - PATCH 7: Check tps25750 using is_compatiable device node
+ - PATCH 8: Create tipd callbacks factory 
+ - PATCH 9: No changes
+ - PATCH 10: Add port registration to tipd data factory
+ - PATCH 11: Use tps25750_init instead of tps25750_apply_patch in resume
+    	     as it initializes sleep mode
+ - PATCH 12: Add trace irq to tipd callbacks factory
+ - PATCH 13: Add trace power status to tipd data factory
+ - PATCH 14: Add trace status to tipd data factory
+v5:
+ - PATCH 1: Add tps25750 bindings to tps6598x
+ - PATCH 2: Remove tps25750 driver and incorperate tps25750
+ 	    into tps6598x driver
+ - PATCH [3..15]: Incorporating tps25750 into tps6598x driver
+v4:
+ - PATCH 1: No change
+ - PATCH 2: Fix comments style and drop of_match_ptr
+v3:
+ - PATCH 1: Fix node name
+ - PATCH 2: Upload tps25750 driver patch
+v2:
+ - PATCH 1: General properties clean up
+
+Abdel Alkuor (14):
+  dt-bindings: usb: tps6598x: Add tps25750
+  USB: typec: tsp6598x: Add cmd timeout and response delay
+  USB: typec: tps6598x: Add patch mode to tps6598x
+  USB: typec: tps6598x: Load TPS25750 patch bundle
+  USB: typec: tps6598x: Check for EEPROM present
+  USB: typec: tps6598x: Clear dead battery flag
+  USB: typec: tps6598x: Apply patch again after power resume
+  USB: typec: tps6598x: Add interrupt support for TPS25750
+  USB: typec: tps6598x: Refactor tps6598x port registration
+  USB: typec: tps6598x: Add port registration for tps25750
+  USB: typec: tps6598x: Enable sleep mode for tps25750
+  USB: typec: tps6598x: Add trace for tps25750 irq
+  USB: typec: tps6598x: Add power status trace for tps25750
+  USB: typec: tps6598x: Add status trace for tps25750
+
+ .../devicetree/bindings/usb/ti,tps6598x.yaml  |  81 ++-
+ drivers/usb/typec/tipd/core.c                 | 622 ++++++++++++++++--
+ drivers/usb/typec/tipd/tps6598x.h             |  36 +
+ drivers/usb/typec/tipd/trace.h                |  92 +++
+ 4 files changed, 762 insertions(+), 69 deletions(-)
+
 -- 
-2.40.1
+2.34.1
 
 
