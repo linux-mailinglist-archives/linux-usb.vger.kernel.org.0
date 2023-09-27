@@ -1,161 +1,192 @@
-Return-Path: <linux-usb+bounces-674-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-675-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 953527B0D07
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 21:58:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id EB09B7B0D14
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 22:01:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 94F38282D07
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 19:58:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 9B5E1282F3E
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 20:01:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 221E84BDD5;
-	Wed, 27 Sep 2023 19:58:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE2654BDD5;
+	Wed, 27 Sep 2023 20:01:08 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EE911A586;
-	Wed, 27 Sep 2023 19:58:19 +0000 (UTC)
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F9110E;
-	Wed, 27 Sep 2023 12:58:17 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38RJRS1m018853;
-	Wed, 27 Sep 2023 19:57:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=rYcnAHiw6usl3QH9sjFDJFDGeRzeKYUgES1JtPSdelw=;
- b=I2Tcn7LVEa0xJm0dobfdy3MRwSAvjCXeSjk6bcEKgzVEFJe7As6IgXbfMOl9iu6zh2gP
- c9pQX7TYcpEJqKf48ohFp6LBwDVw3sBIeJ85rP8bl4lzmsNa8gj56SmUAMIklooW78NI
- b+6nGkufnORaiQVOXJy3YpNMIB+m3kteyeMjl8ZLX9sEGBV2i9xqs4L1I4CSj1fkZpI6
- DrCRoW4HCFvaTSab4LfCmrtbxVOa0gc0g/b7SLVCgDTwJbV6HzFqo+trC8kk4GS4gaBv
- NtSDWCqZIFh0j6N6LemFJq0MXyATfTfOL9AvUhuE1F1JkiPqYP7dGA4uVbYWz0O5U0tS iQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tcfp6hhcq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 27 Sep 2023 19:57:54 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38RJvqZn029066
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 27 Sep 2023 19:57:52 GMT
-Received: from [10.110.25.80] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Wed, 27 Sep
- 2023 12:57:52 -0700
-Message-ID: <cdd947b2-0272-723b-77ad-c81c5417eac7@quicinc.com>
-Date: Wed, 27 Sep 2023 12:57:48 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FD8A450F4
+	for <linux-usb@vger.kernel.org>; Wed, 27 Sep 2023 20:01:07 +0000 (UTC)
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F3E18F
+	for <linux-usb@vger.kernel.org>; Wed, 27 Sep 2023 13:01:02 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id af79cd13be357-77409065623so726928385a.0
+        for <linux-usb@vger.kernel.org>; Wed, 27 Sep 2023 13:01:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google; t=1695844861; x=1696449661; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jDVLMXBa2XfaEHREeVH6PICOgKFD+LcSP9ho+5+MSRo=;
+        b=BSBiJnXg3jxAIe0bY0iizR/xMIJYQvgpeh1v0bShE0cEHhr04rIdEmivMNZzpCUins
+         4FwG8laG7MH1ZmyV9cPq/DCLrNjdnZ5uLe3nKXboDJbg9uhe/8Vm+r4nqi2XDyW9AoCE
+         ni5WUnTh5EqvnCjq+mpUU7yl59m8QrSkuHrpx8ckl1El8Fsnj0coIsqWfo4pq6hSfCsV
+         RETceEsJpzgpsk++rUf1tDpyadDwTqJT3qlUasMS53k5n6YAtPl6YVQMeagjplZcbMPe
+         3V9ShIpKKzSw4jqEdlyxLdHNTni5EZazQ/Wl1Ucn4kPRYLGOWOhSvpX8rD5alHsXghQF
+         CbGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695844861; x=1696449661;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jDVLMXBa2XfaEHREeVH6PICOgKFD+LcSP9ho+5+MSRo=;
+        b=GcFFCtNYzRnetB8T5EWKmMYTn6tp8sthrA0ayK6E6jfF06Joh9ZP5VmNMY/vYOs7m+
+         ouFRHgolBdutPk0T6jZkxQ4jhhqPp0m4XWuw9BqG68jvHNCsQUd8rhN4WarQy8YjgzUL
+         cgVNAmUXKFZCne3A3+ZULijoTQd9xlP0odTtRBCHhuB/XyTwzps6G+d7i7eTLWqKyx+T
+         nFYaFHPd9EjXXMYsUoVF3Da2GsWDA9NnJaxKQCNQULXT1KWRjo4EcPPRVjZSxNb8YE70
+         egGv7uHKvVSiVvco5wJWuVysKrfvmAXYWqr1MiqLQmxNTpzq+gCINpnDR4Fk+lprlqwp
+         Txww==
+X-Gm-Message-State: AOJu0Yx6UiCd5lNWubJm3hBO8uutcPqbI8hSco9LO0xTqASnvwSLedBs
+	zZSKTkZX9ywKn3xX2UWp0afklzNzJG9qRcKzQHChdw==
+X-Google-Smtp-Source: AGHT+IESw2wqCLleqmOMMct8rcQaxMts2l4nFzmNamRccfP/nZV4TTrMJ3qu+Nurw6mbsWjhkSVjbQ==
+X-Received: by 2002:ac8:5f12:0:b0:417:a74f:69b6 with SMTP id x18-20020ac85f12000000b00417a74f69b6mr2365851qta.65.1695844861069;
+        Wed, 27 Sep 2023 13:01:01 -0700 (PDT)
+Received: from ?IPV6:2600:1700:2000:b002:40d8:421c:60ef:36d5? ([2600:1700:2000:b002:40d8:421c:60ef:36d5])
+        by smtp.gmail.com with ESMTPSA id d8-20020ac81188000000b00411fcc18cc1sm5560876qtj.64.2023.09.27.13.00.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Sep 2023 13:01:00 -0700 (PDT)
+Message-ID: <cf68f6f1-e405-4c20-b4e1-da04189d0e2f@sifive.com>
+Date: Wed, 27 Sep 2023 15:00:59 -0500
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v7 06/33] ASoC: Add SOC USB APIs for adding an USB backend
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] dt-bindings: usb: Add T-HEAD TH1520 USB controller
 Content-Language: en-US
-To: Mark Brown <broonie@kernel.org>
-CC: <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>,
-        <lgirdwood@gmail.com>, <perex@perex.cz>, <tiwai@suse.com>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <srinivas.kandagatla@linaro.org>, <bgoswami@quicinc.com>,
-        <Thinh.Nguyen@synopsys.com>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <alsa-devel@alsa-project.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>
-References: <20230921214843.18450-1-quic_wcheng@quicinc.com>
- <20230921214843.18450-7-quic_wcheng@quicinc.com>
- <ZRRAxSlk8uvsfMcx@finisterre.sirena.org.uk>
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <ZRRAxSlk8uvsfMcx@finisterre.sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To: Jisheng Zhang <jszhang@kernel.org>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>,
+ Fu Wei <wefu@redhat.com>, linux-riscv@lists.infradead.org,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+References: <20230927164222.3505-1-jszhang@kernel.org>
+ <20230927164222.3505-2-jszhang@kernel.org>
+From: Samuel Holland <samuel.holland@sifive.com>
+In-Reply-To: <20230927164222.3505-2-jszhang@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: QlIsD3uzMaugVSohs0dpbsgua4zKq2wZ
-X-Proofpoint-GUID: QlIsD3uzMaugVSohs0dpbsgua4zKq2wZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-09-27_12,2023-09-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- clxscore=1011 adultscore=0 impostorscore=0 lowpriorityscore=0 spamscore=0
- phishscore=0 priorityscore=1501 suspectscore=0 malwarescore=0
- mlxlogscore=482 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2309270169
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Hi Mark,
-
-On 9/27/2023 7:48 AM, Mark Brown wrote:
-> On Thu, Sep 21, 2023 at 02:48:16PM -0700, Wesley Cheng wrote:
+On 2023-09-27 11:42 AM, Jisheng Zhang wrote:
+> T-HEAD TH1520 platform's USB has a wrapper module around
+> the DesignWare USB3 DRD controller. Add binding information doc for
+> it.
 > 
->> +static struct device_node *snd_soc_find_phandle(struct device *dev)
->> +{
->> +	struct device_node *node;
->> +
->> +	node = of_parse_phandle(dev->of_node, "usb-soc-be", 0);
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> ---
+>  .../bindings/usb/thead,th1520-usb.yaml        | 73 +++++++++++++++++++
+>  1 file changed, 73 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/thead,th1520-usb.yaml
 > 
-> Very nitpicky but this function possibly wants a _usb_ in the name, not
-> that it *super* matters with it being static.  Or it could just be
-> inlined into the only user and not worry about the naming at all.
-> 
+> diff --git a/Documentation/devicetree/bindings/usb/thead,th1520-usb.yaml b/Documentation/devicetree/bindings/usb/thead,th1520-usb.yaml
+> new file mode 100644
+> index 000000000000..afb618eb5013
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/thead,th1520-usb.yaml
+> @@ -0,0 +1,73 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/thead,th1520-usb.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: T-HEAD TH1520 DWC3 USB Controller Glue
+> +
+> +maintainers:
+> +  - Jisheng Zhang <jszhang@kernel.org>
+> +
+> +properties:
+> +  compatible:
+> +    const: thead,th1520-usb
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 4
+> +
+> +  clock-names:
+> +    items:
+> +      - const: ref
+> +      - const: bus_early
+> +      - const: phy
+> +      - const: suspend
 
-Thanks for the review!  Sure, let me reshuffle things around a bit and 
-just get rid of this function entirely and inline it to the API below.
+Except for "phy", these clocks are already documented in snps,dwc3.yaml. Are
+they necessary for the glue/PHY, or do they belong only in the controller node?
+They are not used by the driver in patch 2. Also, the PHY clock probably belongs
+with the PHY node.
 
->> +/**
->> + * snd_soc_usb_get_priv_data() - Retrieve private data stored
->> + * @dev: device reference
->> + *
->> + * Fetch the private data stored in the USB SND SOC structure.
->> + *
->> + */
->> +void *snd_soc_usb_get_priv_data(struct device *dev)
->> +{
->> +	struct snd_soc_usb *ctx;
->> +
->> +	ctx = snd_soc_find_usb_ctx(dev);
->> +	if (!ctx) {
->> +		/* Check if backend device */
->> +		mutex_lock(&ctx_mutex);
->> +		list_for_each_entry(ctx, &usb_ctx_list, list) {
->> +			if (dev->of_node == ctx->dev->of_node) {
->> +				mutex_unlock(&ctx_mutex);
->> +				goto out;
->> +			}
->> +		}
->> +		mutex_unlock(&ctx_mutex);
->> +		ctx = NULL;
->> +	}
-> 
-> This seems a lot more expensive than I'd expect for a get_priv_data
-> operation, usually it's just a container_of() or other constant time
-> pulling out of a pointer rather than a linked list walk - the sort of
-> thing that people put at the start of functions and do all the time.
-> If we need this I think it needs a name that's more clearly tied to the
-> use case.
-> 
-> I didn't actually find the user of this though?
+> +
+> +  ranges: true
+> +
+> +  '#address-cells':
+> +    enum: [ 1, 2 ]
+> +
+> +  '#size-cells':
+> +    enum: [ 1, 2 ]
+> +
+> +# Required child node:
+> +
+> +patternProperties:
+> +  "^usb@[0-9a-f]+$":
+> +    $ref: snps,dwc3.yaml#
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - ranges
+> +
+> +additionalProperties: false
 
-So the end user of this would be the qc_audio_offload driver, within 
-prepare_qmi_response().  This is to fetch some information about the 
-DPCM backend during the stream enable request.
+The driver in patch 2 uses the thead,misc-sysreg and vbus-supply properties,
+neither of which is documented here. Also, depending on the other bindings, the
+VBUS supply should be referenced from the USB PHY or connector node, not here.
 
-Previously, I limited the # of snd_soc_usb ports to be registered to 
-one, but that would affect the scalability of this layer.  Hence, adding 
-a list instead increased the complexity.  Will rename this accordingly.
+Regards,
+Samuel
 
-Thanks
-Wesley Cheng
+> +examples:
+> +  - |
+> +
+> +    usb {
+> +          compatible = "thead,th1520-usb";
+> +          reg = <0xec03f000 0x1000>;
+> +          clocks = <&clk 1>,
+> +                   <&clk 2>,
+> +                   <&clk 3>,
+> +                   <&clk 4>;
+> +          clock-names = "ref", "bus_early", "phy", "suspend";
+> +          ranges;
+> +          #address-cells = <1>;
+> +          #size-cells = <1>;
+> +
+> +          usb@e7040000 {
+> +                compatible = "snps,dwc3";
+> +                reg = <0xe7040000 0x10000>;
+> +                interrupts = <68>;
+> +                dr_mode = "host";
+> +          };
+> +    };
 
 
