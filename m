@@ -1,132 +1,167 @@
-Return-Path: <linux-usb+bounces-645-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-646-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4F897B05FE
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 16:02:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 227F17B0659
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 16:15:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 96E57282C52
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 14:02:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id AB87D28241D
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 14:15:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A390038F90;
-	Wed, 27 Sep 2023 14:02:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B97FA38FA0;
+	Wed, 27 Sep 2023 14:15:01 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06E6437CAC
-	for <linux-usb@vger.kernel.org>; Wed, 27 Sep 2023 14:02:13 +0000 (UTC)
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC778121
-	for <linux-usb@vger.kernel.org>; Wed, 27 Sep 2023 07:02:11 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-59f6e6b206fso87739117b3.3
-        for <linux-usb@vger.kernel.org>; Wed, 27 Sep 2023 07:02:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695823331; x=1696428131; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TBnyuiDOj3yAHdZQ44pdmLniIewRmVISdqXbyoGpKk0=;
-        b=TZGhz3D9g85w+FGYnx1rBvQ+Kal7RELhFpKLXL1BCPDdRX/yiDDBhOzZqbQOImw0fX
-         YHdADvGt2+kbguBEnlYKB9sNVIx9lelr4QqjDTwqFR+UTn8/79IAu1TRYfWTz7aOpCeB
-         hP2H0G0bQQNOcbBX6RpLH9jLtRjy6xSqqFXOYlspmYNNSPmmWhijfR9Nm02QFJWzbCCI
-         RuBPdKtbZDYkRg0F8qUqV+Zl1+W7o0wZhwRdNrP7qUw9zpCyT8St/KgmHTwmF7ZCEB8Z
-         VCXlkpJPwIcQY1vxt4ZCz6PvRcI9YC6p3bk1A2hFQDRxdgDEeLJZs5ydr6N4Ef8vA+KM
-         gK5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695823331; x=1696428131;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TBnyuiDOj3yAHdZQ44pdmLniIewRmVISdqXbyoGpKk0=;
-        b=eEtnH+TnTttnF0BxFFEcw3MRsveVl/iZC6xXHSx9yQE5ixGcDJkT7E5Z6mb+mErxMQ
-         BeIveac/Wgdb/OfW5GrX5f69sdRDmi14SwHx3/uiecaIMakt+5c4wtmw8nc3S5uZRtAj
-         /AL8u7DFeUd/epDECdjl0EiTMOAB0LUIdt5+wTOP31hJfbsS26Bz8yb4BP1UBPjySloq
-         hjJOyh07ZRqmlKqNhLPyB6Il4ZSYi1TBVnUvvU7C8qKOY0Gph96V2DRlKMzneGdWy79o
-         b3N7Dp7tzO5UU9umMcZ2LdZXyGoHYDsZKm1/FJqQanmih+Ux587oepJIrNOkHcOPerou
-         zE9g==
-X-Gm-Message-State: AOJu0YyJ5gkcjPnEyCexotY1jWWBsZJyklHlvdwa+jdA5Wj8QB8Cra++
-	/OLQ5Qz02z9ffvqr4+LL/jsPI0VujejY7jk3oBIgdw==
-X-Google-Smtp-Source: AGHT+IG3NIoS6t9C0t4P+lYpvc2BAFnmgw/owkIpeAAJonSeGsCHw+DvTSU0bTM47IDgbJEqaN0QxEtIvSU3OMHue9A=
-X-Received: by 2002:a05:6902:4f2:b0:d4b:6a0:fe2b with SMTP id
- w18-20020a05690204f200b00d4b06a0fe2bmr2221423ybs.36.1695823330766; Wed, 27
- Sep 2023 07:02:10 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B56838BAF
+	for <linux-usb@vger.kernel.org>; Wed, 27 Sep 2023 14:14:57 +0000 (UTC)
+Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81D8CF3;
+	Wed, 27 Sep 2023 07:14:55 -0700 (PDT)
+Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
+	by hi1smtp01.de.adit-jv.com (Postfix) with ESMTP id 7B0C4520173;
+	Wed, 27 Sep 2023 16:14:53 +0200 (CEST)
+Received: from vmlxhi-118.adit-jv.com (10.72.93.77) by hi2exch02.adit-jv.com
+ (10.72.92.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.32; Wed, 27 Sep
+ 2023 16:14:53 +0200
+Date: Wed, 27 Sep 2023 16:14:44 +0200
+From: Hardik Gajjar <hgajjar@de.adit-jv.com>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+CC: Hardik Gajjar <hgajjar@de.adit-jv.com>, <gregkh@linuxfoundation.org>,
+	<mathias.nyman@intel.com>, <stern@rowland.harvard.edu>,
+	<yangyingliang@huawei.com>, <jinpu.wang@ionos.com>,
+	<linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<erosca@de.adit-jv.com>
+Subject: Re: [PATCH] usb: hcd: xhci: Add set command timer delay API
+Message-ID: <20230927141444.GA7390@vmlxhi-118.adit-jv.com>
+References: <20230818092353.124658-1-hgajjar@de.adit-jv.com>
+ <2c029018-a926-6fda-ed71-937ac74d00b0@linux.intel.com>
+ <20230821095547.GA9820@vmlxhi-118.adit-jv.com>
+ <d88dbe7e-4558-970d-5601-d4d906829d47@linux.intel.com>
+ <20230904095738.GA5312@vmlxhi-118.adit-jv.com>
+ <862738cd-7a48-345e-3663-5d8e7127712b@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230924-pxa-gpio-v1-0-2805b87d8894@skole.hr> <20230924-pxa-gpio-v1-1-2805b87d8894@skole.hr>
- <ZRE3JNVNqFN0knHl@smile.fi.intel.com>
-In-Reply-To: <ZRE3JNVNqFN0knHl@smile.fi.intel.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Wed, 27 Sep 2023 16:01:58 +0200
-Message-ID: <CACRpkdZdSTCeobuFdXNbJcHTKJp1V=t1sfp2tp25Mb0FBh74pA@mail.gmail.com>
-Subject: Re: [PATCH RFC 1/6] ARM: pxa: Convert Spitz OHCI to GPIO descriptors
-To: Andy Shevchenko <andy@kernel.org>, Kent Gibson <warthog618@gmail.com>
-Cc: =?UTF-8?Q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>, 
-	Daniel Mack <daniel@zonque.org>, Haojian Zhuang <haojian.zhuang@gmail.com>, 
-	Robert Jarzmik <robert.jarzmik@free.fr>, Russell King <linux@armlinux.org.uk>, 
-	Alan Stern <stern@rowland.harvard.edu>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-	version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <862738cd-7a48-345e-3663-5d8e7127712b@linux.intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Originating-IP: [10.72.93.77]
+X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
+ hi2exch02.adit-jv.com (10.72.92.28)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Mon, Sep 25, 2023 at 9:30=E2=80=AFAM Andy Shevchenko <andy@kernel.org> w=
-rote:
+On Tue, Sep 05, 2023 at 05:31:12PM +0300, Mathias Nyman wrote:
+> On 4.9.2023 12.57, Hardik Gajjar wrote:
+> > 
+> > In our setup, we have a arm64 target with a DWC3 USB3 IP core,
+> > connected through a USB hub (specifically designed for automotive use)
+> > to the Android phone. Interestingly,when replicating this setup with
+> > the x86 Ubuntu machine, we encountered a discrepancy.
+> > 
+> > The primary difference between the two setups lies in the utilization
+> > of the DWC3 USB IP core.
+> 
+> Because of the SPLIT transactions seen below it looks like phone is being
+> enumerated at Full or Low speed behind the automotive High-speed HUB.
+> 
+> > 
+> > Working Case:
+> > 
+> > 0,HS,202,0:17.672.512,1.333 us,8 B,I,00,00,SETUP txn (SPLIT),80 06 00 01 00 00 40 00
+> > 1,HS,203,0:17.672.512,83 ns,4 B,,00,00,   SPLIT packet,78 0D 03 70
+> > 1,HS,204,0:17.672.513,66 ns,3 B,,00,00,   SETUP packet,2D 00 10
+> > 1,HS,205,0:17.672.513,200 ns,11 B,,00,00,   DATA0 packet,C3 80 06 00 01 00 00 40 00 DD 94
+> > 1,HS,206,0:17.672.514,33 ns,1 B,,00,00,   ACK packet,D2
+> > 0,HS,207,0:17.672.535,5.625.983 ms,,I,00,00,[256 CSPLIT-SETUP-NYET],
+> > 
+> 
+> The working case shows a GET_DESCRIPTOR DEVICE request (80 06 00 01).
+> Was the SET ADDRESS request (00 05) seen before or after this?
+> 
+> > Non-Working Case:
+> > 
+> > 0,HS,164,0:10.982.303,3.116 us,8 B,I,00,00,SETUP txn (SPLIT-STALL),00 05 04 00 00 00 00 00
+> > 1,HS,165,0:10.982.303,83 ns,4 B,,00,00,   SPLIT packet,78 01 02 A0
+> > 1,HS,166,0:10.982.303,66 ns,3 B,,00,00,   SETUP packet,2D 00 10
+> > 1,HS,167,0:10.982.304,200 ns,11 B,,00,00,   DATA0 packet,C3 00 05 04 00 00 00 00 00 EB 70
+> > 1,HS,168,0:10.982.304,50 ns,1 B,,00,00,   ACK packet,D2
+> > 1,HS,169,0:10.982.305,866 ns,,,00,00,   CSPLIT-SETUP-STALL,
+> > 2,HS,170,0:10.982.305,83 ns,4 B,,00,00,      SPLIT packet,78 81 02 78
+> > 2,HS,171,0:10.982.306,66 ns,3 B,,00,00,      SETUP packet,2D 00 10
+> > 2,HS,172,0:10.982.306,50 ns,1 B,,00,00,      STALL packet,1E
+> 
+> In the failing case the SET ADDRESS (00 05) request STALLs.
+> Was there a GET_DESCRIPOR request before this?
+> 
+> This could still be a case where the order of SET ADDRES and GET DESCRIPTOR
+> requests matter.
+> 
+> See if you can force new scheme enumeration, it should make hub driver issue
+> a GET_DESCRIPTOR request before SET ADDRESS.
+> 
+> Probably testable with some quick hack that forces use_new_scheme() to return
+>  "true" in hub.c
+In failing case, there is no GET_DESCRIPTOR DEVICE request.
 
-> > +     if (pxa_ohci->usb_host)
-> > +             gpiod_put(pxa_ohci->usb_host);
+The result is even worse when enabling the 'new_scheme.'
+Instead of a timeout, it directly crashes and restarts the USB subsystem.
+
+In any case, we cannot use the 'new_scheme' because it exposes additional transactions
+in USB enumeration. This leads to additional delays in the enumeration of all devices,
+potentially exceeding the suggested time limit
+> 
+> > 
+> > Upon close inspection of the USB analyzer data for both cases,
+> > it becomes evident that a STALL packet consistently appears in
+> > the non-working scenario.
+> > 
+> > This stands in contrast to the working case, where the channel
+> > remains open, allowing for the successful execution of the following
+> > high-speed enumeration commands.
+> > 
+> > In the event of a stall, we require an interruption from the host to
+> > resume communication.
+> > Given that there is a fixed 5-second command delay, this interruption
+> > can only occur after this timeout period.
+> > 
+> > Therefore, I would like to propose a solution: providing an additional
+> > API to control this command timeout or as you suggested, adding a timeout
+> > parameter to struct xhci_command, and use that when calling xhci_mod_cmd_timer()
+> > without the need to address any potential bugs in the xHCI driver.
+> 
+> Lets first see if changing enumeration scheme helps.
+> 
+> If not, and the enumeration issue is only seen for devices behind this specific
+> automotive hub, then a quirk could be set for it that adjusts the timeout.
+> 
+> Also let me know if you find xhci driver bugs, those need to be fixed anyway.
 >
-> Linus, Bart, do we have misdesigned _optinal() GPIO APIs?
->
-> In GPIOLIB=3Dn, the above requires that redundant check. Shouldn't we rep=
-lace
-> gpiod_put() stub to be simply no-op?
+I couldn't identify any issues with the xHCI driver either. However, I'd like
+to propose the implementation of a more generic mechanism to control the 5-second
+(HZ*5) timeout. This would offer better flexibility and help reduce enumeration
+time in case of bus errors.
 
-You mean the WARN_ON(desc) in gpiod_put() in the static inline
-stub version?
+As of now, following your suggestion, I will add a parameter in the set_address
+API and use the Quirk in hub.c to pass either the default or customized timeout
+to the xHCI driver. However, in that case also we may need minor modifications in
+xhci driver.
 
-I thought about it for a bit, drafted a patch removing them, and then
-realized the following:
+soon will submit Patch-v2
 
-If someone is making the gpiolib optional for a driver, i.e. neither
-DEPENDS ON GPIOLIB nor SELECT GPIOLIB, they are a quite
-narrow segment. I would say in 9 cases out of 10 or more this is
-just a driver that should depend on or select GPIOLIB.
+Thanks,
+Hardik
 
-I think such drivers should actually do the NULL checks and not be
-too convenient, the reason is readability: someone reading that
-driver will be thinking gpios are not optional if they can call
-gpiod_set_value(), gpiod_put() etc without any sign that the
-desc is optional.
-
-If the driver uses [devm_]gpiod_get_optional() the library is not
-using the stubs and does the right thing, and it is clear that
-the GPIO is *runtime* optional.
-
-But *compile time* optional, *combined* with runtime optional -
-I'm not so happy if we try to avoid warnings around that. I think
-it leads to confusing configs and code that looks like gpiolib is
-around despite it wasn't selected.
-
-If the code isn't depending on or selecting GPIOLIB and still
-use _optional() calls, it better be ready to do some extra checks,
-because this is a weird combo, it can't be common.
-
-Could be a documentation update making this clear though.
-
-What do you other people think?
-
-Yours,
-Linus Walleij
+> Thanks
+> -Mathias
 
