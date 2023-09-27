@@ -1,132 +1,183 @@
-Return-Path: <linux-usb+bounces-627-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-630-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 819497AFEE6
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 10:47:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCFFB7B0117
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 11:55:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by ny.mirrors.kernel.org (Postfix) with ESMTP id 8F16E1C2074D
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 08:47:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 80DB1282682
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 09:55:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A48911BDCC;
-	Wed, 27 Sep 2023 08:47:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC89F14F86;
+	Wed, 27 Sep 2023 09:55:32 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFB5F23CB
-	for <linux-usb@vger.kernel.org>; Wed, 27 Sep 2023 08:47:48 +0000 (UTC)
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6133ECC;
-	Wed, 27 Sep 2023 01:47:47 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38R7Qg6M027364;
-	Wed, 27 Sep 2023 08:47:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=DFClMcz23Gf8da0D7pNHglGNlh8JbZ50VURIo0Bxb8k=;
- b=npEqrAHBiyP32TW6/Yu+8ZBRAzBT+ka/hXE2azEJoMbjrM2GKvaWa3TMYcXKsxl4WKMY
- NsggJbrdePDD5pPOp1Zo9h2BFV5AwvWv37YrECLGJK3PzWToEcxDqZ4M3fSR5HDJlA/A
- /yv3IKAWmeME62jLrnNxGG1hpbqRx2dt1FYQDkXMdU+01WvbALpSjnPQdNlJ+90OwIwZ
- yxQxfNwa8q12OCQFfO4rd81TRp39RLiqnJUE1e5RTfLpgmhRF/juJI8J6m1GZPp8HMz8
- orhI4oXAXb0H4XU8/2KNMHAcsdbvztZvpepAGKu2kZvQ90qfLZ0jFNXGCp7t19oRHmmV WA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tcda7rena-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 27 Sep 2023 08:47:22 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38R8lL1b004704
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 27 Sep 2023 08:47:22 GMT
-Received: from [10.216.34.233] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Wed, 27 Sep
- 2023 01:47:17 -0700
-Message-ID: <3c18614f-eb77-4eff-be1d-068cde655b0a@quicinc.com>
-Date: Wed, 27 Sep 2023 14:17:14 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0177A14AA6;
+	Wed, 27 Sep 2023 09:55:29 +0000 (UTC)
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01hn2212.outbound.protection.outlook.com [52.100.223.212])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F9010E;
+	Wed, 27 Sep 2023 02:55:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TjShKLKkRMcPKTNbcHEJVxOSPtGcuwCkss8enhBf5SofpE9DvQY9gy8rgjxA9CLGQnnTYMz2RzidN+WFX0MKNP8z45Tr8WodW7iFpR47JHX5NCSRE87cHd+VAJvKEAr64/NfrpeMmzn09YvQDn2lukJTEwTlCTPhhyPaTZXEkV6F2wkuXiGOMoKDOD1ZpVvrhxZT8CjoFTG4fd9OVlJM5MGsC7sJ3rMS+ZsYm4P1GPMtn0IPYvN96EVpz9nWjMNLsaTD0FJo4KgZxI13exwj/5YOOmsplkvbYe/EUkpSynn+0nUfecl/wsToWUUTO/9FPm5cNQn0kjYtc/fwRop5hA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=z1Kp9hXECWrSVj3RrKfs1suUHvBoFn9FhI6/bx2zAxE=;
+ b=dZCUpIOcS04n2L4WfvOzvpwaFsArjSqiDh6rhgaR/6zK/Za2miEJOPD3Rh8X3yXfP9IVHCvMXuAImsrwmfOKXxai+/RBlUE3aNpI565VcWIG8mvrvQ+I9ZyayuVxUFzYKIOd5rBWXKPsZyhJ4aY+ZFN1D0s+sZo2wiERFKBMvxYmQlISu5SdyohsNDtqYDDSrDVQoFL6jBP9x9RbrCJp1V4mOavD8YH4uScRw+ims1rvXIiE0sQnzihPdKWTMBnBt4xgrNJ8CzUot08WMx8r9FqIz2/nXIlt0ZzBaHifvRS2VLjSnhImgQeKXAHGYXjXN/Lq+OW5UbPLGYp27SgHJg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 175.98.123.7) smtp.rcpttodomain=gmail.com smtp.mailfrom=nuvoton.com;
+ dmarc=fail (p=none sp=quarantine pct=100) action=none header.from=gmail.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=nuvoton.onmicrosoft.com; s=selector2-nuvoton-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=z1Kp9hXECWrSVj3RrKfs1suUHvBoFn9FhI6/bx2zAxE=;
+ b=DsmtdEYk/5Z6IzMm0jPUZOMS/XyQEh1xSD5ytouFh/ZsnPN85IFJRhR0NrQZLrWujRpntxzl+J1pUTv9G39eGhJiY9nZjWz8r1TeGKvEr/lJ28IUt6mBj4TZ1eNCCKgvN3j3zsoy3uVTywsr5l7muGD9g7Wiw4yqXQj8Uc56BII=
+Received: from SI2PR02CA0012.apcprd02.prod.outlook.com (2603:1096:4:194::7) by
+ JH0PR03MB8351.apcprd03.prod.outlook.com (2603:1096:990:49::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6838.21; Wed, 27 Sep 2023 09:55:24 +0000
+Received: from SG1PEPF000082E7.apcprd02.prod.outlook.com
+ (2603:1096:4:194:cafe::a4) by SI2PR02CA0012.outlook.office365.com
+ (2603:1096:4:194::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.35 via Frontend
+ Transport; Wed, 27 Sep 2023 09:55:24 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 175.98.123.7)
+ smtp.mailfrom=nuvoton.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=none header.from=gmail.com;
+Received-SPF: Pass (protection.outlook.com: domain of nuvoton.com designates
+ 175.98.123.7 as permitted sender) receiver=protection.outlook.com;
+ client-ip=175.98.123.7; helo=NTHCCAS04.nuvoton.com; pr=C
+Received: from NTHCCAS04.nuvoton.com (175.98.123.7) by
+ SG1PEPF000082E7.mail.protection.outlook.com (10.167.240.10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.20.6838.14 via Frontend Transport; Wed, 27 Sep 2023 09:55:24 +0000
+Received: from NTHCCAS01.nuvoton.com (10.1.8.28) by NTHCCAS04.nuvoton.com
+ (10.1.8.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.14; Wed, 27
+ Sep 2023 17:55:12 +0800
+Received: from taln60.nuvoton.co.il (10.191.1.180) by NTHCCAS01.nuvoton.com
+ (10.1.8.28) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
+ Transport; Wed, 27 Sep 2023 17:55:11 +0800
+Received: by taln60.nuvoton.co.il (Postfix, from userid 10070)
+	id 2803664740; Wed, 27 Sep 2023 12:55:11 +0300 (IDT)
+From: Tomer Maimon <tmaimon77@gmail.com>
+To: <peter.chen@kernel.org>, <gregkh@linuxfoundation.org>,
+	<robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+	<xu.yang_2@nxp.com>, <peng.fan@nxp.com>, <avifishman70@gmail.com>,
+	<tali.perry1@gmail.com>, <joel@jms.id.au>, <venture@google.com>,
+	<yuenn@google.com>, <benjaminfair@google.com>, <j.neuschaefer@gmx.net>
+CC: <openbmc@lists.ozlabs.org>, <linux-usb@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>, Tomer Maimon
+	<tmaimon77@gmail.com>
+Subject: [PATCH v2 0/3] usb: ChipIdea: add Nuvoton NPCM UDC support
+Date: Wed, 27 Sep 2023 12:55:06 +0300
+Message-ID: <20230927095509.267029-1-tmaimon77@gmail.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5] usb: gadget: udc: Handle gadget_connect failure during
- bind operation
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC: Alan Stern <stern@rowland.harvard.edu>,
-        Francesco Dolcini
-	<francesco.dolcini@toradex.com>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Ivan Orlov
-	<ivan.orlov0322@gmail.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_ppratap@quicinc.com>,
-        <quic_wcheng@quicinc.com>, <quic_jackp@quicinc.com>
-References: <20230927073027.27952-1-quic_kriskura@quicinc.com>
- <2023092701-facelift-projector-d1d4@gregkh>
-Content-Language: en-US
-From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <2023092701-facelift-projector-d1d4@gregkh>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: nP6WagGRzemSeX86E-Bhsd90GT-U81k0
-X-Proofpoint-GUID: nP6WagGRzemSeX86E-Bhsd90GT-U81k0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-09-27_03,2023-09-26_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 malwarescore=0
- clxscore=1015 lowpriorityscore=0 impostorscore=0 bulkscore=0
- mlxlogscore=498 priorityscore=1501 mlxscore=0 suspectscore=0 spamscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2309270071
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-NotSetDelaration: True
+X-EOPAttributedMessage: 0
+X-MS-Exchange-SkipListedInternetSender:
+ ip=[175.98.123.7];domain=NTHCCAS04.nuvoton.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SG1PEPF000082E7:EE_|JH0PR03MB8351:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6142c8f5-be9a-4db4-6157-08dbbf3fdf03
+X-MS-Exchange-SenderADCheck: 0
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?K3RzcFYxSjhsT3JYMFY1R0FoN0RjQ3M1UEJVRWNxdGdPb05neHYrR2xJYXlZ?=
+ =?utf-8?B?TEhjVmJIUGdxQ2RLYjNQR1lONnFPUW56bVRRYjBwNGhOUTNqM3FDalB0aXdi?=
+ =?utf-8?B?azFwblNYM0grUTEwRGdLVWtMZTA0bmRYSCtaSCtxWmhSQUJNUElmb0NaV0xz?=
+ =?utf-8?B?VWlIdk03V0JqWkNJUmgxZmNNSXVMTjcwNnB0RE51R1VaT3F3VFZPWUdaSkNN?=
+ =?utf-8?B?WUY5U0JwL3BXTmFUa0RhVEdObzVVNTl6YncxZXdML21xbjVwanZ1cUU4Rjdz?=
+ =?utf-8?B?QitiWVUrSWpad2xaR2VZSVpEQ2FpWTJoRWpONXhmeXAwL0xkVk5CYzlXenQr?=
+ =?utf-8?B?aUZXUkU2K3VqdDdKT0tDa3h2eDJielo4MjVjZGU5WFFrQ0RrVmlZVkhIaXdk?=
+ =?utf-8?B?blBpeURaV1hOZzFLK2g0RDRzSW9kQlZtZmlKQnFESmVrbkxNeVRXK1M4Y3cv?=
+ =?utf-8?B?dmZvNTVKb1YxTEU3M3VoVFFqYmttcGYrS0lxaHg5T0toN082Z0htN0VTdmNk?=
+ =?utf-8?B?Sm00WVpJMzNjZ1NHR1JuOFBTeWdHcGdoYzEzamlHdHBZSEp1T1JMcEk5Qm1O?=
+ =?utf-8?B?TjMvVGd4dWVHekoyU0JwWEhpMWJUeUp1OFBiQS9GZVFhTDJNZmYzTGw2azZy?=
+ =?utf-8?B?V2Q1bzYwdmd1bGxhYWVLTG14ZkYrN2Z2UmlDS1RxL2Y3WXRRY1ZXQ3lFZXhP?=
+ =?utf-8?B?U1gyWlR2NW9kVjAwLzdPb09Hd2FUaGo0bGJBdTFEMERYR3NmOVhDZjl2cTlm?=
+ =?utf-8?B?MGZNazc4N1BCNjM0RFA1Z3NpTW5mazFmbzdyWi9ZSGpXWWp3NkNIeTFheWZw?=
+ =?utf-8?B?LytDNzFxTFdOK3FFcGVIS0toL2F2TnFVM0tFbFpiSUo3eEM5MFpqOG44QUNO?=
+ =?utf-8?B?U3ZGV1h3QmxwaXdLZC8ranUxUWhHZWQ3TFNOcDRZb1d1dG8yZEJyR3N6WHhM?=
+ =?utf-8?B?dzhOSFpYODVTc2tSbGtOQW4vWWJ4MGlFNTdLdmJJemdTTVo2MC9ITS9FT3ZT?=
+ =?utf-8?B?RlZ1YzNtR2h4di9yM2ZmNHJPZXB1TGcwaHN1NXNnT3djN1hNa0NRQkZaWDU0?=
+ =?utf-8?B?RksrM3hZYXMzT1FWek9HTW15c1pZVE93WkRSS2hnaVMvVS8rVEVPeEVqT2xX?=
+ =?utf-8?B?VHJVRjViNUhZbmVzdTNrZ2hEc3h1NXprOVNqTU54MEd6SW53WHlyUllyMlBm?=
+ =?utf-8?B?NkNsVFE4b2c3Tjlwd2tTNnNKbkwyRDBsWmZEU0p5WGcyK0dhVFhwQU53T1g5?=
+ =?utf-8?B?K3BYNk94WlRBem9pQkk1V25hNVgwVXdwRGYrcXpTM3RQdzFOZmRtT2xObEdJ?=
+ =?utf-8?Q?BYxthLs7eJa+IBmZYBW5hss0qctnDRC7ni?=
+X-Forefront-Antispam-Report:
+	CIP:175.98.123.7;CTRY:TW;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:NTHCCAS04.nuvoton.com;PTR:175-98-123-7.static.tfn.net.tw;CAT:NONE;SFS:(13230031)(4636009)(136003)(396003)(39860400002)(376002)(346002)(230922051799003)(48200799006)(451199024)(82310400011)(5400799018)(61400799006)(186009)(36840700001)(46966006)(40470700004)(54906003)(966005)(478600001)(110136005)(70586007)(76482006)(70206006)(47076005)(40460700003)(6666004)(316002)(42186006)(36756003)(6266002)(336012)(40480700001)(1076003)(42882007)(73392003)(66574015)(41300700001)(2616005)(82202003)(34020700004)(26005)(5660300002)(83380400001)(55446002)(83170400001)(81166007)(36860700001)(8676002)(4326008)(2906002)(82740400003)(8936002)(7416002)(921005)(356005)(45356006)(84790400001)(35450700002)(12100799045);DIR:OUT;SFP:1501;
+X-OriginatorOrg: nuvoton.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Sep 2023 09:55:24.7192
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6142c8f5-be9a-4db4-6157-08dbbf3fdf03
+X-MS-Exchange-CrossTenant-Id: a3f24931-d403-4b4a-94f1-7d83ac638e07
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=a3f24931-d403-4b4a-94f1-7d83ac638e07;Ip=[175.98.123.7];Helo=[NTHCCAS04.nuvoton.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SG1PEPF000082E7.apcprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: JH0PR03MB8351
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+	DKIM_SIGNED,DKIM_VALID,FORGED_GMAIL_RCVD,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,NML_ADSP_CUSTOM_MED,
+	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+	autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
+This patch set add USB device controller for the NPCM Baseboard
+Management Controllers (BMC).
 
+NPCM UDC driver is a part of the USB ChipIdea driver.
 
-On 9/27/2023 1:46 PM, Greg Kroah-Hartman wrote:
-> On Wed, Sep 27, 2023 at 01:00:27PM +0530, Krishna Kurapati wrote:
->> In the event gadget_connect call (which invokes pullup) fails,
->> propagate the error to udc bind operation which in turn sends the
->> error to configfs. The userspace can then retry enumeration if
->> it chooses to.
-> 
-> Will this break userspace that is not expecting error codes to be
-> returned?  What userspace code will now be modified to handle this?
-> Where is that work happening?
-> 
-> thanks,
+Adding CI_HDRC_FORCE_VBUS_ACTIVE_ALWAYS flag to modify the vbus_active
+parameter to active in case the ChipIdea USB IP role is device-only and
+there is no otgsc register.
 
-Hi Greg,
+BMC NPCM7XX and BMC NPCM8XX has ten identical NPCM UDC modules,
 
-  This only handles cases where the pullup failed but the error code 
-wasn't returned to configfs_udc_store approrpiately. In userspace when 
-we do the following:
+The NPCM UDC were tested on NPCM845 evaluation board.
 
-echo "UDC NAME" > /usb_gadget/<>/UDC
+Addressed comments from:
+ - Rob Herring : https://www.spinics.net/lists/linux-usb/msg246811.html
+ - Krzysztof Kozlowski : https://www.spinics.net/lists/linux-usb/msg246773.html
+ - kernel test robot : https://www.spinics.net/lists/devicetree/msg634160.html
+ - Jonathan Neuschäfer : https://www.spinics.net/lists/linux-usb/msg246790.html
 
-in the issue I was facing, the core soft reset was failing and we return 
--110 from dwc3/core.c to udc's bind_to_driver call, but it is not 
-checked any where today and we return 0 to udc_store in configfs. The 
-userspace assumes the UDC write went through (and enum happened) but it 
-actually doesn't. If we propagate the -ETIMEDOUT coming from dwc3-core 
-all the way to configfs_udc_store, it will reach userspace as well 
-indicating that the echo command was not successful which then the user 
-can choose to retry or not. On Android devices, I saw userspace retry 
-happening when we propagate dwc3-core error to userspace. So nothing in 
-userspace breaks. It can stay as it but this time, the echo in userspace 
-will fail if pullup fails for some reason.
+Changes since version 1:
+ - Add SoC specific compatible.
+ - Remove USB phy mux property from dt-binding, will be handled differently.
+ - Add CI_HDRC_FORCE_VBUS_ACTIVE_ALWAYS commit to this patch set.
 
-Regards,
-Krishna,
+Tomer Maimon (3):
+  usb: chipidea: add CI_HDRC_FORCE_VBUS_ACTIVE_ALWAYS flag
+  dt-bindings: usb: ci-hdrc-usb2: add npcm750 and npcm845 compatible
+  usb: chipidea: Add support for NPCM
+
+ .../devicetree/bindings/usb/ci-hdrc-usb2.yaml |   4 +
+ drivers/usb/chipidea/Kconfig                  |   4 +
+ drivers/usb/chipidea/Makefile                 |   1 +
+ drivers/usb/chipidea/ci_hdrc_npcm.c           | 117 ++++++++++++++++++
+ drivers/usb/chipidea/otg.c                    |   5 +-
+ include/linux/usb/chipidea.h                  |   1 +
+ 6 files changed, 131 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/usb/chipidea/ci_hdrc_npcm.c
+
+-- 
+2.33.0
+
 
