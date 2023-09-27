@@ -1,115 +1,121 @@
-Return-Path: <linux-usb+bounces-637-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-638-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C32297B03D4
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 14:19:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE10C7B044B
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 14:35:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by ny.mirrors.kernel.org (Postfix) with ESMTP id DBB941C209AE
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 12:19:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTP id 007D41C20A3E
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 12:35:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14E68286B3;
-	Wed, 27 Sep 2023 12:19:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62FEE28DC9;
+	Wed, 27 Sep 2023 12:35:31 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15433107BE
-	for <linux-usb@vger.kernel.org>; Wed, 27 Sep 2023 12:19:12 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD5612A
-	for <linux-usb@vger.kernel.org>; Wed, 27 Sep 2023 05:19:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695817150; x=1727353150;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BioufM1BSEZYntrKHg1Rn+FI11MpXAnIhmNM5pHMtSo=;
-  b=JcxgIXkncLcbWUgn3wiETvB7WbOQ/PkWauWRFoywcIleST4/4ljNvjQ6
-   fzXkzgJEC9FdwkUz1rnIZy9vwwj4edlp7Q6G3h+Sa4FxU9KTR4jw7NZk0
-   7zv9yHAsZ3FtsSUSkGCtPw6p/mqI1A0xJsK/dpZwF1dPJqXSnOK7bcPT7
-   bhMD0kq03LK/jUwa1ShQS3wH5RjM99PDGcXniLgbQvvDShg+l4h5SzLCa
-   V7AGXvMQmSlARTWYzNpgLEb04xWsiCpimuDgn0IkNUpTCsjzIQyV4gxnI
-   UXX26i3hTyCKy8xTLtS1kAsAVG+PHufFC5akDYCYdWjNaO1RM7uFpTObR
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="381711315"
-X-IronPort-AV: E=Sophos;i="6.03,181,1694761200"; 
-   d="scan'208";a="381711315"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2023 05:19:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="752551839"
-X-IronPort-AV: E=Sophos;i="6.03,181,1694761200"; 
-   d="scan'208";a="752551839"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga007.fm.intel.com with SMTP; 27 Sep 2023 05:19:07 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 27 Sep 2023 15:19:06 +0300
-Date: Wed, 27 Sep 2023 15:19:06 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Guenter Roeck <linux@roeck-us.net>, linux-usb@vger.kernel.org,
-	Douglas Gilbert <dgilbert@interlog.com>
-Subject: Re: [PATCH] usb: pd: Exposing the Peak Current value of Fixed
- Supplies to user space
-Message-ID: <ZRQduiDBDmcqXgw+@kuha.fi.intel.com>
-References: <20230927111031.1059096-1-heikki.krogerus@linux.intel.com>
- <2023092721-barrier-geranium-ec0e@gregkh>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1E6623778;
+	Wed, 27 Sep 2023 12:35:25 +0000 (UTC)
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58BD513A;
+	Wed, 27 Sep 2023 05:35:23 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-6927528c01dso1722816b3a.0;
+        Wed, 27 Sep 2023 05:35:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1695818123; x=1696422923; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mZmTHs4dbokakR8gFcLSlnEV375fC03XiwASdWZxx3c=;
+        b=a87PakmvGN0TkAWBqkNE3JqpUQGnlktKdKIGWQAYUkb/y7ZlHkFbqH3RstLqRk6G9R
+         3Ju4uwa32PUZ4dzdJ4yk0ynt4h8KzLXvxF+CZoytxJ3zQGVyN4G0so+nTJ2g8LFb+Xgd
+         vSIBeE/adsghEyv6KQoIxNwUsO81An7JAHi4uM0ancWo8PuYkIRJLpTkVQHUhfM82yI9
+         pU5R7IhXRfGhJuS08lDJAUnmI/1AmcPqgdgqQ5mdjBXoX29fzpsRS+x3kteOsDH2BaMX
+         QJXCCbudYmaodDe/U/VquixdZWLbzxdZX+rZqXvQZCwlH8cFJl7feU+XpxZwJoHCblp/
+         IkAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695818123; x=1696422923;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mZmTHs4dbokakR8gFcLSlnEV375fC03XiwASdWZxx3c=;
+        b=tt3IYib+iZ1eMnEWk0qTkKMDLxsH+BqtWYAVn41idWGQkK9S8ek+ZHV8H5XxEfffoL
+         hroKwLhyvKzMF7r9fSKuYyIZUDkorzNrqmwZ66J7SajENRgTkCmtbRytCwtNEDNTDgEp
+         3QDHGVRXo76JinXlh+eA5kuoqqUlj/Xo1WW8tFxpkmi3oX8wUvJcSjkk1FQSZLjWxpJQ
+         eGXsgIKY+FeLVYKztpUECAe3yKJnL3TWC7GGMKRHWznhI3+FMW442Twt1axEda95gB3J
+         vYgJkSQqk/GXbpFKIKjOJxpNnjVUJJLpWXNxsUed88qwMQ3w49Fv1rNS6PUjDNOPWyZ0
+         4N2w==
+X-Gm-Message-State: AOJu0YymakR7bKMPBe4I1d7v9kEkC3VhIJNiln88fqrcDXLkr6AYB9gF
+	ELexpMuhC+nbNfU3SHq/LD8=
+X-Google-Smtp-Source: AGHT+IEteVHzB1bHAgzOS9qc6fFf/SUHwn6ezxQ3PdhRXtaZbCXw+dENsj3GVzN0/K8S83Vj0Ji4dA==
+X-Received: by 2002:a05:6a20:1445:b0:13d:d5bd:758f with SMTP id a5-20020a056a20144500b0013dd5bd758fmr1941642pzi.6.1695818122712;
+        Wed, 27 Sep 2023 05:35:22 -0700 (PDT)
+Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:8313:ad6b:7769:5148])
+        by smtp.gmail.com with ESMTPSA id s4-20020a170902a50400b001b567bbe82dsm12969886plq.150.2023.09.27.05.35.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Sep 2023 05:35:22 -0700 (PDT)
+From: Fabio Estevam <festevam@gmail.com>
+To: gregkh@linuxfoundation.org
+Cc: robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org,
+	andersson@kernel.org,
+	linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	jun.li@nxp.com,
+	Fabio Estevam <festevam@denx.de>,
+	Conor Dooley <conor.dooley@microchip.com>
+Subject: [PATCH v3 1/2] dt-bindings: usb: gpio-sbu-mux: Add an entry for CBDTU02043
+Date: Wed, 27 Sep 2023 09:35:10 -0300
+Message-Id: <20230927123511.45085-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2023092721-barrier-geranium-ec0e@gregkh>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Wed, Sep 27, 2023 at 02:10:38PM +0200, Greg Kroah-Hartman wrote:
-> On Wed, Sep 27, 2023 at 02:10:31PM +0300, Heikki Krogerus wrote:
-> > Exposing the value of the field as is.
-> > 
-> > The Peak Current value has to be interpreted as described
-> > in Table 6-10 (Fixed Power Source Peak Current Capability)
-> > of the USB Power Delivery Specification, but that
-> > interpretation will be done in user space, not in kernel.
-> > 
-> > Suggested-by: Douglas Gilbert <dgilbert@interlog.com>
-> > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > ---
-> >  drivers/usb/typec/pd.c | 10 ++++------
-> >  include/linux/usb/pd.h |  1 +
-> >  2 files changed, 5 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/drivers/usb/typec/pd.c b/drivers/usb/typec/pd.c
-> > index 8cc66e4467c4..85d015cdbe1f 100644
-> > --- a/drivers/usb/typec/pd.c
-> > +++ b/drivers/usb/typec/pd.c
-> > @@ -83,14 +83,12 @@ unchunked_extended_messages_supported_show(struct device *dev,
-> >  }
-> >  static DEVICE_ATTR_RO(unchunked_extended_messages_supported);
-> >  
-> > -/*
-> > - * REVISIT: Peak Current requires access also to the RDO.
-> >  static ssize_t
-> >  peak_current_show(struct device *dev, struct device_attribute *attr, char *buf)
-> >  {
-> > -	...
-> > +	return sysfs_emit(buf, "%u\n", (to_pdo(dev)->pdo >> PDO_FIXED_PEAK_CURR_SHIFT) & 3);
-> >  }
-> > -*/
-> > +static DEVICE_ATTR_RO(peak_current);
-> 
-> Don't you need to add a Documentation/ABI/ entry for this new field?
+From: Fabio Estevam <festevam@denx.de>
 
-Yes. Sorry about that. I'll send v2.
+Add a compatible entry for the NXP CBDTU02043 GPIO-based mux hardware
+used for connecting, disconnecting and switching orientation of
+the SBU lines in USB Type-C applications.
 
-thanks,
+CBTU02043 datasheet: https://www.nxp.com/docs/en/data-sheet/CBTU02043.pdf
 
+Signed-off-by: Fabio Estevam <festevam@denx.de>
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+---
+Changes since v2:
+- None. Splitted the dt-bindings from the dts changes so that
+this series can go via the USB tree.
+
+Changes since v1:
+- None. Only collected Conor's Ack.
+
+ Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml b/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml
+index f196beb826d8..b61dcf8b4aad 100644
+--- a/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml
++++ b/Documentation/devicetree/bindings/usb/gpio-sbu-mux.yaml
+@@ -19,6 +19,7 @@ properties:
+   compatible:
+     items:
+       - enum:
++          - nxp,cbdtu02043
+           - onnn,fsusb43l10x
+           - pericom,pi3usb102
+       - const: gpio-sbu-mux
 -- 
-heikki
+2.34.1
+
 
