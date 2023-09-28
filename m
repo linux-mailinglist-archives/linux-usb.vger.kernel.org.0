@@ -1,193 +1,317 @@
-Return-Path: <linux-usb+bounces-681-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-682-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 948957B1063
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Sep 2023 03:31:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96A9E7B11F7
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Sep 2023 07:21:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 6B6FC281A02
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Sep 2023 01:31:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTP id 9A8A31C20961
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Sep 2023 05:21:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD4EA15C9;
-	Thu, 28 Sep 2023 01:31:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B97311183;
+	Thu, 28 Sep 2023 05:21:37 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1696136D
-	for <linux-usb@vger.kernel.org>; Thu, 28 Sep 2023 01:31:23 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A6C0AC;
-	Wed, 27 Sep 2023 18:31:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695864682; x=1727400682;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=kFzDDcKHql4iIfs8IFlnrJhrsoP2Yj0JdKRjInDzNA4=;
-  b=n2PSAiEk6yUqVrPU8/xGL1jLT8Y7n4sTH/Hap35ZzAyjcNkFLL9cHxq4
-   XQN37tz2RjtznHLMZY6vHRfWSLmiV9PpovrlEAUeLLCyvhJhRagals/IW
-   kAGc723u9b3ychr2zQF9O31C/u0SwGC0unLgQM56boPyoFm5xWx4nLi/T
-   tkzDujJAJv9dsXsQKYDnWW0lxN/rGKafh8lLZt7yKHtQbephelQJR6bN+
-   A8x1Q+F23A2uoRJLYLEY6qYcyC693DZv5jShTw2APW/jhVpOjeyoeU+sJ
-   s/uyArgySVeucwhwLTElMMLJ2U+hFHOsPEgGL3X1vhun2DcHygEMvM6Dc
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10846"; a="448456561"
-X-IronPort-AV: E=Sophos;i="6.03,182,1694761200"; 
-   d="scan'208";a="448456561"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2023 18:31:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10846"; a="996387332"
-X-IronPort-AV: E=Sophos;i="6.03,182,1694761200"; 
-   d="scan'208";a="996387332"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga006.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 27 Sep 2023 18:31:20 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32; Wed, 27 Sep 2023 18:31:19 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32 via Frontend Transport; Wed, 27 Sep 2023 18:31:19 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.41) by
- edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.32; Wed, 27 Sep 2023 18:31:19 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NgcdudpnRc17tQ+YJg2ZNDhnAD5e1Nl1DwNT7KK+WnN8PGMwbIBqInUWFSO054m0p9IIcGqdNjvE8XRiqqosmKprqN+TbM5xCaU45k/AfUdyEyr2gySsm1/pKXQEkcMosKCC79V8UQ3TcCnj+8Y5ABl14EBFw2BzLz1rUCTeBHbmg9DAEuTUUE3QPZvhiHVB+nWfhCdu0g4QMo6ExQDviWFZcdHa4+bptUs7JKV/NJ4AGwaMTkyroXkCRM8BzsLDVOn5dVqDRQ+E6V8twPsLcouHgkxRDKQ5CjTMA4n5dQ1L7UrtmVn6rDrkH/K2MV2WtrVAhLlHFcpOadaLj+0hZg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=neaUnbA0HzUB/jxTfCXCDz7b3fUzFXAwFtwmKoMdt/U=;
- b=jA4pWL25dpX741HTZ83KJSvfNgwVdhT5WdCeAsYSP828sAChIPYCOjE+os5rm7BeEVwc6US8vU8xQtzLXM5GvWlKOlZy0fNUKIdoeINDuXztACdrB/yuiVOQZvLEkJDKLgwCWQh15CpKTdrHbuNE865j4nMC5AW6FoRvxBZuUWSYzq4NOZiz3su/XT41urItI1cBPT55t73PkcyCZyiVc1g9r0K8JekvWmDtppRYX4MvHG+7qfm3loBrcq1oIyiC9UZF5ze7pzVFIKgFQvPV7TdIoPtqNA1EvuTh6UWDXZT2Jn8WR/AHy2gs//CHN9NO00a7URl00kiN3B4nLG2gxQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DM5PR11MB0042.namprd11.prod.outlook.com (2603:10b6:4:6b::36) by
- DS7PR11MB7949.namprd11.prod.outlook.com (2603:10b6:8:eb::11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6813.28; Thu, 28 Sep 2023 01:31:18 +0000
-Received: from DM5PR11MB0042.namprd11.prod.outlook.com
- ([fe80::847d:e218:d45a:2079]) by DM5PR11MB0042.namprd11.prod.outlook.com
- ([fe80::847d:e218:d45a:2079%4]) with mapi id 15.20.6813.027; Thu, 28 Sep 2023
- 01:31:18 +0000
-From: "Patel, Utkarsh H" <utkarsh.h.patel@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
-	"pmalani@chromium.org" <pmalani@chromium.org>,
-	"chrome-platform@lists.linux.dev" <chrome-platform@lists.linux.dev>,
-	"bleung@chromium.org" <bleung@chromium.org>
-Subject: RE: [PATCH v4 4/5] platform/chrome: cros_ec_typec: Add Displayport
- Alternatemode 2.1 Support
-Thread-Topic: [PATCH v4 4/5] platform/chrome: cros_ec_typec: Add Displayport
- Alternatemode 2.1 Support
-Thread-Index: AQHZ62rbNkeZhAZZx06GIHaJQh/KW7AjypoAgAIVhzCABhXHAIAAbckQ
-Date: Thu, 28 Sep 2023 01:31:18 +0000
-Message-ID: <DM5PR11MB004261CE9939D0ECDDB81D4FA9C1A@DM5PR11MB0042.namprd11.prod.outlook.com>
-References: <20230920023243.2494410-1-utkarsh.h.patel@intel.com>
- <20230920023243.2494410-5-utkarsh.h.patel@intel.com>
- <ZQsE5hgm4qYpr/My@smile.fi.intel.com>
- <CY4PR11MB0037E70612B8067062AC1C40A9FCA@CY4PR11MB0037.namprd11.prod.outlook.com>
- <ZRHfNoiDazz1ZDtD@smile.fi.intel.com>
-In-Reply-To: <ZRHfNoiDazz1ZDtD@smile.fi.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM5PR11MB0042:EE_|DS7PR11MB7949:EE_
-x-ms-office365-filtering-correlation-id: a5ee8bb6-fa35-4309-3a2f-08dbbfc29cfc
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 7J7ru248whyrayPG8dVjOCjdFgznwQBWCAcnKTmMqq2Ib59aLLUSPvvdlLrISYyt50+FLT3E8px9Hz+kgFU9zOr05JmEcfEAvWSCemcpK/AVuQrMMlY+B9VWHF4vflnJtDBvlYcFwBaV8xXv7rX5YgLFBFXELqxgLY3LFpCz4oiRUXUndsRvPCkwfNMjvmTFxsQRp55sv4quCQSAfsDbgOKKU+3Gx6yqaxPmevwTnkzFTLwuNoglp1VwS/4wRGWImTG4zhGWHE8v/y6S4oXvhkX2Q+XlimGjKpboHG7o4WoJui7y/KClQZa2E1lopOIHYgO2D4qHAzgvjx245+uZavnrs0m5zOjSwzIjPeJjVcPf6Jh5rYt4BIGoxg8x544q5gaMqcvDzgjUAoxt9Et1OL8n6pBmoMNtOJ1u/sLxGMmsYGbuKo7kF746/kDnSU0NB0JJFt3oPmZwLiJKifYsAbcH6lmhEM1SDwpgPkJjxWDzzTWPYuYOLdGB2TXpQ3Np5kReoPp4S8Q2zOs0QUHSN6NBSxmuqbK8RDk6AbRtbUpxTCl+v3ehQpyIyytvWia9hztkSc0VDDEYaIL3Dat8qCqCSK6I/V2miX8+N/jHekeQZEhfbTuHaCGoNSejYRXx
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR11MB0042.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(376002)(39860400002)(396003)(346002)(366004)(230922051799003)(451199024)(186009)(64100799003)(1800799009)(4744005)(8936002)(55016003)(26005)(478600001)(5660300002)(86362001)(4326008)(8676002)(52536014)(6916009)(122000001)(71200400001)(38100700002)(2906002)(41300700001)(66446008)(64756008)(66946007)(54906003)(316002)(38070700005)(66476007)(76116006)(66556008)(7696005)(6506007)(33656002)(9686003)(82960400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?0pXQv5IMZC3QCnNXHY3NtzEpE7uXnmKSFab2rLdKRxEyUz1ELRq2WEWos2aH?=
- =?us-ascii?Q?5kgpFJp0W01WNtfSJE5rKwAfmeWYCeKOO5DoBrMZAZ6cNNesHTbDje73vJdc?=
- =?us-ascii?Q?Xe5hNAyY1N6nYDCllM+enHOYTE9LywMBZXMPNbRU4xFoicwXJkjLIR4S+g9o?=
- =?us-ascii?Q?8RpVSri64MpXxw3S016er75i2neXd3TI03WXdOPjsYekyLYRRRb/fHbyKvIQ?=
- =?us-ascii?Q?u2yxm5Tg/uEKO8xd/qVsLqUpVGlsaxfQkJTpd3F4JTDos3m9S2mocPZ1bbxv?=
- =?us-ascii?Q?GQfItAm/O/zW5JIj4N/OrHAzrV9LwDtl/+xCDLcJ0hcXRlxUm3TJzr5LrU0B?=
- =?us-ascii?Q?zUx2OkTvLXw2UV/RNx1J79ZvheP8ShcQG3kFbVynD6V5F7nFHk3pJS1Xh46O?=
- =?us-ascii?Q?E9Y8YbcZdvfafkmhveRFzBSc/9RujBEVceSRIvS9yCm+ASl0vYO10lmzkDu7?=
- =?us-ascii?Q?1jEfHCH7PnQlJIYuA9JJFuwqdkGu2ftHPi6dDCFz1oAJ5/rgKT2anYLd4Rnr?=
- =?us-ascii?Q?+bI/sxY7C8HqF1SPVm6MxIa655yTPMZd/zaDnnzs3bhkz7O4rVGG8xKFw9Jp?=
- =?us-ascii?Q?+sbQAXUi3NqOoN7kGz0aHrO7+hxTGGv3ltCvnuUR9XwG75OQ58Lh3OeKbhBg?=
- =?us-ascii?Q?UJNaXTVG/KYfrT3BwC9IHxyn6Q+JM+ApHZ6uJxlh0nSNF45mkVqajxrt0i8/?=
- =?us-ascii?Q?eT7WZTGJiItQYdDSm5v7NmKgCerg5iQdqUT/7T5e/h4wHdeX/U+9PKubPLGV?=
- =?us-ascii?Q?P5GGyEpIGll19avkAvfwRh8OyykNrZQ5sYAYKHtiTg+hyownCuj7UFSWThFZ?=
- =?us-ascii?Q?czXPW6xAGuGVzJaNus2X/Tf3cvXN7gCrNYLVxS8afL6DjNOt3TTk+3U9Lnzz?=
- =?us-ascii?Q?KvidV02KNQEmIiy3iRy6LuN6BAVie+3xOEDCZcB6TAuEDHmi2g90JcwLtuau?=
- =?us-ascii?Q?TJpwMpR8eVz9u9+z6eCKMRGeofVVpG6wj3ej9yALpV/CCmOvp8+d/V343o4O?=
- =?us-ascii?Q?SF/+QqJqWyrixFve6VMAJbqTHtShQiv6Rh93oKmWtWyigIX+2KZusK6iDYD0?=
- =?us-ascii?Q?kB3h02RxHFiAmI8h46i2bWBv8QB4xRILVsl6QYxxeQkhTVhqhxHV33AA7+ko?=
- =?us-ascii?Q?ERaRh+8knN0/yb4PlsJIRvSvzwqbox0d6d06wGhEWfWcLNEVp9TMXbzGE164?=
- =?us-ascii?Q?kCg3YSCJVASauYbPcMx7LqyUGKQUSbKNgPM16MnIV0TgiAce1xkm3HmnSeeE?=
- =?us-ascii?Q?CvUhqcGxQpzf2goiNo5XtfO2QUrWr6D5+TeRK9gUUVVmtJCkqcgKuYy3o0YO?=
- =?us-ascii?Q?Jvf3gbsVbX9KZ66Yw+fIc2bz/1gtWy4YXB1t+w0KonhO0kUEIP6OPIXEETdY?=
- =?us-ascii?Q?Bo0At9zHL1/v/FAb8s1Z3IGkOiskFUKeE/KwtX26yXdVBdusPhj/tQ/O5fOS?=
- =?us-ascii?Q?65v6eV1TEIyxCDkGq+R+V/jfL19gVpFCXWuAajBbwKKl/YGmcFV7oDBMwFYT?=
- =?us-ascii?Q?JS1aKGVsu6B6wM9sGmI8TIeXPecPRcMwqSx4ghBg+U9XSuAbUBHItNxlS+Dv?=
- =?us-ascii?Q?S1dbx7zfohQ6VdF6Z6KWVXf7v0wy7nTvLmDtp8yy?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A5638462
+	for <linux-usb@vger.kernel.org>; Thu, 28 Sep 2023 05:21:34 +0000 (UTC)
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0ECB136
+	for <linux-usb@vger.kernel.org>; Wed, 27 Sep 2023 22:21:29 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-9b281a2aa94so1000999666b.2
+        for <linux-usb@vger.kernel.org>; Wed, 27 Sep 2023 22:21:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1695878488; x=1696483288; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IctSNdmwP27jdIkRDHGtBl56HPuutEqsWQ3K1xwqCM0=;
+        b=aoEQP5Rjc5ZNYQNrei6cdSkuXyvUeU/pbQkvmZASAFNvoQgWSpFIT+KbZY73QWSpnd
+         If6dvXdScViqYtm46ZukiDxoagHulPcWw2sqQ68Eyg6AVEzB8gEcDUMgMpjiJ70SQdgy
+         Zq+49MIA4JRhOgrxkVYqXfFepCyu4/OuhBcylSNuTYz/vmQ67zloCOu36GM3q7gACIF5
+         8NZV9mjX2vpBKNoggeeyMU1pUn2aPlQqUMG2p2TJ5Gbmj0s21cAaoc0RtJfRAyXFZ0MF
+         yaOXbIAa0ehZVfPNp8xrk6qesS9/Bd1gtT6BOBCjy1RdgmK/ZoDYOjaRKdoERZB0xg8C
+         sTgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695878488; x=1696483288;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IctSNdmwP27jdIkRDHGtBl56HPuutEqsWQ3K1xwqCM0=;
+        b=GV1J1vqhm2smlWQu59Eb4mqrFIOOKad4JTrW4TXnm8W5IHVSmPuZnEIcHhdUUnqyWd
+         v7YUlb1kFz+33Ej4d5o3e//KWg6rCpHS+iXsejAFMK1M6suVv/1kLmpXoz6mmOn6ERwn
+         gwwKqpNSGhSrqq6yVVpbw+6JKaeUcVm+tZ+0fe1hAWosh/hyFvG7iZKszHJD0djXPAEh
+         BTKGI6aL00hHhYMFuUkJWQAGsb+Rm/Wg2aQ1sNrGxI7X0YK3iMR8ODi6qc5mIcy4rsWG
+         0RcwTaIny7XBA+MBJ6kamGwED9Wwd3/K+YytMVRR6OcxEsvnfUWngAbbqBq6aUxs2x3D
+         O91g==
+X-Gm-Message-State: AOJu0YwWbjuFfT8wIaCvDPL0GrVzOABazu67Jcr1O9CGAjNxaECvEgRF
+	q8KliyXtBuj6CnEw/RWF/FxowA==
+X-Google-Smtp-Source: AGHT+IHCI6nP8GJrizsiycPqb9sumMYLwbNfauPQm9m/YdWVDylObm9wgRL27P0XVvBUJvRPacOxyA==
+X-Received: by 2002:a17:906:1dd:b0:9ae:6355:64bb with SMTP id 29-20020a17090601dd00b009ae635564bbmr200009ejj.73.1695878488360;
+        Wed, 27 Sep 2023 22:21:28 -0700 (PDT)
+Received: from [192.168.1.235] (host-87-4-82-94.retail.telecomitalia.it. [87.4.82.94])
+        by smtp.gmail.com with ESMTPSA id v5-20020a1709064e8500b00993470682e5sm10174443eju.32.2023.09.27.22.21.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 27 Sep 2023 22:21:27 -0700 (PDT)
+Message-ID: <5e453da1-91b6-4f55-8af7-c25e9d28be7a@linaro.org>
+Date: Thu, 28 Sep 2023 07:21:25 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR11MB0042.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a5ee8bb6-fa35-4309-3a2f-08dbbfc29cfc
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Sep 2023 01:31:18.0934
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Q52bUun7laS/wpRuofOJrTk/NnZEUxvFJ9k/xbETUKaM6ZPS+qGeV8KfHSFztZU3raeIDIMF8pXRmhfopw+MVmWIeD32yXi1nCbuifbnSwU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR11MB7949
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-	autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] usb: dwc3: add T-HEAD TH1520 usb driver
+Content-Language: en-US
+To: Jisheng Zhang <jszhang@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>,
+ Fu Wei <wefu@redhat.com>, linux-riscv@lists.infradead.org
+References: <20230927164222.3505-1-jszhang@kernel.org>
+ <20230927164222.3505-3-jszhang@kernel.org>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20230927164222.3505-3-jszhang@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
->=20
-> On Mon, Sep 25, 2023 at 03:54:40PM +0000, Patel, Utkarsh H wrote:
->=20
-> ...
->=20
-> > > > +	/**
-> > >
-> > > Are you sure?
-> > >
-> > > > +	 * Get cable VDO for thunderbolt cables and cables with DPSID
-> > > > +but
-> > > does not
-> > > > +	 * support DPAM2.1.
-> > > > +	 */
-> > >
-> > Yes, there are TBT3 cables which advertise DPSID but does not provide
-> > any DP capabilities in the DP discover mode VDO but does support UHBR.
-> > In that case, need to use TBTSID and use capabilities from TBT discover=
- mode
-> VDO.
->=20
-> My comment was against the style of the comment, not about content.
->=20
+On 27/09/2023 18:42, Jisheng Zhang wrote:
+> Adds TH1520 Glue layer to support USB controller on T-HEAD TH1520 SoC.
+> There is a DesignWare USB3 DRD core in TH1520 SoCs, the dwc3 core is
+> the child of this USB wrapper module device.
+> 
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> ---
+>  MAINTAINERS                   |   1 +
+>  drivers/usb/dwc3/Kconfig      |   9 +++
+>  drivers/usb/dwc3/Makefile     |   1 +
+>  drivers/usb/dwc3/dwc3-thead.c | 119 ++++++++++++++++++++++++++++++++++
+>  4 files changed, 130 insertions(+)
+>  create mode 100644 drivers/usb/dwc3/dwc3-thead.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 90f13281d297..d55e40060c46 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -18481,6 +18481,7 @@ M:	Fu Wei <wefu@redhat.com>
+>  L:	linux-riscv@lists.infradead.org
+>  S:	Maintained
+>  F:	arch/riscv/boot/dts/thead/
+> +F:	drivers/usb/dwc3/dwc3-thead.c
+>  
+>  RNBD BLOCK DRIVERS
+>  M:	Md. Haris Iqbal <haris.iqbal@ionos.com>
+> diff --git a/drivers/usb/dwc3/Kconfig b/drivers/usb/dwc3/Kconfig
+> index 98efcbb76c88..1b02f4f55b47 100644
+> --- a/drivers/usb/dwc3/Kconfig
+> +++ b/drivers/usb/dwc3/Kconfig
+> @@ -178,4 +178,13 @@ config USB_DWC3_OCTEON
+>  	  Only the host mode is currently supported.
+>  	  Say 'Y' or 'M' here if you have one such device.
+>  
+> +config USB_DWC3_THEAD
+> +	tristate "T-HEAD Platform"
+> +	depends on ARCH_THEAD || COMPILE_TEST
+> +	default USB_DWC3
+> +	help
+> +	  Support T-HEAD platform with DesignWare Core USB3 IP.
+> +	  Only the host mode is currently supported.
+> +	  Say 'Y' or 'M' here if you have one such device.
+> +
+>  endif
+> diff --git a/drivers/usb/dwc3/Makefile b/drivers/usb/dwc3/Makefile
+> index fe1493d4bbe5..9523a51dd279 100644
+> --- a/drivers/usb/dwc3/Makefile
+> +++ b/drivers/usb/dwc3/Makefile
+> @@ -55,3 +55,4 @@ obj-$(CONFIG_USB_DWC3_QCOM)		+= dwc3-qcom.o
+>  obj-$(CONFIG_USB_DWC3_IMX8MP)		+= dwc3-imx8mp.o
+>  obj-$(CONFIG_USB_DWC3_XILINX)		+= dwc3-xilinx.o
+>  obj-$(CONFIG_USB_DWC3_OCTEON)		+= dwc3-octeon.o
+> +obj-$(CONFIG_USB_DWC3_THEAD)		+= dwc3-thead.o
+> diff --git a/drivers/usb/dwc3/dwc3-thead.c b/drivers/usb/dwc3/dwc3-thead.c
+> new file mode 100644
+> index 000000000000..999b1e319c72
+> --- /dev/null
+> +++ b/drivers/usb/dwc3/dwc3-thead.c
+> @@ -0,0 +1,119 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * dwc3-thead.c - T-HEAD platform specific glue layer
+> + *
+> + * Inspired by dwc3-of-simple.c
+> + *
+> + * Copyright (C) 2021 Alibaba Group Holding Limited.
+> + * Copyright (C) 2023 Jisheng Zhang <jszhang@kernel.org>
+> + * Copyright (c) 2018, The Linux Foundation. All rights reserved.
+> + */
+> +
+> +#include <linux/io.h>
+> +#include <linux/kernel.h>
+> +#include <linux/mfd/syscon.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +
+> +#include "core.h"
+> +
+> +#define USB_SSP_EN		0x34
+> +#define  REF_SSP_EN		BIT(0)
+> +#define USB_SYS			0x3c
+> +#define  COMMONONN		BIT(0)
+> +
+> +#define USB3_DRD_SWRST		0x14
+> +#define  USB3_DRD_PRST		BIT(0)
+> +#define  USB3_DRD_PHYRST	BIT(1)
+> +#define  USB3_DRD_VCCRST	BIT(2)
+> +#define  USB3_DRD_RSTMASK	(USB3_DRD_PRST | USB3_DRD_PHYRST | USB3_DRD_VCCRST)
+> +
+> +struct dwc3_thead {
+> +	void __iomem		*base;
+> +	struct regmap		*misc_sysreg;
+> +	struct regulator	*vbus;
+> +};
+> +
+> +static void dwc3_thead_optimize_power(struct dwc3_thead *thead)
+> +{
+> +	u32 val;
+> +
+> +	/* config usb top within USB ctrl & PHY reset */
+> +	regmap_update_bits(thead->misc_sysreg, USB3_DRD_SWRST,
+> +			   USB3_DRD_RSTMASK, USB3_DRD_PRST);
+> +
+> +	/*
+> +	 * dwc reg also need to be configed to save power
+> +	 * 1. set USB_SYS[COMMONONN]
+> +	 * 2. set DWC3_GCTL[SOFITPSYNC](done by core.c)
+> +	 * 3. set GUSB3PIPECTL[SUSPENDEN] (done by core.c)
+> +	 */
+> +	val = readl(thead->base + USB_SYS);
+> +	val |= COMMONONN;
+> +	writel(val, thead->base + USB_SYS);
+> +	val = readl(thead->base + USB_SSP_EN);
+> +	val |= REF_SSP_EN;
+> +	writel(val, thead->base + USB_SSP_EN);
+> +
+> +	regmap_update_bits(thead->misc_sysreg, USB3_DRD_SWRST,
+> +			   USB3_DRD_RSTMASK, USB3_DRD_RSTMASK);
+> +}
+> +
+> +static int dwc3_thead_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct device_node *np = dev->of_node;
+> +	struct dwc3_thead *thead;
+> +	int ret;
+> +
+> +	thead = devm_kzalloc(&pdev->dev, sizeof(*thead), GFP_KERNEL);
+> +	if (!thead)
+> +		return -ENOMEM;
+> +
+> +	platform_set_drvdata(pdev, thead);
+> +
+> +	ret = devm_regulator_get_enable_optional(dev, "vbus");
+> +	if (ret < 0 && ret != -ENODEV)
+> +		return ret;
+> +
+> +	thead->misc_sysreg = syscon_regmap_lookup_by_phandle(np, "thead,misc-sysreg");
 
-Ahh, Okay.  Thank you for clarifying.
+NAK. Test your DTS first. You do not have such property.
 
-Sincerely,
-Utkarsh Patel.
+> +	if (IS_ERR(thead->misc_sysreg))
+> +		return PTR_ERR(thead->misc_sysreg);
+> +
+> +	thead->base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(thead->base))
+> +		return PTR_ERR(thead->base);
+> +
+> +	dwc3_thead_optimize_power(thead);
+> +
+> +	return of_platform_populate(np, NULL, NULL, dev);
+> +}
+> +
+> +static void dwc3_thead_remove(struct platform_device *pdev)
+> +{
+> +	of_platform_depopulate(&pdev->dev);
+> +}
+> +
+> +static const struct of_device_id dwc3_thead_of_match[] = {
+> +	{ .compatible = "thead,th1520-usb" },
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(of, dwc3_thead_of_match);
+> +
+> +static struct platform_driver dwc3_thead_driver = {
+> +	.probe		= dwc3_thead_probe,
+> +	.remove_new	= dwc3_thead_remove,
+> +	.driver		= {
+> +		.name	= "dwc3-thead",
+> +		.of_match_table	= dwc3_thead_of_match,
+> +	},
+> +};
+> +module_platform_driver(dwc3_thead_driver);
+> +
+> +MODULE_ALIAS("platform:dwc3-thead");
+
+No, you do not need this. If you need, your device ID table is wrong.
+
+Best regards,
+Krzysztof
+
 
