@@ -1,61 +1,61 @@
-Return-Path: <linux-usb+bounces-683-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-684-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D11A7B11FA
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Sep 2023 07:22:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 605947B122E
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Sep 2023 07:37:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 3F786281D68
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Sep 2023 05:22:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 63273281F84
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Sep 2023 05:37:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0ABC11188;
-	Thu, 28 Sep 2023 05:22:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0214818625;
+	Thu, 28 Sep 2023 05:37:33 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18328136D
-	for <linux-usb@vger.kernel.org>; Thu, 28 Sep 2023 05:21:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 307FE7E2
+	for <linux-usb@vger.kernel.org>; Thu, 28 Sep 2023 05:37:31 +0000 (UTC)
 Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7431219F
-	for <linux-usb@vger.kernel.org>; Wed, 27 Sep 2023 22:21:58 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-9b275afb6abso1850982266b.1
-        for <linux-usb@vger.kernel.org>; Wed, 27 Sep 2023 22:21:58 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498BBF9
+	for <linux-usb@vger.kernel.org>; Wed, 27 Sep 2023 22:37:29 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-9b29186e20aso894809966b.2
+        for <linux-usb@vger.kernel.org>; Wed, 27 Sep 2023 22:37:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695878517; x=1696483317; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1695879448; x=1696484248; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=aLxA3fRcN7nIS8WD4djsJZwj9LeN9tfQPkx+icK4+GQ=;
-        b=QtavY0pZwGSxA8Qdx5oAepY0sA3byeRjd1L8ITHomp/a3dFWVqK4e1B4wg6lql+R64
-         e/TiM6O/bxgg6rDpPRPqvpXtXWQ5ZR/Wjfz3Egj6Njxk8NYsm3WpJjYnyzVfxZr7+ghQ
-         iGOG5LAt49ugzWnPss+idim65/BRHNHxLSg4kMne0nPjhlujPFKUsBt3cdoDb5uUc0Mp
-         KIBL8I4uCKQv0rA1zoD1UP7gL8KztBZJ7ETOXfAIRNGSu5lqmS6r5Cfq2Fv8fjuL1a5A
-         t7IfgryIxMs7Banh6Rr/hGppdvOEqZQST6yqXTewyYwTGOT5zQITwqp2vedP+V3arOG6
-         gYTQ==
+        bh=wmcotlRCrBk80r7OsmMGFTSrnZaiLKFO2fVbfsVUPoI=;
+        b=aIeLOgQWH5bPq4m0orCEDq4XaPX3LHcKslIC7zKju9DyqlVto2HkETXJFm7wuMuxC3
+         QyvTOFPQiNwbnQOUmJOeSiHuBWq//F7ZvYF/nOB2ISbskpjeSz6wuK8rEleOJb9L63k6
+         QSLV41mAAm+j87r5Y8AaTqmd+HxjS1K8/kI7gqQfZhSNSOcj2b/uvPNbczdYbl8PCSDK
+         Ez4TobYPvt+a2c2xPCq/wwWWa27O5U7VCobxmyVSOoCZAX6Z4fitMzJkyP5Cha7Yp/7g
+         MQymMJFD3MOI0uKI7yAxfp/NEaZ92wR2Dav73cfW3wqW7dct7fDNt2o/lJDuiq9cmwr3
+         on7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695878517; x=1696483317;
+        d=1e100.net; s=20230601; t=1695879448; x=1696484248;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aLxA3fRcN7nIS8WD4djsJZwj9LeN9tfQPkx+icK4+GQ=;
-        b=EP2rWW22JtvtmB8G2QXrPlEglUkXuOthcNTn+XrzhEkmgIEEPQLIM8+x6Gl0jGQDu9
-         dfEURp1hz//RR/k5cXLJGrqnFn28NVonVmScq9sz1/0gtSOdL3QMkQnYKBW192K3+jtS
-         6KOHIHfvOk31887gNvr+NQKkPP8pqvO+jsUWUrOb+GqjkDovTwGPlGDeRINp54D/e4i+
-         EShlHlS5uCQGUk/Mmmm85syhFxIGUxJO38UC4c4qLoSsyw+lQKeoWV6Jx0o1p0OY/XpF
-         2kSnyJm7NB+ba5GDb09QznNjKH39Fjmm76kLV+uBmL1ipWIDtQ/8KiZeMwSkXBYIcYri
-         Oang==
-X-Gm-Message-State: AOJu0YwcjFyvu4ow9j0ynLxN796DG6ssaBoYk8GRTOp4YASH/x27nz4e
-	c695AsUcUhQ7ONAWqx6ZFDwfTw==
-X-Google-Smtp-Source: AGHT+IGrjdOfj0NO/zfv1A1IGDKzs8SjVxJSt9DYkeasnIQWGn08dUVMnrUV4kFWnbTiGaVOFGM5uw==
-X-Received: by 2002:a17:907:b1a:b0:9a1:b85d:c952 with SMTP id h26-20020a1709070b1a00b009a1b85dc952mr252211ejl.12.1695878516859;
-        Wed, 27 Sep 2023 22:21:56 -0700 (PDT)
-Received: from [192.168.1.235] (host-87-4-82-94.retail.telecomitalia.it. [87.4.82.94])
-        by smtp.gmail.com with ESMTPSA id v5-20020a1709064e8500b00993470682e5sm10174443eju.32.2023.09.27.22.21.55
+        bh=wmcotlRCrBk80r7OsmMGFTSrnZaiLKFO2fVbfsVUPoI=;
+        b=xF9NXN7eGi+NApQnN/LPIOSTYjDA4jksf5aJ2XnV17XyIGqjtOR4xorPrMpSD5IVhZ
+         vqgOAVIqGAfzYqAnZRz9zDp7Eu4mYZl0OnOAsWm7FbHJudus7xJXtvthbPF6tk5yE6Oa
+         NShPZHlK1Ef/l6RKpSnNvAxxJa69Ewo4mGK0JsQdkK9hHUbe0r0G4QjpVYTOr4LekDiJ
+         wh2b76ECTVILytWuwV/4yEGYdfuANiXbV44ihsDp5vADGmALE1QBE9oend6QOAE10pkq
+         FHQN9nTnLVIMTBhU3mTNWVjmyTA/eXT75s+hQ46KOjnNPEtoGa6URVLwzJur3xn05ROF
+         BgUw==
+X-Gm-Message-State: AOJu0YyfXM3pqtRQOwlA6+DzOuruL2t+M14lWSVd/QXrW8/Gr3zdogi0
+	NNMPNlAe/ohQfbkVxau89ToNzSH58KHE8Bk12DvLh0U5
+X-Google-Smtp-Source: AGHT+IHEfbd0byXhvmYaG9HXJ29xqTB3PRreLwdGTKLxr4tFg+7C9sQbPDMO/xEr9w48gPlh8Sx5OA==
+X-Received: by 2002:a17:907:77c9:b0:9ae:1872:d01a with SMTP id kz9-20020a17090777c900b009ae1872d01amr230583ejc.76.1695879447172;
+        Wed, 27 Sep 2023 22:37:27 -0700 (PDT)
+Received: from [192.168.168.70] (host-87-4-82-94.retail.telecomitalia.it. [87.4.82.94])
+        by smtp.gmail.com with ESMTPSA id s4-20020a170906168400b009ad829ed144sm10250766ejd.130.2023.09.27.22.37.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Sep 2023 22:21:56 -0700 (PDT)
-Message-ID: <08760c32-fee0-4681-92f2-56003cadad0a@linaro.org>
-Date: Thu, 28 Sep 2023 07:21:55 +0200
+        Wed, 27 Sep 2023 22:37:26 -0700 (PDT)
+Message-ID: <77d9306e-ac55-48ab-8751-db43fd03523d@linaro.org>
+Date: Thu, 28 Sep 2023 07:37:24 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -63,18 +63,16 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: usb: Add T-HEAD TH1520 USB controller
+Subject: Re: [PATCH v7 01/14] dt-bindings: usb: tps6598x: Add tps25750
 Content-Language: en-US
-To: Jisheng Zhang <jszhang@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>,
- Fu Wei <wefu@redhat.com>, linux-riscv@lists.infradead.org
-References: <20230927164222.3505-1-jszhang@kernel.org>
- <20230927164222.3505-2-jszhang@kernel.org>
+To: Abdel Alkuor <alkuor@gmail.com>, heikki.krogerus@linux.intel.com,
+ krzysztof.kozlowski+dt@linaro.org, bryan.odonoghue@linaro.org
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, ryan.eleceng@gmail.com, robh+dt@kernel.org,
+ conor+dt@kernel.org, devicetree@vger.kernel.org,
+ Abdel Alkuor <abdelalkuor@geotab.com>
+References: <20230927175348.18041-1-alkuor@gmail.com>
+ <20230927175348.18041-2-alkuor@gmail.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -120,7 +118,7 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20230927164222.3505-2-jszhang@kernel.org>
+In-Reply-To: <20230927175348.18041-2-alkuor@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -129,59 +127,83 @@ X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On 27/09/2023 18:42, Jisheng Zhang wrote:
-> T-HEAD TH1520 platform's USB has a wrapper module around
-> the DesignWare USB3 DRD controller. Add binding information doc for
-> it.
+On 27/09/2023 19:53, Abdel Alkuor wrote:
+> From: Abdel Alkuor <abdelalkuor@geotab.com>
 > 
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> TPS25750 is USB TypeC PD controller which is a subset of TPS6598x.
+> 
+> Signed-off-by: Abdel Alkuor <abdelalkuor@geotab.com>
 > ---
-
-...
-
+> Changes in v7:
+>   - Define reg at top-level
+>   - Remove description from reg-names
+> Changes in v6:
+>   - Use reg property for patch address
+> Changes in v5:
+>   - Add tps25750 bindings
+> 
+>  .../devicetree/bindings/usb/ti,tps6598x.yaml  | 81 ++++++++++++++++++-
+>  1 file changed, 80 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml b/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
+> index 5497a60cddbc..9303d00b89de 100644
+> --- a/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
+> +++ b/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
+> @@ -20,8 +20,18 @@ properties:
+>      enum:
+>        - ti,tps6598x
+>        - apple,cd321x
+> +      - ti,tps25750
 > +
-> +  '#address-cells':
-> +    enum: [ 1, 2 ]
+>    reg:
+> -    maxItems: 1
+> +    minItems: 1
+> +    items:
+> +      - description: main PD controller address
+> +      - description: |
+> +          I2C slave address field in PBMs input data
+> +          which is used as the device address when writing the
+> +          patch for TPS25750.
+> +          The patch address can be any value except 0x00, 0x20,
+> +          0x21, 0x22, and 0x23
+>  
+>    wakeup-source: true
+>  
+> @@ -32,10 +42,47 @@ properties:
+>      items:
+>        - const: irq
+>  
+> +  firmware-name:
+> +    description: |
+> +      Should contain the name of the default patch binary
+> +      file located on the firmware search path which is
+> +      used to switch the controller into APP mode.
+> +      This is used when tps25750 doesn't have an EEPROM
+> +      connected to it.
+> +    maxItems: 1
 > +
-> +  '#size-cells':
-> +    enum: [ 1, 2 ]
+>  required:
+>    - compatible
+>    - reg
+>  
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: ti,tps25750
+> +    then:
+> +      properties:
+> +        reg:
+> +          maxItems: 2
 > +
-> +# Required child node:
-> +
-> +patternProperties:
-> +  "^usb@[0-9a-f]+$":
-> +    $ref: snps,dwc3.yaml#
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - clock-names
-> +  - ranges
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +
+> +        reg-names:
+> +          items:
+> +            - const: main
+> +            - const: patch-address
 
-Drop stray blank line
-
-> +    usb {
-> +          compatible = "thead,th1520-usb";
-
-Use 4 spaces for example indentation.
-
-> +          reg = <0xec03f000 0x1000>;
-> +          clocks = <&clk 1>,
-> +                   <&clk 2>,
-> +                   <&clk 3>,
-> +                   <&clk 4>;
-> +          clock-names = "ref", "bus_early", "phy", "suspend";
-> +          ranges;
-
-Are you sure you do not have W=1 warnings in DTS?
-
+This should be at top level. I wrote it last time - do not define
+properties in if:then:, but in top-level.
 
 Best regards,
 Krzysztof
