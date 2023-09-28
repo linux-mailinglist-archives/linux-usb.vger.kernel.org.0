@@ -1,185 +1,410 @@
-Return-Path: <linux-usb+bounces-720-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-721-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 303687B2498
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Sep 2023 20:01:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 400F97B265D
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Sep 2023 22:19:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id D70DA2828A8
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Sep 2023 18:01:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id AEF35282579
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Sep 2023 20:19:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0133C516CE;
-	Thu, 28 Sep 2023 18:01:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CD1448E96;
+	Thu, 28 Sep 2023 20:19:15 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 695686FBF;
-	Thu, 28 Sep 2023 18:01:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6C1DC433C7;
-	Thu, 28 Sep 2023 18:01:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1695924109;
-	bh=EAdPFsmHcyWayc69u1pNQGVN/Od37LMkwOOQtSvFBiM=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=bfK28RLdLGgKZCUgDzeWTBKaqWs6brrGRaSyPdFXskOVm0On6PlLojE5M/xCgEEY5
-	 grpUMo2uaqDtijMvKbHWfOGFJG+vQA/tkSyBcl6qHWL3dn3aU/KYO5L4q/l83Nz1PF
-	 rjm7ECl0slpI4oU4YRq3Il4iqcNMzLzfgVWdoz5lG6ZAiTp3N12KGI95ZvFcFMlTR+
-	 jbG318WOr9JpuRBEryTb1XBxjEr4Jw9k8E4/FfV1BqWFd1k5jtZEs5n6naq0zoe6ze
-	 HRJ/cpQFseJro5/YEKgl8SVwodWHkLRLpC8H6rkjRLoCIio3JUF68vh6UiBMp7cQEp
-	 W7opbVnaB1VbA==
-Message-ID: <00ca2e3997cc86401f7fb65d936fe5403abd5627.camel@kernel.org>
-Subject: Re: [PATCH 87/87] fs: move i_blocks up a few places in struct inode
-From: Jeff Layton <jlayton@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner
- <brauner@kernel.org>, David Sterba <dsterba@suse.cz>, Amir Goldstein
- <amir73il@gmail.com>, Theodore Ts'o <tytso@mit.edu>, Eric Biederman
- <ebiederm@xmission.com>, Kees Cook <keescook@chromium.org>, Jeremy Kerr
- <jk@ozlabs.org>, Arnd Bergmann <arnd@arndb.de>, Michael Ellerman
- <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy
- <christophe.leroy@csgroup.eu>, Heiko Carstens <hca@linux.ibm.com>, Vasily
- Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>,
- Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle
- <svens@linux.ibm.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Arve =?ISO-8859-1?Q?Hj=F8nnev=E5g?= <arve@android.com>, Todd Kjos
- <tkjos@android.com>, Martijn Coenen <maco@android.com>, Joel Fernandes
- <joel@joelfernandes.org>, Carlos Llamas <cmllamas@google.com>, Suren
- Baghdasaryan <surenb@google.com>, Mattia Dongili <malattia@linux.it>,
- Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>, Jason
- Gunthorpe <jgg@ziepe.ca>,  Leon Romanovsky <leon@kernel.org>, Brad Warrum
- <bwarrum@linux.ibm.com>, Ritu Agarwal <rituagar@linux.ibm.com>, Hans de
- Goede <hdegoede@redhat.com>, Ilpo =?ISO-8859-1?Q?J=E4rvinen?=
- <ilpo.jarvinen@linux.intel.com>, Mark Gross <markgross@kernel.org>, Jiri
- Slaby <jirislaby@kernel.org>, Eric Van Hensbergen <ericvh@kernel.org>,
- Latchesar Ionkov <lucho@ionkov.net>, Dominique Martinet
- <asmadeus@codewreck.org>, Christian Schoenebeck <linux_oss@crudebyte.com>, 
- David Sterba <dsterba@suse.com>, David Howells <dhowells@redhat.com>, Marc
- Dionne <marc.dionne@auristor.com>,  Ian Kent <raven@themaw.net>, Luis de
- Bethencourt <luisbg@kernel.org>, Salah Triki <salah.triki@gmail.com>,
- "Tigran A. Aivazian" <aivazian.tigran@gmail.com>,  Chris Mason
- <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>, Xiubo Li
- <xiubli@redhat.com>,  Ilya Dryomov <idryomov@gmail.com>, Jan Harkes
- <jaharkes@cs.cmu.edu>, coda@cs.cmu.edu, Joel Becker <jlbec@evilplan.org>,
- Christoph Hellwig <hch@lst.de>, Nicolas Pitre <nico@fluxnic.net>, "Rafael
- J. Wysocki" <rafael@kernel.org>, Ard Biesheuvel <ardb@kernel.org>, Gao
- Xiang <xiang@kernel.org>, Chao Yu <chao@kernel.org>,  Yue Hu
- <huyue2@coolpad.com>, Jeffle Xu <jefflexu@linux.alibaba.com>, Namjae Jeon
- <linkinjeon@kernel.org>, Sungjong Seo <sj1557.seo@samsung.com>, Jan Kara
- <jack@suse.com>, Andreas Dilger <adilger.kernel@dilger.ca>, Jaegeuk Kim
- <jaegeuk@kernel.org>, OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>, 
- Christoph Hellwig <hch@infradead.org>, Miklos Szeredi <miklos@szeredi.hu>,
- Bob Peterson <rpeterso@redhat.com>, Andreas Gruenbacher
- <agruenba@redhat.com>, Richard Weinberger <richard@nod.at>, Anton Ivanov
- <anton.ivanov@cambridgegreys.com>, Johannes Berg
- <johannes@sipsolutions.net>, Mikulas Patocka
- <mikulas@artax.karlin.mff.cuni.cz>,  Mike Kravetz
- <mike.kravetz@oracle.com>, Muchun Song <muchun.song@linux.dev>, Jan Kara
- <jack@suse.cz>,  David Woodhouse <dwmw2@infradead.org>, Dave Kleikamp
- <shaggy@kernel.org>, Tejun Heo <tj@kernel.org>, Trond Myklebust
- <trond.myklebust@hammerspace.com>, Anna Schumaker <anna@kernel.org>, Chuck
- Lever <chuck.lever@oracle.com>, Neil Brown <neilb@suse.de>, Olga
- Kornievskaia <kolga@netapp.com>, Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey
- <tom@talpey.com>,  Ryusuke Konishi <konishi.ryusuke@gmail.com>, Anton
- Altaparmakov <anton@tuxera.com>, Konstantin Komarov
- <almaz.alexandrovich@paragon-software.com>, Mark Fasheh <mark@fasheh.com>, 
- Joseph Qi <joseph.qi@linux.alibaba.com>, Bob Copeland <me@bobcopeland.com>,
- Mike Marshall <hubcap@omnibond.com>, Martin Brandenburg
- <martin@omnibond.com>, Luis Chamberlain <mcgrof@kernel.org>, Iurii Zaikin
- <yzaikin@google.com>, Tony Luck <tony.luck@intel.com>,  "Guilherme G.
- Piccoli" <gpiccoli@igalia.com>, Anders Larsen <al@alarsen.net>, Steve
- French <sfrench@samba.org>, Paulo Alcantara <pc@manguebit.com>, Ronnie
- Sahlberg <lsahlber@redhat.com>, Shyam Prasad N <sprasad@microsoft.com>,
- Sergey Senozhatsky <senozhatsky@chromium.org>, Phillip Lougher
- <phillip@squashfs.org.uk>, Steven Rostedt <rostedt@goodmis.org>, Masami
- Hiramatsu <mhiramat@kernel.org>, Evgeniy Dushistov <dushistov@mail.ru>,
- Chandan Babu R <chandan.babu@oracle.com>, "Darrick J. Wong"
- <djwong@kernel.org>, Damien Le Moal <dlemoal@kernel.org>, Naohiro Aota
- <naohiro.aota@wdc.com>, Johannes Thumshirn <jth@kernel.org>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
- <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
- Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
- <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,  Hugh Dickins
- <hughd@google.com>, Andrew Morton <akpm@linux-foundation.org>, "David S.
- Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub
- Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, John Johansen
- <john.johansen@canonical.com>, Paul Moore <paul@paul-moore.com>, James
- Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, Stephen
- Smalley <stephen.smalley.work@gmail.com>, Eric Paris
- <eparis@parisplace.org>,  linux-fsdevel@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
- linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, 
- platform-driver-x86@vger.kernel.org, linux-rdma@vger.kernel.org, 
- linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
- v9fs@lists.linux.dev,  linux-afs@lists.infradead.org,
- autofs@vger.kernel.org,  linux-btrfs@vger.kernel.org,
- ceph-devel@vger.kernel.org,  codalist@coda.cs.cmu.edu,
- linux-efi@vger.kernel.org,  linux-erofs@lists.ozlabs.org,
- linux-ext4@vger.kernel.org,  linux-f2fs-devel@lists.sourceforge.net,
- gfs2@lists.linux.dev,  linux-um@lists.infradead.org,
- linux-mtd@lists.infradead.org,  jfs-discussion@lists.sourceforge.net,
- linux-nfs@vger.kernel.org,  linux-nilfs@vger.kernel.org,
- linux-ntfs-dev@lists.sourceforge.net,  ntfs3@lists.linux.dev,
- ocfs2-devel@lists.linux.dev,  linux-karma-devel@lists.sourceforge.net,
- devel@lists.orangefs.org,  linux-unionfs@vger.kernel.org,
- linux-hardening@vger.kernel.org,  reiserfs-devel@vger.kernel.org,
- linux-cifs@vger.kernel.org,  samba-technical@lists.samba.org,
- linux-trace-kernel@vger.kernel.org,  linux-xfs@vger.kernel.org,
- bpf@vger.kernel.org, netdev@vger.kernel.org,  apparmor@lists.ubuntu.com,
- linux-security-module@vger.kernel.org,  selinux@vger.kernel.org
-Date: Thu, 28 Sep 2023 14:01:33 -0400
-In-Reply-To: <CAHk-=wij_42Q9WHY898r-gugmT5c-1JJKRh3C+nTUd1hc1aeqQ@mail.gmail.com>
-References: <20230928110554.34758-1-jlayton@kernel.org>
-	 <20230928110554.34758-3-jlayton@kernel.org>
-	 <CAHk-=wij_42Q9WHY898r-gugmT5c-1JJKRh3C+nTUd1hc1aeqQ@mail.gmail.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A63318626
+	for <linux-usb@vger.kernel.org>; Thu, 28 Sep 2023 20:19:13 +0000 (UTC)
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CD4B180
+	for <linux-usb@vger.kernel.org>; Thu, 28 Sep 2023 13:19:11 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-d814634fe4bso20697137276.1
+        for <linux-usb@vger.kernel.org>; Thu, 28 Sep 2023 13:19:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1695932350; x=1696537150; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=pllQ3EK+t+tR7Fp3wficz5gYikkfu1qqo+IJ9sVnus0=;
+        b=Cygn22rMUnowgL6axg7X+/22dSxYieotSuUfe+Y8Wl+TJtQjItIgyDwjg8gIcn7ebr
+         zNSBA9lG6y5nAeDVKGN2yqRCLIi3X8kVkxvHLSyK5ul98FvBwgYqIeKE5a9+sf0OVn3y
+         YwP2WM3xUwZ3l56Ol8hId8PKxFXNEnogFwdnYHzsUReDGLbdEWrbi+EaYhv/Xi4vszjP
+         dqdd42Unu+NRXwQ/X1uG56d+AtUX7rQKge4rgFodfN+Rddthhv7dXFivHocSZYaJm2Ik
+         ETiJZMLRGMRlAP65gIu2adXfbjKAF9TN5PpzwsFTHmdO+PS09QMonE0IQrGPlEWiQJ7g
+         pfuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695932350; x=1696537150;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pllQ3EK+t+tR7Fp3wficz5gYikkfu1qqo+IJ9sVnus0=;
+        b=d4csHlk7eZ9wzKVhgaQJA2+Le8Od64cV+gUreT+6T1/8/LeB4PKC/Xr4FNLEA7exlw
+         NjZ7FnunT9+0jN5L/G+GVM9uLGaaGYXobAGM9ol6KHL3AxXe9IxjVGJvjtFY60N16LOv
+         ON0f3/00DCMA2kQdJRmieXJntnff/Axr6q+3pLLsbCpi2nuyFDaTPEffojLLusAHWkHx
+         Gv9fIYIb+4oGN59+liJCStautblE6c/0ip4nOkmQDmfXkuI6xkS1Oluc/+1TEIDiHalE
+         8TsbWsKSC62mKXBW4AcM0iYrwd2PBcTpFbQHJiK6InBcAdlNDxa3qKMOCSZ5tyKZ3WFF
+         CiqA==
+X-Gm-Message-State: AOJu0YxwbkGcVA0o8l5lB+Gd3GecXq3r0DTxFObwBoak9Cy7F1WAFhoQ
+	4KlgvKk0IycnsJgWehnyKaFZEaM/0xVF
+X-Google-Smtp-Source: AGHT+IEbQR74Ht7ElnstI9KTz/dGGQIhyc6mC7X8PrlaEd3xhSYbG5FtpUw6vPUPHJGauD0cZy5HLvl34tbq
+X-Received: from hi-h2o-specialist.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3cef])
+ (user=arakesh job=sendgmr) by 2002:a05:6902:181c:b0:d82:9342:8627 with SMTP
+ id cf28-20020a056902181c00b00d8293428627mr34574ybb.6.1695932350374; Thu, 28
+ Sep 2023 13:19:10 -0700 (PDT)
+Date: Thu, 28 Sep 2023 13:19:04 -0700
+In-Reply-To: <20230920200335.63709-1-arakesh@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+References: <20230920200335.63709-1-arakesh@google.com>
+X-Mailer: git-send-email 2.42.0.582.g8ccd20d70d-goog
+Message-ID: <20230928201904.454229-1-arakesh@google.com>
+Subject: [PATCH v3 2/2] usb: gadget: uvc: prevent de-allocating inflight usb_requests
+From: Avichal Rakesh <arakesh@google.com>
+To: arakesh@google.com
+Cc: dan.scally@ideasonboard.com, etalvala@google.com, 
+	gregkh@linuxfoundation.org, jchowdhary@google.com, 
+	laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, m.grzeschik@pengutronix.de, mgr@pengutronix.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+	RCVD_IN_DNSWL_BLOCKED,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+	USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-On Thu, 2023-09-28 at 10:41 -0700, Linus Torvalds wrote:
-> On Thu, 28 Sept 2023 at 04:06, Jeff Layton <jlayton@kernel.org> wrote:
-> >=20
-> > Move i_blocks up above the i_lock, which moves the new 4 byte hole to
-> > just after the timestamps, without changing the size of the structure.
->=20
-> I'm sure others have mentioned this, but 'struct inode' is marked with
-> __randomize_layout, so the actual layout may end up being very
-> different.
->=20
-> I'm personally not convinced the whole structure randomization is
-> worth it - it's easy enough to figure out for any distro kernel since
-> the seed has to be the same across machines for modules to work, so
-> even if the seed isn't "public", any layout is bound to be fairly
-> easily discoverable.
->=20
-> So the whole randomization only really works for private kernel
-> builds, and it adds this kind of pain where "optimizing" the structure
-> layout is kind of pointless depending on various options.
->=20
-> I certainly *hope* no distro enables that pointless thing, but it's a wor=
-ry.
->=20
+Currently, when stopping the stream, uvcg_video_enable immediately
+deallocates the usb_requests after calling usb_ep_dequeue. However,
+usb_ep_dequeue is asynchronous and it is possible that it a request
+that is still in use by the controller. This can lead to some hard
+to reproduce crashes with double frees and general memory
+inconsistencies.
 
-I've never enabled struct randomization and don't know anyone who does.
-I figure if you turn that on, you get to keep all of the pieces when you
-start seeing weird performance problems.
+This patch sets up some stronger guarantees around when a request should
+be deallocated. To that extent, this patch does the following:
+1. When stream is stopped only the currently owned uvc_requests are freed
+   and all in-flight uvc_requests are marked 'abandoned'
+2. uvc_video_complete callback is made responsible for freeing up the
+   abandoned requests. No uvc specific logic is triggered when handling
+   abandoned requests.
 
-I think that we have to optimize for that being disabled. Even without
-that though, turning on and off options can change the layout...and then
-there are different arches, etc.
+This ensures that the ownership of uvc_request (and its corresponding
+usb_request) is never ambiguous, and uvc_requests are always freed
+regardless of when the requests are returned to the gadget driver.
 
-I'm using a config derived from the Fedora x86_64 kernel images and hope
-that represents a reasonably common configuration. The only conditional
-members before the timestamps are based on CONFIG_FS_POSIX_ACL and
-CONFIG_SECURITY, which are almost always turned on with most distros.
---=20
-Jeff Layton <jlayton@kernel.org>
+Other changes in the patch are required to decouple the allocated
+uvc_requests from uvc_video that allocated them.
+
+Link: https://lore.kernel.org/7cd81649-2795-45b6-8c10-b7df1055020d@google.com
+Suggested-by: Michael Grzeschik <mgr@pengutronix.de>
+Signed-off-by: Avichal Rakesh <arakesh@google.com>
+---
+v1 -> v2: Switched from a timed wait to free on complete model based
+          on discussions with Michael.
+v3 -> v3: Initialized ureqs at init to prevent accessing invalid
+          memory when no stream is created.
+
+ drivers/usb/gadget/function/uvc.h       |   4 +-
+ drivers/usb/gadget/function/uvc_video.c | 183 +++++++++++++++++-------
+ 2 files changed, 134 insertions(+), 53 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
+index 989bc6b4e93d..e69cfb7cced1 100644
+--- a/drivers/usb/gadget/function/uvc.h
++++ b/drivers/usb/gadget/function/uvc.h
+@@ -81,6 +81,8 @@ struct uvc_request {
+ 	struct sg_table sgt;
+ 	u8 header[UVCG_REQUEST_HEADER_LEN];
+ 	struct uvc_buffer *last_buf;
++	struct list_head list;
++	bool is_abandoned;
+ };
+
+ struct uvc_video {
+@@ -102,7 +104,7 @@ struct uvc_video {
+
+ 	/* Requests */
+ 	unsigned int req_size;
+-	struct uvc_request *ureq;
++	struct list_head ureqs; /* all uvc_requests allocated by uvc_video */
+ 	struct list_head req_free;
+ 	spinlock_t req_lock;
+
+diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
+index 70ff88854539..aa5ef63e5540 100644
+--- a/drivers/usb/gadget/function/uvc_video.c
++++ b/drivers/usb/gadget/function/uvc_video.c
+@@ -227,6 +227,23 @@ uvc_video_encode_isoc(struct usb_request *req, struct uvc_video *video,
+  * Request handling
+  */
+
++static void uvc_video_free_request(struct uvc_request *ureq, struct usb_ep *ep)
++{
++	sg_free_table(&ureq->sgt);
++	if (ureq->req && ep) {
++		usb_ep_free_request(ep, ureq->req);
++		ureq->req = NULL;
++	}
++
++	kfree(ureq->req_buffer);
++	ureq->req_buffer = NULL;
++
++	if (!list_empty(&ureq->list))
++		list_del(&ureq->list);
++
++	kfree(ureq);
++}
++
+ static int uvcg_video_ep_queue(struct uvc_video *video, struct usb_request *req)
+ {
+ 	int ret;
+@@ -254,7 +271,21 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
+ 	struct uvc_video *video = ureq->video;
+ 	struct uvc_video_queue *queue = &video->queue;
+ 	struct uvc_device *uvc = video->uvc;
++	struct uvc_buffer *last_buf;
+ 	unsigned long flags;
++	bool is_abandoned;
++
++	spin_lock_irqsave(&video->req_lock, flags);
++	is_abandoned = ureq->is_abandoned;
++	last_buf = ureq->last_buf;
++	ureq->last_buf = NULL;
++	spin_unlock_irqrestore(&video->req_lock, flags);
++
++	if (is_abandoned) {
++		uvcg_dbg(&video->uvc->func, "Freeing abandoned request\n");
++		uvc_video_free_request(ureq, ep);
++		return;
++	}
+
+ 	switch (req->status) {
+ 	case 0:
+@@ -277,15 +308,27 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
+ 		uvcg_queue_cancel(queue, 0);
+ 	}
+
+-	if (ureq->last_buf) {
+-		uvcg_complete_buffer(&video->queue, ureq->last_buf);
+-		ureq->last_buf = NULL;
++	if (last_buf) {
++		spin_lock_irqsave(&video->queue.irqlock, flags);
++		uvcg_complete_buffer(&video->queue, last_buf);
++		spin_unlock_irqrestore(&video->queue.irqlock, flags);
+ 	}
+
++	/*
++	 * request might have been abandoned while being processed.
++	 * do a last minute check before queueing the request back.
++	 */
+ 	spin_lock_irqsave(&video->req_lock, flags);
+-	list_add_tail(&req->list, &video->req_free);
++	is_abandoned = ureq->is_abandoned;
++	if (!is_abandoned)
++		list_add_tail(&req->list, &video->req_free);
+ 	spin_unlock_irqrestore(&video->req_lock, flags);
+
++	if (is_abandoned) {
++		uvc_video_free_request(ureq, ep);
++		return;
++	}
++
+ 	if (uvc->state == UVC_STATE_STREAMING)
+ 		queue_work(video->async_wq, &video->pump);
+ }
+@@ -293,25 +336,10 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
+ static int
+ uvc_video_free_requests(struct uvc_video *video)
+ {
+-	unsigned int i;
+-
+-	if (video->ureq) {
+-		for (i = 0; i < video->uvc_num_requests; ++i) {
+-			sg_free_table(&video->ureq[i].sgt);
++	struct uvc_request *ureq, *temp;
+
+-			if (video->ureq[i].req) {
+-				usb_ep_free_request(video->ep, video->ureq[i].req);
+-				video->ureq[i].req = NULL;
+-			}
+-
+-			if (video->ureq[i].req_buffer) {
+-				kfree(video->ureq[i].req_buffer);
+-				video->ureq[i].req_buffer = NULL;
+-			}
+-		}
+-
+-		kfree(video->ureq);
+-		video->ureq = NULL;
++	list_for_each_entry_safe(ureq, temp, &video->ureqs, list) {
++		uvc_video_free_request(ureq, video->ep);
+ 	}
+
+ 	INIT_LIST_HEAD(&video->req_free);
+@@ -322,6 +350,7 @@ uvc_video_free_requests(struct uvc_video *video)
+ static int
+ uvc_video_alloc_requests(struct uvc_video *video)
+ {
++	struct uvc_request *ureq;
+ 	unsigned int req_size;
+ 	unsigned int i;
+ 	int ret = -ENOMEM;
+@@ -332,35 +361,36 @@ uvc_video_alloc_requests(struct uvc_video *video)
+ 		 * max_t(unsigned int, video->ep->maxburst, 1)
+ 		 * (video->ep->mult);
+
+-	video->ureq = kcalloc(video->uvc_num_requests, sizeof(struct uvc_request), GFP_KERNEL);
+-	if (video->ureq == NULL)
+-		return -ENOMEM;
+-
+-	for (i = 0; i < video->uvc_num_requests; ++i) {
+-		video->ureq[i].req_buffer = kmalloc(req_size, GFP_KERNEL);
+-		if (video->ureq[i].req_buffer == NULL)
++	INIT_LIST_HEAD(&video->ureqs);
++	for (i = 0; i < video->uvc_num_requests; i++) {
++		ureq = kzalloc(sizeof(struct uvc_request), GFP_KERNEL);
++		if (ureq == NULL)
+ 			goto error;
++		INIT_LIST_HEAD(&ureq->list);
++		list_add_tail(&ureq->list, &video->ureqs);
++	}
+
+-		video->ureq[i].req = usb_ep_alloc_request(video->ep, GFP_KERNEL);
+-		if (video->ureq[i].req == NULL)
++	list_for_each_entry(ureq, &video->ureqs, list) {
++		ureq->req_buffer = kmalloc(req_size, GFP_KERNEL);
++		if (ureq->req_buffer == NULL)
+ 			goto error;
+-
+-		video->ureq[i].req->buf = video->ureq[i].req_buffer;
+-		video->ureq[i].req->length = 0;
+-		video->ureq[i].req->complete = uvc_video_complete;
+-		video->ureq[i].req->context = &video->ureq[i];
+-		video->ureq[i].video = video;
+-		video->ureq[i].last_buf = NULL;
+-
+-		list_add_tail(&video->ureq[i].req->list, &video->req_free);
++		ureq->req = usb_ep_alloc_request(video->ep, GFP_KERNEL);
++		if (ureq->req == NULL)
++			goto error;
++		ureq->req->buf = ureq->req_buffer;
++		ureq->req->length = 0;
++		ureq->req->complete = uvc_video_complete;
++		ureq->req->context = ureq;
++		ureq->video = video;
++		ureq->last_buf = NULL;
++		list_add_tail(&ureq->req->list, &video->req_free);
+ 		/* req_size/PAGE_SIZE + 1 for overruns and + 1 for header */
+-		sg_alloc_table(&video->ureq[i].sgt,
++		sg_alloc_table(&ureq->sgt,
+ 			       DIV_ROUND_UP(req_size - UVCG_REQUEST_HEADER_LEN,
+ 					    PAGE_SIZE) + 2, GFP_KERNEL);
+ 	}
+
+ 	video->req_size = req_size;
+-
+ 	return 0;
+
+ error:
+@@ -484,12 +514,68 @@ static void uvcg_video_pump(struct work_struct *work)
+ 	return;
+ }
+
++/*
++ * Disable video stream. This ensures that any inflight usb requests are marked
++ * for clean up and video buffers are dropped up before returning.
++ */
++static void uvcg_video_disable(struct uvc_video *video)
++{
++	struct uvc_buffer *buf, *tmp_buf;
++	struct uvc_request *ureq, *temp;
++	struct list_head buf_list; /* track in-flight video buffers */
++	struct usb_request *req;
++	unsigned long flags;
++
++	cancel_work_sync(&video->pump);
++	uvcg_queue_cancel(&video->queue, 0);
++
++	INIT_LIST_HEAD(&buf_list);
++	spin_lock_irqsave(&video->req_lock, flags);
++	/* abandon all usb requests */
++	list_for_each_entry_safe(ureq, temp, &video->ureqs, list) {
++		ureq->is_abandoned = true;
++		if (ureq->last_buf) {
++			list_add(&ureq->last_buf->queue, &buf_list);
++			ureq->last_buf = NULL;
++		}
++		list_del_init(&ureq->list);
++		if (ureq->req)
++			usb_ep_dequeue(video->ep, ureq->req);
++	}
++	/*
++	 * re-add uvc_requests currently owned by the gadget to
++	 * video->ureqs to be deallocated
++	 */
++	list_for_each_entry(req, &video->req_free, list) {
++		ureq = req->context;
++		list_add_tail(&ureq->list, &video->ureqs);
++	}
++	spin_unlock_irqrestore(&video->req_lock, flags);
++
++	/*
++	 * drop abandoned uvc_buffers, as the completion handler
++	 * no longer will
++	 */
++	if (!list_empty(&buf_list)) {
++		spin_lock_irqsave(&video->queue.irqlock, flags);
++		list_for_each_entry_safe(buf, tmp_buf,
++						&buf_list, queue) {
++			video->queue.flags |= UVC_QUEUE_DROP_INCOMPLETE;
++			uvcg_complete_buffer(&video->queue, buf);
++			list_del(&buf->queue);
++		}
++		spin_unlock_irqrestore(&video->queue.irqlock, flags);
++	}
++
++	uvc_video_free_requests(video);
++	uvcg_queue_enable(&video->queue, 0);
++}
++
+ /*
+  * Enable or disable the video stream.
+  */
+ int uvcg_video_enable(struct uvc_video *video, int enable)
+ {
+-	unsigned int i;
+ 	int ret;
+
+ 	if (video->ep == NULL) {
+@@ -499,15 +585,7 @@ int uvcg_video_enable(struct uvc_video *video, int enable)
+ 	}
+
+ 	if (!enable) {
+-		cancel_work_sync(&video->pump);
+-		uvcg_queue_cancel(&video->queue, 0);
+-
+-		for (i = 0; i < video->uvc_num_requests; ++i)
+-			if (video->ureq && video->ureq[i].req)
+-				usb_ep_dequeue(video->ep, video->ureq[i].req);
+-
+-		uvc_video_free_requests(video);
+-		uvcg_queue_enable(&video->queue, 0);
++		uvcg_video_disable(video);
+ 		return 0;
+ 	}
+
+@@ -536,6 +614,7 @@ int uvcg_video_enable(struct uvc_video *video, int enable)
+  */
+ int uvcg_video_init(struct uvc_video *video, struct uvc_device *uvc)
+ {
++	INIT_LIST_HEAD(&video->ureqs);
+ 	INIT_LIST_HEAD(&video->req_free);
+ 	spin_lock_init(&video->req_lock);
+ 	INIT_WORK(&video->pump, uvcg_video_pump);
+--
+2.42.0.582.g8ccd20d70d-goog
+
 
