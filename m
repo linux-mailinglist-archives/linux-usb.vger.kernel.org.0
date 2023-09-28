@@ -1,175 +1,140 @@
-Return-Path: <linux-usb+bounces-700-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-701-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF0C37B1B9C
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Sep 2023 14:02:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC7097B1C0D
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Sep 2023 14:20:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id C22A82828BC
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Sep 2023 12:02:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTP id BE29D1C209DC
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Sep 2023 12:20:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC99D38BBD;
-	Thu, 28 Sep 2023 12:02:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D32AA38BCA;
+	Thu, 28 Sep 2023 12:20:15 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 409A31A5A7;
-	Thu, 28 Sep 2023 12:02:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DA9FC433C8;
-	Thu, 28 Sep 2023 12:01:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1695902525;
-	bh=1OUz3HfWq12NDsf5pt/6tI4U8Mw0C+kMAWU6iE/wPW8=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=X75jpHewuenH5i4yKP6hTRRG96bBnvYSW9ppyaPCvnjRr7Vm9FFZm7UX9cHhEdgJN
-	 9sWsiJl4JoQqsZw/GKoi7gqY0vw1WSuYAKrfeyF1owUUDgi337zCsV6xBykTFrjqQ4
-	 1IMm02SWv3ExmYV6PPhf6pdloK7xjV68MtysVko9J4sCrAu5RV7rZ7A69VK3LrHZj/
-	 A70QTwuFIQFa4pBSyL7/hVskPkmrikqba+e0r1Z/ds7+Y2X+m8S6nvykGKta//EbMF
-	 i8R56KOYB+jvupadzk05Se+6sdUCAkxdoK6c3HGUXdwYBTc4QSGFZzFBPryJ+pbGMH
-	 lSy4ugTII5Mvw==
-Message-ID: <f88106b26a2b647a1541d049999d5546d2ee3e51.camel@kernel.org>
-Subject: Re: [PATCH 87/87] fs: move i_blocks up a few places in struct inode
-From: Jeff Layton <jlayton@kernel.org>
-To: Amir Goldstein <amir73il@gmail.com>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner
- <brauner@kernel.org>, Linus Torvalds <torvalds@linux-foundation.org>, David
- Sterba <dsterba@suse.cz>, Theodore Ts'o <tytso@mit.edu>, Eric Biederman
- <ebiederm@xmission.com>,  Kees Cook <keescook@chromium.org>, Jeremy Kerr
- <jk@ozlabs.org>, Arnd Bergmann <arnd@arndb.de>,  Michael Ellerman
- <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy
- <christophe.leroy@csgroup.eu>, Heiko Carstens <hca@linux.ibm.com>, Vasily
- Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>,
- Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle
- <svens@linux.ibm.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Arve =?ISO-8859-1?Q?Hj=F8nnev=E5g?= <arve@android.com>, Todd Kjos
- <tkjos@android.com>, Martijn Coenen <maco@android.com>, Joel Fernandes
- <joel@joelfernandes.org>, Carlos Llamas <cmllamas@google.com>, Suren
- Baghdasaryan <surenb@google.com>, Mattia Dongili <malattia@linux.it>,
- Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>, Jason
- Gunthorpe <jgg@ziepe.ca>,  Leon Romanovsky <leon@kernel.org>, Brad Warrum
- <bwarrum@linux.ibm.com>, Ritu Agarwal <rituagar@linux.ibm.com>, Hans de
- Goede <hdegoede@redhat.com>, Ilpo =?ISO-8859-1?Q?J=E4rvinen?=
- <ilpo.jarvinen@linux.intel.com>, Mark Gross <markgross@kernel.org>, Jiri
- Slaby <jirislaby@kernel.org>, Eric Van Hensbergen <ericvh@kernel.org>,
- Latchesar Ionkov <lucho@ionkov.net>, Dominique Martinet
- <asmadeus@codewreck.org>, Christian Schoenebeck <linux_oss@crudebyte.com>, 
- David Sterba <dsterba@suse.com>, David Howells <dhowells@redhat.com>, Marc
- Dionne <marc.dionne@auristor.com>,  Ian Kent <raven@themaw.net>, Luis de
- Bethencourt <luisbg@kernel.org>, Salah Triki <salah.triki@gmail.com>,
- "Tigran A. Aivazian" <aivazian.tigran@gmail.com>,  Chris Mason
- <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>, Xiubo Li
- <xiubli@redhat.com>,  Ilya Dryomov <idryomov@gmail.com>, Jan Harkes
- <jaharkes@cs.cmu.edu>, coda@cs.cmu.edu, Joel Becker <jlbec@evilplan.org>,
- Christoph Hellwig <hch@lst.de>, Nicolas Pitre <nico@fluxnic.net>, "Rafael
- J. Wysocki" <rafael@kernel.org>, Ard Biesheuvel <ardb@kernel.org>, Gao
- Xiang <xiang@kernel.org>, Chao Yu <chao@kernel.org>,  Yue Hu
- <huyue2@coolpad.com>, Jeffle Xu <jefflexu@linux.alibaba.com>, Namjae Jeon
- <linkinjeon@kernel.org>, Sungjong Seo <sj1557.seo@samsung.com>, Jan Kara
- <jack@suse.com>, Andreas Dilger <adilger.kernel@dilger.ca>, Jaegeuk Kim
- <jaegeuk@kernel.org>, OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>, 
- Christoph Hellwig <hch@infradead.org>, Miklos Szeredi <miklos@szeredi.hu>,
- Bob Peterson <rpeterso@redhat.com>, Andreas Gruenbacher
- <agruenba@redhat.com>, Richard Weinberger <richard@nod.at>, Anton Ivanov
- <anton.ivanov@cambridgegreys.com>, Johannes Berg
- <johannes@sipsolutions.net>, Mikulas Patocka
- <mikulas@artax.karlin.mff.cuni.cz>,  Mike Kravetz
- <mike.kravetz@oracle.com>, Muchun Song <muchun.song@linux.dev>, Jan Kara
- <jack@suse.cz>,  David Woodhouse <dwmw2@infradead.org>, Dave Kleikamp
- <shaggy@kernel.org>, Tejun Heo <tj@kernel.org>, Trond Myklebust
- <trond.myklebust@hammerspace.com>, Anna Schumaker <anna@kernel.org>, Chuck
- Lever <chuck.lever@oracle.com>, Neil Brown <neilb@suse.de>, Olga
- Kornievskaia <kolga@netapp.com>, Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey
- <tom@talpey.com>,  Ryusuke Konishi <konishi.ryusuke@gmail.com>, Anton
- Altaparmakov <anton@tuxera.com>, Konstantin Komarov
- <almaz.alexandrovich@paragon-software.com>, Mark Fasheh <mark@fasheh.com>, 
- Joseph Qi <joseph.qi@linux.alibaba.com>, Bob Copeland <me@bobcopeland.com>,
- Mike Marshall <hubcap@omnibond.com>, Martin Brandenburg
- <martin@omnibond.com>, Luis Chamberlain <mcgrof@kernel.org>, Iurii Zaikin
- <yzaikin@google.com>, Tony Luck <tony.luck@intel.com>,  "Guilherme G.
- Piccoli" <gpiccoli@igalia.com>, Anders Larsen <al@alarsen.net>, Steve
- French <sfrench@samba.org>, Paulo Alcantara <pc@manguebit.com>, Ronnie
- Sahlberg <lsahlber@redhat.com>, Shyam Prasad N <sprasad@microsoft.com>,
- Sergey Senozhatsky <senozhatsky@chromium.org>, Phillip Lougher
- <phillip@squashfs.org.uk>, Steven Rostedt <rostedt@goodmis.org>, Masami
- Hiramatsu <mhiramat@kernel.org>, Evgeniy Dushistov <dushistov@mail.ru>,
- Chandan Babu R <chandan.babu@oracle.com>, "Darrick J. Wong"
- <djwong@kernel.org>, Damien Le Moal <dlemoal@kernel.org>, Naohiro Aota
- <naohiro.aota@wdc.com>, Johannes Thumshirn <jth@kernel.org>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
- <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
- Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
- <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,  Hugh Dickins
- <hughd@google.com>, Andrew Morton <akpm@linux-foundation.org>, "David S.
- Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub
- Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, John Johansen
- <john.johansen@canonical.com>, Paul Moore <paul@paul-moore.com>, James
- Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, Stephen
- Smalley <stephen.smalley.work@gmail.com>, Eric Paris
- <eparis@parisplace.org>,  linux-fsdevel@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
- linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, 
- platform-driver-x86@vger.kernel.org, linux-rdma@vger.kernel.org, 
- linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
- v9fs@lists.linux.dev,  linux-afs@lists.infradead.org,
- autofs@vger.kernel.org,  linux-btrfs@vger.kernel.org,
- ceph-devel@vger.kernel.org,  codalist@coda.cs.cmu.edu,
- linux-efi@vger.kernel.org,  linux-erofs@lists.ozlabs.org,
- linux-ext4@vger.kernel.org,  linux-f2fs-devel@lists.sourceforge.net,
- gfs2@lists.linux.dev,  linux-um@lists.infradead.org,
- linux-mtd@lists.infradead.org,  jfs-discussion@lists.sourceforge.net,
- linux-nfs@vger.kernel.org,  linux-nilfs@vger.kernel.org,
- linux-ntfs-dev@lists.sourceforge.net,  ntfs3@lists.linux.dev,
- ocfs2-devel@lists.linux.dev,  linux-karma-devel@lists.sourceforge.net,
- devel@lists.orangefs.org,  linux-unionfs@vger.kernel.org,
- linux-hardening@vger.kernel.org,  reiserfs-devel@vger.kernel.org,
- linux-cifs@vger.kernel.org,  samba-technical@lists.samba.org,
- linux-trace-kernel@vger.kernel.org,  linux-xfs@vger.kernel.org,
- bpf@vger.kernel.org, netdev@vger.kernel.org,  apparmor@lists.ubuntu.com,
- linux-security-module@vger.kernel.org,  selinux@vger.kernel.org
-Date: Thu, 28 Sep 2023 08:01:50 -0400
-In-Reply-To: <CAOQ4uxjSrgGr+6UOs4ADGYCderpQ7hAaPjNmB1DExAPLQQsHSg@mail.gmail.com>
-References: <20230928110554.34758-1-jlayton@kernel.org>
-	 <20230928110554.34758-3-jlayton@kernel.org>
-	 <CAOQ4uxjSrgGr+6UOs4ADGYCderpQ7hAaPjNmB1DExAPLQQsHSg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 120995386
+	for <linux-usb@vger.kernel.org>; Thu, 28 Sep 2023 12:20:13 +0000 (UTC)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE41219E
+	for <linux-usb@vger.kernel.org>; Thu, 28 Sep 2023 05:20:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1695903610;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=l3smEwL+UI6+Q/2dCb7QvgQWyJ40TpMV2o0vHCJMrgA=;
+	b=BiSkhXMQHbVg3Yv4HOz0uhaHZA98FvKgvVyJZz+TMwVmcLOyOF2RQbrXoQKYX8D3sTHIgi
+	74HZ7IYg0j8a4GAwq9t3mG070sXmnkYAL2HV1wwT1OcJslCKnLPPmJc95LBxcRYokTPhwb
+	T+CDJ2I2DW3lMzvkhbMLl6fKnatl8s8=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-178-HDljNNOoOfupSLvy2E74Cg-1; Thu, 28 Sep 2023 08:20:09 -0400
+X-MC-Unique: HDljNNOoOfupSLvy2E74Cg-1
+Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-5346626c1c5so4412806a12.1
+        for <linux-usb@vger.kernel.org>; Thu, 28 Sep 2023 05:20:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695903608; x=1696508408;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=l3smEwL+UI6+Q/2dCb7QvgQWyJ40TpMV2o0vHCJMrgA=;
+        b=cNZ7KfqDSH8P6tJA2IUvW10SRe0xuAa514ENto7Hwke/0IxIt5dtZzJw+QzTjfIDP8
+         kN6b7VTDFRhebAlbgCLRzyauzVhlnVSVJHuH7cSTmI8f/4qk9QfuoqGeXUJbLTNjA7KM
+         chIhsLrk+y1nd5IYnjaNjSQRyQqoOaK/hAYJS7H1qF+gt2G4zFyTypPo54Nn3FySy0oh
+         +oO2djtDdYeDoqSNHEnqWl7EnxRq0fp+vuT02vzIhrVvyFtpWczv2PefvEPcvwEmbYfm
+         PUOlM+gupx/15s8I1/bAFTpBp3P+0P3FxFbc1LgW8XLgcgZbRHZUM1q+190OAVHWb1hF
+         oqQQ==
+X-Gm-Message-State: AOJu0Ywa6pS7izFOxaKV5dQ0Tvug58WG678QHIOxIIPMCM70Qi7NLIuS
+	V4ffLAKn+zF1uoQVSvZExqT8Dq/NQ7t1ObNHNpf9rFTMj8MfYpYMCdIWMoBVfoMhupXg7dgA14c
+	hAWOXSEpk57FuYOQA+1PP
+X-Received: by 2002:a05:6402:164a:b0:52f:a44e:601d with SMTP id s10-20020a056402164a00b0052fa44e601dmr1096062edx.9.1695903608315;
+        Thu, 28 Sep 2023 05:20:08 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHyO5ErgFLWf8MDBzpoDNHA/Wzf+KuJdstEciFIl3FORrSyJ3myzBVY3wU2I8qm2ccDL23Nsw==
+X-Received: by 2002:a05:6402:164a:b0:52f:a44e:601d with SMTP id s10-20020a056402164a00b0052fa44e601dmr1096041edx.9.1695903608017;
+        Thu, 28 Sep 2023 05:20:08 -0700 (PDT)
+Received: from [192.168.1.217] ([109.36.138.103])
+        by smtp.gmail.com with ESMTPSA id x18-20020aa7d6d2000000b0052febc781bfsm9608018edr.36.2023.09.28.05.20.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Sep 2023 05:20:07 -0700 (PDT)
+Message-ID: <1e7c1c28-5bbe-49b5-f5ff-8cc84039f34f@redhat.com>
+Date: Thu, 28 Sep 2023 14:20:04 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+From: Hans de Goede <hdegoede@redhat.com>
+Subject: Re: [PATCH v19 0/4] Add Intel LJCA device driver
+To: Oliver Neukum <oneukum@suse.com>, Greg KH <gregkh@linuxfoundation.org>,
+ Wentong Wu <wentong.wu@intel.com>
+Cc: arnd@arndb.de, mka@chromium.org, lee@kernel.org, wsa@kernel.org,
+ kfting@nuvoton.com, broonie@kernel.org, linus.walleij@linaro.org,
+ maz@kernel.org, brgl@bgdev.pl, linux-usb@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+ linux-gpio@vger.kernel.org, andriy.shevchenko@linux.intel.com,
+ heikki.krogerus@linux.intel.com, andi.shyti@linux.intel.com,
+ sakari.ailus@linux.intel.com, bartosz.golaszewski@linaro.org,
+ srinivas.pandruvada@intel.com, zhifeng.wang@intel.com
+References: <1694890416-14409-1-git-send-email-wentong.wu@intel.com>
+ <2023091704-nape-coconut-af6c@gregkh>
+ <f576c346-db6c-dded-1502-c87d5e58fa39@redhat.com>
+ <95ce1e2f-eb60-46fc-bced-06b8a150cbfb@suse.com>
+Content-Language: en-US
+In-Reply-To: <95ce1e2f-eb60-46fc-bced-06b8a150cbfb@suse.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+	RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+	SPF_NONE autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-On Thu, 2023-09-28 at 14:35 +0300, Amir Goldstein wrote:
-> On Thu, Sep 28, 2023 at 2:06=E2=80=AFPM Jeff Layton <jlayton@kernel.org> =
-wrote:
-> >=20
-> > The recent change to use discrete integers instead of struct timespec64
-> > in struct inode shaved 8 bytes off of it, but it also moves the i_lock
-> > into the previous cacheline, away from the fields that it protects.
-> >=20
-> > Move i_blocks up above the i_lock, which moves the new 4 byte hole to
-> > just after the timestamps, without changing the size of the structure.
-> >=20
->=20
-> Instead of creating an implicit hole, can you please move i_generation
-> to fill the 4 bytes hole.
->=20
-> It makes sense in the same cache line with i_ino and I could
-> use the vacant 4 bytes hole above i_fsnotify_mask to expand the
-> mask to 64bit (the 32bit event mask space is running out).
->=20
-> Thanks,
-> Amir.
->=20
+Hi,
 
-Sounds like a plan. Resulting struct inode size is the same (616 bytes
-with my kdevops kconfig). BTW: all of these changes are in my "amtime"
-branch if anyone wants to pull them down.
---
-Jeff Layton <jlayton@kernel.org>
+On 9/28/23 12:18, Oliver Neukum wrote:
+> On 17.09.23 13:26, Hans de Goede wrote:
+>  
+>> Note I did not ask for a new version to be send right away, but
+>> I'm afraid there has been a bit of miscommunication and instead
+>> of rebasing the next version based on further review Wentong has
+>> send out a new rebased version immediately, sorry about that.
+> 
+> Hi,
+> 
+> what to do now? It's been ten days.
+> I am sure this driver has been very thoroughly reviewed by now.
+> We are dragging this out. Do we want the developer to do another release
+> or do we ask Greg to take it as is?
+> This is becoming almost comical, but that is not what we want driver
+> submission to be.
+> 
+> As far as I am concerned on the USB side everything is fine now.
+> Hans? Greg?
+
+Note I have been mostly involved in testing these patches I have
+*not* thoroughly reviewed them. I have taken a quick(ish) look
+which did not find anything obviously wrong.
+
+I agree that at least patch 1/4 is ready for merging. I'm
+not sure if Greg should pick-up the entire series or if
+the rest should be merged through there relevant subsystems
+to also give the relevant subsys maintainer tree.
+
+For the series:
+
+Acked-by: Hans de Goede <hdegoede@redhat.com>
+Tested-by: Hans de Goede <hdegoede@redhat.com>
+
+Regards,
+
+Hans
+
 
