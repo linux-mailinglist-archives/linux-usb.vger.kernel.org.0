@@ -1,117 +1,193 @@
-Return-Path: <linux-usb+bounces-680-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-681-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A29417B0EE8
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Sep 2023 00:29:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 948957B1063
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Sep 2023 03:31:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 923BF281EB6
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Sep 2023 22:29:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 6B6FC281A02
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Sep 2023 01:31:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E40A14CFC1;
-	Wed, 27 Sep 2023 22:29:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD4EA15C9;
+	Thu, 28 Sep 2023 01:31:25 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F6AD11188;
-	Wed, 27 Sep 2023 22:29:33 +0000 (UTC)
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8632102;
-	Wed, 27 Sep 2023 15:29:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=Y5BdNredrDHTYUunP3kApqKLWcDG2AzXoWP37/0LaLo=; b=ndvyW/v5AnnTWjFcOaHmQtJ2tQ
-	BC/6lzWxYgmdgHXT3PvPZcC090LQrp5ml02Ae1GnoSZckoSqvjoU59jpnfAR30t9sQc4/Tr/mYnNI
-	X6fsO3Ipq3PoKVycIJsEvT0+99hFr4CUSn/aQRGG2eC0g6Iw2svNRD/I3rMzmeTP9B1nb7c4dqeqA
-	JN6364DWbEtruq3HNM0pL9YLgknS628sDSI3CSoX5x4axSRNWXVW2YPZpfLHfh77TVYhq6vn6Ypxd
-	WcP/K9r5N10De0XaKEEw5J4cGIg6JXFmGw4wiy5LDY2ZiUC1DhwwA6Vw2c8s4Kjh2Vk+HNoezE5u+
-	4u/hMT3A==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-	id 1qld1m-00CP4N-2B;
-	Wed, 27 Sep 2023 22:29:07 +0000
-Date: Wed, 27 Sep 2023 23:29:06 +0100
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: Christoph Hellwig <hch@lst.de>
-Cc: Christian Brauner <brauner@kernel.org>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Fenghua Yu <fenghua.yu@intel.com>,
-	Reinette Chatre <reinette.chatre@intel.com>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-	Tejun Heo <tj@kernel.org>,
-	Trond Myklebust <trond.myklebust@hammerspace.com>,
-	Anna Schumaker <anna@kernel.org>, Kees Cook <keescook@chromium.org>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Naohiro Aota <naohiro.aota@wdc.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-s390@vger.kernel.org, linux-rdma@vger.kernel.org,
-	linux-nfs@vger.kernel.org, linux-hardening@vger.kernel.org,
-	cgroups@vger.kernel.org
-Subject: Re: [PATCH 03/19] fs: release anon dev_t in deactivate_locked_super
-Message-ID: <20230927222906.GO800259@ZenIV>
-References: <20230913111013.77623-1-hch@lst.de>
- <20230913111013.77623-4-hch@lst.de>
- <20230913232712.GC800259@ZenIV>
- <20230926093834.GB13806@lst.de>
- <20230926212515.GN800259@ZenIV>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1696136D
+	for <linux-usb@vger.kernel.org>; Thu, 28 Sep 2023 01:31:23 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A6C0AC;
+	Wed, 27 Sep 2023 18:31:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695864682; x=1727400682;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=kFzDDcKHql4iIfs8IFlnrJhrsoP2Yj0JdKRjInDzNA4=;
+  b=n2PSAiEk6yUqVrPU8/xGL1jLT8Y7n4sTH/Hap35ZzAyjcNkFLL9cHxq4
+   XQN37tz2RjtznHLMZY6vHRfWSLmiV9PpovrlEAUeLLCyvhJhRagals/IW
+   kAGc723u9b3ychr2zQF9O31C/u0SwGC0unLgQM56boPyoFm5xWx4nLi/T
+   tkzDujJAJv9dsXsQKYDnWW0lxN/rGKafh8lLZt7yKHtQbephelQJR6bN+
+   A8x1Q+F23A2uoRJLYLEY6qYcyC693DZv5jShTw2APW/jhVpOjeyoeU+sJ
+   s/uyArgySVeucwhwLTElMMLJ2U+hFHOsPEgGL3X1vhun2DcHygEMvM6Dc
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10846"; a="448456561"
+X-IronPort-AV: E=Sophos;i="6.03,182,1694761200"; 
+   d="scan'208";a="448456561"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2023 18:31:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10846"; a="996387332"
+X-IronPort-AV: E=Sophos;i="6.03,182,1694761200"; 
+   d="scan'208";a="996387332"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga006.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 27 Sep 2023 18:31:20 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32; Wed, 27 Sep 2023 18:31:19 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32 via Frontend Transport; Wed, 27 Sep 2023 18:31:19 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.41) by
+ edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.32; Wed, 27 Sep 2023 18:31:19 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NgcdudpnRc17tQ+YJg2ZNDhnAD5e1Nl1DwNT7KK+WnN8PGMwbIBqInUWFSO054m0p9IIcGqdNjvE8XRiqqosmKprqN+TbM5xCaU45k/AfUdyEyr2gySsm1/pKXQEkcMosKCC79V8UQ3TcCnj+8Y5ABl14EBFw2BzLz1rUCTeBHbmg9DAEuTUUE3QPZvhiHVB+nWfhCdu0g4QMo6ExQDviWFZcdHa4+bptUs7JKV/NJ4AGwaMTkyroXkCRM8BzsLDVOn5dVqDRQ+E6V8twPsLcouHgkxRDKQ5CjTMA4n5dQ1L7UrtmVn6rDrkH/K2MV2WtrVAhLlHFcpOadaLj+0hZg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=neaUnbA0HzUB/jxTfCXCDz7b3fUzFXAwFtwmKoMdt/U=;
+ b=jA4pWL25dpX741HTZ83KJSvfNgwVdhT5WdCeAsYSP828sAChIPYCOjE+os5rm7BeEVwc6US8vU8xQtzLXM5GvWlKOlZy0fNUKIdoeINDuXztACdrB/yuiVOQZvLEkJDKLgwCWQh15CpKTdrHbuNE865j4nMC5AW6FoRvxBZuUWSYzq4NOZiz3su/XT41urItI1cBPT55t73PkcyCZyiVc1g9r0K8JekvWmDtppRYX4MvHG+7qfm3loBrcq1oIyiC9UZF5ze7pzVFIKgFQvPV7TdIoPtqNA1EvuTh6UWDXZT2Jn8WR/AHy2gs//CHN9NO00a7URl00kiN3B4nLG2gxQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from DM5PR11MB0042.namprd11.prod.outlook.com (2603:10b6:4:6b::36) by
+ DS7PR11MB7949.namprd11.prod.outlook.com (2603:10b6:8:eb::11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6813.28; Thu, 28 Sep 2023 01:31:18 +0000
+Received: from DM5PR11MB0042.namprd11.prod.outlook.com
+ ([fe80::847d:e218:d45a:2079]) by DM5PR11MB0042.namprd11.prod.outlook.com
+ ([fe80::847d:e218:d45a:2079%4]) with mapi id 15.20.6813.027; Thu, 28 Sep 2023
+ 01:31:18 +0000
+From: "Patel, Utkarsh H" <utkarsh.h.patel@intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
+	"pmalani@chromium.org" <pmalani@chromium.org>,
+	"chrome-platform@lists.linux.dev" <chrome-platform@lists.linux.dev>,
+	"bleung@chromium.org" <bleung@chromium.org>
+Subject: RE: [PATCH v4 4/5] platform/chrome: cros_ec_typec: Add Displayport
+ Alternatemode 2.1 Support
+Thread-Topic: [PATCH v4 4/5] platform/chrome: cros_ec_typec: Add Displayport
+ Alternatemode 2.1 Support
+Thread-Index: AQHZ62rbNkeZhAZZx06GIHaJQh/KW7AjypoAgAIVhzCABhXHAIAAbckQ
+Date: Thu, 28 Sep 2023 01:31:18 +0000
+Message-ID: <DM5PR11MB004261CE9939D0ECDDB81D4FA9C1A@DM5PR11MB0042.namprd11.prod.outlook.com>
+References: <20230920023243.2494410-1-utkarsh.h.patel@intel.com>
+ <20230920023243.2494410-5-utkarsh.h.patel@intel.com>
+ <ZQsE5hgm4qYpr/My@smile.fi.intel.com>
+ <CY4PR11MB0037E70612B8067062AC1C40A9FCA@CY4PR11MB0037.namprd11.prod.outlook.com>
+ <ZRHfNoiDazz1ZDtD@smile.fi.intel.com>
+In-Reply-To: <ZRHfNoiDazz1ZDtD@smile.fi.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM5PR11MB0042:EE_|DS7PR11MB7949:EE_
+x-ms-office365-filtering-correlation-id: a5ee8bb6-fa35-4309-3a2f-08dbbfc29cfc
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 7J7ru248whyrayPG8dVjOCjdFgznwQBWCAcnKTmMqq2Ib59aLLUSPvvdlLrISYyt50+FLT3E8px9Hz+kgFU9zOr05JmEcfEAvWSCemcpK/AVuQrMMlY+B9VWHF4vflnJtDBvlYcFwBaV8xXv7rX5YgLFBFXELqxgLY3LFpCz4oiRUXUndsRvPCkwfNMjvmTFxsQRp55sv4quCQSAfsDbgOKKU+3Gx6yqaxPmevwTnkzFTLwuNoglp1VwS/4wRGWImTG4zhGWHE8v/y6S4oXvhkX2Q+XlimGjKpboHG7o4WoJui7y/KClQZa2E1lopOIHYgO2D4qHAzgvjx245+uZavnrs0m5zOjSwzIjPeJjVcPf6Jh5rYt4BIGoxg8x544q5gaMqcvDzgjUAoxt9Et1OL8n6pBmoMNtOJ1u/sLxGMmsYGbuKo7kF746/kDnSU0NB0JJFt3oPmZwLiJKifYsAbcH6lmhEM1SDwpgPkJjxWDzzTWPYuYOLdGB2TXpQ3Np5kReoPp4S8Q2zOs0QUHSN6NBSxmuqbK8RDk6AbRtbUpxTCl+v3ehQpyIyytvWia9hztkSc0VDDEYaIL3Dat8qCqCSK6I/V2miX8+N/jHekeQZEhfbTuHaCGoNSejYRXx
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR11MB0042.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(376002)(39860400002)(396003)(346002)(366004)(230922051799003)(451199024)(186009)(64100799003)(1800799009)(4744005)(8936002)(55016003)(26005)(478600001)(5660300002)(86362001)(4326008)(8676002)(52536014)(6916009)(122000001)(71200400001)(38100700002)(2906002)(41300700001)(66446008)(64756008)(66946007)(54906003)(316002)(38070700005)(66476007)(76116006)(66556008)(7696005)(6506007)(33656002)(9686003)(82960400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?0pXQv5IMZC3QCnNXHY3NtzEpE7uXnmKSFab2rLdKRxEyUz1ELRq2WEWos2aH?=
+ =?us-ascii?Q?5kgpFJp0W01WNtfSJE5rKwAfmeWYCeKOO5DoBrMZAZ6cNNesHTbDje73vJdc?=
+ =?us-ascii?Q?Xe5hNAyY1N6nYDCllM+enHOYTE9LywMBZXMPNbRU4xFoicwXJkjLIR4S+g9o?=
+ =?us-ascii?Q?8RpVSri64MpXxw3S016er75i2neXd3TI03WXdOPjsYekyLYRRRb/fHbyKvIQ?=
+ =?us-ascii?Q?u2yxm5Tg/uEKO8xd/qVsLqUpVGlsaxfQkJTpd3F4JTDos3m9S2mocPZ1bbxv?=
+ =?us-ascii?Q?GQfItAm/O/zW5JIj4N/OrHAzrV9LwDtl/+xCDLcJ0hcXRlxUm3TJzr5LrU0B?=
+ =?us-ascii?Q?zUx2OkTvLXw2UV/RNx1J79ZvheP8ShcQG3kFbVynD6V5F7nFHk3pJS1Xh46O?=
+ =?us-ascii?Q?E9Y8YbcZdvfafkmhveRFzBSc/9RujBEVceSRIvS9yCm+ASl0vYO10lmzkDu7?=
+ =?us-ascii?Q?1jEfHCH7PnQlJIYuA9JJFuwqdkGu2ftHPi6dDCFz1oAJ5/rgKT2anYLd4Rnr?=
+ =?us-ascii?Q?+bI/sxY7C8HqF1SPVm6MxIa655yTPMZd/zaDnnzs3bhkz7O4rVGG8xKFw9Jp?=
+ =?us-ascii?Q?+sbQAXUi3NqOoN7kGz0aHrO7+hxTGGv3ltCvnuUR9XwG75OQ58Lh3OeKbhBg?=
+ =?us-ascii?Q?UJNaXTVG/KYfrT3BwC9IHxyn6Q+JM+ApHZ6uJxlh0nSNF45mkVqajxrt0i8/?=
+ =?us-ascii?Q?eT7WZTGJiItQYdDSm5v7NmKgCerg5iQdqUT/7T5e/h4wHdeX/U+9PKubPLGV?=
+ =?us-ascii?Q?P5GGyEpIGll19avkAvfwRh8OyykNrZQ5sYAYKHtiTg+hyownCuj7UFSWThFZ?=
+ =?us-ascii?Q?czXPW6xAGuGVzJaNus2X/Tf3cvXN7gCrNYLVxS8afL6DjNOt3TTk+3U9Lnzz?=
+ =?us-ascii?Q?KvidV02KNQEmIiy3iRy6LuN6BAVie+3xOEDCZcB6TAuEDHmi2g90JcwLtuau?=
+ =?us-ascii?Q?TJpwMpR8eVz9u9+z6eCKMRGeofVVpG6wj3ej9yALpV/CCmOvp8+d/V343o4O?=
+ =?us-ascii?Q?SF/+QqJqWyrixFve6VMAJbqTHtShQiv6Rh93oKmWtWyigIX+2KZusK6iDYD0?=
+ =?us-ascii?Q?kB3h02RxHFiAmI8h46i2bWBv8QB4xRILVsl6QYxxeQkhTVhqhxHV33AA7+ko?=
+ =?us-ascii?Q?ERaRh+8knN0/yb4PlsJIRvSvzwqbox0d6d06wGhEWfWcLNEVp9TMXbzGE164?=
+ =?us-ascii?Q?kCg3YSCJVASauYbPcMx7LqyUGKQUSbKNgPM16MnIV0TgiAce1xkm3HmnSeeE?=
+ =?us-ascii?Q?CvUhqcGxQpzf2goiNo5XtfO2QUrWr6D5+TeRK9gUUVVmtJCkqcgKuYy3o0YO?=
+ =?us-ascii?Q?Jvf3gbsVbX9KZ66Yw+fIc2bz/1gtWy4YXB1t+w0KonhO0kUEIP6OPIXEETdY?=
+ =?us-ascii?Q?Bo0At9zHL1/v/FAb8s1Z3IGkOiskFUKeE/KwtX26yXdVBdusPhj/tQ/O5fOS?=
+ =?us-ascii?Q?65v6eV1TEIyxCDkGq+R+V/jfL19gVpFCXWuAajBbwKKl/YGmcFV7oDBMwFYT?=
+ =?us-ascii?Q?JS1aKGVsu6B6wM9sGmI8TIeXPecPRcMwqSx4ghBg+U9XSuAbUBHItNxlS+Dv?=
+ =?us-ascii?Q?S1dbx7zfohQ6VdF6Z6KWVXf7v0wy7nTvLmDtp8yy?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230926212515.GN800259@ZenIV>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE
-	autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR11MB0042.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a5ee8bb6-fa35-4309-3a2f-08dbbfc29cfc
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Sep 2023 01:31:18.0934
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Q52bUun7laS/wpRuofOJrTk/NnZEUxvFJ9k/xbETUKaM6ZPS+qGeV8KfHSFztZU3raeIDIMF8pXRmhfopw+MVmWIeD32yXi1nCbuifbnSwU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR11MB7949
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Tue, Sep 26, 2023 at 10:25:15PM +0100, Al Viro wrote:
+>=20
+> On Mon, Sep 25, 2023 at 03:54:40PM +0000, Patel, Utkarsh H wrote:
+>=20
+> ...
+>=20
+> > > > +	/**
+> > >
+> > > Are you sure?
+> > >
+> > > > +	 * Get cable VDO for thunderbolt cables and cables with DPSID
+> > > > +but
+> > > does not
+> > > > +	 * support DPAM2.1.
+> > > > +	 */
+> > >
+> > Yes, there are TBT3 cables which advertise DPSID but does not provide
+> > any DP capabilities in the DP discover mode VDO but does support UHBR.
+> > In that case, need to use TBTSID and use capabilities from TBT discover=
+ mode
+> VDO.
+>=20
+> My comment was against the style of the comment, not about content.
+>=20
 
-> Before your patch: foo_kill_super() calls kill_anon_super(),
-> which calls kill_super_notify(), which removes the sucker from
-> the list, then frees ->s_fs_info.  After your patch:
-> removal from the lists happens via the call of kill_super_notify()
-> *after* both of your methods had been called, while freeing
-> ->s_fs_info happens from the method call.  IOW, you've restored
-> the situation prior to "super: ensure valid info".  The whole
-> point of that commit had been to make sure that we have nothing
-> in the lists with ->s_fs_info pointing to a freed object.
+Ahh, Okay.  Thank you for clarifying.
 
-More detailed example: take a look at NFS.  We have ->get_tree() there
-call sget_fc() with nfs_compare_super() as possible 'test' callback.
-It does look at ->s_fs_info of the superblocks found on the list
-of instances for fs type in question.  Moreover, it proceeds to
-call nfs_compare_mount_options(), which chases pointers from that
-(at the very least fetch ->client in nfs_server instance ->s_fs_info
-points to and dereferences that).
-
-We really, really do not want nfs_free_server() happen while the
-superblock is visible in the instances list.  Now, in your tree
-nfs_free_sb() call nfs_free_server().  *Without* having called
-kill_super_notify() first - you do that only after the call of
-->free_sb().
-
-So with this series applied we have UAF on race between mount and
-umount.  For NFS.  No block devices involved.
-
-Old logics had been "after generic_shutdown_super() the private
-parts of superblock belong to filesystem alone; they might be
-accessed by methods called from RCU pathwalk, but that's it".
-
-I still don't see any clear rules for the new one.  And the more
-I'm looking, the more sceptical I get about the approach you've
-taken, TBH...
+Sincerely,
+Utkarsh Patel.
 
