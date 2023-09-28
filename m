@@ -1,119 +1,262 @@
-Return-Path: <linux-usb+bounces-705-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-706-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5B057B1D6F
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Sep 2023 15:12:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5AF097B1E8E
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Sep 2023 15:35:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 4338B282652
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Sep 2023 13:12:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id F25232827AB
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Sep 2023 13:35:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C839B38FAF;
-	Thu, 28 Sep 2023 13:12:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F2913B791;
+	Thu, 28 Sep 2023 13:35:04 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ABE838DD8;
-	Thu, 28 Sep 2023 13:12:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ED3BC433C7;
-	Thu, 28 Sep 2023 13:12:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1695906727;
-	bh=+1zU6l1Sj4Tu/8nppmaxE6SIjasiJ7VsM8uSjK5Nd90=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ELxue2D7+j8mxYN/FOFmFVbPZov0lrpHxH19stQ+e5Oggjfoc+YPse3e+vUryhgNy
-	 m9O+lKTojWNjuv7eJkQyM62DwKXgkAGYa+9MqweXsiXRCpvADEJZlyLaea2onPHlFO
-	 hL8LNucNTs1dLlIvi7T4vQ3wRqAUp666hdpuoMdS3T4R/XOqokUeIVf8bnSmCVjaVT
-	 yKaJQggiPrkEf9Wi9Hh93Q4TKuNStwhPWQbtfROnDL3Pf4ov/LZLwZYe2aSafnUr39
-	 +SpLbkgQlmWsx8Imuwi5dFmDmNN3qP6N680uO8D9YU1ShgK03VRXBEFPobaHY9uq9Q
-	 a3aqWIfoAF54w==
-Date: Thu, 28 Sep 2023 15:11:45 +0200
-From: Simon Horman <horms@kernel.org>
-To: Shigeru Yoshida <syoshida@redhat.com>
-Cc: steve.glendinning@shawell.net, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	syzbot+6966546b78d050bb0b5d@syzkaller.appspotmail.com
-Subject: Re: [PATCH] net: usb: smsc75xx: Fix uninit-value access in
- __smsc75xx_read_reg
-Message-ID: <20230928131145.GK24230@kernel.org>
-References: <20230923173549.3284502-1-syoshida@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 378F63B781;
+	Thu, 28 Sep 2023 13:35:01 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C22B11F;
+	Thu, 28 Sep 2023 06:35:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695908100; x=1727444100;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=2q/ofJbjVnxsiWF4wpyLGs7XzpOCXPm/6xI4ePXLves=;
+  b=AapLIZpfhIbLoy2Bxnc3/gaTMXAiw948rsHJtPSPwuyuZO1+AEeUaoaw
+   NEJC1PLrRRpU7eX117AmHyxkBaIUXoicCsieo/l/V4rRGLhAIFPuGBUnx
+   xB2pc6+8XwLBKtkrWQjm1PIQNMv2flyGAMFwMLmb/SM465ovRE5TIzBMo
+   UTH8ktwTDNv66boYuM+x6UEo0OYw3vpMx6JGqXowVoJcCJUHhbiuu5wok
+   7NIRP8dQuliZlbdB8RNCgGTSNoy4yL+ecDz33KS2g+ZK/fLI3ERRp+7AN
+   eWKgvfu/gmt8+DznE9UmRlJhrRQDgo91U7mE+nqAL+Yt2md7wAgzAv4vb
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10846"; a="381968817"
+X-IronPort-AV: E=Sophos;i="6.03,184,1694761200"; 
+   d="scan'208";a="381968817"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2023 06:30:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10846"; a="923216353"
+X-IronPort-AV: E=Sophos;i="6.03,184,1694761200"; 
+   d="scan'208";a="923216353"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga005.jf.intel.com with ESMTP; 28 Sep 2023 06:30:28 -0700
+Message-ID: <6e9d2094-0bf9-b2ac-29f3-99115b456fdb@linux.intel.com>
+Date: Thu, 28 Sep 2023 16:31:52 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230923173549.3284502-1-syoshida@redhat.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.13.0
+Content-Language: en-US
+To: Wesley Cheng <quic_wcheng@quicinc.com>, mathias.nyman@intel.com,
+ gregkh@linuxfoundation.org, lgirdwood@gmail.com, broonie@kernel.org,
+ perex@perex.cz, tiwai@suse.com, agross@kernel.org, andersson@kernel.org,
+ konrad.dybcio@linaro.org, robh+dt@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+ srinivas.kandagatla@linaro.org, bgoswami@quicinc.com,
+ Thinh.Nguyen@synopsys.com
+Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ alsa-devel@alsa-project.org, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org
+References: <20230921214843.18450-1-quic_wcheng@quicinc.com>
+ <20230921214843.18450-3-quic_wcheng@quicinc.com>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [PATCH v7 02/33] xhci: add helper to stop endpoint and wait for
+ completion
+In-Reply-To: <20230921214843.18450-3-quic_wcheng@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+	SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-On Sun, Sep 24, 2023 at 02:35:49AM +0900, Shigeru Yoshida wrote:
-> syzbot reported the following uninit-value access issue:
+On 22.9.2023 0.48, Wesley Cheng wrote:
+> From: Mathias Nyman <mathias.nyman@linux.intel.com>
 > 
-> =====================================================
-> BUG: KMSAN: uninit-value in smsc75xx_wait_ready drivers/net/usb/smsc75xx.c:975 [inline]
-> BUG: KMSAN: uninit-value in smsc75xx_bind+0x5c9/0x11e0 drivers/net/usb/smsc75xx.c:1482
-> CPU: 0 PID: 8696 Comm: kworker/0:3 Not tainted 5.8.0-rc5-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> Workqueue: usb_hub_wq hub_event
-> Call Trace:
->  __dump_stack lib/dump_stack.c:77 [inline]
->  dump_stack+0x21c/0x280 lib/dump_stack.c:118
->  kmsan_report+0xf7/0x1e0 mm/kmsan/kmsan_report.c:121
->  __msan_warning+0x58/0xa0 mm/kmsan/kmsan_instr.c:215
->  smsc75xx_wait_ready drivers/net/usb/smsc75xx.c:975 [inline]
->  smsc75xx_bind+0x5c9/0x11e0 drivers/net/usb/smsc75xx.c:1482
->  usbnet_probe+0x1152/0x3f90 drivers/net/usb/usbnet.c:1737
->  usb_probe_interface+0xece/0x1550 drivers/usb/core/driver.c:374
->  really_probe+0xf20/0x20b0 drivers/base/dd.c:529
->  driver_probe_device+0x293/0x390 drivers/base/dd.c:701
->  __device_attach_driver+0x63f/0x830 drivers/base/dd.c:807
->  bus_for_each_drv+0x2ca/0x3f0 drivers/base/bus.c:431
->  __device_attach+0x4e2/0x7f0 drivers/base/dd.c:873
->  device_initial_probe+0x4a/0x60 drivers/base/dd.c:920
->  bus_probe_device+0x177/0x3d0 drivers/base/bus.c:491
->  device_add+0x3b0e/0x40d0 drivers/base/core.c:2680
->  usb_set_configuration+0x380f/0x3f10 drivers/usb/core/message.c:2032
->  usb_generic_driver_probe+0x138/0x300 drivers/usb/core/generic.c:241
->  usb_probe_device+0x311/0x490 drivers/usb/core/driver.c:272
->  really_probe+0xf20/0x20b0 drivers/base/dd.c:529
->  driver_probe_device+0x293/0x390 drivers/base/dd.c:701
->  __device_attach_driver+0x63f/0x830 drivers/base/dd.c:807
->  bus_for_each_drv+0x2ca/0x3f0 drivers/base/bus.c:431
->  __device_attach+0x4e2/0x7f0 drivers/base/dd.c:873
->  device_initial_probe+0x4a/0x60 drivers/base/dd.c:920
->  bus_probe_device+0x177/0x3d0 drivers/base/bus.c:491
->  device_add+0x3b0e/0x40d0 drivers/base/core.c:2680
->  usb_new_device+0x1bd4/0x2a30 drivers/usb/core/hub.c:2554
->  hub_port_connect drivers/usb/core/hub.c:5208 [inline]
->  hub_port_connect_change drivers/usb/core/hub.c:5348 [inline]
->  port_event drivers/usb/core/hub.c:5494 [inline]
->  hub_event+0x5e7b/0x8a70 drivers/usb/core/hub.c:5576
->  process_one_work+0x1688/0x2140 kernel/workqueue.c:2269
->  worker_thread+0x10bc/0x2730 kernel/workqueue.c:2415
->  kthread+0x551/0x590 kernel/kthread.c:292
->  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:293
+> Expose xhci_stop_endpoint_sync() which is a synchronous variant of
+> xhci_queue_stop_endpoint().  This is useful for client drivers that are
+> using the secondary interrupters, and need to stop/clean up the current
+> session.  The stop endpoint command handler will also take care of cleaning
+> up the ring.
 > 
-> Local variable ----buf.i87@smsc75xx_bind created at:
->  __smsc75xx_read_reg drivers/net/usb/smsc75xx.c:83 [inline]
->  smsc75xx_wait_ready drivers/net/usb/smsc75xx.c:968 [inline]
->  smsc75xx_bind+0x485/0x11e0 drivers/net/usb/smsc75xx.c:1482
->  __smsc75xx_read_reg drivers/net/usb/smsc75xx.c:83 [inline]
->  smsc75xx_wait_ready drivers/net/usb/smsc75xx.c:968 [inline]
->  smsc75xx_bind+0x485/0x11e0 drivers/net/usb/smsc75xx.c:1482
+> Modifications to repurpose the new API into existing stop endpoint
+> sequences was implemented by Wesley Cheng.
 > 
-> This issue is caused because usbnet_read_cmd() reads less bytes than requested
-> (zero byte in the reproducer). In this case, 'buf' is not properly filled.
+> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+> Co-developed-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> ---
+>   drivers/usb/host/xhci-hub.c | 29 +++---------------
+>   drivers/usb/host/xhci.c     | 60 +++++++++++++++++++++++++++----------
+>   drivers/usb/host/xhci.h     |  2 ++
+>   3 files changed, 50 insertions(+), 41 deletions(-)
 > 
-> This patch fixes the issue by returning -ENODATA if usbnet_read_cmd() reads
-> less bytes than requested.
-> 
-> Fixes: d0cad871703b ("smsc75xx: SMSC LAN75xx USB gigabit ethernet adapter driver")
-> Reported-and-tested-by: syzbot+6966546b78d050bb0b5d@syzkaller.appspotmail.com
-> Closes: https://syzkaller.appspot.com/bug?extid=6966546b78d050bb0b5d
-> Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
+> diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
+> index 0054d02239e2..2f7309bdc922 100644
+> --- a/drivers/usb/host/xhci-hub.c
+> +++ b/drivers/usb/host/xhci-hub.c
+> @@ -489,7 +489,6 @@ EXPORT_SYMBOL_GPL(xhci_find_slot_id_by_port);
+>   static int xhci_stop_device(struct xhci_hcd *xhci, int slot_id, int suspend)
+>   {
+>   	struct xhci_virt_device *virt_dev;
+> -	struct xhci_command *cmd;
+>   	unsigned long flags;
+>   	int ret;
+>   	int i;
+> @@ -501,10 +500,6 @@ static int xhci_stop_device(struct xhci_hcd *xhci, int slot_id, int suspend)
+>   
+>   	trace_xhci_stop_device(virt_dev);
+>   
+> -	cmd = xhci_alloc_command(xhci, true, GFP_NOIO);
+> -	if (!cmd)
+> -		return -ENOMEM;
+> -
+>   	spin_lock_irqsave(&xhci->lock, flags);
+>   	for (i = LAST_EP_INDEX; i > 0; i--) {
+>   		if (virt_dev->eps[i].ring && virt_dev->eps[i].ring->dequeue) {
+> @@ -521,7 +516,7 @@ static int xhci_stop_device(struct xhci_hcd *xhci, int slot_id, int suspend)
+>   			if (!command) {
+>   				spin_unlock_irqrestore(&xhci->lock, flags);
+>   				ret = -ENOMEM;
+> -				goto cmd_cleanup;
+> +				goto out;
+>   			}
+>   
+>   			ret = xhci_queue_stop_endpoint(xhci, command, slot_id,
+> @@ -529,30 +524,14 @@ static int xhci_stop_device(struct xhci_hcd *xhci, int slot_id, int suspend)
+>   			if (ret) {
+>   				spin_unlock_irqrestore(&xhci->lock, flags);
+>   				xhci_free_command(xhci, command);
+> -				goto cmd_cleanup;
+> +				goto out;
+>   			}
+>   		}
+>   	}
+> -	ret = xhci_queue_stop_endpoint(xhci, cmd, slot_id, 0, suspend);
+> -	if (ret) {
+> -		spin_unlock_irqrestore(&xhci->lock, flags);
+> -		goto cmd_cleanup;
+> -	}
+> -
+> -	xhci_ring_cmd_db(xhci);
+>   	spin_unlock_irqrestore(&xhci->lock, flags);
+> +	ret = xhci_stop_endpoint_sync(xhci, &virt_dev->eps[0], suspend);
 
-Reviewed-by: Simon Horman <horms@kernel.org>
+I didn't take this new xhci_stop_endpoint_sync() helper into use as it causes an extra
+xhci spinlock release and reacquire here.
+
+Also the memory allocation flags differ, GFP_NOIO is turned into GFP_KERNEL after this change.
+
+>   
+> -	/* Wait for last stop endpoint command to finish */
+> -	wait_for_completion(cmd->completion);
+> -
+> -	if (cmd->status == COMP_COMMAND_ABORTED ||
+> -	    cmd->status == COMP_COMMAND_RING_STOPPED) {
+> -		xhci_warn(xhci, "Timeout while waiting for stop endpoint command\n");
+> -		ret = -ETIME;
+> -	}
+> -
+> -cmd_cleanup:
+> -	xhci_free_command(xhci, cmd);
+> +out:
+>   	return ret;
+>   }
+>   
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index 3fd2b58ee1d3..163d533d6200 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+> @@ -2758,6 +2758,46 @@ static int xhci_reserve_bandwidth(struct xhci_hcd *xhci,
+>   	return -ENOMEM;
+>   }
+>   
+> +/*
+> + * Synchronous XHCI stop endpoint helper.  Issues the stop endpoint command and
+> + * waits for the command completion before returning.
+> + */
+> +int xhci_stop_endpoint_sync(struct xhci_hcd *xhci, struct xhci_virt_ep *ep, int suspend)
+> +{
+> +	struct xhci_command *command;
+> +	unsigned long flags;
+> +	int ret;
+> +
+> +	command = xhci_alloc_command(xhci, true, GFP_KERNEL);
+> +	if (!command)
+> +		return -ENOMEM;
+> +
+> +	spin_lock_irqsave(&xhci->lock, flags);
+> +	ret = xhci_queue_stop_endpoint(xhci, command, ep->vdev->slot_id,
+> +				       ep->ep_index, suspend);
+> +	if (ret < 0) {
+> +		spin_unlock_irqrestore(&xhci->lock, flags);
+> +		goto out;
+> +	}
+> +
+> +	xhci_ring_cmd_db(xhci);
+> +	spin_unlock_irqrestore(&xhci->lock, flags);
+> +
+> +	ret = wait_for_completion_timeout(command->completion, msecs_to_jiffies(3000));
+> +	if (!ret)
+> +		xhci_warn(xhci, "%s: Unable to stop endpoint.\n",
+> +				__func__);
+> +
+> +	if (command->status == COMP_COMMAND_ABORTED ||
+> +	    command->status == COMP_COMMAND_RING_STOPPED) {
+> +		xhci_warn(xhci, "Timeout while waiting for stop endpoint command\n");
+> +		ret = -ETIME;
+> +	}
+> +out:
+> +	xhci_free_command(xhci, command);
+> +
+> +	return ret;
+> +}
+>   
+>   /* Issue a configure endpoint command or evaluate context command
+>    * and wait for it to finish.
+> @@ -3078,7 +3118,7 @@ static void xhci_endpoint_reset(struct usb_hcd *hcd,
+>   	struct xhci_virt_device *vdev;
+>   	struct xhci_virt_ep *ep;
+>   	struct xhci_input_control_ctx *ctrl_ctx;
+> -	struct xhci_command *stop_cmd, *cfg_cmd;
+> +	struct xhci_command *cfg_cmd;
+>   	unsigned int ep_index;
+>   	unsigned long flags;
+>   	u32 ep_flag;
+> @@ -3118,10 +3158,6 @@ static void xhci_endpoint_reset(struct usb_hcd *hcd,
+>   	if (ep_flag == SLOT_FLAG || ep_flag == EP0_FLAG)
+>   		return;
+>   
+> -	stop_cmd = xhci_alloc_command(xhci, true, GFP_NOWAIT);
+> -	if (!stop_cmd)
+> -		return;
+> -
+>   	cfg_cmd = xhci_alloc_command_with_ctx(xhci, true, GFP_NOWAIT);
+>   	if (!cfg_cmd)
+>   		goto cleanup;
+> @@ -3144,23 +3180,16 @@ static void xhci_endpoint_reset(struct usb_hcd *hcd,
+>   		goto cleanup;
+>   	}
+>   
+> -	err = xhci_queue_stop_endpoint(xhci, stop_cmd, udev->slot_id,
+> -					ep_index, 0);
+> +	spin_unlock_irqrestore(&xhci->lock, flags);
+> +
+
+Same here, extra unlock -> lock, and GFP flags differ.
+
+
+> +	err = xhci_stop_endpoint_sync(xhci, ep, 0);
+
+Thanks
+Mathias
+
 
