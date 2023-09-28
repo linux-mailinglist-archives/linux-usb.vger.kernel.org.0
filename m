@@ -1,230 +1,167 @@
-Return-Path: <linux-usb+bounces-687-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-688-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 666F47B17F0
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Sep 2023 11:56:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 057F07B1829
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Sep 2023 12:19:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 18893281D77
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Sep 2023 09:55:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id A8061281CE7
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Sep 2023 10:19:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12050347C5;
-	Thu, 28 Sep 2023 09:55:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FDF534CCC;
+	Thu, 28 Sep 2023 10:19:01 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7DC52E65C;
-	Thu, 28 Sep 2023 09:55:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21997C433C8;
-	Thu, 28 Sep 2023 09:55:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1695894956;
-	bh=+DSkHuvZmTOScbwhjWVKRNlUFglCaEELGK+8EY7Tp/I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NMXSWKElxk6xfVfY06vGjZCgODlqRzzee6ia03JW8afHrGDE771oQpZ3dPJehOEpH
-	 OQejT+hMGdVDQRswZqSOuzET/BZgEYVLIPBjPveFZh1PxSwsS5rt8eEOsduy/vQONM
-	 x5zAIKHBA6PpMj7zieC72VqN9I8Bmdlc0rEozi6tW9BN7iXDtmwU5I4xim7dAptRbX
-	 OTbtbLZMwG0yy6Qx80iiHFfeobSHARVHw3MEEiC0aKYLJKwPBOdQkYY/ZUtRZK864h
-	 HdJLTbIDJ9fg1yG3+e5b/vaZmxKHEnvdfnWwk0AxdKJeB6Xq41dIay69zk6PUw3M/w
-	 hqTmjwuJcMDow==
-Date: Thu, 28 Sep 2023 17:55:44 +0800
-From: Peter Chen <peter.chen@kernel.org>
-To: Tomer Maimon <tmaimon77@gmail.com>
-Cc: gregkh@linuxfoundation.org, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, xu.yang_2@nxp.com,
-	peng.fan@nxp.com, avifishman70@gmail.com, tali.perry1@gmail.com,
-	joel@jms.id.au, venture@google.com, yuenn@google.com,
-	benjaminfair@google.com, j.neuschaefer@gmx.net,
-	openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] usb: chipidea: Add support for NPCM
-Message-ID: <20230928095544.GB2081690@nchen-desktop>
-References: <20230927095509.267029-1-tmaimon77@gmail.com>
- <20230927095509.267029-4-tmaimon77@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CCD33418E
+	for <linux-usb@vger.kernel.org>; Thu, 28 Sep 2023 10:18:58 +0000 (UTC)
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2044.outbound.protection.outlook.com [40.107.20.44])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ECA79C;
+	Thu, 28 Sep 2023 03:18:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=d8c077CpXoWpwjkIGcqAsfeT15OJqDn4kZr2VlLY+ANYEnaxlflokIzdArhX5PK/FBoaaDtoOEsGQuhgiAAPBBV9NIBcWjjZ5xnH7K48QIF1W799RO1quROJ5gDw25Iyy38zjadUcERI2j3Sc0wv8/5o7+8FeFPBlae5pmyAGW0vv7xnae1itlMYlkRLZmx6LCaIR8VH7G+adl7GtRoeZrkbw7TiO6sjtlTi5qFVQLzQKPKeBr2VLFZN3h60ER8Mf6SzzbfDJAZo2un2qr+zXanxCbbkrsSB37XtYT5I6w3Sl5gO6PheTbjaiXe0sQzPHOg5Vuy8VHRBQCsBnXq6Pg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2VayyAcTwBmHFjeQszHVSBjVTqTJQIVyWEJ4M7t3uPI=;
+ b=AVbNKVssIAEmYbmOwnlj2V8bVrAnZz+6oYrnP4dVT8DUjQ4N9v2VKKGVvw0jDf5dBvoiFvcvQaIu5oZHlCxP5823HB8Vng+BA/+8fqgnfZdnjSqKk42inJDl0MqzBi4firIHfjFPdIRMQTaO70IhR7NSV/7d/KiXsgSkBzd4oIffLzjG+pmpaaBJ0YzWNKrdaeSlS33UKmB8QDf1gvFPTffPEsN2isPa+ppKjCjQ9yEa7MPrRevM8mbm5kcS3oJqjF4OYqr6DD0LSpCDrdT6TyuReyJK/R3dkpzgIMHaQ0f6VpfL2Ktlvr0vHu10WVzNcqkDEbytgX+N4o2SC8vwwQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2VayyAcTwBmHFjeQszHVSBjVTqTJQIVyWEJ4M7t3uPI=;
+ b=t+72ayf+OKCmlvCn85Rtc0zla+g8ezvMfD44s3TVv1zBdyd7p7SHi1f7EheX/uRFJC/q17C9yg/cYwQ9J4qSZv1eDNvOZ3UjmRcXYKVZGpFo5Hbk7KdfX987gPxJ//L7R83EYYfIZx38x0tZwFurCzaJVKcrzOKzgOlcPFgVgDqmLG0KCVqS0vvReQ5ktqY1sqahUEVRBlTh73royloc87reErsJmm7IvSerqhAsX0/PTqWqAazyawumGM2DFXNsj3OQHxxEOsED3kwsDfFtWeSerK5g7QvisTpZmJCeIgWHXnK5WQAeblIwyVjBsfpBHhX18wHeZ+QpwOb85jL+Vw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
+ by AS8PR04MB8295.eurprd04.prod.outlook.com (2603:10a6:20b:3b0::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6813.28; Thu, 28 Sep
+ 2023 10:18:54 +0000
+Received: from VI1PR04MB7104.eurprd04.prod.outlook.com
+ ([fe80::ae2b:2be:9625:d810]) by VI1PR04MB7104.eurprd04.prod.outlook.com
+ ([fe80::ae2b:2be:9625:d810%4]) with mapi id 15.20.6813.017; Thu, 28 Sep 2023
+ 10:18:54 +0000
+Message-ID: <95ce1e2f-eb60-46fc-bced-06b8a150cbfb@suse.com>
+Date: Thu, 28 Sep 2023 12:18:50 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v19 0/4] Add Intel LJCA device driver
+Content-Language: en-US
+To: Hans de Goede <hdegoede@redhat.com>, Greg KH
+ <gregkh@linuxfoundation.org>, Wentong Wu <wentong.wu@intel.com>
+Cc: arnd@arndb.de, mka@chromium.org, oneukum@suse.com, lee@kernel.org,
+ wsa@kernel.org, kfting@nuvoton.com, broonie@kernel.org,
+ linus.walleij@linaro.org, maz@kernel.org, brgl@bgdev.pl,
+ linux-usb@vger.kernel.org, linux-i2c@vger.kernel.org,
+ linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
+ andriy.shevchenko@linux.intel.com, heikki.krogerus@linux.intel.com,
+ andi.shyti@linux.intel.com, sakari.ailus@linux.intel.com,
+ bartosz.golaszewski@linaro.org, srinivas.pandruvada@intel.com,
+ zhifeng.wang@intel.com
+References: <1694890416-14409-1-git-send-email-wentong.wu@intel.com>
+ <2023091704-nape-coconut-af6c@gregkh>
+ <f576c346-db6c-dded-1502-c87d5e58fa39@redhat.com>
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <f576c346-db6c-dded-1502-c87d5e58fa39@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FRYP281CA0004.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10::14)
+ To VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230927095509.267029-4-tmaimon77@gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|AS8PR04MB8295:EE_
+X-MS-Office365-Filtering-Correlation-Id: 681e3c30-cbe3-4af9-c1ed-08dbc00c50f7
+X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	Jn46+J5CKND+MqDv7UaPyqOPscTVdBdFfwIGWIlf/R8hoyqcW0apNMn4kL+a7Wu/4xZ1PS4iFoWmhmSMNtN+kVOurYfmers+e7HoJstFYL8f9ZinkCQtL6YgplKrrWt3N0yNAPy6w9aWFNMDDxTBiO7XPAMCS7UTUbdeVSR8AiJzb16GuSKK/xzWvEv3pOjySgoSpH9t9LOzEpU+ItyHSwoWJU4wBnrxFSh2WCqfqNegjb50Snjb35tBPZveLkHNc3bacmsiuBKitJ0pbiwST/rNVUKtkIg8BJPc5lazKiqAgLvr/wzSm6ZXrK5o00bGrxWfsb3mO6RzMQkSBelqyGrUQsSMVTldwlhgU7EV8kQouU1PycLpq0o25BuhrDzQacaopVUWsTWYjvubPK7Jzbib0C+RQnzd7EGaEMWyFcOd+l/s6c9bMmBkfYxoVMtw5wv2amroctyb4Ka07BF4cos83g8sDphRJPIlNc6jJHBDbr5dmp9fipdJRqArCCvxspORlaZUWQh88WbI0IYAhL2knPZaa9PLPUosW+A9GtCHQL2ClZ9EG82AUymznsY0k2+hUmyFG5UGjzWZD9lc/gByQFjcAGUYAE8Uh0wH4VkfOnYRhxQiYr1luDZStqhPC4jfR3NBjzhxBzw09xS3yg==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(346002)(136003)(39860400002)(376002)(366004)(230922051799003)(1800799009)(186009)(64100799003)(451199024)(4744005)(31686004)(110136005)(6512007)(66946007)(316002)(7416002)(2906002)(66476007)(66556008)(41300700001)(8936002)(8676002)(4326008)(478600001)(6666004)(5660300002)(38100700002)(53546011)(6506007)(2616005)(86362001)(36756003)(6486002)(31696002)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?dzdUTGJNSVJaM1JwYk4yU2NnVUxJWmppWmZYTTQ1U0hLK1k0R0R2aWJwS1JN?=
+ =?utf-8?B?ZWRVRnBmZzhDcFgxSHBKQjlXU3ZTcmVqajNWbG8xV29KVlovZU9LVkg1U1pw?=
+ =?utf-8?B?MVNjaXlYbHpzUnFNZWh1VkNvcDdURkZzZ3J0RTZ6Qi9aUUw5bUc3c2ljR3Bn?=
+ =?utf-8?B?dUtvdVFXRW5NcWVPMzJ4TWg0cVhMdTlObmZzeHFoamxuOENSalpDMjIydENw?=
+ =?utf-8?B?dmxpK3YwYTY3TGdZTXFzcVY3RmFjR3p2dlk3Rmc0QXNYK2ZGalVMeXdXR1Vs?=
+ =?utf-8?B?YkFzcFRoemZOdkRlYnIxZS9CcldncFBHbFdzc3AzS0psczRaOStLb3NITGN6?=
+ =?utf-8?B?aDgwZzRsSjZodWpORGU5MGQrdFdPSmwzeU1KWDkycmRIS045TGRyTW9uM2wz?=
+ =?utf-8?B?NXNIYVpNRU1jckJJRnd2K0w0TURqazF4dmpwaE1uZkl0aW43WGlmM0ZERTBq?=
+ =?utf-8?B?ZE8zbmczZnl1YVZsTjczUm82Vi8rdEt4M28wY2gwMEswOEV6aHN3ZmNuQ1A1?=
+ =?utf-8?B?dE1BTEYrcmZ4by9PaGI2dHdqZm16Tnl0MTVIUTBIM0pxZ1NNV3BSMm5RTGY5?=
+ =?utf-8?B?UHNwRzBreXhaemlNTEpSN3BTK3JNRWxReStqbHM4Z2h0Z3pYM2RpMEhmZ09z?=
+ =?utf-8?B?SVZFbFB3KzB0cG1tK2ROakdmY2gvMnU1RWlhQW94cEpYYmtqaEt5QStsMFdF?=
+ =?utf-8?B?VzVwTUdWYlk1UFBabjIwK0VOSmdYSVBOeHErbXhyZlhjZE9zNFhRTkNpbWI0?=
+ =?utf-8?B?eFVpalplTE4rcmVQRHE3NER0L1pDRkdjS2R0c0FJVC9xZFJPVTU5NDRYWllZ?=
+ =?utf-8?B?TnRRLzFQZmFjODZkd3VLTi9wWmtWRmduZFZlMlYyeFZmOTcyM0lGK3Q2bjQv?=
+ =?utf-8?B?SW83TjI3OGNKMi84aWpIRVJlNjJDRW12WmJCUE1rOURCNVh3NFBUaUlYSGdO?=
+ =?utf-8?B?a3lsbXdqZGtXTE80RTZhTWdSVXQyandrUnc3c2o1ZWxmVXVqMmZXVkNUMXB2?=
+ =?utf-8?B?MFFGMFc3Zy9DV3ljZURJaWFLVkVnUERLaXZSV3Q2cjRzdjFkVUlPUGVoZEsv?=
+ =?utf-8?B?aVRWdHNMZUJNUzAvWm5WQlU1YnZQSUFiTVU4Ky81THZTQ2NXMi9DVVc2aTZp?=
+ =?utf-8?B?S0JZeHJXdnpneitnL2JVazk1YUdsZS9paG5NRDlSQTY5QXNWNGFYMnlKT2lz?=
+ =?utf-8?B?eEZQOTNXYzNmelRBVHhWbldwMC9Cc1JydDJTZjZwTzBVYnhsRDMvYytUM1Rl?=
+ =?utf-8?B?NGd1a3E5bkZYY1BwWlJ1M2k1dFB1dWdwMUdWZmpEN2ZRUjk5OG9Vb0pwdllz?=
+ =?utf-8?B?c0MzUHBiTFBJdm1OUnpCcEpIbFMzdnU3clhhdm84TDU2TytORjZtT2t2clpt?=
+ =?utf-8?B?UFROdGdiV2g4elBmRTRJeGNjR240ZklmUDVNWC9NK2xzSG0vZUNwWmxpREQ5?=
+ =?utf-8?B?dzBDdzYrSlR3UG9Eam5aaEk2ZUlPNGxGU0praEp1R2w4WWhCbzdUci9VU2hr?=
+ =?utf-8?B?a1NMRzFaakdoTHpLSElNOGlIandJN3FId3dSZS9mS2FrOU5yZ29zSXBJU1FN?=
+ =?utf-8?B?UlZXcC9mQk9naTJkWnpOeXllSGZjek5SME14eUJCVjZLclhmTlBUNlcxc3hS?=
+ =?utf-8?B?VzBvbm9qbEhZYWNieHpoc21sQXU3aWQwUW9mSW1SZDBaL0o4cXdkeWZwZWR1?=
+ =?utf-8?B?b0dtaGtaN0xkOHM5dGo1VXM0aEhQWDVUdFFXYXpEOTlNdEF0UDU2bC9oQWp3?=
+ =?utf-8?B?VXZMVlc1ak8xa2hPaXAyaEhXRys0RGwvVUx5NGJZSHJZYXJCSmNxdWtHMEpD?=
+ =?utf-8?B?Yy9iOGU4ZE4wbmlNekdCUmRpb1ZtMnF1M0oxY0VkT09VcXdoMGpJNm1JeDdp?=
+ =?utf-8?B?VkpGdnd3NzRYYW15ZEU1K2FKLzc3RjFmUldIRUNySUFPbjRqbmpwZ0llOVlK?=
+ =?utf-8?B?OXBDQ280aHVFTjRtQWJpSlVUaVlscE9TeGNFWXBxR0MxcVllb3RXbHltTWg2?=
+ =?utf-8?B?QmViQUVQRUdMU0tVQ0pYaEY0RnNtekIxTzlKMmhlM2NKTldidHJIVGJmVWVj?=
+ =?utf-8?B?K3ZGaklwQWd5NzhzekJCKzRWb05lZlpGcm0rNWUxRWtCQmFUaEdheUtSYThP?=
+ =?utf-8?B?VWNBb1B2L29yamUvSndGekN5VlIyK0dNNjJ3WWpLeTZQd0Z0Q3VQdVBDZXFU?=
+ =?utf-8?Q?lpKKS7yWiTPKfYvJdqj5Yf6QOJxsztTQqdMUnzo882Fb?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 681e3c30-cbe3-4af9-c1ed-08dbc00c50f7
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Sep 2023 10:18:53.9614
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LT8zDcQ7gGkUIHpU+nnDx0GWdmWVqja9AHrCmyvbR3FlSNk87jVGKYAX/rcxP/tF+R/qhz71Rx/27tIpJR8BdA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8295
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-On 23-09-27 12:55:09, Tomer Maimon wrote:
-> Add Nuvoton NPCM BMC SoCs support to USB ChipIdea driver.
-> NPCM SoC include ChipIdea IP block that used for USB device controller
-> mode.
-> 
-> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+On 17.09.23 13:26, Hans de Goede wrote:
+  
+> Note I did not ask for a new version to be send right away, but
+> I'm afraid there has been a bit of miscommunication and instead
+> of rebasing the next version based on further review Wentong has
+> send out a new rebased version immediately, sorry about that.
 
-Acked-by: Peter Chen <peter.chen@kernel.org>
+Hi,
 
-Peter
-> ---
->  drivers/usb/chipidea/Kconfig        |   4 +
->  drivers/usb/chipidea/Makefile       |   1 +
->  drivers/usb/chipidea/ci_hdrc_npcm.c | 117 ++++++++++++++++++++++++++++
->  3 files changed, 122 insertions(+)
->  create mode 100644 drivers/usb/chipidea/ci_hdrc_npcm.c
-> 
-> diff --git a/drivers/usb/chipidea/Kconfig b/drivers/usb/chipidea/Kconfig
-> index c815824a0b2d..bab45bc62361 100644
-> --- a/drivers/usb/chipidea/Kconfig
-> +++ b/drivers/usb/chipidea/Kconfig
-> @@ -43,6 +43,10 @@ config USB_CHIPIDEA_MSM
->  	tristate "Enable MSM hsusb glue driver" if EXPERT
->  	default USB_CHIPIDEA
->  
-> +config USB_CHIPIDEA_NPCM
-> +	tristate "Enable NPCM hsusb glue driver" if EXPERT
-> +	default USB_CHIPIDEA
-> +
->  config USB_CHIPIDEA_IMX
->  	tristate "Enable i.MX USB glue driver" if EXPERT
->  	depends on OF
-> diff --git a/drivers/usb/chipidea/Makefile b/drivers/usb/chipidea/Makefile
-> index 71afeab97e83..718cb24603dd 100644
-> --- a/drivers/usb/chipidea/Makefile
-> +++ b/drivers/usb/chipidea/Makefile
-> @@ -13,6 +13,7 @@ ci_hdrc-$(CONFIG_USB_OTG_FSM)		+= otg_fsm.o
->  
->  obj-$(CONFIG_USB_CHIPIDEA_GENERIC)	+= ci_hdrc_usb2.o
->  obj-$(CONFIG_USB_CHIPIDEA_MSM)		+= ci_hdrc_msm.o
-> +obj-$(CONFIG_USB_CHIPIDEA_NPCM)		+= ci_hdrc_npcm.o
->  obj-$(CONFIG_USB_CHIPIDEA_PCI)		+= ci_hdrc_pci.o
->  obj-$(CONFIG_USB_CHIPIDEA_IMX)		+= usbmisc_imx.o ci_hdrc_imx.o
->  obj-$(CONFIG_USB_CHIPIDEA_TEGRA)	+= ci_hdrc_tegra.o
-> diff --git a/drivers/usb/chipidea/ci_hdrc_npcm.c b/drivers/usb/chipidea/ci_hdrc_npcm.c
-> new file mode 100644
-> index 000000000000..4169855e7940
-> --- /dev/null
-> +++ b/drivers/usb/chipidea/ci_hdrc_npcm.c
-> @@ -0,0 +1,117 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +// Copyright (c) 2023 Nuvoton Technology corporation.
-> +
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/pm_runtime.h>
-> +#include <linux/usb/chipidea.h>
-> +#include <linux/clk.h>
-> +#include <linux/io.h>
-> +#include <linux/reset-controller.h>
-> +#include <linux/of.h>
-> +
-> +#include "ci.h"
-> +
-> +struct npcm_udc_data {
-> +	struct platform_device	*ci;
-> +	struct clk		*core_clk;
-> +	struct ci_hdrc_platform_data pdata;
-> +};
-> +
-> +static int npcm_udc_notify_event(struct ci_hdrc *ci, unsigned event)
-> +{
-> +	struct device *dev = ci->dev->parent;
-> +
-> +	switch (event) {
-> +	case CI_HDRC_CONTROLLER_RESET_EVENT:
-> +		/* clear all mode bits */
-> +		hw_write(ci, OP_USBMODE, 0xffffffff, 0x0);
-> +		break;
-> +	default:
-> +		dev_dbg(dev, "unknown ci_hdrc event\n");
-> +		break;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int npcm_udc_probe(struct platform_device *pdev)
-> +{
-> +	int ret;
-> +	struct npcm_udc_data *ci;
-> +	struct platform_device *plat_ci;
-> +	struct device *dev = &pdev->dev;
-> +
-> +	ci = devm_kzalloc(&pdev->dev, sizeof(*ci), GFP_KERNEL);
-> +	if (!ci)
-> +		return -ENOMEM;
-> +	platform_set_drvdata(pdev, ci);
-> +
-> +	ci->core_clk = devm_clk_get_optional(dev, NULL);
-> +	if (IS_ERR(ci->core_clk))
-> +		return PTR_ERR(ci->core_clk);
-> +
-> +	ret = clk_prepare_enable(ci->core_clk);
-> +	if (ret) {
-> +		dev_err(dev, "failed to enable the clock: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	ci->pdata.name = dev_name(dev);
-> +	ci->pdata.capoffset = DEF_CAPOFFSET;
-> +	ci->pdata.flags	= CI_HDRC_REQUIRES_ALIGNED_DMA |
-> +		CI_HDRC_FORCE_VBUS_ACTIVE_ALWAYS;
-> +	ci->pdata.phy_mode = USBPHY_INTERFACE_MODE_UTMI;
-> +	ci->pdata.notify_event = npcm_udc_notify_event;
-> +
-> +	plat_ci = ci_hdrc_add_device(dev, pdev->resource, pdev->num_resources,
-> +				     &ci->pdata);
-> +	if (IS_ERR(plat_ci)) {
-> +		ret = PTR_ERR(plat_ci);
-> +		dev_err(dev, "failed to register HDRC NPCM device: %d\n", ret);
-> +		goto clk_err;
-> +	}
-> +
-> +	pm_runtime_no_callbacks(dev);
-> +	pm_runtime_enable(dev);
-> +
-> +	return 0;
-> +
-> +clk_err:
-> +	clk_disable_unprepare(ci->core_clk);
-> +	return ret;
-> +}
-> +
-> +static int npcm_udc_remove(struct platform_device *pdev)
-> +{
-> +	struct npcm_udc_data *ci = platform_get_drvdata(pdev);
-> +
-> +	pm_runtime_disable(&pdev->dev);
-> +	ci_hdrc_remove_device(ci->ci);
-> +	clk_disable_unprepare(ci->core_clk);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id npcm_udc_dt_match[] = {
-> +	{ .compatible = "nuvoton,npcm750-udc", },
-> +	{ .compatible = "nuvoton,npcm845-udc", },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, npcm_udc_dt_match);
-> +
-> +static struct platform_driver npcm_udc_driver = {
-> +	.probe = npcm_udc_probe,
-> +	.remove = npcm_udc_remove,
-> +	.driver = {
-> +		.name = "npcm_udc",
-> +		.of_match_table = npcm_udc_dt_match,
-> +	},
-> +};
-> +
-> +module_platform_driver(npcm_udc_driver);
-> +
-> +MODULE_DESCRIPTION("NPCM USB device controller driver");
-> +MODULE_AUTHOR("Tomer Maimon <tomer.maimon@nuvoton.com>");
-> +MODULE_ALIAS("platform:npcm-udc");
-> +MODULE_LICENSE("GPL v2");
-> -- 
-> 2.33.0
-> 
+what to do now? It's been ten days.
+I am sure this driver has been very thoroughly reviewed by now.
+We are dragging this out. Do we want the developer to do another release
+or do we ask Greg to take it as is?
+This is becoming almost comical, but that is not what we want driver
+submission to be.
 
--- 
+As far as I am concerned on the USB side everything is fine now.
+Hans? Greg?
 
-Thanks,
-Peter Chen
+	Regards
+		Oliver
 
