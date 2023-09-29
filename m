@@ -1,148 +1,139 @@
-Return-Path: <linux-usb+bounces-767-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-761-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC8F07B3341
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Sep 2023 15:15:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9410D7B332B
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Sep 2023 15:14:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id B9374283A67
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Sep 2023 13:15:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTP id AA2AD1C209D2
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Sep 2023 13:14:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8405F1D693;
-	Fri, 29 Sep 2023 13:15:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C7861A594;
+	Fri, 29 Sep 2023 13:14:44 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ED291A594
-	for <linux-usb@vger.kernel.org>; Fri, 29 Sep 2023 13:15:13 +0000 (UTC)
-Received: from mx.skole.hr (mx2.hosting.skole.hr [161.53.165.186])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05EBA1AB;
-	Fri, 29 Sep 2023 06:15:10 -0700 (PDT)
-Received: from mx2.hosting.skole.hr (localhost.localdomain [127.0.0.1])
-	by mx.skole.hr (mx.skole.hr) with ESMTP id 71C4A84758;
-	Fri, 29 Sep 2023 15:15:09 +0200 (CEST)
-From: =?utf-8?q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
-Date: Fri, 29 Sep 2023 15:14:04 +0200
-Subject: [PATCH RFC v3 6/6] ARM: pxa: Convert gumstix Bluetooth to GPIO
- descriptors
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1CAC11737
+	for <linux-usb@vger.kernel.org>; Fri, 29 Sep 2023 13:14:42 +0000 (UTC)
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 481CEE7
+	for <linux-usb@vger.kernel.org>; Fri, 29 Sep 2023 06:14:41 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-9b0168a9e05so1595998366b.3
+        for <linux-usb@vger.kernel.org>; Fri, 29 Sep 2023 06:14:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1695993280; x=1696598080; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6hm8M8P0E044zsXKxzjnzQHb9jlx7F15tmg44YiTQE4=;
+        b=pzSe6wpNj8bF6T/3dC0WgKQDaRToW9rYy2i89VzKeaCdK9L3CpqHH0woMA6u3dQ6AR
+         SVNT/OPpyJVYC/OUAtNY36RFi45xdnd606AJMc2DSSZmK5v8jo5icWcEuXO+s5Lhauy4
+         7Q45VTtrVhAQAYaLOd1SeJjuxGD/zlLTkL9R7RahEDHXDBZyxbjy5cQXalfe7i+2i+CY
+         PJ5N2TyFrYy/CGXVJDJ68BoWT5H3nBb7yIItbGAbWslfhczlmH7d8II5tzkeCJKA4GYh
+         tHl8UatRJcJrB0BodA77NIRIVnWxwWCHHNBv1Qi291fNI8plSUiUxhyayH3r5O17/ysY
+         Hgrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695993280; x=1696598080;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6hm8M8P0E044zsXKxzjnzQHb9jlx7F15tmg44YiTQE4=;
+        b=Wow4/8u1n4r/JpRhszhTkML2aQyAA6WxFXcGxT3rDIwjtlRWiCetld4GGw/XZdhsC1
+         ngomdKtBcLzeSeV/aAxdyP6oNFug6WVZv1YUYoJipci7vdC8jz1wu25XILWrYQDQYjw9
+         8km5+wZz9Q5OjyKQQrGIRyM06Ch6TTcXKB++TzU8kWkDLlOLZ8Yh3Uo8xhyoKJd/qaVn
+         EJvrbYsKYnw8dgp2EYSuDKcBgiIZNXqlshzXAg2RQCTujOmC2eg1RtlOCgNTHWPmGEXo
+         u+cepyZM0typWd6GpNsO3aOLr0DMX1qLZyv+hg8OvZzRwqt3nzOdv4BuURGsDanWVs4W
+         90XA==
+X-Gm-Message-State: AOJu0YxWQqKj6rVj39o9FpGbcEa1hmHJWAMXxfdpYe6czboPxcXkaG4P
+	oW/UVAm2WICCPLp9hffh7uQMHw==
+X-Google-Smtp-Source: AGHT+IFaIr967H1qvXJ1+Ob/sEixHAE4zeLZGWkN/0aZsxP/QyOHMrbD2cXfX4HadkUjPIshupFt/w==
+X-Received: by 2002:a17:906:101a:b0:9b2:babb:5fe9 with SMTP id 26-20020a170906101a00b009b2babb5fe9mr3831539ejm.23.1695993279692;
+        Fri, 29 Sep 2023 06:14:39 -0700 (PDT)
+Received: from [192.168.33.189] (178235177217.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.217])
+        by smtp.gmail.com with ESMTPSA id k22-20020a170906129600b009aa292a2df2sm12352258ejb.217.2023.09.29.06.14.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Sep 2023 06:14:39 -0700 (PDT)
+Message-ID: <618992fe-4c76-42ef-af47-ee66f74c5bb6@linaro.org>
+Date: Fri, 29 Sep 2023 15:14:35 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230929-pxa-gpio-v3-6-af8d5e5d1f34@skole.hr>
-References: <20230929-pxa-gpio-v3-0-af8d5e5d1f34@skole.hr>
-In-Reply-To: <20230929-pxa-gpio-v3-0-af8d5e5d1f34@skole.hr>
-To: Daniel Mack <daniel@zonque.org>, 
- Haojian Zhuang <haojian.zhuang@gmail.com>, 
- Robert Jarzmik <robert.jarzmik@free.fr>, 
- Russell King <linux@armlinux.org.uk>, 
- Alan Stern <stern@rowland.harvard.edu>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Linus Walleij <linus.walleij@linaro.org>, 
- Bartosz Golaszewski <brgl@bgdev.pl>, Andy Shevchenko <andy@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
- linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org, 
- =?utf-8?q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2065;
- i=duje.mihanovic@skole.hr; h=from:subject:message-id;
- bh=H9m5GKPOjDqHvnoQunanjp8s8qAFx4LJD9KoCMZ/UEw=;
- b=owEBbQKS/ZANAwAIAZoRnrBCLZbhAcsmYgBlFs3XQsYnvxMh8SEOdWIMlFI/gwqsQo1oFMAKm
- lHd2NusZbuJAjMEAAEIAB0WIQRT351NnD/hEPs2LXiaEZ6wQi2W4QUCZRbN1wAKCRCaEZ6wQi2W
- 4bA8EACR7xGZJhaqRGnqJIgWVrBgsRruhMzrzu0NpPcugh54aroe6yB2w3nU0wXPpA10Gdfcrey
- 1a15ODiJtApvmlnEhX3FfH/ifnmsM1vf2lNV1icIZUi0ytId2w6YSJxZegXEs0lLWecCcXZHli/
- z5PlZp/ln3AwtJs5oRseXF0s0GiPDFnZcBKtMluMRV2vTogjJEE8opuw2Upb8e50snjsPw/BaLY
- wKzWq+ICN8a0dEbFvPVQLZX6NVsW2AjdYbszt98XeQoPIapJuOMgbfzxJ9pS9xG6O11A7DuZQKb
- UJVkdC054DdcytnfJEZD/frOLmoQkC9KR2/7I3Dlkyn11t866hRB9zHdKks+XZVs1+YMCj0W8dj
- KaIIJQuse3+VTs7xJzWGwPJlDRCeuT5j/l9s786EOQXS4uAiWUUMKbxUPMcn9mTRfDOpLVhLGkO
- aBl4LxNmwh5QRh/slaS8gpmstNrG0A5oeqPjL52RnK1HZz7m6JQUiL5L5mcWPhiC2RyRchBOPXn
- SLxX0S/y/ZQvsocbiOuZulkqG0329Wh9Wbzxi5l9R/Rxv/BIGFfrqB7jb3cRyy891A9U0AVIsBC
- 95WBkTo9J5SGgE8dE49P2wvFQz90zdxKqfFCoXCIkfEcDOkIb/BrUciT3afDv3SEgl/HesqzLMk
- ZAlgpNYVDBEU/nA==
-X-Developer-Key: i=duje.mihanovic@skole.hr; a=openpgp;
- fpr=53DF9D4D9C3FE110FB362D789A119EB0422D96E1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 6/8] arm64: dts: qcom: ipq5332: Add Super-Speed UNIPHY in
+ USB node
+Content-Language: en-US
+To: Praveenkumar I <quic_ipkumar@quicinc.com>, agross@kernel.org,
+ andersson@kernel.org, vkoul@kernel.org, kishon@kernel.org,
+ robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+ gregkh@linuxfoundation.org, catalin.marinas@arm.com, will@kernel.org,
+ p.zabel@pengutronix.de, geert+renesas@glider.be, arnd@arndb.de,
+ neil.armstrong@linaro.org, nfraprado@collabora.com, u-kumar1@ti.com,
+ peng.fan@nxp.com, quic_wcheng@quicinc.com, quic_varada@quicinc.com,
+ linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc: quic_kathirav@quicinc.com, quic_nsekar@quicinc.com,
+ quic_srichara@quicinc.com
+References: <20230929084209.3033093-1-quic_ipkumar@quicinc.com>
+ <20230929084209.3033093-7-quic_ipkumar@quicinc.com>
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
+ xsFNBF9ALYUBEADWAhxdTBWrwAgDQQzc1O/bJ5O7b6cXYxwbBd9xKP7MICh5YA0DcCjJSOum
+ BB/OmIWU6X+LZW6P88ZmHe+KeyABLMP5s1tJNK1j4ntT7mECcWZDzafPWF4F6m4WJOG27kTJ
+ HGWdmtO+RvadOVi6CoUDqALsmfS3MUG5Pj2Ne9+0jRg4hEnB92AyF9rW2G3qisFcwPgvatt7
+ TXD5E38mLyOPOUyXNj9XpDbt1hNwKQfiidmPh5e7VNAWRnW1iCMMoKqzM1Anzq7e5Afyeifz
+ zRcQPLaqrPjnKqZGL2BKQSZDh6NkI5ZLRhhHQf61fkWcUpTp1oDC6jWVfT7hwRVIQLrrNj9G
+ MpPzrlN4YuAqKeIer1FMt8cq64ifgTzxHzXsMcUdclzq2LTk2RXaPl6Jg/IXWqUClJHbamSk
+ t1bfif3SnmhA6TiNvEpDKPiT3IDs42THU6ygslrBxyROQPWLI9IL1y8S6RtEh8H+NZQWZNzm
+ UQ3imZirlPjxZtvz1BtnnBWS06e7x/UEAguj7VHCuymVgpl2Za17d1jj81YN5Rp5L9GXxkV1
+ aUEwONM3eCI3qcYm5JNc5X+JthZOWsbIPSC1Rhxz3JmWIwP1udr5E3oNRe9u2LIEq+wH/toH
+ kpPDhTeMkvt4KfE5m5ercid9+ZXAqoaYLUL4HCEw+HW0DXcKDwARAQABzShLb25yYWQgRHli
+ Y2lvIDxrb25yYWQuZHliY2lvQGxpbmFyby5vcmc+wsGOBBMBCAA4FiEEU24if9oCL2zdAAQV
+ R4cBcg5dfFgFAmQ5bqwCGwMFCwkIBwIGFQoJCAsCBBYCAwECHgECF4AACgkQR4cBcg5dfFjO
+ BQ//YQV6fkbqQCceYebGg6TiisWCy8LG77zV7DB0VMIWJv7Km7Sz0QQrHQVzhEr3trNenZrf
+ yy+o2tQOF2biICzbLM8oyQPY8B///KJTWI2khoB8IJSJq3kNG68NjPg2vkP6CMltC/X3ohAo
+ xL2UgwN5vj74QnlNneOjc0vGbtA7zURNhTz5P/YuTudCqcAbxJkbqZM4WymjQhe0XgwHLkiH
+ 5LHSZ31MRKp/+4Kqs4DTXMctc7vFhtUdmatAExDKw8oEz5NbskKbW+qHjW1XUcUIrxRr667V
+ GWH6MkVceT9ZBrtLoSzMLYaQXvi3sSAup0qiJiBYszc/VOu3RbIpNLRcXN3KYuxdQAptacTE
+ mA+5+4Y4DfC3rUSun+hWLDeac9z9jjHm5rE998OqZnOU9aztbd6zQG5VL6EKgsVXAZD4D3RP
+ x1NaAjdA3MD06eyvbOWiA5NSzIcC8UIQvgx09xm7dThCuQYJR4Yxjd+9JPJHI6apzNZpDGvQ
+ BBZzvwxV6L1CojUEpnilmMG1ZOTstktWpNzw3G2Gis0XihDUef0MWVsQYJAl0wfiv/0By+XK
+ mm2zRR+l/dnzxnlbgJ5pO0imC2w0TVxLkAp0eo0LHw619finad2u6UPQAkZ4oj++iIGrJkt5
+ Lkn2XgB+IW8ESflz6nDY3b5KQRF8Z6XLP0+IEdLOOARkOW7yEgorBgEEAZdVAQUBAQdAwmUx
+ xrbSCx2ksDxz7rFFGX1KmTkdRtcgC6F3NfuNYkYDAQgHwsF2BBgBCAAgFiEEU24if9oCL2zd
+ AAQVR4cBcg5dfFgFAmQ5bvICGwwACgkQR4cBcg5dfFju1Q//Xta1ShwL0MLSC1KL1lXGXeRM
+ 8arzfyiB5wJ9tb9U/nZvhhdfilEDLe0jKJY0RJErbdRHsalwQCrtq/1ewQpMpsRxXzAjgfRN
+ jc4tgxRWmI+aVTzSRpywNahzZBT695hMz81cVZJoZzaV0KaMTlSnBkrviPz1nIGHYCHJxF9r
+ cIu0GSIyUjZ/7xslxdvjpLth16H27JCWDzDqIQMtg61063gNyEyWgt1qRSaK14JIH/DoYRfn
+ jfFQSC8bffFjat7BQGFz4ZpRavkMUFuDirn5Tf28oc5ebe2cIHp4/kajTx/7JOxWZ80U70mA
+ cBgEeYSrYYnX+UJsSxpzLc/0sT1eRJDEhI4XIQM4ClIzpsCIN5HnVF76UQXh3a9zpwh3dk8i
+ bhN/URmCOTH+LHNJYN/MxY8wuukq877DWB7k86pBs5IDLAXmW8v3gIDWyIcgYqb2v8QO2Mqx
+ YMqL7UZxVLul4/JbllsQB8F/fNI8AfttmAQL9cwo6C8yDTXKdho920W4WUR9k8NT/OBqWSyk
+ bGqMHex48FVZhexNPYOd58EY9/7mL5u0sJmo+jTeb4JBgIbFPJCFyng4HwbniWgQJZ1WqaUC
+ nas9J77uICis2WH7N8Bs9jy0wQYezNzqS+FxoNXmDQg2jetX8en4bO2Di7Pmx0jXA4TOb9TM
+ izWDgYvmBE8=
+In-Reply-To: <20230929084209.3033093-7-quic_ipkumar@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Gumstix still uses the legacy GPIO interface for resetting the Bluetooth
-device.
+On 29.09.2023 10:42, Praveenkumar I wrote:
+> Add UNIPHY node in USB to support Super-speed. As the SS PHY has
+> pipe clock, removed "qcom,select-utmi-as-pipe-clk" flag.
+> 
+> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+> ---
+Patches 6 and 7 should be swapped, otherwise you may get no
+USB with this commit. Incremental patches must not break
+functionality, unless it is truly inevitable.
 
-Convert it to use the GPIO descriptor interface.
-
-Signed-off-by: Duje Mihanović <duje.mihanovic@skole.hr>
----
- arch/arm/mach-pxa/gumstix.c | 24 +++++++++++++-----------
- 1 file changed, 13 insertions(+), 11 deletions(-)
-
-diff --git a/arch/arm/mach-pxa/gumstix.c b/arch/arm/mach-pxa/gumstix.c
-index c9f0f62187bd..14e1b9274d7a 100644
---- a/arch/arm/mach-pxa/gumstix.c
-+++ b/arch/arm/mach-pxa/gumstix.c
-@@ -20,8 +20,8 @@
- #include <linux/delay.h>
- #include <linux/mtd/mtd.h>
- #include <linux/mtd/partitions.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/gpio/machine.h>
--#include <linux/gpio.h>
- #include <linux/err.h>
- #include <linux/clk.h>
- 
-@@ -129,6 +129,9 @@ static void gumstix_udc_init(void)
- #endif
- 
- #ifdef CONFIG_BT
-+GPIO_LOOKUP_SINGLE(gumstix_bt_gpio_table, "pxa2xx-uart.1", "pxa-gpio",
-+		GPIO_GUMSTIX_BTRESET, "BTRST", GPIO_ACTIVE_LOW);
-+
- /* Normally, the bootloader would have enabled this 32kHz clock but many
- ** boards still have u-boot 1.1.4 so we check if it has been turned on and
- ** if not, we turn it on with a warning message. */
-@@ -153,24 +156,23 @@ static void gumstix_setup_bt_clock(void)
- 
- static void __init gumstix_bluetooth_init(void)
- {
--	int err;
-+	struct gpio_desc *desc;
-+
-+	gpiod_add_lookup_table(&gumstix_bt_gpio_table);
- 
- 	gumstix_setup_bt_clock();
- 
--	err = gpio_request(GPIO_GUMSTIX_BTRESET, "BTRST");
--	if (err) {
-+	desc = gpiod_get(&pxa_device_btuart.dev, "BTRST", GPIOD_OUT_HIGH);
-+	if (IS_ERR(desc)) {
- 		pr_err("gumstix: failed request gpio for bluetooth reset\n");
- 		return;
- 	}
- 
--	err = gpio_direction_output(GPIO_GUMSTIX_BTRESET, 1);
--	if (err) {
--		pr_err("gumstix: can't reset bluetooth\n");
--		return;
--	}
--	gpio_set_value(GPIO_GUMSTIX_BTRESET, 0);
-+	gpiod_set_value(desc, 0);
- 	udelay(100);
--	gpio_set_value(GPIO_GUMSTIX_BTRESET, 1);
-+	gpiod_set_value(desc, 1);
-+
-+	gpiod_put(desc);
- }
- #else
- static void gumstix_bluetooth_init(void)
-
--- 
-2.42.0
-
-
+Konrad
 
