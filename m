@@ -1,48 +1,48 @@
-Return-Path: <linux-usb+bounces-745-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-746-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E3057B2E34
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Sep 2023 10:43:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7FEF07B2E37
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Sep 2023 10:43:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 31AF7283BD8
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Sep 2023 08:43:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 11165283FDC
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Sep 2023 08:43:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AFC41097C;
-	Fri, 29 Sep 2023 08:43:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A369411719;
+	Fri, 29 Sep 2023 08:43:44 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DD1EC8C3;
-	Fri, 29 Sep 2023 08:43:41 +0000 (UTC)
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B2111A8;
-	Fri, 29 Sep 2023 01:43:39 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38T6xeB7003083;
-	Fri, 29 Sep 2023 08:43:12 GMT
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72EECF9FB;
+	Fri, 29 Sep 2023 08:43:42 +0000 (UTC)
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A38CDAC;
+	Fri, 29 Sep 2023 01:43:40 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38T8XZcJ013854;
+	Fri, 29 Sep 2023 08:43:22 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=qcppdkim1;
- bh=bjvskR0dMl3MN6jJkPzBP88qL9AVOezaPO2jraQbkIs=;
- b=NjhDv9YBJV2d6JBO/GjVlbPATrzPgMYIDEMFichiizSyaSkWgXtQMoj81+ND/4u4OZ6P
- N5KCI0ccNIPv2IiAPU5etbBJ1xstNclrIs9BbSaMpAp7aZE45n0uOHy6q4HH9sBWTfB0
- Ku6efzQg1/o2aYxg+PcFnGxs6yYvBd44fZO1mD9tlCESif+oXF78Q+tGdWNYpOeyJvo/
- QXeCVxSVIT7r+Bf3BqfuqYIFydYignmoQM7VcMkP17RRNv62qafSIoA0Ppsj0rAhiqlE
- WhxCAAAexkjYs2mp6fPaUFGcG+tAzufjkivUQ1AFnb9Y0E+n8zDC3T/UDbB6aPd1cDGg vQ== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tct5gv3g4-1
+ bh=uujz29C6vSVzpUjiXOlH1X3Fxf3wd0vz8+uZH71+ICc=;
+ b=HzMku9gnkrQYxvP1QqIUIYPZbOiarhpCQA0WllTr9kVbbr9NKAtmYjanikTr0p+db/mq
+ 0JOMEt4b6n/tzI2IGDZmMgMCUHiWfaQat8v2k13lFsQS2v42+6br/Tdswa+WNA68IdXt
+ 63BRqzeMU+OUPjrmPNUIxFgU6ANtmNuBMAEFSVNaDS4KqtDPmlGRQBwq4luHOQeIW63I
+ zNqnK9a+LRgac70rG44KyB0AD7shOLbBmgrSS77prvRgXJarhuZ7RXVY2tib9pTiapTK
+ kxeFZQdf+ukbj8lIpQJGZDgbaXNfF8MiqWMd2w+Do1H19wTGPOKtOc2yUmapCkqz8U0m UQ== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tcvg9bj94-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 29 Sep 2023 08:43:12 +0000
+	Fri, 29 Sep 2023 08:43:22 +0000
 Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38T8hBKK001088
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38T8hL7U027901
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 29 Sep 2023 08:43:11 GMT
+	Fri, 29 Sep 2023 08:43:21 GMT
 Received: from hu-ipkumar-blr.qualcomm.com (10.80.80.8) by
  nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Fri, 29 Sep 2023 01:43:02 -0700
+ 15.2.1118.30; Fri, 29 Sep 2023 01:43:11 -0700
 From: Praveenkumar I <quic_ipkumar@quicinc.com>
 To: <agross@kernel.org>, <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
         <vkoul@kernel.org>, <kishon@kernel.org>, <robh+dt@kernel.org>,
@@ -57,9 +57,9 @@ To: <agross@kernel.org>, <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
         <linux-usb@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
 CC: <quic_kathirav@quicinc.com>, <quic_nsekar@quicinc.com>,
         <quic_srichara@quicinc.com>
-Subject: [PATCH 4/8] dt-bindings: usb: dwc3: Add clocks on Qualcomm IPQ5332
-Date: Fri, 29 Sep 2023 14:12:05 +0530
-Message-ID: <20230929084209.3033093-5-quic_ipkumar@quicinc.com>
+Subject: [PATCH 5/8] arm64: dts: qcom: ipq5332: Add clocks for USB Super-Speed
+Date: Fri, 29 Sep 2023 14:12:06 +0530
+Message-ID: <20230929084209.3033093-6-quic_ipkumar@quicinc.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230929084209.3033093-1-quic_ipkumar@quicinc.com>
 References: <20230929084209.3033093-1-quic_ipkumar@quicinc.com>
@@ -76,68 +76,52 @@ X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nalasex01c.na.qualcomm.com (10.47.97.35)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 8tH2XLhxZZGsd95aT5c88-YoBwfrUzlG
-X-Proofpoint-GUID: 8tH2XLhxZZGsd95aT5c88-YoBwfrUzlG
+X-Proofpoint-ORIG-GUID: UpTaHn4PtcuuLwYrLKfIxIceL9FCa9NP
+X-Proofpoint-GUID: UpTaHn4PtcuuLwYrLKfIxIceL9FCa9NP
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-09-29_07,2023-09-28_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 mlxlogscore=742 impostorscore=0 phishscore=0 adultscore=0
- suspectscore=0 priorityscore=1501 mlxscore=0 bulkscore=0 clxscore=1015
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ priorityscore=1501 lowpriorityscore=0 phishscore=0 adultscore=0
+ bulkscore=0 suspectscore=0 mlxscore=0 mlxlogscore=550 spamscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2309180000 definitions=main-2309290074
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-	SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Add aux and lfps clocks in Qualcomm IPQ5332. These clocks are required
-for USB Super-Speed support.
+Add aux and lfps clocks in USB node for Super-Speed support.
 
 Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
 ---
- .../devicetree/bindings/usb/qcom,dwc3.yaml    | 20 ++++++++++++++++++-
- 1 file changed, 19 insertions(+), 1 deletion(-)
+ arch/arm64/boot/dts/qcom/ipq5332.dtsi | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-index 67591057f234..18af2887b984 100644
---- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-@@ -149,6 +149,25 @@ allOf:
-             - const: sleep
-             - const: mock_utmi
- 
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,ipq5332-dwc3
-+    then:
-+      properties:
-+        clocks:
-+          maxItems: 6
-+        clock-names:
-+          items:
-+            - const: core
-+            - const: iface
-+            - const: sleep
-+            - const: mock_utmi
-+            - const: aux
-+            - const: lfps
+diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+index b08ffd8c094e..1813b9fa4bb5 100644
+--- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
++++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
+@@ -336,11 +336,16 @@ usb: usb@8af8800 {
+ 			clocks = <&gcc GCC_USB0_MASTER_CLK>,
+ 				 <&gcc GCC_SNOC_USB_CLK>,
+ 				 <&gcc GCC_USB0_SLEEP_CLK>,
+-				 <&gcc GCC_USB0_MOCK_UTMI_CLK>;
++				 <&gcc GCC_USB0_MOCK_UTMI_CLK>,
++				 <&gcc GCC_USB0_AUX_CLK>,
++				 <&gcc GCC_USB0_LFPS_CLK>;
 +
-   - if:
-       properties:
-         compatible:
-@@ -238,7 +257,6 @@ allOf:
-         compatible:
-           contains:
-             enum:
--              - qcom,ipq5332-dwc3
-               - qcom,msm8994-dwc3
-               - qcom,qcs404-dwc3
-     then:
+ 			clock-names = "core",
+ 				      "iface",
+ 				      "sleep",
+-				      "mock_utmi";
++				      "mock_utmi",
++				      "aux",
++				      "lfps";
+ 
+ 			resets = <&gcc GCC_USB_BCR>;
+ 
 -- 
 2.34.1
 
