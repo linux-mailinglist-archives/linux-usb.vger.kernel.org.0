@@ -1,117 +1,154 @@
-Return-Path: <linux-usb+bounces-749-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-750-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 682FD7B2E43
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Sep 2023 10:44:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBB2C7B2E68
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Sep 2023 10:52:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by ny.mirrors.kernel.org (Postfix) with ESMTP id 6F7B11C20A75
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Sep 2023 08:44:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 71CA12847A2
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Sep 2023 08:52:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 234A511711;
-	Fri, 29 Sep 2023 08:44:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06FD711716;
+	Fri, 29 Sep 2023 08:52:19 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0923511712;
-	Fri, 29 Sep 2023 08:44:10 +0000 (UTC)
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C90170D;
-	Fri, 29 Sep 2023 01:44:09 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38T8NZrX028301;
-	Fri, 29 Sep 2023 08:43:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=BZXIAXF1GcsWzT88JgZL9KOqUY3nkaOKwAT8v03JQEE=;
- b=Lz0+TTrAKaAzLMMtZmiPAZ320CD4+VcRzqjnbEAuBcrrZUT4qJadZ7CFf5gXMzb9+1Cs
- 2yHxY0sXCnfwZQZUVn1EC/WHRU52o16Z7zcUPmirh6yA3bCGZk4hickbge/4ZF3ww1hy
- SdaaSp1w8L/qcCzTvjt3Pv0FSi7GGKuNJMgfJhv8WweJgfuK7YqkazqxESwD//D6vMDN
- kUsD5aVdJNxZm/t4yyH7l0FDLpdGmpCqAm7Y/F72IlC+XWp9kJyDgkHhZgRZcDoUJvoH
- 5YkpLmAvqwLm8/BVnOVzjW5M7/5F7D9B+fjI1OSSrN3UbJfqtxYaFfVyGg5QS9FUCdE3 VQ== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tcvg9bjaa-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 29 Sep 2023 08:43:51 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 38T8hoiO022760
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 29 Sep 2023 08:43:50 GMT
-Received: from hu-ipkumar-blr.qualcomm.com (10.80.80.8) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.30; Fri, 29 Sep 2023 01:43:40 -0700
-From: Praveenkumar I <quic_ipkumar@quicinc.com>
-To: <agross@kernel.org>, <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
-        <vkoul@kernel.org>, <kishon@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <gregkh@linuxfoundation.org>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <p.zabel@pengutronix.de>, <geert+renesas@glider.be>,
-        <arnd@arndb.de>, <neil.armstrong@linaro.org>,
-        <nfraprado@collabora.com>, <u-kumar1@ti.com>, <peng.fan@nxp.com>,
-        <quic_wcheng@quicinc.com>, <quic_varada@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
-CC: <quic_kathirav@quicinc.com>, <quic_nsekar@quicinc.com>,
-        <quic_srichara@quicinc.com>
-Subject: [PATCH 8/8] arm64: defconfig: Enable qcom USB UNIPHY driver
-Date: Fri, 29 Sep 2023 14:12:09 +0530
-Message-ID: <20230929084209.3033093-9-quic_ipkumar@quicinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230929084209.3033093-1-quic_ipkumar@quicinc.com>
-References: <20230929084209.3033093-1-quic_ipkumar@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9B78AD47;
+	Fri, 29 Sep 2023 08:52:16 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF6794;
+	Fri, 29 Sep 2023 01:52:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695977535; x=1727513535;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bxjnnMTEfiYHjMl/VzP/xRuB60mcYj1DgtGGuQgN3Hs=;
+  b=g6yYQ+Iefg22lv5yGHgMwWGzRMjvI85SNfTiVUlqSYX70uBMLUwP/Vh0
+   06ryHpQmtlJBdNo2TAh+FP95WQBE09de2GZOgKCax3C7hItnN2oV9NNmr
+   qXOBSEjSmd4a/vGhLBGYagZaErbmFgPuiTZQv5xQrQ0/L3jpDQABLqRVc
+   rOLCvyg/D6p9KBTrLoHgqCQDo9tFcHWf9uRMiBdIXmstY+5ofgRsTuD5w
+   JiAEuPqBgJ44uLaV0R2LrsV3wfSSl+RjFnA0dIri8k/4tdbgrGfXkAHtp
+   9RvkgIRf2/37epaYcWdhmhPYJvQs9k8jcml6aIFxy3U6E3vO4TSX4MDCe
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10847"; a="863667"
+X-IronPort-AV: E=Sophos;i="6.03,186,1694761200"; 
+   d="scan'208";a="863667"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2023 01:52:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10847"; a="743396335"
+X-IronPort-AV: E=Sophos;i="6.03,186,1694761200"; 
+   d="scan'208";a="743396335"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by orsmga007.jf.intel.com with SMTP; 29 Sep 2023 01:52:09 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 29 Sep 2023 11:52:09 +0300
+Date: Fri, 29 Sep 2023 11:52:09 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Abdel Alkuor <alkuor@gmail.com>
+Cc: krzysztof.kozlowski+dt@linaro.org, bryan.odonoghue@linaro.org,
+	gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, ryan.eleceng@gmail.com,
+	robh+dt@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org,
+	Abdel Alkuor <abdelalkuor@geotab.com>
+Subject: Re: [PATCH v7 02/14] USB: typec: tsp6598x: Add cmd timeout and
+ response delay
+Message-ID: <ZRaQObkJ5kQhhhYs@kuha.fi.intel.com>
+References: <20230927175348.18041-1-alkuor@gmail.com>
+ <20230927175348.18041-3-alkuor@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: GTdaUXR8mrpY3IfGTg2dweKkPatieDU5
-X-Proofpoint-GUID: GTdaUXR8mrpY3IfGTg2dweKkPatieDU5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-09-29_07,2023-09-28_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- priorityscore=1501 lowpriorityscore=0 phishscore=0 adultscore=0
- bulkscore=0 suspectscore=0 mlxscore=0 mlxlogscore=319 spamscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2309290074
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230927175348.18041-3-alkuor@gmail.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Enable USB UNIPHY driver present in Qualcomm IPQ5332.
+On Wed, Sep 27, 2023 at 01:53:36PM -0400, Abdel Alkuor wrote:
+> From: Abdel Alkuor <abdelalkuor@geotab.com>
+> 
+> Some commands in tps25750 take longer than 1 second
+> to complete, and some responses need some delay before
+> the result becomes available.
+> 
+> Signed-off-by: Abdel Alkuor <abdelalkuor@geotab.com>
 
-Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
----
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 758bb96bd184..155a862e907d 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -1424,6 +1424,7 @@ CONFIG_PHY_QCOM_PCIE2=m
- CONFIG_PHY_QCOM_QMP=m
- CONFIG_PHY_QCOM_QUSB2=m
- CONFIG_PHY_QCOM_SNPS_EUSB2=m
-+CONFIG_PHY_QCOM_UNIPHY_USB=m
- CONFIG_PHY_QCOM_USB_HS=m
- CONFIG_PHY_QCOM_USB_SNPS_FEMTO_V2=m
- CONFIG_PHY_QCOM_USB_HS_28NM=m
+> ---
+> Changes in v7:
+>   - Add driver name to commit subject 
+> Changes in v6:
+>   - Use tps6598x_exec_cmd as a wrapper
+> Changes in v5:
+>   - Incorporating tps25750 into tps6598x driver
+> 
+>  drivers/usb/typec/tipd/core.c | 19 +++++++++++++++----
+>  1 file changed, 15 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+> index 37b56ce75f39..32420c61660d 100644
+> --- a/drivers/usb/typec/tipd/core.c
+> +++ b/drivers/usb/typec/tipd/core.c
+> @@ -282,9 +282,10 @@ static void tps6598x_disconnect(struct tps6598x *tps, u32 status)
+>  	power_supply_changed(tps->psy);
+>  }
+>  
+> -static int tps6598x_exec_cmd(struct tps6598x *tps, const char *cmd,
+> +static int tps6598x_exec_cmd_tmo(struct tps6598x *tps, const char *cmd,
+>  			     size_t in_len, u8 *in_data,
+> -			     size_t out_len, u8 *out_data)
+> +			     size_t out_len, u8 *out_data,
+> +			     u32 cmd_timeout_ms, u32 res_delay_ms)
+>  {
+>  	unsigned long timeout;
+>  	u32 val;
+> @@ -307,8 +308,7 @@ static int tps6598x_exec_cmd(struct tps6598x *tps, const char *cmd,
+>  	if (ret < 0)
+>  		return ret;
+>  
+> -	/* XXX: Using 1s for now, but it may not be enough for every command. */
+> -	timeout = jiffies + msecs_to_jiffies(1000);
+> +	timeout = jiffies + msecs_to_jiffies(cmd_timeout_ms);
+>  
+>  	do {
+>  		ret = tps6598x_read32(tps, TPS_REG_CMD1, &val);
+> @@ -321,6 +321,9 @@ static int tps6598x_exec_cmd(struct tps6598x *tps, const char *cmd,
+>  			return -ETIMEDOUT;
+>  	} while (val);
+>  
+> +	/* some commands require delay for the result to be available */
+> +	mdelay(res_delay_ms);
+> +
+>  	if (out_len) {
+>  		ret = tps6598x_block_read(tps, TPS_REG_DATA1,
+>  					  out_data, out_len);
+> @@ -345,6 +348,14 @@ static int tps6598x_exec_cmd(struct tps6598x *tps, const char *cmd,
+>  	return 0;
+>  }
+>  
+> +static int tps6598x_exec_cmd(struct tps6598x *tps, const char *cmd,
+> +			     size_t in_len, u8 *in_data,
+> +			     size_t out_len, u8 *out_data)
+> +{
+> +	return tps6598x_exec_cmd_tmo(tps, cmd, in_len, in_data,
+> +				     out_len, out_data, 1000, 0);
+> +}
+> +
+>  static int tps6598x_dr_set(struct typec_port *port, enum typec_data_role role)
+>  {
+>  	const char *cmd = (role == TYPEC_DEVICE) ? "SWUF" : "SWDF";
+> -- 
+> 2.34.1
+
 -- 
-2.34.1
-
+heikki
 
