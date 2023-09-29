@@ -1,139 +1,165 @@
-Return-Path: <linux-usb+bounces-761-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-769-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9410D7B332B
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Sep 2023 15:14:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1E207B3363
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Sep 2023 15:19:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by ny.mirrors.kernel.org (Postfix) with ESMTP id AA2AD1C209D2
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Sep 2023 13:14:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 0DAEA2836C7
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Sep 2023 13:19:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C7861A594;
-	Fri, 29 Sep 2023 13:14:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7300F1A5AB;
+	Fri, 29 Sep 2023 13:19:35 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1CAC11737
-	for <linux-usb@vger.kernel.org>; Fri, 29 Sep 2023 13:14:42 +0000 (UTC)
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 481CEE7
-	for <linux-usb@vger.kernel.org>; Fri, 29 Sep 2023 06:14:41 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-9b0168a9e05so1595998366b.3
-        for <linux-usb@vger.kernel.org>; Fri, 29 Sep 2023 06:14:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695993280; x=1696598080; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6hm8M8P0E044zsXKxzjnzQHb9jlx7F15tmg44YiTQE4=;
-        b=pzSe6wpNj8bF6T/3dC0WgKQDaRToW9rYy2i89VzKeaCdK9L3CpqHH0woMA6u3dQ6AR
-         SVNT/OPpyJVYC/OUAtNY36RFi45xdnd606AJMc2DSSZmK5v8jo5icWcEuXO+s5Lhauy4
-         7Q45VTtrVhAQAYaLOd1SeJjuxGD/zlLTkL9R7RahEDHXDBZyxbjy5cQXalfe7i+2i+CY
-         PJ5N2TyFrYy/CGXVJDJ68BoWT5H3nBb7yIItbGAbWslfhczlmH7d8II5tzkeCJKA4GYh
-         tHl8UatRJcJrB0BodA77NIRIVnWxwWCHHNBv1Qi291fNI8plSUiUxhyayH3r5O17/ysY
-         Hgrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695993280; x=1696598080;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6hm8M8P0E044zsXKxzjnzQHb9jlx7F15tmg44YiTQE4=;
-        b=Wow4/8u1n4r/JpRhszhTkML2aQyAA6WxFXcGxT3rDIwjtlRWiCetld4GGw/XZdhsC1
-         ngomdKtBcLzeSeV/aAxdyP6oNFug6WVZv1YUYoJipci7vdC8jz1wu25XILWrYQDQYjw9
-         8km5+wZz9Q5OjyKQQrGIRyM06Ch6TTcXKB++TzU8kWkDLlOLZ8Yh3Uo8xhyoKJd/qaVn
-         EJvrbYsKYnw8dgp2EYSuDKcBgiIZNXqlshzXAg2RQCTujOmC2eg1RtlOCgNTHWPmGEXo
-         u+cepyZM0typWd6GpNsO3aOLr0DMX1qLZyv+hg8OvZzRwqt3nzOdv4BuURGsDanWVs4W
-         90XA==
-X-Gm-Message-State: AOJu0YxWQqKj6rVj39o9FpGbcEa1hmHJWAMXxfdpYe6czboPxcXkaG4P
-	oW/UVAm2WICCPLp9hffh7uQMHw==
-X-Google-Smtp-Source: AGHT+IFaIr967H1qvXJ1+Ob/sEixHAE4zeLZGWkN/0aZsxP/QyOHMrbD2cXfX4HadkUjPIshupFt/w==
-X-Received: by 2002:a17:906:101a:b0:9b2:babb:5fe9 with SMTP id 26-20020a170906101a00b009b2babb5fe9mr3831539ejm.23.1695993279692;
-        Fri, 29 Sep 2023 06:14:39 -0700 (PDT)
-Received: from [192.168.33.189] (178235177217.dynamic-4-waw-k-1-1-0.vectranet.pl. [178.235.177.217])
-        by smtp.gmail.com with ESMTPSA id k22-20020a170906129600b009aa292a2df2sm12352258ejb.217.2023.09.29.06.14.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 29 Sep 2023 06:14:39 -0700 (PDT)
-Message-ID: <618992fe-4c76-42ef-af47-ee66f74c5bb6@linaro.org>
-Date: Fri, 29 Sep 2023 15:14:35 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 503A51A58E;
+	Fri, 29 Sep 2023 13:19:33 +0000 (UTC)
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B74EE7;
+	Fri, 29 Sep 2023 06:19:31 -0700 (PDT)
+Received: from pps.filterd (m0369458.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 38TABSom007571;
+	Fri, 29 Sep 2023 15:18:50 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	message-id:date:mime-version:subject:from:to:cc:references
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	selector1; bh=KMM5HFfGi3/V+NX/zIj16MtndrNJ3wjO6VBqQEWwOzE=; b=ga
+	rM6WT7soC9Qg5lgEynlNIDEz19ICFxdBxx8K4WKaa81yBoo69ZoqQgPtPJrk+yqH
+	6Ke+T4tgb/wvQ7+D6b8/REeHXj+x3qhuVXstjmlbfDXVsD7fnq1otz0IBlMfWVfL
+	E4pait5J8DRp751sajaRVoUu+IBQuOKISwGGaDU+w8jkYTr9fXxKlpYDQovtoe8f
+	gElrQ2fdRogxsh24zwaguSO+d3txrH3Ag2t7373pPcvxthqul803q1iHU52Zkj5N
+	HDkK8wgJgLFXVxL19kvPUsq9yAyQ76DfuoiJhXjgKUsphyNPOIYM5JXL5gCdij8s
+	EmQ/SdD52jWC2koKfFGg==
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3ta9k0s0fb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 29 Sep 2023 15:18:50 +0200 (MEST)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id AE29710002A;
+	Fri, 29 Sep 2023 15:18:48 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 4AB3A2865FC;
+	Fri, 29 Sep 2023 15:18:48 +0200 (CEST)
+Received: from [10.201.20.32] (10.201.20.32) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 29 Sep
+ 2023 15:18:46 +0200
+Message-ID: <6e419e89-10f1-e448-10fe-64f1ea9ff862@foss.st.com>
+Date: Fri, 29 Sep 2023 15:18:18 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 6/8] arm64: dts: qcom: ipq5332: Add Super-Speed UNIPHY in
- USB node
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [IGNORE][PATCH v4 01/11] dt-bindings: Document common device
+ controller bindings
+From: Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
+To: Greg KH <gregkh@linuxfoundation.org>
+CC: <Oleksii_Moisieiev@epam.com>, <herbert@gondor.apana.org.au>,
+        <davem@davemloft.net>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <alexandre.torgue@foss.st.com>, <vkoul@kernel.org>, <jic23@kernel.org>,
+        <olivier.moysan@foss.st.com>, <arnaud.pouliquen@foss.st.com>,
+        <mchehab@kernel.org>, <fabrice.gasnier@foss.st.com>,
+        <andi.shyti@kernel.org>, <ulf.hansson@linaro.org>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <hugues.fruchet@foss.st.com>, <lee@kernel.org>, <will@kernel.org>,
+        <catalin.marinas@arm.com>, <arnd@kernel.org>,
+        <richardcochran@gmail.com>, Frank Rowand <frowand.list@gmail.com>,
+        <peng.fan@oss.nxp.com>, <linux-crypto@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <dmaengine@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-iio@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <linux-media@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>
+References: <20230811100731.108145-1-gatien.chevallier@foss.st.com>
+ <20230811100731.108145-2-gatien.chevallier@foss.st.com>
+ <2023081117-sprout-cruncher-862c@gregkh>
+ <4f0f9d6c-ce4d-73a2-60bf-801c1a1d6cc3@foss.st.com>
 Content-Language: en-US
-To: Praveenkumar I <quic_ipkumar@quicinc.com>, agross@kernel.org,
- andersson@kernel.org, vkoul@kernel.org, kishon@kernel.org,
- robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
- gregkh@linuxfoundation.org, catalin.marinas@arm.com, will@kernel.org,
- p.zabel@pengutronix.de, geert+renesas@glider.be, arnd@arndb.de,
- neil.armstrong@linaro.org, nfraprado@collabora.com, u-kumar1@ti.com,
- peng.fan@nxp.com, quic_wcheng@quicinc.com, quic_varada@quicinc.com,
- linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc: quic_kathirav@quicinc.com, quic_nsekar@quicinc.com,
- quic_srichara@quicinc.com
-References: <20230929084209.3033093-1-quic_ipkumar@quicinc.com>
- <20230929084209.3033093-7-quic_ipkumar@quicinc.com>
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <20230929084209.3033093-7-quic_ipkumar@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+In-Reply-To: <4f0f9d6c-ce4d-73a2-60bf-801c1a1d6cc3@foss.st.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.201.20.32]
+X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-09-29_11,2023-09-28_03,2023-05-22_02
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,
 	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On 29.09.2023 10:42, Praveenkumar I wrote:
-> Add UNIPHY node in USB to support Super-speed. As the SS PHY has
-> pipe clock, removed "qcom,select-utmi-as-pipe-clk" flag.
-> 
-> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
-> ---
-Patches 6 and 7 should be swapped, otherwise you may get no
-USB with this commit. Incremental patches must not break
-functionality, unless it is truly inevitable.
 
-Konrad
+
+On 8/11/23 14:00, Gatien CHEVALLIER wrote:
+> 
+> 
+> On 8/11/23 12:16, Greg KH wrote:
+>> On Fri, Aug 11, 2023 at 12:07:21PM +0200, Gatien Chevallier wrote:
+>>> From: Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
+>>>
+>>> Introducing of the common device controller bindings for the controller
+>>> provider and consumer devices. Those bindings are intended to allow
+>>> divided system on chip into multiple domains, that can be used to
+>>> configure hardware permissions.
+>>>
+>>> Signed-off-by: Oleksii Moisieiev <oleksii_moisieiev@epam.com>
+>>> [Gatien: Fix typos and YAML error]
+>>> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+>>> ---
+>>>
+>>> Changes in V4:
+>>>     Corrected typos and YAML errors
+>>
+>> Why are we supposed to ignore the first patch in this series, but pay
+>> attention to the 10 after this that depend on it?
+>>
+>> totally confused,
+>>
+>> greg k-h
+> 
+> Hello Greg,
+> 
+> I'm sorry that this tag troubles your review. It was first suggested
+> in [1]. The "IGNORE" means ignore review on this thread, as it is still
+> under review in another thread (Link in the cover letter). It does not
+> mean that the content should be ignored for the series. I will change
+> this to something else as this is obviously confusing the review.
+> 
+> @Oleksii, can we imagine integrating this patch to this series or do
+> you prefer to keep it apart?
+> 
+
+Hi,
+
+after a discussion with Oleksii: I'll rename the binding to narrow
+down its scope and integrate the patch in my series. This way, I'll drop
+the [IGNORE] tag.
+
+=> I'll stick with the generic binding for V5 (Sorry for the misleading
+    information in the previous mail)
+
+Best regards,
+Gatien
+
+> Should I consider a resend with another tag if Oleksii prefers to keep
+> this patch apart?
+> 
+> [1] 
+> https://lore.kernel.org/all/1e498b93-d3bd-bd12-e991-e3f4bedf632d@linaro.org/
+> 
+> Best regards,
+> Gatien
 
