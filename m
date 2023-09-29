@@ -1,184 +1,461 @@
-Return-Path: <linux-usb+bounces-754-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-755-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5961A7B2FE3
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Sep 2023 12:17:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A1667B3042
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Sep 2023 12:30:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id BCF18283F75
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Sep 2023 10:17:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 8777A28351E
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Sep 2023 10:30:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F65A156FA;
-	Fri, 29 Sep 2023 10:17:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B84D515ADE;
+	Fri, 29 Sep 2023 10:29:59 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7118C154A7;
-	Fri, 29 Sep 2023 10:17:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C55EAC433C7;
-	Fri, 29 Sep 2023 10:16:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1695982632;
-	bh=P0eff07RhtpS5UOcz3JkNsf+Ld6yeT/W26VJM0WDCPo=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=XzS9mEvGo34Ng6IbV0phy7oFkBghevr6TXQtKuvgCZiNk6sipSIK1ybdV8fiZNmJi
-	 ryG2oocKEqZZKJ0Qpanb9xZf3XPiR4Bq6wmT9EMmf0fleXLKV9fNEg9/bkdRQXUeb0
-	 6CCRA5VO7ZThmTCkkfWYanznw4Z3cZqE/s5mMA3tjLRXwYn9bn1bqt+qj2Mv3mg9Lj
-	 pTssK95Hwcb1T8QjlazVp2JhItPwZmMqN2Vq1pnJqTnlHDG5dK0bcBFAZ33vjsFaWl
-	 leIqxKSfZkutf2lGQF/4jFFb0IVmQg0er/lH6TmX4JwaSuIbh4XkLnYFCd3nLSRRA6
-	 40ODyX835zJVA==
-Message-ID: <d52b4330cd26e8ef9b2999281b05e50bd7106b3a.camel@kernel.org>
-Subject: Re: [PATCH 86/87] fs: switch timespec64 fields in inode to discrete
- integers
-From: Jeff Layton <jlayton@kernel.org>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Alexander Viro <viro@zeniv.linux.org.uk>,
-  Linus Torvalds <torvalds@linux-foundation.org>, David Sterba
- <dsterba@suse.cz>, Amir Goldstein <amir73il@gmail.com>, Theodore Ts'o
- <tytso@mit.edu>, "Eric W. Biederman" <ebiederm@xmission.com>, Kees Cook
- <keescook@chromium.org>, Jeremy Kerr <jk@ozlabs.org>, Michael Ellerman
- <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy
- <christophe.leroy@csgroup.eu>, Heiko Carstens <hca@linux.ibm.com>, Vasily
- Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,  Sven Schnelle
- <svens@linux.ibm.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Arve =?ISO-8859-1?Q?Hj=F8nnev=E5g?= <arve@android.com>, Todd Kjos
- <tkjos@android.com>, Martijn Coenen <maco@android.com>, Joel Fernandes
- <joel@joelfernandes.org>, Carlos Llamas <cmllamas@google.com>, Suren
- Baghdasaryan <surenb@google.com>, Mattia Dongili <malattia@linux.it>,
- Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>, Jason
- Gunthorpe <jgg@ziepe.ca>,  Leon Romanovsky <leon@kernel.org>, Brad Warrum
- <bwarrum@linux.ibm.com>, Ritu Agarwal <rituagar@linux.ibm.com>, Hans de
- Goede <hdegoede@redhat.com>, Ilpo =?ISO-8859-1?Q?J=E4rvinen?=
- <ilpo.jarvinen@linux.intel.com>, Mark Gross <markgross@kernel.org>, Jiri
- Slaby <jirislaby@kernel.org>, Eric Van Hensbergen <ericvh@kernel.org>,
- Latchesar Ionkov <lucho@ionkov.net>, Dominique Martinet
- <asmadeus@codewreck.org>, Christian Schoenebeck <linux_oss@crudebyte.com>, 
- David Sterba <dsterba@suse.com>, David Howells <dhowells@redhat.com>, Marc
- Dionne <marc.dionne@auristor.com>,  Ian Kent <raven@themaw.net>, Luis de
- Bethencourt <luisbg@kernel.org>, Salah Triki <salah.triki@gmail.com>,
- "Tigran A. Aivazian" <aivazian.tigran@gmail.com>,  Chris Mason
- <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>, Xiubo Li
- <xiubli@redhat.com>,  Ilya Dryomov <idryomov@gmail.com>, Jan Harkes
- <jaharkes@cs.cmu.edu>, coda@cs.cmu.edu, Joel Becker <jlbec@evilplan.org>,
- Christoph Hellwig <hch@lst.de>, Nicolas Pitre <nico@fluxnic.net>, "Rafael J
- . Wysocki" <rafael@kernel.org>, Ard Biesheuvel <ardb@kernel.org>, Gao Xiang
- <xiang@kernel.org>, Chao Yu <chao@kernel.org>,  Yue Hu
- <huyue2@coolpad.com>, Jeffle Xu <jefflexu@linux.alibaba.com>, Namjae Jeon
- <linkinjeon@kernel.org>, Sungjong Seo <sj1557.seo@samsung.com>, Jan Kara
- <jack@suse.com>, Andreas Dilger <adilger.kernel@dilger.ca>, Jaegeuk Kim
- <jaegeuk@kernel.org>, OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>, 
- Christoph Hellwig <hch@infradead.org>, Miklos Szeredi <miklos@szeredi.hu>,
- Bob Peterson <rpeterso@redhat.com>, Andreas Gruenbacher
- <agruenba@redhat.com>, Richard Weinberger <richard@nod.at>, Anton Ivanov
- <anton.ivanov@cambridgegreys.com>, Johannes Berg
- <johannes@sipsolutions.net>, Mikulas Patocka
- <mikulas@artax.karlin.mff.cuni.cz>,  Mike Kravetz
- <mike.kravetz@oracle.com>, Muchun Song <muchun.song@linux.dev>, Jan Kara
- <jack@suse.cz>,  David Woodhouse <dwmw2@infradead.org>, Dave Kleikamp
- <shaggy@kernel.org>, Tejun Heo <tj@kernel.org>, Trond Myklebust
- <trond.myklebust@hammerspace.com>, Anna Schumaker <anna@kernel.org>, Chuck
- Lever <chuck.lever@oracle.com>, Neil Brown <neilb@suse.de>, Olga
- Kornievskaia <kolga@netapp.com>, Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey
- <tom@talpey.com>,  Ryusuke Konishi <konishi.ryusuke@gmail.com>, Anton
- Altaparmakov <anton@tuxera.com>, Konstantin Komarov
- <almaz.alexandrovich@paragon-software.com>, Mark Fasheh <mark@fasheh.com>, 
- Joseph Qi <joseph.qi@linux.alibaba.com>, Bob Copeland <me@bobcopeland.com>,
- Mike Marshall <hubcap@omnibond.com>, Martin Brandenburg
- <martin@omnibond.com>, Luis Chamberlain <mcgrof@kernel.org>, Iurii Zaikin
- <yzaikin@google.com>, Tony Luck <tony.luck@intel.com>,  "Guilherme G.
- Piccoli" <gpiccoli@igalia.com>, Anders Larsen <al@alarsen.net>, Steve
- French <sfrench@samba.org>, Paulo Alcantara <pc@manguebit.com>, Ronnie
- Sahlberg <lsahlber@redhat.com>, Shyam Prasad N <sprasad@microsoft.com>,
- Sergey Senozhatsky <senozhatsky@chromium.org>, Phillip Lougher
- <phillip@squashfs.org.uk>, Steven Rostedt <rostedt@goodmis.org>, Masami
- Hiramatsu <mhiramat@kernel.org>, Evgeniy Dushistov <dushistov@mail.ru>,
- Chandan Babu R <chandan.babu@oracle.com>, "Darrick J. Wong"
- <djwong@kernel.org>, Damien Le Moal <dlemoal@kernel.org>, Naohiro Aota
- <naohiro.aota@wdc.com>, Johannes Thumshirn <jth@kernel.org>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
- <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
- Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
- <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,  Hugh Dickins
- <hughd@google.com>, Andrew Morton <akpm@linux-foundation.org>, "David S .
- Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub
- Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, John Johansen
- <john.johansen@canonical.com>, Paul Moore <paul@paul-moore.com>, James
- Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, Stephen
- Smalley <stephen.smalley.work@gmail.com>, Eric Paris
- <eparis@parisplace.org>,  linux-fsdevel@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
- linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, 
- platform-driver-x86@vger.kernel.org, linux-rdma@vger.kernel.org, 
- linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
- v9fs@lists.linux.dev,  linux-afs@lists.infradead.org,
- autofs@vger.kernel.org,  linux-btrfs@vger.kernel.org,
- ceph-devel@vger.kernel.org,  codalist@coda.cs.cmu.edu,
- linux-efi@vger.kernel.org,  linux-erofs@lists.ozlabs.org,
- linux-ext4@vger.kernel.org,  linux-f2fs-devel@lists.sourceforge.net,
- gfs2@lists.linux.dev,  linux-um@lists.infradead.org,
- linux-mtd@lists.infradead.org,  jfs-discussion@lists.sourceforge.net,
- linux-nfs@vger.kernel.org,  linux-nilfs@vger.kernel.org,
- linux-ntfs-dev@lists.sourceforge.net,  ntfs3@lists.linux.dev,
- ocfs2-devel@lists.linux.dev,  linux-karma-devel@lists.sourceforge.net,
- devel@lists.orangefs.org,  linux-unionfs@vger.kernel.org,
- linux-hardening@vger.kernel.org,  reiserfs-devel@vger.kernel.org,
- linux-cifs@vger.kernel.org,  samba-technical@lists.samba.org,
- linux-trace-kernel@vger.kernel.org,  linux-xfs@vger.kernel.org,
- bpf@vger.kernel.org, Netdev <netdev@vger.kernel.org>, 
- apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org, 
- selinux@vger.kernel.org
-Date: Fri, 29 Sep 2023 06:16:57 -0400
-In-Reply-To: <20230929-yuppie-unzweifelhaft-434bf13bc964@brauner>
-References: <20230928110554.34758-1-jlayton@kernel.org>
-	 <20230928110554.34758-2-jlayton@kernel.org>
-	 <6020d6e7-b187-4abb-bf38-dc09d8bd0f6d@app.fastmail.com>
-	 <af047e4a1c6947c59d4a13d4ae221c784a5386b4.camel@kernel.org>
-	 <20230929-yuppie-unzweifelhaft-434bf13bc964@brauner>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B679156C0;
+	Fri, 29 Sep 2023 10:29:56 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F8F61718;
+	Fri, 29 Sep 2023 03:29:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695983383; x=1727519383;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SzjhW+T92LOd5EAqHe+Fp8FE2qmBxFfnP8zfhpj/fBA=;
+  b=GuXqqhTkk2DGWxG9CbFIplcGT8z9kD3Cw5/mcfHH96fFJzgDgFI9yVKs
+   syftEnTgh7x1GuQpeYhjrLTzsdb1NoEJFBuQ6De5AWf3T4gjvG2sEHjpr
+   4Im4lB9WqVoLCUwcpVaE2H70e6zh9ovLanjQhi7bOOkwpZpXThUrAsg7V
+   QYla0EqdA56EowVGnvRfcsYQPwsXpiREbi8YZQH5kqjHtza+cNGoWgR76
+   36RfUBY9tCw4ncrIrDAOwoLP7viF6yYdM1B8HBA9W0mDWHo6zSDcy966Q
+   y/iZ+JlrUwqj9hdWJuJVoL7lKUbOlmUF5UN+1MkgFZypGoG2p0lO/ZP5g
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10847"; a="382175146"
+X-IronPort-AV: E=Sophos;i="6.03,187,1694761200"; 
+   d="scan'208";a="382175146"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2023 03:29:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10847"; a="840240207"
+X-IronPort-AV: E=Sophos;i="6.03,187,1694761200"; 
+   d="scan'208";a="840240207"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by FMSMGA003.fm.intel.com with SMTP; 29 Sep 2023 03:29:34 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 29 Sep 2023 13:29:33 +0300
+Date: Fri, 29 Sep 2023 13:29:33 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Abdel Alkuor <alkuor@gmail.com>
+Cc: krzysztof.kozlowski+dt@linaro.org, bryan.odonoghue@linaro.org,
+	gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, ryan.eleceng@gmail.com,
+	robh+dt@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org,
+	Abdel Alkuor <abdelalkuor@geotab.com>
+Subject: Re: [PATCH v7 04/14] USB: typec: tps6598x: Load TPS25750 patch bundle
+Message-ID: <ZRanDS2nN7aMamt+@kuha.fi.intel.com>
+References: <20230927175348.18041-1-alkuor@gmail.com>
+ <20230927175348.18041-5-alkuor@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230927175348.18041-5-alkuor@gmail.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+	SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-On Fri, 2023-09-29 at 11:44 +0200, Christian Brauner wrote:
-> > It is a lot of churn though.
->=20
-> I think that i_{a,c,m}time shouldn't be accessed directly by
-> filesystems same as no filesystem should really access i_{g,u}id which
-> we also provide i_{g,u}id_{read,write}() accessors for. The mode is
-> another example where really most often should use helpers because of all
-> the set*id stripping that we need to do (and the bugs that we had
-> because of this...).
->=20
-> The interdependency between ctime and mtime is enough to hide this in
-> accessors. The other big advantage is simply grepability. So really I
-> would like to see this change even without the type switch.
->=20
-> In other words, there's no need to lump the two changes together. Do the
-> conversion part and we can argue about the switch to discrete integers
-> separately.
->=20
-> The other adavantage is that we have a cycle to see any possible
-> regression from the conversion.
->=20
-> Thoughts anyone?
+On Wed, Sep 27, 2023 at 01:53:38PM -0400, Abdel Alkuor wrote:
+> From: Abdel Alkuor <abdelalkuor@geotab.com>
+> 
+> TPS25750 controller requires a binary to be loaded with a configuration
+> binary by an EEPROM or a host.
+> 
+> Appling a patch bundling using a host is implemented based on the flow
+> diagram pg.62 in TPS25750 host interface manual.
+> https://www.ti.com/lit/ug/slvuc05a/slvuc05a.pdf
+> 
+> The flow diagram can be summarized as following:
+> - Start the patch loading sequence with patch bundle information by
+>   executing PBMs
+> - Write the whole patch at once
+> - When writing the patch fails, execute PBMe which instructs the PD controller
+>   to end the patching process
+> - After writing the patch successfully, execute PBMc which verifies the patch
+>   integrity and applies the patch internally
+> - Wait for the device to switch into APP mode (normal operation)
+> 
+> The execuation flow diagram polls the events register and then polls the
+> corresponding register related to the event as well before advancing to the next
+> state. Polling the events register is a redundant step, in this implementation
+> only the corresponding register related to the event is polled.
+> 
+> Signed-off-by: Abdel Alkuor <abdelalkuor@geotab.com>
 
-That works for me, and sort of what I was planning anyway. I mostly just
-did the change to timestamp storage to see what it would look like
-afterward.
+This looks okay, but let's see how the final DT bindings look like.
 
-FWIW, I'm planning to do a v2 patchbomb early next week, with the
-changes that Chuck suggested (specific helpers for fetching the _sec and
-_nsec fields). For now, I'll drop the change from timespec64 to discrete
-fields. We can do that in a separate follow-on set.
---=20
-Jeff Layton <jlayton@kernel.org>
+Few nitpicks below:
+
+> ---
+> Changes in v7:
+>   - Add driver name to commit subject
+> Changes in v6:
+>   - Don't check VID for tps25750 as the VID register doesn't exist
+>   - Remove is_tps25750 flag from tps6598x struct
+>   - Get patch address from reg property
+> Changes in v5:
+>   - Incorporating tps25750 into tps6598x driver
+> 
+>  drivers/usb/typec/tipd/core.c | 254 +++++++++++++++++++++++++++++++++-
+>  1 file changed, 250 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+> index 58679b1c0cfe..f96a9ff07fba 100644
+> --- a/drivers/usb/typec/tipd/core.c
+> +++ b/drivers/usb/typec/tipd/core.c
+> @@ -17,6 +17,7 @@
+>  #include <linux/usb/typec_altmode.h>
+>  #include <linux/usb/role.h>
+>  #include <linux/workqueue.h>
+> +#include <linux/firmware.h>
+>  
+>  #include "tps6598x.h"
+>  #include "trace.h"
+> @@ -43,6 +44,23 @@
+>  /* TPS_REG_SYSTEM_CONF bits */
+>  #define TPS_SYSCONF_PORTINFO(c)		((c) & 7)
+>  
+> +/*
+> + * BPMs task timeout, recommended 5 seconds
+> + * pg.48 TPS2575 Host Interface Technical Reference
+> + * Manual (Rev. A)
+> + * https://www.ti.com/lit/ug/slvuc05a/slvuc05a.pdf
+> + */
+> +#define TPS_BUNDLE_TIMEOUT	0x32
+> +
+> +/* BPMs return code */
+> +#define TPS_TASK_BPMS_INVALID_BUNDLE_SIZE	0x4
+> +#define TPS_TASK_BPMS_INVALID_SLAVE_ADDR	0x5
+> +#define TPS_TASK_BPMS_INVALID_TIMEOUT		0x6
+> +
+> +/* PBMc data out */
+> +#define TPS_PBMC_RC	0 /* Return code */
+> +#define TPS_PBMC_DPCS	2 /* device patch complete status */
+> +
+>  enum {
+>  	TPS_PORTINFO_SINK,
+>  	TPS_PORTINFO_SINK_ACCESSORY,
+> @@ -713,6 +731,213 @@ static int devm_tps6598_psy_register(struct tps6598x *tps)
+>  	return PTR_ERR_OR_ZERO(tps->psy);
+>  }
+>  
+> +static int
+> +tps25750_write_firmware(struct tps6598x *tps,
+> +			u8 bpms_addr, const u8 *data, size_t len)
+> +{
+> +	struct i2c_client *client = to_i2c_client(tps->dev);
+> +	int ret;
+> +	u8 slave_addr;
+> +	int timeout;
+> +
+> +	slave_addr = client->addr;
+> +	timeout = client->adapter->timeout;
+> +
+> +	/*
+> +	 * binary configuration size is around ~16Kbytes
+> +	 * which might take some time to finish writing it
+> +	 */
+> +	client->adapter->timeout = msecs_to_jiffies(5000);
+> +	client->addr = bpms_addr;
+> +
+> +	ret = regmap_raw_write(tps->regmap, data[0], &data[1], len - 1);
+> +
+> +	client->addr = slave_addr;
+> +	client->adapter->timeout = timeout;
+> +
+> +	return ret;
+> +}
+> +
+> +static int
+> +tps25750_exec_pbms(struct tps6598x *tps, u8 *in_data, size_t in_len)
+> +{
+> +	int ret;
+> +	u8 rc;
+> +
+> +	ret = tps6598x_exec_cmd_tmo(tps, "PBMs", in_len, in_data,
+> +				    sizeof(rc), &rc, 4000, 0);
+> +	if (ret)
+> +		return ret;
+> +
+> +	switch (rc) {
+> +	case TPS_TASK_BPMS_INVALID_BUNDLE_SIZE:
+> +		dev_err(tps->dev, "%s: invalid fw size\n", __func__);
+> +		return -EINVAL;
+> +	case TPS_TASK_BPMS_INVALID_SLAVE_ADDR:
+> +		dev_err(tps->dev, "%s: invalid slave address\n", __func__);
+> +		return -EINVAL;
+> +	case TPS_TASK_BPMS_INVALID_TIMEOUT:
+> +		dev_err(tps->dev, "%s: timed out\n", __func__);
+> +		return -ETIMEDOUT;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int tps25750_abort_patch_process(struct tps6598x *tps)
+> +{
+> +	int ret;
+> +
+> +	ret = tps6598x_exec_cmd(tps, "PBMe", 0, NULL, 0, NULL);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = tps6598x_check_mode(tps);
+> +	if (ret != TPS_MODE_PTCH)
+> +		dev_err(tps->dev, "failed to switch to \"PTCH\" mode\n");
+> +
+> +	return ret;
+> +}
+> +
+> +static int tps25750_start_patch_burst_mode(struct tps6598x *tps)
+> +{
+> +	int ret;
+> +	const struct firmware *fw;
+> +	const char *firmware_name;
+> +	struct {
+> +		u32 fw_size;
+> +		u8 addr;
+> +		u8 timeout;
+> +	} __packed bpms_data;
+> +	u32 addr;
+> +	struct device_node *np = tps->dev->of_node;
+> +
+> +	ret = device_property_read_string(tps->dev, "firmware-name",
+> +					  &firmware_name);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = request_firmware(&fw, firmware_name, tps->dev);
+> +	if (ret) {
+> +		dev_err(tps->dev, "failed to retrieve \"%s\"\n", firmware_name);
+> +		return ret;
+> +	}
+> +
+> +	if (fw->size == 0) {
+> +		ret = -EINVAL;
+> +		goto release_fw;
+> +	}
+> +
+> +	ret = of_property_match_string(np, "reg-names", "patch-address");
+> +	if (ret < 0) {
+> +		dev_err(tps->dev, "failed to get patch-address %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = of_property_read_u32_index(np, "reg", ret, &addr);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (addr == 0 || (addr >= 0x20 && addr <= 0x23)) {
+> +		dev_err(tps->dev, "wrong patch address %u\n", addr);
+> +		return -EINVAL;
+> +	}
+> +
+> +	bpms_data.addr = (u8)addr;
+> +	bpms_data.fw_size = fw->size;
+> +	bpms_data.timeout = TPS_BUNDLE_TIMEOUT;
+> +
+> +	ret = tps25750_exec_pbms(tps, (u8 *)&bpms_data, sizeof(bpms_data));
+> +	if (ret)
+> +		goto release_fw;
+> +
+> +	ret = tps25750_write_firmware(tps, bpms_data.addr, fw->data, fw->size);
+> +	if (ret) {
+> +		dev_err(tps->dev, "Failed to write patch %s of %zu bytes\n",
+> +			firmware_name, fw->size);
+> +		goto release_fw;
+> +	}
+> +
+> +	/*
+> +	 * A delay of 500us is required after the firmware is written
+> +	 * based on pg.62 in tps6598x Host Interface Technical
+> +	 * Reference Manual
+> +	 * https://www.ti.com/lit/ug/slvuc05a/slvuc05a.pdf
+> +	 */
+> +	udelay(500);
+> +
+> +release_fw:
+> +	release_firmware(fw);
+> +
+> +	return ret;
+> +}
+> +
+> +static int tps25750_complete_patch_process(struct tps6598x *tps)
+> +{
+> +	int ret;
+> +	u8 out_data[40];
+> +	u8 dummy[2] = { };
+> +
+> +	/*
+> +	 * Without writing something to DATA_IN, this command would
+> +	 * return an error
+> +	 */
+> +	ret = tps6598x_exec_cmd_tmo(tps, "PBMc", sizeof(dummy), dummy,
+> +				    sizeof(out_data), out_data, 2000, 20);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (out_data[TPS_PBMC_RC]) {
+> +		dev_err(tps->dev,
+> +			"%s: pbmc failed: %u\n", __func__,
+> +			out_data[TPS_PBMC_RC]);
+> +		return -EIO;
+> +	}
+> +
+> +	if (out_data[TPS_PBMC_DPCS]) {
+> +		dev_err(tps->dev,
+> +			"%s: failed device patch complete status: %u\n",
+> +			__func__, out_data[TPS_PBMC_DPCS]);
+> +		return -EIO;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int tps25750_apply_patch(struct tps6598x *tps)
+> +{
+> +	int ret;
+> +	unsigned long timeout;
+> +
+> +	ret = tps25750_start_patch_burst_mode(tps);
+> +	if (ret) {
+> +		tps25750_abort_patch_process(tps);
+> +		return ret;
+> +	}
+> +
+> +	ret = tps25750_complete_patch_process(tps);
+> +	if (ret)
+> +		return ret;
+> +
+> +	timeout = jiffies + msecs_to_jiffies(1000);
+> +
+> +	do {
+> +		ret = tps6598x_check_mode(tps);
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		if (time_is_before_jiffies(timeout))
+> +			return -ETIMEDOUT;
+> +
+> +	} while (ret != TPS_MODE_APP);
+> +
+> +	dev_info(tps->dev, "controller switched to \"APP\" mode\n");
+> +
+> +	return 0;
+> +};
+> +
+>  static int tps6598x_probe(struct i2c_client *client)
+>  {
+>  	irq_handler_t irq_handler = tps6598x_interrupt;
+> @@ -725,6 +950,7 @@ static int tps6598x_probe(struct i2c_client *client)
+>  	u32 vid;
+>  	int ret;
+>  	u64 mask1;
+> +	bool is_tps25750;
+>  
+>  	tps = devm_kzalloc(&client->dev, sizeof(*tps), GFP_KERNEL);
+>  	if (!tps)
+> @@ -737,9 +963,12 @@ static int tps6598x_probe(struct i2c_client *client)
+>  	if (IS_ERR(tps->regmap))
+>  		return PTR_ERR(tps->regmap);
+>  
+> -	ret = tps6598x_read32(tps, TPS_REG_VID, &vid);
+> -	if (ret < 0 || !vid)
+> -		return -ENODEV;
+> +	is_tps25750 = of_device_is_compatible(np, "ti,tps25750");
+
+Please use the unified device property interface everywhere possible
+so the support is ready for ACPI too. So:
+
+        device_is_compatible(tps->dev, "ti,tps25750")
+
+> +	if (!is_tps25750) {
+> +		ret = tps6598x_read32(tps, TPS_REG_VID, &vid);
+> +		if (ret < 0 || !vid)
+> +			return -ENODEV;
+> +	}
+>  
+>  	/*
+>  	 * Checking can the adapter handle SMBus protocol. If it can not, the
+> @@ -773,9 +1002,15 @@ static int tps6598x_probe(struct i2c_client *client)
+>  	if (ret < 0)
+>  		return ret;
+>  
+> +	if (is_tps25750 && ret == TPS_MODE_PTCH) {
+> +		ret = tps25750_apply_patch(tps);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+>  	ret = tps6598x_write64(tps, TPS_REG_INT_MASK1, mask1);
+>  	if (ret)
+> -		return ret;
+> +		goto err_reset_controller;
+>  
+>  	ret = tps6598x_read32(tps, TPS_REG_STATUS, &status);
+>  	if (ret < 0)
+> @@ -895,19 +1130,29 @@ static int tps6598x_probe(struct i2c_client *client)
+>  	fwnode_handle_put(fwnode);
+>  err_clear_mask:
+>  	tps6598x_write64(tps, TPS_REG_INT_MASK1, 0);
+> +err_reset_controller:
+> +	/* Reset PD controller to remove any applied patch */
+> +	if (is_tps25750)
+> +		tps6598x_exec_cmd_tmo(tps, "GAID", 0, NULL, 0, NULL, 2000, 0);
+>  	return ret;
+>  }
+>  
+>  static void tps6598x_remove(struct i2c_client *client)
+>  {
+>  	struct tps6598x *tps = i2c_get_clientdata(client);
+> +	struct device_node *np = client->dev.of_node;
+>  
+>  	if (!client->irq)
+>  		cancel_delayed_work_sync(&tps->wq_poll);
+>  
+> +	devm_free_irq(tps->dev, client->irq, tps);
+>  	tps6598x_disconnect(tps, 0);
+>  	typec_unregister_port(tps->port);
+>  	usb_role_switch_put(tps->role_sw);
+> +
+> +	/* Reset PD controller to remove any applied patch */
+> +	if (of_device_is_compatible(np, "ti,tps25750"))
+
+Ditto.
+
+> +		tps6598x_exec_cmd_tmo(tps, "GAID", 0, NULL, 0, NULL, 2000, 0);
+>  }
+>  
+>  static int __maybe_unused tps6598x_suspend(struct device *dev)
+> @@ -950,6 +1195,7 @@ static const struct dev_pm_ops tps6598x_pm_ops = {
+>  static const struct of_device_id tps6598x_of_match[] = {
+>  	{ .compatible = "ti,tps6598x", },
+>  	{ .compatible = "apple,cd321x", },
+> +	{ .compatible = "ti,tps25750", },
+>  	{}
+>  };
+>  MODULE_DEVICE_TABLE(of, tps6598x_of_match);
+
+thanks,
+
+-- 
+heikki
 
