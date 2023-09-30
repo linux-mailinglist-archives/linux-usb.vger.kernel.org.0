@@ -1,61 +1,61 @@
-Return-Path: <linux-usb+bounces-829-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-830-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C488E7B4153
-	for <lists+linux-usb@lfdr.de>; Sat, 30 Sep 2023 16:58:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 421257B4156
+	for <lists+linux-usb@lfdr.de>; Sat, 30 Sep 2023 16:59:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 472BA282E2E
-	for <lists+linux-usb@lfdr.de>; Sat, 30 Sep 2023 14:58:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id E2B7A282FBE
+	for <lists+linux-usb@lfdr.de>; Sat, 30 Sep 2023 14:59:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 899941641D;
-	Sat, 30 Sep 2023 14:58:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34DB51641B;
+	Sat, 30 Sep 2023 14:59:16 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D55B16400
-	for <linux-usb@vger.kernel.org>; Sat, 30 Sep 2023 14:58:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98A24F9D5
+	for <linux-usb@vger.kernel.org>; Sat, 30 Sep 2023 14:59:14 +0000 (UTC)
 Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 496C4C2
-	for <linux-usb@vger.kernel.org>; Sat, 30 Sep 2023 07:58:31 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-9b2a3fd5764so1098597666b.3
-        for <linux-usb@vger.kernel.org>; Sat, 30 Sep 2023 07:58:31 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA87BD
+	for <linux-usb@vger.kernel.org>; Sat, 30 Sep 2023 07:59:12 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-9ad8a822508so2083840666b.0
+        for <linux-usb@vger.kernel.org>; Sat, 30 Sep 2023 07:59:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696085910; x=1696690710; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1696085951; x=1696690751; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=XhRNLpTtFuwflO9fICmWPN+t7DhTdGCrswb6CHsVjHM=;
-        b=rwl+YwMzHKr+zObCsHxuh/XBCicl8O83O+C/JBo60hdjTJSb+CaJkYxbIZQf1fFiXS
-         r7HxoxMnaGjf7n2oTLeIvuL3dOM90S5ECnSWFSdOQs4HXZT36IGbLonbqorBaWu4DLlC
-         idZ1ZQA+CCYhYZPVU0RexKYI9vn1yjfc2svo9aakhbTBcXoa9qHOtNDS1uh8N2n9c2b5
-         q/A9X8+LSobnO+JKaoowfnx8SmHtUvkyO0S660OrToMnX5qzrjEyxbjcltA1o3qe0qp5
-         kPZty/mtMFDm23YQi7WGdSDbzmZZH7u83IEtupYGy8TqsulZIMHVcEQg5e8uNLffsDQm
-         sNsg==
+        bh=E9B2kQ3iq7p4VksKg+DkVqKQqg7HQD9C40iD0MzBios=;
+        b=TjSW2LIEfbZZvkgS8jo/F8yVBIY8SzyrkboP8EyM3o2pH01Iugoc2ymhdTWNZ9mWzb
+         nuaZBH3F3dHZ1Bi3ynPE7UOePWwLWPXA/nvLdQtYI0n1f98pi4jauWfDG2PO+OLUFUVn
+         H0GKiDBiaq8QvDlvpFI30boa1rsKgM3V5q11nikN7owXTbBY891J47/KEiKDfWbPdOP1
+         jlb6WqTQQSEq01CqlVH//FkY0/jyC6o1H9RNZzw43WTjocBGS2p5roeWg9qb2xdx4BgA
+         CgbCPwsubCilGAYdnC03RSXtHnIywai/HCjii+7qOYs03iDB0UPPoa8nT8iDvIx28ggt
+         D55A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696085910; x=1696690710;
+        d=1e100.net; s=20230601; t=1696085951; x=1696690751;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XhRNLpTtFuwflO9fICmWPN+t7DhTdGCrswb6CHsVjHM=;
-        b=cYaz8eHDK90+afweVLM6ivEGbEil26+p+iKEjuwBEHG9SUmA5GizqmpGnc6O3VxK6f
-         CtGrXvkT2P1CSSaH7i7+k7nfr6QLxlDX76frCnRxAremyyymZXgmSWcyceDutvXjRyG6
-         JSS8lDPrID0kPNyVY8FPH5IeGxnWCMmeFvYGZpd8H+bOb4I1rX5t06Ysql47iTYtfxYf
-         5jKfU4toXbIukhhZy8yZpvoLt7eN5jE/r7UDj/+M9HwmFtf7fkNEzU14EVXyiVi2e5P0
-         GMB7PMtfeKauK4SEv2yosbogGHUmPx5cSV9AxYzzANQm7bQnm85wdscHfaPEZ9S8JE6a
-         ctzQ==
-X-Gm-Message-State: AOJu0Yx5qgIcWEyM5HNC+GVunDaYW7SukAWDirC0wlO3SC5GBpbsOs2w
-	hayj5HVJtL5k+XmI7fB2fy7fcQ==
-X-Google-Smtp-Source: AGHT+IGgy0NCDnxbJzLbMBSjHYuDIDJMISktLeNJAlYutBLBnGDy3EWZDQErpt0F7vKRkY6o3CqJxA==
-X-Received: by 2002:a17:906:3045:b0:9ae:3f7a:f777 with SMTP id d5-20020a170906304500b009ae3f7af777mr6597015ejd.9.1696085909774;
-        Sat, 30 Sep 2023 07:58:29 -0700 (PDT)
+        bh=E9B2kQ3iq7p4VksKg+DkVqKQqg7HQD9C40iD0MzBios=;
+        b=ADxbARGWr4HFoVx4JAXTPn3ZSBeCDEYPz6cDSYY33EtU/Ahw4c97gW7eaOtro6Rwz3
+         dlE+2VTg5nVtEkc1nYpgkExHsOg/O3DqXSGp6FptWhmy7WT81Hs/01Y2xHyy0Vj7MFpG
+         332pXT57YhdZbJRoR+2hCeBgCvlmljT4qJqmDcUuxeXdMvhkniofAnyrKPhDZhpvycE0
+         OVeg1MXfNaU9Rwg20gJ4to0pMRhfPzJGNPQGcN08mm5xrBzq1NaJCSCOBDFZoUfOu3KY
+         dMzOzaFqfnN/Hh2FSDgSW77OLbuKglo9rsaYsjAFJ/a1yrzp0wqKSe1gDUfPZKLxnAS8
+         z77g==
+X-Gm-Message-State: AOJu0YzrA65LlofEE+ahogoKueY7ZTnqGFKHMDp3KUQRO0MFD0V0B4D9
+	EJkACzJmPvGUbGZr5G36En7kAQ==
+X-Google-Smtp-Source: AGHT+IH8axa7dnIe/xIWnpxdeRWUiiB26wu/xYmyDnj8UsBBSyQfBUqmeJcpXQ3QelVnDtcM41ngvg==
+X-Received: by 2002:a17:906:8a7a:b0:9ae:3d75:4c83 with SMTP id hy26-20020a1709068a7a00b009ae3d754c83mr6332082ejc.0.1696085951513;
+        Sat, 30 Sep 2023 07:59:11 -0700 (PDT)
 Received: from [192.168.8.76] ([88.154.47.206])
-        by smtp.gmail.com with ESMTPSA id qk7-20020a1709077f8700b009b2b4385db7sm5662953ejc.92.2023.09.30.07.58.19
+        by smtp.gmail.com with ESMTPSA id qk7-20020a1709077f8700b009b2b4385db7sm5662953ejc.92.2023.09.30.07.59.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 30 Sep 2023 07:58:29 -0700 (PDT)
-Message-ID: <854412b9-4993-45a4-b935-037b3b6b9666@linaro.org>
-Date: Sat, 30 Sep 2023 16:58:19 +0200
+        Sat, 30 Sep 2023 07:59:11 -0700 (PDT)
+Message-ID: <99fa3e43-2202-44d4-ae45-0b47568a5758@linaro.org>
+Date: Sat, 30 Sep 2023 16:59:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -63,8 +63,7 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/8] dt-bindings: usb: dwc3: Add clocks on Qualcomm
- IPQ5332
+Subject: Re: [PATCH 8/8] arm64: defconfig: Enable qcom USB UNIPHY driver
 Content-Language: en-US
 To: Praveenkumar I <quic_ipkumar@quicinc.com>, agross@kernel.org,
  andersson@kernel.org, konrad.dybcio@linaro.org, vkoul@kernel.org,
@@ -80,7 +79,7 @@ To: Praveenkumar I <quic_ipkumar@quicinc.com>, agross@kernel.org,
 Cc: quic_kathirav@quicinc.com, quic_nsekar@quicinc.com,
  quic_srichara@quicinc.com
 References: <20230929084209.3033093-1-quic_ipkumar@quicinc.com>
- <20230929084209.3033093-5-quic_ipkumar@quicinc.com>
+ <20230929084209.3033093-9-quic_ipkumar@quicinc.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -126,7 +125,7 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20230929084209.3033093-5-quic_ipkumar@quicinc.com>
+In-Reply-To: <20230929084209.3033093-9-quic_ipkumar@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -137,14 +136,30 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
 On 29/09/2023 10:42, Praveenkumar I wrote:
-> Add aux and lfps clocks in Qualcomm IPQ5332. These clocks are required
-> for USB Super-Speed support.
+> Enable USB UNIPHY driver present in Qualcomm IPQ5332.
 > 
 > Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
 > ---
 
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+---
+
+This is an automated instruction, just in case, because many review tags
+are being ignored. If you know the process, you can skip it (please do
+not feel offended by me posting it here - no bad intentions intended).
+If you do not know the process, here is a short explanation:
+
+Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+versions, under or above your Signed-off-by tag. Tag is "received", when
+provided in a message replied to you on the mailing list. Tools like b4
+can help here. However, there's no need to repost patches *only* to add
+the tags. The upstream maintainer will do that for tags received on the
+version they apply.
+
+https://elixir.bootlin.com/linux/v6.5-rc3/source/Documentation/process/submitting-patches.rst#L577
 
 Best regards,
 Krzysztof
