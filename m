@@ -1,152 +1,220 @@
-Return-Path: <linux-usb+bounces-831-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-832-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B71947B4188
-	for <lists+linux-usb@lfdr.de>; Sat, 30 Sep 2023 17:15:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B9FF27B419F
+	for <lists+linux-usb@lfdr.de>; Sat, 30 Sep 2023 17:31:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 62C252819D0
-	for <lists+linux-usb@lfdr.de>; Sat, 30 Sep 2023 15:15:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 6B515283488
+	for <lists+linux-usb@lfdr.de>; Sat, 30 Sep 2023 15:31:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9804D168B5;
-	Sat, 30 Sep 2023 15:15:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5315171AD;
+	Sat, 30 Sep 2023 15:31:15 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10E71168C4
-	for <linux-usb@vger.kernel.org>; Sat, 30 Sep 2023 15:15:44 +0000 (UTC)
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A209E6
-	for <linux-usb@vger.kernel.org>; Sat, 30 Sep 2023 08:15:41 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-9a64619d8fbso2096307966b.0
-        for <linux-usb@vger.kernel.org>; Sat, 30 Sep 2023 08:15:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696086940; x=1696691740; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+fXRoDaX0snspyq4l607eMGlityCwt18ZoAYpwalNb8=;
-        b=LjcpViL+IdwwvlmOqWnLf+HkKB0qwGhIVm7Voqra342x9YG5I796eFL2zZfZwwJvlv
-         37a0LQpR1MAY1pzsKL3jStVIU05T2aNW6O7MTTG/U0bKoozuT3JPEvJYYM8ls0qS3MkS
-         69G4JLbLW3IYOhN8K7cRBWdvEc59mvlA2rWcd3lKWLVe/+UsZnS5wf+n8J/EiAbNsbmO
-         79TgCem8yNHB+T6R4LiaC50PfhFk/A92671ok1UFolNy4CEow2hsVGutjsrESFZ8IuaH
-         ZyiHEE8uy33SNjhX7491fNDPlodcPfzNtpND2hc0l+0NB0vpSX0UdmA6ueibePRocoBu
-         wZxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696086940; x=1696691740;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+fXRoDaX0snspyq4l607eMGlityCwt18ZoAYpwalNb8=;
-        b=TGeaTfpt5di5N31J3ZCGqdrcBCAphnKkWajPcYoXqGrsCnDm4C7ms+suct6XQ5AKzs
-         vpdVR5AERvzvV/1Bucv4QrNQQ82boATs4IdlIsKJeTFsIJHnCQ1udsPgsltgAFAMdKMe
-         Kh4iGGFIWHFUFHKcEL9RClHxyFJIs2DTc6h+Vomej83igAYJ90eeMNoAPfY4drdr7Xsr
-         KQiwuCS/gAwWpdqv9kgWn6oXlViVvor2XIGcOocXSsYZd1d1WG0uqcKst14S6A1oiRvY
-         hJWiAWUxNZRoPYiCZME4d3oviu/WvkIAY3REWQ5PdZS+HaS9eWc0IFaQK1OHfHdtsiGr
-         lzAQ==
-X-Gm-Message-State: AOJu0YzvoNGmAWM12HPfjt+zQR7reFSXHt6C2nwCoEn5lQlcr+Ov35x5
-	9R8uT8QrI6h5dMsQUhbZhC7UYA==
-X-Google-Smtp-Source: AGHT+IHNDPy3eVGPn0y2OTgpHlreF2eOAWezCw/yLQIp6Gy2OLzTYklgm+hu0TofJPlCs0sdHWAp3w==
-X-Received: by 2002:a17:906:191:b0:9ae:4ead:6c06 with SMTP id 17-20020a170906019100b009ae4ead6c06mr7096918ejb.30.1696086939662;
-        Sat, 30 Sep 2023 08:15:39 -0700 (PDT)
-Received: from [192.168.8.76] ([88.155.247.88])
-        by smtp.gmail.com with ESMTPSA id lu8-20020a170906fac800b00997cce73cc7sm13953774ejb.29.2023.09.30.08.15.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 30 Sep 2023 08:15:39 -0700 (PDT)
-Message-ID: <4349c714-a49b-4814-81d1-b0bb6120f34b@linaro.org>
-Date: Sat, 30 Sep 2023 17:15:31 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83B4DF9CF
+	for <linux-usb@vger.kernel.org>; Sat, 30 Sep 2023 15:31:13 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB79BE;
+	Sat, 30 Sep 2023 08:31:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696087869; x=1727623869;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=RAtMpypnsWT2vx45TMUTuDf6gaWWE9XuH2lm3ppYvGQ=;
+  b=WeBpGdYpYq0RtQfI1b9eoG+fCR5bGDqyH/4uvHsLlsG1vmrGsirVmoGq
+   ozKdKBDBCDn6f8ivoDwEvgFUr88ycu9u0EXDyjs2EFMxiKs1lSPg31VB6
+   febaENDNLxPpm4fe1ojPGPlGQ/h4QhjsHqsfEM1kySbNi2FfFPe7uY9v+
+   3/y4vZg2VBWY8yMjNRe+8uiVCX+B7QXCDCmaEnVmRtsnD/mSoPL18L4US
+   k2a6OzZ0rlw9kMwOyO7KCO2+L/hkogdJtZ7jmNOQ5saVyK4XAZb8SANnc
+   x4iyRW/M6K9u5C/iOZbOFRMMrxfaHgB+u0bst7OiQkDrR+GIK82aB1iQQ
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10849"; a="379734993"
+X-IronPort-AV: E=Sophos;i="6.03,190,1694761200"; 
+   d="scan'208";a="379734993"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2023 08:31:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10849"; a="923848527"
+X-IronPort-AV: E=Sophos;i="6.03,190,1694761200"; 
+   d="scan'208";a="923848527"
+Received: from lkp-server02.sh.intel.com (HELO c3b01524d57c) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 30 Sep 2023 08:31:05 -0700
+Received: from kbuild by c3b01524d57c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qmbvr-0004Ez-0U;
+	Sat, 30 Sep 2023 15:31:03 +0000
+Date: Sat, 30 Sep 2023 23:30:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: Abhinav <singhabhinav9051571833@gmail.com>, gregkh@linuxfoundation.org,
+	stern@rowland.harvard.edu, benjamin.tissoires@redhat.com,
+	mathias.nyman@linux.intel.com, hdegoede@redhat.com,
+	hadess@hadess.net
+Cc: oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, skhan@linuxfoundation.org,
+	Abhinav <singhabhinav9051571833@gmail.com>
+Subject: Re: [PATCH] fixed documentation warning about duplicate symbol
+Message-ID: <202309302312.Sk9H9aNZ-lkp@intel.com>
+References: <20230930123449.1170359-1-singhabhinav9051571833@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 1/3] dt-binding: usb: ulpi-phy: add ulpi-phy binding
-Content-Language: en-US
-To: Piyush Mehta <piyush.mehta@amd.com>, gregkh@linuxfoundation.org,
- michal.simek@amd.com, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
- conor+dt@kernel.org, peter.chen@kernel.org, linus.walleij@linaro.org,
- paul@crapouillou.net, arnd@arndb.de
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, git@amd.com
-References: <20230929064852.16642-1-piyush.mehta@amd.com>
- <20230929064852.16642-2-piyush.mehta@amd.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20230929064852.16642-2-piyush.mehta@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230930123449.1170359-1-singhabhinav9051571833@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On 29/09/2023 08:48, Piyush Mehta wrote:
-> Create an ulpi-phy binding to read and write PHY registers with explicit
-> control of the address and data using the usb.VIEWPORT register.
-> 
-> Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
+Hi Abhinav,
 
-Subject: dt-bindings, not dt-binding.
+kernel test robot noticed the following build errors:
 
-Please use subject prefixes matching the subsystem. You can get them for
-example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-your patch is touching.
-> ---
-> This binding patch was created to support generic platforms. This binding
-> will be modified in accordance with patch [3/3] procedures.
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on usb/usb-next usb/usb-linus johan-usb-serial/usb-next johan-usb-serial/usb-linus hid/for-next linus/master v6.6-rc3 next-20230929]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I don't understand this. How binding can be updated by further
-procedures? Your patch 3 is a driver, so how driver can modify a binding?
+url:    https://github.com/intel-lab-lkp/linux/commits/Abhinav/fixed-documentation-warning-about-duplicate-symbol/20230930-203554
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20230930123449.1170359-1-singhabhinav9051571833%40gmail.com
+patch subject: [PATCH] fixed documentation warning about duplicate symbol
+config: sh-defconfig (https://download.01.org/0day-ci/archive/20230930/202309302312.Sk9H9aNZ-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230930/202309302312.Sk9H9aNZ-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309302312.Sk9H9aNZ-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   drivers/hid/usbhid/hid-core.c: In function 'usbhid_probe':
+>> drivers/hid/usbhid/hid-core.c:1409:13: error: implicit declaration of function 'usb_string' [-Werror=implicit-function-declaration]
+    1409 |         if (usb_string(dev, dev->descriptor.iSerialNumber, hid->uniq, 64) <= 0)
+         |             ^~~~~~~~~~
+   cc1: some warnings being treated as errors
 
 
-Best regards,
-Krzysztof
+vim +/usb_string +1409 drivers/hid/usbhid/hid-core.c
 
+8c3e24065e3d37 drivers/hid/usbhid/hid-core.c Thomas Weißschuh 2022-12-22  1341  
+c4c259bcc27c42 drivers/hid/usbhid/hid-core.c Jiri Kosina      2009-09-15  1342  static int usbhid_probe(struct usb_interface *intf, const struct usb_device_id *id)
+^1da177e4c3f41 drivers/usb/input/hid-core.c  Linus Torvalds   2005-04-16  1343  {
+131d3a7a009d56 drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-11-14  1344  	struct usb_host_interface *interface = intf->cur_altsetting;
+c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1345  	struct usb_device *dev = interface_to_usbdev(intf);
+3d5afd324a4bf9 drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-10-27  1346  	struct usbhid_device *usbhid;
+^1da177e4c3f41 drivers/usb/input/hid-core.c  Linus Torvalds   2005-04-16  1347  	struct hid_device *hid;
+131d3a7a009d56 drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-11-14  1348  	unsigned int n, has_in = 0;
+c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1349  	size_t len;
+c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1350  	int ret;
+^1da177e4c3f41 drivers/usb/input/hid-core.c  Linus Torvalds   2005-04-16  1351  
+58037eb961f859 drivers/hid/usbhid/hid-core.c Jiri Kosina      2007-05-30  1352  	dbg_hid("HID probe called for ifnum %d\n",
+^1da177e4c3f41 drivers/usb/input/hid-core.c  Linus Torvalds   2005-04-16  1353  			intf->altsetting->desc.bInterfaceNumber);
+^1da177e4c3f41 drivers/usb/input/hid-core.c  Linus Torvalds   2005-04-16  1354  
+131d3a7a009d56 drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-11-14  1355  	for (n = 0; n < interface->desc.bNumEndpoints; n++)
+131d3a7a009d56 drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-11-14  1356  		if (usb_endpoint_is_int_in(&interface->endpoint[n].desc))
+131d3a7a009d56 drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-11-14  1357  			has_in++;
+131d3a7a009d56 drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-11-14  1358  	if (!has_in) {
+4291ee305e9bb0 drivers/hid/usbhid/hid-core.c Joe Perches      2010-12-09  1359  		hid_err(intf, "couldn't find an input interrupt endpoint\n");
+131d3a7a009d56 drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-11-14  1360  		return -ENODEV;
+131d3a7a009d56 drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-11-14  1361  	}
+131d3a7a009d56 drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-11-14  1362  
+c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1363  	hid = hid_allocate_device();
+c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1364  	if (IS_ERR(hid))
+c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1365  		return PTR_ERR(hid);
+^1da177e4c3f41 drivers/usb/input/hid-core.c  Linus Torvalds   2005-04-16  1366  
+^1da177e4c3f41 drivers/usb/input/hid-core.c  Linus Torvalds   2005-04-16  1367  	usb_set_intfdata(intf, hid);
+c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1368  	hid->ll_driver = &usb_hid_driver;
+76483cf4d0efbc drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-09-18  1369  	hid->ff_init = hid_pidff_init;
+c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1370  #ifdef CONFIG_USB_HIDDEV
+93c10132a7ac16 drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-06-27  1371  	hid->hiddev_connect = hiddev_connect;
+c4c259bcc27c42 drivers/hid/usbhid/hid-core.c Jiri Kosina      2009-09-15  1372  	hid->hiddev_disconnect = hiddev_disconnect;
+c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1373  	hid->hiddev_hid_event = hiddev_hid_event;
+c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1374  	hid->hiddev_report_event = hiddev_report_event;
+c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1375  #endif
+c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1376  	hid->dev.parent = &intf->dev;
+c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1377  	hid->bus = BUS_USB;
+c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1378  	hid->vendor = le16_to_cpu(dev->descriptor.idVendor);
+c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1379  	hid->product = le16_to_cpu(dev->descriptor.idProduct);
+d5158e020c4593 drivers/hid/usbhid/hid-core.c Niels Skou Olsen 2017-10-04  1380  	hid->version = le16_to_cpu(dev->descriptor.bcdDevice);
+c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1381  	hid->name[0] = 0;
+a73a63701f8f23 drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-10-22  1382  	if (intf->cur_altsetting->desc.bInterfaceProtocol ==
+a73a63701f8f23 drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-10-22  1383  			USB_INTERFACE_PROTOCOL_MOUSE)
+a73a63701f8f23 drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-10-22  1384  		hid->type = HID_TYPE_USBMOUSE;
+6dc1418e131441 drivers/hid/usbhid/hid-core.c Tomoki Sekiyama  2011-05-23  1385  	else if (intf->cur_altsetting->desc.bInterfaceProtocol == 0)
+6dc1418e131441 drivers/hid/usbhid/hid-core.c Tomoki Sekiyama  2011-05-23  1386  		hid->type = HID_TYPE_USBNONE;
+^1da177e4c3f41 drivers/usb/input/hid-core.c  Linus Torvalds   2005-04-16  1387  
+c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1388  	if (dev->manufacturer)
+eeeec27d682047 drivers/hid/usbhid/hid-core.c Wolfram Sang     2022-08-18  1389  		strscpy(hid->name, dev->manufacturer, sizeof(hid->name));
+^1da177e4c3f41 drivers/usb/input/hid-core.c  Linus Torvalds   2005-04-16  1390  
+c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1391  	if (dev->product) {
+c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1392  		if (dev->manufacturer)
+c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1393  			strlcat(hid->name, " ", sizeof(hid->name));
+c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1394  		strlcat(hid->name, dev->product, sizeof(hid->name));
+^1da177e4c3f41 drivers/usb/input/hid-core.c  Linus Torvalds   2005-04-16  1395  	}
+^1da177e4c3f41 drivers/usb/input/hid-core.c  Linus Torvalds   2005-04-16  1396  
+c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1397  	if (!strlen(hid->name))
+c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1398  		snprintf(hid->name, sizeof(hid->name), "HID %04x:%04x",
+c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1399  			 le16_to_cpu(dev->descriptor.idVendor),
+c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1400  			 le16_to_cpu(dev->descriptor.idProduct));
+^1da177e4c3f41 drivers/usb/input/hid-core.c  Linus Torvalds   2005-04-16  1401  
+c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1402  	usb_make_path(dev, hid->phys, sizeof(hid->phys));
+c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1403  	strlcat(hid->phys, "/input", sizeof(hid->phys));
+c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1404  	len = strlen(hid->phys);
+c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1405  	if (len < sizeof(hid->phys) - 1)
+c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1406  		snprintf(hid->phys + len, sizeof(hid->phys) - len,
+c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1407  			 "%d", intf->altsetting[0].desc.bInterfaceNumber);
+c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1408  
+c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16 @1409  	if (usb_string(dev, dev->descriptor.iSerialNumber, hid->uniq, 64) <= 0)
+c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1410  		hid->uniq[0] = 0;
+^1da177e4c3f41 drivers/usb/input/hid-core.c  Linus Torvalds   2005-04-16  1411  
+3d5afd324a4bf9 drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-10-27  1412  	usbhid = kzalloc(sizeof(*usbhid), GFP_KERNEL);
+3d5afd324a4bf9 drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-10-27  1413  	if (usbhid == NULL) {
+3d5afd324a4bf9 drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-10-27  1414  		ret = -ENOMEM;
+3d5afd324a4bf9 drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-10-27  1415  		goto err;
+3d5afd324a4bf9 drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-10-27  1416  	}
+3d5afd324a4bf9 drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-10-27  1417  
+3d5afd324a4bf9 drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-10-27  1418  	hid->driver_data = usbhid;
+3d5afd324a4bf9 drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-10-27  1419  	usbhid->hid = hid;
+57ab12e418ec4f drivers/hid/usbhid/hid-core.c Jiri Kosina      2010-02-17  1420  	usbhid->intf = intf;
+57ab12e418ec4f drivers/hid/usbhid/hid-core.c Jiri Kosina      2010-02-17  1421  	usbhid->ifnum = interface->desc.bInterfaceNumber;
+3d5afd324a4bf9 drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-10-27  1422  
+fde4e2f73208b8 drivers/hid/usbhid/hid-core.c Alan Stern       2010-05-07  1423  	init_waitqueue_head(&usbhid->wait);
+fde4e2f73208b8 drivers/hid/usbhid/hid-core.c Alan Stern       2010-05-07  1424  	INIT_WORK(&usbhid->reset_work, hid_reset);
+0ee32774aed648 drivers/hid/usbhid/hid-core.c Kees Cook        2017-10-04  1425  	timer_setup(&usbhid->io_retry, hid_retry_timeout, 0);
+fde4e2f73208b8 drivers/hid/usbhid/hid-core.c Alan Stern       2010-05-07  1426  	spin_lock_init(&usbhid->lock);
+0ed08faded1da0 drivers/hid/usbhid/hid-core.c Alan Stern       2020-04-22  1427  	mutex_init(&usbhid->mutex);
+fde4e2f73208b8 drivers/hid/usbhid/hid-core.c Alan Stern       2010-05-07  1428  
+85cdaf524b7dda drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1429  	ret = hid_add_device(hid);
+85cdaf524b7dda drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1430  	if (ret) {
+d458a9dfc4de24 drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1431  		if (ret != -ENODEV)
+4291ee305e9bb0 drivers/hid/usbhid/hid-core.c Joe Perches      2010-12-09  1432  			hid_err(intf, "can't add hid device: %d\n", ret);
+3d5afd324a4bf9 drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-10-27  1433  		goto err_free;
+85cdaf524b7dda drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1434  	}
+c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1435  
+c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1436  	return 0;
+3d5afd324a4bf9 drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-10-27  1437  err_free:
+3d5afd324a4bf9 drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-10-27  1438  	kfree(usbhid);
+c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1439  err:
+c500c9714011ed drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1440  	hid_destroy_device(hid);
+85cdaf524b7dda drivers/hid/usbhid/hid-core.c Jiri Slaby       2008-05-16  1441  	return ret;
+^1da177e4c3f41 drivers/usb/input/hid-core.c  Linus Torvalds   2005-04-16  1442  }
+^1da177e4c3f41 drivers/usb/input/hid-core.c  Linus Torvalds   2005-04-16  1443  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
