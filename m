@@ -1,61 +1,61 @@
-Return-Path: <linux-usb+bounces-828-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-829-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DA837B414E
-	for <lists+linux-usb@lfdr.de>; Sat, 30 Sep 2023 16:57:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C488E7B4153
+	for <lists+linux-usb@lfdr.de>; Sat, 30 Sep 2023 16:58:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 8015A28238E
-	for <lists+linux-usb@lfdr.de>; Sat, 30 Sep 2023 14:57:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 472BA282E2E
+	for <lists+linux-usb@lfdr.de>; Sat, 30 Sep 2023 14:58:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11DDF16418;
-	Sat, 30 Sep 2023 14:57:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 899941641D;
+	Sat, 30 Sep 2023 14:58:34 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57588F9D5
-	for <linux-usb@vger.kernel.org>; Sat, 30 Sep 2023 14:57:18 +0000 (UTC)
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A028C6
-	for <linux-usb@vger.kernel.org>; Sat, 30 Sep 2023 07:57:16 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-9ada2e6e75fso2143967466b.2
-        for <linux-usb@vger.kernel.org>; Sat, 30 Sep 2023 07:57:16 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D55B16400
+	for <linux-usb@vger.kernel.org>; Sat, 30 Sep 2023 14:58:33 +0000 (UTC)
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 496C4C2
+	for <linux-usb@vger.kernel.org>; Sat, 30 Sep 2023 07:58:31 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-9b2a3fd5764so1098597666b.3
+        for <linux-usb@vger.kernel.org>; Sat, 30 Sep 2023 07:58:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696085835; x=1696690635; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1696085910; x=1696690710; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=1xh7JD7J8zpmGRPBgU/lLHiIQCHWK0v040WJUddWCQA=;
-        b=Hp0ORsLsL1NOCyAVag8MyFcVEoDdRiKHr+wMi+w9tj35Un6ELxP13ay2Q9AXanNIX5
-         A4QE7cSoheC5V9a9DSbP7nqXxrIeeN3BmHZt0bUZgF3jVEwgW5PZHAaC75YcSDK+WRTZ
-         smXUv5OMViKsNhY93yuEtvbAPxmt9+KL+I1f9VXzxEpwuwunfVwfNQD91wP5gmNUDSVD
-         yTCwS5tpyj957GpY1GteXxntKoEnGTYPKw9wBOaTe5kl2dKfoIVJRsvGvhJ0WNzeDuLd
-         MXEuz1PVDWpxlrQuvCD6CxrhFzudoEXvZNQpkye8DnliOLszDBcymLSQB4/EIblaaNUv
-         NsoQ==
+        bh=XhRNLpTtFuwflO9fICmWPN+t7DhTdGCrswb6CHsVjHM=;
+        b=rwl+YwMzHKr+zObCsHxuh/XBCicl8O83O+C/JBo60hdjTJSb+CaJkYxbIZQf1fFiXS
+         r7HxoxMnaGjf7n2oTLeIvuL3dOM90S5ECnSWFSdOQs4HXZT36IGbLonbqorBaWu4DLlC
+         idZ1ZQA+CCYhYZPVU0RexKYI9vn1yjfc2svo9aakhbTBcXoa9qHOtNDS1uh8N2n9c2b5
+         q/A9X8+LSobnO+JKaoowfnx8SmHtUvkyO0S660OrToMnX5qzrjEyxbjcltA1o3qe0qp5
+         kPZty/mtMFDm23YQi7WGdSDbzmZZH7u83IEtupYGy8TqsulZIMHVcEQg5e8uNLffsDQm
+         sNsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696085835; x=1696690635;
+        d=1e100.net; s=20230601; t=1696085910; x=1696690710;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1xh7JD7J8zpmGRPBgU/lLHiIQCHWK0v040WJUddWCQA=;
-        b=im4+rI3iPy+2gxT1RlRp539FK0MSGptphvYhufE2tbK/R8bw+bVPNMyKwZqEu5ZWkG
-         oJWKovIu8nnYQ4Bj5MGt1/67G5GR+u8GVG3DotzC/zIyybteXwYKybJA6kS+olyjFT3m
-         A4Lme4YGwfxMPY10mylOmzLwTRQ1dnz2BSR2EWkK48MIaUjemTVFLxDqA+Wy5oVDozVD
-         owHQhbKUKC3vcANyVqbpwcTBWhKZgSTxo9G2YNLL+yOOPOPuo8JKxsT9fHS47l8q5rC9
-         361rT1FtBWEnDZMAEo42DNQLMrpMi5T3jjQXFIWF93X4tkDwPGwNLYP0J5JtCK9G2zf0
-         tPIw==
-X-Gm-Message-State: AOJu0Yw57Mx/ZpsVDzkGV47wgXUhiasj8GeEfelxYZt8vW7achSpzq9n
-	bDbnOYyEMam8k20wzEpyAlyG0A==
-X-Google-Smtp-Source: AGHT+IGRIH3Pk0SH9A3fSEOxR16gLz5OwppYbC+heMMfgY+NPG+WVK/6RbqEX7fo2vBgcDyqkutC+Q==
-X-Received: by 2002:a17:906:8e:b0:9a1:e994:3440 with SMTP id 14-20020a170906008e00b009a1e9943440mr5206701ejc.4.1696085834699;
-        Sat, 30 Sep 2023 07:57:14 -0700 (PDT)
+        bh=XhRNLpTtFuwflO9fICmWPN+t7DhTdGCrswb6CHsVjHM=;
+        b=cYaz8eHDK90+afweVLM6ivEGbEil26+p+iKEjuwBEHG9SUmA5GizqmpGnc6O3VxK6f
+         CtGrXvkT2P1CSSaH7i7+k7nfr6QLxlDX76frCnRxAremyyymZXgmSWcyceDutvXjRyG6
+         JSS8lDPrID0kPNyVY8FPH5IeGxnWCMmeFvYGZpd8H+bOb4I1rX5t06Ysql47iTYtfxYf
+         5jKfU4toXbIukhhZy8yZpvoLt7eN5jE/r7UDj/+M9HwmFtf7fkNEzU14EVXyiVi2e5P0
+         GMB7PMtfeKauK4SEv2yosbogGHUmPx5cSV9AxYzzANQm7bQnm85wdscHfaPEZ9S8JE6a
+         ctzQ==
+X-Gm-Message-State: AOJu0Yx5qgIcWEyM5HNC+GVunDaYW7SukAWDirC0wlO3SC5GBpbsOs2w
+	hayj5HVJtL5k+XmI7fB2fy7fcQ==
+X-Google-Smtp-Source: AGHT+IGgy0NCDnxbJzLbMBSjHYuDIDJMISktLeNJAlYutBLBnGDy3EWZDQErpt0F7vKRkY6o3CqJxA==
+X-Received: by 2002:a17:906:3045:b0:9ae:3f7a:f777 with SMTP id d5-20020a170906304500b009ae3f7af777mr6597015ejd.9.1696085909774;
+        Sat, 30 Sep 2023 07:58:29 -0700 (PDT)
 Received: from [192.168.8.76] ([88.154.47.206])
-        by smtp.gmail.com with ESMTPSA id qk7-20020a1709077f8700b009b2b4385db7sm5662953ejc.92.2023.09.30.07.57.02
+        by smtp.gmail.com with ESMTPSA id qk7-20020a1709077f8700b009b2b4385db7sm5662953ejc.92.2023.09.30.07.58.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 30 Sep 2023 07:57:14 -0700 (PDT)
-Message-ID: <d1536449-d80b-4ee7-a3d8-ab68a67be986@linaro.org>
-Date: Sat, 30 Sep 2023 16:56:59 +0200
+        Sat, 30 Sep 2023 07:58:29 -0700 (PDT)
+Message-ID: <854412b9-4993-45a4-b935-037b3b6b9666@linaro.org>
+Date: Sat, 30 Sep 2023 16:58:19 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -63,8 +63,8 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/8] dt-bindings: phy: qcom,uniphy-usb: Document
- qcom,uniphy-usb phy
+Subject: Re: [PATCH 4/8] dt-bindings: usb: dwc3: Add clocks on Qualcomm
+ IPQ5332
 Content-Language: en-US
 To: Praveenkumar I <quic_ipkumar@quicinc.com>, agross@kernel.org,
  andersson@kernel.org, konrad.dybcio@linaro.org, vkoul@kernel.org,
@@ -80,7 +80,7 @@ To: Praveenkumar I <quic_ipkumar@quicinc.com>, agross@kernel.org,
 Cc: quic_kathirav@quicinc.com, quic_nsekar@quicinc.com,
  quic_srichara@quicinc.com
 References: <20230929084209.3033093-1-quic_ipkumar@quicinc.com>
- <20230929084209.3033093-2-quic_ipkumar@quicinc.com>
+ <20230929084209.3033093-5-quic_ipkumar@quicinc.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -126,93 +126,25 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20230929084209.3033093-2-quic_ipkumar@quicinc.com>
+In-Reply-To: <20230929084209.3033093-5-quic_ipkumar@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
 On 29/09/2023 10:42, Praveenkumar I wrote:
-> Document the Qualcomm USB3 22ull UNIPHY present in IPQ5332.
+> Add aux and lfps clocks in Qualcomm IPQ5332. These clocks are required
+> for USB Super-Speed support.
 > 
 > Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
 > ---
->  .../bindings/phy/qcom,ipq5332-usb-uniphy.yaml | 83 +++++++++++++++++++
->  1 file changed, 83 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/phy/qcom,ipq5332-usb-uniphy.yaml
 
-Filename should match compatible.
 
-> 
-> diff --git a/Documentation/devicetree/bindings/phy/qcom,ipq5332-usb-uniphy.yaml b/Documentation/devicetree/bindings/phy/qcom,ipq5332-usb-uniphy.yaml
-> new file mode 100644
-> index 000000000000..90434cee9cdd
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/phy/qcom,ipq5332-usb-uniphy.yaml
-> @@ -0,0 +1,83 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/phy/qcom,ipq5332-usb-uniphy.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm USB Super-Speed UNIPHY
-> +
-> +maintainers:
-> +  - Praveenkumar I <quic_ipkumar@quicinc.com>
-> +  - Varadarajan Narayanan <quic_varada@quicinc.com>
-> +
-> +description:
-> +  USB Super-Speed UNIPHY found in Qualcomm IPQ5332, IPQ5018 SoCs.
-> +
-> +properties:
-> +  compatible:
-> +    items:
-
-Drop items, not needed.
-
-> +      - const: qcom,ipq5332-usb-ssphy
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 3
-> +
-> +  clock-names:
-> +    items:
-> +      - const: ahb
-> +      - const: cfg_ahb
-> +      - const: pipe
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  vdd-supply:
-> +    description:
-> +      Phandle to 5V regulator supply to PHY digital circuit.
-> +
-> +  qcom,phy-usb-mux-sel:
-> +    description: PHY Mux Selection for USB
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    items:
-> +      - items:
-> +          - description: phandle of TCSR syscon
-> +          - description: offset of PHY Mux selection register
-> +
-> +  "#clock-cells":
-> +    const: 0
-> +
-> +  clock-output-names:
-> +    maxItems: 1
-> +
-> +  "#phy-cells":
-> +    const: 0
-
-You miss required: block.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
