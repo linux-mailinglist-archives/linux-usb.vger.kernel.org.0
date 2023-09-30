@@ -1,61 +1,61 @@
-Return-Path: <linux-usb+bounces-830-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-831-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 421257B4156
-	for <lists+linux-usb@lfdr.de>; Sat, 30 Sep 2023 16:59:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B71947B4188
+	for <lists+linux-usb@lfdr.de>; Sat, 30 Sep 2023 17:15:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id E2B7A282FBE
-	for <lists+linux-usb@lfdr.de>; Sat, 30 Sep 2023 14:59:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 62C252819D0
+	for <lists+linux-usb@lfdr.de>; Sat, 30 Sep 2023 15:15:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34DB51641B;
-	Sat, 30 Sep 2023 14:59:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9804D168B5;
+	Sat, 30 Sep 2023 15:15:46 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98A24F9D5
-	for <linux-usb@vger.kernel.org>; Sat, 30 Sep 2023 14:59:14 +0000 (UTC)
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA87BD
-	for <linux-usb@vger.kernel.org>; Sat, 30 Sep 2023 07:59:12 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-9ad8a822508so2083840666b.0
-        for <linux-usb@vger.kernel.org>; Sat, 30 Sep 2023 07:59:12 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10E71168C4
+	for <linux-usb@vger.kernel.org>; Sat, 30 Sep 2023 15:15:44 +0000 (UTC)
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A209E6
+	for <linux-usb@vger.kernel.org>; Sat, 30 Sep 2023 08:15:41 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-9a64619d8fbso2096307966b.0
+        for <linux-usb@vger.kernel.org>; Sat, 30 Sep 2023 08:15:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696085951; x=1696690751; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1696086940; x=1696691740; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=E9B2kQ3iq7p4VksKg+DkVqKQqg7HQD9C40iD0MzBios=;
-        b=TjSW2LIEfbZZvkgS8jo/F8yVBIY8SzyrkboP8EyM3o2pH01Iugoc2ymhdTWNZ9mWzb
-         nuaZBH3F3dHZ1Bi3ynPE7UOePWwLWPXA/nvLdQtYI0n1f98pi4jauWfDG2PO+OLUFUVn
-         H0GKiDBiaq8QvDlvpFI30boa1rsKgM3V5q11nikN7owXTbBY891J47/KEiKDfWbPdOP1
-         jlb6WqTQQSEq01CqlVH//FkY0/jyC6o1H9RNZzw43WTjocBGS2p5roeWg9qb2xdx4BgA
-         CgbCPwsubCilGAYdnC03RSXtHnIywai/HCjii+7qOYs03iDB0UPPoa8nT8iDvIx28ggt
-         D55A==
+        bh=+fXRoDaX0snspyq4l607eMGlityCwt18ZoAYpwalNb8=;
+        b=LjcpViL+IdwwvlmOqWnLf+HkKB0qwGhIVm7Voqra342x9YG5I796eFL2zZfZwwJvlv
+         37a0LQpR1MAY1pzsKL3jStVIU05T2aNW6O7MTTG/U0bKoozuT3JPEvJYYM8ls0qS3MkS
+         69G4JLbLW3IYOhN8K7cRBWdvEc59mvlA2rWcd3lKWLVe/+UsZnS5wf+n8J/EiAbNsbmO
+         79TgCem8yNHB+T6R4LiaC50PfhFk/A92671ok1UFolNy4CEow2hsVGutjsrESFZ8IuaH
+         ZyiHEE8uy33SNjhX7491fNDPlodcPfzNtpND2hc0l+0NB0vpSX0UdmA6ueibePRocoBu
+         wZxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696085951; x=1696690751;
+        d=1e100.net; s=20230601; t=1696086940; x=1696691740;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=E9B2kQ3iq7p4VksKg+DkVqKQqg7HQD9C40iD0MzBios=;
-        b=ADxbARGWr4HFoVx4JAXTPn3ZSBeCDEYPz6cDSYY33EtU/Ahw4c97gW7eaOtro6Rwz3
-         dlE+2VTg5nVtEkc1nYpgkExHsOg/O3DqXSGp6FptWhmy7WT81Hs/01Y2xHyy0Vj7MFpG
-         332pXT57YhdZbJRoR+2hCeBgCvlmljT4qJqmDcUuxeXdMvhkniofAnyrKPhDZhpvycE0
-         OVeg1MXfNaU9Rwg20gJ4to0pMRhfPzJGNPQGcN08mm5xrBzq1NaJCSCOBDFZoUfOu3KY
-         dMzOzaFqfnN/Hh2FSDgSW77OLbuKglo9rsaYsjAFJ/a1yrzp0wqKSe1gDUfPZKLxnAS8
-         z77g==
-X-Gm-Message-State: AOJu0YzrA65LlofEE+ahogoKueY7ZTnqGFKHMDp3KUQRO0MFD0V0B4D9
-	EJkACzJmPvGUbGZr5G36En7kAQ==
-X-Google-Smtp-Source: AGHT+IH8axa7dnIe/xIWnpxdeRWUiiB26wu/xYmyDnj8UsBBSyQfBUqmeJcpXQ3QelVnDtcM41ngvg==
-X-Received: by 2002:a17:906:8a7a:b0:9ae:3d75:4c83 with SMTP id hy26-20020a1709068a7a00b009ae3d754c83mr6332082ejc.0.1696085951513;
-        Sat, 30 Sep 2023 07:59:11 -0700 (PDT)
-Received: from [192.168.8.76] ([88.154.47.206])
-        by smtp.gmail.com with ESMTPSA id qk7-20020a1709077f8700b009b2b4385db7sm5662953ejc.92.2023.09.30.07.59.00
+        bh=+fXRoDaX0snspyq4l607eMGlityCwt18ZoAYpwalNb8=;
+        b=TGeaTfpt5di5N31J3ZCGqdrcBCAphnKkWajPcYoXqGrsCnDm4C7ms+suct6XQ5AKzs
+         vpdVR5AERvzvV/1Bucv4QrNQQ82boATs4IdlIsKJeTFsIJHnCQ1udsPgsltgAFAMdKMe
+         Kh4iGGFIWHFUFHKcEL9RClHxyFJIs2DTc6h+Vomej83igAYJ90eeMNoAPfY4drdr7Xsr
+         KQiwuCS/gAwWpdqv9kgWn6oXlViVvor2XIGcOocXSsYZd1d1WG0uqcKst14S6A1oiRvY
+         hJWiAWUxNZRoPYiCZME4d3oviu/WvkIAY3REWQ5PdZS+HaS9eWc0IFaQK1OHfHdtsiGr
+         lzAQ==
+X-Gm-Message-State: AOJu0YzvoNGmAWM12HPfjt+zQR7reFSXHt6C2nwCoEn5lQlcr+Ov35x5
+	9R8uT8QrI6h5dMsQUhbZhC7UYA==
+X-Google-Smtp-Source: AGHT+IHNDPy3eVGPn0y2OTgpHlreF2eOAWezCw/yLQIp6Gy2OLzTYklgm+hu0TofJPlCs0sdHWAp3w==
+X-Received: by 2002:a17:906:191:b0:9ae:4ead:6c06 with SMTP id 17-20020a170906019100b009ae4ead6c06mr7096918ejb.30.1696086939662;
+        Sat, 30 Sep 2023 08:15:39 -0700 (PDT)
+Received: from [192.168.8.76] ([88.155.247.88])
+        by smtp.gmail.com with ESMTPSA id lu8-20020a170906fac800b00997cce73cc7sm13953774ejb.29.2023.09.30.08.15.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 30 Sep 2023 07:59:11 -0700 (PDT)
-Message-ID: <99fa3e43-2202-44d4-ae45-0b47568a5758@linaro.org>
-Date: Sat, 30 Sep 2023 16:59:00 +0200
+        Sat, 30 Sep 2023 08:15:39 -0700 (PDT)
+Message-ID: <4349c714-a49b-4814-81d1-b0bb6120f34b@linaro.org>
+Date: Sat, 30 Sep 2023 17:15:31 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -63,23 +63,16 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 8/8] arm64: defconfig: Enable qcom USB UNIPHY driver
+Subject: Re: [RFC PATCH 1/3] dt-binding: usb: ulpi-phy: add ulpi-phy binding
 Content-Language: en-US
-To: Praveenkumar I <quic_ipkumar@quicinc.com>, agross@kernel.org,
- andersson@kernel.org, konrad.dybcio@linaro.org, vkoul@kernel.org,
- kishon@kernel.org, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
- conor+dt@kernel.org, gregkh@linuxfoundation.org, catalin.marinas@arm.com,
- will@kernel.org, p.zabel@pengutronix.de, geert+renesas@glider.be,
- arnd@arndb.de, neil.armstrong@linaro.org, nfraprado@collabora.com,
- u-kumar1@ti.com, peng.fan@nxp.com, quic_wcheng@quicinc.com,
- quic_varada@quicinc.com, linux-arm-msm@vger.kernel.org,
- linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-Cc: quic_kathirav@quicinc.com, quic_nsekar@quicinc.com,
- quic_srichara@quicinc.com
-References: <20230929084209.3033093-1-quic_ipkumar@quicinc.com>
- <20230929084209.3033093-9-quic_ipkumar@quicinc.com>
+To: Piyush Mehta <piyush.mehta@amd.com>, gregkh@linuxfoundation.org,
+ michal.simek@amd.com, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+ conor+dt@kernel.org, peter.chen@kernel.org, linus.walleij@linaro.org,
+ paul@crapouillou.net, arnd@arndb.de
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, git@amd.com
+References: <20230929064852.16642-1-piyush.mehta@amd.com>
+ <20230929064852.16642-2-piyush.mehta@amd.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -125,41 +118,33 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20230929084209.3033093-9-quic_ipkumar@quicinc.com>
+In-Reply-To: <20230929064852.16642-2-piyush.mehta@amd.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-	version=3.4.6
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On 29/09/2023 10:42, Praveenkumar I wrote:
-> Enable USB UNIPHY driver present in Qualcomm IPQ5332.
+On 29/09/2023 08:48, Piyush Mehta wrote:
+> Create an ulpi-phy binding to read and write PHY registers with explicit
+> control of the address and data using the usb.VIEWPORT register.
 > 
-> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+> Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
+
+Subject: dt-bindings, not dt-binding.
+
+Please use subject prefixes matching the subsystem. You can get them for
+example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+your patch is touching.
 > ---
+> This binding patch was created to support generic platforms. This binding
+> will be modified in accordance with patch [3/3] procedures.
 
+I don't understand this. How binding can be updated by further
+procedures? Your patch 3 is a driver, so how driver can modify a binding?
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
----
-
-This is an automated instruction, just in case, because many review tags
-are being ignored. If you know the process, you can skip it (please do
-not feel offended by me posting it here - no bad intentions intended).
-If you do not know the process, here is a short explanation:
-
-Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-versions, under or above your Signed-off-by tag. Tag is "received", when
-provided in a message replied to you on the mailing list. Tools like b4
-can help here. However, there's no need to repost patches *only* to add
-the tags. The upstream maintainer will do that for tags received on the
-version they apply.
-
-https://elixir.bootlin.com/linux/v6.5-rc3/source/Documentation/process/submitting-patches.rst#L577
 
 Best regards,
 Krzysztof
