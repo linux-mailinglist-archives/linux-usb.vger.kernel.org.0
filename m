@@ -1,59 +1,59 @@
-Return-Path: <linux-usb+bounces-868-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-869-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 461B07B460B
-	for <lists+linux-usb@lfdr.de>; Sun,  1 Oct 2023 10:15:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D8F957B460E
+	for <lists+linux-usb@lfdr.de>; Sun,  1 Oct 2023 10:16:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id E63EB283917
-	for <lists+linux-usb@lfdr.de>; Sun,  1 Oct 2023 08:15:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 61E99283BB3
+	for <lists+linux-usb@lfdr.de>; Sun,  1 Oct 2023 08:15:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A2F4F9FE;
-	Sun,  1 Oct 2023 08:15:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5450814F62;
+	Sun,  1 Oct 2023 08:15:57 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 795D41401B;
-	Sun,  1 Oct 2023 08:15:48 +0000 (UTC)
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C197710CB;
-	Sun,  1 Oct 2023 01:15:39 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-9a64619d8fbso2167144966b.0;
-        Sun, 01 Oct 2023 01:15:39 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0ED2E55F;
+	Sun,  1 Oct 2023 08:15:55 +0000 (UTC)
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE20F1;
+	Sun,  1 Oct 2023 01:15:41 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-51e28cac164so4531738a12.1;
+        Sun, 01 Oct 2023 01:15:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696148137; x=1696752937; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1696148139; x=1696752939; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=IkM85K7qerliqFzrskzHsY1jjDj4Egep2EeBXa3H9HE=;
-        b=gch1OradbR+fiZ9SlpdYWH8ZKubY2lPJfhX4zq4U/LLwqrKJUlLEH0dgjzBlK09sZY
-         gcJYpQX2p7SBnw/7NPxkaxTVuSZh5twNRe6NfBFVSp2WtfuoCOFoA3iwKr6smA7n4w4u
-         qnk5JA7n+blxgjgnDpDQDW5jbj/8pMJH2diivSRYSBvtFB/AQKbQiiCptg0rLM/hWStW
-         idtGnbwuVXIg3gZ8R6DTegytdrCxNjqkSnzUOXfVT/sVYka5jJ/Bfwp9Q1FpOPxqWsHo
-         1l9K+Sym32nqNPf2U070qNxQnqRGSRcbx1miCeM9klqdWWuTwuEsYOQC0HGx3r/CUcyv
-         RPnA==
+        bh=kAQb2lcKCiK4nVCJ/kUlHxpo3G9oP8wSrjvkHy883UA=;
+        b=lj0Taukf8WEL+YYxaHBf39L0Im3oSE7WBl7vYlHkk+dTiIoHZ6yd8MSranORdF4PRU
+         DA/o8+4lx//teX02wjK+h0YFv+x9HiDyAeja6ouMPr8JDzosXaZ0dArId+tkYiBr72Zw
+         UT8+0f2zDRsiIJNYCEGDXr7XeEFusCprWzzBR4aEWdw8BIJJCtCJl8WbjipqjnutpRuN
+         Ne6305bSxoTp776EgEnIEZURWkKyu6clMw4JrCk1HEHAYIPVG2x50i1SSVN+o/A1KoA4
+         BZuMTUU1+xEB0dB5ZEdgUsPMRjIL/c83UwV6a9wJ1GNpvGm4dAqsz6ridbf6M4wB1PYs
+         l4jQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696148137; x=1696752937;
+        d=1e100.net; s=20230601; t=1696148139; x=1696752939;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=IkM85K7qerliqFzrskzHsY1jjDj4Egep2EeBXa3H9HE=;
-        b=XXF53XGGuHknnoNZeT4GNW1Via2gdY5UqG6SSKrFpFVFrqGM5drgceqW5ZYpkohgA5
-         VJ5jWMpwwhAyRVuoI1UaZ0UhFrgcO8JywIrBRWNF8WQDXeG6J0Uhf5d+4okowEViUGeJ
-         cb3OMKmleBCLTPnf31yCQddFbo2OFb1jOe5Xsw4X2CvaLjnT8ngRWeHOc2o1MOME4dyJ
-         gTT+2hIQQfct1Ortr7u6BjfofDLRfkc//fcdc5mEbhlB4xUXTIEzvWrwbyFpIt24MDnt
-         84lUd0xCTnwMQ4ml+EIoGcmFfxleENifRLfY5X+x46MWDq5jHWKZYkmP6790leHYXLMB
-         1icQ==
-X-Gm-Message-State: AOJu0YwRua+ahpJMI2mmsaGQT4SCtd8d9/qZmeHh969KPf1RMSgFwHgw
-	APoMYoJ8sor3eLQp/1uC4Vo=
-X-Google-Smtp-Source: AGHT+IFZmC3T+GeKC3raZwF0/26lL7wGXB0KrDbYdpLHZTyosIMefeTiPuApoZ5LQ1tisyOpOu59ig==
-X-Received: by 2002:a17:907:75d9:b0:9b2:7148:dd5e with SMTP id jl25-20020a17090775d900b009b27148dd5emr7884787ejc.16.1696148137458;
-        Sun, 01 Oct 2023 01:15:37 -0700 (PDT)
+        bh=kAQb2lcKCiK4nVCJ/kUlHxpo3G9oP8wSrjvkHy883UA=;
+        b=PjKJC0Vnd6gA6B+vlYvnBtVho0pFfpfmXL5lFJM6kSE+yjExycnB7VRp43+5x4OiPA
+         8zjWjb2DptN7qxIYxYhptcKUgsZfgz3bpwwUsvwe5RlrmMAl3iu8RVmr2SOUJm2TbqsU
+         TWZNMUI06KBU6mMJ+oTjj9MWm0tuQ8zqA0fDoBlxllvMSR+aIBxxaJIr5lyNtl7IwXVL
+         KnN3guKppSUQMLXd2fbCsGuTNlcqQug4hBfp0w9O2Mcop2gEJrDr7D3gO6r8v4kmduOO
+         gfYvky9Qd/1TFsPbE7bOzMOQRvs2mSV4/J+eNCRWZ9bX7danLacU0bzeXkNgtI46EXDU
+         EWgA==
+X-Gm-Message-State: AOJu0Yz5oq3OYQvKzBQVApDwOLJbQivh3svKcDScOZV1ujVGM8cdRBuT
+	yn8E25lZnZy4I8f2Yf7dP58=
+X-Google-Smtp-Source: AGHT+IEvXTyTWzFmFiUKoclhrxZvZ7tDtUKEKXNYPczB6yGGj5xDxqb9sARy6u1dxv8x7zeC5NNE4Q==
+X-Received: by 2002:a17:906:54:b0:9a2:295a:9bbc with SMTP id 20-20020a170906005400b009a2295a9bbcmr6556487ejg.37.1696148139314;
+        Sun, 01 Oct 2023 01:15:39 -0700 (PDT)
 Received: from primary.. ([213.139.52.198])
-        by smtp.gmail.com with ESMTPSA id e8-20020a170906374800b0099cf840527csm15121841ejc.153.2023.10.01.01.15.35
+        by smtp.gmail.com with ESMTPSA id e8-20020a170906374800b0099cf840527csm15121841ejc.153.2023.10.01.01.15.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Oct 2023 01:15:37 -0700 (PDT)
+        Sun, 01 Oct 2023 01:15:39 -0700 (PDT)
 From: Abdel Alkuor <alkuor@gmail.com>
 To: heikki.krogerus@linux.intel.com,
 	krzysztof.kozlowski+dt@linaro.org,
@@ -66,9 +66,9 @@ Cc: gregkh@linuxfoundation.org,
 	conor+dt@kernel.org,
 	devicetree@vger.kernel.org,
 	Abdel Alkuor <abdelalkuor@geotab.com>
-Subject: [PATCH v9 11/14] USB: typec: tps6598x: Enable sleep mode for tps25750
-Date: Sun,  1 Oct 2023 04:11:31 -0400
-Message-Id: <20231001081134.37101-12-alkuor@gmail.com>
+Subject: [PATCH v9 12/14] USB: typec: tps6598x: Add trace for tps25750 irq
+Date: Sun,  1 Oct 2023 04:11:32 -0400
+Message-Id: <20231001081134.37101-13-alkuor@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231001081134.37101-1-alkuor@gmail.com>
 References: <20231001081134.37101-1-alkuor@gmail.com>
@@ -88,8 +88,8 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 
 From: Abdel Alkuor <abdelalkuor@geotab.com>
 
-Allow controller to enter sleep mode after the device
-is idle for sleep time.
+tps25750 event1 register doesn't have all bits in tps6598x
+event registers, only show the events that are masked
 
 Signed-off-by: Abdel Alkuor <abdelalkuor@geotab.com>
 ---
@@ -99,83 +99,69 @@ Changes in v8:
   - No changes
 Changes in v7:
   - Add driver name to commit subject
+  - Call trace_tps25750_irq directly from tps25750 interrupt
+    handler
 Changes in v6:
-  - Use tps25750_init instead of tps25750_apply_patch in resume
-    as it initializes sleep mode
+  - Add trace irq to tipd callbacks factory
 Changes in v5:
   - Incorporating tps25750 into tps6598x driver
 
- drivers/usb/typec/tipd/core.c     | 23 +++++++++++++++++++++--
- drivers/usb/typec/tipd/tps6598x.h |  3 +++
- 2 files changed, 24 insertions(+), 2 deletions(-)
+ drivers/usb/typec/tipd/core.c  |  1 +
+ drivers/usb/typec/tipd/trace.h | 22 ++++++++++++++++++++++
+ 2 files changed, 23 insertions(+)
 
 diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-index ae08c5306707..ddb5db7d5855 100644
+index ddb5db7d5855..f775e479b92b 100644
 --- a/drivers/usb/typec/tipd/core.c
 +++ b/drivers/usb/typec/tipd/core.c
-@@ -43,6 +43,7 @@
- #define TPS_REG_PD_STATUS		0x40
- #define TPS_REG_RX_IDENTITY_SOP		0x48
- #define TPS_REG_DATA_STATUS		0x5f
-+#define TPS_REG_SLEEP_CONF		0x70
- 
- /* TPS_REG_SYSTEM_CONF bits */
- #define TPS_SYSCONF_PORTINFO(c)		((c) & 7)
-@@ -1041,6 +1042,24 @@ static int tps25750_apply_patch(struct tps6598x *tps)
- 	return 0;
- };
- 
-+static int tps25750_init(struct tps6598x *tps)
-+{
-+	int ret;
-+
-+	ret = tps25750_apply_patch(tps);
-+	if (ret)
-+		return ret;
-+
-+	ret = tps6598x_write8(tps, TPS_REG_SLEEP_CONF,
-+			      TPS_SLEEP_CONF_SLEEP_MODE_ALLOWED);
-+	if (ret)
-+		dev_warn(tps->dev,
-+			 "%s: failed to enable sleep mode: %d\n",
-+			 __func__, ret);
-+
-+	return 0;
-+}
-+
- static int
- tps6598x_register_port(struct tps6598x *tps, struct fwnode_handle *fwnode)
- {
-@@ -1211,7 +1230,7 @@ static int tps6598x_probe(struct i2c_client *client)
- 		return ret;
- 
- 	if (is_tps25750 && ret == TPS_MODE_PTCH) {
--		ret = tps25750_apply_patch(tps);
-+		ret = tps25750_init(tps);
- 		if (ret)
- 			return ret;
+@@ -583,6 +583,7 @@ static irqreturn_t tps25750_interrupt(int irq, void *data)
+ 		dev_err(tps->dev, "%s: failed to read events\n", __func__);
+ 		goto err_unlock;
  	}
-@@ -1348,7 +1367,7 @@ static int __maybe_unused tps6598x_resume(struct device *dev)
- 		return ret;
++	trace_tps25750_irq(event[0]);
  
- 	if (device_is_compatible(tps->dev, "ti,tps25750") && ret == TPS_MODE_PTCH) {
--		ret = tps25750_apply_patch(tps);
-+		ret = tps25750_init(tps);
- 		if (ret)
- 			return ret;
- 	}
-diff --git a/drivers/usb/typec/tipd/tps6598x.h b/drivers/usb/typec/tipd/tps6598x.h
-index 3a9a43394134..f86b5e96efba 100644
---- a/drivers/usb/typec/tipd/tps6598x.h
-+++ b/drivers/usb/typec/tipd/tps6598x.h
-@@ -213,4 +213,7 @@
- #define TPS_PD_STATUS_PORT_TYPE_SOURCE		2
- #define TPS_PD_STATUS_PORT_TYPE_SOURCE_SINK	3
+ 	if (!(event[0] | event[1]))
+ 		goto err_unlock;
+diff --git a/drivers/usb/typec/tipd/trace.h b/drivers/usb/typec/tipd/trace.h
+index 12cad1bde7cc..28725234a2d8 100644
+--- a/drivers/usb/typec/tipd/trace.h
++++ b/drivers/usb/typec/tipd/trace.h
+@@ -74,6 +74,13 @@
+ 		{ APPLE_CD_REG_INT_DATA_STATUS_UPDATE,		"DATA_STATUS_UPDATE" }, \
+ 		{ APPLE_CD_REG_INT_STATUS_UPDATE,		"STATUS_UPDATE" })
  
-+/* SLEEP CONF REG */
-+#define TPS_SLEEP_CONF_SLEEP_MODE_ALLOWED	BIT(0)
++#define show_tps25750_irq_flags(flags) \
++	__print_flags_u64(flags, "|", \
++		{ TPS_REG_INT_PLUG_EVENT,			"PLUG_EVENT" }, \
++		{ TPS_REG_INT_POWER_STATUS_UPDATE,		"POWER_STATUS_UPDATE" }, \
++		{ TPS_REG_INT_STATUS_UPDATE,			"STATUS_UPDATE" }, \
++		{ TPS_REG_INT_PD_STATUS_UPDATE,			"PD_STATUS_UPDATE" })
 +
- #endif /* __TPS6598X_H__ */
+ #define TPS6598X_STATUS_FLAGS_MASK (GENMASK(31, 0) ^ (TPS_STATUS_CONN_STATE_MASK | \
+ 						      TPS_STATUS_PP_5V0_SWITCH_MASK | \
+ 						      TPS_STATUS_PP_HV_SWITCH_MASK | \
+@@ -230,6 +237,21 @@ TRACE_EVENT(cd321x_irq,
+ 		      show_cd321x_irq_flags(__entry->event))
+ );
+ 
++TRACE_EVENT(tps25750_irq,
++	    TP_PROTO(u64 event),
++	    TP_ARGS(event),
++
++	    TP_STRUCT__entry(
++			     __field(u64, event)
++			     ),
++
++	    TP_fast_assign(
++			   __entry->event = event;
++			   ),
++
++	    TP_printk("event=%s", show_tps25750_irq_flags(__entry->event))
++);
++
+ TRACE_EVENT(tps6598x_status,
+ 	    TP_PROTO(u32 status),
+ 	    TP_ARGS(status),
 -- 
 2.34.1
 
