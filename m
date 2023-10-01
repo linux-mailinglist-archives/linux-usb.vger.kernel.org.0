@@ -1,102 +1,141 @@
-Return-Path: <linux-usb+bounces-878-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-880-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 341347B47CB
-	for <lists+linux-usb@lfdr.de>; Sun,  1 Oct 2023 16:06:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3962C7B47D9
+	for <lists+linux-usb@lfdr.de>; Sun,  1 Oct 2023 16:13:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sy.mirrors.kernel.org (Postfix) with ESMTP id CAEA0B209A5
-	for <lists+linux-usb@lfdr.de>; Sun,  1 Oct 2023 14:06:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTP id 53E991C203A8
+	for <lists+linux-usb@lfdr.de>; Sun,  1 Oct 2023 14:13:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D01EE171DE;
-	Sun,  1 Oct 2023 14:06:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 166E6179B3;
+	Sun,  1 Oct 2023 14:13:09 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76F608F67
-	for <linux-usb@vger.kernel.org>; Sun,  1 Oct 2023 14:06:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F04BCC433C7
-	for <linux-usb@vger.kernel.org>; Sun,  1 Oct 2023 14:06:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1696169166;
-	bh=xCaXpAwGvPFzi5J2zQXZPUUfu53NTxunh7mCqk7ga8A=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=p69OdyYwz0RW0aWrs8nFMz9Jm29XgomyUYEokE84KfJlZa7Ib7ztQsoY11ODItLMC
-	 kSQLIWHiyhWaPFPufEB64Yq3QRkE9m0XjiYBPujlrzVjG12LUCE0wNBAiOf6nXwzmE
-	 eyyolb6ejl+lNom04iNV4pDvNw0Xcv/re9WgptMe+U6iqH4MkZRtrgzcCXqeS8EsgX
-	 QDC2Is1DPQvT6WjS+p86/QRdDAGXQ/KJkbXBxYGY9/XPNS7TXwIdTgY2TH6YaBG6Ry
-	 /5bABySOVqVxEf2MpYF6dBbf1LTjabBcMo4BJkTpfvDm/meT7SKXAEuUmwVJ52gY4f
-	 bxa2r/PLRxYlA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id BD42EC4332E; Sun,  1 Oct 2023 14:06:05 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 217960] Linux 6.5.5 - kernel BUG with ucsi_acpi
-Date: Sun, 01 Oct 2023 14:06:05 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: bagasdotme@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-217960-208809-wDmrWvDuRX@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-217960-208809@https.bugzilla.kernel.org/>
-References: <bug-217960-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FB7D29B2
+	for <linux-usb@vger.kernel.org>; Sun,  1 Oct 2023 14:13:04 +0000 (UTC)
+Received: from mx.skole.hr (mx1.hosting.skole.hr [161.53.165.185])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4D04A4;
+	Sun,  1 Oct 2023 07:13:02 -0700 (PDT)
+Received: from mx1.hosting.skole.hr (localhost.localdomain [127.0.0.1])
+	by mx.skole.hr (mx.skole.hr) with ESMTP id 3C232836A5;
+	Sun,  1 Oct 2023 16:13:01 +0200 (CEST)
+From: =?utf-8?q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
+Subject: [PATCH RFC v4 0/6] ARM: pxa: GPIO descriptor conversions
+Date: Sun, 01 Oct 2023 16:12:51 +0200
+Message-Id: <20231001-pxa-gpio-v4-0-0f3b975e6ed5@skole.hr>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAGN+GWUC/13NSw7CIBCA4as0sxbDY2ipKxMTD+DWuKiFWqIpD
+ RhS0/TuEjYSl8Pw/bNCMN6aAIdqBW+iDdZNacBdBf3YTQ9DrE4zcMoFVbQh89KRx2wdEb3hUss
+ GFUNI32dvBrvk1BUu5xPc0uNow9v5T85Hlle51HL8lSIjlHBF5V01WqkWj+HpXmY/+tyIvHR14
+ XhyrUKsUbNaav3nROnawonkukFpaaRmgyjvbdv2BXLmtYoUAQAA
+To: Daniel Mack <daniel@zonque.org>, 
+ Haojian Zhuang <haojian.zhuang@gmail.com>, 
+ Robert Jarzmik <robert.jarzmik@free.fr>, 
+ Russell King <linux@armlinux.org.uk>, 
+ Alan Stern <stern@rowland.harvard.edu>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Linus Walleij <linus.walleij@linaro.org>, 
+ Bartosz Golaszewski <brgl@bgdev.pl>, Andy Shevchenko <andy@kernel.org>, 
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
+ Mark Brown <broonie@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org, 
+ linux-input@vger.kernel.org, linux-spi@vger.kernel.org, 
+ =?utf-8?q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2325;
+ i=duje.mihanovic@skole.hr; h=from:subject:message-id;
+ bh=m8bKiHpWAVkzZ4rX+3MqXGTQKxlWpvxpDzrmC6PtKks=;
+ b=owEBbQKS/ZANAwAIAZoRnrBCLZbhAcsmYgBlGX5nOeDT3j+PeN8XmO9hsa7Y0m/xSrsaviidP
+ P5CN29YWYyJAjMEAAEIAB0WIQRT351NnD/hEPs2LXiaEZ6wQi2W4QUCZRl+ZwAKCRCaEZ6wQi2W
+ 4b/FD/0cgXaU50cz0P86RkEXyT6bFJth3AXwlIJKthxeagxMpUY5yEUqu/T8p8LCOUDexyoLiCl
+ 6kUUOumwEsISsqpv+i4HXGcxRa5bLHWNAm3gXyr2KpAxUA0xnqT300mUeEqeRQCqJOYEgCMdTFi
+ EXCArOgqWkm9INcLP7yGavJ33xgosZeOjnoWaa8uQm4wqohD3wOF4fvCFqiSPFpRvtMmGnvnziu
+ o/TQ2MPZORRpb8fH5GIHj07lDkk5Yu40hVEgRy1p74jVxyB9JFyHsQsM14dV8nQ6ITW/596db+v
+ ldXimOvDHfUH4z5bc4D6GhvIUxpCwCO8CCYPPwxobz8TDhM1UApBu809kONvOMXdQxq4hIoedcD
+ M+hE1KV2BTj7vTvD5XeiNTM0xr0a1iVKOPqcUXRWnjl/Of2zDf5kWWvggXDp/ngD06rBEQbYkAN
+ OxpsNpPK1qrMH0/7AqrPt9EvGdtfhWok3aevethRNvzBJP19asFySsuY9zQ9Q1wArwvgAdA8YB8
+ uLMTl85cku91uvG88Z6GsnR0qq4/Wv8x6iHZImb77tWbfmpCqyEkj3RsNCdYGMqGJF4i2BDUWMX
+ PWqi/v8BGbET6E33UF1dxi3MQtJd3WHpoX+5XoBjgMlbe/nlJ5llpB+iEKSrHbirBoiIlxGitMV
+ iwbjBf5fmjzM4Ng==
+X-Developer-Key: i=duje.mihanovic@skole.hr; a=openpgp;
+ fpr=53DF9D4D9C3FE110FB362D789A119EB0422D96E1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D217960
+Hello,
 
-Bagas Sanjaya (bagasdotme@gmail.com) changed:
+Small series to convert some of the board files in the mach-pxa directory
+to use the new GPIO descriptor interface.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |bagasdotme@gmail.com
+Most notably, the am200epd, am300epd and Spitz matrix keypad among
+others are not converted in this series.
 
---- Comment #3 from Bagas Sanjaya (bagasdotme@gmail.com) ---
-(In reply to Oleksii Shevchuk from comment #0)
-> After update to linux 6.5.5 I observed several crashes during bootup when
-> USB drive connected to USB-C hub. To find out what has been crashed I
-> enabled EFI pstore. Unfortunately there were no crashes after that. Howev=
-er,
-> there are kernel BUG traces in dmesg. After several experiments I found
-> strong correlation between ucsi_acpi driver and the crash.
->=20
-> I blacklisted:
-> blacklist typec_ucsi
-> blacklist ucsi_acpi
-> blacklist roles
-> blacklist typec
->=20
-> Two dmesgs are in attachment.=20
->=20
-> The messages to search:
-> ucsi_acpi USBC000:00: possible UCSI driver bug 2
-> ucsi_acpi USBC000:00: error -EINVAL: PPM init failed
+Signed-off-by: Duje Mihanović <duje.mihanovic@skole.hr>
+---
+Changes in v4:
+- Address maintainer comments:
+  - Move wait_for_sync() from spitz.c to driver
+  - Register LED platform device before getting its gpiod-s
+- Add Linus' Reviewed-by
+- Link to v3: https://lore.kernel.org/r/20230929-pxa-gpio-v3-0-af8d5e5d1f34@skole.hr
 
-Do you have this issue on v6.4?
+Changes in v3:
+- Address maintainer comments:
+  - Use GPIO_LOOKUP_IDX for LEDs
+  - Drop unnecessary NULL assignments
+  - Don't give up on *all* SPI devices if hsync cannot be set up
+- Add Linus' Acked-by
+- Link to v2: https://lore.kernel.org/r/20230926-pxa-gpio-v2-0-984464d165dd@skole.hr
 
---=20
-You may reply to this email to add a comment.
+Changes in v2:
+- Address maintainer comments:
+  - Change mentions of function to function()
+  - Drop cast in OHCI driver dev_warn() call
+  - Use %pe in OHCI and reset drivers
+  - Use GPIO _optional() API in OHCI driver
+  - Drop unnecessary not-null check in OHCI driver
+  - Use pr_err() instead of printk() in reset driver
+- Rebase on v6.6-rc3
+- Link to v1: https://lore.kernel.org/r/20230924-pxa-gpio-v1-0-2805b87d8894@skole.hr
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+---
+Duje Mihanović (6):
+      ARM: pxa: Convert Spitz OHCI to GPIO descriptors
+      ARM: pxa: Convert Spitz LEDs to GPIO descriptors
+      ARM: pxa: Convert Spitz CF power control to GPIO descriptors
+      ARM: pxa: Convert reset driver to GPIO descriptors
+      ARM: pxa: Convert gumstix Bluetooth to GPIO descriptors
+      input: ads7846: Move wait_for_sync() logic to driver
+
+ arch/arm/mach-pxa/gumstix.c         | 24 +++++++------
+ arch/arm/mach-pxa/reset.c           | 39 +++++++--------------
+ arch/arm/mach-pxa/reset.h           |  3 +-
+ arch/arm/mach-pxa/spitz.c           | 69 +++++++++++++++++++++++++------------
+ drivers/input/touchscreen/ads7846.c | 22 ++++++++----
+ drivers/usb/host/ohci-pxa27x.c      |  7 ++++
+ include/linux/spi/ads7846.h         |  1 -
+ 7 files changed, 96 insertions(+), 69 deletions(-)
+---
+base-commit: 6465e260f48790807eef06b583b38ca9789b6072
+change-id: 20230807-pxa-gpio-3ce25d574814
+
+Best regards,
+-- 
+Duje Mihanović <duje.mihanovic@skole.hr>
+
+
 
