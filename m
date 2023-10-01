@@ -1,181 +1,245 @@
-Return-Path: <linux-usb+bounces-873-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-857-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B520F7B4680
-	for <lists+linux-usb@lfdr.de>; Sun,  1 Oct 2023 11:13:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C8F827B45EF
+	for <lists+linux-usb@lfdr.de>; Sun,  1 Oct 2023 10:15:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id EDDE8284BA4
-	for <lists+linux-usb@lfdr.de>; Sun,  1 Oct 2023 09:13:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 0A777281B17
+	for <lists+linux-usb@lfdr.de>; Sun,  1 Oct 2023 08:15:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26F80AD4C;
-	Sun,  1 Oct 2023 09:13:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1E74D2F8;
+	Sun,  1 Oct 2023 08:15:21 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49FD129B2;
-	Sun,  1 Oct 2023 09:13:35 +0000 (UTC)
-Received: from omta36.uswest2.a.cloudfilter.net (omta36.uswest2.a.cloudfilter.net [35.89.44.35])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E818BC6;
-	Sun,  1 Oct 2023 02:13:33 -0700 (PDT)
-Received: from eig-obgw-5004a.ext.cloudfilter.net ([10.0.29.221])
-	by cmsmtp with ESMTP
-	id mKShqDMZSMZBkmsW5q6tIg; Sun, 01 Oct 2023 09:13:33 +0000
-Received: from gator4166.hostgator.com ([108.167.133.22])
-	by cmsmtp with ESMTPS
-	id msW4qwZeCXQGamsW4qvGiu; Sun, 01 Oct 2023 09:13:32 +0000
-X-Authority-Analysis: v=2.4 cv=DJGcXgBb c=1 sm=1 tr=0 ts=6519383c
- a=1YbLdUo/zbTtOZ3uB5T3HA==:117 a=P7XfKmiOJ4/qXqHZrN7ymg==:17
- a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
- a=IkcTkHD0fZMA:10 a=bhdUkHdE2iEA:10 a=wYkD_t78qR0A:10 a=VwQbUJbxAAAA:8
- a=LGO97N6URhV1HzgtwBkA:9 a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=4g2DqY1HQzg9VHDk8bpfbsxVxIS5o6CwTE1YY6fEQ3g=; b=AUvFBCRUB7J4vAcINYNmf8AedX
-	vVjpv9aSEIHk6sHw8Z03zs4zmYb0n26Zz4ENctk+kwTyZxdREssUFaiHh8iqt6+n/F+XAhbguP5BD
-	xaNImehj3L+M6hDG4ekFPG/4y7kZ3s3INLLpGO1fHDVcSHmzSDjdFU4Uv9WNlnE8CZhxYqCKbYa1k
-	kHRn2OZVJde+6EotWeVQ1c+fvtrEzNM2GpiRQAw4lBWyEv1zZqipiev6SRBPmUSRAH/o8PqVYwLNt
-	j1UDYIofGl95WzJ1RNGbqD6ZBURjfRP8+JfsHaSEhS1X7fGgFBS1iZDhwXJVDacDFbnAc1e0Grd3Y
-	UhEt5mXQ==;
-Received: from [94.239.20.48] (port=48332 helo=[192.168.1.98])
-	by gator4166.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.96)
-	(envelope-from <gustavo@embeddedor.com>)
-	id 1qmqOy-001eje-0E;
-	Sun, 01 Oct 2023 01:58:04 -0500
-Message-ID: <d81a2187-a2ff-c741-8f35-a1af54652ebd@embeddedor.com>
-Date: Sun, 1 Oct 2023 08:58:00 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B745441A;
+	Sun,  1 Oct 2023 08:15:19 +0000 (UTC)
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B52BA;
+	Sun,  1 Oct 2023 01:15:17 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-9a64619d8fbso2167119866b.0;
+        Sun, 01 Oct 2023 01:15:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696148116; x=1696752916; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=tCGU7l+ViGep3xnaiG+Tgxk7IH4Sn0hq2t+mXfvxZPQ=;
+        b=eIrKhf+rZLHYf2tr4IVH9tzhZoEyngo7phICdfbpPYWMf3kfYZEcHHhp8jGWcLYnr7
+         SnB5fryq96zWtYmXCtSXeqzk5xkyCNwdKwK41omRqtmQbAnPsNTZmjYBEJdZ7pIlKzeq
+         aETo/+8C5XfCcRCPf1B8TV8frqrR1RqOBiAzD+M+EdhBZ85qC/14D1cZ8KJsRnwaJ4M2
+         nAmHShaTTU1oI0BvFFABkN4vf2V5TWOkfR1gXcGh3YxzcPTo5ZOE5e+FuWFSeb0PGoxf
+         OLkay0CacyU6DW3m8XpfT+Klq2JNlkQHZ0QLBaOFyw8KL23Z9F0DhwdVVtsxGXX7p2uC
+         Wkyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696148116; x=1696752916;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tCGU7l+ViGep3xnaiG+Tgxk7IH4Sn0hq2t+mXfvxZPQ=;
+        b=GE/sRsAlefqy+rC2W2S551Yhv7SY145TSLCu35GtN3VpTB/5MTi3YJkHtLuA689zDa
+         b7IAFCg77fanzA9FLBUlAuZYM/b/7z6u80MM9UfyPOHh1+J9KPHj87Ba6Th8rdQEEjpr
+         uyUY/mbZeIf7ct86lq+KsRLp3PGL//1AtJQw4G/KCHQAAtxCAQMbX6syCfrsW6ER0KIx
+         5Wk7f+IWGwlXTTsH+RGY5+lC6Yay479wZ9GlxF/mQGoVAwquGyTpam+LkrLVia2kEIwh
+         fNdg+9oNHb7llYDhT/TDO/9ELSmB302gTPw2n+tsKRV4vuujqvPMkpB9mFLI6fOsJBG7
+         ZrFg==
+X-Gm-Message-State: AOJu0Yxzp8J5G6ZJYhwS5wHmRsZ3/6TpkogTr/PR9A6jPG/2gAqXBTJB
+	O9RTEJ9FZqXCL/h422Ns41A=
+X-Google-Smtp-Source: AGHT+IHTOrTTrtQg1snQOveaja6+XjunR3IFvKEnuJ2Ep2HKYPMd23tWkfQ1rAvjaKs9rCiewAq01A==
+X-Received: by 2002:a17:906:11a:b0:9a1:bd82:de24 with SMTP id 26-20020a170906011a00b009a1bd82de24mr7290213eje.12.1696148115882;
+        Sun, 01 Oct 2023 01:15:15 -0700 (PDT)
+Received: from primary.. ([213.139.52.198])
+        by smtp.gmail.com with ESMTPSA id e8-20020a170906374800b0099cf840527csm15121841ejc.153.2023.10.01.01.15.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 01 Oct 2023 01:15:15 -0700 (PDT)
+From: Abdel Alkuor <alkuor@gmail.com>
+To: heikki.krogerus@linux.intel.com,
+	krzysztof.kozlowski+dt@linaro.org,
+	bryan.odonoghue@linaro.org
+Cc: gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	ryan.eleceng@gmail.com,
+	robh+dt@kernel.org,
+	conor+dt@kernel.org,
+	devicetree@vger.kernel.org,
+	Abdel Alkuor <alkuor@gmail.com>
+Subject: [PATCH v9 00/14] Add TPS25750 USB type-C PD controller support
+Date: Sun,  1 Oct 2023 04:11:20 -0400
+Message-Id: <20231001081134.37101-1-alkuor@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH][next] media: usb: siano: Fix undefined behavior bug in
- struct smsusb_urb_t
-Content-Language: en-US
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Jann Horn <jannh@google.com>
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- USB list <linux-usb@vger.kernel.org>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, linux-media@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <ZRbwU8Qnx28gpbuO@work>
- <CAG48ez2SJMJSYrJQ9RVC44hbj3uNYBZeN0yfxWa7pqX9Fp2L7g@mail.gmail.com>
- <2023093029-primary-likewise-9579@gregkh>
-From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <2023093029-primary-likewise-9579@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 94.239.20.48
-X-Source-L: No
-X-Exim-ID: 1qmqOy-001eje-0E
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: ([192.168.1.98]) [94.239.20.48]:48332
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 0
-X-Org: HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfOBNRepxkbBW5oTCh0rxhMzN0x/4rQbyN1ExUDG0Yn4Z0S/O6iJ5NDER4VYcRRTP8KkhuIasKPH6ssj+2egE8I/6bhavg1i0ATX0Pr+V8xuB5nbP2YZw
- jvTPnVrtac/gAWvCY+3fLsfzha6We/4v0SNJQ2zRoY6aA15gutLLCZuiibW9S+ir8m4uL0/sjjTCzmd7TD9BJG657sK3uqDl1Wd00RLvgNjfHWjaltJk76qA
- wx583CU3F+a2OSCPcXq0esn8Fxnf1qjkD8+uNjTyEK/ZLxuZw+53u5xZHKQqtzFm3FvfhgNx4kCTZgEEsh3f+uY+pv9jAJF57PUsb0U1lk/3yWoiJqrrFugq
- zpyf009w
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
+TPS25750 USB type-C PD controller has the same register offsets as
+tps6598x. The following is a summary of incorporating TPS25750 into
+TPS6598x driver:
 
+- Only Check VID register (0x00) for TPS6598x and cd321x, as TPS25750 doesn't
+  have VID register.
 
-On 9/30/23 09:01, Greg Kroah-Hartman wrote:
-> On Fri, Sep 29, 2023 at 06:20:10PM +0200, Jann Horn wrote:
->> On Fri, Sep 29, 2023 at 5:42 PM Gustavo A. R. Silva
->> <gustavoars@kernel.org> wrote:
->>> `struct urb` is a flexible structure, which means that it contains a
->>> flexible-array member at the bottom. This could potentially lead to an
->>> overwrite of the object `wq` at run-time with the contents of `urb`.
->>>
->>> Fix this by placing object `urb` at the end of `struct smsusb_urb_t`.
->>
->> Does this really change the situation? "struct smsusb_device_t"
->> contains an array of "struct smsusb_urb_t", so it seems to be like
+- TypeC port registration will be registered differently for each PD
+  controller. TPS6598x uses system configuration register (0x28) to get
+  pr/dr capabilities. On the other hand, TPS25750 will use data role property
+  and PD status register (0x40) to get pr/dr capabilities as TPS25750 doesn't
+  have register 0x28 supported.
 
-Yeah. I noticed that too.
+- TPS25750 requires writing a binary configuration to switch PD
+  controller from PTCH mode to APP mode which needs the following changes:
+  - Add PTCH mode to the modes list.
+  - Add an argument to tps6598x_check_mode to return the current mode.
+  - Currently, tps6598x_exec_cmd has cmd timeout hardcoded to 1 second,
+    and doesn't wait before checking DATA_OUT response. In TPS25750, patch 4CCs
+    take longer than 1 second to execute and some requires a delay before
+    checking DATA_OUT. To accommodate that, cmd_timeout and response_delay will
+    be added as arguments to tps6598x_exec_cmd.
+  - Implement applying patch sequence for TPS25750.
 
-Probably what Greg suggests (dynamically create the urb) can fix this, too.
+- In pm suspend callback, patch mode needs to be checked and the binary
+  configuration should be applied if needed.
 
-I haven't taken a deep dive into this particular case. So, let me go and
-figure something out.
+- For interrupt, TPS25750 has only one event register (0x14) and one mask
+  register (0x16) of 11 bytes each, where TPS6598x has two event
+  and two mask registers of 8 bytes each. Both TPS25750 and TPS65986x
+  shares the same bit field offsets for events/masks/clear but many of
+  there fields are reserved in TPS25750, the following needs to be done in
+  tps6598x_interrupt:
+  - Read EVENT1 register as a block of 11 bytes when tps25750 is present
+  - Write CLEAR1 register as a block of 11 bytes when tps25750 is present
+  - Add trace_tps25750_irq
+  - During testing, I noticed that when a cable is plugged into the PD
+    controller and before PD controller switches to APP mode, there is a
+    lag between dr/pr updates and PlugInsertOrRemoval Event, so a check
+    for dr/pr change needs to be added along TPS_REG_INT_PLUG_EVENT check
 
->> you're just shifting the "VLA inside a non-final member of a struct"
->> thing around so that there is one more layer of abstraction in
->> between.
->>
->> Comments on "struct urb" say:
->>
->>   * Isochronous URBs have a different data transfer model, in part because
->>   * the quality of service is only "best effort".  Callers provide specially
->>   * allocated URBs, with number_of_packets worth of iso_frame_desc structures
->>   * at the end.
->>
->> and:
->>
->> /* (in) ISO ONLY */
->>
->> And it looks like smsusb only uses that URB as a bulk URB, so the flex
->> array is unused and we can't have an overflow here?
->>
->> If this is intended to make it possible to enable some kinda compiler
->> warning, it might be worth talking to the USB folks to figure out the
->> right approach here.
->>
->>> Fixes: dd47fbd40e6e ("[media] smsusb: don't sleep while atomic")
->>> Cc: stable@vger.kernel.org
->>> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
->>> ---
->>>   drivers/media/usb/siano/smsusb.c | 4 ++--
->>>   1 file changed, 2 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/media/usb/siano/smsusb.c b/drivers/media/usb/siano/smsusb.c
->>> index 9d9e14c858e6..2c048f8e8371 100644
->>> --- a/drivers/media/usb/siano/smsusb.c
->>> +++ b/drivers/media/usb/siano/smsusb.c
->>> @@ -40,10 +40,10 @@ struct smsusb_urb_t {
->>>          struct smscore_buffer_t *cb;
->>>          struct smsusb_device_t *dev;
->>>
->>> -       struct urb urb;
->>> -
->>>          /* For the bottom half */
->>>          struct work_struct wq;
->>> +
->>> +       struct urb urb;
->>>   };
-> 
-> Yeah, this is going to get messy.  Ideally, just dynamically create the
-> urb and change this to a "struct urb *urb;" instead.
+- Add TPS25750 traces for status and power status registers. Trace for
+  data register won't be added as it doesn't exist in the device.
 
-Probably, yes.
+- Configure sleep mode for TPS25750.
 
-Thanks
---
-Gustavo
+v9:
+ - PATCH 1: 
+    - Add Reviewed-by
+ - PATCH 2..7:
+    - No changes
+ - PATCH 8:
+    - Move of_device_id to its original place
+    - Move device data structs to the top of of_device_id
+    - Use device_get_match_data to get device data
+ - PATCH 9:
+    - No changes
+ - PATCH 10:
+    - Move device data structs to the top of of_device_id
+ - PATCH 11,12:
+    - No changes
+ - PATCH 13,14:
+    - Move device data structs to the top of of_device_id
+v8:
+ - PATCH 1: 
+    - Define reg-names at top-level
+ - PATCH 2:
+    - Add Reviewed-by
+ - PATCH 3:
+    - Revert mode check return
+ - PATCH 4:
+    - Return mode when mode is checked
+    - Use device_is_compatible instead of of_device_is_compatible
+ - PATCH 5,6:
+    - No changes
+ - PATCH 7:
+    - Use device_is_compatible instead of of_device_is_compatible
+ - PATCH 8,9:
+    - No changes
+ - PATCH 10:
+    - Change tps->cb to tps->data
+ - PATCH 11,12:
+    - No changes
+ - PATCH 13,14:
+    - Change tps->cb to tps->data
+
+v7:
+ - PATCH 1: 
+    - Define reg at top-level
+    - Remove description from reg-names
+ - PATCH 2..7: Add tps6598x to the subject
+ - PATCH 8:
+    - Add tps6598x to the subject
+    - Create tps25750 interrupt handler
+ - PATCH 9..11: Add tps6598x to the subject
+ - PATCH 12: 
+    - Add driver name to commit subject
+    - Call trace_tps25750_irq directly from tps25750 interrupt
+      handler
+ - PATCH 13-14: Add tps6598x to the subject
+      
+v6:
+ - PATCH 1: Use reg property for patch address
+ - PATCH 2: Use tps6598x_exec_cmd as a wrapper
+ - PATCH 3: Return current mode and check it directly
+ - PATCH 4:
+    - Don't check VID for tps25750 as the VID register doesn't exist
+    - Remove is_tps25750 flag from tps6598x struct
+    - Get patch address from reg property
+ - PATCH 5: Update eeprom macro to use TPS instead
+ - PATCH 6: No changes
+ - PATCH 7: Check tps25750 using is_compatiable device node
+ - PATCH 8: Create tipd callbacks factory 
+ - PATCH 9: No changes
+ - PATCH 10: Add port registration to tipd data factory
+ - PATCH 11: Use tps25750_init instead of tps25750_apply_patch in resume
+    	     as it initializes sleep mode
+ - PATCH 12: Add trace irq to tipd callbacks factory
+ - PATCH 13: Add trace power status to tipd data factory
+ - PATCH 14: Add trace status to tipd data factory
+v5:
+ - PATCH 1: Add tps25750 bindings to tps6598x
+ - PATCH 2: Remove tps25750 driver and incorperate tps25750
+ 	    into tps6598x driver
+ - PATCH [3..15]: Incorporating tps25750 into tps6598x driver
+v4:
+ - PATCH 1: No change
+ - PATCH 2: Fix comments style and drop of_match_ptr
+v3:
+ - PATCH 1: Fix node name
+ - PATCH 2: Upload tps25750 driver patch
+v2:
+ - PATCH 1: General properties clean up
+
+Abdel Alkuor (14):
+  dt-bindings: usb: tps6598x: Add tps25750
+  USB: typec: tsp6598x: Add cmd timeout and response delay
+  USB: typec: tps6598x: Add patch mode to tps6598x
+  USB: typec: tps6598x: Load TPS25750 patch bundle
+  USB: typec: tps6598x: Check for EEPROM present
+  USB: typec: tps6598x: Clear dead battery flag
+  USB: typec: tps6598x: Apply patch again after power resume
+  USB: typec: tps6598x: Add interrupt support for TPS25750
+  USB: typec: tps6598x: Refactor tps6598x port registration
+  USB: typec: tps6598x: Add port registration for tps25750
+  USB: typec: tps6598x: Enable sleep mode for tps25750
+  USB: typec: tps6598x: Add trace for tps25750 irq
+  USB: typec: tps6598x: Add power status trace for tps25750
+  USB: typec: tps6598x: Add status trace for tps25750
+
+ .../devicetree/bindings/usb/ti,tps6598x.yaml  |  81 ++-
+ drivers/usb/typec/tipd/core.c                 | 624 ++++++++++++++++--
+ drivers/usb/typec/tipd/tps6598x.h             |  36 +
+ drivers/usb/typec/tipd/trace.h                |  92 +++
+ 4 files changed, 762 insertions(+), 71 deletions(-)
+
+-- 
+2.34.1
+
 
