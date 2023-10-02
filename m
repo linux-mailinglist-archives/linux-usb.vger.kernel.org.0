@@ -1,106 +1,213 @@
-Return-Path: <linux-usb+bounces-961-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-962-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0D877B58BA
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 19:26:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 86EC17B58C4
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 19:30:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 9F562283909
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 17:26:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 574A3284C7C
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 17:30:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D3751E50B;
-	Mon,  2 Oct 2023 17:26:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8BF91E51C;
+	Mon,  2 Oct 2023 17:30:26 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23A9F1A73C
-	for <linux-usb@vger.kernel.org>; Mon,  2 Oct 2023 17:26:33 +0000 (UTC)
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B0EEB8
-	for <linux-usb@vger.kernel.org>; Mon,  2 Oct 2023 10:26:31 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id 3f1490d57ef6-d81f35511e6so4204155276.0
-        for <linux-usb@vger.kernel.org>; Mon, 02 Oct 2023 10:26:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696267591; x=1696872391; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cWIcP9wX0mT1aYX41AeZZPoQ0U59y7qnUZSn5QwnCXg=;
-        b=KpBC4mKlNPmqoL/3NXbFUrF4WjyZoOQuqaPC2/NtMWHZcdum1LR2u1PN5anOAr2K0F
-         DH/bacF/gV15eYLhZqzVsTMzyKuFUsGrbdykJOVN9z3e4VeTGq/1K59fzcwd85aD1bPu
-         a1dW4y1ithLa3Y2gICai9X1bDfRuRJwqPafrnmrtBVWG6RQzPvELXet88ZZhRuO0/QPn
-         EHxEk8310syqMqvtOzVz8s9OwBxXGQJP4s/BaDd+dlMe451r/325mERSLFuGACZ3XzNi
-         QetBsB4U4vgQGLlRSOPUv3nfFjON4u9asyRXMrT8Psxo+/4vjbr6uxB+D10u7qH1vrIN
-         7Vxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696267591; x=1696872391;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cWIcP9wX0mT1aYX41AeZZPoQ0U59y7qnUZSn5QwnCXg=;
-        b=YxePdB2rQbCzAh/fwkge48mdJiq3KqXbSP2lzmG3fl+RipaVxpEjBVrIUXw8DGpQ9m
-         mPUaYdevMAYKS58gnUavPI/4bfZN6TASmbHPZ1A4AgzFK6s6h358oFfa0z1G4KBm5rUb
-         7DjIjiXxT8pSALLuRLV5MAkqj/QRqJvPjdlXmulHtTKSjGz/Hl3QmPqIziTeZiHP6RYU
-         HuluGvpBXKpXcfqSJYrRlnM0Qd0k1xzQt0YL/A+hLUjOnxHJZq2iF/hJmNq0L/lMace9
-         2ulc08uo/Mf7/yfEGiKpQpqq4gsgWbQ21BIM8KxXs8aUqHLdqFmlUtjH1Rc0Lo4uQ3i/
-         CQIA==
-X-Gm-Message-State: AOJu0Yx8IG3StnE8jGOFlyfSaYfBtphmIH5qQH4XuwjQV2jIgbBwakBR
-	IyaYD5H0OwkWqqxijjmi1vGrzg+8X0Eqgw2ROaZXlg==
-X-Google-Smtp-Source: AGHT+IFssR1DQ3n6Ot+X24EoXCpTIhEqGvK257G4k1IeGTBppDIe2H1NqvRflZMEtb/Ibet2AS3AiXbvBb2Iw7TdOb0=
-X-Received: by 2002:a25:6903:0:b0:cb2:7e6:191c with SMTP id
- e3-20020a256903000000b00cb207e6191cmr287905ybc.20.1696267590732; Mon, 02 Oct
- 2023 10:26:30 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CB85199B2;
+	Mon,  2 Oct 2023 17:30:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19B79C433C7;
+	Mon,  2 Oct 2023 17:30:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1696267825;
+	bh=OdlZ5THuUArLfRy0wPc5UG7mfiwyH1fEuvpKiBXwcrk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=WLDvTlVrxZp+ubgMERGBLIgHk6VMW4gyrqvh6mAAY+mHvtfSK005LoanH0gVddMIF
+	 dv6MrJ8iXIX8S5kE74NfsNKvWsSgPX0bl4B/psz3ESsD5XzS7o4s96vlCPREA25czC
+	 tijyU5A+aReBkq0z80oyP9APXu6XkA7ib7irSiLHoPG9kzDlpUYeOMLna/gyLBZz8Q
+	 tcAgkYfXWtiFK93iad2cRXQY12s76l3zqk3dF2u2o8+S58OpoSymvEwH5IRF1I4g2t
+	 PUu/LV3ItEkvomp2fk/sFlrkgrkeKKqHFuyIkMgWKp3SENERPcMqNcLi2GvRCK8K2E
+	 q4ZQpq6SN+/+A==
+Received: (nullmailer pid 2046960 invoked by uid 1000);
+	Mon, 02 Oct 2023 17:30:19 -0000
+Date: Mon, 2 Oct 2023 12:30:19 -0500
+From: Rob Herring <robh@kernel.org>
+To: Gatien Chevallier <gatien.chevallier@foss.st.com>
+Cc: Oleksii_Moisieiev@epam.com, gregkh@linuxfoundation.org,
+	herbert@gondor.apana.org.au, davem@davemloft.net,
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+	alexandre.torgue@foss.st.com, vkoul@kernel.org, jic23@kernel.org,
+	olivier.moysan@foss.st.com, arnaud.pouliquen@foss.st.com,
+	mchehab@kernel.org, fabrice.gasnier@foss.st.com,
+	andi.shyti@kernel.org, ulf.hansson@linaro.org, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, hugues.fruchet@foss.st.com,
+	lee@kernel.org, will@kernel.org, catalin.marinas@arm.com,
+	arnd@kernel.org, richardcochran@gmail.com,
+	Frank Rowand <frowand.list@gmail.com>, peng.fan@oss.nxp.com,
+	linux-crypto@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-iio@vger.kernel.org, alsa-devel@alsa-project.org,
+	linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+	netdev@vger.kernel.org, linux-p@web.codeaurora.org,
+	hy@lists.infradead.org, linux-serial@vger.kernel.org,
+	linux-spi@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v5 01/11] dt-bindings: document generic access controller
+Message-ID: <20231002173019.GA2037244-robh@kernel.org>
+References: <20230929142852.578394-1-gatien.chevallier@foss.st.com>
+ <20230929142852.578394-2-gatien.chevallier@foss.st.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231002-topic-sm8550-upstream-type-c-orientation-v2-0-125410d3ff95@linaro.org>
- <20231002-topic-sm8550-upstream-type-c-orientation-v2-2-125410d3ff95@linaro.org>
-In-Reply-To: <20231002-topic-sm8550-upstream-type-c-orientation-v2-2-125410d3ff95@linaro.org>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Mon, 2 Oct 2023 20:26:19 +0300
-Message-ID: <CAA8EJpp2_eW+YukTq3eAFGXxtZ+YWYVkzEP9Qhs20TxoXy-v7A@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] usb: ucsi: glink: use the connector orientation
- GPIO to provide switch events
-To: Neil Armstrong <neil.armstrong@linaro.org>
-Cc: Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konrad.dybcio@linaro.org>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-arm-msm@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230929142852.578394-2-gatien.chevallier@foss.st.com>
 
-On Mon, 2 Oct 2023 at 13:21, Neil Armstrong <neil.armstrong@linaro.org> wrote:
->
-> On SM8550, the non-altmode orientation is not given anymore within
-> altmode events, even with USB SVIDs events.
->
-> On the other side, the Type-C connector orientation is correctly
-> reported by a signal from the PMIC.
->
-> Take this gpio signal when we detect some Type-C port activity
-> to notify any Type-C switches tied to the Type-C port connectors.
-
-Have you checked, which UCSI version is implemented on SM8550?
-Is there any chance of GET_CONNECTOR_STATUS / bit 86 actually
-reflecting the correct orientation?
-
->
-> Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+On Fri, Sep 29, 2023 at 04:28:42PM +0200, Gatien Chevallier wrote:
+> From: Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
+> 
+> Introducing of the generic access controller bindings for the
+> access controller provider and consumer devices. Those bindings are
+> intended to allow a better handling of accesses to resources in a
+> hardware architecture supporting several compartments.
+> 
+> This patch is based on [1]. It is integrated in this patchset as it
+> provides a use-case for it.
+> 
+> Diffs with [1]:
+> 	- Rename feature-domain* properties to access-control* to narrow
+> 	  down the scope of the binding
+> 	- YAML errors and typos corrected.
+> 	- Example updated
+> 	- Some rephrasing in the binding description
+> 
+> [1]: https://lore.kernel.org/lkml/0c0a82bb-18ae-d057-562b
+> 
+> Signed-off-by: Oleksii Moisieiev <oleksii_moisieiev@epam.com>
+> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+> 
 > ---
+> Changes in V5:
+> 	- Diffs with [1]
+> 	- Discarded the [IGNORE] tag as the patch is now part of the
+> 	  patchset
+> 
+>  .../access-controllers/access-controller.yaml | 90 +++++++++++++++++++
+>  1 file changed, 90 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/access-controllers/access-controller.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/access-controllers/access-controller.yaml b/Documentation/devicetree/bindings/access-controllers/access-controller.yaml
+> new file mode 100644
+> index 000000000000..9d305fccc333
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/access-controllers/access-controller.yaml
+> @@ -0,0 +1,90 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/access-controllers/access-controller.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Generic Domain Access Controller
+> +
+> +maintainers:
+> +  - Oleksii Moisieiev <oleksii_moisieiev@epam.com>
+> +
+> +description: |+
+> +  Common access controllers properties
+> +
+> +  Access controllers are in charge of stating which of the hardware blocks under
+> +  their responsibility (their domain) can be accesssed by which compartment. A
+> +  compartment can be a cluster of CPUs (or coprocessors), a range of addresses
+> +  or a group of hardware blocks. An access controller's domain is the set of
+> +  resources covered by the access controller.
+> +
+> +  This device tree bindings can be used to bind devices to their access
+> +  controller provided by access-controller property. In this case, the device is
+> +  a consumer and the access controller is the provider.
+> +
+> +  An access controller can be represented by any node in the device tree and
+> +  can provide one or more configuration parameters, needed to control parameters
+> +  of the consumer device. A consumer node can refer to the provider by phandle
+> +  and a set of phandle arguments, specified by '#access-controller-cells'
+> +  property in the access controller node.
+> +
+> +  Access controllers are typically used to set/read the permissions of a
+> +  hardware block and grant access to it. Any of which depends on the access
+> +  controller. The capabilities of each access controller are defined by the
+> +  binding of the access controller device.
+> +
+> +  Each node can be a consumer for the several access controllers.
+> +
+> +# always select the core schema
+> +select: true
+> +
+> +properties:
+> +  "#access-controller-cells":
+> +    $ref: /schemas/types.yaml#/definitions/uint32
 
+Drop. "#.*-cells" already defines the type.
 
--- 
-With best wishes
-Dmitry
+> +    description:
+> +      Number of cells in a access-controller specifier;
+> +      Can be any value as specified by device tree binding documentation
+> +      of a particular provider.
+> +
+> +  access-control-provider:
+> +    description:
+> +      Indicates that the node is an access controller.
+
+Drop. The presence of "#access-controller-cells" is enough to do that.
+
+> +
+> +  access-controller-names:
+> +    $ref: /schemas/types.yaml#/definitions/string-array
+> +    description:
+> +      A list of access-controller names, sorted in the same order as
+> +      access-controller entries. Consumer drivers will use
+> +      access-controller-names to match with existing access-controller entries.
+> +
+> +  access-controller:
+
+For consistency with other provider bindings: access-controllers
+
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    description:
+> +      A list of access controller specifiers, as defined by the
+> +      bindings of the access-controller provider.
+> +
+> +additionalProperties: true
+> +
+> +examples:
+> +  - |
+> +    uart_controller: access-controller@50000 {
+> +        reg = <0x50000 0x10>;
+> +        access-control-provider;
+> +        #access-controller-cells = <2>;
+> +    };
+> +
+> +    bus_controller: bus@60000 {
+> +        reg = <0x60000 0x10000>;
+> +        #address-cells = <1>;
+> +        #size-cells = <1>;
+> +        ranges;
+> +        access-control-provider;
+> +        #access-controller-cells = <3>;
+> +
+> +        uart4: serial@60100 {
+> +            reg = <0x60100 0x400>;
+> +            access-controller = <&uart_controller 1 2>,
+> +                                <&bus_controller 1 3 5>;
+> +            access-controller-names = "controller", "bus-controller";
+
+Not great names. It should indicate what access is being controlled 
+locally. Perhaps "reg" for register access, "dma" or "bus" for bus 
+master access. (Not sure what your uart_controller is controlling access 
+to.)
+
+Rob
 
