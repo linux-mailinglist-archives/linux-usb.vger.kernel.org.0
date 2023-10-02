@@ -1,89 +1,109 @@
-Return-Path: <linux-usb+bounces-933-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-935-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AEB357B5579
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 16:53:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55D417B56CD
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 17:40:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 594FB2828CB
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 14:53:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTP id 6419A1C208E4
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 15:40:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 719A71A713;
-	Mon,  2 Oct 2023 14:53:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B17AD1CFB0;
+	Mon,  2 Oct 2023 15:40:38 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09B151A29B
-	for <linux-usb@vger.kernel.org>; Mon,  2 Oct 2023 14:53:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 148B7C433C7;
-	Mon,  2 Oct 2023 14:53:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1696258388;
-	bh=+rVpKXm6Nmhq/ALGv9CKFZpidgGfpk8Y8x6TZ51OS8k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pi7CmM/WRmIoi1lEnPr1T0+EFGW9iHJMmX0utDgT3U5Y6pKnMgSmMpzBS8+er5kqh
-	 ToS2ootXrmI3kY+Ey26Z4itgV+j+6zh6nMMuxbqjbr+i2Xz1871GBaNCcbFWKzNquM
-	 erPN+M7XmTPxFMRDTCGAUvmhkIxoPRw4tVV8EfPM=
-Date: Mon, 2 Oct 2023 16:53:05 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>, linux-usb@vger.kernel.org,
-	linux-mediatek@lists.infradead.org, kernel@pengutronix.de
-Subject: Re: [PATCH v2] usb: mtu3: Convert to platform remove callback
- returning void
-Message-ID: <2023100253-amino-pencil-9a96@gregkh>
-References: <20230914200251.919584-1-u.kleine-koenig@pengutronix.de>
- <2023100219-variety-genre-befe@gregkh>
- <20231002144959.jc6wwfrvwd4cyu2l@pengutronix.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 293FB1A5B4
+	for <linux-usb@vger.kernel.org>; Mon,  2 Oct 2023 15:40:37 +0000 (UTC)
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E15CBD;
+	Mon,  2 Oct 2023 08:40:36 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1c723f1c80fso55177575ad.1;
+        Mon, 02 Oct 2023 08:40:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696261235; x=1696866035; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/wiIjPxGS9I1xRfBewNetTUwkZeGUFLTkeOYKIQyLkg=;
+        b=GL2VvNKj50vCwZmzR8P9pCycp9QD3HOzUV3U5hRlV9Bf3fnubMqEXQTOKHQ8Jak02T
+         XoH8w27u4NwmHf7SHTQ8opZ8LFwf/aghia+4kN8D3d1sGUJz93GtbH/VmZgHsF+T16z/
+         pg9/TFtSc4MBbzSCVq9dnitVjybEKvdp1U2G4pLYVou6qflWS7g2sYa+EFe8E/0Cba1b
+         DEoP3Sv4hxH84M2MJr7a4YQ27nzDK9abe3SWPlG7gc+Zxz+Mqhp+Tc3KZDa6MsLB04C4
+         mBnj2GA288OUdzFsaeZaUNnyr3W93ZS0PdiccJmHQEF11ZMKupdeQR1/j+BLAgo1SATK
+         3nrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696261235; x=1696866035;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/wiIjPxGS9I1xRfBewNetTUwkZeGUFLTkeOYKIQyLkg=;
+        b=YZqMmwyG2zE7zp+kPkCVyiaG8CvNPhegToJh6J+NxKnmTTX7adkv/s1lSjN29qa6wC
+         4JTZtpPkDeO/GU5TzHI+lhTznRwDMLwCCplC3pvXHyjemSc0TxorHwJWgdDk+g31qfNv
+         SDGhYdFRzAerZOizXKyKR1mF1Ll8H/O7L5ZVh4agkAl1ZaKJfPLb+20X7cXMaZs6rAf0
+         eDgVPLyLnB/fr5RnKHmWWJ7KpXl35Z1bP0o3sTjresG5WbnQctOG8znadw8hIj3e6lFD
+         /3IEqoltLgv0G+7W30roI1nXjxPZFaIMtsM2fdqTWDFyMbW9qzuXmDss4NBgO/01ev83
+         NcLQ==
+X-Gm-Message-State: AOJu0Yxgwq4kDdqSeDhpckA1BFO201Dw2vSwr8UTJgbcJaoTp5Kf7X0a
+	ssUAF+AsABGBMQ+Xy5kZAixQv0OvCqUB3eFR
+X-Google-Smtp-Source: AGHT+IEqZ3v/v//a1wYhJ9s8uuhb7EVgVzeNPvmzBmt8w0G6QXiks6v052V2OBcI6S1rLh8zi7i+rQ==
+X-Received: by 2002:a17:902:ecc8:b0:1c7:41ed:199 with SMTP id a8-20020a170902ecc800b001c741ed0199mr10742839plh.66.1696261235536;
+        Mon, 02 Oct 2023 08:40:35 -0700 (PDT)
+Received: from swarup-virtual-machine ([171.76.87.78])
+        by smtp.gmail.com with ESMTPSA id g2-20020a170902868200b001b54d064a4bsm3524178plo.259.2023.10.02.08.40.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Oct 2023 08:40:35 -0700 (PDT)
+Date: Mon, 2 Oct 2023 21:10:30 +0530
+From: swarup <swarupkotikalapudi@gmail.com>
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Thinh.Nguyen@synopsys.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kernel-mentees@lists.linuxfoundation.org
+Subject: Re: [PATCH] usb: fix kernel-doc warning
+Message-ID: <ZRrkbkjoHgEnuy/m@swarup-virtual-machine>
+References: <20230918193505.7046-1-swarupkotikalapudi@gmail.com>
+ <2023100253-aide-authentic-5aa1@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20231002144959.jc6wwfrvwd4cyu2l@pengutronix.de>
+In-Reply-To: <2023100253-aide-authentic-5aa1@gregkh>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-On Mon, Oct 02, 2023 at 04:49:59PM +0200, Uwe Kleine-König wrote:
-> Hello Greg,
-> 
-> On Mon, Oct 02, 2023 at 04:39:47PM +0200, Greg Kroah-Hartman wrote:
-> > On Thu, Sep 14, 2023 at 10:02:51PM +0200, Uwe Kleine-König wrote:
-> > > @@ -469,8 +469,17 @@ static int mtu3_remove(struct platform_device *pdev)
-> > >  		ssusb_gadget_exit(ssusb);
-> > >  		ssusb_host_exit(ssusb);
-> > >  		break;
-> > > -	default:
-> > > -		return -EINVAL;
-> > > +	case USB_DR_MODE_UNKNOWN:
-> > > +		/*
-> > > +		 * This cannot happen because with dr_mode ==
-> > > +		 * USB_DR_MODE_UNKNOWN, .probe() doesn't succeed and so
-> > > +		 * .remove() wouldn't be called at all. However (little
-> > > +		 * surprising) the compiler isn't smart enough to see that, so
-> > > +		 * we explicitly have this case item to not make the compiler
-> > > +		 * wail about an unhandled enumeration value.
-> > > +		 */
-> > > +		WARN_ON(1);
+On Mon, Oct 02, 2023 at 04:42:03PM +0200, Greg KH wrote:
+> On Tue, Sep 19, 2023 at 01:05:05AM +0530, Swarup Laxman Kotiaklapudi wrote:
+> > Fix kernel-doc warnings discovered in usb driver.
+> > Fixes this warning:
+> > warning: Function parameter or member 'gfladj_refclk_lpm_sel'
+> >          not described in 'dwc3'
 > > 
-> > Please don't add new WARN_ON() calls to the kernel, print out a big
-> > error message and return, don't reboot the machine.
+> > Signed-off-by: Swarup Laxman Kotiaklapudi <swarupkotikalapudi@gmail.com>
+> > ---
+> >  drivers/usb/dwc3/core.h | 2 ++
+> >  1 file changed, 2 insertions(+)
 > 
-> Huh, printing out an loud error message was my intention. It's news to
-> me that WARN_ON() reboots the machine?! I thought BUG_ON() was the one
-> with the effects you describe that I shouldn't use.
+> What commit id does this fix?
+> 
+> thanks,
+> 
+> greg k-h
 
-panic-on-warn is set for zillions[1] of Linux systems out there, so systems
-will reboot.
+Hi Greg,
+Please find the commit id as mentioned below,
+next time onwards i will mention it:
 
-thanks,
+Fixes: 5cd07f96c0c6 ("usb: fix kernel-doc warning")
 
-greg k-h
+Thanks,
+Swarup
 
-[1] Unofficial number, I know the "cloud" systems set this, as well as
-    all of Samsung's phone kernels, a non-trivial amount of Linux
-    instances in the wild.
 
