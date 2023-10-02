@@ -1,72 +1,70 @@
-Return-Path: <linux-usb+bounces-901-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-902-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22C3D7B4C9C
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 09:36:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A7927B4CBF
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 09:43:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 3E760281870
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 07:36:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 2D2A1281A3A
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 07:43:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9105186E;
-	Mon,  2 Oct 2023 07:36:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F15511844;
+	Mon,  2 Oct 2023 07:43:10 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 450E417C3
-	for <linux-usb@vger.kernel.org>; Mon,  2 Oct 2023 07:36:29 +0000 (UTC)
-Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FF7DBF
-	for <linux-usb@vger.kernel.org>; Mon,  2 Oct 2023 00:36:28 -0700 (PDT)
-Received: by mail-ua1-x936.google.com with SMTP id a1e0cc1a2514c-7abda795363so5064683241.0
-        for <linux-usb@vger.kernel.org>; Mon, 02 Oct 2023 00:36:28 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19E811C01
+	for <linux-usb@vger.kernel.org>; Mon,  2 Oct 2023 07:43:08 +0000 (UTC)
+Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 492B7BD
+	for <linux-usb@vger.kernel.org>; Mon,  2 Oct 2023 00:43:04 -0700 (PDT)
+Received: by mail-ua1-x92a.google.com with SMTP id a1e0cc1a2514c-7abda795363so5067597241.0
+        for <linux-usb@vger.kernel.org>; Mon, 02 Oct 2023 00:43:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1696232187; x=1696836987; darn=vger.kernel.org;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1696232583; x=1696837383; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/kzGcKH51BMhzvkfijbkvJZcq6BeliJjCgiKuHtTrZI=;
-        b=XUBlhCQCluEKPTIeKdQAyXsvycYs0HPKyzJwsKaAlprAGDhvJkWBqmXREA4B4AeVgt
-         g/1+uIOwYGamevIHZEQVWRY6ClzqwSx53B93NdDsKCefWtfGJ37005JkrvVSeshgefaq
-         fhaBnJXTQgMS4XXJVVP1Pa7G5wrj59r3EopY+dGf1+r9epR7KQII32teS/JiSG8QqSlx
-         2bk6UUpeuuBpLLRETmvP2lkfyAOt/zrmPsWgghVeTyTuSwJ2842z70SefXGyG6fpVQ+h
-         dgoEbiySSPXuhZCQgIcYSQzI+AoNtkj0QsfB8x4ZFMfgmzPtsELWzDFWiC+e2PpX8KLo
-         GS4A==
+        bh=u+VAUc4E+Y21AdLpQo4ZI38h7A9OH7Ux8a8Ek8zfCE8=;
+        b=qplXjsWHxVZXvDUoPJc+ruqcd/LRX1kKkgII1SKDn4FvThkhEGf2Lf+QfX+2O8ktTz
+         1MCoMyNWO3JAqO5k8gXrR2Z8fxyNdIypQmpF8NIAq77zRyi9mCnp2XJlzQbXXfKbYdyK
+         fmNqkOT630jLVqHNOphKHctCSwPvlSMuaqV4ygHW7tGsLgYJZF+Johncih+QN79x0Dcz
+         ztW90zVVfTG3md3HZ7jCWnhjwpjs/3lCqEV2PG+hwIm6IA6xnINdPFMssFMLDQH/lJzr
+         /gdfzQrV57+EgAP0Tl/KlCUWQ6aXStJsA4IdA4bYCPbj9hrMkniMByf4dGRQaC/JQkVN
+         oPIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696232187; x=1696836987;
+        d=1e100.net; s=20230601; t=1696232583; x=1696837383;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/kzGcKH51BMhzvkfijbkvJZcq6BeliJjCgiKuHtTrZI=;
-        b=mhseLkLHDhJQMeEFxQs3xHsSrlwNAJeytzlyE4Gyz+s+1SWSSFumV1DBXe716lL7F+
-         DchGpFkFN1UOLgOseUkcxWT3+HIGw45zmvsEu0t5+WVj69xSPD1/WSxSdSk0z2+HdCGs
-         1zJOtENUCZQVTYEq2SHXlaksem9sKZBWVGK5In2PBBBgunIDiTsDwUw4tDzjq2BSDC3S
-         OIEw/XVLzGEj4l4DWDpcwe6hPWDvyaggFnR2B7Z8oD4c3n9rtw40fKVHICTZY6GKAmOM
-         MI7PVaQV4nG6OXfddyzP0jWs2uIkHn6FjSns4XPRYsfoShMWori9qEk2jttY+vR9LQQj
-         yROA==
-X-Gm-Message-State: AOJu0YxfgsbAek16zrj8cyqlVW9cZsodfbXVwE6K1WjBSt5ojlX4tGGN
-	xtZS0ho3hXt2XH2ybHNZbXbDmjeK/7MSa3N7PEdWNw==
-X-Google-Smtp-Source: AGHT+IHIgV9UAM4yA8MoechR8q4GLUBkoPowZHLEFw1ZULiGDp+VXiAj3o0rKyl0yWYlk/4LeZK5AfIRMZZY2/x23tg=
-X-Received: by 2002:a67:fe0b:0:b0:452:560e:31a9 with SMTP id
- l11-20020a67fe0b000000b00452560e31a9mr8909087vsr.1.1696232186976; Mon, 02 Oct
- 2023 00:36:26 -0700 (PDT)
+        bh=u+VAUc4E+Y21AdLpQo4ZI38h7A9OH7Ux8a8Ek8zfCE8=;
+        b=X3PxazxGWANHO+Kc1dMjvjrtWPWRUXFZSXELQIdd0VI1pJjq7y6KA2mqeRFW6VQaF/
+         myXpTMxRsYv5UgyV2zPB7GeSFll5EYtiEn3RXHSTF7xh4XAFMvK7vNMyfZn1rdULMXR0
+         EUDiKUPO/FINregMMDm8q1tiqXwk9D51zI0ao2R8BuDHRaZN5DS1r3c000fx2wp2jI4S
+         cGvwN3JcNqh6qieQFD/Ni+rMQnEFrqnJPvU1k1rHgYsmrZReeqm/6lqk0oHBdJyVtASS
+         rRb3cwS74JA5EkRS+GJDjH4igYuPImP1l07I0D75VnPRvOXKjsvpLKIo3uvdCjUafK9B
+         TkJA==
+X-Gm-Message-State: AOJu0Yz8/TplrvqQLoDWubuSYxUyUhSL29aDXuXEDwA5x1/FA9fjMy5Q
+	tCdGhV0tkQKD3J/Hf3OQ1POLcXWc+uwHR+LTtbR00Nj4nCmW+9fW
+X-Google-Smtp-Source: AGHT+IFmS8Y8o10/iX1hxTsbAjkfklmWIjUvA2ZCS4Kabcn+Zm8qj4rKrioQbkwgn36XGL+DicPyDjqH3RTB3brkDMI=
+X-Received: by 2002:a67:cfc6:0:b0:452:7795:7c93 with SMTP id
+ h6-20020a67cfc6000000b0045277957c93mr9731589vsm.29.1696232583363; Mon, 02 Oct
+ 2023 00:43:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231001-pxa-gpio-v4-0-0f3b975e6ed5@skole.hr> <20231001-pxa-gpio-v4-2-0f3b975e6ed5@skole.hr>
- <CAHp75VeYduD=uXpNKcxhwqFTkahUbz_Ockqi7KVO88cpeVHbQQ@mail.gmail.com>
-In-Reply-To: <CAHp75VeYduD=uXpNKcxhwqFTkahUbz_Ockqi7KVO88cpeVHbQQ@mail.gmail.com>
+References: <20231001-pxa-gpio-v4-0-0f3b975e6ed5@skole.hr> <20231001-pxa-gpio-v4-5-0f3b975e6ed5@skole.hr>
+In-Reply-To: <20231001-pxa-gpio-v4-5-0f3b975e6ed5@skole.hr>
 From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Mon, 2 Oct 2023 09:36:16 +0200
-Message-ID: <CAMRc=McgNoz-umhkJKZ-juWukgToEhPh3iex7G-QikmSTgDdnw@mail.gmail.com>
-Subject: Re: [PATCH RFC v4 2/6] ARM: pxa: Convert Spitz LEDs to GPIO descriptors
-To: Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: =?UTF-8?Q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>, 
-	Daniel Mack <daniel@zonque.org>, Haojian Zhuang <haojian.zhuang@gmail.com>, 
+Date: Mon, 2 Oct 2023 09:42:52 +0200
+Message-ID: <CAMRc=MdHv0YxSowMnqJ8xG1_w8dwTWVJV1K0b1jgectPTbOheQ@mail.gmail.com>
+Subject: Re: [PATCH RFC v4 5/6] ARM: pxa: Convert gumstix Bluetooth to GPIO descriptors
+To: =?UTF-8?Q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
+Cc: Daniel Mack <daniel@zonque.org>, Haojian Zhuang <haojian.zhuang@gmail.com>, 
 	Robert Jarzmik <robert.jarzmik@free.fr>, Russell King <linux@armlinux.org.uk>, 
 	Alan Stern <stern@rowland.harvard.edu>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
 	Linus Walleij <linus.walleij@linaro.org>, Andy Shevchenko <andy@kernel.org>, 
@@ -82,47 +80,92 @@ X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Sun, Oct 1, 2023 at 4:35=E2=80=AFPM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
+On Sun, Oct 1, 2023 at 4:13=E2=80=AFPM Duje Mihanovi=C4=87 <duje.mihanovic@=
+skole.hr> wrote:
 >
-> On Sun, Oct 1, 2023 at 5:13=E2=80=AFPM Duje Mihanovi=C4=87 <duje.mihanovi=
-c@skole.hr> wrote:
-> >
-> > Sharp's Spitz board still uses the legacy GPIO interface for configurin=
-g
-> > its two onboard LEDs.
-> >
-> > Convert them to use the GPIO descriptor interface.
+> Gumstix still uses the legacy GPIO interface for resetting the Bluetooth
+> device.
 >
-> ...
+> Convert it to use the GPIO descriptor interface.
 >
-> >  static void __init spitz_leds_init(void)
-> >  {
-> > +       gpiod_add_lookup_table(&spitz_led_gpio_table);
-> >         platform_device_register(&spitz_led_device);
-> > +       spitz_gpio_leds[0].gpiod =3D gpiod_get_index(&spitz_led_device.=
-dev,
-> > +                       NULL, 0, GPIOD_ASIS);
-> > +       spitz_gpio_leds[1].gpiod =3D gpiod_get_index(&spitz_led_device.=
-dev,
-> > +                       NULL, 1, GPIOD_ASIS);
-> >  }
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> Signed-off-by: Duje Mihanovi=C4=87 <duje.mihanovic@skole.hr>
+> ---
+>  arch/arm/mach-pxa/gumstix.c | 24 +++++++++++++-----------
+>  1 file changed, 13 insertions(+), 11 deletions(-)
 >
-> What's the point of keeping a lookup table after we got descriptors out o=
-f it?
+> diff --git a/arch/arm/mach-pxa/gumstix.c b/arch/arm/mach-pxa/gumstix.c
+> index c9f0f62187bd..14e1b9274d7a 100644
+> --- a/arch/arm/mach-pxa/gumstix.c
+> +++ b/arch/arm/mach-pxa/gumstix.c
+> @@ -20,8 +20,8 @@
+>  #include <linux/delay.h>
+>  #include <linux/mtd/mtd.h>
+>  #include <linux/mtd/partitions.h>
+> +#include <linux/gpio/consumer.h>
+>  #include <linux/gpio/machine.h>
+> -#include <linux/gpio.h>
+>  #include <linux/err.h>
+>  #include <linux/clk.h>
 >
+> @@ -129,6 +129,9 @@ static void gumstix_udc_init(void)
+>  #endif
+>
+>  #ifdef CONFIG_BT
+> +GPIO_LOOKUP_SINGLE(gumstix_bt_gpio_table, "pxa2xx-uart.1", "pxa-gpio",
+> +               GPIO_GUMSTIX_BTRESET, "BTRST", GPIO_ACTIVE_LOW);
+> +
+>  /* Normally, the bootloader would have enabled this 32kHz clock but many
+>  ** boards still have u-boot 1.1.4 so we check if it has been turned on a=
+nd
+>  ** if not, we turn it on with a warning message. */
+> @@ -153,24 +156,23 @@ static void gumstix_setup_bt_clock(void)
+>
+>  static void __init gumstix_bluetooth_init(void)
+>  {
+> -       int err;
+> +       struct gpio_desc *desc;
+> +
+> +       gpiod_add_lookup_table(&gumstix_bt_gpio_table);
+>
+>         gumstix_setup_bt_clock();
+>
+> -       err =3D gpio_request(GPIO_GUMSTIX_BTRESET, "BTRST");
+> -       if (err) {
+> +       desc =3D gpiod_get(&pxa_device_btuart.dev, "BTRST", GPIOD_OUT_HIG=
+H);
+> +       if (IS_ERR(desc)) {
+>                 pr_err("gumstix: failed request gpio for bluetooth reset\=
+n");
+>                 return;
+>         }
+>
+> -       err =3D gpio_direction_output(GPIO_GUMSTIX_BTRESET, 1);
+> -       if (err) {
+> -               pr_err("gumstix: can't reset bluetooth\n");
+> -               return;
+> -       }
+> -       gpio_set_value(GPIO_GUMSTIX_BTRESET, 0);
+> +       gpiod_set_value(desc, 0);
+>         udelay(100);
+> -       gpio_set_value(GPIO_GUMSTIX_BTRESET, 1);
+> +       gpiod_set_value(desc, 1);
+> +
+> +       gpiod_put(desc);
 
-Normally the descriptors would be retrieved in drivers and so lookup
-tables should stay in memory forever as static resources (just like
-device-tree). We have recently added some "temporary" lookup tables to
-address even worse hacks. The tables would be removed immediately
-after the descriptor is retrieved simply because we used that hack in
-drivers which may be unbound and re-bound resulting in adding
-repeating lookup entries.
-
-Here we're dealing with a board-file so a more classic approach of
-having static lookup tables added once and never removed is in order.
-So I'd leave it like this.
+This changes the way this code works. You release the descriptor here,
+it returns to the driver and can be re-requested by someone else. Its
+value is also not guaranteed to remain as "active". Is this what you
+want?
 
 Bart
+
+>  }
+>  #else
+>  static void gumstix_bluetooth_init(void)
+>
+> --
+> 2.42.0
+>
+>
 
