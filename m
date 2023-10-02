@@ -1,133 +1,155 @@
-Return-Path: <linux-usb+bounces-908-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-909-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76B4B7B4F64
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 11:48:04 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7013F7B5020
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 12:20:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 9A313282CEC
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 09:48:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTP id 3069EB20AAE
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 10:20:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62485D2E8;
-	Mon,  2 Oct 2023 09:48:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EC71EADA;
+	Mon,  2 Oct 2023 10:20:37 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2B89CA5F
-	for <linux-usb@vger.kernel.org>; Mon,  2 Oct 2023 09:47:58 +0000 (UTC)
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37003A7
-	for <linux-usb@vger.kernel.org>; Mon,  2 Oct 2023 02:47:56 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2bff936e10fso34600101fa.1
-        for <linux-usb@vger.kernel.org>; Mon, 02 Oct 2023 02:47:56 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBD88E552
+	for <linux-usb@vger.kernel.org>; Mon,  2 Oct 2023 10:20:35 +0000 (UTC)
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B97EC6
+	for <linux-usb@vger.kernel.org>; Mon,  2 Oct 2023 03:20:32 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-406609df1a6so24126165e9.3
+        for <linux-usb@vger.kernel.org>; Mon, 02 Oct 2023 03:20:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696240074; x=1696844874; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=68CSLoMUk/xsQxJmYczMbK1aUNl1yG9wbG7lfg9/RhI=;
-        b=SCYcD/sE2mB21crD+Wt5cGyZCLkx4C+qtO8wxTiXs51VJHY17soV9+pamfHdUlWuhL
-         NTgdtp/rhNdIuMF0wHYiuyAg2vrTNBDt/1s/Wzfr44KaloVGG5L++8hbpkd/TitsZhDP
-         UnQlqR911izMMhEwi4AvAVknbPOB2ANeG42QtuehJxy0rdnA3aWB0xmfQIvCuk7/60me
-         NDimCOrrjX3+s1Gz1KWHMWMy5Ia2/+aNmczc51UJVenvi1qoUh60P/QNoWUwJ/FB+1AJ
-         gGiUylI4iKXdYWFF5Zlwxdk9QhUkUBO5AgwX/XMzFoU7BupKmnNCcKxmQb9m8A7fl3aA
-         shdg==
+        d=linaro.org; s=google; t=1696242031; x=1696846831; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pfv0AtlnvNa/E/C0wmR1XzkqLMulzABmbQ9znMd60Gs=;
+        b=sf3/WjS6YXUi2Sfrp8k42vnphJfnnf/LtGYvI433cW28zbBmHPd58q3UqLU8BqI0H6
+         aX9ZEbdkkZCxh2lzsJCXN4qUayN3Kz65ooMF9Nk2xos4ps3KVNCAAq+deePnt1nn/70X
+         MSaYeGarT/K+hcbjwp1kx8g4WaeGC2kS7ROwLIJm9tWJk+yXk/+ikDsLZUHqZF/T9hQD
+         czvZQKQ2NFy92yGs/h16GdVH/fbCvfooz6kC+yZqGma4pWwhNuxwqlBLy17EIDxn850d
+         VX9yTSD9/Hp0dvNNKYo1FPW/NNdo8eraaSaHgCO94U/zHaOHh+15Tipik4XUpZHFN6P5
+         2JNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696240074; x=1696844874;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=68CSLoMUk/xsQxJmYczMbK1aUNl1yG9wbG7lfg9/RhI=;
-        b=xSKsFvO35+FwU2hEXMNqrmycGCAbdkCeG5QP062+Bveu4kHpqJF4IbPxFd8EmAkTh9
-         lXb7RdAmXIsLKd1B8K7gVFqL7kpCUhOD9kKSkYcecwUoakMNqgKETADD+C7IGYhGQYtZ
-         XHqW8tY1+jP1Oel1u1sZw3AEvwCPHS7t4yHZ3euhNr1FL9t9B2yMvrLr7scd29tUoPD2
-         ZJ8kgMrc37VjNmyxBwFPFIagWq298gkNxo7MtjyL8GDkjaWkPM1Oz1br116Y4CU85AeC
-         52QDSqfn6i3Ni7Ip2gJ5LOkTVJjxxCDQRzIEX9rzzJLI2QlzQfEyNvXScQJA8AULyrgc
-         xMiQ==
-X-Gm-Message-State: AOJu0Ywjo4FmA8YDc+EpJvDQme8t77yjrqr7Q8kEnfw95zxO2KZLH5Lj
-	eo2uSGT5+eNnI2eCljIIZfmmsQ==
-X-Google-Smtp-Source: AGHT+IFB6wUw1P1R09s+FBtCrJG65I4cwdpFA9MfqSjU6aDZA99s8Ne+18Wsp42LniSmzSCz4sF4yA==
-X-Received: by 2002:a2e:9d50:0:b0:2c0:1eea:d9c0 with SMTP id y16-20020a2e9d50000000b002c01eead9c0mr7066747ljj.25.1696240074339;
-        Mon, 02 Oct 2023 02:47:54 -0700 (PDT)
-Received: from [172.30.204.164] (UNUSED.212-182-62-129.lubman.net.pl. [212.182.62.129])
-        by smtp.gmail.com with ESMTPSA id x20-20020a2e7c14000000b002b6c61bac2esm5253876ljc.92.2023.10.02.02.47.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Oct 2023 02:47:53 -0700 (PDT)
-Message-ID: <77eff01f-082e-d7a7-2d6c-2abcc8665c59@linaro.org>
-Date: Mon, 2 Oct 2023 11:47:52 +0200
+        d=1e100.net; s=20230601; t=1696242031; x=1696846831;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pfv0AtlnvNa/E/C0wmR1XzkqLMulzABmbQ9znMd60Gs=;
+        b=ukaXcrHDZix2QAmNkOyM5tKelXsObNVRZde6XRgW7OVRjJpyQJxrpLlcmpFqbkxlwJ
+         8MM4XWG7ZpUkM04MM5ad9L9GSdcl2o4RKxZBRxVruvQZdlMyxoVruxcZ8XvIPj7b5JaM
+         ghNOu0NdiMYiK22tJ7e3RxpapUD/LfQvlXKDMJRtFNwzT02LvLKji9WWRxnPeGFmqWr7
+         hDbvd8zDSa7fY2YDl7m/NWi5CN1IJlfoh7fXQMx6lwc9tvQ74/R98WkVWR9HIWlbYoja
+         8kux12wpF5esUWCRcwIROnS1cQ3onxMt1hNdvqynzxQtNHaU33ftuHD5mA9DAgVHHnVW
+         GbXg==
+X-Gm-Message-State: AOJu0YyZGS9N2vAiaVDvXvFc63jnsdA2BOSme7Vg7iOl+X7m/NrnvPy5
+	9jbwyKctoUF0kfMgOzM16SZE7w==
+X-Google-Smtp-Source: AGHT+IHKQKBc27yWRnJvsnCQnRfbEPhbVYRxX4qMkNLc/yNshIM4n70R/iHPUBBLejbfbmWcStSkGw==
+X-Received: by 2002:a05:600c:2609:b0:405:34e4:e756 with SMTP id h9-20020a05600c260900b0040534e4e756mr9115752wma.36.1696242030644;
+        Mon, 02 Oct 2023 03:20:30 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id g18-20020a5d5552000000b003196b1bb528sm27822901wrw.64.2023.10.02.03.20.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Oct 2023 03:20:30 -0700 (PDT)
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [PATCH v2 0/4] arm64: qcom: sm8550: retrieve USB-C port
+ orientation from gpio
+Date: Mon, 02 Oct 2023 12:20:20 +0200
+Message-Id: <20231002-topic-sm8550-upstream-type-c-orientation-v2-0-125410d3ff95@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH v11 13/13] arm64: dts: qcom: sa8540-ride: Enable first
- port of tertiary usb controller
-Content-Language: en-US
-To: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Philipp Zabel <p.zabel@pengutronix.de>, Andy Gross <agross@kernel.org>,
- Bjorn Andersson <andersson@kernel.org>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Felipe Balbi <balbi@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>,
- Johan Hovold <johan@kernel.org>, Mathias Nyman <mathias.nyman@intel.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
- quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com, quic_jackp@quicinc.com,
- ahalaney@redhat.com, quic_shazhuss@quicinc.com
-References: <20230828133033.11988-1-quic_kriskura@quicinc.com>
- <20230828133033.11988-14-quic_kriskura@quicinc.com>
- <f19fa545-0ccb-4670-af77-7c034b1016ef@linaro.org>
- <e7bd3aa9-b8ee-4b8a-2354-e786f9a9ff47@quicinc.com>
- <3920bc96-fe58-4e3b-96ab-706f00edb2ee@linaro.org>
- <e7e4fc1e-661a-fd62-e8b1-1e173cbfcd3e@quicinc.com>
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <e7e4fc1e-661a-fd62-e8b1-1e173cbfcd3e@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-	RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGSZGmUC/52NTQ6CMBBGr0K6dkyh8hNX3sOwKO0Ak0jbtJVIC
+ Hd35Ah+u/ct3ttFwkiYxL3YRcSVEnnHUF0KYWbtJgSyzKKSlZKdvEH2gQykpatrCe+QckS9QN4
+ CggHPLpd1ZgnIgacaadXYCtaFiCN9ztSzZ54pZR+3s7yWv/ePyFqCBNVYq9CiaYfx8SKno7/6O
+ In+OI4vlPwx1+EAAAA=
+To: Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konrad.dybcio@linaro.org>, Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+ Neil Armstrong <neil.armstrong@linaro.org>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2113;
+ i=neil.armstrong@linaro.org; h=from:subject:message-id;
+ bh=Qo0f5HDypComny9WssJzstEih7AYlhet2I248Twlt+M=;
+ b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBlGplqbypaeMI7QPoC/3sxqXx+ye2lh9NHkExQ2cJx
+ WmorGX2JAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZRqZagAKCRB33NvayMhJ0bNhEA
+ CVbMRdn6P21VLUf44cwkzQqo1lYjaXsYYdSdPfwWQsZUIStSyQXM0NgZAE6bdLgzwPCVNXQSQU5GJm
+ Vfia1K6beM16pmdzcn/xH3SQIcW8hBPQn5gU1HVFfbAsT2l9J2qcdQi3vE88wdKOUlIvsctPehHwug
+ xGtKNNY5soumjqrWVfclKgN6kD86X6KS1lFxWpl3T+LRvzDuqrdJf/oWQRnxpFIKk771INk+u+lGu+
+ nAPURX/CIk6/z/Tl57qGid/Cwr/0Llb5Q1JniIpFfp+ulKVGY6YeCuDLEi89NFE9/QQUooo+/GEkFQ
+ pAPgpMxjGMt26/LzvdaRR4rrT0BS5tzT1VSInoncJAcwivrHQonenbpJDs/N+DRQfzFw45Va2kjGus
+ V5th/H1lIRqm2bTFcaqPhiAaykKojfTb646ud7lhAKqWvTIZUDr+EnkLOW5iFLA6fx5dfnd3an7gzH
+ QQZxT/+WUtYedNPLPiWrfDGWgz3a+NPKB7uqOr56zqvuAUSnRIrFZg4J+6quc0njXTUb2uKXD/Sxip
+ NQUaO8hI7S4oCx/Uj8nx/9PNDO1FFM9qvhGCrFfyYiFcFRGR06FKUNfr9+ONbYhH8Q1hWbQWgoYbZX
+ RyEFfusjjRJzhvs6aepmktan+/wEeHEXaf7zQgr5J9oix/mO0e8xrnzwi8kA==
+X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
+ fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
 	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
+This patchset is derived from [1], with only the GPIO orientation.
 
+On the SM8550 platform, the PMIC Glink firmware doesn't emit
+ALTMODE events for all USB-C port changes like it was done
+for older platforms (like SM8450).
+This means we only have a valid orientation when an Altmode
+compliant device is inserted, but not for all the other devices,
+including USB cables, dongles and non-altmode Hubs.
 
-On 9/14/23 17:45, Krishna Kurapati PSSNV wrote:
-> 
-> 
-> On 9/13/2023 5:40 PM, Konrad Dybcio wrote:
->> On 7.09.2023 05:36, Krishna Kurapati PSSNV wrote:
->>>
->>>
->>>> Is there any benefit to removing the other ports?
->>>>
->>>> i.e. are ports 1-3 not parked properly by the dwc3 driver if
->>>> they're never connected to anything?
->>>>
->>> Hi Konrad,
->>>
->>>   Whether or not the phy is connected to a port, the controller would 
->>> modify the GUSB2PHYCFG/GUSB3PIPECTL registers. But if we don't 
->>> specify only one phy and let phys from base DTSI take effect (4 HS / 
->>> 2 SS), we would end up initializing and powering on phy's which are 
->>> never connected to a port. To avoid that we need to specify only one 
->>> phy for this platform.
->> And does that have any major effect on power use?
->>
->> Do these PHYs not have some dormant/low power mode?
->>
-> Hi Konrad,
-> 
->   I believe there will be some minimal power use. IMO its best to keep 
-> only one phy enabled for this variant instead of giving all and 
-> initializing/powering-on all 4 of them.
-Okay let's not waste power..
+But the actual orientation is shared by the PM8550B by
+a signal called CC_OUT which can be read on a gpio of the SM8550
+SoC.
 
-Konrad
+Let's add support for this feature by using the UCSI PMIC
+Glink driver events to read and dispatch the orientation
+to the USB-C connector devices on the DT graph.
+
+While everybody would prefer having a proper PMIC Glink event
+for an orientation change, this is not implemented and not
+planned for future platforms either.
+
+[1] https://lore.kernel.org/all/20230601-topic-sm8550-upstream-type-c-v3-0-22c9973012b6@linaro.org/
+
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+Changes in v2:
+- Update bindings property description to describe how multi-port is handled
+- Link to v1: https://lore.kernel.org/r/20230804-topic-sm8550-upstream-type-c-orientation-v1-0-36dd3edec7bf@linaro.org
+
+---
+Neil Armstrong (4):
+      dt-bindings: soc: qcom: qcom,pmic-glink: add a gpio used to determine the Type-C port plug orientation
+      usb: ucsi: glink: use the connector orientation GPIO to provide switch events
+      arm64: dts: qcom: sm8550-mtp: add orientation gpio
+      arm64: dts: qcom: sm8550-qrd: add orientation gpio
+
+ .../bindings/soc/qcom/qcom,pmic-glink.yaml         | 19 ++++++++
+ arch/arm64/boot/dts/qcom/sm8550-mtp.dts            |  1 +
+ arch/arm64/boot/dts/qcom/sm8550-qrd.dts            |  1 +
+ drivers/usb/typec/ucsi/ucsi_glink.c                | 54 +++++++++++++++++++++-
+ 4 files changed, 74 insertions(+), 1 deletion(-)
+---
+base-commit: df964ce9ef9fea10cf131bf6bad8658fde7956f6
+change-id: 20230804-topic-sm8550-upstream-type-c-orientation-0bbbb360d3f7
+
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
+
 
