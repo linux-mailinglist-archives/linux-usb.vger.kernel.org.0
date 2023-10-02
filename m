@@ -1,119 +1,207 @@
-Return-Path: <linux-usb+bounces-896-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-897-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE16A7B4A69
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 02:11:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 261697B4A70
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 02:18:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by ny.mirrors.kernel.org (Postfix) with ESMTP id A555B1C208E0
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 00:11:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 39E182817FD
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 00:18:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF23D37A;
-	Mon,  2 Oct 2023 00:11:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2FD737A;
+	Mon,  2 Oct 2023 00:18:11 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34D2E18F
-	for <linux-usb@vger.kernel.org>; Mon,  2 Oct 2023 00:11:22 +0000 (UTC)
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C947C6;
-	Sun,  1 Oct 2023 17:11:21 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-690bfd4f3ebso12483966b3a.3;
-        Sun, 01 Oct 2023 17:11:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696205481; x=1696810281; darn=vger.kernel.org;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VIeMQoi8QBaB+nwPjIVi58PASB0t9qKzyA1DxUjQEJw=;
-        b=S9DIW4PkkSKlKiAcSWvFUjQEPhWlcjkA0hCEWDP4zg/K/DpxPpY3+9QT/PZMV5G7yC
-         Eeh99J8s1a7oRsGSYGicfls4Ex6ZXvyAWEJjVVqEzhTxbYTMNz/YueC+b/P17OMzVG9a
-         OSKnT0dOeovn/b5zMn1Hoglu+rNr9nDge2UNn72lQ38NZBmmlK0y2204IYtERCmULZKS
-         Sfra+0vP9zZYQlTMO8b1/HRRw+QDsqk0jrD2PYuvAsw3+j/3wOaBpRBXpmEExJx81M8e
-         pZPuewhIgXC5AJY8685KDHJVoohqbJjbABeFLcf2NHHkao4hVjT/1lCor8BfdqBoqBwX
-         0m3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696205481; x=1696810281;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=VIeMQoi8QBaB+nwPjIVi58PASB0t9qKzyA1DxUjQEJw=;
-        b=o7oHpbbS5iOfDU4cMp7Ab/8VzGaMlIdi9Lrlufkns03fbg7Lojq3dX+tuQSYp7mCMR
-         0ixXTbx/lAIvIa1pemZbwlXZt9QoaLT0zov57yF40bY+tjiFM5QFgT9ioTEBHnFLCV/u
-         AVJm2Id834kOs/2Vzc6yeVDwtVKztJzOG+P/Cs+mCR6EawAexFpc2e1d0NrEofg/205c
-         fnsxZOopzBSFzMw0UoJl27xPj1lXDaUmTQ8ChL9gtpKl0NmU150zK4xPgrV/XJ29T0Tn
-         ddVn0PCHiVfVBvQ6GxZTfXCNFQseu38tmY6inOGo1GC20/bD6gDXx2lCpHihfEYqgOHI
-         zFnA==
-X-Gm-Message-State: AOJu0Yxfr1nYNhZ5TPUklBPRxXuvbF5g38TGZITSJnnLTAVgmQGdkzLA
-	FuLVxehsUqFgSQfm4Vzl9NkLK4h1448=
-X-Google-Smtp-Source: AGHT+IHFJvgcO6flKb7/yHNDIK1vTFu3smZotdPeIA/oCOYBhQ73JmK42VMb03xGAWU+89kmOfuYsQ==
-X-Received: by 2002:a05:6a00:2e10:b0:691:1eb:7dda with SMTP id fc16-20020a056a002e1000b0069101eb7ddamr10552347pfb.7.1696205480810;
-        Sun, 01 Oct 2023 17:11:20 -0700 (PDT)
-Received: from [192.168.0.106] ([103.131.18.64])
-        by smtp.gmail.com with ESMTPSA id q26-20020a62ae1a000000b00689f1ce7dacsm18539800pff.23.2023.10.01.17.11.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 01 Oct 2023 17:11:20 -0700 (PDT)
-Message-ID: <bcfdaf76-8d0f-4365-9ad9-a8b285dc70dd@gmail.com>
-Date: Mon, 2 Oct 2023 07:11:08 +0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDFB118F
+	for <linux-usb@vger.kernel.org>; Mon,  2 Oct 2023 00:18:09 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2703EC6
+	for <linux-usb@vger.kernel.org>; Sun,  1 Oct 2023 17:18:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696205888; x=1727741888;
+  h=date:from:to:cc:subject:message-id;
+  bh=uQ5x0RFgV8xGNTA9aDJjU/hmdc+ewqBbcQQ9ShYM1gc=;
+  b=M+Eyp0++MPeNyhxWbT17iCcbiIL8Un971clBBoHxR+TqbxNWNVN32MfE
+   8nv8jjSn/dn3RweDr8hRfSY7EXC0jD4R9CoIFb/ZyNrS6ELFbE55SR0Ob
+   zgbi3mx+FLq1bO/VMb/wYdgUar2ZPwVUK4iTXfqgeMvt5pLgKTtV5e6+V
+   64NDgfN2bifQsGZLE4Pa+tOEc53fo/Xorlkx4Zr+xRhRC8Cjw3wpjEKnN
+   rcYoYWqcX1/CIn6Jmg7BDs3TlBgIIMJ9PYCFQJPWM0ydFlvdYXAaMX/g6
+   YQDPrY61kQchg5/yGQn4o6Ji7loGzdidCKaqieuGJTq32t4Ug52x2cAhZ
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10850"; a="468840034"
+X-IronPort-AV: E=Sophos;i="6.03,193,1694761200"; 
+   d="scan'208";a="468840034"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2023 17:18:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.03,193,1694761200"; 
+   d="scan'208";a="1372560"
+Received: from lkp-server02.sh.intel.com (HELO c3b01524d57c) ([10.239.97.151])
+  by orviesa001.jf.intel.com with ESMTP; 01 Oct 2023 17:17:27 -0700
+Received: from kbuild by c3b01524d57c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qn6dP-0005aN-2A;
+	Mon, 02 Oct 2023 00:18:03 +0000
+Date: Mon, 02 Oct 2023 08:17:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:rndis-removal] BUILD SUCCESS
+ 55f311d2ec5c9901c0f8033495630622c831a668
+Message-ID: <202310020825.IV7KXmiS-lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+	SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Regressions <regressions@lists.linux.dev>,
- Linux USB <linux-usb@vger.kernel.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- =?UTF-8?Q?Samuel_=C4=8Cavoj?= <samuel@cavoj.net>,
- Hans de Goede <hdegoede@redhat.com>,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
- Oleksii Shevchuk <alxchk@gmail.com>
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: Fwd: Linux 6.5.5 - kernel BUG with ucsi_acpi
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
-	autolearn_force=no version=3.4.6
-X-Spam-Level: *
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
 
-Hi,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git rndis-removal
+branch HEAD: 55f311d2ec5c9901c0f8033495630622c831a668  USB: disable all RNDIS protocol drivers
 
-I notice a regression report on Bugzilla [1]. Quoting from it:
+elapsed time: 722m
 
-> After update to linux 6.5.5 I observed several crashes during bootup when USB drive connected to USB-C hub. To find out what has been crashed I enabled EFI pstore. Unfortunately there were no crashes after that. However, there are kernel BUG traces in dmesg. After several experiments I found strong correlation between ucsi_acpi driver and the crash.
-> 
-> I blacklisted:
-> blacklist typec_ucsi
-> blacklist ucsi_acpi
-> blacklist roles
-> blacklist typec
-> 
-> Two dmesgs are in attachment. 
-> 
-> The messages to search:
-> ucsi_acpi USBC000:00: possible UCSI driver bug 2
-> ucsi_acpi USBC000:00: error -EINVAL: PPM init failed
+configs tested: 124
+configs skipped: 2
 
-See Bugzilla for the full thread.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Anyway, I'm adding this regression to regzbot:
-
-#regzbot introduced: v6.4..v6.5 https://bugzilla.kernel.org/show_bug.cgi?id=217960
-#regzbot title: ucsi_acpi boot crash when USB drive is connected to USB-C port
-
-Thanks.
-
-[1]: https://bugzilla.kernel.org/show_bug.cgi?id=217960
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                   randconfig-001-20231001   gcc  
+arc                        vdk_hs38_defconfig   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                            hisi_defconfig   gcc  
+arm                        mvebu_v5_defconfig   clang
+arm                   randconfig-001-20231001   gcc  
+arm64                            allmodconfig   gcc  
+arm64                             allnoconfig   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+i386                             allmodconfig   gcc  
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386         buildonly-randconfig-001-20231001   gcc  
+i386         buildonly-randconfig-002-20231001   gcc  
+i386         buildonly-randconfig-003-20231001   gcc  
+i386         buildonly-randconfig-004-20231001   gcc  
+i386         buildonly-randconfig-005-20231001   gcc  
+i386         buildonly-randconfig-006-20231001   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                  randconfig-001-20231001   gcc  
+i386                  randconfig-002-20231001   gcc  
+i386                  randconfig-003-20231001   gcc  
+i386                  randconfig-004-20231001   gcc  
+i386                  randconfig-005-20231001   gcc  
+i386                  randconfig-006-20231001   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                        allyesconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20231001   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                         apollo_defconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                        mvme16x_defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                       bmips_be_defconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+openrisc                         allmodconfig   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+openrisc                       virt_defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   gcc  
+powerpc                   bluestone_defconfig   clang
+powerpc                     tqm8555_defconfig   gcc  
+powerpc64                           defconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv             nommu_k210_sdcard_defconfig   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                              allnoconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                          debug_defconfig   gcc  
+s390                                defconfig   gcc  
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sh                 kfr2r09-romimage_defconfig   gcc  
+sh                        sh7757lcr_defconfig   gcc  
+sh                  sh7785lcr_32bit_defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                randconfig-001-20231001   gcc  
+x86_64                randconfig-002-20231001   gcc  
+x86_64                randconfig-003-20231001   gcc  
+x86_64                randconfig-004-20231001   gcc  
+x86_64                randconfig-005-20231001   gcc  
+x86_64                randconfig-006-20231001   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa                            allnoconfig   gcc  
+xtensa                           allyesconfig   gcc  
 
 -- 
-An old man doll... just what I always wanted! - Clara
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
