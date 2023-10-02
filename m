@@ -1,207 +1,117 @@
-Return-Path: <linux-usb+bounces-897-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-898-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 261697B4A70
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 02:18:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DDB197B4B96
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 08:42:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 39E182817FD
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 00:18:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id DFE992816F2
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 06:42:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2FD737A;
-	Mon,  2 Oct 2023 00:18:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4BBC138A;
+	Mon,  2 Oct 2023 06:42:40 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDFB118F
-	for <linux-usb@vger.kernel.org>; Mon,  2 Oct 2023 00:18:09 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2703EC6
-	for <linux-usb@vger.kernel.org>; Sun,  1 Oct 2023 17:18:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696205888; x=1727741888;
-  h=date:from:to:cc:subject:message-id;
-  bh=uQ5x0RFgV8xGNTA9aDJjU/hmdc+ewqBbcQQ9ShYM1gc=;
-  b=M+Eyp0++MPeNyhxWbT17iCcbiIL8Un971clBBoHxR+TqbxNWNVN32MfE
-   8nv8jjSn/dn3RweDr8hRfSY7EXC0jD4R9CoIFb/ZyNrS6ELFbE55SR0Ob
-   zgbi3mx+FLq1bO/VMb/wYdgUar2ZPwVUK4iTXfqgeMvt5pLgKTtV5e6+V
-   64NDgfN2bifQsGZLE4Pa+tOEc53fo/Xorlkx4Zr+xRhRC8Cjw3wpjEKnN
-   rcYoYWqcX1/CIn6Jmg7BDs3TlBgIIMJ9PYCFQJPWM0ydFlvdYXAaMX/g6
-   YQDPrY61kQchg5/yGQn4o6Ji7loGzdidCKaqieuGJTq32t4Ug52x2cAhZ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10850"; a="468840034"
-X-IronPort-AV: E=Sophos;i="6.03,193,1694761200"; 
-   d="scan'208";a="468840034"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2023 17:18:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.03,193,1694761200"; 
-   d="scan'208";a="1372560"
-Received: from lkp-server02.sh.intel.com (HELO c3b01524d57c) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 01 Oct 2023 17:17:27 -0700
-Received: from kbuild by c3b01524d57c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qn6dP-0005aN-2A;
-	Mon, 02 Oct 2023 00:18:03 +0000
-Date: Mon, 02 Oct 2023 08:17:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:rndis-removal] BUILD SUCCESS
- 55f311d2ec5c9901c0f8033495630622c831a668
-Message-ID: <202310020825.IV7KXmiS-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-	SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D96C10E8
+	for <linux-usb@vger.kernel.org>; Mon,  2 Oct 2023 06:42:37 +0000 (UTC)
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899949B
+	for <linux-usb@vger.kernel.org>; Sun,  1 Oct 2023 23:42:35 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1qnCdW-0004ba-22; Mon, 02 Oct 2023 08:42:34 +0200
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1qnCdU-00ASh9-Qa; Mon, 02 Oct 2023 08:42:32 +0200
+Received: from mgr by dude04.red.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1qnCdU-009nt2-2S;
+	Mon, 02 Oct 2023 08:42:32 +0200
+From: Michael Grzeschik <m.grzeschik@pengutronix.de>
+To: laurent.pinchart@ideasonboard.com
+Cc: linux-usb@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	gregkh@linuxfoundation.org,
+	john@keeping.me.uk,
+	alsi@bang-olufsen.dk,
+	ruslan.bilovol@gmail.com,
+	kernel@pengutronix.de
+Subject: [PATCH] usb: gadget: u_audio: initialize spinlocks
+Date: Mon,  2 Oct 2023 08:42:31 +0200
+Message-Id: <20231002064231.2336627-1-m.grzeschik@pengutronix.de>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git rndis-removal
-branch HEAD: 55f311d2ec5c9901c0f8033495630622c831a668  USB: disable all RNDIS protocol drivers
+When using uac2 with lockdep enabled, the kernel is throwing this
+message, due to uninitialized spinlocks. We initialize them now.
 
-elapsed time: 722m
+[   24.668867] The code is fine but needs lockdep annotation, or maybe
+[   24.675878] you didn't initialize this object before use?
+[   24.681910] turning off the locking correctness validator.
+[   24.688038] CPU: 0 PID: 348 Comm: irq/43-dwc3 Tainted: G         C         6.5.0-20230919-1+ #14
+[   24.697866] Hardware name: WolfVision PF5 (DT)
+[   24.702831] Call trace:
+[   24.705559]  dump_backtrace+0xac/0x130
+[   24.709755]  show_stack+0x30/0x48
+[   24.713456]  dump_stack_lvl+0x60/0xb0
+[   24.717552]  dump_stack+0x18/0x28
+[   24.721254]  register_lock_class+0x4e8/0x4f8
+[   24.726029]  __lock_acquire+0x88/0x2130
+[   24.730314]  lock_acquire+0x17c/0x338
+[   24.734403]  _raw_spin_lock_irqsave+0x60/0x90
+[   24.739274]  u_audio_get_capture_srate+0x34/0x68
+[   24.744436]  afunc_setup+0x2d8/0x538
+[   24.748431]  composite_setup+0x1a8/0x1ba8
+[   24.752913]  configfs_composite_setup+0x88/0xc0
+[   24.757974]  dwc3_ep0_interrupt+0x5e8/0xab8
+[   24.762648]  dwc3_process_event_buf+0x424/0xbb0
+[   24.767717]  dwc3_thread_interrupt+0x4c/0x90
+[   24.772488]  irq_thread_fn+0x34/0xb8
+[   24.776484]  irq_thread+0x1a0/0x290
+[   24.780379]  kthread+0x10c/0x120
+[   24.783985]  ret_from_fork+0x10/0x20
 
-configs tested: 124
-configs skipped: 2
+Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+---
+ drivers/usb/gadget/function/u_audio.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20231001   gcc  
-arc                        vdk_hs38_defconfig   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                            hisi_defconfig   gcc  
-arm                        mvebu_v5_defconfig   clang
-arm                   randconfig-001-20231001   gcc  
-arm64                            allmodconfig   gcc  
-arm64                             allnoconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20231001   gcc  
-i386         buildonly-randconfig-002-20231001   gcc  
-i386         buildonly-randconfig-003-20231001   gcc  
-i386         buildonly-randconfig-004-20231001   gcc  
-i386         buildonly-randconfig-005-20231001   gcc  
-i386         buildonly-randconfig-006-20231001   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                  randconfig-001-20231001   gcc  
-i386                  randconfig-002-20231001   gcc  
-i386                  randconfig-003-20231001   gcc  
-i386                  randconfig-004-20231001   gcc  
-i386                  randconfig-005-20231001   gcc  
-i386                  randconfig-006-20231001   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20231001   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                         apollo_defconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                        mvme16x_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                       bmips_be_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-openrisc                       virt_defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   gcc  
-powerpc                   bluestone_defconfig   clang
-powerpc                     tqm8555_defconfig   gcc  
-powerpc64                           defconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv             nommu_k210_sdcard_defconfig   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                          debug_defconfig   gcc  
-s390                                defconfig   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                 kfr2r09-romimage_defconfig   gcc  
-sh                        sh7757lcr_defconfig   gcc  
-sh                  sh7785lcr_32bit_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20231001   gcc  
-x86_64                randconfig-002-20231001   gcc  
-x86_64                randconfig-003-20231001   gcc  
-x86_64                randconfig-004-20231001   gcc  
-x86_64                randconfig-005-20231001   gcc  
-x86_64                randconfig-006-20231001   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                            allnoconfig   gcc  
-xtensa                           allyesconfig   gcc  
-
+diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
+index 4a42574b4a7feb..9d9f906adf7c00 100644
+--- a/drivers/usb/gadget/function/u_audio.c
++++ b/drivers/usb/gadget/function/u_audio.c
+@@ -1172,6 +1172,9 @@ int g_audio_setup(struct g_audio *g_audio, const char *pcm_name,
+ 	g_audio->uac = uac;
+ 	uac->audio_dev = g_audio;
+ 
++	spin_lock_init(&uac->c_prm.lock);
++	spin_lock_init(&uac->p_prm.lock);
++
+ 	params = &g_audio->params;
+ 	p_chmask = params->p_chmask;
+ 	c_chmask = params->c_chmask;
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.39.2
+
 
