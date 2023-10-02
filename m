@@ -1,167 +1,121 @@
-Return-Path: <linux-usb+bounces-929-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-930-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DBA67B54DE
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 16:22:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A48E7B5553
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 16:39:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by ny.mirrors.kernel.org (Postfix) with ESMTP id 8DD5C1C209AC
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 14:22:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTP id 394B71C208CC
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 14:39:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 721BF1A27A;
-	Mon,  2 Oct 2023 14:22:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB9BC1A271;
+	Mon,  2 Oct 2023 14:39:51 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1650C199AF
-	for <linux-usb@vger.kernel.org>; Mon,  2 Oct 2023 14:22:46 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A14EBA4
-	for <linux-usb@vger.kernel.org>; Mon,  2 Oct 2023 07:22:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696256564; x=1727792564;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=YbWXFvzQZoqXdqd/6sX/f9t0eK5BwQKXDGFlF8bdmPw=;
-  b=nxYLcj1NXH1U7dTeg+eqZybFQKYlNm5qDCsBeuksRJi6c4cbXzdyz6PI
-   idoja/TZfOgtEVhBQpuugZNMU96DsPVI1Ikh4iwMMdBI1JpUgi76psZXm
-   tmyLoNV4a7UE40s4SPSSHERTw3t3D0XLtNsm+UPMceyPLOwvIGf4lAqyB
-   28W0w30vqOo+rNUH6Crrlksq55maAhdYVvcPkkY/fWVq+OiGvfgr20+0I
-   bUtb5BoXTzKpbCQgXjNLH1bdYsmO3svXLjFAR0tBQN/lc8x7e9+CQN3Xl
-   qieFLOHQ2p39KJAeRrUZa5TrqJ0NZSQ+Yo0Ei3toEkYtP5wSa03WXk2iS
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10851"; a="413563270"
-X-IronPort-AV: E=Sophos;i="6.03,194,1694761200"; 
-   d="scan'208";a="413563270"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2023 07:22:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10851"; a="894143281"
-X-IronPort-AV: E=Sophos;i="6.03,194,1694761200"; 
-   d="scan'208";a="894143281"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 02 Oct 2023 07:21:20 -0700
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Guenter Roeck <linux@roeck-us.net>,
-	linux-usb@vger.kernel.org,
-	Douglas Gilbert <dgilbert@interlog.com>
-Subject: [PATCH v3] usb: pd: Exposing the Peak Current value of Fixed Supplies to user space
-Date: Mon,  2 Oct 2023 17:22:40 +0300
-Message-Id: <20231002142240.2641962-1-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.40.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B15D18AEE
+	for <linux-usb@vger.kernel.org>; Mon,  2 Oct 2023 14:39:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34E24C433C8;
+	Mon,  2 Oct 2023 14:39:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1696257590;
+	bh=mfetEKQLfVvOsbkQ2Cy6lZWuc5c3sKvX7rQKRBDc538=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qhMrkH+9QTbAsa6GPqtCgY3pJ+2VLDzOjfIJX2snnANn6BHEvlA//XS4DZQn/00vX
+	 GSgyNlCl3UvdW0IbKK8z2z/mEgP47qESqnMCwGNxpMP9RrO7i3wK9O/HekuGmzSdmD
+	 VLCaI4KTc7k7D0FdNNuMoTLovqPUskRjJ0F+Xi7I=
+Date: Mon, 2 Oct 2023 16:39:47 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
+Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>, linux-usb@vger.kernel.org,
+	linux-mediatek@lists.infradead.org, kernel@pengutronix.de
+Subject: Re: [PATCH v2] usb: mtu3: Convert to platform remove callback
+ returning void
+Message-ID: <2023100219-variety-genre-befe@gregkh>
+References: <20230914200251.919584-1-u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-	RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-	autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+In-Reply-To: <20230914200251.919584-1-u.kleine-koenig@pengutronix.de>
 
-Exposing the value of the field as is.
+On Thu, Sep 14, 2023 at 10:02:51PM +0200, Uwe Kleine-König wrote:
+> The .remove() callback for a platform driver returns an int which makes
+> many driver authors wrongly assume it's possible to do error handling by
+> returning an error code. However the value returned is (mostly) ignored
+> and this typically results in resource leaks. To improve here there is a
+> quest to make the remove callback return void. In the first step of this
+> quest all drivers are converted to .remove_new() which already returns
+> void.
+> 
+> The function mtu3_remove() can only return a non-zero value if
+> ssusb->dr_mode is neiter USB_DR_MODE_PERIPHERAL nor USB_DR_MODE_HOST nor
+> USB_DR_MODE_OTG. In this case however the probe callback doesn't succeed
+> and so the remove callback isn't called at all. So the code branch
+> resulting in this error path could just be dropped were it not for the
+> compiler choking on "enumeration value 'USB_DR_MODE_UNKNOWN' not handled
+> in switch [-Werror=switch]". So instead replace this code path by a
+> WARN_ON and then mtu3_remove() be converted to return void trivially.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+> ---
+> Changes since (implicit) v1 sent with Message-Id:
+> 20230709163335.3458886-1-u.kleine-koenig@pengutronix.de:
+> 
+>  - Keep case USB_DR_MODE_UNKNOWN to cope for the compiler being called
+>    with -Werror=switch.
+>  - Rebase to a newer tree
+> 
+> Just to evaluate the options, I tried with a BUG_ON(ssusb->dr_mode ==
+> USB_DR_MODE_UNKNOWN) before the switch, but even then gcc insists on the
+> case label for this value.
+> 
+> Best regards
+> Uwe
+> 
+>  drivers/usb/mtu3/mtu3_plat.c | 19 +++++++++++++------
+>  1 file changed, 13 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/usb/mtu3/mtu3_plat.c b/drivers/usb/mtu3/mtu3_plat.c
+> index 6f264b129243..18c6cf9a2d71 100644
+> --- a/drivers/usb/mtu3/mtu3_plat.c
+> +++ b/drivers/usb/mtu3/mtu3_plat.c
+> @@ -451,7 +451,7 @@ static int mtu3_probe(struct platform_device *pdev)
+>  	return ret;
+>  }
+>  
+> -static int mtu3_remove(struct platform_device *pdev)
+> +static void mtu3_remove(struct platform_device *pdev)
+>  {
+>  	struct ssusb_mtk *ssusb = platform_get_drvdata(pdev);
+>  
+> @@ -469,8 +469,17 @@ static int mtu3_remove(struct platform_device *pdev)
+>  		ssusb_gadget_exit(ssusb);
+>  		ssusb_host_exit(ssusb);
+>  		break;
+> -	default:
+> -		return -EINVAL;
+> +	case USB_DR_MODE_UNKNOWN:
+> +		/*
+> +		 * This cannot happen because with dr_mode ==
+> +		 * USB_DR_MODE_UNKNOWN, .probe() doesn't succeed and so
+> +		 * .remove() wouldn't be called at all. However (little
+> +		 * surprising) the compiler isn't smart enough to see that, so
+> +		 * we explicitly have this case item to not make the compiler
+> +		 * wail about an unhandled enumeration value.
+> +		 */
+> +		WARN_ON(1);
 
-The Peak Current value has to be interpreted as described
-in Table 6-10 (Fixed Power Source Peak Current Capability)
-of the USB Power Delivery Specification, but that
-interpretation will be done in user space, not in kernel.
+Please don't add new WARN_ON() calls to the kernel, print out a big
+error message and return, don't reboot the machine.
 
-Suggested-by: Douglas Gilbert <dgilbert@interlog.com>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
-v3: There was something wrong with my reStructuredText style table. While
-    attempting to fix it, I realised that in the latest USB PD specification
-    there are some small changes in the Table 6-10, so I'm skipping that table
-    from the documentation, and just giving a general explanation for the sysfs
-    file instead.
+thanks,
 
-    I took the liberty of including Reviewed-by tag from Guenter in any case.
-    The code has not changed.
-
----
- .../ABI/testing/sysfs-class-usb_power_delivery         |  7 +++++++
- drivers/usb/typec/pd.c                                 | 10 ++++------
- include/linux/usb/pd.h                                 |  1 +
- 3 files changed, 12 insertions(+), 6 deletions(-)
-
-diff --git a/Documentation/ABI/testing/sysfs-class-usb_power_delivery b/Documentation/ABI/testing/sysfs-class-usb_power_delivery
-index 1bf9d1d7902c..61d233c320ea 100644
---- a/Documentation/ABI/testing/sysfs-class-usb_power_delivery
-+++ b/Documentation/ABI/testing/sysfs-class-usb_power_delivery
-@@ -124,6 +124,13 @@ Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
- Description:
- 		The voltage the supply supports in millivolts.
- 
-+What:		/sys/class/usb_power_delivery/.../source-capabilities/<position>:fixed_supply/peak_current
-+Date:		October 2023
-+Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
-+Description:
-+		This file shows the value of the Fixed Power Source Peak Current
-+		Capability field.
-+
- What:		/sys/class/usb_power_delivery/.../source-capabilities/<position>:fixed_supply/maximum_current
- Date:		May 2022
- Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
-diff --git a/drivers/usb/typec/pd.c b/drivers/usb/typec/pd.c
-index 8cc66e4467c4..85d015cdbe1f 100644
---- a/drivers/usb/typec/pd.c
-+++ b/drivers/usb/typec/pd.c
-@@ -83,14 +83,12 @@ unchunked_extended_messages_supported_show(struct device *dev,
- }
- static DEVICE_ATTR_RO(unchunked_extended_messages_supported);
- 
--/*
-- * REVISIT: Peak Current requires access also to the RDO.
- static ssize_t
- peak_current_show(struct device *dev, struct device_attribute *attr, char *buf)
- {
--	...
-+	return sysfs_emit(buf, "%u\n", (to_pdo(dev)->pdo >> PDO_FIXED_PEAK_CURR_SHIFT) & 3);
- }
--*/
-+static DEVICE_ATTR_RO(peak_current);
- 
- static ssize_t
- fast_role_swap_current_show(struct device *dev, struct device_attribute *attr, char *buf)
-@@ -135,7 +133,7 @@ static struct attribute *source_fixed_supply_attrs[] = {
- 	&dev_attr_usb_communication_capable.attr,
- 	&dev_attr_dual_role_data.attr,
- 	&dev_attr_unchunked_extended_messages_supported.attr,
--	/*&dev_attr_peak_current.attr,*/
-+	&dev_attr_peak_current.attr,
- 	&dev_attr_voltage.attr,
- 	&maximum_current_attr.attr,
- 	NULL
-@@ -144,7 +142,7 @@ static struct attribute *source_fixed_supply_attrs[] = {
- static umode_t fixed_attr_is_visible(struct kobject *kobj, struct attribute *attr, int n)
- {
- 	if (to_pdo(kobj_to_dev(kobj))->object_position &&
--	    /*attr != &dev_attr_peak_current.attr &&*/
-+	    attr != &dev_attr_peak_current.attr &&
- 	    attr != &dev_attr_voltage.attr &&
- 	    attr != &maximum_current_attr.attr &&
- 	    attr != &operational_current_attr.attr)
-diff --git a/include/linux/usb/pd.h b/include/linux/usb/pd.h
-index c59fb79a42e8..eb626af0e4e7 100644
---- a/include/linux/usb/pd.h
-+++ b/include/linux/usb/pd.h
-@@ -228,6 +228,7 @@ enum pd_pdo_type {
- #define PDO_FIXED_UNCHUNK_EXT		BIT(24) /* Unchunked Extended Message supported (Source) */
- #define PDO_FIXED_FRS_CURR_MASK		(BIT(24) | BIT(23)) /* FR_Swap Current (Sink) */
- #define PDO_FIXED_FRS_CURR_SHIFT	23
-+#define PDO_FIXED_PEAK_CURR_SHIFT	20
- #define PDO_FIXED_VOLT_SHIFT		10	/* 50mV units */
- #define PDO_FIXED_CURR_SHIFT		0	/* 10mA units */
- 
--- 
-2.40.1
-
+greg k-h
 
