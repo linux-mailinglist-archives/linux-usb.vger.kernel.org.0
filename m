@@ -1,93 +1,74 @@
-Return-Path: <linux-usb+bounces-922-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-923-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7E547B518C
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 13:39:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6456B7B5194
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 13:42:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sy.mirrors.kernel.org (Postfix) with ESMTP id 38E3AB20C66
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 11:39:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTP id 77D5C1C208D6
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 11:42:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FEC614019;
-	Mon,  2 Oct 2023 11:39:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D56E414285;
+	Mon,  2 Oct 2023 11:42:05 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E7C9EAD4
-	for <linux-usb@vger.kernel.org>; Mon,  2 Oct 2023 11:39:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A238EC433C7;
-	Mon,  2 Oct 2023 11:39:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1696246786;
-	bh=O7NFR64zOPLmC/QNpKeZgYJ7AuhogpiJTIeNItFSlV0=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73CDDE566;
+	Mon,  2 Oct 2023 11:42:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40348C433C7;
+	Mon,  2 Oct 2023 11:42:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1696246924;
+	bh=d8FcFb3yWGd/9wtt0mcVGwPft2o/vm/EglUHKzdkfgQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=c9zSq/8im9O/OMdqhtSjRVXbE79zcjQWNT9FpK6FUUxMTrOdkZ5ESETXThYD30tue
-	 tulTimyVSjR5hwl3iayVlTqsjCCBtzJn7Pcg7oRofQ+Byd/clT3+U7XNc47UXB3SHt
-	 0rWEpDoZMCMISEUPZjfeUXUyeSgM+3m0ZoJplvSu1fzH95q45SqxWK2VlqcYMKRJEX
-	 HZkqfCl9Tarx7Jzmw2sCStEGvGZk05y5n86MrmebfY/fYqAZRoHyZYEhF0c/eMmxLf
-	 3pxkxHQcTjpNH9j8ZqL6MpjFJjMDHcE4nXmY6/2t4GlsB0jV8QY5hOM7WFIIVInGNH
-	 OMdYyw2PA6EPw==
-Date: Mon, 2 Oct 2023 12:39:39 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Duje =?utf-8?Q?Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
-Cc: Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	Russell King <linux@armlinux.org.uk>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Andy Shevchenko <andy@kernel.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-input@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH RFC v4 6/6] input: ads7846: Move wait_for_sync() logic to
- driver
-Message-ID: <d55bc5aa-0d23-42ac-8056-649e9dcb416b@sirena.org.uk>
-References: <20231001-pxa-gpio-v4-0-0f3b975e6ed5@skole.hr>
- <20231001-pxa-gpio-v4-6-0f3b975e6ed5@skole.hr>
+	b=sPG0RdMpsRSEdUD24LYEMhEURsA7sqlGX29fJ5XEfM0gmq3NlvgvkoV7tHor+LC0x
+	 uWR04f5dKQExuM5HEQ8X5EPbFKBAW20JvqzSgDBiJ/Ig8a1xMp3Y6jXJhmXXKIzutf
+	 iWGdjOIB2dSKGH3qUVJmpIaSboNgAp0rqLbeEFmA=
+Date: Mon, 2 Oct 2023 13:42:01 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Kees Cook <keescook@chromium.org>
+Cc: Alan Stern <stern@rowland.harvard.edu>,
+	Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] usb: Annotate struct urb_priv with __counted_by
+Message-ID: <2023100246-stem-overcoat-c4b8@gregkh>
+References: <20230915195812.never.371-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="M4Zq+ZQdxjC6Bd+a"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231001-pxa-gpio-v4-6-0f3b975e6ed5@skole.hr>
-X-Cookie: Postage will be paid by addressee.
+In-Reply-To: <20230915195812.never.371-kees@kernel.org>
 
+On Fri, Sep 15, 2023 at 12:58:16PM -0700, Kees Cook wrote:
+> Prepare for the coming implementation by GCC and Clang of the __counted_by
+> attribute. Flexible array members annotated with __counted_by can have
+> their accesses bounds-checked at run-time checking via CONFIG_UBSAN_BOUNDS
+> (for array indexing) and CONFIG_FORTIFY_SOURCE (for strcpy/memcpy-family
+> functions).
+> 
+> As found with Coccinelle[1], add __counted_by for struct urb_priv.
+> 
+> [1] https://github.com/kees/kernel-tools/blob/trunk/coccinelle/examples/counted_by.cocci
+> 
+> Cc: Alan Stern <stern@rowland.harvard.edu>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Mathias Nyman <mathias.nyman@intel.com>
+> Cc: linux-usb@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  drivers/usb/host/ohci.h | 2 +-
+>  drivers/usb/host/xhci.h | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
---M4Zq+ZQdxjC6Bd+a
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks for taking these changes through your tree, I was too slow...
 
-On Sun, Oct 01, 2023 at 04:12:57PM +0200, Duje Mihanovi=C4=87 wrote:
-> If this code is left in the board file, the sync GPIO would have to be
-> separated into another lookup table during conversion to the GPIO
-> descriptor API (which is also done in this patch).
-
-Acked-by: Mark Brown <broonie@kernel.org>
-
---M4Zq+ZQdxjC6Bd+a
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmUaq/oACgkQJNaLcl1U
-h9Dt/Qf+MSd/mMCZ5OeKKKxAHpF1kvtA5HYwERVpgdRl25JhE/oHIAPXqiqWxquN
-cmA2UMzMdGVebBDbjli7wPf5RBtNwZ/B2oTGvUzesyS4cqssMa4DuWJ4JC0huDnt
-nQHBqKKORTUL/aUDVUTFjAd/GX/aSUdP+DxpT/5FK3v5BDrVBGIyhMZuHws8mQGX
-1MYnpDAAjNrKWEzavwf/KIff+v+mgg2/0XvNgC74/+4V1P7txO/fy5hoz+U5IuK4
-NBISeh6GyHXc0mNJ3sDKFCscaWDyYv1Zw6+iK0x29+wQhUia8JDo++hrPrlN+qB7
-QDKXiNNMV+m2IwEfp92IOumo45fINw==
-=CmBU
------END PGP SIGNATURE-----
-
---M4Zq+ZQdxjC6Bd+a--
+greg k-h
 
