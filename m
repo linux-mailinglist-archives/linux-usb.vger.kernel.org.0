@@ -1,141 +1,103 @@
-Return-Path: <linux-usb+bounces-925-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-926-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12D7F7B52D8
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 14:21:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C4367B5337
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 14:29:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id B96DC282FC8
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 12:21:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTP id 43B231C2098C
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 12:29:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95F6D17724;
-	Mon,  2 Oct 2023 12:21:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDA5C18E00;
+	Mon,  2 Oct 2023 12:29:22 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B44710A0D;
-	Mon,  2 Oct 2023 12:21:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D79BCC433C7;
-	Mon,  2 Oct 2023 12:21:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1696249279;
-	bh=j6GCwRHciLgjRT87l8yg8vMEZ+mk/SUuffwOzm0R1xs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DKYQ8mdZOgKw8zZeEEHwVzD2dedtzq2hQK80iOXudNyaRmZDYwknuXEObVp2rLKa5
-	 29voMfvZ84T8EQaRhGSryhRZaeQ6lRUtS/I36rAxAwXjOfeJlp25ZwvRa5zzSehzC+
-	 R7235RFh0t5yBQ66nKLx2cyDoNJOGs2NS3UG170A=
-Date: Mon, 2 Oct 2023 14:21:15 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: richard.yu@hpe.com
-Cc: verdun@hpe.com, nick.hawkins@hpe.com, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] usb: gadget: udc: gxp-udc: add HPE GXP USB HUB
- support
-Message-ID: <2023100212-hyperlink-prolonged-3e18@gregkh>
-References: <20230907210601.25284-1-richard.yu@hpe.com>
- <20230907210601.25284-3-richard.yu@hpe.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FA6D18025
+	for <linux-usb@vger.kernel.org>; Mon,  2 Oct 2023 12:29:20 +0000 (UTC)
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA61FD8
+	for <linux-usb@vger.kernel.org>; Mon,  2 Oct 2023 05:29:16 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-31f71b25a99so16397320f8f.2
+        for <linux-usb@vger.kernel.org>; Mon, 02 Oct 2023 05:29:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1696249755; x=1696854555; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cTJqVBoOgLxU8zj+PMnKpZEI8SgRr76FsWuJmkP+inE=;
+        b=b2VPz+shcLvZudZI8QobsNHgb6qOWj52cycG3QPRipuvqqDSu3Kqtw9lX7bILuDQ87
+         QMUoYRoOF2Ag3HZRxdpuk/g3BMq4uzyFxg0mkARllB5VUKHfF+jMv5ckgkwUSgkxVdTD
+         XRxgbU9pu8ReZIYLQfHiiZdj/IE9k288a8dicWmUVrpoGNRfPYVOm9qkAVAOn9O2sEe7
+         626TTlAP3oIC5w5GEJP5z3b0r+mM8QINTelUfHz3xvbL/1SYeCdUg0x1M5BSGqONqJqb
+         zfn39ogNReXv4zmK+/iekfVaHtHou+63H0FGRoRUa7XlI7O4ZVhRdR4YsACazO/jtfgj
+         47NA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696249755; x=1696854555;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cTJqVBoOgLxU8zj+PMnKpZEI8SgRr76FsWuJmkP+inE=;
+        b=NnPqtxVKrRtfG9sStv+srHBk0zAYi3hmvsfv/P1ns+OOhEE5ZrTGonE9TJ66F/+Y4r
+         c0MlCKtRLw3yG4/kMtJRVRBfipmazYYSPWYEM3FZ5rl+pEYUoUigvh3rhKpZYSQEf/cg
+         1+ypDRdYhDq6+/R26NgF+6dbKh7eJneO/wBGLB1XbP0sG1QM3V9dxdL3ro+oKKuFgj1H
+         EA47BSpbFvH1D/Nw3SwTsGdb9ShEcelqF9rPbEXz1wJYt+sRKB6RMeX3SU9ndA46fPHb
+         bY1ORCXh1z/rGuSQriCL5TLDgKQpGSfm6bUnfCV3rPAaHbeCry2zb3GQ03lNJQaR9f82
+         l6ZQ==
+X-Gm-Message-State: AOJu0YxlBO4/KzdNV1kU3GDS/RcnCnW41RenpWA9Ax+Hs+sJs0chQ+Nm
+	qMiacmA91Ppul2qms56y10bHIA==
+X-Google-Smtp-Source: AGHT+IFRHHZHyI7q31hR72m2ZJJLYi9dW2DnTOfh6M0zxWL5XbDOqS+zPZ63hr6D6g2MpN9MwxCxSQ==
+X-Received: by 2002:a5d:60cd:0:b0:320:38:9e14 with SMTP id x13-20020a5d60cd000000b0032000389e14mr10225432wrt.7.1696249755020;
+        Mon, 02 Oct 2023 05:29:15 -0700 (PDT)
+Received: from toaster.lan ([2a01:e0a:3c5:5fb1:fcf2:65f1:853c:13be])
+        by smtp.googlemail.com with ESMTPSA id s16-20020a05600c045000b0040536dcec17sm7144819wmb.27.2023.10.02.05.29.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Oct 2023 05:29:14 -0700 (PDT)
+From: Jerome Brunet <jbrunet@baylibre.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: Jerome Brunet <jbrunet@baylibre.com>,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: [PATCH v2 0/2] usb: misc: onboard_usb_hub: add gl3510 support
+Date: Mon,  2 Oct 2023 14:29:07 +0200
+Message-Id: <20231002122909.2338049-1-jbrunet@baylibre.com>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230907210601.25284-3-richard.yu@hpe.com>
+X-Patchwork-Bot: notify
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-On Thu, Sep 07, 2023 at 04:06:00PM -0500, richard.yu@hpe.com wrote:
-> +struct gxp_udc_drvdata {
-> +	void __iomem *base;
-> +	struct platform_device *pdev;
-> +	struct regmap *udcg_map;
-> +	struct gxp_udc_ep ep[GXP_UDC_MAX_NUM_EP];
-> +
-> +	int irq;
-> +
-> +	/* sysfs enclosure for the gadget gunk */
-> +	struct device *port_dev;
+This patchset adds the bindings and driver support to trigger the reset
+pin of the Genesys Logic gl3510 usb hub.
 
-A "raw" struct device?  That's not ok.  It's also going to break things,
-how was this tested?  What does it look like in sysfs with this device?
+Changes since v1: [0]
+ - fix typo, replacing '.' with ',' in the bindings
+ - use existing gl852g data structure
 
-> +	/*
-> +	 * The UDC core really needs us to have separate and uniquely
-> +	 * named "parent" devices for each port so we create a sub device
-> +	 * here for that purpose
-> +	 */
-> +	drvdata->port_dev = kzalloc(sizeof(*drvdata->port_dev), GFP_KERNEL);
-> +	if (!drvdata->port_dev) {
-> +		rc = -ENOMEM;
-> +		goto fail_alloc;
-> +	}
-> +	device_initialize(drvdata->port_dev);
-> +	drvdata->port_dev->release = gxp_udc_dev_release;
-> +	drvdata->port_dev->parent = parent;
-> +	dev_set_name(drvdata->port_dev, "%s:p%d", dev_name(parent), idx + 1);
-> +
-> +	/* DMA setting */
-> +	drvdata->port_dev->dma_mask = parent->dma_mask;
-> +	drvdata->port_dev->coherent_dma_mask = parent->coherent_dma_mask;
-> +	drvdata->port_dev->bus_dma_limit = parent->bus_dma_limit;
-> +	drvdata->port_dev->dma_range_map = parent->dma_range_map;
-> +	drvdata->port_dev->dma_parms = parent->dma_parms;
-> +	drvdata->port_dev->dma_pools = parent->dma_pools;
-> +
-> +	rc = device_add(drvdata->port_dev);
+[0]: https://lore.kernel.org/all/20230808100746.391365-1-jbrunet@baylibre.com/
 
-So you createad a "raw" device that does not belong to any bus or type
-and add it to sysfs?  Why?  Shouldn't it be a "virtual" device if you
-really want/need one?
+Jerome Brunet (2):
+  dt-bindings: usb: add device for Genesys Logic hub gl3510
+  usb: misc: onboard_usb_hub: add Genesys Logic gl3510 hub support
 
-> +	if (rc)
-> +		goto fail_add;
-> +
-> +	/* Populate gadget */
-> +	gxp_udc_init(drvdata);
-> +
-> +	rc = usb_add_gadget_udc(drvdata->port_dev, &drvdata->gadget);
-> +	if (rc != 0) {
-> +		dev_err(drvdata->port_dev, "add gadget failed\n");
-> +		goto fail_udc;
-> +	}
-> +	rc = devm_request_irq(drvdata->port_dev,
-> +			      drvdata->irq,
-> +			      gxp_udc_irq,
-> +			      IRQF_SHARED,
-> +			      gxp_udc_name[drvdata->vdevnum],
-> +			      drvdata);
+ Documentation/devicetree/bindings/usb/genesys,gl850g.yaml | 3 ++-
+ drivers/usb/misc/onboard_usb_hub.h                        | 1 +
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-devm_request_irq() is _very_ tricky, are you _SURE_ you got it right
-here?  Why do you need to use it?
+-- 
+2.40.1
 
-> +	if (rc < 0) {
-> +		dev_err(drvdata->port_dev, "irq request failed\n");
-> +		goto fail_udc;
-> +	}
-> +
-> +	return 0;
-> +
-> +	/* ran code to simulate these three error exit, no double free */
-
-What does this comment mean?
-
-> +fail_udc:
-> +	device_del(drvdata->port_dev);
-> +fail_add:
-> +	put_device(drvdata->port_dev);
-> +fail_alloc:
-> +	devm_kfree(parent, drvdata);
-> +
-> +	return rc;
-> +}
-
-Where is the device removed from the system when done?
-
-thanks,
-
-greg k-h
 
