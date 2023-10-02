@@ -1,125 +1,125 @@
-Return-Path: <linux-usb+bounces-964-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-965-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8168C7B58D1
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 19:40:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A2C167B596B
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 19:48:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 3459C2836DA
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 17:40:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id C686E2832DF
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Oct 2023 17:48:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BE671E529;
-	Mon,  2 Oct 2023 17:40:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFE531E52F;
+	Mon,  2 Oct 2023 17:48:46 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBC66199B2
-	for <linux-usb@vger.kernel.org>; Mon,  2 Oct 2023 17:40:14 +0000 (UTC)
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93A09E9;
-	Mon,  2 Oct 2023 10:40:13 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-565e395e7a6so9245318a12.0;
-        Mon, 02 Oct 2023 10:40:13 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FA99199B2
+	for <linux-usb@vger.kernel.org>; Mon,  2 Oct 2023 17:48:45 +0000 (UTC)
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D07B890
+	for <linux-usb@vger.kernel.org>; Mon,  2 Oct 2023 10:48:43 -0700 (PDT)
+Received: by mail-ot1-x329.google.com with SMTP id 46e09a7af769-6c4a25f6390so9810014a34.2
+        for <linux-usb@vger.kernel.org>; Mon, 02 Oct 2023 10:48:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696268413; x=1696873213; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=G85KjuFiBO73o7Wzp/yJK1STnMsGHZl8ZA4ohW5rdb0=;
-        b=mHG2XujWpv5aY+ZT+hK4Qg1TPrVrbZadveA8ZLZwQ3TmYJZA1VNSYTprhRCgdX3L3s
-         jPU6cWcAG3hAdHDn8qh1SgzomplyUCaEUZPXh9N7LdkXdym3VKLgqjwr+z53dEDTT0yZ
-         OAyvPUNZQUlmNxEkQ5WIkLUtns2qYu2grgX3TJnrEsMwaUKKTa1uELp5eIVTAa5SF8lC
-         twNQG8ure3IQWvbeb0l70v31EPszoSea5woBQg43VFMTyTT6/5CQJy8n9DpW4hLNij1U
-         mNj4dMzh5uN4GVhuChLnQDOOQ79i+QOPLnCEd2+TsyTXBUPL4muAjztlVziJXcm78meW
-         dgpA==
+        d=gmail.com; s=20230601; t=1696268923; x=1696873723; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ArpFlxjb/tidMMcoJLYiYql1O9zWxusIpcC7Xf3Yrv4=;
+        b=L4tyU9W87E5gBgzFbbfIzzszmX2khfhG/Dg8BtFjNh25BrxD60mUSDI9LadUNepaMg
+         /XId8ionBj3uXx7pjv8d5vcrYObcq5NllYhFLh5a+LxjkA8GVAYe3QLMUsJPph1hmIbJ
+         l43nfZqq73BUGVWHfjIGUx7XchSkSNSNE7mf9Mk48wNslxE++AWPX8Z9zVyZDo22mlm4
+         FFku//x8Kf2VsKQ4sq5pgpNlaumAiTdYDywh2tuJb0kj5D7PnejndnvzaiDioXCu9KHY
+         4JSk+AUKEx9PT9qsiMlNdmp8FyPXajkdddyyC/4F4sWR4FPb8TVnX8EzwWAmEe6QF5mN
+         tQJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696268413; x=1696873213;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=G85KjuFiBO73o7Wzp/yJK1STnMsGHZl8ZA4ohW5rdb0=;
-        b=qQ1w7DUTgQ0CKE2FG4YejtuWpnu4WqsRRLSTv+W1F5gZf5C/9VHvI2A5MKWDq0npni
-         n+bj8SWUeaHmR0ZgYOOaivkgtYIIG1BJDMVIJiQG0XJuxeVfh279jv+IHNQVybO54bRp
-         S3PiwMV8XhQLypSMoAZI3TK6odNDhQxYza+n5UacZMk7DR5mHOXuVqxDyMzH4mNubRm/
-         RdKNuYzrr/7/e1fDOkXP8PXes44NFqzPVjWrPu5Y8yKI+hkzUU9X6h80q7i+/QaqC5WH
-         7b5Gm5/idVOfnsiboRry/d/TgHjuEK3BDxVKG4qlR1RTHjAOHVhkmQ6NkD88gpaZ6/KH
-         Jx5Q==
-X-Gm-Message-State: AOJu0YxDs4Aguoqw0foRQmEhQS8GMiFFNRz0q7QBqjpLcGCDJ4imi/cl
-	aXsvRSHV1QeLH7Wf9STeJ3fSI5o91pbENsTz
-X-Google-Smtp-Source: AGHT+IFfnemkqgLkLIaFXsRgXJMqG3C9Cw5R8Sr91ipeEIpNMozmNWbJAPPEYNXlIB6+I8ZpFUwICg==
-X-Received: by 2002:a05:6a20:4292:b0:157:b453:dbb9 with SMTP id o18-20020a056a20429200b00157b453dbb9mr12165018pzj.6.1696268412767;
-        Mon, 02 Oct 2023 10:40:12 -0700 (PDT)
-Received: from swarup-virtual-machine ([171.76.87.78])
-        by smtp.gmail.com with ESMTPSA id p22-20020aa78616000000b006932657075bsm58122pfn.82.2023.10.02.10.40.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Oct 2023 10:40:12 -0700 (PDT)
-Date: Mon, 2 Oct 2023 23:10:06 +0530
-From: swarup <swarupkotikalapudi@gmail.com>
-To: Greg KH <gregkh@linuxfoundation.org>,
-	q@swarup-virtual-machine.smtp.subspace.kernel.org
-Cc: Thinh.Nguyen@synopsys.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kernel-mentees@lists.linuxfoundation.org
-Subject: Re: [PATCH] usb: fix kernel-doc warning
-Message-ID: <ZRsAdi/LOEFPY6j1@swarup-virtual-machine>
-References: <20230918193505.7046-1-swarupkotikalapudi@gmail.com>
- <2023100253-aide-authentic-5aa1@gregkh>
- <ZRrkbkjoHgEnuy/m@swarup-virtual-machine>
- <2023100207-unmoved-arbitrary-2c33@gregkh>
+        d=1e100.net; s=20230601; t=1696268923; x=1696873723;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ArpFlxjb/tidMMcoJLYiYql1O9zWxusIpcC7Xf3Yrv4=;
+        b=YnOHhugYhkyUnLxoiMESu63EYM5f7dfd1xngx51N8MJBJurvsdL88cJOEkWEQxV39U
+         26eWVuk01pv54t3+EqDqgG+iGLRWuHSKlj6oHIPh06jnx/4RxveYztjbtYe57O46NzwS
+         v4W2PFvF7NjO+HrjYhg/C+x+WOTyJILyGwajM7s/wrbHnCMEsaz9Afc+bLLKoptapwwZ
+         1siZo14ZlZ/38ONBBsattezOPg6MRVB9XzdJ4VoT7zCg9V5BgkKCeDucN/ETiw69YK9f
+         j7RDd402W5lDiu28ebV+NmoSkmhhH/2aNl+kYjG3I+J0qMNNXaambslVAW+R0/i+BU40
+         6nsw==
+X-Gm-Message-State: AOJu0YxFyJmn2T9MLlY35wsaJhLJINunxaFGpveEb5dRvvoyW4dXuVxR
+	9Oz81YJum/pWET/ykc5OJ2M=
+X-Google-Smtp-Source: AGHT+IHXgbOxQO/3FVyfcMyGHfuyiRpkzj+9CBmXBjHIFHWsN38ijpCRLMxgci9k4aGskYYWiUzStA==
+X-Received: by 2002:a9d:6d0f:0:b0:6c4:c151:8ebe with SMTP id o15-20020a9d6d0f000000b006c4c1518ebemr12392905otp.22.1696268923063;
+        Mon, 02 Oct 2023 10:48:43 -0700 (PDT)
+Received: from [192.168.1.7] ([159.192.229.27])
+        by smtp.googlemail.com with ESMTPSA id n16-20020a637210000000b0057408a9b3a8sm19626725pgc.42.2023.10.02.10.48.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Oct 2023 10:48:42 -0700 (PDT)
+Message-ID: <1e67fdfa-be41-6d8f-4b1a-e26f098a6bfc@gmail.com>
+Date: Tue, 3 Oct 2023 00:48:39 +0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2023100207-unmoved-arbitrary-2c33@gregkh>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH] USB: serial: option: Sierra EM9191 with new firmware
+Content-Language: en-US
+To: =?UTF-8?Q?Beno=c3=aet_Monin?= <benoit.monin@gmx.fr>,
+ Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <f72b49af24b281f80bb217cff04d0cc249f229b6.1696261301.git.benoit.monin@gmx.fr>
+From: Lars Melin <larsm17@gmail.com>
+In-Reply-To: <f72b49af24b281f80bb217cff04d0cc249f229b6.1696261301.git.benoit.monin@gmx.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+	FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-esOn Mon, Oct 02, 2023 at 05:46:49PM +0200, Greg KH wrote:
-> On Mon, Oct 02, 2023 at 09:10:30PM +0530, swarup wrote:
-> > On Mon, Oct 02, 2023 at 04:42:03PM +0200, Greg KH wrote:
-> > > On Tue, Sep 19, 2023 at 01:05:05AM +0530, Swarup Laxman Kotiaklapudi wrote:
-> > > > Fix kernel-doc warnings discovered in usb driver.
-> > > > Fixes this warning:
-> > > > warning: Function parameter or member 'gfladj_refclk_lpm_sel'
-> > > >          not described in 'dwc3'
-> > > > 
-> > > > Signed-off-by: Swarup Laxman Kotiaklapudi <swarupkotikalapudi@gmail.com>
-> > > > ---
-> > > >  drivers/usb/dwc3/core.h | 2 ++
-> > > >  1 file changed, 2 insertions(+)
-> > > 
-> > > What commit id does this fix?
-> > > 
-> > > thanks,
-> > > 
-> > > greg k-h
-> > 
-> > Hi Greg,
-> > Please find the commit id as mentioned below,
-> > next time onwards i will mention it:
-> > 
-> > Fixes: 5cd07f96c0c6 ("usb: fix kernel-doc warning")
+On 10/2/2023 22:51, Benoît Monin wrote:
+> Following a firmware update of the modem, the interface for the AT
+> command port changed, so add it back.
 > 
-> That is not a valid commit id in Linus's tree, are you sure it is
-> correct?
+> T:  Bus=08 Lev=01 Prnt=01 Port=01 Cnt=02 Dev#=  2 Spd=5000 MxCh= 0
+> D:  Ver= 3.20 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
+> P:  Vendor=1199 ProdID=90d3 Rev=00.06
+> S:  Manufacturer=Sierra Wireless, Incorporated
+> S:  Product=Sierra Wireless EM9191
+> S:  SerialNumber=xxxxxxxxxxxxxxxx
+> C:  #Ifs= 4 Cfg#= 1 Atr=a0 MxPwr=896mA
+> I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
+> I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+> I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=(none)
+> I:  If#=0x4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+> Signed-off-by: Benoît Monin <benoit.monin@gmx.fr>
+> ---
+>   drivers/usb/serial/option.c | 1 +
+>   1 file changed, 1 insertion(+)
 > 
-> And please resend the patch with that information in it.
+> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+> index 7994a4549a6c..73971a3a1897 100644
+> --- a/drivers/usb/serial/option.c
+> +++ b/drivers/usb/serial/option.c
+> @@ -2262,6 +2262,7 @@ static const struct usb_device_id option_ids[] = {
+>   	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1406, 0xff) },			/* GosunCn GM500 ECM/NCM */
+>   	{ USB_DEVICE_AND_INTERFACE_INFO(OPPO_VENDOR_ID, OPPO_PRODUCT_R11, 0xff, 0xff, 0x30) },
+>   	{ USB_DEVICE_AND_INTERFACE_INFO(SIERRA_VENDOR_ID, SIERRA_PRODUCT_EM9191, 0xff, 0xff, 0x30) },
+> +	{ USB_DEVICE_AND_INTERFACE_INFO(SIERRA_VENDOR_ID, SIERRA_PRODUCT_EM9191, 0xff, 0xff, 0x40) },
+>   	{ USB_DEVICE_AND_INTERFACE_INFO(SIERRA_VENDOR_ID, SIERRA_PRODUCT_EM9191, 0xff, 0, 0) },
+>   	{ USB_DEVICE_AND_INTERFACE_INFO(UNISOC_VENDOR_ID, TOZED_PRODUCT_LT70C, 0xff, 0, 0) },
+>   	{ } /* Terminating entry */
 > 
-> thanks,
-> 
-> greg k-h
 
-Hi Greg,
-  I send patch V2, with the Fixes tag being mentioned.
-  Please check the email.
-Thanks,
-Swarup
+No need to add additional lines in the driver, the entry can be 
+simplified by removing the previous two lines and add a single line 
+using the USB_DEVICE_INTERFACE_CLASS macro.
+
+
+Thanks
+Lars
 
