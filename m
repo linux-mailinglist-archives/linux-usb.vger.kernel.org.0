@@ -1,50 +1,50 @@
-Return-Path: <linux-usb+bounces-988-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-989-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DCD17B609F
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 08:04:20 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC7E87B60AF
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 08:21:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 11F56281910
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 06:04:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTP id 2DF77B209E5
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 06:21:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD69E4A12;
-	Tue,  3 Oct 2023 06:04:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DE7D4C84;
+	Tue,  3 Oct 2023 06:21:18 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1461D186C;
-	Tue,  3 Oct 2023 06:04:09 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72ADEB7;
-	Mon,  2 Oct 2023 23:04:08 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 416EA3FFE;
+	Tue,  3 Oct 2023 06:21:15 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AE8DCE;
+	Mon,  2 Oct 2023 23:21:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696313048; x=1727849048;
+  t=1696314073; x=1727850073;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=PQoOxp5uH3JSr9lFmLJ6gLBj5jlaiqqD/shujUnKOuk=;
-  b=UO3Zdm59gSfZd8IvXl/V5XfUTw3NI3liOg5laozSSd3O3zgE4WNTB54I
-   b1675aK3XJ/I77cuRzGrItnjn2qViTLgD1PumswoONzv3mSzJD3USP1L/
-   dc+CH2o2G/gS1PrFdmXMvOGdcrBm4DID3/eMkWb8UJ4ksC9J5G8ss0kzb
-   48ghB3G/19kFzHy0C803tdJzf1A88GvugX7yGfUEPWyLFkldkpMtHaSaW
-   1NYmLKRGfw2D5uhoZBJ+jaCeVrb6qX8K+yQiA7cPIwE0mPRZWfw5hatv5
-   MpKaHY25t2xwX0T4ixSny2lNE/kwgFMrd81n9PcCg41FC30b+6qWXx6NH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10851"; a="469074427"
+  bh=aZY00p5Zs6evElTgNGG3NrD4dyDiLSahudswiJ1LeXk=;
+  b=A9KtoCkT/hQw6Do0WapGZOfmqUQA29KiucFV902C3OI51Xf1wJnWOeCV
+   Vy2+q8FMyghdMyJOM1mXxU86t4Q3x2IipAjenVAm7YLQDlxyauh7ymwKz
+   EsoXjJotYI7TTD6rH3DP9jhX4784Fq5YpObtiz5z90PGu1OYaXMZi79jK
+   ZdN4PMYMWIJ9BtyP8qaABdB7WsTad+scvRoAIw0rq2OcO9KLQyhg12OV5
+   WucwCHjrETlDMWELH67Fa542Ci4z/uly4GvJErqbFJvfXypsC9FV6E/C5
+   9yNeh7WpOKxM5TmBeq56gDZMvLPP0oP5EhrAzuIHDPqh2lBqQNSAYbGBI
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10851"; a="380079960"
 X-IronPort-AV: E=Sophos;i="6.03,196,1694761200"; 
-   d="scan'208";a="469074427"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2023 23:03:48 -0700
+   d="scan'208";a="380079960"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2023 23:21:12 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10851"; a="924525370"
+X-IronPort-AV: E=McAfee;i="6600,9927,10851"; a="1081895650"
 X-IronPort-AV: E=Sophos;i="6.03,196,1694761200"; 
-   d="scan'208";a="924525370"
+   d="scan'208";a="1081895650"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by orsmga005.jf.intel.com with SMTP; 02 Oct 2023 23:03:43 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 03 Oct 2023 09:03:42 +0300
-Date: Tue, 3 Oct 2023 09:03:42 +0300
+  by fmsmga005.fm.intel.com with SMTP; 02 Oct 2023 23:21:08 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 03 Oct 2023 09:21:08 +0300
+Date: Tue, 3 Oct 2023 09:21:08 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To: Abdel Alkuor <alkuor@gmail.com>
 Cc: krzysztof.kozlowski+dt@linaro.org, bryan.odonoghue@linaro.org,
@@ -52,10 +52,11 @@ Cc: krzysztof.kozlowski+dt@linaro.org, bryan.odonoghue@linaro.org,
 	linux-kernel@vger.kernel.org, ryan.eleceng@gmail.com,
 	robh+dt@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org,
 	Abdel Alkuor <abdelalkuor@geotab.com>
-Subject: Re: [PATCH v9 06/14] USB: typec: tps6598x: Clear dead battery flag
-Message-ID: <ZRuuvj3r1kBqc+EI@kuha.fi.intel.com>
+Subject: Re: [PATCH v9 07/14] USB: typec: tps6598x: Apply patch again after
+ power resume
+Message-ID: <ZRuy1NqA/VfWbBWn@kuha.fi.intel.com>
 References: <20231001081134.37101-1-alkuor@gmail.com>
- <20231001081134.37101-7-alkuor@gmail.com>
+ <20231001081134.37101-8-alkuor@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -64,87 +65,70 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231001081134.37101-7-alkuor@gmail.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-	SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20231001081134.37101-8-alkuor@gmail.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Sun, Oct 01, 2023 at 04:11:26AM -0400, Abdel Alkuor wrote:
+On Sun, Oct 01, 2023 at 04:11:27AM -0400, Abdel Alkuor wrote:
 > From: Abdel Alkuor <abdelalkuor@geotab.com>
 > 
-> Dead battery flag must be cleared after switching tps25750 to APP mode
-> so the PD controller becomes fully functional.
+> TPS25750 PD controller might be powered off externally at power suspend,
+> after resuming PD controller power back, apply the patch again.
 > 
 > Signed-off-by: Abdel Alkuor <abdelalkuor@geotab.com>
 
-I'm sorry I noticed these so late, but this one really feels like it
-should be part of the patch 4/14. Is there some reason why you do this
-separately?
+This one looks also like something that should be part of the patch 4.
+
+My concern is that with these separated features you are creating points
+into the kernel git tree where TPS25750 is enabled, but it's not fully
+functional, or even broken in scenarious like this (suspend/resume).
+You can't do that unless you have some really good reason.
+
+Since all of these add only a bit of code each, I think it would be
+better to just merge these into the initial patch that enabled
+TPS25750 - so I belive patch 4/14.
 
 > ---
 > Changes in v9:
 >   - No changes
 > Changes in v8:
->   - No changes
+>   - Use device_is_compatible instead of of_device_is_compatible
 > Changes in v7:
 >   - Add driver name to commit subject
 > Changes in v6:
->   - No changes
+>   - Check tps25750 using is_compatiable device node
 > Changes in v5:
 >   - Incorporating tps25750 into tps6598x driver
-> 
->  drivers/usb/typec/tipd/core.c     | 16 ++++++++++++++++
->  drivers/usb/typec/tipd/tps6598x.h |  1 +
->  2 files changed, 17 insertions(+)
+>  drivers/usb/typec/tipd/core.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
 > 
 > diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-> index 21b0ea2c9627..2598433a69cf 100644
+> index 2598433a69cf..32e42798688f 100644
 > --- a/drivers/usb/typec/tipd/core.c
 > +++ b/drivers/usb/typec/tipd/core.c
-> @@ -946,6 +946,22 @@ static int tps25750_apply_patch(struct tps6598x *tps)
->  
->  	} while (ret != TPS_MODE_APP);
->  
-> +	/*
-> +	 * The dead battery flag may be triggered when the controller
-> +	 * port is connected to a device that can source power and
-> +	 * attempts to power up both the controller and the board it is on.
-> +	 * To restore controller functionality, it is necessary to clear
-> +	 * this flag
-> +	 */
-> +	if (status & TPS_BOOT_STATUS_DEAD_BATTERY_FLAG) {
-> +		ret = tps6598x_exec_cmd(tps, "DBfg", 0, NULL, 0, NULL);
-> +		if (ret) {
-> +			dev_err(tps->dev,
-> +				"failed to clear dead battery %d\n", ret);
-
-One line is enough.
-
-> +			return ret;
-> +		}
-> +	}
+> @@ -1203,6 +1203,17 @@ static int __maybe_unused tps6598x_resume(struct device *dev)
+>  {
+>  	struct i2c_client *client = to_i2c_client(dev);
+>  	struct tps6598x *tps = i2c_get_clientdata(client);
+> +	int ret;
 > +
->  	dev_info(tps->dev, "controller switched to \"APP\" mode\n");
+> +	ret = tps6598x_check_mode(tps);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	if (device_is_compatible(tps->dev, "ti,tps25750") && ret == TPS_MODE_PTCH) {
+> +		ret = tps25750_apply_patch(tps);
+> +		if (ret)
+> +			return ret;
+> +	}
 >  
->  	return 0;
-> diff --git a/drivers/usb/typec/tipd/tps6598x.h b/drivers/usb/typec/tipd/tps6598x.h
-> index a80d0929f3ee..c000170f4547 100644
-> --- a/drivers/usb/typec/tipd/tps6598x.h
-> +++ b/drivers/usb/typec/tipd/tps6598x.h
-> @@ -200,6 +200,7 @@
->  #define TPS_DATA_STATUS_DP_SPEC_PIN_ASSIGNMENT_B    (BIT(2) | BIT(1))
->  
->  /* BOOT STATUS REG*/
-> +#define TPS_BOOT_STATUS_DEAD_BATTERY_FLAG	BIT(2)
->  #define TPS_BOOT_STATUS_I2C_EEPROM_PRESENT	BIT(3)
->  
->  #endif /* __TPS6598X_H__ */
+>  	if (tps->wakeup) {
+>  		disable_irq_wake(client->irq);
 > -- 
 > 2.34.1
-
-Br,
 
 -- 
 heikki
