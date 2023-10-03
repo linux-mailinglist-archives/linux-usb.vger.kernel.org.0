@@ -1,59 +1,59 @@
-Return-Path: <linux-usb+bounces-1030-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1031-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A4F87B6795
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 13:15:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E63F7B67BA
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 13:19:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by ny.mirrors.kernel.org (Postfix) with ESMTP id 73FCB1C20929
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 11:15:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id D31AD2819C7
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 11:19:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 783B921354;
-	Tue,  3 Oct 2023 11:15:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 876282135A;
+	Tue,  3 Oct 2023 11:19:07 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC5AB21111;
-	Tue,  3 Oct 2023 11:15:12 +0000 (UTC)
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2308ECC;
-	Tue,  3 Oct 2023 04:14:53 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-53447d0241eso1331316a12.3;
-        Tue, 03 Oct 2023 04:14:52 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C301D21112;
+	Tue,  3 Oct 2023 11:19:05 +0000 (UTC)
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A6E0CC;
+	Tue,  3 Oct 2023 04:19:03 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-5362bcc7026so1292497a12.1;
+        Tue, 03 Oct 2023 04:19:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696331691; x=1696936491; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1696331942; x=1696936742; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+YKfyhGWK50EYX6P6nsymBrzK3PdYjAuHWlw+828dds=;
-        b=mRYoWCwb8IY9fI3q38Zl1kHtvDP2PDYj37b6kUemdrmMOOsF4T/AUiLmKiGty+Htu4
-         u/vjVmHPaJbi+DF/X0N6yQOf4sqPgZBTdspCXSRGLH9qHpw8tabfl0S1XKPiWTC8wq7H
-         qZDc3st7oDb3YMK0d2iE3qFndr98ryfeMX+/knRk61HnL0iGR42ajZEzuBKaoTXhCVNN
-         euoRHtrQaWll/dvDevn0zaLNgsvnwug8rE1PI99yyr6uKG9CTklvU+IVoB7qFsfOntUO
-         c996wjxL6mvx7HT/b8ZQUd7GdO/SFXl/UA91f+BFN+cUxJlkaygyna8LgEwKGfVeqG7Z
-         hz7w==
+        bh=yzEFkY7TkXHrl69Xqba/YHjVd67aEYiCo5we8WdB1Eo=;
+        b=kSEroy+KDuFEgE/x4rHIuw9s2oiTPh4MRl69U73bTRrDLeRCmPcuWo+nA4OvPvKUqV
+         DUy/HJNCRf94GMRR9QDqtm/K1aBbqdpA11eqDElkj3vfhljczkkO2vttyczR3c/K0vZD
+         iYfHreOpD6cUc8GaTLu2YsegNfxtGxgbV6hwG3Qrm3jSuISWI6qf8vUCvmjGONlWGqqt
+         9ibTW4FUqE+q6cZZwFkUyMg6WmFogCu/yhGoKB24TUxX/XkuO1UiGxdpjAcEwQyv9Cnx
+         x3fgq21AXFklrehgQcDm6qmpngwZDr9FSlq/iNp/+tJp/+MZk4tm/l1kxal0sBOpFjh6
+         52hA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696331691; x=1696936491;
+        d=1e100.net; s=20230601; t=1696331942; x=1696936742;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+YKfyhGWK50EYX6P6nsymBrzK3PdYjAuHWlw+828dds=;
-        b=GnNT8tiDq9fH9Q7i0Li04KIauvDB7iXXSdylNfmn2y0h7iunkJ0Nn60n4DOocomvYo
-         b3JNrd6hGCVNUlrC3xNqJ6G4mZiKHvFRrgoGLLBx/hTt5z4/6mSDgx3OIJQFjrschKB1
-         je7ncnSz2SyoN0UQXH8wOzxoK/Ffmdf/tlXgjRMn0Dq73V1z7hRcMJzyOGAEHxMW3cAq
-         TYd+osufO8NVkugysy/0x0XszIRw26nlxQYfI97CQl4HxjKISdjDDBQTY67n6fNJKwRn
-         JSv+ohoAs8UMEx36hXS4Bvdg6JzowWpGEpqAbq5rsDEfI5jOxFZcC3VDh6q97mb7i2D+
-         /sXQ==
-X-Gm-Message-State: AOJu0Yy6BNPTpe4qjTYQs+SlYCFDwKIwsaKKmoxzFlYGS0pf6+xD/QfQ
-	JVMSlI+w87sn8H/muy1WyRXw13NP97U4pcOAAb4=
-X-Google-Smtp-Source: AGHT+IFNmgPgmDX35YnDAkO8uZYBiO9rLldccZAMLi6NZh7xwDZfCJTSRNlCKb2bNRHCmCMwStHxFg==
-X-Received: by 2002:a17:906:1cd:b0:9ae:5492:640 with SMTP id 13-20020a17090601cd00b009ae54920640mr11178573ejj.32.1696331691204;
-        Tue, 03 Oct 2023 04:14:51 -0700 (PDT)
+        bh=yzEFkY7TkXHrl69Xqba/YHjVd67aEYiCo5we8WdB1Eo=;
+        b=n41Q1L5jEOuLSj0sbGKv9mhh4cKaYH14CMNnrV4BA+NN5PpZNjbHykN9vV6K36H37H
+         sf0IpLkMWu3cE/5skBWETPZlxHRnQuSvPDO11OaMjvPaaH0F6j5PXzzl1PSuQ+M3nKQa
+         As3rv9TFxVyuHno4+Q+OTF7NBVZM08VJ9mjJiBxnXh+sstPex+sGUQeDs3aIKV9bgnLx
+         2EeOnHiUrpUimRW+WMpn2mTmK3Q/YsLvQubrqrhckdHCOqAFS95V4/Fjf3Q5ZHNssN/q
+         hQuP3eEaHlLFAVsgq6JiRlMewuoKRwf2NxXaJD+ac550jg38uCxHOy5EUGcfsgxNFVo4
+         CV0w==
+X-Gm-Message-State: AOJu0Yyk4UpaVDv4kXQB7cJS0S3F3FjNaV6glevOr3jUW5q8yxFQbrX/
+	Mrek6IYeFwCX1fc+QZhPGjM=
+X-Google-Smtp-Source: AGHT+IFAHKT/bInD5ELh5El8DOvGm9hCqLeBsQ/SLugLnQ+U+3Ku6vNTpvdZp3FvB/LcGcygLxl/oA==
+X-Received: by 2002:a17:906:3091:b0:9b6:50d3:2a75 with SMTP id 17-20020a170906309100b009b650d32a75mr3467745ejv.48.1696331941727;
+        Tue, 03 Oct 2023 04:19:01 -0700 (PDT)
 Received: from primary ([213.139.52.198])
-        by smtp.gmail.com with ESMTPSA id y22-20020a170906449600b0098e2969ed44sm881828ejo.45.2023.10.03.04.14.49
+        by smtp.gmail.com with ESMTPSA id l12-20020a170906078c00b0099ce188be7fsm906949ejc.3.2023.10.03.04.18.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Oct 2023 04:14:50 -0700 (PDT)
-Date: Tue, 3 Oct 2023 07:14:47 -0400
+        Tue, 03 Oct 2023 04:19:01 -0700 (PDT)
+Date: Tue, 3 Oct 2023 07:18:57 -0400
 From: Abdel Alkuor <alkuor@gmail.com>
 To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 Cc: krzysztof.kozlowski+dt@linaro.org, bryan.odonoghue@linaro.org,
@@ -61,12 +61,12 @@ Cc: krzysztof.kozlowski+dt@linaro.org, bryan.odonoghue@linaro.org,
 	linux-kernel@vger.kernel.org, ryan.eleceng@gmail.com,
 	robh+dt@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org,
 	Abdel Alkuor <abdelalkuor@geotab.com>
-Subject: Re: [PATCH v9 07/14] USB: typec: tps6598x: Apply patch again after
- power resume
-Message-ID: <ZRv3pz6E5Jc48VxL@primary>
+Subject: Re: [PATCH v9 08/14] USB: typec: tps6598x: Add interrupt support for
+ TPS25750
+Message-ID: <ZRv4oaj68KnNMMc5@primary>
 References: <20231001081134.37101-1-alkuor@gmail.com>
- <20231001081134.37101-8-alkuor@gmail.com>
- <ZRuy1NqA/VfWbBWn@kuha.fi.intel.com>
+ <20231001081134.37101-9-alkuor@gmail.com>
+ <ZRu3P7Dlo7CiQfFK@kuha.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -75,7 +75,7 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZRuy1NqA/VfWbBWn@kuha.fi.intel.com>
+In-Reply-To: <ZRu3P7Dlo7CiQfFK@kuha.fi.intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
 	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -83,30 +83,42 @@ X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Tue, Oct 03, 2023 at 09:21:08AM +0300, Heikki Krogerus wrote:
-> On Sun, Oct 01, 2023 at 04:11:27AM -0400, Abdel Alkuor wrote:
+On Tue, Oct 03, 2023 at 09:39:59AM +0300, Heikki Krogerus wrote:
+> On Sun, Oct 01, 2023 at 04:11:28AM -0400, Abdel Alkuor wrote:
 > > From: Abdel Alkuor <abdelalkuor@geotab.com>
 > > 
-> > TPS25750 PD controller might be powered off externally at power suspend,
-> > after resuming PD controller power back, apply the patch again.
+> > tps25750 event registers structure is different than tps6598x's,
+> > tps25750 has 11 bytes of events which are read at once where
+> > tps6598x has two event registers of 8 bytes each which are read
+> > separately. Likewise MASK event registers. Also, not all events
+> > are supported in both devices.
+> > 
+> > - Create a new handler to accommodate tps25750 interrupt
+> > - Add device data to of_device_id
 > > 
 > > Signed-off-by: Abdel Alkuor <abdelalkuor@geotab.com>
 > 
-> This one looks also like something that should be part of the patch 4.
+> I'm sorry, but I just realised that this one also has to be in place
+> by the time TPS25750 is enabled in patch 4/14. Otherwise the series is
+> not bisectable.
 > 
-> My concern is that with these separated features you are creating points
-> into the kernel git tree where TPS25750 is enabled, but it's not fully
-> functional, or even broken in scenarious like this (suspend/resume).
-> You can't do that unless you have some really good reason.
+> I think you need to refactor the patch order a bit:
 > 
-> Since all of these add only a bit of code each, I think it would be
-> better to just merge these into the initial patch that enabled
-> TPS25750 - so I belive patch 4/14.
->
-Makes a lot of sense. I will add part of full tps25750 support patch
-> -- 
-> heikki
+> First come the patches that prepare everything that needs preparing -
+> introduction of struct tipd_data (without anything TPS25750 specific),
+> and so on.
+> 
+> Then you have patches for things that are specific to TPS25750 (small
+> stuff just merge together) if needed.
+> 
+> In the very last patches you finally enable TPS25750.
+> 
+No worries. I will aggregate all the patches that are related to
+tps25750 into one patch that supports tps25750 implementation and enable
+it. The remainig patches after enabling tps25750 are to add trace
+support.
 
 Thanks,
 Abdel
+
 
