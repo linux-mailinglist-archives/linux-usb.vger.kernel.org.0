@@ -1,93 +1,151 @@
-Return-Path: <linux-usb+bounces-987-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-988-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68DC57B6079
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 07:44:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DCD17B609F
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 08:04:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by ny.mirrors.kernel.org (Postfix) with ESMTP id 38B101C203D9
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 05:44:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 11F56281910
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 06:04:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 323854429;
-	Tue,  3 Oct 2023 05:44:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD69E4A12;
+	Tue,  3 Oct 2023 06:04:13 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B900A62D;
-	Tue,  3 Oct 2023 05:44:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29246C433C7;
-	Tue,  3 Oct 2023 05:44:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1696311890;
-	bh=TaZguEXQKjSyHnAA74xfdT5k4Fyw6T4I2L535UsMZOQ=;
-	h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-	b=Oh8mIWoYdcBvLrHp+irD9zsUljjwD3BOI5QjL/ZqAV6DWIHPKSRsG0CWXO3492MrJ
-	 WwR5pZBA5YgtC/KfkEF8sIqz1I3K0IUlEyLmVNaf40Y8DrhCrbDEFG4oaXgdic4DGg
-	 dxPK83/RQWn5CrN+/HVyKDpXQH7tkXaK3LoCOzm2A20eENtKr+6SaWMirT1wRXpw5+
-	 whladzHvzb4Qb+eaE+YzLiBLCzg7gDV8UdMbg7Dxc0Vq1M/ku8id4II+QEKo9WPOvS
-	 dL0yg7YJ4Do9t/MBPiV+IJEIrrWRTGU9ooSmKIYCVzqTVPVx+VR2J4n0OiQkBa9rpy
-	 p1F7oVYVdttdg==
-From: Kalle Valo <kvalo@kernel.org>
-To: Bagas Sanjaya <bagasdotme@gmail.com>
-Cc: enc0der <enc0der@gmail.com>,  Linux Regressions
- <regressions@lists.linux.dev>,  Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>,  Linux Wireless
- <linux-wireless@vger.kernel.org>,  Linux Networking
- <netdev@vger.kernel.org>,  Linux USB <linux-usb@vger.kernel.org>,  Linux
- RCU <rcu@vger.kernel.org>,  Stanislaw Gruszka <stf_xl@wp.pl>,  Helmut
- Schaa <helmut.schaa@googlemail.com>,  "David S. Miller"
- <davem@davemloft.net>,  Eric Dumazet <edumazet@google.com>,  Jakub
- Kicinski <kuba@kernel.org>,  Paolo Abeni <pabeni@redhat.com>,  Hayes Wang
- <hayeswang@realtek.com>,  Simon Horman <horms@kernel.org>,  Andre Przywara
- <andre.przywara@arm.com>,  Andrew Gaul <gaul@gaul.org>,  =?utf-8?Q?Bj?=
- =?utf-8?Q?=C3=B8rn?= Mork
- <bjorn@mork.no>,  "Paul E. McKenney" <paulmck@kernel.org>,  Frederic
- Weisbecker <frederic@kernel.org>,  Neeraj Upadhyay
- <quic_neeraju@quicinc.com>,  Joel Fernandes <joel@joelfernandes.org>,
-  Josh Triplett <josh@joshtriplett.org>,  Boqun Feng
- <boqun.feng@gmail.com>,  Steven Rostedt <rostedt@goodmis.org>,  Mathieu
- Desnoyers <mathieu.desnoyers@efficios.com>,  Lai Jiangshan
- <jiangshanlai@gmail.com>,  Zqiang <qiang.zhang1211@gmail.com>
-Subject: Re: rt8000usb driver issue (maybe interaction with other drivers)
-References: <CAEXpi5Rd6Y4umKOWRsCjX0kit=W5ZrVhn=MuRkyvJPwmjjDVnA@mail.gmail.com>
-	<ZRj_ovMi-Xbb8i-D@debian.me>
-	<CAEXpi5RiLbma5cb-ctEvvb7LGRn78VTOh5HDmreC2hYgtBEQog@mail.gmail.com>
-	<3d246a72-2755-484f-8274-0c61fc185592@gmail.com>
-Date: Tue, 03 Oct 2023 08:47:00 +0300
-In-Reply-To: <3d246a72-2755-484f-8274-0c61fc185592@gmail.com> (Bagas Sanjaya's
-	message of "Sun, 1 Oct 2023 12:53:22 +0700")
-Message-ID: <878r8ki7fv.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1461D186C;
+	Tue,  3 Oct 2023 06:04:09 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72ADEB7;
+	Mon,  2 Oct 2023 23:04:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696313048; x=1727849048;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PQoOxp5uH3JSr9lFmLJ6gLBj5jlaiqqD/shujUnKOuk=;
+  b=UO3Zdm59gSfZd8IvXl/V5XfUTw3NI3liOg5laozSSd3O3zgE4WNTB54I
+   b1675aK3XJ/I77cuRzGrItnjn2qViTLgD1PumswoONzv3mSzJD3USP1L/
+   dc+CH2o2G/gS1PrFdmXMvOGdcrBm4DID3/eMkWb8UJ4ksC9J5G8ss0kzb
+   48ghB3G/19kFzHy0C803tdJzf1A88GvugX7yGfUEPWyLFkldkpMtHaSaW
+   1NYmLKRGfw2D5uhoZBJ+jaCeVrb6qX8K+yQiA7cPIwE0mPRZWfw5hatv5
+   MpKaHY25t2xwX0T4ixSny2lNE/kwgFMrd81n9PcCg41FC30b+6qWXx6NH
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10851"; a="469074427"
+X-IronPort-AV: E=Sophos;i="6.03,196,1694761200"; 
+   d="scan'208";a="469074427"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2023 23:03:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10851"; a="924525370"
+X-IronPort-AV: E=Sophos;i="6.03,196,1694761200"; 
+   d="scan'208";a="924525370"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by orsmga005.jf.intel.com with SMTP; 02 Oct 2023 23:03:43 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 03 Oct 2023 09:03:42 +0300
+Date: Tue, 3 Oct 2023 09:03:42 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Abdel Alkuor <alkuor@gmail.com>
+Cc: krzysztof.kozlowski+dt@linaro.org, bryan.odonoghue@linaro.org,
+	gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, ryan.eleceng@gmail.com,
+	robh+dt@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org,
+	Abdel Alkuor <abdelalkuor@geotab.com>
+Subject: Re: [PATCH v9 06/14] USB: typec: tps6598x: Clear dead battery flag
+Message-ID: <ZRuuvj3r1kBqc+EI@kuha.fi.intel.com>
+References: <20231001081134.37101-1-alkuor@gmail.com>
+ <20231001081134.37101-7-alkuor@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231001081134.37101-7-alkuor@gmail.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+	SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-Bagas Sanjaya <bagasdotme@gmail.com> writes:
+On Sun, Oct 01, 2023 at 04:11:26AM -0400, Abdel Alkuor wrote:
+> From: Abdel Alkuor <abdelalkuor@geotab.com>
+> 
+> Dead battery flag must be cleared after switching tps25750 to APP mode
+> so the PD controller becomes fully functional.
+> 
+> Signed-off-by: Abdel Alkuor <abdelalkuor@geotab.com>
 
->> These are the drivers being loaded:
->> 
->> rt2800usb              36864  0
->> rt2x00usb              24576  1 rt2800usb
->> rt2800lib             122880  1 rt2800usb
->> rt2x00lib              77824  3 rt2800usb,rt2x00usb,rt2800lib
->> mac80211              811008  3 rt2x00lib,rt2x00usb,rt2800lib
->> cfg80211              724992  2 rt2x00lib,mac80211
->> 
->
-> I don't see rt2800usb module in the mainline kernel. Is it out-of-tree?
-> (no wonder why it taints your kernel)
+I'm sorry I noticed these so late, but this one really feels like it
+should be part of the patch 4/14. Is there some reason why you do this
+separately?
 
-I'm guessing it's this driver:
+> ---
+> Changes in v9:
+>   - No changes
+> Changes in v8:
+>   - No changes
+> Changes in v7:
+>   - Add driver name to commit subject
+> Changes in v6:
+>   - No changes
+> Changes in v5:
+>   - Incorporating tps25750 into tps6598x driver
+> 
+>  drivers/usb/typec/tipd/core.c     | 16 ++++++++++++++++
+>  drivers/usb/typec/tipd/tps6598x.h |  1 +
+>  2 files changed, 17 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+> index 21b0ea2c9627..2598433a69cf 100644
+> --- a/drivers/usb/typec/tipd/core.c
+> +++ b/drivers/usb/typec/tipd/core.c
+> @@ -946,6 +946,22 @@ static int tps25750_apply_patch(struct tps6598x *tps)
+>  
+>  	} while (ret != TPS_MODE_APP);
+>  
+> +	/*
+> +	 * The dead battery flag may be triggered when the controller
+> +	 * port is connected to a device that can source power and
+> +	 * attempts to power up both the controller and the board it is on.
+> +	 * To restore controller functionality, it is necessary to clear
+> +	 * this flag
+> +	 */
+> +	if (status & TPS_BOOT_STATUS_DEAD_BATTERY_FLAG) {
+> +		ret = tps6598x_exec_cmd(tps, "DBfg", 0, NULL, 0, NULL);
+> +		if (ret) {
+> +			dev_err(tps->dev,
+> +				"failed to clear dead battery %d\n", ret);
 
-drivers/net/wireless/ralink/rt2x00/Makefile:obj-$(CONFIG_RT2800USB)                     += rt2800usb.o
+One line is enough.
+
+> +			return ret;
+> +		}
+> +	}
+> +
+>  	dev_info(tps->dev, "controller switched to \"APP\" mode\n");
+>  
+>  	return 0;
+> diff --git a/drivers/usb/typec/tipd/tps6598x.h b/drivers/usb/typec/tipd/tps6598x.h
+> index a80d0929f3ee..c000170f4547 100644
+> --- a/drivers/usb/typec/tipd/tps6598x.h
+> +++ b/drivers/usb/typec/tipd/tps6598x.h
+> @@ -200,6 +200,7 @@
+>  #define TPS_DATA_STATUS_DP_SPEC_PIN_ASSIGNMENT_B    (BIT(2) | BIT(1))
+>  
+>  /* BOOT STATUS REG*/
+> +#define TPS_BOOT_STATUS_DEAD_BATTERY_FLAG	BIT(2)
+>  #define TPS_BOOT_STATUS_I2C_EEPROM_PRESENT	BIT(3)
+>  
+>  #endif /* __TPS6598X_H__ */
+> -- 
+> 2.34.1
+
+Br,
 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+heikki
 
