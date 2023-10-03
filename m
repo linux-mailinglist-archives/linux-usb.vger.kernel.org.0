@@ -1,62 +1,62 @@
-Return-Path: <linux-usb+bounces-981-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-982-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1662F7B5F2A
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 04:53:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F18777B5FF7
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 06:43:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by ny.mirrors.kernel.org (Postfix) with ESMTP id 1E1E31C2088D
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 02:53:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 8A52128167F
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 04:43:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67A75A2C;
-	Tue,  3 Oct 2023 02:53:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05C511113;
+	Tue,  3 Oct 2023 04:43:23 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCA0F812
-	for <linux-usb@vger.kernel.org>; Tue,  3 Oct 2023 02:53:17 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3801C6
-	for <linux-usb@vger.kernel.org>; Mon,  2 Oct 2023 19:53:15 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22F6CEC8
+	for <linux-usb@vger.kernel.org>; Tue,  3 Oct 2023 04:43:20 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289B9A4
+	for <linux-usb@vger.kernel.org>; Mon,  2 Oct 2023 21:43:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696301595; x=1727837595;
+  t=1696308199; x=1727844199;
   h=date:from:to:cc:subject:message-id;
-  bh=te8OQWuabKYBjOULQbioxbNQ1DCOHJ5txTOAbuli9uA=;
-  b=TJHiGvmbs1ek86E1IoJC/c+08VT/N93rof4Iautt6Ghy77cojqzIFFtZ
-   TU7N3OISMx/XXjdRKO4c3wHoZnvGYflt+yDSncDL98j2elOVtKbrGIyxC
-   c8v+99RjfxPGKhjeFpTVvY/eHNUvrBq88kwWtELbl2bFFYFNsRGB9kJez
-   muFY10TGsxVNc5AUDOKk1mRcX/RTE6OqKX/YN488+yTOvHJ8Opot12zDp
-   MB7YFAYnmXqsSBIkyfXvqVK7R0mCG2v+ut2ghRvbdlowkg3+h64k/rPg1
-   O10QP37GpiIXV0adw4/xCK8qSt0E8T3BF9ptEFUzcLFlCw4NDs6iuzfDU
+  bh=S04jbKID5bsUR/0F0v3wJcZTH63qrHKUArlJzKAh8n8=;
+  b=i8Eax2mIeA82Q0uGkhjqGLP0QzvqlIIzgPKY6KLP07GD7lDt5ysDNEmD
+   gQjf6TBEewHi5doKk+VOIubutWbAtXR0gVUGKLrG6DWdfjOj+FrsR9np5
+   JcIDFBRLAn3ELBRojTUs1SrsMLkveHQCfMqnTcoWAb1XVls/GkNGHGUjP
+   Oa9zFAYxlWUy/ueBRJFFUbuuON4ENHra/nw5YvTk0dhje23hva6CzI0Zz
+   KvElJhm3mpGSjz0Ykp4UGWBKk0FwxMcE9oWznnLav4jtcL0viyeZmtcp5
+   RxHZoMyXbuyX+ZiAZspah6uD1I+s3y0ufpkACrDqoQflxJ1JqRfgMMfVk
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10851"; a="4347523"
-X-IronPort-AV: E=Sophos;i="6.03,194,1694761200"; 
-   d="scan'208";a="4347523"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2023 19:53:15 -0700
+X-IronPort-AV: E=McAfee;i="6600,9927,10851"; a="469065138"
+X-IronPort-AV: E=Sophos;i="6.03,196,1694761200"; 
+   d="scan'208";a="469065138"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2023 21:43:18 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10851"; a="894322859"
-X-IronPort-AV: E=Sophos;i="6.03,194,1694761200"; 
-   d="scan'208";a="894322859"
+X-IronPort-AV: E=McAfee;i="6600,9927,10851"; a="750786635"
+X-IronPort-AV: E=Sophos;i="6.03,196,1694761200"; 
+   d="scan'208";a="750786635"
 Received: from lkp-server02.sh.intel.com (HELO c3b01524d57c) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 02 Oct 2023 19:51:52 -0700
+  by orsmga002.jf.intel.com with ESMTP; 02 Oct 2023 21:43:17 -0700
 Received: from kbuild by c3b01524d57c with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1qnVX6-0006gr-0U;
-	Tue, 03 Oct 2023 02:53:12 +0000
-Date: Tue, 03 Oct 2023 10:52:58 +0800
+	id 1qnXFb-0006m7-0M;
+	Tue, 03 Oct 2023 04:43:15 +0000
+Date: Tue, 03 Oct 2023 12:43:00 +0800
 From: kernel test robot <lkp@intel.com>
 To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
 Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- cf97c5e0f7dda2edc15ecd96775fe6c355823784
-Message-ID: <202310031056.vZ3PYMmU-lkp@intel.com>
+Subject: [usb:usb-testing] BUILD SUCCESS
+ fc85c59b85d111f51b58ecf08485fa74ac5471cd
+Message-ID: <202310031257.U6eWDy4L-lkp@intel.com>
 User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-	SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+	SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 Precedence: bulk
@@ -65,12 +65,12 @@ List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-branch HEAD: cf97c5e0f7dda2edc15ecd96775fe6c355823784  xhci: Preserve RsvdP bits in ERSTBA register correctly
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: fc85c59b85d111f51b58ecf08485fa74ac5471cd  usb: gadgetfs: return USB_GADGET_DELAYED_STATUS from setup()
 
-elapsed time: 726m
+elapsed time: 836m
 
-configs tested: 125
+configs tested: 108
 configs skipped: 2
 
 The following configs have been built successfully.
@@ -84,14 +84,11 @@ arc                              allmodconfig   gcc
 arc                               allnoconfig   gcc  
 arc                              allyesconfig   gcc  
 arc                                 defconfig   gcc  
-arc                         haps_hs_defconfig   gcc  
 arc                   randconfig-001-20231003   gcc  
 arm                              allmodconfig   gcc  
 arm                               allnoconfig   gcc  
 arm                              allyesconfig   gcc  
 arm                                 defconfig   gcc  
-arm                           imxrt_defconfig   gcc  
-arm                        multi_v7_defconfig   gcc  
 arm                   randconfig-001-20231003   gcc  
 arm64                            allmodconfig   gcc  
 arm64                             allnoconfig   gcc  
@@ -128,8 +125,6 @@ m68k                             allmodconfig   gcc
 m68k                              allnoconfig   gcc  
 m68k                             allyesconfig   gcc  
 m68k                                defconfig   gcc  
-m68k                       m5249evb_defconfig   gcc  
-m68k                        stmark2_defconfig   gcc  
 microblaze                       allmodconfig   gcc  
 microblaze                        allnoconfig   gcc  
 microblaze                       allyesconfig   gcc  
@@ -153,10 +148,6 @@ parisc64                            defconfig   gcc
 powerpc                          allmodconfig   gcc  
 powerpc                           allnoconfig   gcc  
 powerpc                          allyesconfig   gcc  
-powerpc                       holly_defconfig   gcc  
-powerpc                 mpc837x_rdb_defconfig   gcc  
-powerpc                     sequoia_defconfig   gcc  
-powerpc                        warp_defconfig   gcc  
 riscv                            allmodconfig   gcc  
 riscv                             allnoconfig   gcc  
 riscv                            allyesconfig   gcc  
@@ -170,12 +161,6 @@ sh                               allmodconfig   gcc
 sh                                allnoconfig   gcc  
 sh                               allyesconfig   gcc  
 sh                                  defconfig   gcc  
-sh                 kfr2r09-romimage_defconfig   gcc  
-sh                          sdk7780_defconfig   gcc  
-sh                           se7712_defconfig   gcc  
-sh                           se7750_defconfig   gcc  
-sh                        sh7757lcr_defconfig   gcc  
-sh                          urquell_defconfig   gcc  
 sparc                            allmodconfig   gcc  
 sparc                             allnoconfig   gcc  
 sparc                            allyesconfig   gcc  
@@ -200,8 +185,6 @@ x86_64                randconfig-005-20231003   gcc
 x86_64                randconfig-006-20231003   gcc  
 x86_64                          rhel-8.3-rust   clang
 x86_64                               rhel-8.3   gcc  
-xtensa                            allnoconfig   gcc  
-xtensa                           allyesconfig   gcc  
 
 -- 
 0-DAY CI Kernel Test Service
