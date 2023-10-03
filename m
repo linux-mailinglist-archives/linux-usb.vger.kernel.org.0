@@ -1,109 +1,116 @@
-Return-Path: <linux-usb+bounces-1007-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1009-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0EB87B656A
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 11:24:06 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34D127B65A4
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 11:40:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 534222817D3
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 09:24:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTP id 6AE96B20A84
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 09:40:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47740DF66;
-	Tue,  3 Oct 2023 09:24:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CC1A10798;
+	Tue,  3 Oct 2023 09:40:16 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ACE6DDAC;
-	Tue,  3 Oct 2023 09:24:01 +0000 (UTC)
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24EC2AB;
-	Tue,  3 Oct 2023 02:24:00 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2c00df105f8so8236731fa.2;
-        Tue, 03 Oct 2023 02:24:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696325038; x=1696929838; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=o02q/FIkDaGrgLqoN/Aj/vG1/YJOsTbj5fKhJBGnD2E=;
-        b=MnxE3v6QRLo92+y+2fiAfySUbDOh6InYpNKU1hzuWvyyhtYdOS1bOQL+43d+Zt5+ho
-         jTvp2EKPSrdktA8XrJwZwrhf6K+xLXkeWiFSG77AmouKm4SHO/fW4jU/FQmjMDfXe1YF
-         Znx/mXwcHj0mOT3+Bmwmc/d+Cl65Uou9qIX9Q/x62buBnIzZV7NCcQUr+MFB7GOAFVim
-         mh7WOAAGw4E+PgFCgmmDtO/Y9Q/Od+kv3kFfT+hkA9IcnzHq5a6uYB9o/Bd+aIMIDajA
-         VUZgvxX/+fIHWfM0EZLIper7c4as0lnMfKhKL3CTpaRSTfaf2pXjcbtGRaWnKQXzbgvO
-         XoIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696325038; x=1696929838;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=o02q/FIkDaGrgLqoN/Aj/vG1/YJOsTbj5fKhJBGnD2E=;
-        b=Bjwyv0hEuuxT1ynUg00yvCKfTKOBxs+lsmKMqfZC7dgKXfYmDlOk6Q2sXg8wWwdD+k
-         DNyoDBtZFwIkjp87P29U6CRstouzco5bFCETqepyLh/uxz0xundvlGxBE65WGXDBEgZB
-         PfyMpJidJyLrFNLu3A/9Rr40giQLbhKSL8FyRF/eZAob+9ZRfuDL82Xr+HM3YBuOkmI3
-         fUwqfD174cThIn6MtZGI+5O9P8L/Va3xzH+WN9XxH4TsNK5Y0hzhi2k0sunNJ5fPM6G6
-         1utmFzonQAEOOlzaNyfmXBMm+Vo/4Oy/teXUYdLOoIzXrTFE+T3Dm2Ag81Na8u2d+gGf
-         lRtA==
-X-Gm-Message-State: AOJu0Yxfq7PlOlhEFJ0SXj0eRtssFDjTYk2bsyU8136gpsN/9q0X4Q47
-	lBZ0LYFSobyi7jUlmF5AbunudclfmfFueyCxMoE=
-X-Google-Smtp-Source: AGHT+IG3BDQNI/pILbidS9xryMvAbSkn6Y/6bkHT63bOwqPMoRRoTSL7+zz03ry1Fl2f/uI9CfxqrOri93gbzoU0eQc=
-X-Received: by 2002:a2e:9b04:0:b0:2bd:e3e:1a23 with SMTP id
- u4-20020a2e9b04000000b002bd0e3e1a23mr10574736lji.45.1696325038173; Tue, 03
- Oct 2023 02:23:58 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF7D2FC17
+	for <linux-usb@vger.kernel.org>; Tue,  3 Oct 2023 09:40:12 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DC67B0
+	for <linux-usb@vger.kernel.org>; Tue,  3 Oct 2023 02:40:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696326010; x=1727862010;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=3e4EBuapbkB+l9mqA4Cra63IRmh4fP3gLTFmR3oi+T8=;
+  b=h2W/fjLYEAujK+29ThFfUCxGDfTEpem06xcy2jO545bacZv7wdgqM89u
+   Ljb9qm5iMjQ5ajoMGFq9TsebHsxOIjpNZP1aSaXgOsdbX1ITRKx1Z9S0W
+   LDKtNW/ui+IlNS+fqdRC9KyAUlwk+Szx+otzoPGmXPgP7H06ZZii8EMoO
+   BY2Ez/k/ioOi1uyNYL6j+FDx3Fnf5PvCH+aEeA0fkYX6nUFXhyQcn/QfI
+   GpR0op9euRONxGpi2FpOhtqCQ86RdaTTrV/8t42fd87B83BK3ewKJ4OfW
+   wodJ+Jwrc2cM8jOoWVCyoxLiVJYixaz8Q6UJ4uZbYhXsiUbI8wKR7MTIq
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10851"; a="1424878"
+X-IronPort-AV: E=Sophos;i="6.03,196,1694761200"; 
+   d="scan'208";a="1424878"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2023 02:40:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10851"; a="997945434"
+X-IronPort-AV: E=Sophos;i="6.03,196,1694761200"; 
+   d="scan'208";a="997945434"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga006.fm.intel.com with ESMTP; 03 Oct 2023 02:40:06 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id 73C4E18A0; Tue,  3 Oct 2023 12:40:05 +0300 (EEST)
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: linux-usb@vger.kernel.org
+Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Gil Fine <gil.fine@linux.intel.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH 00/13] thunderbolt: DisplayPort and logging improvements & cleanups
+Date: Tue,  3 Oct 2023 12:39:52 +0300
+Message-Id: <20231003094005.2676823-1-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231002161350.64229-1-tmaimon77@gmail.com> <2023100323-reunite-upfront-8922@gregkh>
- <CAP6Zq1jHzRP1Ytzk8YXyR8ppAP=ZoPvPkYvC2yMRfTt5140zqw@mail.gmail.com> <0298e4a7-0f40-41d6-82f3-327d2fe493cc@linaro.org>
-In-Reply-To: <0298e4a7-0f40-41d6-82f3-327d2fe493cc@linaro.org>
-From: Tomer Maimon <tmaimon77@gmail.com>
-Date: Tue, 3 Oct 2023 12:23:46 +0300
-Message-ID: <CAP6Zq1ghiUhecvtC7gpKtbP11QTU8Js0wCk_sTFqjUf=d6KK1A@mail.gmail.com>
-Subject: Re: [PATCH RESEND v3 0/3] usb: ChipIdea: add Nuvoton NPCM UDC support
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Greg KH <gregkh@linuxfoundation.org>, peter.chen@kernel.org, robh+dt@kernel.org, 
-	krzysztof.kozlowski+dt@linaro.org, xu.yang_2@nxp.com, peng.fan@nxp.com, 
-	avifishman70@gmail.com, tali.perry1@gmail.com, joel@jms.id.au, 
-	venture@google.com, yuenn@google.com, benjaminfair@google.com, 
-	j.neuschaefer@gmx.net, openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-	FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Hi Krzysztof,
+Hi all,
 
-Appreciate your clarifications
+This series improves the DisplayPort tunneling slightly to handle
+several "active" DP IN/OUT pairs so that for each of them a DP tunnel is
+created. It also improves pairing when eGPU with DP IN adapter is
+plugged in.
 
-Thanks,
+The rest are logging improvements and small cleanups here and there. I'm
+planning to merge these for v6.7.
 
-Tomer
+Gil Fine (5):
+  thunderbolt: Fix debug log when DisplayPort adapter not available for pairing
+  thunderbolt: Fix typo of HPD bit for Hot Plug Detect
+  thunderbolt: Log NVM version of routers and retimers
+  thunderbolt: Create multiple DisplayPort tunnels if there are more DP IN/OUT pairs
+  thunderbolt: Add DP IN added last in the head of the list of DP resources
 
-On Tue, 3 Oct 2023 at 11:32, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 03/10/2023 08:56, Tomer Maimon wrote:
-> > Hi Greg,
-> >
-> > Forgot to add in Acked-by: Peter Chen <peter.chen@kernel.org> in V3,
-> > Resend the patch set with the Ack.
-> >
-> > Should I do it differently?
->
-> If it is RESEND after some time (min. 2 weeks), then it is fine. If you
-> added tags or changed something, make a new version. If you resend for
-> any other reason (assuming resend is valid), please mention shortly why
-> do you resend (e.g. "My company email servers maybe blocked it, so
-> resending without changes").
->
-> Best regards,
-> Krzysztof
->
+Mika Westerberg (8):
+  thunderbolt: dma_test: Use enum tb_link_width
+  thunderbolt: Get rid of usb4_usb3_port_actual_link_rate()
+  thunderbolt: Make tb_switch_clx_is_supported() static
+  thunderbolt: Check for unplugged router in tb_switch_clx_disable()
+  thunderbolt: Fix typo in enum tb_link_width kernel-doc
+  thunderbolt: Use tb_tunnel_dbg() where possible to make logging more consistent
+  thunderbolt: Expose tb_tunnel_xxx() log macros to the rest of the driver
+  thunderbolt: Use tb_tunnel_xxx() log macros in tb.c
+
+ drivers/thunderbolt/clx.c      |  47 ++++++++-------
+ drivers/thunderbolt/dma_test.c |  14 ++---
+ drivers/thunderbolt/retimer.c  |   1 +
+ drivers/thunderbolt/switch.c   |   9 +--
+ drivers/thunderbolt/tb.c       |  85 +++++++++++++++------------
+ drivers/thunderbolt/tb.h       |   2 -
+ drivers/thunderbolt/tb_regs.h  |   7 +--
+ drivers/thunderbolt/tunnel.c   | 102 ++++++++++++---------------------
+ drivers/thunderbolt/tunnel.h   |  24 +++++++-
+ drivers/thunderbolt/usb4.c     |  29 ----------
+ include/linux/thunderbolt.h    |   2 +-
+ 11 files changed, 148 insertions(+), 174 deletions(-)
+
+-- 
+2.40.1
+
 
