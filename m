@@ -1,97 +1,138 @@
-Return-Path: <linux-usb+bounces-1032-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1033-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 044587B68FA
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 14:29:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 018107B6B02
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 16:04:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 9877228177C
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 12:29:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id AAD37281A63
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 14:04:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94B0A22F10;
-	Tue,  3 Oct 2023 12:29:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F8E930F88;
+	Tue,  3 Oct 2023 14:04:39 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6041C22F11
-	for <linux-usb@vger.kernel.org>; Tue,  3 Oct 2023 12:29:11 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73F5683;
-	Tue,  3 Oct 2023 05:29:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696336150; x=1727872150;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=pc75A29Qr+v2GGHyvOoeOlvXcO2Uz5k6FAnU6RIw6NA=;
-  b=g3E/kbMJHIUl+pMuL/VQqKMr+TFXnkHK7GRrnuTwlsP6bQ3YJliajHmh
-   nT3Cew9/+0tJj+SXejxTG14RQzW2foilfX7S/tTu2ZY6lSN3y48+IJilG
-   GgkrWfytiprAaczHMEeBiLID5RHCla13vwd33GAI2h9E4zh3jKYLmUfoj
-   Uj1Ts82bEc5Q8Sq13XjgC9YxxseziXIYnZUnfWZ+HTby93E0Vv5QsvS8S
-   tUWjIGv+UIh7U27MBhcLNatwuivZfFmBM8DBtXeRJXH4Lx/8ekkddlxN9
-   so3Rh1cpzQkUai5hfqOAj4OlBdbzH47g2fMoqTfcsELn+noU/VHEURMhZ
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10851"; a="381741729"
-X-IronPort-AV: E=Sophos;i="6.03,197,1694761200"; 
-   d="scan'208";a="381741729"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2023 05:29:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10851"; a="750908596"
-X-IronPort-AV: E=Sophos;i="6.03,197,1694761200"; 
-   d="scan'208";a="750908596"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga002.jf.intel.com with ESMTP; 03 Oct 2023 05:29:08 -0700
-Message-ID: <164ea72d-9d73-5751-a67a-bcf40c351743@linux.intel.com>
-Date: Tue, 3 Oct 2023 15:30:33 +0300
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B30DF2940B;
+	Tue,  3 Oct 2023 14:04:37 +0000 (UTC)
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC16A9;
+	Tue,  3 Oct 2023 07:04:36 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 393CtFvq024974;
+	Tue, 3 Oct 2023 14:03:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=KW2J+DS9oHYENFNLmqwrDgX6qwBY0QVYINMUCr7I9Yw=;
+ b=XK4rIydXnhdLo2yarTHTscnIJdElJzth/Ep8SXoVI6+uYwiVuaTGFEw+uc4TMXW78MIj
+ cCrLu5JhjbeAPGffL3QE5Z+TDMCWHt4nc+joXxCqSaYrsX5t8XG8OmFLwhFOZDiRapX9
+ KZ5P4CsNBR+QUxIUYo0qpib3c21kOiQYLGirz5aMAwEXUogs41MrYBgf7v5sGg/7+hFT
+ 6vKnl8A20HSchdW7hlR07TyOn7uVx7woWemxTXZrYiofyowHr1V87ltwn4ldB/t1KIyd
+ C/jfR2Pz/mNjToHgx6dF5dv7b0t8PCq8UGF8gUpFIYoBRUIWAXFI+fO6aVEdiOQNmtKJ 0g== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tgbjgs659-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 03 Oct 2023 14:03:56 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 393E3tq2012896
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 3 Oct 2023 14:03:55 GMT
+Received: from [10.216.32.208] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Tue, 3 Oct
+ 2023 07:03:01 -0700
+Message-ID: <7d01eadc-4395-4871-91d4-a3d33d119921@quicinc.com>
+Date: Tue, 3 Oct 2023 19:32:46 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.13.0
-Subject: Re: [PATCH v1 03/10] xhci: dbc: Use sysfs_emit() to instead of
- scnprintf()
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 6/8] arm64: dts: qcom: ipq5332: Add Super-Speed UNIPHY in
+ USB node
 Content-Language: en-US
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- kernel test robot <lkp@intel.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- oe-kbuild-all@lists.linux.dev,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20231002161610.2648818-3-andriy.shevchenko@linux.intel.com>
- <202310030150.M1SfrYmG-lkp@intel.com> <ZRvVyN7A/AWoZLj5@smile.fi.intel.com>
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <ZRvVyN7A/AWoZLj5@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Konrad Dybcio
+	<konrad.dybcio@linaro.org>, <agross@kernel.org>,
+        <andersson@kernel.org>, <vkoul@kernel.org>, <kishon@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <gregkh@linuxfoundation.org>,
+        <catalin.marinas@arm.com>, <will@kernel.org>, <p.zabel@pengutronix.de>,
+        <geert+renesas@glider.be>, <arnd@arndb.de>,
+        <neil.armstrong@linaro.org>, <nfraprado@collabora.com>,
+        <u-kumar1@ti.com>, <peng.fan@nxp.com>, <quic_wcheng@quicinc.com>,
+        <quic_varada@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC: <quic_kathirav@quicinc.com>, <quic_nsekar@quicinc.com>,
+        <quic_srichara@quicinc.com>
+References: <20230929084209.3033093-1-quic_ipkumar@quicinc.com>
+ <20230929084209.3033093-7-quic_ipkumar@quicinc.com>
+ <618992fe-4c76-42ef-af47-ee66f74c5bb6@linaro.org>
+ <3f89e0b7-189e-4cf7-bec5-b03c903c46b5@quicinc.com>
+ <1e3af927-52b0-42ab-9643-db4bf3f2d2c4@linaro.org>
+From: Praveenkumar I <quic_ipkumar@quicinc.com>
+In-Reply-To: <1e3af927-52b0-42ab-9643-db4bf3f2d2c4@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-	autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: Wd7JrN6cM8dnplHkB29Q3HpCe5dE3cnM
+X-Proofpoint-GUID: Wd7JrN6cM8dnplHkB29Q3HpCe5dE3cnM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-03_11,2023-10-02_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
+ lowpriorityscore=0 spamscore=0 priorityscore=1501 adultscore=0
+ suspectscore=0 bulkscore=0 impostorscore=0 mlxlogscore=443 phishscore=0
+ malwarescore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2310030102
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On 3.10.2023 11.50, Andy Shevchenko wrote:
-> On Tue, Oct 03, 2023 at 02:03:53AM +0800, kernel test robot wrote:
-> 
-> 
->> All warnings (new ones prefixed by >>):
+
+
+On 9/30/2023 10:56 PM, Dmitry Baryshkov wrote:
+> On 29/09/2023 16:31, Praveenkumar I wrote:
 >>
->>     drivers/usb/host/xhci-dbgcap.c: In function 'dbc_show':
->>>> drivers/usb/host/xhci-dbgcap.c:926:34: warning: unused variable 'p' [-Wunused-variable]
->>       926 |         const char              *p;
->>           |                                  ^
-> 
-> Indeed, forgot to remove it...
-> 
-> Mathias, tell me if you want a v2 of this patch or the entire series.
-> 
+>>
+>> On 9/29/2023 6:44 PM, Konrad Dybcio wrote:
+>>> On 29.09.2023 10:42, Praveenkumar I wrote:
+>>>> Add UNIPHY node in USB to support Super-speed. As the SS PHY has
+>>>> pipe clock, removed "qcom,select-utmi-as-pipe-clk" flag.
+>>>>
+>>>> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+>>>> ---
+>>> Patches 6 and 7 should be swapped, otherwise you may get no
+>>> USB with this commit. Incremental patches must not break
+>>> functionality, unless it is truly inevitable.
+>> Understood. Will swap the 6 and 7 patches in the update.
+>
+> But just swapping the patches will not work, the patch for the board 
+> file will break compilation. I think you have to squash them.
+I think swapping will work as the PHY node in the base dtsi added 
+separately in patch 3. If compilation fails, will squash them.
 
-No need, I can fix this while applying
+- Praveenkumar
+>
+>>
+>> -- 
+>> Thanks,
+>> Praveenkumar
+>>>
+>>> Konrad
+>>
+>
 
-Thanks
-Mathias
 
