@@ -1,176 +1,274 @@
-Return-Path: <linux-usb+bounces-1042-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1043-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 275997B6C7D
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 16:56:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5F7E7B6DC9
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 18:00:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sy.mirrors.kernel.org (Postfix) with ESMTP id 74DBAB2099A
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 14:55:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 5F61C280792
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 16:00:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2776C347C0;
-	Tue,  3 Oct 2023 14:55:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E36C4374EF;
+	Tue,  3 Oct 2023 16:00:54 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52FB0341A6
-	for <linux-usb@vger.kernel.org>; Tue,  3 Oct 2023 14:55:52 +0000 (UTC)
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33CB71FF5
-	for <linux-usb@vger.kernel.org>; Tue,  3 Oct 2023 07:54:55 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-59b5484fbe6so12405627b3.1
-        for <linux-usb@vger.kernel.org>; Tue, 03 Oct 2023 07:54:55 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8869036B0D;
+	Tue,  3 Oct 2023 16:00:52 +0000 (UTC)
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04BD1D9;
+	Tue,  3 Oct 2023 09:00:49 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-9b2a3fd5764so194216866b.3;
+        Tue, 03 Oct 2023 09:00:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696344894; x=1696949694; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ssiq5+nUb5tk+njmXyusvMPmk3vvCvKa/6ALKcbA4us=;
-        b=soM7zb3NrsuXZ8ePr4b8N7VXIOHEjshwQHVckcEX+IIzy0Zxer5OEUACmECvviNzNf
-         1qBgtkQmkSQ1hAiC5dpMzMenwtcupQPGywtWU6UbJXlyeOosQ9Bulol/ZeSpHvog77re
-         giFarXHIeQObEc7HYto4saN7kRDM0sJyLcBhyUbKX6anI11mgK33fk2WegLj520kFors
-         lcIjz8uXj2lyYMoi0JftNyTS/za5FMcJ3YFSBk0stOsBI9umzXTn82/61Ct36IrfBozj
-         foSA1osRyZfTKcJudaOP8gFgu6sNG/sYziOeQedzz6BOiwe3rv7HH1Pni9Tphr6H49/c
-         OJ3g==
+        d=gmail.com; s=20230601; t=1696348847; x=1696953647; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=tya8R8jajAVNKTmm7MpxZgEwNbrudUVhY+NFvCiehCY=;
+        b=mlnnDgc/Hih6wUyLdLL6ivxKEPNz68Gr7+McI/XaSbkHWZkkEWstS8+y8cGao+yj/Q
+         Epusy93GNME3RWpvc2MHb0ChfrOgLE1ZCqAaL6Q9yrKw/rWYb8fA53R2IZacRlwlC4l7
+         CEzEhvRtjDhpq/6SqCKeQpuBiDX8lCJnH/l59Jb2fdghaLoI5bYnYVkcbIgXhPRo/M7U
+         GYi401pv8qgvuWv2y8mp8C0EM03vdRZI/TNZxbX0NK6Ve9Bewlsn3U0yxI8bSJWX5Dq/
+         IwLodMpAlKHK5UTYrc3YecwXIWlxaZ9AF6Ide3ZvoQK61SSbZVYG0Tqi0108WUaMxBAa
+         2jCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696344894; x=1696949694;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1696348847; x=1696953647;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Ssiq5+nUb5tk+njmXyusvMPmk3vvCvKa/6ALKcbA4us=;
-        b=YgC4ln+o7Okt4kZX9OP9ML8IAy9Xnko5GyZ6rqb/3CmX8IPLB1tpVKWrCL0ibVNvU4
-         OP295gi67GP45DS8yzD2bxpVRyVkFSbpFlpmZywou6/X6whBWCSmQ3RXGtKrBsRsglnd
-         NikbzJMUOLuHwYPMm8Xcw6xjvT8Sh/ilgo54oJRFoRajc2+1ofVI3jcD74YyzVH/otcV
-         ZFUenN9/KfTdYb5kcFOruH4rNI8F71AOy3ojpOUDWDYrSa3Et8lBxpGypz4zGbwTimqv
-         skkDmL3DmlR2wsvmMEJjs11HPcPj+fQ+CmRJKPkZ1hwcDyVkTqHetTx5Mue7Q3dTGjeN
-         Wv6w==
-X-Gm-Message-State: AOJu0YzWcCk4oPWyryqKwsR8AZfQHNYsUimmONucpLT6CvLXdBjBa8DV
-	s996axAYM4a3aRiAkq9WXGmi483nPYTp3byeNCGmGQ==
-X-Google-Smtp-Source: AGHT+IE7Tm0+TOjAqbRf3K+J648pOlmhjcx6LMgVgwylE1FTXpvtTVrh5k3zwCUdGOKzzHN3/AU/Q/UGpVey3g+73X8=
-X-Received: by 2002:a81:65d6:0:b0:589:f41c:bc63 with SMTP id
- z205-20020a8165d6000000b00589f41cbc63mr13912123ywb.39.1696344894263; Tue, 03
- Oct 2023 07:54:54 -0700 (PDT)
+        bh=tya8R8jajAVNKTmm7MpxZgEwNbrudUVhY+NFvCiehCY=;
+        b=TJueEtKsvp835N65U3Z2SpFaSEt1qXT74UfeGAHWxjywoxuWW7yuVHuddudtHZ7x0T
+         knocgAocHkYiPaZHBgXXXO+DFifqy+Y3Hbqn09+2/RWwwc0a6xcTL0KjXMzWR4juEajn
+         Ow9ueYqhmIWD2MoezgdnaEMrMJl3crCJL7HsJOCvfp9HYA/rCum5omHVmi59JvSr4Evy
+         J2wVfImDIBpbbFEMrskgJmU/64cSg+tRS0M/SklTGfiKA9llmk1Rg2s39Q4ZxsBxSbn8
+         6Q7sTwZRlmlf19uze3G2YVaDCtqB7EujChGJ4b/EjDw5yRIQoMuIB4mIrqiqLQ/7f/VI
+         Z6rQ==
+X-Gm-Message-State: AOJu0YxQjTXmNjPFs6biezV6PbH75kv+BBx+V9Tmd+R3/CO+SPXPTE+K
+	jFX2+wJQ8FEuNuZFgHmyLKI=
+X-Google-Smtp-Source: AGHT+IEoCs23E0emLt/nhkXHXXPsnxPofv0LnszoKnH5N2mKQ+GQhP/aQGbwF+lcgQNdB4SQBQ21jg==
+X-Received: by 2002:a17:906:104e:b0:9ae:4e81:4580 with SMTP id j14-20020a170906104e00b009ae4e814580mr13802807ejj.66.1696348846113;
+        Tue, 03 Oct 2023 09:00:46 -0700 (PDT)
+Received: from primary.. ([213.139.52.198])
+        by smtp.gmail.com with ESMTPSA id jo3-20020a170906f6c300b0099df2ddfc37sm1270526ejb.165.2023.10.03.09.00.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Oct 2023 09:00:45 -0700 (PDT)
+From: Abdel Alkuor <alkuor@gmail.com>
+To: heikki.krogerus@linux.intel.com,
+	krzysztof.kozlowski+dt@linaro.org,
+	bryan.odonoghue@linaro.org
+Cc: gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	ryan.eleceng@gmail.com,
+	robh+dt@kernel.org,
+	conor+dt@kernel.org,
+	devicetree@vger.kernel.org,
+	Abdel Alkuor <abdelalkuor@geotab.com>
+Subject: [PATCH v10 00/14] Add TPS25750 USB type-C PD controller support
+Date: Tue,  3 Oct 2023 11:58:33 -0400
+Message-Id: <20231003155842.57313-1-alkuor@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230929084209.3033093-1-quic_ipkumar@quicinc.com>
- <20230929084209.3033093-3-quic_ipkumar@quicinc.com> <412492d1-fcc9-481c-9d28-b208a644ba1d@linaro.org>
- <7975c638-29cf-45ce-9d76-b8a93d750eb7@quicinc.com>
-In-Reply-To: <7975c638-29cf-45ce-9d76-b8a93d750eb7@quicinc.com>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Tue, 3 Oct 2023 17:54:42 +0300
-Message-ID: <CAA8EJprhQz_Tj0Bhv6zhGa7h37Ug-Fp6Tof9tNscTFyZzkbJvw@mail.gmail.com>
-Subject: Re: [PATCH 2/8] phy: qcom: Introduce Super-Speed USB UNIPHY driver
-To: Praveenkumar I <quic_ipkumar@quicinc.com>
-Cc: agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org, 
-	vkoul@kernel.org, kishon@kernel.org, robh+dt@kernel.org, 
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
-	gregkh@linuxfoundation.org, catalin.marinas@arm.com, will@kernel.org, 
-	p.zabel@pengutronix.de, geert+renesas@glider.be, arnd@arndb.de, 
-	neil.armstrong@linaro.org, nfraprado@collabora.com, u-kumar1@ti.com, 
-	peng.fan@nxp.com, quic_wcheng@quicinc.com, quic_varada@quicinc.com, 
-	linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	quic_kathirav@quicinc.com, quic_nsekar@quicinc.com, quic_srichara@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-	version=3.4.6
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Tue, 3 Oct 2023 at 17:22, Praveenkumar I <quic_ipkumar@quicinc.com> wrote:
->
->
->
-> On 9/30/2023 10:48 PM, Dmitry Baryshkov wrote:
-> > On 29/09/2023 11:42, Praveenkumar I wrote:
-> >> Adds Qualcomm 22ull Super-Speed USB UNIPHY driver support which
-> >> is present in Qualcomm IPQ5332 SoC. This PHY is interfaced with
-> >> SNPS DWC3 USB and SNPS DWC PCIe. Either one of the interface
-> >> can use the it and selection is done via mux present in TCSR
-> >> register. This driver selects the PHY for DWC3 USB and handles
-> >> the reset, clocks and regulator.
-> >>
-> >> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
-> >> ---
-> >>   drivers/phy/qualcomm/Kconfig               |  11 +
-> >>   drivers/phy/qualcomm/Makefile              |   1 +
-> >>   drivers/phy/qualcomm/phy-qcom-uniphy-usb.c | 322 +++++++++++++++++++++
-> >>   3 files changed, 334 insertions(+)
-> >>   create mode 100644 drivers/phy/qualcomm/phy-qcom-uniphy-usb.c
-> >>
-> >> diff --git a/drivers/phy/qualcomm/Kconfig b/drivers/phy/qualcomm/Kconfig
-> >> index d891058b7c39..7257c8455c53 100644
-> >> --- a/drivers/phy/qualcomm/Kconfig
-> >> +++ b/drivers/phy/qualcomm/Kconfig
-> >> @@ -154,6 +154,17 @@ config PHY_QCOM_M31_USB
-> >>         management. This driver is required even for peripheral only or
-> >>         host only mode configurations.
-> >>   +config PHY_QCOM_UNIPHY_USB
-> >> +    tristate "Qualcomm USB Super-Speed UNIPHY driver"
-> >
-> > Can we please have more specific driver name? As I wrote earlier,
-> > there are two other (different) kinds of Qualcomm UNI PHY devices:
-> > - DSI / HDMI UNIPHY on apq8064 / msm8974 / msm8960 (?)
-> > - USB QMP UNI PHY drivers
-> >
-> > Adding a driver called UNIPHY, which is not related to those two kinds
-> > sounds pretty confusing to me.
-> This UNIPHY is different from above mentioned ones. This a custom
-> version for 22nm on Qualcomm IPQ5332.
-> Can we name the driver as phy-qcom-uniphy-usb-ss-22ull.c /
-> phy-qcom-usb-ss-22ull.c ?
+From: Abdel Alkuor <abdelalkuor@geotab.com>
 
-usb-ss-22ull sounds better. Or maybe usb-ipq-ss
+TPS25750 USB type-C PD controller has the same register offsets as
+tps6598x. The following is a summary of incorporating TPS25750 into
+TPS6598x driver:
+- Add device data to accommodate different implementations
 
-> >
-> >> +    depends on USB && (ARCH_QCOM || COMPILE_TEST)
-> >> +    select GENERIC_PHY
-> >> +    help
-> >> +      Enable this to support the Qualcomm USB Super-Speed UNIPHY
-> >> transceiver
-> >> +      with DWC3 USB core. It handles PHY initialization, clock
-> >> +      management required after resetting the hardware and power
-> >> +      management. This driver is required even for peripheral only or
-> >> +      host only mode configurations.
-> >> +
-> >>   config PHY_QCOM_USB_HS
-> >>       tristate "Qualcomm USB HS PHY module"
-> >>       depends on USB_ULPI_BUS
-> >> diff --git a/drivers/phy/qualcomm/Makefile
-> >> b/drivers/phy/qualcomm/Makefile
-> >> index ffd609ac6233..c3e0112a7a70 100644
-> >> --- a/drivers/phy/qualcomm/Makefile
-> >> +++ b/drivers/phy/qualcomm/Makefile
-> >> @@ -17,6 +17,7 @@ obj-$(CONFIG_PHY_QCOM_QMP_USB_LEGACY)    +=
-> >> phy-qcom-qmp-usb-legacy.o
-> >>   obj-$(CONFIG_PHY_QCOM_QUSB2)        += phy-qcom-qusb2.o
-> >>   obj-$(CONFIG_PHY_QCOM_SNPS_EUSB2)    += phy-qcom-snps-eusb2.o
-> >>   obj-$(CONFIG_PHY_QCOM_EUSB2_REPEATER)    += phy-qcom-eusb2-repeater.o
-> >> +obj-$(CONFIG_PHY_QCOM_UNIPHY_USB)    += phy-qcom-uniphy-usb.o
-> >>   obj-$(CONFIG_PHY_QCOM_USB_HS)         += phy-qcom-usb-hs.o
-> >>   obj-$(CONFIG_PHY_QCOM_USB_HSIC)     += phy-qcom-usb-hsic.o
-> >>   obj-$(CONFIG_PHY_QCOM_USB_HS_28NM)    += phy-qcom-usb-hs-28nm.o
-> >> diff --git a/drivers/phy/qualcomm/phy-qcom-uniphy-usb.c
-> >> b/drivers/phy/qualcomm/phy-qcom-uniphy-usb.c
-> >> new file mode 100644
-> >> index 000000000000..fdfc9c225995
-> >> --- /dev/null
-> >> +++ b/drivers/phy/qualcomm/phy-qcom-uniphy-usb.c
-> >
-> > So, is it a USB PHY or UNI PHY (where I would expect that it handles
-> > USB and PCIe?)
-> It is a USB PHY and the PHY name is UNIPHY. Added the usb in the file
-> name to differentiate it.
-> >
+- Only Check VID register (0x00) for TPS6598x and cd321x, as TPS25750 doesn't
+  have VID register.
+
+- TypeC port registration will be registered differently for each PD
+  controller. TPS6598x uses system configuration register (0x28) to get
+  pr/dr capabilities. On the other hand, TPS25750 will use data role property
+  and PD status register (0x40) to get pr/dr capabilities as TPS25750 doesn't
+  have register 0x28 supported.
+
+- TPS25750 requires writing a binary configuration to switch PD
+  controller from PTCH mode to APP mode which needs the following changes:
+  - Add PTCH mode to the modes list.
+  - Add an argument to tps6598x_check_mode to return the current mode.
+  - Currently, tps6598x_exec_cmd has cmd timeout hardcoded to 1 second,
+    and doesn't wait before checking DATA_OUT response. In TPS25750, patch 4CCs
+    take longer than 1 second to execute and some requires a delay before
+    checking DATA_OUT. To accommodate that, cmd_timeout and response_delay will
+    be added as arguments to tps6598x_exec_cmd.
+  - Implement applying patch sequence for TPS25750.
+
+- In pm resume callback, patch mode needs to be checked and the binary
+  configuration should be applied if needed.
+
+- For interrupt, TPS25750 has only one event register (0x14) and one mask
+  register (0x16) of 11 bytes each, where TPS6598x has two event
+  and two mask registers of 8 bytes each. Both TPS25750 and TPS65986x
+  shares the same bit field offsets for events/masks/clear but many of
+  there fields are reserved in TPS25750, the following needs to be done in
+  tps6598x_interrupt:
+  - Read EVENT1 register as a block of 11 bytes when tps25750 is present
+  - Write CLEAR1 register as a block of 11 bytes when tps25750 is present
+  - Add trace_tps25750_irq
+  - During testing, I noticed that when a cable is plugged into the PD
+    controller and before PD controller switches to APP mode, there is a
+    lag between dr/pr updates and PlugInsertOrRemoval Event, so a check
+    for dr/pr change needs to be added along TPS_REG_INT_PLUG_EVENT check
+
+- Add TPS25750 traces for status and power status registers. Trace for
+  data register won't be added as it doesn't exist in the device.
+
+- Configure sleep mode for TPS25750.
+
+v10:
+ - PATCH 1,2:
+    - No changes
+ - PATCH 3:
+    - Add Reviewed-by
+ - PATCH 4:
+    - Move 0004-USB-typec-tps6598x-Load-TPS25750-patch-bundle.patch to patch 6
+    - Reorder 0009-USB-typec-tps6598x-Refactor-tps6598x-port-registrati.patch
+      to be patch 4
+    - Add Reviewed-by
+ - PATCH 5:
+    - Move 0005-USB-typec-tps6598x-Check-for-EEPROM-present.patch to patch 6
+    - Add device data for tps6598x and cd321x
+ - PATCH 6:
+    - Add tps25750 support and enable it by aggregating the following patches from v9:
+      0004-USB-typec-tps6598x-Load-TPS25750-patch-bundle.patch
+      0005-USB-typec-tps6598x-Check-for-EEPROM-present.patch
+      0006-USB-typec-tps6598x-Clear-dead-battery-flag.patch
+      0007-USB-typec-tps6598x-Apply-patch-again-after-power-res.patch
+      0008-USB-typec-tps6598x-Add-interrupt-support-for-TPS2575.patch
+      0010-USB-typec-tps6598x-Add-port-registration-for-tps2575.patch
+      0011-USB-typec-tps6598x-Enable-sleep-mode-for-tps25750.patch
+ - PATCH 7:
+    - Move 0012-USB-typec-tps6598x-Add-trace-for-tps25750-irq.patch to patch 7
+ - PATCH 8:
+    - Move 0013-USB-typec-tps6598x-Add-power-status-trace-for-tps257.patch to patch 8
+    - Remove power status trace prototype from device data
+ - PATCH 9:
+    - Move 0014-USB-typec-tps6598x-Add-status-trace-for-tps25750.patch to patch 9
+    - Remove status trace prototype from device data
+	
+v9:
+ - PATCH 1: 
+    - Add Reviewed-by
+ - PATCH 2..7:
+    - No changes
+ - PATCH 8:
+    - Move of_device_id to its original place
+    - Move device data structs to the top of of_device_id
+    - Use device_get_match_data to get device data
+ - PATCH 9:
+    - No changes
+ - PATCH 10:
+    - Move device data structs to the top of of_device_id
+ - PATCH 11,12:
+    - No changes
+ - PATCH 13,14:
+    - Move device data structs to the top of of_device_id
+v8:
+ - PATCH 1: 
+    - Define reg-names at top-level
+ - PATCH 2:
+    - Add Reviewed-by
+ - PATCH 3:
+    - Revert mode check return
+ - PATCH 4:
+    - Return mode when mode is checked
+    - Use device_is_compatible instead of of_device_is_compatible
+ - PATCH 5,6:
+    - No changes
+ - PATCH 7:
+    - Use device_is_compatible instead of of_device_is_compatible
+ - PATCH 8,9:
+    - No changes
+ - PATCH 10:
+    - Change tps->cb to tps->data
+ - PATCH 11,12:
+    - No changes
+ - PATCH 13,14:
+    - Change tps->cb to tps->data
+
+v7:
+ - PATCH 1: 
+    - Define reg at top-level
+    - Remove description from reg-names
+ - PATCH 2..7: Add tps6598x to the subject
+ - PATCH 8:
+    - Add tps6598x to the subject
+    - Create tps25750 interrupt handler
+ - PATCH 9..11: Add tps6598x to the subject
+ - PATCH 12: 
+    - Add driver name to commit subject
+    - Call trace_tps25750_irq directly from tps25750 interrupt
+      handler
+ - PATCH 13-14: Add tps6598x to the subject
+      
+v6:
+ - PATCH 1: Use reg property for patch address
+ - PATCH 2: Use tps6598x_exec_cmd as a wrapper
+ - PATCH 3: Return current mode and check it directly
+ - PATCH 4:
+    - Don't check VID for tps25750 as the VID register doesn't exist
+    - Remove is_tps25750 flag from tps6598x struct
+    - Get patch address from reg property
+ - PATCH 5: Update eeprom macro to use TPS instead
+ - PATCH 6: No changes
+ - PATCH 7: Check tps25750 using is_compatiable device node
+ - PATCH 8: Create tipd callbacks factory 
+ - PATCH 9: No changes
+ - PATCH 10: Add port registration to tipd data factory
+ - PATCH 11: Use tps25750_init instead of tps25750_apply_patch in resume
+    	     as it initializes sleep mode
+ - PATCH 12: Add trace irq to tipd callbacks factory
+ - PATCH 13: Add trace power status to tipd data factory
+ - PATCH 14: Add trace status to tipd data factory
+v5:
+ - PATCH 1: Add tps25750 bindings to tps6598x
+ - PATCH 2: Remove tps25750 driver and incorperate tps25750
+ 	    into tps6598x driver
+ - PATCH [3..15]: Incorporating tps25750 into tps6598x driver
+v4:
+ - PATCH 1: No change
+ - PATCH 2: Fix comments style and drop of_match_ptr
+v3:
+ - PATCH 1: Fix node name
+ - PATCH 2: Upload tps25750 driver patch
+v2:
+ - PATCH 1: General properties clean up
+
+Abdel Alkuor (9):
+  dt-bindings: usb: tps6598x: Add tps25750
+  USB: typec: tsp6598x: Add cmd timeout and response delay
+  USB: typec: tps6598x: Add patch mode to tps6598x
+  USB: typec: tps6598x: Refactor tps6598x port registration
+  USB: typec: tps6598x: Add device data to of_device_id
+  USB: typec: tps6598x: Add TPS25750 support
+  USB: typec: tps6598x: Add trace for tps25750 irq
+  USB: typec: tps6598x: Add power status trace for tps25750
+  USB: typec: tps6598x: Add status trace for tps25750
+
+ .../devicetree/bindings/usb/ti,tps6598x.yaml  |  81 ++-
+ drivers/usb/typec/tipd/core.c                 | 626 ++++++++++++++++--
+ drivers/usb/typec/tipd/tps6598x.h             |  36 +
+ drivers/usb/typec/tipd/trace.h                |  92 +++
+ 4 files changed, 764 insertions(+), 71 deletions(-)
 
 -- 
-With best wishes
-Dmitry
+2.34.1
+
 
