@@ -1,70 +1,106 @@
-Return-Path: <linux-usb+bounces-996-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-997-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E6647B6215
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 09:05:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C87607B624D
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 09:13:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sy.mirrors.kernel.org (Postfix) with ESMTP id 2F07FB209F1
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 07:05:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id E3F8128198A
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 07:12:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E79C6D26F;
-	Tue,  3 Oct 2023 07:05:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DC2AD27E;
+	Tue,  3 Oct 2023 07:12:55 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 746891C36;
-	Tue,  3 Oct 2023 07:05:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B6FCC433C7;
-	Tue,  3 Oct 2023 07:05:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1696316736;
-	bh=SjGX3jCFVdiNsB2r2BY7I5WgDYwtsa92FOhazxUr+iA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=q5RDnAoElwAkbKO9DyhYFDDRq/2FQ/6FvrGCb3609E2bA5ZZImlL7nuowYdxArol4
-	 KiBG+BjZfxOa3JiS0vsz2+2B6w41FJMNsuLddxIFrZdRPdaFrlgMiXeZ1A8pvVSzYQ
-	 PRSHteEYXDYP46qFLi7KbYhzvJYtX11EKOdevqHc=
-Date: Tue, 3 Oct 2023 09:05:34 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Tomer Maimon <tmaimon77@gmail.com>
-Cc: peter.chen@kernel.org, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, xu.yang_2@nxp.com,
-	peng.fan@nxp.com, avifishman70@gmail.com, tali.perry1@gmail.com,
-	joel@jms.id.au, venture@google.com, yuenn@google.com,
-	benjaminfair@google.com, j.neuschaefer@gmx.net,
-	openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH RESEND v3 0/3] usb: ChipIdea: add Nuvoton NPCM UDC support
-Message-ID: <2023100342-unnerving-diaphragm-cf36@gregkh>
-References: <20231002161350.64229-1-tmaimon77@gmail.com>
- <2023100323-reunite-upfront-8922@gregkh>
- <CAP6Zq1jHzRP1Ytzk8YXyR8ppAP=ZoPvPkYvC2yMRfTt5140zqw@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E330CA65;
+	Tue,  3 Oct 2023 07:12:53 +0000 (UTC)
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1541383;
+	Tue,  3 Oct 2023 00:12:52 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2b9338e4695so6243881fa.2;
+        Tue, 03 Oct 2023 00:12:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696317170; x=1696921970; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=VpvT/D80OxJ4afszuNnSX5OlIZElw6h6KH28boI+JUo=;
+        b=TE9K0aqpxYh9qFPIDdmYIugphqjuUEVf0d1FAuZNqr1E9RygMjpM9wQkkwz7Um5wLR
+         XjQCb6RQOwJ4pzV+hD61yhcLS3lFAS1AMFLk20KdnEC4zoi0UcrdfEqqdI4ujBuu+D7D
+         3WAuLAJ3bphcoZfHW1x66X2C1Tpwrfihn3tgbVs0aBd94QXVzWGz/WhzpJMqbVmxL0i3
+         uWp4R7Uzkcc0ExrH8HTEPM+pcQNojNT+wE2bnXsF3JqV0otLvHJ8Y6cQPYzUvNUfFj3f
+         S64b5o5pEapizzYe+qzBf3jamjvgOac2k+DcCUGQsGZPuZsRMe6SiI8Nh2r4+twL6yyM
+         PbVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696317170; x=1696921970;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VpvT/D80OxJ4afszuNnSX5OlIZElw6h6KH28boI+JUo=;
+        b=KKLsJJ3niqdA1+nbDgUtVem+hlu4SvMltX2JL4awNxmBS3ulbgMx1BBEOMorpGVJUO
+         b2iSjwzvE8mCAj0t/bxbApj8NGoHjPjCSYa2RzTPOSfM61piimV8zzGiqO2Uvp1NppoN
+         cLrcIDHfEy6D6D8qkXC968ODP9oXS+RCznzfAyAjlM/heWV1GT6Ot8Y5XR09qr6T6NAf
+         l7D+heptMfGXnYdsERvb/ETTFZFmm8g4Xx3l0rWQPxOncfPr7Qs8DNbvqMUqDm3/OL+g
+         pTHgArar210vzp+3o4TwD38GNT+EpDGJJPdQNokyThDlC6XgNkX2wbYkvgue+XWo2Bv+
+         L5Og==
+X-Gm-Message-State: AOJu0YyT+TqMy2qRlS8inFx26SN2W+c3xIsUs3BYsE+2wEcPgqJaOBBP
+	yTdLXpdbZc2fFpOZQD1PmAt5kJjHVgYIvf30Jbc=
+X-Google-Smtp-Source: AGHT+IF/2qtL9lsTpoepg5ulXqwKd8bMtdNP5zrBn2lfZWD9LWZVW6RTD0ONNE313l5Zh4wEN8dsF04KIvlNA2yiadc=
+X-Received: by 2002:a2e:a3c5:0:b0:2c0:a2:77d7 with SMTP id w5-20020a2ea3c5000000b002c000a277d7mr10724615lje.24.1696317170212;
+ Tue, 03 Oct 2023 00:12:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAP6Zq1jHzRP1Ytzk8YXyR8ppAP=ZoPvPkYvC2yMRfTt5140zqw@mail.gmail.com>
+References: <20231002161350.64229-1-tmaimon77@gmail.com> <2023100323-reunite-upfront-8922@gregkh>
+ <CAP6Zq1jHzRP1Ytzk8YXyR8ppAP=ZoPvPkYvC2yMRfTt5140zqw@mail.gmail.com> <2023100342-unnerving-diaphragm-cf36@gregkh>
+In-Reply-To: <2023100342-unnerving-diaphragm-cf36@gregkh>
+From: Tomer Maimon <tmaimon77@gmail.com>
+Date: Tue, 3 Oct 2023 10:12:39 +0300
+Message-ID: <CAP6Zq1j-uqwCCXF6aJA9Y2GynHRrPXiLjZM90ORqmNDT9vFKRw@mail.gmail.com>
+Subject: Re: [PATCH RESEND v3 0/3] usb: ChipIdea: add Nuvoton NPCM UDC support
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: peter.chen@kernel.org, robh+dt@kernel.org, 
+	krzysztof.kozlowski+dt@linaro.org, xu.yang_2@nxp.com, peng.fan@nxp.com, 
+	avifishman70@gmail.com, tali.perry1@gmail.com, joel@jms.id.au, 
+	venture@google.com, yuenn@google.com, benjaminfair@google.com, 
+	j.neuschaefer@gmx.net, openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+	FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-On Tue, Oct 03, 2023 at 09:56:47AM +0300, Tomer Maimon wrote:
-> Hi Greg,
-> 
-> Forgot to add in Acked-by: Peter Chen <peter.chen@kernel.org> in V3,
-> Resend the patch set with the Ack.
-> 
-> Should I do it differently?
+O.K.
 
-You need to tell me what the difference is, otherwise I would have no
-clue what to do, what would you do if you had to review all of these and
-try to figure out which ones to accept?
+Thanks a lot
 
-Please send this as a v4.
+Tomer
 
-thanks,
 
-greg k-h
+On Tue, 3 Oct 2023 at 10:05, Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Tue, Oct 03, 2023 at 09:56:47AM +0300, Tomer Maimon wrote:
+> > Hi Greg,
+> >
+> > Forgot to add in Acked-by: Peter Chen <peter.chen@kernel.org> in V3,
+> > Resend the patch set with the Ack.
+> >
+> > Should I do it differently?
+>
+> You need to tell me what the difference is, otherwise I would have no
+> clue what to do, what would you do if you had to review all of these and
+> try to figure out which ones to accept?
+>
+> Please send this as a v4.
+>
+> thanks,
+>
+> greg k-h
 
