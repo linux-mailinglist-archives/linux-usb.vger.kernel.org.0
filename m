@@ -1,159 +1,184 @@
-Return-Path: <linux-usb+bounces-985-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-986-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 617D07B6070
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 07:34:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD08B7B6073
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 07:42:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sy.mirrors.kernel.org (Postfix) with ESMTP id 9D426B209E7
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 05:34:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 80A602817FD
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 05:42:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D58913FC7;
-	Tue,  3 Oct 2023 05:34:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D656F3FC2;
+	Tue,  3 Oct 2023 05:42:07 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CF6A1375;
-	Tue,  3 Oct 2023 05:34:19 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3819B3;
-	Mon,  2 Oct 2023 22:34:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696311257; x=1727847257;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RCj7WyluIUsq7v8E4Prf3L0fuZhckvzQbOsAkGXe6P8=;
-  b=fRBZXueXaHfsatylMxW1vle489ts7zRZ5Z63i70PzX02IXEsyfTNon/k
-   4MrSj2LXnj9EbHaDhqvZ7I26OSMpmF6Ogo7SaxybSecHP1vJPWs/6mwio
-   nwbApRDH66W9Ber1KvySnIsDFYv2iNDpC+onEo7I3YgEGNsS1firD/CuZ
-   D7IM2ANnHVEXu/WuZ2WDyHmaHMaelW6wQhygpWn2xqEhIQh9PO/jhcvLO
-   IBLlMknZBlU2LL+wvNHnEjr8xTGK+l1rSNtBrZbHEuezeiyH9La6FXZ/y
-   5Irr2BJ60P6MmKMPnuKgAP8HvHoynvaKkk526ddxfIhG7H3SIPuWc0hpd
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10851"; a="449284644"
-X-IronPort-AV: E=Sophos;i="6.03,196,1694761200"; 
-   d="scan'208";a="449284644"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2023 22:34:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10851"; a="841211944"
-X-IronPort-AV: E=Sophos;i="6.03,196,1694761200"; 
-   d="scan'208";a="841211944"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by FMSMGA003.fm.intel.com with SMTP; 02 Oct 2023 22:34:12 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 03 Oct 2023 08:34:11 +0300
-Date: Tue, 3 Oct 2023 08:34:11 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Abdel Alkuor <alkuor@gmail.com>
-Cc: krzysztof.kozlowski+dt@linaro.org, bryan.odonoghue@linaro.org,
-	gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, ryan.eleceng@gmail.com,
-	robh+dt@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org,
-	Abdel Alkuor <abdelalkuor@geotab.com>
-Subject: Re: [PATCH v9 05/14] USB: typec: tps6598x: Check for EEPROM present
-Message-ID: <ZRun0+pBJ8n6tMZU@kuha.fi.intel.com>
-References: <20231001081134.37101-1-alkuor@gmail.com>
- <20231001081134.37101-6-alkuor@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 048C3EC8
+	for <linux-usb@vger.kernel.org>; Tue,  3 Oct 2023 05:42:05 +0000 (UTC)
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A01A1B3
+	for <linux-usb@vger.kernel.org>; Mon,  2 Oct 2023 22:42:01 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3935GrfO020467;
+	Tue, 3 Oct 2023 05:41:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=liOSk9kAbMdpvf1tCH7DTropd1lf696xuT/ZkuI8Ywo=;
+ b=UI8v0pdl3sc8Hd7XpjQKn6qkiBzWzLjEX++4h+jyNwyTlEmy2V4zCZZdFbLxd92KMoME
+ c3YI8EzXOx4pix8a6k0zplqlcX80YH8c74pyNsoyJrHEGqOzmEr7q3wGpMy9Wb2l3AT4
+ BSbTQSqN78fu7+19GhElQYfSfLRzFsmMDb+ImdPntKlJW+6+nksKLUF9cHJpjpNGw8kR
+ R5IHXSCmdmQQ+mMnelVkju72ZCWdX2dIWsoyDD0un76cLb55U65MOqtL5UmUJj5+rTct
+ VA+xP+Cgcg5MB+FajF49OiM5gJwesbYzq3LScYwzKb4TRWo+83gg9HOQGmBnRa4cYEC4 1A== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tg9hdrbau-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 03 Oct 2023 05:41:57 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3935fu4i000703
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 3 Oct 2023 05:41:56 GMT
+Received: from [10.217.219.221] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Mon, 2 Oct
+ 2023 22:41:54 -0700
+Message-ID: <179abd6a-3c4e-456a-a946-1f8c7d715491@quicinc.com>
+Date: Tue, 3 Oct 2023 11:11:51 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231001081134.37101-6-alkuor@gmail.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-	SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] usb: XHCI: Implement xhci_handshake_check_state() API
+To: Mathias Nyman <mathias.nyman@intel.com>
+CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>
+References: <20230919085847.8210-1-quic_ugoswami@quicinc.com>
+Content-Language: en-US
+From: Udipto Goswami <quic_ugoswami@quicinc.com>
+In-Reply-To: <20230919085847.8210-1-quic_ugoswami@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: F2lRzNMhLCeBt_Cdk1OGcQk6-ln_HOJq
+X-Proofpoint-GUID: F2lRzNMhLCeBt_Cdk1OGcQk6-ln_HOJq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-03_03,2023-10-02_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ lowpriorityscore=0 phishscore=0 clxscore=1015 mlxscore=0 suspectscore=0
+ impostorscore=0 mlxlogscore=428 malwarescore=0 spamscore=0
+ priorityscore=1501 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2309180000 definitions=main-2310030045
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Sun, Oct 01, 2023 at 04:11:25AM -0400, Abdel Alkuor wrote:
-> From: Abdel Alkuor <abdelalkuor@geotab.com>
+
+
+On 9/19/2023 2:28 PM, Udipto Goswami wrote:
+> In some situations where xhci removal happens parallel to
+> xhci_handshake, we enoughter a scenario where the
+> xhci_handshake will fails because the status does not change
+> the entire duration of polling. This causes the xhci_handshake
+> to timeout resulting in long wait which might lead to watchdog
+> timeout.
 > 
-> When an EEPROM is present, tps25750 loads the binary configuration from
-> EEPROM. Hence, all we need to do is wait for the device to switch to APP
-> mode
+> The API  handles command timeout which may happen upon XHCI
+> stack removal. Check for xhci state and exit the handshake if
+> xhci is removed.
 > 
-> Signed-off-by: Abdel Alkuor <abdelalkuor@geotab.com>
-
-I'm not sure I understand why this needs separate patch, but in any
-case:
-
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
+> Signed-off-by: Udipto Goswami <quic_ugoswami@quicinc.com>
 > ---
-> Changes in v9:
->   - No changes
-> Changes in v8:
->   - No changes
-> Changes in v7:
->   - Add driver name to commit subject
-> Changes in v6: 
->   - Update eeprom macro to use TPS instead
-> Changes in v5:
->   - Incorporating tps25750 into tps6598x driver
+> v2: Fixed compilation error.
 > 
->  drivers/usb/typec/tipd/core.c     | 13 +++++++++++++
->  drivers/usb/typec/tipd/tps6598x.h |  3 +++
->  2 files changed, 16 insertions(+)
+>   drivers/usb/host/xhci-ring.c |  5 +++--
+>   drivers/usb/host/xhci.c      | 21 ++++++++++++++++++++-
+>   drivers/usb/host/xhci.h      |  2 ++
+>   3 files changed, 25 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-> index 2e7b9eafaf04..21b0ea2c9627 100644
-> --- a/drivers/usb/typec/tipd/core.c
-> +++ b/drivers/usb/typec/tipd/core.c
-> @@ -37,6 +37,7 @@
->  #define TPS_REG_STATUS			0x1a
->  #define TPS_REG_SYSTEM_CONF		0x28
->  #define TPS_REG_CTRL_CONF		0x29
-> +#define TPS_REG_BOOT_STATUS		0x2D
->  #define TPS_REG_POWER_STATUS		0x3f
->  #define TPS_REG_RX_IDENTITY_SOP		0x48
->  #define TPS_REG_DATA_STATUS		0x5f
-> @@ -910,6 +911,17 @@ static int tps25750_apply_patch(struct tps6598x *tps)
->  {
->  	int ret;
->  	unsigned long timeout;
-> +	u64 status = 0;
+> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+> index 1dde53f6eb31..26add6c23a1d 100644
+> --- a/drivers/usb/host/xhci-ring.c
+> +++ b/drivers/usb/host/xhci-ring.c
+> @@ -450,8 +450,9 @@ static int xhci_abort_cmd_ring(struct xhci_hcd *xhci, unsigned long flags)
+>   	 * In the future we should distinguish between -ENODEV and -ETIMEDOUT
+>   	 * and try to recover a -ETIMEDOUT with a host controller reset.
+>   	 */
+> -	ret = xhci_handshake(&xhci->op_regs->cmd_ring,
+> -			CMD_RING_RUNNING, 0, 5 * 1000 * 1000);
+> +	ret = xhci_handshake_check_state(xhci, &xhci->op_regs->cmd_ring,
+> +			CMD_RING_RUNNING, 0, 5 * 1000 * 1000,
+> +			XHCI_STATE_REMOVING);
+>   	if (ret < 0) {
+>   		xhci_err(xhci, "Abort failed to stop command ring: %d\n", ret);
+>   		xhci_halt(xhci);
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index e1b1b64a0723..95b4c63dbeba 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+> @@ -84,6 +84,24 @@ int xhci_handshake(void __iomem *ptr, u32 mask, u32 done, u64 timeout_us)
+>   /*
+>    * Disable interrupts and begin the xHCI halting process.
+>    */
+> +int xhci_handshake_check_state(struct xhci_hcd *xhci, void __iomem *ptr,
+> +		u32 mask, u32 done, int usec, unsigned int exit_state)
+> +{
+> +	u32	result;
+> +	int	ret;
 > +
-> +	ret = tps6598x_block_read(tps, TPS_REG_BOOT_STATUS, &status, 5);
-> +	if (ret)
-> +		return ret;
-> +	/*
-> +	 * Nothing to be done if the configuration
-> +	 * is being loaded from EERPOM
-> +	 */
-> +	if (status & TPS_BOOT_STATUS_I2C_EEPROM_PRESENT)
-> +		goto wait_for_app;
->  
->  	ret = tps25750_start_patch_burst_mode(tps);
->  	if (ret) {
-> @@ -921,6 +933,7 @@ static int tps25750_apply_patch(struct tps6598x *tps)
->  	if (ret)
->  		return ret;
->  
-> +wait_for_app:
->  	timeout = jiffies + msecs_to_jiffies(1000);
->  
->  	do {
-> diff --git a/drivers/usb/typec/tipd/tps6598x.h b/drivers/usb/typec/tipd/tps6598x.h
-> index 527857549d69..a80d0929f3ee 100644
-> --- a/drivers/usb/typec/tipd/tps6598x.h
-> +++ b/drivers/usb/typec/tipd/tps6598x.h
-> @@ -199,4 +199,7 @@
->  #define TPS_DATA_STATUS_DP_SPEC_PIN_ASSIGNMENT_A    BIT(2)
->  #define TPS_DATA_STATUS_DP_SPEC_PIN_ASSIGNMENT_B    (BIT(2) | BIT(1))
->  
-> +/* BOOT STATUS REG*/
-> +#define TPS_BOOT_STATUS_I2C_EEPROM_PRESENT	BIT(3)
+> +	ret = readl_poll_timeout_atomic(ptr, result,
+> +				(result & mask) == done ||
+> +				result == U32_MAX ||
+> +				xhci->xhc_state & exit_state,
+> +				1, usec);
 > +
->  #endif /* __TPS6598X_H__ */
-> -- 
-> 2.34.1
+> +	if (result == U32_MAX || xhci->xhc_state & exit_state)
+> +		return -ENODEV;
+> +
+> +	return ret;
+> +}
+> +
+>   void xhci_quiesce(struct xhci_hcd *xhci)
+>   {
+>   	u32 halted;
+> @@ -201,7 +219,8 @@ int xhci_reset(struct xhci_hcd *xhci, u64 timeout_us)
+>   	if (xhci->quirks & XHCI_INTEL_HOST)
+>   		udelay(1000);
+>   
+> -	ret = xhci_handshake(&xhci->op_regs->command, CMD_RESET, 0, timeout_us);
+> +	ret = xhci_handshake_check_state(xhci, &xhci->op_regs->command,
+> +				CMD_RESET, 0, timeout_us, XHCI_STATE_REMOVING);
+>   	if (ret)
+>   		return ret;
+>   
+> diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+> index 7e282b4522c0..06d5a90dedd5 100644
+> --- a/drivers/usb/host/xhci.h
+> +++ b/drivers/usb/host/xhci.h
+> @@ -2119,6 +2119,8 @@ void xhci_free_container_ctx(struct xhci_hcd *xhci,
+>   /* xHCI host controller glue */
+>   typedef void (*xhci_get_quirks_t)(struct device *, struct xhci_hcd *);
+>   int xhci_handshake(void __iomem *ptr, u32 mask, u32 done, u64 timeout_us);
+> +int xhci_handshake_check_state(struct xhci_hcd *xhci, void __iomem *ptr,
+> +		u32 mask, u32 done, int usec, unsigned int exit_state);
+>   void xhci_quiesce(struct xhci_hcd *xhci);
+>   int xhci_halt(struct xhci_hcd *xhci);
+>   int xhci_start(struct xhci_hcd *xhci);
 
--- 
-heikki
+Hi All,
+
+Gentle Reminder on this.
+
+Thanks,
+-Udipto
 
