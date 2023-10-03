@@ -1,50 +1,43 @@
-Return-Path: <linux-usb+bounces-1053-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1054-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29A9D7B6EA3
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 18:34:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C1EE97B729B
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 22:37:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by ny.mirrors.kernel.org (Postfix) with ESMTP id C92FE1C203A7
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 16:34:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTP id E3E101C2084B
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 20:37:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA6CE30D15;
-	Tue,  3 Oct 2023 16:34:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 051083B7B0;
+	Tue,  3 Oct 2023 20:37:37 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB0192510C;
-	Tue,  3 Oct 2023 16:34:38 +0000 (UTC)
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50B5CAF;
-	Tue,  3 Oct 2023 09:34:37 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 393Erddk013142;
-	Tue, 3 Oct 2023 16:34:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=FF73pH/SYbmbjDDOjovosivE4VxvLNDlhTfVVV+K1bM=;
- b=B7bHcW7RReBs1ljd7qMkUPf9w6CBSvDNz93NOjt9t9BNJJteUMM4WuByNLMCKQYgTkWc
- Z68I1dE8jSXy5sLmxFdDc/tZ6zE6l2Vz8ucaTSSXzMleB5RE26AlU6xa6W9ykPJmA4oC
- b3vEU0GjDaFjKhP7EztMl4nkp5YqWdV0TUwfTA3OUxL+kxpHPo38mu93J+j1dvVNSTNo
- L9pnWNYrZBrEl7WkAbZ+wxLv1/hj6p0lril4sYH+XMrB46p0WGhPYVXJBycoGqs07ddY
- zT/b4+N7717LCB7J2XgOP1LU1eOPyuh5Fn5coJtdurjNikHp7kFdD5L/ICvwWhSj1i6O bg== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tg98rhx6u-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 03 Oct 2023 16:34:06 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 393GY50m030027
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 3 Oct 2023 16:34:05 GMT
-Received: from [10.216.32.208] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Tue, 3 Oct
- 2023 09:33:55 -0700
-Message-ID: <a44fcc7b-0a79-4755-87a1-1d1704fd3e58@quicinc.com>
-Date: Tue, 3 Oct 2023 22:03:51 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 974DAF517
+	for <linux-usb@vger.kernel.org>; Tue,  3 Oct 2023 20:37:34 +0000 (UTC)
+Received: from smtp.smtpout.orange.fr (smtp-24.smtpout.orange.fr [80.12.242.24])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0611DAC
+	for <linux-usb@vger.kernel.org>; Tue,  3 Oct 2023 13:37:32 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.2.178])
+	by smtp.orange.fr with ESMTPA
+	id nm94qRJHbs3p2nm94qPxBe; Tue, 03 Oct 2023 22:37:31 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1696365451;
+	bh=IKG3F6hJ3v/L25Z0w91DgqZDC5nYGOA6uzkidIkVaf4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=VBS+xN1HohHEC37JSmZks97ZPR+Inp0YSI+FNwPF/QAUA/KT3PAStE9KlOV02jVwM
+	 6851mKbQLhnbIh1Hzo/oKGRMfmJY2K45OU8ySY4Dmt57EPsT4+RzliOs3Zfa+uizUd
+	 Tu2LmWX9I2ZlWZ+H7LcuoCCaeS6UZuQUvPI+t9Zd0GCcyGIyJCh5INNQNTXkrdDcws
+	 NCwfANy1Ftq7BJG1HZwtyDhtxSeUG+FPh3d+HQsV1pXPDQqaLvbkdXCtKsA25mA4sx
+	 PnW6Xutl385l89APfyVNkKUki2TMRFJd0Q9u/IX3r0gXeZuoZ29d73BeSDeKrDJg8T
+	 d8iq8y881+TOg==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Tue, 03 Oct 2023 22:37:31 +0200
+X-ME-IP: 86.243.2.178
+Message-ID: <29133480-ad61-482b-9b3e-d7c73344b2f4@wanadoo.fr>
+Date: Tue, 3 Oct 2023 22:37:30 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -52,136 +45,66 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/8] phy: qcom: Introduce Super-Speed USB UNIPHY driver
-Content-Language: en-US
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC: <agross@kernel.org>, <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
-        <vkoul@kernel.org>, <kishon@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <gregkh@linuxfoundation.org>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <p.zabel@pengutronix.de>, <geert+renesas@glider.be>,
-        <arnd@arndb.de>, <neil.armstrong@linaro.org>,
-        <nfraprado@collabora.com>, <u-kumar1@ti.com>, <peng.fan@nxp.com>,
-        <quic_wcheng@quicinc.com>, <quic_varada@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <quic_kathirav@quicinc.com>, <quic_nsekar@quicinc.com>,
-        <quic_srichara@quicinc.com>
-References: <20230929084209.3033093-1-quic_ipkumar@quicinc.com>
- <20230929084209.3033093-3-quic_ipkumar@quicinc.com>
- <412492d1-fcc9-481c-9d28-b208a644ba1d@linaro.org>
- <7975c638-29cf-45ce-9d76-b8a93d750eb7@quicinc.com>
- <CAA8EJprhQz_Tj0Bhv6zhGa7h37Ug-Fp6Tof9tNscTFyZzkbJvw@mail.gmail.com>
-From: Praveenkumar I <quic_ipkumar@quicinc.com>
-In-Reply-To: <CAA8EJprhQz_Tj0Bhv6zhGa7h37Ug-Fp6Tof9tNscTFyZzkbJvw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: KukSnE5ys9HRpl3qozM40BtNCj8Gai-o
-X-Proofpoint-GUID: KukSnE5ys9HRpl3qozM40BtNCj8Gai-o
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-03_13,2023-10-02_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- suspectscore=0 bulkscore=0 adultscore=0 impostorscore=0 lowpriorityscore=0
- clxscore=1015 spamscore=0 mlxscore=0 malwarescore=0 phishscore=0
- mlxlogscore=554 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2310030125
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-	SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] usb: dwc2: gadget: Fix a warning when compiling with W=1
+Content-Language: fr, en-US
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Minas Harutyunyan <hminas@synopsys.com>, Ben Dooks <ben@simtec.co.uk>,
+ linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+ Greg Kroah-Hartman <gregkh@suse.de>, linux-usb@vger.kernel.org
+References: <5cf603809388aa04c9a02bbfe3cf531c20bb043e.1695466447.git.christophe.jaillet@wanadoo.fr>
+ <2023100226-cloak-tissue-7efa@gregkh>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <2023100226-cloak-tissue-7efa@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+	RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+	autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
+Le 02/10/2023 à 13:45, Greg Kroah-Hartman a écrit :
+> On Sat, Sep 23, 2023 at 12:54:24PM +0200, Christophe JAILLET wrote:
+>> In order to teach the compiler that 'hs_ep->name' will never be truncated,
+>> we need to tell it that 'epnum' is not negative.
+>>
+>> 'epnum' comes from in a 'for' loop in dwc2_gadget_init(), starting at 0
+>> and ending at 255. (hsotg->num_of_eps is a char)
+>>
+>> When building with W=1, this fixes the following warnings:
+>>
+>>    drivers/usb/dwc2/gadget.c: In function ‘dwc2_hsotg_initep’:
+>>    drivers/usb/dwc2/gadget.c:4804:55: error: ‘%d’ directive output may be truncated writing between 1 and 11 bytes into a region of size 8 [-Werror=format-truncation=]
+>>     4804 |         snprintf(hs_ep->name, sizeof(hs_ep->name), "ep%d%s", epnum, dir);
+>>          |                                                       ^~
+>>    drivers/usb/dwc2/gadget.c:4804:52: note: directive argument in the range [-2147483645, 255]
+>>     4804 |         snprintf(hs_ep->name, sizeof(hs_ep->name), "ep%d%s", epnum, dir);
+>>          |                                                    ^~~~~~~~
+>>    drivers/usb/dwc2/gadget.c:4804:9: note: ‘snprintf’ output between 6 and 17 bytes into a destination of size 10
+>>     4804 |         snprintf(hs_ep->name, sizeof(hs_ep->name), "ep%d%s", epnum, dir);
+>>          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>
+>> Fixes: 5b7d70c6dbf2 ("USB: Gadget driver for Samsung HS/OtG block")
+>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> 
+> Looks like the kernel test robot didn't like this one :(
+> 
+
+Hi,
+
+unless I missed something, this was built-tested.
+I use gcc 12.3.0 and the report is done with gcc 11.3.0.
+
+Maybe the value range propagation algorithm of how the diagnostic for 
+such potential overflow has been improved in recent gcc?
 
 
-On 10/3/2023 8:24 PM, Dmitry Baryshkov wrote:
-> On Tue, 3 Oct 2023 at 17:22, Praveenkumar I <quic_ipkumar@quicinc.com> wrote:
->>
->>
->> On 9/30/2023 10:48 PM, Dmitry Baryshkov wrote:
->>> On 29/09/2023 11:42, Praveenkumar I wrote:
->>>> Adds Qualcomm 22ull Super-Speed USB UNIPHY driver support which
->>>> is present in Qualcomm IPQ5332 SoC. This PHY is interfaced with
->>>> SNPS DWC3 USB and SNPS DWC PCIe. Either one of the interface
->>>> can use the it and selection is done via mux present in TCSR
->>>> register. This driver selects the PHY for DWC3 USB and handles
->>>> the reset, clocks and regulator.
->>>>
->>>> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
->>>> ---
->>>>    drivers/phy/qualcomm/Kconfig               |  11 +
->>>>    drivers/phy/qualcomm/Makefile              |   1 +
->>>>    drivers/phy/qualcomm/phy-qcom-uniphy-usb.c | 322 +++++++++++++++++++++
->>>>    3 files changed, 334 insertions(+)
->>>>    create mode 100644 drivers/phy/qualcomm/phy-qcom-uniphy-usb.c
->>>>
->>>> diff --git a/drivers/phy/qualcomm/Kconfig b/drivers/phy/qualcomm/Kconfig
->>>> index d891058b7c39..7257c8455c53 100644
->>>> --- a/drivers/phy/qualcomm/Kconfig
->>>> +++ b/drivers/phy/qualcomm/Kconfig
->>>> @@ -154,6 +154,17 @@ config PHY_QCOM_M31_USB
->>>>          management. This driver is required even for peripheral only or
->>>>          host only mode configurations.
->>>>    +config PHY_QCOM_UNIPHY_USB
->>>> +    tristate "Qualcomm USB Super-Speed UNIPHY driver"
->>> Can we please have more specific driver name? As I wrote earlier,
->>> there are two other (different) kinds of Qualcomm UNI PHY devices:
->>> - DSI / HDMI UNIPHY on apq8064 / msm8974 / msm8960 (?)
->>> - USB QMP UNI PHY drivers
->>>
->>> Adding a driver called UNIPHY, which is not related to those two kinds
->>> sounds pretty confusing to me.
->> This UNIPHY is different from above mentioned ones. This a custom
->> version for 22nm on Qualcomm IPQ5332.
->> Can we name the driver as phy-qcom-uniphy-usb-ss-22ull.c /
->> phy-qcom-usb-ss-22ull.c ?
-> usb-ss-22ull sounds better. Or maybe usb-ipq-ss
-Sure, will rename it to phy-qcom-usb-ss-22ull.c
->
->>>> +    depends on USB && (ARCH_QCOM || COMPILE_TEST)
->>>> +    select GENERIC_PHY
->>>> +    help
->>>> +      Enable this to support the Qualcomm USB Super-Speed UNIPHY
->>>> transceiver
->>>> +      with DWC3 USB core. It handles PHY initialization, clock
->>>> +      management required after resetting the hardware and power
->>>> +      management. This driver is required even for peripheral only or
->>>> +      host only mode configurations.
->>>> +
->>>>    config PHY_QCOM_USB_HS
->>>>        tristate "Qualcomm USB HS PHY module"
->>>>        depends on USB_ULPI_BUS
->>>> diff --git a/drivers/phy/qualcomm/Makefile
->>>> b/drivers/phy/qualcomm/Makefile
->>>> index ffd609ac6233..c3e0112a7a70 100644
->>>> --- a/drivers/phy/qualcomm/Makefile
->>>> +++ b/drivers/phy/qualcomm/Makefile
->>>> @@ -17,6 +17,7 @@ obj-$(CONFIG_PHY_QCOM_QMP_USB_LEGACY)    +=
->>>> phy-qcom-qmp-usb-legacy.o
->>>>    obj-$(CONFIG_PHY_QCOM_QUSB2)        += phy-qcom-qusb2.o
->>>>    obj-$(CONFIG_PHY_QCOM_SNPS_EUSB2)    += phy-qcom-snps-eusb2.o
->>>>    obj-$(CONFIG_PHY_QCOM_EUSB2_REPEATER)    += phy-qcom-eusb2-repeater.o
->>>> +obj-$(CONFIG_PHY_QCOM_UNIPHY_USB)    += phy-qcom-uniphy-usb.o
->>>>    obj-$(CONFIG_PHY_QCOM_USB_HS)         += phy-qcom-usb-hs.o
->>>>    obj-$(CONFIG_PHY_QCOM_USB_HSIC)     += phy-qcom-usb-hsic.o
->>>>    obj-$(CONFIG_PHY_QCOM_USB_HS_28NM)    += phy-qcom-usb-hs-28nm.o
->>>> diff --git a/drivers/phy/qualcomm/phy-qcom-uniphy-usb.c
->>>> b/drivers/phy/qualcomm/phy-qcom-uniphy-usb.c
->>>> new file mode 100644
->>>> index 000000000000..fdfc9c225995
->>>> --- /dev/null
->>>> +++ b/drivers/phy/qualcomm/phy-qcom-uniphy-usb.c
->>> So, is it a USB PHY or UNI PHY (where I would expect that it handles
->>> USB and PCIe?)
->> It is a USB PHY and the PHY name is UNIPHY. Added the usb in the file
->> name to differentiate it.
---
-Thanks,
-Praveenkumar
+For your information, I got a similar feedback for another patch.
+It was also built tested from my side, but the maintainer report that 
+there is still some potential overflow warning.
+
+Strange :/
+
+CJ
 
