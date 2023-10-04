@@ -1,210 +1,174 @@
-Return-Path: <linux-usb+bounces-1080-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1081-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2830B7B82E3
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Oct 2023 16:57:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF6067B8593
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Oct 2023 18:44:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id C9AB128225A
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Oct 2023 14:56:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTP id C7EC31C208DA
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Oct 2023 16:44:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8776B18E17;
-	Wed,  4 Oct 2023 14:56:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1485D1C2A8;
+	Wed,  4 Oct 2023 16:44:31 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC89C15EBA
-	for <linux-usb@vger.kernel.org>; Wed,  4 Oct 2023 14:56:52 +0000 (UTC)
-Received: from mx.skole.hr (mx1.hosting.skole.hr [161.53.165.185])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B97C1;
-	Wed,  4 Oct 2023 07:56:49 -0700 (PDT)
-Received: from mx1.hosting.skole.hr (localhost.localdomain [127.0.0.1])
-	by mx.skole.hr (mx.skole.hr) with ESMTP id 84E2384CBD;
-	Wed,  4 Oct 2023 16:56:48 +0200 (CEST)
-From: =?utf-8?q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
-Date: Wed, 04 Oct 2023 16:56:30 +0200
-Subject: [PATCH RFC v5 6/6] input: ads7846: Move wait_for_sync() logic to
- driver
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9931B1BDC8;
+	Wed,  4 Oct 2023 16:44:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC080C433C8;
+	Wed,  4 Oct 2023 16:44:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1696437870;
+	bh=bJUdCu4n8Q616ruuLdWGE4yAQa292y0ym8neR1k201A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=J0goTKf7yenCuo1njZMrdo0wDTZQ5t1AC2tPHka97g2Tw8m49Gbju3yP3QFrztt7U
+	 PN/0QG/WY1onVRnFunFTmiV9QhcIcASYT19N+va3cryvt4q6+Z/cxMIAidJ0kNOF6w
+	 Wb6oOuXTJuD/I8RpVkWvMcI6ZlSMYBsAhNIz3SnnCzNfffbYTB2YrbsY0PUk90MCpe
+	 2XKJDz2xfxe/JJuLwx14ZYyXc7RqfTlkL3KlVH/Bsg2k18iK1dSy93uImyHWmQyRvG
+	 g5ANS9iQg3CvKRycbtbSuhZny1k3bnQKtZBxX2WwR2Ycjzan5KB/Tk8fCQBuv1mTh4
+	 cNatltJeDS8HA==
+Date: Thu, 5 Oct 2023 00:32:23 +0800
+From: Jisheng Zhang <jszhang@kernel.org>
+To: Samuel Holland <samuel.holland@sifive.com>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>,
+	Fu Wei <wefu@redhat.com>, linux-riscv@lists.infradead.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: Re: [PATCH 1/2] dt-bindings: usb: Add T-HEAD TH1520 USB controller
+Message-ID: <ZR2Tl1rkRdIG+fQa@xhacker>
+References: <20230927164222.3505-1-jszhang@kernel.org>
+ <20230927164222.3505-2-jszhang@kernel.org>
+ <cf68f6f1-e405-4c20-b4e1-da04189d0e2f@sifive.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20231004-pxa-gpio-v5-6-d99ae6fceea8@skole.hr>
-References: <20231004-pxa-gpio-v5-0-d99ae6fceea8@skole.hr>
-In-Reply-To: <20231004-pxa-gpio-v5-0-d99ae6fceea8@skole.hr>
-To: Daniel Mack <daniel@zonque.org>, 
- Haojian Zhuang <haojian.zhuang@gmail.com>, 
- Robert Jarzmik <robert.jarzmik@free.fr>, 
- Russell King <linux@armlinux.org.uk>, 
- Alan Stern <stern@rowland.harvard.edu>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Linus Walleij <linus.walleij@linaro.org>, 
- Bartosz Golaszewski <brgl@bgdev.pl>, Andy Shevchenko <andy@kernel.org>, 
- Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
- Mark Brown <broonie@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
- linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org, 
- linux-input@vger.kernel.org, linux-spi@vger.kernel.org, 
- =?utf-8?q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4268;
- i=duje.mihanovic@skole.hr; h=from:subject:message-id;
- bh=mfGlDLCki8NV8tuIB3jWgW4BpAW+ImMtQkJ8rvZ0eFs=;
- b=owEBbQKS/ZANAwAIAZoRnrBCLZbhAcsmYgBlHX0ko6QF0tV1IpOHpld/KlsqWZMXejAlxwX4p
- RioSchfOkqJAjMEAAEIAB0WIQRT351NnD/hEPs2LXiaEZ6wQi2W4QUCZR19JAAKCRCaEZ6wQi2W
- 4UDJEACL1rzW0OK+OZlq0VZP+NcIBMKUVlmXswhE+c4fqQzKRHdfqVHJ+HNX/f5un7+vbog19mN
- ghkrHhQ3na+v7tbB2lKBHQfIkfqt8Lpzo4yxZoj/xheHAaTNmC95iIzDcDejfXhn1RFqiCyg8f2
- b1/VcmMwKpw881LCL3rBkpws3D6d7E9E8p1Iv62fMYRXgHsm9SJdGxCLx649Z1XT+cw63ERxQAc
- 9CO8OfRrwX0q2ip4aToA8AjddXA3MPIIfOn61sJh+k6xC/18IuQ5CMeF+R1pmMI4BBELNM0HWPt
- 4C9GwnRQFfLR2q1IgIuSYYOwKP6xizY6fYWOGeI+oXLqEjpe9yAz+xo+AV3k8SHdrTJfA5wO+Fm
- 2qZ50mDe3kerUqoOWAsSBf3aejym2q3i84DPemXqPkfk1Gog8R/0LyJtNh/SbP6F3zsmo58N4oo
- xdxemvjNCm64z0s5l+RJYxZTPB006qGhmS6UReKLHSR7GeV7mm78+y88WQ49BadsUCNol5i5nEH
- hEJdwUnulJII8uLcsjyGEMJMSK4j+szRDYFuxVo2eaT+cVTDsja40QF3WUhK8qBiCfQHAYeaSZl
- jqXP36EKy0W8BZkP9wqRrtlYzTa74nY/n4Xw2C4T6g6zXwQzfXyg5HxYpH0xmh2Cbr733QVkoKv
- JVBGQIlAgoCRiaw==
-X-Developer-Key: i=duje.mihanovic@skole.hr; a=openpgp;
- fpr=53DF9D4D9C3FE110FB362D789A119EB0422D96E1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <cf68f6f1-e405-4c20-b4e1-da04189d0e2f@sifive.com>
 
-If this code is left in the board file, the sync GPIO would have to be
-separated into another lookup table during conversion to the GPIO
-descriptor API (which is also done in this patch).
+On Wed, Sep 27, 2023 at 03:00:59PM -0500, Samuel Holland wrote:
+> On 2023-09-27 11:42 AM, Jisheng Zhang wrote:
+> > T-HEAD TH1520 platform's USB has a wrapper module around
+> > the DesignWare USB3 DRD controller. Add binding information doc for
+> > it.
+> > 
+> > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> > ---
+> >  .../bindings/usb/thead,th1520-usb.yaml        | 73 +++++++++++++++++++
+> >  1 file changed, 73 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/usb/thead,th1520-usb.yaml
+> > 
+> > diff --git a/Documentation/devicetree/bindings/usb/thead,th1520-usb.yaml b/Documentation/devicetree/bindings/usb/thead,th1520-usb.yaml
+> > new file mode 100644
+> > index 000000000000..afb618eb5013
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/usb/thead,th1520-usb.yaml
+> > @@ -0,0 +1,73 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/usb/thead,th1520-usb.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: T-HEAD TH1520 DWC3 USB Controller Glue
+> > +
+> > +maintainers:
+> > +  - Jisheng Zhang <jszhang@kernel.org>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: thead,th1520-usb
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    maxItems: 4
+> > +
+> > +  clock-names:
+> > +    items:
+> > +      - const: ref
+> > +      - const: bus_early
+> > +      - const: phy
+> > +      - const: suspend
+> 
+> Except for "phy", these clocks are already documented in snps,dwc3.yaml. Are
+> they necessary for the glue/PHY, or do they belong only in the controller node?
 
-The only user of this code (Sharp Spitz) is also converted in this
-patch.
+Hi Samuel,
 
-Suggested-by: Linus Walleij <linus.walleij@linaro.org>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Acked-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Duje Mihanović <duje.mihanovic@skole.hr>
----
- arch/arm/mach-pxa/spitz.c           | 12 ++----------
- drivers/input/touchscreen/ads7846.c | 22 +++++++++++++++-------
- include/linux/spi/ads7846.h         |  1 -
- 3 files changed, 17 insertions(+), 18 deletions(-)
+Enabling ref, bus_early clks are necessary for the glue layer, because
+we program the glue registers before calling of_platform_populate()
 
-diff --git a/arch/arm/mach-pxa/spitz.c b/arch/arm/mach-pxa/spitz.c
-index 26ec29c9cd1b..e8bc0249b503 100644
---- a/arch/arm/mach-pxa/spitz.c
-+++ b/arch/arm/mach-pxa/spitz.c
-@@ -520,22 +520,12 @@ static inline void spitz_leds_init(void) {}
-  * SSP Devices
-  ******************************************************************************/
- #if defined(CONFIG_SPI_PXA2XX) || defined(CONFIG_SPI_PXA2XX_MODULE)
--static void spitz_ads7846_wait_for_hsync(void)
--{
--	while (gpio_get_value(SPITZ_GPIO_HSYNC))
--		cpu_relax();
--
--	while (!gpio_get_value(SPITZ_GPIO_HSYNC))
--		cpu_relax();
--}
--
- static struct ads7846_platform_data spitz_ads7846_info = {
- 	.model			= 7846,
- 	.vref_delay_usecs	= 100,
- 	.x_plate_ohms		= 419,
- 	.y_plate_ohms		= 486,
- 	.pressure_max		= 1024,
--	.wait_for_sync		= spitz_ads7846_wait_for_hsync,
- };
- 
- static struct gpiod_lookup_table spitz_ads7846_gpio_table = {
-@@ -543,6 +533,8 @@ static struct gpiod_lookup_table spitz_ads7846_gpio_table = {
- 	.table = {
- 		GPIO_LOOKUP("gpio-pxa", SPITZ_GPIO_TP_INT,
- 			    "pendown", GPIO_ACTIVE_LOW),
-+		GPIO_LOOKUP("gpio-pxa", SPITZ_GPIO_HSYNC,
-+			    "sync", GPIO_ACTIVE_LOW),
- 		{ }
- 	},
- };
-diff --git a/drivers/input/touchscreen/ads7846.c b/drivers/input/touchscreen/ads7846.c
-index faea40dd66d0..139b0f3735d0 100644
---- a/drivers/input/touchscreen/ads7846.c
-+++ b/drivers/input/touchscreen/ads7846.c
-@@ -138,8 +138,7 @@ struct ads7846 {
- 	void			*filter_data;
- 	int			(*get_pendown_state)(void);
- 	struct gpio_desc	*gpio_pendown;
--
--	void			(*wait_for_sync)(void);
-+	struct gpio_desc	*sync;
- };
- 
- enum ads7846_filter {
-@@ -636,9 +635,15 @@ static const struct attribute_group ads784x_attr_group = {
- };
- 
- /*--------------------------------------------------------------------------*/
--
--static void null_wait_for_sync(void)
-+static void ads7846_wait_for_sync_gpio(struct ads7846 *ts)
- {
-+	if (!ts->sync)
-+		return;
-+	while (!gpiod_get_value(ts->sync))
-+		cpu_relax();
-+
-+	while (gpiod_get_value(ts->sync))
-+		cpu_relax();
- }
- 
- static int ads7846_debounce_filter(void *ads, int data_idx, int *val)
-@@ -803,7 +808,7 @@ static void ads7846_read_state(struct ads7846 *ts)
- 	packet->last_cmd_idx = 0;
- 
- 	while (true) {
--		ts->wait_for_sync();
-+		ads7846_wait_for_sync_gpio(ts);
- 
- 		m = &ts->msg[msg_idx];
- 		error = spi_sync(ts->spi, m);
-@@ -1261,8 +1266,6 @@ static int ads7846_probe(struct spi_device *spi)
- 		ts->penirq_recheck_delay_usecs =
- 				pdata->penirq_recheck_delay_usecs;
- 
--	ts->wait_for_sync = pdata->wait_for_sync ? : null_wait_for_sync;
--
- 	snprintf(ts->phys, sizeof(ts->phys), "%s/input0", dev_name(dev));
- 	snprintf(ts->name, sizeof(ts->name), "ADS%d Touchscreen", ts->model);
- 
-@@ -1361,6 +1364,11 @@ static int ads7846_probe(struct spi_device *spi)
- 	if (err)
- 		return err;
- 
-+	ts->sync = devm_gpiod_get_optional(dev, "sync", GPIOD_IN);
-+	if (IS_ERR(ts->sync))
-+		return dev_err_probe(dev, PTR_ERR(ts->sync),
-+				"Failed to get sync GPIO");
-+
- 	err = input_register_device(input_dev);
- 	if (err)
- 		return err;
-diff --git a/include/linux/spi/ads7846.h b/include/linux/spi/ads7846.h
-index a04c1c34c344..fa7c4f119023 100644
---- a/include/linux/spi/ads7846.h
-+++ b/include/linux/spi/ads7846.h
-@@ -38,7 +38,6 @@ struct ads7846_platform_data {
- 	int	gpio_pendown_debounce;	/* platform specific debounce time for
- 					 * the gpio_pendown */
- 	int	(*get_pendown_state)(void);
--	void	(*wait_for_sync)(void);
- 	bool	wakeup;
- 	unsigned long irq_flags;
- };
+> They are not used by the driver in patch 2. Also, the PHY clock probably belongs
+> with the PHY node.
 
--- 
-2.42.0
+Except enabling the phy clk, we don't need to touch the phy, so I'm not
+sure how to handle this if we have a dedicated phy driver thus a phy node.
+or use the usb-nop-xceiv?
 
-
+Thanks
+> 
+> > +
+> > +  ranges: true
+> > +
+> > +  '#address-cells':
+> > +    enum: [ 1, 2 ]
+> > +
+> > +  '#size-cells':
+> > +    enum: [ 1, 2 ]
+> > +
+> > +# Required child node:
+> > +
+> > +patternProperties:
+> > +  "^usb@[0-9a-f]+$":
+> > +    $ref: snps,dwc3.yaml#
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - clocks
+> > +  - clock-names
+> > +  - ranges
+> > +
+> > +additionalProperties: false
+> 
+> The driver in patch 2 uses the thead,misc-sysreg and vbus-supply properties,
+> neither of which is documented here. Also, depending on the other bindings, the
+> VBUS supply should be referenced from the USB PHY or connector node, not here.
+> 
+> Regards,
+> Samuel
+> 
+> > +examples:
+> > +  - |
+> > +
+> > +    usb {
+> > +          compatible = "thead,th1520-usb";
+> > +          reg = <0xec03f000 0x1000>;
+> > +          clocks = <&clk 1>,
+> > +                   <&clk 2>,
+> > +                   <&clk 3>,
+> > +                   <&clk 4>;
+> > +          clock-names = "ref", "bus_early", "phy", "suspend";
+> > +          ranges;
+> > +          #address-cells = <1>;
+> > +          #size-cells = <1>;
+> > +
+> > +          usb@e7040000 {
+> > +                compatible = "snps,dwc3";
+> > +                reg = <0xe7040000 0x10000>;
+> > +                interrupts = <68>;
+> > +                dr_mode = "host";
+> > +          };
+> > +    };
+> 
 
