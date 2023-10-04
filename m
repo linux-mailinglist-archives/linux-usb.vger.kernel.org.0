@@ -1,292 +1,176 @@
-Return-Path: <linux-usb+bounces-1059-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1060-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 155CA7B74BE
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Oct 2023 01:21:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92C8E7B77CD
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Oct 2023 08:27:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sy.mirrors.kernel.org (Postfix) with ESMTP id D932CB20985
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Oct 2023 23:21:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 460CF281592
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Oct 2023 06:27:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B61903FB23;
-	Tue,  3 Oct 2023 23:21:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50EC15697;
+	Wed,  4 Oct 2023 06:27:13 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAFBE3FB04
-	for <linux-usb@vger.kernel.org>; Tue,  3 Oct 2023 23:21:26 +0000 (UTC)
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C11E3B0
-	for <linux-usb@vger.kernel.org>; Tue,  3 Oct 2023 16:21:23 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5a1df5b7830so21518867b3.1
-        for <linux-usb@vger.kernel.org>; Tue, 03 Oct 2023 16:21:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696375283; x=1696980083; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xX0umRmiZ0cLGmGD38f/MibuOBTvqO+eaoVVtdmVDCY=;
-        b=nd4Vi0j/kzWHsBJ17zftBwdc6C/M7Msob9+RgKP5gBZxYSHK3vfmFbpJ0RncMTgpu/
-         R6RGKa8jBe96fK3O+YKKvkxGJipEsMkwQrQLTV9xPytZcHP6R91aON1heMWcSG+boVmF
-         CUkQpvyVhDReZWgzmuOo2/v+kvleNInOiWsIq+LL3Ss/9D+tQK/prAMsH5ur6kyAHOPy
-         H12705hfVo5Z7kchSOvXhxHCOALaS/hH6xNlYF6rKHuQOTBnYrnEIosYkAJMqX61MbTP
-         W5w52YKfbRhj6+c9qlzr8fteVsxli236ZXDKHtkrehs3YogjxT4OzIacA+t6Fr4VyXZV
-         8MJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696375283; x=1696980083;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xX0umRmiZ0cLGmGD38f/MibuOBTvqO+eaoVVtdmVDCY=;
-        b=pIBEhMJRTv1tR84WQDMHmQ/nsy0OXFGF9RUQKWoCqQji9uaSestxI34UowCz7Xp/Bg
-         cVT4P/mK64B0IkwBLeZs6rXhY5GKUrfV4U3Pc2zT9kzMzkP7vS0RLUOuOo3rZQAygft8
-         1d7PVoQN0o8/BIoQCK1QrdiAnzuNjIFkXGGEzvOppeoq/lIzcoZXNKzppIv0ELCUrU6w
-         Bxh/NlWayrrH9CeN8clCO46/VaN/4unjLYKtCniILA7qrVgriCuuZKl4P+8OOi2JIaud
-         XT1Tgz1bY2xM5KRUrjeEIIklvFpG4+4N4O3q6LHQ8bdkwpCpQjHgGQBD7Nx9ccVNObjU
-         QlNg==
-X-Gm-Message-State: AOJu0Yzd7Sm34ZjjWsB+cMJZrRqiCg6rWJU44ubHwtJLhOCTxsSH9qke
-	2vgUbSNVafhw6VL7+YuuoDwPrsnRNmnQ
-X-Google-Smtp-Source: AGHT+IGSrWanjAkruP+Az1MmmFYTVYaT8bPHGsJb3wfDLC5Ra2CutV+dDmO/2/x+1U3Y1LlA5xpJrA9Ay0LN
-X-Received: from hi-h2o-specialist.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3cef])
- (user=arakesh job=sendgmr) by 2002:a81:b3c3:0:b0:59b:eb63:4beb with SMTP id
- r186-20020a81b3c3000000b0059beb634bebmr18764ywh.7.1696375283016; Tue, 03 Oct
- 2023 16:21:23 -0700 (PDT)
-Date: Tue,  3 Oct 2023 16:21:20 -0700
-In-Reply-To: <20230930184821.310143-4-arakesh@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A013423C8
+	for <linux-usb@vger.kernel.org>; Wed,  4 Oct 2023 06:27:10 +0000 (UTC)
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F3CBD8
+	for <linux-usb@vger.kernel.org>; Tue,  3 Oct 2023 23:27:05 -0700 (PDT)
+Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
+	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20231004062702epoutp012088394d1c8733442702ed8eb583d21b~K049XBKPK0722907229epoutp01X
+	for <linux-usb@vger.kernel.org>; Wed,  4 Oct 2023 06:27:02 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20231004062702epoutp012088394d1c8733442702ed8eb583d21b~K049XBKPK0722907229epoutp01X
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1696400822;
+	bh=s7oyeX/NDBMYZhgmHGE2LLyxIRmlD9XMyJ+CymvFogw=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=TAV88mGyszkJj26RspJDPxkBJdELXmoGct9gYTsl+/I4D6VdxrT4+plxdaTgKbnwG
+	 tKdVKBeEo2HgOf7ES5U8dC5hSphX2t99M3fn+7Bs1C/cn6WJl0sILp0+QQTJ+ootD/
+	 6hGr/mMVGRvBwfxW5esjV2w6xHnA6bsd99uoWOq4=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+	epcas1p3.samsung.com (KnoxPortal) with ESMTP id
+	20231004062701epcas1p3342dd9e2b6f6d79ee2bb74d7876a1085~K048sGCeR2668626686epcas1p3j;
+	Wed,  4 Oct 2023 06:27:01 +0000 (GMT)
+Received: from epsmgec1p1.samsung.com (unknown [182.195.38.242]) by
+	epsnrtp1.localdomain (Postfix) with ESMTP id 4S0l8j0h4bz4x9Q0; Wed,  4 Oct
+	2023 06:27:01 +0000 (GMT)
+Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
+	epsmgec1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+	7A.0E.08657.4B50D156; Wed,  4 Oct 2023 15:27:01 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+	epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+	20231004062700epcas1p16fe36bf6b6a6e5d9d4adeaef32937480~K047_nG-B3078430784epcas1p15;
+	Wed,  4 Oct 2023 06:27:00 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20231004062700epsmtrp29aeecab0f185e12b41c3bed880e86a75~K047986IA2550625506epsmtrp2u;
+	Wed,  4 Oct 2023 06:27:00 +0000 (GMT)
+X-AuditID: b6c32a33-d6281a80000021d1-64-651d05b40d80
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+	epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	12.BD.08788.4B50D156; Wed,  4 Oct 2023 15:27:00 +0900 (KST)
+Received: from U18PB1-1707.tn.corp.samsungelectronics.net (unknown
+	[10.253.239.63]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20231004062700epsmtip1ba02c13ffb7b5373c5fa5f49766b8985~K0471D2nb3150231502epsmtip1b;
+	Wed,  4 Oct 2023 06:27:00 +0000 (GMT)
+From: Woo-kwang Lee <wookwang.lee@samsung.com>
+To: gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org, wookwang.lee@samsung.com, sj1557.seo@samsung.com
+Subject: [PATCH] usb: core: add bos NULL pointer checking condition
+Date: Wed,  4 Oct 2023 15:26:42 +0900
+Message-Id: <20231004062642.16431-1-wookwang.lee@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprCJsWRmVeSWpSXmKPExsWy7bCmnu5WVtlUg12nmCyaF69ns7i8aw6b
+	xaJlrcwWW/4dYbVYsPERo8XvXWtYHNg89s9dw+7Rt2UVo8fnTXIBzFENjDaJRckZmWWpCql5
+	yfkpmXnptkqhIW66FkoKGfnFJbZK0YaGRnqGBuZ6RkZGeqZGsVZGpkoKeYm5qbZKFbpQvUoK
+	RckFQLW5lcVAA3JS9aDiesWpeSkOWfmlIMfqFSfmFpfmpesl5+cqKZQl5pQCjVDST/jGmDH/
+	9Gfmgll8FXveTmRuYPzE3cXIySEhYCJxq2k/cxcjF4eQwA5GidXH5kE5nxglJrztZgepEhL4
+	xiix/aY8TMf/e4tYIYr2Mkp8bzgN1dHBJNF9cwojSBWbgJ5E57ENYN0iAnIST27/AStiFmhn
+	lNjdd4gNJCEs4Cyx4Np1JhCbRUBVYsO8yWBxXgFbib61/9kh1slLrN5wAKxZQmA6u0TDvQNs
+	EAkXiZfLXrNC2MISr45vgWqQkvj8bi8bREMzo8TLm59YIJweRonjDzcxQVQZS3z6/BnoVg6g
+	mzQl1u/ShwgrSuz8PRfsBWYBPol3X3ugFghKnL7WzQxSLiHAK9HRJgQRVpNYfXYR1D0yEp8e
+	X4KyPSSWHbgLDbtYieM9m9gmMMrNQli2gJFxFaNYakFxbnpqsmGBIXK0bWIEJzgt4x2Ml+f/
+	0zvEyMTBeIhRgoNZSYQ3vUEmVYg3JbGyKrUoP76oNCe1+BBjMjD0JjJLiSbnA1NsXkm8oZmZ
+	pYWlkYmhsZmhIWFhE0sDEzMjEwtjS2MzJXFexQmzU4QE0hNLUrNTUwtSi2C2MHFwSjUwBcyd
+	t34Xc2plx/7I2T7CvJLHjwRf2PemfNLFwA6/5J4nHTHXmvMW8ip/Ohr2Kqno+eONAltn7lPq
+	eHxz9j/n3fyTzdbLM4aUyXmcVFLekCjxctsrl/cLDI16Lx+43sAq07zhQuKBJ15vpvz42d29
+	ftXU+fInRVR/2SUEsOzf6bxtf93qtty4HqkZ8r0b9a/EFQf8uOa2f3rL+ukW3ImmQQZGmS6P
+	/ZyWnTf1fM8d+2pzoXulmVjTq92HMn8kON5Sko3TXiLA0qX4qLn/tsr/G/aPJ3da8Zgmur3Y
+	EDHn0Zar9zSO7WYsPrrz97+v3ncWFDJoOltZzhUy/+s99cuS1ZJTrgR82+U0z77nteCi20os
+	xRmJhlrMRcWJALPjACQnBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrAJMWRmVeSWpSXmKPExsWy7bCSnO4WVtlUg5uPtSyaF69ns7i8aw6b
+	xaJlrcwWW/4dYbVYsPERo8XvXWtYHNg89s9dw+7Rt2UVo8fnTXIBzFFcNimpOZllqUX6dglc
+	GfNPf2YumMVXseftROYGxk/cXYycHBICJhL/7y1i7WLk4hAS2M0o8XdTAztEQkZi9/I/bF2M
+	HEC2sMThw8UQNW1MEtN3bWUEqWET0JPoPLYBrF5EQE7iye0/zCBFzAK9jBJTmneygSSEBZwl
+	Fly7zgRiswioSmyYNxkszitgK9G39j/UMnmJ1RsOME9g5FnAyLCKUTK1oDg3PbfYsMAoL7Vc
+	rzgxt7g0L10vOT93EyM4ULS0djDuWfVB7xAjEwfjIUYJDmYlEd70BplUId6UxMqq1KL8+KLS
+	nNTiQ4zSHCxK4rzfXvemCAmkJ5akZqemFqQWwWSZODilGpiyZJwKPk9W4VX2fqq6ZpuJkaA4
+	n23OftFP310OPmW6Ml3+ZO0mvitdXpLusl6yhyNeWXGczzzTrqS7Ma82nsP9yq0txtKhzXa8
+	pzj3vFs+iz/SoJPvVHyL9koXi0cuL+Z63lht5qTfuGrfBfVEzaPM152uKn9dopzSqh/Cvjqg
+	WbjzmprgZrsfom9WbOfW/hu9xfHdecWYLeXcIS6a/XIWt4Nvxyz2b3l0QPvKO8Peh/MWZmYt
+	OHDeMf7k1JzmJ/dfVEhbip6ZwmRhp/jn0hPmTW6FrCva+C6e+pzI4Cqz+L/e1tNrUq9zOSwJ
+	PWu8qi5oblNgu/2jiZP/N09XtmnfxGmu12lR4Gn3mvnUTSWW4oxEQy3mouJEAP+mIN2DAgAA
+X-CMS-MailID: 20231004062700epcas1p16fe36bf6b6a6e5d9d4adeaef32937480
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+X-ArchiveUser: EV
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20231004062700epcas1p16fe36bf6b6a6e5d9d4adeaef32937480
+References: <CGME20231004062700epcas1p16fe36bf6b6a6e5d9d4adeaef32937480@epcas1p1.samsung.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+	SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20230930184821.310143-4-arakesh@google.com>
-X-Mailer: git-send-email 2.42.0.582.g8ccd20d70d-goog
-Message-ID: <20231003232120.2594176-1-arakesh@google.com>
-Subject: [PATCH v2 3/3] usb: gadget: uvc: Fix use-after-free for inflight usb_requests
-From: Avichal Rakesh <arakesh@google.com>
-To: arakesh@google.com, dan.scally@ideasonboard.com, 
-	gregkh@linuxfoundation.org, laurent.pinchart@ideasonboard.com, 
-	m.grzeschik@pengutronix.de, mgr@pengutronix.de
-Cc: etalvala@google.com, jchowdhary@google.com, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-	SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-	autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
 
-Currently, the uvc gadget driver allocates all uvc_requests as one array
-and deallocates them all when the video stream stops. This includes
-de-allocating all the usb_requests associated with those uvc_requests.
-This can lead to use-after-free issues if any of those de-allocated
-usb_requests were still owned by the usb controller.
+This issue occurs when connecting Galaxy S22 and abnormal SEC Dex Adapter.
+When the abnormal adapter is connected, kernel panic always occurs after a
+few seconds.
+This occurs due to unable to get BOS descriptor, usb_release_bos_descriptor
+set dev->bos = NULL.
 
-This is patch 2 of 2 in fixing the use-after-free issue. It adds a new
-flag to uvc_request to mark it as 'abandoned'. When disabling the video
-stream, instead of de-allocating all uvc_requests and usb_requests, the
-gadget driver only de-allocates those usb_requests that are currently
-owned by the gadget driver (as present in req_free). Other usb_requests
-have their corresponding 'is_abandoned' flag tripped, and the
-usb_requests complete handler takes care of freeing the usb_request and
-its corresponding uvc_request.
+- usb_reset_and_verify_device
+  - hub_port_init
+  - usb_release_bos_descriptor
+    - dev->bos = NULL;
 
-This should ensure that uvc gadget driver never accidentally de-allocates
-a usb_request that it doesn't own.
+hub_port_connect_change() calls portspeed(), and portspeed() calls hub_is_s
+uperspeedplus().
+Finally, hub_is_superspeedplus() calls hdev->bos->ssp_cap.
+It needs to check hdev->bos is NULL to prevent a kernel panic.
 
-Link: https://lore.kernel.org/7cd81649-2795-45b6-8c10-b7df1055020d@google.com
-Suggested-by: Michael Grzeschik <mgr@pengutronix.de>
-Signed-off-by: Avichal Rakesh <arakesh@google.com>
+usb 3-1: new SuperSpeed Gen 1 USB device number 16 using xhci-hcd-exynos
+usb 3-1: unable to get BOS descriptor set
+usb 3-1: Product: USB3.0 Hub
+Unable to handle kernel NULL pointer dereference at virtual address 0000018
+
+Call trace:
+ hub_port_connect_change+0x8c/0x538
+ port_event+0x244/0x764
+ hub_event+0x158/0x474
+ process_one_work+0x204/0x550
+ worker_thread+0x28c/0x580
+ kthread+0x13c/0x178
+ ret_from_fork+0x10/0x30
+
+- hub_port_connect_change
+  - portspeed
+    - hub_is_superspeedplus
+
+Fixes: 0cdd49a1d1a4 ("usb: Support USB 3.1 extended port status request")
+Signed-off-by: Woo-kwang Lee <wookwang.lee@samsung.com>
 ---
-v1 -> v2: Rebased to ToT, and fixed deadlock reported in
-          https://lore.kernel.org/all/ZRv2UnKztgyqk2pt@pengutronix.de/
+ drivers/usb/core/hub.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
- drivers/usb/gadget/function/uvc.h       |   1 +
- drivers/usb/gadget/function/uvc_video.c | 118 ++++++++++++++++++++----
- 2 files changed, 102 insertions(+), 17 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
-index 993694da0bbc..e69cfb7cced1 100644
---- a/drivers/usb/gadget/function/uvc.h
-+++ b/drivers/usb/gadget/function/uvc.h
-@@ -82,6 +82,7 @@ struct uvc_request {
- 	u8 header[UVCG_REQUEST_HEADER_LEN];
- 	struct uvc_buffer *last_buf;
- 	struct list_head list;
-+	bool is_abandoned;
- };
-
- struct uvc_video {
-diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
-index 3c4d286d81c0..69521886d599 100644
---- a/drivers/usb/gadget/function/uvc_video.c
-+++ b/drivers/usb/gadget/function/uvc_video.c
-@@ -271,7 +271,21 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
- 	struct uvc_video *video = ureq->video;
- 	struct uvc_video_queue *queue = &video->queue;
- 	struct uvc_device *uvc = video->uvc;
-+	struct uvc_buffer *last_buf;
- 	unsigned long flags;
-+	bool is_abandoned;
-+
-+	spin_lock_irqsave(&video->req_lock, flags);
-+	is_abandoned = ureq->is_abandoned;
-+	last_buf = ureq->last_buf;
-+	ureq->last_buf = NULL;
-+	spin_unlock_irqrestore(&video->req_lock, flags);
-+
-+	if (is_abandoned) {
-+		uvcg_dbg(&video->uvc->func, "Freeing abandoned usb_request\n");
-+		uvc_video_free_request(ureq, ep);
-+		return;
-+	}
-
- 	if (uvc->state == UVC_STATE_CONNECTED) {
- 		usb_ep_free_request(video->ep, ureq->req);
-@@ -300,15 +314,29 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
- 		uvcg_queue_cancel(queue, 0);
- 	}
-
--	if (ureq->last_buf) {
--		uvcg_complete_buffer(&video->queue, ureq->last_buf);
--		ureq->last_buf = NULL;
-+	if (last_buf) {
-+		spin_lock_irqsave(&video->queue.irqlock, flags);
-+		uvcg_complete_buffer(&video->queue, last_buf);
-+		spin_unlock_irqrestore(&video->queue.irqlock, flags);
- 	}
-
-+	/*
-+	 * request might have been abandoned while being processed.
-+	 * do a last minute check before queueing the request back.
-+	 */
- 	spin_lock_irqsave(&video->req_lock, flags);
--	list_add_tail(&req->list, &video->req_free);
-+	is_abandoned = ureq->is_abandoned;
-+	if (!is_abandoned)
-+		list_add_tail(&req->list, &video->req_free);
- 	spin_unlock_irqrestore(&video->req_lock, flags);
-
-+	if (is_abandoned) {
-+		uvcg_dbg(&video->uvc->func,
-+			 "usb_request abandoned mid-processing - freeing.\n");
-+		uvc_video_free_request(ureq, ep);
-+		return;
-+	}
-+
- 	if (uvc->state == UVC_STATE_STREAMING)
- 		queue_work(video->async_wq, &video->pump);
- }
-@@ -372,7 +400,6 @@ uvc_video_alloc_requests(struct uvc_video *video)
- 	}
-
- 	video->req_size = req_size;
--
- 	return 0;
-
- error:
-@@ -504,13 +531,80 @@ static void uvcg_video_pump(struct work_struct *work)
- 	return;
- }
-
-+/*
-+ * Disable video stream. This ensures that any inflight usb requests are marked
-+ * for clean up and all video buffers are dropped before returning.
-+ */
-+static void uvcg_video_disable(struct uvc_video *video)
-+{
-+	struct uvc_buffer *buf, *tmp_buf;
-+	struct uvc_request *ureq, *temp;
-+	struct list_head buf_list; /* track in-flight video buffers */
-+	struct usb_request *req;
-+	unsigned long flags;
-+
-+	INIT_LIST_HEAD(&buf_list);
-+
-+	cancel_work_sync(&video->pump);
-+	uvcg_queue_cancel(&video->queue, 0);
-+
-+	list_for_each_entry(ureq, &video->ureqs, list) {
-+		if (ureq->req)
-+			usb_ep_dequeue(video->ep, ureq->req);
-+	}
-+
-+	/**
-+	 * acquiring req_lock here should prevent any more complete
-+	 * callbacks from processing until we've abandoned the
-+	 * requests that are still in-flight and let the complete
-+	 * callback handle cleanup
-+	 */
-+	spin_lock_irqsave(&video->req_lock, flags);
-+	/* abandon all usb requests */
-+	list_for_each_entry_safe(ureq, temp, &video->ureqs, list) {
-+		ureq->is_abandoned = true;
-+		if (ureq->last_buf) {
-+			list_add(&ureq->last_buf->queue, &buf_list);
-+			ureq->last_buf = NULL;
-+		}
-+		list_del_init(&ureq->list);
-+	}
-+	/*
-+	 * re-add uvc_requests currently owned by the gadget to
-+	 * video->ureqs to be deallocated. This effectively leaves
-+	 * video->ureqs with the requests that we currently own.
-+	 */
-+	list_for_each_entry(req, &video->req_free, list) {
-+		ureq = req->context;
-+		list_add_tail(&ureq->list, &video->ureqs);
-+	}
-+	spin_unlock_irqrestore(&video->req_lock, flags);
-+
-+	/*
-+	 * drop abandoned uvc_buffers, as the completion handler
-+	 * no longer will
-+	 */
-+	if (!list_empty(&buf_list)) {
-+		spin_lock_irqsave(&video->queue.irqlock, flags);
-+		list_for_each_entry_safe(buf, tmp_buf,
-+						&buf_list, queue) {
-+			video->queue.flags |= UVC_QUEUE_DROP_INCOMPLETE;
-+			uvcg_complete_buffer(&video->queue, buf);
-+			list_del(&buf->queue);
-+		}
-+		spin_unlock_irqrestore(&video->queue.irqlock, flags);
-+	}
-+
-+	uvc_video_free_requests(video);
-+	uvcg_queue_enable(&video->queue, 0);
-+}
-+
- /*
-  * Enable or disable the video stream.
-  */
- int uvcg_video_enable(struct uvc_video *video, int enable)
+diff --git a/drivers/usb/core/hub.h b/drivers/usb/core/hub.h
+index 73f4482d833a..cc0c994e19e5 100644
+--- a/drivers/usb/core/hub.h
++++ b/drivers/usb/core/hub.h
+@@ -139,6 +139,8 @@ static inline int hub_is_superspeed(struct usb_device *hdev)
+ 
+ static inline int hub_is_superspeedplus(struct usb_device *hdev)
  {
- 	struct uvc_device *uvc = video->uvc;
--	struct uvc_request *ureq;
- 	int ret;
-
- 	if (video->ep == NULL) {
-@@ -521,17 +615,7 @@ int uvcg_video_enable(struct uvc_video *video, int enable)
-
- 	if (!enable) {
- 		uvc->state = UVC_STATE_CONNECTED;
--
--		cancel_work_sync(&video->pump);
--		uvcg_queue_cancel(&video->queue, 0);
--
--		list_for_each_entry(ureq, &video->ureqs, list) {
--			if (ureq->req)
--				usb_ep_dequeue(video->ep, ureq->req);
--		}
--
--		uvc_video_free_requests(video);
--		uvcg_queue_enable(&video->queue, 0);
-+		uvcg_video_disable(video);
- 		return 0;
- 	}
-
---
-2.42.0.582.g8ccd20d70d-goog
++	if (!hdev->bos)
++		return 0;
+ 	return (hdev->descriptor.bDeviceProtocol == USB_HUB_PR_SS &&
+ 		le16_to_cpu(hdev->descriptor.bcdUSB) >= 0x0310 &&
+ 		hdev->bos->ssp_cap);
+-- 
+2.17.1
 
 
