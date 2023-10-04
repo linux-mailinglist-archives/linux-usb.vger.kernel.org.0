@@ -1,225 +1,76 @@
-Return-Path: <linux-usb+bounces-1096-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1097-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78E4D7B8BAB
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Oct 2023 20:56:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A475C7B8D4E
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Oct 2023 21:26:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by ny.mirrors.kernel.org (Postfix) with ESMTP id 648351C20995
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Oct 2023 18:56:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 02E9A28199C
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Oct 2023 19:26:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79D0B219FA;
-	Wed,  4 Oct 2023 18:56:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CB8421A18;
+	Wed,  4 Oct 2023 19:26:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NqVtdmXP"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Gk+pnVV7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB58020B05;
-	Wed,  4 Oct 2023 18:56:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 675C9C433D9;
-	Wed,  4 Oct 2023 18:56:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1696445777;
-	bh=iC7KwsOJJL3kT0M8KubHc+xTYSGXLa7gjxgf1YgvBK8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=NqVtdmXPTE3K9q9deuJTm/G7a71zUKszCFqZsp5GIQNtA7H7/+QIS49PlOMCUfFNJ
-	 1ydyxG0x0Zhc5NXKKvQZoNb0pMC2bwR6porAQ3qOkvHn+oCaXipMdg5DIlUK6kK3dJ
-	 /qGaNm9SdmE2IDbECVrjFagXBbmQuihBc1Xhxlya1LZKKRDWQwFqYqNeRTG4/PcP8U
-	 fjxjbvBWhJKav9Mn2S5Lw52vmEkf02EL+EOCc8xxck+JdDNrgRWXBSojP+3KV6r6+j
-	 osY5RvD+bQgIMRf1FSVwxbtgizfCN1brIMaKXTHpZ/pGKsilyXHn7K+ZkEvj2U6B0B
-	 tzn7voxPB+lnw==
-From: Jeff Layton <jlayton@kernel.org>
-To: Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	David Sterba <dsterba@suse.cz>,
-	Amir Goldstein <amir73il@gmail.com>,
-	Theodore Ts'o <tytso@mit.edu>,
-	Eric Biederman <ebiederm@xmission.com>,
-	Kees Cook <keescook@chromium.org>,
-	Jeremy Kerr <jk@ozlabs.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	=?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?= <arve@android.com>,
-	Todd Kjos <tkjos@android.com>,
-	Martijn Coenen <maco@android.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Carlos Llamas <cmllamas@google.com>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Mattia Dongili <malattia@linux.it>,
-	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Leon Romanovsky <leon@kernel.org>,
-	Brad Warrum <bwarrum@linux.ibm.com>,
-	Ritu Agarwal <rituagar@linux.ibm.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Mark Gross <markgross@kernel.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Eric Van Hensbergen <ericvh@kernel.org>,
-	Latchesar Ionkov <lucho@ionkov.net>,
-	Dominique Martinet <asmadeus@codewreck.org>,
-	Christian Schoenebeck <linux_oss@crudebyte.com>,
-	David Sterba <dsterba@suse.com>,
-	David Howells <dhowells@redhat.com>,
-	Marc Dionne <marc.dionne@auristor.com>,
-	Ian Kent <raven@themaw.net>,
-	Luis de Bethencourt <luisbg@kernel.org>,
-	Salah Triki <salah.triki@gmail.com>,
-	"Tigran A. Aivazian" <aivazian.tigran@gmail.com>,
-	Chris Mason <clm@fb.com>,
-	Josef Bacik <josef@toxicpanda.com>,
-	Xiubo Li <xiubli@redhat.com>,
-	Ilya Dryomov <idryomov@gmail.com>,
-	Jan Harkes <jaharkes@cs.cmu.edu>,
-	coda@cs.cmu.edu,
-	Joel Becker <jlbec@evilplan.org>,
-	Christoph Hellwig <hch@lst.de>,
-	Nicolas Pitre <nico@fluxnic.net>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Gao Xiang <xiang@kernel.org>,
-	Chao Yu <chao@kernel.org>,
-	Yue Hu <huyue2@coolpad.com>,
-	Jeffle Xu <jefflexu@linux.alibaba.com>,
-	Namjae Jeon <linkinjeon@kernel.org>,
-	Sungjong Seo <sj1557.seo@samsung.com>,
-	Jan Kara <jack@suse.com>,
-	Andreas Dilger <adilger.kernel@dilger.ca>,
-	Jaegeuk Kim <jaegeuk@kernel.org>,
-	OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-	Christoph Hellwig <hch@infradead.org>,
-	Miklos Szeredi <miklos@szeredi.hu>,
-	Bob Peterson <rpeterso@redhat.com>,
-	Andreas Gruenbacher <agruenba@redhat.com>,
-	Richard Weinberger <richard@nod.at>,
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>,
-	Mike Kravetz <mike.kravetz@oracle.com>,
-	Muchun Song <muchun.song@linux.dev>,
-	Jan Kara <jack@suse.cz>,
-	David Woodhouse <dwmw2@infradead.org>,
-	Dave Kleikamp <shaggy@kernel.org>,
-	Tejun Heo <tj@kernel.org>,
-	Trond Myklebust <trond.myklebust@hammerspace.com>,
-	Anna Schumaker <anna@kernel.org>,
-	Chuck Lever <chuck.lever@oracle.com>,
-	Neil Brown <neilb@suse.de>,
-	Olga Kornievskaia <kolga@netapp.com>,
-	Dai Ngo <Dai.Ngo@oracle.com>,
-	Tom Talpey <tom@talpey.com>,
-	Ryusuke Konishi <konishi.ryusuke@gmail.com>,
-	Anton Altaparmakov <anton@tuxera.com>,
-	Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
-	Mark Fasheh <mark@fasheh.com>,
-	Joseph Qi <joseph.qi@linux.alibaba.com>,
-	Bob Copeland <me@bobcopeland.com>,
-	Mike Marshall <hubcap@omnibond.com>,
-	Martin Brandenburg <martin@omnibond.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Iurii Zaikin <yzaikin@google.com>,
-	Tony Luck <tony.luck@intel.com>,
-	"Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-	Anders Larsen <al@alarsen.net>,
-	Steve French <sfrench@samba.org>,
-	Paulo Alcantara <pc@manguebit.com>,
-	Ronnie Sahlberg <lsahlber@redhat.com>,
-	Shyam Prasad N <sprasad@microsoft.com>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	Phillip Lougher <phillip@squashfs.org.uk>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Evgeniy Dushistov <dushistov@mail.ru>,
-	Chandan Babu R <chandan.babu@oracle.com>,
-	"Darrick J. Wong" <djwong@kernel.org>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Naohiro Aota <naohiro.aota@wdc.com>,
-	Johannes Thumshirn <jth@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Hugh Dickins <hughd@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"David S. Miller" <davem@davemloft.net>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D30B721A06
+	for <linux-usb@vger.kernel.org>; Wed,  4 Oct 2023 19:26:50 +0000 (UTC)
+Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA66C4
+	for <linux-usb@vger.kernel.org>; Wed,  4 Oct 2023 12:26:48 -0700 (PDT)
+Received: by mail-oo1-xc34.google.com with SMTP id 006d021491bc7-57e40f0189aso101559eaf.1
+        for <linux-usb@vger.kernel.org>; Wed, 04 Oct 2023 12:26:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1696447608; x=1697052408; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=eRE7W6rGykUfzRSDRb1QLp0CI0wlMdCzPIOy4s2ddyg=;
+        b=Gk+pnVV74FcH81c7bzM7EeIXC6PLS0K6gfwSpXi9UQHYMw3O7C9T6MhBbc1V7Raosq
+         aMGw1JuC302Zzj36FmeResuBpMPGLG5zlw5WHTs7hB9iKPOMgIMhK4Fj25DlYcOuH+Gd
+         FOnkGUAIcIS3VEaWdyDy7iBIohv0diaYbXHKA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696447608; x=1697052408;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eRE7W6rGykUfzRSDRb1QLp0CI0wlMdCzPIOy4s2ddyg=;
+        b=WoD6G1V20zk7zKt0uXXPs6ijYElWYSmeIKRyTby0O9PfZdJBnvfDeFtPevb9BWddwu
+         4YXjupmA3BArbkHYjgzAVYCb1qc/dUrKZjzsI8wrYzzV23Z0cvqUvAgo5pSmI8egogFo
+         xvNjBxXhpaeOWBhP/Da8WrFDqVGqKG1aTJRe9Xpjn2xFUo20edaXNx8BxhhqRv/Rd8ng
+         Sf55X68dCm5AMfb3LmAOCXGuXqrp3rYw+LnJdCUksh+3L5/cglJGFZ1hrx1uPFOQybBs
+         JeHDH45jIjKTVyeE55J6sAFZIiAFgasJ6b5QL3vPsdHdvzOjztDg1YsgsEEJd6f2Csob
+         wgSQ==
+X-Gm-Message-State: AOJu0YwOQ+fj6cK3oVwDV9ygloDXmW2/WxITesUFj2ngH2nPHiGtxB5F
+	HyoY4DhlEuhOWL0hPdfoS7VtrA==
+X-Google-Smtp-Source: AGHT+IHKdRWWAwhB2Rx6+1BQ4DLatol3GN1p1tpZH1G+C0D8KW52QijHHt9AX+eyUVJh6ky/NhR6yA==
+X-Received: by 2002:a05:6358:4414:b0:15a:e6ac:ee5d with SMTP id z20-20020a056358441400b0015ae6acee5dmr3139352rwc.17.1696447608189;
+        Wed, 04 Oct 2023 12:26:48 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:9cce:13a8:f2b8:b799])
+        by smtp.gmail.com with ESMTPSA id d190-20020a6336c7000000b0057c29fec795sm3649151pga.37.2023.10.04.12.26.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Oct 2023 12:26:47 -0700 (PDT)
+From: Douglas Anderson <dianders@chromium.org>
+To: Jakub Kicinski <kuba@kernel.org>,
+	Hayes Wang <hayeswang@realtek.com>,
+	"David S . Miller" <davem@davemloft.net>
+Cc: linux-usb@vger.kernel.org,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Grant Grundler <grundler@chromium.org>,
+	Edward Hill <ecgh@chromium.org>,
+	Douglas Anderson <dianders@chromium.org>,
+	=?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
 	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
 	Paolo Abeni <pabeni@redhat.com>,
-	John Johansen <john.johansen@canonical.com>,
-	Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Stephen Smalley <stephen.smalley.work@gmail.com>,
-	Eric Paris <eparis@parisplace.org>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	Brian Foster <bfoster@redhat.com>
-Cc: linux-fsdevel@vger.kernel.org,
+	Simon Horman <horms@kernel.org>,
 	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org,
-	linux-rdma@vger.kernel.org,
-	linux-serial@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	v9fs@lists.linux.dev,
-	linux-afs@lists.infradead.org,
-	autofs@vger.kernel.org,
-	linux-btrfs@vger.kernel.org,
-	ceph-devel@vger.kernel.org,
-	codalist@coda.cs.cmu.edu,
-	linux-efi@vger.kernel.org,
-	linux-erofs@lists.ozlabs.org,
-	linux-ext4@vger.kernel.org,
-	linux-f2fs-devel@lists.sourceforge.net,
-	gfs2@lists.linux.dev,
-	linux-um@lists.infradead.org,
-	linux-mtd@lists.infradead.org,
-	jfs-discussion@lists.sourceforge.net,
-	linux-nfs@vger.kernel.org,
-	linux-nilfs@vger.kernel.org,
-	linux-ntfs-dev@lists.sourceforge.net,
-	ntfs3@lists.linux.dev,
-	ocfs2-devel@lists.linux.dev,
-	linux-karma-devel@lists.sourceforge.net,
-	devel@lists.orangefs.org,
-	linux-unionfs@vger.kernel.org,
-	linux-hardening@vger.kernel.org,
-	reiserfs-devel@vger.kernel.org,
-	linux-cifs@vger.kernel.org,
-	samba-technical@lists.samba.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-xfs@vger.kernel.org,
-	bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	apparmor@lists.ubuntu.com,
-	linux-security-module@vger.kernel.org,
-	selinux@vger.kernel.org,
-	linux-bcachefs@vger.kernel.org
-Subject: [PATCH v2 89/89] fs: move i_generation into new hole created after timestamp conversion
-Date: Wed,  4 Oct 2023 14:55:30 -0400
-Message-ID: <20231004185530.82088-3-jlayton@kernel.org>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20231004185530.82088-1-jlayton@kernel.org>
-References: <20231004185530.82088-1-jlayton@kernel.org>
+	netdev@vger.kernel.org
+Subject: [PATCH v2 0/5] r8152: Avoid writing garbage to the adapter's registers
+Date: Wed,  4 Oct 2023 12:24:37 -0700
+Message-ID: <20231004192622.1093964-1-dianders@chromium.org>
+X-Mailer: git-send-email 2.42.0.582.g8ccd20d70d-goog
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -227,41 +78,67 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-The recent change to use discrete integers instead of struct timespec64
-shaved 8 bytes off of struct inode, but it also moves the i_lock
-into the previous cacheline, away from the fields that it protects.
+This series is the result of a cooperative debug effort between
+Realtek and the ChromeOS team. On ChromeOS, we've noticed that Realtek
+Ethernet adapters can sometimes get so wedged that even a reboot of
+the host can't get them to enumerate again, assuming that the adapter
+was on a powered hub and din't lose power when the host rebooted. This
+is sometimes seen in the ChromeOS automated testing lab. The only way
+to recover adapters in this state is to manually power cycle them.
 
-Move i_generation above the i_lock, which moves the new 4 byte hole to
-just after the i_fsnotify_mask in my setup.
+I managed to reproduce one instance of this wedging (unknown if this
+is truly related to what the test lab sees) by doing this:
+1. Start a flood ping from a host to the device.
+2. Drop the device into kdb.
+3. Wait 90 seconds.
+4. Resume from kdb (the "g" command).
+5. Wait another 45 seconds.
 
-Suggested-by: Amir Goldstein <amir73il@gmail.com>
-Signed-off-by: Jeff Layton <jlayton@kernel.org>
----
- include/linux/fs.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Upon analysis, Realtek realized this was happening:
 
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index 485b5e21c8e5..686c9f33e725 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -677,6 +677,7 @@ struct inode {
- 	u32			i_atime_nsec;
- 	u32			i_mtime_nsec;
- 	u32			i_ctime_nsec;
-+	u32			i_generation;
- 	spinlock_t		i_lock;	/* i_blocks, i_bytes, maybe i_size */
- 	unsigned short          i_bytes;
- 	u8			i_blkbits;
-@@ -733,7 +734,6 @@ struct inode {
- 		unsigned		i_dir_seq;
- 	};
- 
--	__u32			i_generation;
- 
- #ifdef CONFIG_FSNOTIFY
- 	__u32			i_fsnotify_mask; /* all events this inode cares about */
+1. The Linux driver was getting a "Tx timeout" after resuming from kdb
+   and then trying to reset itself.
+2. As part of the reset, the Linux driver was attempting to do a
+   read-modify-write of the adapter's registers.
+3. The read would fail (due to a timeout) and the driver pretended
+   that the register contained all 0xFFs. See commit f53a7ad18959
+   ("r8152: Set memory to all 0xFFs on failed reg reads")
+4. The driver would take this value of all 0xFFs, modify it, and
+   attempt to write it back to the adapter.
+5. By this time the USB channel seemed to recover and thus we'd
+   successfully write a value that was mostly 0xFFs to the adpater.
+6. The adapter didn't like this and would wedge itself.
+
+Another Engineer also managed to reproduce wedging of the Realtek
+Ethernet adpater during a reboot test on an AMD Chromebook. In that
+case he was sometimes seeing -EPIPE returned from the control
+transfers.
+
+This patch series fixes both issues.
+
+Changes in v2:
+- ("Check for unplug in rtl_phy_patch_request()") new for v2.
+- ("Check for unplug in r8153b_ups_en() / r8153c_ups_en()") new for v2.
+- ("Rename RTL8152_UNPLUG to RTL8152_INACCESSIBLE") new for v2.
+
+Douglas Anderson (5):
+  r8152: Increase USB control msg timeout to 5000ms as per spec
+  r8152: Check for unplug in rtl_phy_patch_request()
+  r8152: Check for unplug in r8153b_ups_en() / r8153c_ups_en()
+  r8152: Rename RTL8152_UNPLUG to RTL8152_INACCESSIBLE
+  r8152: Block future register access if register access fails
+
+ drivers/net/usb/r8152.c | 268 +++++++++++++++++++++++++++++++---------
+ 1 file changed, 209 insertions(+), 59 deletions(-)
+
 -- 
-2.41.0
+2.42.0.582.g8ccd20d70d-goog
 
 
