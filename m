@@ -1,108 +1,156 @@
-Return-Path: <linux-usb+bounces-1065-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1066-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65C207B78B5
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Oct 2023 09:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A067D7B78CE
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Oct 2023 09:34:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id EC836281595
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Oct 2023 07:28:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 9D009281583
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Oct 2023 07:34:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5EB079F2;
-	Wed,  4 Oct 2023 07:28:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02E33D2FE;
+	Wed,  4 Oct 2023 07:34:47 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 168C663C3
-	for <linux-usb@vger.kernel.org>; Wed,  4 Oct 2023 07:28:46 +0000 (UTC)
-Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com [209.85.167.200])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3313DAB
-	for <linux-usb@vger.kernel.org>; Wed,  4 Oct 2023 00:28:43 -0700 (PDT)
-Received: by mail-oi1-f200.google.com with SMTP id 5614622812f47-3af7219c67fso2614911b6e.1
-        for <linux-usb@vger.kernel.org>; Wed, 04 Oct 2023 00:28:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696404522; x=1697009322;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BgKrvAHPPnFbgL/jHnrLa+rBLBl2K8FRSAuVolVvCxs=;
-        b=vpCMuppMXCJkuPWGiWjTtcbByDAoOf1T/KwdyhRfr2csiMzU9I7W17QouMVhhfYasR
-         xAEF3rYPigFYKQc4IDsMG3n8HUnzQYkAIyf4yn+zg2SxNvd0MnPm0h/+QNQLnZJtDCdq
-         ykOsxFM/8ZH7O/Q+fdxYE9AJVh5UbGS3jkfssxsK2+jo8aBaGgo8lhBOoAAVA06JnRd5
-         tzVKzmQ5NbnjVKOO5H2y+GVy8kTXu0y+s+6w5k1HKqSm0cQcqC8+5Sm5JDD4tfw7RRZH
-         KZBsJH9dlFf14ENTiLD88pRty9gBqvLXdgY9Dox7g7y33N2bnx2D/qqnvt+vW+Z/4Dr4
-         v4CA==
-X-Gm-Message-State: AOJu0YxaRjVXtAinjsU6hHnCMuh/SHs7ye+2RJiGtuDbX61JNdGbONW8
-	ginCTfjzB50tqG3jRdwqTGVLz8pnHtyXk24cl6pWeO6U2Nr2
-X-Google-Smtp-Source: AGHT+IEKnqwUXjDT8KGKajjXUfZjvk7G8CMKOZZO7VzMAYCqELb908xqmZ4AvW9TdfulGPOKu8qSHC7o440QZlbPCnodhzgzRm/G
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA126CA7F
+	for <linux-usb@vger.kernel.org>; Wed,  4 Oct 2023 07:34:44 +0000 (UTC)
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87E9AD
+	for <linux-usb@vger.kernel.org>; Wed,  4 Oct 2023 00:34:41 -0700 (PDT)
+Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
+	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20231004073438epoutp04393b02560384a6252087c3a77f27680d~K1z_1fPNE3256732567epoutp044
+	for <linux-usb@vger.kernel.org>; Wed,  4 Oct 2023 07:34:38 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20231004073438epoutp04393b02560384a6252087c3a77f27680d~K1z_1fPNE3256732567epoutp044
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1696404878;
+	bh=ijI6ldLxMVsnkVyv7irebtA3Q9901IfdS55IxS0QIBE=;
+	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+	b=WyFECOgAOljXhIhci3og2v+1+V1BzhewKv+l0miEhuHFXDsS3c7TNG2iR7KoGWwRA
+	 Et1SCrIR4t10PeTOncU5nGBeGSnahb5G+2YBiL/YAtsP6210mpDHMUz1YfCFlByEM9
+	 Z9j4sKaCNEfCEgdCLbj7sJC42xAb3IZcNNf3PjCQ=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+	epcas1p4.samsung.com (KnoxPortal) with ESMTP id
+	20231004073437epcas1p4887af4518251ad861e7a05b8cd418a05~K1z_gMebm2633626336epcas1p4R;
+	Wed,  4 Oct 2023 07:34:37 +0000 (GMT)
+Received: from epsmges1p4.samsung.com (unknown [182.195.36.226]) by
+	epsnrtp4.localdomain (Postfix) with ESMTP id 4S0mfj5xB4z4x9Q1; Wed,  4 Oct
+	2023 07:34:37 +0000 (GMT)
+Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
+	epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+	5C.AA.10163.D851D156; Wed,  4 Oct 2023 16:34:37 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+	epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
+	20231004073437epcas1p206e1516eaea07bad34854c99fcdc3025~K1z_J0Cs52617026170epcas1p2S;
+	Wed,  4 Oct 2023 07:34:37 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20231004073437epsmtrp2e9a6a42b583e30d9d45f43207ce0333a~K1z_JB8fK3200632006epsmtrp2V;
+	Wed,  4 Oct 2023 07:34:37 +0000 (GMT)
+X-AuditID: b6c32a38-4dbf8700000027b3-e3-651d158db476
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+	epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	D5.D1.08788.D851D156; Wed,  4 Oct 2023 16:34:37 +0900 (KST)
+Received: from wookwanglee02 (unknown [10.253.100.52]) by
+	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20231004073437epsmtip2a98ae000471e02cb41c34281eb4e5d52~K1z9-h5OI1536015360epsmtip2J;
+	Wed,  4 Oct 2023 07:34:37 +0000 (GMT)
+From: "Woo-kwang Lee" <wookwang.lee@samsung.com>
+To: "'Greg KH'" <gregkh@linuxfoundation.org>
+Cc: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<stable@vger.kernel.org>, <sj1557.seo@samsung.com>
+In-Reply-To: <2023100411-duckling-tibia-398a@gregkh>
+Subject: RE: [PATCH] usb: core: add bos NULL pointer checking condition
+Date: Wed, 4 Oct 2023 16:34:37 +0900
+Message-ID: <007e01d9f695$3a8d9ea0$afa8dbe0$@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6808:30a7:b0:3af:6c87:144c with SMTP id
- bl39-20020a05680830a700b003af6c87144cmr921058oib.2.1696404522572; Wed, 04 Oct
- 2023 00:28:42 -0700 (PDT)
-Date: Wed, 04 Oct 2023 00:28:42 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f6a4630606def4cd@google.com>
-Subject: [syzbot] Monthly usb report (Oct 2023)
-From: syzbot <syzbot+listfa0313a2fe512dcdce74@syzkaller.appspotmail.com>
-To: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-	HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQL4ktvx1bQoFTuKvuL3rpp4W8lh6wDTwCDRAk7sf+IBqjJOwwKQ6a6ZrcEVBQA=
+Content-Language: ko
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrNJsWRmVeSWpSXmKPExsWy7bCmvm6vqGyqwbZv+hbNi9ezWVzeNYfN
+	YtGyVmaLLf+OsFos2PiI0YHVY//cNewefVtWMXp83iQXwBzVwGiTWJSckVmWqpCal5yfkpmX
+	bqsUGuKma6GkkJFfXGKrFG1oaKRnaGCuZ2RkpGdqFGtlZKqkkJeYm2qrVKEL1aukUJRcAFSb
+	W1kMNCAnVQ8qrlecmpfikJVfCnKnXnFibnFpXrpecn6ukkJZYk4p0Agl/YRvjBnT/m9gKdjL
+	VvHo4WbGBsbFrF2MnBwSAiYSk++uYeti5OIQEtjBKPH36iVGCOcTo8SmzrNQzjdGieMfpzLD
+	tDw5spkVIrGXUeLQ6n5mCOc1o8SEdz+ZQKrYBAwkNrVfYQOxRQR0JDrOnGABsZkFSiV+3+kD
+	W84JNGnhgSdgU4UF3CXWv7wOZrMIqEg87vnFDmLzClhK/Jh8kgXCFpQ4OfMJ1Bx5ie1v50Bd
+	pCDx8+kyVohdfhIHNq9jh6gRkZjd2QZ2nIRAL4fEgT9P2SEaXCTO/NkGDQFhiVfHt0DFpSQ+
+	v9vLBtHQzCjx8uYnFginBxgADzcxQVQZS3z6/BkYMhxAKzQl1u/ShwgrSuz8PZcRYjOfxLuv
+	PVALBCVOX+tmBimXEOCV6GgTggirSaw+u4htAqPyLCS/zULy2ywkP8xCWLaAkWUVo1hqQXFu
+	emqxYYEJcpRvYgSnUy2LHYxz337QO8TIxMF4iFGCg1lJhDe9QSZViDclsbIqtSg/vqg0J7X4
+	EGMyMLQnMkuJJucDE3peSbyhmZmlhaWRiaGxmaEhYWETSwMTMyMTC2NLYzMlcd5jr3pThATS
+	E0tSs1NTC1KLYLYwcXBKNTBNjQ763B+mvjnbxrLU5UmP7hOdhybCL3eJtnUKH/04STzZJVyW
+	1/r0zVc3F9yd/5yv+dFe1ti0uKCgDx/CWQVCDT96F9l132OK7F3o7rp+367lG3Qne7HfPFo6
+	U0R+g+uhXXbLTNd7b0+2TU5pmf+uz/Vs/Ir9s+ZvN6ueYapj+GTiMcnWKcx7PDcI83ILMW3h
+	FPrYvWhTVslp28qDzxmbsq7OOuZocHbCvjO3Xr8Vbz+4NO+A3C1Zl1bpS+XvQ3g/r3m68ezZ
+	uln9MwpXGwguC5v2bH5f+D/ZKzyK3/bv1Vmz+eHaA9MDE9+cceJV29zz8rv2yw3vZRwkxU4l
+	Rsznv+yZ93bvz/PnLrxsLluRq8RSnJFoqMVcVJwIALZBowBeBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmplkeLIzCtJLcpLzFFi42LZdlhJXrdXVDbVoO2ajEXz4vVsFpd3zWGz
+	WLSsldliy78jrBYLNj5idGD12D93DbtH35ZVjB6fN8kFMEdx2aSk5mSWpRbp2yVwZUz7v4Gl
+	YC9bxaOHmxkbGBezdjFyckgImEg8ObIZyObiEBLYzShxaNlfRoiEjMTu5X/Yuhg5gGxhicOH
+	iyFqXjJKPPy4hhmkhk3AQGJT+xU2EFtEQEei48wJFhCbWaBS4u73L1BDu5gkJi3qAdvGCbRt
+	4YEnYM3CAu4S619eB7NZBFQkHvf8YgexeQUsJX5MPskCYQtKnJz5hAXkCGYBPYm2jYwQ8+Ul
+	tr+dwwxxp4LEz6fLoJ4Rlnh1fAs7hG0m8WdfNwvEbX4SBzavY4foFZGY3dnGPIFRdBaSDbMQ
+	NsxCsmEWko4FjCyrGCVTC4pz03OLDQuM8lLL9YoTc4tL89L1kvNzNzGCY0pLawfjnlUf9A4x
+	MnEwHmKU4GBWEuFNb5BJFeJNSaysSi3Kjy8qzUktPsQozcGiJM777XVvipBAemJJanZqakFq
+	EUyWiYNTqoEpxvG2fWOpzmnPosn5O2dVZX6JVZTK+Kf1+6Tdi+eyMe/fSM6NPF45y+hMxzzz
+	I7Hno8/ZiHzXeunSt+Je9fsGHp3ctvVCs389/LL82UvH5HPMn+ybw6JSngT8+afiI7RLUvbl
+	DYtKS2b9H5PN727Os7kte1ygLPlmYk2cUpkOa3HkxFcuRh2lZieE3+6+Uu3Y4nSs12fD1aMu
+	7iv/KBp+PMbbxacW2Xi155rt3sMhC4/s63/KZmIq/Kl5UU24XeGti5c2XrwaeiJtM6vuvBVf
+	GHz29XYn7srdxWhp17WGL+GoUXWAu8H0gktpJYvSq1OafE+6Nc36f37bjrCdUxavO9WuafbS
+	I9A7vjsx6YcSS3FGoqEWc1FxIgCMpHBpGAMAAA==
+X-CMS-MailID: 20231004073437epcas1p206e1516eaea07bad34854c99fcdc3025
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+CMS-TYPE: 101P
+X-ArchiveUser: EV
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20231004062700epcas1p16fe36bf6b6a6e5d9d4adeaef32937480
+References: <CGME20231004062700epcas1p16fe36bf6b6a6e5d9d4adeaef32937480@epcas1p1.samsung.com>
+	<20231004062642.16431-1-wookwang.lee@samsung.com>
+	<2023100439-king-salute-5cd5@gregkh>
+	<000101d9f691$4513da00$cf3b8e00$@samsung.com>
+	<2023100411-duckling-tibia-398a@gregkh>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+	SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
 	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Hello usb maintainers/developers,
+Hello. Grek.
+It means that this is not needed.
+Commit id f74a7afc224a already has hub_is_superspeedplus modification.
+I'm sorry for the confusion.
+Thank you.
 
-This is a 31-day syzbot report for the usb subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/usb
+Woo-kwang Lee
 
-During the period, 3 new issues were detected and 0 were fixed.
-In total, 67 issues are still open and 325 have been fixed so far.
+> -----Original Message-----
+> From: 'Greg KH' <gregkh@linuxfoundation.org>
+> Sent: Wednesday, October 4, 2023 4:22 PM
+> To: Woo-kwang Lee <wookwang.lee@samsung.com>
+> Cc: linux-usb@vger.kernel.org; linux-kernel@vger.kernel.org;
+> stable@vger.kernel.org; sj1557.seo@samsung.com
+> Subject: Re: [PATCH] usb: core: add bos NULL pointer checking condition
+> 
+> On Wed, Oct 04, 2023 at 04:06:17PM +0900, Woo-kwang Lee wrote:
+> > Hello. I think I missed the patch.
+> 
+> I do not understand, does that mean that you have tested the patch (and
+> which one, please do not top post), and that this is not needed?
+> 
+> confused,
+> greg k-h
 
-Some of the still happening issues:
-
-Ref  Crashes Repro Title
-<1>  2705    Yes   KMSAN: uninit-value in dib3000mb_attach (2)
-                   https://syzkaller.appspot.com/bug?extid=c88fc0ebe0d5935c70da
-<2>  2437    Yes   KMSAN: uninit-value in mii_nway_restart
-                   https://syzkaller.appspot.com/bug?extid=1f53a30781af65d2c955
-<3>  2367    Yes   WARNING in firmware_fallback_sysfs
-                   https://syzkaller.appspot.com/bug?extid=95f2e2439b97575ec3c0
-<4>  816     Yes   general protection fault in ir_raw_event_store_with_filter
-                   https://syzkaller.appspot.com/bug?extid=34008406ee9a31b13c73
-<5>  519     Yes   INFO: task hung in hub_port_init (3)
-                   https://syzkaller.appspot.com/bug?extid=b6f11035e572f08bc20f
-<6>  468     Yes   KMSAN: uninit-value in smsc95xx_eeprom_confirm_not_busy
-                   https://syzkaller.appspot.com/bug?extid=2c97a98a5ba9ea9c23bd
-<7>  363     Yes   INFO: task hung in r871xu_dev_remove
-                   https://syzkaller.appspot.com/bug?extid=f39c1dad0b7db49ca4a8
-<8>  361     Yes   KMSAN: uninit-value in smsc95xx_reset
-                   https://syzkaller.appspot.com/bug?extid=c74c24b43c9ae534f0e0
-<9>  350     Yes   INFO: task hung in usbdev_open (2)
-                   https://syzkaller.appspot.com/bug?extid=b73659f5bb96fac34820
-<10> 304     Yes   KASAN: use-after-free Read in v4l2_fh_init
-                   https://syzkaller.appspot.com/bug?extid=c025d34b8eaa54c571b8
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
-
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
-
-You may send multiple commands in a single email message.
 
