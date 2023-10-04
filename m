@@ -1,156 +1,107 @@
-Return-Path: <linux-usb+bounces-1066-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1067-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A067D7B78CE
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Oct 2023 09:34:52 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8F5C7B78E2
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Oct 2023 09:40:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 9D009281583
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Oct 2023 07:34:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTP id 35F11B2091F
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Oct 2023 07:40:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02E33D2FE;
-	Wed,  4 Oct 2023 07:34:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E32D2D507;
+	Wed,  4 Oct 2023 07:40:43 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA126CA7F
-	for <linux-usb@vger.kernel.org>; Wed,  4 Oct 2023 07:34:44 +0000 (UTC)
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87E9AD
-	for <linux-usb@vger.kernel.org>; Wed,  4 Oct 2023 00:34:41 -0700 (PDT)
-Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
-	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20231004073438epoutp04393b02560384a6252087c3a77f27680d~K1z_1fPNE3256732567epoutp044
-	for <linux-usb@vger.kernel.org>; Wed,  4 Oct 2023 07:34:38 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20231004073438epoutp04393b02560384a6252087c3a77f27680d~K1z_1fPNE3256732567epoutp044
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1696404878;
-	bh=ijI6ldLxMVsnkVyv7irebtA3Q9901IfdS55IxS0QIBE=;
-	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-	b=WyFECOgAOljXhIhci3og2v+1+V1BzhewKv+l0miEhuHFXDsS3c7TNG2iR7KoGWwRA
-	 Et1SCrIR4t10PeTOncU5nGBeGSnahb5G+2YBiL/YAtsP6210mpDHMUz1YfCFlByEM9
-	 Z9j4sKaCNEfCEgdCLbj7sJC42xAb3IZcNNf3PjCQ=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-	epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-	20231004073437epcas1p4887af4518251ad861e7a05b8cd418a05~K1z_gMebm2633626336epcas1p4R;
-	Wed,  4 Oct 2023 07:34:37 +0000 (GMT)
-Received: from epsmges1p4.samsung.com (unknown [182.195.36.226]) by
-	epsnrtp4.localdomain (Postfix) with ESMTP id 4S0mfj5xB4z4x9Q1; Wed,  4 Oct
-	2023 07:34:37 +0000 (GMT)
-Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
-	epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-	5C.AA.10163.D851D156; Wed,  4 Oct 2023 16:34:37 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-	epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
-	20231004073437epcas1p206e1516eaea07bad34854c99fcdc3025~K1z_J0Cs52617026170epcas1p2S;
-	Wed,  4 Oct 2023 07:34:37 +0000 (GMT)
-Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20231004073437epsmtrp2e9a6a42b583e30d9d45f43207ce0333a~K1z_JB8fK3200632006epsmtrp2V;
-	Wed,  4 Oct 2023 07:34:37 +0000 (GMT)
-X-AuditID: b6c32a38-4dbf8700000027b3-e3-651d158db476
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-	epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	D5.D1.08788.D851D156; Wed,  4 Oct 2023 16:34:37 +0900 (KST)
-Received: from wookwanglee02 (unknown [10.253.100.52]) by
-	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20231004073437epsmtip2a98ae000471e02cb41c34281eb4e5d52~K1z9-h5OI1536015360epsmtip2J;
-	Wed,  4 Oct 2023 07:34:37 +0000 (GMT)
-From: "Woo-kwang Lee" <wookwang.lee@samsung.com>
-To: "'Greg KH'" <gregkh@linuxfoundation.org>
-Cc: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<stable@vger.kernel.org>, <sj1557.seo@samsung.com>
-In-Reply-To: <2023100411-duckling-tibia-398a@gregkh>
-Subject: RE: [PATCH] usb: core: add bos NULL pointer checking condition
-Date: Wed, 4 Oct 2023 16:34:37 +0900
-Message-ID: <007e01d9f695$3a8d9ea0$afa8dbe0$@samsung.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E7FF568B
+	for <linux-usb@vger.kernel.org>; Wed,  4 Oct 2023 07:40:41 +0000 (UTC)
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82FC99B
+	for <linux-usb@vger.kernel.org>; Wed,  4 Oct 2023 00:40:40 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3947CRlH032581;
+	Wed, 4 Oct 2023 07:40:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=beHtcsQ63LMmHEJI0mWIG8oU2aan9VoL1BlPmtwtCxQ=;
+ b=hcMxPGH3Pr0BPMcx9+Y1925p/xAL/5PRTI3LWkqRH2jiBUtlrVDeXV53wZmQRKYu+hsK
+ mopRxQRJsvq4ugL4Zh7wXu6vZrG/bh1yXRc/A++BrMdR02Lhu5yM/MS3AHm3ZzTck1qH
+ 6mjZJxXF0CMlqKrTmRACSrYk97BXjkJlqqeEUI5ck1JXCiZtzxbrOncbjRmtq9cr/dfb
+ wID75xqLUXfNMZRUmw6qOnWsSfs+/H/ZpVTSwyQozqT35sfr524BlFICQPg4XNG1oxRi
+ V5DjB8rjBI246/0VGzCKwf9yU3o+Mciq9N4w9XJkvGYwAf0TfbcN58KJLKl7mr1XLdNa Iw== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tgqr19eky-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 04 Oct 2023 07:40:35 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3947eYqD027110
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 4 Oct 2023 07:40:34 GMT
+Received: from [10.216.59.4] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Wed, 4 Oct
+ 2023 00:40:32 -0700
+Message-ID: <e58ec88c-142d-49d2-875a-4b5c90929d31@quicinc.com>
+Date: Wed, 4 Oct 2023 13:10:29 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v11 00/13] Add multiport support for DWC3 controllers
+From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen
+	<Thinh.Nguyen@synopsys.com>
+CC: Jack Pham <quic_jackp@quicinc.com>,
+        Wesley Cheng
+	<quic_wcheng@quicinc.com>,
+        "linux-usb@vger.kernel.org"
+	<linux-usb@vger.kernel.org>
+References: <20230828133033.11988-1-quic_kriskura@quicinc.com>
+ <0814b6a2-c52d-4be2-ae06-8391767ac144@quicinc.com>
+Content-Language: en-US
+In-Reply-To: <0814b6a2-c52d-4be2-ae06-8391767ac144@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQL4ktvx1bQoFTuKvuL3rpp4W8lh6wDTwCDRAk7sf+IBqjJOwwKQ6a6ZrcEVBQA=
-Content-Language: ko
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrNJsWRmVeSWpSXmKPExsWy7bCmvm6vqGyqwbZv+hbNi9ezWVzeNYfN
-	YtGyVmaLLf+OsFos2PiI0YHVY//cNewefVtWMXp83iQXwBzVwGiTWJSckVmWqpCal5yfkpmX
-	bqsUGuKma6GkkJFfXGKrFG1oaKRnaGCuZ2RkpGdqFGtlZKqkkJeYm2qrVKEL1aukUJRcAFSb
-	W1kMNCAnVQ8qrlecmpfikJVfCnKnXnFibnFpXrpecn6ukkJZYk4p0Agl/YRvjBnT/m9gKdjL
-	VvHo4WbGBsbFrF2MnBwSAiYSk++uYeti5OIQEtjBKPH36iVGCOcTo8SmzrNQzjdGieMfpzLD
-	tDw5spkVIrGXUeLQ6n5mCOc1o8SEdz+ZQKrYBAwkNrVfYQOxRQR0JDrOnGABsZkFSiV+3+kD
-	W84JNGnhgSdgU4UF3CXWv7wOZrMIqEg87vnFDmLzClhK/Jh8kgXCFpQ4OfMJ1Bx5ie1v50Bd
-	pCDx8+kyVohdfhIHNq9jh6gRkZjd2QZ2nIRAL4fEgT9P2SEaXCTO/NkGDQFhiVfHt0DFpSQ+
-	v9vLBtHQzCjx8uYnFginBxgADzcxQVQZS3z6/BkYMhxAKzQl1u/ShwgrSuz8PZcRYjOfxLuv
-	PVALBCVOX+tmBimXEOCV6GgTggirSaw+u4htAqPyLCS/zULy2ywkP8xCWLaAkWUVo1hqQXFu
-	emqxYYEJcpRvYgSnUy2LHYxz337QO8TIxMF4iFGCg1lJhDe9QSZViDclsbIqtSg/vqg0J7X4
-	EGMyMLQnMkuJJucDE3peSbyhmZmlhaWRiaGxmaEhYWETSwMTMyMTC2NLYzMlcd5jr3pThATS
-	E0tSs1NTC1KLYLYwcXBKNTBNjQ763B+mvjnbxrLU5UmP7hOdhybCL3eJtnUKH/04STzZJVyW
-	1/r0zVc3F9yd/5yv+dFe1ti0uKCgDx/CWQVCDT96F9l132OK7F3o7rp+367lG3Qne7HfPFo6
-	U0R+g+uhXXbLTNd7b0+2TU5pmf+uz/Vs/Ir9s+ZvN6ueYapj+GTiMcnWKcx7PDcI83ILMW3h
-	FPrYvWhTVslp28qDzxmbsq7OOuZocHbCvjO3Xr8Vbz+4NO+A3C1Zl1bpS+XvQ3g/r3m68ezZ
-	uln9MwpXGwguC5v2bH5f+D/ZKzyK3/bv1Vmz+eHaA9MDE9+cceJV29zz8rv2yw3vZRwkxU4l
-	Rsznv+yZ93bvz/PnLrxsLluRq8RSnJFoqMVcVJwIALZBowBeBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmplkeLIzCtJLcpLzFFi42LZdlhJXrdXVDbVoO2ajEXz4vVsFpd3zWGz
-	WLSsldliy78jrBYLNj5idGD12D93DbtH35ZVjB6fN8kFMEdx2aSk5mSWpRbp2yVwZUz7v4Gl
-	YC9bxaOHmxkbGBezdjFyckgImEg8ObIZyObiEBLYzShxaNlfRoiEjMTu5X/Yuhg5gGxhicOH
-	iyFqXjJKPPy4hhmkhk3AQGJT+xU2EFtEQEei48wJFhCbWaBS4u73L1BDu5gkJi3qAdvGCbRt
-	4YEnYM3CAu4S619eB7NZBFQkHvf8YgexeQUsJX5MPskCYQtKnJz5hAXkCGYBPYm2jYwQ8+Ul
-	tr+dwwxxp4LEz6fLoJ4Rlnh1fAs7hG0m8WdfNwvEbX4SBzavY4foFZGY3dnGPIFRdBaSDbMQ
-	NsxCsmEWko4FjCyrGCVTC4pz03OLDQuM8lLL9YoTc4tL89L1kvNzNzGCY0pLawfjnlUf9A4x
-	MnEwHmKU4GBWEuFNb5BJFeJNSaysSi3Kjy8qzUktPsQozcGiJM777XVvipBAemJJanZqakFq
-	EUyWiYNTqoEpxvG2fWOpzmnPosn5O2dVZX6JVZTK+Kf1+6Tdi+eyMe/fSM6NPF45y+hMxzzz
-	I7Hno8/ZiHzXeunSt+Je9fsGHp3ctvVCs389/LL82UvH5HPMn+ybw6JSngT8+afiI7RLUvbl
-	DYtKS2b9H5PN727Os7kte1ygLPlmYk2cUpkOa3HkxFcuRh2lZieE3+6+Uu3Y4nSs12fD1aMu
-	7iv/KBp+PMbbxacW2Xi155rt3sMhC4/s63/KZmIq/Kl5UU24XeGti5c2XrwaeiJtM6vuvBVf
-	GHz29XYn7srdxWhp17WGL+GoUXWAu8H0gktpJYvSq1OafE+6Nc36f37bjrCdUxavO9WuafbS
-	I9A7vjsx6YcSS3FGoqEWc1FxIgCMpHBpGAMAAA==
-X-CMS-MailID: 20231004073437epcas1p206e1516eaea07bad34854c99fcdc3025
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-X-ArchiveUser: EV
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20231004062700epcas1p16fe36bf6b6a6e5d9d4adeaef32937480
-References: <CGME20231004062700epcas1p16fe36bf6b6a6e5d9d4adeaef32937480@epcas1p1.samsung.com>
-	<20231004062642.16431-1-wookwang.lee@samsung.com>
-	<2023100439-king-salute-5cd5@gregkh>
-	<000101d9f691$4513da00$cf3b8e00$@samsung.com>
-	<2023100411-duckling-tibia-398a@gregkh>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-	SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: Qtu6WAKZ0BkPPOZT_K7yK5icaza1y3nb
+X-Proofpoint-GUID: Qtu6WAKZ0BkPPOZT_K7yK5icaza1y3nb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-04_01,2023-10-02_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ lowpriorityscore=0 spamscore=0 clxscore=1015 impostorscore=0
+ suspectscore=0 mlxscore=0 phishscore=0 adultscore=0 mlxlogscore=560
+ bulkscore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2309180000 definitions=main-2310040053
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Hello. Grek.
-It means that this is not needed.
-Commit id f74a7afc224a already has hub_is_superspeedplus modification.
-I'm sorry for the confusion.
-Thank you.
+Hi Greg,
 
-Woo-kwang Lee
+  Thanks for picking first 3 patches into usb-testing branch.
 
-> -----Original Message-----
-> From: 'Greg KH' <gregkh@linuxfoundation.org>
-> Sent: Wednesday, October 4, 2023 4:22 PM
-> To: Woo-kwang Lee <wookwang.lee@samsung.com>
-> Cc: linux-usb@vger.kernel.org; linux-kernel@vger.kernel.org;
-> stable@vger.kernel.org; sj1557.seo@samsung.com
-> Subject: Re: [PATCH] usb: core: add bos NULL pointer checking condition
-> 
-> On Wed, Oct 04, 2023 at 04:06:17PM +0900, Woo-kwang Lee wrote:
-> > Hello. I think I missed the patch.
-> 
-> I do not understand, does that mean that you have tested the patch (and
-> which one, please do not top post), and that this is not needed?
-> 
-> confused,
-> greg k-h
+  Can you help pick patches 4/5 of this series as well into usb-testing 
+(I checked and they apply cleanly) so that I can fix comments and rebase 
+patches starting from 6 to 13 in my v12.
 
+  Patch 4 been approved yesterday by Thinh and so far no kernel build 
+bot has reported issues on these 2 patches for any configs (on v9 / v10 
+/ v11).
+
+Regards,
+Krishna,
 
