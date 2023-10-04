@@ -1,159 +1,316 @@
-Return-Path: <linux-usb+bounces-1069-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1070-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4C647B7973
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Oct 2023 10:03:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E22297B7E70
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Oct 2023 13:45:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sy.mirrors.kernel.org (Postfix) with ESMTP id 01B23B20927
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Oct 2023 08:03:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 9D2312817CC
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Oct 2023 11:45:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 658B6101E8;
-	Wed,  4 Oct 2023 08:03:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E3FA134C3;
+	Wed,  4 Oct 2023 11:45:35 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFA81101DD
-	for <linux-usb@vger.kernel.org>; Wed,  4 Oct 2023 08:03:40 +0000 (UTC)
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63FDAC
-	for <linux-usb@vger.kernel.org>; Wed,  4 Oct 2023 01:03:38 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-9b27bc8b65eso305374666b.0
-        for <linux-usb@vger.kernel.org>; Wed, 04 Oct 2023 01:03:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696406617; x=1697011417; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eLN3YMd6CT22tWM20pImL4XGhG7GHBb9qZ2LV6tnqrE=;
-        b=nNmHeDA6vAeTVcQcT1acInMYEqMFEr/oGWTK/7EhAdE2NQPDZiPpBw8ANYZECpWTu7
-         6Uhu0nDjppVmjODJYGN5aiMsQRfxZqCR7FN4YPYWRp0mIhB14N6Gqhbf77hT5IeFco71
-         nAg/cJfwRdGKPzGXvkzF61drunhMIxXOwzDy3RlGN4c9iHJK+lIIWjaSOCX5dbkr4iLi
-         2opYT6siLlz7KoQ6fMBZOggxcj2f5qFgeyuyrWbJbhRik997w6QNbaMSZiD27FKL+QuO
-         3baeM/6zrzb6NcXRtRUPhe6NVlndPF89sIKT+ajzTNHR5k/oDz/aEWMj+MKOK1YUr7AP
-         dJ9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696406617; x=1697011417;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eLN3YMd6CT22tWM20pImL4XGhG7GHBb9qZ2LV6tnqrE=;
-        b=dl4guxNXE/YY9c5c0DYitgdtUpZb8u/Hq63ecAH/+YQtmc+801YP83kJJFe7yCLUra
-         OwZDgSYmjzyL3UVmcUaT4SSEDKsX31IE62kUQ+t0Lv6ih6TnKsDmaouYQW5zomE106JA
-         +PyvktwnuKtYZpLIe9Q00h855Iu9gGxiGslonn69TQnNuMAKzoappIEVwO/juLSrokOr
-         PYjt5OA1y15HStzIWJilCg2u8uZrc8YUdJ7iTegOwJRWd7m7RYxb9gob6OyrlB1h1Ijw
-         Pd+u7zD2jlnPH97YcgzvWiwV+RR1OMKNMXcYo1+uQNsoMQeIGgoxND/GclsG/ms2YiYp
-         SoaA==
-X-Gm-Message-State: AOJu0YzNiXAQhEBpwsuLWWCeOKbjJvRKHdnB7N9lkV12qrAXjFsMxavr
-	HsS1mMk8Z8hB6hwWnjrgPcVukQ==
-X-Google-Smtp-Source: AGHT+IGWB6/WHk2xtPh/icUapO409yUJMC0JV+MOc+E0lUPW7YYPGSxmERovok8WmZMUvpYuWw6vAg==
-X-Received: by 2002:a17:907:7ea0:b0:9a5:9038:b1e7 with SMTP id qb32-20020a1709077ea000b009a59038b1e7mr1507149ejc.36.1696406617319;
-        Wed, 04 Oct 2023 01:03:37 -0700 (PDT)
-Received: from [192.168.1.197] (5-157-101-10.dyn.eolo.it. [5.157.101.10])
-        by smtp.gmail.com with ESMTPSA id lf17-20020a170906ae5100b0099d45ed589csm2318542ejb.125.2023.10.04.01.03.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Oct 2023 01:03:36 -0700 (PDT)
-Message-ID: <25e8c953-8bf1-4107-9531-263d68c41128@linaro.org>
-Date: Wed, 4 Oct 2023 10:03:34 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0BAD12B99;
+	Wed,  4 Oct 2023 11:45:32 +0000 (UTC)
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2050.outbound.protection.outlook.com [40.107.237.50])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7545B90;
+	Wed,  4 Oct 2023 04:45:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cprQ7iUrXq2KsY0JJ+hp1JyWtw5/PZVWms0M50nw7cyk/MDpBA7HKXDGWRlwZiLtKGd4Xk56MM85in/Ca9ZUQfAwWzmqYzyLZob3lSux0TFDTAG7O+jVL1OuyWgW+tNm7eE1Z3titEc4ItdVyPrLKjV5wsusvmGnS4rN1Xqs5tXZIGrQ+6PHRBdiKOJCAENI60xn78/qT89A4bEnzyArbkYswk5a9YcsetNV7VJe0YpJmVB4Z+PA833BFp2w11KBMiK7JVUKhdQHGiy+k0UODWKZrU+hQ1elB7lI6EaJbrVWSzKpGLzzMjWDR8uHbvUu50uNUh6q5ANe45YgJifRcA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qkOvxqElz8k15AB7F9OqubUOc5ZHZMu4JPxbrflZUP4=;
+ b=KBg55P67RzBBeNdbrKfrCqvdg8qkVL34yst7YxLp1BJytmFEhpZjTPdqdu+i+FMFSQtC1Jn2wS6DDNqTHzRvLB2XDudiFVoR5hh4DGmNZjjJwSBsL83Lq1WvHcrphrDfkHcfPEkngK6GO6kLOEcDuj0UDwjSx3+kXdrqt6endzGYmwkpBof/7FT2muFA9K9Kooplutz/oT1So9phldZbRFQRM+XNoTyyCGd+xIAwcswQIo8xcj3sLQjb4sYTGJ+JNJ0RJOtmpzmhE+hZnjTH3j4BKehxjIyNIAneLO1uxmcPYKjzJWx4R05c5sXHUxVkAPyKEkljmRI0NKZpv/cD/g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qkOvxqElz8k15AB7F9OqubUOc5ZHZMu4JPxbrflZUP4=;
+ b=YW81Rp4O/Wsd4hJZWw79JHarND6mmquEzFI8dXlQlkFzocOn7brhArpdv1MS2x/2onzMDt1Gy9rro+XAx6wFrKFPRsFi2mGKmAUsrkOiwOUnwiyXwWtGucWMWKuwyzLWN1zxBKgJDb/SMHbjUAgohIbLZYjWE1XtSK094oAHx4k=
+Received: from MN2PR12MB4333.namprd12.prod.outlook.com (2603:10b6:208:1d3::23)
+ by DM4PR12MB6541.namprd12.prod.outlook.com (2603:10b6:8:88::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.30; Wed, 4 Oct
+ 2023 11:45:25 +0000
+Received: from MN2PR12MB4333.namprd12.prod.outlook.com
+ ([fe80::7331:e05b:6311:5620]) by MN2PR12MB4333.namprd12.prod.outlook.com
+ ([fe80::7331:e05b:6311:5620%6]) with mapi id 15.20.6838.030; Wed, 4 Oct 2023
+ 11:45:25 +0000
+From: "Mehta, Piyush" <piyush.mehta@amd.com>
+To: Rob Herring <robh@kernel.org>
+CC: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, "Simek, Michal"
+	<michal.simek@amd.com>, "krzysztof.kozlowski+dt@linaro.org"
+	<krzysztof.kozlowski+dt@linaro.org>, "conor+dt@kernel.org"
+	<conor+dt@kernel.org>, "peter.chen@kernel.org" <peter.chen@kernel.org>,
+	"linus.walleij@linaro.org" <linus.walleij@linaro.org>, "paul@crapouillou.net"
+	<paul@crapouillou.net>, "arnd@arndb.de" <arnd@arndb.de>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "git
+ (AMD-Xilinx)" <git@amd.com>
+Subject: RE: [RFC PATCH 1/3] dt-binding: usb: ulpi-phy: add ulpi-phy binding
+Thread-Topic: [RFC PATCH 1/3] dt-binding: usb: ulpi-phy: add ulpi-phy binding
+Thread-Index: AQHZ8qEa5JeYHGbt0EyV+BYDViGoorA2vp2AgAC7O0A=
+Date: Wed, 4 Oct 2023 11:45:24 +0000
+Message-ID:
+ <MN2PR12MB433326B66D9037CD0462BD2088CBA@MN2PR12MB4333.namprd12.prod.outlook.com>
+References: <20230929064852.16642-1-piyush.mehta@amd.com>
+ <20230929064852.16642-2-piyush.mehta@amd.com>
+ <20231002170025.GA1928031-robh@kernel.org>
+In-Reply-To: <20231002170025.GA1928031-robh@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MN2PR12MB4333:EE_|DM4PR12MB6541:EE_
+x-ms-office365-filtering-correlation-id: 5146e539-88f9-42f2-959f-08dbc4cf65e6
+x-ld-processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ XsJYELunSdZ1vFvg1fqxYd/aYM1E0kRDO/gNmHvJU/HBd6CQr3BwS4fnUkCC8y+YVRxOvwvxYVQNer53OAsMjPfm3fN3wXH3U1KHUT2GLeeNkWaF9BdCzLQBrKrjRpwTNqfeo5gislOhUmhdZW/iIzJjUXdgmLLKH0+cblgm0KFIbOaWiJ6BcdQn20s3bVpBlreJy90YRTaYkde30Lrvar/WYluk1YtQ0U20HgVDYgSv+Y+IjyxPUHK2IpT+qwMVk2QOFyoZ13XF2LrCmtvqXlne/9wWSGovT13DxH+7gtPw3RVz2e0qcrxclfzQuzY94edY+s2ld/1RG23wkXDjLRHXiuaqYpP2Jq8XF6x8lxL7TXi/T2cfWG/iAcqt0xsjimVDEzoHBO7wnl04+DSK2preqWum2yIi0kaq2P9jn68XtDCyvGIn5sfZ4SMYL8ccQHIocEZvFeg5Ggv/Ge/ijN8txmTpdJngWRps69CSjiIQr/+Ho16ejBwJw9ngkTTL+y2PUQA/IzZKsbYGVaEXbx5VXqwbSOc4DOeHO8vwqcJ7Bp80CEs9hd02AYwVmvnjCqGUDk2dR+Tu4DCX90MWrDN+saEnHiMQseGMV1b6fH2+vxJau4lLdkXqOA1rXoNdgtcf7qOV65JLm7bvODQNCg==
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4333.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(346002)(376002)(366004)(136003)(396003)(230922051799003)(451199024)(1800799009)(64100799003)(186009)(52536014)(5660300002)(9686003)(53546011)(33656002)(71200400001)(38100700002)(38070700005)(7696005)(6506007)(86362001)(2906002)(7416002)(55016003)(966005)(478600001)(122000001)(26005)(8676002)(4326008)(316002)(6916009)(66946007)(76116006)(54906003)(8936002)(64756008)(83380400001)(66446008)(66476007)(66556008)(41300700001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?+ANJ4SNDlFZmSlgt6JRIwi+EO87dSwUdoPCZzPPXKyMndSt8NxDat3AGbJI8?=
+ =?us-ascii?Q?8wYoHFxKV1xxufYwinfD9wdgz1mi76BywKzoujZ5twYpBuwqceXdOB1aPl/A?=
+ =?us-ascii?Q?HgRytQvkRBrdgPz+rOVH3GITv0rsbl1tD1R7/xYw1P4N3ElPsGrJmbIF6Qvx?=
+ =?us-ascii?Q?xrUo1JAzr4tEGOzyIPf6uCHmHL2TpKri8MI52KVGNmt8VptcOIIUBwHMx3Pb?=
+ =?us-ascii?Q?BSLnnSPF0Hu05v21DHfjzf+iRSIOcJb1ALujo8meaaQvWOJhIYDlnClCkfGb?=
+ =?us-ascii?Q?8mrwFehd7DoXkwYpbflbRo9XL+K0Lzkjx2JoL1gmiKpicdUOalXLDpv2w1KF?=
+ =?us-ascii?Q?h0Mdgibxb9+LnXwca9KF6F/CRcjaE6P1gA60Q/29nb0X15Vaynww/fDSzpc5?=
+ =?us-ascii?Q?cNaAgcU/a5n5IVUwwsOSp5XdXNoVw5f3JBy+SI5RdCb40akHTnhNW1kNo6ZT?=
+ =?us-ascii?Q?GAvjp5SQ+4xF+Oe2/VF24AXevyfQdNsNcCs62Z7N8LoQ3SrjU6kmyEw5c61Y?=
+ =?us-ascii?Q?LpPi52exdhcmNB9+PTrJnP0caT0CszpPaSPlhVFRNB1Qytj8gzofbbla3j4H?=
+ =?us-ascii?Q?5HVTzEB7mnDab6YeVvzYC9dW8c7AQp1+K48plDh15JUqGCIs4gqF5wZHSbXT?=
+ =?us-ascii?Q?jD88kk3259j3iihBoJyAmktoQK8N4VOD6nd7Cs/6SfrzUQMOGN/3tl02nOG/?=
+ =?us-ascii?Q?phEgB4YPmJemoBvaCuuq+aRZpsVsYplCPzsNaQFdASNkpqrcWwvYU1wPxyc9?=
+ =?us-ascii?Q?9nd+YWAHWbPCoskSN9NnOw5Q1OpDdu/8ezmhB8hvjD7SUtMIWZaDzJxWPc71?=
+ =?us-ascii?Q?oKgQzCoExLAm9dTl1IX49G4O5xeWiOHImK5FocQbufoKJGBBr9qdrAx3QBuG?=
+ =?us-ascii?Q?uRiJKAPTen/Rq98QpzWZsvKzdSgwjfoqBmgHll16v7vSTsFxsZXCbYhE5Z7f?=
+ =?us-ascii?Q?jARCMHAiPy8lOjaVJUufN6s5Y/ISiQPafuKu4hFyTCVQXrhvpFVvpT0acSaE?=
+ =?us-ascii?Q?6fqVh0dz9aog/J8rICJ3fwiM4x3zJcdW+kGlCyaxqqGxtwXYakBgap+3wMYa?=
+ =?us-ascii?Q?lRDAIggeplPPSJpwfMevkAXRbPN8GVSnjmGsIqbDDveUNJYJci8RBMW1KrUR?=
+ =?us-ascii?Q?44u2MlJlUI2jK1Ykgx2SZppP9whz4lyiuf8D3+rzBB8B/KtC8Zqai6fbbWJA?=
+ =?us-ascii?Q?SuVkljOAFl5uc76ucuhzwghzROnusImVM38uUjMB6XmUKULF4NEiyOXUQjXr?=
+ =?us-ascii?Q?+uLQ09snFe+GM21n8mbF4F7cIBBmLs87yum+8PYsq5qtOYQo6H58bun7YE53?=
+ =?us-ascii?Q?ipKHmdrCv/iubL1N7pKq1TPkd3a3GblOf3soljqCH1sGbv5H2qz2kkhnGuXX?=
+ =?us-ascii?Q?+yJrYXuWsdb341g2HapK7KrVuFLtUCdP8zRWgDp+s5RhgmHOVxae8c1XeJf8?=
+ =?us-ascii?Q?+89EYhhTCHGQIG/IgaM8rWYkbjlNf4RVikFWxv4f0F+hdF/PUVkPd4Qhe1Zr?=
+ =?us-ascii?Q?4AKYDMATsHnSkjiVkwU7TN3ZD+5suCqrEg5ilAmXlihsUVMz0wiJWnTAKzOI?=
+ =?us-ascii?Q?Ub4nAGaeZABprHuiei0=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/3] dt-bindings: usb: ci-hdrc-usb2: add npcm750 and
- npcm845 compatible
-Content-Language: en-US
-To: Tomer Maimon <tmaimon77@gmail.com>, peter.chen@kernel.org,
- gregkh@linuxfoundation.org, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, xu.yang_2@nxp.com, peng.fan@nxp.com,
- avifishman70@gmail.com, tali.perry1@gmail.com, joel@jms.id.au,
- venture@google.com, yuenn@google.com, benjaminfair@google.com,
- j.neuschaefer@gmx.net
-Cc: openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20231003110130.229711-1-tmaimon77@gmail.com>
- <20231003110130.229711-3-tmaimon77@gmail.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231003110130.229711-3-tmaimon77@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.6
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4333.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5146e539-88f9-42f2-959f-08dbc4cf65e6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Oct 2023 11:45:24.9593
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: x/U8/Q9H6qxNRa1tkmG16HzBfhMC9zpC5AzU52m6UennfECiTjnmpbEYK5esAP+a
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6541
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On 03/10/2023 13:01, Tomer Maimon wrote:
-> Add a compatible string for Nuvoton BMC NPCM750 and Nuvoton BMC NPCM845.
-> 
-> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-> ---
->  Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
-> index 1394557517b1..a9e173432002 100644
-> --- a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
-> +++ b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
-> @@ -16,6 +16,8 @@ properties:
->        - enum:
->            - chipidea,usb2
->            - lsi,zevio-usb
-> +          - nuvoton,npcm750-udc
-> +          - nuvoton,npcm845-udc
+Hi All,
 
-Your driver clearly suggests these are compatible. If they are not, why
-commit msg does no explain anything here?
+> -----Original Message-----
+> From: Rob Herring <robh@kernel.org>
+> Sent: Monday, October 2, 2023 10:30 PM
+> To: Mehta, Piyush <piyush.mehta@amd.com>
+> Cc: gregkh@linuxfoundation.org; Simek, Michal <michal.simek@amd.com>;
+> krzysztof.kozlowski+dt@linaro.org; conor+dt@kernel.org;
+> peter.chen@kernel.org; linus.walleij@linaro.org; paul@crapouillou.net;
+> arnd@arndb.de; linux-usb@vger.kernel.org; devicetree@vger.kernel.org; lin=
+ux-
+> kernel@vger.kernel.org; git (AMD-Xilinx) <git@amd.com>
+> Subject: Re: [RFC PATCH 1/3] dt-binding: usb: ulpi-phy: add ulpi-phy bind=
+ing
+>=20
+> On Fri, Sep 29, 2023 at 12:18:50PM +0530, Piyush Mehta wrote:
+> > Create an ulpi-phy binding to read and write PHY registers with
+> > explicit control of the address and data using the usb.VIEWPORT registe=
+r.
+> >
+> > Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
+> > ---
+> > This binding patch was created to support generic platforms. This
+> > binding will be modified in accordance with patch [3/3] procedures.
+> > One of the approch may be Create a zynq phy platform driver in
+> > "driver/usb/phy" with driver source "phy-ulpi-zynq-usb.c" and then the
+> > binding will be particular to the Xilinx/AMD zynq platform.
+> >
+> > This binding was built with the Zynq hardware design example in
+> > consideration of as a generic platform. The viewport provide access
+> > the Chipidea controller to interface with the ULPI PHY.
+> > ---
+> >  .../devicetree/bindings/usb/ulpi-phy.yaml     | 48 +++++++++++++++++++
+> >  1 file changed, 48 insertions(+)
+> >  create mode 100644
+> > Documentation/devicetree/bindings/usb/ulpi-phy.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/usb/ulpi-phy.yaml
+> > b/Documentation/devicetree/bindings/usb/ulpi-phy.yaml
+> > new file mode 100644
+> > index 000000000000..490b2f610129
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/usb/ulpi-phy.yaml
+> > @@ -0,0 +1,48 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) %YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/usb/ulpi-phy.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: ULPI PHY- Generic platform
+> > +
+> > +maintainers:
+> > +  - Piyush Mehta <piyush.mehta@amd.com>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: ulpi-phy
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  '#phy-cells':
+> > +    const: 0
+> > +
+> > +  external-drv-vbus:
+> > +    description:
+> > +      If present, configure ulpi-phy external supply to drive 5V on VB=
+us.
+> > +    type: boolean
+> > +
+> > +  view-port:
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    description:
+> > +      Address to read and write PHY registers with explicit control of
+> > +      the address and data using the usb.VIEWPORT register.
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - view-port
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    phy0@e0002000 {
+> > +        compatible =3D "ulpi-phy";
+> > +        #phy-cells =3D <0x00>;
+> > +        reg =3D <0xe0002000 0x1000>;
+> > +        view-port =3D <0x170>;
+>=20
+> I don't understand. Do you have an MMIO address and the VIEWPORT address
+> to the PHY? You need both?
 
-Best regards,
-Krzysztof
+Yes, we need both.=20
 
+The ULPI Link wrapper passes-through packet data and interprets Rx commands=
+ as well as send Tx
+commands and provide viewport services to the software. The ULPI link wrapp=
+er interfaces between
+the port controller (a bus similar to UTMI+ that connects to the rest of th=
+e controller and its registers)
+and the ULPI interface.
+
+Name XUSBPS_ULPIVIEW_OFFSET
+Address 0x00000170
+
+Description ULPI Viewport
+
+The register provides indirect access to the ULPI PHY register set. Althoug=
+h the core performs access
+to the ULPI PHY register set, there may be extraordinary circumstances wher=
+e software may need direct
+access.
+
+ULPI PHY Viewport
+The ULPI viewport provides a mechanism for software to read and write PHY r=
+egisters with explicit
+control of the address and data using the usb.VIEWPORT register. An interru=
+pt is generated when a
+transaction is complete, including when the requested read data is availabl=
+e.
+
+>=20
+> There's already a defined binding for ULPI bus:
+>=20
+> Documentation/devicetree/bindings/usb/ulpi.txt
+>=20
+> Why can't you use/expand that?
+>=20
+> Rob
+
+We need your input to determine the best approach . We did preliminary rese=
+arch and discovered few possibilities:
+
+USB Node {
+	.............
+	ULPI PHY Node {  // child node
+		.................
+		compatible =3D "ulpi-phy-";
+		#phy-cells =3D <0x00>;
+		..............	=09
+	};
+};
+
+https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bind=
+ings/phy/qcom%2Cusb-hs-phy.yaml#L100
+https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bind=
+ings/usb/ci-hdrc-usb2.yaml#L338
+https://github.com/torvalds/linux/blob/master/drivers/usb/chipidea/ci_hdrc_=
+msm.c#L245
+https://github.com/torvalds/linux/blob/master/drivers/phy/qualcomm/phy-qcom=
+-usb-hs.c#L85
+[This implementation is based on ulpi driver: https://github.com/torvalds/l=
+inux/blob/master/drivers/phy/qualcomm/phy-qcom-usb-hs.c#L287C1-L287C19]=20
+
+OR
+
+https://github.com/torvalds/linux/blob/master/drivers/usb/chipidea/ci_hdrc_=
+imx.c#L81
+https://github.com/torvalds/linux/blob/master/drivers/usb/chipidea/ci_hdrc_=
+imx.c#L176
+https://github.com/torvalds/linux/blob/master/drivers/usb/chipidea/usbmisc_=
+imx.c#L234
+https://github.com/torvalds/linux/blob/master/drivers/usb/phy/phy-mxs-usb.c=
+#L191
+[This implementation is based on platform driver: https://github.com/torval=
+ds/linux/blob/master/drivers/usb/phy/phy-mxs-usb.c#L848]
+
+Note:
+Above examples are to show the interface between the Chipidea Controller an=
+d PHY.
+
+Are these possibilities aligning with your inputs?
+
+Regards,
+Piyush Mehta
 
