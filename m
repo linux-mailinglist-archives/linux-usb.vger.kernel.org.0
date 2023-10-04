@@ -1,217 +1,311 @@
-Return-Path: <linux-usb+bounces-1093-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1094-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 591847B8B7D
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Oct 2023 20:55:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EAAB7B8B82
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Oct 2023 20:55:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 070322817CA
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Oct 2023 18:55:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 46107281A15
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Oct 2023 18:55:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE74A2134D;
-	Wed,  4 Oct 2023 18:55:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1BFC219E8;
+	Wed,  4 Oct 2023 18:55:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="A3iTXvh9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U4cHhSwb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4252A18E29
-	for <linux-usb@vger.kernel.org>; Wed,  4 Oct 2023 18:55:10 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0C219AA
-	for <linux-usb@vger.kernel.org>; Wed,  4 Oct 2023 11:55:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696445702; x=1727981702;
-  h=date:from:to:cc:subject:message-id;
-  bh=BUAPhzwFB4iombyJFm5ut6juV06uhKA6uXzzwb+SnZs=;
-  b=A3iTXvh9LwkEhVvBbSuu+cjAMPGMmBl24UH3m/tCGQZhZRaS/lUB1k1r
-   wU1r2Un/hSZbduqICQcZc9nYWTJkdKAm/NZZEQj7wL68PyroRv9ysC2gB
-   T/nhzRgu2aho/SAD6uNXRWmBUpGg48kacQoCGjDcaIuzpchQrwvho6kZs
-   /UDor4ElPIqgsCBx/g5OYz0xRDwI9y0y2pphK0JBTRuJ7FShrpEA38KkU
-   88OJGA7cCL1gy/Cmwu++0ykGeD83wR26InNjzjGTf7ku6PbqbOpuvxmeh
-   amrlu36Mt7IkX4XKB1PCOJ1NAhsawaxmSXlpDi/jE77yC47MOonDff8Hp
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="383174160"
-X-IronPort-AV: E=Sophos;i="6.03,201,1694761200"; 
-   d="scan'208";a="383174160"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2023 11:55:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="780912218"
-X-IronPort-AV: E=Sophos;i="6.03,201,1694761200"; 
-   d="scan'208";a="780912218"
-Received: from lkp-server02.sh.intel.com (HELO c3b01524d57c) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 04 Oct 2023 11:54:57 -0700
-Received: from kbuild by c3b01524d57c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qo71L-000KWM-1a;
-	Wed, 04 Oct 2023 18:54:55 +0000
-Date: Thu, 05 Oct 2023 02:54:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-next] BUILD SUCCESS
- 03cf2af41b37daa96635a31a012b86d0053e0670
-Message-ID: <202310050225.fiNXBVMe-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-	SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13DD521110;
+	Wed,  4 Oct 2023 18:55:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BD6BC433C9;
+	Wed,  4 Oct 2023 18:55:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1696445746;
+	bh=g/yzBkH2Lp29tPfDBqNp+9Elc+zqCeoJYNIVCamPD2Q=;
+	h=From:To:Cc:Subject:Date:From;
+	b=U4cHhSwb0LbjLA0qPOmmG7XGfwhLrdUKNdOP6jb0JmroYvkDlGxxFYbdBHNbhzXNH
+	 iovfoJxTxBNF3fgWoxKD5rhfozOY+7XT8L1cOwcimaEFAuQea9kFSm7ljzuINveJng
+	 8O/TRaYWLsMFAu0WZqR+Ej7+BaviQVOBsP8mffc2SqReX6OXjtiZTmCmLoR9/saHwB
+	 c5rjkuCRPMb/Q55YD3oJLDC2dFLpMza5Y6vaUnEAxOls8VOQTB4gdTGSQ3fEJfeL1x
+	 KMOBQbkmXFBlyX1vgIb23wb+t56+wSAOGwpJ/lOlOTTFlZfD0AdwHSMDPWo5mfkyr4
+	 HgGj4IVfBzhTQ==
+From: Jeff Layton <jlayton@kernel.org>
+To: Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	David Sterba <dsterba@suse.cz>,
+	Amir Goldstein <amir73il@gmail.com>,
+	Theodore Ts'o <tytso@mit.edu>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Kees Cook <keescook@chromium.org>,
+	Jeremy Kerr <jk@ozlabs.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	=?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?= <arve@android.com>,
+	Todd Kjos <tkjos@android.com>,
+	Martijn Coenen <maco@android.com>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Carlos Llamas <cmllamas@google.com>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Mattia Dongili <malattia@linux.it>,
+	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Leon Romanovsky <leon@kernel.org>,
+	Brad Warrum <bwarrum@linux.ibm.com>,
+	Ritu Agarwal <rituagar@linux.ibm.com>,
+	Hans de Goede <hdegoede@redhat.com>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Mark Gross <markgross@kernel.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Eric Van Hensbergen <ericvh@kernel.org>,
+	Latchesar Ionkov <lucho@ionkov.net>,
+	Dominique Martinet <asmadeus@codewreck.org>,
+	Christian Schoenebeck <linux_oss@crudebyte.com>,
+	David Sterba <dsterba@suse.com>,
+	David Howells <dhowells@redhat.com>,
+	Marc Dionne <marc.dionne@auristor.com>,
+	Ian Kent <raven@themaw.net>,
+	Luis de Bethencourt <luisbg@kernel.org>,
+	Salah Triki <salah.triki@gmail.com>,
+	"Tigran A. Aivazian" <aivazian.tigran@gmail.com>,
+	Chris Mason <clm@fb.com>,
+	Josef Bacik <josef@toxicpanda.com>,
+	Xiubo Li <xiubli@redhat.com>,
+	Ilya Dryomov <idryomov@gmail.com>,
+	Jan Harkes <jaharkes@cs.cmu.edu>,
+	coda@cs.cmu.edu,
+	Joel Becker <jlbec@evilplan.org>,
+	Christoph Hellwig <hch@lst.de>,
+	Nicolas Pitre <nico@fluxnic.net>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Gao Xiang <xiang@kernel.org>,
+	Chao Yu <chao@kernel.org>,
+	Yue Hu <huyue2@coolpad.com>,
+	Jeffle Xu <jefflexu@linux.alibaba.com>,
+	Namjae Jeon <linkinjeon@kernel.org>,
+	Sungjong Seo <sj1557.seo@samsung.com>,
+	Jan Kara <jack@suse.com>,
+	Andreas Dilger <adilger.kernel@dilger.ca>,
+	Jaegeuk Kim <jaegeuk@kernel.org>,
+	OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
+	Christoph Hellwig <hch@infradead.org>,
+	Miklos Szeredi <miklos@szeredi.hu>,
+	Bob Peterson <rpeterso@redhat.com>,
+	Andreas Gruenbacher <agruenba@redhat.com>,
+	Richard Weinberger <richard@nod.at>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>,
+	Mike Kravetz <mike.kravetz@oracle.com>,
+	Muchun Song <muchun.song@linux.dev>,
+	Jan Kara <jack@suse.cz>,
+	David Woodhouse <dwmw2@infradead.org>,
+	Dave Kleikamp <shaggy@kernel.org>,
+	Tejun Heo <tj@kernel.org>,
+	Trond Myklebust <trond.myklebust@hammerspace.com>,
+	Anna Schumaker <anna@kernel.org>,
+	Chuck Lever <chuck.lever@oracle.com>,
+	Neil Brown <neilb@suse.de>,
+	Olga Kornievskaia <kolga@netapp.com>,
+	Dai Ngo <Dai.Ngo@oracle.com>,
+	Tom Talpey <tom@talpey.com>,
+	Ryusuke Konishi <konishi.ryusuke@gmail.com>,
+	Anton Altaparmakov <anton@tuxera.com>,
+	Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
+	Mark Fasheh <mark@fasheh.com>,
+	Joseph Qi <joseph.qi@linux.alibaba.com>,
+	Bob Copeland <me@bobcopeland.com>,
+	Mike Marshall <hubcap@omnibond.com>,
+	Martin Brandenburg <martin@omnibond.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Iurii Zaikin <yzaikin@google.com>,
+	Tony Luck <tony.luck@intel.com>,
+	"Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+	Anders Larsen <al@alarsen.net>,
+	Steve French <sfrench@samba.org>,
+	Paulo Alcantara <pc@manguebit.com>,
+	Ronnie Sahlberg <lsahlber@redhat.com>,
+	Shyam Prasad N <sprasad@microsoft.com>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Phillip Lougher <phillip@squashfs.org.uk>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Evgeniy Dushistov <dushistov@mail.ru>,
+	Chandan Babu R <chandan.babu@oracle.com>,
+	"Darrick J. Wong" <djwong@kernel.org>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Naohiro Aota <naohiro.aota@wdc.com>,
+	Johannes Thumshirn <jth@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Hugh Dickins <hughd@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	John Johansen <john.johansen@canonical.com>,
+	Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Stephen Smalley <stephen.smalley.work@gmail.com>,
+	Eric Paris <eparis@parisplace.org>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	Brian Foster <bfoster@redhat.com>
+Cc: linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-s390@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org,
+	linux-rdma@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	v9fs@lists.linux.dev,
+	linux-afs@lists.infradead.org,
+	autofs@vger.kernel.org,
+	linux-btrfs@vger.kernel.org,
+	ceph-devel@vger.kernel.org,
+	codalist@coda.cs.cmu.edu,
+	linux-efi@vger.kernel.org,
+	linux-erofs@lists.ozlabs.org,
+	linux-ext4@vger.kernel.org,
+	linux-f2fs-devel@lists.sourceforge.net,
+	gfs2@lists.linux.dev,
+	linux-um@lists.infradead.org,
+	linux-mtd@lists.infradead.org,
+	jfs-discussion@lists.sourceforge.net,
+	linux-nfs@vger.kernel.org,
+	linux-nilfs@vger.kernel.org,
+	linux-ntfs-dev@lists.sourceforge.net,
+	ntfs3@lists.linux.dev,
+	ocfs2-devel@lists.linux.dev,
+	linux-karma-devel@lists.sourceforge.net,
+	devel@lists.orangefs.org,
+	linux-unionfs@vger.kernel.org,
+	linux-hardening@vger.kernel.org,
+	reiserfs-devel@vger.kernel.org,
+	linux-cifs@vger.kernel.org,
+	samba-technical@lists.samba.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-xfs@vger.kernel.org,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	apparmor@lists.ubuntu.com,
+	linux-security-module@vger.kernel.org,
+	selinux@vger.kernel.org,
+	linux-bcachefs@vger.kernel.org
+Subject: [PATCH v2 87/89] fs: rename inode i_atime and i_mtime fields
+Date: Wed,  4 Oct 2023 14:55:28 -0400
+Message-ID: <20231004185530.82088-1-jlayton@kernel.org>
+X-Mailer: git-send-email 2.41.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
-branch HEAD: 03cf2af41b37daa96635a31a012b86d0053e0670  Revert "phy: qcom-qmp-usb: Add Qualcomm SDX75 USB3 PHY support"
+Rename these two fields to discourage direct access (and to help ensure
+that we mop up any leftover direct accesses).
 
-elapsed time: 720m
+Signed-off-by: Jeff Layton <jlayton@kernel.org>
+---
+ include/linux/fs.h | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-configs tested: 130
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20231004   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                         at91_dt_defconfig   gcc  
-arm                                 defconfig   gcc  
-arm                       multi_v4t_defconfig   gcc  
-arm                   randconfig-001-20231004   gcc  
-arm                         s5pv210_defconfig   clang
-arm                           sama7_defconfig   clang
-arm64                            allmodconfig   gcc  
-arm64                             allnoconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20231004   gcc  
-i386         buildonly-randconfig-002-20231004   gcc  
-i386         buildonly-randconfig-003-20231004   gcc  
-i386         buildonly-randconfig-004-20231004   gcc  
-i386         buildonly-randconfig-005-20231004   gcc  
-i386         buildonly-randconfig-006-20231004   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                  randconfig-001-20231004   gcc  
-i386                  randconfig-002-20231004   gcc  
-i386                  randconfig-003-20231004   gcc  
-i386                  randconfig-004-20231004   gcc  
-i386                  randconfig-005-20231004   gcc  
-i386                  randconfig-006-20231004   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20231004   gcc  
-loongarch             randconfig-001-20231005   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                      bmips_stb_defconfig   clang
-mips                     decstation_defconfig   gcc  
-mips                       rbtx49xx_defconfig   clang
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   gcc  
-powerpc                     asp8347_defconfig   gcc  
-powerpc                      cm5200_defconfig   gcc  
-powerpc                   currituck_defconfig   gcc  
-powerpc                       holly_defconfig   gcc  
-powerpc                     kmeter1_defconfig   clang
-powerpc                 mpc834x_itx_defconfig   gcc  
-powerpc                     tqm8555_defconfig   gcc  
-powerpc                      walnut_defconfig   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                    nommu_k210_defconfig   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                             espt_defconfig   gcc  
-sh                          rsk7269_defconfig   gcc  
-sh                     sh7710voipgw_defconfig   gcc  
-sparc                            alldefconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                       sparc32_defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20231004   gcc  
-x86_64                randconfig-002-20231004   gcc  
-x86_64                randconfig-003-20231004   gcc  
-x86_64                randconfig-004-20231004   gcc  
-x86_64                randconfig-005-20231004   gcc  
-x86_64                randconfig-006-20231004   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                  nommu_kc705_defconfig   gcc  
-
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index 3ca610d42176..84fdaf399fbe 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -671,8 +671,8 @@ struct inode {
+ 	};
+ 	dev_t			i_rdev;
+ 	loff_t			i_size;
+-	struct timespec64	i_atime;
+-	struct timespec64	i_mtime;
++	struct timespec64	__i_atime;
++	struct timespec64	__i_mtime;
+ 	struct timespec64	__i_ctime; /* use inode_*_ctime accessors! */
+ 	spinlock_t		i_lock;	/* i_blocks, i_bytes, maybe i_size */
+ 	unsigned short          i_bytes;
+@@ -1517,23 +1517,23 @@ struct timespec64 inode_set_ctime_current(struct inode *inode);
+ 
+ static inline time64_t inode_get_atime_sec(const struct inode *inode)
+ {
+-	return inode->i_atime.tv_sec;
++	return inode->__i_atime.tv_sec;
+ }
+ 
+ static inline long inode_get_atime_nsec(const struct inode *inode)
+ {
+-	return inode->i_atime.tv_nsec;
++	return inode->__i_atime.tv_nsec;
+ }
+ 
+ static inline struct timespec64 inode_get_atime(const struct inode *inode)
+ {
+-	return inode->i_atime;
++	return inode->__i_atime;
+ }
+ 
+ static inline struct timespec64 inode_set_atime_to_ts(struct inode *inode,
+ 						      struct timespec64 ts)
+ {
+-	inode->i_atime = ts;
++	inode->__i_atime = ts;
+ 	return ts;
+ }
+ 
+@@ -1547,23 +1547,23 @@ static inline struct timespec64 inode_set_atime(struct inode *inode,
+ 
+ static inline time64_t inode_get_mtime_sec(const struct inode *inode)
+ {
+-	return inode->i_mtime.tv_sec;
++	return inode->__i_mtime.tv_sec;
+ }
+ 
+ static inline long inode_get_mtime_nsec(const struct inode *inode)
+ {
+-	return inode->i_mtime.tv_nsec;
++	return inode->__i_mtime.tv_nsec;
+ }
+ 
+ static inline struct timespec64 inode_get_mtime(const struct inode *inode)
+ {
+-	return inode->i_mtime;
++	return inode->__i_mtime;
+ }
+ 
+ static inline struct timespec64 inode_set_mtime_to_ts(struct inode *inode,
+ 						      struct timespec64 ts)
+ {
+-	inode->i_mtime = ts;
++	inode->__i_mtime = ts;
+ 	return ts;
+ }
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.41.0
+
 
