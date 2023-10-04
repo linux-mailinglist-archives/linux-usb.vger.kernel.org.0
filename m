@@ -1,188 +1,202 @@
-Return-Path: <linux-usb+bounces-1105-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1106-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FD387B989A
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 01:16:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3727C7B98CA
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 01:43:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 50529281D2B
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Oct 2023 23:16:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 97409281DD6
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Oct 2023 23:43:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FDBA28E05;
-	Wed,  4 Oct 2023 23:16:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE5EC347DB;
+	Wed,  4 Oct 2023 23:43:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arunraghavan.net header.i=@arunraghavan.net header.b="BWHzOQwB";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="rqSMR/lQ"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="AkZGFcn9"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC4CD262B9
-	for <linux-usb@vger.kernel.org>; Wed,  4 Oct 2023 23:15:59 +0000 (UTC)
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97866C0
-	for <linux-usb@vger.kernel.org>; Wed,  4 Oct 2023 16:15:57 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailout.west.internal (Postfix) with ESMTP id CAE943200A28;
-	Wed,  4 Oct 2023 19:15:54 -0400 (EDT)
-Received: from imap41 ([10.202.2.91])
-  by compute5.internal (MEProxy); Wed, 04 Oct 2023 19:15:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	arunraghavan.net; h=cc:cc:content-type:content-type:date:date
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-	1696461354; x=1696547754; bh=uUkiegyyK/lntvNpIzWSoeP6zNCwtt1mOVQ
-	cmRDl8d4=; b=BWHzOQwBznU8UH44SRtcDi2DThbGciN63DklNG1jHjohzglnqdF
-	GxDHQclCOyVmMpVn8lY9qRNp0U8t1pkQkwB94efwa+ZGD7IuFQ7VtBrm5fJRx/q/
-	n3GikvpX4LIIOj19rUohf4pyZ3L0JYHnOiIpqEkof/ILeZ3O2YPiohZDN+6ZcR9u
-	Ww5pYXmqFtOi9icHoHduisU8yVmv037Qh9X5bzusMSDpiO8tOPmfpY2FJs+BC72f
-	798SaLiZ2pF+fTXHzLAtfbZFZ05kdndxkq7qEygL/9e5dYtjOsNY/xeBJ6v5aH5L
-	PSh3GvcnpprncaeciHR/M/hw7Hb7r4XwtRA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm2; t=1696461354; x=1696547754; bh=uUkiegyyK/lnt
-	vNpIzWSoeP6zNCwtt1mOVQcmRDl8d4=; b=rqSMR/lQmAIEwAvMaD1NffKs/jMO4
-	juNPYcvu0UQhnE9BU3N4EVokWl6mK7t//mhfa3uiFA4WBrM4wdc4qiYGbklRQZYl
-	3w/joKanSETqZUWObnuJK2zmYdji12zcgl05NMivlE5ZWJg+GZNp+hKE615eXsdr
-	U6Tc8W+WlmziQopT9ijuS+wTWHkVEDDBE6HaNJsHsCNeNnY11KGTIfRlZnnqUHP0
-	qVjamOORc8rBJwjCAoNkrqlgDPUcSHpqTE/xuIvlgOV7Co6NvdOepNuUtZnS1zMS
-	kWnNdxG4Bhbx43LQJBKlwu/zXSPV2U/J+JRs4CAHFWfleSIO9C/JAntEQ==
-X-ME-Sender: <xms:KfIdZfKbt-Bhzug4GtTSx9N3fHSCtEHNnUZtmPJmRnRNJbCP81Pq4A>
-    <xme:KfIdZTLuVouye-7F6rQnGopnbVPtVX_CCyJ6CWoCkhVQoANhuLb9OBJ7GknkEe79h
-    HHCX_-jTWKcGSoqSQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrgeefgddulecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhu
-    nhcutfgrghhhrghvrghnfdcuoegrrhhunhesrghruhhnrhgrghhhrghvrghnrdhnvghtqe
-    enucggtffrrghtthgvrhhnpeevfeegiedvhfeuffdtffdufedtkeehuedujefgleettdei
-    tdektdegjeehjeekheenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdhgihhthhhusg
-    drtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhm
-    pegrrhhunhesrghruhhnrhgrghhhrghvrghnrdhnvght
-X-ME-Proxy: <xmx:KfIdZXuvfFecj9ByS32MZdu-ikbOz2HpkW3p4lEXZFeeR7QxLDo0zQ>
-    <xmx:KfIdZYalBvpZfMUFbD7WDWvI-LMPpW5oXdHGycDTnC9Z4PjleIfrpg>
-    <xmx:KfIdZWaiVnVRSkJ40IEXQIQkJfQsngILLQvqZWNQgABTVOf7b7FZQA>
-    <xmx:KvIdZdz_qcCPebgpg9VyZg9LzvCvXMPY71cw5YQCxezBOjCMy66XLw>
-Feedback-ID: i42c0435e:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id F193A234007E; Wed,  4 Oct 2023 19:15:52 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-958-g1b1b911df8-fm-20230927.002-g1b1b911d
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68659224F5;
+	Wed,  4 Oct 2023 23:43:08 +0000 (UTC)
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0CB9C0;
+	Wed,  4 Oct 2023 16:43:06 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 394NQtre007061;
+	Wed, 4 Oct 2023 23:42:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=1AtYsGZ3CJV+ChxDmOyWt3a/katMWjh5SobmXd2knI4=;
+ b=AkZGFcn9l0wUpiYUYDo0de0rwqq1vOso3dvzi2YOgCxSjw2HeBvrEwuUnD1IXz+H1Sla
+ UxypH2Q0RZ1I5P3jS+fojDTYgO8QEYyP8EqGjXvS1ogTqIkC8xg8/iDazThhPrNSTE68
+ WjERFw4u9TvFUhAiw5WnD4+P1tF4rOJWKoPL+M2V4dz+VQI0Ax3yZ7nFeAls2T6kAgF2
+ 313TRwsvYh6ZvIRZbEOk3SUeQBLHzVXQLmHnfB5Jh2Z5C7RuE7/IhyDWl6rtuilke/9x
+ A/0d1j2tx2dcJKqIt3bNIKsbOSGrnEdQfV6R64erGeffwj+4yeW6v9kzfCcwkDyR3KGb bQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3th2d6t86j-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 04 Oct 2023 23:42:42 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 394NgeXW007409
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 4 Oct 2023 23:42:40 GMT
+Received: from [10.71.112.36] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Wed, 4 Oct
+ 2023 16:42:40 -0700
+Message-ID: <c3b147b2-ed54-f1f0-52f0-51d41199acd0@quicinc.com>
+Date: Wed, 4 Oct 2023 16:42:39 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <2504b014-08b2-4f39-83f6-5072b5ec4ea8@app.fastmail.com>
-In-Reply-To: <4154b125-35c8-b15a-8706-54b9eb3cb5e0@ivitera.com>
-References: <6ebc2456-a46b-bc47-da76-7a341414c1fb@ivitera.com>
- <35766f0f-784d-d37a-6d07-665f9ee88331@ivitera.com>
- <27b4b607-5d71-4e5d-a0ff-530c25752213@app.fastmail.com>
- <4154b125-35c8-b15a-8706-54b9eb3cb5e0@ivitera.com>
-Date: Wed, 04 Oct 2023 19:15:32 -0400
-From: "Arun Raghavan" <arun@arunraghavan.net>
-To: "Pavel Hofman" <pavel.hofman@ivitera.com>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>
-Cc: "Julian Scheel" <julian@jusst.de>, "Takashi Iwai" <tiwai@suse.de>,
- "Ruslan Bilovol" <ruslan.bilovol@gmail.com>,
- "Jerome Brunet" <jbrunet@baylibre.com>
-Subject: Re: RFC: usb: gadget: u_audio: Notifying gadget that host started
- playback/capture?
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v7 01/33] xhci: add support to allocate several
+ interrupters
+Content-Language: en-US
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+To: Mathias Nyman <mathias.nyman@intel.com>,
+        Mathias Nyman
+	<mathias.nyman@linux.intel.com>,
+        <gregkh@linuxfoundation.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <perex@perex.cz>, <tiwai@suse.com>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <srinivas.kandagatla@linaro.org>, <bgoswami@quicinc.com>,
+        <Thinh.Nguyen@synopsys.com>
+CC: <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+References: <20230921214843.18450-1-quic_wcheng@quicinc.com>
+ <20230921214843.18450-2-quic_wcheng@quicinc.com>
+ <10ad0613-7e88-dbe8-c5a2-d535f8e9db03@linux.intel.com>
+ <e3f3c8cd-6338-da08-d988-4d2ed68280e6@quicinc.com>
+ <843897f1-3ce5-f8da-5f10-7d8a68849fd2@intel.com>
+ <2127ef61-e263-2a0e-438a-6baa125aa70d@quicinc.com>
+In-Reply-To: <2127ef61-e263-2a0e-438a-6baa125aa70d@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: pkdpDepHsXU-32eg42MlL4wPtE2a5sj8
+X-Proofpoint-GUID: pkdpDepHsXU-32eg42MlL4wPtE2a5sj8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-04_13,2023-10-02_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=0
+ malwarescore=0 adultscore=0 mlxscore=0 impostorscore=0 bulkscore=0
+ priorityscore=1501 lowpriorityscore=0 mlxlogscore=785 phishscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2310040173
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Fri, 22 Sep 2023, at 3:09 AM, Pavel Hofman wrote:
-> Dne 21. 09. 23 v 3:30 Arun Raghavan napsal(a):
->> Hi folks,
->> 
->> On Fri, 1 Oct 2021, at 8:38 AM, Pavel Hofman wrote:
->>> Hi,
->>>
->>> Dne 08. 09. 21 v 10:21 Pavel Hofman napsal(a):
->>>> Hi,
->>>>
->>>> The current audio gadget has no way to inform the gadget side that the
->>>> host side has started playback/capture and that gadget-side alsa
->>>> processes should be started.
->>>>
->>>> Playback/capture processes on the host side do not get stuck without the
->>>> gadget side consuming/producing data (OUT requests are ignored in
->>>> u_audio_iso_complete, IN ones send initial zeros in their req->buf).
->>>>
->>>> However, playback/capture processes on the gadget side get stuck without
->>>> the host side sending playback OUT packets or capture IN requests and
->>>> time out with error. If there was a way to inform the gadget side that
->>>> playback/capture has started on the host side, the gadget clients could
->>>> react accordingly.
->>>>
->>>
->>> I drafted a simple patch for u_audio.c which defines read-only boolean
->>> ctl elems "Capture Requested" and "Playback Requested". Their values are
->>> set/reset in methods u_audio_start_capture/playback and
->>> u_audio_stop_capture/playback, i.e. at changes of respective altsettings
->>> from 0 to 1 and back. Every ctl elem value change sends notification via
->>> snd_ctl_notify. The principle works OK for capture/playback start/stop
->>> on the host, as monitored by alsactl:
->>>
->>> pi@raspberrypi:~ $ alsactl monitor hw:UAC2Gadget
->>> node hw:UAC2Gadget, #4 (3,0,0,Capture Requested,0) VALUE
->>> node hw:UAC2Gadget, #4 (3,0,0,Capture Requested,0) VALUE
->>> node hw:UAC2Gadget, #3 (3,0,0,Playback Requested,0) VALUE
->>> node hw:UAC2Gadget, #3 (3,0,0,Playback Requested,0) VALUE
->>>
->>> However at enumeration the USB host switches both playback and capture
->>> altsettings repeatedly, generating "fake" events from the gadget side
->>> POW. The host even sends regular-sized EP-OUT packets filled with zeros
->>> during enumeration (tested on linux only for now).
->>>
->>> Please is there any way to "detect" the enumeration stage to mask out
->>> the "fake" playback/capture start/stop events?
->>>
->>> The attached patch does not apply cleanly to mainline u_audio.c because
->>> it's rebased on other patches not submitted yet but it's only a
->>> discussion inducer for now.
->> 
->> Resurrecting this one -- is there any input on how we want to deal wit letting UAC gadgets know when the host is sending/receiving data?
->
-> The current version uses the Playback/Capture Rate alsa ctls with 
-> notifications 
-> https://lore.kernel.org/all/20220121155308.48794-8-pavel.hofman@ivitera.com/
->
-> Example of handling is e.g. https://github.com/pavhofman/gaudio_ctl , 
-> the controller is being used in a number of projects, mostly DIY.
->
-> Recently Qualcomm devs have submitted patches for alternative approach 
-> using uevents 
-> https://lore.kernel.org/lkml/2023050801-handshake-refusing-0367@gregkh/T/#mcd6b346f3ddab6ab34792be0141633bb362d168f 
-> and later versions. The detection is identical, monitoring change in 
-> altsetting from 0 to non zero and back (methods 
-> u_audio_[start/stop]_[capture/playback]), just a different means of 
-> communicating the events to userspace.
->
-> Both methods (using the same principle) suffer from not knowing what's 
-> going on the host side and cannot differentiate between player really 
-> starting playback vs. UAC2 host driver or Pulseaudio shortly checking 
-> device availability. That's why the gaudio_ctl controller can debounce 
-> the playback/capture start 
-> https://github.com/pavhofman/gaudio_ctl#debouncing . But that is just an 
-> ugly workaround...
+Hi Mathias,
 
-Thank you for the links, Pavel! This all makes sense.
+On 10/4/2023 11:35 AM, Wesley Cheng wrote:
+> Hi Mathias,
+> 
+> On 10/4/2023 7:02 AM, Mathias Nyman wrote:
+>> On 2.10.2023 23.07, Wesley Cheng wrote:
+>>> Hi Mathias,
+>>>
+>>> On 9/28/2023 3:31 AM, Mathias Nyman wrote:
+>>>> On 22.9.2023 0.48, Wesley Cheng wrote:
+>>>>> From: Mathias Nyman <mathias.nyman@linux.intel.com>
+>>>>>
+>>>>> Modify the XHCI drivers to accommodate for handling multiple event 
+>>>>> rings in
+>>>>> case there are multiple interrupters.  Add the required APIs so 
+>>>>> clients are
+>>>>> able to allocate/request for an interrupter ring, and pass this 
+>>>>> information
+>>>>> back to the client driver.  This allows for users to handle the 
+>>>>> resource
+>>>>> accordingly, such as passing the event ring base address to an 
+>>>>> audio DSP.
+>>>>> There is no actual support for multiple MSI/MSI-X vectors.
+>>>>>
+>>>>> Factoring out XHCI interrupter APIs and structures done by Wesley 
+>>>>> Cheng, in
+>>>>> order to allow for USB class drivers to utilze them.
+>>>>>
+>>>>>   }
+>>>>> +void xhci_remove_secondary_interrupter(struct usb_hcd *hcd, struct 
+>>>>> xhci_interrupter *ir)
+>>>>> +{
+>>>>> +    struct xhci_hcd *xhci = hcd_to_xhci(hcd);
+>>>>> +    unsigned int intr_num;
+>>>>> +
+>>>>> +    /* interrupter 0 is primary interrupter, don't touchit */
+>>>>> +    if (!ir || !ir->intr_num || ir->intr_num >= 
+>>>>> xhci->max_interrupters) {
+>>>>> +        xhci_dbg(xhci, "Invalid secondary interrupter, can't 
+>>>>> remove\n");
+>>>>> +        return;
+>>>>> +    }
+>>>>> +
+>>>>> +    /* fixme, should we check xhci->interrupter[intr_num] == ir */
+>>>>> +    spin_lock(&xhci->lock);
+>>>>
+>>>> Needs to be spin_lock_irq() ir spin_lock_irqsave() as xhci->lock is 
+>>>> used in interrupt handler.
+>>>>
+>>>>
+>>>>> +    intr_num = ir->intr_num;
+>>>>> +    xhci_free_interrupter(xhci, ir);
+>>>>> +    xhci->interrupters[intr_num] = NULL;
+>>>>> +    spin_unlock(&xhci->lock);
+>>>>
+>>>> likewise
+>>>>
+>>>
+>>> Let me check these again.  In general, I think I will use both the 
+>>> xhci->mutex and xhci->lock where needed, because I believe we'd run 
+>>> into sleep while atomic issues
+>>> while freeing the DMA memory.  Will rework this and submit in the 
+>>> next rev.
+>>>
+>>
+>> Maybe we need to split xhci_free_interrupter() into separate remove 
+>> and free functions
+>>
+> 
+> Thanks for sharing the work you've been doing.  Yes, I did something 
+> similar as well on my end, but will refactor in your code and re-test.
+> 
+>> Did some work on this, and on the sideband api in general.
+>>
+>> Code still has a lot of FIXMEs, and it's completely untested, but to 
+>> avoid us
+>> from doing duplicate work I pushed it to my feature_interrupters 
+>> branch anyway
+>>
+>> git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git 
+>> feature_interrupters
+>> https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=feature_interrupters 
+>>
+> 
+> Ok.  Initial look at it seems like it will be fine, but will integrate 
+> and make changes where needed.
+> 
 
-I guess the uevent mechanism is more "general" than the ALSA ctl for clients that want to plug in, listen and do $something. Not sure if there are other pros/cons of either approach.
+Had to make some minor tweaks here and there, but nothing major.  Was 
+able to validate the changes on my end, and they look good.  Will test a 
+bit more, and include these in my next submission.  Will try to address 
+your FIXME tags as well.
 
-I wonder if it might not be good to have some debouncing in the kernel rather than having every client have to implement this.
-
-Cheers,
-Arun
+Thanks
+Wesley Cheng
 
