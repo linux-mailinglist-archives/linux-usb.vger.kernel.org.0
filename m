@@ -1,203 +1,147 @@
-Return-Path: <linux-usb+bounces-1119-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1120-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ADDE47B9C73
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 12:14:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E8E97B9C81
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 12:28:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 1E5FB281F05
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 10:14:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTP id B83DE1C2094D
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 10:28:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3634F125B4;
-	Thu,  5 Oct 2023 10:14:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F689125BF;
+	Thu,  5 Oct 2023 10:28:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="3LT/jAQx"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 256D511CB4
-	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 10:14:27 +0000 (UTC)
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 267FB1712
-	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 03:14:25 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1qoLN6-00020h-L2; Thu, 05 Oct 2023 12:14:20 +0200
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1qoLN5-00BFAl-U2; Thu, 05 Oct 2023 12:14:19 +0200
-Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.94.2)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1qoLN5-00F94W-KY; Thu, 05 Oct 2023 12:14:19 +0200
-Date: Thu, 5 Oct 2023 12:14:19 +0200
-From: Michael Grzeschik <mgr@pengutronix.de>
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Avichal Rakesh <arakesh@google.com>,
-	Daniel Scally <dan.scally@ideasonboard.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	jchowdhary@google.com, etalvala@google.com,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 0/3] usb: gadget: uvc: stability fixes on STREAMOFF.
-Message-ID: <ZR6Me5WsAbjvc2hk@pengutronix.de>
-References: <20230930184821.310143-1-arakesh@google.com>
- <ZRv2UnKztgyqk2pt@pengutronix.de>
- <20231005082327.GC13853@pendragon.ideasonboard.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CCA96FDF
+	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 10:28:31 +0000 (UTC)
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2060d.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe5a::60d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C94E20E5B;
+	Thu,  5 Oct 2023 03:28:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CRgerfsuS5/C6R7rgtBP/THa2hkMMDUevJ7SFOQyN+6q56y2KjUg332kR1z4zkZkOL4J+3GuQRuGQu/ACeV2d43ps0JzgOlCME7A04BkRcCst4I4qOCBCS1H5T/bT4oRNwVN1EotHAM2sttNK+6XeyvQ+VE5YFLwRzyYlOaWQrWkmqdmwJNx5p0sfEStA1roLjH+7+KJyA4oUIS5nEnCmHi8y90jtu85E9EKKiXifs+yF1sQpJwkRvDvfnK0D00ICVfykXT5ttyQXbKErSB8tW6/5DvchhEnKY0MP3yPDS7Zc4ADw3igWTX0O49GHaNR6QwvQC/tz0KTaWr7eULolQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nP1vEXGDwQNgBCAfu4Uibkw+clkHJSMzHN0SLowiA2M=;
+ b=kIyuqGIs5phtJFpF+HyYurICurCn4CzZs+tfe4FSHz34bB4pqhF4AcmhVbhXf6WAotwK/gt/2nVKoAF254uD3jtp4kEivWiIbOH0Rs7NHmF2eV5mFD3y9ov2vaI3CmF1OUYTsI7MN5xsonJFZPOiNqlmuzkHBBaCpjQ9P9+OllMxOuf+/J4ErbDDY3V9+TCzxEKxKLPLqjIqEAA0qvOR2tHv29CqC6ry9joZ9LgWVfB7j4Yx/yuKTepsWvnJv8wcoPbFAiS4CtHQwr19pus/wBnLDgkfd2LH4U4XlFAU78Ztn6kBKK2DhG7+MIlBLS0MSaNur3Rm/Q6A+bIgk2GfIQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nP1vEXGDwQNgBCAfu4Uibkw+clkHJSMzHN0SLowiA2M=;
+ b=3LT/jAQxxBX8WUl99zCOEmSkX8eQhpuMWtVyqpgSFLS3PVEqPzgsnp8WBs3tH4U0GGgAeyOd6Uy84Uzmqo9Gcpp3/V24KjgJvo0Zlx4WLfISOPsz+TYatFhRfjUzXtHoGDOSRmLItn9v15UAhIxblOe+8Yz85DKW76BEungb/WU=
+Received: from CY5PR15CA0234.namprd15.prod.outlook.com (2603:10b6:930:88::24)
+ by SA1PR12MB7245.namprd12.prod.outlook.com (2603:10b6:806:2bf::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.33; Thu, 5 Oct
+ 2023 10:28:13 +0000
+Received: from CY4PEPF0000EE3B.namprd03.prod.outlook.com (2603:10b6:930:88::4)
+ by CY5PR15CA0234.outlook.office365.com (2603:10b6:930:88::24) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6838.37 via Frontend Transport; Thu, 5 Oct 2023 10:28:12 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CY4PEPF0000EE3B.mail.protection.outlook.com (10.167.242.15) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6838.22 via Frontend Transport; Thu, 5 Oct 2023 10:28:12 +0000
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 5 Oct
+ 2023 05:28:11 -0500
+Received: from xhdpiyushm40.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.27 via Frontend
+ Transport; Thu, 5 Oct 2023 05:27:54 -0500
+From: Piyush Mehta <piyush.mehta@amd.com>
+To: <gregkh@linuxfoundation.org>, <michal.simek@amd.com>,
+	<Thinh.Nguyen@synopsys.com>, <robh@kernel.org>, <herve.codina@bootlin.com>,
+	<yangbin@rock-chips.com>, <pgwipeout@gmail.com>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<git@amd.com>, Piyush Mehta <piyush.mehta@amd.com>
+Subject: [PATCH] usb: dwc3: core: disable 3.0 clock when operating in 2.0 device mode
+Date: Thu, 5 Oct 2023 15:57:25 +0530
+Message-ID: <20231005102725.8458-1-piyush.mehta@amd.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="6taxRm4yga2KkIgQ"
-Content-Disposition: inline
-In-Reply-To: <20231005082327.GC13853@pendragon.ideasonboard.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000EE3B:EE_|SA1PR12MB7245:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5a802b2a-5a69-496e-8717-08dbc58dc74e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	XcheHfE4Q0g+V48bc3ayo1aEGGkL4+h2lisIHS+l0k9vym0vi0ZMhSm839Jhc78ZxSMX4mK9ZDXPuullZgjeH2d1uys5UVAEFb8ji4abEGhLNJuF567JO+nRZXKeBpF9crNBiEXHZvzcrsQBmX3VdqKIVU6cgv8E5gUkJlLa4WWN5jRwzOryuGA0+Pt6hebkEJZ641FAoqZQATuhY0m54yzKvb326EqWo5/aQboztxwkjDkuTnvy+gPmgTMiUSM2xl5DBafDnf9DqTrRFvETATsN94TCUsLGtrG5ywk/bRSyWUgWm52LGZVgUD/wfitC9HdX2NQmcWJOQWjlatDxxOeMHhD7t7FNb5OAhiYOTqG4F1JHXIaFGLaG1tFeR1WD6jN/iyhWmFBohlqu2p1cMXAnEMife8lDzzt+nBHxHsoCCa6mv4kj0HaVXGIPnzP+mAiFUCBxsA5de3kdRbnH0JRQ7DDW24BzIxUhhqeLktKBaeTy185nBAXWQPqMb2hlNKKU2nYfLgYonVTKxQx5PygAMxrLmrMlvHb7gfT+gbH1/TOmmaPaKnVPXgtkcio1MoqoH4TTAP1PAonGc8EwSZSOxgcy4+G+sFkfE/3qOW7IgE7JF2RQudXpaTT4Edkghz47b9Q8t3+Ek5aJIVOcd+weeiViIY/8z+aAIlzZClho1Y4//PpFqqxpB6S5SrGOl6SsWsEmXbMO9w43Vjsq3tfOc0BQiSpYiRR+cHLJ+WeGK9mapSjY8IPbaFBxTjlCS0B4+ukdi9WSacty3UDQXA==
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(346002)(376002)(396003)(136003)(39860400002)(230922051799003)(451199024)(1800799009)(64100799003)(186009)(82310400011)(40470700004)(46966006)(36840700001)(1076003)(41300700001)(110136005)(2616005)(966005)(316002)(44832011)(54906003)(70586007)(70206006)(4326008)(26005)(5660300002)(478600001)(336012)(8936002)(8676002)(6666004)(426003)(40460700003)(83380400001)(2906002)(47076005)(81166007)(36756003)(36860700001)(40480700001)(86362001)(82740400003)(356005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Oct 2023 10:28:12.6992
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5a802b2a-5a69-496e-8717-08dbc58dc74e
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CY4PEPF0000EE3B.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7245
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED
+	autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
+The GUCTL1.DEV_FORCE_20_CLK_FOR_30_CLK bit enable the feature of internal
+2.0(utmi/ulpi) clock to be routed as the 3.0 (pipe) clock. This feature is
+applicable when core is operating in 2.0 device mode.
 
---6taxRm4yga2KkIgQ
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+When this bit is set in host mode and core is in 2.0 device mode (maximum
+speed = high-speed) then usb super speed devices not detected on host.
 
-Hi Laurent
+To address the above issue added usb device mode conditional check.
 
-On Thu, Oct 05, 2023 at 11:23:27AM +0300, Laurent Pinchart wrote:
->On Tue, Oct 03, 2023 at 01:09:06PM +0200, Michael Grzeschik wrote:
->> On Sat, Sep 30, 2023 at 11:48:18AM -0700, Avichal Rakesh wrote:
->> > We have been seeing two main stability issues that uvc gadget driver
->> > runs into when stopping streams:
->> >  1. Attempting to queue usb_requests to a disabled usb_ep
->> >  2. use-after-free issue for inflight usb_requests
->> >
->> > The three patches below fix the two issues above. Patch 1/3 fixes the
->> > first issue, and Patch 2/3 and 3/3 fix the second issue.
->> >
->> > Avichal Rakesh (3):
->> >   usb: gadget: uvc: prevent use of disabled endpoint
->> >   usb: gadget: uvc: Allocate uvc_requests one at a time
->> >   usb: gadget: uvc: Fix use-after-free for inflight usb_requests
->> >
->> > drivers/usb/gadget/function/f_uvc.c     |  11 +-
->> > drivers/usb/gadget/function/f_uvc.h     |   2 +-
->> > drivers/usb/gadget/function/uvc.h       |   6 +-
->> > drivers/usb/gadget/function/uvc_v4l2.c  |  21 ++-
->> > drivers/usb/gadget/function/uvc_video.c | 189 +++++++++++++++++-------
->> > 5 files changed, 164 insertions(+), 65 deletions(-)
->>
->> These patches are not applying on gregkh/usb-testing since
->> Greg did take my patches first. I have already rebased them.
->
->I think they got merged too soon :-( We could fix things on top, but
->there's very little time to do so for v6.7.
+Fixes: 62b20e6e0dde ("usb: dwc3: core: do not use 3.0 clock when operating in 2.0 mode")
+Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
+---
+DWC3 Register Map Link:
+https://docs.xilinx.com/r/en-US/ug1087-zynq-ultrascale-registers/GUCTL1-USB3_XHCI-Register
+Register Name	GUCTL1
+Bit: 26 
+Bit Name: DEV_FORCE_20_CLK_FOR_30_CLK
+---
+ drivers/usb/dwc3/core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Agreed. I was jumping from one workaround to another one, since this
-is not easy to fix in a proper way. And still after this long discussion
-with Avichal I don't think we are there yet.
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 9c6bf054f15d..0cf1fe60628b 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -1202,6 +1202,7 @@ static int dwc3_core_init(struct dwc3 *dwc)
+ 			reg |= DWC3_GUCTL1_PARKMODE_DISABLE_HS;
+ 
+ 		if (DWC3_VER_IS_WITHIN(DWC3, 290A, ANY) &&
++		    (dwc->dr_mode == USB_DR_MODE_PERIPHERAL) &&
+ 		    (dwc->maximum_speed == USB_SPEED_HIGH ||
+ 		     dwc->maximum_speed == USB_SPEED_FULL))
+ 			reg |= DWC3_GUCTL1_DEV_FORCE_20_CLK_FOR_30_CLK;
+-- 
+2.17.1
 
-
-So far the first two patches from Avichal look legit. But the overall
-Use-After-Free fix is yet to be done properly.
-
-The "abondoned" method he suggested is really bad to follow and will
-add too much complexity and will be hard to debug.
-
-IMHO it should be possible to introduce two cleanup pathes.
-
-One path would be in the uvc_cleanup_requests that will cleanup the
-requests that are actually not used in the controller and are registered
-in the req_free list.
-
-The second path would be the complete functions that are being run
-=66rom the controller and will ensure that the cleanup will really free
-the requests from the controller after they were consumed.
-
-What do you think?
-
-Regards,
-Michael
-
->> In the updated version I the stack runs into the
->> following error, when enabling lockdep. Could you
->> try your version with lockdep enabled?
->>
->> [   41.278520] configfs-gadget.vz gadget.0: uvc: reset UVC
->> [   47.156261] configfs-gadget.vz gadget.0: uvc: uvc_function_set_alt(2,=
- 0)
->> [   47.169177]
->> [   47.170903] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->> [   47.176857] WARNING: possible recursive locking detected
->> [   47.182798] 6.5.0-20230919-1+ #19 Tainted: G         C
->> [   47.189323] --------------------------------------------
->> [   47.195256] vzuvcd/412 is trying to acquire lock:
->> [   47.200511] ffffff8009560928 (&video->req_lock){....}-{3:3}, at: uvc_=
-video_complete+0x44/0x2e0
->> [   47.210172]
->> [   47.210172] but task is already holding lock:
->> [   47.216687] ffffff8009560928 (&video->req_lock){....}-{3:3}, at: uvcg=
-_video_enable+0x2d0/0x5c0
->> [   47.226333]
->> [   47.226333] other info that might help us debug this:
->> [   47.233625]  Possible unsafe locking scenario:
->> [   47.233625]
->> [   47.240242]        CPU0
->> [   47.242974]        ----
->> [   47.245709]   lock(&video->req_lock);
->> [   47.249802]   lock(&video->req_lock);
->> [   47.253897]
->> [   47.253897]  *** DEADLOCK ***
->> [   47.253897]
->> [   47.260511]  May be due to missing lock nesting notation
->> [   47.260511]
->
->--=20
->Regards,
->
->Laurent Pinchart
->
-
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
---6taxRm4yga2KkIgQ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmUejHYACgkQC+njFXoe
-LGS/tBAAv1d9NLfHCEL7BNkWB2otAjRuMI7KIE8WzOULuaSJ5nqHEhPm8f/N4qvt
-Lax5AMpP3XpcSnSDbpSrjJXS6zYGRKsDLOkLzzu1SzSmKXzH1KnWUzOogBKyK2Yw
-/lwoETzqXtmezr26YhIE3hAgvLGnKwvTOFW7IQmhnkJs6QXhKG0mEyMWp9GSHOA9
-GHSoc4hOh8RQkVeZjaOu6NnAniSmS08ieak95ZjkA3KieDzOaYMnLIKDPkFxf068
-FC9/M+C6yWX1l3f8fSiiL7eGQ8gDYHZX205B1zuIHDM9xBIpujXXKvd/7LpISNml
-nCFRrDTiiCnm9Fv7lALnmAnryw2PRUnpKApVRr6xGyg6U///i+UcIKNCYO9G/EJ4
-3OflX7g4JvYf9clNpUmMvpDUE/B1kIE8wt/yO9XsULct15c/T5Jhgv9wZ2KzCxqJ
-e8s9DAg746OymRIu0IM/+rJJ469NXOv+SPEP6xyJX6nU2MaD82i5jpcAQNQVBU05
-QQ+414nz88gT+RNMLA1TcRcD33hFOj+D6bvUGwF1qvBIEN23NPTFAMGLUJIkZX6R
-pJl2SHmMh4ClLim5HqTTO+F0ZMd6SjUc+o5NzsWWQBPBkZmqU+h8vspd1C1ddykO
-h1OQK8/b/HtElFEWFJnRzgK9Z05e7UrX2uiOyN2DRLnNNy5DONc=
-=y9yp
------END PGP SIGNATURE-----
-
---6taxRm4yga2KkIgQ--
 
