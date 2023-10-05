@@ -1,141 +1,143 @@
-Return-Path: <linux-usb+bounces-1145-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1147-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 531157B9FE0
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 16:31:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id F0F8D7BA024
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 16:34:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 7411E281E98
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 14:31:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id A2BA6281F08
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 14:34:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9807029438;
-	Thu,  5 Oct 2023 14:31:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D5CA29426;
+	Thu,  5 Oct 2023 14:34:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ivitera.com header.i=@ivitera.com header.b="RM728GTz";
-	dkim=pass (1024-bit key) header.d=ivitera.com header.i=@ivitera.com header.b="RM728GTz"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="B55Mkgca"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01AFAF51C
-	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 14:31:00 +0000 (UTC)
-Received: from mail.insite.cz (smtp.ivitera.com [88.101.85.59])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA5441BD
-	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 07:30:49 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-	by mail.insite.cz (Postfix) with ESMTP id A27798234;
-	Thu,  5 Oct 2023 16:30:46 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-	t=1696516246; bh=DoFeQ6eBTcgaK/XpIiIY5JInXpjcMVs2sQEJX4E1LaY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=RM728GTzVC/Fbdg8QrsjqKsZLv1y7Sp4bFfSjeFPuFvA1fLqNTjQX3z1BgOz90WST
-	 Uz1+YwMkzMpCw/SPkwdasSUQoHBlGvL9/9ga1HyiXkhH55Vl2QKsizcNmcWVAYPdPc
-	 WQhudcdhHpiYETF7AWMF0gwLm+LQuQqHVxAPCxrw=
-Received: from mail.insite.cz ([127.0.0.1])
-	by localhost (localhost [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id ha4U18s2QCdN; Thu,  5 Oct 2023 16:30:46 +0200 (CEST)
-Received: from [192.168.40.6] (unknown [192.168.100.40])
-	(Authenticated sender: pavel)
-	by mail.insite.cz (Postfix) with ESMTPSA id 3A7048334;
-	Thu,  5 Oct 2023 16:30:46 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-	t=1696516246; bh=DoFeQ6eBTcgaK/XpIiIY5JInXpjcMVs2sQEJX4E1LaY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=RM728GTzVC/Fbdg8QrsjqKsZLv1y7Sp4bFfSjeFPuFvA1fLqNTjQX3z1BgOz90WST
-	 Uz1+YwMkzMpCw/SPkwdasSUQoHBlGvL9/9ga1HyiXkhH55Vl2QKsizcNmcWVAYPdPc
-	 WQhudcdhHpiYETF7AWMF0gwLm+LQuQqHVxAPCxrw=
-Message-ID: <004494f2-bd2b-9bdb-8f45-61b6aed6432b@ivitera.com>
-Date: Thu, 5 Oct 2023 16:30:45 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ED00125DD
+	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 14:34:20 +0000 (UTC)
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F7A3A8B;
+	Thu,  5 Oct 2023 07:34:02 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 395CslCb008997;
+	Thu, 5 Oct 2023 14:33:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=YCoqfRfci803TAuA+uObCUn+qGJg5RKtRXjOeiZfK9k=;
+ b=B55MkgcaOrIqHhjMdlym+xDBLWuWI70fTSRR+UPsCzdji6soDNscZB9CMpzzS5y/uv+s
+ IZ7WUww80LuQbymlVFI+jtDsLdBLtGdhzsmKysDaDsLx3pSWxLlBRG7fATexCLNGnenB
+ qiE3XTe49bHzeUyq7oTGK64fwUEym7KmRYH+py89QHJ9/cgk13V7N82274x4zMbTtuWQ
+ 2KxEIuToEtz2ehfgc7t/yYPBdzWf+eSkWrXhE5yr0YJ0v5JceKrBcLNBfIddTZZ40NWs
+ jWetd6PI4optHKFdkOBgRXP6+P6bK4M+AH/IzlBLIYfzZqf7aqukugsey0kUBbCeWLZA xg== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3thrjdrt9x-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 05 Oct 2023 14:33:53 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 395EXqb2010454
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 5 Oct 2023 14:33:52 GMT
+Received: from [10.216.55.130] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Thu, 5 Oct
+ 2023 07:33:48 -0700
+Message-ID: <7a4cf85f-c221-41c5-bc3d-7b00c88aff36@quicinc.com>
+Date: Thu, 5 Oct 2023 20:03:44 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: RFC: usb: gadget: u_audio: Notifying gadget that host started
- playback/capture?
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v12 0/3] Add multiport support for DWC3 controllers
+To: Johan Hovold <johan@kernel.org>
+CC: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Bjorn Andersson <andersson@kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_ppratap@quicinc.com>,
+        <quic_wcheng@quicinc.com>, <quic_jackp@quicinc.com>
+References: <20231004165922.25642-1-quic_kriskura@quicinc.com>
+ <ZR5ZUaWcyRj5sZKx@hovoldconsulting.com>
 Content-Language: en-US
-To: Arun Raghavan <arun@arunraghavan.net>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>
-Cc: Julian Scheel <julian@jusst.de>, Takashi Iwai <tiwai@suse.de>,
- Ruslan Bilovol <ruslan.bilovol@gmail.com>,
- Jerome Brunet <jbrunet@baylibre.com>
-References: <6ebc2456-a46b-bc47-da76-7a341414c1fb@ivitera.com>
- <35766f0f-784d-d37a-6d07-665f9ee88331@ivitera.com>
- <27b4b607-5d71-4e5d-a0ff-530c25752213@app.fastmail.com>
- <4154b125-35c8-b15a-8706-54b9eb3cb5e0@ivitera.com>
- <2504b014-08b2-4f39-83f6-5072b5ec4ea8@app.fastmail.com>
-From: Pavel Hofman <pavel.hofman@ivitera.com>
-In-Reply-To: <2504b014-08b2-4f39-83f6-5072b5ec4ea8@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <ZR5ZUaWcyRj5sZKx@hovoldconsulting.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: wjd4U7B_MpgIcUrCV8sjvUzrM0-anjfe
+X-Proofpoint-GUID: wjd4U7B_MpgIcUrCV8sjvUzrM0-anjfe
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-05_08,2023-10-05_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 priorityscore=1501 phishscore=0
+ mlxscore=0 mlxlogscore=999 impostorscore=0 bulkscore=0 suspectscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2310050112
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
 
-Dne 05. 10. 23 v 1:15 Arun Raghavan napsal(a):
-> On Fri, 22 Sep 2023, at 3:09 AM, Pavel Hofman wrote:
->> Dne 21. 09. 23 v 3:30 Arun Raghavan napsal(a):
->>> Hi folks,
->>>
->>> On Fri, 1 Oct 2021, at 8:38 AM, Pavel Hofman wrote:
->>>> Hi,
->>>>
->>>
->>> Resurrecting this one -- is there any input on how we want to deal wit letting UAC gadgets know when the host is sending/receiving data?
+
+On 10/5/2023 12:06 PM, Johan Hovold wrote:
+> On Wed, Oct 04, 2023 at 10:29:19PM +0530, Krishna Kurapati wrote:
+>> This series is a set of picked up acks and split from larger series [1]
+>> The series is rebased on top of:
+>> Repo: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
+>> Branch: usb-testing
+>> commit 03cf2af41b37 ("Revert "phy: qcom-qmp-usb: Add Qualcomm SDX75 USB3 PHY support"")
 >>
->> The current version uses the Playback/Capture Rate alsa ctls with
->> notifications
->> https://lore.kernel.org/all/20220121155308.48794-8-pavel.hofman@ivitera.com/
+>> The patches present in series have been reviewed and acked by respective
+>> maintainers. They dont break any existing implementation and is just a
+>> subset of merge ready multiport code. The rest of the patches will be
+>> rebased on top of the usb branch once this series is merged.
 >>
->> Example of handling is e.g. https://github.com/pavhofman/gaudio_ctl ,
->> the controller is being used in a number of projects, mostly DIY.
+>> [1]: https://patchwork.kernel.org/project/linux-usb/cover/20230828133033.11988-1-quic_kriskura@quicinc.com/
 >>
->> Recently Qualcomm devs have submitted patches for alternative approach
->> using uevents
->> https://lore.kernel.org/lkml/2023050801-handshake-refusing-0367@gregkh/T/#mcd6b346f3ddab6ab34792be0141633bb362d168f
->> and later versions. The detection is identical, monitoring change in
->> altsetting from 0 to non zero and back (methods
->> u_audio_[start/stop]_[capture/playback]), just a different means of
->> communicating the events to userspace.
->>
->> Both methods (using the same principle) suffer from not knowing what's
->> going on the host side and cannot differentiate between player really
->> starting playback vs. UAC2 host driver or Pulseaudio shortly checking
->> device availability. That's why the gaudio_ctl controller can debounce
->> the playback/capture start
->> https://github.com/pavhofman/gaudio_ctl#debouncing . But that is just an
->> ugly workaround...
+>> Krishna Kurapati (3):
+>>    usb: dwc3: core: Access XHCI address space temporarily to read port
+>>      info
+>>    usb: dwc3: core: Skip setting event buffers for host only controllers
+>>    usb: dwc3: qcom: Add helper function to request threaded IRQ
 > 
-> Thank you for the links, Pavel! This all makes sense.
+> NAK.
 > 
-> I guess the uevent mechanism is more "general" than the ALSA ctl for clients that want to plug in, listen and do $something. Not sure if there are other pros/cons of either approach.
-
-If the gadget defines multiple samplerates, the client must look at the 
-RATE alsa ctls for learn the actual rate requested by the host. The ctls 
-provide both the rate and notification of playback/capture start/stop at 
-the same time.
-
-For gadgets with a single fixed samplerate, the alsa ctl vs. uevents 
-methods are equivalent. Both may find their users and can be in the 
-gadget code, IMO.
-
+> These patches make very little sense on their own and can't really be
+> evaluated without the context of the larger series.
 > 
-> I wonder if it might not be good to have some debouncing in the kernel rather than having every client have to implement this.
+> Just work on getting the multiport series in shape and include any acks
+> you've received so far when submitting new revisions
+Hi Johan,
 
-I am afraid this would be a large feature (debouncing requires extra 
-threads), I have not even tried to push it through. Much better would be 
-having some nice solution instead of a workaround :-)
+  This may be partially true for first patch of this series, (where we 
+read num_ports), but the other two patches are self explanatory and are 
+applicable for non-mp controllers as well. Intention was to ensure we 
+make the next rebase easy.
 
-With regards,
+  Will try to address all comments and send v12 again as a whole series 
+this week. I am actually blocked on [1]. Not able to repro the compile 
+error on my end. That's what stopped me from sending all at once.
 
-Pavel.
+[1]: https://lore.kernel.org/all/202309200156.CxQ3yaLY-lkp@intel.com/
 
+PS: I sent this mail once but some issue with my mail client and the 
+mail didn't reach the mailing list. If two copies of same mail comes up, 
+pls ignore it.
 
+Thanks,
+Krishna,
 
