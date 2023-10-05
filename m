@@ -1,155 +1,146 @@
-Return-Path: <linux-usb+bounces-1151-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1157-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1986E7BA7DB
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 19:23:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B17A7BA9C3
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 21:09:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id CAFCA281E7E
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 17:23:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 1A543281F4D
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 19:09:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CDBE38FBD;
-	Thu,  5 Oct 2023 17:23:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C747341226;
+	Thu,  5 Oct 2023 19:08:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bHNDN3Ei"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="uaZE8jgv"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C70730D05
-	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 17:23:23 +0000 (UTC)
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D72A35A6;
-	Thu,  5 Oct 2023 10:23:21 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-533cbbd0153so2285730a12.0;
-        Thu, 05 Oct 2023 10:23:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696526600; x=1697131400; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6No5T+K1vf1nW01MUcNpePl2n3fgfVqNM+PBXuFav/8=;
-        b=bHNDN3Eikd14VWLHSjQLuoPiQP4P+qXqGa3y8G/iA9GYnOYG9qTSKz5F0U92PdpwRK
-         ohP2kxpoB3pxbOkwzS4O8X+/c0N48dc+y2zzB2RepuxUqhF9OgH74quTnOIx+UCWkI6Y
-         WU6TlpjK7AsYDmtJ4NbkPG6q7jbl073N5zC6Tg/E8qpWPzQTMpQ9pvQ0yTCV9T6n0Qqv
-         P8FC/WKn+FW31WqXYAaSzPgW4CmvkGSA9hDpBbhDXQMSvzizMNhtUlnu6HZmEKdYkMwT
-         gn0ivl2mqGrmJ1TtHZVCdYGKzknln3PlGxWJ26sNBBkuSxo24lSIBa+P5UsGeqXqObzT
-         vKpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696526600; x=1697131400;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6No5T+K1vf1nW01MUcNpePl2n3fgfVqNM+PBXuFav/8=;
-        b=kdewHlY2T4I8kIXa8IvfHv016OD/LD0N2Yw9I0/buf71ACjDO3jQ/0enRFhZi7iVT4
-         J8ViniBiD5x1fmroGlcX0Rfm3ztKoPRD8NAYPr/ak4vazgHuBTpG1TigfQyx7eK5XIZ2
-         Ta8jxMJsTjJzFwX2vyIuVtsXRQBzS7FdZBplonYwHGNMzmkq0amfo2LoNFUWED1SlX4G
-         rRztal2BGSzo+W/TxcPZA1DNLt297JnZBdJfWijYglTYApvf/j4NqETlURw6uEBdro/8
-         k68o2a/kiIDeB4rUTtcmC8PQlkNoq3wGPAK/1xrnnGyPyyZ9DtfIkNe+vRlaH3bZDgpe
-         9FOQ==
-X-Gm-Message-State: AOJu0YwbhW+JKE7HILS4sdbSSv+Zj3fuU8vP7cKqbfAWePQhCkQk9gtJ
-	msKDAcjxmi0qkkV0AxiT5t+wbxm8PSk9sZye9T2uOcsgej8=
-X-Google-Smtp-Source: AGHT+IF0Rt6UW/UV9Lchh5LVRFwF3Z2tctX7gQ8Ry7vHu3ouw9LokTfSv6n3bZL78YJHe1Csm0xbR16AjNdMprlBoPo=
-X-Received: by 2002:aa7:d1cb:0:b0:532:edda:3bb8 with SMTP id
- g11-20020aa7d1cb000000b00532edda3bb8mr5434826edp.16.1696526599747; Thu, 05
- Oct 2023 10:23:19 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08B6D4121E
+	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 19:08:57 +0000 (UTC)
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 869D8D9;
+	Thu,  5 Oct 2023 12:08:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=n4sBYi1BxXh1+HSMe/Wj8VQpviqjDyB+YmJxv9z24EPvmHkXylHlyyZXLQlDKPWdEvR567ocCpbwCNJhHXtlfC+EltviBBBQbHjXzefSqYhqrO91RpaC4cjK7/y5llvVeyTJeHRNtfDDeDnHsSuvWnYMl2h1R27GZnb0vWs764OgSboP9JY/VZsl5CFDXTX8by6BJwBQTifJ61U7m4siLGo9gyQTI6AA6aRfvqJLvN5WAYbzavYv/uGynfCGI7PG9cQALuAOznCF3Fe/FCfzGE0pKgm9lsp4MkEIlVtPR95MAXixKXk7hjIb6NomS+fhx151FmSuSRh41E0rkVGz6w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=H7ct8XEN4sYtDcf7jfUZkbZ6UbDgxrdnVCn2KN3UEeM=;
+ b=FxxeM6YSNCEWfPJDF+c4j4iByEs/YnbGNoVUww5n5pf6OXeA6+kvafq2jiTocTvJRpYdCjklkML/6GVjiUan7oDwLkgKrHLg3Xffz9tNh3eSOzoZ89eN3EO8Iv9uPYwR/u61IMg7CmpIQViWAo28lrgkht9Fv3ZPBr4DIeXWC7lmeQlsJln2icTHx5wf5kTdXjvvHcRNUCWl59KdmkqkI+mja76yyLnvFgwbiE9Ad8GYau6iin21IQvdSFiKVADUZS2SOeVWLUmiYojBXVQ8p4VloPt86dj74lEoYaQg5idF0AFOQiBbiSQDOKWt0De3fLeDuD0RK5hPw+gwkobOCw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=H7ct8XEN4sYtDcf7jfUZkbZ6UbDgxrdnVCn2KN3UEeM=;
+ b=uaZE8jgv4acSwZY9ze2hVmq+dsSliDP3v9mG+aXtpt4jUTY5I2Vnb6iBcXxrCKnZ+V/LOZOMs8d64El1CmMiqs5+YP+bWgwbLIAaJpz+W8g5Swld2u9BkgBArozuYZQQPFg5qqEKN1mIQ4mz3rMtFjdLYZBu24EfqFgqcd3nV7I=
+Received: from SA0PR11CA0189.namprd11.prod.outlook.com (2603:10b6:806:1bc::14)
+ by IA1PR12MB8334.namprd12.prod.outlook.com (2603:10b6:208:3ff::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.28; Thu, 5 Oct
+ 2023 19:08:54 +0000
+Received: from SN1PEPF00026369.namprd02.prod.outlook.com
+ (2603:10b6:806:1bc:cafe::7e) by SA0PR11CA0189.outlook.office365.com
+ (2603:10b6:806:1bc::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.29 via Frontend
+ Transport; Thu, 5 Oct 2023 19:08:54 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ SN1PEPF00026369.mail.protection.outlook.com (10.167.241.134) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6838.14 via Frontend Transport; Thu, 5 Oct 2023 19:08:53 +0000
+Received: from AUS-P9-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 5 Oct
+ 2023 14:08:52 -0500
+From: Mario Limonciello <mario.limonciello@amd.com>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>, Wolfram Sang <wsa@kernel.org>, "Sebastian
+ Reichel" <sebastian.reichel@collabora.com>
+CC: Alex Deucher <alexander.deucher@amd.com>, <linux-usb@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <amd-gfx@lists.freedesktop.org>, "Mario
+ Limonciello" <mario.limonciello@amd.com>
+Subject: [PATCH v2 0/2] Fix Navi3x boot and hotplug problems
+Date: Thu, 5 Oct 2023 12:52:28 -0500
+Message-ID: <20231005175230.232764-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231005113624.8329-1-piyush.mehta@amd.com>
-In-Reply-To: <20231005113624.8329-1-piyush.mehta@amd.com>
-From: Peter Geis <pgwipeout@gmail.com>
-Date: Thu, 5 Oct 2023 13:23:05 -0400
-Message-ID: <CAMdYzYq87xuZ8fTrGhcV5sdCyuGFGyEAPwJOJSoXE2O_pVZUag@mail.gmail.com>
-Subject: Re: [PATCH V2] usb: dwc3: core: disable 3.0 clock when operating in
- 2.0 device mode
-To: Piyush Mehta <piyush.mehta@amd.com>
-Cc: gregkh@linuxfoundation.org, michal.simek@amd.com, 
-	Thinh.Nguyen@synopsys.com, robh@kernel.org, herve.codina@bootlin.com, 
-	yangbin@rock-chips.com, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, git@amd.com, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN1PEPF00026369:EE_|IA1PR12MB8334:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3f818141-1e9a-4214-bd21-08dbc5d6847c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	4O3q2PG7Fg8C0e1nNrfAFwIEBBAoCBLlSbM6+LFSeFcY0Dx2xgiVoMP7zv7YCdftETHOHxljgNo2VgAzijC28g1ZC+1AqULEA6jgWHtS6hPlM/gEzWUfqGuE83r7DgrBoYUpFT9F3DPg44Gm3FODWrmvxipK5/eM7NpVbMH0s/h9nYK3T/k2YCWCn78fiXia4sJ4Gjk7sf4ZZf8KN+Fl7ABDNPbb/vCSsfSH+piCVyh0BqhBsTx4Og0Vv1qgDKlQ+8nXA4zC70e0lwWxsBLk7Etx6K6GOIkI+pKBgpTyqkWoyDykpO0+bDxgN7DDH1vNqwSNDnZgyOKsrQtcpMB26E+614SMcn9AJqvs3T8DNP3PMK/9vPbH3X+cv6vjuDEdcr1EjYv58an2hKT87rhjEhihCbvf/1FpjUXwsUOjoQUe49pzW42qqVZwefswqxpHO62Ey7LvUHCNfLHS+H9hk+SIG3QtRBhnVonnoA2wbUapUZ+uK6kLLxvyqbjoSTcaMu7me7iOYFZjkHS1PYjwTFS+peAK1bEOuB7qg6inAiCdCNY9f3B7ehdXNnso8o/o7zywW2AU9iLLGsUMSBe5P0yzRRcxf7X9KSpfIZirmfyf/T5GbACQDZyE34khIWoqYrlNPMwvHlCu5jVgHa+5ncjOxVXoWqRZftsfqfiuOnUsRazD9//uf7cdFt/b3Nb3G9y9okqRxNmU8leYv5FVrSbdCwBiVa46b+M7q54ThrGQ/QDKN7+QXoICHWOYZj6eiPj+wlBQVSjlMtbgh/MtY6Ni8DsBxpBW9bOVjEYjwkE=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(346002)(396003)(376002)(39860400002)(136003)(230922051799003)(82310400011)(64100799003)(186009)(1800799009)(451199024)(40470700004)(46966006)(36840700001)(426003)(16526019)(40460700003)(1076003)(478600001)(26005)(2616005)(966005)(336012)(81166007)(82740400003)(40480700001)(7696005)(6666004)(44832011)(4326008)(36860700001)(5660300002)(70206006)(8676002)(110136005)(8936002)(70586007)(41300700001)(36756003)(316002)(86362001)(2906002)(47076005)(54906003)(356005)(83380400001)(32563001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Oct 2023 19:08:53.8872
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3f818141-1e9a-4214-bd21-08dbc5d6847c
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SN1PEPF00026369.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8334
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Thu, Oct 5, 2023 at 7:36=E2=80=AFAM Piyush Mehta <piyush.mehta@amd.com> =
-wrote:
->
-> The GUCTL1.DEV_FORCE_20_CLK_FOR_30_CLK bit enable the feature of internal
-> 2.0(utmi/ulpi) clock to be routed as the 3.0 (pipe) clock. This feature i=
-s
-> applicable when core is operating in 2.0 device mode.
->
-> When this bit is set in host mode and core is in 2.0 device mode (maximum
-> speed =3D high-speed) then usb super speed devices not detected on host.
->
-> To address the above issue added usb device mode conditional check.
+On some OEM systems multiple navi3x dGPUS are triggering RAS errors
+and BACO errors.
 
-Good Afternoon,
+These errors come from elements of the OEM system that weren't part of
+original test environment.  This series addresses those problems.
 
-This will outright break the patch it attempts to fix. This was
-originally done to work around hardware where a dwc3 core was attached
-only to a 2.0 phy and lacked 3.0 clocks. While I empathize with the
-intentions of the hardware designers, it works perfectly well for host
-mode as well as device mode. As I didn't have access to the register
-mappings, I was unaware of the original intention of this register
-beyond what was in the downstream commit.
+NOTE: Although this series touches two subsystems, I would prefer to
+take this all through DRM because there is a workaround in
+amd-staging-drm-next that I would like to be reverted at the same
+time as picking up the fix.
 
-If this is affecting hardware in the wild, I would surmise the
-firmware for that hardware is incorrectly reporting the dwc3
-implementation max speed as USB_SPEED_HIGH or USB_SPEED_FULL when it
-should be USB_SPEED_SUPER or USB_SPEED_SUPER_PLUS. If this is the
-case, we have fixed this issue in other ways both in newer kernels and
-in firmware so the risk of this affecting users is slim. If this is
-just to make the software behave the way the hardware designers
-originally intended, then I have to respectfully nack this patch.
+v1->v2:
+ * Drop _PR3 patch from series, it was cherry picked and is on it's way
+   to 6.6-rcX already.
+ * Rather than changing global policy, fix the problematic power supply
+   driver.
+v1: https://lore.kernel.org/linux-pm/20230926225955.386553-1-mario.limonciello@amd.com/
 
-Very Respectfully,
-Peter Geis
+Mario Limonciello (2):
+  usb: typec: ucsi: Use GET_CAPABILITY attributes data to set power
+    supply scope
+  Revert "drm/amd/pm: workaround for the wrong ac power detection on smu
+    13.0.0"
 
->
-> Cc: stable@vger.kernel.org
-> Fixes: 62b20e6e0dde ("usb: dwc3: core: do not use 3.0 clock when operatin=
-g in 2.0 mode")
-> Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
-> ---
-> DWC3 Register Map Link:
-> https://docs.xilinx.com/r/en-US/ug1087-zynq-ultrascale-registers/GUCTL1-U=
-SB3_XHCI-Register
-> Register Name   GUCTL1
-> Bit: 26
-> Bit Name: DEV_FORCE_20_CLK_FOR_30_CLK
->
-> Change in V2:
-> - Added CC stable kernel email.
->
-> Link: https://lore.kernel.org/all/20231005102725.8458-1-piyush.mehta@amd.=
-com/
-> ---
->  drivers/usb/dwc3/core.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index 9c6bf054f15d..0cf1fe60628b 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -1202,6 +1202,7 @@ static int dwc3_core_init(struct dwc3 *dwc)
->                         reg |=3D DWC3_GUCTL1_PARKMODE_DISABLE_HS;
->
->                 if (DWC3_VER_IS_WITHIN(DWC3, 290A, ANY) &&
-> +                   (dwc->dr_mode =3D=3D USB_DR_MODE_PERIPHERAL) &&
->                     (dwc->maximum_speed =3D=3D USB_SPEED_HIGH ||
->                      dwc->maximum_speed =3D=3D USB_SPEED_FULL))
->                         reg |=3D DWC3_GUCTL1_DEV_FORCE_20_CLK_FOR_30_CLK;
-> --
-> 2.17.1
->
+ drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c       |  3 ++-
+ drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_0_ppt.c |  1 +
+ drivers/usb/typec/ucsi/psy.c                         | 10 ++++++++++
+ 3 files changed, 13 insertions(+), 1 deletion(-)
+
+-- 
+2.34.1
+
 
