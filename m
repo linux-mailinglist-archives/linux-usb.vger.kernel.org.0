@@ -1,156 +1,158 @@
-Return-Path: <linux-usb+bounces-1168-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1169-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 856147BAA2F
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 21:33:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6AB6E7BAB79
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 22:35:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 16132282010
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 19:33:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 938DA282154
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 20:35:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A126841759;
-	Thu,  5 Oct 2023 19:33:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A382C38DC7;
+	Thu,  5 Oct 2023 20:35:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Ocw7yrGy"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="XW0IGpZO"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4CD1266D5
-	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 19:33:29 +0000 (UTC)
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59805CE
-	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 12:33:27 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-9936b3d0286so254955466b.0
-        for <linux-usb@vger.kernel.org>; Thu, 05 Oct 2023 12:33:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696534405; x=1697139205; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=y4UEE65lFhOrzbPGl/iOYRgYQaGHQyg6aoZ6ztKtIPY=;
-        b=Ocw7yrGyzbIkUjLPKRvUQ0aVCutGiTXNzsZUVz72FwjvWTpczojE43gPzQDnhj/9ks
-         bkJ0vSqLmkJcvKGoQKc1guaZmpPQ33Pr8bFKyIR3UAcXNMCL2hDYy5ct/+Ep54M2oE4s
-         pu7Y5jinyKTJqkRRdUqBGfFZkzmFWe3HBWAdtqD7vzApAv6xsFEOJOMTLxoMtePeqR/y
-         LhksyfEu6Y7O+jKOVsDYzyITAhwEUOPzO7Uzgxb/gwH2Gw9EJQwVpjQ5iBeUOgS6sKLM
-         DbT/+xr1GZpUlCQqG5xLgMvIasNCXZmkw8l/aKUdYYX2iNNzZ5MOx65PiizpvUxGeVg2
-         epmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696534405; x=1697139205;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=y4UEE65lFhOrzbPGl/iOYRgYQaGHQyg6aoZ6ztKtIPY=;
-        b=tdJmpISDM8S3FYpY+2CdFIjg3a58VgRXtREirvLWksZkXdbbb+PJ1m6jJDPiPYAHRe
-         X71Wbi4qnLcdy570WLohXvjEdCpsu995BrDZJpNNcjeADl8q3DGNVI7yO/SPjRRx1fK9
-         kYNUqswTe5F/srhoF/whSnP9lS0WFLd87eolSoKd6Be5Y6koHPgeM98g0zZREUp+wf4E
-         EIX+rpx4obX+A7dYB6CppTtD7KqZc+f8CdmdVt7k0cRQ1tglypxzaw/Yc8SmMaztFuKk
-         yQmAp1/Nxo7bv1FlhxeJl9lp068ZwPZ4dNn5yopiNRuwmBA6w9iGIDZYxMNyADNocmxJ
-         zYHg==
-X-Gm-Message-State: AOJu0YxfGcGvOobaW0un6KzSUhEGyDLtGOdwBqDUbMrI+UBP8P5DJBBW
-	wXE8J3cMwHNy9MKtoWCOby/syg==
-X-Google-Smtp-Source: AGHT+IFVcF6eMuOo4470ukhp0qoJNX+1XfTItQET+m4tKusw8t8TfXQ8nWf5qTgCie/0Qim4HEHaDQ==
-X-Received: by 2002:a17:907:2724:b0:9ae:6196:a410 with SMTP id d4-20020a170907272400b009ae6196a410mr5550030ejl.43.1696534405657;
-        Thu, 05 Oct 2023 12:33:25 -0700 (PDT)
-Received: from [192.168.1.197] (5-157-101-10.dyn.eolo.it. [5.157.101.10])
-        by smtp.gmail.com with ESMTPSA id y18-20020a170906559200b009ad75d318ffsm1656981ejp.17.2023.10.05.12.33.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Oct 2023 12:33:25 -0700 (PDT)
-Message-ID: <4eac8a89-c188-40c4-b179-6229ea87b65e@linaro.org>
-Date: Thu, 5 Oct 2023 21:33:23 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 494B141E43
+	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 20:35:14 +0000 (UTC)
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 471AE93;
+	Thu,  5 Oct 2023 13:35:12 -0700 (PDT)
+Received: from mercury (unknown [185.254.75.28])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: sre)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id 44CD56607336;
+	Thu,  5 Oct 2023 21:35:10 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1696538110;
+	bh=+Rnv2prRvZyVs11h4b6Mvv3TPCjUToYKmLtK7qDQkIs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XW0IGpZO3bt6WbxkR9uUpyOT72hklLSv568GU7RwhhTEY/Ud8L76HNM3vDDtInz9y
+	 5hSVIYPVh+MPb7Zkk0Vem3TE+cLdIhzjhbcxyUskFo3a6uhSSehvHo6J9wH+zouoZX
+	 76x9VhxYm+e9RpMrckoYeJML2WyETUyBSHYYXkJUh3OFdm7WvqOALmBKRqkgsWPBiL
+	 zgOoopweoFg+P3re35A58hO9BNtDpG/lxBSDqn3NG7G+V8mOGYKwsBv3GL36j7nGhr
+	 IsYfpY2cjeluRrnxm0FIPEzLDviXotjy2xzUrUDUvxiHLggobgn3QwxErqKr0UqLdz
+	 j2E/5gTweAO9Q==
+Received: by mercury (Postfix, from userid 1000)
+	id 994511060532; Thu,  5 Oct 2023 22:35:06 +0200 (CEST)
+Date: Thu, 5 Oct 2023 22:35:06 +0200
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Wolfram Sang <wsa@kernel.org>,
+	Alex Deucher <alexander.deucher@amd.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+	Kai-Heng Feng <kai.heng.feng@canonical.com>,
+	Richard Gong <Richard.Gong@amd.com>
+Subject: Re: [PATCH v2 1/2] usb: typec: ucsi: Use GET_CAPABILITY attributes
+ data to set power supply scope
+Message-ID: <20231005203506.akgyrzdjnmq3ugd6@mercury.elektranox.org>
+References: <20231005175230.232764-1-mario.limonciello@amd.com>
+ <20231005175230.232764-2-mario.limonciello@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 2/3] dt-bindings: usb: ci-hdrc-usb2: add npcm750 and
- npcm845 compatible
-Content-Language: en-US
-To: Tomer Maimon <tmaimon77@gmail.com>, peter.chen@kernel.org,
- gregkh@linuxfoundation.org, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, xu.yang_2@nxp.com, peng.fan@nxp.com,
- avifishman70@gmail.com, tali.perry1@gmail.com, joel@jms.id.au,
- venture@google.com, yuenn@google.com, benjaminfair@google.com,
- j.neuschaefer@gmx.net
-Cc: openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20231005192529.162785-1-tmaimon77@gmail.com>
- <20231005192529.162785-3-tmaimon77@gmail.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231005192529.162785-3-tmaimon77@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="hxwbm6xxxmhg7owu"
+Content-Disposition: inline
+In-Reply-To: <20231005175230.232764-2-mario.limonciello@amd.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-	autolearn_force=no version=3.4.6
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On 05/10/2023 21:25, Tomer Maimon wrote:
-> Add a compatible string for Nuvoton BMC NPCM750 and Nuvoton BMC NPCM845.
-> 
-> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+
+--hxwbm6xxxmhg7owu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+On Thu, Oct 05, 2023 at 12:52:29PM -0500, Mario Limonciello wrote:
+> On some OEM systems, adding a W7900 dGPU triggers RAS errors and hangs
+> at a black screen on startup.  This issue occurs only if `ucsi_acpi` has
+> loaded before `amdgpu` has loaded.  The reason for this failure is that
+> `amdgpu` uses power_supply_is_system_supplied() to determine if running
+> on AC or DC power at startup. If this value is reported incorrectly the
+> dGPU will also be programmed incorrectly and trigger errors.
+>=20
+> power_supply_is_system_supplied() reports the wrong value because UCSI
+> power supplies provided as part of the system don't properly report the
+> scope as "DEVICE" scope (not powering the system).
+>=20
+> In order to fix this issue check the capabilities reported from the UCSI
+> power supply to ensure that it supports charging a battery and that it can
+> be powered by AC.  Mark the scope accordingly.
+>=20
+> Fixes: a7fbfd44c020 ("usb: typec: ucsi: Mark dGPUs as DEVICE scope")
+> Link: https://www.intel.com/content/www/us/en/products/docs/io/universal-=
+serial-bus/usb-type-c-ucsi-spec.html p28
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 > ---
+> Cc: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> Cc: Alex Deucher <Alexander.Deucher@amd.com>>
+> Cc: Richard Gong <Richard.Gong@amd.com>
+> ---
+>  drivers/usb/typec/ucsi/psy.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+>=20
+> diff --git a/drivers/usb/typec/ucsi/psy.c b/drivers/usb/typec/ucsi/psy.c
+> index 384b42267f1f..b35c6e07911e 100644
+> --- a/drivers/usb/typec/ucsi/psy.c
+> +++ b/drivers/usb/typec/ucsi/psy.c
+> @@ -37,6 +37,15 @@ static int ucsi_psy_get_scope(struct ucsi_connector *c=
+on,
+>  	struct device *dev =3D con->ucsi->dev;
+> =20
+>  	device_property_read_u8(dev, "scope", &scope);
+> +	if (scope =3D=3D POWER_SUPPLY_SCOPE_UNKNOWN) {
+> +		u32 mask =3D UCSI_CAP_ATTR_POWER_AC_SUPPLY |
+> +			   UCSI_CAP_ATTR_BATTERY_CHARGING;
+> +
+> +		if (con->ucsi->cap.attributes & mask)
+> +			scope =3D POWER_SUPPLY_SCOPE_SYSTEM;
+> +		else
+> +			scope =3D POWER_SUPPLY_SCOPE_DEVICE;
+> +	}
+>  	val->intval =3D scope;
+>  	return 0;
+>  }
 
->    reg:
->      minItems: 1
-> @@ -388,6 +393,8 @@ allOf:
->              enum:
->                - chipidea,usb2
->                - lsi,zevio-usb
-> +              - nuvoton,npcm750-udc
-> +              - nuvoton,npcm845-udc
+Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-npcm845 is not needed here.
+-- Sebastian
 
-Best regards,
-Krzysztof
+--hxwbm6xxxmhg7owu
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmUfHfEACgkQ2O7X88g7
++pppFQ//fWCSXocN8V9lRZsVm33b3mgWdP2RaiSkwmCaeOsp2meEhzaND+5l2W2R
+u9ESFzFFmC5R29upWz7R5ACgNpGJiyN1kzIlxgfldp6xG8IFjsDetQk8RCdEoYI2
+zrC3ckTJ2qrv+RXyvdoOjoGfjRbllExOWAlMD55XebSoBAI3HDD69uWatWLYucN3
+XwyzzWVHaBdn957IE4IIU8bZQioDXaPECvnR67LIUlCrWDyzWtZ44tX+rEkzOlzW
+MzKg0hZPjmYJ3+abBUFXWHD3YJuyoQrbl+MAju4SH1pVNG3dxg67FmHEETZRFVIZ
+DYLg9SgdfBEINIvH1tNIpvsgp9pJVZ5w8s80sajobht9lNA4vTR9LHoP+NjbuwlT
+UNQlHufAAA/O7zWtqlqgz5X4Ge7klZ7cu4ybYoQOrI4j4L4MRNC77nSlQlpmB1/w
+71046UcX/rHGjQNYeqXR37YsNcemWLwQkBM7+6Hyupjdu5VKhXPpTxFizdl4E5Rw
+obgiOjYwgxti3G8PRp95sKO/56QJTGYO4hgjDu2III24YTT6VmIhDOTNjBk+PpIv
+5K4/GT6VV7csRyHfMCxvvF1cyNlIRoGaIjYYD7HDMgOKdx5qQobPkEwDJpNuvtCK
+ozGkiCfEdRerdMwQtbywbeZ7nqUzd12P2ZI07UeRUfd4JqsNE6c=
+=TKBn
+-----END PGP SIGNATURE-----
+
+--hxwbm6xxxmhg7owu--
 
