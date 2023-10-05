@@ -1,60 +1,56 @@
-Return-Path: <linux-usb+bounces-1146-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1149-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 846177BA023
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 16:34:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 654A77BA1DC
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 17:01:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id E2332281E42
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 14:34:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTP id 764911C209FB
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 15:01:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EF0128E34;
-	Thu,  5 Oct 2023 14:34:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41C312E63C;
+	Thu,  5 Oct 2023 15:01:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Fr2fR6/s"
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="Q1EOr3sP"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA741125DD
-	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 14:34:12 +0000 (UTC)
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A11E065AE
-	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 07:33:56 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id ca18e2360f4ac-7a2874d2820so14365139f.1
-        for <linux-usb@vger.kernel.org>; Thu, 05 Oct 2023 07:33:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1696516435; x=1697121235; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QXhhPLEbAH2Co1vOCJVLpu3VNCebYxHTaxUBPSL3m/A=;
-        b=Fr2fR6/sJIOJCoOuJUi58GJngqPaA/HSFSa0fJhJ0ldiySmGOcjhyPTuaUVI/U5Oz3
-         rYl1vLlsXhNp/pZMBiIupFFan+bOh+xkTqM08MXOQBWjFlimRsqPrdAHQUQ22p33Wtbq
-         kHoNN8ycuVZA6lpw3qhZdgawSzehMgB8tchYk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696516435; x=1697121235;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QXhhPLEbAH2Co1vOCJVLpu3VNCebYxHTaxUBPSL3m/A=;
-        b=PCXxXtRyVSh4vdAnZR8NOzBi9iT9TEJ18pHtFqub9Kf0mv5er6Q7ZdOexgAqnNLpH3
-         kgm2O4FLBUV5o8Vxa/KjOVS4z6Ij7bjdipYMpt6lz618Y3g+RU29DCE4OOA+Kzkv972t
-         sEsB3APPBOMHSPLnqMIaB2ZX3Es6d2fJPLlSxe683BkrHN099LyJhEYsj0Myu0vI64if
-         FsJxrM8x3LjSIGYPBi5f1tf95YEBRfl7CPaB9AvytxDd1zbc1Ee39syt+YTiCMFIAT7l
-         2ohtFMoucrwllMcXAGVnLH7yc6/a84BAb8ogalPEc1LAJuoehed32P3ODoXCzODGDeq/
-         2deA==
-X-Gm-Message-State: AOJu0Yztn3XbqB9w/V7VjWTtyiwNG9qr8UDpwTwngaokXFYfiIEcvcfm
-	jkYEMzjcb5xYPcgPFOGg3JDSNw==
-X-Google-Smtp-Source: AGHT+IHO+aFM7ha6XCEPzgrAXCsvNjRwxGCPHmreI2zNmrs7Itj3mlYvL2vecXZPtwUHFZ4V9sHWOw==
-X-Received: by 2002:a05:6602:140c:b0:79f:a8c2:290d with SMTP id t12-20020a056602140c00b0079fa8c2290dmr6926134iov.0.1696516435724;
-        Thu, 05 Oct 2023 07:33:55 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id y10-20020a02bb0a000000b0043e8735ea85sm461243jan.144.2023.10.05.07.33.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Oct 2023 07:33:55 -0700 (PDT)
-Message-ID: <e56353b2-a814-4a81-9516-63736d12abba@linuxfoundation.org>
-Date: Thu, 5 Oct 2023 08:33:54 -0600
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A7562E626
+	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 15:01:41 +0000 (UTC)
+Received: from out203-205-221-239.mail.qq.com (out203-205-221-239.mail.qq.com [203.205.221.239])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47FAC658E;
+	Thu,  5 Oct 2023 08:01:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+	s=s201512; t=1696518098;
+	bh=j7v78EfYr5kWBGVx9Q0yeHqQ9MIDixPPetJ6nvLJ2nc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=Q1EOr3sPF+C02Z9y8KIbwTZOG7fwnZjX9n5Dq2v2HiP7FvMH2e6y01F4d46nYbBRq
+	 RmU0WuCxgaFsugA6hmrUewisTEQf2E5scs+XGcRQNzDwS3CEXc1Wu6EUIthmO6Vgro
+	 QkhRSqA5VFY/hwCYxKtZG5om5LSSrC89JfBLhGpc=
+Received: from [10.255.87.57] ([122.14.229.252])
+	by newxmesmtplogicsvrszb6-0.qq.com (NewEsmtp) with SMTP
+	id 6299CF5; Thu, 05 Oct 2023 23:01:34 +0800
+X-QQ-mid: xmsmtpt1696518094tyxh55cxd
+Message-ID: <tencent_21B5235BC260E91E030A10A8E112D037EC08@qq.com>
+X-QQ-XMAILINFO: N8kVz9D657mRghfTFuheWxMrr0xSlkTJvrM9oKOp5NOWHliJN+ctqLKGt97tFL
+	 m3fz4DS2pnsYA+PNV3STpG+lWIHV6mz2eVcyPT+9ZVSohw4YhsVGOVorP60vX9itD6HRWouswlkP
+	 uqd+5yAcNqjUdBVs78KFqerqFLjQ2FSNBa10zhueGXzVJL8/OQlfUUg7au0y2QybffnXu0hPhM2D
+	 AseFv1dzmfBf/XLrmLBTHB93y02qKt2rBCKfDLJMiPJ8VrO456vwkvyjscNVB3rhk/6UC/44sf/K
+	 aVmpVa+Kgi1UUDCTKHTbLoodV5599fXSes7B4vCu30JrrOzugSlXUBcOu89RnvTTAUNzO3TNtslQ
+	 tN/JFsRxV7QvmWGXbtWo0lzkNx0xHgq2ydXIeyM/O/Y0v00gG+PtT+VxAIL3xXCeFzOr+KCKsl1r
+	 uit6OEIuteYr1LjFseTW2i6q8ih+Enz5kQlZGf6iflGNi4Jwtd6p2doE+5C8FKpfcnLkCdqVLg/8
+	 6vjGeuHWSab2VU4uREAq66UhZRHPt8TJqUsPyLkOKDOYXwTdlUji0x+gmfhj/0c0IV/5jkblu5Hl
+	 XpcZnjxZw0MUKCgP0DG/DvinadUuCF3AV50GW7so5uCiIAh6BWu61b5NzjfCDwO/CgxPN/xm2haq
+	 LBTHzesSnCb6/CwKy4CouVSmftE6Ht59ZGHzXvOHcp3dM+UiQzFutnVNnR2ChydntH2GrtyW5IZQ
+	 ZHmU6XkE6zLIJZDCytV0P8OpeA951BDqxY2ZycevqV9bjPRhcWFfrVPjB3x9nWLklFwNmBvjstYS
+	 20xYf0e76yFi/knHIwg2fC/7r6W6M+/Bm3MnlSLnzleMX2m25ukWoxqkVcfGLf7fm5MIprDEDiwn
+	 DKRAPamy2c6D7bHAKgIAl3XNqPoJFyxzOzc9z5iRB4TBVCLJxe/lPTT7JAbJU2mtql+YnNlA9AZw
+	 jNRFrcHZiIeIrrGHVCquNHflmyBM6um1vycxdgyW7+c/3i9WMzKZgDIvlE514MlzI0S/XH/lWq0e
+	 NVJX5tdjj9BltgNfA18GRmQAjW2fYhdc98wvQRSH0vEI+i1gMDiRFXqkncaMy104LkRpk45Q==
+X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
+X-OQ-MSGID: <3e289937-f216-4ead-abac-28d35d644f9c@foxmail.com>
+Date: Thu, 5 Oct 2023 23:01:34 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -62,75 +58,52 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] USB: usbip: fix stub_dev hub disconnect
-To: Greg KH <gregkh@linuxfoundation.org>, Jonas Blixt <jonas.blixt@actia.se>
-Cc: shuah@kernel.org, valentina.manea.m@gmail.com, stern@rowland.harvard.edu,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20230615092810.1215490-1-jonas.blixt@actia.se>
- <2023100548-kleenex-deceased-624e@gregkh>
+Subject: Re: [PATCH] usb: dwc3: fix possible object reference leak
 Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <2023100548-kleenex-deceased-624e@gregkh>
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Thinh.Nguyen@synopsys.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
+ kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+ linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+References: <tencent_6BA8EA125537CBB5D65B05605E1E960AA708@qq.com>
+ <2023100512-crayon-prowess-0f27@gregkh>
+From: Zhang Shurong <zhang_shurong@foxmail.com>
+In-Reply-To: <2023100512-crayon-prowess-0f27@gregkh>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
+	FREEMAIL_FROM,HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_BLOCKED,RDNS_DYNAMIC,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+	version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On 10/5/23 01:22, Greg KH wrote:
-> On Thu, Jun 15, 2023 at 11:28:10AM +0200, Jonas Blixt wrote:
->> If a hub is disconnected that has device(s) that's attached to the usbip layer
->> the disconnect function might fail because it tries to release the port
->> on an already disconnected hub.
+I apologize for the poorly formatted patch.
+I will make the necessary revisions and send it to you again.
+Additionally, I thought that it may not be straightforward
+to test but I will try.
+
+Kind regards,
+Shurong
+
+在 2023/10/5 21:59, Greg KH 写道:
+> On Thu, Oct 05, 2023 at 09:49:46PM +0800, Zhang Shurong wrote:
+>> The of_find_device_by_node takes a reference to the struct device
+>> when find the match device,we should release it when fail.
 >>
->> Fixes: 6080cd0e9239 ("staging: usbip: claim ports used by shared devices")
->> Signed-off-by: Jonas Blixt <jonas.blixt@actia.se>
+>> Fix it by calling by calling platform_device_put when error returns.
+>>
+>> Signed-off-by: Zhang Shurong <zhang_shurong@foxmail.com>
 >> ---
->> v2:
->>   - Clarify comment
->> v1:
->>   Link to v1: https://lore.kernel.org/linux-usb/20230615092205.GA1212960@W388ANL/T/#m575e37dc404067797eadf4444857366c73ba3420
->> ---
->>   drivers/usb/usbip/stub_dev.c | 9 +++++++--
->>   1 file changed, 7 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/usb/usbip/stub_dev.c b/drivers/usb/usbip/stub_dev.c
->> index 2305d425e6c9..2170c95c8dab 100644
->> --- a/drivers/usb/usbip/stub_dev.c
->> +++ b/drivers/usb/usbip/stub_dev.c
->> @@ -427,8 +427,13 @@ static void stub_disconnect(struct usb_device *udev)
->>   	/* release port */
->>   	rc = usb_hub_release_port(udev->parent, udev->portnum,
->>   				  (struct usb_dev_state *) udev);
->> -	if (rc) {
->> -		dev_dbg(&udev->dev, "unable to release port\n");
->> +	/*
->> +	 * NOTE: If a HUB disconnect triggered disconnect of the down stream
->> +	 * device usb_hub_release_port will return -ENODEV so we can safely ignore
->> +	 * that error here.
->> +	 */
->> +	if (rc && (rc != -ENODEV)) {
->> +		dev_dbg(&udev->dev, "unable to release port (%i)\n", rc);
->>   		return;
->>   	}
->>   
->> -- 
->> 2.25.1
->>
-> 
-> Shuah, what ever happened to this change, is it correct or was something
-> else applied to fix it?
-> 
+> What commit id does this fix?
+>
+> And how did you find this?  How was it tested?
+>
+> thanks,
+>
+> greg k-h
 
-Sorry for the delay. I thought I took care of acking this one. :(
-
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
-
-thanks,
--- Shuah
 
 
