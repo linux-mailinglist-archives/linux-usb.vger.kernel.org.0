@@ -1,154 +1,222 @@
-Return-Path: <linux-usb+bounces-1159-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1152-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 068287BA9C6
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 21:09:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0346C7BA8B0
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 20:08:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 23E712823E3
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 19:09:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id A7EB028200C
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 18:08:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6237641743;
-	Thu,  5 Oct 2023 19:09:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ADB93D98F;
+	Thu,  5 Oct 2023 18:08:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="BdJvYhO7"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1UAjV89+"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A0844121E
-	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 19:08:59 +0000 (UTC)
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2065.outbound.protection.outlook.com [40.107.223.65])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97405E7;
-	Thu,  5 Oct 2023 12:08:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=guAZ9Fk/tqpF7OlArAfrOJqYURhojkYhvefRLxB5gD7dXPRjfT2w+Gd3Wb5JA1p0RWCtpmqeOcZDOnV7dJVy+C04jXDOWdARVTNCPdi3s6AsmyEW8G4uYl4rnBmLhb6E9cLxZXWvpFJNSCbiU4uPRHVM8bHeJImadmMGVMgaomICygfkfdcnOlicJHuHHHtcVK+P5CUynDyvcNRcpO3nhW+vwAqwbGYUG57rh31SfkJHZAD/I/G5O8vAus+Mdqk6uUGyb9RtotSsFsFArTVdOk7bI+Ru36M9TAvoI8aRDcGXnHu3p3B8vyuIKxid2NURWaZ4GtQcg3De2YRTIEDYUQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=n/XMCJxftJEDKpTeT04yXzq+yXfO/JwuB/WNJvDBs74=;
- b=KTMW12DcOnJtSsOIkNq7idVLF+Jr+OGNoCJs8YUjxC7lj52zh0NMo2Chr/PdJuTEW9Uhiq/aUGrjqN200QIY82ps0D0i20r/jkJtda/DIgsOsRuCCFpgMTAPVLYMC25pVS0BpQi4HCahrz1StkBnqxumNN7AWqSdk6PTlc12Rs5YMbWQiv75PXbpkRyxJXTSx5hgluPkaYH/+MZVWaTqAUHt8gLRPbf+nY3vXimVkvxroG1ndIc8nIc0xRXTb1e2ST8GQa64bI2ZL2KPy9tTF1N10cCeQk03EtYDe2EKXJTLRoX3PCZxjClbehPxeGg5gR184wJFTd0a4KEs4SD6hA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=n/XMCJxftJEDKpTeT04yXzq+yXfO/JwuB/WNJvDBs74=;
- b=BdJvYhO7N0oLJ61rGSnLmooHqrCBOerS6dSdHfM1bVMSeXvQX6jAVj8Xjd5ElqgRL5Ol9Iyg2idQ01BvQsRi6lXuPLGvTLmUfnA1iKtGx/f9JyeymlbWpvOMb0Cy3XBxfO/DAsSv4kSJUhvXc0y5AEdyvUGr4sOqqPxnjGqs2fA=
-Received: from SA1PR04CA0017.namprd04.prod.outlook.com (2603:10b6:806:2ce::22)
- by PH0PR12MB7863.namprd12.prod.outlook.com (2603:10b6:510:28b::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.31; Thu, 5 Oct
- 2023 19:08:55 +0000
-Received: from SN1PEPF00026368.namprd02.prod.outlook.com
- (2603:10b6:806:2ce:cafe::18) by SA1PR04CA0017.outlook.office365.com
- (2603:10b6:806:2ce::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.29 via Frontend
- Transport; Thu, 5 Oct 2023 19:08:55 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- SN1PEPF00026368.mail.protection.outlook.com (10.167.241.133) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6838.14 via Frontend Transport; Thu, 5 Oct 2023 19:08:55 +0000
-Received: from AUS-P9-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 5 Oct
- 2023 14:08:54 -0500
-From: Mario Limonciello <mario.limonciello@amd.com>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>, Wolfram Sang <wsa@kernel.org>, "Sebastian
- Reichel" <sebastian.reichel@collabora.com>
-CC: Alex Deucher <alexander.deucher@amd.com>, <linux-usb@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <amd-gfx@lists.freedesktop.org>, "Mario
- Limonciello" <mario.limonciello@amd.com>
-Subject: [PATCH v2 2/2] Revert "drm/amd/pm: workaround for the wrong ac power detection on smu 13.0.0"
-Date: Thu, 5 Oct 2023 12:52:30 -0500
-Message-ID: <20231005175230.232764-3-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231005175230.232764-1-mario.limonciello@amd.com>
-References: <20231005175230.232764-1-mario.limonciello@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5353E374FB
+	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 18:08:26 +0000 (UTC)
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E865C115
+	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 11:08:18 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-d86766bba9fso1775328276.1
+        for <linux-usb@vger.kernel.org>; Thu, 05 Oct 2023 11:08:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1696529298; x=1697134098; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cGPEr42+ZwCTP+CEzEnFhGGfenBhCq6NKh2BAUdeTck=;
+        b=1UAjV89+aPiZ6PfduyoOx/FVGFc1vjlm+88m960GJqSnjXrtwwqMI/qL9rcKTal9Ub
+         YIqcddmQ0iGpp62XKF8UMBXnaUPqhfb8S26Tl+GctNI2A6S/6pLse//oqYHj7ArjLtG7
+         cSWvr1cPkExnnrBrBZ/H6a2hQm7RnRmg+2w6iSMNOCfkLl3uGuoWnakFuRmFfpCbRJsJ
+         rGu5SJX9mBB4oU4EunUppIJO+Jb4Z80VaEZ+YX4b11S5Q9eqRMxFQ2u8T3SZKBacjDFT
+         FE6huwNN5AFa7B4v8BhQBOwf9DT6jrhbu2NoyZCOcR1OK7Ce0cVArtbGlcX9GY8tVA0B
+         rUDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696529298; x=1697134098;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cGPEr42+ZwCTP+CEzEnFhGGfenBhCq6NKh2BAUdeTck=;
+        b=FQ1AMmjINiJz2UiMcNIcu4KNgtOjYtksFVS7GeYCl0D3agd37YJJhyRSrCvQKZGEsV
+         NjCm1LOGILf+6QWmbuVusb99pHv6/+vFXH4iMHWm5iM/9xkK6PUZ7mlD++CxHeIyAQga
+         XAAGz48O8Ls+EC8ecQ+Ou/PbHuoLG55CbEST7ds+PN8DWl7YLJUI2cCDqp4bHBjZ3Ec/
+         pQwnmWMxdNLdp8Ba1rgWxwWx9xFMZivH3L5QphEJNx2lZQ1uXBqKn5Lzf/QRnkb2Gas8
+         lMxGUVz9IKX3c/VLYWmZtrAcE5F4P7EuzHz2Xxh+4QmoFsF2QQsB2FU9gtFTFSDdv/54
+         +dzw==
+X-Gm-Message-State: AOJu0YwbFNuZJgVsBS9NV1DwT+/D6eEUSS2ww78s7Uq+knkxHWjE3yb1
+	FRoas3oXdZ4ryb6MHXw5B9SkxiMRriRb
+X-Google-Smtp-Source: AGHT+IGohbK75EVXkfCZDbTpCYdI4cTufrVSsHUE2OXMHhyT7A/XkqzRLLmcg1lhHIXwLzwe32LvY3mmUFFy
+X-Received: from hi-h2o-specialist.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3cef])
+ (user=arakesh job=sendgmr) by 2002:a5b:5c9:0:b0:d8b:737f:8240 with SMTP id
+ w9-20020a5b05c9000000b00d8b737f8240mr103527ybp.0.1696529298114; Thu, 05 Oct
+ 2023 11:08:18 -0700 (PDT)
+Date: Thu,  5 Oct 2023 11:08:12 -0700
+In-Reply-To: <20230930184821.310143-1-arakesh@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN1PEPF00026368:EE_|PH0PR12MB7863:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5f382354-9212-4671-dd41-08dbc5d68591
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	CxaP7d9V6q3cCkN3wGWaW3MEz/835PtXNagTveR+cnkTBJbB2MzzkKsVLd9tMUHXdEjzSsAV2s8MUZT1/hzcNNsV5rGOlfLAs5NhSd7Wta5KubBHWFpcIPxiUuqwK2uM1BkHUZhhQ/o07r1uYWqtrsLAbZ0a85DBI3Ph2k7O74WX6i64lw9cxGlpmRAy2TQukJ575ih1jnz29B8lD4qxiq1GBntIm5yzuOvb1h2VKN+r1Ou6Gul5ICUx43Fw1lUSZHusSICj+go3mlX0Ok+WN0amRYnjdcZ8X+oBfzZi6wwJpiNokdUASRJnLaZHTBvUxxGq0qKJaOmrxaTe9Cz9zJ2+A58DEH9JC7UEs9Y6QFU6mzdoKu7tsi+Rw+/EF4ltZIbiI22p4F/YoHvSJgX9orn+17UbMEIWXDsw7oaZirz3hludJk0gTU9d588JtwROGrGQK+JeKplVYpqJ/M4hrOUj54X/9HIzDnXrNK9RhSKH5Lw67zDuK7Oug9MoVbnl5GsU76MIahLHfHtzJxf9H2k378QCeKOfvQrq5ZYx1AalqEW4C8+n7BCV6CrFX2vBzokadFYVjEXREXHcj4p1+jUWMvshKKWRNdQY3d7VQma3qatQaISAFLgVoZTZWh+0ehNzi8yWUmtBvBX+yCUNoVnixl2H9qi+iOwGA0tQ+RN1tioHozixkLpVGmegRr5n2zWu4OgjKVH7f7p3BWDj10eLaVMNDz/0tT6JOvPXLxagbYP8fVutODHSzDlRYHt2KAJg8x9qQnS+U9dp9/9xng==
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(396003)(346002)(376002)(136003)(39860400002)(230922051799003)(451199024)(82310400011)(1800799009)(64100799003)(186009)(40470700004)(46966006)(36840700001)(36860700001)(40460700003)(40480700001)(6666004)(82740400003)(81166007)(356005)(478600001)(8676002)(70586007)(5660300002)(44832011)(4326008)(54906003)(316002)(110136005)(8936002)(70206006)(83380400001)(7696005)(41300700001)(16526019)(1076003)(26005)(336012)(426003)(36756003)(2616005)(66574015)(2906002)(47076005)(86362001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Oct 2023 19:08:55.7034
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5f382354-9212-4671-dd41-08dbc5d68591
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SN1PEPF00026368.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7863
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Mime-Version: 1.0
+References: <20230930184821.310143-1-arakesh@google.com>
+X-Mailer: git-send-email 2.42.0.609.gbb76f46606-goog
+Message-ID: <20231005180814.3278050-1-arakesh@google.com>
+Subject: [PATCH v3 1/3] usb: gadget: uvc: prevent use of disabled endpoint
+From: Avichal Rakesh <arakesh@google.com>
+To: arakesh@google.com, dan.scally@ideasonboard.com, 
+	gregkh@linuxfoundation.org, laurent.pinchart@ideasonboard.com, 
+	m.grzeschik@pengutronix.de
+Cc: etalvala@google.com, jchowdhary@google.com, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-This reverts commit 0e5e1a84f0b8c814d502a135824244127fed8f23.
+Currently the set_alt callback immediately disables the endpoint and queues
+the v4l2 streamoff event. However, as the streamoff event is processed
+asynchronously, it is possible that the video_pump thread attempts to queue
+requests to an already disabled endpoint.
 
-Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+This change moves disabling usb endpoint to the end of streamoff event
+callback. To be consistent with the actual streaming state, uvc->state
+is now toggled between CONNECTED and STREAMING from the v4l2 event
+callback only.
+
+Link: https://lore.kernel.org/20230615171558.GK741@pendragon.ideasonboard.com/
+Link: https://lore.kernel.org/20230531085544.253363-1-dan.scally@ideasonboard.com/
+Signed-off-by: Avichal Rakesh <arakesh@google.com>
 ---
- drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c       | 3 ++-
- drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_0_ppt.c | 1 +
- 2 files changed, 3 insertions(+), 1 deletion(-)
+v1 -> v2: Rebased to ToT and reworded commit message.
+v2 -> v3: Fix email threading goof-up
 
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c
-index 08cb9f8ce64e..9b62b45ebb7f 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c
-@@ -1026,7 +1026,8 @@ static int smu_v13_0_process_pending_interrupt(struct smu_context *smu)
+ drivers/usb/gadget/function/f_uvc.c    | 11 +++++------
+ drivers/usb/gadget/function/f_uvc.h    |  2 +-
+ drivers/usb/gadget/function/uvc.h      |  2 +-
+ drivers/usb/gadget/function/uvc_v4l2.c | 21 ++++++++++++++++++---
+ 4 files changed, 25 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+index faa398109431..75c9f9a3f884 100644
+--- a/drivers/usb/gadget/function/f_uvc.c
++++ b/drivers/usb/gadget/function/f_uvc.c
+@@ -263,10 +263,13 @@ uvc_function_setup(struct usb_function *f, const struct usb_ctrlrequest *ctrl)
+ 	return 0;
+ }
+
+-void uvc_function_setup_continue(struct uvc_device *uvc)
++void uvc_function_setup_continue(struct uvc_device *uvc, int disable_ep)
  {
- 	int ret = 0;
- 
--	if (smu_cmn_feature_is_enabled(smu, SMU_FEATURE_ACDC_BIT))
-+	if (smu->dc_controlled_by_gpio &&
-+	    smu_cmn_feature_is_enabled(smu, SMU_FEATURE_ACDC_BIT))
- 		ret = smu_v13_0_allow_ih_interrupt(smu);
- 
- 	return ret;
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_0_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_0_ppt.c
-index 07df5be063e2..0fb6be11a0cc 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_0_ppt.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0_0_ppt.c
-@@ -2662,6 +2662,7 @@ static const struct pptable_funcs smu_v13_0_0_ppt_funcs = {
- 	.enable_mgpu_fan_boost = smu_v13_0_0_enable_mgpu_fan_boost,
- 	.get_power_limit = smu_v13_0_0_get_power_limit,
- 	.set_power_limit = smu_v13_0_set_power_limit,
-+	.set_power_source = smu_v13_0_set_power_source,
- 	.get_power_profile_mode = smu_v13_0_0_get_power_profile_mode,
- 	.set_power_profile_mode = smu_v13_0_0_set_power_profile_mode,
- 	.run_btc = smu_v13_0_run_btc,
--- 
-2.34.1
+ 	struct usb_composite_dev *cdev = uvc->func.config->cdev;
 
++	if (disable_ep && uvc->video.ep) {
++		usb_ep_disable(uvc->video.ep);
++	}
+ 	usb_composite_setup_continue(cdev);
+ }
+
+@@ -337,15 +340,11 @@ uvc_function_set_alt(struct usb_function *f, unsigned interface, unsigned alt)
+ 		if (uvc->state != UVC_STATE_STREAMING)
+ 			return 0;
+
+-		if (uvc->video.ep)
+-			usb_ep_disable(uvc->video.ep);
+-
+ 		memset(&v4l2_event, 0, sizeof(v4l2_event));
+ 		v4l2_event.type = UVC_EVENT_STREAMOFF;
+ 		v4l2_event_queue(&uvc->vdev, &v4l2_event);
+
+-		uvc->state = UVC_STATE_CONNECTED;
+-		return 0;
++		return USB_GADGET_DELAYED_STATUS;
+
+ 	case 1:
+ 		if (uvc->state != UVC_STATE_CONNECTED)
+diff --git a/drivers/usb/gadget/function/f_uvc.h b/drivers/usb/gadget/function/f_uvc.h
+index 1db972d4beeb..e7f9f13f14dc 100644
+--- a/drivers/usb/gadget/function/f_uvc.h
++++ b/drivers/usb/gadget/function/f_uvc.h
+@@ -11,7 +11,7 @@
+
+ struct uvc_device;
+
+-void uvc_function_setup_continue(struct uvc_device *uvc);
++void uvc_function_setup_continue(struct uvc_device *uvc, int disale_ep);
+
+ void uvc_function_connect(struct uvc_device *uvc);
+
+diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
+index 6751de8b63ad..989bc6b4e93d 100644
+--- a/drivers/usb/gadget/function/uvc.h
++++ b/drivers/usb/gadget/function/uvc.h
+@@ -177,7 +177,7 @@ struct uvc_file_handle {
+  * Functions
+  */
+
+-extern void uvc_function_setup_continue(struct uvc_device *uvc);
++extern void uvc_function_setup_continue(struct uvc_device *uvc, int disable_ep);
+ extern void uvc_function_connect(struct uvc_device *uvc);
+ extern void uvc_function_disconnect(struct uvc_device *uvc);
+
+diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
+index 3f0a9795c0d4..3d3469883ed0 100644
+--- a/drivers/usb/gadget/function/uvc_v4l2.c
++++ b/drivers/usb/gadget/function/uvc_v4l2.c
+@@ -451,7 +451,7 @@ uvc_v4l2_streamon(struct file *file, void *fh, enum v4l2_buf_type type)
+ 	 * Complete the alternate setting selection setup phase now that
+ 	 * userspace is ready to provide video frames.
+ 	 */
+-	uvc_function_setup_continue(uvc);
++	uvc_function_setup_continue(uvc, 0);
+ 	uvc->state = UVC_STATE_STREAMING;
+
+ 	return 0;
+@@ -463,11 +463,19 @@ uvc_v4l2_streamoff(struct file *file, void *fh, enum v4l2_buf_type type)
+ 	struct video_device *vdev = video_devdata(file);
+ 	struct uvc_device *uvc = video_get_drvdata(vdev);
+ 	struct uvc_video *video = &uvc->video;
++	int ret = 0;
+
+ 	if (type != video->queue.queue.type)
+ 		return -EINVAL;
+
+-	return uvcg_video_enable(video, 0);
++	uvc->state = UVC_STATE_CONNECTED;
++	ret = uvcg_video_enable(video, 0);
++	if (ret < 0) {
++		return ret;
++	}
++
++	uvc_function_setup_continue(uvc, 1);
++	return 0;
+ }
+
+ static int
+@@ -500,6 +508,14 @@ uvc_v4l2_subscribe_event(struct v4l2_fh *fh,
+ static void uvc_v4l2_disable(struct uvc_device *uvc)
+ {
+ 	uvc_function_disconnect(uvc);
++	if (uvc->state == UVC_STATE_STREAMING) {
++		/*
++		 * Drop uvc->state to CONNECTED if it was streaming before.
++		 * This ensures that the usb_requests are no longer queued
++		 * to the controller.
++		 */
++		uvc->state = UVC_STATE_CONNECTED;
++	}
+ 	uvcg_video_enable(&uvc->video, 0);
+ 	uvcg_free_buffers(&uvc->video.queue);
+ 	uvc->func_connected = false;
+@@ -647,4 +663,3 @@ const struct v4l2_file_operations uvc_v4l2_fops = {
+ 	.get_unmapped_area = uvcg_v4l2_get_unmapped_area,
+ #endif
+ };
+-
+--
+2.42.0.609.gbb76f46606-goog
 
