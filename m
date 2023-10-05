@@ -1,85 +1,87 @@
-Return-Path: <linux-usb+bounces-1107-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1108-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A67297B9922
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 02:10:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA9627B9B21
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 08:35:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by ny.mirrors.kernel.org (Postfix) with ESMTP id CF8621C2094F
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 00:10:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 6294B281BA1
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 06:35:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D62C64B;
-	Thu,  5 Oct 2023 00:10:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1D684C9D;
+	Thu,  5 Oct 2023 06:35:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oPHtVwjy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s4ZW/3jf"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F273A7F;
-	Thu,  5 Oct 2023 00:10:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6FC48C433C9;
-	Thu,  5 Oct 2023 00:10:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C1C17F
+	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 06:35:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6666C433B6;
+	Thu,  5 Oct 2023 06:35:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1696464626;
-	bh=ZAyObxd3ELfiKp6Laq/5uFI4Zz0JhrXUcKzxBevzbw4=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=oPHtVwjyGDXalqOQVTKjg1HPa9A7C/5ETe91ML38o5p9jIh/bwMAA/YKXBbzxFE4J
-	 ZYzuofWqvfEn4Aq/CRMJVXDsmysO3aZ6HnISDNVV4+5siPejW44NSef8lSTDRUSAFh
-	 hdHfTI8UTWK1OyGFkYEvtxrQAUV4nYpSkOe+JDuM1LRD9xBRdxn+V4tfZhsxfxv4Il
-	 m6Y07qY3HGJZvhlA88FH+1rP3M3X2hSdOKFZYeqAOJSmwQkn295vjAH2Z0e/NDGtjE
-	 q0TNBVp37DmBeIwCKIkbdshRkxatAThLhiJpIwMaOCP855DsNnZgZYOBYdcrDwPahu
-	 2LsDb84VX0tsw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4E96CC595D0;
-	Thu,  5 Oct 2023 00:10:26 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1696487745;
+	bh=ypr08pgY6c2eP9P2qYB2bJHbuVcnNmfSe66z44UoZvs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=s4ZW/3jfyG3xsagsVjX0ZESZ8I/QmLSI7NBZzFnORa9ftepVJZj4aSEHYvCKmaOSY
+	 TTNAM63zrluIweCFtqRQEXhKqjsQqPgBURoxJiU/Sk7GJEI0aYcur7/oZCI30qygKQ
+	 gHv3CckD5W2IYtQFH26Hrgn0kBLLENjaOvu+WEzzj5Ruvb0EcKr0830ZRPUnzg/yiW
+	 BPZ38UhButfb4UYY+mWJvDgn4tN7jvaFHgBQUAizjpAHw0KGIMRjn2Gn1Vei6c7QxD
+	 kyXVztyfFfGHZ/fZXOYfdvYhPOOkCIuqDp6p/O+3zWJIX5TKmmx0ndjEx1KaCkhgNi
+	 XxDnBa5Cfzfzw==
+Received: from johan by xi.lan with local (Exim 4.96)
+	(envelope-from <johan@kernel.org>)
+	id 1qoHxp-0004D5-0s;
+	Thu, 05 Oct 2023 08:36:01 +0200
+Date: Thu, 5 Oct 2023 08:36:01 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Bjorn Andersson <andersson@kernel.org>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, quic_ppratap@quicinc.com,
+	quic_wcheng@quicinc.com, quic_jackp@quicinc.com
+Subject: Re: [PATCH v12 0/3] Add multiport support for DWC3 controllers
+Message-ID: <ZR5ZUaWcyRj5sZKx@hovoldconsulting.com>
+References: <20231004165922.25642-1-quic_kriskura@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v3 0/2] r8152: modify rx_bottom
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <169646462631.25730.11600010674078336884.git-patchwork-notify@kernel.org>
-Date: Thu, 05 Oct 2023 00:10:26 +0000
-References: <20230926111714.9448-432-nic_swsd@realtek.com>
-In-Reply-To: <20230926111714.9448-432-nic_swsd@realtek.com>
-To: Hayes Wang <hayeswang@realtek.com>
-Cc: kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
- nic_swsd@realtek.com, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, edumazet@google.com, bjorn@mork.no,
- pabeni@redhat.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231004165922.25642-1-quic_kriskura@quicinc.com>
 
-Hello:
-
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Tue, 26 Sep 2023 19:17:12 +0800 you wrote:
-> v3:
-> For patch #1, this patch is replaced. The new patch only break the loop,
-> and keep that the driver would queue the rx packets.
+On Wed, Oct 04, 2023 at 10:29:19PM +0530, Krishna Kurapati wrote:
+> This series is a set of picked up acks and split from larger series [1]
+> The series is rebased on top of:
+> Repo: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
+> Branch: usb-testing
+> commit 03cf2af41b37 ("Revert "phy: qcom-qmp-usb: Add Qualcomm SDX75 USB3 PHY support"")
 > 
-> For patch #2, modify the code depends on patch #1. For work_down < budget,
-> napi_get_frags() and napi_gro_frags() would be used. For the others,
-> nothing is changed.
+> The patches present in series have been reviewed and acked by respective
+> maintainers. They dont break any existing implementation and is just a
+> subset of merge ready multiport code. The rest of the patches will be
+> rebased on top of the usb branch once this series is merged.
+>
+> [1]: https://patchwork.kernel.org/project/linux-usb/cover/20230828133033.11988-1-quic_kriskura@quicinc.com/
 > 
-> [...]
+> Krishna Kurapati (3):
+>   usb: dwc3: core: Access XHCI address space temporarily to read port
+>     info
+>   usb: dwc3: core: Skip setting event buffers for host only controllers
+>   usb: dwc3: qcom: Add helper function to request threaded IRQ
 
-Here is the summary with links:
-  - [net-next,v3,1/2] r8152: break the loop when the budget is exhausted
-    https://git.kernel.org/netdev/net-next/c/2cf51f931797
-  - [net-next,v3,2/2] r8152: use napi_gro_frags
-    https://git.kernel.org/netdev/net-next/c/788d30daa8f9
+NAK.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+These patches make very little sense on their own and can't really be
+evaluated without the context of the larger series.
 
+Just work on getting the multiport series in shape and include any acks
+you've received so far when submitting new revisions.
 
+Johan
 
