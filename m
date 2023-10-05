@@ -1,140 +1,200 @@
-Return-Path: <linux-usb+bounces-1148-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1139-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DF017BA0A6
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 16:41:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 68FE57B9E4F
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 16:04:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 1C625281DCE
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 14:41:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 171FF2821EB
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 14:04:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA0712AB4C;
-	Thu,  5 Oct 2023 14:41:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DA4127722;
+	Thu,  5 Oct 2023 14:04:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="iJK+h5Uu"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JPHNFOXb"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BA261D698
-	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 14:41:18 +0000 (UTC)
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E276D085;
-	Thu,  5 Oct 2023 07:41:04 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3958tp9X011945;
-	Thu, 5 Oct 2023 09:03:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=khXMauHaN37WlQI4QDMEvQGmqZEu2LmWzhZ2mcPvDZE=;
- b=iJK+h5UuvXGORfn3Su1l5sNOStXWzdWo2SX732Gm5YR0hV00KAsUHE5TrqBapDYIrba4
- vvKQWwhVgWSq3RqZHHkpA8egeIqltIXNsVQjREFtaaW9/EHhSU/n5gPODR5wv4NZ70kR
- GK17VR6RR9YB62Tlk1e+5PfvImxIqSCQfnYTBsi0EmMZL3z/XFPQN3Kbo1+JtxWDovHB
- vRvFhkWevWwzKqTPwM3CkaoEcOk3larNK1rWmCyTmN6pvIvp77gzi2oaxPenuQNjCSiT
- /a1booBASbHnQoWd0xgEOCYgvU8fhcDAiVXtgxoujUQAwPx/DR3gfvo/bbZCa0/bAtrs rA== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3thfkh155e-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 05 Oct 2023 09:03:01 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 395931mm029885
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 5 Oct 2023 09:03:01 GMT
-Received: from [10.216.33.24] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Thu, 5 Oct
- 2023 02:02:58 -0700
-Message-ID: <d6974352-e157-421b-aa2d-e4a6c791ca2b@quicinc.com>
-Date: Thu, 5 Oct 2023 14:32:54 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F30F327725
+	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 14:04:35 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F06CC4E368
+	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 07:04:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696514657; x=1728050657;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Wa6t2DTFXJa4tkylw9tYrxfqlqGaswEZ8RJPzfie9Sw=;
+  b=JPHNFOXbKaneIxpDj1foR+r/00sXsRdRfwlqhH2Og8gwz3HwAyBBINyV
+   2rr/UDpHlATOun+eeQaol2KpU+DEsXKCHWFeIALJCFgjaeUcvo7q46AQb
+   75BtMuUhFy347xreSatoiwYrNPWGfJBFnn0pCWAAVLHD2vbiz9DAW/7b2
+   pGl+Lwepxm/K+xZ+krQxOVEA0MviNWRklmmoeSU5Gqhf4wiG3xm/QdCAr
+   P31Yn+EPfEaxUDw+UzmfKtm54G1Ct/P6kU7MgoYgf7bzp0myTypmiAjU+
+   U3zjElN2KMOKqPTOlyW0BSsmX3fyhIm4u9um83tVcFanLzAvkJp6IhNZa
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="380732071"
+X-IronPort-AV: E=Sophos;i="6.03,202,1694761200"; 
+   d="scan'208";a="380732071"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2023 02:27:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="817511730"
+X-IronPort-AV: E=Sophos;i="6.03,202,1694761200"; 
+   d="scan'208";a="817511730"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga008.fm.intel.com with ESMTP; 05 Oct 2023 02:27:31 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id D771A345; Thu,  5 Oct 2023 12:27:29 +0300 (EEST)
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: linux-usb@vger.kernel.org
+Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Gil Fine <gil.fine@linux.intel.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH 01/10] thunderbolt: Use constants for path weight and priority
+Date: Thu,  5 Oct 2023 12:27:20 +0300
+Message-Id: <20231005092729.3595447-2-mika.westerberg@linux.intel.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20231005092729.3595447-1-mika.westerberg@linux.intel.com>
+References: <20231005092729.3595447-1-mika.westerberg@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v12 0/3] Add multiport support for DWC3 controllers
-To: Johan Hovold <johan@kernel.org>
-CC: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Bjorn Andersson <andersson@kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_ppratap@quicinc.com>,
-        <quic_wcheng@quicinc.com>, <quic_jackp@quicinc.com>
-References: <20231004165922.25642-1-quic_kriskura@quicinc.com>
- <ZR5ZUaWcyRj5sZKx@hovoldconsulting.com>
-Content-Language: en-US
-From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <ZR5ZUaWcyRj5sZKx@hovoldconsulting.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: PYKGrIw-0QHMrmDtdXhsl-lWKvnsWBm5
-X-Proofpoint-ORIG-GUID: PYKGrIw-0QHMrmDtdXhsl-lWKvnsWBm5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-05_06,2023-10-02_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=889
- malwarescore=0 phishscore=0 impostorscore=0 suspectscore=0
- priorityscore=1501 lowpriorityscore=0 clxscore=1015 spamscore=0
- bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2310050069
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
+Makes it easier to follow and update. No functional changes.
 
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+---
+ drivers/thunderbolt/tunnel.c | 39 +++++++++++++++++++++++++-----------
+ 1 file changed, 27 insertions(+), 12 deletions(-)
 
-On 10/5/2023 12:06 PM, Johan Hovold wrote:
-> On Wed, Oct 04, 2023 at 10:29:19PM +0530, Krishna Kurapati wrote:
->> This series is a set of picked up acks and split from larger series [1]
->> The series is rebased on top of:
->> Repo: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
->> Branch: usb-testing
->> commit 03cf2af41b37 ("Revert "phy: qcom-qmp-usb: Add Qualcomm SDX75 USB3 PHY support"")
->>
->> The patches present in series have been reviewed and acked by respective
->> maintainers. They dont break any existing implementation and is just a
->> subset of merge ready multiport code. The rest of the patches will be
->> rebased on top of the usb branch once this series is merged.
->>
->> [1]: https://patchwork.kernel.org/project/linux-usb/cover/20230828133033.11988-1-quic_kriskura@quicinc.com/
->>
->> Krishna Kurapati (3):
->>    usb: dwc3: core: Access XHCI address space temporarily to read port
->>      info
->>    usb: dwc3: core: Skip setting event buffers for host only controllers
->>    usb: dwc3: qcom: Add helper function to request threaded IRQ
-> 
-> NAK.
-> 
-> These patches make very little sense on their own and can't really be
-> evaluated without the context of the larger series.
-> 
-> Just work on getting the multiport series in shape and include any acks
-> you've received so far when submitting new revisions.
-> 
+diff --git a/drivers/thunderbolt/tunnel.c b/drivers/thunderbolt/tunnel.c
+index 9775332dee0e..c53df06dd5df 100644
+--- a/drivers/thunderbolt/tunnel.c
++++ b/drivers/thunderbolt/tunnel.c
+@@ -21,12 +21,18 @@
+ #define TB_PCI_PATH_DOWN		0
+ #define TB_PCI_PATH_UP			1
+ 
++#define TB_PCI_PRIORITY			3
++#define TB_PCI_WEIGHT			1
++
+ /* USB3 adapters use always HopID of 8 for both directions */
+ #define TB_USB3_HOPID			8
+ 
+ #define TB_USB3_PATH_DOWN		0
+ #define TB_USB3_PATH_UP			1
+ 
++#define TB_USB3_PRIORITY		3
++#define TB_USB3_WEIGHT			3
++
+ /* DP adapters use HopID 8 for AUX and 9 for Video */
+ #define TB_DP_AUX_TX_HOPID		8
+ #define TB_DP_AUX_RX_HOPID		8
+@@ -36,6 +42,12 @@
+ #define TB_DP_AUX_PATH_OUT		1
+ #define TB_DP_AUX_PATH_IN		2
+ 
++#define TB_DP_VIDEO_PRIORITY		1
++#define TB_DP_VIDEO_WEIGHT		1
++
++#define TB_DP_AUX_PRIORITY		2
++#define TB_DP_AUX_WEIGHT		1
++
+ /* Minimum number of credits needed for PCIe path */
+ #define TB_MIN_PCIE_CREDITS		6U
+ /*
+@@ -46,6 +58,9 @@
+ /* Minimum number of credits for DMA path */
+ #define TB_MIN_DMA_CREDITS		1
+ 
++#define TB_DMA_PRIORITY			5
++#define TB_DMA_WEIGHT			1
++
+ static unsigned int dma_credits = TB_DMA_CREDITS;
+ module_param(dma_credits, uint, 0444);
+ MODULE_PARM_DESC(dma_credits, "specify custom credits for DMA tunnels (default: "
+@@ -213,8 +228,8 @@ static int tb_pci_init_path(struct tb_path *path)
+ 	path->egress_shared_buffer = TB_PATH_NONE;
+ 	path->ingress_fc_enable = TB_PATH_ALL;
+ 	path->ingress_shared_buffer = TB_PATH_NONE;
+-	path->priority = 3;
+-	path->weight = 1;
++	path->priority = TB_PCI_PRIORITY;
++	path->weight = TB_PCI_WEIGHT;
+ 	path->drop_packages = 0;
+ 
+ 	tb_path_for_each_hop(path, hop) {
+@@ -1152,8 +1167,8 @@ static void tb_dp_init_aux_path(struct tb_path *path)
+ 	path->egress_shared_buffer = TB_PATH_NONE;
+ 	path->ingress_fc_enable = TB_PATH_ALL;
+ 	path->ingress_shared_buffer = TB_PATH_NONE;
+-	path->priority = 2;
+-	path->weight = 1;
++	path->priority = TB_DP_AUX_PRIORITY;
++	path->weight = TB_DP_AUX_WEIGHT;
+ 
+ 	tb_path_for_each_hop(path, hop)
+ 		tb_dp_init_aux_credits(hop);
+@@ -1196,8 +1211,8 @@ static int tb_dp_init_video_path(struct tb_path *path)
+ 	path->egress_shared_buffer = TB_PATH_NONE;
+ 	path->ingress_fc_enable = TB_PATH_NONE;
+ 	path->ingress_shared_buffer = TB_PATH_NONE;
+-	path->priority = 1;
+-	path->weight = 1;
++	path->priority = TB_DP_VIDEO_PRIORITY;
++	path->weight = TB_DP_VIDEO_WEIGHT;
+ 
+ 	tb_path_for_each_hop(path, hop) {
+ 		int ret;
+@@ -1471,8 +1486,8 @@ static int tb_dma_init_rx_path(struct tb_path *path, unsigned int credits)
+ 	path->ingress_fc_enable = TB_PATH_ALL;
+ 	path->egress_shared_buffer = TB_PATH_NONE;
+ 	path->ingress_shared_buffer = TB_PATH_NONE;
+-	path->priority = 5;
+-	path->weight = 1;
++	path->priority = TB_DMA_PRIORITY;
++	path->weight = TB_DMA_WEIGHT;
+ 	path->clear_fc = true;
+ 
+ 	/*
+@@ -1505,8 +1520,8 @@ static int tb_dma_init_tx_path(struct tb_path *path, unsigned int credits)
+ 	path->ingress_fc_enable = TB_PATH_ALL;
+ 	path->egress_shared_buffer = TB_PATH_NONE;
+ 	path->ingress_shared_buffer = TB_PATH_NONE;
+-	path->priority = 5;
+-	path->weight = 1;
++	path->priority = TB_DMA_PRIORITY;
++	path->weight = TB_DMA_WEIGHT;
+ 	path->clear_fc = true;
+ 
+ 	tb_path_for_each_hop(path, hop) {
+@@ -1838,8 +1853,8 @@ static void tb_usb3_init_path(struct tb_path *path)
+ 	path->egress_shared_buffer = TB_PATH_NONE;
+ 	path->ingress_fc_enable = TB_PATH_ALL;
+ 	path->ingress_shared_buffer = TB_PATH_NONE;
+-	path->priority = 3;
+-	path->weight = 3;
++	path->priority = TB_USB3_PRIORITY;
++	path->weight = TB_USB3_WEIGHT;
+ 	path->drop_packages = 0;
+ 
+ 	tb_path_for_each_hop(path, hop)
+-- 
+2.40.1
 
-Hi Johan,
-
-  This may be partially true for first patch of this series, (where we 
-read num_ports), but the other two patches are self explanatory and are 
-applicable for non-mp controllers as well. Intention was to ensure we 
-make the next rebase easy.
-
-  Will try to address all comments and send v12 again as a whole series 
-this week. I am actually blocked on [1]. Not able to repro the compile 
-error on my end. That's what stopped me from sending all at once.
-
-[1]: https://lore.kernel.org/all/202309200156.CxQ3yaLY-lkp@intel.com/
-
-Thanks,
-Krishna,
 
