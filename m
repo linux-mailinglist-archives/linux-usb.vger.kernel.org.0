@@ -1,34 +1,34 @@
-Return-Path: <linux-usb+bounces-1138-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1144-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82BA57B9E4C
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 16:04:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED1637B9FDA
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 16:30:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 341732822F8
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 14:04:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTP id B00E41F21520
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 14:30:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B053427EE1;
-	Thu,  5 Oct 2023 14:04:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4934C125DD;
+	Thu,  5 Oct 2023 14:30:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="ivbGpObT"
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="NNGuo49X"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2096627ED1
-	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 14:04:16 +0000 (UTC)
-X-Greylist: delayed 435 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 05 Oct 2023 07:03:36 PDT
-Received: from out203-205-221-242.mail.qq.com (out203-205-221-242.mail.qq.com [203.205.221.242])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16DA759E6;
-	Thu,  5 Oct 2023 07:03:35 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1C6D29403
+	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 14:30:19 +0000 (UTC)
+X-Greylist: delayed 2420 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 05 Oct 2023 07:30:16 PDT
+Received: from out203-205-251-66.mail.qq.com (out203-205-251-66.mail.qq.com [203.205.251.66])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BFEE8682
+	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 07:30:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1696514613;
+	s=s201512; t=1696516213;
 	bh=SXOUgbldgZBCY3GyES22l+Ixl/lk+hf9+Aq9JS/F44U=;
 	h=From:To:Cc:Subject:Date;
-	b=ivbGpObTfpcXyvTA6pLrkKVYM8ddZpZLIkVIaEDUv+4b6FjjRZSAdcNZlsATIjqdk
-	 6UgwiIQRZLoS+Lu5cp3PZht1bRkuAt4lNYy+LyYO4wSX9V9jQElNQgbsJs0vWG8xuq
-	 0JLrHcH9CcmmjICvxGFqeBfA2XjHGiO2+cUGpaKQ=
+	b=NNGuo49XWXpUA2DZFqXI4opoj2GuyiaIYC6gAAC+Q8+Pu0cMvv0SFAo+LaTSVnyOP
+	 qEZIvFExWlHvsmK6gLDCAHkQ5giBCq5irk7oK+3ILK3e1DkXEpOTbDmF8e7egz55G8
+	 mTFJGTEcWbtZ/JPQdPgADjXi72q1CqlNrQN35CW8=
 Received: from KernelDevBox.byted.org ([180.184.103.200])
 	by newxmesmtplogicsvrsza12-0.qq.com (NewEsmtp) with SMTP
 	id C7005A1E; Thu, 05 Oct 2023 21:49:48 +0800
@@ -74,7 +74,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_BLOCKED,RDNS_DYNAMIC,SPF_HELO_NONE,
+	HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
 	SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
