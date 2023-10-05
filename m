@@ -1,59 +1,64 @@
-Return-Path: <linux-usb+bounces-1126-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1127-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A53517B9D98
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 15:51:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A91787B9D99
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 15:51:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 5BD882821F1
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 13:51:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 578AC282253
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 13:51:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCCCC273D5;
-	Thu,  5 Oct 2023 13:50:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D41E273DE;
+	Thu,  5 Oct 2023 13:50:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hCMswHYv"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EE9526E1D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A47E026E1E
 	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 13:50:02 +0000 (UTC)
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D7651BFC;
-	Thu,  5 Oct 2023 06:50:01 -0700 (PDT)
-X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="383353480"
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5BA51BFF
+	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 06:50:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696513801; x=1728049801;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=r4zSMdv2D0l/K4htRYiDWAf7oxWqMxKtQD3xWfbuLlM=;
+  b=hCMswHYvE0vGW8co+UEdkACH69V2qs0YekKOcAiFcKi/+0qRMdmwxUg5
+   tE8pOsyQhstamiXKYAQrnzjqqPRrmrkZIFHrTrFStSIaM8uzI5uaQEgqc
+   jOEc7cNh/+s7rP8cuNLNMb5pmlTMQGB9XeTJmND5kE4bal3Qf3jY784mp
+   SiKD/NYF6EPOdpEZYbhE/yB1JXCi2QVpRe4HUPMU17xHIbgPmDEO5czbB
+   bDFIifKnGYDiinET2IhMtz634x83hWOcz914yAIAc2hhcsJQsI6TFy01o
+   cmU/DyeCEXPij81ZN8BMfELskkUNQeUHOUtNxxljnlOuAsLF8TF3x3qN6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="383353487"
 X-IronPort-AV: E=Sophos;i="6.03,202,1694761200"; 
-   d="scan'208";a="383353480"
+   d="scan'208";a="383353487"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2023 02:14:13 -0700
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2023 02:14:15 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="728365949"
+X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="728365953"
 X-IronPort-AV: E=Sophos;i="6.03,202,1694761200"; 
-   d="scan'208";a="728365949"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga006.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2023 02:14:09 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC1)
-	(envelope-from <andy@kernel.org>)
-	id 1qoKQn-00000002z4r-1f1n;
-	Thu, 05 Oct 2023 12:14:05 +0300
-Date: Thu, 5 Oct 2023 12:14:05 +0300
-From: Andy Shevchenko <andy@kernel.org>
-To: Duje =?utf-8?Q?Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
-Cc: Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	Russell King <linux@armlinux.org.uk>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-input@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH RFC v5 0/6] ARM: pxa: GPIO descriptor conversions
-Message-ID: <ZR5+XWBmg0I7joOg@smile.fi.intel.com>
-References: <20231004-pxa-gpio-v5-0-d99ae6fceea8@skole.hr>
+   d="scan'208";a="728365953"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga006.jf.intel.com with ESMTP; 05 Oct 2023 02:14:13 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id EECDA35A; Thu,  5 Oct 2023 12:14:11 +0300 (EEST)
+Date: Thu, 5 Oct 2023 12:14:11 +0300
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: linux-usb@vger.kernel.org
+Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Gil Fine <gil.fine@linux.intel.com>
+Subject: Re: [PATCH] thunderbolt: Call tb_switch_put() once DisplayPort
+ bandwidth request is finished
+Message-ID: <20231005091411.GR3208943@black.fi.intel.com>
+References: <20231003092302.2672156-1-mika.westerberg@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -62,34 +67,25 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20231004-pxa-gpio-v5-0-d99ae6fceea8@skole.hr>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-	autolearn_force=no version=3.4.6
+In-Reply-To: <20231003092302.2672156-1-mika.westerberg@linux.intel.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Wed, Oct 04, 2023 at 04:56:24PM +0200, Duje Mihanović wrote:
-> Hello,
+On Tue, Oct 03, 2023 at 12:23:02PM +0300, Mika Westerberg wrote:
+> From: Gil Fine <gil.fine@linux.intel.com>
 > 
-> Small series to convert some of the board files in the mach-pxa directory
-> to use the new GPIO descriptor interface.
+> When handling DisplayPort bandwidth request tb_switch_find_by_route() is
+> called and it returns a router structure with reference count increased.
+> In order to avoid resource leak call tb_switch_put() when finished.
 > 
-> Most notably, the am200epd, am300epd and Spitz matrix keypad among
-> others are not converted in this series.
+> Fixes: 6ce3563520be ("thunderbolt: Add support for DisplayPort bandwidth allocation mode")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Gil Fine <gil.fine@linux.intel.com>
+> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-Why is it still RFC?
-I believe it's already good enough to be considered as a real material.
-OTOH "RFT" might make sense. I'm not sure there are any users on the
-planet Earth that have this Sharp device up and running with newest
-kernels.
-
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Applied to thunderbolt.git/fixes.
 
