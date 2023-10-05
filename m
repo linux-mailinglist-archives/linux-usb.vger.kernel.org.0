@@ -1,52 +1,52 @@
-Return-Path: <linux-usb+bounces-1129-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1133-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D78C7B9D9B
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 15:52:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id EB5257B9D9F
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 15:52:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 0A7602822FF
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 13:52:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 9937B282706
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 13:52:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48FCE2770C;
-	Thu,  5 Oct 2023 13:50:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4340526E12;
+	Thu,  5 Oct 2023 13:50:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="N0LalvjE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XzCxNLjQ"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B3A326E31
-	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 13:50:04 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580561FCE
-	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 06:50:02 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 628D1266BD
+	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 13:50:54 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61C42713
+	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 06:50:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696513802; x=1728049802;
+  t=1696513852; x=1728049852;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=f7jd1P5K5yrePs3I3The3qsRZDLAKtvzOb2urriXFYI=;
-  b=N0LalvjEiYBj+FUjupmAGWAGH5v3DTDhHB6dco/sBXyb+0/2HcAn71bm
-   CKAslUyyAEehEEBUbAh0egwlNmNfL5dHl4qdrqrQWl5lUMumcabBIzBT9
-   1qmRvE/NPJlAMATVcO8OADalB8rr8WumF2DgZLfqRCrNp3+5deJtJoBnG
-   mHJf3/tUnocKv85pa1I6sKXhQ3UZQXFiBRMcGCInnaqRO7d6/RnvNiVy5
-   7p5dogNj0u4ywLOb1AVYsaU7pEFxzCgqpXF0eY68bSX5VrzwOyyd7cd0q
-   vppaqz7i+PIjm5r/cVH389GAOuvW6+S8iFkpNTZGB9pFIqn27+uPjRVkj
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="383355558"
+  bh=LVB9d1j4l8rWI7muJmnyjcFcDQCiuND/wpiFnw7J+Ec=;
+  b=XzCxNLjQiXcunoMM1x2PeTcdkCMUnHYiumXr4LSwV6r5rD1hU6LDyFr8
+   Tyet/YMhENv6OZxoywKtKPqUn8m/BD+wnTc8hb2nMeJAOU3ZKY/EavhA4
+   WzmnveNWCsv716Re8oVFBL/Xa4rgo9dna7shI0Pp0YRcjwM69O3GgpycX
+   48abGEbeBd9jAjN1xE5gDfzTDQHGIz9NYIaDQ/z7Bk/pN4FhKX5PocKNF
+   l7RaJBHrawLgqbuHxYUZkwgC5CHnsEJ9m201LwD6mTJzYyTaQ1/jUALl1
+   56nqVwxnAus0PPoIG89H/1TCWTo9D2kjSVRhsA+4rwybwAaHMiPT28IxX
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="368524197"
 X-IronPort-AV: E=Sophos;i="6.03,202,1694761200"; 
-   d="scan'208";a="383355558"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2023 02:27:33 -0700
+   d="scan'208";a="368524197"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2023 02:27:37 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="728369862"
+X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="822054746"
 X-IronPort-AV: E=Sophos;i="6.03,202,1694761200"; 
-   d="scan'208";a="728369862"
+   d="scan'208";a="822054746"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga006.jf.intel.com with ESMTP; 05 Oct 2023 02:27:31 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 05 Oct 2023 02:27:34 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 06E7D4F3; Thu,  5 Oct 2023 12:27:29 +0300 (EEST)
+	id 119374F4; Thu,  5 Oct 2023 12:27:30 +0300 (EEST)
 From: Mika Westerberg <mika.westerberg@linux.intel.com>
 To: linux-usb@vger.kernel.org
 Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
@@ -55,9 +55,9 @@ Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
 	Andreas Noever <andreas.noever@gmail.com>,
 	Gil Fine <gil.fine@linux.intel.com>,
 	Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH 04/10] thunderbolt: Change bandwidth reservations to comply USB4 v2
-Date: Thu,  5 Oct 2023 12:27:23 +0300
-Message-Id: <20231005092729.3595447-5-mika.westerberg@linux.intel.com>
+Subject: [PATCH 05/10] thunderbolt: Set path power management packet support bit for USB4 v2 routers
+Date: Thu,  5 Oct 2023 12:27:24 +0300
+Message-Id: <20231005092729.3595447-6-mika.westerberg@linux.intel.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20231005092729.3595447-1-mika.westerberg@linux.intel.com>
 References: <20231005092729.3595447-1-mika.westerberg@linux.intel.com>
@@ -75,182 +75,205 @@ X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-From: Gil Fine <gil.fine@linux.intel.com>
+USB4 v2 spec allows USB4 links that are part of a pass through tunnel
+(such as DisplayPort and USB 3.x Gen T) to enter lower CL states, which
+provide better power management. For this USB4 v2 routers in their path
+config space of lane 0 adapter include a new bit PMPS (PM packet
+support) that needs to be set.
 
-USB4 v2 Connection Manager guide (section 6.1.2.3) suggests to reserve
-bandwidth in a sligthly different manner. It suggests to keep minimum of
-1500 Mb/s for each path that carry a bulk traffic. Here we change the
-bandwidth reservations to comply to the above for USB 3.x and PCIe
-protocols over Gen 4 link, taking weights into account (that's 1500 Mb/s
-for PCIe and 3000 Mb/s for USB 3.x).
-
-For Gen 3 and below we use the existing reservation.
-
-Signed-off-by: Gil Fine <gil.fine@linux.intel.com>
 Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- drivers/thunderbolt/tb.c     | 11 ++++++
- drivers/thunderbolt/tunnel.c | 66 ++++++++++++++++++++++++++++++++++--
- drivers/thunderbolt/tunnel.h |  2 ++
- 3 files changed, 76 insertions(+), 3 deletions(-)
+ drivers/thunderbolt/path.c    |  7 ++++---
+ drivers/thunderbolt/tb.h      |  2 ++
+ drivers/thunderbolt/tb_regs.h |  3 ++-
+ drivers/thunderbolt/tunnel.c  | 35 ++++++++++++++++++++++++++---------
+ 4 files changed, 34 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-index 4d957e1f2c7a..96eb7d9fdedf 100644
---- a/drivers/thunderbolt/tb.c
-+++ b/drivers/thunderbolt/tb.c
-@@ -602,6 +602,7 @@ static int tb_available_bandwidth(struct tb *tb, struct tb_port *src_port,
- 	/* Find the minimum available bandwidth over all links */
- 	tb_for_each_port_on_path(src_port, dst_port, port) {
- 		int link_speed, link_width, up_bw, down_bw;
-+		int pci_reserved_up, pci_reserved_down;
+diff --git a/drivers/thunderbolt/path.c b/drivers/thunderbolt/path.c
+index ee03fd75a472..091a81bbdbdc 100644
+--- a/drivers/thunderbolt/path.c
++++ b/drivers/thunderbolt/path.c
+@@ -19,9 +19,9 @@ static void tb_dump_hop(const struct tb_path_hop *hop, const struct tb_regs_hop
  
- 		if (!tb_port_is_null(port))
- 			continue;
-@@ -695,6 +696,16 @@ static int tb_available_bandwidth(struct tb *tb, struct tb_port *src_port,
- 		up_bw -= usb3_consumed_up;
- 		down_bw -= usb3_consumed_down;
+ 	tb_port_dbg(port, " In HopID: %d => Out port: %d Out HopID: %d\n",
+ 		    hop->in_hop_index, regs->out_port, regs->next_hop);
+-	tb_port_dbg(port, "  Weight: %d Priority: %d Credits: %d Drop: %d\n",
+-		    regs->weight, regs->priority,
+-		    regs->initial_credits, regs->drop_packages);
++	tb_port_dbg(port, "  Weight: %d Priority: %d Credits: %d Drop: %d PM: %d\n",
++		    regs->weight, regs->priority, regs->initial_credits,
++		    regs->drop_packages, regs->pmps);
+ 	tb_port_dbg(port, "   Counter enabled: %d Counter index: %d\n",
+ 		    regs->counter_enable, regs->counter);
+ 	tb_port_dbg(port, "  Flow Control (In/Eg): %d/%d Shared Buffer (In/Eg): %d/%d\n",
+@@ -535,6 +535,7 @@ int tb_path_activate(struct tb_path *path)
+ 		hop.next_hop = path->hops[i].next_hop_index;
+ 		hop.out_port = path->hops[i].out_port->port;
+ 		hop.initial_credits = path->hops[i].initial_credits;
++		hop.pmps = path->hops[i].pm_support;
+ 		hop.unknown1 = 0;
+ 		hop.enable = 1;
  
-+		/*
-+		 * If there is anything reserved for PCIe bulk traffic
-+		 * take it into account here too.
-+		 */
-+		if (tb_tunnel_reserved_pci(port, &pci_reserved_up,
-+					   &pci_reserved_down)) {
-+			up_bw -= pci_reserved_up;
-+			down_bw -= pci_reserved_down;
-+		}
-+
- 		if (up_bw < *available_up)
- 			*available_up = up_bw;
- 		if (down_bw < *available_down)
+diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
+index f29bbafb977f..3c9ae5584569 100644
+--- a/drivers/thunderbolt/tb.h
++++ b/drivers/thunderbolt/tb.h
+@@ -348,6 +348,7 @@ struct tb_retimer {
+  *		     the path
+  * @nfc_credits: Number of non-flow controlled buffers allocated for the
+  *		 @in_port.
++ * @pm_support: Set path PM packet support bit to 1 (for USB4 v2 routers)
+  *
+  * Hop configuration is always done on the IN port of a switch.
+  * in_port and out_port have to be on the same switch. Packets arriving on
+@@ -368,6 +369,7 @@ struct tb_path_hop {
+ 	int next_hop_index;
+ 	unsigned int initial_credits;
+ 	unsigned int nfc_credits;
++	bool pm_support;
+ };
+ 
+ /**
+diff --git a/drivers/thunderbolt/tb_regs.h b/drivers/thunderbolt/tb_regs.h
+index 32839315948b..c14a1c3bc992 100644
+--- a/drivers/thunderbolt/tb_regs.h
++++ b/drivers/thunderbolt/tb_regs.h
+@@ -496,7 +496,8 @@ struct tb_regs_hop {
+ 			  * out_port (on the incoming port of the next switch)
+ 			  */
+ 	u32 out_port:6; /* next port of the path (on the same switch) */
+-	u32 initial_credits:8;
++	u32 initial_credits:7;
++	u32 pmps:1;
+ 	u32 unknown1:6; /* set to zero */
+ 	bool enable:1;
+ 
 diff --git a/drivers/thunderbolt/tunnel.c b/drivers/thunderbolt/tunnel.c
-index b77acda284d0..876b8f07f716 100644
+index 876b8f07f716..db0546c62cb3 100644
 --- a/drivers/thunderbolt/tunnel.c
 +++ b/drivers/thunderbolt/tunnel.c
-@@ -31,7 +31,7 @@
- #define TB_USB3_PATH_UP			1
- 
- #define TB_USB3_PRIORITY		3
--#define TB_USB3_WEIGHT			3
-+#define TB_USB3_WEIGHT			2
- 
- /* DP adapters use HopID 8 for AUX and 9 for Video */
- #define TB_DP_AUX_TX_HOPID		8
-@@ -61,6 +61,15 @@
- #define TB_DMA_PRIORITY			5
- #define TB_DMA_WEIGHT			1
- 
-+/*
-+ * Reserve additional bandwidth for USB 3.x and PCIe bulk traffic
-+ * according to USB4 v2 Connection Manager guide. This ends up reserving
-+ * 1500 Mb/s for PCIe and 3000 Mb/s for USB 3.x taking weights into
-+ * account.
-+ */
-+#define USB4_V2_PCI_MIN_BANDWIDTH	(1500 * TB_PCI_WEIGHT)
-+#define USB4_V2_USB3_MIN_BANDWIDTH	(1500 * TB_USB3_WEIGHT)
-+
- static unsigned int dma_credits = TB_DMA_CREDITS;
- module_param(dma_credits, uint, 0444);
- MODULE_PARM_DESC(dma_credits, "specify custom credits for DMA tunnels (default: "
-@@ -150,11 +159,11 @@ static struct tb_tunnel *tb_tunnel_alloc(struct tb *tb, size_t npaths,
- 
- static int tb_pci_set_ext_encapsulation(struct tb_tunnel *tunnel, bool enable)
- {
-+	struct tb_port *port = tb_upstream_port(tunnel->dst_port->sw);
- 	int ret;
- 
- 	/* Only supported of both routers are at least USB4 v2 */
--	if (usb4_switch_version(tunnel->src_port->sw) < 2 ||
--	    usb4_switch_version(tunnel->dst_port->sw) < 2)
-+	if (tb_port_get_link_generation(port) < 4)
- 		return 0;
- 
- 	ret = usb4_pci_port_set_ext_encapsulation(tunnel->src_port, enable);
-@@ -370,6 +379,51 @@ struct tb_tunnel *tb_tunnel_alloc_pci(struct tb *tb, struct tb_port *up,
- 	return NULL;
+@@ -134,6 +134,16 @@ static unsigned int tb_available_credits(const struct tb_port *port,
+ 	return credits > 0 ? credits : 0;
  }
  
-+/**
-+ * tb_tunnel_reserved_pci() - Amount of bandwidth to reserve for PCIe
-+ * @port: Lane 0 adapter
-+ * @reserved_up: Upstream bandwidth in Mb/s to reserve
-+ * @reserved_down: Downstream bandwidth in Mb/s to reserve
-+ *
-+ * Can be called to any connected lane 0 adapter to find out how much
-+ * bandwidth needs to be left in reserve for possible PCIe bulk traffic.
-+ * Returns true if there is something to be reserved and writes the
-+ * amount to @reserved_down/@reserved_up. Otherwise returns false and
-+ * does not touch the parameters.
-+ */
-+bool tb_tunnel_reserved_pci(struct tb_port *port, int *reserved_up,
-+			    int *reserved_down)
++static void tb_init_pm_support(struct tb_path_hop *hop)
 +{
-+	if (WARN_ON_ONCE(!port->remote))
-+		return false;
++	struct tb_port *out_port = hop->out_port;
++	struct tb_port *in_port = hop->in_port;
 +
-+	if (!tb_acpi_may_tunnel_pcie())
-+		return false;
-+
-+	if (tb_port_get_link_generation(port) < 4)
-+		return false;
-+
-+	/* Must have PCIe adapters */
-+	if (tb_is_upstream_port(port)) {
-+		if (!tb_switch_find_port(port->sw, TB_TYPE_PCIE_UP))
-+			return false;
-+		if (!tb_switch_find_port(port->remote->sw, TB_TYPE_PCIE_DOWN))
-+			return false;
-+	} else {
-+		if (!tb_switch_find_port(port->sw, TB_TYPE_PCIE_DOWN))
-+			return false;
-+		if (!tb_switch_find_port(port->remote->sw, TB_TYPE_PCIE_UP))
-+			return false;
-+	}
-+
-+	*reserved_up = USB4_V2_PCI_MIN_BANDWIDTH;
-+	*reserved_down = USB4_V2_PCI_MIN_BANDWIDTH;
-+
-+	tb_port_dbg(port, "reserving %u/%u Mb/s for PCIe\n", *reserved_up,
-+		    *reserved_down);
-+	return true;
++	if (tb_port_is_null(in_port) && tb_port_is_null(out_port) &&
++	    usb4_switch_version(in_port->sw) >= 2)
++		hop->pm_support = true;
 +}
 +
- static bool tb_dp_is_usb4(const struct tb_switch *sw)
+ static struct tb_tunnel *tb_tunnel_alloc(struct tb *tb, size_t npaths,
+ 					 enum tb_tunnel_type type)
  {
- 	/* Titan Ridge DP adapters need the same treatment as USB4 */
-@@ -1747,6 +1801,7 @@ static int tb_usb3_activate(struct tb_tunnel *tunnel, bool activate)
- static int tb_usb3_consumed_bandwidth(struct tb_tunnel *tunnel,
- 		int *consumed_up, int *consumed_down)
+@@ -1213,7 +1223,7 @@ static void tb_dp_init_aux_credits(struct tb_path_hop *hop)
+ 		hop->initial_credits = 1;
+ }
+ 
+-static void tb_dp_init_aux_path(struct tb_path *path)
++static void tb_dp_init_aux_path(struct tb_path *path, bool pm_support)
  {
-+	struct tb_port *port = tb_upstream_port(tunnel->dst_port->sw);
- 	int pcie_weight = tb_acpi_may_tunnel_pcie() ? TB_PCI_WEIGHT : 0;
+ 	struct tb_path_hop *hop;
  
- 	/*
-@@ -1758,6 +1813,11 @@ static int tb_usb3_consumed_bandwidth(struct tb_tunnel *tunnel,
- 	*consumed_down = tunnel->allocated_down *
- 		(TB_USB3_WEIGHT + pcie_weight) / TB_USB3_WEIGHT;
+@@ -1224,8 +1234,11 @@ static void tb_dp_init_aux_path(struct tb_path *path)
+ 	path->priority = TB_DP_AUX_PRIORITY;
+ 	path->weight = TB_DP_AUX_WEIGHT;
  
-+	if (tb_port_get_link_generation(port) >= 4) {
-+		*consumed_up = max(*consumed_up, USB4_V2_USB3_MIN_BANDWIDTH);
-+		*consumed_down = max(*consumed_down, USB4_V2_USB3_MIN_BANDWIDTH);
+-	tb_path_for_each_hop(path, hop)
++	tb_path_for_each_hop(path, hop) {
+ 		tb_dp_init_aux_credits(hop);
++		if (pm_support)
++			tb_init_pm_support(hop);
 +	}
-+
+ }
+ 
+ static int tb_dp_init_video_credits(struct tb_path_hop *hop)
+@@ -1257,7 +1270,7 @@ static int tb_dp_init_video_credits(struct tb_path_hop *hop)
  	return 0;
  }
  
-diff --git a/drivers/thunderbolt/tunnel.h b/drivers/thunderbolt/tunnel.h
-index 750ebb570d99..b4cff5482112 100644
---- a/drivers/thunderbolt/tunnel.h
-+++ b/drivers/thunderbolt/tunnel.h
-@@ -80,6 +80,8 @@ struct tb_tunnel *tb_tunnel_discover_pci(struct tb *tb, struct tb_port *down,
- 					 bool alloc_hopid);
- struct tb_tunnel *tb_tunnel_alloc_pci(struct tb *tb, struct tb_port *up,
- 				      struct tb_port *down);
-+bool tb_tunnel_reserved_pci(struct tb_port *port, int *reserved_up,
-+			    int *reserved_down);
- struct tb_tunnel *tb_tunnel_discover_dp(struct tb *tb, struct tb_port *in,
- 					bool alloc_hopid);
- struct tb_tunnel *tb_tunnel_alloc_dp(struct tb *tb, struct tb_port *in,
+-static int tb_dp_init_video_path(struct tb_path *path)
++static int tb_dp_init_video_path(struct tb_path *path, bool pm_support)
+ {
+ 	struct tb_path_hop *hop;
+ 
+@@ -1274,6 +1287,8 @@ static int tb_dp_init_video_path(struct tb_path *path)
+ 		ret = tb_dp_init_video_credits(hop);
+ 		if (ret)
+ 			return ret;
++		if (pm_support)
++			tb_init_pm_support(hop);
+ 	}
+ 
+ 	return 0;
+@@ -1365,7 +1380,7 @@ struct tb_tunnel *tb_tunnel_discover_dp(struct tb *tb, struct tb_port *in,
+ 		goto err_free;
+ 	}
+ 	tunnel->paths[TB_DP_VIDEO_PATH_OUT] = path;
+-	if (tb_dp_init_video_path(tunnel->paths[TB_DP_VIDEO_PATH_OUT]))
++	if (tb_dp_init_video_path(tunnel->paths[TB_DP_VIDEO_PATH_OUT], false))
+ 		goto err_free;
+ 
+ 	path = tb_path_discover(in, TB_DP_AUX_TX_HOPID, NULL, -1, NULL, "AUX TX",
+@@ -1373,14 +1388,14 @@ struct tb_tunnel *tb_tunnel_discover_dp(struct tb *tb, struct tb_port *in,
+ 	if (!path)
+ 		goto err_deactivate;
+ 	tunnel->paths[TB_DP_AUX_PATH_OUT] = path;
+-	tb_dp_init_aux_path(tunnel->paths[TB_DP_AUX_PATH_OUT]);
++	tb_dp_init_aux_path(tunnel->paths[TB_DP_AUX_PATH_OUT], false);
+ 
+ 	path = tb_path_discover(tunnel->dst_port, -1, in, TB_DP_AUX_RX_HOPID,
+ 				&port, "AUX RX", alloc_hopid);
+ 	if (!path)
+ 		goto err_deactivate;
+ 	tunnel->paths[TB_DP_AUX_PATH_IN] = path;
+-	tb_dp_init_aux_path(tunnel->paths[TB_DP_AUX_PATH_IN]);
++	tb_dp_init_aux_path(tunnel->paths[TB_DP_AUX_PATH_IN], false);
+ 
+ 	/* Validate that the tunnel is complete */
+ 	if (!tb_port_is_dpout(tunnel->dst_port)) {
+@@ -1435,6 +1450,7 @@ struct tb_tunnel *tb_tunnel_alloc_dp(struct tb *tb, struct tb_port *in,
+ 	struct tb_tunnel *tunnel;
+ 	struct tb_path **paths;
+ 	struct tb_path *path;
++	bool pm_support;
+ 
+ 	if (WARN_ON(!in->cap_adap || !out->cap_adap))
+ 		return NULL;
+@@ -1456,26 +1472,27 @@ struct tb_tunnel *tb_tunnel_alloc_dp(struct tb *tb, struct tb_port *in,
+ 	tunnel->max_down = max_down;
+ 
+ 	paths = tunnel->paths;
++	pm_support = usb4_switch_version(in->sw) >= 2;
+ 
+ 	path = tb_path_alloc(tb, in, TB_DP_VIDEO_HOPID, out, TB_DP_VIDEO_HOPID,
+ 			     link_nr, "Video");
+ 	if (!path)
+ 		goto err_free;
+-	tb_dp_init_video_path(path);
++	tb_dp_init_video_path(path, pm_support);
+ 	paths[TB_DP_VIDEO_PATH_OUT] = path;
+ 
+ 	path = tb_path_alloc(tb, in, TB_DP_AUX_TX_HOPID, out,
+ 			     TB_DP_AUX_TX_HOPID, link_nr, "AUX TX");
+ 	if (!path)
+ 		goto err_free;
+-	tb_dp_init_aux_path(path);
++	tb_dp_init_aux_path(path, pm_support);
+ 	paths[TB_DP_AUX_PATH_OUT] = path;
+ 
+ 	path = tb_path_alloc(tb, out, TB_DP_AUX_RX_HOPID, in,
+ 			     TB_DP_AUX_RX_HOPID, link_nr, "AUX RX");
+ 	if (!path)
+ 		goto err_free;
+-	tb_dp_init_aux_path(path);
++	tb_dp_init_aux_path(path, pm_support);
+ 	paths[TB_DP_AUX_PATH_IN] = path;
+ 
+ 	return tunnel;
 -- 
 2.40.1
 
