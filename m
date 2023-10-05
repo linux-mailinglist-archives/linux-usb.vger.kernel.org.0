@@ -1,45 +1,45 @@
-Return-Path: <linux-usb+bounces-1109-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1110-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8242B7B9B3F
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 09:11:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BEE67B9B45
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 09:13:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 3FC2E281B74
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 07:11:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 5C5CC281AEF
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 07:13:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0ED185259;
-	Thu,  5 Oct 2023 07:11:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D803525C;
+	Thu,  5 Oct 2023 07:13:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="W4X+yrl3"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="SM3GSVUb"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3043520E3
-	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 07:11:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42D04C433B9;
-	Thu,  5 Oct 2023 07:11:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06C703C3F
+	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 07:13:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F94FC433BA;
+	Thu,  5 Oct 2023 07:13:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1696489877;
-	bh=waTn81+t3Huf4bgZ5kUKfol0AEwKgZ3Oiqv9It1QBkQ=;
+	s=korg; t=1696490001;
+	bh=8OKsDsRgseQhws0CL9HUY+Fxt0nfCfk4BoGajhLR7Is=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=W4X+yrl3VNwQBRtwJ6EnCHhSp5KYbsNS7UxKXHyRxC3eMeHSU0/9k7++LMd5FilsS
-	 zmktcYtPQID4HTz0F/X+ck/MGIGvN3fL4eXHguq6R6vKmyLyn3UH0reAowW53HXVqF
-	 8cFUS3YAxruk578mRI53eE2SRSqWkcMvhvM6ROBg=
-Date: Thu, 5 Oct 2023 09:11:14 +0200
+	b=SM3GSVUb40jlNIYxL23WMHJhlc84z0uY4+A+X4KVpX7Y3FOLf9koln1RaU05qUH6D
+	 LWvH6JoKggmL+dr/2lp5o8oMyH6UOT0OY5d4twl5gqbuDvF9boIWUy1/JRI7Zp/Q/6
+	 JkSn7lXFpWYlDAbkPM/drvrRlPAn30g7rs9sXQHg=
+Date: Thu, 5 Oct 2023 09:13:18 +0200
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Avichal Rakesh <arakesh@google.com>
-Cc: Michael Grzeschik <mgr@pengutronix.de>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Daniel Scally <dan.scally@ideasonboard.com>, jchowdhary@google.com,
-	etalvala@google.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 0/3] usb: gadget: uvc: stability fixes on STREAMOFF.
-Message-ID: <2023100518-everyday-graves-7404@gregkh>
-References: <20230930184821.310143-1-arakesh@google.com>
- <ZRv2UnKztgyqk2pt@pengutronix.de>
- <0ccb2c13-438d-4715-af79-d5cf536930cc@google.com>
+To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>
+Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>, linux-usb@vger.kernel.org,
+	linux-mediatek@lists.infradead.org, kernel@pengutronix.de
+Subject: Re: [PATCH v2] usb: mtu3: Convert to platform remove callback
+ returning void
+Message-ID: <2023100530-degree-overlap-6aff@gregkh>
+References: <20230914200251.919584-1-u.kleine-koenig@pengutronix.de>
+ <2023100219-variety-genre-befe@gregkh>
+ <20231002144959.jc6wwfrvwd4cyu2l@pengutronix.de>
+ <2023100253-amino-pencil-9a96@gregkh>
+ <20231002214158.wvhals4ywezftepo@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -49,47 +49,55 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <0ccb2c13-438d-4715-af79-d5cf536930cc@google.com>
+In-Reply-To: <20231002214158.wvhals4ywezftepo@pengutronix.de>
 
-On Tue, Oct 03, 2023 at 04:16:00PM -0700, Avichal Rakesh wrote:
-> Thank you for testing the patch, Michael!
+On Mon, Oct 02, 2023 at 11:41:58PM +0200, Uwe Kleine-König wrote:
+> Hello Greg,
 > 
-> On 10/3/23 04:09, Michael Grzeschik wrote:
-> > Hi
+> On Mon, Oct 02, 2023 at 04:53:05PM +0200, Greg Kroah-Hartman wrote:
+> > On Mon, Oct 02, 2023 at 04:49:59PM +0200, Uwe Kleine-König wrote:
+> > > On Mon, Oct 02, 2023 at 04:39:47PM +0200, Greg Kroah-Hartman wrote:
+> > > > On Thu, Sep 14, 2023 at 10:02:51PM +0200, Uwe Kleine-König wrote:
+> > > > > @@ -469,8 +469,17 @@ static int mtu3_remove(struct platform_device *pdev)
+> > > > >  		ssusb_gadget_exit(ssusb);
+> > > > >  		ssusb_host_exit(ssusb);
+> > > > >  		break;
+> > > > > -	default:
+> > > > > -		return -EINVAL;
+> > > > > +	case USB_DR_MODE_UNKNOWN:
+> > > > > +		/*
+> > > > > +		 * This cannot happen because with dr_mode ==
+> > > > > +		 * USB_DR_MODE_UNKNOWN, .probe() doesn't succeed and so
+> > > > > +		 * .remove() wouldn't be called at all. However (little
+> > > > > +		 * surprising) the compiler isn't smart enough to see that, so
+> > > > > +		 * we explicitly have this case item to not make the compiler
+> > > > > +		 * wail about an unhandled enumeration value.
+> > > > > +		 */
+> > > > > +		WARN_ON(1);
+> > > > 
+> > > > Please don't add new WARN_ON() calls to the kernel, print out a big
+> > > > error message and return, don't reboot the machine.
+> > > 
+> > > Huh, printing out an loud error message was my intention. It's news to
+> > > me that WARN_ON() reboots the machine?! I thought BUG_ON() was the one
+> > > with the effects you describe that I shouldn't use.
 > > 
-> > On Sat, Sep 30, 2023 at 11:48:18AM -0700, Avichal Rakesh wrote:
-> >> We have been seeing two main stability issues that uvc gadget driver
-> >> runs into when stopping streams:
-> >> 1. Attempting to queue usb_requests to a disabled usb_ep
-> >> 2. use-after-free issue for inflight usb_requests
-> >>
-> >> The three patches below fix the two issues above. Patch 1/3 fixes the
-> >> first issue, and Patch 2/3 and 3/3 fix the second issue.
-> >>
-> >> Avichal Rakesh (3):
-> >>  usb: gadget: uvc: prevent use of disabled endpoint
-> >>  usb: gadget: uvc: Allocate uvc_requests one at a time
-> >>  usb: gadget: uvc: Fix use-after-free for inflight usb_requests
-> >>
-> >> drivers/usb/gadget/function/f_uvc.c     |  11 +-
-> >> drivers/usb/gadget/function/f_uvc.h     |   2 +-
-> >> drivers/usb/gadget/function/uvc.h       |   6 +-
-> >> drivers/usb/gadget/function/uvc_v4l2.c  |  21 ++-
-> >> drivers/usb/gadget/function/uvc_video.c | 189 +++++++++++++++++-------
-> >> 5 files changed, 164 insertions(+), 65 deletions(-)
-> > 
-> > These patches are not applying on gregkh/usb-testing since
-> > Greg did take my patches first. I have already rebased them.
+> > panic-on-warn is set for zillions[1] of Linux systems out there, so systems
+> > will reboot.
 > 
-> Ah, I didn't realize Greg had picked up your changes in his tree.
-> Rebased the patches in V2.
+> The people enabling panic-on-warn *ask* for a reboot if something
+> strange happens, right? If ssusb->dr_mode is USB_DR_MODE_UNKNOWN in
+> .remove() but wasn't in .probe(), that's strange, right? If I don't
+> enable panic-on-warn, my system just emits a warning and then the driver
+> copes with what it has, right? Sounds to me as if WARN_ON does exactly
+> what is the right thing here.
 
-The "v2" series here is almost impossible to follow, sorry.
+I really don't want to add more WARN_ON() to the kernel if at all
+possible.
 
-Please send it as a new thread, not as responses to the individual
-commits, how am I supposed to pick them up that way?
-
-And make it v3 please.
+If this "can not happen" then just don't even add code for it, why have
+this at all?  The compiler warning can be handled a different way,
+right?
 
 thanks,
 
