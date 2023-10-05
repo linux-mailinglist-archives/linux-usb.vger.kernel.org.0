@@ -1,174 +1,141 @@
-Return-Path: <linux-usb+bounces-1143-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1145-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2DCAF7B9F62
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 16:23:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 531157B9FE0
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 16:31:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by ny.mirrors.kernel.org (Postfix) with ESMTP id 21B921C2094F
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 14:23:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 7411E281E98
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 14:31:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 297B428E32;
-	Thu,  5 Oct 2023 14:23:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9807029438;
+	Thu,  5 Oct 2023 14:31:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="gRuy9eh3"
+	dkim=pass (1024-bit key) header.d=ivitera.com header.i=@ivitera.com header.b="RM728GTz";
+	dkim=pass (1024-bit key) header.d=ivitera.com header.i=@ivitera.com header.b="RM728GTz"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B44C28E29
-	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 14:23:07 +0000 (UTC)
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2064.outbound.protection.outlook.com [40.107.93.64])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A5A02B915;
-	Thu,  5 Oct 2023 07:22:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kkMeoBuVLyhrobZeEkSu6fhBiuO5bG1dnRfVONqMcgknzKMkN84tSr1a+ba0ZIxEZOv9f/kxZvy+Y6WKwCxLvDoAXuUuGiGyJxmFw7WDtBcBJ7Rm77Mcb70eF7MK3Hk8VxcFxZ3UfXN6vwoqT7KE7DUAd0hltu3X55wgeY4PyUkoTc63KJ0DAhhLiAJRadsYuuGlng5YEt42l+nxmzDY4QNGeJkEEDES9A7HoNbe1ZCTcVyymwKCLb1vJqa1pRPlYwm7kfBzErh/H/+ZsccE7AL5y9ewDuTLOv/nG8LH8KSooq1/vzCqH+4Ecp13iYN1UMnkwVqlFHAq0/vsjcgpTw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xZmxiXzEO19QM2XmvIEFIwZKQdGn7QT9D65OteTQosY=;
- b=BN9gptm6eHkwoiJAEYtbjDACMyS6rMTCRqTrpSWs3caJ4KzbgnMrDFGNhNgCNVKi4butRHLEr3B/mWRVLiw2OXJQmxVZQ5wq9Fm/g15VjZD9foojUPpuWQpdo8zAtJcIdi7mZSaKYIq0zZu5gR6q1oZgvCFlTnkAB5hKu4IuoED9eT3d/hVqq505lW9REsjQ1Do08GfsQP7gThHlGK8tUOs/NgNCjY5eVxgIrRz9cZ3AbOwDWi6uYw/mPzJv5dZa/flhiS7+FHRVmTFyV7FQLRRR56mNQlYhLKZrXP/5EpLVvbA/jm3jyDOZwtP/PRx93lAZuM0HLpdiF8jLa/wpUg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xZmxiXzEO19QM2XmvIEFIwZKQdGn7QT9D65OteTQosY=;
- b=gRuy9eh3ZjP9a6KoniDf1lRPhO8mHC5G1o6dLsKzz6ypmcuGyT0slfBUy2zprRoA2KSYa/mQaJN/Wa91S/d0x8JemigwpyLQacouPz3Hmb99kKqiSDFnL8uU5oqR7HWQ1ZkRx4mXH6Hbca8FZ2Yt9+A1vwWtLk4HxRFt/fARMXo=
-Received: from CH0PR03CA0296.namprd03.prod.outlook.com (2603:10b6:610:e6::31)
- by IA0PR12MB8423.namprd12.prod.outlook.com (2603:10b6:208:3dc::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.37; Thu, 5 Oct
- 2023 14:22:50 +0000
-Received: from DS3PEPF000099D7.namprd04.prod.outlook.com
- (2603:10b6:610:e6:cafe::a) by CH0PR03CA0296.outlook.office365.com
- (2603:10b6:610:e6::31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.29 via Frontend
- Transport; Thu, 5 Oct 2023 14:22:50 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DS3PEPF000099D7.mail.protection.outlook.com (10.167.17.8) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6838.14 via Frontend Transport; Thu, 5 Oct 2023 14:22:49 +0000
-Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 5 Oct
- 2023 09:22:26 -0500
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB06.amd.com
- (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 5 Oct
- 2023 09:22:25 -0500
-Received: from xhdpiyushm40.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.27 via Frontend
- Transport; Thu, 5 Oct 2023 09:22:23 -0500
-From: Piyush Mehta <piyush.mehta@amd.com>
-To: <gregkh@linuxfoundation.org>, <michal.simek@amd.com>,
-	<Thinh.Nguyen@synopsys.com>, <p.zabel@pengutronix.de>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<git@amd.com>, Piyush Mehta <piyush.mehta@amd.com>
-Subject: [PATCH] usb: dwc3: xilinx: add reset-controller support
-Date: Thu, 5 Oct 2023 19:52:15 +0530
-Message-ID: <20231005142215.1530-1-piyush.mehta@amd.com>
-X-Mailer: git-send-email 2.17.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01AFAF51C
+	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 14:31:00 +0000 (UTC)
+Received: from mail.insite.cz (smtp.ivitera.com [88.101.85.59])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA5441BD
+	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 07:30:49 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+	by mail.insite.cz (Postfix) with ESMTP id A27798234;
+	Thu,  5 Oct 2023 16:30:46 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+	t=1696516246; bh=DoFeQ6eBTcgaK/XpIiIY5JInXpjcMVs2sQEJX4E1LaY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=RM728GTzVC/Fbdg8QrsjqKsZLv1y7Sp4bFfSjeFPuFvA1fLqNTjQX3z1BgOz90WST
+	 Uz1+YwMkzMpCw/SPkwdasSUQoHBlGvL9/9ga1HyiXkhH55Vl2QKsizcNmcWVAYPdPc
+	 WQhudcdhHpiYETF7AWMF0gwLm+LQuQqHVxAPCxrw=
+Received: from mail.insite.cz ([127.0.0.1])
+	by localhost (localhost [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ha4U18s2QCdN; Thu,  5 Oct 2023 16:30:46 +0200 (CEST)
+Received: from [192.168.40.6] (unknown [192.168.100.40])
+	(Authenticated sender: pavel)
+	by mail.insite.cz (Postfix) with ESMTPSA id 3A7048334;
+	Thu,  5 Oct 2023 16:30:46 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+	t=1696516246; bh=DoFeQ6eBTcgaK/XpIiIY5JInXpjcMVs2sQEJX4E1LaY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=RM728GTzVC/Fbdg8QrsjqKsZLv1y7Sp4bFfSjeFPuFvA1fLqNTjQX3z1BgOz90WST
+	 Uz1+YwMkzMpCw/SPkwdasSUQoHBlGvL9/9ga1HyiXkhH55Vl2QKsizcNmcWVAYPdPc
+	 WQhudcdhHpiYETF7AWMF0gwLm+LQuQqHVxAPCxrw=
+Message-ID: <004494f2-bd2b-9bdb-8f45-61b6aed6432b@ivitera.com>
+Date: Thu, 5 Oct 2023 16:30:45 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS3PEPF000099D7:EE_|IA0PR12MB8423:EE_
-X-MS-Office365-Filtering-Correlation-Id: 961e7c36-2e9a-40b6-77f4-08dbc5ae8de7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	/Zjxz8vgrVO9pqohwJYptmAsYjA35p2VBpz1ccA2NSNTppJPSzjj/tZLE/ZsneJRlYJO+d6hybXcXsqLVrMJ1U/q7DPwcpfZs1yGzRpHo3UQbhShSSiG6IcDX/mhS8C9V5ZJHUGgkqHnVu5p+lq9YQejrQXLv8HYTdk8uCQf629AbKg2fwsBz8BQIRVtUnSdjCjkbmDdjCS4F0Lj+tPW3vWKzWtG0CfdY2g7R9SrtpfsJdgoP7YtJNsefq+BPsHGKc2Le46DWjrIoBD6P3NMn1aQW4ZotjWPn6Cy4QWIiIboHTz6/Tut6smTFxaZG3Xb0UhSSl4B7TGr4eqIDapr5+C2Wo+e9ixdpnvyAt2VpBOkDmGxg96olgBLis7FOLmsGFdV1bHUdPlQlnhStcybxPBBvYf85+vs+bnY1XCZZQyJcpI+PlcYWTLqxQX8RYd7zBHIJLIUuiDkow/oqwc4zNNAY+db7ecAIIMSqZX60ZMNC9hf7yCilWi7naIBs/1iH4IXIztWeg+RjHyhv1vqQtgyYKSwnPsNXzOuybeDdkOA+ejODZruIBs3ihj7xm+Lx3OucpI9EFWo+T28WZfYT+ggxGIrHhVhc+qGccWVjxhWyzU/dqcV/kqadNF9U83XgerZdcwjJEl1MK5O1RBCUfG34uOL+5gtUXK33xOT2wJMrrkkRV81X5i4Lhb/fkWAu2usTqrDLq9X7HGP34CnUi6gzZZ6jiUkDzCOonwu31Ef0Vmy0KvhFkyQN8OM1424Y8gBmTE9xTsH6Z5+lUmhFw==
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(376002)(39860400002)(136003)(396003)(346002)(230922051799003)(186009)(82310400011)(451199024)(1800799009)(64100799003)(36840700001)(40470700004)(46966006)(2906002)(44832011)(8676002)(8936002)(5660300002)(4326008)(41300700001)(40460700003)(316002)(70586007)(2616005)(70206006)(54906003)(36860700001)(40480700001)(110136005)(26005)(336012)(426003)(36756003)(6666004)(1076003)(82740400003)(81166007)(356005)(83380400001)(86362001)(47076005)(478600001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Oct 2023 14:22:49.8014
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 961e7c36-2e9a-40b6-77f4-08dbc5ae8de7
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DS3PEPF000099D7.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8423
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-	URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: RFC: usb: gadget: u_audio: Notifying gadget that host started
+ playback/capture?
+Content-Language: en-US
+To: Arun Raghavan <arun@arunraghavan.net>,
+ "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+ "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>
+Cc: Julian Scheel <julian@jusst.de>, Takashi Iwai <tiwai@suse.de>,
+ Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+ Jerome Brunet <jbrunet@baylibre.com>
+References: <6ebc2456-a46b-bc47-da76-7a341414c1fb@ivitera.com>
+ <35766f0f-784d-d37a-6d07-665f9ee88331@ivitera.com>
+ <27b4b607-5d71-4e5d-a0ff-530c25752213@app.fastmail.com>
+ <4154b125-35c8-b15a-8706-54b9eb3cb5e0@ivitera.com>
+ <2504b014-08b2-4f39-83f6-5072b5ec4ea8@app.fastmail.com>
+From: Pavel Hofman <pavel.hofman@ivitera.com>
+In-Reply-To: <2504b014-08b2-4f39-83f6-5072b5ec4ea8@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Add a reset-controller for supporting Xilinx versal platforms. To reset
-the USB controller, get the reset ID from device-tree and using ID trigger
-the reset, with the assert and deassert reset controller APIs for USB
-controller initialization. Delay of microseconds is added in between assert
-and deassert to meet the setup and hold the time requirement of the reset.
 
-Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
----
- drivers/usb/dwc3/dwc3-xilinx.c | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
+Dne 05. 10. 23 v 1:15 Arun Raghavan napsal(a):
+> On Fri, 22 Sep 2023, at 3:09 AM, Pavel Hofman wrote:
+>> Dne 21. 09. 23 v 3:30 Arun Raghavan napsal(a):
+>>> Hi folks,
+>>>
+>>> On Fri, 1 Oct 2021, at 8:38 AM, Pavel Hofman wrote:
+>>>> Hi,
+>>>>
+>>>
+>>> Resurrecting this one -- is there any input on how we want to deal wit letting UAC gadgets know when the host is sending/receiving data?
+>>
+>> The current version uses the Playback/Capture Rate alsa ctls with
+>> notifications
+>> https://lore.kernel.org/all/20220121155308.48794-8-pavel.hofman@ivitera.com/
+>>
+>> Example of handling is e.g. https://github.com/pavhofman/gaudio_ctl ,
+>> the controller is being used in a number of projects, mostly DIY.
+>>
+>> Recently Qualcomm devs have submitted patches for alternative approach
+>> using uevents
+>> https://lore.kernel.org/lkml/2023050801-handshake-refusing-0367@gregkh/T/#mcd6b346f3ddab6ab34792be0141633bb362d168f
+>> and later versions. The detection is identical, monitoring change in
+>> altsetting from 0 to non zero and back (methods
+>> u_audio_[start/stop]_[capture/playback]), just a different means of
+>> communicating the events to userspace.
+>>
+>> Both methods (using the same principle) suffer from not knowing what's
+>> going on the host side and cannot differentiate between player really
+>> starting playback vs. UAC2 host driver or Pulseaudio shortly checking
+>> device availability. That's why the gaudio_ctl controller can debounce
+>> the playback/capture start
+>> https://github.com/pavhofman/gaudio_ctl#debouncing . But that is just an
+>> ugly workaround...
+> 
+> Thank you for the links, Pavel! This all makes sense.
+> 
+> I guess the uevent mechanism is more "general" than the ALSA ctl for clients that want to plug in, listen and do $something. Not sure if there are other pros/cons of either approach.
 
-diff --git a/drivers/usb/dwc3/dwc3-xilinx.c b/drivers/usb/dwc3/dwc3-xilinx.c
-index 19307d24f3a0..d0780bf231fb 100644
---- a/drivers/usb/dwc3/dwc3-xilinx.c
-+++ b/drivers/usb/dwc3/dwc3-xilinx.c
-@@ -32,9 +32,6 @@
- #define XLNX_USB_TRAFFIC_ROUTE_CONFIG		0x005C
- #define XLNX_USB_TRAFFIC_ROUTE_FPD		0x1
- 
--/* Versal USB Reset ID */
--#define VERSAL_USB_RESET_ID			0xC104036
--
- #define XLNX_USB_FPD_PIPE_CLK			0x7c
- #define PIPE_CLK_DESELECT			1
- #define PIPE_CLK_SELECT				0
-@@ -72,20 +69,26 @@ static void dwc3_xlnx_mask_phy_rst(struct dwc3_xlnx *priv_data, bool mask)
- static int dwc3_xlnx_init_versal(struct dwc3_xlnx *priv_data)
- {
- 	struct device		*dev = priv_data->dev;
-+	struct reset_control	*crst;
- 	int			ret;
- 
-+	crst = devm_reset_control_get_exclusive(dev, NULL);
-+	if (IS_ERR(crst))
-+		return dev_err_probe(dev, PTR_ERR(crst), "failed to get reset signal\n");
-+
- 	dwc3_xlnx_mask_phy_rst(priv_data, false);
- 
- 	/* Assert and De-assert reset */
--	ret = zynqmp_pm_reset_assert(VERSAL_USB_RESET_ID,
--				     PM_RESET_ACTION_ASSERT);
-+	ret = reset_control_assert(crst);
- 	if (ret < 0) {
- 		dev_err_probe(dev, ret, "failed to assert Reset\n");
- 		return ret;
- 	}
- 
--	ret = zynqmp_pm_reset_assert(VERSAL_USB_RESET_ID,
--				     PM_RESET_ACTION_RELEASE);
-+	/* reset hold time */
-+	usleep_range(5, 10);
-+
-+	ret = reset_control_deassert(crst);
- 	if (ret < 0) {
- 		dev_err_probe(dev, ret, "failed to De-assert Reset\n");
- 		return ret;
--- 
-2.17.1
+If the gadget defines multiple samplerates, the client must look at the 
+RATE alsa ctls for learn the actual rate requested by the host. The ctls 
+provide both the rate and notification of playback/capture start/stop at 
+the same time.
+
+For gadgets with a single fixed samplerate, the alsa ctl vs. uevents 
+methods are equivalent. Both may find their users and can be in the 
+gadget code, IMO.
+
+> 
+> I wonder if it might not be good to have some debouncing in the kernel rather than having every client have to implement this.
+
+I am afraid this would be a large feature (debouncing requires extra 
+threads), I have not even tried to push it through. Much better would be 
+having some nice solution instead of a workaround :-)
+
+With regards,
+
+Pavel.
+
 
 
