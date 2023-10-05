@@ -1,87 +1,97 @@
-Return-Path: <linux-usb+bounces-1108-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1109-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA9627B9B21
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 08:35:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8242B7B9B3F
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 09:11:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id 6294B281BA1
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 06:35:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 3FC2E281B74
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 07:11:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1D684C9D;
-	Thu,  5 Oct 2023 06:35:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0ED185259;
+	Thu,  5 Oct 2023 07:11:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s4ZW/3jf"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="W4X+yrl3"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C1C17F
-	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 06:35:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6666C433B6;
-	Thu,  5 Oct 2023 06:35:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1696487745;
-	bh=ypr08pgY6c2eP9P2qYB2bJHbuVcnNmfSe66z44UoZvs=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3043520E3
+	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 07:11:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42D04C433B9;
+	Thu,  5 Oct 2023 07:11:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1696489877;
+	bh=waTn81+t3Huf4bgZ5kUKfol0AEwKgZ3Oiqv9It1QBkQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=s4ZW/3jfyG3xsagsVjX0ZESZ8I/QmLSI7NBZzFnORa9ftepVJZj4aSEHYvCKmaOSY
-	 TTNAM63zrluIweCFtqRQEXhKqjsQqPgBURoxJiU/Sk7GJEI0aYcur7/oZCI30qygKQ
-	 gHv3CckD5W2IYtQFH26Hrgn0kBLLENjaOvu+WEzzj5Ruvb0EcKr0830ZRPUnzg/yiW
-	 BPZ38UhButfb4UYY+mWJvDgn4tN7jvaFHgBQUAizjpAHw0KGIMRjn2Gn1Vei6c7QxD
-	 kyXVztyfFfGHZ/fZXOYfdvYhPOOkCIuqDp6p/O+3zWJIX5TKmmx0ndjEx1KaCkhgNi
-	 XxDnBa5Cfzfzw==
-Received: from johan by xi.lan with local (Exim 4.96)
-	(envelope-from <johan@kernel.org>)
-	id 1qoHxp-0004D5-0s;
-	Thu, 05 Oct 2023 08:36:01 +0200
-Date: Thu, 5 Oct 2023 08:36:01 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Bjorn Andersson <andersson@kernel.org>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, quic_ppratap@quicinc.com,
-	quic_wcheng@quicinc.com, quic_jackp@quicinc.com
-Subject: Re: [PATCH v12 0/3] Add multiport support for DWC3 controllers
-Message-ID: <ZR5ZUaWcyRj5sZKx@hovoldconsulting.com>
-References: <20231004165922.25642-1-quic_kriskura@quicinc.com>
+	b=W4X+yrl3VNwQBRtwJ6EnCHhSp5KYbsNS7UxKXHyRxC3eMeHSU0/9k7++LMd5FilsS
+	 zmktcYtPQID4HTz0F/X+ck/MGIGvN3fL4eXHguq6R6vKmyLyn3UH0reAowW53HXVqF
+	 8cFUS3YAxruk578mRI53eE2SRSqWkcMvhvM6ROBg=
+Date: Thu, 5 Oct 2023 09:11:14 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Avichal Rakesh <arakesh@google.com>
+Cc: Michael Grzeschik <mgr@pengutronix.de>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Daniel Scally <dan.scally@ideasonboard.com>, jchowdhary@google.com,
+	etalvala@google.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 0/3] usb: gadget: uvc: stability fixes on STREAMOFF.
+Message-ID: <2023100518-everyday-graves-7404@gregkh>
+References: <20230930184821.310143-1-arakesh@google.com>
+ <ZRv2UnKztgyqk2pt@pengutronix.de>
+ <0ccb2c13-438d-4715-af79-d5cf536930cc@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20231004165922.25642-1-quic_kriskura@quicinc.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0ccb2c13-438d-4715-af79-d5cf536930cc@google.com>
 
-On Wed, Oct 04, 2023 at 10:29:19PM +0530, Krishna Kurapati wrote:
-> This series is a set of picked up acks and split from larger series [1]
-> The series is rebased on top of:
-> Repo: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
-> Branch: usb-testing
-> commit 03cf2af41b37 ("Revert "phy: qcom-qmp-usb: Add Qualcomm SDX75 USB3 PHY support"")
+On Tue, Oct 03, 2023 at 04:16:00PM -0700, Avichal Rakesh wrote:
+> Thank you for testing the patch, Michael!
 > 
-> The patches present in series have been reviewed and acked by respective
-> maintainers. They dont break any existing implementation and is just a
-> subset of merge ready multiport code. The rest of the patches will be
-> rebased on top of the usb branch once this series is merged.
->
-> [1]: https://patchwork.kernel.org/project/linux-usb/cover/20230828133033.11988-1-quic_kriskura@quicinc.com/
+> On 10/3/23 04:09, Michael Grzeschik wrote:
+> > Hi
+> > 
+> > On Sat, Sep 30, 2023 at 11:48:18AM -0700, Avichal Rakesh wrote:
+> >> We have been seeing two main stability issues that uvc gadget driver
+> >> runs into when stopping streams:
+> >> 1. Attempting to queue usb_requests to a disabled usb_ep
+> >> 2. use-after-free issue for inflight usb_requests
+> >>
+> >> The three patches below fix the two issues above. Patch 1/3 fixes the
+> >> first issue, and Patch 2/3 and 3/3 fix the second issue.
+> >>
+> >> Avichal Rakesh (3):
+> >>  usb: gadget: uvc: prevent use of disabled endpoint
+> >>  usb: gadget: uvc: Allocate uvc_requests one at a time
+> >>  usb: gadget: uvc: Fix use-after-free for inflight usb_requests
+> >>
+> >> drivers/usb/gadget/function/f_uvc.c     |  11 +-
+> >> drivers/usb/gadget/function/f_uvc.h     |   2 +-
+> >> drivers/usb/gadget/function/uvc.h       |   6 +-
+> >> drivers/usb/gadget/function/uvc_v4l2.c  |  21 ++-
+> >> drivers/usb/gadget/function/uvc_video.c | 189 +++++++++++++++++-------
+> >> 5 files changed, 164 insertions(+), 65 deletions(-)
+> > 
+> > These patches are not applying on gregkh/usb-testing since
+> > Greg did take my patches first. I have already rebased them.
 > 
-> Krishna Kurapati (3):
->   usb: dwc3: core: Access XHCI address space temporarily to read port
->     info
->   usb: dwc3: core: Skip setting event buffers for host only controllers
->   usb: dwc3: qcom: Add helper function to request threaded IRQ
+> Ah, I didn't realize Greg had picked up your changes in his tree.
+> Rebased the patches in V2.
 
-NAK.
+The "v2" series here is almost impossible to follow, sorry.
 
-These patches make very little sense on their own and can't really be
-evaluated without the context of the larger series.
+Please send it as a new thread, not as responses to the individual
+commits, how am I supposed to pick them up that way?
 
-Just work on getting the multiport series in shape and include any acks
-you've received so far when submitting new revisions.
+And make it v3 please.
 
-Johan
+thanks,
+
+greg k-h
 
