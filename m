@@ -1,178 +1,158 @@
-Return-Path: <linux-usb+bounces-1123-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1124-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 409137B9CBC
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 13:27:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0687E7B9CC3
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 13:37:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id B5C65281B9D
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 11:27:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTP id 5E2322819E2
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 11:37:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBF81134A3;
-	Thu,  5 Oct 2023 11:27:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE091134A7;
+	Thu,  5 Oct 2023 11:37:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Kf/dZ1Qt"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="xlK5RJPs"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E41C311CB1
-	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 11:27:30 +0000 (UTC)
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5825E24E8E
-	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 04:27:29 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-52bd9ddb741so1466027a12.0
-        for <linux-usb@vger.kernel.org>; Thu, 05 Oct 2023 04:27:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696505248; x=1697110048; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=v36wx9Pk64n53fIg/6A0WMF6jR/YhJkuHYrw/KUTl6k=;
-        b=Kf/dZ1QtITz+yuoa0l3mL33bdwPG9sRU4elNZqn8RvRYVxR07Qm5ok22B13lGigzuj
-         wfEMd8iTVnLrObpOcaVlRe5hNq8xt0nRD8tUUri9LP6cxMKrjMzGvXyfjsmWPT/kcInj
-         qVhlisVdUqupM6nnOypCP4OPMR1Hf6/arv/KiP22ETmR+bd8ZUzIR1+Csjm2Z3odib4H
-         mtmmqY1N1xB54LoGoz888V0VEKmxQmRjbEXdjL1tG6y2W++MutTVrOeC6hkw7oBS0gjT
-         /T6QtCXW5ioAQffN8+/n6XJ6Hq3PZZL/nLJ1N0n3RdnpZONepJQ8Pji6TSDKFocq7NkD
-         ppAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696505248; x=1697110048;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=v36wx9Pk64n53fIg/6A0WMF6jR/YhJkuHYrw/KUTl6k=;
-        b=gh+pn5KmI7xm9G+u3WMkD/3a+cQEcAxMIsnnYyE/8g6uI9lA8mhnMPORbWf1jKRmIC
-         lw79unfUvnaF69TYYlIPWbD3VFFfWBYJoimaH9ouzW8wrdSANzPrcZsSxGwc4Sx0M2XF
-         5JMzVpMhCJtAFLkrkob5A/XxaZPZFpLoRgUfLjSsy0Yrp6A1LBRNpuy4uJF32vs4iNd4
-         VAfMHzYFAIIPg03xK/4j7HRGVh3EP53EBdlGUlZROJi+fcjBOdgWoiM4T4NAy/E9Pf9r
-         q/D5QKRVB/btUhFe+j6AuAuyfHkBiShwTjuQ7ISFxCBNCgn9VbrwWt/B2pTPfgwZw5v2
-         BlKQ==
-X-Gm-Message-State: AOJu0Yx2veGIZzTgSyYcA2wpBmBx5KFBzF7S7oPXETUXbg/ra1Vti3Me
-	BPurADrCpIyyt+cenba1lkyqbw==
-X-Google-Smtp-Source: AGHT+IH5sTt0UC8bfVW5JJhNwhjYB38ckB3QAE2oyGcpN6Y52pD844+c/uZe7G0bj2x75kqsUvspCg==
-X-Received: by 2002:a05:6402:4025:b0:531:1f3b:cb36 with SMTP id d37-20020a056402402500b005311f3bcb36mr5316270eda.9.1696505247836;
-        Thu, 05 Oct 2023 04:27:27 -0700 (PDT)
-Received: from [192.168.1.197] (5-157-101-10.dyn.eolo.it. [5.157.101.10])
-        by smtp.gmail.com with ESMTPSA id w24-20020a50fa98000000b00532bec5f768sm915596edr.95.2023.10.05.04.27.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Oct 2023 04:27:27 -0700 (PDT)
-Message-ID: <aa7aab2b-6e9a-4055-b9c7-9edc27556bd7@linaro.org>
-Date: Thu, 5 Oct 2023 13:27:25 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65BC963AE
+	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 11:36:58 +0000 (UTC)
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on20628.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e8a::628])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC11024EA9;
+	Thu,  5 Oct 2023 04:36:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jjzpB3+554tHaGDHPytL/jgqkiL+vGWq3kQrUcgfx2sUphCVenwlaJD7eI5FwqcoGH5B+nLpT/uqeLaOsV3Tk1dNi/CDjg1S2VFhWTdlWsEhmZd7krirIkj6z3L9UYdVcftmbiIibMmXUHwVZS2LFeFeq1nJzEXL3e0E8a4NiUPfANwMaoqMho1SSChaX7m99S7N+FudH/NdR1+4JpRGwebtHT7AaOowugzYyu7xg9gAVUOt48GOmTn2xD8CawDJamXSP0k7sajqyQaIpKi4WfnvxM6YwcfDvNsmUBl6fnrFQTezgV0yObFhN0GxR3gBSLL1sX5SPDNvtHbe+QlcBA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=AIavWWJEftVPDFWJ2r6zd8KwV7K7mVa2mPC0LmzmTrU=;
+ b=HGSnuRtxuXQ9Di17XxnkUmNVRZUKR3lGEMAa4eHl2p22us4mYnZKqODj+lkl09yY0BC+jIlw3lZJbKsGpoZU7kHmfsc7V/wyTbrjIqfmr7TuHuAA+HXJQDQCpu6rNYBOHjH+D/NicjVqf9vdRO1ZrvaKIbF2OKfheCRDWrMKOPZCjtJQdaCsDU/uVNChISmXpZh5Usts+17KubQlY5pnw/tVyo6BtHgai2dSzWK98yGemNdEb4pqn73/mBdZvlpG1yuPfodvulloFtuz54PC/FTE+xSu23u2G8c4PA0ou/Swg5W9UdRA4VrdhJU7PUOSNPbp1FSxUnbOCty6CXX8mw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=AIavWWJEftVPDFWJ2r6zd8KwV7K7mVa2mPC0LmzmTrU=;
+ b=xlK5RJPsx1L50RT3jNe1aSyyg5RknRkxBvu7x2gHt9kVKT/AFjgssWwVezTTaGXSVJIeNXs/maWJHbEH8hPP1c+sZfP9IE0dbqU10DrlCmmbKvqZnsoaCuXvAc3QGIRgIo0ccBtEdh239RiZpIkAmd8CL7PlQFw69H2dRJQybQ8=
+Received: from MN2PR13CA0013.namprd13.prod.outlook.com (2603:10b6:208:160::26)
+ by MN0PR12MB6128.namprd12.prod.outlook.com (2603:10b6:208:3c4::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.37; Thu, 5 Oct
+ 2023 11:36:40 +0000
+Received: from BL6PEPF0001AB4F.namprd04.prod.outlook.com
+ (2603:10b6:208:160:cafe::da) by MN2PR13CA0013.outlook.office365.com
+ (2603:10b6:208:160::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.25 via Frontend
+ Transport; Thu, 5 Oct 2023 11:36:39 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL6PEPF0001AB4F.mail.protection.outlook.com (10.167.242.73) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6838.14 via Frontend Transport; Thu, 5 Oct 2023 11:36:39 +0000
+Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 5 Oct
+ 2023 06:36:38 -0500
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB06.amd.com
+ (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 5 Oct
+ 2023 06:36:29 -0500
+Received: from xhdpiyushm40.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.27 via Frontend
+ Transport; Thu, 5 Oct 2023 06:36:27 -0500
+From: Piyush Mehta <piyush.mehta@amd.com>
+To: <gregkh@linuxfoundation.org>, <michal.simek@amd.com>,
+	<Thinh.Nguyen@synopsys.com>, <robh@kernel.org>, <herve.codina@bootlin.com>,
+	<yangbin@rock-chips.com>, <pgwipeout@gmail.com>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<git@amd.com>, Piyush Mehta <piyush.mehta@amd.com>, <stable@vger.kernel.org>
+Subject: [PATCH V2] usb: dwc3: core: disable 3.0 clock when operating in 2.0 device mode
+Date: Thu, 5 Oct 2023 17:06:24 +0530
+Message-ID: <20231005113624.8329-1-piyush.mehta@amd.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/3] dt-bindings: usb: ci-hdrc-usb2: add npcm750 and
- npcm845 compatible
-Content-Language: en-US
-To: Tomer Maimon <tmaimon77@gmail.com>
-Cc: peter.chen@kernel.org, gregkh@linuxfoundation.org, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, xu.yang_2@nxp.com, peng.fan@nxp.com,
- avifishman70@gmail.com, tali.perry1@gmail.com, joel@jms.id.au,
- venture@google.com, yuenn@google.com, benjaminfair@google.com,
- j.neuschaefer@gmx.net, openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20231003110130.229711-1-tmaimon77@gmail.com>
- <20231003110130.229711-3-tmaimon77@gmail.com>
- <25e8c953-8bf1-4107-9531-263d68c41128@linaro.org>
- <CAP6Zq1gwbYfE4xg0-TCC+Wfoo_1omdsWukupJqpZekMem0xeMA@mail.gmail.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <CAP6Zq1gwbYfE4xg0-TCC+Wfoo_1omdsWukupJqpZekMem0xeMA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-	version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL6PEPF0001AB4F:EE_|MN0PR12MB6128:EE_
+X-MS-Office365-Filtering-Correlation-Id: bc892bbd-bebe-4e5e-6dd3-08dbc597574d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	xVUab0/zFpnWoTdCW/xWb5ynv+IhuodgMO4haNKv8LpJ2bihRp/WMpde57RFI1jjRbpIh5sABxWUYVRIXuagjTAQf+8sx4GI2OSO4w6Z8KvA91TekSDBBMm6K4ZL2115hfwtKD8krrJ+lpJ0HVcL6qpRPKRhTmNVc5YhRoTyHcyU5bSAhJiBgXY0ZX6og0LbjRMaOk0wiIwRdb+SJ0g9o2QNjo06+EjCyKRnVU80TfLirLrg37xp6qL0GEIJrqU1+LvxEBROU2dUS9Z+7qgovMABsr6afocfUHTdsXOf4eLZAHMwlDLMgPsKs30yykylAznCpOvrz8UxmmQj0ybG1EGIw6TKU5QsDdZcq5VbMrFAz5WYM4J6gZ8rUAxQ6dIzwES9/fkXAdcyWQV+r/jfrQn11MWr7Zx5CnXqYB5ptmALWl0HAhh/H0qyMzfOXfDjTIltNV/gCdwmMKySf4+3ghuCPfYJtvlyNRZDtHa6K7+T9YKKBhMyVukmmfqaP51DvUil+Rph6qjoO8Z9BP/S24D5CfXkHtWhIdxPnG0mx8Xrteoi2cUHugV/w4LZV59b+oDDYrMsKsc4TLwdK8fVo2D6oQpONBAVphd2eJR4MHrl7g7jDd82FUqamjg9e90Q+ds//JNTBgWYwZh7+7BtIt5EKw/DhVrXtpel4pH+CrfS/bRP7dP91MViHdUFkPRovbc3ZXJPtXuqo8egfAnTekWe15A5ZA4nGC+ZiflZMgcxYG3kyf4K5ikrvrQih0LKvrPb3dJWkQZuUuSAnbPSvqYwAateEIHMaj7wnRGF7XE=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(346002)(136003)(376002)(396003)(39860400002)(230922051799003)(64100799003)(82310400011)(186009)(1800799009)(451199024)(46966006)(40470700004)(36840700001)(70586007)(70206006)(316002)(40460700003)(54906003)(41300700001)(2616005)(1076003)(426003)(336012)(26005)(36756003)(6666004)(966005)(478600001)(82740400003)(81166007)(356005)(47076005)(86362001)(83380400001)(36860700001)(110136005)(40480700001)(44832011)(2906002)(4326008)(8676002)(8936002)(5660300002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Oct 2023 11:36:39.7857
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: bc892bbd-bebe-4e5e-6dd3-08dbc597574d
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL6PEPF0001AB4F.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6128
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED
+	autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On 05/10/2023 12:46, Tomer Maimon wrote:
-> Hi Krzysztof,
-> 
-> Thanks for your comment
-> 
-> On Wed, 4 Oct 2023 at 11:03, Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 03/10/2023 13:01, Tomer Maimon wrote:
->>> Add a compatible string for Nuvoton BMC NPCM750 and Nuvoton BMC NPCM845.
->>>
->>> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
->>> ---
->>>  Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml | 4 ++++
->>>  1 file changed, 4 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
->>> index 1394557517b1..a9e173432002 100644
->>> --- a/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
->>> +++ b/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
->>> @@ -16,6 +16,8 @@ properties:
->>>        - enum:
->>>            - chipidea,usb2
->>>            - lsi,zevio-usb
->>> +          - nuvoton,npcm750-udc
->>> +          - nuvoton,npcm845-udc
->>
->> Your driver clearly suggests these are compatible. If they are not, why
->> commit msg does no explain anything here?
-> Do you mean to add nuvoton,npcmxxx-udc as described below to the end
-> of the compatible property?
->       - items:
->           - enum:
->               - nuvoton,npcm845-udc
->           - const: nuvoton,npcm750-udc
+The GUCTL1.DEV_FORCE_20_CLK_FOR_30_CLK bit enable the feature of internal
+2.0(utmi/ulpi) clock to be routed as the 3.0 (pipe) clock. This feature is
+applicable when core is operating in 2.0 device mode.
 
-For the 845 yes. Of course you also need enum entry for 750.
+When this bit is set in host mode and core is in 2.0 device mode (maximum
+speed = high-speed) then usb super speed devices not detected on host.
 
-Best regards,
-Krzysztof
+To address the above issue added usb device mode conditional check.
+
+Cc: stable@vger.kernel.org
+Fixes: 62b20e6e0dde ("usb: dwc3: core: do not use 3.0 clock when operating in 2.0 mode")
+Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
+---
+DWC3 Register Map Link:
+https://docs.xilinx.com/r/en-US/ug1087-zynq-ultrascale-registers/GUCTL1-USB3_XHCI-Register
+Register Name	GUCTL1
+Bit: 26 
+Bit Name: DEV_FORCE_20_CLK_FOR_30_CLK
+
+Change in V2:
+- Added CC stable kernel email.
+
+Link: https://lore.kernel.org/all/20231005102725.8458-1-piyush.mehta@amd.com/
+---
+ drivers/usb/dwc3/core.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 9c6bf054f15d..0cf1fe60628b 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -1202,6 +1202,7 @@ static int dwc3_core_init(struct dwc3 *dwc)
+ 			reg |= DWC3_GUCTL1_PARKMODE_DISABLE_HS;
+ 
+ 		if (DWC3_VER_IS_WITHIN(DWC3, 290A, ANY) &&
++		    (dwc->dr_mode == USB_DR_MODE_PERIPHERAL) &&
+ 		    (dwc->maximum_speed == USB_SPEED_HIGH ||
+ 		     dwc->maximum_speed == USB_SPEED_FULL))
+ 			reg |= DWC3_GUCTL1_DEV_FORCE_20_CLK_FOR_30_CLK;
+-- 
+2.17.1
 
 
