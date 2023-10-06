@@ -1,262 +1,200 @@
-Return-Path: <linux-usb+bounces-1182-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1183-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30D367BB801
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Oct 2023 14:42:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD6EE7BB836
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Oct 2023 14:55:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D8CC42823EC
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Oct 2023 12:42:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D0B251C20AC8
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Oct 2023 12:55:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A5871D69A;
-	Fri,  6 Oct 2023 12:42:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F31D1F605;
+	Fri,  6 Oct 2023 12:55:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YUTNZV0Z"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 148C71CA93
-	for <linux-usb@vger.kernel.org>; Fri,  6 Oct 2023 12:42:32 +0000 (UTC)
-Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com [209.85.210.69])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A97FCE
-	for <linux-usb@vger.kernel.org>; Fri,  6 Oct 2023 05:42:30 -0700 (PDT)
-Received: by mail-ot1-f69.google.com with SMTP id 46e09a7af769-6c61ada4178so2485234a34.0
-        for <linux-usb@vger.kernel.org>; Fri, 06 Oct 2023 05:42:30 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CFE41F5F5
+	for <linux-usb@vger.kernel.org>; Fri,  6 Oct 2023 12:54:58 +0000 (UTC)
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 509DCD6;
+	Fri,  6 Oct 2023 05:54:56 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-9ad8a822508so402605666b.0;
+        Fri, 06 Oct 2023 05:54:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696596895; x=1697201695; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gecE+vOGFjARaQC/nlEr7rWoc3kbi1x64ECe3si5O9A=;
+        b=YUTNZV0ZDZFg5hj6nfvgxV9ta43IFBVQvNHZM2Pb3zk5KXWSgHv4gfylS6Qf6DbcWy
+         vk7Wl9sXQh/7mwxrGixlwA5g+ODP9MEQ0g31lj4nNOpo+k1sCNssJWBpLPVAgjyf048i
+         nL1RXBWRYYrQnWAGIoKbT1bWH08BTw4a/D4s0JV7NeRRhwaHddIsq5leX4fNjsUJgrXc
+         usDzGZ2i5aexRLf8XlVPhc3IaQ1GEC2ZxZmEGxVGVPTRCayjhzIPJE/mcofH/YzGX2Hv
+         1+SxmpgvH5xqNyn0WN0z+5npgW2snvJ86+nGzaaYsdIu7ivUbiuO+RTaC4wMExgnRfH1
+         Afwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696596149; x=1697200949;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=c+qTE5USwUbIuOQxd4KZ+uRL8qbIQ2IWDKthvgULu9A=;
-        b=FgzwQplsMfhOIWnaL/oqGhCdaF7Qsfehgdfgq8WqoDC4sW+Acg0h5vL0zp0UWq/SV7
-         egaQdA3FEom6YVAvPfrXJ9DcaQ+bQRYFbS9ifEm9jV45xhk8DE/cRcatucuj9eHAUGri
-         UV48eb+bAj7W5eLguYO4snKEVD8AEnOSUFx0TtpwnbCDIXf24wpjpPi/3rTo71xAvt4d
-         4hpGy0H9FSOPjW3xMznSrslEyYtoR7tvEpgk3WhH1hr2t2J//BTbFNE7jDtzBUOo5Atz
-         JFCDIyG39CGHtUoa0hDGwD/sAP1B50p5GC1LcuVigdznMWSU6c0P15/7IkMdTyujWoHq
-         UdHQ==
-X-Gm-Message-State: AOJu0Ywk79ctNw2qtYQAe5ZY6wYkbv9vRNxnAaiEvzKJe5o/xAquCaY7
-	Tidu+BI2K1fYP9XnP3A/nQYcY7LmYet5bjABh2m8T/pIG2LU
-X-Google-Smtp-Source: AGHT+IHpDH+LJttmChOLL1xS7t5ipaiFYloUyaauwYVUxKilQk1QYP9P/ZyyC78ly8MxJrDBAXRE5abcJRhtgu8mmXpiXW8CzReI
+        d=1e100.net; s=20230601; t=1696596895; x=1697201695;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gecE+vOGFjARaQC/nlEr7rWoc3kbi1x64ECe3si5O9A=;
+        b=ofXlhAqmVm0UySHyJPZJsJGUFMIiGFi0CO0bP1Th7xTkuc873LKqxDhKpIiryrD59B
+         GeuFiOrkQ3WRT7Q6KcdeqEHizTjECOTyYK9JL3FUahgiFdtO6ld5EiXOSIcb7716/v82
+         ClezAnacr3hdV8pt6+Dn2n7TnFuIkf3RcFFpuGnfVkG91yb5eHJ11hWopVlmAj5PRsk5
+         9dVlwf+vYweU47Xd5V/RgJEps5loKtw/4mYXUfzSsqcUdp5WbcT4+nlPBg4rdn/m7U2L
+         uE+uz9cmZNA3N+n/GeHUfTweWstOtihGaxgTqCBH31nYkKpOlhFDI03cyDWyk9GRpt9G
+         2g0Q==
+X-Gm-Message-State: AOJu0Yxjm46+L9bahak5SD4czhyuN/qqZzXp1dfsdhsvO31qXaTSAMGQ
+	ep45hhUu7jSrzGcuJhDCVZp5gMTL3gv+qg==
+X-Google-Smtp-Source: AGHT+IESjdKyA6s5OhJ7UTOKsi/fr9Zwv0a4+sM65k6PMfimI9UTYwlNKm7rSorMRoWRPGG+v7fOvA==
+X-Received: by 2002:a17:906:1da1:b0:9ba:65e:752b with SMTP id u1-20020a1709061da100b009ba065e752bmr368474ejh.39.1696596894512;
+        Fri, 06 Oct 2023 05:54:54 -0700 (PDT)
+Received: from sauvignon.fi.muni.cz (laomedon.fi.muni.cz. [147.251.42.107])
+        by smtp.gmail.com with ESMTPSA id p26-20020a1709060dda00b0099bc08862b6sm2894660eji.171.2023.10.06.05.54.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Oct 2023 05:54:53 -0700 (PDT)
+From: Milan Broz <gmazyland@gmail.com>
+To: linux-usb@vger.kernel.org
+Cc: usb-storage@lists.one-eyed-alien.net,
+	linux-scsi@vger.kernel.org,
+	linux-block@vger.kernel.org,
+	stern@rowland.harvard.edu,
+	oneukum@suse.com,
+	jonathan.derrick@linux.dev,
+	Milan Broz <gmazyland@gmail.com>
+Subject: [RFC PATCH 0/6] usb-storage,uas,scsi: Support OPAL commands on USB attached devices.
+Date: Fri,  6 Oct 2023 14:54:39 +0200
+Message-ID: <20231006125445.122380-1-gmazyland@gmail.com>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6830:4dc:b0:6bc:af19:1d22 with SMTP id
- s28-20020a05683004dc00b006bcaf191d22mr2491834otd.7.1696596149631; Fri, 06 Oct
- 2023 05:42:29 -0700 (PDT)
-Date: Fri, 06 Oct 2023 05:42:29 -0700
-In-Reply-To: <cb6fm6c65rqbk6hzjii5bqanscy7njfu5k7nnpe4doxytshqpf@ulv5noywsnlv>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d3836306070b927a@google.com>
-Subject: Re: [syzbot] [pvrusb2?] KASAN: slab-use-after-free Read in pvr2_context_set_notify
-From: syzbot <syzbot+621409285c4156a009b3@syzkaller.appspotmail.com>
-To: isely@pobox.com, linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
-	linux-usb@vger.kernel.org, mchehab@kernel.org, pvrusb2@isely.net, 
-	ricardo@marliere.net, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-	HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
-	RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Hello,
+This patchset adds support for OPAL commands (self-encrypted drives)
+through USB-attached storage (usb-storage and UAS drivers).
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-KASAN: slab-use-after-free Read in pvr2_context_set_notify
+1) Patches 1-4 only add support for 64-bit quirks for USB storage
+(unfortunately, USB device info can be 32-bit on 32-bit platforms,
+and we are out of space for flags now).
 
-pvrusb2: Important functionality might not be entirely working.
-pvrusb2: Please consider contacting the driver author to help with further stabilization of the driver.
-pvrusb2: **********
-usb 1-1: USB disconnect, device number 3
-pvrusb2: Device being rendered inoperable
-==================================================================
-BUG: KASAN: slab-use-after-free in pvr2_context_set_notify+0x2c4/0x310 drivers/media/usb/pvrusb2/pvrusb2-context.c:35
-Read of size 4 at addr ffff88812c3e68d8 by task kworker/0:2/699
+2) Patches 5-6 enable OPAL commands on USB device and also adds
+an ATA-12 pass-thru wrapper to support OPAL even on devices that
+do not support SCSI SECURITY IN/OUT commands.
+ATA-12 is already used by sedutils directly; this patch makes
+internal kernel OPAL ioctl work with ATA-12 too.
 
-CPU: 0 PID: 699 Comm: kworker/0:2 Not tainted 6.6.0-rc4-syzkaller-00064-g1053c4a4b8fc #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/06/2023
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x1b0 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:364 [inline]
- print_report+0xc4/0x620 mm/kasan/report.c:475
- kasan_report+0xda/0x110 mm/kasan/report.c:588
- pvr2_context_set_notify+0x2c4/0x310 drivers/media/usb/pvrusb2/pvrusb2-context.c:35
- pvr_disconnect+0x80/0xf0 drivers/media/usb/pvrusb2/pvrusb2-main.c:79
- usb_unbind_interface+0x1dd/0x8d0 drivers/usb/core/driver.c:458
- device_remove drivers/base/dd.c:569 [inline]
- device_remove+0x11f/0x170 drivers/base/dd.c:561
- __device_release_driver drivers/base/dd.c:1272 [inline]
- device_release_driver_internal+0x44a/0x610 drivers/base/dd.c:1295
- bus_remove_device+0x22c/0x420 drivers/base/bus.c:574
- device_del+0x39a/0xa50 drivers/base/core.c:3813
- usb_disable_device+0x36c/0x7f0 drivers/usb/core/message.c:1416
- usb_disconnect+0x2e1/0x890 drivers/usb/core/hub.c:2252
- hub_port_connect drivers/usb/core/hub.c:5280 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5580 [inline]
- port_event drivers/usb/core/hub.c:5740 [inline]
- hub_event+0x1be0/0x4f30 drivers/usb/core/hub.c:5822
- process_one_work+0x884/0x15c0 kernel/workqueue.c:2630
- process_scheduled_works kernel/workqueue.c:2703 [inline]
- worker_thread+0x8b9/0x1290 kernel/workqueue.c:2784
- kthread+0x33c/0x440 kernel/kthread.c:388
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:304
- </TASK>
+As patch 6 introduced a new USB quirk that overflows 32-bit,
+I posted all patches together - but logically, these solve two
+separate issues.
 
-Allocated by task 699:
- kasan_save_stack+0x33/0x50 mm/kasan/common.c:45
- kasan_set_track+0x25/0x30 mm/kasan/common.c:52
- ____kasan_kmalloc mm/kasan/common.c:374 [inline]
- __kasan_kmalloc+0x87/0x90 mm/kasan/common.c:383
- kmalloc include/linux/slab.h:599 [inline]
- kzalloc include/linux/slab.h:720 [inline]
- pvr2_context_create+0x53/0x2a0 drivers/media/usb/pvrusb2/pvrusb2-context.c:207
- pvr_probe+0x25/0xe0 drivers/media/usb/pvrusb2/pvrusb2-main.c:54
- usb_probe_interface+0x307/0x930 drivers/usb/core/driver.c:396
- call_driver_probe drivers/base/dd.c:579 [inline]
- really_probe+0x234/0xc90 drivers/base/dd.c:658
- __driver_probe_device+0x1de/0x4b0 drivers/base/dd.c:800
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:830
- __device_attach_driver+0x1d4/0x300 drivers/base/dd.c:958
- bus_for_each_drv+0x157/0x1d0 drivers/base/bus.c:457
- __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1030
- bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
- device_add+0x117e/0x1aa0 drivers/base/core.c:3624
- usb_set_configuration+0x10cb/0x1c40 drivers/usb/core/message.c:2207
- usb_generic_driver_probe+0xca/0x130 drivers/usb/core/generic.c:238
- usb_probe_device+0xda/0x2c0 drivers/usb/core/driver.c:293
- call_driver_probe drivers/base/dd.c:579 [inline]
- really_probe+0x234/0xc90 drivers/base/dd.c:658
- __driver_probe_device+0x1de/0x4b0 drivers/base/dd.c:800
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:830
- __device_attach_driver+0x1d4/0x300 drivers/base/dd.c:958
- bus_for_each_drv+0x157/0x1d0 drivers/base/bus.c:457
- __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1030
- bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
- device_add+0x117e/0x1aa0 drivers/base/core.c:3624
- usb_new_device+0xd80/0x1960 drivers/usb/core/hub.c:2589
- hub_port_connect drivers/usb/core/hub.c:5440 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5580 [inline]
- port_event drivers/usb/core/hub.c:5740 [inline]
- hub_event+0x2e62/0x4f30 drivers/usb/core/hub.c:5822
- process_one_work+0x884/0x15c0 kernel/workqueue.c:2630
- process_scheduled_works kernel/workqueue.c:2703 [inline]
- worker_thread+0x8b9/0x1290 kernel/workqueue.c:2784
- kthread+0x33c/0x440 kernel/kthread.c:388
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:304
+More info
 
-Freed by task 902:
- kasan_save_stack+0x33/0x50 mm/kasan/common.c:45
- kasan_set_track+0x25/0x30 mm/kasan/common.c:52
- kasan_save_free_info+0x2b/0x40 mm/kasan/generic.c:522
- ____kasan_slab_free mm/kasan/common.c:236 [inline]
- ____kasan_slab_free+0x13c/0x190 mm/kasan/common.c:200
- kasan_slab_free include/linux/kasan.h:164 [inline]
- slab_free_hook mm/slub.c:1800 [inline]
- slab_free_freelist_hook mm/slub.c:1826 [inline]
- slab_free mm/slub.c:3809 [inline]
- __kmem_cache_free+0xff/0x330 mm/slub.c:3822
- pvr2_context_check drivers/media/usb/pvrusb2/pvrusb2-context.c:137 [inline]
- pvr2_context_thread_func+0x69d/0x960 drivers/media/usb/pvrusb2/pvrusb2-context.c:158
- kthread+0x33c/0x440 kernel/kthread.c:388
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:304
+1) 64bit USB storage quirk flags
 
-The buggy address belongs to the object at ffff88812c3e6800
- which belongs to the cache kmalloc-256 of size 256
-The buggy address is located 216 bytes inside of
- freed 256-byte region [ffff88812c3e6800, ffff88812c3e6900)
+The quirks are transferred through the device info value, which
+is unsigned long (and as a part of USB infrastructure, it cannot
+be changed).
+After discussion on USB list, I used high bit as an indicator
+that the values need to be translated/unpacked to 64bit
+(while lower values are used directly).
 
-The buggy address belongs to the physical page:
-page:ffffea0004b0f980 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x12c3e6
-head:ffffea0004b0f980 order:1 entire_mapcount:0 nr_pages_mapped:0 pincount:0
-flags: 0x200000000000840(slab|head|node=0|zone=2)
-page_type: 0xffffffff()
-raw: 0200000000000840 ffff888100041b40 ffffea0004722a80 dead000000000004
-raw: 0000000000000000 0000000080100010 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 1, migratetype Unmovable, gfp_mask 0x1d20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC|__GFP_HARDWALL), pid 699, tgid 699 (kworker/0:2), ts 149486728006, free_ts 149464487231
- set_page_owner include/linux/page_owner.h:31 [inline]
- post_alloc_hook+0x2cf/0x340 mm/page_alloc.c:1536
- prep_new_page mm/page_alloc.c:1543 [inline]
- get_page_from_freelist+0x10e1/0x2fd0 mm/page_alloc.c:3170
- __alloc_pages+0x1d0/0x4a0 mm/page_alloc.c:4426
- alloc_pages+0x1a9/0x270 mm/mempolicy.c:2297
- alloc_slab_page mm/slub.c:1870 [inline]
- allocate_slab+0x251/0x380 mm/slub.c:2017
- new_slab mm/slub.c:2070 [inline]
- ___slab_alloc+0x8c7/0x1580 mm/slub.c:3223
- __slab_alloc.constprop.0+0x56/0xa0 mm/slub.c:3322
- __slab_alloc_node mm/slub.c:3375 [inline]
- slab_alloc_node mm/slub.c:3468 [inline]
- __kmem_cache_alloc_node+0x12c/0x310 mm/slub.c:3517
- kmalloc_trace+0x25/0xe0 mm/slab_common.c:1114
- kmalloc include/linux/slab.h:599 [inline]
- kzalloc include/linux/slab.h:720 [inline]
- pvr2_context_create+0x53/0x2a0 drivers/media/usb/pvrusb2/pvrusb2-context.c:207
- pvr_probe+0x25/0xe0 drivers/media/usb/pvrusb2/pvrusb2-main.c:54
- usb_probe_interface+0x307/0x930 drivers/usb/core/driver.c:396
- call_driver_probe drivers/base/dd.c:579 [inline]
- really_probe+0x234/0xc90 drivers/base/dd.c:658
- __driver_probe_device+0x1de/0x4b0 drivers/base/dd.c:800
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:830
- __device_attach_driver+0x1d4/0x300 drivers/base/dd.c:958
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1136 [inline]
- free_unref_page_prepare+0x460/0xa20 mm/page_alloc.c:2312
- free_unref_page+0x33/0x2c0 mm/page_alloc.c:2405
- qlink_free mm/kasan/quarantine.c:166 [inline]
- qlist_free_all+0x6a/0x170 mm/kasan/quarantine.c:185
- kasan_quarantine_reduce+0x18e/0x1d0 mm/kasan/quarantine.c:292
- __kasan_slab_alloc+0x4a/0x70 mm/kasan/common.c:305
- kasan_slab_alloc include/linux/kasan.h:188 [inline]
- slab_post_alloc_hook mm/slab.h:762 [inline]
- slab_alloc_node mm/slub.c:3478 [inline]
- __kmem_cache_alloc_node+0x190/0x310 mm/slub.c:3517
- __do_kmalloc_node mm/slab_common.c:1022 [inline]
- __kmalloc+0x4f/0x100 mm/slab_common.c:1036
- kmalloc include/linux/slab.h:603 [inline]
- tomoyo_realpath_from_path+0xb9/0x710 security/tomoyo/realpath.c:251
- tomoyo_get_realpath security/tomoyo/file.c:151 [inline]
- tomoyo_path_number_perm+0x241/0x580 security/tomoyo/file.c:723
- security_file_ioctl+0x72/0xb0 security/security.c:2647
- __do_sys_ioctl fs/ioctl.c:865 [inline]
- __se_sys_ioctl fs/ioctl.c:857 [inline]
- __x64_sys_ioctl+0xbb/0x210 fs/ioctl.c:857
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x38/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+This is implemented through a host-compiled program that
+generates device tables and translation function.
+As both usb-storage and UAS drivers share a lot of headers and
+definitions, we need to generate separate files for usb-storage,
+UAS and flags translation function.
 
-Memory state around the buggy address:
- ffff88812c3e6780: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff88812c3e6800: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->ffff88812c3e6880: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                                    ^
- ffff88812c3e6900: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff88812c3e6980: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-==================================================================
+(I also tried to use a statically generated array for flags,
+but this increased the size of drivers significantly, and
+the code was quite ugly...)
 
+2) Support for OPAL on USB attached storage.
 
-Tested on:
+The main support for OPAL on USB-attached storage is
+straightforward. The patch 6
+ - enables SCSI security flag for USB mass storage and UAS device
+   by default.
+ - adds an optional wrapper to the SCSI layer for the ATA-12
+   pass-thru command as an alternative if SECURITY IN/OUT
+   is unavailable.
 
-commit:         1053c4a4 Revert "usb: gadget: uvc: stop pump thread on..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=1472423a680000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a5e01246f94ceed9
-dashboard link: https://syzkaller.appspot.com/bug?extid=621409285c4156a009b3
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+During device detection, these steps are then done:
+  1) USB driver (mass-storage, UAS) enables security driver flag
+     by default if not disabled by quirk
+  2) SCSI device enumerates SECURITY IN/OUT support. If detected,
+     SECURITY ON/OUT wrapper is used (as in the current code).
+     If not, the new ATA12 pass-thru wrapper is used instead.
+  3) SED OPAL code tries OPAL discovery command for the device.
+     If it receives correct reply, OPAL is enabled for the device.
 
-Note: no patches were applied.
+Enabling support may uncover many issues, as OPAL-locked devices often
+tend to generate errors on the locked range.
+
+Anyway, cryptsetup will soon support OPAL devices, and I think support
+for USB devices is a nice feature that enables users to unlock drives
+even if they are attached through USB adapters.
+
+But also, there are bugs in firmware, so I added a quirk flag that can
+disable security commands for particular devices.
+
+The last patch uses this quirk for Realtek 9210, which seems to support
+OPAL commands, but after configuring OPAL locking range, it also sets
+the write-protected flag for the whole device.
+This is perhaps a bug in firmware (all versions I tried), and I will
+report that later to Realtek.
+
+Milan Broz (6):
+  usb-storage: remove UNUSUAL_VENDOR_INTF macro
+  usb-storage: make internal quirks flags 64bit
+  usb-storage: use fflags index only in usb-storage driver
+  usb-storage,uas: use host helper to generate driver info
+  usb-storage,uas,scsi: allow to pass through security commands (OPAL)
+  usb-storage,uas: Disable security commands (OPAL) for RT9210 chip
+    family
+
+ drivers/scsi/sd.c                   |  33 ++++-
+ drivers/usb/storage/Makefile        |  25 ++++
+ drivers/usb/storage/alauda.c        |   2 +-
+ drivers/usb/storage/cypress_atacb.c |   2 +-
+ drivers/usb/storage/datafab.c       |   2 +-
+ drivers/usb/storage/ene_ub6250.c    |   2 +-
+ drivers/usb/storage/freecom.c       |   2 +-
+ drivers/usb/storage/isd200.c        |   2 +-
+ drivers/usb/storage/jumpshot.c      |   2 +-
+ drivers/usb/storage/karma.c         |   2 +-
+ drivers/usb/storage/mkflags.c       | 212 ++++++++++++++++++++++++++++
+ drivers/usb/storage/onetouch.c      |   2 +-
+ drivers/usb/storage/realtek_cr.c    |   2 +-
+ drivers/usb/storage/scsiglue.c      |   4 +
+ drivers/usb/storage/sddr09.c        |   2 +-
+ drivers/usb/storage/sddr55.c        |   2 +-
+ drivers/usb/storage/shuttle_usbat.c |   2 +-
+ drivers/usb/storage/uas-detect.h    |   4 +-
+ drivers/usb/storage/uas.c           |  26 ++--
+ drivers/usb/storage/unusual_devs.h  |  11 ++
+ drivers/usb/storage/unusual_uas.h   |  11 ++
+ drivers/usb/storage/usb.c           |  42 +++---
+ drivers/usb/storage/usb.h           |   7 +-
+ drivers/usb/storage/usual-tables.c  |  38 +----
+ include/linux/usb_usual.h           |   2 +
+ 25 files changed, 346 insertions(+), 95 deletions(-)
+ create mode 100644 drivers/usb/storage/mkflags.c
+
+-- 
+2.42.0
+
 
