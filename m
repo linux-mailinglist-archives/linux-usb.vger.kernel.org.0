@@ -1,48 +1,54 @@
-Return-Path: <linux-usb+bounces-1204-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1205-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61C857BBBE5
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Oct 2023 17:40:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 197A77BBC15
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Oct 2023 17:46:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8EB08282462
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Oct 2023 15:40:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 60DC428207F
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Oct 2023 15:46:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C238D2868A;
-	Fri,  6 Oct 2023 15:40:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F3CB28697;
+	Fri,  6 Oct 2023 15:46:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EkEDsXAQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IrQlPwGv"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1490327EF2;
-	Fri,  6 Oct 2023 15:40:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACBADC433C8;
-	Fri,  6 Oct 2023 15:40:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC52A1D554
+	for <linux-usb@vger.kernel.org>; Fri,  6 Oct 2023 15:46:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F15CC433C8;
+	Fri,  6 Oct 2023 15:46:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1696606838;
-	bh=CQ3tpC/DASTgxY6DDz8rdDHkbS+6W3r8KCIgNsOPPFg=;
+	s=k20201202; t=1696607207;
+	bh=ksSYkcdw/6cmeqtqG2iMHN+7nIEblCybrVsjoCbBp8k=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=EkEDsXAQ9Cmp5tr6OX02yztvXuEbocstBiOPRzphvHadTQWhWYleaSZbvu1wtGs01
-	 6nOTIj6d39Wf9f2O3HU4RtDsg5ZmWVZ1pr95jki4nCbdvq12awFJOQrVBG5caz9bJv
-	 XJEyH23/Gz6FBn5DgXZLUxjzVEYrMw04vNqmb9eg0rYxc15KWZXl5/9Jw47i3Vtyh+
-	 KSbT25eci1dJbo4kHPGWNi49TRMNUugOMtRhj2iW607HMXC5U4mlWQyKrswjRm+zUP
-	 /DLDKIkAf1PjodlsEqrnEG0fk/TgHo/Esmy70ObjBZxOryVStJX90YPdVdMHklQF/X
-	 USLsmjTvRBvZQ==
-Received: (nullmailer pid 3983540 invoked by uid 1000);
-	Fri, 06 Oct 2023 15:40:35 -0000
-Date: Fri, 6 Oct 2023 10:40:35 -0500
-From: Rob Herring <robh@kernel.org>
-To: Neil Armstrong <neil.armstrong@linaro.org>
-Cc: Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 1/4] dt-bindings: soc: qcom: qcom,pmic-glink: add a
- gpio used to determine the Type-C port plug orientation
-Message-ID: <20231006154035.GA3979654-robh@kernel.org>
-References: <20231002-topic-sm8550-upstream-type-c-orientation-v2-0-125410d3ff95@linaro.org>
- <20231002-topic-sm8550-upstream-type-c-orientation-v2-1-125410d3ff95@linaro.org>
+	b=IrQlPwGvGxCPQz4wOxg+XyD4dDq3MEvesVTQy6DxQgeM1nte2Qxop0OPxRfxOtK6l
+	 q8HC00ubJ6o2p43TooGK/qsFKzR/EHiDi/6vpZKOwR3xhuZNDOYLPsqQXedyUuBgZe
+	 LFIpcEhhgPIOaVV56PsmfX/bNblUjELgDHE4ZAkZbeuNTpjibXmuuVlICzwSrpS055
+	 vncR/zjhGbfTwjUso5u3P4z6ioGrWVvSj5NuG8ziUNJdA+foBai9dfk57F3KstNqSJ
+	 aEL8ecNdGnj3zNSzII2W5IuvMCXJWOgN13Xc0sKni+uChidHEzUhQFfZCgyQHAO8yl
+	 KVmiRm7SG4jzw==
+Received: from johan by xi.lan with local (Exim 4.96)
+	(envelope-from <johan@kernel.org>)
+	id 1qon2f-0006BE-36;
+	Fri, 06 Oct 2023 17:47:06 +0200
+Date: Fri, 6 Oct 2023 17:47:05 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Bjorn Andersson <andersson@kernel.org>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, quic_ppratap@quicinc.com,
+	quic_wcheng@quicinc.com, quic_jackp@quicinc.com
+Subject: Re: [PATCH v12 0/3] Add multiport support for DWC3 controllers
+Message-ID: <ZSAr-SSaZcsIoC2P@hovoldconsulting.com>
+References: <20231004165922.25642-1-quic_kriskura@quicinc.com>
+ <ZR5ZUaWcyRj5sZKx@hovoldconsulting.com>
+ <d6974352-e157-421b-aa2d-e4a6c791ca2b@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -51,33 +57,41 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231002-topic-sm8550-upstream-type-c-orientation-v2-1-125410d3ff95@linaro.org>
+In-Reply-To: <d6974352-e157-421b-aa2d-e4a6c791ca2b@quicinc.com>
 
-On Mon, Oct 02, 2023 at 12:20:21PM +0200, Neil Armstrong wrote:
-> On SM8450 and SM8550 based platforms, the Type-C plug orientation is given on a
-> GPIO line for each connector which are set by the PMIC(s).
-> 
-> Document this optional Type-C connector property, and take the
-> assumption an active level represents an inverted/flipped orientation.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->  .../devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
-> index bceb479f74c5..422921cf1f82 100644
-> --- a/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
-> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
-> @@ -35,6 +35,12 @@ properties:
->    '#size-cells':
->      const: 0
->  
-> +  orientation-gpios:
-> +    description: Array of input gpios for the Type-C connector orientation indication.
-> +      The GPIO indication is used to detect the orientation of the Type-C connector.
-> +      The array should contain a gpio entry for each PMIC Glink connector, in reg order.
-> +      It is defined that GPIO active level means "CC2" or Reversed/Flipped orientation.
+On Thu, Oct 05, 2023 at 02:32:54PM +0530, Krishna Kurapati PSSNV wrote:
+> On 10/5/2023 12:06 PM, Johan Hovold wrote:
+> > On Wed, Oct 04, 2023 at 10:29:19PM +0530, Krishna Kurapati wrote:
 
-Shouldn't this node then have 'orientation-switch'?
+> >> Krishna Kurapati (3):
+> >>    usb: dwc3: core: Access XHCI address space temporarily to read port
+> >>      info
+> >>    usb: dwc3: core: Skip setting event buffers for host only controllers
+> >>    usb: dwc3: qcom: Add helper function to request threaded IRQ
+> > 
+> > NAK.
+> > 
+> > These patches make very little sense on their own and can't really be
+> > evaluated without the context of the larger series.
+> > 
+> > Just work on getting the multiport series in shape and include any acks
+> > you've received so far when submitting new revisions.
+
+>   This may be partially true for first patch of this series, (where we 
+> read num_ports), but the other two patches are self explanatory and are 
+> applicable for non-mp controllers as well. Intention was to ensure we 
+> make the next rebase easy.
+
+No, just send the whole series at once.
+ 
+>   Will try to address all comments and send v12 again as a whole series 
+> this week. I am actually blocked on [1]. Not able to repro the compile 
+> error on my end. That's what stopped me from sending all at once.
+
+Looks like your buffer is too small for a u8 index. Should be easy to
+fix.
+
+Johan
+ 
+> [1]: https://lore.kernel.org/all/202309200156.CxQ3yaLY-lkp@intel.com/
 
