@@ -1,118 +1,105 @@
-Return-Path: <linux-usb+bounces-1216-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1217-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3C377BBF63
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Oct 2023 20:57:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6F4A7BBFC9
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Oct 2023 21:43:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6746B28218A
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Oct 2023 18:57:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0D0651C209AA
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Oct 2023 19:43:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35B7B38FB8;
-	Fri,  6 Oct 2023 18:57:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C889B405F6;
+	Fri,  6 Oct 2023 19:43:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="J7uxfpAO"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07C30328C3
-	for <linux-usb@vger.kernel.org>; Fri,  6 Oct 2023 18:57:22 +0000 (UTC)
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by lindbergh.monkeyblade.net (Postfix) with SMTP id 5CB0DFA
-	for <linux-usb@vger.kernel.org>; Fri,  6 Oct 2023 11:57:19 -0700 (PDT)
-Received: (qmail 54422 invoked by uid 1000); 6 Oct 2023 14:57:18 -0400
-Date: Fri, 6 Oct 2023 14:57:18 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Milan Broz <gmazyland@gmail.com>
-Cc: linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-  linux-scsi@vger.kernel.org, linux-block@vger.kernel.org, oneukum@suse.com,
-  jonathan.derrick@linux.dev
-Subject: Re: [RFC PATCH 6/6] usb-storage,uas: Disable security commands
- (OPAL) for RT9210 chip family
-Message-ID: <e9aad1d3-1aa1-4f09-955f-6d9f6f604600@rowland.harvard.edu>
-References: <20231006125445.122380-1-gmazyland@gmail.com>
- <20231006125445.122380-7-gmazyland@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28E093FB29
+	for <linux-usb@vger.kernel.org>; Fri,  6 Oct 2023 19:43:43 +0000 (UTC)
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE7CD95
+	for <linux-usb@vger.kernel.org>; Fri,  6 Oct 2023 12:43:42 -0700 (PDT)
+Received: by mail-il1-x130.google.com with SMTP id e9e14a558f8ab-34f69780037so2937135ab.1
+        for <linux-usb@vger.kernel.org>; Fri, 06 Oct 2023 12:43:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1696621422; x=1697226222; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=N7YYLqQKEBxYGYHN/5uoJBXyuFdtBHM7nG76jzEtpXc=;
+        b=J7uxfpAOJSzQp/vQtHYW0xVpSQ1sRSs4Y0yC+ZJPNsPZgGtSXLJMybPbIHzNH5npOL
+         kYhJ/JEeWZGMxK/GpIutH2TFVLw3HbDmr3RkqNf8wifhfle6TaUoYWK7d5Ks3srUZO1e
+         0YiF7BJQsGux8Do3OdOp7pIo4j1cxBlT3hYw0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696621422; x=1697226222;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=N7YYLqQKEBxYGYHN/5uoJBXyuFdtBHM7nG76jzEtpXc=;
+        b=AFnB5DEkLNLbZEMsOwp8vuUpX0Jr3HSbZpluB4sn3emYEvH+PveC1N7AiL0oAi5NPH
+         H7kpDRvUxR5tdfQbLDzN13cOXxk6m2vhrXHFLwiTuHLPrMJS0/aStFQ+jf2OQ74TDmwf
+         YdIpX7xUgFRh4AZ7/jzJnoSIha4XPwDIwWh8L+dL4k5eJR44h4oH2kt5y8nzLenb2Wg/
+         yr9L4+VYftDGYc6BTyc4w+8nikeZtAlDdAxT1cWIbL6B8xRckrpm/vsQk0uyvDIjP6JY
+         0E/nQy/5SUrJM0JfAgEAxe+QQ5vT3uno6QWeC0NjqmOA0lgBMlTaZ4uYQOJB0puysv5z
+         R6oQ==
+X-Gm-Message-State: AOJu0Yxl2LS4fLrBMG8IOwJ3cjmlmAukXEAYzLqaDd4A5QxySmAh5wlK
+	NzGiJcBgMHFnh304iVMei7OBmGj1ydraxQV+qMs=
+X-Google-Smtp-Source: AGHT+IH8S+W4GcBgA8b7s2M/grRMn193p8+srz/4y0+Oit8CvMkRb+3GUpCbZJdp3ZEo6R8stxI0wQ==
+X-Received: by 2002:a05:6602:368c:b0:792:7c78:55be with SMTP id bf12-20020a056602368c00b007927c7855bemr8827149iob.0.1696621422104;
+        Fri, 06 Oct 2023 12:43:42 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id s12-20020a5eaa0c000000b0078754bed499sm749769ioe.37.2023.10.06.12.43.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Oct 2023 12:43:41 -0700 (PDT)
+Message-ID: <d8437b59-552b-4ea5-9400-07535c200560@linuxfoundation.org>
+Date: Fri, 6 Oct 2023 13:43:40 -0600
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231006125445.122380-7-gmazyland@gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/1] usbip: Use platform_device_register_full()
+Content-Language: en-US
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: Valentina Manea <valentina.manea.m@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20231006164312.3528524-1-andriy.shevchenko@linux.intel.com>
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20231006164312.3528524-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Fri, Oct 06, 2023 at 02:54:45PM +0200, Milan Broz wrote:
-> Realtek 9210 family (NVME to USB bridge) adapters always set
-> the write-protected bit for the whole drive if an OPAL locking range
-> is defined (even if the OPAL locking range just covers part of the disk).
+On 10/6/23 10:43, Andy Shevchenko wrote:
+> The code to create the child platform device is essentially the same as
+> what platform_device_register_full() does, so change over to use
+> that same function to reduce duplication.
 > 
-> The only way to recover is PSID reset and physical reconnection of the device.
-> 
-> This looks like a wrong implementation of OPAL standard (and I will try
-> to report it to Realtek as it happens for all firmware versions I have),
-> but for now, these adapters are unusable for OPAL.
-> 
-> Signed-off-by: Milan Broz <gmazyland@gmail.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > ---
->  drivers/usb/storage/unusual_devs.h | 11 +++++++++++
->  drivers/usb/storage/unusual_uas.h  | 11 +++++++++++
->  2 files changed, 22 insertions(+)
+> v2: (hopefully) fixed run-time NULL-dereference (LKP)
+>   drivers/usb/usbip/vhci_hcd.c | 55 +++++++++++++-----------------------
+>   1 file changed, 20 insertions(+), 35 deletions(-)
 > 
-> diff --git a/drivers/usb/storage/unusual_devs.h b/drivers/usb/storage/unusual_devs.h
-> index 20dcbccb290b..b7c0df180e5d 100644
-> --- a/drivers/usb/storage/unusual_devs.h
-> +++ b/drivers/usb/storage/unusual_devs.h
-> @@ -1476,6 +1476,17 @@ UNUSUAL_DEV( 0x0bc2, 0x3332, 0x0000, 0x9999,
->  		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
->  		US_FL_NO_WP_DETECT ),
->  
-> +/*
-> + * Realtek 9210 family set global write-protection flag
-> + * for any OPAL locking range making device unusable
-> + * Reported-by: Milan Broz <gmazyland@gmail.com>
-> + */
-> +UNUSUAL_DEV( 0x0bda, 0x9210, 0x0000, 0xffff,
-> +		"Realtek",
-> +		"",
 
-Doesn't Realtek have some sort of product name you can put here?
+Looks good to me.
 
-> +		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-> +		US_FL_IGNORE_OPAL),
-> +
->  UNUSUAL_DEV(  0x0d49, 0x7310, 0x0000, 0x9999,
->  		"Maxtor",
->  		"USB to SATA",
-> diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
-> index 1f8c9b16a0fb..71ab824bfb32 100644
-> --- a/drivers/usb/storage/unusual_uas.h
-> +++ b/drivers/usb/storage/unusual_uas.h
-> @@ -185,3 +185,14 @@ UNUSUAL_DEV(0x4971, 0x8024, 0x0000, 0x9999,
->  		"External HDD",
->  		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
->  		US_FL_ALWAYS_SYNC),
-> +
-> +/*
-> + * Realtek 9210 family set global write-protection flag
-> + * for any OPAL locking range making device unusable
-> + * Reported-by: Milan Broz <gmazyland@gmail.com>
-> + */
-> +UNUSUAL_DEV(0x0bda, 0x9210, 0x0000, 0xffff,
-> +		"Realtek",
-> +		"",
-> +		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-> +		US_FL_IGNORE_OPAL),
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
-This entry is not in the right position.  The file is supposed to be 
-sorted by vendor ID, then product ID.
+thanks,
+-- Shuah
 
-Alan Stern
 
