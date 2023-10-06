@@ -1,233 +1,227 @@
-Return-Path: <linux-usb+bounces-1172-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1173-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 959F87BAE98
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Oct 2023 00:05:43 +0200 (CEST)
-Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sv.mirrors.kernel.org (Postfix) with ESMTP id D926728210F
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Oct 2023 22:05:40 +0000 (UTC)
+	by mail.lfdr.de (Postfix) with ESMTPS id 68A817BB05A
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Oct 2023 04:49:30 +0200 (CEST)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E3EFE282133
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Oct 2023 02:49:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AD7342BEF;
-	Thu,  5 Oct 2023 22:05:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59B9D1854;
+	Fri,  6 Oct 2023 02:49:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F0E941E30
-	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 22:05:35 +0000 (UTC)
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E510395
-	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 15:05:33 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1qoWTJ-00039q-VF; Fri, 06 Oct 2023 00:05:29 +0200
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1qoWTJ-00BNLj-92; Fri, 06 Oct 2023 00:05:29 +0200
-Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.94.2)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1qoWTI-00FI2n-Vm; Fri, 06 Oct 2023 00:05:29 +0200
-Date: Fri, 6 Oct 2023 00:05:28 +0200
-From: Michael Grzeschik <mgr@pengutronix.de>
-To: Avichal Rakesh <arakesh@google.com>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Daniel Scally <dan.scally@ideasonboard.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	jchowdhary@google.com, etalvala@google.com,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 0/3] usb: gadget: uvc: stability fixes on STREAMOFF.
-Message-ID: <ZR8zKHQv1dkyLosv@pengutronix.de>
-References: <20230930184821.310143-1-arakesh@google.com>
- <ZRv2UnKztgyqk2pt@pengutronix.de>
- <20231005082327.GC13853@pendragon.ideasonboard.com>
- <ZR6Me5WsAbjvc2hk@pengutronix.de>
- <53300d24-b558-428d-b52f-316b2e456313@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9C3F17C5
+	for <linux-usb@vger.kernel.org>; Fri,  6 Oct 2023 02:49:22 +0000 (UTC)
+Received: from mp-relay-02.fibernetics.ca (mp-relay-02.fibernetics.ca [208.85.217.137])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20160D6
+	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 19:49:21 -0700 (PDT)
+Received: from mailpool-fe-01.fibernetics.ca (mailpool-fe-01.fibernetics.ca [208.85.217.144])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mp-relay-02.fibernetics.ca (Postfix) with ESMTPS id 4D04676535;
+	Fri,  6 Oct 2023 02:49:20 +0000 (UTC)
+Received: from localhost (mailpool-mx-02.fibernetics.ca [208.85.217.141])
+	by mailpool-fe-01.fibernetics.ca (Postfix) with ESMTP id 3788C4670E;
+	Fri,  6 Oct 2023 02:49:20 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at 
+X-Spam-Score: -0.199
+X-Spam-Level:
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.6
+Received: from mailpool-fe-01.fibernetics.ca ([208.85.217.144])
+	by localhost (mail-mx-02.fibernetics.ca [208.85.217.141]) (amavisd-new, port 10024)
+	with ESMTP id CKl-eijkwYvB; Fri,  6 Oct 2023 02:49:18 +0000 (UTC)
+Received: from [192.168.48.17] (host-104-157-209-188.dyn.295.ca [104.157.209.188])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: dgilbert@interlog.com)
+	by mail.ca.inter.net (Postfix) with ESMTPSA id A77F94670D;
+	Fri,  6 Oct 2023 02:49:17 +0000 (UTC)
+Message-ID: <11b1687f-3419-4037-845e-ef33d4e3871f@interlog.com>
+Date: Thu, 5 Oct 2023 22:49:10 -0400
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="bKGQ3CYWzkfbylp5"
-Content-Disposition: inline
-In-Reply-To: <53300d24-b558-428d-b52f-316b2e456313@google.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Reply-To: dgilbert@interlog.com
+Subject: Re: device present in lsusb, disappears in lsusb -t
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+References: <70c563f1-847c-32a1-cf4d-6bf9802017ab@interlog.com>
+ <2023091638-duration-barcode-73a3@gregkh>
+Content-Language: en-CA
+From: Douglas Gilbert <dgilbert@interlog.com>
+In-Reply-To: <2023091638-duration-barcode-73a3@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-
---bKGQ3CYWzkfbylp5
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi Avichal,
-
-On Thu, Oct 05, 2023 at 11:30:32AM -0700, Avichal Rakesh wrote:
->On 10/5/23 03:14, Michael Grzeschik wrote:
->> On Thu, Oct 05, 2023 at 11:23:27AM +0300, Laurent Pinchart wrote:
->>> On Tue, Oct 03, 2023 at 01:09:06PM +0200, Michael Grzeschik wrote:
->>>> On Sat, Sep 30, 2023 at 11:48:18AM -0700, Avichal Rakesh wrote:
->>>> > We have been seeing two main stability issues that uvc gadget driver
->>>> > runs into when stopping streams:
->>>> >=A0 1. Attempting to queue usb_requests to a disabled usb_ep
->>>> >=A0 2. use-after-free issue for inflight usb_requests
->>>> >
->>>> > The three patches below fix the two issues above. Patch 1/3 fixes the
->>>> > first issue, and Patch 2/3 and 3/3 fix the second issue.
->>>> >
->>>> > Avichal Rakesh (3):
->>>> >=A0=A0 usb: gadget: uvc: prevent use of disabled endpoint
->>>> >=A0=A0 usb: gadget: uvc: Allocate uvc_requests one at a time
->>>> >=A0=A0 usb: gadget: uvc: Fix use-after-free for inflight usb_requests
->>>> >
->>>> > drivers/usb/gadget/function/f_uvc.c=A0=A0=A0=A0 |=A0 11 +-
->>>> > drivers/usb/gadget/function/f_uvc.h=A0=A0=A0=A0 |=A0=A0 2 +-
->>>> > drivers/usb/gadget/function/uvc.h=A0=A0=A0=A0=A0=A0 |=A0=A0 6 +-
->>>> > drivers/usb/gadget/function/uvc_v4l2.c=A0 |=A0 21 ++-
->>>> > drivers/usb/gadget/function/uvc_video.c | 189 +++++++++++++++++-----=
---
->>>> > 5 files changed, 164 insertions(+), 65 deletions(-)
->>>>
->>>> These patches are not applying on gregkh/usb-testing since
->>>> Greg did take my patches first. I have already rebased them.
->>>
->>> I think they got merged too soon :-( We could fix things on top, but
->>> there's very little time to do so for v6.7.
+On 2023-09-16 07:16, Greg KH wrote:
+> On Fri, Sep 15, 2023 at 08:16:18PM -0400, Douglas Gilbert wrote:
+>> The device in question is this one:
+>>    Bus 005 Device 015: ID 0483:572b STMicroelectronics STEVAL-USBC2DP Type-C
+>> to DisplayPort adapter. It is a USB-C alternate mode device (so tbtadm does
+>> not
+>> report it).
 >>
->> Agreed. I was jumping from one workaround to another one, since this
->> is not easy to fix in a proper way. And still after this long discussion
->> with Avichal I don't think we are there yet.
+>> That adapter is connected to a screen (and working) and to a USB-C port on
+>> a Lenovo TB3 dock [40AN] which in turn is connected to a Thinkpad X13 Gen3's
+>> USB-C port. The Thinkpad is running lk 6.6.0-rc1 with "lsusb (usbutils) 014".
 >>
->>
->> So far the first two patches from Avichal look legit. But the overall
->> Use-After-Free fix is yet to be done properly.
->>
->> The "abondoned" method he suggested is really bad to follow and will
->> add too much complexity and will be hard to debug.
->>
->> IMHO it should be possible to introduce two cleanup pathes.
->>
->> One path would be in the uvc_cleanup_requests that will cleanup the
->> requests that are actually not used in the controller and are registered
->> in the req_free list.
->>
->> The second path would be the complete functions that are being run
->> from the controller and will ensure that the cleanup will really free
->> the requests from the controller after they were consumed.
->>
->> What do you think?
->
->I am not sure I follow. Patch 3/3 does exactly what you say here.
+>> The strange thing is that this device is nowhere to be found in the output
+>> of "lsusb -t". The lsusb manpage describes the '-t' option as: "Tells
+>> lsusb to dump the physical USB device hierarchy as a tree." So is 'physical'
+>> a weasel word in this context, or is there a bug in the '-t' option, or is
+>> there some other explanation?
+> 
+> A number of 'lsusb -t' issues were fixed in the 015 release of usbutils,
+> so maybe update?
+> 
+> that being said, the -t option is a totally different codepath in the
+> tool, and shows different things overall.  -t shows the drivers that are
+> bound to the different interfaces, which means that a single device will
+> show up multiple times in the -t option.
+> 
+> Here's the output of the two things on my local laptop, with just a few
+> USB devices in it:
+> 
+> $ lsusb
+> Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+> Bus 003 Device 003: ID 27c6:609c Shenzhen Goodix Technology Co.,Ltd. Goodix USB2.0 MISC
+> Bus 003 Device 006: ID 0bda:5634 Realtek Semiconductor Corp. Laptop Camera
+> Bus 003 Device 004: ID 8087:0032 Intel Corp. AX210 Bluetooth
+> Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+> Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+> Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+> 
+> $ lsusb -t
+> /:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 10000M
+> /:  Bus 03.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/12p, 480M
+>      |__ Port 7: Dev 6, If 0, Class=Video, Driver=uvcvideo, 480M
+>      |__ Port 7: Dev 6, If 1, Class=Video, Driver=uvcvideo, 480M
+>      |__ Port 9: Dev 3, If 0, Class=Vendor Specific Class, Driver=, 12M
+>      |__ Port 10: Dev 4, If 0, Class=Wireless, Driver=btusb, 12M
+>      |__ Port 10: Dev 4, If 1, Class=Wireless, Driver=btusb, 12M
+> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 20000M/x2
+> /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/1p, 480M
+> 
+> and then if you give the -v option as well you see a bit more:
+> 
+> $ lsusb -tv
+> /:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 10000M
+>      ID 1d6b:0003 Linux Foundation 3.0 root hub
+> /:  Bus 03.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/12p, 480M
+>      ID 1d6b:0002 Linux Foundation 2.0 root hub
+>      |__ Port 7: Dev 6, If 0, Class=Video, Driver=uvcvideo, 480M
+>          ID 0bda:5634 Realtek Semiconductor Corp.
+>      |__ Port 7: Dev 6, If 1, Class=Video, Driver=uvcvideo, 480M
+>          ID 0bda:5634 Realtek Semiconductor Corp.
+>      |__ Port 9: Dev 3, If 0, Class=Vendor Specific Class, Driver=, 12M
+>          ID 27c6:609c Shenzhen Goodix Technology Co.,Ltd.
+>      |__ Port 10: Dev 4, If 0, Class=Wireless, Driver=btusb, 12M
+>          ID 8087:0032 Intel Corp. AX210 Bluetooth
+>      |__ Port 10: Dev 4, If 1, Class=Wireless, Driver=btusb, 12M
+>          ID 8087:0032 Intel Corp. AX210 Bluetooth
+> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 20000M/x2
+>      ID 1d6b:0003 Linux Foundation 3.0 root hub
+> /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/1p, 480M
+>      ID 1d6b:0002 Linux Foundation 2.0 root hub
+> 
+> 
+> What are you seeing missing in your output?
 
-Yes, it was just to summ up what the latest state of the idea was,
-so Laurent does not read the whole thread in detail. Sorry for not
-being clear enough about that.
+lsusb-t.c says:
 
->There are two cleanup paths:
->  1. uvcg_video_disable cleans up only the requests in req_free, and
->  2. complete handler cleans up the in-flight requests.
->
->The "abandoned" flag is simply to let the completion handler know
->which requests to clean up and which ones to re-queue back to
->the gadget driver.
+   Copyright (c) 2009 Greg Kroah-Hartman <gregkh@suse.de>
 
-What I don't get is, why in the case of shutdown there needs to
-be something re-queued back to the gadget driver. There should not
-need to be any sort of barrier flag for the requests. Just the
-complete handler running past a barrier where it knows that the
-whole device is stopped. So every call on complete should then clean
-that exact request it is touching currently.
+When I tried to contact the author by email off-list with a fair
+amount of data (e.g. a copy of /sys from my machine), he claimed
+that such an approach was "rude" in the sense that it should have
+been sent to this list. Personally I prefer to fix bugs via a
+direct email exchange, without the peanut gallery. After all, many
+of the bugs found fall into the "brown paper bag" variety.
+Plus I felt a bit uncomfortable about publishing the full
+contents of /sys from my laptop.
 
-I don't know where the extra complexity comes from.
+Oh well, each to their own.
 
->The other "complications" are around making sure we can trust
->the values in an inherently racey situation. The reasoning
->can admittedly be difficult to follow at a glance, which incidentally
->is why I went with a simple to prove timed wait in the past
->(https://lore.kernel.org/20230912041910.726442-3-arakesh@google.com).
->
->I am not suggesting we go back to a timed wait, but please do look
->at the patch and let me know which parts don't make sense, or are
->difficult to understand. We can add more documentation about our
->assumptions there, or if you have a way to do this that you
->think is simpler to reason about, then please let me know and I'll
->be more than happy to use that!
+Here is a bit more information on this subject:
 
-I really try to spin my head around the idea of the is_abondoned flag
-you are using. Unfortunatly for now I am out to debug the issues I see
-with your series.
+$ ls /sys/bus/usb/devices
+1-0:1.0  3-7:1.1      5-2.1.1.2      5-2.5        6-2.3.4
+2-0:1.0  3-7:1.2      5-2.1.1.2:1.0  5-2.5:1.0    6-2.3.4:1.0
+3-0:1.0  4-0:1.0      5-2.1.1.2:1.1  6-0:1.0      usb1
+3-3      5-0:1.0      5-2.1.1.2:1.2  6-2          usb2
+3-3:1.0  5-1          5-2.1.1.2:1.3  6-2.1        usb3
+3-4      5-2          5-2.3          6-2:1.0      usb4
+3-4:1.0  5-2.1        5-2.3:1.0      6-2.1:1.0    usb5
+3-4:1.1  5-2:1.0      5-2.3.4        6-2.1.2      usb6
+3-4:1.2  5-2.1.1      5-2.3.4:1.0    6-2.1.2:1.0
+3-7      5-2.1:1.0    5-2.3.4.3      6-2.3
+3-7:1.0  5-2.1.1:1.0  5-2.3.4.3:2.0  6-2.3:1.0
 
-So I did try these patches you send. Yes the deadlock error is gone with
-v3. But the linked list is still running into cases where
-dwc3_gadget_giveback(complete) is touching requests that are already
-freed.
+And the missing device is 5-1 and looks like this:
+$ cd /sys/bus/usb/devices/5-1
+$ ls_name_value
+authorized : 1
+avoid_reset_quirk : 0
+bcdDevice : 0200
+bConfigurationValue : 1
+bDeviceClass : 11
+bDeviceProtocol : 00
+bDeviceSubClass : 00
+bmAttributes : c0
+bMaxPacketSize0 : 64
+bMaxPower : 0mA
+bNumConfigurations : 1
+bNumInterfaces :  0
+busnum : 5
+configuration :
+descriptors : <contains non-ASCII chars>
+dev : 189:526
+devnum : 15
+devpath : 1
+devspec : (null)
+idProduct : 572b
+idVendor : 0483
+ltm_capable : no
+manufacturer : STMicroelectronics
+maxchild : 0
+product : STEVAL-USBC2DP Type-C to DisplayPort adapter
+quirks : 0x0
+removable : unknown
+remove :
+rx_lanes : 1
+serial : 00000000002B
+speed : 12
+tx_lanes : 1
+uevent : MAJOR=189 MINOR=526 DEVNAME=bus/usb/005/015 DEVTYPE=usb_device 
+DRIVER=usb PRODUCT=483/572b/200 TYPE=17/0/0 BUSNUM=005 DEVNUM=015
+urbnum : 14
+version :  2.01
 
-[   61.408715] ------------[ cut here ]------------
-[   61.413897] kernel BUG at lib/list_debug.c:56!
-=2E..
-[   61.590762] Call trace:
-[   61.596890]  __list_del_entry_valid+0xb8/0xe8
-[   61.603408]  dwc3_gadget_giveback+0x3c/0x1b0
-[   61.607594]  dwc3_remove_requests.part.0+0xcc/0x100
-[   61.612948]  __dwc3_gadget_ep_disable+0xbc/0x1b8
-[   61.621019]  dwc3_gadget_ep_disable+0x48/0x100
-[   61.627925]  usb_ep_disable+0x3c/0x138
-[   61.638230]  uvc_function_setup_continue+0x3c/0x60
-[   61.645040]  uvc_v4l2_streamoff+0x5c/0x80
-[   61.659812]  v4l_streamoff+0x40/0x60
-[   61.668950]  __video_do_ioctl+0x344/0x420
-[   61.679548]  video_usercopy+0x1d0/0x788
-[   61.685677]  video_ioctl2+0x40/0x70
-[   61.697439]  v4l2_ioctl+0x68/0xa0
-[   61.709200]  __arm64_sys_ioctl+0x304/0xda0
-[   61.720768]  invoke_syscall.constprop.0+0x70/0x130
+That all looks correct.
 
-Regards,
-Michael
+The code in lsusb-t.c seems to assign a special meaning to "-1" devices
+and there is only one of those: "5-1". And the device associated with
+"5-1" is the one that does _not_ appear in the output of 'lsusb -t' but
+does appear in the output of 'lsusb'.
 
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Doug Gilbert
 
---bKGQ3CYWzkfbylp5
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmUfMyYACgkQC+njFXoe
-LGQwCw/+KuWq5eCCRs2wyNmR2Ojt7Y9Hv/dzvZFZFjyeNbVP6JStp1NWiu9Stew3
-wln/VdjiRrceDZ1+afj1l3AaSQ210JAcLaEuqUv54LL2JJvun4sKHN5bCspNWDEA
-kOKym+oDUNNTU3reZwEXh30GYdrh567uNh++m2+9b9+KV7GEshGXxvAHzW9Br9zz
-my93O7pahJSBUvfkpYQVuw2yiXibecgO+AUsAS9dYs2N69KwefZpF1s/kQ1XrBHl
-+I6Aivl+Tus/qYnjvAt1s2+L+ygHGZaZYYJM8v9yY4B+ADRhl3jPub72OwXS5emS
-HAl1oE+lx7me3tVDgfp+B1r8PjQYBzRLPT8A8wtqFjv7hcjpEVHSSY1LQTaut1U+
-bvAcSHM236A5a3bmkgVEsZ9nITn7j66S+OUVn+gmIYW7iTPXxhRyRvp+V7HPhR2z
-dkeuH/Rk4braWAmuQP5SH9EBWi9oR1kbTJq8QNk7I/On1QPJaXMQ045n2/U1s8ID
-9QbIcNdz7h0aoTMGpSNC3GVX0cZXbYyyALbu0F4RFp8Dt4uY1YY80yK9DL5rDv/X
-muvSiVPN/SZ6ZwYG5zDJ/GYEqYQ4uEAL6uA7zWv4DyFmKN6KxYx/Jj0z7Csreb22
-6ECjCqk25qBDr4JqwHorq5eJZUBnraFJXQc3oIWqZsszF3I1yM4=
-=YVlC
------END PGP SIGNATURE-----
-
---bKGQ3CYWzkfbylp5--
 
