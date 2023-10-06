@@ -1,227 +1,187 @@
-Return-Path: <linux-usb+bounces-1173-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1174-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68A817BB05A
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Oct 2023 04:49:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88C7D7BB1BB
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Oct 2023 08:49:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E3EFE282133
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Oct 2023 02:49:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 79D4D1C20A08
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Oct 2023 06:49:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59B9D1854;
-	Fri,  6 Oct 2023 02:49:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09231539C;
+	Fri,  6 Oct 2023 06:49:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="n9VfNPG4"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9C3F17C5
-	for <linux-usb@vger.kernel.org>; Fri,  6 Oct 2023 02:49:22 +0000 (UTC)
-Received: from mp-relay-02.fibernetics.ca (mp-relay-02.fibernetics.ca [208.85.217.137])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20160D6
-	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 19:49:21 -0700 (PDT)
-Received: from mailpool-fe-01.fibernetics.ca (mailpool-fe-01.fibernetics.ca [208.85.217.144])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mp-relay-02.fibernetics.ca (Postfix) with ESMTPS id 4D04676535;
-	Fri,  6 Oct 2023 02:49:20 +0000 (UTC)
-Received: from localhost (mailpool-mx-02.fibernetics.ca [208.85.217.141])
-	by mailpool-fe-01.fibernetics.ca (Postfix) with ESMTP id 3788C4670E;
-	Fri,  6 Oct 2023 02:49:20 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at 
-X-Spam-Score: -0.199
-X-Spam-Level:
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
-Received: from mailpool-fe-01.fibernetics.ca ([208.85.217.144])
-	by localhost (mail-mx-02.fibernetics.ca [208.85.217.141]) (amavisd-new, port 10024)
-	with ESMTP id CKl-eijkwYvB; Fri,  6 Oct 2023 02:49:18 +0000 (UTC)
-Received: from [192.168.48.17] (host-104-157-209-188.dyn.295.ca [104.157.209.188])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: dgilbert@interlog.com)
-	by mail.ca.inter.net (Postfix) with ESMTPSA id A77F94670D;
-	Fri,  6 Oct 2023 02:49:17 +0000 (UTC)
-Message-ID: <11b1687f-3419-4037-845e-ef33d4e3871f@interlog.com>
-Date: Thu, 5 Oct 2023 22:49:10 -0400
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6614B523D
+	for <linux-usb@vger.kernel.org>; Fri,  6 Oct 2023 06:48:59 +0000 (UTC)
+Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1429EEB
+	for <linux-usb@vger.kernel.org>; Thu,  5 Oct 2023 23:48:57 -0700 (PDT)
+Received: by mail-vk1-xa31.google.com with SMTP id 71dfb90a1353d-49a99c43624so708941e0c.2
+        for <linux-usb@vger.kernel.org>; Thu, 05 Oct 2023 23:48:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1696574936; x=1697179736; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mO/HF0HBlJ2Jej01g1aJHNBVplRdvJlEtkw7wkfb7oc=;
+        b=n9VfNPG43PZykPiJD9d/kOVQZJ+Ok4amJ7LFHcRq4SeymchD72kUOoB63ixgxRXZKf
+         JTz3sljJDPWIvW8OuOFmihmVuwNe5/IZWQbAGDAlrXVv1MrMv4AdWui0q2UD8e73DAum
+         SBmx9FxGZHcu/Y+TrTd9aLhTHrYny0DC06/3mKmtDu+hewf9zooOb7FF507DKnqvYIuc
+         yIgla7cwuZxeq2aM/gQ7qELzaAIk87ATXPQ4Rs9X543OakX3rb244auYay80MnBf4WDl
+         bGlG9zrzS8n4nEaKozCfToSS2MgqlkCs/acZAchSyl6ROtIkltCOLL6zDSA/Nnd3GAGG
+         ciTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696574936; x=1697179736;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mO/HF0HBlJ2Jej01g1aJHNBVplRdvJlEtkw7wkfb7oc=;
+        b=QMLzS8IV2a1KzJJZb0bVCsssd1Tzok3E946T7SgP2tJtDQOkEv6nTa4LgXtBQSOcTU
+         /R8c1LKNT/ghSzk4MZ+7yXK15V1IxUYl4n8n1C2mVFRMygHNhvpDj/khrNein6WqsA8n
+         8lmL3WSvDBqKZa7I1FYt1WfPSo2Sv7WOUT+kGLdxGD7xcwNpgq2DlxCxijJQmStF0tTm
+         XR1aWx+MOPJTo7JUm2i6JmytvsQdvVyd/Q8j4cpTMNilIit6q23jZUbw1XADHLfakE4M
+         D0ojck6KMShlQAWrhz0xgpksWgRxghpbamLqIhaddosHOQq6Es73hDJlrNvtpybZrf4M
+         a3Ow==
+X-Gm-Message-State: AOJu0YymwY2ICRa6qhpfJqqxAJ/njFNKRrxjNuZW0qOXmKss+9vXwadZ
+	8kbssckLYfX2sdeOI4AYxCed+6HzL8djh8lxntgN+Q==
+X-Google-Smtp-Source: AGHT+IHc9dtSUxk9aTGH3bM96KLhGyZh0ypnD/UpuBZUbcF28r4HaYyVgxXbe8jAdN+8Fs12j0+oIUMyajEl8XyHuZE=
+X-Received: by 2002:a1f:cbc5:0:b0:49d:9916:5747 with SMTP id
+ b188-20020a1fcbc5000000b0049d99165747mr7103460vkg.13.1696574936048; Thu, 05
+ Oct 2023 23:48:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: dgilbert@interlog.com
-Subject: Re: device present in lsusb, disappears in lsusb -t
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-References: <70c563f1-847c-32a1-cf4d-6bf9802017ab@interlog.com>
- <2023091638-duration-barcode-73a3@gregkh>
-Content-Language: en-CA
-From: Douglas Gilbert <dgilbert@interlog.com>
-In-Reply-To: <2023091638-duration-barcode-73a3@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20231004-pxa-gpio-v5-0-d99ae6fceea8@skole.hr> <20231004-pxa-gpio-v5-1-d99ae6fceea8@skole.hr>
+In-Reply-To: <20231004-pxa-gpio-v5-1-d99ae6fceea8@skole.hr>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Fri, 6 Oct 2023 08:48:45 +0200
+Message-ID: <CAMRc=MeoxVOgs2D21P2ECXxUC-wfHAV0YAgZFwKDC99jLQSC5Q@mail.gmail.com>
+Subject: Re: [PATCH RFC v5 1/6] ARM: pxa: Convert Spitz OHCI to GPIO descriptors
+To: =?UTF-8?Q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
+Cc: Daniel Mack <daniel@zonque.org>, Haojian Zhuang <haojian.zhuang@gmail.com>, 
+	Robert Jarzmik <robert.jarzmik@free.fr>, Russell King <linux@armlinux.org.uk>, 
+	Alan Stern <stern@rowland.harvard.edu>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Linus Walleij <linus.walleij@linaro.org>, Andy Shevchenko <andy@kernel.org>, 
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Mark Brown <broonie@kernel.org>, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-input@vger.kernel.org, linux-spi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE
+	autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On 2023-09-16 07:16, Greg KH wrote:
-> On Fri, Sep 15, 2023 at 08:16:18PM -0400, Douglas Gilbert wrote:
->> The device in question is this one:
->>    Bus 005 Device 015: ID 0483:572b STMicroelectronics STEVAL-USBC2DP Type-C
->> to DisplayPort adapter. It is a USB-C alternate mode device (so tbtadm does
->> not
->> report it).
->>
->> That adapter is connected to a screen (and working) and to a USB-C port on
->> a Lenovo TB3 dock [40AN] which in turn is connected to a Thinkpad X13 Gen3's
->> USB-C port. The Thinkpad is running lk 6.6.0-rc1 with "lsusb (usbutils) 014".
->>
->> The strange thing is that this device is nowhere to be found in the output
->> of "lsusb -t". The lsusb manpage describes the '-t' option as: "Tells
->> lsusb to dump the physical USB device hierarchy as a tree." So is 'physical'
->> a weasel word in this context, or is there a bug in the '-t' option, or is
->> there some other explanation?
-> 
-> A number of 'lsusb -t' issues were fixed in the 015 release of usbutils,
-> so maybe update?
-> 
-> that being said, the -t option is a totally different codepath in the
-> tool, and shows different things overall.  -t shows the drivers that are
-> bound to the different interfaces, which means that a single device will
-> show up multiple times in the -t option.
-> 
-> Here's the output of the two things on my local laptop, with just a few
-> USB devices in it:
-> 
-> $ lsusb
-> Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-> Bus 003 Device 003: ID 27c6:609c Shenzhen Goodix Technology Co.,Ltd. Goodix USB2.0 MISC
-> Bus 003 Device 006: ID 0bda:5634 Realtek Semiconductor Corp. Laptop Camera
-> Bus 003 Device 004: ID 8087:0032 Intel Corp. AX210 Bluetooth
-> Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-> Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-> Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-> 
-> $ lsusb -t
-> /:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 10000M
-> /:  Bus 03.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/12p, 480M
->      |__ Port 7: Dev 6, If 0, Class=Video, Driver=uvcvideo, 480M
->      |__ Port 7: Dev 6, If 1, Class=Video, Driver=uvcvideo, 480M
->      |__ Port 9: Dev 3, If 0, Class=Vendor Specific Class, Driver=, 12M
->      |__ Port 10: Dev 4, If 0, Class=Wireless, Driver=btusb, 12M
->      |__ Port 10: Dev 4, If 1, Class=Wireless, Driver=btusb, 12M
-> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 20000M/x2
-> /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/1p, 480M
-> 
-> and then if you give the -v option as well you see a bit more:
-> 
-> $ lsusb -tv
-> /:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 10000M
->      ID 1d6b:0003 Linux Foundation 3.0 root hub
-> /:  Bus 03.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/12p, 480M
->      ID 1d6b:0002 Linux Foundation 2.0 root hub
->      |__ Port 7: Dev 6, If 0, Class=Video, Driver=uvcvideo, 480M
->          ID 0bda:5634 Realtek Semiconductor Corp.
->      |__ Port 7: Dev 6, If 1, Class=Video, Driver=uvcvideo, 480M
->          ID 0bda:5634 Realtek Semiconductor Corp.
->      |__ Port 9: Dev 3, If 0, Class=Vendor Specific Class, Driver=, 12M
->          ID 27c6:609c Shenzhen Goodix Technology Co.,Ltd.
->      |__ Port 10: Dev 4, If 0, Class=Wireless, Driver=btusb, 12M
->          ID 8087:0032 Intel Corp. AX210 Bluetooth
->      |__ Port 10: Dev 4, If 1, Class=Wireless, Driver=btusb, 12M
->          ID 8087:0032 Intel Corp. AX210 Bluetooth
-> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/4p, 20000M/x2
->      ID 1d6b:0003 Linux Foundation 3.0 root hub
-> /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/1p, 480M
->      ID 1d6b:0002 Linux Foundation 2.0 root hub
-> 
-> 
-> What are you seeing missing in your output?
+On Wed, Oct 4, 2023 at 4:56=E2=80=AFPM Duje Mihanovi=C4=87 <duje.mihanovic@=
+skole.hr> wrote:
+>
+> Sharp's Spitz board still uses the legacy GPIO interface for controlling
+> a GPIO pin related to the USB host controller.
+>
+> Convert this function to use the new GPIO descriptor interface.
+>
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> Signed-off-by: Duje Mihanovi=C4=87 <duje.mihanovic@skole.hr>
+> ---
+>  arch/arm/mach-pxa/spitz.c      | 13 ++++++-------
+>  drivers/usb/host/ohci-pxa27x.c |  7 +++++++
+>  2 files changed, 13 insertions(+), 7 deletions(-)
+>
+> diff --git a/arch/arm/mach-pxa/spitz.c b/arch/arm/mach-pxa/spitz.c
+> index cc691b199429..535e2b2e997b 100644
+> --- a/arch/arm/mach-pxa/spitz.c
+> +++ b/arch/arm/mach-pxa/spitz.c
+> @@ -649,23 +649,22 @@ static inline void spitz_mmc_init(void) {}
+>   * USB Host
+>   ***********************************************************************=
+*******/
+>  #if defined(CONFIG_USB_OHCI_HCD) || defined(CONFIG_USB_OHCI_HCD_MODULE)
+> +GPIO_LOOKUP_SINGLE(spitz_usb_host_gpio_table, "pxa27x-ohci", "gpio-pxa",
+> +               SPITZ_GPIO_USB_HOST, "usb-host", GPIO_ACTIVE_LOW);
+> +
+>  static int spitz_ohci_init(struct device *dev)
+>  {
+> -       int err;
+> -
+> -       err =3D gpio_request(SPITZ_GPIO_USB_HOST, "USB_HOST");
+> -       if (err)
+> -               return err;
+> +       gpiod_add_lookup_table(&spitz_usb_host_gpio_table);
+>
+>         /* Only Port 2 is connected, setup USB Port 2 Output Control Regi=
+ster */
+>         UP2OCR =3D UP2OCR_HXS | UP2OCR_HXOE | UP2OCR_DPPDE | UP2OCR_DMPDE=
+;
+>
+> -       return gpio_direction_output(SPITZ_GPIO_USB_HOST, 1);
+> +       return 0;
+>  }
+>
+>  static void spitz_ohci_exit(struct device *dev)
+>  {
+> -       gpio_free(SPITZ_GPIO_USB_HOST);
+> +       gpiod_remove_lookup_table(&spitz_usb_host_gpio_table);
+>  }
+>
+>  static struct pxaohci_platform_data spitz_ohci_platform_data =3D {
+> diff --git a/drivers/usb/host/ohci-pxa27x.c b/drivers/usb/host/ohci-pxa27=
+x.c
+> index 357d9aee38a3..876842b940c0 100644
+> --- a/drivers/usb/host/ohci-pxa27x.c
+> +++ b/drivers/usb/host/ohci-pxa27x.c
+> @@ -121,6 +121,7 @@ struct pxa27x_ohci {
+>         void __iomem    *mmio_base;
+>         struct regulator *vbus[3];
+>         bool            vbus_enabled[3];
+> +       struct gpio_desc *usb_host;
+>  };
+>
+>  #define to_pxa27x_ohci(hcd)    (struct pxa27x_ohci *)(hcd_to_ohci(hcd)->=
+priv)
+> @@ -447,6 +448,10 @@ static int ohci_hcd_pxa27x_probe(struct platform_dev=
+ice *pdev)
+>         pxa_ohci =3D to_pxa27x_ohci(hcd);
+>         pxa_ohci->clk =3D usb_clk;
+>         pxa_ohci->mmio_base =3D (void __iomem *)hcd->regs;
+> +       pxa_ohci->usb_host =3D gpiod_get_optional(&pdev->dev, "usb-host",=
+ GPIOD_OUT_LOW);
 
-lsusb-t.c says:
+Any reason not to use devm_gpiod_get_optional()?
 
-   Copyright (c) 2009 Greg Kroah-Hartman <gregkh@suse.de>
+Bart
 
-When I tried to contact the author by email off-list with a fair
-amount of data (e.g. a copy of /sys from my machine), he claimed
-that such an approach was "rude" in the sense that it should have
-been sent to this list. Personally I prefer to fix bugs via a
-direct email exchange, without the peanut gallery. After all, many
-of the bugs found fall into the "brown paper bag" variety.
-Plus I felt a bit uncomfortable about publishing the full
-contents of /sys from my laptop.
-
-Oh well, each to their own.
-
-Here is a bit more information on this subject:
-
-$ ls /sys/bus/usb/devices
-1-0:1.0  3-7:1.1      5-2.1.1.2      5-2.5        6-2.3.4
-2-0:1.0  3-7:1.2      5-2.1.1.2:1.0  5-2.5:1.0    6-2.3.4:1.0
-3-0:1.0  4-0:1.0      5-2.1.1.2:1.1  6-0:1.0      usb1
-3-3      5-0:1.0      5-2.1.1.2:1.2  6-2          usb2
-3-3:1.0  5-1          5-2.1.1.2:1.3  6-2.1        usb3
-3-4      5-2          5-2.3          6-2:1.0      usb4
-3-4:1.0  5-2.1        5-2.3:1.0      6-2.1:1.0    usb5
-3-4:1.1  5-2:1.0      5-2.3.4        6-2.1.2      usb6
-3-4:1.2  5-2.1.1      5-2.3.4:1.0    6-2.1.2:1.0
-3-7      5-2.1:1.0    5-2.3.4.3      6-2.3
-3-7:1.0  5-2.1.1:1.0  5-2.3.4.3:2.0  6-2.3:1.0
-
-And the missing device is 5-1 and looks like this:
-$ cd /sys/bus/usb/devices/5-1
-$ ls_name_value
-authorized : 1
-avoid_reset_quirk : 0
-bcdDevice : 0200
-bConfigurationValue : 1
-bDeviceClass : 11
-bDeviceProtocol : 00
-bDeviceSubClass : 00
-bmAttributes : c0
-bMaxPacketSize0 : 64
-bMaxPower : 0mA
-bNumConfigurations : 1
-bNumInterfaces :  0
-busnum : 5
-configuration :
-descriptors : <contains non-ASCII chars>
-dev : 189:526
-devnum : 15
-devpath : 1
-devspec : (null)
-idProduct : 572b
-idVendor : 0483
-ltm_capable : no
-manufacturer : STMicroelectronics
-maxchild : 0
-product : STEVAL-USBC2DP Type-C to DisplayPort adapter
-quirks : 0x0
-removable : unknown
-remove :
-rx_lanes : 1
-serial : 00000000002B
-speed : 12
-tx_lanes : 1
-uevent : MAJOR=189 MINOR=526 DEVNAME=bus/usb/005/015 DEVTYPE=usb_device 
-DRIVER=usb PRODUCT=483/572b/200 TYPE=17/0/0 BUSNUM=005 DEVNUM=015
-urbnum : 14
-version :  2.01
-
-That all looks correct.
-
-The code in lsusb-t.c seems to assign a special meaning to "-1" devices
-and there is only one of those: "5-1". And the device associated with
-"5-1" is the one that does _not_ appear in the output of 'lsusb -t' but
-does appear in the output of 'lsusb'.
-
-Doug Gilbert
-
-
+> +       if (IS_ERR(pxa_ohci->usb_host))
+> +               return dev_err_probe(&pdev->dev, PTR_ERR(pxa_ohci->usb_ho=
+st),
+> +                               "failed to get USB host GPIO\n");
+>
+>         for (i =3D 0; i < 3; ++i) {
+>                 char name[6];
+> @@ -512,6 +517,8 @@ static void ohci_hcd_pxa27x_remove(struct platform_de=
+vice *pdev)
+>         for (i =3D 0; i < 3; ++i)
+>                 pxa27x_ohci_set_vbus_power(pxa_ohci, i, false);
+>
+> +       gpiod_put(pxa_ohci->usb_host);
+> +
+>         usb_put_hcd(hcd);
+>  }
+>
+>
+> --
+> 2.42.0
+>
+>
 
