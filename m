@@ -1,68 +1,95 @@
-Return-Path: <linux-usb+bounces-1202-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1203-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 301E87BBB03
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Oct 2023 16:59:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 988D27BBBE0
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Oct 2023 17:38:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 602611C20A6B
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Oct 2023 14:59:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5118B2823DA
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Oct 2023 15:38:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02CD01CA9A;
-	Fri,  6 Oct 2023 14:59:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="WxXjRL2I"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25EDC27EF8;
+	Fri,  6 Oct 2023 15:38:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4123526E3C
-	for <linux-usb@vger.kernel.org>; Fri,  6 Oct 2023 14:59:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55E65C43215;
-	Fri,  6 Oct 2023 14:59:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1696604351;
-	bh=jPD7LD0nZ0fW171kWWlLz2f5hqXrbFlaGKo9bdgLi7g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WxXjRL2IJEL9IaVcm+SLzhrboLT09GWXXrcbWuGPGFW5AlZ954cKwuNyNwaoKKq18
-	 k7l0Ub8zrNbe+a5eUx9qCyl0kU5H25lzN89kEcQ5CmyOqEXyiwOh1UkLopOZvQYCei
-	 FdwLJOERhDDdho140LyZ0jxtVn+UiwTdHNhzVcCg=
-Date: Fri, 6 Oct 2023 16:59:08 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Hardik Gajjar <hgajjar@de.adit-jv.com>
-Cc: s.hauer@pengutronix.de, jonathanh@nvidia.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, quic_linyyuan@quicinc.com,
-	paul@crapouillou.net, quic_eserrao@quicinc.com,
-	erosca@de.adit-jv.com
-Subject: Re: [PATCH v2] usb: gadget: u_ether: Replace netif_stop_queue with
- netif_device_detach
-Message-ID: <2023100657-immovably-bungee-f3a6@gregkh>
-References: <20231006141231.7220-1-hgajjar@de.adit-jv.com>
- <20231006145332.8739-1-hgajjar@de.adit-jv.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B9B12772A
+	for <linux-usb@vger.kernel.org>; Fri,  6 Oct 2023 15:38:20 +0000 (UTC)
+Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A394BA6;
+	Fri,  6 Oct 2023 08:38:18 -0700 (PDT)
+Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
+	by hi1smtp01.de.adit-jv.com (Postfix) with ESMTP id 046A652050C;
+	Fri,  6 Oct 2023 17:38:17 +0200 (CEST)
+Received: from vmlxhi-118.adit-jv.com (10.72.93.77) by hi2exch02.adit-jv.com
+ (10.72.92.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.32; Fri, 6 Oct
+ 2023 17:38:16 +0200
+From: Hardik Gajjar <hgajjar@de.adit-jv.com>
+To: <gregkh@linuxfoundation.org>, <s.hauer@pengutronix.de>,
+	<jonathanh@nvidia.com>, <linux-usb@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+CC: <quic_linyyuan@quicinc.com>, <paul@crapouillou.net>,
+	<quic_eserrao@quicinc.com>, <erosca@de.adit-jv.com>, <hgajjar@de.adit-jv.com>
+Subject: [PATCH v3] usb: gadget: u_ether: Replace netif_stop_queue with netif_device_detach
+Date: Fri, 6 Oct 2023 17:38:08 +0200
+Message-ID: <20231006153808.9758-1-hgajjar@de.adit-jv.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20231006145332.8739-1-hgajjar@de.adit-jv.com>
+References: <20231006145332.8739-1-hgajjar@de.adit-jv.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231006145332.8739-1-hgajjar@de.adit-jv.com>
+Content-Type: text/plain
+X-Originating-IP: [10.72.93.77]
+X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
+ hi2exch02.adit-jv.com (10.72.92.28)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-On Fri, Oct 06, 2023 at 04:53:32PM +0200, Hardik Gajjar wrote:
-> This patch replaces the usage of netif_stop_queue with netif_device_detach
-> in the u_ether driver. The netif_device_detach function not only stops all
-> tx queues by calling netif_tx_stop_all_queues but also marks the device as
-> removed by clearing the __LINK_STATE_PRESENT bit.
-> 
-> This change helps notify user space about the disconnection of the device
-> more effectively, compared to netif_stop_queue, which only stops a single
-> transmit queue.
-> 
-> Changes since version 1:
-> 	- Correct Singed-off user name and e-mail
+This patch replaces the usage of netif_stop_queue with netif_device_detach
+in the u_ether driver. The netif_device_detach function not only stops all
+tx queues by calling netif_tx_stop_all_queues but also marks the device as
+removed by clearing the __LINK_STATE_PRESENT bit.
 
-Nit, this goes below the --- line :(
+This change helps notify user space about the disconnection of the device
+more effectively, compared to netif_stop_queue, which only stops a single
+transmit queue.
+
+Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
+---
+Changes since version 1:
+	- Correct Singed-off user name and e-mail
+
+Changes since version 2:
+	- Move change history below signed-off-by
+---
+ drivers/usb/gadget/function/u_ether.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
+index 4bb0553da658..b0daee35b996 100644
+--- a/drivers/usb/gadget/function/u_ether.c
++++ b/drivers/usb/gadget/function/u_ether.c
+@@ -635,7 +635,7 @@ static int eth_stop(struct net_device *net)
+ 	unsigned long	flags;
+ 
+ 	VDBG(dev, "%s\n", __func__);
+-	netif_stop_queue(net);
++	netif_device_detach(dev->net);
+ 
+ 	DBG(dev, "stop stats: rx/tx %ld/%ld, errs %ld/%ld\n",
+ 		dev->net->stats.rx_packets, dev->net->stats.tx_packets,
+-- 
+2.17.1
+
 
