@@ -1,72 +1,72 @@
-Return-Path: <linux-usb+bounces-1178-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1179-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 230067BB1FF
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Oct 2023 09:10:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DECB7BB205
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Oct 2023 09:12:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D13F928207D
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Oct 2023 07:10:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5DF841C20A0F
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Oct 2023 07:12:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D4F463C6;
-	Fri,  6 Oct 2023 07:10:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C1E363CC;
+	Fri,  6 Oct 2023 07:12:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="DVbrAv/O"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="uoti3CP1"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32FF5EBB
-	for <linux-usb@vger.kernel.org>; Fri,  6 Oct 2023 07:10:32 +0000 (UTC)
-Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 029E2E9
-	for <linux-usb@vger.kernel.org>; Fri,  6 Oct 2023 00:10:30 -0700 (PDT)
-Received: by mail-ua1-x934.google.com with SMTP id a1e0cc1a2514c-7ab9ad973e6so679249241.1
-        for <linux-usb@vger.kernel.org>; Fri, 06 Oct 2023 00:10:30 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 350B615C2
+	for <linux-usb@vger.kernel.org>; Fri,  6 Oct 2023 07:12:02 +0000 (UTC)
+Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D96DEB
+	for <linux-usb@vger.kernel.org>; Fri,  6 Oct 2023 00:12:00 -0700 (PDT)
+Received: by mail-vk1-xa2f.google.com with SMTP id 71dfb90a1353d-48feedb90d2so655988e0c.1
+        for <linux-usb@vger.kernel.org>; Fri, 06 Oct 2023 00:12:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1696576230; x=1697181030; darn=vger.kernel.org;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1696576319; x=1697181119; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=s4Pz6V+l7g1fDRYkyErgWlYbtoLKmeqMrzbk272HU6I=;
-        b=DVbrAv/OhKHORSxdsS3e5euO2Z1vQWa+xc8b/wOAkbX9s1Q4i0rbCXanOzgWcML8tF
-         FwPobV/Yskf0wQz793l01oRnLguLoGd/nKmTZy1TkSmqGvUnIbooAJlctrjzf8h3DadK
-         cT0gRMAWzlzNQ3trpjrvVQ7wl89AlIftknFL9iksHDdNki+XFrAKNFiBYBjcbb5QOaCz
-         66nHlqTjK0egyeIvdBBSnhUxPPSkRaFfJihI3wrX3CVaGkyC1LNOGGyXG5d2e+qmzzcw
-         mD3+mbax2JJ5pfiQOKvL+l9DgJUdzqMXCcJZa0PYKua7vlRCNrHzJ3+mDIpGIPkou/6z
-         hrOQ==
+        bh=iHzPDIF0nHvJ4MjZXtd+1YcUGWWggbQugVNz0aoRvm4=;
+        b=uoti3CP1UVIV4y6Az3AEUllKS7h0StIL6Gn5M0VSwN5J2LjQDgx/3fM6a5KHKfRPin
+         WPJNTf9VKGtmJj57NXv/hF+GqyJpGR5OY8LmTZ8SLDIUCPBLaqBe6iW2aHR5vk2Z94hu
+         tKw7liJchp9+hKSiGjzbKY1V7XhBAzjEUALg1ZWBP236ZkoRuQEhdtyFNljlW2JVKpcJ
+         l55foz2jy+6FfXFxVUbS7GMm8y7EDbLEM0b3qKhCAUP28otIEsYwBQd5rlBVXZtF/zLe
+         aopFz0015uSyrxJUwX1vvY+bqLTqk9EEfe98wwLMnp4AG9p4IL3WLHiT3bLdcukYkSbF
+         dnKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696576230; x=1697181030;
+        d=1e100.net; s=20230601; t=1696576319; x=1697181119;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=s4Pz6V+l7g1fDRYkyErgWlYbtoLKmeqMrzbk272HU6I=;
-        b=KwLxG6QQyWVS4ksvs2JEXdI2WHZ1xCPDIh0kGE03B+aso+jkGAkVOiiP+NjXx1Q2K2
-         Pdh8ntOGKti5fIcegEHttWJ5aSGnHXxlbK6LYbKSq6Eq5v7H+oMqCJPQY9IFEK/MxnHT
-         PLCU0R8bjLF0s3BUq0p9pPbj62I58sGM1pBy4clU7GCDew69NI3RjFCcN9VsTMesLqtK
-         FcWtuPFZ1UYOAXYmRBgNHr8ilTIpnax0C3IB2s7MBGi3fl9jC8+1ewSTNkC5CFMcM+T5
-         umb9STf/4DPxijL/Y6JaKg9BwpQ0ji1rF3Seo1q68qpUkWb6eC59d3RwVMl+EuVstz49
-         Lr8Q==
-X-Gm-Message-State: AOJu0Yz3bfh0XYDRRgjMwlw8xUnXUjoH92Ad+FkHIzNgUzlfT4tNblQ7
-	aE2zH6chqfSwKuXMcGlbnoOlK40YoCuTYA15ibCtRA==
-X-Google-Smtp-Source: AGHT+IElekYbONyUWUDSEziCQbS03+r3xAaUoSu1bVKXQLUSAIno+7zsmOgB0alZ0ADMgfjFwh9TNpN3RIIBLTKJWkY=
-X-Received: by 2002:a1f:e246:0:b0:48f:8533:3cda with SMTP id
- z67-20020a1fe246000000b0048f85333cdamr6331515vkg.11.1696576229965; Fri, 06
- Oct 2023 00:10:29 -0700 (PDT)
+        bh=iHzPDIF0nHvJ4MjZXtd+1YcUGWWggbQugVNz0aoRvm4=;
+        b=e3U7U4JSAVGMqKpKAfBLph/CFQok1gahoJjhS7/Ambshecvyshrmpwzxg8b8MFugCJ
+         12pUVNW0ZwN6CRD4Msr4tp0/M8Bpfaqu/xq0fiz1PMqjGpwtXPi+x4gVedVGG3cLz/Lj
+         jJek3fWyevILHYuhl/BDj2VKPrH0Ww90GAU0ryKzYv1ls3h6YkaOhVVKD5sZ/Jlgv1nU
+         d1Iz7r+u7O043LDCNTM+qjhlmjykY98m7JISewQbPEQ77GMHlnyRsIex4trDZwYldoGG
+         k7llkb+HeV6JAG0n0JjLHTpit8vzK/hsb/g49m2b5hcjK6qXwKaNv3Zg5G0E3MlbyoeI
+         EEbg==
+X-Gm-Message-State: AOJu0YzUIMcbT8scMzfK2H89BmhQsmu9tLKhaEBs0ZHTOyG/xRlbbFwN
+	QoE/lTWssd3ygXLtTiDgPYWyrJgCKovfZngfpZNTNw==
+X-Google-Smtp-Source: AGHT+IHiUqGjKQHUfgrIcgITqHkmD2z1HCMXkK+vuDHKcerGKLDJ+4ufx0fc/UxlguWUqe3soL3/3nEQ/msf2e3kc/I=
+X-Received: by 2002:a1f:a9d0:0:b0:49d:92e0:9cd1 with SMTP id
+ s199-20020a1fa9d0000000b0049d92e09cd1mr7100923vke.11.1696576319479; Fri, 06
+ Oct 2023 00:11:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231004-pxa-gpio-v5-0-d99ae6fceea8@skole.hr> <20231004-pxa-gpio-v5-5-d99ae6fceea8@skole.hr>
-In-Reply-To: <20231004-pxa-gpio-v5-5-d99ae6fceea8@skole.hr>
+References: <20231004-pxa-gpio-v5-0-d99ae6fceea8@skole.hr> <20231004-pxa-gpio-v5-6-d99ae6fceea8@skole.hr>
+In-Reply-To: <20231004-pxa-gpio-v5-6-d99ae6fceea8@skole.hr>
 From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Fri, 6 Oct 2023 09:10:19 +0200
-Message-ID: <CAMRc=Mf47F7GgLyp+DkRQp2H7+JiqjczVHSQwZoYJg8455n_bA@mail.gmail.com>
-Subject: Re: [PATCH RFC v5 5/6] ARM: pxa: Convert gumstix Bluetooth to GPIO descriptors
+Date: Fri, 6 Oct 2023 09:11:48 +0200
+Message-ID: <CAMRc=MeGvqnsn63o1sH66AwTFCPd5kqj+7V=B08afrwUZdZCvQ@mail.gmail.com>
+Subject: Re: [PATCH RFC v5 6/6] input: ads7846: Move wait_for_sync() logic to driver
 To: =?UTF-8?Q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
 Cc: Daniel Mack <daniel@zonque.org>, Haojian Zhuang <haojian.zhuang@gmail.com>, 
 	Robert Jarzmik <robert.jarzmik@free.fr>, Russell King <linux@armlinux.org.uk>, 
@@ -87,12 +87,16 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 On Wed, Oct 4, 2023 at 4:56=E2=80=AFPM Duje Mihanovi=C4=87 <duje.mihanovic@=
 skole.hr> wrote:
 >
-> Gumstix still uses the legacy GPIO interface for resetting the Bluetooth
-> device.
+> If this code is left in the board file, the sync GPIO would have to be
+> separated into another lookup table during conversion to the GPIO
+> descriptor API (which is also done in this patch).
 >
-> Convert it to use the GPIO descriptor interface.
+> The only user of this code (Sharp Spitz) is also converted in this
+> patch.
 >
+> Suggested-by: Linus Walleij <linus.walleij@linaro.org>
 > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> Acked-by: Mark Brown <broonie@kernel.org>
 > Signed-off-by: Duje Mihanovi=C4=87 <duje.mihanovic@skole.hr>
 > ---
 
