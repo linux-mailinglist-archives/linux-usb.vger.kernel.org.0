@@ -1,114 +1,132 @@
-Return-Path: <linux-usb+bounces-1304-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1306-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 023127BEA71
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 21:16:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5F9C7BEB3E
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 22:06:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B1B4D281B06
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 19:16:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 223821C20C88
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 20:06:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DB573B7B3;
-	Mon,  9 Oct 2023 19:16:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F24BB3D986;
+	Mon,  9 Oct 2023 20:06:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ionos.com header.i=@ionos.com header.b="BFuMz3FM"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF0C93B296
-	for <linux-usb@vger.kernel.org>; Mon,  9 Oct 2023 19:16:29 +0000 (UTC)
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by lindbergh.monkeyblade.net (Postfix) with SMTP id AB861B6
-	for <linux-usb@vger.kernel.org>; Mon,  9 Oct 2023 12:16:26 -0700 (PDT)
-Received: (qmail 155547 invoked by uid 1000); 9 Oct 2023 15:16:25 -0400
-Date: Mon, 9 Oct 2023 15:16:25 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Hardik Gajjar <hgajjar@de.adit-jv.com>
-Cc: mathias.nyman@intel.com, gregkh@linuxfoundation.org,
-  yangyingliang@huawei.com, jinpu.wang@ionos.com, linux-usb@vger.kernel.org,
-  linux-kernel@vger.kernel.org, erosca@de.adit-jv.com
-Subject: Re: [PATCH v2] usb: core: hub: Add quirks for reducing device
- address timeout
-Message-ID: <66f874d3-b480-4748-8732-d0cdce3ab4b7@rowland.harvard.edu>
-References: <--in-reply-to=20231006153808.9758-1-hgajjar@de.adit-jv.com>
- <20231009161402.104224-1-hgajjar@de.adit-jv.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6B623D993
+	for <linux-usb@vger.kernel.org>; Mon,  9 Oct 2023 20:06:11 +0000 (UTC)
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F74E3
+	for <linux-usb@vger.kernel.org>; Mon,  9 Oct 2023 13:06:08 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2c1807f3400so60244961fa.1
+        for <linux-usb@vger.kernel.org>; Mon, 09 Oct 2023 13:06:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ionos.com; s=google; t=1696881966; x=1697486766; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vntWR/EJpWFamZ/9NMXVbCLlV4xDhJbERcnlqbMN6Xk=;
+        b=BFuMz3FMbhLgkIJi/HkkmJ1VkLf2I7vqp4svyIwG2+yDE+U4S96EGEikgUcb8O02Uo
+         8j8iLlfo7vmxsfcwVcs/qIKkl99xa5dmEeJRo1cSF6V+ygbEal7iO3+v912NQA+dawBz
+         Soy5yco9XA4Rbc4rDCwVGkioAfXZalXRitmVvyF0C2rWZ0Ewe2//XA3FBEsbn52apGZL
+         aRFt/c7Wzbg6QpYPQ0dm8EJR8fe2x3S+duZuFSIP/H5VlRW/FVRYn5HxOETlTJKz3xcb
+         BMDmJLPjWEXQ8IaDm9bc5q/71Ibv+h4ffhs1BXiaAk1KUwUk/S2rUW6zLyroy1Lm1kJC
+         OAGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696881966; x=1697486766;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vntWR/EJpWFamZ/9NMXVbCLlV4xDhJbERcnlqbMN6Xk=;
+        b=B285GgYLJ8GEQPCo8eeTO+v+i4VrWV19tEC3kYUTqMCxcAk2bcH8c8NaxR4eqlr30U
+         Ou5w8N2a7AsGUjH9wpNJkatxQdAdrfnOb+QWvwC+TKT8bSUUbvLLVjUTVVC6xPl0fMwW
+         FoNYmVQFgpxat0CckqXYfpqrLat7YauIJ6b++qpf6ymI5nHxuWWZR1xs83Xex2WjtCv+
+         BbgLx5+Pyp7OzTZgwE25M976bOHsOVHsRH5vAj4lUqC4gdc9hVoOUiLGkPdz9p9wIpFw
+         z/gjervCSnpTW6uCEYH26kXlUJ78YxIH3oeaNQKRZRvphCvJxvvsLUGbA3QD/4wfXkYw
+         9IgQ==
+X-Gm-Message-State: AOJu0YxMjOjj1ezCzN7cDJ8klobd129pPjQ910sUEHLnQs+7+qpxq5Bs
+	o+Ouerz/iCRavwbxjHAwVw07OeKYPPDeYFW/iStlVg==
+X-Google-Smtp-Source: AGHT+IFghqg7b3VfDVvZ+soPEwEaIfxhrwarlOcz2b03PC3KagC0O9BH1UGRNCP79pJ8yT5JMzxC/VoYSKvtKG/y1ws=
+X-Received: by 2002:a2e:870c:0:b0:2b6:cbdb:790c with SMTP id
+ m12-20020a2e870c000000b002b6cbdb790cmr11535962lji.1.1696881966432; Mon, 09
+ Oct 2023 13:06:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231009161402.104224-1-hgajjar@de.adit-jv.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-	autolearn_force=no version=3.4.6
+References: <20231009165741.746184-1-max.kellermann@ionos.com>
+ <20231009165741.746184-6-max.kellermann@ionos.com> <264fa39d-aed6-4a54-a085-107997078f8d@roeck-us.net>
+In-Reply-To: <264fa39d-aed6-4a54-a085-107997078f8d@roeck-us.net>
+From: Max Kellermann <max.kellermann@ionos.com>
+Date: Mon, 9 Oct 2023 22:05:55 +0200
+Message-ID: <CAKPOu+8k2x1CucWSzoouts0AfMJk+srJXWWf3iWVOeY+fWkOpQ@mail.gmail.com>
+Subject: Re: [PATCH 6/7] fs/sysfs/group: make attribute_group pointers const
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Jens Axboe <axboe@kernel.dk>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>, 
+	James Morse <james.morse@arm.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
+	Robert Richter <rric@kernel.org>, Jean Delvare <jdelvare@suse.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Leon Romanovsky <leon@kernel.org>, Bart Van Assche <bvanassche@acm.org>, Joerg Roedel <joro@8bytes.org>, 
+	Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>, 
+	Dan Williams <dan.j.williams@intel.com>, Vishal Verma <vishal.l.verma@intel.com>, 
+	Dave Jiang <dave.jiang@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
+	Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>, 
+	Alessandro Zummo <a.zummo@towertech.it>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	Jiri Slaby <jirislaby@kernel.org>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+	Mike Leach <mike.leach@linaro.org>, James Clark <james.clark@arm.com>, 
+	Leo Yan <leo.yan@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Peter Zijlstra <peterz@infradead.org>, Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Bjorn Helgaas <bhelgaas@google.com>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Sebastian Reichel <sre@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Wim Van Sebroeck <wim@linux-watchdog.org>, 
+	"James E.J. Bottomley" <jejb@linux.ibm.com>, "Martin K. Petersen" <martin.petersen@oracle.com>, 
+	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-edac@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-rdma@vger.kernel.org, iommu@lists.linux.dev, nvdimm@lists.linux.dev, 
+	linux-nvme@lists.infradead.org, linux-rtc@vger.kernel.org, 
+	linux-serial@vger.kernel.org, coresight@lists.linaro.org, 
+	linux-arm-kernel@lists.infradead.org, linux-leds@vger.kernel.org, 
+	linux-pci@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-scsi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+	SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Mon, Oct 09, 2023 at 06:14:02PM +0200, Hardik Gajjar wrote:
-> Currently, the timeout for the set address command is fixed at
-> 5 seconds in the xhci driver. This means the host waits up to 5
-> seconds to receive a response for the set_address command from
-> the device.
-> 
-> In the automotive context, most smartphone enumerations, including
-> screen projection, should ideally complete within 3 seconds.
-> Achieving this is impossible in scenarios where the set_address is
-> not successful and waits for a timeout.
+On Mon, Oct 9, 2023 at 7:24=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> w=
+rote:
+> Also, I don't know why checkpatch is happy with all the
+>
+>         const struct attribute_group *const*groups;
+>
+> instead of
+>
+>         const struct attribute_group *const *groups;
 
-What will you do about scenarios where the Set-Address completes very 
-quickly but the following Get-Device-Descriptor times out after 5 
-seconds?  Or any of the other transfers involved in device 
-initialization and enumeration?
+I found out that checkpatch has no check for this at all; it does
+complain about such lines, but only for local variables. But that
+warning is actually a bug, because this is a check for unary
+operators: it thinks the asterisk is a dereference operator, not a
+pointer declaration, and complains that the unary operator must be
+preceded by a space. Thus warnings on local variable are only correct
+by coincidence, not by design.
 
-> The shortened address device timeout quirks provide the flexibility
-> to align with a 3-second time limit in the event of errors.
-> By swiftly triggering a failure response and swiftly initiating
-> retry procedures, these quirks ensure efficient and rapid recovery,
-> particularly in automotive contexts where rapid smartphone enumeration
-> and screen projection are vital.
-> 
-> The quirk will set the timeout to 500 ms from 5 seconds.
-> 
-> To use the quirk, please write "vendor_id:product_id:p" to
-> /sys/bus/usb/drivers/hub/module/parameter/quirks
-> 
-> For example,
-> echo "0x2c48:0x0132:p" > /sys/bus/usb/drivers/hub/module/parameter/quirks"
-> 
-> Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
-> ---
-> changes since version 1:
-> 	- implement quirk instead of new API in xhci driver
-> ---
->  drivers/usb/core/hub.c       | 15 +++++++++++++--
->  drivers/usb/core/quirks.c    |  3 +++
->  drivers/usb/host/xhci-mem.c  |  1 +
->  drivers/usb/host/xhci-ring.c |  3 ++-
->  drivers/usb/host/xhci.c      |  9 +++++----
->  drivers/usb/host/xhci.h      |  1 +
->  include/linux/usb/hcd.h      |  3 ++-
->  include/linux/usb/quirks.h   |  3 +++
->  8 files changed, 30 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index 3c54b218301c..975449b03426 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -54,6 +54,9 @@
->  #define USB_TP_TRANSMISSION_DELAY_MAX	65535	/* ns */
->  #define USB_PING_RESPONSE_TIME		400	/* ns */
->  
-> +#define USB_DEFAULT_ADDR_DEVICE_TIMEOUT		(HZ * 5) /* 5000ms */
-> +#define USB_SHORT_ADDR_DEVICE_TIMEOUT		125  /* ~500ms */
-
-That number, 125, is meaningless.  It's in units of jiffies, which vary 
-from one system to another.  If you want the timeout to be about 500 ms, 
-you should write it as (HZ / 2).
-
-Alan Stern
+Inside structs or parameters (where my coding style violations can be
+found), it's a different context and thus checkpatch doesn't apply the
+rules for unary operators.
 
