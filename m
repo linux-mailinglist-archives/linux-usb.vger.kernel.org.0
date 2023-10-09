@@ -1,146 +1,135 @@
-Return-Path: <linux-usb+bounces-1293-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1294-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1AAC17BE8C7
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 19:58:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 44DA77BE936
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 20:28:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9FED32817E3
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 17:58:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7490E281AAF
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 18:28:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA03138DFA;
-	Mon,  9 Oct 2023 17:58:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F3B63AC30;
+	Mon,  9 Oct 2023 18:28:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="zpVjJqqk"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="NIcP1acj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F53135880
-	for <linux-usb@vger.kernel.org>; Mon,  9 Oct 2023 17:58:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ACA5C433C8;
-	Mon,  9 Oct 2023 17:58:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1696874320;
-	bh=QHk/1cXuOaKOHr5dgDNjM07x1Qv6Chk95JyiSPtJudY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=zpVjJqqkD48GKNv5Cov+/E51bMrXAgf/wS9MIfjnwN1eMPEkzscGbPnmupu12vBNM
-	 bayR4sDosWeffdiz9s/7XMsVNt4O3aZXRDO0/h9RnM8E4C34tvYrejV2UUHqXfd8ok
-	 OAAROeQZnHyCSO0KQbOZ0TW6vbdg4dhDDuBz5SkU=
-Date: Mon, 9 Oct 2023 19:58:37 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: jlmxyz <dev.delaboetie@dolce-energy.com>
-Cc: linux-usb@vger.kernel.org
-Subject: Re: usb-c port power not reset correctly (can't connect any device
- after a phone was connected)
-Message-ID: <2023100920-pushy-polygraph-f4a2@gregkh>
-References: <9f99a188-cb45-439c-8006-dc0cd4e1ef3e@dolce-energy.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58F1238BBD
+	for <linux-usb@vger.kernel.org>; Mon,  9 Oct 2023 18:27:59 +0000 (UTC)
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC18BAF;
+	Mon,  9 Oct 2023 11:27:56 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 399F8L88001636;
+	Mon, 9 Oct 2023 18:27:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Q+cCkUzN9xrbsC8Pf+ICak/y+bLqYP4HVThQeuiAvuI=;
+ b=NIcP1acjmif1uakqbc+d+05R9lcRmlew/UP7J1IbSAhHucx8yV6OQ9cvklKM+XuM21mI
+ eRBctGtnmj6wo8T5s/eQuZWOrvDFkBcVDfBrglrNLh1KrxljwaCc5MnDkqpV3rj0TaWM
+ EZ/Av5U/VA6A1DnGgOEsiDOAfXclpeWBfoOnii/28BccOZwC/MUU71oSLsPKxkN8d+0/
+ SFKSUCR1d2lX5ZhPE2hp7WUxaJogQFnIiZDS/6suGbt3D1c6DUjo3FX76tlz2KCnRWs4
+ n4+r63UFoIh/3LmJmmenCYT1diAehp7Y21NgvK8RqzercRy70UKqyiYPVnBiF71cizZS EA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tkh6g38em-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 09 Oct 2023 18:27:53 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 399IRqri013329
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 9 Oct 2023 18:27:52 GMT
+Received: from [10.216.9.133] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Mon, 9 Oct
+ 2023 11:27:48 -0700
+Message-ID: <e361e3c0-069c-4e91-8f3a-d7ab2de8bdd4@quicinc.com>
+Date: Mon, 9 Oct 2023 23:57:44 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9f99a188-cb45-439c-8006-dc0cd4e1ef3e@dolce-energy.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] usb: gadget: ncm: Add support to update
+ wMaxSegmentSize via configfs
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC: =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>,
+        onathan Corbet
+	<corbet@lwn.net>,
+        Linyu Yuan <quic_linyyuan@quicinc.com>, <linux-usb@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
+        <quic_jackp@quicinc.com>
+References: <20231009142005.21338-1-quic_kriskura@quicinc.com>
+ <20231009142005.21338-2-quic_kriskura@quicinc.com>
+ <2023100931-reward-justice-ed1c@gregkh>
+ <a9efdc23-0417-48dc-aa17-ef7b1459b85a@quicinc.com>
+ <2023100910-used-unruly-f750@gregkh>
+Content-Language: en-US
+From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <2023100910-used-unruly-f750@gregkh>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: p6mIrmFhuRgEFSCW21TOg7PthHAmRr8q
+X-Proofpoint-ORIG-GUID: p6mIrmFhuRgEFSCW21TOg7PthHAmRr8q
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-09_16,2023-10-09_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
+ clxscore=1015 mlxlogscore=252 bulkscore=0 lowpriorityscore=0 phishscore=0
+ mlxscore=0 adultscore=0 priorityscore=1501 malwarescore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2309180000
+ definitions=main-2310090150
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-On Mon, Oct 09, 2023 at 12:50:54PM +0200, jlmxyz wrote:
-> Hi,
-> 
-> my hardware :https://wiki.gentoo.org/wiki/Lenovo_Yoga_900
-> I use the pre-built gentoo linux kernel,
-> Linux jlmyoga900 6.5.5-gentoo-dist #1 SMP PREEMPT_DYNAMIC Sat Sep 23 17:31:47 -00 2023 x86_64 Intel(R) Core(TM) i7-6500U CPU @ 2.50GHz GenuineIntel GNU/Linux
-> 
-> 
-> output of lsusb, phone connected on usb-c port, phone in "share connection virtual network adaptater mode"
-> $ lsusb -t
-> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/6p, 5000M
->     |__ Port 3: Dev 12, If 0, Class=Wireless, Driver=rndis_host, 5000M
->     |__ Port 3: Dev 12, If 1, Class=CDC Data, Driver=rndis_host, 5000M
->     |__ Port 3: Dev 12, If 2, Class=Vendor Specific Class, Driver=, 5000M
-> /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/12p, 480M
->     |__ Port 6: Dev 2, If 0, Class=Video, Driver=uvcvideo, 480M
->     |__ Port 6: Dev 2, If 1, Class=Video, Driver=uvcvideo, 480M
->     |__ Port 7: Dev 4, If 0, Class=Wireless, Driver=btusb, 12M
->     |__ Port 7: Dev 4, If 1, Class=Wireless, Driver=btusb, 12M
-> 
-> output of lsusb, micro sd card connected on usb-c port using usb-A-usb-c adaptater (works on the phone),
-> $ lsusb -t
-> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/6p, 5000M
-> /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/12p, 480M
->     |__ Port 6: Dev 2, If 0, Class=Video, Driver=uvcvideo, 480M
->     |__ Port 6: Dev 2, If 1, Class=Video, Driver=uvcvideo, 480M
->     |__ Port 7: Dev 4, If 0, Class=Wireless, Driver=btusb, 12M
->     |__ Port 7: Dev 4, If 1, Class=Wireless, Driver=btusb, 12M
-> 
-> output of lsusb, micro sd card connected on usb-A port,
-> $ lsusb -t
-> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/6p, 5000M
->     |__ Port 2: Dev 13, If 0, Class=Mass Storage, Driver=usb-storage, 5000M
-> /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/12p, 480M
->     |__ Port 6: Dev 2, If 0, Class=Video, Driver=uvcvideo, 480M
->     |__ Port 6: Dev 2, If 1, Class=Video, Driver=uvcvideo, 480M
->     |__ Port 7: Dev 4, If 0, Class=Wireless, Driver=btusb, 12M
->     |__ Port 7: Dev 4, If 1, Class=Wireless, Driver=btusb, 12M
-> 
-> output of dmesg
-> ---- connecting the phone
-> [371134.453914] xhci_hcd 0000:00:14.0: WARN Set TR Deq Ptr cmd failed due to incorrect slot or ep state.
-> [371162.893880] usb usb2-port3: config error
-> [371163.527330] usb 2-3: new SuperSpeed USB device number 11 using xhci_hcd
-> [371163.544872] usb 2-3: New USB device found, idVendor=04e8, idProduct=685d, bcdDevice= 4.14
-> [371163.544881] usb 2-3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-> [371163.544885] usb 2-3: Product: SM-N975F
-> [371163.544888] usb 2-3: Manufacturer: samsung
-> [371163.544890] usb 2-3: SerialNumber: RF8M73LKC5E
-> [371181.443775] usb 2-3: USB disconnect, device number 11
-> [371181.700584] usb 2-3: new SuperSpeed USB device number 12 using xhci_hcd
-> [371181.718597] usb 2-3: New USB device found, idVendor=04e8, idProduct=6864, bcdDevice= 4.14
-> [371181.718606] usb 2-3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-> [371181.718610] usb 2-3: Product: SM-N975F
-> [371181.718613] usb 2-3: Manufacturer: samsung
-> [371181.718615] usb 2-3: SerialNumber: RF8M73LKC5E
-> [371181.843263] usbcore: registered new interface driver cdc_ether
-> [371181.850720] rndis_host 2-3:1.0 usb0: register 'rndis_host' at usb-0000:00:14.0-3, RNDIS device, 02:24:0a:73:0e:02
-> [371181.851343] usbcore: registered new interface driver rndis_host
-> [371181.905461] rndis_host 2-3:1.0 enp0s20f0u3: renamed from usb0
-> [371275.791820] usb 2-3: USB disconnect, device number 12
-> [371275.791890] rndis_host 2-3:1.0 enp0s20f0u3: unregister 'rndis_host' usb-0000:00:14.0-3, RNDIS device
-> ----- disconnecting the phone connecting the usb masstorage usb-c port
-> ----- disconnecting the masstorage usb-c - connecting same device on usb-A port next to it
-> [371352.897323] usb 2-2: new SuperSpeed USB device number 13 using xhci_hcd
-> [371352.916934] usb 2-2: New USB device found, idVendor=11b0, idProduct=3307, bcdDevice= 0.13
-> [371352.916949] usb 2-2: New USB device strings: Mfr=3, Product=4, SerialNumber=2
-> [371352.916951] usb 2-2: Product: UHSII uSD Reader
-> [371352.916954] usb 2-2: Manufacturer: Kingston
-> [371352.916955] usb 2-2: SerialNumber: 202006001890
-> [371352.919919] usb-storage 2-2:1.0: USB Mass Storage device detected
-> [371352.939695] scsi host3: usb-storage 2-2:1.0
-> [371353.951776] scsi 3:0:0:0: Direct-Access     Kingston UHSII uSD Reader 0013 PQ: 0 ANSI: 6
-> [371353.952333] sd 3:0:0:0: Attached scsi generic sg1 type 0
-> [371354.333610] sd 3:0:0:0: [sdb] 500695040 512-byte logical blocks: (256 GB/239 GiB)
-> [371354.334277] sd 3:0:0:0: [sdb] Write Protect is off
-> [371354.334282] sd 3:0:0:0: [sdb] Mode Sense: 21 00 00 00
-> [371354.334902] sd 3:0:0:0: [sdb] Write cache: disabled, read cache: enabled, doesn't support DPO or FUA
-> [371354.338703]  sdb: sdb1
-> [371354.338841] sd 3:0:0:0: [sdb] Attached SCSI removable disk
-> 
-> there is no dmesg entry when connecting on the usb-c as if there was no power
 
-I don't understand, it shows the phone connecting above.
 
-> I tried on phone to change the device powering the port, but I always get error, when connecting the phone, even if it is in "charge only" mode, the battery icon don't show any charging information.... looks like the port is always powered by the phone and the first time the device powering the port is choosen in power negociation, the port will after remain in slave-power mode on the laptop....
+On 10/9/2023 11:24 PM, Greg Kroah-Hartman wrote:
+> On Mon, Oct 09, 2023 at 09:02:32PM +0530, Krishna Kurapati PSSNV wrote:
+>>
+>>
+>> On 10/9/2023 8:38 PM, Greg Kroah-Hartman wrote:
+>>> On Mon, Oct 09, 2023 at 07:50:05PM +0530, Krishna Kurapati wrote:
+>>>> Currently the NCM driver restricts wMaxSegmentSize that indicates
+>>>> the datagram size coming from network layer to 1514.
+>>>
+>>> I don't see that restriction in the existing driver, where does that
+>>> happen?
+>>
+>> Hi Greg,
+>>
+>>   In the ecm_desc, the following line restricts the value:
+>>
+>> .wMaxSegmentSize =      cpu_to_le16(ETH_FRAME_LEN),
+> 
+> Ok, so is that 1514?  I don't know as I don't know what ETH_FRAM_LEN is.
+> 
+Hi Greg,
 
-Are you sure the phone is handling this properly?  Many times it will
-refuse to connect to a host at all until you tell it is safe to do so
-somehow (like change the USB mode.)
+Yes, that is 1514.
 
-> I will gladely help troubleshooting the issue, having a usb port less over 3 is really problematic
+> So how about saying something to the affect of "the max segment size is
+> currently limited to the ethernet frame length of the kernel which
+> happens to be 1514 at this point in time."
+> 
 
-I don't understand this question, sorry.
+Sure. I will rephrase this in v2 with the suggestion provided.
 
-greg k-h
+Regards,
+Krishna,
 
