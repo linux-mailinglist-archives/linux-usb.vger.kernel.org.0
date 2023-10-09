@@ -1,113 +1,169 @@
-Return-Path: <linux-usb+bounces-1253-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1254-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4FEED7BD1FF
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 04:36:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C5DAF7BD36B
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 08:34:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 36E2A1C20AC2
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 02:36:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 03EE81C20A96
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 06:34:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A505A46A4;
-	Mon,  9 Oct 2023 02:36:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7975BA56;
+	Mon,  9 Oct 2023 06:33:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kx7pN7qv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RhzwvGgW"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 913765241
-	for <linux-usb@vger.kernel.org>; Mon,  9 Oct 2023 02:36:33 +0000 (UTC)
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ABB9AB
-	for <linux-usb@vger.kernel.org>; Sun,  8 Oct 2023 19:36:32 -0700 (PDT)
-Received: by mail-il1-x134.google.com with SMTP id e9e14a558f8ab-3526ac53d43so2237025ab.1
-        for <linux-usb@vger.kernel.org>; Sun, 08 Oct 2023 19:36:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696818991; x=1697423791; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qxl5aMBpLKNGgqxRvmsqFYnSYsg9sj9eq9LrU4GbWw0=;
-        b=Kx7pN7qvHTQn78DoLuc1z5I4O5ICYXOBzu52aWONSkRrg+HWT3H1mqcIo/4slqWasp
-         KZbPE2p1Qz4+84a8wSBGqT5C4UlzYOMBANpymTc69Si+JNAH0rZ0PELW/VLbF6zxZthb
-         PC+xiAdAp96Q0Xd0K9HBK6kKAlqohk09s6/WwpWL2AMUbWVR3J8nFatL4QZt1AEHrlsO
-         ggmHqziasGN5vrhzZy0zaJ3UFgZ4sXzD0F3P5WLWKzkSo4yoWKlvfmn5jJmtAXazXPmf
-         FLqv7/FiXMW6Gpw3Q9vUI3NVsOHJiuRJkUONHfBtgCSY4BVSEa+OqSqX+cbZNR4YPq5a
-         I17w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696818991; x=1697423791;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qxl5aMBpLKNGgqxRvmsqFYnSYsg9sj9eq9LrU4GbWw0=;
-        b=xPzHV3f2jtZjar0dxOco6aW5TXQj0crSjm6cNUZU3wVeg+aSJBlBSxin0Db8QQpHUc
-         lK4GMZy+GKDCH8j/ro3YCFHm8PQbHF9bp+Ih24KR64Ep9FyX5hkSoipI0eKMZzRxDjin
-         i1QpYZVklQWiaZX4U938CZRwjmprWc/t7wKIyYkF3FLU+JrPhLjckVOSeB2VA39ub16H
-         Rg1KWs1ulIXAsdIEG7JTyTxOVnfwuNP68P0alFG4EbfFE1weQN7q1Ka0DlZwspgyquF7
-         o3QY0/6uuQvHMMNHjfCkDpU9xWSS9+QF3lQq2+S1h8fD2W+jiTIF4ZB9rBNA94KQL27O
-         kboQ==
-X-Gm-Message-State: AOJu0YyhS3P6KnOtNj6OchRAi9HQrGqhuArdLa4o20+rsIfgbVr9VQh6
-	nuv/XUriGThKaGwKYp8GxeA=
-X-Google-Smtp-Source: AGHT+IEANyh2RX+uNEd/aNNllLWEyn3o75rOeOX4eR89j5r3vhZk7fYQZgnAuM/Gln2S2vtRq9A8UA==
-X-Received: by 2002:a92:c847:0:b0:352:a3f5:6314 with SMTP id b7-20020a92c847000000b00352a3f56314mr12348004ilq.0.1696818991511;
-        Sun, 08 Oct 2023 19:36:31 -0700 (PDT)
-Received: from epislon.kloppenborg.net ([2601:281:d47f:ffab::18db])
-        by smtp.gmail.com with ESMTPSA id m11-20020a924a0b000000b00351375f30b4sm2637583ilf.51.2023.10.08.19.36.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Oct 2023 19:36:31 -0700 (PDT)
-From: Brian Kloppenborg <bkloppenborg@gmail.com>
-X-Google-Original-From: Brian Kloppenborg <brian@kloppenborg.net>
-To: Johan Hovold <johan@kernel.org>,
-	linux-usb@vger.kernel.org
-Cc: Brian Kloppenborg <brian@kloppenborg.net>
-Subject: [PATCH 2/2] Make cp210x register GPS PPS signals on the RI pin.
-Date: Sun,  8 Oct 2023 20:34:25 -0600
-Message-Id: <20231009023425.366783-3-brian@kloppenborg.net>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231009023425.366783-1-brian@kloppenborg.net>
-References: <20231009023425.366783-1-brian@kloppenborg.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72D3A8F48
+	for <linux-usb@vger.kernel.org>; Mon,  9 Oct 2023 06:33:56 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265A6B9;
+	Sun,  8 Oct 2023 23:33:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696833234; x=1728369234;
+  h=from:to:cc:subject:date:message-id;
+  bh=yGGnTiOwfcMWNPVc2G/Q813ixhjZkvPBHMtZp7WfHWA=;
+  b=RhzwvGgW2Tay0i90VybRKZkZns+OkvFNviuWP8QAvEoI2Dm5YADqBnL8
+   Xzn4lmefIuDYnS11qsVcOtnUIs/FlNvK0FVYdmnsFguae0664Od7KjHK6
+   KnSpfiTj7BvEQB11ytKycUE6UPGlZy14RNRWo4QoFwAgsJ7e2LGStV3uA
+   usQvzYrJh2mK9SLoCEMu5Ubx+Fgko54HdGoa2V3evU1HsZOcjq5pUV88v
+   wTKKe5FGxnJCEBR9T9Wasbv/1BJb1MKvOzpwwQLA3yWdDkoN0yvOA4fie
+   w6FwIV34g7coFaIl1w2k+naBsB46w8YvjFda+o6ji+1GKDXTKY7I+OJk0
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10857"; a="448273533"
+X-IronPort-AV: E=Sophos;i="6.03,209,1694761200"; 
+   d="scan'208";a="448273533"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2023 23:33:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10857"; a="896653868"
+X-IronPort-AV: E=Sophos;i="6.03,209,1694761200"; 
+   d="scan'208";a="896653868"
+Received: from shsensorbuild2.sh.intel.com ([10.239.134.197])
+  by fmsmga001.fm.intel.com with ESMTP; 08 Oct 2023 23:32:08 -0700
+From: Wentong Wu <wentong.wu@intel.com>
+To: gregkh@linuxfoundation.org,
+	oneukum@suse.com,
+	wsa@kernel.org,
+	andi.shyti@linux.intel.com,
+	broonie@kernel.org
+Cc: bartosz.golaszewski@linaro.org,
+	linus.walleij@linaro.org,
+	hdegoede@redhat.com,
+	linux-usb@vger.kernel.org,
+	linux-i2c@vger.kernel.org,
+	linux-spi@vger.kernel.org,
+	sakari.ailus@linux.intel.com,
+	zhifeng.wang@intel.com,
+	linux-gpio@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Wentong Wu <wentong.wu@intel.com>
+Subject: [PATCH v20 0/4] Add Intel LJCA device driver
+Date: Mon,  9 Oct 2023 14:33:21 +0800
+Message-Id: <1696833205-16716-1-git-send-email-wentong.wu@intel.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+	autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+
+Add driver for Intel La Jolla Cove Adapter (LJCA) device. This
+IO-expander adds additional functions to the host system with
+host USB interface, such as GPIO, I2C and SPI. This patch set
+adds four drivers to support this device: a USB device driver,
+a GPIO chip driver, a I2C controller driver and a SPI controller
+driver.
 
 ---
- drivers/usb/serial/cp210x.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+v20:
+ - add __counted_by attributes for all of [] arrays
+ - use proper kernel doc for ljca_adapter structure
+ - re-structure ljca_recv function to make it more clear
+ - remove all of scoped_guard
+ - check return value of usb_autopm_get_interface()
+ - re-structure ljca_enumerate_clients() to handle error correctly
+ - add comment for 'uid = "0";' in ljca_match_device_ids()
+ - change the parameters' type of ljca_send() to u8
 
-diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
-index af96d592456b..458360851a71 100644
---- a/drivers/usb/serial/cp210x.c
-+++ b/drivers/usb/serial/cp210x.c
-@@ -857,6 +857,15 @@ static void cp210x_process_msr(struct usb_serial_port *port, unsigned char msr,
- 
- 	if(msr & CP210X_MSR_DELTA_RI_BIT) {
- 		port->icount.rng++;
-+
-+		// Support PPS signal on Ring Indicator pin. While uncommon, this is
-+		// found on some devices, like the Adafruit Ultimate GPS USB-C edition.
-+		tty = tty_port_tty_get(&port->port);
-+		if (tty) {
-+			usb_serial_handle_dcd_change(port, tty,
-+				(msr) & CP210X_MSR_RI_STATE_BIT);
-+		}
-+		tty_kref_put(tty);
- 	}
- 
- 	if(msr & CP210X_MSR_DELTA_DCD_BIT) {
+v17 - v19:
+ - rebase patch set on top of Linus' master branch (57d88e8a5974644039fbc47806bac7bb12025636)
+ - change valid_pins type to __le32 and access valid_pins with get_unaligned_le32
+ - remove COMPILE_TEST for USB_LJCA Kconfig
+
+v16:
+ - drop all void * and use real types in the exported apis and internal ljca_send()
+ - remove #ifdef in usb-ljca.c file
+ - add documentation in ljca.h for the public structures
+ - add error message in ljca_handle_cmd_ack() if error happens and remove blank line
+ - use the functionality in cleanup.h for spinlock to make function much simpler
+ - change the type of ex_buf in struct ljca_adapter to u8 *
+
+v14 - v15:
+ - enhance disconnect() of usb-ljca driver
+ - change memchr to strchr in ljca_match_device_ids() of usb-ljca driver
+ - fix build error: implicit declaration of function 'acpi_dev_clear_dependencies'
+
+v13:
+ - make ljca-usb more robust with the help of Hans de Goede
+ - call acpi_dev_clear_dependencies() to mark _DEP ACPI dependencies on the I2C controller as satisfied
+ - avoid err printing because of calling usb_kill_urb when attempts to resubmit the rx urb
+
+v10 - v12:
+ - switch dev_err to dev_dbg for i2c-ljca driver
+ - remove message length check because of defined quirk structure
+ - remove I2C_FUNC_SMBUS_EMUL support
+ - remove ljca_i2c_format_slave_addr
+ - remove memset before write write w_packet for i2c driver
+ - make ljca_i2c_stop void and print err message in case failure
+ - use dev_err_probe in ljca_i2c_probe function
+
+v9:
+ - overhaul usb-ljca driver to make it more structured and easy understand
+ - fix memory leak issue for usb-ljca driver
+ - add spinlock to protect tx_buf and ex_buf
+ - change exported APIs for usb-ljca driver
+ - unify prefix for structures and functions for i2c-ljca driver
+ - unify prefix for structures and functions for spi-ljca driver
+ - unify prefix for structures and functions for gpio-ljca driver
+ - update gpio-ljca, i2c-ljca and spi-ljca drivers according to usb-ljca's changes
+
+Wentong Wu (4):
+  usb: Add support for Intel LJCA device
+  i2c: Add support for Intel LJCA USB I2C driver
+  spi: Add support for Intel LJCA USB SPI driver
+  gpio: update Intel LJCA USB GPIO driver
+
+ drivers/gpio/Kconfig          |   4 +-
+ drivers/gpio/gpio-ljca.c      | 246 +++++++-----
+ drivers/i2c/busses/Kconfig    |  11 +
+ drivers/i2c/busses/Makefile   |   1 +
+ drivers/i2c/busses/i2c-ljca.c | 343 ++++++++++++++++
+ drivers/spi/Kconfig           |  11 +
+ drivers/spi/Makefile          |   1 +
+ drivers/spi/spi-ljca.c        | 297 ++++++++++++++
+ drivers/usb/misc/Kconfig      |  13 +
+ drivers/usb/misc/Makefile     |   1 +
+ drivers/usb/misc/usb-ljca.c   | 902 ++++++++++++++++++++++++++++++++++++++++++
+ include/linux/usb/ljca.h      | 145 +++++++
+ 12 files changed, 1870 insertions(+), 105 deletions(-)
+ create mode 100644 drivers/i2c/busses/i2c-ljca.c
+ create mode 100644 drivers/spi/spi-ljca.c
+ create mode 100644 drivers/usb/misc/usb-ljca.c
+ create mode 100644 include/linux/usb/ljca.h
+
 -- 
-2.34.1
+2.7.4
 
 
