@@ -1,171 +1,151 @@
-Return-Path: <linux-usb+bounces-1305-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1302-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19E287BEA86
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 21:24:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 95FFB7BEA24
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 20:53:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B12E281553
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 19:24:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 094B12819EB
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 18:53:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59E3B3C681;
-	Mon,  9 Oct 2023 19:24:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C5CF3B2AA;
+	Mon,  9 Oct 2023 18:53:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="XGAZHhWq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lv21Hteb"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3947FBA4B
-	for <linux-usb@vger.kernel.org>; Mon,  9 Oct 2023 19:24:40 +0000 (UTC)
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2056.outbound.protection.outlook.com [40.107.94.56])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940BCAF;
-	Mon,  9 Oct 2023 12:24:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Z8KGXr2DL3YJsdTnStkGnnGtJRSCIWOMEgeCO/Hgg5hXGsBbUrKL0MbL2jzzAzxXyyfqr0qDdbQfEJCI9Usbl1cAu8YmOSsJjLe0HQow4a0B3QOJcgszfQWybjwOuVXm6oQXK2IckE9fKhGmsGuDegpPgLGqCDQxyLVgBFARyrLoTZ7HT7BAI09dj12vmDZ16nMTUqYO2BFqN0zs4hPauCAg0kqbHr54rnVZhf/ZLBIuIsvwhjxsJQoyYtVJ2L1rAptlJMnybj3kt8rSRPxz9QOuBmL6jCo2Nqwc5LmK8aQVvYdEfOtzyRBLGXXb4H6FyFqVg/9z9bHlc1rOGoXrVw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Pw+R3r5K6BXXcay1Rryj1r8v2jKH7ogIduw5kZ+F+qM=;
- b=FFYuvIZts2BWZpD22kngxwCcKSvckzeRRzleLMJ8TMq6hiomhwTotLiI63NPHaSjviWHSXHjGnY4Ww3mLW+1mr5E7wjxCGTLZJADYtF3ux8k39UCbxUScFW/hUiEaFAU6T7dxUnJIzKUHx+EwNOPhkYLShCNz52kiCM7es2OLqYnN2sRlkDYoAZDmlopPlqJVZCFEGK/V32cTopAgc9QN9Pvcc+2hMfL3QNp2YNWgcIBe7AUJrUWrcaYw3p5OIdBGWj7emEk7wkpMkDBgsSjuZ75tsJUnOUEL9ClykMWUraqz2fsydQs3k4BtOcNYo4rIdnihec7MLHklzyYmJjBEg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Pw+R3r5K6BXXcay1Rryj1r8v2jKH7ogIduw5kZ+F+qM=;
- b=XGAZHhWqU6ZbxVkEsbhlO7lExWeEaWyTq4nQ0rEXHHLTQ20o8D+mITLKuCtOwOLKo96uuw6LrJLAYT3gGM45MnSlEaAUE5AoV43L2YIXSPP2oAXVifEvf/QEkluBzvisBcQ506ftuKhA4B11AdZVt+Q1LxRXHPEMg3c2I+Lsr+A=
-Received: from DS7PR05CA0057.namprd05.prod.outlook.com (2603:10b6:8:2f::21) by
- PH8PR12MB7157.namprd12.prod.outlook.com (2603:10b6:510:22b::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6863.36; Mon, 9 Oct 2023 19:24:34 +0000
-Received: from CY4PEPF0000FCC5.namprd03.prod.outlook.com
- (2603:10b6:8:2f:cafe::5) by DS7PR05CA0057.outlook.office365.com
- (2603:10b6:8:2f::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6886.19 via Frontend
- Transport; Mon, 9 Oct 2023 19:24:34 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CY4PEPF0000FCC5.mail.protection.outlook.com (10.167.242.107) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6838.21 via Frontend Transport; Mon, 9 Oct 2023 19:24:33 +0000
-Received: from AUS-P9-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 9 Oct
- 2023 14:24:32 -0500
-From: Mario Limonciello <mario.limonciello@amd.com>
-To: <heikki.krogerus@linux.intel.com>, <gregkh@linuxfoundation.org>
-CC: <wsa@kernel.org>, <linux-usb@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <Alexander.Deucher@amd.com>,
-	<Richard.Gong@amd.com>, <kai.heng.feng@canonical.com>,
-	<sebastian.reichel@collabora.com>, Mario Limonciello
-	<mario.limonciello@amd.com>
-Subject: [PATCH v3] usb: typec: ucsi: Use GET_CAPABILITY attributes data to set power supply scope
-Date: Mon, 9 Oct 2023 13:46:43 -0500
-Message-ID: <20231009184643.129986-1-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 208FE35880;
+	Mon,  9 Oct 2023 18:53:02 +0000 (UTC)
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05A0AF;
+	Mon,  9 Oct 2023 11:53:00 -0700 (PDT)
+Received: by mail-ej1-x644.google.com with SMTP id a640c23a62f3a-991c786369cso814835966b.1;
+        Mon, 09 Oct 2023 11:53:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696877579; x=1697482379; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4iEFw2KWu0uLaXIWh95J9DkXgQ94Tm3AGN4RoICln98=;
+        b=Lv21Htebuds0cZAr+gOXmTjJMSbr2Z3yuu4bb9jt0U2CPeab+yAh31yIXeBTjmBrZb
+         Ujn7HtoPX3MzXJQKyj4ozksyVnoMVyMsfV0JXF2FKLv7y7QHt0omlDDjWeu473ubdS3N
+         eD2bQORfMkDZVNd9fj+kfUiwO3BKuYuKdZt5wE94D+Y9lYyJ5dgZ7GjbRGbh80ATREUE
+         lFakJ2AvQc5RZlXz5zIJ7+DrG6pi3NypNek1LcjwdZKRvFP6k4+XrYXQeSTMI8vOCdJ9
+         NKGVT0hpAUFpsLcIwcyIdIncG+yRHgZn7rYjeDbt+bdChLpERT7H5lN0IQd5bGf4YoEq
+         EDXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696877579; x=1697482379;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4iEFw2KWu0uLaXIWh95J9DkXgQ94Tm3AGN4RoICln98=;
+        b=InXUxhHfQJx2sKjVFTjVIhgJkxqYnW1D79Oiaxs7lHQc9uy6mpFn0Nq2WFs436irET
+         rH1oiioYu3xDHHVyQBUTbMe+rWr5nGbW2PMUhKyEW+bWiFbMZPCayw4jR9UkrMjUbWmE
+         pXd72odMF5xacHwGe5lNrgG6+803c563E0+2FEo9H4ih55VllQaPDHcJ2KMfsMa0lA1M
+         fSqqNq5Re7eyP+DkR0hJO0fDuwi1W/HVOmDGW6eA97uudFH4hlk+EZRnsorScntayFLr
+         8fETbZ9ywRa1qZwF5THzbrzQY5wchl0/CTN/B1NncFy4P0PMYiHEcdFkVd4jIo8ZsIdy
+         +9/w==
+X-Gm-Message-State: AOJu0YyarLPo8JIHT1XR0xSc+Ms1htpK4JoXAls4kCUzFslCYw8jSY7X
+	2RKwjy5amKTnsOP00TDDkY0=
+X-Google-Smtp-Source: AGHT+IHstENxO/CXBuztPUegYH2i+Eluu2FwXYIb3oRGpR+JbD37gpX5p6/pDya5W/Q4FEg4oGasbA==
+X-Received: by 2002:a17:906:fe4a:b0:9ae:5120:5147 with SMTP id wz10-20020a170906fe4a00b009ae51205147mr17596835ejb.38.1696877579020;
+        Mon, 09 Oct 2023 11:52:59 -0700 (PDT)
+Received: from [127.0.1.1] (2a02-8389-41cf-e200-0d7c-652f-4e74-10b8.cable.dynamic.v6.surfer.at. [2a02:8389:41cf:e200:d7c:652f:4e74:10b8])
+        by smtp.gmail.com with ESMTPSA id dc4-20020a170906c7c400b0098e34446464sm7115079ejb.25.2023.10.09.11.52.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Oct 2023 11:52:58 -0700 (PDT)
+From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Date: Mon, 09 Oct 2023 20:52:55 +0200
+Subject: [PATCH] net: usb: dm9601: fix uninitialized variable use in
+ dm9601_mdio_read
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000FCC5:EE_|PH8PR12MB7157:EE_
-X-MS-Office365-Filtering-Correlation-Id: fa96d12b-0d49-4104-2239-08dbc8fd5e71
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	aCnPKAIXwLsyKPJ92ClvPkLnTdj9o8uPdgXUuc2ndC1f20hzM0rX0SusrUccqx8QRVCkrq012ZQV1si9oivxh7uMbOUAAOAvOmCZG4Z8LfSVTik96AeFRiHGuW/nUKU+kuVBfTuJ0Dj5NFt//GjZyh7PMEXtkx8MUwNS0dY8NIPXStllhhk6p1hV+eMJW+/TVeNJPjOy0qULqd21L/dVoHW/6qLu2VQdZW3EfELcs7YhBsxeXo0pYqOHMpxRxx3cBh/vdj3zPt/gyTDzWBK4JoW/e/ZoLVFrg462T0+uiJ/0UYADbvGLG5iU3v/v1GO2xE5yv2s8EonbP5Bwc2RbNLzUNSPCq7EmHW07YBzdGFnR3AU8EEur3ttPAJGYeI5Z6fnw9pEFzruuwr5RRVTxwW8vS7gnFkaWQ3XE2DNLIAT0fibpRQ2SkVAG1iD9pQcXAveWuvDVW/dgVcwixddGSAFsRaJain0QwCNhjx27X1SuzeQqEMYMK5jKb9yrGKRBguYixk8HSlBSqMxDmgbbr78aFNak3+4PXjKaBHZ64Mk3jtT6TzHv9pPMU/LBjSHiKY5r+wJ/41WvzKeCcjdETO+86Ye91+iA5/Y2u23EiwvdNxit+Ip3XAZkKVdoy90YFEv36ah5+b0xBDQlvKfMn5/klV80uT9RiTTa5E6YalXfsH6AnZiUzbuVSoxK09BC75C2XDOIPCwyOKetwWPWWZTtVTLgFWgCeACn2hyjGH9KNyMlVZGZ26VMb9tJlN7U5N+A17/UzRhgNxazAFS5hw==
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(396003)(39860400002)(346002)(376002)(136003)(230922051799003)(82310400011)(451199024)(64100799003)(1800799009)(186009)(36840700001)(40470700004)(46966006)(1076003)(426003)(16526019)(336012)(2616005)(26005)(8936002)(6666004)(8676002)(47076005)(478600001)(36860700001)(4326008)(83380400001)(2906002)(110136005)(54906003)(5660300002)(70206006)(70586007)(44832011)(316002)(966005)(41300700001)(81166007)(36756003)(86362001)(356005)(82740400003)(40480700001)(40460700003)(7696005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Oct 2023 19:24:33.8717
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: fa96d12b-0d49-4104-2239-08dbc8fd5e71
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CY4PEPF0000FCC5.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7157
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-	autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20231009-topic-dm9601_uninit_mdio_read-v1-1-d4d775e24e3b@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAAZMJGUC/x2NQQrDIBAAvxL2XEFTGmq/UoqscW32oIbVlELI3
+ 2t6HAZmdqgkTBUeww5CH65ccgdzGWBeML9JcegMox6vRmurWll5ViHZSRu3Zc7cXApcnBAGheZ
+ mzT1GH6YIveGxkvKCeV7OSsLaSE6xCkX+/sfP13H8APazsqmIAAAA
+To: Peter Korsgaard <peter@korsgaard.com>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ syzbot+1f53a30781af65d2c955@syzkaller.appspotmail.com
+Cc: netdev@vger.kernel.org, linux-usb@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ Javier Carrasco <javier.carrasco.cruz@gmail.com>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1696877577; l=1746;
+ i=javier.carrasco.cruz@gmail.com; s=20230509; h=from:subject:message-id;
+ bh=mr8zo8GkO8oFsYnOO1Ir3z/Ohnh9ZkCWi74Q+XjdrAw=;
+ b=Ci4voJZHNqhGCYzpafxEBwQNK2Id3/J6q0wWFflh/IM3YXHIfzqgqFA9hmTzXxoS1OJAXksGz
+ LWVNIUycrJ1C1HWJbFsXM1X/UmIAfk6Gh9utnaVXx36HBu1VipFOaVJ
+X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
+ pk=tIGJV7M+tCizagNijF0eGMBGcOsPD+0cWGfKjl4h6K8=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On some OEM systems, adding a W7900 dGPU triggers RAS errors and hangs
-at a black screen on startup.  This issue occurs only if `ucsi_acpi` has
-loaded before `amdgpu` has loaded.  The reason for this failure is that
-`amdgpu` uses power_supply_is_system_supplied() to determine if running
-on AC or DC power at startup. If this value is reported incorrectly the
-dGPU will also be programmed incorrectly and trigger errors.
+syzbot has found an uninit-value bug triggered by the dm9601 driver [1].
 
-power_supply_is_system_supplied() reports the wrong value because UCSI
-power supplies provided as part of the system don't properly report the
-scope as "DEVICE" scope (not powering the system).
+This error happens because the variable res is not updated if the call
+to dm_read_shared_word returns an error or if no data is read (see
+__usbnet_read_cmd()). In this particular case -EPROTO was returned and
+res stayed uninitialized.
 
-In order to fix this issue check the capabilities reported from the UCSI
-power supply to ensure that it supports charging a battery and that it can
-be powered by AC.  Mark the scope accordingly.
+This can be avoided by checking the return value of dm_read_shared_word
+and returning an error if the read operation failed or no data was read.
 
-Cc: stable@vger.kernel.org
-Fixes: a7fbfd44c020 ("usb: typec: ucsi: Mark dGPUs as DEVICE scope")
-Link: https://www.intel.com/content/www/us/en/products/docs/io/universal-serial-bus/usb-type-c-ucsi-spec.html p28
-Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+[1] https://syzkaller.appspot.com/bug?extid=1f53a30781af65d2c955
+
+Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Reported-and-tested-by: syzbot+1f53a30781af65d2c955@syzkaller.appspotmail.com
 ---
-Cc: Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc: Alex Deucher <Alexander.Deucher@amd.com>>
-Cc: Richard Gong <Richard.Gong@amd.com>
+ drivers/net/usb/dm9601.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-v2->v3:
- * Pick up tag
- * Add missing stable tag
- * Drop patch 2, we'll just avoid upstreaming it.
----
- drivers/usb/typec/ucsi/psy.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/drivers/usb/typec/ucsi/psy.c b/drivers/usb/typec/ucsi/psy.c
-index 384b42267f1f..b35c6e07911e 100644
---- a/drivers/usb/typec/ucsi/psy.c
-+++ b/drivers/usb/typec/ucsi/psy.c
-@@ -37,6 +37,15 @@ static int ucsi_psy_get_scope(struct ucsi_connector *con,
- 	struct device *dev = con->ucsi->dev;
+diff --git a/drivers/net/usb/dm9601.c b/drivers/net/usb/dm9601.c
+index 48d7d278631e..e223daa93229 100644
+--- a/drivers/net/usb/dm9601.c
++++ b/drivers/net/usb/dm9601.c
+@@ -222,13 +222,20 @@ static int dm9601_mdio_read(struct net_device *netdev, int phy_id, int loc)
+ 	struct usbnet *dev = netdev_priv(netdev);
  
- 	device_property_read_u8(dev, "scope", &scope);
-+	if (scope == POWER_SUPPLY_SCOPE_UNKNOWN) {
-+		u32 mask = UCSI_CAP_ATTR_POWER_AC_SUPPLY |
-+			   UCSI_CAP_ATTR_BATTERY_CHARGING;
-+
-+		if (con->ucsi->cap.attributes & mask)
-+			scope = POWER_SUPPLY_SCOPE_SYSTEM;
-+		else
-+			scope = POWER_SUPPLY_SCOPE_DEVICE;
+ 	__le16 res;
++	int err;
+ 
+ 	if (phy_id) {
+ 		netdev_dbg(dev->net, "Only internal phy supported\n");
+ 		return 0;
+ 	}
+ 
+-	dm_read_shared_word(dev, 1, loc, &res);
++	err = dm_read_shared_word(dev, 1, loc, &res);
++	if (err <= 0) {
++		if (err == 0)
++			err = -ENODATA;
++		netdev_err(dev->net, "MDIO read error: %d\n", err);
++		return err;
 +	}
- 	val->intval = scope;
- 	return 0;
- }
+ 
+ 	netdev_dbg(dev->net,
+ 		   "dm9601_mdio_read() phy_id=0x%02x, loc=0x%02x, returns=0x%04x\n",
+
+---
+base-commit: 94f6f0550c625fab1f373bb86a6669b45e9748b3
+change-id: 20231009-topic-dm9601_uninit_mdio_read-a15918ffbd6f
+
+Best regards,
 -- 
-2.34.1
+Javier Carrasco <javier.carrasco.cruz@gmail.com>
 
 
