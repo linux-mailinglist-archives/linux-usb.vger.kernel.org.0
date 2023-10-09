@@ -1,135 +1,170 @@
-Return-Path: <linux-usb+bounces-1294-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1295-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44DA77BE936
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 20:28:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A1807BE96C
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 20:34:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7490E281AAF
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 18:28:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2D1C281BD1
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 18:34:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F3B63AC30;
-	Mon,  9 Oct 2023 18:28:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="NIcP1acj"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2763F3B2AA;
+	Mon,  9 Oct 2023 18:34:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58F1238BBD
-	for <linux-usb@vger.kernel.org>; Mon,  9 Oct 2023 18:27:59 +0000 (UTC)
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC18BAF;
-	Mon,  9 Oct 2023 11:27:56 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 399F8L88001636;
-	Mon, 9 Oct 2023 18:27:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Q+cCkUzN9xrbsC8Pf+ICak/y+bLqYP4HVThQeuiAvuI=;
- b=NIcP1acjmif1uakqbc+d+05R9lcRmlew/UP7J1IbSAhHucx8yV6OQ9cvklKM+XuM21mI
- eRBctGtnmj6wo8T5s/eQuZWOrvDFkBcVDfBrglrNLh1KrxljwaCc5MnDkqpV3rj0TaWM
- EZ/Av5U/VA6A1DnGgOEsiDOAfXclpeWBfoOnii/28BccOZwC/MUU71oSLsPKxkN8d+0/
- SFKSUCR1d2lX5ZhPE2hp7WUxaJogQFnIiZDS/6suGbt3D1c6DUjo3FX76tlz2KCnRWs4
- n4+r63UFoIh/3LmJmmenCYT1diAehp7Y21NgvK8RqzercRy70UKqyiYPVnBiF71cizZS EA== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tkh6g38em-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 09 Oct 2023 18:27:53 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 399IRqri013329
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 9 Oct 2023 18:27:52 GMT
-Received: from [10.216.9.133] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Mon, 9 Oct
- 2023 11:27:48 -0700
-Message-ID: <e361e3c0-069c-4e91-8f3a-d7ab2de8bdd4@quicinc.com>
-Date: Mon, 9 Oct 2023 23:57:44 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45D483B294
+	for <linux-usb@vger.kernel.org>; Mon,  9 Oct 2023 18:34:18 +0000 (UTC)
+Received: from mx.skole.hr (mx1.hosting.skole.hr [161.53.165.185])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5467BA4;
+	Mon,  9 Oct 2023 11:34:15 -0700 (PDT)
+Received: from mx1.hosting.skole.hr (localhost.localdomain [127.0.0.1])
+	by mx.skole.hr (mx.skole.hr) with ESMTP id 8CE5B84F15;
+	Mon,  9 Oct 2023 20:34:13 +0200 (CEST)
+From: =?utf-8?q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>
+Subject: [PATCH RFT v7 0/6] ARM: pxa: GPIO descriptor conversions
+Date: Mon, 09 Oct 2023 20:33:57 +0200
+Message-Id: <20231009-pxa-gpio-v7-0-c8f5f403e856@skole.hr>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] usb: gadget: ncm: Add support to update
- wMaxSegmentSize via configfs
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC: =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>,
-        onathan Corbet
-	<corbet@lwn.net>,
-        Linyu Yuan <quic_linyyuan@quicinc.com>, <linux-usb@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
-        <quic_jackp@quicinc.com>
-References: <20231009142005.21338-1-quic_kriskura@quicinc.com>
- <20231009142005.21338-2-quic_kriskura@quicinc.com>
- <2023100931-reward-justice-ed1c@gregkh>
- <a9efdc23-0417-48dc-aa17-ef7b1459b85a@quicinc.com>
- <2023100910-used-unruly-f750@gregkh>
-Content-Language: en-US
-From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <2023100910-used-unruly-f750@gregkh>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: p6mIrmFhuRgEFSCW21TOg7PthHAmRr8q
-X-Proofpoint-ORIG-GUID: p6mIrmFhuRgEFSCW21TOg7PthHAmRr8q
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-09_16,2023-10-09_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- clxscore=1015 mlxlogscore=252 bulkscore=0 lowpriorityscore=0 phishscore=0
- mlxscore=0 adultscore=0 priorityscore=1501 malwarescore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2309180000
- definitions=main-2310090150
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAJVHJGUC/13Pu2rEMBAF0F9ZVEdBr9EjVap8wLJdSCF7xmuRs
+ DZSMBsW/3uEikS4HI3OHe6DFcqJCns5PVimLZW03Orgnk5snOPtSjxhnZkSSgsvHF/vkV/XtHA
+ 9kgIEZ7w0rH5fM03p3qLe2fntwj7q45zK95J/Wvwm26olBWX+kzbJBVdewOAdeh/Ma/lcvuh5z
+ i1jU72znVPVBW+MNSgtIB6c7l3onK4uTh6BAOWkj/fMn5NCyM6Z6sSkh+CALCEcHPSu7wfVYQi
+ R7DQSRX9wtnd9P9v6ycEEKRBC6Ny+779wKZyzvAEAAA==
+To: Daniel Mack <daniel@zonque.org>, 
+ Haojian Zhuang <haojian.zhuang@gmail.com>, 
+ Robert Jarzmik <robert.jarzmik@free.fr>, 
+ Russell King <linux@armlinux.org.uk>, 
+ Alan Stern <stern@rowland.harvard.edu>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Linus Walleij <linus.walleij@linaro.org>, 
+ Bartosz Golaszewski <brgl@bgdev.pl>, Andy Shevchenko <andy@kernel.org>, 
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
+ Mark Brown <broonie@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org, 
+ linux-input@vger.kernel.org, linux-spi@vger.kernel.org, 
+ =?utf-8?q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>, 
+ Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3356;
+ i=duje.mihanovic@skole.hr; h=from:subject:message-id;
+ bh=9HISThLWXYrKw02vad3s3jjv7OIK+LTjobe89BliE1o=;
+ b=owEBbQKS/ZANAwAIAZoRnrBCLZbhAcsmYgBlJEebqRxXPSHSkqz3VzFiWmCYluOEsVC6FdrVX
+ kdBjEH03BqJAjMEAAEIAB0WIQRT351NnD/hEPs2LXiaEZ6wQi2W4QUCZSRHmwAKCRCaEZ6wQi2W
+ 4d/PEACEBwdEFzScJK2AKBhR+Sh2TExixXRhlHrijlQj6TpxuD3ccuPKBwNKoZx1nfg5Z14ao05
+ kzPcyamJc9OOofLeF+CSKg1kXy9MnQx4NPmIhk/HiZI5ZkbsbTRPUHhji7GXpD7vy37vLW8SmW+
+ U/aVMCAv2sXe3Iism4UxDi4Qgp6khIb4t3K2T2o7efDiM+9aaZOsK/5d5z+lwdTcQfZsYN04//+
+ SmnmRIZHrBREnhjCn/M0VF7Y6fXBtfcnxIXY57RfNpRjKCjF1z4gWdVaK/utVHdPBqhUHK4S5YO
+ qxxR8DmS9jOLL04bafaq9UR4ayEsQTdmIVmOE26pufWaT1MV8OAyOGuyUxnrqLIWfoDzFnPZGM4
+ lHtEhuh6t2CIVK/Yo2H7ym0MoJiZtkGgcr1g7Snch/ktNt3fLXO5WMhO7cgWmPxWQ90eaOIaAF2
+ SlRDrw10T7ZMqn2gcbMcszt9tse57mDNwMbFw8UH2C1qWphXlWa7iQ9jMWdDZ1U0Lx76PAbS1Gh
+ ozJ0uyhzzM/yc04meQpxIiI7d3+mk5yKmneRV0H96L1j8vC7QGT8Otzqnds8r0Jv3BWdnwcQVoN
+ 8LY0KS6bRzLQx+4qnIhQQtSv4Bl5dMYZK0dQHvuNsIgTIgRwMUlsk6tJ9wewoObMT3UypmEGldh
+ udURqlb2X3xSY3Q==
+X-Developer-Key: i=duje.mihanovic@skole.hr; a=openpgp;
+ fpr=53DF9D4D9C3FE110FB362D789A119EB0422D96E1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
+Hello,
+
+Small series to convert some of the board files in the mach-pxa directory
+to use the new GPIO descriptor interface.
+
+Most notably, the am200epd, am300epd and Spitz matrix keypad among
+others are not converted in this series.
+
+Signed-off-by: Duje Mihanović <duje.mihanovic@skole.hr>
+---
+Changes in v7:
+- Address maintainer comments:
+  - Drop gpiod_put in OHCI
+  - Make "struct gpio_descs *leds" in Spitz LEDs global
+- Link to v6: https://lore.kernel.org/r/20231006-pxa-gpio-v6-0-981b4910d599@skole.hr
+
+Changes in v6:
+- Address maintainer comments:
+  - Use devm_gpiod_get_optional() in OHCI
+  - Use gpiod_get_array() in Spitz LEDs
+- Update trailers
+- Link to v5: https://lore.kernel.org/r/20231004-pxa-gpio-v5-0-d99ae6fceea8@skole.hr
+
+Changes in v5:
+- Address maintainer comments:
+  - Rename "reset generator" GPIO to "reset"
+  - Rename ads7846_wait_for_sync() to ads7846_wait_for_sync_gpio()
+  - Properly bail out when requesting USB host GPIO fails
+  - Use dev_err_probe() when requesting touchscreen sync GPIO fails
+  - Use static gpio_desc for gumstix bluetooth reset
+- Pulse gumstix bluetooth reset line correctly (assert, then deassert)
+- Fix style issue in ads7846_wait_for_sync_gpio()
+- Update trailers
+- Link to v4: https://lore.kernel.org/r/20231001-pxa-gpio-v4-0-0f3b975e6ed5@skole.hr
+
+Changes in v4:
+- Address maintainer comments:
+  - Move wait_for_sync() from spitz.c to driver
+  - Register LED platform device before getting its gpiod-s
+- Add Linus' Reviewed-by
+- Link to v3: https://lore.kernel.org/r/20230929-pxa-gpio-v3-0-af8d5e5d1f34@skole.hr
+
+Changes in v3:
+- Address maintainer comments:
+  - Use GPIO_LOOKUP_IDX for LEDs
+  - Drop unnecessary NULL assignments
+  - Don't give up on *all* SPI devices if hsync cannot be set up
+- Add Linus' Acked-by
+- Link to v2: https://lore.kernel.org/r/20230926-pxa-gpio-v2-0-984464d165dd@skole.hr
+
+Changes in v2:
+- Address maintainer comments:
+  - Change mentions of function to function()
+  - Drop cast in OHCI driver dev_warn() call
+  - Use %pe in OHCI and reset drivers
+  - Use GPIO _optional() API in OHCI driver
+  - Drop unnecessary not-null check in OHCI driver
+  - Use pr_err() instead of printk() in reset driver
+- Rebase on v6.6-rc3
+- Link to v1: https://lore.kernel.org/r/20230924-pxa-gpio-v1-0-2805b87d8894@skole.hr
+
+---
+Duje Mihanović (6):
+      ARM: pxa: Convert Spitz OHCI to GPIO descriptors
+      ARM: pxa: Convert Spitz LEDs to GPIO descriptors
+      ARM: pxa: Convert Spitz CF power control to GPIO descriptors
+      ARM: pxa: Convert reset driver to GPIO descriptors
+      ARM: pxa: Convert gumstix Bluetooth to GPIO descriptors
+      input: ads7846: Move wait_for_sync() logic to driver
+
+ arch/arm/mach-pxa/gumstix.c         | 22 ++++++------
+ arch/arm/mach-pxa/reset.c           | 39 +++++++-------------
+ arch/arm/mach-pxa/reset.h           |  3 +-
+ arch/arm/mach-pxa/spitz.c           | 71 +++++++++++++++++++++++++------------
+ drivers/input/touchscreen/ads7846.c | 22 ++++++++----
+ drivers/usb/host/ohci-pxa27x.c      |  5 +++
+ include/linux/spi/ads7846.h         |  1 -
+ 7 files changed, 94 insertions(+), 69 deletions(-)
+---
+base-commit: 8a749fd1a8720d4619c91c8b6e7528c0a355c0aa
+change-id: 20230807-pxa-gpio-3ce25d574814
+
+Best regards,
+-- 
+Duje Mihanović <duje.mihanovic@skole.hr>
 
 
-On 10/9/2023 11:24 PM, Greg Kroah-Hartman wrote:
-> On Mon, Oct 09, 2023 at 09:02:32PM +0530, Krishna Kurapati PSSNV wrote:
->>
->>
->> On 10/9/2023 8:38 PM, Greg Kroah-Hartman wrote:
->>> On Mon, Oct 09, 2023 at 07:50:05PM +0530, Krishna Kurapati wrote:
->>>> Currently the NCM driver restricts wMaxSegmentSize that indicates
->>>> the datagram size coming from network layer to 1514.
->>>
->>> I don't see that restriction in the existing driver, where does that
->>> happen?
->>
->> Hi Greg,
->>
->>   In the ecm_desc, the following line restricts the value:
->>
->> .wMaxSegmentSize =      cpu_to_le16(ETH_FRAME_LEN),
-> 
-> Ok, so is that 1514?  I don't know as I don't know what ETH_FRAM_LEN is.
-> 
-Hi Greg,
-
-Yes, that is 1514.
-
-> So how about saying something to the affect of "the max segment size is
-> currently limited to the ethernet frame length of the kernel which
-> happens to be 1514 at this point in time."
-> 
-
-Sure. I will rephrase this in v2 with the suggestion provided.
-
-Regards,
-Krishna,
 
