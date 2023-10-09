@@ -1,450 +1,264 @@
-Return-Path: <linux-usb+bounces-1275-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1276-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC1917BE5F1
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 18:10:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6792D7BE611
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 18:14:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A9FD1C20B53
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 16:10:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 89ADB1C20B08
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 16:14:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5634838BB8;
-	Mon,  9 Oct 2023 16:10:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uXLBAcbt"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D67E838BA8;
+	Mon,  9 Oct 2023 16:14:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 553E235894;
-	Mon,  9 Oct 2023 16:10:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A92FFC433C8;
-	Mon,  9 Oct 2023 16:09:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1696867824;
-	bh=keW4wOj90e6SAzWHDhiijPY7xlKn91ViUXq7+ZBy/qA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=uXLBAcbtT3qSJRhL/8M371BpeA1C5ljwEOv35PPhR9AAXbskswQIJClC2lj7Rj5gp
-	 Wf8DMgzdk7F1Im4JpcUlzudlx2J7u7qAkCKVl53l50QCMlVywy97j4Z/z6YC81cPOB
-	 ZEhm/bd89ThwJczgLVLfYGYQSRgf/gJFEhHLWwuJMYiWS6kKeieI6gsrdpEaduSXjN
-	 MyDpNqeyNgkjuA9pNpJc3RCwGGB/UZ94Td6pVCF9naF2MzsC97YBscCdHyiZxAMM7J
-	 TNVG7+Kfo/TbzJEmvAHe6SdjHTFA0oLVhgfu0YPY0D5YqFYWH70KP0wz8Tk3JvnzVy
-	 Fp4FzyfzRg4Qw==
-From: Christian Brauner <brauner@kernel.org>
-To: Jeff Layton <jlayton@kernel.org>
-Cc: Christian Brauner <brauner@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	David Sterba <dsterba@suse.cz>,
-	Amir Goldstein <amir73il@gmail.com>,
-	Theodore Ts'o <tytso@mit.edu>,
-	Eric Biederman <ebiederm@xmission.com>,
-	Kees Cook <keescook@chromium.org>,
-	Jeremy Kerr <jk@ozlabs.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	arve@android.com,
-	Todd Kjos <tkjos@android.com>,
-	Martijn Coenen <maco@android.com>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Carlos Llamas <cmllamas@google.com>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Mattia Dongili <malattia@linux.it>,
-	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Leon Romanovsky <leon@kernel.org>,
-	Brad Warrum <bwarrum@linux.ibm.com>,
-	Ritu Agarwal <rituagar@linux.ibm.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	ilpo.jarvinen@linux.intel.com,
-	Mark Gross <markgross@kernel.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Eric Van Hensbergen <ericvh@kernel.org>,
-	Latchesar Ionkov <lucho@ionkov.net>,
-	Dominique Martinet <asmadeus@codewreck.org>,
-	Christian Schoenebeck <linux_oss@crudebyte.com>,
-	David Sterba <dsterba@suse.com>,
-	David Howells <dhowells@redhat.com>,
-	Marc Dionne <marc.dionne@auristor.com>,
-	Ian Kent <raven@themaw.net>,
-	Luis de Bethencourt <luisbg@kernel.org>,
-	Salah Triki <salah.triki@gmail.com>,
-	"Tigran A. Aivazian" <aivazian.tigran@gmail.com>,
-	Chris Mason <clm@fb.com>,
-	Josef Bacik <josef@toxicpanda.com>,
-	Xiubo Li <xiubli@redhat.com>,
-	Ilya Dryomov <idryomov@gmail.com>,
-	Jan Harkes <jaharkes@cs.cmu.edu>,
-	coda@cs.cmu.edu,
-	Joel Becker <jlbec@evilplan.org>,
-	Christoph Hellwig <hch@lst.de>,
-	Nicolas Pitre <nico@fluxnic.net>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Gao Xiang <xiang@kernel.org>,
-	Chao Yu <chao@kernel.org>,
-	Yue Hu <huyue2@coolpad.com>,
-	Jeffle Xu <jefflexu@linux.alibaba.com>,
-	Namjae Jeon <linkinjeon@kernel.org>,
-	Sungjong Seo <sj1557.seo@samsung.com>,
-	Jan Kara <jack@suse.com>,
-	Andreas Dilger <adilger.kernel@dilger.ca>,
-	Jaegeuk Kim <jaegeuk@kernel.org>,
-	OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>,
-	Christoph Hellwig <hch@infradead.org>,
-	Miklos Szeredi <miklos@szeredi.hu>,
-	Bob Peterson <rpeterso@redhat.com>,
-	Andreas Gruenbacher <agruenba@redhat.com>,
-	Richard Weinberger <richard@nod.at>,
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>,
-	Mike Kravetz <mike.kravetz@oracle.com>,
-	Muchun Song <muchun.song@linux.dev>,
-	Jan Kara <jack@suse.cz>,
-	David Woodhouse <dwmw2@infradead.org>,
-	Dave Kleikamp <shaggy@kernel.org>,
-	Tejun Heo <tj@kernel.org>,
-	Trond Myklebust <trond.myklebust@hammerspace.com>,
-	Anna Schumaker <anna@kernel.org>,
-	Chuck Lever <chuck.lever@oracle.com>,
-	Neil Brown <neilb@suse.de>,
-	Olga Kornievskaia <kolga@netapp.com>,
-	Dai Ngo <Dai.Ngo@oracle.com>,
-	Tom Talpey <tom@talpey.com>,
-	Ryusuke Konishi <konishi.ryusuke@gmail.com>,
-	Anton Altaparmakov <anton@tuxera.com>,
-	Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
-	Mark Fasheh <mark@fasheh.com>,
-	Joseph Qi <joseph.qi@linux.alibaba.com>,
-	Bob Copeland <me@bobcopeland.com>,
-	Mike Marshall <hubcap@omnibond.com>,
-	Martin Brandenburg <martin@omnibond.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Iurii Zaikin <yzaikin@google.com>,
-	Tony Luck <tony.luck@intel.com>,
-	"Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-	Anders Larsen <al@alarsen.net>,
-	Steve French <sfrench@samba.org>,
-	Paulo Alcantara <pc@manguebit.com>,
-	Ronnie Sahlberg <lsahlber@redhat.com>,
-	Shyam Prasad N <sprasad@microsoft.com>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	Phillip Lougher <phillip@squashfs.org.uk>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Evgeniy Dushistov <dushistov@mail.ru>,
-	Chandan Babu R <chandan.babu@oracle.com>,
-	"Darrick J. Wong" <djwong@kernel.org>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Naohiro Aota <naohiro.aota@wdc.com>,
-	Johannes Thumshirn <jth@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Hugh Dickins <hughd@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	John Johansen <john.johansen@canonical.com>,
-	Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Stephen Smalley <stephen.smalley.work@gmail.com>,
-	Eric Paris <eparis@parisplace.org>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	Brian Foster <bfoster@redhat.com>,
-	linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org,
-	linux-rdma@vger.kernel.org,
-	linux-serial@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	v9fs@lists.linux.dev,
-	linux-afs@lists.infradead.org,
-	autofs@vger.kernel.org,
-	linux-btrfs@vger.kernel.org,
-	ceph-devel@vger.kernel.org,
-	codalist@coda.cs.cmu.edu,
-	linux-efi@vger.kernel.org,
-	linux-erofs@lists.ozlabs.org,
-	linux-ext4@vger.kernel.org,
-	linux-f2fs-devel@lists.sourceforge.net,
-	gfs2@lists.linux.dev,
-	linux-um@lists.infradead.org,
-	linux-mtd@lists.infradead.org,
-	jfs-discussion@lists.sourceforge.net,
-	linux-nfs@vger.kernel.org,
-	linux-nilfs@vger.kernel.org,
-	linux-ntfs-dev@lists.sourceforge.net,
-	ntfs3@lists.linux.dev,
-	ocfs2-devel@lists.linux.dev,
-	linux-karma-devel@lists.sourceforge.net,
-	devel@lists.orangefs.org,
-	linux-unionfs@vger.kernel.org,
-	linux-hardening@vger.kernel.org,
-	reiserfs-devel@vger.kernel.org,
-	linux-cifs@vger.kernel.org,
-	samba-technical@lists.samba.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-xfs@vger.kernel.org,
-	bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	apparmor@lists.ubuntu.com,
-	linux-security-module@vger.kernel.org,
-	selinux@vger.kernel.org,
-	linux-bcachefs@vger.kernel.org
-Subject: Re: [PATCH v2 00/89] fs: new accessor methods for inode atime and mtime
-Date: Mon,  9 Oct 2023 18:09:31 +0200
-Message-Id: <20231009-charmant-locken-893b11849e84@brauner>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231004185221.80802-1-jlayton@kernel.org>
-References: 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C50D437CB7
+	for <linux-usb@vger.kernel.org>; Mon,  9 Oct 2023 16:14:25 +0000 (UTC)
+Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF04A6;
+	Mon,  9 Oct 2023 09:14:22 -0700 (PDT)
+Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
+	by hi1smtp01.de.adit-jv.com (Postfix) with ESMTP id 0E0C6520333;
+	Mon,  9 Oct 2023 18:14:20 +0200 (CEST)
+Received: from vmlxhi-118.adit-jv.com (10.72.93.77) by hi2exch02.adit-jv.com
+ (10.72.92.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.32; Mon, 9 Oct
+ 2023 18:14:19 +0200
+From: Hardik Gajjar <hgajjar@de.adit-jv.com>
+To: <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>,
+	<stern@rowland.harvard.edu>
+CC: <yangyingliang@huawei.com>, <jinpu.wang@ionos.com>,
+	<linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<erosca@de.adit-jv.com>, <hgajjar@de.adit-jv.com>
+Subject: [PATCH v2] usb: core: hub: Add quirks for reducing device address timeout
+Date: Mon, 9 Oct 2023 18:14:02 +0200
+Message-ID: <20231009161402.104224-1-hgajjar@de.adit-jv.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <--in-reply-to=20231006153808.9758-1-hgajjar@de.adit-jv.com>
+References: <--in-reply-to=20231006153808.9758-1-hgajjar@de.adit-jv.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=10941; i=brauner@kernel.org; h=from:subject:message-id; bh=IjD9jhCYjdIJ9vPkYDocQbsMoCTgovwgHUWkZ/3GCzk=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaSqqLYye23auu+81JbW5Y9by59u2veoRtMoSybRa4ps7qMV 1SnPO0pZGMS4GGTFFFkc2k3C5ZbzVGw2ytSAmcPKBDKEgYtTAG4yFyPDct4beVfC7N9kTeGsyQvesc LrVB9X8d5HrqtS30c2lc/vYPgrs2DPvYLs+5rO5WFr0n0CStp+xH9eLnqRR9iW68ZB+QY+AA==
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.72.93.77]
+X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
+ hi2exch02.adit-jv.com (10.72.92.28)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-On Wed, Oct 04, 2023 at 02:52:21PM -0400, Jeff Layton wrote:
-> v2:
-> - bugfix in mtime handling
-> - incorporate _sec and _nsec accessor functions (Chuck Lever)
-> - move i_generation to plug hole after changing timestamps (Amir Goldstein)
-> 
-> While working on the multigrain timestamp changes, Linus suggested
-> adding some similar wrappers for accessing the atime and mtime that we
-> have for the ctime. With that, we could then move to using discrete
-> integers instead of struct timespec64 in struct inode and shrink it.
-> 
-> This patch implements this. Linus suggested using macros for the new
-> accessors, but the existing ctime wrappers were static inlines and since
-> there are only 3 different timestamps, I didn't see that trying to
-> fiddle with macros would gain us anything (other than less verbosity in
-> fs.h).
-> 
-> [...]
+Currently, the timeout for the set address command is fixed at
+5 seconds in the xhci driver. This means the host waits up to 5
+seconds to receive a response for the set_address command from
+the device.
 
-This was applied on top of -next but vfs.ctime is now based on v6.6-rc3
-as stable tag otherwise this is too much of a moving target with other
-stuff in -next. Anything that had to be dropped and requires fixups
-should just be explained in the pr. The sooner this sees some -next, the
-better, I think.
+In the automotive context, most smartphone enumerations, including
+screen projection, should ideally complete within 3 seconds.
+Achieving this is impossible in scenarios where the set_address is
+not successful and waits for a timeout.
 
+The shortened address device timeout quirks provide the flexibility
+to align with a 3-second time limit in the event of errors.
+By swiftly triggering a failure response and swiftly initiating
+retry procedures, these quirks ensure efficient and rapid recovery,
+particularly in automotive contexts where rapid smartphone enumeration
+and screen projection are vital.
+
+The quirk will set the timeout to 500 ms from 5 seconds.
+
+To use the quirk, please write "vendor_id:product_id:p" to
+/sys/bus/usb/drivers/hub/module/parameter/quirks
+
+For example,
+echo "0x2c48:0x0132:p" > /sys/bus/usb/drivers/hub/module/parameter/quirks"
+
+Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
 ---
+changes since version 1:
+	- implement quirk instead of new API in xhci driver
+---
+ drivers/usb/core/hub.c       | 15 +++++++++++++--
+ drivers/usb/core/quirks.c    |  3 +++
+ drivers/usb/host/xhci-mem.c  |  1 +
+ drivers/usb/host/xhci-ring.c |  3 ++-
+ drivers/usb/host/xhci.c      |  9 +++++----
+ drivers/usb/host/xhci.h      |  1 +
+ include/linux/usb/hcd.h      |  3 ++-
+ include/linux/usb/quirks.h   |  3 +++
+ 8 files changed, 30 insertions(+), 8 deletions(-)
 
-Applied to the vfs.ctime branch of the vfs/vfs.git tree.
-Patches in the vfs.ctime branch should appear in linux-next soon.
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 3c54b218301c..975449b03426 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -54,6 +54,9 @@
+ #define USB_TP_TRANSMISSION_DELAY_MAX	65535	/* ns */
+ #define USB_PING_RESPONSE_TIME		400	/* ns */
+ 
++#define USB_DEFAULT_ADDR_DEVICE_TIMEOUT		(HZ * 5) /* 5000ms */
++#define USB_SHORT_ADDR_DEVICE_TIMEOUT		125  /* ~500ms */
++
+ /* Protect struct usb_device->state and ->children members
+  * Note: Both are also protected by ->dev.sem, except that ->state can
+  * change to USB_STATE_NOTATTACHED even when the semaphore isn't held. */
+@@ -4626,8 +4629,16 @@ EXPORT_SYMBOL_GPL(usb_ep0_reinit);
+ static int hub_set_address(struct usb_device *udev, int devnum)
+ {
+ 	int retval;
++	int timeout = USB_DEFAULT_ADDR_DEVICE_TIMEOUT;
+ 	struct usb_hcd *hcd = bus_to_hcd(udev->bus);
+ 
++	struct usb_hub *hub = usb_hub_to_struct_hub(udev->parent);
++
++	if (hub->hdev->quirks & USB_QUIRK_SHORT_DEVICE_ADDR_TIMEOUT)
++		timeout = USB_SHORT_ADDR_DEVICE_TIMEOUT;
++
++	dev_dbg(&udev->dev, "address_device timeout %d\n", timeout);
++
+ 	/*
+ 	 * The host controller will choose the device address,
+ 	 * instead of the core having chosen it earlier
+@@ -4639,11 +4650,11 @@ static int hub_set_address(struct usb_device *udev, int devnum)
+ 	if (udev->state != USB_STATE_DEFAULT)
+ 		return -EINVAL;
+ 	if (hcd->driver->address_device)
+-		retval = hcd->driver->address_device(hcd, udev);
++		retval = hcd->driver->address_device(hcd, udev, timeout);
+ 	else
+ 		retval = usb_control_msg(udev, usb_sndaddr0pipe(),
+ 				USB_REQ_SET_ADDRESS, 0, devnum, 0,
+-				NULL, 0, USB_CTRL_SET_TIMEOUT);
++				NULL, 0, jiffies_to_msecs(timeout));
+ 	if (retval == 0) {
+ 		update_devnum(udev, devnum);
+ 		/* Device now using proper address. */
+diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
+index 15e9bd180a1d..01ed26bd41f0 100644
+--- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -138,6 +138,9 @@ static int quirks_param_set(const char *value, const struct kernel_param *kp)
+ 			case 'o':
+ 				flags |= USB_QUIRK_HUB_SLOW_RESET;
+ 				break;
++			case 'p':
++				flags |= USB_QUIRK_SHORT_DEVICE_ADDR_TIMEOUT;
++				break;
+ 			/* Ignore unrecognized flag characters */
+ 			}
+ 		}
+diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+index 8714ab5bf04d..492433fdac77 100644
+--- a/drivers/usb/host/xhci-mem.c
++++ b/drivers/usb/host/xhci-mem.c
+@@ -1729,6 +1729,7 @@ struct xhci_command *xhci_alloc_command(struct xhci_hcd *xhci,
+ 	}
+ 
+ 	command->status = 0;
++	command->timeout = 0;
+ 	INIT_LIST_HEAD(&command->cmd_list);
+ 	return command;
+ }
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index 1dde53f6eb31..0bd19a1efdec 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -4301,7 +4301,8 @@ static int queue_command(struct xhci_hcd *xhci, struct xhci_command *cmd,
+ 	/* if there are no other commands queued we start the timeout timer */
+ 	if (list_empty(&xhci->cmd_list)) {
+ 		xhci->current_cmd = cmd;
+-		xhci_mod_cmd_timer(xhci, XHCI_CMD_DEFAULT_TIMEOUT);
++		xhci_mod_cmd_timer(xhci, (cmd->timeout) ? cmd->timeout :
++				XHCI_CMD_DEFAULT_TIMEOUT);
+ 	}
+ 
+ 	list_add_tail(&cmd->cmd_list, &xhci->cmd_list);
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index e1b1b64a0723..1d088ceb2b74 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -4002,7 +4002,7 @@ int xhci_alloc_dev(struct usb_hcd *hcd, struct usb_device *udev)
+  * SetAddress request to the device.
+  */
+ static int xhci_setup_device(struct usb_hcd *hcd, struct usb_device *udev,
+-			     enum xhci_setup_dev setup)
++			     enum xhci_setup_dev setup, int timeout)
+ {
+ 	const char *act = setup == SETUP_CONTEXT_ONLY ? "context" : "address";
+ 	unsigned long flags;
+@@ -4059,6 +4059,7 @@ static int xhci_setup_device(struct usb_hcd *hcd, struct usb_device *udev,
+ 	}
+ 
+ 	command->in_ctx = virt_dev->in_ctx;
++	command->timeout = timeout;
+ 
+ 	slot_ctx = xhci_get_slot_ctx(xhci, virt_dev->in_ctx);
+ 	ctrl_ctx = xhci_get_input_control_ctx(virt_dev->in_ctx);
+@@ -4185,14 +4186,14 @@ static int xhci_setup_device(struct usb_hcd *hcd, struct usb_device *udev,
+ 	return ret;
+ }
+ 
+-static int xhci_address_device(struct usb_hcd *hcd, struct usb_device *udev)
++static int xhci_address_device(struct usb_hcd *hcd, struct usb_device *udev, int timeout)
+ {
+-	return xhci_setup_device(hcd, udev, SETUP_CONTEXT_ADDRESS);
++	return xhci_setup_device(hcd, udev, SETUP_CONTEXT_ADDRESS, timeout);
+ }
+ 
+ static int xhci_enable_device(struct usb_hcd *hcd, struct usb_device *udev)
+ {
+-	return xhci_setup_device(hcd, udev, SETUP_CONTEXT_ONLY);
++	return xhci_setup_device(hcd, udev, SETUP_CONTEXT_ONLY, 0);
+ }
+ 
+ /*
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index 7e282b4522c0..ebdca8dd01c2 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -818,6 +818,7 @@ struct xhci_command {
+ 	struct completion		*completion;
+ 	union xhci_trb			*command_trb;
+ 	struct list_head		cmd_list;
++	int				timeout;
+ };
+ 
+ /* drop context bitmasks */
+diff --git a/include/linux/usb/hcd.h b/include/linux/usb/hcd.h
+index 61d4f0b793dc..b0fda87ad3a2 100644
+--- a/include/linux/usb/hcd.h
++++ b/include/linux/usb/hcd.h
+@@ -373,7 +373,8 @@ struct hc_driver {
+ 		 */
+ 	void	(*reset_bandwidth)(struct usb_hcd *, struct usb_device *);
+ 		/* Returns the hardware-chosen device address */
+-	int	(*address_device)(struct usb_hcd *, struct usb_device *udev);
++	int	(*address_device)(struct usb_hcd *, struct usb_device *udev,
++				  int timeout);
+ 		/* prepares the hardware to send commands to the device */
+ 	int	(*enable_device)(struct usb_hcd *, struct usb_device *udev);
+ 		/* Notifies the HCD after a hub descriptor is fetched.
+diff --git a/include/linux/usb/quirks.h b/include/linux/usb/quirks.h
+index eeb7c2157c72..0cb464e3eaf4 100644
+--- a/include/linux/usb/quirks.h
++++ b/include/linux/usb/quirks.h
+@@ -72,4 +72,7 @@
+ /* device has endpoints that should be ignored */
+ #define USB_QUIRK_ENDPOINT_IGNORE		BIT(15)
+ 
++/* short device address timeout */
++#define USB_QUIRK_SHORT_DEVICE_ADDR_TIMEOUT	BIT(16)
++
+ #endif /* __LINUX_USB_QUIRKS_H */
+-- 
+2.17.1
 
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
-
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
-
-Note that commit hashes shown below are subject to change due to rebase,
-trailer updates or similar. If in doubt, please check the listed branch.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: vfs.ctime
-
-[01/86] fs: new accessor methods for atime and mtime
-        https://git.kernel.org/vfs/vfs/c/22f45fee808d
-[02/86] fs: convert core infrastructure to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/6ac95fb71485
-[03/86] spufs: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/9953073d5f20
-[04/86] hypfs: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/1d64bfe22112
-[05/86] android: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/a8a74b6b4f2c
-[06/86] char: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/671ffa0775a7
-[07/86] qib: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/ebd5458f3b52
-[08/86] ibmasm: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/1d4257d57a41
-[09/86] misc: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/d4bf8378b9cb
-[10/86] x86: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/070601b1e496
-[11/86] tty: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/5c9f26b87bed
-[12/86] function: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/092f46404245
-[13/86] legacy: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/5c51d80e51d0
-[14/86] usb: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/4707a33afd6f
-[15/86] 9p: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/20fc454b4493
-[16/86] adfs: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/3e8d59046f6d
-[17/86] affs: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/60d4d0d37086
-[18/86] afs: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/6471772aa6fe
-[19/86] autofs: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/3eaad981548b
-[20/86] befs: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/21d0433caf69
-[21/86] bfs: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/06e502c123a6
-[22/86] btrfs: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/f62049d7838d
-[23/86] ceph: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/ac7750d84e38
-[24/86] coda: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/5c4bf2507baa
-[25/86] configfs: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/3b930e187f16
-[26/86] cramfs: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/bb0bf9d3bda8
-[27/86] debugfs: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/7dc950e659d6
-[28/86] devpts: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/a1eb5c26d5a1
-[29/86] efivarfs: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/17b5652aa824
-[30/86] efs: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/a3cfbea29e7d
-[31/86] erofs: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/2beccde96d66
-[32/86] exfat: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/522f3c42c9e7
-[33/86] ext2: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/07be81fce412
-[34/86] ext4: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/2ff285d78c4d
-[35/86] f2fs: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/c495130561ae
-[36/86] fat: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/e57260ae3226
-[37/86] freevxfs: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/a83513cd029e
-[38/86] fuse: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/5f1e57582b4e
-[39/86] gfs2: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/a5f1a9296668
-[40/86] hfs: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/7ee8d53576e9
-[41/86] hfsplus: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/2179ad3569f6
-[42/86] hostfs: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/c3e1be490207
-[43/86] hpfs: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/e08a2ea26b41
-[44/86] hugetlbfs: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/a9701db0ca64
-[45/86] isofs: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/362d327da07e
-[46/86] jffs2: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/36a8a5a63218
-[47/86] jfs: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/acd529413de5
-[48/86] kernfs: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/05acde68936b
-[49/86] minix: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/34c1ca111ec1
-[50/86] nfs: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/77e808456854
-[51/86] nfsd: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/a800ed7ebbbf
-[52/86] nilfs2: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/4ddc9518c2fa
-[53/86] ntfs: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/0d15c2118b1a
-[54/86] ntfs3: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/82f8d5fde753
-[55/86] ocfs2: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/45251ebaca70
-[56/86] omfs: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/e7c1ff814326
-[57/86] openpromfs: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/cb62db1d3c61
-[58/86] orangefs: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/68e257a49aed
-[59/86] overlayfs: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/d482d98dc1bd
-[60/86] proc: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/8c8afe8a25fa
-[61/86] pstore: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/b0be548328a2
-[62/86] qnx4: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/c28589f2d838
-[63/86] qnx6: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/ae0f3d29e728
-[64/86] ramfs: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/6315fd97a8fc
-[65/86] reiserfs: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/8eceb9b75a5b
-[66/86] romfs: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/6d3dd456da31
-[67/86] client: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/b14d4c14f51b
-[68/86] server: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/bec3d7ffcecd
-[69/86] squashfs: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/d7d5ff75af52
-[70/86] sysv: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/39f012d8743e
-[71/86] tracefs: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/22ada3856de8
-[72/86] ubifs: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/af8b66e1d4b7
-[73/86] udf: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/1da45142f95a
-[74/86] ufs: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/41c46d3bb9b3
-[75/86] vboxsf: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/cc36ec7935eb
-[76/86] xfs: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/ee3be90b2ba7
-[77/86] zonefs: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/8c798cc16b17
-[78/86] linux: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/dd53b64b6f51
-[79/86] ipc: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/f132b3723b71
-[80/86] bpf: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/448a018f67a3
-[81/86] mm: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/b6f5b3d5ffc9
-[82/86] sunrpc: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/fc9db028b8d7
-[83/86] apparmor: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/794ef2a745ec
-[84/86] selinux: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/3d57ee3686d7
-[85/86] security: convert to new timestamp accessors
-        https://git.kernel.org/vfs/vfs/c/71f6d9ebaf43
-[86/86] fs: rename inode i_atime and i_mtime fields
-        https://git.kernel.org/vfs/vfs/c/fea0e8fc7829
 
