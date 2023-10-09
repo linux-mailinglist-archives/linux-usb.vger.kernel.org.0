@@ -1,151 +1,188 @@
-Return-Path: <linux-usb+bounces-1302-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1303-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95FFB7BEA24
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 20:53:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B66ED7BEA31
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 20:57:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 094B12819EB
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 18:53:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D935F1C20C45
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 18:57:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C5CF3B2AA;
-	Mon,  9 Oct 2023 18:53:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3595C3B785;
+	Mon,  9 Oct 2023 18:57:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lv21Hteb"
+	dkim=pass (2048-bit key) header.d=dolce-energy.com header.i=@dolce-energy.com header.b="h8GUvjfg"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 208FE35880;
-	Mon,  9 Oct 2023 18:53:02 +0000 (UTC)
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com [IPv6:2a00:1450:4864:20::644])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05A0AF;
-	Mon,  9 Oct 2023 11:53:00 -0700 (PDT)
-Received: by mail-ej1-x644.google.com with SMTP id a640c23a62f3a-991c786369cso814835966b.1;
-        Mon, 09 Oct 2023 11:53:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696877579; x=1697482379; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=4iEFw2KWu0uLaXIWh95J9DkXgQ94Tm3AGN4RoICln98=;
-        b=Lv21Htebuds0cZAr+gOXmTjJMSbr2Z3yuu4bb9jt0U2CPeab+yAh31yIXeBTjmBrZb
-         Ujn7HtoPX3MzXJQKyj4ozksyVnoMVyMsfV0JXF2FKLv7y7QHt0omlDDjWeu473ubdS3N
-         eD2bQORfMkDZVNd9fj+kfUiwO3BKuYuKdZt5wE94D+Y9lYyJ5dgZ7GjbRGbh80ATREUE
-         lFakJ2AvQc5RZlXz5zIJ7+DrG6pi3NypNek1LcjwdZKRvFP6k4+XrYXQeSTMI8vOCdJ9
-         NKGVT0hpAUFpsLcIwcyIdIncG+yRHgZn7rYjeDbt+bdChLpERT7H5lN0IQd5bGf4YoEq
-         EDXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696877579; x=1697482379;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4iEFw2KWu0uLaXIWh95J9DkXgQ94Tm3AGN4RoICln98=;
-        b=InXUxhHfQJx2sKjVFTjVIhgJkxqYnW1D79Oiaxs7lHQc9uy6mpFn0Nq2WFs436irET
-         rH1oiioYu3xDHHVyQBUTbMe+rWr5nGbW2PMUhKyEW+bWiFbMZPCayw4jR9UkrMjUbWmE
-         pXd72odMF5xacHwGe5lNrgG6+803c563E0+2FEo9H4ih55VllQaPDHcJ2KMfsMa0lA1M
-         fSqqNq5Re7eyP+DkR0hJO0fDuwi1W/HVOmDGW6eA97uudFH4hlk+EZRnsorScntayFLr
-         8fETbZ9ywRa1qZwF5THzbrzQY5wchl0/CTN/B1NncFy4P0PMYiHEcdFkVd4jIo8ZsIdy
-         +9/w==
-X-Gm-Message-State: AOJu0YyarLPo8JIHT1XR0xSc+Ms1htpK4JoXAls4kCUzFslCYw8jSY7X
-	2RKwjy5amKTnsOP00TDDkY0=
-X-Google-Smtp-Source: AGHT+IHstENxO/CXBuztPUegYH2i+Eluu2FwXYIb3oRGpR+JbD37gpX5p6/pDya5W/Q4FEg4oGasbA==
-X-Received: by 2002:a17:906:fe4a:b0:9ae:5120:5147 with SMTP id wz10-20020a170906fe4a00b009ae51205147mr17596835ejb.38.1696877579020;
-        Mon, 09 Oct 2023 11:52:59 -0700 (PDT)
-Received: from [127.0.1.1] (2a02-8389-41cf-e200-0d7c-652f-4e74-10b8.cable.dynamic.v6.surfer.at. [2a02:8389:41cf:e200:d7c:652f:4e74:10b8])
-        by smtp.gmail.com with ESMTPSA id dc4-20020a170906c7c400b0098e34446464sm7115079ejb.25.2023.10.09.11.52.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Oct 2023 11:52:58 -0700 (PDT)
-From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Date: Mon, 09 Oct 2023 20:52:55 +0200
-Subject: [PATCH] net: usb: dm9601: fix uninitialized variable use in
- dm9601_mdio_read
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F4B738BD9
+	for <linux-usb@vger.kernel.org>; Mon,  9 Oct 2023 18:57:10 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70920B7
+	for <linux-usb@vger.kernel.org>; Mon,  9 Oct 2023 11:57:07 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3D0D0C0005;
+	Mon,  9 Oct 2023 18:57:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolce-energy.com;
+	s=gm1; t=1696877826;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bnKZT4FSGveLSHr4AjzjnhjmbEL82WU/51G8YVRdR70=;
+	b=h8GUvjfg3gZbqhyXYvmo2GIBlv9BomTawZBh5lQY67acTerKQC8OFCWCuJZAkwEohFSR4Y
+	xcbBZIwJoy7N0dnF7jV/Wy+Z5414VJ3r2vQChjH74aGwR/0j/eYN0tw436fE2S0607UwV/
+	hsT54NyeVYefT16au2c2A6aEw6yRAiMzeobFNVWUi6zE5Bz4qXAWxMuaIMoFBb5QRFjIH4
+	VqVECS/yLXky0eu1ilCm2/hh+DbJrpsn8CFvnv834m6WLFjGsJxnZjQb+KPUYmMMhhLkLu
+	cpZT9ys6vXWUMmHuzrdR/F1HnT+DRt3U4lQNnXrN/Mi6hpm3nN68eR++a3H5Kg==
+Message-ID: <2f70ac1f-81c4-4e0c-b079-30d26f3b770a@dolce-energy.com>
+Date: Mon, 9 Oct 2023 20:56:21 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231009-topic-dm9601_uninit_mdio_read-v1-1-d4d775e24e3b@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAAZMJGUC/x2NQQrDIBAAvxL2XEFTGmq/UoqscW32oIbVlELI3
- 2t6HAZmdqgkTBUeww5CH65ccgdzGWBeML9JcegMox6vRmurWll5ViHZSRu3Zc7cXApcnBAGheZ
- mzT1GH6YIveGxkvKCeV7OSsLaSE6xCkX+/sfP13H8APazsqmIAAAA
-To: Peter Korsgaard <peter@korsgaard.com>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- syzbot+1f53a30781af65d2c955@syzkaller.appspotmail.com
-Cc: netdev@vger.kernel.org, linux-usb@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- Javier Carrasco <javier.carrasco.cruz@gmail.com>
-X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1696877577; l=1746;
- i=javier.carrasco.cruz@gmail.com; s=20230509; h=from:subject:message-id;
- bh=mr8zo8GkO8oFsYnOO1Ir3z/Ohnh9ZkCWi74Q+XjdrAw=;
- b=Ci4voJZHNqhGCYzpafxEBwQNK2Id3/J6q0wWFflh/IM3YXHIfzqgqFA9hmTzXxoS1OJAXksGz
- LWVNIUycrJ1C1HWJbFsXM1X/UmIAfk6Gh9utnaVXx36HBu1VipFOaVJ
-X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
- pk=tIGJV7M+tCizagNijF0eGMBGcOsPD+0cWGfKjl4h6K8=
+User-Agent: Mozilla Thunderbird
+Subject: Re: usb-c port power not reset correctly (can't connect any device
+ after a phone was connected)
+Content-Language: fr
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+References: <9f99a188-cb45-439c-8006-dc0cd4e1ef3e@dolce-energy.com>
+ <2023100920-pushy-polygraph-f4a2@gregkh>
+From: jlmxyz <dev.delaboetie@dolce-energy.com>
+In-Reply-To: <2023100920-pushy-polygraph-f4a2@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-GND-Sasl: jl.m.a.l.e.t@dolce-energy.com
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-syzbot has found an uninit-value bug triggered by the dm9601 driver [1].
 
-This error happens because the variable res is not updated if the call
-to dm_read_shared_word returns an error or if no data is read (see
-__usbnet_read_cmd()). In this particular case -EPROTO was returned and
-res stayed uninitialized.
+Le 09/10/2023 à 19:58, Greg KH a écrit :
+> On Mon, Oct 09, 2023 at 12:50:54PM +0200, jlmxyz wrote:
+>> Hi,
+>>
+>> my hardware :https://wiki.gentoo.org/wiki/Lenovo_Yoga_900
+>> I use the pre-built gentoo linux kernel,
+>> Linux jlmyoga900 6.5.5-gentoo-dist #1 SMP PREEMPT_DYNAMIC Sat Sep 23 17:31:47 -00 2023 x86_64 Intel(R) Core(TM) i7-6500U CPU @ 2.50GHz GenuineIntel GNU/Linux
+>>
+>>
+>> output of lsusb, phone connected on usb-c port, phone in "share connection virtual network adaptater mode"
+>> $ lsusb -t
+>> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/6p, 5000M
+>>      |__ Port 3: Dev 12, If 0, Class=Wireless, Driver=rndis_host, 5000M
+>>      |__ Port 3: Dev 12, If 1, Class=CDC Data, Driver=rndis_host, 5000M
+>>      |__ Port 3: Dev 12, If 2, Class=Vendor Specific Class, Driver=, 5000M
+>> /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/12p, 480M
+>>      |__ Port 6: Dev 2, If 0, Class=Video, Driver=uvcvideo, 480M
+>>      |__ Port 6: Dev 2, If 1, Class=Video, Driver=uvcvideo, 480M
+>>      |__ Port 7: Dev 4, If 0, Class=Wireless, Driver=btusb, 12M
+>>      |__ Port 7: Dev 4, If 1, Class=Wireless, Driver=btusb, 12M
+>>
+>> output of lsusb, micro sd card connected on usb-c port using usb-A-usb-c adaptater (works on the phone),
+>> $ lsusb -t
+>> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/6p, 5000M
+>> /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/12p, 480M
+>>      |__ Port 6: Dev 2, If 0, Class=Video, Driver=uvcvideo, 480M
+>>      |__ Port 6: Dev 2, If 1, Class=Video, Driver=uvcvideo, 480M
+>>      |__ Port 7: Dev 4, If 0, Class=Wireless, Driver=btusb, 12M
+>>      |__ Port 7: Dev 4, If 1, Class=Wireless, Driver=btusb, 12M
+>>
+>> output of lsusb, micro sd card connected on usb-A port,
+>> $ lsusb -t
+>> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/6p, 5000M
+>>      |__ Port 2: Dev 13, If 0, Class=Mass Storage, Driver=usb-storage, 5000M
+>> /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/12p, 480M
+>>      |__ Port 6: Dev 2, If 0, Class=Video, Driver=uvcvideo, 480M
+>>      |__ Port 6: Dev 2, If 1, Class=Video, Driver=uvcvideo, 480M
+>>      |__ Port 7: Dev 4, If 0, Class=Wireless, Driver=btusb, 12M
+>>      |__ Port 7: Dev 4, If 1, Class=Wireless, Driver=btusb, 12M
+>>
+>> output of dmesg
+>> ---- connecting the phone
+>> [371134.453914] xhci_hcd 0000:00:14.0: WARN Set TR Deq Ptr cmd failed due to incorrect slot or ep state.
+>> [371162.893880] usb usb2-port3: config error
+>> [371163.527330] usb 2-3: new SuperSpeed USB device number 11 using xhci_hcd
+>> [371163.544872] usb 2-3: New USB device found, idVendor=04e8, idProduct=685d, bcdDevice= 4.14
+>> [371163.544881] usb 2-3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+>> [371163.544885] usb 2-3: Product: SM-N975F
+>> [371163.544888] usb 2-3: Manufacturer: samsung
+>> [371163.544890] usb 2-3: SerialNumber: RF8M73LKC5E
+>> [371181.443775] usb 2-3: USB disconnect, device number 11
+>> [371181.700584] usb 2-3: new SuperSpeed USB device number 12 using xhci_hcd
+>> [371181.718597] usb 2-3: New USB device found, idVendor=04e8, idProduct=6864, bcdDevice= 4.14
+>> [371181.718606] usb 2-3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+>> [371181.718610] usb 2-3: Product: SM-N975F
+>> [371181.718613] usb 2-3: Manufacturer: samsung
+>> [371181.718615] usb 2-3: SerialNumber: RF8M73LKC5E
+>> [371181.843263] usbcore: registered new interface driver cdc_ether
+>> [371181.850720] rndis_host 2-3:1.0 usb0: register 'rndis_host' at usb-0000:00:14.0-3, RNDIS device, 02:24:0a:73:0e:02
+>> [371181.851343] usbcore: registered new interface driver rndis_host
+>> [371181.905461] rndis_host 2-3:1.0 enp0s20f0u3: renamed from usb0
+>> [371275.791820] usb 2-3: USB disconnect, device number 12
+>> [371275.791890] rndis_host 2-3:1.0 enp0s20f0u3: unregister 'rndis_host' usb-0000:00:14.0-3, RNDIS device
+>> ----- disconnecting the phone connecting the usb masstorage usb-c port
+>> ----- disconnecting the masstorage usb-c - connecting same device on usb-A port next to it
+>> [371352.897323] usb 2-2: new SuperSpeed USB device number 13 using xhci_hcd
+>> [371352.916934] usb 2-2: New USB device found, idVendor=11b0, idProduct=3307, bcdDevice= 0.13
+>> [371352.916949] usb 2-2: New USB device strings: Mfr=3, Product=4, SerialNumber=2
+>> [371352.916951] usb 2-2: Product: UHSII uSD Reader
+>> [371352.916954] usb 2-2: Manufacturer: Kingston
+>> [371352.916955] usb 2-2: SerialNumber: 202006001890
+>> [371352.919919] usb-storage 2-2:1.0: USB Mass Storage device detected
+>> [371352.939695] scsi host3: usb-storage 2-2:1.0
+>> [371353.951776] scsi 3:0:0:0: Direct-Access     Kingston UHSII uSD Reader 0013 PQ: 0 ANSI: 6
+>> [371353.952333] sd 3:0:0:0: Attached scsi generic sg1 type 0
+>> [371354.333610] sd 3:0:0:0: [sdb] 500695040 512-byte logical blocks: (256 GB/239 GiB)
+>> [371354.334277] sd 3:0:0:0: [sdb] Write Protect is off
+>> [371354.334282] sd 3:0:0:0: [sdb] Mode Sense: 21 00 00 00
+>> [371354.334902] sd 3:0:0:0: [sdb] Write cache: disabled, read cache: enabled, doesn't support DPO or FUA
+>> [371354.338703]  sdb: sdb1
+>> [371354.338841] sd 3:0:0:0: [sdb] Attached SCSI removable disk
+>>
+>> there is no dmesg entry when connecting on the usb-c as if there was no power
+> I don't understand, it shows the phone connecting above.
 
-This can be avoided by checking the return value of dm_read_shared_word
-and returning an error if the read operation failed or no data was read.
+yes the phone is connecting, everything is fine as long as it's the 
+phone, this shows that the port is working
 
-[1] https://syzkaller.appspot.com/bug?extid=1f53a30781af65d2c955
+>
+>> I tried on phone to change the device powering the port, but I always get error, when connecting the phone, even if it is in "charge only" mode, the battery icon don't show any charging information.... looks like the port is always powered by the phone and the first time the device powering the port is choosen in power negociation, the port will after remain in slave-power mode on the laptop....
+> Are you sure the phone is handling this properly?  Many times it will
+> refuse to connect to a host at all until you tell it is safe to do so
+> somehow (like change the USB mode.)
+>
+>> I will gladely help troubleshooting the issue, having a usb port less over 3 is really problematic
+> I don't understand this question, sorry.
+>
+> greg k-h
 
-Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Reported-and-tested-by: syzbot+1f53a30781af65d2c955@syzkaller.appspotmail.com
----
- drivers/net/usb/dm9601.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+the issue is that the usb masstorage that should be seen in dmesg 
+between [371275.791890] and [371352.897323] has... not a single line in 
+dmesg, on this port, nothing works appart the phone, usb masstorage? not 
+working. usb jtag dongle? not working. usb uart? not working....
 
-diff --git a/drivers/net/usb/dm9601.c b/drivers/net/usb/dm9601.c
-index 48d7d278631e..e223daa93229 100644
---- a/drivers/net/usb/dm9601.c
-+++ b/drivers/net/usb/dm9601.c
-@@ -222,13 +222,20 @@ static int dm9601_mdio_read(struct net_device *netdev, int phy_id, int loc)
- 	struct usbnet *dev = netdev_priv(netdev);
- 
- 	__le16 res;
-+	int err;
- 
- 	if (phy_id) {
- 		netdev_dbg(dev->net, "Only internal phy supported\n");
- 		return 0;
- 	}
- 
--	dm_read_shared_word(dev, 1, loc, &res);
-+	err = dm_read_shared_word(dev, 1, loc, &res);
-+	if (err <= 0) {
-+		if (err == 0)
-+			err = -ENODATA;
-+		netdev_err(dev->net, "MDIO read error: %d\n", err);
-+		return err;
-+	}
- 
- 	netdev_dbg(dev->net,
- 		   "dm9601_mdio_read() phy_id=0x%02x, loc=0x%02x, returns=0x%04x\n",
+this looks like no device on this pc usb-c port is powered by the port, 
+and on usb-c port the devices can select which is powering the 
+communication, by default the phone will want to power the port since I 
+can connect the masstorage dongle on it (and the masstorage dongle won't 
+be detected unless powered)
 
----
-base-commit: 94f6f0550c625fab1f373bb86a6669b45e9748b3
-change-id: 20231009-topic-dm9601_uninit_mdio_read-a15918ffbd6f
+this looks like once I connected a phone not in charging mode, the 
+device powering the port is the phone, when I disconnect the phone, the 
+pc port remains in "slave power" and then won't power the port anymore. 
+When I plug the usb masstorage dongle on it, since the port isn't 
+providing power, it don't power the dongle and then there is no 
+detection of the dongle....
 
-Best regards,
--- 
-Javier Carrasco <javier.carrasco.cruz@gmail.com>
+best regards
 
 
