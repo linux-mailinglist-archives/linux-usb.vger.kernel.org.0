@@ -1,189 +1,151 @@
-Return-Path: <linux-usb+bounces-1262-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1263-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 135AB7BD86C
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 12:22:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C15707BD8FC
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 12:51:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 39A031C20B5D
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 10:22:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EB8561C20B6A
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 10:51:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05528182C6;
-	Mon,  9 Oct 2023 10:22:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83635156C3;
+	Mon,  9 Oct 2023 10:51:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="mRFPzkXX"
+	dkim=pass (2048-bit key) header.d=dolce-energy.com header.i=@dolce-energy.com header.b="FPK7F6yM"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8123E168D3
-	for <linux-usb@vger.kernel.org>; Mon,  9 Oct 2023 10:22:12 +0000 (UTC)
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2042.outbound.protection.outlook.com [40.107.21.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E2099F;
-	Mon,  9 Oct 2023 03:22:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AsGZb2pxkezlw/UAdV5Vb/mAdwMNK6Um5iPuIT0hmJqWxtMBkZAI55+JpPWZdR3TDHxjF9rk23Nt50QUU/mAxhxxg5pJCRA8B2rP54Ty8VxFjbn9gEo8hKUOh73m4W353dGMNsi84SSRHdxGds125Ih+2HBWv4JvQ+OwceDz5wjta1UxDkzmKMZSS4arc2flOg10PLuisjkV3eDiKH8QYmecU896Z8H+8wUfljE1MkfUupB1tPwSbPq0bZQqEGMtUkpbOCk6yBFB9U3Q5eEwf+BQKaBpBpJxNPwKEc/cyGr1nRPeTHkgdFLadQ6zQYVO6u601NiAJQcYTJzBJXfHKA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cw3IcPxKO/a+biabGfCLAQjFkoBIAQg+XR4EPlklovM=;
- b=J0G0rnsIdmq238ulAoMLs+7mlHjoY8YWMaLkS3KhUoIuoQhbP5t90lNxnMSQY11rC8B0FzfObwmRsCqkhrYxEMzDvZ718NsigmcfJB29YSC+JjgaohkBSkIIoXlorr2HoT9AcqI7u4tfJWcWix3G2ZWCLWja5lNjHZaKwZFoaoF9rl2k49Z3Kf7d0PxUTUYBcQBfgEpXgPYvk7Kpc3KDY4242jZb9Y+392w8vcXjRpeedPJK0oCKnaWLSIJuIv1tzbX1VXugSbMbgnICfBrWkNobdlqUfQxoQ1PJheTT22WHmzt69G2hX5Ub42qxzhUuYiHAJQoiPfja8wfFVd/2EA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cw3IcPxKO/a+biabGfCLAQjFkoBIAQg+XR4EPlklovM=;
- b=mRFPzkXXcNocKabw/7f1RXuHBW1sBbgM8C4mvuSBHLs2sNg4xcczIKq6gIxXFg4ZnSoH4VkHp3nV4AePrEgMsJq5DkTVRh3C5HWYzE4viKUdc+vaQhuHvehoNsd7M4RU4Frm57PaRSJ6vfQKKSDkdCanVE56twRpP89emz8MeeX5rSulfEr6etW9lHQFhD55tT6lJjrJH8lVCd7DElLjhZJoxa5Ehu0/Zfb25ERw9NAApWq4l9iyAEtY2GYpe+G/QDBj6oeRLNQFlNKCOU/HEK9CJsWDOsFAqqowsXAkgqASYaxzWf/mXPNfhr1H3inULoaPA1oFgO75bY2oM0Vl5g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from DB8PR04MB7097.eurprd04.prod.outlook.com (2603:10a6:10:12a::11)
- by VI1PR04MB6830.eurprd04.prod.outlook.com (2603:10a6:803:132::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.36; Mon, 9 Oct
- 2023 10:22:04 +0000
-Received: from DB8PR04MB7097.eurprd04.prod.outlook.com
- ([fe80::5ad2:2cf9:afd5:99fd]) by DB8PR04MB7097.eurprd04.prod.outlook.com
- ([fe80::5ad2:2cf9:afd5:99fd%2]) with mapi id 15.20.6863.032; Mon, 9 Oct 2023
- 10:22:04 +0000
-Message-ID: <a32e996a-a9ed-4332-9a07-46bf66913db7@suse.com>
-Date: Mon, 9 Oct 2023 12:22:01 +0200
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v20 1/4] usb: Add support for Intel LJCA device
-To: Wentong Wu <wentong.wu@intel.com>, gregkh@linuxfoundation.org,
- oneukum@suse.com, wsa@kernel.org, andi.shyti@linux.intel.com,
- broonie@kernel.org
-Cc: bartosz.golaszewski@linaro.org, linus.walleij@linaro.org,
- hdegoede@redhat.com, linux-usb@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-spi@vger.kernel.org, sakari.ailus@linux.intel.com,
- zhifeng.wang@intel.com, linux-gpio@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <1696833205-16716-1-git-send-email-wentong.wu@intel.com>
- <1696833205-16716-2-git-send-email-wentong.wu@intel.com>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <1696833205-16716-2-git-send-email-wentong.wu@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR2P281CA0010.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a::20) To DB8PR04MB7097.eurprd04.prod.outlook.com
- (2603:10a6:10:12a::11)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CD5E210B
+	for <linux-usb@vger.kernel.org>; Mon,  9 Oct 2023 10:51:33 +0000 (UTC)
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A6719D
+	for <linux-usb@vger.kernel.org>; Mon,  9 Oct 2023 03:51:31 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 61A73FF805
+	for <linux-usb@vger.kernel.org>; Mon,  9 Oct 2023 10:51:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolce-energy.com;
+	s=gm1; t=1696848689;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=JeK/igannISDpquIOtGRB3F+sXtOcKemIE/t5O87tyI=;
+	b=FPK7F6yMnxGUUwtbrvswNcNg5fHomcPG0LbbOBrtx31Gmlg3kALBEX3mu6/RQvKgnGtFRI
+	jIrW0RocmIgaxibBwBGgMsVQXz7/v91CqKOUr7tblkH3oo6rzdn5K5UvWcM1KvhVBBBtaJ
+	2CKJQMo9Z8/L88bLpk6vaaq+3E4hKKs/quIi+btR6rRSXp5EkbFA+ndLQfmy4dTYbeol3r
+	qlBJMTxkfFKrouZ+jLsHOfG8xad0u4h/Lh7H2YEBngi47e8n2TRrra/DL2IxU4Bb/iejtR
+	NH9rYE1/5naTtDdL29HtHJlHvCzOrS/rsvLgxSm7CCGW7/+9aqYwg7V96HM7vg==
+Message-ID: <9f99a188-cb45-439c-8006-dc0cd4e1ef3e@dolce-energy.com>
+Date: Mon, 9 Oct 2023 12:50:54 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB8PR04MB7097:EE_|VI1PR04MB6830:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3262f6ce-89b2-48ac-2c5c-08dbc8b19510
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	NVKqTPwRUioHpaIz2BQ2gMkIefKi88E/RIsy70j5sy+EsyTnIQvNnM2PRLX1YY0mPSk/anHCcd1a0ES3g1MoZk8YB2f42zleqw0fLbF4nlRdXWyPbtElYxjliJI2tXmZImcyQSRkHeE0yZ+tM03b80XJV2COpS941F61LGDh0aZye24wbGH6VlJrAB4u2zfPzFy2a5pz9foGVbg5QfYe3wdH34rbiaGMrPULvybLkt9INjoQ9+wTOy9+F+20fKGZg6pdSbkrfe1Msj5mqiX0mzPESNVmwPdFcCx+6AEjSpLA36Ek+sJKjjGr9c8Xa+Dul7WyQd6QCZUxwDlRIaiqzse0IS8J+p4GeqkI+43AwXP5GYR1ceg8EeSfTRvIM06j560SpCxhRgryU20mpD65VH7ThDPW+qTKEiK8mgjQKmJq6B/ZJs8eqPLcAEGfqI6xoNVwqlEsUB2/myeiX7dc1vMDW5Fl0TXs+OOeFllIr1+Uy4mj5NC4Yy6hCdnYWq8ow0yTT9P5M5yG2DnbmhvHihW0IdvV4S/H4IzXoRrXHkxfATssoWz4L4U+Sjn4rmC91Xem2vSMW/qsLygW1ocyvp7w/CGjdnE9K6e3P9LTvqumHY3TzNroE/mA8J6hPj475Po78Hveu1KnXBScbfQzTQ==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB7097.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(346002)(376002)(366004)(136003)(39850400004)(230922051799003)(64100799003)(186009)(1800799009)(451199024)(53546011)(2616005)(8676002)(478600001)(6506007)(6512007)(6666004)(8936002)(83380400001)(7416002)(2906002)(4326008)(66556008)(66476007)(66946007)(6486002)(5660300002)(41300700001)(316002)(38100700002)(36756003)(31696002)(86362001)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?T3pZTi9wSWtoQUJnUk13cWl2ejlPRitySmlXWk9pdXJRVXdQQnVQSUYwbDFt?=
- =?utf-8?B?dUdEQVVLL0tQSTJYNDZaNFB1blg0aWl5T1ZNUVk0dGgzQlBtQ0VycWVaSW5G?=
- =?utf-8?B?V25CTG9zaGhCS3lyYXVVdnpoWlZ0WWN2K1dnYlE2V0orZjkzRENyRDVVMTZi?=
- =?utf-8?B?SU5IWkdWRHRmQm9paHNMM2FRNFRFLzNuZG0rZkhkR3UvTjlGNURENkpZMzJ0?=
- =?utf-8?B?SG9sNmdZbThDenpUeWp0ZU8ydWgzNVl0WnF5SUVKMzRCMEluYUtWRE1Wam93?=
- =?utf-8?B?aHRCVHA2UVdHVVhSRWNlVUhVVnZtT3BOT0lYeHlHenNHV040eStiamJJUmlZ?=
- =?utf-8?B?OTBiZ1VEckRDZUNQc1hYL1dHRTlid2FWS3hnWWd3TEJ0YWZDMyt5RUpnbStR?=
- =?utf-8?B?V1NmVmswK2VocVBDMTdvZDMya2gzS1J0MEFVREFOSTZkY04rK3pDQ0creU5v?=
- =?utf-8?B?N2tlR3M5QkwrTjNDanVrUWVuaUhyMklyWGJJM3ljWk5sVHdoVEtKVm56eEhK?=
- =?utf-8?B?NjhDbzI5ZnZPaVJORFMrL1RiNDFQQ0x1WG40eXVhVUlCNzdtc0FzQmZMYzNa?=
- =?utf-8?B?T0xPcFNSSndhMjdNYjE2MHhuaVRXbVhpQzRUc0l4cGhYZGRhQ1FHTlJuNkM2?=
- =?utf-8?B?dXpNemdYclJwVnp1VEswTkhBOEVCei9OSldXbkRmdmlPZlo5Qkt4eldyYWs1?=
- =?utf-8?B?ZnZlU0F1cXh4aElJemZhWGsvMkJIUzg4OEoxb09UL2l1TENQblBrVkhXQVhV?=
- =?utf-8?B?QURQeEJxVXFFRWpoa1R6a1JEWTBNeVlPc0xXRmUzRjJoR1MyMEcxQVkxVk9y?=
- =?utf-8?B?SVFWdjZpL0VOZWFQRmVhSGV3a25ObkRHVHZKZm41Q0I0U01zSlRNYzVhc3hu?=
- =?utf-8?B?MmY2Y2VMb21zU2gyT1dCaytRT1NuMFVIMGdsZ0Y2MEc4aXJpS2RhQmxPbDhO?=
- =?utf-8?B?VjVEcnJ2TXlEbFgvMjhYa216Wm52NUpSQ01FT2ltbVdITlNVbFBsRnRRUUhl?=
- =?utf-8?B?aHlDaXdzQ2QzcHlWNTBTVjl2Tk1wMUxyRzlpV0lYWVI5QnErckl5WmVCcXlB?=
- =?utf-8?B?Wk9Rc0lIL1pSM01GMkF4S1VROWk4b0lpZzdLSDVrNUlKOUVMVlozZzNrY1oz?=
- =?utf-8?B?RDQ4VTJUUWlZV3VYQmFYYkJPM1IxRnJTa1FrQ29GeGg4d09oNStRREVFQWp2?=
- =?utf-8?B?aWtKZ2FEbWxza1JRN2ZYc2pyZHpDTHVpcVdPTC90UHNBYWlHL1JQQjRyV0M3?=
- =?utf-8?B?d3JvZ09vbFJNU0I4USttL3NWeVBXbzNicWMyQlV1RGViakRzWWJtbUM2UnNI?=
- =?utf-8?B?QUdBYWljR0ZyZzVKS2l6ZW0vUFNQQk1lRCsxYzQ0Mmo2VnhlcDlaSklYTm1I?=
- =?utf-8?B?SjlxcUlvMnBqalBYazYwcnBLamo4dTNIazFqWXlLVC9KSjdHVFRqOVhEK3VL?=
- =?utf-8?B?OEpQK0Z3ZnozTng4UlZsekY1OWc0ZmdDbkVKTWY1b1dYQVRFbTJTbmYxb2Rw?=
- =?utf-8?B?aFo5RGxCeFpXS3FqdDZ6WHg5QWxrTmNVS0ttVzFFODBsbHV2WEtOT3dnWk9K?=
- =?utf-8?B?eGhOaWJMTU1VSksyd0hGNlVjMmxPR3hPdTI2SjUvVGs5cnoxd3VPOWE3ajdI?=
- =?utf-8?B?dkQxVUk4bmlwb0RMTHlxV0NwdWJLckdTdG5lZGt6YmtwWitQd0p1dzdjSWgr?=
- =?utf-8?B?cE5tUUtzd1liTExVeHpqZmQrL0hiaHhXbmR6QS9aN0wrRy9HdHhHWWRrQjUx?=
- =?utf-8?B?Q29Uc2s4c01xaS81SWRpYktEb1pwYU5odlpFNzRCb210b3VKY3lEWVB4YnRC?=
- =?utf-8?B?Z1VtMzZIODROSzQvN293a2E4NnlGa0VXcUNHY0YyRzhVd1VHSWxKSzBlS0V1?=
- =?utf-8?B?WUF6U211NEJncjJqS3UrT0hmTGd4TlpmS2VSaUduS0xtQldwSjRVRGordTRF?=
- =?utf-8?B?b012aExzR0VOTGRJdDM3WmlyT3AydGdNeGRDR3QzOGRxakM3SURMdTNMRUR3?=
- =?utf-8?B?OHpjSEVmMjlzRkNnQkp3anV0RE5KQkN3SHRCTzFsTEN5a3FkRGpJZHl4UnlK?=
- =?utf-8?B?NWRQMkExMk9NWjdOcHdoQ3ZybmpQQXdPV21iRU1HSWFueDh6VTNvN1dQUVJm?=
- =?utf-8?B?T1BOREcxYW9HcmNlVnFQYWpyc0h4eHVOVHg3bzNGb3kzMHlpMmtPV2lac3Rr?=
- =?utf-8?Q?Bt7ofvezEB4zNnyjsqncchsj20zxCbtG+XpYxs9INI5M?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3262f6ce-89b2-48ac-2c5c-08dbc8b19510
-X-MS-Exchange-CrossTenant-AuthSource: DB8PR04MB7097.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Oct 2023 10:22:04.1193
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1/lrS4zfxai+e4ZnMNfAZABcaJ6Fcx2l+Q5Y+e+piNLkLGouk3kmyyceDJSF8m8Qip90nz9xjqXSLLvQ5RO7kQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6830
+User-Agent: Mozilla Thunderbird
+From: jlmxyz <dev.delaboetie@dolce-energy.com>
+Content-Language: fr
+To: linux-usb@vger.kernel.org
+Subject: usb-c port power not reset correctly (can't connect any device after
+ a phone was connected)
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-GND-Sasl: jl.m.a.l.e.t@dolce-energy.com
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
+	SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On 09.10.23 08:33, Wentong Wu wrote:
-> Implements the USB part of Intel USB-I2C/GPIO/SPI adapter device
-> named "La Jolla Cove Adapter" (LJCA).
-> 
-> The communication between the various LJCA module drivers and the
-> hardware will be muxed/demuxed by this driver. Three modules (
-> I2C, GPIO, and SPI) are supported currently.
-> 
-> Each sub-module of LJCA device is identified by type field within
-> the LJCA message header.
-> 
-> The sub-modules of LJCA can use ljca_transfer() to issue a transfer
-> between host and hardware. And ljca_register_event_cb is exported
-> to LJCA sub-module drivers for hardware event subscription.
-> 
-> The minimum code in ASL that covers this board is
-> Scope (\_SB.PCI0.DWC3.RHUB.HS01)
->      {
->          Device (GPIO)
->          {
->              Name (_ADR, Zero)
->              Name (_STA, 0x0F)
->          }
-> 
->          Device (I2C)
->          {
->              Name (_ADR, One)
->              Name (_STA, 0x0F)
->          }
-> 
->          Device (SPI)
->          {
->              Name (_ADR, 0x02)
->              Name (_STA, 0x0F)
->          }
->      }
-> 
-> Signed-off-by: Wentong Wu <wentong.wu@intel.com>
-> Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
-> Tested-by: Hans de Goede <hdegoede@redhat.com>
-Reviewed-by: Oliver Neukum <oneukum@suse.com>
+Hi,
+
+my hardware :https://wiki.gentoo.org/wiki/Lenovo_Yoga_900
+I use the pre-built gentoo linux kernel,
+Linux jlmyoga900 6.5.5-gentoo-dist #1 SMP PREEMPT_DYNAMIC Sat Sep 23 17:31:47 -00 2023 x86_64 Intel(R) Core(TM) i7-6500U CPU @ 2.50GHz GenuineIntel GNU/Linux
+
+
+output of lsusb, phone connected on usb-c port, phone in "share connection virtual network adaptater mode"
+$ lsusb -t
+/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/6p, 5000M
+     |__ Port 3: Dev 12, If 0, Class=Wireless, Driver=rndis_host, 5000M
+     |__ Port 3: Dev 12, If 1, Class=CDC Data, Driver=rndis_host, 5000M
+     |__ Port 3: Dev 12, If 2, Class=Vendor Specific Class, Driver=, 5000M
+/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/12p, 480M
+     |__ Port 6: Dev 2, If 0, Class=Video, Driver=uvcvideo, 480M
+     |__ Port 6: Dev 2, If 1, Class=Video, Driver=uvcvideo, 480M
+     |__ Port 7: Dev 4, If 0, Class=Wireless, Driver=btusb, 12M
+     |__ Port 7: Dev 4, If 1, Class=Wireless, Driver=btusb, 12M
+
+output of lsusb, micro sd card connected on usb-c port using usb-A-usb-c adaptater (works on the phone),
+$ lsusb -t
+/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/6p, 5000M
+/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/12p, 480M
+     |__ Port 6: Dev 2, If 0, Class=Video, Driver=uvcvideo, 480M
+     |__ Port 6: Dev 2, If 1, Class=Video, Driver=uvcvideo, 480M
+     |__ Port 7: Dev 4, If 0, Class=Wireless, Driver=btusb, 12M
+     |__ Port 7: Dev 4, If 1, Class=Wireless, Driver=btusb, 12M
+
+output of lsusb, micro sd card connected on usb-A port,
+$ lsusb -t
+/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/6p, 5000M
+     |__ Port 2: Dev 13, If 0, Class=Mass Storage, Driver=usb-storage, 5000M
+/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/12p, 480M
+     |__ Port 6: Dev 2, If 0, Class=Video, Driver=uvcvideo, 480M
+     |__ Port 6: Dev 2, If 1, Class=Video, Driver=uvcvideo, 480M
+     |__ Port 7: Dev 4, If 0, Class=Wireless, Driver=btusb, 12M
+     |__ Port 7: Dev 4, If 1, Class=Wireless, Driver=btusb, 12M
+
+output of dmesg
+---- connecting the phone
+[371134.453914] xhci_hcd 0000:00:14.0: WARN Set TR Deq Ptr cmd failed due to incorrect slot or ep state.
+[371162.893880] usb usb2-port3: config error
+[371163.527330] usb 2-3: new SuperSpeed USB device number 11 using xhci_hcd
+[371163.544872] usb 2-3: New USB device found, idVendor=04e8, idProduct=685d, bcdDevice= 4.14
+[371163.544881] usb 2-3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[371163.544885] usb 2-3: Product: SM-N975F
+[371163.544888] usb 2-3: Manufacturer: samsung
+[371163.544890] usb 2-3: SerialNumber: RF8M73LKC5E
+[371181.443775] usb 2-3: USB disconnect, device number 11
+[371181.700584] usb 2-3: new SuperSpeed USB device number 12 using xhci_hcd
+[371181.718597] usb 2-3: New USB device found, idVendor=04e8, idProduct=6864, bcdDevice= 4.14
+[371181.718606] usb 2-3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+[371181.718610] usb 2-3: Product: SM-N975F
+[371181.718613] usb 2-3: Manufacturer: samsung
+[371181.718615] usb 2-3: SerialNumber: RF8M73LKC5E
+[371181.843263] usbcore: registered new interface driver cdc_ether
+[371181.850720] rndis_host 2-3:1.0 usb0: register 'rndis_host' at usb-0000:00:14.0-3, RNDIS device, 02:24:0a:73:0e:02
+[371181.851343] usbcore: registered new interface driver rndis_host
+[371181.905461] rndis_host 2-3:1.0 enp0s20f0u3: renamed from usb0
+[371275.791820] usb 2-3: USB disconnect, device number 12
+[371275.791890] rndis_host 2-3:1.0 enp0s20f0u3: unregister 'rndis_host' usb-0000:00:14.0-3, RNDIS device
+----- disconnecting the phone connecting the usb masstorage usb-c port
+----- disconnecting the masstorage usb-c - connecting same device on usb-A port next to it
+[371352.897323] usb 2-2: new SuperSpeed USB device number 13 using xhci_hcd
+[371352.916934] usb 2-2: New USB device found, idVendor=11b0, idProduct=3307, bcdDevice= 0.13
+[371352.916949] usb 2-2: New USB device strings: Mfr=3, Product=4, SerialNumber=2
+[371352.916951] usb 2-2: Product: UHSII uSD Reader
+[371352.916954] usb 2-2: Manufacturer: Kingston
+[371352.916955] usb 2-2: SerialNumber: 202006001890
+[371352.919919] usb-storage 2-2:1.0: USB Mass Storage device detected
+[371352.939695] scsi host3: usb-storage 2-2:1.0
+[371353.951776] scsi 3:0:0:0: Direct-Access     Kingston UHSII uSD Reader 0013 PQ: 0 ANSI: 6
+[371353.952333] sd 3:0:0:0: Attached scsi generic sg1 type 0
+[371354.333610] sd 3:0:0:0: [sdb] 500695040 512-byte logical blocks: (256 GB/239 GiB)
+[371354.334277] sd 3:0:0:0: [sdb] Write Protect is off
+[371354.334282] sd 3:0:0:0: [sdb] Mode Sense: 21 00 00 00
+[371354.334902] sd 3:0:0:0: [sdb] Write cache: disabled, read cache: enabled, doesn't support DPO or FUA
+[371354.338703]  sdb: sdb1
+[371354.338841] sd 3:0:0:0: [sdb] Attached SCSI removable disk
+
+there is no dmesg entry when connecting on the usb-c as if there was no power
+I tried on phone to change the device powering the port, but I always get error, when connecting the phone, even if it is in "charge only" mode, the battery icon don't show any charging information.... looks like the port is always powered by the phone and the first time the device powering the port is choosen in power negociation, the port will after remain in slave-power mode on the laptop....
+
+I will gladely help troubleshooting the issue, having a usb port less over 3 is really problematic
+don't know if I can change the settings of the port using /sys?
+
+thanks and regards
+JL
+
 
