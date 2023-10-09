@@ -1,188 +1,114 @@
-Return-Path: <linux-usb+bounces-1303-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1304-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B66ED7BEA31
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 20:57:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 023127BEA71
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 21:16:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D935F1C20C45
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 18:57:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B1B4D281B06
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 19:16:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3595C3B785;
-	Mon,  9 Oct 2023 18:57:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dolce-energy.com header.i=@dolce-energy.com header.b="h8GUvjfg"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DB573B7B3;
+	Mon,  9 Oct 2023 19:16:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F4B738BD9
-	for <linux-usb@vger.kernel.org>; Mon,  9 Oct 2023 18:57:10 +0000 (UTC)
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70920B7
-	for <linux-usb@vger.kernel.org>; Mon,  9 Oct 2023 11:57:07 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3D0D0C0005;
-	Mon,  9 Oct 2023 18:57:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolce-energy.com;
-	s=gm1; t=1696877826;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bnKZT4FSGveLSHr4AjzjnhjmbEL82WU/51G8YVRdR70=;
-	b=h8GUvjfg3gZbqhyXYvmo2GIBlv9BomTawZBh5lQY67acTerKQC8OFCWCuJZAkwEohFSR4Y
-	xcbBZIwJoy7N0dnF7jV/Wy+Z5414VJ3r2vQChjH74aGwR/0j/eYN0tw436fE2S0607UwV/
-	hsT54NyeVYefT16au2c2A6aEw6yRAiMzeobFNVWUi6zE5Bz4qXAWxMuaIMoFBb5QRFjIH4
-	VqVECS/yLXky0eu1ilCm2/hh+DbJrpsn8CFvnv834m6WLFjGsJxnZjQb+KPUYmMMhhLkLu
-	cpZT9ys6vXWUMmHuzrdR/F1HnT+DRt3U4lQNnXrN/Mi6hpm3nN68eR++a3H5Kg==
-Message-ID: <2f70ac1f-81c4-4e0c-b079-30d26f3b770a@dolce-energy.com>
-Date: Mon, 9 Oct 2023 20:56:21 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF0C93B296
+	for <linux-usb@vger.kernel.org>; Mon,  9 Oct 2023 19:16:29 +0000 (UTC)
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by lindbergh.monkeyblade.net (Postfix) with SMTP id AB861B6
+	for <linux-usb@vger.kernel.org>; Mon,  9 Oct 2023 12:16:26 -0700 (PDT)
+Received: (qmail 155547 invoked by uid 1000); 9 Oct 2023 15:16:25 -0400
+Date: Mon, 9 Oct 2023 15:16:25 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Hardik Gajjar <hgajjar@de.adit-jv.com>
+Cc: mathias.nyman@intel.com, gregkh@linuxfoundation.org,
+  yangyingliang@huawei.com, jinpu.wang@ionos.com, linux-usb@vger.kernel.org,
+  linux-kernel@vger.kernel.org, erosca@de.adit-jv.com
+Subject: Re: [PATCH v2] usb: core: hub: Add quirks for reducing device
+ address timeout
+Message-ID: <66f874d3-b480-4748-8732-d0cdce3ab4b7@rowland.harvard.edu>
+References: <--in-reply-to=20231006153808.9758-1-hgajjar@de.adit-jv.com>
+ <20231009161402.104224-1-hgajjar@de.adit-jv.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: usb-c port power not reset correctly (can't connect any device
- after a phone was connected)
-Content-Language: fr
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-References: <9f99a188-cb45-439c-8006-dc0cd4e1ef3e@dolce-energy.com>
- <2023100920-pushy-polygraph-f4a2@gregkh>
-From: jlmxyz <dev.delaboetie@dolce-energy.com>
-In-Reply-To: <2023100920-pushy-polygraph-f4a2@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-GND-Sasl: jl.m.a.l.e.t@dolce-energy.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231009161402.104224-1-hgajjar@de.adit-jv.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
+On Mon, Oct 09, 2023 at 06:14:02PM +0200, Hardik Gajjar wrote:
+> Currently, the timeout for the set address command is fixed at
+> 5 seconds in the xhci driver. This means the host waits up to 5
+> seconds to receive a response for the set_address command from
+> the device.
+> 
+> In the automotive context, most smartphone enumerations, including
+> screen projection, should ideally complete within 3 seconds.
+> Achieving this is impossible in scenarios where the set_address is
+> not successful and waits for a timeout.
 
-Le 09/10/2023 à 19:58, Greg KH a écrit :
-> On Mon, Oct 09, 2023 at 12:50:54PM +0200, jlmxyz wrote:
->> Hi,
->>
->> my hardware :https://wiki.gentoo.org/wiki/Lenovo_Yoga_900
->> I use the pre-built gentoo linux kernel,
->> Linux jlmyoga900 6.5.5-gentoo-dist #1 SMP PREEMPT_DYNAMIC Sat Sep 23 17:31:47 -00 2023 x86_64 Intel(R) Core(TM) i7-6500U CPU @ 2.50GHz GenuineIntel GNU/Linux
->>
->>
->> output of lsusb, phone connected on usb-c port, phone in "share connection virtual network adaptater mode"
->> $ lsusb -t
->> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/6p, 5000M
->>      |__ Port 3: Dev 12, If 0, Class=Wireless, Driver=rndis_host, 5000M
->>      |__ Port 3: Dev 12, If 1, Class=CDC Data, Driver=rndis_host, 5000M
->>      |__ Port 3: Dev 12, If 2, Class=Vendor Specific Class, Driver=, 5000M
->> /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/12p, 480M
->>      |__ Port 6: Dev 2, If 0, Class=Video, Driver=uvcvideo, 480M
->>      |__ Port 6: Dev 2, If 1, Class=Video, Driver=uvcvideo, 480M
->>      |__ Port 7: Dev 4, If 0, Class=Wireless, Driver=btusb, 12M
->>      |__ Port 7: Dev 4, If 1, Class=Wireless, Driver=btusb, 12M
->>
->> output of lsusb, micro sd card connected on usb-c port using usb-A-usb-c adaptater (works on the phone),
->> $ lsusb -t
->> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/6p, 5000M
->> /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/12p, 480M
->>      |__ Port 6: Dev 2, If 0, Class=Video, Driver=uvcvideo, 480M
->>      |__ Port 6: Dev 2, If 1, Class=Video, Driver=uvcvideo, 480M
->>      |__ Port 7: Dev 4, If 0, Class=Wireless, Driver=btusb, 12M
->>      |__ Port 7: Dev 4, If 1, Class=Wireless, Driver=btusb, 12M
->>
->> output of lsusb, micro sd card connected on usb-A port,
->> $ lsusb -t
->> /:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/6p, 5000M
->>      |__ Port 2: Dev 13, If 0, Class=Mass Storage, Driver=usb-storage, 5000M
->> /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/12p, 480M
->>      |__ Port 6: Dev 2, If 0, Class=Video, Driver=uvcvideo, 480M
->>      |__ Port 6: Dev 2, If 1, Class=Video, Driver=uvcvideo, 480M
->>      |__ Port 7: Dev 4, If 0, Class=Wireless, Driver=btusb, 12M
->>      |__ Port 7: Dev 4, If 1, Class=Wireless, Driver=btusb, 12M
->>
->> output of dmesg
->> ---- connecting the phone
->> [371134.453914] xhci_hcd 0000:00:14.0: WARN Set TR Deq Ptr cmd failed due to incorrect slot or ep state.
->> [371162.893880] usb usb2-port3: config error
->> [371163.527330] usb 2-3: new SuperSpeed USB device number 11 using xhci_hcd
->> [371163.544872] usb 2-3: New USB device found, idVendor=04e8, idProduct=685d, bcdDevice= 4.14
->> [371163.544881] usb 2-3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
->> [371163.544885] usb 2-3: Product: SM-N975F
->> [371163.544888] usb 2-3: Manufacturer: samsung
->> [371163.544890] usb 2-3: SerialNumber: RF8M73LKC5E
->> [371181.443775] usb 2-3: USB disconnect, device number 11
->> [371181.700584] usb 2-3: new SuperSpeed USB device number 12 using xhci_hcd
->> [371181.718597] usb 2-3: New USB device found, idVendor=04e8, idProduct=6864, bcdDevice= 4.14
->> [371181.718606] usb 2-3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
->> [371181.718610] usb 2-3: Product: SM-N975F
->> [371181.718613] usb 2-3: Manufacturer: samsung
->> [371181.718615] usb 2-3: SerialNumber: RF8M73LKC5E
->> [371181.843263] usbcore: registered new interface driver cdc_ether
->> [371181.850720] rndis_host 2-3:1.0 usb0: register 'rndis_host' at usb-0000:00:14.0-3, RNDIS device, 02:24:0a:73:0e:02
->> [371181.851343] usbcore: registered new interface driver rndis_host
->> [371181.905461] rndis_host 2-3:1.0 enp0s20f0u3: renamed from usb0
->> [371275.791820] usb 2-3: USB disconnect, device number 12
->> [371275.791890] rndis_host 2-3:1.0 enp0s20f0u3: unregister 'rndis_host' usb-0000:00:14.0-3, RNDIS device
->> ----- disconnecting the phone connecting the usb masstorage usb-c port
->> ----- disconnecting the masstorage usb-c - connecting same device on usb-A port next to it
->> [371352.897323] usb 2-2: new SuperSpeed USB device number 13 using xhci_hcd
->> [371352.916934] usb 2-2: New USB device found, idVendor=11b0, idProduct=3307, bcdDevice= 0.13
->> [371352.916949] usb 2-2: New USB device strings: Mfr=3, Product=4, SerialNumber=2
->> [371352.916951] usb 2-2: Product: UHSII uSD Reader
->> [371352.916954] usb 2-2: Manufacturer: Kingston
->> [371352.916955] usb 2-2: SerialNumber: 202006001890
->> [371352.919919] usb-storage 2-2:1.0: USB Mass Storage device detected
->> [371352.939695] scsi host3: usb-storage 2-2:1.0
->> [371353.951776] scsi 3:0:0:0: Direct-Access     Kingston UHSII uSD Reader 0013 PQ: 0 ANSI: 6
->> [371353.952333] sd 3:0:0:0: Attached scsi generic sg1 type 0
->> [371354.333610] sd 3:0:0:0: [sdb] 500695040 512-byte logical blocks: (256 GB/239 GiB)
->> [371354.334277] sd 3:0:0:0: [sdb] Write Protect is off
->> [371354.334282] sd 3:0:0:0: [sdb] Mode Sense: 21 00 00 00
->> [371354.334902] sd 3:0:0:0: [sdb] Write cache: disabled, read cache: enabled, doesn't support DPO or FUA
->> [371354.338703]  sdb: sdb1
->> [371354.338841] sd 3:0:0:0: [sdb] Attached SCSI removable disk
->>
->> there is no dmesg entry when connecting on the usb-c as if there was no power
-> I don't understand, it shows the phone connecting above.
+What will you do about scenarios where the Set-Address completes very 
+quickly but the following Get-Device-Descriptor times out after 5 
+seconds?  Or any of the other transfers involved in device 
+initialization and enumeration?
 
-yes the phone is connecting, everything is fine as long as it's the 
-phone, this shows that the port is working
+> The shortened address device timeout quirks provide the flexibility
+> to align with a 3-second time limit in the event of errors.
+> By swiftly triggering a failure response and swiftly initiating
+> retry procedures, these quirks ensure efficient and rapid recovery,
+> particularly in automotive contexts where rapid smartphone enumeration
+> and screen projection are vital.
+> 
+> The quirk will set the timeout to 500 ms from 5 seconds.
+> 
+> To use the quirk, please write "vendor_id:product_id:p" to
+> /sys/bus/usb/drivers/hub/module/parameter/quirks
+> 
+> For example,
+> echo "0x2c48:0x0132:p" > /sys/bus/usb/drivers/hub/module/parameter/quirks"
+> 
+> Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
+> ---
+> changes since version 1:
+> 	- implement quirk instead of new API in xhci driver
+> ---
+>  drivers/usb/core/hub.c       | 15 +++++++++++++--
+>  drivers/usb/core/quirks.c    |  3 +++
+>  drivers/usb/host/xhci-mem.c  |  1 +
+>  drivers/usb/host/xhci-ring.c |  3 ++-
+>  drivers/usb/host/xhci.c      |  9 +++++----
+>  drivers/usb/host/xhci.h      |  1 +
+>  include/linux/usb/hcd.h      |  3 ++-
+>  include/linux/usb/quirks.h   |  3 +++
+>  8 files changed, 30 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> index 3c54b218301c..975449b03426 100644
+> --- a/drivers/usb/core/hub.c
+> +++ b/drivers/usb/core/hub.c
+> @@ -54,6 +54,9 @@
+>  #define USB_TP_TRANSMISSION_DELAY_MAX	65535	/* ns */
+>  #define USB_PING_RESPONSE_TIME		400	/* ns */
+>  
+> +#define USB_DEFAULT_ADDR_DEVICE_TIMEOUT		(HZ * 5) /* 5000ms */
+> +#define USB_SHORT_ADDR_DEVICE_TIMEOUT		125  /* ~500ms */
 
->
->> I tried on phone to change the device powering the port, but I always get error, when connecting the phone, even if it is in "charge only" mode, the battery icon don't show any charging information.... looks like the port is always powered by the phone and the first time the device powering the port is choosen in power negociation, the port will after remain in slave-power mode on the laptop....
-> Are you sure the phone is handling this properly?  Many times it will
-> refuse to connect to a host at all until you tell it is safe to do so
-> somehow (like change the USB mode.)
->
->> I will gladely help troubleshooting the issue, having a usb port less over 3 is really problematic
-> I don't understand this question, sorry.
->
-> greg k-h
+That number, 125, is meaningless.  It's in units of jiffies, which vary 
+from one system to another.  If you want the timeout to be about 500 ms, 
+you should write it as (HZ / 2).
 
-the issue is that the usb masstorage that should be seen in dmesg 
-between [371275.791890] and [371352.897323] has... not a single line in 
-dmesg, on this port, nothing works appart the phone, usb masstorage? not 
-working. usb jtag dongle? not working. usb uart? not working....
-
-this looks like no device on this pc usb-c port is powered by the port, 
-and on usb-c port the devices can select which is powering the 
-communication, by default the phone will want to power the port since I 
-can connect the masstorage dongle on it (and the masstorage dongle won't 
-be detected unless powered)
-
-this looks like once I connected a phone not in charging mode, the 
-device powering the port is the phone, when I disconnect the phone, the 
-pc port remains in "slave power" and then won't power the port anymore. 
-When I plug the usb masstorage dongle on it, since the port isn't 
-providing power, it don't power the dongle and then there is no 
-detection of the dongle....
-
-best regards
-
+Alan Stern
 
