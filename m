@@ -1,90 +1,137 @@
-Return-Path: <linux-usb+bounces-1265-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1267-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0ACAC7BDCCF
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 14:50:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2ED017BE28E
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 16:21:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BB0282816F6
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 12:50:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 330AA1C20BC6
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 14:21:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9BB5179A6;
-	Mon,  9 Oct 2023 12:50:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D023035894;
+	Mon,  9 Oct 2023 14:21:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OvK3rnOo"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="aerRDdPV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE9CD1118C
-	for <linux-usb@vger.kernel.org>; Mon,  9 Oct 2023 12:50:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 925C4C433C9;
-	Mon,  9 Oct 2023 12:50:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1696855833;
-	bh=am1r6BTG/XmXtORcHF6USty0gqCaUscj0/AmTY4W23A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OvK3rnOotvxVgvWV5m5YztYaMp2e1yGXx1dGKQ2ORtvR9KAO92CJJAkD6pZHwmRi/
-	 eg49JuXXQkuAl4Gwno+ECJVWLVVXnwNWX318d8s4p7XqIFR5NwIrNi+W5aBgwU99NP
-	 s7YF4eomr70lkkOCcSggSGbSh87R6WLg38KuoZgsGLufrY4rqavHZw0dt9xVOgqH6n
-	 K/fvGLhz21qqZO4K2/oel5ypPIfMRsmLgHiuvFasSVq9Rwjfg8SrpNHXsqmGTLY4eS
-	 nQImGOTjYxFWAK2kORMmef+Dyh3LLQUsON1l0JvHXdybTG/dKJlvW9dcWfESIV8EUq
-	 EyeTSQNh5Tqhg==
-Date: Mon, 9 Oct 2023 13:50:24 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Wentong Wu <wentong.wu@intel.com>
-Cc: gregkh@linuxfoundation.org, oneukum@suse.com, wsa@kernel.org,
-	andi.shyti@linux.intel.com, bartosz.golaszewski@linaro.org,
-	linus.walleij@linaro.org, hdegoede@redhat.com,
-	linux-usb@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-spi@vger.kernel.org, sakari.ailus@linux.intel.com,
-	zhifeng.wang@intel.com, linux-gpio@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v20 3/4] spi: Add support for Intel LJCA USB SPI driver
-Message-ID: <6084346e-48d7-4f70-b49a-46b5aeda2c9a@sirena.org.uk>
-References: <1696833205-16716-1-git-send-email-wentong.wu@intel.com>
- <1696833205-16716-4-git-send-email-wentong.wu@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29CFD3588D
+	for <linux-usb@vger.kernel.org>; Mon,  9 Oct 2023 14:21:09 +0000 (UTC)
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 942E2D4D;
+	Mon,  9 Oct 2023 07:20:40 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 399DvUFo009578;
+	Mon, 9 Oct 2023 14:20:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=7qdfQioX1zXubJuPh0HpCefHEHuSrBYDOMSQ4QrcvWM=;
+ b=aerRDdPVoitYbuaf7LeSir/QWWhVEh0vffpdXcP9vyqKzFp6EqGVV2Nkr+1s51p8WxP6
+ /8xj/SE1BR6usNYMhLuzs+/7DwW8O8JeaDfdV8XI9oXVyiinjc70C0h8Ervlf1yO+8Nb
+ 3tH5fCqayL89020+0vvYSl2/kCxnfy7sIlfkX28qCYp7IHRCJe8+jky3fR+O0BOvPN4R
+ zvzVk6m5+O1uZNpNb8PrMRfe122ETlgMeDULd6OjhLwu+KO15HTimWamtKUZJppeW703
+ zNFkUD2dsSULhjn3M6lz8rMyQBe5HuJRqpWXBpSDrZh9lHJ69Oz4CTX/5wMPEHLK2FiP vg== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tkhx2jjdq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 09 Oct 2023 14:20:36 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 399EKLsx008053
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 9 Oct 2023 14:20:21 GMT
+Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.36; Mon, 9 Oct 2023 07:20:16 -0700
+From: Krishna Kurapati <quic_kriskura@quicinc.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <maze@google.com>,
+        onathan Corbet
+	<corbet@lwn.net>,
+        Linyu Yuan <quic_linyyuan@quicinc.com>
+CC: <linux-usb@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_ppratap@quicinc.com>,
+        <quic_wcheng@quicinc.com>, <quic_jackp@quicinc.com>,
+        Krishna Kurapati
+	<quic_kriskura@quicinc.com>
+Subject: [PATCH 1/2] Documentation: usb: Update NCM configfs parameters
+Date: Mon, 9 Oct 2023 19:50:04 +0530
+Message-ID: <20231009142005.21338-1-quic_kriskura@quicinc.com>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="et45qnm/EusVI4JP"
-Content-Disposition: inline
-In-Reply-To: <1696833205-16716-4-git-send-email-wentong.wu@intel.com>
-X-Cookie: What is the sound of one hand clapping?
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Xx960gByasl8Il6ueXmcyg3i4O4ybp_X
+X-Proofpoint-ORIG-GUID: Xx960gByasl8Il6ueXmcyg3i4O4ybp_X
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-09_12,2023-10-09_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ impostorscore=0 malwarescore=0 mlxscore=0 lowpriorityscore=0 phishscore=0
+ bulkscore=0 adultscore=0 priorityscore=1501 spamscore=0 mlxlogscore=688
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2310090118
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
+Updateed NCM configfs parameters by adding max_segment_size
+property and describing its effect on MTU configuration of
+NCM interface.
 
---et45qnm/EusVI4JP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+---
+ Documentation/usb/gadget-testing.rst | 20 +++++++++++---------
+ 1 file changed, 11 insertions(+), 9 deletions(-)
 
-On Mon, Oct 09, 2023 at 02:33:24PM +0800, Wentong Wu wrote:
-> Implements the SPI function of Intel USB-I2C/GPIO/SPI adapter device
-> named "La Jolla Cove Adapter" (LJCA). It communicate with LJCA SPI
-> module with specific protocol through interfaces exported by LJCA USB
-> driver.
+diff --git a/Documentation/usb/gadget-testing.rst b/Documentation/usb/gadget-testing.rst
+index 29072c166d23..6e5d96668e8e 100644
+--- a/Documentation/usb/gadget-testing.rst
++++ b/Documentation/usb/gadget-testing.rst
+@@ -448,15 +448,17 @@ Function-specific configfs interface
+ The function name to use when creating the function directory is "ncm".
+ The NCM function provides these attributes in its function directory:
+ 
+-	=============== ==================================================
+-	ifname		network device interface name associated with this
+-			function instance
+-	qmult		queue length multiplier for high and super speed
+-	host_addr	MAC address of host's end of this
+-			Ethernet over USB link
+-	dev_addr	MAC address of device's end of this
+-			Ethernet over USB link
+-	=============== ==================================================
++	================= ====================================================
++	ifname		  network device interface name associated with this
++			  function instance
++	qmult		  queue length multiplier for high and super speed
++	host_addr	  MAC address of host's end of this
++			  Ethernet over USB link
++	dev_addr	  MAC address of device's end of this
++			  Ethernet over USB link
++	max_segment_size  Segment size required for P2P connections. This
++			  will inturn set MTU to (max_segment_size - 14 bytes)
++	================= ====================================================
+ 
+ and after creating the functions/ncm.<instance name> they contain default
+ values: qmult is 5, dev_addr and host_addr are randomly selected.
+-- 
+2.42.0
 
-Reviewed-by: Mark Brown <broonie@kernel.org>
-
---et45qnm/EusVI4JP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmUj9xAACgkQJNaLcl1U
-h9AHpAf+Lcv/GJXaWMla2DduP+3qig0ZxjVPLwTRsDGNWY7btA80cDUxQBWMjvRC
-hDzi621fgKj33PT6wws2CVq+GwZhhLAYrtSh6+0bpXWusY2TRIwLxnfo96cKN6tk
-p5T8hdfRGYUyFZEAXtWBGd0+5aObdIWc/a+CtwzmXqpjY7+YHLnD4Fc+2HqTapyL
-EZ2nhADF0KSaRkJ/VLtSSIj+Rr+DHPYVG2Zzsm4i3rALtrwL3DFoBK9ZDmhQ7/GN
-Dhyf3HAcc6kGD/10SCbRtJVN3nzzTEm+1yVrPGQUT65BK0YsjzVIp0KS1s5mKb1s
-iYidXdqI15muRrJUH6XSUjr21nkEgw==
-=hHSh
------END PGP SIGNATURE-----
-
---et45qnm/EusVI4JP--
 
