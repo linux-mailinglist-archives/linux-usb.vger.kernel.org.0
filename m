@@ -1,124 +1,155 @@
-Return-Path: <linux-usb+bounces-1279-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1282-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56F147BE7B2
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 19:21:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16A9E7BE7CE
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 19:25:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 85B9A1C20D74
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 17:21:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 222472819EC
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 17:24:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E444C38BCE;
-	Mon,  9 Oct 2023 17:21:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3935938BCB;
+	Mon,  9 Oct 2023 17:24:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="j19yWOUR"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VcdmRB5J"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92ECF37C97;
-	Mon,  9 Oct 2023 17:21:37 +0000 (UTC)
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37FE7A3;
-	Mon,  9 Oct 2023 10:21:35 -0700 (PDT)
-Received: from jupiter.universe (dyndsl-091-248-211-168.ewe-ip-backbone.de [91.248.211.168])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: sre)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id 6EAFC660716C;
-	Mon,  9 Oct 2023 18:21:33 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1696872093;
-	bh=UsIbMdBkB63KIT1K+XLIc1aWT6m/RDcXwqMsI3caB1g=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=j19yWOUR3vQL4YSn4IiVdvJP32EuORB71gqW3LowVX0sDvX+DuCgqPpwK+06T1vcC
-	 060hbsjqpNrgDWc+QPK0NSspPMdhoDEu5Wzjppl0VRgUnc2EZ0IEjZ4hARHapxvBvC
-	 yaGwJvhi1kp510oqrMRhxaPkMDBtS5hhH2A960kI9Qe5bT2jhLu0DPRvgfjtqeP8ZI
-	 loAOEupY3BLCQjJybVqWgLSU1SC8sLXZxoL3s3s+Aa3xs/4LZO7CwIks369ygu355O
-	 pPSzQ32jVCPBj9IO61/k8FrRggjzRQZqkVyo+tZPD6dmm1nw67Majxl1WrIpQUio9I
-	 9gpLXVyhI722Q==
-Received: by jupiter.universe (Postfix, from userid 1000)
-	id 2067F480105; Mon,  9 Oct 2023 19:21:31 +0200 (CEST)
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Heiko Stuebner <heiko@sntech.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	linux-rockchip@lists.infradead.org,
-	linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Sebastian Reichel <sebastian.reichel@collabora.com>,
-	kernel@collabora.com
-Subject: [PATCH v3 3/3] arm64: dts: rockchip: rk3588s: Add USB3 host controller
-Date: Mon,  9 Oct 2023 19:20:11 +0200
-Message-ID: <20231009172129.43568-4-sebastian.reichel@collabora.com>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231009172129.43568-1-sebastian.reichel@collabora.com>
-References: <20231009172129.43568-1-sebastian.reichel@collabora.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D8C0374FD;
+	Mon,  9 Oct 2023 17:24:52 +0000 (UTC)
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C569A3;
+	Mon,  9 Oct 2023 10:24:51 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-578d0d94986so3492567a12.2;
+        Mon, 09 Oct 2023 10:24:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696872290; x=1697477090; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hzAdnPv6S7wemZW2LOvDdjej33oUOA4jt9qFcygegX8=;
+        b=VcdmRB5Jyqw8aqvnps3ZcNESprEZdvjdfZIHohOck7OQ+ebTQDRRCAy5hDXxTGcBdW
+         JEWThpfElMZZN6U7JsjnB5HH54J80NACyeKE3UbKbZCn6+bgBpt9Aa1leQHU85YufaMy
+         iQbTWQUTq0Vw6PZIvJa8rUjjqanvgZw0ric83OoIZNRhValzcMsodZT/47Hl3oaBzBMQ
+         lkWwnvITABSzqb1v73HekQEZSg75DYG95nUNBS76vzSMiaO355GiFoXRORwaIzvHlSY/
+         lezXmO1mxVPjyoBpb0fCiRcp1Wj/dvqoRpvGHK2Ym2SJmFrC5rORF6cLNIyUSGCYQpUH
+         sQ+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696872290; x=1697477090;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hzAdnPv6S7wemZW2LOvDdjej33oUOA4jt9qFcygegX8=;
+        b=E75aMKFKTiQieeU28mkZ0AbzQI0IkhDi/5k6iSZUO4uEQRPyndpw/RP/bMRy0LatgT
+         WNjaqRl9zR00QX9R+2jNiyfnX/le48V2g+BqCl82r4X7Imz28nfLbdxAWXcLZEWB2Sie
+         mgHCOp5O5xt3SzjydAT2LU0bEv7O9xG7HoTZIIu4MQvm+PvS1SDmVpqPVTIGwgQBQLxx
+         bZwHFAQi1F9kX1yw7i//D3ZrID6KW4ovplI0wQHJkUw5DldcGPS+WXy/yeKc77nhD7T1
+         fj463MYoENIbQb8wN/hHa5UfvECy2Js/lAGt+dVVqNynDrGbDnfSEWJz5KRs0y5wEmg1
+         P4+A==
+X-Gm-Message-State: AOJu0YwljsRwStMLikM9hRsaj+osT/BPLN2bOmDZ3tRZgPgxdpg2A6mM
+	3vXfkBbcyOkgLonNJwuH7Qw=
+X-Google-Smtp-Source: AGHT+IH+tyPqS70qDikWknMDjzYLaNh8XUrbid6v4dI3mkvPqY7I02GkSEKBPm73V9X3Q4ayZd0Azg==
+X-Received: by 2002:a05:6a20:8e05:b0:162:4f45:b415 with SMTP id y5-20020a056a208e0500b001624f45b415mr20823608pzj.51.1696872290343;
+        Mon, 09 Oct 2023 10:24:50 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id m24-20020a17090a7f9800b0027b168cb011sm8557487pjl.56.2023.10.09.10.24.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Oct 2023 10:24:49 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Mon, 9 Oct 2023 10:24:48 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Max Kellermann <max.kellermann@ionos.com>
+Cc: Jens Axboe <axboe@kernel.dk>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
+	James Morse <james.morse@arm.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Robert Richter <rric@kernel.org>, Jean Delvare <jdelvare@suse.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
+	Bart Van Assche <bvanassche@acm.org>,
+	Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Vishal Verma <vishal.l.verma@intel.com>,
+	Dave Jiang <dave.jiang@intel.com>, Ira Weiny <ira.weiny@intel.com>,
+	Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>,
+	Sagi Grimberg <sagi@grimberg.me>,
+	Alessandro Zummo <a.zummo@towertech.it>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Mike Leach <mike.leach@linaro.org>,
+	James Clark <james.clark@arm.com>, Leo Yan <leo.yan@linaro.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Peter Zijlstra <peterz@infradead.org>, Pavel Machek <pavel@ucw.cz>,
+	Lee Jones <lee@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Bjorn Helgaas <bhelgaas@google.com>, Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+	Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Sebastian Reichel <sre@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	"James E.J. Bottomley" <jejb@linux.ibm.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-edac@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	linux-rdma@vger.kernel.org, iommu@lists.linux.dev,
+	nvdimm@lists.linux.dev, linux-nvme@lists.infradead.org,
+	linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+	coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+	linux-leds@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	linux-scsi@vger.kernel.org
+Subject: Re: [PATCH 6/7] fs/sysfs/group: make attribute_group pointers const
+Message-ID: <264fa39d-aed6-4a54-a085-107997078f8d@roeck-us.net>
+References: <20231009165741.746184-1-max.kellermann@ionos.com>
+ <20231009165741.746184-6-max.kellermann@ionos.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231009165741.746184-6-max.kellermann@ionos.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-RK3588 has three USB3 controllers. This adds the host-only controller,
-which is using the naneng-combphy shared with PCIe and SATA.
+On Mon, Oct 09, 2023 at 06:57:39PM +0200, Max Kellermann wrote:
+> This allows passing arrays of const pointers.  The goal is to make
+> lots of global variables "const" to allow them to live in the
+> ".rodata" section.
+> 
+> Signed-off-by: Max Kellermann <max.kellermann@ionos.com>
 
-The other two are dual-role and using a different PHY that is not yet
-supported upstream.
+In my opinion this touches way too many subsystems in a single patch.
+If someting is wrong with just one of the changes, it will be all but
+impossible to revert the whole thing.
 
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
----
- arch/arm64/boot/dts/rockchip/rk3588s.dtsi | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+Also, I don't know why checkpatch is happy with all the
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3588s.dtsi b/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
-index 5544f66c6ff4..8b4c99b49798 100644
---- a/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3588s.dtsi
-@@ -443,6 +443,27 @@ usb_host1_ohci: usb@fc8c0000 {
- 		status = "disabled";
- 	};
- 
-+	usb_host2_xhci: usb@fcd00000 {
-+		compatible = "rockchip,rk3588-dwc3", "snps,dwc3";
-+		reg = <0x0 0xfcd00000 0x0 0x400000>;
-+		interrupts = <GIC_SPI 222 IRQ_TYPE_LEVEL_HIGH 0>;
-+		clocks = <&cru REF_CLK_USB3OTG2>, <&cru SUSPEND_CLK_USB3OTG2>,
-+			 <&cru ACLK_USB3OTG2>, <&cru CLK_UTMI_OTG2>,
-+			 <&cru CLK_PIPEPHY2_PIPE_U3_G>;
-+		clock-names = "ref_clk", "suspend_clk", "bus_clk", "utmi", "pipe";
-+		dr_mode = "host";
-+		phys = <&combphy2_psu PHY_TYPE_USB3>;
-+		phy-names = "usb3-phy";
-+		phy_type = "utmi_wide";
-+		resets = <&cru SRST_A_USB3OTG2>;
-+		snps,dis_enblslpm_quirk;
-+		snps,dis-u2-freeclk-exists-quirk;
-+		snps,dis-del-phy-power-chg-quirk;
-+		snps,dis-tx-ipgap-linecheck-quirk;
-+		snps,dis_rxdet_inp3_quirk;
-+		status = "disabled";
-+	};
-+
- 	sys_grf: syscon@fd58c000 {
- 		compatible = "rockchip,rk3588-sys-grf", "syscon";
- 		reg = <0x0 0xfd58c000 0x0 0x1000>;
--- 
-2.42.0
+	const struct attribute_group *const*groups;
 
+instead of
+
+	const struct attribute_group *const *groups;
+
+but I still don't like it.
+
+Guenter
 
