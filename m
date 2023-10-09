@@ -1,150 +1,153 @@
-Return-Path: <linux-usb+bounces-1316-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1317-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE7217BEE11
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Oct 2023 00:06:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D2BA7BEE44
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Oct 2023 00:26:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E114A1C20AF8
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 22:06:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7D9571C20C51
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 22:26:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52B07450CC;
-	Mon,  9 Oct 2023 22:06:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2498A450EA;
+	Mon,  9 Oct 2023 22:26:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=sensoray.com header.i=@sensoray.com header.b="PuDp+cKL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Iht0jWIn"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51E6D41239
-	for <linux-usb@vger.kernel.org>; Mon,  9 Oct 2023 22:06:32 +0000 (UTC)
-Received: from omta38.uswest2.a.cloudfilter.net (omta38.uswest2.a.cloudfilter.net [35.89.44.37])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC1A99
-	for <linux-usb@vger.kernel.org>; Mon,  9 Oct 2023 15:06:31 -0700 (PDT)
-Received: from eig-obgw-6009a.ext.cloudfilter.net ([10.0.30.184])
-	by cmsmtp with ESMTP
-	id pwkpqGMLeytxcpyOUq5AnS; Mon, 09 Oct 2023 22:06:30 +0000
-Received: from gator3086.hostgator.com ([50.87.144.121])
-	by cmsmtp with ESMTPS
-	id pyOUqLuZ8En2cpyOUqjaqW; Mon, 09 Oct 2023 22:06:30 +0000
-X-Authority-Analysis: v=2.4 cv=P6MpOwMu c=1 sm=1 tr=0 ts=65247966
- a=qMXOcmIMY6YlrKEg1GzxDg==:117 a=QsTHvn2EeHXCImuSLmd++Q==:17
- a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
- a=bhdUkHdE2iEA:10 a=6kiSLZGAxYIA:10 a=wXneSEFuAAAA:8 a=cx3T9TuRWzljh2io5AcA:9
- a=YVKGGmaMxpnpCiYzuRtG:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=sensoray.com; s=default; h=Content-Transfer-Encoding:MIME-Version:
-	Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=I2zUCITexx1BRQQFop4L/T/2Or2BfRe/YRTO6jbwTDo=; b=PuDp+cKLdzvkjk/FjaxqC0qhG1
-	DaigeiEwikBcrNAUeZ6gMzpHVYX3Y2RKkLUSm6CslwHbYJcbvOiLi+G1uPfMgb/Ny8ClQzkoGVo0n
-	bY0lcL4Rzc27EPLAivE6dR79RXCb9YbsZyDh8IEFYJwmpw2ZSw1lssg7bH/UNF2Y61QA=;
-Received: from [50.126.89.90] (port=41400 helo=localhost.localdomain)
-	by gator3086.hostgator.com with esmtpa (Exim 4.95)
-	(envelope-from <linux-dev@sensoray.com>)
-	id 1qpyOT-002v5u-GX;
-	Mon, 09 Oct 2023 17:06:29 -0500
-From: linux-dev@sensoray.com
-To: balbi@kernel.org,
-	linux-usb@vger.kernel.org
-Cc: dean@sensoray.com,
-	linux-dev@sensoray.com
-Subject: [PATCH] usb: gadget: function fs req_match endpoint address fix
-Date: Mon,  9 Oct 2023 15:06:56 -0700
-Message-Id: <20231009220656.2990612-1-linux-dev@sensoray.com>
-X-Mailer: git-send-email 2.30.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9F05200B2;
+	Mon,  9 Oct 2023 22:26:19 +0000 (UTC)
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9279D;
+	Mon,  9 Oct 2023 15:26:17 -0700 (PDT)
+Received: by mail-ej1-x642.google.com with SMTP id a640c23a62f3a-98377c5d53eso861535066b.0;
+        Mon, 09 Oct 2023 15:26:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696890376; x=1697495176; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gNp5QN+Wa5gSGqFJs+wkBFIMdPrKF+F1qBOYA4/HLBM=;
+        b=Iht0jWInlER29aQNJaZ0jnftDItjzIrOTTfQ7pdAxNara2YFqslY3Sfq9uAie8hqf1
+         xpJcvhEq7t29Ck00AcT6tIEyHY2PZa53e7VMzhEYVRus9vP76szsCESQWO+e3bR2TpYZ
+         ghPJvmbOVyY2y86+kj6UhVyREf2wCuTUCFm2lXpVmPzA9tSSTGgkQAQhjG/JQYFPXqDZ
+         qv3JxZlDcUKwws5extxsrGsprJrrrViPoc1zxJo9P19ECvs3pdqy0O9JB7OZmyOWc6Ov
+         0RftRtwD/VtBcvtYhohh0euLv/dTTl9nu5exXxWn7Ndhz/Zo3EZJz4s90IdoDnBpEmHc
+         fVBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696890376; x=1697495176;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gNp5QN+Wa5gSGqFJs+wkBFIMdPrKF+F1qBOYA4/HLBM=;
+        b=pDv0u3xAMTPV6AR1QeckVcBgBGVPSWASgWnjPLCCCQhlnTrrHHljyRPPuqysshjAUj
+         Q1kRxRx7qpmM3hbimg22jlqR75h1vZgWbov6X3rfBj9xUHUpIxvNH/cNjagSFWQdyG83
+         RhH4/C8lUbFW/hx6P+MLU9qISR1r8IrSYkPt3kSBxnGxEdVOvTNjVzM/8MlIWKwxrp3G
+         YSLkTPKrJsCz+iTvGMNuIOt9rTi0N0jhq9y4440a8v2p2bXbzpexrYzevc6WzGpYxWEl
+         OFAdRcFNR529xNmz59Q3OZfmneD22kJALm8L3EC1Nvgv1p9MuVmXz4X+r01SvSgC7gXV
+         k9tQ==
+X-Gm-Message-State: AOJu0YzhXkX9C/FzGI0iGj27r4bferakuukxuIP0rpmUt/+m7cDZvv6L
+	AYW4p9XpF6lUl+ooEWTWX9E=
+X-Google-Smtp-Source: AGHT+IEXBZp6MNn5Iz0ZdFKMXIs3oPFYXzJVz9SzxV9sEy1dPEadJNRGycTF+Pwpu4r1dnqq7/zVSQ==
+X-Received: by 2002:a17:907:78d1:b0:9b3:264:446 with SMTP id kv17-20020a17090778d100b009b302640446mr15240204ejc.0.1696890376063;
+        Mon, 09 Oct 2023 15:26:16 -0700 (PDT)
+Received: from [127.0.1.1] (2a02-8389-41cf-e200-0d7c-652f-4e74-10b8.cable.dynamic.v6.surfer.at. [2a02:8389:41cf:e200:d7c:652f:4e74:10b8])
+        by smtp.gmail.com with ESMTPSA id t24-20020a1709066bd800b0099ddc81903asm7311487ejs.221.2023.10.09.15.26.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Oct 2023 15:26:15 -0700 (PDT)
+From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Date: Tue, 10 Oct 2023 00:26:14 +0200
+Subject: [PATCH v2] net: usb: dm9601: fix uninitialized variable use in
+ dm9601_mdio_read
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator3086.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - sensoray.com
-X-BWhitelist: no
-X-Source-IP: 50.126.89.90
-X-Source-L: No
-X-Exim-ID: 1qpyOT-002v5u-GX
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: (localhost.localdomain) [50.126.89.90]:41400
-X-Source-Auth: dean@sensoray.com
-X-Email-Count: 1
-X-Org: HG=hgshared;ORG=hostgator;
-X-Source-Cap: c2Vuc29yYXk7c2Vuc29yYXk7Z2F0b3IzMDg2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfMkxlyxIe8XrrQwuHz7lcxazK8+/kA/gzM+cChXL4ffbBzY3NNT9NojpTt00GVpwWh1Z3uE4W9vxdM6pSkKXs7lCzFL53A1sBkpmN4mulNefTyebGDmi
- TAsr9Wd48pV+uWrhDpJGUlCvoWSkYxrUrikYk0l+AtVKOGItKk+b8ecWx5rFRH55UUYYcjFyXyVOmBXBpkyut+8iJb+dib2GLk0=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-	RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20231009-topic-dm9601_uninit_mdio_read-v2-1-f2fe39739b6c@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAAV+JGUC/42OWw6DIBREt2L4Lg3gq/ar+2iMAbnoTQoYoKaNc
+ e9FV9DPM5OcmY1ECAiR3IuNBFgxoncZxKUg4yzdBBR1ZiKYKDljHU1+wZFq2zWMD2+HDtNgNfo
+ hgNRU8rrjN2OUbgzJDiUjUBWkG+fDYmVMEI5iCWDwcw4/+8wzxuTD9/yx8iP9d3LllFNd6batQ
+ VRQqsdkJb6uo7ek3/f9B61zopHjAAAA
+To: Peter Korsgaard <peter@korsgaard.com>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ syzbot+1f53a30781af65d2c955@syzkaller.appspotmail.com
+Cc: netdev@vger.kernel.org, linux-usb@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ Javier Carrasco <javier.carrasco.cruz@gmail.com>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1696890374; l=1805;
+ i=javier.carrasco.cruz@gmail.com; s=20230509; h=from:subject:message-id;
+ bh=tuSpdfIOLwv7wtHY5W9nhbDUxC1QdO8MYoXpwOuuSqE=;
+ b=Ai7OsMH7iPyecSWDeP+Mdw3y4XBpnq183Zav9G1vJ1tx14o4CErwsZh5oPsgU6MM4uM3Zq+Fo
+ AHoFWK1Pkm7BUwyCk4C68GAbXkn6nw2mH1+29wwNde4BnUVQk0MxV5j
+X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
+ pk=tIGJV7M+tCizagNijF0eGMBGcOsPD+0cWGfKjl4h6K8=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-From: Dean Anderson <linux-dev@sensoray.com>
+syzbot has found an uninit-value bug triggered by the dm9601 driver [1].
 
-Fixes f_fs.c handling USB_RECIP_ENDPOINT request types incorrectly for
-endpoints not belonging to it. f_fs.c needs to distinguish between IN
-and OUT endpoints, not just the endpoint number. Otherwise, f_fs may
-handle endpoints belonging to other functions. This occurs in the
-gadget/composite.c composite_setup function in the req_match callback.
+This error happens because the variable res is not updated if the call
+to dm_read_shared_word returns an error. In this particular case -EPROTO
+was returned and res stayed uninitialized.
 
-Signed-off-by: Dean Anderson <linux-dev@sensoray.com>
+This can be avoided by checking the return value of dm_read_shared_word
+and propagating the error if the read operation failed.
+
+[1] https://syzkaller.appspot.com/bug?extid=1f53a30781af65d2c955
+
+Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Reported-and-tested-by: syzbot+1f53a30781af65d2c955@syzkaller.appspotmail.com
+---
+Changes in v2:
+- Remove unnecessary 'err == 0' case
+- Link to v1: https://lore.kernel.org/r/20231009-topic-dm9601_uninit_mdio_read-v1-1-d4d775e24e3b@gmail.com
+---
+ drivers/net/usb/dm9601.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/usb/dm9601.c b/drivers/net/usb/dm9601.c
+index 48d7d278631e..99ec1d4a972d 100644
+--- a/drivers/net/usb/dm9601.c
++++ b/drivers/net/usb/dm9601.c
+@@ -222,13 +222,18 @@ static int dm9601_mdio_read(struct net_device *netdev, int phy_id, int loc)
+ 	struct usbnet *dev = netdev_priv(netdev);
+ 
+ 	__le16 res;
++	int err;
+ 
+ 	if (phy_id) {
+ 		netdev_dbg(dev->net, "Only internal phy supported\n");
+ 		return 0;
+ 	}
+ 
+-	dm_read_shared_word(dev, 1, loc, &res);
++	err = dm_read_shared_word(dev, 1, loc, &res);
++	if (err < 0) {
++		netdev_err(dev->net, "MDIO read error: %d\n", err);
++		return err;
++	}
+ 
+ 	netdev_dbg(dev->net,
+ 		   "dm9601_mdio_read() phy_id=0x%02x, loc=0x%02x, returns=0x%04x\n",
 
 ---
- drivers/usb/gadget/function/f_fs.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+base-commit: 94f6f0550c625fab1f373bb86a6669b45e9748b3
+change-id: 20231009-topic-dm9601_uninit_mdio_read-a15918ffbd6f
 
-diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-index 6e9ef35a43a7..61b4abd6a9df 100644
---- a/drivers/usb/gadget/function/f_fs.c
-+++ b/drivers/usb/gadget/function/f_fs.c
-@@ -71,7 +71,8 @@ struct ffs_function {
- 	struct ffs_data			*ffs;
- 
- 	struct ffs_ep			*eps;
--	u8				eps_revmap[16];
-+	u8				eps_revmap_in[16];
-+	u8				eps_revmap_out[16];
- 	short				*interfaces_nums;
- 
- 	struct usb_function		function;
-@@ -2843,8 +2844,12 @@ static int __ffs_func_bind_do_descs(enum ffs_entity_type type, u8 *valuep,
- 
- 		ffs_ep->ep  = ep;
- 		ffs_ep->req = req;
--		func->eps_revmap[ds->bEndpointAddress &
--				 USB_ENDPOINT_NUMBER_MASK] = idx + 1;
-+		if (ds->bEndpointAddress & USB_ENDPOINT_DIR_MASK)
-+			func->eps_revmap_in[ds->bEndpointAddress &
-+					USB_ENDPOINT_NUMBER_MASK] = idx + 1;
-+		else
-+			func->eps_revmap_out[ds->bEndpointAddress &
-+					USB_ENDPOINT_NUMBER_MASK] = idx + 1;
- 		/*
- 		 * If we use virtual address mapping, we restore
- 		 * original bEndpointAddress value.
-@@ -3371,7 +3376,8 @@ static void ffs_func_resume(struct usb_function *f)
- 
- static int ffs_func_revmap_ep(struct ffs_function *func, u8 num)
- {
--	num = func->eps_revmap[num & USB_ENDPOINT_NUMBER_MASK];
-+	num = num & USB_ENDPOINT_DIR_MASK ? func->eps_revmap_in[num & USB_ENDPOINT_NUMBER_MASK]
-+		: func->eps_revmap_out[num & USB_ENDPOINT_NUMBER_MASK];
- 	return num ? num : -EDOM;
- }
- 
+Best regards,
 -- 
-2.30.2
+Javier Carrasco <javier.carrasco.cruz@gmail.com>
 
 
