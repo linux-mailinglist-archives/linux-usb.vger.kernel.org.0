@@ -1,122 +1,220 @@
-Return-Path: <linux-usb+bounces-1309-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1310-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E28857BEC2F
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 23:01:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3994F7BEC82
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 23:14:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1FB011C2094D
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 21:01:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6ACE01C20D8A
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 21:14:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D50323FB33;
-	Mon,  9 Oct 2023 21:01:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3924841228;
+	Mon,  9 Oct 2023 21:14:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RDqhhdTF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UX5AlFcs"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81D363C6A6
-	for <linux-usb@vger.kernel.org>; Mon,  9 Oct 2023 21:01:07 +0000 (UTC)
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92358A6
-	for <linux-usb@vger.kernel.org>; Mon,  9 Oct 2023 14:01:03 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5a7be940fe1so279827b3.2
-        for <linux-usb@vger.kernel.org>; Mon, 09 Oct 2023 14:01:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696885263; x=1697490063; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=qyOEdilfHw6B6k4i/Hrpjck7dAiRB3VXEglYZeWU0vY=;
-        b=RDqhhdTFJzDEWkrgAFSXv2TAkzjlNIv0utTHzAf1vat4jLqL467f1eyWhCms0hrpuU
-         XeEDnmllu4x+r0VCYVazUpQToTfOagFhQ2g8pPIlNkW0clkiws5TjjVYWFy8mr4gGAUv
-         gjRPZTJedhMwI12slCQP7JwNwLTHqalGIfkJtm0eSwLTEvJsIfSpJ36R60m+AWeeH3Vq
-         1wEEd5dlMghdsNwAMjhpG55/sE2VptzL0BOHG1fbk9f+TYVR6/JUpw148RAzCYGdr0L7
-         SHb2p5N2sg+JzUMVZZwRvIO1Rj2/shaTkqPbgeW2JoXyD4+htb4qoMnd/0OLaQRUDcNW
-         bW1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696885263; x=1697490063;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qyOEdilfHw6B6k4i/Hrpjck7dAiRB3VXEglYZeWU0vY=;
-        b=ovTqKTOuvWJCxJJS0xEwQwcsdwibvcU96jj4W1q55sXz0N2vXfmeVLQW+fl4IA+KhK
-         68DM2LLFLRXYAXKeAaizp18GwnlKCihr/ld4aiGx9+83ieAS6HUgzKAkZUC3lS+jLJ+Y
-         COcYez3waTjDheT19+TIAtmJsWaejYyWbrH/EGZxanJajM2Aj4oITHcdBWijGFcS7qjB
-         7MPlbSW+g7mmfHeTedx5kBWVzPgwI+al1lR7SvuooePJ0QizZjIaZU2p2lDM6oWJ6HGR
-         zf8DT1DvYwkkLa9/MtBd5Y8RnY6DgMcyuP2xB02t1T2+Db9SMG9BiRjntGc5eg3HsLiJ
-         8qcQ==
-X-Gm-Message-State: AOJu0YyQIRBuIkxJ0BnlL2KKZEsuskIKI2CC+o4gcROXFizLLmuwUAc4
-	Q8tyNm/to9+DHyOHC8f1tDgtedym1CXNoac=
-X-Google-Smtp-Source: AGHT+IEDyvZJwdqY9Oc+PsWnDK52oMqUDJXq0wl9ww7b4zK4S7kU9Z8dwTPjMN33xEoBDyZKGPNLrxqnaLEgeN4=
-X-Received: from rdbabiera.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:18a8])
- (user=rdbabiera job=sendgmr) by 2002:a81:c14a:0:b0:5a7:aab1:96a9 with SMTP id
- e10-20020a81c14a000000b005a7aab196a9mr37078ywl.6.1696885262787; Mon, 09 Oct
- 2023 14:01:02 -0700 (PDT)
-Date: Mon,  9 Oct 2023 21:00:58 +0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A01EC2030B
+	for <linux-usb@vger.kernel.org>; Mon,  9 Oct 2023 21:14:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A26EC433C8;
+	Mon,  9 Oct 2023 21:14:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1696886073;
+	bh=X1cH/h9NDVZrOok4vly/3g9sh+E04rVkCkSlfXlWOkc=;
+	h=From:To:Cc:Subject:Date:From;
+	b=UX5AlFcsmSNuOATqpTq/hIGo5FVEW6AOvZIzMyjgNvPnEIMxc0WKvQu08BweMdCFw
+	 0zCmWnxuIchvRaQE/rVjCjZwq4po/w6dpkLmCDkI9D1Na1t0515QYR2RidgCz5Rd90
+	 gdYcXPc0XrMJCb1s2LWdURita5X6F46xykVT0w25UhELnABfNrQ8xod18E3DeOgYAx
+	 tyXN6j/t9dhuK06eMT4UBk+nV+3s6U149ln3ThjasbJeCwtIcBTfCwWOtYlzuYrlxe
+	 mdEFlKV9cyMp0wjIPJUQGKLMKwkMzrWWijwCSKm7L6KNtXaN/x83pdrstCq1bDtYU1
+	 EWK50UVpWY+/g==
+Received: (nullmailer pid 3246487 invoked by uid 1000);
+	Mon, 09 Oct 2023 21:14:15 -0000
+From: Rob Herring <robh@kernel.org>
+To: Peter Chen <peter.chen@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Minas Harutyunyan <hminas@synopsys.com>, Li Yang <leoyang.li@nxp.com>, Matthias Kaehlcke <mka@chromium.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH] usb: Use device_get_match_data()
+Date: Mon,  9 Oct 2023 16:13:46 -0500
+Message-ID: <20231009211356.3242037-16-robh@kernel.org>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Developer-Key: i=rdbabiera@google.com; a=openpgp; fpr=639A331F1A21D691815CE090416E17CA2BBBD5C8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1373; i=rdbabiera@google.com;
- h=from:subject; bh=naOIDwmSOXGmB0NeKgkfBkGNyY1AcsJZAkoLxfJAvY4=;
- b=owGbwMvMwCFW0bfok0KS4TbG02pJDKkqWZyV4e0cCiJFf8M0b/3MzIv2XfV/aa2ZucelhMbUB
- WwzXh/qKGVhEONgkBVTZNH1zzO4cSV1yxzOGmOYOaxMIEMYuDgFYCIcnAx/ZSSaD5g46di9/9R0
- r/b1VJ44i2ydZaw3Ezd4Scww9pqqzvBP80lb4eKKcJsTypG9fPO5bv/dMcWJ/2LbyudhXJz6PSb cAA==
-X-Mailer: git-send-email 2.42.0.609.gbb76f46606-goog
-Message-ID: <20231009210057.3773877-2-rdbabiera@google.com>
-Subject: [PATCH v1] usb: typec: altmodes/displayport: Signal hpd low when
- exiting mode
-From: RD Babiera <rdbabiera@google.com>
-To: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
-Cc: badhri@google.com, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	RD Babiera <rdbabiera@google.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-	SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-	autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Upon receiving an ACK for a sent EXIT_MODE message, the DisplayPort
-driver currently resets the status and configuration of the port partner.
-The hpd signal is not updated despite being part of the status, so the
-Display stack can still transmit video despite typec_altmode_exit placing
-the lanes in a Safe State.
+Use preferred device_get_match_data() instead of of_match_device() to
+get the driver match data. With this, adjust the includes to explicitly
+include the correct headers.
 
-Set hpd to low when a sent EXIT_MODE message is ACK'ed.
-
-Fixes: 0e3bb7d6894d ("usb: typec: Add driver for DisplayPort alternate mode")
-Cc: stable@vger.kernel.org
-Signed-off-by: RD Babiera <rdbabiera@google.com>
+Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- drivers/usb/typec/altmodes/displayport.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/usb/chipidea/ci_hdrc_usb2.c | 11 +++++------
+ drivers/usb/dwc2/params.c           | 21 ++++++---------------
+ drivers/usb/gadget/udc/fsl_qe_udc.c | 10 +++-------
+ drivers/usb/misc/onboard_usb_hub.c  |  7 +------
+ 4 files changed, 15 insertions(+), 34 deletions(-)
 
-diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
-index f503cb4cd721..718da02036d8 100644
---- a/drivers/usb/typec/altmodes/displayport.c
-+++ b/drivers/usb/typec/altmodes/displayport.c
-@@ -307,6 +307,11 @@ static int dp_altmode_vdm(struct typec_altmode *alt,
- 			typec_altmode_update_active(alt, false);
- 			dp->data.status = 0;
- 			dp->data.conf = 0;
-+			if (dp->hpd) {
-+				drm_connector_oob_hotplug_event(dp->connector_fwnode);
-+				dp->hpd = false;
-+				sysfs_notify(&dp->alt->dev.kobj, "displayport", "hpd");
-+			}
- 			break;
- 		case DP_CMD_STATUS_UPDATE:
- 			dp->data.status = *vdo;
-
-base-commit: 1053c4a4b8fcbd28386e80347e7c82d4d617e352
+diff --git a/drivers/usb/chipidea/ci_hdrc_usb2.c b/drivers/usb/chipidea/ci_hdrc_usb2.c
+index 1321ee67f3b8..180a632dd7ba 100644
+--- a/drivers/usb/chipidea/ci_hdrc_usb2.c
++++ b/drivers/usb/chipidea/ci_hdrc_usb2.c
+@@ -9,9 +9,9 @@
+ #include <linux/dma-mapping.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+-#include <linux/of_platform.h>
+ #include <linux/phy/phy.h>
+ #include <linux/platform_device.h>
++#include <linux/property.h>
+ #include <linux/usb/chipidea.h>
+ #include <linux/usb/hcd.h>
+ #include <linux/usb/ulpi.h>
+@@ -51,8 +51,8 @@ static int ci_hdrc_usb2_probe(struct platform_device *pdev)
+ 	struct device *dev = &pdev->dev;
+ 	struct ci_hdrc_usb2_priv *priv;
+ 	struct ci_hdrc_platform_data *ci_pdata = dev_get_platdata(dev);
++	const struct ci_hdrc_platform_data *data;
+ 	int ret;
+-	const struct of_device_id *match;
+ 
+ 	if (!ci_pdata) {
+ 		ci_pdata = devm_kmalloc(dev, sizeof(*ci_pdata), GFP_KERNEL);
+@@ -61,11 +61,10 @@ static int ci_hdrc_usb2_probe(struct platform_device *pdev)
+ 		*ci_pdata = ci_default_pdata;	/* struct copy */
+ 	}
+ 
+-	match = of_match_device(ci_hdrc_usb2_of_match, &pdev->dev);
+-	if (match && match->data) {
++	data = device_get_match_data(&pdev->dev);
++	if (data)
+ 		/* struct copy */
+-		*ci_pdata = *(struct ci_hdrc_platform_data *)match->data;
+-	}
++		*ci_pdata = *data;
+ 
+ 	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+ 	if (!priv)
+diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
+index 93f52e371cdd..fb03162ae9b7 100644
+--- a/drivers/usb/dwc2/params.c
++++ b/drivers/usb/dwc2/params.c
+@@ -5,7 +5,7 @@
+ 
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+-#include <linux/of_device.h>
++#include <linux/of.h>
+ #include <linux/usb/of.h>
+ #include <linux/pci_ids.h>
+ #include <linux/pci.h>
+@@ -968,26 +968,17 @@ typedef void (*set_params_cb)(struct dwc2_hsotg *data);
+ 
+ int dwc2_init_params(struct dwc2_hsotg *hsotg)
+ {
+-	const struct of_device_id *match;
+ 	set_params_cb set_params;
+ 
+ 	dwc2_set_default_params(hsotg);
+ 	dwc2_get_device_properties(hsotg);
+ 
+-	match = of_match_device(dwc2_of_match_table, hsotg->dev);
+-	if (match && match->data) {
+-		set_params = match->data;
++	set_params = device_get_match_data(hsotg->dev);
++	if (set_params) {
+ 		set_params(hsotg);
+-	} else if (!match) {
+-		const struct acpi_device_id *amatch;
+-		const struct pci_device_id *pmatch = NULL;
+-
+-		amatch = acpi_match_device(dwc2_acpi_match, hsotg->dev);
+-		if (amatch && amatch->driver_data) {
+-			set_params = (set_params_cb)amatch->driver_data;
+-			set_params(hsotg);
+-		} else if (!amatch)
+-			pmatch = pci_match_id(dwc2_pci_ids, to_pci_dev(hsotg->dev->parent));
++	} else {
++		const struct pci_device_id *pmatch =
++			pci_match_id(dwc2_pci_ids, to_pci_dev(hsotg->dev->parent));
+ 
+ 		if (pmatch && pmatch->driver_data) {
+ 			set_params = (set_params_cb)pmatch->driver_data;
+diff --git a/drivers/usb/gadget/udc/fsl_qe_udc.c b/drivers/usb/gadget/udc/fsl_qe_udc.c
+index 4aae86b47edf..4e88681a79b6 100644
+--- a/drivers/usb/gadget/udc/fsl_qe_udc.c
++++ b/drivers/usb/gadget/udc/fsl_qe_udc.c
+@@ -27,9 +27,10 @@
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
+ #include <linux/moduleparam.h>
++#include <linux/of.h>
+ #include <linux/of_address.h>
+ #include <linux/of_irq.h>
+-#include <linux/of_platform.h>
++#include <linux/platform_device.h>
+ #include <linux/dma-mapping.h>
+ #include <linux/usb/ch9.h>
+ #include <linux/usb/gadget.h>
+@@ -2471,17 +2472,12 @@ static const struct of_device_id qe_udc_match[];
+ static int qe_udc_probe(struct platform_device *ofdev)
+ {
+ 	struct qe_udc *udc;
+-	const struct of_device_id *match;
+ 	struct device_node *np = ofdev->dev.of_node;
+ 	struct qe_ep *ep;
+ 	unsigned int ret = 0;
+ 	unsigned int i;
+ 	const void *prop;
+ 
+-	match = of_match_device(qe_udc_match, &ofdev->dev);
+-	if (!match)
+-		return -EINVAL;
+-
+ 	prop = of_get_property(np, "mode", NULL);
+ 	if (!prop || strcmp(prop, "peripheral"))
+ 		return -ENODEV;
+@@ -2493,7 +2489,7 @@ static int qe_udc_probe(struct platform_device *ofdev)
+ 		return -ENOMEM;
+ 	}
+ 
+-	udc->soc_type = (unsigned long)match->data;
++	udc->soc_type = (unsigned long)device_get_match_data(&ofdev->dev);
+ 	udc->usb_regs = of_iomap(np, 0);
+ 	if (!udc->usb_regs) {
+ 		ret = -ENOMEM;
+diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
+index 57bbe1309094..a341b2fbb7b4 100644
+--- a/drivers/usb/misc/onboard_usb_hub.c
++++ b/drivers/usb/misc/onboard_usb_hub.c
+@@ -240,7 +240,6 @@ static void onboard_hub_attach_usb_driver(struct work_struct *work)
+ 
+ static int onboard_hub_probe(struct platform_device *pdev)
+ {
+-	const struct of_device_id *of_id;
+ 	struct device *dev = &pdev->dev;
+ 	struct onboard_hub *hub;
+ 	unsigned int i;
+@@ -250,11 +249,7 @@ static int onboard_hub_probe(struct platform_device *pdev)
+ 	if (!hub)
+ 		return -ENOMEM;
+ 
+-	of_id = of_match_device(onboard_hub_match, &pdev->dev);
+-	if (!of_id)
+-		return -ENODEV;
+-
+-	hub->pdata = of_id->data;
++	hub->pdata = device_get_match_data(&pdev->dev);
+ 	if (!hub->pdata)
+ 		return -EINVAL;
+ 
 -- 
-2.42.0.609.gbb76f46606-goog
+2.42.0
 
 
