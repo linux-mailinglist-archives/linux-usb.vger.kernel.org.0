@@ -1,94 +1,110 @@
-Return-Path: <linux-usb+bounces-1250-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1251-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F338E7BD170
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 02:34:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FAC27BD1FD
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 04:36:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC4901C20AF8
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 00:34:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6958C281457
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 02:36:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D83B10F7;
-	Mon,  9 Oct 2023 00:34:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F070443D;
+	Mon,  9 Oct 2023 02:36:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N4FY5kIv"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fp6+8VXQ"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A76CF63E;
-	Mon,  9 Oct 2023 00:34:44 +0000 (UTC)
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281EFAB;
-	Sun,  8 Oct 2023 17:34:41 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id 5614622812f47-3af608eb34bso2812244b6e.1;
-        Sun, 08 Oct 2023 17:34:41 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D72E631
+	for <linux-usb@vger.kernel.org>; Mon,  9 Oct 2023 02:36:25 +0000 (UTC)
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A970B3
+	for <linux-usb@vger.kernel.org>; Sun,  8 Oct 2023 19:36:24 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id ca18e2360f4ac-79fc70bf3d5so16388739f.0
+        for <linux-usb@vger.kernel.org>; Sun, 08 Oct 2023 19:36:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696811678; x=1697416478; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=cDy6tPfpqj3KR3HrKDaQ7tUSHnBT+iyGC2DxosxlRHw=;
-        b=N4FY5kIvBp6l58FSOLotVAeIMXvR/ByUazZ7a1PLOV8DraQ4TMm6FY2vaEyQdusWz2
-         4Jufrtul7eFb7O92Xm5bJEf5t7MeD1GIepVnzrLNaNPBBrL1cfnMhA96IMvqJYKrBexC
-         dUevpOpeWwa3215urJRyAswAS8Gmka+SeIE/vuT5bHh65AVEmtx479hwF+Sar2HsTzkS
-         tgo7NBW+vExhRJZrZ7HXH5FLxmg7Vetc6XHb4UfqIwbxM+L7TS3SEb1Y7tq/ZWO5RWFA
-         62q1AfTTyewjDVW7WlcEdSu9+21RjVe0ssKNAMAcbhF8qnw/5jBUBG8im3gvn3y4HHH0
-         F1DA==
+        d=gmail.com; s=20230601; t=1696818983; x=1697423783; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z8Y/gC2ZU8lIowDp4uB5jkMKCGZrUswlojSZthU/zxU=;
+        b=Fp6+8VXQu4UwnPEOOhcD1hrIx0ayORWyfO2HfhiahvNWoWSwV02asVz6Jn5UUt3/FE
+         tzR9/CT7UzcDSc/zenGbr9XW1eh57sy+sdvSsOU9M907IIprlvDgFABfKdbaXH8g18E1
+         P9yC7piXXWW/SRmTydqBYqk4lFcK8YmdFoqRCM9jcOeHpNYhWh1wb/UrZjNiVPOvG3fE
+         SOql/la7EzgZ/xD9EJzmSm0Xw+/Gx0goDDJv2lCdC7j1E4yn6/RDokddpQck/NtZuDm9
+         0nAOUIKsWKZZqJZLCc4IT/JKjNdhfWemRdnc2U6JReeenr8hlDU6dAfpCinfFG6i672f
+         JoYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696811678; x=1697416478;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cDy6tPfpqj3KR3HrKDaQ7tUSHnBT+iyGC2DxosxlRHw=;
-        b=A67aVVJqH6csm0EW7A10FaDDGrnUp6FBrufqWl4NDnejfymk2juEvo7i28ZUDQG1BZ
-         DxYPnMSFrIFR/ye4ozaCsOsNL1oVMAWqLwKGOLMMKzbIQqO7/Rj7I0SLtRqYVACbDFXA
-         +lI9p16kjdbFvRfCDFkFfEC73a+UlqIS3CRVuglGUbOtTKCUFf+Re7vaskD3x33vjRK2
-         E/0xymCAC882jFb1DQxKv2Iywsjoy02qhrPaKB0rae1o3MYyJUwzt6iDVSneepdwaBOB
-         Iqjf24YOmVbrjZN1CHYy4L8usaXY78vJtnCIaWBtzem3xjrQL9kNYc212oe8KqXjN2IO
-         nU9Q==
-X-Gm-Message-State: AOJu0Yx4hl4wuuFOWrxs5QtxYMLxjPaYBg6c3Yx+ZJrnCDtOnoWAb4XH
-	s2gvX2N5knitrL8UxlEKY3Z37d7mF6ct1S6jq0URkhQhXBI=
-X-Google-Smtp-Source: AGHT+IF1lHwAdPSIz68BEqoIzPlJiCE+dBbnohGiqjnajvLPkqdx+GXK2l1vV+xZP96LZI3Q6QBolT4Cx3G546JTHO8=
-X-Received: by 2002:a05:6358:7296:b0:164:953b:35a9 with SMTP id
- w22-20020a056358729600b00164953b35a9mr3669149rwf.23.1696811678244; Sun, 08
- Oct 2023 17:34:38 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1696818983; x=1697423783;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Z8Y/gC2ZU8lIowDp4uB5jkMKCGZrUswlojSZthU/zxU=;
+        b=bCdiiYq2ZLugeurF5aVH8z5xGYY7ou59uYR+dFKEqfymgXWlGL19+TxAzS7OiMylFT
+         fqnyIMFQBr+beLuS3Lp9fu85qrVtunHM6/cpILjzuD3CEm/s9XX5LeT8R3dj3n1cm/ka
+         d7CUNZbKgafP0Xm+mxrMgmCU/326wsZk/n1vr25iKA27oQeemhHbj+skoa26wsL7Kr69
+         WJsGvKhZ+5bIAvYaBvWiY7UIsoBWMdnGaXgH/kY7BNeyUYj3i2zCfS98ivX0xv8BLL/u
+         wsGFNNcYps1hegOC/T4w/LfUTU4pSQZm0NdSWrJAF1sRmdFJnb4lg8j3mWeWwBANDPQa
+         R/Bg==
+X-Gm-Message-State: AOJu0Yz5q1KXssN+N+zUU3lulVVF+pOAyUg1FniNJKNeoc+zKaSghcZJ
+	0d9UgpZygpLL2gL6Cb6mQT9mpvkD9T8=
+X-Google-Smtp-Source: AGHT+IGhTO/VKC4aRiv0adCxMPr6xQjHlEWFRNRANAKz+lMBgCRBw70SV6exa6/QElUkn6gt3/9m2A==
+X-Received: by 2002:a92:d14a:0:b0:349:983c:4940 with SMTP id t10-20020a92d14a000000b00349983c4940mr14551167ilg.1.1696818983212;
+        Sun, 08 Oct 2023 19:36:23 -0700 (PDT)
+Received: from epislon.kloppenborg.net ([2601:281:d47f:ffab::18db])
+        by smtp.gmail.com with ESMTPSA id m11-20020a924a0b000000b00351375f30b4sm2637583ilf.51.2023.10.08.19.36.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 Oct 2023 19:36:22 -0700 (PDT)
+From: Brian Kloppenborg <bkloppenborg@gmail.com>
+X-Google-Original-From: Brian Kloppenborg <brian@kloppenborg.net>
+To: Johan Hovold <johan@kernel.org>,
+	linux-usb@vger.kernel.org
+Cc: Brian Kloppenborg <brian@kloppenborg.net>
+Subject: [PATCH 0/2] Enable modem line status events on cp210x, add support for PPS on RI pin
+Date: Sun,  8 Oct 2023 20:34:23 -0600
+Message-Id: <20231009023425.366783-1-brian@kloppenborg.net>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Forest Crossman <cyrozap@gmail.com>
-Date: Sun, 8 Oct 2023 19:33:00 -0500
-Message-ID: <CAO3ALPxXSkRVu4UO+TXse47FCFimfN+dYjvssocmaRQ3zdMDpg@mail.gmail.com>
-Subject: r8152: "ram code speedup mode fail" error with latest RTL8156B firmware
-To: hayeswang@realtek.com, davem@davemloft.net, kuba@kernel.org
-Cc: netdev@vger.kernel.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Hi, all,
+Dear Johan,
 
-While looking at my kernel log today I noticed the following error:
+This is my first patch to the Linux kernel.
 
-> r8152 6-1:1.0: ram code speedup mode fail
+Patch 1 enables support for modem line status changes to the cp210x driver. This is required to receive pulse-per-second (PPS) signals from GPS receivers. Support for this feature exists in the FTDI driver, but is not present in cp210x. The patch is implemented through (1) enabling the device's event mode by default when the port is opened or closed, and (2) registering the CTS, DSR, RI, and DCD changes with the kernel through conventional means.
 
-The error appears when using the latest RTL8156B firmware (04/27/23),
-but not when using the previous version of the firmware (04/15/21).
+Patch 2 enables support for GPS PPS signals on the RI pin. While most GPS devices typically expose this signal on the DCD pin, the Adafruit Ultimate GPS with USB-C placed it on the RI pin instead. So this patch is highly focused on that specific device. From what I can tell, the usb_serial_handle_dcd_change function is used exclusively to register PPS signals with the kernel, so calling it from the RI block shouldn't result in unexpected behavior.
 
-I haven't really noticed any malfunction or degradation in the
-performance of my RTL8156B device, but I figured I'd bring this to
-your attention anyways just in case either something really is wrong
-with the firmware or the driver is simply printing the error by
-mistake.
+Please let me know if you require any further information.
 
-Thanks,
+Regards
 
-Forest
+Brian Kloppenborg
+
+Signed-off-by: Brian Kloppenborg <brian@kloppenborg.net>
+
+Brian Kloppenborg (2):
+  Make cp210x respond to modem status changes (CTS, DSR, RI, DCD) by
+    default.
+  Make cp210x register GPS PPS signals on the RI pin.
+
+ drivers/usb/serial/cp210x.c | 71 +++++++++++++++++++++++++++++++------
+ 1 file changed, 60 insertions(+), 11 deletions(-)
+
+-- 
+2.34.1
+
 
