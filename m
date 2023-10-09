@@ -1,43 +1,54 @@
-Return-Path: <linux-usb+bounces-1263-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1264-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C15707BD8FC
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 12:51:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7AB5F7BDBA5
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 14:23:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EB8561C20B6A
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 10:51:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC2861C20A4C
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 12:23:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83635156C3;
-	Mon,  9 Oct 2023 10:51:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88C2A19469;
+	Mon,  9 Oct 2023 12:23:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dolce-energy.com header.i=@dolce-energy.com header.b="FPK7F6yM"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="iknY5SyQ"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CD5E210B
-	for <linux-usb@vger.kernel.org>; Mon,  9 Oct 2023 10:51:33 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A6719D
-	for <linux-usb@vger.kernel.org>; Mon,  9 Oct 2023 03:51:31 -0700 (PDT)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 61A73FF805
-	for <linux-usb@vger.kernel.org>; Mon,  9 Oct 2023 10:51:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolce-energy.com;
-	s=gm1; t=1696848689;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=JeK/igannISDpquIOtGRB3F+sXtOcKemIE/t5O87tyI=;
-	b=FPK7F6yMnxGUUwtbrvswNcNg5fHomcPG0LbbOBrtx31Gmlg3kALBEX3mu6/RQvKgnGtFRI
-	jIrW0RocmIgaxibBwBGgMsVQXz7/v91CqKOUr7tblkH3oo6rzdn5K5UvWcM1KvhVBBBtaJ
-	2CKJQMo9Z8/L88bLpk6vaaq+3E4hKKs/quIi+btR6rRSXp5EkbFA+ndLQfmy4dTYbeol3r
-	qlBJMTxkfFKrouZ+jLsHOfG8xad0u4h/Lh7H2YEBngi47e8n2TRrra/DL2IxU4Bb/iejtR
-	NH9rYE1/5naTtDdL29HtHJlHvCzOrS/rsvLgxSm7CCGW7/+9aqYwg7V96HM7vg==
-Message-ID: <9f99a188-cb45-439c-8006-dc0cd4e1ef3e@dolce-energy.com>
-Date: Mon, 9 Oct 2023 12:50:54 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30523C8F8;
+	Mon,  9 Oct 2023 12:23:02 +0000 (UTC)
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14EF0B6;
+	Mon,  9 Oct 2023 05:23:00 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 399CCcB0028812;
+	Mon, 9 Oct 2023 12:22:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=suP35r1I9Tl7Cfr9eTF8H/MOSNej0t7TcjZBQBeGero=;
+ b=iknY5SyQ1Ak+PDP/eh9dd1stRLx0L9lD8X9l0s0usw0t1Qfw9s88KR2S40Qjr+PIRVzT
+ ma+qb2Rg1gTgUBYXlL1+bcEwjjIfAKqrki4wfaAc0Q//SZ1ubce8KMdQ0g4s3lR1Vb1g
+ 6DXkBmST4ZbkKrpuS5odle3BApIPOl0PuJZL9JCQnRblx67OtnhB5Su35ddZqpj2ODDD
+ ae5CMk7NVheCRyOrFtPnmum6Da1yJqU/cxYpnW9okj/hMfw34Wk2/saH93CVNIuS6rNt
+ XixhNe+bw6J68ooO6tsTz/Tilp4XMqwub8nsv8Z7WI5RzHeuP8dzR5F1LYCxoul8/apF kA== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tkhx2jb92-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 09 Oct 2023 12:22:22 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 399CMKRB017690
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 9 Oct 2023 12:22:20 GMT
+Received: from [10.216.45.67] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Mon, 9 Oct
+ 2023 05:22:11 -0700
+Message-ID: <55435a32-1c3f-479b-b257-a190ef3fc7cb@quicinc.com>
+Date: Mon, 9 Oct 2023 17:52:07 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -45,107 +56,110 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-From: jlmxyz <dev.delaboetie@dolce-energy.com>
-Content-Language: fr
-To: linux-usb@vger.kernel.org
-Subject: usb-c port power not reset correctly (can't connect any device after
- a phone was connected)
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH 2/8] phy: qcom: Introduce Super-Speed USB UNIPHY driver
+To: Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Dmitry Baryshkov
+	<dmitry.baryshkov@linaro.org>
+CC: <agross@kernel.org>, <andersson@kernel.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <gregkh@linuxfoundation.org>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <p.zabel@pengutronix.de>, <geert+renesas@glider.be>,
+        <arnd@arndb.de>, <neil.armstrong@linaro.org>,
+        <nfraprado@collabora.com>, <u-kumar1@ti.com>, <peng.fan@nxp.com>,
+        <quic_wcheng@quicinc.com>, <quic_varada@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <quic_kathirav@quicinc.com>, <quic_nsekar@quicinc.com>,
+        <quic_srichara@quicinc.com>
+References: <20230929084209.3033093-1-quic_ipkumar@quicinc.com>
+ <20230929084209.3033093-3-quic_ipkumar@quicinc.com>
+ <412492d1-fcc9-481c-9d28-b208a644ba1d@linaro.org>
+ <7975c638-29cf-45ce-9d76-b8a93d750eb7@quicinc.com>
+ <CAA8EJprhQz_Tj0Bhv6zhGa7h37Ug-Fp6Tof9tNscTFyZzkbJvw@mail.gmail.com>
+ <0007b5ff-34d4-44c0-80bd-8277d5842c01@linaro.org>
+Content-Language: en-US
+From: Praveenkumar I <quic_ipkumar@quicinc.com>
+In-Reply-To: <0007b5ff-34d4-44c0-80bd-8277d5842c01@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-GND-Sasl: jl.m.a.l.e.t@dolce-energy.com
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: lslQH4pSDAP-WMR6p4dijFZIEMlxgnM5
+X-Proofpoint-ORIG-GUID: lslQH4pSDAP-WMR6p4dijFZIEMlxgnM5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-09_11,2023-10-09_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ impostorscore=0 malwarescore=0 mlxscore=0 lowpriorityscore=0 phishscore=0
+ bulkscore=0 adultscore=0 priorityscore=1501 spamscore=0 mlxlogscore=380
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2310090101
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Hi,
-
-my hardware :https://wiki.gentoo.org/wiki/Lenovo_Yoga_900
-I use the pre-built gentoo linux kernel,
-Linux jlmyoga900 6.5.5-gentoo-dist #1 SMP PREEMPT_DYNAMIC Sat Sep 23 17:31:47 -00 2023 x86_64 Intel(R) Core(TM) i7-6500U CPU @ 2.50GHz GenuineIntel GNU/Linux
 
 
-output of lsusb, phone connected on usb-c port, phone in "share connection virtual network adaptater mode"
-$ lsusb -t
-/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/6p, 5000M
-     |__ Port 3: Dev 12, If 0, Class=Wireless, Driver=rndis_host, 5000M
-     |__ Port 3: Dev 12, If 1, Class=CDC Data, Driver=rndis_host, 5000M
-     |__ Port 3: Dev 12, If 2, Class=Vendor Specific Class, Driver=, 5000M
-/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/12p, 480M
-     |__ Port 6: Dev 2, If 0, Class=Video, Driver=uvcvideo, 480M
-     |__ Port 6: Dev 2, If 1, Class=Video, Driver=uvcvideo, 480M
-     |__ Port 7: Dev 4, If 0, Class=Wireless, Driver=btusb, 12M
-     |__ Port 7: Dev 4, If 1, Class=Wireless, Driver=btusb, 12M
-
-output of lsusb, micro sd card connected on usb-c port using usb-A-usb-c adaptater (works on the phone),
-$ lsusb -t
-/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/6p, 5000M
-/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/12p, 480M
-     |__ Port 6: Dev 2, If 0, Class=Video, Driver=uvcvideo, 480M
-     |__ Port 6: Dev 2, If 1, Class=Video, Driver=uvcvideo, 480M
-     |__ Port 7: Dev 4, If 0, Class=Wireless, Driver=btusb, 12M
-     |__ Port 7: Dev 4, If 1, Class=Wireless, Driver=btusb, 12M
-
-output of lsusb, micro sd card connected on usb-A port,
-$ lsusb -t
-/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/6p, 5000M
-     |__ Port 2: Dev 13, If 0, Class=Mass Storage, Driver=usb-storage, 5000M
-/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/12p, 480M
-     |__ Port 6: Dev 2, If 0, Class=Video, Driver=uvcvideo, 480M
-     |__ Port 6: Dev 2, If 1, Class=Video, Driver=uvcvideo, 480M
-     |__ Port 7: Dev 4, If 0, Class=Wireless, Driver=btusb, 12M
-     |__ Port 7: Dev 4, If 1, Class=Wireless, Driver=btusb, 12M
-
-output of dmesg
----- connecting the phone
-[371134.453914] xhci_hcd 0000:00:14.0: WARN Set TR Deq Ptr cmd failed due to incorrect slot or ep state.
-[371162.893880] usb usb2-port3: config error
-[371163.527330] usb 2-3: new SuperSpeed USB device number 11 using xhci_hcd
-[371163.544872] usb 2-3: New USB device found, idVendor=04e8, idProduct=685d, bcdDevice= 4.14
-[371163.544881] usb 2-3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-[371163.544885] usb 2-3: Product: SM-N975F
-[371163.544888] usb 2-3: Manufacturer: samsung
-[371163.544890] usb 2-3: SerialNumber: RF8M73LKC5E
-[371181.443775] usb 2-3: USB disconnect, device number 11
-[371181.700584] usb 2-3: new SuperSpeed USB device number 12 using xhci_hcd
-[371181.718597] usb 2-3: New USB device found, idVendor=04e8, idProduct=6864, bcdDevice= 4.14
-[371181.718606] usb 2-3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-[371181.718610] usb 2-3: Product: SM-N975F
-[371181.718613] usb 2-3: Manufacturer: samsung
-[371181.718615] usb 2-3: SerialNumber: RF8M73LKC5E
-[371181.843263] usbcore: registered new interface driver cdc_ether
-[371181.850720] rndis_host 2-3:1.0 usb0: register 'rndis_host' at usb-0000:00:14.0-3, RNDIS device, 02:24:0a:73:0e:02
-[371181.851343] usbcore: registered new interface driver rndis_host
-[371181.905461] rndis_host 2-3:1.0 enp0s20f0u3: renamed from usb0
-[371275.791820] usb 2-3: USB disconnect, device number 12
-[371275.791890] rndis_host 2-3:1.0 enp0s20f0u3: unregister 'rndis_host' usb-0000:00:14.0-3, RNDIS device
------ disconnecting the phone connecting the usb masstorage usb-c port
------ disconnecting the masstorage usb-c - connecting same device on usb-A port next to it
-[371352.897323] usb 2-2: new SuperSpeed USB device number 13 using xhci_hcd
-[371352.916934] usb 2-2: New USB device found, idVendor=11b0, idProduct=3307, bcdDevice= 0.13
-[371352.916949] usb 2-2: New USB device strings: Mfr=3, Product=4, SerialNumber=2
-[371352.916951] usb 2-2: Product: UHSII uSD Reader
-[371352.916954] usb 2-2: Manufacturer: Kingston
-[371352.916955] usb 2-2: SerialNumber: 202006001890
-[371352.919919] usb-storage 2-2:1.0: USB Mass Storage device detected
-[371352.939695] scsi host3: usb-storage 2-2:1.0
-[371353.951776] scsi 3:0:0:0: Direct-Access     Kingston UHSII uSD Reader 0013 PQ: 0 ANSI: 6
-[371353.952333] sd 3:0:0:0: Attached scsi generic sg1 type 0
-[371354.333610] sd 3:0:0:0: [sdb] 500695040 512-byte logical blocks: (256 GB/239 GiB)
-[371354.334277] sd 3:0:0:0: [sdb] Write Protect is off
-[371354.334282] sd 3:0:0:0: [sdb] Mode Sense: 21 00 00 00
-[371354.334902] sd 3:0:0:0: [sdb] Write cache: disabled, read cache: enabled, doesn't support DPO or FUA
-[371354.338703]  sdb: sdb1
-[371354.338841] sd 3:0:0:0: [sdb] Attached SCSI removable disk
-
-there is no dmesg entry when connecting on the usb-c as if there was no power
-I tried on phone to change the device powering the port, but I always get error, when connecting the phone, even if it is in "charge only" mode, the battery icon don't show any charging information.... looks like the port is always powered by the phone and the first time the device powering the port is choosen in power negociation, the port will after remain in slave-power mode on the laptop....
-
-I will gladely help troubleshooting the issue, having a usb port less over 3 is really problematic
-don't know if I can change the settings of the port using /sys?
-
-thanks and regards
-JL
-
+On 10/7/2023 5:27 AM, Konrad Dybcio wrote:
+> On 3.10.2023 16:54, Dmitry Baryshkov wrote:
+>> On Tue, 3 Oct 2023 at 17:22, Praveenkumar I <quic_ipkumar@quicinc.com> wrote:
+>>>
+>>>
+>>> On 9/30/2023 10:48 PM, Dmitry Baryshkov wrote:
+>>>> On 29/09/2023 11:42, Praveenkumar I wrote:
+>>>>> Adds Qualcomm 22ull Super-Speed USB UNIPHY driver support which
+>>>>> is present in Qualcomm IPQ5332 SoC. This PHY is interfaced with
+>>>>> SNPS DWC3 USB and SNPS DWC PCIe. Either one of the interface
+>>>>> can use the it and selection is done via mux present in TCSR
+>>>>> register. This driver selects the PHY for DWC3 USB and handles
+>>>>> the reset, clocks and regulator.
+>>>>>
+>>>>> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+>>>>> ---
+>>>>>    drivers/phy/qualcomm/Kconfig               |  11 +
+>>>>>    drivers/phy/qualcomm/Makefile              |   1 +
+>>>>>    drivers/phy/qualcomm/phy-qcom-uniphy-usb.c | 322 +++++++++++++++++++++
+>>>>>    3 files changed, 334 insertions(+)
+>>>>>    create mode 100644 drivers/phy/qualcomm/phy-qcom-uniphy-usb.c
+>>>>>
+>>>>> diff --git a/drivers/phy/qualcomm/Kconfig b/drivers/phy/qualcomm/Kconfig
+>>>>> index d891058b7c39..7257c8455c53 100644
+>>>>> --- a/drivers/phy/qualcomm/Kconfig
+>>>>> +++ b/drivers/phy/qualcomm/Kconfig
+>>>>> @@ -154,6 +154,17 @@ config PHY_QCOM_M31_USB
+>>>>>          management. This driver is required even for peripheral only or
+>>>>>          host only mode configurations.
+>>>>>    +config PHY_QCOM_UNIPHY_USB
+>>>>> +    tristate "Qualcomm USB Super-Speed UNIPHY driver"
+>>>> Can we please have more specific driver name? As I wrote earlier,
+>>>> there are two other (different) kinds of Qualcomm UNI PHY devices:
+>>>> - DSI / HDMI UNIPHY on apq8064 / msm8974 / msm8960 (?)
+>>>> - USB QMP UNI PHY drivers
+>>>>
+>>>> Adding a driver called UNIPHY, which is not related to those two kinds
+>>>> sounds pretty confusing to me.
+>>> This UNIPHY is different from above mentioned ones. This a custom
+>>> version for 22nm on Qualcomm IPQ5332.
+>>> Can we name the driver as phy-qcom-uniphy-usb-ss-22ull.c /
+>>> phy-qcom-usb-ss-22ull.c ?
+>> usb-ss-22ull sounds better. Or maybe usb-ipq-ss
+> usb-ipq-ss is as safe as usb-msm-ss
+>
+> We can not rely on the hardware never ever changing down the
+> product line :D
+Not all IPQ platforms having this UNIPHY. Only IPQ5332 and IPQ5018 are 
+having
+this custom version of UNIPHY. Hence thought usb-ipq-ss might confuse.
+>
+> Konrad
+--
+Thanks,
+Praveenkumar
 
