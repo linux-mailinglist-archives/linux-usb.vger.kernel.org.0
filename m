@@ -1,60 +1,60 @@
-Return-Path: <linux-usb+bounces-1306-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1307-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5F9C7BEB3E
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 22:06:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 641617BEB85
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 22:20:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 223821C20C88
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 20:06:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A3733281CFA
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Oct 2023 20:20:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F24BB3D986;
-	Mon,  9 Oct 2023 20:06:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F2F13FB10;
+	Mon,  9 Oct 2023 20:20:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ionos.com header.i=@ionos.com header.b="BFuMz3FM"
+	dkim=pass (2048-bit key) header.d=ionos.com header.i=@ionos.com header.b="ZXApSf+x"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6B623D993
-	for <linux-usb@vger.kernel.org>; Mon,  9 Oct 2023 20:06:11 +0000 (UTC)
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F74E3
-	for <linux-usb@vger.kernel.org>; Mon,  9 Oct 2023 13:06:08 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2c1807f3400so60244961fa.1
-        for <linux-usb@vger.kernel.org>; Mon, 09 Oct 2023 13:06:08 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D0B23FB0F
+	for <linux-usb@vger.kernel.org>; Mon,  9 Oct 2023 20:20:29 +0000 (UTC)
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B85C0E0
+	for <linux-usb@vger.kernel.org>; Mon,  9 Oct 2023 13:20:26 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2c17de836fbso62365891fa.1
+        for <linux-usb@vger.kernel.org>; Mon, 09 Oct 2023 13:20:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ionos.com; s=google; t=1696881966; x=1697486766; darn=vger.kernel.org;
+        d=ionos.com; s=google; t=1696882824; x=1697487624; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vntWR/EJpWFamZ/9NMXVbCLlV4xDhJbERcnlqbMN6Xk=;
-        b=BFuMz3FMbhLgkIJi/HkkmJ1VkLf2I7vqp4svyIwG2+yDE+U4S96EGEikgUcb8O02Uo
-         8j8iLlfo7vmxsfcwVcs/qIKkl99xa5dmEeJRo1cSF6V+ygbEal7iO3+v912NQA+dawBz
-         Soy5yco9XA4Rbc4rDCwVGkioAfXZalXRitmVvyF0C2rWZ0Ewe2//XA3FBEsbn52apGZL
-         aRFt/c7Wzbg6QpYPQ0dm8EJR8fe2x3S+duZuFSIP/H5VlRW/FVRYn5HxOETlTJKz3xcb
-         BMDmJLPjWEXQ8IaDm9bc5q/71Ibv+h4ffhs1BXiaAk1KUwUk/S2rUW6zLyroy1Lm1kJC
-         OAGg==
+        bh=Y+Vz1bOKclq9QVOuzcbH1aPgn89tmrsRZHycaiZatEw=;
+        b=ZXApSf+xs3DWZi9glvHF1ftND6nJHcuKyZNMhSXqRfpzyjpe56h3jtGPbf0ReTYeIR
+         RoqIRMnNlo5c4iYjSTI3QLMoSrSL3Rs4N1wpJYkT7wNvk55NM8Kj09YWfoihk3uwDV0N
+         j3DLQGPgNtVUZ1Xe3iQddIydsZZGVwfsNomkvREBIGMDV5eJ9Swc92sSWIp/4FFJLqSW
+         cxpBEqBDyMXZseJ7uDuknWrKTq/l6vorjNDBaNeMsX/00U5lU9RwVZ4B+UfgR9Phi2Nn
+         Kmrm7CQdyUv/4Oz1E2zyTUl+ziSyCKtPfjZ+tJ8buhGvk4n7GbHom+dqb86i8kTuCv48
+         ctcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696881966; x=1697486766;
+        d=1e100.net; s=20230601; t=1696882824; x=1697487624;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=vntWR/EJpWFamZ/9NMXVbCLlV4xDhJbERcnlqbMN6Xk=;
-        b=B285GgYLJ8GEQPCo8eeTO+v+i4VrWV19tEC3kYUTqMCxcAk2bcH8c8NaxR4eqlr30U
-         Ou5w8N2a7AsGUjH9wpNJkatxQdAdrfnOb+QWvwC+TKT8bSUUbvLLVjUTVVC6xPl0fMwW
-         FoNYmVQFgpxat0CckqXYfpqrLat7YauIJ6b++qpf6ymI5nHxuWWZR1xs83Xex2WjtCv+
-         BbgLx5+Pyp7OzTZgwE25M976bOHsOVHsRH5vAj4lUqC4gdc9hVoOUiLGkPdz9p9wIpFw
-         z/gjervCSnpTW6uCEYH26kXlUJ78YxIH3oeaNQKRZRvphCvJxvvsLUGbA3QD/4wfXkYw
-         9IgQ==
-X-Gm-Message-State: AOJu0YxMjOjj1ezCzN7cDJ8klobd129pPjQ910sUEHLnQs+7+qpxq5Bs
-	o+Ouerz/iCRavwbxjHAwVw07OeKYPPDeYFW/iStlVg==
-X-Google-Smtp-Source: AGHT+IFghqg7b3VfDVvZ+soPEwEaIfxhrwarlOcz2b03PC3KagC0O9BH1UGRNCP79pJ8yT5JMzxC/VoYSKvtKG/y1ws=
-X-Received: by 2002:a2e:870c:0:b0:2b6:cbdb:790c with SMTP id
- m12-20020a2e870c000000b002b6cbdb790cmr11535962lji.1.1696881966432; Mon, 09
- Oct 2023 13:06:06 -0700 (PDT)
+        bh=Y+Vz1bOKclq9QVOuzcbH1aPgn89tmrsRZHycaiZatEw=;
+        b=hvfLwBGtl9hOO45uR3b8y9yxDC8rhIDnM13VT5Lc3xdJQeUld2nMN2kjafIHb0E4Ps
+         v360q5GEJeB3PNOY7ZA4Y5spdC9suE//2GxPxLYirKtNMUY/7Wzq1trN6BsdutGfp0RJ
+         dzW5WSr48s/cwAQmkrAd1cGhxvLB1qzDwuqOLAmqUVfXLJGsZnEaFYJdQGztyXOWB1R3
+         dvFGggQw3ksUZkuTXzyUYRlspucnyYz0znr7P8OWLSnHcWRvbPAdKtmtE86hWyp8H48L
+         x04/0chIYIVmVBJVm0Sqf2uB5kw7gacoEYInHagceJb3E8rLVM/yzc0dnaKJkiHM53Sm
+         ffAw==
+X-Gm-Message-State: AOJu0YxtUurldprHJiZuOXZhFoFReTLIAW2AN0OMk7BzWgZ1nDVxcEvo
+	aVW20fmCZXa3AAf0BLlidK0UoCzvvuRO0FWKuINnag==
+X-Google-Smtp-Source: AGHT+IEX6TNoPqier59OSFRvkXjcha7x9rPtvBMuDMX6o39QQshLcsk0zSX1nZ378MTMsNUvnOr8e/pohr3AIc4q14M=
+X-Received: by 2002:a05:651c:120e:b0:2bf:fbe7:67dd with SMTP id
+ i14-20020a05651c120e00b002bffbe767ddmr14845991lja.28.1696882824611; Mon, 09
+ Oct 2023 13:20:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -62,29 +62,28 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20231009165741.746184-1-max.kellermann@ionos.com>
- <20231009165741.746184-6-max.kellermann@ionos.com> <264fa39d-aed6-4a54-a085-107997078f8d@roeck-us.net>
-In-Reply-To: <264fa39d-aed6-4a54-a085-107997078f8d@roeck-us.net>
+ <20231009165741.746184-6-max.kellermann@ionos.com> <2023100921-that-jasmine-2240@gregkh>
+In-Reply-To: <2023100921-that-jasmine-2240@gregkh>
 From: Max Kellermann <max.kellermann@ionos.com>
-Date: Mon, 9 Oct 2023 22:05:55 +0200
-Message-ID: <CAKPOu+8k2x1CucWSzoouts0AfMJk+srJXWWf3iWVOeY+fWkOpQ@mail.gmail.com>
+Date: Mon, 9 Oct 2023 22:20:13 +0200
+Message-ID: <CAKPOu+9=WBabTBExH1GQxhXrNH9xWciceavi6QF1nbfn9cXcig@mail.gmail.com>
 Subject: Re: [PATCH 6/7] fs/sysfs/group: make attribute_group pointers const
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Jens Axboe <axboe@kernel.dk>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>, 
-	James Morse <james.morse@arm.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
-	Robert Richter <rric@kernel.org>, Jean Delvare <jdelvare@suse.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Leon Romanovsky <leon@kernel.org>, Bart Van Assche <bvanassche@acm.org>, Joerg Roedel <joro@8bytes.org>, 
-	Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>, 
-	Dan Williams <dan.j.williams@intel.com>, Vishal Verma <vishal.l.verma@intel.com>, 
-	Dave Jiang <dave.jiang@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
-	Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>, 
-	Alessandro Zummo <a.zummo@towertech.it>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Jiri Slaby <jirislaby@kernel.org>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Mike Leach <mike.leach@linaro.org>, James Clark <james.clark@arm.com>, 
-	Leo Yan <leo.yan@linaro.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Peter Zijlstra <peterz@infradead.org>, Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Bjorn Helgaas <bhelgaas@google.com>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Jens Axboe <axboe@kernel.dk>, "Rafael J. Wysocki" <rafael@kernel.org>, Borislav Petkov <bp@alien8.de>, 
+	Tony Luck <tony.luck@intel.com>, James Morse <james.morse@arm.com>, 
+	Mauro Carvalho Chehab <mchehab@kernel.org>, Robert Richter <rric@kernel.org>, Jean Delvare <jdelvare@suse.com>, 
+	Guenter Roeck <linux@roeck-us.net>, Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
+	Bart Van Assche <bvanassche@acm.org>, Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>, 
+	Robin Murphy <robin.murphy@arm.com>, Dan Williams <dan.j.williams@intel.com>, 
+	Vishal Verma <vishal.l.verma@intel.com>, Dave Jiang <dave.jiang@intel.com>, 
+	Ira Weiny <ira.weiny@intel.com>, Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>, 
+	Sagi Grimberg <sagi@grimberg.me>, Alessandro Zummo <a.zummo@towertech.it>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Jiri Slaby <jirislaby@kernel.org>, 
+	Suzuki K Poulose <suzuki.poulose@arm.com>, Mike Leach <mike.leach@linaro.org>, 
+	James Clark <james.clark@arm.com>, Leo Yan <leo.yan@linaro.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>, Pavel Machek <pavel@ucw.cz>, 
+	Lee Jones <lee@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Bjorn Helgaas <bhelgaas@google.com>, 
+	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
 	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
 	Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>, 
 	Adrian Hunter <adrian.hunter@intel.com>, Sebastian Reichel <sre@kernel.org>, 
@@ -102,31 +101,18 @@ Cc: Jens Axboe <axboe@kernel.dk>, Greg Kroah-Hartman <gregkh@linuxfoundation.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
 	SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
 	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Mon, Oct 9, 2023 at 7:24=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> w=
-rote:
-> Also, I don't know why checkpatch is happy with all the
->
->         const struct attribute_group *const*groups;
->
-> instead of
->
->         const struct attribute_group *const *groups;
+On Mon, Oct 9, 2023 at 7:26=E2=80=AFPM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+> "*const*groups"?   That's a parsing nightmare, really hard for humans to
+> read and understand.  Doesn't checkpatch complain about this?
 
-I found out that checkpatch has no check for this at all; it does
-complain about such lines, but only for local variables. But that
-warning is actually a bug, because this is a check for unary
-operators: it thinks the asterisk is a dereference operator, not a
-pointer declaration, and complains that the unary operator must be
-preceded by a space. Thus warnings on local variable are only correct
-by coincidence, not by design.
-
-Inside structs or parameters (where my coding style violations can be
-found), it's a different context and thus checkpatch doesn't apply the
-rules for unary operators.
+No, checkpatch does not implement a check/warning for this style (see
+my other email). There's no rule for this in coding-style.rst. Should
+there be one?
 
