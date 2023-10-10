@@ -1,136 +1,179 @@
-Return-Path: <linux-usb+bounces-1375-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1376-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B260C7BFFE7
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Oct 2023 17:02:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C459D7C005B
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Oct 2023 17:27:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D55121C20DA2
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Oct 2023 15:02:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5668C281EE0
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Oct 2023 15:27:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A408E28F4;
-	Tue, 10 Oct 2023 15:02:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=sensoray.com header.i=@sensoray.com header.b="htj6qxqK"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EDCA27455;
+	Tue, 10 Oct 2023 15:27:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F8E929412
-	for <linux-usb@vger.kernel.org>; Tue, 10 Oct 2023 15:02:26 +0000 (UTC)
-Received: from omta039.useast.a.cloudfilter.net (omta039.useast.a.cloudfilter.net [44.202.169.38])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCCCCAC
-	for <linux-usb@vger.kernel.org>; Tue, 10 Oct 2023 08:02:24 -0700 (PDT)
-Received: from eig-obgw-5010a.ext.cloudfilter.net ([10.0.29.199])
-	by cmsmtp with ESMTP
-	id pzWcqU8GaaLCxqEFbqDxzn; Tue, 10 Oct 2023 15:02:23 +0000
-Received: from gator3086.hostgator.com ([50.87.144.121])
-	by cmsmtp with ESMTPS
-	id qEFbqMgbzX2l7qEFbqNK4w; Tue, 10 Oct 2023 15:02:23 +0000
-X-Authority-Analysis: v=2.4 cv=Ut5wis8B c=1 sm=1 tr=0 ts=6525677f
- a=qMXOcmIMY6YlrKEg1GzxDg==:117 a=QsTHvn2EeHXCImuSLmd++Q==:17
- a=OWjo9vPv0XrRhIrVQ50Ab3nP57M=:19 a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19
- a=kj9zAlcOel0A:10 a=bhdUkHdE2iEA:10 a=6kiSLZGAxYIA:10 a=wXneSEFuAAAA:8
- a=Z4Rwk6OoAAAA:8 a=zlXjzUhwOT6McCRvPVsA:9 a=CjuIK1q_8ugA:10
- a=YVKGGmaMxpnpCiYzuRtG:22 a=HkZW87K1Qel5hWWM3VKY:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=sensoray.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-	Message-ID:References:In-Reply-To:Subject:Cc:To:From:Date:MIME-Version:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=QMQ0DdGQWx0t9SfeWzFXKxFzsTczkhDHsDEr+dfX7jw=; b=htj6qxqK94dgCRrSYYZZRpQEtb
-	WrVAiOch1GbcHdF62a/hJl0drShVBPdgky7onBYvdswud1eoEWmFsjxq0Q22h573YQww53ss8BrWn
-	r08LovciFepDsh6wmGCqsMNpagH1TWznM3PkahYXD4Rm8+MVFkcF56e74ne2T2EdjD/E=;
-Received: from gator3086.hostgator.com ([50.87.144.121]:12142)
-	by gator3086.hostgator.com with esmtpa (Exim 4.95)
-	(envelope-from <dean@sensoray.com>)
-	id 1qqEFa-001qqY-HP;
-	Tue, 10 Oct 2023 10:02:22 -0500
-Received: from mail.thomaswright.com ([50.126.89.90])
- by www.sensoray.com
- with HTTP (HTTP/1.1 POST); Tue, 10 Oct 2023 10:02:22 -0500
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7ED32744A
+	for <linux-usb@vger.kernel.org>; Tue, 10 Oct 2023 15:26:57 +0000 (UTC)
+Received: from mp-relay-02.fibernetics.ca (mp-relay-02.fibernetics.ca [208.85.217.137])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C4999
+	for <linux-usb@vger.kernel.org>; Tue, 10 Oct 2023 08:26:56 -0700 (PDT)
+Received: from mailpool-fe-01.fibernetics.ca (mailpool-fe-01.fibernetics.ca [208.85.217.144])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mp-relay-02.fibernetics.ca (Postfix) with ESMTPS id 5BC4976268;
+	Tue, 10 Oct 2023 15:26:55 +0000 (UTC)
+Received: from localhost (mailpool-mx-02.fibernetics.ca [208.85.217.141])
+	by mailpool-fe-01.fibernetics.ca (Postfix) with ESMTP id 5262346F8C;
+	Tue, 10 Oct 2023 15:26:55 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at 
+X-Spam-Score: -0.2
+X-Spam-Level:
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: from mailpool-fe-01.fibernetics.ca ([208.85.217.144])
+	by localhost (mail-mx-02.fibernetics.ca [208.85.217.141]) (amavisd-new, port 10024)
+	with ESMTP id C6yqAtVrAjgh; Tue, 10 Oct 2023 15:26:54 +0000 (UTC)
+Received: from [192.168.48.17] (host-104-157-209-188.dyn.295.ca [104.157.209.188])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: dgilbert@interlog.com)
+	by mail.ca.inter.net (Postfix) with ESMTPSA id 79F2846F87;
+	Tue, 10 Oct 2023 15:26:54 +0000 (UTC)
+Message-ID: <efa08b04-94aa-4150-bf24-850e739bc3f2@interlog.com>
+Date: Tue, 10 Oct 2023 11:26:53 -0400
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Tue, 10 Oct 2023 10:02:22 -0500
-From: dean@sensoray.com
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: linux-dev@sensoray.com, balbi@kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: function fs req_match endpoint address fix
-In-Reply-To: <2023101025-tavern-properly-3114@gregkh>
-References: <20231009220656.2990612-1-linux-dev@sensoray.com>
- <2023101025-tavern-properly-3114@gregkh>
-User-Agent: Roundcube Webmail/1.4.12
-Message-ID: <17afa339f888408c3d49e5b4adb19c06@sensoray.com>
-X-Sender: dean@sensoray.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla Thunderbird
+Reply-To: dgilbert@interlog.com
+Subject: Re: [typec] ucsi.c: ucsi_register_partner_pdos() leak
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: linux-usb@vger.kernel.org
+References: <161b4007-3360-4268-ab66-bc19aa8f360e@interlog.com>
+ <ZSUMXdw9nanHtnw2@kuha.fi.intel.com> <ZSVcTQfIHJtctJlj@kuha.fi.intel.com>
+Content-Language: en-CA
+From: Douglas Gilbert <dgilbert@interlog.com>
+In-Reply-To: <ZSVcTQfIHJtctJlj@kuha.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator3086.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - sensoray.com
-X-BWhitelist: no
-X-Source-IP: 50.87.144.121
-X-Source-L: Yes
-X-Exim-ID: 1qqEFa-001qqY-HP
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: gator3086.hostgator.com [50.87.144.121]:12142
-X-Source-Auth: dean@sensoray.com
-X-Email-Count: 1
-X-Org: HG=hgshared;ORG=hostgator;
-X-Source-Cap: c2Vuc29yYXk7c2Vuc29yYXk7Z2F0b3IzMDg2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfN3r4JTKxPLe5Pg7jmuhNgo49+ACh5UnrFsYEQws4iNJ5Mg/dIRKSRWxkGKug/HzfuXsKWN1sG6Tcdq94cga2OAey2BtdWc/tZ2HM5SOcGZ2riG8mLjI
- S4MBJlu0Qrf6x4QEsYGjH4MhEIeqYYuQYAdJg9DgxCQ+NSKEepXONYS/B2PXrUgG8sIgi9EEwfFwDnXoXFZ8wug8VT/Kqea8fhU=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,TRACKER_ID,URIBL_BLOCKED
-	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On 2023-10-10 01:00, Greg KH wrote:
-> On Mon, Oct 09, 2023 at 03:06:56PM -0700, linux-dev@sensoray.com wrote:
->> From: Dean Anderson <linux-dev@sensoray.com>
->> 
->> Fixes f_fs.c handling USB_RECIP_ENDPOINT request types incorrectly for
->> endpoints not belonging to it. f_fs.c needs to distinguish between IN
->> and OUT endpoints, not just the endpoint number. Otherwise, f_fs may
->> handle endpoints belonging to other functions. This occurs in the
->> gadget/composite.c composite_setup function in the req_match callback.
->> 
->> Signed-off-by: Dean Anderson <linux-dev@sensoray.com>
->> 
->> ---
->>  drivers/usb/gadget/function/f_fs.c | 14 ++++++++++----
->>  1 file changed, 10 insertions(+), 4 deletions(-)
+On 2023-10-10 10:14, Heikki Krogerus wrote:
+> On Tue, Oct 10, 2023 at 11:33:36AM +0300, Heikki Krogerus wrote:
+>> Hi Douglas,
+>>
+>> Please always CC the mailing list. I'm not the only person working on
+>> this code.
+
+Okay.
+
+>>
+>> On Sun, Oct 08, 2023 at 06:59:19PM -0400, Douglas Gilbert wrote:
+>>> Hi,
+>>> I was debugging something else in lk 6.6.0-rc1 and was tailing
+>>> /var/log/syslog and noticed several:
+>>>     kmemleak: 6 new suspected memory leaks
+>>> messages so I had a look and saw many of these:
+>>>
+>>> unreferenced object 0xffff8882943a4df8 (size 8):
+>>>    comm "kworker/u32:41", pid 73935, jiffies 4437924777 (age 6489.122s)
+>>>    hex dump (first 8 bytes):
+>>>      70 64 35 00 82 88 ff ff                          pd5.....
+>>>    backtrace:
+>>>      [<ffffffff812d247c>] __kmalloc_node_track_caller+0x4c/0x150
+>>>      [<ffffffff815c8585>] kvasprintf+0x65/0xd0
+>>>      [<ffffffff81b1b56c>] kobject_set_name_vargs+0x1c/0x90
+>>>      [<ffffffff8178f30e>] dev_set_name+0x4e/0x70
+>>>      [<ffffffffa05f78b4>] usb_power_delivery_register+0x84/0xe0 [typec]
+>>>      [<ffffffffa0748112>] ucsi_register_partner_pdos+0x62/0x190 [typec_ucsi]
+>>>      [<ffffffffa07464a8>] ucsi_poll_worker+0x38/0x110 [typec_ucsi]
+>>>      [<ffffffff810a9d48>] process_one_work+0x1d8/0x4b0
+>>>      [<ffffffff810ab149>] worker_thread+0x1c9/0x3b0
+>>>      [<ffffffff810b60d2>] kthread+0xf2/0x130
+>>>      [<ffffffff8102d588>] ret_from_fork+0x28/0x40
+>>>      [<ffffffff81001aeb>] ret_from_fork_asm+0x1b/0x30
+>>>
+>>> and similar variants involving UCSI. Looking at ucsi_register_partner_pdos()
+>>> there seems to be a leak of con->partner_pd if one other the other functions
+>>> that depend on it fail. If it was my code, I would replace most of the
+>>> returns in that function with 'goto err;' branches which would then call
+>>>     usb_power_delivery_unregister(con->partner_pd);
+>>
+>> No, partner_pd object isn't there only for the PDOs. We need it even
+>> when PDO details are not supported by the interface (PDO details are
+>> optional in UCSI).
+>>
+>> I don't see any leak here. All these object, including partner_pd, are
+>> unregistered in the end as they should, no?
 > 
-> What commit id does this fix?
+> I found an issue that I think is causing the problem. The link between
+> the typec and PD devices is never removed in this driver. That will
+> prevent the device from ever being released.
 
-8a749fd1a8720d4619c91c8b6e7528c0a355c0aa
+Great.
 
-"git log"
+I wonder if this code in ucsi_register_partner_pdos() is problematic:
 
-commit df91c8a9c05098f06ad2dd5bf0d9342e80a9eb22 (HEAD -> v6.6-rc4)
-Author: Dean A <dean@sensoray.com>
-Date:   Mon Oct 9 15:04:19 2023 -0700
+         if (con->partner_pd)
+                 return 0;
 
-     usb: gadget: function fs req_match endpoint address fix
+         con->partner_pd = usb_power_delivery_register(NULL, &desc);
+         if (IS_ERR(con->partner_pd))
+                 return PTR_ERR(con->partner_pd);
+         ....
 
-commit 8a749fd1a8720d4619c91c8b6e7528c0a355c0aa (tag: v6.6-rc4)
-Author: Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun Oct 1 14:15:13 2023 -0700
+If usb_power_delivery_register() fails it places a hacked, non-zero value
+in con->partner_pd. So if usb_power_delivery_register() is called again
+the first "if" will then be taken (as if it had already been set up
+properly). If ucsi_register_partner_pdos() is properly interleaved with
+ucsi_unregister_partner_pdos() than there should not be a problem in
+this case. That said, I think the above code would be more robust if
+a local was declared and only after usb_power_delivery_register()
+succeeded, do something like:
+         con->partner_pd = partner_pd;
 
-     Linux 6.6-rc4
+
+Perhaps more USB developers should be setting CONFIG_DEBUG_KMEMLEAK in
+their kernel builds. Associated with looking at this issue I did several
+unloads then loads of the typec_ucsi and ucsi_acpi modules. Thereafter
+cat /sys/kernel/debug/kmemleak began to show several:
+
+unreferenced object 0xffff88810f2b0cc0 (size 96):
+   comm "irq/124-pciehp", pid 223, jiffies 4294896705 (age 39641.506s)
+   hex dump (first 32 bytes):
+     00 00 00 00 00 00 00 00 00 00 00 00 ad 4e ad de  .............N..
+     ff ff ff ff 00 00 00 00 ff ff ff ff ff ff ff ff  ................
+   backtrace:
+     [<ffffffff812d3d7e>] kmalloc_node_trace+0x1e/0xb0
+     [<ffffffffa037736c>] xhci_alloc_command+0xac/0x130 [xhci_hcd]
+     [<ffffffffa037356f>] xhci_disable_slot+0x1f/0x120 [xhci_hcd]
+     [<ffffffffa0374993>] xhci_free_dev+0xd3/0x190 [xhci_hcd]
+     [<ffffffffa02cc184>] usb_disconnect+0x204/0x2d0 [usbcore]
+     [<ffffffffa02cc03f>] usb_disconnect+0xbf/0x2d0 [usbcore]
+     [<ffffffffa02cc03f>] usb_disconnect+0xbf/0x2d0 [usbcore]
+     [<ffffffffa02cc03f>] usb_disconnect+0xbf/0x2d0 [usbcore]
+     [<ffffffffa02d2579>] usb_remove_hcd+0x1d9/0x240 [usbcore]
+     [<ffffffffa020c050>] xhci_pci_remove+0x40/0x90 [xhci_pci]
+     [<ffffffff8166d11e>] pci_device_remove+0x2e/0x90
+     [<ffffffff817aea30>] device_release_driver_internal+0x1a0/0x210
+     [<ffffffff81661f17>] pci_stop_bus_device+0x67/0x90
+     [<ffffffff81661ed7>] pci_stop_bus_device+0x27/0x90
+     [<ffffffff81661ee8>] pci_stop_bus_device+0x38/0x90
+     [<ffffffff81661fb9>] pci_stop_and_remove_bus_device+0x9/0x20
+
+Doug Gilbert
+
+
 
 
