@@ -1,64 +1,63 @@
-Return-Path: <linux-usb+bounces-1347-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1348-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C3DF7BF648
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Oct 2023 10:42:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 451287BF64C
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Oct 2023 10:44:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D5A15281D50
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Oct 2023 08:42:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 76D7E1C20B3A
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Oct 2023 08:44:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1BAC15AC1;
-	Tue, 10 Oct 2023 08:42:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0239B14F6D;
+	Tue, 10 Oct 2023 08:44:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NVxKT9UE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="byD3ycCC"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45D51D2F2
-	for <linux-usb@vger.kernel.org>; Tue, 10 Oct 2023 08:42:41 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546E8AF;
-	Tue, 10 Oct 2023 01:42:39 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E841C9449
+	for <linux-usb@vger.kernel.org>; Tue, 10 Oct 2023 08:44:08 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31908B6;
+	Tue, 10 Oct 2023 01:44:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696927359; x=1728463359;
+  t=1696927446; x=1728463446;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=kkyLSf4/qcEQkbIbtLZI4kvgbwssKuyY44JGAodpz8k=;
-  b=NVxKT9UEXxURGiWVMOqhqqedsZpP2Z1SnuU0cDnaVWgfLg+uL+HqBnuv
-   ycsTUX595037eTirAZ21iW610m6aXUDr6MsXqhwgtkGn7KNfxbjRvhP6I
-   PQ5VO0YcysaGWcQ92z55i3ugRHAJTjbHEb8PLsNSxPg5hiudTXQHMOH3z
-   sha1vw6RSkA/ybsF0VxB1fmTVTvq6LJE/efxZTdvBXhXadPyP4tBLEOIn
-   va5SFTwzT3GeqIimdbe0mg6hliceD7ER/oyIKtPGYboUz6+O+r9zywKOB
-   rJrvcMpu+sLCntvzseFgKgjjbxIFllfBoK4zs1QDs232RNX6T+0RcWIm8
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10858"; a="364637356"
+  bh=P3e3h6rEHckwaYQiJNlFyKL2I8caGpDPVq6en05d0+U=;
+  b=byD3ycCCKNyYPr+40ZShJFG+Gm1T1djBfImnJdJKIjZHXJDhpcz5rXPz
+   zIia4+6FJySOhVDX2V/dP+YYllc9ga/VLqXuThFzFLBskqrBhoveVuSEf
+   aalN3IRddz0jW+/PaEuguRUWQVRTbEmmG0K2ohM8BqXpMIlqg8gxYxqBy
+   Vv4jmwJhfUQEybh8PTdlTjyrD+EHL80oowRpJ+kWmswuLFtgvDj4y5afg
+   tLV6y/99B7dnAr/Motcpo+L2hl1LyHt0vyKkUydDS1PY1TT1PLCm5xkfo
+   7eboU4R0keBrode+ronfR0bZB/iEYcGN43sG5+Nj/1brug2UA8CGel80n
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10858"; a="387178842"
 X-IronPort-AV: E=Sophos;i="6.03,212,1694761200"; 
-   d="scan'208";a="364637356"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2023 01:42:36 -0700
+   d="scan'208";a="387178842"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2023 01:44:05 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10858"; a="757041419"
+X-IronPort-AV: E=McAfee;i="6600,9927,10858"; a="730003225"
 X-IronPort-AV: E=Sophos;i="6.03,212,1694761200"; 
-   d="scan'208";a="757041419"
+   d="scan'208";a="730003225"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga007.fm.intel.com with SMTP; 10 Oct 2023 01:42:29 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 10 Oct 2023 11:42:25 +0300
-Date: Tue, 10 Oct 2023 11:42:25 +0300
+  by orsmga006.jf.intel.com with SMTP; 10 Oct 2023 01:44:02 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 10 Oct 2023 11:44:02 +0300
+Date: Tue, 10 Oct 2023 11:44:02 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: gregkh@linuxfoundation.org, wsa@kernel.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Alexander.Deucher@amd.com,
-	Richard.Gong@amd.com, kai.heng.feng@canonical.com,
-	sebastian.reichel@collabora.com
-Subject: Re: [PATCH v3] usb: typec: ucsi: Use GET_CAPABILITY attributes data
- to set power supply scope
-Message-ID: <ZSUOcdtWQ/AlAH+c@kuha.fi.intel.com>
-References: <20231009184643.129986-1-mario.limonciello@amd.com>
+To: RD Babiera <rdbabiera@google.com>
+Cc: gregkh@linuxfoundation.org, badhri@google.com,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v1] usb: typec: altmodes/displayport: Signal hpd low when
+ exiting mode
+Message-ID: <ZSUO0rkmTsRkV361@kuha.fi.intel.com>
+References: <20231009210057.3773877-2-rdbabiera@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,72 +66,53 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231009184643.129986-1-mario.limonciello@amd.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-	SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20231009210057.3773877-2-rdbabiera@google.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Mon, Oct 09, 2023 at 01:46:43PM -0500, Mario Limonciello wrote:
-> On some OEM systems, adding a W7900 dGPU triggers RAS errors and hangs
-> at a black screen on startup.  This issue occurs only if `ucsi_acpi` has
-> loaded before `amdgpu` has loaded.  The reason for this failure is that
-> `amdgpu` uses power_supply_is_system_supplied() to determine if running
-> on AC or DC power at startup. If this value is reported incorrectly the
-> dGPU will also be programmed incorrectly and trigger errors.
+On Mon, Oct 09, 2023 at 09:00:58PM +0000, RD Babiera wrote:
+> Upon receiving an ACK for a sent EXIT_MODE message, the DisplayPort
+> driver currently resets the status and configuration of the port partner.
+> The hpd signal is not updated despite being part of the status, so the
+> Display stack can still transmit video despite typec_altmode_exit placing
+> the lanes in a Safe State.
 > 
-> power_supply_is_system_supplied() reports the wrong value because UCSI
-> power supplies provided as part of the system don't properly report the
-> scope as "DEVICE" scope (not powering the system).
+> Set hpd to low when a sent EXIT_MODE message is ACK'ed.
 > 
-> In order to fix this issue check the capabilities reported from the UCSI
-> power supply to ensure that it supports charging a battery and that it can
-> be powered by AC.  Mark the scope accordingly.
-> 
+> Fixes: 0e3bb7d6894d ("usb: typec: Add driver for DisplayPort alternate mode")
 > Cc: stable@vger.kernel.org
-> Fixes: a7fbfd44c020 ("usb: typec: ucsi: Mark dGPUs as DEVICE scope")
-> Link: https://www.intel.com/content/www/us/en/products/docs/io/universal-serial-bus/usb-type-c-ucsi-spec.html p28
-> Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> Signed-off-by: RD Babiera <rdbabiera@google.com>
 
 Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
-> Cc: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> Cc: Alex Deucher <Alexander.Deucher@amd.com>>
-> Cc: Richard Gong <Richard.Gong@amd.com>
+>  drivers/usb/typec/altmodes/displayport.c | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
-> v2->v3:
->  * Pick up tag
->  * Add missing stable tag
->  * Drop patch 2, we'll just avoid upstreaming it.
-> ---
->  drivers/usb/typec/ucsi/psy.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
+> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
+> index f503cb4cd721..718da02036d8 100644
+> --- a/drivers/usb/typec/altmodes/displayport.c
+> +++ b/drivers/usb/typec/altmodes/displayport.c
+> @@ -307,6 +307,11 @@ static int dp_altmode_vdm(struct typec_altmode *alt,
+>  			typec_altmode_update_active(alt, false);
+>  			dp->data.status = 0;
+>  			dp->data.conf = 0;
+> +			if (dp->hpd) {
+> +				drm_connector_oob_hotplug_event(dp->connector_fwnode);
+> +				dp->hpd = false;
+> +				sysfs_notify(&dp->alt->dev.kobj, "displayport", "hpd");
+> +			}
+>  			break;
+>  		case DP_CMD_STATUS_UPDATE:
+>  			dp->data.status = *vdo;
 > 
-> diff --git a/drivers/usb/typec/ucsi/psy.c b/drivers/usb/typec/ucsi/psy.c
-> index 384b42267f1f..b35c6e07911e 100644
-> --- a/drivers/usb/typec/ucsi/psy.c
-> +++ b/drivers/usb/typec/ucsi/psy.c
-> @@ -37,6 +37,15 @@ static int ucsi_psy_get_scope(struct ucsi_connector *con,
->  	struct device *dev = con->ucsi->dev;
->  
->  	device_property_read_u8(dev, "scope", &scope);
-> +	if (scope == POWER_SUPPLY_SCOPE_UNKNOWN) {
-> +		u32 mask = UCSI_CAP_ATTR_POWER_AC_SUPPLY |
-> +			   UCSI_CAP_ATTR_BATTERY_CHARGING;
-> +
-> +		if (con->ucsi->cap.attributes & mask)
-> +			scope = POWER_SUPPLY_SCOPE_SYSTEM;
-> +		else
-> +			scope = POWER_SUPPLY_SCOPE_DEVICE;
-> +	}
->  	val->intval = scope;
->  	return 0;
->  }
+> base-commit: 1053c4a4b8fcbd28386e80347e7c82d4d617e352
 > -- 
-> 2.34.1
+> 2.42.0.609.gbb76f46606-goog
 
 -- 
 heikki
