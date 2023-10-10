@@ -1,111 +1,129 @@
-Return-Path: <linux-usb+bounces-1383-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1384-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C62017C048C
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Oct 2023 21:25:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9ED557C40A0
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Oct 2023 22:04:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7EFE72825CD
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Oct 2023 19:25:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 58974281E2B
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Oct 2023 20:04:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7699A3218D;
-	Tue, 10 Oct 2023 19:25:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D143029CF9;
+	Tue, 10 Oct 2023 20:04:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EOwfP2fo"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jYRDHubk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4CCD32181
-	for <linux-usb@vger.kernel.org>; Tue, 10 Oct 2023 19:25:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D001FC433C8;
-	Tue, 10 Oct 2023 19:25:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1696965954;
-	bh=6aGhe1D5Wpj/8nF2yBk8kzHR/8H7Y4/7mQ/EMQzjmyI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=EOwfP2fov2jcIzLLP17wHLF+HmzM3aTpZLSBV39SGPOGCUVMLPfu/KPStQqQPTdI0
-	 jpU1qdXxy0odrCzyEmkl6iZdAepSOMBvejbxx/MaRbuOMA0j2PNWip+k16ymjKm3VJ
-	 /VezTXco3ori5AoHBTAqYE0BEJnCYCQemaNBxbD6IRANXhA5IFnHaHJemrO6cZ4bsD
-	 HUbP5lJ3Gb1hnhfbyQun7Eq42gyOco4Y5fLDWRtqDujKNwy98dJkjB4P7xtQbPap5N
-	 GhioGt8cD7+nyoF5EaurZmjJZ9Omn5jj9ivqXfZ5zhYCQbKjwP9ACNwrmfCN8xhg4U
-	 BMdGFdPFGRUMw==
-Date: Tue, 10 Oct 2023 21:25:50 +0200
-From: Wolfram Sang <wsa@kernel.org>
-To: Wentong Wu <wentong.wu@intel.com>
-Cc: gregkh@linuxfoundation.org, oneukum@suse.com,
-	andi.shyti@linux.intel.com, broonie@kernel.org,
-	bartosz.golaszewski@linaro.org, linus.walleij@linaro.org,
-	hdegoede@redhat.com, linux-usb@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-	sakari.ailus@linux.intel.com, zhifeng.wang@intel.com,
-	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v20 2/4] i2c: Add support for Intel LJCA USB I2C driver
-Message-ID: <ZSWlPgSZi6uIxPGo@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-	Wentong Wu <wentong.wu@intel.com>, gregkh@linuxfoundation.org,
-	oneukum@suse.com, andi.shyti@linux.intel.com, broonie@kernel.org,
-	bartosz.golaszewski@linaro.org, linus.walleij@linaro.org,
-	hdegoede@redhat.com, linux-usb@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-	sakari.ailus@linux.intel.com, zhifeng.wang@intel.com,
-	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1696833205-16716-1-git-send-email-wentong.wu@intel.com>
- <1696833205-16716-3-git-send-email-wentong.wu@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A68CC2745F
+	for <linux-usb@vger.kernel.org>; Tue, 10 Oct 2023 20:04:46 +0000 (UTC)
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 766ABD56
+	for <linux-usb@vger.kernel.org>; Tue, 10 Oct 2023 13:04:27 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-5a7af52ee31so22095267b3.2
+        for <linux-usb@vger.kernel.org>; Tue, 10 Oct 2023 13:04:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1696968266; x=1697573066; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Dsgx0xQPge+9HmU8GeSr2i19e9kEWopqk+L20TkvvHU=;
+        b=jYRDHubkHHeppyz50JJbbaZ8vgaSUrCsB5PS5zWtcfTY0UmBwGsKq1Xl0sY6zrhQqg
+         O2u01L10tDfCLqUokrv372DGqDCMM/wrwEbQ3zHLml30+JXdWaIlqBTyEdsmgeniEnbq
+         oEvIVjtpLK0LmAse6TsnBEbAjc2MZNMW31B5tymVrnYpyqHLq7hunLvl4lD4Jauhg4Px
+         scOpNYWhfEVmbaJ5s1dqQcyrbAlc4UBGUrhEpIm/tQkKI7P/Qk8WNphImqdUS1IsP5xA
+         jBL7dntbchvV7YlpdYsSkMsaiMsXn/wrZ6tTFkHMk0CevyRr5MXns8TW530aFsH5oMdD
+         HtIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696968266; x=1697573066;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Dsgx0xQPge+9HmU8GeSr2i19e9kEWopqk+L20TkvvHU=;
+        b=m0O+rhKihmaWcpvOYKMR9WuKNefzlT1x1mO1VbMyKlVk1OPiAjENnDGep8vrrKwnuy
+         3p3WGa0m0MB33NmLd51Vujbg2DvqXnuvch6YR08Q0HHEK5h/BFKYCh+eYtng/Jh1CBk2
+         7W7XwloPWv/dsAkGAA8l6pwp8g9wxh2kni2hz2HoRM6cALMfYZu94kAdheEky5Hx13Il
+         iEqFq845UmEE/6UZt9iMiCvzW1qqDjHrUSBqkMEOL65SxYMoHb6B3+HQzDZbIdRKhUVk
+         blREXCaUX8I3DFjghLa8h676EZBXnErFd5cHS9q7ntLQUXiMA1CYG+TcJhbDQNJVQWtj
+         QpXQ==
+X-Gm-Message-State: AOJu0Yx+UsUNEsHbWQJpukkz+Ma84RHhkk+1Qi0YzJg3V+I1RWIVbEn9
+	p+O9LnlIWq/zTGRcchpeiWrHq9NgnL73MNwGOrv/yA==
+X-Google-Smtp-Source: AGHT+IGzom/ReBeggPYaQh3ululPlpooeQvd3UU+g9vhHJOk+VetQr2sXUXYcWmIJ7V4FJosqHhUU7LLH1jqvS0oyO0=
+X-Received: by 2002:a81:b71f:0:b0:5a7:aa83:9fb with SMTP id
+ v31-20020a81b71f000000b005a7aa8309fbmr4756178ywh.0.1696968266581; Tue, 10 Oct
+ 2023 13:04:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="/TB0LcZbcuX4Yi1j"
-Content-Disposition: inline
-In-Reply-To: <1696833205-16716-3-git-send-email-wentong.wu@intel.com>
-
-
---/TB0LcZbcuX4Yi1j
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20231009-pxa-gpio-v7-0-c8f5f403e856@skole.hr> <20231009-pxa-gpio-v7-2-c8f5f403e856@skole.hr>
+ <CAMRc=Mc7=E9bMQgiUM8qqk7UD4+exhJZqw2DucTcsnqHcttR3Q@mail.gmail.com>
+ <12313687.O9o76ZdvQC@radijator> <CAMRc=MdWYNmBkJ6Nw6V_FzJKQw--g02tjLSztMYW_atNhisVpw@mail.gmail.com>
+In-Reply-To: <CAMRc=MdWYNmBkJ6Nw6V_FzJKQw--g02tjLSztMYW_atNhisVpw@mail.gmail.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Tue, 10 Oct 2023 22:04:14 +0200
+Message-ID: <CACRpkda4ZeQ8eYKqXBR7XmWj9jJF58C+PLeRWqx2m7aSf2FWQw@mail.gmail.com>
+Subject: Re: [PATCH RFT v7 2/6] ARM: pxa: Convert Spitz LEDs to GPIO descriptors
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: =?UTF-8?Q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>, 
+	Daniel Mack <daniel@zonque.org>, Haojian Zhuang <haojian.zhuang@gmail.com>, 
+	Robert Jarzmik <robert.jarzmik@free.fr>, Russell King <linux@armlinux.org.uk>, 
+	Alan Stern <stern@rowland.harvard.edu>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Andy Shevchenko <andy@kernel.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
+	Mark Brown <broonie@kernel.org>, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-input@vger.kernel.org, 
+	linux-spi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+	autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-On Mon, Oct 09, 2023 at 02:33:23PM +0800, Wentong Wu wrote:
-> Implements the I2C function of Intel USB-I2C/GPIO/SPI adapter device
-> named "La Jolla Cove Adapter" (LJCA). It communicate with LJCA I2C
-> module with specific protocol through interfaces exported by LJCA
-> USB driver.
->=20
-> Signed-off-by: Wentong Wu <wentong.wu@intel.com>
-> Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
-> Tested-by: Hans de Goede <hdegoede@redhat.com>
+On Tue, Oct 10, 2023 at 7:39=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.pl>=
+ wrote:
 
-I2C driver looks good. Waiting for the USB part to be applied.
+> It doesn't seem like anyone is using these GPIOs once they're
+> requested? Wouldn't the above definitios be analogous to:
+>
+> GPIO_HOG("pxa-gpio", SPITZ_GPIO_LED_ORANGE, NULL, GPIO_ACTIVE_HIGH, GPIOD=
+_ASIS)
+> GPIO_HOG("pxa-gpio", SPITZ_GPIO_LED_GREEN, NULL, GPIO_ACTIVE_HIGH, GPIOD_=
+ASIS)
 
-Reviewed-by: Wolfram Sang <wsa@kernel.org>
+They are used:
++       spitz_gpio_leds[0].gpiod =3D leds->desc[0];
++       spitz_gpio_leds[1].gpiod =3D leds->desc[1];
 
+The descriptors are passed to the leds-gpio driver.
 
---/TB0LcZbcuX4Yi1j
-Content-Type: application/pgp-signature; name="signature.asc"
+But wait: no.
 
------BEGIN PGP SIGNATURE-----
+This whole thing:
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmUlpT4ACgkQFA3kzBSg
-KbYxOxAAsDXYCq218NxgOF4H39GK+e75fDBqUtXaRoVRmMDuicJ7o2TgosOBATKp
-28lDHoPzJRms2rspOSpYNREXtAIRXctqJk/74FgsxY9SsBnwoPaCN5CiQUutm3wM
-PBkWYa4Z3fxm0wrh2xkyQ4a0l3aj18vviRaKOqrVnoiHleXPeyxPyVdD1q3gGlwy
-b8PlFtn/bG2XwOWMs0YP8hnn0+GontIB2+JkgzMpZxZ5wZeL3vmxdAPGZYSUqMWt
-0thfutaZjfOz0/0Chhm+3JyaUyziWtbdgRAGAI/jV5gq22hN89sKhQaFTBdMuSYo
-de3ucneZivSjhGcHR4ABKGsisbn4tDQs6XRo5CkN/jbZH+FIWYuOTtux4gOJcAi7
-hEPZdXmaL/1o7/usQWTXZY7D0241qrD5BYeyrQ9ljA5ME6UgNFlIhjGTucV6JxoM
-5fXdS7F+HqkT+yWsZBll/FLWX6mrYnbK/brMpL9OGa/WUQt2WO6uoI3WAsYXW0uw
-T5v3ldtvK0nYpPXoMiEp8P7hbzOZkn5J/1iaUpzisP5OkrAghl8Fa2FSlr3zcDRb
-epIJQWOLi5MHQzEZT4XE0ub4yrRO+zFZTXmDiLmBGqxQcRPbPYCuVduh1OQ77hvX
-puBFbTpnv5yKGMHAhRpfWOKwYGlX095XYfiuWkor6caGqM396wo=
-=4737
------END PGP SIGNATURE-----
++static struct gpio_descs *leds;
++
+(...)
++       leds =3D gpiod_get_array_optional(&spitz_led_device.dev,
++                       NULL, GPIOD_ASIS);
++       spitz_gpio_leds[0].gpiod =3D leds->desc[0];
++       spitz_gpio_leds[1].gpiod =3D leds->desc[1];
 
---/TB0LcZbcuX4Yi1j--
+Just delete all that.
+
+The leds-gpio driver will request and use the lines.
+
+It was just so unorthodox that I missed it. Adding the descriptor
+table is enough.
+
+Yours,
+Linus Walleij
 
