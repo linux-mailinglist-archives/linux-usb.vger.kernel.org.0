@@ -1,168 +1,111 @@
-Return-Path: <linux-usb+bounces-1382-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1383-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 621087C0402
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Oct 2023 21:01:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C62017C048C
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Oct 2023 21:25:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8D3DF1C20DB9
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Oct 2023 19:01:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7EFE72825CD
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Oct 2023 19:25:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 394323714F;
-	Tue, 10 Oct 2023 19:01:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7699A3218D;
+	Tue, 10 Oct 2023 19:25:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="EofFRRIl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EOwfP2fo"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0C52EB8
-	for <linux-usb@vger.kernel.org>; Tue, 10 Oct 2023 19:01:22 +0000 (UTC)
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE23894;
-	Tue, 10 Oct 2023 12:01:19 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39AIklF5027319;
-	Tue, 10 Oct 2023 19:01:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=xdbkijLx7schihxcpHXzfMjQ0oJH76kV0Llxrn0wbiA=;
- b=EofFRRIlKAef89uJzy+8jv6R8IVwo4Rapb6+VPsoMmnm6NpU8gWw6lbGYrYQDyq+wKxR
- Z/VVWIoUk/3LPKFWcQSCAdjfr/eYuGpgADfWhCNfx1oTKbHGjxgIjheT3sObKeF0BxbR
- n/6mTfLnu8RycJccGJVt4KqD9hm0h5C06kFLGC/qHb40I0SbsOSRnV31ZuLuxAaX7WYt
- 5uY/IQgkIk3oCv9NWRHI7VPUmnHC9ILMOSrZaYifbAN22PXCxoFnBK6SZeBBrm75FxaH
- eOc+0C/IEE8PVmcmFZ9zeXkD+g5wBQy2MUQEooX1TLGAMgc5loWLctZQiEHqw3kKXmvq Xw== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tmj0dbec1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 10 Oct 2023 19:01:14 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39AJ1AEf019930
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 10 Oct 2023 19:01:11 GMT
-Received: from [10.110.38.80] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Tue, 10 Oct
- 2023 12:01:10 -0700
-Message-ID: <5f491814-c105-64e3-93c0-5fff89160ac1@quicinc.com>
-Date: Tue, 10 Oct 2023 12:01:05 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4CCD32181
+	for <linux-usb@vger.kernel.org>; Tue, 10 Oct 2023 19:25:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D001FC433C8;
+	Tue, 10 Oct 2023 19:25:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1696965954;
+	bh=6aGhe1D5Wpj/8nF2yBk8kzHR/8H7Y4/7mQ/EMQzjmyI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=EOwfP2fov2jcIzLLP17wHLF+HmzM3aTpZLSBV39SGPOGCUVMLPfu/KPStQqQPTdI0
+	 jpU1qdXxy0odrCzyEmkl6iZdAepSOMBvejbxx/MaRbuOMA0j2PNWip+k16ymjKm3VJ
+	 /VezTXco3ori5AoHBTAqYE0BEJnCYCQemaNBxbD6IRANXhA5IFnHaHJemrO6cZ4bsD
+	 HUbP5lJ3Gb1hnhfbyQun7Eq42gyOco4Y5fLDWRtqDujKNwy98dJkjB4P7xtQbPap5N
+	 GhioGt8cD7+nyoF5EaurZmjJZ9Omn5jj9ivqXfZ5zhYCQbKjwP9ACNwrmfCN8xhg4U
+	 BMdGFdPFGRUMw==
+Date: Tue, 10 Oct 2023 21:25:50 +0200
+From: Wolfram Sang <wsa@kernel.org>
+To: Wentong Wu <wentong.wu@intel.com>
+Cc: gregkh@linuxfoundation.org, oneukum@suse.com,
+	andi.shyti@linux.intel.com, broonie@kernel.org,
+	bartosz.golaszewski@linaro.org, linus.walleij@linaro.org,
+	hdegoede@redhat.com, linux-usb@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+	sakari.ailus@linux.intel.com, zhifeng.wang@intel.com,
+	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v20 2/4] i2c: Add support for Intel LJCA USB I2C driver
+Message-ID: <ZSWlPgSZi6uIxPGo@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+	Wentong Wu <wentong.wu@intel.com>, gregkh@linuxfoundation.org,
+	oneukum@suse.com, andi.shyti@linux.intel.com, broonie@kernel.org,
+	bartosz.golaszewski@linaro.org, linus.walleij@linaro.org,
+	hdegoede@redhat.com, linux-usb@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+	sakari.ailus@linux.intel.com, zhifeng.wang@intel.com,
+	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1696833205-16716-1-git-send-email-wentong.wu@intel.com>
+ <1696833205-16716-3-git-send-email-wentong.wu@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3] usb: host: xhci: Avoid XHCI resume delay if SSUSB
- device is not present
-Content-Language: en-US
-To: <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230919224327.29974-1-quic_wcheng@quicinc.com>
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <20230919224327.29974-1-quic_wcheng@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: t7kclmkzjCDgjRTkdC0DV3R4ZWupEK-f
-X-Proofpoint-ORIG-GUID: t7kclmkzjCDgjRTkdC0DV3R4ZWupEK-f
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-10_15,2023-10-10_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- adultscore=0 spamscore=0 mlxscore=0 mlxlogscore=691 clxscore=1011
- priorityscore=1501 malwarescore=0 impostorscore=0 bulkscore=0
- suspectscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2309180000 definitions=main-2310100145
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-	SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="/TB0LcZbcuX4Yi1j"
+Content-Disposition: inline
+In-Reply-To: <1696833205-16716-3-git-send-email-wentong.wu@intel.com>
 
-Friendly ping to see if there are any updates/feedback on this patch?
 
-Thanks
-Wesley Cheng
+--/TB0LcZbcuX4Yi1j
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 9/19/2023 3:43 PM, Wesley Cheng wrote:
-> There is a 120ms delay implemented for allowing the XHCI host controller to
-> detect a U3 wakeup pulse.  The intention is to wait for the device to retry
-> the wakeup event if the USB3 PORTSC doesn't reflect the RESUME link status
-> by the time it is checked.  As per the USB3 specification:
-> 
->    tU3WakeupRetryDelay ("Table 7-12. LTSSM State Transition Timeouts")
-> 
-> This would allow the XHCI resume sequence to determine if the root hub
-> needs to be also resumed.  However, in case there is no device connected,
-> or if there is only a HSUSB device connected, this delay would still affect
-> the overall resume timing.
-> 
-> Since this delay is solely for detecting U3 wake events (USB3 specific)
-> then ignore this delay for the disconnected case and the HSUSB connected
-> only case.
-> 
-> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
-> ---
-> Depends-on:
-> https://lore.kernel.org/linux-usb/20230915143108.1532163-3-mathias.nyman@linux.intel.com/
-> 
->   drivers/usb/host/xhci.c | 20 +++++++++++++++++++-
->   1 file changed, 19 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index e1b1b64a0723..1855cab1be56 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -805,6 +805,18 @@ static void xhci_disable_hub_port_wake(struct xhci_hcd *xhci,
->   	spin_unlock_irqrestore(&xhci->lock, flags);
->   }
->   
-> +/*
-> + * Utilize suspended_ports and bus_suspended to determine if USB3 device is
-> + * connected.  The bus state bits are set by XHCI hub when root hub udev is
-> + * suspended.  Used to determine if USB3 remote wakeup considerations need to
-> + * be accounted for during XHCI resume.
-> + */
-> +static bool xhci_usb3_dev_connected(struct xhci_hcd *xhci)
-> +{
-> +	return !!xhci->usb3_rhub.bus_state.suspended_ports ||
-> +		!!xhci->usb3_rhub.bus_state.bus_suspended;
-> +}
-> +
->   static bool xhci_pending_portevent(struct xhci_hcd *xhci)
->   {
->   	struct xhci_port	**ports;
-> @@ -968,6 +980,7 @@ int xhci_resume(struct xhci_hcd *xhci, pm_message_t msg)
->   	int			retval = 0;
->   	bool			comp_timer_running = false;
->   	bool			pending_portevent = false;
-> +	bool			usb3_connected = false;
->   	bool			reinit_xhc = false;
->   
->   	if (!hcd->state)
-> @@ -1116,9 +1129,14 @@ int xhci_resume(struct xhci_hcd *xhci, pm_message_t msg)
->   		 * Resume roothubs only if there are pending events.
->   		 * USB 3 devices resend U3 LFPS wake after a 100ms delay if
->   		 * the first wake signalling failed, give it that chance.
-> +		 * Avoid this check if there are no devices connected to
-> +		 * the SS root hub. (i.e. HS device connected or no device
-> +		 * connected)
->   		 */
->   		pending_portevent = xhci_pending_portevent(xhci);
-> -		if (!pending_portevent && msg.event == PM_EVENT_AUTO_RESUME) {
-> +		usb3_connected = xhci_usb3_dev_connected(xhci);
-> +		if (!pending_portevent && usb3_connected &&
-> +		     msg.event == PM_EVENT_AUTO_RESUME) {
->   			msleep(120);
->   			pending_portevent = xhci_pending_portevent(xhci);
->   		}
+On Mon, Oct 09, 2023 at 02:33:23PM +0800, Wentong Wu wrote:
+> Implements the I2C function of Intel USB-I2C/GPIO/SPI adapter device
+> named "La Jolla Cove Adapter" (LJCA). It communicate with LJCA I2C
+> module with specific protocol through interfaces exported by LJCA
+> USB driver.
+>=20
+> Signed-off-by: Wentong Wu <wentong.wu@intel.com>
+> Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
+> Tested-by: Hans de Goede <hdegoede@redhat.com>
+
+I2C driver looks good. Waiting for the USB part to be applied.
+
+Reviewed-by: Wolfram Sang <wsa@kernel.org>
+
+
+--/TB0LcZbcuX4Yi1j
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmUlpT4ACgkQFA3kzBSg
+KbYxOxAAsDXYCq218NxgOF4H39GK+e75fDBqUtXaRoVRmMDuicJ7o2TgosOBATKp
+28lDHoPzJRms2rspOSpYNREXtAIRXctqJk/74FgsxY9SsBnwoPaCN5CiQUutm3wM
+PBkWYa4Z3fxm0wrh2xkyQ4a0l3aj18vviRaKOqrVnoiHleXPeyxPyVdD1q3gGlwy
+b8PlFtn/bG2XwOWMs0YP8hnn0+GontIB2+JkgzMpZxZ5wZeL3vmxdAPGZYSUqMWt
+0thfutaZjfOz0/0Chhm+3JyaUyziWtbdgRAGAI/jV5gq22hN89sKhQaFTBdMuSYo
+de3ucneZivSjhGcHR4ABKGsisbn4tDQs6XRo5CkN/jbZH+FIWYuOTtux4gOJcAi7
+hEPZdXmaL/1o7/usQWTXZY7D0241qrD5BYeyrQ9ljA5ME6UgNFlIhjGTucV6JxoM
+5fXdS7F+HqkT+yWsZBll/FLWX6mrYnbK/brMpL9OGa/WUQt2WO6uoI3WAsYXW0uw
+T5v3ldtvK0nYpPXoMiEp8P7hbzOZkn5J/1iaUpzisP5OkrAghl8Fa2FSlr3zcDRb
+epIJQWOLi5MHQzEZT4XE0ub4yrRO+zFZTXmDiLmBGqxQcRPbPYCuVduh1OQ77hvX
+puBFbTpnv5yKGMHAhRpfWOKwYGlX095XYfiuWkor6caGqM396wo=
+=4737
+-----END PGP SIGNATURE-----
+
+--/TB0LcZbcuX4Yi1j--
 
