@@ -1,197 +1,107 @@
-Return-Path: <linux-usb+bounces-1352-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1353-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C3687BF90B
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Oct 2023 12:52:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30EF37BF948
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Oct 2023 13:09:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9BE3C1C20BD9
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Oct 2023 10:52:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E00602824F3
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Oct 2023 11:09:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F19211C8B;
-	Tue, 10 Oct 2023 10:52:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BB9C18AE1;
+	Tue, 10 Oct 2023 11:09:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="LK7+XR71"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d9Gai0Ix"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 466EDD29B;
-	Tue, 10 Oct 2023 10:52:49 +0000 (UTC)
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2056.outbound.protection.outlook.com [40.107.6.56])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61EAEA9;
-	Tue, 10 Oct 2023 03:52:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=S4SOBsVUVQ2cBuuSU3i2OcCHYsiVXkzOduqUQiHd+KywSlYYB1zA9/LFeerHGWgp2yK7g4TDZgc/wuJQiuPFF5Zil4ZrJ7QAi3rYQHf+AACnjcGdLrSTIQ7D3KLtKBiMrMUm09b9MOe85BMaGjnzqGRXvRuxQlQ8IoyDNQRlmKHRwqw6pOiQaCVCignkJ4G6jCMgXwKlfQiBCsllrbE82FeCDV8tpWzTHwwzrRe7rAhxWnQJeZk0W+8TCpvt2HtZ9SmrA7ExSMvF3/f0uSuLDby6ILWcgoRPJ039NTxzkOZ5qU6/jpFmYPDTEno2YO/dOOU+9TnqAiVPD0m+n1t3Iw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=G5bO9xYcXomt8IMtUN1EVC3PtvNNSs4+GO9dh0EeDnU=;
- b=lhZR0bEhowr9X7I2u7SD78cVHYLTi0S/XiKRQjlixmts43iKWvKgdGOlZKq7kHPhygqNXF7m/ZDOj6CcBBEKR6YqZzotQSRYQOUyXf3EMRzBKgjlqzpOI3efqIa+m4Bo6F5xu/JCOtCynM3wYPAarXA7f+jNJI5U0lYD+CG2oS849c40V/pjs7P65OgzZXibH43TSzmV73OB34VbP5c0QlwH+xtgaqrFIKHprUVuQi9UGgiyNCxC2xeFpZhqW2tEfw3fOQLMKXI3OEck84nujqEPo/AbQK5462GTUKklEJNpBgcdrAoU4tajHucGYzGb+oniPtU+pmI7LsEAtqFb7w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=G5bO9xYcXomt8IMtUN1EVC3PtvNNSs4+GO9dh0EeDnU=;
- b=LK7+XR71dWkSwfqwAc+RYF5AALdcasI9GtaMwmS0aixBcIqSxZp/PzmQamkn6XcXPLjU5gE1znlFX3KIuohzOQkT73Q4lqB+U34uExcLvb1sFMYH60mQyv2CpUfjZtJY97M364TkeQ1P0oGn93rkRjDnNP6YK/Cejbvgpcfl26s=
-Received: from DB7PR04MB5146.eurprd04.prod.outlook.com (2603:10a6:10:23::16)
- by AM7PR04MB7013.eurprd04.prod.outlook.com (2603:10a6:20b:116::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.37; Tue, 10 Oct
- 2023 10:52:44 +0000
-Received: from DB7PR04MB5146.eurprd04.prod.outlook.com
- ([fe80::f4f8:a4d6:fe5a:3e1]) by DB7PR04MB5146.eurprd04.prod.outlook.com
- ([fe80::f4f8:a4d6:fe5a:3e1%3]) with mapi id 15.20.6863.032; Tue, 10 Oct 2023
- 10:52:44 +0000
-From: Xu Yang <xu.yang_2@nxp.com>
-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-CC: Francesco Dolcini <francesco@dolcini.it>, Jun Li <jun.li@nxp.com>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"festevam@gmail.com" <festevam@gmail.com>, "gregkh@linuxfoundation.org"
-	<gregkh@linuxfoundation.org>, "kernel@pengutronix.de"
-	<kernel@pengutronix.de>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, dl-linux-imx <linux-imx@nxp.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, "robh+dt@kernel.org"
-	<robh+dt@kernel.org>, "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-	"shawnguo@kernel.org" <shawnguo@kernel.org>, Krzysztof Kozlowski
-	<krzysztof.kozlowski@linaro.org>, Francesco Dolcini
-	<francesco.dolcini@toradex.com>
-Subject: RE: [EXT] Re: [PATCH v2 2/3] usb: chipidea: imx: support disabling
- runtime-pm
-Thread-Topic: [EXT] Re: [PATCH v2 2/3] usb: chipidea: imx: support disabling
- runtime-pm
-Thread-Index:
- AQHZkukSER6EMlEOvUGUKvCWQIHv2K+swg6AgBG0WYCAAQQm4IAARWMAgAF+cOCAAF2AgIAA4BAQgABvbACAANwWkIABRyIAgAWwp3CAZ883AIARGsdw
-Date: Tue, 10 Oct 2023 10:52:43 +0000
-Message-ID:
- <DB7PR04MB51460E22D3F57F1D613861A38CCDA@DB7PR04MB5146.eurprd04.prod.outlook.com>
-References: <20230504162312.1506763-1-luca.ceresoli@bootlin.com>
-	<PA4PR04MB96405EE2468555EA900B340189739@PA4PR04MB9640.eurprd04.prod.outlook.com>
-	<ZFjaNzY32x8o2XG7@francesco-nb.int.toradex.com>
-	<20230508151756.785ec07e@booty>	<20230529121825.71e9b6d6@booty>
-	<PA4PR04MB96405138465D215C34285F02894B9@PA4PR04MB9640.eurprd04.prod.outlook.com>
-	<ZKaWL3+ClI7iNr/4@francesco-nb.int.toradex.com>
-	<20230717184537.6d6ed607@booty>
-	<DB7PR04MB450573F8EA936E049F053A258C38A@DB7PR04MB4505.eurprd04.prod.outlook.com>
-	<20230718142504.075d0186@booty>
-	<DB7PR04MB4505560E7DCBC2523FD7A0FE8C39A@DB7PR04MB4505.eurprd04.prod.outlook.com>
-	<20230719184831.75ae8658@booty>
-	<DB7PR04MB45050B15EDA7A2A3940840308C3EA@DB7PR04MB4505.eurprd04.prod.outlook.com>
-	<20230720144916.01d49adb@booty>
-	<DB7PR04MB4505F28957A32F09BB84B27A8C3FA@DB7PR04MB4505.eurprd04.prod.outlook.com>
-	<20230721232750.0aea6e0f@booty>
-	<DB7PR04MB450517AD9F25F47320835A5B8C03A@DB7PR04MB4505.eurprd04.prod.outlook.com>
- <20230929153748.63620770@booty>
-In-Reply-To: <20230929153748.63620770@booty>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DB7PR04MB5146:EE_|AM7PR04MB7013:EE_
-x-ms-office365-filtering-correlation-id: 547f04e3-3aad-4adf-aa02-08dbc97f07c0
-x-ld-processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- 8AOijuB9YM3rFnTERkL6c7IlYeOyNs1vp7li6I1PaSMdDJdmZJRG7CPgBNbyIoSNl2yXSOs9EKIfKBs9Nay9tXUJ02MNfpJE6+fG8ceVjGfEELGBDHMVgLABu19/jpXq/HPAkEUxHpiV5Jv09MsA3W4CB9lKDObS+skrEVs36BJLD5W3jtBRasib8ZtAtvnE9nZikJWF8NsKCI2SIjA9jXzvf1gxlbRQ6l4G/4HddCX8BzF7v22DSrpaLHO1zZSCQemWgXGl+92U2nM0GYpX6c3MLdzeMPSyiaj9/wpLiT88qeSt/RCFAG3HQ5QaoKHBcHVoQTfNkOkLAcQLH0aQbAJn5XgXgmXuff71Zp67lr79n8HG9p43iiMh7IaziUjwo5bt62ACsFWUfHEalamFHzkLg44RSjhLPQO/nzugXBHgdjylJZFOSLjB9sk4qfbuVe8dPxQzXOP9O43QIFw11Vc1nXzahGk6ogeo9eP9491kyl1YaGH3jNVmM5zIsuYNJwsZUpC/JlYguaUDT+tA6PUv8/HhA8/sxtQgjhpWeAFdlxDgLdAJ6QhcWe1nNhYR7fgW3N2pbNJvLvluBtDdI18iUVKT9i8HC1YWQdegWhJfBEfTqDvv3r+F9r/8ObfK
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR04MB5146.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(136003)(366004)(396003)(376002)(39860400002)(230922051799003)(1800799009)(186009)(64100799003)(451199024)(9686003)(7696005)(6506007)(55016003)(122000001)(38070700005)(86362001)(71200400001)(33656002)(38100700002)(83380400001)(2906002)(4744005)(7416002)(316002)(41300700001)(478600001)(66476007)(8676002)(66946007)(8936002)(26005)(4326008)(5660300002)(66446008)(76116006)(6916009)(54906003)(66556008)(64756008)(52536014);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?yVyqni6BhabYLokQk9EBnCfJkou0T9f6waiWX5VzWLy2mq7RdeD2JMy/nMhq?=
- =?us-ascii?Q?ZHvZlSYHIIqpaqg3vOcVLe/cl5iCk2UnVx8ALtswTQEyVklENQRDGqvEbGSz?=
- =?us-ascii?Q?abl2W3P+8Iouo8ZIP/eoNTa38lh9ySBdA0UtXYeBE0UlsO9FXAoqstriAJk6?=
- =?us-ascii?Q?DcPVnsNUUd6oLmi3qRPsJYOSwySWw4BXm4X0mrx6FaO2lkX9i+cfLeiu2XD7?=
- =?us-ascii?Q?yGl3a/6FOzFswqmB0lEiIMBx8lBgo2PfkAKQnZnBSVympUKpmT2OdpssTEKl?=
- =?us-ascii?Q?aIyoARoDcaSf1biLHSlBunlB0OzFB2EKXZsHrazJGzIkeb17JSYjEtzfScqH?=
- =?us-ascii?Q?azso3otmoqdfxWrADdxcGYpgShXKcz7t9gDP8FCLaecuuk/zooHFXB/u6xnc?=
- =?us-ascii?Q?sYB/htNlU2S/+mh36qiTCkfM1jiGoOmdLobE8+9WEEYbvT0MlWxSGamB9DfH?=
- =?us-ascii?Q?mpLUrnB0pEXD76QchSauXHCv7rvnAITRXgiRRU2rodTkD0LNexZINOpvx8mw?=
- =?us-ascii?Q?bDArXza5wfoboRQMhvV16tma3hAOtnc8esNkHGJSXnBaXj/5foIb3lhErArN?=
- =?us-ascii?Q?ZWU9Zpzg5K9EKebz7ipSQNwXRA8moigeV+2JwdXykGHCB6qayMy+4Nxdk59U?=
- =?us-ascii?Q?xE777QOrLcOOBeBbxLQSnWw261H1cHNTR1nBUKMCVELiDFKGE/KFq7W4gosu?=
- =?us-ascii?Q?W4rSYRFYHegq9oIebuH1VHVgnhZ6H4VebsEeh9vWKlF3sw4PUOYx7G6kbByw?=
- =?us-ascii?Q?VZkEEIHM22/W5BLsD7fjE/Mfsw46dRMlP7WO4Hahb2NcFIaiJ6SzwIIno0Uz?=
- =?us-ascii?Q?k8ePaRt8fPKPgLP3JsFDFadDYf87wbolPJ1EcGNJhquzBX5LmhgGUZ0eubpA?=
- =?us-ascii?Q?LnHA3dN66BxcwNsorovsMnQiDfQIExgqNQO7nBvCOaBTnlKGk3P6lpwALAVd?=
- =?us-ascii?Q?Ba5cllVp37Z7Ju1Iu6F6SWl2MrNqR76bqpBVYDd73zlRHKuiV5In8bC5rEFx?=
- =?us-ascii?Q?V5XMJlVXA0kydFzgaHeO18XDtSgZm3DaCoY9OcmpQEHtwTpv6SNwk187S/e7?=
- =?us-ascii?Q?nflldwruTxXU3MWuerC6H1sk0sRMP56uhSkR3s0l1vT43bX3RGm9pcxIVqA0?=
- =?us-ascii?Q?EcdOg2uGgV8jn4AC7xbkLUHYPyt0D8VwhqShUQnSD6GRCIcwBQ/XBWrGB6I9?=
- =?us-ascii?Q?G9hnofHOmLVrwh8uTPTTEkCxnxof1xVGnUTYRbTlPAJHnwPUS9VaQCwOF6Vh?=
- =?us-ascii?Q?v9Yrzt0m4OKb66wpb4OUU4vxVDQ9gOD8EUS+5jDuHza8YvMibBNNF3WZ+zWm?=
- =?us-ascii?Q?wlFwWo0MQAu/G+a9rmXr56fuoF8SoeN/3QyEehs+Nvw5zFaPlAGfquG8aA4g?=
- =?us-ascii?Q?yhxMicODJ8SLXSMubPkt8ZCXi+x4w8Ayc3C5qOCiqKmvBrcx9tfLdY83Qmzw?=
- =?us-ascii?Q?TjzczmcT4R4a2/yBmY5hXsoYjP8uxd848GBsJvsWL6DH+2TsOSKFvnQ+/cU3?=
- =?us-ascii?Q?+3EmNVca+sPVr8C8vDrmV42/bd+NOGmM2OuhSlmOmZ0ODJZjq0Rgx4v7wBJQ?=
- =?us-ascii?Q?Q4sQoQXcxuuzOmdIpd0=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E125DF64;
+	Tue, 10 Oct 2023 11:09:36 +0000 (UTC)
+Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4F394;
+	Tue, 10 Oct 2023 04:09:34 -0700 (PDT)
+Received: by mail-vs1-xe30.google.com with SMTP id ada2fe7eead31-45456121514so2426286137.0;
+        Tue, 10 Oct 2023 04:09:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696936173; x=1697540973; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ssZe5t9j2bWoYIJEBCq+KIIOsSZbILqTRL/htZUvZoI=;
+        b=d9Gai0IxgVkb0j8g6mI8ShJo3FlTVBHwbu2wEADKOVlisGMF60G+ERsPx2PA4fKzGG
+         XrkV4lF7sxSHtLR21YsE1Te7mbE6NZEGpKK0QECcfrlqwnhW4Vtp6nPIaxji3tCa/aCA
+         EWrAB8OIyYg5fdlM7FzrrNui/miip8tuXguFXvZN9ska+pAg4yDag/yNk8zlmUtUh0ba
+         LygZvwZIyXwb/a2/YRyYgnrXlx/HfHAQudz9LhwERtSdrm1gwvEXafYRSXqrSIglVO+r
+         2FdVA1isXKPCeS4V2bHU+oelvuqh8nExSlanPtn7VkOZPXAXi0gzusdw8fKvQaRbAaBt
+         UL1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696936173; x=1697540973;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ssZe5t9j2bWoYIJEBCq+KIIOsSZbILqTRL/htZUvZoI=;
+        b=Lveq/ftgSGaZDIEX52fHsOo9/afoOMtawa4LIHR6CaNTYRqFQJoBkMRaFw1eh+fcTc
+         G65bSR4P4Fsbd72BzlDyHCqTgxQXnfAI28EeJiXSo+dJaywZzk8IFKvDGvKc0e5Du7Q4
+         Xs4vaVKhHJlgEWYagC+2D6Z5wbGOSWPgsf4MlphYvyat9F4PHxLoPrcy3nIph70J8pTF
+         ZKbesjCJHSSsR30Umcq0DvIcVWxYfn6lcNUjWtw/DDt/PH6ZkyM1E14geTHyuKouRpvG
+         OCh9iQshWFPHenyKtZEiSJqb6/3cytOOY1yL0HBqX/TVRrxaAgHEw9rVED1AoJ80qkvq
+         LNjQ==
+X-Gm-Message-State: AOJu0Yw0YHadI8ItKVvTR4KEm1F2SrxETuB8CEzEJ9DyQPj4RCqBjvUL
+	ynuIsuLJ66xjMxVFNqj/gBg=
+X-Google-Smtp-Source: AGHT+IEcdigPG8BF2XmlMSNn5BBpbombgW1UUubfg9XcJS8ZarLraVlrwp/bUrBqTHBSyR1B4My++w==
+X-Received: by 2002:a67:e20c:0:b0:452:6320:60da with SMTP id g12-20020a67e20c000000b00452632060damr15436524vsa.22.1696936173638;
+        Tue, 10 Oct 2023 04:09:33 -0700 (PDT)
+Received: from primary ([174.95.13.129])
+        by smtp.gmail.com with ESMTPSA id i15-20020a05620a074f00b0076c96e571f3sm4257613qki.26.2023.10.10.04.09.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Oct 2023 04:09:33 -0700 (PDT)
+Date: Tue, 10 Oct 2023 07:09:22 -0400
+From: Abdel Alkuor <alkuor@gmail.com>
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: heikki.krogerus@linux.intel.com, krzysztof.kozlowski+dt@linaro.org,
+	bryan.odonoghue@linaro.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, ryan.eleceng@gmail.com,
+	robh+dt@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org,
+	Abdel Alkuor <abdelalkuor@geotab.com>
+Subject: Re: [PATCH v10 00/14] Add TPS25750 USB type-C PD controller support
+Message-ID: <ZSUw4kDgzAIR/F3m@primary>
+References: <20231003155842.57313-1-alkuor@gmail.com>
+ <2023101017-custard-scale-470f@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DB7PR04MB5146.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 547f04e3-3aad-4adf-aa02-08dbc97f07c0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Oct 2023 10:52:43.0586
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ji9l8d1090l+473ZSyOMf9kuc0b/Drnqip58wzyt0/9cjRaBfEe0ms5k4QOaBIJ4UIJArswpjhQmKrf+r5UbRw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB7013
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2023101017-custard-scale-470f@gregkh>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Hi Luca,
-
-> Hello Xu,
->=20
-> On Tue, 25 Jul 2023 12:23:43 +0000
-> Xu Yang <xu.yang_2@nxp.com> wrote:
-> ...
-> > > I tested again now with the 3 patches applied and found that with
-> > > CONFIG_USB_OTG=3Dy it works, and detects a device when plugged. Good!
-> > >
-> > > However with CONFIG_USB_OTG disabled it is still not working. In this
-> > > case obviously mxs_phy_is_otg_host() returns always false, even thoug=
-h
-> > > las_event is 2 (USB_EVENT_ID). This is what I get during boot with no
-> > > device connected:
-> >
-> > Yes, I may need to remove CONFIG_USB_OTG condifion. Will handle this la=
-ter.
->=20
-> Did you manage to make progress with this work? It looked like very
-> close to be fixed in the proper way with your latest patch iteration.
-
-I'm a little busy these days. I may handle this when I'm free or you can al=
-so
-fix it.
+On Tue, Oct 10, 2023 at 09:02:55AM +0200, Greg KH wrote:
+> On Tue, Oct 03, 2023 at 11:58:33AM -0400, Abdel Alkuor wrote:
+> > From: Abdel Alkuor <abdelalkuor@geotab.com>
+>
+Hi Greg,
+> Note, your subject line says 00/14 yet your patches had 00/09.  I hope
+> you didn't dropp patches somewhere?
+>
+Sorry, it is just a copy/paste error from v9 as v9 has 14 patches.
+> I applied what is here now, but are some missing?
+>
+No, they are 9 patches in v10 as many patches from v9 got merged into
+one patch. Should I upload another cover letter to fix the subject line?
+> thanks,
+> 
+> greg k-h
 
 Thanks,
-Xu Yang
-
->=20
-> I'd definitely happy to test new patches as soon as you have any.
->=20
-> Best regards,
-> Luca
->=20
+Abdel
 
