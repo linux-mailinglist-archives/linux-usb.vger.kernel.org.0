@@ -1,293 +1,127 @@
-Return-Path: <linux-usb+bounces-1371-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1372-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 325FA7BFE1E
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Oct 2023 15:44:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF2127BFED9
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Oct 2023 16:14:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DB776282BD3
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Oct 2023 13:44:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 215B91C20BA4
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Oct 2023 14:14:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 919461DFE8;
-	Tue, 10 Oct 2023 13:43:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5564224C88;
+	Tue, 10 Oct 2023 14:14:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T66D2HUa"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="N2Drb+eS"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70D281DFDA
-	for <linux-usb@vger.kernel.org>; Tue, 10 Oct 2023 13:43:57 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 024F6D4A;
-	Tue, 10 Oct 2023 06:43:23 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BC2324C7A
+	for <linux-usb@vger.kernel.org>; Tue, 10 Oct 2023 14:14:43 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF30FA9
+	for <linux-usb@vger.kernel.org>; Tue, 10 Oct 2023 07:14:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696945404; x=1728481404;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=8GzamgwMi9wu+H60ATttaaxd7JDaPmhsJATl/qWfVDo=;
-  b=T66D2HUaZIwr1VFrV6ozV9pH0TuLJSmHnC1hHkOhvl173lZtvu80h/28
-   EP/8aft27POeYFzOgZUtbkigJL3F+UFqQa/71rg7JAQqk8JL+aLHndzCO
-   MrJBiaM8rGFjzsCI+nwnBzkmPKmKb1vvb2W/Kq6qhoZ2ypzkKgmsrqaRs
-   ndX+7ca/azWvsU1RIRmRDYRI0HUwQyHuYQVHoBtSEtW/cNBuC8AlWdf95
-   sh+bYls2x5LC9tEyoXItvQyVH+Wc6HplS1LvS9cN3sV9uRUr82+yvUFgs
-   tZP+NMJ9EKKPBZpFPNfgKoejdtjm1zNW74kR+cUzpIbBbjlRE3EkxSTAR
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10859"; a="450894968"
+  t=1696947280; x=1728483280;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Ho1j3c4QO//mt8FclVRF+uf03bBDvzOOOBSUS3vnVaM=;
+  b=N2Drb+eSwlZLLKqk9F2pHpnlZMChHMNC1y6zjEkFzHOaNAq4aTlhXdzw
+   RWAZ2LS4jQggAaR+pLb35W+X+3jYevTALYEOLd1Hnv0NZwjLa9OShoOFx
+   SXkHUSWfHNCI3efsqZ6c6vHBIf4SKPSM7hrt37g9rO9mwuGqZC3qJIoc/
+   bSWVxI76bPmqyWyROiRNFRsZ+q8rCyjhF8rTCSwtrAS5bDhSVeGKmBVkO
+   Jts1Bhiaten0anGo+nx6egkPlizrxqFtOsRojCVCnJbFG5m6KBrXaB88I
+   lLamXvNW49mxNiWZmQrTpH1rT4if5ktgPIHF2brLZ06vDfPTO3xFMtJaY
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10859"; a="387243510"
 X-IronPort-AV: E=Sophos;i="6.03,212,1694761200"; 
-   d="scan'208";a="450894968"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2023 06:38:54 -0700
+   d="scan'208";a="387243510"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2023 07:14:40 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10859"; a="869697333"
+X-IronPort-AV: E=McAfee;i="6600,9927,10859"; a="1000712005"
 X-IronPort-AV: E=Sophos;i="6.03,212,1694761200"; 
-   d="scan'208";a="869697333"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga002.fm.intel.com with ESMTP; 10 Oct 2023 06:38:51 -0700
-Message-ID: <6b26db15-89a0-d455-5740-9abb1befa3a8@intel.com>
-Date: Tue, 10 Oct 2023 16:40:17 +0300
+   d="scan'208";a="1000712005"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga006.fm.intel.com with SMTP; 10 Oct 2023 07:14:38 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 10 Oct 2023 17:14:37 +0300
+Date: Tue, 10 Oct 2023 17:14:37 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Douglas Gilbert <dgilbert@interlog.com>
+Cc: linux-usb@vger.kernel.org
+Subject: Re: [typec] ucsi.c: ucsi_register_partner_pdos() leak
+Message-ID: <ZSVcTQfIHJtctJlj@kuha.fi.intel.com>
+References: <161b4007-3360-4268-ab66-bc19aa8f360e@interlog.com>
+ <ZSUMXdw9nanHtnw2@kuha.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.13.0
-Subject: Re: [PATCH v2] usb: core: hub: Add quirks for reducing device address
- timeout
-Content-Language: en-US
-To: Hardik Gajjar <hgajjar@de.adit-jv.com>, gregkh@linuxfoundation.org,
- stern@rowland.harvard.edu
-Cc: yangyingliang@huawei.com, jinpu.wang@ionos.com,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- erosca@de.adit-jv.com
-References: <--in-reply-to=20231006153808.9758-1-hgajjar@de.adit-jv.com>
- <20231009161402.104224-1-hgajjar@de.adit-jv.com>
-From: Mathias Nyman <mathias.nyman@intel.com>
-In-Reply-To: <20231009161402.104224-1-hgajjar@de.adit-jv.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-	RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-	autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZSUMXdw9nanHtnw2@kuha.fi.intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+	RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On 9.10.2023 19.14, Hardik Gajjar wrote:
-> Currently, the timeout for the set address command is fixed at
-> 5 seconds in the xhci driver. This means the host waits up to 5
-> seconds to receive a response for the set_address command from
-> the device.
+On Tue, Oct 10, 2023 at 11:33:36AM +0300, Heikki Krogerus wrote:
+> Hi Douglas,
 > 
-> In the automotive context, most smartphone enumerations, including
-> screen projection, should ideally complete within 3 seconds.
-> Achieving this is impossible in scenarios where the set_address is
-> not successful and waits for a timeout.
+> Please always CC the mailing list. I'm not the only person working on
+> this code.
 > 
-> The shortened address device timeout quirks provide the flexibility
-> to align with a 3-second time limit in the event of errors.
-> By swiftly triggering a failure response and swiftly initiating
-> retry procedures, these quirks ensure efficient and rapid recovery,
-> particularly in automotive contexts where rapid smartphone enumeration
-> and screen projection are vital.
+> On Sun, Oct 08, 2023 at 06:59:19PM -0400, Douglas Gilbert wrote:
+> > Hi,
+> > I was debugging something else in lk 6.6.0-rc1 and was tailing
+> > /var/log/syslog and noticed several:
+> >    kmemleak: 6 new suspected memory leaks
+> > messages so I had a look and saw many of these:
+> > 
+> > unreferenced object 0xffff8882943a4df8 (size 8):
+> >   comm "kworker/u32:41", pid 73935, jiffies 4437924777 (age 6489.122s)
+> >   hex dump (first 8 bytes):
+> >     70 64 35 00 82 88 ff ff                          pd5.....
+> >   backtrace:
+> >     [<ffffffff812d247c>] __kmalloc_node_track_caller+0x4c/0x150
+> >     [<ffffffff815c8585>] kvasprintf+0x65/0xd0
+> >     [<ffffffff81b1b56c>] kobject_set_name_vargs+0x1c/0x90
+> >     [<ffffffff8178f30e>] dev_set_name+0x4e/0x70
+> >     [<ffffffffa05f78b4>] usb_power_delivery_register+0x84/0xe0 [typec]
+> >     [<ffffffffa0748112>] ucsi_register_partner_pdos+0x62/0x190 [typec_ucsi]
+> >     [<ffffffffa07464a8>] ucsi_poll_worker+0x38/0x110 [typec_ucsi]
+> >     [<ffffffff810a9d48>] process_one_work+0x1d8/0x4b0
+> >     [<ffffffff810ab149>] worker_thread+0x1c9/0x3b0
+> >     [<ffffffff810b60d2>] kthread+0xf2/0x130
+> >     [<ffffffff8102d588>] ret_from_fork+0x28/0x40
+> >     [<ffffffff81001aeb>] ret_from_fork_asm+0x1b/0x30
+> > 
+> > and similar variants involving UCSI. Looking at ucsi_register_partner_pdos()
+> > there seems to be a leak of con->partner_pd if one other the other functions
+> > that depend on it fail. If it was my code, I would replace most of the
+> > returns in that function with 'goto err;' branches which would then call
+> >    usb_power_delivery_unregister(con->partner_pd);
 > 
-> The quirk will set the timeout to 500 ms from 5 seconds.
+> No, partner_pd object isn't there only for the PDOs. We need it even
+> when PDO details are not supported by the interface (PDO details are
+> optional in UCSI).
 > 
-> To use the quirk, please write "vendor_id:product_id:p" to
-> /sys/bus/usb/drivers/hub/module/parameter/quirks
-> 
-> For example,
-> echo "0x2c48:0x0132:p" > /sys/bus/usb/drivers/hub/module/parameter/quirks"
-> 
-> Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
-> ---
-> changes since version 1:
-> 	- implement quirk instead of new API in xhci driver
-> ---
->   drivers/usb/core/hub.c       | 15 +++++++++++++--
->   drivers/usb/core/quirks.c    |  3 +++
->   drivers/usb/host/xhci-mem.c  |  1 +
->   drivers/usb/host/xhci-ring.c |  3 ++-
->   drivers/usb/host/xhci.c      |  9 +++++----
->   drivers/usb/host/xhci.h      |  1 +
->   include/linux/usb/hcd.h      |  3 ++-
->   include/linux/usb/quirks.h   |  3 +++
->   8 files changed, 30 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index 3c54b218301c..975449b03426 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -54,6 +54,9 @@
->   #define USB_TP_TRANSMISSION_DELAY_MAX	65535	/* ns */
->   #define USB_PING_RESPONSE_TIME		400	/* ns */
->   
-> +#define USB_DEFAULT_ADDR_DEVICE_TIMEOUT		(HZ * 5) /* 5000ms */
-> +#define USB_SHORT_ADDR_DEVICE_TIMEOUT		125  /* ~500ms */
+> I don't see any leak here. All these object, including partner_pd, are
+> unregistered in the end as they should, no?
 
-maybe use milliseconds directly
-define USB_DEFAULT_ADDR_DEVICE_TIMEOUT		5000	/* ms */
-...
+I found an issue that I think is causing the problem. The link between
+the typec and PD devices is never removed in this driver. That will
+prevent the device from ever being released.
 
-> +
->   /* Protect struct usb_device->state and ->children members
->    * Note: Both are also protected by ->dev.sem, except that ->state can
->    * change to USB_STATE_NOTATTACHED even when the semaphore isn't held. */
-> @@ -4626,8 +4629,16 @@ EXPORT_SYMBOL_GPL(usb_ep0_reinit);
->   static int hub_set_address(struct usb_device *udev, int devnum)
->   {
->   	int retval;
-> +	int timeout = USB_DEFAULT_ADDR_DEVICE_TIMEOUT;
->   	struct usb_hcd *hcd = bus_to_hcd(udev->bus);
->   
-> +	struct usb_hub *hub = usb_hub_to_struct_hub(udev->parent);
-> +
-> +	if (hub->hdev->quirks & USB_QUIRK_SHORT_DEVICE_ADDR_TIMEOUT)
-> +		timeout = USB_SHORT_ADDR_DEVICE_TIMEOUT;
-> +
-> +	dev_dbg(&udev->dev, "address_device timeout %d\n", timeout);
-> +
->   	/*
->   	 * The host controller will choose the device address,
->   	 * instead of the core having chosen it earlier
-> @@ -4639,11 +4650,11 @@ static int hub_set_address(struct usb_device *udev, int devnum)
->   	if (udev->state != USB_STATE_DEFAULT)
->   		return -EINVAL;
->   	if (hcd->driver->address_device)
-> -		retval = hcd->driver->address_device(hcd, udev);
-> +		retval = hcd->driver->address_device(hcd, udev, timeout);
->   	else
->   		retval = usb_control_msg(udev, usb_sndaddr0pipe(),
->   				USB_REQ_SET_ADDRESS, 0, devnum, 0,
-> -				NULL, 0, USB_CTRL_SET_TIMEOUT);
-> +				NULL, 0, jiffies_to_msecs(timeout));
->   	if (retval == 0) {
->   		update_devnum(udev, devnum);
->   		/* Device now using proper address. */
-> diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-> index 15e9bd180a1d..01ed26bd41f0 100644
-> --- a/drivers/usb/core/quirks.c
-> +++ b/drivers/usb/core/quirks.c
-> @@ -138,6 +138,9 @@ static int quirks_param_set(const char *value, const struct kernel_param *kp)
->   			case 'o':
->   				flags |= USB_QUIRK_HUB_SLOW_RESET;
->   				break;
-> +			case 'p':
-> +				flags |= USB_QUIRK_SHORT_DEVICE_ADDR_TIMEOUT;
-> +				break;
->   			/* Ignore unrecognized flag characters */
->   			}
->   		}
-> diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-> index 8714ab5bf04d..492433fdac77 100644
-> --- a/drivers/usb/host/xhci-mem.c
-> +++ b/drivers/usb/host/xhci-mem.c
-> @@ -1729,6 +1729,7 @@ struct xhci_command *xhci_alloc_command(struct xhci_hcd *xhci,
->   	}
->   
->   	command->status = 0;
-> +	command->timeout = 0;
+thanks,
 
-This could be command->timeout = XHCI_CMD_DEFAULT_TIMEOUT_MS;
-For address device commands we then  override it later in xhci_setup_device()
-
-The default xhci command timeout could be changed to 5000ms instead of 5 * HZ,
-so in xhci.h:
-
-/* Default xhci command timeout in milliseconds */
-XHCI_CMD_DEFAULT_TIMEOUT_MS	5000
-
->   	INIT_LIST_HEAD(&command->cmd_list);
->   	return command;
->   }
-> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-> index 1dde53f6eb31..0bd19a1efdec 100644
-> --- a/drivers/usb/host/xhci-ring.c
-> +++ b/drivers/usb/host/xhci-ring.c
-> @@ -4301,7 +4301,8 @@ static int queue_command(struct xhci_hcd *xhci, struct xhci_command *cmd,
->   	/* if there are no other commands queued we start the timeout timer */
->   	if (list_empty(&xhci->cmd_list)) {
->   		xhci->current_cmd = cmd;
-> -		xhci_mod_cmd_timer(xhci, XHCI_CMD_DEFAULT_TIMEOUT);
-> +		xhci_mod_cmd_timer(xhci, (cmd->timeout) ? cmd->timeout :
-> +				XHCI_CMD_DEFAULT_TIMEOUT);
-
-xhci_mod_cmd_timer(xhci, cmd->timeout);
-
-We would then also need to convert ms to jiffies in xhci_mod_cmd_timer():
-
-return mod_delayed_work(system_wq, &xhci->cmd_timer, msecs_to_jiffies(delay));
-
-
->   	}
->   
->   	list_add_tail(&cmd->cmd_list, &xhci->cmd_list);
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index e1b1b64a0723..1d088ceb2b74 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -4002,7 +4002,7 @@ int xhci_alloc_dev(struct usb_hcd *hcd, struct usb_device *udev)
->    * SetAddress request to the device.
->    */
->   static int xhci_setup_device(struct usb_hcd *hcd, struct usb_device *udev,
-> -			     enum xhci_setup_dev setup)
-> +			     enum xhci_setup_dev setup, int timeout)
-  
-Hmm, I know usb_control_msg() uses int for timeout, but unsigned int would seem more
-appropriate.
-
-Same for xhci_address_device() and xhci_enable_device()
-
->   {
->   	const char *act = setup == SETUP_CONTEXT_ONLY ? "context" : "address";
->   	unsigned long flags;
-> @@ -4059,6 +4059,7 @@ static int xhci_setup_device(struct usb_hcd *hcd, struct usb_device *udev,
->   	}
->   
->   	command->in_ctx = virt_dev->in_ctx;
-> +	command->timeout = timeout;
->   
->   	slot_ctx = xhci_get_slot_ctx(xhci, virt_dev->in_ctx);
->   	ctrl_ctx = xhci_get_input_control_ctx(virt_dev->in_ctx);
-> @@ -4185,14 +4186,14 @@ static int xhci_setup_device(struct usb_hcd *hcd, struct usb_device *udev,
->   	return ret;
->   }
->   
-> -static int xhci_address_device(struct usb_hcd *hcd, struct usb_device *udev)
-> +static int xhci_address_device(struct usb_hcd *hcd, struct usb_device *udev, int timeout)
->   {
-> -	return xhci_setup_device(hcd, udev, SETUP_CONTEXT_ADDRESS);
-> +	return xhci_setup_device(hcd, udev, SETUP_CONTEXT_ADDRESS, timeout);
->   }
->   
->   static int xhci_enable_device(struct usb_hcd *hcd, struct usb_device *udev)
->   {
-> -	return xhci_setup_device(hcd, udev, SETUP_CONTEXT_ONLY);
-> +	return xhci_setup_device(hcd, udev, SETUP_CONTEXT_ONLY, 0);
-
-return xhci_setup_device(hcd, udev, SETUP_CONTEXT_ONLY, XHCI_CMD_DEFAULT_TIMEOUT_MS);
-
->   }
->   
->   /*
-> diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-> index 7e282b4522c0..ebdca8dd01c2 100644
-> --- a/drivers/usb/host/xhci.h
-> +++ b/drivers/usb/host/xhci.h
-> @@ -818,6 +818,7 @@ struct xhci_command {
->   	struct completion		*completion;
->   	union xhci_trb			*command_trb;
->   	struct list_head		cmd_list;
-> +	int				timeout;
-
-unsigned int?
-
-Thanks
-Mathias
-
+-- 
+heikki
 
