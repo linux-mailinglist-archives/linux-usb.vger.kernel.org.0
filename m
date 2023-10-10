@@ -1,119 +1,128 @@
-Return-Path: <linux-usb+bounces-1345-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1346-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2C4F7BF5DB
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Oct 2023 10:29:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E219E7BF5FA
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Oct 2023 10:33:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2CA331C20C72
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Oct 2023 08:29:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1CC141C20D14
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Oct 2023 08:33:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D73A715AD1;
-	Tue, 10 Oct 2023 08:29:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 593FEDF44;
+	Tue, 10 Oct 2023 08:33:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="Hsnnv3fI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZQ+2gIot"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96E9A14F81
-	for <linux-usb@vger.kernel.org>; Tue, 10 Oct 2023 08:29:43 +0000 (UTC)
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6065A4
-	for <linux-usb@vger.kernel.org>; Tue, 10 Oct 2023 01:29:40 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-4060b623e64so32406525e9.0
-        for <linux-usb@vger.kernel.org>; Tue, 10 Oct 2023 01:29:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1696926579; x=1697531379; darn=vger.kernel.org;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=YrDpZmZefXlqy3WFlkBNTJUKRA9XMwssY5ktKEP6Rng=;
-        b=Hsnnv3fIc1m7TH1rMUBq/XXbHKa/9pGFZSmM27eWflv+izae8wc40whIQbfV+4SXGS
-         DpD5lfNC6hieAQ5fIUyXVDh2vrCG9QtGniL3DAHlBSQnCKEV6+GbXQSpbtnSmmwfDlsw
-         buX8++UZjbZnb7OFumRcBTJ648pb9QtMUo5gWhnXE2AF/67ThOeTddyF1J874AnYANEL
-         NpQLX/3TLg7pHWAc/XBxJB4vMUz+/un7TYo9Ve9WUg2f8+KSlYFf6T9HGbzx94s3ARer
-         qf5jYW5gyC1Zr1Jkq4tLjPaOsDUK7tZ/+ysysIxBsn/HXkaBqO2bWDmpSTwDdUxnKpZ3
-         /LKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696926579; x=1697531379;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YrDpZmZefXlqy3WFlkBNTJUKRA9XMwssY5ktKEP6Rng=;
-        b=ItLvjfniufleBaiDpMAhltRNHvrAk4xNgpmADahZsg1F7Qxzte+86yLJShDEHP/FK6
-         xwNTimrKbfdx693H+UXYvoMkZUodSwdQsvHqmnhm27bToDDpNt7AslxBe8EG4WlIUApp
-         hXgSIsADnQ4DMlg+IldKz3e+dkP8p/ggkWZXXR0fD1kkpJQ2ayyaLqQEn/B2RtdP/KHt
-         hX6IHsXQrP77UD3oVpl+Vh/G5ZrP7pdQK+Bz6Wostv5iOuu1ujIPnbIA2vOXOTTr1oco
-         gLzW0rLA24MgXuhcq6+JwqZzgUAYLJdBSDiBx5tLS12R/UANZvgHHnXKu4vzW+eEBm38
-         0RkQ==
-X-Gm-Message-State: AOJu0YzE3dF8gkEYzTHCWr8ELFHGLs2zovN9BincienalHBdh+WzKaZ8
-	e62LfLaUgBEfJ1YxW3GLtmC/Rw==
-X-Google-Smtp-Source: AGHT+IFk5wTB1OSheyR+tcxmgmgrUuRTtfgpZrtLiJ3/eRJ6WTGcqEUM2TECgII5D5zIpHI9IGCKgg==
-X-Received: by 2002:a7b:c457:0:b0:401:c8b9:4b86 with SMTP id l23-20020a7bc457000000b00401c8b94b86mr13461614wmi.9.1696926578938;
-        Tue, 10 Oct 2023 01:29:38 -0700 (PDT)
-Received: from localhost ([2a01:e0a:3c5:5fb1:cb24:d0d8:242b:616c])
-        by smtp.gmail.com with ESMTPSA id z23-20020a1c4c17000000b00405935b417asm15681065wmf.2.2023.10.10.01.29.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Oct 2023 01:29:38 -0700 (PDT)
-References: <20231006101028.1973730-1-jbrunet@baylibre.com>
- <2023101036-ambiance-precision-657c@gregkh>
-User-agent: mu4e 1.8.13; emacs 29.1
-From: Jerome Brunet <jbrunet@baylibre.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, Neil Armstrong
- <neil.armstrong@linaro.org>
-Subject: Re: [PATCH] usb: misc: onboard_usb_hub: extend gl3510 reset duration
-Date: Tue, 10 Oct 2023 10:27:32 +0200
-In-reply-to: <2023101036-ambiance-precision-657c@gregkh>
-Message-ID: <1jv8bex4lq.fsf@starbuckisacylon.baylibre.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FDBE15AE4
+	for <linux-usb@vger.kernel.org>; Tue, 10 Oct 2023 08:33:38 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E497A7
+	for <linux-usb@vger.kernel.org>; Tue, 10 Oct 2023 01:33:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696926817; x=1728462817;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=8mkXrzkF3SfiYG2dWHMqfRD9Ky4l0XjpND155B+7sk4=;
+  b=ZQ+2gIotbrGGNRGIS41YdReuBLXPwFc1SNqHWrFqWDXXAoE+2u0KypkS
+   61/CexrPOtMk0eVMk/rLOGGrCNfFAKqUev5y/RNJFiCrfIhAsxDRrP3DZ
+   dCRMFtNsstwbbxT7ShgiJ3hszU798R89Xv0gCbDxAtw+nAz6dz2zocBrJ
+   1K7Kujh5OQfrYmHFDlmTnKd2aZHD9cH0Vl2ffadF1gyViT8LrRTlw+cHL
+   wBcnkq4PMQKchu8Pn2Pl+TG6M3+imhiBYTpmNkWpFdfcQU9DaqV28WpNK
+   5Sx4baC4cG8aw22Obf57C4C7t0Lp/VNZJuyuw1+NRRJBdOIHfskPEedhN
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10858"; a="448534388"
+X-IronPort-AV: E=Sophos;i="6.03,212,1694761200"; 
+   d="scan'208";a="448534388"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2023 01:33:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10858"; a="746990468"
+X-IronPort-AV: E=Sophos;i="6.03,212,1694761200"; 
+   d="scan'208";a="746990468"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by orsmga007.jf.intel.com with SMTP; 10 Oct 2023 01:33:34 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 10 Oct 2023 11:33:33 +0300
+Date: Tue, 10 Oct 2023 11:33:33 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Douglas Gilbert <dgilbert@interlog.com>
+Cc: linux-usb@vger.kernel.org
+Subject: Re: [typec] ucsi.c: ucsi_register_partner_pdos() leak
+Message-ID: <ZSUMXdw9nanHtnw2@kuha.fi.intel.com>
+References: <161b4007-3360-4268-ab66-bc19aa8f360e@interlog.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <161b4007-3360-4268-ab66-bc19aa8f360e@interlog.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
+Hi Douglas,
 
-On Tue 10 Oct 2023 at 08:56, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+Please always CC the mailing list. I'm not the only person working on
+this code.
 
-> On Fri, Oct 06, 2023 at 12:10:28PM +0200, Jerome Brunet wrote:
->> Initial tests with the gl3510 has been done on libretech aml-a311d-cc.
->> A 50us reset was fine as long as the hub node was under the usb phy node it
->> DT. DT schema does not allow that. Moving the hub under the dwc3 controller
->> caused issues, such as:
->> 
->> onboard-usb-hub 1-1: Failed to suspend device, error -32
->> onboard-usb-hub 1-1: can't set config #1, error -71
->> onboard-usb-hub 1-1: Failed to suspend device, error -32
->> onboard-usb-hub 1-1: USB disconnect, device number 2
->> 
->> Extending the reset duration solves the problem.
->> Since there is no documentation available for this hub, it is difficult to
->> know the actual required reset duration. 200us seems to work fine so far.
->> 
->> Suggested-by: Neil Armstrong <neil.armstrong@linaro.org>
->> Fixes: 65009ccf7e8f ("usb: misc: onboard_usb_hub: add Genesys Logic gl3510 hub support")
->
-> I can't find this git id, what tree is it in?
+On Sun, Oct 08, 2023 at 06:59:19PM -0400, Douglas Gilbert wrote:
+> Hi,
+> I was debugging something else in lk 6.6.0-rc1 and was tailing
+> /var/log/syslog and noticed several:
+>    kmemleak: 6 new suspected memory leaks
+> messages so I had a look and saw many of these:
+> 
+> unreferenced object 0xffff8882943a4df8 (size 8):
+>   comm "kworker/u32:41", pid 73935, jiffies 4437924777 (age 6489.122s)
+>   hex dump (first 8 bytes):
+>     70 64 35 00 82 88 ff ff                          pd5.....
+>   backtrace:
+>     [<ffffffff812d247c>] __kmalloc_node_track_caller+0x4c/0x150
+>     [<ffffffff815c8585>] kvasprintf+0x65/0xd0
+>     [<ffffffff81b1b56c>] kobject_set_name_vargs+0x1c/0x90
+>     [<ffffffff8178f30e>] dev_set_name+0x4e/0x70
+>     [<ffffffffa05f78b4>] usb_power_delivery_register+0x84/0xe0 [typec]
+>     [<ffffffffa0748112>] ucsi_register_partner_pdos+0x62/0x190 [typec_ucsi]
+>     [<ffffffffa07464a8>] ucsi_poll_worker+0x38/0x110 [typec_ucsi]
+>     [<ffffffff810a9d48>] process_one_work+0x1d8/0x4b0
+>     [<ffffffff810ab149>] worker_thread+0x1c9/0x3b0
+>     [<ffffffff810b60d2>] kthread+0xf2/0x130
+>     [<ffffffff8102d588>] ret_from_fork+0x28/0x40
+>     [<ffffffff81001aeb>] ret_from_fork_asm+0x1b/0x30
+> 
+> and similar variants involving UCSI. Looking at ucsi_register_partner_pdos()
+> there seems to be a leak of con->partner_pd if one other the other functions
+> that depend on it fail. If it was my code, I would replace most of the
+> returns in that function with 'goto err;' branches which would then call
+>    usb_power_delivery_unregister(con->partner_pd);
 
-Silly mistake. I must have taken the git id I had before you merged it. Sorry.
-The correct tag with usb-next is
+No, partner_pd object isn't there only for the PDOs. We need it even
+when PDO details are not supported by the interface (PDO details are
+optional in UCSI).
 
-Fixes: b447e9efe50a ("usb: misc: onboard_usb_hub: add Genesys Logic gl3510 hub support")
+I don't see any leak here. All these object, including partner_pd, are
+unregistered in the end as they should, no?
 
-Should I resend it ?
+The function looks a bit funny because it has to always try to read
+both sink and source PDOs (UCSI does not tell us what is available
+beforehand). We can probable refactor the code a bit to make it more
+understandable. The actual registration of the PDOs should be split
+into separate function and this one should be renamed to
+ucsi_register_partner_pd().
 
->
-> thanks,
->
-> greg k-h
+thanks,
 
+-- 
+heikki
 
