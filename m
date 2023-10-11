@@ -1,88 +1,151 @@
-Return-Path: <linux-usb+bounces-1431-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1432-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 898697C482A
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Oct 2023 05:10:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60C1B7C490F
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Oct 2023 07:12:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 68B1228247E
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Oct 2023 03:10:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 915A31C20DBF
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Oct 2023 05:12:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0A9DC15E;
-	Wed, 11 Oct 2023 03:10:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80C34D2EA;
+	Wed, 11 Oct 2023 05:12:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uliMU3Db"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="n95wl1Dv"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C7D66111;
-	Wed, 11 Oct 2023 03:10:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C6D9CC433CA;
-	Wed, 11 Oct 2023 03:10:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1696993825;
-	bh=chhBCKkV6ZerimGonFhRxw877THTC2UOjXgTOzI0cxw=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=uliMU3Dbeg2uHNffO1m5HRHiMQDIb8dS3e0RUtjyg+HY5B2fNk7N11YHjoaVRDqq4
-	 bXKTY/R5kLh3EEtAHu+vSsMVKcUnTgP6sWUsNs80b5qwevgGwWV1wUQ0+LTQyldhQA
-	 kxFLw1tr8yvSdfeyKHqRjH6p0APsUBtUTYrtRGFOsfv3L9uialQ/zLO7cEQSiC3Eqo
-	 Qlj5vE91gMnlMSbt2Rw6LDBFsRyra/9QMMDJdWpSvdFzFbnWLMBQ+2TPIiUW0cfhOO
-	 7Z4nfgUr0taYgSK/WA9u675nIyGq5DRczNSOCHh50qiymoe1Ude+FyCNKSLHZZC5VC
-	 33DxgP5gqEHtw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A7C24E11F43;
-	Wed, 11 Oct 2023 03:10:25 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63ACB354F9;
+	Wed, 11 Oct 2023 05:12:09 +0000 (UTC)
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A915F94;
+	Tue, 10 Oct 2023 22:12:07 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39B4L7Qv018484;
+	Wed, 11 Oct 2023 05:11:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Shlvryev70po6+y16cgY2lwIBQ2lfoFlgDPaJLuAWWQ=;
+ b=n95wl1DvgAlwFmru9lVDHn21r/bIQ0UAiwl4K9JFWOGLTuwTjt9+i4prjkCqY7Uw/jVv
+ g7yi5w2SAyjlWlREBFoAn2LTOkPL7YEP7HNeEt3PJKBBPbJXs4hgHzhKUopXt2iPJRl4
+ o0WmcyyscwjjDTfeR73rZITEoO4fiTVaAycebqhVQxaKzEkMOQrFwq+Z1g6NNFlj2a+H
+ 2NY6mrowYQ9CUld+0i9hVz9uMYUD+rJBT7gYABNfwdAmddp1FsO85ZM9egjLhSxFcOQ/
+ uZpJbf0OjiKRMM7bUw4CcUKKQjDWHqDl1GYKCKrdw0PgLkB4K2qmxQfz36+L/lrmGXyB Uw== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tn4he232m-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 11 Oct 2023 05:11:55 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39B5BsDS020211
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 11 Oct 2023 05:11:54 GMT
+Received: from [10.216.3.75] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Tue, 10 Oct
+ 2023 22:11:47 -0700
+Message-ID: <2c325941-0fcc-4092-9581-dd6ebb067163@quicinc.com>
+Date: Wed, 11 Oct 2023 10:41:44 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v13 00/10] Add multiport support for DWC3 controllers
+To: Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Thinh Nguyen
+	<Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>, Andy Gross <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi
+	<balbi@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Johan Hovold
+	<johan@kernel.org>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>,
+        <quic_jackp@quicinc.com>, <ahalaney@redhat.com>,
+        <quic_shazhuss@quicinc.com>
+References: <20231007154806.605-1-quic_kriskura@quicinc.com>
+ <537d59b3-0e40-4d4d-80ab-b99028af6ec2@linaro.org>
+Content-Language: en-US
+From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <537d59b3-0e40-4d4d-80ab-b99028af6ec2@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] net: usb: dm9601: fix uninitialized variable use in
- dm9601_mdio_read
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <169699382568.3301.6960021020124970856.git-patchwork-notify@kernel.org>
-Date: Wed, 11 Oct 2023 03:10:25 +0000
-References: <20231009-topic-dm9601_uninit_mdio_read-v2-1-f2fe39739b6c@gmail.com>
-In-Reply-To: <20231009-topic-dm9601_uninit_mdio_read-v2-1-f2fe39739b6c@gmail.com>
-To: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Cc: peter@korsgaard.com, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com,
- syzbot+1f53a30781af65d2c955@syzkaller.appspotmail.com,
- netdev@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: qBwvHOhGTLevD_mKHfjY_UTaE_ONyd2f
+X-Proofpoint-ORIG-GUID: qBwvHOhGTLevD_mKHfjY_UTaE_ONyd2f
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-11_01,2023-10-10_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=643
+ suspectscore=0 mlxscore=0 lowpriorityscore=0 spamscore=0 adultscore=0
+ impostorscore=0 phishscore=0 clxscore=1015 bulkscore=0 malwarescore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2310110046
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+	URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-Hello:
 
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
 
-On Tue, 10 Oct 2023 00:26:14 +0200 you wrote:
-> syzbot has found an uninit-value bug triggered by the dm9601 driver [1].
+On 10/11/2023 2:21 AM, Konrad Dybcio wrote:
 > 
-> This error happens because the variable res is not updated if the call
-> to dm_read_shared_word returns an error. In this particular case -EPROTO
-> was returned and res stayed uninitialized.
 > 
-> This can be avoided by checking the return value of dm_read_shared_word
-> and propagating the error if the read operation failed.
+> On 10/7/23 17:47, Krishna Kurapati wrote:
+>> Currently the DWC3 driver supports only single port controller which
+>> requires at most two PHYs ie HS and SS PHYs. There are SoCs that has
+>> DWC3 controller with multiple ports that can operate in host mode.
+>> Some of the port supports both SS+HS and other port supports only HS
+>> mode.
+>>
+>> This change primarily refactors the Phy logic in core driver to allow
+>> multiport support with Generic Phy's.
+>>
+>> Changes have been tested on  QCOM SoC SA8295P which has 4 ports (2
+>> are HS+SS capable and 2 are HS only capable).
+>>
+>> Changes in v13:
+>> This series is a subset of patches in v11 as the first 3 patches in v11
+>> have been mereged into usb-next.
+>> Moved dr_mode property from platform specific files to common sc8280xp 
+>> DT.
+>> Fixed function call wrapping, added comments and replaced #defines with
+>> enum in dwc3-qcom for identifying IRQ index appropriately.
+>> Fixed nitpicks pointed out in v11 for suspend-resume handling.
+>> Added reported-by tag for phy refactoring patch as a compile error was
+>> found by kernel test bot [1].
+> "If you fix the issue in a separate patch/commit (i.e. not just a new 
+> version of
+> the same patch/commit), kindly add following tags"
 > 
-> [...]
+> the issue your patch resolves is not one that was reported by the kernel 
+> testing robot, it just pointed out that you need to fix up the next 
+> revision
+> 
 
-Here is the summary with links:
-  - [v2] net: usb: dm9601: fix uninitialized variable use in dm9601_mdio_read
-    https://git.kernel.org/netdev/net/c/8f8abb863fa5
+I Agree. It sounds wrong to add a reproted-by tag making it seem like a 
+bug instead of a feature we have written. But if we fix the compile 
+error mentioned and not add the "reported-by", its like not giving 
+credit for the reporter. So I put in the reproted by and closes tag to 
+give a view of what was reported and the feature implemented.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Regards,
+Krishna,
 
