@@ -1,140 +1,108 @@
-Return-Path: <linux-usb+bounces-1448-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1450-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CED47C4FFC
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Oct 2023 12:21:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCA307C502B
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Oct 2023 12:32:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BE0752822B4
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Oct 2023 10:21:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 18F921C20FCB
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Oct 2023 10:32:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAA781DA54;
-	Wed, 11 Oct 2023 10:21:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 980EF10963;
+	Wed, 11 Oct 2023 10:32:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VIeWU83b"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="uNJtxGnV"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E01721DA38
-	for <linux-usb@vger.kernel.org>; Wed, 11 Oct 2023 10:21:29 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D616794;
-	Wed, 11 Oct 2023 03:21:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697019688; x=1728555688;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/cYWT/4fm7jXsKnDZ4BU0yY6cJwahfXPWVnGMGjbcsM=;
-  b=VIeWU83bLvIUuBBVheASpygqGR67OfO2po2QRufat1UAd7c771nPnieN
-   qke+mncSsVYK2FsIruJRW+jU6K+XLX6bd7Zndjjg15/5+YWvJyJL/axyv
-   TDovcmIDnajM4mJC3s8Yq+C8kOaNr4eChcBEGbrh38srpMuVamyvn8wrQ
-   5+SUKrUW7toVZHTzGzIAucFQT3Id9Y+y3SsHVJHaK/h/2Y2t1t950ISAP
-   ltHUsxBHyZhDNvTR8+lpJD6XUUoZDorRVxGf5QAhqGUL5zzlXwvKlzKjM
-   osi32NGu6DUWogmTLWZ4uAjnXvCKBdxUE0sn0Sk3SRm/5hgGiab5I5AMJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10859"; a="415673273"
-X-IronPort-AV: E=Sophos;i="6.03,214,1694761200"; 
-   d="scan'208";a="415673273"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2023 03:21:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10859"; a="897579128"
-X-IronPort-AV: E=Sophos;i="6.03,214,1694761200"; 
-   d="scan'208";a="897579128"
-Received: from unknown (HELO smile.fi.intel.com) ([10.237.72.54])
-  by fmsmga001.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2023 03:19:39 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC1)
-	(envelope-from <andriy.shevchenko@intel.com>)
-	id 1qqWLB-00000004an8-1jYb;
-	Wed, 11 Oct 2023 13:21:21 +0300
-Date: Wed, 11 Oct 2023 13:21:20 +0300
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Wentong Wu <wentong.wu@intel.com>
-Cc: gregkh@linuxfoundation.org, oneukum@suse.com, wsa@kernel.org,
-	andi.shyti@linux.intel.com, broonie@kernel.org,
-	bartosz.golaszewski@linaro.org, linus.walleij@linaro.org,
-	hdegoede@redhat.com, linux-usb@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-	sakari.ailus@linux.intel.com, zhifeng.wang@intel.com,
-	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v20 1/4] usb: Add support for Intel LJCA device
-Message-ID: <ZSZ3IPgLk7uC5UGI@smile.fi.intel.com>
-References: <1696833205-16716-1-git-send-email-wentong.wu@intel.com>
- <1696833205-16716-2-git-send-email-wentong.wu@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4740E10941
+	for <linux-usb@vger.kernel.org>; Wed, 11 Oct 2023 10:32:52 +0000 (UTC)
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 685D1A7
+	for <linux-usb@vger.kernel.org>; Wed, 11 Oct 2023 03:32:48 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-503397ee920so8440176e87.1
+        for <linux-usb@vger.kernel.org>; Wed, 11 Oct 2023 03:32:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1697020366; x=1697625166; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7QIeMMhcSryQxmA+otjPSDtQCoEfBMg1N+BkKe5wFu8=;
+        b=uNJtxGnVeBnjSN2RO5hwudMh/nyZiWej5RqaiLcUbuVGIhTvyDZARfqMNBe27XQvl5
+         80yi9mtFAtEO92WhNiSJ4VW1HsuQTsHjfDfOc41lUCKynbRlPYWDzwh7+rEWgqCitXN/
+         w7RRhS+XkXo6UwL9fKMoeewcd1oTaV9i53qD6Jfxf6Wh/W4N4f70bCA/mZWnX2X5p5Wv
+         PvTHHLQ3xbQzun0DVXuctHJBAKV65hnvXGEV9rBf7CyN8dU9mAhNsLpnArn5cRnUsZeE
+         Efzhk/ySyKN/y2BMMyJ6jcYRuD4o0Iml07e4u9LRKyHNaLYLMmArW1WP9vExWMKEM2Rh
+         A/aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697020366; x=1697625166;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7QIeMMhcSryQxmA+otjPSDtQCoEfBMg1N+BkKe5wFu8=;
+        b=ermCD3sP0bONv/Lk/QXmghDQBfppDeM9OhGkXq4UetnaCoUYnDnE1RxCb0+I8by7y4
+         TC6BiF01GKGLymb6hcdtE0kq9UqDGwrTOPKzLQIAF17iiQ2Ed3sNh7v5ek0cPPK+/kny
+         0HDRFfhuWO8oDbGQbzPRBLUr4CCi3Uy6hGXiaxIgIogxO3wbbt1z9vZ4s4R5yQC0Z6Tj
+         Pm06HW+QD4klCiHQ4pNe1EstNf8zVQkkawxkpOk9GXDRJI88Xb3frlx5VTzPI4FipT3m
+         NFmXQ+9x+meqbndS35GRH6aZ/QLInMHlZ6N7QE8Wqcy4QUTd0NfEjRV2TiwI03HGDEYT
+         Q8iw==
+X-Gm-Message-State: AOJu0YyDx0aNJooj8xfCa+WlHU7dOPxv7z5ScYCHtyzX9+0zQ89jMflk
+	X+4BYGzpaFd69NmeEzpp9PSEZA==
+X-Google-Smtp-Source: AGHT+IHmLHvAYx0QiL4fcVA1D7OPFE9bl/LdZFHcwQ9I74wF7LYRU/CP4cqEDFylwCc+p50yCTmL0Q==
+X-Received: by 2002:ac2:4e87:0:b0:503:3816:c42c with SMTP id o7-20020ac24e87000000b005033816c42cmr14877373lfr.41.1697020366012;
+        Wed, 11 Oct 2023 03:32:46 -0700 (PDT)
+Received: from umbar.unikie.fi ([192.130.178.91])
+        by smtp.gmail.com with ESMTPSA id x2-20020ac24882000000b0050574829e48sm2195517lfc.298.2023.10.11.03.32.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Oct 2023 03:32:45 -0700 (PDT)
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-arm-msm@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: [PATCH 1/2] arm64: defconfig: enable CONFIG_TYPEC_QCOM_PMIC
+Date: Wed, 11 Oct 2023 13:32:44 +0300
+Message-Id: <20231011103245.96638-1-dmitry.baryshkov@linaro.org>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1696833205-16716-2-git-send-email-wentong.wu@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-	SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
 	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Mon, Oct 09, 2023 at 02:33:22PM +0800, Wentong Wu wrote:
-> Implements the USB part of Intel USB-I2C/GPIO/SPI adapter device
-> named "La Jolla Cove Adapter" (LJCA).
-> 
-> The communication between the various LJCA module drivers and the
-> hardware will be muxed/demuxed by this driver. Three modules (
-> I2C, GPIO, and SPI) are supported currently.
-> 
-> Each sub-module of LJCA device is identified by type field within
-> the LJCA message header.
-> 
-> The sub-modules of LJCA can use ljca_transfer() to issue a transfer
-> between host and hardware. And ljca_register_event_cb is exported
-> to LJCA sub-module drivers for hardware event subscription.
-> 
-> The minimum code in ASL that covers this board is
-> Scope (\_SB.PCI0.DWC3.RHUB.HS01)
->     {
->         Device (GPIO)
->         {
->             Name (_ADR, Zero)
->             Name (_STA, 0x0F)
->         }
-> 
->         Device (I2C)
->         {
->             Name (_ADR, One)
->             Name (_STA, 0x0F)
->         }
-> 
->         Device (SPI)
->         {
->             Name (_ADR, 0x02)
->             Name (_STA, 0x0F)
->         }
->     }
+Enable Qualcomm PMIC TCPM driver, it is used to handle Type-C ports on
+devices like Qualcomm Robotics RB5 platform.
 
-This commit message is not true anymore, or misleading at bare minimum.
-The ACPI specification is crystal clear about usage _ADR and _HID, i.e.
-they must NOT be used together for the same device node. So, can you
-clarify how the DSDT is organized and update the commit message and
-it may require (quite likely) to redesign the architecture of this
-driver. Sorry I missed this from previous rounds as I was busy by
-something else.
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+---
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Greg, please do not promote this to the next before above will be clarified.
-
-P.S> Using _ADR and _HID together is an immediate NAK from me.
-
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 07011114eef8..9509a73db774 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -1042,6 +1042,7 @@ CONFIG_TYPEC_TCPCI=m
+ CONFIG_TYPEC_FUSB302=m
+ CONFIG_TYPEC_TPS6598X=m
+ CONFIG_TYPEC_HD3SS3220=m
++CONFIG_TYPEC_QCOM_PMIC=m
+ CONFIG_TYPEC_UCSI=m
+ CONFIG_TYPEC_MUX_FSA4480=m
+ CONFIG_TYPEC_MUX_NB7VPQ904M=m
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.39.2
 
 
