@@ -1,111 +1,141 @@
-Return-Path: <linux-usb+bounces-1455-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1456-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC9677C5096
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Oct 2023 12:52:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 873727C5098
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Oct 2023 12:52:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 865D42823F4
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Oct 2023 10:52:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B80B31C20ED7
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Oct 2023 10:52:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72F7317999;
-	Wed, 11 Oct 2023 10:52:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EA0C17999;
+	Wed, 11 Oct 2023 10:52:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nexus-software-ie.20230601.gappssmtp.com header.i=@nexus-software-ie.20230601.gappssmtp.com header.b="Ugcfb81P"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VGppeCdu"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 522B61078D
-	for <linux-usb@vger.kernel.org>; Wed, 11 Oct 2023 10:52:07 +0000 (UTC)
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 597EDCC
-	for <linux-usb@vger.kernel.org>; Wed, 11 Oct 2023 03:52:05 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-32d849cc152so507645f8f.1
-        for <linux-usb@vger.kernel.org>; Wed, 11 Oct 2023 03:52:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nexus-software-ie.20230601.gappssmtp.com; s=20230601; t=1697021524; x=1697626324; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TwWT4IYbpXX6DFtsyZBSiSeurVMLjbNbulZ+VeIuYDs=;
-        b=Ugcfb81P4Ooh6vAxTH10lY2xWbJv8OHAPNyoPWhWPPIWXFAfckMtuzYl7PCqHlG1rU
-         61zaUANrACN/0oMVBdtrENsPpeu+zDIW1/tatgORDsV0N9UmP6rlCRQ2mTD1za/7LSAh
-         Na4ET+OuwFuCOHnU+4YMjRT7BST/PhQN2Abzmqh5xYsbitvCO4f36q1zpilKoDRhJX83
-         x0WSxWtVxXsT1XwsF1rHQsLHnx5wO575ZH9Z24PtuHEK0dAaJA2/r7cJ8PGaW27cDZKq
-         tQs9arelqmc91U5Qw5o2fA7/u/40VV892rg2zhzQekAOMz1K/i1Rk5xCZC5/TrTNI+vo
-         51ZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697021524; x=1697626324;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TwWT4IYbpXX6DFtsyZBSiSeurVMLjbNbulZ+VeIuYDs=;
-        b=g2L5hbyOyRik6RPjkBPX6u1iYIkgv129y1qOepoOeA1I8oPrJfRHxNjjWLI/7CU/7e
-         Jj5D+Il20PiJK7OaGgUSCYeFVAIMaleAE512xZSd5z4ngGSw6OCRCGzkX23WL4R3kL9b
-         NLpy49yeFI1l/2NFrMgkatZ/8zq+NSOcdZd5ftmP3Q9u4RU7bm68epn0RFpr2/I3pEdy
-         ZE+dd2SgJNlf9Yix52SWG3fC+5IJjRP9VNhYuNWi7Qkh3KHGY5YodgDbLjtAqs+0c9XG
-         17iXka80au6GuochC+NXbNMFXjoaKSJeWandvrUxiqUbWsoyGxr2nKxv0fd67EI72Kve
-         A17A==
-X-Gm-Message-State: AOJu0Yxrei+q5Kp1+GmezFRKgE7J1i1uPuWofHtmIzfzvVNfPcn5LMP/
-	4YQckJXyyMKQywST8qrC22lEZQ==
-X-Google-Smtp-Source: AGHT+IEXISshUTVPtxuyUeL4wx1qW+uUDwVadrLh4BOqT5XeQ1RR0hjE1Eq8bw6kFW7kfimA7KekTQ==
-X-Received: by 2002:a5d:4149:0:b0:31f:eb8d:481f with SMTP id c9-20020a5d4149000000b0031feb8d481fmr18571149wrq.29.1697021523796;
-        Wed, 11 Oct 2023 03:52:03 -0700 (PDT)
-Received: from [192.168.100.102] ([37.228.218.3])
-        by smtp.gmail.com with ESMTPSA id t4-20020a0560001a4400b0032763287473sm15312339wry.75.2023.10.11.03.52.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Oct 2023 03:52:03 -0700 (PDT)
-Message-ID: <81b1f92b-92ce-4e4d-8385-bab3a2acece4@nexus-software.ie>
-Date: Wed, 11 Oct 2023 11:52:02 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B213D1078D
+	for <linux-usb@vger.kernel.org>; Wed, 11 Oct 2023 10:52:42 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E33298
+	for <linux-usb@vger.kernel.org>; Wed, 11 Oct 2023 03:52:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1697021561; x=1728557561;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=I0J2YW7Jsd8yS6tYLeiE3gPI7G3j3yZ/5kuyIga9sT8=;
+  b=VGppeCdue271y2F252wPn+lL08+830ZSNfuD+/GjkvmI8EAg8cp3n3sn
+   T9VY8jWmdk4LxQ5F/XelaQs+XEFUMViI9T/xGE7Jkhb3xqTyFHbghU9e/
+   yC2Lo6Q92sUAhh7W0MyNQhEA6vBzuK5RJLESpwsIAqfQHhrsijPEG/7KV
+   xsbZvRR38TUtgaQ0OWENAYsTyEyrF9daxGNUn0LXm3vwgWVWmPAWhFRJp
+   1Rnsl0lLVLAEOpXMqyTc7KuNfGgLmepDsi1vGmciFmp9ArXSGqpr2jogO
+   Zo/Y4jYQUACt3hnYVwH3c24Lj8fUfIjVB0DpRSsndSLhh5Y5cHHsee7md
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10859"; a="448831858"
+X-IronPort-AV: E=Sophos;i="6.03,214,1694761200"; 
+   d="scan'208";a="448831858"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2023 03:52:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10859"; a="753774041"
+X-IronPort-AV: E=Sophos;i="6.03,214,1694761200"; 
+   d="scan'208";a="753774041"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by orsmga002.jf.intel.com with SMTP; 11 Oct 2023 03:52:37 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 11 Oct 2023 13:52:37 +0300
+Date: Wed, 11 Oct 2023 13:52:37 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, Douglas Gilbert <dgilbert@interlog.com>
+Subject: Re: [PATCH] usb: typec: ucsi: Fix missing link removal
+Message-ID: <ZSZ+dRUvyzCJr9Y8@kuha.fi.intel.com>
+References: <20231010141749.3912016-1-heikki.krogerus@linux.intel.com>
+ <2023101134-division-sift-c471@gregkh>
+ <2023101107-enrich-sudoku-c0ea@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] arm64: defconfig: enable DisplayPort altmode support
-Content-Language: en-US
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20231011103245.96638-1-dmitry.baryshkov@linaro.org>
- <20231011103245.96638-2-dmitry.baryshkov@linaro.org>
-From: Bryan O'Donoghue <pure.logic@nexus-software.ie>
-In-Reply-To: <20231011103245.96638-2-dmitry.baryshkov@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-	autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2023101107-enrich-sudoku-c0ea@gregkh>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+	SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On 11/10/2023 11:32, Dmitry Baryshkov wrote:
-> Enable the DisplayPort altmode, it is required to get DisplayPort output
-> to work on devices like Qualcomm Robotics RB5 platform.
+On Wed, Oct 11, 2023 at 11:39:20AM +0200, Greg Kroah-Hartman wrote:
+> On Wed, Oct 11, 2023 at 11:38:49AM +0200, Greg Kroah-Hartman wrote:
+> > On Tue, Oct 10, 2023 at 05:17:49PM +0300, Heikki Krogerus wrote:
+> > > The link between the partner device and its USB Power
+> > > Delivery instance was never removed which prevented the
+> > > device from being released. Removing the link always when
+> > > the partner is unregistered.
+> > > 
+> > > Fixes: b04e1747fbcc ("usb: typec: ucsi: Register USB Power Delivery Capabilities")
+> > > Reported-by: Douglas Gilbert <dgilbert@interlog.com>
+> > > Closes: https://lore.kernel.org/linux-usb/ZSUMXdw9nanHtnw2@kuha.fi.intel.com/
+> > > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > > ---
+> > >  drivers/usb/typec/ucsi/ucsi.c | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > > 
+> > > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> > > index f3ba2997004a..c9a032a5dbd0 100644
+> > > --- a/drivers/usb/typec/ucsi/ucsi.c
+> > > +++ b/drivers/usb/typec/ucsi/ucsi.c
+> > > @@ -787,6 +787,7 @@ static void ucsi_unregister_partner(struct ucsi_connector *con)
+> > >  
+> > >  	typec_set_mode(con->port, TYPEC_STATE_SAFE);
+> > >  
+> > > +	typec_partner_set_usb_power_delivery(con->partner, NULL);
+> > >  	ucsi_unregister_partner_pdos(con);
+> > >  	ucsi_unregister_altmodes(con, UCSI_RECIPIENT_SOP);
+> > >  	typec_unregister_partner(con->partner);
+> > > -- 
+> > > 2.40.1
+> > > 
+> > > 
+> > 
+> > Hi,
+> > 
+> > This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+> > a patch that has triggered this response.  He used to manually respond
+> > to these common problems, but in order to save his sanity (he kept
+> > writing the same thing over and over, yet to different people), I was
+> > created.  Hopefully you will not take offence and will fix the problem
+> > in your patch and resubmit it so that it can be accepted into the Linux
+> > kernel tree.
+> > 
+> > You are receiving this message because of the following common error(s)
+> > as indicated below:
+> > 
+> > - You have marked a patch with a "Fixes:" tag for a commit that is in an
+> >   older released kernel, yet you do not have a cc: stable line in the
+> >   signed-off-by area at all, which means that the patch will not be
+> >   applied to any older kernel releases.  To properly fix this, please
+> >   follow the documented rules in the
+> >   Documentation/process/stable-kernel-rules.rst file for how to resolve
+> >   this.
+> > 
+> > If you wish to discuss this problem further, or you have questions about
+> > how to resolve this issue, please feel free to respond to this email and
+> > Greg will reply once he has dug out from the pending patches received
+> > from other developers.
 > 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
->   arch/arm64/configs/defconfig | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-> index 9509a73db774..5807397e645a 100644
-> --- a/arch/arm64/configs/defconfig
-> +++ b/arch/arm64/configs/defconfig
-> @@ -1048,6 +1048,7 @@ CONFIG_TYPEC_MUX_FSA4480=m
->   CONFIG_TYPEC_MUX_NB7VPQ904M=m
->   CONFIG_UCSI_CCG=m
->   CONFIG_TYPEC_MUX_GPIO_SBU=m
-> +CONFIG_TYPEC_DP_ALTMODE=m
->   CONFIG_MMC=y
->   CONFIG_MMC_BLOCK_MINORS=32
->   CONFIG_MMC_ARMMMCI=y
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> Note, I've fixed this up by hand, but in the future, please be aware of
+> it.
+
+Thank you Greg. I'll try to be more careful in the future.
+
+-- 
+heikki
 
