@@ -1,131 +1,114 @@
-Return-Path: <linux-usb+bounces-1486-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1487-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A1FC7C5F95
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Oct 2023 23:53:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B1A787C5FC7
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Oct 2023 23:59:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 40D291C20F66
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Oct 2023 21:53:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E37601C20AF1
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Oct 2023 21:59:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 345583F4AE;
-	Wed, 11 Oct 2023 21:53:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52D273F4BD;
+	Wed, 11 Oct 2023 21:59:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FzlGInvY"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Jv/A/sBu"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DDE539936
-	for <linux-usb@vger.kernel.org>; Wed, 11 Oct 2023 21:53:48 +0000 (UTC)
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82F42D6;
-	Wed, 11 Oct 2023 14:53:46 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-536b39daec1so604453a12.2;
-        Wed, 11 Oct 2023 14:53:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1697061225; x=1697666025; darn=vger.kernel.org;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VSScds+GJQ6D93Fb0cWNRZ+D6voBNtXqMw6bvzbLln8=;
-        b=FzlGInvYo2T1/xVjhyAUNBXA0V/qlVNJj/e7FE1P6fN/9xJEeP3jPPV/9FfUyAcB/P
-         x5EotiJnmaL78O8Uux+3FLd6GIBCGjkM/XqjqjmM4PErR7i8rsdsKyczp4BKVlPn9lHP
-         digi6RXBi0pIWh9egiAPJPWfaRVQ6pHJ+uAXtiNafJv0DlLXlM1etChTb9uegggE1Gr1
-         nNPz5K80Qgf+Svkfb1HRred6wi2InZDGVQbUPiHFCXCacd3u4C4mxIacEcT5Wum3HoG1
-         Nkl+jrkaXhEEVuVllADJsvoe+SRiohJIbsp6A57kekQWws36u4aPRvvmkaUEv3GWigcZ
-         nxEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697061225; x=1697666025;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VSScds+GJQ6D93Fb0cWNRZ+D6voBNtXqMw6bvzbLln8=;
-        b=bU9y8LoYZ7GW+rp24rPtvvUJhzNBvbHlDtB5TM4vT7VsowgV7TLKsco8DLXV9v67qO
-         nArNt+TjotG07mCa8bb6UU+/Yz1R+o9CWHXA80fq9rf66v2bqFXDPIS98f+3bH6fVPFl
-         LlKyC08gPYG9oJz/7/eFLLrlErV5qSDxA9tv8bWh9Sf3dM9qqmjNen4a2Q1j/iwso+mq
-         u5AHad4D8R7tWEu2yFrFg2kc1kwZ438CSYcwk3gM4e1qcLyIBke7HcgmxkCPDI/rCdt0
-         Tzi9++EUT2WR+aqCODzCAm4WKngSOGSTZBreXpJoRJC0b8qZ2mCFzLnr1nwCCTIzugvQ
-         ebTg==
-X-Gm-Message-State: AOJu0Yyz1osDLhHSdNRsoXhwUPJX69soKOSz0K1Aae/bBE7iS2t+/Z3u
-	sePzO4H1HW2t5LHKcxg9Nmg=
-X-Google-Smtp-Source: AGHT+IFpY65P9BPWCyH+AKHIBxbhMgtZ8QSz6/S7tZ5lBAY/78hJuPHGTQFcHAEKLoOyBo/R2qRJNQ==
-X-Received: by 2002:aa7:d902:0:b0:52c:9f89:4447 with SMTP id a2-20020aa7d902000000b0052c9f894447mr19407023edr.4.1697061224833;
-        Wed, 11 Oct 2023 14:53:44 -0700 (PDT)
-Received: from orome.fritz.box (p200300e41f3f4900f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f3f:4900:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id f17-20020a056402161100b00537666d307csm9387655edv.32.2023.10.11.14.53.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Oct 2023 14:53:44 -0700 (PDT)
-Date: Wed, 11 Oct 2023 23:53:42 +0200
-From: Thierry Reding <thierry.reding@gmail.com>
-To: =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-Cc: Dmitry Osipenko <digetx@gmail.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Peter Chen <peter.chen@kernel.org>,
-	Peter Geis <pgwipeout@gmail.com>,
-	Thierry Reding <treding@nvidia.com>, linux-usb@vger.kernel.org,
-	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] usb: chipidea: tegra: Consistently use
- dev_err_probe()
-Message-ID: <ZScZZqRYvLHxa2HI@orome.fritz.box>
-References: <cover.1695934946.git.mirq-linux@rere.qmqm.pl>
- <43d03aad1c394d9995f69d13ca1176f9ff8a8dab.1695934946.git.mirq-linux@rere.qmqm.pl>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F34F3E485
+	for <linux-usb@vger.kernel.org>; Wed, 11 Oct 2023 21:59:27 +0000 (UTC)
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A6459E;
+	Wed, 11 Oct 2023 14:59:24 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39BIxBgK009576;
+	Wed, 11 Oct 2023 21:59:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=OgrDYYwCOL/ieAwAtOQYeAM72138+c5Elgd6rcII/+U=;
+ b=Jv/A/sBu/SnbZdcd0z3AQYUnKwzjj40Pq2dfCf5DR6qn6uAbZP1IqJOH30lFE47Q1cF2
+ zGhVy02WB4Rv2AoduwfAaXMLX3LCXVsIgjSQlZSjRuB+z+35UHHS4pgSiTTW/bK+YvAo
+ GbNQBJzNnVC2oVo2ccxCSPCSbfyTLLrv29dLMBnlinQnoXXTf157pkIJxm1GE1KcrUqd
+ lJjpJhyU9QTHpuO8qWKeeN0K5tq+TF38wIU+Hutkar5sFsOgG6R4H7pTXHdEXKoo/+Wk
+ DK1gEObFJAOnir1svtvDmpC7H5iYWiBoOQGSJT60Cgu4lKalHOtqdJ73bBiKDpZWISi3 XA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tngtpapdd-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 11 Oct 2023 21:59:19 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39BLwrOg018902
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 11 Oct 2023 21:58:53 GMT
+Received: from [10.71.115.198] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Wed, 11 Oct
+ 2023 14:58:53 -0700
+Message-ID: <2c91a35a-43ea-4e20-4065-e30cdaf1931f@quicinc.com>
+Date: Wed, 11 Oct 2023 14:58:52 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="NIjWg3bSNQ0mxaxS"
-Content-Disposition: inline
-In-Reply-To: <43d03aad1c394d9995f69d13ca1176f9ff8a8dab.1695934946.git.mirq-linux@rere.qmqm.pl>
-User-Agent: Mutt/2.2.12 (2023-09-09)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3] usb: host: xhci: Avoid XHCI resume delay if SSUSB
+ device is not present
+Content-Language: en-US
+To: Greg KH <gregkh@linuxfoundation.org>
+CC: <mathias.nyman@intel.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230919224327.29974-1-quic_wcheng@quicinc.com>
+ <5f491814-c105-64e3-93c0-5fff89160ac1@quicinc.com>
+ <2023101111-acquire-dosage-65c1@gregkh>
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <2023101111-acquire-dosage-65c1@gregkh>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: Kcr5DhnmzyabB757p4zmeXZ4_crNGPj9
+X-Proofpoint-GUID: Kcr5DhnmzyabB757p4zmeXZ4_crNGPj9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-11_17,2023-10-11_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ lowpriorityscore=0 clxscore=1015 phishscore=0 mlxlogscore=501
+ priorityscore=1501 bulkscore=0 impostorscore=0 mlxscore=0 malwarescore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2310110194
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
+Hi Greg,
 
---NIjWg3bSNQ0mxaxS
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 10/11/2023 2:24 AM, Greg KH wrote:
+> On Tue, Oct 10, 2023 at 12:01:05PM -0700, Wesley Cheng wrote:
+>> Friendly ping to see if there are any updates/feedback on this patch?
+> 
+> Please do not top-post.
+> 
+> Anyway, did you not see my bot's response to this patch?  If so, why did
+> you ignore it, that's why we didn't do anything with it...
+> 
 
-On Thu, Sep 28, 2023 at 11:06:04PM +0200, Micha=C5=82 Miros=C5=82aw wrote:
-> Convert all error exits from probe() to dev_err_probe().
->=20
-> Acked-by: Peter Chen <peter.chen@kernel.org>
-> Signed-off-by: Micha=C5=82 Miros=C5=82aw <mirq-linux@rere.qmqm.pl>
-> ---
->  drivers/usb/chipidea/ci_hdrc_tegra.c | 16 +++++++---------
->  1 file changed, 7 insertions(+), 9 deletions(-)
+Got it, I was mainly just checking to see if the new way of determining 
+if there is a SSUSB device connected is the way we want to implement it, 
+since I changed to using the ports_suspended bitmask.  I'll send a new 
+revision with the changelist.
 
-Acked-by: Thierry Reding <treding@nvidia.com>
-
---NIjWg3bSNQ0mxaxS
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmUnGWYACgkQ3SOs138+
-s6Gjyg/9Fp/5PJpk4a76rLzVEmaDglABgYvF+GOflqVvG9ugRJyAO7HqA/+xRWG5
-uf0hn/YKpNIjgA9h7memtWUeePZedwQ5lCZr0okb7MTmJS/t6XG2DeZ/FjegWQXO
-A3Ljtm+hQ5MQSdUm4E0zptKHe/lS3ks8GUrM4uijQYFEYFMWwvmHAvd0ESHU7pcD
-EGESHZwnNbtL4zbHP3sYcCY6ydPkmbl0YOT2xKb+Yy29SZDaEncyVOAb1MAGeO7s
-E8VVbNgXi73vIrzgHNmUC//pglINynwn85RfIrO8cgSZOMva4oqQDWPkfAk+BWI5
-/uCAR6A4AFBvDUYH1E3XSblcNI2lDldEGgoeXeebI71+vqM3UM4PAhJsfB3PCaMC
-WyU4f4EnGQSdmnBIbrsg34M+6nIhwcyKxiM5UIXtsLpQWGXWpMpRrk5SDawvwQxD
-bMx8t4VI7TOFHcYRPgQcnrm1N/U1Aah2GFcCKJ5ctlIxOEWfRzHDAI+PblpfiVxb
-77/lWU774M5P+zTh5L32wO8Mozz4DQuqeoW+x57GpvddQwb3ftChdD4+vp1fodh3
-cPMK5Gcw6Rjg9CF4O/d9/WA6chuyM8Cs3k+XivSHqITGLmxXLHU5F7y6ax1IcnN4
-w9fVt2egKmUzSfDbbYfWjy5yhw2d0mohMpGzdF6xNSTMhCuuAd0=
-=ofw1
------END PGP SIGNATURE-----
-
---NIjWg3bSNQ0mxaxS--
+Thanks
+Wesley Cheng
 
