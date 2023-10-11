@@ -1,311 +1,300 @@
-Return-Path: <linux-usb+bounces-1446-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1447-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B19DE7C4F83
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Oct 2023 12:02:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 206767C4F85
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Oct 2023 12:04:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A22671C20F11
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Oct 2023 10:02:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3597E1C20E49
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Oct 2023 10:04:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9C541DA41;
-	Wed, 11 Oct 2023 10:02:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A9621DA30;
+	Wed, 11 Oct 2023 10:04:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="YKsep26H"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Lx/QurT3"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46CE41DA29
-	for <linux-usb@vger.kernel.org>; Wed, 11 Oct 2023 10:02:34 +0000 (UTC)
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56FE094;
-	Wed, 11 Oct 2023 03:02:31 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39B8Ywux022121;
-	Wed, 11 Oct 2023 10:02:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=NYowNHTwmDAHuf9dzttySouzD52J2jwFA4tlHYb/pvk=;
- b=YKsep26H5d0ONKdIkbievnFrWmnYRXwJS2pdEaOOg4zMuGLWxPSqnALhQlNIEoIbtMIi
- l9EhpwbJsIlW8J/vwrKF4V4DKFhG17N9oJDKBtU9ZN4eURC9PcBc9UfnVEA5zvLxCcca
- uLOiE4UFB9hBtgs0T/J//A7YvC04OaoqcC7u12LsNyaKKOL2AmT/ADCoQPacN7R8KMMV
- KaQ9gJn2Hm/5TfrECa2pTGy2iyUcZ/E8uv/J01uYcdUK/8odo4M1qMJ93Kfja5fpXJ3j
- 8a+Q6EDVbWPSpQOcJWu4HbVefh1PcUC+UpJwgjDAR2M2okEWbXqPS9+CbK9u4WIFjxa3 hw== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tna9c9r20-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 11 Oct 2023 10:02:28 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39BA2RwQ012503
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 11 Oct 2023 10:02:27 GMT
-Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D7081D529
+	for <linux-usb@vger.kernel.org>; Wed, 11 Oct 2023 10:04:26 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6D6F92
+	for <linux-usb@vger.kernel.org>; Wed, 11 Oct 2023 03:04:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1697018663; x=1728554663;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=lBOf60w2Si0uK5wXe3CTF+2lrrWJgN7t9HPXdyPfie0=;
+  b=Lx/QurT3Dm1DsW6hqjRpaJxwwlua6f+eAT9LIKGEDj3+0EQWVqf9No9x
+   vAMb2lCGkY+wHmpGDOQ9rtrfNR3wea9SErcgZfUv33efRbbsrWTF79H5R
+   GU9t/n7zlBvIn2/JiX9qg8N7E/PDl663JXiVw8JaN/CNEsHFAe16Xetir
+   Z3zRKqW4vIi7iVGIVtlKKR6C+kgODHk5b/5Y74BrnA4e9Fsb02dgYvmtI
+   RPHaZ5nd1QIASol0YgtejCTqLs0GPek5NY2TiMLfLTepM2lWMqJRyJI2b
+   u6wSRbqY9Opqsw4F2q8o8VeujKhE5CONrH52eo2gX35slEVQewN/N8c2I
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10859"; a="415669856"
+X-IronPort-AV: E=Sophos;i="6.03,214,1694761200"; 
+   d="scan'208";a="415669856"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2023 03:04:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10859"; a="1085173820"
+X-IronPort-AV: E=Sophos;i="6.03,214,1694761200"; 
+   d="scan'208";a="1085173820"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by fmsmga005.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 11 Oct 2023 03:04:21 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32; Wed, 11 Oct 2023 03:04:21 -0700
+Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32; Wed, 11 Oct 2023 03:04:20 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32 via Frontend Transport; Wed, 11 Oct 2023 03:04:20 -0700
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.41) by
+ edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.36; Wed, 11 Oct 2023 03:02:24 -0700
-From: Krishna Kurapati <quic_kriskura@quicinc.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
-        <quic_jackp@quicinc.com>, <quic_ugoswami@quicinc.com>,
-        Krishna Kurapati
-	<quic_kriskura@quicinc.com>
-Subject: [RFC] usb: dwc3: core: Fix RAM interface getting stuck during enumeration
-Date: Wed, 11 Oct 2023 15:32:14 +0530
-Message-ID: <20231011100214.25720-1-quic_kriskura@quicinc.com>
-X-Mailer: git-send-email 2.42.0
+ 15.1.2507.32; Wed, 11 Oct 2023 03:04:20 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BXBV/CabjS3YADc/F8d+H3K0fXAx6FSe+Hjz54svx4GWhJKH0ZNAQktm6pwdZ8jNIFMzbhbJ+UHoNYy3oTEp+mS4U2vjHP5wAoLRyS3ojyaS9ASfSdRA9Sn3+vgwKDnR4TV/b2UmfoHZTzKog/DhYg+Eb3he4Kod/agCPB6zOlNI0Knnmgp/heaE0U5rDz8Xfrh+zI1BMvL68t6blhpistipstsVMThq6Tt4MJ/0TwwSWrQsmY5AfFOgL/qtrjwrVzemNLd6VEGC2TLVqy9f1SZE9dngBy+4l0Gxy7a9K8nUg5IjqDKochdyV12WrmFMTc4b6pQTBy3OGkJZBn7fCg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OqvaAmGuEv1+AwecXf/p537wyrRo/LeSq4sZjZEE37k=;
+ b=eaYRCqUiSa49hepi4/B2/gdWESXYAaBxPouRbinTXZzWeMnkNiej64buwAFJWzlmK9entkoqE1AHbVDqx8MdTtMHJM1SlM/UJIIutyvDw06iemegab+PUqsEH8SjabeVPQzxsm7aQskYC1xqHEqdKXDHK+h2p1Pb0+ENYVWzkd5kxInA4qWxIbnq67ZTDu6aS+Ub3+HShx6GCwwULDc8dsXCZ9BH8G9ov04QXg1NtxtfcM0GnPNQpQ2kP6sofTSo+Iqw2RDCOHRtQnZD9hPacTsa9wq73ehcusZcpra+h3q5cEmwGtVeBi/dcnXZKdd+kw29ruAxtDb30kxQEUhuDA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH8PR11MB6779.namprd11.prod.outlook.com (2603:10b6:510:1ca::17)
+ by CH3PR11MB7346.namprd11.prod.outlook.com (2603:10b6:610:152::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.44; Wed, 11 Oct
+ 2023 10:04:17 +0000
+Received: from PH8PR11MB6779.namprd11.prod.outlook.com
+ ([fe80::73c6:1231:e700:924]) by PH8PR11MB6779.namprd11.prod.outlook.com
+ ([fe80::73c6:1231:e700:924%4]) with mapi id 15.20.6838.029; Wed, 11 Oct 2023
+ 10:04:17 +0000
+Date: Wed, 11 Oct 2023 18:03:48 +0800
+From: kernel test robot <oliver.sang@intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC: <oe-lkp@lists.linux.dev>, <lkp@intel.com>, <linux-usb@vger.kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Shuah Khan
+	<skhan@linuxfoundation.org>, <oliver.sang@intel.com>
+Subject: [usb:usb-next] [usbip]  b8aaf639b4:
+ BUG:KASAN:slab-out-of-bounds_in_vhci_setup
+Message-ID: <202310111714.cb804a0c-oliver.sang@intel.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+X-ClientProxiedBy: SG3P274CA0016.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:be::28)
+ To PH8PR11MB6779.namprd11.prod.outlook.com (2603:10b6:510:1ca::17)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: -bX855sQEA0_eSzIaRYdnR52y6dvH66B
-X-Proofpoint-ORIG-GUID: -bX855sQEA0_eSzIaRYdnR52y6dvH66B
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-11_07,2023-10-10_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- bulkscore=0 spamscore=0 malwarescore=0 mlxscore=0 phishscore=0
- lowpriorityscore=0 impostorscore=0 clxscore=1015 mlxlogscore=999
- suspectscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2309180000 definitions=main-2310110088
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH8PR11MB6779:EE_|CH3PR11MB7346:EE_
+X-MS-Office365-Filtering-Correlation-Id: d2ec6b57-7a67-48e5-3315-08dbca4162c5
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: MqvKVhtYJd2hdy5n2/tneEPjI2PxbeopmsYzfYu92u/eL7HY7kRHfeuGvsvzV3bguMt6R8ufObAE8UCE42rSx1Jy1QU/o9pslg8WD6eEJnGWHHgxDCwEchhJhKdxrsl9PC+KpU7dPQbjtf2NGDKrbymzvkYn5fkUADxZA+mo8If1pJdLsmKt5Q9MHhNtVlcnVQLyVfiP2iv+M5l1/P6/nJQ+EwKLpfRtqKoNztmVC8356DxTAFbuH8bQ0CTLOfNE5EjCJJFoJi46ukxsylln6CMWJk0rBVCg589nxdEq1VsSOmW1cSmPBoMgrppaiw7J613IOY2Ptsf4tu4+gFn3g519EgBOuUFf4vhCj5ycwIyfQXCZfZsNCH9Pjb7cTT9GOzuBx0YPqNlkIE0/2VR0jQF1BYTCVlxecn67XjzuzZkPkRAhRicmGETdcdroWv69J/oh436C7YAvl3awy5qhZmwN9nPP3JltZJzUESyIczLNVlKTu1cC1RIpQbvQb847a7ZuJpREcgzpSAPeLidU1U/a24FacOsSgaZTieCNYtEU3gC7UqOwiQ6DaS7qFL07CzlERAP8cym1/B0xZe6uKA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB6779.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(376002)(366004)(396003)(346002)(39860400002)(230922051799003)(186009)(1800799009)(451199024)(64100799003)(6666004)(6512007)(6506007)(26005)(36756003)(478600001)(6486002)(966005)(1076003)(2616005)(66946007)(83380400001)(66556008)(66476007)(316002)(6916009)(54906003)(38100700002)(41300700001)(8936002)(8676002)(4326008)(5660300002)(2906002)(86362001)(82960400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?BhZRmER9zEoKZrktt9BTpmQibw6KW8IwL9sc6xn13jTa4TKwkTJ7Pd0ftmHl?=
+ =?us-ascii?Q?Nu3LxaKf0BS4xomKYLC9W1MRdIT90Ho08z9XnfP1diI+C6OVH8voNd/VUWDn?=
+ =?us-ascii?Q?GsJoiRSnQbQ5fWmXd33Fj7Z1gejodPvGgWdXVUOevs9Wl4LQl22iWjmxMkiN?=
+ =?us-ascii?Q?oRNwuwaLvCcmWWFd1qY+rvt9hFes3zPxjIU2iSCLu/EjvUcmIYmXFTYY5RSZ?=
+ =?us-ascii?Q?OhAzq5Fhtmb+gGBJFVO4VpNxLUn3hSDBzsPaL/OhY0I/F/AuSnQ7i1l5EjzT?=
+ =?us-ascii?Q?VF65+nBpc+DDIt/efpR4ifeCcdRHfceMTAN5mh7cOIloXLiqLYUs9G8AtYQR?=
+ =?us-ascii?Q?A/Qr9PKbTKCkssuvui1kQP9JFXfdjNTOILHfEfqXa+skq7vfFHAXEdrPvgKz?=
+ =?us-ascii?Q?lqsxgx8flxfxyxWjujuZL82MYnFIVsJ5IWP2hMQairJCrPmy1qR0vBJcb/V4?=
+ =?us-ascii?Q?EYs51AmvJJI18h5y46xe0kTgMW/l+JiZs8Jroj2R2VmNubvhrTftZPBLRrP/?=
+ =?us-ascii?Q?xaxurwY0aC4LJZPHGUQ1Uj0LoZ73d8O8uFR7jPrgLAAGpzvytQi8dOGp7VJT?=
+ =?us-ascii?Q?2dZRwLZ/iLIITwd7dIBQqIvGO0u3zPEKsPh+PoFwO9rcAI1GIV04ZHKt8W+h?=
+ =?us-ascii?Q?87R4QGZGTidSnzyDTBjnvEMf+EdIqEjoYLlLSrR9tfCz6RcauJ2hKa0RCFXg?=
+ =?us-ascii?Q?NyCuXp+0zP37T9wYVkop8IDGhTwB+46R7qusb7EzwpsGzgTpksmJZat04XwO?=
+ =?us-ascii?Q?66B8hvUyvejcg8jJeusKSLVM4FoxKrtb0Kq8wSY5yTVGudY3BH5MYNxdtI7z?=
+ =?us-ascii?Q?S9IY3o0nIDX954a7mrLScVCwA1xNQxGRglvZM3lH8sVziu91Pf3g2jzZIJED?=
+ =?us-ascii?Q?FSrhkYZX4zEJQnDjz28yeCsYVQzPAwRpeYKcAJ1BoepZ0U3NmFrEVUqH19sM?=
+ =?us-ascii?Q?bgsLrAR2tu1n0xpPRgfrQQyTAb9U/5iSy1h7MjZOsgVNPiYTJtMXSoSVMEuF?=
+ =?us-ascii?Q?o9Ti5BMf5wR2yQpS6oGipT2XZT3mQPKPhWWmtqAp9+Lo6io7J6k1wxbntJmu?=
+ =?us-ascii?Q?cuUcLqr3WJVHdIcc6S83oGiaXHIPbwK04YuSRFlHR1GHTgUkGur4+54drB/9?=
+ =?us-ascii?Q?wJ+xrJGwJbBSActzlPm0koYNLmPr8EwyH/YaO6EfZTCHX7xhqrL5tFmlWW3+?=
+ =?us-ascii?Q?MTtDrDOCo1MEVaQnEWh22YRnICy69+yEFukHClCgT/usWyifAlZKq9NyYbO8?=
+ =?us-ascii?Q?GhsdRqoBJcPBk+I5U4oitJL0PyVD6dmB/vLdYwqRIgGYVae7JQMEvXvTMYp1?=
+ =?us-ascii?Q?8tH+quc9tWB0TJJv5PNPjrX5QkQeX6TU70+0XoDE2iF2351GOwDAybVz4Egj?=
+ =?us-ascii?Q?qP8fDx5svGWgnbOH/4vOgDy8NFY8QaStD+JFfX2Myx0gNrO+VMi+rMOP9a7u?=
+ =?us-ascii?Q?UYsuSR8jv/AOO9FahJTMDiDXuHHrRA9JQ+GbiUvYWbf1Y8X+L2ah/oLpZfl/?=
+ =?us-ascii?Q?3Dl2pFuM4qXk6+ce8ur8/8bmhamzY6iZJ3+sQP8fiOkqVyTg2RcJp0kw7M0c?=
+ =?us-ascii?Q?0vq8NHWjxQ1/SGvasuMPcqxv9CeQF98qj7ofZnERNBY1HSdqhAN3qbGbZi1P?=
+ =?us-ascii?Q?rA=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: d2ec6b57-7a67-48e5-3315-08dbca4162c5
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB6779.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Oct 2023 10:03:58.3500
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: q+sxskyB+MGX2gvKPplwM8dTapX7ahoTh7JuVGC50ZI8YOrauzv/IX52opMSyqLIzSWxWZXIV0kL3AiQsC8Xzw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR11MB7346
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+	SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
 	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-This implementation is to fix RAM interface getting stuck during
-enumeration and controller not responding to any command.
 
-During plug-out test cases, it is sometimes seen that no events
-are generated by the controller and all CSR register reads give "0"
-and CSR_Timeout bit gets set indicating that CSR reads/writes are
-timing out or timed out.
 
-The issue comes up on different instnaces of enumeration on different
-platforms. On one platform, the debug log is as follows:
+Hello,
 
-Prepared a TRB on ep0out and did start transfer to get set
-address request from host:
+kernel test robot noticed "BUG:KASAN:slab-out-of-bounds_in_vhci_setup" on:
 
-<...>-7191    [000] D..1.    66.421006: dwc3_gadget_ep_cmd: ep0out:
-cmd 'Start Transfer' [406] params 00000000 efffa000 00000000 -->
-status: Successful
+commit: b8aaf639b403f01d132c9ac1e906c45debfb0218 ("usbip: Use platform_device_register_full()")
+https://git.kernel.org/cgit/linux/kernel/git/gregkh/usb.git usb-next
 
-<...>-7191    [000] D..1.    66.421196: dwc3_event: event (0000c040):
-ep0out: Transfer Complete (sIL) [Setup Phase]
+[test failed on linux-next/master 2a860505b617cf8fda4ebff6cf05d3f774145440]
 
-<...>-7191    [000] D..1.    66.421197: dwc3_ctrl_req: Set
-Address(Addr = 01)
+in testcase: boot
 
-Then XFER NRDY received on ep0in for zero length status phase and
-a Start Transfer was done on ep0in with 0-length packet in 2 Stage
-status phase:
+compiler: gcc-12
+test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
 
-<...>-7191    [000] D..1.    66.421249: dwc3_event: event (000020c2):
-ep0in: Transfer Not Ready [00000000] (Not Active) [Status Phase]
+(please refer to attached dmesg/kmsg for entire log/backtrace)
 
-<...>-7191    [000] D..1.    66.421266: dwc3_prepare_trb: ep0in: trb
-ffffffc00fcfd000 (E0:D0) buf 00000000efffa000 size 0 ctrl 00000c33
-sofn 00000000 (HLcs:SC:status2)
 
-<...>-7191    [000] D..1.    66.421387: dwc3_gadget_ep_cmd: ep0in: cmd
-'Start Transfer' [406] params 00000000 efffa000 00000000 -->status:
-Successful
 
-Then a bus reset was received directly after 500 msec. Software never
-got the cmd complete for the start transfer done in status phase. Here
-the RAM interface is stuck. So host issues a bus reset as link is
-idle for 500 msec:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <oliver.sang@intel.com>
+| Closes: https://lore.kernel.org/oe-lkp/202310111714.cb804a0c-oliver.sang@intel.com
 
-<...>-7191    [000] D..1.    66.935603: dwc3_event: event (00000101):
-Reset [U0]
 
-Then software sees that it is in status phase and we issue an ENDXFER
-on ep0in and it gets timedout waiting for the CMDACT to go '0':
+[ 55.719220][ T1] BUG: KASAN: slab-out-of-bounds in vhci_setup (drivers/usb/usbip/vhci_hcd.c:1145) 
+[   55.719220][    T1] Write of size 8 at addr ffff88814f4140e8 by task swapper/1
+[   55.719220][    T1]
+[   55.719220][    T1] CPU: 0 PID: 1 Comm: swapper Tainted: G                T  6.6.0-rc4-00066-gb8aaf639b403 #1
+[   55.719220][    T1] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
+[   55.719220][    T1] Call Trace:
+[   55.719220][    T1]  <TASK>
+[ 55.719220][ T1] dump_stack_lvl (arch/x86/include/asm/irqflags.h:26 arch/x86/include/asm/irqflags.h:67 arch/x86/include/asm/irqflags.h:127 lib/dump_stack.c:107) 
+[ 55.719220][ T1] print_address_description+0x2c/0x390 
+[ 55.719220][ T1] print_report (mm/kasan/report.c:476) 
+[ 55.719220][ T1] ? vhci_setup (drivers/usb/usbip/vhci_hcd.c:1145) 
+[ 55.719220][ T1] kasan_report (mm/kasan/report.c:590) 
+[ 55.719220][ T1] ? vhci_setup (drivers/usb/usbip/vhci_hcd.c:1145) 
+[ 55.719220][ T1] vhci_setup (drivers/usb/usbip/vhci_hcd.c:1145) 
+[ 55.719220][ T1] usb_add_hcd (drivers/usb/core/hcd.c:2911) 
+[ 55.719220][ T1] ? kernfs_create_link (fs/kernfs/symlink.c:48) 
+[ 55.719220][ T1] vhci_hcd_probe (drivers/usb/usbip/vhci_hcd.c:1363) 
+[ 55.719220][ T1] platform_probe (drivers/base/platform.c:1404) 
+[ 55.719220][ T1] really_probe (drivers/base/dd.c:579 drivers/base/dd.c:658) 
+[ 55.719220][ T1] __driver_probe_device (drivers/base/dd.c:800) 
+[ 55.719220][ T1] driver_probe_device (drivers/base/dd.c:830) 
+[ 55.719220][ T1] __device_attach_driver (drivers/base/dd.c:959) 
+[ 55.719220][ T1] ? driver_probe_device (drivers/base/dd.c:922) 
+[ 55.719220][ T1] bus_for_each_drv (drivers/base/bus.c:414 drivers/base/bus.c:456) 
+[ 55.719220][ T1] ? bus_for_each_dev (drivers/base/bus.c:445) 
+[ 55.719220][ T1] ? _raw_spin_unlock_irqrestore (arch/x86/include/asm/preempt.h:104 include/linux/spinlock_api_smp.h:152 kernel/locking/spinlock.c:194) 
+[ 55.719220][ T1] __device_attach (drivers/base/dd.c:1030) 
+[ 55.719220][ T1] ? device_driver_attach (drivers/base/dd.c:1001) 
+[ 55.719220][ T1] ? _raw_spin_unlock (arch/x86/include/asm/preempt.h:104 include/linux/spinlock_api_smp.h:143 kernel/locking/spinlock.c:186) 
+[ 55.719220][ T1] bus_probe_device (drivers/base/bus.c:532) 
+[ 55.719220][ T1] device_add (drivers/base/core.c:3631) 
+[ 55.719220][ T1] ? __fw_devlink_link_to_suppliers (drivers/base/core.c:3507) 
+[ 55.719220][ T1] ? kasan_set_track (mm/kasan/common.c:52) 
+[ 55.719220][ T1] ? __kasan_kmalloc (mm/kasan/common.c:374 mm/kasan/common.c:383) 
+[ 55.719220][ T1] platform_device_add (drivers/base/platform.c:717 (discriminator 3)) 
+[ 55.719220][ T1] ? kmemdup (mm/util.c:135) 
+[ 55.719220][ T1] platform_device_register_full (drivers/base/platform.c:844) 
+[ 55.719220][ T1] ? driver_register (drivers/base/driver.c:258) 
+[ 55.719220][ T1] vhci_hcd_init (drivers/usb/usbip/vhci_hcd.c:1532) 
+[ 55.719220][ T1] ? usbip_core_init (drivers/usb/usbip/vhci_hcd.c:1507) 
+[ 55.719220][ T1] ? rng_is_initialized (drivers/char/random.c:918) 
+[ 55.719220][ T1] ? usbip_core_init (drivers/usb/usbip/vhci_hcd.c:1507) 
+[ 55.719220][ T1] do_one_initcall (init/main.c:1232) 
+[ 55.719220][ T1] ? trace_event_raw_event_initcall_level (init/main.c:1223) 
+[ 55.719220][ T1] ? parameq (kernel/params.c:171) 
+[ 55.719220][ T1] do_initcalls (init/main.c:1293 init/main.c:1310) 
+[ 55.719220][ T1] kernel_init_freeable (init/main.c:1551) 
+[ 55.719220][ T1] ? rest_init (init/main.c:1429) 
+[ 55.719220][ T1] kernel_init (init/main.c:1439) 
+[ 55.719220][ T1] ? _raw_spin_unlock_irq (arch/x86/include/asm/preempt.h:104 include/linux/spinlock_api_smp.h:160 kernel/locking/spinlock.c:202) 
+[ 55.719220][ T1] ret_from_fork (arch/x86/kernel/process.c:153) 
+[ 55.719220][ T1] ? rest_init (init/main.c:1429) 
+[ 55.719220][ T1] ret_from_fork_asm (arch/x86/entry/entry_64.S:312) 
+[   55.719220][    T1]  </TASK>
+[   55.719220][    T1]
+[   55.719220][    T1] Allocated by task 1:
+[ 55.719220][ T1] kasan_save_stack (mm/kasan/common.c:46) 
+[ 55.719220][ T1] kasan_set_track (mm/kasan/common.c:52) 
+[ 55.719220][ T1] __kasan_kmalloc (mm/kasan/common.c:374 mm/kasan/common.c:383) 
+[ 55.719220][ T1] __kmalloc_node_track_caller (mm/slab_common.c:1024 mm/slab_common.c:1043) 
+[ 55.719220][ T1] kvasprintf (lib/kasprintf.c:25) 
+[ 55.719220][ T1] kobject_set_name_vargs (lib/kobject.c:272) 
+[ 55.719220][ T1] device_create_groups_vargs (drivers/base/core.c:4307) 
+[ 55.719220][ T1] device_create (drivers/base/core.c:4353) 
+[ 55.719220][ T1] mon_bin_add (drivers/usb/mon/mon_bin.c:1369 (discriminator 4)) 
+[ 55.719220][ T1] mon_bus_init (drivers/usb/mon/mon_main.c:291) 
+[ 55.719220][ T1] mon_notify (drivers/usb/mon/mon_main.c:189 drivers/usb/mon/mon_main.c:219) 
+[ 55.719220][ T1] notifier_call_chain (kernel/notifier.c:95 (discriminator 2)) 
+[ 55.719220][ T1] blocking_notifier_call_chain (kernel/notifier.c:389) 
+[ 55.719220][ T1] usb_add_hcd (drivers/usb/core/hcd.c:912 drivers/usb/core/hcd.c:2852) 
+[ 55.719220][ T1] vhci_hcd_probe (drivers/usb/usbip/vhci_hcd.c:1363) 
+[ 55.719220][ T1] platform_probe (drivers/base/platform.c:1404) 
+[ 55.719220][ T1] really_probe (drivers/base/dd.c:579 drivers/base/dd.c:658) 
+[ 55.719220][ T1] __driver_probe_device (drivers/base/dd.c:800) 
+[ 55.719220][ T1] driver_probe_device (drivers/base/dd.c:830) 
+[ 55.719220][ T1] __device_attach_driver (drivers/base/dd.c:959) 
+[ 55.719220][ T1] bus_for_each_drv (drivers/base/bus.c:414 drivers/base/bus.c:456) 
+[ 55.719220][ T1] __device_attach (drivers/base/dd.c:1030) 
+[ 55.719220][ T1] bus_probe_device (drivers/base/bus.c:532) 
+[ 55.719220][ T1] device_add (drivers/base/core.c:3631) 
+[ 55.719220][ T1] platform_device_add (drivers/base/platform.c:717 (discriminator 3)) 
+[ 55.719220][ T1] platform_device_register_full (drivers/base/platform.c:844) 
+[ 55.719220][ T1] vhci_hcd_init (drivers/usb/usbip/vhci_hcd.c:1532) 
+[ 55.719220][ T1] do_one_initcall (init/main.c:1232) 
+[ 55.719220][ T1] do_initcalls (init/main.c:1293 init/main.c:1310) 
+[ 55.719220][ T1] kernel_init_freeable (init/main.c:1551) 
+[ 55.719220][ T1] kernel_init (init/main.c:1439) 
+[ 55.719220][ T1] ret_from_fork (arch/x86/kernel/process.c:153) 
+[ 55.719220][ T1] ret_from_fork_asm (arch/x86/entry/entry_64.S:312) 
+[   55.719220][    T1]
+[   55.719220][    T1] The buggy address belongs to the object at ffff88814f4140c8
+[   55.719220][    T1]  which belongs to the cache kmalloc-8 of size 8
+[   55.719220][    T1] The buggy address is located 24 bytes to the right of
+[   55.719220][    T1]  allocated 8-byte region [ffff88814f4140c8, ffff88814f4140d0)
+[   55.719220][    T1]
+[   55.719220][    T1] The buggy address belongs to the physical page:
+[   55.719220][    T1] page:(____ptrval____) refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x14f414
+[   55.719220][    T1] flags: 0x4000000000000800(slab|zone=1)
+[   55.719220][    T1] page_type: 0xffffffff()
+[   55.719220][    T1] raw: 4000000000000800 ffff888100041280 dead000000000122 0000000000000000
+[   55.719220][    T1] raw: 0000000000000000 0000000080660066 00000001ffffffff 0000000000000000
 
-<...>-7191    [000] D..1.    66.958249: dwc3_gadget_ep_cmd: ep0in: cmd
-'End Transfer' [10508] params 00000000 00000000 00000000 --> status:
-Timed Out
 
-Upon debug with Synopsys, it turns out that the root cause is as
-follows:
+The kernel config and materials to reproduce are available at:
+https://download.01.org/0day-ci/archive/20231011/202310111714.cb804a0c-oliver.sang@intel.com
 
-During any transfer, if the data is not successfully transmitted,
-then a Done (with failure) handshake is returned, so that the BMU
-can re-attempt the same data again by rewinding its data pointers.
 
-But, if the USB IN is a 0-length payload (which is what is happening
-in this case - 2 stage status phase of set_address), then there is no
-need to rewind the pointers and the Done (with failure) handshake is
-not returned for failure case. This keeps the Request-Done interface
-busy till the next Done handshake. The MAC sends the 0-length payload
-again when the host requests. If the transmission is successful this
-time, the Done (with success) handshake is provided back. Otherwise,
-it repeats the same steps again.
 
-If the cable is disconnected or if the Host aborts the transfer on 3
-consecutive failed attempts, the Request-Done handshake is not
-complete. This keeps the interface busy.
-
-The subsequent RAM access cannot proceed until the above pending
-transfer is complete. This results in failure of any access to RAM
-address locations. Many of the EndPoint commands need to access the
-RAM and they would fail to complete successfully.
-
-Furthermore when cable removal happens, this would not generate a
-disconnect event and the "connected" flag remains true always blockin
-suspend.
-
-Synopsys confirmed that the issue is present on all USB3 devices and
-as a workaround, suggested to re-initialize device mode.
-
-Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
----
- drivers/usb/dwc3/core.c   | 20 ++++++++++++++++++++
- drivers/usb/dwc3/core.h   |  4 ++++
- drivers/usb/dwc3/drd.c    |  5 +++++
- drivers/usb/dwc3/gadget.c |  6 ++++--
- 4 files changed, 33 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 44ee8526dc28..d18b81cccdc5 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -122,6 +122,7 @@ static void __dwc3_set_mode(struct work_struct *work)
- 	unsigned long flags;
- 	int ret;
- 	u32 reg;
-+	u8 timeout = 100;
- 	u32 desired_dr_role;
- 
- 	mutex_lock(&dwc->mutex);
-@@ -137,6 +138,25 @@ static void __dwc3_set_mode(struct work_struct *work)
- 	if (!desired_dr_role)
- 		goto out;
- 
-+	/*
-+	 * STAR 5001544 - If cable disconnect doesn't generate
-+	 * disconnect event in device mode, then re-initialize the
-+	 * controller.
-+	 */
-+	if ((dwc->cable_disconnected == true) &&
-+		(dwc->current_dr_role == DWC3_GCTL_PRTCAP_DEVICE)) {
-+		while (dwc->connected == true && timeout != 0) {
-+			mdelay(10);
-+			timeout--;
-+		}
-+
-+		if (timeout == 0) {
-+			dwc3_gadget_soft_disconnect(dwc);
-+			udelay(100);
-+			dwc3_gadget_soft_connect(dwc);
-+		}
-+	}
-+
- 	if (desired_dr_role == dwc->current_dr_role)
- 		goto out;
- 
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index c6c87acbd376..7642330cf608 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -1355,6 +1355,7 @@ struct dwc3 {
- 	int			last_fifo_depth;
- 	int			num_ep_resized;
- 	struct dentry		*debug_root;
-+	bool			cable_disconnected;
- };
- 
- #define INCRX_BURST_MODE 0
-@@ -1568,6 +1569,9 @@ void dwc3_event_buffers_cleanup(struct dwc3 *dwc);
- 
- int dwc3_core_soft_reset(struct dwc3 *dwc);
- 
-+int dwc3_gadget_soft_disconnect(struct dwc3 *dwc);
-+int dwc3_gadget_soft_connect(struct dwc3 *dwc);
-+
- #if IS_ENABLED(CONFIG_USB_DWC3_HOST) || IS_ENABLED(CONFIG_USB_DWC3_DUAL_ROLE)
- int dwc3_host_init(struct dwc3 *dwc);
- void dwc3_host_exit(struct dwc3 *dwc);
-diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
-index 039bf241769a..593c023fc39a 100644
---- a/drivers/usb/dwc3/drd.c
-+++ b/drivers/usb/dwc3/drd.c
-@@ -446,6 +446,8 @@ static int dwc3_usb_role_switch_set(struct usb_role_switch *sw,
- 	struct dwc3 *dwc = usb_role_switch_get_drvdata(sw);
- 	u32 mode;
- 
-+	dwc->cable_disconnected = false;
-+
- 	switch (role) {
- 	case USB_ROLE_HOST:
- 		mode = DWC3_GCTL_PRTCAP_HOST;
-@@ -454,6 +456,9 @@ static int dwc3_usb_role_switch_set(struct usb_role_switch *sw,
- 		mode = DWC3_GCTL_PRTCAP_DEVICE;
- 		break;
- 	default:
-+		if (role == USB_ROLE_NONE)
-+			dwc->cable_disconnected = true;
-+
- 		if (dwc->role_switch_default_mode == USB_DR_MODE_HOST)
- 			mode = DWC3_GCTL_PRTCAP_HOST;
- 		else
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 858fe4c299b7..a92df2e04cce 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2634,7 +2634,7 @@ static void dwc3_gadget_disable_irq(struct dwc3 *dwc);
- static void __dwc3_gadget_stop(struct dwc3 *dwc);
- static int __dwc3_gadget_start(struct dwc3 *dwc);
- 
--static int dwc3_gadget_soft_disconnect(struct dwc3 *dwc)
-+int dwc3_gadget_soft_disconnect(struct dwc3 *dwc)
- {
- 	unsigned long flags;
- 	int ret;
-@@ -2701,7 +2701,7 @@ static int dwc3_gadget_soft_disconnect(struct dwc3 *dwc)
- 	return ret;
- }
- 
--static int dwc3_gadget_soft_connect(struct dwc3 *dwc)
-+int dwc3_gadget_soft_connect(struct dwc3 *dwc)
- {
- 	int ret;
- 
-@@ -3963,6 +3963,7 @@ static void dwc3_gadget_disconnect_interrupt(struct dwc3 *dwc)
- 	dwc3_gadget_dctl_write_safe(dwc, reg);
- 
- 	dwc->connected = false;
-+	dwc->cable_disconnected = true;
- 
- 	dwc3_disconnect_gadget(dwc);
- 
-@@ -4038,6 +4039,7 @@ static void dwc3_gadget_reset_interrupt(struct dwc3 *dwc)
- 	 */
- 	dwc3_stop_active_transfers(dwc);
- 	dwc->connected = true;
-+	dwc->cable_disconnected = false;
- 
- 	reg = dwc3_readl(dwc->regs, DWC3_DCTL);
- 	reg &= ~DWC3_DCTL_TSTCTRL_MASK;
 -- 
-2.42.0
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
 
