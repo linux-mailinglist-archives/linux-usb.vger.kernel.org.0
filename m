@@ -1,43 +1,58 @@
-Return-Path: <linux-usb+bounces-1530-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1531-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A57887C766A
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Oct 2023 21:10:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7ECBF7C7695
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Oct 2023 21:20:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BB3E21C2101F
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Oct 2023 19:10:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 632D81C2112F
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Oct 2023 19:20:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D61D38BC2;
-	Thu, 12 Oct 2023 19:10:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03C1138FA5;
+	Thu, 12 Oct 2023 19:20:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=triops.cz header.i=@triops.cz header.b="Yi/11JiK";
+	dkim=pass (2048-bit key) header.d=triops.cz header.i=@triops.cz header.b="Yi/11JiK"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9753A63B4
-	for <linux-usb@vger.kernel.org>; Thu, 12 Oct 2023 19:10:15 +0000 (UTC)
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by lindbergh.monkeyblade.net (Postfix) with SMTP id 23F8EB7
-	for <linux-usb@vger.kernel.org>; Thu, 12 Oct 2023 12:10:12 -0700 (PDT)
-Received: (qmail 12438 invoked by uid 1000); 12 Oct 2023 15:10:11 -0400
-Date: Thu, 12 Oct 2023 15:10:11 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Douglas Gilbert <dgilbert@interlog.com>
-Cc: Greg KH <gregkh@linuxfoundation.org>,
-  "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: device present in lsusb, disappears in lsusb -t
-Message-ID: <30288fa6-105a-4c4b-84c4-750fe083ee85@rowland.harvard.edu>
-References: <70c563f1-847c-32a1-cf4d-6bf9802017ab@interlog.com>
- <2023091638-duration-barcode-73a3@gregkh>
- <11b1687f-3419-4037-845e-ef33d4e3871f@interlog.com>
- <2023101139-puma-fanfare-8a0e@gregkh>
- <299d927f-7044-4d48-b6cd-c05bdb0e7fcc@rowland.harvard.edu>
- <0c2a2a23-28dd-4c83-b7af-d5421501e411@interlog.com>
- <2023101203-marine-chatter-692e@gregkh>
- <723ee63c-1eb6-490d-9327-2856601573f7@interlog.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F8F826296
+	for <linux-usb@vger.kernel.org>; Thu, 12 Oct 2023 19:19:59 +0000 (UTC)
+X-Greylist: delayed 60 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 12 Oct 2023 12:19:56 PDT
+Received: from h2.cmg2.smtp.forpsi.com (h2.cmg2.smtp.forpsi.com [81.2.195.189])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C4FAB7
+	for <linux-usb@vger.kernel.org>; Thu, 12 Oct 2023 12:19:56 -0700 (PDT)
+Received: from lenoch ([91.218.190.200])
+	by cmgsmtp with ESMTPSA
+	id r1Ctqq4BISqGRr1Cvqj2Ll; Thu, 12 Oct 2023 21:18:54 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
+	t=1697138334; bh=EkhSnxUlbwTbGUl+43trl5xby2UZ1UC/eFAd9sMIHIY=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+	b=Yi/11JiK6mGGPyI1F2K3wXQn0sFW8ag+YGPRzsbMrN7fmWr9WuH3q4Pi3lTeu5pQw
+	 XB0NucT/DEReYtLFK0NOmclBefnYLSORbaAj0dE+pFDrUW//8zZAcYWL+tOEicFqoU
+	 63OIThLl42vdD0fjVkWmQLR3CM5UkJrzKSCDuCmkqwv+xsJ9GZAQbnE69tgl/Y62JN
+	 iJB3gHJWv8ykV7u/oyv8xygbRFQ4xH8un+hXZvWIkjgiVWDmGxxgU4MyQ9T3eBGTCq
+	 /+ZrO0QG9jJbo1drEzoNJhkwbK/+d3xdm5DB+Z/j9DzeLog4HJu4EMCd783vaoYlZN
+	 Wu9g3bCUnPDFw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=triops.cz; s=f2019;
+	t=1697138334; bh=EkhSnxUlbwTbGUl+43trl5xby2UZ1UC/eFAd9sMIHIY=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+	b=Yi/11JiK6mGGPyI1F2K3wXQn0sFW8ag+YGPRzsbMrN7fmWr9WuH3q4Pi3lTeu5pQw
+	 XB0NucT/DEReYtLFK0NOmclBefnYLSORbaAj0dE+pFDrUW//8zZAcYWL+tOEicFqoU
+	 63OIThLl42vdD0fjVkWmQLR3CM5UkJrzKSCDuCmkqwv+xsJ9GZAQbnE69tgl/Y62JN
+	 iJB3gHJWv8ykV7u/oyv8xygbRFQ4xH8un+hXZvWIkjgiVWDmGxxgU4MyQ9T3eBGTCq
+	 /+ZrO0QG9jJbo1drEzoNJhkwbK/+d3xdm5DB+Z/j9DzeLog4HJu4EMCd783vaoYlZN
+	 Wu9g3bCUnPDFw==
+Date: Thu, 12 Oct 2023 21:18:48 +0200
+From: Ladislav Michl <oss-lists@triops.cz>
+To: linux-usb@vger.kernel.org
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: [RFC] usb: dwc3: dwc3-octeon: Fix USB PHY High-Speed PLL
+ Initialization
+Message-ID: <ZShGmL4mph91Ncib@lenoch>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -46,115 +61,376 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <723ee63c-1eb6-490d-9327-2856601573f7@interlog.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-CMAE-Envelope: MS4wfCxBvFhPfpU3ckdap6k++7mQtasoJncYFdNdbyFRettnbwcBkiS6+kSGoPBwrIBlzjCLbfe7Ck1TMkyPHxwXYmC+nqVY2+PTJ8Ep5rj7Yyr/5G0OqE5z
+ jsU1qBQbqvlfMWwdC1rNkqwBRQ1g36is/SjM65mnVOcH1YG8iQRIbKw2TwHwtZBdCP+eOwJogcRfT9lSgbC1s/Y/rmt7nx4cZLI=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Thu, Oct 12, 2023 at 10:38:31AM -0400, Douglas Gilbert wrote:
-> On 2023-10-12 08:50, Greg KH wrote:
-> > I've pushed all of the remaining pending changes for usbutils to the
-> > repo, and added a few of my own that makes the 'lsusb -t' output a bit
-> > more sane (sorted order, proper digit field width, etc.)
-> > 
-> > Can you try the latest version in github (or on kernel.org, they are
-> > mirrors) and show the output there?
-> 
-> Removed the Lenovo dock [40AN] to lessen the clutter.
-> 
-> 
->   ~/usbutils$ ./lsusb
-> Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-> Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-> Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-> Bus 003 Device 002: ID 06cb:00f9 Synaptics, Inc.
-> Bus 003 Device 003: ID 5986:1177 Acer, Inc Integrated Camera
-> Bus 003 Device 004: ID 046d:c52b Logitech, Inc. Unifying Receiver
-> Bus 003 Device 005: ID 8087:0033 Intel Corp.
-> Bus 003 Device 012: ID 0483:572b STMicroelectronics STEVAL-USBC2DP Type-C to
-> DisplayPort adapter
-> Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-> 
->   ~/usbutils$ ./lsusb -tv
-> /:  Bus 001.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/1p, 480M
->     ID 1d6b:0002 Linux Foundation 2.0 root hub
-> /:  Bus 002.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/3p, 20000M/x2
->     ID 1d6b:0003 Linux Foundation 3.0 root hub
-> /:  Bus 003.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/12p, 480M
->     ID 1d6b:0002 Linux Foundation 2.0 root hub
->     |__ Port 003: Dev 002, If 0, Class=Vendor Specific Class, Driver=, 12M
->         ID 06cb:00f9 Synaptics, Inc.
->     |__ Port 004: Dev 003, If 0, Class=Video, Driver=uvcvideo, 480M
->         ID 5986:1177 Acer, Inc
->     |__ Port 004: Dev 003, If 1, Class=Video, Driver=uvcvideo, 480M
->         ID 5986:1177 Acer, Inc
->     |__ Port 004: Dev 003, If 2, Class=Application Specific Interface,
-> Driver=, 480M
->         ID 5986:1177 Acer, Inc
->     |__ Port 007: Dev 004, If 0, Class=Human Interface Device, Driver=usbhid, 12M
->         ID 046d:c52b Logitech, Inc. Unifying Receiver
->     |__ Port 007: Dev 004, If 1, Class=Human Interface Device, Driver=usbhid, 12M
->         ID 046d:c52b Logitech, Inc. Unifying Receiver
->     |__ Port 007: Dev 004, If 2, Class=Human Interface Device, Driver=usbhid, 12M
->         ID 046d:c52b Logitech, Inc. Unifying Receiver
->     |__ Port 010: Dev 005, If 0, Class=Wireless, Driver=btusb, 12M
->         ID 8087:0033 Intel Corp.
->     |__ Port 010: Dev 005, If 1, Class=Wireless, Driver=btusb, 12M
->         ID 8087:0033 Intel Corp.
-> /:  Bus 004.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/4p, 10000M
->     ID 1d6b:0003 Linux Foundation 3.0 root hub
-> 
-> 
-> So ID 0483:572b (ST Micro DP dongle) still missing in the 'lsusb -t' output.
+From: Ladislav Michl <ladis@linux-mips.org>
 
-Your dongle is an unusual USB device, in that it has no interfaces.  
-That's why nothing shows up in the lsusb -t output.
+Implement workaround for Octeon Known Issue Id 29206:
+| The USB high speed logic contains a PLL that must lock during
+| initialization for correct operation. In very rare circumstances,
+| it is possible for the PLL to fail to start correctly.
+| Workaround
+| After initialization, check the USB PLL lock register via the
+| UPHY CR interface. If the PLL is not running, power it down and
+| back up and restart the initialization.
 
-Try applying the patch below.
+PLL initialization code taken from Cavium's vendor bootloader:
+u-boot/drivers/usb/host/xhci-octeon.c:octeon3_usb_clocks_start
 
-Alan Stern
+Signed-off-by: Ladislav Michl <ladis@linux-mips.org>
+---
+ NOTE:
+ This patch fixes initialization issue found on some CN7020 based boards.
+ Without this patch, controller sometimes fails to detect devices connected.
+ Original code comes from Cavium released u-boot monster patch, which seems
+ to suffer from mistakes made while resolving merge conflicts when upgrading
+ to newer u-boot.
+ Testing revealed that only single reinit is needed to properly lock PLL,
+ this agrees with comment in Cavium's u-boot code, which is claiming the
+ same. However, same as in u-boot code, reinit is attempted three times.
+ (in could be done using while loop instead of goto, just let me know
+ which way do you prefer)
+ SoCs suffering from this problem would fail to initialize PHY about
+ several tens times of thousand boots. This patch always restored
+ functional state.
 
+ drivers/usb/dwc3/dwc3-octeon.c | 285 ++++++++++++++++++++++++++++++++-
+ 1 file changed, 284 insertions(+), 1 deletion(-)
 
-
- lsusb-t.c |   14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
-
-Index: usbutils-master/lsusb-t.c
-===================================================================
---- usbutils-master.orig/lsusb-t.c
-+++ usbutils-master/lsusb-t.c
-@@ -183,9 +183,12 @@ static void print_usbdevice(struct usbde
- 	char lanes[32];
+diff --git a/drivers/usb/dwc3/dwc3-octeon.c b/drivers/usb/dwc3/dwc3-octeon.c
+index d45d62c72b2d..497c18e19c73 100644
+--- a/drivers/usb/dwc3/dwc3-octeon.c
++++ b/drivers/usb/dwc3/dwc3-octeon.c
+@@ -122,8 +122,32 @@
+ #define USBDRD_UCTL_INTSTAT			0x30
+ #define USBDRD_UCTL_PORT_CFG_HS(port)		(0x40 + (0x20 * port))
+ #define USBDRD_UCTL_PORT_CFG_SS(port)		(0x48 + (0x20 * port))
++
++/*
++ * UCTL Port Debug Configuration Registers
++ */
+ #define USBDRD_UCTL_PORT_CR_DBG_CFG(port)	(0x50 + (0x20 * port))
++/* Rising edge triggers a register write operation of the captured
++ * address with the captured data
++ */
++# define USBDRD_UCTL_PORT_CR_DBG_CFG_WRITE	BIT_ULL(0)
++/* Rising edge triggers a register read operation of the capture address */
++# define USBDRD_UCTL_PORT_CR_DBG_CFG_READ	BIT_ULL(1)
++/* Rising edge triggers the [DATA_IN] field to be captured as the write data */
++# define USBDRD_UCTL_PORT_CR_DBG_CFG_CAP_DATA	BIT_ULL(2)
++/* Rising edge triggers the [DATA_IN] field to be captured as the address */
++# define USBDRD_UCTL_PORT_CR_DBG_CFG_CAP_ADDR	BIT_ULL(3)
++/* Address or data to be written to the CR interface */
++# define USBDRD_UCTL_PORT_CR_DBG_CFG_DATA_IN	GENMASK_ULL(47, 32)
++
++/*
++ * UCTL Port Debug Status Registers
++ */
+ #define USBDRD_UCTL_PORT_CR_DBG_STATUS(port)	(0x58 + (0x20 * port))
++/* Acknowledge that the CAP_ADDR, CAP_DATA, READ, WRITE commands have completed */
++# define USBDRD_UCTL_PORT_CR_DBG_STATUS_ACK	BIT_ULL(0)
++/* Last data read from the CR interface */
++# define USBDRD_UCTL_PORT_CR_DBG_STATUS_DATA_OUT GENMASK_ULL(47, 32)
  
- 	lanes_to_str(lanes, d->tx_lanes, d->rx_lanes);
--	get_class_string(subcls, sizeof(subcls), i->bInterfaceClass);
-+	if (i)
-+		get_class_string(subcls, sizeof(subcls), i->bInterfaceClass);
- 
--	if (i->bInterfaceClass == 9)
-+	if (!i)
-+		printf("Port %03u: Dev %03u, %sM%s\n", d->portnum, d->devnum, d->speed, lanes);
-+	else if (i->bInterfaceClass == 9)
- 		printf("Port %03u: Dev %03u, If %u, Class=%s, Driver=%s/%up, %sM%s\n", d->portnum, d->devnum, i->ifnum, subcls,
- 		       i->driver, d->maxchild, d->speed, lanes);
- 	else
-@@ -690,11 +693,12 @@ static void sort_busses(void)
- static void print_tree_dev_interface(struct usbdevice *d, struct usbinterface *i)
- {
- 	indent += 3;
--	while (i) {
-+	do {
- 		printf(" %*s", indent, "|__ ");
- 		print_usbdevice(d, i);
--		i = i->next;
--	}
-+		if (i)
-+			i = i->next;
-+	} while (i);
- 	indent -= 3;
+ /*
+  * UCTL Configuration Register
+@@ -410,6 +434,252 @@ static void dwc3_octeon_phy_reset(struct dwc3_octeon *octeon)
+ 	dwc3_octeon_writeq(uctl_ctl_reg, val);
  }
- static void print_tree_dev_children(struct usbdevice *d)
+ 
++/* Internal indirect register that reports if the phy PLL has lock.
++ * This will be 1 if lock, 0 if no lock.
++ */
++#define DWC3_INT_IND_PLL_LOCK_REG			0x200b
++
++/* Internal indirect UPHY register that controls the power to the UPHY PLL. */
++#define DWC3_INT_IND_UPHY_PLL_PU			0x2012
++/* Write enable bit for DWC3_INT_IND_PLL_POWER_CTL */
++# define DWC3_INT_IND_UPHY_PLL_PU_WE			BIT(5)
++/* Power enable bit for DWC3_INT_IND_PLL_POWER_CTL */
++# define DWC3_INT_IND_UPHY_PLL_PU_POWER_EN		BIT(2)
++
++/* Internal indirect UPHY PLL register */
++#define DWC3_INT_IND_UPHY_PLL_RESET			0x201C
++/* Write enable bit */
++# define DWC3_INT_IND_UPHY_PLL_RESET_WE			BIT(4)
++/* VCO reset bit */
++# define DWC3_INT_IND_UPHY_PLL_RESET_VCO_RST		BIT(0)
++
++static int dwc3_octeon_indirect_read(struct dwc3_octeon *octeon, u32 addr)
++{
++	int ret;
++	u64 val;
++	unsigned long timeout;
++	struct device *dev = octeon->dev;
++	void __iomem *cfg_reg = octeon->base + USBDRD_UCTL_PORT_CR_DBG_CFG(0);
++	void __iomem *status_reg = octeon->base + USBDRD_UCTL_PORT_CR_DBG_STATUS(0);
++
++	/* 1 */
++	val = FIELD_PREP(USBDRD_UCTL_PORT_CR_DBG_CFG_DATA_IN, addr);
++	dwc3_octeon_writeq(cfg_reg, val);
++	/* 2 */
++	val |= USBDRD_UCTL_PORT_CR_DBG_CFG_CAP_ADDR;
++	dwc3_octeon_writeq(cfg_reg, val);
++	/* 3 */
++	timeout = jiffies + msecs_to_jiffies(1000);
++	while (!(dwc3_octeon_readq(status_reg) & USBDRD_UCTL_PORT_CR_DBG_STATUS_ACK)) {
++                if (time_after(jiffies, timeout)) {
++			dev_warn(dev, "set read address timeout (%x)\n", addr);
++                        return -ETIMEDOUT;
++		}
++                cpu_relax();
++        }
++	/* 4 */
++	dwc3_octeon_writeq(cfg_reg, 0);
++	/* 5 */
++	timeout = jiffies + msecs_to_jiffies(1000);
++	while (dwc3_octeon_readq(status_reg) & USBDRD_UCTL_PORT_CR_DBG_STATUS_ACK) {
++                if (time_after(jiffies, timeout)) {
++			dev_warn(dev, "read ack address clear timeout (%x)\n", addr);
++                        return -ETIMEDOUT;
++		}
++                cpu_relax();
++        }
++	/* 6 */
++	dwc3_octeon_writeq(cfg_reg, USBDRD_UCTL_PORT_CR_DBG_CFG_READ);
++	/* 7 */
++	timeout = jiffies + msecs_to_jiffies(1000);
++	while (!((val = dwc3_octeon_readq(status_reg)) & USBDRD_UCTL_PORT_CR_DBG_STATUS_ACK)) {
++                if (time_after(jiffies, timeout)) {
++			dev_warn(dev, "read data timeout (%x)\n", addr);
++                        return -ETIMEDOUT;
++		}
++                cpu_relax();
++        }
++	/* 8 */
++	ret = FIELD_GET(USBDRD_UCTL_PORT_CR_DBG_STATUS_DATA_OUT, val);
++	/* 9 */
++	dwc3_octeon_writeq(cfg_reg, 0);
++	/* 10 */
++	while (dwc3_octeon_readq(status_reg) & USBDRD_UCTL_PORT_CR_DBG_STATUS_ACK) {
++                if (time_after(jiffies, timeout)) {
++			dev_warn(dev, "read ack data clear timeout (%x)\n", addr);
++                        return -ETIMEDOUT;
++		}
++                cpu_relax();
++        }
++
++	return ret;
++}
++
++static int dwc3_octeon_indirect_write(struct dwc3_octeon *octeon, u32 addr, u16 value)
++{
++	u64 val;
++	unsigned long timeout;
++	struct device *dev = octeon->dev;
++	void __iomem *cfg_reg = octeon->base + USBDRD_UCTL_PORT_CR_DBG_CFG(0);
++	void __iomem *status_reg = octeon->base + USBDRD_UCTL_PORT_CR_DBG_STATUS(0);
++
++	/* 1 */
++	val = FIELD_PREP(USBDRD_UCTL_PORT_CR_DBG_CFG_DATA_IN, addr);
++	dwc3_octeon_writeq(cfg_reg, val);
++	/* 2 */
++	val |= USBDRD_UCTL_PORT_CR_DBG_CFG_CAP_ADDR;
++	dwc3_octeon_writeq(cfg_reg, val);
++	/* 3 */
++	timeout = jiffies + msecs_to_jiffies(1000);
++	while (!(dwc3_octeon_readq(status_reg) & USBDRD_UCTL_PORT_CR_DBG_STATUS_ACK)) {
++                if (time_after(jiffies, timeout)) {
++			dev_warn(dev, "set write address timeout (%x)\n", addr);
++                        return -ETIMEDOUT;
++		}
++                cpu_relax();
++        }
++	/* 4 */
++	dwc3_octeon_writeq(cfg_reg, 0);
++	/* 5 */
++	timeout = jiffies + msecs_to_jiffies(1000);
++	while (dwc3_octeon_readq(status_reg) & USBDRD_UCTL_PORT_CR_DBG_STATUS_ACK) {
++                if (time_after(jiffies, timeout)) {
++			dev_warn(dev, "write ack address clear timeout (%x)\n", addr);
++                        return -ETIMEDOUT;
++		}
++                cpu_relax();
++        }
++	/* 6 */
++	val = FIELD_PREP(USBDRD_UCTL_PORT_CR_DBG_CFG_DATA_IN, value);
++	dwc3_octeon_writeq(cfg_reg, FIELD_PREP(USBDRD_UCTL_PORT_CR_DBG_CFG_DATA_IN, value));
++	/* 7 */
++	val |= USBDRD_UCTL_PORT_CR_DBG_CFG_CAP_DATA;
++	dwc3_octeon_writeq(cfg_reg, val);
++	/* 8 */
++	timeout = jiffies + msecs_to_jiffies(1000);
++	while (!(dwc3_octeon_readq(status_reg) & USBDRD_UCTL_PORT_CR_DBG_STATUS_ACK)) {
++                if (time_after(jiffies, timeout)) {
++			dev_warn(dev, "write set data timeout (%x)\n", addr);
++                        return -ETIMEDOUT;
++		}
++                cpu_relax();
++        }
++	/* 9 */
++	dwc3_octeon_writeq(cfg_reg, 0);
++	/* 10 */
++	timeout = jiffies + msecs_to_jiffies(1000);
++	while (dwc3_octeon_readq(status_reg) & USBDRD_UCTL_PORT_CR_DBG_STATUS_ACK) {
++                if (time_after(jiffies, timeout)) {
++			dev_warn(dev, "write ack clear timeout (%x)\n", addr);
++                        return -ETIMEDOUT;
++		}
++                cpu_relax();
++        }
++	/* 11 */
++	dwc3_octeon_writeq(cfg_reg, USBDRD_UCTL_PORT_CR_DBG_CFG_WRITE);
++	/* 12 */
++	timeout = jiffies + msecs_to_jiffies(1000);
++	while (!(dwc3_octeon_readq(status_reg) & USBDRD_UCTL_PORT_CR_DBG_STATUS_ACK)) {
++                if (time_after(jiffies, timeout)) {
++			dev_warn(dev, "write data timeout (%x)\n", addr);
++                        return -ETIMEDOUT;
++		}
++                cpu_relax();
++        }
++	/* 13 */
++	dwc3_octeon_writeq(cfg_reg, 0);
++	/* 14 */
++	timeout = jiffies + msecs_to_jiffies(1000);
++	while (dwc3_octeon_readq(status_reg) & USBDRD_UCTL_PORT_CR_DBG_STATUS_ACK) {
++                if (time_after(jiffies, timeout)) {
++			dev_warn(dev, "write ack clear timeout (%x)\n", addr);
++                        return -ETIMEDOUT;
++		}
++                cpu_relax();
++        }
++
++	return 0;
++}
++
++static int dwc3_octeon_pll_locked(struct dwc3_octeon *octeon)
++{
++	int ret = dwc3_octeon_indirect_read(octeon, DWC3_INT_IND_PLL_LOCK_REG);
++
++	if (ret < 0)
++		return ret;
++	return ret & 1;
++}
++
++/**
++ * Performs a full reset of the UPHY PLL. Note that this is normally done
++ * internally by a state machine when the UPHY is brought out of reset but this
++ * version gives far more time for things to settle before continuing.
++ */
++static int dwc3_uphy_pll_reset(struct dwc3_octeon *octeon)
++{
++	u16 ctrl, pwr;
++
++	/* 1. Turn on write enable so we can assert reset to the PLL VCO */
++	ctrl = dwc3_octeon_indirect_read(octeon, DWC3_INT_IND_UPHY_PLL_RESET);
++	ctrl |= DWC3_INT_IND_UPHY_PLL_RESET_WE;
++	dwc3_octeon_indirect_write(octeon, DWC3_INT_IND_UPHY_PLL_RESET, ctrl);
++
++	/* 2. Turn on write enable for PLL power control */
++	pwr = dwc3_octeon_indirect_read(octeon, DWC3_INT_IND_UPHY_PLL_PU);
++	pwr |= DWC3_INT_IND_UPHY_PLL_PU_WE;
++	dwc3_octeon_indirect_write(octeon, DWC3_INT_IND_UPHY_PLL_PU, pwr);
++
++	/* 3. Assert VCO reset */
++	ctrl |= DWC3_INT_IND_UPHY_PLL_RESET_VCO_RST;
++	dwc3_octeon_indirect_write(octeon, DWC3_INT_IND_UPHY_PLL_RESET, ctrl);
++
++	/* 4. Power off the PLL */
++	pwr &= ~DWC3_INT_IND_UPHY_PLL_PU_POWER_EN;
++	dwc3_octeon_indirect_write(octeon, DWC3_INT_IND_UPHY_PLL_PU, pwr);
++	usleep_range(1000, 2000);
++
++	/* 5. Power on the PLL while VCO is held in reset */
++	pwr |= DWC3_INT_IND_UPHY_PLL_PU_POWER_EN;
++	dwc3_octeon_indirect_write(octeon, DWC3_INT_IND_UPHY_PLL_PU, pwr);
++
++	/* Wait for things to stabilize before taking VCO out of reset */
++	usleep_range(1000, 2000);
++
++	/* 6. Take the VCO out of reset */
++	ctrl &= ~DWC3_INT_IND_UPHY_PLL_RESET_VCO_RST;
++	dwc3_octeon_indirect_write(octeon, DWC3_INT_IND_UPHY_PLL_RESET, ctrl);
++	usleep_range(1000, 2000);
++
++	/* 7. Put the VCO back in reset */
++	ctrl |= ~DWC3_INT_IND_UPHY_PLL_RESET_VCO_RST;
++	dwc3_octeon_indirect_write(octeon, DWC3_INT_IND_UPHY_PLL_RESET, ctrl);
++
++	/* 8. Power off the PLL */
++	pwr &= ~DWC3_INT_IND_UPHY_PLL_PU_POWER_EN;
++	dwc3_octeon_indirect_write(octeon, DWC3_INT_IND_UPHY_PLL_PU, pwr);
++	usleep_range(1000, 2000);
++
++	/* 9. Power on the PLL while VCO is held in reset */
++	pwr |= DWC3_INT_IND_UPHY_PLL_PU_POWER_EN;
++	dwc3_octeon_indirect_write(octeon, DWC3_INT_IND_UPHY_PLL_PU, pwr);
++
++	/* 10. Take the VCO out of reset */
++	ctrl &= ~DWC3_INT_IND_UPHY_PLL_RESET_VCO_RST;
++	dwc3_octeon_indirect_write(octeon, DWC3_INT_IND_UPHY_PLL_RESET, ctrl);
++
++	/* 11. Turn off write enables */
++	pwr &= ~DWC3_INT_IND_UPHY_PLL_PU_WE;
++	dwc3_octeon_indirect_write(octeon, DWC3_INT_IND_UPHY_PLL_PU, pwr);
++
++	ctrl &= ~DWC3_INT_IND_UPHY_PLL_RESET_WE;
++	dwc3_octeon_indirect_write(octeon, DWC3_INT_IND_UPHY_PLL_RESET, ctrl);
++
++	usleep_range(1000, 2000);
++
++	/* Return if we have lock or not */
++	return dwc3_octeon_pll_locked(octeon);
++}
++
+ static int dwc3_octeon_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+@@ -418,7 +688,7 @@ static int dwc3_octeon_probe(struct platform_device *pdev)
+ 	const char *hs_clock_type, *ss_clock_type;
+ 	int ref_clk_sel, ref_clk_fsel, mpll_mul;
+ 	int power_active_low, power_gpio;
+-	int err, len;
++	int err, len, tries = 0;
+ 	u32 clock_rate;
+ 
+ 	if (of_property_read_u32(node, "refclk-frequency", &clock_rate)) {
+@@ -503,6 +773,7 @@ static int dwc3_octeon_probe(struct platform_device *pdev)
+ 	if (IS_ERR(octeon->base))
+ 		return PTR_ERR(octeon->base);
+ 
++retry:
+ 	err = dwc3_octeon_setup(octeon, ref_clk_sel, ref_clk_fsel, mpll_mul,
+ 				power_gpio, power_active_low);
+ 	if (err)
+@@ -511,6 +782,18 @@ static int dwc3_octeon_probe(struct platform_device *pdev)
+ 	dwc3_octeon_set_endian_mode(octeon);
+ 	dwc3_octeon_phy_reset(octeon);
+ 
++	usleep_range(50, 100);
++	if (dwc3_octeon_pll_locked(octeon) == 0) {
++		dev_warn(dev, "PLL unlocked, reseting (%d of 3)\n", ++tries);
++		err = dwc3_uphy_pll_reset(octeon);
++		if (err < 0)
++			return err;
++		if (tries < 3)
++			goto retry;
++		dev_err(dev, "PLL lock failed\n");
++		return -EIO;
++	}
++
+ 	platform_set_drvdata(pdev, octeon);
+ 
+ 	return of_platform_populate(node, NULL, NULL, dev);
+-- 
+2.39.2
 
 
