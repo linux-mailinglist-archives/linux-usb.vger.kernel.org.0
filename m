@@ -1,116 +1,102 @@
-Return-Path: <linux-usb+bounces-1507-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1508-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45C4A7C6E77
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Oct 2023 14:50:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28AA37C701D
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Oct 2023 16:12:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2DE511C210D9
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Oct 2023 12:50:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A829F282ABA
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Oct 2023 14:12:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C3E5266C9;
-	Thu, 12 Oct 2023 12:50:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53A3030FA1;
+	Thu, 12 Oct 2023 14:12:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="aybDAsBQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l/IfSs5k"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62BA725114
-	for <linux-usb@vger.kernel.org>; Thu, 12 Oct 2023 12:50:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D526C433C7;
-	Thu, 12 Oct 2023 12:50:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1697115037;
-	bh=uvK4i4CIQykjFUF0bhDXHGMzDBGZ91kmwUHdULAWuqg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aybDAsBQfg7UUB1ba1RfVa2VkxlIjZ6g8YsJXuqiLurVFtG2ei14CWKryaTzHnZby
-	 s0Xn55JzI3I2BbWnQqjzkr8fYeOKDNrzvuj0c88HDsHN/PCXTXf1gf4HzRiy3FClYG
-	 0RJu8DvmlLlxEzZw3qSkGIWUW+gGSrP9cbl4mHjw=
-Date: Thu, 12 Oct 2023 14:50:35 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Douglas Gilbert <dgilbert@interlog.com>
-Cc: Alan Stern <stern@rowland.harvard.edu>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: device present in lsusb, disappears in lsusb -t
-Message-ID: <2023101203-marine-chatter-692e@gregkh>
-References: <70c563f1-847c-32a1-cf4d-6bf9802017ab@interlog.com>
- <2023091638-duration-barcode-73a3@gregkh>
- <11b1687f-3419-4037-845e-ef33d4e3871f@interlog.com>
- <2023101139-puma-fanfare-8a0e@gregkh>
- <299d927f-7044-4d48-b6cd-c05bdb0e7fcc@rowland.harvard.edu>
- <0c2a2a23-28dd-4c83-b7af-d5421501e411@interlog.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 749752941E
+	for <linux-usb@vger.kernel.org>; Thu, 12 Oct 2023 14:12:05 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC54C91
+	for <linux-usb@vger.kernel.org>; Thu, 12 Oct 2023 07:12:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1697119923; x=1728655923;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=u6RE3VHUmFcb14AYSTpBkU2wHwqq7oh9a3qBjUAtrY8=;
+  b=l/IfSs5kKWVO/G2/1C0ljb4aGi9LD1T/Jg9wL6640j/emsbd2peEkYP1
+   UytdaR9E1o7twuTV3Tk+1KaMDI8u142kATMQc5FBdOPNKPbgbv9uBg9zc
+   Nek1es9SdBIZ0fxZMSFLVl9zhCVM/ogSAP6vK2wo6WzYboqRWqabSykaT
+   o6J9RYIHISE2hKZn5BoguOp3pAIleeXz93OPc/wgmAj/Ikp9gJWc1ziVe
+   NaWMF9WAFRAYyfprAVktSvM0B8JZnKLfmXKzoGUVQIuRFGw7bkXMwbu/z
+   OvYG03Itwn8q6seCvZDBdbghu9z6yRne2qpWckNnnY8x/z6aQEbbgNPK/
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="387775902"
+X-IronPort-AV: E=Sophos;i="6.03,219,1694761200"; 
+   d="scan'208";a="387775902"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2023 07:12:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="870588936"
+X-IronPort-AV: E=Sophos;i="6.03,219,1694761200"; 
+   d="scan'208";a="870588936"
+Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga002.fm.intel.com with ESMTP; 12 Oct 2023 07:11:59 -0700
+Message-ID: <edb99fbe-854e-11f7-b718-b31c921a962e@linux.intel.com>
+Date: Thu, 12 Oct 2023 17:13:26 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0c2a2a23-28dd-4c83-b7af-d5421501e411@interlog.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.13.0
+Subject: Re: [PATCH v5] usb: host: xhci-plat: fix possible kernel oops while
+ resuming
+Content-Language: en-US
+To: Sergey Shtylyov <s.shtylyov@omp.ru>,
+ Mathias Nyman <mathias.nyman@intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
+Cc: Florian Fainelli <f.fainelli@gmail.com>
+References: <c8c4ea38-c0f7-756d-01fb-cab51a3f8393@omp.ru>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <c8c4ea38-c0f7-756d-01fb-cab51a3f8393@omp.ru>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,
+	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+	SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-On Wed, Oct 11, 2023 at 02:51:28PM -0400, Douglas Gilbert wrote:
-> On 2023-10-11 11:00, Alan Stern wrote:
-> > On Wed, Oct 11, 2023 at 11:30:39AM +0200, Greg KH wrote:
-> > > On Thu, Oct 05, 2023 at 10:49:10PM -0400, Douglas Gilbert wrote:
-> > > > The code in lsusb-t.c seems to assign a special meaning to "-1" devices
-> > > > and there is only one of those: "5-1". And the device associated with
-> > > > "5-1" is the one that does _not_ appear in the output of 'lsusb -t' but
-> > > > does appear in the output of 'lsusb'.
-> > > 
-> > > The code patch of the '-t' option in lsusb is totally separate and apart
-> > > from the "normal" portion of lsusb, as you note, it is a separate .c
-> > > file as well.  -t uses the sysfs representation of the USB devices,
-> > > while the other code path uses the 'libusb' representation of the USB
-> > > devices.  And those seem to differ here (as they do for everyone.)
-> > > 
-> > > So if someone wants to take the time to figure out which representation
-> > > is "more correct", that would be great.  I don't have the bandwidth to
-> > > do so for the next few weeks due to travel requirements on my end,
-> > > sorry.
-> > 
-> > Doug, I've looked through the source code in lsusb-t.c (usbutils 015)
-> > and I didn't notice any place where it treats device names containing
-> > "-1" specially.  Can you point it out?
-> > 
-> > Also, if I suggested some debugging additions to the source file, would
-> > you be able to build them and test the result?
+On 4.10.2023 23.47, Sergey Shtylyov wrote:
+> If this driver enables the xHC clocks while resuming from sleep, it calls
+> clk_prepare_enable() without checking for errors and blithely goes on to
+> read/write the xHC's registers -- which, with the xHC not being clocked,
+> at least on ARM32 usually causes an imprecise external abort exceptions
+> which cause kernel oops.  Currently, the chips for which the driver does
+> the clock dance on suspend/resume seem to be the Broadcom STB SoCs, based
+> on ARM32 CPUs, as it seems...
 > 
-> Hi Alan,
-> Attached is a patch that adds support for a '-S <sysroot>' option to lsusb from
-> usbutils found in GKH's github account. It only works when the '-t' option is
-> given to show USB devices in a tree like representation. Without the '-t' option
-> lsusb uses the enumeration services in libusb. The 'lsusb' invocation does find
-> the device at /tmp/sys/bus/usb/devices/5-1 which is a "product : STEVAL-USBC2DP
-> Type-C to DisplayPort adapter" made by ST Micro.
+> Found by Linux Verification Center (linuxtesting.org) with the Svace static
+> analysis tool.
 > 
-> Also attached is a pruned representation of /sys and /dev from my machine which
-> is a Thinkpad X13 G3 with a Lenovo TB3 dock [40AN] connected via USB-C. The
-> "missing" adapter is connected to that dock. However that indirect
-> connection
-> is probably _not_ significant since if I move that dongle to the other USB-C
-> receptacle on the X13G3 (it has two), the same seen/not_seen issue is
-> reproduced. And with the direct connect the adapter moves to
-> /sys/bus/usb/devices/3-5 . So that debunks my theory that the "1" in the "5-1"
-> is somehow significant.
+> Fixes: 8bd954c56197 ("usb: host: xhci-plat: suspend and resume clocks")
+> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
 > 
-> The attached files differ from those I sent to GKH in one important respect.
-> I sent Greg my _whole_ sysfs, around 55,000 nodes and that would have included
-> serial numbers of my machine, my storage devices, MAC addresses, etc. In
-> the tarball attached below only about 5000 nodes are present after some
-> pruning with my clone_pseudo_fs utility (in my github account).
+> ---
+> This patch is against the 'usb-next' branch of Greg KH's 'usb.git' repo...
 
-I've pushed all of the remaining pending changes for usbutils to the
-repo, and added a few of my own that makes the 'lsusb -t' output a bit
-more sane (sorted order, proper digit field width, etc.)
+Looks good to me, adding to queue
 
-Can you try the latest version in github (or on kernel.org, they are
-mirrors) and show the output there?
+Thanks
+Mathias
 
-thanks,
-
-greg k-h
 
