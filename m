@@ -1,65 +1,54 @@
-Return-Path: <linux-usb+bounces-1497-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1498-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 779417C6699
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Oct 2023 09:44:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87D7F7C67E3
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Oct 2023 10:48:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C30D1C21083
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Oct 2023 07:44:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2419F28287D
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Oct 2023 08:48:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD2EB107B4;
-	Thu, 12 Oct 2023 07:44:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A58641F5FD;
+	Thu, 12 Oct 2023 08:48:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XpRk4LoW"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="WT6Zen/y"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E25BB101C1
-	for <linux-usb@vger.kernel.org>; Thu, 12 Oct 2023 07:43:58 +0000 (UTC)
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB81B8
-	for <linux-usb@vger.kernel.org>; Thu, 12 Oct 2023 00:43:57 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-313e742a787so329135f8f.1
-        for <linux-usb@vger.kernel.org>; Thu, 12 Oct 2023 00:43:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697096636; x=1697701436; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6pGb3HGceT5/2sWjhWBJAACKQ5znAHiL9SXNlGtYAVU=;
-        b=XpRk4LoW8NG/6ivu/yLDQ0Kih+zA07VKEpIaJ5kt7b7n+ezYDxmN52gXTJ9SVmNFHX
-         hdBqlF4elBpB020rVsaBt9eqFYo/UevkSUIrVCrgMVFtxTZlxTNAbxNEfNSBfZne14CL
-         gFFTFGtAZub0SRLFZ19a3JuV8pWGWC3qVk64D/GosCb2o0qk85Xpe7Bfkb/VCl+1eIg6
-         q0nsli6bVdxVAMg4oEamiLIwNvUenzGLc3P8K4AQVt6bbMTknSUvlkyrdMaNnW0j0jMO
-         e+rqp6gfNcbiDjMWxpCfwFUIhKmDYzEMShFbOWFBuzu3BNbk7lbHgVTuIdUFUnxGzUXW
-         WVWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697096636; x=1697701436;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6pGb3HGceT5/2sWjhWBJAACKQ5znAHiL9SXNlGtYAVU=;
-        b=c4uCgte11ihgolT0mANLm+D4cEDJ3wEX12jlN1yDsXgIpOPM5xODdw4m/61PE/IeCL
-         PLKpNWt51fT51IZWN5QFZR05ARu6P7HG88ltlAJy3jTkiGdAjOsUxtX1K5gTCWZeh9S1
-         qi/fhPb9Sk5f8S0JVLKN3uK8d5a4qDdbZzAuqyxwtnZv4LW7WJVLzsNFsZEdQ7w2wqPo
-         yXjk4ReTS7Qk9LV4gJCTijo4xMyP3H3CZSSF+tWrkGOs3t+SbBEVJ4Q0mKl09oxfQS/H
-         vXze5KdycnTNTJU+QCfArYt67PbsdHY1LzfXurMhy9cNEdAXzcGgulYoKu+7WejqUCtA
-         FrGw==
-X-Gm-Message-State: AOJu0Yz+LmoyhNXGoO4PyPL6sz+waZ146gR75tcLEQfagMm5kZ9/xaUD
-	U57RVvmdqi5r9HesIlZhBzGg6r8xZNKFkN79Q33Jag==
-X-Google-Smtp-Source: AGHT+IFaWxysZLgTN32QN8lGWXQc+RXod5GHTptPjZL4LBGic628OKN+rsGkNpFfMStt2tFVcBuAVg==
-X-Received: by 2002:adf:ff88:0:b0:319:5234:5c92 with SMTP id j8-20020adfff88000000b0031952345c92mr14497982wrr.35.1697096635651;
-        Thu, 12 Oct 2023 00:43:55 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.100])
-        by smtp.gmail.com with ESMTPSA id v15-20020a5d43cf000000b003233b554e6esm17680843wrr.85.2023.10.12.00.43.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Oct 2023 00:43:55 -0700 (PDT)
-Message-ID: <abe72aae-c43c-487a-8021-2c0f54319a5b@linaro.org>
-Date: Thu, 12 Oct 2023 09:43:54 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CAEDFC0E;
+	Thu, 12 Oct 2023 08:48:31 +0000 (UTC)
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFBA9D62;
+	Thu, 12 Oct 2023 01:48:29 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39C7wsFR030511;
+	Thu, 12 Oct 2023 08:48:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=EjNwXNWyPPQx56lwNethXlrj7uVzLAOKH/elKpWEvnc=;
+ b=WT6Zen/yG/HePZj+8sDvzSQBN4muTc4LpHkv5wjhzvdBGQxo0b6fLiP2ZutizIPP6xjg
+ rktSXv4RAvCbZLygY3mgMI7LMWh6n/qSXMTsqLnj1ETk3lwD0L9l5LfytDix1CQLdQjE
+ cf0VF/40/Lx5KHs3NLXVRNY+mHhS25kcLcdQdJSVH1ZHiDYHZyrGgXDUeZgc8im6JBj0
+ ui2MOGQQTA5/FzIwLLWWEXaWrk9Gwai6KL398NogF7U/siN9F1UKZLo0e3R93gYSDXhi
+ iLNMS02mAuTQmsAnyFpoPeUksYF0QptCv8aWtQ48JC2mcXWFEkQimVDHjpRHvzi7dxKO lw== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tp9dp0fq4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 12 Oct 2023 08:48:26 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39C8mPTF014669
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 12 Oct 2023 08:48:25 GMT
+Received: from [10.216.58.179] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Thu, 12 Oct
+ 2023 01:48:21 -0700
+Message-ID: <fad5a7fb-cce1-46bc-a0af-72405c76d107@quicinc.com>
+Date: Thu, 12 Oct 2023 14:18:17 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,153 +56,132 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] dt-bindings: usb: Add the binding example for the
- Genesys Logic GL3523 hub
+Subject: Re: [PATCH 2/2] usb: gadget: ncm: Add support to update
+ wMaxSegmentSize via configfs
+From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+To: =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
+CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        onathan Corbet
+	<corbet@lwn.net>,
+        Linyu Yuan <quic_linyyuan@quicinc.com>, <linux-usb@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
+        <quic_jackp@quicinc.com>
+References: <20231009142005.21338-1-quic_kriskura@quicinc.com>
+ <20231009142005.21338-2-quic_kriskura@quicinc.com>
+ <CANP3RGfEk2DqZ3biyN78ycQYbDxCEG+H1me2vnEYuwXkNdXnTA@mail.gmail.com>
+ <CANP3RGcCpNOuVpdV9n0AFxZo-wsfwi8OfYgBk1WHNHaEd-4V-Q@mail.gmail.com>
+ <CANP3RGdY4LsOA6U5kuccApHCzL0_jBnY=pLOYrUuYtMZFTvnbw@mail.gmail.com>
+ <d19d9d08-c119-4991-b460-49925f601d15@quicinc.com>
 Content-Language: en-US
-To: Anand Moon <linux.amoon@gmail.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Icenowy Zheng <uwu@icenowy.me>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20231011051152.133257-1-linux.amoon@gmail.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231011051152.133257-1-linux.amoon@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <d19d9d08-c119-4991-b460-49925f601d15@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: UUH1rbL7Ry3iYl2STQt5A3KQzu16KWwR
+X-Proofpoint-GUID: UUH1rbL7Ry3iYl2STQt5A3KQzu16KWwR
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-12_04,2023-10-11_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 mlxlogscore=857 priorityscore=1501 spamscore=0 bulkscore=0
+ mlxscore=0 clxscore=1015 adultscore=0 impostorscore=0 malwarescore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2310120073
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On 11/10/2023 07:11, Anand Moon wrote:
-> Add the binding example for the USB3.1 Genesys Logic GL3523
-> integrates with USB 3.1 Gen 1 Super Speed and USB 2.0 High-Speed
-> hub.
 
-That's not what the patch does.
 
+On 10/10/2023 10:08 AM, Krishna Kurapati PSSNV wrote:
 > 
-> Signed-off-by: Anand Moon <linux.amoon@gmail.com>
-> ---
-> New patch.
-> ---
->  .../bindings/usb/genesys,gl850g.yaml          | 28 +++++++++++++++++--
->  1 file changed, 25 insertions(+), 3 deletions(-)
+
+>>
+>> ^ is this a problem now if we have >1 gadget?
+>> how does it work then?
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-> index d0927f6768a4..2f6e0c870e1d 100644
-> --- a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-> +++ b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-> @@ -22,29 +22,51 @@ properties:
->    reg: true
->  
->    reset-gpios:
-> +    maxItems: 1
+> 
+> You are right. This would effect unwrap call and the wMaxSegmentSize is 
+> used directly. Thanks for the catch. I didn't test with 2 NCM interfaces 
+> and hence I wasn't able to find this bug. Perhaps changing this to 
+> opts->max_segment_size would fix the implementation as unwrap would 
+> anyways be called after bind.
 
-Why?
+Hi Maciej,
 
->      description: GPIO controlling the RESET# pin.
->  
->    vdd-supply:
->      description:
->        the regulator that provides 3.3V core power to the hub.
->  
-> +  peer-hub:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description:
-> +      phandle to the peer hub on the controller.
-> +
->  required:
->    - compatible
->    - reg
-> +  - reset-gpios
+  How about the below diff:
 
-Why?
+---------
 
-> +  - vdd-supply
-> +  - peer-hub
->  
->  additionalProperties: false
->  
->  examples:
->    - |
->      #include <dt-bindings/gpio/gpio.h>
-> +
->      usb {
->          dr_mode = "host";
->          #address-cells = <1>;
->          #size-cells = <0>;
->  
-> -        hub: hub@1 {
-> -            compatible = "usb5e3,608";
-> +        /* 2.0 hub on port 1 */
-> +        hub_2_0: hub@1 {
-> +            compatible = "usb5e3,610";
->              reg = <1>;
-> -            reset-gpios = <&pio 7 2 GPIO_ACTIVE_LOW>;
-> +            vdd-supply = <&vcc_5v>;
-> +            peer-hub = <&hub_3_0>;
-> +            reset-gpios = <&gpio 20 GPIO_ACTIVE_LOW>;
-> +        };
-> +
-> +        /* 3.1 hub on port 4 */
-> +        hub_3_0: hub@2 {
-> +            compatible = "usb5e3,620";
-> +            reg = <2>;
-> +            vdd-supply = <&vcc_5v>;
-> +            peer-hub = <&hub_2_0>;
-> +            reset-gpios = <&gpio 20 GPIO_ACTIVE_LOW>;
++/*
++ * Allow max segment size to be in parity with max_mtu possible
++ * for the interface.
++ */
++#define MAX_DATAGRAM_SIZE      GETHER_MAX_ETH_FRAME_LEN
++
+  #define FORMATS_SUPPORTED      (USB_CDC_NCM_NTB16_SUPPORTED |  \
+                                  USB_CDC_NCM_NTB32_SUPPORTED)
 
-Really, what is happening here?
+@@ -194,7 +200,6 @@ static struct usb_cdc_ether_desc ecm_desc = {
+         /* this descriptor actually adds value, surprise! */
+         /* .iMACAddress = DYNAMIC */
+         .bmEthernetStatistics = cpu_to_le32(0), /* no statistics */
+-       .wMaxSegmentSize =      cpu_to_le16(ETH_FRAME_LEN),
+         .wNumberMCFilters =     cpu_to_le16(0),
+         .bNumberPowerFilters =  0,
+  };
+@@ -1180,10 +1185,15 @@ static int ncm_unwrap_ntb(struct gether *port,
+         struct sk_buff  *skb2;
+         int             ret = -EINVAL;
+         unsigned        ntb_max = 
+le32_to_cpu(ntb_parameters.dwNtbOutMaxSize);
+-       unsigned        frame_max = le16_to_cpu(ecm_desc.wMaxSegmentSize);
++       unsigned int    frame_max;
+         const struct ndp_parser_opts *opts = ncm->parser_opts;
+         unsigned        crc_len = ncm->is_crc ? sizeof(uint32_t) : 0;
+         int             dgram_counter;
++       struct f_ncm_opts *ncm_opts;
++       const struct usb_function_instance *fi = port->func.fi;
++
++       ncm_opts = container_of(fi, struct f_ncm_opts, func_inst);
++       frame_max = ncm_opts->max_segment_size;
 
-Best regards,
-Krzysztof
+         /* dwSignature */
+         if (get_unaligned_le32(tmp) != opts->nth_sign) {
+@@ -1440,6 +1450,7 @@ static int ncm_bind(struct usb_configuration *c, 
+struct usb_function *f)
+          */
+         if (!ncm_opts->bound) {
+                 mutex_lock(&ncm_opts->lock);
++               ncm_opts->net->mtu = (ncm_opts->max_segment_size - 
+ETH_HLEN);
+                 gether_set_gadget(ncm_opts->net, cdev->gadget);
+                 status = gether_register_netdev(ncm_opts->net);
+                 mutex_unlock(&ncm_opts->lock);
+@@ -1484,6 +1495,8 @@ static int ncm_bind(struct usb_configuration *c, 
+struct usb_function *f)
 
+         status = -ENODEV;
+
++       ecm_desc.wMaxSegmentSize = (__le16)ncm_opts->max_segment_size;
++
+
+------
+
+I can limit the max segment size to (Max MTU + ETH_HELN) and this would 
+be logical to do. Also we can set the frame_max from ncm_opts itself 
+while initializing it to 1514 (default value) during alloc_inst callback 
+and nothing would break while still being backward compatible.
+
+Let me know your thoughts on this.
+
+Regards,
+Krishna,
 
