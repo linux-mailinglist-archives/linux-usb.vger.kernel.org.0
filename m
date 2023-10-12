@@ -1,191 +1,119 @@
-Return-Path: <linux-usb+bounces-1514-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1515-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1AE8E7C732F
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Oct 2023 18:37:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55DDA7C7339
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Oct 2023 18:40:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B37E8282B09
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Oct 2023 16:37:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 704CF1C2112E
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Oct 2023 16:40:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B60327EF7;
-	Thu, 12 Oct 2023 16:37:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9988D20E5;
+	Thu, 12 Oct 2023 16:40:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LhHD5o7b"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jh0kjXqU"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5543C20E5;
-	Thu, 12 Oct 2023 16:37:45 +0000 (UTC)
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A1CA9;
-	Thu, 12 Oct 2023 09:37:42 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-1dd5b98d9aeso577706fac.0;
-        Thu, 12 Oct 2023 09:37:42 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48524266C6
+	for <linux-usb@vger.kernel.org>; Thu, 12 Oct 2023 16:40:15 +0000 (UTC)
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 500FFCA
+	for <linux-usb@vger.kernel.org>; Thu, 12 Oct 2023 09:40:12 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2c503da4fd6so973621fa.1
+        for <linux-usb@vger.kernel.org>; Thu, 12 Oct 2023 09:40:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1697128662; x=1697733462; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9u1kAvrEac9Qi+MHI/eb0phIPTWwLhAQGTfL68QyLNI=;
-        b=LhHD5o7bS7irbCkNgC4qxx/7hGh4y/vqTfI+a8PobWh7tYEev3dTmLV+aAGUmttFCB
-         IrQ5a6D4K6CIVxzKK0d2Bc9ryzYQqOGYXIZ0IRrrtv6SpS3xiLmzkPRDktKvyC0fGbz5
-         QBlV1CBaNYCI9pF9zUE4kWkxohcydbW33d1DYSJv5AgJ+4vdnlc3ZukHPwaBOG8A2nXN
-         vG3+PSOyXt3pVFhxLBJw6FTHl/gPE6BgZzOSsslBuoy8OF4uQ2cZSOn0sVHAIlUwgcBo
-         X8QXbELl2HlD+fl2P7VJ2XdJLYa+ARte1uwVHuW9vUsmOmmF68nX87zcmGHcAVXdtDTm
-         A6Pw==
+        d=linaro.org; s=google; t=1697128810; x=1697733610; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oWO94gUYYbgFYpZi/S4rt4kc1CR6230PtdfFhraso7w=;
+        b=jh0kjXqUamh6aVpbk1nt+KzL0+z3CaCBqotLZcHybrKkrXG4iPdzoaoeURp5ztoz0g
+         cJZy7zkEAPdNAS09oJL7dYzGUGcOhvmHqW/wv/9r1t7gElxFUmxorf7hu5SAjCFjrr36
+         KTSDN00n+YAT4t7Oe+Qlhzcm+HfOo/yFQQNbi7M1ak1Qe+K1YiYnJLYyDeOHUI80rgJ+
+         vRa9T+6EzrqAQZnci6qgGAyHsIDQB5lM0KIuVCMgGnxPOpyX8YPt01BwKcZs66hgl7jt
+         V/APUJ4mRbcpWkl4IYzVhovlc6cgXGonaVPGjcYnrW78jGGctGbdZqhTmsnPcUxQ3ify
+         askQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697128662; x=1697733462;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9u1kAvrEac9Qi+MHI/eb0phIPTWwLhAQGTfL68QyLNI=;
-        b=C8jwOF8Plgzj72Qd1s7PKATs9AQqr36Byp9RKZQ4UtLvCIqa7cRZVFOFZnA3exUPgA
-         bYGuojjocWMpfpQMVLzz+pncqBMXQxJEcHTmU5hV3odOnuqnUJzh0ChgDmPy3S4LTWCO
-         SdwoJkfQSoAZ2je3JT3iEvD3BWdSH01L/TnPAI4NagsTeyanUKnt3fgCivaBnGbYhRAl
-         wvuyFNx+3Esput2TXWtNb+SnMt7WC+N4ZG60ZKc7o41gohCW9g8u384CXp+atXUvmlJX
-         bsuyk/tJm7IUZME9oAD+HuVvePwemGriKkYlPjghgv7CSrylreW9XAIc9Pi1kUezaTyy
-         FUFQ==
-X-Gm-Message-State: AOJu0Yyz39fGwIDcmRSQfHO+a8BUPLGpHqtBpQTd5prBnA3Ku9Wfk8+I
-	QKkoCkQ4TOKPEhBq4Q7MPu5//KGlii/DmphP55I=
-X-Google-Smtp-Source: AGHT+IF3idoTvk3iQIydZOFUuTHb9X53/KuzrTwT1V/yxZI4ZBgG+GdHFpUOuv/G18GACk/bYhQbBFdOratw7VpY67I=
-X-Received: by 2002:a05:6871:d13:b0:1e9:7078:9f3b with SMTP id
- vh19-20020a0568710d1300b001e970789f3bmr3895870oab.10.1697128662009; Thu, 12
- Oct 2023 09:37:42 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1697128810; x=1697733610;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oWO94gUYYbgFYpZi/S4rt4kc1CR6230PtdfFhraso7w=;
+        b=VUP08n/lfo456TqaOUZUW+pMDnu4mraaK79kBIxMAReoKPyXnSobYmb/5kObBil3I9
+         2C/gVqxSIhIC6QvfxO0LwQHcCPZdbs8CFNMKY7dnsZ+8CnH9Vcvpy6hPV9p5ynS8jl1B
+         zS7eGkrtdenirL0LIaldw2TgcGDS/ruRCDmO4DhM5TvV5L46X6rC2chF0IsjfppVe1TB
+         dtF8rRseX4dpmM4rebVaW8TmyDHJb75N9mq0676F3dsqNGa6cWTwFaQh10LivCPFt+xE
+         r3wkb9IpWLIB1fU/a4kJF4J5XFSvZ4tJoByh0ul6AfKj5o3YizEFb0VgzFK/HgKl30Zo
+         NdEA==
+X-Gm-Message-State: AOJu0YzCI636A0fmKffWSBuaaC13JLg1IzGgfImwITubRXIPAttssWRS
+	Kke015VJqKVXCJFaI4z2kvEq8g==
+X-Google-Smtp-Source: AGHT+IEYH8hBoN/7cTp7puXpUYmr5Xg/tD8Pp3yR7oEc8+89bjqPg5QHPIIa55HkW5/PuUtCf0tgsQ==
+X-Received: by 2002:a2e:7c15:0:b0:2b6:e2e4:7d9a with SMTP id x21-20020a2e7c15000000b002b6e2e47d9amr22634688ljc.38.1697128810439;
+        Thu, 12 Oct 2023 09:40:10 -0700 (PDT)
+Received: from [172.30.204.175] (UNUSED.212-182-62-129.lubman.net.pl. [212.182.62.129])
+        by smtp.gmail.com with ESMTPSA id p9-20020a2e7409000000b002bfe8537f37sm3633373ljc.33.2023.10.12.09.40.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Oct 2023 09:40:10 -0700 (PDT)
+Message-ID: <467dd1cc-64af-43d7-93ca-be28043e2765@linaro.org>
+Date: Thu, 12 Oct 2023 18:40:06 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231011051152.133257-1-linux.amoon@gmail.com> <abe72aae-c43c-487a-8021-2c0f54319a5b@linaro.org>
-In-Reply-To: <abe72aae-c43c-487a-8021-2c0f54319a5b@linaro.org>
-From: Anand Moon <linux.amoon@gmail.com>
-Date: Thu, 12 Oct 2023 22:07:26 +0530
-Message-ID: <CANAwSgQa3_ROnYyDZA958ZvFu0tb7qsVJ0Loij0saYRKEec_xw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: usb: Add the binding example for the
- Genesys Logic GL3523 hub
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Icenowy Zheng <uwu@icenowy.me>, linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v13 08/10] arm64: dts: qcom: sc8280xp: Add multiport
+ controller node for SC8280
+Content-Language: en-US
+To: Krishna Kurapati <quic_kriskura@quicinc.com>,
+ Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Philipp Zabel <p.zabel@pengutronix.de>, Andy Gross <agross@kernel.org>,
+ Bjorn Andersson <andersson@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Felipe Balbi <balbi@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>,
+ Johan Hovold <johan@kernel.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+ quic_pkondeti@quicinc.com, quic_ppratap@quicinc.com, quic_jackp@quicinc.com,
+ ahalaney@redhat.com, quic_shazhuss@quicinc.com
+References: <20231007154806.605-1-quic_kriskura@quicinc.com>
+ <20231007154806.605-9-quic_kriskura@quicinc.com>
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20231007154806.605-9-quic_kriskura@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Hi Krzysztof,
 
-On Thu, 12 Oct 2023 at 13:13, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 11/10/2023 07:11, Anand Moon wrote:
-> > Add the binding example for the USB3.1 Genesys Logic GL3523
-> > integrates with USB 3.1 Gen 1 Super Speed and USB 2.0 High-Speed
-> > hub.
->
-> That's not what the patch does.
 
-Ok I have tried to add an example below the original changes
-but the device tree complained of duplicate entries. Hence I
-modified these changes.
+On 10/7/23 17:48, Krishna Kurapati wrote:
+> Add USB and DWC3 node for tertiary port of SC8280 along with multiport
+> IRQ's and phy's. This will be used as a base for SA8295P and SA8295-Ride
+> platforms.
+> 
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> ---
+[...]
 
-This change was requested to update the peer-hub example below.
-[0] https://lore.kernel.org/all/9fe7d0d2-3582-4b62-be9b-aa9134c18023@linaro.org/
+> +
+> +			interconnects = <&aggre1_noc MASTER_USB3_MP 0 &mc_virt SLAVE_EBI1 0>,
+> +					<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_USB3_MP 0>;
+Please use QCOM_ICC_TAG_ALWAYS from 
+include/dt-bindings/interconnect/qcom,icc.h (like in sa8775p)
 
->
-> >
-> > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
-> > ---
-> > New patch.
-> > ---
-> >  .../bindings/usb/genesys,gl850g.yaml          | 28 +++++++++++++++++--
-> >  1 file changed, 25 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-> > index d0927f6768a4..2f6e0c870e1d 100644
-> > --- a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-> > +++ b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-> > @@ -22,29 +22,51 @@ properties:
-> >    reg: true
-> >
-> >    reset-gpios:
-> > +    maxItems: 1
->
-> Why?
+With that I think it's good to go :)
 
-Following another example, I added this and will drop this.
->
-> >      description: GPIO controlling the RESET# pin.
-> >
-> >    vdd-supply:
-> >      description:
-> >        the regulator that provides 3.3V core power to the hub.
-> >
-> > +  peer-hub:
-> > +    $ref: /schemas/types.yaml#/definitions/phandle
-> > +    description:
-> > +      phandle to the peer hub on the controller.
-> > +
-> >  required:
-> >    - compatible
-> >    - reg
-> > +  - reset-gpios
->
-> Why?
-see below.
->
-> > +  - vdd-supply
-> > +  - peer-hub
-> >
-> >  additionalProperties: false
-> >
-> >  examples:
-> >    - |
-> >      #include <dt-bindings/gpio/gpio.h>
-> > +
-> >      usb {
-> >          dr_mode = "host";
-> >          #address-cells = <1>;
-> >          #size-cells = <0>;
-> >
-> > -        hub: hub@1 {
-> > -            compatible = "usb5e3,608";
-> > +        /* 2.0 hub on port 1 */
-> > +        hub_2_0: hub@1 {
-> > +            compatible = "usb5e3,610";
-> >              reg = <1>;
-> > -            reset-gpios = <&pio 7 2 GPIO_ACTIVE_LOW>;
-> > +            vdd-supply = <&vcc_5v>;
-> > +            peer-hub = <&hub_3_0>;
-> > +            reset-gpios = <&gpio 20 GPIO_ACTIVE_LOW>;
-> > +        };
-> > +
-> > +        /* 3.1 hub on port 4 */
-> > +        hub_3_0: hub@2 {
-> > +            compatible = "usb5e3,620";
-> > +            reg = <2>;
-> > +            vdd-supply = <&vcc_5v>;
-> > +            peer-hub = <&hub_2_0>;
-> > +            reset-gpios = <&gpio 20 GPIO_ACTIVE_LOW>;
->
-> Really, what is happening here?
-
-USB hub GL3523-QFN76 supports two pins CHIP_EN and RST_N pins
-so RST_N (GPIOH_4) is used to reset the USB hub,
-earlier we were using gpio-hog to reset the hub.
-
->
-> Best regards,
-> Krzysztof
->
-
-Thanks
--Anand
+Konrad
 
