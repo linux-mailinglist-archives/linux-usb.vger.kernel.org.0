@@ -1,102 +1,153 @@
-Return-Path: <linux-usb+bounces-1508-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1509-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28AA37C701D
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Oct 2023 16:12:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C7047C7041
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Oct 2023 16:28:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A829F282ABA
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Oct 2023 14:12:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 880981C20F7F
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Oct 2023 14:28:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53A3030FA1;
-	Thu, 12 Oct 2023 14:12:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B3D931A61;
+	Thu, 12 Oct 2023 14:28:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l/IfSs5k"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jcd4XL1k"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 749752941E
-	for <linux-usb@vger.kernel.org>; Thu, 12 Oct 2023 14:12:05 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC54C91
-	for <linux-usb@vger.kernel.org>; Thu, 12 Oct 2023 07:12:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697119923; x=1728655923;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=u6RE3VHUmFcb14AYSTpBkU2wHwqq7oh9a3qBjUAtrY8=;
-  b=l/IfSs5kKWVO/G2/1C0ljb4aGi9LD1T/Jg9wL6640j/emsbd2peEkYP1
-   UytdaR9E1o7twuTV3Tk+1KaMDI8u142kATMQc5FBdOPNKPbgbv9uBg9zc
-   Nek1es9SdBIZ0fxZMSFLVl9zhCVM/ogSAP6vK2wo6WzYboqRWqabSykaT
-   o6J9RYIHISE2hKZn5BoguOp3pAIleeXz93OPc/wgmAj/Ikp9gJWc1ziVe
-   NaWMF9WAFRAYyfprAVktSvM0B8JZnKLfmXKzoGUVQIuRFGw7bkXMwbu/z
-   OvYG03Itwn8q6seCvZDBdbghu9z6yRne2qpWckNnnY8x/z6aQEbbgNPK/
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="387775902"
-X-IronPort-AV: E=Sophos;i="6.03,219,1694761200"; 
-   d="scan'208";a="387775902"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2023 07:12:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="870588936"
-X-IronPort-AV: E=Sophos;i="6.03,219,1694761200"; 
-   d="scan'208";a="870588936"
-Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga002.fm.intel.com with ESMTP; 12 Oct 2023 07:11:59 -0700
-Message-ID: <edb99fbe-854e-11f7-b718-b31c921a962e@linux.intel.com>
-Date: Thu, 12 Oct 2023 17:13:26 +0300
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B22C41EA95
+	for <linux-usb@vger.kernel.org>; Thu, 12 Oct 2023 14:28:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C0BCC433C8;
+	Thu, 12 Oct 2023 14:28:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1697120890;
+	bh=9NRzGriIdVw7J/qyLb/puVHqGx9a7Bn3c8C+RlHyPJ4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jcd4XL1kHu4ZxukZiedKOO9vymcQSdsub7HU+XzAdVwAHHgHAOktFo5kS0VC6K/sD
+	 7Pz2bGGBSXuz8RRlzkpQbdFFN0Xu4pR5g9EbKkWQikKFsUIa9Qchbk1XuvA8hUUyHW
+	 vcrC3QhqN3L7C8E+Bwd5XIZexWkZiZExpL5Sq8FCU8jEHxpuM6inTl9FSh5RofZF8a
+	 hIBuT22XFHVvySvFuiNXPjFZSq9wf8d/Uy1RuH3NOU4E2CLABBime600XHUZDMe0XQ
+	 xa3NFI9JmOLZzFGALVkO5jbICC3eG2IENFPUWMXni63pQyRpp88VPQGY5w+9cntOf+
+	 SZsz5/QgjpQmQ==
+Date: Thu, 12 Oct 2023 22:28:00 +0800
+From: Peter Chen <peter.chen@kernel.org>
+To: =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Peter Geis <pgwipeout@gmail.com>,
+	Thierry Reding <treding@nvidia.com>,
+	Dmitry Osipenko <digetx@gmail.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] usb: chipidea: Fix DMA overwrite for Tegra
+Message-ID: <20231012142800.GB1010588@nchen-desktop>
+References: <cover.1695934946.git.mirq-linux@rere.qmqm.pl>
+ <ef8466b834c1726f5404c95c3e192e90460146f8.1695934946.git.mirq-linux@rere.qmqm.pl>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.13.0
-Subject: Re: [PATCH v5] usb: host: xhci-plat: fix possible kernel oops while
- resuming
-Content-Language: en-US
-To: Sergey Shtylyov <s.shtylyov@omp.ru>,
- Mathias Nyman <mathias.nyman@intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
-Cc: Florian Fainelli <f.fainelli@gmail.com>
-References: <c8c4ea38-c0f7-756d-01fb-cab51a3f8393@omp.ru>
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <c8c4ea38-c0f7-756d-01fb-cab51a3f8393@omp.ru>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,
-	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-	SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ef8466b834c1726f5404c95c3e192e90460146f8.1695934946.git.mirq-linux@rere.qmqm.pl>
 
-On 4.10.2023 23.47, Sergey Shtylyov wrote:
-> If this driver enables the xHC clocks while resuming from sleep, it calls
-> clk_prepare_enable() without checking for errors and blithely goes on to
-> read/write the xHC's registers -- which, with the xHC not being clocked,
-> at least on ARM32 usually causes an imprecise external abort exceptions
-> which cause kernel oops.  Currently, the chips for which the driver does
-> the clock dance on suspend/resume seem to be the Broadcom STB SoCs, based
-> on ARM32 CPUs, as it seems...
+On 23-09-28 23:06:03, Michał Mirosław wrote:
+> Tegra USB controllers seem to issue DMA in full 32-bit words only and thus
+> may overwrite unevenly-sized buffers.  One such occurrence is detected by
+> SLUB when receiving a reply to a 1-byte buffer (below).  Fix this by
+> allocating a bounce buffer also for buffers with sizes not a multiple of 4.
 > 
-> Found by Linux Verification Center (linuxtesting.org) with the Svace static
-> analysis tool.
+> =============================================================================
+> BUG kmalloc-64 (Tainted: G    B             ): kmalloc Redzone overwritten
+> -----------------------------------------------------------------------------
 > 
-> Fixes: 8bd954c56197 ("usb: host: xhci-plat: suspend and resume clocks")
-> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+> 0x8555cd02-0x8555cd03 @offset=3330. First byte 0x0 instead of 0xcc
+> Allocated in usb_get_status+0x2b/0xac age=1 cpu=3 pid=41
+>  __kmem_cache_alloc_node+0x12f/0x1e4
+>  __kmalloc+0x33/0x8c
+>  usb_get_status+0x2b/0xac
+>  hub_probe+0x5e9/0xcec
+>  usb_probe_interface+0xbf/0x21c
+>  really_probe+0xa5/0x2c4
+>  __driver_probe_device+0x75/0x174
+>  driver_probe_device+0x31/0x94
+>  __device_attach_driver+0x65/0xc0
+>  bus_for_each_drv+0x4b/0x74
+>  __device_attach+0x69/0x120
+>  bus_probe_device+0x65/0x6c
+>  device_add+0x48b/0x5f8
+>  usb_set_configuration+0x37b/0x6b4
+>  usb_generic_driver_probe+0x37/0x68
+>  usb_probe_device+0x35/0xb4
+> Slab 0xbf622b80 objects=21 used=18 fp=0x8555cdc0 flags=0x800(slab|zone=0)
+> Object 0x8555cd00 @offset=3328 fp=0x00000000
 > 
+> Redzone  8555ccc0: cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc  ................
+> Redzone  8555ccd0: cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc  ................
+> Redzone  8555cce0: cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc  ................
+> Redzone  8555ccf0: cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc  ................
+> Object   8555cd00: 01 00 00 00 cc cc cc cc cc cc cc cc cc cc cc cc  ................
+> Object   8555cd10: cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc  ................
+> Object   8555cd20: cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc  ................
+> Object   8555cd30: cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc cc  ................
+> Redzone  8555cd40: cc cc cc cc                                      ....
+> Padding  8555cd74: 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a 5a              ZZZZZZZZZZZZ
+> CPU: 3 PID: 41 Comm: kworker/3:1 Tainted: G    B              6.6.0-rc1mq-00118-g59786f827ea1 #1115
+> Hardware name: NVIDIA Tegra SoC (Flattened Device Tree)
+> Workqueue: usb_hub_wq hub_event
+> [<8010ca28>] (unwind_backtrace) from [<801090a5>] (show_stack+0x11/0x14)
+> [<801090a5>] (show_stack) from [<805da2fb>] (dump_stack_lvl+0x4d/0x7c)
+> [<805da2fb>] (dump_stack_lvl) from [<8026464f>] (check_bytes_and_report+0xb3/0xe4)
+> [<8026464f>] (check_bytes_and_report) from [<802648e1>] (check_object+0x261/0x290)
+> [<802648e1>] (check_object) from [<802671b1>] (free_to_partial_list+0x105/0x3f8)
+> [<802671b1>] (free_to_partial_list) from [<80268613>] (__kmem_cache_free+0x103/0x128)
+> [<80268613>] (__kmem_cache_free) from [<80425a67>] (usb_get_status+0x73/0xac)
+> [<80425a67>] (usb_get_status) from [<80421b31>] (hub_probe+0x5e9/0xcec)
+> [<80421b31>] (hub_probe) from [<80428bbb>] (usb_probe_interface+0xbf/0x21c)
+> [<80428bbb>] (usb_probe_interface) from [<803ee13d>] (really_probe+0xa5/0x2c4)
+> [<803ee13d>] (really_probe) from [<803ee3d1>] (__driver_probe_device+0x75/0x174)
+> [<803ee3d1>] (__driver_probe_device) from [<803ee501>] (driver_probe_device+0x31/0x94)
+> usb 1-1: device descriptor read/8, error -71
+> 
+> Fixes: fc53d5279094 ("usb: chipidea: tegra: Support host mode")
+> Signed-off-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
+
+Acked-by: Peter Chen <peter.chen@kernel.org>
 > ---
-> This patch is against the 'usb-next' branch of Greg KH's 'usb.git' repo...
+>  drivers/usb/chipidea/host.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/chipidea/host.c b/drivers/usb/chipidea/host.c
+> index 08af26b762a2..abddd39d1ff1 100644
+> --- a/drivers/usb/chipidea/host.c
+> +++ b/drivers/usb/chipidea/host.c
+> @@ -411,12 +411,13 @@ static int ci_hdrc_alloc_dma_aligned_buffer(struct urb *urb, gfp_t mem_flags)
+>  	const unsigned int ci_hdrc_usb_dma_align = 32;
+>  	size_t kmalloc_size;
+>  
+> -	if (urb->num_sgs || urb->sg || urb->transfer_buffer_length == 0 ||
+> -	    !((uintptr_t)urb->transfer_buffer & (ci_hdrc_usb_dma_align - 1)))
+> +	if (urb->num_sgs || urb->sg || urb->transfer_buffer_length == 0)
+> +		return 0;
+> +	if (!((uintptr_t)urb->transfer_buffer & (ci_hdrc_usb_dma_align - 1)) && !(urb->transfer_buffer_length & 3))
+>  		return 0;
+>  
+>  	/* Allocate a buffer with enough padding for alignment */
+> -	kmalloc_size = urb->transfer_buffer_length +
+> +	kmalloc_size = ALIGN(urb->transfer_buffer_length, 4) +
+>  		       sizeof(struct ci_hdrc_dma_aligned_buffer) +
+>  		       ci_hdrc_usb_dma_align - 1;
+>  
+> -- 
+> 2.39.2
+> 
 
-Looks good to me, adding to queue
+-- 
 
-Thanks
-Mathias
-
+Thanks,
+Peter Chen
 
