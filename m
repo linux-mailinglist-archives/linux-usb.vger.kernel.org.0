@@ -1,98 +1,141 @@
-Return-Path: <linux-usb+bounces-1518-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1519-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9D157C7359
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Oct 2023 18:44:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C8AA7C739C
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Oct 2023 19:03:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0FB891C21145
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Oct 2023 16:44:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2FAB328297B
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Oct 2023 17:03:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EF102AB34;
-	Thu, 12 Oct 2023 16:44:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CF77328C5;
+	Thu, 12 Oct 2023 17:03:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JJ3jZA5d"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="E+SieSW0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E2B2262B2;
-	Thu, 12 Oct 2023 16:44:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F299C433C7;
-	Thu, 12 Oct 2023 16:44:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1697129086;
-	bh=Wj/b/rTXfuxjS20fYyMYenjOGieGl3jd2wJ+8o1xpmU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JJ3jZA5dX6S3T30H/LlG1i9szPvYNW9TYQTVqLJTF8nA2IrgPSQe1GqVufDKF5lPJ
-	 uv7cYGUTT6u5EjNv9tUqJbzgnXG7VeWOWgdKdKN/cZyKdJk9y3+YsBkasq002BS67f
-	 jC1dQqDEeSOGoiIrQN9WDzgu05syJ4BcD6Ow1p0E3yLzccZSFe3Id5KkQsJ2vB4jkb
-	 Thy/r78N7Yof/za89a7cXQcByx53jnxzEX2kxWPQW4EJ6JUcigykPu1yp9D46wLBTW
-	 kUqdt/MRAbQYovfhtihzNZ1jE6tVh98x2Npgl4002RU3/WVcRrrRWq0PX02wER8y5l
-	 8tuuUEk5h9Wdw==
-Date: Thu, 12 Oct 2023 09:48:38 -0700
-From: Bjorn Andersson <andersson@kernel.org>
-To: Rob Herring <robh@kernel.org>
-Cc: Neil Armstrong <neil.armstrong@linaro.org>, 
-	Andy Gross <agross@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 1/4] dt-bindings: soc: qcom: qcom,pmic-glink: add a
- gpio used to determine the Type-C port plug orientation
-Message-ID: <fdmytyymltbc2wvsobbbu57vfturwiq755fuj6vt5g35bf77ls@gkscepiyvn5a>
-References: <20231002-topic-sm8550-upstream-type-c-orientation-v2-0-125410d3ff95@linaro.org>
- <20231002-topic-sm8550-upstream-type-c-orientation-v2-1-125410d3ff95@linaro.org>
- <20231006154035.GA3979654-robh@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63484200AE;
+	Thu, 12 Oct 2023 17:03:20 +0000 (UTC)
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED0A890;
+	Thu, 12 Oct 2023 10:03:18 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39C9sw0g002931;
+	Thu, 12 Oct 2023 17:02:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=ChLw1gPCreVADDqa++lhTytF91fEXU6wneQX61ewHlw=;
+ b=E+SieSW09RwnewnsW8ff95xBYbrxXFJVazHl1hsCavh9XtIwo10JkY9H0kRHWTo6jhTa
+ Hvl40w7iYxVfyNCCk1EpbVm7Vsgip9C0rfk8lTVoR7kkSm6E27sUwujknyGdE4sGqbE2
+ hXi1vOjn8Gjd4Kewa2eYPSA7KHKA9kcLgt23uEm+7I7e1k4SwnYEOM5f6IEln/mMNEKs
+ dcIzIpzL2MRvE1588Y8vMEc4VZ9skAXoGUG8xc/pg3Nj0K+f/rYZnq81Wp+6TxDe2wMC
+ 4fcOUWZ3H/7GrEC27sQ9p2UmY8X+B460kJWO5y/cQ74u5DDfux7/HJpC6vfomy4B/ES3 Qg== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tp0vwapma-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 12 Oct 2023 17:02:40 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39CH2cE5005541
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 12 Oct 2023 17:02:39 GMT
+Received: from [10.216.58.179] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Thu, 12 Oct
+ 2023 10:02:32 -0700
+Message-ID: <cceab5a9-ac0f-4ecd-9aa5-0ede5615a13d@quicinc.com>
+Date: Thu, 12 Oct 2023 22:32:28 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231006154035.GA3979654-robh@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v13 08/10] arm64: dts: qcom: sc8280xp: Add multiport
+ controller node for SC8280
+To: Konrad Dybcio <konrad.dybcio@linaro.org>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>,
+        <quic_jackp@quicinc.com>, <ahalaney@redhat.com>,
+        <quic_shazhuss@quicinc.com>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Andy
+ Gross" <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Rob
+ Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        "Wesley
+ Cheng" <quic_wcheng@quicinc.com>,
+        Johan Hovold <johan@kernel.org>
+References: <20231007154806.605-1-quic_kriskura@quicinc.com>
+ <20231007154806.605-9-quic_kriskura@quicinc.com>
+ <467dd1cc-64af-43d7-93ca-be28043e2765@linaro.org>
+Content-Language: en-US
+From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <467dd1cc-64af-43d7-93ca-be28043e2765@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 6Gz5k3DFi_elboXfzKuruuxvwtr9HH-t
+X-Proofpoint-ORIG-GUID: 6Gz5k3DFi_elboXfzKuruuxvwtr9HH-t
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-12_05,2023-10-12_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
+ phishscore=0 lowpriorityscore=0 spamscore=0 clxscore=1015 mlxlogscore=774
+ suspectscore=0 priorityscore=1501 adultscore=0 malwarescore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2309180000
+ definitions=main-2310120141
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-On Fri, Oct 06, 2023 at 10:40:35AM -0500, Rob Herring wrote:
-> On Mon, Oct 02, 2023 at 12:20:21PM +0200, Neil Armstrong wrote:
-> > On SM8450 and SM8550 based platforms, the Type-C plug orientation is given on a
-> > GPIO line for each connector which are set by the PMIC(s).
-> > 
-> > Document this optional Type-C connector property, and take the
-> > assumption an active level represents an inverted/flipped orientation.
-> > 
-> > Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> > ---
-> >  .../devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml | 19 +++++++++++++++++++
-> >  1 file changed, 19 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
-> > index bceb479f74c5..422921cf1f82 100644
-> > --- a/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
-> > +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
-> > @@ -35,6 +35,12 @@ properties:
-> >    '#size-cells':
-> >      const: 0
-> >  
-> > +  orientation-gpios:
-> > +    description: Array of input gpios for the Type-C connector orientation indication.
-> > +      The GPIO indication is used to detect the orientation of the Type-C connector.
-> > +      The array should contain a gpio entry for each PMIC Glink connector, in reg order.
-> > +      It is defined that GPIO active level means "CC2" or Reversed/Flipped orientation.
+
+
+On 10/12/2023 10:10 PM, Konrad Dybcio wrote:
 > 
-> Shouldn't this node then have 'orientation-switch'?
+> 
+> On 10/7/23 17:48, Krishna Kurapati wrote:
+>> Add USB and DWC3 node for tertiary port of SC8280 along with multiport
+>> IRQ's and phy's. This will be used as a base for SA8295P and SA8295-Ride
+>> platforms.
+>>
+>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>> ---
+> [...]
+> 
+>> +
+>> +            interconnects = <&aggre1_noc MASTER_USB3_MP 0 &mc_virt 
+>> SLAVE_EBI1 0>,
+>> +                    <&gem_noc MASTER_APPSS_PROC 0 &config_noc 
+>> SLAVE_USB3_MP 0>;
+> Please use QCOM_ICC_TAG_ALWAYS from 
+> include/dt-bindings/interconnect/qcom,icc.h (like in sa8775p)
+> 
+> With that I think it's good to go :)
+> 
+Hi Konrad. Thanks for the review.
 
-The 'orientation-switch' property denotes that the node is the sink of a
-orientation switching event, but this node represents the source of such
-events (i.e. the connector-side).
-
-The array defines the gpio signal providing the current orientation for
-each of the listed usb-c-connectors under the node.
+I see that the tags are used fr spi/i2c but not usb. So to maintain 
+uniformity, wanted to keep the same here.
 
 Regards,
-Bjorn
+Krishna,
 
