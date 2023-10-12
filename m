@@ -1,191 +1,121 @@
-Return-Path: <linux-usb+bounces-1511-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1512-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30A5A7C7072
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Oct 2023 16:38:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD7EC7C7181
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Oct 2023 17:30:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9E166282991
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Oct 2023 14:38:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EEA231C20A9B
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Oct 2023 15:30:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44CDF208D2;
-	Thu, 12 Oct 2023 14:38:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C94027ED2;
+	Thu, 12 Oct 2023 15:30:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sNlqy8im"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84646883E
-	for <linux-usb@vger.kernel.org>; Thu, 12 Oct 2023 14:38:35 +0000 (UTC)
-Received: from mp-relay-02.fibernetics.ca (mp-relay-02.fibernetics.ca [208.85.217.137])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD84DB8
-	for <linux-usb@vger.kernel.org>; Thu, 12 Oct 2023 07:38:33 -0700 (PDT)
-Received: from mailpool-fe-01.fibernetics.ca (mailpool-fe-01.fibernetics.ca [208.85.217.144])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mp-relay-02.fibernetics.ca (Postfix) with ESMTPS id E72097633E;
-	Thu, 12 Oct 2023 14:38:32 +0000 (UTC)
-Received: from localhost (mailpool-mx-02.fibernetics.ca [208.85.217.141])
-	by mailpool-fe-01.fibernetics.ca (Postfix) with ESMTP id DB61347336;
-	Thu, 12 Oct 2023 14:38:32 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at 
-X-Spam-Score: -1.001
-X-Spam-Level:
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
-Received: from mailpool-fe-01.fibernetics.ca ([208.85.217.144])
-	by localhost (mail-mx-02.fibernetics.ca [208.85.217.141]) (amavisd-new, port 10024)
-	with ESMTP id 0kFK74NYVdfb; Thu, 12 Oct 2023 14:38:32 +0000 (UTC)
-Received: from [192.168.48.17] (host-104-157-209-188.dyn.295.ca [104.157.209.188])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: dgilbert@interlog.com)
-	by mail.ca.inter.net (Postfix) with ESMTPSA id CE41E47332;
-	Thu, 12 Oct 2023 14:38:31 +0000 (UTC)
-Message-ID: <723ee63c-1eb6-490d-9327-2856601573f7@interlog.com>
-Date: Thu, 12 Oct 2023 10:38:31 -0400
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D1BB224CF;
+	Thu, 12 Oct 2023 15:30:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65F77C433C8;
+	Thu, 12 Oct 2023 15:30:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1697124617;
+	bh=ZtcSIbjB2WpeZfQRyCvdpc+0MAvoSIsAVFQJFGWoAZY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=sNlqy8imXhwlW5ogqsGatXLJh6x3ULy2dxsaSxs56ggFVkTV6XlGelwtvmknbj7Xu
+	 ShUCZ/8OXslZolbuuvyrBlxLrcJ01GSlmz7CSJEaxf3rAcgbPMbnfuFHufU09E90RW
+	 5ApYEGyJHTTls7cFvAibnKaw6QYJ/MgybICMj+V6qAR0vsGzNnF3N6loiEvhXeakbo
+	 Tc8RBxaMuLt9cw9IyN5cmf2yVbPk/7zrWOf/NIL+18Z146Hj24oQ+EZR236LNiKgxH
+	 rW8s1EpB9lyTQA3S/nGP0hy8u95XFa9UJYnNgK7IXnZV4NIWHKMv5YsKgXN/Jehq6j
+	 lkrAiKBqcY2gw==
+Received: (nullmailer pid 821925 invoked by uid 1000);
+	Thu, 12 Oct 2023 15:30:12 -0000
+Date: Thu, 12 Oct 2023 10:30:12 -0500
+From: Rob Herring <robh@kernel.org>
+To: Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
+Cc: Oleksii_Moisieiev@epam.com, gregkh@linuxfoundation.org, herbert@gondor.apana.org.au, davem@davemloft.net, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, alexandre.torgue@foss.st.com, vkoul@kernel.org, jic23@kernel.org, olivier.moysan@foss.st.com, arnaud.pouliquen@foss.st.com, mchehab@kernel.org, fabrice.gasnier@foss.st.com, andi.shyti@kernel.org, ulf.hansson@linaro.org, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, hugues.fruchet@foss.st.com, lee@kernel.org, will@kernel.org, catalin.marinas@arm.com, arnd@kernel.org, richardcochran@gmail.com, Frank Rowand <frowand.list@gmail.com>, peng.fan@oss.nxp.com, linux-crypto@vger.kernel.org, devicetree@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org, alsa-devel@alsa-project.org, linux-media@vger.kernel.org, linux-mmc@vger.kernel.org, netdev@vger.kernel.org, linux-p
+ .hy@lists.infradead.org, linux-serial@vger.kernel.org, linux-spi@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v6 10/11] ARM: dts: stm32: add ETZPC as a system bus for
+ STM32MP15x boards
+Message-ID: <20231012153012.GA698406-robh@kernel.org>
+References: <20231010125719.784627-1-gatien.chevallier@foss.st.com>
+ <20231010125719.784627-11-gatien.chevallier@foss.st.com>
+ <20231010184212.GA1221641-robh@kernel.org>
+ <8f1b6915-68be-a525-c5d5-37f0983c14de@foss.st.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: dgilbert@interlog.com
-Subject: Re: device present in lsusb, disappears in lsusb -t
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Alan Stern <stern@rowland.harvard.edu>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-References: <70c563f1-847c-32a1-cf4d-6bf9802017ab@interlog.com>
- <2023091638-duration-barcode-73a3@gregkh>
- <11b1687f-3419-4037-845e-ef33d4e3871f@interlog.com>
- <2023101139-puma-fanfare-8a0e@gregkh>
- <299d927f-7044-4d48-b6cd-c05bdb0e7fcc@rowland.harvard.edu>
- <0c2a2a23-28dd-4c83-b7af-d5421501e411@interlog.com>
- <2023101203-marine-chatter-692e@gregkh>
-Content-Language: en-CA
-From: Douglas Gilbert <dgilbert@interlog.com>
-In-Reply-To: <2023101203-marine-chatter-692e@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8f1b6915-68be-a525-c5d5-37f0983c14de@foss.st.com>
 
-On 2023-10-12 08:50, Greg KH wrote:
-> On Wed, Oct 11, 2023 at 02:51:28PM -0400, Douglas Gilbert wrote:
->> On 2023-10-11 11:00, Alan Stern wrote:
->>> On Wed, Oct 11, 2023 at 11:30:39AM +0200, Greg KH wrote:
->>>> On Thu, Oct 05, 2023 at 10:49:10PM -0400, Douglas Gilbert wrote:
->>>>> The code in lsusb-t.c seems to assign a special meaning to "-1" devices
->>>>> and there is only one of those: "5-1". And the device associated with
->>>>> "5-1" is the one that does _not_ appear in the output of 'lsusb -t' but
->>>>> does appear in the output of 'lsusb'.
->>>>
->>>> The code patch of the '-t' option in lsusb is totally separate and apart
->>>> from the "normal" portion of lsusb, as you note, it is a separate .c
->>>> file as well.  -t uses the sysfs representation of the USB devices,
->>>> while the other code path uses the 'libusb' representation of the USB
->>>> devices.  And those seem to differ here (as they do for everyone.)
->>>>
->>>> So if someone wants to take the time to figure out which representation
->>>> is "more correct", that would be great.  I don't have the bandwidth to
->>>> do so for the next few weeks due to travel requirements on my end,
->>>> sorry.
->>>
->>> Doug, I've looked through the source code in lsusb-t.c (usbutils 015)
->>> and I didn't notice any place where it treats device names containing
->>> "-1" specially.  Can you point it out?
->>>
->>> Also, if I suggested some debugging additions to the source file, would
->>> you be able to build them and test the result?
->>
->> Hi Alan,
->> Attached is a patch that adds support for a '-S <sysroot>' option to lsusb from
->> usbutils found in GKH's github account. It only works when the '-t' option is
->> given to show USB devices in a tree like representation. Without the '-t' option
->> lsusb uses the enumeration services in libusb. The 'lsusb' invocation does find
->> the device at /tmp/sys/bus/usb/devices/5-1 which is a "product : STEVAL-USBC2DP
->> Type-C to DisplayPort adapter" made by ST Micro.
->>
->> Also attached is a pruned representation of /sys and /dev from my machine which
->> is a Thinkpad X13 G3 with a Lenovo TB3 dock [40AN] connected via USB-C. The
->> "missing" adapter is connected to that dock. However that indirect
->> connection
->> is probably _not_ significant since if I move that dongle to the other USB-C
->> receptacle on the X13G3 (it has two), the same seen/not_seen issue is
->> reproduced. And with the direct connect the adapter moves to
->> /sys/bus/usb/devices/3-5 . So that debunks my theory that the "1" in the "5-1"
->> is somehow significant.
->>
->> The attached files differ from those I sent to GKH in one important respect.
->> I sent Greg my _whole_ sysfs, around 55,000 nodes and that would have included
->> serial numbers of my machine, my storage devices, MAC addresses, etc. In
->> the tarball attached below only about 5000 nodes are present after some
->> pruning with my clone_pseudo_fs utility (in my github account).
+On Wed, Oct 11, 2023 at 10:49:58AM +0200, Gatien CHEVALLIER wrote:
+> Hi Rob,
 > 
-> I've pushed all of the remaining pending changes for usbutils to the
-> repo, and added a few of my own that makes the 'lsusb -t' output a bit
-> more sane (sorted order, proper digit field width, etc.)
+> On 10/10/23 20:42, Rob Herring wrote:
+> > On Tue, Oct 10, 2023 at 02:57:18PM +0200, Gatien Chevallier wrote:
+> > > ETZPC is a firewall controller. Put all peripherals filtered by the
+> > > ETZPC as ETZPC subnodes and reference ETZPC as an
+> > > access-control-provider.
+> > > 
+> > > For more information on which peripheral is securable or supports MCU
+> > > isolation, please read the STM32MP15 reference manual.
+> > > 
+> > > Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+> > > ---
+> > > 
+> > > Changes in V6:
+> > >      	- Renamed access-controller to access-controllers
+> > >      	- Removal of access-control-provider property
+> > > 
+> > > Changes in V5:
+> > >      	- Renamed feature-domain* to access-control*
+> > > 
+> > >   arch/arm/boot/dts/st/stm32mp151.dtsi  | 2756 +++++++++++++------------
+> > >   arch/arm/boot/dts/st/stm32mp153.dtsi  |   52 +-
+> > >   arch/arm/boot/dts/st/stm32mp15xc.dtsi |   19 +-
+> > >   3 files changed, 1450 insertions(+), 1377 deletions(-)
+> > 
+> > This is not reviewable. Change the indentation and any non-functional
+> > change in one patch and then actual changes in another.
 > 
-> Can you try the latest version in github (or on kernel.org, they are
-> mirrors) and show the output there?
+> Ok, I'll make it easier to read.
+> 
+> > 
+> > This is also an ABI break. Though I'm not sure it's avoidable. All the
+> > devices below the ETZPC node won't probe on existing kernel. A
+> > simple-bus fallback for ETZPC node should solve that.
+> > 
+> 
+> I had one issue when trying with a simple-bus fallback that was the
+> drivers were probing even though the access rights aren't correct.
+> Hence the removal of the simple-bus compatible in the STM32MP25 patch.
 
-Removed the Lenovo dock [40AN] to lessen the clutter.
-
-
-   ~/usbutils$ ./lsusb
-Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-Bus 003 Device 002: ID 06cb:00f9 Synaptics, Inc.
-Bus 003 Device 003: ID 5986:1177 Acer, Inc Integrated Camera
-Bus 003 Device 004: ID 046d:c52b Logitech, Inc. Unifying Receiver
-Bus 003 Device 005: ID 8087:0033 Intel Corp.
-Bus 003 Device 012: ID 0483:572b STMicroelectronics STEVAL-USBC2DP Type-C to 
-DisplayPort adapter
-Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-
-   ~/usbutils$ ./lsusb -tv
-/:  Bus 001.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/1p, 480M
-     ID 1d6b:0002 Linux Foundation 2.0 root hub
-/:  Bus 002.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/3p, 20000M/x2
-     ID 1d6b:0003 Linux Foundation 3.0 root hub
-/:  Bus 003.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/12p, 480M
-     ID 1d6b:0002 Linux Foundation 2.0 root hub
-     |__ Port 003: Dev 002, If 0, Class=Vendor Specific Class, Driver=, 12M
-         ID 06cb:00f9 Synaptics, Inc.
-     |__ Port 004: Dev 003, If 0, Class=Video, Driver=uvcvideo, 480M
-         ID 5986:1177 Acer, Inc
-     |__ Port 004: Dev 003, If 1, Class=Video, Driver=uvcvideo, 480M
-         ID 5986:1177 Acer, Inc
-     |__ Port 004: Dev 003, If 2, Class=Application Specific Interface, Driver=, 
-480M
-         ID 5986:1177 Acer, Inc
-     |__ Port 007: Dev 004, If 0, Class=Human Interface Device, Driver=usbhid, 12M
-         ID 046d:c52b Logitech, Inc. Unifying Receiver
-     |__ Port 007: Dev 004, If 1, Class=Human Interface Device, Driver=usbhid, 12M
-         ID 046d:c52b Logitech, Inc. Unifying Receiver
-     |__ Port 007: Dev 004, If 2, Class=Human Interface Device, Driver=usbhid, 12M
-         ID 046d:c52b Logitech, Inc. Unifying Receiver
-     |__ Port 010: Dev 005, If 0, Class=Wireless, Driver=btusb, 12M
-         ID 8087:0033 Intel Corp.
-     |__ Port 010: Dev 005, If 1, Class=Wireless, Driver=btusb, 12M
-         ID 8087:0033 Intel Corp.
-/:  Bus 004.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/4p, 10000M
-     ID 1d6b:0003 Linux Foundation 3.0 root hub
+But it worked before, right? So the difference is you have either added 
+new devices which need setup or your firmware changed how devices are 
+setup (or not setup). Certainly can't fix the latter case. You just need 
+to be explicit about what you are doing to users.
 
 
-So ID 0483:572b (ST Micro DP dongle) still missing in the 'lsusb -t' output.
+> Even though a node is tagged with the OF_POPULATED flag when checking
+> the access rights with the firewall controller, it seems that when
+> simple-bus is probing, there's no check of this flag.
 
-Also noticed that the -d and -D options are ignored, without warning, when
-the '-t' option is given. If that is a feature, perhaps the manpage should
-state that.
+It shouldn't. Those flags are for creating the devices (or not) and 
+removing only devices of_platform_populate() created.
 
-Doug Gilbert
+> of_platform_populate() checks and sets the OF_POPULATED_BUS flag.
+> Maybe that is my error and the firewall bus populate should set
+> OF_POPULATED_BUS instead of OF_POPULATED. Is that correct?
 
+Shrug. Off hand, I'd say probably not, but am not certain.
+
+Rob
 
