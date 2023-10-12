@@ -1,153 +1,191 @@
-Return-Path: <linux-usb+bounces-1513-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1514-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 441CE7C71BA
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Oct 2023 17:41:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AE8E7C732F
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Oct 2023 18:37:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7088C1C2104B
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Oct 2023 15:41:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B37E8282B09
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Oct 2023 16:37:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8EA228DB5;
-	Thu, 12 Oct 2023 15:41:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B60327EF7;
+	Thu, 12 Oct 2023 16:37:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ffUmEuBg"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LhHD5o7b"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F16B249F0;
-	Thu, 12 Oct 2023 15:41:00 +0000 (UTC)
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC84C6;
-	Thu, 12 Oct 2023 08:40:57 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39CATjnD003983;
-	Thu, 12 Oct 2023 15:40:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=7MCaYfPBEG4wO9qlImg2hPGzgMMBLqG18sck647HVtE=;
- b=ffUmEuBg8K0s4GANuDEVvWf6DgnKx9sfQ+I9VjC2Vv7Bg1PaSxK4q2E5rpQ8Quanil8M
- EkB1uG3+nr2CFvoURM6IoB01dc5W2Zv8CmZMy0ti/lcOjihu8o83zag1pge+A/J6vke3
- hjiQw3bk71RAVzQxGdB8ovUqrWXuaXrV9SVKwB3klEIiXdaOeYeAQgfMRLP+DiwrH0mH
- 76LG3rGuJOGaPCAZjWvswQvLuEh7mxok2bvecEsGX2qFaQJzFyeTcl9qvALPYmxS975b
- rm7DyvwKGWYNBPobwZwiDKCmY+IfWY+cgxtS5EuWCgy+yXaNh0fiGyeLuSOGBiBDHQmU 5g== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tp0vwaf1m-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 12 Oct 2023 15:40:54 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39CFer4x001522
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 12 Oct 2023 15:40:53 GMT
-Received: from [10.216.58.179] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Thu, 12 Oct
- 2023 08:40:49 -0700
-Message-ID: <8ff92053-52ff-4950-95c8-0e986f6a028a@quicinc.com>
-Date: Thu, 12 Oct 2023 21:10:46 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5543C20E5;
+	Thu, 12 Oct 2023 16:37:45 +0000 (UTC)
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A1CA9;
+	Thu, 12 Oct 2023 09:37:42 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-1dd5b98d9aeso577706fac.0;
+        Thu, 12 Oct 2023 09:37:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1697128662; x=1697733462; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9u1kAvrEac9Qi+MHI/eb0phIPTWwLhAQGTfL68QyLNI=;
+        b=LhHD5o7bS7irbCkNgC4qxx/7hGh4y/vqTfI+a8PobWh7tYEev3dTmLV+aAGUmttFCB
+         IrQ5a6D4K6CIVxzKK0d2Bc9ryzYQqOGYXIZ0IRrrtv6SpS3xiLmzkPRDktKvyC0fGbz5
+         QBlV1CBaNYCI9pF9zUE4kWkxohcydbW33d1DYSJv5AgJ+4vdnlc3ZukHPwaBOG8A2nXN
+         vG3+PSOyXt3pVFhxLBJw6FTHl/gPE6BgZzOSsslBuoy8OF4uQ2cZSOn0sVHAIlUwgcBo
+         X8QXbELl2HlD+fl2P7VJ2XdJLYa+ARte1uwVHuW9vUsmOmmF68nX87zcmGHcAVXdtDTm
+         A6Pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697128662; x=1697733462;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9u1kAvrEac9Qi+MHI/eb0phIPTWwLhAQGTfL68QyLNI=;
+        b=C8jwOF8Plgzj72Qd1s7PKATs9AQqr36Byp9RKZQ4UtLvCIqa7cRZVFOFZnA3exUPgA
+         bYGuojjocWMpfpQMVLzz+pncqBMXQxJEcHTmU5hV3odOnuqnUJzh0ChgDmPy3S4LTWCO
+         SdwoJkfQSoAZ2je3JT3iEvD3BWdSH01L/TnPAI4NagsTeyanUKnt3fgCivaBnGbYhRAl
+         wvuyFNx+3Esput2TXWtNb+SnMt7WC+N4ZG60ZKc7o41gohCW9g8u384CXp+atXUvmlJX
+         bsuyk/tJm7IUZME9oAD+HuVvePwemGriKkYlPjghgv7CSrylreW9XAIc9Pi1kUezaTyy
+         FUFQ==
+X-Gm-Message-State: AOJu0Yyz39fGwIDcmRSQfHO+a8BUPLGpHqtBpQTd5prBnA3Ku9Wfk8+I
+	QKkoCkQ4TOKPEhBq4Q7MPu5//KGlii/DmphP55I=
+X-Google-Smtp-Source: AGHT+IF3idoTvk3iQIydZOFUuTHb9X53/KuzrTwT1V/yxZI4ZBgG+GdHFpUOuv/G18GACk/bYhQbBFdOratw7VpY67I=
+X-Received: by 2002:a05:6871:d13:b0:1e9:7078:9f3b with SMTP id
+ vh19-20020a0568710d1300b001e970789f3bmr3895870oab.10.1697128662009; Thu, 12
+ Oct 2023 09:37:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] usb: gadget: ncm: Add support to update
- wMaxSegmentSize via configfs
-To: =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>
-CC: onathan Corbet <corbet@lwn.net>, Linyu Yuan <quic_linyyuan@quicinc.com>,
-        <linux-usb@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_ppratap@quicinc.com>,
-        <quic_wcheng@quicinc.com>, <quic_jackp@quicinc.com>
-References: <20231009142005.21338-1-quic_kriskura@quicinc.com>
- <20231009142005.21338-2-quic_kriskura@quicinc.com>
- <CANP3RGfEk2DqZ3biyN78ycQYbDxCEG+H1me2vnEYuwXkNdXnTA@mail.gmail.com>
- <CANP3RGcCpNOuVpdV9n0AFxZo-wsfwi8OfYgBk1WHNHaEd-4V-Q@mail.gmail.com>
- <CANP3RGdY4LsOA6U5kuccApHCzL0_jBnY=pLOYrUuYtMZFTvnbw@mail.gmail.com>
- <d19d9d08-c119-4991-b460-49925f601d15@quicinc.com>
- <fad5a7fb-cce1-46bc-a0af-72405c76d107@quicinc.com>
- <CANP3RGcqWBYd9FqAX47rE9pFgBTB8=0CGdwkScm-OH1epHcVWQ@mail.gmail.com>
-Content-Language: en-US
-From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <CANP3RGcqWBYd9FqAX47rE9pFgBTB8=0CGdwkScm-OH1epHcVWQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: FjK8zgFgOuyNa0Qn9upiXD3sg5aHPF1h
-X-Proofpoint-ORIG-GUID: FjK8zgFgOuyNa0Qn9upiXD3sg5aHPF1h
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-12_05,2023-10-12_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- phishscore=0 lowpriorityscore=0 spamscore=0 clxscore=1015 mlxlogscore=897
- suspectscore=0 priorityscore=1501 adultscore=0 malwarescore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2309180000
- definitions=main-2310120129
+References: <20231011051152.133257-1-linux.amoon@gmail.com> <abe72aae-c43c-487a-8021-2c0f54319a5b@linaro.org>
+In-Reply-To: <abe72aae-c43c-487a-8021-2c0f54319a5b@linaro.org>
+From: Anand Moon <linux.amoon@gmail.com>
+Date: Thu, 12 Oct 2023 22:07:26 +0530
+Message-ID: <CANAwSgQa3_ROnYyDZA958ZvFu0tb7qsVJ0Loij0saYRKEec_xw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: usb: Add the binding example for the
+ Genesys Logic GL3523 hub
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Icenowy Zheng <uwu@icenowy.me>, linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.6
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
+Hi Krzysztof,
 
+On Thu, 12 Oct 2023 at 13:13, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 11/10/2023 07:11, Anand Moon wrote:
+> > Add the binding example for the USB3.1 Genesys Logic GL3523
+> > integrates with USB 3.1 Gen 1 Super Speed and USB 2.0 High-Speed
+> > hub.
+>
+> That's not what the patch does.
 
-On 10/12/2023 6:02 PM, Maciej Żenczykowski wrote:
-> On Thu, Oct 12, 2023 at 1:48 AM Krishna Kurapati PSSNV
-> 
-> Could you paste the full patch?
-> This is hard to review without looking at much more context then email
-> is providing
-> (or, even better, send me a link to a CL in gerrit somewhere - for
-> example aosp ACK mainline tree)
+Ok I have tried to add an example below the original changes
+but the device tree complained of duplicate entries. Hence I
+modified these changes.
 
-Sure. Will provide a gerrit on ACK for review before posting v2.
+This change was requested to update the peer-hub example below.
+[0] https://lore.kernel.org/all/9fe7d0d2-3582-4b62-be9b-aa9134c18023@linaro.org/
 
-The intent of posting the diff was two fold:
+>
+> >
+> > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> > ---
+> > New patch.
+> > ---
+> >  .../bindings/usb/genesys,gl850g.yaml          | 28 +++++++++++++++++--
+> >  1 file changed, 25 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+> > index d0927f6768a4..2f6e0c870e1d 100644
+> > --- a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+> > +++ b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+> > @@ -22,29 +22,51 @@ properties:
+> >    reg: true
+> >
+> >    reset-gpios:
+> > +    maxItems: 1
+>
+> Why?
 
-1. The question Greg asked regarding why the max segment size was 
-limited to 15014 was valid. When I thought about it, I actually wanted 
-to limit the max MTU to 15000, so the max segment size automatically 
-needs to be limited to 15014. But my commit text didn't mention this 
-properly which was a mistake on my behalf. But when I looked at the 
-code, limiting the max segment size 15014 would force the practical 
-max_mtu to not cross 15000 although theoretical max_mtu was set to:
-(GETHER_MAX_MTU_SIZE - 15412) during registration of net device.
+Following another example, I added this and will drop this.
+>
+> >      description: GPIO controlling the RESET# pin.
+> >
+> >    vdd-supply:
+> >      description:
+> >        the regulator that provides 3.3V core power to the hub.
+> >
+> > +  peer-hub:
+> > +    $ref: /schemas/types.yaml#/definitions/phandle
+> > +    description:
+> > +      phandle to the peer hub on the controller.
+> > +
+> >  required:
+> >    - compatible
+> >    - reg
+> > +  - reset-gpios
+>
+> Why?
+see below.
+>
+> > +  - vdd-supply
+> > +  - peer-hub
+> >
+> >  additionalProperties: false
+> >
+> >  examples:
+> >    - |
+> >      #include <dt-bindings/gpio/gpio.h>
+> > +
+> >      usb {
+> >          dr_mode = "host";
+> >          #address-cells = <1>;
+> >          #size-cells = <0>;
+> >
+> > -        hub: hub@1 {
+> > -            compatible = "usb5e3,608";
+> > +        /* 2.0 hub on port 1 */
+> > +        hub_2_0: hub@1 {
+> > +            compatible = "usb5e3,610";
+> >              reg = <1>;
+> > -            reset-gpios = <&pio 7 2 GPIO_ACTIVE_LOW>;
+> > +            vdd-supply = <&vcc_5v>;
+> > +            peer-hub = <&hub_3_0>;
+> > +            reset-gpios = <&gpio 20 GPIO_ACTIVE_LOW>;
+> > +        };
+> > +
+> > +        /* 3.1 hub on port 4 */
+> > +        hub_3_0: hub@2 {
+> > +            compatible = "usb5e3,620";
+> > +            reg = <2>;
+> > +            vdd-supply = <&vcc_5v>;
+> > +            peer-hub = <&hub_2_0>;
+> > +            reset-gpios = <&gpio 20 GPIO_ACTIVE_LOW>;
+>
+> Really, what is happening here?
 
-So my assumption of limiting it to 15000 was wrong. It must be limited 
-to 15412 as mentioned in u_ether.c  This inturn means we must limit 
-max_segment_size to:
-GETHER_MAX_ETH_FRAME_LEN (GETHER_MAX_MTU_SIZE + ETH_HLEN)
-as mentioned in u_ether.c.
+USB hub GL3523-QFN76 supports two pins CHIP_EN and RST_N pins
+so RST_N (GPIOH_4) is used to reset the USB hub,
+earlier we were using gpio-hog to reset the hub.
 
-I wanted to confirm that setting MAX_DATAGRAM_SIZE to 
-GETHER_MAX_ETH_FRAME_LEN was correct.
+>
+> Best regards,
+> Krzysztof
+>
 
-2. I am not actually able to test with MTU beyond 15000. When my host 
-device is a linux machine, the cdc_ncm.c limits max_segment_size to:
-CDC_NCM_MAX_DATAGRAM_SIZE		8192	/* bytes */
-
-When connected to windows machine, I am able to set the mtu to a max 
-value of 15000. So not sure how to test the patch if I set the 
-max_segment_size to GETHER_MAX_ETH_FRAME_LEN.
-
-By pasting the diff, I wanted to confirm both the above queries.
-
-And you are right, while assigning value to ecm.wMaxSegmentSize, we must 
-use cpu_to_le16(...). Will ensure to make this change in v2. It worked 
-without that too, not sure how.
-
-Let me know your thoughts on the above.
-
-Regards,
-Krishna,
+Thanks
+-Anand
 
