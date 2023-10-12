@@ -1,167 +1,307 @@
-Return-Path: <linux-usb+bounces-1495-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1496-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F1277C6549
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Oct 2023 08:18:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DA5D77C65B7
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Oct 2023 08:38:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 01C9A282873
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Oct 2023 06:18:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3A4B12828CA
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Oct 2023 06:38:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F580D29E;
-	Thu, 12 Oct 2023 06:18:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="cpfiMUEZ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEE6CD533;
+	Thu, 12 Oct 2023 06:38:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B5B9D2EE;
-	Thu, 12 Oct 2023 06:18:10 +0000 (UTC)
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ABC9E8;
-	Wed, 11 Oct 2023 23:18:06 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39C3we71017001;
-	Thu, 12 Oct 2023 06:17:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=v6n+Qo5Xll7F3pJ132sAwl/u459T/C0j0zMUkU5yojY=;
- b=cpfiMUEZtObN6Z58xE4gCCH6MOSAjx4nNrNN3olJGkG5g6rDvMJUShhXgbF7iV5n3Jbo
- nVixLOd2E2F5fFCQACIIEJQQgZMrW2xEScbMWQlFrzyCfhmaor25xEcTGB3Z3fwstmCC
- yPsP2iQBEvRMi6hU6XZg8CL7dgPZzw+YRdrNqyprPQt1diiU+bX8L5lQUJ0YSCpAmpa6
- kjcP1WprKRdy4eLEKbgAAO8jRZ9Iv1qrGzr8eK5583r78pksugRS5A9mkaoTok5dJg1e
- BKss4lJEuuSpgrulv4gTMvnSlKit3L7tIReG11sDLH/UsFVF+3Cwy4BDTrLwPzimr++I /g== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tp87v8beq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 12 Oct 2023 06:17:48 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39C6HlkI009604
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 12 Oct 2023 06:17:47 GMT
-Received: from [10.216.58.179] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Wed, 11 Oct
- 2023 23:17:41 -0700
-Message-ID: <b4e8e36d-3a41-417f-8b39-085a9dad6796@quicinc.com>
-Date: Thu, 12 Oct 2023 11:47:37 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04956D2EE
+	for <linux-usb@vger.kernel.org>; Thu, 12 Oct 2023 06:38:49 +0000 (UTC)
+Received: from mail-ot1-f80.google.com (mail-ot1-f80.google.com [209.85.210.80])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E33A3B8
+	for <linux-usb@vger.kernel.org>; Wed, 11 Oct 2023 23:38:47 -0700 (PDT)
+Received: by mail-ot1-f80.google.com with SMTP id 46e09a7af769-6c65a8aaa0dso862676a34.2
+        for <linux-usb@vger.kernel.org>; Wed, 11 Oct 2023 23:38:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697092727; x=1697697527;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kugT5vVre2uGxeihnO0uYR0kEGBEhnTzCr35jh6H+EY=;
+        b=kM4/ERKl37C0VKAVrB+qrhgaGOKqMgNGT+xVUQC3Z6V3Fpt2rCXLnKJr3f8QuAMqt/
+         IC2ub3jHBmtcx2C3WqWl8uAhkWEskXqsC3uFe2iILjYRsEIPPxXXLl65Ts8yUmhSxXdd
+         VInh7IVXKmTe2ZKjaC6Az1YslRN7kdkuc9a0Ca1S2t0cf8XA58zj8Sm6vVsmUDoHiTo8
+         2rdwBLk/njnZkd4m6jqEa5VwnkgNK8t2cP7y5sw55YMQAW6JmWnRoPpt0RCbKmppJltR
+         tlegrvCKtKVPsSyim1i6nSeztGouQX/0RDOJLQK6vm0t7kTxQUgCeh0nkZZq4xEvul+i
+         255g==
+X-Gm-Message-State: AOJu0YzY6Frk73uxsXKdvpqVAEVN/vxhjFJGxu3yh8aIIqWjGQHaBrA8
+	7nZoymTa2y2CIv3A43PrQ4n+gzs2WmDrqg6t8N0ic4nUV1C1
+X-Google-Smtp-Source: AGHT+IETAGaAx/ytVoOkQqmOK2k+tRbbFJYA2kIJ1qQ+ExAhGYZkb+i28SBG2czr2IamMBXIQRQnzOJJ0GWTc7KmuKiCsdHxxu0I
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v13 00/10] Add multiport support for DWC3 controllers
-Content-Language: en-US
-To: Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Thinh Nguyen
-	<Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>, Andy Gross <agross@kernel.org>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi
-	<balbi@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Johan Hovold
-	<johan@kernel.org>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>,
-        <quic_jackp@quicinc.com>, <ahalaney@redhat.com>,
-        <quic_shazhuss@quicinc.com>
-References: <20231007154806.605-1-quic_kriskura@quicinc.com>
- <537d59b3-0e40-4d4d-80ab-b99028af6ec2@linaro.org>
- <2c325941-0fcc-4092-9581-dd6ebb067163@quicinc.com>
- <a8493160-6417-4366-957b-ea4ac68f8926@linaro.org>
-From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <a8493160-6417-4366-957b-ea4ac68f8926@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: YVXindEfpHLZ-ShMUFsvTK_mRTUNQkLd
-X-Proofpoint-GUID: YVXindEfpHLZ-ShMUFsvTK_mRTUNQkLd
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-12_02,2023-10-11_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
- malwarescore=0 priorityscore=1501 bulkscore=0 adultscore=0 phishscore=0
- clxscore=1015 suspectscore=0 impostorscore=0 lowpriorityscore=0
- mlxlogscore=625 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2310120053
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-	SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6870:1699:b0:1e9:b451:bae6 with SMTP id
+ j25-20020a056870169900b001e9b451bae6mr375604oae.1.1697092727282; Wed, 11 Oct
+ 2023 23:38:47 -0700 (PDT)
+Date: Wed, 11 Oct 2023 23:38:47 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000029242706077f3145@google.com>
+Subject: [syzbot] [usb?] usb-testing boot error: KASAN: slab-out-of-bounds
+ Write in vhci_setup
+From: syzbot <syzbot+e0dbc33630a092ccf033@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, i@zenithal.me, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, shuah@kernel.org, syzkaller-bugs@googlegroups.com, 
+	valentina.manea.m@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+	HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+	RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    efa33cd89c8a USB: typec: tps6598x: Add status trace for tp..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=162614de680000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a5e01246f94ceed9
+dashboard link: https://syzkaller.appspot.com/bug?extid=e0dbc33630a092ccf033
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/d5a3eaf3019b/disk-efa33cd8.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/32ddfa7a7357/vmlinux-efa33cd8.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/e9525e3de36f/bzImage-efa33cd8.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e0dbc33630a092ccf033@syzkaller.appspotmail.com
+
+usb usb4: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.06
+usb usb4: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+usb usb4: Product: Dummy host controller
+usb usb4: Manufacturer: Linux 6.6.0-rc4-syzkaller-00079-gefa33cd89c8a dummy_hcd
+usb usb4: SerialNumber: dummy_hcd.3
+hub 4-0:1.0: USB hub found
+hub 4-0:1.0: 1 port detected
+dummy_hcd dummy_hcd.4: USB Host+Gadget Emulator, driver 02 May 2005
+dummy_hcd dummy_hcd.4: Dummy host controller
+dummy_hcd dummy_hcd.4: new USB bus registered, assigned bus number 5
+usb usb5: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.06
+usb usb5: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+usb usb5: Product: Dummy host controller
+usb usb5: Manufacturer: Linux 6.6.0-rc4-syzkaller-00079-gefa33cd89c8a dummy_hcd
+usb usb5: SerialNumber: dummy_hcd.4
+hub 5-0:1.0: USB hub found
+hub 5-0:1.0: 1 port detected
+dummy_hcd dummy_hcd.5: USB Host+Gadget Emulator, driver 02 May 2005
+dummy_hcd dummy_hcd.5: Dummy host controller
+dummy_hcd dummy_hcd.5: new USB bus registered, assigned bus number 6
+usb usb6: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.06
+usb usb6: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+usb usb6: Product: Dummy host controller
+usb usb6: Manufacturer: Linux 6.6.0-rc4-syzkaller-00079-gefa33cd89c8a dummy_hcd
+usb usb6: SerialNumber: dummy_hcd.5
+hub 6-0:1.0: USB hub found
+hub 6-0:1.0: 1 port detected
+dummy_hcd dummy_hcd.6: USB Host+Gadget Emulator, driver 02 May 2005
+dummy_hcd dummy_hcd.6: Dummy host controller
+dummy_hcd dummy_hcd.6: new USB bus registered, assigned bus number 7
+usb usb7: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.06
+usb usb7: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+usb usb7: Product: Dummy host controller
+usb usb7: Manufacturer: Linux 6.6.0-rc4-syzkaller-00079-gefa33cd89c8a dummy_hcd
+usb usb7: SerialNumber: dummy_hcd.6
+hub 7-0:1.0: USB hub found
+hub 7-0:1.0: 1 port detected
+dummy_hcd dummy_hcd.7: USB Host+Gadget Emulator, driver 02 May 2005
+dummy_hcd dummy_hcd.7: Dummy host controller
+dummy_hcd dummy_hcd.7: new USB bus registered, assigned bus number 8
+usb usb8: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.06
+usb usb8: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+usb usb8: Product: Dummy host controller
+usb usb8: Manufacturer: Linux 6.6.0-rc4-syzkaller-00079-gefa33cd89c8a dummy_hcd
+usb usb8: SerialNumber: dummy_hcd.7
+hub 8-0:1.0: USB hub found
+hub 8-0:1.0: 1 port detected
+vhci_hcd vhci_hcd.0: USB/IP Virtual Host Controller
+vhci_hcd vhci_hcd.0: new USB bus registered, assigned bus number 9
+==================================================================
+BUG: KASAN: slab-out-of-bounds in vhci_setup+0x2d3/0x340 drivers/usb/usbip/vhci_hcd.c:1145
+Write of size 8 at addr ffff888105f04d18 by task swapper/0/1
+
+CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.6.0-rc4-syzkaller-00079-gefa33cd89c8a #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/06/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd9/0x1b0 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:364 [inline]
+ print_report+0xc4/0x620 mm/kasan/report.c:475
+ kasan_report+0xda/0x110 mm/kasan/report.c:588
+ vhci_setup+0x2d3/0x340 drivers/usb/usbip/vhci_hcd.c:1145
+ usb_add_hcd+0x5bc/0x1770 drivers/usb/core/hcd.c:2911
+ vhci_hcd_probe+0x12c/0x460 drivers/usb/usbip/vhci_hcd.c:1363
+ platform_probe+0xff/0x1e0 drivers/base/platform.c:1404
+ call_driver_probe drivers/base/dd.c:579 [inline]
+ really_probe+0x234/0xc90 drivers/base/dd.c:658
+ __driver_probe_device+0x1de/0x4b0 drivers/base/dd.c:800
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:830
+ __device_attach_driver+0x1d4/0x300 drivers/base/dd.c:958
+ bus_for_each_drv+0x157/0x1d0 drivers/base/bus.c:457
+ __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1030
+ bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
+ device_add+0x117e/0x1aa0 drivers/base/core.c:3624
+ platform_device_add+0x36d/0x840 drivers/base/platform.c:717
+ platform_device_register_full+0x3ec/0x550 drivers/base/platform.c:844
+ vhci_hcd_init+0x1ad/0x360 drivers/usb/usbip/vhci_hcd.c:1532
+ do_one_initcall+0x117/0x630 init/main.c:1232
+ do_initcall_level init/main.c:1294 [inline]
+ do_initcalls init/main.c:1310 [inline]
+ do_basic_setup init/main.c:1329 [inline]
+ kernel_init_freeable+0x5bd/0x8f0 init/main.c:1547
+ kernel_init+0x1c/0x2a0 init/main.c:1437
+ ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:304
+ </TASK>
+
+Allocated by task 1:
+ kasan_save_stack+0x33/0x50 mm/kasan/common.c:45
+ kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+ ____kasan_kmalloc mm/kasan/common.c:374 [inline]
+ __kasan_kmalloc+0x87/0x90 mm/kasan/common.c:383
+ kasan_kmalloc include/linux/kasan.h:198 [inline]
+ __do_kmalloc_node mm/slab_common.c:1023 [inline]
+ __kmalloc_node_track_caller+0x61/0x100 mm/slab_common.c:1043
+ kvasprintf+0xbd/0x150 lib/kasprintf.c:25
+ kvasprintf_const+0x66/0x190 lib/kasprintf.c:49
+ kobject_set_name_vargs+0x5a/0x130 lib/kobject.c:272
+ device_create_groups_vargs+0x1b1/0x270 drivers/base/core.c:4307
+ device_create+0xe9/0x120 drivers/base/core.c:4350
+ mon_bin_add+0xba/0x160 drivers/usb/mon/mon_bin.c:1366
+ mon_bus_init+0x18e/0x320 drivers/usb/mon/mon_main.c:291
+ mon_bus_add drivers/usb/mon/mon_main.c:188 [inline]
+ mon_notify+0x32e/0x490 drivers/usb/mon/mon_main.c:219
+ notifier_call_chain+0xb6/0x3b0 kernel/notifier.c:93
+ blocking_notifier_call_chain kernel/notifier.c:388 [inline]
+ blocking_notifier_call_chain+0x69/0x90 kernel/notifier.c:376
+ usb_register_bus drivers/usb/core/hcd.c:910 [inline]
+ usb_add_hcd+0x34d/0x1770 drivers/usb/core/hcd.c:2852
+ vhci_hcd_probe+0x12c/0x460 drivers/usb/usbip/vhci_hcd.c:1363
+ platform_probe+0xff/0x1e0 drivers/base/platform.c:1404
+ call_driver_probe drivers/base/dd.c:579 [inline]
+ really_probe+0x234/0xc90 drivers/base/dd.c:658
+ __driver_probe_device+0x1de/0x4b0 drivers/base/dd.c:800
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:830
+ __device_attach_driver+0x1d4/0x300 drivers/base/dd.c:958
+ bus_for_each_drv+0x157/0x1d0 drivers/base/bus.c:457
+ __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1030
+ bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
+ device_add+0x117e/0x1aa0 drivers/base/core.c:3624
+ platform_device_add+0x36d/0x840 drivers/base/platform.c:717
+ platform_device_register_full+0x3ec/0x550 drivers/base/platform.c:844
+ vhci_hcd_init+0x1ad/0x360 drivers/usb/usbip/vhci_hcd.c:1532
+ do_one_initcall+0x117/0x630 init/main.c:1232
+ do_initcall_level init/main.c:1294 [inline]
+ do_initcalls init/main.c:1310 [inline]
+ do_basic_setup init/main.c:1329 [inline]
+ kernel_init_freeable+0x5bd/0x8f0 init/main.c:1547
+ kernel_init+0x1c/0x2a0 init/main.c:1437
+ ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:304
+
+The buggy address belongs to the object at ffff888105f04cf8
+ which belongs to the cache kmalloc-8 of size 8
+The buggy address is located 24 bytes to the right of
+ allocated 8-byte region [ffff888105f04cf8, ffff888105f04d00)
+
+The buggy address belongs to the physical page:
+page:ffffea000417c100 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x105f04
+flags: 0x200000000000800(slab|node=0|zone=2)
+page_type: 0xffffffff()
+raw: 0200000000000800 ffff888100041280 dead000000000122 0000000000000000
+raw: 0000000000000000 0000000080660066 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12cc0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY), pid 1, tgid 1 (swapper/0), ts 9597611518, free_ts 9330208953
+ set_page_owner include/linux/page_owner.h:31 [inline]
+ post_alloc_hook+0x2cf/0x340 mm/page_alloc.c:1536
+ prep_new_page mm/page_alloc.c:1543 [inline]
+ get_page_from_freelist+0x10e1/0x2fd0 mm/page_alloc.c:3170
+ __alloc_pages+0x1d0/0x4a0 mm/page_alloc.c:4426
+ alloc_page_interleave+0x1e/0x230 mm/mempolicy.c:2130
+ alloc_pages+0x22a/0x270 mm/mempolicy.c:2292
+ alloc_slab_page mm/slub.c:1870 [inline]
+ allocate_slab+0x251/0x380 mm/slub.c:2017
+ new_slab mm/slub.c:2070 [inline]
+ ___slab_alloc+0x8c7/0x1580 mm/slub.c:3223
+ __slab_alloc.constprop.0+0x56/0xa0 mm/slub.c:3322
+ __slab_alloc_node mm/slub.c:3375 [inline]
+ slab_alloc_node mm/slub.c:3468 [inline]
+ __kmem_cache_alloc_node+0x12c/0x310 mm/slub.c:3517
+ __do_kmalloc_node mm/slab_common.c:1022 [inline]
+ __kmalloc+0x4f/0x100 mm/slab_common.c:1036
+ kmalloc include/linux/slab.h:603 [inline]
+ usb_get_status+0x7a/0x270 drivers/usb/core/message.c:1145
+ usb_get_std_status include/linux/usb.h:1856 [inline]
+ hub_configure drivers/usb/core/hub.c:1602 [inline]
+ hub_probe+0x178e/0x3070 drivers/usb/core/hub.c:1922
+ usb_probe_interface+0x307/0x930 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:579 [inline]
+ really_probe+0x234/0xc90 drivers/base/dd.c:658
+ __driver_probe_device+0x1de/0x4b0 drivers/base/dd.c:800
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:830
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1136 [inline]
+ free_unref_page_prepare+0x460/0xa20 mm/page_alloc.c:2312
+ free_unref_page+0x33/0x2c0 mm/page_alloc.c:2405
+ mm_free_pgd kernel/fork.c:803 [inline]
+ __mmdrop+0xd7/0x470 kernel/fork.c:919
+ mmdrop include/linux/sched/mm.h:54 [inline]
+ __mmput kernel/fork.c:1360 [inline]
+ mmput+0x376/0x420 kernel/fork.c:1371
+ free_bprm+0x144/0x3f0 fs/exec.c:1492
+ kernel_execve+0x3e7/0x4e0 fs/exec.c:2026
+ call_usermodehelper_exec_async+0x256/0x4c0 kernel/umh.c:110
+ ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:304
+
+Memory state around the buggy address:
+ ffff888105f04c00: fc 06 fc fc fc fc fa fc fc fc fc 06 fc fc fc fc
+ ffff888105f04c80: 06 fc fc fc fc 07 fc fc fc fc 00 fc fc fc fc 00
+>ffff888105f04d00: fc fc fc fc 00 fc fc fc fc 00 fc fc fc fc 06 fc
+                            ^
+ ffff888105f04d80: fc fc fc 05 fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff888105f04e00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+==================================================================
 
 
-On 10/11/2023 3:04 PM, Konrad Dybcio wrote:
-> 
-> 
-> On 10/11/23 07:11, Krishna Kurapati PSSNV wrote:
->>
->>
->> On 10/11/2023 2:21 AM, Konrad Dybcio wrote:
->>>
->>>
->>> On 10/7/23 17:47, Krishna Kurapati wrote:
->>>> Currently the DWC3 driver supports only single port controller which
->>>> requires at most two PHYs ie HS and SS PHYs. There are SoCs that has
->>>> DWC3 controller with multiple ports that can operate in host mode.
->>>> Some of the port supports both SS+HS and other port supports only HS
->>>> mode.
->>>>
->>>> This change primarily refactors the Phy logic in core driver to allow
->>>> multiport support with Generic Phy's.
->>>>
->>>> Changes have been tested on  QCOM SoC SA8295P which has 4 ports (2
->>>> are HS+SS capable and 2 are HS only capable).
->>>>
->>>> Changes in v13:
->>>> This series is a subset of patches in v11 as the first 3 patches in v11
->>>> have been mereged into usb-next.
->>>> Moved dr_mode property from platform specific files to common 
->>>> sc8280xp DT.
->>>> Fixed function call wrapping, added comments and replaced #defines with
->>>> enum in dwc3-qcom for identifying IRQ index appropriately.
->>>> Fixed nitpicks pointed out in v11 for suspend-resume handling.
->>>> Added reported-by tag for phy refactoring patch as a compile error was
->>>> found by kernel test bot [1].
->>> "If you fix the issue in a separate patch/commit (i.e. not just a new 
->>> version of
->>> the same patch/commit), kindly add following tags"
->>>
->>> the issue your patch resolves is not one that was reported by the 
->>> kernel testing robot, it just pointed out that you need to fix up the 
->>> next revision
->>>
->>
->> I Agree. It sounds wrong to add a reproted-by tag making it seem like 
->> a bug instead of a feature we have written. But if we fix the compile 
->> error mentioned and not add the "reported-by", its like not giving 
->> credit for the reporter. So I put in the reproted by and closes tag to 
->> give a view of what was reported and the feature implemented.
-> This is a normal thing in review, people spot mistakes, null ptrs, etc..
-> 
-> If I had a reported-by for each review where I pointed out e.g. device 
-> tree changes that don't compile i'd be topping lwn charts
-> 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Sure. Will keep this in mind for future patches. And if revising this 
-again, will remove the above two tags.
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-Regards,
-Krishna,
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to overwrite bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
