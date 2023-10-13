@@ -1,286 +1,178 @@
-Return-Path: <linux-usb+bounces-1592-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1593-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44EAE7C85FD
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 14:45:27 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D09217C8643
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 14:59:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 767C91C20F55
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 12:45:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D5BDBB20A39
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 12:59:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CED311C91;
-	Fri, 13 Oct 2023 12:45:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 948CD14F67;
+	Fri, 13 Oct 2023 12:59:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kTUz4ojT"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="lvT440ET"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4E4D63B4
-	for <linux-usb@vger.kernel.org>; Fri, 13 Oct 2023 12:45:18 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B96B91
-	for <linux-usb@vger.kernel.org>; Fri, 13 Oct 2023 05:45:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697201115; x=1728737115;
-  h=date:from:to:cc:subject:message-id;
-  bh=5CAwzpn9NGz4gSMDB3Xg248XuALfi26Dm1rVUrKn2lI=;
-  b=kTUz4ojTjYk5/NXArMce2Y7s1o4AoJgVN/gyXQbCSMcJQ+DPI5oFtAIU
-   5Q+x1uX3xeFRzs7/Uwb6JL6VdiVvNnP/x2xhbzUAXOOlvBOuB3B9A2S/o
-   nqUbACK84lvTrjB0LMh7IRUuXzWhv9wiWrRm6Dr22Qzvt3ByOK3xliWE/
-   uBhiKpCk5busdAZlhW+tYxvV+S9cLu2q+XSdcvoyFKlqMzCMj17ZOVW4t
-   OGUa6BJZsivJ+t0LOfpxkX6yM05YM6VhEMJswXS4BZOwDnCbqHzo8IqVq
-   Ax9DO2c6PeLBEXcW7saNlOzvalvKtsqDZcjv32MT443Xw1R15VhgdnLsq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10862"; a="471410584"
-X-IronPort-AV: E=Sophos;i="6.03,222,1694761200"; 
-   d="scan'208";a="471410584"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2023 05:45:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10862"; a="758484469"
-X-IronPort-AV: E=Sophos;i="6.03,222,1694761200"; 
-   d="scan'208";a="758484469"
-Received: from lkp-server02.sh.intel.com (HELO f64821696465) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 13 Oct 2023 05:45:13 -0700
-Received: from kbuild by f64821696465 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qrHXT-0004ly-1Z;
-	Fri, 13 Oct 2023 12:45:11 +0000
-Date: Fri, 13 Oct 2023 20:44:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS WITH WARNING
- 1034cc423f1b4a7a9a56d310ca980fcd2753e11d
-Message-ID: <202310132017.R6Ud3snY-lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-	autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 536BA1428C
+	for <linux-usb@vger.kernel.org>; Fri, 13 Oct 2023 12:59:11 +0000 (UTC)
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2072.outbound.protection.outlook.com [40.107.220.72])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63EEC91;
+	Fri, 13 Oct 2023 05:59:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hV2tF6YA6zxaJwuQBtQsBVh9o8lWSuT6RCB5EnA2TfsvJNx4Daoa9dm+9/oPksVjoJ3nEatm73CgcnzAF85W6y2P7xUud7AYuX80zzjNloapqQ0BSHzs848HuasRJmMhVH+p2p7l63YOkqxr9J8CBZ39JZhGZVsx5WfrdAztjdpbs6e3Mpe9lKVoOHo2tAmwpJCWiV+ZmK+oPuWkYOdcpWmnwKZUPr2GLnvk9ZNNNUzoPvgcQEBTd9QG6/kMjDWs66CXGIXoVhE603sz6z5uQnDfRD9daLNJC4RRsSilK9nM6zcfZm6ErJlZZpzYG87kGXkhfTzD0jOBns7dPiZvJA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CYfomqZ4+rLICC4/N2/K4WrcEuyyny2NI8siBHZ0T2s=;
+ b=M8TcYBPMnrpoexLp7tX+dasUrI4Sg+0LJfk3hhKNWLFJOY63ojJtf26MUAQGZHnM1D2sdf8/JqCn3rN9QaNqgjezThML24Doxu45QSCQDFxpvybOGV/lAAcakMX1mP05IhdD36qJh0sGeLlkMzb3rNuqkWqa/dS77lcMiTp/jl2o2E5G44gqMgHzJ3R8iBQXnSPSiMESoygwdXvAEzeQYN+GApNZx6QkuZXXX/M/RS/BQC7DVXbu5Ue4sFnU1GxN3vt0F2WoJxcTjrW21uxNggYuC3KbSX8Wt47kmFAVUgs8jMUyykWV+pYFeNXAADl8Rgxfzl5Le/0pvSSA6pc9DA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CYfomqZ4+rLICC4/N2/K4WrcEuyyny2NI8siBHZ0T2s=;
+ b=lvT440EThI6bx38/Qdgrl2kHOHpV0A3qLw9ea3v3p0/omHPxcT84R9FSCgueNDmZ9iLJ2FgBi8WcldZbIekxrmbY1kIbxIcEoYvgUCpaMz/40vaJoUDJwoU0mZlXOAJehe+hQpfEiTJ7f+LKYp5i3zejPO4OHETxf0NBH0DUU54=
+Received: from DM6PR11CA0007.namprd11.prod.outlook.com (2603:10b6:5:190::20)
+ by PH7PR12MB7794.namprd12.prod.outlook.com (2603:10b6:510:276::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.44; Fri, 13 Oct
+ 2023 12:59:04 +0000
+Received: from DS1PEPF0001708E.namprd03.prod.outlook.com
+ (2603:10b6:5:190:cafe::5b) by DM6PR11CA0007.outlook.office365.com
+ (2603:10b6:5:190::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6886.28 via Frontend
+ Transport; Fri, 13 Oct 2023 12:59:04 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DS1PEPF0001708E.mail.protection.outlook.com (10.167.17.134) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6838.22 via Frontend Transport; Fri, 13 Oct 2023 12:59:04 +0000
+Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 13 Oct
+ 2023 07:59:03 -0500
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB05.amd.com
+ (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 13 Oct
+ 2023 07:58:58 -0500
+Received: from xhdpiyushm40.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.27 via Frontend
+ Transport; Fri, 13 Oct 2023 07:58:56 -0500
+From: Piyush Mehta <piyush.mehta@amd.com>
+To: <gregkh@linuxfoundation.org>, <michal.simek@amd.com>,
+	<Thinh.Nguyen@synopsys.com>, <p.zabel@pengutronix.de>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<git@amd.com>, Piyush Mehta <piyush.mehta@amd.com>
+Subject: [PATCH V2] usb: dwc3: xilinx: add reset-controller support
+Date: Fri, 13 Oct 2023 18:28:47 +0530
+Message-ID: <20231013125847.20334-1-piyush.mehta@amd.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS1PEPF0001708E:EE_|PH7PR12MB7794:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2d8efa3b-5e5c-42ee-3c72-08dbcbec2dbd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	VECu/kBxf388O3ZeEGxtepLMsCr2l6Iy/23UL0YZQIsbkphvIl5m+mJOZQvNgXFEwde4I3WLVI8oqCM8soBSMRSIqFhPeNcQbwQoIVTCQJ6t1s41eEW/Uyosslvln4vz91LQAPFbeyzMwGtMCz1UXIbPNy1YEGGgXAJIy4IN4/UWWBVrzRG/oIH160a543Cb2ObQpb2ity1UM0ZiHcnONvXLTvW4ppb2ecU4BgA4mhMrm6WuVtWFqJ6rKozxfsf7V9BY3d5EySiOBLT9BdD+8EA5Jop/+d844IJvm3AtpCmU+zFIUY4s8C3OJC8IGfAMhs9HEny+k4KD2xAvmJ+pzXr4K5mxjdqz3HFtjwPZzCuubOLnNE1f+INcLb53uMQb5a/k61rBFzECxOGU0xIhB4vTosjnz7+ORBr2fuNs1Qjb/Zh6nDIv8ZYrk+cTVf1ZhtrOMNkbkpqsAtxogpA1clxQ9L7K+WfAO2mejWT1Otr1oALh1IHIFgB3vWR9o89v5/hzvPzMOz3Skg4lxWorUs+0hwxKMUrortGQUkn01Mfl4tVdIKZAOz8mEz1deHtzHyp50e7bcCfbE9gpiegqyiMRfEfgctY+BLXVMAyXyzp3PwNFYY38fHl+igAqdULefYi6g9t3GwEwiduzihvogLTMwJvPpDhocJ/JsIAYwZlmvVfpMuZC9XrJ58kh/DlwmK+cm0aTrEyCnI7SdzNLPiips2cnmr0+fxwbbSxAGhjgcXsHwz4nv7S+hxxmZR6uHurqyyKtu8rN2OYBS6XYbw==
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(136003)(396003)(346002)(39860400002)(376002)(230922051799003)(82310400011)(1800799009)(64100799003)(451199024)(186009)(40470700004)(36840700001)(46966006)(47076005)(44832011)(478600001)(81166007)(966005)(2906002)(8936002)(8676002)(5660300002)(356005)(4326008)(83380400001)(36756003)(426003)(26005)(336012)(41300700001)(86362001)(316002)(40460700003)(70586007)(110136005)(54906003)(70206006)(2616005)(36860700001)(40480700001)(1076003)(6666004)(82740400003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Oct 2023 12:59:04.2372
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2d8efa3b-5e5c-42ee-3c72-08dbcbec2dbd
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DS1PEPF0001708E.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7794
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+	autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: 1034cc423f1b4a7a9a56d310ca980fcd2753e11d  gpio: update Intel LJCA USB GPIO driver
+Add a reset-controller for supporting Xilinx versal platforms. To reset
+the USB controller, get the reset ID from device-tree and using ID trigger
+the reset, with the assert and deassert reset controller APIs for USB
+controller initialization.
 
-Warning reports:
+Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
+---
+Changes in V2:
+- Removed unnecessary delay between assert and deassert.
+- Updated commit message.
 
-https://lore.kernel.org/oe-kbuild-all/202310131627.M43j234A-lkp@intel.com
+Link: https://lore.kernel.org/all/20231005142215.1530-1-piyush.mehta@amd.com/
+---
+ drivers/usb/dwc3/dwc3-xilinx.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-Warning: (recently discovered and may have been fixed)
-
-drivers/usb/chipidea/ci_hdrc_usb2.c:41:34: warning: unused variable 'ci_hdrc_usb2_of_match' [-Wunused-const-variable]
-
-Warning ids grouped by kconfigs:
-
-clang_recent_errors
-`-- hexagon-buildonly-randconfig-r004-20220331
-    `-- drivers-usb-chipidea-ci_hdrc_usb2.c:warning:unused-variable-ci_hdrc_usb2_of_match
-
-elapsed time: 3045m
-
-configs tested: 186
-configs skipped: 2
-
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                      axs103_smp_defconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20231011   gcc  
-arc                   randconfig-001-20231012   gcc  
-arc                   randconfig-001-20231013   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                         orion5x_defconfig   clang
-arm                         wpcm450_defconfig   gcc  
-arm64                            allmodconfig   gcc  
-arm64                             allnoconfig   gcc  
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20231011   gcc  
-i386         buildonly-randconfig-001-20231012   gcc  
-i386         buildonly-randconfig-002-20231011   gcc  
-i386         buildonly-randconfig-002-20231012   gcc  
-i386         buildonly-randconfig-003-20231011   gcc  
-i386         buildonly-randconfig-003-20231012   gcc  
-i386         buildonly-randconfig-004-20231011   gcc  
-i386         buildonly-randconfig-004-20231012   gcc  
-i386         buildonly-randconfig-005-20231011   gcc  
-i386         buildonly-randconfig-005-20231012   gcc  
-i386         buildonly-randconfig-006-20231011   gcc  
-i386         buildonly-randconfig-006-20231012   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                  randconfig-001-20231011   gcc  
-i386                  randconfig-001-20231012   gcc  
-i386                  randconfig-002-20231011   gcc  
-i386                  randconfig-002-20231012   gcc  
-i386                  randconfig-003-20231011   gcc  
-i386                  randconfig-003-20231012   gcc  
-i386                  randconfig-004-20231011   gcc  
-i386                  randconfig-004-20231012   gcc  
-i386                  randconfig-005-20231011   gcc  
-i386                  randconfig-005-20231012   gcc  
-i386                  randconfig-006-20231011   gcc  
-i386                  randconfig-006-20231012   gcc  
-i386                  randconfig-011-20231011   gcc  
-i386                  randconfig-012-20231011   gcc  
-i386                  randconfig-013-20231011   gcc  
-i386                  randconfig-014-20231011   gcc  
-i386                  randconfig-015-20231011   gcc  
-i386                  randconfig-016-20231011   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20231011   gcc  
-loongarch             randconfig-001-20231012   gcc  
-loongarch             randconfig-001-20231013   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                      loongson3_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                         alldefconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   gcc  
-powerpc                      pcm030_defconfig   gcc  
-powerpc                      ppc6xx_defconfig   gcc  
-powerpc                     tqm8560_defconfig   clang
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                 randconfig-001-20231011   gcc  
-riscv                 randconfig-001-20231013   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                  randconfig-001-20231011   gcc  
-s390                  randconfig-001-20231013   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                         apsh4a3a_defconfig   gcc  
-sh                                  defconfig   gcc  
-sh                ecovec24-romimage_defconfig   gcc  
-sh                        edosk7705_defconfig   gcc  
-sh                            migor_defconfig   gcc  
-sh                           se7750_defconfig   gcc  
-sh                            shmin_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                 randconfig-001-20231012   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-001-20231011   gcc  
-x86_64       buildonly-randconfig-001-20231012   gcc  
-x86_64       buildonly-randconfig-002-20231011   gcc  
-x86_64       buildonly-randconfig-002-20231012   gcc  
-x86_64       buildonly-randconfig-003-20231011   gcc  
-x86_64       buildonly-randconfig-003-20231012   gcc  
-x86_64       buildonly-randconfig-004-20231011   gcc  
-x86_64       buildonly-randconfig-004-20231012   gcc  
-x86_64       buildonly-randconfig-005-20231011   gcc  
-x86_64       buildonly-randconfig-005-20231012   gcc  
-x86_64       buildonly-randconfig-006-20231011   gcc  
-x86_64       buildonly-randconfig-006-20231012   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                randconfig-001-20231011   gcc  
-x86_64                randconfig-001-20231013   gcc  
-x86_64                randconfig-002-20231011   gcc  
-x86_64                randconfig-002-20231013   gcc  
-x86_64                randconfig-003-20231011   gcc  
-x86_64                randconfig-003-20231013   gcc  
-x86_64                randconfig-004-20231011   gcc  
-x86_64                randconfig-004-20231013   gcc  
-x86_64                randconfig-005-20231011   gcc  
-x86_64                randconfig-005-20231013   gcc  
-x86_64                randconfig-006-20231011   gcc  
-x86_64                randconfig-006-20231013   gcc  
-x86_64                randconfig-011-20231011   gcc  
-x86_64                randconfig-012-20231011   gcc  
-x86_64                randconfig-013-20231011   gcc  
-x86_64                randconfig-014-20231011   gcc  
-x86_64                randconfig-015-20231011   gcc  
-x86_64                randconfig-016-20231011   gcc  
-x86_64                randconfig-071-20231011   gcc  
-x86_64                randconfig-072-20231011   gcc  
-x86_64                randconfig-073-20231011   gcc  
-x86_64                randconfig-074-20231011   gcc  
-x86_64                randconfig-075-20231011   gcc  
-x86_64                randconfig-076-20231011   gcc  
-x86_64                           rhel-8.3-bpf   gcc  
-x86_64                          rhel-8.3-func   gcc  
-x86_64                    rhel-8.3-kselftests   gcc  
-x86_64                         rhel-8.3-kunit   gcc  
-x86_64                           rhel-8.3-ltp   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                            allnoconfig   gcc  
-xtensa                           allyesconfig   gcc  
-xtensa                  cadence_csp_defconfig   gcc  
-
+diff --git a/drivers/usb/dwc3/dwc3-xilinx.c b/drivers/usb/dwc3/dwc3-xilinx.c
+index 19307d24f3a0..5b7e92f476de 100644
+--- a/drivers/usb/dwc3/dwc3-xilinx.c
++++ b/drivers/usb/dwc3/dwc3-xilinx.c
+@@ -32,9 +32,6 @@
+ #define XLNX_USB_TRAFFIC_ROUTE_CONFIG		0x005C
+ #define XLNX_USB_TRAFFIC_ROUTE_FPD		0x1
+ 
+-/* Versal USB Reset ID */
+-#define VERSAL_USB_RESET_ID			0xC104036
+-
+ #define XLNX_USB_FPD_PIPE_CLK			0x7c
+ #define PIPE_CLK_DESELECT			1
+ #define PIPE_CLK_SELECT				0
+@@ -72,20 +69,23 @@ static void dwc3_xlnx_mask_phy_rst(struct dwc3_xlnx *priv_data, bool mask)
+ static int dwc3_xlnx_init_versal(struct dwc3_xlnx *priv_data)
+ {
+ 	struct device		*dev = priv_data->dev;
++	struct reset_control	*crst;
+ 	int			ret;
+ 
++	crst = devm_reset_control_get_exclusive(dev, NULL);
++	if (IS_ERR(crst))
++		return dev_err_probe(dev, PTR_ERR(crst), "failed to get reset signal\n");
++
+ 	dwc3_xlnx_mask_phy_rst(priv_data, false);
+ 
+ 	/* Assert and De-assert reset */
+-	ret = zynqmp_pm_reset_assert(VERSAL_USB_RESET_ID,
+-				     PM_RESET_ACTION_ASSERT);
++	ret = reset_control_assert(crst);
+ 	if (ret < 0) {
+ 		dev_err_probe(dev, ret, "failed to assert Reset\n");
+ 		return ret;
+ 	}
+ 
+-	ret = zynqmp_pm_reset_assert(VERSAL_USB_RESET_ID,
+-				     PM_RESET_ACTION_RELEASE);
++	ret = reset_control_deassert(crst);
+ 	if (ret < 0) {
+ 		dev_err_probe(dev, ret, "failed to De-assert Reset\n");
+ 		return ret;
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.17.1
+
 
