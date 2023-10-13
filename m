@@ -1,178 +1,244 @@
-Return-Path: <linux-usb+bounces-1593-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1594-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D09217C8643
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 14:59:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB1607C869E
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 15:19:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D5BDBB20A39
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 12:59:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8FC58282D7A
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 13:19:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 948CD14F67;
-	Fri, 13 Oct 2023 12:59:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="lvT440ET"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D247E15E9E;
+	Fri, 13 Oct 2023 13:19:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 536BA1428C
-	for <linux-usb@vger.kernel.org>; Fri, 13 Oct 2023 12:59:11 +0000 (UTC)
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2072.outbound.protection.outlook.com [40.107.220.72])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63EEC91;
-	Fri, 13 Oct 2023 05:59:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hV2tF6YA6zxaJwuQBtQsBVh9o8lWSuT6RCB5EnA2TfsvJNx4Daoa9dm+9/oPksVjoJ3nEatm73CgcnzAF85W6y2P7xUud7AYuX80zzjNloapqQ0BSHzs848HuasRJmMhVH+p2p7l63YOkqxr9J8CBZ39JZhGZVsx5WfrdAztjdpbs6e3Mpe9lKVoOHo2tAmwpJCWiV+ZmK+oPuWkYOdcpWmnwKZUPr2GLnvk9ZNNNUzoPvgcQEBTd9QG6/kMjDWs66CXGIXoVhE603sz6z5uQnDfRD9daLNJC4RRsSilK9nM6zcfZm6ErJlZZpzYG87kGXkhfTzD0jOBns7dPiZvJA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CYfomqZ4+rLICC4/N2/K4WrcEuyyny2NI8siBHZ0T2s=;
- b=M8TcYBPMnrpoexLp7tX+dasUrI4Sg+0LJfk3hhKNWLFJOY63ojJtf26MUAQGZHnM1D2sdf8/JqCn3rN9QaNqgjezThML24Doxu45QSCQDFxpvybOGV/lAAcakMX1mP05IhdD36qJh0sGeLlkMzb3rNuqkWqa/dS77lcMiTp/jl2o2E5G44gqMgHzJ3R8iBQXnSPSiMESoygwdXvAEzeQYN+GApNZx6QkuZXXX/M/RS/BQC7DVXbu5Ue4sFnU1GxN3vt0F2WoJxcTjrW21uxNggYuC3KbSX8Wt47kmFAVUgs8jMUyykWV+pYFeNXAADl8Rgxfzl5Le/0pvSSA6pc9DA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CYfomqZ4+rLICC4/N2/K4WrcEuyyny2NI8siBHZ0T2s=;
- b=lvT440EThI6bx38/Qdgrl2kHOHpV0A3qLw9ea3v3p0/omHPxcT84R9FSCgueNDmZ9iLJ2FgBi8WcldZbIekxrmbY1kIbxIcEoYvgUCpaMz/40vaJoUDJwoU0mZlXOAJehe+hQpfEiTJ7f+LKYp5i3zejPO4OHETxf0NBH0DUU54=
-Received: from DM6PR11CA0007.namprd11.prod.outlook.com (2603:10b6:5:190::20)
- by PH7PR12MB7794.namprd12.prod.outlook.com (2603:10b6:510:276::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.44; Fri, 13 Oct
- 2023 12:59:04 +0000
-Received: from DS1PEPF0001708E.namprd03.prod.outlook.com
- (2603:10b6:5:190:cafe::5b) by DM6PR11CA0007.outlook.office365.com
- (2603:10b6:5:190::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6886.28 via Frontend
- Transport; Fri, 13 Oct 2023 12:59:04 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DS1PEPF0001708E.mail.protection.outlook.com (10.167.17.134) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6838.22 via Frontend Transport; Fri, 13 Oct 2023 12:59:04 +0000
-Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 13 Oct
- 2023 07:59:03 -0500
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB05.amd.com
- (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 13 Oct
- 2023 07:58:58 -0500
-Received: from xhdpiyushm40.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.27 via Frontend
- Transport; Fri, 13 Oct 2023 07:58:56 -0500
-From: Piyush Mehta <piyush.mehta@amd.com>
-To: <gregkh@linuxfoundation.org>, <michal.simek@amd.com>,
-	<Thinh.Nguyen@synopsys.com>, <p.zabel@pengutronix.de>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<git@amd.com>, Piyush Mehta <piyush.mehta@amd.com>
-Subject: [PATCH V2] usb: dwc3: xilinx: add reset-controller support
-Date: Fri, 13 Oct 2023 18:28:47 +0530
-Message-ID: <20231013125847.20334-1-piyush.mehta@amd.com>
-X-Mailer: git-send-email 2.17.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9263015E85
+	for <linux-usb@vger.kernel.org>; Fri, 13 Oct 2023 13:19:10 +0000 (UTC)
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42223C2;
+	Fri, 13 Oct 2023 06:19:06 -0700 (PDT)
+Received: from [192.168.0.185] (ip5f5bf22a.dynamic.kabel-deutschland.de [95.91.242.42])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 09CBF61E5FE01;
+	Fri, 13 Oct 2023 15:18:17 +0200 (CEST)
+Message-ID: <7add0297-709f-4836-832f-f8fbd412eca5@molgen.mpg.de>
+Date: Fri, 13 Oct 2023 15:18:16 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS1PEPF0001708E:EE_|PH7PR12MB7794:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2d8efa3b-5e5c-42ee-3c72-08dbcbec2dbd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	VECu/kBxf388O3ZeEGxtepLMsCr2l6Iy/23UL0YZQIsbkphvIl5m+mJOZQvNgXFEwde4I3WLVI8oqCM8soBSMRSIqFhPeNcQbwQoIVTCQJ6t1s41eEW/Uyosslvln4vz91LQAPFbeyzMwGtMCz1UXIbPNy1YEGGgXAJIy4IN4/UWWBVrzRG/oIH160a543Cb2ObQpb2ity1UM0ZiHcnONvXLTvW4ppb2ecU4BgA4mhMrm6WuVtWFqJ6rKozxfsf7V9BY3d5EySiOBLT9BdD+8EA5Jop/+d844IJvm3AtpCmU+zFIUY4s8C3OJC8IGfAMhs9HEny+k4KD2xAvmJ+pzXr4K5mxjdqz3HFtjwPZzCuubOLnNE1f+INcLb53uMQb5a/k61rBFzECxOGU0xIhB4vTosjnz7+ORBr2fuNs1Qjb/Zh6nDIv8ZYrk+cTVf1ZhtrOMNkbkpqsAtxogpA1clxQ9L7K+WfAO2mejWT1Otr1oALh1IHIFgB3vWR9o89v5/hzvPzMOz3Skg4lxWorUs+0hwxKMUrortGQUkn01Mfl4tVdIKZAOz8mEz1deHtzHyp50e7bcCfbE9gpiegqyiMRfEfgctY+BLXVMAyXyzp3PwNFYY38fHl+igAqdULefYi6g9t3GwEwiduzihvogLTMwJvPpDhocJ/JsIAYwZlmvVfpMuZC9XrJ58kh/DlwmK+cm0aTrEyCnI7SdzNLPiips2cnmr0+fxwbbSxAGhjgcXsHwz4nv7S+hxxmZR6uHurqyyKtu8rN2OYBS6XYbw==
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(136003)(396003)(346002)(39860400002)(376002)(230922051799003)(82310400011)(1800799009)(64100799003)(451199024)(186009)(40470700004)(36840700001)(46966006)(47076005)(44832011)(478600001)(81166007)(966005)(2906002)(8936002)(8676002)(5660300002)(356005)(4326008)(83380400001)(36756003)(426003)(26005)(336012)(41300700001)(86362001)(316002)(40460700003)(70586007)(110136005)(54906003)(70206006)(2616005)(36860700001)(40480700001)(1076003)(6666004)(82740400003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Oct 2023 12:59:04.2372
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2d8efa3b-5e5c-42ee-3c72-08dbcbec2dbd
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DS1PEPF0001708E.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7794
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-	autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 3/3] usb: chipidea: Add support for NPCM
+To: Tomer Maimon <tmaimon77@gmail.com>
+Cc: peter.chen@kernel.org, gregkh@linuxfoundation.org,
+ avifishman70@gmail.com, tali.perry1@gmail.com, joel@jms.id.au,
+ venture@google.com, yuenn@google.com, benjaminfair@google.com,
+ j.neuschaefer@gmx.net, openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20231012230057.3365626-1-tmaimon77@gmail.com>
+ <20231012230057.3365626-4-tmaimon77@gmail.com>
+Content-Language: en-US
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20231012230057.3365626-4-tmaimon77@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Add a reset-controller for supporting Xilinx versal platforms. To reset
-the USB controller, get the reset ID from device-tree and using ID trigger
-the reset, with the assert and deassert reset controller APIs for USB
-controller initialization.
+Dear Tomer,
 
-Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
----
-Changes in V2:
-- Removed unnecessary delay between assert and deassert.
-- Updated commit message.
 
-Link: https://lore.kernel.org/all/20231005142215.1530-1-piyush.mehta@amd.com/
----
- drivers/usb/dwc3/dwc3-xilinx.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+Thank you for your patch.
 
-diff --git a/drivers/usb/dwc3/dwc3-xilinx.c b/drivers/usb/dwc3/dwc3-xilinx.c
-index 19307d24f3a0..5b7e92f476de 100644
---- a/drivers/usb/dwc3/dwc3-xilinx.c
-+++ b/drivers/usb/dwc3/dwc3-xilinx.c
-@@ -32,9 +32,6 @@
- #define XLNX_USB_TRAFFIC_ROUTE_CONFIG		0x005C
- #define XLNX_USB_TRAFFIC_ROUTE_FPD		0x1
- 
--/* Versal USB Reset ID */
--#define VERSAL_USB_RESET_ID			0xC104036
--
- #define XLNX_USB_FPD_PIPE_CLK			0x7c
- #define PIPE_CLK_DESELECT			1
- #define PIPE_CLK_SELECT				0
-@@ -72,20 +69,23 @@ static void dwc3_xlnx_mask_phy_rst(struct dwc3_xlnx *priv_data, bool mask)
- static int dwc3_xlnx_init_versal(struct dwc3_xlnx *priv_data)
- {
- 	struct device		*dev = priv_data->dev;
-+	struct reset_control	*crst;
- 	int			ret;
- 
-+	crst = devm_reset_control_get_exclusive(dev, NULL);
-+	if (IS_ERR(crst))
-+		return dev_err_probe(dev, PTR_ERR(crst), "failed to get reset signal\n");
-+
- 	dwc3_xlnx_mask_phy_rst(priv_data, false);
- 
- 	/* Assert and De-assert reset */
--	ret = zynqmp_pm_reset_assert(VERSAL_USB_RESET_ID,
--				     PM_RESET_ACTION_ASSERT);
-+	ret = reset_control_assert(crst);
- 	if (ret < 0) {
- 		dev_err_probe(dev, ret, "failed to assert Reset\n");
- 		return ret;
- 	}
- 
--	ret = zynqmp_pm_reset_assert(VERSAL_USB_RESET_ID,
--				     PM_RESET_ACTION_RELEASE);
-+	ret = reset_control_deassert(crst);
- 	if (ret < 0) {
- 		dev_err_probe(dev, ret, "failed to De-assert Reset\n");
- 		return ret;
--- 
-2.17.1
+Am 13.10.23 um 01:00 schrieb Tomer Maimon:
+> Add Nuvoton NPCM BMC SoCs support to USB ChipIdea driver.
+> NPCM SoC include ChipIdea IP block that used for USB device controller
 
+include*s*
+“that *is* used” or just “… used for”
+
+> mode.
+
+Please add a line, how you tested this patch.
+
+> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> Acked-by: Peter Chen <peter.chen@kernel.org>
+> ---
+>   drivers/usb/chipidea/Kconfig        |   4 +
+>   drivers/usb/chipidea/Makefile       |   1 +
+>   drivers/usb/chipidea/ci_hdrc_npcm.c | 114 ++++++++++++++++++++++++++++
+>   3 files changed, 119 insertions(+)
+>   create mode 100644 drivers/usb/chipidea/ci_hdrc_npcm.c
+> 
+> diff --git a/drivers/usb/chipidea/Kconfig b/drivers/usb/chipidea/Kconfig
+> index c815824a0b2d..bab45bc62361 100644
+> --- a/drivers/usb/chipidea/Kconfig
+> +++ b/drivers/usb/chipidea/Kconfig
+> @@ -43,6 +43,10 @@ config USB_CHIPIDEA_MSM
+>   	tristate "Enable MSM hsusb glue driver" if EXPERT
+>   	default USB_CHIPIDEA
+>   
+> +config USB_CHIPIDEA_NPCM
+> +	tristate "Enable NPCM hsusb glue driver" if EXPERT
+> +	default USB_CHIPIDEA
+> +
+>   config USB_CHIPIDEA_IMX
+>   	tristate "Enable i.MX USB glue driver" if EXPERT
+>   	depends on OF
+> diff --git a/drivers/usb/chipidea/Makefile b/drivers/usb/chipidea/Makefile
+> index 71afeab97e83..718cb24603dd 100644
+> --- a/drivers/usb/chipidea/Makefile
+> +++ b/drivers/usb/chipidea/Makefile
+> @@ -13,6 +13,7 @@ ci_hdrc-$(CONFIG_USB_OTG_FSM)		+= otg_fsm.o
+>   
+>   obj-$(CONFIG_USB_CHIPIDEA_GENERIC)	+= ci_hdrc_usb2.o
+>   obj-$(CONFIG_USB_CHIPIDEA_MSM)		+= ci_hdrc_msm.o
+> +obj-$(CONFIG_USB_CHIPIDEA_NPCM)		+= ci_hdrc_npcm.o
+>   obj-$(CONFIG_USB_CHIPIDEA_PCI)		+= ci_hdrc_pci.o
+>   obj-$(CONFIG_USB_CHIPIDEA_IMX)		+= usbmisc_imx.o ci_hdrc_imx.o
+>   obj-$(CONFIG_USB_CHIPIDEA_TEGRA)	+= ci_hdrc_tegra.o
+> diff --git a/drivers/usb/chipidea/ci_hdrc_npcm.c b/drivers/usb/chipidea/ci_hdrc_npcm.c
+> new file mode 100644
+> index 000000000000..37b64a3dbd96
+> --- /dev/null
+> +++ b/drivers/usb/chipidea/ci_hdrc_npcm.c
+> @@ -0,0 +1,114 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +// Copyright (c) 2023 Nuvoton Technology corporation.
+> +
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/pm_runtime.h>
+> +#include <linux/usb/chipidea.h>
+> +#include <linux/clk.h>
+> +#include <linux/io.h>
+> +#include <linux/reset-controller.h>
+> +#include <linux/of.h>
+> +
+> +#include "ci.h"
+> +
+> +struct npcm_udc_data {
+> +	struct platform_device	*ci;
+> +	struct clk		*core_clk;
+> +	struct ci_hdrc_platform_data pdata;
+> +};
+> +
+> +static int npcm_udc_notify_event(struct ci_hdrc *ci, unsigned event)
+> +{
+> +	struct device *dev = ci->dev->parent;
+> +
+> +	switch (event) {
+> +	case CI_HDRC_CONTROLLER_RESET_EVENT:
+> +		/* clear all mode bits */
+> +		hw_write(ci, OP_USBMODE, 0xffffffff, 0x0);
+> +		break;
+> +	default:
+> +		dev_dbg(dev, "unknown ci_hdrc event\n");
+
+Please print it out.
+
+> +		break;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int npcm_udc_probe(struct platform_device *pdev)
+> +{
+> +	int ret;
+> +	struct npcm_udc_data *ci;
+> +	struct platform_device *plat_ci;
+> +	struct device *dev = &pdev->dev;
+> +
+> +	ci = devm_kzalloc(&pdev->dev, sizeof(*ci), GFP_KERNEL);
+> +	if (!ci)
+> +		return -ENOMEM;
+> +	platform_set_drvdata(pdev, ci);
+> +
+> +	ci->core_clk = devm_clk_get_optional(dev, NULL);
+> +	if (IS_ERR(ci->core_clk))
+> +		return PTR_ERR(ci->core_clk);
+> +
+> +	ret = clk_prepare_enable(ci->core_clk);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "failed to enable the clock: %d\n", ret);
+> +
+> +	ci->pdata.name = dev_name(dev);
+> +	ci->pdata.capoffset = DEF_CAPOFFSET;
+> +	ci->pdata.flags	= CI_HDRC_REQUIRES_ALIGNED_DMA |
+> +		CI_HDRC_FORCE_VBUS_ACTIVE_ALWAYS;
+> +	ci->pdata.phy_mode = USBPHY_INTERFACE_MODE_UTMI;
+> +	ci->pdata.notify_event = npcm_udc_notify_event;
+> +
+> +	plat_ci = ci_hdrc_add_device(dev, pdev->resource, pdev->num_resources,
+> +				     &ci->pdata);
+> +	if (IS_ERR(plat_ci)) {
+> +		ret = PTR_ERR(plat_ci);
+> +		dev_err(dev, "failed to register HDRC NPCM device: %d\n", ret);
+> +		goto clk_err;
+> +	}
+> +
+> +	pm_runtime_no_callbacks(dev);
+> +	pm_runtime_enable(dev);
+> +
+> +	return 0;
+> +
+> +clk_err:
+> +	clk_disable_unprepare(ci->core_clk);
+> +	return ret;
+> +}
+> +
+> +static int npcm_udc_remove(struct platform_device *pdev)
+> +{
+> +	struct npcm_udc_data *ci = platform_get_drvdata(pdev);
+> +
+> +	pm_runtime_disable(&pdev->dev);
+> +	ci_hdrc_remove_device(ci->ci);
+> +	clk_disable_unprepare(ci->core_clk);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id npcm_udc_dt_match[] = {
+> +	{ .compatible = "nuvoton,npcm750-udc", },
+> +	{ .compatible = "nuvoton,npcm845-udc", },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, npcm_udc_dt_match);
+> +
+> +static struct platform_driver npcm_udc_driver = {
+> +	.probe = npcm_udc_probe,
+> +	.remove = npcm_udc_remove,
+> +	.driver = {
+> +		.name = "npcm_udc",
+> +		.of_match_table = npcm_udc_dt_match,
+> +	},
+> +};
+> +
+> +module_platform_driver(npcm_udc_driver);
+> +
+> +MODULE_DESCRIPTION("NPCM USB device controller driver");
+> +MODULE_AUTHOR("Tomer Maimon <tomer.maimon@nuvoton.com>");
+
+Should that address also be recorded as the patch author?
+
+> +MODULE_LICENSE("GPL v2");
+
+
+Kind regards,
+
+Paul
 
