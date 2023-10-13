@@ -1,54 +1,54 @@
-Return-Path: <linux-usb+bounces-1552-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1553-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 914327C7B85
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 04:13:07 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 999C07C7C62
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 05:56:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3A4EB282D6D
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 02:13:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1E912B20945
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 03:56:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F12FA46;
-	Fri, 13 Oct 2023 02:13:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C98171879;
+	Fri, 13 Oct 2023 03:56:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="OiTcZMR+"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1C5DA35
-	for <linux-usb@vger.kernel.org>; Fri, 13 Oct 2023 02:12:59 +0000 (UTC)
-Received: from mp-relay-02.fibernetics.ca (mp-relay-02.fibernetics.ca [208.85.217.137])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB99BB
-	for <linux-usb@vger.kernel.org>; Thu, 12 Oct 2023 19:12:54 -0700 (PDT)
-Received: from mailpool-fe-01.fibernetics.ca (mailpool-fe-01.fibernetics.ca [208.85.217.144])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mp-relay-02.fibernetics.ca (Postfix) with ESMTPS id D4B6F7650E;
-	Fri, 13 Oct 2023 02:12:49 +0000 (UTC)
-Received: from localhost (mailpool-mx-01.fibernetics.ca [208.85.217.140])
-	by mailpool-fe-01.fibernetics.ca (Postfix) with ESMTP id C84C94741E;
-	Fri, 13 Oct 2023 02:12:49 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at 
-X-Spam-Score: -0.2
-X-Spam-Level:
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
-Received: from mailpool-fe-01.fibernetics.ca ([208.85.217.144])
-	by localhost (mail-mx-01.fibernetics.ca [208.85.217.140]) (amavisd-new, port 10024)
-	with ESMTP id 7jk1WHw0u1xb; Fri, 13 Oct 2023 02:12:49 +0000 (UTC)
-Received: from [192.168.48.17] (host-104-157-209-188.dyn.295.ca [104.157.209.188])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: dgilbert@interlog.com)
-	by mail.ca.inter.net (Postfix) with ESMTPSA id CF50E4741D;
-	Fri, 13 Oct 2023 02:12:45 +0000 (UTC)
-Message-ID: <611db058-afb5-4837-850d-b91f1e48f386@interlog.com>
-Date: Thu, 12 Oct 2023 22:12:42 -0400
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD31515D0
+	for <linux-usb@vger.kernel.org>; Fri, 13 Oct 2023 03:56:48 +0000 (UTC)
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18EA8B7;
+	Thu, 12 Oct 2023 20:56:47 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39D2uWDo023257;
+	Fri, 13 Oct 2023 03:56:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=1wN9r/ygJa5hc10Q0L1K794PKyr7Hfnc7rIOt55zZoM=;
+ b=OiTcZMR+01qfzd67dE+571bN6qiOZ502zvDM9saWdar39sRmLC8swtwW2YGqouxuawsw
+ bIyxzIZmCL0+ROqOLsZVKRvhPjkLMoQXlnZM/kGc5DmJx0VMk6iWLRAUIz+Pf06ZanIG
+ M70hvpUfrw2vOAyuY/lJrq8ied+DrG9wghCcW4HzTvVeE1moAUdaJESURRF+33qlzkat
+ tIJSMbOIdf90HcqA1cYxBxoMKzqBOKOf8ntGaQlm4Ix+mZAkbs3Ya5880ePvzcNV/532
+ g948+CO3f4PMsHQNjX7Ipq/SfGbNDrfJgCPSM/zj/ZbyqmcnAzprjcqG5wz75ydm64Xh Dw== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tpt11ge2r-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 13 Oct 2023 03:56:41 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39D3uegw028840
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 13 Oct 2023 03:56:40 GMT
+Received: from [10.216.41.155] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Thu, 12 Oct
+ 2023 20:56:37 -0700
+Message-ID: <ff5674b3-6536-4f37-92e7-0c114645cd49@quicinc.com>
+Date: Fri, 13 Oct 2023 09:26:34 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -56,173 +56,150 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Reply-To: dgilbert@interlog.com
-Subject: Re: device present in lsusb, disappears in lsusb -t
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Greg KH <gregkh@linuxfoundation.org>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-References: <70c563f1-847c-32a1-cf4d-6bf9802017ab@interlog.com>
- <2023091638-duration-barcode-73a3@gregkh>
- <11b1687f-3419-4037-845e-ef33d4e3871f@interlog.com>
- <2023101139-puma-fanfare-8a0e@gregkh>
- <299d927f-7044-4d48-b6cd-c05bdb0e7fcc@rowland.harvard.edu>
- <0c2a2a23-28dd-4c83-b7af-d5421501e411@interlog.com>
- <2023101203-marine-chatter-692e@gregkh>
- <723ee63c-1eb6-490d-9327-2856601573f7@interlog.com>
- <30288fa6-105a-4c4b-84c4-750fe083ee85@rowland.harvard.edu>
-Content-Language: en-CA
-From: Douglas Gilbert <dgilbert@interlog.com>
-In-Reply-To: <30288fa6-105a-4c4b-84c4-750fe083ee85@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Subject: Re: [RFC] usb: dwc3: core: Fix RAM interface getting stuck during
+ enumeration
+To: Wesley Cheng <quic_wcheng@quicinc.com>,
+        Thinh Nguyen
+	<Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_ppratap@quicinc.com>, <quic_jackp@quicinc.com>,
+        <quic_ugoswami@quicinc.com>
+References: <20231011100214.25720-1-quic_kriskura@quicinc.com>
+ <1e8d6d63-f5e5-3e69-ae8e-cf3cd1b90ad8@quicinc.com>
+Content-Language: en-US
+From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <1e8d6d63-f5e5-3e69-ae8e-cf3cd1b90ad8@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: TIEZGCLijBgLjHeVO7eeOdFtMqJ0FnnY
+X-Proofpoint-ORIG-GUID: TIEZGCLijBgLjHeVO7eeOdFtMqJ0FnnY
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-12_14,2023-10-12_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
+ phishscore=0 mlxlogscore=999 impostorscore=0 suspectscore=0
+ priorityscore=1501 spamscore=0 adultscore=0 clxscore=1015 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2310130034
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On 2023-10-12 15:10, Alan Stern wrote:
-> On Thu, Oct 12, 2023 at 10:38:31AM -0400, Douglas Gilbert wrote:
->> On 2023-10-12 08:50, Greg KH wrote:
->>> I've pushed all of the remaining pending changes for usbutils to the
->>> repo, and added a few of my own that makes the 'lsusb -t' output a bit
->>> more sane (sorted order, proper digit field width, etc.)
->>>
->>> Can you try the latest version in github (or on kernel.org, they are
->>> mirrors) and show the output there?
->>
->> Removed the Lenovo dock [40AN] to lessen the clutter.
->>
->>
->>    ~/usbutils$ ./lsusb
->> Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
->> Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
->> Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
->> Bus 003 Device 002: ID 06cb:00f9 Synaptics, Inc.
->> Bus 003 Device 003: ID 5986:1177 Acer, Inc Integrated Camera
->> Bus 003 Device 004: ID 046d:c52b Logitech, Inc. Unifying Receiver
->> Bus 003 Device 005: ID 8087:0033 Intel Corp.
->> Bus 003 Device 012: ID 0483:572b STMicroelectronics STEVAL-USBC2DP Type-C to
->> DisplayPort adapter
->> Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
->>
->>    ~/usbutils$ ./lsusb -tv
->> /:  Bus 001.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/1p, 480M
->>      ID 1d6b:0002 Linux Foundation 2.0 root hub
->> /:  Bus 002.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/3p, 20000M/x2
->>      ID 1d6b:0003 Linux Foundation 3.0 root hub
->> /:  Bus 003.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/12p, 480M
->>      ID 1d6b:0002 Linux Foundation 2.0 root hub
->>      |__ Port 003: Dev 002, If 0, Class=Vendor Specific Class, Driver=, 12M
->>          ID 06cb:00f9 Synaptics, Inc.
->>      |__ Port 004: Dev 003, If 0, Class=Video, Driver=uvcvideo, 480M
->>          ID 5986:1177 Acer, Inc
->>      |__ Port 004: Dev 003, If 1, Class=Video, Driver=uvcvideo, 480M
->>          ID 5986:1177 Acer, Inc
->>      |__ Port 004: Dev 003, If 2, Class=Application Specific Interface,
->> Driver=, 480M
->>          ID 5986:1177 Acer, Inc
->>      |__ Port 007: Dev 004, If 0, Class=Human Interface Device, Driver=usbhid, 12M
->>          ID 046d:c52b Logitech, Inc. Unifying Receiver
->>      |__ Port 007: Dev 004, If 1, Class=Human Interface Device, Driver=usbhid, 12M
->>          ID 046d:c52b Logitech, Inc. Unifying Receiver
->>      |__ Port 007: Dev 004, If 2, Class=Human Interface Device, Driver=usbhid, 12M
->>          ID 046d:c52b Logitech, Inc. Unifying Receiver
->>      |__ Port 010: Dev 005, If 0, Class=Wireless, Driver=btusb, 12M
->>          ID 8087:0033 Intel Corp.
->>      |__ Port 010: Dev 005, If 1, Class=Wireless, Driver=btusb, 12M
->>          ID 8087:0033 Intel Corp.
->> /:  Bus 004.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/4p, 10000M
->>      ID 1d6b:0003 Linux Foundation 3.0 root hub
->>
->>
->> So ID 0483:572b (ST Micro DP dongle) still missing in the 'lsusb -t' output.
+
+
+On 10/13/2023 12:55 AM, Wesley Cheng wrote:
+> Hi Krishna,
 > 
-> Your dongle is an unusual USB device, in that it has no interfaces.
-> That's why nothing shows up in the lsusb -t output.
+> On 10/11/2023 3:02 AM, Krishna Kurapati wrote:
+>> This implementation is to fix RAM interface getting stuck during
+
+>> Synopsys confirmed that the issue is present on all USB3 devices and
+>> as a workaround, suggested to re-initialize device mode.
+>>
+>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>> ---
+>>   drivers/usb/dwc3/core.c   | 20 ++++++++++++++++++++
+>>   drivers/usb/dwc3/core.h   |  4 ++++
+>>   drivers/usb/dwc3/drd.c    |  5 +++++
+>>   drivers/usb/dwc3/gadget.c |  6 ++++--
+>>   4 files changed, 33 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+>> index 44ee8526dc28..d18b81cccdc5 100644
+>> --- a/drivers/usb/dwc3/core.c
+>> +++ b/drivers/usb/dwc3/core.c
+>> @@ -122,6 +122,7 @@ static void __dwc3_set_mode(struct work_struct *work)
+>>       unsigned long flags;
+>>       int ret;
+>>       u32 reg;
+>> +    u8 timeout = 100;
+>>       u32 desired_dr_role;
+>>       mutex_lock(&dwc->mutex);
+>> @@ -137,6 +138,25 @@ static void __dwc3_set_mode(struct work_struct 
+>> *work)
+>>       if (!desired_dr_role)
+>>           goto out;
+>> +    /*
+>> +     * STAR 5001544 - If cable disconnect doesn't generate
+>> +     * disconnect event in device mode, then re-initialize the
+>> +     * controller.
+>> +     */
+>> +    if ((dwc->cable_disconnected == true) &&
+>> +        (dwc->current_dr_role == DWC3_GCTL_PRTCAP_DEVICE)) {
+>> +        while (dwc->connected == true && timeout != 0) {
+>> +            mdelay(10);
+>> +            timeout--;
+>> +        }
+>> +
+>> +        if (timeout == 0) {
+>> +            dwc3_gadget_soft_disconnect(dwc);
+>> +            udelay(100);
+>> +            dwc3_gadget_soft_connect(dwc);
+>> +        }
+>> +    }
+>> +
+>>       if (desired_dr_role == dwc->current_dr_role)
+>>           goto out;
+>> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+>> index c6c87acbd376..7642330cf608 100644
+>> --- a/drivers/usb/dwc3/core.h
+>> +++ b/drivers/usb/dwc3/core.h
+>> @@ -1355,6 +1355,7 @@ struct dwc3 {
+>>       int            last_fifo_depth;
+>>       int            num_ep_resized;
+>>       struct dentry        *debug_root;
+>> +    bool            cable_disconnected;
+>>   };
+>>   #define INCRX_BURST_MODE 0
+>> @@ -1568,6 +1569,9 @@ void dwc3_event_buffers_cleanup(struct dwc3 *dwc);
+>>   int dwc3_core_soft_reset(struct dwc3 *dwc);
+>> +int dwc3_gadget_soft_disconnect(struct dwc3 *dwc);
+>> +int dwc3_gadget_soft_connect(struct dwc3 *dwc);
+>> +
+>>   #if IS_ENABLED(CONFIG_USB_DWC3_HOST) || 
+>> IS_ENABLED(CONFIG_USB_DWC3_DUAL_ROLE)
+>>   int dwc3_host_init(struct dwc3 *dwc);
+>>   void dwc3_host_exit(struct dwc3 *dwc);
+>> diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
+>> index 039bf241769a..593c023fc39a 100644
+>> --- a/drivers/usb/dwc3/drd.c
+>> +++ b/drivers/usb/dwc3/drd.c
+>> @@ -446,6 +446,8 @@ static int dwc3_usb_role_switch_set(struct 
+>> usb_role_switch *sw,
+>>       struct dwc3 *dwc = usb_role_switch_get_drvdata(sw);
+>>       u32 mode;
+>> +    dwc->cable_disconnected = false;
+>> +
+>>       switch (role) {
+>>       case USB_ROLE_HOST:
+>>           mode = DWC3_GCTL_PRTCAP_HOST;
+>> @@ -454,6 +456,9 @@ static int dwc3_usb_role_switch_set(struct 
+>> usb_role_switch *sw,
+>>           mode = DWC3_GCTL_PRTCAP_DEVICE;
+>>           break;
+>>       default:
+>> +        if (role == USB_ROLE_NONE)
+>> +            dwc->cable_disconnected = true;
+>> +
 > 
-> Try applying the patch below.
+> How do we handle cases where role switch isn't used? (ie extcon or maybe 
+> no cable connection notification at all)
+> 
 
-<snip>
+Hi Wesley,
 
-# lsusb -tv
-/:  Bus 001.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/1p, 480M
-     ID 1d6b:0002 Linux Foundation 2.0 root hub
-/:  Bus 002.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/3p, 20000M/x2
-     ID 1d6b:0003 Linux Foundation 3.0 root hub
-/:  Bus 003.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/12p, 480M
-     ID 1d6b:0002 Linux Foundation 2.0 root hub
-     |__ Port 003: Dev 007, If 0, Class=Vendor Specific Class, Driver=, 12M
-         ID 06cb:00f9 Synaptics, Inc.
-     |__ Port 004: Dev 003, If 0, Class=Video, Driver=uvcvideo, 480M
-         ID 5986:1177 Acer, Inc
-     |__ Port 004: Dev 003, If 1, Class=Video, Driver=uvcvideo, 480M
-         ID 5986:1177 Acer, Inc
-     |__ Port 004: Dev 003, If 2, Class=Application Specific Interface, Driver=, 
-480M
-         ID 5986:1177 Acer, Inc
-     |__ Port 005: Dev 009, 12M
-         ID 0483:572b STMicroelectronics
-     |__ Port 007: Dev 004, If 0, Class=Human Interface Device, Driver=usbhid, 12M
-         ID 046d:c52b Logitech, Inc. Unifying Receiver
-     |__ Port 007: Dev 004, If 1, Class=Human Interface Device, Driver=usbhid, 12M
-         ID 046d:c52b Logitech, Inc. Unifying Receiver
-     |__ Port 007: Dev 004, If 2, Class=Human Interface Device, Driver=usbhid, 12M
-         ID 046d:c52b Logitech, Inc. Unifying Receiver
-/:  Bus 004.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/4p, 10000M
-     ID 1d6b:0003 Linux Foundation 3.0 root hub
+  Since I was considering fixing it during disconnect, I made it in role 
+switch. So no cable connection notification case has been ruled out in 
+this patch. But yes, extcon is a valid case. Will need to account for it.
 
-
-And there it is: Bus 003. Port 005: Dev 009 !!
-
-
-Re your "unusual device" comment: welcome to USB-C PD which in a way subverts
-"classic" USB.
-
-USB-C port 0 has the ST Micro dongle in it; USB-C port 1 has a PD power adapter:
-
-# lsucpd
-  port0 [pd0]  ====>>  partner [pd2]
-  port1 [pd1]  <<====  partner [pd3]
-
-# lsucpd pd2 -c
- > pd2: has NO source capabilities
- >  pd2: sink capabilities:
-    >> 1:fixed_supply
-       dual_role_data='0'
-       dual_role_power='0'
-       fast_role_swap_current='0'
-       higher_capability='0'
-       operational_current='3000mA'
-       unchunked_extended_messages_supported='0'
-       unconstrained_power='0'
-       usb_communication_capable='0'
-                        ^^^^^^^^^^^^^
-       voltage='5000mV'
-
-So port 0's partner says it does _not_ support USB data communications! I
-think that means that if anything moves along D+, D-, and the Tx plus Rx
-SuperSpeed circuits then it does _not_ follow the USB specs. Further USB PD
-potentially sets up alternate modes:
-
-# lsucpd -ll p0p
-  port0 [pd0]  ====>>  partner [pd2]
-    port0-partner  [pd2]:
-       accessory_mode='none'
-       number_of_alternate_modes='1'
-       supports_usb_power_delivery='yes'
-       usb_power_delivery_revision='0.0'
-     Alternate mode: /sys/class/typec/port0-partner/port0-partner.0
-         active='yes'
-         description='DisplayPort'
-         mode='1'
-         svid='ff01'
-         vdo='0x00001085'
-
-So you could argue the 'lsusb -t' should not list this USB-C DP dongle.
-IMO a stronger argument is that lsusb and 'lsusb -t' should list the
-same devices.
-
-If you submit a patch you can add my "tested-by" to it. Another (little)
-bug fixed.
-
-Thanks
-Doug Gilbert
+Regards,
+Krishna,
 
