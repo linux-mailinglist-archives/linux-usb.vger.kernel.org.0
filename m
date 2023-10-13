@@ -1,235 +1,193 @@
-Return-Path: <linux-usb+bounces-1568-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1569-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB3077C83C0
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 12:52:28 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 995B77C83D8
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 12:59:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7175D282D7A
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 10:52:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0DBA9B2098B
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 10:59:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C7D412B61;
-	Fri, 13 Oct 2023 10:52:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECB55134B0;
+	Fri, 13 Oct 2023 10:59:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zenithal.me header.i=@zenithal.me header.b="tUcxouPQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MA7IdydB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFC0B107A4
-	for <linux-usb@vger.kernel.org>; Fri, 13 Oct 2023 10:52:21 +0000 (UTC)
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2109.outbound.protection.outlook.com [40.107.113.109])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35E33AD;
-	Fri, 13 Oct 2023 03:52:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aaXI1KkhMTCg/svf/FeBnrIktF5BMufsZ5M+BseInqyFnI+mM5lY6oOhThh+EXHM5Jxzy8xphoEqFB7plsEkzOGyyJNqRKYdKPi8GNDMhqOYC9BbpbEQfkY5iudJcqwGCcLF2XQjdzrF/o+5flLq5xgqvaJn4ySd5X76b7h6GZOB9oRv/NrGn2xs5df7Fs7zz0Kjnrcn9vNChsfi30xR5J1rPdW77wbWB4hdgeS5bni1yo53Y+ieCF5tQgXvX/i8iJaLuFsNAzJOmpFSNUJlc0VhlpaW/u+TwZUXAsRuThe/XjIvEUOACEaWiBWPUCdtDHWB2mPHo17p9KRv/LawqQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CaB9/jCNtvAx3Ke+Aa7pIH0sdS4tlzY7Lpxjcd+qR+8=;
- b=ltAGofvz+slE8VLBnYq7yqW8Fb7uhEWWpntJcLUd6Ipal6l/esbrd7n0fTtSjm5dp9exxr+IXaWZor0fGOou8MHj7E5Uyo6awR07CYLYzoFXBFmeK3Z1LxVlfw87igUzdFqBpUK4gDd0/BFnI9zGrjw24+U68rlb8RndJFVl3RYNIt3G2xB3B3aHn58SnoKKIhmHC8vtRq/e4ovs7mGTsgpiq1xUeB1eLpcULZtwEwuRBhY9+HsIa640w5VC/Y7Fh6LPNMH4XclzG6viVGA1l7Sl7A4Kb744I4M+GqRFZ0tJ15p3OtB2wzwU93GFePZ5dt5PyYlL9sDdUgN/QXTg1Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=zenithal.me; dmarc=pass action=none header.from=zenithal.me;
- dkim=pass header.d=zenithal.me; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zenithal.me;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CaB9/jCNtvAx3Ke+Aa7pIH0sdS4tlzY7Lpxjcd+qR+8=;
- b=tUcxouPQ8EkuOsS2l4wEyc236p+vQojxWXFQv9dMJI/IL3xZtexpB/9Tw333ASpkKN2JVqDD4ua7Td9Xg5KLLyeoyStYXIt1IuyYWa6dhZdpNWCQBE/LWXiblPQ+vV3tOWVkNSLR+xln1eBxGIgw06lcUv3SHXgn2O0WccyQj44=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=zenithal.me;
-Received: from TYYP286MB1406.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:de::5) by
- TYWP286MB2478.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:236::14) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6886.29; Fri, 13 Oct 2023 10:52:16 +0000
-Received: from TYYP286MB1406.JPNP286.PROD.OUTLOOK.COM
- ([fe80::54a2:c3cf:4f5:91cc]) by TYYP286MB1406.JPNP286.PROD.OUTLOOK.COM
- ([fe80::54a2:c3cf:4f5:91cc%7]) with mapi id 15.20.6886.030; Fri, 13 Oct 2023
- 10:52:16 +0000
-Date: Fri, 13 Oct 2023 18:52:09 +0800
-From: Hongren Zheng <i@zenithal.me>
-To: Shuah Khan <shuah@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Valentina Manea <valentina.manea.m@gmail.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	sfr@canb.auug.org.au
-Subject: [PATCH -next] usb/usbip: fix wrong data added to platform device
-Message-ID: <ZSkhWa5wmAGsAdCK@Sun>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Operating-System: Linux Sun 5.15.67
-X-Mailer: Mutt 2.2.7 (2022-08-07)
-X-ClientProxiedBy: SJ0PR13CA0045.namprd13.prod.outlook.com
- (2603:10b6:a03:2c2::20) To TYYP286MB1406.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:de::5)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B44E11720;
+	Fri, 13 Oct 2023 10:59:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35844C433C9;
+	Fri, 13 Oct 2023 10:59:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1697194754;
+	bh=xpY34OnoUOumz2tisrgcB13L7F/cK2GUTthY+74xzEM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MA7IdydB9XMBk9sMLEkSwxGQk/56pDShTvmcVz/1wyGYXesuQR3NB6G6QAQmWlgSI
+	 Xd8mbsqH+QvmFVNh6KcqkJv95/HJjAXQz8QhWaa8MMAhVqSh2k129DV2ot9yvREgI7
+	 y8SA/aNmeXuSwKUPWfEr/2sC3YqK3sI0PPYF4qq+RuD7DjTwCKNJ2dxlby/3CP5LMV
+	 kZhkVHF16m6lY+jwJGJC82E/vhYNwiYUFWEnMItOqVnf5cwISU2vlamvfA7qOWctBs
+	 C9OEHJqQXz1LA59MWX5G9NeCSLVdI4dPc084LThaJp+9PdkwaOX9/rP2t7FGYD0+qu
+	 ktFbUyiWxGuBQ==
+Date: Fri, 13 Oct 2023 12:59:09 +0200
+From: Simon Horman <horms@kernel.org>
+To: Edward AD <twuufnxlz@gmail.com>
+Cc: syzbot+225bfad78b079744fd5e@syzkaller.appspotmail.com,
+	bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+	pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+Subject: Re: [PATCH] media: imon: fix stall in worker_thread
+Message-ID: <20231013105909.GC29570@kernel.org>
+References: <0000000000003495bf060724994a@google.com>
+ <20231010053640.2034061-2-twuufnxlz@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYYP286MB1406:EE_|TYWP286MB2478:EE_
-X-MS-Office365-Filtering-Correlation-Id: f05b149b-d518-4be5-4816-08dbcbda76c6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	rF7sifoVAzKoWu+LRVZhBHIYmi6dKI/yYqvAvzxr0+be7OD7kMMJPxAkgwRq3MAWPGiUECx9mtisXFAVDo0GF2vT/2d73cxYItj2biyfJGwdSv4XMJ8vYrOadvfrYQTHSDJ0lYKVrCXnmtOElW9Ej4F7KzG4li9L6LvyFPTaOyeq8cg54FOQDoAkVzA+abBS24wR8Nc0Rk9AVStm4wm1fSqChKYEpk0eahsmKgyHMUw1YWasqqhvIGVVFjGLYnZCNfK4+F/2C4OgFVXRezpnJuyEAwFN7b+c/tkXTzy9MUNfgWyIlWFr2ksZ1aQJZ30Ex5S+NVWIrmsirSzwbFADEBTTWW9NRv23UYcsic4Q5s8LLhAfQ1mCeAVRoS4nKdWoAO9hEYAI2r7memz5t3ImpGEYJN/SbX71XSIgvbkWAbXwfl+j4/eSSsmj5h52y4I91kzEm/WsSNsrvatHcVIhUiiJRtXnC7kFJgXFBaU7iJ1sEmU33W1RZYyveGeRskes6IJUrYqDzep1FDr81VOZZCoSf0yuyXW5Dpbthv104Al79cmzHGKpNhwW/qB0m354RbW7mqiII4btMmgZZXOmjQpOqekZ0tcmmtiaJa8aBz0=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYYP286MB1406.JPNP286.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(7916004)(346002)(39830400003)(376002)(366004)(396003)(136003)(230922051799003)(1800799009)(64100799003)(186009)(451199024)(316002)(786003)(6666004)(6506007)(9686003)(33716001)(6512007)(83380400001)(5660300002)(4326008)(8936002)(8676002)(2906002)(478600001)(966005)(6486002)(66476007)(66556008)(66946007)(110136005)(41300700001)(38100700002)(41320700001)(86362001)(49092004);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?wAahB1BKOB8NWW+Ok75sSS78zqpiKOumDwYUmyyzNb1BuClUVOp7J4OqLSN3?=
- =?us-ascii?Q?Bv6cLImssNiICjzWgRNIVowfT5Mzc3teVOCXslc9GzFVaZrzM8+qP5b+HwrL?=
- =?us-ascii?Q?gOtCf8dinp/kwNvhKO0Qz9IQmHACkWlIcDlxWsN22V7dwno6XyOZEoRjJ2EY?=
- =?us-ascii?Q?EEe2viJtOeNIZJDUJJpNhHi9auFHFEmhZ8K7r0fStLyjfjyvljOCpx87lyIL?=
- =?us-ascii?Q?re5xAaO3Dn0GvTQPtjNUD+NQ5SuJ13RKCSA5J9Zxga6LZYU0bi91DJFpH8yM?=
- =?us-ascii?Q?EvT0yw8Ub7lMFvgNzDixFW07RV8SUkKQ2ni3HWunFXBXvvzGmXUb5OBZTsBB?=
- =?us-ascii?Q?RzHZL6rK/5GOcK7jO4+cirbGbfnTkQv0LvZ1G9wF7P3ySlmeiPnOrRG364R2?=
- =?us-ascii?Q?H3U/cxARr0+KWpzhzXip2f9G8Q6YgIg/i3Ghg/1JidqMAK4c8P1veTU+mnJB?=
- =?us-ascii?Q?wp5h7VUnXs6fo8Rwov7XkNrmhuJe4oq5v50c5K9bw90D0IXpkfdq1EfBI4zq?=
- =?us-ascii?Q?wk6TaSqqqG0DPsm5nvF2N5bS0w8+B9RAe/cPz7ifurWUXxWPsLsmQn4HRo6O?=
- =?us-ascii?Q?DQhXDWe6QQsqNJsATKL5wFUtsj4sXHoBGvsle04sVNiDkzKqOF9gmUbxbdQk?=
- =?us-ascii?Q?JBkvoEn1WDm7Q9tR/Daq1yuTOjSf1C+LUfs/o7gJqaKqq7XtmaE9VNs8Aemt?=
- =?us-ascii?Q?dIJ66nu216nG8TWPi3Hi72t8BIko7ZQ6/njjVPPAi3uxVA+7Jy5sdTGncJje?=
- =?us-ascii?Q?iAPNEsfzCu2SzHSMi9/6JhXTG7hjV03rUOnmSyJpcPjCRWTgU0bsvPyyp3I8?=
- =?us-ascii?Q?lFgm11S95HvEpG9AFwNU3Xf2K5y25LTVd0P0uax39JCyWHAMN2UqNdPQnMzg?=
- =?us-ascii?Q?Z1q0w2Cs94lmTq1MPYq3tu7gGELfwOLRGlEXuxDSkOG2wr0pXUgsKMCFzY2Q?=
- =?us-ascii?Q?hYW2ghRXenBOfyZmpXigczX1j5ei/t0AtxDO74Qo1/bd+4pyu9Q9V0uY+Iws?=
- =?us-ascii?Q?++0l4TfHtwqr8F9Pdcgh1kFMANM6RSYSIXAZJ53Ukse5L7eZfieHV9ACLgQy?=
- =?us-ascii?Q?x1+J9lCP7wDrQyidPt+NzDa5E4QX4ijYGaTVczZgG1VKBI/nQet2CyaAGB5W?=
- =?us-ascii?Q?EqaMSienT9w6STP0zJCw4toaUrS5ggEB4F2I5FcMF3NPe03CKVn4jUMDFmOB?=
- =?us-ascii?Q?UhN6uzE9blnI1HO7joz3KaLAEgeY2PoH1x2gcm75ToyU9iDgHNabxcNFBMDY?=
- =?us-ascii?Q?ThtKNEsrQ3JWyFj0/EenoqMVoKMnfSHyw88/RXpnBkkO5J0LtGl5FnlOwbPk?=
- =?us-ascii?Q?6/DL4kgif0li4WIbGBdLPmtPDCDwkTvyznrTr1Aldg1DJZUL9J12CnkyHCxC?=
- =?us-ascii?Q?zeHtJuw4J3tW1FTeU1mIZK4KvH+Zhv45MmOsJbesNqBGO8AezU1Bjfp3SDsT?=
- =?us-ascii?Q?8cxh9R66LqXJf4OZV5Y3GSuQNg0S83GXHhx9dCVq9OzsRNAwRFyhLDThKaVv?=
- =?us-ascii?Q?oiQvkjvYEQ6hvHWV65EjGpVh67sLSlPZjJ+6B8rLs7JpBgicAPS9k8RATHg6?=
- =?us-ascii?Q?JE4pGGeZ+FPTekujhTmtTXpgS6srbjolFS+mGEPr?=
-X-OriginatorOrg: zenithal.me
-X-MS-Exchange-CrossTenant-Network-Message-Id: f05b149b-d518-4be5-4816-08dbcbda76c6
-X-MS-Exchange-CrossTenant-AuthSource: TYYP286MB1406.JPNP286.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Oct 2023 10:52:16.2039
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 436d481c-43b1-4418-8d7f-84c1e4887cf0
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: N9eQm4tzfBrmn6RZBrNymiCKAnxfi6TVgSfDjAFAO5VfgVW+ev0M10ihiqpfl0q/
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWP286MB2478
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231010053640.2034061-2-twuufnxlz@gmail.com>
 
-.data of platform_device_info will be copied into .platform_data of
-struct device via platform_device_add_data.
+On Tue, Oct 10, 2023 at 01:36:41PM +0800, Edward AD wrote:
+> syzbot report:
+> rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { 1-....
+>  } 2682 jiffies s: 16081 root: 0x2/.
+> rcu: blocking rcu_node structures (internal RCU debug):
+> 
+> Sending NMI from CPU 0 to CPUs 1:
+> imon 6-1:0.0: imon usb_rx_callback_intf0: status(-71): ignored
+> NMI backtrace for cpu 1
+> CPU: 1 PID: 5131 Comm: kworker/1:5 Not tainted 6.6.0-rc4-syzkaller-00012-gce36c8b14987 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/06/2023
+> Workqueue: events nsim_dev_trap_report_work
+> RIP: 0010:io_serial_in+0x76/0xb0 drivers/tty/serial/8250/8250_port.c:417
+> Code: 60 35 c6 fc 89 e9 41 d3 e6 48 83 c3 40 48 89 d8 48 c1 e8 03 42 80 3c 38 00 74 08 48 89 df e8 51 b1 20 fd 44 03 33 44 89 f2 ec <0f> b6 c0 5b 41 5e 41 5f 5d c3 89 e9 80 e1 07 38 c1 7c ad 48 89 ef
+> RSP: 0018:ffffc900001efed8 EFLAGS: 00000002
+> RAX: 1ffffffff2443700 RBX: ffffffff9221bd60 RCX: 0000000000000000
+> RDX: 00000000000003fd RSI: 0000000000000000 RDI: 0000000000000020
+> RBP: 0000000000000000 R08: ffffffff84c7d646 R09: 1ffff110039be046
+> R10: dffffc0000000000 R11: ffffed10039be047 R12: dffffc0000000000
+> R13: 0000000000002703 R14: 00000000000003fd R15: dffffc0000000000
+> FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007fcd51aff0f0 CR3: 000000000d130000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <NMI>
+>  </NMI>
+>  <IRQ>
+>  serial_in drivers/tty/serial/8250/8250.h:117 [inline]
+>  serial_lsr_in drivers/tty/serial/8250/8250.h:139 [inline]
+>  wait_for_lsr drivers/tty/serial/8250/8250_port.c:2089 [inline]
+>  serial8250_console_fifo_write drivers/tty/serial/8250/8250_port.c:3374 [inline]
+>  serial8250_console_write+0x110e/0x1820 drivers/tty/serial/8250/8250_port.c:3452
+>  console_emit_next_record kernel/printk/printk.c:2910 [inline]
+>  console_flush_all+0x7ff/0xec0 kernel/printk/printk.c:2966
+>  console_unlock+0x13b/0x4d0 kernel/printk/printk.c:3035
+>  vprintk_emit+0x508/0x720 kernel/printk/printk.c:2307
+>  dev_vprintk_emit+0x2ae/0x330 drivers/base/core.c:4849
+>  dev_printk_emit+0xdd/0x120 drivers/base/core.c:4860
+>  _dev_warn+0x122/0x170 drivers/base/core.c:4916
+>  usb_rx_callback_intf0+0x156/0x190 drivers/media/rc/imon.c:1771
+>  __usb_hcd_giveback_urb+0x371/0x530 drivers/usb/core/hcd.c:1650
+>  dummy_timer+0x8aa/0x3210 drivers/usb/gadget/udc/dummy_hcd.c:1987
+>  call_timer_fn+0x17a/0x580 kernel/time/timer.c:1700
+>  expire_timers kernel/time/timer.c:1751 [inline]
+>  __run_timers+0x64f/0x860 kernel/time/timer.c:2022
+>  run_timer_softirq+0x67/0xf0 kernel/time/timer.c:2035
+>  __do_softirq+0x2ab/0x908 kernel/softirq.c:553
+>  invoke_softirq kernel/softirq.c:427 [inline]
+>  __irq_exit_rcu+0xf1/0x1b0 kernel/softirq.c:632
+>  irq_exit_rcu+0x9/0x20 kernel/softirq.c:644
+>  sysvec_apic_timer_interrupt+0x95/0xb0 arch/x86/kernel/apic/apic.c:1074
+>  </IRQ>
+>  <TASK>
+>  asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:645
+> RIP: 0010:jhash2 include/linux/jhash.h:129 [inline]
+> RIP: 0010:hash_stack lib/stackdepot.c:322 [inline]
+> RIP: 0010:__stack_depot_save+0x64/0x650 lib/stackdepot.c:382
+> Code: 00 43 8d 34 00 46 8d 34 c5 7b 71 f5 75 83 fe 04 72 70 44 89 f5 44 89 f0 4c 89 fa 03 02 03 6a 04 44 03 72 08 44 89 f7 c1 c7 04 <44> 29 f0 31 c7 41 01 ee 29 fd 89 fb c1 c3 06 31 eb 44 01 f7 89 d9
+> RSP: 0018:ffffc900043df6b8 EFLAGS: 00000a07
+> RAX: 00000000062d8798 RBX: 00000000fe584f8b RCX: 00000000838c8150
+> RDX: ffffc900043df758 RSI: 0000000000000004 RDI: 00000000385a93f7
+> RBP: 000000006c0b3f46 R08: 000000000000000b R09: ffffffff813da4e7
+> R10: 0000000000000002 R11: ffff888026631dc0 R12: 0000000000000820
+> R13: 0000000000000001 R14: 000000007385a93f R15: ffffc900043df710
+>  kasan_save_stack mm/kasan/common.c:46 [inline]
+>  kasan_set_track+0x61/0x70 mm/kasan/common.c:52
+>  __kasan_slab_alloc+0x66/0x70 mm/kasan/common.c:328
+>  kasan_slab_alloc include/linux/kasan.h:188 [inline]
+>  slab_post_alloc_hook+0x67/0x3d0 mm/slab.h:762
+>  slab_alloc_node mm/slub.c:3478 [inline]
+>  kmem_cache_alloc_node+0x148/0x330 mm/slub.c:3523
+>  __alloc_skb+0x181/0x420 net/core/skbuff.c:640
+>  alloc_skb include/linux/skbuff.h:1286 [inline]
+>  nsim_dev_trap_skb_build drivers/net/netdevsim/dev.c:748 [inline]
+>  nsim_dev_trap_report drivers/net/netdevsim/dev.c:805 [inline]
+>  nsim_dev_trap_report_work+0x250/0xa90 drivers/net/netdevsim/dev.c:850
+>  process_one_work kernel/workqueue.c:2630 [inline]
+>  process_scheduled_works+0x90f/0x1400 kernel/workqueue.c:2703
+>  worker_thread+0xa5f/0xff0 kernel/workqueue.c:2784
+>  kthread+0x2d3/0x370 kernel/kthread.c:388
+>  ret_from_fork+0x48/0x80 arch/x86/kernel/process.c:147
+>  ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:304
+>  </TASK>
+> imon 2-1:0.0: imon usb_rx_callback_intf0: status(-71): ignored
+> imon 1-1:0.0: imon usb_rx_callback_intf0: status(-71): ignored
+> raw-gadget.5 gadget.4: ignoring, device is not running
+> imon 1-1:0.0: imon usb_rx_callback_intf0: status(-71): ignored
+> 
+> Invalid protocol requests should not be processed in
+> usb_rx_callback_intf0().
+> 
+> Reported-and-tested-by: syzbot+225bfad78b079744fd5e@syzkaller.appspotmail.com
+> Signed-off-by: Edward AD <twuufnxlz@gmail.com>
+> ---
+>  drivers/media/rc/imon.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/media/rc/imon.c b/drivers/media/rc/imon.c
+> index 74546f7e3469..3830fabf113a 100644
+> --- a/drivers/media/rc/imon.c
+> +++ b/drivers/media/rc/imon.c
+> @@ -1770,6 +1770,8 @@ static void usb_rx_callback_intf0(struct urb *urb)
+>  	default:
+>  		dev_warn(ictx->dev, "imon %s: status(%d): ignored\n",
+>  			 __func__, urb->status);
+> +		if (urb->status == -EPROTO)
+> +			return;
+>  		break;
+>  	}
 
-However, vhcis[i] contains a spinlock, is dynamically allocated and
-used by other code, so it is not meant to be copied. The workaround
-was to use void *vhci as an agent, but it was removed in the commit
-suggested below.
+Hi Edward,
 
-This patch adds back the workaround and changes the way of using
-platform_data accordingly.
+The code is already switching based on urb->status,
+so unless the warning message is really desired,
+perhaps this is more appropriate?
 
-Reported-by: syzbot+e0dbc33630a092ccf033@syzkaller.appspotmail.com
-Closes: https://lore.kernel.org/linux-usb/00000000000029242706077f3145@google.com/
-Reported-by: syzbot+6867a9777f4b8dc4e256@syzkaller.appspotmail.com
-Closes: https://lore.kernel.org/linux-usb/0000000000007634c1060793197c@google.com/
-Fixes: b8aaf639b403 ("usbip: Use platform_device_register_full()")
-Signed-off-by: Hongren Zheng <i@zenithal.me>
----
- drivers/usb/usbip/vhci_hcd.c | 17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
+diff --git a/drivers/media/rc/imon.c b/drivers/media/rc/imon.c
+index 74546f7e3469..0e2f06f2f456 100644
+--- a/drivers/media/rc/imon.c
++++ b/drivers/media/rc/imon.c
+@@ -1799,6 +1799,7 @@ static void usb_rx_callback_intf1(struct urb *urb)
+ 
+ 	switch (urb->status) {
+ 	case -ENOENT:		/* usbcore unlink successful! */
++	case -EPROTO:		/* XXX: something goes here */
+ 		return;
+ 
+ 	case -ESHUTDOWN:	/* transport endpoint was shut down */
 
-diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
-index f845b91848b9..dfbdc77108e5 100644
---- a/drivers/usb/usbip/vhci_hcd.c
-+++ b/drivers/usb/usbip/vhci_hcd.c
-@@ -1139,8 +1139,7 @@ static int hcd_name_to_id(const char *name)
- 
- static int vhci_setup(struct usb_hcd *hcd)
- {
--	struct vhci *vhci = dev_get_platdata(hcd->self.controller);
--
-+	struct vhci *vhci = *((void **)dev_get_platdata(hcd->self.controller));
- 	if (usb_hcd_is_primary_hcd(hcd)) {
- 		vhci->vhci_hcd_hs = hcd_to_vhci_hcd(hcd);
- 		vhci->vhci_hcd_hs->vhci = vhci;
-@@ -1257,7 +1256,7 @@ static int vhci_get_frame_number(struct usb_hcd *hcd)
- /* FIXME: suspend/resume */
- static int vhci_bus_suspend(struct usb_hcd *hcd)
- {
--	struct vhci *vhci = dev_get_platdata(hcd->self.controller);
-+	struct vhci *vhci = *((void **)dev_get_platdata(hcd->self.controller));
- 	unsigned long flags;
- 
- 	dev_dbg(&hcd->self.root_hub->dev, "%s\n", __func__);
-@@ -1271,7 +1270,7 @@ static int vhci_bus_suspend(struct usb_hcd *hcd)
- 
- static int vhci_bus_resume(struct usb_hcd *hcd)
- {
--	struct vhci *vhci = dev_get_platdata(hcd->self.controller);
-+	struct vhci *vhci = *((void **)dev_get_platdata(hcd->self.controller));
- 	int rc = 0;
- 	unsigned long flags;
- 
-@@ -1338,7 +1337,7 @@ static const struct hc_driver vhci_hc_driver = {
- 
- static int vhci_hcd_probe(struct platform_device *pdev)
- {
--	struct vhci             *vhci = dev_get_platdata(&pdev->dev);
-+	struct vhci             *vhci = *((void **)dev_get_platdata(&pdev->dev));
- 	struct usb_hcd		*hcd_hs;
- 	struct usb_hcd		*hcd_ss;
- 	int			ret;
-@@ -1396,7 +1395,7 @@ static int vhci_hcd_probe(struct platform_device *pdev)
- 
- static void vhci_hcd_remove(struct platform_device *pdev)
- {
--	struct vhci *vhci = dev_get_platdata(&pdev->dev);
-+	struct vhci *vhci = *((void **)dev_get_platdata(&pdev->dev));
- 
- 	/*
- 	 * Disconnects the root hub,
-@@ -1431,7 +1430,7 @@ static int vhci_hcd_suspend(struct platform_device *pdev, pm_message_t state)
- 	if (!hcd)
- 		return 0;
- 
--	vhci = dev_get_platdata(hcd->self.controller);
-+	vhci = *((void **)dev_get_platdata(hcd->self.controller));
- 
- 	spin_lock_irqsave(&vhci->lock, flags);
- 
-@@ -1506,6 +1505,7 @@ static void del_platform_devices(void)
- static int __init vhci_hcd_init(void)
- {
- 	int i, ret;
-+	void *vhci;
- 
- 	if (usb_disabled())
- 		return -ENODEV;
-@@ -1522,10 +1522,11 @@ static int __init vhci_hcd_init(void)
- 		goto err_driver_register;
- 
- 	for (i = 0; i < vhci_num_controllers; i++) {
-+		vhci = &vhcis[i];
- 		struct platform_device_info pdevinfo = {
- 			.name = driver_name,
- 			.id = i,
--			.data = &vhcis[i],
-+			.data = &vhci,
- 			.size_data = sizeof(void *),
- 		};
- 
--- 
-2.37.2
-
+>  
+> -- 
+> 2.25.1
+> 
+> 
 
