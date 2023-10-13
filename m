@@ -1,36 +1,39 @@
-Return-Path: <linux-usb+bounces-1594-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1595-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB1607C869E
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 15:19:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39EA77C86E5
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 15:32:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8FC58282D7A
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 13:19:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6666A1C210F8
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 13:32:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D247E15E9E;
-	Fri, 13 Oct 2023 13:19:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3912315E9F;
+	Fri, 13 Oct 2023 13:32:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="doqk1/Yi"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9263015E85
-	for <linux-usb@vger.kernel.org>; Fri, 13 Oct 2023 13:19:10 +0000 (UTC)
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42223C2;
-	Fri, 13 Oct 2023 06:19:06 -0700 (PDT)
-Received: from [192.168.0.185] (ip5f5bf22a.dynamic.kabel-deutschland.de [95.91.242.42])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 09CBF61E5FE01;
-	Fri, 13 Oct 2023 15:18:17 +0200 (CEST)
-Message-ID: <7add0297-709f-4836-832f-f8fbd412eca5@molgen.mpg.de>
-Date: Fri, 13 Oct 2023 15:18:16 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99BA915E95
+	for <linux-usb@vger.kernel.org>; Fri, 13 Oct 2023 13:32:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81C89C433C8;
+	Fri, 13 Oct 2023 13:32:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1697203954;
+	bh=r8b96SLh8F5P3eXfJlwjoFjNajNgFAzxCO7YlLe7PZU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=doqk1/YiXciLYGr0CtyD0OGEtzq1v/Pq+ALTZugSWV9io5lxRSNxcpDkMg8vqSl28
+	 pAr2rRF/Ft2svHn3Yhw7O9uXbJHrHKXRlcmqPKvaegtgbg7XK/KPYvxFdvfB5+pAKl
+	 fOV82wesZn2uXR06tDK2BuKnQ0d3AjKPbA04qODOObBHnBLeZniYRIw7hv04PDQOU1
+	 bMb2jNuibVfe7+s3ip9Xcfp4dOMNjWF6UqztJCMAr3H9CtLl+K1LhunYMekeVtz8lk
+	 DIOpctJohX+F0TF5Xaq/g8sRDQseV0CMwh6wp87J7/4iSGVANEq37b4oZxDqggtik2
+	 7jvrea4YLAz2A==
+Message-ID: <7598fcfa-7047-434d-be03-41cb2bb46ecb@kernel.org>
+Date: Fri, 13 Oct 2023 15:32:26 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -38,207 +41,84 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 3/3] usb: chipidea: Add support for NPCM
-To: Tomer Maimon <tmaimon77@gmail.com>
-Cc: peter.chen@kernel.org, gregkh@linuxfoundation.org,
- avifishman70@gmail.com, tali.perry1@gmail.com, joel@jms.id.au,
- venture@google.com, yuenn@google.com, benjaminfair@google.com,
- j.neuschaefer@gmx.net, openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
+Subject: Re: [PATCH v6 2/3] dt-bindings: usb: ci-hdrc-usb2: add npcm750 and
+ npcm845 compatible
+To: Tomer Maimon <tmaimon77@gmail.com>, peter.chen@kernel.org,
+ gregkh@linuxfoundation.org, avifishman70@gmail.com, tali.perry1@gmail.com,
+ joel@jms.id.au, venture@google.com, yuenn@google.com,
+ benjaminfair@google.com, j.neuschaefer@gmx.net
+Cc: openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20231012230057.3365626-1-tmaimon77@gmail.com>
- <20231012230057.3365626-4-tmaimon77@gmail.com>
+ <20231012230057.3365626-3-tmaimon77@gmail.com>
 Content-Language: en-US
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <20231012230057.3365626-4-tmaimon77@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Autocrypt: addr=krzk@kernel.org; keydata=
+ xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
+ cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
+ JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
+ gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
+ J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
+ NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
+ BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
+ vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
+ Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
+ TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
+ S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
+ FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJgPO8PBQkUX63hAAoJEBuTQ307
+ QWKbBn8P+QFxwl7pDsAKR1InemMAmuykCHl+XgC0LDqrsWhAH5TYeTVXGSyDsuZjHvj+FRP+
+ gZaEIYSw2Yf0e91U9HXo3RYhEwSmxUQ4Fjhc9qAwGKVPQf6YuQ5yy6pzI8brcKmHHOGrB3tP
+ /MODPt81M1zpograAC2WTDzkICfHKj8LpXp45PylD99J9q0Y+gb04CG5/wXs+1hJy/dz0tYy
+ iua4nCuSRbxnSHKBS5vvjosWWjWQXsRKd+zzXp6kfRHHpzJkhRwF6ArXi4XnQ+REnoTfM5Fk
+ VmVmSQ3yFKKePEzoIriT1b2sXO0g5QXOAvFqB65LZjXG9jGJoVG6ZJrUV1MVK8vamKoVbUEe
+ 0NlLl/tX96HLowHHoKhxEsbFzGzKiFLh7hyboTpy2whdonkDxpnv/H8wE9M3VW/fPgnL2nPe
+ xaBLqyHxy9hA9JrZvxg3IQ61x7rtBWBUQPmEaK0azW+l3ysiNpBhISkZrsW3ZUdknWu87nh6
+ eTB7mR7xBcVxnomxWwJI4B0wuMwCPdgbV6YDUKCuSgRMUEiVry10xd9KLypR9Vfyn1AhROrq
+ AubRPVeJBf9zR5UW1trJNfwVt3XmbHX50HCcHdEdCKiT9O+FiEcahIaWh9lihvO0ci0TtVGZ
+ MCEtaCE80Q3Ma9RdHYB3uVF930jwquplFLNF+IBCn5JRzsFNBFVDXDQBEADNkrQYSREUL4D3
+ Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
+ MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
+ OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
+ GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
+ 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
+ YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
+ 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
+ BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
+ JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
+ 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
+ YpsFAmA872oFCRRflLYACgkQG5NDfTtBYpvScw/9GrqBrVLuJoJ52qBBKUBDo4E+5fU1bjt0
+ Gv0nh/hNJuecuRY6aemU6HOPNc2t8QHMSvwbSF+Vp9ZkOvrM36yUOufctoqON+wXrliEY0J4
+ ksR89ZILRRAold9Mh0YDqEJc1HmuxYLJ7lnbLYH1oui8bLbMBM8S2Uo9RKqV2GROLi44enVt
+ vdrDvo+CxKj2K+d4cleCNiz5qbTxPUW/cgkwG0lJc4I4sso7l4XMDKn95c7JtNsuzqKvhEVS
+ oic5by3fbUnuI0cemeizF4QdtX2uQxrP7RwHFBd+YUia7zCcz0//rv6FZmAxWZGy5arNl6Vm
+ lQqNo7/Poh8WWfRS+xegBxc6hBXahpyUKphAKYkah+m+I0QToCfnGKnPqyYIMDEHCS/RfqA5
+ t8F+O56+oyLBAeWX7XcmyM6TGeVfb+OZVMJnZzK0s2VYAuI0Rl87FBFYgULdgqKV7R7WHzwD
+ uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
+ 7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
+ 5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
+In-Reply-To: <20231012230057.3365626-3-tmaimon77@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Dear Tomer,
-
-
-Thank you for your patch.
-
-Am 13.10.23 um 01:00 schrieb Tomer Maimon:
-> Add Nuvoton NPCM BMC SoCs support to USB ChipIdea driver.
-> NPCM SoC include ChipIdea IP block that used for USB device controller
-
-include*s*
-“that *is* used” or just “… used for”
-
-> mode.
-
-Please add a line, how you tested this patch.
-
-> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
-> Acked-by: Peter Chen <peter.chen@kernel.org>
-> ---
->   drivers/usb/chipidea/Kconfig        |   4 +
->   drivers/usb/chipidea/Makefile       |   1 +
->   drivers/usb/chipidea/ci_hdrc_npcm.c | 114 ++++++++++++++++++++++++++++
->   3 files changed, 119 insertions(+)
->   create mode 100644 drivers/usb/chipidea/ci_hdrc_npcm.c
+On 13/10/2023 01:00, Tomer Maimon wrote:
+> Add a compatible string for Nuvoton BMC NPCM750 and Nuvoton BMC NPCM845.
 > 
-> diff --git a/drivers/usb/chipidea/Kconfig b/drivers/usb/chipidea/Kconfig
-> index c815824a0b2d..bab45bc62361 100644
-> --- a/drivers/usb/chipidea/Kconfig
-> +++ b/drivers/usb/chipidea/Kconfig
-> @@ -43,6 +43,10 @@ config USB_CHIPIDEA_MSM
->   	tristate "Enable MSM hsusb glue driver" if EXPERT
->   	default USB_CHIPIDEA
->   
-> +config USB_CHIPIDEA_NPCM
-> +	tristate "Enable NPCM hsusb glue driver" if EXPERT
-> +	default USB_CHIPIDEA
-> +
->   config USB_CHIPIDEA_IMX
->   	tristate "Enable i.MX USB glue driver" if EXPERT
->   	depends on OF
-> diff --git a/drivers/usb/chipidea/Makefile b/drivers/usb/chipidea/Makefile
-> index 71afeab97e83..718cb24603dd 100644
-> --- a/drivers/usb/chipidea/Makefile
-> +++ b/drivers/usb/chipidea/Makefile
-> @@ -13,6 +13,7 @@ ci_hdrc-$(CONFIG_USB_OTG_FSM)		+= otg_fsm.o
->   
->   obj-$(CONFIG_USB_CHIPIDEA_GENERIC)	+= ci_hdrc_usb2.o
->   obj-$(CONFIG_USB_CHIPIDEA_MSM)		+= ci_hdrc_msm.o
-> +obj-$(CONFIG_USB_CHIPIDEA_NPCM)		+= ci_hdrc_npcm.o
->   obj-$(CONFIG_USB_CHIPIDEA_PCI)		+= ci_hdrc_pci.o
->   obj-$(CONFIG_USB_CHIPIDEA_IMX)		+= usbmisc_imx.o ci_hdrc_imx.o
->   obj-$(CONFIG_USB_CHIPIDEA_TEGRA)	+= ci_hdrc_tegra.o
-> diff --git a/drivers/usb/chipidea/ci_hdrc_npcm.c b/drivers/usb/chipidea/ci_hdrc_npcm.c
-> new file mode 100644
-> index 000000000000..37b64a3dbd96
-> --- /dev/null
-> +++ b/drivers/usb/chipidea/ci_hdrc_npcm.c
-> @@ -0,0 +1,114 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +// Copyright (c) 2023 Nuvoton Technology corporation.
-> +
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/pm_runtime.h>
-> +#include <linux/usb/chipidea.h>
-> +#include <linux/clk.h>
-> +#include <linux/io.h>
-> +#include <linux/reset-controller.h>
-> +#include <linux/of.h>
-> +
-> +#include "ci.h"
-> +
-> +struct npcm_udc_data {
-> +	struct platform_device	*ci;
-> +	struct clk		*core_clk;
-> +	struct ci_hdrc_platform_data pdata;
-> +};
-> +
-> +static int npcm_udc_notify_event(struct ci_hdrc *ci, unsigned event)
-> +{
-> +	struct device *dev = ci->dev->parent;
-> +
-> +	switch (event) {
-> +	case CI_HDRC_CONTROLLER_RESET_EVENT:
-> +		/* clear all mode bits */
-> +		hw_write(ci, OP_USBMODE, 0xffffffff, 0x0);
-> +		break;
-> +	default:
-> +		dev_dbg(dev, "unknown ci_hdrc event\n");
+> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> ---
 
-Please print it out.
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC. It might happen, that command when run on an older
+kernel, gives you outdated entries. Therefore please be sure you base
+your patches on recent Linux kernel.
 
-> +		break;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int npcm_udc_probe(struct platform_device *pdev)
-> +{
-> +	int ret;
-> +	struct npcm_udc_data *ci;
-> +	struct platform_device *plat_ci;
-> +	struct device *dev = &pdev->dev;
-> +
-> +	ci = devm_kzalloc(&pdev->dev, sizeof(*ci), GFP_KERNEL);
-> +	if (!ci)
-> +		return -ENOMEM;
-> +	platform_set_drvdata(pdev, ci);
-> +
-> +	ci->core_clk = devm_clk_get_optional(dev, NULL);
-> +	if (IS_ERR(ci->core_clk))
-> +		return PTR_ERR(ci->core_clk);
-> +
-> +	ret = clk_prepare_enable(ci->core_clk);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "failed to enable the clock: %d\n", ret);
-> +
-> +	ci->pdata.name = dev_name(dev);
-> +	ci->pdata.capoffset = DEF_CAPOFFSET;
-> +	ci->pdata.flags	= CI_HDRC_REQUIRES_ALIGNED_DMA |
-> +		CI_HDRC_FORCE_VBUS_ACTIVE_ALWAYS;
-> +	ci->pdata.phy_mode = USBPHY_INTERFACE_MODE_UTMI;
-> +	ci->pdata.notify_event = npcm_udc_notify_event;
-> +
-> +	plat_ci = ci_hdrc_add_device(dev, pdev->resource, pdev->num_resources,
-> +				     &ci->pdata);
-> +	if (IS_ERR(plat_ci)) {
-> +		ret = PTR_ERR(plat_ci);
-> +		dev_err(dev, "failed to register HDRC NPCM device: %d\n", ret);
-> +		goto clk_err;
-> +	}
-> +
-> +	pm_runtime_no_callbacks(dev);
-> +	pm_runtime_enable(dev);
-> +
-> +	return 0;
-> +
-> +clk_err:
-> +	clk_disable_unprepare(ci->core_clk);
-> +	return ret;
-> +}
-> +
-> +static int npcm_udc_remove(struct platform_device *pdev)
-> +{
-> +	struct npcm_udc_data *ci = platform_get_drvdata(pdev);
-> +
-> +	pm_runtime_disable(&pdev->dev);
-> +	ci_hdrc_remove_device(ci->ci);
-> +	clk_disable_unprepare(ci->core_clk);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id npcm_udc_dt_match[] = {
-> +	{ .compatible = "nuvoton,npcm750-udc", },
-> +	{ .compatible = "nuvoton,npcm845-udc", },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, npcm_udc_dt_match);
-> +
-> +static struct platform_driver npcm_udc_driver = {
-> +	.probe = npcm_udc_probe,
-> +	.remove = npcm_udc_remove,
-> +	.driver = {
-> +		.name = "npcm_udc",
-> +		.of_match_table = npcm_udc_dt_match,
-> +	},
-> +};
-> +
-> +module_platform_driver(npcm_udc_driver);
-> +
-> +MODULE_DESCRIPTION("NPCM USB device controller driver");
-> +MODULE_AUTHOR("Tomer Maimon <tomer.maimon@nuvoton.com>");
+You missed at least devicetree list (maybe more), so this won't be
+tested by automated tooling. Performing review on untested code might be
+a waste of time, thus I will skip this patch entirely till you follow
+the process allowing the patch to be tested.
 
-Should that address also be recorded as the patch author?
+Please kindly resend and include all necessary To/Cc entries.
 
-> +MODULE_LICENSE("GPL v2");
+Best regards,
+Krzysztof
 
-
-Kind regards,
-
-Paul
 
