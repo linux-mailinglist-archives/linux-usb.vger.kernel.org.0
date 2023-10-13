@@ -1,102 +1,138 @@
-Return-Path: <linux-usb+bounces-1566-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1567-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8519F7C838D
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 12:45:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A25A27C839C
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 12:47:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 411A7282D6D
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 10:45:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B426282CAF
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 10:47:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B250E125CF;
-	Fri, 13 Oct 2023 10:45:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D1BF12B61;
+	Fri, 13 Oct 2023 10:47:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m6+JpUQe"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="WTH5BM7c"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BF2C111AA;
-	Fri, 13 Oct 2023 10:45:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDD22C433C7;
-	Fri, 13 Oct 2023 10:45:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1697193935;
-	bh=0ZLfe7SbZuvOaoiV89P70O3iNcAqcUL0z/OoDUfELrQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=m6+JpUQenSk2gmtCrWeMpEH0VpBqJLlmvUeoG1r1jMVximEsXRUIHfYWRia1P5fpM
-	 n9MXnR4n7F/KlmzyV0SG/N3+tPOSFPQR25rbHqNWOpq5XU1YiN40mE5jlA91lTZkS2
-	 QYHPjl/uZXU8Vv4rSXSvt7cj+gSNlaZgICfipqgq7JPII/2xvBFb5jEahP24V0n9qL
-	 2AtPi8aNujI0mGfQ5n09zgsmtTksAHhC9datsJitZEcnLUTI/hX+IrdKnaYkQ/dCpq
-	 dsvI44TKZYpiXg0OFTvRXSWcd20yJxpI/Jh9HZHSiHozGH6F5ybU4lhRQRLioOJ3UN
-	 H+xV+UMyVCkfA==
-Date: Fri, 13 Oct 2023 16:15:30 +0530
-From: Vinod Koul <vkoul@kernel.org>
-To: Rohit Agarwal <quic_rohiagar@quicinc.com>
-Cc: agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-	kishon@kernel.org, robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-	gregkh@linuxfoundation.org, abel.vesa@linaro.org,
-	quic_wcheng@quicinc.com, dmitry.baryshkov@linaro.org,
-	linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, kernel@quicinc.com
-Subject: Re: [PATCH v4 0/5] Add USB Support on Qualcomm's SDX75 Platform
-Message-ID: <ZSkfyl757VXnfIjw@matsya>
-References: <1695359525-4548-1-git-send-email-quic_rohiagar@quicinc.com>
- <ZSkb9ajLZGpD46Ik@matsya>
- <b88cc301-52db-4401-8364-7056f0e10149@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64D946FB4;
+	Fri, 13 Oct 2023 10:47:49 +0000 (UTC)
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7C3E109;
+	Fri, 13 Oct 2023 03:47:44 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39D5PQxO016976;
+	Fri, 13 Oct 2023 10:47:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=5CeX+GyTnqbIkFTWtzQtGHiN8bC34N+qdq/3IRn0plY=;
+ b=WTH5BM7cXFORw+zslxHDt0s/G20TN0xP/f/XMps1frpyE0Gz+MBKDxrEtoHoJCL+f9s/
+ qCLbCOQ4eDDp80c2VnvuQV07MCNFqekC6oz5evXV53/T60RjxGk9dC/umbic9/nciKdJ
+ Ityua9yN1an7gq3WqgP4FlBSDwBPJiTL1RVsHE+yC4/Np79NGC7ZX5meYUyrwf2ofqkB
+ RudeWS7v4d665CqP5Dc7Ni8Ufi6uCyXjwF0MOVunWKgvLYPI/+gFx3PL3qiYOSSabh1g
+ EHxK72w87asfuqpygRtJbM1RlQMf7JlkkojCxTiaENu7cQdf6WyME0U+FvrWGiSX2XH3 +Q== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tpt0x1exr-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 13 Oct 2023 10:47:35 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39DAlYa8008892
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 13 Oct 2023 10:47:34 GMT
+Received: from [10.214.66.58] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Fri, 13 Oct
+ 2023 03:47:26 -0700
+Message-ID: <86f1c597-0a29-482b-bb21-b305373bbc6c@quicinc.com>
+Date: Fri, 13 Oct 2023 16:17:23 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b88cc301-52db-4401-8364-7056f0e10149@quicinc.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 0/5] Add USB Support on Qualcomm's SDX75 Platform
+Content-Language: en-US
+To: Vinod Koul <vkoul@kernel.org>
+CC: <agross@kernel.org>, <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
+        <kishon@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <gregkh@linuxfoundation.org>, <abel.vesa@linaro.org>,
+        <quic_wcheng@quicinc.com>, <dmitry.baryshkov@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <kernel@quicinc.com>
+References: <1695359525-4548-1-git-send-email-quic_rohiagar@quicinc.com>
+ <ZSkb9ajLZGpD46Ik@matsya> <b88cc301-52db-4401-8364-7056f0e10149@quicinc.com>
+ <ZSkfyl757VXnfIjw@matsya>
+From: Rohit Agarwal <quic_rohiagar@quicinc.com>
+In-Reply-To: <ZSkfyl757VXnfIjw@matsya>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: xF6WC4y7vr9bHQzCGv6VVNHikIZoqEiB
+X-Proofpoint-ORIG-GUID: xF6WC4y7vr9bHQzCGv6VVNHikIZoqEiB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-13_03,2023-10-12_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
+ lowpriorityscore=0 bulkscore=0 spamscore=0 impostorscore=0 suspectscore=0
+ priorityscore=1501 malwarescore=0 mlxlogscore=645 phishscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2310130088
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-On 13-10-23, 16:08, Rohit Agarwal wrote:
-> 
-> On 10/13/2023 3:59 PM, Vinod Koul wrote:
-> > On 22-09-23, 10:42, Rohit Agarwal wrote:
-> > > Hi,
-> > > 
-> > > Changes in v4:
-> > >   - Replaced the v5 offsets with v6 offsets as per Dmitry's suggestion in patch 5/5.
-> > > 
-> > > Changes in v3:
-> > >   - Removed the unnecessary change introduced in v2 of patch 2/5
-> > >   - Added Fixes tag in patch 3/5
-> > >   - Rebased patch 5/5 on Dmitry's cleanup patches.
-> > >     https://lore.kernel.org/all/20230911203842.778411-1-dmitry.baryshkov@linaro.org/
-> > >     https://lore.kernel.org/linux-phy/20230824211952.1397699-1-dmitry.baryshkov@linaro.org/
-> > > 
-> > > Changes in v2:
-> > >   - Dropped the new dt schema introduced in v1 for sdx75 usb3 phy
-> > >     and reusing the bindings.
-> > >   - Rephrased the commit message of patch 3/5
-> > >   - Removed stray lines from the patch 5/5
-> > > 
-> > > This series adds support of USB3 PHY support for Qualcomm's SDX75 Platform.
-> > The phy patches fail to apply, can you please rebase the three patches
-> > and resend
-> Can you please apply these two series. This series depends on it for
-> successful compilation.
-> [1] https://lore.kernel.org/all/20230911203842.778411-1-dmitry.baryshkov@linaro.org/
 
-This one has a pending comment bw Konrad and Dmitry..
+On 10/13/2023 4:15 PM, Vinod Koul wrote:
+> On 13-10-23, 16:08, Rohit Agarwal wrote:
+>> On 10/13/2023 3:59 PM, Vinod Koul wrote:
+>>> On 22-09-23, 10:42, Rohit Agarwal wrote:
+>>>> Hi,
+>>>>
+>>>> Changes in v4:
+>>>>    - Replaced the v5 offsets with v6 offsets as per Dmitry's suggestion in patch 5/5.
+>>>>
+>>>> Changes in v3:
+>>>>    - Removed the unnecessary change introduced in v2 of patch 2/5
+>>>>    - Added Fixes tag in patch 3/5
+>>>>    - Rebased patch 5/5 on Dmitry's cleanup patches.
+>>>>      https://lore.kernel.org/all/20230911203842.778411-1-dmitry.baryshkov@linaro.org/
+>>>>      https://lore.kernel.org/linux-phy/20230824211952.1397699-1-dmitry.baryshkov@linaro.org/
+>>>>
+>>>> Changes in v2:
+>>>>    - Dropped the new dt schema introduced in v1 for sdx75 usb3 phy
+>>>>      and reusing the bindings.
+>>>>    - Rephrased the commit message of patch 3/5
+>>>>    - Removed stray lines from the patch 5/5
+>>>>
+>>>> This series adds support of USB3 PHY support for Qualcomm's SDX75 Platform.
+>>> The phy patches fail to apply, can you please rebase the three patches
+>>> and resend
+>> Can you please apply these two series. This series depends on it for
+>> successful compilation.
+>> [1] https://lore.kernel.org/all/20230911203842.778411-1-dmitry.baryshkov@linaro.org/
+> This one has a pending comment bw Konrad and Dmitry..
+Ok, Will wait for this to get resolved.
 
-> [2] https://lore.kernel.org/linux-phy/20230824211952.1397699-1-dmitry.baryshkov@linaro.org/
-
-This one is already in -next
-
-> 
-> Thanks,
-> Rohit.
-
--- 
-~Vinod
+Thanks,
+Rohit.
+>
+>> [2] https://lore.kernel.org/linux-phy/20230824211952.1397699-1-dmitry.baryshkov@linaro.org/
+> This one is already in -next
+>
+>> Thanks,
+>> Rohit.
 
