@@ -1,66 +1,67 @@
-Return-Path: <linux-usb+bounces-1596-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1597-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FCBD7C87C4
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 16:25:15 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6336A7C87C6
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 16:25:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 51B351C20F14
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 14:25:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8767BB20A3D
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 14:25:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40B1F1A724;
-	Fri, 13 Oct 2023 14:25:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB7D21B27A;
+	Fri, 13 Oct 2023 14:25:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="2+hII2Ff"
+	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="pph0E6fh"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAD4818E38
-	for <linux-usb@vger.kernel.org>; Fri, 13 Oct 2023 14:25:06 +0000 (UTC)
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37D1EBF
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A10CC19BD5
+	for <linux-usb@vger.kernel.org>; Fri, 13 Oct 2023 14:25:07 +0000 (UTC)
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB57CBD
 	for <linux-usb@vger.kernel.org>; Fri, 13 Oct 2023 07:25:04 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-53d8320f0easo3638350a12.3
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9936b3d0286so362476766b.0
         for <linux-usb@vger.kernel.org>; Fri, 13 Oct 2023 07:25:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1697207102; x=1697811902; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=eVIXIq/Rm+SyJ1K4MPb2o9/YrrlOkItMvHUn3gP+p+M=;
-        b=2+hII2Ff7yQE1F+kHz7eaq+T9rEv+0RPXVQQ2GIZ8DFwPX4Ja3L1ypr6A0L7pVsJ1A
-         SXICGxIdinIlXXiH7lMP2tK7iN+l7W8rQ683YTEMwrhvhnG58HecBgymRiSDAjCloQL5
-         Uz/d+RhHk6JwLJNL2g+1PRqFr4qMVf/XDFhV+Z86L1N00vRsF15ptHJqphODandPRP2o
-         YBcltQXbzIQ7ePPYAzKhGHQO7zU4S/Q5g1PKj+Pb5xucAMUHbhDIc1atA2FqN9ianUD5
-         yL0YsVwPeob4MPnptj2t1QmcBS/uWOLFmJSEpg0xi3LG0TWyyvyZC2Fnel278L9RmlTI
-         6kWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697207102; x=1697811902;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=fairphone.com; s=fair; t=1697207103; x=1697811903; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=eVIXIq/Rm+SyJ1K4MPb2o9/YrrlOkItMvHUn3gP+p+M=;
-        b=H0/x+YjDzIOMj8P54fwBPAkiLdTS/0mbgD+BCyINhhBdnvP9PuvgAlNvyOWEff7Epz
-         /BHYUYPz5LmNKD87YwHrEUQ5KVR8ylTM2fmrHheUj3oSxvzFQIiu1/NKgWwK2nUFwa8Z
-         abqBhBIhSpu423/xnGWx6LO91GzoodQ0ptm5qLF8rl6+ORWUDlnkElmZoYAEjptwGML9
-         RtOAnyn5dJA4PAbK0SmodThuU0h9djOM2CDq8gYqzyuQGuFVq2YpftJHZGEEsq7RrA6Z
-         tfYgeAHp63SS0mM5dlWZSkvx5bZccmZGhTCwdj4Nul1jB57n1kptj88lShua3PBzVX5Q
-         HHTw==
-X-Gm-Message-State: AOJu0Yz0AWvhGtDFgJ2Ek9/AUF0Ri3gVYAb1FwKrDySOTD2qAf01feyc
-	tW92FVhK5Y3mVFftxbJ9hALxcw==
-X-Google-Smtp-Source: AGHT+IGrkNfOBCtYpSIX9yoAdhv7XuR3zDtIfuz0Sker1ZEbl3nGD0kbwEPQAYtFdaX1mSAyG0KxZg==
-X-Received: by 2002:a17:907:2e19:b0:9b2:c2a9:357a with SMTP id ig25-20020a1709072e1900b009b2c2a9357amr23293471ejc.68.1697207102578;
-        Fri, 13 Oct 2023 07:25:02 -0700 (PDT)
+        bh=pm+/QnAH06Qh5wXqBp81N2OJaOoNdJfCQwZxxMt/91k=;
+        b=pph0E6fhGwpDPYGHdJ+f3vTSJQyVAqRy23vSoatmaLrf4Hp/ijOOJcva0y8JEI32IB
+         3vmOq515iDrM2O+ZnkxCuttdCaRY/7KMsqZD5oWBWZ/OTSDCwY5sM0eb+Jt9vLLLuRdY
+         r5d8KWlfmSmCGVvR3WoazCmKI0evoivs3uJ8RlTfbkkFM+kMES4navijQXSVv6fRWFpP
+         3RbISxpuzFcXz1n4WwYFbrD/yHc3TmjjnyTda7p9VQA6TK4+r4j92V2U09r/vPp+419Q
+         0MI1ET8iM2PIK5HPnTrgcl2abyssP2675N0NcpGlur24AeRamdBecKHaz8GaFqZtb+91
+         sOuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697207103; x=1697811903;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pm+/QnAH06Qh5wXqBp81N2OJaOoNdJfCQwZxxMt/91k=;
+        b=ZHkJml3jsI/2tyz5WPPWDruoXYxQqu2FY1z9k6AEVreOgqPaKY1FHtiwbhkWROY9os
+         451NZjiIEVGpwLkmFhaBDIRABN81ao+b5N9P5Z1sa+vSSpD3uXa8Y+c97ks9pHZk9PLz
+         f9HUSYz2tQDJ10Rczcn7fwAkFIF+XPJTFy4XAr1Q78SOotWkvN3jfvfUbWUNY/hAHZar
+         +V8MOD0/yg01trn366E59IjZ5BglTJ4+Pj8i4AM6Mc4/vt3p2h9DVfdYCN4hinEnSZis
+         dys4pBQFnU0LJUfCLZt4Hss5bOivBtRXJ1xbkXiFI8isTpF1q3A44NHA7VgZQxXJwyTW
+         7aUA==
+X-Gm-Message-State: AOJu0YyZtY2yYj0aMbSbtiuK0uBMonnpGbOW8jsdJDB3zNE6KC3dOesS
+	DRfAM1mpfaOrpbUdsruUFdATwg==
+X-Google-Smtp-Source: AGHT+IEMHIoikYOBPwPMaRKA5aN7QcZQ1oOpqza2EXBD4ZSE4wVpOOyjeOfCcf6CHIlTBsoBeOB9eQ==
+X-Received: by 2002:a17:906:1d5:b0:9a1:bb8f:17de with SMTP id 21-20020a17090601d500b009a1bb8f17demr22023725ejj.35.1697207103432;
+        Fri, 13 Oct 2023 07:25:03 -0700 (PDT)
 Received: from otso.luca.vpn.lucaweiss.eu (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id ot21-20020a170906ccd500b0099df2ddfc37sm12412041ejb.165.2023.10.13.07.25.01
+        by smtp.gmail.com with ESMTPSA id ot21-20020a170906ccd500b0099df2ddfc37sm12412041ejb.165.2023.10.13.07.25.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 13 Oct 2023 07:25:02 -0700 (PDT)
 From: Luca Weiss <luca.weiss@fairphone.com>
-Subject: [PATCH 0/2] Add driver for NXP PTN36502 Type-C redriver
-Date: Fri, 13 Oct 2023 16:24:46 +0200
-Message-Id: <20231013-ptn36502-v1-0-98109a430efc@fairphone.com>
+Date: Fri, 13 Oct 2023 16:24:47 +0200
+Subject: [PATCH 1/2] dt-bindings: usb: add NXP PTN36502 Type-C redriver
+ bindings
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -69,9 +70,9 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAC5TKWUC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI2NDA0Nj3YKSPGMzUwMjXdNEC/NUUwPzFGOzZCWg8oKi1LTMCrBR0bG1tQA
- UkoV5WgAAAA==
+Message-Id: <20231013-ptn36502-v1-1-98109a430efc@fairphone.com>
+References: <20231013-ptn36502-v1-0-98109a430efc@fairphone.com>
+In-Reply-To: <20231013-ptn36502-v1-0-98109a430efc@fairphone.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
  Rob Herring <robh+dt@kernel.org>, 
  Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
@@ -91,26 +92,119 @@ X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-The NXP PTN36502 is used in the Fairphone 5 smartphone, add a driver for
-it so we can soon enable DisplayPort over USB-C on this phone.
+Document bindings for this Type-C USB 3.1 Gen 1 and DisplayPort v1.2
+combo redriver.
+
+The PTN36502 can also run in GPIO mode where it is configured
+differently, without any I2C connection, but this is not supported yet.
 
 Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
 ---
-Luca Weiss (2):
-      dt-bindings: usb: add NXP PTN36502 Type-C redriver bindings
-      usb: typec: add support for PTN36502 redriver
+ .../devicetree/bindings/usb/nxp,ptn36502.yaml      | 94 ++++++++++++++++++++++
+ 1 file changed, 94 insertions(+)
 
- .../devicetree/bindings/usb/nxp,ptn36502.yaml      |  94 +++++
- drivers/usb/typec/mux/Kconfig                      |  10 +
- drivers/usb/typec/mux/Makefile                     |   1 +
- drivers/usb/typec/mux/ptn36502.c                   | 421 +++++++++++++++++++++
- 4 files changed, 526 insertions(+)
----
-base-commit: e3b18f7200f45d66f7141136c25554ac1e82009b
-change-id: 20231013-ptn36502-5a87e507d36c
+diff --git a/Documentation/devicetree/bindings/usb/nxp,ptn36502.yaml b/Documentation/devicetree/bindings/usb/nxp,ptn36502.yaml
+new file mode 100644
+index 000000000000..eee548ac1abe
+--- /dev/null
++++ b/Documentation/devicetree/bindings/usb/nxp,ptn36502.yaml
+@@ -0,0 +1,94 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/usb/nxp,ptn36502.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: NXP PTN36502 Type-C USB 3.1 Gen 1 and DisplayPort v1.2 combo redriver
++
++maintainers:
++  - Luca Weiss <luca.weiss@fairphone.com>
++
++properties:
++  compatible:
++    enum:
++      - nxp,ptn36502
++
++  reg:
++    maxItems: 1
++
++  vdd18-supply:
++    description: Power supply for VDD18 pin
++
++  retimer-switch:
++    description: Flag the port as possible handle of SuperSpeed signals retiming
++    type: boolean
++
++  orientation-switch:
++    description: Flag the port as possible handler of orientation switching
++    type: boolean
++
++  ports:
++    $ref: /schemas/graph.yaml#/properties/ports
++    properties:
++      port@0:
++        $ref: /schemas/graph.yaml#/properties/port
++        description: Super Speed (SS) Output endpoint to the Type-C connector
++
++      port@1:
++        $ref: /schemas/graph.yaml#/properties/port
++        description: Super Speed (SS) Input endpoint from the Super-Speed PHY
++
++      port@2:
++        $ref: /schemas/graph.yaml#/properties/port
++        description:
++          Sideband Use (SBU) AUX lines endpoint to the Type-C connector for the purpose of
++          handling altmode muxing and orientation switching.
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        typec-mux@1a {
++            compatible = "nxp,ptn36502";
++            reg = <0x1a>;
++
++            vdd18-supply = <&usb_redrive_1v8>;
++
++            retimer-switch;
++            orientation-switch;
++
++            ports {
++                #address-cells = <1>;
++                #size-cells = <0>;
++
++                port@0 {
++                    reg = <0>;
++                    usb_con_ss: endpoint {
++                        remote-endpoint = <&typec_con_ss>;
++                    };
++                };
++                port@1 {
++                    reg = <1>;
++                    phy_con_ss: endpoint {
++                        remote-endpoint = <&usb_phy_ss>;
++                    };
++                };
++                port@2 {
++                    reg = <2>;
++                    usb_con_sbu: endpoint {
++                        remote-endpoint = <&typec_dp_aux>;
++                    };
++                };
++            };
++        };
++    };
++...
 
-Best regards,
 -- 
-Luca Weiss <luca.weiss@fairphone.com>
+2.42.0
 
 
