@@ -1,98 +1,282 @@
-Return-Path: <linux-usb+bounces-1557-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1558-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83E5D7C7D48
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 07:55:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D15A77C7DA4
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 08:24:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E3789B209F5
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 05:55:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 78EA1282B95
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 06:24:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1CF263B8;
-	Fri, 13 Oct 2023 05:55:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OWrspikT"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D904C7462;
+	Fri, 13 Oct 2023 06:23:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 218CA5693
-	for <linux-usb@vger.kernel.org>; Fri, 13 Oct 2023 05:55:27 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58574D9
-	for <linux-usb@vger.kernel.org>; Thu, 12 Oct 2023 22:55:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697176526; x=1728712526;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Z7uWCw4mOxWFZWMvYd9pWRR+6yexveilScMX3PESAaY=;
-  b=OWrspikTdV7gbMCPkxteCddW6ageO5UtW1VOtfv+SKxNeG1jyJRlUxWr
-   UPWTIFwmZz4ZqZno4Xy60IqetBG+x3bf4h0+uf/rqgOYsQrUwujoO1BYJ
-   2VBJ865s/3vJLPW1zb75yL8g07lSIyuSpnu0mwFs1SWkJZtCkW2x3yYT3
-   XcJyuS7npfBhqtalDug0kNUu/S3GBnhoNjAzifKcYEGjLxnkky9QTyLwW
-   SZauXadjxBrV029boTI/riWRF2zM27WR3yQpTEhIS3jM16hiojgRH9eXs
-   eyFc/j9nh9mZ8TOM0yKxRtdMy8a8oZA9FB7drd+Y/WXX0QltzDrYnBQhG
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="449299649"
-X-IronPort-AV: E=Sophos;i="6.03,221,1694761200"; 
-   d="scan'208";a="449299649"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2023 22:55:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="845306939"
-X-IronPort-AV: E=Sophos;i="6.03,221,1694761200"; 
-   d="scan'208";a="845306939"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by FMSMGA003.fm.intel.com with ESMTP; 12 Oct 2023 22:55:24 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id A2D5B666; Fri, 13 Oct 2023 08:55:22 +0300 (EEST)
-Date: Fri, 13 Oct 2023 08:55:22 +0300
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: linux-usb@vger.kernel.org
-Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Gil Fine <gil.fine@linux.intel.com>
-Subject: Re: [PATCH 00/13] thunderbolt: DisplayPort and logging improvements
- & cleanups
-Message-ID: <20231013055522.GS3208943@black.fi.intel.com>
-References: <20231003094005.2676823-1-mika.westerberg@linux.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD11533D2
+	for <linux-usb@vger.kernel.org>; Fri, 13 Oct 2023 06:23:57 +0000 (UTC)
+Received: from mail-oi1-f206.google.com (mail-oi1-f206.google.com [209.85.167.206])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB11BE
+	for <linux-usb@vger.kernel.org>; Thu, 12 Oct 2023 23:23:49 -0700 (PDT)
+Received: by mail-oi1-f206.google.com with SMTP id 5614622812f47-3b2b1ade9deso312677b6e.2
+        for <linux-usb@vger.kernel.org>; Thu, 12 Oct 2023 23:23:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697178229; x=1697783029;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ehp3s3wmDK8jWuZJe23c3aGn8VEvCoZ9nLJEqHmk/rs=;
+        b=J9Ymk+iAYRWdhc/g0oe64aCcarlV0ivoEYrmuSeWAVD+9/nzOTTRrfgqPAOzwRXF5B
+         ZhhFQgt5iPdMxjQ6xvq14xsS/moSEPh7OoXqXFAUXlr+qj+VP61wOFvs9r3w+milLY5u
+         6VN38gBDL+2974E7KfOhTQv7MwNXl60Sxla0+OsK4fl3iwAXaUwY+d+qDn3Eqyx/y9Gm
+         LTgLvtP12c2sE4DGuOA6Rr2jxhlJf/MIV2RzsNgyBN0OpXKWLAPHkyqDyW3jt0EywbnV
+         qjQc+lkcvNAhKdBDWHC8efGQkRS3djc6btYsG7xaRzrSt96bssIuJXD74q1swRImQvU2
+         PIxg==
+X-Gm-Message-State: AOJu0Yy+RdtRh7LVwn3TYwUlroHskG3T3vkxMy7zcdGHpwZJoy3tgmHe
+	ef88YhCPneYOq4DuQSOXeRP45ZxG6IzQaR4F/SlFaORzcgNh
+X-Google-Smtp-Source: AGHT+IHg2nZgrO+niXj572zpjY4FsLb35hqbQeEWxyv1D+nHtPrnDMpcmyFEQtM51ivs/JlvEtZqxFXj2aZ4UCKFt26l9WwUTfl2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20231003094005.2676823-1-mika.westerberg@linux.intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-	SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6808:1916:b0:3ae:2024:837d with SMTP id
+ bf22-20020a056808191600b003ae2024837dmr13896975oib.8.1697178229025; Thu, 12
+ Oct 2023 23:23:49 -0700 (PDT)
+Date: Thu, 12 Oct 2023 23:23:48 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000007634c1060793197c@google.com>
+Subject: [syzbot] [usb?] linux-next boot error: KASAN: slab-out-of-bounds
+ Write in vhci_setup
+From: syzbot <syzbot+6867a9777f4b8dc4e256@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, i@zenithal.me, linux-kernel@vger.kernel.org, 
+	linux-next@vger.kernel.org, linux-usb@vger.kernel.org, sfr@canb.auug.org.au, 
+	shuah@kernel.org, syzkaller-bugs@googlegroups.com, 
+	valentina.manea.m@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+	HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
+	SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Tue, Oct 03, 2023 at 12:39:52PM +0300, Mika Westerberg wrote:
-> Gil Fine (5):
->   thunderbolt: Fix debug log when DisplayPort adapter not available for pairing
->   thunderbolt: Fix typo of HPD bit for Hot Plug Detect
->   thunderbolt: Log NVM version of routers and retimers
->   thunderbolt: Create multiple DisplayPort tunnels if there are more DP IN/OUT pairs
->   thunderbolt: Add DP IN added last in the head of the list of DP resources
-> 
-> Mika Westerberg (8):
->   thunderbolt: dma_test: Use enum tb_link_width
->   thunderbolt: Get rid of usb4_usb3_port_actual_link_rate()
->   thunderbolt: Make tb_switch_clx_is_supported() static
->   thunderbolt: Check for unplugged router in tb_switch_clx_disable()
->   thunderbolt: Fix typo in enum tb_link_width kernel-doc
->   thunderbolt: Use tb_tunnel_dbg() where possible to make logging more consistent
->   thunderbolt: Expose tb_tunnel_xxx() log macros to the rest of the driver
->   thunderbolt: Use tb_tunnel_xxx() log macros in tb.c
+Hello,
 
-All applied to thunderbolt.git/next.
+syzbot found the following issue on:
+
+HEAD commit:    f9a6bea13184 Add linux-next specific files for 20231012
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=1534d829680000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9e549f76cbaa1b13
+dashboard link: https://syzkaller.appspot.com/bug?extid=6867a9777f4b8dc4e256
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/db1637d9c577/disk-f9a6bea1.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/16c1010b94c4/vmlinux-f9a6bea1.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/f804f5e468c9/bzImage-f9a6bea1.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+6867a9777f4b8dc4e256@syzkaller.appspotmail.com
+
+usb usb4: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+usb usb4: Product: Dummy host controller
+usb usb4: Manufacturer: Linux 6.6.0-rc5-next-20231012-syzkaller dummy_hcd
+usb usb4: SerialNumber: dummy_hcd.3
+hub 4-0:1.0: USB hub found
+hub 4-0:1.0: 1 port detected
+dummy_hcd dummy_hcd.4: USB Host+Gadget Emulator, driver 02 May 2005
+dummy_hcd dummy_hcd.4: Dummy host controller
+dummy_hcd dummy_hcd.4: new USB bus registered, assigned bus number 5
+usb usb5: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.06
+usb usb5: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+usb usb5: Product: Dummy host controller
+usb usb5: Manufacturer: Linux 6.6.0-rc5-next-20231012-syzkaller dummy_hcd
+usb usb5: SerialNumber: dummy_hcd.4
+hub 5-0:1.0: USB hub found
+hub 5-0:1.0: 1 port detected
+dummy_hcd dummy_hcd.5: USB Host+Gadget Emulator, driver 02 May 2005
+dummy_hcd dummy_hcd.5: Dummy host controller
+dummy_hcd dummy_hcd.5: new USB bus registered, assigned bus number 6
+usb usb6: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.06
+usb usb6: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+usb usb6: Product: Dummy host controller
+usb usb6: Manufacturer: Linux 6.6.0-rc5-next-20231012-syzkaller dummy_hcd
+usb usb6: SerialNumber: dummy_hcd.5
+hub 6-0:1.0: USB hub found
+hub 6-0:1.0: 1 port detected
+dummy_hcd dummy_hcd.6: USB Host+Gadget Emulator, driver 02 May 2005
+dummy_hcd dummy_hcd.6: Dummy host controller
+dummy_hcd dummy_hcd.6: new USB bus registered, assigned bus number 7
+usb usb7: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.06
+usb usb7: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+usb usb7: Product: Dummy host controller
+usb usb7: Manufacturer: Linux 6.6.0-rc5-next-20231012-syzkaller dummy_hcd
+usb usb7: SerialNumber: dummy_hcd.6
+hub 7-0:1.0: USB hub found
+hub 7-0:1.0: 1 port detected
+dummy_hcd dummy_hcd.7: USB Host+Gadget Emulator, driver 02 May 2005
+dummy_hcd dummy_hcd.7: Dummy host controller
+dummy_hcd dummy_hcd.7: new USB bus registered, assigned bus number 8
+usb usb8: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.06
+usb usb8: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+usb usb8: Product: Dummy host controller
+usb usb8: Manufacturer: Linux 6.6.0-rc5-next-20231012-syzkaller dummy_hcd
+usb usb8: SerialNumber: dummy_hcd.7
+hub 8-0:1.0: USB hub found
+hub 8-0:1.0: 1 port detected
+gadgetfs: USB Gadget filesystem, version 24 Aug 2004
+vhci_hcd vhci_hcd.0: USB/IP Virtual Host Controller
+vhci_hcd vhci_hcd.0: new USB bus registered, assigned bus number 9
+==================================================================
+BUG: KASAN: slab-out-of-bounds in vhci_setup+0x2d3/0x340 drivers/usb/usbip/vhci_hcd.c:1145
+Write of size 8 at addr ffff8881417e15c0 by task swapper/0/1
+
+CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.6.0-rc5-next-20231012-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/06/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd9/0x1b0 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:364 [inline]
+ print_report+0xc4/0x620 mm/kasan/report.c:475
+ kasan_report+0xda/0x110 mm/kasan/report.c:588
+ vhci_setup+0x2d3/0x340 drivers/usb/usbip/vhci_hcd.c:1145
+ usb_add_hcd+0x5bc/0x1770 drivers/usb/core/hcd.c:2911
+ vhci_hcd_probe+0x12c/0x460 drivers/usb/usbip/vhci_hcd.c:1363
+ platform_probe+0xff/0x1e0 drivers/base/platform.c:1404
+ call_driver_probe drivers/base/dd.c:579 [inline]
+ really_probe+0x234/0xc90 drivers/base/dd.c:658
+ __driver_probe_device+0x1de/0x4b0 drivers/base/dd.c:800
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:830
+ __device_attach_driver+0x1d4/0x300 drivers/base/dd.c:958
+ bus_for_each_drv+0x157/0x1d0 drivers/base/bus.c:457
+ __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1030
+ bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
+ device_add+0x117e/0x1aa0 drivers/base/core.c:3625
+ platform_device_add+0x316/0x810 drivers/base/platform.c:716
+ platform_device_register_full+0x3ec/0x550 drivers/base/platform.c:844
+ vhci_hcd_init+0x1ad/0x360 drivers/usb/usbip/vhci_hcd.c:1532
+ do_one_initcall+0x128/0x670 init/main.c:1232
+ do_initcall_level init/main.c:1294 [inline]
+ do_initcalls init/main.c:1310 [inline]
+ do_basic_setup init/main.c:1329 [inline]
+ kernel_init_freeable+0x5c2/0x900 init/main.c:1547
+ kernel_init+0x1c/0x2a0 init/main.c:1437
+ ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:291
+ </TASK>
+
+Allocated by task 1:
+ kasan_save_stack+0x33/0x50 mm/kasan/common.c:45
+ kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+ ____kasan_kmalloc mm/kasan/common.c:374 [inline]
+ __kasan_kmalloc+0xa2/0xb0 mm/kasan/common.c:383
+ kasan_kmalloc include/linux/kasan.h:198 [inline]
+ __do_kmalloc_node mm/slab_common.c:1007 [inline]
+ __kmalloc_node_track_caller+0x65/0x130 mm/slab_common.c:1027
+ kvasprintf+0xbd/0x150 lib/kasprintf.c:25
+ kvasprintf_const+0x66/0x190 lib/kasprintf.c:49
+ kobject_set_name_vargs+0x5a/0x130 lib/kobject.c:272
+ dev_set_name+0xc8/0x100 drivers/base/core.c:3428
+ usb_alloc_dev+0xb45/0xdb0 drivers/usb/core/usb.c:696
+ usb_add_hcd+0x3a9/0x1770 drivers/usb/core/hcd.c:2856
+ vhci_hcd_probe+0x12c/0x460 drivers/usb/usbip/vhci_hcd.c:1363
+ platform_probe+0xff/0x1e0 drivers/base/platform.c:1404
+ call_driver_probe drivers/base/dd.c:579 [inline]
+ really_probe+0x234/0xc90 drivers/base/dd.c:658
+ __driver_probe_device+0x1de/0x4b0 drivers/base/dd.c:800
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:830
+ __device_attach_driver+0x1d4/0x300 drivers/base/dd.c:958
+ bus_for_each_drv+0x157/0x1d0 drivers/base/bus.c:457
+ __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1030
+ bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
+ device_add+0x117e/0x1aa0 drivers/base/core.c:3625
+ platform_device_add+0x316/0x810 drivers/base/platform.c:716
+ platform_device_register_full+0x3ec/0x550 drivers/base/platform.c:844
+ vhci_hcd_init+0x1ad/0x360 drivers/usb/usbip/vhci_hcd.c:1532
+ do_one_initcall+0x128/0x670 init/main.c:1232
+ do_initcall_level init/main.c:1294 [inline]
+ do_initcalls init/main.c:1310 [inline]
+ do_basic_setup init/main.c:1329 [inline]
+ kernel_init_freeable+0x5c2/0x900 init/main.c:1547
+ kernel_init+0x1c/0x2a0 init/main.c:1437
+ ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:291
+
+The buggy address belongs to the object at ffff8881417e15a0
+ which belongs to the cache kmalloc-8 of size 8
+The buggy address is located 27 bytes to the right of
+ allocated 5-byte region [ffff8881417e15a0, ffff8881417e15a5)
+
+The buggy address belongs to the physical page:
+page:ffffea000505f840 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1417e1
+flags: 0x57ff00000000800(slab|node=1|zone=2|lastcpupid=0x7ff)
+page_type: 0xffffffff()
+raw: 057ff00000000800 ffff888012c41280 dead000000000122 0000000000000000
+raw: 0000000000000000 0000000080660066 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12cc0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY), pid 1, tgid 1 (swapper/0), ts 10541560946, free_ts 0
+ set_page_owner include/linux/page_owner.h:31 [inline]
+ post_alloc_hook+0x2cf/0x340 mm/page_alloc.c:1540
+ prep_new_page mm/page_alloc.c:1547 [inline]
+ get_page_from_freelist+0x98f/0x32a0 mm/page_alloc.c:3339
+ __alloc_pages+0x1d0/0x4c0 mm/page_alloc.c:4595
+ alloc_pages_mpol+0x258/0x5f0 mm/mempolicy.c:2133
+ alloc_slab_page mm/slub.c:1870 [inline]
+ allocate_slab+0x251/0x380 mm/slub.c:2017
+ new_slab mm/slub.c:2070 [inline]
+ ___slab_alloc+0x8c7/0x1580 mm/slub.c:3223
+ __slab_alloc.constprop.0+0x56/0xa0 mm/slub.c:3322
+ __slab_alloc_node mm/slub.c:3375 [inline]
+ slab_alloc_node mm/slub.c:3468 [inline]
+ __kmem_cache_alloc_node+0x131/0x310 mm/slub.c:3517
+ __do_kmalloc_node mm/slab_common.c:1006 [inline]
+ __kmalloc_node_track_caller+0x54/0x130 mm/slab_common.c:1027
+ kstrdup+0x3c/0x70 mm/util.c:62
+ kstrdup_const+0x5f/0x70 mm/util.c:85
+ kvasprintf_const+0x10b/0x190 lib/kasprintf.c:48
+ kobject_set_name_vargs+0x5a/0x130 lib/kobject.c:272
+ dev_set_name+0xc8/0x100 drivers/base/core.c:3428
+ netdev_register_kobject+0xc1/0x3f0 net/core/net-sysfs.c:2031
+ register_netdevice+0xbcb/0x1490 net/core/dev.c:10162
+page_owner free stack trace missing
+
+Memory state around the buggy address:
+ ffff8881417e1480: fc 00 fc fc fc fc 00 fc fc fc fc 00 fc fc fc fc
+ ffff8881417e1500: 06 fc fc fc fc 05 fc fc fc fc 05 fc fc fc fc 00
+>ffff8881417e1580: fc fc fc fc 05 fc fc fc fc fc fc fc fc fc fc fc
+                                           ^
+ ffff8881417e1600: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff8881417e1680: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to overwrite bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
