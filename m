@@ -1,155 +1,99 @@
-Return-Path: <linux-usb+bounces-1559-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1560-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C4AF7C811D
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 10:58:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id F28B17C81E2
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 11:22:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7E2BCB20A82
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 08:58:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 87648B20A51
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 09:22:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FC3010966;
-	Fri, 13 Oct 2023 08:58:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27DC110A23;
+	Fri, 13 Oct 2023 09:22:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bnhiK9dy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dPKh6o7h"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52D0D101FD
-	for <linux-usb@vger.kernel.org>; Fri, 13 Oct 2023 08:58:03 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791EAD8
-	for <linux-usb@vger.kernel.org>; Fri, 13 Oct 2023 01:58:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697187480; x=1728723480;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=zZjODe78uXPD2wdWqP1Zdxn3dzIaIyjNnZkUBkxvP8s=;
-  b=bnhiK9dyt4F63GlPZJ8YBfDBr8Mu9OtmmPns9cUvFB2+Gn6abAHpg/pL
-   2URthJ+dscV5EmH0BNdkFvvdF9EwXlEb4Hex+x0ud3dt2NQDnsaKk8TFJ
-   QDkg+os9Vq8JP6HnI/yyu43h+ZFfRtxhJJGo4Rsm2PE0gdJTmaMd3+8tv
-   R6nh2DwsMD2opPSF/HEwGlLpZGFXEFERYztrOiv62ZlxzbjtD0UFa+Wso
-   2EPHB1K67nOPoTjmXL0SKa5DFCZght370wGbFUUBmf1uxfFkayG+Pnmkz
-   QlF5wFJTFgR+LtntDlZm+ZCl27i23851hs1p927sV3/NjvGgwRgcML4iy
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="365397285"
-X-IronPort-AV: E=Sophos;i="6.03,221,1694761200"; 
-   d="scan'208";a="365397285"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2023 01:58:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="1086060795"
-X-IronPort-AV: E=Sophos;i="6.03,221,1694761200"; 
-   d="scan'208";a="1086060795"
-Received: from lkp-server02.sh.intel.com (HELO f64821696465) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 13 Oct 2023 01:57:58 -0700
-Received: from kbuild by f64821696465 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qrDzY-0004Y9-1S;
-	Fri, 13 Oct 2023 08:57:56 +0000
-Date: Fri, 13 Oct 2023 16:57:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: Rob Herring <robh@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-usb@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [usb:usb-next 70/83] drivers/usb/chipidea/ci_hdrc_usb2.c:41:34:
- warning: unused variable 'ci_hdrc_usb2_of_match'
-Message-ID: <202310131627.M43j234A-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AF456FB4
+	for <linux-usb@vger.kernel.org>; Fri, 13 Oct 2023 09:22:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6F61C433C7;
+	Fri, 13 Oct 2023 09:22:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1697188955;
+	bh=0IICjsHru85+qPhGyOECjDC4TXr3Pa9V1kZA3t24K0U=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dPKh6o7h9bPCYKzcZEVBTkwm1pPVFAj78NtQz8euMqTcj+9ce2ohdi08Dhx4F+f32
+	 9kCFOfBR6LaC8zXKvII1frOxnrLAVsg1xpSEn+n3q8Y+DH80IWPE9M+E+PDQuyqjh1
+	 EunHQe2eB82+nPv7OIn7vEPzd9Ya7kFeuMudWZmQh7ReOgzP4Ff5/nDhlRrzJVGgTx
+	 01jR/IKZNj112s8N8JDCijM6iDj7AosXoK4YRIIsFtAe7KMaOC0fILJrPUdvcmjeRA
+	 AJK20TT/wgtj3qToDtLFWZFwaCT3gYnpkWMMe1kSGiHfi8gOy9fzLFqeXFpX1+6Hsk
+	 lFCTcJXqL7AcQ==
+Received: from johan by xi.lan with local (Exim 4.96)
+	(envelope-from <johan@kernel.org>)
+	id 1qrENu-0003RJ-1v;
+	Fri, 13 Oct 2023 11:23:07 +0200
+Date: Fri, 13 Oct 2023 11:23:06 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Puliang Lu <530194200.fh@gmail.com>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Puliang Lu <puliang.lu@fibocom.com>
+Subject: Re: [PATCH] USB: serial: option: add Fibocom to DELL custom modem
+ FM101R-GL
+Message-ID: <ZSkMenm5jC9H_sxo@hovoldconsulting.com>
+References: <20230901093610.67438-1-puliang.lu@fibocom.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-	SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+In-Reply-To: <20230901093610.67438-1-puliang.lu@fibocom.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
-head:   1034cc423f1b4a7a9a56d310ca980fcd2753e11d
-commit: 14485de431b0a860d3a117fe518ce9ede8c76732 [70/83] usb: Use device_get_match_data()
-config: hexagon-buildonly-randconfig-r004-20220331 (https://download.01.org/0day-ci/archive/20231013/202310131627.M43j234A-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231013/202310131627.M43j234A-lkp@intel.com/reproduce)
+On Fri, Sep 01, 2023 at 05:36:10PM +0800, Puliang Lu wrote:
+> Update the USB serial option driver support for the Fibocom
+> FM101R-GL
+> LTE modules as there are actually several different variants.
+> - VID:PID 413C:8213, FM101R-GL are laptop M.2 cards (with
+> MBIM interfaces for Linux)
+> - VID:PID 413C:8215, FM101R-GL ESIM are laptop M.2 cards(with
+> MBIM interface for Linux)
+> 
+> T:  Bus=04 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  2 Spd=5000 MxCh= 0
+> D:  Ver= 3.20 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
+> P:  Vendor=413c ProdID=8213 Rev= 5.04
+> S:  Manufacturer=Fibocom Wireless Inc.
+> S:  Product=Fibocom FM101-GL Module
+> S:  SerialNumber=a3b7cbf0
+> C:* #Ifs= 3 Cfg#= 1 Atr=a0 MxPwr=896mA
+> A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
+> I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00 Driver=cdc_mbim
+> E:  Ad=81(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+> I:  If#= 1 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+> I:* If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+> E:  Ad=8e(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> E:  Ad=0f(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=40 Driver=(none)
+> E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+> E:  Ad=82(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+> E:  Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310131627.M43j234A-lkp@intel.com/
+Could there ever be further vendor class interfaces (e.g. adb) so that
+you should be using a more specific match entry?
 
-All warnings (new ones prefixed by >>):
+> Signed-off-by: Puliang Lu <puliang.lu@fibocom.com>
 
-   In file included from drivers/usb/chipidea/ci_hdrc_usb2.c:9:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/usb/chipidea/ci_hdrc_usb2.c:9:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/usb/chipidea/ci_hdrc_usb2.c:9:
-   In file included from include/linux/dma-mapping.h:11:
-   In file included from include/linux/scatterlist.h:9:
-   In file included from arch/hexagon/include/asm/io.h:337:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> drivers/usb/chipidea/ci_hdrc_usb2.c:41:34: warning: unused variable 'ci_hdrc_usb2_of_match' [-Wunused-const-variable]
-   static const struct of_device_id ci_hdrc_usb2_of_match[] = {
-                                    ^
-   7 warnings generated.
+The SoB email does not match the sender address (e.g. as checkpatch
+complains about). Could you resend this one from you fibocom account so
+that it matches?
 
+> +	{ USB_DEVICE_INTERFACE_CLASS(DELL_VENDOR_ID, DELL_PRODUCT_FM101R, 0xff) },
+> +	{ USB_DEVICE_INTERFACE_CLASS(DELL_VENDOR_ID, DELL_PRODUCT_FM101R_ESIM, 0xff) },
 
-vim +/ci_hdrc_usb2_of_match +41 drivers/usb/chipidea/ci_hdrc_usb2.c
-
-1c16f63d1e6c94 Michał Mirosław 2020-04-04  40  
-84bc70f94d81f1 Nathan Sullivan 2015-08-31 @41  static const struct of_device_id ci_hdrc_usb2_of_match[] = {
-84bc70f94d81f1 Nathan Sullivan 2015-08-31  42  	{ .compatible = "chipidea,usb2" },
-84bc70f94d81f1 Nathan Sullivan 2015-08-31  43  	{ .compatible = "xlnx,zynq-usb-2.20a", .data = &ci_zynq_pdata },
-1c16f63d1e6c94 Michał Mirosław 2020-04-04  44  	{ .compatible = "lsi,zevio-usb", .data = &ci_zevio_pdata },
-84bc70f94d81f1 Nathan Sullivan 2015-08-31  45  	{ }
-84bc70f94d81f1 Nathan Sullivan 2015-08-31  46  };
-84bc70f94d81f1 Nathan Sullivan 2015-08-31  47  MODULE_DEVICE_TABLE(of, ci_hdrc_usb2_of_match);
-84bc70f94d81f1 Nathan Sullivan 2015-08-31  48  
-
-:::::: The code at line 41 was first introduced by commit
-:::::: 84bc70f94d81f1d3107dbcdafc1b193169e82131 usb: chipidea: add xilinx zynq platform data
-
-:::::: TO: Nathan Sullivan <nathan.sullivan@ni.com>
-:::::: CC: Peter Chen <peter.chen@freescale.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Johan
 
