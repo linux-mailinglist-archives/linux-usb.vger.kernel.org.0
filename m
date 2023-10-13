@@ -1,240 +1,194 @@
-Return-Path: <linux-usb+bounces-1607-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1608-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2856C7C8E1F
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 22:06:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E29277C8F82
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 23:44:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 308D8B20B13
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 20:05:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8E481282EDC
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 21:44:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01B1D250EE;
-	Fri, 13 Oct 2023 20:05:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="keF77/CC"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DBB0273ED;
+	Fri, 13 Oct 2023 21:44:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EFFA1BDED
-	for <linux-usb@vger.kernel.org>; Fri, 13 Oct 2023 20:05:45 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 497DCB7;
-	Fri, 13 Oct 2023 13:05:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697227544; x=1728763544;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5it+lZKtnoTVXQpnj5JtqmDZwGeKWf9KR13g1UL7qjw=;
-  b=keF77/CCV/rnVrm2KhscP506Z7cLsHRpF32Bx9d+P2VbzatSsuplSHwm
-   8ti5nl+Pkvx/Y3MyRHd79vq5j1yyBE1CkfhTbnoQfnDO6tkgwsKtNJ2Gr
-   D41bvFcWVKSO/HPivYY80hS0paiEWkXl5u4sL9qKGpS3gX+pQxBV1VhWi
-   vr3f1GRkuNXMPAtWhhP/Ec3h+5um0pgZrH59vRDwr5RoPMja/SbBrWBzP
-   2+Jy48igYMZJiwBWdyTbew6wXmDgGL3xp6rjArR6Pi5Kk15hgQbqx9oiM
-   Yia5T5GcUL7/n53fVD9j0lHyzqD/UddmY9AdNYQi7UDhdCuLjbYxLHIG6
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10862"; a="389115490"
-X-IronPort-AV: E=Sophos;i="6.03,223,1694761200"; 
-   d="scan'208";a="389115490"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2023 13:05:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10862"; a="789976484"
-X-IronPort-AV: E=Sophos;i="6.03,223,1694761200"; 
-   d="scan'208";a="789976484"
-Received: from unknown (HELO smile.fi.intel.com) ([10.237.72.54])
-  by orsmga001.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2023 13:05:40 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC1)
-	(envelope-from <andriy.shevchenko@intel.com>)
-	id 1qrOPg-00000005Jz1-2wkn;
-	Fri, 13 Oct 2023 23:05:36 +0300
-Date: Fri, 13 Oct 2023 23:05:36 +0300
-From: "Shevchenko, Andriy" <andriy.shevchenko@intel.com>
-To: Hans de Goede <hdegoede@redhat.com>
-Cc: "Wu, Wentong" <wentong.wu@intel.com>,
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"oneukum@suse.com" <oneukum@suse.com>,
-	"wsa@kernel.org" <wsa@kernel.org>,
-	"andi.shyti@linux.intel.com" <andi.shyti@linux.intel.com>,
-	"broonie@kernel.org" <broonie@kernel.org>,
-	"bartosz.golaszewski@linaro.org" <bartosz.golaszewski@linaro.org>,
-	"linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-	"linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-	"sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
-	"Wang, Zhifeng" <zhifeng.wang@intel.com>,
-	"linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v20 1/4] usb: Add support for Intel LJCA device
-Message-ID: <ZSmjEKfYzFuAHXW+@smile.fi.intel.com>
-References: <1696833205-16716-1-git-send-email-wentong.wu@intel.com>
- <1696833205-16716-2-git-send-email-wentong.wu@intel.com>
- <ZSZ3IPgLk7uC5UGI@smile.fi.intel.com>
- <6a87b43a-0648-28d4-6c69-e0f684e44eb6@redhat.com>
- <DM6PR11MB4316BE44F53E276384FF06C88DCCA@DM6PR11MB4316.namprd11.prod.outlook.com>
- <5d2e9eba-a941-ea9a-161a-5b97d09d5d35@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F60A18E21
+	for <linux-usb@vger.kernel.org>; Fri, 13 Oct 2023 21:44:23 +0000 (UTC)
+Received: from mp-relay-01.fibernetics.ca (mp-relay-01.fibernetics.ca [208.85.217.136])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6C7BE
+	for <linux-usb@vger.kernel.org>; Fri, 13 Oct 2023 14:44:21 -0700 (PDT)
+Received: from mailpool-fe-02.fibernetics.ca (mailpool-fe-02.fibernetics.ca [208.85.217.145])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mp-relay-01.fibernetics.ca (Postfix) with ESMTPS id B9F9AE1ACA;
+	Fri, 13 Oct 2023 21:44:20 +0000 (UTC)
+Received: from localhost (mailpool-mx-01.fibernetics.ca [208.85.217.140])
+	by mailpool-fe-02.fibernetics.ca (Postfix) with ESMTP id AC3266044B;
+	Fri, 13 Oct 2023 21:44:20 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at 
+X-Spam-Score: -0.2
+X-Spam-Level:
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.6
+Received: from mailpool-fe-02.fibernetics.ca ([208.85.217.145])
+	by localhost (mail-mx-01.fibernetics.ca [208.85.217.140]) (amavisd-new, port 10024)
+	with ESMTP id f2BeJWsnfGmZ; Fri, 13 Oct 2023 21:44:20 +0000 (UTC)
+Received: from [192.168.2.19] (lnsm3-torontoxn-142-116-140-195.internet.virginmobile.ca [142.116.140.195])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: dgilbert@interlog.com)
+	by mail.ca.inter.net (Postfix) with ESMTPSA id F3C45600EA;
+	Fri, 13 Oct 2023 21:44:19 +0000 (UTC)
+Message-ID: <3659cd85-1ad0-4587-b2db-acec87f6312b@interlog.com>
+Date: Fri, 13 Oct 2023 17:44:19 -0400
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5d2e9eba-a941-ea9a-161a-5b97d09d5d35@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-	SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Reply-To: dgilbert@interlog.com
+Subject: Re: device present in lsusb, disappears in lsusb -t
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Greg KH <gregkh@linuxfoundation.org>,
+ "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+References: <70c563f1-847c-32a1-cf4d-6bf9802017ab@interlog.com>
+ <2023091638-duration-barcode-73a3@gregkh>
+ <11b1687f-3419-4037-845e-ef33d4e3871f@interlog.com>
+ <2023101139-puma-fanfare-8a0e@gregkh>
+ <299d927f-7044-4d48-b6cd-c05bdb0e7fcc@rowland.harvard.edu>
+ <0c2a2a23-28dd-4c83-b7af-d5421501e411@interlog.com>
+ <2023101203-marine-chatter-692e@gregkh>
+ <723ee63c-1eb6-490d-9327-2856601573f7@interlog.com>
+ <30288fa6-105a-4c4b-84c4-750fe083ee85@rowland.harvard.edu>
+ <611db058-afb5-4837-850d-b91f1e48f386@interlog.com>
+ <f51cd282-6244-4689-84be-143e56809eb2@rowland.harvard.edu>
+Content-Language: en-CA
+From: Douglas Gilbert <dgilbert@interlog.com>
+In-Reply-To: <f51cd282-6244-4689-84be-143e56809eb2@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Thu, Oct 12, 2023 at 01:14:23PM +0200, Hans de Goede wrote:
-> On 10/11/23 14:50, Wu, Wentong wrote:
-> >> On 10/11/23 12:21, Andy Shevchenko wrote:
-> >>> On Mon, Oct 09, 2023 at 02:33:22PM +0800, Wentong Wu wrote:
-> >>>> Implements the USB part of Intel USB-I2C/GPIO/SPI adapter device
-> >>>> named "La Jolla Cove Adapter" (LJCA).
-> >>>>
-> >>>> The communication between the various LJCA module drivers and the
-> >>>> hardware will be muxed/demuxed by this driver. Three modules ( I2C,
-> >>>> GPIO, and SPI) are supported currently.
-> >>>>
-> >>>> Each sub-module of LJCA device is identified by type field within the
-> >>>> LJCA message header.
-> >>>>
-> >>>> The sub-modules of LJCA can use ljca_transfer() to issue a transfer
-> >>>> between host and hardware. And ljca_register_event_cb is exported to
-> >>>> LJCA sub-module drivers for hardware event subscription.
-> >>>>
-> >>>> The minimum code in ASL that covers this board is Scope
-> >>>> (\_SB.PCI0.DWC3.RHUB.HS01)
-> >>>>     {
-> >>>>         Device (GPIO)
-> >>>>         {
-> >>>>             Name (_ADR, Zero)
-> >>>>             Name (_STA, 0x0F)
-> >>>>         }
-> >>>>
-> >>>>         Device (I2C)
-> >>>>         {
-> >>>>             Name (_ADR, One)
-> >>>>             Name (_STA, 0x0F)
-> >>>>         }
-> >>>>
-> >>>>         Device (SPI)
-> >>>>         {
-> >>>>             Name (_ADR, 0x02)
-> >>>>             Name (_STA, 0x0F)
-> >>>>         }
-> >>>>     }
-> >>>
-> >>> This commit message is not true anymore, or misleading at bare minimum.
-> >>> The ACPI specification is crystal clear about usage _ADR and _HID, i.e.
-> >>> they must NOT be used together for the same device node. So, can you
-> >>> clarify how the DSDT is organized and update the commit message and it
-> >>> may require (quite likely) to redesign the architecture of this
-> >>> driver. Sorry I missed this from previous rounds as I was busy by
-> >>> something else.
-> >>
-> >> This part of the commit message unfortunately is not accurate.
-> >> _ADR is not used in either DSDTs of shipping hw; nor in the code.
-> > 
-> > We have covered the _ADR in the code like below, it first try to find the
-> > child device based on _ADR, if not found, it will check the _HID, and there
-> > is clear comment in the function.
-> > 
-> > /* bind auxiliary device to acpi device */
-> > static void ljca_auxdev_acpi_bind(struct ljca_adapter *adap,
-> > 				   struct auxiliary_device *auxdev,
-> > 				   u64 adr, u8 id)
-> > {
-> > 	struct ljca_match_ids_walk_data wd = { 0 };
-> > 	struct acpi_device *parent, *adev;
-> > 	struct device *dev = adap->dev;
-> > 	char uid[4];
-> > 
-> > 	parent = ACPI_COMPANION(dev);
-> > 	if (!parent)
-> > 		return;
-> > 
-> > 	/*
-> > 	 * get auxdev ACPI handle from the ACPI device directly
-> > 	 * under the parent that matches _ADR.
-> > 	 */
-> > 	adev = acpi_find_child_device(parent, adr, false);
-> > 	if (adev) {
-> > 		ACPI_COMPANION_SET(&auxdev->dev, adev);
-> > 		return;
-> > 	}
-> > 
-> > 	/*
-> > 	 * _ADR is a grey area in the ACPI specification, some
-> > 	 * platforms use _HID to distinguish children devices.
-> > 	 */
-> > 	switch (adr) {
-> > 	case LJCA_GPIO_ACPI_ADR:
-> > 		wd.ids = ljca_gpio_hids;
-> > 		break;
-> > 	case LJCA_I2C1_ACPI_ADR:
-> > 	case LJCA_I2C2_ACPI_ADR:
-> > 		snprintf(uid, sizeof(uid), "%d", id);
-> > 		wd.uid = uid;
-> > 		wd.ids = ljca_i2c_hids;
-> > 		break;
-> > 	case LJCA_SPI1_ACPI_ADR:
-> > 	case LJCA_SPI2_ACPI_ADR:
-> > 		wd.ids = ljca_spi_hids;
-> > 		break;
-> > 	default:
-> > 		dev_warn(dev, "unsupported _ADR\n");
-> > 		return;
-> > 	}
-> > 
-> > 	acpi_dev_for_each_child(parent, ljca_match_device_ids, &wd);
+On 10/13/23 10:50, Alan Stern wrote:
+> On Thu, Oct 12, 2023 at 10:12:42PM -0400, Douglas Gilbert wrote:
+>> # lsusb -tv
+>> /:  Bus 001.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/1p, 480M
+>>      ID 1d6b:0002 Linux Foundation 2.0 root hub
+>> /:  Bus 002.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/3p, 20000M/x2
+>>      ID 1d6b:0003 Linux Foundation 3.0 root hub
+>> /:  Bus 003.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/12p, 480M
+>>      ID 1d6b:0002 Linux Foundation 2.0 root hub
+>>      |__ Port 003: Dev 007, If 0, Class=Vendor Specific Class, Driver=, 12M
+>>          ID 06cb:00f9 Synaptics, Inc.
+>>      |__ Port 004: Dev 003, If 0, Class=Video, Driver=uvcvideo, 480M
+>>          ID 5986:1177 Acer, Inc
+>>      |__ Port 004: Dev 003, If 1, Class=Video, Driver=uvcvideo, 480M
+>>          ID 5986:1177 Acer, Inc
+>>      |__ Port 004: Dev 003, If 2, Class=Application Specific Interface,
+>> Driver=, 480M
+>>          ID 5986:1177 Acer, Inc
+>>      |__ Port 005: Dev 009, 12M
+>>          ID 0483:572b STMicroelectronics
+>>      |__ Port 007: Dev 004, If 0, Class=Human Interface Device, Driver=usbhid, 12M
+>>          ID 046d:c52b Logitech, Inc. Unifying Receiver
+>>      |__ Port 007: Dev 004, If 1, Class=Human Interface Device, Driver=usbhid, 12M
+>>          ID 046d:c52b Logitech, Inc. Unifying Receiver
+>>      |__ Port 007: Dev 004, If 2, Class=Human Interface Device, Driver=usbhid, 12M
+>>          ID 046d:c52b Logitech, Inc. Unifying Receiver
+>> /:  Bus 004.Port 001: Dev 001, Class=root_hub, Driver=xhci_hcd/4p, 10000M
+>>      ID 1d6b:0003 Linux Foundation 3.0 root hub
+>>
+>>
+>> And there it is: Bus 003. Port 005: Dev 009 !!
 > 
-> Ah ok, I see. So the code:
+> Not much of an entry, but better than nothing.  :-)
 > 
-> 1. First tries to find the matching child acpi_device for the auxdev by ADR
+>> Re your "unusual device" comment: welcome to USB-C PD which in a way subverts
+>> "classic" USB.
 > 
-> 2. If 1. fails then falls back to HID + UID matching
+> Well, it's not really a subversion.  Just using it in a way it wasn't
+> intended to be used, while still remaining in compliance with the spec.
 > 
-> And there are DSDTs which use either:
+>> USB-C port 0 has the ST Micro dongle in it; USB-C port 1 has a PD power adapter:
+>>
+>> # lsucpd
+>>   port0 [pd0]  ====>>  partner [pd2]
+>>   port1 [pd1]  <<====  partner [pd3]
+>>
+>> # lsucpd pd2 -c
+>>> pd2: has NO source capabilities
+>>>   pd2: sink capabilities:
+>>     >> 1:fixed_supply
+>>        dual_role_data='0'
+>>        dual_role_power='0'
+>>        fast_role_swap_current='0'
+>>        higher_capability='0'
+>>        operational_current='3000mA'
+>>        unchunked_extended_messages_supported='0'
+>>        unconstrained_power='0'
+>>        usb_communication_capable='0'
+>>                         ^^^^^^^^^^^^^
+>>        voltage='5000mV'
+>>
+>> So port 0's partner says it does _not_ support USB data communications! I
+>> think that means that if anything moves along D+, D-, and the Tx plus Rx
+>> SuperSpeed circuits then it does _not_ follow the USB specs.
 > 
-> 1. Only use _ADR to identify which child device is which, like the example
->    DSDT snippet from the commit msg.
-> 
-> 2. Only use _HID + _UID like the 2 example DSDT snippets from me email
-> 
-> But there never is a case where both _ADR and _HID are used at
-> the same time (which would be an ACPI spec violation as Andy said).
-> 
-> So AFAICT there is no issue here since  _ADR and _HID are never
-> user at the same time and the commit message correctly describes
-> scenario 1. from above, so the commit message is fine too.
-> 
-> So I believe that we can continue with this patch series in
-> its current v20 form, which has already been staged for
-> going into -next by Greg.
-> 
-> Andy can you confirm that moving ahead with the current
-> version is ok ?
+> Not quite; if that were true then nothing would have shown up in any of
+> the lsusb outputs, with or without -t and with or without my patch.  The
+> dongle transfers enough data to be initialized and enumerated. of 
 
-Yes as we have a few weeks to fix corner cases.
+So then there might be two varieties of "usb_communications_capable=0" *** : 
+those that send enough along D+ and D- to be enumerated; and those that don't
+have D+ and D- pins! Many USB PD power adapters are any that second variety.
 
-What I'm worrying is that opening door for _ADR that seems never used is kinda
-an overkill here (resolving non-existing problem). Looking at the design of the
-driver I'm not sure why ACPI HIDs are collected somewhere else than in the
-respective drivers. And looking at the ID lists themselves I am not sure why
-the firmware of the respective hardware platforms are not using _CID.
+And it is not the worst idea to have a USB-C M-M cable that is Emarked (so
+it can carry up to 5 Amps) and does _not_ connect D+, D- and the SuperSpeed
+signals). And this is the cable to use when recharging your USB-C devices
+from a public source ...
 
--- 
-With Best Regards,
-Andy Shevchenko
+Doug Gilbert
 
+*** I prefer the snake case variant of "usb_communications_capable" because that
+is the term used by the PD specs, not  "usb_communication_capable" .
+
+>>   Further USB PD
+>> potentially sets up alternate modes:
+>>
+>> # lsucpd -ll p0p
+>>   port0 [pd0]  ====>>  partner [pd2]
+>>     port0-partner  [pd2]:
+>>        accessory_mode='none'
+>>        number_of_alternate_modes='1'
+>>        supports_usb_power_delivery='yes'
+>>        usb_power_delivery_revision='0.0'
+>>      Alternate mode: /sys/class/typec/port0-partner/port0-partner.0
+>>          active='yes'
+>>          description='DisplayPort'
+>>          mode='1'
+>>          svid='ff01'
+>>          vdo='0x00001085'
+>>
+>> So you could argue the 'lsusb -t' should not list this USB-C DP dongle.
+>> IMO a stronger argument is that lsusb and 'lsusb -t' should list the
+>> same devices.
+>>
+>> If you submit a patch you can add my "tested-by" to it. Another (little)
+>> bug fixed.
+> 
+> Thank you; I will.
+> 
+> Alan Stern
 
 
