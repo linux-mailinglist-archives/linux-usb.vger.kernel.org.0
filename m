@@ -1,134 +1,140 @@
-Return-Path: <linux-usb+bounces-1573-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1574-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 512567C8433
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 13:16:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06AC87C8494
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 13:38:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E5964B20A0F
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 11:16:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B6C96282C2F
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 11:38:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4E3A13AC3;
-	Fri, 13 Oct 2023 11:16:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84BAE13AED;
+	Fri, 13 Oct 2023 11:38:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zenithal.me header.i=@zenithal.me header.b="sMcNaAtX"
+	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="ZmG025V4"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAB4810787
-	for <linux-usb@vger.kernel.org>; Fri, 13 Oct 2023 11:16:46 +0000 (UTC)
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2115.outbound.protection.outlook.com [40.107.113.115])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18E6AB7;
-	Fri, 13 Oct 2023 04:16:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=df9lk9Jn+c8tYH9+ZmZ8RAbh8mLpBswta/zbRHjjWCPTjRxkZxEk+Ac3Iu94pE86PJ6wJEgdjCCjbZXR24ZAmhPiODchE9YHV9R2nfnpzY0JRx42373tV9qGS2EBQK/aQZROoBcQAXcWrdUQinBd40Vk8Qc80wj3cXPGK30a+1ATuV30ZRelVwH2t43jWPtP5J6wANyjCU82QAtx+QvbSYODa9MGdugxfh4dxqSUkqdPbnJ7t9e9FFXN8qSIjBS/HyfLQnUcP3S9z4UenrBRK6j+Yd6cwPcvas7dF5k652xhi944CpxwEcS313SmEjDO9gnmH0UFcPC6W9C3Uff+1w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=arS/C8gwWC7XkAVvV1qTw+c1Co2CPvmWsmFoOl45BAg=;
- b=Zs0wSZKi9BHDbZEkEcKRrbH/BjTCnEM6kAtHFIaTQq5WVoXHyzzJ7HTM0+RXKhGE4pVMrZqa7YCRgsZa3eiAiRxqiPnUMWWczNOW/RkKOKnP8WPQKLxRrBQDQMhVwLUw/rUPGBx6uH9X7T1Q1tbPSPeDC2M589uX3r4ltp1hRlI2P0ZsA59eGoCCDCCsK4xnz77SAaJRHqJOuEcVty9r4Ll0tVFBDt6PEfnK4T2aLbGsjQXj0LfvYrGmgGW7Nht3D0XBHIO/EuK81Gqm/7/0DgG21MQB02gntB58eRuV0PeeBYJxS6oi7KKQB3qa3tuiBj49GCkCRZfZuyyWCTlOVQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=zenithal.me; dmarc=pass action=none header.from=zenithal.me;
- dkim=pass header.d=zenithal.me; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zenithal.me;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=arS/C8gwWC7XkAVvV1qTw+c1Co2CPvmWsmFoOl45BAg=;
- b=sMcNaAtXMdkiepbLXw/kv4lfMGzTYLK//G91cqNvj7uDQrxZw7HUKksqphpQcA2jAclU6FAYSsumaCYV812B1DCk3oCDEkKNog5CtxbkUpwVGZEgs7e48LAkQErcD84kkjSZI/H9qi+AvdF3Q2ALWoQRAO4QmgKppsn1SzXsEzY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=zenithal.me;
-Received: from TYYP286MB1406.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:de::5) by
- TYCP286MB2351.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:18e::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6886.29; Fri, 13 Oct 2023 11:16:42 +0000
-Received: from TYYP286MB1406.JPNP286.PROD.OUTLOOK.COM
- ([fe80::54a2:c3cf:4f5:91cc]) by TYYP286MB1406.JPNP286.PROD.OUTLOOK.COM
- ([fe80::54a2:c3cf:4f5:91cc%7]) with mapi id 15.20.6886.030; Fri, 13 Oct 2023
- 11:16:42 +0000
-Date: Fri, 13 Oct 2023 19:16:37 +0800
-From: Hongren Zheng <i@zenithal.me>
-To: syzbot <syzbot+6867a9777f4b8dc4e256@syzkaller.appspotmail.com>
-Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-	linux-next@vger.kernel.org, linux-usb@vger.kernel.org,
-	sfr@canb.auug.org.au, shuah@kernel.org,
-	syzkaller-bugs@googlegroups.com, valentina.manea.m@gmail.com
-Subject: Re: [syzbot] [usb?] linux-next boot error: KASAN: slab-out-of-bounds
- Write in vhci_setup
-Message-ID: <ZSknFd3ywz6e+wNg@Sun>
-References: <0000000000007634c1060793197c@google.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0000000000007634c1060793197c@google.com>
-X-Operating-System: Linux Sun 5.15.67
-X-Mailer: Mutt 2.2.7 (2022-08-07)
-X-ClientProxiedBy: SJ0PR03CA0263.namprd03.prod.outlook.com
- (2603:10b6:a03:3a0::28) To TYYP286MB1406.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:de::5)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB8F313ADD
+	for <linux-usb@vger.kernel.org>; Fri, 13 Oct 2023 11:38:12 +0000 (UTC)
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23BA9E3
+	for <linux-usb@vger.kernel.org>; Fri, 13 Oct 2023 04:38:10 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-53da72739c3so3441062a12.3
+        for <linux-usb@vger.kernel.org>; Fri, 13 Oct 2023 04:38:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair; t=1697197088; x=1697801888; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=aeuzswEtGNcv7PN7p/vCAjwlSADLyM73/cH0LYcA47I=;
+        b=ZmG025V4vsuxTVnYWAODi8mvbnl85+h9aWrAZT1KH17ad2i25YNQ/lktE+zpZUdv6V
+         dNsnqA3Cwuxbf2V7QlNpo3AyWsZmkWi6UiezX4AoQnT50DexT3xX2mVSQwJqM36spO/M
+         t9c13ciJUwGCVPbEreHdBmLjdptx78xcLSzv1QAXRkNx5M/pt8jfApSZHoGRJ4EZo7jj
+         4Nbe3hUNqyXGMXWIH3PpkwqlNc7QtoD8qDPMNBhLC4lZHNNuwVf3g1P4fYIhZAk039aV
+         LFxsPUHWx9o2lUip9BItNflyH20FX9/URpnrhyNUkDyRGkuKybguQoY6iYvRvT4DeJDX
+         SUHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697197088; x=1697801888;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aeuzswEtGNcv7PN7p/vCAjwlSADLyM73/cH0LYcA47I=;
+        b=BkvUpToHds3StrzIHvbwB2d2FJXm8QdnYuYdLFLpLEQUEQDQvdEr5nTDhMcu8w65Th
+         47IoN/yCWP4F8BoOGVgI6GlYnkOCYII7dRQQ3kZGBzRgYPzLoziufWVqdWVlXXHbwxCn
+         Y7DCManrIreg9zV2KkF6qD0HpOU2i9xMVWmw7vM7KHKzRpbb4BhfaUcvBUk+oDJh4qrI
+         hZC5xBTfbfRcZGHUbDyrhW2TbGBYxjCoUuD4L2OsdpJCk1QEMFciiZYn5SkY+AqJepCS
+         nTZ6d4tgjsHqszhO2hr9ubS1TbGwzZWlPQjM6tI6dQ3sO9pQBdG+1Nh2yiEEdFTwF/rj
+         71Ng==
+X-Gm-Message-State: AOJu0YxA2Mf4mlMxAn9vkCNpH9VGT+igjPJwhEZwhyaqpZGH1Y1VDnSM
+	gISAm2Ewk5S4PKajTgpazTu5Fw==
+X-Google-Smtp-Source: AGHT+IFkTEGA0TMga8AxlgGtGhqbCixlBZi81dfQxvPnWxxILoG3AlMI2uAQ2CNX7IniM8KJqIQCNQ==
+X-Received: by 2002:a05:6402:3605:b0:53d:be55:3ee8 with SMTP id el5-20020a056402360500b0053dbe553ee8mr6667395edb.12.1697197088595;
+        Fri, 13 Oct 2023 04:38:08 -0700 (PDT)
+Received: from otso.luca.vpn.lucaweiss.eu (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id v18-20020aa7d652000000b00533dad8a9c5sm11360772edr.38.2023.10.13.04.38.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Oct 2023 04:38:08 -0700 (PDT)
+From: Luca Weiss <luca.weiss@fairphone.com>
+Subject: [PATCH 0/3] Handle reversed SBU orientation for FSA4480
+Date: Fri, 13 Oct 2023 13:38:04 +0200
+Message-Id: <20231013-fsa4480-swap-v1-0-b877f62046cc@fairphone.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYYP286MB1406:EE_|TYCP286MB2351:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4d79e31f-9c9f-4a87-0752-08dbcbdde0f2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	kpx17i3mTlgpw3iSfEAjhaTflgM83aP7H8dS3fDGz15mM+gHizOBEG6Y/v64rJEoJqseCRcfIwfEoP318hD5ieP7LxkHZy3BaUHKWmEuDNqzSrgmCqwMZKBv4NTZ3fpMGuF+Gwit97VInNnhOFYocbRkFL3z8bCTR2d7DXw38aZaUDVEIUhpEqclabeifxUS/imvTMq3nTDfGwfUI9KQ+TjtJTbigI3UvJaMpd1YcfCfwiTuRrQ2i9jb9l3/dRPNi3aby4KXZECYywiysPQwcpALMzbMNzEy6nsu3rm4px3P1Y29PImjKnvg0ulznwFqDimkmtXRGTtH7ItEm9piTS58JoT/nZB8Zit/PnJfLD0QM2epCucdWM1LM1fa1hPG86m6nFTggeQJf6ysuRph370031xAxcac6fI9BC6Gn8/1jDLMEEVSqCdp81C3dsu9M76+qgOWb/b24Nx1TTg6SNnDuJGAO6e1HfVejaDjgmDoKGo7tZnCkBRorGn2Qf2JO3pU20UUdqOwzV7jLA9JQ/E5LP8K7CprjqZhBKXdyW5DYyXuHUTurgpgWQAoT2Vq5BAO7cJJNEudj2Kw6pjyv4KZ79E13EN+nMksAVySfrShIcMl3k7+VZOB6y/xQHJj
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYYP286MB1406.JPNP286.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(7916004)(346002)(376002)(39830400003)(366004)(396003)(136003)(230922051799003)(1800799009)(64100799003)(451199024)(186009)(966005)(6486002)(6666004)(38100700002)(316002)(786003)(41300700001)(66946007)(66476007)(66556008)(4326008)(8676002)(8936002)(6506007)(478600001)(9686003)(6512007)(5660300002)(2906002)(41320700001)(86362001)(558084003)(33716001)(49092004)(67856001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?eY+w0mYIN2m6aBLWgoelvjJB05/X7CML/U2DXMjtE3tWukskD5DTFLzkLydM?=
- =?us-ascii?Q?5ZYEi0t7Q1/QxIWb1F0H/V6NBdHNkzL6EK0E5FlsNZd/Kfrun+4sMvL8C66x?=
- =?us-ascii?Q?VIg8ZasD7RTAZfA5xzymlazH51XMd/ajq0TCM2LQVrETGY/78Ed9YGnmAxxg?=
- =?us-ascii?Q?j2HV/N/KLJdepT+tMJ2SoDwlPIYjubF2gs/GKYxtwHZXFgP/Ji1YR7vj3l/e?=
- =?us-ascii?Q?b0ecmDT6u6YNBDsbwNolBz6fq0ydmgiWHCC1q3EE6uotlg5+cif/+1U0cmqU?=
- =?us-ascii?Q?kDwwcuir9d7Dv6vTV9qFpucMTRK3HglvyIQ5yNyXtAXYK31hY4QP9S72GhDN?=
- =?us-ascii?Q?2Inmd2mr/ho1B0+8HuwOFqRIAIz3YVqMHsklmbpU6T+FwuyMh2GphsVdIkEf?=
- =?us-ascii?Q?ZdvW9ijhHu68X3zpxflaH009DXsawVquC9SGjYKET28VyyXLREes4DznqK1D?=
- =?us-ascii?Q?0p0zuk3ARzukyjDLBLN5TiqLC7LPpqVFQ4UHgKAshmkbhMiUYAJQd45oVzxL?=
- =?us-ascii?Q?l+7fKZKq+5IoGA+8OLxsWJ0fFhQ2rcZ4KyiHIIdGAoGMCrz9cgBHJerMN/Tk?=
- =?us-ascii?Q?q3+wMHooXZNErDoePjSLMLzmwlz3PZx1IC0EWI5pDq1Sy/jyBLOgdYa9gLmS?=
- =?us-ascii?Q?HtVm8Ai/554k/S1bomtscrGxinL0BrEJvyBvi6Pp2SZBC4GCaWKmJ9fSsHhJ?=
- =?us-ascii?Q?01bXYepRe/51oJ2yZu35BIOads/mj0dKIzT78GZfb9RtgbT8J1fL8g1bm2nx?=
- =?us-ascii?Q?DYU/uYkM5YuWTjyuNXAyu4vxddNfhtVSCmDf+dmKPhHme9GhBAszVetO6duy?=
- =?us-ascii?Q?dHfWmKkcTar52buaRrqIW5BNXdQjq+Jpd1r9ZY6oH5ucCjAxyF2Y+/ppoZa2?=
- =?us-ascii?Q?P+IEaSCKDd4wjqYPdNCR8zNPdfr7hBA2sbPOHgfF+o6T0s9Msq6xrTV/yhJX?=
- =?us-ascii?Q?4SaXRlR0drZ5kiLbQT1FFufL/wuEfIFuU9s2ghPqwnN8kt4F/El1kxcM693y?=
- =?us-ascii?Q?C6vmADVwfGNNgh91P/9qYOkfiKT2w2AIocIWPIcJNwQ3c6uj3SJwYmthWf+n?=
- =?us-ascii?Q?NF1xOZMH7XpZb4cvWIgHWGnIiVezutc1G0+FlLItQJooLjXViBQIKSJe+DuS?=
- =?us-ascii?Q?8XpCXzbvjA8OPx8Fd3gwwMpaGu6Pq1nemWroG26X5L52qSNuQxDqz8hZ2ZAn?=
- =?us-ascii?Q?teaYQVDrhkgSaEd4FyJDNXTT66SFd99eypbq/bRZjqAbSOR3WyxQ9DKCPIkV?=
- =?us-ascii?Q?VkRjndTE1syLheiZjXobfw1YPU9AFdx9Gh3l/r7KWcgSDf6X5xaoUKrzYqbx?=
- =?us-ascii?Q?k/4QIbUwo7yvVCZWsN+1Dkz83N95k0vJxlRBhFTkofRDJNtmU8uVvPAVbmeX?=
- =?us-ascii?Q?m8FZUzxgvpI16cFMENFGoAb1ilZctXFfxjnl6PYPV6adjtWjkumP9M6X5nZy?=
- =?us-ascii?Q?GJp2QiYbyBKKBI2EoA54veOzV4i0Nvm5HZb/fKhMzuuJgKlyRO68wkMggSVc?=
- =?us-ascii?Q?ekUfYxFZ3T6u4ZxP1zZwtnpiJAAbYfVOyiikljZ4pj+bMhcTIpg8+Wt9WdoC?=
- =?us-ascii?Q?GaaiWSzPh0DiRFYdclbVmLD2pc5N4DagmrjbpyJz?=
-X-OriginatorOrg: zenithal.me
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4d79e31f-9c9f-4a87-0752-08dbcbdde0f2
-X-MS-Exchange-CrossTenant-AuthSource: TYYP286MB1406.JPNP286.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Oct 2023 11:16:42.5946
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 436d481c-43b1-4418-8d7f-84c1e4887cf0
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: asx144FrzcL8mEEwwDkml2Ucrrs/yGjJ4lfUOdg+d5+zr+cILNCstAHjxjt2frx8
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCP286MB2351
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABwsKWUC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI2NDA0Nj3bTiRBMTCwPd4vLEAl3LJIM0c7MUc+NkQ0sloJaCotS0zAqwcdG
+ xtbUA2ylJb14AAAA=
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Neil Armstrong <neil.armstrong@linaro.org>, 
+ Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>
+Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
+ Luca Weiss <luca.weiss@fairphone.com>
+X-Mailer: b4 0.12.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	RCVD_IN_MSPIKE_H2,SORTED_RECIPS,SPF_HELO_PASS,SPF_PASS autolearn=no
-	autolearn_force=no version=3.4.6
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-#syz test: https://github.com/ZenithalHourlyRate/linux.git usbip-fix-wrong-platform-data
+Short reason:
+Without swapping the SBU lanes, on QCM6490 Fairphone 5 the
+DisplayPort-over-USB-C doesn't work.
+
+The Orient-Chip OCP96011 used in this phone is generally compatible with
+FSA4480 but has a difference how AUX+/- should be connected to SBU1/2.
+
+Long explanation, with my current understanding:
+* FSA4480 block diagram shows AUX+ connected to SBU2 and AUX- to SBU1.
+* OCP96011 block diagram shows AUX+ connected to SBU1 and AUX- to SBU2
+  (it's not 100% clear though in the picture but makes sense with the
+  observed behavior)
+* Fairphone 5 schematics have AUX+ connected to SBU2 and AUX- to SBU1,
+  which would be correct for FSA4480 but since OCP96011 is used (which
+  expects it to be the other way around) the Linux driver needs to
+  reverse it.
+  If AUX+ would be connected to SBU1 and AUX- to SBU2 as shown in the
+  OCP96011 block diagram, then no driver/dts change would be needed.
+
+Not sure if I've implemented the best solution in this patch. Other
+solutions I could think of are:
+* Add some custom boolean property to the node, e.g. 'fsa,swap-sbu'
+* Reverse when ocs,ocp96011 compatible is used. This would be incorrect
+  since when following the OCP96011 block diagram no reversing would be
+  needed, as explained above.
+
+However I think the current solution with data-lanes in the endpoint is
+the best fit and is also already used for a similar purpose in another
+USB mux driver.
+
+Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+---
+Luca Weiss (3):
+      dt-bindings: usb: fsa4480: Add data-lanes property to endpoint
+      usb: typec: fsa4480: Add support to swap SBU orientation
+      dt-bindings: usb: fsa4480: Add compatible for OCP96011
+
+ .../devicetree/bindings/usb/fcs,fsa4480.yaml       | 43 +++++++++++-
+ drivers/usb/typec/mux/fsa4480.c                    | 81 ++++++++++++++++++++++
+ 2 files changed, 121 insertions(+), 3 deletions(-)
+---
+base-commit: e3b18f7200f45d66f7141136c25554ac1e82009b
+change-id: 20231013-fsa4480-swap-9b0f76d73c19
+
+Best regards,
+-- 
+Luca Weiss <luca.weiss@fairphone.com>
+
 
