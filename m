@@ -1,216 +1,240 @@
-Return-Path: <linux-usb+bounces-1606-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1607-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1D4E7C8E09
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 21:58:53 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2856C7C8E1F
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 22:06:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6856D282F53
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 19:58:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 308D8B20B13
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Oct 2023 20:05:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9AFC250E8;
-	Fri, 13 Oct 2023 19:58:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01B1D250EE;
+	Fri, 13 Oct 2023 20:05:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="gRho6fmQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="keF77/CC"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 847751428A;
-	Fri, 13 Oct 2023 19:58:44 +0000 (UTC)
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18CF5E3;
-	Fri, 13 Oct 2023 12:58:41 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39DIOoU6021535;
-	Fri, 13 Oct 2023 19:58:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=pX+uRLhqkPchUb0oySxhA1//1XowAmtf/SD2oT558aI=;
- b=gRho6fmQHSFbfISMjkkBBZ8wv8mb/0k+uijYOQlBvNQNqKajCcjpS9/ITxP1vbwb1UXK
- qR8aJDAmI3QjIYmKaCwb6PTjG4iQq/AdjcLDnWMI5yMhB/rQG3Vk7kS0eKDWHipg6Gs/
- h9WxaZRjrOiPJn+yR7WkR4qVVxnsy5ijqqqvK1IiSI4AARWVVI61BwYset66bV3OoR26
- QTajAZTC0AYapVzzyDnKxuDvPGIlqsWfdFk4gQpXVg32MgTL6WpynRVZimKSfVsGyYxq
- uMfRmaw3s5qSvPTzE08ohZZqqdDD76Bcyaca/6ATjhrHTMhYzDkorTXXBKwC9r/d2tL5 VQ== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tqaa2r949-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 13 Oct 2023 19:58:32 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39DJwVm3011343
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 13 Oct 2023 19:58:31 GMT
-Received: from [10.216.41.155] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Fri, 13 Oct
- 2023 12:58:27 -0700
-Message-ID: <b12eb7b1-54e7-406f-8c19-0046555b82d3@quicinc.com>
-Date: Sat, 14 Oct 2023 01:28:23 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EFFA1BDED
+	for <linux-usb@vger.kernel.org>; Fri, 13 Oct 2023 20:05:45 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 497DCB7;
+	Fri, 13 Oct 2023 13:05:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1697227544; x=1728763544;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5it+lZKtnoTVXQpnj5JtqmDZwGeKWf9KR13g1UL7qjw=;
+  b=keF77/CCV/rnVrm2KhscP506Z7cLsHRpF32Bx9d+P2VbzatSsuplSHwm
+   8ti5nl+Pkvx/Y3MyRHd79vq5j1yyBE1CkfhTbnoQfnDO6tkgwsKtNJ2Gr
+   D41bvFcWVKSO/HPivYY80hS0paiEWkXl5u4sL9qKGpS3gX+pQxBV1VhWi
+   vr3f1GRkuNXMPAtWhhP/Ec3h+5um0pgZrH59vRDwr5RoPMja/SbBrWBzP
+   2+Jy48igYMZJiwBWdyTbew6wXmDgGL3xp6rjArR6Pi5Kk15hgQbqx9oiM
+   Yia5T5GcUL7/n53fVD9j0lHyzqD/UddmY9AdNYQi7UDhdCuLjbYxLHIG6
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10862"; a="389115490"
+X-IronPort-AV: E=Sophos;i="6.03,223,1694761200"; 
+   d="scan'208";a="389115490"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2023 13:05:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10862"; a="789976484"
+X-IronPort-AV: E=Sophos;i="6.03,223,1694761200"; 
+   d="scan'208";a="789976484"
+Received: from unknown (HELO smile.fi.intel.com) ([10.237.72.54])
+  by orsmga001.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2023 13:05:40 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97-RC1)
+	(envelope-from <andriy.shevchenko@intel.com>)
+	id 1qrOPg-00000005Jz1-2wkn;
+	Fri, 13 Oct 2023 23:05:36 +0300
+Date: Fri, 13 Oct 2023 23:05:36 +0300
+From: "Shevchenko, Andriy" <andriy.shevchenko@intel.com>
+To: Hans de Goede <hdegoede@redhat.com>
+Cc: "Wu, Wentong" <wentong.wu@intel.com>,
+	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"oneukum@suse.com" <oneukum@suse.com>,
+	"wsa@kernel.org" <wsa@kernel.org>,
+	"andi.shyti@linux.intel.com" <andi.shyti@linux.intel.com>,
+	"broonie@kernel.org" <broonie@kernel.org>,
+	"bartosz.golaszewski@linaro.org" <bartosz.golaszewski@linaro.org>,
+	"linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+	"linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+	"sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
+	"Wang, Zhifeng" <zhifeng.wang@intel.com>,
+	"linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v20 1/4] usb: Add support for Intel LJCA device
+Message-ID: <ZSmjEKfYzFuAHXW+@smile.fi.intel.com>
+References: <1696833205-16716-1-git-send-email-wentong.wu@intel.com>
+ <1696833205-16716-2-git-send-email-wentong.wu@intel.com>
+ <ZSZ3IPgLk7uC5UGI@smile.fi.intel.com>
+ <6a87b43a-0648-28d4-6c69-e0f684e44eb6@redhat.com>
+ <DM6PR11MB4316BE44F53E276384FF06C88DCCA@DM6PR11MB4316.namprd11.prod.outlook.com>
+ <5d2e9eba-a941-ea9a-161a-5b97d09d5d35@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] usb: gadget: ncm: Add support to update
- wMaxSegmentSize via configfs
-To: =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        onathan Corbet
-	<corbet@lwn.net>,
-        Linyu Yuan <quic_linyyuan@quicinc.com>, <linux-usb@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
-        <quic_jackp@quicinc.com>
-References: <20231009142005.21338-1-quic_kriskura@quicinc.com>
- <20231009142005.21338-2-quic_kriskura@quicinc.com>
- <CANP3RGfEk2DqZ3biyN78ycQYbDxCEG+H1me2vnEYuwXkNdXnTA@mail.gmail.com>
- <CANP3RGcCpNOuVpdV9n0AFxZo-wsfwi8OfYgBk1WHNHaEd-4V-Q@mail.gmail.com>
- <CANP3RGdY4LsOA6U5kuccApHCzL0_jBnY=pLOYrUuYtMZFTvnbw@mail.gmail.com>
- <d19d9d08-c119-4991-b460-49925f601d15@quicinc.com>
- <fad5a7fb-cce1-46bc-a0af-72405c76d107@quicinc.com>
- <CANP3RGcqWBYd9FqAX47rE9pFgBTB8=0CGdwkScm-OH1epHcVWQ@mail.gmail.com>
- <8ff92053-52ff-4950-95c8-0e986f6a028a@quicinc.com>
- <CANP3RGd4G4dkMOyg6wSX29NYP2mp=LhMhmZpoG=rgoCz=bh1=w@mail.gmail.com>
-Content-Language: en-US
-From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <CANP3RGd4G4dkMOyg6wSX29NYP2mp=LhMhmZpoG=rgoCz=bh1=w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: WUoyPTtJeotEsqBl2B8RdbnAfy2AcqvZ
-X-Proofpoint-ORIG-GUID: WUoyPTtJeotEsqBl2B8RdbnAfy2AcqvZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-13_11,2023-10-12_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- priorityscore=1501 lowpriorityscore=0 bulkscore=0 mlxlogscore=823
- phishscore=0 suspectscore=0 adultscore=0 clxscore=1015 impostorscore=0
- malwarescore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2310130172
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-	SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5d2e9eba-a941-ea9a-161a-5b97d09d5d35@redhat.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+	SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
+On Thu, Oct 12, 2023 at 01:14:23PM +0200, Hans de Goede wrote:
+> On 10/11/23 14:50, Wu, Wentong wrote:
+> >> On 10/11/23 12:21, Andy Shevchenko wrote:
+> >>> On Mon, Oct 09, 2023 at 02:33:22PM +0800, Wentong Wu wrote:
+> >>>> Implements the USB part of Intel USB-I2C/GPIO/SPI adapter device
+> >>>> named "La Jolla Cove Adapter" (LJCA).
+> >>>>
+> >>>> The communication between the various LJCA module drivers and the
+> >>>> hardware will be muxed/demuxed by this driver. Three modules ( I2C,
+> >>>> GPIO, and SPI) are supported currently.
+> >>>>
+> >>>> Each sub-module of LJCA device is identified by type field within the
+> >>>> LJCA message header.
+> >>>>
+> >>>> The sub-modules of LJCA can use ljca_transfer() to issue a transfer
+> >>>> between host and hardware. And ljca_register_event_cb is exported to
+> >>>> LJCA sub-module drivers for hardware event subscription.
+> >>>>
+> >>>> The minimum code in ASL that covers this board is Scope
+> >>>> (\_SB.PCI0.DWC3.RHUB.HS01)
+> >>>>     {
+> >>>>         Device (GPIO)
+> >>>>         {
+> >>>>             Name (_ADR, Zero)
+> >>>>             Name (_STA, 0x0F)
+> >>>>         }
+> >>>>
+> >>>>         Device (I2C)
+> >>>>         {
+> >>>>             Name (_ADR, One)
+> >>>>             Name (_STA, 0x0F)
+> >>>>         }
+> >>>>
+> >>>>         Device (SPI)
+> >>>>         {
+> >>>>             Name (_ADR, 0x02)
+> >>>>             Name (_STA, 0x0F)
+> >>>>         }
+> >>>>     }
+> >>>
+> >>> This commit message is not true anymore, or misleading at bare minimum.
+> >>> The ACPI specification is crystal clear about usage _ADR and _HID, i.e.
+> >>> they must NOT be used together for the same device node. So, can you
+> >>> clarify how the DSDT is organized and update the commit message and it
+> >>> may require (quite likely) to redesign the architecture of this
+> >>> driver. Sorry I missed this from previous rounds as I was busy by
+> >>> something else.
+> >>
+> >> This part of the commit message unfortunately is not accurate.
+> >> _ADR is not used in either DSDTs of shipping hw; nor in the code.
+> > 
+> > We have covered the _ADR in the code like below, it first try to find the
+> > child device based on _ADR, if not found, it will check the _HID, and there
+> > is clear comment in the function.
+> > 
+> > /* bind auxiliary device to acpi device */
+> > static void ljca_auxdev_acpi_bind(struct ljca_adapter *adap,
+> > 				   struct auxiliary_device *auxdev,
+> > 				   u64 adr, u8 id)
+> > {
+> > 	struct ljca_match_ids_walk_data wd = { 0 };
+> > 	struct acpi_device *parent, *adev;
+> > 	struct device *dev = adap->dev;
+> > 	char uid[4];
+> > 
+> > 	parent = ACPI_COMPANION(dev);
+> > 	if (!parent)
+> > 		return;
+> > 
+> > 	/*
+> > 	 * get auxdev ACPI handle from the ACPI device directly
+> > 	 * under the parent that matches _ADR.
+> > 	 */
+> > 	adev = acpi_find_child_device(parent, adr, false);
+> > 	if (adev) {
+> > 		ACPI_COMPANION_SET(&auxdev->dev, adev);
+> > 		return;
+> > 	}
+> > 
+> > 	/*
+> > 	 * _ADR is a grey area in the ACPI specification, some
+> > 	 * platforms use _HID to distinguish children devices.
+> > 	 */
+> > 	switch (adr) {
+> > 	case LJCA_GPIO_ACPI_ADR:
+> > 		wd.ids = ljca_gpio_hids;
+> > 		break;
+> > 	case LJCA_I2C1_ACPI_ADR:
+> > 	case LJCA_I2C2_ACPI_ADR:
+> > 		snprintf(uid, sizeof(uid), "%d", id);
+> > 		wd.uid = uid;
+> > 		wd.ids = ljca_i2c_hids;
+> > 		break;
+> > 	case LJCA_SPI1_ACPI_ADR:
+> > 	case LJCA_SPI2_ACPI_ADR:
+> > 		wd.ids = ljca_spi_hids;
+> > 		break;
+> > 	default:
+> > 		dev_warn(dev, "unsupported _ADR\n");
+> > 		return;
+> > 	}
+> > 
+> > 	acpi_dev_for_each_child(parent, ljca_match_device_ids, &wd);
+> 
+> Ah ok, I see. So the code:
+> 
+> 1. First tries to find the matching child acpi_device for the auxdev by ADR
+> 
+> 2. If 1. fails then falls back to HID + UID matching
+> 
+> And there are DSDTs which use either:
+> 
+> 1. Only use _ADR to identify which child device is which, like the example
+>    DSDT snippet from the commit msg.
+> 
+> 2. Only use _HID + _UID like the 2 example DSDT snippets from me email
+> 
+> But there never is a case where both _ADR and _HID are used at
+> the same time (which would be an ACPI spec violation as Andy said).
+> 
+> So AFAICT there is no issue here since  _ADR and _HID are never
+> user at the same time and the commit message correctly describes
+> scenario 1. from above, so the commit message is fine too.
+> 
+> So I believe that we can continue with this patch series in
+> its current v20 form, which has already been staged for
+> going into -next by Greg.
+> 
+> Andy can you confirm that moving ahead with the current
+> version is ok ?
+
+Yes as we have a few weeks to fix corner cases.
+
+What I'm worrying is that opening door for _ADR that seems never used is kinda
+an overkill here (resolving non-existing problem). Looking at the design of the
+driver I'm not sure why ACPI HIDs are collected somewhere else than in the
+respective drivers. And looking at the ID lists themselves I am not sure why
+the firmware of the respective hardware platforms are not using _CID.
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-On 10/14/2023 12:09 AM, Maciej Żenczykowski wrote:
-> On Thu, Oct 12, 2023 at 8:40 AM Krishna Kurapati PSSNV
-> <quic_kriskura@quicinc.com> wrote:
->>
->>
->>
->> On 10/12/2023 6:02 PM, Maciej Żenczykowski wrote:
->>> On Thu, Oct 12, 2023 at 1:48 AM Krishna Kurapati PSSNV
->>>
->>> Could you paste the full patch?
->>> This is hard to review without looking at much more context then email
->>> is providing
->>> (or, even better, send me a link to a CL in gerrit somewhere - for
->>> example aosp ACK mainline tree)
->>
->> Sure. Will provide a gerrit on ACK for review before posting v2.
->>
->> The intent of posting the diff was two fold:
->>
->> 1. The question Greg asked regarding why the max segment size was
->> limited to 15014 was valid. When I thought about it, I actually wanted
->> to limit the max MTU to 15000, so the max segment size automatically
->> needs to be limited to 15014.
-> 
-> Note that this is a *very* abstract value.
-> I get you want L3 MTU of 10 * 1500, but this value is not actually meaningful.
-> 
-> IPv4/IPv6 fragmentation and IPv4/IPv6 TCP segmentation
-> do not result in a trivial multiplication of the standard 1500 byte
-> ethernet L3 MTU.
-> Indeed aggregating 2 1500 L3 mtu frames results in *different* sized
-> frames depending on which type of aggregation you do.
-> (and for tcp it even depends on the number and size of tcp options,
-> though it is often assumed that those take up 12 bytes, since that's the
-> normal for Linux-to-Linux tcp connections)
-> 
-> For example if you aggregate N standard Linux ipv6/tcp L3 1500 mtu frames,
-> this means you have
-> N frames: ethernet (14) + ipv6 (40) + tcp (20) + tcp options (12) +
-> payload (1500-12-20-40=1500-72=1428)
-> post aggregation:
-> 1 frame: ethernet (14) + ipv6 (40) + tcp (20) + tcp options (12) +
-> payload (N*1428)
-> 
-> so N * 1500 == N * (72 + 1428) --> 1 * (72 + N * 1428)
-> 
-> That value of 72 is instead 52 for 'standard Linux ipv4/tcp),
-> it's 40/60 if there's no tcp options (which I think happens when
-> talking to windows)
-> it's different still with ipv4 fragmentation... and again different
-> with ipv6 fragmentation...
-> etc.
-> 
-> ie. 15000 L3 mtu is exactly as meaningless as 14000 L3 mtu.
-> Either way you don't get full frames.
-> 
-> As such I'd recommend going with whatever is the largest mtu that can
-> be meaningfully made to fit in 16K with all the NCM header overhead.
-> That's likely closer to 15500-16000 (though I have *not* checked).
-> 
->> But my commit text didn't mention this
->> properly which was a mistake on my behalf. But when I looked at the
->> code, limiting the max segment size 15014 would force the practical
->> max_mtu to not cross 15000 although theoretical max_mtu was set to:
->> (GETHER_MAX_MTU_SIZE - 15412) during registration of net device.
->>
->> So my assumption of limiting it to 15000 was wrong. It must be limited
->> to 15412 as mentioned in u_ether.c  This inturn means we must limit
->> max_segment_size to:
->> GETHER_MAX_ETH_FRAME_LEN (GETHER_MAX_MTU_SIZE + ETH_HLEN)
->> as mentioned in u_ether.c.
->>
->> I wanted to confirm that setting MAX_DATAGRAM_SIZE to
->> GETHER_MAX_ETH_FRAME_LEN was correct.
->>
->> 2. I am not actually able to test with MTU beyond 15000. When my host
->> device is a linux machine, the cdc_ncm.c limits max_segment_size to:
->> CDC_NCM_MAX_DATAGRAM_SIZE               8192    /* bytes */
-> 
-> In practice you get 50% of the benefits of infinitely large mtu by
-> going from 1500 to ~2980.
-> you get 75% of the benefits by going to ~6K
-> you get 87.5% of the benefits by going to ~12K
-> the benefits of going even higher are smaller and smaller...
->  > If the host side is limited to 8192, maybe we should match that here too?
-
-Hi Maciej,
-
-  Thanks for the detailed explanation. I agree with you on setting 
-device side also to 8192 instead of what max_mtu is present in u_ether 
-or practical max segment size possible.
-
-> 
-> But the host side limitation of 8192 doesn't seem particularly sane either...
-> Maybe we should relax that instead?
-> 
-I really didn't understand why it was set to 8192 in first place.
-
-> (especially since for things like tcp zero copy you want an mtu which
-> is slighly more then N * 4096,
-> ie. around 4.5KB, 8.5KB, 12.5KB or something like that)
-> 
-
-I am not sure about host mode completely. If we want to increase though, 
-just increasing the MAX_DATAGRAM_SIZE to some bigger value help ? (I 
-don't know the entire code of cdc_ncm, so I might be wrong).
-
-Regards,
-Krishna,
 
