@@ -1,200 +1,146 @@
-Return-Path: <linux-usb+bounces-1620-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1621-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0BCB27C9447
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Oct 2023 12:58:21 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4EEA7C946F
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Oct 2023 13:59:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DC8DC1C20A2F
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Oct 2023 10:58:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 55CC6B20BCC
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Oct 2023 11:59:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 652B3F51C;
-	Sat, 14 Oct 2023 10:58:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4A101096C;
+	Sat, 14 Oct 2023 11:59:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="axAGG+XO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lFhM3OYh"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7245A5396
-	for <linux-usb@vger.kernel.org>; Sat, 14 Oct 2023 10:58:14 +0000 (UTC)
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0F36AD
-	for <linux-usb@vger.kernel.org>; Sat, 14 Oct 2023 03:58:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1697281091;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7K8u/F/T7vd5Qb0NUDHtY09uDfh7jAIHafbl7k57Yug=;
-	b=axAGG+XOnTuegyal3NHIDnoT8m3q0+oLDWgkhc+vVW2Uqbc+lfwIdbXowqsVGvcgNXcrYh
-	PIBnm2EygyJ2ciFZSvW6c1z7alV7MJV3w2oYSBNAKMBPpuIkR1VQ63ByY9AHv+yNMbg88b
-	kyI75UuHXjX3pZc6k0u2xEXFPJtBtes=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-460-Xq2c-h1WOead9Nz8lS5Vbg-1; Sat, 14 Oct 2023 06:58:09 -0400
-X-MC-Unique: Xq2c-h1WOead9Nz8lS5Vbg-1
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-9ae0601d689so187555666b.0
-        for <linux-usb@vger.kernel.org>; Sat, 14 Oct 2023 03:58:09 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CA49101D3
+	for <linux-usb@vger.kernel.org>; Sat, 14 Oct 2023 11:59:34 +0000 (UTC)
+Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15FA8A9;
+	Sat, 14 Oct 2023 04:59:32 -0700 (PDT)
+Received: by mail-vk1-xa34.google.com with SMTP id 71dfb90a1353d-49ad8b76003so1151532e0c.3;
+        Sat, 14 Oct 2023 04:59:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1697284771; x=1697889571; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HZlc482k/rrtYqYbzZMx2rkwqW6WN7JZHueUcH2+av8=;
+        b=lFhM3OYhck0X7bRC9rHWiSvonGLxp7P8M6Yxy61fGfjCyf6VTqnabghNX10tLNAOJs
+         QH5KcIa/VLUTqePIzUwVultheYFtJ8ojo7ymJ2JZPR62h+8EEgVdflCkFAmJrSKmpMcg
+         clz5eHfECyULTAfi+L03wbSqTC7mxKJcJ9xiKOzcPQVlG/rupmUiciBjCjURExaXIR4N
+         jFW88wlZJYlSWljSQYXNpDw6hEAZaUSppsWprbfB9UIFcaO0LfGldrg4pGxNsSxXzx9h
+         6kwyrA++vD1CVTu8reHAtYwSllcOTqkBP22Vm4BhbUKSKR5V3LoiSGI0vcRM8aVsFIhm
+         XguQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697281088; x=1697885888;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7K8u/F/T7vd5Qb0NUDHtY09uDfh7jAIHafbl7k57Yug=;
-        b=Kq3G5D41o+uT+JxjzglwR43fdFidPkXpO9Wknfvt0H08+c2ePVOyR2RrovXWULxiKq
-         5TLcDK8+U5Ybhnkz+9wdomCJdLf1bIFyAgt1DDlzPnkTMiWKTWNOHznP8H3wrHHraa4x
-         vJo2KCPXQ6y4ChP0bJFLsKS72bBcgPJISbpw+I2kC4IerNnE1IfNTVNOXQDIaZNmlwEx
-         UTjjIbGUT4ejj7W3WtrRewbuJHMC2FS56F+/qhLpOFrFs0VoJJ9EHIjl7RVFX9krhu3H
-         pWJOjtGJMXHxU7UFLor4ahdKPeeX8ZFFYOzhT/pjrVH5NEQd6hvMo8P1Ugz2UDMqL3rq
-         F+Bw==
-X-Gm-Message-State: AOJu0YzsSSn8+f87b4u5Pjxq8wOVRQUU/2qt72SdA1V0xOHlfYK9XOLX
-	hcHArCryJWcyeOrEtWrvrZgd2mBVPx6fOG27H+vU5RfTWuIXbg/GjZwo3VX7Qc1/eAYT79VLKhb
-	+D744h+EQaYesHGtHGz6C
-X-Received: by 2002:a17:907:9306:b0:9bd:a2a9:a722 with SMTP id bu6-20020a170907930600b009bda2a9a722mr4380732ejc.45.1697281088720;
-        Sat, 14 Oct 2023 03:58:08 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IERPMfjIBAe6gPMoCmGJsf/nvUED0pBuGMeWmFvEJzgs1jrgiD92PRib0Pl5uaiKzqcHeO+Jg==
-X-Received: by 2002:a17:907:9306:b0:9bd:a2a9:a722 with SMTP id bu6-20020a170907930600b009bda2a9a722mr4380709ejc.45.1697281088270;
-        Sat, 14 Oct 2023 03:58:08 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id vl9-20020a170907b60900b0099bccb03eadsm755833ejc.205.2023.10.14.03.58.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 14 Oct 2023 03:58:07 -0700 (PDT)
-Message-ID: <9a080d06-586d-686f-997e-674cb8d16099@redhat.com>
-Date: Sat, 14 Oct 2023 12:58:06 +0200
+        d=1e100.net; s=20230601; t=1697284771; x=1697889571;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HZlc482k/rrtYqYbzZMx2rkwqW6WN7JZHueUcH2+av8=;
+        b=YN/Hj6C33n4tq/jjbi/0RkOOFepFviXold2RdGuiuk0qdrWE4tHAvXfuhEy3cQY281
+         5CUm5CF5GjXUF2+I8RC8clebuCEEqEvIdJIxGThIEU5pey7pG5kjF4BBzuhcNvc9gAQp
+         /vf6uC0BQV3E7rzGNYQwW7IUqRLjEBN4M/53EJABQ0AIqiSQLk3PashifBEkR+60Hvfx
+         x1n6Nv0NBRD6Nm1nGFxKTjLtaP9Uw7v+9CDoVVvJQJa1RGOZS9mFvINmqS+I/K/pKejb
+         1N2xSCFQBhNFXspBS0NnyaP+qmtszyxP9vfH35huQ1awN+LPq8WUddmPxWdiXE6QFemD
+         RgVA==
+X-Gm-Message-State: AOJu0Ywr6rGI3ygXGI97eClFCmbqj1mE86IvcqOWKKpFM0dqhl2JeU5Y
+	sJ3xLukfh7PZaDPcwmlZGeo=
+X-Google-Smtp-Source: AGHT+IFRpDpRJ4qHUzHOJR30FoxUvX1FnX7kQ21oTbc/rsFp2eIu/q0xyG7y6Tc4wsOvzFbBZdT6aQ==
+X-Received: by 2002:a1f:a9c9:0:b0:49e:1eca:f847 with SMTP id s192-20020a1fa9c9000000b0049e1ecaf847mr15754459vke.15.1697284770972;
+        Sat, 14 Oct 2023 04:59:30 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g10-20020a056122062a00b004961bbadb84sm258976vkp.7.2023.10.14.04.59.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 14 Oct 2023 04:59:29 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Sat, 14 Oct 2023 04:59:28 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Badhri Jagan Sridharan <badhri@google.com>
+Cc: gregkh@linuxfoundation.org, heikki.krogerus@linux.intel.com,
+	kyletso@google.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, rdbabiera@google.com,
+	amitsd@google.com, stable@vger.kernel.org
+Subject: Re: [PATCH v1] usb: typec: tcpm: Check for sink pdp op current only
+ for pd
+Message-ID: <636e2ace-30cb-4d05-b67f-7047f6fad2a9@roeck-us.net>
+References: <20231014031709.1900370-1-badhri@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v20 1/4] usb: Add support for Intel LJCA device
-To: "Shevchenko, Andriy" <andriy.shevchenko@intel.com>
-Cc: "Wu, Wentong" <wentong.wu@intel.com>,
- "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
- "oneukum@suse.com" <oneukum@suse.com>, "wsa@kernel.org" <wsa@kernel.org>,
- "andi.shyti@linux.intel.com" <andi.shyti@linux.intel.com>,
- "broonie@kernel.org" <broonie@kernel.org>,
- "bartosz.golaszewski@linaro.org" <bartosz.golaszewski@linaro.org>,
- "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
- "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
- "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
- "Wang, Zhifeng" <zhifeng.wang@intel.com>,
- "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <1696833205-16716-1-git-send-email-wentong.wu@intel.com>
- <1696833205-16716-2-git-send-email-wentong.wu@intel.com>
- <ZSZ3IPgLk7uC5UGI@smile.fi.intel.com>
- <6a87b43a-0648-28d4-6c69-e0f684e44eb6@redhat.com>
- <DM6PR11MB4316BE44F53E276384FF06C88DCCA@DM6PR11MB4316.namprd11.prod.outlook.com>
- <5d2e9eba-a941-ea9a-161a-5b97d09d5d35@redhat.com>
- <ZSmjEKfYzFuAHXW+@smile.fi.intel.com>
-Content-Language: en-US, nl
-From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <ZSmjEKfYzFuAHXW+@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-	SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-	version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231014031709.1900370-1-badhri@google.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Hi Andy,
+On Sat, Oct 14, 2023 at 03:17:09AM +0000, Badhri Jagan Sridharan wrote:
+> TCPM checks for sink caps operational current even when PD is disabled.
+> This incorrectly sets tcpm_set_charge() when PD is disabled.
+> Check for sink caps only when PD is disabled.
+                                      ^^^^^^^^
 
-On 10/13/23 22:05, Shevchenko, Andriy wrote:
-> On Thu, Oct 12, 2023 at 01:14:23PM +0200, Hans de Goede wrote:
+enabled ?
 
-<snip>
-
->> Ah ok, I see. So the code:
->>
->> 1. First tries to find the matching child acpi_device for the auxdev by ADR
->>
->> 2. If 1. fails then falls back to HID + UID matching
->>
->> And there are DSDTs which use either:
->>
->> 1. Only use _ADR to identify which child device is which, like the example
->>    DSDT snippet from the commit msg.
->>
->> 2. Only use _HID + _UID like the 2 example DSDT snippets from me email
->>
->> But there never is a case where both _ADR and _HID are used at
->> the same time (which would be an ACPI spec violation as Andy said).
->>
->> So AFAICT there is no issue here since  _ADR and _HID are never
->> user at the same time and the commit message correctly describes
->> scenario 1. from above, so the commit message is fine too.
->>
->> So I believe that we can continue with this patch series in
->> its current v20 form, which has already been staged for
->> going into -next by Greg.
->>
->> Andy can you confirm that moving ahead with the current
->> version is ok ?
 > 
-> Yes as we have a few weeks to fix corner cases.
+> [   97.572342] Start toggling
+> [   97.578949] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
+> [   99.571648] CC1: 0 -> 0, CC2: 0 -> 4 [state TOGGLING, polarity 0, connected]
+> [   99.571658] state change TOGGLING -> SNK_ATTACH_WAIT [rev3 NONE_AMS]
+> [   99.571673] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev3 NONE_AMS]
+> [   99.741778] state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED [delayed 170 ms]
+> [   99.789283] CC1: 0 -> 0, CC2: 4 -> 5 [state SNK_DEBOUNCED, polarity 0, connected]
+> [   99.789306] state change SNK_DEBOUNCED -> SNK_DEBOUNCED [rev3 NONE_AMS]
+> [   99.903584] VBUS on
+> [   99.903591] state change SNK_DEBOUNCED -> SNK_ATTACHED [rev3 NONE_AMS]
+> [   99.903600] polarity 1
+> [   99.910155] enable vbus discharge ret:0
+> [   99.910160] Requesting mux state 1, usb-role 2, orientation 2
+> [   99.946791] state change SNK_ATTACHED -> SNK_STARTUP [rev3 NONE_AMS]
+> [   99.946798] state change SNK_STARTUP -> SNK_DISCOVERY [rev3 NONE_AMS]
+> [   99.946800] Setting voltage/current limit 5000 mV 500 mA
+> [   99.946803] vbus=0 charge:=1
+> [  100.027139] state change SNK_DISCOVERY -> SNK_READY [rev3 NONE_AMS]
+> [  100.027145] Setting voltage/current limit 5000 mV 3000 mA
+> [  100.466830] VBUS on
 > 
-> What I'm worrying is that opening door for _ADR that seems never used is kinda
-> an overkill here (resolving non-existing problem).
-
-I assume that there actually some DSDTs using the _ADR approach
-and that this support is not there just for fun.
-
-Wentong, can you confirm that the _ADR using codepaths are
-actually used on some hardware / with some DSDTs out there ?
-
-> Looking at the design of the
-> driver I'm not sure why ACPI HIDs are collected somewhere else than in the
-> respective drivers. And looking at the ID lists themselves I am not sure why
-> the firmware of the respective hardware platforms are not using _CID.
-
-This is a USB device which has 4 functions:
-
-1. GPIO controller
-2. I2C controller 1
-3. I2C controller 2
-4. SPI controller
-
-The driver for the main USB interface uses
-the new auxbus to create 4 child devices. The _ADR
-or if that fails _HID + _UID matching is done to
-find the correct acpi_device child of the acpi_device
-which is the ACPI-companion of the main USB device.
-
-After looking up the correct acpi_device child
-this is then set as the fwnode / ACPI-companion
-of the auxbus device created for that function.
-
-Having the correct fwnode is important because other
-parts of the DSDT reference this fwnode to specify
-GPIO / I2C / SPI resources and if the fwnode of
-the aux-device is not set correctly then the resources
-for other devices referencing it (typically a camera
-sensor) can not be found.
-
-As for why the driver for the auxbus devices / children
-do not use HID matching, AFAIK the auxbus has no support
-for using ACPI (or DT) matching for aux-devices and these
-drivers need to be auxiliary_driver's and bind to the
-auxbus device and not to a platform_device instantiated for
-the acpi_device since they need the auxbus device to access
-the USB device.
-
-Regards,
-
-Hans
-
-
+> Cc: stable@vger.kernel.org
+> Fixes: 34fde9ec08a3 ("FROMGIT: usb: typec: tcpm: not sink vbus if operational current is 0mA")
+> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 6e843c511b85..994493481c24 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -4268,7 +4268,8 @@ static void run_state_machine(struct tcpm_port *port)
+>  				current_lim = PD_P_SNK_STDBY_MW / 5;
+>  			tcpm_set_current_limit(port, current_lim, 5000);
+>  			/* Not sink vbus if operational current is 0mA */
+> -			tcpm_set_charge(port, !!pdo_max_current(port->snk_pdo[0]));
+> +			tcpm_set_charge(port, port->pd_supported ?
+> +					!!pdo_max_current(port->snk_pdo[0]) : true);
+>  
+>  			if (!port->pd_supported)
+>  				tcpm_set_state(port, SNK_READY, 0);
+> 
+> base-commit: 1034cc423f1b4a7a9a56d310ca980fcd2753e11d
+> -- 
+> 2.42.0.655.g421f12c284-goog
+> 
 
