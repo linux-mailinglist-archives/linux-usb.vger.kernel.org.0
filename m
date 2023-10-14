@@ -1,231 +1,277 @@
-Return-Path: <linux-usb+bounces-1615-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1616-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 637D07C9352
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Oct 2023 09:46:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A8537C936C
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Oct 2023 10:24:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 533691C20986
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Oct 2023 07:46:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 93A151C20A84
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Oct 2023 08:24:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7AEB5680;
-	Sat, 14 Oct 2023 07:46:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E54763C9;
+	Sat, 14 Oct 2023 08:24:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zenithal.me header.i=@zenithal.me header.b="VkUWEQuW"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="SgZjzA+B"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5343C2586
-	for <linux-usb@vger.kernel.org>; Sat, 14 Oct 2023 07:46:16 +0000 (UTC)
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2109.outbound.protection.outlook.com [40.107.113.109])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 933D6A9;
-	Sat, 14 Oct 2023 00:46:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UvZ+CgoosIoeJknyplqXdjsqj6WQ+milO3WamkczQfwfEPKE5N69ITNIy2Ylt/irACfrNnlleNpQ8ixLfHWOHfqad52uo4hKMl7c/X6AkQErB99UWkms9MW4EjK8K9hnewSVEnNeluHxpOUISm2pG9aJ3xrhtgLywiofAfjcZUwN0HXom1spzAAJ9LmmBH+owV5vpTMX6sF/NLmLC5t8I0BknIKQOHjYCS26v5j0Ndd5jI/C5X5eu9RVWMqP1p03D0fz9GbnwzTgZtg3biftndI+O3kunWk9EEtlSJTulTls/mjEl4NRUIBG12GtHffCvvXUNA7sp+ULOGI3JB9d8g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qOCfgqLGWmZuuPPvOJN6jJSwoA75Y7iR0jJ0oemxbxg=;
- b=YfIiccl9E1RrUTf/8YRqjfLk5zq53/Z74LIycLLfxhVQVaaa9BN0wqT66Cx7SDr8smvROBL9QFMQkW+70jj/wJNMFZlRIRs/yhd5vIlvW3yJZut3NxoCSSa6eDrL7iEm1zJVe05tK0JM5/2K8vTwha53OY/K5l+KIAdVJrzQ2ZkXj/3PfmtfgvxooBklOOVrDnIXY6fybGrxf0DVHtXr+f5Xi5uIgk26VFYeZcYw7aj1DuvdiE05bnFu/tZBnFbEZjQYL+oC/XCjJmwXbpEyNGUlue48lzOHMfMDFH+NVlhQ5nnsfxqmqAT3xW9KOkPzyLUPs6pIGLM3Je0msLa+IA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=zenithal.me; dmarc=pass action=none header.from=zenithal.me;
- dkim=pass header.d=zenithal.me; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zenithal.me;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qOCfgqLGWmZuuPPvOJN6jJSwoA75Y7iR0jJ0oemxbxg=;
- b=VkUWEQuWFugmqKbrV4RoHcaeVL7XcaK2p3G2QhD0g2fV/2XRTj/VXi/Bhl5fiN2dvLJueJYJOTrgD9rCJlkTVnGlLSPDwQKkq73RzzkcX5B8cBn4+5+2HYGiiFtXGWQb4mEGe0v1sAQK9rLdaNYJS9i7NVON2+xOUzorLuMC6uE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=zenithal.me;
-Received: from TYYP286MB1406.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:de::5) by
- OSZP286MB1984.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:181::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6886.31; Sat, 14 Oct 2023 07:46:11 +0000
-Received: from TYYP286MB1406.JPNP286.PROD.OUTLOOK.COM
- ([fe80::54a2:c3cf:4f5:91cc]) by TYYP286MB1406.JPNP286.PROD.OUTLOOK.COM
- ([fe80::54a2:c3cf:4f5:91cc%7]) with mapi id 15.20.6886.030; Sat, 14 Oct 2023
- 07:46:11 +0000
-Date: Sat, 14 Oct 2023 15:46:04 +0800
-From: Hongren Zheng <i@zenithal.me>
-To: Shuah Khan <shuah@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Valentina Manea <valentina.manea.m@gmail.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	sfr@canb.auug.org.au
-Subject: [PATCH v2 -next] usb/usbip: fix wrong data added to platform device
-Message-ID: <ZSpHPCaQ5DDA9Ysl@Sun>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Operating-System: Linux Sun 5.15.67
-X-Mailer: Mutt 2.2.7 (2022-08-07)
-X-ClientProxiedBy: SJ0PR13CA0028.namprd13.prod.outlook.com
- (2603:10b6:a03:2c0::33) To TYYP286MB1406.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:400:de::5)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04BCF5396;
+	Sat, 14 Oct 2023 08:24:23 +0000 (UTC)
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC49BB7;
+	Sat, 14 Oct 2023 01:24:21 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39E7wad1000663;
+	Sat, 14 Oct 2023 08:24:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Uvc2hqQQkHwWq4fnUR0Yp08FbcyytJbN/vMXd9UoQpU=;
+ b=SgZjzA+BEDodoEspAzxIMF2Fp9+xO1uc+Sy7LQ4oBpbnvsfO0A7Gx894eiW9KRjaGcxo
+ c6mhUAZ316c8jj7S03IohEW9qBNROE9MASxW7saMvUGWQvwn4GsE+CgRLyGEr4Yf4XYx
+ l35t51ZRzHkm3gq6XYlyjdwniI6mQlElmuylClChP9eryk4bYmPOn7cY8qiHW/i5Fghs
+ FYGKfbxQZjyuyxmmj2QqL4+zPPW6hF0hAArfpnUSNbbtQYN49ajQGgrtwVoaa+byK6DI
+ 2pLKDLXDl8ZhpuGDZ/vWKN9vqutoK0w1sNgauVolqMyh6P5Y74lzDWpgMMVCU9s+PGaC ew== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tqgpp0p11-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 14 Oct 2023 08:24:10 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39E8Nquc028924
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 14 Oct 2023 08:23:52 GMT
+Received: from [10.216.59.22] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Sat, 14 Oct
+ 2023 01:23:49 -0700
+Message-ID: <d395d631-239a-43f1-bcbf-b88b11852c76@quicinc.com>
+Date: Sat, 14 Oct 2023 13:53:45 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYYP286MB1406:EE_|OSZP286MB1984:EE_
-X-MS-Office365-Filtering-Correlation-Id: 25082b6e-421d-42b6-c729-08dbcc89a231
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	Y4n2R6HbkpYqmVwNGgvjvjbRFEcw/CV6q4lYRHtjLPaaDb27/7pDG1khEaPjs0Ol9aQlhl6qC8tqw3JCMld55jmRwSySbnYfJ+5QPjGjIISgdu2NH5EI3q2qn7USRkCe3HlVVB2ChWrzX90QIx/TeZ9XFWVWIToWBljMUj5snLi6A1OK7E2OLruUVIaderposbtgyNpmoUS1IH8CSj6jBoLppbMCkL7Ipufr/Tob6xPwze2K+EjBjGoSZuJ6yU+aeEyM2QKYlIXI95FExzOdjyFJqThgYSHDQAqq5FiKm+7obF8N1zW4Rj7s/QYH3DeEId4iKdI4wc9ZDpjxdQmMoHvOAggqCrxIePId46jCUzWdinmZlfuI6kvziONKvfCYWuDpMIRTrAGnrpKCtmd62GObfTyPE4QSOHAw393QwY9Fy6oSth6ecWOS7xBR9/9br6eHds4ZXUlya1WCWcpEZJ97pqpTrCY1cf3wH6plvzC2hsoswiSZ4mP2diFYHesf+z1nMEFm/YTdUVgMY+iqxajocQ2keIj+ozGB22Ovdx3lpUtiid221ciluwYKrQz2IZkAb0NCnjEniCrazECxqd6SeIemJlQ6LG4nGKbxS48=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYYP286MB1406.JPNP286.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(7916004)(376002)(346002)(136003)(366004)(39830400003)(396003)(230922051799003)(64100799003)(451199024)(1800799009)(186009)(6666004)(9686003)(6512007)(6506007)(38100700002)(41320700001)(86362001)(83380400001)(33716001)(110136005)(66946007)(8936002)(786003)(66556008)(316002)(66476007)(2906002)(8676002)(5660300002)(4326008)(478600001)(41300700001)(6486002)(966005)(49092004);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?us6ncWYZodJsLKezwgVvD8fbBl3M1fQPH99h2A9ruIBdYm1k71rlmYxILTdh?=
- =?us-ascii?Q?0h89DOPy0un2+m4LazR0m/hcGQfl0vshju7yZemESSodY1TwHUD/g56Ovr6/?=
- =?us-ascii?Q?Q2k0BFgn0iCkM/3TrBBcCqAhY9Q49jW1dRzVUdDgs35ubeRhTSNXctppgrFO?=
- =?us-ascii?Q?bEGPqoFVbpcDQdbAoSh7oiK6f3fia2/oPV8QTFs6UW8ZOXz/j53yRHBztGUC?=
- =?us-ascii?Q?gn36bksmhg1Jg7lZfLQQzqlXhDyuqqCb83OE5Zm8QqNRzSDYg9y9vMYRSbwG?=
- =?us-ascii?Q?zzMBrpquf+eK81wjubMoiuRM0O2gjhqqGMAEzhdHZ/2bjGpnR5J8t2UgaS1X?=
- =?us-ascii?Q?aYAHLStmm7KnN6HKrtnBRMXFfTyBkF5HTNNoBIxY/tb+AfgmDaBAozUc8cW0?=
- =?us-ascii?Q?YOH3nDdaN2pTtSUkc3ZQCLXq3S0fuLXogKaTp5liCe1c117uEZEynOPEDByS?=
- =?us-ascii?Q?svL+M5lHMH6RTrWyKa6sqViGQ6OHL2la70CgJ/0ibuQNBcMhsY4RMiPER+sE?=
- =?us-ascii?Q?0sy85KHHJojhprBkdFnNnMQZ/pDG265HKMlxDC5eDDOljEyXIH/QIPS1w3dd?=
- =?us-ascii?Q?ij/x39XH73h/kY7cfeyuMhRF/DfvV5uAJ7EkQDIB9rZCW61LTnJpgfVwAvgb?=
- =?us-ascii?Q?y13ZOcbq9ByQKd1v8TlNdbvnvGIR8U+oElp5kknh/OlbzK2AYSnbVBktWsKV?=
- =?us-ascii?Q?QgIABFBifOoRMXVpuzNy+EU0a5eyEJfT8KCEDg+qWN85VYJsuLiR+Mv7F71l?=
- =?us-ascii?Q?kgY4j9eEyh44Y+qZXy/oDQcFgjb/ry44OAgR1aQSm5NkGXJo/8Y070q/mgrK?=
- =?us-ascii?Q?pMt2l0aNrBCn9iYMTdzFbu3uwIHUvrTbUoJWIwJkgrSHW5JLxK7I0SYf7RcY?=
- =?us-ascii?Q?uDZb7rUzoDNzwWcZfFPdfTRKG4g9ndA9fCgcrGcusUnbBRM3RB3tnQ/KzUUn?=
- =?us-ascii?Q?FN5dhRgN4fO/nVJ9/1qWWLaoauJlkQlf2V5UCM0HaJAdEYEzBm+rt0oUADDi?=
- =?us-ascii?Q?j/VxwFfaFSeNVizXI0Cj4MpIQ+3g3AIehyMYFxpYKC6gJNRAkz/xbVSHFuF3?=
- =?us-ascii?Q?yYrVeadBBBpS0FsYvVHvOFjKgfIW2FLjhX+FhGYGbZ485pYXQxs3H7t0c+Vg?=
- =?us-ascii?Q?qx6Yian/CwicMo10BIpejwLi/I1JlIxPyJm9Y03B6nhxvdnLBhQ9pJr/pgpC?=
- =?us-ascii?Q?FKqBRzT5J6Rssgt1K6E4cYFt0JFiuvhzNoRnI7XGa/EC+ABUpJ14VcpRL3u5?=
- =?us-ascii?Q?XgraF2PYRHDXl92TPy/wTDkGy6zGmf6ysplK+AZarcXqYIzGIxVGKIG2o1V3?=
- =?us-ascii?Q?1kzhb1+1Nq81BPa76FfdVyeCOfhFcEg7SBJhhpvgJoY9ZjE2hZUnYAfNxY7R?=
- =?us-ascii?Q?KztVlyWCFEmJltES1ckjGfEROWfPjltY2vBmeEOYP8/3h4uaSi8vNilgnNQY?=
- =?us-ascii?Q?1S5r3ll1U59anjFydILQxh6E3gVfk/OdDUTRvpoLzUhMOzRZGnpyE3tAt3/p?=
- =?us-ascii?Q?M569c3zKgf7Qc41jBAGxiLIvClGbeXLXnGRnRE+tjvWgSk0hB40lTudK0nvX?=
- =?us-ascii?Q?OiQOhdLgLjfuw4XqZ07xfSBRZkeUtMWl/7PrNkga?=
-X-OriginatorOrg: zenithal.me
-X-MS-Exchange-CrossTenant-Network-Message-Id: 25082b6e-421d-42b6-c729-08dbcc89a231
-X-MS-Exchange-CrossTenant-AuthSource: TYYP286MB1406.JPNP286.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Oct 2023 07:46:10.9849
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 436d481c-43b1-4418-8d7f-84c1e4887cf0
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9lc8CYSYsn0zP7m8HdcpCpaOQ8f7AKE6OTsm3ldiClSkVvaGt7CdOzCba6TNtM3n
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSZP286MB1984
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] usb: gadget: ncm: Add support to update
+ wMaxSegmentSize via configfs
+From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+To: =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
+CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        onathan Corbet
+	<corbet@lwn.net>,
+        Linyu Yuan <quic_linyyuan@quicinc.com>, <linux-usb@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
+        <quic_jackp@quicinc.com>
+References: <20231009142005.21338-1-quic_kriskura@quicinc.com>
+ <20231009142005.21338-2-quic_kriskura@quicinc.com>
+ <CANP3RGfEk2DqZ3biyN78ycQYbDxCEG+H1me2vnEYuwXkNdXnTA@mail.gmail.com>
+ <CANP3RGcCpNOuVpdV9n0AFxZo-wsfwi8OfYgBk1WHNHaEd-4V-Q@mail.gmail.com>
+ <CANP3RGdY4LsOA6U5kuccApHCzL0_jBnY=pLOYrUuYtMZFTvnbw@mail.gmail.com>
+ <d19d9d08-c119-4991-b460-49925f601d15@quicinc.com>
+ <fad5a7fb-cce1-46bc-a0af-72405c76d107@quicinc.com>
+ <CANP3RGcqWBYd9FqAX47rE9pFgBTB8=0CGdwkScm-OH1epHcVWQ@mail.gmail.com>
+ <8ff92053-52ff-4950-95c8-0e986f6a028a@quicinc.com>
+ <CANP3RGd4G4dkMOyg6wSX29NYP2mp=LhMhmZpoG=rgoCz=bh1=w@mail.gmail.com>
+ <b12eb7b1-54e7-406f-8c19-0046555b82d3@quicinc.com>
+ <CANP3RGcUrFTaFL8V3tpuh+qQoEi84O0Dy9ie+XD=-H01c2btAw@mail.gmail.com>
+ <70c15867-ccce-4788-a0dd-38a73decb785@quicinc.com>
+Content-Language: en-US
+In-Reply-To: <70c15867-ccce-4788-a0dd-38a73decb785@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: WoeVUBP8rxIW27-iyO_pxwhX7iZb540q
+X-Proofpoint-GUID: WoeVUBP8rxIW27-iyO_pxwhX7iZb540q
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-13_12,2023-10-12_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
+ lowpriorityscore=0 malwarescore=0 suspectscore=0 bulkscore=0 phishscore=0
+ mlxlogscore=392 adultscore=0 impostorscore=0 priorityscore=1501
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2310140073
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-.data of platform_device_info will be copied into .platform_data of
-struct device via platform_device_add_data.
 
-However, vhcis[i] contains a spinlock, is dynamically allocated and
-used by other code, so it is not meant to be copied. The workaround
-was to use void *vhci as an agent, but it was removed in the commit
-suggested below.
 
-This patch adds back the workaround and changes the way of using
-platform_data accordingly.
+On 10/14/2023 12:32 PM, Krishna Kurapati PSSNV wrote:
+> 
+> 
+> On 10/14/2023 4:05 AM, Maciej Żenczykowski wrote:
+>>>>> The intent of posting the diff was two fold:
+>>>>>
+>>>>> 1. The question Greg asked regarding why the max segment size was
+>>>>> limited to 15014 was valid. When I thought about it, I actually wanted
+>>>>> to limit the max MTU to 15000, so the max segment size automatically
+>>>>> needs to be limited to 15014.
+>>>>
+>>>> Note that this is a *very* abstract value.
+>>>> I get you want L3 MTU of 10 * 1500, but this value is not actually 
+>>>> meaningful.
+>>>>
+>>>> IPv4/IPv6 fragmentation and IPv4/IPv6 TCP segmentation
+>>>> do not result in a trivial multiplication of the standard 1500 byte
+>>>> ethernet L3 MTU.
+>>>> Indeed aggregating 2 1500 L3 mtu frames results in *different* sized
+>>>> frames depending on which type of aggregation you do.
+>>>> (and for tcp it even depends on the number and size of tcp options,
+>>>> though it is often assumed that those take up 12 bytes, since that's 
+>>>> the
+>>>> normal for Linux-to-Linux tcp connections)
+>>>>
+>>>> For example if you aggregate N standard Linux ipv6/tcp L3 1500 mtu 
+>>>> frames,
+>>>> this means you have
+>>>> N frames: ethernet (14) + ipv6 (40) + tcp (20) + tcp options (12) +
+>>>> payload (1500-12-20-40=1500-72=1428)
+>>>> post aggregation:
+>>>> 1 frame: ethernet (14) + ipv6 (40) + tcp (20) + tcp options (12) +
+>>>> payload (N*1428)
+>>>>
+>>>> so N * 1500 == N * (72 + 1428) --> 1 * (72 + N * 1428)
+>>>>
+>>>> That value of 72 is instead 52 for 'standard Linux ipv4/tcp),
+>>>> it's 40/60 if there's no tcp options (which I think happens when
+>>>> talking to windows)
+>>>> it's different still with ipv4 fragmentation... and again different
+>>>> with ipv6 fragmentation...
+>>>> etc.
+>>>>
+>>>> ie. 15000 L3 mtu is exactly as meaningless as 14000 L3 mtu.
+>>>> Either way you don't get full frames.
+>>>>
+>>>> As such I'd recommend going with whatever is the largest mtu that can
+>>>> be meaningfully made to fit in 16K with all the NCM header overhead.
+>>>> That's likely closer to 15500-16000 (though I have *not* checked).
+>>>>
+>>>>> But my commit text didn't mention this
+>>>>> properly which was a mistake on my behalf. But when I looked at the
+>>>>> code, limiting the max segment size 15014 would force the practical
+>>>>> max_mtu to not cross 15000 although theoretical max_mtu was set to:
+>>>>> (GETHER_MAX_MTU_SIZE - 15412) during registration of net device.
+>>>>>
+>>>>> So my assumption of limiting it to 15000 was wrong. It must be limited
+>>>>> to 15412 as mentioned in u_ether.c  This inturn means we must limit
+>>>>> max_segment_size to:
+>>>>> GETHER_MAX_ETH_FRAME_LEN (GETHER_MAX_MTU_SIZE + ETH_HLEN)
+>>>>> as mentioned in u_ether.c.
+>>>>>
+>>>>> I wanted to confirm that setting MAX_DATAGRAM_SIZE to
+>>>>> GETHER_MAX_ETH_FRAME_LEN was correct.
+>>>>>
+>>>>> 2. I am not actually able to test with MTU beyond 15000. When my host
+>>>>> device is a linux machine, the cdc_ncm.c limits max_segment_size to:
+>>>>> CDC_NCM_MAX_DATAGRAM_SIZE               8192    /* bytes */
+>>>>
+>>>> In practice you get 50% of the benefits of infinitely large mtu by
+>>>> going from 1500 to ~2980.
+>>>> you get 75% of the benefits by going to ~6K
+>>>> you get 87.5% of the benefits by going to ~12K
+>>>> the benefits of going even higher are smaller and smaller...
+>>>>   > If the host side is limited to 8192, maybe we should match that 
+>>>> here too?
+>>>
+>>> Hi Maciej,
+>>>
+>>>    Thanks for the detailed explanation. I agree with you on setting
+>>> device side also to 8192 instead of what max_mtu is present in u_ether
+>>> or practical max segment size possible.
+>>>
+>>>>
+>>>> But the host side limitation of 8192 doesn't seem particularly sane 
+>>>> either...
+>>>> Maybe we should relax that instead?
+>>>>
+>>> I really didn't understand why it was set to 8192 in first place.
+>>>
+>>>> (especially since for things like tcp zero copy you want an mtu which
+>>>> is slighly more then N * 4096,
+>>>> ie. around 4.5KB, 8.5KB, 12.5KB or something like that)
+>>>>
+>>>
+>>> I am not sure about host mode completely. If we want to increase though,
+>>> just increasing the MAX_DATAGRAM_SIZE to some bigger value help ? (I
+>>> don't know the entire code of cdc_ncm, so I might be wrong).
+>>>
+>>> Regards,
+>>> Krishna,
+>>
+>> Hmm, I'm not sure.  I know I've experimented with high mtu ncm in the 
+>> past
+>> (around 2.5 years ago).  I got it working between my Linux desktop (host)
+>> and a Pixel 6 (device/gadget) with absolutely no problems.
+>>
+>> I'm pretty sure I didn't change my desktop kernel, so I was probably
+>> limited to 8192 there
+>> (and I do more or less remember that).
+>>  From what I vaguely remember, it wasn't difficult (at all) to hit
+>> upwards of 7gbps for iperf tests.
+>> I don't remember how close to the theoretical USB 10gbps maximum of
+>> 9.7gbps I could get...
+>> [this was never the real bottleneck / issue, so I didn't ever dig
+>> particularly deep]
+>>
+>> I'm pretty sure my gadget side changes were non-configurable...
+>> Probably just bumped one or two constants...
+>>
+> Could you share what parameters you changed to get this high value of 
+> iperf throughput.
+> 
+>> I do *very* *vaguely* recall there being some funkiness though, where 
+>> 8192 was
+>> *less* efficient than some slightly smaller value.
+>>
+>> If I recall correctly the issue is that 8192 + ethernet overhead + NCM
+>> overhead only fits *once* into 16384, which leaves a lot of space
+>> wasted.
+>> While ~7.5 kb + overhead fits twice and is thus a fair bit better.
+> Right, same goes for using 5K vs 5.5K MTU. If MTU is 5K, 3 packets can 
+> conveniently fit into an NTB but if its 5.5, at max only two (5.5k) 
+> packets can fit in (essentially filling ~11k of the 16384 bytes and 
+> wasting the rest)
 
-Reported-by: syzbot+e0dbc33630a092ccf033@syzkaller.appspotmail.com
-Closes: https://lore.kernel.org/r/00000000000029242706077f3145@google.com/
-Reported-by: syzbot+6867a9777f4b8dc4e256@syzkaller.appspotmail.com
-Closes: https://lore.kernel.org/r/0000000000007634c1060793197c@google.com/
-Fixes: b8aaf639b403 ("usbip: Use platform_device_register_full()")
-Tested-by: syzbot+6867a9777f4b8dc4e256@syzkaller.appspotmail.com
-Link: https://lore.kernel.org/r/0000000000007ac87d0607979b6b@google.com/
-Signed-off-by: Hongren Zheng <i@zenithal.me>
----
- drivers/usb/usbip/vhci_hcd.c | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+Formatting gone wrong. So pasting the first paragraph again here:
 
-v2:
-code style change suggested by Andy Shevchenko
+"Right, same goes for using 5K vs 5.5K MTU. If MTU is 5K, 3 packets can
+conveniently fit into an NTB but if its 5.5, at max only two (5.5k)
+packets can fit in (essentially filling ~11k of the 16384 bytes and
+wasting the rest)"
 
-diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
-index f845b91848b9..82650c11e451 100644
---- a/drivers/usb/usbip/vhci_hcd.c
-+++ b/drivers/usb/usbip/vhci_hcd.c
-@@ -1139,7 +1139,7 @@ static int hcd_name_to_id(const char *name)
- 
- static int vhci_setup(struct usb_hcd *hcd)
- {
--	struct vhci *vhci = dev_get_platdata(hcd->self.controller);
-+	struct vhci *vhci = *((void **)dev_get_platdata(hcd->self.controller));
- 
- 	if (usb_hcd_is_primary_hcd(hcd)) {
- 		vhci->vhci_hcd_hs = hcd_to_vhci_hcd(hcd);
-@@ -1257,7 +1257,7 @@ static int vhci_get_frame_number(struct usb_hcd *hcd)
- /* FIXME: suspend/resume */
- static int vhci_bus_suspend(struct usb_hcd *hcd)
- {
--	struct vhci *vhci = dev_get_platdata(hcd->self.controller);
-+	struct vhci *vhci = *((void **)dev_get_platdata(hcd->self.controller));
- 	unsigned long flags;
- 
- 	dev_dbg(&hcd->self.root_hub->dev, "%s\n", __func__);
-@@ -1271,7 +1271,7 @@ static int vhci_bus_suspend(struct usb_hcd *hcd)
- 
- static int vhci_bus_resume(struct usb_hcd *hcd)
- {
--	struct vhci *vhci = dev_get_platdata(hcd->self.controller);
-+	struct vhci *vhci = *((void **)dev_get_platdata(hcd->self.controller));
- 	int rc = 0;
- 	unsigned long flags;
- 
-@@ -1338,7 +1338,7 @@ static const struct hc_driver vhci_hc_driver = {
- 
- static int vhci_hcd_probe(struct platform_device *pdev)
- {
--	struct vhci             *vhci = dev_get_platdata(&pdev->dev);
-+	struct vhci             *vhci = *((void **)dev_get_platdata(&pdev->dev));
- 	struct usb_hcd		*hcd_hs;
- 	struct usb_hcd		*hcd_ss;
- 	int			ret;
-@@ -1396,7 +1396,7 @@ static int vhci_hcd_probe(struct platform_device *pdev)
- 
- static void vhci_hcd_remove(struct platform_device *pdev)
- {
--	struct vhci *vhci = dev_get_platdata(&pdev->dev);
-+	struct vhci *vhci = *((void **)dev_get_platdata(&pdev->dev));
- 
- 	/*
- 	 * Disconnects the root hub,
-@@ -1431,7 +1431,7 @@ static int vhci_hcd_suspend(struct platform_device *pdev, pm_message_t state)
- 	if (!hcd)
- 		return 0;
- 
--	vhci = dev_get_platdata(hcd->self.controller);
-+	vhci = *((void **)dev_get_platdata(hcd->self.controller));
- 
- 	spin_lock_irqsave(&vhci->lock, flags);
- 
-@@ -1522,10 +1522,11 @@ static int __init vhci_hcd_init(void)
- 		goto err_driver_register;
- 
- 	for (i = 0; i < vhci_num_controllers; i++) {
-+		void *vhci = &vhcis[i];
- 		struct platform_device_info pdevinfo = {
- 			.name = driver_name,
- 			.id = i,
--			.data = &vhcis[i],
-+			.data = &vhci,
- 			.size_data = sizeof(void *),
- 		};
- 
--- 
-2.37.2
+> 
+> And whether its Ipv4/Ipv6 like you mentioned on [1], the MTU is what NCM 
+> layer receives and we append the Ethernet header and add NCM headers and 
+> send it out after aggregation. Why can't we set the MAX_DATAGRAM_SIZE to 
+> ~8050 or ~8100 ? The reason I say this value is, obviously setting it to 
+> 8192 would not efficiently use the NTB buffer. We need to fill as much 
+> space in buffer as possible and assuming that each packet received on 
+> ncm layer is of MTU size set (not less that that), we can assume that 
+> even if only 2 packets are aggregated (minimum aggregation possible), we 
+> would be filling (2 * (8050 + ETH_HLEN) + (room for NCM headers)) would 
+> almost be close to 16384 ep max packet size. I already check 8050 MTU 
+> and it works. We can add a comment in code detailing the above 
+> explanation and why we chose to use 8050 or 8100 as MAX_DATAGRAM_SIZE.
+> 
+> Hope my reasoning of why we can chose 8.1K or 8.05K makes sense. Let me 
+> know your thoughts on this.
+> 
 
+[1]: 
+https://lore.kernel.org/all/CANP3RGd4G4dkMOyg6wSX29NYP2mp=LhMhmZpoG=rgoCz=bh1=w@mail.gmail.com/
+
+> Regards,
+> Krishna,
+> 
 
