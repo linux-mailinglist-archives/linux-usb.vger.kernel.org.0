@@ -1,224 +1,294 @@
-Return-Path: <linux-usb+bounces-1636-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1637-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C5967C9A1B
-	for <lists+linux-usb@lfdr.de>; Sun, 15 Oct 2023 18:48:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BF4A7C9A46
+	for <lists+linux-usb@lfdr.de>; Sun, 15 Oct 2023 19:22:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 188101C2095A
-	for <lists+linux-usb@lfdr.de>; Sun, 15 Oct 2023 16:48:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 050F71C2091F
+	for <lists+linux-usb@lfdr.de>; Sun, 15 Oct 2023 17:22:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84F8BC8D8;
-	Sun, 15 Oct 2023 16:48:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A949AE550;
+	Sun, 15 Oct 2023 17:22:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ERUOaU8w"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XtPySN2j"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 510BC748D
-	for <linux-usb@vger.kernel.org>; Sun, 15 Oct 2023 16:48:23 +0000 (UTC)
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD5DAB;
-	Sun, 15 Oct 2023 09:48:19 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39FGg2aZ008768;
-	Sun, 15 Oct 2023 16:48:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=mEUVVgqaCA4wpoOL2SQhIE0kR75KjYORD2C4fBXqT9Y=;
- b=ERUOaU8wLOhBdYZHr7Vn6Wl14wJ8yYlsQ7P+uQgOSpb6UJlvzf15Be4wfAkvP23wYLnS
- q4L9dxo4AMymLfJBXhHNo7qe5sqIqW4BiZ6CnPa5r3DT79C6Vupaa1/KjzpV8QTMz2Wf
- OzfMUAfubhC84MV1r+dtY7PF9cW/Nb/fblEvvog9HlYyd+AnkesSLFQF+Zha+ligRPNu
- nFavrwHdl5+TBgBoaUUBqpAmtwsWq+nC4Z3j0l+zBWShFZWEPvokNFoZmS2f42R0gOcH
- fjesQA5BzjkNc6DZmRtmAE4Uo1tGPCedBiHrRGEYwHoLtD4H66p0C7KaAL8NbNHnDODa Mw== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tqkrpadqv-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 15 Oct 2023 16:48:13 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39FGmDoY013458
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 15 Oct 2023 16:48:13 GMT
-Received: from [10.216.16.175] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Sun, 15 Oct
- 2023 09:48:09 -0700
-Message-ID: <6b2115c2-ddd1-401e-81ef-e998264bfd89@quicinc.com>
-Date: Sun, 15 Oct 2023 22:18:05 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13D0F7466
+	for <linux-usb@vger.kernel.org>; Sun, 15 Oct 2023 17:22:06 +0000 (UTC)
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11892A1;
+	Sun, 15 Oct 2023 10:22:05 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2c50d1b9f22so20840641fa.0;
+        Sun, 15 Oct 2023 10:22:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1697390523; x=1697995323; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5KkduH/ZQuhYuwGTaVnTAfxaGqMb6uJiQI/XtTEMqE4=;
+        b=XtPySN2jLe402FLlgPGH4EbDsBfBB4aj35fbBpV5NPz6wWcL1hlu/A631rpfXFKvhI
+         v1YUYMhsu/jGNgUJ61uez2ow9wKoLGDN69ctqml8lTwbdskRgg0w+07lAP6Xnw22o8U9
+         gYbCUkQzUd8bMWYeVwjkZqN5xKvanOdOzGUFRNJWO3sbjcCQpzp9C8wwDy1sFp+b2/rz
+         x/L0iWpyZZfE/YmpI6cDPFV+YkDwA9nfrJcsTIRMluow4naXqK0bSri8EjjMl7ChW35w
+         Gvf8jHSr+wCoU6Xuxk7aBzDlPS73efoKLaP9g62JpGzFbRyq9HRPAv4U0yzp+wv2H5e0
+         xGmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697390523; x=1697995323;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5KkduH/ZQuhYuwGTaVnTAfxaGqMb6uJiQI/XtTEMqE4=;
+        b=uB9M4TkCspEWSg91hLj9q7g7hW3Z4WlH4Ei8M3Ip77GbW/+XJX+mV5+UttABnn8Kfx
+         /bVobwZb6V7aTyNA4BFk/XTVeG51BAgO8Iomd/Sl98n2kzOmfvzDA0602suVXkmz+HU3
+         9e1z+VdANwuIXUAjagHiW6mosnZytJ6FKlJyvLPsstkh0rFzFdGr80uWu+u9XljA835s
+         tZ+5rgCqzLLj++LH6Mg26diB8kMAHVFzV2LYW2GNKIef8hKiFzn+7KnKhYqiFFHTGkdE
+         JcWIpIiLWx12ErIkGgmtRZgguMq7vVHLXEVBI37Lrbe8OXhOAAf0sMZ0Yp/sVxgZA3oh
+         68gg==
+X-Gm-Message-State: AOJu0Yw8FjquwDxzuyNx2jgArpTKx9AnxxuohbqGi7cyRrsvK2pRbDDD
+	FlzyKvTvhvRz/LweISHnDAu3f+UXnU1M1oiHMcI=
+X-Google-Smtp-Source: AGHT+IE+B5mf8etTcynZmQWKI3zC4RXIloC3dzspmE6UY9SFz6DoDrzTJ/Auqc3A3EKOjZTrJE9pN116bJxSgdXowoA=
+X-Received: by 2002:a2e:a596:0:b0:2c5:fde:e457 with SMTP id
+ m22-20020a2ea596000000b002c50fdee457mr4314039ljp.3.1697390522995; Sun, 15 Oct
+ 2023 10:22:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC] usb: dwc3: core: Fix RAM interface getting stuck during
- enumeration
-From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
-        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
-        "quic_jackp@quicinc.com"
-	<quic_jackp@quicinc.com>,
-        "quic_ugoswami@quicinc.com"
-	<quic_ugoswami@quicinc.com>
-References: <20231011100214.25720-1-quic_kriskura@quicinc.com>
- <20231012175912.umc3ugzk4iqwtcp3@synopsys.com>
- <bac414a7-aa2a-4b93-82e0-998002c455e0@quicinc.com>
- <20231012221744.ww2w6febhurvlqi6@synopsys.com>
- <cabf2de7-bde2-4cec-9f99-2cb8c92875a5@quicinc.com>
-Content-Language: en-US
-In-Reply-To: <cabf2de7-bde2-4cec-9f99-2cb8c92875a5@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: nPLU4SAadXg2dZQpxeGhyhhG5LimVYnU
-X-Proofpoint-GUID: nPLU4SAadXg2dZQpxeGhyhhG5LimVYnU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-15_03,2023-10-12_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- malwarescore=0 adultscore=0 bulkscore=0 spamscore=0 priorityscore=1501
- mlxscore=0 lowpriorityscore=0 suspectscore=0 mlxlogscore=986 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2309180000
- definitions=main-2310150152
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20231012230057.3365626-1-tmaimon77@gmail.com> <20231012230057.3365626-4-tmaimon77@gmail.com>
+ <7add0297-709f-4836-832f-f8fbd412eca5@molgen.mpg.de>
+In-Reply-To: <7add0297-709f-4836-832f-f8fbd412eca5@molgen.mpg.de>
+From: Tomer Maimon <tmaimon77@gmail.com>
+Date: Sun, 15 Oct 2023 20:21:51 +0300
+Message-ID: <CAP6Zq1g0eT0X5UvQ6Zok=JdOb2WOJ89qFW2MtUQh_z737F7F1A@mail.gmail.com>
+Subject: Re: [PATCH v6 3/3] usb: chipidea: Add support for NPCM
+To: Paul Menzel <pmenzel@molgen.mpg.de>
+Cc: peter.chen@kernel.org, gregkh@linuxfoundation.org, avifishman70@gmail.com, 
+	tali.perry1@gmail.com, joel@jms.id.au, venture@google.com, yuenn@google.com, 
+	benjaminfair@google.com, j.neuschaefer@gmx.net, openbmc@lists.ozlabs.org, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+	FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
+Hi Paul,
 
+Thanks for your comments
 
-On 10/13/2023 9:28 AM, Krishna Kurapati PSSNV wrote:
-> 
-> 
-> On 10/13/2023 3:47 AM, Thinh Nguyen wrote:
->> On Fri, Oct 13, 2023, Krishna Kurapati PSSNV wrote:
->>>
->>>
->>> On 10/12/2023 11:29 PM, Thinh Nguyen wrote:
->>>
->>>>> -static int dwc3_gadget_soft_disconnect(struct dwc3 *dwc)
->>>>> +int dwc3_gadget_soft_disconnect(struct dwc3 *dwc)
->>>>>    {
->>>>>        unsigned long flags;
->>>>>        int ret;
->>>>> @@ -2701,7 +2701,7 @@ static int dwc3_gadget_soft_disconnect(struct 
->>>>> dwc3 *dwc)
->>>>>        return ret;
->>>>>    }
->>>>> -static int dwc3_gadget_soft_connect(struct dwc3 *dwc)
->>>>> +int dwc3_gadget_soft_connect(struct dwc3 *dwc)
->>>>>    {
->>>>>        int ret;
->>>>> @@ -3963,6 +3963,7 @@ static void 
->>>>> dwc3_gadget_disconnect_interrupt(struct dwc3 *dwc)
->>>>>        dwc3_gadget_dctl_write_safe(dwc, reg);
->>>>>        dwc->connected = false;
->>>>> +    dwc->cable_disconnected = true;
->>>>>        dwc3_disconnect_gadget(dwc);
->>>>> @@ -4038,6 +4039,7 @@ static void 
->>>>> dwc3_gadget_reset_interrupt(struct dwc3 *dwc)
->>>>>         */
->>>>>        dwc3_stop_active_transfers(dwc);
->>>>>        dwc->connected = true;
->>>>> +    dwc->cable_disconnected = false;
->>>>>        reg = dwc3_readl(dwc->regs, DWC3_DCTL);
->>>>>        reg &= ~DWC3_DCTL_TSTCTRL_MASK;
->>>>> -- 
->>>>> 2.42.0
->>>>>
->>>>
->>>> We can just reset the controller when there's End Transfer command
->>>> timeout as a failure recovery. No need to do what you're doing here.
->>>>
->>> Hi Thinh,
->>>
->>>   That was what I initially wanted to do, but there were couple of 
->>> reasons I
->>> wanted to take this approach:
->>>
->>> 1. We can't just reset the controller in midst of gadget_interrupt. 
->>> We need
->>> to process it completely and then take action.
->>
->> You can flag the driver so you can do the teardown/soft-reset at the
->> appropriate time.
->>
->>>
->>> 2. The above log was seen on QRD variant of SM8550/SM8650 easily. But on
->>> other platforms of same targets, the issue comes up at some other 
->>> instances
->>> of code, at a point where no IRQ is running. In such cases its not 
->>> possible
->>> to accurately find out code portions and reset the controller. The way I
->>> confirmed that both platforms are having the same issue is:
->>>
->>> a. During cable disconnect, I am not receiving disconnect interrupt
->>> b. The reg dump is exactly same in both cases (BMU as well)
->>>
->>> So I felt it was better to fix it during cable disconnect because 
->>> even if we
->>> remove cable, we are still in device mode only and in this case we can
->>> unblock suspend and also bring back controller to a known state.
->>>
->>> Let me know your thoughts on the above.
->>>
->>
->> This issue happens outside of disconnect right? Did you account for port
->> reset?
->>
->> The symptom should be the same. At some point, a command will be issued.
->> If a command timed out, then something is really wrong (especially End
->> Transfer command). We can attempt to recover base on this symptom then.
->>
->> And you don't need to poll for timeout for this specific type of error.
->> Just read some known register like GSNPSID to see if it's invalid.
-> 
-> Hi Thinh,
-> 
->   Yes. It actually happens before disconnect, but I was trying to handle 
-> it during disconnect. How about I add a check in gadget_ep_cmd saying 
-> that if cmd timeout happens, then read the snpsid and if it reads an 
-> invalid value, then I will call soft_disconnect followed by 
-> soft_connect. That must cover all cases ?
-> 
-Hi Thinh,
+On Fri, 13 Oct 2023 at 16:18, Paul Menzel <pmenzel@molgen.mpg.de> wrote:
+>
+> Dear Tomer,
+>
+>
+> Thank you for your patch.
+>
+> Am 13.10.23 um 01:00 schrieb Tomer Maimon:
+> > Add Nuvoton NPCM BMC SoCs support to USB ChipIdea driver.
+> > NPCM SoC include ChipIdea IP block that used for USB device controller
+>
+> include*s*
+> =E2=80=9Cthat *is* used=E2=80=9D or just =E2=80=9C=E2=80=A6 used for=E2=
+=80=9D
+Will do
+>
+> > mode.
+>
+> Please add a line, how you tested this patch.
+I don't recall "how you tested the patch" done in the commit message,
+I can add it in the cover letter
+>
+> > Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> > Acked-by: Peter Chen <peter.chen@kernel.org>
+> > ---
+> >   drivers/usb/chipidea/Kconfig        |   4 +
+> >   drivers/usb/chipidea/Makefile       |   1 +
+> >   drivers/usb/chipidea/ci_hdrc_npcm.c | 114 +++++++++++++++++++++++++++=
++
+> >   3 files changed, 119 insertions(+)
+> >   create mode 100644 drivers/usb/chipidea/ci_hdrc_npcm.c
+> >
+> > diff --git a/drivers/usb/chipidea/Kconfig b/drivers/usb/chipidea/Kconfi=
+g
+> > index c815824a0b2d..bab45bc62361 100644
+> > --- a/drivers/usb/chipidea/Kconfig
+> > +++ b/drivers/usb/chipidea/Kconfig
+> > @@ -43,6 +43,10 @@ config USB_CHIPIDEA_MSM
+> >       tristate "Enable MSM hsusb glue driver" if EXPERT
+> >       default USB_CHIPIDEA
+> >
+> > +config USB_CHIPIDEA_NPCM
+> > +     tristate "Enable NPCM hsusb glue driver" if EXPERT
+> > +     default USB_CHIPIDEA
+> > +
+> >   config USB_CHIPIDEA_IMX
+> >       tristate "Enable i.MX USB glue driver" if EXPERT
+> >       depends on OF
+> > diff --git a/drivers/usb/chipidea/Makefile b/drivers/usb/chipidea/Makef=
+ile
+> > index 71afeab97e83..718cb24603dd 100644
+> > --- a/drivers/usb/chipidea/Makefile
+> > +++ b/drivers/usb/chipidea/Makefile
+> > @@ -13,6 +13,7 @@ ci_hdrc-$(CONFIG_USB_OTG_FSM)               +=3D otg_=
+fsm.o
+> >
+> >   obj-$(CONFIG_USB_CHIPIDEA_GENERIC)  +=3D ci_hdrc_usb2.o
+> >   obj-$(CONFIG_USB_CHIPIDEA_MSM)              +=3D ci_hdrc_msm.o
+> > +obj-$(CONFIG_USB_CHIPIDEA_NPCM)              +=3D ci_hdrc_npcm.o
+> >   obj-$(CONFIG_USB_CHIPIDEA_PCI)              +=3D ci_hdrc_pci.o
+> >   obj-$(CONFIG_USB_CHIPIDEA_IMX)              +=3D usbmisc_imx.o ci_hdr=
+c_imx.o
+> >   obj-$(CONFIG_USB_CHIPIDEA_TEGRA)    +=3D ci_hdrc_tegra.o
+> > diff --git a/drivers/usb/chipidea/ci_hdrc_npcm.c b/drivers/usb/chipidea=
+/ci_hdrc_npcm.c
+> > new file mode 100644
+> > index 000000000000..37b64a3dbd96
+> > --- /dev/null
+> > +++ b/drivers/usb/chipidea/ci_hdrc_npcm.c
+> > @@ -0,0 +1,114 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +// Copyright (c) 2023 Nuvoton Technology corporation.
+> > +
+> > +#include <linux/module.h>
+> > +#include <linux/platform_device.h>
+> > +#include <linux/pm_runtime.h>
+> > +#include <linux/usb/chipidea.h>
+> > +#include <linux/clk.h>
+> > +#include <linux/io.h>
+> > +#include <linux/reset-controller.h>
+> > +#include <linux/of.h>
+> > +
+> > +#include "ci.h"
+> > +
+> > +struct npcm_udc_data {
+> > +     struct platform_device  *ci;
+> > +     struct clk              *core_clk;
+> > +     struct ci_hdrc_platform_data pdata;
+> > +};
+> > +
+> > +static int npcm_udc_notify_event(struct ci_hdrc *ci, unsigned event)
+> > +{
+> > +     struct device *dev =3D ci->dev->parent;
+> > +
+> > +     switch (event) {
+> > +     case CI_HDRC_CONTROLLER_RESET_EVENT:
+> > +             /* clear all mode bits */
+> > +             hw_write(ci, OP_USBMODE, 0xffffffff, 0x0);
+> > +             break;
+> > +     default:
+> > +             dev_dbg(dev, "unknown ci_hdrc event\n");
+>
+> Please print it out.
+Do you mean instead dev_dbg to use dev_info? in that case, each event
+that didnt handled will cause a print.
+>
+> > +             break;
+> > +     }
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static int npcm_udc_probe(struct platform_device *pdev)
+> > +{
+> > +     int ret;
+> > +     struct npcm_udc_data *ci;
+> > +     struct platform_device *plat_ci;
+> > +     struct device *dev =3D &pdev->dev;
+> > +
+> > +     ci =3D devm_kzalloc(&pdev->dev, sizeof(*ci), GFP_KERNEL);
+> > +     if (!ci)
+> > +             return -ENOMEM;
+> > +     platform_set_drvdata(pdev, ci);
+> > +
+> > +     ci->core_clk =3D devm_clk_get_optional(dev, NULL);
+> > +     if (IS_ERR(ci->core_clk))
+> > +             return PTR_ERR(ci->core_clk);
+> > +
+> > +     ret =3D clk_prepare_enable(ci->core_clk);
+> > +     if (ret)
+> > +             return dev_err_probe(dev, ret, "failed to enable the cloc=
+k: %d\n", ret);
+> > +
+> > +     ci->pdata.name =3D dev_name(dev);
+> > +     ci->pdata.capoffset =3D DEF_CAPOFFSET;
+> > +     ci->pdata.flags =3D CI_HDRC_REQUIRES_ALIGNED_DMA |
+> > +             CI_HDRC_FORCE_VBUS_ACTIVE_ALWAYS;
+> > +     ci->pdata.phy_mode =3D USBPHY_INTERFACE_MODE_UTMI;
+> > +     ci->pdata.notify_event =3D npcm_udc_notify_event;
+> > +
+> > +     plat_ci =3D ci_hdrc_add_device(dev, pdev->resource, pdev->num_res=
+ources,
+> > +                                  &ci->pdata);
+> > +     if (IS_ERR(plat_ci)) {
+> > +             ret =3D PTR_ERR(plat_ci);
+> > +             dev_err(dev, "failed to register HDRC NPCM device: %d\n",=
+ ret);
+> > +             goto clk_err;
+> > +     }
+> > +
+> > +     pm_runtime_no_callbacks(dev);
+> > +     pm_runtime_enable(dev);
+> > +
+> > +     return 0;
+> > +
+> > +clk_err:
+> > +     clk_disable_unprepare(ci->core_clk);
+> > +     return ret;
+> > +}
+> > +
+> > +static int npcm_udc_remove(struct platform_device *pdev)
+> > +{
+> > +     struct npcm_udc_data *ci =3D platform_get_drvdata(pdev);
+> > +
+> > +     pm_runtime_disable(&pdev->dev);
+> > +     ci_hdrc_remove_device(ci->ci);
+> > +     clk_disable_unprepare(ci->core_clk);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static const struct of_device_id npcm_udc_dt_match[] =3D {
+> > +     { .compatible =3D "nuvoton,npcm750-udc", },
+> > +     { .compatible =3D "nuvoton,npcm845-udc", },
+> > +     { }
+> > +};
+> > +MODULE_DEVICE_TABLE(of, npcm_udc_dt_match);
+> > +
+> > +static struct platform_driver npcm_udc_driver =3D {
+> > +     .probe =3D npcm_udc_probe,
+> > +     .remove =3D npcm_udc_remove,
+> > +     .driver =3D {
+> > +             .name =3D "npcm_udc",
+> > +             .of_match_table =3D npcm_udc_dt_match,
+> > +     },
+> > +};
+> > +
+> > +module_platform_driver(npcm_udc_driver);
+> > +
+> > +MODULE_DESCRIPTION("NPCM USB device controller driver");
+> > +MODULE_AUTHOR("Tomer Maimon <tomer.maimon@nuvoton.com>");
+>
+> Should that address also be recorded as the patch author?
+I prefer to use this e-mail since this is my main e-mail.
+>
+> > +MODULE_LICENSE("GPL v2");
+>
+>
+> Kind regards,
+>
+> Paul
 
-One more datapoint for putting forward the above opinion. There are two 
-types of situations observed during bus reset when we try to do endxfer 
-on ep0in followed by set_stall on ep0out:
+Best regards,
 
-1. If we issue endxfer for ep0in, and it times out, then the next 
-command set_stall is successful (only because all reads give zero and 
-since we check for CMDACT bit for ep0out after setting it, and since the 
-read of DEPCMD register gives "0" while polling for it, sw indicated 
-that set stall is successful. But when we check GEVTADDR at this point, 
-both ADDRLO and ADDRHI read zero.
-
-2. If ram access timeout occurs while polling for CMDACT bit after 
-issuing endxfer on ep0in, then at that instant, polling returns true, sw 
-indicates that endxfer is successful but inreality when checked, 
-GEVTADDR LO/HI read zero.
-
-So I think it would be better to check for validity of GEVADDR registers 
-at end of gadget_ep_cmd to identify id RAM access timeout happened and 
-call soft_disconnect followed by soft_connect.
-
-Let me know your thoughts on this
-
-Regards,
-Krishna,
+Tomer
 
