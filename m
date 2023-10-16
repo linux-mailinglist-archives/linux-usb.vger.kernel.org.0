@@ -1,159 +1,198 @@
-Return-Path: <linux-usb+bounces-1663-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1664-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C458B7CA6CD
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Oct 2023 13:36:21 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A2537CA7BD
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Oct 2023 14:06:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F9B4280EC7
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Oct 2023 11:36:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E2A84B20EDA
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Oct 2023 12:06:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F350B2420E;
-	Mon, 16 Oct 2023 11:36:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AE1F273FF;
+	Mon, 16 Oct 2023 12:03:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="VLT64lpT"
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="1J98O2Dj"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3941B23775
-	for <linux-usb@vger.kernel.org>; Mon, 16 Oct 2023 11:36:14 +0000 (UTC)
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2086.outbound.protection.outlook.com [40.107.6.86])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E219DC
-	for <linux-usb@vger.kernel.org>; Mon, 16 Oct 2023 04:36:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VoWmAnzf4GQSILmeAXDjJKGEEInNcS574PslCBbPdc3CL+jFoZNi6kI4RA87eVOnoqloq2M8n6Py6qcUNuzG8JcSm0m+WqF849+HA8WdA+VpirXPCcIFLq0lESNkD/yu2cETTF101CPpMwMeQ/ht5CzFB4u0jAqfzKN0h9z5G1kT8Znodgfxuh6uchvNHxV/C1mIu28Bu4PMYDjCylZGyCzh9d0pcI0XdK1lPy95zDOgeXRSPePrZCYzJCfLoYA96awg3/+psuvm4Ir5YVgMlhYVP5QS2Rgmtgi7mPUICQbdweAsVYRrDb5UaHj7NL474h/ilARpHHnoExxatKPbfQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6puOt9uAgO5M9V9dJPIk/npDk8uXLQBoGnf8XunUoco=;
- b=drHjEdJWKdU4CFc8x9Prz/2E7bqdSV6FwppCS0SBV9HhhDJyW45NRsfzv03MFV1o8sytVaq3AtgRLeyDXS7pheoAap1N3Qtb9DRAyza0Xk6HViJKSQHCfZIiAZkuNow4y4hnwJtL/UHHRGEalC6y56ceS5wXlRCgXg6GtKqsqjfJGpJJep+44+eslOdrzorTUMAEwFgR8fCmFi4xqjBKnm+hDxqn5qNUdaCyoq7y3ZBjOodMMzIaMB6pasUIPXiPBcfBHj8WuHMY5Vs4fMAogKOIzQB2oVagAR3Pf+QvGDz+ik+G6GTdThgowGOqTTklyI4lcMG67zPP/HPDqpmN9Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6puOt9uAgO5M9V9dJPIk/npDk8uXLQBoGnf8XunUoco=;
- b=VLT64lpTLtHqKq5paERV3zXI262RyUXxPNOAUmwo5IFKPpsYJQRhurmOlcMngMJnavVGbZf/0NQskfCRxn/hqf7Rv18ztD0FlUssNWpdcSLdACrZ3NP2/b7/BT4L0MjJf32H/dnfiaDMR6iQIOl+6wzjiH2TMSRZxOTJLGqqvon9u/ayhKPIeyJfD1AANipCIeV9EUu1cfHxJXircSvGyqtwoWIe5NRmExfeq+jDMgpJRijoJ8A7y3NOu7dyWvi8EK6OrlkwELkpsn/CaiL7OtJahOq1k30eGukMDDvuFlE3ZSQrZ3QyLiLTZgLXepCa0QBr/Jze60B9RRJW+QsXuw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from AM0PR04MB6467.eurprd04.prod.outlook.com (2603:10a6:208:16c::20)
- by DU2PR04MB8789.eurprd04.prod.outlook.com (2603:10a6:10:2e0::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.46; Mon, 16 Oct
- 2023 11:36:06 +0000
-Received: from AM0PR04MB6467.eurprd04.prod.outlook.com
- ([fe80::52bb:37fa:d297:2a7d]) by AM0PR04MB6467.eurprd04.prod.outlook.com
- ([fe80::52bb:37fa:d297:2a7d%7]) with mapi id 15.20.6886.034; Mon, 16 Oct 2023
- 11:36:06 +0000
-Message-ID: <3f3c2d58-c962-4066-96ab-cca31eeba95b@suse.com>
-Date: Mon, 16 Oct 2023 13:36:04 +0200
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: William Wu <william.wu@rock-chips.com>
-Cc: USB list <linux-usb@vger.kernel.org>, "Ivan T. Ivanov" <iivanov@suse.de>
-From: Oliver Neukum <oneukum@suse.com>
-Subject: your patch to dwc3 fixing channel halt with unknown reason
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR4P281CA0198.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:e5::13) To AM0PR04MB6467.eurprd04.prod.outlook.com
- (2603:10a6:208:16c::20)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32EB3266CD;
+	Mon, 16 Oct 2023 12:03:32 +0000 (UTC)
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C840AE6;
+	Mon, 16 Oct 2023 05:03:29 -0700 (PDT)
+Received: from pps.filterd (m0369458.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 39G7h1Um007323;
+	Mon, 16 Oct 2023 14:02:47 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	message-id:date:mime-version:from:subject:to:cc:references
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	selector1; bh=GEtT1vGNrN2L3qXSsS6BjSB5ruMmKsplVyDRLRyeo9Y=; b=1J
+	98O2DjQg2zsjt4f510btLN/TCgkmPUp32hr+x1F3zVIG6OoZLfC3Cbyjc01lX9nZ
+	VSS73Gn48GLdu2Pj2PdtzQCh6rQpYFXh63DE6xW8H+rsFN1zzvxxEYZ+i7yOrOVy
+	1ybut4hcc4ZKwAQt8fVMxknPbllcUus7znWDRJmPQvi1rHJqIrPWzqu6PICGgi4T
+	lPhNG+AgOBhZOVBNR4OCi7G99qM+FbpiuaYRVCuRKuOTObDyKtkIfcpdvYv/o3Zu
+	vwBRb1d9cJyQS7368vGtITam91qeWebiryaExexOXLeN9hsY/CpxbuHNjAGKdma9
+	ZC1Ob39vbFcYhfvYRXtg==
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3tr4hyn1db-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 16 Oct 2023 14:02:47 +0200 (MEST)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 3AB9A10005B;
+	Mon, 16 Oct 2023 14:02:45 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A384A22F7D3;
+	Mon, 16 Oct 2023 14:02:45 +0200 (CEST)
+Received: from [10.201.20.32] (10.201.20.32) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Mon, 16 Oct
+ 2023 14:02:43 +0200
+Message-ID: <b16ed06f-66fd-457b-9610-a67ad07deb60@foss.st.com>
+Date: Mon, 16 Oct 2023 14:02:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0PR04MB6467:EE_|DU2PR04MB8789:EE_
-X-MS-Office365-Filtering-Correlation-Id: 87bbc44a-6667-4b85-48be-08dbce3c15ea
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	U1zmPdvjAfntk3WbpHWunZYfpTfKBrxooQkT9Y9GZQy26XzUSGrTuvlFYezbtrTAd+u6DYyh0D75OWzBr4chrfZhyNI0tbbJxr7B+OvXqAHsk/vRi7xShd5pWKVZIBZy78nQCmhnshMjoO/Ut2f/VHvH7648903DfJb+IGDcJvnLpde3hRd4Eyvw69rjxBALkD2pYr/qJVD3JtONbFR/2eAk00c3SBbWWNrJF/BFhJQpYB/LCwW8xX6mkTSwek9on0TkexhAyZEcIUVFt/mu1QfOmSfjGzC8FI9X0c1oS/L9wuexWfogWz+zoapl9ytdKUiS5DR3u1QHcQo5t0t79Q7ARjHPMcb7XtkYt4FmNwd55aTS9KZFdUJPkBKzBLOF6jkOeYwkd0c8w1GT/8n2Xyq9KGncjCb8HucZEEZvmFuWXxm+aFboja1Av1eCme9AuCO6CfajUCH12jacfPqPZWKthCMa7a6OWl3p4GSqPg1yZBt5xl66PWHrmoZsDaUSbcjpr990PLWGKStN3JR+eARFZKpAunOjfF6AouQenY0mcyFuhWHFOTsepvphTm+KSUEwgUHBr1imRF3ntwKCmpcydnEO77W6mX89giTzgUWkLS1NvlO8ag0NAMbQkLFoAj3exdpUea3Q2vrkdZZF6Q==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6467.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(39850400004)(136003)(396003)(366004)(346002)(230922051799003)(64100799003)(186009)(451199024)(1800799009)(966005)(6506007)(6486002)(478600001)(6512007)(2616005)(6916009)(2906002)(54906003)(66946007)(5660300002)(8676002)(4326008)(8936002)(316002)(41300700001)(66556008)(66476007)(83380400001)(38100700002)(31696002)(36756003)(86362001)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?VmR6YzVVUWh1bHM4NUJFT25kV3c2VlAzVVIxcmk4SHl6aEVzM0Q4TFdCUW1Q?=
- =?utf-8?B?QkcxWXUzRC9VdFNkSVBNVTYxaS9BYXZqUXBuVDRVeVdnYWpTcWJrSjJqKzIx?=
- =?utf-8?B?eVlMdEZ5REQ5SjI0YXNKcEh3WTcxV2dNMzhXRXhOY3pxVEloc1A5QUZGam8v?=
- =?utf-8?B?ZDRsUXIwOFMvMnNEWE8rVDRxdmMrYmpmSWlsaVJsbUh0NGkxWXJMOTRUUmtt?=
- =?utf-8?B?MTZPaStpVmhPbTJWKzFFY3RONzlyTHJKKzBJM0tzTE04MmJJcWRWclBEZlh2?=
- =?utf-8?B?NXFxYW82VXJkTkdQZHE1aTFUdUdFVEhiT29mekZGb0E1YzVST1c3OXBCNVQv?=
- =?utf-8?B?cW1LZWpJRHFhbTlyMU8rSy8zamJETit3U0VjUWtvUG1LY2s0MUF2YnM1YlRl?=
- =?utf-8?B?OGw1WVlFRGk1NWY4OUZHMWpRUXRld1VoMXYrZFVsTWx4WXdSYlAvR3dlZ2RM?=
- =?utf-8?B?SUdJRG83bnQrMVFSQ1V1RmxtbTZxay9haVV6SDlLMTErN3RJbElTQ3FqZ2Vv?=
- =?utf-8?B?M2xEdHlBSUtxMFRXUC91NG5DOWFHZWNaVG02L0xrd1BTOXQyUHd3cjdLT2xE?=
- =?utf-8?B?TzFGRG9JcHlmaDlRdVhWQjd0SzhTSEg1YUZTNURhdWROd1FocWpOSWRZM2lm?=
- =?utf-8?B?UVRPVC9nVk82Z0JBbEhWUkp4dkYzaUZ5MC9vUXZQZTBHTFYvb1c2YlNYSjFH?=
- =?utf-8?B?b1NNNWJ4NHl5Q2dnbStndk5sY3FJQm5nMXVDeEM0dGI4ZjhFcllDcTd2Yk9B?=
- =?utf-8?B?MTZqM2ZHMFdaRjBwQkR0K3FCTHhNT0hQSnFuMjhlUEdlZHU1STA3WGFEbXdR?=
- =?utf-8?B?ODhidzBjc0dhVVV2RlJ1Qi9hOVptbDNSQTduODNwR082cWF2N0Y5NG4rcXFM?=
- =?utf-8?B?NUxVcThVNmVIMVNSOXFvMmhFL1dTYU5VU0hLVncyMFc4ZWczajlZOEgyVzVV?=
- =?utf-8?B?bVZ2VENab2ZzaTB6SFpqelF3TlkwbnlnSVJaRlpPYTArNnE1aEJmSVgrbHBy?=
- =?utf-8?B?WXJ4bzl1U3FNK2dMTUpGWnEyODVJMzN4VXJaaXM3UEY3NzhveGxKelBzeE5F?=
- =?utf-8?B?bE9NYVB4cy9heS9EbDNjZ3NKdzlaeC9xWi8rRTc1RUdKcS8veklNc1dmdVlL?=
- =?utf-8?B?eWJOTkpTemd1QWNMd1BveVZaMmQxc2hNR05VUEJPRmZpWVJxOW95cmh2ZjVX?=
- =?utf-8?B?WUI2NnVhbDVoY3ZBcWZSTHNwVWJMZWlIZVZXVTFOc01yWHBITkNUb1RTWkMr?=
- =?utf-8?B?SXJ5SlpnZm1iUG5sQ3R6TnNjWThXVFNUQjk4UTZWa1pzSDBNNFhZdFE1cUgz?=
- =?utf-8?B?L2phaW5YUEpnRVVlZXV0ek5sL2hlVURLUGZVNS8zQmoxTWhPTHMvdVFJTThv?=
- =?utf-8?B?WGFjRFFQZGxqYlR4S1k4K2pBQmtaZUpqdVduMTZ1Vm5XLzdLS2x4aDc3ZDJj?=
- =?utf-8?B?TTVTUDY5T00zVnI2NnZIK1M5T0p0dXlhOVVTVGpiQnNWTmFJcnpPMkpKemVX?=
- =?utf-8?B?cTFCSi93UCt3Ymlnbkg0eiszL0dxa1hFcVk2SENKdG5JZDhob3ZKRnIyRjdZ?=
- =?utf-8?B?R29xNGZMZk40YnFqYTV4V3VxUEFJaFk4K0Nkd2RhVnptc1NBdzk5OFJMM3Jx?=
- =?utf-8?B?dEVNVDBEOGJWNFVnOTlBRmlRVjErWVZYNXVzKzhtaFBGT0pYMHR3VGRuazRB?=
- =?utf-8?B?N1FCLzkzZUJHdWpZblo4RTY4c1I0ajkyc1N4ZDBoTUhLbEhQQitrbUZBZEpZ?=
- =?utf-8?B?WG5HUXRiZDBqQUVuRDhHeDhZTlN0empubEt5bUtMY29sSEdWMmdPY3Bpblpp?=
- =?utf-8?B?SUpUcGg4SFV3QTNSZzVJMmM3Zys0MnlFQm9qbEkzbVhTYXR3RUttdTM3djd2?=
- =?utf-8?B?dGJsSEpmbjJHVXZ4dDNSaFVqN2lyQzlhSzV2Ylo5WEI0bGlPcjc2S3FmRFhS?=
- =?utf-8?B?NzJXcHhoOVlDV0RRZ0xyYnBFUys2U28waTJGYjFkRHVYZWpGeWVGOFVmcGRT?=
- =?utf-8?B?YW81VzVyMlg3M1hWM1Z3WDB0cHpsS3FEMWgxd05IZ3hWVWhvQWp2WlAxNGJr?=
- =?utf-8?B?WGZjTCtVK3ZtMmZ0TCtuV3BKcmNHZkxMNzJmRzJsTGJQRnhuRmRWZmV2enV2?=
- =?utf-8?B?cTVLWTFkU21zSGJVZ2h1VXZsaEtwVkhYTnRBMENhekJETWRTUGFCQlFsOWFo?=
- =?utf-8?Q?RNq9cwQcJXCgIBX+tn8HFbtHNz/jEzR1ezYXHcOdakqH?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 87bbc44a-6667-4b85-48be-08dbce3c15ea
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6467.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Oct 2023 11:36:06.5678
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: iN5a6+8+/++I9lZKu7f75C5TjFSDIgIZH8MIP+8USctds5TYWXFg4LM3+es3/LCclnPgMsuspfKS+rjEsyYreg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8789
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+From: Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
+Subject: Re: [PATCH v6 10/11] ARM: dts: stm32: add ETZPC as a system bus for
+ STM32MP15x boards
+To: Rob Herring <robh@kernel.org>
+CC: <Oleksii_Moisieiev@epam.com>, <gregkh@linuxfoundation.org>,
+        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <alexandre.torgue@foss.st.com>, <vkoul@kernel.org>, <jic23@kernel.org>,
+        <olivier.moysan@foss.st.com>, <arnaud.pouliquen@foss.st.com>,
+        <mchehab@kernel.org>, <fabrice.gasnier@foss.st.com>,
+        <andi.shyti@kernel.org>, <ulf.hansson@linaro.org>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <hugues.fruchet@foss.st.com>, <lee@kernel.org>, <will@kernel.org>,
+        <catalin.marinas@arm.com>, <arnd@kernel.org>,
+        <richardcochran@gmail.com>, Frank Rowand <frowand.list@gmail.com>,
+        <peng.fan@oss.nxp.com>, <linux-crypto@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <dmaengine@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+        <linux-iio@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <linux-media@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-p.hy@lists.infradead.org>,
+        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>
+References: <20231010125719.784627-1-gatien.chevallier@foss.st.com>
+ <20231010125719.784627-11-gatien.chevallier@foss.st.com>
+ <20231010184212.GA1221641-robh@kernel.org>
+ <8f1b6915-68be-a525-c5d5-37f0983c14de@foss.st.com>
+ <20231012153012.GA698406-robh@kernel.org>
+Content-Language: en-US
+In-Reply-To: <20231012153012.GA698406-robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.201.20.32]
+X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-16_05,2023-10-12_01,2023-05-22_02
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Hi William,
+Hi Rob,
 
-we encountered the same bug you developed a patch against posted to
-https://github.com/aosp-rockchip/README/blob/23c1487f8060c79f5ab73ebc7bccce10c6a8b655/patches-kernel/0001-usb-dwc2-host-fix-channel-halt-with-unknown-reason.patch#L24
+On 10/12/23 17:30, Rob Herring wrote:
+> On Wed, Oct 11, 2023 at 10:49:58AM +0200, Gatien CHEVALLIER wrote:
+>> Hi Rob,
+>>
+>> On 10/10/23 20:42, Rob Herring wrote:
+>>> On Tue, Oct 10, 2023 at 02:57:18PM +0200, Gatien Chevallier wrote:
+>>>> ETZPC is a firewall controller. Put all peripherals filtered by the
+>>>> ETZPC as ETZPC subnodes and reference ETZPC as an
+>>>> access-control-provider.
+>>>>
+>>>> For more information on which peripheral is securable or supports MCU
+>>>> isolation, please read the STM32MP15 reference manual.
+>>>>
+>>>> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
+>>>> ---
+>>>>
+>>>> Changes in V6:
+>>>>       	- Renamed access-controller to access-controllers
+>>>>       	- Removal of access-control-provider property
+>>>>
+>>>> Changes in V5:
+>>>>       	- Renamed feature-domain* to access-control*
+>>>>
+>>>>    arch/arm/boot/dts/st/stm32mp151.dtsi  | 2756 +++++++++++++------------
+>>>>    arch/arm/boot/dts/st/stm32mp153.dtsi  |   52 +-
+>>>>    arch/arm/boot/dts/st/stm32mp15xc.dtsi |   19 +-
+>>>>    3 files changed, 1450 insertions(+), 1377 deletions(-)
+>>>
+>>> This is not reviewable. Change the indentation and any non-functional
+>>> change in one patch and then actual changes in another.
+>>
+>> Ok, I'll make it easier to read.
+>>
+>>>
+>>> This is also an ABI break. Though I'm not sure it's avoidable. All the
+>>> devices below the ETZPC node won't probe on existing kernel. A
+>>> simple-bus fallback for ETZPC node should solve that.
+>>>
+>>
+>> I had one issue when trying with a simple-bus fallback that was the
+>> drivers were probing even though the access rights aren't correct.
+>> Hence the removal of the simple-bus compatible in the STM32MP25 patch.
+> 
+> But it worked before, right? So the difference is you have either added
+> new devices which need setup or your firmware changed how devices are
+> setup (or not setup). Certainly can't fix the latter case. You just need
+> to be explicit about what you are doing to users.
+> 
 
-We, too, are seeing this error case triggered:
+I should've specified it was during a test where I deliberately set
+incorrect rights on a peripheral and enabled its node to see if the
+firewall would allow the creation of the device.
 
-[Mon Aug 14 10:51:07 2023] dwc2 3f980000.usb: dwc2_hc_chhltd_intr_dma: Channel 7 - ChHltd set, but reason is unknown
-[Mon Aug 14 10:51:07 2023] dwc2 3f980000.usb: hcint 0x00000002, intsts 0x04600001
-[Mon Aug 14 10:51:08 2023] dwc2 3f980000.usb: dwc2_hc_chhltd_intr_dma: Channel 0 - ChHltd set, but reason is unknown
-[Mon Aug 14 10:51:08 2023] dwc2 3f980000.usb: hcint 0x00000002, intsts 0x04600001
-[Mon Aug 14 10:51:08 2023] dwc2 3f980000.usb: dwc2_hc_chhltd_intr_dma: Channel 4 - ChHltd set, but reason is unknown
-[Mon Aug 14 10:51:08 2023] dwc2 3f980000.usb: hcint 0x00000002, intsts 0x04600001
-[Mon Aug 14 10:51:08 2023] dwc2 3f980000.usb: dwc2_update_urb_state_abn(): trimming xfer length
+> 
+>> Even though a node is tagged with the OF_POPULATED flag when checking
+>> the access rights with the firewall controller, it seems that when
+>> simple-bus is probing, there's no check of this flag.
+> 
+> It shouldn't. Those flags are for creating the devices (or not) and
+> removing only devices of_platform_populate() created.
+> 
 
-As this patch is from 2021 and the issue remains unfixed
-in the current upstream, I was wondering whether it would
-be possible to push it upstream, respectively what prevented
-that in the past.
+About the "simple-bus" being a fallback, I think I understood why I saw
+that the devices were created.
 
-	Regards
-		Oliver
+All devices under a node whose compatible is "simple-bus" are created
+in of_platform_device_create_pdata(), called by
+of_platform_default_populate_init() at arch_initcall level. This
+before the firewall-controller has a chance to populate it's bus.
+
+Therefore, when I flag nodes when populating the firewall-bus, the
+devices are already created. The "simple-bus" mechanism is not a
+fallback here as it precedes the driver probe.
+
+Is there a safe way to safely remove/disable a device created this way?
+Devices that are under the firewall controller (simple-bus) node
+should not be probed before it as they're child of it.
+
+Best regards,
+Gatien
+
+>> of_platform_populate() checks and sets the OF_POPULATED_BUS flag.
+>> Maybe that is my error and the firewall bus populate should set
+>> OF_POPULATED_BUS instead of OF_POPULATED. Is that correct?
+> 
+> Shrug. Off hand, I'd say probably not, but am not certain.
+> 
+> Rob
 
