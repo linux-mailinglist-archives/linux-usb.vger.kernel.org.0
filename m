@@ -1,54 +1,65 @@
-Return-Path: <linux-usb+bounces-1640-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1642-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 922617C9E01
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Oct 2023 05:48:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 76EB07C9E41
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Oct 2023 06:34:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B89AF1C20902
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Oct 2023 03:48:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 898A61C20947
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Oct 2023 04:33:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF9076D24;
-	Mon, 16 Oct 2023 03:48:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A58DD1C08;
+	Mon, 16 Oct 2023 04:33:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="TMqDbG8M"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zVhwq+Fv"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A5F81FD1;
-	Mon, 16 Oct 2023 03:48:20 +0000 (UTC)
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF68BAD;
-	Sun, 15 Oct 2023 20:48:18 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39G2qCk4026107;
-	Mon, 16 Oct 2023 03:48:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=qNg14GcggDnrj3270YNJfGynOyIYi98iCn9wUS7HdVo=;
- b=TMqDbG8MiB/m4qsgHGITwiMljlKkmVjP41DQgGNk1pqZiLAyOGoeZ+d11+p+wgJGpXiR
- Wb93k0rmrt2+YpCYdjVD5/BMJe77IWOB6NKcBJmLHC5C3+FutoNMdtyNckmvwt3/7p2C
- +i26HAmWbVsJkkcpqm/KQzyEL3zA/u1fZXhkplE7f+7f2LBI2FZG63A47/9pauZWQgdc
- zKMnv3HMnFRkQa87VzDF1Qt79bFYRZjzRwb84rDKVxej+lFUnStsPqgh6DuKW3FCqrEa
- Fh8YMtAmAx9OqO+77MhHTGdf2+bCP/i6FxcMfcZ9B9Kh5hg3fcS1RI41sBFK7U6+3aQJ yA== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tqgbt37cq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 16 Oct 2023 03:48:15 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39G3mEeA004601
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 16 Oct 2023 03:48:14 GMT
-Received: from [10.216.5.27] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.36; Sun, 15 Oct
- 2023 20:48:10 -0700
-Message-ID: <20632da6-3144-47d3-b1dc-0446e4e55a19@quicinc.com>
-Date: Mon, 16 Oct 2023 09:18:13 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8033D79CD
+	for <linux-usb@vger.kernel.org>; Mon, 16 Oct 2023 04:33:51 +0000 (UTC)
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 109E1DF
+	for <linux-usb@vger.kernel.org>; Sun, 15 Oct 2023 21:33:47 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-6ba172c5f3dso972363b3a.0
+        for <linux-usb@vger.kernel.org>; Sun, 15 Oct 2023 21:33:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1697430826; x=1698035626; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8Tejy3Kv2ewCsu4ePvtm8O+1oKzqOghrnllUZz+x8is=;
+        b=zVhwq+Fv+KFXXghEin8MqnARtXZX6r979pJsfTaBtYQJTm2V6+Cn3eGvr68oaMHW3W
+         h9xirOPvUb9sMrWoahJYHirdlKK/b64nQVwv2K4KLILVx2/5qXvvIibA52DOya2mYXDa
+         3Zf7ODsqOBlDBuZ3E6OzI96fEHY5GENwPh2SGswAXb54+d+GjrEogUxZ5PRN19bpjeIF
+         7S71kfM2s06leqBBbJZdVU9R3cUdutiNR4LxSCLsmd2Atl+05ccNzkJqoVU6tWfrmTmy
+         wi7JFR4d8sPyq3iDoNQ7oyJq1a0drgRJMcme9tETa/06qneqkeN8QUpMFlhKo5b33cT7
+         USYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697430826; x=1698035626;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8Tejy3Kv2ewCsu4ePvtm8O+1oKzqOghrnllUZz+x8is=;
+        b=FuLgpd6urPJpedN1TmTo6cpPT0ZqE/Pf1yyd4ugJFWCH/VvJ1IMv+hrK4fVK47srVJ
+         rsWLdhScojKPkZbnzlilEKbpu6YG03grAUiIcUvMvifxL1eDMqTjKvkjy2rUlaE4R9Ev
+         wF0MQqKBnBCAu0shd31mseTGZ9JmwH7DXsVSIKPb/5ogVfErkt/OHrp18jNR4/CFGUoB
+         6n1GJ/AaTfyU2hAkTHYZmL++4/zW+QN30zezqR2dzkfGLODzKuoDddCNc4RtFjn5mlTd
+         GeSs1foX0e7jn3iBzrBTaJPt0DDH/wdiNPaphrbuSwn356VVYVCGYys2VPj0xnGMxriv
+         OflQ==
+X-Gm-Message-State: AOJu0YzI2AYT6NZS1gfpCzTwnTG7UgATa7qz0d7FG0FDmnn2rJKRr8Cu
+	VCcQoXx3K5M7rOpNfy0FGTR0qQ==
+X-Google-Smtp-Source: AGHT+IGXP/Q3ZMU3lWTF3wh/lT2U/xael8C052BezvhvxxWT5fcxi4F6U4vCCB2TbtiqD6CXzWxgoQ==
+X-Received: by 2002:a05:6a21:a106:b0:174:1466:359c with SMTP id aq6-20020a056a21a10600b001741466359cmr11503435pzc.61.1697430826220;
+        Sun, 15 Oct 2023 21:33:46 -0700 (PDT)
+Received: from ?IPV6:2601:645:8100:1350:aa26:108f:3b80:445a? ([2601:645:8100:1350:aa26:108f:3b80:445a])
+        by smtp.gmail.com with ESMTPSA id 15-20020a17090a01cf00b00263dfe9b972sm4198311pjd.0.2023.10.15.21.33.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 15 Oct 2023 21:33:45 -0700 (PDT)
+Message-ID: <c47e864b-4b9e-4a21-afea-af121a4d7771@google.com>
+Date: Sun, 15 Oct 2023 21:33:43 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -56,152 +67,138 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] usb: gadget: ncm: Add support to update
- wMaxSegmentSize via configfs
-To: =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        onathan Corbet
-	<corbet@lwn.net>,
-        Linyu Yuan <quic_linyyuan@quicinc.com>, <linux-usb@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
-        <quic_jackp@quicinc.com>
-References: <20231009142005.21338-1-quic_kriskura@quicinc.com>
- <20231009142005.21338-2-quic_kriskura@quicinc.com>
- <CANP3RGfEk2DqZ3biyN78ycQYbDxCEG+H1me2vnEYuwXkNdXnTA@mail.gmail.com>
- <CANP3RGcCpNOuVpdV9n0AFxZo-wsfwi8OfYgBk1WHNHaEd-4V-Q@mail.gmail.com>
- <CANP3RGdY4LsOA6U5kuccApHCzL0_jBnY=pLOYrUuYtMZFTvnbw@mail.gmail.com>
- <d19d9d08-c119-4991-b460-49925f601d15@quicinc.com>
- <fad5a7fb-cce1-46bc-a0af-72405c76d107@quicinc.com>
- <CANP3RGcqWBYd9FqAX47rE9pFgBTB8=0CGdwkScm-OH1epHcVWQ@mail.gmail.com>
- <8ff92053-52ff-4950-95c8-0e986f6a028a@quicinc.com>
- <CANP3RGd4G4dkMOyg6wSX29NYP2mp=LhMhmZpoG=rgoCz=bh1=w@mail.gmail.com>
- <b12eb7b1-54e7-406f-8c19-0046555b82d3@quicinc.com>
- <CANP3RGcUrFTaFL8V3tpuh+qQoEi84O0Dy9ie+XD=-H01c2btAw@mail.gmail.com>
- <70c15867-ccce-4788-a0dd-38a73decb785@quicinc.com>
- <d395d631-239a-43f1-bcbf-b88b11852c76@quicinc.com>
- <CANP3RGcnpkcLK_CRfSLvxyGM3L0j5R3fybeF_L1bmRV9hNBcuQ@mail.gmail.com>
+Subject: Re: uvc gadget: Making upper bound of number of usb requests
+ allocated configurable through configfs
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, mgr@pengutronix.de
+Cc: Greg KH <gregkh@linuxfoundation.org>, "corbet@lwn.net" <corbet@lwn.net>,
+ "laurent.pinchart@ideasonboard.com" <laurent.pinchart@ideasonboard.com>,
+ "dan.scally@ideasonboard.com" <dan.scally@ideasonboard.com>,
+ "kieran.bingham@ideasonboard.com" <kieran.bingham@ideasonboard.com>,
+ "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+ "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+ "etalvala@google.com" <etalvala@google.com>,
+ "arakesh@google.com" <arakesh@google.com>
+References: <edad1597-48da-49d2-a089-da2487cac889@google.com>
+ <2023100834-statistic-richly-49ef@gregkh>
+ <7ed46b3c-bd42-468e-b28d-860dc8a6c7e6@google.com>
+ <20231012184954.ech7kfpqjkunq6eu@synopsys.com>
 Content-Language: en-US
-From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <CANP3RGcnpkcLK_CRfSLvxyGM3L0j5R3fybeF_L1bmRV9hNBcuQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+From: Jayant Chowdhary <jchowdhary@google.com>
+In-Reply-To: <20231012184954.ech7kfpqjkunq6eu@synopsys.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 5_5IheJW5851YTctblNiWnZPfBAxQFV3
-X-Proofpoint-ORIG-GUID: 5_5IheJW5851YTctblNiWnZPfBAxQFV3
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-15_09,2023-10-12_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
- priorityscore=1501 impostorscore=0 malwarescore=0 mlxlogscore=302
- adultscore=0 spamscore=0 bulkscore=0 clxscore=1015 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2310160032
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+	ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+	USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
+ Hi Thinh,
 
 
-On 10/16/2023 6:49 AM, Maciej Żenczykowski wrote:
-
+On 10/12/23 11:50, Thinh Nguyen wrote:
+> Hi,
+>
+> On Mon, Oct 09, 2023, Jayant Chowdhary wrote:
+>>> On Fri, Oct 06, 2023 at 03:03:56PM -0700, Jayant Chowdhary wrote:
+>>>> Hi Everyone,
 >>>>
->>>> Hmm, I'm not sure.  I know I've experimented with high mtu ncm in the
->>>> past
->>>> (around 2.5 years ago).  I got it working between my Linux desktop (host)
->>>> and a Pixel 6 (device/gadget) with absolutely no problems.
+>>>> We had been seeing the UVC gadget driver receive isoc errors while
+>>>> sending packets to the usb endpoint - resulting in glitches being shown
+>>>> on linux hosts. My colleague Avichal Rakesh and others had a very
+>>>> enlightening discussion at
+>>>> https://urldefense.com/v3/__https://lore.kernel.org/linux-usb/8741b7cb-54ec-410b-caf5-697f81e8ad64@google.com/T/__;!!A4F2R9G_pg!e3zVZGt-6Td6HJXqh8GaZAsUeKyvKBhOoyru9qzn3Vkw01Vdkwk7hFr_t5glBG2BYJlOYfFKEUpiH5H4gQ73n_-Y$ 
 >>>>
->>>> I'm pretty sure I didn't change my desktop kernel, so I was probably
->>>> limited to 8192 there
->>>> (and I do more or less remember that).
->>>>   From what I vaguely remember, it wasn't difficult (at all) to hit
->>>> upwards of 7gbps for iperf tests.
->>>> I don't remember how close to the theoretical USB 10gbps maximum of
->>>> 9.7gbps I could get...
->>>> [this was never the real bottleneck / issue, so I didn't ever dig
->>>> particularly deep]
 >>>>
->>>> I'm pretty sure my gadget side changes were non-configurable...
->>>> Probably just bumped one or two constants...
+>>>> The conclusion that we came to was : usb requests with actual uvc frame
+>>>> data were missing their scheduled uframes in the usb controller. As a
+>>>> mitigation, we started sending 0 length usb requests when there was no
+>>>> uvc frame buffer available to get data from. Even with this mitigation,
+>>>> we are seeing glitches - albeit at a lower frequency.
 >>>>
->>> Could you share what parameters you changed to get this high value of
->>> iperf throughput.
-> 
-> Eh, I really don't remember, but it wasn't anything earth shattering.
->  From what I recall it was just a matter of bumping mtu, and tweaking
-> irq pinning to stronger cores.
-> Indeed I'm not even certain that the mtu was required to be over 5gbps.
-> Though I may be confusing some things, as at least some of the testing was done
-> with the kernel's built in packet generator.
-> 
->>>
->>>> I do *very* *vaguely* recall there being some funkiness though, where
->>>> 8192 was
->>>> *less* efficient than some slightly smaller value.
->>>>
->>>> If I recall correctly the issue is that 8192 + ethernet overhead + NCM
->>>> overhead only fits *once* into 16384, which leaves a lot of space
->>>> wasted.
->>>> While ~7.5 kb + overhead fits twice and is thus a fair bit better.
->>> Right, same goes for using 5K vs 5.5K MTU. If MTU is 5K, 3 packets can
->>> conveniently fit into an NTB but if its 5.5, at max only two (5.5k)
->>> packets can fit in (essentially filling ~11k of the 16384 bytes and
->>> wasting the rest)
+>>>> After some investigation, it is seen that we’re getting isoc errors when
+>>>> the worker thread serving video_pump() work items, doesn’t get scheduled
+>>>> for longer periods of time - than usual - in most cases > 6ms.
+>>>> This is close enough to the 8ms limit that we have when the number of usb
+>>>> requests in the queue is 64 (since we have a 125us uframe period). In order
+>>>> to tolerate the scheduling delays better, it helps to increase the number of
+>>>> usb requests in the queue . In that case, we have more 0 length requests
+>>>> given to the udc driver - and as a result we can wait longer for uvc
+>>>> frames with valid data to get processed by video_pump(). I’m attaching a
+>>>> patch which lets one configure the upper bound on the number of usb
+>>>> requests allocated through configfs. Please let me know your thoughts.
+>>>> I can formalize  the patch if it looks okay.
+>>> Why do you want to limit the upper bound?  Why not just not submit so
+>>> many requests from userspace as you control that, right?
 >>
->> Formatting gone wrong. So pasting the first paragraph again here:
+>> Userspace negotiates a video frame rate (typically 30/60fps) with the host that does
+>> not necessarily correspond to the ISOC cadence. After the
+>> patch at https://urldefense.com/v3/__https://lkml.org/lkml/diff/2023/5/8/1115/1__;!!A4F2R9G_pg!e3zVZGt-6Td6HJXqh8GaZAsUeKyvKBhOoyru9qzn3Vkw01Vdkwk7hFr_t5glBG2BYJlOYfFKEUpiH5H4gWbb9bvy$  was submitted, we are
+>> maintaining back pressure on the usb controller even if we do not have uvc frame
+>> data, by sending the controller 0 length requests (as long as usb_requests are
+>> available). Also, even if the userspace application were to somehow produce
+>> data to match the ISOC rate, it would  need to have information about USB
+>> timing details - which I am not sure is available to userspace or is the right
+>> thing to do here ?
 >>
->> "Right, same goes for using 5K vs 5.5K MTU. If MTU is 5K, 3 packets can
->> conveniently fit into an NTB but if its 5.5, at max only two (5.5k)
->> packets can fit in (essentially filling ~11k of the 16384 bytes and
->> wasting the rest)"
+>> Here, we are trying to handle the scenario in which the video_pump() worker
+>> thread does not get scheduled in time - by increasing the number of usb requests
+>> allocated in the queue. This would send more usb requests to the usb controller,
+>> when video_pump() does get scheduled - even if they're 0 length. This buys
+>> the video_pump() worker thread scheduling time -since more usb requests
+>> are with the controller, subsequent requests sent will not be 'stale' and
+>> dropped by the usb controller.
 >>
->>>
->>> And whether its Ipv4/Ipv6 like you mentioned on [1], the MTU is what NCM
->>> layer receives and we append the Ethernet header and add NCM headers and
->>> send it out after aggregation. Why can't we set the MAX_DATAGRAM_SIZE to
->>> ~8050 or ~8100 ? The reason I say this value is, obviously setting it to
->>> 8192 would not efficiently use the NTB buffer. We need to fill as much
->>> space in buffer as possible and assuming that each packet received on
->>> ncm layer is of MTU size set (not less that that), we can assume that
->>> even if only 2 packets are aggregated (minimum aggregation possible), we
->>> would be filling (2 * (8050 + ETH_HLEN) + (room for NCM headers)) would
->>> almost be close to 16384 ep max packet size. I already check 8050 MTU
->>> and it works. We can add a comment in code detailing the above
->>> explanation and why we chose to use 8050 or 8100 as MAX_DATAGRAM_SIZE.
->>>
->>> Hope my reasoning of why we can chose 8.1K or 8.05K makes sense. Let me
->>> know your thoughts on this.
-> 
-> Maybe just use an L3 mtu of 8000 then?  That's a nice round number...
-> But I'm also fine with 8050 or 8100.. though 8100 seems 'rounder'.
-> 
-> I'm not sure what the actual overhead is... I guess we control the
-> overhead in one direction, but not in the other, and there could be
-> some slop, so we need to be a little generous?
-> 
->>>
-Hi Maciej,
+> I believe you're testing against dwc3 controller right? I may not be as
+> familiar with UVC function driver, but based on the previous
+> discussions, I think the driver should be able to handle this without
+> the user input.
 
-   Sure. Let's go with 8000 to leave some space for headers. And would 
-add the following paragraph as comment for readers to understand why 
-this value was set:
+Yes we are testing against the dwc3 controller.
 
-"Although max mtu as dictated by u_ether is 15412 bytes, setting 
-max_segment_size to 15426 would not be efficient. If user chooses 
-segment size to be (> 8192), then we can't aggregate more than one 
-buffer in each NTB (assuming each packet coming from network layer is > 
-8192 bytes) as ep maxpacket limit is 16384. So let max_segment_size be 
-limited to 8000 to allow atleast 2 packets to be aggregated reducing 
-wastage of NTB buffer space"
+>
+> The frequency of the request submission should not depend on the
+> video_pump() work thread since it can vary. The frequency of request
+> submission should match with the request completion. We know that
+> request completion rate should be fixed (1 uframe/request + when you
+> don't set no_interrupt). Base on this you can do your calculation on how
+> often you should set no_interrupt and how many requests you must submit.
+> You don't have to wait for the video_pump() to submit 0-length requests.
+>
+> The only variable here is the completion handler delay or system
+> latency, which should not be much and should be within your calculation.
 
-Hope that would be fine.
 
-Regards,
-Krishna,
+Thanks for the suggestion. It indeed makes sense that we do not completely depend on
+video_pump() for sending 0 length requests. I was concerned about
+synchronization needed when we send requests to the dwc3 controller from
+different threads. I see that the dwc3 controller code does internally serialize
+queueing requests, can we expect this from other controllers as well ? 
+
+This brings me to another question for Michael - I see
+that we introduced a worker thread for pumping  usb requests to the usb endpoint
+in https://lore.kernel.org/all/20200427151614.10868-1-m.grzeschik@pengutronix.de/
+(I see multiple email addresses, so apologies if I used the incorrect one).
+
+Did we introduce the worker thread to solve some specific deadlock scenarios ?
+Or was it a general mitigation against racy usb request submission from v4l2 buffer
+queuing, stream enable and the video complete handler firing ?
+
+I was chatting with Avi about this, what if we submit requests to the endpoint
+only at two points in the streaming lifecycle - 
+1) The whole 64 (or however many usb requests are allocated) when
+   uvcg_video_enable() is called - with 0 length usb_requests.
+2) In the video complete handler - if a video buffer is available, we encode it
+   and submit it to the endpoint. If not, we send a 0 length request.
+
+This way we're really maintaining back pressure and sending requests as soon
+as we can to the dwc3 controller. Encoding is mostly memcpys from what I see
+so hopefully not too heavy on the interrupt handler. I will work on prototyping
+this meanwhile.
+
+Thanks,
+Jayant
+
 
