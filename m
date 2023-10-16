@@ -1,41 +1,40 @@
-Return-Path: <linux-usb+bounces-1701-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1702-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E99257CB320
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Oct 2023 21:05:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15CC07CB34D
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Oct 2023 21:23:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 261E51C2094A
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Oct 2023 19:05:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BF7742816D7
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Oct 2023 19:23:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF2EE339BA;
-	Mon, 16 Oct 2023 19:05:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA876341B1;
+	Mon, 16 Oct 2023 19:23:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBD8A30F92
-	for <linux-usb@vger.kernel.org>; Mon, 16 Oct 2023 19:05:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D59B34197
+	for <linux-usb@vger.kernel.org>; Mon, 16 Oct 2023 19:23:40 +0000 (UTC)
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by lindbergh.monkeyblade.net (Postfix) with SMTP id 20E13A2
-	for <linux-usb@vger.kernel.org>; Mon, 16 Oct 2023 12:05:41 -0700 (PDT)
-Received: (qmail 154127 invoked by uid 1000); 16 Oct 2023 15:05:40 -0400
-Date: Mon, 16 Oct 2023 15:05:40 -0400
+	by lindbergh.monkeyblade.net (Postfix) with SMTP id DE16B83
+	for <linux-usb@vger.kernel.org>; Mon, 16 Oct 2023 12:23:38 -0700 (PDT)
+Received: (qmail 154609 invoked by uid 1000); 16 Oct 2023 15:23:38 -0400
+Date: Mon, 16 Oct 2023 15:23:38 -0400
 From: Alan Stern <stern@rowland.harvard.edu>
-To: Oliver Neukum <oneukum@suse.com>
-Cc: burcheri.massimo+linux-usb@gmail.com,
-  linux-usb <linux-usb@vger.kernel.org>
-Subject: Re: JMicron JMS567 and UAS
-Message-ID: <fc10752f-5b63-4aed-805e-3e60e8e18e48@rowland.harvard.edu>
-References: <5d8cad13445172d02a371f162ceaea1a68819819.camel@gmail.com>
- <a5b48a53-9dff-4a84-9a58-1c08f0e0781b@rowland.harvard.edu>
- <072417fd7806d86e930bccb882460dbbfaa5ca52.camel@gmail.com>
- <0919e02b-e395-438c-b4d6-314d7e108639@rowland.harvard.edu>
- <7f8396ae597a78969811011034a7e5f759a6564e.camel@gmail.com>
- <c3cd0de5-e8f3-4edb-bcaa-abf29ce5928b@suse.com>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: "Li, Meng" <Meng.Li@windriver.com>, Ingo Molnar <mingo@redhat.com>,
+  USB mailing list <linux-usb@vger.kernel.org>,
+  Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+  linux-rt-users <linux-rt-users@vger.kernel.org>
+Subject: Re: USB: add check to detect host controller hardware removal
+Message-ID: <62fdcf97-11c6-4dee-8db1-74752d6949f3@rowland.harvard.edu>
+References: <PH0PR11MB5191464B2F01511D2ADECB3BF1D2A@PH0PR11MB5191.namprd11.prod.outlook.com>
+ <9a1074e2-c1ae-485b-b5e7-a34442c98c0b@rowland.harvard.edu>
+ <20231016125624.1096766a@gandalf.local.home>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -44,45 +43,62 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c3cd0de5-e8f3-4edb-bcaa-abf29ce5928b@suse.com>
+In-Reply-To: <20231016125624.1096766a@gandalf.local.home>
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
 	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
 	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Mon, Oct 16, 2023 at 09:37:06AM +0200, Oliver Neukum wrote:
+On Mon, Oct 16, 2023 at 12:56:24PM -0400, Steven Rostedt wrote:
+> On Fri, 13 Oct 2023 13:17:52 -0400
+> Alan Stern <stern@rowland.harvard.edu> wrote:
 > 
-> 
-> On 22.09.23 15:23, Massimo Burcheri wrote:
-> > It's not blacklisted here afaik. This would be done in /etc/modprobe.d/*.conf
-> > and I have no entry about that device.
+> > --- a/drivers/usb/core/hcd-pci.c
+> > +++ b/drivers/usb/core/hcd-pci.c
+> > @@ -292,6 +292,14 @@ void usb_hcd_pci_remove(struct pci_dev *dev)
+> >         if (!hcd)
+> >                 return;
+> >  
+> > +       /* Fake an interrupt request in order to give the driver a chance
+> > +        * to test whether the controller hardware has been removed (e.g.,
+> > +        * cardbus physical eject).
+> > +        */
+> > +       local_irq_disable();
+> > +       usb_hcd_irq(0, hcd);
+> > +       local_irq_enable();
+> > +
+> >         usb_remove_hcd(hcd);
+> >         if (hcd->driver->flags & HCD_MEMORY) {
+> >                 iounmap(hcd->regs);
 > > 
-> > So you mean if not blacklisted by kernel and not locally blacklisted, uas is
-> > just not supported by that firmware? I'm going to check if I can just try other
-> > firmwares that were reported to support uas.
-> > 
-> > In the past I already got an enclosure supporting uas by just switching the
-> > firmware...that was:
-> > 
-> > Nov 23 10:25:27 [kernel] usb 4-6: new SuperSpeed Gen 1 USB device number 3 using xhci_hcd
-> > Nov 23 10:25:27 [kernel] usb 4-6: New USB device found, idVendor=174c, idProduct=55aa, bcdDevice= 1.00
-> > Nov 23 10:25:27 [kernel] usb 4-6: New USB device strings: Mfr=2, Product=3, SerialNumber=1
-> > Nov 23 10:25:27 [kernel] usb 4-6: Product: USB3-SATA-UASP1(modForGentoo)
-> > Nov 23 10:25:27 [kernel] usb 4-6: Manufacturer: StoreJet Transcend
+> > The local_irq_disable() is there so that the irq handler will be invoked 
+> > in the state that it expects (i.e., with interrupts disabled).  
+> > Apparently Meng's RT kernel doesn't like it when the handler then 
+> > calls spin_lock(); I don't know why.
 > 
-> Hi,
+> Because in RT, spin_lock()s are actually mutexes.
 > 
-> sorry, this seems to have fallen through the cracks.
-> I think we have some sort of confusion here. Could you first
-> of all give us "lsusb -v" for your device?
+> In RT, interrupt handlers do not even run with interrupts disabled (they
+> run as threads), so the assumption that they run with interrupts disabled
+> on RT is incorrect. One hack would simply be:
+> 
+> 	if (!IS_ENABLED(CONFIG_PREEMPT_RT))
+> 		local_irq_disable();
+> 	usb_hcd_irq(0, hcd);
+> 	if (!IS_ENABLED(CONFIG_PREEMPT_RT))
+> 		local_irq_enable();
+> 
+> But that's rather ugly. We use to have that as a wrapper of just:
+> 
+> 	local_irq_disable_nort();
+> 
+> but I don't know if we removed that or not.
+> 
+> Sebastian?
 
-Massimo did provide the "lsusb -v" listing here:
-
-https://lore.kernel.org/linux-usb/1352baa835ecd1a6b7f49e0d08f440858a99189d.camel@gmail.com/
-
-It showed that his device's current firmware does not support UAS.  So 
-it won't work at very high speed without a firmware upgrade.
+Thanks for the information.  I guess a simple approach would be to add 
+the wrapper back in, since it's not present in the current kernel.
 
 Alan Stern
 
