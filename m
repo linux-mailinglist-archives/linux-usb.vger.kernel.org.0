@@ -1,193 +1,337 @@
-Return-Path: <linux-usb+bounces-1678-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1679-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39EA67CAB89
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Oct 2023 16:33:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CA447CACE8
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Oct 2023 17:05:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CE861B20D64
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Oct 2023 14:33:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8BD131C20ACF
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Oct 2023 15:05:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46BF827ECC;
-	Mon, 16 Oct 2023 14:33:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EF8228E23;
+	Mon, 16 Oct 2023 15:05:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZVhLTHNm"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R0L5bTl0"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21A2D28E10
-	for <linux-usb@vger.kernel.org>; Mon, 16 Oct 2023 14:32:59 +0000 (UTC)
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E459C
-	for <linux-usb@vger.kernel.org>; Mon, 16 Oct 2023 07:32:58 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-32d9b507b00so2870821f8f.1
-        for <linux-usb@vger.kernel.org>; Mon, 16 Oct 2023 07:32:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697466777; x=1698071577; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :references:cc:to:content-language:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5MirTTMDBF2noGg1AFEV5Zt62GQyR/ng5/Y330ynh3s=;
-        b=ZVhLTHNmvvCnlbKyQw7z1zpWq8NqJtZFaqCSVm78GH4TwaBWh3WFJ+Ul08VvznjCmM
-         uGisGLIiK9t9buOCwZg3YJsoKZjcGszWrB6p52W4Kv7ZX3Nb2hjHblKc0LzVwreK8RkU
-         e/z2mn1Mu50BCeGkI53ls2vPsRptgzYnWotoHynlRla66AllofWCEa7T54h/h1MS3+Yj
-         /zR8UzBnl6Yw9evCLqOxyNBCDbeas3aXLI0RFCuXLp1cUK7oniQlhJGdwnjSZZDNHk+D
-         leQKQHzdP3zDiA09HoRet99zN9L6/Dl1JgOoSaKvGecslHAM0I5Ct7NhxCQN1MfALOxh
-         Q6gA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697466777; x=1698071577;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :references:cc:to:content-language:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=5MirTTMDBF2noGg1AFEV5Zt62GQyR/ng5/Y330ynh3s=;
-        b=wO2HxHuI7NxaVpIEHXKuQ78pJr2evnLvVynTSJcSlXOblf3M+MKfRN6Gy1oURVqHhr
-         e7hWptdwSjECaPxUP4K0W1wfvnFzF6XkyZ0h3wOLxYH40DmZAHhs7YbD6Ry+raQl0utH
-         rAnLOViMjJKICMI9vjx6Ka2Fwy0V/YwpempB1nEQL8LLZ3QTTKlAG6k448qJF6+iyNSG
-         VB7Cu93jg3AnT66xX06qdgF9T5jVqMiQBjlyJlv8jhjFfvX/6cWr+9aiGsxAXp66rPYX
-         cPAqXU1k5D3UUNWeqI2qc+aLDy0UpkgBa3Z72OgCFZzTS6NjYK/bV8zsw0vvo8TuLSCg
-         dKAA==
-X-Gm-Message-State: AOJu0YyFfquRoi6MK6lMrNDt/qbnidb3AhkHTp+ssliBlPDf3UFqsaPN
-	3FJlbmtRLmRyfddg8yZ3171x8Q==
-X-Google-Smtp-Source: AGHT+IFk0Upybw+CNBvkb8f8bHryxWmhv+wiTfTAiv3+xIUVY/TgT74Vle1GgSWRTpx+Q/RrDa+FNg==
-X-Received: by 2002:a05:6000:709:b0:32d:b06c:80b2 with SMTP id bs9-20020a056000070900b0032db06c80b2mr3538892wrb.0.1697466776794;
-        Mon, 16 Oct 2023 07:32:56 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:b5ab:4a16:fd45:8130? ([2a01:e0a:982:cbb0:b5ab:4a16:fd45:8130])
-        by smtp.gmail.com with ESMTPSA id bx7-20020a5d5b07000000b003232f167df5sm1845522wrb.108.2023.10.16.07.32.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Oct 2023 07:32:56 -0700 (PDT)
-Message-ID: <323ff7db-0963-4e63-94e9-551540dd6490@linaro.org>
-Date: Mon, 16 Oct 2023 16:32:55 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 273D628DAB
+	for <linux-usb@vger.kernel.org>; Mon, 16 Oct 2023 15:05:43 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE451B4;
+	Mon, 16 Oct 2023 08:05:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1697468740; x=1729004740;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=ukKUWut59IN3BmoYR8GrHML1DrBmaakLCHv6nYqYSTo=;
+  b=R0L5bTl07n+1SCPbGvxTaHtgHGBJNlx1K0kf5rpQn5MtFyhtLaUbPr+r
+   LFLk8tKkuTHTMbFTOqmcF7k790MeL1+73IsF5k0t0wb/lZCyHxVdRlE/+
+   BistykGf4urboeF00Q0Z9rQwADx+U+ftXf6C+QEvClZ9gOq3gC68cS+PR
+   3SpGdlzOTGca9widaPV6tVdLCLPgq51jJM/mCzVEtT0g4uqSQLn4JZLyB
+   8LX0qt0+vLbul/LVOgaa57WFHf2UkmkfN2FT4YSvrkXR767WzLQS1ig44
+   SmtTK+i2EbNPyO7ExVfSUzuIRfmsyMbtGb63gycwZAhZHDvmlDIJqG37j
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10863"; a="389409899"
+X-IronPort-AV: E=Sophos;i="6.03,229,1694761200"; 
+   d="scan'208";a="389409899"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2023 08:05:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10863"; a="872143720"
+X-IronPort-AV: E=Sophos;i="6.03,229,1694761200"; 
+   d="scan'208";a="872143720"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by fmsmga002.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 16 Oct 2023 08:05:25 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32; Mon, 16 Oct 2023 08:05:24 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32; Mon, 16 Oct 2023 08:05:23 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32 via Frontend Transport; Mon, 16 Oct 2023 08:05:23 -0700
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.41) by
+ edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.32; Mon, 16 Oct 2023 08:05:21 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VDCVAirXyqBcjCWMq4LkPe5SM4sOh7aAx+fNqa+r2vwDNlY2YQ4Ea4fd2CJr6MY/DKJIO9kvt80eYMcGVtNyNrNX8hX11T8PtK9SIi8UjkuunSB9PYwb/naY233cExgYDwmCJD3M0uS1JWNuAHZ25nLZvNfw+vZv/UUC6IbKKnEVXGUbkQti+gI+jWkwElFspsZfLpfHeiJt5pGICaOBQkMYpG89PBIEwNo9r6Pk+G5b0HTdove8tBxCNCCN8FkfhbTZ7BHkfsoxdrPGdoq1mVaEyb3iX6RlU1sA1LuTKP/F1oh9FXkRxZONMocc8ic3h8d91jK70+ItyfSryXeExQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=L99e7Lw0SEikiplpGHUKcKtLFKje2U9Po5gHTRpHn/4=;
+ b=CLfItsJEXv1C5T3lsa4fug7BNCjhX5nLP1bWq3H6d3PTJr+AlW8w7++C8VIzKhOpAYKBF9aymnY0EXU8WPzCmwk6C0Cz8iTwxDHq88heD4Zp/rSpMY4Bkp3oBjT6DzKlEW3yjooalzBFLP5xM65xisnWpM4ZYGqSJwC/Gnh0GaMq3nnGwTz5CfsU8BlUFTMYAx4xdiQLpM4Y2Fi7w5VoVK5RWeAjVkW/7xzBe9B6IRulyI4aEwqcMgFA7G7lXOWVFb4QpoWJAoBw7mlDVLPSNRyDkI9MoRxE5+T2BV8Re6Lp9V2bB/bsbPW7TsON9Wlx7KC/hv4jAaZ3lT6ZGELkPw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from DM6PR11MB4316.namprd11.prod.outlook.com (2603:10b6:5:205::16)
+ by CH3PR11MB8702.namprd11.prod.outlook.com (2603:10b6:610:1cb::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6886.34; Mon, 16 Oct
+ 2023 15:05:09 +0000
+Received: from DM6PR11MB4316.namprd11.prod.outlook.com
+ ([fe80::e836:4003:6244:2466]) by DM6PR11MB4316.namprd11.prod.outlook.com
+ ([fe80::e836:4003:6244:2466%7]) with mapi id 15.20.6863.046; Mon, 16 Oct 2023
+ 15:05:09 +0000
+From: "Wu, Wentong" <wentong.wu@intel.com>
+To: "Shevchenko, Andriy" <andriy.shevchenko@intel.com>
+CC: Hans de Goede <hdegoede@redhat.com>, "gregkh@linuxfoundation.org"
+	<gregkh@linuxfoundation.org>, "oneukum@suse.com" <oneukum@suse.com>,
+	"wsa@kernel.org" <wsa@kernel.org>, "andi.shyti@linux.intel.com"
+	<andi.shyti@linux.intel.com>, "broonie@kernel.org" <broonie@kernel.org>,
+	"bartosz.golaszewski@linaro.org" <bartosz.golaszewski@linaro.org>,
+	"linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+	"linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+	"sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>, "Wang,
+ Zhifeng" <zhifeng.wang@intel.com>, "linux-gpio@vger.kernel.org"
+	<linux-gpio@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v20 1/4] usb: Add support for Intel LJCA device
+Thread-Topic: [PATCH v20 1/4] usb: Add support for Intel LJCA device
+Thread-Index: AQHZ+nqZYOWB2QQzm0agSGlxpBPNmbBEZGUAgAAEnYCAAByScIABf/iAgAImwQCAAPlcAIACx//wgAAk8gCAAHc9cA==
+Date: Mon, 16 Oct 2023 15:05:09 +0000
+Message-ID: <DM6PR11MB4316382324D15985A70E531C8DD7A@DM6PR11MB4316.namprd11.prod.outlook.com>
+References: <1696833205-16716-1-git-send-email-wentong.wu@intel.com>
+ <1696833205-16716-2-git-send-email-wentong.wu@intel.com>
+ <ZSZ3IPgLk7uC5UGI@smile.fi.intel.com>
+ <6a87b43a-0648-28d4-6c69-e0f684e44eb6@redhat.com>
+ <DM6PR11MB4316BE44F53E276384FF06C88DCCA@DM6PR11MB4316.namprd11.prod.outlook.com>
+ <5d2e9eba-a941-ea9a-161a-5b97d09d5d35@redhat.com>
+ <ZSmjEKfYzFuAHXW+@smile.fi.intel.com>
+ <9a080d06-586d-686f-997e-674cb8d16099@redhat.com>
+ <DM6PR11MB43169A9ADDA7681DB7D9347C8DD7A@DM6PR11MB4316.namprd11.prod.outlook.com>
+ <ZSzogNhlX9njvOIU@smile.fi.intel.com>
+In-Reply-To: <ZSzogNhlX9njvOIU@smile.fi.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM6PR11MB4316:EE_|CH3PR11MB8702:EE_
+x-ms-office365-filtering-correlation-id: 87ccc3ab-c830-45c2-d32b-08dbce594a3d
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: oRrCRw0IQw1Ua963bRFJFysMOP6ITd88HZW4FYtaH3zE0VMPhnXgbsQahKKnPCi2+HTZSPBGhjHfgolDSGCEwxr1rUKGDtoGUz30Miqo3o4LvCFursRnGt1xA412WRKDATYJ6x5lGh1NqtbvZ8XS3gcswcHhkn3vMtooOkDs2N6An0J7CXz0ZKt/knnSrHCwsjDKzyEtoI7g1nvfRwSyT1ubvHc5SiIhNyHNbIZhUYotYzrg025TF6omcuYxghDHWckCEDnpwPgOAfo0M+7cUB7SYvzDtQMlROgJvzx9/kCUZsfsgI6Q+GVs6aWEVFm9xQ3jSrlfp546XfSMc/NUY1BR4Vo3w+AmgOpjzc9S2Yd6MnCHWQqvX7CCPvu+c3u1T9rW7fuhiA7gmQ1mrnnAAj8yGWbGmFY0S6ItYSUhZ/nS6CdBnzEpbvuOKQJ2oGPRNxiEDqWZbGFrDkQ+nlUBEUJjrrbnIUk9idgFY9zHXbNd+Qu1xBS8mpim4RSJGaoHnopHW4iPNHDTQr1XnVpouRPFzvXbmFF16Jo8SguhlYqyoWmQEViu/xB1WOfVwi9PEOgvWEKiYoqUlOeLz4+2mQ+pKOfv7X000uG+wiGJI+JB8fnX52SliMEV9JJPEZRg
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB4316.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(376002)(39860400002)(346002)(136003)(396003)(230922051799003)(451199024)(1800799009)(186009)(64100799003)(66899024)(55016003)(82960400001)(122000001)(38070700005)(38100700002)(83380400001)(9686003)(26005)(71200400001)(7696005)(6506007)(316002)(76116006)(66946007)(66476007)(6636002)(478600001)(66556008)(64756008)(66446008)(53546011)(54906003)(2906002)(41300700001)(86362001)(7416002)(8676002)(5660300002)(8936002)(4326008)(52536014)(33656002)(6862004);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?ZcyLCdNxqYmPyJQUhIa8+K4WLFS9R5agEnkdQaWCKisbdeWn781oBClTMl2t?=
+ =?us-ascii?Q?M0SOP/N4K/KdLYrLchpjVIptyjfZo+qp09O679oHUpfq0WaBxVSuzuBX9bBz?=
+ =?us-ascii?Q?pGjKrexrbW/tAzc5oezlyutT/VS4pJS1RxN/PLH13Xnq0PQYXYYMWHpAg+xU?=
+ =?us-ascii?Q?Pmn+vM2p+AZ5Vnfb/XQ4G4nLILdkRANeGheZA8Yyr7RgkokpHcEQ3qGFVsg0?=
+ =?us-ascii?Q?c1Q2Vq4cHF8CCgK1PRlqgkV8rRHlYpjnJNAqa8NDi6sKUIxBEr+BNUSBdtGU?=
+ =?us-ascii?Q?kzhK692Ot1EYPqN9uj43456ovI2JK9j3qf8+REY95rWspgrLJ3s7mgld2rVR?=
+ =?us-ascii?Q?vnmQL54ApUqF538E1EI20i2R6bzJ8qPc3NypG84G8wKIhuSPAs2/P2f5uo8k?=
+ =?us-ascii?Q?OqjiXWGc1o9MYbckjRmRiyWe7RvvJqqu6Blo4R8schaX+VCYfMAM0Zd0Uz7E?=
+ =?us-ascii?Q?srazghTMcK4fSSLnRzOkcfe+b4V+GWdQv/pKkr18gAeWhaATmiu9CZ20/1H+?=
+ =?us-ascii?Q?70LDag/FuvDr3+u9TMd3QUTaLeUrFwgPJrIqKqdvs061GD41dL0OQDyalzeb?=
+ =?us-ascii?Q?uDN5V3ZFHJqaZ7NfKxJJb6d9lxqqjmKXVVY5lbSmLSnNQiDtJiYE5WBCDGi2?=
+ =?us-ascii?Q?ft9zHxmhR3I7Ab54rbzQqnJfzlytNrttRWfB0zLZhWd0iisySuSg/BG9scSr?=
+ =?us-ascii?Q?fgTusit8P9reLSzNBBO9fIxXM5XfKl8tea+3KjjQ5AdU3Mn7q4xlDa+Klqmn?=
+ =?us-ascii?Q?sme/VKLY8bmmQcNOiEtUUz58jlrqWqWG0dTcqOI0N1+ZoV0vm+lBzEgSE3u8?=
+ =?us-ascii?Q?goFuMrV3Y5D8Frr+mRb2Qo/9YlECsylGtpn2dz1kOqOoImG8t6SOUiyaCfjC?=
+ =?us-ascii?Q?NzMd6/ph67pA5gWH8QFkOQKnBWXCH4XSfTsCf7F9Rz7ddr4vOz2fCKOiUWkt?=
+ =?us-ascii?Q?Ay/osdgnK23ELcIOF6tlFas0ldHm7G4zWdbVrEjZFgdAkU/sUuioGG3kjzDG?=
+ =?us-ascii?Q?4HfXoqDU10knHXtGzIJMaaphGK7DclEQ96SVMkhpqnsr4WH81Si4tR3KQTi8?=
+ =?us-ascii?Q?pZreQ/J5oWeCrahplKdPLNpJUz3k41PsYtYDEm2kktNqaErTVXc02T3BjBCu?=
+ =?us-ascii?Q?MLIMbDtNylfqgZOVEM2IHsJPu+UQlzSKLv/I+c7MZrBCsh4EIHcHeuC5gCyS?=
+ =?us-ascii?Q?R4j8HTQ0XjgymnobNzuVZgEwiAoQw9v7fwlKDL8k7Ujp/McrCm8Se0tbVD/U?=
+ =?us-ascii?Q?INuCYiGmEoydxiwQmTAiluSEXWda+tW9NGGzuykw12Fj9RElqDkeNX+Zd0lt?=
+ =?us-ascii?Q?s7DeMs9f9j5EH3/CyFGNwm/+R3bOCLSBue4nPSfh9lByOZvcT8D7M5uX5tyI?=
+ =?us-ascii?Q?e/qFONqMN62AKC/5g5OtRBrEIjeoqslCvrnFniEpeDr2oE0vDc9wX93BxIRN?=
+ =?us-ascii?Q?YukhK/E8Ol2LOmSUdVJNy7vRygdLkr1rxghP4U/5bWE/IZYjqphs3Q8Oa2El?=
+ =?us-ascii?Q?5r4AGS3DrYtiimLJte6mPpllAsVRqRMiCiejOouKCCJQsfVX0OWSTCWuIoAY?=
+ =?us-ascii?Q?sb2yrG9aNu/VeVsKOACxjyAPfY9d9YJZG7Q731Ur?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 1/3] dt-bindings: usb: fsa4480: Add data-lanes property to
- endpoint
-Content-Language: en-US, fr
-To: Rob Herring <robh@kernel.org>, Luca Weiss <luca.weiss@fairphone.com>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-References: <20231013-fsa4480-swap-v1-0-b877f62046cc@fairphone.com>
- <20231013-fsa4480-swap-v1-1-b877f62046cc@fairphone.com>
- <20231016142256.GA2754674-robh@kernel.org>
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro Developer Services
-In-Reply-To: <20231016142256.GA2754674-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB4316.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 87ccc3ab-c830-45c2-d32b-08dbce594a3d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Oct 2023 15:05:09.6000
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ojsVHtlK9qEjx8yq9E0NIOYKTO20ZD4oDqMWPNK0z7G/iJBvJtZM4ugChEkFPPj/jEkPGV4MygDwtbajL9fQGQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR11MB8702
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+	SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On 16/10/2023 16:22, Rob Herring wrote:
-> On Fri, Oct 13, 2023 at 01:38:05PM +0200, Luca Weiss wrote:
->> Allow specifying data-lanes to reverse the SBU muxing orientation where
->> necessary by the hardware design.
-> 
-> What situation in the hardware design makes this necessary. Please
-> describe the problem.
-> 
->>
->> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
->> ---
->>   .../devicetree/bindings/usb/fcs,fsa4480.yaml       | 29 +++++++++++++++++++++-
->>   1 file changed, 28 insertions(+), 1 deletion(-)
->>
->> diff --git a/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml b/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
->> index f6e7a5c1ff0b..86f6d633c2fb 100644
->> --- a/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
->> +++ b/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
->> @@ -32,10 +32,37 @@ properties:
->>       type: boolean
->>   
->>     port:
->> -    $ref: /schemas/graph.yaml#/properties/port
->> +    $ref: /schemas/graph.yaml#/$defs/port-base
->>       description:
->>         A port node to link the FSA4480 to a TypeC controller for the purpose of
->>         handling altmode muxing and orientation switching.
->> +    unevaluatedProperties: false
->> +
->> +    properties:
->> +      endpoint:
->> +        $ref: /schemas/graph.yaml#/$defs/endpoint-base
->> +        unevaluatedProperties: false
->> +
->> +        properties:
->> +          data-lanes:
->> +            $ref: /schemas/types.yaml#/definitions/uint32-array
->> +            description:
->> +              Specifies how the AUX+/- lines are connected to SBU1/2.
-> 
-> Doesn't this depend on the connector orientation? Or it is both that and
-> the lines can be swapped on the PCB?
-> 
-> Seems like an abuse of data-lanes which already has a definition which
-> is not about swapping + and - differential lanes.
+> From: Shevchenko, Andriy
+> On Mon, Oct 16, 2023 at 08:52:28AM +0300, Wu, Wentong wrote:
+> > > On 10/13/23 22:05, Shevchenko, Andriy wrote:
+> > > > On Thu, Oct 12, 2023 at 01:14:23PM +0200, Hans de Goede wrote:
+>=20
+> <snip>
+>=20
+> > > >> Ah ok, I see. So the code:
+> > > >>
+> > > >> 1. First tries to find the matching child acpi_device for the
+> > > >> auxdev by ADR
+> > > >>
+> > > >> 2. If 1. fails then falls back to HID + UID matching
+> > > >>
+> > > >> And there are DSDTs which use either:
+> > > >>
+> > > >> 1. Only use _ADR to identify which child device is which, like the=
+ example
+> > > >>    DSDT snippet from the commit msg.
+> > > >>
+> > > >> 2. Only use _HID + _UID like the 2 example DSDT snippets from me
+> > > >> email
+> > > >>
+> > > >> But there never is a case where both _ADR and _HID are used at
+> > > >> the same time (which would be an ACPI spec violation as Andy said)=
+.
+> > > >>
+> > > >> So AFAICT there is no issue here since  _ADR and _HID are never
+> > > >> user at the same time and the commit message correctly describes
+> > > >> scenario 1. from above, so the commit message is fine too.
+> > > >>
+> > > >> So I believe that we can continue with this patch series in its
+> > > >> current v20 form, which has already been staged for going into
+> > > >> -next by Greg.
+> > > >>
+> > > >> Andy can you confirm that moving ahead with the current version
+> > > >> is ok ?
+> > > >
+> > > > Yes as we have a few weeks to fix corner cases.
+> > > >
+> > > > What I'm worrying is that opening door for _ADR that seems never
+> > > > used is kinda an overkill here (resolving non-existing problem).
+> > >
+> > > I assume that there actually some DSDTs using the _ADR approach and
+> > > that this support is not there just for fun.
+> >
+> > right, it's not for fun, we use _ADR here is to reduce the maintain
+> > effort because currently it defines _HID for every new platform and
+> > the drivers have to be updated accordingly, while _ADR doesn't have tha=
+t
+> problem.
+>=20
+> But this does not confirm if you have such devices. Moreover, My question
+> about _CID per function stays the same. Why firmware is not using it?
 
-The FSA acts as a mux between DP AUX, Audio lanes on one side and
-the USB-C SBU lanes on the other side.
-_______          ______
-       |          |     |
-       |-- HP   --|     |
-       |-- MIC  --|     |or
-SoC   |          | MUX |-- SBU1 --->  To the USB-C
-Codec |-- AUX+ --|     |-- SBU2 --->  connected
-       |-- AUX- --|     |
-______|          |____ |
+Yes, both _ADR and _CID can stop growing list in the driver. And for _ADR, =
+it also
+only require one ID per function. I don't know why BIOS team doesn't select=
+ _CID,
+but I have suggested use _ADR internally, and , to make things moving forwa=
+rd,
+the driver adds support for _ADR here first.=20
 
-The SBU1 & SBU2 are connected to the USB-C connector, and the actual orientation
-to the connected devices/cable/whatever is determined by the TPCM and the MUX in
-the FSA4480 with be dynamically changed according to the CC1/CC2 detection and PD alt mode.
+But you're right, _CID is another solution as well, we will discuss it with=
+ firmware
+team more.
 
-But on the other side the orientation of the AUX+/AUX- connected to the SoC
-is not tied to the USB-C orientation but how it's routed on the PCB.
+> In that case you need only one ID per function in the driver (it might re=
+quire some
+> IDs in the _HID, I don't remember that part of the spec by heart, i.e.  i=
+f _CID can be
+> only provided with existing _HID or not).
+>=20
+> > > Wentong, can you confirm that the _ADR using codepaths are actually
+> > > used on some hardware / with some DSDTs out there ?
+> >
+> > what I can share is that we will see.
+> >
+> > > > Looking at the design of the
+> > > > driver I'm not sure why ACPI HIDs are collected somewhere else
+> > > > than in the respective drivers.
+> >
+> > AFAIK, auxiliary bus doesn't support parsing fwnodes currently.
+> > Probably we can support it for auxiliary bus in another patch.
+>=20
+> This is good idea!
+>=20
+>=20
+> > > > And looking at the ID lists themselves I am not sure why the
+> > > > firmware of the respective hardware platforms are not using
+> > > _CID.
+> >
+> > I think firmware can select _CID as well, but the shipped hw doesn't
+> > use _CID, the driver has to make sure the shipped hw working as well.
+> > And switching to _CID for the shipped hw is not easy, and it has to cha=
+nge
+> windows driver as well.
+>=20
+> I understand, but at least you may stop growing list in the driver.
+Yes,=20
 
-This describes how the AUX+/AUX- are physically routed to the FSA4480 chip.
+> And actually using separate IDs for multifunctional device seems not idea=
+l
+> solution to me.
+Agree, I will consider _CID more, but currently to avoid this and also supp=
+ort
+shipped hardware, _ADR is at least a choice.
 
-Neil
+BR,
+Wentong
 
-> 
-> Rob
+> > > This is a USB device which has 4 functions:
+>=20
+> Yes, I understand this part, but thank you for elaboration about auxbus, =
+which
+> seems lack of needed support. And I would really like to see someone adds=
+ it
+> there.
+>=20
+> > > 1. GPIO controller
+> > > 2. I2C controller 1
+> > > 3. I2C controller 2
+> > > 4. SPI controller
+> > >
+> > > The driver for the main USB interface uses the new auxbus to create
+> > > 4 child devices. The _ADR or if that fails _HID + _UID matching is
+> > > done to find the correct acpi_device child of the acpi_device which
+> > > is the ACPI-companion of the main USB device.
+> > >
+> > > After looking up the correct acpi_device child this is then set as
+> > > the fwnode / ACPI-companion of the auxbus device created for that fun=
+ction.
+> > >
+> > > Having the correct fwnode is important because other parts of the
+> > > DSDT reference this fwnode to specify GPIO / I2C / SPI resources and
+> > > if the fwnode of the aux-device is not set correctly then the
+> > > resources for other devices referencing it (typically a camera
+> > > sensor) can not be found.
+> > >
+> > > As for why the driver for the auxbus devices / children do not use
+> > > HID matching, AFAIK the auxbus has no support for using ACPI (or DT)
+> > > matching for aux-devices and these drivers need to be
+> > > auxiliary_driver's and bind to the auxbus device and not to a
+> > > platform_device instantiated for the acpi_device since they need the =
+auxbus
+> device to access the USB device.
+> >
+> > Yes, total agree. Thanks
+>=20
+> --
+> With Best Regards,
+> Andy Shevchenko
+>=20
 
 
