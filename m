@@ -1,65 +1,65 @@
-Return-Path: <linux-usb+bounces-1642-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1643-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76EB07C9E41
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Oct 2023 06:34:00 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71F367C9F14
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Oct 2023 07:45:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 898A61C20947
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Oct 2023 04:33:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C7C20B20C08
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Oct 2023 05:45:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A58DD1C08;
-	Mon, 16 Oct 2023 04:33:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2276EDDC8;
+	Mon, 16 Oct 2023 05:44:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zVhwq+Fv"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Y5exdubU"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8033D79CD
-	for <linux-usb@vger.kernel.org>; Mon, 16 Oct 2023 04:33:51 +0000 (UTC)
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 109E1DF
-	for <linux-usb@vger.kernel.org>; Sun, 15 Oct 2023 21:33:47 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-6ba172c5f3dso972363b3a.0
-        for <linux-usb@vger.kernel.org>; Sun, 15 Oct 2023 21:33:47 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E43C79EE
+	for <linux-usb@vger.kernel.org>; Mon, 16 Oct 2023 05:44:54 +0000 (UTC)
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 811DAE0
+	for <linux-usb@vger.kernel.org>; Sun, 15 Oct 2023 22:44:52 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-406609df1a6so40057105e9.3
+        for <linux-usb@vger.kernel.org>; Sun, 15 Oct 2023 22:44:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1697430826; x=1698035626; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google; t=1697435091; x=1698039891; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=8Tejy3Kv2ewCsu4ePvtm8O+1oKzqOghrnllUZz+x8is=;
-        b=zVhwq+Fv+KFXXghEin8MqnARtXZX6r979pJsfTaBtYQJTm2V6+Cn3eGvr68oaMHW3W
-         h9xirOPvUb9sMrWoahJYHirdlKK/b64nQVwv2K4KLILVx2/5qXvvIibA52DOya2mYXDa
-         3Zf7ODsqOBlDBuZ3E6OzI96fEHY5GENwPh2SGswAXb54+d+GjrEogUxZ5PRN19bpjeIF
-         7S71kfM2s06leqBBbJZdVU9R3cUdutiNR4LxSCLsmd2Atl+05ccNzkJqoVU6tWfrmTmy
-         wi7JFR4d8sPyq3iDoNQ7oyJq1a0drgRJMcme9tETa/06qneqkeN8QUpMFlhKo5b33cT7
-         USYA==
+        bh=mkWEIIkYYh6kK7b6r8XR0r+lXaNIK83y5EKUw/G8onE=;
+        b=Y5exdubUoLThgSmog8meKT7YU6yRHu7DoQkThMapQ3UKPoUzjyPn4PaNOcqp9lDoyV
+         VTCC9UiL8oBhbUU0fB37g91jqLCNK5pcOpM7RMHsQvlaXX8C7RQDTcteZQsSKjfUVrO+
+         cY/l1txPtb5zpWlF2Qd7H2uaroSFJ7Vyzimd4LdNcNAFOmPdnx+ywUVJGMn3MIO3/3c4
+         oopXEm3zTx2V8FvKLDNEvrldNapZF79O44FVuzqk7ixzMsgDnOgQqo051FrUWKuasktT
+         9htnXCX6iCpywJqf2TmgQG668iX9KCLlr5zef5+zeXddVGiczTVYn7iMDZ1GuQQnF+em
+         XQSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697430826; x=1698035626;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1697435091; x=1698039891;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8Tejy3Kv2ewCsu4ePvtm8O+1oKzqOghrnllUZz+x8is=;
-        b=FuLgpd6urPJpedN1TmTo6cpPT0ZqE/Pf1yyd4ugJFWCH/VvJ1IMv+hrK4fVK47srVJ
-         rsWLdhScojKPkZbnzlilEKbpu6YG03grAUiIcUvMvifxL1eDMqTjKvkjy2rUlaE4R9Ev
-         wF0MQqKBnBCAu0shd31mseTGZ9JmwH7DXsVSIKPb/5ogVfErkt/OHrp18jNR4/CFGUoB
-         6n1GJ/AaTfyU2hAkTHYZmL++4/zW+QN30zezqR2dzkfGLODzKuoDddCNc4RtFjn5mlTd
-         GeSs1foX0e7jn3iBzrBTaJPt0DDH/wdiNPaphrbuSwn356VVYVCGYys2VPj0xnGMxriv
-         OflQ==
-X-Gm-Message-State: AOJu0YzI2AYT6NZS1gfpCzTwnTG7UgATa7qz0d7FG0FDmnn2rJKRr8Cu
-	VCcQoXx3K5M7rOpNfy0FGTR0qQ==
-X-Google-Smtp-Source: AGHT+IGXP/Q3ZMU3lWTF3wh/lT2U/xael8C052BezvhvxxWT5fcxi4F6U4vCCB2TbtiqD6CXzWxgoQ==
-X-Received: by 2002:a05:6a21:a106:b0:174:1466:359c with SMTP id aq6-20020a056a21a10600b001741466359cmr11503435pzc.61.1697430826220;
-        Sun, 15 Oct 2023 21:33:46 -0700 (PDT)
-Received: from ?IPV6:2601:645:8100:1350:aa26:108f:3b80:445a? ([2601:645:8100:1350:aa26:108f:3b80:445a])
-        by smtp.gmail.com with ESMTPSA id 15-20020a17090a01cf00b00263dfe9b972sm4198311pjd.0.2023.10.15.21.33.44
+        bh=mkWEIIkYYh6kK7b6r8XR0r+lXaNIK83y5EKUw/G8onE=;
+        b=uR+cL7OcI9YhVrwag/us47NUzIkTRa1aLwH/V4zWRmV0ZVclz1hbGCraafN/SjUACu
+         Ldae5qsNLtr0Ac9u8YViKnkZ6IFzquR4kXORgbHFVFj8EQ3UuqrvVjVaOAIl0IuqEBdP
+         eHTWqgTKbh0Wxsm1FtDGLsyL1M8vAAE8vQOn92K7x3L1NCSUDXO0dPDD3m5Rg2IwA4CX
+         9sXPF+8EfiPnrP5ZkJcELgI79EXFdW2cr7h1OSrPnVsSLCV2pUU2ss/27arO0SuMliJc
+         PNd0HRc6ubmhcSF0QFqY4MtSLmI3e1289ndHcJyrzPn2JcDFiDW9kxilBXQKaTd9+3L3
+         dgtw==
+X-Gm-Message-State: AOJu0YwsuZU9iqipB0G8kZw+Ms08ntmdVaJQ9BVwTxlMaGy3K8EAerH6
+	0xI/+kgpRjDdEMXtby2mGpTXZQ==
+X-Google-Smtp-Source: AGHT+IFudYotk2IRfX0ILFNPW5CCt+h9JJHQxieqqhUMqKXFEf/MhwPiMQsfeho+Lc4GufWbqiQAfg==
+X-Received: by 2002:a05:600c:3b14:b0:407:4944:76e5 with SMTP id m20-20020a05600c3b1400b00407494476e5mr17309244wms.22.1697435091027;
+        Sun, 15 Oct 2023 22:44:51 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.154])
+        by smtp.gmail.com with ESMTPSA id z15-20020a05600c220f00b0040684abb623sm6124155wml.24.2023.10.15.22.44.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 15 Oct 2023 21:33:45 -0700 (PDT)
-Message-ID: <c47e864b-4b9e-4a21-afea-af121a4d7771@google.com>
-Date: Sun, 15 Oct 2023 21:33:43 -0700
+        Sun, 15 Oct 2023 22:44:50 -0700 (PDT)
+Message-ID: <0990c5fb-7e02-436d-8ebf-6e9565b324e3@linaro.org>
+Date: Mon, 16 Oct 2023 07:44:48 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,138 +67,89 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: uvc gadget: Making upper bound of number of usb requests
- allocated configurable through configfs
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, mgr@pengutronix.de
-Cc: Greg KH <gregkh@linuxfoundation.org>, "corbet@lwn.net" <corbet@lwn.net>,
- "laurent.pinchart@ideasonboard.com" <laurent.pinchart@ideasonboard.com>,
- "dan.scally@ideasonboard.com" <dan.scally@ideasonboard.com>,
- "kieran.bingham@ideasonboard.com" <kieran.bingham@ideasonboard.com>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
- "etalvala@google.com" <etalvala@google.com>,
- "arakesh@google.com" <arakesh@google.com>
-References: <edad1597-48da-49d2-a089-da2487cac889@google.com>
- <2023100834-statistic-richly-49ef@gregkh>
- <7ed46b3c-bd42-468e-b28d-860dc8a6c7e6@google.com>
- <20231012184954.ech7kfpqjkunq6eu@synopsys.com>
+Subject: Re: [PATCH 1/2] dt-bindings: usb: add NXP PTN36502 Type-C redriver
+ bindings
 Content-Language: en-US
-From: Jayant Chowdhary <jchowdhary@google.com>
-In-Reply-To: <20231012184954.ech7kfpqjkunq6eu@synopsys.com>
+To: Luca Weiss <luca.weiss@fairphone.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+ linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <20231013-ptn36502-v1-0-98109a430efc@fairphone.com>
+ <20231013-ptn36502-v1-1-98109a430efc@fairphone.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20231013-ptn36502-v1-1-98109a430efc@fairphone.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-	ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-	USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-	autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+	version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
- Hi Thinh,
+On 13/10/2023 16:24, Luca Weiss wrote:
+> Document bindings for this Type-C USB 3.1 Gen 1 and DisplayPort v1.2
+> combo redriver.
+> 
+> The PTN36502 can also run in GPIO mode where it is configured
+> differently, without any I2C connection, but this is not supported yet.
+> 
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
 
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-On 10/12/23 11:50, Thinh Nguyen wrote:
-> Hi,
->
-> On Mon, Oct 09, 2023, Jayant Chowdhary wrote:
->>> On Fri, Oct 06, 2023 at 03:03:56PM -0700, Jayant Chowdhary wrote:
->>>> Hi Everyone,
->>>>
->>>> We had been seeing the UVC gadget driver receive isoc errors while
->>>> sending packets to the usb endpoint - resulting in glitches being shown
->>>> on linux hosts. My colleague Avichal Rakesh and others had a very
->>>> enlightening discussion at
->>>> https://urldefense.com/v3/__https://lore.kernel.org/linux-usb/8741b7cb-54ec-410b-caf5-697f81e8ad64@google.com/T/__;!!A4F2R9G_pg!e3zVZGt-6Td6HJXqh8GaZAsUeKyvKBhOoyru9qzn3Vkw01Vdkwk7hFr_t5glBG2BYJlOYfFKEUpiH5H4gQ73n_-Y$ 
->>>>
->>>>
->>>> The conclusion that we came to was : usb requests with actual uvc frame
->>>> data were missing their scheduled uframes in the usb controller. As a
->>>> mitigation, we started sending 0 length usb requests when there was no
->>>> uvc frame buffer available to get data from. Even with this mitigation,
->>>> we are seeing glitches - albeit at a lower frequency.
->>>>
->>>> After some investigation, it is seen that we’re getting isoc errors when
->>>> the worker thread serving video_pump() work items, doesn’t get scheduled
->>>> for longer periods of time - than usual - in most cases > 6ms.
->>>> This is close enough to the 8ms limit that we have when the number of usb
->>>> requests in the queue is 64 (since we have a 125us uframe period). In order
->>>> to tolerate the scheduling delays better, it helps to increase the number of
->>>> usb requests in the queue . In that case, we have more 0 length requests
->>>> given to the udc driver - and as a result we can wait longer for uvc
->>>> frames with valid data to get processed by video_pump(). I’m attaching a
->>>> patch which lets one configure the upper bound on the number of usb
->>>> requests allocated through configfs. Please let me know your thoughts.
->>>> I can formalize  the patch if it looks okay.
->>> Why do you want to limit the upper bound?  Why not just not submit so
->>> many requests from userspace as you control that, right?
->>
->> Userspace negotiates a video frame rate (typically 30/60fps) with the host that does
->> not necessarily correspond to the ISOC cadence. After the
->> patch at https://urldefense.com/v3/__https://lkml.org/lkml/diff/2023/5/8/1115/1__;!!A4F2R9G_pg!e3zVZGt-6Td6HJXqh8GaZAsUeKyvKBhOoyru9qzn3Vkw01Vdkwk7hFr_t5glBG2BYJlOYfFKEUpiH5H4gWbb9bvy$  was submitted, we are
->> maintaining back pressure on the usb controller even if we do not have uvc frame
->> data, by sending the controller 0 length requests (as long as usb_requests are
->> available). Also, even if the userspace application were to somehow produce
->> data to match the ISOC rate, it would  need to have information about USB
->> timing details - which I am not sure is available to userspace or is the right
->> thing to do here ?
->>
->> Here, we are trying to handle the scenario in which the video_pump() worker
->> thread does not get scheduled in time - by increasing the number of usb requests
->> allocated in the queue. This would send more usb requests to the usb controller,
->> when video_pump() does get scheduled - even if they're 0 length. This buys
->> the video_pump() worker thread scheduling time -since more usb requests
->> are with the controller, subsequent requests sent will not be 'stale' and
->> dropped by the usb controller.
->>
-> I believe you're testing against dwc3 controller right? I may not be as
-> familiar with UVC function driver, but based on the previous
-> discussions, I think the driver should be able to handle this without
-> the user input.
-
-Yes we are testing against the dwc3 controller.
-
->
-> The frequency of the request submission should not depend on the
-> video_pump() work thread since it can vary. The frequency of request
-> submission should match with the request completion. We know that
-> request completion rate should be fixed (1 uframe/request + when you
-> don't set no_interrupt). Base on this you can do your calculation on how
-> often you should set no_interrupt and how many requests you must submit.
-> You don't have to wait for the video_pump() to submit 0-length requests.
->
-> The only variable here is the completion handler delay or system
-> latency, which should not be much and should be within your calculation.
-
-
-Thanks for the suggestion. It indeed makes sense that we do not completely depend on
-video_pump() for sending 0 length requests. I was concerned about
-synchronization needed when we send requests to the dwc3 controller from
-different threads. I see that the dwc3 controller code does internally serialize
-queueing requests, can we expect this from other controllers as well ? 
-
-This brings me to another question for Michael - I see
-that we introduced a worker thread for pumping  usb requests to the usb endpoint
-in https://lore.kernel.org/all/20200427151614.10868-1-m.grzeschik@pengutronix.de/
-(I see multiple email addresses, so apologies if I used the incorrect one).
-
-Did we introduce the worker thread to solve some specific deadlock scenarios ?
-Or was it a general mitigation against racy usb request submission from v4l2 buffer
-queuing, stream enable and the video complete handler firing ?
-
-I was chatting with Avi about this, what if we submit requests to the endpoint
-only at two points in the streaming lifecycle - 
-1) The whole 64 (or however many usb requests are allocated) when
-   uvcg_video_enable() is called - with 0 length usb_requests.
-2) In the video complete handler - if a video buffer is available, we encode it
-   and submit it to the endpoint. If not, we send a 0 length request.
-
-This way we're really maintaining back pressure and sending requests as soon
-as we can to the dwc3 controller. Encoding is mostly memcpys from what I see
-so hopefully not too heavy on the interrupt handler. I will work on prototyping
-this meanwhile.
-
-Thanks,
-Jayant
+Best regards,
+Krzysztof
 
 
