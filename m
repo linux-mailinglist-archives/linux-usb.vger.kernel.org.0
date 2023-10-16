@@ -1,167 +1,114 @@
-Return-Path: <linux-usb+bounces-1687-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1688-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 954EE7CB0DD
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Oct 2023 19:01:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C3987CB135
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Oct 2023 19:19:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BDA321C20C6B
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Oct 2023 17:01:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 37B222816F6
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Oct 2023 17:19:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 938A930FAE;
-	Mon, 16 Oct 2023 17:01:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49F8431A7A;
+	Mon, 16 Oct 2023 17:19:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ZAgpocJE"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 424372AB48
-	for <linux-usb@vger.kernel.org>; Mon, 16 Oct 2023 17:01:21 +0000 (UTC)
-Received: from mail-ot1-f80.google.com (mail-ot1-f80.google.com [209.85.210.80])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 060CE110A
-	for <linux-usb@vger.kernel.org>; Mon, 16 Oct 2023 10:01:19 -0700 (PDT)
-Received: by mail-ot1-f80.google.com with SMTP id 46e09a7af769-6c6373a4aa7so6774577a34.3
-        for <linux-usb@vger.kernel.org>; Mon, 16 Oct 2023 10:01:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697475678; x=1698080478;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A87F30FBA
+	for <linux-usb@vger.kernel.org>; Mon, 16 Oct 2023 17:19:47 +0000 (UTC)
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0506183
+	for <linux-usb@vger.kernel.org>; Mon, 16 Oct 2023 10:19:44 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id ca18e2360f4ac-7a2874d2820so57571839f.1
+        for <linux-usb@vger.kernel.org>; Mon, 16 Oct 2023 10:19:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1697476783; x=1698081583; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=AguIrS8FyQRIl/SV4QTd/CLsLIDTCPdYBXZP6uUmFLc=;
-        b=onObHu4O9SAnxavFp/mU+hgVIgNbTG9Dzc7drgXaYfPOIxKAKe2L9eETEpaqoNipD2
-         kluqTx+WvjkhRrsIAhpPKramq4C24ScA7fnjgJOPq+5KFRClpLxRQAlCPqzV4BM+juxW
-         y7nwPJgM/vh53oJZ/jTEfJPtpBZusFhc6jSAMYJc3mIwYlBL1tzxcnn/Fvb3LYEw70yD
-         ZZJIUN421t2u+H/as/x2ql7J8RVSWXc5LErfWLJmzkS0Ol2MqsnCmse/ZHc/o6ftsvf5
-         +i/QBF7I5fMXnCu5JWjbZMndRkaw/cfwVm3ot8zZdWR1zq4LRyCtqAQAiLKrEHlN1c47
-         KpLA==
-X-Gm-Message-State: AOJu0YwwpInJBzLN3wop8TMSj8MZXY3WbGon+KKUEo+XPW92VoE4G2mW
-	Ick2pHi7iZcj2ZFKuwnAOzfgCnHeB0Td6A8ZFn/p3/er5vqa
-X-Google-Smtp-Source: AGHT+IGtY86A9Xv6zUryal+okMN00ia8K4jA+UWmDt3j6OvjnXQxaUQe5Xhj/du7JH0L6SyaGtqS1qV2zcdm3pRW3gUQitIeOcEY
+        bh=QgUa+mKvmsmGKgSXxgXS6XuuY5vQ/8sgjMNQWn66qJU=;
+        b=ZAgpocJEXXYkm5caiZ4CN5fHG0ZSWLSXEMEztK+uOTyjLaleHYlZv7xdtNvdSCwCg2
+         iMKfbhtopRFsabF0LDQ3GFWRBNaV9YtqfI2g1olPMxEWp7WcmkdE4iGYlDzFYRJ0zqwL
+         APMZM31DZMdAKAt6KFELS5NVdlvfsWWftF75E=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697476783; x=1698081583;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QgUa+mKvmsmGKgSXxgXS6XuuY5vQ/8sgjMNQWn66qJU=;
+        b=dt4ohOCIgda8Z3fTSCdKEumtyDS62P9nQ5dnAfmQOeC8bRCQYH3/avH77zZyjYcffr
+         iZuhBYr+3iIc8SJOvcQqP3Wn2Hkk4fFpITi0hgbLthhy53hgEGGY4AhUabaYThuarU9x
+         4+eEFXYrEmieBiBFt2zIF8YlTWaMMKsvVILG2HEucYVO6qrq+H9K+ZIzOiTXzeG2xlhU
+         yNOKsvbBED81kINmZcka1BJHdOp04i4Txel9UQMQR75KtgztXMDLzWeiQqCV+juxYsvQ
+         UaHOqGSrKT2JRp+9lh6tRlIXbZjt9dHlyOFjqSqqMUBFFOgBCM3qxaH6Cv9eDNSgQLQR
+         ncGg==
+X-Gm-Message-State: AOJu0YxEbciBA+778EMKVR7MUL724pYe7bha4VthwjZB/pFgr+Fi1XaO
+	74UCU6rryOLJBJD2I2yqHU1JMw==
+X-Google-Smtp-Source: AGHT+IH01KOJB7womZ3bhd3IAY5anUtTZrEzFuuJ1qqL/RrjkhKbEMdf0j89Pwsvv9woipq/08kmpQ==
+X-Received: by 2002:a92:cac7:0:b0:351:54db:c1bc with SMTP id m7-20020a92cac7000000b0035154dbc1bcmr98759ilq.0.1697476783349;
+        Mon, 16 Oct 2023 10:19:43 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id r2-20020a92c502000000b00350b7a9f0c1sm3498858ilg.62.2023.10.16.10.19.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Oct 2023 10:19:42 -0700 (PDT)
+Message-ID: <8328df87-67d0-43a8-aa6a-4b9587089e3a@linuxfoundation.org>
+Date: Mon, 16 Oct 2023 11:19:41 -0600
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a9d:6656:0:b0:6bc:e2b0:7446 with SMTP id
- q22-20020a9d6656000000b006bce2b07446mr10041434otm.1.1697475678381; Mon, 16
- Oct 2023 10:01:18 -0700 (PDT)
-Date: Mon, 16 Oct 2023 10:01:18 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d330500607d85a5f@google.com>
-Subject: [syzbot] [usb?] UBSAN: array-index-out-of-bounds in usbhid_parse
-From: syzbot <syzbot+c52569baf0c843f35495@syzkaller.appspotmail.com>
-To: benjamin.tissoires@redhat.com, jikos@kernel.org, 
-	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-	HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
-	RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 -next] usb/usbip: fix wrong data added to platform
+ device
+Content-Language: en-US
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Hongren Zheng <i@zenithal.me>
+Cc: Shuah Khan <shuah@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Valentina Manea <valentina.manea.m@gmail.com>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, sfr@canb.auug.org.au,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <ZSpHPCaQ5DDA9Ysl@Sun> <ZSzo816RQEP1ha/l@smile.fi.intel.com>
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <ZSzo816RQEP1ha/l@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Hello,
+On 10/16/23 01:40, Andy Shevchenko wrote:
+> On Sat, Oct 14, 2023 at 03:46:04PM +0800, Hongren Zheng wrote:
+>> .data of platform_device_info will be copied into .platform_data of
+>> struct device via platform_device_add_data.
+> 
+> platform_device_add_data()
+> 
+>> However, vhcis[i] contains a spinlock, is dynamically allocated and
+>> used by other code, so it is not meant to be copied. The workaround
+>> was to use void *vhci as an agent, but it was removed in the commit
+>> suggested below.
+>>
+>> This patch adds back the workaround and changes the way of using
+>> platform_data accordingly.
+> 
+> Good learning to me, thank you for the fix!
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> 
 
-syzbot found the following issue on:
+Thank you both.
 
-HEAD commit:    ad7f1baed071 Merge tag 'acpi-6.6-rc6' of git://git.kernel...
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=1056d5c5680000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=32d0b9b42ceb8b10
-dashboard link: https://syzkaller.appspot.com/bug?extid=c52569baf0c843f35495
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1081f1e5680000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16c7bc4d680000
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/e3074ad3ff92/disk-ad7f1bae.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/94b298a1e285/vmlinux-ad7f1bae.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/1ad5cd9c2a48/bzImage-ad7f1bae.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+c52569baf0c843f35495@syzkaller.appspotmail.com
-
-usb 1-1: string descriptor 0 read error: -22
-usb 1-1: New USB device found, idVendor=080e, idProduct=4eb9, bcdDevice=d7.f6
-usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-================================================================================
-UBSAN: array-index-out-of-bounds in drivers/hid/usbhid/hid-core.c:1024:18
-index 1 is out of range for type 'hid_class_descriptor [1]'
-CPU: 0 PID: 9 Comm: kworker/0:1 Not tainted 6.6.0-rc5-syzkaller-00227-gad7f1baed071 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/06/2023
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x125/0x1b0 lib/dump_stack.c:106
- ubsan_epilogue lib/ubsan.c:217 [inline]
- __ubsan_handle_out_of_bounds+0x111/0x150 lib/ubsan.c:348
- usbhid_parse+0x94a/0xa20 drivers/hid/usbhid/hid-core.c:1024
- hid_add_device+0x189/0xa60 drivers/hid/hid-core.c:2783
- usbhid_probe+0xd0a/0x1360 drivers/hid/usbhid/hid-core.c:1429
- usb_probe_interface+0x307/0x930 drivers/usb/core/driver.c:396
- call_driver_probe drivers/base/dd.c:579 [inline]
- really_probe+0x234/0xc90 drivers/base/dd.c:658
- __driver_probe_device+0x1de/0x4b0 drivers/base/dd.c:800
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:830
- __device_attach_driver+0x1d4/0x300 drivers/base/dd.c:958
- bus_for_each_drv+0x157/0x1d0 drivers/base/bus.c:457
- __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1030
- bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
- device_add+0x117e/0x1aa0 drivers/base/core.c:3624
- usb_set_configuration+0x10cb/0x1c40 drivers/usb/core/message.c:2207
- usb_generic_driver_probe+0xca/0x130 drivers/usb/core/generic.c:238
- usb_probe_device+0xda/0x2c0 drivers/usb/core/driver.c:293
- call_driver_probe drivers/base/dd.c:579 [inline]
- really_probe+0x234/0xc90 drivers/base/dd.c:658
- __driver_probe_device+0x1de/0x4b0 drivers/base/dd.c:800
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:830
- __device_attach_driver+0x1d4/0x300 drivers/base/dd.c:958
- bus_for_each_drv+0x157/0x1d0 drivers/base/bus.c:457
- __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1030
- bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
- device_add+0x117e/0x1aa0 drivers/base/core.c:3624
- usb_new_device+0xd80/0x1960 drivers/usb/core/hub.c:2589
- hub_port_connect drivers/usb/core/hub.c:5440 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5580 [inline]
- port_event drivers/usb/core/hub.c:5740 [inline]
- hub_event+0x2daf/0x4e00 drivers/usb/core/hub.c:5822
- process_one_work+0x884/0x15c0 kernel/workqueue.c:2630
- process_scheduled_works kernel/workqueue.c:2703 [inline]
- worker_thread+0x8b9/0x1290 kernel/workqueue.c:2784
- kthread+0x33c/0x440 kernel/kthread.c:388
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:304
- </TASK>
-================================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+thanks,
+-- Shuah
 
