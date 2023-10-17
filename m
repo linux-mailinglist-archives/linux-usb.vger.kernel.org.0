@@ -1,311 +1,570 @@
-Return-Path: <linux-usb+bounces-1726-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1727-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 751867CBD73
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 10:30:53 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A63A47CBD98
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 10:34:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F666281944
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 08:30:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 26479B21160
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 08:34:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C8BA3B28B;
-	Tue, 17 Oct 2023 08:30:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F109E3C684;
+	Tue, 17 Oct 2023 08:34:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nH9vVatB"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OzW6Ww2C"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04B843B793
-	for <linux-usb@vger.kernel.org>; Tue, 17 Oct 2023 08:30:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D96AA3D3AB;
+	Tue, 17 Oct 2023 08:34:18 +0000 (UTC)
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9188E93
-	for <linux-usb@vger.kernel.org>; Tue, 17 Oct 2023 01:30:42 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E154FA;
+	Tue, 17 Oct 2023 01:34:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697531442; x=1729067442;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LgiHppljTtYJWvIp91Nkds2bn0slKdHjgrogzgiJk6A=;
-  b=nH9vVatBE7JBFXdJtU9JbEb3kh8AcfLYeYYNJq6MYco/vZCpFZxMefnr
-   /oKn63mjcNpy6qwbqMyeahksuE+pHUswlU/9IL3q31KDFYSSY1RWpf9RI
-   JRvIRyF/Yqj1YMy+2LDn/CqThMNvJPfcaYmgGW4MeQg0qk3CqwdbZsmae
-   V4AUCOuD+y9xTPIJenEk4/KgqyX0U/mS05jkrGX1SO9e8diynsFkPQwWq
-   bCfY7RGwPqY+yBhz2l+ICdnzBlBQZbhIb+mQuD60dfsn3MdsH24gcUJLS
-   nPvVl3mZ8xbznmr7jU6vgkd+Zp0NlXKyLiVFJv9+nXw4UGJgyIVSzd9pa
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10865"; a="416812022"
+  t=1697531656; x=1729067656;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MxbicM1S1FMcUtXMPUH9Edwjv0WoIkOAbw6lUC89MFI=;
+  b=OzW6Ww2CtCEFhPKDfcZSYyE03UmmfgH1aQMvw5xM0ShgmMxzU37vCKyk
+   KUeJ9rD2LOgnR5Sj8R2CPbSl52VWttn0EnbTC9mcQkC+xYlnCmXKfQbpL
+   2vdZh1i8lo+OO7X4Rlq+8ssYgcqm8B3iH+8tuSRkO283ISq6rXoOZB2O2
+   2z370RYhPMo1hnHwvDlGNFQQ0LwSqy+J0fNNHayC3nAxoGDcA7f+L+LYE
+   O2NeGNSL4mlZu/+sc3BAnVlzeZySjr9aTmemR+3EiocDhWIp+YVIMjYlL
+   yp6BkYyfIM13neVB76lX0cuUzPw1nPBbvDUk97KTxAhLGzs0qzgckuGO9
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10865"; a="416812578"
 X-IronPort-AV: E=Sophos;i="6.03,231,1694761200"; 
-   d="scan'208";a="416812022"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2023 01:30:42 -0700
+   d="scan'208";a="416812578"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2023 01:34:15 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10865"; a="759718249"
+X-IronPort-AV: E=McAfee;i="6600,9927,10865"; a="732632345"
 X-IronPort-AV: E=Sophos;i="6.03,231,1694761200"; 
-   d="scan'208";a="759718249"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmsmga007.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 17 Oct 2023 01:30:42 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32; Tue, 17 Oct 2023 01:30:41 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32; Tue, 17 Oct 2023 01:30:41 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32 via Frontend Transport; Tue, 17 Oct 2023 01:30:41 -0700
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.41) by
- edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.32; Tue, 17 Oct 2023 01:30:40 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nW9jGI7TBnPZNYk7sBkY9GIYIwShRDo5sVfh7C6IJEmgSwRBCgi0r68J7XiqCWdwvPcOp3nJJfqUga7CBB6Yn5yw83tuntyDTKke7ZoV9RyBYSzq07bOGA2r7PGdTOz2/fDZtzZV4q4QIh7MEHs2nnHC11LE+L1kKnCqMSTfST5Wp0bELTHURcoy4KIXacr0fmBYj0o9CTDEcLIMmzUEgRlQl5OLPGlFtZxHoB3TXtHT4Eyq8BMSBet7X9zpC1jXDRuPaKz2HnTom14yWZfoOo5LaLEX0Ron9vBAfpmAE5tYU0xfhBLer7A8jSaL/bHwXgVt+eSudbEBfXCDY/P06g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FpQolY7uQUVzUdCC/oFeW0CqS4gY1AkNsn/+YHQIWm8=;
- b=N2UA+NvTb5FTN508VAeDaBAK7DneKFNTzbm8kUuqdDymhY5Ejm73gFP/55oqpsXwY3FHIddpXV521SbpvHAM000ClzopPFtoVTlANa9gHC4f3PnG7cIFqiHg7c93d0nOZfkr385Jej/4bQ8i/n/a+G8I9Dpd+SIXzTc5rag75T6Df+QO0iP+IHoM1Ekz+J/25fk9FhO+UVH8Pw5sVDcOCCOWgcm4CGDIOG7s+JLbsPZe1+zdZMiJZScqTd0JX30iMzb+idwxRbej98pSm/Ryofgk5bVC2fqzLiWJbyQV0cBMhqAxAdtRWlufpPupnlpfnyWhciq6XywjPNvG4GQ9Dw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH8PR11MB6779.namprd11.prod.outlook.com (2603:10b6:510:1ca::17)
- by IA0PR11MB7791.namprd11.prod.outlook.com (2603:10b6:208:401::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6886.35; Tue, 17 Oct
- 2023 08:30:34 +0000
-Received: from PH8PR11MB6779.namprd11.prod.outlook.com
- ([fe80::134a:412c:eb02:ae17]) by PH8PR11MB6779.namprd11.prod.outlook.com
- ([fe80::134a:412c:eb02:ae17%5]) with mapi id 15.20.6863.046; Tue, 17 Oct 2023
- 08:30:33 +0000
-Date: Tue, 17 Oct 2023 16:30:26 +0800
-From: kernel test robot <oliver.sang@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC: <oe-lkp@lists.linux.dev>, <lkp@intel.com>, Linux Memory Management List
-	<linux-mm@kvack.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Shuah
- Khan" <skhan@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-	<oliver.sang@intel.com>
-Subject: [linux-next:master] [usbip]  b8aaf639b4:
- BUG:KASAN:slab-out-of-bounds_in_lockdep_init_map_type
-Message-ID: <202310171658.eceb99b8-oliver.sang@intel.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-X-ClientProxiedBy: SI2PR02CA0035.apcprd02.prod.outlook.com
- (2603:1096:4:195::22) To PH8PR11MB6779.namprd11.prod.outlook.com
- (2603:10b6:510:1ca::17)
+   d="scan'208";a="732632345"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by orsmga006.jf.intel.com with SMTP; 17 Oct 2023 01:34:10 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 17 Oct 2023 11:34:10 +0300
+Date: Tue, 17 Oct 2023 11:34:09 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Luca Weiss <luca.weiss@fairphone.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 2/2] usb: typec: add support for PTN36502 redriver
+Message-ID: <ZS5HAQrUObdhHSdV@kuha.fi.intel.com>
+References: <20231013-ptn36502-v1-0-98109a430efc@fairphone.com>
+ <20231013-ptn36502-v1-2-98109a430efc@fairphone.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH8PR11MB6779:EE_|IA0PR11MB7791:EE_
-X-MS-Office365-Filtering-Correlation-Id: ccc7d3b6-1775-4e67-2323-08dbceeb54ae
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xHM4NigJPE5tJvlM0MzgovNHocU+NmwDvaV547n6nb5HiyTRzvgltxx5OkorwPlEa28h7OYsdYtM07D36M3D1Fw+ZuFtFqLRrs3plnY/QJbi8z3tsdd3ZnzzuJALQOv10glh2ra/Pjia8HnxvEbksooF5bZufEIXK5q+fBQKnz2nDntbqvGmVu93bFtxM/pzZQZa7bUCctF7OZsWQQaU+deg8ckYpgyc0xPyEDlPhux5A1yxPRrSovZ9e/pmigL+XmMZ7ETv/H92iTxhLL/9pOeLBE9AQ6e7ineubNwMbAUGQtuZVflYP4q1tt2XD9pnEmHmGd4F8/qIdDQP7HWNywEuKqM9sRNx+leVDtlV8EcNj21K2wlNkQaxTi2zqhMj02TKC2ZeErjvSaHfENd48lO4w/mBsW+FLO7wfXjUwHgYAby5W7hbRv/h1OZyskobmTwPcq5nvgDjFIob4AeKZG+/Z8oUrlBH/UCxXxiNyCSiT+9ESoxQ6oTZRJjt4jz8Vmc6CqkL2XeFtV81jxgDZrmraCNhrS9ATQfI0K6WVTE3NnpGzGwN2fvVacSZeW7PkafziGNcPS6itRz0NUKJnw1KV4ywvGFAIigTanL/I4bVn33yolRGrAkPR5dbcVRI5Hi0X+orBTHcRkbg0OgA9w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB6779.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(346002)(366004)(136003)(396003)(39860400002)(230922051799003)(64100799003)(451199024)(1800799009)(186009)(36756003)(86362001)(26005)(478600001)(2906002)(6486002)(6666004)(6506007)(41300700001)(5660300002)(966005)(82960400001)(38100700002)(2616005)(1076003)(6916009)(8936002)(54906003)(66556008)(66946007)(66476007)(316002)(4326008)(8676002)(83380400001)(6512007)(568244002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?aXd/AdwFXhtwKIyTrlEq96tIAqSY9xWunwTI4kRWJCtwCT9ucp+R+cSiuUdr?=
- =?us-ascii?Q?erbvU+yglDHugqMKSBPLP6EhWZ8911moUiWhxauycMsQ0IqXI+wAgkebYDwp?=
- =?us-ascii?Q?R3v/vaOXOIIT4MtMJZjFU+ci8Fpn3r+IBlSM6lRyjSH11St1d06VbCrX+ijc?=
- =?us-ascii?Q?1seXarj4LlSdKyW9obGRxmvEFswfWqTL94ncLkDxXuWhVa70Ax8THMq51fqI?=
- =?us-ascii?Q?5HeoYf67f2gvxxHmPt7GYpYg6UtSgP2/hgIXQ6eIlZJaYz9k8tifjcroF418?=
- =?us-ascii?Q?vjO/GJDDBR9dNDC1Q5uOOCWASRZey+u3zqUiOJQR3qB9nFWjksuzBO8CSM2u?=
- =?us-ascii?Q?9xhLfLIaMiKz6FG1mNjLqZwgWBLpqV+q9WX/HgHhdpovZbUCmPJGmrcIe6Pk?=
- =?us-ascii?Q?h4TRKx/pIx/VUYtmnPX6TALW4f+yqqycsL2lZRZLvjmDs8eh9KHJdhFRbDk6?=
- =?us-ascii?Q?8aMnLyfz49a1Ek/EeFA2YkktZtTJkhz+mM/n1F12ANvZ0gRQmzkW9Yb7dWvr?=
- =?us-ascii?Q?Vd3vEIPhoRL03fCBqwG9rMYnET7dUGaPFscyNZdmDZplez03FAA2G+fozur+?=
- =?us-ascii?Q?DgobfsVU1H5buodG2sISX0M/3LAXyWK89N4w/TYD5zKtWzrOysM6Ciucjsa3?=
- =?us-ascii?Q?ZE3N8b2FnHRevQesH0Ea00ZVrQMEnyDOtE4JCtJU7GzYKd4GAlWcjKt9ovN4?=
- =?us-ascii?Q?hNHoOGv+dBt5vQ4MfX00lGHMYJbb8lA+LAYmDPnXfl7EHXiNOgXhWyH0wt8A?=
- =?us-ascii?Q?9aU2iAvhfzDgOTj9xnJZeZDxz8DYqtJE8y4oLOnHPUMFRyZuz30j2Mr6yE9L?=
- =?us-ascii?Q?9jgMFZjV9Zrkqh/IzytXIs3kxh3aZUJnIRGJk5FV8M4F0eQPQd5c/6vodQ1Z?=
- =?us-ascii?Q?Uoxl0ehZS39FsLuMi8FxNnVv8IhD7Iw2PHfmibcR4odaGsG8AhuXDqz/DBHG?=
- =?us-ascii?Q?SspjC8xVcjE6JuSyTgX6ZUI2fu9SYvR/jcVaVHwU/SIHwuYLR75VkSyroBoD?=
- =?us-ascii?Q?iBTRFCTnxwWwAQj2RDTWx4MSTB8Ls/dzuHwWfL4seRFoLauj6EsgdyVxz/Tt?=
- =?us-ascii?Q?iaYuxRVHVSH3lZQ3gGZDSUeSCkKCly++/FvntRhh3JTRbqpOL9M6WDSvbv4m?=
- =?us-ascii?Q?HnZCj9yjJPB0XSlsKtdcv5TTvpBgdcTMwaxvw4Aoo/t/BDxe1ZgItsPCgA7D?=
- =?us-ascii?Q?JByhz5qA4MR9bxOunGizLoBaQUX6jwat2MH4U1SolDcABLR6+JC82kqP3/Jw?=
- =?us-ascii?Q?CtBeSAh/esuQoAKABk1VSYXWyDlNCvqpWCrlxFhdS5+9uqrjShOc9akVod8m?=
- =?us-ascii?Q?1PYbu4jIo46bRE4rXcw+N45haNBnRIEzZkbOeydpjytnB/C/apJcnxyO75m3?=
- =?us-ascii?Q?95Mv6iFhuVzvouPTcr3ITaprHFUA2znybvN98aAr0UcqjIwoa4/kzLRslihW?=
- =?us-ascii?Q?UHMpzflF4DlEPnMOLZkbGERo4veFyYRb9UhvgDW0FleQ/xDDPP71vhTnfB0X?=
- =?us-ascii?Q?0Ft2cLIsD2VggLnuszN3G52uw+h3YXiq22QVw8xPHDoGg/A+0k4d1TA7fz0c?=
- =?us-ascii?Q?i3uNbBiGmQ+ep5UZjV50UM82leDusSkOdAyPUf6RwovcaIubLsS4ev8GwKW4?=
- =?us-ascii?Q?Ig=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: ccc7d3b6-1775-4e67-2323-08dbceeb54ae
-X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB6779.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Oct 2023 08:30:33.8320
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tMMw52gL1HmMHRza22KBJYN1JonwDQyS9sk/9uhLyLygdFMWB93pVbuInYADE1/vVNiaGPLZ1/KGqnkeKyKEOw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR11MB7791
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231013-ptn36502-v1-2-98109a430efc@fairphone.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
 	RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
 	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
+Hi,
 
-hi, Andy Shevchenko,
+On Fri, Oct 13, 2023 at 04:24:48PM +0200, Luca Weiss wrote:
+> Add a driver for the NXP PTN36502 Type-C USB 3.1 Gen 1 and DisplayPort
+> v1.2 combo redriver.
+> 
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
 
-we reported
-"[usb:usb-next] [usbip]  b8aaf639b4: BUG:KASAN:slab-out-of-bounds_in_vhci_setup"
-on
-https://lore.kernel.org/all/202310111714.cb804a0c-oliver.sang@intel.com/
-when this commit is still in
-https://git.kernel.org/cgit/linux/kernel/git/gregkh/usb.git usb-next
+Looks OK to me, but couple of nitpicks below. With those fixed:
 
-now we noticed it's in linux-next/master, below report FYI.
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
+> ---
+>  drivers/usb/typec/mux/Kconfig    |  10 +
+>  drivers/usb/typec/mux/Makefile   |   1 +
+>  drivers/usb/typec/mux/ptn36502.c | 421 +++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 432 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/mux/Kconfig b/drivers/usb/typec/mux/Kconfig
+> index 65da61150ba7..816b9bd08355 100644
+> --- a/drivers/usb/typec/mux/Kconfig
+> +++ b/drivers/usb/typec/mux/Kconfig
+> @@ -46,4 +46,14 @@ config TYPEC_MUX_NB7VPQ904M
+>  	  Say Y or M if your system has a On Semiconductor NB7VPQ904M Type-C
+>  	  redriver chip found on some devices with a Type-C port.
+>  
+> +config TYPEC_MUX_PTN36502
+> +	tristate "NXP PTN36502 Type-C redriver driver"
+> +	depends on I2C
+> +	depends on DRM || DRM=n
+> +	select DRM_PANEL_BRIDGE if DRM
+> +	select REGMAP_I2C
+> +	help
+> +	  Say Y or M if your system has a NXP PTN36502 Type-C redriver chip
+> +	  found on some devices with a Type-C port.
+> +
+>  endmenu
+> diff --git a/drivers/usb/typec/mux/Makefile b/drivers/usb/typec/mux/Makefile
+> index 76196096ef41..9d6a5557b0bd 100644
+> --- a/drivers/usb/typec/mux/Makefile
+> +++ b/drivers/usb/typec/mux/Makefile
+> @@ -5,3 +5,4 @@ obj-$(CONFIG_TYPEC_MUX_GPIO_SBU)	+= gpio-sbu-mux.o
+>  obj-$(CONFIG_TYPEC_MUX_PI3USB30532)	+= pi3usb30532.o
+>  obj-$(CONFIG_TYPEC_MUX_INTEL_PMC)	+= intel_pmc_mux.o
+>  obj-$(CONFIG_TYPEC_MUX_NB7VPQ904M)	+= nb7vpq904m.o
+> +obj-$(CONFIG_TYPEC_MUX_PTN36502)	+= ptn36502.o
+> diff --git a/drivers/usb/typec/mux/ptn36502.c b/drivers/usb/typec/mux/ptn36502.c
+> new file mode 100644
+> index 000000000000..91684a856f3a
+> --- /dev/null
+> +++ b/drivers/usb/typec/mux/ptn36502.c
+> @@ -0,0 +1,421 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * NXP PTN36502 Type-C driver
+> + *
+> + * Copyright (C) 2023 Luca Weiss <luca.weiss@fairphone.com>
+> + *
+> + * Based on NB7VPQ904M driver:
+> + * Copyright (C) 2023 Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> + */
+> +
+> +#include <drm/drm_bridge.h>
+> +#include <linux/bitfield.h>
+> +#include <linux/i2c.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/mutex.h>
+> +#include <linux/of_graph.h>
+> +#include <linux/regmap.h>
+> +#include <linux/regulator/consumer.h>
+> +#include <linux/usb/typec_dp.h>
+> +#include <linux/usb/typec_mux.h>
+> +#include <linux/usb/typec_retimer.h>
+> +
+> +#define PTN36502_CHIP_ID_REG				0x00
+> +#define PTN36502_CHIP_ID				0x02
+> +
+> +#define PTN36502_CHIP_REVISION_REG			0x01
+> +#define PTN36502_CHIP_REVISION_BASE(val)		FIELD_GET(GENMASK(7, 4), (val))
+> +#define PTN36502_CHIP_REVISION_METAL(val)		FIELD_GET(GENMASK(3, 0), (val))
+> +
+> +#define PTN36502_DP_LINK_CTRL_REG			0x06
+> +#define PTN36502_DP_LINK_CTRL_LANES_2			(2 << 2)
+> +#define PTN36502_DP_LINK_CTRL_LANES_4			(3 << 2)
+> +#define PTN36502_DP_LINK_CTRL_LINK_RATE_5_4GBPS		(2 << 0)
+> +
+> +/* Registers for lane 0 (0x07) to lane 3 (0x0a) have the same layout */
+> +#define PTN36502_DP_LANE_CTRL_REG(n)			(0x07 + (n))
+> +#define PTN36502_DP_LANE_CTRL_RX_GAIN_3DB		(2<<4)
+> +#define PTN36502_DP_LANE_CTRL_TX_SWING_800MVPPD		(2<<2)
+> +#define PTN36502_DP_LANE_CTRL_PRE_EMPHASIS_3_5DB	(1<<0)
+> +
+> +#define PTN36502_MODE_CTRL1_REG				0x0b
+> +#define PTN36502_MODE_CTRL1_PLUG_ORIENT_REVERSE		(1<<5)
+> +#define PTN36502_MODE_CTRL1_AUX_CROSSBAR_SW_ON		(1<<3)
+> +#define PTN36502_MODE_CTRL1_MODE_OFF			(0<<0)
+> +#define PTN36502_MODE_CTRL1_MODE_USB_ONLY		(1<<0)
+> +#define PTN36502_MODE_CTRL1_MODE_USB_DP			(2<<0)
+> +#define PTN36502_MODE_CTRL1_MODE_DP			(3<<0)
+> +
+> +#define PTN36502_DEVICE_CTRL_REG			0x0d
+> +#define PTN36502_DEVICE_CTRL_AUX_MONITORING_EN		(1<<7)
 
-Hello,
+You have couple of different styles here. Please try to always use
+BIT() and GENMASK() macros when possible. At the very least put spaces
+around << and >>.
 
-kernel test robot noticed "BUG:KASAN:slab-out-of-bounds_in_lockdep_init_map_type" on:
+> +struct ptn36502 {
+> +	struct i2c_client *client;
+> +	struct regulator *vdd18_supply;
+> +	struct regmap *regmap;
+> +	struct typec_switch_dev *sw;
+> +	struct typec_retimer *retimer;
+> +
+> +	struct typec_switch *typec_switch;
+> +
+> +	struct drm_bridge bridge;
+> +
+> +	struct mutex lock; /* protect non-concurrent retimer & switch */
+> +
+> +	enum typec_orientation orientation;
+> +	unsigned long mode;
+> +	unsigned int svid;
+> +};
+> +
+> +static int ptn36502_set(struct ptn36502 *ptn)
+> +{
+> +	bool reverse = (ptn->orientation == TYPEC_ORIENTATION_REVERSE);
+> +	unsigned int ctrl1_val = 0;
+> +	unsigned int lane_ctrl_val = 0;
+> +	unsigned int link_ctrl_val = 0;
+> +
+> +	switch (ptn->mode) {
+> +	case TYPEC_STATE_SAFE:
+> +		/* Deep power saving state */
+> +		regmap_write(ptn->regmap, PTN36502_MODE_CTRL1_REG,
+> +			     PTN36502_MODE_CTRL1_MODE_OFF);
+> +		return 0;
+> +
+> +	case TYPEC_STATE_USB:
+> +		/*
+> +		 * Normal Orientation (CC1)
+> +		 * A -> USB RX
+> +		 * B -> USB TX
+> +		 * C -> X
+> +		 * D -> X
+> +		 * Flipped Orientation (CC2)
+> +		 * A -> X
+> +		 * B -> X
+> +		 * C -> USB TX
+> +		 * D -> USB RX
+> +		 */
+> +
+> +		/* USB 3.1 Gen 1 only */
+> +		ctrl1_val = PTN36502_MODE_CTRL1_MODE_USB_ONLY;
+> +		if (reverse)
+> +			ctrl1_val |= PTN36502_MODE_CTRL1_PLUG_ORIENT_REVERSE;
+> +
+> +		regmap_write(ptn->regmap, PTN36502_MODE_CTRL1_REG, ctrl1_val);
+> +		return 0;
+> +
+> +	default:
+> +		if (ptn->svid != USB_TYPEC_DP_SID)
+> +			return -EINVAL;
+> +
+> +		break;
+> +	}
+> +
+> +	/* DP Altmode Setup */
+> +
+> +	switch (ptn->mode) {
+> +	case TYPEC_DP_STATE_C:
+> +	case TYPEC_DP_STATE_E:
+> +		/*
+> +		 * Normal Orientation (CC1)
+> +		 * A -> DP3
+> +		 * B -> DP2
+> +		 * C -> DP1
+> +		 * D -> DP0
+> +		 * Flipped Orientation (CC2)
+> +		 * A -> DP0
+> +		 * B -> DP1
+> +		 * C -> DP2
+> +		 * D -> DP3
+> +		 */
+> +
+> +		/* 4-lane DP */
+> +		ctrl1_val |= PTN36502_MODE_CTRL1_MODE_DP;
+> +		link_ctrl_val |= PTN36502_DP_LINK_CTRL_LANES_4;
+> +		break;
+> +
+> +	case TYPEC_DP_STATE_D:
+> +	case TYPEC_DP_STATE_F: /* State F is deprecated */
+> +		/*
+> +		 * Normal Orientation (CC1)
+> +		 * A -> USB RX
+> +		 * B -> USB TX
+> +		 * C -> DP1
+> +		 * D -> DP0
+> +		 * Flipped Orientation (CC2)
+> +		 * A -> DP0
+> +		 * B -> DP1
+> +		 * C -> USB TX
+> +		 * D -> USB RX
+> +		 */
+> +
+> +		/* USB 3.1 Gen 1 and 2-lane DP */
+> +		ctrl1_val |= PTN36502_MODE_CTRL1_MODE_USB_DP;
+> +		link_ctrl_val |= PTN36502_DP_LINK_CTRL_LANES_2;
+> +		break;
+> +
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	/* Enable AUX monitoring */
+> +	regmap_write(ptn->regmap, PTN36502_DEVICE_CTRL_REG,
+> +		     PTN36502_DEVICE_CTRL_AUX_MONITORING_EN);
+> +
+> +	/* Enable AUX switch path */
+> +	ctrl1_val |= PTN36502_MODE_CTRL1_AUX_CROSSBAR_SW_ON;
+> +	if (reverse)
+> +		ctrl1_val |= PTN36502_MODE_CTRL1_PLUG_ORIENT_REVERSE;
+> +	regmap_write(ptn->regmap, PTN36502_MODE_CTRL1_REG, ctrl1_val);
+> +
+> +	/* DP Link rate: 5.4 Gbps (HBR2) */
+> +	link_ctrl_val |= PTN36502_DP_LINK_CTRL_LINK_RATE_5_4GBPS;
+> +	regmap_write(ptn->regmap, PTN36502_DP_LINK_CTRL_REG, link_ctrl_val);
+> +
+> +	/*
+> +	 * For all lanes:
+> +	 * - Rx equivalization gain: 3 dB
+> +	 * - TX output swing control: 800 mVppd
+> +	 * - Pre-emphasis control: 3.5 dB
+> +	 */
+> +	lane_ctrl_val = PTN36502_DP_LANE_CTRL_RX_GAIN_3DB |
+> +			PTN36502_DP_LANE_CTRL_TX_SWING_800MVPPD |
+> +			PTN36502_DP_LANE_CTRL_PRE_EMPHASIS_3_5DB;
+> +	regmap_write(ptn->regmap, PTN36502_DP_LANE_CTRL_REG(0), lane_ctrl_val);
+> +	regmap_write(ptn->regmap, PTN36502_DP_LANE_CTRL_REG(1), lane_ctrl_val);
+> +	regmap_write(ptn->regmap, PTN36502_DP_LANE_CTRL_REG(2), lane_ctrl_val);
+> +	regmap_write(ptn->regmap, PTN36502_DP_LANE_CTRL_REG(3), lane_ctrl_val);
+> +
+> +	return 0;
+> +}
+> +
+> +static int ptn36502_sw_set(struct typec_switch_dev *sw, enum typec_orientation orientation)
+> +{
+> +	struct ptn36502 *ptn = typec_switch_get_drvdata(sw);
+> +	int ret;
+> +
+> +	ret = typec_switch_set(ptn->typec_switch, orientation);
+> +	if (ret)
+> +		return ret;
+> +
+> +	mutex_lock(&ptn->lock);
+> +
+> +	if (ptn->orientation != orientation) {
+> +		ptn->orientation = orientation;
+> +
+> +		ret = ptn36502_set(ptn);
+> +	}
+> +
+> +	mutex_unlock(&ptn->lock);
+> +
+> +	return ret;
+> +}
+> +
+> +static int ptn36502_retimer_set(struct typec_retimer *retimer, struct typec_retimer_state *state)
+> +{
+> +	struct ptn36502 *ptn = typec_retimer_get_drvdata(retimer);
+> +	int ret = 0;
+> +
+> +	mutex_lock(&ptn->lock);
+> +
+> +	if (ptn->mode != state->mode) {
+> +		ptn->mode = state->mode;
+> +
+> +		if (state->alt)
+> +			ptn->svid = state->alt->svid;
+> +		else
+> +			ptn->svid = 0; // No SVID
+> +
+> +		ret = ptn36502_set(ptn);
+> +	}
+> +
+> +	mutex_unlock(&ptn->lock);
+> +
+> +	return ret;
+> +}
+> +
+> +static int ptn36502_detect(struct ptn36502 *ptn)
+> +{
+> +	struct device *dev = &ptn->client->dev;
+> +	unsigned int reg_val;
+> +	int ret;
+> +
+> +	ret = regmap_read(ptn->regmap, PTN36502_CHIP_ID_REG,
+> +			  &reg_val);
+> +	if (ret < 0)
+> +		return dev_err_probe(dev, ret, "Failed to read chip ID\n");
+> +
+> +	if (reg_val != PTN36502_CHIP_ID)
+> +		return dev_err_probe(dev, -ENODEV, "Unexpected chip ID: %x\n", reg_val);
+> +
+> +	ret = regmap_read(ptn->regmap, PTN36502_CHIP_REVISION_REG,
+> +			  &reg_val);
+> +	if (ret < 0)
+> +		return dev_err_probe(dev, ret, "Failed to read chip revision\n");
+> +
+> +	dev_dbg(dev, "Chip revision: base layer version %lx, metal layer version %lx\n",
+> +		PTN36502_CHIP_REVISION_BASE(reg_val),
+> +		PTN36502_CHIP_REVISION_METAL(reg_val));
+> +
+> +	return 0;
+> +}
+> +
+> +#if IS_ENABLED(CONFIG_OF) && IS_ENABLED(CONFIG_DRM_PANEL_BRIDGE)
+> +static int ptn36502_bridge_attach(struct drm_bridge *bridge,
+> +				    enum drm_bridge_attach_flags flags)
 
-commit: b8aaf639b403f01d132c9ac1e906c45debfb0218 ("usbip: Use platform_device_register_full()")
-https://git.kernel.org/cgit/linux/kernel/git/next/linux-next.git master
+I applied this patch and realised that that's not correctly aligned.
+There are couple of extra spaces.
 
-[test failed on linux-next/master f9a6bea131849702d591d18d5c8b8a0eda6f62b3]
+> +{
+> +	struct ptn36502 *ptn = container_of(bridge, struct ptn36502, bridge);
+> +	struct drm_bridge *next_bridge;
+> +
+> +	if (!(flags & DRM_BRIDGE_ATTACH_NO_CONNECTOR))
+> +		return -EINVAL;
+> +
+> +	next_bridge = devm_drm_of_get_bridge(&ptn->client->dev, ptn->client->dev.of_node, 0, 0);
+> +	if (IS_ERR(next_bridge)) {
+> +		dev_err(&ptn->client->dev, "failed to acquire drm_bridge: %pe\n", next_bridge);
+> +		return PTR_ERR(next_bridge);
+> +	}
+> +
+> +	return drm_bridge_attach(bridge->encoder, next_bridge, bridge,
+> +				 DRM_BRIDGE_ATTACH_NO_CONNECTOR);
+> +}
+> +
+> +static const struct drm_bridge_funcs ptn36502_bridge_funcs = {
+> +	.attach	= ptn36502_bridge_attach,
+> +};
+> +
+> +static int ptn36502_register_bridge(struct ptn36502 *ptn)
+> +{
+> +	ptn->bridge.funcs = &ptn36502_bridge_funcs;
+> +	ptn->bridge.of_node = ptn->client->dev.of_node;
+> +
+> +	return devm_drm_bridge_add(&ptn->client->dev, &ptn->bridge);
+> +}
+> +#else
+> +static int ptn36502_register_bridge(struct ptn36502 *ptn)
+> +{
+> +	return 0;
+> +}
+> +#endif
+> +
+> +static const struct regmap_config ptn36502_regmap = {
+> +	.max_register = 0x0d,
+> +	.reg_bits = 8,
+> +	.val_bits = 8,
+> +};
+> +
+> +static int ptn36502_probe(struct i2c_client *client)
+> +{
+> +	struct device *dev = &client->dev;
+> +	struct typec_switch_desc sw_desc = { };
+> +	struct typec_retimer_desc retimer_desc = { };
+> +	struct ptn36502 *ptn;
+> +	int ret;
+> +
+> +	ptn = devm_kzalloc(dev, sizeof(*ptn), GFP_KERNEL);
+> +	if (!ptn)
+> +		return -ENOMEM;
+> +
+> +	ptn->client = client;
+> +
+> +	ptn->regmap = devm_regmap_init_i2c(client, &ptn36502_regmap);
+> +	if (IS_ERR(ptn->regmap)) {
+> +		dev_err(&client->dev, "Failed to allocate register map\n");
+> +		return PTR_ERR(ptn->regmap);
+> +	}
+> +
+> +	ptn->mode = TYPEC_STATE_SAFE;
+> +	ptn->orientation = TYPEC_ORIENTATION_NONE;
+> +
+> +	mutex_init(&ptn->lock);
+> +
+> +	ptn->vdd18_supply = devm_regulator_get_optional(dev, "vdd18");
+> +	if (IS_ERR(ptn->vdd18_supply))
+> +		return PTR_ERR(ptn->vdd18_supply);
+> +
+> +	ptn->typec_switch = fwnode_typec_switch_get(dev->fwnode);
+> +	if (IS_ERR(ptn->typec_switch))
+> +		return dev_err_probe(dev, PTR_ERR(ptn->typec_switch),
+> +				     "Failed to acquire orientation-switch\n");
+> +
+> +	ret = regulator_enable(ptn->vdd18_supply);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "Failed to enable vdd18\n");
+> +
+> +	ret = ptn36502_detect(ptn);
+> +	if (ret)
+> +		goto err_disable_regulator;
+> +
+> +	ret = ptn36502_register_bridge(ptn);
+> +	if (ret)
+> +		goto err_disable_regulator;
+> +
+> +	sw_desc.drvdata = ptn;
+> +	sw_desc.fwnode = dev->fwnode;
+> +	sw_desc.set = ptn36502_sw_set;
+> +
+> +	ptn->sw = typec_switch_register(dev, &sw_desc);
+> +	if (IS_ERR(ptn->sw)) {
+> +		ret = dev_err_probe(dev, PTR_ERR(ptn->sw),
+> +				    "Failed to register typec switch\n");
+> +		goto err_disable_regulator;
+> +	}
+> +
+> +	retimer_desc.drvdata = ptn;
+> +	retimer_desc.fwnode = dev->fwnode;
+> +	retimer_desc.set = ptn36502_retimer_set;
+> +
+> +	ptn->retimer = typec_retimer_register(dev, &retimer_desc);
+> +	if (IS_ERR(ptn->retimer)) {
+> +		ret = dev_err_probe(dev, PTR_ERR(ptn->retimer),
+> +				    "Failed to register typec retimer\n");
+> +		goto err_switch_unregister;
+> +	}
+> +
+> +	return 0;
+> +
+> +err_switch_unregister:
+> +	typec_switch_unregister(ptn->sw);
+> +
+> +err_disable_regulator:
+> +	regulator_disable(ptn->vdd18_supply);
+> +
+> +	return ret;
+> +}
+> +
+> +static void ptn36502_remove(struct i2c_client *client)
+> +{
+> +	struct ptn36502 *ptn = i2c_get_clientdata(client);
+> +
+> +	typec_retimer_unregister(ptn->retimer);
+> +	typec_switch_unregister(ptn->sw);
+> +
+> +	regulator_disable(ptn->vdd18_supply);
+> +}
+> +
+> +static const struct i2c_device_id ptn36502_table[] = {
+> +	{ "ptn36502" },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(i2c, ptn36502_table);
+> +
+> +static const struct of_device_id ptn36502_of_table[] = {
+> +	{ .compatible = "nxp,ptn36502" },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, ptn36502_of_table);
+> +
+> +static struct i2c_driver ptn36502_driver = {
+> +	.driver = {
+> +		.name = "ptn36502",
+> +		.of_match_table = ptn36502_of_table,
+> +	},
+> +	.probe		= ptn36502_probe,
+> +	.remove		= ptn36502_remove,
+> +	.id_table	= ptn36502_table,
+> +};
+> +module_i2c_driver(ptn36502_driver);
+> +
+> +MODULE_AUTHOR("Luca Weiss <luca.weiss@fairphone.com>");
+> +MODULE_DESCRIPTION("NXP PTN36502 Type-C driver");
+> +MODULE_LICENSE("GPL");
 
-in testcase: boot
-
-compiler: gcc-12
-test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
-
-(please refer to attached dmesg/kmsg for entire log/backtrace)
-
-
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <oliver.sang@intel.com>
-| Closes: https://lore.kernel.org/oe-lkp/202310171658.eceb99b8-oliver.sang@intel.com
-
-
-[ 124.077874][ T1] BUG: KASAN: slab-out-of-bounds in lockdep_init_map_type (kernel/locking/lockdep.c:4862) 
-[  124.077913][    T1] Write of size 8 at addr ffff88811506ce58 by task swapper/0/1
-[  124.077913][    T1]
-[  124.077913][    T1] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.6.0-rc4-00066-gb8aaf639b403 #1 b7f5a4e58d773035f956074c1d632e313715f9ac
-[  124.077913][    T1] Call Trace:
-[  124.077913][    T1]  <TASK>
-[ 124.077913][ T1] dump_stack_lvl (lib/dump_stack.c:107) 
-[ 124.077913][ T1] print_address_description+0x2b/0x3d0 
-[ 124.077913][ T1] ? lockdep_init_map_type (kernel/locking/lockdep.c:4862) 
-[ 124.077913][ T1] print_report (mm/kasan/report.c:476) 
-[ 124.077913][ T1] ? lock_acquired (include/trace/events/lock.h:85 kernel/locking/lockdep.c:6026) 
-[ 124.077913][ T1] ? kasan_addr_to_slab (mm/kasan/common.c:35) 
-[ 124.077913][ T1] ? lockdep_init_map_type (kernel/locking/lockdep.c:4862) 
-[ 124.077913][ T1] kasan_report (mm/kasan/report.c:590) 
-[ 124.077913][ T1] ? lockdep_init_map_type (kernel/locking/lockdep.c:4862) 
-[ 124.077913][ T1] lockdep_init_map_type (kernel/locking/lockdep.c:4862) 
-[ 124.077913][ T1] __raw_spin_lock_init (kernel/locking/spinlock_debug.c:26) 
-[ 124.077913][ T1] vhci_start (drivers/usb/usbip/vhci_hcd.c:1185) 
-[ 124.077913][ T1] ? vhci_setup (drivers/usb/usbip/vhci_hcd.c:1173) 
-[ 124.077913][ T1] usb_add_hcd (drivers/usb/core/hcd.c:2944) 
-[ 124.077913][ T1] vhci_hcd_probe (drivers/usb/usbip/vhci_hcd.c:1363) 
-[ 124.077913][ T1] platform_probe (drivers/base/platform.c:1410) 
-[ 124.077913][ T1] really_probe (drivers/base/dd.c:579 drivers/base/dd.c:658) 
-[ 124.077913][ T1] ? acpi_driver_match_device (drivers/acpi/bus.c:956) 
-[ 124.077913][ T1] driver_probe_device (drivers/base/dd.c:830) 
-[ 124.077913][ T1] __device_attach_driver (drivers/base/dd.c:959) 
-[ 124.077913][ T1] ? driver_probe_device (drivers/base/dd.c:922) 
-[ 124.077913][ T1] bus_for_each_drv (drivers/base/bus.c:414 drivers/base/bus.c:456) 
-[ 124.077913][ T1] ? bus_for_each_dev (drivers/base/bus.c:445) 
-[ 124.077913][ T1] ? __lock_acquired (kernel/locking/lockdep.c:339 kernel/locking/lockdep.c:5990) 
-[ 124.077913][ T1] __device_attach (drivers/base/dd.c:1032) 
-[ 124.077913][ T1] ? device_driver_attach (drivers/base/dd.c:1001) 
-[ 124.077913][ T1] ? preempt_count_sub (kernel/sched/core.c:5863 kernel/sched/core.c:5859 kernel/sched/core.c:5881) 
-[ 124.077913][ T1] ? _raw_spin_unlock (arch/x86/include/asm/preempt.h:104 include/linux/spinlock_api_smp.h:143 kernel/locking/spinlock.c:186) 
-[ 124.077913][ T1] bus_probe_device (drivers/base/bus.c:532) 
-[ 124.077913][ T1] device_add (drivers/base/core.c:3631) 
-[ 124.077913][ T1] ? __fw_devlink_link_to_consumers+0x1f0/0x1f0 
-[ 124.077913][ T1] ? kasan_set_track (mm/kasan/common.c:52) 
-[ 124.077913][ T1] ? __kasan_kmalloc (mm/kasan/common.c:374 mm/kasan/common.c:383) 
-[ 124.077913][ T1] platform_device_add (drivers/base/platform.c:717) 
-[ 124.077913][ T1] platform_device_register_full (drivers/base/platform.c:844) 
-[ 124.077913][ T1] ? driver_register (drivers/base/driver.c:258) 
-[ 124.077913][ T1] vhci_hcd_init (drivers/usb/usbip/vhci_hcd.c:1532) 
-[ 124.077913][ T1] ? _raw_spin_unlock_irqrestore (arch/x86/include/asm/preempt.h:104 include/linux/spinlock_api_smp.h:152 kernel/locking/spinlock.c:194) 
-[ 124.077913][ T1] ? usbip_core_init (drivers/usb/usbip/vhci_hcd.c:1507) 
-[ 124.077913][ T1] ? rng_is_initialized (drivers/char/random.c:918) 
-[ 124.077913][ T1] ? usbip_core_init (drivers/usb/usbip/vhci_hcd.c:1507) 
-[ 124.077913][ T1] do_one_initcall (init/main.c:1232) 
-[ 124.077913][ T1] ? trace_initcall_level (init/main.c:1223) 
-[ 124.077913][ T1] ? parse_one (kernel/params.c:138) 
-[ 124.077913][ T1] ? __kmem_cache_alloc_node (mm/slab.h:761 mm/slub.c:3478 mm/slub.c:3517) 
-[ 124.077913][ T1] ? kasan_set_track (mm/kasan/common.c:52) 
-[ 124.077913][ T1] ? __kasan_kmalloc (mm/kasan/common.c:374 mm/kasan/common.c:383) 
-[ 124.077913][ T1] do_initcalls (init/main.c:1293 init/main.c:1310) 
-[ 124.077913][ T1] kernel_init_freeable (init/main.c:1549) 
-[ 124.077913][ T1] ? rest_init (init/main.c:1429) 
-[ 124.077913][ T1] kernel_init (init/main.c:1439) 
-[ 124.077913][ T1] ? _raw_spin_unlock_irq (arch/x86/include/asm/preempt.h:104 include/linux/spinlock_api_smp.h:160 kernel/locking/spinlock.c:202) 
-[ 124.077913][ T1] ret_from_fork (arch/x86/kernel/process.c:153) 
-[ 124.077913][ T1] ? rest_init (init/main.c:1429) 
-[ 124.077913][ T1] ret_from_fork_asm (arch/x86/entry/entry_64.S:312) 
-[  124.077913][    T1]  </TASK>
-[  124.077913][    T1]
-[  124.077913][    T1] Allocated by task 1:
-[ 124.077913][ T1] kasan_save_stack (mm/kasan/common.c:46) 
-[ 124.077913][ T1] kasan_set_track (mm/kasan/common.c:52) 
-[ 124.077913][ T1] __kasan_kmalloc (mm/kasan/common.c:374 mm/kasan/common.c:383) 
-[ 124.077913][ T1] __kmalloc_node_track_caller (mm/slab_common.c:1024 mm/slab_common.c:1043) 
-[ 124.077913][ T1] kmemdup (mm/util.c:131) 
-[ 124.077913][ T1] platform_device_add_data (include/linux/fortify-string.h:765 drivers/base/platform.c:638) 
-[ 124.077913][ T1] platform_device_register_full (drivers/base/platform.c:832) 
-[ 124.077913][ T1] vhci_hcd_init (drivers/usb/usbip/vhci_hcd.c:1532) 
-[ 124.077913][ T1] do_one_initcall (init/main.c:1232) 
-[ 124.077913][ T1] do_initcalls (init/main.c:1293 init/main.c:1310) 
-[ 124.077913][ T1] kernel_init_freeable (init/main.c:1549) 
-[ 124.077913][ T1] kernel_init (init/main.c:1439) 
-[ 124.077913][ T1] ret_from_fork (arch/x86/kernel/process.c:153) 
-[ 124.077913][ T1] ret_from_fork_asm (arch/x86/entry/entry_64.S:312) 
-[  124.077913][    T1]
-[  124.077913][    T1] The buggy address belongs to the object at ffff88811506ce38
-[  124.077913][    T1]  which belongs to the cache kmalloc-8 of size 8
-[  124.077913][    T1] The buggy address is located 24 bytes to the right of
-[  124.077913][    T1]  allocated 8-byte region [ffff88811506ce38, ffff88811506ce40)
-[  124.077913][    T1]
-[  124.077913][    T1] The buggy address belongs to the physical page:
-[  124.077913][    T1] page:(____ptrval____) refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x11506c
-[  124.077913][    T1] flags: 0x20000000000800(slab|node=0|zone=2)
-[  124.077913][    T1] page_type: 0xffffffff()
-[  124.077913][    T1] raw: 0020000000000800 ffff888100041280 dead000000000122 0000000000000000
-[  124.077913][    T1] raw: 0000000000000000 0000000080660066 00000001ffffffff 0000000000000000
-[  124.077913][    T1] page dumped because: kasan: bad access detected
-[  124.077913][    T1] page_owner tracks the page as allocated
-[  124.077913][    T1] page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12cc0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY), pid 27, tgid 27 (kworker/u4:1), ts 45269241050, free_ts 0
-[ 124.077913][ T1] get_page_from_freelist (mm/page_alloc.c:1545 mm/page_alloc.c:3170) 
-[ 124.077913][ T1] __alloc_pages (mm/page_alloc.c:4426) 
-[ 124.077913][ T1] allocate_slab (mm/slub.c:1870 mm/slub.c:2017) 
-[ 124.077913][ T1] ___slab_alloc (mm/slub.c:3224 (discriminator 3)) 
-[ 124.077913][ T1] __kmem_cache_alloc_node (mm/slub.c:3322 mm/slub.c:3375 mm/slub.c:3468 mm/slub.c:3517) 
-[ 124.077913][ T1] __kmalloc_node_track_caller (include/linux/kasan.h:198 mm/slab_common.c:1023 mm/slab_common.c:1043) 
-[ 124.077913][ T1] kstrdup (mm/util.c:62) 
-[ 124.077913][ T1] eventfs_prepare_ef+0x6a/0x300 
-
-
-The kernel config and materials to reproduce are available at:
-https://download.01.org/0day-ci/archive/20231017/202310171658.eceb99b8-oliver.sang@intel.com
-
-
+thanks,
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
-
+heikki
 
