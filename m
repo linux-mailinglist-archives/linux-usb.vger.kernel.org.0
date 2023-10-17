@@ -1,144 +1,127 @@
-Return-Path: <linux-usb+bounces-1799-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1811-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9D4A7CCD55
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 22:04:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9213E7CCE8B
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 22:47:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 857852818DD
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 20:04:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C25611C20CC9
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 20:47:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6CED43104;
-	Tue, 17 Oct 2023 20:02:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="VxijUOB6"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E204B2E405;
+	Tue, 17 Oct 2023 20:47:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C680335B1;
-	Tue, 17 Oct 2023 20:01:54 +0000 (UTC)
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89CDB121;
-	Tue, 17 Oct 2023 13:01:51 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39HJwCfa020201;
-	Tue, 17 Oct 2023 20:01:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=DoJZgskjuTAjvQWKHDVwm5LpAAOTSIH3Fsab8vjZneA=;
- b=VxijUOB6EvlzWgGhMAQwya1NKWK+zZ2yF5E6BmGkG3zQKY0M71Vmd9gHhQlyGVVFY+k9
- rJd8oJwXC/IJC+CvlblZD4DjswrsaEza8ZAtGoYu1sO6bJAuB5bXF9bCUYlEn9+IKiCA
- Uqiyj2aJuyfSfqV/TNHxrCaqCrCDbJd8d/i5zCOo5ZCh7VK5stHEeyFPGlaEjX9/8PO7
- 5CO58ZZgiNMnRKfM74iL2L0lAQYl3lirghZdjGrRQ50AeOars90uSkwZ/p2153BLj7Hl
- SnTkZfBBHK+17ElRxTkzHnmlu94vCm4s+NKnnfQ1T+biOw3TnKlppT4jvLCqTZrbfyvH cA== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tsr7c1bbg-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 17 Oct 2023 20:01:31 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39HK1UGt027424
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 17 Oct 2023 20:01:30 GMT
-Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.39; Tue, 17 Oct 2023 13:01:29 -0700
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-To: <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>,
-        <lgirdwood@gmail.com>, <broonie@kernel.org>, <perex@perex.cz>,
-        <tiwai@suse.com>, <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <srinivas.kandagatla@linaro.org>, <bgoswami@quicinc.com>,
-        <Thinh.Nguyen@synopsys.com>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>
-Subject: [PATCH v9 34/34] ASoC: usb: Rediscover USB SND devices on USB port add
-Date: Tue, 17 Oct 2023 13:01:09 -0700
-Message-ID: <20231017200109.11407-35-quic_wcheng@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20231017200109.11407-1-quic_wcheng@quicinc.com>
-References: <20231017200109.11407-1-quic_wcheng@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1237D430E9
+	for <linux-usb@vger.kernel.org>; Tue, 17 Oct 2023 20:47:34 +0000 (UTC)
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 710F0C4
+	for <linux-usb@vger.kernel.org>; Tue, 17 Oct 2023 13:47:33 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1qsqy2-0001nf-7N; Tue, 17 Oct 2023 22:47:06 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1qsqxy-002Oky-V0; Tue, 17 Oct 2023 22:47:02 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1qsqxy-000U0Q-LC; Tue, 17 Oct 2023 22:47:02 +0200
+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Michael Grzeschik <m.grzeschik@pengutronix.de>,
+	linux-usb@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	kernel@pengutronix.de,
+	Li Yang <leoyang.li@nxp.com>,
+	linuxppc-dev@lists.ozlabs.org,
+	Aaro Koskinen <aaro.koskinen@iki.fi>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Gaosheng Cui <cuigaosheng1@huawei.com>,
+	Vladimir Zapolskiy <vz@mleia.com>,
+	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+	Pavel Machek <pavel@ucw.cz>,
+	Paolo Abeni <pabeni@redhat.com>,
+	"Steven Rostedt (Google)" <rostedt@goodmis.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	linux-kbuild@vger.kernel.org
+Subject: [PATCH 0/6] usb: gadget: Convert to use module_platform_driver()
+Date: Tue, 17 Oct 2023 22:44:43 +0200
+Message-ID: <20231017204442.1625925-8-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: bc8wjuo5QozTUjptIZKECPWLozquuHZJ
-X-Proofpoint-GUID: bc8wjuo5QozTUjptIZKECPWLozquuHZJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-17_03,2023-10-17_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- lowpriorityscore=0 spamscore=0 clxscore=1015 bulkscore=0 adultscore=0
- impostorscore=0 mlxscore=0 priorityscore=1501 mlxlogscore=999
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2310170170
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-	autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1786; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=Z/Vn1N315f7fZHcxDG81QUWg0Chp5jm5OkmHHEOJRVE=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlLvI7mPi3t5lSt18AODt6voX5wl6HZGEZUuiLE DhImsw17AuJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZS7yOwAKCRCPgPtYfRL+ ThJEB/9+jgGO1Osx1rWXHL+Yx4I4Ef0vXz+VHQMVy9A2tCCjNre5tivU2+SxAlVa6kI4TZjRtCQ FyAOQnHfLBiNaj8mx5ozuYig8xHBmH//k/z4GzYYiU2HYzP6izmdCC848LHCRcHuqeMwOzLhcyy M28c1WL43/YowvzK/7lpDT9hgjF1n5Ar0s2fyB2dLLvzH8+VPo/933uyq0y+C3IKNKe+tvU8Oth OiDqUV82qBcsLJ+aFXsrweNqjNxZDBZeyL1zdUDYu1dB4YpYjf3ftUbNHhaedzernUoazFkw9m+ +DpbUhtUY7ntNY0dfx4SKZ3KdK3yIE63VeCBUdEqLJHgUjCa
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-In case the USB backend device has not been initialized/probed, USB SND
-device connections can still occur.  When the USB backend is eventually
-made available, previous USB SND device connections are not communicated to
-the USB backend.  Call snd_usb_rediscover_devices() to generate the connect
-callbacks for all USB SND devices connected.  This will allow for the USB
-backend to be updated with the current set of devices available.
+Hello,
 
-The chip array entries are all populated and removed while under the
-register_mutex, so going over potential race conditions:
+module_platform_driver_probe() is an alternative to
+module_platform_driver(). Comparing the two the former has the advantage
+that the probe and remove callbacks can live in .init.text and
+.exit.text respectively. The latter has the advantage that it's a bit
+easier to use correctly and you can bind/unbind via sysfs and/or
+hotplug.
 
-Thread#1:
-  q6usb_component_probe()
-    --> snd_soc_usb_add_port()
-      --> snd_usb_rediscover_devices()
-        --> mutex_lock(register_mutex)
+There are considerations about deprecating
+module_platform_driver_probe()[1] as very few drivers use it, still less
+make actually use of the advantages and saving a few bytes isn't as
+important any more as it was (say) 10 years ago.
 
-Thread#2
-  --> usb_audio_disconnect()
-    --> mutex_lock(register_mutex)
+Given that the drivers below drivers/usb/gadget making use of
+module_platform_driver_probe() doesn't benefit from the advantages
+at all (probe and remove are all defined in .text), convert these
+drivers to module_platform_driver().
 
-So either thread#1 or thread#2 will complete first.  If
+Best regards
+Uwe
 
-Thread#1 completes before thread#2:
-  SOC USB will notify DPCM backend of the device connection.  Shortly
-  after, once thread#2 runs, we will get a disconnect event for the
-  connected device.
+[1] https://lore.kernel.org/linux-kbuild/20231017132045.afswdgcv4axjf6jj@pengutronix.de
 
-Thread#2 completes before thread#1:
-  Then during snd_usb_rediscover_devices() it won't notify of any
-  connection for that particular chip index.
+Uwe Kleine-König (6):
+  usb: gadget: at91-udc: Convert to use module_platform_driver()
+  usb: gadget: fsl-udc: Convert to use module_platform_driver()
+  usb: gadget: fusb300-udc: Convert to use module_platform_driver()
+  usb: gadget: lpc32xx-udc: Convert to use module_platform_driver()
+  usb: gadget: m66592-udc: Convert to use module_platform_driver()
+  usb: gadget: r8a66597-udc: Convert to use module_platform_driver()
 
-Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
----
- sound/soc/soc-usb.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/usb/gadget/udc/at91_udc.c     | 3 ++-
+ drivers/usb/gadget/udc/fsl_udc_core.c | 3 ++-
+ drivers/usb/gadget/udc/fusb300_udc.c  | 7 ++++---
+ drivers/usb/gadget/udc/lpc32xx_udc.c  | 3 ++-
+ drivers/usb/gadget/udc/m66592-udc.c   | 3 ++-
+ drivers/usb/gadget/udc/r8a66597-udc.c | 3 ++-
+ 6 files changed, 14 insertions(+), 8 deletions(-)
 
-diff --git a/sound/soc/soc-usb.c b/sound/soc/soc-usb.c
-index 7407678a993e..60aafbe87c36 100644
---- a/sound/soc/soc-usb.c
-+++ b/sound/soc/soc-usb.c
-@@ -104,6 +104,8 @@ struct snd_soc_usb *snd_soc_usb_add_port(struct device *dev, void *priv,
- 	list_add_tail(&usb->list, &usb_ctx_list);
- 	mutex_unlock(&ctx_mutex);
- 
-+	snd_usb_rediscover_devices();
-+
- 	return usb;
- }
- EXPORT_SYMBOL_GPL(snd_soc_usb_add_port);
+base-commit: 4d5ab2376ec576af173e5eac3887ed0b51bd8566
+-- 
+2.42.0
+
 
