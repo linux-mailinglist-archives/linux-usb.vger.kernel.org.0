@@ -1,162 +1,123 @@
-Return-Path: <linux-usb+bounces-1816-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1829-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 991D27CD021
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 00:59:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D7E37CD0A3
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 01:24:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 56D01B21235
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 22:59:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6CE4F1C20BC1
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 23:24:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A98842EB16;
-	Tue, 17 Oct 2023 22:59:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D4F33C094;
+	Tue, 17 Oct 2023 23:23:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="jSoDuA7e"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ecV+tUaU"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A24F628DD2;
-	Tue, 17 Oct 2023 22:59:29 +0000 (UTC)
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E72A4;
-	Tue, 17 Oct 2023 15:59:28 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39HMH8TN014215;
-	Tue, 17 Oct 2023 22:59:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=iz0L8alZ+dPfV19ATH3djg35IWvxdhzam4YmjqjCkjo=;
- b=jSoDuA7ev1ETkG3XAxlgNryICVimHkObpzvNxVmdmVJTO9JEfUEcVMClGgucImwmRsUo
- K1KLndqHvxqRsb4kyZhIAe1hso4YPXYFhvdyjULou5I1R5GoOcCqf8FPHlAdzpTLzeIG
- n/lFEJktp97sfjdA0q+R8YJOWMraekcPo890IUAc0U94Bd1YEte0/wnCjW0NzwK7sel6
- uebKONjziO+f/5ZkJbsjqFtwrtWTNlGCApUnHfRxAajsEtQxHRh8yhejeHzL1txQyXP+
- coBvW1eSSB6jPydVmEnrVJFSUbMq058BsqgFvO1AJkgFYLF6qbP8qoiHZT78N1fDQIeB 3A== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tstv9sb4p-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 17 Oct 2023 22:59:23 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39HMxMjZ020335
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 17 Oct 2023 22:59:22 GMT
-Received: from [10.110.113.170] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.39; Tue, 17 Oct
- 2023 15:59:21 -0700
-Message-ID: <e668ca8a-8842-4500-ac8d-ae3798238890@quicinc.com>
-Date: Tue, 17 Oct 2023 15:59:12 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F8E73C087;
+	Tue, 17 Oct 2023 23:23:34 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C86111;
+	Tue, 17 Oct 2023 16:23:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1697585010; x=1729121010;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ZMpdPFeaFAxYR/4q025izaH0wmquZAWUlNrQl8oKEZE=;
+  b=ecV+tUaUU2CCH93H4+X2KJowtr7OItAUeLOqkBKxdDxE/syiScfvhiTh
+   gg/w+9AOjwa0a+XrCATxz4caf+JUZoKA5x6oFx13xO/y0XMYlKx+dFLzG
+   2eM+M67cmGObER6op3MzgjGBqruTjI5z2UnDklzec3R/eus1Z/QydVQ1l
+   XbDe8wZdfj8Yecn1cHJb4RbZbMuHcc6tSuusxhHLrXbZcloyVlOElREai
+   8+aEfLQ7WipH7EShb0TNVm0mZtQXd5DgTYSk8/rI/WkQyCCQyse4M0rnU
+   wYkqTREGe4TjMdHLpmeuYvf/kztNjy6DmgGuK2Z/socznO2BLyBsZOrZO
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10866"; a="384778224"
+X-IronPort-AV: E=Sophos;i="6.03,233,1694761200"; 
+   d="scan'208";a="384778224"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2023 16:23:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10866"; a="826637517"
+X-IronPort-AV: E=Sophos;i="6.03,233,1694761200"; 
+   d="scan'208";a="826637517"
+Received: from asprado-mobl2.amr.corp.intel.com (HELO [10.212.55.179]) ([10.212.55.179])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2023 16:23:28 -0700
+Message-ID: <34d0ce88-e006-43d3-bab3-c884c997de4c@linux.intel.com>
+Date: Tue, 17 Oct 2023 18:03:13 -0500
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v4 2/3] dt-bindings: usb: snps,dwc3: Add
- runtime-suspend-on-usb-suspend property
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 31/34] ASoC: qcom: qdsp6: Add headphone jack for
+ offload connection status
 Content-Language: en-US
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Roger Quadros
-	<rogerq@kernel.org>,
-        "gregkh@linuxfoundation.org"
-	<gregkh@linuxfoundation.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>,
-        "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org"
-	<linux-usb@vger.kernel.org>,
-        "quic_kriskura@quicinc.com"
-	<quic_kriskura@quicinc.com>
-References: <cf0227c8-cd02-81b6-9e13-2e7fe6f505f2@kernel.org>
- <20230826015257.mbogiefsbz5474ft@synopsys.com>
- <afd4843b-427a-8535-78e2-f81879378371@linaro.org>
- <969988f6-f01f-0e31-6a98-7d02c5a3a4ad@quicinc.com>
- <20230830013739.srnh2uyhly66yvu2@synopsys.com>
- <d30a8d6a-236a-b6eb-76d7-115cc9950ce1@quicinc.com>
- <6f70a710-c409-23c0-890b-370ccd23e088@linaro.org>
- <20230831030134.z46fjwyr6edl3t7x@synopsys.com>
- <cea3472a-e9f7-39cb-419c-d042b3bf0682@linaro.org>
- <63c9ced1-6204-88e9-1dae-2979388bbc67@quicinc.com>
- <20231002185606.eumc37ezthov7uge@synopsys.com>
-From: Elson Serrao <quic_eserrao@quicinc.com>
-In-Reply-To: <20231002185606.eumc37ezthov7uge@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To: Wesley Cheng <quic_wcheng@quicinc.com>, mathias.nyman@intel.com,
+ gregkh@linuxfoundation.org, lgirdwood@gmail.com, broonie@kernel.org,
+ perex@perex.cz, tiwai@suse.com, agross@kernel.org, andersson@kernel.org,
+ konrad.dybcio@linaro.org, robh+dt@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+ srinivas.kandagatla@linaro.org, bgoswami@quicinc.com,
+ Thinh.Nguyen@synopsys.com
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ alsa-devel@alsa-project.org, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org
+References: <20231017200109.11407-1-quic_wcheng@quicinc.com>
+ <20231017200109.11407-32-quic_wcheng@quicinc.com>
+From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20231017200109.11407-32-quic_wcheng@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Gbb8RL7rkAk20j4csSo-X87zomLET5Xa
-X-Proofpoint-ORIG-GUID: Gbb8RL7rkAk20j4csSo-X87zomLET5Xa
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-17_06,2023-10-17_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 phishscore=0
- priorityscore=1501 mlxlogscore=777 impostorscore=0 suspectscore=0
- adultscore=0 lowpriorityscore=0 bulkscore=0 malwarescore=0 clxscore=1011
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2310170194
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+	SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
 
 
->> HI Thinh
->>
->> Apologies for the delayed response.
->> Series https://urldefense.com/v3/__https://patchwork.kernel.org/project/linux-usb/cover/1655094654-24052-1-git-send-email-quic_kriskura@quicinc.com/__;!!A4F2R9G_pg!YGlVy7No98zfEM-X5iWRhIUJ-gJEJn_gbTR4k12avzENV1TXf7cwJLZUezYzAU-rnHIbbqA1UWM0IE0R-t5SMMTJLwLZ$
->> from Krishna K, introduced a dt property 'wakeup-source' which indicates a
->> platforms capability to handle wakeup interrupts. Based on this property,
->> glue drivers can inform dwc3 core that the device is wakeup capable through
->> device_init_wakeup(). For example dwc3-qcom driver informs it like below as
->> per the implementation done in the above series
->>
->> 	wakeup_source = of_property_read_bool(dev->of_node, "wakeup-source");
->> 	device_init_wakeup(&pdev->dev, wakeup_source);
->> 	device_init_wakeup(&qcom->dwc3->dev, wakeup_source);
->>
->> The dwc3 core now can access this info through device_may_wakeup(dwc->dev)
->> while checking for bus suspend scenario to know whether the platform is
->> capable of detecting wakeup.
->>
->> Please let me know your thoughts on this approach.
->>
-> 
-> Hi Elson,
-> 
-> I think that it may not work for everyone. Some platforms may indicate
-> wakeup-source but should only be applicable in selected scenarios.
-> (e.g. Roger's platform was only intended to keep connect on suspend)
-> 
-> Also, how will you disable it for certain platforms? Probably will need
-> to use compatible string then too.
-> 
+On 10/17/23 15:01, Wesley Cheng wrote:
+> The headphone jack framework has a well defined infrastructure for
+> notifying userspace entities through input devices.  Expose a jack device
+> that carries information about if an offload capable device is connected.
+> Applications can further identify specific offloading information through
+> other SND kcontrols.
 
-Hi Thinh
+maybe I am mistaken but if you expose a jack, is there not a need to
+implement a .set_jack callback in the component driver?
 
-Thank you for your feedback. As an alternative approach, how about 
-exposing an API from dwc3 core that glue drivers can call to enable 
-runtime suspend during bus suspend feature ( i.e this API sets 
-dwc->runtime_suspend_on_usb_suspend field).
+>  static void q6usb_connector_control_init(struct snd_soc_component *component)
+>  {
+> +	struct q6usb_port_data *data = dev_get_drvdata(component->dev);
+>  	int ret;
+>  
+>  	ret = snd_ctl_add(component->card->snd_card,
+> @@ -290,6 +293,11 @@ static void q6usb_connector_control_init(struct snd_soc_component *component)
+>  				snd_ctl_new1(&q6usb_offload_dev_ctrl, component));
+>  	if (ret < 0)
+>  		return;
+> +
+> +	ret = snd_soc_card_jack_new(component->card, "USB offload",
+> +					SND_JACK_HEADSET, &data->hs_jack);
+> +	if (ret)
+> +		return;
 
-Only the platforms that need this feature to be enabled, can call this 
-API after the child (dwc3 core) probe.
+Also if you report a jack then usually there's a difference between
+SND_JACK_HEADPHONE and SND_JACK_HEADSET - where the latter case hints at
+capture support.
 
-Thanks
-Elson
+Clearly you don't have capture support for now, so should this be
+SND_JACK_HEADPHONE ?
+
+I must say I still don't get how this entire patchset would be used, for
+playback userspace *may* use offload but for any sort of voice call then
+userspace *shall* rely on the legacy USB card. Is this not a
+show-stopper for CRAS or PipeWire?
 
