@@ -1,223 +1,162 @@
-Return-Path: <linux-usb+bounces-1815-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1816-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4E427CD01A
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 00:55:00 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 991D27CD021
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 00:59:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C3571C20A66
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 22:54:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 56D01B21235
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 22:59:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E20372E410;
-	Tue, 17 Oct 2023 22:54:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A98842EB16;
+	Tue, 17 Oct 2023 22:59:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="cGU8pgRT"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="jSoDuA7e"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB16143102;
-	Tue, 17 Oct 2023 22:54:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A24F628DD2;
+	Tue, 17 Oct 2023 22:59:29 +0000 (UTC)
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F27AF0;
-	Tue, 17 Oct 2023 15:54:48 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39HMKYaw010936;
-	Tue, 17 Oct 2023 22:54:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=QmkSjAQT6/UOwV1H46ZV5rNieSvZTeLgkEC3zgH2Rbk=;
- b=cGU8pgRTyn8EvwX5nYL+tj8v0QZI+49iczx2c6VbfVga61jwKXwzrmDbCkosb5hZQAX8
- 1uP5i0Hz4RtTQNpwT4xVXL7IJJYFZlrdKX+F/pp9FUWmgbLeeWju7HSUC6uaHE3Udc23
- YCWVH4RgYM2zrPrTF3x8yQF+1BIsFRQSFIWrrRxLHCU0M+QOVpd0TJmemVMGydlhlNRX
- pOqFFqXDUwKGRf0JGjuLUjUDprtwgsXwWY+hHsludZmnrSt4gtfAWmFlH7KmXuhSTA4b
- s9tzIwSjG4h9YeMY8aOhsigCp7tElbqXZyudiYXp0xChwIJ7vhtELKbHLMlp7vDue+ht XQ== 
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E72A4;
+	Tue, 17 Oct 2023 15:59:28 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39HMH8TN014215;
+	Tue, 17 Oct 2023 22:59:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=iz0L8alZ+dPfV19ATH3djg35IWvxdhzam4YmjqjCkjo=;
+ b=jSoDuA7ev1ETkG3XAxlgNryICVimHkObpzvNxVmdmVJTO9JEfUEcVMClGgucImwmRsUo
+ K1KLndqHvxqRsb4kyZhIAe1hso4YPXYFhvdyjULou5I1R5GoOcCqf8FPHlAdzpTLzeIG
+ n/lFEJktp97sfjdA0q+R8YJOWMraekcPo890IUAc0U94Bd1YEte0/wnCjW0NzwK7sel6
+ uebKONjziO+f/5ZkJbsjqFtwrtWTNlGCApUnHfRxAajsEtQxHRh8yhejeHzL1txQyXP+
+ coBvW1eSSB6jPydVmEnrVJFSUbMq058BsqgFvO1AJkgFYLF6qbP8qoiHZT78N1fDQIeB 3A== 
 Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tt14008u9-1
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tstv9sb4p-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 17 Oct 2023 22:54:38 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39HMsZO7015831
+	Tue, 17 Oct 2023 22:59:23 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39HMxMjZ020335
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 17 Oct 2023 22:54:35 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.39; Tue, 17 Oct 2023 15:54:34 -0700
-Date: Tue, 17 Oct 2023 15:54:33 -0700
-From: Bjorn Andersson <quic_bjorande@quicinc.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC: Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio
-	<konrad.dybcio@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski
-	<krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Thinh Nguyen
-	<Thinh.Nguyen@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Philipp Zabel
-	<p.zabel@pengutronix.de>,
-        <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        "Krishna
- Kurapati PSSNV" <quic_kriskura@quicinc.com>
-Subject: Re: [PATCH 10/12] dt-bindings: usb: qcom,dwc3: Introduce flattened
- qcom,dwc3 binding
-Message-ID: <20231017225433.GW3553829@hu-bjorande-lv.qualcomm.com>
-References: <20231016-dwc3-refactor-v1-0-ab4a84165470@quicinc.com>
- <20231016-dwc3-refactor-v1-10-ab4a84165470@quicinc.com>
- <9f53e647-7c38-435f-bc74-e4f417445830@linaro.org>
+	Tue, 17 Oct 2023 22:59:22 GMT
+Received: from [10.110.113.170] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.39; Tue, 17 Oct
+ 2023 15:59:21 -0700
+Message-ID: <e668ca8a-8842-4500-ac8d-ae3798238890@quicinc.com>
+Date: Tue, 17 Oct 2023 15:59:12 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <9f53e647-7c38-435f-bc74-e4f417445830@linaro.org>
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v4 2/3] dt-bindings: usb: snps,dwc3: Add
+ runtime-suspend-on-usb-suspend property
+Content-Language: en-US
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Roger Quadros
+	<rogerq@kernel.org>,
+        "gregkh@linuxfoundation.org"
+	<gregkh@linuxfoundation.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
+        "conor+dt@kernel.org" <conor+dt@kernel.org>,
+        "devicetree@vger.kernel.org"
+	<devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org"
+	<linux-usb@vger.kernel.org>,
+        "quic_kriskura@quicinc.com"
+	<quic_kriskura@quicinc.com>
+References: <cf0227c8-cd02-81b6-9e13-2e7fe6f505f2@kernel.org>
+ <20230826015257.mbogiefsbz5474ft@synopsys.com>
+ <afd4843b-427a-8535-78e2-f81879378371@linaro.org>
+ <969988f6-f01f-0e31-6a98-7d02c5a3a4ad@quicinc.com>
+ <20230830013739.srnh2uyhly66yvu2@synopsys.com>
+ <d30a8d6a-236a-b6eb-76d7-115cc9950ce1@quicinc.com>
+ <6f70a710-c409-23c0-890b-370ccd23e088@linaro.org>
+ <20230831030134.z46fjwyr6edl3t7x@synopsys.com>
+ <cea3472a-e9f7-39cb-419c-d042b3bf0682@linaro.org>
+ <63c9ced1-6204-88e9-1dae-2979388bbc67@quicinc.com>
+ <20231002185606.eumc37ezthov7uge@synopsys.com>
+From: Elson Serrao <quic_eserrao@quicinc.com>
+In-Reply-To: <20231002185606.eumc37ezthov7uge@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: bDq5BbIqjHZt77dWStEfmDtmVLprR4JF
-X-Proofpoint-ORIG-GUID: bDq5BbIqjHZt77dWStEfmDtmVLprR4JF
+X-Proofpoint-GUID: Gbb8RL7rkAk20j4csSo-X87zomLET5Xa
+X-Proofpoint-ORIG-GUID: Gbb8RL7rkAk20j4csSo-X87zomLET5Xa
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-10-17_06,2023-10-17_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- mlxlogscore=522 mlxscore=0 bulkscore=0 lowpriorityscore=0 clxscore=1015
- priorityscore=1501 suspectscore=0 phishscore=0 adultscore=0
- impostorscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2309180000 definitions=main-2310170194
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 phishscore=0
+ priorityscore=1501 mlxlogscore=777 impostorscore=0 suspectscore=0
+ adultscore=0 lowpriorityscore=0 bulkscore=0 malwarescore=0 clxscore=1011
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2310170194
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Tue, Oct 17, 2023 at 08:11:45AM +0200, Krzysztof Kozlowski wrote:
-> On 17/10/2023 05:11, Bjorn Andersson wrote:
-> > diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-[..]
-> > +select:
-> > +  properties:
-> > +    compatible:
-> > +      items:
-> > +        - enum:
-> > +            - qcom,ipq4019-dwc3
-[..]
-> > +            - qcom,sm8550-dwc3
+
+
+>> HI Thinh
+>>
+>> Apologies for the delayed response.
+>> Series https://urldefense.com/v3/__https://patchwork.kernel.org/project/linux-usb/cover/1655094654-24052-1-git-send-email-quic_kriskura@quicinc.com/__;!!A4F2R9G_pg!YGlVy7No98zfEM-X5iWRhIUJ-gJEJn_gbTR4k12avzENV1TXf7cwJLZUezYzAU-rnHIbbqA1UWM0IE0R-t5SMMTJLwLZ$
+>> from Krishna K, introduced a dt property 'wakeup-source' which indicates a
+>> platforms capability to handle wakeup interrupts. Based on this property,
+>> glue drivers can inform dwc3 core that the device is wakeup capable through
+>> device_init_wakeup(). For example dwc3-qcom driver informs it like below as
+>> per the implementation done in the above series
+>>
+>> 	wakeup_source = of_property_read_bool(dev->of_node, "wakeup-source");
+>> 	device_init_wakeup(&pdev->dev, wakeup_source);
+>> 	device_init_wakeup(&qcom->dwc3->dev, wakeup_source);
+>>
+>> The dwc3 core now can access this info through device_may_wakeup(dwc->dev)
+>> while checking for bus suspend scenario to know whether the platform is
+>> capable of detecting wakeup.
+>>
+>> Please let me know your thoughts on this approach.
+>>
 > 
-> This enum could be replaced with '{}'. Alternatively, drop enum entire
-> select replaced with:
-> - contains
->   - items:
->       - const: qcom,dwc3
->       - const: snps,dwc3
+> Hi Elson,
 > 
-
-I thought this would be what I needed as well, but unfortunately this
-select matches either qcom,dwc3, snps,dwc3, or both. With the result
-that e.g. the example in the snps,dwc3 binding matches against this and
-as expected fails when validated against this binding.
-
-Taking yet another look at this, and reading more about json validation
-I figured out that the following matches nodes with both the
-compatibles:
-
-select:
-  properties:
-    compatible:
-      items:
-        - const: qcom,dwc3
-        - const: snps,dwc3
-  required:
-    - compatible
-
-[..]
-> > +
-> > +# Required child node:
+> I think that it may not work for everyone. Some platforms may indicate
+> wakeup-source but should only be applicable in selected scenarios.
+> (e.g. Roger's platform was only intended to keep connect on suspend)
 > 
-> Drop
+> Also, how will you disable it for certain platforms? Probably will need
+> to use compatible string then too.
 > 
 
-Of course.
+Hi Thinh
 
-> 
-> ...
-> 
-> > diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> > index d81c2e849ca9..d6914b8cef6a 100644
-> > --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> > +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> > @@ -44,14 +44,18 @@ properties:
-> >        It's either a single common DWC3 interrupt (dwc_usb3) or individual
-> >        interrupts for the host, gadget and DRD modes.
-> >      minItems: 1
-> > -    maxItems: 4
-> > +    maxItems: 5
-> >  
-> >    interrupt-names:
-> > -    minItems: 1
-> > -    maxItems: 4
-> >      oneOf:
-> > -      - const: dwc_usb3
-> > -      - items:
-> > +      - minItems: 1
-> > +        maxItems: 5
-> > +        items:
-> > +          - const: dwc_usb3
-> > +        additionalItems: true
-> 
-> This is not correct change. Before, one dwc_usb3 interrupt was combined
-> allowed, or a set of host+peripheral+otg+wakeup. Now, you allow combined
-> dwc_usb3 with anything.
-> 
+Thank you for your feedback. As an alternative approach, how about 
+exposing an API from dwc3 core that glue drivers can call to enable 
+runtime suspend during bus suspend feature ( i.e this API sets 
+dwc->runtime_suspend_on_usb_suspend field).
 
-My intention here is to make below list of 5 strings be valid according
-to the snps,dwc3 (i.e. dwc_usb3 being the first item), and valid
-according to the qcom,dwc3 binding with all 5 defined.
+Only the platforms that need this feature to be enabled, can call this 
+API after the child (dwc3 core) probe.
 
-  interrupt-names = "dwc_usb3", "hs_phy_irq", "ss_phy_irq",
-		    "dm_hs_phy_irq", "dp_hs_phy_irq";
-
-When I express this as:
-
-  interrupt-names:
-    minItems: 1
-    maxItems: 5
-    oneOf:
-      - const: dwc_usb3
-      - items:
-          enum: [host, peripheral, otg, wakeup]
-
-I get:
-
-/local/mnt/workspace/bjorande/linux/Documentation/devicetree/bindings/usb/qcom,dwc3.example.dtb: usb@a600000: interrupt-names: 'oneOf' conditional failed, one must be fixed:
-        ['dwc_usb3', 'hs_phy_irq', 'ss_phy_irq', 'dm_hs_phy_irq', 'dp_hs_phy_irq'] is too long
-        'dwc_usb3' is not one of ['host', 'peripheral', 'otg', 'wakeup']
-        'hs_phy_irq' is not one of ['host', 'peripheral', 'otg', 'wakeup']
-        'ss_phy_irq' is not one of ['host', 'peripheral', 'otg', 'wakeup']
-        'dm_hs_phy_irq' is not one of ['host', 'peripheral', 'otg', 'wakeup']
-        'dp_hs_phy_irq' is not one of ['host', 'peripheral', 'otg', 'wakeup']
-        from schema $id: http://devicetree.org/schemas/usb/snps,dwc3.yaml#
-
-Which to me sounds like the two oneOf branches allow me a single entry,
-or items from the set given here. In contrast, I believe that my
-proposal allow 1-5 items, where the first needs to be dwc_usb3.
-
-But the proposal does look messy, so I'd appreciate some guidance on
-this one.
-
-Thanks,
-Bjorn
+Thanks
+Elson
 
