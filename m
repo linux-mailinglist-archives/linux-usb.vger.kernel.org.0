@@ -1,219 +1,269 @@
-Return-Path: <linux-usb+bounces-1745-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1746-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E8257CC5C0
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 16:17:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E8267CC74E
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 17:21:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8937F1C20C99
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 14:17:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C15811F22FBD
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 15:21:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14E8343AB3;
-	Tue, 17 Oct 2023 14:17:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Wa2XdJlp"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB27C4448D;
+	Tue, 17 Oct 2023 15:21:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6EB243AA2
-	for <linux-usb@vger.kernel.org>; Tue, 17 Oct 2023 14:17:25 +0000 (UTC)
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE89102
-	for <linux-usb@vger.kernel.org>; Tue, 17 Oct 2023 07:17:24 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-5079fa1bbf8so4927798e87.0
-        for <linux-usb@vger.kernel.org>; Tue, 17 Oct 2023 07:17:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1697552241; x=1698157041; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZhfkjFsxmGF82cD1/zPvd0Z9FpQNYOUYA0aagsJzr4o=;
-        b=Wa2XdJlpa2WrADa42UyRAP0CIaiwAMdAmCoDww0WbJg+ymnin6+tpSfBnxSbZr2MxH
-         GyD8r3LTd9PDsjLDDKkcZlFlvFx2q1FCkY66aBkUJT03860pIluGa3BPASgXID/jWTLF
-         5pKFMov7zyA0Ne5jQc0IaRh0WDKh8luJN//OM=
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BB0844484
+	for <linux-usb@vger.kernel.org>; Tue, 17 Oct 2023 15:20:59 +0000 (UTC)
+Received: from mail-oo1-f77.google.com (mail-oo1-f77.google.com [209.85.161.77])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 710A4BA
+	for <linux-usb@vger.kernel.org>; Tue, 17 Oct 2023 08:20:57 -0700 (PDT)
+Received: by mail-oo1-f77.google.com with SMTP id 006d021491bc7-57b9c8f4281so7703493eaf.0
+        for <linux-usb@vger.kernel.org>; Tue, 17 Oct 2023 08:20:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697552241; x=1698157041;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZhfkjFsxmGF82cD1/zPvd0Z9FpQNYOUYA0aagsJzr4o=;
-        b=KqHH/3DSxoZLEBEzjKt2aukqrMO6xWNDa3Xo4VDfTcykKLU4ODICxP0NpqXV5LdXAD
-         UTFCF9FMqQ+013V/J8iDMvUtZ8Ooxejb8Ro6stAu4isyYFl1dJfX9bBtx9OmjcvbwxYR
-         zrfwx4XiHwYtVb16rmrwX8sMPAWxkoUL4zubBqsC6bS57P5q+U2KEzWHbj060XYSJG1q
-         +MAQKncO6CQA6OpuR95pBK5cEoyLreFmhJ+ILhBT9aL6roA93n0QbimLjDNAAX7F7pZK
-         A4D0LQksYSG0kQGwN28Fp29pZHdkcmbITxFIN5zxFbnfDNHtmCV1L4OjIQBKacrDjPul
-         0kwA==
-X-Gm-Message-State: AOJu0YxY8i8RzL1Amml3torzmwCJ0ypK8bGIlPqjz9nOenMdrr14EQAZ
-	LcNXhFYNpZUkIE7KLe00KtidpFmYAgdxlDXXp+CA2w/v
-X-Google-Smtp-Source: AGHT+IGTnGuGN6Y7PwqPfm/O18rFOv8XhydecCMul2BpmfnrGV439TBb+UsPfg/+2qMIKVhbAr85yQ==
-X-Received: by 2002:ac2:5a59:0:b0:503:264b:efc9 with SMTP id r25-20020ac25a59000000b00503264befc9mr1782560lfn.18.1697552241101;
-        Tue, 17 Oct 2023 07:17:21 -0700 (PDT)
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com. [209.85.128.47])
-        by smtp.gmail.com with ESMTPSA id bd15-20020a056402206f00b0053e15aefb0fsm1275213edb.85.2023.10.17.07.17.20
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Oct 2023 07:17:20 -0700 (PDT)
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4063bfc6c03so78045e9.0
-        for <linux-usb@vger.kernel.org>; Tue, 17 Oct 2023 07:17:20 -0700 (PDT)
-X-Received: by 2002:a05:600c:214d:b0:408:2b:5956 with SMTP id
- v13-20020a05600c214d00b00408002b5956mr2161wml.6.1697552239873; Tue, 17 Oct
- 2023 07:17:19 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1697556057; x=1698160857;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WLyjbBHzm8zSDA2CdkSkN7NZXD6muo+11DDcGDVcfos=;
+        b=f0ihqn91XJRk72lKzclTS7dhFIvb8hgQmJLwxfAXYdg/OjI3cbdc+GzBMUpZUQDjzX
+         ZXKq9Jhj6bxNO2be4UdPcSpfqCFIGqiH4v0w4kni6fUN4SKb3tEeWow9Y9mT+c/IyrDy
+         LxAWOrToD6SGKkpOjzwn0UCmaavt+ILMZz69esj7KPG2q+oXGU5psRbJ0n1BEPVPkWWa
+         Kod91HVrf7uiTa6LNsZxc48PNvwylbnjqET1PPZ/O8oEYyVH2Y4jtEb5DHdrUARm75Vn
+         x4gmCfkIZJwyoXWI99MXh0nzb1ojME5DyME4gZmBOwdonrJOOmvRhj614kV+8OTfDpa3
+         sAFA==
+X-Gm-Message-State: AOJu0YzlBz0HXk54J1pg+5xxwJXF6/6GQODWD34CR63/1alMb95QTLHx
+	0rhWPA3ygG4PhVMvZgA4FvxS7BJTOiGFV+jQwbpj/u9cXCSI
+X-Google-Smtp-Source: AGHT+IGe2AxnfMvZbQGfEKwdZq/NCV2ZV2qI6BiQNC8dblrJT3MxdJnc3QMoluFXbwcP+f++6UyDQs2w/dcSTrQRFnX4rivjoAL1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231012192552.3900360-1-dianders@chromium.org>
- <20231012122458.v3.5.Ib2affdbfdc2527aaeef9b46d4f23f7c04147faeb@changeid>
- <29f9a2ff1979406489213909b940184f@realtek.com> <CAD=FV=U4rGozXHoK8+ejPgRtyoACy1971ftoatQivqzk2tk5ng@mail.gmail.com>
- <052401da00fa$dacccd90$906668b0$@realtek.com>
-In-Reply-To: <052401da00fa$dacccd90$906668b0$@realtek.com>
-From: Doug Anderson <dianders@chromium.org>
-Date: Tue, 17 Oct 2023 07:17:03 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=XQswgKZh-JQ6PuKGRmrDMfDmZwM+MUpAcOk1=7Ppjyiw@mail.gmail.com>
-Message-ID: <CAD=FV=XQswgKZh-JQ6PuKGRmrDMfDmZwM+MUpAcOk1=7Ppjyiw@mail.gmail.com>
-Subject: Re: [PATCH v3 5/5] r8152: Block future register access if register
- access fails
-To: Hayes Wang <hayeswang@realtek.com>
-Cc: Jakub Kicinski <kuba@kernel.org>, "David S . Miller" <davem@davemloft.net>, 
-	Alan Stern <stern@rowland.harvard.edu>, Simon Horman <horms@kernel.org>, 
-	Edward Hill <ecgh@chromium.org>, Laura Nao <laura.nao@collabora.com>, 
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, Grant Grundler <grundler@chromium.org>, 
-	=?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>, 
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>
+X-Received: by 2002:a4a:b406:0:b0:581:e323:1b05 with SMTP id
+ y6-20020a4ab406000000b00581e3231b05mr398426oon.0.1697556056828; Tue, 17 Oct
+ 2023 08:20:56 -0700 (PDT)
+Date: Tue, 17 Oct 2023 08:20:56 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c0f3970607eb11a0@google.com>
+Subject: [syzbot] [kernel?] usb-testing boot error: KASAN: slab-out-of-bounds
+ Write in vhci_start
+From: syzbot <syzbot+2c502e3d1f388a6ea2fd@syzkaller.appspotmail.com>
+To: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-	version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+	HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
+	RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Hi,
+Hello,
 
-On Tue, Oct 17, 2023 at 6:07=E2=80=AFAM Hayes Wang <hayeswang@realtek.com> =
-wrote:
->
-> Doug Anderson <dianders@chromium.org>
-> > Sent: Tuesday, October 17, 2023 12:47 AM
-> [...
-> > > >  static int generic_ocp_read(struct r8152 *tp, u16 index, u16 size,
-> > > > @@ -8265,6 +8353,19 @@ static int rtl8152_pre_reset(struct
-> > usb_interface
-> > > > *intf)
-> > > >         if (!tp)
-> > > >                 return 0;
-> > > >
-> > > > +       /* We can only use the optimized reset if we made it to the=
- end of
-> > > > +        * probe without any register access fails, which sets
-> > > > +        * `PROBED_WITH_NO_ERRORS` to true. If we didn't have that =
-then return
-> > > > +        * an error here which tells the USB framework to fully unb=
-ind/rebind
-> > > > +        * our driver.
-> > >
-> > > Would you stay in a loop of unbind and rebind,
-> > > if the control transfers in the probe() are not always successful?
-> > > I just think about the worst case that at least one control always fa=
-ils in probe().
-> >
-> > We won't! :-) One of the first things that rtl8152_probe() does is to
-> > call rtl8152_get_version(). That goes through to
-> > rtl8152_get_version(). That function _doesn't_ queue up a reset if
-> > there are communication problems, but it does do 3 retries of the
-> > read. So if all 3 reads fail then we will permanently fail probe,
-> > which I think is the correct thing to do.
->
-> The probe() contains control transfers in
->         1. rtl8152_get_version()
->         2. tp->rtl_ops.init()
->
-> If one of the 3 control transfers in 1) is successful AND
-> any control transfer in 2) fails,
-> you would queue a usb reset which would unbind/rebind the driver.
-> Then, the loop starts.
-> The loop would be broken, if and only if
->         a) all control transfers in 1) fail, OR
->         b) all control transfers in 2) succeed.
->
-> That is, the loop would be broken when the fail rate of the control trans=
-fer is high or low enough.
-> Otherwise, you would queue a usb reset again and again.
-> For example, if the fail rate of the control transfer is 10% ~ 60%,
-> I think you have high probability to keep the loop continually.
-> Would it never happen?
+syzbot found the following issue on:
 
-Actually, even with a failure rate of 10% I don't think you'll end up
-with a fully continuous loop, right? All you need is to get 3 failures
-in a row in rtl8152_get_version() to get out of the loop. So with a
-10% failure rate you'd unbind/bind 1000 times (on average) and then
-(finally) give up. With a 50% failure rate I think you'd only
-unbind/bind 8 times on average, right? Of course, I guess 1000 loops
-is pretty close to infinite.
+HEAD commit:    1034cc423f1b gpio: update Intel LJCA USB GPIO driver
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=1346549d680000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2978ac6b274c8961
+dashboard link: https://syzkaller.appspot.com/bug?extid=2c502e3d1f388a6ea2fd
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
 
-In any case, we haven't actually seen hardware that fails like this.
-We've seen failure rates that are much much lower and we can imagine
-failure rates that are 100% if we're got really broken hardware. Do
-you think cases where failure rates are middle-of-the-road are likely?
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/c2d563dc9f85/disk-1034cc42.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/ad2ee75b14c0/vmlinux-1034cc42.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/0e21b4099d7d/bzImage-1034cc42.xz
 
-I would also say that nothing we can do can perfectly handle faulty
-hardware. If we're imagining theoretical hardware, we could imagine
-theoretical hardware that de-enumerated itself and re-enumerated
-itself every half second because the firmware on the device crashed or
-some regulator kept dropping. This faulty hardware would also cause an
-infinite loop of de-enumeration and re-enumeration, right?
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+2c502e3d1f388a6ea2fd@syzkaller.appspotmail.com
 
-Presumably if we get into either case, the user will realize that the
-hardware isn't working and will unplug it from the system. While the
-system is doing the loop of trying to enumerate the hardware, it will
-be taking up a bunch of extra CPU cycles but (I believe) it won't be
-fully locked up or anything. The machine will still function and be
-able to do non-Ethernet activities, right? I would say that the worst
-thing about this state would be that it would stress corner cases in
-the reset of the USB subsystem, possibly ticking bugs.
+usb usb4: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.06
+usb usb4: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+usb usb4: Product: Dummy host controller
+usb usb4: Manufacturer: Linux 6.6.0-rc4-syzkaller-00083-g1034cc423f1b dummy_hcd
+usb usb4: SerialNumber: dummy_hcd.3
+hub 4-0:1.0: USB hub found
+hub 4-0:1.0: 1 port detected
+dummy_hcd dummy_hcd.4: USB Host+Gadget Emulator, driver 02 May 2005
+dummy_hcd dummy_hcd.4: Dummy host controller
+dummy_hcd dummy_hcd.4: new USB bus registered, assigned bus number 5
+usb usb5: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.06
+usb usb5: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+usb usb5: Product: Dummy host controller
+usb usb5: Manufacturer: Linux 6.6.0-rc4-syzkaller-00083-g1034cc423f1b dummy_hcd
+usb usb5: SerialNumber: dummy_hcd.4
+hub 5-0:1.0: USB hub found
+hub 5-0:1.0: 1 port detected
+dummy_hcd dummy_hcd.5: USB Host+Gadget Emulator, driver 02 May 2005
+dummy_hcd dummy_hcd.5: Dummy host controller
+dummy_hcd dummy_hcd.5: new USB bus registered, assigned bus number 6
+usb usb6: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.06
+usb usb6: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+usb usb6: Product: Dummy host controller
+usb usb6: Manufacturer: Linux 6.6.0-rc4-syzkaller-00083-g1034cc423f1b dummy_hcd
+usb usb6: SerialNumber: dummy_hcd.5
+hub 6-0:1.0: USB hub found
+hub 6-0:1.0: 1 port detected
+dummy_hcd dummy_hcd.6: USB Host+Gadget Emulator, driver 02 May 2005
+dummy_hcd dummy_hcd.6: Dummy host controller
+dummy_hcd dummy_hcd.6: new USB bus registered, assigned bus number 7
+usb usb7: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.06
+usb usb7: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+usb usb7: Product: Dummy host controller
+usb usb7: Manufacturer: Linux 6.6.0-rc4-syzkaller-00083-g1034cc423f1b dummy_hcd
+usb usb7: SerialNumber: dummy_hcd.6
+hub 7-0:1.0: USB hub found
+hub 7-0:1.0: 1 port detected
+dummy_hcd dummy_hcd.7: USB Host+Gadget Emulator, driver 02 May 2005
+dummy_hcd dummy_hcd.7: Dummy host controller
+dummy_hcd dummy_hcd.7: new USB bus registered, assigned bus number 8
+usb usb8: New USB device found, idVendor=1d6b, idProduct=0002, bcdDevice= 6.06
+usb usb8: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+usb usb8: Product: Dummy host controller
+usb usb8: Manufacturer: Linux 6.6.0-rc4-syzkaller-00083-g1034cc423f1b dummy_hcd
+usb usb8: SerialNumber: dummy_hcd.7
+hub 8-0:1.0: USB hub found
+hub 8-0:1.0: 1 port detected
+vhci_hcd vhci_hcd.0: USB/IP Virtual Host Controller
+vhci_hcd vhci_hcd.0: new USB bus registered, assigned bus number 9
+==================================================================
+BUG: KASAN: slab-out-of-bounds in lockdep_init_map_type+0x6ff/0x7c0 kernel/locking/lockdep.c:4862
+Write of size 8 at addr ffff888106392fe8 by task swapper/0/1
 
-So I guess I would summarize all the above as:
+CPU: 1 PID: 1 Comm: swapper/0 Not tainted 6.6.0-rc4-syzkaller-00083-g1034cc423f1b #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/06/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd9/0x1b0 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:364 [inline]
+ print_report+0xc4/0x620 mm/kasan/report.c:475
+ kasan_report+0xda/0x110 mm/kasan/report.c:588
+ lockdep_init_map_type+0x6ff/0x7c0 kernel/locking/lockdep.c:4862
+ lockdep_init_map_waits include/linux/lockdep.h:192 [inline]
+ lockdep_init_map_wait include/linux/lockdep.h:199 [inline]
+ __raw_spin_lock_init+0x3a/0x110 kernel/locking/spinlock_debug.c:24
+ vhci_start+0x63d/0x880 drivers/usb/usbip/vhci_hcd.c:1181
+ usb_add_hcd+0x958/0x1770 drivers/usb/core/hcd.c:2944
+ vhci_hcd_probe+0x12c/0x460 drivers/usb/usbip/vhci_hcd.c:1363
+ platform_probe+0xff/0x1e0 drivers/base/platform.c:1404
+ call_driver_probe drivers/base/dd.c:579 [inline]
+ really_probe+0x234/0xc90 drivers/base/dd.c:658
+ __driver_probe_device+0x1de/0x4b0 drivers/base/dd.c:800
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:830
+ __device_attach_driver+0x1d4/0x300 drivers/base/dd.c:958
+ bus_for_each_drv+0x157/0x1d0 drivers/base/bus.c:457
+ __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1030
+ bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
+ device_add+0x117e/0x1aa0 drivers/base/core.c:3624
+ platform_device_add+0x36d/0x840 drivers/base/platform.c:717
+ platform_device_register_full+0x3ec/0x550 drivers/base/platform.c:844
+ vhci_hcd_init+0x1ad/0x360 drivers/usb/usbip/vhci_hcd.c:1532
+ do_one_initcall+0x117/0x630 init/main.c:1232
+ do_initcall_level init/main.c:1294 [inline]
+ do_initcalls init/main.c:1310 [inline]
+ do_basic_setup init/main.c:1329 [inline]
+ kernel_init_freeable+0x5bd/0x8f0 init/main.c:1547
+ kernel_init+0x1c/0x2a0 init/main.c:1437
+ ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:304
+ </TASK>
 
-If hardware is broken in just the right way then this patch could
-cause a nearly infinite unbinding/rebinding of the r8152 driver.
-However:
+Allocated by task 1:
+ kasan_save_stack+0x33/0x50 mm/kasan/common.c:45
+ kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+ ____kasan_kmalloc mm/kasan/common.c:374 [inline]
+ __kasan_kmalloc+0x87/0x90 mm/kasan/common.c:383
+ kasan_kmalloc include/linux/kasan.h:198 [inline]
+ __do_kmalloc_node mm/slab_common.c:1023 [inline]
+ __kmalloc_node_track_caller+0x61/0x100 mm/slab_common.c:1043
+ kmemdup+0x29/0x60 mm/util.c:131
+ kmemdup include/linux/fortify-string.h:765 [inline]
+ platform_device_add_data+0x30/0xc0 drivers/base/platform.c:638
+ platform_device_register_full+0x376/0x550 drivers/base/platform.c:832
+ vhci_hcd_init+0x1ad/0x360 drivers/usb/usbip/vhci_hcd.c:1532
+ do_one_initcall+0x117/0x630 init/main.c:1232
+ do_initcall_level init/main.c:1294 [inline]
+ do_initcalls init/main.c:1310 [inline]
+ do_basic_setup init/main.c:1329 [inline]
+ kernel_init_freeable+0x5bd/0x8f0 init/main.c:1547
+ kernel_init+0x1c/0x2a0 init/main.c:1437
+ ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:304
 
-1. It doesn't seem terribly likely for hardware to be broken in just this w=
-ay.
+The buggy address belongs to the object at ffff888106392fc8
+ which belongs to the cache kmalloc-8 of size 8
+The buggy address is located 24 bytes to the right of
+ allocated 8-byte region [ffff888106392fc8, ffff888106392fd0)
 
-2. We haven't seen hardware broken in just this way.
+The buggy address belongs to the physical page:
+page:ffffea000418e480 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x106392
+flags: 0x200000000000800(slab|node=0|zone=2)
+page_type: 0xffffffff()
+raw: 0200000000000800 ffff888100041280 dead000000000122 0000000000000000
+raw: 0000000000000000 0000000000660066 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12cc0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY), pid 1, tgid 1 (swapper/0), ts 6905814461, free_ts 0
+ set_page_owner include/linux/page_owner.h:31 [inline]
+ post_alloc_hook+0x2cf/0x340 mm/page_alloc.c:1536
+ prep_new_page mm/page_alloc.c:1543 [inline]
+ get_page_from_freelist+0x10e1/0x2fd0 mm/page_alloc.c:3170
+ __alloc_pages+0x1d0/0x4a0 mm/page_alloc.c:4426
+ alloc_page_interleave+0x1e/0x230 mm/mempolicy.c:2130
+ alloc_pages+0x22a/0x270 mm/mempolicy.c:2292
+ alloc_slab_page mm/slub.c:1870 [inline]
+ allocate_slab+0x251/0x380 mm/slub.c:2017
+ new_slab mm/slub.c:2070 [inline]
+ ___slab_alloc+0x8c7/0x1580 mm/slub.c:3223
+ __slab_alloc.constprop.0+0x56/0xa0 mm/slub.c:3322
+ __slab_alloc_node mm/slub.c:3375 [inline]
+ slab_alloc_node mm/slub.c:3468 [inline]
+ __kmem_cache_alloc_node+0x12c/0x310 mm/slub.c:3517
+ __do_kmalloc_node mm/slab_common.c:1022 [inline]
+ __kmalloc_node_track_caller+0x50/0x100 mm/slab_common.c:1043
+ kvasprintf+0xbd/0x150 lib/kasprintf.c:25
+ kvasprintf_const+0x66/0x190 lib/kasprintf.c:49
+ kobject_set_name_vargs+0x5a/0x130 lib/kobject.c:272
+ dev_set_name+0xc8/0x100 drivers/base/core.c:3427
+ usb_create_ep_devs+0x158/0x2a0 drivers/usb/core/endpoint.c:167
+ usb_new_device+0xfd8/0x1960 drivers/usb/core/hub.c:2617
+page_owner free stack trace missing
 
-3. Hardware broken in a slightly different way could cause infinite
-unbinding/rebinding even without this patch.
-
-4. Infinite unbinding/rebinding of a USB adapter isn't great, but not
-the absolute worst thing.
-
-
-That all being said, if we wanted to address this we could try two
-different ways:
-
-a) We could add a global in the r8152 driver and limit the number of
-times we reset. This gets a little ugly because if we have multiple
-r8152 adapters plugged in then the same global would be used for both,
-but maybe it's OK?
-
-b) We could improve the USB core to somehow prevent usb_reset_device()
-from running too much on a given device?
+Memory state around the buggy address:
+ ffff888106392e80: fc fa fc fc fc fc 00 fc fc fc fc 00 fc fc fc fc
+ ffff888106392f00: 00 fc fc fc fc 00 fc fc fc fc 00 fc fc fc fc fa
+>ffff888106392f80: fc fc fc fc 07 fc fc fc fc 00 fc fc fc fc fc fc
+                                                          ^
+ ffff888106393000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffff888106393080: 00 00 00 00 00 fc fc fc fc fc fc fc fc 00 00 00
+==================================================================
 
 
-...though I would re-emphasize that I don't think this is something we
-need to address now. If later we actually see a problem we can always
-address it then.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
--Doug
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to overwrite bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
