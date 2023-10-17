@@ -1,66 +1,65 @@
-Return-Path: <linux-usb+bounces-1723-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1724-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37EB37CBA7F
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 08:03:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 624107CBA86
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 08:05:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AF533B21164
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 06:03:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8197D1C20A7D
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 06:05:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E71EC8DB;
-	Tue, 17 Oct 2023 06:03:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ADECC8E8;
+	Tue, 17 Oct 2023 06:05:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XqgElqdz"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ppo7mwH4"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9451AC2CD
-	for <linux-usb@vger.kernel.org>; Tue, 17 Oct 2023 06:03:21 +0000 (UTC)
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F00B6
-	for <linux-usb@vger.kernel.org>; Mon, 16 Oct 2023 23:03:19 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-50435a9f800so6598143e87.2
-        for <linux-usb@vger.kernel.org>; Mon, 16 Oct 2023 23:03:19 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9C0D8813
+	for <linux-usb@vger.kernel.org>; Tue, 17 Oct 2023 06:05:06 +0000 (UTC)
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4912FB0
+	for <linux-usb@vger.kernel.org>; Mon, 16 Oct 2023 23:05:04 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-307d20548adso4671898f8f.0
+        for <linux-usb@vger.kernel.org>; Mon, 16 Oct 2023 23:05:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697522598; x=1698127398; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=1o4mb2iZUz1SnoRWPsXsV2zwIl1BLvqgIpgXyGVIoRo=;
-        b=XqgElqdzcmlqoWiaEqtW3TUoS7W5fS4nHEF2FYebGNsuFQALg7yNDChFcDStVKtcxz
-         cCIm3q9y5VKRio1mkixNe0Hv2dH1r2yJSU8PElB6rfp8DoEqJ7oivaVWXBPhCY1pvrMz
-         9aUC7/hjZ3kYKHnuuv9MI4HvQZUzo7WnNI+ypyEZ+JUMfcJyDIduRna7QalCzupgEmMk
-         WWYovXOXm3uYJrety2gbWTeO86GxdvQe7uiZxkPiEkQpT0LfLpTE8BuTKpj/3nZoHUOX
-         x49L9o9amr8MiWn8UPS017EcSuWMB84J/vp0gpX8D3Nw/rtkxjZIMiasJdckgrie4EMW
-         u16g==
+        d=linaro.org; s=google; t=1697522703; x=1698127503; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5M1cmW2rfWV3X44jT5kx+HhLqoh3Rz91eVWm6qY6Tz8=;
+        b=ppo7mwH4GtV8tj2/z2i1PWhrFPZpNflel68ixnbZQJ0xu3/KLKzCyfjH7PL7AjOW8J
+         QxipnTIP8uW0tsDenQdI3p0mc86fDAc8a5hkS4VTMKqlPFmK7mUwSfjVM9xOMd5nlp6i
+         JFrSEc1YNMrepiFDJJLTVDBi1ad06pI2Fhv7+x38MYIuflCdnmk4vtwDaxZxoaXnLMid
+         89l62kujCiWfuVc8G7+qP0xpGi+/iUp2B3yK5SUeHi1VSZI2eAG9B8bhYcNxp/C7QO3Q
+         WtPUDMK+849yoBIuMccvGQrJgvr/eBC+XBp9axqgey1vcxbzvTBt/sWB7s4daC2Zi4uB
+         n+Mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697522598; x=1698127398;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1o4mb2iZUz1SnoRWPsXsV2zwIl1BLvqgIpgXyGVIoRo=;
-        b=Mpi7HhpCtHRf08Ir7ThKMTi2dICm7Zipe7Llx669RExtFKXHaew/MM8XfpjmyaHisW
-         vlAE68cn2wMqU+5n2d4ed2Ce49B1lQITf6XzazHZU60lSW0Df6MXPT7sw/PZhssm/GBx
-         KZmmEgZZ/8SPndz9IuMsLawuJFeivHKS2MPhnsSa5QrBtUd3ucnN/9VAdRbKw7BsvwDZ
-         FGjVJIfJ/vY3icjHrZc4ckhwN/6qNOzsQWgp+9y3yeeAQXMhMaKjLKZxMgto7qAA3PBM
-         NPcEvUksKOnoTeuAyYPuQLCLssERqKhka8kdLii6K44LKFlQ7/dRR4WLRDer8T3tW+V5
-         VaSA==
-X-Gm-Message-State: AOJu0Yyf3YNdZzfI443OJBdhmdhgmhbjY0EPcjHFmTY6oIzJIU7LoOUG
-	HNwVEqD0DQIxqrSRFbbYuJke7g==
-X-Google-Smtp-Source: AGHT+IFSCLHHu1/7FUxXMD/LNbBo5XUyAFZD012+UIGMyHYURmW3pgD6FcsjGoNU6NRaGfwtblmpWw==
-X-Received: by 2002:ac2:5585:0:b0:507:9608:4a87 with SMTP id v5-20020ac25585000000b0050796084a87mr989223lfg.56.1697522597659;
-        Mon, 16 Oct 2023 23:03:17 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1697522703; x=1698127503;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5M1cmW2rfWV3X44jT5kx+HhLqoh3Rz91eVWm6qY6Tz8=;
+        b=DKKpOhvfXAd6mQAEBXrTn6Pu6KIC4TsT6xIjg8Ei1mr2kTIGwTI6R0W3fQVC6gPAFw
+         IZxAqKOOzBRuU+4MnSiM7j9hTeRydT9Sg77x/7avnOqMeOEGiY4L4eAEKwRgSko9PTml
+         3msviajUxfsPGuhLZ1zHJ0E87uCan9VNzGkIC7R5e6CLOOdzBvAY667R25ekJ8zx4ift
+         7MWxC333chP4HxV9BkjKKfqb3p99AS0gPd5yytqxb3OoPMsPKOmb8ofoDfZ9npSUPKEh
+         yZ5PDsoglkTtRpWb77rZFhmX0ClseEqlcR0lWAJrjQCoRgdtozxayt9lAc8VBHAchevV
+         Y8uA==
+X-Gm-Message-State: AOJu0Yz1SsmS9v9kVhj0qYtep8nAdsIRsjsBKf6tYM+e1y42g2zEi16+
+	Fxgi6QlUOs0KBkqrUKBQzC+Zeg==
+X-Google-Smtp-Source: AGHT+IEGS5+hhhSkRRjeifi47JrnbWhwq4Dopnqh8S6DFO0+FwU0IIxsfN0K8vHsQ3ctnKSdELYuHQ==
+X-Received: by 2002:adf:f2c2:0:b0:32d:9876:571c with SMTP id d2-20020adff2c2000000b0032d9876571cmr1251628wrp.63.1697522702635;
+        Mon, 16 Oct 2023 23:05:02 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.219.154])
-        by smtp.gmail.com with ESMTPSA id e13-20020adfef0d000000b0032d9caeab0fsm854270wro.77.2023.10.16.23.03.15
+        by smtp.gmail.com with ESMTPSA id a4-20020a5d5704000000b0032d09f7a713sm865593wrv.18.2023.10.16.23.05.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Oct 2023 23:03:17 -0700 (PDT)
-Message-ID: <73b39195-4a71-4f07-9072-a40bb0420343@linaro.org>
-Date: Tue, 17 Oct 2023 08:03:14 +0200
+        Mon, 16 Oct 2023 23:05:02 -0700 (PDT)
+Message-ID: <42a05ea3-4693-498a-bc39-9ff50477e4ba@linaro.org>
+Date: Tue, 17 Oct 2023 08:05:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -68,7 +67,8 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 01/12] dt-bindings: usb: qcom,dwc3: Add qcom,sc8180x-dwc3
+Subject: Re: [PATCH 09/12] dt-bindings: usb: qcom,dwc3: Rename to "glue"
+Content-Language: en-US
 To: Bjorn Andersson <quic_bjorande@quicinc.com>,
  Bjorn Andersson <andersson@kernel.org>,
  Konrad Dybcio <konrad.dybcio@linaro.org>,
@@ -83,8 +83,7 @@ Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
  Johan Hovold <johan@kernel.org>,
  Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
 References: <20231016-dwc3-refactor-v1-0-ab4a84165470@quicinc.com>
- <20231016-dwc3-refactor-v1-1-ab4a84165470@quicinc.com>
-Content-Language: en-US
+ <20231016-dwc3-refactor-v1-9-ab4a84165470@quicinc.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -130,27 +129,32 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231016-dwc3-refactor-v1-1-ab4a84165470@quicinc.com>
+In-Reply-To: <20231016-dwc3-refactor-v1-9-ab4a84165470@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-	version=3.4.6
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
 On 17/10/2023 05:11, Bjorn Andersson wrote:
-> Add the missing compatible for the SC8180X DWC3 glue binding.
+> The Qualcomm USB block consists of three intertwined parts, the XHCI,
+> the DWC3 core and the Qualcomm DWC3 glue. The exsting binding represents
+> the Qualcomm glue part, with the other two represented as in a child
+> node.
+> 
+> Rename the qcom,dwc3 binding, to represent that this is indeed only the
+> glue part, to make room for a combined binding.
+> 
+> The large "select" is included to avoid the schema to be selected for
+> validation with the upcoming flattened binding - which includes
+> snps,dwc3 in the compatible.
 > 
 > Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
 > ---
->  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 3 +++
->  1 file changed, 3 insertions(+)
 
-This was already sent:
-
-https://lore.kernel.org/all/20230530162454.51708-3-vkoul@kernel.org/
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
