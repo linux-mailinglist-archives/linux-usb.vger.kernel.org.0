@@ -1,206 +1,264 @@
-Return-Path: <linux-usb+bounces-1761-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1762-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3E6C7CCAAB
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 20:31:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 106867CCADB
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 20:38:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8EAC6281AC1
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 18:31:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 423011C20AF5
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 18:38:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 330A231A83;
-	Tue, 17 Oct 2023 18:31:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 087FE4121E;
+	Tue, 17 Oct 2023 18:38:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="d+8ibS9H"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E54EB44474;
-	Tue, 17 Oct 2023 18:31:40 +0000 (UTC)
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D2993;
-	Tue, 17 Oct 2023 11:31:39 -0700 (PDT)
-Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-6c7b3adbeb6so4230072a34.0;
-        Tue, 17 Oct 2023 11:31:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697567498; x=1698172298;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0D9F2D035
+	for <linux-usb@vger.kernel.org>; Tue, 17 Oct 2023 18:37:57 +0000 (UTC)
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8437590
+	for <linux-usb@vger.kernel.org>; Tue, 17 Oct 2023 11:37:55 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-9936b3d0286so975454366b.0
+        for <linux-usb@vger.kernel.org>; Tue, 17 Oct 2023 11:37:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1697567871; x=1698172671; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qzWRwWp3BxixilkAzmNhq2oiRa0dsZPpPZCzdqmjz/8=;
-        b=QPqTy/eTa1ImV2x3KAWa5q/jEpm/6NUoDZwCOZf+1UWu9lFCeYeUlfUd9kh6VgPqDd
-         hOuoeCnKhDH7ttObvA58eGGIGfvlpg9wxzOKu/PO2FRnLZfEvYbYjNMw5jM1NUvydjma
-         GwFa9T/wc0G4HoNNXKuPU5NNXXgV1AWZ1rRgpBbmLs+6GmQGQWmq851EerAQECRv9dZx
-         lbJ3O4+LEKtiMtq/De0Us4cyhHPphh7iaAV9tNLmSx1HRtzF69sPoPRehTAPqk7Z1XRt
-         EEmhlaOMxZPH6Tacb2IexFzAUGdzxBgCDhgTDYyRWc++rSoVK3x5YxJTJ/ya8wQvhihk
-         SqHQ==
-X-Gm-Message-State: AOJu0Ywzz/ZvV7MrGBGqU7NHmYE/86vui8eQEghR1NmkQwGkaRHMzieT
-	Ku6DK3AEMU3Q0rrhApCrnQ==
-X-Google-Smtp-Source: AGHT+IGLlG3DfuJ1i4PwEW4HSVYWwjf+v63085nkwxWVjtssu00SZkvpA/2SSg7tfQCAsA1wzX9yZA==
-X-Received: by 2002:a05:6830:44a0:b0:6bf:1f5f:ed18 with SMTP id r32-20020a05683044a000b006bf1f5fed18mr3883374otv.1.1697567498617;
-        Tue, 17 Oct 2023 11:31:38 -0700 (PDT)
-Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id b7-20020a056830104700b006c6311b15f6sm346957otp.38.2023.10.17.11.31.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Oct 2023 11:31:37 -0700 (PDT)
-Received: (nullmailer pid 2478778 invoked by uid 1000);
-	Tue, 17 Oct 2023 18:31:36 -0000
-Date: Tue, 17 Oct 2023 13:31:36 -0500
-From: Rob Herring <robh@kernel.org>
-To: Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc: Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Felipe Balbi <balbi@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>, Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-Subject: Re: [PATCH 10/12] dt-bindings: usb: qcom,dwc3: Introduce flattened
- qcom,dwc3 binding
-Message-ID: <20231017183136.GA2438579-robh@kernel.org>
-References: <20231016-dwc3-refactor-v1-0-ab4a84165470@quicinc.com>
- <20231016-dwc3-refactor-v1-10-ab4a84165470@quicinc.com>
+        bh=E0ndmeFAnooDYJrLwBWEykUK1jnu79vBWHr+CSspHeI=;
+        b=d+8ibS9HVj8ISXpJ7WsVfmRuCtpTJPJPrPhrzcFH6WvzoucV+mYpFWL++9pCdsTnlE
+         Z/QexG9mCbX+Uk7ybfQ2w01NZ1WKZxL4evA2Zqew1tTqL0nMNYCFBEevT+pH8EJAbznm
+         fzQjTSP7UE+Pxl5mj8+/ou2Ny3X60du7RnElQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697567871; x=1698172671;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=E0ndmeFAnooDYJrLwBWEykUK1jnu79vBWHr+CSspHeI=;
+        b=Ts6Q5foIAaSLIXRD4nUxjmTkpSxJUHlGg9t08RiA4wX22UmFe4NEo2SIqur1rkEgV3
+         GeMODvg3V88lObt545j9T2pSOE+Uyt+I1NbI81Y3Xt+sr+z6pelqgf7rxTSI/2ObmuDG
+         LX9lmmtnlCY+jdXmSjF9fUqNjjCMuFiTtYX/Xs7UlBGx1oZ3xDkbIs6BVkWvZPX2pS6X
+         Uat/9cZtlPN5N10hlH46cNLptQChm6EfK3TFTtoSTvisO4a8OfzTgmIr0OqhZuTw8mqx
+         crF9LLX7Cah8zYbLELx1c8HykwT8tBlYOf0aBoMaHBuEedfQPROkJd9ZCcBcJqZGcvuF
+         qKNQ==
+X-Gm-Message-State: AOJu0YwMyU4L3tsV7PZpqY777P6A0PxstH6Xiy3WVrafxkcUAKnuFSQF
+	9h0JB3H6oqxOeKsI9+tBz70EUv3Jh5v+bkw+kwqxcDKl
+X-Google-Smtp-Source: AGHT+IH/VwJCW2Ni5x3/M3U1yo8MwipoEcjmkGgk02OIlmLVaApqQOeTQIvMkPPuVc4fTthlVcQIPw==
+X-Received: by 2002:a17:907:80b:b0:9c3:d356:ad0c with SMTP id wv11-20020a170907080b00b009c3d356ad0cmr2248545ejb.24.1697567871084;
+        Tue, 17 Oct 2023 11:37:51 -0700 (PDT)
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com. [209.85.128.50])
+        by smtp.gmail.com with ESMTPSA id k6-20020a170906a38600b009a2235ed496sm243132ejz.141.2023.10.17.11.37.50
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Oct 2023 11:37:50 -0700 (PDT)
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-40837124e1cso13395e9.0
+        for <linux-usb@vger.kernel.org>; Tue, 17 Oct 2023 11:37:50 -0700 (PDT)
+X-Received: by 2002:a05:600c:11cf:b0:400:c6de:6a20 with SMTP id
+ b15-20020a05600c11cf00b00400c6de6a20mr16564wmi.3.1697567869494; Tue, 17 Oct
+ 2023 11:37:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231016-dwc3-refactor-v1-10-ab4a84165470@quicinc.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-	FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
-	RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <20231012192552.3900360-1-dianders@chromium.org>
+ <20231012122458.v3.5.Ib2affdbfdc2527aaeef9b46d4f23f7c04147faeb@changeid>
+ <29f9a2ff1979406489213909b940184f@realtek.com> <CAD=FV=U4rGozXHoK8+ejPgRtyoACy1971ftoatQivqzk2tk5ng@mail.gmail.com>
+ <052401da00fa$dacccd90$906668b0$@realtek.com> <CAD=FV=XQswgKZh-JQ6PuKGRmrDMfDmZwM+MUpAcOk1=7Ppjyiw@mail.gmail.com>
+In-Reply-To: <CAD=FV=XQswgKZh-JQ6PuKGRmrDMfDmZwM+MUpAcOk1=7Ppjyiw@mail.gmail.com>
+From: Doug Anderson <dianders@chromium.org>
+Date: Tue, 17 Oct 2023 11:37:32 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=Vp_KE_hjWy7bKJbvmqwCQ67jhzfFoV368vB5ZGge=Yzw@mail.gmail.com>
+Message-ID: <CAD=FV=Vp_KE_hjWy7bKJbvmqwCQ67jhzfFoV368vB5ZGge=Yzw@mail.gmail.com>
+Subject: Re: [PATCH v3 5/5] r8152: Block future register access if register
+ access fails
+To: Hayes Wang <hayeswang@realtek.com>
+Cc: Jakub Kicinski <kuba@kernel.org>, "David S . Miller" <davem@davemloft.net>, 
+	Alan Stern <stern@rowland.harvard.edu>, Simon Horman <horms@kernel.org>, 
+	Edward Hill <ecgh@chromium.org>, Laura Nao <laura.nao@collabora.com>, 
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, Grant Grundler <grundler@chromium.org>, 
+	=?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>, 
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
 	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Mon, Oct 16, 2023 at 08:11:18PM -0700, Bjorn Andersson wrote:
-> The Qualcomm USB block consists of three intertwined parts, the XHCI,
-> the DWC3 core and the Qualcomm DWC3 glue. The three parts can not be
-> operated independently, but the binding was for historical reasons split
-> to mimic the Linux driver implementation.
-> 
-> The split binding also makes it hard to alter the implementation, as
-> properties and resources are split between the two nodes, in some cases
-> with some duplication.
-> 
-> Introduce a new binding, with a single representation of the whole USB
-> block in one node.
-> 
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> ---
->  .../devicetree/bindings/usb/qcom,dwc3.yaml         | 482 +++++++++++++++++++++
->  .../devicetree/bindings/usb/snps,dwc3.yaml         |  14 +-
->  2 files changed, 491 insertions(+), 5 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> new file mode 100644
-> index 000000000000..cb50261c6a36
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> @@ -0,0 +1,482 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/qcom,dwc3.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm SuperSpeed DWC3 USB SoC controller
-> +
-> +maintainers:
-> +  - Wesley Cheng <quic_wcheng@quicinc.com>
-> +
-> +select:
-> +  properties:
-> +    compatible:
-> +      items:
-> +        - enum:
-> +            - qcom,ipq4019-dwc3
-> +            - qcom,ipq5018-dwc3
-> +            - qcom,ipq5332-dwc3
-> +            - qcom,ipq6018-dwc3
-> +            - qcom,ipq8064-dwc3
-> +            - qcom,ipq8074-dwc3
-> +            - qcom,ipq9574-dwc3
-> +            - qcom,msm8953-dwc3
-> +            - qcom,msm8994-dwc3
-> +            - qcom,msm8996-dwc3
-> +            - qcom,msm8998-dwc3
-> +            - qcom,qcm2290-dwc3
-> +            - qcom,qcs404-dwc3
-> +            - qcom,sa8775p-dwc3
-> +            - qcom,sc7180-dwc3
-> +            - qcom,sc7280-dwc3
-> +            - qcom,sc8180x-dwc3
-> +            - qcom,sc8280xp-dwc3
-> +            - qcom,sc8280xp-dwc3-mp
-> +            - qcom,sdm660-dwc3
-> +            - qcom,sdm670-dwc3
-> +            - qcom,sdm845-dwc3
-> +            - qcom,sdx55-dwc3
-> +            - qcom,sdx65-dwc3
-> +            - qcom,sdx75-dwc3
-> +            - qcom,sm4250-dwc3
-> +            - qcom,sm6115-dwc3
-> +            - qcom,sm6125-dwc3
-> +            - qcom,sm6350-dwc3
-> +            - qcom,sm6375-dwc3
-> +            - qcom,sm8150-dwc3
-> +            - qcom,sm8250-dwc3
-> +            - qcom,sm8350-dwc3
-> +            - qcom,sm8450-dwc3
-> +            - qcom,sm8550-dwc3
-> +        - const: qcom,dwc3
-> +        - const: snps,dwc3
-> +  required:
-> +    - compatible
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - qcom,ipq4019-dwc3
-> +          - qcom,ipq5018-dwc3
-> +          - qcom,ipq5332-dwc3
-> +          - qcom,ipq6018-dwc3
-> +          - qcom,ipq8064-dwc3
-> +          - qcom,ipq8074-dwc3
-> +          - qcom,ipq9574-dwc3
-> +          - qcom,msm8953-dwc3
-> +          - qcom,msm8994-dwc3
-> +          - qcom,msm8996-dwc3
-> +          - qcom,msm8998-dwc3
-> +          - qcom,qcm2290-dwc3
-> +          - qcom,qcs404-dwc3
-> +          - qcom,sa8775p-dwc3
-> +          - qcom,sc7180-dwc3
-> +          - qcom,sc7280-dwc3
-> +          - qcom,sc8180x-dwc3
-> +          - qcom,sc8280xp-dwc3
-> +          - qcom,sc8280xp-dwc3-mp
-> +          - qcom,sdm660-dwc3
-> +          - qcom,sdm670-dwc3
-> +          - qcom,sdm845-dwc3
-> +          - qcom,sdx55-dwc3
-> +          - qcom,sdx65-dwc3
-> +          - qcom,sdx75-dwc3
-> +          - qcom,sm4250-dwc3
-> +          - qcom,sm6115-dwc3
-> +          - qcom,sm6125-dwc3
-> +          - qcom,sm6350-dwc3
-> +          - qcom,sm6375-dwc3
-> +          - qcom,sm8150-dwc3
-> +          - qcom,sm8250-dwc3
-> +          - qcom,sm8350-dwc3
-> +          - qcom,sm8450-dwc3
-> +          - qcom,sm8550-dwc3
-> +      - const: qcom,dwc3
-> +      - const: snps,dwc3
-> +
-> +  reg:
-> +    description: Offset and length of register set for QSCRATCH wrapper
-> +    maxItems: 1
+Hi,
 
-Isn't this more things now? Or the description is wrong.
+On Tue, Oct 17, 2023 at 7:17=E2=80=AFAM Doug Anderson <dianders@chromium.or=
+g> wrote:
+>
+> Hi,
+>
+> On Tue, Oct 17, 2023 at 6:07=E2=80=AFAM Hayes Wang <hayeswang@realtek.com=
+> wrote:
+> >
+> > Doug Anderson <dianders@chromium.org>
+> > > Sent: Tuesday, October 17, 2023 12:47 AM
+> > [...
+> > > > >  static int generic_ocp_read(struct r8152 *tp, u16 index, u16 siz=
+e,
+> > > > > @@ -8265,6 +8353,19 @@ static int rtl8152_pre_reset(struct
+> > > usb_interface
+> > > > > *intf)
+> > > > >         if (!tp)
+> > > > >                 return 0;
+> > > > >
+> > > > > +       /* We can only use the optimized reset if we made it to t=
+he end of
+> > > > > +        * probe without any register access fails, which sets
+> > > > > +        * `PROBED_WITH_NO_ERRORS` to true. If we didn't have tha=
+t then return
+> > > > > +        * an error here which tells the USB framework to fully u=
+nbind/rebind
+> > > > > +        * our driver.
+> > > >
+> > > > Would you stay in a loop of unbind and rebind,
+> > > > if the control transfers in the probe() are not always successful?
+> > > > I just think about the worst case that at least one control always =
+fails in probe().
+> > >
+> > > We won't! :-) One of the first things that rtl8152_probe() does is to
+> > > call rtl8152_get_version(). That goes through to
+> > > rtl8152_get_version(). That function _doesn't_ queue up a reset if
+> > > there are communication problems, but it does do 3 retries of the
+> > > read. So if all 3 reads fail then we will permanently fail probe,
+> > > which I think is the correct thing to do.
+> >
+> > The probe() contains control transfers in
+> >         1. rtl8152_get_version()
+> >         2. tp->rtl_ops.init()
+> >
+> > If one of the 3 control transfers in 1) is successful AND
+> > any control transfer in 2) fails,
+> > you would queue a usb reset which would unbind/rebind the driver.
+> > Then, the loop starts.
+> > The loop would be broken, if and only if
+> >         a) all control transfers in 1) fail, OR
+> >         b) all control transfers in 2) succeed.
+> >
+> > That is, the loop would be broken when the fail rate of the control tra=
+nsfer is high or low enough.
+> > Otherwise, you would queue a usb reset again and again.
+> > For example, if the fail rate of the control transfer is 10% ~ 60%,
+> > I think you have high probability to keep the loop continually.
+> > Would it never happen?
+>
+> Actually, even with a failure rate of 10% I don't think you'll end up
+> with a fully continuous loop, right? All you need is to get 3 failures
+> in a row in rtl8152_get_version() to get out of the loop. So with a
+> 10% failure rate you'd unbind/bind 1000 times (on average) and then
+> (finally) give up. With a 50% failure rate I think you'd only
+> unbind/bind 8 times on average, right? Of course, I guess 1000 loops
+> is pretty close to infinite.
+>
+> In any case, we haven't actually seen hardware that fails like this.
+> We've seen failure rates that are much much lower and we can imagine
+> failure rates that are 100% if we're got really broken hardware. Do
+> you think cases where failure rates are middle-of-the-road are likely?
+>
+> I would also say that nothing we can do can perfectly handle faulty
+> hardware. If we're imagining theoretical hardware, we could imagine
+> theoretical hardware that de-enumerated itself and re-enumerated
+> itself every half second because the firmware on the device crashed or
+> some regulator kept dropping. This faulty hardware would also cause an
+> infinite loop of de-enumeration and re-enumeration, right?
+>
+> Presumably if we get into either case, the user will realize that the
+> hardware isn't working and will unplug it from the system. While the
+> system is doing the loop of trying to enumerate the hardware, it will
+> be taking up a bunch of extra CPU cycles but (I believe) it won't be
+> fully locked up or anything. The machine will still function and be
+> able to do non-Ethernet activities, right? I would say that the worst
+> thing about this state would be that it would stress corner cases in
+> the reset of the USB subsystem, possibly ticking bugs.
+>
+> So I guess I would summarize all the above as:
+>
+> If hardware is broken in just the right way then this patch could
+> cause a nearly infinite unbinding/rebinding of the r8152 driver.
+> However:
+>
+> 1. It doesn't seem terribly likely for hardware to be broken in just this=
+ way.
+>
+> 2. We haven't seen hardware broken in just this way.
+>
+> 3. Hardware broken in a slightly different way could cause infinite
+> unbinding/rebinding even without this patch.
+>
+> 4. Infinite unbinding/rebinding of a USB adapter isn't great, but not
+> the absolute worst thing.
+>
+>
+> That all being said, if we wanted to address this we could try two
+> different ways:
+>
+> a) We could add a global in the r8152 driver and limit the number of
+> times we reset. This gets a little ugly because if we have multiple
+> r8152 adapters plugged in then the same global would be used for both,
+> but maybe it's OK?
+>
+> b) We could improve the USB core to somehow prevent usb_reset_device()
+> from running too much on a given device?
+>
+>
+> ...though I would re-emphasize that I don't think this is something we
+> need to address now. If later we actually see a problem we can always
+> address it then.
 
-Rob
+One other idea occurred to me that we could do, if we cared to solve
+this hypothetical failure case. We could change the code to always
+read the version 4 times on every probe. If one of the transfers fails
+then we could consider that OK. If 2 or more transfers fails then we
+could consider that to be an error. You still might get a _few_
+unbind/bind in this hypothetical failure mode, but I think it would
+catch the problem more quickly.
+
+My probability theory is rusty and I'm sure there's a better way, but
+I think we can just add up all the cases. Assuming a 10% failures and
+90% success of any transfer:
+
+# Chance of 2 failures:
+.10 * .10 * .90 * .90 +
+.10 * .90 * .10 * .90 +
+.10 * .90 * .90 * .10 +
+.90 * .10 * .90 * .10 +
+.90 * .90 * .10 * .10
+
+# Chance of 3 failures:
+.10 * .10 * .10 * .90 +
+.10 * .10 * .90 * .10 +
+.10 * .90 * .10 * .10 +
+.90 * .10 * .10 * .10
+
+# Chance of 4 failures:
+.10 * .10 * .10 * .10
+
+If I add that up I get about a 4.4% chance of 2 or more failures in 4
+reads. That means if we got into an unbind/bind cycle we'd get out of
+it (on average) in ~23 probes because we'd see enough failures. We
+could likely reduce this further by reading the version 5 or 6 times.
+
+I will note that my measurements showed that a normal probe is ~200
+transfers and also includes a bunch of delays, so reading the version
+a few times wouldn't be a huge deal.
+
+
+In any case, I'm still of the opinion that we don't need to handle this.
+
+-Doug
 
