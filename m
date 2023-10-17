@@ -1,249 +1,173 @@
-Return-Path: <linux-usb+bounces-1708-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1709-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9AF2F7CB864
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 04:23:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A6067CB8E4
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 05:11:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D02FAB20FFE
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 02:23:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C505128196D
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 03:11:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45B2C5393;
-	Tue, 17 Oct 2023 02:23:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B8A3882E;
+	Tue, 17 Oct 2023 03:11:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=windriver.com header.i=@windriver.com header.b="EUbaHPXy"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Mhfer62g"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F45B4404;
-	Tue, 17 Oct 2023 02:23:27 +0000 (UTC)
-Received: from mx0b-0064b401.pphosted.com (mx0b-0064b401.pphosted.com [205.220.178.238])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 541CAA1;
-	Mon, 16 Oct 2023 19:23:26 -0700 (PDT)
-Received: from pps.filterd (m0250811.ppops.net [127.0.0.1])
-	by mx0a-0064b401.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 39H1qFgd002691;
-	Tue, 17 Oct 2023 02:23:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com;
-	 h=from:to:cc:subject:date:message-id:references:in-reply-to
-	:content-type:content-transfer-encoding:mime-version; s=
-	PPS06212021; bh=q7mUWYo4QXLD7MMqnawGC2u9rO6b+Zeae7W0uV19Rsk=; b=
-	EUbaHPXyhHjaKdZNAGV3lR+H/xReMbvlKRUipyLwYb84wp7UgkwLROG4V3kj/5nG
-	6Cq0KyAfMjVg2qakxFFHQXnZb2J6VaQhaNkUlfqOK+VBwsmdyfqMLL2PhGgtYMR+
-	PvuzoOD9dyO4VVS7Rav+1P6L/MYGfGpxwuXgKJObHVZFSHrDRU7MAaBk/odlFOb9
-	8E5X1vX7lA9eJcs7KIeyO+EZcJNqXWoFikzZTnylurMCjkliVNHX/mDUIq9Vw+CK
-	xSxOt0hGhq0pvtiYSd0KeQYkNzoTYH52GVopKcabLSYQgTV8sH1KuUKM3LvPsHH2
-	RSBaSLaw7xnWKsN1+IT5zg==
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2100.outbound.protection.outlook.com [104.47.55.100])
-	by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3tqg6xajf8-1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 700908813;
+	Tue, 17 Oct 2023 03:11:39 +0000 (UTC)
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECB3595;
+	Mon, 16 Oct 2023 20:11:37 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39H2HeiS018193;
+	Tue, 17 Oct 2023 03:11:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : subject :
+ date : message-id : mime-version : content-type :
+ content-transfer-encoding : to : cc; s=qcppdkim1;
+ bh=wo666QFHwH9jbueXj1tL9j5DiN6Dpf2gV1xa51nmhl8=;
+ b=Mhfer62gjdT+Q8+y8wq4T7tVJqNuKCN7SSu8AH/ocmifTpPLrg06/I47eDpdbD28KKtq
+ KXw3vBlf1BqRpITPGqU6F7BMkJN3qRNa7yc+jjLfzVVUrQis6JRzpkrKg697L37DI/ZR
+ MxwcZ6xyYLmM8fh8b+3P77UqiL69/+YUVgj8XQ0yQGVLiPQ+u5Y9C+36eISkiNVH/W5H
+ 62VOe/+dfKLIgdJFra5c0//lgQ430anbeItnItYa06h8wkBxpysrvMGVBTqa2Y2naize
+ Xx9XCwlq90M3kbfbrdK2GEdhOl4A6xmLTFSg9Lf5aVy4BxSSnMpExtIG28/3wkgeXj/i yQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ts9jns3vu-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 17 Oct 2023 02:23:10 +0000 (GMT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ciAalzOqG+AB1+F063QdhtvyKt/kPocDhT3tKBZgzMtxfE+kvQvow3X8f30p/tys9E7HMW6oR37eNYdozaqFV+N1yrExLYOZDnzc3BtzHvkmhHX/gTLwcXsbtJR2Wsh93rOWHUWD5iSZstn4t+A0K+uJHqe5NYMh0PpPVO628HB2ZXh2FVsfPXyweKnVpiL7irElbOpV+krMPm148F5mHQn9pJjt2PVcb8nsn3Ecob2l5SeKAkBIq9k7/eRYyx7mNPGu+bz7U6vkDWT9eIq1SFg4mw+KEo7cx6HWp1snYMJ4vzfXKkHDTuVdUp8y+gkdMEBjxwUJ0K+NNZX02Wl5qg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=q7mUWYo4QXLD7MMqnawGC2u9rO6b+Zeae7W0uV19Rsk=;
- b=UdBLKi1j3yrQ7COEa82Y8o3F2lFsje1doNPG0brBepbwNZPlH2mNOa3ZbIVp+MiTPHPXTj5ITCp9ABHMfTbvL9pxGsbNUaGJi7ccUo+//G8On5PNylsZUdGV0uqa8/4AxWX28e1g1g0SIg3eMKrCLLUp1HFo2bCIsFABDda6dqOn7z4nnwRzInb/KAugo+m7NK4QTIeYoUTCKJHxNXjyC67hU2RwYer2J8hQ1beW+SBqKjNSEdB8eFNCTIjfSMKvi1Jzw2ac1DmBJE9Rku/WNptJhm8M7ScWFgjEMgQcCgblDiI8qK8VkDYBmSC78hBkll4Gre6WDPmtc75H8EU1Dw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=windriver.com; dmarc=pass action=none
- header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
-Received: from PH0PR11MB5191.namprd11.prod.outlook.com (2603:10b6:510:3e::24)
- by BL1PR11MB5221.namprd11.prod.outlook.com (2603:10b6:208:310::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6886.36; Tue, 17 Oct
- 2023 02:23:05 +0000
-Received: from PH0PR11MB5191.namprd11.prod.outlook.com
- ([fe80::6eff:bf87:e13f:40df]) by PH0PR11MB5191.namprd11.prod.outlook.com
- ([fe80::6eff:bf87:e13f:40df%7]) with mapi id 15.20.6863.046; Tue, 17 Oct 2023
- 02:23:05 +0000
-From: "Li, Meng" <Meng.Li@windriver.com>
-To: Alan Stern <stern@rowland.harvard.edu>,
-        Steven Rostedt
-	<rostedt@goodmis.org>
-CC: Ingo Molnar <mingo@redhat.com>,
-        USB mailing list
-	<linux-usb@vger.kernel.org>,
-        Sebastian Andrzej Siewior
-	<bigeasy@linutronix.de>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>
-Subject: RE: USB: add check to detect host controller hardware removal
-Thread-Topic: USB: add check to detect host controller hardware removal
-Thread-Index: Adn9i9LFJguVckBOQnaI1KZe5N8FAAAbV+4AAJYf4gAABSReAAAOS6qw
-Date: Tue, 17 Oct 2023 02:23:05 +0000
-Message-ID: 
- <PH0PR11MB5191924ECC92A8F67891D614F1D6A@PH0PR11MB5191.namprd11.prod.outlook.com>
-References: 
- <PH0PR11MB5191464B2F01511D2ADECB3BF1D2A@PH0PR11MB5191.namprd11.prod.outlook.com>
- <9a1074e2-c1ae-485b-b5e7-a34442c98c0b@rowland.harvard.edu>
- <20231016125624.1096766a@gandalf.local.home>
- <62fdcf97-11c6-4dee-8db1-74752d6949f3@rowland.harvard.edu>
-In-Reply-To: <62fdcf97-11c6-4dee-8db1-74752d6949f3@rowland.harvard.edu>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH0PR11MB5191:EE_|BL1PR11MB5221:EE_
-x-ms-office365-filtering-correlation-id: 33065244-b49d-42d1-fc4f-08dbceb7ff06
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 
- LUevcWd8zDl/RBtSo+gTpGOKrj4tHmINjUDJARaplFkCBG15r6L8ZnRYAfxCWozuSFlpU6gBiOa/EPx7JejF/s98vdbmXVnEzOGPwgZmDxfW6zt21BLz37I8Fn7EB2YYejlPX7b7phn7wakZIcD8d2Ze0mAYmzro2+FwarackEHMCAHn5nT+1lONIKoXuhxBAFiuzbZ77FCRJHtjbjSJ6FSOCE2O+YPsSbqkaVT2Lf3lv2pTzmCu7IDREhiqr1ZG2t7NmWBZIZhhha1LfhpGeMQRsg7CrbNcSfUAHRa1sTaau6G6YGbGlWGXS2/hkaSm1hyoR2hcN0jCyAD6dJ0A/458ob/1ShDaaGNfQ9AvNzYiV6QZAOH10Ah2pTfiIm9sfuOFgHKEpY/7LtOIXRhyy09tt+v+nFaBwdMSkVTTl4DYpvhuJgzcWGVjuLiHbGMboUwJNAdLnA5evZaugUq+mMdC0Wz2P9G8F1IJE5x6jJeDOkMvqFnApYdN4wiRhqWzwisf4srApLk1ncHqJg+1wmQEnhy4sG5HXPA4dVtoaoXNHw27J1AcxzpsH5JNTor8yoeUALflvjHmSUDDyln6K9JW883r9dUBuZp8i5QxX6beqOxSmr1K+sI0JnSR/w96
-x-forefront-antispam-report: 
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5191.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(376002)(366004)(346002)(396003)(39850400004)(230922051799003)(1800799009)(451199024)(186009)(64100799003)(55016003)(66476007)(478600001)(110136005)(76116006)(66556008)(66946007)(66446008)(64756008)(54906003)(71200400001)(83380400001)(38100700002)(9686003)(316002)(26005)(7696005)(53546011)(6506007)(33656002)(41300700001)(5660300002)(86362001)(38070700005)(122000001)(8936002)(8676002)(4326008)(52536014)(2906002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: 
- =?us-ascii?Q?WuktMY/9WONFK4DgyE7H2riHFCF+9hFwAt1lYcbpvqOSYG1KCNPZd5OApDeP?=
- =?us-ascii?Q?Npxq8Xi/10d+H9nuhZBl86gCDj/IRakUYX9zgs1UCcHY5lQ8nN2TyMaVMzrD?=
- =?us-ascii?Q?EhgsORxNWP9apYn/JrYQ6cClsU0bKMhvqxr97Nko4at2fIV9/aJDmvJtAyhN?=
- =?us-ascii?Q?0yrO6RW8/3WVuEPtiKvoROcwddwYYzeHA2NIdB2AdCKckmVRd+kkiyWHUrIG?=
- =?us-ascii?Q?+lPb6OEe7jDnmSX0r95Jt15b33IMfKZzmNc7GUJv5ZSKEwta2QfjQD2EHBxz?=
- =?us-ascii?Q?jrFDN+vzvcryUC2P/Rv0FjtEscF6ZkN6NWF842u8tN968vnqcTgWET32qfMF?=
- =?us-ascii?Q?YkHPu393KcXzaDNwaC/NUUX00JnrpxjtsCIqAY7HXa2OT51PjuDieyAXvVOX?=
- =?us-ascii?Q?0uZO0leI+BbJkRu78HLf4FjDwD+IPv8TUHxC5MGyM6/LTaO4aojyMO3iiI8d?=
- =?us-ascii?Q?UD0N3KfinDFsTbYZr+z/j064bq0mNad7kxrXVQBJdIKCZa3DI5NvqTgvgqQL?=
- =?us-ascii?Q?vzg0qXEC4bShNGlda/iDrMzBZy3wzLysgdhHHfFStMAAnpMyFyg8Zy3ZOuwG?=
- =?us-ascii?Q?IfyO0j4nF8ayMRIZ1tPs1LB3NPlVeVv3PrS7VmuNQiWXcyGh++2MTE17KEw5?=
- =?us-ascii?Q?CaWHfjX8yTCHstb5v+6qJ/l8jtbmH7OTv6vysPJpV4/MhDpwxP84tDP+h6Po?=
- =?us-ascii?Q?PFzMk0cdsE2SvJdjqlsOVf9LkTNfZIR5E7rKu7AUckeJUQtA8dQdI5Igz6ig?=
- =?us-ascii?Q?/4zIn9SKuO3FAsZdwnkr31gdDXEQUnaiIM84howYGueTw4UzgpuI3EZOIozz?=
- =?us-ascii?Q?fEHoTUNfG5QkVxOp5E3z8+MHD6Cjv/jc+Id1Pw4h4yXuUaii8jmvx/LWMoib?=
- =?us-ascii?Q?AdmONdw48hCkPGlvSeX9oZZXkokkUewUCyXl0jXI9ELJx+GmGiOo2cS619Je?=
- =?us-ascii?Q?76oWQJhrnKGrD2SSVhb6Q3WK06btCoxcmU/RzCMXp/B/acsREyk205t5KR+H?=
- =?us-ascii?Q?RhH0evSxUciFqgCL6eMgeJqXkkko7EOdBJjtLMXj4hrTjAWCjSQI8wL5E2YD?=
- =?us-ascii?Q?FqIaXYWE3mVX1RWjO5nodR/zcTrA0DyghbvB3IrK+mIEvyI2vS0IOoJ3a2Xw?=
- =?us-ascii?Q?m+dx6olvG1gZ/0GAMPhLe2d9iOWu9vSTwMOY5EQlE12L5/MWtA5Jb+7ybDzD?=
- =?us-ascii?Q?G8i86Z3dmvSkQ0urr6p3M75ArZYieZ+WyryAMWigiAU7IF5VOlk2gDfD00CR?=
- =?us-ascii?Q?aTn2itLwPlfjo5WaSxACOS3+0BTDJhCUKQbrDXGX6IHB3zDjYHSTIrggCVsX?=
- =?us-ascii?Q?1+M4nroBNisWD6YhCRgths2XVfHPwmco4HmCy4pU4GSu9Ui9LCuFLAM2kuGx?=
- =?us-ascii?Q?pOvL7TT7hMVqVZXphsIgS0P9ryRnAWvLm3D+1stWUrFcc/5CwRTID0NVYyeu?=
- =?us-ascii?Q?37OovTPvhmwWG6YhEMT8o+l8SSvZ9Lu62KFkuxXtebDkcKMTDgsxPq13VJkT?=
- =?us-ascii?Q?9URYVi3vDdkWozdRSUh/4IUFPGVK6vlDhkD3tuxI38AODrKXLXIfEg2yPYTj?=
- =?us-ascii?Q?X/0xxwli8aw3I+5EPO+rYFZ3IVVetB5uszj51W0v?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	Tue, 17 Oct 2023 03:11:27 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39H3BQWJ004277
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 17 Oct 2023 03:11:26 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.39; Mon, 16 Oct 2023 20:11:26 -0700
+From: Bjorn Andersson <quic_bjorande@quicinc.com>
+Subject: [PATCH 00/12] usb: dwc3: qcom: Flatten dwc3 structure
+Date: Mon, 16 Oct 2023 20:11:08 -0700
+Message-ID: <20231016-dwc3-refactor-v1-0-ab4a84165470@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: windriver.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5191.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 33065244-b49d-42d1-fc4f-08dbceb7ff06
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Oct 2023 02:23:05.5498
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: dUtjEbwSmVnQ8C1D5JXJoU15vaYN+Xa4sZ6q0gkEMMVTXlxbuC2J9awtZeNLXUSnadhYLevIg8avYGRa57X1Pg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5221
-X-Proofpoint-GUID: kX6m3FqhlPQV_Uim-bTAgKZxzrkI1FqV
-X-Proofpoint-ORIG-GUID: kX6m3FqhlPQV_Uim-bTAgKZxzrkI1FqV
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAEz7LWUC/x2N0QqDMAxFf0XyvEBrYai/IntIa6YBqZJuKhT/f
+ WGP53APt0JhFS4wNBWUDymyZQP/aCAtlGdGmYyhdW3wzj9xOlNA5Telz6bYB88huo662IM1kQp
+ jVMppsSp/19XkbnO5/ifj675/fMAxdHQAAAA=
+To: Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio
+	<konrad.dybcio@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Thinh Nguyen
+	<Thinh.Nguyen@synopsys.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Philipp Zabel
+	<p.zabel@pengutronix.de>
+CC: <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Johan Hovold
+	<johan@kernel.org>,
+        Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
+        "Bjorn Andersson" <quic_bjorande@quicinc.com>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1697512286; l=2928;
+ i=quic_bjorande@quicinc.com; s=20230915; h=from:subject:message-id;
+ bh=BfVs6sray0YTN4vc4g+Yvojjyk0sCDR/MLa1TmSoVr4=;
+ b=QF1GXgroHtrSsBhAJ8qMEkbjIkJN7+8nx/i2Ep40qd+yf6XEb7dMmqsdX8WOu3nbHfd/m+LgFxNM
+ lUCFQQx3AyLC9oZu2IU5jfDFdAQYM+XeB7oSWvjtAFkKVDOdsLWg
+X-Developer-Key: i=quic_bjorande@quicinc.com; a=ed25519;
+ pk=VkhObtljigy9k0ZUIE1Mvr0Y+E1dgBEH9WoLQnUtbIM=
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: USVpYvXr35ihRY4bccwrV9r5WVoRWpzm
+X-Proofpoint-ORIG-GUID: USVpYvXr35ihRY4bccwrV9r5WVoRWpzm
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-10-16_13,2023-10-12_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- priorityscore=1501 spamscore=0 mlxscore=0 bulkscore=0 clxscore=1011
- impostorscore=0 adultscore=0 malwarescore=0 lowpriorityscore=0
- suspectscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2309180000 definitions=main-2310170019
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,
-	RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ priorityscore=1501 mlxscore=0 clxscore=1011 phishscore=0 adultscore=0
+ malwarescore=0 bulkscore=0 suspectscore=0 mlxlogscore=732 spamscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2310170026
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
+The USB IP-block found in most Qualcomm platforms is modelled in the
+Linux kernel as 3 different independent device drivers, but as shown by
+the already existing layering violations in the Qualcomm glue driver
+they can not be operated independently.
 
+With the current implementation, the glue driver registers the core and
+has no way to know when this is done. As a result, e.g. the suspend
+callbacks needs to guard against NULL pointer dereferences when trying
+to peek into the struct dwc3 found in the drvdata of the child.
 
-> -----Original Message-----
-> From: Alan Stern <stern@rowland.harvard.edu>
-> Sent: Tuesday, October 17, 2023 3:24 AM
-> To: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Li, Meng <Meng.Li@windriver.com>; Ingo Molnar <mingo@redhat.com>;
-> USB mailing list <linux-usb@vger.kernel.org>; Sebastian Andrzej Siewior
-> <bigeasy@linutronix.de>; linux-rt-users <linux-rt-users@vger.kernel.org>
-> Subject: Re: USB: add check to detect host controller hardware removal
->=20
-> CAUTION: This email comes from a non Wind River email account!
-> Do not click links or open attachments unless you recognize the sender an=
-d
-> know the content is safe.
->=20
-> On Mon, Oct 16, 2023 at 12:56:24PM -0400, Steven Rostedt wrote:
-> > On Fri, 13 Oct 2023 13:17:52 -0400
-> > Alan Stern <stern@rowland.harvard.edu> wrote:
-> >
-> > > --- a/drivers/usb/core/hcd-pci.c
-> > > +++ b/drivers/usb/core/hcd-pci.c
-> > > @@ -292,6 +292,14 @@ void usb_hcd_pci_remove(struct pci_dev *dev)
-> > >         if (!hcd)
-> > >                 return;
-> > >
-> > > +       /* Fake an interrupt request in order to give the driver a ch=
-ance
-> > > +        * to test whether the controller hardware has been removed (=
-e.g.,
-> > > +        * cardbus physical eject).
-> > > +        */
-> > > +       local_irq_disable();
-> > > +       usb_hcd_irq(0, hcd);
-> > > +       local_irq_enable();
-> > > +
-> > >         usb_remove_hcd(hcd);
-> > >         if (hcd->driver->flags & HCD_MEMORY) {
-> > >                 iounmap(hcd->regs);
-> > >
-> > > The local_irq_disable() is there so that the irq handler will be
-> > > invoked in the state that it expects (i.e., with interrupts disabled)=
-.
-> > > Apparently Meng's RT kernel doesn't like it when the handler then
-> > > calls spin_lock(); I don't know why.
-> >
-> > Because in RT, spin_lock()s are actually mutexes.
-> >
-> > In RT, interrupt handlers do not even run with interrupts disabled
-> > (they run as threads), so the assumption that they run with interrupts
-> > disabled on RT is incorrect. One hack would simply be:
-> >
-> >       if (!IS_ENABLED(CONFIG_PREEMPT_RT))
-> >               local_irq_disable();
-> >       usb_hcd_irq(0, hcd);
-> >       if (!IS_ENABLED(CONFIG_PREEMPT_RT))
-> >               local_irq_enable();
-> >
-> > But that's rather ugly. We use to have that as a wrapper of just:
-> >
-> >       local_irq_disable_nort();
-> >
-> > but I don't know if we removed that or not.
-> >
-> > Sebastian?
->=20
-> Thanks for the information.  I guess a simple approach would be to add th=
-e
-> wrapper back in, since it's not present in the current kernel.
->
+Missing from the upstream Qualcomm USB support is handling of role
+switching, in which the glue needs to be notified upon DRD mode changes.
+Several attempts has been made through the years to register callbacks
+etc, but they always fall short when it comes to handling of the core's
+probe deferral on resources etc.
 
-I did some debugs on my side.
-Firstly, the local_irq_disable_nort() function had been removed from latest=
- RT kernel.
-Second, because of creating xhci-pci.c, the commit c548795abe0d("USB: add c=
-heck to detect host controller hardware removal") is no longer useful.
-Because the function usb_remove_hcd() is invoked from xhci_pci_remove() of =
-file xhci-pci.c in advance.
-I am trying to fix this issue with getting register status directly without=
- local_irq_disable().=20
+Furhtermore, the DeviceTree binding is a direct representation of the
+Linux driver model, and doesn't necessarily describe "the USB IP-block".
 
-Thanks,
-Limeng=20
+This series therefor attempts to flatten the driver split, and operate
+the glue and core out of the same platform_device instance. And in order
+to do this, the DeviceTree representation of the IP block is flattened.
 
-=20
-> Alan Stern
+As a side effect, much of the ACPI integration code is dropped.
+
+Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+---
+Bjorn Andersson (12):
+      dt-bindings: usb: qcom,dwc3: Add qcom,sc8180x-dwc3
+      usb: dwc3: qcom: Rename dwc3 platform_device reference
+      usb: dwc3: qcom: Merge resources from urs_usb device
+      usb: dwc3: Expose core driver as library
+      usb: dwc3: Override end of dwc3 memory resource
+      usb: dwc3: qcom: Add dwc3 core reference in driver state
+      usb: dwc3: qcom: Instantiate dwc3 core directly
+      usb: dwc3: qcom: Inline the qscratch constants
+      dt-bindings: usb: qcom,dwc3: Rename to "glue"
+      dt-bindings: usb: qcom,dwc3: Introduce flattened qcom,dwc3 binding
+      usb: dwc3: qcom: Flatten the Qualcomm dwc3 binding and implementation
+      arm64: dts: qcom: sc8180x: flatten usb_sec node
+
+ .../devicetree/bindings/usb/qcom,dwc3-glue.yaml    | 626 +++++++++++++++++++++
+ .../devicetree/bindings/usb/qcom,dwc3.yaml         | 321 ++++-------
+ .../devicetree/bindings/usb/snps,dwc3.yaml         |  14 +-
+ .../arm64/boot/dts/qcom/sc8180x-lenovo-flex-5g.dts |   6 +-
+ arch/arm64/boot/dts/qcom/sc8180x-primus.dts        |   6 +-
+ arch/arm64/boot/dts/qcom/sc8180x.dtsi              |  34 +-
+ drivers/usb/dwc3/core.c                            | 136 +++--
+ drivers/usb/dwc3/core.h                            |  10 +
+ drivers/usb/dwc3/dwc3-qcom.c                       | 328 ++++++-----
+ 9 files changed, 1057 insertions(+), 424 deletions(-)
+---
+base-commit: 4d0515b235dec789578d135a5db586b25c5870cb
+change-id: 20231016-dwc3-refactor-931e3b08a8b9
+
+Best regards,
+-- 
+Bjorn Andersson <quic_bjorande@quicinc.com>
+
 
