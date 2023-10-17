@@ -1,152 +1,206 @@
-Return-Path: <linux-usb+bounces-1760-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1761-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 609F17CCA19
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 19:46:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3E6C7CCAAB
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 20:31:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D40FBB2126E
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 17:46:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8EAC6281AC1
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 18:31:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F8702D795;
-	Tue, 17 Oct 2023 17:46:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ixaO6Kz0"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 330A231A83;
+	Tue, 17 Oct 2023 18:31:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88F912D780;
-	Tue, 17 Oct 2023 17:46:35 +0000 (UTC)
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6037783;
-	Tue, 17 Oct 2023 10:46:34 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39HGsRWY022257;
-	Tue, 17 Oct 2023 17:46:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=wizOAI8PdKSoJNpWslPwAMKZwsvY0u4gK5kO6xEFiLU=;
- b=ixaO6Kz03PxmXAqt3FzQQ8W074Fkj7I3UiHTl0WwUjWUFkCCaCGToHOaUlMTpNRqXCK0
- b8auLdeGnl+aIJK9tZt4f8NVpYJTw1HVkjb1O9egHU431W1jABcFG7Eqk0UVN4h2bvqR
- i8plg7snU86MINhuXfWqs0cVjHdyQhKr2qhyrDSESoR8vH0DQEIxq7MPGHD+CxRx9vh8
- aLWrOaLjOMCxpFVLJ2VMYpvh1RkFxnOOYdBs+2VyBOEjZMKVzWsbNXSWpDFXqh4fbcfY
- AUXY021ck0s/ONg+5OJaR8eqbL6TARv2WDNqSaEZ14Ce9nA0fstq4YvN7GXn5v4kBydC JQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tsvxwrds1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 17 Oct 2023 17:46:24 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39HHkNwK000725
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 17 Oct 2023 17:46:23 GMT
-Received: from [10.216.40.160] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.39; Tue, 17 Oct
- 2023 10:46:17 -0700
-Message-ID: <189be124-efb1-4843-9a47-db84942838c9@quicinc.com>
-Date: Tue, 17 Oct 2023 23:16:12 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E54EB44474;
+	Tue, 17 Oct 2023 18:31:40 +0000 (UTC)
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D2993;
+	Tue, 17 Oct 2023 11:31:39 -0700 (PDT)
+Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-6c7b3adbeb6so4230072a34.0;
+        Tue, 17 Oct 2023 11:31:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697567498; x=1698172298;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qzWRwWp3BxixilkAzmNhq2oiRa0dsZPpPZCzdqmjz/8=;
+        b=QPqTy/eTa1ImV2x3KAWa5q/jEpm/6NUoDZwCOZf+1UWu9lFCeYeUlfUd9kh6VgPqDd
+         hOuoeCnKhDH7ttObvA58eGGIGfvlpg9wxzOKu/PO2FRnLZfEvYbYjNMw5jM1NUvydjma
+         GwFa9T/wc0G4HoNNXKuPU5NNXXgV1AWZ1rRgpBbmLs+6GmQGQWmq851EerAQECRv9dZx
+         lbJ3O4+LEKtiMtq/De0Us4cyhHPphh7iaAV9tNLmSx1HRtzF69sPoPRehTAPqk7Z1XRt
+         EEmhlaOMxZPH6Tacb2IexFzAUGdzxBgCDhgTDYyRWc++rSoVK3x5YxJTJ/ya8wQvhihk
+         SqHQ==
+X-Gm-Message-State: AOJu0Ywzz/ZvV7MrGBGqU7NHmYE/86vui8eQEghR1NmkQwGkaRHMzieT
+	Ku6DK3AEMU3Q0rrhApCrnQ==
+X-Google-Smtp-Source: AGHT+IGLlG3DfuJ1i4PwEW4HSVYWwjf+v63085nkwxWVjtssu00SZkvpA/2SSg7tfQCAsA1wzX9yZA==
+X-Received: by 2002:a05:6830:44a0:b0:6bf:1f5f:ed18 with SMTP id r32-20020a05683044a000b006bf1f5fed18mr3883374otv.1.1697567498617;
+        Tue, 17 Oct 2023 11:31:38 -0700 (PDT)
+Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id b7-20020a056830104700b006c6311b15f6sm346957otp.38.2023.10.17.11.31.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Oct 2023 11:31:37 -0700 (PDT)
+Received: (nullmailer pid 2478778 invoked by uid 1000);
+	Tue, 17 Oct 2023 18:31:36 -0000
+Date: Tue, 17 Oct 2023 13:31:36 -0500
+From: Rob Herring <robh@kernel.org>
+To: Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc: Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Felipe Balbi <balbi@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>, Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+Subject: Re: [PATCH 10/12] dt-bindings: usb: qcom,dwc3: Introduce flattened
+ qcom,dwc3 binding
+Message-ID: <20231017183136.GA2438579-robh@kernel.org>
+References: <20231016-dwc3-refactor-v1-0-ab4a84165470@quicinc.com>
+ <20231016-dwc3-refactor-v1-10-ab4a84165470@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC 1/8] dt-bindings: usb: qcom,dwc3: Add bindings to enable
- runtime
-Content-Language: en-US
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring
-	<robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <quic_ppratap@quicinc.com>, <quic_jackp@quicinc.com>,
-        Conor Dooley
-	<conor+dt@kernel.org>, <quic_wcheng@quicinc.com>,
-        Andy Gross
-	<agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Thinh Nguyen
-	<Thinh.Nguyen@synopsys.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Greg
- Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Bjorn Andersson
-	<andersson@kernel.org>
-References: <20231017131851.8299-1-quic_kriskura@quicinc.com>
- <20231017131851.8299-2-quic_kriskura@quicinc.com>
- <a3d612a8-1917-491d-a944-22ea39879a9d@linaro.org>
-From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <a3d612a8-1917-491d-a944-22ea39879a9d@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: GjAApdZHzVFdDuElrfluWIo4xkL-aJyZ
-X-Proofpoint-ORIG-GUID: GjAApdZHzVFdDuElrfluWIo4xkL-aJyZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-17_03,2023-10-17_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 impostorscore=0 adultscore=0 clxscore=1011 mlxscore=0
- suspectscore=0 phishscore=0 mlxlogscore=999 lowpriorityscore=0 spamscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2310170150
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-	SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231016-dwc3-refactor-v1-10-ab4a84165470@quicinc.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+	FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
+	RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-
-
-On 10/17/2023 10:49 PM, Krzysztof Kozlowski wrote:
-> On 17/10/2023 15:18, Krishna Kurapati wrote:
->> Add enable-rt binding to let the device register vendor hooks to
->> core and facilitate runtime suspend and resume.
->>
->> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
->> ---
->>   Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 5 +++++
->>   1 file changed, 5 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
->> index cb50261c6a36..788d9c510abc 100644
->> --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
->> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
->> @@ -151,6 +151,11 @@ properties:
->>         HS/FS/LS modes are supported.
->>       type: boolean
->>   
->> +  qcom,enable-rt:
->> +    description:
->> +      If present, register vendor hooks to facilitate runtime suspend/resume
+On Mon, Oct 16, 2023 at 08:11:18PM -0700, Bjorn Andersson wrote:
+> The Qualcomm USB block consists of three intertwined parts, the XHCI,
+> the DWC3 core and the Qualcomm DWC3 glue. The three parts can not be
+> operated independently, but the binding was for historical reasons split
+> to mimic the Linux driver implementation.
 > 
-> You described the desired Linux feature or behavior, not the actual
-> hardware. The bindings are about the latter, so instead you need to
-> rephrase the property and its description to match actual hardware
-> capabilities/features/configuration etc.
+> The split binding also makes it hard to alter the implementation, as
+> properties and resources are split between the two nodes, in some cases
+> with some duplication.
 > 
+> Introduce a new binding, with a single representation of the whole USB
+> block in one node.
+> 
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> ---
+>  .../devicetree/bindings/usb/qcom,dwc3.yaml         | 482 +++++++++++++++++++++
+>  .../devicetree/bindings/usb/snps,dwc3.yaml         |  14 +-
+>  2 files changed, 491 insertions(+), 5 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> new file mode 100644
+> index 000000000000..cb50261c6a36
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> @@ -0,0 +1,482 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/qcom,dwc3.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm SuperSpeed DWC3 USB SoC controller
+> +
+> +maintainers:
+> +  - Wesley Cheng <quic_wcheng@quicinc.com>
+> +
+> +select:
+> +  properties:
+> +    compatible:
+> +      items:
+> +        - enum:
+> +            - qcom,ipq4019-dwc3
+> +            - qcom,ipq5018-dwc3
+> +            - qcom,ipq5332-dwc3
+> +            - qcom,ipq6018-dwc3
+> +            - qcom,ipq8064-dwc3
+> +            - qcom,ipq8074-dwc3
+> +            - qcom,ipq9574-dwc3
+> +            - qcom,msm8953-dwc3
+> +            - qcom,msm8994-dwc3
+> +            - qcom,msm8996-dwc3
+> +            - qcom,msm8998-dwc3
+> +            - qcom,qcm2290-dwc3
+> +            - qcom,qcs404-dwc3
+> +            - qcom,sa8775p-dwc3
+> +            - qcom,sc7180-dwc3
+> +            - qcom,sc7280-dwc3
+> +            - qcom,sc8180x-dwc3
+> +            - qcom,sc8280xp-dwc3
+> +            - qcom,sc8280xp-dwc3-mp
+> +            - qcom,sdm660-dwc3
+> +            - qcom,sdm670-dwc3
+> +            - qcom,sdm845-dwc3
+> +            - qcom,sdx55-dwc3
+> +            - qcom,sdx65-dwc3
+> +            - qcom,sdx75-dwc3
+> +            - qcom,sm4250-dwc3
+> +            - qcom,sm6115-dwc3
+> +            - qcom,sm6125-dwc3
+> +            - qcom,sm6350-dwc3
+> +            - qcom,sm6375-dwc3
+> +            - qcom,sm8150-dwc3
+> +            - qcom,sm8250-dwc3
+> +            - qcom,sm8350-dwc3
+> +            - qcom,sm8450-dwc3
+> +            - qcom,sm8550-dwc3
+> +        - const: qcom,dwc3
+> +        - const: snps,dwc3
+> +  required:
+> +    - compatible
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - qcom,ipq4019-dwc3
+> +          - qcom,ipq5018-dwc3
+> +          - qcom,ipq5332-dwc3
+> +          - qcom,ipq6018-dwc3
+> +          - qcom,ipq8064-dwc3
+> +          - qcom,ipq8074-dwc3
+> +          - qcom,ipq9574-dwc3
+> +          - qcom,msm8953-dwc3
+> +          - qcom,msm8994-dwc3
+> +          - qcom,msm8996-dwc3
+> +          - qcom,msm8998-dwc3
+> +          - qcom,qcm2290-dwc3
+> +          - qcom,qcs404-dwc3
+> +          - qcom,sa8775p-dwc3
+> +          - qcom,sc7180-dwc3
+> +          - qcom,sc7280-dwc3
+> +          - qcom,sc8180x-dwc3
+> +          - qcom,sc8280xp-dwc3
+> +          - qcom,sc8280xp-dwc3-mp
+> +          - qcom,sdm660-dwc3
+> +          - qcom,sdm670-dwc3
+> +          - qcom,sdm845-dwc3
+> +          - qcom,sdx55-dwc3
+> +          - qcom,sdx65-dwc3
+> +          - qcom,sdx75-dwc3
+> +          - qcom,sm4250-dwc3
+> +          - qcom,sm6115-dwc3
+> +          - qcom,sm6125-dwc3
+> +          - qcom,sm6350-dwc3
+> +          - qcom,sm6375-dwc3
+> +          - qcom,sm8150-dwc3
+> +          - qcom,sm8250-dwc3
+> +          - qcom,sm8350-dwc3
+> +          - qcom,sm8450-dwc3
+> +          - qcom,sm8550-dwc3
+> +      - const: qcom,dwc3
+> +      - const: snps,dwc3
+> +
+> +  reg:
+> +    description: Offset and length of register set for QSCRATCH wrapper
+> +    maxItems: 1
 
-Hi Krzysztof,
+Isn't this more things now? Or the description is wrong.
 
-  Thanks for the review. Although it sounds like its a Linux property, 
-internally what it does is configuring qscratch registers properly when 
-(dr_mode == OTG)
-
-  Would it be fine to rephrase the property name to 
-"qcom,config-qscratch" and to make it dependent on dr_mode and 
-usb-role-switch properties ? Would it be possible to make such a 
-dependency in bindings ?
-
-Regards,
-Krishna,
+Rob
 
