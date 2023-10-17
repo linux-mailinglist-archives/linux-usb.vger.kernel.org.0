@@ -1,42 +1,63 @@
-Return-Path: <linux-usb+bounces-1763-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1764-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC4807CCB7B
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 21:00:07 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB3DA7CCBEB
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 21:12:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D179C1C20C8A
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 19:00:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5AA87B21287
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 19:12:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13B259CA55;
-	Tue, 17 Oct 2023 19:00:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FDA42EB02;
+	Tue, 17 Oct 2023 19:12:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38102EBE
-	for <linux-usb@vger.kernel.org>; Tue, 17 Oct 2023 18:59:59 +0000 (UTC)
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by lindbergh.monkeyblade.net (Postfix) with SMTP id B9513F7
-	for <linux-usb@vger.kernel.org>; Tue, 17 Oct 2023 11:59:55 -0700 (PDT)
-Received: (qmail 193575 invoked by uid 1000); 17 Oct 2023 14:59:54 -0400
-Date: Tue, 17 Oct 2023 14:59:54 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Hardik Gajjar <hgajjar@de.adit-jv.com>, mathias.nyman@intel.com,
-  yangyingliang@huawei.com, jinpu.wang@ionos.com, linux-usb@vger.kernel.org,
-  linux-kernel@vger.kernel.org, erosca@de.adit-jv.com
-Subject: Re: [PATCH v4] usb: core: hub: Add quirks for reducing device
- address timeout
-Message-ID: <6c25beed-06fe-4be0-b51a-18e159d25072@rowland.harvard.edu>
-References: <2023101155-unframed-satirical-f7ec@gregkh>
- <20231011164525.97616-1-hgajjar@de.adit-jv.com>
- <2023101620-shaky-sensitize-9708@gregkh>
- <20231017161021.GA62775@vmlxhi-118.adit-jv.com>
- <2023101750-bless-humorous-45c7@gregkh>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 161E7EBE;
+	Tue, 17 Oct 2023 19:12:40 +0000 (UTC)
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910BAB0;
+	Tue, 17 Oct 2023 12:12:39 -0700 (PDT)
+Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-6c4bad60a1aso3656654a34.2;
+        Tue, 17 Oct 2023 12:12:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697569959; x=1698174759;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YKOdpoZLrfC7mZi7adYpYhK/nK8naai8II+Wc2lfLxY=;
+        b=VH1fWjwecDmcLNZggU66HmnglpzwHfNtLJEN/PE4vQzDy9eKw+q0Q7I8XXybbRC6CU
+         PynCNYod0cYwmUEiEfpHCQwdMsMx6I7gl/rq9u00lwYama9ZEnurxRbNxWqxtV9fL/lx
+         +1xA2D+KP82NzkPYWgVLmZaDjYfe7/k0x32vAPJYs4RS/7VR5Y0NG0NsI6RlP2Kcy/MX
+         UrJ7VA3X+HxQ/WRCc1EVEOlbA5xBej4Y1QxLuCPa5X5GDCPEPl8xTLWsvHJzpTy2hTT1
+         i3b/rCWdDJTMt4wBQ+h1lDz1qLk8kosHW1rmAvcfbJR3+4ONn3p4BJqf+JdihfLPYHc9
+         EC/g==
+X-Gm-Message-State: AOJu0YzrWEBG8sZWVzpU2LPTXKlQ68NgwYWSGhfq45rB0auwqCWK505t
+	5yPr4mDS5iPR9qhhNCZg8LO8tliKMQ==
+X-Google-Smtp-Source: AGHT+IGkXqhJ5ElPxLv4x+02C3cqbHcjm/YAs7LK6bTEQxHSpBtRkAaBTPSRRFt1R25w+BMNr/s/zA==
+X-Received: by 2002:a05:6830:1d62:b0:6bc:8afe:8a15 with SMTP id l2-20020a0568301d6200b006bc8afe8a15mr2927536oti.38.1697569958861;
+        Tue, 17 Oct 2023 12:12:38 -0700 (PDT)
+Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id q20-20020a05683031b400b006b8c277be12sm359714ots.8.2023.10.17.12.12.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Oct 2023 12:12:38 -0700 (PDT)
+Received: (nullmailer pid 2529777 invoked by uid 1000);
+	Tue, 17 Oct 2023 19:12:37 -0000
+Date: Tue, 17 Oct 2023 14:12:37 -0500
+From: Rob Herring <robh@kernel.org>
+To: Neil Armstrong <neil.armstrong@linaro.org>
+Cc: Luca Weiss <luca.weiss@fairphone.com>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/3] dt-bindings: usb: fsa4480: Add data-lanes property
+ to endpoint
+Message-ID: <20231017191237.GA2527374-robh@kernel.org>
+References: <20231013-fsa4480-swap-v1-0-b877f62046cc@fairphone.com>
+ <20231013-fsa4480-swap-v1-1-b877f62046cc@fairphone.com>
+ <20231016142256.GA2754674-robh@kernel.org>
+ <323ff7db-0963-4e63-94e9-551540dd6490@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -45,93 +66,84 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2023101750-bless-humorous-45c7@gregkh>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+In-Reply-To: <323ff7db-0963-4e63-94e9-551540dd6490@linaro.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+	FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+	RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
 	autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Tue, Oct 17, 2023 at 06:53:44PM +0200, Greg KH wrote:
-> On Tue, Oct 17, 2023 at 06:10:21PM +0200, Hardik Gajjar wrote:
-> > More logs and detailed in patch V1:
-> > https://lore.kernel.org/linux-usb/20230818092353.124658-1-hgajjar@de.adit-jv.com/T/#m452ec9dad94e8181fdb050cd29483dd89437f7c1
-> > > 
-> > > > Achieving this is impossible in scenarios where the set_address is
-> > > > not successful and waits for a timeout.
-> > > 
-> > > Agreed, broken hardware is a pain, but if your device is allowed to take
-> > > longer, it can, and will, so you have to support that.
-> > > 
-> > The problem is not caused by the device taking an extended amount of time to
-> > process the 'set_address' request. Instead, the issue lies in the absence of
-> > any activity on the upstream bus until a timeout occurs.
-> 
-> So, a broken device.  Why are you then adding the hub to the quirk list
-> and not the broken device?  We are used to adding broken devices to
-> qurik lists all the time, this shouldn't be new.
-
-Adding a quirk for the device isn't feasible, because the problem occurs 
-before the device has been initialized and enumerated.  The kernel 
-doesn't know anything about the device at this point; only that it has 
-just connected.
-
-> > This situation arises when the host has already transmitted the 'set_address' command to the hub,
-> > assuming that the device operates at full speed. However, the device connected
-> > to the hub undergoes a state change from full speed to high-speed during this process.
-> 
-> During which process?  While the set-address happens?  That feels like a
-> hub bug then.
-> 
-> > > > The shortened address device timeout quirks provide the flexibility
-> > > > to align with a 3-second time limit in the event of errors.
-> > > > By swiftly triggering a failure response and swiftly initiating
-> > > > retry procedures, these quirks ensure efficient and rapid recovery,
-> > > > particularly in automotive contexts where rapid smartphone enumeration
-> > > > and screen projection are vital.
-> > > 
-> > > Screen projection is a requirement that you should not be relying on USB
-> > > for as USB has a different set of required timeouts, right?  This sounds
-> > > like a bad hardware design, if not an impossible one.
-> > > 
+On Mon, Oct 16, 2023 at 04:32:55PM +0200, Neil Armstrong wrote:
+> On 16/10/2023 16:22, Rob Herring wrote:
+> > On Fri, Oct 13, 2023 at 01:38:05PM +0200, Luca Weiss wrote:
+> > > Allow specifying data-lanes to reverse the SBU muxing orientation where
+> > > necessary by the hardware design.
 > > 
-> > Screen projection for us means displaying the connected phone on the screen and
-> > launching Carplay and Android Auto for the user. This works perfectly in nearly all
-> > cases, except in scenarios like this one where a combination of a special hub and
-> > a specific phone model is causing the issue
+> > What situation in the hardware design makes this necessary. Please
+> > describe the problem.
+> > 
+> > > 
+> > > Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> > > ---
+> > >   .../devicetree/bindings/usb/fcs,fsa4480.yaml       | 29 +++++++++++++++++++++-
+> > >   1 file changed, 28 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml b/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
+> > > index f6e7a5c1ff0b..86f6d633c2fb 100644
+> > > --- a/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
+> > > +++ b/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
+> > > @@ -32,10 +32,37 @@ properties:
+> > >       type: boolean
+> > >     port:
+> > > -    $ref: /schemas/graph.yaml#/properties/port
+> > > +    $ref: /schemas/graph.yaml#/$defs/port-base
+> > >       description:
+> > >         A port node to link the FSA4480 to a TypeC controller for the purpose of
+> > >         handling altmode muxing and orientation switching.
+> > > +    unevaluatedProperties: false
+> > > +
+> > > +    properties:
+> > > +      endpoint:
+> > > +        $ref: /schemas/graph.yaml#/$defs/endpoint-base
+> > > +        unevaluatedProperties: false
+> > > +
+> > > +        properties:
+> > > +          data-lanes:
+> > > +            $ref: /schemas/types.yaml#/definitions/uint32-array
+> > > +            description:
+> > > +              Specifies how the AUX+/- lines are connected to SBU1/2.
+> > 
+> > Doesn't this depend on the connector orientation? Or it is both that and
+> > the lines can be swapped on the PCB?
+> > 
+> > Seems like an abuse of data-lanes which already has a definition which
+> > is not about swapping + and - differential lanes.
 > 
-> So which is broken, the hub or phone?
-
-It sounds like both of them are broken to some extent, although we can't 
-tell for sure without seeing what's actually happening on the USB bus 
-(i.e., bus analyzer output):
-
-	The phone seems to take too long to activate its high-speed
-	terminations and deactivate the full-speed terminations.
-
-	The hub doesn't seem to realize that the phone has disconnected 
-	its full-speed connection and switched to high-speed.
-
-But without real data, these are just best guesses.
-
-> > The issue arises when the host has already issued the 'set_address' command to the hub,
-> > assuming the device is operating at full speed. However, in such cases, when the device
-> > connected to the hub changes its state from full speed to high-speed, the 'set_address'
-> > request becomes blocked, waiting for the full 5-second timeout. This patch reduces the
-> > timeout from 5 seconds to 500 milliseconds, allowing for quicker failure and re-enumeration
-> > of the device as high-speed
+> The FSA acts as a mux between DP AUX, Audio lanes on one side and
+> the USB-C SBU lanes on the other side.
+> _______          ______
+>       |          |     |
+>       |-- HP   --|     |
+>       |-- MIC  --|     |or
+> SoC   |          | MUX |-- SBU1 --->  To the USB-C
+> Codec |-- AUX+ --|     |-- SBU2 --->  connected
+>       |-- AUX- --|     |
+> ______|          |____ |
 > 
-> Changing speed is under hub control, not device control, right?  Are you
-
-Changing speed is under device control.  But of course, the hub has to 
-detect the change and react to it properly.
-
-Alan Stern
-
-> sure the firmware is correct in that hub?  Has the hub passed all of the
-> USB-IF testing requirements?
+> The SBU1 & SBU2 are connected to the USB-C connector, and the actual orientation
+> to the connected devices/cable/whatever is determined by the TPCM and the MUX in
+> the FSA4480 with be dynamically changed according to the CC1/CC2 detection and PD alt mode.
 > 
-> thanks,
+> But on the other side the orientation of the AUX+/AUX- connected to the SoC
+> is not tied to the USB-C orientation but how it's routed on the PCB.
 > 
-> greg k-h
+> This describes how the AUX+/AUX- are physically routed to the FSA4480 chip.
+
+I'd hate for this ASCII art to go to waste. Please add this detail to 
+the commit message.
+
+Rob
+
 
