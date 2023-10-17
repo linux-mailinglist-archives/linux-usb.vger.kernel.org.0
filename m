@@ -1,190 +1,265 @@
-Return-Path: <linux-usb+bounces-1728-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1729-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D0C77CBDE4
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 10:39:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2D777CBE4E
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 11:01:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F101BB211EF
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 08:39:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B5A8281A99
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 09:01:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40F973B793;
-	Tue, 17 Oct 2023 08:39:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 940BC3D978;
+	Tue, 17 Oct 2023 09:01:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="lEzTpX+o"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Wa4GYMuI"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 264A73D979
-	for <linux-usb@vger.kernel.org>; Tue, 17 Oct 2023 08:39:40 +0000 (UTC)
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.217])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id B4CFA93;
-	Tue, 17 Oct 2023 01:39:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=krMrh
-	+gnj9GwvY8PuJ2nHyEgdmzG0vhrGe+vOfvIw9Q=; b=lEzTpX+orqfVJ2Q9JhMlE
-	+uWRMpNh5usXqsk/LmzkJH+Ow6i/A5MDgMGkt40XiVkd9CJjWeWOlrn2iWfg8gvr
-	Mo1OK27vnQp89o90Tx8ytYEsZUi50V3+LMBSgrMR/WmP6X9pMESdWJz5TfzgntnV
-	XURDX5D6QZ98BU42et/WHs=
-Received: from ubuntu.. (unknown [171.83.47.247])
-	by zwqz-smtp-mta-g5-4 (Coremail) with SMTP id _____wDnNwI6SC5lUGceAw--.33359S2;
-	Tue, 17 Oct 2023 16:39:22 +0800 (CST)
-From: Charles <be286@163.com>
-To: gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Charles <be286@163.com>
-Subject: [PATCH]         usb: gadget: f_uac1: add adaptive sync support for capture
-Date: Tue, 17 Oct 2023 16:39:18 +0800
-Message-Id: <20231017083918.1149647-1-be286@163.com>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 612683CD1B;
+	Tue, 17 Oct 2023 09:01:19 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D64EB0;
+	Tue, 17 Oct 2023 02:01:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1697533277; x=1729069277;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Ycdmn1yRnmUMNTHqsn5gHRBcw7LLPquXwlkEsT2ze3g=;
+  b=Wa4GYMuI6JT60yalyY6kyE6K8kEeO9oQFm1bkTtBew+BZEAbQbj8Zhq2
+   aoFSwrMiaqr/AaQtX2o46sAHHJ/DTivb6zuz6S37CK7tN3Yj0bXFYvw1L
+   SbwCJUxRbd8MeUEOBxI+4r/a1a6U7DvoE4uUXk28N7DUoE7WlMbjJ6A94
+   jx7EGqIXZdKgE2XC+n289sE6zh9mr7gjC1+0STdKjzIHv2Io3SIsOAeGH
+   fk2vqAh80KSRTUTT+3MFKtpNP7TjP3My7neCEpOVSkMUxDW/nuOO3mfms
+   Z+LIXztV8CtzN8dH/sIwiI7d0hhzQjK/Tq0F9btb9uC50FZEglPo1dZaT
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10865"; a="7296588"
+X-IronPort-AV: E=Sophos;i="6.03,231,1694761200"; 
+   d="scan'208";a="7296588"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2023 02:01:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10865"; a="705923313"
+X-IronPort-AV: E=Sophos;i="6.03,231,1694761200"; 
+   d="scan'208";a="705923313"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by orsmga003.jf.intel.com with SMTP; 17 Oct 2023 02:01:12 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 17 Oct 2023 12:01:11 +0300
+Date: Tue, 17 Oct 2023 12:01:11 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Luca Weiss <luca.weiss@fairphone.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 2/3] usb: typec: fsa4480: Add support to swap SBU
+ orientation
+Message-ID: <ZS5NV43MhD3YNeDX@kuha.fi.intel.com>
+References: <20231013-fsa4480-swap-v1-0-b877f62046cc@fairphone.com>
+ <20231013-fsa4480-swap-v1-2-b877f62046cc@fairphone.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDnNwI6SC5lUGceAw--.33359S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxAr15JF47Ww4xWFW8ZF1xAFb_yoWrCr1kpw
-	4UC3y0yr45ArZIqr4rAF4rAF43Aa1xG345GrW7Ww4Yganxt3sava42yryFkF17AFWrCw40
-	qF4Fgw1a9w4kCrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRwvtXUUUUU=
-X-Originating-IP: [171.83.47.247]
-X-CM-SenderInfo: dehsmli6rwjhhfrp/1tbiWxIK0mI0cRDTdAADsC
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-	FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_BL,
-	RCVD_IN_MSPIKE_L4,SPF_HELO_NONE,SPF_PASS autolearn=ham
-	autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231013-fsa4480-swap-v1-2-b877f62046cc@fairphone.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-        UAC1 has it's own freerunning clock and can update Host about
-        real clock frequency through feedback endpoint so Host
-        can align number of samples sent to the UAC1 to
-        prevent overruns/underruns.
+Hi Luca,
 
-        Change UAC1 driver to make it configurable through
-        additional 'c_sync' configfs file.
+On Fri, Oct 13, 2023 at 01:38:06PM +0200, Luca Weiss wrote:
+> On some hardware designs the AUX+/- lanes are connected reversed to
+> SBU1/2 compared to the expected design by FSA4480.
+> 
+> Made more complicated, the otherwise compatible Orient-Chip OCP96011
+> expects the lanes to be connected reversed compared to FSA4480.
+> 
+> * FSA4480 block diagram shows AUX+ connected to SBU2 and AUX- to SBU1.
+> * OCP96011 block diagram shows AUX+ connected to SBU1 and AUX- to SBU2.
+> 
+> So if OCP96011 is used as drop-in for FSA4480 then the orientation
+> handling in the driver needs to be reversed to match the expectation of
+> the OCP96011 hardware.
+> 
+> Support parsing the data-lanes parameter in the endpoint node to swap
+> this in the driver.
+> 
+> The parse_data_lanes_mapping function is mostly taken from nb7vpq904m.c.
+> 
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> ---
+>  drivers/usb/typec/mux/fsa4480.c | 81 +++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 81 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/mux/fsa4480.c b/drivers/usb/typec/mux/fsa4480.c
+> index e0ee1f621abb..6ee467c96fb6 100644
+> --- a/drivers/usb/typec/mux/fsa4480.c
+> +++ b/drivers/usb/typec/mux/fsa4480.c
+> @@ -9,6 +9,7 @@
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+>  #include <linux/mutex.h>
+> +#include <linux/of_graph.h>
 
-        Default remains 'asynchronous' with possibility to
-        switch it to 'adaptive'.
+If you don't mind, let's keep this driver ready for ACPI, just in
+case...
 
-        Signed-off-by: Charles <be286@163.com>
----
- drivers/usb/gadget/function/f_uac1.c | 31 ++++++++++++++++++++++++++++
- drivers/usb/gadget/function/u_uac1.h |  2 ++
- 2 files changed, 33 insertions(+)
+>  #include <linux/regmap.h>
+>  #include <linux/usb/typec_dp.h>
+>  #include <linux/usb/typec_mux.h>
+> @@ -60,6 +61,7 @@ struct fsa4480 {
+>  	unsigned int svid;
+>  
+>  	u8 cur_enable;
+> +	bool swap_sbu_lanes;
+>  };
+>  
+>  static const struct regmap_config fsa4480_regmap_config = {
+> @@ -76,6 +78,9 @@ static int fsa4480_set(struct fsa4480 *fsa)
+>  	u8 enable = FSA4480_ENABLE_DEVICE;
+>  	u8 sel = 0;
+>  
+> +	if (fsa->swap_sbu_lanes)
+> +		reverse = !reverse;
+> +
+>  	/* USB Mode */
+>  	if (fsa->mode < TYPEC_STATE_MODAL ||
+>  	    (!fsa->svid && (fsa->mode == TYPEC_MODE_USB2 ||
+> @@ -179,12 +184,84 @@ static int fsa4480_mux_set(struct typec_mux_dev *mux, struct typec_mux_state *st
+>  	return ret;
+>  }
+>  
+> +enum {
+> +	NORMAL_LANE_MAPPING,
+> +	INVERT_LANE_MAPPING,
+> +};
+> +
+> +#define DATA_LANES_COUNT	2
+> +
+> +static const int supported_data_lane_mapping[][DATA_LANES_COUNT] = {
+> +	[NORMAL_LANE_MAPPING] = { 0, 1 },
+> +	[INVERT_LANE_MAPPING] = { 1, 0 },
+> +};
+> +
+> +static int fsa4480_parse_data_lanes_mapping(struct fsa4480 *fsa)
+> +{
+> +	struct device_node *ep;
 
-diff --git a/drivers/usb/gadget/function/f_uac1.c b/drivers/usb/gadget/function/f_uac1.c
-index 6f0e1d803dc2..0a8e55b19ee7 100644
---- a/drivers/usb/gadget/function/f_uac1.c
-+++ b/drivers/usb/gadget/function/f_uac1.c
-@@ -33,6 +33,8 @@
- #define FUOUT_EN(_opts) ((_opts)->c_mute_present \
- 			|| (_opts)->c_volume_present)
- 
-+#define EPOUT_FBACK_IN_EN(_opts) ((_opts)->c_sync == USB_ENDPOINT_SYNC_ASYNC)
-+
- struct f_uac1 {
- 	struct g_audio g_audio;
- 	u8 ac_intf, as_in_intf, as_out_intf;
-@@ -227,6 +229,16 @@ static struct uac_iso_endpoint_descriptor as_iso_out_desc = {
- 	.wLockDelay =		cpu_to_le16(1),
- };
- 
-+static struct usb_endpoint_descriptor as_fback_ep_desc = {
-+	.bLength = USB_DT_ENDPOINT_SIZE,
-+	.bDescriptorType = USB_DT_ENDPOINT,
-+
-+	.bEndpointAddress = USB_DIR_IN,
-+	.bmAttributes = USB_ENDPOINT_XFER_ISOC | USB_ENDPOINT_USAGE_FEEDBACK,
-+	.wMaxPacketSize = cpu_to_le16(3),
-+	.bInterval = 1,
-+};
-+
- static struct uac_format_type_i_discrete_descriptor as_in_type_i_desc = {
- 	.bLength =		0, /* filled on rate setup */
- 	.bDescriptorType =	USB_DT_CS_INTERFACE,
-@@ -280,6 +292,7 @@ static struct usb_descriptor_header *f_audio_desc[] = {
- 
- 	(struct usb_descriptor_header *)&as_out_ep_desc,
- 	(struct usb_descriptor_header *)&as_iso_out_desc,
-+	(struct usb_descriptor_header *)&as_fback_ep_desc,
- 
- 	(struct usb_descriptor_header *)&as_in_interface_alt_0_desc,
- 	(struct usb_descriptor_header *)&as_in_interface_alt_1_desc,
-@@ -1107,6 +1120,9 @@ static void setup_descriptor(struct f_uac1_opts *opts)
- 		f_audio_desc[i++] = USBDHDR(&as_out_type_i_desc);
- 		f_audio_desc[i++] = USBDHDR(&as_out_ep_desc);
- 		f_audio_desc[i++] = USBDHDR(&as_iso_out_desc);
-+		if (EPOUT_FBACK_IN_EN(opts)) {
-+			f_audio_desc[i++] = USBDHDR(&as_fback_ep_desc);
-+		}
- 	}
- 	if (EPIN_EN(opts)) {
- 		f_audio_desc[i++] = USBDHDR(&as_in_interface_alt_0_desc);
-@@ -1317,6 +1333,12 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
- 		ac_header_desc->baInterfaceNr[ba_iface_id++] = status;
- 		uac1->as_out_intf = status;
- 		uac1->as_out_alt = 0;
-+
-+		if (EPOUT_FBACK_IN_EN(audio_opts)) {
-+			as_out_ep_desc.bmAttributes =
-+			USB_ENDPOINT_XFER_ISOC | USB_ENDPOINT_SYNC_ASYNC;
-+			as_out_interface_alt_1_desc.bNumEndpoints++;
-+		}
- 	}
- 
- 	if (EPIN_EN(audio_opts)) {
-@@ -1354,6 +1376,13 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
- 			goto err_free_fu;
- 		audio->out_ep = ep;
- 		audio->out_ep->desc = &as_out_ep_desc;
-+		if (EPOUT_FBACK_IN_EN(audio_opts)) {
-+			audio->in_ep_fback = usb_ep_autoconfig(gadget,
-+								&as_fback_ep_desc);
-+			if (!audio->in_ep_fback) {
-+				goto err_free_fu;
-+			}
-+		}
- 	}
- 
- 	if (EPIN_EN(audio_opts)) {
-@@ -1685,6 +1714,8 @@ static struct usb_function_instance *f_audio_alloc_inst(void)
- 
- 	opts->req_number = UAC1_DEF_REQ_NUM;
- 
-+	opts->c_sync = UAC1_DEF_CSYNC;
-+
- 	snprintf(opts->function_name, sizeof(opts->function_name), "AC Interface");
- 
- 	return &opts->func_inst;
-diff --git a/drivers/usb/gadget/function/u_uac1.h b/drivers/usb/gadget/function/u_uac1.h
-index f7a616760e31..c6e2271e8cdd 100644
---- a/drivers/usb/gadget/function/u_uac1.h
-+++ b/drivers/usb/gadget/function/u_uac1.h
-@@ -27,6 +27,7 @@
- #define UAC1_DEF_MAX_DB		0		/* 0 dB */
- #define UAC1_DEF_RES_DB		(1*256)	/* 1 dB */
- 
-+#define UAC1_DEF_CSYNC		USB_ENDPOINT_SYNC_ASYNC
- 
- struct f_uac1_opts {
- 	struct usb_function_instance	func_inst;
-@@ -56,6 +57,7 @@ struct f_uac1_opts {
- 
- 	struct mutex			lock;
- 	int				refcnt;
-+	int				c_sync;
- };
- 
- #endif /* __U_UAC1_H */
+        struct fwnode_handle *ep;
+
+> +	u32 data_lanes[DATA_LANES_COUNT];
+> +	int ret, i, j;
+> +
+> +	ep = of_graph_get_next_endpoint(fsa->client->dev.of_node, NULL);
+
+Shouldn't you loop through the endpoints? In any case:
+
+        ep = fwnode_graph_get_next_endpoint(dev_fwnode(&fsa->client->dev, NULL));
+
+> +	if (!ep)
+> +		return 0;
+> +
+> +	ret = of_property_count_u32_elems(ep, "data-lanes");
+
+        ret = fwnode_property_count_u32(ep, "data-lanes");
+
+But is this necessary at all in this case - why not just read the
+array since you expect a fixed size for it (if the read fails it fails)?
+
+> +	if (ret == -EINVAL)
+> +		/* Property isn't here, consider default mapping */
+> +		goto out_done;
+> +	if (ret < 0)
+> +		goto out_error;
+> +
+> +	if (ret != DATA_LANES_COUNT) {
+> +		dev_err(&fsa->client->dev, "expected 2 data lanes\n");
+> +		ret = -EINVAL;
+> +		goto out_error;
+> +	}
+> +
+> +	ret = of_property_read_u32_array(ep, "data-lanes", data_lanes, DATA_LANES_COUNT);
+
+        ret = fwnode_property_read_u32_array(ep, "data-lanes", data_lanes, DATA_LANES_COUNT);
+
+> +	if (ret)
+> +		goto out_error;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(supported_data_lane_mapping); i++) {
+> +		for (j = 0; j < DATA_LANES_COUNT; j++) {
+> +			if (data_lanes[j] != supported_data_lane_mapping[i][j])
+> +				break;
+> +		}
+> +
+> +		if (j == DATA_LANES_COUNT)
+> +			break;
+> +	}
+> +
+> +	switch (i) {
+> +	case NORMAL_LANE_MAPPING:
+> +		break;
+> +	case INVERT_LANE_MAPPING:
+> +		fsa->swap_sbu_lanes = true;
+> +		dev_info(&fsa->client->dev, "using inverted data lanes mapping\n");
+
+That is just noise. Please drop it.
+
+> +		break;
+> +	default:
+> +		dev_err(&fsa->client->dev, "invalid data lanes mapping\n");
+> +		ret = -EINVAL;
+> +		goto out_error;
+> +	}
+> +
+> +out_done:
+> +	ret = 0;
+> +
+> +out_error:
+> +	of_node_put(ep);
+> +
+> +	return ret;
+> +}
+> +
+>  static int fsa4480_probe(struct i2c_client *client)
+>  {
+>  	struct device *dev = &client->dev;
+>  	struct typec_switch_desc sw_desc = { };
+>  	struct typec_mux_desc mux_desc = { };
+>  	struct fsa4480 *fsa;
+> +	int ret;
+>  
+>  	fsa = devm_kzalloc(dev, sizeof(*fsa), GFP_KERNEL);
+>  	if (!fsa)
+> @@ -193,6 +270,10 @@ static int fsa4480_probe(struct i2c_client *client)
+>  	fsa->client = client;
+>  	mutex_init(&fsa->lock);
+>  
+> +	ret = fsa4480_parse_data_lanes_mapping(fsa);
+> +	if (ret)
+> +		return ret;
+> +
+>  	fsa->regmap = devm_regmap_init_i2c(client, &fsa4480_regmap_config);
+>  	if (IS_ERR(fsa->regmap))
+>  		return dev_err_probe(dev, PTR_ERR(fsa->regmap), "failed to initialize regmap\n");
+> 
+> -- 
+> 2.42.0
+
 -- 
-2.34.1
-
+heikki
 
