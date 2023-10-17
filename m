@@ -1,68 +1,152 @@
-Return-Path: <linux-usb+bounces-1759-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1760-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABD5A7CC9E5
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 19:28:48 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 609F17CCA19
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 19:46:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67E3028127E
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 17:28:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D40FBB2126E
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 17:46:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D33E74734D;
-	Tue, 17 Oct 2023 17:28:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F8702D795;
+	Tue, 17 Oct 2023 17:46:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="i8us8Yl2"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ixaO6Kz0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D85F2D030
-	for <linux-usb@vger.kernel.org>; Tue, 17 Oct 2023 17:28:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63FEDC433C8;
-	Tue, 17 Oct 2023 17:28:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1697563720;
-	bh=n9GgMaAhc+WehenrjFhFyTf0dO39GP2+2d1v7Jx9iUs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=i8us8Yl2huPsfjsXonzenU49R602LRyEVX+Bj5T7uJgZOP7OTJoDTUuTeXZMrjiVV
-	 L8C7gWC3oLEtT5t5FZigFOnFk8F2MwrDGEYbovyCoZpkA31TevOKAtiwnNpexkir5G
-	 F8M+Oz4ypAb/Atx7Phbj+LyM9SHAuKegv2DTamSM=
-Date: Tue, 17 Oct 2023 19:28:38 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: linux-usb@vger.kernel.org, Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Andreas Noever <andreas.noever@gmail.com>
-Subject: Re: USB4/Thunderbolt fix for v6.6-rc7
-Message-ID: <2023101716-magenta-almighty-281d@gregkh>
-References: <20231017141447.GX3208943@black.fi.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88F912D780;
+	Tue, 17 Oct 2023 17:46:35 +0000 (UTC)
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6037783;
+	Tue, 17 Oct 2023 10:46:34 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39HGsRWY022257;
+	Tue, 17 Oct 2023 17:46:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=wizOAI8PdKSoJNpWslPwAMKZwsvY0u4gK5kO6xEFiLU=;
+ b=ixaO6Kz03PxmXAqt3FzQQ8W074Fkj7I3UiHTl0WwUjWUFkCCaCGToHOaUlMTpNRqXCK0
+ b8auLdeGnl+aIJK9tZt4f8NVpYJTw1HVkjb1O9egHU431W1jABcFG7Eqk0UVN4h2bvqR
+ i8plg7snU86MINhuXfWqs0cVjHdyQhKr2qhyrDSESoR8vH0DQEIxq7MPGHD+CxRx9vh8
+ aLWrOaLjOMCxpFVLJ2VMYpvh1RkFxnOOYdBs+2VyBOEjZMKVzWsbNXSWpDFXqh4fbcfY
+ AUXY021ck0s/ONg+5OJaR8eqbL6TARv2WDNqSaEZ14Ce9nA0fstq4YvN7GXn5v4kBydC JQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tsvxwrds1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 17 Oct 2023 17:46:24 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39HHkNwK000725
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 17 Oct 2023 17:46:23 GMT
+Received: from [10.216.40.160] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.39; Tue, 17 Oct
+ 2023 10:46:17 -0700
+Message-ID: <189be124-efb1-4843-9a47-db84942838c9@quicinc.com>
+Date: Tue, 17 Oct 2023 23:16:12 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231017141447.GX3208943@black.fi.intel.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC 1/8] dt-bindings: usb: qcom,dwc3: Add bindings to enable
+ runtime
+Content-Language: en-US
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring
+	<robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <quic_ppratap@quicinc.com>, <quic_jackp@quicinc.com>,
+        Conor Dooley
+	<conor+dt@kernel.org>, <quic_wcheng@quicinc.com>,
+        Andy Gross
+	<agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Thinh Nguyen
+	<Thinh.Nguyen@synopsys.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Bjorn Andersson
+	<andersson@kernel.org>
+References: <20231017131851.8299-1-quic_kriskura@quicinc.com>
+ <20231017131851.8299-2-quic_kriskura@quicinc.com>
+ <a3d612a8-1917-491d-a944-22ea39879a9d@linaro.org>
+From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <a3d612a8-1917-491d-a944-22ea39879a9d@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: GjAApdZHzVFdDuElrfluWIo4xkL-aJyZ
+X-Proofpoint-ORIG-GUID: GjAApdZHzVFdDuElrfluWIo4xkL-aJyZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-17_03,2023-10-17_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 impostorscore=0 adultscore=0 clxscore=1011 mlxscore=0
+ suspectscore=0 phishscore=0 mlxlogscore=999 lowpriorityscore=0 spamscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2310170150
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-On Tue, Oct 17, 2023 at 05:14:47PM +0300, Mika Westerberg wrote:
-> Hi Greg,
-> 
-> The following changes since commit 8a749fd1a8720d4619c91c8b6e7528c0a355c0aa:
-> 
->   Linux 6.6-rc4 (2023-10-01 14:15:13 -0700)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v6.6-rc7
 
-Nit, you forgot the [GIT PULL] prefix in the subject line.
 
-Anyway, pulled and pushed out, thanks!
+On 10/17/2023 10:49 PM, Krzysztof Kozlowski wrote:
+> On 17/10/2023 15:18, Krishna Kurapati wrote:
+>> Add enable-rt binding to let the device register vendor hooks to
+>> core and facilitate runtime suspend and resume.
+>>
+>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>> ---
+>>   Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 5 +++++
+>>   1 file changed, 5 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+>> index cb50261c6a36..788d9c510abc 100644
+>> --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+>> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+>> @@ -151,6 +151,11 @@ properties:
+>>         HS/FS/LS modes are supported.
+>>       type: boolean
+>>   
+>> +  qcom,enable-rt:
+>> +    description:
+>> +      If present, register vendor hooks to facilitate runtime suspend/resume
+> 
+> You described the desired Linux feature or behavior, not the actual
+> hardware. The bindings are about the latter, so instead you need to
+> rephrase the property and its description to match actual hardware
+> capabilities/features/configuration etc.
+> 
 
-greg k-h
+Hi Krzysztof,
+
+  Thanks for the review. Although it sounds like its a Linux property, 
+internally what it does is configuring qscratch registers properly when 
+(dr_mode == OTG)
+
+  Would it be fine to rephrase the property name to 
+"qcom,config-qscratch" and to make it dependent on dr_mode and 
+usb-role-switch properties ? Would it be possible to make such a 
+dependency in bindings ?
+
+Regards,
+Krishna,
 
