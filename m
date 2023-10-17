@@ -1,181 +1,72 @@
-Return-Path: <linux-usb+bounces-1742-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1743-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EAAD47CC49C
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 15:20:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 757A97CC58D
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 16:06:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F73A1F231B9
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 13:20:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 08D51281AD8
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Oct 2023 14:06:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FD24436B4;
-	Tue, 17 Oct 2023 13:19:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="hTtTMYMp"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DA6C43A97;
+	Tue, 17 Oct 2023 14:06:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C67E542C1E;
-	Tue, 17 Oct 2023 13:19:53 +0000 (UTC)
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACAC9198;
-	Tue, 17 Oct 2023 06:19:50 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39HCiLAE029249;
-	Tue, 17 Oct 2023 13:19:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=AlcgEQhkV+CHWGIIVMx9+hfGbBgrSjeMLC+vJ2luDV4=;
- b=hTtTMYMp2TLd/LsJrkqlcYy18gI9gDFly+1vM9OonK4kLHsTlF6H1b0dPbkdNGyG0Nf6
- soj7OsdcKxoLb/bhoy/OJGsKtbuiobQ2Cdpgk8dqN8AAHo9EVuHtVKcgOGdc2mTqQ/Zy
- 4N07/1cDfKTsQ9GYm3EytZmo35UdggUijspNLtVvJ9Rc+9+8pKwbWkEQLm0uLq0iDnLR
- 1dYQoVirWbNnU710ErIy08U5xvgKzPI0rXUEZbgM6KWM1/k3A+r+FtCE4C6WMN/JSeg5
- ZHyFUhXNK8FFiJRld0eJiZYsEGk7ua+evQPdFdyGyoHLT5BWpSnDsrLunVs7O3xXtljt 2A== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tsnearqfy-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 17 Oct 2023 13:19:43 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39HDJffC031191
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 17 Oct 2023 13:19:41 GMT
-Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.39; Tue, 17 Oct 2023 06:19:37 -0700
-From: Krishna Kurapati <quic_kriskura@quicinc.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Andy
- Gross" <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Konrad
- Dybcio" <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>, <quic_wcheng@quicinc.com>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <quic_ppratap@quicinc.com>, <quic_jackp@quicinc.com>,
-        Krishna Kurapati
-	<quic_kriskura@quicinc.com>
-Subject: [RFC 8/8] usb: dwc3: core: Skip set_mode notification if cable is disconnected
-Date: Tue, 17 Oct 2023 18:48:51 +0530
-Message-ID: <20231017131851.8299-8-quic_kriskura@quicinc.com>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231017131851.8299-1-quic_kriskura@quicinc.com>
-References: <20231017131851.8299-1-quic_kriskura@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE782747B
+	for <linux-usb@vger.kernel.org>; Tue, 17 Oct 2023 14:06:22 +0000 (UTC)
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by lindbergh.monkeyblade.net (Postfix) with SMTP id B7D07F9
+	for <linux-usb@vger.kernel.org>; Tue, 17 Oct 2023 07:06:20 -0700 (PDT)
+Received: (qmail 182604 invoked by uid 1000); 17 Oct 2023 10:06:19 -0400
+Date: Tue, 17 Oct 2023 10:06:19 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: "Li, Meng" <Meng.Li@windriver.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Ingo Molnar <mingo@redhat.com>,
+  USB mailing list <linux-usb@vger.kernel.org>,
+  Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+  linux-rt-users <linux-rt-users@vger.kernel.org>
+Subject: Re: USB: add check to detect host controller hardware removal
+Message-ID: <d6d9478c-585b-4f51-a076-dc2955c6b2b0@rowland.harvard.edu>
+References: <PH0PR11MB5191464B2F01511D2ADECB3BF1D2A@PH0PR11MB5191.namprd11.prod.outlook.com>
+ <9a1074e2-c1ae-485b-b5e7-a34442c98c0b@rowland.harvard.edu>
+ <20231016125624.1096766a@gandalf.local.home>
+ <62fdcf97-11c6-4dee-8db1-74752d6949f3@rowland.harvard.edu>
+ <PH0PR11MB5191924ECC92A8F67891D614F1D6A@PH0PR11MB5191.namprd11.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: nbexWgWYIv3y0j0BHEC-vxIxYccZY9hc
-X-Proofpoint-ORIG-GUID: nbexWgWYIv3y0j0BHEC-vxIxYccZY9hc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-17_02,2023-10-17_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
- phishscore=0 impostorscore=0 malwarescore=0 spamscore=0 mlxlogscore=999
- priorityscore=1501 clxscore=1015 mlxscore=0 suspectscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2310170113
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PH0PR11MB5191924ECC92A8F67891D614F1D6A@PH0PR11MB5191.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+	HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,
+	SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-In device mode use cases, the following sequence of actions are observed:
+On Tue, Oct 17, 2023 at 02:23:05AM +0000, Li, Meng wrote:
+> I did some debugs on my side.
+> Firstly, the local_irq_disable_nort() function had been removed from latest RT kernel.
 
-1. Cable disconnect happens and clears qscratch HS_PHY_CTRL_REG properly
-2. Disconnect event is generated and "connected" flag turns false.
-3. Then the setmode notification from core goes to glue
-4. Glue will set back the qscratch HS_PHY_CTRL_REG bits again.
+What's in the RT kernel doesn't matter here, because the code you're 
+patching belongs to the vanilla kernel.
 
-At this point, since the cable is removed, setting qscratch bits shouldn't
-affect anything. But it is observed that after setting this bits, the
-controller generated Event-0x101 and Event-0x30601 (bus reset and suspend)
-in order. In bus reset, we set back the "connected" flag and this blocks
-suspend again.
+> Second, because of creating xhci-pci.c, the commit c548795abe0d("USB: add check to detect host controller hardware removal") is no longer useful.
+> Because the function usb_remove_hcd() is invoked from xhci_pci_remove() of file xhci-pci.c in advance.
 
-So send set_mode call only if the cable is connected, else skip it.
+What about for non-xHCI controllers?
 
-Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
----
- drivers/usb/dwc3/core.c | 3 ++-
- drivers/usb/dwc3/core.h | 2 ++
- drivers/usb/dwc3/drd.c  | 6 +++++-
- 3 files changed, 9 insertions(+), 2 deletions(-)
+> I am trying to fix this issue with getting register status directly without local_irq_disable(). 
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index b4d1d1c98dd5..6ef1e3558384 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -137,7 +137,8 @@ static void __dwc3_set_mode(struct work_struct *work)
- 	if (!desired_dr_role)
- 		goto out;
- 
--	dwc3_notify_set_mode(dwc, desired_dr_role);
-+	if (dwc->cable_disconnected == false)
-+		dwc3_notify_set_mode(dwc, desired_dr_role);
- 
- 	if (desired_dr_role == dwc->current_dr_role)
- 		goto out;
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 5ed7fd5eb776..1b79c407a798 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -1365,6 +1365,8 @@ struct dwc3 {
- 
- 	void			*glue_data;
- 	const struct dwc3_glue_ops *glue_ops;
-+
-+	bool			cable_disconnected;
- };
- 
- #define INCRX_BURST_MODE 0
-diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
-index 947faeef0e4d..b3a87c40c4f1 100644
---- a/drivers/usb/dwc3/drd.c
-+++ b/drivers/usb/dwc3/drd.c
-@@ -446,6 +446,8 @@ static int dwc3_usb_role_switch_set(struct usb_role_switch *sw,
- 	struct dwc3 *dwc = usb_role_switch_get_drvdata(sw);
- 	u32 mode;
- 
-+	dwc->cable_disconnected = false;
-+
- 	switch (role) {
- 	case USB_ROLE_HOST:
- 		mode = DWC3_GCTL_PRTCAP_HOST;
-@@ -467,8 +469,10 @@ static int dwc3_usb_role_switch_set(struct usb_role_switch *sw,
- 	 * glue needs to know that we are disconnected. It must not notify
- 	 * the change of mode to default mode.
- 	 */
--	if (role == USB_ROLE_NONE)
-+	if (role == USB_ROLE_NONE) {
-+		dwc->cable_disconnected = true;
- 		dwc3_notify_cable_disconnect(dwc);
-+	}
- 
- 	dwc3_set_mode(dwc, mode);
- 	return 0;
--- 
-2.42.0
+Were you able to locate the original bug report?
 
+Alan Stern
 
