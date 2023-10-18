@@ -1,86 +1,152 @@
-Return-Path: <linux-usb+bounces-1851-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1852-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 838587CD934
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 12:30:43 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8A047CDADF
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 13:41:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6BF431C20D4E
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 10:30:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 58DBCB212C5
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 11:41:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A51318C1E;
-	Wed, 18 Oct 2023 10:30:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 467162F517;
+	Wed, 18 Oct 2023 11:41:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2563019440
-	for <linux-usb@vger.kernel.org>; Wed, 18 Oct 2023 10:30:37 +0000 (UTC)
-Received: from mail-oa1-f71.google.com (mail-oa1-f71.google.com [209.85.160.71])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92100FD
-	for <linux-usb@vger.kernel.org>; Wed, 18 Oct 2023 03:30:35 -0700 (PDT)
-Received: by mail-oa1-f71.google.com with SMTP id 586e51a60fabf-1e9b6561650so8040554fac.3
-        for <linux-usb@vger.kernel.org>; Wed, 18 Oct 2023 03:30:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697625035; x=1698229835;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vEOUFvFLj8BGIeeDw6dbDN1dpAqq/KfWUcaxHojzWJo=;
-        b=Q1aW755yFG6fntPJy4s/L5y+oi5QQqMVpW+eB9W0Ugg0WKZ9PslZ22cLgot4tHXchy
-         Fke1TN2AwlgVPAHUrIHtvat4WrL+2hYa4/ybLRAxOK99NAN7S7qip8/5HaI4W0jYPeyA
-         N4JDAU5hE9qZ7pvFc0y4R3hwstu/yBkH3MVWwvFxcH6pp42kX6//m4KHiQWXRmd6w8cS
-         7bukeu2yJzrjfL8GR/JEnUdoUl1g6ALnTGElP06qgW98VMxE014XXXWEaxeXTIMbEY/x
-         nGQBG58BFEHMeWOHUNUspmd/t1ZMcfuMt/BjWKowOuSwGjIRskQpOhrL66m3i3fad9Cc
-         meLA==
-X-Gm-Message-State: AOJu0Yw96E8u8PTdNtgkL+/eVMKB9rtv0ngQv7hME1QMSUOfvinVwNtk
-	AyX5a+pv1E/2ocDkgPiCrd75KVgvvgNK3LiWkR44/TRmgq23
-X-Google-Smtp-Source: AGHT+IFrcWUt2XQ7APuRZBXOaspIaSCG1TmV5W/FBR2ZFo2UKJYfeGEIbuwQMt4XFWTWRYI3xdRZdkFDjTElmSGYtyLsVenMinzO
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CECA1F951;
+	Wed, 18 Oct 2023 11:41:40 +0000 (UTC)
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C27A2111;
+	Wed, 18 Oct 2023 04:41:38 -0700 (PDT)
+X-SpamFilter-By: ArmorX SpamTrap 5.78 with qID 39IBepoP71505718, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+	by rtits2.realtek.com.tw (8.15.2/2.93/5.92) with ESMTPS id 39IBepoP71505718
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 18 Oct 2023 19:40:51 +0800
+Received: from RTEXMBS02.realtek.com.tw (172.21.6.95) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Wed, 18 Oct 2023 19:40:51 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS02.realtek.com.tw (172.21.6.95) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Wed, 18 Oct 2023 19:40:50 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::40c2:6c24:2df4:e6c7]) by
+ RTEXMBS04.realtek.com.tw ([fe80::40c2:6c24:2df4:e6c7%5]) with mapi id
+ 15.01.2375.007; Wed, 18 Oct 2023 19:40:50 +0800
+From: Hayes Wang <hayeswang@realtek.com>
+To: Doug Anderson <dianders@chromium.org>
+CC: Jakub Kicinski <kuba@kernel.org>,
+        "David S . Miller"
+	<davem@davemloft.net>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Simon Horman
+	<horms@kernel.org>, Edward Hill <ecgh@chromium.org>,
+        Laura Nao
+	<laura.nao@collabora.com>,
+        "linux-usb@vger.kernel.org"
+	<linux-usb@vger.kernel.org>,
+        Grant Grundler <grundler@chromium.org>,
+        =?utf-8?B?QmrDuHJuIE1vcms=?= <bjorn@mork.no>,
+        Eric Dumazet
+	<edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: RE: [PATCH v3 5/5] r8152: Block future register access if register access fails
+Thread-Topic: [PATCH v3 5/5] r8152: Block future register access if register
+ access fails
+Thread-Index: AQHZ/UKPr2uppqw2y0WH24Vf4SC1orBMGX/AgAAGioCAAVSUAIAAE/SAgAGw82A=
+Date: Wed, 18 Oct 2023 11:40:50 +0000
+Message-ID: <34d7d7c7b5914674b55a6dc21ced1190@realtek.com>
+References: <20231012192552.3900360-1-dianders@chromium.org>
+ <20231012122458.v3.5.Ib2affdbfdc2527aaeef9b46d4f23f7c04147faeb@changeid>
+ <29f9a2ff1979406489213909b940184f@realtek.com>
+ <CAD=FV=U4rGozXHoK8+ejPgRtyoACy1971ftoatQivqzk2tk5ng@mail.gmail.com>
+ <052401da00fa$dacccd90$906668b0$@realtek.com>
+ <CAD=FV=XQswgKZh-JQ6PuKGRmrDMfDmZwM+MUpAcOk1=7Ppjyiw@mail.gmail.com>
+In-Reply-To: <CAD=FV=XQswgKZh-JQ6PuKGRmrDMfDmZwM+MUpAcOk1=7Ppjyiw@mail.gmail.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+x-originating-ip: [172.22.228.6]
+x-kse-serverinfo: RTEXMBS02.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6870:9113:b0:1dc:709b:4d3a with SMTP id
- o19-20020a056870911300b001dc709b4d3amr2072102oae.11.1697625034911; Wed, 18
- Oct 2023 03:30:34 -0700 (PDT)
-Date: Wed, 18 Oct 2023 03:30:34 -0700
-In-Reply-To: <dc016529-51f7-4a8a-8c67-54a15b19b78b@collabora.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000002af93d0607fb2163@google.com>
-Subject: Re: [syzbot] [usb?] INFO: task hung in usbdev_open (2)
-From: syzbot <syzbot+b73659f5bb96fac34820@syzkaller.appspotmail.com>
-To: gregkh@linuxfoundation.org, jeremy.linton@arm.com, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com, 
-	usama.anjum@collabora.com, viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-	HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,
-	RCVD_IN_MSPIKE_WL,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no
-	autolearn_force=no version=3.4.6
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+	SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Hello,
-
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
-
-Reported-and-tested-by: syzbot+b73659f5bb96fac34820@syzkaller.appspotmail.com
-
-Tested on:
-
-commit:         2dac7569 Add linux-next specific files for 20231018
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git next-20231018
-console output: https://syzkaller.appspot.com/x/log.txt?x=161f5833680000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b9f4d682cd6282b3
-dashboard link: https://syzkaller.appspot.com/bug?extid=b73659f5bb96fac34820
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-
-Note: no patches were applied.
-Note: testing is done by a robot and is best-effort only.
+RG91ZyBBbmRlcnNvbiA8ZGlhbmRlcnNAY2hyb21pdW0ub3JnPg0KPiBTZW50OiBUdWVzZGF5LCBP
+Y3RvYmVyIDE3LCAyMDIzIDEwOjE3IFBNDQpbLi4uXQ0KPiA+IFRoYXQgaXMsIHRoZSBsb29wIHdv
+dWxkIGJlIGJyb2tlbiB3aGVuIHRoZSBmYWlsIHJhdGUgb2YgdGhlIGNvbnRyb2wgdHJhbnNmZXIg
+aXMgaGlnaCBvciBsb3cgZW5vdWdoLg0KPiA+IE90aGVyd2lzZSwgeW91IHdvdWxkIHF1ZXVlIGEg
+dXNiIHJlc2V0IGFnYWluIGFuZCBhZ2Fpbi4NCj4gPiBGb3IgZXhhbXBsZSwgaWYgdGhlIGZhaWwg
+cmF0ZSBvZiB0aGUgY29udHJvbCB0cmFuc2ZlciBpcyAxMCUgfiA2MCUsDQo+ID4gSSB0aGluayB5
+b3UgaGF2ZSBoaWdoIHByb2JhYmlsaXR5IHRvIGtlZXAgdGhlIGxvb3AgY29udGludWFsbHkuDQo+
+ID4gV291bGQgaXQgbmV2ZXIgaGFwcGVuPw0KPiANCj4gQWN0dWFsbHksIGV2ZW4gd2l0aCBhIGZh
+aWx1cmUgcmF0ZSBvZiAxMCUgSSBkb24ndCB0aGluayB5b3UnbGwgZW5kIHVwDQo+IHdpdGggYSBm
+dWxseSBjb250aW51b3VzIGxvb3AsIHJpZ2h0PyBBbGwgeW91IG5lZWQgaXMgdG8gZ2V0IDMgZmFp
+bHVyZXMNCj4gaW4gYSByb3cgaW4gcnRsODE1Ml9nZXRfdmVyc2lvbigpIHRvIGdldCBvdXQgb2Yg
+dGhlIGxvb3AuIFNvIHdpdGggYQ0KPiAxMCUgZmFpbHVyZSByYXRlIHlvdSdkIHVuYmluZC9iaW5k
+IDEwMDAgdGltZXMgKG9uIGF2ZXJhZ2UpIGFuZCB0aGVuDQo+IChmaW5hbGx5KSBnaXZlIHVwLiBX
+aXRoIGEgNTAlIGZhaWx1cmUgcmF0ZSBJIHRoaW5rIHlvdSdkIG9ubHkNCj4gdW5iaW5kL2JpbmQg
+OCB0aW1lcyBvbiBhdmVyYWdlLCByaWdodD8gT2YgY291cnNlLCBJIGd1ZXNzIDEwMDAgbG9vcHMN
+Cj4gaXMgcHJldHR5IGNsb3NlIHRvIGluZmluaXRlLg0KPiANCj4gSW4gYW55IGNhc2UsIHdlIGhh
+dmVuJ3QgYWN0dWFsbHkgc2VlbiBoYXJkd2FyZSB0aGF0IGZhaWxzIGxpa2UgdGhpcy4NCj4gV2Un
+dmUgc2VlbiBmYWlsdXJlIHJhdGVzIHRoYXQgYXJlIG11Y2ggbXVjaCBsb3dlciBhbmQgd2UgY2Fu
+IGltYWdpbmUNCj4gZmFpbHVyZSByYXRlcyB0aGF0IGFyZSAxMDAlIGlmIHdlJ3JlIGdvdCByZWFs
+bHkgYnJva2VuIGhhcmR3YXJlLiBEbw0KPiB5b3UgdGhpbmsgY2FzZXMgd2hlcmUgZmFpbHVyZSBy
+YXRlcyBhcmUgbWlkZGxlLW9mLXRoZS1yb2FkIGFyZSBsaWtlbHk/DQoNClRoYXQgaXMgbXkgcXVl
+c3Rpb24sIHRvby4NCkkgZG9uJ3Qga25vdyBpZiBzb21ldGhpbmcgd291bGQgY2F1c2UgdGhlIHNp
+dHVhdGlvbiwgZWl0aGVyLg0KVGhpcyBpcyBvdXQgb2YgbXkga25vd2xlZGdlLg0KSSBhbSB3YWl0
+aW5nIGZvciB0aGUgcHJvZmVzc2lvbmFsIGFuc3dlcnMsIHRvby4NCg0KQSBsb3Qgb2YgcmVhc29u
+cyBtYXkgY2F1c2UgdGhlIGZhaWwgb2YgdGhlIGNvbnRyb2wgdHJhbnNmZXIuDQpJIGRvbid0IGhh
+dmUgYWxsIG9mIHRoZSByZWFsIHNpdHVhdGlvbiB0byBhbmFseXplIHRoZW0uDQpUaGVyZWZvcmUs
+IHdoYXQgSSBjb3VsZCBkbyBpcyB0byBhc3N1bWUgZGlmZmVyZW50IHNpdHVhdGlvbnMuDQpZb3Ug
+Y291bGQgc2F5IG15IGh5cG90aGVzZXMgYXJlIHVucmVhc29uYWJsZS4NCkhvd2V2ZXIsIEkgaGF2
+ZSB0byB0ZWxsIHlvdSB3aGF0IEkgd29ycnkuDQoNCj4gSSB3b3VsZCBhbHNvIHNheSB0aGF0IG5v
+dGhpbmcgd2UgY2FuIGRvIGNhbiBwZXJmZWN0bHkgaGFuZGxlIGZhdWx0eQ0KPiBoYXJkd2FyZS4g
+SWYgd2UncmUgaW1hZ2luaW5nIHRoZW9yZXRpY2FsIGhhcmR3YXJlLCB3ZSBjb3VsZCBpbWFnaW5l
+DQo+IHRoZW9yZXRpY2FsIGhhcmR3YXJlIHRoYXQgZGUtZW51bWVyYXRlZCBpdHNlbGYgYW5kIHJl
+LWVudW1lcmF0ZWQNCj4gaXRzZWxmIGV2ZXJ5IGhhbGYgc2Vjb25kIGJlY2F1c2UgdGhlIGZpcm13
+YXJlIG9uIHRoZSBkZXZpY2UgY3Jhc2hlZCBvcg0KPiBzb21lIHJlZ3VsYXRvciBrZXB0IGRyb3Bw
+aW5nLiBUaGlzIGZhdWx0eSBoYXJkd2FyZSB3b3VsZCBhbHNvIGNhdXNlIGFuDQo+IGluZmluaXRl
+IGxvb3Agb2YgZGUtZW51bWVyYXRpb24gYW5kIHJlLWVudW1lcmF0aW9uLCByaWdodD8NCj4gDQo+
+IFByZXN1bWFibHkgaWYgd2UgZ2V0IGludG8gZWl0aGVyIGNhc2UsIHRoZSB1c2VyIHdpbGwgcmVh
+bGl6ZSB0aGF0IHRoZQ0KPiBoYXJkd2FyZSBpc24ndCB3b3JraW5nIGFuZCB3aWxsIHVucGx1ZyBp
+dCBmcm9tIHRoZSBzeXN0ZW0uIFdoaWxlIHRoZQ0KDQpTb21lIG9mIG91ciBkZXZpY2VzIGFyZSBv
+bmJvYXJkLiBUaGF0IGlzLCB0aGV5IGNvdWxkbid0IGJlIHVucGx1Z2dlZC4NClRoYXQgaXMgd2h5
+IEkgaGF2ZSB0byBjb25zaWRlciBhIGxvdCBvZiBzaXR1YXRpb25zLg0KDQo+IHN5c3RlbSBpcyBk
+b2luZyB0aGUgbG9vcCBvZiB0cnlpbmcgdG8gZW51bWVyYXRlIHRoZSBoYXJkd2FyZSwgaXQgd2ls
+bA0KPiBiZSB0YWtpbmcgdXAgYSBidW5jaCBvZiBleHRyYSBDUFUgY3ljbGVzIGJ1dCAoSSBiZWxp
+ZXZlKSBpdCB3b24ndCBiZQ0KPiBmdWxseSBsb2NrZWQgdXAgb3IgYW55dGhpbmcuIFRoZSBtYWNo
+aW5lIHdpbGwgc3RpbGwgZnVuY3Rpb24gYW5kIGJlDQo+IGFibGUgdG8gZG8gbm9uLUV0aGVybmV0
+IGFjdGl2aXRpZXMsIHJpZ2h0PyBJIHdvdWxkIHNheSB0aGF0IHRoZSB3b3JzdA0KPiB0aGluZyBh
+Ym91dCB0aGlzIHN0YXRlIHdvdWxkIGJlIHRoYXQgaXQgd291bGQgc3RyZXNzIGNvcm5lciBjYXNl
+cyBpbg0KPiB0aGUgcmVzZXQgb2YgdGhlIFVTQiBzdWJzeXN0ZW0sIHBvc3NpYmx5IHRpY2tpbmcg
+YnVncy4NCj4gDQo+IFNvIEkgZ3Vlc3MgSSB3b3VsZCBzdW1tYXJpemUgYWxsIHRoZSBhYm92ZSBh
+czoNCj4gDQo+IElmIGhhcmR3YXJlIGlzIGJyb2tlbiBpbiBqdXN0IHRoZSByaWdodCB3YXkgdGhl
+biB0aGlzIHBhdGNoIGNvdWxkDQo+IGNhdXNlIGEgbmVhcmx5IGluZmluaXRlIHVuYmluZGluZy9y
+ZWJpbmRpbmcgb2YgdGhlIHI4MTUyIGRyaXZlci4NCj4gSG93ZXZlcjoNCj4gDQo+IDEuIEl0IGRv
+ZXNuJ3Qgc2VlbSB0ZXJyaWJseSBsaWtlbHkgZm9yIGhhcmR3YXJlIHRvIGJlIGJyb2tlbiBpbiBq
+dXN0IHRoaXMgd2F5Lg0KPiANCj4gMi4gV2UgaGF2ZW4ndCBzZWVuIGhhcmR3YXJlIGJyb2tlbiBp
+biBqdXN0IHRoaXMgd2F5Lg0KPiANCj4gMy4gSGFyZHdhcmUgYnJva2VuIGluIGEgc2xpZ2h0bHkg
+ZGlmZmVyZW50IHdheSBjb3VsZCBjYXVzZSBpbmZpbml0ZQ0KPiB1bmJpbmRpbmcvcmViaW5kaW5n
+IGV2ZW4gd2l0aG91dCB0aGlzIHBhdGNoLg0KPiANCj4gNC4gSW5maW5pdGUgdW5iaW5kaW5nL3Jl
+YmluZGluZyBvZiBhIFVTQiBhZGFwdGVyIGlzbid0IGdyZWF0LCBidXQgbm90DQo+IHRoZSBhYnNv
+bHV0ZSB3b3JzdCB0aGluZy4NCg0KSXQgaXMgZmluZSBpZiBldmVyeW9uZSBhZ3JlZXMgdGhlc2Uu
+DQoNCkJlc3QgUmVnYXJkcywNCkhheWVzDQoNCg==
 
