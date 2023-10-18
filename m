@@ -1,167 +1,98 @@
-Return-Path: <linux-usb+bounces-1848-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1849-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BD9F7CD87F
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 11:46:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C21107CD887
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 11:49:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CD0671C20CE6
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 09:46:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EED8C1C20C6E
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 09:49:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECDD3182BB;
-	Wed, 18 Oct 2023 09:46:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05D93182D1;
+	Wed, 18 Oct 2023 09:49:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="d3j52GPm"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S+Kaf8YC"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B64558C0C
-	for <linux-usb@vger.kernel.org>; Wed, 18 Oct 2023 09:46:45 +0000 (UTC)
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CA20B0;
-	Wed, 18 Oct 2023 02:46:43 -0700 (PDT)
-Received: from [192.168.10.2] (unknown [39.45.48.178])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id 788EA66072F4;
-	Wed, 18 Oct 2023 10:46:39 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1697622402;
-	bh=m25X5w8WmDntQdjfhERGFsKxFWTBvcaJ6W+sivEkcLM=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=d3j52GPmjP20yjABiv7Ik30H/FqAwXgm4/bQMuyhgzPzXB2vdJZQsxQlpsNyX1tai
-	 8jvRRgOixElGFxBUpRIlitNYkWfar/7MWX42dcULdzZHMbr12Av2my3+/zSUwUZCeO
-	 7FFeoWvt70z420yV14sSRSOo5hZewvCobMb56mqq53ApbPs7eLP2v/elVnQ8UbRDGa
-	 94MlgzSp8rAV563XY8BbBpznPU6xWfFvTwK9C3Pg4A5Y1Tirup5xCP5Z4EVqklQqKb
-	 vxEtCHkn9QwZyyPkDCaET8po0541FH6TpQ/dTlEr08uynl69hL/HFqk5qw/VA3U3iF
-	 vAGKVN+TUXUeA==
-Message-ID: <dc016529-51f7-4a8a-8c67-54a15b19b78b@collabora.com>
-Date: Wed, 18 Oct 2023 14:46:33 +0500
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C63CF8C0C
+	for <linux-usb@vger.kernel.org>; Wed, 18 Oct 2023 09:49:05 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3C86A2
+	for <linux-usb@vger.kernel.org>; Wed, 18 Oct 2023 02:49:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1697622544; x=1729158544;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UI2fC7G9dQyGTElaqLRkpWdrAAoDohzt1bgkkKek2KM=;
+  b=S+Kaf8YC/d6UmnWFVsTAfLF8o3hGotomHvqvWY0YIa6dQ+UmJ3LPitkL
+   /tfavG1WG9hGbncjI8C8tKuMx8xNe8NBBdlMAlgu3tMQqNDlDmaqU9zwX
+   bCWGB9oHXRNtXAJo2Wi9zJgdRpnsvKnm0L1Q81ZVwDezdZtE6WnzIB4bi
+   ajmQlCvLdCiXxSQa7vnQgh26PcSz5Ky2zi9COw+PJxACI9ypVfOMKnDL3
+   gsjRjxE1/d1qoiSR61JdjOa0mjj1By/cZ6HGVOjN8vL0/Au5kF9vfWZYu
+   R/2kYPiEo8d6RQozedFSuMnwbxmJkEevvWTDMOWkQCtsc0h9hKjSosrio
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10866"; a="376350196"
+X-IronPort-AV: E=Sophos;i="6.03,234,1694761200"; 
+   d="scan'208";a="376350196"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2023 02:49:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10866"; a="847199379"
+X-IronPort-AV: E=Sophos;i="6.03,234,1694761200"; 
+   d="scan'208";a="847199379"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by FMSMGA003.fm.intel.com with ESMTP; 18 Oct 2023 02:49:01 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id 5DF26130; Wed, 18 Oct 2023 12:49:00 +0300 (EEST)
+Date: Wed, 18 Oct 2023 12:49:00 +0300
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>
+Subject: Re: USB4/Thunderbolt fix for v6.6-rc7
+Message-ID: <20231018094900.GA3208943@black.fi.intel.com>
+References: <20231017141447.GX3208943@black.fi.intel.com>
+ <2023101716-magenta-almighty-281d@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Subject: Re: [syzbot] [usb?] INFO: task hung in usbdev_open (2)
-To: syzbot <syzbot+b73659f5bb96fac34820@syzkaller.appspotmail.com>,
- gregkh@linuxfoundation.org, jeremy.linton@arm.com,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com,
- viro@zeniv.linux.org.uk
-References: <0000000000004b4e4805f84041e0@google.com>
-Content-Language: en-US
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <0000000000004b4e4805f84041e0@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <2023101716-magenta-almighty-281d@gregkh>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+	RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-#syz test:
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-next-20231018
+On Tue, Oct 17, 2023 at 07:28:38PM +0200, Greg Kroah-Hartman wrote:
+> On Tue, Oct 17, 2023 at 05:14:47PM +0300, Mika Westerberg wrote:
+> > Hi Greg,
+> > 
+> > The following changes since commit 8a749fd1a8720d4619c91c8b6e7528c0a355c0aa:
+> > 
+> >   Linux 6.6-rc4 (2023-10-01 14:15:13 -0700)
+> > 
+> > are available in the Git repository at:
+> > 
+> >   git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v6.6-rc7
+> 
+> Nit, you forgot the [GIT PULL] prefix in the subject line.
 
-On 4/1/23 11:15 AM, syzbot wrote:
-> syzbot has found a reproducer for the following issue on:
-> 
-> HEAD commit:    59caa87f9dfb Merge branch 'for-next/core' into for-kernelci
-> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-> console output: https://syzkaller.appspot.com/x/log.txt?x=16dd438ec80000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=e918bdf4f2f853c4
-> dashboard link: https://syzkaller.appspot.com/bug?extid=b73659f5bb96fac34820
-> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-> userspace arch: arm64
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15cb0c69c80000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=160d1e21c80000
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/4d91c587af1a/disk-59caa87f.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/c2a88c8fab99/vmlinux-59caa87f.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/0f56d2d1cbfc/Image-59caa87f.gz.xz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+b73659f5bb96fac34820@syzkaller.appspotmail.com
-> 
-> INFO: task syz-executor388:6000 blocked for more than 143 seconds.
->       Not tainted 6.3.0-rc4-syzkaller-g59caa87f9dfb #0
-> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> task:syz-executor388 state:D stack:0     pid:6000  ppid:5984   flags:0x00000001
-> Call trace:
->  __switch_to+0x320/0x754 arch/arm64/kernel/process.c:556
->  context_switch kernel/sched/core.c:5307 [inline]
->  __schedule+0x1048/0x1e38 kernel/sched/core.c:6625
->  schedule+0xc4/0x170 kernel/sched/core.c:6701
->  schedule_preempt_disabled+0x18/0x2c kernel/sched/core.c:6760
->  __mutex_lock_common+0xbd8/0x21a0 kernel/locking/mutex.c:679
->  __mutex_lock kernel/locking/mutex.c:747 [inline]
->  mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
->  device_lock include/linux/device.h:832 [inline]
->  usbdev_open+0x13c/0x6c0 drivers/usb/core/devio.c:1041
->  chrdev_open+0x3e8/0x4fc fs/char_dev.c:414
->  do_dentry_open+0x724/0xf90 fs/open.c:920
->  vfs_open+0x7c/0x90 fs/open.c:1051
->  do_open fs/namei.c:3560 [inline]
->  path_openat+0x1f2c/0x27f8 fs/namei.c:3715
->  do_filp_open+0x1bc/0x3cc fs/namei.c:3742
->  do_sys_openat2+0x128/0x3d8 fs/open.c:1348
->  do_sys_open fs/open.c:1364 [inline]
->  __do_sys_openat fs/open.c:1380 [inline]
->  __se_sys_openat fs/open.c:1375 [inline]
->  __arm64_sys_openat+0x1f0/0x240 fs/open.c:1375
->  __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
->  invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
->  el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
->  do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
->  el0_svc+0x58/0x168 arch/arm64/kernel/entry-common.c:637
->  el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
->  el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
-> 
-> Showing all locks held in the system:
-> 1 lock held by rcu_tasks_kthre/12:
->  #0: ffff800015d36810 (rcu_tasks.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x44/0xcf4 kernel/rcu/tasks.h:510
-> 1 lock held by rcu_tasks_trace/13:
->  #0: ffff800015d37010 (rcu_tasks_trace.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x44/0xcf4 kernel/rcu/tasks.h:510
-> 1 lock held by khungtaskd/28:
->  #0: ffff800015d36640 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0xc/0x44 include/linux/rcupdate.h:326
-> 5 locks held by kworker/0:2/1522:
->  #0: ffff0000c13f7d38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work+0x664/0x12d4 kernel/workqueue.c:2363
->  #1: ffff8000225b7c20 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work+0x6a8/0x12d4 kernel/workqueue.c:2365
->  #2: ffff0000ceaa4190 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:832 [inline]
->  #2: ffff0000ceaa4190 (&dev->mutex){....}-{3:3}, at: hub_event+0x1c8/0x474c drivers/usb/core/hub.c:5739
->  #3: ffff0000d2dd1190 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:832 [inline]
->  #3: ffff0000d2dd1190 (&dev->mutex){....}-{3:3}, at: __device_attach+0x90/0x434 drivers/base/dd.c:973
->  #4: ffff0000cc332118 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:832 [inline]
->  #4: ffff0000cc332118 (&dev->mutex){....}-{3:3}, at: __device_attach+0x90/0x434 drivers/base/dd.c:973
-> 2 locks held by getty/5625:
->  #0: ffff0000d354c098 (&tty->ldisc_sem){++++}-{0:0}, at: ldsem_down_read+0x3c/0x4c drivers/tty/tty_ldsem.c:340
->  #1: ffff80001a8602f0 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0x414/0x1210 drivers/tty/n_tty.c:2177
-> 4 locks held by udevd/5996:
->  #0: ffff0000d0fe41c8 (&p->lock){+.+.}-{3:3}, at: seq_read_iter+0xac/0xc44 fs/seq_file.c:182
->  #1: ffff0000cf47a088 (&of->mutex){+.+.}-{3:3}, at: kernfs_seq_start+0x58/0x384 fs/kernfs/file.c:154
->  #2: ffff0000d37d0660 (kn->active#14){.+.+}-{0:0}, at: kernfs_seq_start+0x74/0x384 fs/kernfs/file.c:155
->  #3: ffff0000d2dd1190 (&dev->mutex){....}-{3:3}, at: device_lock_interruptible include/linux/device.h:837 [inline]
->  #3: ffff0000d2dd1190 (&dev->mutex){....}-{3:3}, at: manufacturer_show+0x30/0xac drivers/usb/core/sysfs.c:142
-> 1 lock held by syz-executor388/6000:
->  #0: ffff0000ceaa4190 (&dev->mutex){....}-{3:3}, at: device_lock include/linux/device.h:832 [inline]
->  #0: ffff0000ceaa4190 (&dev->mutex){....}-{3:3}, at: usbdev_open+0x13c/0x6c0 drivers/usb/core/devio.c:1041
-> 
-> =============================================
-> 
-> 
-> 
+Oops! Thanks for pointing out. I'll make sure this won't happen again.
 
--- 
-BR,
-Muhammad Usama Anjum
+> Anyway, pulled and pushed out, thanks!
+
+Thanks!
 
