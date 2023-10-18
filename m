@@ -1,81 +1,114 @@
-Return-Path: <linux-usb+bounces-1863-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1864-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 313EB7CE146
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 17:34:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C898C7CE192
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 17:47:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 63A7A1C20D9C
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 15:34:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 065381C20D01
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 15:47:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A45953B285;
-	Wed, 18 Oct 2023 15:34:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F0963B7A6;
+	Wed, 18 Oct 2023 15:47:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F/iCTYgu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F0243AC2E
-	for <linux-usb@vger.kernel.org>; Wed, 18 Oct 2023 15:34:34 +0000 (UTC)
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by lindbergh.monkeyblade.net (Postfix) with SMTP id 5FC8F11B
-	for <linux-usb@vger.kernel.org>; Wed, 18 Oct 2023 08:34:32 -0700 (PDT)
-Received: (qmail 224806 invoked by uid 1000); 18 Oct 2023 11:34:31 -0400
-Date: Wed, 18 Oct 2023 11:34:31 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: "Li, Meng" <Meng.Li@windriver.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Ingo Molnar <mingo@redhat.com>,
-  USB mailing list <linux-usb@vger.kernel.org>,
-  Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-  linux-rt-users <linux-rt-users@vger.kernel.org>
-Subject: Re: USB: add check to detect host controller hardware removal
-Message-ID: <1c3d5ac3-0a92-4f5e-a30c-099a8f8ba94d@rowland.harvard.edu>
-References: <PH0PR11MB5191464B2F01511D2ADECB3BF1D2A@PH0PR11MB5191.namprd11.prod.outlook.com>
- <9a1074e2-c1ae-485b-b5e7-a34442c98c0b@rowland.harvard.edu>
- <20231016125624.1096766a@gandalf.local.home>
- <62fdcf97-11c6-4dee-8db1-74752d6949f3@rowland.harvard.edu>
- <PH0PR11MB5191924ECC92A8F67891D614F1D6A@PH0PR11MB5191.namprd11.prod.outlook.com>
- <d6d9478c-585b-4f51-a076-dc2955c6b2b0@rowland.harvard.edu>
- <PH0PR11MB51911132F6CB7DF0C41F15DEF1D5A@PH0PR11MB5191.namprd11.prod.outlook.com>
- <1f8fe9f9-d8d6-48d9-8c7d-1215d10ece91@rowland.harvard.edu>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C450037167;
+	Wed, 18 Oct 2023 15:47:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5582BC433C8;
+	Wed, 18 Oct 2023 15:47:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1697644032;
+	bh=InG035hMLurwAeKeC47GtRoHkwnqDLCor7MaeAfrvrE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=F/iCTYgucw81j5t/RFOEvdBl8DFGb/olHT6bk2KuaDxwbmqGgWgXwZt6uhSCCh8J6
+	 iiMHO9XX+z1cIxV1+FkRqR9NRC1NQPnerNOi7dCoS8MNaNIC7OBc8S3ymK5zRtnSc8
+	 NNVgzrA9OXwGP4MRpbxmbcRFN8vC09nKz1oMcN2FDhT8farNjT55ivsos0qOoNtQfo
+	 xkd/hZQ1GeHGSD4BcqSwkxxjZhyJg9JJZ1dSSSagNr0+It4bm4hn1Yjuu+rZnkaWu3
+	 FmqS6lLRDHggp7YxES1oWyAOuUnB4vS8ByC/Lj5deDk77lVgtMCyRFsfUC5DWWw1dI
+	 9PRhPZUHxs4tA==
+Date: Wed, 18 Oct 2023 16:47:07 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Jisheng Zhang <jszhang@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Anand Moon <linux.amoon@gmail.com>, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] dt-bindings: usb: vialab,vl817: remove reset-gpios
+ from required list
+Message-ID: <20231018-luminous-uncanny-f474a87bf2af@spud>
+References: <20231018150448.1980-1-jszhang@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="RZusTGGTVMT5+wnc"
+Content-Disposition: inline
+In-Reply-To: <20231018150448.1980-1-jszhang@kernel.org>
+
+
+--RZusTGGTVMT5+wnc
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1f8fe9f9-d8d6-48d9-8c7d-1215d10ece91@rowland.harvard.edu>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-	HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,
-	SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 18, 2023 at 11:20:46AM -0400, Alan Stern wrote:
-> On Wed, Oct 18, 2023 at 05:00:58AM +0000, Li, Meng wrote:
-> > > Were you able to locate the original bug report?
-> > > 
-> > This is original bug report
-> > https://bugzilla.redhat.com/show_bug.cgi?id=579093
-> 
-> The Red Hat Bugzilla says:
-> 
-> 	You are not authorized to access bug #579093.
-> 
-> So I can't tell exactly what happened back then.  :-(
-> 
-> But I do vaguely remember the discussion with Stratus Technologies.  
-> They had special hardware in their systems, which allowed them to do 
-> hot-swapping of PCI components.
+On Wed, Oct 18, 2023 at 11:04:48PM +0800, Jisheng Zhang wrote:
+> The "reset-gpios" is optional in real case, for example reset pin is
+> is hard wired to "high". And this fact is also reflected by the
+> devm_gpio_get_optional() calling in driver code.
+>=20
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
 
-Incidentally, for anyone who's interested, some early discussion about 
-these problems can be found on an open mailing list here:
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-	https://marc.info/?l=linux-usb&m=127559364101206&w=2
+Thanks,
+Conor.
 
-Alan Stern
+> ---
+>=20
+> since v1:
+>  - remove th1520 usb dt-binding part, this isn't related.
+>=20
+>  Documentation/devicetree/bindings/usb/vialab,vl817.yaml | 1 -
+>  1 file changed, 1 deletion(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/usb/vialab,vl817.yaml b/Do=
+cumentation/devicetree/bindings/usb/vialab,vl817.yaml
+> index 76db9071b352..c815010ba9c2 100644
+> --- a/Documentation/devicetree/bindings/usb/vialab,vl817.yaml
+> +++ b/Documentation/devicetree/bindings/usb/vialab,vl817.yaml
+> @@ -37,7 +37,6 @@ properties:
+>  required:
+>    - compatible
+>    - reg
+> -  - reset-gpios
+>    - vdd-supply
+>    - peer-hub
+> =20
+> --=20
+> 2.40.1
+>=20
+
+--RZusTGGTVMT5+wnc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZS/9+wAKCRB4tDGHoIJi
+0pcOAQDuNchpYF/y/RhpvZGEw6IGgDbYw5KpnXkvSBk/zG0DQAD/VlbKt3FeHqNO
+Yq/WDm0rrFeSleCyY2v6/pPl1EyEvAE=
+=lUXz
+-----END PGP SIGNATURE-----
+
+--RZusTGGTVMT5+wnc--
 
