@@ -1,275 +1,194 @@
-Return-Path: <linux-usb+bounces-1840-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1841-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 416967CD3D1
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 08:06:30 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A573D7CD3E1
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 08:10:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1ECD01C20976
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 06:06:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F3946B2116C
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 06:10:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D23CA8F5F;
-	Wed, 18 Oct 2023 06:06:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87B4C8F71;
+	Wed, 18 Oct 2023 06:10:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="SPa4lMGN"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="q8ec2Xev"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E3011FC5
-	for <linux-usb@vger.kernel.org>; Wed, 18 Oct 2023 06:06:21 +0000 (UTC)
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5203FF7
-	for <linux-usb@vger.kernel.org>; Tue, 17 Oct 2023 23:06:19 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1c9b70b9671so86005ad.1
-        for <linux-usb@vger.kernel.org>; Tue, 17 Oct 2023 23:06:19 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65D6E8F55
+	for <linux-usb@vger.kernel.org>; Wed, 18 Oct 2023 06:10:00 +0000 (UTC)
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD04793
+	for <linux-usb@vger.kernel.org>; Tue, 17 Oct 2023 23:09:58 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-9ba081173a3so1053573266b.1
+        for <linux-usb@vger.kernel.org>; Tue, 17 Oct 2023 23:09:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1697609179; x=1698213979; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=v1WMeQoTbai5jcFg/8kPiT+daiwAiiktJJC7VnxF4OU=;
-        b=SPa4lMGNoiPN8ba/IOo1l6b6wG1H8bjr2+q8jU8NNNxNSvsboTqevRNtT+OKotsbIU
-         SaJR0iLTSOWVnqpUCfGy3CuNN6L1Wn0Gjc8ZCZwQcnKTtThgMefCAdK5hw+6BdG+uveP
-         ehLPZ6ehV4FCvtSA7bUJXJUPLwRbzpcSEwCIg=
+        d=linaro.org; s=google; t=1697609397; x=1698214197; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TOSDdTKHQ6Zn18zXh4dBj8ZhMSb7NfUjm1rV0GFHp+0=;
+        b=q8ec2Xev+rEuYa9JVBFAJ6mUanuZnt94sHGayOVXF0Hmjhto0zaka3XQlq0q0Z4bAi
+         i98smxaZHMy/snHypaaoQdLCW6aczp4Bhz2Yj/WwCX47IeEzfYFvULIZsfeRu0uyNalA
+         8L7mO3NC2HFgX/ccMfmoL4VL4ufldWfGGUQKDraDvyiHdHn61/j1AJfcyExZSVl8rz+T
+         4n0oT/X6zbkq/iByV5A01SNKqh0tbfQKw/ww2U6nQIdT5I0JUwYChl1/jtYEisx3mdOV
+         e/yXUgHb+TNHeLfBVAlvkjBmAPsYfHcyxt4L4OqKJEiCzE7ay38E3Pagz9xkC4+qoFz8
+         r3pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697609179; x=1698213979;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=v1WMeQoTbai5jcFg/8kPiT+daiwAiiktJJC7VnxF4OU=;
-        b=d04nAuOT77pelhKpgX6pC/AsJaa5BxMODjMwR2cOiIGDrVIPdmkNJ+4m3vSDu07OUF
-         tOU6qwgoEQ/j8Hp7RHmG3srpiWHejBEO9ISIOujucVSyHET0tviwb82sPbaTWvqLjBeD
-         GYI2cPJDB3S6KO1GOI46SzKW2XESEw7KsaahaFdAHac4fHVlo6j3s+I6cI7yvZTLpsqg
-         UuRnLu9oUnBS83F0JlP6ScC+W/9QsI9Qm9aYaeKLa8N7Y3Gx3AqaDMvs1T9KonMoWoU5
-         4LmOLYkPyxPoZ++RKoL6/NZlBI9YmBrcqG6OarXoCk3KR5xb+7qyH4GMVqb+W0jZIg2y
-         3JIw==
-X-Gm-Message-State: AOJu0Yye+mm6XEyBatMQ1zMLd4xHqE/fA5WA5kk+rOKlC0fktzZPCXvL
-	J4AD5TlORCmgzf7/HIM2HwvvuJPjamyUp3h/CZhx5Q==
-X-Google-Smtp-Source: AGHT+IFCmyy+5s6X+xOiaol9ZdDdb7IvXqxzpm7o3kfVB89cGbzx/i5UCG3hHH6rTE4spkcyS1gycWYRMQqcdi75asA=
-X-Received: by 2002:a17:902:cecb:b0:1bb:c2b1:9be0 with SMTP id
- d11-20020a170902cecb00b001bbc2b19be0mr173548plg.16.1697609178444; Tue, 17 Oct
- 2023 23:06:18 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1697609397; x=1698214197;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TOSDdTKHQ6Zn18zXh4dBj8ZhMSb7NfUjm1rV0GFHp+0=;
+        b=Q4yYJ6JvSjJsmDR74EAIRoHmJ16hWJneRd3GsZM6iSjhkZ0AJ6QLAUYil4D8TGTHo6
+         GVw0MnyZI0Kliw2Ju73d+C5+5D+nDb0RfyPN1NJz7ZkSS362FmAbysJ4gX7hM7lLJWJ8
+         bnIwNxfRaM8jw2x1QA8zIuIEp7cKQjb6qiBOriyL/+4cfT1VMBk/AnHuttvXMUe78fJn
+         tlf2mTk/ZB8l0JxNvg62HkjlxXmZHDJqtp8wX8M+F3zVlFzzA+pZWjkESsoqe3unWyVJ
+         dBTB6/1cZ9qhpww4dKGl4Gs7tQGHOJd9wwXyirloz6oanpd2uyyJwGz7SbZCtpTqO9rh
+         bCRQ==
+X-Gm-Message-State: AOJu0YxudknDEYQL4ri0XRoMLyzKjDOnQt/x6suGDKauUqUTDZ0rrj46
+	T02+bSdXK3ZzPryA4x+ttEzxWQ==
+X-Google-Smtp-Source: AGHT+IFxJy7pc9qR58gBFWblDRsvoaM08c/0G6qwRhBGUOQIAkRSbEh09MIMTlEjzlwQdUZMeXgQlg==
+X-Received: by 2002:a17:907:2688:b0:9c5:2806:72e2 with SMTP id bn8-20020a170907268800b009c5280672e2mr3026227ejc.34.1697609397120;
+        Tue, 17 Oct 2023 23:09:57 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.154])
+        by smtp.gmail.com with ESMTPSA id j8-20020a1709064b4800b009a1a653770bsm933348ejv.87.2023.10.17.23.09.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Oct 2023 23:09:56 -0700 (PDT)
+Message-ID: <8059e5ab-672a-4808-9159-d67309625ef0@linaro.org>
+Date: Wed, 18 Oct 2023 08:09:54 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231012192552.3900360-1-dianders@chromium.org>
- <20231012122458.v3.5.Ib2affdbfdc2527aaeef9b46d4f23f7c04147faeb@changeid>
- <29f9a2ff1979406489213909b940184f@realtek.com> <CAD=FV=U4rGozXHoK8+ejPgRtyoACy1971ftoatQivqzk2tk5ng@mail.gmail.com>
- <052401da00fa$dacccd90$906668b0$@realtek.com> <CAD=FV=XQswgKZh-JQ6PuKGRmrDMfDmZwM+MUpAcOk1=7Ppjyiw@mail.gmail.com>
- <CAD=FV=Vp_KE_hjWy7bKJbvmqwCQ67jhzfFoV368vB5ZGge=Yzw@mail.gmail.com>
-In-Reply-To: <CAD=FV=Vp_KE_hjWy7bKJbvmqwCQ67jhzfFoV368vB5ZGge=Yzw@mail.gmail.com>
-From: Grant Grundler <grundler@chromium.org>
-Date: Tue, 17 Oct 2023 23:06:06 -0700
-Message-ID: <CANEJEGuEdGUAUufEHBfxbo_thXbgr8gMFVBaa+pCV_axWO=NGQ@mail.gmail.com>
-Subject: Re: [PATCH v3 5/5] r8152: Block future register access if register
- access fails
-To: Doug Anderson <dianders@chromium.org>, Hayes Wang <hayeswang@realtek.com>
-Cc: Jakub Kicinski <kuba@kernel.org>, "David S . Miller" <davem@davemloft.net>, 
-	Alan Stern <stern@rowland.harvard.edu>, Simon Horman <horms@kernel.org>, 
-	Edward Hill <ecgh@chromium.org>, Laura Nao <laura.nao@collabora.com>, 
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, Grant Grundler <grundler@chromium.org>, 
-	=?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>, 
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-	RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
-	autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC 1/8] dt-bindings: usb: qcom,dwc3: Add bindings to enable
+ runtime
+Content-Language: en-US
+To: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+ quic_ppratap@quicinc.com, quic_jackp@quicinc.com,
+ Conor Dooley <conor+dt@kernel.org>, quic_wcheng@quicinc.com,
+ Andy Gross <agross@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>,
+ Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+ Philipp Zabel <p.zabel@pengutronix.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Bjorn Andersson <andersson@kernel.org>
+References: <20231017131851.8299-1-quic_kriskura@quicinc.com>
+ <20231017131851.8299-2-quic_kriskura@quicinc.com>
+ <a3d612a8-1917-491d-a944-22ea39879a9d@linaro.org>
+ <189be124-efb1-4843-9a47-db84942838c9@quicinc.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <189be124-efb1-4843-9a47-db84942838c9@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-On Tue, Oct 17, 2023 at 11:46=E2=80=AFAM Doug Anderson <dianders@chromium.o=
-rg> wrote:
->
-> Hi,
->
-> On Tue, Oct 17, 2023 at 7:17=E2=80=AFAM Doug Anderson <dianders@chromium.=
-org> wrote:
-> >
-> > Hi,
-> >
-> > On Tue, Oct 17, 2023 at 6:07=E2=80=AFAM Hayes Wang <hayeswang@realtek.c=
-om> wrote:
-> > >
-> > > Doug Anderson <dianders@chromium.org>
-> > > > Sent: Tuesday, October 17, 2023 12:47 AM
-> > > [...
-> > > > > >  static int generic_ocp_read(struct r8152 *tp, u16 index, u16 s=
-ize,
-> > > > > > @@ -8265,6 +8353,19 @@ static int rtl8152_pre_reset(struct
-> > > > usb_interface
-> > > > > > *intf)
-> > > > > >         if (!tp)
-> > > > > >                 return 0;
-> > > > > >
-> > > > > > +       /* We can only use the optimized reset if we made it to=
- the end of
-> > > > > > +        * probe without any register access fails, which sets
-> > > > > > +        * `PROBED_WITH_NO_ERRORS` to true. If we didn't have t=
-hat then return
-> > > > > > +        * an error here which tells the USB framework to fully=
- unbind/rebind
-> > > > > > +        * our driver.
-> > > > >
-> > > > > Would you stay in a loop of unbind and rebind,
-> > > > > if the control transfers in the probe() are not always successful=
-?
-> > > > > I just think about the worst case that at least one control alway=
-s fails in probe().
-> > > >
-> > > > We won't! :-) One of the first things that rtl8152_probe() does is =
-to
-> > > > call rtl8152_get_version(). That goes through to
-> > > > rtl8152_get_version(). That function _doesn't_ queue up a reset if
-> > > > there are communication problems, but it does do 3 retries of the
-> > > > read. So if all 3 reads fail then we will permanently fail probe,
-> > > > which I think is the correct thing to do.
-> > >
-> > > The probe() contains control transfers in
-> > >         1. rtl8152_get_version()
-> > >         2. tp->rtl_ops.init()
-> > >
-> > > If one of the 3 control transfers in 1) is successful AND
-> > > any control transfer in 2) fails,
-> > > you would queue a usb reset which would unbind/rebind the driver.
-> > > Then, the loop starts.
-> > > The loop would be broken, if and only if
-> > >         a) all control transfers in 1) fail, OR
-> > >         b) all control transfers in 2) succeed.
-> > >
-> > > That is, the loop would be broken when the fail rate of the control t=
-ransfer is high or low enough.
-> > > Otherwise, you would queue a usb reset again and again.
-> > > For example, if the fail rate of the control transfer is 10% ~ 60%,
-> > > I think you have high probability to keep the loop continually.
-> > > Would it never happen?
-> >
-> > Actually, even with a failure rate of 10% I don't think you'll end up
-> > with a fully continuous loop, right? All you need is to get 3 failures
-> > in a row in rtl8152_get_version() to get out of the loop. So with a
-> > 10% failure rate you'd unbind/bind 1000 times (on average) and then
-> > (finally) give up. With a 50% failure rate I think you'd only
-> > unbind/bind 8 times on average, right? Of course, I guess 1000 loops
-> > is pretty close to infinite.
-> >
-> > In any case, we haven't actually seen hardware that fails like this.
-> > We've seen failure rates that are much much lower and we can imagine
-> > failure rates that are 100% if we're got really broken hardware. Do
-> > you think cases where failure rates are middle-of-the-road are likely?
-> >
-> > I would also say that nothing we can do can perfectly handle faulty
-> > hardware. If we're imagining theoretical hardware, we could imagine
-> > theoretical hardware that de-enumerated itself and re-enumerated
-> > itself every half second because the firmware on the device crashed or
-> > some regulator kept dropping. This faulty hardware would also cause an
-> > infinite loop of de-enumeration and re-enumeration, right?
-> >
-> > Presumably if we get into either case, the user will realize that the
-> > hardware isn't working and will unplug it from the system. While the
-> > system is doing the loop of trying to enumerate the hardware, it will
-> > be taking up a bunch of extra CPU cycles but (I believe) it won't be
-> > fully locked up or anything. The machine will still function and be
-> > able to do non-Ethernet activities, right? I would say that the worst
-> > thing about this state would be that it would stress corner cases in
-> > the reset of the USB subsystem, possibly ticking bugs.
-> >
-> > So I guess I would summarize all the above as:
-> >
-> > If hardware is broken in just the right way then this patch could
-> > cause a nearly infinite unbinding/rebinding of the r8152 driver.
-> > However:
-> >
-> > 1. It doesn't seem terribly likely for hardware to be broken in just th=
-is way.
-> >
-> > 2. We haven't seen hardware broken in just this way.
-> >
-> > 3. Hardware broken in a slightly different way could cause infinite
-> > unbinding/rebinding even without this patch.
-> >
-> > 4. Infinite unbinding/rebinding of a USB adapter isn't great, but not
-> > the absolute worst thing.
-> >
-> >
-> > That all being said, if we wanted to address this we could try two
-> > different ways:
-> >
-> > a) We could add a global in the r8152 driver and limit the number of
-> > times we reset. This gets a little ugly because if we have multiple
-> > r8152 adapters plugged in then the same global would be used for both,
-> > but maybe it's OK?
-> >
-> > b) We could improve the USB core to somehow prevent usb_reset_device()
-> > from running too much on a given device?
-> >
-> >
-> > ...though I would re-emphasize that I don't think this is something we
-> > need to address now. If later we actually see a problem we can always
-> > address it then.
->
-> One other idea occurred to me that we could do, if we cared to solve
-> this hypothetical failure case. We could change the code to always
-> read the version 4 times on every probe. If one of the transfers fails
-> then we could consider that OK. If 2 or more transfers fails then we
-> could consider that to be an error. You still might get a _few_
-> unbind/bind in this hypothetical failure mode, but I think it would
-> catch the problem more quickly.
->
-> My probability theory is rusty and I'm sure there's a better way, but
-> I think we can just add up all the cases. Assuming a 10% failures and
-> 90% success of any transfer:
->
-> # Chance of 2 failures:
-> .10 * .10 * .90 * .90 +
-> .10 * .90 * .10 * .90 +
-> .10 * .90 * .90 * .10 +
-> .90 * .10 * .90 * .10 +
-> .90 * .90 * .10 * .10
->
-> # Chance of 3 failures:
-> .10 * .10 * .10 * .90 +
-> .10 * .10 * .90 * .10 +
-> .10 * .90 * .10 * .10 +
-> .90 * .10 * .10 * .10
->
-> # Chance of 4 failures:
-> .10 * .10 * .10 * .10
->
-> If I add that up I get about a 4.4% chance of 2 or more failures in 4
-> reads. That means if we got into an unbind/bind cycle we'd get out of
-> it (on average) in ~23 probes because we'd see enough failures. We
-> could likely reduce this further by reading the version 5 or 6 times.
->
-> I will note that my measurements showed that a normal probe is ~200
-> transfers and also includes a bunch of delays, so reading the version
-> a few times wouldn't be a huge deal.
->
->
-> In any case, I'm still of the opinion that we don't need to handle this.
+On 17/10/2023 19:46, Krishna Kurapati PSSNV wrote:
+> 
+> 
+> On 10/17/2023 10:49 PM, Krzysztof Kozlowski wrote:
+>> On 17/10/2023 15:18, Krishna Kurapati wrote:
+>>> Add enable-rt binding to let the device register vendor hooks to
+>>> core and facilitate runtime suspend and resume.
+>>>
+>>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>>> ---
+>>>   Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 5 +++++
+>>>   1 file changed, 5 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+>>> index cb50261c6a36..788d9c510abc 100644
+>>> --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+>>> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+>>> @@ -151,6 +151,11 @@ properties:
+>>>         HS/FS/LS modes are supported.
+>>>       type: boolean
+>>>   
+>>> +  qcom,enable-rt:
+>>> +    description:
+>>> +      If present, register vendor hooks to facilitate runtime suspend/resume
+>>
+>> You described the desired Linux feature or behavior, not the actual
+>> hardware. The bindings are about the latter, so instead you need to
+>> rephrase the property and its description to match actual hardware
+>> capabilities/features/configuration etc.
+>>
+> 
+> Hi Krzysztof,
+> 
+>   Thanks for the review. Although it sounds like its a Linux property, 
+> internally what it does is configuring qscratch registers properly when 
+> (dr_mode == OTG)
 
-Hayes,
-As Doug points out the probability is really low of this happening for
-an event that is already rare. Doug's patch is a very good step in the
-right direction (driver robustness) and I think has been tested by
-Chromium OS team enough that it is safe to apply to the upstream tree.
-I'm a big fan of taking small steps where we can. We can further
-improve on this in the future as needed.
+That's not what you wrote. You wrote "register vendor hooks". Really,
+this is nothing to do with hardware.
 
-Please add:
-Reviewed-by: Grant Grundler <grundler@chromium.org>
+> 
+>   Would it be fine to rephrase the property name to 
+> "qcom,config-qscratch" and to make it dependent on dr_mode and 
+> usb-role-switch properties ? Would it be possible to make such a 
+> dependency in bindings ?
 
-cheers,
-grant
+Examples are in: example-schema or my talk.
 
->
-> -Doug
+Best regards,
+Krzysztof
+
 
