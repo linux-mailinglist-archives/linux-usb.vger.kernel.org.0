@@ -1,53 +1,61 @@
-Return-Path: <linux-usb+bounces-1856-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1857-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47E227CDCC9
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 15:10:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 453D37CDD42
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 15:29:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 682BE1C20D8A
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 13:10:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7055A1C20DAD
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 13:29:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4776D35893;
-	Wed, 18 Oct 2023 13:10:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20FA7358AC;
+	Wed, 18 Oct 2023 13:29:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6E792F531
-	for <linux-usb@vger.kernel.org>; Wed, 18 Oct 2023 13:10:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74C2318636
+	for <linux-usb@vger.kernel.org>; Wed, 18 Oct 2023 13:29:06 +0000 (UTC)
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E31E11D
-	for <linux-usb@vger.kernel.org>; Wed, 18 Oct 2023 06:10:13 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF8095
+	for <linux-usb@vger.kernel.org>; Wed, 18 Oct 2023 06:29:04 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <mgr@pengutronix.de>)
-	id 1qt6JL-0003Re-QX; Wed, 18 Oct 2023 15:10:07 +0200
+	id 1qt6bb-0006n6-7X; Wed, 18 Oct 2023 15:28:59 +0200
 Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <mgr@pengutronix.de>)
-	id 1qt6JL-002ZCt-Aw; Wed, 18 Oct 2023 15:10:07 +0200
+	id 1qt6ba-002ZG9-66; Wed, 18 Oct 2023 15:28:58 +0200
 Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.94.2)
 	(envelope-from <mgr@pengutronix.de>)
-	id 1qt6JL-00GSzS-1a; Wed, 18 Oct 2023 15:10:07 +0200
-Date: Wed, 18 Oct 2023 15:10:07 +0200
+	id 1qt6bZ-00GTRJ-Sm; Wed, 18 Oct 2023 15:28:57 +0200
+Date: Wed, 18 Oct 2023 15:28:57 +0200
 From: Michael Grzeschik <mgr@pengutronix.de>
-To: Avichal Rakesh <arakesh@google.com>
-Cc: dan.scally@ideasonboard.com, laurent.pinchart@ideasonboard.com,
-	etalvala@google.com, gregkh@linuxfoundation.org,
-	jchowdhary@google.com, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v4 3/3] usb: gadget: uvc: Fix use-after-free for inflight
- usb_requests
-Message-ID: <ZS/ZL8RMix7zppcP@pengutronix.de>
-References: <20230930184821.310143-1-arakesh@google.com>
- <20231012002451.254737-1-arakesh@google.com>
- <20231012002451.254737-3-arakesh@google.com>
+To: Jayant Chowdhary <jchowdhary@google.com>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Greg KH <gregkh@linuxfoundation.org>,
+	"corbet@lwn.net" <corbet@lwn.net>,
+	"laurent.pinchart@ideasonboard.com" <laurent.pinchart@ideasonboard.com>,
+	"dan.scally@ideasonboard.com" <dan.scally@ideasonboard.com>,
+	"kieran.bingham@ideasonboard.com" <kieran.bingham@ideasonboard.com>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+	"etalvala@google.com" <etalvala@google.com>,
+	"arakesh@google.com" <arakesh@google.com>
+Subject: Re: uvc gadget: Making upper bound of number of usb requests
+ allocated configurable through configfs
+Message-ID: <ZS/dmTjdCCdnelVP@pengutronix.de>
+References: <edad1597-48da-49d2-a089-da2487cac889@google.com>
+ <2023100834-statistic-richly-49ef@gregkh>
+ <7ed46b3c-bd42-468e-b28d-860dc8a6c7e6@google.com>
+ <20231012184954.ech7kfpqjkunq6eu@synopsys.com>
+ <c47e864b-4b9e-4a21-afea-af121a4d7771@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -55,9 +63,9 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="1sv+Q8p5KINhrMnO"
+	protocol="application/pgp-signature"; boundary="SVCP3qdL2nu0mKes"
 Content-Disposition: inline
-In-Reply-To: <20231012002451.254737-3-arakesh@google.com>
+In-Reply-To: <c47e864b-4b9e-4a21-afea-af121a4d7771@google.com>
 X-Sent-From: Pengutronix Hildesheim
 X-URL: http://www.pengutronix.de/
 X-Accept-Language: de,en
@@ -67,377 +75,179 @@ X-SA-Exim-Mail-From: mgr@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-	SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-	version=3.4.6
+	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
 
---1sv+Q8p5KINhrMnO
-Content-Type: text/plain; charset=us-ascii; format=flowed
+--SVCP3qdL2nu0mKes
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 11, 2023 at 05:24:51PM -0700, Avichal Rakesh wrote:
->Currently, the uvc gadget driver allocates all uvc_requests as one array
->and deallocates them all when the video stream stops. This includes
->de-allocating all the usb_requests associated with those uvc_requests.
->This can lead to use-after-free issues if any of those de-allocated
->usb_requests were still owned by the usb controller.
+On Sun, Oct 15, 2023 at 09:33:43PM -0700, Jayant Chowdhary wrote:
+>On 10/12/23 11:50, Thinh Nguyen wrote:
+>> On Mon, Oct 09, 2023, Jayant Chowdhary wrote:
+>>>> On Fri, Oct 06, 2023 at 03:03:56PM -0700, Jayant Chowdhary wrote:
+>>>>> We had been seeing the UVC gadget driver receive isoc errors while
+>>>>> sending packets to the usb endpoint - resulting in glitches being sho=
+wn
+>>>>> on linux hosts. My colleague Avichal Rakesh and others had a very
+>>>>> enlightening discussion at
+>>>>> https://urldefense.com/v3/__https://lore.kernel.org/linux-usb/8741b7c=
+b-54ec-410b-caf5-697f81e8ad64@google.com/T/__;!!A4F2R9G_pg!e3zVZGt-6Td6HJXq=
+h8GaZAsUeKyvKBhOoyru9qzn3Vkw01Vdkwk7hFr_t5glBG2BYJlOYfFKEUpiH5H4gQ73n_-Y$
+>>>>>
+>>>>>
+>>>>> The conclusion that we came to was : usb requests with actual uvc fra=
+me
+>>>>> data were missing their scheduled uframes in the usb controller. As a
+>>>>> mitigation, we started sending 0 length usb requests when there was no
+>>>>> uvc frame buffer available to get data from. Even with this mitigatio=
+n,
+>>>>> we are seeing glitches - albeit at a lower frequency.
+>>>>>
+>>>>> After some investigation, it is seen that we=E2=80=99re getting isoc =
+errors when
+>>>>> the worker thread serving video_pump() work items, doesn=E2=80=99t ge=
+t scheduled
+>>>>> for longer periods of time - than usual - in most cases > 6ms.
+>>>>> This is close enough to the 8ms limit that we have when the number of=
+ usb
+>>>>> requests in the queue is 64 (since we have a 125us uframe period). In=
+ order
+>>>>> to tolerate the scheduling delays better, it helps to increase the nu=
+mber of
+>>>>> usb requests in the queue . In that case, we have more 0 length reque=
+sts
+>>>>> given to the udc driver - and as a result we can wait longer for uvc
+>>>>> frames with valid data to get processed by video_pump(). I=E2=80=99m =
+attaching a
+>>>>> patch which lets one configure the upper bound on the number of usb
+>>>>> requests allocated through configfs. Please let me know your thoughts.
+>>>>> I can formalize=C2=A0 the patch if it looks okay.
+>>>> Why do you want to limit the upper bound?  Why not just not submit so
+>>>> many requests from userspace as you control that, right?
+>>>
+>>> Userspace negotiates a video frame rate (typically 30/60fps) with the h=
+ost that does
+>>> not necessarily correspond to the ISOC cadence. After the
+>>> patch at https://urldefense.com/v3/__https://lkml.org/lkml/diff/2023/5/=
+8/1115/1__;!!A4F2R9G_pg!e3zVZGt-6Td6HJXqh8GaZAsUeKyvKBhOoyru9qzn3Vkw01Vdkwk=
+7hFr_t5glBG2BYJlOYfFKEUpiH5H4gWbb9bvy$  was submitted, we are
+>>> maintaining back pressure on the usb controller even if we do not have =
+uvc frame
+>>> data, by sending the controller 0 length requests (as long as usb_reque=
+sts are
+>>> available). Also, even if the userspace application were to somehow pro=
+duce
+>>> data to match the ISOC rate, it would  need to have information about U=
+SB
+>>> timing details - which I am not sure is available to userspace or is th=
+e right
+>>> thing to do here ?
+>>>
+>>> Here, we are trying to handle the scenario in which the video_pump() wo=
+rker
+>>> thread does not get scheduled in time - by increasing the number of usb=
+ requests
+>>> allocated in the queue. This would send more usb requests to the usb co=
+ntroller,
+>>> when video_pump() does get scheduled - even if they're 0 length. This b=
+uys
+>>> the video_pump() worker thread scheduling time -since more usb requests
+>>> are with the controller, subsequent requests sent will not be 'stale' a=
+nd
+>>> dropped by the usb controller.
+>>>
+>> I believe you're testing against dwc3 controller right? I may not be as
+>> familiar with UVC function driver, but based on the previous
+>> discussions, I think the driver should be able to handle this without
+>> the user input.
 >
->This is patch 2 of 2 in fixing the use-after-free issue. It adds a new
->flag to uvc_video to track when frames and requests should be flowing.
->When disabling the video stream, the flag is tripped and, instead
->of de-allocating all uvc_requests and usb_requests, the gadget
->driver only de-allocates those usb_requests that are currently
->owned by it (as present in req_free). Other usb_requests are left
->untouched until their completion handler is called which takes care
->of freeing the usb_request and its corresponding uvc_request.
+>Yes we are testing against the dwc3 controller.
 >
->Now that uvc_video does not depends on uvc->state, this patch removes
->unnecessary upates to uvc->state that were made to accomodate uvc_video
->logic. This should ensure that uvc gadget driver never accidentally
->de-allocates a usb_request that it doesn't own.
+>>
+>> The frequency of the request submission should not depend on the
+>> video_pump() work thread since it can vary. The frequency of request
+>> submission should match with the request completion. We know that
+>> request completion rate should be fixed (1 uframe/request + when you
+>> don't set no_interrupt). Base on this you can do your calculation on how
+>> often you should set no_interrupt and how many requests you must submit.
+>> You don't have to wait for the video_pump() to submit 0-length requests.
+>>
+>> The only variable here is the completion handler delay or system
+>> latency, which should not be much and should be within your calculation.
 >
->Link: https://lore.kernel.org/7cd81649-2795-45b6-8c10-b7df1055020d@google.=
-com
->Suggested-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
->Signed-off-by: Avichal Rakesh <arakesh@google.com>
->---
->v1 -> v2: Rebased to ToT, and fixed deadlock reported in
->          https://lore.kernel.org/all/ZRv2UnKztgyqk2pt@pengutronix.de/
->v2 -> v3: Fix email threading goof-up
->v3 -> v4: re-rebase to ToT & moved to a uvc_video level lock
->          as discussed in
->          https://lore.kernel.org/b14b296f-2e08-4edf-aeea-1c5b621e2d0c@goo=
-gle.com/
+>
+>Thanks for the suggestion. It indeed makes sense that we do not completely=
+ depend on
+>video_pump() for sending 0 length requests. I was concerned about
+>synchronization needed when we send requests to the dwc3 controller from
+>different threads. I see that the dwc3 controller code does internally ser=
+ialize
+>queueing requests, can we expect this from other controllers as well ?
+>
+>This brings me to another question for Michael - I see
+>that we introduced a worker thread for pumping  usb requests to the usb en=
+dpoint
+>in https://lore.kernel.org/all/20200427151614.10868-1-m.grzeschik@pengutro=
+nix.de/
+>(I see multiple email addresses, so apologies if I used the incorrect one).
+>
+>Did we introduce the worker thread to solve some specific deadlock scenari=
+os ?
 
-I tested this and I no longer saw any use after free
-errors anymore! :)
+Exactly. This was the reason why we moved to the pump worker. I actually
+looked into the host side implementation of the uvc driver. There we
+also queue an worker from the complete function:
 
-Here comes some more review:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/dri=
+vers/media/usb/uvc/uvc_video.c#n1646
 
-> drivers/usb/gadget/function/uvc.h       |   1 +
-> drivers/usb/gadget/function/uvc_v4l2.c  |  12 +-
-> drivers/usb/gadget/function/uvc_video.c | 156 +++++++++++++++++++-----
-> 3 files changed, 128 insertions(+), 41 deletions(-)
->
->diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/functi=
-on/uvc.h
->index 993694da0bbc..be0d012aa244 100644
->--- a/drivers/usb/gadget/function/uvc.h
->+++ b/drivers/usb/gadget/function/uvc.h
->@@ -102,6 +102,7 @@ struct uvc_video {
-> 	unsigned int uvc_num_requests;
->
-> 	/* Requests */
->+	bool is_enabled; /* tracks whether video stream is enabled */
-> 	unsigned int req_size;
-> 	struct list_head ureqs; /* all uvc_requests allocated by uvc_video */
-> 	struct list_head req_free;
->diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/f=
-unction/uvc_v4l2.c
->index c0d77564a204..ded7d33c2a52 100644
->--- a/drivers/usb/gadget/function/uvc_v4l2.c
->+++ b/drivers/usb/gadget/function/uvc_v4l2.c
->@@ -451,8 +451,8 @@ uvc_v4l2_streamon(struct file *file, void *fh, enum v4=
-l2_buf_type type)
-> 	 * Complete the alternate setting selection setup phase now that
-> 	 * userspace is ready to provide video frames.
-> 	 */
->-	uvc_function_setup_continue(uvc, 0);
-> 	uvc->state =3D UVC_STATE_STREAMING;
->+	uvc_function_setup_continue(uvc, 0);
->
-> 	return 0;
-> }
->@@ -468,12 +468,12 @@ uvc_v4l2_streamoff(struct file *file, void *fh, enum=
- v4l2_buf_type type)
-> 	if (type !=3D video->queue.queue.type)
-> 		return -EINVAL;
->
->-	uvc->state =3D UVC_STATE_CONNECTED;
-> 	ret =3D uvcg_video_enable(video, 0);
-> 	if (ret < 0) {
-> 		return ret;
-> 	}
->
->+	uvc->state =3D UVC_STATE_CONNECTED;
-> 	uvc_function_setup_continue(uvc, 1);
-> 	return 0;
-> }
->@@ -508,14 +508,6 @@ uvc_v4l2_subscribe_event(struct v4l2_fh *fh,
-> static void uvc_v4l2_disable(struct uvc_device *uvc)
-> {
-> 	uvc_function_disconnect(uvc);
->-	/*
->-	 * Drop uvc->state to CONNECTED if it was streaming before.
->-	 * This ensures that the usb_requests are no longer queued
->-	 * to the controller.
->-	 */
->-	if (uvc->state =3D=3D UVC_STATE_STREAMING)
->-		uvc->state =3D UVC_STATE_CONNECTED;
->-
-> 	uvcg_video_enable(&uvc->video, 0);
-> 	uvcg_free_buffers(&uvc->video.queue);
-> 	uvc->func_connected =3D false;
->diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/=
-function/uvc_video.c
->index b62b3de79153..05b89b5b6c48 100644
->--- a/drivers/usb/gadget/function/uvc_video.c
->+++ b/drivers/usb/gadget/function/uvc_video.c
->@@ -227,6 +227,9 @@ uvc_video_encode_isoc(struct usb_request *req, struct =
-uvc_video *video,
->  * Request handling
->  */
->
->+/**
->+ * Must be called with req_lock held as it modifies the list ureq is held=
- in
->+ */
-> static void
-> uvc_video_free_request(struct uvc_request *ureq, struct usb_ep *ep)
-> {
->@@ -271,9 +274,25 @@ uvc_video_complete(struct usb_ep *ep, struct usb_requ=
-est *req)
-> 	struct uvc_request *ureq =3D req->context;
-> 	struct uvc_video *video =3D ureq->video;
-> 	struct uvc_video_queue *queue =3D &video->queue;
->-	struct uvc_device *uvc =3D video->uvc;
->+	struct uvc_buffer *last_buf =3D NULL;
-> 	unsigned long flags;
->
->+	spin_lock_irqsave(&video->req_lock, flags);
->+	if (!video->is_enabled) {
->+		/*
->+		 * When is_enabled is false, uvc_video_disable ensures that
->+		 * in-flight uvc_buffers are returned, so we can safely
->+		 * call free_request without worrying about last_buf.
->+		 */
->+		uvc_video_free_request(ureq, ep);
->+		spin_unlock_irqrestore(&video->req_lock, flags);
->+		return;
->+	}
->+
->+	last_buf =3D ureq->last_buf;
->+	ureq->last_buf =3D NULL;
->+	spin_unlock_irqrestore(&video->req_lock, flags);
->+
-> 	switch (req->status) {
-> 	case 0:
-> 		break;
->@@ -295,17 +314,26 @@ uvc_video_complete(struct usb_ep *ep, struct usb_req=
-uest *req)
-> 		uvcg_queue_cancel(queue, 0);
-> 	}
->
->-	if (ureq->last_buf) {
->-		uvcg_complete_buffer(&video->queue, ureq->last_buf);
->-		ureq->last_buf =3D NULL;
->+	if (last_buf) {
->+		spin_lock_irqsave(&queue->irqlock, flags);
->+		uvcg_complete_buffer(&video->queue, last_buf);
->+		spin_unlock_irqrestore(&queue->irqlock, flags);
-> 	}
->
-> 	spin_lock_irqsave(&video->req_lock, flags);
->-	list_add_tail(&req->list, &video->req_free);
->-	spin_unlock_irqrestore(&video->req_lock, flags);
->-
->-	if (uvc->state =3D=3D UVC_STATE_STREAMING)
->+	/*
->+	 * Video stream might have been disabled while we were
->+	 * processing the current usb_request. So make sure
->+	 * we're still streaming before queueing the usb_request
->+	 * back to req_free
->+	 */
->+	if (video->is_enabled) {
->+		list_add_tail(&req->list, &video->req_free);
-> 		queue_work(video->async_wq, &video->pump);
->+	} else {
->+		uvc_video_free_request(ureq, ep);
->+	}
->+	spin_unlock_irqrestore(&video->req_lock, flags);
-> }
->
-> static int
->@@ -391,20 +419,22 @@ static void uvcg_video_pump(struct work_struct *work)
-> 	struct uvc_video_queue *queue =3D &video->queue;
-> 	/* video->max_payload_size is only set when using bulk transfer */
-> 	bool is_bulk =3D video->max_payload_size;
->-	struct uvc_device *uvc =3D video->uvc;
-> 	struct usb_request *req =3D NULL;
-> 	struct uvc_buffer *buf;
-> 	unsigned long flags;
-> 	bool buf_done;
-> 	int ret;
->
->-	while (uvc->state =3D=3D UVC_STATE_STREAMING && video->ep->enabled) {
->+	while(true) {
+So this sounded reasonable to me. However we faced similar issues like
+you and introduced different ways to improve the latency issue.
 
-Missing space after "while".
+One thing we did was improving the latency by adding WQ_HIGHPRI
 
->+		if (!video->ep->enabled)
->+			return;
->+
-> 		/*
->-		 * Retrieve the first available USB request, protected by the
->-		 * request lock.
->+		 * Check is_enabled and retrieve the first available USB
->+		 * request, protected by the request lock.
-> 		 */
-> 		spin_lock_irqsave(&video->req_lock, flags);
->-		if (list_empty(&video->req_free)) {
->+		if (!video->is_enabled || list_empty(&video->req_free)) {
-> 			spin_unlock_irqrestore(&video->req_lock, flags);
-> 			return;
-> 		}
->@@ -486,9 +516,78 @@ static void uvcg_video_pump(struct work_struct *work)
-> 		return;
->
-> 	spin_lock_irqsave(&video->req_lock, flags);
->-	list_add_tail(&req->list, &video->req_free);
->+	if (video->is_enabled)
->+		list_add_tail(&req->list, &video->req_free);
->+	else
->+		uvc_video_free_request(req->context, video->ep);
->+	spin_unlock_irqrestore(&video->req_lock, flags);
->+}
->+
->+/*
->+ * Disable video stream
->+ */
->+static int
->+uvcg_video_disable(struct uvc_video *video) {
->+	unsigned long flags;
->+	struct list_head inflight_bufs;
->+	struct usb_request *req, *temp;
->+	struct uvc_buffer *buf, *btemp;
->+	struct uvc_request *ureq, *utemp;
->+
->+	INIT_LIST_HEAD(&inflight_bufs);
->+	spin_lock_irqsave(&video->req_lock, flags);
->+	video->is_enabled =3D false;
->+
->+	/*
->+	 * Remove any in-flight buffers from the uvc_requests
->+	 * because we want to return them before cancelling the
->+	 * queue. This ensures that we aren't stuck waiting for
->+	 * all complete callbacks to come through before disabling
->+	 * vb2 queue.
->+	 */
->+	list_for_each_entry(ureq, &video->ureqs, list) {
->+		if (ureq->last_buf) {
->+			list_add_tail(&ureq->last_buf->queue, &inflight_bufs);
->+			ureq->last_buf =3D NULL;
->+		}
->+	}
-> 	spin_unlock_irqrestore(&video->req_lock, flags);
->-	return;
->+
->+	cancel_work_sync(&video->pump);
->+	uvcg_queue_cancel(&video->queue, 0);
->+
->+	spin_lock_irqsave(&video->req_lock, flags);
->+	/*
->+	 * Remove all uvc_reqeusts from from ureqs with list_del_init
->+	 * This lets uvc_video_free_request correctly identify
->+	 * if the uvc_request is attached to a list or not when freeing
->+	 * memory.
->+	 */
->+	list_for_each_entry_safe(ureq, utemp, &video->ureqs, list)
->+		list_del_init(&ureq->list);
->+
->+	list_for_each_entry_safe(req, temp, &video->req_free, list) {
->+		list_del(&req->list);
->+		uvc_video_free_request(req->context, video->ep);
->+	}
->+
->+	INIT_LIST_HEAD(&video->ureqs);
->+	INIT_LIST_HEAD(&video->req_free);
->+	video->req_size =3D 0;
->+	spin_unlock_irqrestore(&video->req_lock, flags);
->+
->+	/*
->+	 * Return all the video buffers before disabling the queue.
->+	 */
->+	spin_lock_irqsave(&video->queue.irqlock, flags);
->+	list_for_each_entry_safe(buf, btemp, &inflight_bufs, queue) {
->+		list_del(&buf->queue);
->+		uvcg_complete_buffer(&video->queue, buf);
->+	}
->+	spin_unlock_irqrestore(&video->queue.irqlock, flags);
->+
->+	uvcg_queue_enable(&video->queue, 0);
->+	return 0;
-> }
->
-> /*
->@@ -497,28 +596,22 @@ static void uvcg_video_pump(struct work_struct *work)
-> int uvcg_video_enable(struct uvc_video *video, int enable)
-> {
-> 	int ret;
->-	struct uvc_request *ureq;
->
-> 	if (video->ep =3D=3D NULL) {
-> 		uvcg_info(&video->uvc->func,
-> 			  "Video enable failed, device is uninitialized.\n");
-> 		return -ENODEV;
-> 	}
->-
->-	if (!enable) {
->-		cancel_work_sync(&video->pump);
->-		uvcg_queue_cancel(&video->queue, 0);
->-
->-		list_for_each_entry(ureq, &video->ureqs, list) {
->-			if (ureq->req)
->-				usb_ep_dequeue(video->ep, ureq->req);
->-		}
->-
->-		uvc_video_free_requests(video);
->-		uvcg_queue_enable(&video->queue, 0);
->-		return 0;
->-	}
->-
->+	if (!enable)
->+		return uvcg_video_disable(video);
+https://lore.kernel.org/linux-usb/20220907215818.2670097-1-m.grzeschik@peng=
+utronix.de/
 
-Could you refactor this code as it is to an separate
-function and prepand this change as an extra patch
-to this one? It would make the changes in the functions
-more obvious and better to review.
+Another patch here is also adding WQ_CPU_INTENSIVE.
 
->+
->+	/*
->+	 * Safe to access request related fields without req_lock because
->+	 * this is the only thread currently active, and no other
->+	 * request handling thread will become active until this function
->+	 * returns.
->+	 */
->+	video->is_enabled =3D true;
+But, after all the input from Thinh it is probably better to solve the
+issue in a more reliable way.
 
-Add an extra empty line.
+>Or was it a general mitigation against racy usb request submission from v4=
+l2 buffer
+>queuing, stream enable and the video complete handler firing ?
 
-> 	if ((ret =3D uvcg_queue_enable(&video->queue, 1)) < 0)
-> 		return ret;
->
->@@ -544,6 +637,7 @@ int uvcg_video_enable(struct uvc_video *video, int ena=
-ble)
->  */
-> int uvcg_video_init(struct uvc_video *video, struct uvc_device *uvc)
-> {
->+	video->is_enabled =3D false;
-> 	INIT_LIST_HEAD(&video->ureqs);
-> 	INIT_LIST_HEAD(&video->req_free);
-> 	spin_lock_init(&video->req_lock);
->--
->2.42.0.609.gbb76f46606-goog
->
->
+I don't remember all of the issues we saw back then. But this is also an ve=
+ry
+likely scenario.
 
-Reviewed-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-Tested-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+>I was chatting with Avi about this, what if we submit requests to the endp=
+oint
+>only at two points in the streaming lifecycle -
+>1) The whole 64 (or however many usb requests are allocated) when
+>   uvcg_video_enable() is called - with 0 length usb_requests.
+>2) In the video complete handler - if a video buffer is available, we enco=
+de it
+>   and submit it to the endpoint. If not, we send a 0 length request.
 
+It really sounds like a good idea.
+
+>This way we're really maintaining back pressure and sending requests as so=
+on
+>as we can to the dwc3 controller. Encoding is mostly memcpys from what I s=
+ee
+>so hopefully not too heavy on the interrupt handler. I will work on protot=
+yping
+>this meanwhile.
+
+Great!
+
+Michael
 
 --=20
 Pengutronix e.K.                           |                             |
@@ -445,25 +255,25 @@ Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
 Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
---1sv+Q8p5KINhrMnO
+--SVCP3qdL2nu0mKes
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmUv2SwACgkQC+njFXoe
-LGThRA/8DHI1OB19SEtUoniNF0R/ijUOfnrLmoWu7T+06rOpAIRmwMhpSHzB4ruR
-1Dn8dmPQqY4oh/8rmL2rM4dgdDApNjVTO9r0QxGpZSegxe8k+uHcJbVaai8MjcKm
-3+E2yiArBJwY24DKQ44if2gmTDJRYVEYXPpnKTeQkQ2GDB7b82ADS+Ww+VoMLlQ2
-JzRpEkEojaV3cbO5scozBTC9q6y0sq0060XpwDUS6I3TQqLi6W/UvztvI/9+21BO
-hYj10zZlndeFZstycPWGcZyV89c8WvDEsLvHwTQ351IKXKy0yXjJc41nQY/eckc3
-3ZqpDNGEe7FzsswIhPXs5SCcRFvA4eDa5kjLSkIZqGy34xUAr+oyy1+fVDlp6vYN
-fpVUuipm3z9bK5n6m+hLCLICJ4Yjm0jnD3l+Nx6+5AP2kN7AmtT6RKCCbPrdcYzm
-c92xkaFEm32y0rbwYJnrf/7bOehktRnthIsBiEOjsvbZ/eqIeUDNURkwD6CFcuB/
-JZ1WicFTyTGnZoQqLj6J658YLytQLQ7ONxrwnJgu6wYOgOTsG0oG3gqkcPeiaABe
-FOL2FnXkStBku0es1rvi1YJEXrgO0IzKjZ2WMPEfRxj59CHqBKAOecx+LiOEDYs/
-G6s0sS4wNPMRFE2W0QWacAYZDYi7pN6MajUm7F9sQP5tP1mveCw=
-=585t
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmUv3ZMACgkQC+njFXoe
+LGS6GBAAinn8GCkexSVxCre5g+nKJglzQZU8eFhaGoi67gkQ569mtjA8g2A6nxIY
+jYMHqr4mqHlnTQRToWeQuMYx66DZ5IqtW58tgD5wQraqg30xamUXLknSirmTcjd3
+OAK4QR4+uqarn6uJlZt2MzGsUtMbGmuORJQU9ZoxHqKgUqc6CtBluGNdipMrPEuR
+E1P0U4V1jrBIic57j9TSu0GNJaycBTj7Fjq4mhcMsrZX3R2r+mAG/v2KofEuostT
+ev+BW5gM2Fvs1lddTvuHpe6JETiI7nFKAkzaHSuqclU3IFveDAanyD9YrwM9R7S2
+7LJIX8gmbi6gZ6leoXmbPupDqo9jj2OhF3Ier3epsd1UQUawQ32i7rkPeqOZ17Mr
+0AvVy1Fniz1Gp8GPp79nf8tVs7aKvPMHgUTbevPxOcGPUBK6IkK4UgIajjsxRy5Q
+OQ4IoBAvqqwafy9l5quG7SYGNU/qigeiDQiJcyAEwUIVOOpsZxx2Ef+i8DTWJzpr
+IYR/pmvHTn+BlfMdwcYhJWbV4rEVwh3v9qbeGo0ixw1S9XQvtmI4lYtEdDDfszZp
+cANh6o+/IjjU3R+HpdDbjAq+whoBXrK5hXSsNrr9+3+prfdWv9N09pc95TLHkt3n
+Y0nBA58drEpcjr4rrM0CKINQOx8RB3UpuYsLuCvby806RHxj/Kg=
+=iXRP
 -----END PGP SIGNATURE-----
 
---1sv+Q8p5KINhrMnO--
+--SVCP3qdL2nu0mKes--
 
