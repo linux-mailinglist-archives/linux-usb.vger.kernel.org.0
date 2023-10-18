@@ -1,42 +1,72 @@
-Return-Path: <linux-usb+bounces-1843-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1844-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 536367CD48D
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 08:36:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C2C17CD551
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 09:11:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 04DB228146B
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 06:36:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0592A2811A8
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 07:11:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 902EB6AD6;
-	Wed, 18 Oct 2023 06:36:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59D7010A36;
+	Wed, 18 Oct 2023 07:11:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="mtSZR4fL"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j0ZfiF21"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7A50D2FF
-	for <linux-usb@vger.kernel.org>; Wed, 18 Oct 2023 06:36:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC369C433C7;
-	Wed, 18 Oct 2023 06:36:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1697610989;
-	bh=ICMIHrTBTAHgmxtuCCuVYOVydvK715mq+jYj66A+810=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mtSZR4fLQJbjYrqBZk8divJ2UoNW/TtBu06ULtJcOKJrECrZ6p8TwC4VvWcwkLqb9
-	 6JhwhnmVC94+Sfly2I2YPO3xxU5qCCLuJMyC5R4nELTYfB6ts5pLcj4H2rq4j2nOzb
-	 IVxcqEv5czaya8cny6yfxYQWznFkvgB6PvDf5Wrs=
-Date: Wed, 18 Oct 2023 08:36:24 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Charles Yi <be286@163.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: gadget: f_uac1: add adaptive sync support for
- capture
-Message-ID: <2023101804-humiliate-extruding-c5b1@gregkh>
-References: <20231018043907.1206817-1-be286@163.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E00F27493;
+	Wed, 18 Oct 2023 07:10:58 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A0D91B4;
+	Wed, 18 Oct 2023 00:10:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1697613054; x=1729149054;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2f5KGCkoKZZ5JhVOJVIHD3+5S1y0Tlk1F+D7jYqUrJ8=;
+  b=j0ZfiF21quykqhMxRY1qotzbhVjUK/Pak7HAsfBUlUIgNXsog+aOJZVJ
+   1ERkvQAv8v0LASphIxjpB80kc+oXJiameRed7GBDnU4AhXKUj2wAmfnik
+   vp0RZ5hDXTemYAwLljaNxX2trdfnRqHI9ZOspcRFaQR1kwoUKE3HPasIO
+   CICzL/bWjDfdPdCg8nPVoHSOuehDt7O+au8MQ2sv2PJT9C+vKznD7nMYh
+   nizfXy7ODXvfE1vw6vaRBj2bMltXJt+Xywk5ahKdoHnEPL+3SiIwjUBws
+   4laElsV8poqIhLL65TDTbbfAB5PZnJzq2nIyngaUQzEWuw0vvJIWQUHR7
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10866"; a="376326405"
+X-IronPort-AV: E=Sophos;i="6.03,234,1694761200"; 
+   d="scan'208";a="376326405"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2023 00:10:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10866"; a="785775403"
+X-IronPort-AV: E=Sophos;i="6.03,234,1694761200"; 
+   d="scan'208";a="785775403"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by orsmga008.jf.intel.com with SMTP; 18 Oct 2023 00:10:48 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 18 Oct 2023 10:10:47 +0300
+Date: Wed, 18 Oct 2023 10:10:47 +0300
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Luca Weiss <luca.weiss@fairphone.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 2/3] usb: typec: fsa4480: Add support to swap SBU
+ orientation
+Message-ID: <ZS+E91QLqCwrhdTG@kuha.fi.intel.com>
+References: <20231013-fsa4480-swap-v1-0-b877f62046cc@fairphone.com>
+ <20231013-fsa4480-swap-v1-2-b877f62046cc@fairphone.com>
+ <ZS5NV43MhD3YNeDX@kuha.fi.intel.com>
+ <CWAMY8EP9RN1.VPH5E7Z1T7JN@fairphone.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -45,158 +75,35 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231018043907.1206817-1-be286@163.com>
+In-Reply-To: <CWAMY8EP9RN1.VPH5E7Z1T7JN@fairphone.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+	RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+	autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+	lindbergh.monkeyblade.net
 
-On Wed, Oct 18, 2023 at 12:39:07PM +0800, Charles Yi wrote:
-> UAC1 has it's own freerunning clock and can update Host about
-> real clock frequency through feedback endpoint so Host can align
-> number of samples sent to the UAC1 to prevent overruns/underruns.
-> 
-> Change UAC1 driver to make it configurable through additional
-> 'c_sync' configfs file.
-> 
-> Default remains 'asynchronous' with possibility to switch it
-> to 'adaptive'.
-> 
-> Signed-off-by: Charles Yi <be286@163.com>
-> ---
->  drivers/usb/gadget/function/f_uac1.c | 30 ++++++++++++++++++++++++++++
->  drivers/usb/gadget/function/u_uac1.h |  2 ++
->  2 files changed, 32 insertions(+)
-> 
-> diff --git a/drivers/usb/gadget/function/f_uac1.c b/drivers/usb/gadget/function/f_uac1.c
-> index 6f0e1d803dc2..7a6fcb40bb46 100644
-> --- a/drivers/usb/gadget/function/f_uac1.c
-> +++ b/drivers/usb/gadget/function/f_uac1.c
-> @@ -33,6 +33,8 @@
->  #define FUOUT_EN(_opts) ((_opts)->c_mute_present \
->  			|| (_opts)->c_volume_present)
->  
-> +#define EPOUT_FBACK_IN_EN(_opts) ((_opts)->c_sync == USB_ENDPOINT_SYNC_ASYNC)
-> +
->  struct f_uac1 {
->  	struct g_audio g_audio;
->  	u8 ac_intf, as_in_intf, as_out_intf;
-> @@ -227,6 +229,16 @@ static struct uac_iso_endpoint_descriptor as_iso_out_desc = {
->  	.wLockDelay =		cpu_to_le16(1),
->  };
->  
-> +static struct usb_endpoint_descriptor as_fback_ep_desc = {
-> +	.bLength = USB_DT_ENDPOINT_SIZE,
-> +	.bDescriptorType = USB_DT_ENDPOINT,
-> +
-> +	.bEndpointAddress = USB_DIR_IN,
-> +	.bmAttributes = USB_ENDPOINT_XFER_ISOC | USB_ENDPOINT_USAGE_FEEDBACK,
-> +	.wMaxPacketSize = cpu_to_le16(3),
-> +	.bInterval = 1,
-> +};
-> +
->  static struct uac_format_type_i_discrete_descriptor as_in_type_i_desc = {
->  	.bLength =		0, /* filled on rate setup */
->  	.bDescriptorType =	USB_DT_CS_INTERFACE,
-> @@ -280,6 +292,7 @@ static struct usb_descriptor_header *f_audio_desc[] = {
->  
->  	(struct usb_descriptor_header *)&as_out_ep_desc,
->  	(struct usb_descriptor_header *)&as_iso_out_desc,
-> +	(struct usb_descriptor_header *)&as_fback_ep_desc,
->  
->  	(struct usb_descriptor_header *)&as_in_interface_alt_0_desc,
->  	(struct usb_descriptor_header *)&as_in_interface_alt_1_desc,
-> @@ -1107,6 +1120,9 @@ static void setup_descriptor(struct f_uac1_opts *opts)
->  		f_audio_desc[i++] = USBDHDR(&as_out_type_i_desc);
->  		f_audio_desc[i++] = USBDHDR(&as_out_ep_desc);
->  		f_audio_desc[i++] = USBDHDR(&as_iso_out_desc);
-> +		if (EPOUT_FBACK_IN_EN(opts)) {
-> +			f_audio_desc[i++] = USBDHDR(&as_fback_ep_desc);
-> +		}
->  	}
->  	if (EPIN_EN(opts)) {
->  		f_audio_desc[i++] = USBDHDR(&as_in_interface_alt_0_desc);
-> @@ -1317,6 +1333,12 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
->  		ac_header_desc->baInterfaceNr[ba_iface_id++] = status;
->  		uac1->as_out_intf = status;
->  		uac1->as_out_alt = 0;
-> +
-> +		if (EPOUT_FBACK_IN_EN(audio_opts)) {
-> +			as_out_ep_desc.bmAttributes =
-> +			USB_ENDPOINT_XFER_ISOC | USB_ENDPOINT_SYNC_ASYNC;
-> +			as_out_interface_alt_1_desc.bNumEndpoints++;
-> +		}
->  	}
->  
->  	if (EPIN_EN(audio_opts)) {
-> @@ -1354,6 +1376,12 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
->  			goto err_free_fu;
->  		audio->out_ep = ep;
->  		audio->out_ep->desc = &as_out_ep_desc;
-> +		if (EPOUT_FBACK_IN_EN(audio_opts)) {
-> +			audio->in_ep_fback = usb_ep_autoconfig(gadget, &as_fback_ep_desc);
-> +			if (!audio->in_ep_fback) {
-> +				goto err_free_fu;
-> +			}
-> +		}
->  	}
->  
->  	if (EPIN_EN(audio_opts)) {
-> @@ -1685,6 +1713,8 @@ static struct usb_function_instance *f_audio_alloc_inst(void)
->  
->  	opts->req_number = UAC1_DEF_REQ_NUM;
->  
-> +	opts->c_sync = UAC1_DEF_CSYNC;
-> +
->  	snprintf(opts->function_name, sizeof(opts->function_name), "AC Interface");
->  
->  	return &opts->func_inst;
-> diff --git a/drivers/usb/gadget/function/u_uac1.h b/drivers/usb/gadget/function/u_uac1.h
-> index f7a616760e31..c6e2271e8cdd 100644
-> --- a/drivers/usb/gadget/function/u_uac1.h
-> +++ b/drivers/usb/gadget/function/u_uac1.h
-> @@ -27,6 +27,7 @@
->  #define UAC1_DEF_MAX_DB		0		/* 0 dB */
->  #define UAC1_DEF_RES_DB		(1*256)	/* 1 dB */
->  
-> +#define UAC1_DEF_CSYNC		USB_ENDPOINT_SYNC_ASYNC
->  
->  struct f_uac1_opts {
->  	struct usb_function_instance	func_inst;
-> @@ -56,6 +57,7 @@ struct f_uac1_opts {
->  
->  	struct mutex			lock;
->  	int				refcnt;
-> +	int				c_sync;
->  };
->  
->  #endif /* __U_UAC1_H */
-> -- 
-> 2.34.1
-> 
-> 
+Hi Luca,
 
-Hi,
+> > Shouldn't you loop through the endpoints? In any case:
+> >
+> >         ep = fwnode_graph_get_next_endpoint(dev_fwnode(&fsa->client->dev, NULL));
+> 
+> The docs only mention one endpoint so I'm assuming just next_endpoint is
+> fine?
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+I'm mostly concerned about what we may have in the future. If one day
+you have more than the one connection in your graph, then you have to
+be able to identify the endpoint you are after.
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+But that may not be a problem in this case (maybe that "data-lanes"
+device property can be used to identify the correct endpoint?).
 
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/process/submitting-patches.rst for what
-  needs to be done here to properly describe this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+We can worry about it then when/if we ever have another endpoint to
+deal with.
 
 thanks,
 
-greg k-h's patch email bot
+-- 
+heikki
 
