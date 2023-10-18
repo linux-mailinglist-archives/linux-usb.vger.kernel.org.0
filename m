@@ -1,109 +1,190 @@
-Return-Path: <linux-usb+bounces-1844-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1845-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C2C17CD551
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 09:11:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2400F7CD5E7
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 10:03:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0592A2811A8
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 07:11:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 552221C20D1A
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 08:03:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59D7010A36;
-	Wed, 18 Oct 2023 07:11:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB538134BE;
+	Wed, 18 Oct 2023 08:03:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j0ZfiF21"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="bnTZCAHm"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E00F27493;
-	Wed, 18 Oct 2023 07:10:58 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A0D91B4;
-	Wed, 18 Oct 2023 00:10:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697613054; x=1729149054;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2f5KGCkoKZZ5JhVOJVIHD3+5S1y0Tlk1F+D7jYqUrJ8=;
-  b=j0ZfiF21quykqhMxRY1qotzbhVjUK/Pak7HAsfBUlUIgNXsog+aOJZVJ
-   1ERkvQAv8v0LASphIxjpB80kc+oXJiameRed7GBDnU4AhXKUj2wAmfnik
-   vp0RZ5hDXTemYAwLljaNxX2trdfnRqHI9ZOspcRFaQR1kwoUKE3HPasIO
-   CICzL/bWjDfdPdCg8nPVoHSOuehDt7O+au8MQ2sv2PJT9C+vKznD7nMYh
-   nizfXy7ODXvfE1vw6vaRBj2bMltXJt+Xywk5ahKdoHnEPL+3SiIwjUBws
-   4laElsV8poqIhLL65TDTbbfAB5PZnJzq2nIyngaUQzEWuw0vvJIWQUHR7
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10866"; a="376326405"
-X-IronPort-AV: E=Sophos;i="6.03,234,1694761200"; 
-   d="scan'208";a="376326405"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2023 00:10:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10866"; a="785775403"
-X-IronPort-AV: E=Sophos;i="6.03,234,1694761200"; 
-   d="scan'208";a="785775403"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by orsmga008.jf.intel.com with SMTP; 18 Oct 2023 00:10:48 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 18 Oct 2023 10:10:47 +0300
-Date: Wed, 18 Oct 2023 10:10:47 +0300
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Luca Weiss <luca.weiss@fairphone.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 2/3] usb: typec: fsa4480: Add support to swap SBU
- orientation
-Message-ID: <ZS+E91QLqCwrhdTG@kuha.fi.intel.com>
-References: <20231013-fsa4480-swap-v1-0-b877f62046cc@fairphone.com>
- <20231013-fsa4480-swap-v1-2-b877f62046cc@fairphone.com>
- <ZS5NV43MhD3YNeDX@kuha.fi.intel.com>
- <CWAMY8EP9RN1.VPH5E7Z1T7JN@fairphone.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90EA5111A5
+	for <linux-usb@vger.kernel.org>; Wed, 18 Oct 2023 08:03:00 +0000 (UTC)
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.199])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id A75B3C6;
+	Wed, 18 Oct 2023 01:02:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=G2qXA
+	XioFozQmVIHwSvY69BMBB8MFyUaaBI7UaqeV1o=; b=bnTZCAHm+lYhdhzCbnztA
+	NucoHwyMGd01+AvC7lpYtPIK9qdeU8PigSGXYYvtWKW4/3z2ds9c/kQNDMCXvZTY
+	/2lN4xdlqyZ9q2ZEtGdlBW/TPa2+v56YVv6A0wKAZgUGuXuxH+SJIMgu076LLavR
+	QScf0iWJenrXkSUqYZUyZw=
+Received: from ubuntu.. (unknown [171.83.47.247])
+	by zwqz-smtp-mta-g4-2 (Coremail) with SMTP id _____wD3P8qfjS9l8YWLAw--.36281S2;
+	Wed, 18 Oct 2023 15:47:44 +0800 (CST)
+From: Charles Yi <be286@163.com>
+To: gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Charles Yi <be286@163.com>
+Subject: [PATCH V2] usb: gadget: f_uac1: add adaptive sync support for capture
+Date: Wed, 18 Oct 2023 15:47:39 +0800
+Message-Id: <20231018074739.1234394-1-be286@163.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CWAMY8EP9RN1.VPH5E7Z1T7JN@fairphone.com>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wD3P8qfjS9l8YWLAw--.36281S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxAr15JF45Xr17KrWDWry7Awb_yoWrCFyUpw
+	4UC3y0yr45ArZIqr4rAF4rAF43Aa1xG345GrW7Ww4Yganxt3sava42yryFkF47AFWrCw40
+	qF4Fgw1a9w4kCr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRwvtXUUUUU=
+X-Originating-IP: [171.83.47.247]
+X-CM-SenderInfo: dehsmli6rwjhhfrp/1tbiWwIN0mI0cVn1oAAAst
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+	FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
 	autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-Hi Luca,
+UAC1 has it's own freerunning clock and can update Host about
+real clock frequency through feedback endpoint so Host can align
+number of samples sent to the UAC1 to prevent overruns/underruns.
 
-> > Shouldn't you loop through the endpoints? In any case:
-> >
-> >         ep = fwnode_graph_get_next_endpoint(dev_fwnode(&fsa->client->dev, NULL));
-> 
-> The docs only mention one endpoint so I'm assuming just next_endpoint is
-> fine?
+Change UAC1 driver to make it configurable through additional
+'c_sync' configfs file.
 
-I'm mostly concerned about what we may have in the future. If one day
-you have more than the one connection in your graph, then you have to
-be able to identify the endpoint you are after.
+Default remains 'asynchronous' with possibility to switch it
+to 'adaptive'.
 
-But that may not be a problem in this case (maybe that "data-lanes"
-device property can be used to identify the correct endpoint?).
+Changes in V2:
+- Updated the indentation of commit message.
 
-We can worry about it then when/if we ever have another endpoint to
-deal with.
+Signed-off-by: Charles Yi <be286@163.com>
+---
+ drivers/usb/gadget/function/f_uac1.c | 30 ++++++++++++++++++++++++++++
+ drivers/usb/gadget/function/u_uac1.h |  2 ++
+ 2 files changed, 32 insertions(+)
 
-thanks,
-
+diff --git a/drivers/usb/gadget/function/f_uac1.c b/drivers/usb/gadget/function/f_uac1.c
+index 6f0e1d803dc2..7a6fcb40bb46 100644
+--- a/drivers/usb/gadget/function/f_uac1.c
++++ b/drivers/usb/gadget/function/f_uac1.c
+@@ -33,6 +33,8 @@
+ #define FUOUT_EN(_opts) ((_opts)->c_mute_present \
+ 			|| (_opts)->c_volume_present)
+ 
++#define EPOUT_FBACK_IN_EN(_opts) ((_opts)->c_sync == USB_ENDPOINT_SYNC_ASYNC)
++
+ struct f_uac1 {
+ 	struct g_audio g_audio;
+ 	u8 ac_intf, as_in_intf, as_out_intf;
+@@ -227,6 +229,16 @@ static struct uac_iso_endpoint_descriptor as_iso_out_desc = {
+ 	.wLockDelay =		cpu_to_le16(1),
+ };
+ 
++static struct usb_endpoint_descriptor as_fback_ep_desc = {
++	.bLength = USB_DT_ENDPOINT_SIZE,
++	.bDescriptorType = USB_DT_ENDPOINT,
++
++	.bEndpointAddress = USB_DIR_IN,
++	.bmAttributes = USB_ENDPOINT_XFER_ISOC | USB_ENDPOINT_USAGE_FEEDBACK,
++	.wMaxPacketSize = cpu_to_le16(3),
++	.bInterval = 1,
++};
++
+ static struct uac_format_type_i_discrete_descriptor as_in_type_i_desc = {
+ 	.bLength =		0, /* filled on rate setup */
+ 	.bDescriptorType =	USB_DT_CS_INTERFACE,
+@@ -280,6 +292,7 @@ static struct usb_descriptor_header *f_audio_desc[] = {
+ 
+ 	(struct usb_descriptor_header *)&as_out_ep_desc,
+ 	(struct usb_descriptor_header *)&as_iso_out_desc,
++	(struct usb_descriptor_header *)&as_fback_ep_desc,
+ 
+ 	(struct usb_descriptor_header *)&as_in_interface_alt_0_desc,
+ 	(struct usb_descriptor_header *)&as_in_interface_alt_1_desc,
+@@ -1107,6 +1120,9 @@ static void setup_descriptor(struct f_uac1_opts *opts)
+ 		f_audio_desc[i++] = USBDHDR(&as_out_type_i_desc);
+ 		f_audio_desc[i++] = USBDHDR(&as_out_ep_desc);
+ 		f_audio_desc[i++] = USBDHDR(&as_iso_out_desc);
++		if (EPOUT_FBACK_IN_EN(opts)) {
++			f_audio_desc[i++] = USBDHDR(&as_fback_ep_desc);
++		}
+ 	}
+ 	if (EPIN_EN(opts)) {
+ 		f_audio_desc[i++] = USBDHDR(&as_in_interface_alt_0_desc);
+@@ -1317,6 +1333,12 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
+ 		ac_header_desc->baInterfaceNr[ba_iface_id++] = status;
+ 		uac1->as_out_intf = status;
+ 		uac1->as_out_alt = 0;
++
++		if (EPOUT_FBACK_IN_EN(audio_opts)) {
++			as_out_ep_desc.bmAttributes =
++			USB_ENDPOINT_XFER_ISOC | USB_ENDPOINT_SYNC_ASYNC;
++			as_out_interface_alt_1_desc.bNumEndpoints++;
++		}
+ 	}
+ 
+ 	if (EPIN_EN(audio_opts)) {
+@@ -1354,6 +1376,12 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
+ 			goto err_free_fu;
+ 		audio->out_ep = ep;
+ 		audio->out_ep->desc = &as_out_ep_desc;
++		if (EPOUT_FBACK_IN_EN(audio_opts)) {
++			audio->in_ep_fback = usb_ep_autoconfig(gadget, &as_fback_ep_desc);
++			if (!audio->in_ep_fback) {
++				goto err_free_fu;
++			}
++		}
+ 	}
+ 
+ 	if (EPIN_EN(audio_opts)) {
+@@ -1685,6 +1713,8 @@ static struct usb_function_instance *f_audio_alloc_inst(void)
+ 
+ 	opts->req_number = UAC1_DEF_REQ_NUM;
+ 
++	opts->c_sync = UAC1_DEF_CSYNC;
++
+ 	snprintf(opts->function_name, sizeof(opts->function_name), "AC Interface");
+ 
+ 	return &opts->func_inst;
+diff --git a/drivers/usb/gadget/function/u_uac1.h b/drivers/usb/gadget/function/u_uac1.h
+index f7a616760e31..c6e2271e8cdd 100644
+--- a/drivers/usb/gadget/function/u_uac1.h
++++ b/drivers/usb/gadget/function/u_uac1.h
+@@ -27,6 +27,7 @@
+ #define UAC1_DEF_MAX_DB		0		/* 0 dB */
+ #define UAC1_DEF_RES_DB		(1*256)	/* 1 dB */
+ 
++#define UAC1_DEF_CSYNC		USB_ENDPOINT_SYNC_ASYNC
+ 
+ struct f_uac1_opts {
+ 	struct usb_function_instance	func_inst;
+@@ -56,6 +57,7 @@ struct f_uac1_opts {
+ 
+ 	struct mutex			lock;
+ 	int				refcnt;
++	int				c_sync;
+ };
+ 
+ #endif /* __U_UAC1_H */
 -- 
-heikki
+2.34.1
+
 
