@@ -1,141 +1,317 @@
-Return-Path: <linux-usb+bounces-1876-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1877-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A95587CE912
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 22:34:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B1537CEA39
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 23:50:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 63C542835EF
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 20:34:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4E47C1C20D67
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 21:50:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A728B134BF;
-	Wed, 18 Oct 2023 20:34:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D6503FB20;
+	Wed, 18 Oct 2023 21:50:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tjTDUDgg"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YKmwnRKR"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFADD9CA41
-	for <linux-usb@vger.kernel.org>; Wed, 18 Oct 2023 20:34:52 +0000 (UTC)
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA03F115
-	for <linux-usb@vger.kernel.org>; Wed, 18 Oct 2023 13:34:48 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5a7bcbb95b2so112089777b3.3
-        for <linux-usb@vger.kernel.org>; Wed, 18 Oct 2023 13:34:48 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D51FC4293F
+	for <linux-usb@vger.kernel.org>; Wed, 18 Oct 2023 21:50:15 +0000 (UTC)
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7375125
+	for <linux-usb@vger.kernel.org>; Wed, 18 Oct 2023 14:50:11 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-5aed4f0e90bso3526989a12.1
+        for <linux-usb@vger.kernel.org>; Wed, 18 Oct 2023 14:50:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1697661288; x=1698266088; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=GYfskxGvkh052vsvEl3d1awIlELqt+/ddHAW9BMrb5M=;
-        b=tjTDUDggaay6pZ8JPWGnkBCMlNApkbCjAUcM95JTuLhhNKnx4jWxVlXdeIZLUrk5CA
-         spybpbmeC77+7ZVi8jZEzRAinCS5ZqAEzHiW75KYIcVLyAxXmfJChHm1/Sho/rjyo7UZ
-         JFkTSF0ajFt1PecigoRKX5q0NlFhtik1G0P7fv1NVKcyMcRmUlbl0vt+dT/j9clocfxc
-         qLICOXY5foAUQyx/HrF8cS0HpSQRDw8oEXlwls7r6Q40dDlfgG3c48ZDIh+hrtF80hgr
-         SDVZtJRhJWMyFPaTyEfW97HDtQyPb65V9Wuh3CYaBawU0qAP/YGU7wJ58q43xiiuxwgg
-         CGKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697661288; x=1698266088;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+        d=google.com; s=20230601; t=1697665811; x=1698270611; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=GYfskxGvkh052vsvEl3d1awIlELqt+/ddHAW9BMrb5M=;
-        b=geE1xKeEEs7GZVG/3wIuNvZEYcdZM0KC9rta+HDFBzIeRTyoWNn6x9RC/ittOikebx
-         jCxFKCNs3oFSQkQKauKEvH+Gdtsjd1D6aMFrnAHpqvKKXjUh9A9NXRuw6Z2gm1Q3j1QL
-         69Mle2bkLJ3HC09V/BMwQ0+u0j8wTi6wd+TduYUWHyiZn5LTu91W9BD0X2sH3KLCagT3
-         KRt1L9YUlZSAij8edH7XwpAXeIrTq9HsgqV5I6ox0dCOoHQmvD1jOJkD1doe7fzMor2S
-         6GJdLcNnx8MuhSTvArjEntKrMhwWD3cNr5c/1rmUlMnG1t6EAWggZoMK0U/3FVgkY7Gg
-         BslA==
-X-Gm-Message-State: AOJu0YwWjSxW+yhm9GBgGvRx0sz6JApQ5eaCHJpWLZG5Jn8Sl56Y/3y1
-	GAfE6bYAiYyRbYpvkFig9StTQGDraOfeEXI=
-X-Google-Smtp-Source: AGHT+IHH9L2XcQrcEnBx+5sYGPq31tgkiNdL4i/MGxTDHxJzWb/KYYrSKiunlxKSpvVOsOx41RQLlhhGwcxpntY=
-X-Received: from rdbabiera.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:18a8])
- (user=rdbabiera job=sendgmr) by 2002:a81:4948:0:b0:59b:d33b:5ddc with SMTP id
- w69-20020a814948000000b0059bd33b5ddcmr8572ywa.4.1697661287989; Wed, 18 Oct
- 2023 13:34:47 -0700 (PDT)
-Date: Wed, 18 Oct 2023 20:34:09 +0000
+        bh=iJ+7th/RasaAq7ED1jtRbeuk5UXgtlcs+RQgrXXgclI=;
+        b=YKmwnRKRIWX+/oO2cxghSxmDC+qGe7b8BP5UZA/atMtlTATWntEd1qKjKc+BaKT4Z/
+         CS9kEhpgFYk2C/wNAxlqPRcqBBgGpT6/1wJ7GBNEyVxgie79xnqTQQcC8qut1Fo5mjeS
+         5ZXX9KzHu43bOrTt6L/blIE27w3q/FmbraDn/ejn4TXkB7vKGreqW1VnMbvpfEYQPyy7
+         zLP0gF1th/GJzXl9s0KtFTWvxs2YEbFt30YeU44G4vMDjyn84pFUG8z5RYfooFN6ZV8e
+         OaiL00q/fARzcC9s0YetPt2WjfGSIuQ3bQdscr9m2b/K3834ux31BV9Jyr+P2VbpmKHE
+         blSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697665811; x=1698270611;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iJ+7th/RasaAq7ED1jtRbeuk5UXgtlcs+RQgrXXgclI=;
+        b=nljWd9QGmaDP0FiwXwGZWlTa2WeRdKxN2P7L1l34WFf/LGF85yKLkzX3e86XkUZ+Uj
+         lLb2mBo0G0OsxxP9jvZBbAKalgYhJeVNC+QOzr85P798YT091cFc/2Fb8LU1tiOQ+wu0
+         0SE1xQe4GpLu9Na/IR7IZu576EGh4I1q6bmdya25iUlZXMe6/bmbvmiA3/r0LQ+oSGg+
+         NIuzXotf8Bwu0U2mSlntkAAQtyrc+lgTcZrjwv3zLD+Kc/H8d0axFNp9AjMLXvTnpUNU
+         1ZYsKGnZwwmk0Y6ShOH4kLoRBePRqXpfrAhqeDA5fU98qBkui/brHV3MwEiSQJYgbWnQ
+         4aPg==
+X-Gm-Message-State: AOJu0YxMh7Y8YS4Md9Poj6/J3wYVcDFtE6qFTZxtgvsiFu6AIjOxnNvG
+	2gJF0oWSspojimIREmIYa/Kihg==
+X-Google-Smtp-Source: AGHT+IHCQep4L6E5jgmIUIX67olfcUaehC1uL5hnxpDkM5Xf8MNVWNNxUQ89CeqoDOrbx0ncHYEIJQ==
+X-Received: by 2002:a17:90b:2b4d:b0:27d:375a:e322 with SMTP id rr13-20020a17090b2b4d00b0027d375ae322mr374446pjb.31.1697665810791;
+        Wed, 18 Oct 2023 14:50:10 -0700 (PDT)
+Received: from [192.168.60.239] (213.126.145.34.bc.googleusercontent.com. [34.145.126.213])
+        by smtp.gmail.com with ESMTPSA id 7-20020a17090a1a0700b0027d04d05d77sm434735pjk.8.2023.10.18.14.50.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Oct 2023 14:50:10 -0700 (PDT)
+Message-ID: <f45e7eab-4d49-41bb-b515-dd036f40a8d8@google.com>
+Date: Wed, 18 Oct 2023 14:50:08 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Developer-Key: i=rdbabiera@google.com; a=openpgp; fpr=639A331F1A21D691815CE090416E17CA2BBBD5C8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2514; i=rdbabiera@google.com;
- h=from:subject; bh=hbXS4m7M+3a84/Y9ShZ33pG/hhrskV0AxsaMBUHbk7Y=;
- b=owGbwMvMwCFW0bfok0KS4TbG02pJDKkGjg4WTwWm9nz6HvjwYaA023frFi2/Z/w3b1Trlb2Ra
- JgRKnOyo5SFQYyDQVZMkUXXP8/gxpXULXM4a4xh5rAygQxh4OIUgInMfMjwP5Zh0tM4sb/H7jhm
- iGjGq05RTf52o3CJRPDV/wIedq8PHGJkWPMnNezDosTQBc//BmpWrI2uKHjv5rRDJnG3sFSB0qr /XAA=
-X-Mailer: git-send-email 2.42.0.655.g421f12c284-goog
-Message-ID: <20231018203408.202845-2-rdbabiera@google.com>
-Subject: [PATCH v2] usb: typec: altmodes/displayport: verify compatible
- source/sink role combination
-From: RD Babiera <rdbabiera@google.com>
-To: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, badhri@google.com, 
-	RD Babiera <rdbabiera@google.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 3/3] usb: gadget: uvc: Fix use-after-free for inflight
+ usb_requests
+Content-Language: en-US
+To: Michael Grzeschik <mgr@pengutronix.de>
+Cc: dan.scally@ideasonboard.com, laurent.pinchart@ideasonboard.com,
+ etalvala@google.com, gregkh@linuxfoundation.org, jchowdhary@google.com,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20230930184821.310143-1-arakesh@google.com>
+ <20231012002451.254737-1-arakesh@google.com>
+ <20231012002451.254737-3-arakesh@google.com>
+ <ZS/ZL8RMix7zppcP@pengutronix.de>
+From: Avichal Rakesh <arakesh@google.com>
+In-Reply-To: <ZS/ZL8RMix7zppcP@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-DisplayPort Alt Mode CTS test 10.3.8 states that both sides of the
-connection shall be compatible with one another such that the connection
-is not Source to Source or Sink to Sink.
 
-The DisplayPort driver currently checks for a compatible pin configuration
-that resolves into a source and sink combination. The CTS test is designed
-to send a Discover Modes message that has a compatible pin configuration
-but advertises the same port capability as the device; the current check
-fails this.
 
-Verify that the port and port partner resolve into a valid source and sink
-combination before checking for a compatible pin configuration.
+On 10/18/23 06:10, Michael Grzeschik wrote:
+> On Wed, Oct 11, 2023 at 05:24:51PM -0700, Avichal Rakesh wrote:
+>> Currently, the uvc gadget driver allocates all uvc_requests as one array
+>> and deallocates them all when the video stream stops. This includes
+>> de-allocating all the usb_requests associated with those uvc_requests.
+>> This can lead to use-after-free issues if any of those de-allocated
+>> usb_requests were still owned by the usb controller.
+>>
+>> This is patch 2 of 2 in fixing the use-after-free issue. It adds a new
+>> flag to uvc_video to track when frames and requests should be flowing.
+>> When disabling the video stream, the flag is tripped and, instead
+>> of de-allocating all uvc_requests and usb_requests, the gadget
+>> driver only de-allocates those usb_requests that are currently
+>> owned by it (as present in req_free). Other usb_requests are left
+>> untouched until their completion handler is called which takes care
+>> of freeing the usb_request and its corresponding uvc_request.
+>>
+>> Now that uvc_video does not depends on uvc->state, this patch removes
+>> unnecessary upates to uvc->state that were made to accomodate uvc_video
+>> logic. This should ensure that uvc gadget driver never accidentally
+>> de-allocates a usb_request that it doesn't own.
+>>
+>> Link: https://lore.kernel.org/7cd81649-2795-45b6-8c10-b7df1055020d@google.com
+>> Suggested-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+>> Signed-off-by: Avichal Rakesh <arakesh@google.com>
+>> ---
+>> v1 -> v2: Rebased to ToT, and fixed deadlock reported in
+>>          https://lore.kernel.org/all/ZRv2UnKztgyqk2pt@pengutronix.de/
+>> v2 -> v3: Fix email threading goof-up
+>> v3 -> v4: re-rebase to ToT & moved to a uvc_video level lock
+>>          as discussed in
+>>          https://lore.kernel.org/b14b296f-2e08-4edf-aeea-1c5b621e2d0c@google.com/
+> 
+> I tested this and I no longer saw any use after free
+> errors anymore! :)
 
----
-Changes since v1:
-* Fixed styling errors
-* Added DP_CAP_IS_UFP_D and DP_CAP_IS_DFP_D as macros to typec_dp.h
----
+Yay! Glad to hear!
 
-Fixes: 0e3bb7d6894d ("usb: typec: Add driver for DisplayPort alternate mode")
-Cc: stable@vger.kernel.org
-Signed-off-by: RD Babiera <rdbabiera@google.com>
----
- drivers/usb/typec/altmodes/displayport.c | 5 +++++
- include/linux/usb/typec_dp.h             | 2 ++
- 2 files changed, 7 insertions(+)
+> 
+> Here comes some more review:
+> 
+>> drivers/usb/gadget/function/uvc.h       |   1 +
+>> drivers/usb/gadget/function/uvc_v4l2.c  |  12 +-
+>> drivers/usb/gadget/function/uvc_video.c | 156 +++++++++++++++++++-----
+>> 3 files changed, 128 insertions(+), 41 deletions(-)
+>>
 
-diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
-index 718da02036d8..9c17955da570 100644
---- a/drivers/usb/typec/altmodes/displayport.c
-+++ b/drivers/usb/typec/altmodes/displayport.c
-@@ -578,6 +578,11 @@ int dp_altmode_probe(struct typec_altmode *alt)
- 
- 	/* FIXME: Port can only be DFP_U. */
- 
-+	/* Make sure that the port and partner can resolve into source and sink */
-+	if (!(DP_CAP_IS_DFP_D(port->vdo) && DP_CAP_IS_UFP_D(alt->vdo)) &&
-+	    !(DP_CAP_IS_UFP_D(port->vdo) && DP_CAP_IS_DFP_D(alt->vdo)))
-+		return -ENODEV;
-+
- 	/* Make sure we have compatiple pin configurations */
- 	if (!(DP_CAP_PIN_ASSIGN_DFP_D(port->vdo) &
- 	      DP_CAP_PIN_ASSIGN_UFP_D(alt->vdo)) &&
-diff --git a/include/linux/usb/typec_dp.h b/include/linux/usb/typec_dp.h
-index 1f358098522d..4e6c0479307f 100644
---- a/include/linux/usb/typec_dp.h
-+++ b/include/linux/usb/typec_dp.h
-@@ -67,6 +67,8 @@ enum {
- #define   DP_CAP_UFP_D			1
- #define   DP_CAP_DFP_D			2
- #define   DP_CAP_DFP_D_AND_UFP_D	3
-+#define DP_CAP_IS_UFP_D(_cap_)		(!!(DP_CAP_CAPABILITY(_cap_) & DP_CAP_UFP_D))
-+#define DP_CAP_IS_DFP_D(_cap_)		(!!(DP_CAP_CAPABILITY(_cap_) & DP_CAP_DFP_D))
- #define DP_CAP_DP_SIGNALLING(_cap_)	(((_cap_) & GENMASK(5, 2)) >> 2)
- #define   DP_CAP_SIGNALLING_HBR3	1
- #define   DP_CAP_SIGNALLING_UHBR10	2
+>> +
+>> +/*
+>> + * Disable video stream
+>> + */
+>> +static int
+>> +uvcg_video_disable(struct uvc_video *video) {
+>> +    unsigned long flags;
+>> +    struct list_head inflight_bufs;
+>> +    struct usb_request *req, *temp;
+>> +    struct uvc_buffer *buf, *btemp;
+>> +    struct uvc_request *ureq, *utemp;
+>> +
+>> +    INIT_LIST_HEAD(&inflight_bufs);
+>> +    spin_lock_irqsave(&video->req_lock, flags);
+>> +    video->is_enabled = false;
+>> +
+>> +    /*
+>> +     * Remove any in-flight buffers from the uvc_requests
+>> +     * because we want to return them before cancelling the
+>> +     * queue. This ensures that we aren't stuck waiting for
+>> +     * all complete callbacks to come through before disabling
+>> +     * vb2 queue.
+>> +     */
+>> +    list_for_each_entry(ureq, &video->ureqs, list) {
+>> +        if (ureq->last_buf) {
+>> +            list_add_tail(&ureq->last_buf->queue, &inflight_bufs);
+>> +            ureq->last_buf = NULL;
+>> +        }
+>> +    }
+>>     spin_unlock_irqrestore(&video->req_lock, flags);
+>> -    return;
+>> +
+>> +    cancel_work_sync(&video->pump);
+>> +    uvcg_queue_cancel(&video->queue, 0);
+>> +
+>> +    spin_lock_irqsave(&video->req_lock, flags);
+>> +    /*
+>> +     * Remove all uvc_reqeusts from from ureqs with list_del_init
+>> +     * This lets uvc_video_free_request correctly identify
+>> +     * if the uvc_request is attached to a list or not when freeing
+>> +     * memory.
+>> +     */
+>> +    list_for_each_entry_safe(ureq, utemp, &video->ureqs, list)
+>> +        list_del_init(&ureq->list);
+>> +
+>> +    list_for_each_entry_safe(req, temp, &video->req_free, list) {
+>> +        list_del(&req->list);
+>> +        uvc_video_free_request(req->context, video->ep);
+>> +    }
+>> +
+>> +    INIT_LIST_HEAD(&video->ureqs);
+>> +    INIT_LIST_HEAD(&video->req_free);
+>> +    video->req_size = 0;
+>> +    spin_unlock_irqrestore(&video->req_lock, flags);
+>> +
+>> +    /*
+>> +     * Return all the video buffers before disabling the queue.
+>> +     */
+>> +    spin_lock_irqsave(&video->queue.irqlock, flags);
+>> +    list_for_each_entry_safe(buf, btemp, &inflight_bufs, queue) {
+>> +        list_del(&buf->queue);
+>> +        uvcg_complete_buffer(&video->queue, buf);
+>> +    }
+>> +    spin_unlock_irqrestore(&video->queue.irqlock, flags);
+>> +
+>> +    uvcg_queue_enable(&video->queue, 0);
+>> +    return 0;
+>> }
+>>
+>> /*
+>> @@ -497,28 +596,22 @@ static void uvcg_video_pump(struct work_struct *work)
+>> int uvcg_video_enable(struct uvc_video *video, int enable)
+>> {
+>>     int ret;
+>> -    struct uvc_request *ureq;
+>>
+>>     if (video->ep == NULL) {
+>>         uvcg_info(&video->uvc->func,
+>>               "Video enable failed, device is uninitialized.\n");
+>>         return -ENODEV;
+>>     }
+>> -
+>> -    if (!enable) {
+>> -        cancel_work_sync(&video->pump);
+>> -        uvcg_queue_cancel(&video->queue, 0);
+>> -
+>> -        list_for_each_entry(ureq, &video->ureqs, list) {
+>> -            if (ureq->req)
+>> -                usb_ep_dequeue(video->ep, ureq->req);
+>> -        }
+>> -
+>> -        uvc_video_free_requests(video);
+>> -        uvcg_queue_enable(&video->queue, 0);
+>> -        return 0;
+>> -    }
+>> -
+>> +    if (!enable)
+>> +        return uvcg_video_disable(video);
+> 
+> Could you refactor this code as it is to an separate
+> function and prepand this change as an extra patch
+> to this one? It would make the changes in the functions
+> more obvious and better to review.
 
-base-commit: 5220d8b04a840fa09434072c866d032b163419e3
--- 
-2.42.0.655.g421f12c284-goog
+Sure I can send a follow up patch, but I am curious why you think this 
+needs to be a separate function? Refactoring into a function would 
+have the functions structured something like:
 
+uvcg_video_disable(video) {
+    // ...
+    // disable impl
+    // ...
+}
+
+uvcg_video_enable(video) {
+    // ...
+    // enable impl
+    // ...
+}
+
+uvcg_video_enable(video, enable) {
+    // ep test
+   
+    if (!enable)
+        return uvcg_video_disable(video);
+
+    return uvc_video_enable(video);
+}
+
+instead of the current structure:
+
+uvcg_video_disable(video) {
+    // ...
+    // disable impl
+    // ...
+}
+
+uvcg_video_enable(video, enable) {
+    // ep test
+   
+    if (!enable)
+        return uvcg_video_disable(video);
+
+    // ...
+    // enable impl
+    // ...
+}
+
+I am not sure if one is more readable than the other.
+
+> 
+>> +
+>> +    /*
+>> +     * Safe to access request related fields without req_lock because
+>> +     * this is the only thread currently active, and no other
+>> +     * request handling thread will become active until this function
+>> +     * returns.
+>> +     */
+>> +    video->is_enabled = true;
+> 
+> Add an extra empty line.
+> 
+>>     if ((ret = uvcg_queue_enable(&video->queue, 1)) < 0)
+>>         return ret;
+>>
+>> @@ -544,6 +637,7 @@ int uvcg_video_enable(struct uvc_video *video, int enable)
+>>  */
+>> int uvcg_video_init(struct uvc_video *video, struct uvc_device *uvc)
+>> {
+>> +    video->is_enabled = false;
+>>     INIT_LIST_HEAD(&video->ureqs);
+>>     INIT_LIST_HEAD(&video->req_free);
+>>     spin_lock_init(&video->req_lock);
+>> -- 
+>> 2.42.0.609.gbb76f46606-goog
+>>
+>>
+> 
+> Reviewed-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+> Tested-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+> 
+> 
 
