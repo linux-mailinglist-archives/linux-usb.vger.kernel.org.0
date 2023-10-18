@@ -1,152 +1,111 @@
-Return-Path: <linux-usb+bounces-1853-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1854-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 150887CDB17
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 13:58:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7F597CDB2B
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 14:01:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 468B01C20C5D
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 11:57:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D7721C20D88
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 12:01:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 635C0335C1;
-	Wed, 18 Oct 2023 11:57:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="DpFlCSQX"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34C95335C2;
+	Wed, 18 Oct 2023 12:01:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79D8015AD7;
-	Wed, 18 Oct 2023 11:57:52 +0000 (UTC)
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5EF2114;
-	Wed, 18 Oct 2023 04:57:50 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39I70Xa2002870;
-	Wed, 18 Oct 2023 11:57:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=ysNYIQ/Zi0jfiz1sdI12w6m3V0yJAk77TlAx2uz/ZxI=;
- b=DpFlCSQXyxNa+tDPlv5SLX6BYQu8BzItHUmuYKoQfRlYaRQNkfYZ6f/9B1YfRC+tModD
- rHjvatR6Bffir4sT+gOas+u3HKdBz+m6nmjiuplN3VP88L8by0NDL1knnVqwFICUUp03
- KqbQhmyaDr1nwOioO1E44ZUI+WYjQYuNX9QARrU3zshX3amkKUuZM5FMouqYwlDS+yH3
- Ul3wMTAX8lXs7MwNYk+UbwxoItjNzNtl2XJE3xBbum9vFmvz1v0UNN5R5ZnyJ8C5/AM6
- DWtzoNFMEju1BCFULWhiEMtUx4CKhJfBPQdtAotKTO4N3RYUG3CjzxYMBMDNfNy4n8wy GQ== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tsv0v2nev-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 18 Oct 2023 11:57:33 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39IBvW3Q001045
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 18 Oct 2023 11:57:32 GMT
-Received: from [10.216.30.229] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.39; Wed, 18 Oct
- 2023 04:57:26 -0700
-Message-ID: <4293617a-f6a7-444f-b6f8-ac7297d9e9b1@quicinc.com>
-Date: Wed, 18 Oct 2023 17:27:21 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77F2C15AD7;
+	Wed, 18 Oct 2023 12:01:44 +0000 (UTC)
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00A0295;
+	Wed, 18 Oct 2023 05:01:42 -0700 (PDT)
+X-SpamFilter-By: ArmorX SpamTrap 5.78 with qID 39IC14goC1519562, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+	by rtits2.realtek.com.tw (8.15.2/2.93/5.92) with ESMTPS id 39IC14goC1519562
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 18 Oct 2023 20:01:04 +0800
+Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Wed, 18 Oct 2023 20:01:04 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Wed, 18 Oct 2023 20:01:02 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::40c2:6c24:2df4:e6c7]) by
+ RTEXMBS04.realtek.com.tw ([fe80::40c2:6c24:2df4:e6c7%5]) with mapi id
+ 15.01.2375.007; Wed, 18 Oct 2023 20:01:02 +0800
+From: Hayes Wang <hayeswang@realtek.com>
+To: Grant Grundler <grundler@chromium.org>,
+        Doug Anderson
+	<dianders@chromium.org>
+CC: Jakub Kicinski <kuba@kernel.org>,
+        "David S . Miller"
+	<davem@davemloft.net>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Simon Horman
+	<horms@kernel.org>, Edward Hill <ecgh@chromium.org>,
+        Laura Nao
+	<laura.nao@collabora.com>,
+        "linux-usb@vger.kernel.org"
+	<linux-usb@vger.kernel.org>,
+        =?utf-8?B?QmrDuHJuIE1vcms=?= <bjorn@mork.no>,
+        Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: RE: [PATCH v3 5/5] r8152: Block future register access if register access fails
+Thread-Topic: [PATCH v3 5/5] r8152: Block future register access if register
+ access fails
+Thread-Index: AQHZ/UKPr2uppqw2y0WH24Vf4SC1orBMGX/AgAAGioCAAVSUAIAAE/SAgABIyACAAMBiAIAA3Ynw
+Date: Wed, 18 Oct 2023 12:01:02 +0000
+Message-ID: <a6f10400c04d48fbaa419310c0ae71de@realtek.com>
+References: <20231012192552.3900360-1-dianders@chromium.org>
+ <20231012122458.v3.5.Ib2affdbfdc2527aaeef9b46d4f23f7c04147faeb@changeid>
+ <29f9a2ff1979406489213909b940184f@realtek.com>
+ <CAD=FV=U4rGozXHoK8+ejPgRtyoACy1971ftoatQivqzk2tk5ng@mail.gmail.com>
+ <052401da00fa$dacccd90$906668b0$@realtek.com>
+ <CAD=FV=XQswgKZh-JQ6PuKGRmrDMfDmZwM+MUpAcOk1=7Ppjyiw@mail.gmail.com>
+ <CAD=FV=Vp_KE_hjWy7bKJbvmqwCQ67jhzfFoV368vB5ZGge=Yzw@mail.gmail.com>
+ <CANEJEGuEdGUAUufEHBfxbo_thXbgr8gMFVBaa+pCV_axWO=NGQ@mail.gmail.com>
+In-Reply-To: <CANEJEGuEdGUAUufEHBfxbo_thXbgr8gMFVBaa+pCV_axWO=NGQ@mail.gmail.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+x-originating-ip: [172.22.228.6]
+x-kse-serverinfo: RTEXMBS03.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v13 08/10] arm64: dts: qcom: sc8280xp: Add multiport
- controller node for SC8280
-From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-To: Konrad Dybcio <konrad.dybcio@linaro.org>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>,
-        <quic_jackp@quicinc.com>, <ahalaney@redhat.com>,
-        <quic_shazhuss@quicinc.com>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Andy
- Gross" <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Rob
- Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski
-	<krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        "Wesley
- Cheng" <quic_wcheng@quicinc.com>,
-        Johan Hovold <johan@kernel.org>
-References: <20231007154806.605-1-quic_kriskura@quicinc.com>
- <20231007154806.605-9-quic_kriskura@quicinc.com>
- <467dd1cc-64af-43d7-93ca-be28043e2765@linaro.org>
- <cceab5a9-ac0f-4ecd-9aa5-0ede5615a13d@quicinc.com>
-Content-Language: en-US
-In-Reply-To: <cceab5a9-ac0f-4ecd-9aa5-0ede5615a13d@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: PMQY6-Tg_CmBeGvoPCNHn4GijJTX08sp
-X-Proofpoint-GUID: PMQY6-Tg_CmBeGvoPCNHn4GijJTX08sp
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-18_09,2023-10-18_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- priorityscore=1501 malwarescore=0 phishscore=0 mlxscore=0 mlxlogscore=705
- impostorscore=0 bulkscore=0 spamscore=0 lowpriorityscore=0 suspectscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2309180000 definitions=main-2310180098
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
 	SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 	lindbergh.monkeyblade.net
 
-
-
-On 10/12/2023 10:32 PM, Krishna Kurapati PSSNV wrote:
-> 
-> 
-> On 10/12/2023 10:10 PM, Konrad Dybcio wrote:
->>
->>
->> On 10/7/23 17:48, Krishna Kurapati wrote:
->>> Add USB and DWC3 node for tertiary port of SC8280 along with multiport
->>> IRQ's and phy's. This will be used as a base for SA8295P and SA8295-Ride
->>> platforms.
->>>
->>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
->>> ---
->> [...]
->>
->>> +
->>> +            interconnects = <&aggre1_noc MASTER_USB3_MP 0 &mc_virt 
->>> SLAVE_EBI1 0>,
->>> +                    <&gem_noc MASTER_APPSS_PROC 0 &config_noc 
->>> SLAVE_USB3_MP 0>;
->> Please use QCOM_ICC_TAG_ALWAYS from 
->> include/dt-bindings/interconnect/qcom,icc.h (like in sa8775p)
->>
->> With that I think it's good to go :)
->>
-> Hi Konrad. Thanks for the review.
-> 
-> I see that the tags are used fr spi/i2c but not usb. So to maintain 
-> uniformity, wanted to keep the same here.
-> 
-
-Hi Konrad,
-
-  Even in sa8775p.dtsi, the interconnect nodes have 0 & 1 instead of 
-macros. So wouldn't it be disturbing the uniformity if we use ICC_TAG's 
-here. Let me know your thoughts on this.
-
-Regards,
-Krishna,
+R3JhbnQgR3J1bmRsZXIgPGdydW5kbGVyQGNocm9taXVtLm9yZz4NCj4gU2VudDogV2VkbmVzZGF5
+LCBPY3RvYmVyIDE4LCAyMDIzIDI6MDYgUE0NClsuLi5dDQo+IEhheWVzLA0KPiBBcyBEb3VnIHBv
+aW50cyBvdXQgdGhlIHByb2JhYmlsaXR5IGlzIHJlYWxseSBsb3cgb2YgdGhpcyBoYXBwZW5pbmcg
+Zm9yDQo+IGFuIGV2ZW50IHRoYXQgaXMgYWxyZWFkeSByYXJlLiBEb3VnJ3MgcGF0Y2ggaXMgYSB2
+ZXJ5IGdvb2Qgc3RlcCBpbiB0aGUNCj4gcmlnaHQgZGlyZWN0aW9uIChkcml2ZXIgcm9idXN0bmVz
+cykgYW5kIEkgdGhpbmsgaGFzIGJlZW4gdGVzdGVkIGJ5DQo+IENocm9taXVtIE9TIHRlYW0gZW5v
+dWdoIHRoYXQgaXQgaXMgc2FmZSB0byBhcHBseSB0byB0aGUgdXBzdHJlYW0gdHJlZS4NCj4gSSdt
+IGEgYmlnIGZhbiBvZiB0YWtpbmcgc21hbGwgc3RlcHMgd2hlcmUgd2UgY2FuLiBXZSBjYW4gZnVy
+dGhlcg0KPiBpbXByb3ZlIG9uIHRoaXMgaW4gdGhlIGZ1dHVyZSBhcyBuZWVkZWQuDQoNCkkgZG9u
+J3QgcmVqZWN0IHRoZSBwYXRjaC4gQW5kLCBJIGRvbid0IGhhdmUgdGhlIHJpZ2h0IHRvIHJlamVj
+dCBvciBhcHBseSB0aGUgcGF0Y2guDQpJIGp1c3QgZG9uJ3Qgd2lzaCB0aGUgcGF0Y2ggdG8gdHJv
+dWJsZSB0aGUgb3RoZXJzLiBBbmQsIEkgbmVlZCB0aGUgcHJvZmVzc2lvbmFsDQpwZW9wbGUgdG8g
+Y2hlY2sgbWUgdmlld3MsIHRvby4NCg0KSSB0aGluayBzb21lb25lIHdvdWxkIGRldGVybWluZSB3
+aGV0aGVyIHRoZSBwYXRjaCBjb3VsZCBiZSBhcHBsaWVkLCBvciBub3QuDQoNCkJlc3QgUmVnYXJk
+cywNCkhheWVzDQoNCj4gUGxlYXNlIGFkZDoNCj4gUmV2aWV3ZWQtYnk6IEdyYW50IEdydW5kbGVy
+IDxncnVuZGxlckBjaHJvbWl1bS5vcmc+DQo+IA0KPiBjaGVlcnMsDQo+IGdyYW50DQo+IA0KPiA+
+DQo+ID4gLURvdWcNCg==
 
