@@ -1,150 +1,202 @@
-Return-Path: <linux-usb+bounces-1842-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1843-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B44EA7CD3EA
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 08:14:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 536367CD48D
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 08:36:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4C0C6B210D0
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 06:14:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 04DB228146B
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 06:36:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E93B98F75;
-	Wed, 18 Oct 2023 06:13:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 902EB6AD6;
+	Wed, 18 Oct 2023 06:36:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jtQvk1dX"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="mtSZR4fL"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94A6E1FC5
-	for <linux-usb@vger.kernel.org>; Wed, 18 Oct 2023 06:13:56 +0000 (UTC)
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0D4C93
-	for <linux-usb@vger.kernel.org>; Tue, 17 Oct 2023 23:13:54 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-40806e40fccso9889815e9.2
-        for <linux-usb@vger.kernel.org>; Tue, 17 Oct 2023 23:13:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1697609633; x=1698214433; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LMOz3a+HIg55KsLnQCDsI6FQjGiosRx/E8Py52k2qlE=;
-        b=jtQvk1dXYB7Ft8nbte/CPgLJr6fX0hDL51P7R9HmD8HVa+GEA1StuC9q4OT/tnguDz
-         DlvlvigPUlJpuk/QW9ztruSa1EJJB2BDtdzj8mhRJjeO6O1qQbeOZ/yfbKKQ5c6LSPbe
-         5aKTIL6bEnqNjdYW2pU+N8WbgmiuQNgpbz3btgkeVY64k0rWA58QGz6LyP0jdLyfGgAO
-         4Gd/3KaojFHgHydUA2TUi1tCHlqmR9ovOhvVDyy87UKLcGERH2twQS16YtQLvEDWZQte
-         MMR9ULGDIBKMEKf0RW1qpe6WdnlTJoXTame8BxEZtcw4cTqu/q8d3Q/cY7A/S/vYDN3v
-         Ugjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697609633; x=1698214433;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LMOz3a+HIg55KsLnQCDsI6FQjGiosRx/E8Py52k2qlE=;
-        b=HiIkUNBmQenTTs+YeuIgyG7zTVyoOxMMDkF78jk+jAvROAq0kksvsbJJlIS/B8Bdrh
-         a9bbt+TStxLNLHqebtElqWef2efpD0H8NtGCk7UbRNx+oicwuvKPnUZupq8TXcASnUuM
-         r5Oisfum/l2NWxy4VaHGqkFzeYVHUdlMIFCGP1mdWSCZAYw6lARLmMrS8vbU5thISRFJ
-         5Qqz4x/zfxmO+IBvNvzK/b3bDvDrGTMXMDxyalCZGWQcftmxCpSD4RJpt96+pRqmXWH4
-         sFX1dEO628NCzcSw8uR858ImDHc0Ds35fD3o/G5qsnwz+uYHb3YZlZCotOcwFwwO1Thu
-         9vUw==
-X-Gm-Message-State: AOJu0Yy2gwU2ERm8N8ZY8toNRMGYbMKQml8L0y2a2Vp0guLukC2rDhjS
-	dyZm0400IY1nDZ7Ba3ee2YK3Zg==
-X-Google-Smtp-Source: AGHT+IE+SjgCIjdnHrkNqRZEPEXij+6enOPAuv2dzsjlEQaQ496mReeuCnQIADgtDz5hvQ0FPXlxDQ==
-X-Received: by 2002:a05:600c:4744:b0:406:61c6:30b8 with SMTP id w4-20020a05600c474400b0040661c630b8mr3362406wmo.22.1697609633234;
-        Tue, 17 Oct 2023 23:13:53 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.154])
-        by smtp.gmail.com with ESMTPSA id 26-20020a05600c229a00b00407460234f9sm743023wmf.21.2023.10.17.23.13.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Oct 2023 23:13:52 -0700 (PDT)
-Message-ID: <588ee1b8-7d95-4cf7-b1c0-191482651dc2@linaro.org>
-Date: Wed, 18 Oct 2023 08:13:50 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7A50D2FF
+	for <linux-usb@vger.kernel.org>; Wed, 18 Oct 2023 06:36:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC369C433C7;
+	Wed, 18 Oct 2023 06:36:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1697610989;
+	bh=ICMIHrTBTAHgmxtuCCuVYOVydvK715mq+jYj66A+810=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mtSZR4fLQJbjYrqBZk8divJ2UoNW/TtBu06ULtJcOKJrECrZ6p8TwC4VvWcwkLqb9
+	 6JhwhnmVC94+Sfly2I2YPO3xxU5qCCLuJMyC5R4nELTYfB6ts5pLcj4H2rq4j2nOzb
+	 IVxcqEv5czaya8cny6yfxYQWznFkvgB6PvDf5Wrs=
+Date: Wed, 18 Oct 2023 08:36:24 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Charles Yi <be286@163.com>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: gadget: f_uac1: add adaptive sync support for
+ capture
+Message-ID: <2023101804-humiliate-extruding-c5b1@gregkh>
+References: <20231018043907.1206817-1-be286@163.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 2/3] dt-bindings: usb: ci-hdrc-usb2: add npcm750 and
- npcm845 compatible
-Content-Language: en-US
-To: Tomer Maimon <tmaimon77@gmail.com>, peter.chen@kernel.org,
- gregkh@linuxfoundation.org, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, xu.yang_2@nxp.com, peng.fan@nxp.com,
- avifishman70@gmail.com, tali.perry1@gmail.com, joel@jms.id.au,
- venture@google.com, yuenn@google.com, benjaminfair@google.com,
- j.neuschaefer@gmx.net
-Cc: openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20231017195903.1665260-1-tmaimon77@gmail.com>
- <20231017195903.1665260-3-tmaimon77@gmail.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231017195903.1665260-3-tmaimon77@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-	SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-	lindbergh.monkeyblade.net
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231018043907.1206817-1-be286@163.com>
 
-On 17/10/2023 21:59, Tomer Maimon wrote:
-> Add a compatible string for Nuvoton BMC NPCM750 and Nuvoton BMC NPCM845.
+On Wed, Oct 18, 2023 at 12:39:07PM +0800, Charles Yi wrote:
+> UAC1 has it's own freerunning clock and can update Host about
+> real clock frequency through feedback endpoint so Host can align
+> number of samples sent to the UAC1 to prevent overruns/underruns.
 > 
-> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> Change UAC1 driver to make it configurable through additional
+> 'c_sync' configfs file.
+> 
+> Default remains 'asynchronous' with possibility to switch it
+> to 'adaptive'.
+> 
+> Signed-off-by: Charles Yi <be286@163.com>
 > ---
->  Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  drivers/usb/gadget/function/f_uac1.c | 30 ++++++++++++++++++++++++++++
+>  drivers/usb/gadget/function/u_uac1.h |  2 ++
+>  2 files changed, 32 insertions(+)
+> 
+> diff --git a/drivers/usb/gadget/function/f_uac1.c b/drivers/usb/gadget/function/f_uac1.c
+> index 6f0e1d803dc2..7a6fcb40bb46 100644
+> --- a/drivers/usb/gadget/function/f_uac1.c
+> +++ b/drivers/usb/gadget/function/f_uac1.c
+> @@ -33,6 +33,8 @@
+>  #define FUOUT_EN(_opts) ((_opts)->c_mute_present \
+>  			|| (_opts)->c_volume_present)
+>  
+> +#define EPOUT_FBACK_IN_EN(_opts) ((_opts)->c_sync == USB_ENDPOINT_SYNC_ASYNC)
+> +
+>  struct f_uac1 {
+>  	struct g_audio g_audio;
+>  	u8 ac_intf, as_in_intf, as_out_intf;
+> @@ -227,6 +229,16 @@ static struct uac_iso_endpoint_descriptor as_iso_out_desc = {
+>  	.wLockDelay =		cpu_to_le16(1),
+>  };
+>  
+> +static struct usb_endpoint_descriptor as_fback_ep_desc = {
+> +	.bLength = USB_DT_ENDPOINT_SIZE,
+> +	.bDescriptorType = USB_DT_ENDPOINT,
+> +
+> +	.bEndpointAddress = USB_DIR_IN,
+> +	.bmAttributes = USB_ENDPOINT_XFER_ISOC | USB_ENDPOINT_USAGE_FEEDBACK,
+> +	.wMaxPacketSize = cpu_to_le16(3),
+> +	.bInterval = 1,
+> +};
+> +
+>  static struct uac_format_type_i_discrete_descriptor as_in_type_i_desc = {
+>  	.bLength =		0, /* filled on rate setup */
+>  	.bDescriptorType =	USB_DT_CS_INTERFACE,
+> @@ -280,6 +292,7 @@ static struct usb_descriptor_header *f_audio_desc[] = {
+>  
+>  	(struct usb_descriptor_header *)&as_out_ep_desc,
+>  	(struct usb_descriptor_header *)&as_iso_out_desc,
+> +	(struct usb_descriptor_header *)&as_fback_ep_desc,
+>  
+>  	(struct usb_descriptor_header *)&as_in_interface_alt_0_desc,
+>  	(struct usb_descriptor_header *)&as_in_interface_alt_1_desc,
+> @@ -1107,6 +1120,9 @@ static void setup_descriptor(struct f_uac1_opts *opts)
+>  		f_audio_desc[i++] = USBDHDR(&as_out_type_i_desc);
+>  		f_audio_desc[i++] = USBDHDR(&as_out_ep_desc);
+>  		f_audio_desc[i++] = USBDHDR(&as_iso_out_desc);
+> +		if (EPOUT_FBACK_IN_EN(opts)) {
+> +			f_audio_desc[i++] = USBDHDR(&as_fback_ep_desc);
+> +		}
+>  	}
+>  	if (EPIN_EN(opts)) {
+>  		f_audio_desc[i++] = USBDHDR(&as_in_interface_alt_0_desc);
+> @@ -1317,6 +1333,12 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
+>  		ac_header_desc->baInterfaceNr[ba_iface_id++] = status;
+>  		uac1->as_out_intf = status;
+>  		uac1->as_out_alt = 0;
+> +
+> +		if (EPOUT_FBACK_IN_EN(audio_opts)) {
+> +			as_out_ep_desc.bmAttributes =
+> +			USB_ENDPOINT_XFER_ISOC | USB_ENDPOINT_SYNC_ASYNC;
+> +			as_out_interface_alt_1_desc.bNumEndpoints++;
+> +		}
+>  	}
+>  
+>  	if (EPIN_EN(audio_opts)) {
+> @@ -1354,6 +1376,12 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
+>  			goto err_free_fu;
+>  		audio->out_ep = ep;
+>  		audio->out_ep->desc = &as_out_ep_desc;
+> +		if (EPOUT_FBACK_IN_EN(audio_opts)) {
+> +			audio->in_ep_fback = usb_ep_autoconfig(gadget, &as_fback_ep_desc);
+> +			if (!audio->in_ep_fback) {
+> +				goto err_free_fu;
+> +			}
+> +		}
+>  	}
+>  
+>  	if (EPIN_EN(audio_opts)) {
+> @@ -1685,6 +1713,8 @@ static struct usb_function_instance *f_audio_alloc_inst(void)
+>  
+>  	opts->req_number = UAC1_DEF_REQ_NUM;
+>  
+> +	opts->c_sync = UAC1_DEF_CSYNC;
+> +
+>  	snprintf(opts->function_name, sizeof(opts->function_name), "AC Interface");
+>  
+>  	return &opts->func_inst;
+> diff --git a/drivers/usb/gadget/function/u_uac1.h b/drivers/usb/gadget/function/u_uac1.h
+> index f7a616760e31..c6e2271e8cdd 100644
+> --- a/drivers/usb/gadget/function/u_uac1.h
+> +++ b/drivers/usb/gadget/function/u_uac1.h
+> @@ -27,6 +27,7 @@
+>  #define UAC1_DEF_MAX_DB		0		/* 0 dB */
+>  #define UAC1_DEF_RES_DB		(1*256)	/* 1 dB */
+>  
+> +#define UAC1_DEF_CSYNC		USB_ENDPOINT_SYNC_ASYNC
+>  
+>  struct f_uac1_opts {
+>  	struct usb_function_instance	func_inst;
+> @@ -56,6 +57,7 @@ struct f_uac1_opts {
+>  
+>  	struct mutex			lock;
+>  	int				refcnt;
+> +	int				c_sync;
+>  };
+>  
+>  #endif /* __U_UAC1_H */
+> -- 
+> 2.34.1
+> 
+> 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Hi,
 
-Best regards,
-Krzysztof
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/process/submitting-patches.rst for what
+  needs to be done here to properly describe this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
 
