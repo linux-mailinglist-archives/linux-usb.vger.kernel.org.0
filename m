@@ -1,47 +1,46 @@
-Return-Path: <linux-usb+bounces-1921-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1922-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9FB57CFD5D
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Oct 2023 16:53:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E0B87CFD99
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Oct 2023 17:10:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 076D21C20E45
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Oct 2023 14:53:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4CFD71C20ECF
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Oct 2023 15:10:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AAB82745A;
-	Thu, 19 Oct 2023 14:53:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OK//eEap"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C31D52FE1A;
+	Thu, 19 Oct 2023 15:10:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8971D4419
-	for <linux-usb@vger.kernel.org>; Thu, 19 Oct 2023 14:53:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F034BC433C7;
-	Thu, 19 Oct 2023 14:53:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1697727187;
-	bh=kBw5yTeJarKCISF0Rqzgf+ypJyJ4QRiNA8nAAPFGzCQ=;
-	h=Date:From:To:Cc:Subject:From;
-	b=OK//eEapTh5eNeFHxQbmJgNee9YgTFHgf422G1w0ZnjUZSSVsVSriOS95OuBnHG7W
-	 knLX2GtD6ult2ptxUfDKQ2CeM2h9UWpep4GTRtz7Sz8mitiooEqVe0fGlLgfu71LsH
-	 6+58xZz1vardBoIRMz3gi6MCr03xwSDFq3T1ezlRJNgSSgAG8dWkfF8l2dlqt+cgMW
-	 MFIJz3ag/7aG2zRwZa2JbQ+ZUDNHIKFM2BS+pcisHiyai2dEMvgpuQ3+FiCVcJiAFA
-	 mN6Y6LmG7jg//SaM9mMbl4p/8x9iPalEdnoNGCNgzhbo7tmoRxOiI4eo0ZgvOaT3H/
-	 0BlEAv4fNKJ4g==
-Received: from johan by xi.lan with local (Exim 4.96)
-	(envelope-from <johan@kernel.org>)
-	id 1qtUOc-0004RH-1r;
-	Thu, 19 Oct 2023 16:53:10 +0200
-Date: Thu, 19 Oct 2023 16:53:10 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] USB-serial device ids for 6.6-rc7
-Message-ID: <ZTFC1jhZ0m5PIMRE@hovoldconsulting.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F30542FE04
+	for <linux-usb@vger.kernel.org>; Thu, 19 Oct 2023 15:10:02 +0000 (UTC)
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by lindbergh.monkeyblade.net (Postfix) with SMTP id AE49411B
+	for <linux-usb@vger.kernel.org>; Thu, 19 Oct 2023 08:10:00 -0700 (PDT)
+Received: (qmail 260651 invoked by uid 1000); 19 Oct 2023 11:09:57 -0400
+Date: Thu, 19 Oct 2023 11:09:57 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: "Li, Meng" <Meng.Li@windriver.com>, Steven Rostedt <rostedt@goodmis.org>,
+  Ingo Molnar <mingo@redhat.com>,
+  USB mailing list <linux-usb@vger.kernel.org>,
+  linux-rt-users <linux-rt-users@vger.kernel.org>
+Subject: Re: USB: add check to detect host controller hardware removal
+Message-ID: <128e4bea-6064-4e46-b9c7-75296e9f553d@rowland.harvard.edu>
+References: <PH0PR11MB5191464B2F01511D2ADECB3BF1D2A@PH0PR11MB5191.namprd11.prod.outlook.com>
+ <9a1074e2-c1ae-485b-b5e7-a34442c98c0b@rowland.harvard.edu>
+ <20231016125624.1096766a@gandalf.local.home>
+ <62fdcf97-11c6-4dee-8db1-74752d6949f3@rowland.harvard.edu>
+ <PH0PR11MB5191924ECC92A8F67891D614F1D6A@PH0PR11MB5191.namprd11.prod.outlook.com>
+ <d6d9478c-585b-4f51-a076-dc2955c6b2b0@rowland.harvard.edu>
+ <PH0PR11MB51911132F6CB7DF0C41F15DEF1D5A@PH0PR11MB5191.namprd11.prod.outlook.com>
+ <1f8fe9f9-d8d6-48d9-8c7d-1215d10ece91@rowland.harvard.edu>
+ <20231019123823.4fjUs8Rl@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -51,37 +50,44 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20231019123823.4fjUs8Rl@linutronix.de>
 
-The following changes since commit 8a749fd1a8720d4619c91c8b6e7528c0a355c0aa:
+On Thu, Oct 19, 2023 at 02:38:23PM +0200, Sebastian Andrzej Siewior wrote:
+> On 2023-10-18 11:20:46 [-0400], Alan Stern wrote:
+> > 
+> > If you hadn't removed the card suddenly, the exception would not have 
+> > occurred.  So the logical conclusion isn't that we should get rid of the 
+> > usb_hcd_irq(0, hcd) call -- the logical conclusion is that you shouldn't 
+> > remove PCIe cards while the system is running.  Not unless your computer 
+> > uses the special hardware from Stratus Technologies.
+> 
+> So the card was removed and the kernel complained that it can't access
+> the memory behind the PCI-bar?
+> 
+> How odd…
+> 
+> > > so I think we don't need to add usb_hcd_irq(0, hcd) on the logical path of unbinding pcie driver.
+> > 
+> > What about cardbus or PCMCIA cards?  Removing one of those cards 
+> > suddenly, while the system is running, is a perfectly reasonable thing 
+> > to do and it will not cause any hardware damage.  So I think we should 
+> > keep the usb_hcd_irq(0, hcd) call.
+> 
+> Don't you invoke pci_driver::remove in such case to properly let the
+> physical device go? This can also be tested via unbind from sysfs.
 
-  Linux 6.6-rc4 (2023-10-01 14:15:13 -0700)
+I don't know any more.  The code in question was added in 2010 in order 
+to handle a specially designed high-availability hot-swap-capable 
+system, and it may not be relevant now.
 
-are available in the Git repository at:
+The original problem: When a particular PCI device was disabled (to 
+simulate a failure), pci_driver::remove did not get called.  Maybe 
+they wanted to have it fail over to a backup device and appear to the 
+kernel as though nothing had happened?  It's hard to tell exactly what 
+was going on thirteen years ago.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-6.6-rc7
+So while this function call may not be needed any more, I prefer to keep 
+it around if that's not too much trouble.
 
-for you to fetch changes up to 52480e1f1a259c93d749ba3961af0bffedfe7a7a:
-
-  USB: serial: option: add Fibocom to DELL custom modem FM101R-GL (2023-10-16 10:40:30 +0200)
-
-----------------------------------------------------------------
-USB-serial device ids for 6.6-rc7
-
-Here are some new modem device ids, including an entry needed for Sierra
-EM9191 which stopped working with recent firmware.
-
-All have been in linux-next with no reported issues.
-
-----------------------------------------------------------------
-Benoît Monin (1):
-      USB: serial: option: add entry for Sierra EM9191 with new firmware
-
-Fabio Porcedda (1):
-      USB: serial: option: add Telit LE910C4-WWX 0x1035 composition
-
-Puliang Lu (1):
-      USB: serial: option: add Fibocom to DELL custom modem FM101R-GL
-
- drivers/usb/serial/option.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+Alan Stern
 
