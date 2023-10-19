@@ -1,118 +1,130 @@
-Return-Path: <linux-usb+bounces-1933-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1934-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A5E27D022C
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Oct 2023 21:00:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 315597D027A
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Oct 2023 21:26:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5A3D91C20E54
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Oct 2023 19:00:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 635D41C20EE4
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Oct 2023 19:26:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81847335BC;
-	Thu, 19 Oct 2023 19:00:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1105239860;
+	Thu, 19 Oct 2023 19:26:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lsyk+pk6"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="md0+6fSV"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A8A22FE0F
-	for <linux-usb@vger.kernel.org>; Thu, 19 Oct 2023 18:59:59 +0000 (UTC)
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F33FD98
-	for <linux-usb@vger.kernel.org>; Thu, 19 Oct 2023 11:59:57 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1c9e072472bso56751845ad.2
-        for <linux-usb@vger.kernel.org>; Thu, 19 Oct 2023 11:59:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1697741997; x=1698346797; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ekm37LH11q8T0WhtnGFVtk8KCWjLe8MaemYJ1INw3fM=;
-        b=lsyk+pk6867O5DE57576y5ohf6qQW7qClkgzBrdwsk26cmTJoqfDTymNbAMkqTpUNx
-         4Dmb/c2KIE9clk0coBa/eP9jB0fp4JjZBT5sTrxymny5EHI+t88v2wevgsYjmZLVAe5L
-         TLOLvdmGZBXAfxurz4+gaX+ndmCKEGiEobb02C3AOoFQ14fAafe1JQQoPLFFpDVz8a+f
-         w7Wq/jHFGK3ArrwVbJ4eEiAzsdcNgW00cJBqakTcy/KjyClGfFfktuxWLpb6JD8megx3
-         kbc+a08p/D8xRGEwaAvpnsTsXwDtEMW1YrCOO0nUGDhqTX4SMNk2lTGOjOnhdgAoUbsz
-         Xlsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697741997; x=1698346797;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ekm37LH11q8T0WhtnGFVtk8KCWjLe8MaemYJ1INw3fM=;
-        b=s8VIdiftkSzK0FsXuBiunY1foErHbqpIIcdmPIvO3yttXktLQ62ooFdhgu5+GAVqS6
-         0U5goWFETNoikt/cjUdk7gF6fiohyQ4prCZslIH5G1GTwlHI6db1lG2OUM7FraOoT7NY
-         BZiylEfKhYOYWi7UGjSCajHlc9hUVVNiOHV3hQk1ZpHyjSgIeG3yEwMj8h66AtvYVgcf
-         O0ezTBIYmv4fXLSJGKrz00OK/YHvhnJfhQUcaL8KxCxtXLFvoKK/siwt5QS8a83WVD0J
-         BlOL2ctKFmjK8k3gjb41WIUIqmCngB4UERBKJ/OpTb2VdU539R6TjwtjvZHuWlFKdLDi
-         DBqg==
-X-Gm-Message-State: AOJu0Yyob4S9cy0jvTnyQUPjMlfva4y/HlBWwotCVP07q/HYXarX1dsw
-	PRwXmr86gL0ujF0ypsBJgeHp8A==
-X-Google-Smtp-Source: AGHT+IGyZiJwz5do3i+LGVcFutBEazlK6wjFdR4H29hIMFAlJGa2HHdn6Wp6zEuz+WWpzYL1d3pl3A==
-X-Received: by 2002:a17:902:c942:b0:1c0:9d6f:9d28 with SMTP id i2-20020a170902c94200b001c09d6f9d28mr3577291pla.11.1697741997228;
-        Thu, 19 Oct 2023 11:59:57 -0700 (PDT)
-Received: from [192.168.60.239] (213.126.145.34.bc.googleusercontent.com. [34.145.126.213])
-        by smtp.gmail.com with ESMTPSA id je22-20020a170903265600b001c625acfed0sm52515plb.44.2023.10.19.11.59.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Oct 2023 11:59:56 -0700 (PDT)
-Message-ID: <73309396-3856-43a2-9a6f-81a40ed594db@google.com>
-Date: Thu, 19 Oct 2023 11:59:56 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA1912FE0F;
+	Thu, 19 Oct 2023 19:25:59 +0000 (UTC)
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E016126;
+	Thu, 19 Oct 2023 12:25:57 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39JHS4wG021989;
+	Thu, 19 Oct 2023 19:25:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=7nZlr836Z1yRwKSJGkQXZps55FXeuMStkqXPcw7VZbM=;
+ b=md0+6fSVejV8AMgpKlPvnBLl4J3FgpVtckN9oWAateqmPfpdkPBiI86G6LuaSblLw6UL
+ r8DyTGz9RV+c/V2HTw5AesWtqrxjTxwXfgB8mxMm0UFqbmrO3fMq07cmq4yj7FdYmfyH
+ 8nrCTTZ6DL4nMFLP0NMMqU7pEI+ZZeXUzmql10dl+Nyz4OVUqdo4wNitnAFjlrtWIb8f
+ DHe3yjPLyUFi2UBC1FoDOQgopgqP4HP/AXmrN0ls7nkxL0c3vRNo+JYD30clGBtGHLoX
+ LOBd1TafidfkchfJfwD8eAUYCeuCD75TfJ/GkGhyP4gTfve0uhE2RsLSzyrE9EJcWk9l ew== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tu14csexk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 19 Oct 2023 19:25:37 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39JJPZKQ008993
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 19 Oct 2023 19:25:35 GMT
+Received: from [10.110.99.208] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.39; Thu, 19 Oct
+ 2023 12:25:35 -0700
+Message-ID: <2e300bef-3722-8b00-2bdf-e9386796f38f@quicinc.com>
+Date: Thu, 19 Oct 2023 12:25:34 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 0/4] usb: gadget: uvc: stability fixes on STREAMOFF.
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v9 30/34] ASoC: qcom: qdsp6: Add SND kcontrol for fetching
+ offload status
 Content-Language: en-US
-To: dan.scally@ideasonboard.com, laurent.pinchart@ideasonboard.com
-Cc: etalvala@google.com, jchowdhary@google.com, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
- m.grzeschik@pengutronix.de
-References: <20230930184821.310143-1-arakesh@google.com>
- <20231019185319.2714000-1-arakesh@google.com>
-From: Avichal Rakesh <arakesh@google.com>
-In-Reply-To: <20231019185319.2714000-1-arakesh@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+To: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>,
+        <lgirdwood@gmail.com>, <broonie@kernel.org>, <perex@perex.cz>,
+        <tiwai@suse.com>, <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <srinivas.kandagatla@linaro.org>, <bgoswami@quicinc.com>,
+        <Thinh.Nguyen@synopsys.com>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+References: <20231017200109.11407-1-quic_wcheng@quicinc.com>
+ <20231017200109.11407-31-quic_wcheng@quicinc.com>
+ <92971bbf-b890-4e41-8ef1-9213e15d81b2@linux.intel.com>
+ <c9c5f13f-b3e7-6591-f277-cd86162152e4@quicinc.com>
+In-Reply-To: <c9c5f13f-b3e7-6591-f277-cd86162152e4@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: szZLkW7qgmVniayGieMMDVKlAabQiICH
+X-Proofpoint-ORIG-GUID: szZLkW7qgmVniayGieMMDVKlAabQiICH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-19_18,2023-10-19_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ mlxlogscore=459 clxscore=1015 suspectscore=0 impostorscore=0 adultscore=0
+ bulkscore=0 mlxscore=0 spamscore=0 phishscore=0 lowpriorityscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2309180000 definitions=main-2310190164
 
+Hi Pierre,
 
-
-On 10/19/23 11:53, Avichal Rakesh wrote:
-> We have been seeing two main stability issues that uvc gadget driver
-> runs into when stopping streams:
->  1. Attempting to queue usb_requests to a disabled usb_ep
->  2. use-after-free issue for inflight usb_requests
+On 10/18/2023 6:41 PM, Wesley Cheng wrote:
+> Hi Pierre,
 > 
-> The four patches below fix the two issues above. Patch 1/4 fixes the
-> first issue, and Patch 2/4 and 4/4 fix the second issue. Patch 3/4
-> is only there to make the diff in 4/4 cleaner.
+> On 10/17/2023 3:53 PM, Pierre-Louis Bossart wrote:
+>>
+>>
+>> On 10/17/23 15:01, Wesley Cheng wrote:
+>>> Add a kcontrol to the platform sound card to fetch the current offload
+>>> status.  This can allow for userspace to ensure/check which USB SND
+>>> resources are actually busy versus having to attempt opening the USB SND
+>>> devices, which will result in an error if offloading is active.
+>>
+>> I think I mentioned this a while back, but why not add the status in the
+>> USB card itself? That's a generic component that all userspace agent
+>> could query. Having a QCOM-specific control doesn't make the life of
+>> userspace easier IMHO.
+>>
+>>
 > 
-> Avichal Rakesh (4):
->   usb: gadget: uvc: prevent use of disabled endpoint
->   usb: gadget: uvc: Allocate uvc_requests one at a time
->   usb: gadget: uvc: move video disable logic to its own function
->   usb: gadget: uvc: Fix use-after-free for inflight usb_requests
+> Will take a look at this based on the comments you had in the other 
+> kcontrol patch.  Seeing if we can move it to a more generic layer.
 > 
->  drivers/usb/gadget/function/f_uvc.c     |  11 +-
->  drivers/usb/gadget/function/f_uvc.h     |   2 +-
->  drivers/usb/gadget/function/uvc.h       |   6 +-
->  drivers/usb/gadget/function/uvc_v4l2.c  |  12 +-
->  drivers/usb/gadget/function/uvc_video.c | 231 +++++++++++++++++-------
->  5 files changed, 189 insertions(+), 73 deletions(-)
-> 
-> --
-> 2.42.0.758.gaed0368e0e-goog
 
-Dan and Laurent, please go over the patches whenever you get a
-chance. I think they're ready to submit as neither Michael 
-nor I have seen any use-after-free issues after the patches.
+I think it would make more sense to see if we can keep all the offload 
+kcontrols under the sound card exposed by the platform.  Especially, if 
+we are going to modify the components string of the card to signify that 
+it supports USB offload.
 
-Thank you!
-- Avi.
-
+Thanks
+Wesley Cheng
 
