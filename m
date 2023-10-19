@@ -1,99 +1,88 @@
-Return-Path: <linux-usb+bounces-1892-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1893-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A50247CF29B
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Oct 2023 10:31:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D10C57CF2D0
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Oct 2023 10:41:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 42E27281F27
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Oct 2023 08:31:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A598281EA9
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Oct 2023 08:41:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1D73156D3;
-	Thu, 19 Oct 2023 08:31:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="gXQMp0Em"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A79C6156E3;
+	Thu, 19 Oct 2023 08:40:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E289415ADF
-	for <linux-usb@vger.kernel.org>; Thu, 19 Oct 2023 08:31:00 +0000 (UTC)
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D807811B
-	for <linux-usb@vger.kernel.org>; Thu, 19 Oct 2023 01:30:55 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (aztw-30-b2-v4wan-166917-cust845.vm26.cable.virginm.net [82.37.23.78])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9BFFC25A;
-	Thu, 19 Oct 2023 10:30:46 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1697704246;
-	bh=EYRAWa3cvbPI1SX8l4ZjV9kbab4hi3G9ZmYnQLSdgWs=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=gXQMp0EmoH/MfeqwijF07LnhDKvWsGXd3as0s83X70l4D8VNhqATNsrcAMCTgO4Mg
-	 XbD+HJPJY/k+GvyQ014Ngm2LnoYo843OeerAMNrZ2KF1sh5ZCx70OvdAYpPNl/QmT3
-	 PfV9uCcavH2F1wqw6pvV4bMsOBYF4Z1CMPMSRSS8=
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29F8A8F64;
+	Thu, 19 Oct 2023 08:40:51 +0000 (UTC)
+Received: from mail.nfschina.com (unknown [42.101.60.195])
+	by lindbergh.monkeyblade.net (Postfix) with SMTP id B69CCAB;
+	Thu, 19 Oct 2023 01:40:49 -0700 (PDT)
+Received: from localhost.localdomain (unknown [180.167.10.98])
+	by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id 805C5608BCF73;
+	Thu, 19 Oct 2023 16:40:33 +0800 (CST)
+X-MD-Sfrom: suhui@nfschina.com
+X-MD-SrcIP: 180.167.10.98
+From: Su Hui <suhui@nfschina.com>
+To: woojung.huh@microchip.com,
+	UNGLinuxDriver@microchip.com,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	trix@redhat.com
+Cc: Su Hui <suhui@nfschina.com>,
+	netdev@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	kernel-janitors@vger.kernel.org
+Subject: [PATCH] net: lan78xx: add an error code check in lan78xx_write_raw_eeprom
+Date: Thu, 19 Oct 2023 16:40:23 +0800
+Message-Id: <20231019084022.1528885-1-suhui@nfschina.com>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <9fec0dd7-f111-4e71-95f2-a06488eec066@google.com>
-References: <9fec0dd7-f111-4e71-95f2-a06488eec066@google.com>
-Subject: Re: uvc gadget: Adding super-speed plus descriptors
-From: Kieran Bingham <kieran.bingham@ideasonboard.com>
-Cc: linux-usb@vger.kernel.org <linux-usb@vger.kernel.org>, etalvala@google.com <etalvala@google.com>, arakesh@google.com <arakesh@google.com>
-To: Greg KH <gregkh@linuxfoundation.org>, Jayant Chowdhary <jchowdhary@google.com>, corbet@lwn.net, dan.scally@ideasonboard.com, laurent.pinchart@ideasonboard.com
-Date: Thu, 19 Oct 2023 09:30:51 +0100
-Message-ID: <169770425169.3350128.5374821695302559264@ping.linuxembedded.co.uk>
-User-Agent: alot/0.10
+Content-Transfer-Encoding: 8bit
 
-Hi Jayant,
+check the value of 'ret' after call 'lan78xx_read_reg'.
 
-Quoting Jayant Chowdhary (2023-10-19 00:35:47)
-> Hello everyone,
-> Currently the uvc gadget driver doesn't set descriptors for super speed p=
-lus
-> configurations in uvc_function_bind(). I see that there was a patch uploa=
-ded
-> a while back, at
-> https://lore.kernel.org/all/20221103060041.25866-1-jleng@ambarella.com/ w=
-hich
-> was addressing this issue.
->=20
-> I tested this out on an Android device and it
-> works - in our case we were seeing that the number of configurations adve=
-rtised
-> by the device was 0 when a super-speed connection was used. Would we able=
- to
-> merge this  patch ? Or would you like me to pick it uploaded and post it =
-again ?
+Signed-off-by: Su Hui <suhui@nfschina.com>
+---
 
-As you'll see in https://lore.kernel.org/all/Y2PCj3c4z73s2Hxe@kroah.com/
-The specific e-mail containing the patch has been deleted and will not
-be merged due to the following trailers in the email:
+Clang complains that value stored to 'ret' is never read.
+Maybe this place miss an error code check, I'm not sure 
+about this.
 
-> This email and attachments contain Ambarella Proprietary and/or
-> Confidential Information and is intended solely for the use of the
-> individual(s) to whom it is addressed. Any unauthorized review, use,
-> disclosure, distribute, copy, or print is prohibited. If you are not
-> an intended recipient, please contact the sender by reply email and
-> destroy all copies of the original message. Thank you.
+ drivers/net/usb/lan78xx.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-It will need to be resent (without such trailing message) and confirming th=
-at it
-is legal and acceptable for the author to submit this, and for the
-Linux Kernel to accept it.
+diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
+index 59cde06aa7f6..347788336b11 100644
+--- a/drivers/net/usb/lan78xx.c
++++ b/drivers/net/usb/lan78xx.c
+@@ -977,6 +977,10 @@ static int lan78xx_write_raw_eeprom(struct lan78xx_net *dev, u32 offset,
+ 	 * disable & restore LED function to access EEPROM.
+ 	 */
+ 	ret = lan78xx_read_reg(dev, HW_CFG, &val);
++	if (ret < 0) {
++		retval = -EIO;
++		goto exit;
++	}
+ 	saved = val;
+ 	if (dev->chipid == ID_REV_CHIP_ID_7800_) {
+ 		val &= ~(HW_CFG_LED1_EN_ | HW_CFG_LED0_EN_);
+-- 
+2.30.2
 
---
-Kieran
-
-
->=20
-> Thank you,
-> Jayant
->
 
