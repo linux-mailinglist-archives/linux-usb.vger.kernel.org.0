@@ -1,98 +1,193 @@
-Return-Path: <linux-usb+bounces-1880-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1881-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 857017CEC28
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Oct 2023 01:36:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7494D7CEC9A
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Oct 2023 02:10:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 15543B2113D
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Oct 2023 23:36:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A9D9281693
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Oct 2023 00:10:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBDA93D984;
-	Wed, 18 Oct 2023 23:35:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CACFE37E;
+	Thu, 19 Oct 2023 00:10:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="aCtbw7hg"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="SFCZ3WxO"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BB9C15AFB
-	for <linux-usb@vger.kernel.org>; Wed, 18 Oct 2023 23:35:54 +0000 (UTC)
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 383E0116
-	for <linux-usb@vger.kernel.org>; Wed, 18 Oct 2023 16:35:52 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1c9b7c234a7so64095145ad.3
-        for <linux-usb@vger.kernel.org>; Wed, 18 Oct 2023 16:35:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1697672151; x=1698276951; darn=vger.kernel.org;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bVieOb0dxZHUr6sRshHvITc5Lu6bs9wgA5QbLNsB1wA=;
-        b=aCtbw7hghe5Xlequ8YglKDSCs4T/c7Zc6Nkhqu0yKwNRHESwcBD1d90rreycPlbj/r
-         YJhftJKyayycCJMPgP1mb9g+uKsjYeS5eisXmEz+StT9pqyI4gu4QjP4xQr36o+ZhyNM
-         dU8lgm6c8ZiBnirvF3IsuH7bupqdNfTHc82nzWXthOGJkd5DyO+uJTN4CHY/omokN92D
-         LCdbXRyra55eVOXisl1Jl3Ic60Ky5PtUESUqT9MIrf8uiyBTr2ouRTMa4jJk7BQg2HCJ
-         +9VjWEVZgZMXIj/2J5iZKNysCEoVZxNzDS2+dweprfIlCRGddozgNz/xJhhGgZwr6jFg
-         4kEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697672151; x=1698276951;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=bVieOb0dxZHUr6sRshHvITc5Lu6bs9wgA5QbLNsB1wA=;
-        b=QWZC62f2MKmNzHjB4OeQlkXxiiouv8Cs2zR0r24OV5YbQkjpvO7V7Rwb7VN3x1/3rN
-         yZ5u9ZRlSVZ4jILAdl0mrUBcWJj77hi7+t71Au+rYkbF5bqGeKkyaLKf7f0zQHrcmgbu
-         0LBC8Q7+f6zT4fY6SlVoszYZ5GZb4ZP80/8DCoG6/XLgr24pcVzB1YxrsAq9jLRRuylw
-         zd2I4126tLME73eQcm+RpAt9RnBvVSIGgArGoNY+rGIizIrQ/cvSOJ245avHWWwxo0Mp
-         oHj2IEFI7T0SoHJCUt2IZIO22AG/mN5FwmJhhsTD5X3QkvTJYxyHO8snoT+gLL6PE+T4
-         RkGw==
-X-Gm-Message-State: AOJu0YxYmBMMBxX2wL+RDbfxLwt+9gbBTomZlBUQCbKn1kKJfSPNsX/f
-	nYaRK6ja6Xgp9bRHmzb8uxuEqbiuWVQl5NCS3iS1opOt
-X-Google-Smtp-Source: AGHT+IF6DP08YuF0s4nevLIzTNQsS4ESEj4nqDz/AtSRGY4TJ5rD4s/7971Un9CwPLc63qz0Jf2LTQ==
-X-Received: by 2002:a17:902:e88c:b0:1c6:17a4:afae with SMTP id w12-20020a170902e88c00b001c617a4afaemr1147004plg.4.1697672151469;
-        Wed, 18 Oct 2023 16:35:51 -0700 (PDT)
-Received: from [192.168.88.195] (48.109.197.35.bc.googleusercontent.com. [35.197.109.48])
-        by smtp.gmail.com with ESMTPSA id p12-20020a170902bd0c00b001c5f0fe64c2sm496212pls.56.2023.10.18.16.35.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Oct 2023 16:35:51 -0700 (PDT)
-Message-ID: <9fec0dd7-f111-4e71-95f2-a06488eec066@google.com>
-Date: Wed, 18 Oct 2023 16:35:47 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DCD517E;
+	Thu, 19 Oct 2023 00:10:39 +0000 (UTC)
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A17FA;
+	Wed, 18 Oct 2023 17:10:37 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39INBi2G013562;
+	Thu, 19 Oct 2023 00:10:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=6hQElVCyOOnSkM+Zznfzy7HZx857FhWzEl1qsufSNo4=;
+ b=SFCZ3WxOtDkGT2IZD6/38EC1pZOMIEbyZLOg0siVLOIn7mc1eyRbGB9fyZSSdHjtOFhW
+ fXe0Qn4yePa6t8JF15Meq2bQi3ZgMlPsF7Xb7lmBXjIsZg+76ay4UqGq6fC5secPEb2f
+ FBsGaSG0ZE5iPwYL0O1A6EZvwQ+FNnkZ6WcHoujpQqjfteGCWYWVJQY5MYdyGWbbLb4Z
+ zUV3eWuyPNY/3wJwL1CTNLA9dhqPBSvX5r++T5KO/5lzcrUVw9LgmM5HYgThe8jIvJdX
+ qbGB6SK0BCuAdXbiLvVCLSO0a8sUv0WJapFvYqBKCSy1t3XkB1HHPDqtTTJ2N4aszXV0 GQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ttg82sb9x-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 19 Oct 2023 00:10:16 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39J0AFLp024950
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 19 Oct 2023 00:10:15 GMT
+Received: from [10.110.123.255] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.39; Wed, 18 Oct
+ 2023 17:10:14 -0700
+Message-ID: <c57ddcf6-81c3-6be4-a07e-0dbe7e8aa8f2@quicinc.com>
+Date: Wed, 18 Oct 2023 17:10:14 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v9 26/34] ASoC: qcom: qdsp6: q6afe: Split USB AFE
+ dev_token param into separate API
 Content-Language: en-US
-To: Greg KH <gregkh@linuxfoundation.org>, "corbet@lwn.net" <corbet@lwn.net>,
- "laurent.pinchart@ideasonboard.com" <laurent.pinchart@ideasonboard.com>,
- "dan.scally@ideasonboard.com" <dan.scally@ideasonboard.com>,
- "kieran.bingham@ideasonboard.com" <kieran.bingham@ideasonboard.com>
-Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "etalvala@google.com" <etalvala@google.com>,
- "arakesh@google.com" <arakesh@google.com>
-From: Jayant Chowdhary <jchowdhary@google.com>
-Subject: uvc gadget: Adding super-speed plus descriptors
-Content-Type: text/plain; charset=UTF-8
+To: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>,
+        <lgirdwood@gmail.com>, <broonie@kernel.org>, <perex@perex.cz>,
+        <tiwai@suse.com>, <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <srinivas.kandagatla@linaro.org>, <bgoswami@quicinc.com>,
+        <Thinh.Nguyen@synopsys.com>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+References: <20231017200109.11407-1-quic_wcheng@quicinc.com>
+ <20231017200109.11407-27-quic_wcheng@quicinc.com>
+ <c6a003eb-213d-4456-bc6a-e07c08c57396@linux.intel.com>
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <c6a003eb-213d-4456-bc6a-e07c08c57396@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: blhNU9CerJ0mDNSk9ta5Q5PAa7V6Hd1o
+X-Proofpoint-ORIG-GUID: blhNU9CerJ0mDNSk9ta5Q5PAa7V6Hd1o
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-18_18,2023-10-18_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ mlxlogscore=999 spamscore=0 priorityscore=1501 adultscore=0 bulkscore=0
+ mlxscore=0 suspectscore=0 lowpriorityscore=0 phishscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2309180000
+ definitions=main-2310180199
 
-Hello everyone,
-Currently the uvc gadget driver doesn't set descriptors for super speed plus
-configurations in uvc_function_bind(). I see that there was a patch uploaded
-a while back, at
-https://lore.kernel.org/all/20221103060041.25866-1-jleng@ambarella.com/ which
-was addressing this issue.
+Hi Pierre,
 
-I tested this out on an Android device and it
-works - in our case we were seeing that the number of configurations advertised
-by the device was 0 when a super-speed connection was used. Would we able to
-merge this  patch ? Or would you like me to pick it uploaded and post it again ?
+On 10/17/2023 3:39 PM, Pierre-Louis Bossart wrote:
+> 
+> 
+> On 10/17/23 15:01, Wesley Cheng wrote:
+>> The Q6USB backend can carry information about the available USB SND cards
+>> and PCM devices discovered on the USB bus.  The dev_token field is used by
+>> the audio DSP to notify the USB offload driver of which card and PCM index
+>> to enable playback on.  Separate this into a dedicated API, so the USB
+>> backend can set the dev_token accordingly.  The audio DSP does not utilize
+>> this information until the AFE port start command is sent, which is done
+>> during the PCM prepare phase.
+>>
+>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+>> ---
+>>   sound/soc/qcom/qdsp6/q6afe.c | 49 +++++++++++++++++++++++++-----------
+>>   sound/soc/qcom/qdsp6/q6afe.h |  1 +
+>>   2 files changed, 36 insertions(+), 14 deletions(-)
+>>
+>> diff --git a/sound/soc/qcom/qdsp6/q6afe.c b/sound/soc/qcom/qdsp6/q6afe.c
+>> index 72c4e6fe20c4..f09a756246f8 100644
+>> --- a/sound/soc/qcom/qdsp6/q6afe.c
+>> +++ b/sound/soc/qcom/qdsp6/q6afe.c
+>> @@ -1394,10 +1394,42 @@ void q6afe_tdm_port_prepare(struct q6afe_port *port,
+>>   }
+>>   EXPORT_SYMBOL_GPL(q6afe_tdm_port_prepare);
+>>   
+>> -static int afe_port_send_usb_dev_param(struct q6afe_port *port, struct q6afe_usb_cfg *cfg)
+>> +/**
+>> + * afe_port_send_usb_dev_param() - Send USB dev token
+>> + *
+>> + * @port: Instance of afe port
+>> + * @cardidx: USB SND card index to reference
+>> + * @pcmidx: USB SND PCM device index to reference
+>> + *
+>> + * The USB dev token carries information about which USB SND card instance and
+>> + * PCM device to execute the offload on.  This information is carried through
+>> + * to the stream enable QMI request, which is handled by the offload class
+>> + * driver.  The information is parsed to determine which USB device to query
+>> + * the required resources for.
+>> + */
+>> +int afe_port_send_usb_dev_param(struct q6afe_port *port, int cardidx, int pcmidx)
+>>   {
+>> -	union afe_port_config *pcfg = &port->port_cfg;
+>>   	struct afe_param_id_usb_audio_dev_params usb_dev;
+>> +	int ret;
+>> +
+>> +	memset(&usb_dev, 0, sizeof(usb_dev));
+>> +
+>> +	usb_dev.cfg_minor_version = AFE_API_MINOR_VERSION_USB_AUDIO_CONFIG;
+>> +	usb_dev.dev_token = (cardidx << 16) | (pcmidx << 8);
+>> +	ret = q6afe_port_set_param_v2(port, &usb_dev,
+>> +				AFE_PARAM_ID_USB_AUDIO_DEV_PARAMS,
+>> +				AFE_MODULE_AUDIO_DEV_INTERFACE, sizeof(usb_dev));
+>> +	if (ret)
+>> +		dev_err(port->afe->dev, "%s: AFE device param cmd failed %d\n",
+>> +			__func__, ret);
+>> +
+>> +	return ret;
+>> +}
+>> +EXPORT_SYMBOL_GPL(afe_port_send_usb_dev_param);
+>> +
+>> +static int afe_port_send_usb_params(struct q6afe_port *port, struct q6afe_usb_cfg *cfg)
+>> +{
+>> +	union afe_port_config *pcfg = &port->port_cfg;
+>>   	struct afe_param_id_usb_audio_dev_lpcm_fmt lpcm_fmt;
+>>   	struct afe_param_id_usb_audio_svc_interval svc_int;
+>>   	int ret = 0;
+>> @@ -1408,20 +1440,9 @@ static int afe_port_send_usb_dev_param(struct q6afe_port *port, struct q6afe_usb
+>>   		goto exit;
+>>   	}
+>>   
+>> -	memset(&usb_dev, 0, sizeof(usb_dev));
+>>   	memset(&lpcm_fmt, 0, sizeof(lpcm_fmt));
+>>   	memset(&svc_int, 0, sizeof(svc_int));
+>>   
+>> -	usb_dev.cfg_minor_version = AFE_API_MINOR_VERSION_USB_AUDIO_CONFIG;
+>> -	ret = q6afe_port_set_param_v2(port, &usb_dev,
+>> -				      AFE_PARAM_ID_USB_AUDIO_DEV_PARAMS,
+>> -				      AFE_MODULE_AUDIO_DEV_INTERFACE, sizeof(usb_dev));
+>> -	if (ret) {
+>> -		dev_err(port->afe->dev, "%s: AFE device param cmd failed %d\n",
+>> -			__func__, ret);
+>> -		goto exit;
+>> -	}
+>> -
+> 
+> this feels like a questionable patch split. Why not introduce the new
+> helper earlier and avoid adding code then modifying the same code?
+> 
 
-Thank you,
-Jayant
+Let me see if I can squash this with the change that adds the USB AFE port.
 
+Thanks
+Wesley Cheng
 
