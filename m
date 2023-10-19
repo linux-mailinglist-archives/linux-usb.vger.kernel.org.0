@@ -1,62 +1,63 @@
-Return-Path: <linux-usb+bounces-1888-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1889-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7ACEC7CF04F
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Oct 2023 08:46:13 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9A717CF20A
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Oct 2023 10:09:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 34D83281F27
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Oct 2023 06:46:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 068DBB211DB
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Oct 2023 08:09:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 186F76AB3;
-	Thu, 19 Oct 2023 06:46:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D7AF14F6F;
+	Thu, 19 Oct 2023 08:09:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JOmox+3m"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iM9neSlh"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C3CC8F49
-	for <linux-usb@vger.kernel.org>; Thu, 19 Oct 2023 06:46:06 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E45F124;
-	Wed, 18 Oct 2023 23:46:04 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0993E14A8B
+	for <linux-usb@vger.kernel.org>; Thu, 19 Oct 2023 08:09:10 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4A111F;
+	Thu, 19 Oct 2023 01:09:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697697964; x=1729233964;
+  t=1697702950; x=1729238950;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=qNGiwG6sPEn5ubts1BrNP/8VMfC11VFMYM5s5vJIJZU=;
-  b=JOmox+3mKfj0lafGMacmqd+QL8A4VDLckj9TJsSdkWqzaaPSHwgZ8uWX
-   u4d8A4hkUl5fisXdN/8fkEOKC7fFTfrlu6mc59xfYe94JnegT8Aa43+Uk
-   4XxHT4l3waQhA20q1xWYsY5Kf6AlYg6g5V21/RCsa9pwWxdtpaJ32P+p5
-   E0qKTYPMMoSkgc9aMcszt5zFIAn5Xx9p8KNf+++aIpU7jyFWMYnxedjMt
-   QjsSigwpt5CRIfyxhWEMA8CraPb2mf+hXZCBKcGR5zLwc1Z48sbbbVje7
-   bTqwAa8qInuZvx1C/SYP/EXwsZgdEOt8eYhPT9lYyxjt41hzxtCG/G8C8
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10867"; a="376560061"
+  bh=zieDz8mNVXN9EfjoP5z7KgDOFeY9VzEa+XusEh5hE+s=;
+  b=iM9neSlhJOW64guO1jRbnybUNIuWhKB2j84yo6oyaX1BzR7PvuP8Ngkj
+   Al0QMk1xoRF7tbUokj4OdNUFK1w1mAk7fcaG5Gq+buC8P98MpsY+8b2wE
+   dLe1qiw4QMc0vhPVHMbPepyZgdY0VdJfGfeIBo7PUry663Rp2NqcuFM4p
+   TSZIT2l0bCsxCvVsi5RV6sqHi1bhhbY851qvrk1/JEZuG3InrmDdC3Hz1
+   2hg80PofpFMa7TnSBxcsbRH514haKcPJcyfQ66z6+HvAdCvc/Wxh6U9ty
+   +DGnZDzCPLr+8Aw73LRFwGng17aGld5LOZpPUwI55uIGhTOyesmGJeA1z
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10867"; a="4791793"
 X-IronPort-AV: E=Sophos;i="6.03,236,1694761200"; 
-   d="scan'208";a="376560061"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2023 23:46:03 -0700
+   d="scan'208";a="4791793"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2023 01:09:09 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10867"; a="1088259427"
+X-IronPort-AV: E=McAfee;i="6600,9927,10867"; a="760551539"
 X-IronPort-AV: E=Sophos;i="6.03,236,1694761200"; 
-   d="scan'208";a="1088259427"
+   d="scan'208";a="760551539"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga005.fm.intel.com with SMTP; 18 Oct 2023 23:45:59 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 19 Oct 2023 09:45:58 +0300
-Date: Thu, 19 Oct 2023 09:45:58 +0300
+  by fmsmga007.fm.intel.com with SMTP; 19 Oct 2023 01:09:05 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 19 Oct 2023 11:09:04 +0300
+Date: Thu, 19 Oct 2023 11:09:04 +0300
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Badhri Jagan Sridharan <badhri@google.com>
-Cc: gregkh@linuxfoundation.org, linux@roeck-us.net, kyletso@google.com,
+To: RD Babiera <rdbabiera@google.com>
+Cc: gregkh@linuxfoundation.org, linux@roeck-us.net,
 	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	rdbabiera@google.com, amitsd@google.com, stable@vger.kernel.org
-Subject: Re: [PATCH v2] usb: typec: tcpm: Fix sink caps op current check
-Message-ID: <ZTDQpqVMx/QB1tTo@kuha.fi.intel.com>
-References: <20231015035838.2207567-1-badhri@google.com>
+	badhri@google.com, stable@vger.kernel.org
+Subject: Re: [PATCH v1] usb: typec: tcpm: only discover modes the port
+ supports svids for
+Message-ID: <ZTDkIGLmjmL9HwJP@kuha.fi.intel.com>
+References: <20231016232816.3355132-2-rdbabiera@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -65,63 +66,129 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231015035838.2207567-1-badhri@google.com>
+In-Reply-To: <20231016232816.3355132-2-rdbabiera@google.com>
 
-On Sun, Oct 15, 2023 at 03:58:38AM +0000, Badhri Jagan Sridharan wrote:
-> TCPM checks for sink caps operational current even when PD is disabled.
-> This incorrectly sets tcpm_set_charge() when PD is disabled.
-> Check for sink caps only when PD is enabled.
+Hi,
+
+On Mon, Oct 16, 2023 at 11:28:17PM +0000, RD Babiera wrote:
+> DisplayPort Alt Mode CTS test 10.3.1 verifies that the device can
+> recognize the DP SVID in arbitrary locations within the Discover SVIDs
+> response message. The test expects that the TCPM sends Discover Modes for
+> the DisplayPort SVID first, but fails because the TCPM sends
+> Discover Modes for all SVIDs regardless of whether or not the port
+> supports them.
 > 
-> [   97.572342] Start toggling
-> [   97.578949] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
-> [   99.571648] CC1: 0 -> 0, CC2: 0 -> 4 [state TOGGLING, polarity 0, connected]
-> [   99.571658] state change TOGGLING -> SNK_ATTACH_WAIT [rev3 NONE_AMS]
-> [   99.571673] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev3 NONE_AMS]
-> [   99.741778] state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED [delayed 170 ms]
-> [   99.789283] CC1: 0 -> 0, CC2: 4 -> 5 [state SNK_DEBOUNCED, polarity 0, connected]
-> [   99.789306] state change SNK_DEBOUNCED -> SNK_DEBOUNCED [rev3 NONE_AMS]
-> [   99.903584] VBUS on
-> [   99.903591] state change SNK_DEBOUNCED -> SNK_ATTACHED [rev3 NONE_AMS]
-> [   99.903600] polarity 1
-> [   99.910155] enable vbus discharge ret:0
-> [   99.910160] Requesting mux state 1, usb-role 2, orientation 2
-> [   99.946791] state change SNK_ATTACHED -> SNK_STARTUP [rev3 NONE_AMS]
-> [   99.946798] state change SNK_STARTUP -> SNK_DISCOVERY [rev3 NONE_AMS]
-> [   99.946800] Setting voltage/current limit 5000 mV 500 mA
-> [   99.946803] vbus=0 charge:=1
-> [  100.027139] state change SNK_DISCOVERY -> SNK_READY [rev3 NONE_AMS]
-> [  100.027145] Setting voltage/current limit 5000 mV 3000 mA
-> [  100.466830] VBUS on
-> 
+> After discovering the port partner's SVIDs, skip to the first SVID
+> supported by the device when preparing the Discover Modes request. If
+> other modes need to be discovered after the first Discover Modes message
+> is returned, skip over SVIDs not supported by the device.
+
+I'm confused here. Is the device here the port or partner (or both)?
+Why are you skipping the first SVID?
+
+Please note that the Type-C specification puts priority on TBT over DP.
+Is this in conflict with that?
+
+> Fixes: f0690a25a140 ("staging: typec: USB Type-C Port Manager (tcpm)")
+
+I think that's wrong commit (perhaps you want 8afe9a3548f9d instead?).
+
+Right now I'm not convinced that this should be considered as a fix at
+all. I don't know anything about the test you are talking about, but
+if this patch is just about making it pass, then there is something
+seriously wrong.
+
+If you need the modes to be discovered in some specific order, then we
+need the framework to allow you to do that. So perhaps the tcpci
+drivers should be able to supply the preferred order to the tcpm?
+
+But as such, unless I'm mistaken, this patch will change the logic so
+that only the partner alt modes that the port supports get registered,
+and that way are exposed to the user. You can't do that - right now
+it's the only way we can inform the user about them. All partner
+alternate modes (at least the SVIDs) must be exposed to the user one
+way or the other, regardless does the port support them or not.
+
+
 > Cc: stable@vger.kernel.org
-> Fixes: 34fde9ec08a3 ("FROMGIT: usb: typec: tcpm: not sink vbus if operational current is 0mA")
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
+> Signed-off-by: RD Babiera <rdbabiera@google.com>
 > ---
-> Changes since v1:
-> * Fix commit title and description to address comments from Guenter Roeck
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  drivers/usb/typec/tcpm/tcpm.c | 46 +++++++++++++++++++++++++++++++----
+>  1 file changed, 41 insertions(+), 5 deletions(-)
 > 
 > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 6e843c511b85..994493481c24 100644
+> index 6e843c511b85..96636a6f1f7c 100644
 > --- a/drivers/usb/typec/tcpm/tcpm.c
 > +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -4268,7 +4268,8 @@ static void run_state_machine(struct tcpm_port *port)
->  				current_lim = PD_P_SNK_STDBY_MW / 5;
->  			tcpm_set_current_limit(port, current_lim, 5000);
->  			/* Not sink vbus if operational current is 0mA */
-> -			tcpm_set_charge(port, !!pdo_max_current(port->snk_pdo[0]));
-> +			tcpm_set_charge(port, port->pd_supported ?
-> +					!!pdo_max_current(port->snk_pdo[0]) : true);
+> @@ -1543,6 +1543,38 @@ static bool svdm_consume_svids(struct tcpm_port *port, const u32 *p, int cnt)
+>  	return false;
+>  }
 >  
->  			if (!port->pd_supported)
->  				tcpm_set_state(port, SNK_READY, 0);
+> +static bool svdm_port_supports_svid(struct tcpm_port *port, u16 svid)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < ALTMODE_DISCOVERY_MAX; i++) {
+> +		struct typec_altmode *altmode = port->port_altmode[i];
+> +
+> +		if (!altmode)
+> +			return false;
+> +		if (altmode->svid == svid)
+> +			return true;
+> +	}
+> +	return false;
+> +}
+> +
+> +/*
+> + * This helper will continue to return the next supported SVID that the port
+> + * needs to send DISCOVER_MODES to until the pmdata->svid_index is incremented after
+> + * svdm_consume_modes() in tcpm_pd_svdm().
+> + */
+> +static int svdm_get_next_supported_svid(struct tcpm_port *port, struct pd_mode_data *pmdata)
+> +{
+> +	while (pmdata->svid_index < pmdata->nsvids) {
+> +		u16 svid = pmdata->svids[pmdata->svid_index];
+> +
+> +		if (svdm_port_supports_svid(port, svid))
+> +			return svid;
+> +		pmdata->svid_index++;
+> +	}
+> +	return 0;
+> +}
+> +
+>  static void svdm_consume_modes(struct tcpm_port *port, const u32 *p, int cnt)
+>  {
+>  	struct pd_mode_data *pmdata = &port->mode_data;
+> @@ -1705,9 +1737,11 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
+>  			if (svdm_consume_svids(port, p, cnt)) {
+>  				response[0] = VDO(USB_SID_PD, 1, svdm_version, CMD_DISCOVER_SVID);
+>  				rlen = 1;
+> -			} else if (modep->nsvids && supports_modal(port)) {
+> -				response[0] = VDO(modep->svids[0], 1, svdm_version,
+> -						  CMD_DISCOVER_MODES);
+> +			} else if (modep->nsvids && supports_modal(port) &&
+> +				   svdm_get_next_supported_svid(port, modep)) {
+> +				u16 svid = svdm_get_next_supported_svid(port, modep);
+> +
+> +				response[0] = VDO(svid, 1, svdm_version, CMD_DISCOVER_MODES);
+>  				rlen = 1;
+>  			}
+>  			break;
+> @@ -1715,8 +1749,10 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
+>  			/* 6.4.4.3.3 */
+>  			svdm_consume_modes(port, p, cnt);
+>  			modep->svid_index++;
+> -			if (modep->svid_index < modep->nsvids) {
+> -				u16 svid = modep->svids[modep->svid_index];
+> +			if (modep->svid_index < modep->nsvids &&
+> +			    svdm_get_next_supported_svid(port, modep)) {
+> +				u16 svid = svdm_get_next_supported_svid(port, modep);
+> +
+>  				response[0] = VDO(svid, 1, svdm_version, CMD_DISCOVER_MODES);
+>  				rlen = 1;
+>  			} else {
 > 
-> base-commit: 1034cc423f1b4a7a9a56d310ca980fcd2753e11d
+> base-commit: d0d27ef87e1ca974ed93ed4f7d3c123cbd392ba6
 > -- 
 > 2.42.0.655.g421f12c284-goog
 
