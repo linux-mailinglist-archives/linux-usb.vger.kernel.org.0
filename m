@@ -1,130 +1,99 @@
-Return-Path: <linux-usb+bounces-1914-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1915-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A138C7CF54D
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Oct 2023 12:29:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B20287CF571
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Oct 2023 12:35:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5BFCD281FD3
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Oct 2023 10:29:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6933028217B
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Oct 2023 10:35:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5BAB18AF0;
-	Thu, 19 Oct 2023 10:28:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3842818B16;
+	Thu, 19 Oct 2023 10:34:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V0Bo2Lml"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lgXCyMoJ"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 399D31DFF4
-	for <linux-usb@vger.kernel.org>; Thu, 19 Oct 2023 10:28:37 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BE1D12A
-	for <linux-usb@vger.kernel.org>; Thu, 19 Oct 2023 03:28:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697711316; x=1729247316;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=UQoOchUdvFoITCqiVz39zKqJmrugtOuqtfYoFPQVAL8=;
-  b=V0Bo2LmlcWQ3ZxRyKwidXy3U4VueEDoftViBQgX6H80CGvCSrPE6/Iyo
-   EYE8DlmIVn3JU7Ltoy44r0vDGAB2GRN9Gqtl91N7VOk5+F8pamSy87Bdz
-   R1o3nefrm/cSSPQbEdQFNwDWW4eO+L4t6/MrYUijd/eMDSkwVakV5D9+w
-   0Uth2SUQ95BlYnxRsq3a6EukjJuB09/8+qHneiG91v1gMkg+akkBxs5Zm
-   AFPQTvi+ZTFl3Hxy0z81tswJz9N+G5A75qzupz7ozF0pTLy9/44mTV9d2
-   re2SB4dEVXvheZdZe/tF7IRQgAEb708nHwYtmmDuTqjXkz2PbUGRLZbKo
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10867"; a="389075987"
-X-IronPort-AV: E=Sophos;i="6.03,237,1694761200"; 
-   d="scan'208";a="389075987"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2023 03:28:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10867"; a="930557928"
-X-IronPort-AV: E=Sophos;i="6.03,237,1694761200"; 
-   d="scan'208";a="930557928"
-Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
-  by orsmga005.jf.intel.com with ESMTP; 19 Oct 2023 03:28:34 -0700
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-To: <gregkh@linuxfoundation.org>
-Cc: <linux-usb@vger.kernel.org>,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 19/19] usb: host: xhci: Avoid XHCI resume delay if SSUSB device is not present
-Date: Thu, 19 Oct 2023 13:29:24 +0300
-Message-Id: <20231019102924.2797346-20-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20231019102924.2797346-1-mathias.nyman@linux.intel.com>
-References: <20231019102924.2797346-1-mathias.nyman@linux.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3357A19449
+	for <linux-usb@vger.kernel.org>; Thu, 19 Oct 2023 10:34:56 +0000 (UTC)
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C593C123
+	for <linux-usb@vger.kernel.org>; Thu, 19 Oct 2023 03:34:54 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-313e742a787so363022f8f.1
+        for <linux-usb@vger.kernel.org>; Thu, 19 Oct 2023 03:34:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1697711693; x=1698316493; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=gHZ0E2oURQ40dzVmSqirtuqVQjv7KJZAugs/PKtmYUc=;
+        b=lgXCyMoJ4ePOJCrJQlFBVWwImk9CquZTm2u+4IE5bTLtPVWBbowhiIBfGgaGuAWrir
+         DMxI0HL07KlU1xMB4vomLRQKtQMZLphduJzxLtj2ykGYudNotYgAQqSoAnDKKRUT/gNI
+         SgcdgfC3VbnIluEfSaA7d/2WV73XdsUSrMjHLFjNMAYh3QJzTsG1AT6xJbt8D20l7NEg
+         7O4YkfxJpbWGEE08hp+aAS6en1I9e6rsXaJTKTeKxVBWPWTorAwlBUeRSrJWXpo4LLsx
+         HsrmepXs085cNJX7L5ZVKAFsHgngCK3ga37IxqX4hyu9uwhOPvk86n+uWaDncEpLjTZd
+         usQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697711693; x=1698316493;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gHZ0E2oURQ40dzVmSqirtuqVQjv7KJZAugs/PKtmYUc=;
+        b=VbyQBEpTno6w1udshGgGj3CDXoPtZDMy3RjjOZsZP51TtUh7Ki+ZCY37XMzzA4y7YQ
+         lKV0d5nw4RatK7FJFlR0W2ZR2MNvNEgFNqzwJMgmgrlTr14w7iQhB3wbXjRps6Dv4ws0
+         SMJgFhcpfF47ZfH5J5FCUoqemQzSdc7hdlwFagmMJa1+eido3jeUvQQOdPXvSmovcMVB
+         AAciKa7nFEtbrlKLGJCnMVzRjSw/maMcqd2zK0DLOQQg9wlzhqxtSZmLjyCqFUewtEYj
+         AVlcFitsukuZTJCoQ18vzuzS+kZSxVs8wOwudQKletE3bOzV6hU0IKIe7vUPc1dkuyWp
+         Lj2w==
+X-Gm-Message-State: AOJu0Yy6k/6Dl6rj2iZcQjLqbmj71foNjmmDL0igTVJrIoZKPhbiHdrY
+	HxMozy5TLcYRkWEcEvYMIWI0LA==
+X-Google-Smtp-Source: AGHT+IFdar0VVDaMOSgRpl4MSClkYLbAVPKlMoGU4cE/swmAe891KuxkdeV5d/6VMA1irMhQ27GKxQ==
+X-Received: by 2002:adf:eb87:0:b0:32d:dd68:e83 with SMTP id t7-20020adfeb87000000b0032ddd680e83mr1075240wrn.21.1697711693227;
+        Thu, 19 Oct 2023 03:34:53 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id q9-20020a05600000c900b0032d8eecf901sm4175868wrx.3.2023.10.19.03.34.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Oct 2023 03:34:52 -0700 (PDT)
+Date: Thu, 19 Oct 2023 13:34:49 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Su Hui <suhui@nfschina.com>
+Cc: woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, nathan@kernel.org, ndesaulniers@google.com,
+	trix@redhat.com, netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] net: lan78xx: add an error code check in
+ lan78xx_write_raw_eeprom
+Message-ID: <aa78dff4-d572-4abc-9f86-3c01f887faf1@kadam.mountain>
+References: <20231019084022.1528885-1-suhui@nfschina.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231019084022.1528885-1-suhui@nfschina.com>
 
-From: Wesley Cheng <quic_wcheng@quicinc.com>
+On Thu, Oct 19, 2023 at 04:40:23PM +0800, Su Hui wrote:
+> check the value of 'ret' after call 'lan78xx_read_reg'.
+> 
+> Signed-off-by: Su Hui <suhui@nfschina.com>
+> ---
+> 
+> Clang complains that value stored to 'ret' is never read.
+> Maybe this place miss an error code check, I'm not sure 
+> about this.
 
-There is a 120ms delay implemented for allowing the XHCI host controller to
-detect a U3 wakeup pulse.  The intention is to wait for the device to retry
-the wakeup event if the USB3 PORTSC doesn't reflect the RESUME link status
-by the time it is checked.  As per the USB3 specification:
+There are a bunch more "ret = " assignments which aren't used in this
+function.
 
-  tU3WakeupRetryDelay ("Table 7-12. LTSSM State Transition Timeouts")
-
-This would allow the XHCI resume sequence to determine if the root hub
-needs to be also resumed.  However, in case there is no device connected,
-or if there is only a HSUSB device connected, this delay would still affect
-the overall resume timing.
-
-Since this delay is solely for detecting U3 wake events (USB3 specific)
-then ignore this delay for the disconnected case and the HSUSB connected
-only case.
-
-[skip helper function, rename usb3_connected variable -Mathias ]
-
-Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
----
- drivers/usb/host/xhci.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 119cbe2a3d65..884b0898d9c9 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -992,6 +992,7 @@ int xhci_resume(struct xhci_hcd *xhci, pm_message_t msg)
- 	int			retval = 0;
- 	bool			comp_timer_running = false;
- 	bool			pending_portevent = false;
-+	bool			suspended_usb3_devs = false;
- 	bool			reinit_xhc = false;
- 
- 	if (!hcd->state)
-@@ -1139,10 +1140,17 @@ int xhci_resume(struct xhci_hcd *xhci, pm_message_t msg)
- 		/*
- 		 * Resume roothubs only if there are pending events.
- 		 * USB 3 devices resend U3 LFPS wake after a 100ms delay if
--		 * the first wake signalling failed, give it that chance.
-+		 * the first wake signalling failed, give it that chance if
-+		 * there are suspended USB 3 devices.
- 		 */
-+		if (xhci->usb3_rhub.bus_state.suspended_ports ||
-+		    xhci->usb3_rhub.bus_state.bus_suspended)
-+			suspended_usb3_devs = true;
-+
- 		pending_portevent = xhci_pending_portevent(xhci);
--		if (!pending_portevent && msg.event == PM_EVENT_AUTO_RESUME) {
-+
-+		if (suspended_usb3_devs && !pending_portevent &&
-+		    msg.event == PM_EVENT_AUTO_RESUME) {
- 			msleep(120);
- 			pending_portevent = xhci_pending_portevent(xhci);
- 		}
--- 
-2.25.1
+regards,
+dan carpenter
 
 
