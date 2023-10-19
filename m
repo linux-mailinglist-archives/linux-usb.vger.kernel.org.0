@@ -1,168 +1,154 @@
-Return-Path: <linux-usb+bounces-1936-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1937-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 067077D034A
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Oct 2023 22:45:23 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69B217D03BA
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Oct 2023 23:22:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B48C328230D
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Oct 2023 20:45:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1DD7FB21296
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Oct 2023 21:22:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF6ABDF59;
-	Thu, 19 Oct 2023 20:45:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 669483DFF6;
+	Thu, 19 Oct 2023 21:22:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EulO5Oy4"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="YrffcQSH"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5749171B6
-	for <linux-usb@vger.kernel.org>; Thu, 19 Oct 2023 20:45:14 +0000 (UTC)
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7C4116
-	for <linux-usb@vger.kernel.org>; Thu, 19 Oct 2023 13:45:12 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-53f98cbcd76so980a12.1
-        for <linux-usb@vger.kernel.org>; Thu, 19 Oct 2023 13:45:12 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C113538DF6
+	for <linux-usb@vger.kernel.org>; Thu, 19 Oct 2023 21:22:06 +0000 (UTC)
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C3BA10DF
+	for <linux-usb@vger.kernel.org>; Thu, 19 Oct 2023 14:21:54 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1cac80292aeso51385ad.1
+        for <linux-usb@vger.kernel.org>; Thu, 19 Oct 2023 14:21:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1697748311; x=1698353111; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VVuCB44VLEjsZzvUgM1w7n2lvEI4MsHtEyH+2GVq2dY=;
-        b=EulO5Oy4vXgxAA88b1og3ur2Akh0sYSkPVfIpxvdGm4MMF93ZCwC1lj2M+zZLqG6eQ
-         A2Pyy0EJ4bXkkrdo7FlBfFVZtAmXDPTVpWgs4MiadRD84rCsdV957TmoxHIs8fAh5OJR
-         LWH+O7bqv3+BZ1CoAaTo7px+dZp2vRpOeiIoL5aSkVby89PJtAhnMCGpk9XMaHLfBIms
-         vaynbKJref+ZTPRmPnc+Wwjun2M1X65PfBJ5TVBm2ZAJOmc1H34QGZIw5Zo2QtFK0zqL
-         CK5pv1cXTUAZOIMeusY13UWvRnqzJaIS6rYMBqCJ7baIWJZlslahMbQxMbWwG3hfByDB
-         F+jQ==
+        d=chromium.org; s=google; t=1697750513; x=1698355313; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8UYTqG/6/51k2TLUFfCOqmPLkctnDDkEac11ETWHXAA=;
+        b=YrffcQSHbfkv3wYDSF1qbiJVDuHrzrAys4OEFHbULpiMWn9WW1blRL7KLyUT+xA95b
+         sP3jLTFXmh4ZzqQ4B41h775SEd/eOxLfQTTve+hiUw+JwpXgOQG9SiyT/KobnOFma7jZ
+         4Y8ZcJ6O05NMhTmR56DtCLyQAoY6z35vDQGec=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697748311; x=1698353111;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VVuCB44VLEjsZzvUgM1w7n2lvEI4MsHtEyH+2GVq2dY=;
-        b=qt+zR5fw+v+3jHwjkZLlkBVBMlL4vciVQ0fDydulY+PgNdoOygqkgWDVYKCqZ8Pvve
-         d+2aWSjJCbBWHUdq07RhY5uYbIHHe8sqVu3dxz3dfl8d/mpsGFPOG62Hyq266lW3jMy+
-         e45CcD3vEofYbfN4U3C8HMFwGYkpcej9A4zZEQ8DIrF0T/MEn1JX+mkPsWow5ff4BRA3
-         VlXBNOZWRoVXZ/TTjD4nci8oyL6stCtF10X16xVk6UMHKZ6FDCseIaUFqqlO5MXjqZ46
-         nVoianXlnbXLH6HfE9VcxpHd/QW2oWXnbjAEaMhm7rQlJlme68vlv4bDMhxsEWwmWqvs
-         FMlg==
-X-Gm-Message-State: AOJu0YzUYJvNsc0omwswKj5/qFbxbzUIdS7EgVQ5MWYBw3rHP/inTjmh
-	PDFtPGRo4Cl5i/rMOXHNDcpuNLyT7gS4q24yAZhHGg==
-X-Google-Smtp-Source: AGHT+IHFC9ybSiyivStLgYN8fa6C0ml9tRY1/5sGB2bF7uJu4CHMtn3ZiatZMgc3HYBkARDtPGQ6AHj9IsKbPrz5vok=
-X-Received: by 2002:a50:9f41:0:b0:53f:91cb:6904 with SMTP id
- b59-20020a509f41000000b0053f91cb6904mr27602edf.4.1697748310674; Thu, 19 Oct
- 2023 13:45:10 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1697750513; x=1698355313;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8UYTqG/6/51k2TLUFfCOqmPLkctnDDkEac11ETWHXAA=;
+        b=qrMmF/0XpZ/MvwCdU6xwO3dRvsWrNjLp39/NiVJj0idbGfOYclNgWx416epM961vgx
+         oQXsluzWGjTnYtvKw9GNQGWxgjrsMma0wmKYr/z0b+d2bj7G6fAwUL8DLWI6jXjqlx7Z
+         Pp0izbpW9J0oLG/fVOsG9wkI/0gAZw1PrLmvvk6xTUMCWnBwKTcSHm07FJ6hyxP/uJDZ
+         svTmaehI2b3QyVx7WCmr9p8w6wPaCQw+LzsVXWd6WNgPoCSSVG+XcUd5BV71v1VOv6U+
+         2YiFgJ3cphcwuqonybHmSb2bfivwOblT4AalFCljN2C4ZDtGD8gDDvBKCSzQsXRXEJ4c
+         vPfg==
+X-Gm-Message-State: AOJu0YzC3HoeVk8sWSHQnnWtQN5IcGfKLQXPcIoj+bdJK3jtyL6yh+6U
+	JjSRGW8bk4EiD2AqQN/NXTh1Ew==
+X-Google-Smtp-Source: AGHT+IHzJlRpUB2nDTKRU0As3Y1nSrMCYGEvG2M7Fp+2hxAvFzahD9zX1yznGS7gMsBiVFN81ofEHA==
+X-Received: by 2002:a17:903:27cd:b0:1ca:25e:3c32 with SMTP id km13-20020a17090327cd00b001ca025e3c32mr107647plb.19.1697750512876;
+        Thu, 19 Oct 2023 14:21:52 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:a6da:6f08:412:e04b])
+        by smtp.gmail.com with ESMTPSA id l2-20020a170902d34200b001bbdd44bbb6sm154100plk.136.2023.10.19.14.21.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Oct 2023 14:21:52 -0700 (PDT)
+From: Douglas Anderson <dianders@chromium.org>
+To: Jakub Kicinski <kuba@kernel.org>,
+	Hayes Wang <hayeswang@realtek.com>,
+	"David S . Miller" <davem@davemloft.net>
+Cc: Grant Grundler <grundler@chromium.org>,
+	Edward Hill <ecgh@chromium.org>,
+	linux-usb@vger.kernel.org,
+	Simon Horman <horms@kernel.org>,
+	Laura Nao <laura.nao@collabora.com>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Douglas Anderson <dianders@chromium.org>,
+	=?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: [PATCH v4 0/5] r8152: Avoid writing garbage to the adapter's registers
+Date: Thu, 19 Oct 2023 14:20:19 -0700
+Message-ID: <20231019212130.3146151-1-dianders@chromium.org>
+X-Mailer: git-send-email 2.42.0.758.gaed0368e0e-goog
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231016232816.3355132-2-rdbabiera@google.com> <ZTDkIGLmjmL9HwJP@kuha.fi.intel.com>
-In-Reply-To: <ZTDkIGLmjmL9HwJP@kuha.fi.intel.com>
-From: RD Babiera <rdbabiera@google.com>
-Date: Thu, 19 Oct 2023 13:44:59 -0700
-Message-ID: <CALzBnUF-EZjFEHCc4XRLdFr5yP8dCq7De4SaNif32LcL5=tMYA@mail.gmail.com>
-Subject: Re: [PATCH v1] usb: typec: tcpm: only discover modes the port
- supports svids for
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: gregkh@linuxfoundation.org, linux@roeck-us.net, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, badhri@google.com, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi Heikki,
+This series is the result of a cooperative debug effort between
+Realtek and the ChromeOS team. On ChromeOS, we've noticed that Realtek
+Ethernet adapters can sometimes get so wedged that even a reboot of
+the host can't get them to enumerate again, assuming that the adapter
+was on a powered hub and din't lose power when the host rebooted. This
+is sometimes seen in the ChromeOS automated testing lab. The only way
+to recover adapters in this state is to manually power cycle them.
 
-On Thu, Oct 19, 2023 at 1:09=E2=80=AFAM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
-> I'm confused here. Is the device here the port or partner (or both)?
+I managed to reproduce one instance of this wedging (unknown if this
+is truly related to what the test lab sees) by doing this:
+1. Start a flood ping from a host to the device.
+2. Drop the device into kdb.
+3. Wait 90 seconds.
+4. Resume from kdb (the "g" command).
+5. Wait another 45 seconds.
 
-The port, I'll make sure to be more precise when describing.
+Upon analysis, Realtek realized this was happening:
 
-> Why are you skipping the first SVID?
+1. The Linux driver was getting a "Tx timeout" after resuming from kdb
+   and then trying to reset itself.
+2. As part of the reset, the Linux driver was attempting to do a
+   read-modify-write of the adapter's registers.
+3. The read would fail (due to a timeout) and the driver pretended
+   that the register contained all 0xFFs. See commit f53a7ad18959
+   ("r8152: Set memory to all 0xFFs on failed reg reads")
+4. The driver would take this value of all 0xFFs, modify it, and
+   attempt to write it back to the adapter.
+5. By this time the USB channel seemed to recover and thus we'd
+   successfully write a value that was mostly 0xFFs to the adpater.
+6. The adapter didn't like this and would wedge itself.
 
-Skipping to the first SVID supported by the port when preparing
-the first Discover Modes message.
+Another Engineer also managed to reproduce wedging of the Realtek
+Ethernet adpater during a reboot test on an AMD Chromebook. In that
+case he was sometimes seeing -EPIPE returned from the control
+transfers.
 
-> Please note that the Type-C specification puts priority on TBT over DP.
-> Is this in conflict with that?
+This patch series fixes both issues.
 
-Not in this case. Assuming the port supports both TBT and DP, a Discover
-Modes message will be sent to both regardless of what order they return
-in the Discover SVIDs ACK message.
+Changes in v4:
+- Took out some unnecessary locks/unlocks of the control mutex.
+- Added comment about reading version causing probe fail if 3 fails.
+- Added text to commit msg about the potential unbind/bind loop.
 
-> > Fixes: f0690a25a140 ("staging: typec: USB Type-C Port Manager (tcpm)")
->
-> I think that's wrong commit (perhaps you want 8afe9a3548f9d instead?).
+Changes in v3:
+- Fixed v2 changelog ending up in the commit message.
+- farmework -> framework in comments.
 
-8afe9a3548f9d looks to be more concerned with the consumption and
-processing of the received payload, I had put f0690a25a140 because it
-contained the logic to determine if the Discover Mode message was being
-sent at all as well as preparing the response. 5e1d4c49fbc86 does touch
-the response formation but only the svdm_version and not the SVID.
+Changes in v2:
+- ("Check for unplug in rtl_phy_patch_request()") new for v2.
+- ("Check for unplug in r8153b_ups_en() / r8153c_ups_en()") new for v2.
+- ("Rename RTL8152_UNPLUG to RTL8152_INACCESSIBLE") new for v2.
+- Reset patch no longer based on retry patch, since that was dropped.
+- Reset patch should be robust even if failures happen in probe.
+- Switched booleans to bits in the "flags" variable.
+- Check for -ENODEV instead of "udev->state == USB_STATE_NOTATTACHED"
 
-> Right now I'm not convinced that this should be considered as a fix at
-> all. I don't know anything about the test you are talking about, but
-> if this patch is just about making it pass, then there is something
-> seriously wrong.
+Douglas Anderson (5):
+  r8152: Increase USB control msg timeout to 5000ms as per spec
+  r8152: Check for unplug in rtl_phy_patch_request()
+  r8152: Check for unplug in r8153b_ups_en() / r8153c_ups_en()
+  r8152: Rename RTL8152_UNPLUG to RTL8152_INACCESSIBLE
+  r8152: Block future register access if register access fails
 
-I use the VESA DisplayPort Alt Mode on USB Type-C CTS as a reference.
-In regards to this being a fix, if this ends up being more optional (discus=
-sed
-below), then I'll remove the fix tag.
+ drivers/net/usb/r8152.c | 269 +++++++++++++++++++++++++++++++---------
+ 1 file changed, 210 insertions(+), 59 deletions(-)
 
-> If you need the modes to be discovered in some specific order, then we
-> need the framework to allow you to do that. So perhaps the tcpci
-> drivers should be able to supply the preferred order to the tcpm?
->
-> But as such, unless I'm mistaken, this patch will change the logic so
-> that only the partner alt modes that the port supports get registered,
-> and that way are exposed to the user. You can't do that - right now
-> it's the only way we can inform the user about them. All partner
-> alternate modes (at least the SVIDs) must be exposed to the user one
-> way or the other, regardless does the port support them or not.
+-- 
+2.42.0.758.gaed0368e0e-goog
 
-The test this patch tries to fix could just be written without consideratio=
-n
-of this. My guess is that the test was designed such that the SVIDs before
-the DisplayPort SVID are unknown to the port under test so the mentality
-could have been "why should a port care about SVIDs it doesn't know
-about?"
-
-A defense I could make for it is that the USB PD CTS doesn't test
-to see if a port under test sends Discover Modes for every SVID returned
-in a Discover SVIDs ACK, so the interpretation isn't invalid. I've seen oth=
-er
-tcpm implementations handle Discover Modes this way as well.
-
-Regardless, you're definitely right that the user should know about all
-Alt Modes/SVIDs - the port would lose SVID information without
-registering a partner altmode for it. Currently I think the approaches to p=
-ass
-this test look like:
-    1. Your suggestion - let the tcpci decide if there should be a
-discovery order.
-Alternatively, let the tcpci decide if it wants to opt into this
-patch's behavior of
-only discovering modes for known SVIDs - a strict discovery flag.
-    2. Send a Discover Mode message to known SVIDs first in the order
-they come in, and then to unknown SVIDs. The test passes and no information
-is lost, but it's unnecessary refactoring just to pass one test for
-one Alt Mode.
-    3. Don't send a Discover Mode message to unknown SVIDs, but do register
-an Alt Mode with blank info for that SVID. It passes the test without havin=
-g to
-do any reordering compared to the first option and it preserves supported
-SVIDs. But, the port would lose information such as each SVID's Alt Modes
-VDO plus each SVID can support more than one Alt Mode.
-
-Let me know if any of these approaches sound worth pursuing; I do think
-Option 1 does make more sense than the others.
-
----
-Thanks for the feedback,
-RD
 
