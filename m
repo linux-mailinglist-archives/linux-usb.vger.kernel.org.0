@@ -1,520 +1,179 @@
-Return-Path: <linux-usb+bounces-2013-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2014-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8035E7D17CF
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Oct 2023 23:09:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 805A37D17E9
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Oct 2023 23:19:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D8770B219B9
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Oct 2023 21:09:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2A088B215E0
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Oct 2023 21:19:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AFCE354F7;
-	Fri, 20 Oct 2023 21:08:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F256E24A1A;
+	Fri, 20 Oct 2023 21:19:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Iu/XNEEY"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="fFR+74so"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C9D52510B
-	for <linux-usb@vger.kernel.org>; Fri, 20 Oct 2023 21:08:28 +0000 (UTC)
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8D9D7F
-	for <linux-usb@vger.kernel.org>; Fri, 20 Oct 2023 14:08:25 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-6b201a93c9cso1130965b3a.0
-        for <linux-usb@vger.kernel.org>; Fri, 20 Oct 2023 14:08:25 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7379200D9
+	for <linux-usb@vger.kernel.org>; Fri, 20 Oct 2023 21:19:18 +0000 (UTC)
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60DE0D65
+	for <linux-usb@vger.kernel.org>; Fri, 20 Oct 2023 14:19:13 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-507c50b7c36so1734171e87.3
+        for <linux-usb@vger.kernel.org>; Fri, 20 Oct 2023 14:19:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1697836105; x=1698440905; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=chromium.org; s=google; t=1697836751; x=1698441551; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DXnBfDlArT8QQ+dhtd2r5fMDGlrQTZfL2E4sRwVy3fU=;
-        b=Iu/XNEEYGxohnwSTLvfv4m9v02bvuXPrDS4a+kAt8x9UsUqVZTeSwHLL4YKPeXVQs4
-         3ynwaL2GtPp5f5wRpdTyi/ogfvgaiB5o7cREBGrdgsDJcmxQbV4wH4ioCzOl3Arp7xZD
-         fqZwyiF8+rmfK6DfjM1CJf8+NV+JqobTm4mZM=
+        bh=YLj+SmhNGHAbmx7AtEGeh++5cFknBV82w6tQGWOTRUk=;
+        b=fFR+74soHuuLOlXUYvHepesfgIPohteqQgR7zOji2DGkYHOGiBKmZ6SZafwfNwOv/k
+         JLArwadnDndto4/O0BnTKetXFa17Q8g4CSQR3feRPFk4CHtiudoOmAtxX+PRySf6lsyl
+         3eBVL4P9bOl+lW/rC+vvutAQG2vCyYOFLKosE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697836105; x=1698440905;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1697836751; x=1698441551;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DXnBfDlArT8QQ+dhtd2r5fMDGlrQTZfL2E4sRwVy3fU=;
-        b=ITP2qPUJgXaRTPsuyGq5y9ljTnJsosD+qqDaymji/HY6yTv8ii6bWAEmgXIH/YLT15
-         EPcbLuHICpmn9fC7jw1Feb8TURSSyuGmQre7BRtH6kSSDpw2OAUP+OTUXJDNyffe1ggn
-         k/+yKun81Ea9oHEdqjj9SQ6hfcqyeAH67iLqENG2U88tnl3ALPItW7OMsihXv6dP2IwR
-         JsQ3x6QGHzB1U6rxrCqyBitaVTRd8eZPNc/yKyhCNci+DS3uj7fqqNfLhVAbuGHHKAKj
-         S2hMATIy1tz5LZrvBOKhSicta5ZawYUJ8JixmgQvW4jS00HBkqupXG1qMua5gPxXGKIj
-         G1Yg==
-X-Gm-Message-State: AOJu0Yw+fGJjqMgEA8E1De4AG97OrkIfWd7e39nv0kciH3MxwG6dsrRq
-	ht93wPq+bqXTakzL4ORHGEhhOg==
-X-Google-Smtp-Source: AGHT+IEb1MKkvrdCiTUUHUx2844H+lZouwvUUGZUYdWYX+sKgbuQD171isy8pFxgtyU5nlBqGpwG0Q==
-X-Received: by 2002:a05:6a21:7748:b0:15d:8409:8804 with SMTP id bc8-20020a056a21774800b0015d84098804mr3161452pzc.57.1697836104815;
-        Fri, 20 Oct 2023 14:08:24 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:c078:ee4f:479f:8486])
-        by smtp.gmail.com with ESMTPSA id w14-20020aa7954e000000b00686b649cdd0sm1969278pfq.86.2023.10.20.14.08.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Oct 2023 14:08:24 -0700 (PDT)
-From: Douglas Anderson <dianders@chromium.org>
-To: Jakub Kicinski <kuba@kernel.org>,
-	Hayes Wang <hayeswang@realtek.com>,
-	"David S . Miller" <davem@davemloft.net>
-Cc: Edward Hill <ecgh@chromium.org>,
-	Laura Nao <laura.nao@collabora.com>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Simon Horman <horms@kernel.org>,
-	linux-usb@vger.kernel.org,
-	Grant Grundler <grundler@chromium.org>,
-	Douglas Anderson <dianders@chromium.org>,
-	=?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: [PATCH v5 8/8] r8152: Block future register access if register access fails
-Date: Fri, 20 Oct 2023 14:06:59 -0700
-Message-ID: <20231020140655.v5.8.Ib2affdbfdc2527aaeef9b46d4f23f7c04147faeb@changeid>
-X-Mailer: git-send-email 2.42.0.758.gaed0368e0e-goog
-In-Reply-To: <20231020210751.3415723-1-dianders@chromium.org>
-References: <20231020210751.3415723-1-dianders@chromium.org>
+        bh=YLj+SmhNGHAbmx7AtEGeh++5cFknBV82w6tQGWOTRUk=;
+        b=k+2m+SaXLn9aKtT68I2wKWDh71iCUvveXBGxwrTQs4uxouA2ouetfC9U7TEzv0UUPO
+         CKPVhgdtsToYexmsgJpH8HevRlhfDtdgn8VPgRwbC4i/7q2hSeLjpLsEmXwqYoEhKuor
+         qqELZhsYDR2KOMqkDcM4od1GzvLgC7TDc46FOtsm61ts7LcPIZDKipE4VgIwUm0PkA1e
+         I2VJNUFO9gbl2Sj3mxxc2YpvbUc2tozyC1pRgHx9KPvZEmTuCdeERInRqC3WduRChmZo
+         7d2pz4gl9O+Y95yEiZiIbo5o7G0JirbfmiPigSiZoNYjRC0cOZnZ5bS5dswdZ5joX28B
+         jsEQ==
+X-Gm-Message-State: AOJu0YyO1DC4KhBJWZEZ7GLqdYurGz+8adQ2Pjmg/EgoAYXnCvGJ3jJi
+	fM92ySoAurzsxj+DuUKIOuCjwhqQULj0GHSp7aEKQkZz
+X-Google-Smtp-Source: AGHT+IFMKRNaAQW+A4gGDjlg3deKHVrGzTvuSs4itCHnauFrziz4jz24YzKAV3Fra6Q6z9mLCt4Wqg==
+X-Received: by 2002:ac2:5548:0:b0:507:9996:f62b with SMTP id l8-20020ac25548000000b005079996f62bmr2146884lfk.56.1697836751230;
+        Fri, 20 Oct 2023 14:19:11 -0700 (PDT)
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com. [209.85.208.45])
+        by smtp.gmail.com with ESMTPSA id 22-20020a508756000000b00532eba07773sm2172493edv.25.2023.10.20.14.19.11
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Oct 2023 14:19:11 -0700 (PDT)
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-53f98cbcd76so1457a12.1
+        for <linux-usb@vger.kernel.org>; Fri, 20 Oct 2023 14:19:11 -0700 (PDT)
+X-Received: by 2002:a05:600c:4f91:b0:408:3e63:f457 with SMTP id
+ n17-20020a05600c4f9100b004083e63f457mr157300wmq.2.1697836257414; Fri, 20 Oct
+ 2023 14:10:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20231019212130.3146151-1-dianders@chromium.org>
+ <20231019142019.v4.5.Ib2affdbfdc2527aaeef9b46d4f23f7c04147faeb@changeid>
+ <eaf05cf1486c418790a1b54cbcda3a98@realtek.com> <CAD=FV=XZQ0XXY7XpX2_ubOwGsi0Hw5otHyuJS2=9QzDJsaSGWg@mail.gmail.com>
+In-Reply-To: <CAD=FV=XZQ0XXY7XpX2_ubOwGsi0Hw5otHyuJS2=9QzDJsaSGWg@mail.gmail.com>
+From: Doug Anderson <dianders@chromium.org>
+Date: Fri, 20 Oct 2023 14:10:42 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=Vx60LchWqQbALx_tAzK3hnqwSF949KY+R7yWvxfYPQAQ@mail.gmail.com>
+Message-ID: <CAD=FV=Vx60LchWqQbALx_tAzK3hnqwSF949KY+R7yWvxfYPQAQ@mail.gmail.com>
+Subject: Re: [PATCH v4 5/5] r8152: Block future register access if register
+ access fails
+To: Hayes Wang <hayeswang@realtek.com>
+Cc: Jakub Kicinski <kuba@kernel.org>, "David S . Miller" <davem@davemloft.net>, 
+	Grant Grundler <grundler@chromium.org>, Edward Hill <ecgh@chromium.org>, 
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, Simon Horman <horms@kernel.org>, 
+	Laura Nao <laura.nao@collabora.com>, Alan Stern <stern@rowland.harvard.edu>, 
+	=?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>, 
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Even though the functions to read/write registers can fail, most of
-the places in the r8152 driver that read/write register values don't
-check error codes. The lack of error code checking is problematic in
-at least two ways.
+Hi,
 
-The first problem is that the r8152 driver often uses code patterns
-similar to this:
-  x = read_register()
-  x = x | SOME_BIT;
-  write_register(x);
+On Fri, Oct 20, 2023 at 8:42=E2=80=AFAM Doug Anderson <dianders@chromium.or=
+g> wrote:
+>
+> > > @@ -8293,6 +8394,8 @@ static int rtl8152_post_reset(struct usb_interf=
+ace *intf)
+> > >         if (!tp)
+> > >                 return 0;
+> > >
+> > > +       rtl_set_accessible(tp);
+> > > +
+> >
+> > Excuse me. I have a new idea. You could check if it is possible.
+> > If you remove test_bit(PROBED_WITH_NO_ERRORS, &tp->flags) in pre_reset(=
+),
+> > the driver wouldn't be unbound and rebound. Instead, you test PROBED_WI=
+TH_NO_ERRORS
+> > here to re-initialize the device. Then, you could limit the times of US=
+B reset, and
+> > the infinite loop wouldn't occur. The code would be like the following,
+> >
+> >         if (!test_bit(PROBED_WITH_NO_ERRORS, &tp->flags)) {
+> >                 /* re-init */
+> >                 mutex_lock(&tp->control);
+> >                 tp->rtl_ops.init(tp);
+> >                 mutex_unlock(&tp->control);
+> >                 rtl_hw_phy_work_func_t(&tp->hw_phy_work.work);
+> >
+> >                 /* re-open(). Maybe move after checking netif_running(n=
+etdev) */
+> >                 mutex_lock(&tp->control);
+> >                 tp->rtl_ops.up(tp);
+> >                 mutex_unlock(&tp->control);
+> >
+> >                 /* check if there is any control error */
+> >                 if (test_bit(RTL8152_INACCESSIBLE, &tp->flags) {
+> >                         if (tp->reg_access_reset_count < REGISTER_ACCES=
+S_MAX_RESETS) {
+> >                                 /* queue reset again ? */
+> >                         } else {
+> >                                 ...
+> >                         }
+> >                         /* return 0 ? */
+> >                 } else {
+> >                         set_bit(PROBED_WITH_NO_ERRORS, &tp->flags)
+> >                 }
+> >         }
+>
+> The above solution worries me.
+>
+> I guess one part of this is that it replicates some logic that's in
+> probe(). That's not necessarily awful, but we'd at least want to
+> reorganize things so that they could share code if possible, though
+> maybe that's hard to do with the extra grabs of the mutex?
+>
+> The other part that worries me is that in the core when we added the
+> network device that something in the core might have cached bogus data
+> about our network device. This doesn't seem wonderful to me.
+>
+> I guess yet another part is that your proposed solution there has a
+> whole bunch of question marks on it. If it's not necessarily obvious
+> what we should do in this case then it doesn't feel like a robust
+> solution.
+>
+> It seems like your main concern here is with the potential for an
+> infinite number of resets. I have sent up a small patch to the USB
+> core [1] addressing this concern. Let's see what folks say about that
+> patch. If it is accepted then it seems like we could just not worry
+> about it. If it's not accepted then perhaps feedback on that patch
+> will give us additional guidance.
+>
+> In the meantime I'll at least post v5 since I don't want to leave the
+> patch up there with the mismatched mutex. I'll have my v5 point at my
+> USB core patch.
+>
+> [1] https://lore.kernel.org/r/20231020083125.1.I3e5f7abcbf6f08d392e31a582=
+6b7f234df662276@changeid
 
-...with the above pattern, if the read_register() fails and returns
-garbage then we'll end up trying to write modified garbage back to the
-Realtek adapter. If the write_register() succeeds that's bad. Note
-that as of commit f53a7ad18959 ("r8152: Set memory to all 0xFFs on
-failed reg reads") the "garbage" returned by read_register() will at
-least be consistent garbage, but it is still garbage.
+OK, Alan responded to the patch above and suggested simply putting the
+retry in the probe routine itself. I think that's actually in the same
+spirit as your suggestion but addresses the concerns that I had. I
+coded it up and tested it and it seems to work, so I posted that as v5
+[2]. Please take a look.
 
-It turns out that this problem is very serious. Writing garbage to
-some of the hardware registers on the Ethernet adapter can put the
-adapter in such a bad state that it needs to be power cycled (fully
-unplugged and plugged in again) before it can enumerate again.
-
-The second problem is that the r8152 driver generally has functions
-that are long sequences of register writes. Assuming everything will
-be OK if a random register write fails in the middle isn't a great
-assumption.
-
-One might wonder if the above two problems are real. You could ask if
-we would really have a successful write after a failed read. It turns
-out that the answer appears to be "yes, this can happen". In fact,
-we've seen at least two distinct failure modes where this happens.
-
-On a sc7180-trogdor Chromebook if you drop into kdb for a while and
-then resume, you can see:
-1. We get a "Tx timeout"
-2. The "Tx timeout" queues up a USB reset.
-3. In rtl8152_pre_reset() we try to reinit the hardware.
-4. The first several (2-9) register accesses fail with a timeout, then
-   things recover.
-
-The above test case was actually fixed by the patch ("r8152: Increase
-USB control msg timeout to 5000ms as per spec") but at least shows
-that we really can see successful calls after failed ones.
-
-On a different (AMD) based Chromebook with a particular adapter, we
-found that during reboot tests we'd also sometimes get a transitory
-failure. In this case we saw -EPIPE being returned sometimes. Retrying
-worked, but retrying is not always safe for all register accesses
-since reading/writing some registers might have side effects (like
-registers that clear on read).
-
-Let's fully lock out all register access if a register access fails.
-When we do this, we'll try to queue up a USB reset and try to unlock
-register access after the reset. This is slightly tricker than it
-sounds since the r8152 driver has an optimized reset sequence that
-only works reliably after probe happens. In order to handle this, we
-avoid the optimized reset if probe didn't finish. Instead, we simply
-retry the probe routine in this case.
-
-When locking out access, we'll use the existing infrastructure that
-the driver was using when it detected we were unplugged. This keeps us
-from getting stuck in delay loops in some parts of the driver.
-
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
-Originally when looking at this problem I thought that the obvious
-solution was to "just" add better error handling to the driver. This
-_sounds_ appealing, but it's a massive change and touches a
-significant portion of the lines in this driver. It's also not always
-obvious what the driver should be doing to handle errors.
-
-If you feel like you need to be convinced and to see what it looked
-like to add better error handling, I put up my "work in progress"
-patch when I was investigating this at: https://crrev.com/c/4937290
-
-There is still some active debate between the two approaches, though,
-so it would be interesting to hear if anyone had any opinions.
-
-NOTE: Grant's review tag was removed in v5 since v5 changed somewhat
-significantly.
-
-Changes in v5:
-- Removed extra mutex_unlock() left over in v4.
-- Fixed minor typos.
-- Don't do queue an unbind/bind reset if probe fails; just retry probe.
-
-Changes in v4:
-- Took out some unnecessary locks/unlocks of the control mutex.
-- Added comment about reading version causing probe fail if 3 fails.
-- Added text to commit msg about the potential unbind/bind loop.
-
-Changes in v3:
-- Fixed v2 changelog ending up in the commit message.
-- farmework -> framework in comments.
-
-Changes in v2:
-- Reset patch no longer based on retry patch, since that was dropped.
-- Reset patch should be robust even if failures happen in probe.
-- Switched booleans to bits in the "flags" variable.
-- Check for -ENODEV instead of "udev->state == USB_STATE_NOTATTACHED"
-
- drivers/net/usb/r8152.c | 207 ++++++++++++++++++++++++++++++++++------
- 1 file changed, 176 insertions(+), 31 deletions(-)
-
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 65232848b31d..afb20c0ed688 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -773,6 +773,9 @@ enum rtl8152_flags {
- 	SCHEDULE_TASKLET,
- 	GREEN_ETHERNET,
- 	RX_EPROTO,
-+	IN_PRE_RESET,
-+	PROBED_WITH_NO_ERRORS,
-+	PROBE_SHOULD_RETRY,
- };
- 
- #define DEVICE_ID_LENOVO_USB_C_TRAVEL_HUB		0x721e
-@@ -953,6 +956,8 @@ struct r8152 {
- 	u8 version;
- 	u8 duplex;
- 	u8 autoneg;
-+
-+	unsigned int reg_access_reset_count;
- };
- 
- /**
-@@ -1200,6 +1205,96 @@ static unsigned int agg_buf_sz = 16384;
- 
- #define RTL_LIMITED_TSO_SIZE	(size_to_mtu(agg_buf_sz) - sizeof(struct tx_desc))
- 
-+/* If register access fails then we block access and issue a reset. If this
-+ * happens too many times in a row without a successful access then we stop
-+ * trying to reset and just leave access blocked.
-+ */
-+#define REGISTER_ACCESS_MAX_RESETS	3
-+
-+static void rtl_set_inaccessible(struct r8152 *tp)
-+{
-+	set_bit(RTL8152_INACCESSIBLE, &tp->flags);
-+	smp_mb__after_atomic();
-+}
-+
-+static void rtl_set_accessible(struct r8152 *tp)
-+{
-+	clear_bit(RTL8152_INACCESSIBLE, &tp->flags);
-+	smp_mb__after_atomic();
-+}
-+
-+static
-+int r8152_control_msg(struct r8152 *tp, unsigned int pipe, __u8 request,
-+		      __u8 requesttype, __u16 value, __u16 index, void *data,
-+		      __u16 size, const char *msg_tag)
-+{
-+	struct usb_device *udev = tp->udev;
-+	int ret;
-+
-+	if (test_bit(RTL8152_INACCESSIBLE, &tp->flags))
-+		return -ENODEV;
-+
-+	ret = usb_control_msg(udev, pipe, request, requesttype,
-+			      value, index, data, size,
-+			      USB_CTRL_GET_TIMEOUT);
-+
-+	/* No need to issue a reset to report an error if the USB device got
-+	 * unplugged; just return immediately.
-+	 */
-+	if (ret == -ENODEV)
-+		return ret;
-+
-+	/* If the write was successful then we're done */
-+	if (ret >= 0) {
-+		tp->reg_access_reset_count = 0;
-+		return ret;
-+	}
-+
-+	dev_err(&udev->dev,
-+		"Failed to %s %d bytes at %#06x/%#06x (%d)\n",
-+		msg_tag, size, value, index, ret);
-+
-+	/* Block all future register access until we reset. Much of the code
-+	 * in the driver doesn't check for errors. Notably, many parts of the
-+	 * driver do a read/modify/write of a register value without
-+	 * confirming that the read succeeded. Writing back modified garbage
-+	 * like this can fully wedge the adapter, requiring a power cycle.
-+	 */
-+	rtl_set_inaccessible(tp);
-+
-+	/* If probe hasn't yet finished, then we'll request a retry of the
-+	 * whole probe routine if we get any control transfer errors. We
-+	 * never have to clear this bit since we free/reallocate the whole "tp"
-+	 * structure if we retry probe.
-+	 */
-+	if (!test_bit(PROBED_WITH_NO_ERRORS, &tp->flags)) {
-+		set_bit(PROBE_SHOULD_RETRY, &tp->flags);
-+		return ret;
-+	}
-+
-+	/* Failing to access registers in pre-reset is not surprising since we
-+	 * wouldn't be resetting if things were behaving normally. The register
-+	 * access we do in pre-reset isn't truly mandatory--we're just reusing
-+	 * the disable() function and trying to be nice by powering the
-+	 * adapter down before resetting it. Thus, if we're in pre-reset,
-+	 * we'll return right away and not try to queue up yet another reset.
-+	 * We know the post-reset is already coming.
-+	 */
-+	if (test_bit(IN_PRE_RESET, &tp->flags))
-+		return ret;
-+
-+	if (tp->reg_access_reset_count < REGISTER_ACCESS_MAX_RESETS) {
-+		usb_queue_reset_device(tp->intf);
-+		tp->reg_access_reset_count++;
-+	} else if (tp->reg_access_reset_count == REGISTER_ACCESS_MAX_RESETS) {
-+		dev_err(&udev->dev,
-+			"Tried to reset %d times; giving up.\n",
-+			REGISTER_ACCESS_MAX_RESETS);
-+	}
-+
-+	return ret;
-+}
-+
- static
- int get_registers(struct r8152 *tp, u16 value, u16 index, u16 size, void *data)
- {
-@@ -1210,9 +1305,10 @@ int get_registers(struct r8152 *tp, u16 value, u16 index, u16 size, void *data)
- 	if (!tmp)
- 		return -ENOMEM;
- 
--	ret = usb_control_msg(tp->udev, tp->pipe_ctrl_in,
--			      RTL8152_REQ_GET_REGS, RTL8152_REQT_READ,
--			      value, index, tmp, size, USB_CTRL_GET_TIMEOUT);
-+	ret = r8152_control_msg(tp, tp->pipe_ctrl_in,
-+				RTL8152_REQ_GET_REGS, RTL8152_REQT_READ,
-+				value, index, tmp, size, "read");
-+
- 	if (ret < 0)
- 		memset(data, 0xff, size);
- 	else
-@@ -1233,9 +1329,9 @@ int set_registers(struct r8152 *tp, u16 value, u16 index, u16 size, void *data)
- 	if (!tmp)
- 		return -ENOMEM;
- 
--	ret = usb_control_msg(tp->udev, tp->pipe_ctrl_out,
--			      RTL8152_REQ_SET_REGS, RTL8152_REQT_WRITE,
--			      value, index, tmp, size, USB_CTRL_SET_TIMEOUT);
-+	ret = r8152_control_msg(tp, tp->pipe_ctrl_out,
-+				RTL8152_REQ_SET_REGS, RTL8152_REQT_WRITE,
-+				value, index, tmp, size, "write");
- 
- 	kfree(tmp);
- 
-@@ -1244,10 +1340,8 @@ int set_registers(struct r8152 *tp, u16 value, u16 index, u16 size, void *data)
- 
- static void rtl_set_unplug(struct r8152 *tp)
- {
--	if (tp->udev->state == USB_STATE_NOTATTACHED) {
--		set_bit(RTL8152_INACCESSIBLE, &tp->flags);
--		smp_mb__after_atomic();
--	}
-+	if (tp->udev->state == USB_STATE_NOTATTACHED)
-+		rtl_set_inaccessible(tp);
- }
- 
- static int generic_ocp_read(struct r8152 *tp, u16 index, u16 size,
-@@ -8262,7 +8356,7 @@ static int rtl8152_pre_reset(struct usb_interface *intf)
- 	struct r8152 *tp = usb_get_intfdata(intf);
- 	struct net_device *netdev;
- 
--	if (!tp)
-+	if (!tp || !test_bit(PROBED_WITH_NO_ERRORS, &tp->flags))
- 		return 0;
- 
- 	netdev = tp->netdev;
-@@ -8277,7 +8371,9 @@ static int rtl8152_pre_reset(struct usb_interface *intf)
- 	napi_disable(&tp->napi);
- 	if (netif_carrier_ok(netdev)) {
- 		mutex_lock(&tp->control);
-+		set_bit(IN_PRE_RESET, &tp->flags);
- 		tp->rtl_ops.disable(tp);
-+		clear_bit(IN_PRE_RESET, &tp->flags);
- 		mutex_unlock(&tp->control);
- 	}
- 
-@@ -8290,9 +8386,11 @@ static int rtl8152_post_reset(struct usb_interface *intf)
- 	struct net_device *netdev;
- 	struct sockaddr sa;
- 
--	if (!tp)
-+	if (!tp || !test_bit(PROBED_WITH_NO_ERRORS, &tp->flags))
- 		return 0;
- 
-+	rtl_set_accessible(tp);
-+
- 	/* reset the MAC address in case of policy change */
- 	if (determine_ethernet_addr(tp, &sa) >= 0) {
- 		rtnl_lock();
-@@ -9494,17 +9592,29 @@ static u8 __rtl_get_hw_ver(struct usb_device *udev)
- 	__le32 *tmp;
- 	u8 version;
- 	int ret;
-+	int i;
- 
- 	tmp = kmalloc(sizeof(*tmp), GFP_KERNEL);
- 	if (!tmp)
- 		return 0;
- 
--	ret = usb_control_msg(udev, usb_rcvctrlpipe(udev, 0),
--			      RTL8152_REQ_GET_REGS, RTL8152_REQT_READ,
--			      PLA_TCR0, MCU_TYPE_PLA, tmp, sizeof(*tmp),
--			      USB_CTRL_GET_TIMEOUT);
--	if (ret > 0)
--		ocp_data = (__le32_to_cpu(*tmp) >> 16) & VERSION_MASK;
-+	/* Retry up to 3 times in case there is a transitory error. We do this
-+	 * since retrying a read of the version is always safe and this
-+	 * function doesn't take advantage of r8152_control_msg().
-+	 */
-+	for (i = 0; i < 3; i++) {
-+		ret = usb_control_msg(udev, usb_rcvctrlpipe(udev, 0),
-+				      RTL8152_REQ_GET_REGS, RTL8152_REQT_READ,
-+				      PLA_TCR0, MCU_TYPE_PLA, tmp, sizeof(*tmp),
-+				      USB_CTRL_GET_TIMEOUT);
-+		if (ret > 0) {
-+			ocp_data = (__le32_to_cpu(*tmp) >> 16) & VERSION_MASK;
-+			break;
-+		}
-+	}
-+
-+	if (i != 0 && ret > 0)
-+		dev_warn(&udev->dev, "Needed %d retries to read version\n", i);
- 
- 	kfree(tmp);
- 
-@@ -9603,25 +9713,14 @@ static bool rtl8152_supports_lenovo_macpassthru(struct usb_device *udev)
- 	return 0;
- }
- 
--static int rtl8152_probe(struct usb_interface *intf,
--			 const struct usb_device_id *id)
-+static int rtl8152_probe_once(struct usb_interface *intf,
-+			      const struct usb_device_id *id, u8 version)
- {
- 	struct usb_device *udev = interface_to_usbdev(intf);
- 	struct r8152 *tp;
- 	struct net_device *netdev;
--	u8 version;
- 	int ret;
- 
--	if (intf->cur_altsetting->desc.bInterfaceClass != USB_CLASS_VENDOR_SPEC)
--		return -ENODEV;
--
--	if (!rtl_check_vendor_ok(intf))
--		return -ENODEV;
--
--	version = rtl8152_get_version(intf);
--	if (version == RTL_VER_UNKNOWN)
--		return -ENODEV;
--
- 	usb_reset_device(udev);
- 	netdev = alloc_etherdev(sizeof(struct r8152));
- 	if (!netdev) {
-@@ -9784,10 +9883,20 @@ static int rtl8152_probe(struct usb_interface *intf,
- 	else
- 		device_set_wakeup_enable(&udev->dev, false);
- 
-+	/* If we saw a control transfer error while probing then we may
-+	 * want to try probe() again. Consider this an error.
-+	 */
-+	if (test_bit(PROBE_SHOULD_RETRY, &tp->flags))
-+		goto out2;
-+
-+	set_bit(PROBED_WITH_NO_ERRORS, &tp->flags);
- 	netif_info(tp, probe, netdev, "%s\n", DRIVER_VERSION);
- 
- 	return 0;
- 
-+out2:
-+	unregister_netdev(netdev);
-+
- out1:
- 	tasklet_kill(&tp->tx_tl);
- 	cancel_delayed_work_sync(&tp->hw_phy_work);
-@@ -9796,10 +9905,46 @@ static int rtl8152_probe(struct usb_interface *intf,
- 	rtl8152_release_firmware(tp);
- 	usb_set_intfdata(intf, NULL);
- out:
-+	if (test_bit(PROBE_SHOULD_RETRY, &tp->flags))
-+		ret = -EAGAIN;
-+
- 	free_netdev(netdev);
- 	return ret;
- }
- 
-+#define RTL8152_PROBE_TRIES	3
-+
-+static int rtl8152_probe(struct usb_interface *intf,
-+			 const struct usb_device_id *id)
-+{
-+	u8 version;
-+	int ret;
-+	int i;
-+
-+	if (intf->cur_altsetting->desc.bInterfaceClass != USB_CLASS_VENDOR_SPEC)
-+		return -ENODEV;
-+
-+	if (!rtl_check_vendor_ok(intf))
-+		return -ENODEV;
-+
-+	version = rtl8152_get_version(intf);
-+	if (version == RTL_VER_UNKNOWN)
-+		return -ENODEV;
-+
-+	for (i = 0; i < RTL8152_PROBE_TRIES; i++) {
-+		ret = rtl8152_probe_once(intf, id, version);
-+		if (ret != -EAGAIN)
-+			break;
-+	}
-+	if (ret == -EAGAIN) {
-+		dev_err(&intf->dev,
-+			"r8152 failed probe after %d tries; giving up\n", i);
-+		return -ENODEV;
-+	}
-+
-+	return ret;
-+}
-+
- static void rtl8152_disconnect(struct usb_interface *intf)
- {
- 	struct r8152 *tp = usb_get_intfdata(intf);
--- 
-2.42.0.758.gaed0368e0e-goog
-
+[2] https://lore.kernel.org/r/20231020210751.3415723-1-dianders@chromium.or=
+g
 
