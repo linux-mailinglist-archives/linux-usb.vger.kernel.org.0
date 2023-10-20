@@ -1,147 +1,232 @@
-Return-Path: <linux-usb+bounces-1966-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1967-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DBA17D0BE7
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Oct 2023 11:33:54 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0DEF7D0C30
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Oct 2023 11:43:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DDEC5B217E1
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Oct 2023 09:33:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 11890B215B4
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Oct 2023 09:43:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B6421401A;
-	Fri, 20 Oct 2023 09:33:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F90D1401A;
+	Fri, 20 Oct 2023 09:43:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="aBYf6lF9"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="RlLDxHJE"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1F2D13AC5
-	for <linux-usb@vger.kernel.org>; Fri, 20 Oct 2023 09:33:41 +0000 (UTC)
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A6D119B6
-	for <linux-usb@vger.kernel.org>; Fri, 20 Oct 2023 02:33:28 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-9be3b66f254so89121066b.3
-        for <linux-usb@vger.kernel.org>; Fri, 20 Oct 2023 02:33:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1697794404; x=1698399204; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wBM6ErArjaeuBbIlwBAlMfcfi+6e43gtVVtakkQbEgY=;
-        b=aBYf6lF9OSoYYDPCHhRiksf2aJVMbKAK+E69a1WdAN9bnaaEF2vOud7VRVAQScOcna
-         6CoYbcm+aCLtPOhj0aqPuc+yTpwpjrjFDptuxwPcrECww+bGFiirr1ua/4SVesOU4mnl
-         tQvt7tLPg5AuVLyLc2JYLDwZvlo5RIblVG4YDfy/6sI/8Scq6htvmmyXwqsinRnCy3Ys
-         IHGXUDg31gx65gHdLLqHO2Is1MaOSkrp5ZfMRSPk8yfrY84AHVZBROpoKScHxJylCUMj
-         Bz0ywNAd7vmBE0S44ERwaS+akUeITa8Q+02bzzlIeNppdyArdQSG75KpP6V0E3hYutsX
-         fJ1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697794404; x=1698399204;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wBM6ErArjaeuBbIlwBAlMfcfi+6e43gtVVtakkQbEgY=;
-        b=qz8oanW8mU6xg43cpO1j7ibHBaxCChjOiJM1l3VrCOfjmT8L+7C5OjRjSXVwwlP+/c
-         aKe4v5VI9ADZUK30SUOQh4VfMF5rJUHfRQhZigqgPKTStgIbL9/b9IrC0DmjfBXSr+yQ
-         BtAqTgT33TLk7Ybvz0WFnSx9zYuogn3L8ub8jk1k6K4Jmlp8De+baM32EUc2wKLGo5gt
-         DPg5ym6fmUEYVFN4IRspj7upmhHP6rKt4XixntDDLnOCc2ja4sij0dz2g7GuX9NVKSNr
-         yMqHFY0x/ACQxHEl2mF5O3NuRqnWSqUP6gBZSTeYChUSjNRCT9jjmw+t9eAckS8LqTyF
-         7BTQ==
-X-Gm-Message-State: AOJu0YzZ//xHREGZuk+wXNaYRH781ARHm1q2ceirOKOtNNAw3/mczS2A
-	k9tZaj9KouO9WH4dTAma0St0JA==
-X-Google-Smtp-Source: AGHT+IEmwTBub4TTdlz1jMLWOrqXIJ66kAQDBOiG76tfqbcR00lkfhKrg/qt9xMsw3VGkkS/X7RPHA==
-X-Received: by 2002:a17:907:786:b0:9c4:41c9:6ac6 with SMTP id xd6-20020a170907078600b009c441c96ac6mr1006182ejb.33.1697794404139;
-        Fri, 20 Oct 2023 02:33:24 -0700 (PDT)
-Received: from otso.luca.vpn.lucaweiss.eu (k10064.upc-k.chello.nl. [62.108.10.64])
-        by smtp.gmail.com with ESMTPSA id t15-20020a1709066bcf00b009a13fdc139fsm1102535ejs.183.2023.10.20.02.33.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Oct 2023 02:33:23 -0700 (PDT)
-From: Luca Weiss <luca.weiss@fairphone.com>
-Date: Fri, 20 Oct 2023 11:33:20 +0200
-Subject: [PATCH v2 3/3] dt-bindings: usb: fsa4480: Add compatible for
- OCP96011
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79B0114264;
+	Fri, 20 Oct 2023 09:43:08 +0000 (UTC)
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72CE2CA;
+	Fri, 20 Oct 2023 02:43:06 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39K9bVNF022305;
+	Fri, 20 Oct 2023 09:42:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=gKgKE/3okkYeBZ3Ht9e//KK6FJL8oHwgra2hVscpmfI=;
+ b=RlLDxHJEzEqPRoWIKD6uJm1+QBLLHImXqr4S4LLiYO8JwhKYorJwHUSvrIWG5FPiMFq8
+ 3w9EEUEXO0NB+rzJRmtJjzBXnqkUyUq0r6jR4E5lxbD07WT6k3gylQKRZ71iTuSlTQnb
+ LZc80/SnBxRIpkQEoznO16fZavKsErCRRxeakusPB9r6FBhhoBxrMR/sBbFvC4WH1KT1
+ 1capsMliUSmuygT9Z40zfB9qQhz4n/Z8TLJPV8P8UIOQvPShDH4Jhv0nGW1pEd/z3krA
+ F4Xg/qcc666iTY0t6pKAZoI0/Q0/JRlL0IU05G8JDb/RGCikXu3YZpI3o47ft8jR+iEb Jw== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tubxa1b9p-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 20 Oct 2023 09:42:55 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39K9gsfB012882
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 20 Oct 2023 09:42:54 GMT
+Received: from [10.216.47.159] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.39; Fri, 20 Oct
+ 2023 02:42:47 -0700
+Message-ID: <279a54f2-7260-4270-83c7-d6f5c5ba0873@quicinc.com>
+Date: Fri, 20 Oct 2023 15:12:44 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v13 01/10] usb: dwc3: core: Access XHCI address space
+ temporarily to read port info
+To: Johan Hovold <johan@kernel.org>
+CC: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Andy
+ Gross" <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Konrad
+ Dybcio" <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi
+	<balbi@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>, <quic_jackp@quicinc.com>,
+        <ahalaney@redhat.com>, <quic_shazhuss@quicinc.com>
+References: <20231007154806.605-1-quic_kriskura@quicinc.com>
+ <20231007154806.605-2-quic_kriskura@quicinc.com>
+ <ZTI7AtCJWgAnACSh@hovoldconsulting.com>
+Content-Language: en-US
+From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <ZTI7AtCJWgAnACSh@hovoldconsulting.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20231020-fsa4480-swap-v2-3-9a7f9bb59873@fairphone.com>
-References: <20231020-fsa4480-swap-v2-0-9a7f9bb59873@fairphone.com>
-In-Reply-To: <20231020-fsa4480-swap-v2-0-9a7f9bb59873@fairphone.com>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Neil Armstrong <neil.armstrong@linaro.org>, 
- Rob Herring <robh+dt@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>
-Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
- Luca Weiss <luca.weiss@fairphone.com>
-X-Mailer: b4 0.12.3
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 07m-R_smzPgJysJaoTRDAlUTKD0PviSu
+X-Proofpoint-ORIG-GUID: 07m-R_smzPgJysJaoTRDAlUTKD0PviSu
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-20_07,2023-10-19_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ mlxlogscore=999 spamscore=0 impostorscore=0 lowpriorityscore=0 bulkscore=0
+ clxscore=1015 malwarescore=0 mlxscore=0 priorityscore=1501 phishscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2310170001 definitions=main-2310200080
 
-The Orient-Chip OCP96011 is generally compatible with the FSA4480, add a
-compatible for it with the fallback on fsa4480.
 
-However the AUX/SBU connections are expected to be swapped compared to
-FSA4480, so document this in the data-lanes description.
 
-Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
----
- Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml | 18 ++++++++++++++----
- 1 file changed, 14 insertions(+), 4 deletions(-)
+On 10/20/2023 2:02 PM, Johan Hovold wrote:
+> On Sat, Oct 07, 2023 at 09:17:57PM +0530, Krishna Kurapati wrote:
+>> Currently host-only capable DWC3 controllers support Multiport.
+> 
+> You use the word "currently" in a few places like this (e.g. in comments
+> in the code). What exactly do you mean? That all current multiport
+> controllers are host-only, or that this is all that the driver supports
+> after your changes?
+> 
+This means that, today the capable multiport controllers are host-only 
+capable, not that the driver is designed that way.
 
-diff --git a/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml b/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
-index 86f6d633c2fb..f9410eb76a62 100644
---- a/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
-+++ b/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
-@@ -11,8 +11,12 @@ maintainers:
- 
- properties:
-   compatible:
--    enum:
--      - fcs,fsa4480
-+    oneOf:
-+      - const: fcs,fsa4480
-+      - items:
-+          - enum:
-+              - ocs,ocp96011
-+          - const: fcs,fsa4480
- 
-   reg:
-     maxItems: 1
-@@ -53,16 +57,22 @@ properties:
-                   - const: 0
-                   - const: 1
-                 description: |
--                  Default AUX/SBU layout
-+                  Default AUX/SBU layout (FSA4480)
-                   - AUX+ connected to SBU2
-                   - AUX- connected to SBU1
-+                  Default AUX/SBU layout (OCP96011)
-+                  - AUX+ connected to SBU1
-+                  - AUX- connected to SBU2
-               - items:
-                   - const: 1
-                   - const: 0
-                 description: |
--                  Swapped AUX/SBU layout
-+                  Swapped AUX/SBU layout (FSA4480)
-                   - AUX+ connected to SBU1
-                   - AUX- connected to SBU2
-+                  Swapped AUX/SBU layout (OCP96011)
-+                  - AUX+ connected to SBU2
-+                  - AUX- connected to SBU1
- 
- required:
-   - compatible
+> Please rephrase accordingly throughout so that this becomes clear.
+> 
+> In any case it looks like the above sentence is at least missing an
+> "only".
+>   
+>> +static int dwc3_read_port_info(struct dwc3 *dwc)
+>> +{
+>> +	void __iomem *base;
+>> +	u8 major_revision;
+>> +	u32 offset = 0;
+> 
+> I'd move the initialisation just before the loop.
+> 
+>> +	u32 val;
+>> +
+>> +	/*
+>> +	 * Remap xHCI address space to access XHCI ext cap regs,
+> 
+> Drop comma and merge with next line and break it closer to 80 chars
+> (instead of 65).
+> 
+>> +	 * since it is needed to get port info.
+> 
+> s/since it is needed to get/which hold the/?
+> 
+>> +	 */
+>> +	base = ioremap(dwc->xhci_resources[0].start,
+>> +				resource_size(&dwc->xhci_resources[0]));
+>> +	if (IS_ERR(base))
+>> +		return PTR_ERR(base);
+>> +
+>> +	do {
+>> +		offset = xhci_find_next_ext_cap(base, offset,
+>> +				XHCI_EXT_CAPS_PROTOCOL);
+>> +		if (!offset)
+>> +			break;
+>> +
+>> +		val = readl(base + offset);
+>> +		major_revision = XHCI_EXT_PORT_MAJOR(val);
+>> +
+>> +		val = readl(base + offset + 0x08);
+>> +		if (major_revision == 0x03) {
+>> +			dwc->num_usb3_ports += XHCI_EXT_PORT_COUNT(val);
+>> +		} else if (major_revision <= 0x02) {
+>> +			dwc->num_usb2_ports += XHCI_EXT_PORT_COUNT(val);
+>> +		} else {
+>> +			dev_err(dwc->dev,
+> 
+> This should be dev_warn() (as in the xhci driver) now that you no longer
+> treat it as a fatal error.
+> 
+>> +				"Unrecognized port major revision %d\n",
+> 
+> Merge this with the previous line (even if it makes that line 83 chars).
+> 
+> Use a lower case 'U' for consistency with most of the error messages.
+> 
+Sure, will change this to dev_warn and modify the "u".
 
--- 
-2.42.0
+>> +							major_revision);
+>> +		}
+>> +	} while (1);
+>> +
+>> +	dev_dbg(dwc->dev, "hs-ports: %u ss-ports: %u\n",
+>> +			dwc->num_usb2_ports, dwc->num_usb3_ports);
+>> +
+>> +	iounmap(base);
+>> +
+>> +	return 0;
+>> +}
+>> +
+>>   static int dwc3_probe(struct platform_device *pdev)
+>>   {
+>>   	struct device		*dev = &pdev->dev;
+>> @@ -1846,6 +1892,7 @@ static int dwc3_probe(struct platform_device *pdev)
+>>   	void __iomem		*regs;
+>>   	struct dwc3		*dwc;
+>>   	int			ret;
+>> +	unsigned int		hw_mode;
+> 
+> Nit: I'd place this one before ret.
+> >>
+>>   	dwc = devm_kzalloc(dev, sizeof(*dwc), GFP_KERNEL);
+>>   	if (!dwc)
+>> @@ -1926,6 +1973,20 @@ static int dwc3_probe(struct platform_device *pdev)
+>>   			goto err_disable_clks;
+>>   	}
+>>   
+>> +	/*
+>> +	 * Currently only DWC3 controllers that are host-only capable
+>> +	 * support Multiport.
+>> +	 */
+> 
+> So is this is a limitation of the hardware or implementation?
+> 
 
+This is how the hardware is implemented today. I wanted to convey that 
+"lets check for host-only condition before going for reading port info"
+
+>> +	hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
+>> +	if (hw_mode == DWC3_GHWPARAMS0_MODE_HOST) {
+>> +		ret = dwc3_read_port_info(dwc);
+>> +		if (ret)
+>> +			goto err_disable_clks;
+>> +	} else {
+>> +		dwc->num_usb2_ports = 1;
+>> +		dwc->num_usb3_ports = 1;
+>> +	}
+>> +
+>>   	spin_lock_init(&dwc->lock);
+>>   	mutex_init(&dwc->mutex);
+> 
+> Johan
+> 
 
