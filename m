@@ -1,143 +1,111 @@
-Return-Path: <linux-usb+bounces-1997-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1998-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBC567D1380
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Oct 2023 18:03:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 01CF57D13EB
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Oct 2023 18:24:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 587B9B2154B
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Oct 2023 16:03:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EADC8B20EC3
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Oct 2023 16:24:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 469E31E52F;
-	Fri, 20 Oct 2023 16:03:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="IQFefCmv"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1A2B1EA7B;
+	Fri, 20 Oct 2023 16:23:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 425731E506;
-	Fri, 20 Oct 2023 16:03:35 +0000 (UTC)
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C018AB3;
-	Fri, 20 Oct 2023 09:03:33 -0700 (PDT)
-Received: from mercury (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: sre)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id 1B29F660731B;
-	Fri, 20 Oct 2023 17:03:32 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1697817812;
-	bh=gdDLnZkjmHu+Sk+/2xbwhd6fH/+pG0s/huYMTIz5rp8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IQFefCmvfeF1DgM1gwp4s6N4cgiJZSOLMPM4KqmFPhcDEqYra/6qGuzOZ8uXfsM1G
-	 dndXiXqb3HzXVk1aMsaSQ0S56EMTjnZjF64NXuuVRQQz8/270jgTiqIxtulr4wGb7c
-	 OPhUDYPn+hXJEAf4rl9wOAcZA/tf/eSSJYQQzh0N/+XupthBNbSDHU/kqHqFhTr5Z6
-	 x0j1cSz2oJoChJT4pr/9Vo3CP/ji3vHYFZ8GgNTQvXtN7ZRdbaJeFsp0+fPOob5UUU
-	 Tu62TlLLx4w2HAGI92a3SiNLOaUFO/rvEo7+sxOqggfemBvjNEz+vG+DrTd/1cZKNv
-	 kvpOyb/vt5z8A==
-Received: by mercury (Postfix, from userid 1000)
-	id 1E11910603FC; Fri, 20 Oct 2023 18:03:29 +0200 (CEST)
-Date: Fri, 20 Oct 2023 18:03:29 +0200
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Conor Dooley <conor@kernel.org>
-Cc: Heiko Stuebner <heiko@sntech.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	linux-rockchip@lists.infradead.org, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, kernel@collabora.com
-Subject: Re: [PATCH v4 1/3] dt-bindings: usb: add rk3588 compatible to
- rockchip,dwc3
-Message-ID: <20231020160329.uqgjjr6ubfrcqjkj@mercury.elektranox.org>
-References: <20231020150022.48725-1-sebastian.reichel@collabora.com>
- <20231020150022.48725-2-sebastian.reichel@collabora.com>
- <20231020-shudder-tackle-cc98a82f1cd0@spud>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABF4A171C6
+	for <linux-usb@vger.kernel.org>; Fri, 20 Oct 2023 16:23:57 +0000 (UTC)
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by lindbergh.monkeyblade.net (Postfix) with SMTP id B4A58A3
+	for <linux-usb@vger.kernel.org>; Fri, 20 Oct 2023 09:23:54 -0700 (PDT)
+Received: (qmail 302116 invoked by uid 1000); 20 Oct 2023 12:23:53 -0400
+Date: Fri, 20 Oct 2023 12:23:53 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Doug Anderson <dianders@chromium.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+  linux-usb@vger.kernel.org, Grant Grundler <grundler@chromium.org>,
+  Hayes Wang <hayeswang@realtek.com>, Bastien Nocera <hadess@hadess.net>,
+  Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+  Flavio Suligoi <f.suligoi@asem.it>, Hans de Goede <hdegoede@redhat.com>,
+  Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+  Ivan Orlov <ivan.orlov0322@gmail.com>,
+  Marc Kleine-Budde <mkl@pengutronix.de>,
+  "Rafael J. Wysocki" <rafael@kernel.org>, Ray Chi <raychi@google.com>,
+  Ricardo =?iso-8859-1?Q?Ca=F1uelo?= <ricardo.canuelo@collabora.com>,
+  Rob Herring <robh@kernel.org>, Roy Luo <royluo@google.com>,
+  Stanley Chang <stanley_chang@realtek.com>,
+  Vincent Mailhol <mailhol.vincent@wanadoo.fr>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: core: Prevent infinite loops when
+ usb_reset_device() unbinds/binds
+Message-ID: <2b6352b1-e192-47d6-bdce-b63216ab674b@rowland.harvard.edu>
+References: <20231020083125.1.I3e5f7abcbf6f08d392e31a5826b7f234df662276@changeid>
+ <60a358c9-b44b-4d25-9a20-aa9e00c65ab6@rowland.harvard.edu>
+ <CAD=FV=VQ22p7iDdzK-CXOBEqpu0b3J=LKRZuPcajQWFUmr=1cA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="bdmk4yrcxo3we24y"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20231020-shudder-tackle-cc98a82f1cd0@spud>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAD=FV=VQ22p7iDdzK-CXOBEqpu0b3J=LKRZuPcajQWFUmr=1cA@mail.gmail.com>
 
+On Fri, Oct 20, 2023 at 08:59:42AM -0700, Doug Anderson wrote:
+> Hi,
+> 
+> On Fri, Oct 20, 2023 at 8:46 AM Alan Stern <stern@rowland.harvard.edu> wrote:
+> >
+> > On Fri, Oct 20, 2023 at 08:31:38AM -0700, Douglas Anderson wrote:
+> > > When we call usb_reset_device() and a driver doesn't implement
+> > > pre_reset() and post_reset() methods then the USB core will attempt to
+> > > unbind and rebind the driver in order to make reset work. This is a
+> > > great general solution, but it has the potential to loop forever.
+> > > Specifically, if the USB device is in a state that the USB device
+> > > driver issues another usb_reset_device() after each rebind then we'll
+> > > just continually unbind and rebind with no end.
+> > >
+> > > It's difficult to address this condition in a USB device driver
+> > > because it's hard for the driver to keep state across each
+> > > unbind/bind.
+> >
+> > How about just adding appropriate pre_reset() and post_reset() methods?
+> > This is precisely what they are meant for.  Then the the unbind/rebind
+> > loop wouldn't ever get started.
+> 
+> Right, and we have pre_reset() and post_reset() in the r1852 driver.
+> The issue is that we are seeing occasional control transfer errors
+> while the r8152 driver is still running its probe() routine and we
+> want to reset in response to those. It is relatively difficult to have
+> the pre_reset() and post_reset() methods work properly if failures
+> happen and probe() hasn't finished yet.
 
---bdmk4yrcxo3we24y
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Why is that?
 
-Hi Conor,
+>  The current proposal I have
+> for the r8152 driver is to have the pre_reset() routine return -EIO if
+> we saw errors during probe, which tells the USB core to unbind/rebind
+> us. This gets us to a known good state.
 
-On Fri, Oct 20, 2023 at 04:36:19PM +0100, Conor Dooley wrote:
-> On Fri, Oct 20, 2023 at 04:11:40PM +0200, Sebastian Reichel wrote:
-> > [...]
-> > +allOf:
-> > +  - $ref: snps,dwc3.yaml#
-> > +  - if:
-> > +      properties:
-> > +        compatible:
-> > +          contains:
-> > +            const: rockchip,rk3328-dwc3
-> > +    then:
-> > +      properties:
-> > +        clocks:
-> > +          minItems: 3
-> > +          maxItems: 4
-> > +        clock-names:
-> > +          minItems: 3
-> > +          items:
-> > +            - const: ref_clk
-> > +            - const: suspend_clk
-> > +            - const: bus_clk
-> > +            - const: grf_clk
->=20
-> minItems for clocks and clock-names is already 3, is it not?
+Don't you also get to a known good state if pre_reset() and post_reset() 
+both return 0?  Then there's no unbinding, so the driver can just jump 
+back to the start of its probe() routine.  Or fail the probe, if there 
+have been too many errors.
 
-Yes, but the following 'maxItems: 4' implicitly sets it to 4,
-so I had to set it again. The same is true for clock-names -
-providings new 'items:' effectively drops the "minItems: 3"
-=66rom the generic section.
+>  If we need to do a reset later
+> on (after probe finished successfully) then pre_reset() and
+> post_reset() can avoid the unbind/bind.
+> 
+> The worry was that this could cause an infinite loop. Hence this patch. ;-)
 
-> Otherwise,
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
->=20
-> Thanks,
-> Conor.
+With no unbinding/rebinding, any loops that occur will be entirely under 
+the driver's control.  Then it should easily be able to avoid looping 
+forever.
 
-Thanks,
-
--- Sebastian
-
---bdmk4yrcxo3we24y
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmUypMQACgkQ2O7X88g7
-+prWug//YTS5WE0ntNTSommlUibet+KcZPc5blw/2DH/Lx7UHSPecqtfjAWpAB/j
-Cg9pHPgOumi0wJSdmqKRkJST7bKaCOkpw4N4HLqnrNBL+PNLG7sQOo9qMwaV2x7B
-3nFbsXLjoxlHuYGrupRoFAUL/LevwpWC1vgnrKdk37p0uJzmhRVyUtMrjE3wqzVU
-FbiI4NgxpflWpRQ8VqtUzZVGA/15RXZVqnFjHgGZ624NhDD/2KsIUYOscvwq5qYa
-1QylGUeTFE3D7EGbmTLd/voxlGKTntEPbYw+hP8JVf/oA7d01zlFRFa3MLmVM4vg
-cRbaTt96A6ugCjBdUdkHYhw0aEROd4u/5hCdRv5whBOqWmz5HJ4jKsc+hrneNE7T
-M9tHr6WpbtHu/s4Gepx+AxScNwOEF/A93pOuQXcy1CYOjF/hvx9zP0PYsQwD7b03
-Qtr6Qnp95rozYYFt/2NforFTdFAwcGxR3XtUmd7qAMkIQYmApzgaQiDzLoJb/Gtv
-1nSAiW0lvgHALq+PefTqKCqPXs28wJXdojJJscTIRk7RbkoLkxScdnaZG85kp+Qj
-xSAtSGrvjE6PLvTdwxP3G+R9Qlh1O5mzze9iydGtwY4UsW6vR+Xybvu6e8V5rC8B
-R/C1la6YhCZoGPgK93jn4tVCqwHxiOX3TMY1NlCj4hn+2WU2AxQ=
-=a1sC
------END PGP SIGNATURE-----
-
---bdmk4yrcxo3we24y--
+Alan Stern
 
