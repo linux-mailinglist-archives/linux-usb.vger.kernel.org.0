@@ -1,129 +1,143 @@
-Return-Path: <linux-usb+bounces-1996-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1997-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF8D77D1366
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Oct 2023 18:00:13 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBC567D1380
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Oct 2023 18:03:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B301A1C20EFA
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Oct 2023 16:00:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 587B9B2154B
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Oct 2023 16:03:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90E921E528;
-	Fri, 20 Oct 2023 16:00:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 469E31E52F;
+	Fri, 20 Oct 2023 16:03:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="NTwiOEer"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="IQFefCmv"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40C1C1DA4C
-	for <linux-usb@vger.kernel.org>; Fri, 20 Oct 2023 16:00:06 +0000 (UTC)
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D45CB3
-	for <linux-usb@vger.kernel.org>; Fri, 20 Oct 2023 09:00:03 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-991c786369cso153979366b.1
-        for <linux-usb@vger.kernel.org>; Fri, 20 Oct 2023 09:00:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1697817599; x=1698422399; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a/hb65rqGn/L+bqKuL2ueokcLD6OZN5u11ra2F8eMBc=;
-        b=NTwiOEerUxv9Wkty3ZTjlqvkkhPlY0BzVmEI0Ku1gsbAYaZX6o1oe7HardzmYbocgr
-         Hxmq4TyV7KDvzbV0pFFQtdm8nye+OcnQTe3NHRe8FmW/yP/KOKUrLxtx6D35aatIMWG+
-         OcIVVoIAKz0pS1MuNuOXxnOt3BBjrV3zQxERk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697817599; x=1698422399;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=a/hb65rqGn/L+bqKuL2ueokcLD6OZN5u11ra2F8eMBc=;
-        b=Z2aL7q/8Uns18838Pn8bkfPuzyVFPSPKUPeFIfbAJ6kKaB73IBGRvLAcyB8EGuxMkj
-         Efhn6SGi776EBh4JYguNUwwOP5p/thEfxuAaz74hqH51Kg2jtA0aFxQV/KSqizxJ6RQv
-         pGBzf7+JdqmZiOR+3yU/slScNdy2Qqafbe74+WEZZaOfMs3R++MDAbefrWRWLHs26eDt
-         uIacboebnw6oySqkuUmELC5+fVeiT+HQkjCz2mqGE4M0iYG1YLfSe6GoZ7GdeSeyVPlF
-         U7BDpLW1ZirwPxvCTFJYE66f45L1lHqhbSPZVbz7jfotx1b0s4VALUJfdilpQ6GRva/d
-         bBtQ==
-X-Gm-Message-State: AOJu0Yz/Cp+YXQglOZk81/XsB3h4uPDjJC93iiOFnhmzyofVDk9dvJDq
-	D6v5lhRX9Z+R6Obgjm05Z62GiZiJQO9e0ubpvTEbDIbc
-X-Google-Smtp-Source: AGHT+IG02ABTmoqXAbP7ZkKXNd8xcUgmtQiFnFnuOc/tpGdU+PQygXU2b5ztk0F1vh2ntt9uJtefYg==
-X-Received: by 2002:a17:907:948e:b0:9bf:9c58:e91e with SMTP id dm14-20020a170907948e00b009bf9c58e91emr1513343ejc.56.1697817599410;
-        Fri, 20 Oct 2023 08:59:59 -0700 (PDT)
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com. [209.85.128.46])
-        by smtp.gmail.com with ESMTPSA id w21-20020a170907271500b009ad81554c1bsm1721576ejk.55.2023.10.20.08.59.58
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Oct 2023 08:59:59 -0700 (PDT)
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-40853f2e93eso45025e9.0
-        for <linux-usb@vger.kernel.org>; Fri, 20 Oct 2023 08:59:58 -0700 (PDT)
-X-Received: by 2002:a1c:6a1a:0:b0:405:320a:44f9 with SMTP id
- f26-20020a1c6a1a000000b00405320a44f9mr120847wmc.5.1697817598277; Fri, 20 Oct
- 2023 08:59:58 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 425731E506;
+	Fri, 20 Oct 2023 16:03:35 +0000 (UTC)
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C018AB3;
+	Fri, 20 Oct 2023 09:03:33 -0700 (PDT)
+Received: from mercury (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: sre)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id 1B29F660731B;
+	Fri, 20 Oct 2023 17:03:32 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1697817812;
+	bh=gdDLnZkjmHu+Sk+/2xbwhd6fH/+pG0s/huYMTIz5rp8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=IQFefCmvfeF1DgM1gwp4s6N4cgiJZSOLMPM4KqmFPhcDEqYra/6qGuzOZ8uXfsM1G
+	 dndXiXqb3HzXVk1aMsaSQ0S56EMTjnZjF64NXuuVRQQz8/270jgTiqIxtulr4wGb7c
+	 OPhUDYPn+hXJEAf4rl9wOAcZA/tf/eSSJYQQzh0N/+XupthBNbSDHU/kqHqFhTr5Z6
+	 x0j1cSz2oJoChJT4pr/9Vo3CP/ji3vHYFZ8GgNTQvXtN7ZRdbaJeFsp0+fPOob5UUU
+	 Tu62TlLLx4w2HAGI92a3SiNLOaUFO/rvEo7+sxOqggfemBvjNEz+vG+DrTd/1cZKNv
+	 kvpOyb/vt5z8A==
+Received: by mercury (Postfix, from userid 1000)
+	id 1E11910603FC; Fri, 20 Oct 2023 18:03:29 +0200 (CEST)
+Date: Fri, 20 Oct 2023 18:03:29 +0200
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Conor Dooley <conor@kernel.org>
+Cc: Heiko Stuebner <heiko@sntech.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	linux-rockchip@lists.infradead.org, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, kernel@collabora.com
+Subject: Re: [PATCH v4 1/3] dt-bindings: usb: add rk3588 compatible to
+ rockchip,dwc3
+Message-ID: <20231020160329.uqgjjr6ubfrcqjkj@mercury.elektranox.org>
+References: <20231020150022.48725-1-sebastian.reichel@collabora.com>
+ <20231020150022.48725-2-sebastian.reichel@collabora.com>
+ <20231020-shudder-tackle-cc98a82f1cd0@spud>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231020083125.1.I3e5f7abcbf6f08d392e31a5826b7f234df662276@changeid>
- <60a358c9-b44b-4d25-9a20-aa9e00c65ab6@rowland.harvard.edu>
-In-Reply-To: <60a358c9-b44b-4d25-9a20-aa9e00c65ab6@rowland.harvard.edu>
-From: Doug Anderson <dianders@chromium.org>
-Date: Fri, 20 Oct 2023 08:59:42 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=VQ22p7iDdzK-CXOBEqpu0b3J=LKRZuPcajQWFUmr=1cA@mail.gmail.com>
-Message-ID: <CAD=FV=VQ22p7iDdzK-CXOBEqpu0b3J=LKRZuPcajQWFUmr=1cA@mail.gmail.com>
-Subject: Re: [PATCH] usb: core: Prevent infinite loops when usb_reset_device() unbinds/binds
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org, 
-	Grant Grundler <grundler@chromium.org>, Hayes Wang <hayeswang@realtek.com>, 
-	Bastien Nocera <hadess@hadess.net>, Benjamin Tissoires <benjamin.tissoires@redhat.com>, 
-	Flavio Suligoi <f.suligoi@asem.it>, Hans de Goede <hdegoede@redhat.com>, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Ivan Orlov <ivan.orlov0322@gmail.com>, 
-	Marc Kleine-Budde <mkl@pengutronix.de>, "Rafael J. Wysocki" <rafael@kernel.org>, Ray Chi <raychi@google.com>, 
-	=?UTF-8?Q?Ricardo_Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>, 
-	Rob Herring <robh@kernel.org>, Roy Luo <royluo@google.com>, 
-	Stanley Chang <stanley_chang@realtek.com>, Vincent Mailhol <mailhol.vincent@wanadoo.fr>, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="bdmk4yrcxo3we24y"
+Content-Disposition: inline
+In-Reply-To: <20231020-shudder-tackle-cc98a82f1cd0@spud>
+
+
+--bdmk4yrcxo3we24y
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Hi Conor,
 
-On Fri, Oct 20, 2023 at 8:46=E2=80=AFAM Alan Stern <stern@rowland.harvard.e=
-du> wrote:
->
-> On Fri, Oct 20, 2023 at 08:31:38AM -0700, Douglas Anderson wrote:
-> > When we call usb_reset_device() and a driver doesn't implement
-> > pre_reset() and post_reset() methods then the USB core will attempt to
-> > unbind and rebind the driver in order to make reset work. This is a
-> > great general solution, but it has the potential to loop forever.
-> > Specifically, if the USB device is in a state that the USB device
-> > driver issues another usb_reset_device() after each rebind then we'll
-> > just continually unbind and rebind with no end.
-> >
-> > It's difficult to address this condition in a USB device driver
-> > because it's hard for the driver to keep state across each
-> > unbind/bind.
->
-> How about just adding appropriate pre_reset() and post_reset() methods?
-> This is precisely what they are meant for.  Then the the unbind/rebind
-> loop wouldn't ever get started.
+On Fri, Oct 20, 2023 at 04:36:19PM +0100, Conor Dooley wrote:
+> On Fri, Oct 20, 2023 at 04:11:40PM +0200, Sebastian Reichel wrote:
+> > [...]
+> > +allOf:
+> > +  - $ref: snps,dwc3.yaml#
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          contains:
+> > +            const: rockchip,rk3328-dwc3
+> > +    then:
+> > +      properties:
+> > +        clocks:
+> > +          minItems: 3
+> > +          maxItems: 4
+> > +        clock-names:
+> > +          minItems: 3
+> > +          items:
+> > +            - const: ref_clk
+> > +            - const: suspend_clk
+> > +            - const: bus_clk
+> > +            - const: grf_clk
+>=20
+> minItems for clocks and clock-names is already 3, is it not?
 
-Right, and we have pre_reset() and post_reset() in the r1852 driver.
-The issue is that we are seeing occasional control transfer errors
-while the r8152 driver is still running its probe() routine and we
-want to reset in response to those. It is relatively difficult to have
-the pre_reset() and post_reset() methods work properly if failures
-happen and probe() hasn't finished yet. The current proposal I have
-for the r8152 driver is to have the pre_reset() routine return -EIO if
-we saw errors during probe, which tells the USB core to unbind/rebind
-us. This gets us to a known good state. If we need to do a reset later
-on (after probe finished successfully) then pre_reset() and
-post_reset() can avoid the unbind/bind.
+Yes, but the following 'maxItems: 4' implicitly sets it to 4,
+so I had to set it again. The same is true for clock-names -
+providings new 'items:' effectively drops the "minItems: 3"
+=66rom the generic section.
 
-The worry was that this could cause an infinite loop. Hence this patch. ;-)
+> Otherwise,
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+>=20
+> Thanks,
+> Conor.
 
--Doug
+Thanks,
+
+-- Sebastian
+
+--bdmk4yrcxo3we24y
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmUypMQACgkQ2O7X88g7
++prWug//YTS5WE0ntNTSommlUibet+KcZPc5blw/2DH/Lx7UHSPecqtfjAWpAB/j
+Cg9pHPgOumi0wJSdmqKRkJST7bKaCOkpw4N4HLqnrNBL+PNLG7sQOo9qMwaV2x7B
+3nFbsXLjoxlHuYGrupRoFAUL/LevwpWC1vgnrKdk37p0uJzmhRVyUtMrjE3wqzVU
+FbiI4NgxpflWpRQ8VqtUzZVGA/15RXZVqnFjHgGZ624NhDD/2KsIUYOscvwq5qYa
+1QylGUeTFE3D7EGbmTLd/voxlGKTntEPbYw+hP8JVf/oA7d01zlFRFa3MLmVM4vg
+cRbaTt96A6ugCjBdUdkHYhw0aEROd4u/5hCdRv5whBOqWmz5HJ4jKsc+hrneNE7T
+M9tHr6WpbtHu/s4Gepx+AxScNwOEF/A93pOuQXcy1CYOjF/hvx9zP0PYsQwD7b03
+Qtr6Qnp95rozYYFt/2NforFTdFAwcGxR3XtUmd7qAMkIQYmApzgaQiDzLoJb/Gtv
+1nSAiW0lvgHALq+PefTqKCqPXs28wJXdojJJscTIRk7RbkoLkxScdnaZG85kp+Qj
+xSAtSGrvjE6PLvTdwxP3G+R9Qlh1O5mzze9iydGtwY4UsW6vR+Xybvu6e8V5rC8B
+R/C1la6YhCZoGPgK93jn4tVCqwHxiOX3TMY1NlCj4hn+2WU2AxQ=
+=a1sC
+-----END PGP SIGNATURE-----
+
+--bdmk4yrcxo3we24y--
 
