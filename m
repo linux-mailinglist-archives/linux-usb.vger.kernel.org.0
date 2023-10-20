@@ -1,294 +1,124 @@
-Return-Path: <linux-usb+bounces-1980-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1983-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D275B7D1072
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Oct 2023 15:23:30 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BFD87D1203
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Oct 2023 17:00:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8C9DD28242C
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Oct 2023 13:23:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D546EB21594
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Oct 2023 15:00:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF9271BDC2;
-	Fri, 20 Oct 2023 13:23:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40A891DA42;
+	Fri, 20 Oct 2023 15:00:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q6BPaSqG"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="WEAoYkuL"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F32E813AC4;
-	Fri, 20 Oct 2023 13:23:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F6ABC433C8;
-	Fri, 20 Oct 2023 13:23:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1697808201;
-	bh=TXLUQxsI9mTYageNVxgktdbFEEqiw6lkZcz9AFp4qBI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=q6BPaSqGyPLft1OpOae26qJfcW2BHB791GbPCRW5WdcqIO7PwnREweScJjXR//tNh
-	 2/ANzlOcenyu5Q3hEhIB4yJCoaMmeAzbhNNnCAp9zT6VjwWxjZoA18h2XEMcN0QgM0
-	 GZFZknRBsWDlbyn9RcI17nyACYLUVEeXLeBFG5pnJ5TrDBEf7xdWlHjw//3dXG/It/
-	 lJg5tozdst6Me5SZ6m5SrRUFO8X7cgtmdbhyuksC+QAXkGCAGqNhCyTQQuPF1X8XZ0
-	 MuR0jm8PJyIPo0jLDyLlCf69SnOLRjT/acp8iE1nZUDoNiuQsPpWKkCjQ4ZXzv93/C
-	 9WHB+P3M0dMMQ==
-Received: from johan by xi.lan with local (Exim 4.96)
-	(envelope-from <johan@kernel.org>)
-	id 1qtpTL-0002fV-0v;
-	Fri, 20 Oct 2023 15:23:27 +0200
-Date: Fri, 20 Oct 2023 15:23:27 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Krishna Kurapati <quic_kriskura@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F8381C69A;
+	Fri, 20 Oct 2023 15:00:29 +0000 (UTC)
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CDE2D46;
+	Fri, 20 Oct 2023 08:00:27 -0700 (PDT)
+Received: from jupiter.universe (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: sre)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id 560AC660734F;
+	Fri, 20 Oct 2023 16:00:26 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1697814026;
+	bh=AwagkB7kAuEMuWURdRVLbW91QS2Ae+qwHCvRYF46Ugg=;
+	h=From:To:Cc:Subject:Date:From;
+	b=WEAoYkuL7lFNdZh+IcbZUMdC/mvevTa5/DlHI+shC14FlvvjJWH25iXG41QRmzmwO
+	 iHLIecb8gLhTo2DROa/2q7asIJpqP3SEDjmMSpLyM8u+BPaL9/IFU59r62RrLVcJxg
+	 zYa3YnYnKox2LKJdq/3qOZDgd7GmufDfuEq2dQn1IZlbVZXfE/RFe4nqVyYZ4iHlUH
+	 KSDWeE1iX7ZVKDWUf/de8N+mBVF/dPRxu3eV1mkAS+ZUy6qSVMozMPFMids25Dk3Bc
+	 eQ8XnClzDQ71KFXcjlcfwy59BfywoXMQAAiE4goQjvdDifZjVCnpBjIucyDUjYxa4I
+	 trr2gTlkBC9nw==
+Received: by jupiter.universe (Postfix, from userid 1000)
+	id 04FD74800CB; Fri, 20 Oct 2023 17:00:24 +0200 (CEST)
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Heiko Stuebner <heiko@sntech.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
 	Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Felipe Balbi <balbi@kernel.org>,
-	Wesley Cheng <quic_wcheng@quicinc.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
-	quic_ppratap@quicinc.com, quic_jackp@quicinc.com,
-	ahalaney@redhat.com, quic_shazhuss@quicinc.com
-Subject: Re: [PATCH v13 05/10] usb: dwc3: qcom: Refactor IRQ handling in QCOM
- Glue driver
-Message-ID: <ZTJ_T1UL8-s2cgNz@hovoldconsulting.com>
-References: <20231007154806.605-1-quic_kriskura@quicinc.com>
- <20231007154806.605-6-quic_kriskura@quicinc.com>
+	Conor Dooley <conor+dt@kernel.org>,
+	linux-rockchip@lists.infradead.org,
+	linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Sebastian Reichel <sebastian.reichel@collabora.com>,
+	kernel@collabora.com
+Subject: [PATCH v4 0/3] RK3588 USB3 host controller support
+Date: Fri, 20 Oct 2023 16:11:39 +0200
+Message-ID: <20231020150022.48725-1-sebastian.reichel@collabora.com>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231007154806.605-6-quic_kriskura@quicinc.com>
+Content-Transfer-Encoding: 8bit
 
-First, drop "QCOM Glue driver" from Subject, you already have the "qcom"
-prefix.
+Hi,
 
-On Sat, Oct 07, 2023 at 09:18:01PM +0530, Krishna Kurapati wrote:
-> Refactor setup_irq call to facilitate reading multiport IRQ's along
+This adds RK3588 USB3 host controller support. The same DT binding
+will be used for the two dual-role controllers, which are also DWC3
+based, but using a different PHY and don't need the extra UTMI/PIPE
+clocks.
 
-"IRQs" or just "interrupts"
+The series has been tested with Radxa Rock 5B, which uses the controller
+for the upper USB3 port. The patch enabling &combphy2_psu and &usbhost3_0
+for this board will be send separately once this series has been merged.
 
-> with non mulitport ones. Read through the interrupt-names property
+Changes since PATCHv3:
+ * https://lore.kernel.org/all/20231009172129.43568-1-sebastian.reichel@collabora.com/
+ * update binding, simplifying "rockchip,rk3568-dwc3"
+ * update binding, no need to specify min/max items for "rockchip,rk3588-dwc3"
+ * add driver inline comment, that "utmi" and "pipe" are RK3588 specific
 
-"multiport"
+Changes since PATCHv2:
+ * https://lore.kernel.org/all/20230720173643.69553-1-sebastian.reichel@collabora.com/
+ * update binding, so that "utmi" and "pipe" clocks may only be used on RK3588;
+   at the same time do not allow "grf_clk" for RK3568, which does not have a GRF
+   clock for USB3.
 
-Please spell check all your patches (commit messages and code) before
-posting, it's not the reviewers job.
+Changes since PATCHv1:
+ * https://lore.kernel.org/all/20230719174015.68153-1-sebastian.reichel@collabora.com/
+ * use same compatible for USB3 host and drd controllers (Krzysztof Kozlowski)
+ * do not update reset-names (Krzysztof Kozlowski)
+   - note: I dropped reset-names property, since there is only one reset line
+     anyways. Binding could stay the same, since the reset-names property is
+     optional
+ * use "ref_clk", "suspend_clk" and "bus_clk" instead of "ref", "suspend" and "bus",
+   so that they are the same as in RK3568 (Krzysztof Kozlowski)
+ * rename handle name to "usb_host2_xhci" (Michael Riesch)
+ * use RK356x style DWC3 binding instead of DWC3399 style
+   - required adding an extra patch, so that the DWC3 core supports enabling
+     the UTMI/PIPE clocks
 
-> to figure out, the type of interrupt (DP/DM/HS/SS) and to which port
-> it belongs. Also keep track of port index to calculate port count
-> based on interrupts provided as input in DT.
-> 
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> ---
->  drivers/usb/dwc3/dwc3-qcom.c | 210 +++++++++++++++++++++++++----------
->  1 file changed, 154 insertions(+), 56 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index ef2006db7601..863892284146 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -53,14 +53,25 @@
->  #define APPS_USB_AVG_BW 0
->  #define APPS_USB_PEAK_BW MBps_to_icc(40)
->  
-> +#define NUM_PHY_IRQ		4
-> +
-> +enum dwc3_qcom_ph_index {
+-- Sebastian
 
-"phy_index"
+Sebastian Reichel (3):
+  dt-bindings: usb: add rk3588 compatible to rockchip,dwc3
+  usb: dwc3: add optional PHY interface clocks
+  arm64: dts: rockchip: rk3588s: Add USB3 host controller
 
-> +	DP_HS_PHY_IRQ_INDEX = 0,
-> +	DM_HS_PHY_IRQ_INDEX,
-> +	SS_PHY_IRQ_INDEX,
-> +	HS_PHY_IRQ_INDEX,
-> +};
-> +
->  struct dwc3_acpi_pdata {
->  	u32			qscratch_base_offset;
->  	u32			qscratch_base_size;
->  	u32			dwc3_core_base_size;
-> +	/*
-> +	 * The phy_irq_index corresponds to ACPI indexes of (in order) DP/DM/SS
-> +	 * IRQ's respectively.
-> +	 */
-> +	int			phy_irq_index[NUM_PHY_IRQ - 1];
->  	int			hs_phy_irq_index;
-> -	int			dp_hs_phy_irq_index;
-> -	int			dm_hs_phy_irq_index;
-> -	int			ss_phy_irq_index;
->  	bool			is_urs;
->  };
->  
-> @@ -73,10 +84,12 @@ struct dwc3_qcom {
->  	int			num_clocks;
->  	struct reset_control	*resets;
->  
-> +	/*
-> +	 * The phy_irq corresponds to IRQ's registered for (in order) DP/DM/SS
-> +	 * respectively.
-> +	 */
-> +	int			phy_irq[NUM_PHY_IRQ - 1][DWC3_MAX_PORTS];
->  	int			hs_phy_irq;
-> -	int			dp_hs_phy_irq;
-> -	int			dm_hs_phy_irq;
-> -	int			ss_phy_irq;
+ .../bindings/usb/rockchip,dwc3.yaml           | 60 +++++++++++++++++--
+ arch/arm64/boot/dts/rockchip/rk3588s.dtsi     | 21 +++++++
+ drivers/usb/dwc3/core.c                       | 28 +++++++++
+ drivers/usb/dwc3/core.h                       |  4 ++
+ 4 files changed, 108 insertions(+), 5 deletions(-)
 
-I'm not sure using arrays like this is a good idea (and haven't you
-switched the indexes above?).
+-- 
+2.42.0
 
-Why not add a port structure instead?
-
-	struct dwc3_qcom_port {
-		int hs_phy_irq;
-		int dp_hs_phy_irq;
-		int dm_hs_phy_irq;
-		int ss_phy_irq;
-	};
-
-and then have
-
-	struct dwc3_qcom_port ports[DWC3_MAX_PORTS];
-
-in dwc3_qcom. The port structure can the later also be amended with
-whatever other additional per-port data there is need for.
-
-This should make the implementation cleaner.
-
-I also don't like the special handling of hs_phy_irq; if this is really
-just another name for the pwr_event_irq then this should be cleaned up
-before making the code more complicated than it needs to be.
-
-Make sure to clarify this before posting a new revision.
-
->  	enum usb_device_speed	usb2_speed;
->  
->  	struct extcon_dev	*edev;
-  
->  	if (qcom->usb2_speed == USB_SPEED_LOW) {
-> -		dwc3_qcom_disable_wakeup_irq(qcom->dm_hs_phy_irq);
-> +		dwc3_qcom_disable_wakeup_irq(qcom->phy_irq[DM_HS_PHY_IRQ_INDEX][0]);
-
-For example, this would become
-
-	dwc3_qcom_disable_wakeup_irq(qcom->ports[0].dm_hs_phy_irq);
-
-which is much more readable.
-
-> -static int dwc3_qcom_prep_irq(struct dwc3_qcom *qcom, char *irq_name,
-> -				char *disp_name, int irq)
-> +static int dwc3_qcom_prep_irq(struct dwc3_qcom *qcom, const char *irq_name,
-> +				const char *disp_name, int irq)
-
-Ok, here you did drop the second name parameter, but without renaming
-the first and hidden in a long diff without any mention anywhere.
-
-> +static int dwc3_qcom_get_port_index(const char *irq_name, int irq_index)
-> +{
-> +	int port_index = -1;
-> +
-> +	switch (irq_index) {
-> +	case DP_HS_PHY_IRQ_INDEX:
-> +		if (strcmp(irq_name, "dp_hs_phy_irq") == 0)
-> +			port_index = 1;
-> +		else
-> +			sscanf(irq_name, "dp_hs_phy_%d", &port_index);
-> +		break;
-> +
-
-No need for newlines after break.
-
-> +	case DM_HS_PHY_IRQ_INDEX:
-> +		if (strcmp(irq_name, "dm_hs_phy_irq") == 0)
-> +			port_index = 1;
-> +		else
-> +			sscanf(irq_name, "dm_hs_phy_%d", &port_index);
-> +		break;
-> +
-> +	case SS_PHY_IRQ_INDEX:
-> +		if (strcmp(irq_name, "ss_phy_irq") == 0)
-> +			port_index = 1;
-> +		else
-> +			sscanf(irq_name, "ss_phy_%d", &port_index);
-> +		break;
-> +
-> +	case HS_PHY_IRQ_INDEX:
-> +		port_index = 1;
-> +		break;
-> +	}
-> +
-> +	if (port_index > DWC3_MAX_PORTS)
-> +		port_index = -1;
-> +
-> +	return port_index;
-> +}
-
->  static int dwc3_qcom_setup_irq(struct platform_device *pdev)
->  {
->  	struct dwc3_qcom *qcom = platform_get_drvdata(pdev);
-> -	const struct dwc3_acpi_pdata *pdata = qcom->acpi_pdata;
-> +	struct device_node *np = pdev->dev.of_node;
-> +	const char **irq_names;
-> +	int port_index;
-> +	int acpi_index;
-> +	int irq_count;
-> +	int irq_index;
->  	int irq;
->  	int ret;
-> +	int i;
->  
-> -	irq = dwc3_qcom_get_irq(pdev, "hs_phy_irq",
-> -				pdata ? pdata->hs_phy_irq_index : -1);
-> -	if (irq > 0) {
-> -		ret = dwc3_qcom_prep_irq(qcom, "hs_phy_irq", "qcom_dwc3 HS", irq);
-> -		if (ret)
-> -			return ret;
-> -		qcom->hs_phy_irq = irq;
-> -	}
-> +	irq_count = of_property_count_strings(np, "interrupt-names");
-
-of_property_count_strings() can return negative errnos and you don't
-have any sanity checks for the return value...
-
-Please slow down, and also make sure to get your patches reviewed
-internally before posting new revisions.
-
-> +	irq_names = devm_kzalloc(&pdev->dev, sizeof(*irq_names) * irq_count, GFP_KERNEL);
-
-devm_kcalloc()
-
-> +	if (!irq_names)
-> +		return -ENOMEM;
->  
-> -	irq = dwc3_qcom_get_irq(pdev, "dp_hs_phy_irq",
-> -				pdata ? pdata->dp_hs_phy_irq_index : -1);
-> -	if (irq > 0) {
-> -		ret = dwc3_qcom_prep_irq(qcom, "dp_hs_phy_irq", "qcom_dwc3 DP_HS", irq);
-> -		if (ret)
-> -			return ret;
-> -		qcom->dp_hs_phy_irq = irq;
-> -	}
-> +	ret = of_property_read_string_array(np, "interrupt-names",
-> +						irq_names, irq_count);
-
-No sanity check here either?
-
-> +	for (i = 0; i < irq_count; i++) {
-> +		irq_index = dwc3_qcom_get_irq_index(irq_names[i]);
-> +		if (irq_index == -1) {
-> +			dev_dbg(&pdev->dev, "Invalid IRQ not handled");
-> +			continue;
-> +		}
-
-I'll just stop reviewing here. This is a waste of my time.
-
-Johan
 
