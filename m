@@ -1,612 +1,294 @@
-Return-Path: <linux-usb+bounces-1979-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1980-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1AAA7D0FE7
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Oct 2023 14:49:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D275B7D1072
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Oct 2023 15:23:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7049E2812D6
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Oct 2023 12:49:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8C9DD28242C
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Oct 2023 13:23:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8BCC18C01;
-	Fri, 20 Oct 2023 12:49:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF9271BDC2;
+	Fri, 20 Oct 2023 13:23:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q6BPaSqG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA8BB8F5A
-	for <linux-usb@vger.kernel.org>; Fri, 20 Oct 2023 12:49:42 +0000 (UTC)
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F898D49
-	for <linux-usb@vger.kernel.org>; Fri, 20 Oct 2023 05:49:34 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1qtowT-0003Wg-81; Fri, 20 Oct 2023 14:49:29 +0200
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1qtowS-0031wM-19; Fri, 20 Oct 2023 14:49:28 +0200
-Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.94.2)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1qtowR-001j55-Nc; Fri, 20 Oct 2023 14:49:27 +0200
-Date: Fri, 20 Oct 2023 14:49:27 +0200
-From: Michael Grzeschik <mgr@pengutronix.de>
-To: Jayant Chowdhary <jchowdhary@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F32E813AC4;
+	Fri, 20 Oct 2023 13:23:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F6ABC433C8;
+	Fri, 20 Oct 2023 13:23:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1697808201;
+	bh=TXLUQxsI9mTYageNVxgktdbFEEqiw6lkZcz9AFp4qBI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=q6BPaSqGyPLft1OpOae26qJfcW2BHB791GbPCRW5WdcqIO7PwnREweScJjXR//tNh
+	 2/ANzlOcenyu5Q3hEhIB4yJCoaMmeAzbhNNnCAp9zT6VjwWxjZoA18h2XEMcN0QgM0
+	 GZFZknRBsWDlbyn9RcI17nyACYLUVEeXLeBFG5pnJ5TrDBEf7xdWlHjw//3dXG/It/
+	 lJg5tozdst6Me5SZ6m5SrRUFO8X7cgtmdbhyuksC+QAXkGCAGqNhCyTQQuPF1X8XZ0
+	 MuR0jm8PJyIPo0jLDyLlCf69SnOLRjT/acp8iE1nZUDoNiuQsPpWKkCjQ4ZXzv93/C
+	 9WHB+P3M0dMMQ==
+Received: from johan by xi.lan with local (Exim 4.96)
+	(envelope-from <johan@kernel.org>)
+	id 1qtpTL-0002fV-0v;
+	Fri, 20 Oct 2023 15:23:27 +0200
+Date: Fri, 20 Oct 2023 15:23:27 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Krishna Kurapati <quic_kriskura@quicinc.com>
 Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Greg KH <gregkh@linuxfoundation.org>,
-	"corbet@lwn.net" <corbet@lwn.net>,
-	"laurent.pinchart@ideasonboard.com" <laurent.pinchart@ideasonboard.com>,
-	"dan.scally@ideasonboard.com" <dan.scally@ideasonboard.com>,
-	"kieran.bingham@ideasonboard.com" <kieran.bingham@ideasonboard.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-	"etalvala@google.com" <etalvala@google.com>,
-	"arakesh@google.com" <arakesh@google.com>
-Subject: Re: uvc gadget: Making upper bound of number of usb requests
- allocated configurable through configfs
-Message-ID: <ZTJ3V/laVTGNctgg@pengutronix.de>
-References: <edad1597-48da-49d2-a089-da2487cac889@google.com>
- <2023100834-statistic-richly-49ef@gregkh>
- <7ed46b3c-bd42-468e-b28d-860dc8a6c7e6@google.com>
- <20231012184954.ech7kfpqjkunq6eu@synopsys.com>
- <c47e864b-4b9e-4a21-afea-af121a4d7771@google.com>
- <ZS/dmTjdCCdnelVP@pengutronix.de>
- <ZTG4l49nrA5NeYr5@pengutronix.de>
- <c4743c5f-d365-4829-b5a1-46c0daceba1e@google.com>
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Felipe Balbi <balbi@kernel.org>,
+	Wesley Cheng <quic_wcheng@quicinc.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
+	quic_ppratap@quicinc.com, quic_jackp@quicinc.com,
+	ahalaney@redhat.com, quic_shazhuss@quicinc.com
+Subject: Re: [PATCH v13 05/10] usb: dwc3: qcom: Refactor IRQ handling in QCOM
+ Glue driver
+Message-ID: <ZTJ_T1UL8-s2cgNz@hovoldconsulting.com>
+References: <20231007154806.605-1-quic_kriskura@quicinc.com>
+ <20231007154806.605-6-quic_kriskura@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Qcd8xLkNcpSy2XEb"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c4743c5f-d365-4829-b5a1-46c0daceba1e@google.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+In-Reply-To: <20231007154806.605-6-quic_kriskura@quicinc.com>
 
+First, drop "QCOM Glue driver" from Subject, you already have the "qcom"
+prefix.
 
---Qcd8xLkNcpSy2XEb
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Sat, Oct 07, 2023 at 09:18:01PM +0530, Krishna Kurapati wrote:
+> Refactor setup_irq call to facilitate reading multiport IRQ's along
 
-On Thu, Oct 19, 2023 at 10:52:11PM -0700, Jayant Chowdhary wrote:
->On 10/19/23 16:15, Michael Grzeschik wrote:
->> On Wed, Oct 18, 2023 at 03:28:57PM +0200, Michael Grzeschik wrote:
->>> On Sun, Oct 15, 2023 at 09:33:43PM -0700, Jayant Chowdhary wrote:
->>>> On 10/12/23 11:50, Thinh Nguyen wrote:
->>>>> On Mon, Oct 09, 2023, Jayant Chowdhary wrote:
->>>>>>> On Fri, Oct 06, 2023 at 03:03:56PM -0700, Jayant Chowdhary wrote:
->>>>>>>> We had been seeing the UVC gadget driver receive isoc errors while
->>>>>>>> sending packets to the usb endpoint - resulting in glitches being =
-shown
->>>>>>>> on linux hosts. My colleague Avichal Rakesh and others had a very
->>>>>>>> enlightening discussion at
->>>>>>>> https://urldefense.com/v3/__https://lore.kernel.org/linux-usb/8741=
-b7cb-54ec-410b-caf5-697f81e8ad64@google.com/T/__;!!A4F2R9G_pg!e3zVZGt-6Td6H=
-JXqh8GaZAsUeKyvKBhOoyru9qzn3Vkw01Vdkwk7hFr_t5glBG2BYJlOYfFKEUpiH5H4gQ73n_-Y$
->>>>>>>>
->>>>>>>>
->>>>>>>> The conclusion that we came to was : usb requests with actual uvc =
-frame
->>>>>>>> data were missing their scheduled uframes in the usb controller. A=
-s a
->>>>>>>> mitigation, we started sending 0 length usb requests when there wa=
-s no
->>>>>>>> uvc frame buffer available to get data from. Even with this mitiga=
-tion,
->>>>>>>> we are seeing glitches - albeit at a lower frequency.
->>>>>>>>
->>>>>>>> After some investigation, it is seen that we=E2=80=99re getting is=
-oc errors when
->>>>>>>> the worker thread serving video_pump() work items, doesn=E2=80=99t=
- get scheduled
->>>>>>>> for longer periods of time - than usual - in most cases > 6ms.
->>>>>>>> This is close enough to the 8ms limit that we have when the number=
- of usb
->>>>>>>> requests in the queue is 64 (since we have a 125us uframe period).=
- In order
->>>>>>>> to tolerate the scheduling delays better, it helps to increase the=
- number of
->>>>>>>> usb requests in the queue . In that case, we have more 0 length re=
-quests
->>>>>>>> given to the udc driver - and as a result we can wait longer for u=
-vc
->>>>>>>> frames with valid data to get processed by video_pump(). I=E2=80=
-=99m attaching a
->>>>>>>> patch which lets one configure the upper bound on the number of usb
->>>>>>>> requests allocated through configfs. Please let me know your thoug=
-hts.
->>>>>>>> I can formalize=C2=A0 the patch if it looks okay.
->>>>>>> Why do you want to limit the upper bound?=C2=A0 Why not just not su=
-bmit so
->>>>>>> many requests from userspace as you control that, right?
->>>>>>
->>>>>> Userspace negotiates a video frame rate (typically 30/60fps) with th=
-e host that does
->>>>>> not necessarily correspond to the ISOC cadence. After the
->>>>>> patch at https://urldefense.com/v3/__https://lkml.org/lkml/diff/2023=
-/5/8/1115/1__;!!A4F2R9G_pg!e3zVZGt-6Td6HJXqh8GaZAsUeKyvKBhOoyru9qzn3Vkw01Vd=
-kwk7hFr_t5glBG2BYJlOYfFKEUpiH5H4gWbb9bvy$=C2=A0 was submitted, we are
->>>>>> maintaining back pressure on the usb controller even if we do not ha=
-ve uvc frame
->>>>>> data, by sending the controller 0 length requests (as long as usb_re=
-quests are
->>>>>> available). Also, even if the userspace application were to somehow =
-produce
->>>>>> data to match the ISOC rate, it would=C2=A0 need to have information=
- about USB
->>>>>> timing details - which I am not sure is available to userspace or is=
- the right
->>>>>> thing to do here ?
->>>>>>
->>>>>> Here, we are trying to handle the scenario in which the video_pump()=
- worker
->>>>>> thread does not get scheduled in time - by increasing the number of =
-usb requests
->>>>>> allocated in the queue. This would send more usb requests to the usb=
- controller,
->>>>>> when video_pump() does get scheduled - even if they're 0 length. Thi=
-s buys
->>>>>> the video_pump() worker thread scheduling time -since more usb reque=
-sts
->>>>>> are with the controller, subsequent requests sent will not be 'stale=
-' and
->>>>>> dropped by the usb controller.
->>>>>>
->>>>> I believe you're testing against dwc3 controller right? I may not be =
-as
->>>>> familiar with UVC function driver, but based on the previous
->>>>> discussions, I think the driver should be able to handle this without
->>>>> the user input.
->>>>
->>>> Yes we are testing against the dwc3 controller.
->>>>
->>>>>
->>>>> The frequency of the request submission should not depend on the
->>>>> video_pump() work thread since it can vary. The frequency of request
->>>>> submission should match with the request completion. We know that
->>>>> request completion rate should be fixed (1 uframe/request + when you
->>>>> don't set no_interrupt). Base on this you can do your calculation on =
-how
->>>>> often you should set no_interrupt and how many requests you must subm=
-it.
->>>>> You don't have to wait for the video_pump() to submit 0-length reques=
-ts.
->>>>>
->>>>> The only variable here is the completion handler delay or system
->>>>> latency, which should not be much and should be within your calculati=
-on.
->>>>
->>>>
->>>> Thanks for the suggestion. It indeed makes sense that we do not comple=
-tely depend on
->>>> video_pump() for sending 0 length requests. I was concerned about
->>>> synchronization needed when we send requests to the dwc3 controller fr=
-om
->>>> different threads. I see that the dwc3 controller code does internally=
- serialize
->>>> queueing requests, can we expect this from other controllers as well ?
->>>>
->>>> This brings me to another question for Michael - I see
->>>> that we introduced a worker thread for pumping=C2=A0 usb requests to t=
-he usb endpoint
->>>> in https://lore.kernel.org/all/20200427151614.10868-1-m.grzeschik@peng=
-utronix.de/
->>>> (I see multiple email addresses, so apologies if I used the incorrect =
-one).
->>>>
->>>> Did we introduce the worker thread to solve some specific deadlock sce=
-narios ?
->>>
->>> Exactly. This was the reason why we moved to the pump worker. I actually
->>> looked into the host side implementation of the uvc driver. There we
->>> also queue an worker from the complete function:
->>>
->>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
-/drivers/media/usb/uvc/uvc_video.c#n1646
->>>
->>> So this sounded reasonable to me. However we faced similar issues like
->>> you and introduced different ways to improve the latency issue.
->>>
->>> One thing we did was improving the latency by adding WQ_HIGHPRI
->>>
->>> https://lore.kernel.org/linux-usb/20220907215818.2670097-1-m.grzeschik@=
-pengutronix.de/
->>>
->>> Another patch here is also adding WQ_CPU_INTENSIVE.
->>>
->>> But, after all the input from Thinh it is probably better to solve the
->>> issue in a more reliable way.
->>>
->>>> Or was it a general mitigation against racy usb request submission fro=
-m v4l2 buffer
->>>> queuing, stream enable and the video complete handler firing ?
->>>
->>> I don't remember all of the issues we saw back then. But this is also a=
-n very
->>> likely scenario.
->>>
->>>> I was chatting with Avi about this, what if we submit requests to the =
-endpoint
->>>> only at two points in the streaming lifecycle -
->>>> 1) The whole 64 (or however many usb requests are allocated) when
->>>> =C2=A0uvcg_video_enable() is called - with 0 length usb_requests.
->>>> 2) In the video complete handler - if a video buffer is available, we =
-encode it
->>>> =C2=A0and submit it to the endpoint. If not, we send a 0 length reques=
-t.
->>>
->>> It really sounds like a good idea.
->>>
->>>> This way we're really maintaining back pressure and sending requests a=
-s soon
->>>> as we can to the dwc3 controller. Encoding is mostly memcpys from what=
- I see
->>>> so hopefully not too heavy on the interrupt handler. I will work on pr=
-ototyping
->>>> this meanwhile.
->>
->> [1] https://lore.kernel.org/linux-usb/20230930184821.310143-1-arakesh@go=
-ogle.com/T/#t
->>
->> It was actually not that hard to do that.
->> With the patches from this thread applied [1] , the unformal changes loo=
-ks like this:
->>
->> #change 1
->>
->> diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget=
-/function/uvc_v4l2.c
->> index f64d03136c5665..29cd23c38eb99d 100644
->> --- a/drivers/usb/gadget/function/uvc_v4l2.c
->> +++ b/drivers/usb/gadget/function/uvc_v4l2.c
->> @@ -626,8 +626,7 @@ uvc_v4l2_qbuf(struct file *file, void *fh, struct v4=
-l2_buffer *b)
->> =C2=A0=C2=A0=C2=A0=C2=A0 if (ret < 0)
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return ret;
->> =C2=A0
->> -=C2=A0=C2=A0=C2=A0 if (uvc->state =3D=3D UVC_STATE_STREAMING)
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 queue_work(video->async_wq, =
-&video->pump);
->> +=C2=A0=C2=A0=C2=A0 uvcg_video_pump(video);
->> =C2=A0
->> =C2=A0=C2=A0=C2=A0=C2=A0 return ret;
->> =C2=A0}
->> diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadge=
-t/function/uvc_video.c
->> index 2ec51ed5e9d074..2fe800500c88a3 100644
->> --- a/drivers/usb/gadget/function/uvc_video.c
->> +++ b/drivers/usb/gadget/function/uvc_video.c
->> @@ -329,7 +329,9 @@ uvc_video_complete(struct usb_ep *ep, struct usb_req=
-uest *req)
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
->> =C2=A0=C2=A0=C2=A0=C2=A0 if (video->is_enabled) {
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 list_add_tail(&req->lis=
-t, &video->req_free);
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 queue_work(video->async_wq, =
-&video->pump);
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 spin_unlock_irqrestore(&vide=
-o->req_lock, flags);
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 uvcg_video_pump(video);
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return;
->> =C2=A0=C2=A0=C2=A0=C2=A0 } else {
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 uvc_video_free_request(=
-ureq, ep);
->> =C2=A0=C2=A0=C2=A0=C2=A0 }
->> @@ -413,9 +415,8 @@ uvc_video_alloc_requests(struct uvc_video *video)
->> =C2=A0 * This function fills the available USB requests (listed in req_f=
-ree) with
->> =C2=A0 * video data from the queued buffers.
->> =C2=A0 */
->> -static void uvcg_video_pump(struct work_struct *work)
->> +int uvcg_video_pump(struct uvc_video *video)
->> =C2=A0{
->> -=C2=A0=C2=A0=C2=A0 struct uvc_video *video =3D container_of(work, struc=
-t uvc_video, pump);
->> =C2=A0=C2=A0=C2=A0=C2=A0 struct uvc_video_queue *queue =3D &video->queue;
->> =C2=A0=C2=A0=C2=A0=C2=A0 /* video->max_payload_size is only set when usi=
-ng bulk transfer */
->> =C2=A0=C2=A0=C2=A0=C2=A0 bool is_bulk =3D video->max_payload_size;
->> @@ -427,7 +428,7 @@ static void uvcg_video_pump(struct work_struct *work)
->> =C2=A0
->> =C2=A0=C2=A0=C2=A0=C2=A0 while(true) {
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!video->ep->enabled)
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 retu=
-rn;
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 retu=
-rn 0;
->> =C2=A0
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /*
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Check is_enable=
-d and retrieve the first available USB
->> @@ -436,7 +437,7 @@ static void uvcg_video_pump(struct work_struct *work)
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 spin_lock_irqsave(&vide=
-o->req_lock, flags);
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!video->is_enabled =
-|| list_empty(&video->req_free)) {
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- spin_unlock_irqrestore(&video->req_lock, flags);
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 retu=
-rn;
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 retu=
-rn -EBUSY;
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 req =3D list_first_entr=
-y(&video->req_free, struct usb_request,
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 list);
->> @@ -513,7 +514,7 @@ static void uvcg_video_pump(struct work_struct *work)
->> =C2=A0=C2=A0=C2=A0=C2=A0 }
->> =C2=A0
->> =C2=A0=C2=A0=C2=A0=C2=A0 if (!req)
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return;
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return 0;
->> =C2=A0
->> =C2=A0=C2=A0=C2=A0=C2=A0 spin_lock_irqsave(&video->req_lock, flags);
->> =C2=A0=C2=A0=C2=A0=C2=A0 if (video->is_enabled)
->> @@ -521,6 +522,8 @@ static void uvcg_video_pump(struct work_struct *work)
->> =C2=A0=C2=A0=C2=A0=C2=A0 else
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 uvc_video_free_request(=
-req->context, video->ep);
->> =C2=A0=C2=A0=C2=A0=C2=A0 spin_unlock_irqrestore(&video->req_lock, flags);
->> +
->> +=C2=A0=C2=A0=C2=A0 return 0;
->> =C2=A0}
->> =C2=A0
->> =C2=A0/*
->> @@ -554,7 +557,6 @@ uvcg_video_disable(struct uvc_video *video)
->> =C2=A0=C2=A0=C2=A0=C2=A0 }
->> =C2=A0=C2=A0=C2=A0=C2=A0 spin_unlock_irqrestore(&video->req_lock, flags);
->> =C2=A0
->> -=C2=A0=C2=A0=C2=A0 cancel_work_sync(&video->pump);
->> =C2=A0=C2=A0=C2=A0=C2=A0 uvcg_queue_cancel(&video->queue, 0);
->> =C2=A0
->> =C2=A0=C2=A0=C2=A0=C2=A0 spin_lock_irqsave(&video->req_lock, flags);
->> @@ -635,8 +637,6 @@ int uvcg_video_enable(struct uvc_video *video, int e=
-nable)
->> =C2=A0
->> =C2=A0=C2=A0=C2=A0=C2=A0 video->req_int_count =3D 0;
->> =C2=A0
->> -=C2=A0=C2=A0=C2=A0 queue_work(video->async_wq, &video->pump);
->> -
->> =C2=A0=C2=A0=C2=A0=C2=A0 return ret;
->> =C2=A0}
->> =C2=A0
->> @@ -649,12 +649,6 @@ int uvcg_video_init(struct uvc_video *video, struct=
- uvc_device *uvc)
->> =C2=A0=C2=A0=C2=A0=C2=A0 INIT_LIST_HEAD(&video->ureqs);
->> =C2=A0=C2=A0=C2=A0=C2=A0 INIT_LIST_HEAD(&video->req_free);
->> =C2=A0=C2=A0=C2=A0=C2=A0 spin_lock_init(&video->req_lock);
->> -=C2=A0=C2=A0=C2=A0 INIT_WORK(&video->pump, uvcg_video_pump);
->> -
->> -=C2=A0=C2=A0=C2=A0 /* Allocate a work queue for asynchronous video pump=
- handler. */
->> -=C2=A0=C2=A0=C2=A0 video->async_wq =3D alloc_workqueue("uvcgadget", WQ_=
-UNBOUND | WQ_HIGHPRI | WQ_CPU_INTENSIVE, 0);
->> -=C2=A0=C2=A0=C2=A0 if (!video->async_wq)
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return -EINVAL;
->> =C2=A0
->> =C2=A0=C2=A0=C2=A0=C2=A0 video->uvc =3D uvc;
->> =C2=A0
->> diff --git a/drivers/usb/gadget/function/uvc_video.h b/drivers/usb/gadge=
-t/function/uvc_video.h
->> index 03adeefa343b71..322b05da43965f 100644
->> --- a/drivers/usb/gadget/function/uvc_video.h
->> +++ b/drivers/usb/gadget/function/uvc_video.h
->> @@ -16,6 +16,8 @@ struct uvc_video;
->> =C2=A0
->> =C2=A0int uvcg_video_enable(struct uvc_video *video, int enable);
->> =C2=A0
->> +int uvcg_video_pump(struct uvc_video *video);
->> +
->> =C2=A0int uvcg_video_init(struct uvc_video *video, struct uvc_device *uv=
-c);
->> =C2=A0
->> =C2=A0#endif /* __UVC_VIDEO_H__ */
->>
->>
->
->Thank you for this. I made some slight modifications (nothing functional)
->and applied this. I'm actually seeing that the flickers completely disappe=
-ar
->on the device that I'm testing.
->
->From around a flicker every couple of minutes to none in 20 minutes. What =
-I did
->keep was the 0 length request submission, since the camera is naturally pr=
-oducing
->data at a much lower rate than what the usb controller expects. Is there a=
- reason we would
->want to remove that code ?
+"IRQs" or just "interrupts"
 
-There is no need to remove this. I was just currious, if this would
-change anything for the tests.
+> with non mulitport ones. Read through the interrupt-names property
 
->> #change 2
->>
->> Also if you would like to revert the zero request generation apply this =
-ontop.
->>
->> diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadge=
-t/function/uvc_video.c
->> index 82695a2ff39aa3..2a3c87079c548d 100644
->> --- a/drivers/usb/gadget/function/uvc_video.c
->> +++ b/drivers/usb/gadget/function/uvc_video.c
->> @@ -418,12 +418,9 @@ uvc_video_alloc_requests(struct uvc_video *video)
->> =C2=A0int uvcg_video_pump(struct uvc_video *video)
->> =C2=A0{
->> =C2=A0=C2=A0=C2=A0=C2=A0 struct uvc_video_queue *queue =3D &video->queue;
->> -=C2=A0=C2=A0=C2=A0 /* video->max_payload_size is only set when using bu=
-lk transfer */
->> -=C2=A0=C2=A0=C2=A0 bool is_bulk =3D video->max_payload_size;
->> =C2=A0=C2=A0=C2=A0=C2=A0 struct usb_request *req =3D NULL;
->> =C2=A0=C2=A0=C2=A0=C2=A0 struct uvc_buffer *buf;
->> =C2=A0=C2=A0=C2=A0=C2=A0 unsigned long flags;
->> -=C2=A0=C2=A0=C2=A0 bool buf_done;
->> =C2=A0=C2=A0=C2=A0=C2=A0 int ret;
->> =C2=A0
->> =C2=A0=C2=A0=C2=A0=C2=A0 while(true) {
->> @@ -450,28 +447,13 @@ int uvcg_video_pump(struct uvc_video *video)
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 spin_lock_irqsave(&queu=
-e->irqlock, flags);
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 buf =3D uvcg_queue_head=
-(queue);
->> -
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (buf !=3D NULL) {
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vide=
-o->encode(req, video, buf);
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 buf_=
-done =3D buf->state =3D=3D UVC_BUF_STATE_DONE;
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 } else if (!(queue->flags & =
-UVC_QUEUE_DISCONNECTED) && !is_bulk) {
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /*
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 * No video buffer available; the queue is still connected and
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 * we're transferring over ISOC. Queue a 0 length request to
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 * prevent missed ISOC transfers.
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 */
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 req-=
->length =3D 0;
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 buf_=
-done =3D false;
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 } else {
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /*
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 * Either the queue has been disconnected or no video buffer
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 * available for bulk transfer. Either way, stop processing
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 * further.
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 */
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (buf =3D=3D NULL) {
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- spin_unlock_irqrestore(&queue->irqlock, flags);
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- break;
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
->> =C2=A0
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 video->encode(req, video, bu=
-f);
->> +
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /*
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * With USB3 handl=
-ing more requests at a higher speed, we can't
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * afford to gener=
-ate an interrupt for every request. Decide to
->> @@ -490,7 +472,8 @@ int uvcg_video_pump(struct uvc_video *video)
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *=C2=A0=C2=A0 ind=
-icated by video->uvc_num_requests), as a trade-off
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 *=C2=A0=C2=A0 bet=
-ween latency and interrupt load.
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (list_empty(&video->req_f=
-ree) || buf_done ||
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (list_empty(&video->req_f=
-ree) ||
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 buf-=
->state =3D=3D UVC_BUF_STATE_DONE ||
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- !(video->req_int_count %
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 DIV_ROUND_UP(video->uvc_num_requests, 4))) {
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- video->req_int_count =3D 0;
->> @@ -510,7 +493,8 @@ int uvcg_video_pump(struct uvc_video *video)
->> =C2=A0
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* Endpoint now owns th=
-e request */
->> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 req =3D NULL;
->> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 video->req_int_count++;
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if(buf->state !=3D UVC_BUF_S=
-TATE_DONE)
->> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vide=
-o->req_int_count++;
->> =C2=A0=C2=A0=C2=A0=C2=A0 }
->> =C2=A0
->> =C2=A0=C2=A0=C2=A0=C2=A0 if (!req)
->>
->>
->> In my case this did not change a lot with the flickering.
->>
->> In fact I did see the most effective change when increasing the
->> fifo size in the dwc3 controller like this in drivers/usb/dwc3/gadget.c
->>
->> -813=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 fifo =3D dwc3_gadge=
-t_calc_tx_fifo_size(dwc, 1);
->> +813=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 fifo =3D dwc3_gadge=
-t_calc_tx_fifo_size(dwc, 3);
->>
->> My system I am testing against is stressed with a high memory bandwidth
->> use. So it is possible that in this scenario the hardware fifo will not
->> get filled fast enough. Thus, changing the fifo size helps here. It is
->> still just a string to pull on but I think it is worth to dig a bit
->> deeper here.
->>
->> I am not sure if you are already aware of the following discussion:
->>
->> https://lore.kernel.org/all/ZPo51EUtBgH+qw44@pengutronix.de/T/
->
->Thank you for this. I wasn't aware of this thread, I will give it a read!
+"multiport"
 
-Thanks. I would be happy about some help.
+Please spell check all your patches (commit messages and code) before
+posting, it's not the reviewers job.
 
->To confirm, should I still put up a patch for removing the video_pump() wo=
-rker
->thread or are you planning on doing that ?
+> to figure out, the type of interrupt (DP/DM/HS/SS) and to which port
+> it belongs. Also keep track of port index to calculate port count
+> based on interrupts provided as input in DT.
+> 
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> ---
+>  drivers/usb/dwc3/dwc3-qcom.c | 210 +++++++++++++++++++++++++----------
+>  1 file changed, 154 insertions(+), 56 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index ef2006db7601..863892284146 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -53,14 +53,25 @@
+>  #define APPS_USB_AVG_BW 0
+>  #define APPS_USB_PEAK_BW MBps_to_icc(40)
+>  
+> +#define NUM_PHY_IRQ		4
+> +
+> +enum dwc3_qcom_ph_index {
 
-I don't mind. If you have the capacity to send this; feel free to do
-this. Otherwise I could send the cleaned version from above and credit
-you with an Suggested-By.
+"phy_index"
 
-Regards,
-Michael
+> +	DP_HS_PHY_IRQ_INDEX = 0,
+> +	DM_HS_PHY_IRQ_INDEX,
+> +	SS_PHY_IRQ_INDEX,
+> +	HS_PHY_IRQ_INDEX,
+> +};
+> +
+>  struct dwc3_acpi_pdata {
+>  	u32			qscratch_base_offset;
+>  	u32			qscratch_base_size;
+>  	u32			dwc3_core_base_size;
+> +	/*
+> +	 * The phy_irq_index corresponds to ACPI indexes of (in order) DP/DM/SS
+> +	 * IRQ's respectively.
+> +	 */
+> +	int			phy_irq_index[NUM_PHY_IRQ - 1];
+>  	int			hs_phy_irq_index;
+> -	int			dp_hs_phy_irq_index;
+> -	int			dm_hs_phy_irq_index;
+> -	int			ss_phy_irq_index;
+>  	bool			is_urs;
+>  };
+>  
+> @@ -73,10 +84,12 @@ struct dwc3_qcom {
+>  	int			num_clocks;
+>  	struct reset_control	*resets;
+>  
+> +	/*
+> +	 * The phy_irq corresponds to IRQ's registered for (in order) DP/DM/SS
+> +	 * respectively.
+> +	 */
+> +	int			phy_irq[NUM_PHY_IRQ - 1][DWC3_MAX_PORTS];
+>  	int			hs_phy_irq;
+> -	int			dp_hs_phy_irq;
+> -	int			dm_hs_phy_irq;
+> -	int			ss_phy_irq;
 
+I'm not sure using arrays like this is a good idea (and haven't you
+switched the indexes above?).
 
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Why not add a port structure instead?
 
---Qcd8xLkNcpSy2XEb
-Content-Type: application/pgp-signature; name="signature.asc"
+	struct dwc3_qcom_port {
+		int hs_phy_irq;
+		int dp_hs_phy_irq;
+		int dm_hs_phy_irq;
+		int ss_phy_irq;
+	};
 
------BEGIN PGP SIGNATURE-----
+and then have
 
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmUyd1QACgkQC+njFXoe
-LGR/qQ/8DkjX0jyVgZ9zk0TjaOfFaqs4NatHQ8hbGLbe5b3Wp7oG+HBv2SRIFcqd
-y9lT0y2FjpZc5IjmERdIQv76oFFK02QdBxNR6xMKrqTg/0IKALSeBzS567LI5JqB
-ykhR1OPJ+5XCQXLEyTlqiK1tG38GUmmwJGu8/cRV3bo1/keNqhb2km4QIGiW4uir
-V9H3abQhnkFF8vWc/gRTP/0TM9CCppAXsITedgbC6KNqfyjJOYoFzypGbABH5EI+
-RoxC9gwb3QByGCZ3fV7EpUbwkNdDPrmEu7yAg6rPlwoD50jvhmhM5a2SrsFQEBUf
-/0AyHBPfUDZ/vzeIysVbiYL28sFjyS+OcRATDgVGztn9GwOkLQINRnExYVqvFget
-mrQcnvI+a1Ai9eIqvNWoiTsZLinyNT0Sjw6bmZkdg8cZpq9N7a8t6Q2A/D8N7Itg
-zoQdHLF1PZrH+mjwccUWNIVC2xyYUT6eZfAmzwTZGJLJM68gJYdfRu6U7B4BriRf
-Z00Mro11gag4bjPsYwPCNgsU1vqItPzIMlL38o+fMdxkItfMRaePzNu9+C8mFq7w
-vwd4HI7aQJig81wMPyxarz92vqPFhFo1w6lRaq9atCvREtk+LEmsFOXGYWDaRRlC
-5RXn7y2A1huzRFU6m911dJMdp88iBJduTl4VRy5iOAh9t8+AYBo=
-=aquG
------END PGP SIGNATURE-----
+	struct dwc3_qcom_port ports[DWC3_MAX_PORTS];
 
---Qcd8xLkNcpSy2XEb--
+in dwc3_qcom. The port structure can the later also be amended with
+whatever other additional per-port data there is need for.
+
+This should make the implementation cleaner.
+
+I also don't like the special handling of hs_phy_irq; if this is really
+just another name for the pwr_event_irq then this should be cleaned up
+before making the code more complicated than it needs to be.
+
+Make sure to clarify this before posting a new revision.
+
+>  	enum usb_device_speed	usb2_speed;
+>  
+>  	struct extcon_dev	*edev;
+  
+>  	if (qcom->usb2_speed == USB_SPEED_LOW) {
+> -		dwc3_qcom_disable_wakeup_irq(qcom->dm_hs_phy_irq);
+> +		dwc3_qcom_disable_wakeup_irq(qcom->phy_irq[DM_HS_PHY_IRQ_INDEX][0]);
+
+For example, this would become
+
+	dwc3_qcom_disable_wakeup_irq(qcom->ports[0].dm_hs_phy_irq);
+
+which is much more readable.
+
+> -static int dwc3_qcom_prep_irq(struct dwc3_qcom *qcom, char *irq_name,
+> -				char *disp_name, int irq)
+> +static int dwc3_qcom_prep_irq(struct dwc3_qcom *qcom, const char *irq_name,
+> +				const char *disp_name, int irq)
+
+Ok, here you did drop the second name parameter, but without renaming
+the first and hidden in a long diff without any mention anywhere.
+
+> +static int dwc3_qcom_get_port_index(const char *irq_name, int irq_index)
+> +{
+> +	int port_index = -1;
+> +
+> +	switch (irq_index) {
+> +	case DP_HS_PHY_IRQ_INDEX:
+> +		if (strcmp(irq_name, "dp_hs_phy_irq") == 0)
+> +			port_index = 1;
+> +		else
+> +			sscanf(irq_name, "dp_hs_phy_%d", &port_index);
+> +		break;
+> +
+
+No need for newlines after break.
+
+> +	case DM_HS_PHY_IRQ_INDEX:
+> +		if (strcmp(irq_name, "dm_hs_phy_irq") == 0)
+> +			port_index = 1;
+> +		else
+> +			sscanf(irq_name, "dm_hs_phy_%d", &port_index);
+> +		break;
+> +
+> +	case SS_PHY_IRQ_INDEX:
+> +		if (strcmp(irq_name, "ss_phy_irq") == 0)
+> +			port_index = 1;
+> +		else
+> +			sscanf(irq_name, "ss_phy_%d", &port_index);
+> +		break;
+> +
+> +	case HS_PHY_IRQ_INDEX:
+> +		port_index = 1;
+> +		break;
+> +	}
+> +
+> +	if (port_index > DWC3_MAX_PORTS)
+> +		port_index = -1;
+> +
+> +	return port_index;
+> +}
+
+>  static int dwc3_qcom_setup_irq(struct platform_device *pdev)
+>  {
+>  	struct dwc3_qcom *qcom = platform_get_drvdata(pdev);
+> -	const struct dwc3_acpi_pdata *pdata = qcom->acpi_pdata;
+> +	struct device_node *np = pdev->dev.of_node;
+> +	const char **irq_names;
+> +	int port_index;
+> +	int acpi_index;
+> +	int irq_count;
+> +	int irq_index;
+>  	int irq;
+>  	int ret;
+> +	int i;
+>  
+> -	irq = dwc3_qcom_get_irq(pdev, "hs_phy_irq",
+> -				pdata ? pdata->hs_phy_irq_index : -1);
+> -	if (irq > 0) {
+> -		ret = dwc3_qcom_prep_irq(qcom, "hs_phy_irq", "qcom_dwc3 HS", irq);
+> -		if (ret)
+> -			return ret;
+> -		qcom->hs_phy_irq = irq;
+> -	}
+> +	irq_count = of_property_count_strings(np, "interrupt-names");
+
+of_property_count_strings() can return negative errnos and you don't
+have any sanity checks for the return value...
+
+Please slow down, and also make sure to get your patches reviewed
+internally before posting new revisions.
+
+> +	irq_names = devm_kzalloc(&pdev->dev, sizeof(*irq_names) * irq_count, GFP_KERNEL);
+
+devm_kcalloc()
+
+> +	if (!irq_names)
+> +		return -ENOMEM;
+>  
+> -	irq = dwc3_qcom_get_irq(pdev, "dp_hs_phy_irq",
+> -				pdata ? pdata->dp_hs_phy_irq_index : -1);
+> -	if (irq > 0) {
+> -		ret = dwc3_qcom_prep_irq(qcom, "dp_hs_phy_irq", "qcom_dwc3 DP_HS", irq);
+> -		if (ret)
+> -			return ret;
+> -		qcom->dp_hs_phy_irq = irq;
+> -	}
+> +	ret = of_property_read_string_array(np, "interrupt-names",
+> +						irq_names, irq_count);
+
+No sanity check here either?
+
+> +	for (i = 0; i < irq_count; i++) {
+> +		irq_index = dwc3_qcom_get_irq_index(irq_names[i]);
+> +		if (irq_index == -1) {
+> +			dev_dbg(&pdev->dev, "Invalid IRQ not handled");
+> +			continue;
+> +		}
+
+I'll just stop reviewing here. This is a waste of my time.
+
+Johan
 
