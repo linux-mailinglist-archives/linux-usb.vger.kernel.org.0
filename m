@@ -1,219 +1,215 @@
-Return-Path: <linux-usb+bounces-1993-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1994-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE4C57D12EC
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Oct 2023 17:36:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC8027D1313
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Oct 2023 17:42:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 39E45B2156B
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Oct 2023 15:36:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0BC051C2101F
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Oct 2023 15:42:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA4401DDF5;
-	Fri, 20 Oct 2023 15:36:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FEF81E504;
+	Fri, 20 Oct 2023 15:42:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pNHvl4mY"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="ObNQdBsc"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0F861DDDC;
-	Fri, 20 Oct 2023 15:36:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D730CC433C8;
-	Fri, 20 Oct 2023 15:36:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1697816184;
-	bh=s1xV3JBd6JIKm+NQbSAbEH6DMv5wORv7APbuEHALwfw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pNHvl4mYVct+XX8kx8UXf2TT0nVK+m3RiqBgFauhIyP34BfS24P6w3cN+sNYgh86L
-	 zIefFNd8SChjbE5mt0RcnCDDVnHQI9kiZ34N/Ndcb99gaYfbftUXfVN2jHE+rGi3tm
-	 n1WJoP51Ny99stXZhmuo1Jrobgy4wuqH2wA5OViwEeNmvPtRxtmTZNsEomW/GeuStz
-	 E56SShxBTIycb5PteKMvF+cjGSX68RZRJUltSn2U6mia4caFYA/aHgilLqBlYv75n1
-	 XaB4EfF6m1ZGVqn9pgmCTZdSpN7ahbLcycEwthBAeTyHfVar01kDyclkbMcSWk/O7u
-	 O/Z9xWkCKirLA==
-Date: Fri, 20 Oct 2023 16:36:19 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc: Heiko Stuebner <heiko@sntech.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	linux-rockchip@lists.infradead.org, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, kernel@collabora.com
-Subject: Re: [PATCH v4 1/3] dt-bindings: usb: add rk3588 compatible to
- rockchip,dwc3
-Message-ID: <20231020-shudder-tackle-cc98a82f1cd0@spud>
-References: <20231020150022.48725-1-sebastian.reichel@collabora.com>
- <20231020150022.48725-2-sebastian.reichel@collabora.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2B591DDF8
+	for <linux-usb@vger.kernel.org>; Fri, 20 Oct 2023 15:42:33 +0000 (UTC)
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACEA5D61
+	for <linux-usb@vger.kernel.org>; Fri, 20 Oct 2023 08:42:31 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2c5629fdbf8so7889721fa.0
+        for <linux-usb@vger.kernel.org>; Fri, 20 Oct 2023 08:42:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1697816547; x=1698421347; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zGC+3Kmw+D+b5Dj58mb9CrKsjrP+aMd2+KprUNQqghc=;
+        b=ObNQdBscUh1T1gp2pXa/MGjLP9ZbSrkyBqZTSs3sWb4DX5rQHun7rmEGL7uXOBncPZ
+         am3ZGRvy8qkIfb8HglWndoXSOEvWTsotEmwIaHMGhTXPQieHzIT215IZKCmut27ueXal
+         v/wnLiIZdfVGG8R7mcB+f1KnoPDJqBRmXcH4g=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697816547; x=1698421347;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zGC+3Kmw+D+b5Dj58mb9CrKsjrP+aMd2+KprUNQqghc=;
+        b=da90LwXaA6xTFK5idsJakJtu1o/Ul60pen9Pg240STr77FEv0W9U1Ccj3J1QGmAItc
+         jGT/Z47uEDc3L0sBxUyOrgCF80xU1kCmJ/wTY22csDhye9YZkMInKG+W2fM8LZRatMt/
+         94I6uFP+a7oinAcFIAHLsC8uVhFln4si5vftUXANG2uywd8jZJTvaNdwrz8w4rrT97ts
+         4aRZQTnoC6nCjSY2zVUOTE870vTm8tR/VijDXdq8jCrtA9bh/wE/0FB4tT3BWe8CmiYv
+         iJ4wIxS9UqluleAxXjNUYypnZNO4jlnS0rJJBZwVBSgoErXIZ/VJ3/Ip+uIk+7dhTVc3
+         gGUA==
+X-Gm-Message-State: AOJu0YxcKg07a2i5BtGGqWXo/tAjo3o5+IELZsYUQmHt8bg5qK1Mf+Ny
+	eVL/vwdusrRdFPtdWrCDv0teaBSlufDR0rzYI2YOfLsq
+X-Google-Smtp-Source: AGHT+IGOxA+kBGpXX5knjCpSbCSb1qVK7nvdQ0vZUUj7MRNadyCXgbANyXsBm5mW4cjZm7OsE52+tg==
+X-Received: by 2002:a05:651c:b20:b0:2c5:8a4:9e6f with SMTP id b32-20020a05651c0b2000b002c508a49e6fmr1963198ljr.37.1697816546510;
+        Fri, 20 Oct 2023 08:42:26 -0700 (PDT)
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com. [209.85.128.53])
+        by smtp.gmail.com with ESMTPSA id 23-20020a170906209700b0099cb0a7098dsm1738937ejq.19.2023.10.20.08.42.25
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Oct 2023 08:42:26 -0700 (PDT)
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-40853f2e93eso42255e9.0
+        for <linux-usb@vger.kernel.org>; Fri, 20 Oct 2023 08:42:25 -0700 (PDT)
+X-Received: by 2002:a05:600c:4a22:b0:408:2b:5956 with SMTP id
+ c34-20020a05600c4a2200b00408002b5956mr119419wmp.6.1697816544811; Fri, 20 Oct
+ 2023 08:42:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="xK1bQfKTFhB0MwbA"
-Content-Disposition: inline
-In-Reply-To: <20231020150022.48725-2-sebastian.reichel@collabora.com>
-
-
---xK1bQfKTFhB0MwbA
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20231019212130.3146151-1-dianders@chromium.org>
+ <20231019142019.v4.5.Ib2affdbfdc2527aaeef9b46d4f23f7c04147faeb@changeid> <eaf05cf1486c418790a1b54cbcda3a98@realtek.com>
+In-Reply-To: <eaf05cf1486c418790a1b54cbcda3a98@realtek.com>
+From: Doug Anderson <dianders@chromium.org>
+Date: Fri, 20 Oct 2023 08:42:07 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=XZQ0XXY7XpX2_ubOwGsi0Hw5otHyuJS2=9QzDJsaSGWg@mail.gmail.com>
+Message-ID: <CAD=FV=XZQ0XXY7XpX2_ubOwGsi0Hw5otHyuJS2=9QzDJsaSGWg@mail.gmail.com>
+Subject: Re: [PATCH v4 5/5] r8152: Block future register access if register
+ access fails
+To: Hayes Wang <hayeswang@realtek.com>
+Cc: Jakub Kicinski <kuba@kernel.org>, "David S . Miller" <davem@davemloft.net>, 
+	Grant Grundler <grundler@chromium.org>, Edward Hill <ecgh@chromium.org>, 
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, Simon Horman <horms@kernel.org>, 
+	Laura Nao <laura.nao@collabora.com>, Alan Stern <stern@rowland.harvard.edu>, 
+	=?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>, 
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 20, 2023 at 04:11:40PM +0200, Sebastian Reichel wrote:
-> RK3588 has three DWC3 controllers. Two of them are fully functional in
-> host, device and OTG mode including USB2 support. They are connected to
-> dedicated PHYs, that also support USB-C's DisplayPort alternate mode.
->=20
-> The third controller is connected to one of the combphy's shared
-> with PCIe and SATA. It can only be used in host mode and does not
-> support USB2. Compared to the other controllers this one needs
-> some extra clocks.
->=20
-> While adding the extra clocks required by RK3588, I noticed grf_clk
-> is not available on RK3568, so I disallowed it for that platform.
->=20
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> ---
->  .../bindings/usb/rockchip,dwc3.yaml           | 60 +++++++++++++++++--
->  1 file changed, 55 insertions(+), 5 deletions(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml b/D=
-ocumentation/devicetree/bindings/usb/rockchip,dwc3.yaml
-> index 291844c8f3e1..264c2178d61d 100644
-> --- a/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
-> +++ b/Documentation/devicetree/bindings/usb/rockchip,dwc3.yaml
-> @@ -20,9 +20,6 @@ description:
->    Type-C PHY
->    Documentation/devicetree/bindings/phy/phy-rockchip-typec.txt
-> =20
-> -allOf:
-> -  - $ref: snps,dwc3.yaml#
-> -
->  select:
->    properties:
->      compatible:
-> @@ -30,6 +27,7 @@ select:
->          enum:
->            - rockchip,rk3328-dwc3
->            - rockchip,rk3568-dwc3
-> +          - rockchip,rk3588-dwc3
->    required:
->      - compatible
-> =20
-> @@ -39,6 +37,7 @@ properties:
->        - enum:
->            - rockchip,rk3328-dwc3
->            - rockchip,rk3568-dwc3
-> +          - rockchip,rk3588-dwc3
->        - const: snps,dwc3
-> =20
->    reg:
-> @@ -58,7 +57,9 @@ properties:
->            Master/Core clock, must to be >=3D 62.5 MHz for SS
->            operation and >=3D 30MHz for HS operation
->        - description:
-> -          Controller grf clock
-> +          Controller grf clock OR UTMI clock
-> +      - description:
-> +          PIPE clock
-> =20
->    clock-names:
->      minItems: 3
-> @@ -66,7 +67,10 @@ properties:
->        - const: ref_clk
->        - const: suspend_clk
->        - const: bus_clk
-> -      - const: grf_clk
-> +      - enum:
-> +          - grf_clk
-> +          - utmi
-> +      - const: pipe
-> =20
->    power-domains:
->      maxItems: 1
-> @@ -86,6 +90,52 @@ required:
->    - clocks
->    - clock-names
-> =20
-> +allOf:
-> +  - $ref: snps,dwc3.yaml#
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: rockchip,rk3328-dwc3
-> +    then:
-> +      properties:
-> +        clocks:
-> +          minItems: 3
+Hi,
 
-minItems for clocks and clock-names is already 3, is it not?
+On Fri, Oct 20, 2023 at 4:31=E2=80=AFAM Hayes Wang <hayeswang@realtek.com> =
+wrote:
+>
+> Douglas Anderson <dianders@chromium.org>
+> > Sent: Friday, October 20, 2023 5:20 AM
+> [...]
+> >  static int generic_ocp_read(struct r8152 *tp, u16 index, u16 size,
+> > @@ -8265,6 +8353,17 @@ static int rtl8152_pre_reset(struct usb_interfac=
+e *intf)
+> >         if (!tp)
+> >                 return 0;
+> >
+> > +       /* We can only use the optimized reset if we made it to the end=
+ of
+> > +        * probe without any register access fails, which sets
+> > +        * `PROBED_WITH_NO_ERRORS` to true. If we didn't have that then=
+ return
+> > +        * an error here which tells the USB framework to fully unbind/=
+rebind
+> > +        * our driver.
+> > +        */
+> > +       if (!test_bit(PROBED_WITH_NO_ERRORS, &tp->flags)) {
+> > +               mutex_unlock(&tp->control);
+>
+> I think you forget to remove mutex_unlock here.
 
-Otherwise,
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Ugh, thanks for catching. I tested it with a bootup or two but I
+didn't re-run all tests or spend lots of time looking through the logs
+so I missed this. I'll run a few more cycles this time.
 
-Thanks,
-Conor.
 
-> +          maxItems: 4
-> +        clock-names:
-> +          minItems: 3
-> +          items:
-> +            - const: ref_clk
-> +            - const: suspend_clk
-> +            - const: bus_clk
-> +            - const: grf_clk
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: rockchip,rk3568-dwc3
-> +    then:
-> +      properties:
-> +        clocks:
-> +          maxItems: 3
-> +        clock-names:
-> +          maxItems: 3
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: rockchip,rk3588-dwc3
-> +    then:
-> +      properties:
-> +        clock-names:
-> +          minItems: 3
-> +          items:
-> +            - const: ref_clk
-> +            - const: suspend_clk
-> +            - const: bus_clk
-> +            - const: utmi
-> +            - const: pipe
-> +
->  examples:
->    - |
->      #include <dt-bindings/clock/rk3328-cru.h>
-> --=20
-> 2.42.0
->=20
+> > +               return -EIO;
+> > +       }
+> > +
+> >         netdev =3D tp->netdev;
+> >         if (!netif_running(netdev))
+> >                 return 0;
+> > @@ -8277,7 +8376,9 @@ static int rtl8152_pre_reset(struct usb_interface=
+ *intf)
+> >         napi_disable(&tp->napi);
+> >         if (netif_carrier_ok(netdev)) {
+> >                 mutex_lock(&tp->control);
+> > +               set_bit(IN_PRE_RESET, &tp->flags);
+> >                 tp->rtl_ops.disable(tp);
+> > +               clear_bit(IN_PRE_RESET, &tp->flags);
+> >                 mutex_unlock(&tp->control);
+> >         }
+> >
+> > @@ -8293,6 +8394,8 @@ static int rtl8152_post_reset(struct usb_interfac=
+e *intf)
+> >         if (!tp)
+> >                 return 0;
+> >
+> > +       rtl_set_accessible(tp);
+> > +
+>
+> Excuse me. I have a new idea. You could check if it is possible.
+> If you remove test_bit(PROBED_WITH_NO_ERRORS, &tp->flags) in pre_reset(),
+> the driver wouldn't be unbound and rebound. Instead, you test PROBED_WITH=
+_NO_ERRORS
+> here to re-initialize the device. Then, you could limit the times of USB =
+reset, and
+> the infinite loop wouldn't occur. The code would be like the following,
+>
+>         if (!test_bit(PROBED_WITH_NO_ERRORS, &tp->flags)) {
+>                 /* re-init */
+>                 mutex_lock(&tp->control);
+>                 tp->rtl_ops.init(tp);
+>                 mutex_unlock(&tp->control);
+>                 rtl_hw_phy_work_func_t(&tp->hw_phy_work.work);
+>
+>                 /* re-open(). Maybe move after checking netif_running(net=
+dev) */
+>                 mutex_lock(&tp->control);
+>                 tp->rtl_ops.up(tp);
+>                 mutex_unlock(&tp->control);
+>
+>                 /* check if there is any control error */
+>                 if (test_bit(RTL8152_INACCESSIBLE, &tp->flags) {
+>                         if (tp->reg_access_reset_count < REGISTER_ACCESS_=
+MAX_RESETS) {
+>                                 /* queue reset again ? */
+>                         } else {
+>                                 ...
+>                         }
+>                         /* return 0 ? */
+>                 } else {
+>                         set_bit(PROBED_WITH_NO_ERRORS, &tp->flags)
+>                 }
+>         }
 
---xK1bQfKTFhB0MwbA
-Content-Type: application/pgp-signature; name="signature.asc"
+The above solution worries me.
 
------BEGIN PGP SIGNATURE-----
+I guess one part of this is that it replicates some logic that's in
+probe(). That's not necessarily awful, but we'd at least want to
+reorganize things so that they could share code if possible, though
+maybe that's hard to do with the extra grabs of the mutex?
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZTKecwAKCRB4tDGHoIJi
-0nobAP9gB+qsHrTFsAFDJu4+fvKBpfSdY02kTL2MPTojpyy3eAD8C3SFcHdhD6T3
-zRXBywGwE+6lPmCkSRVvQByGqxESRAk=
-=vfSY
------END PGP SIGNATURE-----
+The other part that worries me is that in the core when we added the
+network device that something in the core might have cached bogus data
+about our network device. This doesn't seem wonderful to me.
 
---xK1bQfKTFhB0MwbA--
+I guess yet another part is that your proposed solution there has a
+whole bunch of question marks on it. If it's not necessarily obvious
+what we should do in this case then it doesn't feel like a robust
+solution.
+
+It seems like your main concern here is with the potential for an
+infinite number of resets. I have sent up a small patch to the USB
+core [1] addressing this concern. Let's see what folks say about that
+patch. If it is accepted then it seems like we could just not worry
+about it. If it's not accepted then perhaps feedback on that patch
+will give us additional guidance.
+
+In the meantime I'll at least post v5 since I don't want to leave the
+patch up there with the mismatched mutex. I'll have my v5 point at my
+USB core patch.
+
+[1] https://lore.kernel.org/r/20231020083125.1.I3e5f7abcbf6f08d392e31a5826b=
+7f234df662276@changeid
+
+-Doug
 
