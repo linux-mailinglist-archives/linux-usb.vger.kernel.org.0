@@ -1,83 +1,90 @@
-Return-Path: <linux-usb+bounces-1988-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-1989-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6442F7D1276
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Oct 2023 17:20:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A2547D1293
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Oct 2023 17:25:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 09D2E1F23215
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Oct 2023 15:20:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 777561F23ABD
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Oct 2023 15:25:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2E781DDC1;
-	Fri, 20 Oct 2023 15:19:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 490A61DDC7;
+	Fri, 20 Oct 2023 15:25:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AENinO4y"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 739A11DA52
-	for <linux-usb@vger.kernel.org>; Fri, 20 Oct 2023 15:19:53 +0000 (UTC)
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by lindbergh.monkeyblade.net (Postfix) with SMTP id F2EC5D63
-	for <linux-usb@vger.kernel.org>; Fri, 20 Oct 2023 08:19:50 -0700 (PDT)
-Received: (qmail 299621 invoked by uid 1000); 20 Oct 2023 11:19:49 -0400
-Date: Fri, 20 Oct 2023 11:19:49 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: "Li, Meng" <Meng.Li@windriver.com>, Steven Rostedt <rostedt@goodmis.org>,
-  Ingo Molnar <mingo@redhat.com>,
-  USB mailing list <linux-usb@vger.kernel.org>,
-  linux-rt-users <linux-rt-users@vger.kernel.org>
-Subject: Re: USB: add check to detect host controller hardware removal
-Message-ID: <1f26049d-b16d-4db8-8b7a-ed93213faf76@rowland.harvard.edu>
-References: <20231016125624.1096766a@gandalf.local.home>
- <62fdcf97-11c6-4dee-8db1-74752d6949f3@rowland.harvard.edu>
- <PH0PR11MB5191924ECC92A8F67891D614F1D6A@PH0PR11MB5191.namprd11.prod.outlook.com>
- <d6d9478c-585b-4f51-a076-dc2955c6b2b0@rowland.harvard.edu>
- <PH0PR11MB51911132F6CB7DF0C41F15DEF1D5A@PH0PR11MB5191.namprd11.prod.outlook.com>
- <1f8fe9f9-d8d6-48d9-8c7d-1215d10ece91@rowland.harvard.edu>
- <20231019123823.4fjUs8Rl@linutronix.de>
- <128e4bea-6064-4e46-b9c7-75296e9f553d@rowland.harvard.edu>
- <55925f45-4921-46cc-81df-ac705ad7530e@rowland.harvard.edu>
- <20231020095238.Z4m-M_oS@linutronix.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FBEA14285
+	for <linux-usb@vger.kernel.org>; Fri, 20 Oct 2023 15:25:00 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E2DD5F
+	for <linux-usb@vger.kernel.org>; Fri, 20 Oct 2023 08:24:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1697815499; x=1729351499;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=npVUPUUOhMBGZhgEL3b6DPBFLw/2y8lfzs3o6Y3qDQQ=;
+  b=AENinO4y0iddAWTdXevaPS1kQdV1y9tgJILGEDO8qHDTtbFN1KCDUiao
+   JiycCKJ1/4AC6zu1Yi4mQ37asSy/k7QvxjAGENoCNYHmndvJnribcsC1D
+   Yy6R7eDfiz2oVfGuJr/XULk6HZRtIjI4iI6MjglM9K0lBd/9ciJzM5i8Z
+   FSEQrwTTJLSY0SFieVay8Wq94Tvrm6Ga5ExHiamyJjFiXeHjcFRBRMN9M
+   WoYbDfAx9AEhf3fweQFRQ8oRV4e4k9RLv6MvgrEDsc6VUhIxU8ZKcrgnb
+   bkKRikkxoUgg41qRPNKZkQ7yYOGw45SAgp01OYbFgMcl6udbXhishZBvQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10869"; a="417646303"
+X-IronPort-AV: E=Sophos;i="6.03,239,1694761200"; 
+   d="scan'208";a="417646303"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Oct 2023 08:24:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10869"; a="901170404"
+X-IronPort-AV: E=Sophos;i="6.03,239,1694761200"; 
+   d="scan'208";a="901170404"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 20 Oct 2023 08:22:48 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id 86408130; Fri, 20 Oct 2023 18:24:56 +0300 (EEST)
+Date: Fri, 20 Oct 2023 18:24:56 +0300
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: linux-usb@vger.kernel.org
+Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Gil Fine <gil.fine@linux.intel.com>
+Subject: Re: [PATCH v2 00/10] thunderbolt: USB4 v2 asymmetric switching and
+ more
+Message-ID: <20231020152456.GB3208943@black.fi.intel.com>
+References: <20231013120640.709255-1-mika.westerberg@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20231020095238.Z4m-M_oS@linutronix.de>
+In-Reply-To: <20231013120640.709255-1-mika.westerberg@linux.intel.com>
 
-On Fri, Oct 20, 2023 at 11:52:38AM +0200, Sebastian Andrzej Siewior wrote:
-> On 2023-10-19 11:27:54 [-0400], Alan Stern wrote:
-> > 
-> > Perhaps that what we should do.
+On Fri, Oct 13, 2023 at 03:06:30PM +0300, Mika Westerberg wrote:
+> Gil Fine (5):
+>   thunderbolt: Make is_gen4_link() available to the rest of the driver
+>   thunderbolt: Change bandwidth reservations to comply USB4 v2
+>   thunderbolt: Introduce tb_port_path_direction_downstream()
+>   thunderbolt: Add support for asymmetric link
+>   thunderbolt: Configure asymmetric link if needed and bandwidth allows
 > 
-> Perfect.
+> Mika Westerberg (5):
+>   thunderbolt: Use constants for path weight and priority
+>   thunderbolt: Use weight constants in tb_usb3_consumed_bandwidth()
+>   thunderbolt: Set path power management packet support bit for USB4 v2 routers
+>   thunderbolt: Introduce tb_for_each_upstream_port_on_path()
+>   thunderbolt: Introduce tb_switch_depth()
 
-Hmmm...  This turns out not to be as easy as one might think.
-
-Sebastian, if you can instead suggest a way to call drivers' interrupt 
-handlers (i.e., simulate an interrupt) without causing problems for RT 
-kernels, I think that would be a better approach.
-
-The fundamental problem here is that the uhci-hcd driver was not written 
-with unexpected hardware removal in mind.  It doesn't have timeouts to 
-handle situations where the device doesn't generate an IRQ to indicate 
-completion of an I/O operation.  And since it's been ten years since 
-I've done any significant work on the driver, I'd really like to avoid 
-the need for such a far-reaching change (not least because I don't have 
-any way to test it).
-
-I suppose an alternative approach would be to add a new callback pointer 
-to the hc_driver structure -- something that could tell the driver to 
-check for hardware removal.  I'll do that if there's no other choice.  
-But simulating an interrupt seems easier, provided it can be done at 
-all.
-
-Alan Stern
+All applied to thunderbolt.git/next.
 
