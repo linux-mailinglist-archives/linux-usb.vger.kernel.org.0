@@ -1,47 +1,45 @@
-Return-Path: <linux-usb+bounces-2028-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2029-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C22047D1C5A
-	for <lists+linux-usb@lfdr.de>; Sat, 21 Oct 2023 12:05:24 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DA157D1C5D
+	for <lists+linux-usb@lfdr.de>; Sat, 21 Oct 2023 12:10:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA0091C20F7D
-	for <lists+linux-usb@lfdr.de>; Sat, 21 Oct 2023 10:05:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BFB1AB214D1
+	for <lists+linux-usb@lfdr.de>; Sat, 21 Oct 2023 10:10:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3E3BD311;
-	Sat, 21 Oct 2023 10:05:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AB15D53A;
+	Sat, 21 Oct 2023 10:10:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="lgJdp3tH"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="VYkQ+BVO"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37275469F
-	for <linux-usb@vger.kernel.org>; Sat, 21 Oct 2023 10:05:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42CE8C433C7;
-	Sat, 21 Oct 2023 10:05:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B49B263B3
+	for <linux-usb@vger.kernel.org>; Sat, 21 Oct 2023 10:10:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 878A1C433C8;
+	Sat, 21 Oct 2023 10:10:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1697882717;
-	bh=z7NyvC2nM5GAT4Hdft8Uj9fmtmLiRPX8ReS+qa2TBck=;
+	s=korg; t=1697883006;
+	bh=l2uGjtCIejrc6L6O3rXUOz/2g7u2EwJLoiJlt0FIuo8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lgJdp3tH0pkgvExwqNs8NGw6bKul5wlqxUFZL/3ob6p0TzlVHz95FplLUSf9eCzw/
-	 ScFuYLudwphJq5QJ4Um7Dchrxq2GpgnGVGu8SgF2UVf85LYOTyOnqn/JkQCRHHlQ1S
-	 xCgXbpk8nA+FBAQ0YohgWa2m6BedjFwM3rCmE2H0=
-Date: Sat, 21 Oct 2023 12:05:15 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Avichal Rakesh <arakesh@google.com>
-Cc: etalvala@google.com, jchowdhary@google.com,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	dan.scally@ideasonboard.com, laurent.pinchart@ideasonboard.com,
-	m.grzeschik@pengutronix.de
-Subject: Re: [PATCH v6 4/4] usb: gadget: uvc: Fix use-after-free for inflight
- usb_requests
-Message-ID: <2023102103-casually-wavy-6a54@gregkh>
-References: <20231019185319.2714000-5-arakesh@google.com>
- <202310200457.GwPPFuHX-lkp@intel.com>
- <738df245-e7d1-4fc0-9076-3ac5afebaa44@google.com>
+	b=VYkQ+BVOg6kCqPEW1B9ax8pPK6R+fdAT4cX2JnwULQw21k9NGW6AZI8czxC0KGC6l
+	 RR42HeXHp8tIbyXvCf/ToLzs3wfuvUk+GF/97XfiVtkQ+NKlI23AJxqAbUy4xCwrVG
+	 pM5PaT4bpOv9DGbjomWWZkM4NAfltHJld8yVRicI=
+Date: Sat, 21 Oct 2023 12:10:03 +0200
+From: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+To: "zdi-disclosures@trendmicro.com" <zdi-disclosures@trendmicro.com>
+Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"valentina.manea.m@gmail.com" <valentina.manea.m@gmail.com>,
+	"shuah@kernel.org" <shuah@kernel.org>,
+	"i@zenithal.me" <i@zenithal.me>
+Subject: Re: ZDI-CAN-22273: New Vulnerability Report
+Message-ID: <2023102134-reflux-saddling-c750@gregkh>
+References: <DM5PR0102MB347711AF2F5655852AC60BEB80DBA@DM5PR0102MB3477.prod.exchangelabs.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,47 +48,61 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <738df245-e7d1-4fc0-9076-3ac5afebaa44@google.com>
+In-Reply-To: <DM5PR0102MB347711AF2F5655852AC60BEB80DBA@DM5PR0102MB3477.prod.exchangelabs.com>
 
-On Thu, Oct 19, 2023 at 03:30:00PM -0700, Avichal Rakesh wrote:
+On Fri, Oct 20, 2023 at 03:25:27PM +0000, zdi-disclosures@trendmicro.com wrote:
+> ### Analysis
 > 
+> ```
+> race condition bug exists in the usb/ip VHCI driver
+> it leads to UAF on `struct usb_device`
+> thread 1                                                thread 2
+> vhci_device_reset()                             vhci_urb_enqueue()
+>  usb_put_dev(vdev->udev);
+>                                                                  usb_put_dev(vdev->udev);               // free
+>                                                                  vdev->udev = usb_get_dev(urb->dev);    // UAF
+>  vdev->udev = NULL;
+> ```
 > 
-> On 10/19/23 13:32, kernel test robot wrote:
-> > Hi Avichal,
-> > 
-> > kernel test robot noticed the following build warnings:
-> > 
-> > [auto build test WARNING on usb/usb-testing]
-> > [also build test WARNING on usb/usb-next usb/usb-linus linus/master v6.6-rc6 next-20231019]
-> > [If your patch is applied to the wrong git tree, kindly drop us a note.
-> > And when submitting patch, we suggest to use '--base' as documented in
-> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> > 
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Avichal-Rakesh/usb-gadget-uvc-prevent-use-of-disabled-endpoint/20231020-025512
-> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> > patch link:    https://lore.kernel.org/r/20231019185319.2714000-5-arakesh%40google.com
-> > patch subject: [PATCH v6 4/4] usb: gadget: uvc: Fix use-after-free for inflight usb_requests
-> > config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20231020/202310200457.GwPPFuHX-lkp@intel.com/config)
-> > compiler: m68k-linux-gcc (GCC) 13.2.0
-> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231020/202310200457.GwPPFuHX-lkp@intel.com/reproduce)
-> > 
-> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202310200457.GwPPFuHX-lkp@intel.com/
-> > 
-> > All warnings (new ones prefixed by >>):
-> > 
-> >>> drivers/usb/gadget/function/uvc_video.c:231: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-> >     * Must be called with req_lock held as it modifies the list ureq is held in
-> > 
-> > 
+> here is the patch in order to trigger the bug more easier
+> ```
+> diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
+> index 37d1fc34e..7242244d7 100644
+> --- a/drivers/usb/usbip/vhci_hcd.c
+> +++ b/drivers/usb/usbip/vhci_hcd.c
+> @@ -11,7 +11,7 @@
+>  #include <linux/module.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/slab.h>
+> -
+> +#include <linux/delay.h>
+>  #include "usbip_common.h"
+>  #include "vhci.h"
 > 
-> Greg, apologies for the newb question: do you want me to upload
-> the fix for this as a reply to [PATCH v6 4/4], or upload a new chain of 
-> v7s with this patch fixed? 
+> @@ -781,6 +781,7 @@ static int vhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
+>                                 usbip_dbg_vhci_hc(
+>                                         "Not yet?:Get_Descriptor to device 0 (get max pipe size)\n");
+> 
+> +                       mdelay(200);
+>                         usb_put_dev(vdev->udev);
+>                         vdev->udev = usb_get_dev(urb->dev);
+>                         goto out;
+> @@ -1075,6 +1076,7 @@ static void vhci_device_reset(struct usbip_device *ud)
+>         vdev->devid  = 0;
+> 
+>         usb_put_dev(vdev->udev);
+> +       mdelay(200);
+>         vdev->udev = NULL;
+> 
+>         if (ud->tcp_socket) {
+> ```
 
-A whole new v7 series please.
+So you are resetting a device while it is enumerating?  That's a very
+narrow window to handle, and you need a malicious device to do this,
+right?
+
+Can you submit a patch to just save off the reference of the device
+before the put is called on it to be sure that all is in sync properly?
 
 thanks,
 
