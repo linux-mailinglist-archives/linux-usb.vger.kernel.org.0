@@ -1,107 +1,91 @@
-Return-Path: <linux-usb+bounces-2056-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2057-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C89F7D2580
-	for <lists+linux-usb@lfdr.de>; Sun, 22 Oct 2023 20:53:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CC4F7D2598
+	for <lists+linux-usb@lfdr.de>; Sun, 22 Oct 2023 21:19:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5D6771C20949
-	for <lists+linux-usb@lfdr.de>; Sun, 22 Oct 2023 18:53:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9312D1C20941
+	for <lists+linux-usb@lfdr.de>; Sun, 22 Oct 2023 19:19:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAACF125B7;
-	Sun, 22 Oct 2023 18:53:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3336A12B6A;
+	Sun, 22 Oct 2023 19:19:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="lyIsSvWS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JftjDvGS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AA6B2F93;
-	Sun, 22 Oct 2023 18:53:39 +0000 (UTC)
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C64AB3;
-	Sun, 22 Oct 2023 11:53:38 -0700 (PDT)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39M3mwLd015796;
-	Sun, 22 Oct 2023 18:53:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding;
- s=corp-2023-03-30; bh=DLqCwiZSlDSf4bkLi8tuIMPWT+orDX3cplywz0tFQfc=;
- b=lyIsSvWS1ZJP7VXza5BVtJXGMHQrOUNIM/ZDf49gkKCEAmd1hkDIcGST952vAaDbOqe4
- f8orRHkrBCKnx0KF+4z3N+vp8dbUA9QVKYsWcH3KsWQm+5Ta3kXwc5Km1ZDIt1ot2g1i
- O3TlSQag0PvX1KAN6FmgGJFKIKqywNCcHnWVVpkh1CNglvzcow4G9iQwz/Y3sJXKYDCd
- Eu4Aa4GMpRXojQA4l4TYYUgAQQG7UUiYY2fN2dj1AuAZiVqGDrPYziftVtB+w/wr6XiF
- t2K7h0ngub3NbLGoQ8mfvjcX2thtTF/hntMt9UalMtfW3i9OgcYNofeqprbUlQgXtcEr Fw== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3tv5e31ub7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sun, 22 Oct 2023 18:53:34 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 39MH0usR031243;
-	Sun, 22 Oct 2023 18:53:33 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3tv539qcw8-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sun, 22 Oct 2023 18:53:33 +0000
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 39MIrXGH033580;
-	Sun, 22 Oct 2023 18:53:33 GMT
-Received: from localhost.localdomain (dhcp-10-175-52-84.vpn.oracle.com [10.175.52.84])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3tv539qcvt-1;
-	Sun, 22 Oct 2023 18:53:32 +0000
-From: Vegard Nossum <vegard.nossum@oracle.com>
-To: Jonathan Corbet <corbet@lwn.net>, linux-usb@vger.kernel.org
-Cc: linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Daniel Scally <dan.scally@ideasonboard.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH] docs: usb: fix reference to nonexistent file in UVC Gadget
-Date: Sun, 22 Oct 2023 20:53:11 +0200
-Message-Id: <20231022185311.919325-1-vegard.nossum@oracle.com>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E93ADDB0
+	for <linux-usb@vger.kernel.org>; Sun, 22 Oct 2023 19:19:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 00069C433CA
+	for <linux-usb@vger.kernel.org>; Sun, 22 Oct 2023 19:19:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1698002383;
+	bh=jwMi5TH5k+lbEBCmi3gV6ADHzQFo5a1KWJO91QVEHDk=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=JftjDvGSTo7A2OFj7CL1TN/2UZRaQlBaVqrwxXtw5TnyBOYzlnEnB/zqD8DCXWsAp
+	 xgYqWqzXfyHlrAhYpPSHc4OSNE73nACsLY2by1hu7lEVM8DnXIdYPex3MBVZcO0iTJ
+	 khJioC3N1BYRYnWfwI8fAh8NqiM3uHuuITmAqoe1/Zcv2lcZrnoBG1XNIBlUce7FeM
+	 4vByefp651kq5dEmHW9DStgAdPYzy+RBd3whYd4QnlzhTADodVyPa5SigxxCYfcRdt
+	 MvReKreUIggNWBgfIBxHsbR31dWij2Lz5UwcO7CnA1p7q3jlqNK35fIsp67qL8sf9h
+	 El9RKRbiDrTmg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id D4B88C53BD0; Sun, 22 Oct 2023 19:19:42 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 215906] DMAR fault when connected usb hub (xhci_hcd)
+Date: Sun, 22 Oct 2023 19:19:42 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: chris.bainbridge@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-215906-208809-fHRbdhQ63A@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215906-208809@https.bugzilla.kernel.org/>
+References: <bug-215906-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-22_16,2023-10-19_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 malwarescore=0 mlxscore=0
- suspectscore=0 spamscore=0 adultscore=0 mlxlogscore=963 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2310170001
- definitions=main-2310220175
-X-Proofpoint-GUID: R809x-Luvyorqu5BjSvjpUoXjyyZSmCz
-X-Proofpoint-ORIG-GUID: R809x-Luvyorqu5BjSvjpUoXjyyZSmCz
 
-Fix a typo in the path of this reference.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215906
 
-Fixes: 094f391013ba ("docs: usb: Add documentation for the UVC Gadget")
-Cc: Daniel Scally <dan.scally@ideasonboard.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Vegard Nossum <vegard.nossum@oracle.com>
----
- Documentation/usb/gadget_uvc.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Chris Bainbridge (chris.bainbridge@gmail.com) changed:
 
-diff --git a/Documentation/usb/gadget_uvc.rst b/Documentation/usb/gadget_uvc.rst
-index 80a1f031b593..bf78fba3ce23 100644
---- a/Documentation/usb/gadget_uvc.rst
-+++ b/Documentation/usb/gadget_uvc.rst
-@@ -126,7 +126,7 @@ might do:
- 	create_frame 1920 1080 uncompressed yuyv
- 
- The only uncompressed format currently supported is YUYV, which is detailed at
--Documentation/userspace-api/media/v4l/pixfmt-packed.yuv.rst.
-+Documentation/userspace-api/media/v4l/pixfmt-packed-yuv.rst.
- 
- Color Matching Descriptors
- ~~~~~~~~~~~~~~~~~~~~~~~~~~
--- 
-2.34.1
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |chris.bainbridge@gmail.com
 
+--- Comment #9 from Chris Bainbridge (chris.bainbridge@gmail.com) ---
+The IOMMU error is caused by a buggy VL805 firmware. It is more visible with
+the Debian kernel as Debian patches the kernel to enable IOMMU by default. =
+The
+updated firmware can be installed using the VIA Windows tool (this did not =
+work
+for me), or you can just turn off IOMMU.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
