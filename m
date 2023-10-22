@@ -1,123 +1,77 @@
-Return-Path: <linux-usb+bounces-2049-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2050-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 598AC7D22AD
-	for <lists+linux-usb@lfdr.de>; Sun, 22 Oct 2023 12:40:33 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EA837D22BB
+	for <lists+linux-usb@lfdr.de>; Sun, 22 Oct 2023 12:48:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B8F61C20A47
-	for <lists+linux-usb@lfdr.de>; Sun, 22 Oct 2023 10:40:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 44198B20E04
+	for <lists+linux-usb@lfdr.de>; Sun, 22 Oct 2023 10:48:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F338D6FAA;
-	Sun, 22 Oct 2023 10:40:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B65B6AB5;
+	Sun, 22 Oct 2023 10:47:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OrB1dyuz"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="IeyCD1In"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 504C417DB;
-	Sun, 22 Oct 2023 10:40:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CE2ABC433C7;
-	Sun, 22 Oct 2023 10:40:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1697971223;
-	bh=AmxucS0I6jpezYSp6CUJ8OIsJn2NqODuFduq57nFTjw=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=OrB1dyuzfdbJ/7oZW/qkEYhUCM01qzeJMC0F+gFPLAjZJqlvN1mGGAq0gmOQBp4m5
-	 RVC/bcn4oJWuzKy4tm3BAiqVAU9STic0TZ8dyrkC5Mg6qWeIhGtkT18IhvH1Ojr/4g
-	 dP0ic1nRnHyeGv+QxAs9E7TEf2VAb/kFWOvQne/rMRDCtANrMNj+aD5gmdDWUiSwIU
-	 YqDEXGe6Tp7mxF39hHX0FJAwdMR0ApMCZL/+qY8ZPiytbLK8WfVW5trlE8R3vdbSWI
-	 j0g9A/yG445tMPWGRX7U+bZWAJ3JkaMma1HXHgubfX7IXzWxufhqoDXfMTpE8Bt9y/
-	 WY6E/WysvL21g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B0E3AC691E1;
-	Sun, 22 Oct 2023 10:40:23 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C8896AA9
+	for <linux-usb@vger.kernel.org>; Sun, 22 Oct 2023 10:47:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64FA6C433C8;
+	Sun, 22 Oct 2023 10:47:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1697971674;
+	bh=BoPNcV27Uz+mTokqyHQ/JjVxFWBVv3OMy/RdThGw6B0=;
+	h=Date:From:To:Cc:Subject:From;
+	b=IeyCD1InS5t8t02sIOBZJsFyZGO5idW+QaAlyULVabQjAbQVlGc9nrC1qQOdB+RDP
+	 36UeMm1kFSax0X0xr2rSV/0t1TK2oSypaBOTkAvZVHKG8eeR2rAe9bAaRmYuf/HNRx
+	 USxmkO0TLFuMTglGtYD55yXov36ntWwar9fqDFv8=
+Date: Sun, 22 Oct 2023 12:47:52 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: linux.usb.ids@gmail.com
+Cc: linux-usb@vger.kernel.org
+Subject: [PATCH] usb.ids: update the USB Class codes
+Message-ID: <2023102224-lagged-coffee-db34@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] net: usb: smsc95xx: Fix uninit-value access in
- smsc95xx_read_reg
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <169797122372.373.6344765542608925929.git-patchwork-notify@kernel.org>
-Date: Sun, 22 Oct 2023 10:40:23 +0000
-References: <20231020170344.2450248-1-syoshida@redhat.com>
-In-Reply-To: <20231020170344.2450248-1-syoshida@redhat.com>
-To: Shigeru Yoshida <syoshida@redhat.com>
-Cc: steve.glendinning@shawell.net, UNGLinuxDriver@microchip.com,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- netdev@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- syzbot+c74c24b43c9ae534f0e0@syzkaller.appspotmail.com,
- syzbot+2c97a98a5ba9ea9c23bd@syzkaller.appspotmail.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hello:
+There are a number of newer USB class codes that are missing from
+usb.ids, so update them to the latest approved values.
 
-This patch was applied to netdev/net.git (main)
-by David S. Miller <davem@davemloft.net>:
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-On Sat, 21 Oct 2023 02:03:44 +0900 you wrote:
-> syzbot reported the following uninit-value access issue [1]:
-> 
-> smsc95xx 1-1:0.0 (unnamed net_device) (uninitialized): Failed to read reg index 0x00000030: -32
-> smsc95xx 1-1:0.0 (unnamed net_device) (uninitialized): Error reading E2P_CMD
-> =====================================================
-> BUG: KMSAN: uninit-value in smsc95xx_reset+0x409/0x25f0 drivers/net/usb/smsc95xx.c:896
->  smsc95xx_reset+0x409/0x25f0 drivers/net/usb/smsc95xx.c:896
->  smsc95xx_bind+0x9bc/0x22e0 drivers/net/usb/smsc95xx.c:1131
->  usbnet_probe+0x100b/0x4060 drivers/net/usb/usbnet.c:1750
->  usb_probe_interface+0xc75/0x1210 drivers/usb/core/driver.c:396
->  really_probe+0x506/0xf40 drivers/base/dd.c:658
->  __driver_probe_device+0x2a7/0x5d0 drivers/base/dd.c:800
->  driver_probe_device+0x72/0x7b0 drivers/base/dd.c:830
->  __device_attach_driver+0x55a/0x8f0 drivers/base/dd.c:958
->  bus_for_each_drv+0x3ff/0x620 drivers/base/bus.c:457
->  __device_attach+0x3bd/0x640 drivers/base/dd.c:1030
->  device_initial_probe+0x32/0x40 drivers/base/dd.c:1079
->  bus_probe_device+0x3d8/0x5a0 drivers/base/bus.c:532
->  device_add+0x16ae/0x1f20 drivers/base/core.c:3622
->  usb_set_configuration+0x31c9/0x38c0 drivers/usb/core/message.c:2207
->  usb_generic_driver_probe+0x109/0x2a0 drivers/usb/core/generic.c:238
->  usb_probe_device+0x290/0x4a0 drivers/usb/core/driver.c:293
->  really_probe+0x506/0xf40 drivers/base/dd.c:658
->  __driver_probe_device+0x2a7/0x5d0 drivers/base/dd.c:800
->  driver_probe_device+0x72/0x7b0 drivers/base/dd.c:830
->  __device_attach_driver+0x55a/0x8f0 drivers/base/dd.c:958
->  bus_for_each_drv+0x3ff/0x620 drivers/base/bus.c:457
->  __device_attach+0x3bd/0x640 drivers/base/dd.c:1030
->  device_initial_probe+0x32/0x40 drivers/base/dd.c:1079
->  bus_probe_device+0x3d8/0x5a0 drivers/base/bus.c:532
->  device_add+0x16ae/0x1f20 drivers/base/core.c:3622
->  usb_new_device+0x15f6/0x22f0 drivers/usb/core/hub.c:2589
->  hub_port_connect drivers/usb/core/hub.c:5440 [inline]
->  hub_port_connect_change drivers/usb/core/hub.c:5580 [inline]
->  port_event drivers/usb/core/hub.c:5740 [inline]
->  hub_event+0x53bc/0x7290 drivers/usb/core/hub.c:5822
->  process_one_work kernel/workqueue.c:2630 [inline]
->  process_scheduled_works+0x104e/0x1e70 kernel/workqueue.c:2703
->  worker_thread+0xf45/0x1490 kernel/workqueue.c:2784
->  kthread+0x3e8/0x540 kernel/kthread.c:388
->  ret_from_fork+0x66/0x80 arch/x86/kernel/process.c:147
->  ret_from_fork_asm+0x11/0x20 arch/x86/entry/entry_64.S:304
-> 
-> [...]
-
-Here is the summary with links:
-  - [net] net: usb: smsc95xx: Fix uninit-value access in smsc95xx_read_reg
-    https://git.kernel.org/netdev/net/c/51a32e828109
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+--- a/usb.ids
++++ b/usb.ids
+@@ -23876,6 +23876,22 @@ C 0e  Video
+ 	01  Video Control
+ 	02  Video Streaming
+ 	03  Video Interface Collection
++C 0f  Personal Healthcare
++C 10  Audio/Video
++	00  AVData Control
++	01  AVData Video Stream
++	01  AVData Audio Stream
++C 11  Billboard
++C 12  TypeC Bridge
++C 13  Bulk Display
++C 14  MCTCP over USB
++	00  MCTCP Management
++		01  MCTCP 1.x
++		02  MCTCP 2.x
++	01  MCTCP Host
++		01  MCTCP 1.x
++		02  MCTCP 2.x
++C 3c  I3C
+ C 58  Xbox
+ 	42  Controller
+ C dc  Diagnostic
 
