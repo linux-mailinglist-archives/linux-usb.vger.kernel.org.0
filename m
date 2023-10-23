@@ -1,54 +1,54 @@
-Return-Path: <linux-usb+bounces-2084-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2085-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 047CB7D3DDC
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Oct 2023 19:35:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 676F27D3E11
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Oct 2023 19:43:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 365101C20AAF
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Oct 2023 17:35:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 98D701C20949
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Oct 2023 17:43:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17658210F5;
-	Mon, 23 Oct 2023 17:35:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1DAD2111D;
+	Mon, 23 Oct 2023 17:43:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="cN/m+cgb"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="dnurKmnx"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00334134C6;
-	Mon, 23 Oct 2023 17:35:02 +0000 (UTC)
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7449994;
-	Mon, 23 Oct 2023 10:35:01 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39NFINoQ009003;
-	Mon, 23 Oct 2023 17:34:52 GMT
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D417D200BF;
+	Mon, 23 Oct 2023 17:43:05 +0000 (UTC)
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9E498;
+	Mon, 23 Oct 2023 10:43:03 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39NGrEWF021316;
+	Mon, 23 Oct 2023 17:42:53 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
  mime-version : subject : to : cc : references : from : in-reply-to :
  content-type : content-transfer-encoding; s=qcppdkim1;
- bh=yvlCbiRr18FdVxgfxneGyjIS4OoyzH6zgRsET/Jvi98=;
- b=cN/m+cgb4c7nh3fve4+y6YT7hVUwJeS6ieqdGF6RWBYFOnlXV3EfpDY9LeoZL10yoPeh
- nxY41pEJsan9ZcDOrExwBOGEMmJGqqEs63U1mX+fnyPC3PPJZEWBuihz0xe/nwfPLhKb
- 1RG6pU1z76ZDtJ1J1zL/mgyaL+jsBgTpNFLafZ/NvVYHECSY3pxKz5FpqM32iu68kGfe
- OkSTXo49bwSaCFe/TARbOnm3Wj7tZFDuyBNfsuFV/bfarmDpm4AOpc8Mpo6CSUquqznr
- 00y4nSGjGH2E+aT9F0qS5wIAiZhTus4sXbw85sjv3CW/PE7yyM08JuO3kpI3ZvJUIeHs pQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tv6r2cr1d-1
+ bh=Thbvvz6X+dAXdwI8GyfmFVSpYdfQyNnRvRh5T6KVgDs=;
+ b=dnurKmnxAhvUTlo44pBlF+ZYn8UMDEf2aCqDckdxHoVmISI0dPSFEa6klZCDBWvH1moa
+ lChPJ5MkEbpvaUwuWyvWPEkqNIAFgMF0wVZ4LmVS7rLaHXj5zIwt3IHnPd6ygP4IAJVr
+ oK3afcJyYH4YUmLmu5uin15Uydp4YOE83PBb47Jazb9ij5z1x0jOL9vs4mW94AHFp9NW
+ Q8EGeOHrFZ1OnxRAawB3XvbctXekLr9dpeZPkEXAsBXLJK8oiSDrBUNcBTRo67cea+jU
+ bwCid2a/H2ONmnYlFk0uqPDDRkEOSZgl3L/JIMewKNtm5GeqXdpbv72HBQ5UMcO2p4bs rw== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3twtxwrejb-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 23 Oct 2023 17:34:52 +0000
+	Mon, 23 Oct 2023 17:42:52 +0000
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39NHYpPf017938
+	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39NHgqIF007389
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 23 Oct 2023 17:34:51 GMT
+	Mon, 23 Oct 2023 17:42:52 GMT
 Received: from [10.216.7.46] (10.80.80.8) by nalasex01a.na.qualcomm.com
  (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.39; Mon, 23 Oct
- 2023 10:34:43 -0700
-Message-ID: <c50e9266-2308-4fd5-b102-f604bf4ce2e8@quicinc.com>
-Date: Mon, 23 Oct 2023 23:04:38 +0530
+ 2023 10:42:45 -0700
+Message-ID: <faa647ed-9692-4233-b421-b9e6271f8934@quicinc.com>
+Date: Mon, 23 Oct 2023 23:12:40 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -56,8 +56,8 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v13 08/10] arm64: dts: qcom: sc8280xp: Add multiport
- controller node for SC8280
+Subject: Re: [PATCH v13 09/10] arm64: dts: qcom: sa8295p: Enable tertiary
+ controller and its 4 USB ports
 Content-Language: en-US
 To: Johan Hovold <johan@kernel.org>
 CC: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
@@ -79,102 +79,86 @@ CC: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         <quic_ppratap@quicinc.com>, <quic_jackp@quicinc.com>,
         <ahalaney@redhat.com>, <quic_shazhuss@quicinc.com>
 References: <20231007154806.605-1-quic_kriskura@quicinc.com>
- <20231007154806.605-9-quic_kriskura@quicinc.com>
- <ZTaauQewazaaFonF@hovoldconsulting.com>
+ <20231007154806.605-10-quic_kriskura@quicinc.com>
+ <ZTad-_toGkumYx6O@hovoldconsulting.com>
 From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <ZTaauQewazaaFonF@hovoldconsulting.com>
+In-Reply-To: <ZTad-_toGkumYx6O@hovoldconsulting.com>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: f7QCm6TWSGo2izP2PykhLjqDjP3EZzbk
-X-Proofpoint-GUID: f7QCm6TWSGo2izP2PykhLjqDjP3EZzbk
+X-Proofpoint-ORIG-GUID: gM9Yoy4cwfT-mfFK2KJNiKj1cExvwry2
+X-Proofpoint-GUID: gM9Yoy4cwfT-mfFK2KJNiKj1cExvwry2
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2023-10-23_16,2023-10-19_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
- adultscore=0 clxscore=1015 priorityscore=1501 phishscore=0 spamscore=0
- mlxlogscore=695 impostorscore=0 bulkscore=0 suspectscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2310170001 definitions=main-2310230153
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ priorityscore=1501 clxscore=1015 phishscore=0 adultscore=0 spamscore=0
+ malwarescore=0 bulkscore=0 impostorscore=0 suspectscore=0 mlxscore=0
+ mlxlogscore=792 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2310170001 definitions=main-2310230154
 
 
 
-On 10/23/2023 9:39 PM, Johan Hovold wrote:
-> On Sat, Oct 07, 2023 at 09:18:04PM +0530, Krishna Kurapati wrote:
->> Add USB and DWC3 node for tertiary port of SC8280 along with multiport
->> IRQ's and phy's. This will be used as a base for SA8295P and SA8295-Ride
->> platforms.
+On 10/23/2023 9:53 PM, Johan Hovold wrote:
+> On Sat, Oct 07, 2023 at 09:18:05PM +0530, Krishna Kurapati wrote:
+>> Enable tertiary controller for SA8295P (based on SC8280XP).
+>> Add pinctrl support for usb ports to provide VBUS to connected peripherals.
 >>
 >> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
 >> ---
->>   arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 84 ++++++++++++++++++++++++++
->>   1 file changed, 84 insertions(+)
+>>   arch/arm64/boot/dts/qcom/sa8295p-adp.dts | 49 ++++++++++++++++++++++++
+>>   1 file changed, 49 insertions(+)
 >>
->> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
->> index cad59af7ccef..5f64f75b07db 100644
->> --- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
->> @@ -3330,6 +3330,90 @@ system-cache-controller@9200000 {
->>   			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
->>   		};
->>   
->> +		usb_2: usb@a4f8800 {
->> +			compatible = "qcom,sc8280xp-dwc3-mp", "qcom,dwc3";
+>> diff --git a/arch/arm64/boot/dts/qcom/sa8295p-adp.dts b/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
+>> index fd253942e5e5..271000163823 100644
+>> --- a/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
+>> +++ b/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
+>> @@ -9,6 +9,7 @@
+>>   #include <dt-bindings/gpio/gpio.h>
+>>   #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
+>>   #include <dt-bindings/spmi/spmi.h>
+>> +#include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
 > 
-> So you went with a dedicated compatible even though you are now
-> inferring the number of ports from the interrupts property.
+> Sort order ('p' < 'r').
+
+ACK
+
 > 
-> Should we drop that compatible again or is there any other reason to
-> keep a separate one?
->  >> +			interrupts-extended = <&pdc 127 IRQ_TYPE_EDGE_RISING>,
->> +					      <&pdc 126 IRQ_TYPE_EDGE_RISING>,
->> +					      <&pdc 129 IRQ_TYPE_EDGE_RISING>,
->> +					      <&pdc 128 IRQ_TYPE_EDGE_RISING>,
->> +					      <&pdc 131 IRQ_TYPE_EDGE_RISING>,
->> +					      <&pdc 130 IRQ_TYPE_EDGE_RISING>,
->> +					      <&pdc 133 IRQ_TYPE_EDGE_RISING>,
->> +					      <&pdc 132 IRQ_TYPE_EDGE_RISING>,
->> +					      <&pdc 16 IRQ_TYPE_LEVEL_HIGH>,
->> +					      <&pdc 17 IRQ_TYPE_LEVEL_HIGH>,
->> +					      <&intc GIC_SPI 130 IRQ_TYPE_LEVEL_HIGH>,
->> +					      <&intc GIC_SPI 135 IRQ_TYPE_LEVEL_HIGH>,
->> +					      <&intc GIC_SPI 857 IRQ_TYPE_LEVEL_HIGH>,
->> +					      <&intc GIC_SPI 856 IRQ_TYPE_LEVEL_HIGH>;
+>> +&usb_2 {
+>> +	pinctrl-0 = <&usb2_en_state>,
+>> +		    <&usb3_en_state>,
+>> +		    <&usb4_en_state>,
+>> +		    <&usb5_en_state>;
+>> +	pinctrl-names = "default";
 >> +
->> +			interrupt-names = "dp_hs_phy_1", "dm_hs_phy_1",
->> +					  "dp_hs_phy_2", "dm_hs_phy_2",
->> +					  "dp_hs_phy_3", "dm_hs_phy_3",
->> +					  "dp_hs_phy_4", "dm_hs_phy_4",
->> +					  "ss_phy_1", "ss_phy_2",
->> +					  "pwr_event_1",
->> +					  "pwr_event_2",
->> +					  "pwr_event_3",
->> +					  "pwr_event_4";
+>> +	status = "okay";
+>> +};
+>> +
+>>   &usb_2_hsphy0 {
+>>   	vdda-pll-supply = <&vreg_l5a>;
+>>   	vdda18-supply = <&vreg_l7g>;
+>> @@ -729,3 +740,41 @@ wake-n-pins {
+>>   		};
+>>   	};
+>>   };
+>> +
+>> +&pmm8540c_gpios {
 > 
-> The interrupt order does not match the binding, where the power event
-> interrupts come first.
+> Sort order here too ('p' < 't' in "&tlmm").
 > 
-> And we probably also want the hs_phy_irqs here after fixing the
-> incomplete binding.
 
-You want to update the driver code for this as well ? I have no problem 
-in adding it in DT and binding but not in driver.
+ACK.
 
+>> +	usb2_en_state: usb2-en-state {
 > 
->> +			usb_2_dwc3: usb@a400000 {
->> +				compatible = "snps,dwc3";
->> +				reg = <0 0x0a400000 0 0xcd00>;
->> +				interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
+> No need to include '_state' in the labels.
 > 
-> I'd also like to know what that second dwc3 interrupt is for and whether
-> it should be defined here as well.
-
-Second interrupts is for HW acceleration I believe for which support is 
-not there currently.
+Any specific reason ? I have no problem if removing the suffix but just 
+wanted to know the reason.
 
 Regards,
 Krishna,
