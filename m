@@ -1,145 +1,237 @@
-Return-Path: <linux-usb+bounces-2079-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2080-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A7CA7D3C8B
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Oct 2023 18:30:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F3627D3D23
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Oct 2023 19:13:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8A8F61C20A64
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Oct 2023 16:30:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D02CE2815C4
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Oct 2023 17:13:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CCCA1E519;
-	Mon, 23 Oct 2023 16:30:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 484281E51D;
+	Mon, 23 Oct 2023 17:13:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YE83aC6i"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="e9Phh2nZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D26B01F604;
-	Mon, 23 Oct 2023 16:30:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 473E1C433C7;
-	Mon, 23 Oct 2023 16:30:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1698078614;
-	bh=oxhRkKnt1vpZzLnIp9TEFC3AqRHgwU5lT3eCZlDuw48=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YE83aC6iJN5FiMSyL1eqYXTZ9s18lUw/qEmLBkqlvmYgQ34qR2XCJljH7MpIsCZvo
-	 idB3WnKgL7GBaTOfTgim3oHz54nRve9bZ46sgkGe8iWZ/e/RPusxgFNhCUagcACq0C
-	 vLA2y3HA5Q+oC+amV6WYuaqCM4xQxXx1nlcMPdv8hTBkVs7IaLDvvB/I3aF7lOaWxF
-	 hiC2Fw2LnThirCygiDnsUXBdhKAZofDUnK9SbcyqL73azOn1JhP2/fwgiXisPQjo7b
-	 VD+g2ner/YU4qVK76cjb2mDRrQ92129YPSjxQ+ayk4A/WE1gAO81ua65jKzpodPX9x
-	 ZNvsN+10voyjg==
-Received: from johan by xi.lan with local (Exim 4.96)
-	(envelope-from <johan@kernel.org>)
-	id 1quxoy-0002Bs-1e;
-	Mon, 23 Oct 2023 18:30:29 +0200
-Date: Mon, 23 Oct 2023 18:30:28 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Felipe Balbi <balbi@kernel.org>,
-	Wesley Cheng <quic_wcheng@quicinc.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
-	quic_ppratap@quicinc.com, quic_jackp@quicinc.com,
-	ahalaney@redhat.com, quic_shazhuss@quicinc.com
-Subject: Re: [PATCH v13 10/10] arm64: dts: qcom: sa8540-ride: Enable first
- port of tertiary usb controller
-Message-ID: <ZTafpJNeFOUtneki@hovoldconsulting.com>
-References: <20231007154806.605-1-quic_kriskura@quicinc.com>
- <20231007154806.605-11-quic_kriskura@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F944134C6;
+	Mon, 23 Oct 2023 17:12:57 +0000 (UTC)
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B63B94;
+	Mon, 23 Oct 2023 10:12:56 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39NDrs6u001001;
+	Mon, 23 Oct 2023 17:12:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=6Dydov/5+Ni6DF1P0Owc+XG9biGIMDaOkcqMYg6b4nQ=;
+ b=e9Phh2nZ60FO8S0c1kpJ9+AH7nqSBI4Fn8ogxI2z0pLovbq+ioFLDooQAtsgkumMRXio
+ Ig2oHAvAWekU/uX4x8a+1esMDu5rJHp5g9V9VIblbS3PTZTPeG+Xl8kaCdGrt1mqm8Va
+ OBf6H3IEQi1dmCVMj2mM7OoVsbSYgB4SW62EALkktEr+ROJpaIZogW1A+m+vs1umBTh7
+ HpDd/5yM1V8t/Z0aKqC264RZVsG7qdaTU+LX8C6GGjer+KSYwI6LQCpvqGhvcmwanBOu
+ SxejxTRuLV0Auo0bHZLPLewdPaQtlRBf9FqrMEUOndkV+z/GcNP7AiITv586nlRHrUoK mQ== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tv6r2cppb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 23 Oct 2023 17:12:45 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39NHChfD007046
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 23 Oct 2023 17:12:43 GMT
+Received: from [10.216.7.46] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.39; Mon, 23 Oct
+ 2023 10:12:35 -0700
+Message-ID: <fb5e5e1d-520c-4cbc-adde-f30e853421a1@quicinc.com>
+Date: Mon, 23 Oct 2023 22:42:31 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231007154806.605-11-quic_kriskura@quicinc.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v13 05/10] usb: dwc3: qcom: Refactor IRQ handling in QCOM
+ Glue driver
+To: Johan Hovold <johan@kernel.org>
+CC: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Andy
+ Gross" <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Konrad
+ Dybcio" <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi
+	<balbi@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>, <quic_jackp@quicinc.com>,
+        <ahalaney@redhat.com>, <quic_shazhuss@quicinc.com>
+References: <20231007154806.605-1-quic_kriskura@quicinc.com>
+ <20231007154806.605-6-quic_kriskura@quicinc.com>
+ <ZTJ_T1UL8-s2cgNz@hovoldconsulting.com>
+ <14fc724c-bc99-4b5d-9893-3e5eff8895f7@quicinc.com>
+ <ZTY7Lwjd3_8NlfEi@hovoldconsulting.com>
+ <cabf24d0-8eea-4eb5-8205-bf7fe6017ec2@quicinc.com>
+ <ZTZ-EvvbuA6HpycT@hovoldconsulting.com>
+Content-Language: en-US
+From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <ZTZ-EvvbuA6HpycT@hovoldconsulting.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: -aCK_aVKoeab-uVcbJGjupbG1QQpWm_K
+X-Proofpoint-GUID: -aCK_aVKoeab-uVcbJGjupbG1QQpWm_K
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-23_16,2023-10-19_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ adultscore=0 clxscore=1015 priorityscore=1501 phishscore=0 spamscore=0
+ mlxlogscore=802 impostorscore=0 bulkscore=0 suspectscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2310170001 definitions=main-2310230150
 
-On Sat, Oct 07, 2023 at 09:18:06PM +0530, Krishna Kurapati wrote:
-> From: Andrew Halaney <ahalaney@redhat.com>
+
+
+On 10/23/2023 7:37 PM, Johan Hovold wrote:
+> On Mon, Oct 23, 2023 at 04:54:11PM +0530, Krishna Kurapati PSSNV wrote:
+>> On 10/23/2023 2:51 PM, Johan Hovold wrote:
+>>> On Mon, Oct 23, 2023 at 12:11:45AM +0530, Krishna Kurapati PSSNV wrote:
+>>>> On 10/20/2023 6:53 PM, Johan Hovold wrote:
 > 
-> There is now support for the multiport USB controller this uses so
-> enable it.
+>>>>> I also don't like the special handling of hs_phy_irq; if this is really
+>>>>> just another name for the pwr_event_irq then this should be cleaned up
+>>>>> before making the code more complicated than it needs to be.
+>>>>>
+>>>>> Make sure to clarify this before posting a new revision.
+>>>>
+>>>> hs_phy_irq is different from pwr_event_irq.
+>>>
+>>> How is it different and how are they used?
+>>>
+>>>> AFAIK, there is only one of this per controller.
+>>>
+>>> But previous controllers were all single port so this interrupt is
+>>> likely also per-port, even if your comment below seems to suggest even
+>>> SC8280XP has one, which is unexpected (and not described in the updated
+>>> binding):
+>>>
+>>> 	Yes, all targets have the same IRQ's. Just that MP one's have
+>>> 	multiple IRQ's of each type. But hs-phy_irq is only one in
+>>> 	SC8280 as well.
+>>>
+>>> 	https://lore.kernel.org/lkml/70b2495f-1305-05b1-2039-9573d171fe24@quicinc.com/
+>>>
+>>> Please clarify.
+>>>
+>>
+>> For sure pwr_event_irq and hs_phy_irq are different. I assumed it was
+>> per-controller and not per-phy because I took reference from software
+>> code we have on downstream and hs_phy for multiport is not used
+>> anywhere. I don't see any functionality implemented in downstream for
+>> that IRQ. And it is only one for single port controllers.
+>>
+>> But I got the following info from HW page and these are all the
+>> interrupts (on apss processor) for multiport (extra details removed):
+>>
+>> u_usb31_scnd_mvs_pipe_wrapper_usb31_power_event_irq_0	SYS_apcsQgicSPI[130]
+>> u_usb31_scnd_mvs_pipe_wrapper_usb31_power_event_irq_1	SYS_apcsQgicSPI[135]
+>> u_usb31_scnd_mvs_pipe_wrapper_usb31_power_event_irq_3	SYS_apcsQgicSPI[856]
+>> u_usb31_scnd_mvs_pipe_wrapper_usb31_power_event_irq_2	SYS_apcsQgicSPI[857]
+>>
+>> u_usb31_scnd_mvs_pipe_wrapper_usb31_ctrl_irq[0]	SYS_apcsQgicSPI[133]
+>> u_usb31_scnd_mvs_pipe_wrapper_usb31_ctrl_irq[1]	SYS_apcsQgicSPI[134]
 > 
-> The board only has a single port hooked up (despite it being wired up to
-> the multiport IP on the SoC). There's also a USB 2.0 mux hooked up,
-> which by default on boot is selected to mux properly. Grab the gpio
-> controlling that and ensure it stays in the right position so USB 2.0
-> continues to be routed from the external port to the SoC.
+> This second core interrupt is also missing in the updated binding... It
+> is defined in the ACPI tables so presumably it is needed for the
+> multiport controller.
 > 
-> Co-developed-by: Andrew Halaney <ahalaney@redhat.com>
-
-Checkpatch complains about this one too since Andrew is the primary
-author.
-
-> Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
-> [Krishna: Rebased on top of usb-next]
-> Co-developed-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-
-How much co-development did you actually do here? Just rebasing and
-submitting a patch is not enough to warrant shared authorship.
-
-> ---
->  arch/arm64/boot/dts/qcom/sa8540p-ride.dts | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
+> Do you have any more details on this one?
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-> index b04f72ec097c..6904a4c201ff 100644
-> --- a/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-> +++ b/arch/arm64/boot/dts/qcom/sa8540p-ride.dts
-> @@ -503,6 +503,18 @@ &usb_2_qmpphy0 {
->  	status = "okay";
->  };
->  
-> +&usb_2 {
-> +	pinctrl-0 = <&usb2_en_state>;
-> +	pinctrl-names = "default";
-> +
-> +	status = "okay";
-> +};
-> +
-> +&usb_2_dwc3 {
-> +	phy-names = "usb2-port0", "usb3-port0";
-> +	phys = <&usb_2_hsphy0>, <&usb_2_qmpphy0>;
-> +};
+>> u_cm_usb3_uni_wrapper_mp0_usb3phy_debug_irq	SYS_apcsQgicSPI[668]
+>> u_usb31_scnd_mvs_pipe_wrapper_usb31_bam_irq[0]	SYS_apcsQgicSPI[830]
+>> u_cm_usb3_uni_wrapper_mp1_usb3phy_debug_irq	SYS_apcsQgicSPI[855]
+>>
+>> u_usb31_scnd_mvs_pipe_wrapper_usb31_hs_phy_irq_0	SYS_apcsQgicSPI[131]
+>> u_usb31_scnd_mvs_pipe_wrapper_usb31_hs_phy_irq_1	SYS_apcsQgicSPI[136]
+>> u_usb31_scnd_mvs_pipe_wrapper_usb31_hs_phy_irq_3	SYS_apcsQgicSPI[859]
+>> u_usb31_scnd_mvs_pipe_wrapper_usb31_hs_phy_irq_2	SYS_apcsQgicSPI[860]
+> 
+> Ok, so at least we know hs_phy_irq and pwr_event_irq are distinct and
+> both per-port.
+> 
+> The ACPI tables do not seem to include these, but yeah, that doesn't say
+> much more than that the Windows implementation doesn't currently use
+> them either.
+> 
+>> u_cm_dwc_usb2_hs0_usb2_dpse	apps_pdc_irq_out[127]
+>> u_cm_dwc_usb2_hs0_usb2_dmse	apps_pdc_irq_out[126]
+>> u_cm_dwc_usb2_hs1_usb2_dpse	apps_pdc_irq_out[129]
+>> u_cm_dwc_usb2_hs1_usb2_dmse	apps_pdc_irq_out[128]
+>> u_cm_dwc_usb2_hs2_usb2_dpse	apps_pdc_irq_out[131]
+>> u_cm_dwc_usb2_hs2_usb2_dmse	apps_pdc_irq_out[130]
+>> u_cm_dwc_usb2_hs3_usb2_dpse	apps_pdc_irq_out[133]
+>> u_cm_dwc_usb2_hs3_usb2_dmse	apps_pdc_irq_out[132]
+>> u_cm_usb3_uni_wrapper_mp0_qmp_usb3_lfps_rxterm_irq	apps_pdc_irq_out[16]
+>> u_cm_usb3_uni_wrapper_mp1_qmp_usb3_lfps_rxterm_irq	apps_pdc_irq_out[17]
+>>
+>> Seems like there are 4 IRQ's for HS.
+> 
+> Right. And I assume there are hs_phy_irqs also for the first two USB
+> controllers on sc8280xp?
 
-Sort order and what Konrad said.
+Hi Johan,
 
-> +
->  &xo_board_clk {
->  	clock-frequency = <38400000>;
->  };
-> @@ -655,4 +667,13 @@ wake-pins {
->  			bias-pull-up;
->  		};
->  	};
-> +
-> +	usb2_en_state: usb2-en-state {
+There are, I can dig through and find out. Atleast in downstream I don't 
+see any use of them.
 
-Drop "_state" from label.
+> 
+> Can you find out anything more about what hs_phy_irq is used for? It
+> appears to be an HS wakeup interrupt like the dp/dm ones, but there are
+> not really any details on how it is supposed to be used.
+> 
 
-> +		/* TS3USB221A USB2.0 mux select */
-> +		pins = "gpio24";
-> +		function = "gpio";
-> +		drive-strength = <2>;
-> +		bias-disable;
-> +		output-low;
-> +	};
->  };
+  This IRQ is really not used in downstream controllers. Not sure if its 
+a good idea to add driver code for that. I did some digging and I got 
+the reason why I first said that there is only one hs_phy_irq for 
+tertiary port of controller. The hardware programming sequence doesn't 
+specify usage of these 4 IRQ's but the hw specifics mention that there 
+are 4 of them. Adding driver support for these IRQ's is not a good idea 
+(atleast at this point because they are not used in downstream and I am 
+not sure what would be the side effect). For now I suggest we can add 
+them in bindings and DT and not handle the 4 hs_phy_irq's in the driver 
+code (meaning not add the hs_phy_irq to port structure we plan on adding 
+to dwc3_qcom).
 
-Johan
+Also I plan on splitting the patchset into 4 parts (essentially 4 diff 
+series):
+
+1. Bindings update for hs_phy_irq's
+2. DT patches for MP controller and platform specific files
+3. Core driver update for supporting multiport
+4. QCOM driver update for supporting wakeup/suspend/resume
+
+This is in accordance to [1] and that way qcom code won't block core 
+driver changes from getting merged. Core driver changes are independent 
+and are sufficient to get multiport working.
+
+[1]: 
+https://lore.kernel.org/all/d4663197-8295-4967-a4f5-6cc91638fc0d@linaro.org/
+
+Regards,
+Krishna,
 
