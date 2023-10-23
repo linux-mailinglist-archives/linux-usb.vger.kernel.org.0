@@ -1,129 +1,88 @@
-Return-Path: <linux-usb+bounces-2070-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2071-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84C777D36C0
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Oct 2023 14:34:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D51C7D38DA
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Oct 2023 16:05:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 24E38B20C9C
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Oct 2023 12:34:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A12E328154B
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Oct 2023 14:05:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 625D218E2A;
-	Mon, 23 Oct 2023 12:34:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5141F1B273;
+	Mon, 23 Oct 2023 14:04:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="B2OQkVIa"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hJC2gYt4"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7046E18E21;
-	Mon, 23 Oct 2023 12:34:03 +0000 (UTC)
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC15102;
-	Mon, 23 Oct 2023 05:34:01 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39NCNjDg032629;
-	Mon, 23 Oct 2023 12:33:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=H+2TWuT+YWr9Us1Gv0HohP8Kf2RlZAPvYUoJubSqLYs=;
- b=B2OQkVIaVtVMGW2eBawebqsqbwdLoF6rrrrn8lFWG7RS5zmxYr387olONuH/CxYlAU5l
- phIZRmhm6D7mJPozPgsLrQ/rIwM/0q7t6DZYe5VGpCf/RqUJ0SfT6URWdkXDOh+RwWWR
- /GfuXp7jX9Ei6DmF2ykLFxKWSLt7aEqF2dinf93QHko7wUN+7yBL3+8KIKcAi/2N5LAD
- zSNJcgHU0g1Qs2ECrWq+3Xl4ZdF42qM+EBK/KxVrfgyUwLF8A0qbEmavl9XARaMsTuUJ
- z7bnYmiQIMjPUPI55Zxc+bPKpQdSNUN0jX/5iC0TTklL5Pheb8VgSRKDmloQ4xCsVHmC RQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tv6873yms-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 23 Oct 2023 12:33:43 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39NCXgJp012933
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 23 Oct 2023 12:33:42 GMT
-Received: from [10.216.55.75] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.39; Mon, 23 Oct
- 2023 05:33:35 -0700
-Message-ID: <e640c995-4751-464b-b6fc-106be822ae1c@quicinc.com>
-Date: Mon, 23 Oct 2023 18:03:32 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29DD21A583
+	for <linux-usb@vger.kernel.org>; Mon, 23 Oct 2023 14:04:55 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29E8BD79;
+	Mon, 23 Oct 2023 07:04:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1698069894; x=1729605894;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=+C2/Ry6NP0cEOVCtYHcHZQPHV/tKXSmdj1EwbBKyWs4=;
+  b=hJC2gYt4tuqh0NVWFmO9QIixix4LYzVZr7kdiph8gW1kK3fC9RWTwm/0
+   M6MbSBc+H3So7Hd8Dh18aGcmX4PsvbSu7U3Q6NeHmOo6kzMLVyxuZUmGt
+   bhj3q81uMbYDszAvuDOdxSJB232rC1HdMJh5k9pAF8cVD07CiNbCN8CCw
+   S1Xu8CLF8fDDlL3RsXqr3ofIdyftaVZxrH1n/pTeoBx19Ot5TuP+28aDs
+   gYi4t1U/x7n1xzthxPTjYhz5X1iyy1OB3zm1RWENQmA/DMx2+BVCTmiW8
+   ogcWuaYiDC5lvT2ouEBKfpF+wHIKeIaglbl1uX/N5WvcULIe8iJSYxIvN
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="5470690"
+X-IronPort-AV: E=Sophos;i="6.03,244,1694761200"; 
+   d="scan'208";a="5470690"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2023 07:04:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="758151299"
+X-IronPort-AV: E=Sophos;i="6.03,244,1694761200"; 
+   d="scan'208";a="758151299"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga002.jf.intel.com with ESMTP; 23 Oct 2023 07:04:50 -0700
+Message-ID: <830bfe86-06bd-146e-af28-6f79e638060f@linux.intel.com>
+Date: Mon, 23 Oct 2023 17:06:20 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v13 03/10] usb: dwc3: core: Refactor PHY logic to support
- Multiport Controller
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.13.0
+Subject: Re: [PATCH v2 05/10] xhci: dbc: Check for errors first in
+ xhci_dbc_stop()
+To: Sergei Shtylyov <sergei.shtylyov@gmail.com>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: Mathias Nyman <mathias.nyman@intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20231016130934.1158504-1-andriy.shevchenko@linux.intel.com>
+ <20231016130934.1158504-6-andriy.shevchenko@linux.intel.com>
+ <8b3537e4-db84-7ba7-7c63-0a605631507e@gmail.com>
 Content-Language: en-US
-To: Johan Hovold <johan@kernel.org>
-CC: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Andy
- Gross" <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Konrad
- Dybcio" <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi
-	<balbi@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>, <quic_jackp@quicinc.com>,
-        <ahalaney@redhat.com>, <quic_shazhuss@quicinc.com>,
-        Harsh Agarwal <quic_harshq@quicinc.com>,
-        kernel test robot <lkp@intel.com>
-References: <20231007154806.605-1-quic_kriskura@quicinc.com>
- <20231007154806.605-4-quic_kriskura@quicinc.com>
- <ZTJPBcyZ_zLXbgE5@hovoldconsulting.com>
- <257716c4-7194-4d26-a34c-fff09234628f@quicinc.com>
- <ZTY42KvYCk9HhCIE@hovoldconsulting.com>
-From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <ZTY42KvYCk9HhCIE@hovoldconsulting.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <8b3537e4-db84-7ba7-7c63-0a605631507e@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: MWqRsYOPB_OToFeM1eowGYgTkA03BNwm
-X-Proofpoint-ORIG-GUID: MWqRsYOPB_OToFeM1eowGYgTkA03BNwm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-23_10,2023-10-19_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- suspectscore=0 priorityscore=1501 bulkscore=0 phishscore=0
- lowpriorityscore=0 malwarescore=0 mlxlogscore=355 impostorscore=0
- spamscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2310170001 definitions=main-2310230109
 
-
-
-On 10/23/2023 2:41 PM, Johan Hovold wrote:
-
->>>> Multiport currently.
->>>
->>> You use capitalised "Multiport" in several places it seems. Is this an
->>> established term for these controllers or should it just be "multiport"
->>> or "multiple ports"?
->>>
->> This is an established term AFAIK. So I've been using it here like this.
+On 16.10.2023 19.55, Sergei Shtylyov wrote:
+> On 10/16/23 4:09 PM, Andy Shevchenko wrote:
 > 
-> Do you have a pointer? A google search seems to mostly come up with
-> links to this patch series.
+>> The usual patter is to check for errors and then continue if none.
+> 
+>     Pattern. :-)
+> 
 
-Only pointer I had is the hardware programming guide internally. It 
-mentioned "Multiport" as an established term. I think that is self 
-explanatory in usb context. Isn't it ?
+I'll fix it while applying
 
-Regards,
-Krishna,
+-Mathias
+
 
