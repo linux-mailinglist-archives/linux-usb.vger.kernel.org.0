@@ -1,155 +1,122 @@
-Return-Path: <linux-usb+bounces-2093-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2094-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C44DC7D41FE
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Oct 2023 23:55:51 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E4E77D42CF
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Oct 2023 00:42:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7CCA52816A8
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Oct 2023 21:55:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F2885B20CE1
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Oct 2023 22:42:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68C8E23758;
-	Mon, 23 Oct 2023 21:55:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="WRksQS2g"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E53722F1D;
+	Mon, 23 Oct 2023 22:42:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56ECA10971;
-	Mon, 23 Oct 2023 21:55:42 +0000 (UTC)
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41DDA98;
-	Mon, 23 Oct 2023 14:55:40 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39NJdt1X002491;
-	Mon, 23 Oct 2023 21:54:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=hVa/mq2VQpyWbZU8AbMbE350it4l72isr/X7+dQsCVw=;
- b=WRksQS2ghff9LS+dck6Eb9LoSUZajKXQPzLoN0iBfuMrRhwp9+whWjZLG9kV2ZI0bq84
- BkICQs1jVcdFakCj/zkMJUHVeHEwhCS3XBgSSmE4DCyRD+XJxCWadFRbSO0upGibuy9M
- dxxApoyvDi9By5YP6R5SoPb7fKm4z7Mpl1b4vNX4Z/+gluYx3X/5f+F5n/DZ3qH6KbZM
- f9O2u8AK+hAK7QJHcFqCOdMXgh09FxnTL/LpsSaN9syXq9cB4wbPDtSvpeezjmOU2zsM
- j33mz0FYjGZUPgfX1ogdrb5icHmvjIKa5KCc9NqHXO8d/m9luRO9RmrzGjedjf/EYRHe EQ== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tv40ungua-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 23 Oct 2023 21:54:57 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39NLsupN031852
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 23 Oct 2023 21:54:56 GMT
-Received: from [10.110.22.156] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.39; Mon, 23 Oct
- 2023 14:54:55 -0700
-Message-ID: <6409c486-7393-4352-489c-ecd488597c4c@quicinc.com>
-Date: Mon, 23 Oct 2023 14:54:50 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4617822337;
+	Mon, 23 Oct 2023 22:42:09 +0000 (UTC)
+Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EB2610D;
+	Mon, 23 Oct 2023 15:42:08 -0700 (PDT)
+Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-5842a7fdc61so1783574eaf.3;
+        Mon, 23 Oct 2023 15:42:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698100927; x=1698705727;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OQtZrDjxMO0cn6Z1v3NtG+S2tU9MQ3gDl1rlW3lNWy0=;
+        b=l40lAiaLG15ugjRlFfYqAlN6SMq0cK3BXnRwJ70ixggMKlQEwUxietAQbfKIEQcxpJ
+         fWSWTAiHBp0m+jRG8QZBN8aaQ73x6ikIzfSrXK9pXILXL2F4x2ELnZ8BlxOcYePJyXbU
+         5HTn5+dOkkKMdql6sx2a6gblWM5KEulqny9K2P9Ex4H09e7lWXksad8kzPfas5nOstjL
+         mBKEVGIhvZVFmVLs+jGQ6gvyRMyHhL8oqlWD2swEkUhes6iOucEgqbkqEuSH1X7F11HG
+         dMoXKmao/rXw/geBqyoHPRsi4XqrdyQl5ppjmNnIuKv6El1gIveLJwjIgdvSQTeXhoII
+         xlAg==
+X-Gm-Message-State: AOJu0YxVxaz6p6vjLD6y3B8+aCxtU9cQpL+OgB9zjt6pBGuQnCtKZZOm
+	eMFzB0v64UfCN+sfQd7GBVkTCsg/aA==
+X-Google-Smtp-Source: AGHT+IEx9L2hGghv2/kE/n011his5PMYgI+6kmyvJkZKOk/GWfuvIwxtr8nh8WcfcPdwpBQQHnFGOQ==
+X-Received: by 2002:a4a:d032:0:b0:57b:7e41:9f11 with SMTP id w18-20020a4ad032000000b0057b7e419f11mr9924525oor.2.1698100927290;
+        Mon, 23 Oct 2023 15:42:07 -0700 (PDT)
+Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id w13-20020a4adecd000000b0057b95dc4c44sm1696534oou.48.2023.10.23.15.42.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Oct 2023 15:42:06 -0700 (PDT)
+Received: (nullmailer pid 1724522 invoked by uid 1000);
+	Mon, 23 Oct 2023 22:42:05 -0000
+Date: Mon, 23 Oct 2023 17:42:05 -0500
+From: Rob Herring <robh@kernel.org>
+To: Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: Conor Dooley <conor@kernel.org>, Heiko Stuebner <heiko@sntech.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, linux-rockchip@lists.infradead.org, linux-usb@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kernel@collabora.com
+Subject: Re: [PATCH v4 1/3] dt-bindings: usb: add rk3588 compatible to
+ rockchip,dwc3
+Message-ID: <20231023224205.GA1163435-robh@kernel.org>
+References: <20231020150022.48725-1-sebastian.reichel@collabora.com>
+ <20231020150022.48725-2-sebastian.reichel@collabora.com>
+ <20231020-shudder-tackle-cc98a82f1cd0@spud>
+ <20231020160329.uqgjjr6ubfrcqjkj@mercury.elektranox.org>
+ <20231022214219.GA706888-robh@kernel.org>
+ <20231023001803.7fylnbv74zp2ynx7@mercury.elektranox.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v9 34/34] ASoC: usb: Rediscover USB SND devices on USB
- port add
-Content-Language: en-US
-To: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>,
-        <lgirdwood@gmail.com>, <broonie@kernel.org>, <perex@perex.cz>,
-        <tiwai@suse.com>, <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <srinivas.kandagatla@linaro.org>, <bgoswami@quicinc.com>,
-        <Thinh.Nguyen@synopsys.com>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-References: <20231017200109.11407-1-quic_wcheng@quicinc.com>
- <20231017200109.11407-35-quic_wcheng@quicinc.com>
- <b503058d-e23f-4a63-99b8-f0a62b2a2557@linux.intel.com>
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <b503058d-e23f-4a63-99b8-f0a62b2a2557@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 3O20EUy7dwzYWHIPEZCZdjjATpyogG3y
-X-Proofpoint-ORIG-GUID: 3O20EUy7dwzYWHIPEZCZdjjATpyogG3y
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-23_21,2023-10-19_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- phishscore=0 adultscore=0 clxscore=1015 spamscore=0 suspectscore=0
- impostorscore=0 priorityscore=1501 malwarescore=0 mlxlogscore=999
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2310170001 definitions=main-2310230192
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231023001803.7fylnbv74zp2ynx7@mercury.elektranox.org>
 
-Hi Pierre,
-
-On 10/17/2023 4:11 PM, Pierre-Louis Bossart wrote:
+On Mon, Oct 23, 2023 at 02:18:03AM +0200, Sebastian Reichel wrote:
+> Hi Rob,
 > 
+> On Sun, Oct 22, 2023 at 04:42:19PM -0500, Rob Herring wrote:
+> > On Fri, Oct 20, 2023 at 06:03:29PM +0200, Sebastian Reichel wrote:
+> > > On Fri, Oct 20, 2023 at 04:36:19PM +0100, Conor Dooley wrote:
+> > > > On Fri, Oct 20, 2023 at 04:11:40PM +0200, Sebastian Reichel wrote:
+> > > > > [...]
+> > > > > +allOf:
+> > > > > +  - $ref: snps,dwc3.yaml#
+> > > > > +  - if:
+> > > > > +      properties:
+> > > > > +        compatible:
+> > > > > +          contains:
+> > > > > +            const: rockchip,rk3328-dwc3
+> > > > > +    then:
+> > > > > +      properties:
+> > > > > +        clocks:
+> > > > > +          minItems: 3
+> > > > > +          maxItems: 4
+> > > > > +        clock-names:
+> > > > > +          minItems: 3
+> > > > > +          items:
+> > > > > +            - const: ref_clk
+> > > > > +            - const: suspend_clk
+> > > > > +            - const: bus_clk
+> > > > > +            - const: grf_clk
+> > > > 
+> > > > minItems for clocks and clock-names is already 3, is it not?
+> > > 
+> > > Yes, but the following 'maxItems: 4' implicitly sets it to 4,
+> > > so I had to set it again. The same is true for clock-names -
+> > > providings new 'items:' effectively drops the "minItems: 3"
+> > > from the generic section.
+> > 
+> > Are you sure? We don't add anything implicit in the if/then schemas. 
+> > Could be a tool issue though.
 > 
-> On 10/17/23 15:01, Wesley Cheng wrote:
->> In case the USB backend device has not been initialized/probed, USB SND
->> device connections can still occur.  When the USB backend is eventually
->> made available, previous USB SND device connections are not communicated to
->> the USB backend.  Call snd_usb_rediscover_devices() to generate the connect
->> callbacks for all USB SND devices connected.  This will allow for the USB
->> backend to be updated with the current set of devices available.
->>
->> The chip array entries are all populated and removed while under the
->> register_mutex, so going over potential race conditions:
->>
->> Thread#1:
->>    q6usb_component_probe()
->>      --> snd_soc_usb_add_port()
->>        --> snd_usb_rediscover_devices()
->>          --> mutex_lock(register_mutex)
->>
->> Thread#2
->>    --> usb_audio_disconnect()
->>      --> mutex_lock(register_mutex)
->>
->> So either thread#1 or thread#2 will complete first.  If
->>
->> Thread#1 completes before thread#2:
->>    SOC USB will notify DPCM backend of the device connection.  Shortly
->>    after, once thread#2 runs, we will get a disconnect event for the
->>    connected device.
->>
->> Thread#2 completes before thread#1:
->>    Then during snd_usb_rediscover_devices() it won't notify of any
->>    connection for that particular chip index.
-> Looks like you are assuming the regular USB audio stuff is probed first?
-> 
-> What if it's not the case? Have you tested with a manual 'blacklist' and
-> "modprobe" sequence long after all the DSP stuff is initialized?
-> 
-> It really reminds me of audio+display issues, and the same opens apply IMHO.
+> I had this issue in the past. But just in case I also did a re-test
+> before sending my last mail and I did get a warning. So yes, I'm
+> quite sure :)
 
-Not necessarily...if the USB audio driver is not probed, then that is 
-the same scenario as when there is no USB audio capable device plugged 
-in, while the offload path is waiting for the connect event. I think 
-this is the standard scenario.
+Well, I'm quite surprised no one else noticed. Anyways, I'm working on a 
+fix for it. In the meantime, just leave it as you have it.
 
-In the situation where the platform sound card hasn't probed yet and USB 
-audio devices are being identified, then that is basically the scenario 
-that would be more of an issue, since its USB SND that notifies of the 
-connection state (at the time of connect/disconnect).
+Note that there's an existing error in this binding I noticed in the 
+example. The clocks and clock-names lengths don't match.
 
-I've tried with building these drivers as modules and probing them at 
-different times/sequences, and I haven't seen an issue so far.
-
-Thanks
-Wesley Cheng
+Rob
 
