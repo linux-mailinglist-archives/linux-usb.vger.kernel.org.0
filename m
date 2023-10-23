@@ -1,122 +1,170 @@
-Return-Path: <linux-usb+bounces-2094-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2095-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E4E77D42CF
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Oct 2023 00:42:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86A727D42E2
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Oct 2023 00:47:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F2885B20CE1
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Oct 2023 22:42:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B85701C20B05
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Oct 2023 22:47:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E53722F1D;
-	Mon, 23 Oct 2023 22:42:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EE2422EF7;
+	Mon, 23 Oct 2023 22:47:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="m6hnzEtP"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4617822337;
-	Mon, 23 Oct 2023 22:42:09 +0000 (UTC)
-Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EB2610D;
-	Mon, 23 Oct 2023 15:42:08 -0700 (PDT)
-Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-5842a7fdc61so1783574eaf.3;
-        Mon, 23 Oct 2023 15:42:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698100927; x=1698705727;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OQtZrDjxMO0cn6Z1v3NtG+S2tU9MQ3gDl1rlW3lNWy0=;
-        b=l40lAiaLG15ugjRlFfYqAlN6SMq0cK3BXnRwJ70ixggMKlQEwUxietAQbfKIEQcxpJ
-         fWSWTAiHBp0m+jRG8QZBN8aaQ73x6ikIzfSrXK9pXILXL2F4x2ELnZ8BlxOcYePJyXbU
-         5HTn5+dOkkKMdql6sx2a6gblWM5KEulqny9K2P9Ex4H09e7lWXksad8kzPfas5nOstjL
-         mBKEVGIhvZVFmVLs+jGQ6gvyRMyHhL8oqlWD2swEkUhes6iOucEgqbkqEuSH1X7F11HG
-         dMoXKmao/rXw/geBqyoHPRsi4XqrdyQl5ppjmNnIuKv6El1gIveLJwjIgdvSQTeXhoII
-         xlAg==
-X-Gm-Message-State: AOJu0YxVxaz6p6vjLD6y3B8+aCxtU9cQpL+OgB9zjt6pBGuQnCtKZZOm
-	eMFzB0v64UfCN+sfQd7GBVkTCsg/aA==
-X-Google-Smtp-Source: AGHT+IEx9L2hGghv2/kE/n011his5PMYgI+6kmyvJkZKOk/GWfuvIwxtr8nh8WcfcPdwpBQQHnFGOQ==
-X-Received: by 2002:a4a:d032:0:b0:57b:7e41:9f11 with SMTP id w18-20020a4ad032000000b0057b7e419f11mr9924525oor.2.1698100927290;
-        Mon, 23 Oct 2023 15:42:07 -0700 (PDT)
-Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id w13-20020a4adecd000000b0057b95dc4c44sm1696534oou.48.2023.10.23.15.42.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Oct 2023 15:42:06 -0700 (PDT)
-Received: (nullmailer pid 1724522 invoked by uid 1000);
-	Mon, 23 Oct 2023 22:42:05 -0000
-Date: Mon, 23 Oct 2023 17:42:05 -0500
-From: Rob Herring <robh@kernel.org>
-To: Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc: Conor Dooley <conor@kernel.org>, Heiko Stuebner <heiko@sntech.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, linux-rockchip@lists.infradead.org, linux-usb@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kernel@collabora.com
-Subject: Re: [PATCH v4 1/3] dt-bindings: usb: add rk3588 compatible to
- rockchip,dwc3
-Message-ID: <20231023224205.GA1163435-robh@kernel.org>
-References: <20231020150022.48725-1-sebastian.reichel@collabora.com>
- <20231020150022.48725-2-sebastian.reichel@collabora.com>
- <20231020-shudder-tackle-cc98a82f1cd0@spud>
- <20231020160329.uqgjjr6ubfrcqjkj@mercury.elektranox.org>
- <20231022214219.GA706888-robh@kernel.org>
- <20231023001803.7fylnbv74zp2ynx7@mercury.elektranox.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C66C224E3
+	for <linux-usb@vger.kernel.org>; Mon, 23 Oct 2023 22:47:29 +0000 (UTC)
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C36C10C;
+	Mon, 23 Oct 2023 15:47:27 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39NMPdrV010909;
+	Mon, 23 Oct 2023 22:47:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=8l/GjaPgFZUdLEOFW+JADuItN1vCu90bHJCJsxyTrX0=;
+ b=m6hnzEtPSRsu1TwtPfiMY5H3l+M3kGtouvkuM+7o0zCZIWR91ixLpO7xSQkj9s/TeXrG
+ mJGcXXwcMJaDQCKbnNDTEjQ+UjAuVcHtYEquDx91aVBa6weRTBPl9ZIz/la6T6XgI9WS
+ ost7GGRDgJXiLtCmPrPFveNGZKCvMR815iqXd1KGwEjP8wVNsf0PChPbMrgbQcJ/GmAF
+ 5swV1//p5eKSid4WoplCyql4vI99ODUpjaV/b7YE4c5cNlbFPaniV2nIWvV3MOpB7YfT
+ Zv0AlcRVGQ3eJi5/u2aNnfAvlbDV/Htie0kjHHAYyk+aN7o6aIfhD8QgUu3gf0Ss1ZWC wQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3twp3vhpak-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 23 Oct 2023 22:47:17 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39NMlGuu022614
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 23 Oct 2023 22:47:16 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.39; Mon, 23 Oct 2023 15:47:16 -0700
+Date: Mon, 23 Oct 2023 15:47:15 -0700
+From: Bjorn Andersson <quic_bjorande@quicinc.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson
+	<andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Neil
+ Armstrong <neil.armstrong@linaro.org>,
+        Rob Herring <robh@kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>
+Subject: Re: [PATCH 1/2] usb: typec: ucsi: fix UCSI on buggy Qualcomm devices
+Message-ID: <20231023224715.GN3553829@hu-bjorande-lv.qualcomm.com>
+References: <20231023215327.695720-1-dmitry.baryshkov@linaro.org>
+ <20231023215327.695720-2-dmitry.baryshkov@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20231023001803.7fylnbv74zp2ynx7@mercury.elektranox.org>
+In-Reply-To: <20231023215327.695720-2-dmitry.baryshkov@linaro.org>
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: xJEUuLuoi_ujMvmjX0iyuWjQ1mW2TVnj
+X-Proofpoint-ORIG-GUID: xJEUuLuoi_ujMvmjX0iyuWjQ1mW2TVnj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-23_21,2023-10-19_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
+ suspectscore=0 bulkscore=0 phishscore=0 priorityscore=1501 malwarescore=0
+ impostorscore=0 adultscore=0 spamscore=0 clxscore=1011 mlxlogscore=503
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2310170001
+ definitions=main-2310230200
 
-On Mon, Oct 23, 2023 at 02:18:03AM +0200, Sebastian Reichel wrote:
-> Hi Rob,
+On Tue, Oct 24, 2023 at 12:47:26AM +0300, Dmitry Baryshkov wrote:
+> On sevral Qualcomm platforms (SC8180X, SM8350, SC8280XP) a call to
+> UCSI_GET_PDOS for non-PD partners will cause a firmware crash with no
+> easy way to recover from it. Since we have no easy way to determine
+> whether the partner really has PD support, shortcut UCSI_GET_PDOS on
+> such platforms. This allows us to enable UCSI support on such devices.
 > 
-> On Sun, Oct 22, 2023 at 04:42:19PM -0500, Rob Herring wrote:
-> > On Fri, Oct 20, 2023 at 06:03:29PM +0200, Sebastian Reichel wrote:
-> > > On Fri, Oct 20, 2023 at 04:36:19PM +0100, Conor Dooley wrote:
-> > > > On Fri, Oct 20, 2023 at 04:11:40PM +0200, Sebastian Reichel wrote:
-> > > > > [...]
-> > > > > +allOf:
-> > > > > +  - $ref: snps,dwc3.yaml#
-> > > > > +  - if:
-> > > > > +      properties:
-> > > > > +        compatible:
-> > > > > +          contains:
-> > > > > +            const: rockchip,rk3328-dwc3
-> > > > > +    then:
-> > > > > +      properties:
-> > > > > +        clocks:
-> > > > > +          minItems: 3
-> > > > > +          maxItems: 4
-> > > > > +        clock-names:
-> > > > > +          minItems: 3
-> > > > > +          items:
-> > > > > +            - const: ref_clk
-> > > > > +            - const: suspend_clk
-> > > > > +            - const: bus_clk
-> > > > > +            - const: grf_clk
-> > > > 
-> > > > minItems for clocks and clock-names is already 3, is it not?
-> > > 
-> > > Yes, but the following 'maxItems: 4' implicitly sets it to 4,
-> > > so I had to set it again. The same is true for clock-names -
-> > > providings new 'items:' effectively drops the "minItems: 3"
-> > > from the generic section.
-> > 
-> > Are you sure? We don't add anything implicit in the if/then schemas. 
-> > Could be a tool issue though.
+
+Really nice to see this. Thanks.
+
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+>  drivers/usb/typec/ucsi/ucsi.c       | 3 +++
+>  drivers/usb/typec/ucsi/ucsi.h       | 3 +++
+>  drivers/usb/typec/ucsi/ucsi_glink.c | 3 +++
+>  3 files changed, 9 insertions(+)
 > 
-> I had this issue in the past. But just in case I also did a re-test
-> before sending my last mail and I did get a warning. So yes, I'm
-> quite sure :)
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index 61b64558f96c..5392ec698959 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -578,6 +578,9 @@ static int ucsi_read_pdos(struct ucsi_connector *con,
+>  	u64 command;
+>  	int ret;
+>  
+> +	if (ucsi->quirks & UCSI_NO_PARTNER_PDOS)
+> +		return 0;
+> +
+>  	command = UCSI_COMMAND(UCSI_GET_PDOS) | UCSI_CONNECTOR_NUMBER(con->num);
+>  	command |= UCSI_GET_PDOS_PARTNER_PDO(is_partner);
+>  	command |= UCSI_GET_PDOS_PDO_OFFSET(offset);
+> diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+> index 474315a72c77..6478016d5cb8 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.h
+> +++ b/drivers/usb/typec/ucsi/ucsi.h
+> @@ -317,6 +317,9 @@ struct ucsi {
+>  #define EVENT_PENDING	0
+>  #define COMMAND_PENDING	1
+>  #define ACK_PENDING	2
+> +
+> +	unsigned long quirks;
+> +#define UCSI_NO_PARTNER_PDOS	BIT(0)	/* Don't read partner's PDOs */
+>  };
+>  
+>  #define UCSI_MAX_SVID		5
+> diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
+> index db6e248f8208..5c159e7b2b65 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_glink.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_glink.c
+> @@ -327,6 +327,8 @@ static int pmic_glink_ucsi_probe(struct auxiliary_device *adev,
+>  	if (ret)
+>  		return ret;
+>  
+> +	ucsi->ucsi->quirks = id->driver_data;
+> +
+>  	ucsi_set_drvdata(ucsi->ucsi, ucsi);
+>  
+>  	device_for_each_child_node(dev, fwnode) {
+> @@ -379,6 +381,7 @@ static void pmic_glink_ucsi_remove(struct auxiliary_device *adev)
+>  
+>  static const struct auxiliary_device_id pmic_glink_ucsi_id_table[] = {
+>  	{ .name = "pmic_glink.ucsi", },
+> +	{ .name = "pmic_glink.ucsi-no-pdos", .driver_data = UCSI_NO_PARTNER_PDOS, },
 
-Well, I'm quite surprised no one else noticed. Anyways, I'm working on a 
-fix for it. In the meantime, just leave it as you have it.
+In altmode and battmgr drivers we apply quirks based on the compatible
+of the pmic_glink of_node.
 
-Note that there's an existing error in this binding I noticed in the 
-example. The clocks and clock-names lengths don't match.
+Could we do the same here, instead of mixing the two schemes?
 
-Rob
+Regards,
+Bjorn
+
+>  	{},
+>  };
+>  MODULE_DEVICE_TABLE(auxiliary, pmic_glink_ucsi_id_table);
+> -- 
+> 2.42.0
+> 
 
