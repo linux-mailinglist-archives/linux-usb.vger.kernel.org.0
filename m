@@ -1,288 +1,180 @@
-Return-Path: <linux-usb+bounces-2086-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2087-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DF697D3EB8
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Oct 2023 20:13:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF7A37D3F34
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Oct 2023 20:24:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B6B1B2815D1
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Oct 2023 18:13:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E18F11C20921
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Oct 2023 18:24:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4F152136A;
-	Mon, 23 Oct 2023 18:13:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 491722137F;
+	Mon, 23 Oct 2023 18:24:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PjB50tIY"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="daqprl+U"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 792D71BDFE
-	for <linux-usb@vger.kernel.org>; Mon, 23 Oct 2023 18:13:08 +0000 (UTC)
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EBA39D
-	for <linux-usb@vger.kernel.org>; Mon, 23 Oct 2023 11:13:06 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id 98e67ed59e1d1-27d1aee5aa1so2594843a91.0
-        for <linux-usb@vger.kernel.org>; Mon, 23 Oct 2023 11:13:06 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 377AD1B278
+	for <linux-usb@vger.kernel.org>; Mon, 23 Oct 2023 18:24:39 +0000 (UTC)
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 102C810D
+	for <linux-usb@vger.kernel.org>; Mon, 23 Oct 2023 11:24:36 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2c518a1d83fso56956971fa.3
+        for <linux-usb@vger.kernel.org>; Mon, 23 Oct 2023 11:24:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1698084786; x=1698689586; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HyR06kmSOvyp16JipQI1Y3Q+81kFnPqYM3CkWnYWKlM=;
-        b=PjB50tIYf60sQ7wrXiaxydYT/DLTZMtBf5GAgu/cV2tqvk8dJ4aU878QphDC6Y2Bgd
-         G1nOvDieC0meC0SYn6OjCDHDhYOrrMkibF3JbB3Ccjo6WQnxN728M8Ch3Je0oy4Uxbuk
-         XZ1CWBRJIEVd8RFxumPHTCo2FXFAjlA/rcJsMEo+agT7RlMXKx6AO2kfuiZkUFG29MDc
-         66nTB9SRVaDXCVoglDURg4A6StTXit9T1BR04gVG6ea/leVh4edfrpoXhpkAVeuFp1Hs
-         pL1WrR9Kntb9AA91EnF/YSI5Z/imuTnU315Rllq4cguETYZ8mGdTMqTjGErc8/x9dAjr
-         /DUw==
+        d=linaro.org; s=google; t=1698085474; x=1698690274; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=AXl7QD45QL6sivgQCN1vZsJFBc1tqDJMcsR0n1+9ZVA=;
+        b=daqprl+U42OIBvQ5tXF0x+KPqTr+l5gKICMowLVqUpwU46UPt8Z0LnPxG/oQyotROh
+         dXe1tdEyP2r5DMaevupFfO+QGEXaKNRlbUblqufFy4cSEKrP38LLr6CfKnojvdypjViK
+         mb4M0SYFap7nYZ6vWQhZpcGjmoIN1X1efL8DHbp7ndN/IAdX6T/Wn/4Dt5B754cQr0Dy
+         RdaXeUBbCAqDcaZDyFS7OmaFOX1Bgwm4NsI7ELsezLWhG4xhoH/ouclw2+lwUZ58DHG4
+         GAH4JolxLxhjaC322Z5a/2mB9vl7iQFzKFZ8R3+NDnPq6DmZSz5AKkcJJUWXWIC2+9Lz
+         5aaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698084786; x=1698689586;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HyR06kmSOvyp16JipQI1Y3Q+81kFnPqYM3CkWnYWKlM=;
-        b=w6AYZ0tJ982LW2k8wB0Dju1PNkzjS5kkqDBTQJ6xt2rg66gXAEfmIuDLLxF7LcN8r3
-         sEX+5mW8dshd4+5kdZLEIbo19M7T27C9tIAlgz3plpjPJy7YY1o7XdZ42eyZvSZcYJ1d
-         6NJlZVTJyN4fphUQADoBygLEkSh2WiIf9rHRhOIn1rAQtE66NnqaEBg8tpl7NVP8RF8j
-         i2bBc7kJFHlJeDQSFMnQMba8zaEAhLzcLHPfeGZZOFisXFA6J7PAB4NQhazM4aLWBVHJ
-         L6caa5Kx+/k9IswLU8a8HAwhEq7AAuVLlYDYxpCXNHdcENbnDivcwvvigLoQVKtGobXc
-         B7Zg==
-X-Gm-Message-State: AOJu0Yx1vrNHGtmAco4kgLlWcRkm9dyKNsbPVxiPisjxCuYh2vUQbbMe
-	XiU36ZDb8n9xBdIX1NDt4Cwmcw==
-X-Google-Smtp-Source: AGHT+IGnNLGXNBRGtY9F0s5gO+pe7XXXQtcc/AVW7bqVqe/eVeMPbYXjMhUMZFOYmt98+Pt0+SmAWw==
-X-Received: by 2002:a17:90a:ff11:b0:27d:3c62:6342 with SMTP id ce17-20020a17090aff1100b0027d3c626342mr13099308pjb.4.1698084785590;
-        Mon, 23 Oct 2023 11:13:05 -0700 (PDT)
-Received: from ?IPV6:2601:645:8100:1350:8800:4c7f:d309:abbb? ([2601:645:8100:1350:8800:4c7f:d309:abbb])
-        by smtp.gmail.com with ESMTPSA id s12-20020a170902988c00b001c73fb506aesm6140465plp.128.2023.10.23.11.13.04
+        d=1e100.net; s=20230601; t=1698085474; x=1698690274;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AXl7QD45QL6sivgQCN1vZsJFBc1tqDJMcsR0n1+9ZVA=;
+        b=EB1gUuFCGvWg/8wqoYKHnVWQtS3ns9+NkVvthMztc/hF5548VVFAlWWJx0gK00O296
+         eUhd3kbZ+CiQVeYfSaN2tLBfC12akz/08vqOdcg43CpZrkUA2QRrUDw9FgDNZI0JsL1r
+         ez1/3KD02+3FbzZUBp1q1z2GWhz6y2OUNc4CLMCWftvvGVBWOdIeReLxsFqLXFEQJeDo
+         6+9kJVVvglq2WDagdzb9WJ1/a8Q8xzYdawtdq1ch8SFEPB//bSk+9YmLPP8cXB8CawFV
+         UDrh9cuj2UKPlWNwwdKL8K6xUtZIPd9NVMwRey38S0oX/oVvq+KQFNi4tAi/kBXPwGnW
+         qATA==
+X-Gm-Message-State: AOJu0Yw8n6wxQkuiHXUCST5W1pATdCLmYBzxNOX4ZD8jeRCK5UK1QKfs
+	2kIZpK0+wqdr5YAFArrTW32biw==
+X-Google-Smtp-Source: AGHT+IHkBgeiF76Bx8knzqTGYbXJFudDOPHcgula2SENkD2657KkYSAFEtuZJ/OAVh+6CzJaf2DBDA==
+X-Received: by 2002:ac2:5456:0:b0:507:b074:ecd4 with SMTP id d22-20020ac25456000000b00507b074ecd4mr6516885lfn.7.1698085474021;
+        Mon, 23 Oct 2023 11:24:34 -0700 (PDT)
+Received: from [127.0.0.1] (85-76-147-63-nat.elisa-mobile.fi. [85.76.147.63])
+        by smtp.gmail.com with ESMTPSA id z19-20020a19f713000000b00507a3b16d29sm1785836lfe.191.2023.10.23.11.24.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Oct 2023 11:13:05 -0700 (PDT)
-Message-ID: <69609645-fa20-4987-981d-1ab264e80b9b@google.com>
-Date: Mon, 23 Oct 2023 11:13:03 -0700
+        Mon, 23 Oct 2023 11:24:33 -0700 (PDT)
+Date: Mon, 23 Oct 2023 21:24:33 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+CC: David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+ Andrzej Hajda <andrzej.hajda@intel.com>,
+ Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>,
+ Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+ Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+ Guenter Roeck <linux@roeck-us.net>, Janne Grunau <j@jannau.net>,
+ Simon Ser <contact@emersion.fr>, Andy Gross <agross@kernel.org>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ freedreno@lists.freedesktop.org
+Subject: Re: [RFC PATCH v1 12/12] usb: typec: qcom: define the bridge's path
+User-Agent: K-9 Mail for Android
+In-Reply-To: <ZQRKq7K8jKlH/Y4X@kuha.fi.intel.com>
+References: <20230903214150.2877023-1-dmitry.baryshkov@linaro.org> <20230903214150.2877023-13-dmitry.baryshkov@linaro.org> <ZQRKq7K8jKlH/Y4X@kuha.fi.intel.com>
+Message-ID: <0F1BE090-92C4-4233-A77A-9B4C653DA1A7@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: uvc gadget: Making upper bound of number of usb requests
- allocated configurable through configfs
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
- Michael Grzeschik <mgr@pengutronix.de>
-Cc: Greg KH <gregkh@linuxfoundation.org>, "corbet@lwn.net" <corbet@lwn.net>,
- "laurent.pinchart@ideasonboard.com" <laurent.pinchart@ideasonboard.com>,
- "dan.scally@ideasonboard.com" <dan.scally@ideasonboard.com>,
- "kieran.bingham@ideasonboard.com" <kieran.bingham@ideasonboard.com>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
- "etalvala@google.com" <etalvala@google.com>,
- "arakesh@google.com" <arakesh@google.com>
-References: <edad1597-48da-49d2-a089-da2487cac889@google.com>
- <2023100834-statistic-richly-49ef@gregkh>
- <7ed46b3c-bd42-468e-b28d-860dc8a6c7e6@google.com>
- <20231012184954.ech7kfpqjkunq6eu@synopsys.com>
- <c47e864b-4b9e-4a21-afea-af121a4d7771@google.com>
- <20231020233044.dh63nu3tkbmrtfl4@synopsys.com>
-Content-Language: en-US
-From: Jayant Chowdhary <jchowdhary@google.com>
-In-Reply-To: <20231020233044.dh63nu3tkbmrtfl4@synopsys.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Thinh, Michael,
-
-On 10/20/23 16:30, Thinh Nguyen wrote:
-> Sorry for the delay response.
+On 15 September 2023 15:14:35 EEST, Heikki Krogerus <heikki=2Ekrogerus@linu=
+x=2Eintel=2Ecom> wrote:
+>Hi Dmitry,
 >
-> On Sun, Oct 15, 2023, Jayant Chowdhary wrote:
->> On 10/12/23 11:50, Thinh Nguyen wrote:
->>> The frequency of the request submission should not depend on the
->>> video_pump() work thread since it can vary. The frequency of request
->>> submission should match with the request completion. We know that
->>> request completion rate should be fixed (1 uframe/request + when you
->>> don't set no_interrupt). Base on this you can do your calculation on how
->>> often you should set no_interrupt and how many requests you must submit.
->>> You don't have to wait for the video_pump() to submit 0-length requests.
->>>
->>> The only variable here is the completion handler delay or system
->>> latency, which should not be much and should be within your calculation.
->>
->> Thanks for the suggestion. It indeed makes sense that we do not completely depend on
->> video_pump() for sending 0 length requests. I was concerned about
->> synchronization needed when we send requests to the dwc3 controller from
->> different threads. I see that the dwc3 controller code does internally serialize
->> queueing requests, can we expect this from other controllers as well ? 
-> While it's not explicitly documented, when the gadget driver uses
-> usb_ep_queue(), the order in which the gadget recieves the request
-> should be maintained and serialized. Because the order the transfer go
-> out for the same endpoint can be critical, breaking this will cause
-> issue.
+>On Mon, Sep 04, 2023 at 12:41:50AM +0300, Dmitry Baryshkov wrote:
+>> In order to notify the userspace about the DRM connector's USB-C port,
+>> export the corresponding port's name as the bridge's path field=2E
+>>=20
+>> Signed-off-by: Dmitry Baryshkov <dmitry=2Ebaryshkov@linaro=2Eorg>
+>> ---
+>>  drivers/usb/typec/tcpm/qcom/qcom_pmic_typec=2Ec     | 11 +++++++----
+>>  drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_drm=2Ec |  4 +++-
+>>  drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_drm=2Eh |  6 ++++--
+>>  3 files changed, 14 insertions(+), 7 deletions(-)
+>>=20
+>> diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec=2Ec b/drivers/=
+usb/typec/tcpm/qcom/qcom_pmic_typec=2Ec
+>> index b9d4856101c7=2E=2E452dc6437861 100644
+>> --- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec=2Ec
+>> +++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec=2Ec
+>> @@ -156,6 +156,7 @@ static int qcom_pmic_typec_probe(struct platform_de=
+vice *pdev)
+>>  	struct device_node *np =3D dev->of_node;
+>>  	const struct pmic_typec_resources *res;
+>>  	struct regmap *regmap;
+>> +	char *tcpm_name;
+>>  	u32 base[2];
+>>  	int ret;
+>> =20
+>> @@ -211,10 +212,6 @@ static int qcom_pmic_typec_probe(struct platform_d=
+evice *pdev)
+>>  	mutex_init(&tcpm->lock);
+>>  	platform_set_drvdata(pdev, tcpm);
+>> =20
+>> -	tcpm->pmic_typec_drm =3D qcom_pmic_typec_init_drm(dev);
+>> -	if (IS_ERR(tcpm->pmic_typec_drm))
+>> -		return PTR_ERR(tcpm->pmic_typec_drm);
+>> -
+>>  	tcpm->tcpc=2Efwnode =3D device_get_named_child_node(tcpm->dev, "conne=
+ctor");
+>>  	if (!tcpm->tcpc=2Efwnode)
+>>  		return -EINVAL;
+>> @@ -225,6 +222,12 @@ static int qcom_pmic_typec_probe(struct platform_d=
+evice *pdev)
+>>  		goto fwnode_remove;
+>>  	}
+>> =20
+>> +	tcpm_name =3D tcpm_port_get_name(tcpm->tcpm_port);
+>> +	tcpm->pmic_typec_drm =3D qcom_pmic_typec_init_drm(dev, tcpm_name);
 >
-Thanks for clarifying this. Keeping this in mind - I made a slight modification to
-your test patch - I removed the uvc_video_pump() function call from uvc_v4l2_qbuf(). We just
-call it in uvcg_video_enable(). That should just queue 0 length requests till the first qbuf
-is called. There-after only the complete handler running uvcg_video_complete() calls video_pump(),
-which sends usb requests to the endpoint. While I do see that we hold the queue->irqlock while
-getting the uvc buffer to encode and sending it to the ep, I feel like its just logically safer
-for future changes if we can restrict the pumping of requests to one thread.
+>So I got some questions and concerns off-list=2E This was one of the
+>concerns=2E That tcpm_name is now the actual port device name, so I'm
+>afraid this is not acceptable=2E
+>
+>You can't use device name as a reference, ever=2E There is no way to
+>guarantee that a device with a specific name is what you meant it to
+>be by the time it's accessed=2E
 
-Does that seem okay to you ? I can formalize it if it does.  
+Hmm, could you please be more specific, why? I mean, class devices are not=
+ that easy to be renamed in sysfs, are they? Or are you concerned about the=
+ device being destroyed behind userspace's back? At least for MSM this will=
+ be a huge problem already, with the bridge driver suddenly being removed=
+=2E
 
-The patch would look something like (on top of: https://lore.kernel.org/linux-usb/20230930184821.310143-1-arakesh@google.com/T/#t)
-
----
- drivers/usb/gadget/function/f_uvc.c     |  4 ----
- drivers/usb/gadget/function/uvc.h       |  3 ---
- drivers/usb/gadget/function/uvc_v4l2.c  |  3 ---
- drivers/usb/gadget/function/uvc_video.c | 19 +++++++------------
- 4 files changed, 7 insertions(+), 22 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-index 44c36e40e943..7d78fc8c00c5 100644
---- a/drivers/usb/gadget/function/f_uvc.c
-+++ b/drivers/usb/gadget/function/f_uvc.c
-@@ -907,14 +907,10 @@ static void uvc_function_unbind(struct usb_configuration *c,
- {
- 	struct usb_composite_dev *cdev = c->cdev;
- 	struct uvc_device *uvc = to_uvc(f);
--	struct uvc_video *video = &uvc->video;
- 	long wait_ret = 1;
- 
- 	uvcg_info(f, "%s()\n", __func__);
- 
--	if (video->async_wq)
--		destroy_workqueue(video->async_wq);
--
- 	/*
- 	 * If we know we're connected via v4l2, then there should be a cleanup
- 	 * of the device from userspace either via UVC_EVENT_DISCONNECT or
-diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
-index e8d4c87f1e09..b33211c92c02 100644
---- a/drivers/usb/gadget/function/uvc.h
-+++ b/drivers/usb/gadget/function/uvc.h
-@@ -88,9 +88,6 @@ struct uvc_video {
- 	struct uvc_device *uvc;
- 	struct usb_ep *ep;
- 
--	struct work_struct pump;
--	struct workqueue_struct *async_wq;
--
- 	/* Frame parameters */
- 	u8 bpp;
- 	u32 fcc;
-diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
-index 68bb18bdef81..ef4305f79cfe 100644
---- a/drivers/usb/gadget/function/uvc_v4l2.c
-+++ b/drivers/usb/gadget/function/uvc_v4l2.c
-@@ -421,9 +421,6 @@ uvc_v4l2_qbuf(struct file *file, void *fh, struct v4l2_buffer *b)
- 	if (ret < 0)
- 		return ret;
- 
--	if (uvc->state == UVC_STATE_STREAMING)
--		queue_work(video->async_wq, &video->pump);
--
- 	return ret;
- }
- 
-diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
-index 54a1c36e879e..35fb6a185b6e 100644
---- a/drivers/usb/gadget/function/uvc_video.c
-+++ b/drivers/usb/gadget/function/uvc_video.c
-@@ -24,6 +24,8 @@
-  * Video codecs
-  */
- 
-+static void uvcg_video_pump(struct uvc_video *video);
-+
- static int
- uvc_video_encode_header(struct uvc_video *video, struct uvc_buffer *buf,
- 		u8 *data, int len)
-@@ -329,7 +331,9 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
- 	 */
- 	if (video->is_enabled) {
- 		list_add_tail(&req->list, &video->req_free);
--		queue_work(video->async_wq, &video->pump);
-+		spin_unlock_irqrestore(&video->req_lock, flags);
-+		uvcg_video_pump(video);
-+		return;
- 	} else {
- 		uvc_video_free_request(ureq, ep);
- 	}
-@@ -415,9 +419,8 @@ uvc_video_alloc_requests(struct uvc_video *video)
-  * This function fills the available USB requests (listed in req_free) with
-  * video data from the queued buffers.
-  */
--static void uvcg_video_pump(struct work_struct *work)
-+static void uvcg_video_pump(struct uvc_video *video)
- {
--	struct uvc_video *video = container_of(work, struct uvc_video, pump);
- 	struct uvc_video_queue *queue = &video->queue;
- 	struct usb_request *req = NULL;
- 	struct uvc_buffer *buf;
-@@ -545,7 +548,6 @@ uvcg_video_disable(struct uvc_video *video)
- 	}
- 	spin_unlock_irqrestore(&video->req_lock, flags);
- 
--	cancel_work_sync(&video->pump);
- 	uvcg_queue_cancel(&video->queue, 0);
- 
- 	spin_lock_irqsave(&video->req_lock, flags);
-@@ -621,8 +623,7 @@ int uvcg_video_enable(struct uvc_video *video, int enable)
- 
- 	video->req_int_count = 0;
- 
--	queue_work(video->async_wq, &video->pump);
--
-+	uvcg_video_pump(video);
- 	return ret;
- }
- 
-@@ -635,12 +636,6 @@ int uvcg_video_init(struct uvc_video *video, struct uvc_device *uvc)
- 	INIT_LIST_HEAD(&video->ureqs);
- 	INIT_LIST_HEAD(&video->req_free);
- 	spin_lock_init(&video->req_lock);
--	INIT_WORK(&video->pump, uvcg_video_pump);
--
--	/* Allocate a work queue for asynchronous video pump handler. */
--	video->async_wq = alloc_workqueue("uvcgadget", WQ_UNBOUND | WQ_HIGHPRI, 0);
--	if (!video->async_wq)
--		return -EINVAL;
- 
- 	video->uvc = uvc;
- 	video->fcc = V4L2_PIX_FMT_YUYV;
--- 
-
->> This brings me to another question for Michael - I see
->> that we introduced a worker thread for pumping  usb requests to the usb endpoint
->> in https://urldefense.com/v3/__https://lore.kernel.org/all/20200427151614.10868-1-m.grzeschik@pengutronix.de/__;!!A4F2R9G_pg!aAnzCopbTbZtUxBK6a6r6_QzV-b2Z2J5o5esPaartZ2jogKijmhqj6OyiKDg-BPhxq8pJHR3HS1Hf8z6YnqfWTon$ 
->> (I see multiple email addresses, so apologies if I used the incorrect one).
->>
->> Did we introduce the worker thread to solve some specific deadlock scenarios ?
->> Or was it a general mitigation against racy usb request submission from v4l2 buffer
->> queuing, stream enable and the video complete handler firing ?
->>
->> I was chatting with Avi about this, what if we submit requests to the endpoint
->> only at two points in the streaming lifecycle - 
->> 1) The whole 64 (or however many usb requests are allocated) when
->>    uvcg_video_enable() is called - with 0 length usb_requests.
->> 2) In the video complete handler - if a video buffer is available, we encode it
->>    and submit it to the endpoint. If not, we send a 0 length request.
->>
->> This way we're really maintaining back pressure and sending requests as soon
->> as we can to the dwc3 controller. Encoding is mostly memcpys from what I see
->> so hopefully not too heavy on the interrupt handler. I will work on prototyping
->> this meanwhile.
->>
-> That sounds good to me. I believe Michael already provided some test
-> patches and you've already done some preliminary tests for that right?
-
-Yes that is correct. I tested out the patch above as well and it seems to
-work for my setup. I haven't seen flickers in over an hour of streaming.
-
-Thanks,
-Jayant
-
+>
+>If you need to deal with a device, then you have to get an actual
+>reference to it (class_find_device_by_fwnode() should work in this
+>case)=2E
+>
+>Ideally you would get the reference in the place where you actually
+>use it (so drm_connector=2Ec or more likely drm_sysfs=2Ec) but that would
+>mean a dependency on typec in there, if the component framework or
+>something like that (device links?) is not an option=2E You could of
+>course try to confine the dependency somehow=2E drm_class does not have
+>implementation for dev_uevent, so you could take over that as a
+>temporary solution=2E
+>
+>The only way to avoid the dependency completely would be to pass that
+>device reference from here through your drm bridge chain somehow=2E
+>But that's also really fragile=2E But it could be acceptable as a
+>temporary solution perhaps, if it's even possible=2E
+>
+>Br,
+>
 
 
