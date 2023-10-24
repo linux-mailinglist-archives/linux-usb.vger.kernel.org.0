@@ -1,81 +1,143 @@
-Return-Path: <linux-usb+bounces-2107-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2108-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF2A57D46BD
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Oct 2023 06:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B10887D478F
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Oct 2023 08:37:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E47FB1C20B67
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Oct 2023 04:50:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DAE2C1C20BB3
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Oct 2023 06:37:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E8AD5250;
-	Tue, 24 Oct 2023 04:50:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E126E6FCB;
+	Tue, 24 Oct 2023 06:37:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OXnlxgnN"
+	dkim=pass (1024-bit key) header.d=fibocomcorp.onmicrosoft.com header.i=@fibocomcorp.onmicrosoft.com header.b="mi400As+"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C05061FA5
-	for <linux-usb@vger.kernel.org>; Tue, 24 Oct 2023 04:50:46 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DA60F9;
-	Mon, 23 Oct 2023 21:50:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698123044; x=1729659044;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aIOzE6bNLPVOIYcQH23o8JO1UJmPW/YoaBdxr8nBjXo=;
-  b=OXnlxgnNoRPFipwK4vI9AKG8tQWpfuS4Q5pE5Uc772UY503Tb4WQaCFF
-   zOk6/ZPDsym56/d0LBbqQXIW/wYLSTUPxXdClpygWn4UXyQkDcvgR8FIL
-   /39o8xQ9ZQIs5KQXPxsw4zjJXNMTSCSJilB9ABpFveOPXtDaHMqzSMau6
-   CnkmOExd0PDA309Hho7pqmLoe1Vyx5RtA2chzK4JxoKpFsmSyJi79wQIE
-   g8e2bAqocXLprkXJfPTw0WiSvEEv+1gCL3j6rUeen21xCW6vxEHyL3rc/
-   QVsqiArg5OkR36x/xLgkgodLzxV2xisF78e5Os2OKLf8LEUe+D3hcIVws
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="377363925"
-X-IronPort-AV: E=Sophos;i="6.03,246,1694761200"; 
-   d="scan'208";a="377363925"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Oct 2023 21:50:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="1089728862"
-X-IronPort-AV: E=Sophos;i="6.03,246,1694761200"; 
-   d="scan'208";a="1089728862"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga005.fm.intel.com with ESMTP; 23 Oct 2023 21:50:41 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id D5BB394; Tue, 24 Oct 2023 07:50:39 +0300 (EEST)
-Date: Tue, 24 Oct 2023 07:50:39 +0300
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Yang Li <yang.lee@linux.alibaba.com>
-Cc: andreas.noever@gmail.com, michael.jamet@intel.com,
-	YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH -next] thunderbolt: Fix one kernel-doc comment
-Message-ID: <20231024045039.GC3208943@black.fi.intel.com>
-References: <20231024004330.100898-1-yang.lee@linux.alibaba.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9211B1FB5
+	for <linux-usb@vger.kernel.org>; Tue, 24 Oct 2023 06:37:08 +0000 (UTC)
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2053.outbound.protection.outlook.com [40.107.215.53])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73DA3DD;
+	Mon, 23 Oct 2023 23:37:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RjBLvOaPZYv4TynHZ7EPNVfbLKbVXoXD1CQ/S4ltFKXzSgDFCMCQAvh29WfYsDYQUASue5ayzzz0EIF1NZ8duxZe0v3B7R8WRLpvK152CM2zUsIUdbobEmBy7H0i/ub5XWknOSugKdcd8KCv3zlWa1ZvwRBabCD5PEAteADb0nxztLgNbP4A4f5Pp9lruYP9xn1PwOzoDJcUFXfPAIbLzulEPgSI1ERcH5p6/eaheZJMDn+Wb7h+hn1MF1PN7jBfaRXue/zHL+pQd5igmihuxvR6fYFlTQxSd1mBY083HnC/eN0BjkLC/s9UxQ6oo0Fa3+53AusVHzp8sjxiuxJGsg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=S776CKgV5vhw4m649OWtPzVm7jLwVn/6Pas+XvI5hfc=;
+ b=bD7lZFK+m3uIAWcCMLPDtMT83mz/VrYN5W/WXwYfrF7p67sPY5AHR/N2URMoAMlt7h9hvzakbWyXxcf4J7lDwZNcpmXBMf2FgE76Pe48j0a+KctfXGbIbKBBwqtAQQ8+nIC0tLSnazyqbsyegK50aoFXzV2rF5QWlQ74Bvd1jJtRjXRJUOwELwg69vM3zQZnREbjwR7r7jy6Do5qvu8+eFGmwH1riJDntR7yFpac/paMmZS3Q+9WRiG63ojaVHDqXYhzHmfYROQl1lyXYA7oO1T2yfBChG10Bp3QhuwExph8LJJXF/frDc6YoszZi57Ef00ngeWK/GPUDynf0fCIsw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fibocom.com; dmarc=pass action=none header.from=fibocom.com;
+ dkim=pass header.d=fibocom.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=fibocomcorp.onmicrosoft.com; s=selector1-fibocomcorp-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=S776CKgV5vhw4m649OWtPzVm7jLwVn/6Pas+XvI5hfc=;
+ b=mi400As+eTjuAI2QHeS5SjWhtUiPPRPweVLTxPFATVo+zPSj0pB+ZnQZXjU+2jqwbz/cZslrok7g6uod+uq4ZbvT/ZlfUSdbqw8VG/rq/cbSN5gtMf8EtA78iQMB45PZw7Vk8DuKykXHsJYcOU9w5Hn4KfSG3E0fIbhuJKDUGaM=
+Received: from TYZPR02MB5088.apcprd02.prod.outlook.com (2603:1096:400:71::13)
+ by SEYPR02MB7252.apcprd02.prod.outlook.com (2603:1096:101:1db::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6907.29; Tue, 24 Oct
+ 2023 06:36:58 +0000
+Received: from TYZPR02MB5088.apcprd02.prod.outlook.com
+ ([fe80::e6c0:ad44:ccaa:789]) by TYZPR02MB5088.apcprd02.prod.outlook.com
+ ([fe80::e6c0:ad44:ccaa:789%6]) with mapi id 15.20.6907.032; Tue, 24 Oct 2023
+ 06:36:58 +0000
+From: "Puliang Lu(Puliang)" <puliang.lu@fibocom.com>
+To: Johan Hovold <johan@kernel.org>
+CC: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] USB: serial: option: add Fibocom to DELL custom modem
+ FM101R-GL
+Thread-Topic: [PATCH] USB: serial: option: add Fibocom to DELL custom modem
+ FM101R-GL
+Thread-Index: AdoGQiyCd20oL5c8QD288tOBB0WzCg==
+Date: Tue, 24 Oct 2023 06:36:58 +0000
+Message-ID:
+ <TYZPR02MB508845BAD7936A62A105CE5D89DFA@TYZPR02MB5088.apcprd02.prod.outlook.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=fibocom.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYZPR02MB5088:EE_|SEYPR02MB7252:EE_
+x-ms-office365-filtering-correlation-id: 4e840e6b-ed5c-4f67-6e30-08dbd45b9f2d
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ /nXqcOvPWzG04jrItXH1UgOkAxvCunohUztXROtfRnGZEPXvRN0UPaNO8w5+ZQvgZm0tS0Tb7oT6meRZtgg5EDKYcLZSEdE2tZ3FYTtsvKLOLrhgyuOLYE9FCsQUNWf1d5K9HGi++CzKPBFJfxGaVkXFxhoaOj1ZQo3CVIc2rcDsaQhNjfGTzjoSWLSLFXATK5CoyOpCkUEHEArRgBAfQWMwR6vG/Pd1kXtnJMoYW+qoJKUIT0Uf8vE46lXNjUkbfEyt25vHLAKeSuA1nXtvvR3uRdi+XpjGtxhiWhh9ED9AjCyq2I2j56thkaHbqAJXUNQP5F57Z+ycab/Cyh51tsGLtW82HOUDUT/AgpbOrp5gqSZuPCVxhRlh+q0ehoO0lY9sMI5mSzhlOf5KTx1ofWPUE51Nk1LwT2+vMNKi1e+cNA7nrHLTWqr3pkMWG+FzlAjMsUmNe7uRgNzZhUAZgp5RCPq0R0G13Xnw7oEX0aey4JGebgW8ybjbkiRtI2p59CJqv9Pm5gBFwBfNpsAHN3q7J8wW+ix5Ep2zY7zvenrrUdGW2vc3AOohNOdqGx2aHC7EaZLKA3dZ4nrmA0O0Zo7noUvh4IsHqyGEGLq/vZut/upW6r6AtHimOQUP2Ynd
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR02MB5088.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(366004)(376002)(346002)(39850400004)(396003)(230922051799003)(451199024)(1800799009)(64100799003)(186009)(38070700009)(26005)(38100700002)(2906002)(55016003)(41300700001)(52536014)(86362001)(5660300002)(4326008)(8936002)(558084003)(33656002)(8676002)(6506007)(66446008)(478600001)(7696005)(71200400001)(54906003)(76116006)(66476007)(66946007)(66556008)(122000001)(316002)(64756008)(6916009)(83380400001)(9686003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?0WDQYMLKOfNPqoMXLZuRbexiEEcsmo2tt5D6E2+oX3jPgKqk+7HRSnmBnILA?=
+ =?us-ascii?Q?j7wQD4sRVoaZBzYQ9O1vEabMcX3+FqZPHQx54z4y9RfG7/r9KyMdfJDlSxUq?=
+ =?us-ascii?Q?WNPEKhR2cJSfLCC7KzXYIM5Qw/p96KS3/mZy/y48KOIODG5MMedo7Xvj1h2c?=
+ =?us-ascii?Q?DSrYV8MUjPihOl0uGuwsSy4p5uAzyuFp9dfov5a+IUqrc5nZHM3dswczEpI0?=
+ =?us-ascii?Q?Qwiwg9lt14t5Lv/MtfywaZSoN53ldH07UfaEwTgMqvxjWxVXA9zR0hIeceGA?=
+ =?us-ascii?Q?CpyIzuMvwn/QvLEdfBvKwVczxHyGnhjdp/nQat1dV9u/vDzS+QI8eWEiUfFW?=
+ =?us-ascii?Q?o9E2iXDJlZRscy5dUj7UGtgg4AmIKQp+AghfD/1RfF+51h8kfbzm8pELs3ql?=
+ =?us-ascii?Q?b7OEkbcxgX+JKnqtzlz0Ml4pifVz0VXwjvq/OL517hkJF3sAkeZPFJ1TJsjF?=
+ =?us-ascii?Q?+SRwLBn8fM97pgs7OcQ4O21tUvhlFbNU9OGrPFnOA9Z9u0LZ+xSojIIqMlHi?=
+ =?us-ascii?Q?xCjM97Vum9IEl6dVLk29b61QwZTKN3jORf1LlUBN1JC2lh6D/Awu6/R0zmiq?=
+ =?us-ascii?Q?sqoeX1fenRXF9NJJ3Gjnkf0BfVr6GvjeBfIPp9M9XPQhWOTJH8Z5NHMnEUWa?=
+ =?us-ascii?Q?/Ox+Lwos0iKcVWngmAo691pH7l0wVqaWoP+ZpQgbsQKZIijcDoWqCI1vUU3Q?=
+ =?us-ascii?Q?0G5RCfr+UCmEuh1/16cEVPR8weGwDE0P83DZnXqi8z/0Qi5KDvgdSxh6yAEU?=
+ =?us-ascii?Q?4UazUfI7BtxkwkpEtX/C/nEM3eFGOYLNib2lLwUSC26PfC7gpdkYHGOEdwUX?=
+ =?us-ascii?Q?za20mCCm2eqoa9Tn8CWk/cIo/OfM/GDeVSi50m9obhBrKZjDJ4tUkV8r/CTp?=
+ =?us-ascii?Q?9R58SgUJHDtXBEu0CXWHdzBeQbRKjGSDgjVVWb6N7ipKpfWCrX0cXvxtW5up?=
+ =?us-ascii?Q?17tGUg6Gs0AMmWBHCqNQhkz1l6PeF/bW0S1T8ClHpNC/VNGdj0QB0gJAl31G?=
+ =?us-ascii?Q?cG6O+sitNCCKfgR98R/FrSCDfDd5b0JADi9BgYbcI5LiBsCcG2gOaavi1r3i?=
+ =?us-ascii?Q?H3HS9axkpbqys1JY2mkeCKPRe5qMjsswzkztFZ3v81GZhZTuvEOKDeVJFqgm?=
+ =?us-ascii?Q?E/9vXqGERbvrlD+QO4Jo+JAgynEl43ClhiWHEYMqUEQWxaJNZMx1Ac++7Jyc?=
+ =?us-ascii?Q?+6cVOlL10pbbLsYsJP5oFBY5U8K/eJ0w1pP180HSrHgm0e5+3+frC7DEULle?=
+ =?us-ascii?Q?o3iLCFCzv29FaL2uYQhgqkRAVf3vTpKW8lKHJNGvaRsQEbQkJ+A4wk4T9x46?=
+ =?us-ascii?Q?lkzujE4+Y3XQO4IifhosGjGRQkWE/ngc5KxwfBm7FS8gGI5FHCih19Kq0LoK?=
+ =?us-ascii?Q?NjIC9gLPongeXu3gYukQsUU5bc/3gyeMOQe/Pds/84Jsh7Q6wR3jhU7TJoms?=
+ =?us-ascii?Q?5mHkMeg22U0gToLtdL1QEx+sZekbYgQZGD8kOFI41j8vhuaAxwuxnMMPw536?=
+ =?us-ascii?Q?Q9hQYCsWQ5NhS3ULQgCKfF5LW7Fl4idSfa6/cmi5chzjCJJYQT92ED9IdUtZ?=
+ =?us-ascii?Q?jLRQRliy3t68EOuhGmBVjOnsV0FSJ4P8RAxlSzhr?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20231024004330.100898-1-yang.lee@linux.alibaba.com>
+X-OriginatorOrg: fibocom.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR02MB5088.apcprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4e840e6b-ed5c-4f67-6e30-08dbd45b9f2d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Oct 2023 06:36:58.0722
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 889bfe61-8c21-436b-bc07-3908050c8236
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: JdVMCEa0NUbACIrhB7hFhfgx4dlTiAsZ8aC5G0OSUHLJR5zmh4IjdQgEDgr9VOXXS9DGUNCz1ODU8pqslyZORA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR02MB7252
 
-On Tue, Oct 24, 2023 at 08:43:30AM +0800, Yang Li wrote:
-> Fix a spelling errors in kernel doc comment, silence the warning:
-> 
-> drivers/thunderbolt/tb.c:760: warning: expecting prototype for tb_maximum_banwidth(). Prototype was for tb_maximum_bandwidth() instead
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=7048
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 
-Applied to thunderbolt.git/next, thanks!
+On Mon, 16 Oct 2023 10:40:05 +0200, Johan Hovold wrote:
+
+> Ok, thanks for confirming.
+>=20
+> I've now applied the patch.
+
+Can I still modify my patch now? 0x8213 is an ESIM device, 0x8215 is a NO E=
+SIM=20
+device, but it is written backwards in the commit message, and the define i=
+s=20
+also reversed.
+
+Thanks.
+
 
