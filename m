@@ -1,88 +1,173 @@
-Return-Path: <linux-usb+bounces-2148-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2149-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 087AB7D5C11
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Oct 2023 22:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id AD6D27D5C3C
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Oct 2023 22:14:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 39C501C20D28
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Oct 2023 20:02:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D041B1C20CFC
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Oct 2023 20:14:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F9A13E01E;
-	Tue, 24 Oct 2023 20:02:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2A8D3E478;
+	Tue, 24 Oct 2023 20:14:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jqgTtIoV"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E0B92420F;
-	Tue, 24 Oct 2023 20:02:18 +0000 (UTC)
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D65510D0;
-	Tue, 24 Oct 2023 13:02:17 -0700 (PDT)
-Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-3b3f55e1bbbso2857032b6e.2;
-        Tue, 24 Oct 2023 13:02:17 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D63743E469
+	for <linux-usb@vger.kernel.org>; Tue, 24 Oct 2023 20:14:08 +0000 (UTC)
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B972D7A
+	for <linux-usb@vger.kernel.org>; Tue, 24 Oct 2023 13:14:07 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-5a7a80a96dbso1545517b3.0
+        for <linux-usb@vger.kernel.org>; Tue, 24 Oct 2023 13:14:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1698178446; x=1698783246; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=dC2atrRSIB/YiTVS/2rjfPCeXytCc5iWQP0atJqNYrA=;
+        b=jqgTtIoVh88LngPB+173ZfjfX2OxMcBYshQjT0aZdLlJy7pgrnacsQR0iZ8AiPEMsv
+         hWB+2t/eihA1qLI6OFuZ+9JiiKvrNo77AYnvSeQJkd2pv5WgMIGSToNumOx8YBn8pEoi
+         aG71Tl1MX2KnZPUAe2f56PgmoHfH4BKx1SN53Z9loCUKf6Ljc3imQpb4hQHQ7uyVBT62
+         4IlubW9WdSwEPOtC4c6SffMziM2rBIZAZdFUgfzp+RmRl57+CiqqqRR/AlF6fM1ZRul1
+         2wpm2+mnsaNIuYdCZZB85UA2+tnjnXlW/0vvhAKRXd1D5klJVkPFIr18+va6AZUfLdQv
+         yZkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698177736; x=1698782536;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=b7LBP+4sNuVtjoSJxOmRVrbomzzhTqa06ogPkpyg6vM=;
-        b=oEIErysNNDDqu0YlPHs0gd8BClXWZOXLTkInam2pFTMvUwZ/E8Sqww5GkvwQefZlmL
-         qSTzdOqD9pKaladpKeIE3Vq2qf92iE7H2IcdKe3ESxiajXej+mCbyIOHr+w67nPDLZFz
-         God20EB0JDHz8TMHQXFqfRGC/rhte7biTsdDDMjL3SsL2H0uj/YXgxQXOYVHQ0GnpZjE
-         FjxLOJo97M/AEZl8+ybdqFO15QHKyumwBOyx4VAAuANINAtesyfi99kX+UJQ30pqoCGz
-         jIYzUnzFBjnkOQ1iyCthG3NAz7QavUFqCm88p1PN0/0LP8EE38xKFOd3xVUBw1YW6msq
-         JJIQ==
-X-Gm-Message-State: AOJu0YyOWhiPYa88CHFgaiWG8mltzVP2md/7Ah0A1RgAKXBxYziXkE3U
-	ZKZ7kAd+ZlPAoqjTcE7LjmZPHwgOQA==
-X-Google-Smtp-Source: AGHT+IH4hYt3JNOvk2IbMB7aYMfLDffQfXMNQ/OGQJ8ue/Mw0Ee4HGPBn95Yvl/2SYp5Y2S4brH6OA==
-X-Received: by 2002:a05:6808:2005:b0:3ae:b06:2131 with SMTP id q5-20020a056808200500b003ae0b062131mr16665647oiw.0.1698177736277;
-        Tue, 24 Oct 2023 13:02:16 -0700 (PDT)
-Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id b2-20020a056808010200b003b2e4754cc2sm2052808oie.26.2023.10.24.13.02.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Oct 2023 13:02:15 -0700 (PDT)
-Received: (nullmailer pid 471601 invoked by uid 1000);
-	Tue, 24 Oct 2023 20:02:12 -0000
-Date: Tue, 24 Oct 2023 15:02:12 -0500
-From: Rob Herring <robh@kernel.org>
-To: Johan Jonker <jbx6244@gmail.com>
-Cc: Vegard Nossum <vegard.nossum@oracle.com>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>, linux-usb@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>
-Subject: Re: [PATCH] dt-bindings: usb: rockchip,dwc3: fix reference to
- nonexistent file
-Message-ID: <20231024200212.GA465811-robh@kernel.org>
-References: <20231022185150.919293-1-vegard.nossum@oracle.com>
- <6ea02e5e-bc95-48b5-d6e3-15338ebd0a4d@gmail.com>
+        d=1e100.net; s=20230601; t=1698178446; x=1698783246;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dC2atrRSIB/YiTVS/2rjfPCeXytCc5iWQP0atJqNYrA=;
+        b=Fhna5jHGpjflhM4mG4f/DVqlfwJKZkWxRgxiBQfBmz9n+Qu3UG3aQNWlD0tLWZMGjS
+         xEFY5jAOWzO6D63XDdfdFA2vMyyBjADnXdpZSijCzffF7zeyAcbgxs+7fZQD+6I0yuAO
+         MesuWU7/tMFLteOEJIMbPka6EqvRhL8t606jw19KrkI/ag6sWs7njbZxGA5iNaJuECmg
+         NiprbgErnuB+gmurAqyxk7ooz+0gNXQ+d9959ie39HkzOl/CfUKdNtGpM7znbPsXIaGl
+         hvDgTUCvHMjN3w5opc8KHverO/uOMwCbbrV8D8SWpLQTDpcs8eiMTTUNCLCrdCZBi8lV
+         PBuQ==
+X-Gm-Message-State: AOJu0Yxo9yTfNLBtzP0jGRWpz6+x4LFxleyXt0IwapiAF6flpX4DAhT0
+	frvjDx+J6vJ0lvv8sJBhQE03YFI1XlipErVJuU5RCQ==
+X-Google-Smtp-Source: AGHT+IH+YE5cS3MCTNpJE0MbWyfP6NB9VzBuKjHGcDlHWkZ98wZhkbWeB0ONrk0GStbHMSg424rNShJo3nK/aCpyKqw=
+X-Received: by 2002:a05:6902:e91:b0:da0:3648:c3c5 with SMTP id
+ dg17-20020a0569020e9100b00da03648c3c5mr4432774ybb.27.1698178446333; Tue, 24
+ Oct 2023 13:14:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6ea02e5e-bc95-48b5-d6e3-15338ebd0a4d@gmail.com>
+References: <20231023215327.695720-1-dmitry.baryshkov@linaro.org>
+ <20231023215327.695720-2-dmitry.baryshkov@linaro.org> <20231023224715.GN3553829@hu-bjorande-lv.qualcomm.com>
+ <CAA8EJppen6Ebmv_fjdrHoUXRsFFH5TZonKck=bRDKgXTTWOxoQ@mail.gmail.com> <20231024164254.GP3553829@hu-bjorande-lv.qualcomm.com>
+In-Reply-To: <20231024164254.GP3553829@hu-bjorande-lv.qualcomm.com>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date: Tue, 24 Oct 2023 23:13:55 +0300
+Message-ID: <CAA8EJpqbxAo8kxw6RXx18dyT0X9us=2p=bNCxJNHk6aP5012Sg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] usb: typec: ucsi: fix UCSI on buggy Qualcomm devices
+To: Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Andy Gross <agross@kernel.org>, 
+	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, Rob Herring <robh@kernel.org>, linux-usb@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Sun, Oct 22, 2023 at 10:44:10PM +0200, Johan Jonker wrote:
-> 
-> 
-> On 10/22/23 20:51, Vegard Nossum wrote:
-> > This file was renamed but left a dangling reference. Fix it.
-> > 
-> > Fixes: 0f48b0ed356d ("dt-bindings: phy: rename phy-rockchip-inno-usb2.yaml")
-> 
-> > Cc: Johan Jonker <jbx6244@gmail.com>
-> 
-> [PATCH v1] dt-bindings: usb: rockchip,dwc3: update inno usb2 phy binding name
-> https://lore.kernel.org/linux-rockchip/f8747552-d23b-c4cd-cb17-5033fb7f8eb6@gmail.com/
-> 
-> Already Acked.
+On Tue, 24 Oct 2023 at 19:42, Bjorn Andersson <quic_bjorande@quicinc.com> wrote:
+>
+> On Tue, Oct 24, 2023 at 02:08:33AM +0300, Dmitry Baryshkov wrote:
+> > On Tue, 24 Oct 2023 at 01:47, Bjorn Andersson <quic_bjorande@quicinc.com> wrote:
+> > >
+> > > On Tue, Oct 24, 2023 at 12:47:26AM +0300, Dmitry Baryshkov wrote:
+> > > > On sevral Qualcomm platforms (SC8180X, SM8350, SC8280XP) a call to
+> > > > UCSI_GET_PDOS for non-PD partners will cause a firmware crash with no
+> > > > easy way to recover from it. Since we have no easy way to determine
+> > > > whether the partner really has PD support, shortcut UCSI_GET_PDOS on
+> > > > such platforms. This allows us to enable UCSI support on such devices.
+> > > >
+> > >
+> > > Really nice to see this. Thanks.
+> > >
+> > > > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > > > ---
+> > > >  drivers/usb/typec/ucsi/ucsi.c       | 3 +++
+> > > >  drivers/usb/typec/ucsi/ucsi.h       | 3 +++
+> > > >  drivers/usb/typec/ucsi/ucsi_glink.c | 3 +++
+> > > >  3 files changed, 9 insertions(+)
+> > > >
+> > > > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> > > > index 61b64558f96c..5392ec698959 100644
+> > > > --- a/drivers/usb/typec/ucsi/ucsi.c
+> > > > +++ b/drivers/usb/typec/ucsi/ucsi.c
+> > > > @@ -578,6 +578,9 @@ static int ucsi_read_pdos(struct ucsi_connector *con,
+> > > >       u64 command;
+> > > >       int ret;
+> > > >
+> > > > +     if (ucsi->quirks & UCSI_NO_PARTNER_PDOS)
+> > > > +             return 0;
+> > > > +
+> > > >       command = UCSI_COMMAND(UCSI_GET_PDOS) | UCSI_CONNECTOR_NUMBER(con->num);
+> > > >       command |= UCSI_GET_PDOS_PARTNER_PDO(is_partner);
+> > > >       command |= UCSI_GET_PDOS_PDO_OFFSET(offset);
+> > > > diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+> > > > index 474315a72c77..6478016d5cb8 100644
+> > > > --- a/drivers/usb/typec/ucsi/ucsi.h
+> > > > +++ b/drivers/usb/typec/ucsi/ucsi.h
+> > > > @@ -317,6 +317,9 @@ struct ucsi {
+> > > >  #define EVENT_PENDING        0
+> > > >  #define COMMAND_PENDING      1
+> > > >  #define ACK_PENDING  2
+> > > > +
+> > > > +     unsigned long quirks;
+> > > > +#define UCSI_NO_PARTNER_PDOS BIT(0)  /* Don't read partner's PDOs */
+> > > >  };
+> > > >
+> > > >  #define UCSI_MAX_SVID                5
+> > > > diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
+> > > > index db6e248f8208..5c159e7b2b65 100644
+> > > > --- a/drivers/usb/typec/ucsi/ucsi_glink.c
+> > > > +++ b/drivers/usb/typec/ucsi/ucsi_glink.c
+> > > > @@ -327,6 +327,8 @@ static int pmic_glink_ucsi_probe(struct auxiliary_device *adev,
+> > > >       if (ret)
+> > > >               return ret;
+> > > >
+> > > > +     ucsi->ucsi->quirks = id->driver_data;
+> > > > +
+> > > >       ucsi_set_drvdata(ucsi->ucsi, ucsi);
+> > > >
+> > > >       device_for_each_child_node(dev, fwnode) {
+> > > > @@ -379,6 +381,7 @@ static void pmic_glink_ucsi_remove(struct auxiliary_device *adev)
+> > > >
+> > > >  static const struct auxiliary_device_id pmic_glink_ucsi_id_table[] = {
+> > > >       { .name = "pmic_glink.ucsi", },
+> > > > +     { .name = "pmic_glink.ucsi-no-pdos", .driver_data = UCSI_NO_PARTNER_PDOS, },
+> > >
+> > > In altmode and battmgr drivers we apply quirks based on the compatible
+> > > of the pmic_glink of_node.
+> >
+> > ... and I can't say that I like that. In typical drivers we perform
+> > driver tuning by looking at the device's data (e.g. by using
+> > of_device_is_compatible or by of_device_get_match_data. Checking the
+> > parent device seems like breaking the layering.
+>
+> It felt like it was the cleaner option of the two when I did it. I think
+> there was some variation of quirks which made me feel this would grow
+> large - but I might misremember things now.
+>
+> > But if you insist, I can follow that approach.
+>
+> I insist that we should use the same mechanism of dealing with the
+> quirks across the three parts, and following the existing approach
+> doesn't seem too unreasonable...
 
-I was assuming Greg would pick that up. I've applied the linked patch 
-now.
+The problem with the current approach is that it adds dependency
+between patches. We can not apply patch2 without patch1 being in
+place, since applying will enable buggy UCSI.
 
-Rob
+-- 
+With best wishes
+Dmitry
 
