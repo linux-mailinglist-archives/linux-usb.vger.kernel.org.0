@@ -1,45 +1,61 @@
-Return-Path: <linux-usb+bounces-2143-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2144-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B5667D5B6C
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Oct 2023 21:23:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBBCD7D5B83
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Oct 2023 21:33:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1015928193D
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Oct 2023 19:23:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2282B1C20CCA
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Oct 2023 19:33:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B168A3CD0B;
-	Tue, 24 Oct 2023 19:23:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 096433CD1F;
+	Tue, 24 Oct 2023 19:33:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2979127ED2
-	for <linux-usb@vger.kernel.org>; Tue, 24 Oct 2023 19:23:26 +0000 (UTC)
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by lindbergh.monkeyblade.net (Postfix) with SMTP id 0BF6D10C3
-	for <linux-usb@vger.kernel.org>; Tue, 24 Oct 2023 12:23:23 -0700 (PDT)
-Received: (qmail 469860 invoked by uid 1000); 24 Oct 2023 15:23:23 -0400
-Date: Tue, 24 Oct 2023 15:23:23 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-Cc: "Li, Meng" <Meng.Li@windriver.com>,
-  "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-  "usb-storage@lists.one-eyed-alien.net" <usb-storage@lists.one-eyed-alien.net>,
-  "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb: storage: add shutdown function for usb storage
- driver
-Message-ID: <a6bb88cd-0b89-4eb1-b90d-8ad633b7a8f2@rowland.harvard.edu>
-References: <20231023054111.2744872-1-Meng.Li@windriver.com>
- <33bd0779-bfe7-4c87-8fe6-ea8455df3b6b@rowland.harvard.edu>
- <PH0PR11MB51918DD50651DB6BE937BEA3F1DFA@PH0PR11MB5191.namprd11.prod.outlook.com>
- <3fe5b43c-a5aa-4c6a-8614-03a4d9dd53e2@rowland.harvard.edu>
- <2023102428-zit-quickness-9b73@gregkh>
- <5107f6ca-e972-4af1-a21d-6c95778969f3@rowland.harvard.edu>
- <2023102459-protector-frequency-1033@gregkh>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 364F82E625;
+	Tue, 24 Oct 2023 19:33:44 +0000 (UTC)
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31FF310CF;
+	Tue, 24 Oct 2023 12:33:43 -0700 (PDT)
+Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-6c4cbab83aaso3204801a34.1;
+        Tue, 24 Oct 2023 12:33:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698176022; x=1698780822;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=i6EGD2hnIl5nJ7jHbhHkDFGMf4JT3GmrlWO/gNgXFm4=;
+        b=dpBhEVsErF/oPa2MM9Fx0Dii+lvnhlcnboZacDnCMRpP5mBMzLqeGjfx9loOiuE2dB
+         yfnOJS6wwl5Yx2UP5wFu3HUl3h3KPKaS55VKZEcJbIABqzYvrCCR7bvPHFT5F2Wm6Dgc
+         7AAxIBpy2Upit+qhq1RBFDXZjzRWzeiHb23hwpTq8N3VORjvHc+Vk29Q0uxN4cfBjvBn
+         ADRx33HX+9202q0bSn/kT80DvcxErVW7AhCgJ4Sso0/K1GuYJLnD+82IKY/mflYBvNEs
+         lwubtLUhRogCJDT0ro8dYrHGObESI5ZOkpH0VXVK6OGh8ellcoSBrVoiOoNfoXVcTZ5z
+         NfVA==
+X-Gm-Message-State: AOJu0Ywben8M9TUNfqCspz9yGoI+Zmh0+vfun97cpTVHZwsC3ZgvciQe
+	eqrZGmTyeGx6oYMBo5UmDw==
+X-Google-Smtp-Source: AGHT+IG/DnkHUUOZYFCdzFFTsrG7seFDZnhT/cLwyWjOZwqYmjSjpPehEOcMAqlsYZ3B6i2VOy4xRQ==
+X-Received: by 2002:a9d:7e84:0:b0:6cc:cc02:6ea4 with SMTP id m4-20020a9d7e84000000b006cccc026ea4mr13324831otp.38.1698176022379;
+        Tue, 24 Oct 2023 12:33:42 -0700 (PDT)
+Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id s5-20020a056830148500b006b9443ce478sm1946874otq.27.2023.10.24.12.33.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Oct 2023 12:33:41 -0700 (PDT)
+Received: (nullmailer pid 430587 invoked by uid 1000);
+	Tue, 24 Oct 2023 19:33:39 -0000
+Date: Tue, 24 Oct 2023 14:33:39 -0500
+From: Rob Herring <robh@kernel.org>
+To: Luca Weiss <luca.weiss@fairphone.com>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, Neil Armstrong <neil.armstrong@linaro.org>, ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, devicetree@vger.kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, linux-kernel@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>, linux-usb@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] dt-bindings: usb: fsa4480: Add data-lanes
+ property to endpoint
+Message-ID: <169817601855.430514.5700076619485106727.robh@kernel.org>
+References: <20231020-fsa4480-swap-v2-0-9a7f9bb59873@fairphone.com>
+ <20231020-fsa4480-swap-v2-1-9a7f9bb59873@fairphone.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -48,81 +64,40 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2023102459-protector-frequency-1033@gregkh>
+In-Reply-To: <20231020-fsa4480-swap-v2-1-9a7f9bb59873@fairphone.com>
 
-On Tue, Oct 24, 2023 at 07:11:31PM +0200, gregkh@linuxfoundation.org wrote:
-> On Tue, Oct 24, 2023 at 11:58:37AM -0400, Alan Stern wrote:
-> > On Tue, Oct 24, 2023 at 05:45:40PM +0200, gregkh@linuxfoundation.org wrote:
-> > > On Tue, Oct 24, 2023 at 11:35:19AM -0400, Alan Stern wrote:
-> > > > Okay, that's a different matter.  In fact, I don't know what is supposed 
-> > > > to happen during a clean reboot.
-> > > 
-> > > Define "clean" :)
-> > 
-> > In this case, I mean what happens when you give the "reboot" command.
+
+On Fri, 20 Oct 2023 11:33:18 +0200, Luca Weiss wrote:
+> Allow specifying data-lanes to reverse the muxing orientation between
+> AUX+/- and SBU1/2 where necessary by the hardware design.
 > 
-> That's a userspace binary/script/whatever that can do loads of different
-> things not involving the kernel, so it all depends on the user's system
-> as to what will happen here.
+> In the mux there's a switch that needs to be controlled from the OS, and
+> it either connects AUX+ -> SBU1 and AUX- -> SBU2, or the reverse: AUX+
+> -> SBU2 and AUX- -> SBU1, depending on the orientation of how the USB-C
+> connector is plugged in.
 > 
-> Many "good" userspace implementation of reboot will go and sync and
-> unmount all mounted disks in the correct order, before the kernel is
-> told to reboot.
-
-Even if the filesystems are unmounted, the kernel will still probe the 
-drive periodically (once every few seconds) if it claims to have 
-removable media.  Failure of those probes won't hurt anything, but it is 
-likely to generate an error message.  I don't know if that's what's 
-happening in this case, though.
-
-> All we can do in the kernel is act on the reboot system call.
+> With this data-lanes property we can now specify that AUX+ and AUX-
+> connections are swapped between the SoC and the mux, therefore the OS
+> needs to consider this and reverse the direction of this switch in the
+> mux.
 > 
-> So perhaps the original poster here can see why his userspace isn't
-> correctly shutting down their storage devices?
-
-Meng, can you do this?  Maybe you can fix the problem by adding a script 
-to be executed by the "reboot" command.  If the script writes to the 
-"remove" attribute file in the drive's sysfs directory, that will unbind 
-usb-storage from the device.  It should give the same result as your 
-patch, for clean reboots.  It won't help "reboot -f", though.
-
-> > > > What happens with non-USB disk drives?  Or other removable devices?
-> > > 
-> > > It would have to come from "above" in the device tree, so does the PCI
-> > > or platform bus say that they should be shut down and their child
-> > > devices?
-> > 
-> > Well, the PCI layer invokes the HCD's ->shutdown callback.  But the 
-> > usb-storage driver and usbcore don't know this has happened, so they 
-> > start logging errors because they are suddenly unable to communicate 
-> > with a USB drive.  Meng Li is unhappy about these error messages.
-> > 
-> > Adding a shutdown callback of sorts to usb-storage allows the driver to 
-> > know that it shouldn't communicate with the drive any more, which 
-> > prevents the error message from appearing.  That's what this patch does.  
-> > 
-> > But that's all it does.  Basically it creates a layering violation just 
-> > to prevent some error messages from showing up in the system log during 
-> > a shutdown or reboot.  The question is whether we want to do this at 
-> > all, and if we do, shouldn't it be handled at the usbcore level rather 
-> > than just within usb-storage?
+> _______          _______
+>       |          |     |
+>       |-- HP   --|     |
+>       |-- MIC  --|     |or
+> SoC   |          | MUX |-- SBU1 --->  To the USB-C
+> Codec |-- AUX+ --|     |-- SBU2 --->  connected
+>       |-- AUX- --|     |
+> ______|          |_____|
 > 
-> We should do this within the usb core if we care about it, but why did
-> the USB device suddenly go away before the USB storage driver was told
-> about it?  That feels like something else is pulling the power on the
-> device that is out-of-band here.
+> (thanks to Neil Armstrong for this ASCII art)
+> 
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> ---
+>  .../devicetree/bindings/usb/fcs,fsa4480.yaml       | 29 +++++++++++++++++++++-
+>  1 file changed, 28 insertions(+), 1 deletion(-)
+> 
 
-The device went away because the HCD shut down the host controller, 
-thereby stopping all USB communication.  The usb-storage driver wasn't 
-informed because this all happened inside the HCD's PCI ->shutdown 
-callback.  HCD shutdown doesn't do anything to the USB bus -- in 
-particular, it doesn't remove the root hub or anything else -- it just 
-turns off the host controller.
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-Since USB class-device drivers don't have ->shutdown callbacks (there is 
-no shutdown() method in struct usb_driver), they don't know what's going 
-on while a shutdown or reboot is in progress.  All they see is a bunch 
-of errors.
-
-Alan Stern
 
