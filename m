@@ -1,184 +1,181 @@
-Return-Path: <linux-usb+bounces-2135-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2136-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F29A7D58CF
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Oct 2023 18:40:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BE90F7D58F8
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Oct 2023 18:43:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4068A1C20CF8
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Oct 2023 16:40:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EF0121C20C3C
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Oct 2023 16:43:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 441CA3A29D;
-	Tue, 24 Oct 2023 16:40:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 950A73A290;
+	Tue, 24 Oct 2023 16:43:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="TGZD5zPO"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C10EE37176;
-	Tue, 24 Oct 2023 16:40:02 +0000 (UTC)
-Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ACFBD7D;
-	Tue, 24 Oct 2023 09:40:00 -0700 (PDT)
-Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-5845213c583so1594680eaf.0;
-        Tue, 24 Oct 2023 09:40:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698165599; x=1698770399;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4dgLAi1M/nR9fJIQpQVSn3gxY5AOxSN1+8PQWp2ZK3E=;
-        b=dJEL+fgbBkqa2Hxr8owONWDH6pO4QAKL8M6N0LblYDn0D+mvusaM9LI019LIX+Wr3i
-         SBvjWPRMymU3blibDCev3SK/2zggSLh7i4IpkcLL7+56UwaN+3Q+SvbKam8pCpGxanbT
-         He27KYjc4yS6cs4vdNENuanBRdI3kaR7tLAO5bj36M1FDWyM3CJw3cp0SmL52BmqFpit
-         BdEzxk39cE/f7g8NzIovM7D42nhpblBaxWAThWlKCuq1CXkrmypanbfJwfKuwEnp/Q8S
-         InLGUYhaL1tKdHvTD1oRCIWiQ8RKhoO9Sv7r+HPRugFqxsbmNwjwBGYgYl7NZvibTWWM
-         mHUQ==
-X-Gm-Message-State: AOJu0YxSrNVMn+fgX2LQrUQlYDXBSzDJcV9rjwPhKfF+AMIxCWFlyWiP
-	Fy1vX2SNzu3oZN9A3IdBaw==
-X-Google-Smtp-Source: AGHT+IH7r1RypTRYYRKdrh1wNi7leTTNBWI9FBY2oTxpLiREvX3LYW7p4YgROHwYcoRP/a6v+9+WQw==
-X-Received: by 2002:a4a:df11:0:b0:582:28e:93a8 with SMTP id i17-20020a4adf11000000b00582028e93a8mr12468463oou.3.1698165599325;
-        Tue, 24 Oct 2023 09:39:59 -0700 (PDT)
-Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id f22-20020a4ad816000000b0057aef3cab33sm2002659oov.21.2023.10.24.09.39.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Oct 2023 09:39:58 -0700 (PDT)
-Received: (nullmailer pid 4062523 invoked by uid 1000);
-	Tue, 24 Oct 2023 16:39:56 -0000
-Date: Tue, 24 Oct 2023 11:39:56 -0500
-From: Rob Herring <robh@kernel.org>
-To: Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
-Cc: Oleksii_Moisieiev@epam.com, gregkh@linuxfoundation.org, 
-	herbert@gondor.apana.org.au, davem@davemloft.net, 
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
-	alexandre.torgue@foss.st.com, vkoul@kernel.org, jic23@kernel.org, 
-	olivier.moysan@foss.st.com, arnaud.pouliquen@foss.st.com, mchehab@kernel.org, 
-	fabrice.gasnier@foss.st.com, andi.shyti@kernel.org, ulf.hansson@linaro.org, 
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	hugues.fruchet@foss.st.com, lee@kernel.org, will@kernel.org, 
-	catalin.marinas@arm.com, arnd@kernel.org, richardcochran@gmail.com, 
-	Frank Rowand <frowand.list@gmail.com>, peng.fan@oss.nxp.com, linux-crypto@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	dmaengine@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-iio@vger.kernel.org, alsa-devel@alsa-project.org, 
-	linux-media@vger.kernel.org, linux-mmc@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-p.hy@lists.infradead.org, 
-	linux-serial@vger.kernel.org, linux-spi@vger.kernel.org, 
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v6 10/11] ARM: dts: stm32: add ETZPC as a system bus for
- STM32MP15x boards
-Message-ID: <20231024163956.GA4049342-robh@kernel.org>
-References: <20231010125719.784627-1-gatien.chevallier@foss.st.com>
- <20231010125719.784627-11-gatien.chevallier@foss.st.com>
- <20231010184212.GA1221641-robh@kernel.org>
- <8f1b6915-68be-a525-c5d5-37f0983c14de@foss.st.com>
- <20231012153012.GA698406-robh@kernel.org>
- <b16ed06f-66fd-457b-9610-a67ad07deb60@foss.st.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32D463B29F
+	for <linux-usb@vger.kernel.org>; Tue, 24 Oct 2023 16:43:03 +0000 (UTC)
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B946D7F;
+	Tue, 24 Oct 2023 09:43:01 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39OCtfkU029457;
+	Tue, 24 Oct 2023 16:42:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=qKsHb9AyMqgnMUnGQn03phIvjduJKWG8eRweFJAjT5A=;
+ b=TGZD5zPOXxvfNPLvAMbbuOQj5rL4BFR3d3JTM9BHScKnFmimjn/BkdXXcVKo4HPbbzPa
+ vIx+gvTbLmRhoxW8vf6RzT4SmX7aG7G04zS2KKW2y4Ea9y01brD2BlVDYB7s1HTygW7v
+ VSJ86nnRw8mojsBZh0iFX6UxydQOx3WpwwvvE4PTKp3pT1JsyAe88VUgQulVxbPdDMsh
+ gbWbNQGsHR3SjAgBKsFGHNNYabmfrrKp8V0ehT+87TUlN/BMO9IGTYt9lqWnLoTLFgNT
+ mPC8Q+Zrkpj4tKGtjH4U4bm/FPsnITjhSN2wfKEzEJV9PooFVPK3+nK6bkKnULTYz9N0 HA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3twtxwu3cb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 24 Oct 2023 16:42:56 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39OGgu3Q021059
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 24 Oct 2023 16:42:56 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.39; Tue, 24 Oct 2023 09:42:55 -0700
+Date: Tue, 24 Oct 2023 09:42:54 -0700
+From: Bjorn Andersson <quic_bjorande@quicinc.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson
+	<andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Neil
+ Armstrong <neil.armstrong@linaro.org>,
+        Rob Herring <robh@kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>
+Subject: Re: [PATCH 1/2] usb: typec: ucsi: fix UCSI on buggy Qualcomm devices
+Message-ID: <20231024164254.GP3553829@hu-bjorande-lv.qualcomm.com>
+References: <20231023215327.695720-1-dmitry.baryshkov@linaro.org>
+ <20231023215327.695720-2-dmitry.baryshkov@linaro.org>
+ <20231023224715.GN3553829@hu-bjorande-lv.qualcomm.com>
+ <CAA8EJppen6Ebmv_fjdrHoUXRsFFH5TZonKck=bRDKgXTTWOxoQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <b16ed06f-66fd-457b-9610-a67ad07deb60@foss.st.com>
+In-Reply-To: <CAA8EJppen6Ebmv_fjdrHoUXRsFFH5TZonKck=bRDKgXTTWOxoQ@mail.gmail.com>
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 4bgTPzqTbFDYjMUF8DZ3Rbw6Q9jfmt0V
+X-Proofpoint-GUID: 4bgTPzqTbFDYjMUF8DZ3Rbw6Q9jfmt0V
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-24_16,2023-10-24_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ priorityscore=1501 clxscore=1015 phishscore=0 adultscore=0 spamscore=0
+ malwarescore=0 bulkscore=0 impostorscore=0 suspectscore=0 mlxscore=0
+ mlxlogscore=784 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2310170001 definitions=main-2310240144
 
-On Mon, Oct 16, 2023 at 02:02:39PM +0200, Gatien CHEVALLIER wrote:
-> Hi Rob,
+On Tue, Oct 24, 2023 at 02:08:33AM +0300, Dmitry Baryshkov wrote:
+> On Tue, 24 Oct 2023 at 01:47, Bjorn Andersson <quic_bjorande@quicinc.com> wrote:
+> >
+> > On Tue, Oct 24, 2023 at 12:47:26AM +0300, Dmitry Baryshkov wrote:
+> > > On sevral Qualcomm platforms (SC8180X, SM8350, SC8280XP) a call to
+> > > UCSI_GET_PDOS for non-PD partners will cause a firmware crash with no
+> > > easy way to recover from it. Since we have no easy way to determine
+> > > whether the partner really has PD support, shortcut UCSI_GET_PDOS on
+> > > such platforms. This allows us to enable UCSI support on such devices.
+> > >
+> >
+> > Really nice to see this. Thanks.
+> >
+> > > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > > ---
+> > >  drivers/usb/typec/ucsi/ucsi.c       | 3 +++
+> > >  drivers/usb/typec/ucsi/ucsi.h       | 3 +++
+> > >  drivers/usb/typec/ucsi/ucsi_glink.c | 3 +++
+> > >  3 files changed, 9 insertions(+)
+> > >
+> > > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> > > index 61b64558f96c..5392ec698959 100644
+> > > --- a/drivers/usb/typec/ucsi/ucsi.c
+> > > +++ b/drivers/usb/typec/ucsi/ucsi.c
+> > > @@ -578,6 +578,9 @@ static int ucsi_read_pdos(struct ucsi_connector *con,
+> > >       u64 command;
+> > >       int ret;
+> > >
+> > > +     if (ucsi->quirks & UCSI_NO_PARTNER_PDOS)
+> > > +             return 0;
+> > > +
+> > >       command = UCSI_COMMAND(UCSI_GET_PDOS) | UCSI_CONNECTOR_NUMBER(con->num);
+> > >       command |= UCSI_GET_PDOS_PARTNER_PDO(is_partner);
+> > >       command |= UCSI_GET_PDOS_PDO_OFFSET(offset);
+> > > diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+> > > index 474315a72c77..6478016d5cb8 100644
+> > > --- a/drivers/usb/typec/ucsi/ucsi.h
+> > > +++ b/drivers/usb/typec/ucsi/ucsi.h
+> > > @@ -317,6 +317,9 @@ struct ucsi {
+> > >  #define EVENT_PENDING        0
+> > >  #define COMMAND_PENDING      1
+> > >  #define ACK_PENDING  2
+> > > +
+> > > +     unsigned long quirks;
+> > > +#define UCSI_NO_PARTNER_PDOS BIT(0)  /* Don't read partner's PDOs */
+> > >  };
+> > >
+> > >  #define UCSI_MAX_SVID                5
+> > > diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
+> > > index db6e248f8208..5c159e7b2b65 100644
+> > > --- a/drivers/usb/typec/ucsi/ucsi_glink.c
+> > > +++ b/drivers/usb/typec/ucsi/ucsi_glink.c
+> > > @@ -327,6 +327,8 @@ static int pmic_glink_ucsi_probe(struct auxiliary_device *adev,
+> > >       if (ret)
+> > >               return ret;
+> > >
+> > > +     ucsi->ucsi->quirks = id->driver_data;
+> > > +
+> > >       ucsi_set_drvdata(ucsi->ucsi, ucsi);
+> > >
+> > >       device_for_each_child_node(dev, fwnode) {
+> > > @@ -379,6 +381,7 @@ static void pmic_glink_ucsi_remove(struct auxiliary_device *adev)
+> > >
+> > >  static const struct auxiliary_device_id pmic_glink_ucsi_id_table[] = {
+> > >       { .name = "pmic_glink.ucsi", },
+> > > +     { .name = "pmic_glink.ucsi-no-pdos", .driver_data = UCSI_NO_PARTNER_PDOS, },
+> >
+> > In altmode and battmgr drivers we apply quirks based on the compatible
+> > of the pmic_glink of_node.
 > 
-> On 10/12/23 17:30, Rob Herring wrote:
-> > On Wed, Oct 11, 2023 at 10:49:58AM +0200, Gatien CHEVALLIER wrote:
-> > > Hi Rob,
-> > > 
-> > > On 10/10/23 20:42, Rob Herring wrote:
-> > > > On Tue, Oct 10, 2023 at 02:57:18PM +0200, Gatien Chevallier wrote:
-> > > > > ETZPC is a firewall controller. Put all peripherals filtered by the
-> > > > > ETZPC as ETZPC subnodes and reference ETZPC as an
-> > > > > access-control-provider.
-> > > > > 
-> > > > > For more information on which peripheral is securable or supports MCU
-> > > > > isolation, please read the STM32MP15 reference manual.
-> > > > > 
-> > > > > Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
-> > > > > ---
-> > > > > 
-> > > > > Changes in V6:
-> > > > >       	- Renamed access-controller to access-controllers
-> > > > >       	- Removal of access-control-provider property
-> > > > > 
-> > > > > Changes in V5:
-> > > > >       	- Renamed feature-domain* to access-control*
-> > > > > 
-> > > > >    arch/arm/boot/dts/st/stm32mp151.dtsi  | 2756 +++++++++++++------------
-> > > > >    arch/arm/boot/dts/st/stm32mp153.dtsi  |   52 +-
-> > > > >    arch/arm/boot/dts/st/stm32mp15xc.dtsi |   19 +-
-> > > > >    3 files changed, 1450 insertions(+), 1377 deletions(-)
-> > > > 
-> > > > This is not reviewable. Change the indentation and any non-functional
-> > > > change in one patch and then actual changes in another.
-> > > 
-> > > Ok, I'll make it easier to read.
-> > > 
-> > > > 
-> > > > This is also an ABI break. Though I'm not sure it's avoidable. All the
-> > > > devices below the ETZPC node won't probe on existing kernel. A
-> > > > simple-bus fallback for ETZPC node should solve that.
-> > > > 
-> > > 
-> > > I had one issue when trying with a simple-bus fallback that was the
-> > > drivers were probing even though the access rights aren't correct.
-> > > Hence the removal of the simple-bus compatible in the STM32MP25 patch.
-> > 
-> > But it worked before, right? So the difference is you have either added
-> > new devices which need setup or your firmware changed how devices are
-> > setup (or not setup). Certainly can't fix the latter case. You just need
-> > to be explicit about what you are doing to users.
-> > 
-> 
-> I should've specified it was during a test where I deliberately set
-> incorrect rights on a peripheral and enabled its node to see if the
-> firewall would allow the creation of the device.
-> 
-> > 
-> > > Even though a node is tagged with the OF_POPULATED flag when checking
-> > > the access rights with the firewall controller, it seems that when
-> > > simple-bus is probing, there's no check of this flag.
-> > 
-> > It shouldn't. Those flags are for creating the devices (or not) and
-> > removing only devices of_platform_populate() created.
-> > 
-> 
-> About the "simple-bus" being a fallback, I think I understood why I saw
-> that the devices were created.
-> 
-> All devices under a node whose compatible is "simple-bus" are created
-> in of_platform_device_create_pdata(), called by
-> of_platform_default_populate_init() at arch_initcall level. This
-> before the firewall-controller has a chance to populate it's bus.
-> 
-> Therefore, when I flag nodes when populating the firewall-bus, the
-> devices are already created. The "simple-bus" mechanism is not a
-> fallback here as it precedes the driver probe.
-> 
-> Is there a safe way to safely remove/disable a device created this way?
+> ... and I can't say that I like that. In typical drivers we perform
+> driver tuning by looking at the device's data (e.g. by using
+> of_device_is_compatible or by of_device_get_match_data. Checking the
+> parent device seems like breaking the layering.
 
-There's 2 ways to handle this. Either controlling creating the device or 
-controlling probing the device. The latter should just work with 
-fw_devlink dependency. The former probably needs some adjustment to 
-simple-pm-bus driver if you have 'simple-bus' compatible. You want it to 
-probe on old kernels and not probe on new kernels with your firewall 
-driver. Look at the commit history for simple-pm-bus. There was some 
-discussion on it as well.
+It felt like it was the cleaner option of the two when I did it. I think
+there was some variation of quirks which made me feel this would grow
+large - but I might misremember things now.
 
-> Devices that are under the firewall controller (simple-bus) node
-> should not be probed before it as they're child of it.
+> But if you insist, I can follow that approach.
 
-fw_devlink should take care of parent/child dependencies without any 
-explicit handling of the access ctrl binding.
+I insist that we should use the same mechanism of dealing with the
+quirks across the three parts, and following the existing approach
+doesn't seem too unreasonable...
 
-Rob
+Thanks,
+Bjorn
 
