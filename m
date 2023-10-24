@@ -1,386 +1,328 @@
-Return-Path: <linux-usb+bounces-2141-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2142-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD2267D5AA9
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Oct 2023 20:36:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB0E97D5ACC
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Oct 2023 20:42:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 276F1B211F2
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Oct 2023 18:36:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A074628116F
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Oct 2023 18:42:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26D9435896;
-	Tue, 24 Oct 2023 18:36:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2438D374E5;
+	Tue, 24 Oct 2023 18:42:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gNtXhn+o"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="OH6BGjQy"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C0C33CCFB
-	for <linux-usb@vger.kernel.org>; Tue, 24 Oct 2023 18:36:21 +0000 (UTC)
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9B1210E0
-	for <linux-usb@vger.kernel.org>; Tue, 24 Oct 2023 11:36:17 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-5b87a3d4a31so4231992a12.2
-        for <linux-usb@vger.kernel.org>; Tue, 24 Oct 2023 11:36:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1698172577; x=1698777377; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=znU7TMxG4WwaAvkxwpYyhySgtF4OskU9iamXPqB9Rkw=;
-        b=gNtXhn+oItDzWL5K0lAFYfFs46YhsFXuIJrpjY4vE8IkQ8qADcV+w5mpX1u9eUdOpo
-         zgaUTLhEIrP0MSBhDDCT56a9NwSx483Smpl/saeekvb84K/Y2449VyVyXUQENb+BDC1Z
-         lWZwj1w7i4IVRq+TMeXd16iIY9QZ4mE/xZTfZGrPjMptKQB+SF1M3VDPZi5YpTEPJl9a
-         wieTim5tKwShaGdRP8N3bEuDqS54YbDwJ8MlFhAAwPYnFR2LASINF6AsNo75R6NU2lB+
-         yFNVFeY0NUHdwuXvRUV6FmLdk7gS6JfWMNBWQgLd6/ZVFTespBV9cfu3vEhfD0N/o5SR
-         RBaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698172577; x=1698777377;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=znU7TMxG4WwaAvkxwpYyhySgtF4OskU9iamXPqB9Rkw=;
-        b=AswmOpPVA9AllmmCF/8BL2FNK0XWfD6K27gi0N+WWwmrahMFonefxC5MOk0Znw1yqj
-         Bj3s/mDADfgdZEDHL8KaKOzjknPkH0UdEJoY+7gsWKOXYwuJWqQDUyWkd4ZH1cJ0FUqf
-         vhI6NTu3TP4oFmRkz0fKPyTWx+u+z5u7GnOjU/ouGOXM2A2QmXGTzkU+4zGzLEm9QDHr
-         /5BD80Q8rwg/IfcCQF+3MF3hdiOoE7DFPrMzfcjF7v3KtzKtT9mffs4vN94b/lTM2CBh
-         VjKkNL0rTbyn+dTPbHkd7jzEgPxvy2HexbEA60Xx1v8epgChJlF65lySxnjsT61uv1kS
-         Cy/g==
-X-Gm-Message-State: AOJu0YxcDkJXADYKfgU7yOoQX4z73gYxkets/VKvKUAT5gxan/ULHKga
-	BE4oFV71MqIRxopSXZdHyRX/GiPtM34Q
-X-Google-Smtp-Source: AGHT+IF00q3/7U5W069KbjuSdEm8KA8hogcQz/av2fJlQY31VJLuwH8ti7wVuIr1/UYKuuSAWBylzrBfyVcJ
-X-Received: from hi-h2o-specialist.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3cef])
- (user=arakesh job=sendgmr) by 2002:a63:4e5a:0:b0:5aa:74e:2166 with SMTP id
- o26-20020a634e5a000000b005aa074e2166mr234822pgl.10.1698172577206; Tue, 24 Oct
- 2023 11:36:17 -0700 (PDT)
-Date: Tue, 24 Oct 2023 11:36:05 -0700
-In-Reply-To: <20231024183605.908253-1-arakesh@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6828D28FA;
+	Tue, 24 Oct 2023 18:42:14 +0000 (UTC)
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B75912C;
+	Tue, 24 Oct 2023 11:42:12 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39OIWRau025039;
+	Tue, 24 Oct 2023 18:42:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=uGHRv3zuutbStD7E9MlZNXiGhV3IMVGQQ/a4No1Mr2E=;
+ b=OH6BGjQyGl+N4bgKZW2F9XyZXNIVRMsUO5bxNvNQlK7O32GQcJamz/Sz2Snj1jX64Kj0
+ +HaS86V+V+9NTC7MHZP0bUW05XmKMEv+fKEV9z9m9jbUywpwDHnaOI8BWZF4W+mA7L1D
+ yhgq1lqiQGv1x+oeO/L8+V9HesVRyVikfq8PYZ2ss5z6MHOdGQYg7bqS5YIbBlDVvNMt
+ vxhq9beFsSJLwGzUhza/pfqUendvZ/xUaOHppPVqplTS47/Wm/RRwcNUDOWS0CH1Vjlf
+ Qfdni6gud+3lv4zWxEG6Q8cY8/pJ1QH8R6pxSzXrO1dLrbZzLUTFiXZx9vDUnFFejJiG hA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tx7r81t01-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 24 Oct 2023 18:42:04 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39OIg3MO031347
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 24 Oct 2023 18:42:03 GMT
+Received: from [10.110.113.199] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.39; Tue, 24 Oct
+ 2023 11:42:03 -0700
+Message-ID: <cd294a89-33e7-0569-81b3-df77a255f061@quicinc.com>
+Date: Tue, 24 Oct 2023 11:41:51 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20231019185319.2714000-1-arakesh@google.com> <20231024183605.908253-1-arakesh@google.com>
-X-Mailer: git-send-email 2.42.0.758.gaed0368e0e-goog
-Message-ID: <20231024183605.908253-4-arakesh@google.com>
-Subject: [PATCH v8 4/4] usb: gadget: uvc: Fix use-after-free for inflight usb_requests
-From: Avichal Rakesh <arakesh@google.com>
-To: arakesh@google.com, dan.scally@ideasonboard.com, 
-	gregkh@linuxfoundation.org, laurent.pinchart@ideasonboard.com
-Cc: etalvala@google.com, jchowdhary@google.com, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, m.grzeschik@pengutronix.de
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v4 3/3] usb: dwc3: Modify runtime pm ops to handle bus
+ suspend
+Content-Language: en-US
+To: Roger Quadros <rogerq@kernel.org>, <gregkh@linuxfoundation.org>,
+        <Thinh.Nguyen@synopsys.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <devicetree@vger.kernel.org>
+CC: <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
+References: <20230814185043.9252-1-quic_eserrao@quicinc.com>
+ <20230814185043.9252-4-quic_eserrao@quicinc.com>
+ <9be9fae5-f6f2-42fe-bd81-78ab50aafa06@kernel.org>
+From: Elson Serrao <quic_eserrao@quicinc.com>
+In-Reply-To: <9be9fae5-f6f2-42fe-bd81-78ab50aafa06@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: VU6LfGhr4GY0_tRn7IyMektX1o9WnNEj
+X-Proofpoint-GUID: VU6LfGhr4GY0_tRn7IyMektX1o9WnNEj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-24_18,2023-10-24_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ mlxlogscore=999 lowpriorityscore=0 bulkscore=0 phishscore=0 spamscore=0
+ clxscore=1015 priorityscore=1501 suspectscore=0 impostorscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2310170001 definitions=main-2310240160
 
-Currently, the uvc gadget driver allocates all uvc_requests as one array
-and deallocates them all when the video stream stops. This includes
-de-allocating all the usb_requests associated with those uvc_requests.
-This can lead to use-after-free issues if any of those de-allocated
-usb_requests were still owned by the usb controller.
 
-This is patch 2 of 2 in fixing the use-after-free issue. It adds a new
-flag to uvc_video to track when frames and requests should be flowing.
-When disabling the video stream, the flag is tripped and, instead
-of de-allocating all uvc_requests and usb_requests, the gadget
-driver only de-allocates those usb_requests that are currently
-owned by it (as present in req_free). Other usb_requests are left
-untouched until their completion handler is called which takes care
-of freeing the usb_request and its corresponding uvc_request.
 
-Now that uvc_video does not depends on uvc->state, this patch removes
-unnecessary upates to uvc->state that were made to accommodate uvc_video
-logic. This should ensure that uvc gadget driver never accidentally
-de-allocates a usb_request that it doesn't own.
+On 10/24/2023 3:14 AM, Roger Quadros wrote:
+> Hi Elson,
+> 
+> On 14/08/2023 21:50, Elson Roy Serrao wrote:
+>> The current implementation blocks the runtime pm operations when cable
+>> is connected. This would block dwc3 to enter a low power state during
+>> bus suspend scenario. Modify the runtime pm ops to handle bus suspend
+>> case for such platforms where the controller low power mode entry/exit
+>> is handled by the glue driver. This enablement is controlled through a
+>> dt property and platforms capable of detecting bus resume can benefit
+>> from this feature. Also modify the remote wakeup operations to trigger
+>> runtime resume before sending wakeup signal.
+>>
+>> Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
+>> ---
+>>   drivers/usb/dwc3/core.c   | 28 ++++++++++++++++++++++++++--
+>>   drivers/usb/dwc3/core.h   |  3 +++
+>>   drivers/usb/dwc3/gadget.c | 32 +++++++++++++++++++++++++-------
+>>   3 files changed, 54 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+>> index 9c6bf054f15d..9bfd9bb18caf 100644
+>> --- a/drivers/usb/dwc3/core.c
+>> +++ b/drivers/usb/dwc3/core.c
+>> @@ -1518,6 +1518,9 @@ static void dwc3_get_properties(struct dwc3 *dwc)
+>>   	dwc->dis_split_quirk = device_property_read_bool(dev,
+>>   				"snps,dis-split-quirk");
+>>   
+>> +	dwc->runtime_suspend_on_usb_suspend = device_property_read_bool(dev,
+>> +				"snps,runtime-suspend-on-usb-suspend");
+>> +
+>>   	dwc->lpm_nyet_threshold = lpm_nyet_threshold;
+>>   	dwc->tx_de_emphasis = tx_de_emphasis;
+>>   
+>> @@ -2029,6 +2032,9 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
+>>   
+>>   	switch (dwc->current_dr_role) {
+>>   	case DWC3_GCTL_PRTCAP_DEVICE:
+>> +		/* runtime resume on bus resume scenario */
+>> +		if (PMSG_IS_AUTO(msg) && dwc->connected)
+>> +			break;
+>>   		ret = dwc3_core_init_for_resume(dwc);
+>>   		if (ret)
+>>   			return ret;
+>> @@ -2090,8 +2096,13 @@ static int dwc3_runtime_checks(struct dwc3 *dwc)
+>>   {
+>>   	switch (dwc->current_dr_role) {
+>>   	case DWC3_GCTL_PRTCAP_DEVICE:
+>> -		if (dwc->connected)
+>> +		if (dwc->connected) {
+>> +			/* bus suspend scenario */
+>> +			if (dwc->runtime_suspend_on_usb_suspend &&
+>> +			    dwc->suspended)
+> 
+> If dwc is already suspended why do we return -EBUSY?
+> Should this be !dwc->suspended?
+> 
 
-Link: https://lore.kernel.org/7cd81649-2795-45b6-8c10-b7df1055020d@google.com
-Suggested-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-Reviewed-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-Tested-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-Signed-off-by: Avichal Rakesh <arakesh@google.com>
----
-v1 -> v2: Rebased to ToT, and fixed deadlock reported in
-          https://lore.kernel.org/all/ZRv2UnKztgyqk2pt@pengutronix.de/
-v2 -> v3: Fix email threading goof-up
-v3 -> v4: re-rebase to ToT & moved to a uvc_video level lock
-          as discussed in
-          https://lore.kernel.org/b14b296f-2e08-4edf-aeea-1c5b621e2d0c@google.com/
-v4 -> v5: Address review comments. Add Reviewed-by & Tested-by.
-v5 -> v6: Added another patch before this one to make uvcg_video_disable
-          easier to review.
-v6 -> v7: Fix warning reported in
-          https://lore.kernel.org/202310200457.GwPPFuHX-lkp@intel.com/
-v7 -> v8: No change. Getting back in review queue
+Hi Roger
 
- drivers/usb/gadget/function/uvc.h       |   1 +
- drivers/usb/gadget/function/uvc_v4l2.c  |  12 +--
- drivers/usb/gadget/function/uvc_video.c | 128 ++++++++++++++++++++----
- 3 files changed, 111 insertions(+), 30 deletions(-)
+Thank you for reviewing.
+If dwc->suspended is true (i.e suspend event due to U3/L2 is received), 
+I am actually breaking from this switch statement and returning 0.
 
-diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
-index 993694da0bbc..be0d012aa244 100644
---- a/drivers/usb/gadget/function/uvc.h
-+++ b/drivers/usb/gadget/function/uvc.h
-@@ -102,6 +102,7 @@ struct uvc_video {
- 	unsigned int uvc_num_requests;
+>> +				break;
+>>   			return -EBUSY;
+>> +		}
+>>   		break;
+>>   	case DWC3_GCTL_PRTCAP_HOST:
+>>   	default:
+>> @@ -2107,9 +2118,22 @@ static int dwc3_runtime_suspend(struct device *dev)
+>>   	struct dwc3     *dwc = dev_get_drvdata(dev);
+>>   	int		ret;
+>>   
+>> -	if (dwc3_runtime_checks(dwc))
+>> +	ret = dwc3_runtime_checks(dwc);
+>> +	if (ret)
+>>   		return -EBUSY;
+>>   
+>> +	switch (dwc->current_dr_role) {
+>> +	case DWC3_GCTL_PRTCAP_DEVICE:
+>> +		/* bus suspend case */
+>> +		if (!ret && dwc->connected)
+> 
+> No need to check !ret again as it will never happen because
+> we are returning -EBUSY earlier if (ret);
+> 
+Thanks for this catch. I will remove !ret check in v5.
 
- 	/* Requests */
-+	bool is_enabled; /* tracks whether video stream is enabled */
- 	unsigned int req_size;
- 	struct list_head ureqs; /* all uvc_requests allocated by uvc_video */
- 	struct list_head req_free;
-diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
-index 7cb8d027ff0c..f4d2e24835d4 100644
---- a/drivers/usb/gadget/function/uvc_v4l2.c
-+++ b/drivers/usb/gadget/function/uvc_v4l2.c
-@@ -451,8 +451,8 @@ uvc_v4l2_streamon(struct file *file, void *fh, enum v4l2_buf_type type)
- 	 * Complete the alternate setting selection setup phase now that
- 	 * userspace is ready to provide video frames.
- 	 */
--	uvc_function_setup_continue(uvc, 0);
- 	uvc->state = UVC_STATE_STREAMING;
-+	uvc_function_setup_continue(uvc, 0);
+>> +			return 0;
+>> +		break;
+>> +	case DWC3_GCTL_PRTCAP_HOST:
+>> +	default:
+>> +		/* do nothing */
+>> +		break;
+>> +	}
+>> +
+> 
+> While this takes care of runtime suspend case, what about system_suspend?
+> Should this check be moved to dwc3_suspend_common() instead?
+> 
 
- 	return 0;
- }
-@@ -468,11 +468,11 @@ uvc_v4l2_streamoff(struct file *file, void *fh, enum v4l2_buf_type type)
- 	if (type != video->queue.queue.type)
- 		return -EINVAL;
+Sure I can move these checks to dwc3_suspend_common to make it generic.
+Will rename this patch to "Modify pm ops to handle bus suspend" since 
+this is now not limited to only runtime suspend/resume. Will also rename 
+dwc->runtime_suspend_on_usb_suspend to dwc->delegate_wakeup_interrupt 
+based on earlier feedback.
 
--	uvc->state = UVC_STATE_CONNECTED;
- 	ret = uvcg_video_enable(video, 0);
- 	if (ret < 0)
- 		return ret;
+I am still working on a clean way to enable/disable this feature (i.e 
+set dwc->delegate_wakeup_interrupt flag) from the glue driver based on 
+Thinh's feedback .
+I will accommodate above feedback as well and upload v5.
 
-+	uvc->state = UVC_STATE_CONNECTED;
- 	uvc_function_setup_continue(uvc, 1);
- 	return 0;
- }
-@@ -507,14 +507,6 @@ uvc_v4l2_subscribe_event(struct v4l2_fh *fh,
- static void uvc_v4l2_disable(struct uvc_device *uvc)
- {
- 	uvc_function_disconnect(uvc);
--	/*
--	 * Drop uvc->state to CONNECTED if it was streaming before.
--	 * This ensures that the usb_requests are no longer queued
--	 * to the controller.
--	 */
--	if (uvc->state == UVC_STATE_STREAMING)
--		uvc->state = UVC_STATE_CONNECTED;
--
- 	uvcg_video_enable(&uvc->video, 0);
- 	uvcg_free_buffers(&uvc->video.queue);
- 	uvc->func_connected = false;
-diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
-index 80b8eaea2d39..ab3f02054e85 100644
---- a/drivers/usb/gadget/function/uvc_video.c
-+++ b/drivers/usb/gadget/function/uvc_video.c
-@@ -227,6 +227,9 @@ uvc_video_encode_isoc(struct usb_request *req, struct uvc_video *video,
-  * Request handling
-  */
-
-+/*
-+ * Must be called with req_lock held as it modifies the list ureq is held in
-+ */
- static void
- uvc_video_free_request(struct uvc_request *ureq, struct usb_ep *ep)
- {
-@@ -271,9 +274,25 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
- 	struct uvc_request *ureq = req->context;
- 	struct uvc_video *video = ureq->video;
- 	struct uvc_video_queue *queue = &video->queue;
--	struct uvc_device *uvc = video->uvc;
-+	struct uvc_buffer *last_buf = NULL;
- 	unsigned long flags;
-
-+	spin_lock_irqsave(&video->req_lock, flags);
-+	if (!video->is_enabled) {
-+		/*
-+		 * When is_enabled is false, uvc_video_disable ensures that
-+		 * in-flight uvc_buffers are returned, so we can safely
-+		 * call free_request without worrying about last_buf.
-+		 */
-+		uvc_video_free_request(ureq, ep);
-+		spin_unlock_irqrestore(&video->req_lock, flags);
-+		return;
-+	}
-+
-+	last_buf = ureq->last_buf;
-+	ureq->last_buf = NULL;
-+	spin_unlock_irqrestore(&video->req_lock, flags);
-+
- 	switch (req->status) {
- 	case 0:
- 		break;
-@@ -295,17 +314,26 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
- 		uvcg_queue_cancel(queue, 0);
- 	}
-
--	if (ureq->last_buf) {
--		uvcg_complete_buffer(&video->queue, ureq->last_buf);
--		ureq->last_buf = NULL;
-+	if (last_buf) {
-+		spin_lock_irqsave(&queue->irqlock, flags);
-+		uvcg_complete_buffer(&video->queue, last_buf);
-+		spin_unlock_irqrestore(&queue->irqlock, flags);
- 	}
-
- 	spin_lock_irqsave(&video->req_lock, flags);
--	list_add_tail(&req->list, &video->req_free);
--	spin_unlock_irqrestore(&video->req_lock, flags);
--
--	if (uvc->state == UVC_STATE_STREAMING)
-+	/*
-+	 * Video stream might have been disabled while we were
-+	 * processing the current usb_request. So make sure
-+	 * we're still streaming before queueing the usb_request
-+	 * back to req_free
-+	 */
-+	if (video->is_enabled) {
-+		list_add_tail(&req->list, &video->req_free);
- 		queue_work(video->async_wq, &video->pump);
-+	} else {
-+		uvc_video_free_request(ureq, ep);
-+	}
-+	spin_unlock_irqrestore(&video->req_lock, flags);
- }
-
- static int
-@@ -393,20 +421,22 @@ static void uvcg_video_pump(struct work_struct *work)
- 	struct uvc_video_queue *queue = &video->queue;
- 	/* video->max_payload_size is only set when using bulk transfer */
- 	bool is_bulk = video->max_payload_size;
--	struct uvc_device *uvc = video->uvc;
- 	struct usb_request *req = NULL;
- 	struct uvc_buffer *buf;
- 	unsigned long flags;
- 	bool buf_done;
- 	int ret;
-
--	while (uvc->state == UVC_STATE_STREAMING && video->ep->enabled) {
-+	while (true) {
-+		if (!video->ep->enabled)
-+			return;
-+
- 		/*
--		 * Retrieve the first available USB request, protected by the
--		 * request lock.
-+		 * Check is_enabled and retrieve the first available USB
-+		 * request, protected by the request lock.
- 		 */
- 		spin_lock_irqsave(&video->req_lock, flags);
--		if (list_empty(&video->req_free)) {
-+		if (!video->is_enabled || list_empty(&video->req_free)) {
- 			spin_unlock_irqrestore(&video->req_lock, flags);
- 			return;
- 		}
-@@ -488,9 +518,11 @@ static void uvcg_video_pump(struct work_struct *work)
- 		return;
-
- 	spin_lock_irqsave(&video->req_lock, flags);
--	list_add_tail(&req->list, &video->req_free);
-+	if (video->is_enabled)
-+		list_add_tail(&req->list, &video->req_free);
-+	else
-+		uvc_video_free_request(req->context, video->ep);
- 	spin_unlock_irqrestore(&video->req_lock, flags);
--	return;
- }
-
- /*
-@@ -499,17 +531,64 @@ static void uvcg_video_pump(struct work_struct *work)
- static int
- uvcg_video_disable(struct uvc_video *video)
- {
--	struct uvc_request *ureq;
-+	unsigned long flags;
-+	struct list_head inflight_bufs;
-+	struct usb_request *req, *temp;
-+	struct uvc_buffer *buf, *btemp;
-+	struct uvc_request *ureq, *utemp;
-+
-+	INIT_LIST_HEAD(&inflight_bufs);
-+	spin_lock_irqsave(&video->req_lock, flags);
-+	video->is_enabled = false;
-+
-+	/*
-+	 * Remove any in-flight buffers from the uvc_requests
-+	 * because we want to return them before cancelling the
-+	 * queue. This ensures that we aren't stuck waiting for
-+	 * all complete callbacks to come through before disabling
-+	 * vb2 queue.
-+	 */
-+	list_for_each_entry(ureq, &video->ureqs, list) {
-+		if (ureq->last_buf) {
-+			list_add_tail(&ureq->last_buf->queue, &inflight_bufs);
-+			ureq->last_buf = NULL;
-+		}
-+	}
-+	spin_unlock_irqrestore(&video->req_lock, flags);
-
- 	cancel_work_sync(&video->pump);
- 	uvcg_queue_cancel(&video->queue, 0);
-
--	list_for_each_entry(ureq, &video->ureqs, list) {
--		if (ureq->req)
--			usb_ep_dequeue(video->ep, ureq->req);
-+	spin_lock_irqsave(&video->req_lock, flags);
-+	/*
-+	 * Remove all uvc_reqeusts from ureqs with list_del_init
-+	 * This lets uvc_video_free_request correctly identify
-+	 * if the uvc_request is attached to a list or not when freeing
-+	 * memory.
-+	 */
-+	list_for_each_entry_safe(ureq, utemp, &video->ureqs, list)
-+		list_del_init(&ureq->list);
-+
-+	list_for_each_entry_safe(req, temp, &video->req_free, list) {
-+		list_del(&req->list);
-+		uvc_video_free_request(req->context, video->ep);
- 	}
-
--	uvc_video_free_requests(video);
-+	INIT_LIST_HEAD(&video->ureqs);
-+	INIT_LIST_HEAD(&video->req_free);
-+	video->req_size = 0;
-+	spin_unlock_irqrestore(&video->req_lock, flags);
-+
-+	/*
-+	 * Return all the video buffers before disabling the queue.
-+	 */
-+	spin_lock_irqsave(&video->queue.irqlock, flags);
-+	list_for_each_entry_safe(buf, btemp, &inflight_bufs, queue) {
-+		list_del(&buf->queue);
-+		uvcg_complete_buffer(&video->queue, buf);
-+	}
-+	spin_unlock_irqrestore(&video->queue.irqlock, flags);
-+
- 	uvcg_queue_enable(&video->queue, 0);
- 	return 0;
- }
-@@ -530,6 +609,14 @@ int uvcg_video_enable(struct uvc_video *video, int enable)
- 	if (!enable)
- 		return uvcg_video_disable(video);
-
-+	/*
-+	 * Safe to access request related fields without req_lock because
-+	 * this is the only thread currently active, and no other
-+	 * request handling thread will become active until this function
-+	 * returns.
-+	 */
-+	video->is_enabled = true;
-+
- 	if ((ret = uvcg_queue_enable(&video->queue, 1)) < 0)
- 		return ret;
-
-@@ -555,6 +642,7 @@ int uvcg_video_enable(struct uvc_video *video, int enable)
-  */
- int uvcg_video_init(struct uvc_video *video, struct uvc_device *uvc)
- {
-+	video->is_enabled = false;
- 	INIT_LIST_HEAD(&video->ureqs);
- 	INIT_LIST_HEAD(&video->req_free);
- 	spin_lock_init(&video->req_lock);
---
-2.42.0.758.gaed0368e0e-goog
+Thanks
+Elson
+>>   	ret = dwc3_suspend_common(dwc, PMSG_AUTO_SUSPEND);
+>>   	if (ret)
+>>   		return ret;
+>> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+>> index a69ac67d89fe..f2f788a6b4b5 100644
+>> --- a/drivers/usb/dwc3/core.h
+>> +++ b/drivers/usb/dwc3/core.h
+>> @@ -1124,6 +1124,8 @@ struct dwc3_scratchpad_array {
+>>    * @num_ep_resized: carries the current number endpoints which have had its tx
+>>    *		    fifo resized.
+>>    * @debug_root: root debugfs directory for this device to put its files in.
+>> + * @runtime_suspend_on_usb_suspend: true if dwc3 runtime suspend is allowed
+>> + *			during bus suspend scenario.
+>>    */
+>>   struct dwc3 {
+>>   	struct work_struct	drd_work;
+>> @@ -1340,6 +1342,7 @@ struct dwc3 {
+>>   	int			last_fifo_depth;
+>>   	int			num_ep_resized;
+>>   	struct dentry		*debug_root;
+>> +	bool			runtime_suspend_on_usb_suspend;
+>>   };
+>>   
+>>   #define INCRX_BURST_MODE 0
+>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>> index 5fd067151fbf..978ce0e91164 100644
+>> --- a/drivers/usb/dwc3/gadget.c
+>> +++ b/drivers/usb/dwc3/gadget.c
+>> @@ -2401,15 +2401,21 @@ static int dwc3_gadget_wakeup(struct usb_gadget *g)
+>>   		return -EINVAL;
+>>   	}
+>>   
+>> -	spin_lock_irqsave(&dwc->lock, flags);
+>>   	if (!dwc->gadget->wakeup_armed) {
+>>   		dev_err(dwc->dev, "not armed for remote wakeup\n");
+>> -		spin_unlock_irqrestore(&dwc->lock, flags);
+>>   		return -EINVAL;
+>>   	}
+>> -	ret = __dwc3_gadget_wakeup(dwc, true);
+>>   
+>> +	ret = pm_runtime_resume_and_get(dwc->dev);
+>> +	if (ret < 0) {
+>> +		pm_runtime_set_suspended(dwc->dev);
+>> +		return ret;
+>> +	}
+>> +
+>> +	spin_lock_irqsave(&dwc->lock, flags);
+>> +	ret = __dwc3_gadget_wakeup(dwc, true);
+>>   	spin_unlock_irqrestore(&dwc->lock, flags);
+>> +	pm_runtime_put_noidle(dwc->dev);
+>>   
+>>   	return ret;
+>>   }
+>> @@ -2428,6 +2434,12 @@ static int dwc3_gadget_func_wakeup(struct usb_gadget *g, int intf_id)
+>>   		return -EINVAL;
+>>   	}
+>>   
+>> +	ret = pm_runtime_resume_and_get(dwc->dev);
+>> +	if (ret < 0) {
+>> +		pm_runtime_set_suspended(dwc->dev);
+>> +		return ret;
+>> +	}
+>> +
+>>   	spin_lock_irqsave(&dwc->lock, flags);
+>>   	/*
+>>   	 * If the link is in U3, signal for remote wakeup and wait for the
+>> @@ -2438,6 +2450,7 @@ static int dwc3_gadget_func_wakeup(struct usb_gadget *g, int intf_id)
+>>   		ret = __dwc3_gadget_wakeup(dwc, false);
+>>   		if (ret) {
+>>   			spin_unlock_irqrestore(&dwc->lock, flags);
+>> +			pm_runtime_put_noidle(dwc->dev);
+>>   			return -EINVAL;
+>>   		}
+>>   		dwc3_resume_gadget(dwc);
+>> @@ -2452,6 +2465,7 @@ static int dwc3_gadget_func_wakeup(struct usb_gadget *g, int intf_id)
+>>   		dev_err(dwc->dev, "function remote wakeup failed, ret:%d\n", ret);
+>>   
+>>   	spin_unlock_irqrestore(&dwc->lock, flags);
+>> +	pm_runtime_put_noidle(dwc->dev);
+>>   
+>>   	return ret;
+>>   }
+>> @@ -2732,21 +2746,23 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+>>   	/*
+>>   	 * Avoid issuing a runtime resume if the device is already in the
+>>   	 * suspended state during gadget disconnect.  DWC3 gadget was already
+>> -	 * halted/stopped during runtime suspend.
+>> +	 * halted/stopped during runtime suspend except for bus suspend case
+>> +	 * where we would have skipped the controller halt.
+>>   	 */
+>>   	if (!is_on) {
+>>   		pm_runtime_barrier(dwc->dev);
+>> -		if (pm_runtime_suspended(dwc->dev))
+>> +		if (pm_runtime_suspended(dwc->dev) && !dwc->connected)
+>>   			return 0;
+>>   	}
+>>   
+>>   	/*
+>>   	 * Check the return value for successful resume, or error.  For a
+>>   	 * successful resume, the DWC3 runtime PM resume routine will handle
+>> -	 * the run stop sequence, so avoid duplicate operations here.
+>> +	 * the run stop sequence except for bus resume case, so avoid
+>> +	 * duplicate operations here.
+>>   	 */
+>>   	ret = pm_runtime_get_sync(dwc->dev);
+>> -	if (!ret || ret < 0) {
+>> +	if ((!ret && !dwc->connected) || ret < 0) {
+>>   		pm_runtime_put(dwc->dev);
+>>   		if (ret < 0)
+>>   			pm_runtime_set_suspended(dwc->dev);
+>> @@ -4331,6 +4347,8 @@ static void dwc3_gadget_suspend_interrupt(struct dwc3 *dwc,
+>>   	}
+>>   
+>>   	dwc->link_state = next;
+>> +	pm_runtime_mark_last_busy(dwc->dev);
+>> +	pm_request_autosuspend(dwc->dev);
+>>   }
+>>   
+>>   static void dwc3_gadget_interrupt(struct dwc3 *dwc,
+> 
 
