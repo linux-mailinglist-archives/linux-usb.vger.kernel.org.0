@@ -1,135 +1,81 @@
-Return-Path: <linux-usb+bounces-2185-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2186-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F01B37D71CE
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Oct 2023 18:40:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C5C27D73CC
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Oct 2023 21:02:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5B600B211C1
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Oct 2023 16:40:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DB73A281D56
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Oct 2023 19:02:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9184821A14;
-	Wed, 25 Oct 2023 16:40:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DED830FAF;
+	Wed, 25 Oct 2023 19:02:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JQl6a6s5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAC9023A1
-	for <linux-usb@vger.kernel.org>; Wed, 25 Oct 2023 16:40:28 +0000 (UTC)
-Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFA08137;
-	Wed, 25 Oct 2023 09:40:25 -0700 (PDT)
-Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
-	by hi1smtp01.de.adit-jv.com (Postfix) with ESMTP id 02BF95200CE;
-	Wed, 25 Oct 2023 18:40:24 +0200 (CEST)
-Received: from vmlxhi-118.adit-jv.com (10.72.93.77) by hi2exch02.adit-jv.com
- (10.72.92.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.34; Wed, 25 Oct
- 2023 18:40:23 +0200
-Date: Wed, 25 Oct 2023 18:40:19 +0200
-From: Hardik Gajjar <hgajjar@de.adit-jv.com>
-To: Sergey Shtylyov <s.shtylyov@omp.ru>
-CC: Hardik Gajjar <hgajjar@de.adit-jv.com>, <gregkh@linuxfoundation.org>,
-	<stern@rowland.harvard.edu>, <mathias.nyman@intel.com>,
-	<linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<erosca@de.adit-jv.com>
-Subject: Re: [PATCH v5] usb: Reduce 'set_address' command timeout with a new
- quirk
-Message-ID: <20231025164019.GA121292@vmlxhi-118.adit-jv.com>
-References: <de2ed64a-363a-464c-95be-584ce1a7a4ad@rowland.harvard.edu>
- <20231025141316.117514-1-hgajjar@de.adit-jv.com>
- <41e22c23-07b3-5fd9-5fb1-935ab42fa83e@omp.ru>
- <032f236a-e212-fa28-ecf4-b5b585ba7ac2@omp.ru>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D38A610FB
+	for <linux-usb@vger.kernel.org>; Wed, 25 Oct 2023 19:02:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 308ADC433C7;
+	Wed, 25 Oct 2023 19:02:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1698260564;
+	bh=/9iWr4f/dsLFRv2le/lOb5v7vmV4yJB6T0i1GKy1FFQ=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=JQl6a6s5ih0P9/E6pdGs9Pi0hfBJPAWvXW5nSLnzUyEt3o0M+ZgIa4wuo1n15nfFq
+	 4zPF5waP9ScISnJEgUJOGkTPOGvDQ9PkBpa5LuYD67qDUTEcnMTudNcmI6lysfHtxF
+	 QG2kzm5/GgO5cnkxsxSi5V+1Xp53Wvbvb9P+4V9eVzRQwe4E5s9G/Kv+tYOgA7C+4c
+	 Q8KY3/WV8W0vTGbVt+MGS2Ecj7/Wsb03pnPRzwredLsgpp1ukc5wbwsd5O7cy7QQVa
+	 0UhPky7SBhcHBRj9xDW/8gw0w3mIcopnMfpXfS6ZVO+ifo7INcbMLlHW/BkWrH6CoS
+	 EeBzHZJJMO5jg==
+From: Benjamin Tissoires <bentiss@kernel.org>
+To: Jiri Kosina <jikos@kernel.org>, 
+ Benjamin Tissoires <benjamin.tissoires@redhat.com>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc: linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-usb@vger.kernel.org
+In-Reply-To: <20231012-hid-pm_ptr-v1-0-0a71531ca93b@weissschuh.net>
+References: <20231012-hid-pm_ptr-v1-0-0a71531ca93b@weissschuh.net>
+Subject: Re: [PATCH 0/4] HID: remove #ifdef CONFIG_PM
+Message-Id: <169826056250.336761.2729314989598019924.b4-ty@kernel.org>
+Date: Wed, 25 Oct 2023 21:02:42 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <032f236a-e212-fa28-ecf4-b5b585ba7ac2@omp.ru>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Originating-IP: [10.72.93.77]
-X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
- hi2exch02.adit-jv.com (10.72.92.28)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.12.1
 
-On Wed, Oct 25, 2023 at 07:16:05PM +0300, Sergey Shtylyov wrote:
-> On 10/25/23 7:00 PM, Sergey Shtylyov wrote:
+On Thu, 12 Oct 2023 12:23:37 +0200, Thomas Weißschuh wrote:
+> Through the usage of pm_ptr() the CONFIG_PM-dependent code will always be
+> compiled, protecting against bitrot.
+> The linker will then garbage-collect the unused function avoiding any overhead.
+> 
+> This series only converts three users of CONFIG_PM in drivers/hid/ but
+> most of the others should be convertible, too.
 > 
 > [...]
-> >    Sorry to be PITA but... (-:
-> 
->    I just had to speak up after Alan's ACK. :-)
-No problem, Thanks for the feedback. I agreed with many of them
-> 
-> >> This patch introduces a new USB quirk, USB_QUIRK_SHORT_DEVICE_ADDR_TIMEOUT,
-> >> which modifies the timeout value for the 'set_address' command. The
-> > 
-> >    This is called a request, not a command by the spec. And the USB spec
-> > names the requests in all uppercase, e.g. SET_ADDRESS...
-> > 
-> >> standard timeout for this command is 5000 ms, as recommended in the USB
-> >> 3.2 specification (section 9.2.6.1).
-> > 
-> >    This section in the USB specs 1.1/2.0/3.0 talks about _all_ requests.
-> > I don't have USB 3.2 but It believe it has the same wording.
-> > 
 
-The patch modifies both xhci and hub.c, and the keywords 'command' come from the xhci driver.
-I will change 'command' to '(all)request' and newly added 'address_device' to 'SET_ADDRESS' in hub.c.
-That sounds better for hub.c
+Applied to https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git (for-6.7/config_pm), thanks!
 
-> > [...]
-> > 
-> >> Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
-> [...]
-> 
-> >> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> >> index e1b1b64a0723..0c610a853aef 100644
-> >> --- a/drivers/usb/host/xhci.c
-> >> +++ b/drivers/usb/host/xhci.c
-> >> @@ -3998,11 +3998,17 @@ int xhci_alloc_dev(struct usb_hcd *hcd, struct usb_device *udev)
-> >>  }
-> >>  
-> >>  /*
-> > 
-> >    You seem to be converting the existing comment to a kernel-doc one
-> > but you miss changing from /* /** at the start and adding colons after
-> 
->    From /* to /**, I meant to type...
-> 
-> > the param names below...
-> 
->    This comment update also looks like a meterial for a separate patch...
->
+[1/4] HID: core: remove #ifdef CONFIG_PM from hid_driver
+      https://git.kernel.org/hid/hid/c/df8b030d82dd
+[2/4] HID: usbhid: remove #ifdef CONFIG_PM
+      https://git.kernel.org/hid/hid/c/f354872108eb
+[3/4] HID: multitouch: remove #ifdef CONFIG_PM
+      https://git.kernel.org/hid/hid/c/fc2543414c3e
+[4/4] HID: rmi: remove #ifdef CONFIG_PM
+      https://git.kernel.org/hid/hid/c/eeebfe6259ba
 
-I think this is acceptable in the patch since it modifies the function arguments
-as well. I improved the existing comments while adding information about the new
-argument. However will update /* to /**
+Cheers,
+-- 
+Benjamin Tissoires <bentiss@kernel.org>
 
-
-> >> - * Issue an Address Device command and optionally send a corresponding
-> >> - * SetAddress request to the device.
-> >> + * xhci_setup_device - issues an Address Device command to assign a unique
-> >> + *			USB bus address.
-> >> + * @hcd USB host controller data structure.
-> >> + * @udev USB dev structure representing the connected device.
-> >> + * @setup Enum specifying setup mode: address only or with context.
-> >> + * @timeout_ms Max wait time (ms) for the command operation to complete.
-> >> + *
-> >> + * Return: 0 if successful; otherwise, negative error code.
-> >>   */
-> >>  static int xhci_setup_device(struct usb_hcd *hcd, struct usb_device *udev,
-> >> -			     enum xhci_setup_dev setup)
-> >> +			     enum xhci_setup_dev setup, unsigned int timeout_ms)
-> > [...]
-> 
-> MBR, Sergey
-
-Thanks,
-Hardik
 
