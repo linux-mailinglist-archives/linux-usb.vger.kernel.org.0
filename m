@@ -1,42 +1,42 @@
-Return-Path: <linux-usb+bounces-2175-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2176-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 528587D6E78
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Oct 2023 16:11:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 389FB7D6E7D
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Oct 2023 16:13:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BB41C1F22A0E
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Oct 2023 14:11:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5BE671C20E47
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Oct 2023 14:13:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70C8828E25;
-	Wed, 25 Oct 2023 14:11:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 245A728E29;
+	Wed, 25 Oct 2023 14:13:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 764AC848C
-	for <linux-usb@vger.kernel.org>; Wed, 25 Oct 2023 14:11:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F569250E6
+	for <linux-usb@vger.kernel.org>; Wed, 25 Oct 2023 14:13:34 +0000 (UTC)
 Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083C7193;
-	Wed, 25 Oct 2023 07:11:16 -0700 (PDT)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 748AF13A;
+	Wed, 25 Oct 2023 07:13:30 -0700 (PDT)
 Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
-	by hi1smtp01.de.adit-jv.com (Postfix) with ESMTP id 337735200CE;
-	Wed, 25 Oct 2023 16:11:14 +0200 (CEST)
+	by hi1smtp01.de.adit-jv.com (Postfix) with ESMTP id 3CE215200CE;
+	Wed, 25 Oct 2023 16:13:29 +0200 (CEST)
 Received: from vmlxhi-118.adit-jv.com (10.72.93.77) by hi2exch02.adit-jv.com
  (10.72.92.28) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.34; Wed, 25 Oct
- 2023 16:11:14 +0200
+ 2023 16:13:29 +0200
 From: Hardik Gajjar <hgajjar@de.adit-jv.com>
 To: <gregkh@linuxfoundation.org>, <stern@rowland.harvard.edu>,
 	<mathias.nyman@intel.com>
 CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
 	<erosca@de.adit-jv.com>, <hgajjar@de.adit-jv.com>
 Subject: [PATCH v5] usb: Reduce 'set_address' command timeout with a new quirk
-Date: Wed, 25 Oct 2023 16:11:01 +0200
-Message-ID: <20231025141101.117322-1-hgajjar@de.adit-jv.com>
+Date: Wed, 25 Oct 2023 16:13:16 +0200
+Message-ID: <20231025141316.117514-1-hgajjar@de.adit-jv.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <de2ed64a-363a-464c-95be-584ce1a7a4ad@rowland.harvard.edu>
 References: <de2ed64a-363a-464c-95be-584ce1a7a4ad@rowland.harvard.edu>
@@ -99,6 +99,25 @@ For example,
 echo "0x2c48:0x0132:p" > /sys/bus/usb/drivers/hub/module/parameter/quirks"
 
 Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
+---
+changes since version 1:
+	- implement quirk instead of new API in xhci driver
+
+changes since version 2:
+	- Add documentation for the new quirk.
+	- Define the timeout unit in milliseconds in variable names and function arguments.
+	- Change the xHCI command timeout from HZ (jiffies) to milliseconds.
+	- Add APTIV usb hub vendor and product ID in device quirk list
+	- Adding some other comments for clarity
+
+Changes since version 3:
+	- Add some comments for clarity.
+	- Minor indentation and sequence change.
+
+Changes since version 4:
+	- Changing the USB specification reference to version 3.2.
+    	- Enhancing the commit message to provide more details about the technical issue.
+    	- Improving the structure of function comments.
 ---
  .../admin-guide/kernel-parameters.txt         |  3 +++
  drivers/usb/core/hub.c                        | 21 +++++++++++++++++--
