@@ -1,99 +1,115 @@
-Return-Path: <linux-usb+bounces-2179-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2180-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 139E07D6F9B
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Oct 2023 16:44:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D84E7D7161
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Oct 2023 18:00:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 443081C20E5A
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Oct 2023 14:44:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BDDAE1C20E45
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Oct 2023 16:00:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C646C28DC4;
-	Wed, 25 Oct 2023 14:44:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7E8A2E63B;
+	Wed, 25 Oct 2023 16:00:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 253331A58E
-	for <linux-usb@vger.kernel.org>; Wed, 25 Oct 2023 14:44:43 +0000 (UTC)
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by lindbergh.monkeyblade.net (Postfix) with SMTP id 87625DC
-	for <linux-usb@vger.kernel.org>; Wed, 25 Oct 2023 07:44:42 -0700 (PDT)
-Received: (qmail 496317 invoked by uid 1000); 25 Oct 2023 10:44:41 -0400
-Date: Wed, 25 Oct 2023 10:44:41 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Hardik Gajjar <hgajjar@de.adit-jv.com>
-Cc: gregkh@linuxfoundation.org, mathias.nyman@intel.com,
-  linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-  erosca@de.adit-jv.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A14272C84A
+	for <linux-usb@vger.kernel.org>; Wed, 25 Oct 2023 16:00:20 +0000 (UTC)
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89482132;
+	Wed, 25 Oct 2023 09:00:17 -0700 (PDT)
+Received: from [192.168.1.103] (31.173.84.85) by msexch01.omp.ru (10.188.4.12)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Wed, 25 Oct
+ 2023 19:00:07 +0300
 Subject: Re: [PATCH v5] usb: Reduce 'set_address' command timeout with a new
  quirk
-Message-ID: <2345e113-71cd-4cf2-b910-45dd1bca3f13@rowland.harvard.edu>
+To: Hardik Gajjar <hgajjar@de.adit-jv.com>, <gregkh@linuxfoundation.org>,
+	<stern@rowland.harvard.edu>, <mathias.nyman@intel.com>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<erosca@de.adit-jv.com>
 References: <de2ed64a-363a-464c-95be-584ce1a7a4ad@rowland.harvard.edu>
  <20231025141316.117514-1-hgajjar@de.adit-jv.com>
+From: Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <41e22c23-07b3-5fd9-5fb1-935ab42fa83e@omp.ru>
+Date: Wed, 25 Oct 2023 19:00:06 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 In-Reply-To: <20231025141316.117514-1-hgajjar@de.adit-jv.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [31.173.84.85]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 6.0.0, Database issued on: 10/25/2023 15:39:40
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 180895 [Oct 25 2023]
+X-KSE-AntiSpam-Info: Version: 6.0.0.2
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 543 543 1e3516af5cdd92079dfeb0e292c8747a62cb1ee4
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.84.85 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info:
+	omp.ru:7.1.1;31.173.84.85:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2
+X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.84.85
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 10/25/2023 15:44:00
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 10/25/2023 12:12:00 PM
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
 
-On Wed, Oct 25, 2023 at 04:13:16PM +0200, Hardik Gajjar wrote:
+Hello!
+
+On 10/25/23 5:13 PM, Hardik Gajjar wrote:
+
+   Sorry to be PITA but... (-:
+
 > This patch introduces a new USB quirk, USB_QUIRK_SHORT_DEVICE_ADDR_TIMEOUT,
 > which modifies the timeout value for the 'set_address' command. The
+
+   This is called a request, not a command by the spec. And the USB spec
+names the requests in all uppercase, e.g. SET_ADDRESS...
+
 > standard timeout for this command is 5000 ms, as recommended in the USB
 > 3.2 specification (section 9.2.6.1).
-> 
-> However, certain scenarios, such as connecting devices through an APTIV hub,
-> can lead to timeout errors when the device enumerates as full speed initially
-> and later switches to high speed during chirp negotiation.
-> 
-> In such cases, USB analyzer logs reveal that the bus suspends for 5 seconds
-> due to incorrect chirp parsing and resumes only after two consecutive
-> timeout errors trigger a hub driver reset.
-> 
-> Packet(54) Dir(?) Full Speed J(997.100 us) Idle(  2.850 us)
-> _______| Time Stamp(28 . 105 910 682)
-> _______|_________________________________________________________________Ch0
-> Packet(55) Dir(?) Full Speed J(997.118 us) Idle(  2.850 us)
-> _______| Time Stamp(28 . 106 910 632)
-> _______|_________________________________________________________________Ch0
-> Packet(56) Dir(?) Full Speed J(399.650 us) Idle(222.582 us)
-> _______| Time Stamp(28 . 107 910 600)
-> _______|_________________________________________________________________Ch0
-> Packet(57) Dir Chirp J( 23.955 ms) Idle(115.169 ms)
-> _______| Time Stamp(28 . 108 532 832)
-> _______|_________________________________________________________________Ch0
-> Packet(58) Dir(?) Full Speed J (Suspend)( 5.347 sec) Idle(  5.366 us)
-> _______| Time Stamp(28 . 247 657 600)
-> _______|_________________________________________________________________Ch0
-> 
-> This 5-second delay in device enumeration is undesirable, particularly in
-> automotive applications where quick enumeration is crucial
-> (ideally within 3 seconds).
-> 
-> The newly introduced quirks provide the flexibility to align with a
-> 3-second time limit, as required in specific contexts like automotive
-> applications.
-> 
-> By reducing the 'set_address' command timeout to 500 ms, the
-> system can respond more swiftly to errors, initiate rapid recovery, and
-> ensure efficient device enumeration. This change is vital for scenarios
-> where rapid smartphone enumeration and screen projection are essential.
-> To use the quirk, please write "vendor_id:product_id:p" to
-> /sys/bus/usb/drivers/hub/module/parameter/quirks
-> 
-> For example,
-> echo "0x2c48:0x0132:p" > /sys/bus/usb/drivers/hub/module/parameter/quirks"
-> 
+
+   This section in the USB specs 1.1/2.0/3.0 talks about _all_ requests.
+I don't have USB 3.2 but It believe it has the same wording.
+
+[...]
+
 > Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
-> ---
+[...]
 
 > diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
 > index 0a1731a0f0ef..3c03f23bd5d5 100644
@@ -105,15 +121,68 @@ On Wed, Oct 25, 2023 at 04:13:16PM +0200, Hardik Gajjar wrote:
 >  					delay after resetting its port);
 > +				p = USB_QUIRK_SHORT_DEVICE_ADDR_TIMEOUT (Timeout
 > +					of set_address command reducing from
-> +					5000 ms to 500 ms)
 
-As a matter of grammatical style, it would be better to rephrase this as:
+   Please, "The SET_ADDRESS request" instead...
 
-	Reduce timeout of set_address command from 5000 ms to 500 ms
+> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> index 3c54b218301c..3594eeb892ac 100644
+> --- a/drivers/usb/core/hub.c
+> +++ b/drivers/usb/core/hub.c
+> @@ -54,6 +54,18 @@
+>  #define USB_TP_TRANSMISSION_DELAY_MAX	65535	/* ns */
+>  #define USB_PING_RESPONSE_TIME		400	/* ns */
+>  
+> +/*
+> + * address device command timeout 5000 ms is recommended in
 
-Apart from that one little nit, for the usbcore portions of the patch:
+   What address device command? Are you sure you're not mixing
+the USB and xHCI terminologies?
 
-Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
+> + * USB 3.2 spec, section 9.2.6.1
+> + */
+> +#define USB_DEFAULT_ADDR_DEVICE_TIMEOUT_MS	5000 /* ms */
+> +
+> +/*
+> + * address device command timeout will be 500 ms when
 
-Alan Stern
+   Same here. This is a generic USB file, not the xHCI driver...
+
+> + * USB_QUIRK_SHORT_DEVICE_ADDR_TIMEOUT enable.
+> + */
+> +#define USB_SHORT_ADDR_DEVICE_TIMEOUT_MS	500  /* ms */
+> +
+>  /* Protect struct usb_device->state and ->children members
+>   * Note: Both are also protected by ->dev.sem, except that ->state can
+>   * change to USB_STATE_NOTATTACHED even when the semaphore isn't held. */
+[...]
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index e1b1b64a0723..0c610a853aef 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+> @@ -3998,11 +3998,17 @@ int xhci_alloc_dev(struct usb_hcd *hcd, struct usb_device *udev)
+>  }
+>  
+>  /*
+
+   You seem to be converting the existing comment to a kernel-doc one
+but you miss changing from /* /** at the start and adding colons after
+the param names below...
+
+> - * Issue an Address Device command and optionally send a corresponding
+> - * SetAddress request to the device.
+> + * xhci_setup_device - issues an Address Device command to assign a unique
+> + *			USB bus address.
+> + * @hcd USB host controller data structure.
+> + * @udev USB dev structure representing the connected device.
+> + * @setup Enum specifying setup mode: address only or with context.
+> + * @timeout_ms Max wait time (ms) for the command operation to complete.
+> + *
+> + * Return: 0 if successful; otherwise, negative error code.
+>   */
+>  static int xhci_setup_device(struct usb_hcd *hcd, struct usb_device *udev,
+> -			     enum xhci_setup_dev setup)
+> +			     enum xhci_setup_dev setup, unsigned int timeout_ms)
+[...]
+
+MBR, Sergey
 
