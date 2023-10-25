@@ -1,176 +1,129 @@
-Return-Path: <linux-usb+bounces-2173-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2174-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D995B7D6AC0
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Oct 2023 14:03:39 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2CAA7D6BC7
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Oct 2023 14:33:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 00EF31C20975
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Oct 2023 12:03:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6A919B2127F
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Oct 2023 12:32:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD29C27734;
-	Wed, 25 Oct 2023 12:03:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 712F928681;
+	Wed, 25 Oct 2023 12:32:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ShR4eykC"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="MpzRZNVi"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AA982772C
-	for <linux-usb@vger.kernel.org>; Wed, 25 Oct 2023 12:03:32 +0000 (UTC)
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB52186
-	for <linux-usb@vger.kernel.org>; Wed, 25 Oct 2023 05:03:29 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-507d1cc0538so8056296e87.2
-        for <linux-usb@vger.kernel.org>; Wed, 25 Oct 2023 05:03:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698235408; x=1698840208; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :references:cc:to:content-language:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ByS5CQnJ89mhopYzrf6X8u1aolP08AkIubwh3iCpm10=;
-        b=ShR4eykCVQamDksxMcrTvWRoMvPdxKag6NMEGggw+e/RcNG/TiJKD8NulGA5rTpbh0
-         2Mizdax0G5mtgVhvf7k1yx9Dvjg4Hgjj0DrNJlM4FT75EcaBfPaGYF6o0kLDMy0Bsg8i
-         rAr+Kt7UP6p404pjKFYJh0H8IdX/NgJYvpzPi33cZ5rL3hyjfLhCOrHI3FQarLSMX+RS
-         KoQeKbcGMEJ8qp9NdkeEDPEMDgBVrkmyueBiClQ7zhr4TboShdUcKMIwGuCOe9j5g8rl
-         dUHVXHqjbMlYUmRD/WVhwQCgigD3Ttn224C1fKvG6emXbaYnDmRUl2+BRZxSrPknap2q
-         gV5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698235408; x=1698840208;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :references:cc:to:content-language:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ByS5CQnJ89mhopYzrf6X8u1aolP08AkIubwh3iCpm10=;
-        b=isvDG4udkf7OnNKSzE0km7UcaD13wDb8R7wE4qxEv8SajLrE92ZsE91EYviRZs0Tpk
-         ojtMbbPzRNuRBmAfqZsWZrGRdAgYUl8YPL6DUQqjKUE5VuaT2AfTsI9yk+MPYpG+zxZV
-         Cl2ubxg2vRsFlQ7kGlEYB+Cxtd6s5LF7q1hNOdJ5p+vfpAwjbqiscHpitjVtj4lEzsJq
-         NBGz2UTCh8I+tjcMBbP3zMVx2+PWIQmIcuCCslWvTn7DFedvctc05GZ3nLCUXke3Bt0v
-         p2iZvOb+huUhDYg9Mqef3L5XD2i0xgUmJvZczfchNKRf/Oz7UVCrw9OBH90gmikeyKyL
-         mmQA==
-X-Gm-Message-State: AOJu0YwGVHSuRkAUoIkS5MPCIOlYdUgHclvSAXrSvGi/dGq0DAzQbaDc
-	Dh8tNO8JOHV5ap1wJjnjWMK2+A==
-X-Google-Smtp-Source: AGHT+IE4ZafaOSAeZrI6sYHc42usWlZb4m2AGVFDfMck77WgT78ftLn/4zoAH9TzCwJKQC92tAJuXg==
-X-Received: by 2002:a19:5014:0:b0:507:a40e:d8c6 with SMTP id e20-20020a195014000000b00507a40ed8c6mr10050159lfb.11.1698235407849;
-        Wed, 25 Oct 2023 05:03:27 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:4b03:ec74:6374:5430? ([2a01:e0a:982:cbb0:4b03:ec74:6374:5430])
-        by smtp.gmail.com with ESMTPSA id x18-20020a5d60d2000000b003248a490e3asm11928891wrt.39.2023.10.25.05.03.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Oct 2023 05:03:27 -0700 (PDT)
-Message-ID: <544e5eb4-ffa7-4afb-b063-58c9127a9608@linaro.org>
-Date: Wed, 25 Oct 2023 14:03:26 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F6BE27EEF;
+	Wed, 25 Oct 2023 12:32:53 +0000 (UTC)
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32FA129;
+	Wed, 25 Oct 2023 05:32:49 -0700 (PDT)
+Received: from notapiano (zone.collabora.co.uk [167.235.23.81])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: nfraprado)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id 203A466057B6;
+	Wed, 25 Oct 2023 13:32:47 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1698237168;
+	bh=/4dXk3Un/vaxtCsUQZxzPGs3gNA8QPr1cZShAvmvMvg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MpzRZNViuoPfy7pkhZLcZ03fqKpTu+dsSqM9MQFDtpjGQyMoOn9XNNgSR3yW5xeWJ
+	 VvlYQx4lfunbCLN45YIQDePd+aSfBWTbuBFCgsLnlpQH+Uy78/j1kxgfk1z725LrXb
+	 zgVxxfEFsTnBRas8zpPnoKMfD0DRYx3zER6C640CW1xL+u3fhUc9YVVKByT0f86vf1
+	 KsAjoZLnve4eBIv3pf2AEwtWdVKg8KrnBklzts0mBAmsLo3XncB2sMQsD8b7NQHDg2
+	 Nns0czgK5QvlF3sugJbQDTG6WRr5aiyVDlxMSADoR5BJRCsWimtLRr32Y5pxtMBOhI
+	 AgKvgG2i7zuKQ==
+Date: Wed, 25 Oct 2023 08:32:42 -0400
+From: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Shuah Khan <shuah@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+	devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-usb@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+	linux-kselftest@vger.kernel.org, kernel@collabora.com,
+	linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 2/2] kselftest: devices: Add board file for
+ google,spherion
+Message-ID: <e49c63c4-2b24-4428-801c-1f854a98c593@notapiano>
+References: <20231024211818.365844-1-nfraprado@collabora.com>
+ <20231024211818.365844-3-nfraprado@collabora.com>
+ <2023102546-filled-onboard-3dfb@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v2 2/2] soc: qcom: pmic_glink: enable UCSI by default
-Content-Language: en-US, fr
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc: Rob Herring <robh@kernel.org>, linux-usb@vger.kernel.org,
- linux-arm-msm@vger.kernel.org
-References: <20231025115620.905538-1-dmitry.baryshkov@linaro.org>
- <20231025115620.905538-3-dmitry.baryshkov@linaro.org>
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro Developer Services
-In-Reply-To: <20231025115620.905538-3-dmitry.baryshkov@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2023102546-filled-onboard-3dfb@gregkh>
 
-On 25/10/2023 13:49, Dmitry Baryshkov wrote:
-> Now as the issue with the UCSI_GET_PDOS is worked around, enable UCSI
-> support for all PMIC_GLINK platforms except Qualcomm SC8180X. The
-> mentioned SoC has slightly different UCSI implementation, which I would
-> like be tested properly before enabling it.
+On Wed, Oct 25, 2023 at 12:32:15PM +0200, Greg Kroah-Hartman wrote:
+> On Tue, Oct 24, 2023 at 05:18:00PM -0400, Nícolas F. R. A. Prado wrote:
+> > Add the list of devices expected to be probed from the USB and PCI
+> > busses on the google,spherion machine. The USB host controller at
+> > 11200000 is shared between two busses, for USB2 and USB3, so an
+> > additional match is used to select the USB2 bus.
+> > 
+> > Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> > ---
+> > 
+> >  tools/testing/selftests/devices/boards/google,spherion | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >  create mode 100644 tools/testing/selftests/devices/boards/google,spherion
+> > 
+> > diff --git a/tools/testing/selftests/devices/boards/google,spherion b/tools/testing/selftests/devices/boards/google,spherion
+> > new file mode 100644
+> > index 000000000000..ba86ffcfe43c
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/devices/boards/google,spherion
+> > @@ -0,0 +1,3 @@
+> > +usb camera 11200000,PRODUCT=.*/2/.* 1.4.1 1 0,1
+> > +usb bluetooth 11200000,PRODUCT=.*/2/.* 1.4.2 1 0,1
+> > +pci wifi 11230000 0.0/0.0
 > 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
->   drivers/soc/qcom/pmic_glink.c | 19 +++++++++----------
->   1 file changed, 9 insertions(+), 10 deletions(-)
+> USB busses (and PCI ids) are not determinisitic and can, and will,
+> change values randomly.  So while it is nice to test "did the devices
+> show up properly", you can not do that based on bus ids at all, sorry.
 > 
-> diff --git a/drivers/soc/qcom/pmic_glink.c b/drivers/soc/qcom/pmic_glink.c
-> index 914057331afd..71d8901a9389 100644
-> --- a/drivers/soc/qcom/pmic_glink.c
-> +++ b/drivers/soc/qcom/pmic_glink.c
-> @@ -18,9 +18,6 @@ enum {
->   	PMIC_GLINK_CLIENT_UCSI,
->   };
->   
-> -#define PMIC_GLINK_CLIENT_DEFAULT	(BIT(PMIC_GLINK_CLIENT_BATT) |	\
-> -					 BIT(PMIC_GLINK_CLIENT_ALTMODE))
-> -
->   struct pmic_glink {
->   	struct device *dev;
->   	struct pdr_handle *pdr;
-> @@ -263,10 +260,10 @@ static int pmic_glink_probe(struct platform_device *pdev)
->   	mutex_init(&pg->state_lock);
->   
->   	match_data = (unsigned long *)of_device_get_match_data(&pdev->dev);
-> -	if (match_data)
-> -		pg->client_mask = *match_data;
-> -	else
-> -		pg->client_mask = PMIC_GLINK_CLIENT_DEFAULT;
-> +	if (!match_data)
-> +		return -EINVAL;
-> +
-> +	pg->client_mask = *match_data;
->   
->   	if (pg->client_mask & BIT(PMIC_GLINK_CLIENT_UCSI)) {
->   		ret = pmic_glink_add_aux_device(pg, &pg->ucsi_aux, "ucsi");
-> @@ -336,14 +333,16 @@ static void pmic_glink_remove(struct platform_device *pdev)
->   	mutex_unlock(&__pmic_glink_lock);
->   }
->   
-> +static const unsigned long pmic_glink_sc8180x_client_mask = BIT(PMIC_GLINK_CLIENT_BATT) |
-> +							    BIT(PMIC_GLINK_CLIENT_ALTMODE);
-> +
->   static const unsigned long pmic_glink_sm8450_client_mask = BIT(PMIC_GLINK_CLIENT_BATT) |
->   							   BIT(PMIC_GLINK_CLIENT_ALTMODE) |
->   							   BIT(PMIC_GLINK_CLIENT_UCSI);
->   
->   static const struct of_device_id pmic_glink_of_match[] = {
-> -	{ .compatible = "qcom,sm8450-pmic-glink", .data = &pmic_glink_sm8450_client_mask },
-> -	{ .compatible = "qcom,sm8550-pmic-glink", .data = &pmic_glink_sm8450_client_mask },
-> -	{ .compatible = "qcom,pmic-glink" },
-> +	{ .compatible = "qcom,sc8180x-pmic-glink", .data = &pmic_glink_sc8180x_client_mask },
-> +	{ .compatible = "qcom,pmic-glink", .data = &pmic_glink_sm8450_client_mask },
->   	{}
->   };
->   MODULE_DEVICE_TABLE(of, pmic_glink_of_match);
+> Unless I'm reading these values wrong?  What are the fields
+> representing?  Perhaps a comment at the top to describe them so that we
+> know how to parse them?
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+Hi Greg,
+
+I have described the fields in the commit message of patch 1. Here they are:
+
+usb <test_name> <controller_address>[,<additional_match>] <ports_path> <configuration> <interfaces>
+
+pci <test_name> <controller_address> <device-function_pairs_path>
+
+I'm aware that bus IDs are assigned at runtime, and that's exactly why I've
+avoided those in the test definitions, instead describing the hardware topology,
+which won't ever change.
+
+And just to be extra clear, by hardware topology I mean:
+
+For USB, we find the USB bus based on the address of its controller (and
+optionally its productID if two busses share the same controller for USB2 and
+USB3), and then find the device by following the ports at each hub. The
+configuration number and interfaces then describe what interfaces to check for
+presence and driver binding.
+
+For PCI, we find the controller again based on its address, and follow the
+device-function pairs at each level in the topology until we arrive at the
+desired device.
+
+We don't rely on the USB bus number, nor on the PCI domain and bus number, since
+these are all assigned at runtime.
+
+Thanks,
+Nícolas
 
