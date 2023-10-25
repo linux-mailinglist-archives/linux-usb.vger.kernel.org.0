@@ -1,152 +1,135 @@
-Return-Path: <linux-usb+bounces-2184-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2185-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D12CB7D71C6
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Oct 2023 18:35:19 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F01B37D71CE
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Oct 2023 18:40:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7DE2B281D98
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Oct 2023 16:35:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5B600B211C1
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Oct 2023 16:40:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F14421A14;
-	Wed, 25 Oct 2023 16:35:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arunraghavan.net header.i=@arunraghavan.net header.b="hvnzlv1h";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ZfTc67la"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9184821A14;
+	Wed, 25 Oct 2023 16:40:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0089330CE2
-	for <linux-usb@vger.kernel.org>; Wed, 25 Oct 2023 16:35:13 +0000 (UTC)
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07A5C1
-	for <linux-usb@vger.kernel.org>; Wed, 25 Oct 2023 09:35:12 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailout.west.internal (Postfix) with ESMTP id 0E92D32009BC;
-	Wed, 25 Oct 2023 12:35:08 -0400 (EDT)
-Received: from imap41 ([10.202.2.91])
-  by compute5.internal (MEProxy); Wed, 25 Oct 2023 12:35:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	arunraghavan.net; h=cc:cc:content-type:content-type:date:date
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-	1698251708; x=1698338108; bh=Hlozpq9zMtmodVh/xCRgyf+cjHFkZsicTV7
-	ESQzMlUc=; b=hvnzlv1hBKs0JOPqM2XDWexwhxYpaw9ntINpJs0VVM4b5F89Abk
-	o2X+F1JCyoQISH0wn7+oRoKoUiD3xmduNXWDxMyEZFFT6laXx99YJy0JN9L0an28
-	xKFfN7tUQ2tGcdbyIlZE15YSfPneTBebhI+St9YOzuM61NiFhRmQBagKUqCIlSGT
-	eubkBHCmKP4obmZql5aX5MX6XeHKnh5OJO1CGSWKylmHukuRPyVYm/GyGo8X11aL
-	s+9iCvvGek1LN9bpFDmworBoymHDMa8s0L+dgX2IItbIW/orsOpmYAsQcQ3lBRhC
-	TGj8MbUuizQWco4giL8Aar2vTmoYIn7jE8w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm3; t=1698251708; x=1698338108; bh=Hlozpq9zMtmod
-	Vh/xCRgyf+cjHFkZsicTV7ESQzMlUc=; b=ZfTc67laWVqNkBHSzGCoI7nTDbZcn
-	n4KQHITOW3vxtj64EQ1vWv0YrXwyweKTgzLalm5hNbYe0ZRsbpx3FEzsHn3FF7Wq
-	kZ595cyqVbk4QAk8kYmTgofYTRAqkcygPBWTCQC3jZ8lCu36Z4WVqyVGejnwgwPl
-	OcWD2PpZUGabXH8HFXwxulROqqf+qOzZlUAgCyvSD0BKiKKoW5FazBubkbfKP2Zd
-	LWf2IJKqBmRDporUcOul8dtskcOIViwoxU2Qi04aQtvQTUavh2dWq3NegTzZi8LO
-	JCXnCu8pvcYgnfSvasfF8O1VIL2pA5SfjM998J2vHEUBlwSQ+cp/DvO1w==
-X-ME-Sender: <xms:u0M5Ze-pQSbgdRzPpiScggypO4D1y-6ZIeH2zYKHfSplQlh1ASGSGw>
-    <xme:u0M5Zesw7HqkQaiIxZ-DGHptcHngcJx5Qh4JfxJh0PDeJTgaV61WbYQeSPZ9xma6P
-    K6rSRkir_xXnye10Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrledtgddutdduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    uhhnucftrghghhgrvhgrnhdfuceorghruhhnsegrrhhunhhrrghghhgrvhgrnhdrnhgvth
-    eqnecuggftrfgrthhtvghrnhepveefgeeivdfhuefftdffudeftdekheeuudejgfeltedt
-    iedtkedtgeejheejkeehnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpghhithhhuh
-    gsrdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhho
-    mheprghruhhnsegrrhhunhhrrghghhgrvhgrnhdrnhgvth
-X-ME-Proxy: <xmx:u0M5ZUBOiGQd-4rhEfD_wh_tA5QgdVsh9Glcew588rjkok2m7weTQg>
-    <xmx:u0M5ZWc9Oiwj3IMnbDGaopwFI9LX000Ia1HcsxJj2OCyTo_bhVsglw>
-    <xmx:u0M5ZTNzLlEyximqZoCJUcOgRRcge2n9gFwZAhWRgvH6LSulB9Brmg>
-    <xmx:vEM5Ze3hKLkjxgGARLmBPxP7RAIkD25TG5vZMaoNd4L_6USzkqrQtQ>
-Feedback-ID: i42c0435e:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id CD3802340080; Wed, 25 Oct 2023 12:35:07 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-1048-g9229b632c5-fm-20231019.001-g9229b632
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAC9023A1
+	for <linux-usb@vger.kernel.org>; Wed, 25 Oct 2023 16:40:28 +0000 (UTC)
+Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFA08137;
+	Wed, 25 Oct 2023 09:40:25 -0700 (PDT)
+Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
+	by hi1smtp01.de.adit-jv.com (Postfix) with ESMTP id 02BF95200CE;
+	Wed, 25 Oct 2023 18:40:24 +0200 (CEST)
+Received: from vmlxhi-118.adit-jv.com (10.72.93.77) by hi2exch02.adit-jv.com
+ (10.72.92.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.34; Wed, 25 Oct
+ 2023 18:40:23 +0200
+Date: Wed, 25 Oct 2023 18:40:19 +0200
+From: Hardik Gajjar <hgajjar@de.adit-jv.com>
+To: Sergey Shtylyov <s.shtylyov@omp.ru>
+CC: Hardik Gajjar <hgajjar@de.adit-jv.com>, <gregkh@linuxfoundation.org>,
+	<stern@rowland.harvard.edu>, <mathias.nyman@intel.com>,
+	<linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<erosca@de.adit-jv.com>
+Subject: Re: [PATCH v5] usb: Reduce 'set_address' command timeout with a new
+ quirk
+Message-ID: <20231025164019.GA121292@vmlxhi-118.adit-jv.com>
+References: <de2ed64a-363a-464c-95be-584ce1a7a4ad@rowland.harvard.edu>
+ <20231025141316.117514-1-hgajjar@de.adit-jv.com>
+ <41e22c23-07b3-5fd9-5fb1-935ab42fa83e@omp.ru>
+ <032f236a-e212-fa28-ecf4-b5b585ba7ac2@omp.ru>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <056916f6-43e9-41f2-a8f9-93845405c0e3@app.fastmail.com>
-In-Reply-To: <004494f2-bd2b-9bdb-8f45-61b6aed6432b@ivitera.com>
-References: <6ebc2456-a46b-bc47-da76-7a341414c1fb@ivitera.com>
- <35766f0f-784d-d37a-6d07-665f9ee88331@ivitera.com>
- <27b4b607-5d71-4e5d-a0ff-530c25752213@app.fastmail.com>
- <4154b125-35c8-b15a-8706-54b9eb3cb5e0@ivitera.com>
- <2504b014-08b2-4f39-83f6-5072b5ec4ea8@app.fastmail.com>
- <004494f2-bd2b-9bdb-8f45-61b6aed6432b@ivitera.com>
-Date: Wed, 25 Oct 2023 12:33:54 -0400
-From: "Arun Raghavan" <arun@arunraghavan.net>
-To: "Pavel Hofman" <pavel.hofman@ivitera.com>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>
-Cc: "Julian Scheel" <julian@jusst.de>, "Takashi Iwai" <tiwai@suse.de>,
- "Ruslan Bilovol" <ruslan.bilovol@gmail.com>,
- "Jerome Brunet" <jbrunet@baylibre.com>
-Subject: Re: RFC: usb: gadget: u_audio: Notifying gadget that host started
- playback/capture?
-Content-Type: text/plain
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <032f236a-e212-fa28-ecf4-b5b585ba7ac2@omp.ru>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Originating-IP: [10.72.93.77]
+X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
+ hi2exch02.adit-jv.com (10.72.92.28)
 
-On Thu, 5 Oct 2023, at 10:30 AM, Pavel Hofman wrote:
-> Dne 05. 10. 23 v 1:15 Arun Raghavan napsal(a):
->> On Fri, 22 Sep 2023, at 3:09 AM, Pavel Hofman wrote:
->>> Dne 21. 09. 23 v 3:30 Arun Raghavan napsal(a):
->>>> Hi folks,
->>>>
->>>> On Fri, 1 Oct 2021, at 8:38 AM, Pavel Hofman wrote:
->>>>> Hi,
->>>>>
->>>>
->>>> Resurrecting this one -- is there any input on how we want to deal wit letting UAC gadgets know when the host is sending/receiving data?
->>>
->>> The current version uses the Playback/Capture Rate alsa ctls with
->>> notifications
->>> https://lore.kernel.org/all/20220121155308.48794-8-pavel.hofman@ivitera.com/
->>>
->>> Example of handling is e.g. https://github.com/pavhofman/gaudio_ctl ,
->>> the controller is being used in a number of projects, mostly DIY.
->>>
->>> Recently Qualcomm devs have submitted patches for alternative approach
->>> using uevents
->>> https://lore.kernel.org/lkml/2023050801-handshake-refusing-0367@gregkh/T/#mcd6b346f3ddab6ab34792be0141633bb362d168f
->>> and later versions. The detection is identical, monitoring change in
->>> altsetting from 0 to non zero and back (methods
->>> u_audio_[start/stop]_[capture/playback]), just a different means of
->>> communicating the events to userspace.
->>>
->>> Both methods (using the same principle) suffer from not knowing what's
->>> going on the host side and cannot differentiate between player really
->>> starting playback vs. UAC2 host driver or Pulseaudio shortly checking
->>> device availability. That's why the gaudio_ctl controller can debounce
->>> the playback/capture start
->>> https://github.com/pavhofman/gaudio_ctl#debouncing . But that is just an
->>> ugly workaround...
->> 
->> Thank you for the links, Pavel! This all makes sense.
->> 
-[...]
->> I wonder if it might not be good to have some debouncing in the kernel rather than having every client have to implement this.
+On Wed, Oct 25, 2023 at 07:16:05PM +0300, Sergey Shtylyov wrote:
+> On 10/25/23 7:00 PM, Sergey Shtylyov wrote:
+> 
+> [...]
+> >    Sorry to be PITA but... (-:
+> 
+>    I just had to speak up after Alan's ACK. :-)
+No problem, Thanks for the feedback. I agreed with many of them
+> 
+> >> This patch introduces a new USB quirk, USB_QUIRK_SHORT_DEVICE_ADDR_TIMEOUT,
+> >> which modifies the timeout value for the 'set_address' command. The
+> > 
+> >    This is called a request, not a command by the spec. And the USB spec
+> > names the requests in all uppercase, e.g. SET_ADDRESS...
+> > 
+> >> standard timeout for this command is 5000 ms, as recommended in the USB
+> >> 3.2 specification (section 9.2.6.1).
+> > 
+> >    This section in the USB specs 1.1/2.0/3.0 talks about _all_ requests.
+> > I don't have USB 3.2 but It believe it has the same wording.
+> > 
+
+The patch modifies both xhci and hub.c, and the keywords 'command' come from the xhci driver.
+I will change 'command' to '(all)request' and newly added 'address_device' to 'SET_ADDRESS' in hub.c.
+That sounds better for hub.c
+
+> > [...]
+> > 
+> >> Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
+> [...]
+> 
+> >> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> >> index e1b1b64a0723..0c610a853aef 100644
+> >> --- a/drivers/usb/host/xhci.c
+> >> +++ b/drivers/usb/host/xhci.c
+> >> @@ -3998,11 +3998,17 @@ int xhci_alloc_dev(struct usb_hcd *hcd, struct usb_device *udev)
+> >>  }
+> >>  
+> >>  /*
+> > 
+> >    You seem to be converting the existing comment to a kernel-doc one
+> > but you miss changing from /* /** at the start and adding colons after
+> 
+>    From /* to /**, I meant to type...
+> 
+> > the param names below...
+> 
+>    This comment update also looks like a meterial for a separate patch...
 >
-> I am afraid this would be a large feature (debouncing requires extra 
-> threads), I have not even tried to push it through. Much better would be 
-> having some nice solution instead of a workaround :-)
 
-Makes sense.
+I think this is acceptable in the patch since it modifies the function arguments
+as well. I improved the existing comments while adding information about the new
+argument. However will update /* to /**
 
-Maybe a silly question, but what is the status of these patches -- I see them as "Accepted" on patchwork but they've not actually landed upstream yet?
 
-Regards,
-Arun
+> >> - * Issue an Address Device command and optionally send a corresponding
+> >> - * SetAddress request to the device.
+> >> + * xhci_setup_device - issues an Address Device command to assign a unique
+> >> + *			USB bus address.
+> >> + * @hcd USB host controller data structure.
+> >> + * @udev USB dev structure representing the connected device.
+> >> + * @setup Enum specifying setup mode: address only or with context.
+> >> + * @timeout_ms Max wait time (ms) for the command operation to complete.
+> >> + *
+> >> + * Return: 0 if successful; otherwise, negative error code.
+> >>   */
+> >>  static int xhci_setup_device(struct usb_hcd *hcd, struct usb_device *udev,
+> >> -			     enum xhci_setup_dev setup)
+> >> +			     enum xhci_setup_dev setup, unsigned int timeout_ms)
+> > [...]
+> 
+> MBR, Sergey
+
+Thanks,
+Hardik
 
