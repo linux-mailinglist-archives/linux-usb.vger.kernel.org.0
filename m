@@ -1,160 +1,168 @@
-Return-Path: <linux-usb+bounces-2218-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2219-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 081957D82BE
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 14:35:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 146DF7D8312
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 14:48:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B1B67282068
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 12:35:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 37A791C20EFA
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 12:47:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABEE828E31;
-	Thu, 26 Oct 2023 12:35:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AD6E2D041;
+	Thu, 26 Oct 2023 12:47:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=fibocomcorp.onmicrosoft.com header.i=@fibocomcorp.onmicrosoft.com header.b="xOL/m+xK"
+	dkim=pass (1024-bit key) header.d=fibocomcorp.onmicrosoft.com header.i=@fibocomcorp.onmicrosoft.com header.b="nBh+PzOm"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D7422DF92
-	for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 12:35:36 +0000 (UTC)
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2085.outbound.protection.outlook.com [40.107.117.85])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11120193;
-	Thu, 26 Oct 2023 05:35:35 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AF48273D1
+	for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 12:47:47 +0000 (UTC)
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2075.outbound.protection.outlook.com [40.107.255.75])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D511713;
+	Thu, 26 Oct 2023 05:47:35 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=h5N2nY2rcxChfJVsh54FKEpc9om+bYYQojZF/wI+agerJdXjtcDgaevMvU37UJicJJFjBZ2Gzf8X347BB0p149YhcNATh6keSs1GY7jGqT1zxoHlCKREiOr7p5VIXMnr4yAIg076KbRorrdeMA3gKSbuIhWVdwPFqCy6+ASXa+IDdSVJvL4gg4gozvk81xSUM4izNJoQTuoTjn/nQkCtnj7KCwzFZof4EmtnJxnOpLYQcUJmiqOavo7YZXhVHfMktO3kMOnxZsCFz1AilA+FmlyxyfgDbCAo2TI1Lg47IjlhX9Ctcs6A7V5JAQDJIc8T2bob9DwfaBawy6gR8wC69g==
+ b=adZc8jhu5moSogYF9Q3A8q5Vlc75Tup3PqKhnBg1/hpQY/EJFClQtjrcbPrKu2i8tkjI7Xb/rlCatjFWtMEPzqKtl9pE7FvfcU35n585ypTmrNyz1aY7AxP0QThikU/kbFSuVjmlnx1cmbRUtvHE+Q1J4tpG9MdvsHQlpIB5s1umN62vA+DKavYRWhQKYxncAWJbkbrUoNtnOubtchoJuUgeOPGl+uYfAhb0ZQBtO3a64a8RsKw7hx9NmM+5uqeI6JOCDC8dtelaWmHglMoOczqKX21tFXwr+di2NHCE0jEcpXcxDyc3GDtId2yWeA6aipOk78GkwTdGbraYYKlbPg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9/8EtJnHjwQXv2AJQwlbgbRWAu5AJu3G2d/WrNKRs1w=;
- b=EYrQLZ7310O1ZIc3qUww9h573eIR/ek3R96rrvgxoTFtpt9W/EQ4OUIpIX3WC28aK48x1HCTwA9s/y4T/HWUfLZoM3MTfgk8VUr0a0ajm48ZJsYNw+Rd2vvjDPg/EEUt0BgApMoAoD9Ow5rpIPjz6OTxzB97RvWmjnXrxWG4SklP9/eHpkx9/1PjO2vgTFLqsW1CQxVZXuoMYUKxSme3y9BZNuqy5a5PYcEorP+zeRP3Ct+YQpLeCwAmSi4+CAiXfboY9MWFZsVQzEouOX1zrwyM12qU0gWdV9CP5qcxdl7UwuoadVQ0IgumgHaBOklGQkaVlatmklHghslzk6ckGw==
+ bh=5Z6pwYRocKwja7VpN79AVza0MnypHaquN4NIKcjtA7Q=;
+ b=Qer3OXbU7hd5xCqhXOTkjWAQqSWAZgkcL8NBdZtxx7brA1J5pCpBJ/sAp8ZkcrzVgIK3PST575J9ZXFM5IQ1EUnFq0wQa1ta+XwOxof0ZyDe9T487BV2mo/dJ9EOcIGNCENzWZKFlwhioR2fK4mbSenjoyINCf7mi/z9XMrAQ2szykdxm9IRuJLvv3COya19CEVdTT3K6JxESuoS9n3WOJXmyBPNPXjT2EkJv01RwGsEcCvDVpUg/yAUux4TvDJOMoHs6GOcPBpsW9dRf7CwTpsDCjjdmupIWy4j9jsaHFVEiBtS2BxQJRf95ZX7foV0FHpu1CvkMqokYADCJSiYjA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=fibocom.com; dmarc=pass action=none header.from=fibocom.com;
  dkim=pass header.d=fibocom.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=fibocomcorp.onmicrosoft.com; s=selector1-fibocomcorp-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9/8EtJnHjwQXv2AJQwlbgbRWAu5AJu3G2d/WrNKRs1w=;
- b=xOL/m+xK8RWzNhBydtG/9sRDrFmP4oilpZJzfykOPZsskKlyKVRYy/64bTpQW/t9Scm51XM3BHMuIJ5e/CNE/H4x7OV6+rinDHoL9K8gZfsMRXSJoc+PoexlGztGPlnl1VVMT3t/GXD64aMo1jXeGG40jtwzS9uhoOsPEeCOsGQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=fibocom.com;
+ bh=5Z6pwYRocKwja7VpN79AVza0MnypHaquN4NIKcjtA7Q=;
+ b=nBh+PzOmrUBHl21wBMfBB8g+2Iw3k855eYIt2ZF8XjHIUfllYJPA5hOEMpRFqhGx2EnNlHiExvSaNdd+chX0toKBFCrCz2hoUDC+Ma1HJ3Y5q/P9YSOIerEBKLdZ/PS12KSdNWrU15gfvTvmaY2oxauKB7ZR80s+EClHUmI2CE8=
 Received: from TYZPR02MB5088.apcprd02.prod.outlook.com (2603:1096:400:71::13)
- by SEYPR02MB7439.apcprd02.prod.outlook.com (2603:1096:101:1df::10) with
+ by SEZPR02MB6793.apcprd02.prod.outlook.com (2603:1096:101:18f::9) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6907.33; Thu, 26 Oct
- 2023 12:35:19 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6933.23; Thu, 26 Oct
+ 2023 12:47:30 +0000
 Received: from TYZPR02MB5088.apcprd02.prod.outlook.com
  ([fe80::e6c0:ad44:ccaa:789]) by TYZPR02MB5088.apcprd02.prod.outlook.com
  ([fe80::e6c0:ad44:ccaa:789%6]) with mapi id 15.20.6907.032; Thu, 26 Oct 2023
- 12:35:19 +0000
-From: Puliang Lu <puliang.lu@fibocom.com>
-To: johan@kernel.org
-Cc: gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Puliang Lu <puliang.lu@fibocom.com>
-Subject: [PATCH] USB: serial: option: modify Fibocom to DELL custom modem FM101R-GL
-Date: Thu, 26 Oct 2023 20:35:06 +0800
-Message-Id: <20231026123506.26453-1-puliang.lu@fibocom.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SL2PR01CA0016.apcprd01.prod.exchangelabs.com
- (2603:1096:100:41::28) To TYZPR02MB5088.apcprd02.prod.outlook.com
- (2603:1096:400:71::13)
+ 12:47:29 +0000
+From: "Puliang Lu(Puliang)" <puliang.lu@fibocom.com>
+To: "johan@kernel.org" <johan@kernel.org>
+CC: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] USB: serial: option: modify Fibocom to DELL custom modem
+ FM101R-GL
+Thread-Topic: [PATCH] USB: serial: option: modify Fibocom to DELL custom modem
+ FM101R-GL
+Thread-Index: AdoICokA4ksn00QWS2SWjS8lLujw+A==
+Date: Thu, 26 Oct 2023 12:47:29 +0000
+Message-ID:
+ <TYZPR02MB50889E1282C90E3C6804B64889DDA@TYZPR02MB5088.apcprd02.prod.outlook.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=fibocom.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYZPR02MB5088:EE_|SEZPR02MB6793:EE_
+x-ms-office365-filtering-correlation-id: ebbbddfa-7200-4864-7ef2-08dbd621b704
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ Tsg1YKK1GkqEFYbGZ7pU5n2biV1DymqSQBWMrfEnbWAx7gTE1IuEkx9ArlXPOFXj3Af3km+NV4eI07N9L1gsXE5usSllgDDkQGPUaWz6xITF+6EiArr8T4fZFqjHaKy5vOo/vSiUtdaH9QVJschKz8gNQvBMeiubLIntZwweFuHWQ43RvXq12vn0uNy70E2TDbhuXrl89n9QIiu1PFIFJHz01y3KQVE1KYCpZzreV1UYL6bpQViPPPqVZl9yrQpwhJL/+RrHPWLv0KJ7GqeIWI/O/T+kjK0fXv5oh2rtbKy4N2H9M8LmcSbC1xEwFxHiA5sXYfXq2jRVztHdIYZ4ZqKmuY/l687FgyioFdlRBMsEhbvyZcpfNMO0IHCC9iv/gKMl2kz7QnVLqwaoLOD0HcNail3A4jC22LIhOv2XwxRp+1lOSR9FMjvAXYQOVf95FTRrEV3euzUt8JE1EBd518KZZpRiI3t+jlCKBrv5Dhbxavrbwu9zSV3Uju/v8ajx9R3PQ0oRrqZLGPs87wgjfRmOVQKhWXzEfFoxJf6XhGYA7rqE487UW8yLJWlqoNIY6tpW1Ft45MXgWPiso1+ol8S1+ltNvYn6oKUn8Y9cQlevV1SGdRDGV6rif3Fqv5Rr
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR02MB5088.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39850400004)(396003)(346002)(376002)(136003)(366004)(230922051799003)(1800799009)(186009)(451199024)(64100799003)(52536014)(41300700001)(33656002)(26005)(38100700002)(9686003)(8676002)(8936002)(5660300002)(4326008)(54906003)(7696005)(38070700009)(66556008)(66946007)(76116006)(6506007)(66476007)(66446008)(64756008)(2906002)(6916009)(316002)(122000001)(86362001)(478600001)(55016003)(83380400001)(71200400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?TjPErHFQqsxrb97du9V3t6UNtO3EN4vHTiSA6lYQM0kYynjhDHy5p5sfBwCX?=
+ =?us-ascii?Q?M7wTYL1a5/wenA7iVvdLFug9DXd5Omakv06yu/TJBz4caCsspGsszaIP5rJq?=
+ =?us-ascii?Q?xP8vQCmIQatiuEmHDLw/dkLw72E6ZqO/ATDavLOshnlEF/1yKSAi79T+DA9m?=
+ =?us-ascii?Q?oessCZaxnSMJJUG9OwqBgEuUMB5jSerzwBgdshW4LOdkGuwX3U5iR/oCjjtQ?=
+ =?us-ascii?Q?hmefJ3edFHjCimzo9qk1rPaBRqhU3/HTQZqEzL6h0fTSYgyTr/PuvMOeyRHq?=
+ =?us-ascii?Q?GMW3Lh2XitYm73ufXnPffBVmpH6JeETT+NmGHImdN5w003zUFr7TplD/5bW5?=
+ =?us-ascii?Q?fsJ6Nok55/KoVtRs5xVqZHVkVX1OlCvS5RKNhAgwgKickd2eBZY3sHoyxEt6?=
+ =?us-ascii?Q?FnedNikFByDkja6PitUnUMf9CVBl3yreipPWlAj7NbypeeW+0NvQrn0sA0dD?=
+ =?us-ascii?Q?QlhCk7mBlvcQgEWDQOamUvyW01fXilp9hnypeWW7WkrGHAYr736U9F6IdjHs?=
+ =?us-ascii?Q?SGFJSsEJXZBVqtGxkoOkfbmj6GpkUZfOk9Lk/3tBhdtWUrWYFvOdBa7HOptI?=
+ =?us-ascii?Q?on2rnMRYlhIuCj1ylLNaRI5WNiDjtVL8QgNBoAZNuhSx+cKMNNGrtR3lraft?=
+ =?us-ascii?Q?HiL7rkYzBrKo3Ln8VE3grRPF/mY0XG4FKwcrTGC6Y6ee/b6fJ0ejP3DL+1U2?=
+ =?us-ascii?Q?EyZXxYUU19vfYQvZ8WORcRej4CI/KsAL7+/UhCoqEhKW5HGXk8Pa8SgaGqMr?=
+ =?us-ascii?Q?aRk69QvUhaBqRddOhL5EnUmvXd5aoUOKjRafjzDwssRqe26F2IMY4GujAuel?=
+ =?us-ascii?Q?GI33kTu/zizI+8u8lWGhDqV3S3O2fzVy9lT4YiZPhdZXJev+UlM++ZRScSgg?=
+ =?us-ascii?Q?qqvvB/pv99JAGX2bwCe9By3H66SjI69Wo+RUXCUBJ+Pj8YsjKzJU/cKM6vPw?=
+ =?us-ascii?Q?LLc9amHXoQt6dJY+krpwA3zplhMvCQynIec/Y2924cg+zjDM/LOcmvOifXZc?=
+ =?us-ascii?Q?csOm3we0GNnTog91CsIzmAs64l9uVwN4FHCUb7A3ZIyqbJKXMEh8gdUdtGz4?=
+ =?us-ascii?Q?RqfkqOYkLuP6xfjLLsTuXaq3mIKJgvjNauNbmeHZRvjpYybG4V1L3JKDvfp6?=
+ =?us-ascii?Q?VbhFOMcASQPbo9Q30QdabFx+jU6jQua89TB/iA4M0rDXZcxTBcnxMqNs/Y/T?=
+ =?us-ascii?Q?NjAGlFcqHjqfLLrh8Fr1L5X7EnXJ5DaeZEI+f1L+dJ8pRrmObJdJfZPs8K4p?=
+ =?us-ascii?Q?7mtqGeVIqtDxDpEpwN/AL9Jxn9PjhCZGtvOjVg0oQeAYKwjrpUfxiydxgd0g?=
+ =?us-ascii?Q?s8XqB9Qt6vAC4JJjtVX1ECJgDcW8tXZPf0/AaazkUO9GkqpjCq4qtzNj7qAw?=
+ =?us-ascii?Q?UVuAiYb3kFzu1aI7uP3XTAXKFqQ33ZPiIRfhBjne2hTIXoMBVll8Ax3aB1ww?=
+ =?us-ascii?Q?fHCMSpLQyJJ/H6UNpV6/V83ZDRJMjIqgqO6ZzPgJdBPMqcoyZ5gmtAiXE9ud?=
+ =?us-ascii?Q?7Luuv4AsnMfGV8l2funNR32cQILls6f7/rEi5dZ+AmqXdXVA/1CbhRO0wuwo?=
+ =?us-ascii?Q?r5b/g8Vvi9sB/dbk5JgM12BbjCRk7BsIf5QsNCGB?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYZPR02MB5088:EE_|SEYPR02MB7439:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6020dbb7-329e-42e5-b880-08dbd62003a7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	XOruGRAmaD/u+XVsrJeANGnNtBdc/QXXz04dOjudHH0o2dp8JkS6IiICHEn4rdtHv00i3NA5pKWy/AhGmnHCkDjzP0h3OBTh0W4rgFg/3Rw49qMb7xa1sd3+0NWChruJ90IxBkpATqRvNLSYDYGCmaGrBKSFUllwAZI5TTnVwiWBlLHwI9Gtnkezv5AC0tZ2FbvW22zG6tbHGOYyZF67G9YKrjlQ80AHfzMthKXZZiZ+Yu/H+LcnnzA2ZLV6htdfG6BBaEzyigi0z978hUqJ6LfB7Shdce+/dbkg1MycqHcP65pPEQEe4p4i4NWAfSiMizCEa9xe9qy1oxd/X1Y3ZJDGnvALrV65IwQh/JihUU48c3lH5JK6tyEXGEgr13BOILuRkNK6Hd8ETbuUBXeiQYRyqXjT61HkxoTNAX7i8yOxvntxG4sqPqRfO/ku9Ssj7szkJS4MigjXaXephpS0BWLmp12HH/00rYhbLojlp9v6tvqqRVz7p8k2KnrqOdWtDtxvYXqn2gY0J7tcsSMrJmQb6t5lts1KwUj46yuxvvf0oWm1il00yTFMAiKZsx0k
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR02MB5088.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(366004)(346002)(136003)(396003)(39850400004)(230922051799003)(451199024)(64100799003)(186009)(1800799009)(5660300002)(1076003)(316002)(83380400001)(44832011)(41300700001)(4326008)(8676002)(8936002)(38100700002)(6916009)(52116002)(478600001)(6506007)(6486002)(6512007)(6666004)(66946007)(86362001)(66556008)(66476007)(107886003)(4744005)(2616005)(36756003)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?NnLnevdIfxvWUjLZFFn7hzaWn5ASxL+VSJsgDx+flk4gKTJqosur4V3m910f?=
- =?us-ascii?Q?tNK/BBD8H5nMW8r8iLfvMU5xanMelAKtmxnTZElxdb4D+rja+mYWczqOGzSs?=
- =?us-ascii?Q?K3VKBsbvS7fOSsNdvUr8mFMw42dAQVMqWEB4xfnoXI66PJB0OupOHNI2Gns7?=
- =?us-ascii?Q?oUu/jAtAiJtG9gpZ4su5VGfQogK93VZy9LknnS41VNZcZ0LO/TjxKBHdO9Jm?=
- =?us-ascii?Q?8oVmXaj+IXIUQGn1tKHoLn0XevInm4Ztg4Nlci2mbLIvI86oNwNp0/J+k+X/?=
- =?us-ascii?Q?5yxBSXldJoM2SmBWUZeD2CYB7y0TTd/TAs1FE9rNyVm62Kae6uWDeJS22SVx?=
- =?us-ascii?Q?hZTsncJ0+UpUDCC+G/QF9yfiy8H/HY+cs0dE2DprwGATboxRpYD7/5weeeYz?=
- =?us-ascii?Q?sidrZz8ammO7bBZqvqS4K9iWPFWfCosPT1FO/TXWY5PTXuyj+j8ziC8iHIXs?=
- =?us-ascii?Q?8Ncca0GoxL2HEQSusjT6VqWShutjd2R7Cv96dBkR2zrWDyH8xOm47wj91dft?=
- =?us-ascii?Q?dFDsF99M7aVBN7DehbL+/A6MMCU4KicCIIC+a/Dflx0OycQ5QEBpUl1uRnHH?=
- =?us-ascii?Q?OK0Os5W0jV4cuTdw5baeRYMuRv+u8cMJtmGgB62MLC3vHkLoeFGupamGZda9?=
- =?us-ascii?Q?dpFc58uEc4Mp8kIMS6w5LpD5yJhn9rVmhEuxXN8lC2F6D7LD+nlXBWCrtitp?=
- =?us-ascii?Q?Pfi2J3dU9EYXucfiz01XUaAiu7k/6ycAOpafTHiTZrXFTr7+1jX0gOSNlkPo?=
- =?us-ascii?Q?Y5p1b080MOX6u5rOvM3V0GkHgp4Vi02ciYLrUud7mQVw5xsukM+RBCqjyr6k?=
- =?us-ascii?Q?nUyrDezORV2A/6kYMRK7wGbqk1v00/X0kXTZAtJp5pic4TK2O75atecIccCG?=
- =?us-ascii?Q?2H3nIXFBfa+wvrrb0YmuXkpaJ/uz6HJf1FOzCtcX7GqeZF3L6cD5WCTdOnpa?=
- =?us-ascii?Q?aDwEe1DLHDfDWBViLp7eroDvxV9gRsiD6swrwYcxXkP+RL8pohpBcY03bCsV?=
- =?us-ascii?Q?xCGrE4K8CXNNNrBbI6vdsWEMSwTYu6Ftq/i9/Vj/4zkkyVVIpOek+K9k6RPX?=
- =?us-ascii?Q?YaAvkUhBOF8uD8yktTI8itG1si9D1hyuCemwrocz+1q29E+zoNEuDISI2hk3?=
- =?us-ascii?Q?2s2rHQJOLbPmBImjHc+AbZxMrgxFvGuN1kd3KtTWBO2c5P1B/qgHBzOe3Scc?=
- =?us-ascii?Q?iqhKbdnxc0Jq9lPE/kbpxzWpU/sFwHuik7D58SIvf9XzyuXXLDn9eCAkV/HN?=
- =?us-ascii?Q?3+f1fcaVdYZjx0EvIfrUgTA5Y0+rumKz5UJFvoEfjOMvX3pr8nfej3bgucP0?=
- =?us-ascii?Q?L9lI0KxX5c8PJwas0YXf1HIBgH9Md2pv0Yl0BQ3rbJq4tZAU4xs79Zv3H0Xb?=
- =?us-ascii?Q?CC99gy14L7byLQfDnA3MRJcHikUU2WLUQkmLawhf8xcLO0yZAuejL4Odp7KY?=
- =?us-ascii?Q?qf/sbtiS0V8KigvVlnw9cRUu6p9klqimaw+tV9O1f9O6+YmtRMsdGq0gOh9s?=
- =?us-ascii?Q?6tEEOxs7nLSHAmG7ad1d+P0O3QSKqLmZQD9D8UQDAC8a1Se0098u81E7+r+m?=
- =?us-ascii?Q?01whJFKhoGwqKcpmOnZ6BZET4bWtfCOiID6QNgl/DGFkulSlLzdcTzu77VNu?=
- =?us-ascii?Q?ZNbL6LA0YAlZBnq4I7zwfrVoZG34QEBgx9ww79g9fxXF?=
 X-OriginatorOrg: fibocom.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6020dbb7-329e-42e5-b880-08dbd62003a7
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR02MB5088.apcprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2023 12:35:19.2562
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR02MB5088.apcprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ebbbddfa-7200-4864-7ef2-08dbd621b704
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Oct 2023 12:47:29.5666
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 889bfe61-8c21-436b-bc07-3908050c8236
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zNEphSDKlLKOw+w/mWThovnTzIUxnOdvxsnyKiBK49AY9Jjk7XlKP4sKEyX66VckrzMiQBTGyosy01jhzFwzgg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR02MB7439
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 889bfe61-8c21-436b-bc07-3908050c8236
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: aPVp3FrckME6r9omIg9ctq68RDi1V7OEp5NSAww55kYbyQt0lFw8bS38kE+/dc+0SHaXHjuYdcChM1edROl5vg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR02MB6793
 
-Modify the definition of Fibocom USB serial option driver
-FM101R-GL different variants
 
-- VID:PID 413C:8213, FM101R-GL ESIM are laptop M.2 cards (with
-  MBIM interfaces for Linux)
+> Modify the definition of Fibocom USB serial option driver FM101R-GL diffe=
+rent variants
+>=20
+> - VID:PID 413C:8213, FM101R-GL ESIM are laptop M.2 cards (with
+>   MBIM interfaces for Linux)
+>=20
+> - VID:PID 413C:8215, FM101R-GL are laptop M.2 cards (with
+>   MBIM interface for Linux)
+>=20
+> 0x8213: mbim, tty
+> 0x8215: mbim, tty
+>=20
+> Signed-off-by: Puliang Lu <puliang.lu@fibocom.com>
+> ---
+>  drivers/usb/serial/option.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c in=
+dex 45dcfaadaf98..3aa219275509 100644
+> --- a/drivers/usb/serial/option.c
+> +++ b/drivers/usb/serial/option.c
+> @@ -203,8 +203,8 @@ static void option_instat_callback(struct urb *urb);
+>  #define DELL_PRODUCT_5829E_ESIM			0x81e4
+>  #define DELL_PRODUCT_5829E			0x81e6
+> =20
+> -#define DELL_PRODUCT_FM101R			0x8213
+> -#define DELL_PRODUCT_FM101R_ESIM		0x8215
+> +#define DELL_PRODUCT_FM101R_ESIM		0x8213
+> +#define DELL_PRODUCT_FM101R				0x8215
+> =20
+>  #define KYOCERA_VENDOR_ID			0x0c88
+>  #define KYOCERA_PRODUCT_KPC650			0x17da
+> --
+> 2.34.1
 
-- VID:PID 413C:8215, FM101R-GL are laptop M.2 cards (with
-  MBIM interface for Linux)
-
-0x8213: mbim, tty
-0x8215: mbim, tty
-
-Signed-off-by: Puliang Lu <puliang.lu@fibocom.com>
----
- drivers/usb/serial/option.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index 45dcfaadaf98..3aa219275509 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -203,8 +203,8 @@ static void option_instat_callback(struct urb *urb);
- #define DELL_PRODUCT_5829E_ESIM			0x81e4
- #define DELL_PRODUCT_5829E			0x81e6
- 
--#define DELL_PRODUCT_FM101R			0x8213
--#define DELL_PRODUCT_FM101R_ESIM		0x8215
-+#define DELL_PRODUCT_FM101R_ESIM		0x8213
-+#define DELL_PRODUCT_FM101R				0x8215
- 
- #define KYOCERA_VENDOR_ID			0x0c88
- #define KYOCERA_PRODUCT_KPC650			0x17da
--- 
-2.34.1
+Thank you for your feedback.  =20
+We apologize for any mistake and have now submitted the=20
+incremental fix. Your input is greatly appreciated.
 
 
