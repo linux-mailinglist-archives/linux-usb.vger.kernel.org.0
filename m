@@ -1,373 +1,283 @@
-Return-Path: <linux-usb+bounces-2206-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2208-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B17F97D7D20
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 08:59:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E96CE7D7EA5
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 10:40:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CCE121C20EED
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 06:59:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7533A1F22745
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 08:40:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 316F6C134;
-	Thu, 26 Oct 2023 06:58:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AA0D1A5A2;
+	Thu, 26 Oct 2023 08:40:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=cadence.com header.i=@cadence.com header.b="h2/iaBko";
+	dkim=pass (1024-bit key) header.d=cadence.com header.i=@cadence.com header.b="VugabbZd"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 782018BFD
-	for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 06:58:53 +0000 (UTC)
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25B1C129
-	for <linux-usb@vger.kernel.org>; Wed, 25 Oct 2023 23:58:51 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1qvuKO-0005Sc-D8; Thu, 26 Oct 2023 08:58:48 +0200
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1qvuKN-004Lis-9N; Thu, 26 Oct 2023 08:58:47 +0200
-Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.94.2)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1qvuKM-00AJdr-W9; Thu, 26 Oct 2023 08:58:47 +0200
-Date: Thu, 26 Oct 2023 08:58:46 +0200
-From: Michael Grzeschik <mgr@pengutronix.de>
-To: Jayant Chowdhary <jchowdhary@google.com>
-Cc: "laurent.pinchart@ideasonboard.com" <laurent.pinchart@ideasonboard.com>,
-	Greg KH <gregkh@linuxfoundation.org>,
-	"dan.scally@ideasonboard.com" <dan.scally@ideasonboard.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	linux-kernel@vger.kernel.org,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: Re: [PATCH] usb:gadget:uvc Do not use worker thread to pump usb
- requests
-Message-ID: <ZToOJhyOFeGCGUFj@pengutronix.de>
-References: <99384044-0d14-4ebe-9109-8a5557e64449@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E36DC11C9F
+	for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 08:40:46 +0000 (UTC)
+X-Greylist: delayed 3737 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 26 Oct 2023 01:40:44 PDT
+Received: from mx0a-0014ca01.pphosted.com (mx0a-0014ca01.pphosted.com [208.84.65.235])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D3E128;
+	Thu, 26 Oct 2023 01:40:44 -0700 (PDT)
+Received: from pps.filterd (m0042385.ppops.net [127.0.0.1])
+	by mx0a-0014ca01.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 39Q2MN79017651;
+	Thu, 26 Oct 2023 00:38:15 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=proofpoint; bh=bM3emn
+	e8aZofXYNPRzpzPf1uwjrMSPbJCRQrESdcHNo=; b=h2/iaBko5o8fYOiVP6PB3E
+	dO+sXyw1gM6AHyH/lhSPhY74QTc128aknAV+2s6RRsPCpLWAzoSNnFmPiasO8n44
+	KIvuUH+a+mW0UOfYLaNFZ7BYeuUE6Kqonu4UMmDrHqDNDz+oF5W7PNME3W3L/i0U
+	+yMs3iQPfrPxUxxap1JMt0+SyJvBGh0msvBHAFLICujx++l4gHqmrdIk/VD8Ogo4
+	+JQV7yPLcPKdDvn/498Jqeihfv5M/bkJgHaWAPAZH2p9Wxe3xlUijCofKCDLLJxi
+	OXzZ4Q0kYAOXaprPDkJ8uo4jeGpfARuVqiJJckHGsos2yJdpEUTHRTZ1Xhwirt0Q
+	==
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2169.outbound.protection.outlook.com [104.47.55.169])
+	by mx0a-0014ca01.pphosted.com (PPS) with ESMTPS id 3ty71qtskt-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 26 Oct 2023 00:38:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AfO8grevam28HTSqjgNccd+qhz/+y4rNv7kZoW/CiWGjQ0LyiVrSFVj0ORga8d7bpJ/+gXfySy7bnq8W40Kx0IWYK3nfh3bqGjYom9vYIgOQIA/odJqiN8OCW4N5aAmm1rsOjXP3E6No2hih9E7o2VpaALa65Z3EduEI6e57ruc/VKqnTzkbXfi/pUX0/uzezUgSAWtoS5vXphIsFQsHv1YZoBwMHTiqpdpXdujhbntFd3LxwViw6DRpi3gCrRaxzIbMPp+vTz0kC/SeQorvWKVDbdSw0DKWVZFf4Xds3xnsKVVJKw7k/XMpgQUnLXYKXta/WAiZ4UqyGYAl47KmFQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bM3emne8aZofXYNPRzpzPf1uwjrMSPbJCRQrESdcHNo=;
+ b=WwF50+ZLWvNw3dojbcYJnket7mKOgU9a/lfM7w9HPJdgerkpgJrI5JAws3MF62OEcu3AvJl0oEy+2mvh2T3gaT90T/TuRTacwdG4EFjxcvlmAJFDc8HHOTTPWmexEzKRt9l1aA9xt4M26FB0zG8OyhfTRFf5kraoTsc7d1+ltnBbk75CfR+2A/v7t6kxvn7nvnn5Dht7QPu67I9pXIfSX9WO0qQUJ5dXGYjw1fiV3KFlTXpzjrHTgElZ6T/DLzIh/cdsUEogQgnFLBSZA1xjfG8QgD45myl9KNsDBSEIilWc/+OKQ9VoHlF/7inp5x3mS94nc3+ebAo8iXS1aie9Bg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 158.140.1.148) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=cadence.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=cadence.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bM3emne8aZofXYNPRzpzPf1uwjrMSPbJCRQrESdcHNo=;
+ b=VugabbZdHEf7Tu6NTtYpThaSX+hK8ni8ownejJNX+JMeqr/OpiiZY4xvMGNcvKWWJ3ur+uaTSaqBZGZPdSMU9Zbs1woT0rsy98dhoiU+covJZnN//Agx990t/VJoW2GpQnPB3f+pmueu0X69tKiUAbED+e+QsdxRVPIPfwr2cPI=
+Received: from MW4PR04CA0381.namprd04.prod.outlook.com (2603:10b6:303:81::26)
+ by PH7PR07MB9774.namprd07.prod.outlook.com (2603:10b6:510:2b2::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6933.19; Thu, 26 Oct
+ 2023 07:38:13 +0000
+Received: from MW2NAM12FT114.eop-nam12.prod.protection.outlook.com
+ (2603:10b6:303:81:cafe::d4) by MW4PR04CA0381.outlook.office365.com
+ (2603:10b6:303:81::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6933.19 via Frontend
+ Transport; Thu, 26 Oct 2023 07:38:12 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 158.140.1.148)
+ smtp.mailfrom=cadence.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=cadence.com;
+Received-SPF: Pass (protection.outlook.com: domain of cadence.com designates
+ 158.140.1.148 as permitted sender) receiver=protection.outlook.com;
+ client-ip=158.140.1.148; helo=sjmaillnx2.cadence.com; pr=C
+Received: from sjmaillnx2.cadence.com (158.140.1.148) by
+ MW2NAM12FT114.mail.protection.outlook.com (10.13.180.164) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6954.8 via Frontend Transport; Thu, 26 Oct 2023 07:38:12 +0000
+Received: from maileu5.global.cadence.com (eudvw-maileu5.cadence.com [10.160.110.202])
+	by sjmaillnx2.cadence.com (8.14.4/8.14.4) with ESMTP id 39Q7c95c015400
+	(version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 26 Oct 2023 00:38:10 -0700
+Received: from maileu4.global.cadence.com (10.160.110.201) by
+ maileu5.global.cadence.com (10.160.110.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 26 Oct 2023 09:37:57 +0200
+Received: from eu-cn02.cadence.com (10.160.89.185) by
+ maileu4.global.cadence.com (10.160.110.201) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7
+ via Frontend Transport; Thu, 26 Oct 2023 09:37:57 +0200
+Received: from eu-cn02.cadence.com (localhost.localdomain [127.0.0.1])
+	by eu-cn02.cadence.com (8.14.7/8.14.7) with ESMTP id 39Q7blje165614;
+	Thu, 26 Oct 2023 09:37:47 +0200
+Received: (from pawell@localhost)
+	by eu-cn02.cadence.com (8.14.7/8.14.7/Submit) id 39Q7bkVq165607;
+	Thu, 26 Oct 2023 09:37:46 +0200
+From: Pawel Laszczak <pawell@cadence.com>
+To: <peter.chen@kernel.org>
+CC: <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <pawell@cadence.com>
+Subject: [PATCH] usb:cdnsp: remove TRB_FLUSH_ENDPOINT command
+Date: Thu, 26 Oct 2023 09:37:37 +0200
+Message-ID: <20231026073737.165450-1-pawell@cadence.com>
+X-Mailer: git-send-email 2.30.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="uhOVRvhjA5b0Dp6s"
-Content-Disposition: inline
-In-Reply-To: <99384044-0d14-4ebe-9109-8a5557e64449@google.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-CrossPremisesHeadersFilteredBySendConnector: maileu5.global.cadence.com
+X-OrganizationHeadersPreserved: maileu5.global.cadence.com
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MW2NAM12FT114:EE_|PH7PR07MB9774:EE_
+X-MS-Office365-Filtering-Correlation-Id: b9e07917-c413-4ef9-1b13-08dbd5f68207
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 
+	JHAJ7rE8UGnrRvPMs4Y3LXRdqcEk2n/NNE+f6EWVbZPlhURW5YVTHvR9HgiD4L4e33KPs/p12XQVDCYfoUYr2Vvim60mhfWVuxZm6mb7lgXLz6g8V+qZAgKBu2Wo3CZxKYeOhRx/+g8Mz2eM/5JbWRzXtdt9F2o6eMy+n9yb7moovyxzvaovNwAsfYNQCApcyXtTg+B0dW0cTLbmfi8RTvhawqg7fNxffENeAieIfMNq2Sh6waybJmv/61wo0xT4isHiA/0Z10BnBrOUnpctuck0EDJmlqvFYc99KKS7ALQXb6EBefzFxTr4+3SPmaaAgGkf5C4JmEUiQUN5LDuLQHHhe3QYj2QyHB00oU4k7Oi90TkVTej9/GV9k6Q8I2KLR14/UZPjeQ5vcYc0h/YYPKPhXgX3rlTo1/jVHxEFFv69SgT4v+75tmZpmKfxwLuDqIv9vIn9EVzBWhZyOlNbwgesoLIqThQsF19UlJ1B7jzuXsYHPiY9h+qeQfZnjFw8k5FKTAijOiGBHYNft3rSS/I4gQCraRJnPzPKsNDl9rImAp7r+ePsE5zNg0xlBkHYqrfhTDjrS9Ry2txCmC/7GERTFzFTbuyOqDQAFucD3gItP2DoMCmCB9yQJH/QzqWK/MNzE2c4Gi1yslTmoqQ/HlGpeg+FmPFyG+Ot7z/UxOGZW4vJHZrkRq/PDmGbiBKkflFMsM2qKRcZUZKNofY4pCBKDwfuW4CgNXr9ysuDY8EpIYX5qOZolewSrmXwmN9r56GI/XEhrG7KACnLojtDNQ==
+X-Forefront-Antispam-Report: 
+	CIP:158.140.1.148;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:sjmaillnx2.cadence.com;PTR:unknown.Cadence.COM;CAT:NONE;SFS:(13230031)(4636009)(39860400002)(376002)(136003)(396003)(346002)(230922051799003)(64100799003)(82310400011)(1800799009)(451199024)(186009)(40470700004)(36840700001)(46966006)(26005)(478600001)(34070700002)(1076003)(426003)(336012)(40480700001)(6666004)(86362001)(316002)(6916009)(42186006)(54906003)(40460700003)(70586007)(70206006)(36756003)(36860700001)(47076005)(2616005)(107886003)(356005)(7636003)(2906002)(83380400001)(8676002)(4326008)(8936002)(82740400003)(5660300002)(41300700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: cadence.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2023 07:38:12.2606
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b9e07917-c413-4ef9-1b13-08dbd5f68207
+X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[158.140.1.148];Helo=[sjmaillnx2.cadence.com]
+X-MS-Exchange-CrossTenant-AuthSource: 
+	MW2NAM12FT114.eop-nam12.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR07MB9774
+X-Proofpoint-GUID: pZFoR2qRg7biND93chPKduA0HtlCkXjW
+X-Proofpoint-ORIG-GUID: pZFoR2qRg7biND93chPKduA0HtlCkXjW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-26_05,2023-10-25_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 impostorscore=0
+ malwarescore=0 suspectscore=0 clxscore=1011 spamscore=0 mlxscore=0
+ lowpriorityscore=0 adultscore=0 mlxlogscore=747 bulkscore=0
+ priorityscore=1501 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2310170000 definitions=main-2310260063
 
+Patch removes TRB_FLUSH_ENDPOINT command from driver.
+This command is not supported by controller and
+USBSSP returns TRB Error completion code for it.
 
---uhOVRvhjA5b0Dp6s
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+---
+ drivers/usb/cdns3/cdnsp-debug.h  |  3 ---
+ drivers/usb/cdns3/cdnsp-gadget.c |  6 +-----
+ drivers/usb/cdns3/cdnsp-gadget.h |  5 -----
+ drivers/usb/cdns3/cdnsp-ring.c   | 24 ------------------------
+ 4 files changed, 1 insertion(+), 37 deletions(-)
 
-On Wed, Oct 25, 2023 at 03:59:10PM -0700, Jayant Chowdhary wrote:
->This patch is based on top of
->https://lore.kernel.org/linux-usb/20230930184821.310143-1-arakesh@google.c=
-om/T/#t:
->
->When we use an async work queue to perform the function of pumping
->usb requests to the usb controller, it is possible that thread scheduling
->affects at what cadence we're able to pump requests. This could mean usb
->requests miss their uframes - resulting in video stream flickers on the ho=
-st
->device.
->
->In this patch, we move the pumping of usb requests to
->1) uvcg_video_complete() complete handler for both isoc + bulk
->   endpoints. We still send 0 length requests when there is no uvc buffer
->   available to encode.
->2) uvc_v4l2_qbuf - only for bulk endpoints since it is not legal to send
->   0 length requests.
->
->Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
->Suggested-by: Jayant Chowdhary <jchowdhary@google.com>
->Suggested-by: Avichal Rakesh <arakesh@google.com>
->Tested-by: Jayant Chowdhary <jchowdhary@google.com>
->---
-> drivers/usb/gadget/function/f_uvc.c     |  4 --
-> drivers/usb/gadget/function/uvc.h       |  4 +-
-> drivers/usb/gadget/function/uvc_v4l2.c  |  5 +-
-> drivers/usb/gadget/function/uvc_video.c | 72 ++++++++++++++++---------
-> drivers/usb/gadget/function/uvc_video.h |  2 +
-> 5 files changed, 52 insertions(+), 35 deletions(-)
->
->diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/func=
-tion/f_uvc.c
->index ae08341961eb..53cb2539486d 100644
->--- a/drivers/usb/gadget/function/f_uvc.c
->+++ b/drivers/usb/gadget/function/f_uvc.c
->@@ -959,14 +959,10 @@ static void uvc_function_unbind(struct usb_configura=
-tion *c,
-> {
-> 	struct usb_composite_dev *cdev =3D c->cdev;
-> 	struct uvc_device *uvc =3D to_uvc(f);
->-	struct uvc_video *video =3D &uvc->video;
-> 	long wait_ret =3D 1;
->
-> 	uvcg_info(f, "%s()\n", __func__);
->
->-	if (video->async_wq)
->-		destroy_workqueue(video->async_wq);
->-
-> 	/*
-> 	 * If we know we're connected via v4l2, then there should be a cleanup
-> 	 * of the device from userspace either via UVC_EVENT_DISCONNECT or
->diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/functi=
-on/uvc.h
->index be0d012aa244..498f344fda4b 100644
->--- a/drivers/usb/gadget/function/uvc.h
->+++ b/drivers/usb/gadget/function/uvc.h
->@@ -88,9 +88,6 @@ struct uvc_video {
-> 	struct uvc_device *uvc;
-> 	struct usb_ep *ep;
->
->-	struct work_struct pump;
->-	struct workqueue_struct *async_wq;
->-
-> 	/* Frame parameters */
-> 	u8 bpp;
-> 	u32 fcc;
->@@ -116,6 +113,7 @@ struct uvc_video {
-> 	/* Context data used by the completion handler */
-> 	__u32 payload_size;
-> 	__u32 max_payload_size;
->+	bool is_bulk;
->
-> 	struct uvc_video_queue queue;
-> 	unsigned int fid;
->diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/f=
-unction/uvc_v4l2.c
->index f4d2e24835d4..678ea6df7b5c 100644
->--- a/drivers/usb/gadget/function/uvc_v4l2.c
->+++ b/drivers/usb/gadget/function/uvc_v4l2.c
->@@ -414,10 +414,7 @@ uvc_v4l2_qbuf(struct file *file, void *fh, struct v4l=
-2_buffer *b)
-> 	ret =3D uvcg_queue_buffer(&video->queue, b);
-> 	if (ret < 0)
-> 		return ret;
->-
->-	if (uvc->state =3D=3D UVC_STATE_STREAMING)
->-		queue_work(video->async_wq, &video->pump);
->-
->+	uvcg_video_pump_qbuf(video);
-> 	return ret;
-> }
->
->diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/=
-function/uvc_video.c
->index ab3f02054e85..143453e9f003 100644
->--- a/drivers/usb/gadget/function/uvc_video.c
->+++ b/drivers/usb/gadget/function/uvc_video.c
->@@ -24,6 +24,8 @@
->  * Video codecs
->  */
->
->+static void uvcg_video_pump(struct uvc_video *video);
->+
-> static int
-> uvc_video_encode_header(struct uvc_video *video, struct uvc_buffer *buf,
-> 		u8 *data, int len)
->@@ -329,7 +331,9 @@ uvc_video_complete(struct usb_ep *ep, struct usb_reque=
-st *req)
-> 	 */
-> 	if (video->is_enabled) {
-> 		list_add_tail(&req->list, &video->req_free);
->-		queue_work(video->async_wq, &video->pump);
->+		spin_unlock_irqrestore(&video->req_lock, flags);
->+		uvcg_video_pump(video);
->+		return;
-> 	} else {
-> 		uvc_video_free_request(ureq, ep);
-> 	}
->@@ -409,20 +413,32 @@ uvc_video_alloc_requests(struct uvc_video *video)
->  * Video streaming
->  */
->
->+void uvcg_video_pump_qbuf(struct uvc_video *video)
->+{
->+	if (video->is_bulk) {
->+		/*
->+		 * Only call uvcg_video_pump() from qbuf, for bulk eps since
->+		 * for isoc, the complete handler will call uvcg_video_pump()
->+		 * consistently. Calling it for isoc eps, while correct
->+		 * will increase contention for video->req_lock since the
->+		 * complete handler will be called more often.
->+		 */
+diff --git a/drivers/usb/cdns3/cdnsp-debug.h b/drivers/usb/cdns3/cdnsp-debug.h
+index f0ca865cce2a..ad617b7455b9 100644
+--- a/drivers/usb/cdns3/cdnsp-debug.h
++++ b/drivers/usb/cdns3/cdnsp-debug.h
+@@ -131,8 +131,6 @@ static inline const char *cdnsp_trb_type_string(u8 type)
+ 		return "Endpoint Not ready";
+ 	case TRB_HALT_ENDPOINT:
+ 		return "Halt Endpoint";
+-	case TRB_FLUSH_ENDPOINT:
+-		return "FLush Endpoint";
+ 	default:
+ 		return "UNKNOWN";
+ 	}
+@@ -328,7 +326,6 @@ static inline const char *cdnsp_decode_trb(char *str, size_t size, u32 field0,
+ 		break;
+ 	case TRB_RESET_EP:
+ 	case TRB_HALT_ENDPOINT:
+-	case TRB_FLUSH_ENDPOINT:
+ 		ret = snprintf(str, size,
+ 			       "%s: ep%d%s(%d) ctx %08x%08x slot %ld flags %c",
+ 			       cdnsp_trb_type_string(type),
+diff --git a/drivers/usb/cdns3/cdnsp-gadget.c b/drivers/usb/cdns3/cdnsp-gadget.c
+index 4b67749edb99..4a3f0f958256 100644
+--- a/drivers/usb/cdns3/cdnsp-gadget.c
++++ b/drivers/usb/cdns3/cdnsp-gadget.c
+@@ -1024,10 +1024,8 @@ static int cdnsp_gadget_ep_disable(struct usb_ep *ep)
+ 	pep->ep_state |= EP_DIS_IN_RROGRESS;
+ 
+ 	/* Endpoint was unconfigured by Reset Device command. */
+-	if (!(pep->ep_state & EP_UNCONFIGURED)) {
++	if (!(pep->ep_state & EP_UNCONFIGURED))
+ 		cdnsp_cmd_stop_ep(pdev, pep);
+-		cdnsp_cmd_flush_ep(pdev, pep);
+-	}
+ 
+ 	/* Remove all queued USB requests. */
+ 	while (!list_empty(&pep->pending_list)) {
+@@ -1424,8 +1422,6 @@ static void cdnsp_stop(struct cdnsp_device *pdev)
+ {
+ 	u32 temp;
+ 
+-	cdnsp_cmd_flush_ep(pdev, &pdev->eps[0]);
+-
+ 	/* Remove internally queued request for ep0. */
+ 	if (!list_empty(&pdev->eps[0].pending_list)) {
+ 		struct cdnsp_request *req;
+diff --git a/drivers/usb/cdns3/cdnsp-gadget.h b/drivers/usb/cdns3/cdnsp-gadget.h
+index e1b5801fdddf..dbee6f085277 100644
+--- a/drivers/usb/cdns3/cdnsp-gadget.h
++++ b/drivers/usb/cdns3/cdnsp-gadget.h
+@@ -1128,8 +1128,6 @@ union cdnsp_trb {
+ #define TRB_HALT_ENDPOINT	54
+ /* Doorbell Overflow Event. */
+ #define TRB_DRB_OVERFLOW	57
+-/* Flush Endpoint Command. */
+-#define TRB_FLUSH_ENDPOINT	58
+ 
+ #define TRB_TYPE_LINK(x)	(((x) & TRB_TYPE_BITMASK) == TRB_TYPE(TRB_LINK))
+ #define TRB_TYPE_LINK_LE32(x)	(((x) & cpu_to_le32(TRB_TYPE_BITMASK)) == \
+@@ -1539,8 +1537,6 @@ void cdnsp_queue_configure_endpoint(struct cdnsp_device *pdev,
+ void cdnsp_queue_reset_ep(struct cdnsp_device *pdev, unsigned int ep_index);
+ void cdnsp_queue_halt_endpoint(struct cdnsp_device *pdev,
+ 			       unsigned int ep_index);
+-void cdnsp_queue_flush_endpoint(struct cdnsp_device *pdev,
+-				unsigned int ep_index);
+ void cdnsp_force_header_wakeup(struct cdnsp_device *pdev, int intf_num);
+ void cdnsp_queue_reset_device(struct cdnsp_device *pdev);
+ void cdnsp_queue_new_dequeue_state(struct cdnsp_device *pdev,
+@@ -1574,7 +1570,6 @@ void cdnsp_irq_reset(struct cdnsp_device *pdev);
+ int cdnsp_halt_endpoint(struct cdnsp_device *pdev,
+ 			struct cdnsp_ep *pep, int value);
+ int cdnsp_cmd_stop_ep(struct cdnsp_device *pdev, struct cdnsp_ep *pep);
+-int cdnsp_cmd_flush_ep(struct cdnsp_device *pdev, struct cdnsp_ep *pep);
+ void cdnsp_setup_analyze(struct cdnsp_device *pdev);
+ int cdnsp_status_stage(struct cdnsp_device *pdev);
+ int cdnsp_reset_device(struct cdnsp_device *pdev);
+diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
+index 07f6068342d4..af981778382d 100644
+--- a/drivers/usb/cdns3/cdnsp-ring.c
++++ b/drivers/usb/cdns3/cdnsp-ring.c
+@@ -2123,19 +2123,6 @@ int cdnsp_cmd_stop_ep(struct cdnsp_device *pdev, struct cdnsp_ep *pep)
+ 	return ret;
+ }
+ 
+-int cdnsp_cmd_flush_ep(struct cdnsp_device *pdev, struct cdnsp_ep *pep)
+-{
+-	int ret;
+-
+-	cdnsp_queue_flush_endpoint(pdev, pep->idx);
+-	cdnsp_ring_cmd_db(pdev);
+-	ret = cdnsp_wait_for_cmd_compl(pdev);
+-
+-	trace_cdnsp_handle_cmd_flush_ep(pep->out_ctx);
+-
+-	return ret;
+-}
+-
+ /*
+  * The transfer burst count field of the isochronous TRB defines the number of
+  * bursts that are required to move all packets in this TD. Only SuperSpeed
+@@ -2465,17 +2452,6 @@ void cdnsp_queue_halt_endpoint(struct cdnsp_device *pdev, unsigned int ep_index)
+ 			    EP_ID_FOR_TRB(ep_index));
+ }
+ 
+-/*
+- * Queue a flush endpoint request on the command ring.
+- */
+-void  cdnsp_queue_flush_endpoint(struct cdnsp_device *pdev,
+-				 unsigned int ep_index)
+-{
+-	cdnsp_queue_command(pdev, 0, 0, 0, TRB_TYPE(TRB_FLUSH_ENDPOINT) |
+-			    SLOT_ID_FOR_TRB(pdev->slot_id) |
+-			    EP_ID_FOR_TRB(ep_index));
+-}
+-
+ void cdnsp_force_header_wakeup(struct cdnsp_device *pdev, int intf_num)
+ {
+ 	u32 lo, mid;
+-- 
+2.25.1
 
-Could you move the comment above the condition and remove the extra
-braces here.
->+		uvcg_video_pump(video);
->+	}
->+}
->+
-> /*
->  * uvcg_video_pump - Pump video data into the USB requests
->  *
->  * This function fills the available USB requests (listed in req_free) wi=
-th
->  * video data from the queued buffers.
->  */
->-static void uvcg_video_pump(struct work_struct *work)
->+static void uvcg_video_pump(struct uvc_video *video)
-> {
->-	struct uvc_video *video =3D container_of(work, struct uvc_video, pump);
-> 	struct uvc_video_queue *queue =3D &video->queue;
->-	/* video->max_payload_size is only set when using bulk transfer */
->-	bool is_bulk =3D video->max_payload_size;
-> 	struct usb_request *req =3D NULL;
->-	struct uvc_buffer *buf;
->+	struct uvc_request *ureq =3D NULL;
->+	struct uvc_buffer *buf =3D NULL, *last_buf =3D NULL;
-> 	unsigned long flags;
-> 	bool buf_done;
-> 	int ret;
->@@ -455,7 +471,8 @@ static void uvcg_video_pump(struct work_struct *work)
-> 		if (buf !=3D NULL) {
-> 			video->encode(req, video, buf);
-> 			buf_done =3D buf->state =3D=3D UVC_BUF_STATE_DONE;
->-		} else if (!(queue->flags & UVC_QUEUE_DISCONNECTED) && !is_bulk) {
->+		} else if (!(queue->flags & UVC_QUEUE_DISCONNECTED) &&
->+				!video->is_bulk) {
-> 			/*
-> 			 * No video buffer available; the queue is still connected and
-> 			 * we're transferring over ISOC. Queue a 0 length request to
->@@ -500,18 +517,30 @@ static void uvcg_video_pump(struct work_struct *work)
-> 			req->no_interrupt =3D 1;
-> 		}
->
->-		/* Queue the USB request */
->-		ret =3D uvcg_video_ep_queue(video, req);
-> 		spin_unlock_irqrestore(&queue->irqlock, flags);
->-
->+		spin_lock_irqsave(&video->req_lock, flags);
->+		if (video->is_enabled) {
->+			/* Queue the USB request */
->+			ret =3D uvcg_video_ep_queue(video, req);
->+			/* Endpoint now owns the request */
->+			req =3D NULL;
->+			video->req_int_count++;
->+		} else {
->+			ret =3D  -ENODEV;
->+			ureq =3D req->context;
->+			last_buf =3D ureq->last_buf;
->+			ureq->last_buf =3D NULL;
->+		}
->+		spin_unlock_irqrestore(&video->req_lock, flags);
-> 		if (ret < 0) {
->+			if (last_buf !=3D NULL) {
->+				// Return the buffer to the queue in the case the
->+				// request was not queued to the ep.
->+				uvcg_complete_buffer(&video->queue, last_buf);
->+			}
-> 			uvcg_queue_cancel(queue, 0);
-> 			break;
-> 		}
->-
->-		/* Endpoint now owns the request */
->-		req =3D NULL;
->-		video->req_int_count++;
-> 	}
->
-> 	if (!req)
->@@ -556,7 +585,6 @@ uvcg_video_disable(struct uvc_video *video)
-> 	}
-> 	spin_unlock_irqrestore(&video->req_lock, flags);
->
->-	cancel_work_sync(&video->pump);
-> 	uvcg_queue_cancel(&video->queue, 0);
->
-> 	spin_lock_irqsave(&video->req_lock, flags);
->@@ -626,14 +654,16 @@ int uvcg_video_enable(struct uvc_video *video, int e=
-nable)
-> 	if (video->max_payload_size) {
-> 		video->encode =3D uvc_video_encode_bulk;
-> 		video->payload_size =3D 0;
->-	} else
->+		video->is_bulk =3D true;
->+	} else {
-> 		video->encode =3D video->queue.use_sg ?
-> 			uvc_video_encode_isoc_sg : uvc_video_encode_isoc;
->+		video->is_bulk =3D false;
->+	}
->
-> 	video->req_int_count =3D 0;
->
->-	queue_work(video->async_wq, &video->pump);
->-
->+	uvcg_video_pump(video);
-> 	return ret;
-> }
->
->@@ -646,12 +676,6 @@ int uvcg_video_init(struct uvc_video *video, struct u=
-vc_device *uvc)
-> 	INIT_LIST_HEAD(&video->ureqs);
-> 	INIT_LIST_HEAD(&video->req_free);
-> 	spin_lock_init(&video->req_lock);
->-	INIT_WORK(&video->pump, uvcg_video_pump);
->-
->-	/* Allocate a work queue for asynchronous video pump handler. */
->-	video->async_wq =3D alloc_workqueue("uvcgadget", WQ_UNBOUND | WQ_HIGHPRI=
-, 0);
->-	if (!video->async_wq)
->-		return -EINVAL;
->
-> 	video->uvc =3D uvc;
-> 	video->fcc =3D V4L2_PIX_FMT_YUYV;
->diff --git a/drivers/usb/gadget/function/uvc_video.h b/drivers/usb/gadget/=
-function/uvc_video.h
->index 03adeefa343b..29c6b9a2e9c3 100644
->--- a/drivers/usb/gadget/function/uvc_video.h
->+++ b/drivers/usb/gadget/function/uvc_video.h
->@@ -18,4 +18,6 @@ int uvcg_video_enable(struct uvc_video *video, int enabl=
-e);
->
-> int uvcg_video_init(struct uvc_video *video, struct uvc_device *uvc);
->
->+void uvcg_video_pump_qbuf(struct uvc_video *video);
->+
-> #endif /* __UVC_VIDEO_H__ */
->--=20
->
->
-
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
---uhOVRvhjA5b0Dp6s
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmU6DiYACgkQC+njFXoe
-LGTGMxAAiC1uvBAL3xTD0NWTvDzVoUO2TYgSy4AaNnAI4eOffrBQJgtCUdPhxY98
-7gXf+n5jyTpHEgsLegOqPomtaL/FKJDA/AMmnMl2tuXty0118jm92MrLKlxgqsv7
-eXaaLMtJ+XPaIh2d4/JPaEO/BCcLHG/APDLDRJwW2Xp5YiehwRBDvLnrBKigO0uU
-CZS64IRN0jBLqakAYQcJoblUzIN6ZWnDhSGzpJU2P3MJ9ApEwLgjvjB7WLikysT4
-G5IGPVtWkPitah9ek8X3WrV9XszqgoSYI8yBpuYEUlMvvUAd8t3g7zSBTYvnuDml
-TwL4C62TAANKBGlvwRNTWzGpaiibB5mo4WSxfUp/nZ64MwBYJqMu+yo2/wVIAL/R
-61oagXpDe47tffyhELz0W+vulMESlYW3eJLUQ3B3GX3SLT2qsqd62ZgXW8X32dWF
-/7O72Z7xuzJcq4Hy4EFaEkx6SFPmRfdalzEelrLlGTlFdKlNE0IUsPKMHvSykKy9
-YOsx7jia3ctCfgaUmf6Jxqfd20yLdE4OP5mJzwF2Bbfi+PujPcDjxYLu+ZjylNUY
-Bmfj44KkutQc93ZABC8HtRgEMqBBmYDAitf9a4kEWhu2nYpfbFvu2o8VAFjtSM+x
-azukmByTA5Gd4LHj5G00O/tEnCMPtfiZ26elDr5FcN+bLWaNRxU=
-=NWOI
------END PGP SIGNATURE-----
-
---uhOVRvhjA5b0Dp6s--
 
