@@ -1,401 +1,665 @@
-Return-Path: <linux-usb+bounces-2210-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2211-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 305E47D8076
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 12:16:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E72CC7D8079
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 12:16:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D982B281AC3
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 10:16:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9BCE3281F2B
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 10:16:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 086442D040;
-	Thu, 26 Oct 2023 10:16:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1B522D043;
+	Thu, 26 Oct 2023 10:16:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M8AphY4x"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DC7A1A281
-	for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 10:16:06 +0000 (UTC)
-Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ADAD199;
-	Thu, 26 Oct 2023 03:16:00 -0700 (PDT)
-Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
-	by hi1smtp01.de.adit-jv.com (Postfix) with ESMTP id BA8B652050D;
-	Thu, 26 Oct 2023 12:15:58 +0200 (CEST)
-Received: from vmlxhi-118.adit-jv.com (10.72.93.77) by hi2exch02.adit-jv.com
- (10.72.92.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.34; Thu, 26 Oct
- 2023 12:15:58 +0200
-From: Hardik Gajjar <hgajjar@de.adit-jv.com>
-To: <gregkh@linuxfoundation.org>, <stern@rowland.harvard.edu>,
-	<mathias.nyman@intel.com>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<erosca@de.adit-jv.com>, <hgajjar@de.adit-jv.com>
-Subject: [PATCH v6] usb: Reduce the 'SET_ADDRESS' request timeout with a new quirk
-Date: Thu, 26 Oct 2023 12:15:51 +0200
-Message-ID: <20231026101551.36551-1-hgajjar@de.adit-jv.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20231025164019.GA121292@vmlxhi-118.adit-jv.com>
-References: <20231025164019.GA121292@vmlxhi-118.adit-jv.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CECBC1A281
+	for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 10:16:34 +0000 (UTC)
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31FCC19B;
+	Thu, 26 Oct 2023 03:16:31 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-99c3d3c3db9so115090866b.3;
+        Thu, 26 Oct 2023 03:16:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1698315389; x=1698920189; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AkjuTFfoLx1JL94j6ELO8jS7ybJITpaFenCgMdUY8TY=;
+        b=M8AphY4xRbknxlDkJ1B9HjJPF8qRsflCxzyanZTQ8mqjsRgB5baNL6JdP1wkZVjb5Z
+         3AwDT1qrjMu80EniA6SdPKn4XBP5WwkPI1hb1BXYGOg3sHJDpxuJ10W2+RvWPlHibI6m
+         OKnrQg+DBFnp+Ekvd2QYlJXlyEhZGlsN+MaZ/AII0mfWZVx8qus5ujnWM2FgEJbta+w7
+         aiGKuxyXSCwyAskx71oQ3nPDZhkn39g+Bl/9PMJ9g7Q6WnaOPFTTrKaqHmfCoR6eWPSr
+         nLf6+kvAn0TGXbX0/NzRUM93VbYbJ/fL8150dm/UCX426Ecd8dA8AyzOWk/yZb/kj475
+         Rc8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698315389; x=1698920189;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AkjuTFfoLx1JL94j6ELO8jS7ybJITpaFenCgMdUY8TY=;
+        b=EvBINlC6NsiDkNff/7Zno6GoM6gPHtVLMTdNvHC8Tb2QvhrsGwBUmH9N9WLlIlJp0y
+         1Y1kUiPImQTNI3QChhwZs8FI34sjx01kZoCwqIoUjZ7zROCqVcv+83r+8JhV2dG7Rtjw
+         OZHJqSaJ8p0O7ZODFHsg4/AKyz4VDLmSXIQSBMhn/EwDfkrJJgZFo+v+XcgUARE77Y6+
+         jFFbN42deneyTGyMY+a/Sgb4DvgS9UB3d50fblaP3b+4ghqrCtZWS/iETC9kWOyIebBh
+         C0kgn3UdNSu7PQIfFocKUKymYo6jlaKovFeC/BkMsbiU5W0EVcmZ/6Zgl6kRvzKfSePI
+         YcCA==
+X-Gm-Message-State: AOJu0YwQkSlnpfXhQC1rL/DzkzWWe/13bYAS6smS1s1S0vF3spgaHgTM
+	ojc3c4cdO8TZyUHBrh8MBwrcT9PGHdQ=
+X-Google-Smtp-Source: AGHT+IF8rKJ3bbEo+N6/krUZsj49dIDGK2gh1t8D7QgBv5d1Priw3ozSCqZU3Nuo4wHLHbShumun7w==
+X-Received: by 2002:a17:907:72c5:b0:9ae:6a51:87c3 with SMTP id du5-20020a17090772c500b009ae6a5187c3mr11799065ejc.9.1698315389315;
+        Thu, 26 Oct 2023 03:16:29 -0700 (PDT)
+Received: from sauvignon.fi.muni.cz ([2001:718:801:22c:bdcb:518:be8f:6a76])
+        by smtp.gmail.com with ESMTPSA id ze15-20020a170906ef8f00b009bf7a4d591bsm11289653ejb.45.2023.10.26.03.16.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Oct 2023 03:16:28 -0700 (PDT)
+From: Milan Broz <gmazyland@gmail.com>
+To: linux-usb@vger.kernel.org
+Cc: usb-storage@lists.one-eyed-alien.net,
+	linux-scsi@vger.kernel.org,
+	stern@rowland.harvard.edu,
+	gregkh@linuxfoundation.org,
+	oneukum@suse.com,
+	Milan Broz <gmazyland@gmail.com>
+Subject: [PATCH v3] usb-storage,uas: use host helper to generate driver info
+Date: Thu, 26 Oct 2023 12:16:15 +0200
+Message-ID: <20231026101615.395113-1-gmazyland@gmail.com>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20231016072604.40179-5-gmazyland@gmail.com>
+References: <20231016072604.40179-5-gmazyland@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.72.93.77]
-X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
- hi2exch02.adit-jv.com (10.72.92.28)
+Content-Transfer-Encoding: 8bit
 
-This patch introduces a new USB quirk,
-USB_QUIRK_SHORT_SET_ADDRESS_REQ_TIMEOUT, which modifies the timeout value
-for the 'SET_ADDRESS' request. The standard timeout for USB request/command
-is 5000 ms, as recommended in the USB 3.2 specification (section 9.2.6.1).
+The USB mass storage quirks flags can be stored in driver_info in
+a 32-bit integer (unsigned long on 32-bit platforms).
+As this attribute cannot be enlarged, we need to use some form
+of translation of 64-bit quirk bits.
 
-However, certain scenarios, such as connecting devices through an APTIV
-hub, can lead to timeout errors when the device enumerates as full speed
-initially and later switches to high speed during chirp negotiation.
+This problem was discussed on the USB list
+https://lore.kernel.org/linux-usb/f9e8acb5-32d5-4a30-859f-d4336a86b31a@gmail.com/
 
-In such cases, USB analyzer logs reveal that the bus suspends for
-5 seconds due to incorrect chirp parsing and resumes only after two
-consecutive timeout errors trigger a hub driver reset.
+The initial solution to use a static array extensively increased the size
+of the kernel module, so I decided to try the second suggested solution:
+generate a table by host-compiled program and use bit 31 to indicate
+that the value is an index, not the actual value.
 
-Packet(54) Dir(?) Full Speed J(997.100 us) Idle(  2.850 us)
-_______| Time Stamp(28 . 105 910 682)
-_______|_____________________________________________________________Ch0
-Packet(55) Dir(?) Full Speed J(997.118 us) Idle(  2.850 us)
-_______| Time Stamp(28 . 106 910 632)
-_______|_____________________________________________________________Ch0
-Packet(56) Dir(?) Full Speed J(399.650 us) Idle(222.582 us)
-_______| Time Stamp(28 . 107 910 600)
-_______|_____________________________________________________________Ch0
-Packet(57) Dir Chirp J( 23.955 ms) Idle(115.169 ms)
-_______| Time Stamp(28 . 108 532 832)
-_______|_____________________________________________________________Ch0
-Packet(58) Dir(?) Full Speed J (Suspend)( 5.347 sec) Idle(  5.366 us)
-_______| Time Stamp(28 . 247 657 600)
-_______|_____________________________________________________________Ch0
+This patch adds a host-compiled program that processes unusual_devs.h
+(and unusual_uas.h) and generates files usb-ids.c and usb-ids-uas.c
+(for pre-processed USB device table with 32-bit device info).
+These files also contain a generated translation table for driver_info
+to 64-bit values.
 
-This 5-second delay in device enumeration is undesirable, particularly
-in automotive applications where quick enumeration is crucial
-(ideally within 3 seconds).
+The translation function is used only in usb-storage and uas modules; all
+other USB storage modules store flags directly, using only 32-bit flags.
 
-The newly introduced quirks provide the flexibility to align with a
-3-second time limit, as required in specific contexts like automotive
-applications.
+For 64-bit platforms, where unsigned long is 64-bit, we do not need to
+convert quirk flags to 32-bit index; the translation function there uses
+flags directly.
 
-By reducing the 'SET_ADDRESS' request timeout to 500 ms, the
-system can respond more swiftly to errors, initiate rapid recovery, and
-ensure efficient device enumeration. This change is vital for scenarios
-where rapid smartphone enumeration and screen projection are essential.
-
-To use the quirk, please write "vendor_id:product_id:p" to
-/sys/bus/usb/drivers/hub/module/parameter/quirks
-
-For example,
-echo "0x2c48:0x0132:p" > /sys/bus/usb/drivers/hub/module/parameters/quirks"
-
-Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
+Signed-off-by: Milan Broz <gmazyland@gmail.com>
 ---
-changes since version 1:
-	- implement quirk instead of new API in xhci driver
 
-changes since version 2:
-	- Add documentation for the new quirk.
-	- Define the timeout unit in milliseconds in variable names and function arguments.
-	- Change the xHCI command timeout from HZ (jiffies) to milliseconds.
-	- Add APTIV usb hub vendor and product ID in device quirk list
-	- Adding some other comments for clarity
+Changes from v2
+ - Rebased to usb-testing tree
+ - Include changes from Alan Stern and Greg KH reviews (thanks!)
+ - Remove FORCE from Makefile add explicit dependence on unusual*.h headers
+ - Avoid use of #ifdef (mkflags.c need -D CONFIG_64BIT=X flag now)
+ - Use drv_info in functions and variable names (instead of di)
+ - Use wrapper for usb_stor_probe1(), this simplifies the previous separate
+   patch (no need to touch other drivers) so it can be merged here directly
+ - Merge 64bit optimization to this patch too
 
-Changes since version 3:
-	- Add some comments for clarity.
-	- Minor indentation and sequence change.
+Changes from v1
+ - Separate flags generation from OPAL command patchset
+   (it means there is currently no quirk flag that requires this patch yet)
 
-Changes since version 4:
-	- Changing the USB specification reference to version 3.2.
-    	- Enhancing the commit message to provide more details about the technical issue.
-    	- Improving the structure of function comments.
+ drivers/usb/storage/Makefile       |  32 ++++
+ drivers/usb/storage/mkflags.c      | 233 +++++++++++++++++++++++++++++
+ drivers/usb/storage/uas-detect.h   |   6 +-
+ drivers/usb/storage/uas.c          |  23 +--
+ drivers/usb/storage/usb-ids.h      |  37 +++++
+ drivers/usb/storage/usb.c          |  32 +++-
+ drivers/usb/storage/usual-tables.c |  23 +--
+ 7 files changed, 339 insertions(+), 47 deletions(-)
+ create mode 100644 drivers/usb/storage/mkflags.c
+ create mode 100644 drivers/usb/storage/usb-ids.h
 
-Changes since version 5:
-	- Changed the terminology in USB core driver files from 'command' to 'request'
-	  as it is more commonly used. 
-	  It's important to note that USB specifications indicate these terms are interchangeable.
-	  For example, USB spec 3.2, section 9.2.6.1, uses the term 'command' in its text
-	  "USB sets an upper limit of 5 seconds for any command to be processed. "
-	- Change set_address to SET_ADDRESS.
----
- .../admin-guide/kernel-parameters.txt         |  3 +++
- drivers/usb/core/hub.c                        | 22 ++++++++++++++++--
- drivers/usb/core/quirks.c                     |  6 +++++
- drivers/usb/host/xhci-mem.c                   |  2 ++
- drivers/usb/host/xhci-ring.c                  | 11 +++++----
- drivers/usb/host/xhci.c                       | 23 +++++++++++++------
- drivers/usb/host/xhci.h                       |  9 ++++++--
- include/linux/usb/hcd.h                       |  5 ++--
- include/linux/usb/quirks.h                    |  3 +++
- 9 files changed, 66 insertions(+), 18 deletions(-)
-
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 0a1731a0f0ef..4aa3723d2eaf 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -6817,6 +6817,9 @@
- 					pause after every control message);
- 				o = USB_QUIRK_HUB_SLOW_RESET (Hub needs extra
- 					delay after resetting its port);
-+				p = USB_QUIRK_SHORT_SET_ADDRESS_REQ_TIMEOUT (Reduce
-+					timeout of the SET_ADDRESS request from
-+					5000 ms to 500 ms)
- 			Example: quirks=0781:5580:bk,0a5c:5834:gij
- 
- 	usbhid.mousepoll=
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 3c54b218301c..98db92af2cce 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -54,6 +54,19 @@
- #define USB_TP_TRANSMISSION_DELAY_MAX	65535	/* ns */
- #define USB_PING_RESPONSE_TIME		400	/* ns */
- 
-+/*
-+ * USB 3.2 spec, section 9.2.6.1
-+ * USB sets an upper limit of 5000 ms for any command/request
-+ * to be processed.
-+ */
-+#define USB_DEFAULT_REQUEST_TIMEOUT_MS	5000 /* ms */
+diff --git a/drivers/usb/storage/Makefile b/drivers/usb/storage/Makefile
+index 46635fa4a340..9c09d83769e3 100644
+--- a/drivers/usb/storage/Makefile
++++ b/drivers/usb/storage/Makefile
+@@ -45,3 +45,35 @@ ums-realtek-y		:= realtek_cr.o
+ ums-sddr09-y		:= sddr09.o
+ ums-sddr55-y		:= sddr55.o
+ ums-usbat-y		:= shuttle_usbat.o
++
++# The mkflags host-compiled generator produces usb-ids.c (usb-storage)
++# and usb-ids-uas.c (uas) with USB device tables.
++# These tables include pre-computed 32-bit values, as USB driver_info
++# (where the value is stored) can be only 32-bit.
++# The most significant bit means it is index to 64-bit pre-computed table
++# generated by mkflags host-compiled program.
++# Currently used only by mass-storage and uas driver.
++
++$(obj)/usual-tables.o: $(obj)/usb-ids.c
++$(obj)/uas.o: $(obj)/usb-ids-uas.c
++clean-files		:= usb-ids.c usb-ids-uas.c
++HOSTCFLAGS_mkflags.o	:= -I $(srctree)/include/
++ifdef CONFIG_64BIT
++HOSTCFLAGS_mkflags.o	+= -D CONFIG_64BIT=1
++else
++HOSTCFLAGS_mkflags.o	+= -D CONFIG_64BIT=0
++endif
++hostprogs		+= mkflags
++
++quiet_cmd_mkflag_storage = FLAGS   $@
++cmd_mkflag_storage = $(obj)/mkflags storage > $@
++
++quiet_cmd_mkflag_uas = FLAGS   $@
++cmd_mkflag_uas = $(obj)/mkflags uas > $@
++
++# mkflags always need to include unusual_devs.h and unusual_uas.h
++$(obj)/usb-ids.c: $(obj)/mkflags $(obj)/unusual_devs.h $(obj)/unusual_uas.h
++	$(call cmd,mkflag_storage)
++
++$(obj)/usb-ids-uas.c: $(obj)/mkflags $(obj)/unusual_devs.h $(obj)/unusual_uas.h
++	$(call cmd,mkflag_uas)
+diff --git a/drivers/usb/storage/mkflags.c b/drivers/usb/storage/mkflags.c
+new file mode 100644
+index 000000000000..e9c7eb524999
+--- /dev/null
++++ b/drivers/usb/storage/mkflags.c
+@@ -0,0 +1,233 @@
++/* SPDX-License-Identifier: GPL-2.0+ */
 +
 +/*
-+ * The SET_ADDRESS request timeout will be 500 ms when
-+ * USB_QUIRK_SHORT_SET_ADDRESS_REQ_TIMEOUT enable.
-+ */
-+#define USB_SHORT_SET_ADDRESS_REQ_TIMEOUT_MS	500  /* ms */
-+
- /* Protect struct usb_device->state and ->children members
-  * Note: Both are also protected by ->dev.sem, except that ->state can
-  * change to USB_STATE_NOTATTACHED even when the semaphore isn't held. */
-@@ -4626,7 +4639,12 @@ EXPORT_SYMBOL_GPL(usb_ep0_reinit);
- static int hub_set_address(struct usb_device *udev, int devnum)
- {
- 	int retval;
-+	unsigned int timeout_ms = USB_DEFAULT_REQUEST_TIMEOUT_MS;
- 	struct usb_hcd *hcd = bus_to_hcd(udev->bus);
-+	struct usb_hub *hub = usb_hub_to_struct_hub(udev->parent);
-+
-+	if (hub->hdev->quirks & USB_QUIRK_SHORT_SET_ADDRESS_REQ_TIMEOUT)
-+		timeout_ms = USB_SHORT_SET_ADDRESS_REQ_TIMEOUT_MS;
- 
- 	/*
- 	 * The host controller will choose the device address,
-@@ -4639,11 +4657,11 @@ static int hub_set_address(struct usb_device *udev, int devnum)
- 	if (udev->state != USB_STATE_DEFAULT)
- 		return -EINVAL;
- 	if (hcd->driver->address_device)
--		retval = hcd->driver->address_device(hcd, udev);
-+		retval = hcd->driver->address_device(hcd, udev, timeout_ms);
- 	else
- 		retval = usb_control_msg(udev, usb_sndaddr0pipe(),
- 				USB_REQ_SET_ADDRESS, 0, devnum, 0,
--				NULL, 0, USB_CTRL_SET_TIMEOUT);
-+				NULL, 0, timeout_ms);
- 	if (retval == 0) {
- 		update_devnum(udev, devnum);
- 		/* Device now using proper address. */
-diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-index 15e9bd180a1d..815e71f8ec59 100644
---- a/drivers/usb/core/quirks.c
-+++ b/drivers/usb/core/quirks.c
-@@ -138,6 +138,9 @@ static int quirks_param_set(const char *value, const struct kernel_param *kp)
- 			case 'o':
- 				flags |= USB_QUIRK_HUB_SLOW_RESET;
- 				break;
-+			case 'p':
-+				flags |= USB_QUIRK_SHORT_SET_ADDRESS_REQ_TIMEOUT;
-+				break;
- 			/* Ignore unrecognized flag characters */
- 			}
- 		}
-@@ -527,6 +530,9 @@ static const struct usb_device_id usb_quirk_list[] = {
- 
- 	{ USB_DEVICE(0x2386, 0x350e), .driver_info = USB_QUIRK_NO_LPM },
- 
-+	/* APTIV AUTOMOTIVE HUB */
-+	{ USB_DEVICE(0x2c48, 0x0132), .driver_info = USB_QUIRK_SHORT_SET_ADDRESS_REQ_TIMEOUT },
-+
- 	/* DJI CineSSD */
- 	{ USB_DEVICE(0x2ca3, 0x0031), .driver_info = USB_QUIRK_NO_LPM },
- 
-diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index 8714ab5bf04d..4a286136d1a8 100644
---- a/drivers/usb/host/xhci-mem.c
-+++ b/drivers/usb/host/xhci-mem.c
-@@ -1729,6 +1729,8 @@ struct xhci_command *xhci_alloc_command(struct xhci_hcd *xhci,
- 	}
- 
- 	command->status = 0;
-+	/* set default timeout to 5000 ms */
-+	command->timeout_ms = XHCI_CMD_DEFAULT_TIMEOUT_MS;
- 	INIT_LIST_HEAD(&command->cmd_list);
- 	return command;
- }
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 1dde53f6eb31..8f36c2914938 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -366,9 +366,10 @@ void xhci_ring_cmd_db(struct xhci_hcd *xhci)
- 	readl(&xhci->dba->doorbell[0]);
- }
- 
--static bool xhci_mod_cmd_timer(struct xhci_hcd *xhci, unsigned long delay)
-+static bool xhci_mod_cmd_timer(struct xhci_hcd *xhci)
- {
--	return mod_delayed_work(system_wq, &xhci->cmd_timer, delay);
-+	return mod_delayed_work(system_wq, &xhci->cmd_timer,
-+			msecs_to_jiffies(xhci->current_cmd->timeout_ms));
- }
- 
- static struct xhci_command *xhci_next_queued_cmd(struct xhci_hcd *xhci)
-@@ -412,7 +413,7 @@ static void xhci_handle_stopped_cmd_ring(struct xhci_hcd *xhci,
- 	if ((xhci->cmd_ring->dequeue != xhci->cmd_ring->enqueue) &&
- 	    !(xhci->xhc_state & XHCI_STATE_DYING)) {
- 		xhci->current_cmd = cur_cmd;
--		xhci_mod_cmd_timer(xhci, XHCI_CMD_DEFAULT_TIMEOUT);
-+		xhci_mod_cmd_timer(xhci);
- 		xhci_ring_cmd_db(xhci);
- 	}
- }
-@@ -1786,7 +1787,7 @@ static void handle_cmd_completion(struct xhci_hcd *xhci,
- 	if (!list_is_singular(&xhci->cmd_list)) {
- 		xhci->current_cmd = list_first_entry(&cmd->cmd_list,
- 						struct xhci_command, cmd_list);
--		xhci_mod_cmd_timer(xhci, XHCI_CMD_DEFAULT_TIMEOUT);
-+		xhci_mod_cmd_timer(xhci);
- 	} else if (xhci->current_cmd == cmd) {
- 		xhci->current_cmd = NULL;
- 	}
-@@ -4301,7 +4302,7 @@ static int queue_command(struct xhci_hcd *xhci, struct xhci_command *cmd,
- 	/* if there are no other commands queued we start the timeout timer */
- 	if (list_empty(&xhci->cmd_list)) {
- 		xhci->current_cmd = cmd;
--		xhci_mod_cmd_timer(xhci, XHCI_CMD_DEFAULT_TIMEOUT);
-+		xhci_mod_cmd_timer(xhci);
- 	}
- 
- 	list_add_tail(&cmd->cmd_list, &xhci->cmd_list);
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index e1b1b64a0723..d856c4717ca9 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -3997,12 +3997,18 @@ int xhci_alloc_dev(struct usb_hcd *hcd, struct usb_device *udev)
- 	return 0;
- }
- 
--/*
-- * Issue an Address Device command and optionally send a corresponding
-- * SetAddress request to the device.
-+/**
-+ * xhci_setup_device - issues an Address Device command to assign a unique
-+ *			USB bus address.
-+ * @hcd: USB host controller data structure.
-+ * @udev: USB dev structure representing the connected device.
-+ * @setup: Enum specifying setup mode: address only or with context.
-+ * @timeout_ms: Max wait time (ms) for the command operation to complete.
++ * This is host-compiled generator for usb-ids.c (usb-storage)
++ * and usb-ids-uas.c (uas).
 + *
-+ * Return: 0 if successful; otherwise, negative error code.
-  */
- static int xhci_setup_device(struct usb_hcd *hcd, struct usb_device *udev,
--			     enum xhci_setup_dev setup)
-+			     enum xhci_setup_dev setup, unsigned int timeout_ms)
++ * Generated files contain pre-computed 32-bit values, as USB
++ * driver_info (where the value is stored) can be only 32-bit.
++ * The most significant bit means that it is index to 64-bit
++ * pre-computed table named usb_stor_drv_info_u64_table with size
++ * stored in usb_stor_drv_info_u64_table_size (for sanity check).
++ *
++ * Note that usb-storage driver contains also UAS devices, while UAS
++ * driver contains only UAS entries (so there can be duplicates).
++ */
++
++#include <stdio.h>
++#include <string.h>
++
++/*
++ * Cannot use userspace <inttypes.h> as code below
++ * processes internal kernel headers
++ */
++#include <linux/types.h>
++
++/*
++ * Silence warning for definitions in headers we do not use
++ */
++struct usb_device_id {};
++struct usb_interface;
++
++#include <linux/usb_usual.h>
++
++typedef enum { TYPE_DEVICE_STORAGE, TYPE_DEVICE_UAS, TYPE_CLASS } dev_type;
++typedef enum { FLAGS_NOT_SET, FLAGS_SET, FLAGS_DUPLICATE } dev_flags_set;
++#define FLAGS_END (uint64_t)-1
++
++struct unusual_dev_entry {
++	dev_type type;
++
++	/*interface */
++	uint8_t bDeviceSubClass;
++	uint8_t bDeviceProtocol;
++
++	/* device */
++	uint16_t idVendor;
++	uint16_t idProduct;
++	uint16_t bcdDevice_lo;
++	uint16_t bcdDevice_hi;
++
++	uint64_t flags;
++	dev_flags_set set;
++	unsigned int idx;
++};
++
++static struct unusual_dev_entry unusual_dev_entries[] = {
++#define USUAL_DEV(useProto, useTrans) \
++{ TYPE_CLASS, useProto, useTrans, 0, 0, 0, 0, 0, FLAGS_NOT_SET, 0 }
++
++#define COMPLIANT_DEV  UNUSUAL_DEV
++#define IS_ENABLED(x) 0
++
++/* usb-storage */
++#define UNUSUAL_DEV(id_vendor, id_product, bcdDeviceMin, bcdDeviceMax, \
++		    vendorName, productName, useProtocol, useTransport, \
++		    initFunction, flags) \
++{ TYPE_DEVICE_STORAGE, 0, 0, id_vendor, id_product, bcdDeviceMin, bcdDeviceMax, flags, FLAGS_NOT_SET, 0 }
++#include "unusual_devs.h"
++#undef UNUSUAL_DEV
++
++/* uas */
++#define UNUSUAL_DEV(id_vendor, id_product, bcdDeviceMin, bcdDeviceMax, \
++		    vendorName, productName, useProtocol, useTransport, \
++		    initFunction, flags) \
++{ TYPE_DEVICE_UAS, 0, 0, id_vendor, id_product, bcdDeviceMin, bcdDeviceMax, flags, FLAGS_NOT_SET, 0 }
++#include "unusual_uas.h"
++#undef UNUSUAL_DEV
++
++/* Terminating entry */
++{ .flags = FLAGS_END }
++};
++#undef USUAL_DEV
++#undef COMPLIANT_DEV
++#undef IS_ENABLED
++
++/* Highest bit indicates it is index to usb_stor_drv_info_u64_table */
++#define HI32 (uint32_t)(1UL << 31)
++
++static uint64_t get_driver_info(uint64_t flags, unsigned int idx)
++{
++	if (CONFIG_64BIT)
++		return flags;
++
++	if (flags < HI32)
++		return flags;
++
++	/* Use index that will be processed in usb_stor_drv_info_to_flags */
++	return HI32 + idx;
++}
++
++static void print_class(uint8_t bDeviceSubClass, uint8_t bDeviceProtocol)
++{
++	printf("\t{ .match_flags = USB_DEVICE_ID_MATCH_INT_INFO, ");
++	printf(".bInterfaceClass = USB_CLASS_MASS_STORAGE, ");
++	printf(".bInterfaceSubClass = 0x%x, .bInterfaceProtocol = 0x%x },\n",
++		bDeviceSubClass, bDeviceProtocol);
++}
++static void print_type(dev_type type)
++{
++	for (int i = 0; unusual_dev_entries[i].flags != FLAGS_END; i++) {
++		if (unusual_dev_entries[i].type != type)
++			continue;
++
++		if (type == TYPE_DEVICE_STORAGE || type == TYPE_DEVICE_UAS) {
++			printf("\t{ .match_flags = USB_DEVICE_ID_MATCH_DEVICE_AND_VERSION, ");
++			printf(".idVendor = 0x%04x, .idProduct =0x%04x, "
++				".bcdDevice_lo = 0x%04x, .bcdDevice_hi = 0x%04x, .driver_info = 0x%llx },\n",
++				unusual_dev_entries[i].idVendor, unusual_dev_entries[i].idProduct,
++				unusual_dev_entries[i].bcdDevice_lo, unusual_dev_entries[i].bcdDevice_hi,
++				get_driver_info(unusual_dev_entries[i].flags, unusual_dev_entries[i].idx));
++		} else if (type == TYPE_CLASS)
++			print_class(unusual_dev_entries[i].bDeviceSubClass, unusual_dev_entries[i].bDeviceProtocol);
++	}
++}
++
++static void print_usb_flags(const char *type)
++{
++	int i, count;
++
++	if (CONFIG_64BIT) {
++		printf("const u64 usb_%s_drv_info_u64_table[] = {};\n", type);
++		printf("const unsigned long usb_%s_drv_info_u64_table_size = 0;\n\n", type);
++	} else {
++		printf("const u64 usb_%s_drv_info_u64_table[] = {\n", type);
++		for (i = 0, count = 0; unusual_dev_entries[i].flags != FLAGS_END; i++) {
++			if (unusual_dev_entries[i].set == FLAGS_SET) {
++				printf("\t/* 0x%02x */ 0x%llx,\n", unusual_dev_entries[i].idx, unusual_dev_entries[i].flags);
++				count++;
++			}
++		}
++		printf("};\n\n");
++		printf("const unsigned long usb_%s_drv_info_u64_table_size = %i;\n\n", type, count);
++	}
++}
++
++static void print_usb_storage(void)
++{
++	printf("#include <linux/usb.h>\n\n");
++
++	/* conversion table from 32-bit device_flags to 64-bit flags */
++	print_usb_flags("stor");
++
++	/* usb_storage_usb_ids */
++	printf("const struct usb_device_id usb_storage_usb_ids[] = {\n");
++
++	/* usb-storage driver devices */
++	print_type(TYPE_DEVICE_STORAGE);
++
++	/* uas driver devices */
++	printf("#if IS_ENABLED(CONFIG_USB_UAS)\n");
++	print_type(TYPE_DEVICE_UAS);
++	printf("#endif\n");
++
++	/* transport subclasses */
++	print_type(TYPE_CLASS);
++
++	printf("\t{ } /* Terminating entry */\n};\n");
++	printf("MODULE_DEVICE_TABLE(usb, usb_storage_usb_ids);\n");
++}
++
++static void print_usb_uas(void)
++{
++	printf("#include <linux/usb.h>\n\n");
++
++	/* conversion table from 32-bit device_flags to 64-bit flags */
++	print_usb_flags("uas");
++
++	/* uas_usb_ids */
++	printf("const struct usb_device_id uas_usb_ids[] = {\n");
++
++	/* uas driver devices */
++	print_type(TYPE_DEVICE_UAS);
++
++	/* transport subclasses */
++	print_class(USB_SC_SCSI, USB_PR_BULK);
++	print_class(USB_SC_SCSI, USB_PR_UAS);
++
++	printf("\t{ } /* Terminating entry */\n};\n");
++	printf("MODULE_DEVICE_TABLE(usb, uas_usb_ids);\n");
++}
++
++int main(int argc, char *argv[])
++{
++	int i, j, idx = 0, idx_old, skip = 0;
++
++	if (argc != 2 || (strcmp(argv[1], "storage") && strcmp(argv[1], "uas"))) {
++		printf("Please specify output type: storage or uas.\n");
++		return 1;
++	}
++
++	for (i = 0; unusual_dev_entries[i].flags != FLAGS_END; i++) {
++		if (unusual_dev_entries[i].type == TYPE_CLASS)
++			continue;
++		skip = 0;
++		if (unusual_dev_entries[i].flags >= HI32) {
++			for (j = 0; j < i; j++) {
++				if (unusual_dev_entries[j].flags == unusual_dev_entries[i].flags &&
++				    unusual_dev_entries[j].set == FLAGS_SET) {
++					skip = 1;
++					idx_old = unusual_dev_entries[j].idx;
++					break;
++				}
++			}
++			if (skip) {
++				unusual_dev_entries[i].idx = idx_old;
++				unusual_dev_entries[i].set = FLAGS_DUPLICATE;
++			} else {
++				unusual_dev_entries[i].idx = idx;
++				unusual_dev_entries[i].set = FLAGS_SET;
++				idx++;
++			}
++		}
++	}
++
++	if (!strcmp(argv[1], "storage"))
++		print_usb_storage();
++	else if (!strcmp(argv[1], "uas"))
++		print_usb_uas();
++	else
++		return 1;
++
++	return 0;
++}
+diff --git a/drivers/usb/storage/uas-detect.h b/drivers/usb/storage/uas-detect.h
+index 4d3b49e5b87a..fe904d3072ec 100644
+--- a/drivers/usb/storage/uas-detect.h
++++ b/drivers/usb/storage/uas-detect.h
+@@ -54,12 +54,16 @@ static int uas_find_endpoints(struct usb_host_interface *alt,
+ 
+ static int uas_use_uas_driver(struct usb_interface *intf,
+ 			      const struct usb_device_id *id,
++			      const u64 *drv_info_u64_table,
++			      unsigned long drv_info_u64_table_size,
+ 			      u64 *flags_ret)
  {
- 	const char *act = setup == SETUP_CONTEXT_ONLY ? "context" : "address";
- 	unsigned long flags;
-@@ -4059,6 +4065,7 @@ static int xhci_setup_device(struct usb_hcd *hcd, struct usb_device *udev,
+ 	struct usb_host_endpoint *eps[4] = { };
+ 	struct usb_device *udev = interface_to_usbdev(intf);
+ 	struct usb_hcd *hcd = bus_to_hcd(udev->bus);
+-	u64 flags = id->driver_info;
++	u64 flags = usb_stor_drv_info_to_flags(drv_info_u64_table,
++					       drv_info_u64_table_size,
++					       id->driver_info);
+ 	struct usb_host_interface *alt;
+ 	int r;
+ 
+diff --git a/drivers/usb/storage/uas.c b/drivers/usb/storage/uas.c
+index 696bb0b23599..5b5dc8afda11 100644
+--- a/drivers/usb/storage/uas.c
++++ b/drivers/usb/storage/uas.c
+@@ -26,9 +26,13 @@
+ #include <scsi/scsi_host.h>
+ #include <scsi/scsi_tcq.h>
+ 
++#include "usb-ids.h"
+ #include "uas-detect.h"
+ #include "scsiglue.h"
+ 
++/* The table of devices is pre-generated in usb-ids-uas.c */
++#include "usb-ids-uas.c"
++
+ #define MAX_CMNDS 256
+ 
+ struct uas_dev_info {
+@@ -909,22 +913,6 @@ static const struct scsi_host_template uas_host_template = {
+ 	.cmd_size = sizeof(struct uas_cmd_info),
+ };
+ 
+-#define UNUSUAL_DEV(id_vendor, id_product, bcdDeviceMin, bcdDeviceMax, \
+-		    vendorName, productName, useProtocol, useTransport, \
+-		    initFunction, flags) \
+-{ USB_DEVICE_VER(id_vendor, id_product, bcdDeviceMin, bcdDeviceMax), \
+-	.driver_info = (flags) }
+-
+-static struct usb_device_id uas_usb_ids[] = {
+-#	include "unusual_uas.h"
+-	{ USB_INTERFACE_INFO(USB_CLASS_MASS_STORAGE, USB_SC_SCSI, USB_PR_BULK) },
+-	{ USB_INTERFACE_INFO(USB_CLASS_MASS_STORAGE, USB_SC_SCSI, USB_PR_UAS) },
+-	{ }
+-};
+-MODULE_DEVICE_TABLE(usb, uas_usb_ids);
+-
+-#undef UNUSUAL_DEV
+-
+ static int uas_switch_interface(struct usb_device *udev,
+ 				struct usb_interface *intf)
+ {
+@@ -990,7 +978,8 @@ static int uas_probe(struct usb_interface *intf, const struct usb_device_id *id)
+ 	struct usb_device *udev = interface_to_usbdev(intf);
+ 	u64 dev_flags;
+ 
+-	if (!uas_use_uas_driver(intf, id, &dev_flags))
++	if (!uas_use_uas_driver(intf, id, usb_uas_drv_info_u64_table,
++				usb_uas_drv_info_u64_table_size, &dev_flags))
+ 		return -ENODEV;
+ 
+ 	if (uas_switch_interface(udev, intf))
+diff --git a/drivers/usb/storage/usb-ids.h b/drivers/usb/storage/usb-ids.h
+new file mode 100644
+index 000000000000..d0359c572f33
+--- /dev/null
++++ b/drivers/usb/storage/usb-ids.h
+@@ -0,0 +1,37 @@
++/* SPDX-License-Identifier: GPL-2.0+ */
++
++#ifndef _USB_STOR_IDS_H_
++#define _USB_STOR_IDS_H_
++
++#include <linux/types.h>
++#include <linux/bug.h>
++
++/* Conversion of 32-bit quirks flags for 32-bit platforms */
++extern const unsigned long usb_stor_drv_info_u64_table_size;
++extern const unsigned long usb_uas_drv_info_u64_table_size;
++extern const u64 usb_stor_drv_info_u64_table[];
++extern const u64 usb_uas_drv_info_u64_table[];
++
++static u64 usb_stor_drv_info_to_flags(const u64 *drv_info_u64_table,
++		unsigned long table_size, unsigned long idx)
++{
++#if IS_ENABLED(CONFIG_64BIT)
++	return idx;
++#else
++	u64 flags = 0;
++
++	if (idx < (1UL << 31))
++		return idx;
++
++	idx -= (1UL << 31);
++
++	if (idx < table_size)
++		flags = drv_info_u64_table[idx];
++	else
++		pr_warn_once("usb_stor_drv_info_u64_table not updated");
++
++	return flags;
++#endif
++}
++
++#endif
+diff --git a/drivers/usb/storage/usb.c b/drivers/usb/storage/usb.c
+index d1ad6a2509ab..1e564ea52fc5 100644
+--- a/drivers/usb/storage/usb.c
++++ b/drivers/usb/storage/usb.c
+@@ -56,6 +56,7 @@
+ #include "sierra_ms.h"
+ #include "option_ms.h"
+ 
++#include "usb-ids.h"
+ #if IS_ENABLED(CONFIG_USB_UAS)
+ #include "uas-detect.h"
+ #endif
+@@ -574,7 +575,7 @@ EXPORT_SYMBOL_GPL(usb_stor_adjust_quirks);
+ 
+ /* Get the unusual_devs entries and the string descriptors */
+ static int get_device_info(struct us_data *us, const struct usb_device_id *id,
+-		const struct us_unusual_dev *unusual_dev)
++		const struct us_unusual_dev *unusual_dev, int fflags_use_index)
+ {
+ 	struct usb_device *dev = us->pusb_dev;
+ 	struct usb_interface_descriptor *idesc =
+@@ -589,7 +590,11 @@ static int get_device_info(struct us_data *us, const struct usb_device_id *id,
+ 	us->protocol = (unusual_dev->useTransport == USB_PR_DEVICE) ?
+ 			idesc->bInterfaceProtocol :
+ 			unusual_dev->useTransport;
+-	us->fflags = id->driver_info;
++	if (fflags_use_index)
++		us->fflags = usb_stor_drv_info_to_flags(usb_stor_drv_info_u64_table,
++			usb_stor_drv_info_u64_table_size, id->driver_info);
++	else
++		us->fflags = id->driver_info;
+ 	usb_stor_adjust_quirks(us->pusb_dev, &us->fflags);
+ 
+ 	if (us->fflags & US_FL_IGNORE_DEVICE) {
+@@ -921,11 +926,12 @@ static unsigned int usb_stor_sg_tablesize(struct usb_interface *intf)
+ }
+ 
+ /* First part of general USB mass-storage probing */
+-int usb_stor_probe1(struct us_data **pus,
++static int usb_stor_probe1_fflags(struct us_data **pus,
+ 		struct usb_interface *intf,
+ 		const struct usb_device_id *id,
+ 		const struct us_unusual_dev *unusual_dev,
+-		const struct scsi_host_template *sht)
++		const struct scsi_host_template *sht,
++		int fflags_use_index)
+ {
+ 	struct Scsi_Host *host;
+ 	struct us_data *us;
+@@ -962,7 +968,7 @@ int usb_stor_probe1(struct us_data **pus,
+ 		goto BadDevice;
+ 
+ 	/* Get the unusual_devs entries and the descriptors */
+-	result = get_device_info(us, id, unusual_dev);
++	result = get_device_info(us, id, unusual_dev, fflags_use_index);
+ 	if (result)
+ 		goto BadDevice;
+ 
+@@ -981,6 +987,15 @@ int usb_stor_probe1(struct us_data **pus,
+ 	release_everything(us);
+ 	return result;
+ }
++
++int usb_stor_probe1(struct us_data **pus,
++		struct usb_interface *intf,
++		const struct usb_device_id *id,
++		const struct us_unusual_dev *unusual_dev,
++		const struct scsi_host_template *sht)
++{
++	return usb_stor_probe1_fflags(pus, intf, id, unusual_dev, sht, 0);
++}
+ EXPORT_SYMBOL_GPL(usb_stor_probe1);
+ 
+ /* Second part of general USB mass-storage probing */
+@@ -1090,7 +1105,8 @@ static int storage_probe(struct usb_interface *intf,
+ 
+ 	/* If uas is enabled and this device can do uas then ignore it. */
+ #if IS_ENABLED(CONFIG_USB_UAS)
+-	if (uas_use_uas_driver(intf, id, NULL))
++	if (uas_use_uas_driver(intf, id, usb_stor_drv_info_u64_table,
++			       usb_stor_drv_info_u64_table_size, NULL))
+ 		return -ENXIO;
+ #endif
+ 
+@@ -1119,8 +1135,8 @@ static int storage_probe(struct usb_interface *intf,
+ 			id->idVendor, id->idProduct);
  	}
  
- 	command->in_ctx = virt_dev->in_ctx;
-+	command->timeout_ms = timeout_ms;
+-	result = usb_stor_probe1(&us, intf, id, unusual_dev,
+-				 &usb_stor_host_template);
++	result = usb_stor_probe1_fflags(&us, intf, id, unusual_dev,
++				 &usb_stor_host_template, 1);
+ 	if (result)
+ 		return result;
  
- 	slot_ctx = xhci_get_slot_ctx(xhci, virt_dev->in_ctx);
- 	ctrl_ctx = xhci_get_input_control_ctx(virt_dev->in_ctx);
-@@ -4185,14 +4192,16 @@ static int xhci_setup_device(struct usb_hcd *hcd, struct usb_device *udev,
- 	return ret;
- }
+diff --git a/drivers/usb/storage/usual-tables.c b/drivers/usb/storage/usual-tables.c
+index a26029e43dfd..40ef861dbd08 100644
+--- a/drivers/usb/storage/usual-tables.c
++++ b/drivers/usb/storage/usual-tables.c
+@@ -13,28 +13,9 @@
  
--static int xhci_address_device(struct usb_hcd *hcd, struct usb_device *udev)
-+static int xhci_address_device(struct usb_hcd *hcd, struct usb_device *udev,
-+			       unsigned int timeout_ms)
- {
--	return xhci_setup_device(hcd, udev, SETUP_CONTEXT_ADDRESS);
-+	return xhci_setup_device(hcd, udev, SETUP_CONTEXT_ADDRESS, timeout_ms);
- }
- 
- static int xhci_enable_device(struct usb_hcd *hcd, struct usb_device *udev)
- {
--	return xhci_setup_device(hcd, udev, SETUP_CONTEXT_ONLY);
-+	return xhci_setup_device(hcd, udev, SETUP_CONTEXT_ONLY,
-+				 XHCI_CMD_DEFAULT_TIMEOUT_MS);
- }
  
  /*
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 7e282b4522c0..c0ff6b399769 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -818,6 +818,8 @@ struct xhci_command {
- 	struct completion		*completion;
- 	union xhci_trb			*command_trb;
- 	struct list_head		cmd_list;
-+	/* xHCI command response timeout in milliseconds */
-+	unsigned int			timeout_ms;
- };
+- * The table of devices
++ * The table of devices is pre-generated in usb-ids.c
+  */
+-#define UNUSUAL_DEV(id_vendor, id_product, bcdDeviceMin, bcdDeviceMax, \
+-		    vendorName, productName, useProtocol, useTransport, \
+-		    initFunction, flags) \
+-{ USB_DEVICE_VER(id_vendor, id_product, bcdDeviceMin, bcdDeviceMax), \
+-  .driver_info = (kernel_ulong_t)(flags) }
+-
+-#define COMPLIANT_DEV	UNUSUAL_DEV
+-
+-#define USUAL_DEV(useProto, useTrans) \
+-{ USB_INTERFACE_INFO(USB_CLASS_MASS_STORAGE, useProto, useTrans) }
+-
+-const struct usb_device_id usb_storage_usb_ids[] = {
+-#	include "unusual_devs.h"
+-	{ }		/* Terminating entry */
+-};
+-MODULE_DEVICE_TABLE(usb, usb_storage_usb_ids);
+-
+-#undef UNUSUAL_DEV
+-#undef COMPLIANT_DEV
+-#undef USUAL_DEV
++#include "usb-ids.c"
  
- /* drop context bitmasks */
-@@ -1576,8 +1578,11 @@ struct xhci_td {
- 	unsigned int		num_trbs;
- };
- 
--/* xHCI command default timeout value */
--#define XHCI_CMD_DEFAULT_TIMEOUT	(5 * HZ)
-+/*
-+ * xHCI command default timeout value in milliseconds.
-+ * USB 3.2 spec, section 9.2.6.1
-+ */
-+#define XHCI_CMD_DEFAULT_TIMEOUT_MS	5000
- 
- /* command descriptor */
- struct xhci_cd {
-diff --git a/include/linux/usb/hcd.h b/include/linux/usb/hcd.h
-index 61d4f0b793dc..d0e19ac3ba6c 100644
---- a/include/linux/usb/hcd.h
-+++ b/include/linux/usb/hcd.h
-@@ -372,8 +372,9 @@ struct hc_driver {
- 		 * or bandwidth constraints.
- 		 */
- 	void	(*reset_bandwidth)(struct usb_hcd *, struct usb_device *);
--		/* Returns the hardware-chosen device address */
--	int	(*address_device)(struct usb_hcd *, struct usb_device *udev);
-+		/* Set the hardware-chosen device address */
-+	int	(*address_device)(struct usb_hcd *, struct usb_device *udev,
-+				  unsigned int timeout_ms);
- 		/* prepares the hardware to send commands to the device */
- 	int	(*enable_device)(struct usb_hcd *, struct usb_device *udev);
- 		/* Notifies the HCD after a hub descriptor is fetched.
-diff --git a/include/linux/usb/quirks.h b/include/linux/usb/quirks.h
-index eeb7c2157c72..59409c1fc3de 100644
---- a/include/linux/usb/quirks.h
-+++ b/include/linux/usb/quirks.h
-@@ -72,4 +72,7 @@
- /* device has endpoints that should be ignored */
- #define USB_QUIRK_ENDPOINT_IGNORE		BIT(15)
- 
-+/* short SET_ADDRESS request timeout */
-+#define USB_QUIRK_SHORT_SET_ADDRESS_REQ_TIMEOUT	BIT(16)
-+
- #endif /* __LINUX_USB_QUIRKS_H */
+ /*
+  * The table of devices to ignore
 -- 
-2.17.1
+2.42.0
 
 
