@@ -1,146 +1,401 @@
-Return-Path: <linux-usb+bounces-2209-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2210-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EFECA7D7EBA
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 10:44:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 305E47D8076
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 12:16:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8042D281F90
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 08:44:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D982B281AC3
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 10:16:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 134551CAAF;
-	Thu, 26 Oct 2023 08:44:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JsgTkCzp"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 086442D040;
+	Thu, 26 Oct 2023 10:16:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEFF71C6A3
-	for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 08:44:15 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1635A129
-	for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 01:44:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698309850; x=1729845850;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=P3HWvTavV+n2a56NQVuLXNnsoTlUS84rMMBGYy3kUwc=;
-  b=JsgTkCzpOpKZVmaPDbhJI4YSzqOPzH3fJjS1C++q7u1/42MtRnt6r6AD
-   4zdwYboJIoVbXP3ejt/YEYJpRhx52QuWOt6gBcSV6zQ4CU5XNUWxjDsTv
-   RImqhCOm5RbDC66t6j6cxY9z8aEvhRsQzunsEzXnwVENS62wurL5T511h
-   jNeoGYSOb9TvMvkReN/Ju5wTJNosOJMsmliTuRxo1TQnlAxpx8ni8lIMb
-   h3ey9D3dsAmyrWJWQNK8KN5IxPKRswW7oqawqeWsQSW4wiqD6Jzk9XrqH
-   iiKoCLx9/Y6q05sydNEBt+tWG+I1j/WKBe/B7nuK7naygEym+ClfJKoVr
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10874"; a="387317443"
-X-IronPort-AV: E=Sophos;i="6.03,253,1694761200"; 
-   d="scan'208";a="387317443"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2023 01:44:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10874"; a="794121394"
-X-IronPort-AV: E=Sophos;i="6.03,253,1694761200"; 
-   d="scan'208";a="794121394"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 26 Oct 2023 01:44:07 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 12AFE81C; Thu, 26 Oct 2023 11:44:06 +0300 (EEST)
-Date: Thu, 26 Oct 2023 11:44:05 +0300
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	linux-usb@vger.kernel.org,
-	Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [GIT PULL] USB4/Thunderbolt changes for v6.7 merge window
-Message-ID: <20231026084405.GJ3208943@black.fi.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DC7A1A281
+	for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 10:16:06 +0000 (UTC)
+Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ADAD199;
+	Thu, 26 Oct 2023 03:16:00 -0700 (PDT)
+Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
+	by hi1smtp01.de.adit-jv.com (Postfix) with ESMTP id BA8B652050D;
+	Thu, 26 Oct 2023 12:15:58 +0200 (CEST)
+Received: from vmlxhi-118.adit-jv.com (10.72.93.77) by hi2exch02.adit-jv.com
+ (10.72.92.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.34; Thu, 26 Oct
+ 2023 12:15:58 +0200
+From: Hardik Gajjar <hgajjar@de.adit-jv.com>
+To: <gregkh@linuxfoundation.org>, <stern@rowland.harvard.edu>,
+	<mathias.nyman@intel.com>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<erosca@de.adit-jv.com>, <hgajjar@de.adit-jv.com>
+Subject: [PATCH v6] usb: Reduce the 'SET_ADDRESS' request timeout with a new quirk
+Date: Thu, 26 Oct 2023 12:15:51 +0200
+Message-ID: <20231026101551.36551-1-hgajjar@de.adit-jv.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20231025164019.GA121292@vmlxhi-118.adit-jv.com>
+References: <20231025164019.GA121292@vmlxhi-118.adit-jv.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain
+X-Originating-IP: [10.72.93.77]
+X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
+ hi2exch02.adit-jv.com (10.72.92.28)
 
-Hi Greg,
+This patch introduces a new USB quirk,
+USB_QUIRK_SHORT_SET_ADDRESS_REQ_TIMEOUT, which modifies the timeout value
+for the 'SET_ADDRESS' request. The standard timeout for USB request/command
+is 5000 ms, as recommended in the USB 3.2 specification (section 9.2.6.1).
 
-The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
+However, certain scenarios, such as connecting devices through an APTIV
+hub, can lead to timeout errors when the device enumerates as full speed
+initially and later switches to high speed during chirp negotiation.
 
-  Linux 6.6-rc1 (2023-09-10 16:28:41 -0700)
+In such cases, USB analyzer logs reveal that the bus suspends for
+5 seconds due to incorrect chirp parsing and resumes only after two
+consecutive timeout errors trigger a hub driver reset.
 
-are available in the Git repository at:
+Packet(54) Dir(?) Full Speed J(997.100 us) Idle(  2.850 us)
+_______| Time Stamp(28 . 105 910 682)
+_______|_____________________________________________________________Ch0
+Packet(55) Dir(?) Full Speed J(997.118 us) Idle(  2.850 us)
+_______| Time Stamp(28 . 106 910 632)
+_______|_____________________________________________________________Ch0
+Packet(56) Dir(?) Full Speed J(399.650 us) Idle(222.582 us)
+_______| Time Stamp(28 . 107 910 600)
+_______|_____________________________________________________________Ch0
+Packet(57) Dir Chirp J( 23.955 ms) Idle(115.169 ms)
+_______| Time Stamp(28 . 108 532 832)
+_______|_____________________________________________________________Ch0
+Packet(58) Dir(?) Full Speed J (Suspend)( 5.347 sec) Idle(  5.366 us)
+_______| Time Stamp(28 . 247 657 600)
+_______|_____________________________________________________________Ch0
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v6.7-rc1
+This 5-second delay in device enumeration is undesirable, particularly
+in automotive applications where quick enumeration is crucial
+(ideally within 3 seconds).
 
-for you to fetch changes up to a558892b3456d44f2a89d238f5d650f0574fa3b2:
+The newly introduced quirks provide the flexibility to align with a
+3-second time limit, as required in specific contexts like automotive
+applications.
 
-  thunderbolt: Fix one kernel-doc comment (2023-10-24 07:49:17 +0300)
+By reducing the 'SET_ADDRESS' request timeout to 500 ms, the
+system can respond more swiftly to errors, initiate rapid recovery, and
+ensure efficient device enumeration. This change is vital for scenarios
+where rapid smartphone enumeration and screen projection are essential.
 
-----------------------------------------------------------------
-thunderbolt: Changes for v6.7 merge window
+To use the quirk, please write "vendor_id:product_id:p" to
+/sys/bus/usb/drivers/hub/module/parameter/quirks
 
-This includes following USB4/Thunderbolt changes for the v6.7 merge
-window:
+For example,
+echo "0x2c48:0x0132:p" > /sys/bus/usb/drivers/hub/module/parameters/quirks"
 
-  - Configure asymmetric link if the DisplayPort bandwidth requires so
-  - Enable path power management packet support for USB4 v2 routers
-  - Make the bandwidth reservations to follow the USB4 v2 connection
-    manager guide suggestions
-  - DisplayPort tunneling improvements
-  - Small cleanups and improvements around the driver.
+Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
+---
+changes since version 1:
+	- implement quirk instead of new API in xhci driver
 
-All these have been in linux-next with no reported issues.
+changes since version 2:
+	- Add documentation for the new quirk.
+	- Define the timeout unit in milliseconds in variable names and function arguments.
+	- Change the xHCI command timeout from HZ (jiffies) to milliseconds.
+	- Add APTIV usb hub vendor and product ID in device quirk list
+	- Adding some other comments for clarity
 
-----------------------------------------------------------------
-Gil Fine (10):
-      thunderbolt: Fix debug log when DisplayPort adapter not available for pairing
-      thunderbolt: Fix typo of HPD bit for Hot Plug Detect
-      thunderbolt: Log NVM version of routers and retimers
-      thunderbolt: Create multiple DisplayPort tunnels if there are more DP IN/OUT pairs
-      thunderbolt: Add DP IN added last in the head of the list of DP resources
-      thunderbolt: Make is_gen4_link() available to the rest of the driver
-      thunderbolt: Change bandwidth reservations to comply USB4 v2
-      thunderbolt: Introduce tb_port_path_direction_downstream()
-      thunderbolt: Add support for asymmetric link
-      thunderbolt: Configure asymmetric link if needed and bandwidth allows
+Changes since version 3:
+	- Add some comments for clarity.
+	- Minor indentation and sequence change.
 
-Mika Westerberg (14):
-      thunderbolt: Apply USB 3.x bandwidth quirk only in software connection manager
-      thunderbolt: dma_test: Use enum tb_link_width
-      thunderbolt: Get rid of usb4_usb3_port_actual_link_rate()
-      thunderbolt: Make tb_switch_clx_is_supported() static
-      thunderbolt: Check for unplugged router in tb_switch_clx_disable()
-      thunderbolt: Fix typo in enum tb_link_width kernel-doc
-      thunderbolt: Use tb_tunnel_dbg() where possible to make logging more consistent
-      thunderbolt: Expose tb_tunnel_xxx() log macros to the rest of the driver
-      thunderbolt: Use tb_tunnel_xxx() log macros in tb.c
-      thunderbolt: Use constants for path weight and priority
-      thunderbolt: Use weight constants in tb_usb3_consumed_bandwidth()
-      thunderbolt: Set path power management packet support bit for USB4 v2 routers
-      thunderbolt: Introduce tb_for_each_upstream_port_on_path()
-      thunderbolt: Introduce tb_switch_depth()
+Changes since version 4:
+	- Changing the USB specification reference to version 3.2.
+    	- Enhancing the commit message to provide more details about the technical issue.
+    	- Improving the structure of function comments.
 
-Yang Li (1):
-      thunderbolt: Fix one kernel-doc comment
+Changes since version 5:
+	- Changed the terminology in USB core driver files from 'command' to 'request'
+	  as it is more commonly used. 
+	  It's important to note that USB specifications indicate these terms are interchangeable.
+	  For example, USB spec 3.2, section 9.2.6.1, uses the term 'command' in its text
+	  "USB sets an upper limit of 5 seconds for any command to be processed. "
+	- Change set_address to SET_ADDRESS.
+---
+ .../admin-guide/kernel-parameters.txt         |  3 +++
+ drivers/usb/core/hub.c                        | 22 ++++++++++++++++--
+ drivers/usb/core/quirks.c                     |  6 +++++
+ drivers/usb/host/xhci-mem.c                   |  2 ++
+ drivers/usb/host/xhci-ring.c                  | 11 +++++----
+ drivers/usb/host/xhci.c                       | 23 +++++++++++++------
+ drivers/usb/host/xhci.h                       |  9 ++++++--
+ include/linux/usb/hcd.h                       |  5 ++--
+ include/linux/usb/quirks.h                    |  3 +++
+ 9 files changed, 66 insertions(+), 18 deletions(-)
 
- drivers/thunderbolt/clx.c      |  47 +--
- drivers/thunderbolt/dma_test.c |  14 +-
- drivers/thunderbolt/path.c     |   7 +-
- drivers/thunderbolt/quirks.c   |   3 +
- drivers/thunderbolt/retimer.c  |   1 +
- drivers/thunderbolt/switch.c   | 337 +++++++++++++++---
- drivers/thunderbolt/tb.c       | 774 ++++++++++++++++++++++++++++++++---------
- drivers/thunderbolt/tb.h       |  60 +++-
- drivers/thunderbolt/tb_regs.h  |  19 +-
- drivers/thunderbolt/tunnel.c   | 263 ++++++++------
- drivers/thunderbolt/tunnel.h   |  26 +-
- drivers/thunderbolt/usb4.c     | 135 +++++--
- include/linux/thunderbolt.h    |   2 +-
- 13 files changed, 1300 insertions(+), 388 deletions(-)
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 0a1731a0f0ef..4aa3723d2eaf 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -6817,6 +6817,9 @@
+ 					pause after every control message);
+ 				o = USB_QUIRK_HUB_SLOW_RESET (Hub needs extra
+ 					delay after resetting its port);
++				p = USB_QUIRK_SHORT_SET_ADDRESS_REQ_TIMEOUT (Reduce
++					timeout of the SET_ADDRESS request from
++					5000 ms to 500 ms)
+ 			Example: quirks=0781:5580:bk,0a5c:5834:gij
+ 
+ 	usbhid.mousepoll=
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 3c54b218301c..98db92af2cce 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -54,6 +54,19 @@
+ #define USB_TP_TRANSMISSION_DELAY_MAX	65535	/* ns */
+ #define USB_PING_RESPONSE_TIME		400	/* ns */
+ 
++/*
++ * USB 3.2 spec, section 9.2.6.1
++ * USB sets an upper limit of 5000 ms for any command/request
++ * to be processed.
++ */
++#define USB_DEFAULT_REQUEST_TIMEOUT_MS	5000 /* ms */
++
++/*
++ * The SET_ADDRESS request timeout will be 500 ms when
++ * USB_QUIRK_SHORT_SET_ADDRESS_REQ_TIMEOUT enable.
++ */
++#define USB_SHORT_SET_ADDRESS_REQ_TIMEOUT_MS	500  /* ms */
++
+ /* Protect struct usb_device->state and ->children members
+  * Note: Both are also protected by ->dev.sem, except that ->state can
+  * change to USB_STATE_NOTATTACHED even when the semaphore isn't held. */
+@@ -4626,7 +4639,12 @@ EXPORT_SYMBOL_GPL(usb_ep0_reinit);
+ static int hub_set_address(struct usb_device *udev, int devnum)
+ {
+ 	int retval;
++	unsigned int timeout_ms = USB_DEFAULT_REQUEST_TIMEOUT_MS;
+ 	struct usb_hcd *hcd = bus_to_hcd(udev->bus);
++	struct usb_hub *hub = usb_hub_to_struct_hub(udev->parent);
++
++	if (hub->hdev->quirks & USB_QUIRK_SHORT_SET_ADDRESS_REQ_TIMEOUT)
++		timeout_ms = USB_SHORT_SET_ADDRESS_REQ_TIMEOUT_MS;
+ 
+ 	/*
+ 	 * The host controller will choose the device address,
+@@ -4639,11 +4657,11 @@ static int hub_set_address(struct usb_device *udev, int devnum)
+ 	if (udev->state != USB_STATE_DEFAULT)
+ 		return -EINVAL;
+ 	if (hcd->driver->address_device)
+-		retval = hcd->driver->address_device(hcd, udev);
++		retval = hcd->driver->address_device(hcd, udev, timeout_ms);
+ 	else
+ 		retval = usb_control_msg(udev, usb_sndaddr0pipe(),
+ 				USB_REQ_SET_ADDRESS, 0, devnum, 0,
+-				NULL, 0, USB_CTRL_SET_TIMEOUT);
++				NULL, 0, timeout_ms);
+ 	if (retval == 0) {
+ 		update_devnum(udev, devnum);
+ 		/* Device now using proper address. */
+diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
+index 15e9bd180a1d..815e71f8ec59 100644
+--- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -138,6 +138,9 @@ static int quirks_param_set(const char *value, const struct kernel_param *kp)
+ 			case 'o':
+ 				flags |= USB_QUIRK_HUB_SLOW_RESET;
+ 				break;
++			case 'p':
++				flags |= USB_QUIRK_SHORT_SET_ADDRESS_REQ_TIMEOUT;
++				break;
+ 			/* Ignore unrecognized flag characters */
+ 			}
+ 		}
+@@ -527,6 +530,9 @@ static const struct usb_device_id usb_quirk_list[] = {
+ 
+ 	{ USB_DEVICE(0x2386, 0x350e), .driver_info = USB_QUIRK_NO_LPM },
+ 
++	/* APTIV AUTOMOTIVE HUB */
++	{ USB_DEVICE(0x2c48, 0x0132), .driver_info = USB_QUIRK_SHORT_SET_ADDRESS_REQ_TIMEOUT },
++
+ 	/* DJI CineSSD */
+ 	{ USB_DEVICE(0x2ca3, 0x0031), .driver_info = USB_QUIRK_NO_LPM },
+ 
+diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+index 8714ab5bf04d..4a286136d1a8 100644
+--- a/drivers/usb/host/xhci-mem.c
++++ b/drivers/usb/host/xhci-mem.c
+@@ -1729,6 +1729,8 @@ struct xhci_command *xhci_alloc_command(struct xhci_hcd *xhci,
+ 	}
+ 
+ 	command->status = 0;
++	/* set default timeout to 5000 ms */
++	command->timeout_ms = XHCI_CMD_DEFAULT_TIMEOUT_MS;
+ 	INIT_LIST_HEAD(&command->cmd_list);
+ 	return command;
+ }
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index 1dde53f6eb31..8f36c2914938 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -366,9 +366,10 @@ void xhci_ring_cmd_db(struct xhci_hcd *xhci)
+ 	readl(&xhci->dba->doorbell[0]);
+ }
+ 
+-static bool xhci_mod_cmd_timer(struct xhci_hcd *xhci, unsigned long delay)
++static bool xhci_mod_cmd_timer(struct xhci_hcd *xhci)
+ {
+-	return mod_delayed_work(system_wq, &xhci->cmd_timer, delay);
++	return mod_delayed_work(system_wq, &xhci->cmd_timer,
++			msecs_to_jiffies(xhci->current_cmd->timeout_ms));
+ }
+ 
+ static struct xhci_command *xhci_next_queued_cmd(struct xhci_hcd *xhci)
+@@ -412,7 +413,7 @@ static void xhci_handle_stopped_cmd_ring(struct xhci_hcd *xhci,
+ 	if ((xhci->cmd_ring->dequeue != xhci->cmd_ring->enqueue) &&
+ 	    !(xhci->xhc_state & XHCI_STATE_DYING)) {
+ 		xhci->current_cmd = cur_cmd;
+-		xhci_mod_cmd_timer(xhci, XHCI_CMD_DEFAULT_TIMEOUT);
++		xhci_mod_cmd_timer(xhci);
+ 		xhci_ring_cmd_db(xhci);
+ 	}
+ }
+@@ -1786,7 +1787,7 @@ static void handle_cmd_completion(struct xhci_hcd *xhci,
+ 	if (!list_is_singular(&xhci->cmd_list)) {
+ 		xhci->current_cmd = list_first_entry(&cmd->cmd_list,
+ 						struct xhci_command, cmd_list);
+-		xhci_mod_cmd_timer(xhci, XHCI_CMD_DEFAULT_TIMEOUT);
++		xhci_mod_cmd_timer(xhci);
+ 	} else if (xhci->current_cmd == cmd) {
+ 		xhci->current_cmd = NULL;
+ 	}
+@@ -4301,7 +4302,7 @@ static int queue_command(struct xhci_hcd *xhci, struct xhci_command *cmd,
+ 	/* if there are no other commands queued we start the timeout timer */
+ 	if (list_empty(&xhci->cmd_list)) {
+ 		xhci->current_cmd = cmd;
+-		xhci_mod_cmd_timer(xhci, XHCI_CMD_DEFAULT_TIMEOUT);
++		xhci_mod_cmd_timer(xhci);
+ 	}
+ 
+ 	list_add_tail(&cmd->cmd_list, &xhci->cmd_list);
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index e1b1b64a0723..d856c4717ca9 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -3997,12 +3997,18 @@ int xhci_alloc_dev(struct usb_hcd *hcd, struct usb_device *udev)
+ 	return 0;
+ }
+ 
+-/*
+- * Issue an Address Device command and optionally send a corresponding
+- * SetAddress request to the device.
++/**
++ * xhci_setup_device - issues an Address Device command to assign a unique
++ *			USB bus address.
++ * @hcd: USB host controller data structure.
++ * @udev: USB dev structure representing the connected device.
++ * @setup: Enum specifying setup mode: address only or with context.
++ * @timeout_ms: Max wait time (ms) for the command operation to complete.
++ *
++ * Return: 0 if successful; otherwise, negative error code.
+  */
+ static int xhci_setup_device(struct usb_hcd *hcd, struct usb_device *udev,
+-			     enum xhci_setup_dev setup)
++			     enum xhci_setup_dev setup, unsigned int timeout_ms)
+ {
+ 	const char *act = setup == SETUP_CONTEXT_ONLY ? "context" : "address";
+ 	unsigned long flags;
+@@ -4059,6 +4065,7 @@ static int xhci_setup_device(struct usb_hcd *hcd, struct usb_device *udev,
+ 	}
+ 
+ 	command->in_ctx = virt_dev->in_ctx;
++	command->timeout_ms = timeout_ms;
+ 
+ 	slot_ctx = xhci_get_slot_ctx(xhci, virt_dev->in_ctx);
+ 	ctrl_ctx = xhci_get_input_control_ctx(virt_dev->in_ctx);
+@@ -4185,14 +4192,16 @@ static int xhci_setup_device(struct usb_hcd *hcd, struct usb_device *udev,
+ 	return ret;
+ }
+ 
+-static int xhci_address_device(struct usb_hcd *hcd, struct usb_device *udev)
++static int xhci_address_device(struct usb_hcd *hcd, struct usb_device *udev,
++			       unsigned int timeout_ms)
+ {
+-	return xhci_setup_device(hcd, udev, SETUP_CONTEXT_ADDRESS);
++	return xhci_setup_device(hcd, udev, SETUP_CONTEXT_ADDRESS, timeout_ms);
+ }
+ 
+ static int xhci_enable_device(struct usb_hcd *hcd, struct usb_device *udev)
+ {
+-	return xhci_setup_device(hcd, udev, SETUP_CONTEXT_ONLY);
++	return xhci_setup_device(hcd, udev, SETUP_CONTEXT_ONLY,
++				 XHCI_CMD_DEFAULT_TIMEOUT_MS);
+ }
+ 
+ /*
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index 7e282b4522c0..c0ff6b399769 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -818,6 +818,8 @@ struct xhci_command {
+ 	struct completion		*completion;
+ 	union xhci_trb			*command_trb;
+ 	struct list_head		cmd_list;
++	/* xHCI command response timeout in milliseconds */
++	unsigned int			timeout_ms;
+ };
+ 
+ /* drop context bitmasks */
+@@ -1576,8 +1578,11 @@ struct xhci_td {
+ 	unsigned int		num_trbs;
+ };
+ 
+-/* xHCI command default timeout value */
+-#define XHCI_CMD_DEFAULT_TIMEOUT	(5 * HZ)
++/*
++ * xHCI command default timeout value in milliseconds.
++ * USB 3.2 spec, section 9.2.6.1
++ */
++#define XHCI_CMD_DEFAULT_TIMEOUT_MS	5000
+ 
+ /* command descriptor */
+ struct xhci_cd {
+diff --git a/include/linux/usb/hcd.h b/include/linux/usb/hcd.h
+index 61d4f0b793dc..d0e19ac3ba6c 100644
+--- a/include/linux/usb/hcd.h
++++ b/include/linux/usb/hcd.h
+@@ -372,8 +372,9 @@ struct hc_driver {
+ 		 * or bandwidth constraints.
+ 		 */
+ 	void	(*reset_bandwidth)(struct usb_hcd *, struct usb_device *);
+-		/* Returns the hardware-chosen device address */
+-	int	(*address_device)(struct usb_hcd *, struct usb_device *udev);
++		/* Set the hardware-chosen device address */
++	int	(*address_device)(struct usb_hcd *, struct usb_device *udev,
++				  unsigned int timeout_ms);
+ 		/* prepares the hardware to send commands to the device */
+ 	int	(*enable_device)(struct usb_hcd *, struct usb_device *udev);
+ 		/* Notifies the HCD after a hub descriptor is fetched.
+diff --git a/include/linux/usb/quirks.h b/include/linux/usb/quirks.h
+index eeb7c2157c72..59409c1fc3de 100644
+--- a/include/linux/usb/quirks.h
++++ b/include/linux/usb/quirks.h
+@@ -72,4 +72,7 @@
+ /* device has endpoints that should be ignored */
+ #define USB_QUIRK_ENDPOINT_IGNORE		BIT(15)
+ 
++/* short SET_ADDRESS request timeout */
++#define USB_QUIRK_SHORT_SET_ADDRESS_REQ_TIMEOUT	BIT(16)
++
+ #endif /* __LINUX_USB_QUIRKS_H */
+-- 
+2.17.1
+
 
