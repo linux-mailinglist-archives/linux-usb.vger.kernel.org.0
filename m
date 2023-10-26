@@ -1,207 +1,265 @@
-Return-Path: <linux-usb+bounces-2235-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2236-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A5BE7D8983
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 22:09:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E70A7D89AB
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 22:23:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DE823B2128B
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 20:09:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D71A71C20F53
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 20:23:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6161D3CD13;
-	Thu, 26 Oct 2023 20:09:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6C353CD08;
+	Thu, 26 Oct 2023 20:23:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="VGYbP43i"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HjnO2wZn"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAE393C6B2
-	for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 20:09:34 +0000 (UTC)
-X-Greylist: delayed 487 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 26 Oct 2023 13:09:31 PDT
-Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [IPv6:2001:41d0:1004:224b::bd])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBFF51AC
-	for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 13:09:31 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1698350483;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rChh14RoKqHyNTtLO4oEGTir1WUGyXt9ry5A85Vdpuk=;
-	b=VGYbP43i8J4IsipMVD+zeMt0fHoJnBYRw/yKfBwEDSHLF165mZk657fUGAW6Z6z7F1+H0W
-	L/HFADJLtTzn+GsE1YxiJyBXy1pXgyb20osxW+e5iFmf36OGuuCM7hUZ61svAzlchTfN6U
-	PZAeo7JpU0FDob/uVbpy0QFzmiAh050=
-From: andrey.konovalov@linux.dev
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Andrey Konovalov <andreyknvl@gmail.com>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Felipe Balbi <balbi@kernel.org>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] usb: raw-gadget: report suspend, resume, reset, and disconnect events
-Date: Thu, 26 Oct 2023 22:01:14 +0200
-Message-Id: <d610b629a5f32fb76c24012180743f7f0f1872c0.1698350424.git.andreyknvl@gmail.com>
-In-Reply-To: <0db45b1d7cc466e3d4d1ab353f61d63c977fbbc5.1698350424.git.andreyknvl@gmail.com>
-References: <0db45b1d7cc466e3d4d1ab353f61d63c977fbbc5.1698350424.git.andreyknvl@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7753B156CE
+	for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 20:23:50 +0000 (UTC)
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B867D1B1
+	for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 13:23:47 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1ca6809fb8aso10927445ad.1
+        for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 13:23:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1698351827; x=1698956627; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9gvkiqHTsXEVyc9c8Zm+MRgwHjcY6wcBgvCGB0YLRdQ=;
+        b=HjnO2wZnhKGZi2qNmE+cb1SpilvLJJHHjO/Tm71gWnaKbChnChkSBKXK8ncgG5jWcg
+         VD3E9lvuk/i8Tw06AXqeOtcMdZiC2KDEUu5OAr1PKNH+9rQrvI4eSNnMq2+Na+ZclD8J
+         P6I6DkpQzKbRbinTjALe338ZhtoAU0XPujU2koHksHBrgtqsiW/sa76P0XvhzQn+v4yo
+         MgMVaVdfC2RUeA+n9hmUvoJQdrlLTlwpTEkad1Reo5l1htkegSjTD1NVt5PDt9W0gef1
+         P7ALx80jpP7d4PReUaya3doA6/NzAii/GO4UTRUbeN9eUqa956sQ1cxj0RcBkVSgGlgu
+         MoTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698351827; x=1698956627;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9gvkiqHTsXEVyc9c8Zm+MRgwHjcY6wcBgvCGB0YLRdQ=;
+        b=cdi5Nx5K04Wn9HiY5c1Ts9oF+xYGsGAI5h87DjKQ3Dh6j/IK25flyMwIW/ODrEMmLI
+         G5bld5sCiMfFf/VcSKLsVz7sYwxt2ua6z7GZowH1381EFqud3WWZ8s/mWpXZZ67azkHk
+         D2l91n09J4RkDDN1uTNN9tfe6B8Ov3uDxkeYm+p992uigLgq/jLxMBBPMsmZ2ILTKm4x
+         L0MpCBxKyOr7aenf9pE397r3KQCT17uF2bR/0yrBBkJH5iRd0sI3wiDVIewIXS1Daqpp
+         nTBIaNg0hPa9vgnJcZXqe+WRKNxJaNbUt1pRU8rDD126+xXUYYmOd8U89+4P4Hr6fczx
+         zrEQ==
+X-Gm-Message-State: AOJu0YzbLEgTpAue8ThU54uzpMDNXp0ZeQvHqy1az4P/h6QgdMXze0Ki
+	Q++eIxrSyOc7Tzx+/ecXUOA8HQ==
+X-Google-Smtp-Source: AGHT+IE0BRAdbuh92VX3DscJ3TSa9K21TW9l8Ff8wrKk72GSKDOzsVGLpw58ksWgc5QFWk4IaHUzKg==
+X-Received: by 2002:a17:903:120e:b0:1c8:92ee:108a with SMTP id l14-20020a170903120e00b001c892ee108amr812875plh.23.1698351826926;
+        Thu, 26 Oct 2023 13:23:46 -0700 (PDT)
+Received: from [192.168.60.239] (183.43.230.35.bc.googleusercontent.com. [35.230.43.183])
+        by smtp.gmail.com with ESMTPSA id a11-20020a170902eccb00b001bdeb6bdfbasm82604plh.241.2023.10.26.13.23.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Oct 2023 13:23:46 -0700 (PDT)
+Message-ID: <eeea887c-8fd5-45df-aed8-1046d8451a2e@google.com>
+Date: Thu, 26 Oct 2023 13:23:44 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 1/4] usb: gadget: uvc: prevent use of disabled endpoint
+Content-Language: en-US
+To: gregkh@linuxfoundation.org
+Cc: etalvala@google.com, jchowdhary@google.com, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, m.grzeschik@pengutronix.de,
+ dan.scally@ideasonboard.com, laurent.pinchart@ideasonboard.com
+References: <20231019185319.2714000-1-arakesh@google.com>
+ <20231024183605.908253-1-arakesh@google.com>
+From: Avichal Rakesh <arakesh@google.com>
+In-Reply-To: <20231024183605.908253-1-arakesh@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Andrey Konovalov <andreyknvl@gmail.com>
 
-Update USB_RAW_IOCTL_EVENT_FETCH to also report suspend, resume, reset,
-and disconnect events.
 
-This allows the code that emulates a USB device via Raw Gadget to handle
-these events. For example, the device can restart enumeration when it
-gets reset.
+On 10/24/23 11:36, Avichal Rakesh wrote:
+> Currently the set_alt callback immediately disables the endpoint and queues
+> the v4l2 streamoff event. However, as the streamoff event is processed
+> asynchronously, it is possible that the video_pump thread attempts to queue
+> requests to an already disabled endpoint.
+> 
+> This change moves disabling usb endpoint to the end of streamoff event
+> callback. As the endpoint's state can no longer be used, video_pump is
+> now guarded by uvc->state as well. To be consistent with the actual
+> streaming state, uvc->state is now toggled between CONNECTED and STREAMING
+> from the v4l2 event callback only.
+> 
+> Link: https://lore.kernel.org/20230615171558.GK741@pendragon.ideasonboard.com/
+> Link: https://lore.kernel.org/20230531085544.253363-1-dan.scally@ideasonboard.com/
+> Reviewed-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+> Tested-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+> Signed-off-by: Avichal Rakesh <arakesh@google.com>
+> ---
+> v1 -> v2: Rebased to ToT and reworded commit message.
+> v2 -> v3: Fix email threading goof-up
+> v3 -> v4: Address review comments & re-rebase to ToT
+> v4 -> v5: Add Reviewed-by & Tested-by
+> v5 -> v6: No change
+> v6 -> v7: No change
+> v7 -> v8: No change. Getting back in review queue
+> 
+>  drivers/usb/gadget/function/f_uvc.c     | 11 +++++------
+>  drivers/usb/gadget/function/f_uvc.h     |  2 +-
+>  drivers/usb/gadget/function/uvc.h       |  2 +-
+>  drivers/usb/gadget/function/uvc_v4l2.c  | 20 +++++++++++++++++---
+>  drivers/usb/gadget/function/uvc_video.c |  3 ++-
+>  5 files changed, 26 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+> index faa398109431..ae08341961eb 100644
+> --- a/drivers/usb/gadget/function/f_uvc.c
+> +++ b/drivers/usb/gadget/function/f_uvc.c
+> @@ -263,10 +263,13 @@ uvc_function_setup(struct usb_function *f, const struct usb_ctrlrequest *ctrl)
+>  	return 0;
+>  }
+> 
+> -void uvc_function_setup_continue(struct uvc_device *uvc)
+> +void uvc_function_setup_continue(struct uvc_device *uvc, int disable_ep)
+>  {
+>  	struct usb_composite_dev *cdev = uvc->func.config->cdev;
+> 
+> +	if (disable_ep && uvc->video.ep)
+> +		usb_ep_disable(uvc->video.ep);
+> +
+>  	usb_composite_setup_continue(cdev);
+>  }
+> 
+> @@ -337,15 +340,11 @@ uvc_function_set_alt(struct usb_function *f, unsigned interface, unsigned alt)
+>  		if (uvc->state != UVC_STATE_STREAMING)
+>  			return 0;
+> 
+> -		if (uvc->video.ep)
+> -			usb_ep_disable(uvc->video.ep);
+> -
+>  		memset(&v4l2_event, 0, sizeof(v4l2_event));
+>  		v4l2_event.type = UVC_EVENT_STREAMOFF;
+>  		v4l2_event_queue(&uvc->vdev, &v4l2_event);
+> 
+> -		uvc->state = UVC_STATE_CONNECTED;
+> -		return 0;
+> +		return USB_GADGET_DELAYED_STATUS;
+> 
+>  	case 1:
+>  		if (uvc->state != UVC_STATE_CONNECTED)
+> diff --git a/drivers/usb/gadget/function/f_uvc.h b/drivers/usb/gadget/function/f_uvc.h
+> index 1db972d4beeb..e7f9f13f14dc 100644
+> --- a/drivers/usb/gadget/function/f_uvc.h
+> +++ b/drivers/usb/gadget/function/f_uvc.h
+> @@ -11,7 +11,7 @@
+> 
+>  struct uvc_device;
+> 
+> -void uvc_function_setup_continue(struct uvc_device *uvc);
+> +void uvc_function_setup_continue(struct uvc_device *uvc, int disale_ep);
+> 
+>  void uvc_function_connect(struct uvc_device *uvc);
+> 
+> diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
+> index 6751de8b63ad..989bc6b4e93d 100644
+> --- a/drivers/usb/gadget/function/uvc.h
+> +++ b/drivers/usb/gadget/function/uvc.h
+> @@ -177,7 +177,7 @@ struct uvc_file_handle {
+>   * Functions
+>   */
+> 
+> -extern void uvc_function_setup_continue(struct uvc_device *uvc);
+> +extern void uvc_function_setup_continue(struct uvc_device *uvc, int disable_ep);
+>  extern void uvc_function_connect(struct uvc_device *uvc);
+>  extern void uvc_function_disconnect(struct uvc_device *uvc);
+> 
+> diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
+> index 3f0a9795c0d4..7cb8d027ff0c 100644
+> --- a/drivers/usb/gadget/function/uvc_v4l2.c
+> +++ b/drivers/usb/gadget/function/uvc_v4l2.c
+> @@ -451,7 +451,7 @@ uvc_v4l2_streamon(struct file *file, void *fh, enum v4l2_buf_type type)
+>  	 * Complete the alternate setting selection setup phase now that
+>  	 * userspace is ready to provide video frames.
+>  	 */
+> -	uvc_function_setup_continue(uvc);
+> +	uvc_function_setup_continue(uvc, 0);
+>  	uvc->state = UVC_STATE_STREAMING;
+> 
+>  	return 0;
+> @@ -463,11 +463,18 @@ uvc_v4l2_streamoff(struct file *file, void *fh, enum v4l2_buf_type type)
+>  	struct video_device *vdev = video_devdata(file);
+>  	struct uvc_device *uvc = video_get_drvdata(vdev);
+>  	struct uvc_video *video = &uvc->video;
+> +	int ret = 0;
+> 
+>  	if (type != video->queue.queue.type)
+>  		return -EINVAL;
+> 
+> -	return uvcg_video_enable(video, 0);
+> +	uvc->state = UVC_STATE_CONNECTED;
+> +	ret = uvcg_video_enable(video, 0);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	uvc_function_setup_continue(uvc, 1);
+> +	return 0;
+>  }
+> 
+>  static int
+> @@ -500,6 +507,14 @@ uvc_v4l2_subscribe_event(struct v4l2_fh *fh,
+>  static void uvc_v4l2_disable(struct uvc_device *uvc)
+>  {
+>  	uvc_function_disconnect(uvc);
+> +	/*
+> +	 * Drop uvc->state to CONNECTED if it was streaming before.
+> +	 * This ensures that the usb_requests are no longer queued
+> +	 * to the controller.
+> +	 */
+> +	if (uvc->state == UVC_STATE_STREAMING)
+> +		uvc->state = UVC_STATE_CONNECTED;
+> +
+>  	uvcg_video_enable(&uvc->video, 0);
+>  	uvcg_free_buffers(&uvc->video.queue);
+>  	uvc->func_connected = false;
+> @@ -647,4 +662,3 @@ const struct v4l2_file_operations uvc_v4l2_fops = {
+>  	.get_unmapped_area = uvcg_v4l2_get_unmapped_area,
+>  #endif
+>  };
+> -
+> diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
+> index 91af3b1ef0d4..c334802ac0a4 100644
+> --- a/drivers/usb/gadget/function/uvc_video.c
+> +++ b/drivers/usb/gadget/function/uvc_video.c
+> @@ -384,13 +384,14 @@ static void uvcg_video_pump(struct work_struct *work)
+>  	struct uvc_video_queue *queue = &video->queue;
+>  	/* video->max_payload_size is only set when using bulk transfer */
+>  	bool is_bulk = video->max_payload_size;
+> +	struct uvc_device *uvc = video->uvc;
+>  	struct usb_request *req = NULL;
+>  	struct uvc_buffer *buf;
+>  	unsigned long flags;
+>  	bool buf_done;
+>  	int ret;
+> 
+> -	while (video->ep->enabled) {
+> +	while (uvc->state == UVC_STATE_STREAMING && video->ep->enabled) {
+>  		/*
+>  		 * Retrieve the first available USB request, protected by the
+>  		 * request lock.
+> --
+> 2.42.0.758.gaed0368e0e-goog
 
-Also do not print a WARNING when the event queue overflows. With these new
-events being queued, the queue might overflow if the device emulation code
-stops fetching events.
+Hey Greg,
 
-Also print debug messages when a non-control event is received.
+Considering Laurent and Dan haven't responded, and Michael and I have 
+tested this change, would it be possible to merge this patch set
+if the changes look OK to you? I don't think there are any outstanding
+items to be done around these fixes.
 
-Signed-off-by: Andrey Konovalov <andreyknvl@gmail.com>
-
----
-
-Changes v1->v2:
-- Don't print another error message if event queue overflows: each
-  caller already prints one if event queueing fails.
----
- drivers/usb/gadget/legacy/raw_gadget.c | 52 ++++++++++++++++++++++----
- include/uapi/linux/usb/raw_gadget.h    | 14 ++++++-
- 2 files changed, 56 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
-index daac1f078516..399fca32a8ac 100644
---- a/drivers/usb/gadget/legacy/raw_gadget.c
-+++ b/drivers/usb/gadget/legacy/raw_gadget.c
-@@ -65,7 +65,7 @@ static int raw_event_queue_add(struct raw_event_queue *queue,
- 	struct usb_raw_event *event;
- 
- 	spin_lock_irqsave(&queue->lock, flags);
--	if (WARN_ON(queue->size >= RAW_EVENT_QUEUE_SIZE)) {
-+	if (queue->size >= RAW_EVENT_QUEUE_SIZE) {
- 		spin_unlock_irqrestore(&queue->lock, flags);
- 		return -ENOMEM;
- 	}
-@@ -311,9 +311,10 @@ static int gadget_bind(struct usb_gadget *gadget,
- 	dev->eps_num = i;
- 	spin_unlock_irqrestore(&dev->lock, flags);
- 
-+	dev_dbg(&gadget->dev, "gadget connected\n");
- 	ret = raw_queue_event(dev, USB_RAW_EVENT_CONNECT, 0, NULL);
- 	if (ret < 0) {
--		dev_err(&gadget->dev, "failed to queue event\n");
-+		dev_err(&gadget->dev, "failed to queue connect event\n");
- 		set_gadget_data(gadget, NULL);
- 		return ret;
- 	}
-@@ -358,7 +359,7 @@ static int gadget_setup(struct usb_gadget *gadget,
- 
- 	ret = raw_queue_event(dev, USB_RAW_EVENT_CONTROL, sizeof(*ctrl), ctrl);
- 	if (ret < 0)
--		dev_err(&gadget->dev, "failed to queue event\n");
-+		dev_err(&gadget->dev, "failed to queue control event\n");
- 	goto out;
- 
- out_unlock:
-@@ -377,11 +378,46 @@ static int gadget_setup(struct usb_gadget *gadget,
- 	return ret;
- }
- 
--/* These are currently unused but present in case UDC driver requires them. */
--static void gadget_disconnect(struct usb_gadget *gadget) { }
--static void gadget_suspend(struct usb_gadget *gadget) { }
--static void gadget_resume(struct usb_gadget *gadget) { }
--static void gadget_reset(struct usb_gadget *gadget) { }
-+static void gadget_disconnect(struct usb_gadget *gadget)
-+{
-+	struct raw_dev *dev = get_gadget_data(gadget);
-+	int ret;
-+
-+	dev_dbg(&gadget->dev, "gadget disconnected\n");
-+	ret = raw_queue_event(dev, USB_RAW_EVENT_DISCONNECT, 0, NULL);
-+	if (ret < 0)
-+		dev_err(&gadget->dev, "failed to queue disconnect event\n");
-+}
-+static void gadget_suspend(struct usb_gadget *gadget)
-+{
-+	struct raw_dev *dev = get_gadget_data(gadget);
-+	int ret;
-+
-+	dev_dbg(&gadget->dev, "gadget suspended\n");
-+	ret = raw_queue_event(dev, USB_RAW_EVENT_SUSPEND, 0, NULL);
-+	if (ret < 0)
-+		dev_err(&gadget->dev, "failed to queue suspend event\n");
-+}
-+static void gadget_resume(struct usb_gadget *gadget)
-+{
-+	struct raw_dev *dev = get_gadget_data(gadget);
-+	int ret;
-+
-+	dev_dbg(&gadget->dev, "gadget resumed\n");
-+	ret = raw_queue_event(dev, USB_RAW_EVENT_RESUME, 0, NULL);
-+	if (ret < 0)
-+		dev_err(&gadget->dev, "failed to queue resume event\n");
-+}
-+static void gadget_reset(struct usb_gadget *gadget)
-+{
-+	struct raw_dev *dev = get_gadget_data(gadget);
-+	int ret;
-+
-+	dev_dbg(&gadget->dev, "gadget reset\n");
-+	ret = raw_queue_event(dev, USB_RAW_EVENT_RESET, 0, NULL);
-+	if (ret < 0)
-+		dev_err(&gadget->dev, "failed to queue reset event\n");
-+}
- 
- /*----------------------------------------------------------------------*/
- 
-diff --git a/include/uapi/linux/usb/raw_gadget.h b/include/uapi/linux/usb/raw_gadget.h
-index c7d2199134d7..f0224a8dc858 100644
---- a/include/uapi/linux/usb/raw_gadget.h
-+++ b/include/uapi/linux/usb/raw_gadget.h
-@@ -44,6 +44,16 @@ enum usb_raw_event_type {
- 	/* This event is queued when a new control request arrived to ep0. */
- 	USB_RAW_EVENT_CONTROL = 2,
- 
-+	/*
-+	 * These events are queued when the gadget driver is suspended,
-+	 * resumed, reset, or disconnected. Note that some UDCs (e.g. dwc2)
-+	 * report a disconnect event instead of a reset.
-+	 */
-+	USB_RAW_EVENT_SUSPEND = 3,
-+	USB_RAW_EVENT_RESUME = 4,
-+	USB_RAW_EVENT_RESET = 5,
-+	USB_RAW_EVENT_DISCONNECT = 6,
-+
- 	/* The list might grow in the future. */
- };
- 
-@@ -54,8 +64,8 @@ enum usb_raw_event_type {
-  *     actual length of the fetched event data.
-  * @data: A buffer to store the fetched event data.
-  *
-- * Currently the fetched data buffer is empty for USB_RAW_EVENT_CONNECT,
-- * and contains struct usb_ctrlrequest for USB_RAW_EVENT_CONTROL.
-+ * The fetched event data buffer contains struct usb_ctrlrequest for
-+ * USB_RAW_EVENT_CONTROL and is empty for other events.
-  */
- struct usb_raw_event {
- 	__u32		type;
--- 
-2.25.1
-
+Thank you!
+- Avi.
 
