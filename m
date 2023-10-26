@@ -1,283 +1,208 @@
-Return-Path: <linux-usb+bounces-2208-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2207-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E96CE7D7EA5
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 10:40:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6AB87D7E80
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 10:29:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7533A1F22745
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 08:40:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A2192281EEE
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 08:29:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AA0D1A5A2;
-	Thu, 26 Oct 2023 08:40:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F2FA1A5B9;
+	Thu, 26 Oct 2023 08:29:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cadence.com header.i=@cadence.com header.b="h2/iaBko";
-	dkim=pass (1024-bit key) header.d=cadence.com header.i=@cadence.com header.b="VugabbZd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rlHtz9xB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E36DC11C9F
-	for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 08:40:46 +0000 (UTC)
-X-Greylist: delayed 3737 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 26 Oct 2023 01:40:44 PDT
-Received: from mx0a-0014ca01.pphosted.com (mx0a-0014ca01.pphosted.com [208.84.65.235])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D3E128;
-	Thu, 26 Oct 2023 01:40:44 -0700 (PDT)
-Received: from pps.filterd (m0042385.ppops.net [127.0.0.1])
-	by mx0a-0014ca01.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 39Q2MN79017651;
-	Thu, 26 Oct 2023 00:38:15 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=
-	from:to:cc:subject:date:message-id:mime-version
-	:content-transfer-encoding:content-type; s=proofpoint; bh=bM3emn
-	e8aZofXYNPRzpzPf1uwjrMSPbJCRQrESdcHNo=; b=h2/iaBko5o8fYOiVP6PB3E
-	dO+sXyw1gM6AHyH/lhSPhY74QTc128aknAV+2s6RRsPCpLWAzoSNnFmPiasO8n44
-	KIvuUH+a+mW0UOfYLaNFZ7BYeuUE6Kqonu4UMmDrHqDNDz+oF5W7PNME3W3L/i0U
-	+yMs3iQPfrPxUxxap1JMt0+SyJvBGh0msvBHAFLICujx++l4gHqmrdIk/VD8Ogo4
-	+JQV7yPLcPKdDvn/498Jqeihfv5M/bkJgHaWAPAZH2p9Wxe3xlUijCofKCDLLJxi
-	OXzZ4Q0kYAOXaprPDkJ8uo4jeGpfARuVqiJJckHGsos2yJdpEUTHRTZ1Xhwirt0Q
-	==
-Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2169.outbound.protection.outlook.com [104.47.55.169])
-	by mx0a-0014ca01.pphosted.com (PPS) with ESMTPS id 3ty71qtskt-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 26 Oct 2023 00:38:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AfO8grevam28HTSqjgNccd+qhz/+y4rNv7kZoW/CiWGjQ0LyiVrSFVj0ORga8d7bpJ/+gXfySy7bnq8W40Kx0IWYK3nfh3bqGjYom9vYIgOQIA/odJqiN8OCW4N5aAmm1rsOjXP3E6No2hih9E7o2VpaALa65Z3EduEI6e57ruc/VKqnTzkbXfi/pUX0/uzezUgSAWtoS5vXphIsFQsHv1YZoBwMHTiqpdpXdujhbntFd3LxwViw6DRpi3gCrRaxzIbMPp+vTz0kC/SeQorvWKVDbdSw0DKWVZFf4Xds3xnsKVVJKw7k/XMpgQUnLXYKXta/WAiZ4UqyGYAl47KmFQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bM3emne8aZofXYNPRzpzPf1uwjrMSPbJCRQrESdcHNo=;
- b=WwF50+ZLWvNw3dojbcYJnket7mKOgU9a/lfM7w9HPJdgerkpgJrI5JAws3MF62OEcu3AvJl0oEy+2mvh2T3gaT90T/TuRTacwdG4EFjxcvlmAJFDc8HHOTTPWmexEzKRt9l1aA9xt4M26FB0zG8OyhfTRFf5kraoTsc7d1+ltnBbk75CfR+2A/v7t6kxvn7nvnn5Dht7QPu67I9pXIfSX9WO0qQUJ5dXGYjw1fiV3KFlTXpzjrHTgElZ6T/DLzIh/cdsUEogQgnFLBSZA1xjfG8QgD45myl9KNsDBSEIilWc/+OKQ9VoHlF/7inp5x3mS94nc3+ebAo8iXS1aie9Bg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 158.140.1.148) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=cadence.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=cadence.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bM3emne8aZofXYNPRzpzPf1uwjrMSPbJCRQrESdcHNo=;
- b=VugabbZdHEf7Tu6NTtYpThaSX+hK8ni8ownejJNX+JMeqr/OpiiZY4xvMGNcvKWWJ3ur+uaTSaqBZGZPdSMU9Zbs1woT0rsy98dhoiU+covJZnN//Agx990t/VJoW2GpQnPB3f+pmueu0X69tKiUAbED+e+QsdxRVPIPfwr2cPI=
-Received: from MW4PR04CA0381.namprd04.prod.outlook.com (2603:10b6:303:81::26)
- by PH7PR07MB9774.namprd07.prod.outlook.com (2603:10b6:510:2b2::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6933.19; Thu, 26 Oct
- 2023 07:38:13 +0000
-Received: from MW2NAM12FT114.eop-nam12.prod.protection.outlook.com
- (2603:10b6:303:81:cafe::d4) by MW4PR04CA0381.outlook.office365.com
- (2603:10b6:303:81::26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6933.19 via Frontend
- Transport; Thu, 26 Oct 2023 07:38:12 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 158.140.1.148)
- smtp.mailfrom=cadence.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=cadence.com;
-Received-SPF: Pass (protection.outlook.com: domain of cadence.com designates
- 158.140.1.148 as permitted sender) receiver=protection.outlook.com;
- client-ip=158.140.1.148; helo=sjmaillnx2.cadence.com; pr=C
-Received: from sjmaillnx2.cadence.com (158.140.1.148) by
- MW2NAM12FT114.mail.protection.outlook.com (10.13.180.164) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6954.8 via Frontend Transport; Thu, 26 Oct 2023 07:38:12 +0000
-Received: from maileu5.global.cadence.com (eudvw-maileu5.cadence.com [10.160.110.202])
-	by sjmaillnx2.cadence.com (8.14.4/8.14.4) with ESMTP id 39Q7c95c015400
-	(version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 26 Oct 2023 00:38:10 -0700
-Received: from maileu4.global.cadence.com (10.160.110.201) by
- maileu5.global.cadence.com (10.160.110.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 26 Oct 2023 09:37:57 +0200
-Received: from eu-cn02.cadence.com (10.160.89.185) by
- maileu4.global.cadence.com (10.160.110.201) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7
- via Frontend Transport; Thu, 26 Oct 2023 09:37:57 +0200
-Received: from eu-cn02.cadence.com (localhost.localdomain [127.0.0.1])
-	by eu-cn02.cadence.com (8.14.7/8.14.7) with ESMTP id 39Q7blje165614;
-	Thu, 26 Oct 2023 09:37:47 +0200
-Received: (from pawell@localhost)
-	by eu-cn02.cadence.com (8.14.7/8.14.7/Submit) id 39Q7bkVq165607;
-	Thu, 26 Oct 2023 09:37:46 +0200
-From: Pawel Laszczak <pawell@cadence.com>
-To: <peter.chen@kernel.org>
-CC: <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <pawell@cadence.com>
-Subject: [PATCH] usb:cdnsp: remove TRB_FLUSH_ENDPOINT command
-Date: Thu, 26 Oct 2023 09:37:37 +0200
-Message-ID: <20231026073737.165450-1-pawell@cadence.com>
-X-Mailer: git-send-email 2.30.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F35C015AF6;
+	Thu, 26 Oct 2023 08:29:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FDFDC433C8;
+	Thu, 26 Oct 2023 08:29:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1698308972;
+	bh=CTFVbTZqO5OGlZiX3WaXdGwenvlKlAQhgXR0GUTuxCU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=rlHtz9xB+wEz9wF3YvoduRFGpaYt51ROpBxrpoWUEi+AZRzB5OBzy9TaGYXvX9SMN
+	 bNlEHpVhoMDIUcAafN3xFGL5FPXxJbI9L4uACS3w3MKedHAxi4iuXflr1EQDHAX1pf
+	 S1pz+hCfgpsPeJEu2jeg7zZEym+w7ws9rnm/ORELmhEHSc1Kti3PSzNPdWp6HWAtf/
+	 soBzXoMxu+6pj+b0CT1E+xzKrf1aFxYr8Xt+m0cmqVCf83sia1zPhicgglqvM3Ijn9
+	 dYcDbwzae9VxygW2QGIxGaJ1mRb+uxFDOgG8hpZJAct3aUOvwmdGhj2lz4NwtW59e0
+	 jU3a2IlWaB+lg==
+Message-ID: <bd74947f-8827-4539-a590-9c53d5ddd02d@kernel.org>
+Date: Thu, 26 Oct 2023 11:29:27 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 3/3] usb: dwc3: Modify runtime pm ops to handle bus
+ suspend
+Content-Language: en-US
+To: Elson Serrao <quic_eserrao@quicinc.com>, gregkh@linuxfoundation.org,
+ Thinh.Nguyen@synopsys.com, robh+dt@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+ devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20230814185043.9252-1-quic_eserrao@quicinc.com>
+ <20230814185043.9252-4-quic_eserrao@quicinc.com>
+ <9be9fae5-f6f2-42fe-bd81-78ab50aafa06@kernel.org>
+ <cd294a89-33e7-0569-81b3-df77a255f061@quicinc.com>
+ <0dee3bec-d49f-4808-a2f8-7a4205303e1f@kernel.org>
+ <c7fc7bc2-1a84-e6b5-5198-1b8cc602d738@quicinc.com>
+From: Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <c7fc7bc2-1a84-e6b5-5198-1b8cc602d738@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-CrossPremisesHeadersFilteredBySendConnector: maileu5.global.cadence.com
-X-OrganizationHeadersPreserved: maileu5.global.cadence.com
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW2NAM12FT114:EE_|PH7PR07MB9774:EE_
-X-MS-Office365-Filtering-Correlation-Id: b9e07917-c413-4ef9-1b13-08dbd5f68207
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 
-	JHAJ7rE8UGnrRvPMs4Y3LXRdqcEk2n/NNE+f6EWVbZPlhURW5YVTHvR9HgiD4L4e33KPs/p12XQVDCYfoUYr2Vvim60mhfWVuxZm6mb7lgXLz6g8V+qZAgKBu2Wo3CZxKYeOhRx/+g8Mz2eM/5JbWRzXtdt9F2o6eMy+n9yb7moovyxzvaovNwAsfYNQCApcyXtTg+B0dW0cTLbmfi8RTvhawqg7fNxffENeAieIfMNq2Sh6waybJmv/61wo0xT4isHiA/0Z10BnBrOUnpctuck0EDJmlqvFYc99KKS7ALQXb6EBefzFxTr4+3SPmaaAgGkf5C4JmEUiQUN5LDuLQHHhe3QYj2QyHB00oU4k7Oi90TkVTej9/GV9k6Q8I2KLR14/UZPjeQ5vcYc0h/YYPKPhXgX3rlTo1/jVHxEFFv69SgT4v+75tmZpmKfxwLuDqIv9vIn9EVzBWhZyOlNbwgesoLIqThQsF19UlJ1B7jzuXsYHPiY9h+qeQfZnjFw8k5FKTAijOiGBHYNft3rSS/I4gQCraRJnPzPKsNDl9rImAp7r+ePsE5zNg0xlBkHYqrfhTDjrS9Ry2txCmC/7GERTFzFTbuyOqDQAFucD3gItP2DoMCmCB9yQJH/QzqWK/MNzE2c4Gi1yslTmoqQ/HlGpeg+FmPFyG+Ot7z/UxOGZW4vJHZrkRq/PDmGbiBKkflFMsM2qKRcZUZKNofY4pCBKDwfuW4CgNXr9ysuDY8EpIYX5qOZolewSrmXwmN9r56GI/XEhrG7KACnLojtDNQ==
-X-Forefront-Antispam-Report: 
-	CIP:158.140.1.148;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:sjmaillnx2.cadence.com;PTR:unknown.Cadence.COM;CAT:NONE;SFS:(13230031)(4636009)(39860400002)(376002)(136003)(396003)(346002)(230922051799003)(64100799003)(82310400011)(1800799009)(451199024)(186009)(40470700004)(36840700001)(46966006)(26005)(478600001)(34070700002)(1076003)(426003)(336012)(40480700001)(6666004)(86362001)(316002)(6916009)(42186006)(54906003)(40460700003)(70586007)(70206006)(36756003)(36860700001)(47076005)(2616005)(107886003)(356005)(7636003)(2906002)(83380400001)(8676002)(4326008)(8936002)(82740400003)(5660300002)(41300700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2023 07:38:12.2606
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b9e07917-c413-4ef9-1b13-08dbd5f68207
-X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[158.140.1.148];Helo=[sjmaillnx2.cadence.com]
-X-MS-Exchange-CrossTenant-AuthSource: 
-	MW2NAM12FT114.eop-nam12.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR07MB9774
-X-Proofpoint-GUID: pZFoR2qRg7biND93chPKduA0HtlCkXjW
-X-Proofpoint-ORIG-GUID: pZFoR2qRg7biND93chPKduA0HtlCkXjW
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-26_05,2023-10-25_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 impostorscore=0
- malwarescore=0 suspectscore=0 clxscore=1011 spamscore=0 mlxscore=0
- lowpriorityscore=0 adultscore=0 mlxlogscore=747 bulkscore=0
- priorityscore=1501 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2310170000 definitions=main-2310260063
 
-Patch removes TRB_FLUSH_ENDPOINT command from driver.
-This command is not supported by controller and
-USBSSP returns TRB Error completion code for it.
 
-Signed-off-by: Pawel Laszczak <pawell@cadence.com>
----
- drivers/usb/cdns3/cdnsp-debug.h  |  3 ---
- drivers/usb/cdns3/cdnsp-gadget.c |  6 +-----
- drivers/usb/cdns3/cdnsp-gadget.h |  5 -----
- drivers/usb/cdns3/cdnsp-ring.c   | 24 ------------------------
- 4 files changed, 1 insertion(+), 37 deletions(-)
 
-diff --git a/drivers/usb/cdns3/cdnsp-debug.h b/drivers/usb/cdns3/cdnsp-debug.h
-index f0ca865cce2a..ad617b7455b9 100644
---- a/drivers/usb/cdns3/cdnsp-debug.h
-+++ b/drivers/usb/cdns3/cdnsp-debug.h
-@@ -131,8 +131,6 @@ static inline const char *cdnsp_trb_type_string(u8 type)
- 		return "Endpoint Not ready";
- 	case TRB_HALT_ENDPOINT:
- 		return "Halt Endpoint";
--	case TRB_FLUSH_ENDPOINT:
--		return "FLush Endpoint";
- 	default:
- 		return "UNKNOWN";
- 	}
-@@ -328,7 +326,6 @@ static inline const char *cdnsp_decode_trb(char *str, size_t size, u32 field0,
- 		break;
- 	case TRB_RESET_EP:
- 	case TRB_HALT_ENDPOINT:
--	case TRB_FLUSH_ENDPOINT:
- 		ret = snprintf(str, size,
- 			       "%s: ep%d%s(%d) ctx %08x%08x slot %ld flags %c",
- 			       cdnsp_trb_type_string(type),
-diff --git a/drivers/usb/cdns3/cdnsp-gadget.c b/drivers/usb/cdns3/cdnsp-gadget.c
-index 4b67749edb99..4a3f0f958256 100644
---- a/drivers/usb/cdns3/cdnsp-gadget.c
-+++ b/drivers/usb/cdns3/cdnsp-gadget.c
-@@ -1024,10 +1024,8 @@ static int cdnsp_gadget_ep_disable(struct usb_ep *ep)
- 	pep->ep_state |= EP_DIS_IN_RROGRESS;
- 
- 	/* Endpoint was unconfigured by Reset Device command. */
--	if (!(pep->ep_state & EP_UNCONFIGURED)) {
-+	if (!(pep->ep_state & EP_UNCONFIGURED))
- 		cdnsp_cmd_stop_ep(pdev, pep);
--		cdnsp_cmd_flush_ep(pdev, pep);
--	}
- 
- 	/* Remove all queued USB requests. */
- 	while (!list_empty(&pep->pending_list)) {
-@@ -1424,8 +1422,6 @@ static void cdnsp_stop(struct cdnsp_device *pdev)
- {
- 	u32 temp;
- 
--	cdnsp_cmd_flush_ep(pdev, &pdev->eps[0]);
--
- 	/* Remove internally queued request for ep0. */
- 	if (!list_empty(&pdev->eps[0].pending_list)) {
- 		struct cdnsp_request *req;
-diff --git a/drivers/usb/cdns3/cdnsp-gadget.h b/drivers/usb/cdns3/cdnsp-gadget.h
-index e1b5801fdddf..dbee6f085277 100644
---- a/drivers/usb/cdns3/cdnsp-gadget.h
-+++ b/drivers/usb/cdns3/cdnsp-gadget.h
-@@ -1128,8 +1128,6 @@ union cdnsp_trb {
- #define TRB_HALT_ENDPOINT	54
- /* Doorbell Overflow Event. */
- #define TRB_DRB_OVERFLOW	57
--/* Flush Endpoint Command. */
--#define TRB_FLUSH_ENDPOINT	58
- 
- #define TRB_TYPE_LINK(x)	(((x) & TRB_TYPE_BITMASK) == TRB_TYPE(TRB_LINK))
- #define TRB_TYPE_LINK_LE32(x)	(((x) & cpu_to_le32(TRB_TYPE_BITMASK)) == \
-@@ -1539,8 +1537,6 @@ void cdnsp_queue_configure_endpoint(struct cdnsp_device *pdev,
- void cdnsp_queue_reset_ep(struct cdnsp_device *pdev, unsigned int ep_index);
- void cdnsp_queue_halt_endpoint(struct cdnsp_device *pdev,
- 			       unsigned int ep_index);
--void cdnsp_queue_flush_endpoint(struct cdnsp_device *pdev,
--				unsigned int ep_index);
- void cdnsp_force_header_wakeup(struct cdnsp_device *pdev, int intf_num);
- void cdnsp_queue_reset_device(struct cdnsp_device *pdev);
- void cdnsp_queue_new_dequeue_state(struct cdnsp_device *pdev,
-@@ -1574,7 +1570,6 @@ void cdnsp_irq_reset(struct cdnsp_device *pdev);
- int cdnsp_halt_endpoint(struct cdnsp_device *pdev,
- 			struct cdnsp_ep *pep, int value);
- int cdnsp_cmd_stop_ep(struct cdnsp_device *pdev, struct cdnsp_ep *pep);
--int cdnsp_cmd_flush_ep(struct cdnsp_device *pdev, struct cdnsp_ep *pep);
- void cdnsp_setup_analyze(struct cdnsp_device *pdev);
- int cdnsp_status_stage(struct cdnsp_device *pdev);
- int cdnsp_reset_device(struct cdnsp_device *pdev);
-diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
-index 07f6068342d4..af981778382d 100644
---- a/drivers/usb/cdns3/cdnsp-ring.c
-+++ b/drivers/usb/cdns3/cdnsp-ring.c
-@@ -2123,19 +2123,6 @@ int cdnsp_cmd_stop_ep(struct cdnsp_device *pdev, struct cdnsp_ep *pep)
- 	return ret;
- }
- 
--int cdnsp_cmd_flush_ep(struct cdnsp_device *pdev, struct cdnsp_ep *pep)
--{
--	int ret;
--
--	cdnsp_queue_flush_endpoint(pdev, pep->idx);
--	cdnsp_ring_cmd_db(pdev);
--	ret = cdnsp_wait_for_cmd_compl(pdev);
--
--	trace_cdnsp_handle_cmd_flush_ep(pep->out_ctx);
--
--	return ret;
--}
--
- /*
-  * The transfer burst count field of the isochronous TRB defines the number of
-  * bursts that are required to move all packets in this TD. Only SuperSpeed
-@@ -2465,17 +2452,6 @@ void cdnsp_queue_halt_endpoint(struct cdnsp_device *pdev, unsigned int ep_index)
- 			    EP_ID_FOR_TRB(ep_index));
- }
- 
--/*
-- * Queue a flush endpoint request on the command ring.
-- */
--void  cdnsp_queue_flush_endpoint(struct cdnsp_device *pdev,
--				 unsigned int ep_index)
--{
--	cdnsp_queue_command(pdev, 0, 0, 0, TRB_TYPE(TRB_FLUSH_ENDPOINT) |
--			    SLOT_ID_FOR_TRB(pdev->slot_id) |
--			    EP_ID_FOR_TRB(ep_index));
--}
--
- void cdnsp_force_header_wakeup(struct cdnsp_device *pdev, int intf_num)
- {
- 	u32 lo, mid;
+On 26/10/2023 01:21, Elson Serrao wrote:
+> 
+> 
+> On 10/25/2023 1:02 AM, Roger Quadros wrote:
+>>
+>>
+>> On 24/10/2023 21:41, Elson Serrao wrote:
+>>>
+>>>
+>>> On 10/24/2023 3:14 AM, Roger Quadros wrote:
+>>>> Hi Elson,
+>>>>
+>>>> On 14/08/2023 21:50, Elson Roy Serrao wrote:
+>>>>> The current implementation blocks the runtime pm operations when cable
+>>>>> is connected. This would block dwc3 to enter a low power state during
+>>>>> bus suspend scenario. Modify the runtime pm ops to handle bus suspend
+>>>>> case for such platforms where the controller low power mode entry/exit
+>>>>> is handled by the glue driver. This enablement is controlled through a
+>>>>> dt property and platforms capable of detecting bus resume can benefit
+>>>>> from this feature. Also modify the remote wakeup operations to trigger
+>>>>> runtime resume before sending wakeup signal.
+>>>>>
+>>>>> Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
+>>>>> ---
+>>>>>    drivers/usb/dwc3/core.c   | 28 ++++++++++++++++++++++++++--
+>>>>>    drivers/usb/dwc3/core.h   |  3 +++
+>>>>>    drivers/usb/dwc3/gadget.c | 32 +++++++++++++++++++++++++-------
+>>>>>    3 files changed, 54 insertions(+), 9 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+>>>>> index 9c6bf054f15d..9bfd9bb18caf 100644
+>>>>> --- a/drivers/usb/dwc3/core.c
+>>>>> +++ b/drivers/usb/dwc3/core.c
+>>>>> @@ -1518,6 +1518,9 @@ static void dwc3_get_properties(struct dwc3 *dwc)
+>>>>>        dwc->dis_split_quirk = device_property_read_bool(dev,
+>>>>>                    "snps,dis-split-quirk");
+>>>>>    +    dwc->runtime_suspend_on_usb_suspend = device_property_read_bool(dev,
+>>>>> +                "snps,runtime-suspend-on-usb-suspend");
+>>>>> +
+>>>>>        dwc->lpm_nyet_threshold = lpm_nyet_threshold;
+>>>>>        dwc->tx_de_emphasis = tx_de_emphasis;
+>>>>>    @@ -2029,6 +2032,9 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
+>>>>>          switch (dwc->current_dr_role) {
+>>>>>        case DWC3_GCTL_PRTCAP_DEVICE:
+>>>>> +        /* runtime resume on bus resume scenario */
+>>>>> +        if (PMSG_IS_AUTO(msg) && dwc->connected)
+>>>>> +            break;
+>>>>>            ret = dwc3_core_init_for_resume(dwc);
+>>>>>            if (ret)
+>>>>>                return ret;
+>>>>> @@ -2090,8 +2096,13 @@ static int dwc3_runtime_checks(struct dwc3 *dwc)
+>>>>>    {
+>>>>>        switch (dwc->current_dr_role) {
+>>>>>        case DWC3_GCTL_PRTCAP_DEVICE:
+>>>>> -        if (dwc->connected)
+>>>>> +        if (dwc->connected) {
+>>>>> +            /* bus suspend scenario */
+>>>>> +            if (dwc->runtime_suspend_on_usb_suspend &&
+>>>>> +                dwc->suspended)
+>>>>
+>>>> If dwc is already suspended why do we return -EBUSY?
+>>>> Should this be !dwc->suspended?
+>>>>
+>>>
+>>> Hi Roger
+>>>
+>>> Thank you for reviewing.
+>>> If dwc->suspended is true (i.e suspend event due to U3/L2 is received), I am actually breaking from this switch statement and returning 0.
+>>
+>> Of course. I missed the break :)
+>>
+>>>
+>>>>> +                break;
+>>>>>                return -EBUSY;
+>>>>> +        }
+>>>>>            break;
+>>>>>        case DWC3_GCTL_PRTCAP_HOST:
+>>>>>        default:
+>>>>> @@ -2107,9 +2118,22 @@ static int dwc3_runtime_suspend(struct device *dev)
+>>>>>        struct dwc3     *dwc = dev_get_drvdata(dev);
+>>>>>        int        ret;
+>>>>>    -    if (dwc3_runtime_checks(dwc))
+>>>>> +    ret = dwc3_runtime_checks(dwc);
+>>>>> +    if (ret)
+>>>>>            return -EBUSY;
+>>>>>    +    switch (dwc->current_dr_role) {
+>>>>> +    case DWC3_GCTL_PRTCAP_DEVICE:
+>>>>> +        /* bus suspend case */
+>>>>> +        if (!ret && dwc->connected)
+>>>>
+>>>> No need to check !ret again as it will never happen because
+>>>> we are returning -EBUSY earlier if (ret);
+>>>>
+>>> Thanks for this catch. I will remove !ret check in v5.
+>>>
+>>>>> +            return 0;
+>>>>> +        break;
+>>>>> +    case DWC3_GCTL_PRTCAP_HOST:
+>>>>> +    default:
+>>>>> +        /* do nothing */
+>>>>> +        break;
+>>>>> +    }
+>>>>> +
+>>>>
+>>>> While this takes care of runtime suspend case, what about system_suspend?
+>>>> Should this check be moved to dwc3_suspend_common() instead?
+>>>>
+>>>
+>>> Sure I can move these checks to dwc3_suspend_common to make it generic.
+>>
+>> Before you do that let's first decide how we want the gadget driver to behave
+>> in system_suspend case.
+>>
+>> Current behavior is to Disconnect from the Host.
+>>
+>> Earlier I was thinking on the lines that we prevent system suspend if
+>> we are not already in USB suspend. But I'm not sure if that is the right
+>> thing to do anymore. Mainly because, system suspend is a result of user
+>> request and it may not be nice to not to meet his/her request.
+> 
+> Agree. Irrespective of whether USB is suspended or not it is better to honor the system suspend request from user.
+> 
+>> Maybe best to leave this policy handling to user space?
+>> i.e. if user wants USB gadget operation to be alive, he will not issue
+>> system suspend?
+>>
+> 
+> Sure. So below two cases
+> 
+> Case1: User doesn't care if gadget operation is alive and triggers system suspend irrespective of USB suspend. Like you mentioned, current behavior already takes care of this and initiates a DISCONNECT
+> 
+> Case2:  User wants gadget to stay alive and hence can trigger system suspend only when USB is suspended (there are already user space hooks that read cdev->suspended bit to tell whether USB is suspended or not for user to decide). Attempts to request system suspend when USB is not suspended, would result in a DISCONNECT.
+> 
+> For supporting Case2 from gadget driver point of view, we need to extend this series by having relevant checks in suspend_common()
+> 
+> Also, is it better to provide separate flags to control the gadget driver behavior for runtime suspend Vs system suspend when USB is suspended ? For example, what if we want to enable bus suspend handling for runtime suspend only and not for system suspend (Case1).
+
+But you mentioned that for Case1, USB gadget would disconnect from Host. So USB will be in disconnected state and USB controller can be fully de-activated? Except maybe wakeup handling to bring system out of suspend on a USB plug/unplug event?
+Why do we need separate flags for?
+
 -- 
-2.25.1
-
+cheers,
+-roger
 
