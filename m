@@ -1,208 +1,146 @@
-Return-Path: <linux-usb+bounces-2207-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2209-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6AB87D7E80
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 10:29:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id EFECA7D7EBA
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 10:44:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A2192281EEE
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 08:29:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8042D281F90
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 08:44:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F2FA1A5B9;
-	Thu, 26 Oct 2023 08:29:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 134551CAAF;
+	Thu, 26 Oct 2023 08:44:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rlHtz9xB"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JsgTkCzp"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F35C015AF6;
-	Thu, 26 Oct 2023 08:29:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FDFDC433C8;
-	Thu, 26 Oct 2023 08:29:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1698308972;
-	bh=CTFVbTZqO5OGlZiX3WaXdGwenvlKlAQhgXR0GUTuxCU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=rlHtz9xB+wEz9wF3YvoduRFGpaYt51ROpBxrpoWUEi+AZRzB5OBzy9TaGYXvX9SMN
-	 bNlEHpVhoMDIUcAafN3xFGL5FPXxJbI9L4uACS3w3MKedHAxi4iuXflr1EQDHAX1pf
-	 S1pz+hCfgpsPeJEu2jeg7zZEym+w7ws9rnm/ORELmhEHSc1Kti3PSzNPdWp6HWAtf/
-	 soBzXoMxu+6pj+b0CT1E+xzKrf1aFxYr8Xt+m0cmqVCf83sia1zPhicgglqvM3Ijn9
-	 dYcDbwzae9VxygW2QGIxGaJ1mRb+uxFDOgG8hpZJAct3aUOvwmdGhj2lz4NwtW59e0
-	 jU3a2IlWaB+lg==
-Message-ID: <bd74947f-8827-4539-a590-9c53d5ddd02d@kernel.org>
-Date: Thu, 26 Oct 2023 11:29:27 +0300
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEFF71C6A3
+	for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 08:44:15 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1635A129
+	for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 01:44:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1698309850; x=1729845850;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=P3HWvTavV+n2a56NQVuLXNnsoTlUS84rMMBGYy3kUwc=;
+  b=JsgTkCzpOpKZVmaPDbhJI4YSzqOPzH3fJjS1C++q7u1/42MtRnt6r6AD
+   4zdwYboJIoVbXP3ejt/YEYJpRhx52QuWOt6gBcSV6zQ4CU5XNUWxjDsTv
+   RImqhCOm5RbDC66t6j6cxY9z8aEvhRsQzunsEzXnwVENS62wurL5T511h
+   jNeoGYSOb9TvMvkReN/Ju5wTJNosOJMsmliTuRxo1TQnlAxpx8ni8lIMb
+   h3ey9D3dsAmyrWJWQNK8KN5IxPKRswW7oqawqeWsQSW4wiqD6Jzk9XrqH
+   iiKoCLx9/Y6q05sydNEBt+tWG+I1j/WKBe/B7nuK7naygEym+ClfJKoVr
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10874"; a="387317443"
+X-IronPort-AV: E=Sophos;i="6.03,253,1694761200"; 
+   d="scan'208";a="387317443"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2023 01:44:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10874"; a="794121394"
+X-IronPort-AV: E=Sophos;i="6.03,253,1694761200"; 
+   d="scan'208";a="794121394"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga001.jf.intel.com with ESMTP; 26 Oct 2023 01:44:07 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id 12AFE81C; Thu, 26 Oct 2023 11:44:06 +0300 (EEST)
+Date: Thu, 26 Oct 2023 11:44:05 +0300
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	linux-usb@vger.kernel.org,
+	Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [GIT PULL] USB4/Thunderbolt changes for v6.7 merge window
+Message-ID: <20231026084405.GJ3208943@black.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 3/3] usb: dwc3: Modify runtime pm ops to handle bus
- suspend
-Content-Language: en-US
-To: Elson Serrao <quic_eserrao@quicinc.com>, gregkh@linuxfoundation.org,
- Thinh.Nguyen@synopsys.com, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
- devicetree@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20230814185043.9252-1-quic_eserrao@quicinc.com>
- <20230814185043.9252-4-quic_eserrao@quicinc.com>
- <9be9fae5-f6f2-42fe-bd81-78ab50aafa06@kernel.org>
- <cd294a89-33e7-0569-81b3-df77a255f061@quicinc.com>
- <0dee3bec-d49f-4808-a2f8-7a4205303e1f@kernel.org>
- <c7fc7bc2-1a84-e6b5-5198-1b8cc602d738@quicinc.com>
-From: Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <c7fc7bc2-1a84-e6b5-5198-1b8cc602d738@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 
+Hi Greg,
 
+The following changes since commit 0bb80ecc33a8fb5a682236443c1e740d5c917d1d:
 
-On 26/10/2023 01:21, Elson Serrao wrote:
-> 
-> 
-> On 10/25/2023 1:02 AM, Roger Quadros wrote:
->>
->>
->> On 24/10/2023 21:41, Elson Serrao wrote:
->>>
->>>
->>> On 10/24/2023 3:14 AM, Roger Quadros wrote:
->>>> Hi Elson,
->>>>
->>>> On 14/08/2023 21:50, Elson Roy Serrao wrote:
->>>>> The current implementation blocks the runtime pm operations when cable
->>>>> is connected. This would block dwc3 to enter a low power state during
->>>>> bus suspend scenario. Modify the runtime pm ops to handle bus suspend
->>>>> case for such platforms where the controller low power mode entry/exit
->>>>> is handled by the glue driver. This enablement is controlled through a
->>>>> dt property and platforms capable of detecting bus resume can benefit
->>>>> from this feature. Also modify the remote wakeup operations to trigger
->>>>> runtime resume before sending wakeup signal.
->>>>>
->>>>> Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
->>>>> ---
->>>>>    drivers/usb/dwc3/core.c   | 28 ++++++++++++++++++++++++++--
->>>>>    drivers/usb/dwc3/core.h   |  3 +++
->>>>>    drivers/usb/dwc3/gadget.c | 32 +++++++++++++++++++++++++-------
->>>>>    3 files changed, 54 insertions(+), 9 deletions(-)
->>>>>
->>>>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
->>>>> index 9c6bf054f15d..9bfd9bb18caf 100644
->>>>> --- a/drivers/usb/dwc3/core.c
->>>>> +++ b/drivers/usb/dwc3/core.c
->>>>> @@ -1518,6 +1518,9 @@ static void dwc3_get_properties(struct dwc3 *dwc)
->>>>>        dwc->dis_split_quirk = device_property_read_bool(dev,
->>>>>                    "snps,dis-split-quirk");
->>>>>    +    dwc->runtime_suspend_on_usb_suspend = device_property_read_bool(dev,
->>>>> +                "snps,runtime-suspend-on-usb-suspend");
->>>>> +
->>>>>        dwc->lpm_nyet_threshold = lpm_nyet_threshold;
->>>>>        dwc->tx_de_emphasis = tx_de_emphasis;
->>>>>    @@ -2029,6 +2032,9 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
->>>>>          switch (dwc->current_dr_role) {
->>>>>        case DWC3_GCTL_PRTCAP_DEVICE:
->>>>> +        /* runtime resume on bus resume scenario */
->>>>> +        if (PMSG_IS_AUTO(msg) && dwc->connected)
->>>>> +            break;
->>>>>            ret = dwc3_core_init_for_resume(dwc);
->>>>>            if (ret)
->>>>>                return ret;
->>>>> @@ -2090,8 +2096,13 @@ static int dwc3_runtime_checks(struct dwc3 *dwc)
->>>>>    {
->>>>>        switch (dwc->current_dr_role) {
->>>>>        case DWC3_GCTL_PRTCAP_DEVICE:
->>>>> -        if (dwc->connected)
->>>>> +        if (dwc->connected) {
->>>>> +            /* bus suspend scenario */
->>>>> +            if (dwc->runtime_suspend_on_usb_suspend &&
->>>>> +                dwc->suspended)
->>>>
->>>> If dwc is already suspended why do we return -EBUSY?
->>>> Should this be !dwc->suspended?
->>>>
->>>
->>> Hi Roger
->>>
->>> Thank you for reviewing.
->>> If dwc->suspended is true (i.e suspend event due to U3/L2 is received), I am actually breaking from this switch statement and returning 0.
->>
->> Of course. I missed the break :)
->>
->>>
->>>>> +                break;
->>>>>                return -EBUSY;
->>>>> +        }
->>>>>            break;
->>>>>        case DWC3_GCTL_PRTCAP_HOST:
->>>>>        default:
->>>>> @@ -2107,9 +2118,22 @@ static int dwc3_runtime_suspend(struct device *dev)
->>>>>        struct dwc3     *dwc = dev_get_drvdata(dev);
->>>>>        int        ret;
->>>>>    -    if (dwc3_runtime_checks(dwc))
->>>>> +    ret = dwc3_runtime_checks(dwc);
->>>>> +    if (ret)
->>>>>            return -EBUSY;
->>>>>    +    switch (dwc->current_dr_role) {
->>>>> +    case DWC3_GCTL_PRTCAP_DEVICE:
->>>>> +        /* bus suspend case */
->>>>> +        if (!ret && dwc->connected)
->>>>
->>>> No need to check !ret again as it will never happen because
->>>> we are returning -EBUSY earlier if (ret);
->>>>
->>> Thanks for this catch. I will remove !ret check in v5.
->>>
->>>>> +            return 0;
->>>>> +        break;
->>>>> +    case DWC3_GCTL_PRTCAP_HOST:
->>>>> +    default:
->>>>> +        /* do nothing */
->>>>> +        break;
->>>>> +    }
->>>>> +
->>>>
->>>> While this takes care of runtime suspend case, what about system_suspend?
->>>> Should this check be moved to dwc3_suspend_common() instead?
->>>>
->>>
->>> Sure I can move these checks to dwc3_suspend_common to make it generic.
->>
->> Before you do that let's first decide how we want the gadget driver to behave
->> in system_suspend case.
->>
->> Current behavior is to Disconnect from the Host.
->>
->> Earlier I was thinking on the lines that we prevent system suspend if
->> we are not already in USB suspend. But I'm not sure if that is the right
->> thing to do anymore. Mainly because, system suspend is a result of user
->> request and it may not be nice to not to meet his/her request.
-> 
-> Agree. Irrespective of whether USB is suspended or not it is better to honor the system suspend request from user.
-> 
->> Maybe best to leave this policy handling to user space?
->> i.e. if user wants USB gadget operation to be alive, he will not issue
->> system suspend?
->>
-> 
-> Sure. So below two cases
-> 
-> Case1: User doesn't care if gadget operation is alive and triggers system suspend irrespective of USB suspend. Like you mentioned, current behavior already takes care of this and initiates a DISCONNECT
-> 
-> Case2:  User wants gadget to stay alive and hence can trigger system suspend only when USB is suspended (there are already user space hooks that read cdev->suspended bit to tell whether USB is suspended or not for user to decide). Attempts to request system suspend when USB is not suspended, would result in a DISCONNECT.
-> 
-> For supporting Case2 from gadget driver point of view, we need to extend this series by having relevant checks in suspend_common()
-> 
-> Also, is it better to provide separate flags to control the gadget driver behavior for runtime suspend Vs system suspend when USB is suspended ? For example, what if we want to enable bus suspend handling for runtime suspend only and not for system suspend (Case1).
+  Linux 6.6-rc1 (2023-09-10 16:28:41 -0700)
 
-But you mentioned that for Case1, USB gadget would disconnect from Host. So USB will be in disconnected state and USB controller can be fully de-activated? Except maybe wakeup handling to bring system out of suspend on a USB plug/unplug event?
-Why do we need separate flags for?
+are available in the Git repository at:
 
--- 
-cheers,
--roger
+  git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v6.7-rc1
+
+for you to fetch changes up to a558892b3456d44f2a89d238f5d650f0574fa3b2:
+
+  thunderbolt: Fix one kernel-doc comment (2023-10-24 07:49:17 +0300)
+
+----------------------------------------------------------------
+thunderbolt: Changes for v6.7 merge window
+
+This includes following USB4/Thunderbolt changes for the v6.7 merge
+window:
+
+  - Configure asymmetric link if the DisplayPort bandwidth requires so
+  - Enable path power management packet support for USB4 v2 routers
+  - Make the bandwidth reservations to follow the USB4 v2 connection
+    manager guide suggestions
+  - DisplayPort tunneling improvements
+  - Small cleanups and improvements around the driver.
+
+All these have been in linux-next with no reported issues.
+
+----------------------------------------------------------------
+Gil Fine (10):
+      thunderbolt: Fix debug log when DisplayPort adapter not available for pairing
+      thunderbolt: Fix typo of HPD bit for Hot Plug Detect
+      thunderbolt: Log NVM version of routers and retimers
+      thunderbolt: Create multiple DisplayPort tunnels if there are more DP IN/OUT pairs
+      thunderbolt: Add DP IN added last in the head of the list of DP resources
+      thunderbolt: Make is_gen4_link() available to the rest of the driver
+      thunderbolt: Change bandwidth reservations to comply USB4 v2
+      thunderbolt: Introduce tb_port_path_direction_downstream()
+      thunderbolt: Add support for asymmetric link
+      thunderbolt: Configure asymmetric link if needed and bandwidth allows
+
+Mika Westerberg (14):
+      thunderbolt: Apply USB 3.x bandwidth quirk only in software connection manager
+      thunderbolt: dma_test: Use enum tb_link_width
+      thunderbolt: Get rid of usb4_usb3_port_actual_link_rate()
+      thunderbolt: Make tb_switch_clx_is_supported() static
+      thunderbolt: Check for unplugged router in tb_switch_clx_disable()
+      thunderbolt: Fix typo in enum tb_link_width kernel-doc
+      thunderbolt: Use tb_tunnel_dbg() where possible to make logging more consistent
+      thunderbolt: Expose tb_tunnel_xxx() log macros to the rest of the driver
+      thunderbolt: Use tb_tunnel_xxx() log macros in tb.c
+      thunderbolt: Use constants for path weight and priority
+      thunderbolt: Use weight constants in tb_usb3_consumed_bandwidth()
+      thunderbolt: Set path power management packet support bit for USB4 v2 routers
+      thunderbolt: Introduce tb_for_each_upstream_port_on_path()
+      thunderbolt: Introduce tb_switch_depth()
+
+Yang Li (1):
+      thunderbolt: Fix one kernel-doc comment
+
+ drivers/thunderbolt/clx.c      |  47 +--
+ drivers/thunderbolt/dma_test.c |  14 +-
+ drivers/thunderbolt/path.c     |   7 +-
+ drivers/thunderbolt/quirks.c   |   3 +
+ drivers/thunderbolt/retimer.c  |   1 +
+ drivers/thunderbolt/switch.c   | 337 +++++++++++++++---
+ drivers/thunderbolt/tb.c       | 774 ++++++++++++++++++++++++++++++++---------
+ drivers/thunderbolt/tb.h       |  60 +++-
+ drivers/thunderbolt/tb_regs.h  |  19 +-
+ drivers/thunderbolt/tunnel.c   | 263 ++++++++------
+ drivers/thunderbolt/tunnel.h   |  26 +-
+ drivers/thunderbolt/usb4.c     | 135 +++++--
+ include/linux/thunderbolt.h    |   2 +-
+ 13 files changed, 1300 insertions(+), 388 deletions(-)
 
