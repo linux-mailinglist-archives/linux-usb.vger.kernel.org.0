@@ -1,182 +1,97 @@
-Return-Path: <linux-usb+bounces-2226-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2227-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DA0E7D865C
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 18:01:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B2997D86D4
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 18:37:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B070282066
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 16:01:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 45FB928206F
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 16:36:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4DBF381A0;
-	Thu, 26 Oct 2023 16:01:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2E4C11CB3;
+	Thu, 26 Oct 2023 16:36:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SRTlygfz"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D596154AD
-	for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 16:01:11 +0000 (UTC)
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446E61A2;
-	Thu, 26 Oct 2023 09:01:09 -0700 (PDT)
-Received: from [192.168.1.103] (178.176.74.108) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Thu, 26 Oct
- 2023 19:00:58 +0300
-Subject: Re: [PATCH v6] usb: Reduce the 'SET_ADDRESS' request timeout with a
- new quirk
-To: Hardik Gajjar <hgajjar@de.adit-jv.com>, <gregkh@linuxfoundation.org>,
-	<stern@rowland.harvard.edu>, <mathias.nyman@intel.com>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<erosca@de.adit-jv.com>
-References: <20231025164019.GA121292@vmlxhi-118.adit-jv.com>
- <20231026101551.36551-1-hgajjar@de.adit-jv.com>
-From: Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <cd598ae5-6eae-8e0b-8295-d98fa5c4b2fd@omp.ru>
-Date: Thu, 26 Oct 2023 19:00:56 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C705381D5
+	for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 16:36:55 +0000 (UTC)
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B59C818A;
+	Thu, 26 Oct 2023 09:36:54 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id 98e67ed59e1d1-27d0acd0903so928366a91.1;
+        Thu, 26 Oct 2023 09:36:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1698338214; x=1698943014; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=s6mEQ/jJUndEhke58xoYtbcLMqltQaUgXEZRUu92m1g=;
+        b=SRTlygfzoA7DLOy9b+OIxaZdPPJyroeziwmBVDTV1r8HxVw2haeyOXB/mwCU8RFkaP
+         ak2MbWjHkJ5XlyKVTZrs4m8gZ1bVBd+eqSF1MXj+3RWk1Tc86ezmtj7EwN9DNSjxBe42
+         J5yLDmB2uI6B8ATgvPF5nEUseOFIbKZcccR/hsN0R/o1RW2yPNv3oIRv+volzV1y1+y0
+         2Q3S+/CrRPd0KFvYIjFYfGXw+z7LYSfobALdu63fsVW6D/STkfKxa3NGlQLZpXtL+u2Q
+         g1V+gwx0uny652CwpPnThDzf+g1+mMtEaopPFLtQqyLOBb1PPbuZVF7tS+rHPz9o2LnA
+         w/7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698338214; x=1698943014;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=s6mEQ/jJUndEhke58xoYtbcLMqltQaUgXEZRUu92m1g=;
+        b=DWyJvIKBUo0XcKkzWbXvKq1dZlu336r3YO6hY776leH9hAgHkmgy5MqjiV7yEamYrj
+         f9xhLMu0FOvw4LobfZDGc2eQE9sAdViBVpV1IOqZ8BXw8ux1SjL55wLqHeNL6YrM5tgS
+         H2htXmLAvFKhvkfr7n9rY6nTa3cSZHc3Kp3AKjzxVCHtBs55z9otnXIRp4D2O+38BiG4
+         hPWVn0eMN2FnavVI7G+jsQwwgyDZA5aOs+v4dXcZQuknq77FvFrqDkWAyBT3kX/bEgQB
+         CDd9Toq8dRS9i1/xLY2mLOHQZmrEg6MnsqmEe75vuOyDnwNWjAPUCJZ7iTDN4FJJmGPw
+         YJOA==
+X-Gm-Message-State: AOJu0Yy171xgKdsb8KQa8EU+/upFINNmKB4+zbjUucgPDlNVohF/Z5tK
+	8Lu7RHMP8tp296MU2OXSSnrO8YeaNfxdnyXcKjw=
+X-Google-Smtp-Source: AGHT+IHPLjytrDUy/OHJAGwxWJrCqLWDhA4MfCUvQr71kgNrPpxJ998yCpt6MVuks3TbhOCiuTscaTrqWARMjyCOtKY=
+X-Received: by 2002:a17:90b:35c3:b0:27d:61ff:3d3b with SMTP id
+ nb3-20020a17090b35c300b0027d61ff3d3bmr17026289pjb.38.1698338214118; Thu, 26
+ Oct 2023 09:36:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20231026101551.36551-1-hgajjar@de.adit-jv.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [178.176.74.108]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 6.0.0, Database issued on: 10/26/2023 15:43:12
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 180928 [Oct 26 2023]
-X-KSE-AntiSpam-Info: Version: 6.0.0.2
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 543 543 1e3516af5cdd92079dfeb0e292c8747a62cb1ee4
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.74.108 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.74.108 in (user)
- dbl.spamhaus.org}
-X-KSE-AntiSpam-Info:
-	omp.ru:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
-X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.74.108
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 10/26/2023 15:46:00
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 10/26/2023 2:32:00 PM
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+References: <0db45b1d7cc466e3d4d1ab353f61d63c977fbbc5.1698329862.git.andreyknvl@gmail.com>
+ <eb637fd7930722ff9dfc2ab4469d78040ee2a166.1698329862.git.andreyknvl@gmail.com>
+In-Reply-To: <eb637fd7930722ff9dfc2ab4469d78040ee2a166.1698329862.git.andreyknvl@gmail.com>
+From: Andrey Konovalov <andreyknvl@gmail.com>
+Date: Thu, 26 Oct 2023 18:36:42 +0200
+Message-ID: <CA+fCnZfBder34H+zuONEkzJk0_Li91H12AxsO6rCY286RYjFrQ@mail.gmail.com>
+Subject: Re: [PATCH 3/3] usb: raw-gadget: report suspend, resume, reset, and
+ disconnect events
+To: andrey.konovalov@linux.dev
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Alan Stern <stern@rowland.harvard.edu>, 
+	Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello!
+On Thu, Oct 26, 2023 at 4:24=E2=80=AFPM <andrey.konovalov@linux.dev> wrote:
+>
+> diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/=
+legacy/raw_gadget.c
+> index daac1f078516..ee712e6570b4 100644
+> --- a/drivers/usb/gadget/legacy/raw_gadget.c
+> +++ b/drivers/usb/gadget/legacy/raw_gadget.c
+> @@ -65,8 +65,9 @@ static int raw_event_queue_add(struct raw_event_queue *=
+queue,
+>         struct usb_raw_event *event;
+>
+>         spin_lock_irqsave(&queue->lock, flags);
+> -       if (WARN_ON(queue->size >=3D RAW_EVENT_QUEUE_SIZE)) {
+> +       if (queue->size >=3D RAW_EVENT_QUEUE_SIZE) {
+>                 spin_unlock_irqrestore(&queue->lock, flags);
+> +               dev_err(&gadget->dev, "event queue overflown\n");
 
-   Please don't post the patches as a reply to the other thread, start a new
-thread with a new patch version (I thought others would tell you that but nobody
-has so far).
-   And how about changing the wording of the subject to s/th like below?
-
-usb: new quirk to reduce the SET_ADDRESS request timeout
-
-On 10/26/23 1:15 PM, Hardik Gajjar wrote:
-
-> This patch introduces a new USB quirk,
-> USB_QUIRK_SHORT_SET_ADDRESS_REQ_TIMEOUT, which modifies the timeout value
-> for the 'SET_ADDRESS' request. The standard timeout for USB request/command
-
-   The upper case is enough of the emphasis, I don't think the apostrophes
-are needed arounnd SET_ADDRESS...
-
-[...]
-
-> Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
-> ---
-[...]
-> Changes since version 5:
-> 	- Changed the terminology in USB core driver files from 'command' to 'request'
-> 	  as it is more commonly used. 
-> 	  It's important to note that USB specifications indicate these terms are interchangeable.
-
-   Didn't know that... tried to find the proof in the USB specs but haven't
-managed to do it...
-
-> 	  For example, USB spec 3.2, section 9.2.6.1, uses the term 'command' in its text
-> 	  "USB sets an upper limit of 5 seconds for any command to be processed. "
-
-   Hm, indeed; and this wording is even inherited from USB 1.1...
-
-[...]
-
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index 3c54b218301c..98db92af2cce 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -54,6 +54,19 @@
->  #define USB_TP_TRANSMISSION_DELAY_MAX	65535	/* ns */
->  #define USB_PING_RESPONSE_TIME		400	/* ns */
->  
-> +/*
-> + * USB 3.2 spec, section 9.2.6.1
-> + * USB sets an upper limit of 5000 ms for any command/request
-> + * to be processed.
-> + */
-> +#define USB_DEFAULT_REQUEST_TIMEOUT_MS	5000 /* ms */
-> +
-> +/*
-> + * The SET_ADDRESS request timeout will be 500 ms when
-> + * USB_QUIRK_SHORT_SET_ADDRESS_REQ_TIMEOUT enable.
-> + */
-> +#define USB_SHORT_SET_ADDRESS_REQ_TIMEOUT_MS	500  /* ms */
-
-   I don'ts see the _MS-like suffixes in the other timeout #define's there...
-
-[...]
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index e1b1b64a0723..d856c4717ca9 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -3997,12 +3997,18 @@ int xhci_alloc_dev(struct usb_hcd *hcd, struct usb_device *udev)
->  	return 0;
->  }
->  
-> -/*
-> - * Issue an Address Device command and optionally send a corresponding
-> - * SetAddress request to the device.
-> +/**
-> + * xhci_setup_device - issues an Address Device command to assign a unique
-> + *			USB bus address.
-> + * @hcd: USB host controller data structure.
-> + * @udev: USB dev structure representing the connected device.
-> + * @setup: Enum specifying setup mode: address only or with context.
-> + * @timeout_ms: Max wait time (ms) for the command operation to complete.
-> + *
-> + * Return: 0 if successful; otherwise, negative error code.
-
-   I still think the above change should be a separate follow-up (or even
-a preceding) patch...
-
-[...]
-
-MBR, Sergey
+This is wrong, no reference to gadget->dev here. Will fix in v2 or
+send a fix up.
 
