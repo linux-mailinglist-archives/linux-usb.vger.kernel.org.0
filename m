@@ -1,273 +1,159 @@
-Return-Path: <linux-usb+bounces-2222-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2224-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8CB1E7D83DA
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 15:50:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F3D87D84B5
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 16:29:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B8B6E1C20F0F
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 13:50:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8EBDC1C20F4C
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 14:29:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 545A82E3FE;
-	Thu, 26 Oct 2023 13:50:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2B9A2EAFE;
+	Thu, 26 Oct 2023 14:29:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="avTGadn+"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pzsjr0LI"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C31EC2E3EF
-	for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 13:49:59 +0000 (UTC)
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37E14196
-	for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 06:49:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1698328194;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E10882EAF0
+	for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 14:29:34 +0000 (UTC)
+X-Greylist: delayed 323 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 26 Oct 2023 07:29:32 PDT
+Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [IPv6:2001:41d0:203:375::bb])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F20DD9C
+	for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 07:29:32 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1698330247;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=WNkd6PpCHNEvlhYWQiRlA3vMPX+LENdTaqWKtjBEFxY=;
-	b=avTGadn+VqxzRlgs5Na9tohxM8B5YHzxU1FmZQQsgLfyKPWQux3MBrUSUH52S7F3MnOT66
-	b42EpupaK2XUb7JKVPvqEdaH6BvnlWcQx92CefuWPZiA5P9ANsWG6Jbj3cLWM2VL8NkAMc
-	ASDESbEnaKwrbIpihApkJTjIcSwI4yc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-630-0m8kzp5ROnad1MoAcEc2bQ-1; Thu, 26 Oct 2023 09:49:50 -0400
-X-MC-Unique: 0m8kzp5ROnad1MoAcEc2bQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6311B811E86;
-	Thu, 26 Oct 2023 13:49:50 +0000 (UTC)
-Received: from localhost.localdomain (unknown [10.2.14.14])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 0722340C6F79;
-	Thu, 26 Oct 2023 13:49:48 +0000 (UTC)
-Message-ID: <8a8d4a7787e9d8b4f7f3c119b057ec4a8a6b1a91.camel@redhat.com>
-Subject: Re: [PATCH] USB: serial: option: add Fibocom L7xx modules
-From: Dan Williams <dcbw@redhat.com>
-To: Victor Fragoso <victorffs@hotmail.com>, "johan@kernel.org"
-	 <johan@kernel.org>
-Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, 
-	"linux-usb@vger.kernel.org"
-	 <linux-usb@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	 <linux-kernel@vger.kernel.org>
-Date: Thu, 26 Oct 2023 08:49:48 -0500
-In-Reply-To: <9315051ae981aaad1d46724641defc6e5f79d12b.camel@hotmail.com>
-References: <9315051ae981aaad1d46724641defc6e5f79d12b.camel@hotmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=w9sbKYXZtIyf/ohQE3Edg07I3no4RCuR4cZPauSieZc=;
+	b=pzsjr0LIp7pb/XtXqknldRSmwBGEupiwm0vXOysw+nZ5AkXmX4Mn1tMREjMwSEl1PyRTR0
+	RrMsQuW1oZ48xwGaxHMFSSgLkkxejvAhXprLAJpRUHicqO6wsJEoffVlR2iFc5eZDF6NBS
+	lUlaaOHetFd8DugXkRNuZ/UPPwd0ufs=
+From: andrey.konovalov@linux.dev
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Alan Stern <stern@rowland.harvard.edu>
+Cc: Andrey Konovalov <andreyknvl@gmail.com>,
+	Felipe Balbi <balbi@kernel.org>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 1/3] usb: raw-gadget: properly handle interrupted requests
+Date: Thu, 26 Oct 2023 16:23:59 +0200
+Message-Id: <0db45b1d7cc466e3d4d1ab353f61d63c977fbbc5.1698329862.git.andreyknvl@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.2
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, 2023-10-26 at 01:24 +0000, Victor Fragoso wrote:
-> Add support for Fibocom L7xx module series and variants.
->=20
-> L716-EU-60 (ECM):
-> T:=C2=A0 Bus=3D03 Lev=3D01 Prnt=3D01 Port=3D01 Cnt=3D01 Dev#=3D 17 Spd=3D=
-480=C2=A0 MxCh=3D 0
-> D:=C2=A0 Ver=3D 2.00 Cls=3D00(>ifc ) Sub=3D00 Prot=3D00 MxPS=3D64 #Cfgs=
-=3D=C2=A0 1
-> P:=C2=A0 Vendor=3D19d2 ProdID=3D0579 Rev=3D 1.00
-> S:=C2=A0 Manufacturer=3DFibocom,Incorporated
-> S:=C2=A0 Product=3DFibocom Mobile Boardband
-> S:=C2=A0 SerialNumber=3D1234567890ABCDEF
-> C:* #Ifs=3D 7 Cfg#=3D 1 Atr=3De0 MxPwr=3D500mA
-> A:=C2=A0 FirstIf#=3D 0 IfCount=3D 2 Cls=3D02(comm.) Sub=3D06 Prot=3D00
-> I:* If#=3D 0 Alt=3D 0 #EPs=3D 1 Cls=3D02(comm.) Sub=3D06 Prot=3D00 Driver=
-=3Dcdc_ether
-> E:=C2=A0 Ad=3D87(I) Atr=3D03(Int.) MxPS=3D=C2=A0 16 Ivl=3D32ms
-> I:=C2=A0 If#=3D 1 Alt=3D 0 #EPs=3D 0 Cls=3D0a(data ) Sub=3D00 Prot=3D00 D=
-river=3Dcdc_ether
-> I:* If#=3D 1 Alt=3D 1 #EPs=3D 2 Cls=3D0a(data ) Sub=3D00 Prot=3D00 Driver=
-=3Dcdc_ether
-> E:=C2=A0 Ad=3D81(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> E:=C2=A0 Ad=3D01(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> I:* If#=3D 2 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3Dff Prot=3Dff Driver=
-=3Doption
-> E:=C2=A0 Ad=3D82(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> E:=C2=A0 Ad=3D02(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> I:* If#=3D 3 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3Dff Prot=3Dff Driver=
-=3Doption
-> E:=C2=A0 Ad=3D83(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> E:=C2=A0 Ad=3D03(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> I:* If#=3D 4 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3Dff Prot=3Dff Driver=
-=3Doption
-> E:=C2=A0 Ad=3D84(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> E:=C2=A0 Ad=3D04(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> I:* If#=3D 5 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3Dff Prot=3Dff Driver=
-=3Doption
-> E:=C2=A0 Ad=3D85(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> E:=C2=A0 Ad=3D05(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> I:* If#=3D 6 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3D42 Prot=3D01 Driver=
-=3Dusbfs
-> E:=C2=A0 Ad=3D86(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> E:=C2=A0 Ad=3D06(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
->=20
-> L716-EU-60 (RNDIS):
-> T:=C2=A0 Bus=3D03 Lev=3D01 Prnt=3D01 Port=3D01 Cnt=3D01 Dev#=3D 21 Spd=3D=
-480=C2=A0 MxCh=3D 0
-> D:=C2=A0 Ver=3D 2.00 Cls=3D00(>ifc ) Sub=3D00 Prot=3D00 MxPS=3D64 #Cfgs=
-=3D=C2=A0 1
-> P:=C2=A0 Vendor=3D2cb7 ProdID=3D0001 Rev=3D 1.00
-> S:=C2=A0 Manufacturer=3DFibocom,Incorporated
-> S:=C2=A0 Product=3DFibocom Mobile Boardband
-> S:=C2=A0 SerialNumber=3D1234567890ABCDEF
-> C:* #Ifs=3D 7 Cfg#=3D 1 Atr=3De0 MxPwr=3D500mA
-> A:=C2=A0 FirstIf#=3D 0 IfCount=3D 2 Cls=3D02(comm.) Sub=3D06 Prot=3D00
-> I:* If#=3D 0 Alt=3D 0 #EPs=3D 1 Cls=3D02(comm.) Sub=3D06 Prot=3D00 Driver=
-=3Dcdc_ether
-> E:=C2=A0 Ad=3D87(I) Atr=3D03(Int.) MxPS=3D=C2=A0 16 Ivl=3D32ms
-> I:=C2=A0 If#=3D 1 Alt=3D 0 #EPs=3D 0 Cls=3D0a(data ) Sub=3D00 Prot=3D00 D=
-river=3Dcdc_ether
-> I:* If#=3D 1 Alt=3D 1 #EPs=3D 2 Cls=3D0a(data ) Sub=3D00 Prot=3D00 Driver=
-=3Dcdc_ether
-> E:=C2=A0 Ad=3D81(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> E:=C2=A0 Ad=3D01(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> I:* If#=3D 2 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3Dff Prot=3Dff Driver=
-=3Doption
-> E:=C2=A0 Ad=3D82(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> E:=C2=A0 Ad=3D02(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> I:* If#=3D 3 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3Dff Prot=3Dff Driver=
-=3Doption
-> E:=C2=A0 Ad=3D83(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> E:=C2=A0 Ad=3D03(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> I:* If#=3D 4 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3Dff Prot=3Dff Driver=
-=3Doption
-> E:=C2=A0 Ad=3D84(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> E:=C2=A0 Ad=3D04(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> I:* If#=3D 5 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3Dff Prot=3Dff Driver=
-=3Doption
-> E:=C2=A0 Ad=3D85(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> E:=C2=A0 Ad=3D05(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> I:* If#=3D 6 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3D42 Prot=3D01 Driver=
-=3Dusbfs
-> E:=C2=A0 Ad=3D86(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> E:=C2=A0 Ad=3D06(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
->=20
-> L716-EU-10 (ECM):
-> T:=C2=A0 Bus=3D03 Lev=3D01 Prnt=3D01 Port=3D01 Cnt=3D01 Dev#=3D 21 Spd=3D=
-480=C2=A0 MxCh=3D 0
-> D:=C2=A0 Ver=3D 2.00 Cls=3D00(>ifc ) Sub=3D00 Prot=3D00 MxPS=3D64 #Cfgs=
-=3D=C2=A0 1
-> P:=C2=A0 Vendor=3D2cb7 ProdID=3D0001 Rev=3D 1.00
-> S:=C2=A0 Manufacturer=3DFibocom,Incorporated
-> S:=C2=A0 Product=3DFibocom Mobile Boardband
-> S:=C2=A0 SerialNumber=3D1234567890ABCDEF
-> C:* #Ifs=3D 7 Cfg#=3D 1 Atr=3De0 MxPwr=3D500mA
-> A:=C2=A0 FirstIf#=3D 0 IfCount=3D 2 Cls=3D02(comm.) Sub=3D06 Prot=3D00
-> I:* If#=3D 0 Alt=3D 0 #EPs=3D 1 Cls=3D02(comm.) Sub=3D06 Prot=3D00 Driver=
-=3Dcdc_ether
-> E:=C2=A0 Ad=3D87(I) Atr=3D03(Int.) MxPS=3D=C2=A0 16 Ivl=3D32ms
-> I:=C2=A0 If#=3D 1 Alt=3D 0 #EPs=3D 0 Cls=3D0a(data ) Sub=3D00 Prot=3D00 D=
-river=3Dcdc_ether
-> I:* If#=3D 1 Alt=3D 1 #EPs=3D 2 Cls=3D0a(data ) Sub=3D00 Prot=3D00 Driver=
-=3Dcdc_ether
-> E:=C2=A0 Ad=3D81(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> E:=C2=A0 Ad=3D01(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> I:* If#=3D 2 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3Dff Prot=3Dff Driver=
-=3Doption
-> E:=C2=A0 Ad=3D82(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> E:=C2=A0 Ad=3D02(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> I:* If#=3D 3 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3Dff Prot=3Dff Driver=
-=3Doption
-> E:=C2=A0 Ad=3D83(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> E:=C2=A0 Ad=3D03(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> I:* If#=3D 4 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3Dff Prot=3Dff Driver=
-=3Doption
-> E:=C2=A0 Ad=3D84(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> E:=C2=A0 Ad=3D04(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> I:* If#=3D 5 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3Dff Prot=3Dff Driver=
-=3Doption
-> E:=C2=A0 Ad=3D85(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> E:=C2=A0 Ad=3D05(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> I:* If#=3D 6 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3D42 Prot=3D01 Driver=
-=3Dusbfs
-> E:=C2=A0 Ad=3D86(I) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
-> E:=C2=A0 Ad=3D06(O) Atr=3D02(Bulk) MxPS=3D 512 Ivl=3D0ms
->=20
-> Signed-off-by: Victor Fragoso <victorffs@hotmail.com>
-> ---
-> =C2=A0drivers/usb/serial/option.c | 5 +++++
-> =C2=A01 file changed, 5 insertions(+)
->=20
-> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> index 45dcfaadaf98..4ba3dc352d65 100644
-> --- a/drivers/usb/serial/option.c
-> +++ b/drivers/usb/serial/option.c
-> @@ -2262,6 +2262,11 @@ static const struct usb_device_id option_ids[] =3D
-> {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{ USB_DEVICE_INTERFACE_CL=
-ASS(0x2cb7, 0x01a2, 0xff)
-> },=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Fibocom F=
-M101-GL (laptop MBIM) */
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{ USB_DEVICE_INTERFACE_CL=
-ASS(0x2cb7, 0x01a4,
-> 0xff),=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Fibocom FM101-GL (laptop MBIM)=
- */
+From: Andrey Konovalov <andreyknvl@gmail.com>
 
-It looks like your mail client wrapped long lines; you'll want to
-resend with a "preformatted" option or something, or use "git send-
-email" to make sure the formatting doesn't get screwed up.
+Currently, if a USB request that was queued by Raw Gadget is interrupted
+(via a signal), wait_for_completion_interruptible returns -ERESTARTSYS.
+Raw Gadget then attempts to propagate this value to userspace as a return
+value from its ioctls. However, when -ERESTARTSYS is returned by a syscall
+handler, the kernel internally restarts the syscall.
 
-Also, are you at all able to give hints in the comments about what kind
-of ports these are? AT? GPS? PPP? etc?  That's usually described in the
-driver documentation or in the Windows drivers themselves.
+This doesn't allow userspace applications to interrupt requests queued by
+Raw Gadget (which is required when the emulated device is asked to switch
+altsettings). It also violates the implied interface of Raw Gadget that a
+single ioctl must only queue a single USB request.
 
-Dan
+Instead, make Raw Gadget do what GadgetFS does: check whether the request
+was interrupted (dequeued with status == -ECONNRESET) and report -EINTR to
+userspace.
 
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .driver_info =3D R=
-SVD(4) },
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{ USB_DEVICE_AND_INTERFACE_INF=
-O(0x2cb7, 0x0001, 0xff, 0xff,
-> 0xff) },=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Fibocom L71x *=
-/
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{ USB_DEVICE_AND_INTERFACE_INF=
-O(0x2cb7, 0x0001, 0x0a, 0x00,
-> 0xff) },=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Fibocom L71x *=
-/
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{ USB_DEVICE_AND_INTERFACE_INF=
-O(0x2cb7, 0x0100, 0xff, 0xff,
-> 0xff) },=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Fibocom L71x *=
-/
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{ USB_DEVICE_AND_INTERFACE_INF=
-O(0x19d2, 0x0256, 0xff, 0xff,
-> 0xff) },=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Fibocom L71x *=
-/
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{ USB_DEVICE_AND_INTERFACE_INF=
-O(0x19d2, 0x0579, 0xff, 0xff,
-> 0xff) },=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Fibocom L71x *=
-/
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{ USB_DEVICE_INTERFACE_CL=
-ASS(0x2df3, 0x9d03, 0xff)
-> },=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* LongSung =
-M5710 */
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{ USB_DEVICE_INTERFACE_CL=
-ASS(0x305a, 0x1404, 0xff)
-> },=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* GosunCn G=
-M500 RNDIS */
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{ USB_DEVICE_INTERFACE_CL=
-ASS(0x305a, 0x1405, 0xff)
-> },=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* GosunCn G=
-M500 MBIM */
-> --=20
-> 2.34.1
->=20
->=20
+Fixes: f2c2e717642c ("usb: gadget: add raw-gadget interface")
+Signed-off-by: Andrey Konovalov <andreyknvl@gmail.com>
+---
+ drivers/usb/gadget/legacy/raw_gadget.c | 26 ++++++++++++++++----------
+ 1 file changed, 16 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
+index b9ecc55a2ce2..ce9e87f84911 100644
+--- a/drivers/usb/gadget/legacy/raw_gadget.c
++++ b/drivers/usb/gadget/legacy/raw_gadget.c
+@@ -674,12 +674,12 @@ static int raw_process_ep0_io(struct raw_dev *dev, struct usb_raw_ep_io *io,
+ 	if (WARN_ON(in && dev->ep0_out_pending)) {
+ 		ret = -ENODEV;
+ 		dev->state = STATE_DEV_FAILED;
+-		goto out_done;
++		goto out_unlock;
+ 	}
+ 	if (WARN_ON(!in && dev->ep0_in_pending)) {
+ 		ret = -ENODEV;
+ 		dev->state = STATE_DEV_FAILED;
+-		goto out_done;
++		goto out_unlock;
+ 	}
+ 
+ 	dev->req->buf = data;
+@@ -694,7 +694,7 @@ static int raw_process_ep0_io(struct raw_dev *dev, struct usb_raw_ep_io *io,
+ 				"fail, usb_ep_queue returned %d\n", ret);
+ 		spin_lock_irqsave(&dev->lock, flags);
+ 		dev->state = STATE_DEV_FAILED;
+-		goto out_done;
++		goto out_queue_failed;
+ 	}
+ 
+ 	ret = wait_for_completion_interruptible(&dev->ep0_done);
+@@ -703,13 +703,16 @@ static int raw_process_ep0_io(struct raw_dev *dev, struct usb_raw_ep_io *io,
+ 		usb_ep_dequeue(dev->gadget->ep0, dev->req);
+ 		wait_for_completion(&dev->ep0_done);
+ 		spin_lock_irqsave(&dev->lock, flags);
+-		goto out_done;
++		if (dev->ep0_status == -ECONNRESET)
++			dev->ep0_status = -EINTR;
++		goto out_interrupted;
+ 	}
+ 
+ 	spin_lock_irqsave(&dev->lock, flags);
+-	ret = dev->ep0_status;
+ 
+-out_done:
++out_interrupted:
++	ret = dev->ep0_status;
++out_queue_failed:
+ 	dev->ep0_urb_queued = false;
+ out_unlock:
+ 	spin_unlock_irqrestore(&dev->lock, flags);
+@@ -1078,7 +1081,7 @@ static int raw_process_ep_io(struct raw_dev *dev, struct usb_raw_ep_io *io,
+ 				"fail, usb_ep_queue returned %d\n", ret);
+ 		spin_lock_irqsave(&dev->lock, flags);
+ 		dev->state = STATE_DEV_FAILED;
+-		goto out_done;
++		goto out_queue_failed;
+ 	}
+ 
+ 	ret = wait_for_completion_interruptible(&done);
+@@ -1087,13 +1090,16 @@ static int raw_process_ep_io(struct raw_dev *dev, struct usb_raw_ep_io *io,
+ 		usb_ep_dequeue(ep->ep, ep->req);
+ 		wait_for_completion(&done);
+ 		spin_lock_irqsave(&dev->lock, flags);
+-		goto out_done;
++		if (ep->status == -ECONNRESET)
++			ep->status = -EINTR;
++		goto out_interrupted;
+ 	}
+ 
+ 	spin_lock_irqsave(&dev->lock, flags);
+-	ret = ep->status;
+ 
+-out_done:
++out_interrupted:
++	ret = ep->status;
++out_queue_failed:
+ 	ep->urb_queued = false;
+ out_unlock:
+ 	spin_unlock_irqrestore(&dev->lock, flags);
+-- 
+2.25.1
 
 
