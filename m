@@ -1,202 +1,182 @@
-Return-Path: <linux-usb+bounces-2225-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2226-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C27B97D84B6
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 16:29:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3DA0E7D865C
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 18:01:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2AC35282102
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 14:29:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B070282066
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 16:01:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 425232EB07;
-	Thu, 26 Oct 2023 14:29:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="m3gmsQYZ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4DBF381A0;
+	Thu, 26 Oct 2023 16:01:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E108C2EAED
-	for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 14:29:34 +0000 (UTC)
-Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [IPv6:2001:41d0:203:375::bc])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3299A1A2
-	for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 07:29:33 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1698330248;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=V3WoE26nAgEdBcPVcwYl75mEnNpoIurBRTnIv4fRtFU=;
-	b=m3gmsQYZFpE/NvKwO3uvnBHptamqVHuDQBj+qeCmN04QH0rR9MGJgSjR0+mM16CRz7Y15v
-	YszuEHHTNjFLfnAUkF2t0uBJcx6V7xIIedpZz2LfWTCPDClrYXe5nz2U0eWrjIca1mFZqu
-	rshzxKtceA7ssbd+f0BIGC8xNDpdq50=
-From: andrey.konovalov@linux.dev
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Alan Stern <stern@rowland.harvard.edu>
-Cc: Andrey Konovalov <andreyknvl@gmail.com>,
-	Felipe Balbi <balbi@kernel.org>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] usb: raw-gadget: report suspend, resume, reset, and disconnect events
-Date: Thu, 26 Oct 2023 16:24:01 +0200
-Message-Id: <eb637fd7930722ff9dfc2ab4469d78040ee2a166.1698329862.git.andreyknvl@gmail.com>
-In-Reply-To: <0db45b1d7cc466e3d4d1ab353f61d63c977fbbc5.1698329862.git.andreyknvl@gmail.com>
-References: <0db45b1d7cc466e3d4d1ab353f61d63c977fbbc5.1698329862.git.andreyknvl@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D596154AD
+	for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 16:01:11 +0000 (UTC)
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446E61A2;
+	Thu, 26 Oct 2023 09:01:09 -0700 (PDT)
+Received: from [192.168.1.103] (178.176.74.108) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Thu, 26 Oct
+ 2023 19:00:58 +0300
+Subject: Re: [PATCH v6] usb: Reduce the 'SET_ADDRESS' request timeout with a
+ new quirk
+To: Hardik Gajjar <hgajjar@de.adit-jv.com>, <gregkh@linuxfoundation.org>,
+	<stern@rowland.harvard.edu>, <mathias.nyman@intel.com>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<erosca@de.adit-jv.com>
+References: <20231025164019.GA121292@vmlxhi-118.adit-jv.com>
+ <20231026101551.36551-1-hgajjar@de.adit-jv.com>
+From: Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <cd598ae5-6eae-8e0b-8295-d98fa5c4b2fd@omp.ru>
+Date: Thu, 26 Oct 2023 19:00:56 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <20231026101551.36551-1-hgajjar@de.adit-jv.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [178.176.74.108]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 6.0.0, Database issued on: 10/26/2023 15:43:12
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 180928 [Oct 26 2023]
+X-KSE-AntiSpam-Info: Version: 6.0.0.2
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 543 543 1e3516af5cdd92079dfeb0e292c8747a62cb1ee4
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.74.108 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.74.108 in (user)
+ dbl.spamhaus.org}
+X-KSE-AntiSpam-Info:
+	omp.ru:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
+X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.74.108
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 10/26/2023 15:46:00
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 10/26/2023 2:32:00 PM
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
 
-From: Andrey Konovalov <andreyknvl@gmail.com>
+Hello!
 
-Update USB_RAW_IOCTL_EVENT_FETCH to also report suspend, resume, reset,
-and disconnect events.
+   Please don't post the patches as a reply to the other thread, start a new
+thread with a new patch version (I thought others would tell you that but nobody
+has so far).
+   And how about changing the wording of the subject to s/th like below?
 
-This allows the code that emulates a USB device via Raw Gadget to handle
-these events. For example, the device can restart enumeration when it
-gets reset.
+usb: new quirk to reduce the SET_ADDRESS request timeout
 
-Also do not print a WARNING when the event queue overflows. With these new
-events being queued, the queue might overflow if the device emulation code
-stops fetching events. Instead, print an error message.
+On 10/26/23 1:15 PM, Hardik Gajjar wrote:
 
-Also print debug messages when a non-control event is received.
+> This patch introduces a new USB quirk,
+> USB_QUIRK_SHORT_SET_ADDRESS_REQ_TIMEOUT, which modifies the timeout value
+> for the 'SET_ADDRESS' request. The standard timeout for USB request/command
 
-Signed-off-by: Andrey Konovalov <andreyknvl@gmail.com>
----
- drivers/usb/gadget/legacy/raw_gadget.c | 53 ++++++++++++++++++++++----
- include/uapi/linux/usb/raw_gadget.h    | 14 ++++++-
- 2 files changed, 57 insertions(+), 10 deletions(-)
+   The upper case is enough of the emphasis, I don't think the apostrophes
+are needed arounnd SET_ADDRESS...
 
-diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
-index daac1f078516..ee712e6570b4 100644
---- a/drivers/usb/gadget/legacy/raw_gadget.c
-+++ b/drivers/usb/gadget/legacy/raw_gadget.c
-@@ -65,8 +65,9 @@ static int raw_event_queue_add(struct raw_event_queue *queue,
- 	struct usb_raw_event *event;
- 
- 	spin_lock_irqsave(&queue->lock, flags);
--	if (WARN_ON(queue->size >= RAW_EVENT_QUEUE_SIZE)) {
-+	if (queue->size >= RAW_EVENT_QUEUE_SIZE) {
- 		spin_unlock_irqrestore(&queue->lock, flags);
-+		dev_err(&gadget->dev, "event queue overflown\n");
- 		return -ENOMEM;
- 	}
- 	event = kmalloc(sizeof(*event) + length, GFP_ATOMIC);
-@@ -311,9 +312,10 @@ static int gadget_bind(struct usb_gadget *gadget,
- 	dev->eps_num = i;
- 	spin_unlock_irqrestore(&dev->lock, flags);
- 
-+	dev_dbg(&gadget->dev, "gadget connected\n");
- 	ret = raw_queue_event(dev, USB_RAW_EVENT_CONNECT, 0, NULL);
- 	if (ret < 0) {
--		dev_err(&gadget->dev, "failed to queue event\n");
-+		dev_err(&gadget->dev, "failed to queue connect event\n");
- 		set_gadget_data(gadget, NULL);
- 		return ret;
- 	}
-@@ -358,7 +360,7 @@ static int gadget_setup(struct usb_gadget *gadget,
- 
- 	ret = raw_queue_event(dev, USB_RAW_EVENT_CONTROL, sizeof(*ctrl), ctrl);
- 	if (ret < 0)
--		dev_err(&gadget->dev, "failed to queue event\n");
-+		dev_err(&gadget->dev, "failed to queue control event\n");
- 	goto out;
- 
- out_unlock:
-@@ -377,11 +379,46 @@ static int gadget_setup(struct usb_gadget *gadget,
- 	return ret;
- }
- 
--/* These are currently unused but present in case UDC driver requires them. */
--static void gadget_disconnect(struct usb_gadget *gadget) { }
--static void gadget_suspend(struct usb_gadget *gadget) { }
--static void gadget_resume(struct usb_gadget *gadget) { }
--static void gadget_reset(struct usb_gadget *gadget) { }
-+static void gadget_disconnect(struct usb_gadget *gadget)
-+{
-+	struct raw_dev *dev = get_gadget_data(gadget);
-+	int ret;
-+
-+	dev_dbg(&gadget->dev, "gadget disconnected\n");
-+	ret = raw_queue_event(dev, USB_RAW_EVENT_DISCONNECT, 0, NULL);
-+	if (ret < 0)
-+		dev_err(&gadget->dev, "failed to queue disconnect event\n");
-+}
-+static void gadget_suspend(struct usb_gadget *gadget)
-+{
-+	struct raw_dev *dev = get_gadget_data(gadget);
-+	int ret;
-+
-+	dev_dbg(&gadget->dev, "gadget suspended\n");
-+	ret = raw_queue_event(dev, USB_RAW_EVENT_SUSPEND, 0, NULL);
-+	if (ret < 0)
-+		dev_err(&gadget->dev, "failed to queue suspend event\n");
-+}
-+static void gadget_resume(struct usb_gadget *gadget)
-+{
-+	struct raw_dev *dev = get_gadget_data(gadget);
-+	int ret;
-+
-+	dev_dbg(&gadget->dev, "gadget resumed\n");
-+	ret = raw_queue_event(dev, USB_RAW_EVENT_RESUME, 0, NULL);
-+	if (ret < 0)
-+		dev_err(&gadget->dev, "failed to queue resume event\n");
-+}
-+static void gadget_reset(struct usb_gadget *gadget)
-+{
-+	struct raw_dev *dev = get_gadget_data(gadget);
-+	int ret;
-+
-+	dev_dbg(&gadget->dev, "gadget reset\n");
-+	ret = raw_queue_event(dev, USB_RAW_EVENT_RESET, 0, NULL);
-+	if (ret < 0)
-+		dev_err(&gadget->dev, "failed to queue reset event\n");
-+}
- 
- /*----------------------------------------------------------------------*/
- 
-diff --git a/include/uapi/linux/usb/raw_gadget.h b/include/uapi/linux/usb/raw_gadget.h
-index c7d2199134d7..f0224a8dc858 100644
---- a/include/uapi/linux/usb/raw_gadget.h
-+++ b/include/uapi/linux/usb/raw_gadget.h
-@@ -44,6 +44,16 @@ enum usb_raw_event_type {
- 	/* This event is queued when a new control request arrived to ep0. */
- 	USB_RAW_EVENT_CONTROL = 2,
- 
-+	/*
-+	 * These events are queued when the gadget driver is suspended,
-+	 * resumed, reset, or disconnected. Note that some UDCs (e.g. dwc2)
-+	 * report a disconnect event instead of a reset.
-+	 */
-+	USB_RAW_EVENT_SUSPEND = 3,
-+	USB_RAW_EVENT_RESUME = 4,
-+	USB_RAW_EVENT_RESET = 5,
-+	USB_RAW_EVENT_DISCONNECT = 6,
-+
- 	/* The list might grow in the future. */
- };
- 
-@@ -54,8 +64,8 @@ enum usb_raw_event_type {
-  *     actual length of the fetched event data.
-  * @data: A buffer to store the fetched event data.
-  *
-- * Currently the fetched data buffer is empty for USB_RAW_EVENT_CONNECT,
-- * and contains struct usb_ctrlrequest for USB_RAW_EVENT_CONTROL.
-+ * The fetched event data buffer contains struct usb_ctrlrequest for
-+ * USB_RAW_EVENT_CONTROL and is empty for other events.
-  */
- struct usb_raw_event {
- 	__u32		type;
--- 
-2.25.1
+[...]
 
+> Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
+> ---
+[...]
+> Changes since version 5:
+> 	- Changed the terminology in USB core driver files from 'command' to 'request'
+> 	  as it is more commonly used. 
+> 	  It's important to note that USB specifications indicate these terms are interchangeable.
+
+   Didn't know that... tried to find the proof in the USB specs but haven't
+managed to do it...
+
+> 	  For example, USB spec 3.2, section 9.2.6.1, uses the term 'command' in its text
+> 	  "USB sets an upper limit of 5 seconds for any command to be processed. "
+
+   Hm, indeed; and this wording is even inherited from USB 1.1...
+
+[...]
+
+> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> index 3c54b218301c..98db92af2cce 100644
+> --- a/drivers/usb/core/hub.c
+> +++ b/drivers/usb/core/hub.c
+> @@ -54,6 +54,19 @@
+>  #define USB_TP_TRANSMISSION_DELAY_MAX	65535	/* ns */
+>  #define USB_PING_RESPONSE_TIME		400	/* ns */
+>  
+> +/*
+> + * USB 3.2 spec, section 9.2.6.1
+> + * USB sets an upper limit of 5000 ms for any command/request
+> + * to be processed.
+> + */
+> +#define USB_DEFAULT_REQUEST_TIMEOUT_MS	5000 /* ms */
+> +
+> +/*
+> + * The SET_ADDRESS request timeout will be 500 ms when
+> + * USB_QUIRK_SHORT_SET_ADDRESS_REQ_TIMEOUT enable.
+> + */
+> +#define USB_SHORT_SET_ADDRESS_REQ_TIMEOUT_MS	500  /* ms */
+
+   I don'ts see the _MS-like suffixes in the other timeout #define's there...
+
+[...]
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index e1b1b64a0723..d856c4717ca9 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+> @@ -3997,12 +3997,18 @@ int xhci_alloc_dev(struct usb_hcd *hcd, struct usb_device *udev)
+>  	return 0;
+>  }
+>  
+> -/*
+> - * Issue an Address Device command and optionally send a corresponding
+> - * SetAddress request to the device.
+> +/**
+> + * xhci_setup_device - issues an Address Device command to assign a unique
+> + *			USB bus address.
+> + * @hcd: USB host controller data structure.
+> + * @udev: USB dev structure representing the connected device.
+> + * @setup: Enum specifying setup mode: address only or with context.
+> + * @timeout_ms: Max wait time (ms) for the command operation to complete.
+> + *
+> + * Return: 0 if successful; otherwise, negative error code.
+
+   I still think the above change should be a separate follow-up (or even
+a preceding) patch...
+
+[...]
+
+MBR, Sergey
 
