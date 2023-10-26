@@ -1,213 +1,206 @@
-Return-Path: <linux-usb+bounces-2203-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2204-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC5237D7ABB
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 04:14:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98D9E7D7CE3
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 08:34:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 70BE2281E96
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 02:14:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A6AC11C20ED4
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 06:34:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6DED8C11;
-	Thu, 26 Oct 2023 02:14:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8F092D616;
+	Thu, 26 Oct 2023 06:34:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=163.com header.i=@163.com header.b="kp2+tw2f"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="ez+7t92v"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06E7B5384
-	for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 02:14:03 +0000 (UTC)
-Received: from m1312.mail.163.com (m1312.mail.163.com [220.181.13.12])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2F818AB;
-	Wed, 25 Oct 2023 19:13:59 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6497610E3
+	for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 06:34:00 +0000 (UTC)
+Received: from m15.mail.163.com (m15.mail.163.com [45.254.50.219])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id A9375C0;
+	Wed, 25 Oct 2023 23:33:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
-	Message-ID; bh=seZH83F4azqunw1CHtHm1iBRG2ZBjHjECrPKVOCMNyo=; b=k
-	p2+tw2fDOQvaZFk64ApMAjfHq3GUGg7lFKf3SXmyw2mpiaw5Nki0Euaui0pQi1tO
-	NdRzziO6gfeMbzzsHYdo0Q1LXiahytodJ2HNRNPoMu0FtBEA6GCBnwzFkhnIbxVC
-	PCr6eKkjvkWmfEjG4ea144jjnEgrEBVCFqvcqJcweE=
-Received: from be286$163.com ( [171.83.45.213] ) by ajax-webmail-wmsvr12
- (Coremail) ; Thu, 26 Oct 2023 10:13:24 +0800 (CST)
-X-Originating-IP: [171.83.45.213]
-Date: Thu, 26 Oct 2023 10:13:24 +0800 (CST)
-From: be286  <be286@163.com>
-To: "Pavel Hofman" <pavel.hofman@ivitera.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re:Re: [PATCH V2] usb: gadget: f_uac1: add adaptive sync support
- for capture
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20230109(dcb5de15)
- Copyright (c) 2002-2023 www.mailtech.cn 163com
-In-Reply-To: <d1e4e69d-ed5a-39f2-c79a-dbe0edd1d57a@ivitera.com>
-References: <20231018074739.1234394-1-be286@163.com>
- <ff75dd5a-7c32-577b-9ac0-b2aecab3d02c@ivitera.com>
- <58292dd5.6385.18b612da88f.Coremail.be286@163.com>
- <d1e4e69d-ed5a-39f2-c79a-dbe0edd1d57a@ivitera.com>
-X-NTES-SC: AL_QuySCv6TuUwr4iGfZukWnkwahec9XsK3vPQi349TN5k0vynB+ys/fEdhHnv/3f6dJCyeiCCmfR5u6dZcVolqYZDyFD1uCXOnoKvzQ5pk4686
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=tAnAk
+	c6TwBJA7+4fp+4Np5WkOZfvzRbrX0uyOuK61KA=; b=ez+7t92vmB2fOPMCK+x4t
+	DL2fhHnbL9/a3se/VzVcvNtU39vHFekOnd47GHfssoFR9prMU5cdaTWHbJPNQHCH
+	wgDl1ID4Mv/w0nnE4Xc1d8CHVRuHTI139cbWLLaxv+eWe133vv2KB6E+MKwK11Xj
+	A6xsH/b7FcQekz1Rt5vVkk=
+Received: from ubuntu.. (unknown [171.83.45.213])
+	by zwqz-smtp-mta-g2-2 (Coremail) with SMTP id _____wD3P0lFCDplUGTZAw--.45306S2;
+	Thu, 26 Oct 2023 14:33:41 +0800 (CST)
+From: Charles Yi <be286@163.com>
+To: gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Charles Yi <be286@163.com>
+Subject: [PATCH V3] usb: gadget: f_uac1: add adaptive sync support for capture
+Date: Thu, 26 Oct 2023 14:33:13 +0800
+Message-Id: <20231026063313.1574618-1-be286@163.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <56660239.15d7.18b69c2024f.Coremail.be286@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:DMGowAAH9zhEyzllkp8cAA--.1469W
-X-CM-SenderInfo: dehsmli6rwjhhfrp/1tbiFR0U0l5mSC+RvQACs-
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wD3P0lFCDplUGTZAw--.45306S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxuFW7KF1kKFyxAr48tF15CFg_yoW7GFykpw
+	1UC3yIkr45ArW3Jr48JFWruF43CFWxGry8GrW7Ww4FganFy3sava42yrWFkFy7JFyrZw4I
+	qF4Fgw1a93ykCrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRn2-nUUUUU=
+X-Originating-IP: [171.83.45.213]
+X-CM-SenderInfo: dehsmli6rwjhhfrp/1tbiWwcV0mI0cg5OXAAAsj
 
-CkhpIFBhdmVsLAoKS2VlcCB0aGUgYWRhcHRpdmUgbW9kZSBhcyBkZWZhdWx0IGlzIGJldHRlci4K
-ClRoYW5rcy4KCkNoYXJsZXMgWWkKCgoKCgoKCgpBdCAyMDIzLTEwLTI1IDE0OjQ0OjQ5LCAiUGF2
-ZWwgSG9mbWFuIiA8cGF2ZWwuaG9mbWFuQGl2aXRlcmEuY29tPiB3cm90ZToKPkRuZSAyNC4gMTAu
-IDIzIHYgMTI6MTQgYmUyODYgbmFwc2FsKGEpOgo+PiAKPj4gSGkgUGF2ZWwsCj4+IAo+PiBGZWVk
-YmFjayBlbmRwb2ludCB3b3JrcyBmb3IgdWNhMSBjYXB0dXJlLCBtZWFucyAiRVBPVVRfRU4iLgo+
-PiAKPj4gICBDaGFybGVzIFlpCj4+IAo+SGkgQ2hhcmxlcywKPgo+U29ycnkgZm9yIG15IG1pc3Rh
-a2UsIEkgdGhvdWdodCB5b3Ugd2VyZSBpbXBsZW1lbnRpbmcgYWRhcHRpdmUgbW9kZSBmb3IgCj5F
-UC1JTi4KPgo+SUlVQyBub3cgeW91ciBwYXRjaCBhZGRzIGFzeW5jaHJvbm91cyBtb2RlIChub3Qg
-YWRhcHRpdmUgc3luYykgdG8gVUFDMSAKPkVQIE9VVCwgaW4gdGhlIHNhbWUgd2F5IGFzIGltcGxl
-bWVudGVkIGluIFVBQzIuCj4KPklJVUMgeW91ciBwYXRjaCBhbHNvIGNoYW5nZXMgdGhlIFVBQzEg
-RVAtT1VUIGRlZmF1bHQgbW9kZSBmcm9tIGFkYXB0aXZlIAo+dG8gYXN5bmNocm9ub3VzIHZpYQo+
-Cj4gICsjZGVmaW5lIFVBQzFfREVGX0NTWU5DCQlVU0JfRU5EUE9JTlRfU1lOQ19BU1lOQwo+Cj5U
-aGUgY3VycmVudCAodGhlIG9ubHkgc3VwcG9ydGVkKSBtb2RlIGlzIGFkYXB0aXZlIAo+aHR0cHM6
-Ly9lbGl4aXIuYm9vdGxpbi5jb20vbGludXgvbGF0ZXN0L3NvdXJjZS9kcml2ZXJzL3VzYi9nYWRn
-ZXQvZnVuY3Rpb24vZl91YWMxLmMjTDIxNDoKPgo+LyogU3RhbmRhcmQgSVNPIE9VVCBFbmRwb2lu
-dCBEZXNjcmlwdG9yICovCj5zdGF0aWMgc3RydWN0IHVzYl9lbmRwb2ludF9kZXNjcmlwdG9yIGFz
-X291dF9lcF9kZXNjICA9IHsKPgkuYkxlbmd0aCA9CQlVU0JfRFRfRU5EUE9JTlRfQVVESU9fU0la
-RSwKPgkuYkRlc2NyaXB0b3JUeXBlID0JVVNCX0RUX0VORFBPSU5ULAo+CS5iRW5kcG9pbnRBZGRy
-ZXNzID0JVVNCX0RJUl9PVVQsCj4JLmJtQXR0cmlidXRlcyA9CQlVU0JfRU5EUE9JTlRfU1lOQ19B
-REFQVElWRQo+CQkJCXwgVVNCX0VORFBPSU5UX1hGRVJfSVNPQywKPgkud01heFBhY2tldFNpemUJ
-PQljcHVfdG9fbGUxNihVQUMxX09VVF9FUF9NQVhfUEFDS0VUX1NJWkUpLAo+CS5iSW50ZXJ2YWwg
-PQkJNCwKPn07Cj4KPklNTyB0aGUgcGF0Y2ggc2hvdWxkIGtlZXAgdGhlIGFkYXB0aXZlIG1vZGUg
-YXMgZGVmYXVsdCwgdG8gbWFpbnRhaW4gCj5jb21wYXRpYmlsaXR5IHdpdGggdXNlciBzZXR1cHMu
-Cj4KPldpdGggcmVnYXJkcywKPgo+UGF2ZWwuCj4KPj4gCj4+IAo+PiAKPj4gCj4+IAo+PiAKPj4g
-Cj4+IEF0IDIwMjMtMTAtMTggMTc6NTI6MjAsICJQYXZlbCBIb2ZtYW4iIDxwYXZlbC5ob2ZtYW5A
-aXZpdGVyYS5jb20+IHdyb3RlOgo+Pj4KPj4+Cj4+PiBEbmUgMTguIDEwLiAyMyB2IDk6NDcgQ2hh
-cmxlcyBZaSBuYXBzYWwoYSk6Cj4+Pj4gVUFDMSBoYXMgaXQncyBvd24gZnJlZXJ1bm5pbmcgY2xv
-Y2sgYW5kIGNhbiB1cGRhdGUgSG9zdCBhYm91dAo+Pj4+IHJlYWwgY2xvY2sgZnJlcXVlbmN5IHRo
-cm91Z2ggZmVlZGJhY2sgZW5kcG9pbnQgc28gSG9zdCBjYW4gYWxpZ24KPj4+PiBudW1iZXIgb2Yg
-c2FtcGxlcyBzZW50IHRvIHRoZSBVQUMxIHRvIHByZXZlbnQgb3ZlcnJ1bnMvdW5kZXJydW5zLgo+
-Pj4+Cj4+Pj4gQ2hhbmdlIFVBQzEgZHJpdmVyIHRvIG1ha2UgaXQgY29uZmlndXJhYmxlIHRocm91
-Z2ggYWRkaXRpb25hbAo+Pj4+ICdjX3N5bmMnIGNvbmZpZ2ZzIGZpbGUuCj4+Pj4KPj4+PiBEZWZh
-dWx0IHJlbWFpbnMgJ2FzeW5jaHJvbm91cycgd2l0aCBwb3NzaWJpbGl0eSB0byBzd2l0Y2ggaXQK
-Pj4+PiB0byAnYWRhcHRpdmUnLgo+Pj4KPj4+Cj4+PiBIaSBDaGFybGVzLAo+Pj4KPj4+IFBsZWFz
-ZSBjYW4geW91IGNsYXJpZnkgbW9yZSB0aGUgYWRhcHRpdmUgRVAgSU4gc2NlbmFyaW8/IEkgYW0g
-YXdhcmUgdGhhdAo+Pj4gdGhlIGZfdWFjMi5jIGFsc28gYWxsb3dzIGRlZmluaW5nIGNfc3luYyB0
-eXBlICh0aGF0J3Mgd2hhdCB5b3VyIHBhdGNoIGlzCj4+PiBiYXNlZCBvbikuCj4+Pgo+Pj4gSUlV
-QyB0aGUgZGF0YSBwcm9kdWN0aW9uIHJhdGUgb2YgYWRhcHRpdmUgc291cmNlIGVuZHBvaW50IChp
-LmUuIEVQIElOKQo+Pj4gaXMgY29udHJvbGxlZCBieSBmZWVkIGZvcndhcmQgbWVzc2FnZXMgZnJv
-bSB0aGUgaG9zdAo+Pj4gUXVvdGluZyBodHRwOi8vc2RwaGEyLnVjc2QuZWR1L0xhYl9FcXVpcF9N
-YW51YWxzL3VzYl8yMC5wZGYgcGFnZSA3MzoKPj4+Cj4+PiAiQWRhcHRpdmUgc291cmNlIGVuZHBv
-aW50cyBwcm9kdWNlIGRhdGEgYXQgYSByYXRlIHRoYXQgaXMgY29udHJvbGxlZCBieQo+Pj4gdGhl
-IGRhdGEgc2luay4gVGhlIHNpbmsgcHJvdmlkZXMgZmVlZGJhY2sgKHJlZmVyIHRvIFNlY3Rpb24g
-NS4xMi40LjIpIHRvCj4+PiB0aGUgc291cmNlLCB3aGljaCBhbGxvd3MgdGhlIHNvdXJjZSB0byBr
-bm93IHRoZSBkZXNpcmVkIGRhdGEgcmF0ZSBvZiB0aGUKPj4+IHNpbmsuIgo+Pj4KPj4+IFdoaWxl
-IHRoZSBjdXJyZW50IGZfdWFjMiBpbXBsZW1lbnRhdGlvbiBnZW5lcmF0ZXMgZmVlZGJhY2sgZm9y
-IEVQIE9VVAo+Pj4gYXN5bmMgKHVubGlrZSBmX3VhYzEpLCBJIGNhbm5vdCBmaW5kIGFueSBzdXBw
-b3J0IGZvciBpbmNvbWluZwo+Pj4gZmVlZC1mb3J3YXJkIG1lc3NhZ2VzIGZyb20gdGhlIGhvc3Qg
-Zm9yIEVQIElOIGFkYXB0aXZlIGNhc2UuIE5laXRoZXIgaW4KPj4+IGZfdWFjMSwgb2YgY291cnNl
-Lgo+Pj4KPj4+IEkgYW0gbm90IHN1cmUgaWYgbGludXggc3VwcG9ydHMgSU4gRVAgYWRhcHRpdmUs
-IGJ1dCB0aGUgTVMgVUFDMiBkcml2ZXIKPj4+IGRvZXMgbm90Cj4+PiBodHRwczovL2xlYXJuLm1p
-Y3Jvc29mdC5jb20vZW4tdXMvd2luZG93cy1oYXJkd2FyZS9kcml2ZXJzL2F1ZGlvL3VzYi0yLTAt
-YXVkaW8tZHJpdmVycyNhdWRpby1zdHJlYW1pbmc6Cj4+Pgo+Pj4gIkZvciB0aGUgQWRhcHRpdmUg
-SU4gY2FzZSB0aGUgZHJpdmVyIGRvZXNuJ3Qgc3VwcG9ydCBhIGZlZWQgZm9yd2FyZAo+Pj4gZW5k
-cG9pbnQuIElmIHN1Y2ggYW4gZW5kcG9pbnQgaXMgcHJlc2VudCBpbiB0aGUgYWx0ZXJuYXRlIHNl
-dHRpbmcsIGl0Cj4+PiB3aWxsIGJlIGlnbm9yZWQuIFRoZSBkcml2ZXIgaGFuZGxlcyB0aGUgQWRh
-cHRpdmUgSU4gc3RyZWFtIGluIHRoZSBzYW1lCj4+PiB3YXkgYXMgYW4gQXN5bmNocm9ub3VzIElO
-IHN0cmVhbS4iCj4+Pgo+Pj4gSUlVQyAoYW5kIEkgbWF5IGJlIHdyb25nKSBhbGwgdGhlIGNfc3lu
-YyBwYXJhbSBkb2VzIGluIGZfdWFjMiAoYW5kCj4+PiBmX3VhYzEgaW4geW91ciBwYXRjaCkgaXMg
-anVzdCBjaGFuZ2luZyB0aGUgRVAgSU4gY29uZmlndXJhdGlvbiBmbGFnLCBidXQKPj4+IHRoZSBh
-Y3R1YWwgc3VwcG9ydCBmb3IgdHJ1bHkgYWRhcHRpdmUgRVAgSU4gaXMgbm90IGltcGxlbWVudGVk
-LiBJTU8KPj4+IHRoZXJlIGlzIG5vIGNvZGUgd2hpY2ggd291bGQgYWNjZXB0IHRoZSBmZWVkLWZv
-cndhcmQgbWVzc2FnZSBmcm9tIHRoZQo+Pj4gaG9zdCBhbmQgYWRqdXN0IHRoZSByYXRlIGF0IHdo
-aWNoIHNhbXBsZXMgYXJlIGNvbnN1bWVkIGZyb20gdGhlIGFsc2EKPj4+IGJ1ZmZlciB0byBFUCBJ
-TiBwYWNrZXRzIChtZXRob2QgdV9hdWRpb19pc29fY29tcGxldGUKPj4+IGh0dHBzOi8vZWxpeGly
-LmJvb3RsaW4uY29tL2xpbnV4L2xhdGVzdC9zb3VyY2UvZHJpdmVycy91c2IvZ2FkZ2V0L2Z1bmN0
-aW9uL3VfYXVkaW8uYyNMMTkzCj4+PiApCj4+Pgo+Pj4gVGhhdCBwZXJ0YWlucyBhIGJpdCB0byB0
-aGUgZmlyc3Qgc2VudGVuY2Ugb2YgeW91ciBwYXRjaCAtIElNTyBpdAo+Pj4gZGVzY3JpYmVzIEVQ
-IE9VVCBhc3luYywgYnV0IG5vdCBFUCBJTiBhZGFwdGl2ZS4KPj4+Cj4+PiBUaGFua3MgYSBsb3Qg
-Zm9yIGEgYml0IG9mIGNsYXJpZmljYXRpb24uCj4+Pgo+Pj4gUGF2ZWwuCj4+Pgo+Pj4KPj4+Pgo+
-Pj4+IENoYW5nZXMgaW4gVjI6Cj4+Pj4gLSBVcGRhdGVkIHRoZSBpbmRlbnRhdGlvbiBvZiBjb21t
-aXQgbWVzc2FnZS4KPj4+Pgo+Pj4+IFNpZ25lZC1vZmYtYnk6IENoYXJsZXMgWWkgPGJlMjg2QDE2
-My5jb20+Cj4+Pj4gLS0tCj4+Pj4gICAgZHJpdmVycy91c2IvZ2FkZ2V0L2Z1bmN0aW9uL2ZfdWFj
-MS5jIHwgMzAgKysrKysrKysrKysrKysrKysrKysrKysrKysrKwo+Pj4+ICAgIGRyaXZlcnMvdXNi
-L2dhZGdldC9mdW5jdGlvbi91X3VhYzEuaCB8ICAyICsrCj4+Pj4gICAgMiBmaWxlcyBjaGFuZ2Vk
-LCAzMiBpbnNlcnRpb25zKCspCj4+Pj4KPj4+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvZ2Fk
-Z2V0L2Z1bmN0aW9uL2ZfdWFjMS5jIGIvZHJpdmVycy91c2IvZ2FkZ2V0L2Z1bmN0aW9uL2ZfdWFj
-MS5jCj4+Pj4gaW5kZXggNmYwZTFkODAzZGMyLi43YTZmY2I0MGJiNDYgMTAwNjQ0Cj4+Pj4gLS0t
-IGEvZHJpdmVycy91c2IvZ2FkZ2V0L2Z1bmN0aW9uL2ZfdWFjMS5jCj4+Pj4gKysrIGIvZHJpdmVy
-cy91c2IvZ2FkZ2V0L2Z1bmN0aW9uL2ZfdWFjMS5jCj4+Pj4gQEAgLTMzLDYgKzMzLDggQEAKPj4+
-PiAgICAjZGVmaW5lIEZVT1VUX0VOKF9vcHRzKSAoKF9vcHRzKS0+Y19tdXRlX3ByZXNlbnQgXAo+
-Pj4+ICAgIAkJCXx8IChfb3B0cyktPmNfdm9sdW1lX3ByZXNlbnQpCj4+Pj4gICAgCj4+Pj4gKyNk
-ZWZpbmUgRVBPVVRfRkJBQ0tfSU5fRU4oX29wdHMpICgoX29wdHMpLT5jX3N5bmMgPT0gVVNCX0VO
-RFBPSU5UX1NZTkNfQVNZTkMpCj4+Pj4gKwo+Pj4+ICAgIHN0cnVjdCBmX3VhYzEgewo+Pj4+ICAg
-IAlzdHJ1Y3QgZ19hdWRpbyBnX2F1ZGlvOwo+Pj4+ICAgIAl1OCBhY19pbnRmLCBhc19pbl9pbnRm
-LCBhc19vdXRfaW50ZjsKPj4+PiBAQCAtMjI3LDYgKzIyOSwxNiBAQCBzdGF0aWMgc3RydWN0IHVh
-Y19pc29fZW5kcG9pbnRfZGVzY3JpcHRvciBhc19pc29fb3V0X2Rlc2MgPSB7Cj4+Pj4gICAgCS53
-TG9ja0RlbGF5ID0JCWNwdV90b19sZTE2KDEpLAo+Pj4+ICAgIH07Cj4+Pj4gICAgCj4+Pj4gK3N0
-YXRpYyBzdHJ1Y3QgdXNiX2VuZHBvaW50X2Rlc2NyaXB0b3IgYXNfZmJhY2tfZXBfZGVzYyA9IHsK
-Pj4+PiArCS5iTGVuZ3RoID0gVVNCX0RUX0VORFBPSU5UX1NJWkUsCj4+Pj4gKwkuYkRlc2NyaXB0
-b3JUeXBlID0gVVNCX0RUX0VORFBPSU5ULAo+Pj4+ICsKPj4+PiArCS5iRW5kcG9pbnRBZGRyZXNz
-ID0gVVNCX0RJUl9JTiwKPj4+PiArCS5ibUF0dHJpYnV0ZXMgPSBVU0JfRU5EUE9JTlRfWEZFUl9J
-U09DIHwgVVNCX0VORFBPSU5UX1VTQUdFX0ZFRURCQUNLLAo+Pj4+ICsJLndNYXhQYWNrZXRTaXpl
-ID0gY3B1X3RvX2xlMTYoMyksCj4+Pj4gKwkuYkludGVydmFsID0gMSwKPj4+PiArfTsKPj4+PiAr
-Cj4+Pj4gICAgc3RhdGljIHN0cnVjdCB1YWNfZm9ybWF0X3R5cGVfaV9kaXNjcmV0ZV9kZXNjcmlw
-dG9yIGFzX2luX3R5cGVfaV9kZXNjID0gewo+Pj4+ICAgIAkuYkxlbmd0aCA9CQkwLCAvKiBmaWxs
-ZWQgb24gcmF0ZSBzZXR1cCAqLwo+Pj4+ICAgIAkuYkRlc2NyaXB0b3JUeXBlID0JVVNCX0RUX0NT
-X0lOVEVSRkFDRSwKPj4+PiBAQCAtMjgwLDYgKzI5Miw3IEBAIHN0YXRpYyBzdHJ1Y3QgdXNiX2Rl
-c2NyaXB0b3JfaGVhZGVyICpmX2F1ZGlvX2Rlc2NbXSA9IHsKPj4+PiAgICAKPj4+PiAgICAJKHN0
-cnVjdCB1c2JfZGVzY3JpcHRvcl9oZWFkZXIgKikmYXNfb3V0X2VwX2Rlc2MsCj4+Pj4gICAgCShz
-dHJ1Y3QgdXNiX2Rlc2NyaXB0b3JfaGVhZGVyICopJmFzX2lzb19vdXRfZGVzYywKPj4+PiArCShz
-dHJ1Y3QgdXNiX2Rlc2NyaXB0b3JfaGVhZGVyICopJmFzX2ZiYWNrX2VwX2Rlc2MsCj4+Pj4gICAg
-Cj4+Pj4gICAgCShzdHJ1Y3QgdXNiX2Rlc2NyaXB0b3JfaGVhZGVyICopJmFzX2luX2ludGVyZmFj
-ZV9hbHRfMF9kZXNjLAo+Pj4+ICAgIAkoc3RydWN0IHVzYl9kZXNjcmlwdG9yX2hlYWRlciAqKSZh
-c19pbl9pbnRlcmZhY2VfYWx0XzFfZGVzYywKPj4+PiBAQCAtMTEwNyw2ICsxMTIwLDkgQEAgc3Rh
-dGljIHZvaWQgc2V0dXBfZGVzY3JpcHRvcihzdHJ1Y3QgZl91YWMxX29wdHMgKm9wdHMpCj4+Pj4g
-ICAgCQlmX2F1ZGlvX2Rlc2NbaSsrXSA9IFVTQkRIRFIoJmFzX291dF90eXBlX2lfZGVzYyk7Cj4+
-Pj4gICAgCQlmX2F1ZGlvX2Rlc2NbaSsrXSA9IFVTQkRIRFIoJmFzX291dF9lcF9kZXNjKTsKPj4+
-PiAgICAJCWZfYXVkaW9fZGVzY1tpKytdID0gVVNCREhEUigmYXNfaXNvX291dF9kZXNjKTsKPj4+
-PiArCQlpZiAoRVBPVVRfRkJBQ0tfSU5fRU4ob3B0cykpIHsKPj4+PiArCQkJZl9hdWRpb19kZXNj
-W2krK10gPSBVU0JESERSKCZhc19mYmFja19lcF9kZXNjKTsKPj4+PiArCQl9Cj4+Pj4gICAgCX0K
-Pj4+PiAgICAJaWYgKEVQSU5fRU4ob3B0cykpIHsKPj4+PiAgICAJCWZfYXVkaW9fZGVzY1tpKytd
-ID0gVVNCREhEUigmYXNfaW5faW50ZXJmYWNlX2FsdF8wX2Rlc2MpOwo+Pj4+IEBAIC0xMzE3LDYg
-KzEzMzMsMTIgQEAgc3RhdGljIGludCBmX2F1ZGlvX2JpbmQoc3RydWN0IHVzYl9jb25maWd1cmF0
-aW9uICpjLCBzdHJ1Y3QgdXNiX2Z1bmN0aW9uICpmKQo+Pj4+ICAgIAkJYWNfaGVhZGVyX2Rlc2Mt
-PmJhSW50ZXJmYWNlTnJbYmFfaWZhY2VfaWQrK10gPSBzdGF0dXM7Cj4+Pj4gICAgCQl1YWMxLT5h
-c19vdXRfaW50ZiA9IHN0YXR1czsKPj4+PiAgICAJCXVhYzEtPmFzX291dF9hbHQgPSAwOwo+Pj4+
-ICsKPj4+PiArCQlpZiAoRVBPVVRfRkJBQ0tfSU5fRU4oYXVkaW9fb3B0cykpIHsKPj4+PiArCQkJ
-YXNfb3V0X2VwX2Rlc2MuYm1BdHRyaWJ1dGVzID0KPj4+PiArCQkJVVNCX0VORFBPSU5UX1hGRVJf
-SVNPQyB8IFVTQl9FTkRQT0lOVF9TWU5DX0FTWU5DOwo+Pj4+ICsJCQlhc19vdXRfaW50ZXJmYWNl
-X2FsdF8xX2Rlc2MuYk51bUVuZHBvaW50cysrOwo+Pj4+ICsJCX0KPj4+PiAgICAJfQo+Pj4+ICAg
-IAo+Pj4+ICAgIAlpZiAoRVBJTl9FTihhdWRpb19vcHRzKSkgewo+Pj4+IEBAIC0xMzU0LDYgKzEz
-NzYsMTIgQEAgc3RhdGljIGludCBmX2F1ZGlvX2JpbmQoc3RydWN0IHVzYl9jb25maWd1cmF0aW9u
-ICpjLCBzdHJ1Y3QgdXNiX2Z1bmN0aW9uICpmKQo+Pj4+ICAgIAkJCWdvdG8gZXJyX2ZyZWVfZnU7
-Cj4+Pj4gICAgCQlhdWRpby0+b3V0X2VwID0gZXA7Cj4+Pj4gICAgCQlhdWRpby0+b3V0X2VwLT5k
-ZXNjID0gJmFzX291dF9lcF9kZXNjOwo+Pj4+ICsJCWlmIChFUE9VVF9GQkFDS19JTl9FTihhdWRp
-b19vcHRzKSkgewo+Pj4+ICsJCQlhdWRpby0+aW5fZXBfZmJhY2sgPSB1c2JfZXBfYXV0b2NvbmZp
-ZyhnYWRnZXQsICZhc19mYmFja19lcF9kZXNjKTsKPj4+PiArCQkJaWYgKCFhdWRpby0+aW5fZXBf
-ZmJhY2spIHsKPj4+PiArCQkJCWdvdG8gZXJyX2ZyZWVfZnU7Cj4+Pj4gKwkJCX0KPj4+PiArCQl9
-Cj4+Pj4gICAgCX0KPj4+PiAgICAKPj4+PiAgICAJaWYgKEVQSU5fRU4oYXVkaW9fb3B0cykpIHsK
-Pj4+PiBAQCAtMTY4NSw2ICsxNzEzLDggQEAgc3RhdGljIHN0cnVjdCB1c2JfZnVuY3Rpb25faW5z
-dGFuY2UgKmZfYXVkaW9fYWxsb2NfaW5zdCh2b2lkKQo+Pj4+ICAgIAo+Pj4+ICAgIAlvcHRzLT5y
-ZXFfbnVtYmVyID0gVUFDMV9ERUZfUkVRX05VTTsKPj4+PiAgICAKPj4+PiArCW9wdHMtPmNfc3lu
-YyA9IFVBQzFfREVGX0NTWU5DOwo+Pj4+ICsKPj4+PiAgICAJc25wcmludGYob3B0cy0+ZnVuY3Rp
-b25fbmFtZSwgc2l6ZW9mKG9wdHMtPmZ1bmN0aW9uX25hbWUpLCAiQUMgSW50ZXJmYWNlIik7Cj4+
-Pj4gICAgCj4+Pj4gICAgCXJldHVybiAmb3B0cy0+ZnVuY19pbnN0Owo+Pj4+IGRpZmYgLS1naXQg
-YS9kcml2ZXJzL3VzYi9nYWRnZXQvZnVuY3Rpb24vdV91YWMxLmggYi9kcml2ZXJzL3VzYi9nYWRn
-ZXQvZnVuY3Rpb24vdV91YWMxLmgKPj4+PiBpbmRleCBmN2E2MTY3NjBlMzEuLmM2ZTIyNzFlOGNk
-ZCAxMDA2NDQKPj4+PiAtLS0gYS9kcml2ZXJzL3VzYi9nYWRnZXQvZnVuY3Rpb24vdV91YWMxLmgK
-Pj4+PiArKysgYi9kcml2ZXJzL3VzYi9nYWRnZXQvZnVuY3Rpb24vdV91YWMxLmgKPj4+PiBAQCAt
-MjcsNiArMjcsNyBAQAo+Pj4+ICAgICNkZWZpbmUgVUFDMV9ERUZfTUFYX0RCCQkwCQkvKiAwIGRC
-ICovCj4+Pj4gICAgI2RlZmluZSBVQUMxX0RFRl9SRVNfREIJCSgxKjI1NikJLyogMSBkQiAqLwo+
-Pj4+ICAgIAo+Pj4+ICsjZGVmaW5lIFVBQzFfREVGX0NTWU5DCQlVU0JfRU5EUE9JTlRfU1lOQ19B
-U1lOQwo+Pj4+ICAgIAo+Pj4+ICAgIHN0cnVjdCBmX3VhYzFfb3B0cyB7Cj4+Pj4gICAgCXN0cnVj
-dCB1c2JfZnVuY3Rpb25faW5zdGFuY2UJZnVuY19pbnN0Owo+Pj4+IEBAIC01Niw2ICs1Nyw3IEBA
-IHN0cnVjdCBmX3VhYzFfb3B0cyB7Cj4+Pj4gICAgCj4+Pj4gICAgCXN0cnVjdCBtdXRleAkJCWxv
-Y2s7Cj4+Pj4gICAgCWludAkJCQlyZWZjbnQ7Cj4+Pj4gKwlpbnQJCQkJY19zeW5jOwo+Pj4+ICAg
-IH07Cj4+Pj4gICAgCj4+Pj4gICAgI2VuZGlmIC8qIF9fVV9VQUMxX0ggKi8K
+UAC1 has it's own freerunning clock and can update Host about
+real clock frequency through feedback endpoint so Host can align
+number of samples sent to the UAC1 to prevent overruns/underruns.
+
+Change UAC1 driver to make it configurable through additional
+'c_sync' configfs file.
+
+Default remains 'adaptive' with possibility to switch it
+to 'asynchronous'.
+
+Signed-off-by: Charles Yi <be286@163.com>
+
+---------
+Changes in V3:
+- Changed sync mode of capture to adaptive as default.
+- Added implement of 'c_sync' through configfs file.
+---------
+Changes in V2:
+- Updated the indentation of commit message.
+---------
+---
+ drivers/usb/gadget/function/f_uac1.c | 32 ++++++++++++++++++++++++++++
+ drivers/usb/gadget/function/u_uac1.h |  2 ++
+ 2 files changed, 34 insertions(+)
+
+diff --git a/drivers/usb/gadget/function/f_uac1.c b/drivers/usb/gadget/function/f_uac1.c
+index 6f0e1d803dc2..edf3c50766b8 100644
+--- a/drivers/usb/gadget/function/f_uac1.c
++++ b/drivers/usb/gadget/function/f_uac1.c
+@@ -33,6 +33,8 @@
+ #define FUOUT_EN(_opts) ((_opts)->c_mute_present \
+ 			|| (_opts)->c_volume_present)
+ 
++#define EPOUT_FBACK_IN_EN(_opts) ((_opts)->c_sync == USB_ENDPOINT_SYNC_ASYNC)
++
+ struct f_uac1 {
+ 	struct g_audio g_audio;
+ 	u8 ac_intf, as_in_intf, as_out_intf;
+@@ -227,6 +229,16 @@ static struct uac_iso_endpoint_descriptor as_iso_out_desc = {
+ 	.wLockDelay =		cpu_to_le16(1),
+ };
+ 
++static struct usb_endpoint_descriptor as_fback_ep_desc = {
++	.bLength = USB_DT_ENDPOINT_SIZE,
++	.bDescriptorType = USB_DT_ENDPOINT,
++
++	.bEndpointAddress = USB_DIR_IN,
++	.bmAttributes = USB_ENDPOINT_XFER_ISOC | USB_ENDPOINT_USAGE_FEEDBACK,
++	.wMaxPacketSize = cpu_to_le16(3),
++	.bInterval = 1,
++};
++
+ static struct uac_format_type_i_discrete_descriptor as_in_type_i_desc = {
+ 	.bLength =		0, /* filled on rate setup */
+ 	.bDescriptorType =	USB_DT_CS_INTERFACE,
+@@ -280,6 +292,7 @@ static struct usb_descriptor_header *f_audio_desc[] = {
+ 
+ 	(struct usb_descriptor_header *)&as_out_ep_desc,
+ 	(struct usb_descriptor_header *)&as_iso_out_desc,
++	(struct usb_descriptor_header *)&as_fback_ep_desc,
+ 
+ 	(struct usb_descriptor_header *)&as_in_interface_alt_0_desc,
+ 	(struct usb_descriptor_header *)&as_in_interface_alt_1_desc,
+@@ -1107,6 +1120,9 @@ static void setup_descriptor(struct f_uac1_opts *opts)
+ 		f_audio_desc[i++] = USBDHDR(&as_out_type_i_desc);
+ 		f_audio_desc[i++] = USBDHDR(&as_out_ep_desc);
+ 		f_audio_desc[i++] = USBDHDR(&as_iso_out_desc);
++		if (EPOUT_FBACK_IN_EN(opts)) {
++			f_audio_desc[i++] = USBDHDR(&as_fback_ep_desc);
++		}
+ 	}
+ 	if (EPIN_EN(opts)) {
+ 		f_audio_desc[i++] = USBDHDR(&as_in_interface_alt_0_desc);
+@@ -1317,6 +1333,12 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
+ 		ac_header_desc->baInterfaceNr[ba_iface_id++] = status;
+ 		uac1->as_out_intf = status;
+ 		uac1->as_out_alt = 0;
++
++		if (EPOUT_FBACK_IN_EN(audio_opts)) {
++			as_out_ep_desc.bmAttributes =
++			USB_ENDPOINT_XFER_ISOC | USB_ENDPOINT_SYNC_ASYNC;
++			as_out_interface_alt_1_desc.bNumEndpoints++;
++		}
+ 	}
+ 
+ 	if (EPIN_EN(audio_opts)) {
+@@ -1354,6 +1376,12 @@ static int f_audio_bind(struct usb_configuration *c, struct usb_function *f)
+ 			goto err_free_fu;
+ 		audio->out_ep = ep;
+ 		audio->out_ep->desc = &as_out_ep_desc;
++		if (EPOUT_FBACK_IN_EN(audio_opts)) {
++			audio->in_ep_fback = usb_ep_autoconfig(gadget, &as_fback_ep_desc);
++			if (!audio->in_ep_fback) {
++				goto err_free_fu;
++			}
++		}
+ 	}
+ 
+ 	if (EPIN_EN(audio_opts)) {
+@@ -1596,6 +1624,7 @@ UAC1_ATTRIBUTE(u32, p_chmask);
+ UAC1_RATE_ATTRIBUTE(p_srate);
+ UAC1_ATTRIBUTE(u32, p_ssize);
+ UAC1_ATTRIBUTE(u32, req_number);
++UAC1_ATTRIBUTE(u32, c_sync);
+ 
+ UAC1_ATTRIBUTE(bool, p_mute_present);
+ UAC1_ATTRIBUTE(bool, p_volume_present);
+@@ -1618,6 +1647,7 @@ static struct configfs_attribute *f_uac1_attrs[] = {
+ 	&f_uac1_opts_attr_p_srate,
+ 	&f_uac1_opts_attr_p_ssize,
+ 	&f_uac1_opts_attr_req_number,
++	&f_uac1_opts_attr_c_sync,
+ 
+ 	&f_uac1_opts_attr_p_mute_present,
+ 	&f_uac1_opts_attr_p_volume_present,
+@@ -1685,6 +1715,8 @@ static struct usb_function_instance *f_audio_alloc_inst(void)
+ 
+ 	opts->req_number = UAC1_DEF_REQ_NUM;
+ 
++	opts->c_sync = UAC1_DEF_CSYNC;
++
+ 	snprintf(opts->function_name, sizeof(opts->function_name), "AC Interface");
+ 
+ 	return &opts->func_inst;
+diff --git a/drivers/usb/gadget/function/u_uac1.h b/drivers/usb/gadget/function/u_uac1.h
+index f7a616760e31..d0a4b86bff5c 100644
+--- a/drivers/usb/gadget/function/u_uac1.h
++++ b/drivers/usb/gadget/function/u_uac1.h
+@@ -27,6 +27,7 @@
+ #define UAC1_DEF_MAX_DB		0		/* 0 dB */
+ #define UAC1_DEF_RES_DB		(1*256)	/* 1 dB */
+ 
++#define UAC1_DEF_CSYNC		USB_ENDPOINT_SYNC_ADAPTIVE
+ 
+ struct f_uac1_opts {
+ 	struct usb_function_instance	func_inst;
+@@ -56,6 +57,7 @@ struct f_uac1_opts {
+ 
+ 	struct mutex			lock;
+ 	int				refcnt;
++	int				c_sync;
+ };
+ 
+ #endif /* __U_UAC1_H */
+-- 
+2.34.1
+
 
