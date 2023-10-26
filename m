@@ -1,34 +1,65 @@
-Return-Path: <linux-usb+bounces-2231-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2232-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 763DF7D890B
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 21:40:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5EAC7D8913
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 21:42:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F32B7B2113A
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 19:40:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 808382820C0
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 19:42:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B63253B7B0;
-	Thu, 26 Oct 2023 19:40:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC5123C065;
+	Thu, 26 Oct 2023 19:41:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BJWPYixO"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F5803B2A3
-	for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 19:40:22 +0000 (UTC)
-X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 26 Oct 2023 12:40:20 PDT
-Received: from fgw21-4.mail.saunalahti.fi (fgw21-4.mail.saunalahti.fi [62.142.5.108])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9803C10E
-	for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 12:40:20 -0700 (PDT)
-Received: from [192.168.1.15] (81-175-205-118.bb.dnainternet.fi [81.175.205.118])
-	by fgw21.mail.saunalahti.fi (Halon) with ESMTPSA
-	id 58413f03-7437-11ee-abf4-005056bdd08f;
-	Thu, 26 Oct 2023 22:39:15 +0300 (EEST)
-Message-ID: <9aaf9d6a-71d3-45ff-a02b-ce94b32e24eb@gmail.com>
-Date: Thu, 26 Oct 2023 22:39:14 +0300
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC42D17E3
+	for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 19:41:56 +0000 (UTC)
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC2A198
+	for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 12:41:54 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-507bd644a96so1914193e87.3
+        for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 12:41:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1698349313; x=1698954113; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Yv9e3c0vYJpSQOu3wQ5pqkHQb4sf+fuiufdpkPLTfYY=;
+        b=BJWPYixO/5WAyXDGb/3or2z+oQayR6+1u2DT8sAOy9aGFbt7mY5ubznO1G2cGncOCY
+         Gvi2x8/Edg8WGbqiWF0SfpOCjvZHHUVwDXxIonKDu/gp8uYva8ZWo8Rhj4w7Bn11cnjc
+         IR9ETN39R2neX+xNDxTNOXoKKDh2pRfBbQkXwG92nabJMMxSXJUF9cq98s5S3nSYsZeN
+         Q+HZIOppz5i8JW/7uYeLfDIf/Fs+T7JGPIlKTXFm6Hb3L57jif46oX+GkgmPZXl14HfN
+         q0OT/ERKeqC/9uGMTp2eXHmpHGH63CIoIXWXXkC3ubcCwtzBsQEC6LTKoVG61EtpQR3B
+         KyaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698349313; x=1698954113;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Yv9e3c0vYJpSQOu3wQ5pqkHQb4sf+fuiufdpkPLTfYY=;
+        b=P8CzrfFSGqmR9bv2k7ncsTTtXaOBVHwvKA2I8mlTbOaNMuxJ+lBm69rjIqtTS1qefI
+         64aaAKJJGMTfejSBLMtZ1V+nNB8W31+CUq/xzLvU39tJ3XgYTy3IhBVJs0HFFAuzWoiU
+         MSb1tHSR7dCtwNejsVTVopoWeu3J3wDnyA40eMw5DCuFA2o104uLeC0XWGA17eVRVbju
+         YHOM9g6dv/1r9DyMnCIU4MqQSbqKUz7bJldVqhN0kRUUEJQjoSP4ak1UxM4lS04BRLlj
+         rD7hdFsBgl+RlNl3pzdKtb6FK8fvGcyObpqLcSpIaGnPvtVIwICtMRtmkdl38JSNNEoZ
+         eLZw==
+X-Gm-Message-State: AOJu0Ywy9cx2yFLWnqM13PU5hokX+Lj+v7l+xLOtsP4d/yPpIMxlq8GF
+	UXnmsRzphELgZUe8+liNErkMMg==
+X-Google-Smtp-Source: AGHT+IEV42/WXjDvpBt1MNwbTOucybdRAINQLTcLLH26E/VA4usoRuNIF9H1t8+PSj5EnJq1P/1cHw==
+X-Received: by 2002:a19:f70c:0:b0:503:3278:3221 with SMTP id z12-20020a19f70c000000b0050332783221mr250707lfe.69.1698349313166;
+        Thu, 26 Oct 2023 12:41:53 -0700 (PDT)
+Received: from [172.30.204.123] (UNUSED.212-182-62-129.lubman.net.pl. [212.182.62.129])
+        by smtp.gmail.com with ESMTPSA id p26-20020ac246da000000b0050799f7cd6esm3140466lfo.208.2023.10.26.12.41.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Oct 2023 12:41:52 -0700 (PDT)
+Message-ID: <c1929d63-93a4-4425-bdd1-d76a696b528e@linaro.org>
+Date: Thu, 26 Oct 2023 21:41:50 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -36,81 +67,35 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: Linux kernel 6.1 - drivers/usb/storage/unusual_cypress.h "Super
- Top" minimum bcdDevice too high
+Subject: Re: [RFC 6/8] arm: dts: qcom: Add pmic glink support for sm8450-qrd
+To: Krishna Kurapati <quic_kriskura@quicinc.com>,
+ Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Philipp Zabel <p.zabel@pengutronix.de>, Andy Gross <agross@kernel.org>,
+ Bjorn Andersson <andersson@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, quic_wcheng@quicinc.com
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+ quic_ppratap@quicinc.com, quic_jackp@quicinc.com
+References: <20231017131851.8299-1-quic_kriskura@quicinc.com>
+ <20231017131851.8299-6-quic_kriskura@quicinc.com>
 Content-Language: en-US
-To: linux-usb@vger.kernel.org
-Cc: Greg KH <gregkh@linuxfoundation.org>
-References: <7bfd4f9e-9f8d-4102-ab03-7d0401f00513@gmail.com>
- <2023102630-enviable-stood-9b2d@gregkh>
-From: LihaSika <lihasika@gmail.com>
-In-Reply-To: <2023102630-enviable-stood-9b2d@gregkh>
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20231017131851.8299-6-quic_kriskura@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 26.10.2023 22.14, Greg KH wrote:
-> On Thu, Oct 26, 2023 at 06:32:02PM +0300, LihaSika wrote:
->> Hi,	
->>
->> in kernel 6.1 (maybe 5.x - 6.x) there's an ATACB setting for "Super Top USB
->> 2.0 SATA Bridge" -devices, where the minimum bcdDevice version to match has
->> been set to 1.60. It's in the file drivers/usb/storage/unusual_cypress.h:
->>
->> """
->> UNUSUAL_DEV( 0x14cd, 0x6116, 0x0160, 0x0160,
->>   		"Super Top",
->>   		"USB 2.0  SATA BRIDGE",
->>   		USB_SC_CYP_ATACB, USB_PR_DEVICE, NULL, 0),
->> """
->>
->> My old USB HDD with a "Super Top" bridge has bcdDevice version 1.50, thus
->> the setting won't match and it will not mount.
->>
->> I'm not sure when this changed (after kernel 4.x?), but it used to work
->> before. Reading some earlier bug reports, it seems that the max version used
->> to be 0x9999, which then caused corruption in "Super Top" devices with
->> version >=2.20. So that's a reason for lowering the maximum value, but I
->> wonder why the minimum value has also been set to 0x0160.
->>
->>
->> I created a patch, changing 0x0160 to 0x0150 (though I should've left the
->> max version as it was...):
->>
->> """
->> UNUSUAL_DEV( 0x14cd, 0x6116, 0x0150, 0x0150,
->> """
->>
->> Built, installed and rebooted; now the USB HDD can be mounted and works
->> perfectly again. I did some write & read tests, checked with diff, cmp and
->> md5sum - no corruption, everything OK 👍
+
+
+On 10/17/23 15:18, Krishna Kurapati wrote:
+> Add Pmic Glink support for sm8450-qrd to facilitate passing
+> of roe switch notifications generated by ADSP to dwc3 core
+> via ucsi and pmic glink's.
 > 
-> Please submit a proper patch to the linux-usb@vger.kernel.org mailing
-> list and we will be glad to take it from there.
-> 
-> thanks,
-> 
-> greg k-h
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> ---
+No phy+redriver+dp configuration?
 
-OK, here it is!
-
-Best regards,
-L.
---
-
-$ cat lihasika-unusual_cypress.patch
-diff --git a/drivers/usb/storage/unusual_cypress.h 
-b/drivers/usb/storage/unusual_cypress.h
-index 0547daf..7b3d5f0 100644
---- a/drivers/usb/storage/unusual_cypress.h
-+++ b/drivers/usb/storage/unusual_cypress.h
-@@ -19,7 +19,7 @@ UNUSUAL_DEV(  0x04b4, 0x6831, 0x0000, 0x9999,
-  		"Cypress ISD-300LP",
-  		USB_SC_CYP_ATACB, USB_PR_DEVICE, NULL, 0),
-
--UNUSUAL_DEV( 0x14cd, 0x6116, 0x0160, 0x0160,
-+UNUSUAL_DEV( 0x14cd, 0x6116, 0x0150, 0x0160,
-  		"Super Top",
-  		"USB 2.0  SATA BRIDGE",
-  		USB_SC_CYP_ATACB, USB_PR_DEVICE, NULL, 0),
-
+Konrad
 
