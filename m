@@ -1,168 +1,129 @@
-Return-Path: <linux-usb+bounces-2219-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2220-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 146DF7D8312
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 14:48:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 626EC7D834B
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 15:09:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 37A791C20EFA
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 12:47:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C565282050
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 13:09:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AD6E2D041;
-	Thu, 26 Oct 2023 12:47:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EA232DF87;
+	Thu, 26 Oct 2023 13:09:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=fibocomcorp.onmicrosoft.com header.i=@fibocomcorp.onmicrosoft.com header.b="nBh+PzOm"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PuXhTyBa"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AF48273D1
-	for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 12:47:47 +0000 (UTC)
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2075.outbound.protection.outlook.com [40.107.255.75])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D511713;
-	Thu, 26 Oct 2023 05:47:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=adZc8jhu5moSogYF9Q3A8q5Vlc75Tup3PqKhnBg1/hpQY/EJFClQtjrcbPrKu2i8tkjI7Xb/rlCatjFWtMEPzqKtl9pE7FvfcU35n585ypTmrNyz1aY7AxP0QThikU/kbFSuVjmlnx1cmbRUtvHE+Q1J4tpG9MdvsHQlpIB5s1umN62vA+DKavYRWhQKYxncAWJbkbrUoNtnOubtchoJuUgeOPGl+uYfAhb0ZQBtO3a64a8RsKw7hx9NmM+5uqeI6JOCDC8dtelaWmHglMoOczqKX21tFXwr+di2NHCE0jEcpXcxDyc3GDtId2yWeA6aipOk78GkwTdGbraYYKlbPg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5Z6pwYRocKwja7VpN79AVza0MnypHaquN4NIKcjtA7Q=;
- b=Qer3OXbU7hd5xCqhXOTkjWAQqSWAZgkcL8NBdZtxx7brA1J5pCpBJ/sAp8ZkcrzVgIK3PST575J9ZXFM5IQ1EUnFq0wQa1ta+XwOxof0ZyDe9T487BV2mo/dJ9EOcIGNCENzWZKFlwhioR2fK4mbSenjoyINCf7mi/z9XMrAQ2szykdxm9IRuJLvv3COya19CEVdTT3K6JxESuoS9n3WOJXmyBPNPXjT2EkJv01RwGsEcCvDVpUg/yAUux4TvDJOMoHs6GOcPBpsW9dRf7CwTpsDCjjdmupIWy4j9jsaHFVEiBtS2BxQJRf95ZX7foV0FHpu1CvkMqokYADCJSiYjA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fibocom.com; dmarc=pass action=none header.from=fibocom.com;
- dkim=pass header.d=fibocom.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=fibocomcorp.onmicrosoft.com; s=selector1-fibocomcorp-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5Z6pwYRocKwja7VpN79AVza0MnypHaquN4NIKcjtA7Q=;
- b=nBh+PzOmrUBHl21wBMfBB8g+2Iw3k855eYIt2ZF8XjHIUfllYJPA5hOEMpRFqhGx2EnNlHiExvSaNdd+chX0toKBFCrCz2hoUDC+Ma1HJ3Y5q/P9YSOIerEBKLdZ/PS12KSdNWrU15gfvTvmaY2oxauKB7ZR80s+EClHUmI2CE8=
-Received: from TYZPR02MB5088.apcprd02.prod.outlook.com (2603:1096:400:71::13)
- by SEZPR02MB6793.apcprd02.prod.outlook.com (2603:1096:101:18f::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6933.23; Thu, 26 Oct
- 2023 12:47:30 +0000
-Received: from TYZPR02MB5088.apcprd02.prod.outlook.com
- ([fe80::e6c0:ad44:ccaa:789]) by TYZPR02MB5088.apcprd02.prod.outlook.com
- ([fe80::e6c0:ad44:ccaa:789%6]) with mapi id 15.20.6907.032; Thu, 26 Oct 2023
- 12:47:29 +0000
-From: "Puliang Lu(Puliang)" <puliang.lu@fibocom.com>
-To: "johan@kernel.org" <johan@kernel.org>
-CC: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] USB: serial: option: modify Fibocom to DELL custom modem
- FM101R-GL
-Thread-Topic: [PATCH] USB: serial: option: modify Fibocom to DELL custom modem
- FM101R-GL
-Thread-Index: AdoICokA4ksn00QWS2SWjS8lLujw+A==
-Date: Thu, 26 Oct 2023 12:47:29 +0000
-Message-ID:
- <TYZPR02MB50889E1282C90E3C6804B64889DDA@TYZPR02MB5088.apcprd02.prod.outlook.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=fibocom.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYZPR02MB5088:EE_|SEZPR02MB6793:EE_
-x-ms-office365-filtering-correlation-id: ebbbddfa-7200-4864-7ef2-08dbd621b704
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- Tsg1YKK1GkqEFYbGZ7pU5n2biV1DymqSQBWMrfEnbWAx7gTE1IuEkx9ArlXPOFXj3Af3km+NV4eI07N9L1gsXE5usSllgDDkQGPUaWz6xITF+6EiArr8T4fZFqjHaKy5vOo/vSiUtdaH9QVJschKz8gNQvBMeiubLIntZwweFuHWQ43RvXq12vn0uNy70E2TDbhuXrl89n9QIiu1PFIFJHz01y3KQVE1KYCpZzreV1UYL6bpQViPPPqVZl9yrQpwhJL/+RrHPWLv0KJ7GqeIWI/O/T+kjK0fXv5oh2rtbKy4N2H9M8LmcSbC1xEwFxHiA5sXYfXq2jRVztHdIYZ4ZqKmuY/l687FgyioFdlRBMsEhbvyZcpfNMO0IHCC9iv/gKMl2kz7QnVLqwaoLOD0HcNail3A4jC22LIhOv2XwxRp+1lOSR9FMjvAXYQOVf95FTRrEV3euzUt8JE1EBd518KZZpRiI3t+jlCKBrv5Dhbxavrbwu9zSV3Uju/v8ajx9R3PQ0oRrqZLGPs87wgjfRmOVQKhWXzEfFoxJf6XhGYA7rqE487UW8yLJWlqoNIY6tpW1Ft45MXgWPiso1+ol8S1+ltNvYn6oKUn8Y9cQlevV1SGdRDGV6rif3Fqv5Rr
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR02MB5088.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39850400004)(396003)(346002)(376002)(136003)(366004)(230922051799003)(1800799009)(186009)(451199024)(64100799003)(52536014)(41300700001)(33656002)(26005)(38100700002)(9686003)(8676002)(8936002)(5660300002)(4326008)(54906003)(7696005)(38070700009)(66556008)(66946007)(76116006)(6506007)(66476007)(66446008)(64756008)(2906002)(6916009)(316002)(122000001)(86362001)(478600001)(55016003)(83380400001)(71200400001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?TjPErHFQqsxrb97du9V3t6UNtO3EN4vHTiSA6lYQM0kYynjhDHy5p5sfBwCX?=
- =?us-ascii?Q?M7wTYL1a5/wenA7iVvdLFug9DXd5Omakv06yu/TJBz4caCsspGsszaIP5rJq?=
- =?us-ascii?Q?xP8vQCmIQatiuEmHDLw/dkLw72E6ZqO/ATDavLOshnlEF/1yKSAi79T+DA9m?=
- =?us-ascii?Q?oessCZaxnSMJJUG9OwqBgEuUMB5jSerzwBgdshW4LOdkGuwX3U5iR/oCjjtQ?=
- =?us-ascii?Q?hmefJ3edFHjCimzo9qk1rPaBRqhU3/HTQZqEzL6h0fTSYgyTr/PuvMOeyRHq?=
- =?us-ascii?Q?GMW3Lh2XitYm73ufXnPffBVmpH6JeETT+NmGHImdN5w003zUFr7TplD/5bW5?=
- =?us-ascii?Q?fsJ6Nok55/KoVtRs5xVqZHVkVX1OlCvS5RKNhAgwgKickd2eBZY3sHoyxEt6?=
- =?us-ascii?Q?FnedNikFByDkja6PitUnUMf9CVBl3yreipPWlAj7NbypeeW+0NvQrn0sA0dD?=
- =?us-ascii?Q?QlhCk7mBlvcQgEWDQOamUvyW01fXilp9hnypeWW7WkrGHAYr736U9F6IdjHs?=
- =?us-ascii?Q?SGFJSsEJXZBVqtGxkoOkfbmj6GpkUZfOk9Lk/3tBhdtWUrWYFvOdBa7HOptI?=
- =?us-ascii?Q?on2rnMRYlhIuCj1ylLNaRI5WNiDjtVL8QgNBoAZNuhSx+cKMNNGrtR3lraft?=
- =?us-ascii?Q?HiL7rkYzBrKo3Ln8VE3grRPF/mY0XG4FKwcrTGC6Y6ee/b6fJ0ejP3DL+1U2?=
- =?us-ascii?Q?EyZXxYUU19vfYQvZ8WORcRej4CI/KsAL7+/UhCoqEhKW5HGXk8Pa8SgaGqMr?=
- =?us-ascii?Q?aRk69QvUhaBqRddOhL5EnUmvXd5aoUOKjRafjzDwssRqe26F2IMY4GujAuel?=
- =?us-ascii?Q?GI33kTu/zizI+8u8lWGhDqV3S3O2fzVy9lT4YiZPhdZXJev+UlM++ZRScSgg?=
- =?us-ascii?Q?qqvvB/pv99JAGX2bwCe9By3H66SjI69Wo+RUXCUBJ+Pj8YsjKzJU/cKM6vPw?=
- =?us-ascii?Q?LLc9amHXoQt6dJY+krpwA3zplhMvCQynIec/Y2924cg+zjDM/LOcmvOifXZc?=
- =?us-ascii?Q?csOm3we0GNnTog91CsIzmAs64l9uVwN4FHCUb7A3ZIyqbJKXMEh8gdUdtGz4?=
- =?us-ascii?Q?RqfkqOYkLuP6xfjLLsTuXaq3mIKJgvjNauNbmeHZRvjpYybG4V1L3JKDvfp6?=
- =?us-ascii?Q?VbhFOMcASQPbo9Q30QdabFx+jU6jQua89TB/iA4M0rDXZcxTBcnxMqNs/Y/T?=
- =?us-ascii?Q?NjAGlFcqHjqfLLrh8Fr1L5X7EnXJ5DaeZEI+f1L+dJ8pRrmObJdJfZPs8K4p?=
- =?us-ascii?Q?7mtqGeVIqtDxDpEpwN/AL9Jxn9PjhCZGtvOjVg0oQeAYKwjrpUfxiydxgd0g?=
- =?us-ascii?Q?s8XqB9Qt6vAC4JJjtVX1ECJgDcW8tXZPf0/AaazkUO9GkqpjCq4qtzNj7qAw?=
- =?us-ascii?Q?UVuAiYb3kFzu1aI7uP3XTAXKFqQ33ZPiIRfhBjne2hTIXoMBVll8Ax3aB1ww?=
- =?us-ascii?Q?fHCMSpLQyJJ/H6UNpV6/V83ZDRJMjIqgqO6ZzPgJdBPMqcoyZ5gmtAiXE9ud?=
- =?us-ascii?Q?7Luuv4AsnMfGV8l2funNR32cQILls6f7/rEi5dZ+AmqXdXVA/1CbhRO0wuwo?=
- =?us-ascii?Q?r5b/g8Vvi9sB/dbk5JgM12BbjCRk7BsIf5QsNCGB?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F07AE11C9F
+	for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 13:09:17 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF951B2;
+	Thu, 26 Oct 2023 06:09:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1698325756; x=1729861756;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=n+kVWa3f2cmp3SRwLEUoICIQIxRvnp43WE1fOthA6Ak=;
+  b=PuXhTyBa9SwkTn7AKJTI0d/HOfMsbaBA6dSx6lvBVV5EoJCWbn2Zuzr+
+   U3vBtqXyttqmXJZPJ/odr5cdQnF27EIGop5OtfWM8sJD/iuq9SsvwgLOg
+   Ex2F4s9d/JPY2GmfVBDZkPAtAwmvRGmpcMku6ARkVzLcz9rU5CyFh5ZwH
+   YroQCWfbHP6PLEgOYSYrPa9kU6dcbSzvDRhy0LTTin1MR6MSv1AmFJi8h
+   bYP5LjvQV7ourIVIwXSEE1Fkop6UHgZvjyyDyh9qQflem1qXO54VuqMYK
+   /1qCETZoliu4CIxME4paZoMlcj/Icyg3oZcim2muetx0QhnMbteBimkyI
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10875"; a="366883217"
+X-IronPort-AV: E=Sophos;i="6.03,253,1694761200"; 
+   d="scan'208";a="366883217"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2023 06:06:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10874"; a="752709156"
+X-IronPort-AV: E=Sophos;i="6.03,253,1694761200"; 
+   d="scan'208";a="752709156"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orsmga007.jf.intel.com with ESMTP; 26 Oct 2023 06:06:39 -0700
+Message-ID: <e82b71ad-edbf-103f-54fe-80ddc1b2e47e@linux.intel.com>
+Date: Thu, 26 Oct 2023 16:08:09 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: fibocom.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR02MB5088.apcprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ebbbddfa-7200-4864-7ef2-08dbd621b704
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Oct 2023 12:47:29.5666
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 889bfe61-8c21-436b-bc07-3908050c8236
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: aPVp3FrckME6r9omIg9ctq68RDi1V7OEp5NSAww55kYbyQt0lFw8bS38kE+/dc+0SHaXHjuYdcChM1edROl5vg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR02MB6793
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.13.0
+Subject: Re: [PATCH v6] usb: Reduce the 'SET_ADDRESS' request timeout with a
+ new quirk
+Content-Language: en-US
+To: Hardik Gajjar <hgajjar@de.adit-jv.com>, gregkh@linuxfoundation.org,
+ stern@rowland.harvard.edu, mathias.nyman@intel.com
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ erosca@de.adit-jv.com
+References: <20231025164019.GA121292@vmlxhi-118.adit-jv.com>
+ <20231026101551.36551-1-hgajjar@de.adit-jv.com>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20231026101551.36551-1-hgajjar@de.adit-jv.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-
-> Modify the definition of Fibocom USB serial option driver FM101R-GL diffe=
-rent variants
->=20
-> - VID:PID 413C:8213, FM101R-GL ESIM are laptop M.2 cards (with
->   MBIM interfaces for Linux)
->=20
-> - VID:PID 413C:8215, FM101R-GL are laptop M.2 cards (with
->   MBIM interface for Linux)
->=20
-> 0x8213: mbim, tty
-> 0x8215: mbim, tty
->=20
-> Signed-off-by: Puliang Lu <puliang.lu@fibocom.com>
+On 26.10.2023 13.15, Hardik Gajjar wrote:
+> This patch introduces a new USB quirk,
+> USB_QUIRK_SHORT_SET_ADDRESS_REQ_TIMEOUT, which modifies the timeout value
+> for the 'SET_ADDRESS' request. The standard timeout for USB request/command
+> is 5000 ms, as recommended in the USB 3.2 specification (section 9.2.6.1).
+> 
+> However, certain scenarios, such as connecting devices through an APTIV
+> hub, can lead to timeout errors when the device enumerates as full speed
+> initially and later switches to high speed during chirp negotiation.
+> 
+> In such cases, USB analyzer logs reveal that the bus suspends for
+> 5 seconds due to incorrect chirp parsing and resumes only after two
+> consecutive timeout errors trigger a hub driver reset.
+> 
+> Packet(54) Dir(?) Full Speed J(997.100 us) Idle(  2.850 us)
+> _______| Time Stamp(28 . 105 910 682)
+> _______|_____________________________________________________________Ch0
+> Packet(55) Dir(?) Full Speed J(997.118 us) Idle(  2.850 us)
+> _______| Time Stamp(28 . 106 910 632)
+> _______|_____________________________________________________________Ch0
+> Packet(56) Dir(?) Full Speed J(399.650 us) Idle(222.582 us)
+> _______| Time Stamp(28 . 107 910 600)
+> _______|_____________________________________________________________Ch0
+> Packet(57) Dir Chirp J( 23.955 ms) Idle(115.169 ms)
+> _______| Time Stamp(28 . 108 532 832)
+> _______|_____________________________________________________________Ch0
+> Packet(58) Dir(?) Full Speed J (Suspend)( 5.347 sec) Idle(  5.366 us)
+> _______| Time Stamp(28 . 247 657 600)
+> _______|_____________________________________________________________Ch0
+> 
+> This 5-second delay in device enumeration is undesirable, particularly
+> in automotive applications where quick enumeration is crucial
+> (ideally within 3 seconds).
+> 
+> The newly introduced quirks provide the flexibility to align with a
+> 3-second time limit, as required in specific contexts like automotive
+> applications.
+> 
+> By reducing the 'SET_ADDRESS' request timeout to 500 ms, the
+> system can respond more swiftly to errors, initiate rapid recovery, and
+> ensure efficient device enumeration. This change is vital for scenarios
+> where rapid smartphone enumeration and screen projection are essential.
+> 
+> To use the quirk, please write "vendor_id:product_id:p" to
+> /sys/bus/usb/drivers/hub/module/parameter/quirks
+> 
+> For example,
+> echo "0x2c48:0x0132:p" > /sys/bus/usb/drivers/hub/module/parameters/quirks"
+> 
+> Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
 > ---
->  drivers/usb/serial/option.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c in=
-dex 45dcfaadaf98..3aa219275509 100644
-> --- a/drivers/usb/serial/option.c
-> +++ b/drivers/usb/serial/option.c
-> @@ -203,8 +203,8 @@ static void option_instat_callback(struct urb *urb);
->  #define DELL_PRODUCT_5829E_ESIM			0x81e4
->  #define DELL_PRODUCT_5829E			0x81e6
-> =20
-> -#define DELL_PRODUCT_FM101R			0x8213
-> -#define DELL_PRODUCT_FM101R_ESIM		0x8215
-> +#define DELL_PRODUCT_FM101R_ESIM		0x8213
-> +#define DELL_PRODUCT_FM101R				0x8215
-> =20
->  #define KYOCERA_VENDOR_ID			0x0c88
->  #define KYOCERA_PRODUCT_KPC650			0x17da
-> --
-> 2.34.1
 
-Thank you for your feedback.  =20
-We apologize for any mistake and have now submitted the=20
-incremental fix. Your input is greatly appreciated.
+For the xhci parts:
 
+Reviewed-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 
