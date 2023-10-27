@@ -1,138 +1,175 @@
-Return-Path: <linux-usb+bounces-2299-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2300-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E4ED7DA091
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 20:34:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E8997DA0AE
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 20:39:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 585A21C210B7
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 18:34:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DF98528259D
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 18:39:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A28643C07C;
-	Fri, 27 Oct 2023 18:34:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CF343B7AA;
+	Fri, 27 Oct 2023 18:39:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Z5ILT5hv"
+	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="JW+j65J6"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE0C03CD01
-	for <linux-usb@vger.kernel.org>; Fri, 27 Oct 2023 18:34:53 +0000 (UTC)
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2694E1A1
-	for <linux-usb@vger.kernel.org>; Fri, 27 Oct 2023 11:34:52 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-d9bc6447193so1963406276.3
-        for <linux-usb@vger.kernel.org>; Fri, 27 Oct 2023 11:34:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1698431691; x=1699036491; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z2KQL5mvly38v1BFhse+1fz0BAqnm18zxyTLFh/7tsk=;
-        b=Z5ILT5hvKkDIHkefyZ7DIbBIF4l+w7ELSsLPK5m/QuyaiH5Aw4BbDIsLkqFnnFA3TB
-         4Fv/axwSRpcfIKikQYYzcPYcM5mhIGd7cT8dvN18RQjgxCIHQxeQXDxfw5ih6bFTvI1a
-         dp8lsS19F67GlMSvqFtbIU+owE7wY/WB6rmv+WG/LosTg3PLLncwFyKk98j6HU1toKRX
-         yh9ZGH06yCf2KOkXRcK/WFCXc88PdlO3vua+PPrukDveeKhed+rs1ARycDwM5HnLdmEJ
-         lbyBWXBoH5jtUlzy6JMj1QJ62nVcto3fPQy5btlPoY2DMdfpIpDxiWWXkaAhbyUy07/p
-         bHTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698431691; x=1699036491;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z2KQL5mvly38v1BFhse+1fz0BAqnm18zxyTLFh/7tsk=;
-        b=DBnhBk9PAfo0Rr2Ho7YmxcGPJo0WAJlL1fXA9Tunua6tR//0oAglG6Mnqh2lp1wF4X
-         wThBXuVTDVzBAjrlOVRj5GtV/16A5xOUYIWM84r1sS8+To1W9McN4o1lbLCe4nwhIoBh
-         G/d/FyoT4lsDW0l8+JD8OFUE28cBRSF6lMYQo1CWJTazBqw++ev2WMFQkneGUBiOdBlV
-         2UD9VlPfnPpxOB+6E9fx85M24vigDyG7pHubdGJX4OTWapkVcHaoZlXY4Hu3geF8Busk
-         k/A9vMC1vF3l53Nl185XSAb9b8lRkTkbjlKkwsbZb/6KaJKvlxPBMlbbDYQnYAfbws27
-         1pKA==
-X-Gm-Message-State: AOJu0YwbHGRNVTOcB/IIp3ufAtyvCuBwGUV53ljC3SeqDoXbK7lARTNi
-	ttDEVQ4my8eYI4zcmzAgSZJ37ujHSPsP8JDxGw==
-X-Google-Smtp-Source: AGHT+IHO7TfvuhqtaNPamSWCx8oIFoDkAauEh146HYvDhEqkkJsUEpXQ/mGMMdFvo6VFXYCnA+3y2HxsYhlkjW1YXQ==
-X-Received: from shuzhenwang.mtv.corp.google.com ([2620:15c:211:201:c5e7:1675:d0d:2a4c])
- (user=shuzhenwang job=sendgmr) by 2002:a05:6902:565:b0:da0:c979:fd70 with
- SMTP id a5-20020a056902056500b00da0c979fd70mr70535ybt.9.1698431691381; Fri,
- 27 Oct 2023 11:34:51 -0700 (PDT)
-Date: Fri, 27 Oct 2023 11:34:40 -0700
-In-Reply-To: <14ceb63f-1769-4025-ad90-c38112dfec79@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56AF83D3A1
+	for <linux-usb@vger.kernel.org>; Fri, 27 Oct 2023 18:39:37 +0000 (UTC)
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2040.outbound.protection.outlook.com [40.107.8.40])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4689712A;
+	Fri, 27 Oct 2023 11:39:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jYY7sE0sVKrf3YsPB1FPW3f9Ch1aUCpcDtA8+icdz3CYGaIq+X9xGS9PKjgBRGnXzQ49LUK1kqbsvNTzOip4IrtgeYthyzIr1SnqC9RTgd4zEcxsS1UVro6WqTlECCz6AxfBLi+xTZSk6iWT6LdNomrmvtTct7DQIwxva6M8Z1XMfKgBX/td3Wkb5lNuBYGFcdavOlqxIQH+RuyHeVlXTZNY097yhaHbOTwNMrINScPIkcH02BYlMt5N+r9QXCegCzahN7sSSlKinlI9+3KMf3I45xqaTY0WrPFZKGqt/e2Jq0bP0SZKDACfUREjctQW55PPkWhh6Pm0oVjJV3Sx/w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=a1ZQ1XvEkrhkMMzc+DSUrXBJnED9qfMmknHmI9nD9MM=;
+ b=WaSQl8QAfgr86Q0TR2W+/a6s6mCtIY0hgDINT1dTMPB52s4M5vv3meQ2tvqXu4lgV1u8/+lEVxFxdx1QExA9OPneP4MgbIUIhGafCxyfRz2orZJiIGZ4vEedU7fESCT3341oEFIuuUXfQVXNJL1jhmNBJBsqITicZ8qVxULSr6C//TMVcCs3bRGY0Qy+xCSQoC2TlOjTLoxI/HyToZUUzzdJZ0TLoyqK9U4PUiBK8ELAoIofq18kEWLEgCUxrNFByFgVGbyv1j9MHnHN37yYS7Nh1GEzk+ZaTimRwHN+F74bSVOFyIDjxMuqDPbABir66lUm0q9as1kBAu9Me5NNbw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=a1ZQ1XvEkrhkMMzc+DSUrXBJnED9qfMmknHmI9nD9MM=;
+ b=JW+j65J6WAR/v9MU3JVspXn+C49l7iL5YWE/NR79k3301X5HwEtwse33l5Oi3UM1oVtf8qXBR4GGzpMSroulJHzFTMyQmg87EDl54MVtpDEsBEdPQHl6JcZiWwx0XLqAQ3CR0w5pEhHUdG/VpL+LUbv6uOnkFodwqfFjjqsNJrs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM6PR04MB4838.eurprd04.prod.outlook.com (2603:10a6:20b:4::16)
+ by DU2PR04MB9196.eurprd04.prod.outlook.com (2603:10a6:10:2fb::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.11; Fri, 27 Oct
+ 2023 18:39:32 +0000
+Received: from AM6PR04MB4838.eurprd04.prod.outlook.com
+ ([fe80::97ca:a905:8e64:c098]) by AM6PR04MB4838.eurprd04.prod.outlook.com
+ ([fe80::97ca:a905:8e64:c098%6]) with mapi id 15.20.6933.011; Fri, 27 Oct 2023
+ 18:39:31 +0000
+From: Frank Li <Frank.Li@nxp.com>
+To: imx@lists.linux.dev,
+	Peter Chen <peter.chen@kernel.org>,
+	Pawel Laszczak <pawell@cadence.com>,
+	Roger Quadros <rogerq@kernel.org>,
+	Aswath Govindraju <a-govindraju@ti.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org (open list:CADENCE USB3 DRD IP DRIVER),
+	linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH 1/1] usb: cdns3: skip set TRB_IOC when usb_request: no_interrupt is true
+Date: Fri, 27 Oct 2023 14:39:19 -0400
+Message-Id: <20231027183919.664271-1-Frank.Li@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BYAPR21CA0030.namprd21.prod.outlook.com
+ (2603:10b6:a03:114::40) To AM6PR04MB4838.eurprd04.prod.outlook.com
+ (2603:10a6:20b:4::16)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <14ceb63f-1769-4025-ad90-c38112dfec79@google.com>
-X-Mailer: git-send-email 2.42.0.820.g83a721a137-goog
-Message-ID: <20231027183440.1994315-1-shuzhenwang@google.com>
-Subject: [PATCH v2] usb: gadget: uvc: Add missing initialization of ssp config descriptor
-From: Shuzhen Wang <shuzhenwang@google.com>
-To: shuzhenwang@google.com, gregkh@linuxfoundation.org
-Cc: balbi@kernel.org, laurent.pinchart@ideasonboard.com, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM6PR04MB4838:EE_|DU2PR04MB9196:EE_
+X-MS-Office365-Filtering-Correlation-Id: 68056964-25c0-4e95-1166-08dbd71c0f10
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	uh0fNC6eVvdI46Dc3fAwey3TsNbhduWDUtyLrdJDmzgomAoECMK0mXElI2AJU08CYOXXKIR2Wytb9iPGANLo91Mtx8Z2wpcX0wrf3PtIKwhI01XYxmuVPJEr+oxep9+rF3k/PFmBWbgyXF/cOeqUsqaEC///Bgrgulrc/pVmcA9Mv39LUwMdt8Huv5lnzPyF+AiHjsDyDCIY3Vvvw+81UQ/1CN3/h9wTTfWOgHcZZehuV/gaeuH5mv8zJf9Sc2fsVUQkUeY+Bbk+3CehnfAPC1K3Zo8T7wGT5TyUAN2utExioR9ydyDQzBH2PRDstYKMCKzkQeQdd+4CwUeED4OO+eYwmvkELxJ0FpztUXtO+yq822sLElwPPXDE0l5HBSaUtaZ3dMn/lC0heeDd0fsOz9O0jKRT13XdOy3uDfM+CpOQJOHPnAMdmLhznIkiZlVos5PJKkgOSq0TWcNPFeOH+ybtKJLfn69AWHIb3upMczFtfMUGxbrXbOS0IjvlVuvVqtLUx04OmNkHPhiVt6n+E0yrDYIb8dmgvVRrixrSO+mWiQB5IUwlg0jAsZGWLV73pDjGg6fnBJhoZyx9ga+8tjQptyhMNEzyHiM0ECgCPAOgqVc7oq/6QNkPLciJLTjUhejs1cN8geX9iDfACDKuRKmsfmbum8XuT84iAQAHZ2I=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4838.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(396003)(346002)(39860400002)(136003)(366004)(230922051799003)(186009)(1800799009)(64100799003)(451199024)(1076003)(26005)(52116002)(2616005)(6512007)(38350700005)(86362001)(36756003)(38100700002)(83380400001)(6506007)(478600001)(6486002)(6666004)(2906002)(8676002)(8936002)(41300700001)(316002)(110136005)(66476007)(5660300002)(66556008)(66946007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?TQuUYNF+QwDTojnCqVsBeZmDUrJS7t8Cx7Qbz2E3fLBf0enZWR2liSh4oJ7X?=
+ =?us-ascii?Q?qptgfz00uZ2s04oKJ9mpEuSGmWBTbwvXAlsO8R9vIjxsYnHk9thxNNbB714O?=
+ =?us-ascii?Q?nBD8JfWOLk8MHpOQzGP4/ErVaG/nItRdrpXTe1OM1AuQLRU2iAetsz1mR7ei?=
+ =?us-ascii?Q?qAkNkoBHNDScZvtovhvOXnM6VleaACB6lF1lxhGP2kQyj+WeberiirQKQi+9?=
+ =?us-ascii?Q?5Y9XLiT3kFtE8qCg+gYA7+N4aUwsjK3aQc1ZEZtMWb25ywNeqSHfk2P9ZNaK?=
+ =?us-ascii?Q?09+m8hTHX//wF3WYiAFVhkuDhrX58u81bKmGhPcz3vk8lvf9ih5fqcakVFbj?=
+ =?us-ascii?Q?+j9jbBFoMGMo9IQZP7BY28Q7wVC7Fja14+zX03wm94v9yMuMXADmL9+tKCTJ?=
+ =?us-ascii?Q?tVzC8y2TRfYynr2DXPF2Cu7HNALywtqyP4oBRDJc1L0ptr1XEDzwHl5up9WC?=
+ =?us-ascii?Q?llIFx6FUXrJCtsavXtucJE1l89sU+A6YYKI/KR2rfgLSVl4hj8nPinqC8qYn?=
+ =?us-ascii?Q?Xd+afwqUOL6t6CYxzc/VztLQeaQe1TRmY2zuruq3tL5CNTG/4E2DaIPwFguH?=
+ =?us-ascii?Q?AxmMI91P2RL9Le7tomxBA9KLldQg4kDfxcC014CiQxzFX4C9ZMEu4WBceFRC?=
+ =?us-ascii?Q?XiM7kYC4f76lH16HAYc2v7WCvYK1XLnqBFEaRATIb2GsB8Cf1vlQrUiG+SYL?=
+ =?us-ascii?Q?aSNlkwyVj0TvHHBaaRIt0oC6ikrxHgQIFzO+RAOxQlf+b4vABoM4a4PtfMD5?=
+ =?us-ascii?Q?8Qjk8tEGdYpQGJbQrvka3fWcgs4gVblY3cL6PH3pKD6FKgWXfL1HL1GcoDNN?=
+ =?us-ascii?Q?2w34UW5Zgvi7bgXgiZglc1BHXFriLIFLABwmxwMrfe7zxynLgjJzwPWRjPW3?=
+ =?us-ascii?Q?CrSxdZ6EILiLFFRv9Rv8HnydeCF4csqkPeOBM7XwPrT5mkoTzrnXFH3WJjNC?=
+ =?us-ascii?Q?vH6U1Neoo8k+zXzIJoRXigbg9vaaxf42YnahoJMIdQ+mXLEF7bsPC7mVcO5z?=
+ =?us-ascii?Q?TaKLvEs1M0dqgJFNVNpR38tWsSkM61MrE4wvz1WnF+Nw+X58+anPRb0X4bPJ?=
+ =?us-ascii?Q?W3i27c7pBAOmnqR9TVyrucyB7YEj+14VVEHaiD39PQ52+xMJoarg/v5NgfN/?=
+ =?us-ascii?Q?4tbg11P7YMxn9XoZ4pWyd3QhKW4MiBXctHbEE5CnJhTc0j0UEn+VKb6/DdLw?=
+ =?us-ascii?Q?CqkvqP07xN+GAlieU5qi2tuogC5CVQhScGCkH9b5akDh/lnebvims9C3EsLp?=
+ =?us-ascii?Q?l2Jcv0wbWm/dZWFr6B+N8CZ2unP78lBsC9fRtghn2AmKBOq1562cl6gd6Ac+?=
+ =?us-ascii?Q?mmi26ti+qt8ACWTJoERmCsH1Y8qW/FW9R3LPntTLKC79/EQvb0iNM13HTstN?=
+ =?us-ascii?Q?X39KuMbcGVl3CgmojwdoeCOD9bHfs8ex3CUn3lKWgFPztAY46uvF4dSbT5Xt?=
+ =?us-ascii?Q?SlbxG/kMT0BqIlAhDO4ZOVDdAVtJRGLHK/+qoIQSSiIJj+hwwMJkWsvC/wBe?=
+ =?us-ascii?Q?dn21nVrF1G7T9N/B+17BUqd7DaVWzZTmDXpatrkykhR5DT8K7uP3cGO/zu76?=
+ =?us-ascii?Q?lpGwJgQVLqz+1l7wp+nE1P4339b4yKbeBfWjtR1a?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 68056964-25c0-4e95-1166-08dbd71c0f10
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4838.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2023 18:39:31.8586
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Czg2pLSrutwGmDMzA5u7SiCTWDfPwrfUwGivTUPVsdfEFVYeqSLBmppACtDJlwnL7OkIBcQ9RxSMLGmgkt1pWw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB9196
 
-In case the uvc gadget is super speed plus, the corresponding config
-descriptor wasn't initialized. As a result, the host will not recognize
-the devices when using super speed plus connection.
+No completion irq is needed if no_interrupt is true. Needn't set TRB_IOC
+at this case.
 
-This patch initializes them to super speed descriptors.
+Check usb_request: no_interrupt and set/skip TRB_IOC in
+cdns3_ep_run_transfer().
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Shuzhen Wang <shuzhenwang@google.com>
+Signed-off-by: Frank Li <Frank.Li@nxp.com>
 ---
- v2: fix patch formatting
+ drivers/usb/cdns3/cdns3-gadget.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
- drivers/usb/gadget/function/f_uvc.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-index faa398109431..786379f1b7b7 100644
---- a/drivers/usb/gadget/function/f_uvc.c
-+++ b/drivers/usb/gadget/function/f_uvc.c
-@@ -516,6 +516,7 @@ uvc_copy_descriptors(struct uvc_device *uvc, enum usb_device_speed speed)
- 	void *mem;
+diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
+index 69a44bd7e5d02..cd08897f8da8b 100644
+--- a/drivers/usb/cdns3/cdns3-gadget.c
++++ b/drivers/usb/cdns3/cdns3-gadget.c
+@@ -1124,6 +1124,7 @@ static int cdns3_ep_run_transfer(struct cdns3_endpoint *priv_ep,
+ 	u16 total_tdl = 0;
+ 	struct scatterlist *s = NULL;
+ 	bool sg_supported = !!(request->num_mapped_sgs);
++	u32 ioc = request->no_interrupt ? 0 : TRB_IOC;
  
- 	switch (speed) {
-+	case USB_SPEED_SUPER_PLUS:
- 	case USB_SPEED_SUPER:
- 		uvc_control_desc = uvc->desc.ss_control;
- 		uvc_streaming_cls = uvc->desc.ss_streaming;
-@@ -564,7 +565,8 @@ uvc_copy_descriptors(struct uvc_device *uvc, enum usb_device_speed speed)
- 		bytes += uvc_interrupt_ep.bLength + uvc_interrupt_cs_ep.bLength;
- 		n_desc += 2;
+ 	if (priv_ep->type == USB_ENDPOINT_XFER_ISOC)
+ 		num_trb = priv_ep->interval;
+@@ -1233,11 +1234,11 @@ static int cdns3_ep_run_transfer(struct cdns3_endpoint *priv_ep,
+ 			control |= pcs;
  
--		if (speed == USB_SPEED_SUPER) {
-+		if (speed == USB_SPEED_SUPER ||
-+		    speed == USB_SPEED_SUPER_PLUS) {
- 			bytes += uvc_ss_interrupt_comp.bLength;
- 			n_desc += 1;
+ 		if (priv_ep->type == USB_ENDPOINT_XFER_ISOC  && !priv_ep->dir) {
+-			control |= TRB_IOC | TRB_ISP;
++			control |= ioc | TRB_ISP;
+ 		} else {
+ 			/* for last element in TD or in SG list */
+ 			if (sg_iter == (num_trb - 1) && sg_iter != 0)
+-				control |= pcs | TRB_IOC | TRB_ISP;
++				control |= pcs | ioc | TRB_ISP;
  		}
-@@ -619,7 +621,8 @@ uvc_copy_descriptors(struct uvc_device *uvc, enum usb_device_speed speed)
  
- 	if (uvc->enable_interrupt_ep) {
- 		UVC_COPY_DESCRIPTOR(mem, dst, &uvc_interrupt_ep);
--		if (speed == USB_SPEED_SUPER)
-+		if (speed == USB_SPEED_SUPER ||
-+		    speed == USB_SPEED_SUPER_PLUS)
- 			UVC_COPY_DESCRIPTOR(mem, dst, &uvc_ss_interrupt_comp);
+ 		if (sg_iter)
+@@ -1268,7 +1269,7 @@ static int cdns3_ep_run_transfer(struct cdns3_endpoint *priv_ep,
+ 	priv_req->num_of_trb = num_trb;
  
- 		UVC_COPY_DESCRIPTOR(mem, dst, &uvc_interrupt_cs_ep);
-@@ -795,6 +798,13 @@ uvc_function_bind(struct usb_configuration *c, struct usb_function *f)
- 		goto error;
- 	}
+ 	if (sg_iter == 1)
+-		trb->control |= cpu_to_le32(TRB_IOC | TRB_ISP);
++		trb->control |= cpu_to_le32(ioc | TRB_ISP);
  
-+	f->ssp_descriptors = uvc_copy_descriptors(uvc, USB_SPEED_SUPER_PLUS);
-+	if (IS_ERR(f->ssp_descriptors)) {
-+		ret = PTR_ERR(f->ssp_descriptors);
-+		f->ssp_descriptors = NULL;
-+		goto error;
-+	}
-+
- 	/* Preallocate control endpoint request. */
- 	uvc->control_req = usb_ep_alloc_request(cdev->gadget->ep0, GFP_KERNEL);
- 	uvc->control_buf = kmalloc(UVC_MAX_REQUEST_SIZE, GFP_KERNEL);
+ 	if (priv_dev->dev_ver < DEV_VER_V2 &&
+ 	    (priv_ep->flags & EP_TDLCHK_EN)) {
 -- 
-2.42.0.820.g83a721a137-goog
+2.34.1
 
 
