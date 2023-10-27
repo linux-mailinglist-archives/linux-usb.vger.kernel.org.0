@@ -1,38 +1,39 @@
-Return-Path: <linux-usb+bounces-2292-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2293-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5D7B7D9D45
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 17:46:09 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 413AF7D9D63
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 17:49:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2B8521C21032
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 15:46:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C45FAB2143E
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 15:49:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95B8637CA3;
-	Fri, 27 Oct 2023 15:46:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BB87381AD;
+	Fri, 27 Oct 2023 15:49:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB819D530
-	for <linux-usb@vger.kernel.org>; Fri, 27 Oct 2023 15:45:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA5281F5E7
+	for <linux-usb@vger.kernel.org>; Fri, 27 Oct 2023 15:49:15 +0000 (UTC)
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by lindbergh.monkeyblade.net (Postfix) with SMTP id 9A5D1186
-	for <linux-usb@vger.kernel.org>; Fri, 27 Oct 2023 08:45:55 -0700 (PDT)
-Received: (qmail 573168 invoked by uid 1000); 27 Oct 2023 11:45:54 -0400
-Date: Fri, 27 Oct 2023 11:45:54 -0400
+	by lindbergh.monkeyblade.net (Postfix) with SMTP id 571E4C2
+	for <linux-usb@vger.kernel.org>; Fri, 27 Oct 2023 08:49:14 -0700 (PDT)
+Received: (qmail 573361 invoked by uid 1000); 27 Oct 2023 11:49:13 -0400
+Date: Fri, 27 Oct 2023 11:49:13 -0400
 From: Alan Stern <stern@rowland.harvard.edu>
-To: Milan Broz <gmazyland@gmail.com>
-Cc: linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-  linux-scsi@vger.kernel.org, gregkh@linuxfoundation.org, oneukum@suse.com
-Subject: Re: [PATCH v3] usb-storage,uas: use host helper to generate driver
- info
-Message-ID: <083755b2-7d02-45f2-8ce5-a8102cf6911c@rowland.harvard.edu>
-References: <20231016072604.40179-5-gmazyland@gmail.com>
- <20231026101615.395113-1-gmazyland@gmail.com>
+To: Hardik Gajjar <hgajjar@de.adit-jv.com>
+Cc: gregkh@linuxfoundation.org, mathias.nyman@intel.com,
+  linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+  erosca@de.adit-jv.com, s.shtylyov@omp.ru
+Subject: Re: [PATCH v7 2/2] usb: new quirk to reduce the SET_ADDRESS request
+ timeout
+Message-ID: <7cbc1a70-2dcc-4a2a-99e6-fdd92bd5cc9b@rowland.harvard.edu>
+References: <20231027152029.104363-1-hgajjar@de.adit-jv.com>
+ <20231027152029.104363-2-hgajjar@de.adit-jv.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -41,163 +42,59 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231026101615.395113-1-gmazyland@gmail.com>
+In-Reply-To: <20231027152029.104363-2-hgajjar@de.adit-jv.com>
 
-On Thu, Oct 26, 2023 at 12:16:15PM +0200, Milan Broz wrote:
-> The USB mass storage quirks flags can be stored in driver_info in
-> a 32-bit integer (unsigned long on 32-bit platforms).
-> As this attribute cannot be enlarged, we need to use some form
-> of translation of 64-bit quirk bits.
+On Fri, Oct 27, 2023 at 05:20:29PM +0200, Hardik Gajjar wrote:
+> This patch introduces a new USB quirk,
+> USB_QUIRK_SHORT_SET_ADDRESS_REQ_TIMEOUT, which modifies the timeout value
+> for the SET_ADDRESS request. The standard timeout for USB request/command
+> is 5000 ms, as recommended in the USB 3.2 specification (section 9.2.6.1).
 > 
-> This problem was discussed on the USB list
-> https://lore.kernel.org/linux-usb/f9e8acb5-32d5-4a30-859f-d4336a86b31a@gmail.com/
+> However, certain scenarios, such as connecting devices through an APTIV
+> hub, can lead to timeout errors when the device enumerates as full speed
+> initially and later switches to high speed during chirp negotiation.
 > 
-> The initial solution to use a static array extensively increased the size
-> of the kernel module, so I decided to try the second suggested solution:
-> generate a table by host-compiled program and use bit 31 to indicate
-> that the value is an index, not the actual value.
+> In such cases, USB analyzer logs reveal that the bus suspends for
+> 5 seconds due to incorrect chirp parsing and resumes only after two
+> consecutive timeout errors trigger a hub driver reset.
 > 
-> This patch adds a host-compiled program that processes unusual_devs.h
-> (and unusual_uas.h) and generates files usb-ids.c and usb-ids-uas.c
-> (for pre-processed USB device table with 32-bit device info).
-> These files also contain a generated translation table for driver_info
-> to 64-bit values.
+> Packet(54) Dir(?) Full Speed J(997.100 us) Idle(  2.850 us)
+> _______| Time Stamp(28 . 105 910 682)
+> _______|_____________________________________________________________Ch0
+> Packet(55) Dir(?) Full Speed J(997.118 us) Idle(  2.850 us)
+> _______| Time Stamp(28 . 106 910 632)
+> _______|_____________________________________________________________Ch0
+> Packet(56) Dir(?) Full Speed J(399.650 us) Idle(222.582 us)
+> _______| Time Stamp(28 . 107 910 600)
+> _______|_____________________________________________________________Ch0
+> Packet(57) Dir Chirp J( 23.955 ms) Idle(115.169 ms)
+> _______| Time Stamp(28 . 108 532 832)
+> _______|_____________________________________________________________Ch0
+> Packet(58) Dir(?) Full Speed J (Suspend)( 5.347 sec) Idle(  5.366 us)
+> _______| Time Stamp(28 . 247 657 600)
+> _______|_____________________________________________________________Ch0
 > 
-> The translation function is used only in usb-storage and uas modules; all
-> other USB storage modules store flags directly, using only 32-bit flags.
+> This 5-second delay in device enumeration is undesirable, particularly
+> in automotive applications where quick enumeration is crucial
+> (ideally within 3 seconds).
 > 
-> For 64-bit platforms, where unsigned long is 64-bit, we do not need to
-> convert quirk flags to 32-bit index; the translation function there uses
-> flags directly.
+> The newly introduced quirks provide the flexibility to align with a
+> 3-second time limit, as required in specific contexts like automotive
+> applications.
 > 
-> Signed-off-by: Milan Broz <gmazyland@gmail.com>
+> By reducing the SET_ADDRESS request timeout to 500 ms, the
+> system can respond more swiftly to errors, initiate rapid recovery, and
+> ensure efficient device enumeration. This change is vital for scenarios
+> where rapid smartphone enumeration and screen projection are essential.
+> 
+> To use the quirk, please write "vendor_id:product_id:p" to
+> /sys/bus/usb/drivers/hub/module/parameter/quirks
+> 
+> For example,
+> echo "0x2c48:0x0132:p" > /sys/bus/usb/drivers/hub/module/parameters/quirks"
+> 
+> Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
 > ---
 
-Just a few minor comments.
-
-> diff --git a/drivers/usb/storage/Makefile b/drivers/usb/storage/Makefile
-> index 46635fa4a340..9c09d83769e3 100644
-> --- a/drivers/usb/storage/Makefile
-> +++ b/drivers/usb/storage/Makefile
-> @@ -45,3 +45,35 @@ ums-realtek-y		:= realtek_cr.o
->  ums-sddr09-y		:= sddr09.o
->  ums-sddr55-y		:= sddr55.o
->  ums-usbat-y		:= shuttle_usbat.o
-> +
-> +# The mkflags host-compiled generator produces usb-ids.c (usb-storage)
-> +# and usb-ids-uas.c (uas) with USB device tables.
-> +# These tables include pre-computed 32-bit values, as USB driver_info
-> +# (where the value is stored) can be only 32-bit.
-> +# The most significant bit means it is index to 64-bit pre-computed table
-> +# generated by mkflags host-compiled program.
-> +# Currently used only by mass-storage and uas driver.
-> +
-> +$(obj)/usual-tables.o: $(obj)/usb-ids.c
-> +$(obj)/uas.o: $(obj)/usb-ids-uas.c
-
-It would look better to put tabs after the ':'s in these two lines, so 
-that the second field aligns with the lines below.
-
-> +clean-files		:= usb-ids.c usb-ids-uas.c
-> +HOSTCFLAGS_mkflags.o	:= -I $(srctree)/include/
-> +ifdef CONFIG_64BIT
-> +HOSTCFLAGS_mkflags.o	+= -D CONFIG_64BIT=1
-> +else
-> +HOSTCFLAGS_mkflags.o	+= -D CONFIG_64BIT=0
-> +endif
-> +hostprogs		+= mkflags
-> +
-> +quiet_cmd_mkflag_storage = FLAGS   $@
-> +cmd_mkflag_storage = $(obj)/mkflags storage > $@
-> +
-> +quiet_cmd_mkflag_uas = FLAGS   $@
-> +cmd_mkflag_uas = $(obj)/mkflags uas > $@
-> +
-> +# mkflags always need to include unusual_devs.h and unusual_uas.h
-> +$(obj)/usb-ids.c: $(obj)/mkflags $(obj)/unusual_devs.h $(obj)/unusual_uas.h
-> +	$(call cmd,mkflag_storage)
-> +
-> +$(obj)/usb-ids-uas.c: $(obj)/mkflags $(obj)/unusual_devs.h $(obj)/unusual_uas.h
-> +	$(call cmd,mkflag_uas)
-
-I don't think these dependencies are quite right.  usb-ids.c and 
-usb-ids-uas.c don't depend directly on unusual_devs.h or unusual_uas.h 
--- that is, the mkflags program doesn't read those header files when it 
-runs.  Rather, mkflags itself depends on those headers, and the compiler 
-can figure this out by itself so the Makefile doesn't need to mention 
-it.
-
-So instead you should say:
-
-$(obj)/usb-ids.c:	$(obj)/mkflags
-	$(call cmd,mkflag_storage)
-
-$(obj)/usb-ids-uas.c:	$(obj)/mkflags
-	$(call cmd,mkflag_uas)
-
-> diff --git a/drivers/usb/storage/usb-ids.h b/drivers/usb/storage/usb-ids.h
-> new file mode 100644
-> index 000000000000..d0359c572f33
-> --- /dev/null
-> +++ b/drivers/usb/storage/usb-ids.h
-> @@ -0,0 +1,37 @@
-> +/* SPDX-License-Identifier: GPL-2.0+ */
-> +
-> +#ifndef _USB_STOR_IDS_H_
-> +#define _USB_STOR_IDS_H_
-> +
-> +#include <linux/types.h>
-> +#include <linux/bug.h>
-> +
-> +/* Conversion of 32-bit quirks flags for 32-bit platforms */
-> +extern const unsigned long usb_stor_drv_info_u64_table_size;
-> +extern const unsigned long usb_uas_drv_info_u64_table_size;
-> +extern const u64 usb_stor_drv_info_u64_table[];
-> +extern const u64 usb_uas_drv_info_u64_table[];
-> +
-> +static u64 usb_stor_drv_info_to_flags(const u64 *drv_info_u64_table,
-> +		unsigned long table_size, unsigned long idx)
-> +{
-> +#if IS_ENABLED(CONFIG_64BIT)
-> +	return idx;
-> +#else
-> +	u64 flags = 0;
-> +
-> +	if (idx < (1UL << 31))
-> +		return idx;
-> +
-> +	idx -= (1UL << 31);
-> +
-> +	if (idx < table_size)
-> +		flags = drv_info_u64_table[idx];
-> +	else
-> +		pr_warn_once("usb_stor_drv_info_u64_table not updated");
-> +
-> +	return flags;
-> +#endif
-> +}
-
-In order to avoid conditional macros within a function definition, this 
-can be rewritten as:
-
-#if IS_ENABLED(CONFIG_64BIT)
-/* 64-bit systems don't need to use the drv_info_64_table */
-static u64 usb_stor_drv_info_to_flags(const u64 *drv_info_u64_table,
-		unsigned long table_size, unsigned long idx)
-{
-	return idx;
-}
-
-#else
-/* 32-bit systems need to look up flags if bits 31 or beyond are used */
-static u64 usb_stor_drv_info_to_flags(const u64 *drv_info_u64_table,
-		unsigned long table_size, unsigned long idx)
-{
-...
-}
-#endif
-
-Everything else looks okay.
-
-Alan Stern
+Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
 
