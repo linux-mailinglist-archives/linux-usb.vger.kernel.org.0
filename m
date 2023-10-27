@@ -1,175 +1,292 @@
-Return-Path: <linux-usb+bounces-2300-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2301-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E8997DA0AE
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 20:39:42 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B60BF7DA189
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 22:00:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DF98528259D
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 18:39:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 18E8DB21523
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 19:59:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CF343B7AA;
-	Fri, 27 Oct 2023 18:39:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CC5F3DFF5;
+	Fri, 27 Oct 2023 19:59:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="JW+j65J6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VYSPSBNu"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56AF83D3A1
-	for <linux-usb@vger.kernel.org>; Fri, 27 Oct 2023 18:39:37 +0000 (UTC)
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2040.outbound.protection.outlook.com [40.107.8.40])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4689712A;
-	Fri, 27 Oct 2023 11:39:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jYY7sE0sVKrf3YsPB1FPW3f9Ch1aUCpcDtA8+icdz3CYGaIq+X9xGS9PKjgBRGnXzQ49LUK1kqbsvNTzOip4IrtgeYthyzIr1SnqC9RTgd4zEcxsS1UVro6WqTlECCz6AxfBLi+xTZSk6iWT6LdNomrmvtTct7DQIwxva6M8Z1XMfKgBX/td3Wkb5lNuBYGFcdavOlqxIQH+RuyHeVlXTZNY097yhaHbOTwNMrINScPIkcH02BYlMt5N+r9QXCegCzahN7sSSlKinlI9+3KMf3I45xqaTY0WrPFZKGqt/e2Jq0bP0SZKDACfUREjctQW55PPkWhh6Pm0oVjJV3Sx/w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=a1ZQ1XvEkrhkMMzc+DSUrXBJnED9qfMmknHmI9nD9MM=;
- b=WaSQl8QAfgr86Q0TR2W+/a6s6mCtIY0hgDINT1dTMPB52s4M5vv3meQ2tvqXu4lgV1u8/+lEVxFxdx1QExA9OPneP4MgbIUIhGafCxyfRz2orZJiIGZ4vEedU7fESCT3341oEFIuuUXfQVXNJL1jhmNBJBsqITicZ8qVxULSr6C//TMVcCs3bRGY0Qy+xCSQoC2TlOjTLoxI/HyToZUUzzdJZ0TLoyqK9U4PUiBK8ELAoIofq18kEWLEgCUxrNFByFgVGbyv1j9MHnHN37yYS7Nh1GEzk+ZaTimRwHN+F74bSVOFyIDjxMuqDPbABir66lUm0q9as1kBAu9Me5NNbw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=a1ZQ1XvEkrhkMMzc+DSUrXBJnED9qfMmknHmI9nD9MM=;
- b=JW+j65J6WAR/v9MU3JVspXn+C49l7iL5YWE/NR79k3301X5HwEtwse33l5Oi3UM1oVtf8qXBR4GGzpMSroulJHzFTMyQmg87EDl54MVtpDEsBEdPQHl6JcZiWwx0XLqAQ3CR0w5pEhHUdG/VpL+LUbv6uOnkFodwqfFjjqsNJrs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM6PR04MB4838.eurprd04.prod.outlook.com (2603:10a6:20b:4::16)
- by DU2PR04MB9196.eurprd04.prod.outlook.com (2603:10a6:10:2fb::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.11; Fri, 27 Oct
- 2023 18:39:32 +0000
-Received: from AM6PR04MB4838.eurprd04.prod.outlook.com
- ([fe80::97ca:a905:8e64:c098]) by AM6PR04MB4838.eurprd04.prod.outlook.com
- ([fe80::97ca:a905:8e64:c098%6]) with mapi id 15.20.6933.011; Fri, 27 Oct 2023
- 18:39:31 +0000
-From: Frank Li <Frank.Li@nxp.com>
-To: imx@lists.linux.dev,
-	Peter Chen <peter.chen@kernel.org>,
-	Pawel Laszczak <pawell@cadence.com>,
-	Roger Quadros <rogerq@kernel.org>,
-	Aswath Govindraju <a-govindraju@ti.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org (open list:CADENCE USB3 DRD IP DRIVER),
-	linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 1/1] usb: cdns3: skip set TRB_IOC when usb_request: no_interrupt is true
-Date: Fri, 27 Oct 2023 14:39:19 -0400
-Message-Id: <20231027183919.664271-1-Frank.Li@nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BYAPR21CA0030.namprd21.prod.outlook.com
- (2603:10b6:a03:114::40) To AM6PR04MB4838.eurprd04.prod.outlook.com
- (2603:10a6:20b:4::16)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A52546128
+	for <linux-usb@vger.kernel.org>; Fri, 27 Oct 2023 19:59:50 +0000 (UTC)
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A96A21AA;
+	Fri, 27 Oct 2023 12:59:48 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-6be1bc5aa1cso2438980b3a.3;
+        Fri, 27 Oct 2023 12:59:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1698436788; x=1699041588; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=weKHPjc4wxBWhrJPXw89N+hZ6eKctWfsrLxKNLkb6ls=;
+        b=VYSPSBNuOJHJKjmv3GatUEGUveVDUbkM4V2YgZQu5XlCuGhPt7wD2ZI5Mluwi2Pqhh
+         tWa+5YST4KJKYF4T2Q7Y5h1VRi/AGNr1fkzs5EFhdTrz5SEl7IpHo30H52BSx4F5C5gV
+         cwFOTmUJp3fOahwWVO4f/OJR4LP5k3H9oFqqXGagSX4BPxkZGQsdPJvJvBGmuQZWLOOC
+         2YNqNYFtEpABPlq8YPtKj80WtQW6VGlhDJiE9bMeyvic29WQBBryD0vleGAN32q5MLHG
+         5mkIKE//hXyUbs0LHXTQCkwkmWCbQNCmpU7GoCqJm3x2/4ZaqAkuHT2HZ6zswAIAAMh7
+         dGLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698436788; x=1699041588;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=weKHPjc4wxBWhrJPXw89N+hZ6eKctWfsrLxKNLkb6ls=;
+        b=F5tl63Vkq5aOS4gTmzN9or0XM+QGy5s3ThuDoJbXzcDEVzh+kI9Ix9QIFKvcUIqm1F
+         JkY3A6Vwlo7y6Dpuy6Z4VlmVd/TSScFByO/0UKytQXn/78Jt1SG5BD9RoyK5O+8jBD/4
+         zDIhADF8nCIofCxFDGgA2tNSgO3twTfLaU4UCpPMkwTH+6pVzf4RUjT08BABP4l4Oda4
+         a6WNcD27sDLSQce5SXSnH3vtNQRNzdP0awVuz2vzBQt6cC5DJU72yzlAbryppR50fxxG
+         SdT7z6ba8LIGxy/kSd05TisvN8LoJYOfJhpQwxVxCb7HPy1TFWBUliCflUP0D48MVwdh
+         eENw==
+X-Gm-Message-State: AOJu0YwUcw+o/NUiVy+dRAlM91PJtUp0G1tD4BJ1iXt7bxdPmNLPGefV
+	25zvph/cKNF7Xx1zhukXkCE=
+X-Google-Smtp-Source: AGHT+IFk+gtYxQ8LAHDWpcgS3J28W2XTK3gk8wUOAryTEz+QmMB12fhIgtRqvCcN8KMIyoepBHQlrg==
+X-Received: by 2002:a05:6a21:3388:b0:15c:c381:f65e with SMTP id yy8-20020a056a21338800b0015cc381f65emr4783548pzb.34.1698436787831;
+        Fri, 27 Oct 2023 12:59:47 -0700 (PDT)
+Received: from [192.168.1.7] ([159.192.237.220])
+        by smtp.googlemail.com with ESMTPSA id fj40-20020a056a003a2800b0068fe7c4148fsm1745550pfb.57.2023.10.27.12.59.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Oct 2023 12:59:47 -0700 (PDT)
+Message-ID: <103aa944-073a-4dd0-8d58-8c9123dc2352@gmail.com>
+Date: Sat, 28 Oct 2023 02:59:42 +0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM6PR04MB4838:EE_|DU2PR04MB9196:EE_
-X-MS-Office365-Filtering-Correlation-Id: 68056964-25c0-4e95-1166-08dbd71c0f10
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	uh0fNC6eVvdI46Dc3fAwey3TsNbhduWDUtyLrdJDmzgomAoECMK0mXElI2AJU08CYOXXKIR2Wytb9iPGANLo91Mtx8Z2wpcX0wrf3PtIKwhI01XYxmuVPJEr+oxep9+rF3k/PFmBWbgyXF/cOeqUsqaEC///Bgrgulrc/pVmcA9Mv39LUwMdt8Huv5lnzPyF+AiHjsDyDCIY3Vvvw+81UQ/1CN3/h9wTTfWOgHcZZehuV/gaeuH5mv8zJf9Sc2fsVUQkUeY+Bbk+3CehnfAPC1K3Zo8T7wGT5TyUAN2utExioR9ydyDQzBH2PRDstYKMCKzkQeQdd+4CwUeED4OO+eYwmvkELxJ0FpztUXtO+yq822sLElwPPXDE0l5HBSaUtaZ3dMn/lC0heeDd0fsOz9O0jKRT13XdOy3uDfM+CpOQJOHPnAMdmLhznIkiZlVos5PJKkgOSq0TWcNPFeOH+ybtKJLfn69AWHIb3upMczFtfMUGxbrXbOS0IjvlVuvVqtLUx04OmNkHPhiVt6n+E0yrDYIb8dmgvVRrixrSO+mWiQB5IUwlg0jAsZGWLV73pDjGg6fnBJhoZyx9ga+8tjQptyhMNEzyHiM0ECgCPAOgqVc7oq/6QNkPLciJLTjUhejs1cN8geX9iDfACDKuRKmsfmbum8XuT84iAQAHZ2I=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4838.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(396003)(346002)(39860400002)(136003)(366004)(230922051799003)(186009)(1800799009)(64100799003)(451199024)(1076003)(26005)(52116002)(2616005)(6512007)(38350700005)(86362001)(36756003)(38100700002)(83380400001)(6506007)(478600001)(6486002)(6666004)(2906002)(8676002)(8936002)(41300700001)(316002)(110136005)(66476007)(5660300002)(66556008)(66946007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?TQuUYNF+QwDTojnCqVsBeZmDUrJS7t8Cx7Qbz2E3fLBf0enZWR2liSh4oJ7X?=
- =?us-ascii?Q?qptgfz00uZ2s04oKJ9mpEuSGmWBTbwvXAlsO8R9vIjxsYnHk9thxNNbB714O?=
- =?us-ascii?Q?nBD8JfWOLk8MHpOQzGP4/ErVaG/nItRdrpXTe1OM1AuQLRU2iAetsz1mR7ei?=
- =?us-ascii?Q?qAkNkoBHNDScZvtovhvOXnM6VleaACB6lF1lxhGP2kQyj+WeberiirQKQi+9?=
- =?us-ascii?Q?5Y9XLiT3kFtE8qCg+gYA7+N4aUwsjK3aQc1ZEZtMWb25ywNeqSHfk2P9ZNaK?=
- =?us-ascii?Q?09+m8hTHX//wF3WYiAFVhkuDhrX58u81bKmGhPcz3vk8lvf9ih5fqcakVFbj?=
- =?us-ascii?Q?+j9jbBFoMGMo9IQZP7BY28Q7wVC7Fja14+zX03wm94v9yMuMXADmL9+tKCTJ?=
- =?us-ascii?Q?tVzC8y2TRfYynr2DXPF2Cu7HNALywtqyP4oBRDJc1L0ptr1XEDzwHl5up9WC?=
- =?us-ascii?Q?llIFx6FUXrJCtsavXtucJE1l89sU+A6YYKI/KR2rfgLSVl4hj8nPinqC8qYn?=
- =?us-ascii?Q?Xd+afwqUOL6t6CYxzc/VztLQeaQe1TRmY2zuruq3tL5CNTG/4E2DaIPwFguH?=
- =?us-ascii?Q?AxmMI91P2RL9Le7tomxBA9KLldQg4kDfxcC014CiQxzFX4C9ZMEu4WBceFRC?=
- =?us-ascii?Q?XiM7kYC4f76lH16HAYc2v7WCvYK1XLnqBFEaRATIb2GsB8Cf1vlQrUiG+SYL?=
- =?us-ascii?Q?aSNlkwyVj0TvHHBaaRIt0oC6ikrxHgQIFzO+RAOxQlf+b4vABoM4a4PtfMD5?=
- =?us-ascii?Q?8Qjk8tEGdYpQGJbQrvka3fWcgs4gVblY3cL6PH3pKD6FKgWXfL1HL1GcoDNN?=
- =?us-ascii?Q?2w34UW5Zgvi7bgXgiZglc1BHXFriLIFLABwmxwMrfe7zxynLgjJzwPWRjPW3?=
- =?us-ascii?Q?CrSxdZ6EILiLFFRv9Rv8HnydeCF4csqkPeOBM7XwPrT5mkoTzrnXFH3WJjNC?=
- =?us-ascii?Q?vH6U1Neoo8k+zXzIJoRXigbg9vaaxf42YnahoJMIdQ+mXLEF7bsPC7mVcO5z?=
- =?us-ascii?Q?TaKLvEs1M0dqgJFNVNpR38tWsSkM61MrE4wvz1WnF+Nw+X58+anPRb0X4bPJ?=
- =?us-ascii?Q?W3i27c7pBAOmnqR9TVyrucyB7YEj+14VVEHaiD39PQ52+xMJoarg/v5NgfN/?=
- =?us-ascii?Q?4tbg11P7YMxn9XoZ4pWyd3QhKW4MiBXctHbEE5CnJhTc0j0UEn+VKb6/DdLw?=
- =?us-ascii?Q?CqkvqP07xN+GAlieU5qi2tuogC5CVQhScGCkH9b5akDh/lnebvims9C3EsLp?=
- =?us-ascii?Q?l2Jcv0wbWm/dZWFr6B+N8CZ2unP78lBsC9fRtghn2AmKBOq1562cl6gd6Ac+?=
- =?us-ascii?Q?mmi26ti+qt8ACWTJoERmCsH1Y8qW/FW9R3LPntTLKC79/EQvb0iNM13HTstN?=
- =?us-ascii?Q?X39KuMbcGVl3CgmojwdoeCOD9bHfs8ex3CUn3lKWgFPztAY46uvF4dSbT5Xt?=
- =?us-ascii?Q?SlbxG/kMT0BqIlAhDO4ZOVDdAVtJRGLHK/+qoIQSSiIJj+hwwMJkWsvC/wBe?=
- =?us-ascii?Q?dn21nVrF1G7T9N/B+17BUqd7DaVWzZTmDXpatrkykhR5DT8K7uP3cGO/zu76?=
- =?us-ascii?Q?lpGwJgQVLqz+1l7wp+nE1P4339b4yKbeBfWjtR1a?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 68056964-25c0-4e95-1166-08dbd71c0f10
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4838.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Oct 2023 18:39:31.8586
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Czg2pLSrutwGmDMzA5u7SiCTWDfPwrfUwGivTUPVsdfEFVYeqSLBmppACtDJlwnL7OkIBcQ9RxSMLGmgkt1pWw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB9196
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] USB: serial: option: add Fibocom L7xx modules
+Content-Language: en-US
+To: Victor Fragoso <victorffs@hotmail.com>,
+ "johan@kernel.org" <johan@kernel.org>
+Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+ "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <9315051ae981aaad1d46724641defc6e5f79d12b.camel@hotmail.com>
+ <84a78bb8-fd85-4ee5-9c92-859e8450a587@gmail.com>
+ <94477736e69cc76eaaef8584d7e1aa5078a0611e.camel@hotmail.com>
+From: Lars Melin <larsm17@gmail.com>
+In-Reply-To: <94477736e69cc76eaaef8584d7e1aa5078a0611e.camel@hotmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-No completion irq is needed if no_interrupt is true. Needn't set TRB_IOC
-at this case.
+On 10/28/2023 0:55, Victor Fragoso wrote:
+> On Thu, 2023-10-26 at 20:13 +0700, Lars Melin wrote:
+>> On 10/26/2023 8:24, Victor Fragoso wrote:
+>>> Add support for Fibocom L7xx module series and variants.
+>>>
+>>> L716-EU-60 (ECM):
+>>> T:  Bus=03 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#= 17 Spd=480  MxCh= 0
+>>> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+>>> P:  Vendor=19d2 ProdID=0579 Rev= 1.00
+>>> S:  Manufacturer=Fibocom,Incorporated
+>>> S:  Product=Fibocom Mobile Boardband
+>>> S:  SerialNumber=1234567890ABCDEF
+>>> C:* #Ifs= 7 Cfg#= 1 Atr=e0 MxPwr=500mA
+>>> A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=06 Prot=00
+>>> I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=06 Prot=00 Driver=cdc_ether
+>>> E:  Ad=87(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
+>>> I:  If#= 1 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
+>>> I:* If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
+>>> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>> I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+>>> E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>> I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+>>> E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>> I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+>>> E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>> I:* If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+>>> E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>> E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>> I:* If#= 6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=usbfs
+>>> E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>> E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>>
+>>> L716-EU-60 (RNDIS):
+>>> T:  Bus=03 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#= 21 Spd=480  MxCh= 0
+>>> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+>>> P:  Vendor=2cb7 ProdID=0001 Rev= 1.00
+>>> S:  Manufacturer=Fibocom,Incorporated
+>>> S:  Product=Fibocom Mobile Boardband
+>>> S:  SerialNumber=1234567890ABCDEF
+>>> C:* #Ifs= 7 Cfg#= 1 Atr=e0 MxPwr=500mA
+>>> A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=06 Prot=00
+>>> I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=06 Prot=00 Driver=cdc_ether
+>>> E:  Ad=87(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
+>>> I:  If#= 1 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
+>>> I:* If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
+>>> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>> I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+>>> E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>> I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+>>> E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>> I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+>>> E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>> I:* If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+>>> E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>> E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>> I:* If#= 6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=usbfs
+>>> E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>> E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>>
+>>> L716-EU-10 (ECM):
+>>> T:  Bus=03 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#= 21 Spd=480  MxCh= 0
+>>> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+>>> P:  Vendor=2cb7 ProdID=0001 Rev= 1.00
+>>> S:  Manufacturer=Fibocom,Incorporated
+>>> S:  Product=Fibocom Mobile Boardband
+>>> S:  SerialNumber=1234567890ABCDEF
+>>> C:* #Ifs= 7 Cfg#= 1 Atr=e0 MxPwr=500mA
+>>> A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=06 Prot=00
+>>> I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=06 Prot=00 Driver=cdc_ether
+>>> E:  Ad=87(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
+>>> I:  If#= 1 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
+>>> I:* If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
+>>> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>> I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+>>> E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>> I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+>>> E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>> I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+>>> E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>> I:* If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+>>> E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>> E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>> I:* If#= 6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=usbfs
+>>> E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>> E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+>>>
+>>> Signed-off-by: Victor Fragoso <victorffs@hotmail.com>
+>>> ---
+>>>    drivers/usb/serial/option.c | 5 +++++
+>>>    1 file changed, 5 insertions(+)
+>>>
+>>> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+>>> index 45dcfaadaf98..4ba3dc352d65 100644
+>>> --- a/drivers/usb/serial/option.c
+>>> +++ b/drivers/usb/serial/option.c
+>>> @@ -2262,6 +2262,11 @@ static const struct usb_device_id option_ids[] =
+>>> {
+>>>    	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x01a2, 0xff)
+>>> },			/* Fibocom FM101-GL (laptop MBIM) */
+>>>    	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x01a4,
+>>> 0xff),			/* Fibocom FM101-GL (laptop MBIM) */
+>>>    	  .driver_info = RSVD(4) },
+>>> +	{ USB_DEVICE_AND_INTERFACE_INFO(0x2cb7, 0x0001, 0xff, 0xff,
+>>> 0xff) },	/* Fibocom L71x */
+>>> +	{ USB_DEVICE_AND_INTERFACE_INFO(0x2cb7, 0x0001, 0x0a, 0x00,
+>>> 0xff) },	/* Fibocom L71x */
+>>> +	{ USB_DEVICE_AND_INTERFACE_INFO(0x2cb7, 0x0100, 0xff, 0xff,
+>>> 0xff) },	/* Fibocom L71x */
+>>> +	{ USB_DEVICE_AND_INTERFACE_INFO(0x19d2, 0x0256, 0xff, 0xff,
+>>> 0xff) },	/* Fibocom L71x */
+>>> +	{ USB_DEVICE_AND_INTERFACE_INFO(0x19d2, 0x0579, 0xff, 0xff,
+>>> 0xff) },	/* Fibocom L71x */
+>>>    	{ USB_DEVICE_INTERFACE_CLASS(0x2df3, 0x9d03, 0xff)
+>>> },			/* LongSung M5710 */
+>>>    	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1404, 0xff)
+>>> },			/* GosunCn GM500 RNDIS */
+>>>    	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1405, 0xff)
+>>> },			/* GosunCn GM500 MBIM */
+>>
+>>
+>> Hi Victor, thanks for the patch, there is unfortunately the following
+>> errors in it:
+>> The device list is sorted in ascending order based on vid:pid, you have
+>> inserted all of your added Id's in the wrong place.
+>>
+>> 19d2:0579 is a ZTE device Id and should be placed among the other 19d2
+>> devices.
+>>
+>> You have not included usb-devices output for 19d2:0256 and 2cb7:0100,
+>> and I have strong reasons to believe that they should not be included in
+>> the option driver.
+>> If you are of another opinion then please show the usb-devices output
+>> for them, otherwise remove them from the patch.
+>>
+>> You have added support for an interface with the attributes 0a/00/ff ,
+>> there is no such interface in your provided usb-devices listing,
+>> interface Class 0a does not even belong to the option driver.
+>>
+>> Thanks
+>> Lars
+> 
+> Hi Lars, sorry about the wrong order, I will correct it.
+> 
+> But about the ZTE device ID, I belive that we should insert among
+> Fibocom drivers because we are talking about a Fibocom module that is
+> using an ZTE Chipset.
+> So, this is exactly the same situation from Fibocom L610 IDs (0x1782,
+> 0x4d10 / 0x1782, 0x4d11) that is using the Unisoc Chipset but were
+> inserted among Fibocom drivers.
+> 
+> And about the usb-devices output, let me explain better:
+> I am a Field Application Enginner at Fibocom Brazil and I am using the
+> IDs from our internal and official documentation.
+> On this documents its suggested to add all this IDs because it will
+> guarantee that can be used on all the variants devices from L71x series
+> (that can change according to different part number, region support or
+> network protocol).
+> Unfortunately, I don't have all the modules variations available with
+> me right now to test and share all the outputs.
+> 
+> Can we continue with all the IDs that I have inserted?
+> Or do you prefer to keep just the devices that I tested by myself until
+> now?
+> 
+> Victor Fragoso
 
-Check usb_request: no_interrupt and set/skip TRB_IOC in
-cdns3_ep_run_transfer().
+Johan may have a different opinion from mine and he is the one to 
+decide, my take is that there is no value in having a minor part of the 
+list grouped by mfgr and the major part of the list sorted by USB Id.
+We have also seen in the past that when a mfgr1 buys a chipset from 
+mfgr2 and then sells his product with mfgr2 Id instead of using one of 
+his own Id's then there is also not uncommon that mfgr3 is also buying 
+the same chipset without changing Id. Hence "Manufacturer name" is not 
+unique but the vid is..
 
-Signed-off-by: Frank Li <Frank.Li@nxp.com>
----
- drivers/usb/cdns3/cdns3-gadget.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+The list should not be seen or used as a cross reference between 
+mfgr:product name and vid:pid, anyone who needs to search the driver 
+source to see if a device is supported ought to know its vid:pid so can 
+search on those and that works much better if the list is sorted by 
+vid:pid in ascending order. Personally I'd rather see a source without 
+all the unnecessary defines, only vid:pid based and with the 
+mfgr/product as an optional comment.
 
-diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
-index 69a44bd7e5d02..cd08897f8da8b 100644
---- a/drivers/usb/cdns3/cdns3-gadget.c
-+++ b/drivers/usb/cdns3/cdns3-gadget.c
-@@ -1124,6 +1124,7 @@ static int cdns3_ep_run_transfer(struct cdns3_endpoint *priv_ep,
- 	u16 total_tdl = 0;
- 	struct scatterlist *s = NULL;
- 	bool sg_supported = !!(request->num_mapped_sgs);
-+	u32 ioc = request->no_interrupt ? 0 : TRB_IOC;
- 
- 	if (priv_ep->type == USB_ENDPOINT_XFER_ISOC)
- 		num_trb = priv_ep->interval;
-@@ -1233,11 +1234,11 @@ static int cdns3_ep_run_transfer(struct cdns3_endpoint *priv_ep,
- 			control |= pcs;
- 
- 		if (priv_ep->type == USB_ENDPOINT_XFER_ISOC  && !priv_ep->dir) {
--			control |= TRB_IOC | TRB_ISP;
-+			control |= ioc | TRB_ISP;
- 		} else {
- 			/* for last element in TD or in SG list */
- 			if (sg_iter == (num_trb - 1) && sg_iter != 0)
--				control |= pcs | TRB_IOC | TRB_ISP;
-+				control |= pcs | ioc | TRB_ISP;
- 		}
- 
- 		if (sg_iter)
-@@ -1268,7 +1269,7 @@ static int cdns3_ep_run_transfer(struct cdns3_endpoint *priv_ep,
- 	priv_req->num_of_trb = num_trb;
- 
- 	if (sg_iter == 1)
--		trb->control |= cpu_to_le32(TRB_IOC | TRB_ISP);
-+		trb->control |= cpu_to_le32(ioc | TRB_ISP);
- 
- 	if (priv_dev->dev_ver < DEV_VER_V2 &&
- 	    (priv_ep->flags & EP_TDLCHK_EN)) {
--- 
-2.34.1
+When adding Id's to the driver it is you who should know the devices you 
+are adding, don't add Id's if you have not personally confirmed their 
+interface composition and usage.
+Those who told you add these Id's apparently also told you that there 
+are two versions of 2cb7:0001, one with ECM interfaces and one with 
+RNDIS interfaces but your usb-devices output show both to be identical.. 
+There is no RNDIS interface in your listings, both of them will load
+the cdc_ether driver.
+
+br
+Lars
 
 
