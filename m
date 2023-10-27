@@ -1,102 +1,137 @@
-Return-Path: <linux-usb+bounces-2282-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2283-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5ADDB7D9959
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 15:08:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id EAE8C7D9961
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 15:10:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1395C2824CE
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 13:08:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E4562824F5
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 13:10:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80C6F1E503;
-	Fri, 27 Oct 2023 13:08:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 559FA1EB22;
+	Fri, 27 Oct 2023 13:10:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="mUBPquW9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PfJxb9Ec"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6CE4182D2;
-	Fri, 27 Oct 2023 13:08:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C64CDC433C9;
-	Fri, 27 Oct 2023 13:08:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1698412101;
-	bh=wUSE0lZzh01i6zCnbE4aWfTvei7j5EMjOcX3g2jyxM0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mUBPquW9x5Dbtkhk+pz89BmAhLYNFjqDU4YMrOwWzJaYlGsDWMBwBm3y54EH8MiNS
-	 rN/dgBYf/5MCZs0dpXF81e0Hdm/HmWfHEC7Fb1vECpbTzCZ4TIwZfTO1trxSZc6526
-	 4WhzrOBGOkNwGgmW3JnuRmtSci8ou/FZqxaba9FY=
-Date: Fri, 27 Oct 2023 15:08:18 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Alice Ryhl <aliceryhl@google.com>, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	rust-for-linux@vger.kernel.org
-Subject: Re: [RFC PATCH v2 2/2] samples: rust: Add USB sample bindings
-Message-ID: <2023102703-rabid-dealing-7694@gregkh>
-References: <20231027003504.146703-1-yakoyoku@gmail.com>
- <20231027003504.146703-3-yakoyoku@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7526D1A738
+	for <linux-usb@vger.kernel.org>; Fri, 27 Oct 2023 13:10:10 +0000 (UTC)
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6551B3
+	for <linux-usb@vger.kernel.org>; Fri, 27 Oct 2023 06:10:09 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-6b26a3163acso1930629b3a.2
+        for <linux-usb@vger.kernel.org>; Fri, 27 Oct 2023 06:10:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1698412208; x=1699017008; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fXygAGGOuNQivvozHnow8RDNeOQ+g6oJihfEs9klyWI=;
+        b=PfJxb9EcFuT/uIGMCbCoEyTW3gpfaRzqJRbxGi/q7yLVQONdimCdcZFqM8Ti1AFPMN
+         +frU8GClcd6ND7/BYbRrIKmlt7A1vVaUmz8ageb5eotOUnpOn1X9FVF1ROJ1zM9SXvSX
+         okqkNENVSYElUFDiMxcVRREJG7w8OMZgiWrFhPlV2caaNiMHulJp3P1nL+dK32REKvdx
+         TFWDyeqb9pfsrI5q5oaNqXITTHJKmrdUpgfqVCMA+v2IXVlUU7OFwg6xWxfcHUgYs9JU
+         +CqP7r8ezcX3QnGCTkMZ4kepnlOLZPE/0p9SGgH7hlmca8bjJw8a5dIlJA2i3mlf+VDf
+         WTpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698412208; x=1699017008;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fXygAGGOuNQivvozHnow8RDNeOQ+g6oJihfEs9klyWI=;
+        b=SQpelauu2Lcl6U0l9qUr48di3ID9AxCM9ft2pCR3O0DnvJ0fjgeqpyuq7pHiwy0gt/
+         Gvebg37K6FvUQoqzCVsUs/ZI+GnZqCE/c9EcS/RdqvYGB9uN3QPuXXy0e58/Mb3EPjKj
+         8IXqJ2cF7Mz+Q6mx0siDaa3YBUOYusa/S/y/sgBaoMXNoCZiCh+YtUEH5Ds9SafoMzt6
+         xiglMKEFzlhPzCS1GKSs6IkxFDDYti5u3Zw4OmEYbU5mbFbrVNQX9lS4e7FRgVdypEt3
+         c0NFI02jfoNGilIlv9Zbt/MqPhyxkuwc1okCRqo19TxzNSnw/6kC78BTADtO4/p2jvC1
+         8j4g==
+X-Gm-Message-State: AOJu0YyuKhUWuQPXi+MBIGAKplfEAWcpMT1W5Wo8pzi60yGE7WyMAo7m
+	4lr186tCaarIEymazXmqyfdXzG1PJKI=
+X-Google-Smtp-Source: AGHT+IFzayFww1gpAbANsS4f2QzkwvtWDgbRoD7bb/aGeo8Ru3+kcISe25grXXqmfSae4FIIqz6HNQ==
+X-Received: by 2002:a05:6a00:1a86:b0:6b8:2ef3:331d with SMTP id e6-20020a056a001a8600b006b82ef3331dmr2704614pfv.10.1698412208290;
+        Fri, 27 Oct 2023 06:10:08 -0700 (PDT)
+Received: from [192.168.0.106] ([103.131.18.64])
+        by smtp.gmail.com with ESMTPSA id x10-20020aa7940a000000b0068c006dd5c1sm1322399pfo.115.2023.10.27.06.10.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Oct 2023 06:10:07 -0700 (PDT)
+Message-ID: <ea20a0d8-fa44-42cb-9b68-839a40189f34@gmail.com>
+Date: Fri, 27 Oct 2023 20:09:58 +0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231027003504.146703-3-yakoyoku@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] set 1.50 as the lower bcdDevice value for "Super
+ Top"-device in drivers/usb/storage/unusual_cypress.h
+Content-Language: en-US
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: LihaSika <lihasika@gmail.com>, Linux USB <linux-usb@vger.kernel.org>
+References: <ZTsR-RhhjxSpqrsz@debian.me>
+ <055de764-c422-4c22-a79b-dd4db56122ce@gmail.com>
+ <2023102704-stable-lid-c86a@gregkh>
+ <7484f7c8-a49c-4111-83f0-bb6db2906fae@gmail.com> <ZTuzlUp3x8I_kqoS@debian.me>
+ <2023102757-runner-huff-9640@gregkh>
+From: Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <2023102757-runner-huff-9640@gregkh>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Oct 26, 2023 at 09:34:51PM -0300, Martin Rodriguez Reboredo wrote:
-> This is a demonstration of the capabilities of doing bindings with
-> subsystems that may or may not be statically linked.
+On 27/10/2023 20:05, Greg KH wrote:
+> On Fri, Oct 27, 2023 at 07:56:53PM +0700, Bagas Sanjaya wrote:
+>> On Fri, Oct 27, 2023 at 03:37:51PM +0300, LihaSika wrote:
+>>>> - Your patch is malformed (tabs converted to spaces, linewrapped, etc.)
+>>>>    and can not be applied.  Please read the file,
+>>>>    Documentation/process/email-clients.rst in order to fix this.
+>>>>
+>>>
+>>> Oh right, Thunderbird wrapped the first line of the patch file -.-
+>>>
+>>> Disabled wrapping, another attempt:
+>>>
+>>> Cc: stable@vger.kernel.org
+>>> Signed-off-by: Liha Sikanen <lihasika@gmail.com>
+>>> ---
+>>>
+>>> diff --git a/drivers/usb/storage/unusual_cypress.h b/drivers/usb/storage/unusual_cypress.h
+>>> index 0547daf..7b3d5f0 100644
+>>> --- a/drivers/usb/storage/unusual_cypress.h
+>>> +++ b/drivers/usb/storage/unusual_cypress.h
+>>> @@ -19,7 +19,7 @@ UNUSUAL_DEV(  0x04b4, 0x6831, 0x0000, 0x9999,
+>>>          "Cypress ISD-300LP",
+>>>          USB_SC_CYP_ATACB, USB_PR_DEVICE, NULL, 0),
+>>>
+>>> -UNUSUAL_DEV( 0x14cd, 0x6116, 0x0160, 0x0160,
+>>> +UNUSUAL_DEV( 0x14cd, 0x6116, 0x0150, 0x0160,
+>>>          "Super Top",
+>>>          "USB 2.0  SATA BRIDGE",
+>>>          USB_SC_CYP_ATACB, USB_PR_DEVICE, NULL, 0),
+>>>
+>>>
+>>>
+>>
+>> Hi,
+>>
+>> You have to use git-send-email(1) for the purpose of sending patches
+>> instead. Please see Documentation/process/email-clients.rst in the kernel
+>> sources for more information. And don't forget to address reviews from
+>> Greg's bot.
 > 
-> Signed-off-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-> ---
->  drivers/usb/core/Kconfig        |  7 +++++++
->  drivers/usb/core/Makefile       |  3 +++
->  drivers/usb/core/usb.rs         | 13 +++++++++++++
->  samples/rust/Kconfig            | 10 ++++++++++
->  samples/rust/Makefile           |  3 +++
->  samples/rust/rust_usb_simple.rs | 22 ++++++++++++++++++++++
->  6 files changed, 58 insertions(+)
->  create mode 100644 drivers/usb/core/usb.rs
->  create mode 100644 samples/rust/rust_usb_simple.rs
+> You don't have to use git send-email, that's not required at all, it's
+> just there to make things easier for some people.
 > 
 
-Hi,
+Thanks for the tip.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+IMO, this is the submitter's first patch submission where he had to set up
+appropriate tooling.
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+-- 
+An old man doll... just what I always wanted! - Clara
 
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/process/submitting-patches.rst for what
-  needs to be done here to properly describe this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
 
