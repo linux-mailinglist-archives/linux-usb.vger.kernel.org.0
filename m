@@ -1,106 +1,146 @@
-Return-Path: <linux-usb+bounces-2243-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2244-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DCCA57D8D5D
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 05:21:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D76FD7D8D71
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 05:31:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E29D71C20FA0
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 03:21:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 001251C21005
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 03:31:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE79C3C2A;
-	Fri, 27 Oct 2023 03:21:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D49DC3C3E;
+	Fri, 27 Oct 2023 03:31:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g0quwld0"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="AVgA+Ky2"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D29E61C2B;
-	Fri, 27 Oct 2023 03:21:14 +0000 (UTC)
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BEDA192;
-	Thu, 26 Oct 2023 20:21:13 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id 41be03b00d2f7-5b8f68ba4e5so1378578a12.1;
-        Thu, 26 Oct 2023 20:21:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698376873; x=1698981673; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aOrCwkVqAlNg8XVEkShhR/7wXoZRdI3BqowEgZUE1O4=;
-        b=g0quwld0z1luK9L41eHrVxqC9I4m0j22pE44IL1XxLqhsl99HfJ0vnVRYbIvltD0nl
-         XxreSnJxoi8Q9nnnO0zC11IUcciA1iBiBgfyFJBC4XiT8iKXiZ6Id8N059efF7cS7rST
-         c0LmwVCizpj1YD2Sna9a+l5DKoopY5CMwh1+gEB0h8Pyq/9zDjjU3qaXm2WtxTBpDgCs
-         hdEE5qypBjtxqd5qUkwHT0knkOBIvavm/cpfU6s2e+T6CzpMXqmu1721of0uGAYbJGur
-         EELxlrCTseF/XxKvv3wsBi8WC1ddrgf4QYnITOAQfKGhbMM1ItrTaHNt65pMZNV6sEdx
-         mQNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698376873; x=1698981673;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aOrCwkVqAlNg8XVEkShhR/7wXoZRdI3BqowEgZUE1O4=;
-        b=cBAjNUz5nIqjD1TnWzSPnwX/s9xPR4pWmdxKF72R1icWMeRWAKerekUBPKr1pYPOsz
-         LmFewH4xHIcj8WHg7lq09YLPVt2AcvYmirQz3qHE7wVn+/cOSO8Tm0bRpntRh47S1eQp
-         q7KvGf20g+64/gVailCXZHt7K6EuP4wDMtt8zROMRJk75mhVgE5pImb+9r7+vRJ0jB7S
-         NHw9IbJ5IBniTgdOSsANVKk//sMPNt4J7HQtt3t42EamBdlXBIZmnb8xOJnYw5n4ihzp
-         khF+L1r2Mgprw5c8vGBDQVFANDwaPbRxJBOcuLyWDuiD4tbPlMLU1uBk9oCiwTxQjXaW
-         wGaw==
-X-Gm-Message-State: AOJu0YxMZ7SUljgrfILVV3Blsvy8LYS6eq0ctt9OQ8Z1cx6237ByyTtD
-	CmOBx+LYE7vh7XdPmko5HSc=
-X-Google-Smtp-Source: AGHT+IF8GaXXXaQ/WstxXLpkxPjYdO2zjaPFKSKhpF7yx6Jep1hBAhsv1xFt67SGFv5fu3Se3+hWkg==
-X-Received: by 2002:a05:6a20:8417:b0:16b:f4ca:e3d9 with SMTP id c23-20020a056a20841700b0016bf4cae3d9mr2091859pzd.27.1698376872720;
-        Thu, 26 Oct 2023 20:21:12 -0700 (PDT)
-Received: from tx3000mach.io (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id s2-20020a170902ea0200b001c41e1e9ca7sm409771plg.215.2023.10.26.20.21.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Oct 2023 20:21:12 -0700 (PDT)
-From: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-To: yakoyoku@gmail.com,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Gary Guo <gary@garyguo.net>,
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Alice Ryhl <aliceryhl@google.com>
-Cc: gregkh@linuxfoundation.org,
-	linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,
-	Wedson Almeida Filho <walmeida@microsoft.com>
-Subject: Re: [RFC PATCH v2 2/2] samples: rust: Add USB sample bindings
-Date: Fri, 27 Oct 2023 00:21:03 -0300
-Message-ID: <20231027032106.155493-1-yakoyoku@gmail.com>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231027003504.146703-3-yakoyoku@gmail.com>
-References: <20231027003504.146703-3-yakoyoku@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A4FDEC3;
+	Fri, 27 Oct 2023 03:31:08 +0000 (UTC)
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C8D9FA;
+	Thu, 26 Oct 2023 20:31:06 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39R2m0oh018108;
+	Fri, 27 Oct 2023 03:30:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=eA+4m9BmAzgsT7qVo/Hpcl7NxxBTDV/IxifAscaxspg=;
+ b=AVgA+Ky2T2NXZCP+Mw7ceRu+RaWr+qnjvBKKXWeoMU71AvH4kG6ioZ8B46FNkv6+kBfi
+ /crr3ljvtFVc1NkrFgSxSZ6kvyYMAc8mF0oAp/x5KWaf8K+mX+fCuDwQu4aJifQqnjaL
+ +B0N80AFHzFaOpRFS0FClk5GGlTSSUVGqNePT1Lud1GA+bO/HJaucB8BIh8qBk9MeYXs
+ KDiDE2aLsFbUbFyeo3IL1i2ln79l9cqmdAhD0w02CGeIee02FqCTJIJfyEH3lSfr4GH6
+ uK8xh4x7MzBe7NPdLEk07KPZAZM9ihEe9Rw2kStyGMPEFgyPRPNktT5qHh+3N86fxOfz ow== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tyx3u8wy3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 27 Oct 2023 03:30:55 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39R3Us0q022324
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 27 Oct 2023 03:30:55 GMT
+Received: from [10.249.29.6] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.39; Thu, 26 Oct
+ 2023 20:30:49 -0700
+Message-ID: <75890f37-6d71-45b3-a68a-86d64fe1649a@quicinc.com>
+Date: Fri, 27 Oct 2023 09:00:46 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC 6/8] arm: dts: qcom: Add pmic glink support for sm8450-qrd
+Content-Language: en-US
+To: Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Bjorn Andersson
+	<andersson@kernel.org>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Andy Gross
+	<agross@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Thinh Nguyen
+	<Thinh.Nguyen@synopsys.com>,
+        Rob Herring <robh+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <quic_ppratap@quicinc.com>,
+        <quic_jackp@quicinc.com>, <quic_wcheng@quicinc.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "Krzysztof
+ Kozlowski" <krzysztof.kozlowski+dt@linaro.org>
+References: <20231017131851.8299-1-quic_kriskura@quicinc.com>
+ <20231017131851.8299-6-quic_kriskura@quicinc.com>
+ <c1929d63-93a4-4425-bdd1-d76a696b528e@linaro.org>
+From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <c1929d63-93a4-4425-bdd1-d76a696b528e@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 2SUW2Ob2UFprIsV8INYpVMJYB6t3tRb1
+X-Proofpoint-GUID: 2SUW2Ob2UFprIsV8INYpVMJYB6t3tRb1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-26_22,2023-10-26_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 bulkscore=0
+ mlxlogscore=498 suspectscore=0 spamscore=0 mlxscore=0 phishscore=0
+ priorityscore=1501 malwarescore=0 impostorscore=0 clxscore=1015
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2310240000 definitions=main-2310270029
 
-This was missing in the patch, but you get the point...
 
-diff --git a/rust/bindings/bindings_helper.h b/rust/bindings/bindings_helper.h
-index c41eaab4ddb2..845cdd856981 100644
---- a/rust/bindings/bindings_helper.h
-+++ b/rust/bindings/bindings_helper.h
-@@ -10,6 +10,7 @@
- #include <linux/errname.h>
- #include <linux/slab.h>
- #include <linux/refcount.h>
-+#include <linux/usb.h>
- #include <linux/wait.h>
- #include <linux/sched.h>
- #include <linux/workqueue.h>
+
+On 10/27/2023 1:11 AM, Konrad Dybcio wrote:
+> 
+> 
+> On 10/17/23 15:18, Krishna Kurapati wrote:
+>> Add Pmic Glink support for sm8450-qrd to facilitate passing
+>> of roe switch notifications generated by ADSP to dwc3 core
+>> via ucsi and pmic glink's.
+>>
+>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>> ---
+> No phy+redriver+dp configuration?
+> 
+Hi Konrad,
+
+  Did you mean adding the following node:
+
+         typec-mux@42 {
+                 compatible = "fcs,fsa4480";
+                 reg = <0x42>;
+
+                 interrupts-extended = <&tlmm 2 IRQ_TYPE_LEVEL_LOW>;
+
+                 vcc-supply = <&vreg_bob>;
+                 mode-switch;
+                 orientation-switch;
+
+                 port {
+                         fsa4480_sbu_mux: endpoint {
+                                 remote-endpoint = <&pmic_glink_sbu>;
+                         };
+                 };
+         };
+
+
+and then adding port-2 for pmic_glink ?
+
+Usually for role-switch the port-0/1 defined in this patch are 
+sufficient. Also if I added it, I don't have a way to currently test it. 
+So skipped this node. I will try and see if I can test it and add it if 
+possible.
+
+Regards,
+Krishna,
 
