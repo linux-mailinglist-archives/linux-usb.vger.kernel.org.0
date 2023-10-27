@@ -1,145 +1,196 @@
-Return-Path: <linux-usb+bounces-2241-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2242-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26C8D7D8CC9
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 03:27:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 308A77D8CCA
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 03:30:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 578D51C20FB9
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 01:27:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CD26C28222F
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 01:30:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 778D410E9;
-	Fri, 27 Oct 2023 01:27:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61F3D10FA;
+	Fri, 27 Oct 2023 01:30:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JLGX0fLM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wj4A3uMG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A14301C05
-	for <linux-usb@vger.kernel.org>; Fri, 27 Oct 2023 01:27:26 +0000 (UTC)
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA8D1B4
-	for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 18:27:25 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id 41be03b00d2f7-578b407045bso1287032a12.0
-        for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 18:27:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698370045; x=1698974845; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=uLkE7ycZyZUEFEt2cxJuUP4GH1I9LOzbThOGZvdmrZk=;
-        b=JLGX0fLMCAzgsUY1oJW5Aw5CkD3yjOVa5rUTb5Ili71xPhJdrDINQ3fkBS2IuftGMD
-         LXDMEflm5I0nHpHmBCb2hpk9ZnWuPOW3IxJAdPn9GASKDAJzhS1gAvLow89WvP4wOi3c
-         0xYGLUHIBZXWxGP+5IwNK45tly29KmUhX0Vj9HMHv/p/yWteiSMdy/qsih3uXDmoX/+y
-         tB7hkbXO9Bpa08dX2fQ7uf+TWHppV68dslOOiKRawDCZeJy5jhVptmhck/G+IMPJGkrI
-         KF52ut5lWf+lR7EK7JmYZ+cOZOHfrfJiNn4MEsLt1CkRMDsnlR4JAxwsmdMGFGr5YmEy
-         MDnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698370045; x=1698974845;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uLkE7ycZyZUEFEt2cxJuUP4GH1I9LOzbThOGZvdmrZk=;
-        b=cQGCHq9/C2hW9hDwDBfuFiT/TxusxwVCj2jcxMH2R3kP+pc7Ruh1kFiX6vGlrbO7TX
-         fTzZ8+iNPakzWiy7iTrD4u/yLaI2JIgprEtL4pjspR6lXjudISlaQXHWYfUXbvTEp9L9
-         VD9Llhqa5XhEIFUwVJIpAuOGTy67fJhNLUz07DUudSMr456tHemPgyZ/HjbN0R8zNKnv
-         Q9hm682nNa4l2Eqt09TqTgK/H7eDz9GcEMN5hVBFj9uCslSWYqsaCqUWjbgYHRKMsLly
-         0CKLScQWJ2RWXdEPxSvmhxthp1lhZI0TR7ijMDiK6Tw/yTsrRFXjNom/04rdl0tZM2pj
-         oJ5g==
-X-Gm-Message-State: AOJu0YyeoHbaUSgDpD01m81AF05mdDc1Ow2OuIMSITuoFOo0O8BcEnsw
-	6GUSZXU963aIJsZGKrvOrNSoPCQupbw=
-X-Google-Smtp-Source: AGHT+IFMMgbQjEiLrL+bKBNVWOTcYhHQnzGJUI9cTWcus29UB2FOTmHV9wZx4YdEKxjU53Fy8Mmmtg==
-X-Received: by 2002:a17:90b:3449:b0:27d:3f08:cc21 with SMTP id lj9-20020a17090b344900b0027d3f08cc21mr1247600pjb.5.1698370044674;
-        Thu, 26 Oct 2023 18:27:24 -0700 (PDT)
-Received: from debian.me ([103.131.18.64])
-        by smtp.gmail.com with ESMTPSA id 27-20020a17090a035b00b00268b439a0cbsm220664pjf.23.2023.10.26.18.27.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Oct 2023 18:27:24 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-	id 6C845819CFF3; Fri, 27 Oct 2023 08:27:21 +0700 (WIB)
-Date: Fri, 27 Oct 2023 08:27:21 +0700
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: LihaSika <lihasika@gmail.com>, Linux USB <linux-usb@vger.kernel.org>,
-	Linux USB Storage <usb-storage@lists.one-eyed-alien.net>
-Cc: Greg KH <gregkh@linuxfoundation.org>,
-	Alan Stern <stern@rowland.harvard.edu>
-Subject: Re: Linux kernel 6.1 - drivers/usb/storage/unusual_cypress.h "Super
- Top" minimum bcdDevice too high
-Message-ID: <ZTsR-RhhjxSpqrsz@debian.me>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9180F800
+	for <linux-usb@vger.kernel.org>; Fri, 27 Oct 2023 01:30:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0828C433C8;
+	Fri, 27 Oct 2023 01:30:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1698370211;
+	bh=YOWD4N121xIJhA9vwpTTpOpv0xx0mse7znzmlAJoBog=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Wj4A3uMGS3yFDPXYQ8aIxkhnakLmR0yyl6SHkfJlU+TNpqqH8xLB6Ub9zwuAZQsFg
+	 zkVYmO/TxqN8r2sYYe7tSJalSIE3/9g2PrUaKvMKX7mNw5PPew2rr6orVBaDLFXrla
+	 kG91GUJVBpf+wpGxcDl6LPa5N3xDbX3uj+T8ayKYzQMCF566Q8CdkStqx0Q7CXYx0B
+	 iKjue9Azn2JUy0EUdUGiSujP8TgxFkOzbgoOoRXWi10N//0f8v2zQQoi68NIXVdVPX
+	 /vPXm3/mj7Imz9k4Q2DQ5eHlWmYyPdpYMOXy6wnhF1LyqpduzPU9pZUGdx5SGI6P5x
+	 sPdI21GPo96FQ==
+Date: Fri, 27 Oct 2023 09:30:01 +0800
+From: Peter Chen <peter.chen@kernel.org>
+To: Pawel Laszczak <pawell@cadence.com>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb:cdnsp: remove TRB_FLUSH_ENDPOINT command
+Message-ID: <20231027013001.GA1669606@nchen-desktop>
+References: <20231026073737.165450-1-pawell@cadence.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="1Hwj7JMejiX0Jn0x"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9aaf9d6a-71d3-45ff-a02b-ce94b32e24eb@gmail.com>
+In-Reply-To: <20231026073737.165450-1-pawell@cadence.com>
 
+On 23-10-26 09:37:37, Pawel Laszczak wrote:
+> Patch removes TRB_FLUSH_ENDPOINT command from driver.
+> This command is not supported by controller and
+> USBSSP returns TRB Error completion code for it.
+> 
+> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
 
---1Hwj7JMejiX0Jn0x
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Acked-by: Peter Chen <peter.chen@kernel.org>
 
-On Thu, Oct 26, 2023 at 10:39:14PM +0300, LihaSika wrote:
-> On 26.10.2023 22.14, Greg KH wrote:
-> > Please submit a proper patch to the linux-usb@vger.kernel.org mailing
-> > list and we will be glad to take it from there.
-> >=20
-> > thanks,
-> >=20
-> > greg k-h
->=20
-> OK, here it is!
->=20
-> Best regards,
-> L.
-> --
->=20
-> $ cat lihasika-unusual_cypress.patch
-> diff --git a/drivers/usb/storage/unusual_cypress.h
-> b/drivers/usb/storage/unusual_cypress.h
-> index 0547daf..7b3d5f0 100644
-> --- a/drivers/usb/storage/unusual_cypress.h
-> +++ b/drivers/usb/storage/unusual_cypress.h
-> @@ -19,7 +19,7 @@ UNUSUAL_DEV(  0x04b4, 0x6831, 0x0000, 0x9999,
->  		"Cypress ISD-300LP",
->  		USB_SC_CYP_ATACB, USB_PR_DEVICE, NULL, 0),
->=20
-> -UNUSUAL_DEV( 0x14cd, 0x6116, 0x0160, 0x0160,
-> +UNUSUAL_DEV( 0x14cd, 0x6116, 0x0150, 0x0160,
->  		"Super Top",
->  		"USB 2.0  SATA BRIDGE",
->  		USB_SC_CYP_ATACB, USB_PR_DEVICE, NULL, 0),
->=20
+Peter
+> ---
+>  drivers/usb/cdns3/cdnsp-debug.h  |  3 ---
+>  drivers/usb/cdns3/cdnsp-gadget.c |  6 +-----
+>  drivers/usb/cdns3/cdnsp-gadget.h |  5 -----
+>  drivers/usb/cdns3/cdnsp-ring.c   | 24 ------------------------
+>  4 files changed, 1 insertion(+), 37 deletions(-)
+> 
+> diff --git a/drivers/usb/cdns3/cdnsp-debug.h b/drivers/usb/cdns3/cdnsp-debug.h
+> index f0ca865cce2a..ad617b7455b9 100644
+> --- a/drivers/usb/cdns3/cdnsp-debug.h
+> +++ b/drivers/usb/cdns3/cdnsp-debug.h
+> @@ -131,8 +131,6 @@ static inline const char *cdnsp_trb_type_string(u8 type)
+>  		return "Endpoint Not ready";
+>  	case TRB_HALT_ENDPOINT:
+>  		return "Halt Endpoint";
+> -	case TRB_FLUSH_ENDPOINT:
+> -		return "FLush Endpoint";
+>  	default:
+>  		return "UNKNOWN";
+>  	}
+> @@ -328,7 +326,6 @@ static inline const char *cdnsp_decode_trb(char *str, size_t size, u32 field0,
+>  		break;
+>  	case TRB_RESET_EP:
+>  	case TRB_HALT_ENDPOINT:
+> -	case TRB_FLUSH_ENDPOINT:
+>  		ret = snprintf(str, size,
+>  			       "%s: ep%d%s(%d) ctx %08x%08x slot %ld flags %c",
+>  			       cdnsp_trb_type_string(type),
+> diff --git a/drivers/usb/cdns3/cdnsp-gadget.c b/drivers/usb/cdns3/cdnsp-gadget.c
+> index 4b67749edb99..4a3f0f958256 100644
+> --- a/drivers/usb/cdns3/cdnsp-gadget.c
+> +++ b/drivers/usb/cdns3/cdnsp-gadget.c
+> @@ -1024,10 +1024,8 @@ static int cdnsp_gadget_ep_disable(struct usb_ep *ep)
+>  	pep->ep_state |= EP_DIS_IN_RROGRESS;
+>  
+>  	/* Endpoint was unconfigured by Reset Device command. */
+> -	if (!(pep->ep_state & EP_UNCONFIGURED)) {
+> +	if (!(pep->ep_state & EP_UNCONFIGURED))
+>  		cdnsp_cmd_stop_ep(pdev, pep);
+> -		cdnsp_cmd_flush_ep(pdev, pep);
+> -	}
+>  
+>  	/* Remove all queued USB requests. */
+>  	while (!list_empty(&pep->pending_list)) {
+> @@ -1424,8 +1422,6 @@ static void cdnsp_stop(struct cdnsp_device *pdev)
+>  {
+>  	u32 temp;
+>  
+> -	cdnsp_cmd_flush_ep(pdev, &pdev->eps[0]);
+> -
+>  	/* Remove internally queued request for ep0. */
+>  	if (!list_empty(&pdev->eps[0].pending_list)) {
+>  		struct cdnsp_request *req;
+> diff --git a/drivers/usb/cdns3/cdnsp-gadget.h b/drivers/usb/cdns3/cdnsp-gadget.h
+> index e1b5801fdddf..dbee6f085277 100644
+> --- a/drivers/usb/cdns3/cdnsp-gadget.h
+> +++ b/drivers/usb/cdns3/cdnsp-gadget.h
+> @@ -1128,8 +1128,6 @@ union cdnsp_trb {
+>  #define TRB_HALT_ENDPOINT	54
+>  /* Doorbell Overflow Event. */
+>  #define TRB_DRB_OVERFLOW	57
+> -/* Flush Endpoint Command. */
+> -#define TRB_FLUSH_ENDPOINT	58
+>  
+>  #define TRB_TYPE_LINK(x)	(((x) & TRB_TYPE_BITMASK) == TRB_TYPE(TRB_LINK))
+>  #define TRB_TYPE_LINK_LE32(x)	(((x) & cpu_to_le32(TRB_TYPE_BITMASK)) == \
+> @@ -1539,8 +1537,6 @@ void cdnsp_queue_configure_endpoint(struct cdnsp_device *pdev,
+>  void cdnsp_queue_reset_ep(struct cdnsp_device *pdev, unsigned int ep_index);
+>  void cdnsp_queue_halt_endpoint(struct cdnsp_device *pdev,
+>  			       unsigned int ep_index);
+> -void cdnsp_queue_flush_endpoint(struct cdnsp_device *pdev,
+> -				unsigned int ep_index);
+>  void cdnsp_force_header_wakeup(struct cdnsp_device *pdev, int intf_num);
+>  void cdnsp_queue_reset_device(struct cdnsp_device *pdev);
+>  void cdnsp_queue_new_dequeue_state(struct cdnsp_device *pdev,
+> @@ -1574,7 +1570,6 @@ void cdnsp_irq_reset(struct cdnsp_device *pdev);
+>  int cdnsp_halt_endpoint(struct cdnsp_device *pdev,
+>  			struct cdnsp_ep *pep, int value);
+>  int cdnsp_cmd_stop_ep(struct cdnsp_device *pdev, struct cdnsp_ep *pep);
+> -int cdnsp_cmd_flush_ep(struct cdnsp_device *pdev, struct cdnsp_ep *pep);
+>  void cdnsp_setup_analyze(struct cdnsp_device *pdev);
+>  int cdnsp_status_stage(struct cdnsp_device *pdev);
+>  int cdnsp_reset_device(struct cdnsp_device *pdev);
+> diff --git a/drivers/usb/cdns3/cdnsp-ring.c b/drivers/usb/cdns3/cdnsp-ring.c
+> index 07f6068342d4..af981778382d 100644
+> --- a/drivers/usb/cdns3/cdnsp-ring.c
+> +++ b/drivers/usb/cdns3/cdnsp-ring.c
+> @@ -2123,19 +2123,6 @@ int cdnsp_cmd_stop_ep(struct cdnsp_device *pdev, struct cdnsp_ep *pep)
+>  	return ret;
+>  }
+>  
+> -int cdnsp_cmd_flush_ep(struct cdnsp_device *pdev, struct cdnsp_ep *pep)
+> -{
+> -	int ret;
+> -
+> -	cdnsp_queue_flush_endpoint(pdev, pep->idx);
+> -	cdnsp_ring_cmd_db(pdev);
+> -	ret = cdnsp_wait_for_cmd_compl(pdev);
+> -
+> -	trace_cdnsp_handle_cmd_flush_ep(pep->out_ctx);
+> -
+> -	return ret;
+> -}
+> -
+>  /*
+>   * The transfer burst count field of the isochronous TRB defines the number of
+>   * bursts that are required to move all packets in this TD. Only SuperSpeed
+> @@ -2465,17 +2452,6 @@ void cdnsp_queue_halt_endpoint(struct cdnsp_device *pdev, unsigned int ep_index)
+>  			    EP_ID_FOR_TRB(ep_index));
+>  }
+>  
+> -/*
+> - * Queue a flush endpoint request on the command ring.
+> - */
+> -void  cdnsp_queue_flush_endpoint(struct cdnsp_device *pdev,
+> -				 unsigned int ep_index)
+> -{
+> -	cdnsp_queue_command(pdev, 0, 0, 0, TRB_TYPE(TRB_FLUSH_ENDPOINT) |
+> -			    SLOT_ID_FOR_TRB(pdev->slot_id) |
+> -			    EP_ID_FOR_TRB(ep_index));
+> -}
+> -
+>  void cdnsp_force_header_wakeup(struct cdnsp_device *pdev, int intf_num)
+>  {
+>  	u32 lo, mid;
+> -- 
+> 2.25.1
+> 
 
-Hi LihaSika,
+-- 
 
-Please follow proper patch submission process in order to get above patch
-accepted. See Documentation/process/submitting-patches.rst in the kernel
-sources for how to do that properly. You may also consider adding
-`Cc: stable@vger.kernel.org` trailer in your patch to mark it to be
-backported to stable kernels (including one you use).
-
-Thanks.
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---1Hwj7JMejiX0Jn0x
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZTsR9QAKCRD2uYlJVVFO
-owsBAP9NQP2AnEVtcjkqd3qLFr7bH55SgKTqkBsbDswwok5T2gD+KJShd7AwHdoR
-gXB/Dddja84qJD7+XWNlHwLugk6vHwc=
-=rnS+
------END PGP SIGNATURE-----
-
---1Hwj7JMejiX0Jn0x--
+Thanks,
+Peter Chen
 
