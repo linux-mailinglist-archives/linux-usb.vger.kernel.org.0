@@ -1,219 +1,131 @@
-Return-Path: <linux-usb+bounces-2245-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2246-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 883C67D8DA4
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 05:52:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C73977D8ED4
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 08:37:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 22B451F22F30
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 03:52:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0C9731C2102D
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 06:37:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A84E440F;
-	Fri, 27 Oct 2023 03:52:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8383963BD;
+	Fri, 27 Oct 2023 06:37:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jzEdm1wY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xha9T82P"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 063BB4407
-	for <linux-usb@vger.kernel.org>; Fri, 27 Oct 2023 03:52:07 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A4F6198
-	for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 20:52:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698378725; x=1729914725;
-  h=date:from:to:cc:subject:message-id;
-  bh=JSp3QXNQraI7cQUN3QeJQQZK155rEitx9rQuAMH68tE=;
-  b=jzEdm1wY5mC4ri1I+RiO1WGV4p54EMyFnIn5VqZXbiLpK6aUlN5XeEs8
-   R6YpxJ9MgdPvhc/G9Jgj1DGivS91lpP3+fYTbU9MP2HqP3Oji/Z/ofFLi
-   ivlHZ2pg0+t4hG4gTU8HvsDI/pUjyA7isl5GPpFGNmy77AF23AOoijmDS
-   wfXPsc6BcR6XtvKlN2sfui06z5DzN6LTAvIfSzUqPbJl88rj/FIiob5Aq
-   lzcEJuDPn95I1CWPu5XwXpmV1BP3FCW/8cUZJrowdQByMuloxndIabqoc
-   6n46Bv4b6b+W6dvVmmEuAg1AQL6weAsEfYcKEC/IVQt8PPkH9e5CMkU81
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10875"; a="454165487"
-X-IronPort-AV: E=Sophos;i="6.03,255,1694761200"; 
-   d="scan'208";a="454165487"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2023 20:52:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10875"; a="763073400"
-X-IronPort-AV: E=Sophos;i="6.03,255,1694761200"; 
-   d="scan'208";a="763073400"
-Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 26 Oct 2023 20:52:03 -0700
-Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qwDtB-000APg-0s;
-	Fri, 27 Oct 2023 03:52:01 +0000
-Date: Fri, 27 Oct 2023 11:51:13 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- ec098970364234411f39cd6821e6f95937b4070c
-Message-ID: <202310271110.5WnZxhRr-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7FF68813;
+	Fri, 27 Oct 2023 06:37:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37ED2C433C8;
+	Fri, 27 Oct 2023 06:37:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1698388643;
+	bh=iTtuERV2GGYkyPX4sdPoambzqvDILTxFvFsnlUuWTEs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Xha9T82PS3pmzm0UIVeMCGsm2lj7BEV83PPvtrPif94MJYHU+mWsTCpnnPRAVJNov
+	 w9mUwd+MZUQqkrkY9vL/l7E4Zglp4e6aZVW5dVf5IRNq8YJpDpdvYOOj8dU7Um98cR
+	 9B/VNSB8DWM7xBL3LBIf/d4zYR/esLLntEV8N+yxGm1r3LiUIdfveiCaC+jKpFVkUx
+	 Snibywkb+xrFkL+2XLQjybVPpzuNocDh6dhNR1eRi6FPLgl37YoklJWshA4WyKepvZ
+	 jBz5TAB7ZaBIRZIWypyoTbB72W5QiTSyU1cu5kTRt5Dz0FwsbDPNKFJCbJoNk7EVpJ
+	 c1uzmAAAP/+/Q==
+Message-ID: <09707469-193b-43c5-8503-b75f97ba1fbf@kernel.org>
+Date: Fri, 27 Oct 2023 09:37:17 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 3/3] usb: dwc3: Modify runtime pm ops to handle bus
+ suspend
+Content-Language: en-US
+To: Elson Serrao <quic_eserrao@quicinc.com>, gregkh@linuxfoundation.org,
+ Thinh.Nguyen@synopsys.com, robh+dt@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+ devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20230814185043.9252-1-quic_eserrao@quicinc.com>
+ <20230814185043.9252-4-quic_eserrao@quicinc.com>
+ <9be9fae5-f6f2-42fe-bd81-78ab50aafa06@kernel.org>
+ <cd294a89-33e7-0569-81b3-df77a255f061@quicinc.com>
+ <0dee3bec-d49f-4808-a2f8-7a4205303e1f@kernel.org>
+ <c7fc7bc2-1a84-e6b5-5198-1b8cc602d738@quicinc.com>
+ <bd74947f-8827-4539-a590-9c53d5ddd02d@kernel.org>
+ <ceb0f48f-8db9-40ae-769a-08e36373b922@quicinc.com>
+From: Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <ceb0f48f-8db9-40ae-769a-08e36373b922@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: ec098970364234411f39cd6821e6f95937b4070c  Revert "dt-bindings: usb: Add bindings for multiport properties on DWC3 controller"
 
-elapsed time: 3854m
 
-configs tested: 136
-configs skipped: 2
+On 27/10/2023 03:07, Elson Serrao wrote:
+> 
+> 
+> 
+>>>>>>
+>>>>>> While this takes care of runtime suspend case, what about system_suspend?
+>>>>>> Should this check be moved to dwc3_suspend_common() instead?
+>>>>>>
+>>>>>
+>>>>> Sure I can move these checks to dwc3_suspend_common to make it generic.
+>>>>
+>>>> Before you do that let's first decide how we want the gadget driver to behave
+>>>> in system_suspend case.
+>>>>
+>>>> Current behavior is to Disconnect from the Host.
+>>>>
+>>>> Earlier I was thinking on the lines that we prevent system suspend if
+>>>> we are not already in USB suspend. But I'm not sure if that is the right
+>>>> thing to do anymore. Mainly because, system suspend is a result of user
+>>>> request and it may not be nice to not to meet his/her request.
+>>>
+>>> Agree. Irrespective of whether USB is suspended or not it is better to honor the system suspend request from user.
+>>>
+>>>> Maybe best to leave this policy handling to user space?
+>>>> i.e. if user wants USB gadget operation to be alive, he will not issue
+>>>> system suspend?
+>>>>
+>>>
+>>> Sure. So below two cases
+>>>
+>>> Case1: User doesn't care if gadget operation is alive and triggers system suspend irrespective of USB suspend. Like you mentioned, current behavior already takes care of this and initiates a DISCONNECT
+>>>
+>>> Case2:  User wants gadget to stay alive and hence can trigger system suspend only when USB is suspended (there are already user space hooks that read cdev->suspended bit to tell whether USB is suspended or not for user to decide). Attempts to request system suspend when USB is not suspended, would result in a DISCONNECT.
+>>>
+>>> For supporting Case2 from gadget driver point of view, we need to extend this series by having relevant checks in suspend_common()
+>>>
+>>> Also, is it better to provide separate flags to control the gadget driver behavior for runtime suspend Vs system suspend when USB is suspended ? For example, what if we want to enable bus suspend handling for runtime suspend only and not for system suspend (Case1).
+>>
+>> But you mentioned that for Case1, USB gadget would disconnect from Host. So USB will be in disconnected state and USB controller can be fully de-activated? Except maybe wakeup handling to bring system out of suspend on a USB plug/unplug event?
+>> Why do we need separate flags for?
+>>
+> 
+> Sorry let me clarify. This is in reference to deciding how we want the dwc3 driver to behave in system_suspend case.
+> 
+> One option is to continue with the existing behavior where USB gadget would disconnect from Host irrespective of bus suspend state. We dont need any modification in this case and we can leave this series limited to runtime suspend only.
+> 
+> Second option is to stay connected IF we are in bus suspend state (U3/L2) otherwise DISCONNECT IF we are not in bus suspend state. The main motivation is to preserve the ongoing usb session
+> without going through a re-enumeration (ofcourse true only if we are in bus suspend state). This would need relevant checks in suspend_common().
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+The catch here is, what to do if the USB device is not in bus suspend state but user wants to put the system in suspend state? Do we still disconnect?
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20231024   gcc  
-arc                   randconfig-001-20231025   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                   randconfig-001-20231025   gcc  
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386         buildonly-randconfig-001-20231025   gcc  
-i386         buildonly-randconfig-002-20231025   gcc  
-i386         buildonly-randconfig-003-20231025   gcc  
-i386         buildonly-randconfig-004-20231025   gcc  
-i386         buildonly-randconfig-005-20231025   gcc  
-i386         buildonly-randconfig-006-20231025   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                  randconfig-001-20231025   gcc  
-i386                  randconfig-002-20231025   gcc  
-i386                  randconfig-003-20231025   gcc  
-i386                  randconfig-004-20231025   gcc  
-i386                  randconfig-005-20231025   gcc  
-i386                  randconfig-006-20231025   gcc  
-i386                  randconfig-011-20231025   gcc  
-i386                  randconfig-012-20231025   gcc  
-i386                  randconfig-013-20231025   gcc  
-i386                  randconfig-014-20231025   gcc  
-i386                  randconfig-015-20231025   gcc  
-i386                  randconfig-016-20231025   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20231024   gcc  
-loongarch             randconfig-001-20231025   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                 randconfig-001-20231024   gcc  
-riscv                 randconfig-001-20231025   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                  randconfig-001-20231024   gcc  
-s390                  randconfig-001-20231025   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                 randconfig-001-20231024   gcc  
-sparc                 randconfig-001-20231025   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64       buildonly-randconfig-001-20231024   gcc  
-x86_64       buildonly-randconfig-001-20231025   gcc  
-x86_64       buildonly-randconfig-002-20231024   gcc  
-x86_64       buildonly-randconfig-002-20231025   gcc  
-x86_64       buildonly-randconfig-003-20231024   gcc  
-x86_64       buildonly-randconfig-003-20231025   gcc  
-x86_64       buildonly-randconfig-004-20231024   gcc  
-x86_64       buildonly-randconfig-004-20231025   gcc  
-x86_64       buildonly-randconfig-005-20231024   gcc  
-x86_64       buildonly-randconfig-005-20231025   gcc  
-x86_64       buildonly-randconfig-006-20231024   gcc  
-x86_64       buildonly-randconfig-006-20231025   gcc  
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20231025   gcc  
-x86_64                randconfig-002-20231025   gcc  
-x86_64                randconfig-003-20231025   gcc  
-x86_64                randconfig-004-20231025   gcc  
-x86_64                randconfig-005-20231025   gcc  
-x86_64                randconfig-006-20231025   gcc  
-x86_64                randconfig-011-20231025   gcc  
-x86_64                randconfig-012-20231025   gcc  
-x86_64                randconfig-013-20231025   gcc  
-x86_64                randconfig-014-20231025   gcc  
-x86_64                randconfig-015-20231025   gcc  
-x86_64                randconfig-016-20231025   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
+You might also want to refer to the discussion in [1]
+
+[1] - https://lore.kernel.org/all/Y+z9NK6AyhvTQMir@rowland.harvard.edu/
+
+> 
+> Which option do you think is more suitable? IMO option2 is better. For example if we are in a scenario where there is a network session (over USB) open between Host and the device and usb bus is suspended due to data inactivity. Option2 would preserve the session whereas Option1 we would terminate this session when a system_suspend happens.
+> 
+> Thanks
+> Elson
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+cheers,
+-roger
 
