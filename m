@@ -1,131 +1,207 @@
-Return-Path: <linux-usb+bounces-2246-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2247-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C73977D8ED4
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 08:37:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 566A77D8F72
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 09:15:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0C9731C2102D
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 06:37:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 532F61C21052
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 07:15:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8383963BD;
-	Fri, 27 Oct 2023 06:37:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15F77B66C;
+	Fri, 27 Oct 2023 07:15:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xha9T82P"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="QznlPtY7"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7FF68813;
-	Fri, 27 Oct 2023 06:37:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37ED2C433C8;
-	Fri, 27 Oct 2023 06:37:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1698388643;
-	bh=iTtuERV2GGYkyPX4sdPoambzqvDILTxFvFsnlUuWTEs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Xha9T82PS3pmzm0UIVeMCGsm2lj7BEV83PPvtrPif94MJYHU+mWsTCpnnPRAVJNov
-	 w9mUwd+MZUQqkrkY9vL/l7E4Zglp4e6aZVW5dVf5IRNq8YJpDpdvYOOj8dU7Um98cR
-	 9B/VNSB8DWM7xBL3LBIf/d4zYR/esLLntEV8N+yxGm1r3LiUIdfveiCaC+jKpFVkUx
-	 Snibywkb+xrFkL+2XLQjybVPpzuNocDh6dhNR1eRi6FPLgl37YoklJWshA4WyKepvZ
-	 jBz5TAB7ZaBIRZIWypyoTbB72W5QiTSyU1cu5kTRt5Dz0FwsbDPNKFJCbJoNk7EVpJ
-	 c1uzmAAAP/+/Q==
-Message-ID: <09707469-193b-43c5-8503-b75f97ba1fbf@kernel.org>
-Date: Fri, 27 Oct 2023 09:37:17 +0300
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 712AFBA26;
+	Fri, 27 Oct 2023 07:15:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3976EC433C7;
+	Fri, 27 Oct 2023 07:15:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1698390944;
+	bh=WRMtuzaQ5PUuBaVeb+CCbcTOs/PXWi9a2Kg5e5ysQ28=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=QznlPtY7/rsFqZerrMxGqhj07IDXB0gQ2kx78eV+o03hNDPhH//rDL5hgmB6epPUT
+	 tMu2S+7Z+kkWF/PcWnO6/CVPNPAh6W7Aw6xbe9V2Vf8ZevqsLDkidBo9bhKsb7rgAj
+	 CkwF3dS8o7zBxn/llqF6PwXM8xv5gGZz3CPb5KnY=
+Date: Fri, 27 Oct 2023 09:15:41 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@samsung.com>,
+	Alice Ryhl <aliceryhl@google.com>, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	rust-for-linux@vger.kernel.org
+Subject: Re: [RFC PATCH v2 2/2] samples: rust: Add USB sample bindings
+Message-ID: <2023102737-juniper-trodden-afb4@gregkh>
+References: <20231027003504.146703-1-yakoyoku@gmail.com>
+ <20231027003504.146703-3-yakoyoku@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 3/3] usb: dwc3: Modify runtime pm ops to handle bus
- suspend
-Content-Language: en-US
-To: Elson Serrao <quic_eserrao@quicinc.com>, gregkh@linuxfoundation.org,
- Thinh.Nguyen@synopsys.com, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
- devicetree@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20230814185043.9252-1-quic_eserrao@quicinc.com>
- <20230814185043.9252-4-quic_eserrao@quicinc.com>
- <9be9fae5-f6f2-42fe-bd81-78ab50aafa06@kernel.org>
- <cd294a89-33e7-0569-81b3-df77a255f061@quicinc.com>
- <0dee3bec-d49f-4808-a2f8-7a4205303e1f@kernel.org>
- <c7fc7bc2-1a84-e6b5-5198-1b8cc602d738@quicinc.com>
- <bd74947f-8827-4539-a590-9c53d5ddd02d@kernel.org>
- <ceb0f48f-8db9-40ae-769a-08e36373b922@quicinc.com>
-From: Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <ceb0f48f-8db9-40ae-769a-08e36373b922@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231027003504.146703-3-yakoyoku@gmail.com>
 
+On Thu, Oct 26, 2023 at 09:34:51PM -0300, Martin Rodriguez Reboredo wrote:
+> This is a demonstration of the capabilities of doing bindings with
+> subsystems that may or may not be statically linked.
+> 
+> Signed-off-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+> ---
+>  drivers/usb/core/Kconfig        |  7 +++++++
+>  drivers/usb/core/Makefile       |  3 +++
+>  drivers/usb/core/usb.rs         | 13 +++++++++++++
+>  samples/rust/Kconfig            | 10 ++++++++++
+>  samples/rust/Makefile           |  3 +++
+>  samples/rust/rust_usb_simple.rs | 22 ++++++++++++++++++++++
+>  6 files changed, 58 insertions(+)
+>  create mode 100644 drivers/usb/core/usb.rs
+>  create mode 100644 samples/rust/rust_usb_simple.rs
+> 
+> diff --git a/drivers/usb/core/Kconfig b/drivers/usb/core/Kconfig
+> index 351ede4b5de2..4b5604282129 100644
+> --- a/drivers/usb/core/Kconfig
+> +++ b/drivers/usb/core/Kconfig
+> @@ -116,3 +116,10 @@ config USB_AUTOSUSPEND_DELAY
+>  	  The default value Linux has always had is 2 seconds.  Change
+>  	  this value if you want a different delay and cannot modify
+>  	  the command line or module parameter.
+> +
+> +config USB_RUST
+> +	bool "Rust USB bindings"
+> +	depends on USB && RUST
+> +	default n
 
+Nit, "n" is the default, this line is not needed.
 
-On 27/10/2023 03:07, Elson Serrao wrote:
-> 
-> 
-> 
->>>>>>
->>>>>> While this takes care of runtime suspend case, what about system_suspend?
->>>>>> Should this check be moved to dwc3_suspend_common() instead?
->>>>>>
->>>>>
->>>>> Sure I can move these checks to dwc3_suspend_common to make it generic.
->>>>
->>>> Before you do that let's first decide how we want the gadget driver to behave
->>>> in system_suspend case.
->>>>
->>>> Current behavior is to Disconnect from the Host.
->>>>
->>>> Earlier I was thinking on the lines that we prevent system suspend if
->>>> we are not already in USB suspend. But I'm not sure if that is the right
->>>> thing to do anymore. Mainly because, system suspend is a result of user
->>>> request and it may not be nice to not to meet his/her request.
->>>
->>> Agree. Irrespective of whether USB is suspended or not it is better to honor the system suspend request from user.
->>>
->>>> Maybe best to leave this policy handling to user space?
->>>> i.e. if user wants USB gadget operation to be alive, he will not issue
->>>> system suspend?
->>>>
->>>
->>> Sure. So below two cases
->>>
->>> Case1: User doesn't care if gadget operation is alive and triggers system suspend irrespective of USB suspend. Like you mentioned, current behavior already takes care of this and initiates a DISCONNECT
->>>
->>> Case2:  User wants gadget to stay alive and hence can trigger system suspend only when USB is suspended (there are already user space hooks that read cdev->suspended bit to tell whether USB is suspended or not for user to decide). Attempts to request system suspend when USB is not suspended, would result in a DISCONNECT.
->>>
->>> For supporting Case2 from gadget driver point of view, we need to extend this series by having relevant checks in suspend_common()
->>>
->>> Also, is it better to provide separate flags to control the gadget driver behavior for runtime suspend Vs system suspend when USB is suspended ? For example, what if we want to enable bus suspend handling for runtime suspend only and not for system suspend (Case1).
->>
->> But you mentioned that for Case1, USB gadget would disconnect from Host. So USB will be in disconnected state and USB controller can be fully de-activated? Except maybe wakeup handling to bring system out of suspend on a USB plug/unplug event?
->> Why do we need separate flags for?
->>
-> 
-> Sorry let me clarify. This is in reference to deciding how we want the dwc3 driver to behave in system_suspend case.
-> 
-> One option is to continue with the existing behavior where USB gadget would disconnect from Host irrespective of bus suspend state. We dont need any modification in this case and we can leave this series limited to runtime suspend only.
-> 
-> Second option is to stay connected IF we are in bus suspend state (U3/L2) otherwise DISCONNECT IF we are not in bus suspend state. The main motivation is to preserve the ongoing usb session
-> without going through a re-enumeration (ofcourse true only if we are in bus suspend state). This would need relevant checks in suspend_common().
+Also, if you want to get really picky, _which_ USB is this for, the
+"host" apis (you plug a USB device into a Linux maching), or the
+"gadget" apis (i.e. Linux is running in the device that you plug into a
+USB host)?  Linux supports both :)
 
-The catch here is, what to do if the USB device is not in bus suspend state but user wants to put the system in suspend state? Do we still disconnect?
+> +	help
+> +	  Enables Rust bindings for USB.
+> diff --git a/drivers/usb/core/Makefile b/drivers/usb/core/Makefile
+> index 7d338e9c0657..00e116913591 100644
+> --- a/drivers/usb/core/Makefile
+> +++ b/drivers/usb/core/Makefile
+> @@ -11,6 +11,7 @@ usbcore-y += phy.o port.o
+>  usbcore-$(CONFIG_OF)		+= of.o
+>  usbcore-$(CONFIG_USB_PCI)		+= hcd-pci.o
+>  usbcore-$(CONFIG_ACPI)		+= usb-acpi.o
+> +usbcore-$(CONFIG_USB_RUST)		+= libusb.rlib
+>  
+>  ifdef CONFIG_USB_ONBOARD_HUB
+>  usbcore-y			+= ../misc/onboard_usb_hub_pdevs.o
+> @@ -18,4 +19,6 @@ endif
+>  
+>  obj-$(CONFIG_USB)		+= usbcore.o
+>  
+> +rust-libs			:= ./usb
+> +
+>  obj-$(CONFIG_USB_LEDS_TRIGGER_USBPORT)	+= ledtrig-usbport.o
+> diff --git a/drivers/usb/core/usb.rs b/drivers/usb/core/usb.rs
+> new file mode 100644
+> index 000000000000..3f7ad02153f5
+> --- /dev/null
+> +++ b/drivers/usb/core/usb.rs
+> @@ -0,0 +1,13 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +//! USB devices and drivers.
+> +//!
+> +//! C header: [`include/linux/usb.h`](../../../../include/linux/usb.h)
+> +
+> +use kernel::bindings;
+> +
+> +/// Check if USB is disabled.
+> +pub fn disabled() -> bool {
+> +    // SAFETY: FFI call.
+> +    unsafe { bindings::usb_disabled() != 0 }
+> +}
+> diff --git a/samples/rust/Kconfig b/samples/rust/Kconfig
+> index b0f74a81c8f9..12116f6fb526 100644
+> --- a/samples/rust/Kconfig
+> +++ b/samples/rust/Kconfig
+> @@ -30,6 +30,16 @@ config SAMPLE_RUST_PRINT
+>  
+>  	  If unsure, say N.
+>  
+> +config SAMPLE_RUST_USB_SIMPLE
+> +	tristate "USB simple device driver"
+> +	help
+> +	  This option builds the Rust USB simple driver sample.
+> +
+> +	  To compile this as a module, choose M here:
+> +	  the module will be called rust_usb_simple.
+> +
+> +	  If unsure, say N.
+> +
+>  config SAMPLE_RUST_HOSTPROGS
+>  	bool "Host programs"
+>  	help
+> diff --git a/samples/rust/Makefile b/samples/rust/Makefile
+> index 03086dabbea4..f1ab58a9ecdd 100644
+> --- a/samples/rust/Makefile
+> +++ b/samples/rust/Makefile
+> @@ -2,5 +2,8 @@
+>  
+>  obj-$(CONFIG_SAMPLE_RUST_MINIMAL)		+= rust_minimal.o
+>  obj-$(CONFIG_SAMPLE_RUST_PRINT)			+= rust_print.o
+> +obj-$(CONFIG_SAMPLE_RUST_USB_SIMPLE)		+= rust_usb_simple.o
+> +
+> +rust-libs					:= ../../drivers/usb/core/usb
+>  
+>  subdir-$(CONFIG_SAMPLE_RUST_HOSTPROGS)		+= hostprogs
+> diff --git a/samples/rust/rust_usb_simple.rs b/samples/rust/rust_usb_simple.rs
+> new file mode 100644
+> index 000000000000..3523f81d5eb8
+> --- /dev/null
+> +++ b/samples/rust/rust_usb_simple.rs
+> @@ -0,0 +1,22 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +//! Rust USB sample.
+> +
+> +use kernel::prelude::*;
+> +
+> +module! {
+> +    type: UsbSimple,
+> +    name: "rust_usb_simple",
+> +    author: "Martin Rodriguez Reboredo",
+> +    description: "Rust USB sample",
+> +    license: "GPL v2",
+> +}
+> +
+> +struct UsbSimple;
 
-You might also want to refer to the discussion in [1]
+"USBSimple" please.
 
-[1] - https://lore.kernel.org/all/Y+z9NK6AyhvTQMir@rowland.harvard.edu/
+> +
+> +impl kernel::Module for UsbSimple {
+> +    fn init(_module: &'static ThisModule) -> Result<Self> {
+> +        pr_info!("usb enabled: {}", !usb::disabled());
+> +        Ok(UsbSimple)
+> +    }
+> +}
 
-> 
-> Which option do you think is more suitable? IMO option2 is better. For example if we are in a scenario where there is a network session (over USB) open between Host and the device and usb bus is suspended due to data inactivity. Option2 would preserve the session whereas Option1 we would terminate this session when a system_suspend happens.
-> 
-> Thanks
-> Elson
+I know this is just a fake patch to test the bindings logic, so sorry
+for the noise, just wanted to get terminology right :)
 
--- 
-cheers,
--roger
+thanks,
+
+greg k-h
 
