@@ -1,250 +1,203 @@
-Return-Path: <linux-usb+bounces-2291-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2292-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4AFB47D9D26
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 17:39:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5D7B7D9D45
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 17:46:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 935261F22BA3
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 15:38:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2B8521C21032
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 15:46:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C20237CA1;
-	Fri, 27 Oct 2023 15:38:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="EX/VSOoO"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95B8637CA3;
+	Fri, 27 Oct 2023 15:46:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45B3B1F5E7;
-	Fri, 27 Oct 2023 15:38:28 +0000 (UTC)
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D48AC;
-	Fri, 27 Oct 2023 08:38:25 -0700 (PDT)
-Received: from pps.filterd (m0369458.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 39RCc60x010675;
-	Fri, 27 Oct 2023 17:37:17 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	message-id:date:mime-version:from:subject:to:cc:references
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	selector1; bh=137N9qL9i5h4t8Cbod1j95elUvUuNi+rOMR+/nkEcGo=; b=EX
-	/VSOoOTnYBW0p53Tuy8tkZXHrE9TCpRNA/bI48SzdaVOLcAioGGb2rDjfu4AwA5k
-	v32rhDVol8dtT3+OOAzKYell3XeaqdcateC0Ht5f5f44AtAT8RLKlj4pjSRODpXr
-	C0G+tE9HPuhvxq3nm5EGbDWsx+uMm9et8AnfTgvKf1VjaRyB+OoZrlta+QCeusS4
-	DtxnglJxdX6gQPW+fzfVM9T+lLDdVWAiWn4tSE7mlX17rCSRm6jWnka0+g6Fhf8e
-	vNoBtK5Ifbj7KqtJXykvIpXKvK2oehCiK/hsOAlK4WYKA3vfmSNeg4DV8PILG2Rh
-	7NAyCWbRDCK0IX4FDaoA==
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3tywqq4fmr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 27 Oct 2023 17:37:17 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 023E9100062;
-	Fri, 27 Oct 2023 17:37:14 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 6CD2C27DB5D;
-	Fri, 27 Oct 2023 17:37:14 +0200 (CEST)
-Received: from [10.201.20.32] (10.201.20.32) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 27 Oct
- 2023 17:37:12 +0200
-Message-ID: <8fa014c3-c0e9-4183-b4fb-90962f71295a@foss.st.com>
-Date: Fri, 27 Oct 2023 17:37:11 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB819D530
+	for <linux-usb@vger.kernel.org>; Fri, 27 Oct 2023 15:45:58 +0000 (UTC)
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by lindbergh.monkeyblade.net (Postfix) with SMTP id 9A5D1186
+	for <linux-usb@vger.kernel.org>; Fri, 27 Oct 2023 08:45:55 -0700 (PDT)
+Received: (qmail 573168 invoked by uid 1000); 27 Oct 2023 11:45:54 -0400
+Date: Fri, 27 Oct 2023 11:45:54 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Milan Broz <gmazyland@gmail.com>
+Cc: linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+  linux-scsi@vger.kernel.org, gregkh@linuxfoundation.org, oneukum@suse.com
+Subject: Re: [PATCH v3] usb-storage,uas: use host helper to generate driver
+ info
+Message-ID: <083755b2-7d02-45f2-8ce5-a8102cf6911c@rowland.harvard.edu>
+References: <20231016072604.40179-5-gmazyland@gmail.com>
+ <20231026101615.395113-1-gmazyland@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Gatien CHEVALLIER <gatien.chevallier@foss.st.com>
-Subject: Re: [PATCH v6 10/11] ARM: dts: stm32: add ETZPC as a system bus for
- STM32MP15x boards
-To: Rob Herring <robh@kernel.org>
-CC: <Oleksii_Moisieiev@epam.com>, <gregkh@linuxfoundation.org>,
-        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <alexandre.torgue@foss.st.com>, <vkoul@kernel.org>, <jic23@kernel.org>,
-        <olivier.moysan@foss.st.com>, <arnaud.pouliquen@foss.st.com>,
-        <mchehab@kernel.org>, <fabrice.gasnier@foss.st.com>,
-        <andi.shyti@kernel.org>, <ulf.hansson@linaro.org>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <hugues.fruchet@foss.st.com>, <lee@kernel.org>, <will@kernel.org>,
-        <catalin.marinas@arm.com>, <arnd@kernel.org>,
-        <richardcochran@gmail.com>, Frank Rowand <frowand.list@gmail.com>,
-        <peng.fan@oss.nxp.com>, <linux-crypto@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <dmaengine@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-iio@vger.kernel.org>, <alsa-devel@alsa-project.org>,
-        <linux-media@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-p.hy@lists.infradead.org>,
-        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>
-References: <20231010125719.784627-1-gatien.chevallier@foss.st.com>
- <20231010125719.784627-11-gatien.chevallier@foss.st.com>
- <20231010184212.GA1221641-robh@kernel.org>
- <8f1b6915-68be-a525-c5d5-37f0983c14de@foss.st.com>
- <20231012153012.GA698406-robh@kernel.org>
- <b16ed06f-66fd-457b-9610-a67ad07deb60@foss.st.com>
- <20231024163956.GA4049342-robh@kernel.org>
-Content-Language: en-US
-In-Reply-To: <20231024163956.GA4049342-robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.201.20.32]
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-27_14,2023-10-27_01,2023-05-22_02
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231026101615.395113-1-gmazyland@gmail.com>
 
-
-
-On 10/24/23 18:39, Rob Herring wrote:
-> On Mon, Oct 16, 2023 at 02:02:39PM +0200, Gatien CHEVALLIER wrote:
->> Hi Rob,
->>
->> On 10/12/23 17:30, Rob Herring wrote:
->>> On Wed, Oct 11, 2023 at 10:49:58AM +0200, Gatien CHEVALLIER wrote:
->>>> Hi Rob,
->>>>
->>>> On 10/10/23 20:42, Rob Herring wrote:
->>>>> On Tue, Oct 10, 2023 at 02:57:18PM +0200, Gatien Chevallier wrote:
->>>>>> ETZPC is a firewall controller. Put all peripherals filtered by the
->>>>>> ETZPC as ETZPC subnodes and reference ETZPC as an
->>>>>> access-control-provider.
->>>>>>
->>>>>> For more information on which peripheral is securable or supports MCU
->>>>>> isolation, please read the STM32MP15 reference manual.
->>>>>>
->>>>>> Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
->>>>>> ---
->>>>>>
->>>>>> Changes in V6:
->>>>>>        	- Renamed access-controller to access-controllers
->>>>>>        	- Removal of access-control-provider property
->>>>>>
->>>>>> Changes in V5:
->>>>>>        	- Renamed feature-domain* to access-control*
->>>>>>
->>>>>>     arch/arm/boot/dts/st/stm32mp151.dtsi  | 2756 +++++++++++++------------
->>>>>>     arch/arm/boot/dts/st/stm32mp153.dtsi  |   52 +-
->>>>>>     arch/arm/boot/dts/st/stm32mp15xc.dtsi |   19 +-
->>>>>>     3 files changed, 1450 insertions(+), 1377 deletions(-)
->>>>>
->>>>> This is not reviewable. Change the indentation and any non-functional
->>>>> change in one patch and then actual changes in another.
->>>>
->>>> Ok, I'll make it easier to read.
->>>>
->>>>>
->>>>> This is also an ABI break. Though I'm not sure it's avoidable. All the
->>>>> devices below the ETZPC node won't probe on existing kernel. A
->>>>> simple-bus fallback for ETZPC node should solve that.
->>>>>
->>>>
->>>> I had one issue when trying with a simple-bus fallback that was the
->>>> drivers were probing even though the access rights aren't correct.
->>>> Hence the removal of the simple-bus compatible in the STM32MP25 patch.
->>>
->>> But it worked before, right? So the difference is you have either added
->>> new devices which need setup or your firmware changed how devices are
->>> setup (or not setup). Certainly can't fix the latter case. You just need
->>> to be explicit about what you are doing to users.
->>>
->>
->> I should've specified it was during a test where I deliberately set
->> incorrect rights on a peripheral and enabled its node to see if the
->> firewall would allow the creation of the device.
->>
->>>
->>>> Even though a node is tagged with the OF_POPULATED flag when checking
->>>> the access rights with the firewall controller, it seems that when
->>>> simple-bus is probing, there's no check of this flag.
->>>
->>> It shouldn't. Those flags are for creating the devices (or not) and
->>> removing only devices of_platform_populate() created.
->>>
->>
->> About the "simple-bus" being a fallback, I think I understood why I saw
->> that the devices were created.
->>
->> All devices under a node whose compatible is "simple-bus" are created
->> in of_platform_device_create_pdata(), called by
->> of_platform_default_populate_init() at arch_initcall level. This
->> before the firewall-controller has a chance to populate it's bus.
->>
->> Therefore, when I flag nodes when populating the firewall-bus, the
->> devices are already created. The "simple-bus" mechanism is not a
->> fallback here as it precedes the driver probe.
->>
->> Is there a safe way to safely remove/disable a device created this way?
+On Thu, Oct 26, 2023 at 12:16:15PM +0200, Milan Broz wrote:
+> The USB mass storage quirks flags can be stored in driver_info in
+> a 32-bit integer (unsigned long on 32-bit platforms).
+> As this attribute cannot be enlarged, we need to use some form
+> of translation of 64-bit quirk bits.
 > 
-> There's 2 ways to handle this. Either controlling creating the device or
-> controlling probing the device. The latter should just work with
-> fw_devlink dependency. The former probably needs some adjustment to
-> simple-pm-bus driver if you have 'simple-bus' compatible. You want it to
-> probe on old kernels and not probe on new kernels with your firewall
-> driver. Look at the commit history for simple-pm-bus. There was some
-> discussion on it as well.
+> This problem was discussed on the USB list
+> https://lore.kernel.org/linux-usb/f9e8acb5-32d5-4a30-859f-d4336a86b31a@gmail.com/
 > 
-
-Hi Rob,
-
-First, thank you for your suggestions.
-
-Regarding controlling probing the device: the philosophy of the firewall
-controller was to check a device secure configuration to determine if
-its associated driver should be probed (+handle some firewall
-resources). I'd rather avoid it so that the device isn't created at all.
-
-I took a look on the simple-bus driver side. I don't see an obvious way
-on how to do it as the firewall controller driver is a module while the
-devices being populated is done at arch initcall level.
-
-I ended up with two propositions:
-
-1)I took a shot at implementing a new flag "OF_ACCESS_GRANTED" that
-should be set in the first call of the of_platform_bus_create()
-function for every child node of a "default bus" (simple-bus,
-simple-pm-bus, ...) having the access-controllers property.
-This flag should be unset by the access controller if the access is
-not granted. This covers the particular case where the access controller
-has a simple-bus fallback whilst not creating the devices on the first
-try for the bus' childs.
-
-This way, the first round of of_platform_populate() done at arch init
-call level won't create the devices of an access controller child
-nodes. Then, the firewall controller has a chance to clear the flag
-before the second call to this function by the simple-pm-bus driver.
-
-If the controller module isn't present, then it's a simple-bus
-behavior to extent of the child devices not being all created in the
-first place. This shouldn't be an issue as in only concerns childs
-of such bus that aren't probed before the bus driver.
-
-I have a patch that I can send as RFC on top of my series if my
-explanation isn't clear enough.
-
-2)Make the STM32_FIREWALL configuration switch select the OF_DYNAMIC
-one. This way I can use of_detach_node() function to remove the node
-from the device tree. The cons of this is the device tree is now
-used at runtime.
-
-Are you considering one of these two proposition as a viable solution?
-
-Best regards,
-Gatien
-
->> Devices that are under the firewall controller (simple-bus) node
->> should not be probed before it as they're child of it.
+> The initial solution to use a static array extensively increased the size
+> of the kernel module, so I decided to try the second suggested solution:
+> generate a table by host-compiled program and use bit 31 to indicate
+> that the value is an index, not the actual value.
 > 
-> fw_devlink should take care of parent/child dependencies without any
-> explicit handling of the access ctrl binding.
+> This patch adds a host-compiled program that processes unusual_devs.h
+> (and unusual_uas.h) and generates files usb-ids.c and usb-ids-uas.c
+> (for pre-processed USB device table with 32-bit device info).
+> These files also contain a generated translation table for driver_info
+> to 64-bit values.
 > 
-> Rob
+> The translation function is used only in usb-storage and uas modules; all
+> other USB storage modules store flags directly, using only 32-bit flags.
+> 
+> For 64-bit platforms, where unsigned long is 64-bit, we do not need to
+> convert quirk flags to 32-bit index; the translation function there uses
+> flags directly.
+> 
+> Signed-off-by: Milan Broz <gmazyland@gmail.com>
+> ---
+
+Just a few minor comments.
+
+> diff --git a/drivers/usb/storage/Makefile b/drivers/usb/storage/Makefile
+> index 46635fa4a340..9c09d83769e3 100644
+> --- a/drivers/usb/storage/Makefile
+> +++ b/drivers/usb/storage/Makefile
+> @@ -45,3 +45,35 @@ ums-realtek-y		:= realtek_cr.o
+>  ums-sddr09-y		:= sddr09.o
+>  ums-sddr55-y		:= sddr55.o
+>  ums-usbat-y		:= shuttle_usbat.o
+> +
+> +# The mkflags host-compiled generator produces usb-ids.c (usb-storage)
+> +# and usb-ids-uas.c (uas) with USB device tables.
+> +# These tables include pre-computed 32-bit values, as USB driver_info
+> +# (where the value is stored) can be only 32-bit.
+> +# The most significant bit means it is index to 64-bit pre-computed table
+> +# generated by mkflags host-compiled program.
+> +# Currently used only by mass-storage and uas driver.
+> +
+> +$(obj)/usual-tables.o: $(obj)/usb-ids.c
+> +$(obj)/uas.o: $(obj)/usb-ids-uas.c
+
+It would look better to put tabs after the ':'s in these two lines, so 
+that the second field aligns with the lines below.
+
+> +clean-files		:= usb-ids.c usb-ids-uas.c
+> +HOSTCFLAGS_mkflags.o	:= -I $(srctree)/include/
+> +ifdef CONFIG_64BIT
+> +HOSTCFLAGS_mkflags.o	+= -D CONFIG_64BIT=1
+> +else
+> +HOSTCFLAGS_mkflags.o	+= -D CONFIG_64BIT=0
+> +endif
+> +hostprogs		+= mkflags
+> +
+> +quiet_cmd_mkflag_storage = FLAGS   $@
+> +cmd_mkflag_storage = $(obj)/mkflags storage > $@
+> +
+> +quiet_cmd_mkflag_uas = FLAGS   $@
+> +cmd_mkflag_uas = $(obj)/mkflags uas > $@
+> +
+> +# mkflags always need to include unusual_devs.h and unusual_uas.h
+> +$(obj)/usb-ids.c: $(obj)/mkflags $(obj)/unusual_devs.h $(obj)/unusual_uas.h
+> +	$(call cmd,mkflag_storage)
+> +
+> +$(obj)/usb-ids-uas.c: $(obj)/mkflags $(obj)/unusual_devs.h $(obj)/unusual_uas.h
+> +	$(call cmd,mkflag_uas)
+
+I don't think these dependencies are quite right.  usb-ids.c and 
+usb-ids-uas.c don't depend directly on unusual_devs.h or unusual_uas.h 
+-- that is, the mkflags program doesn't read those header files when it 
+runs.  Rather, mkflags itself depends on those headers, and the compiler 
+can figure this out by itself so the Makefile doesn't need to mention 
+it.
+
+So instead you should say:
+
+$(obj)/usb-ids.c:	$(obj)/mkflags
+	$(call cmd,mkflag_storage)
+
+$(obj)/usb-ids-uas.c:	$(obj)/mkflags
+	$(call cmd,mkflag_uas)
+
+> diff --git a/drivers/usb/storage/usb-ids.h b/drivers/usb/storage/usb-ids.h
+> new file mode 100644
+> index 000000000000..d0359c572f33
+> --- /dev/null
+> +++ b/drivers/usb/storage/usb-ids.h
+> @@ -0,0 +1,37 @@
+> +/* SPDX-License-Identifier: GPL-2.0+ */
+> +
+> +#ifndef _USB_STOR_IDS_H_
+> +#define _USB_STOR_IDS_H_
+> +
+> +#include <linux/types.h>
+> +#include <linux/bug.h>
+> +
+> +/* Conversion of 32-bit quirks flags for 32-bit platforms */
+> +extern const unsigned long usb_stor_drv_info_u64_table_size;
+> +extern const unsigned long usb_uas_drv_info_u64_table_size;
+> +extern const u64 usb_stor_drv_info_u64_table[];
+> +extern const u64 usb_uas_drv_info_u64_table[];
+> +
+> +static u64 usb_stor_drv_info_to_flags(const u64 *drv_info_u64_table,
+> +		unsigned long table_size, unsigned long idx)
+> +{
+> +#if IS_ENABLED(CONFIG_64BIT)
+> +	return idx;
+> +#else
+> +	u64 flags = 0;
+> +
+> +	if (idx < (1UL << 31))
+> +		return idx;
+> +
+> +	idx -= (1UL << 31);
+> +
+> +	if (idx < table_size)
+> +		flags = drv_info_u64_table[idx];
+> +	else
+> +		pr_warn_once("usb_stor_drv_info_u64_table not updated");
+> +
+> +	return flags;
+> +#endif
+> +}
+
+In order to avoid conditional macros within a function definition, this 
+can be rewritten as:
+
+#if IS_ENABLED(CONFIG_64BIT)
+/* 64-bit systems don't need to use the drv_info_64_table */
+static u64 usb_stor_drv_info_to_flags(const u64 *drv_info_u64_table,
+		unsigned long table_size, unsigned long idx)
+{
+	return idx;
+}
+
+#else
+/* 32-bit systems need to look up flags if bits 31 or beyond are used */
+static u64 usb_stor_drv_info_to_flags(const u64 *drv_info_u64_table,
+		unsigned long table_size, unsigned long idx)
+{
+...
+}
+#endif
+
+Everything else looks okay.
+
+Alan Stern
 
