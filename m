@@ -1,170 +1,158 @@
-Return-Path: <linux-usb+bounces-2238-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2239-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 761377D8B8B
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 00:17:38 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA1A97D8C7A
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 02:08:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 702F81C20FC8
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Oct 2023 22:17:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 39013B21419
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 00:08:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEABE3F4A9;
-	Thu, 26 Oct 2023 22:17:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA22D631;
+	Fri, 27 Oct 2023 00:08:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="nZbcxUsJ"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 333783D99D
-	for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 22:17:29 +0000 (UTC)
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF23CC
-	for <linux-usb@vger.kernel.org>; Thu, 26 Oct 2023 15:17:27 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1qw8fC-0003bR-JJ; Fri, 27 Oct 2023 00:17:14 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1qw8f7-004VM6-V6; Fri, 27 Oct 2023 00:17:09 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1qw8f7-006suW-LB; Fri, 27 Oct 2023 00:17:09 +0200
-From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Neal Liu <neal_liu@aspeedtech.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Joel Stanley <joel@jms.id.au>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>,
-	linux-aspeed@lists.ozlabs.org,
-	linux-usb@vger.kernel.org,
-	kernel@pengutronix.de,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Li Yang <leoyang.li@nxp.com>,
-	Zhu Wang <wangzhu9@huawei.com>,
-	Vladimir Zapolskiy <vz@mleia.com>,
-	Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>
-Subject: [PATCH] usb: gadget: aspeed_udc: Convert to platform remove callback returning void
-Date: Fri, 27 Oct 2023 00:17:02 +0200
-Message-ID: <20231026221701.2521483-2-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.42.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E2D1179;
+	Fri, 27 Oct 2023 00:08:17 +0000 (UTC)
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B04B1D4F;
+	Thu, 26 Oct 2023 17:08:14 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39QNxq7e010558;
+	Fri, 27 Oct 2023 00:07:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=KTwkppKtfnt2SAszLh2T9OBebpVxwToekkwIOrS6bL4=;
+ b=nZbcxUsJY0ezVL5sidh830ykjrp0PQ6loSuQuiqUgbwY027VsGahwVKjM3mllbbwY/65
+ WC6yqfUOe+iXZIcGZqtXWCcrBBAIIwMDCKWDr7C68FkJnjnRoev7CjblainhJ+m5OdD3
+ JH9KA57UeywlKwi3KB8sayFHiEbVxzNzK9uFU60QoHtF2bPFBx3X1b7i/FQGc63ug794
+ J91gXQfO3NfFML7Vp7R4kEudUtVYDPXnG7Bc6fQp8nICl/T4HnqitGAruKPIWib9esce
+ MXNTeS9cFWHKciLlUjAuOYjgvmPL2FAQXBtM7if9nFdpXZZD7HEEk4jEu1pOoKX+EdX2 lw== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3tyx3u8jtt-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 27 Oct 2023 00:07:51 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39R07oVw032425
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 27 Oct 2023 00:07:50 GMT
+Received: from [10.71.115.36] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.39; Thu, 26 Oct
+ 2023 17:07:50 -0700
+Message-ID: <ceb0f48f-8db9-40ae-769a-08e36373b922@quicinc.com>
+Date: Thu, 26 Oct 2023 17:07:49 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3353; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=kjYgi1tNDpEkZXYfPpv9I42yC3H7lSh6O/o/Lny0Nk0=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlOuVd9j1oolGO0ajvDjH/3NT7YvVEdY7WC+IZp Om2+o9OsWOJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZTrlXQAKCRCPgPtYfRL+ TivmB/9F6ixFlAlLk+THbeGCiXxeqQ1ecBD4q89Fho0DoLLO+CdDTZm+j37YZpc75Ga7KFe+OOP zG+Z+2bOe/QkIVvjz/2u67ZDYAcu32pBEWHz3ZHgy+nRg9SF2HIi5yCq2GHin0H5+8ouGcxQF9j qgSbAcg4k3uKByFpDR73vqPv4G/WEPmCibvlXzmUQS4c+ntnjcSKgRLiMDhXRXBygamuPZv+owf sA06bxGTyVQmeaV/v4TP+jNoL8O4JwbJmejXp0XgV8Y5VnAFC5h2WHOXRmJZFMGSiV08mjlxgYs mUBRpUR21dGT5bdSw7IDs5EgRkXU0hSyrFVxXQmTWeHeylo/
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v4 3/3] usb: dwc3: Modify runtime pm ops to handle bus
+ suspend
+Content-Language: en-US
+To: Roger Quadros <rogerq@kernel.org>, <gregkh@linuxfoundation.org>,
+        <Thinh.Nguyen@synopsys.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <devicetree@vger.kernel.org>
+CC: <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
+References: <20230814185043.9252-1-quic_eserrao@quicinc.com>
+ <20230814185043.9252-4-quic_eserrao@quicinc.com>
+ <9be9fae5-f6f2-42fe-bd81-78ab50aafa06@kernel.org>
+ <cd294a89-33e7-0569-81b3-df77a255f061@quicinc.com>
+ <0dee3bec-d49f-4808-a2f8-7a4205303e1f@kernel.org>
+ <c7fc7bc2-1a84-e6b5-5198-1b8cc602d738@quicinc.com>
+ <bd74947f-8827-4539-a590-9c53d5ddd02d@kernel.org>
+From: Elson Serrao <quic_eserrao@quicinc.com>
+In-Reply-To: <bd74947f-8827-4539-a590-9c53d5ddd02d@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 7rxH9l_SyWSXCToapu9r2IwRjqwzkuZ8
+X-Proofpoint-GUID: 7rxH9l_SyWSXCToapu9r2IwRjqwzkuZ8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-26_22,2023-10-26_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 bulkscore=0
+ mlxlogscore=668 suspectscore=0 spamscore=0 mlxscore=0 phishscore=0
+ priorityscore=1501 malwarescore=0 impostorscore=0 clxscore=1015
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2310240000 definitions=main-2310260211
 
-The .remove() callback for a platform driver returns an int which makes
-many driver authors wrongly assume it's possible to do error handling by
-returning an error code. However the value returned is ignored (apart
-from emitting a warning) and this typically results in resource leaks.
 
-To improve here there is a quest to make the remove callback return
-void. In the first step of this quest all drivers are converted to
-.remove_new(), which already returns void. Eventually after all drivers
-are converted, .remove_new() will be renamed to .remove().
 
-ast_udc_remove() is one of these functions that return an error code
-after doing only a partial cleanup. Replace the core's error message by
-a more drastic one and still convert the driver to .remove_new().
-Note the only semantic change here is the changed error message.
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
-Hello,
+>>>>>
+>>>>> While this takes care of runtime suspend case, what about system_suspend?
+>>>>> Should this check be moved to dwc3_suspend_common() instead?
+>>>>>
+>>>>
+>>>> Sure I can move these checks to dwc3_suspend_common to make it generic.
+>>>
+>>> Before you do that let's first decide how we want the gadget driver to behave
+>>> in system_suspend case.
+>>>
+>>> Current behavior is to Disconnect from the Host.
+>>>
+>>> Earlier I was thinking on the lines that we prevent system suspend if
+>>> we are not already in USB suspend. But I'm not sure if that is the right
+>>> thing to do anymore. Mainly because, system suspend is a result of user
+>>> request and it may not be nice to not to meet his/her request.
+>>
+>> Agree. Irrespective of whether USB is suspended or not it is better to honor the system suspend request from user.
+>>
+>>> Maybe best to leave this policy handling to user space?
+>>> i.e. if user wants USB gadget operation to be alive, he will not issue
+>>> system suspend?
+>>>
+>>
+>> Sure. So below two cases
+>>
+>> Case1: User doesn't care if gadget operation is alive and triggers system suspend irrespective of USB suspend. Like you mentioned, current behavior already takes care of this and initiates a DISCONNECT
+>>
+>> Case2:  User wants gadget to stay alive and hence can trigger system suspend only when USB is suspended (there are already user space hooks that read cdev->suspended bit to tell whether USB is suspended or not for user to decide). Attempts to request system suspend when USB is not suspended, would result in a DISCONNECT.
+>>
+>> For supporting Case2 from gadget driver point of view, we need to extend this series by having relevant checks in suspend_common()
+>>
+>> Also, is it better to provide separate flags to control the gadget driver behavior for runtime suspend Vs system suspend when USB is suspended ? For example, what if we want to enable bus suspend handling for runtime suspend only and not for system suspend (Case1).
+> 
+> But you mentioned that for Case1, USB gadget would disconnect from Host. So USB will be in disconnected state and USB controller can be fully de-activated? Except maybe wakeup handling to bring system out of suspend on a USB plug/unplug event?
+> Why do we need separate flags for?
+> 
 
-this driver is one of those that got the remove function wrong. This is
-a general problem of the udc drivers and also affects
+Sorry let me clarify. This is in reference to deciding how we want the 
+dwc3 driver to behave in system_suspend case.
 
- drivers/usb/gadget/udc/at91_udc.c
- drivers/usb/gadget/udc/fsl_udc_core.c
- drivers/usb/gadget/udc/gr_udc.c
- drivers/usb/gadget/udc/lpc32xx_udc.c
- drivers/usb/gadget/udc/pxa25x_udc.c
+One option is to continue with the existing behavior where USB gadget 
+would disconnect from Host irrespective of bus suspend state. We dont 
+need any modification in this case and we can leave this series limited 
+to runtime suspend only.
 
-. For now I only converted the aspeed driver, but once this patch is in
-an acceptable state, I'd convert all these drivers in the same way.
+Second option is to stay connected IF we are in bus suspend state 
+(U3/L2) otherwise DISCONNECT IF we are not in bus suspend state. The 
+main motivation is to preserve the ongoing usb session
+without going through a re-enumeration (ofcourse true only if we are in 
+bus suspend state). This would need relevant checks in suspend_common().
 
-Fixing the resource leak and the oops is something I'll not address.
-This should be done by someone who cares for these drivers and has the
-actual hardware.
+Which option do you think is more suitable? IMO option2 is better. For 
+example if we are in a scenario where there is a network session (over 
+USB) open between Host and the device and usb bus is suspended due to 
+data inactivity. Option2 would preserve the session whereas Option1 we 
+would terminate this session when a system_suspend happens.
 
-Best regards
-Uwe
-
- drivers/usb/gadget/udc/aspeed_udc.c | 19 +++++++++++++------
- 1 file changed, 13 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/usb/gadget/udc/aspeed_udc.c b/drivers/usb/gadget/udc/aspeed_udc.c
-index 2ef89a442f50..3916c8e2ba01 100644
---- a/drivers/usb/gadget/udc/aspeed_udc.c
-+++ b/drivers/usb/gadget/udc/aspeed_udc.c
-@@ -1432,15 +1432,24 @@ static void ast_udc_init_hw(struct ast_udc_dev *udc)
- 	ast_udc_write(udc, 0, AST_UDC_EP0_CTRL);
- }
- 
--static int ast_udc_remove(struct platform_device *pdev)
-+static void ast_udc_remove(struct platform_device *pdev)
- {
- 	struct ast_udc_dev *udc = platform_get_drvdata(pdev);
- 	unsigned long flags;
- 	u32 ctrl;
- 
- 	usb_del_gadget_udc(&udc->gadget);
--	if (udc->driver)
--		return -EBUSY;
-+	if (udc->driver) {
-+		/*
-+		 * This is broken as only some cleanup is skipped, *udev is
-+		 * freed and the register mapping goes away. Any further usage
-+		 * probably crashes. Also the device is unbound, so the skipped
-+		 * cleanup is never catched up later.
-+		 */
-+		dev_alert(&pdev->dev,
-+			  "Driver is busy and still going away. Fasten your seat belts!\n");
-+		return;
-+	}
- 
- 	spin_lock_irqsave(&udc->lock, flags);
- 
-@@ -1459,8 +1468,6 @@ static int ast_udc_remove(struct platform_device *pdev)
- 				  udc->ep0_buf_dma);
- 
- 	udc->ep0_buf = NULL;
--
--	return 0;
- }
- 
- static int ast_udc_probe(struct platform_device *pdev)
-@@ -1581,7 +1588,7 @@ MODULE_DEVICE_TABLE(of, ast_udc_of_dt_ids);
- 
- static struct platform_driver ast_udc_driver = {
- 	.probe			= ast_udc_probe,
--	.remove			= ast_udc_remove,
-+	.remove_new		= ast_udc_remove,
- 	.driver			= {
- 		.name			= KBUILD_MODNAME,
- 		.of_match_table		= ast_udc_of_dt_ids,
-
-base-commit: 2ef7141596eed0b4b45ef18b3626f428a6b0a822
--- 
-2.42.0
-
+Thanks
+Elson
 
