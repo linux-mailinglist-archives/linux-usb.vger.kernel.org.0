@@ -1,65 +1,66 @@
-Return-Path: <linux-usb+bounces-2295-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2296-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 976CC7D9ED5
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 19:26:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E20B77D9EDE
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 19:28:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 959301C21049
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 17:26:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9CF75282484
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Oct 2023 17:28:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E33339879;
-	Fri, 27 Oct 2023 17:26:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16CBB3987B;
+	Fri, 27 Oct 2023 17:28:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EuV1h/Pb"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fv0rkoGV"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6B262F37
-	for <linux-usb@vger.kernel.org>; Fri, 27 Oct 2023 17:26:18 +0000 (UTC)
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C5D2B8
-	for <linux-usb@vger.kernel.org>; Fri, 27 Oct 2023 10:26:16 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2c509d5ab43so35008491fa.0
-        for <linux-usb@vger.kernel.org>; Fri, 27 Oct 2023 10:26:16 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CC442F37
+	for <linux-usb@vger.kernel.org>; Fri, 27 Oct 2023 17:28:12 +0000 (UTC)
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F1EC1AC
+	for <linux-usb@vger.kernel.org>; Fri, 27 Oct 2023 10:28:07 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-507bd19eac8so3419512e87.0
+        for <linux-usb@vger.kernel.org>; Fri, 27 Oct 2023 10:28:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698427574; x=1699032374; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=gmail.com; s=20230601; t=1698427685; x=1699032485; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=+/UYVHi7AWk3VwUm9qEDj9gFx8B05de2Vwc3uIctnf0=;
-        b=EuV1h/PbmoZnuIVsJdQpESWhFgsGt/rLxpm0+CgyoCZPMj8tKueXdB3VF9+WsLscdk
-         DzpgeKzA44jYMIEN8C7dYoM/ShXkhA80kW1EqLw8Rup/eF728BhSMg0/p4vXMzUP+dcj
-         FQMtMmRehkVroxSNqRuiYqDDLmUp1nGjbbQw3Kncvt+tjQRg/teU8cEDOYoxGZH/IPqC
-         uEi5qF74z8EIx52FG9CGPeP7WXWlv5rFXgBwmE33D39ykykH1SsqZpdWf5IhxJNt5zk7
-         6Yv1HCzGDhkdYtIYufF74HQzgSeH06kbMAS6ZAdnyBJrVBP1gAv8EpMFfCL31zFYTx0W
-         xwYA==
+        bh=lmysuzjuHdUzDUKerdvVYUJgcEOMLJwWIM3o3T5z/6g=;
+        b=Fv0rkoGV/eHJACuzgsR9wYAWfYG3wfKi7oVzpUUP9JqRY3eyXChv3BN4xfZ4yAnqwa
+         NBia8ELClE6NhkYJz3/4xxoqXbZM33arpJLxus/KuRIS/04sc80hOV/t0/bqmUt7htYp
+         0vhB7cbJQuCkI2xNN1ynGzXwFfh+ZI6fE9Zab6q50I119zTSVk3n4fCA7sMkkbJBA1WC
+         jDuvgA1GJT+2K4Tka0/I2ERQN63lHTXkl6V/slA5ml/xueLk0MwBsgqIUd8ZUYXA/awc
+         nOOldwsXpqyWZDxLJPyP6+TBTqVNkZrWAnTw6FehwJ9M8kb4yiuDl/FglBKXp1WZ+N12
+         dvEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698427574; x=1699032374;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=1e100.net; s=20230601; t=1698427685; x=1699032485;
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+/UYVHi7AWk3VwUm9qEDj9gFx8B05de2Vwc3uIctnf0=;
-        b=D4s6ix4YCytTlTMhRFe/qFJJUoq2qoDC3D5Bd8mjpJBIQDl8nMZ7/eLhtGbq4b0A0z
-         98NCSmXIUd63dWU57mZ0Y7XLAf4tveMew/ZGGAC20e/6SXj8VJ0GEJj1DqFk31WQN5PX
-         RiR3snjcwnAUwHDYozTVybRlzwbeM51fYXrV7J8CTQ/vkFbU2GKYjIV+Qogve3PTK4mG
-         ITu1VlVxYy/IMbmZz0ex1WnF0x/BmAG8UfyUXvB5YkO7Pl4j/oF3XHhpiN7mcEU+DGow
-         DVWj0PPYFsWexfosfx2df/Wy/f4eMtyNOk/JMGK8YPNbWO01N8MZyRj+q2fX5CEzRo5H
-         wC6A==
-X-Gm-Message-State: AOJu0YzB7rfGDlQMATfelFUeN3SLyHMH490aJJe76iVzQQ5XEfQVjc4Z
-	jZoUUUn13vwHxtY8Gn9X1CUYrW/ii+1Gig==
-X-Google-Smtp-Source: AGHT+IGv1Asb1LpR3PEFOPIPezWyWBitSHiwwfn+SAoru685fVLy5FdXMKgUofJ1ZjkiF1k9Vpt0IA==
-X-Received: by 2002:a2e:a232:0:b0:2c5:1aae:400d with SMTP id i18-20020a2ea232000000b002c51aae400dmr2539656ljm.22.1698427574494;
-        Fri, 27 Oct 2023 10:26:14 -0700 (PDT)
+        bh=lmysuzjuHdUzDUKerdvVYUJgcEOMLJwWIM3o3T5z/6g=;
+        b=kO0kcs2s0vmWnSRLTimYWxQGzo51FdDHj3QObKaHYC9QGILeoK0mL5LJtxf+YbzgA6
+         +GSg4r/v58PaBCAdX/PjuVAm3sZORDXt8UXpaBdy6o5eUYKkC4oiQuxuXY0MVIlydxNm
+         AF7qLbFHF0iMGSBCNiT1zUdAGI90Gva/IFpAdxluqUBOEm+vJGSpSxLZSskVvuHC8crB
+         EuqLaWF/6PkdrEuEhTw4TYKnKPJjPGHdq/X0bGEOPnb9poEY0uca79eWwD4kf5KP5xG0
+         bG1BKsrq99lbzVtdtFKkMKwaM3EvyjyBOI/intHB3a4WWwAkGmj9S4AvtXqdP1dLfFFq
+         6G+Q==
+X-Gm-Message-State: AOJu0YwtQ+Mo65a71qA5I5OhSiAy/e3nqVT7X7NpT84/Ry8k0OrB8d3F
+	qEi4ybuxnYGHOxWDGJL75RERCPRXLmsH5g==
+X-Google-Smtp-Source: AGHT+IFjnF3+ZYIwG+vrkkQvcpq+c7ZtLolCt6tiP2rOiCGPimdbi+1oFLXrC9OtnBKxHZVJseWQzw==
+X-Received: by 2002:a05:6512:2eb:b0:500:9a45:63b with SMTP id m11-20020a05651202eb00b005009a45063bmr2407751lfq.13.1698427685247;
+        Fri, 27 Oct 2023 10:28:05 -0700 (PDT)
 Received: from ?IPV6:2001:14ba:4c14:9c00::188? (dltml4yyyyyyyyyyyyhfy-3.rev.dnainternet.fi. [2001:14ba:4c14:9c00::188])
-        by smtp.gmail.com with ESMTPSA id a21-20020a2e8315000000b002bce38190a3sm350423ljh.34.2023.10.27.10.26.14
+        by smtp.gmail.com with ESMTPSA id f13-20020a19ae0d000000b005079db81105sm341725lfc.116.2023.10.27.10.28.04
+        for <linux-usb@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 27 Oct 2023 10:26:14 -0700 (PDT)
-Message-ID: <93f05030-9f4c-42bd-b482-8df6d24d5a41@gmail.com>
-Date: Fri, 27 Oct 2023 20:26:13 +0300
+        Fri, 27 Oct 2023 10:28:04 -0700 (PDT)
+Message-ID: <ccf7d12a-8362-4916-b3e0-f4150f54affd@gmail.com>
+Date: Fri, 27 Oct 2023 20:28:04 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,11 +68,10 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: storage: set 1.50 as the lower bcdDevice for older
+Subject: [PATCH] usb: storage: set 1.50 as the lower bcdDevice for older
  "Super Top" compatibility
 Content-Language: en-US
-To: Greg KH <greg@kroah.com>
-Cc: Linux USB <linux-usb@vger.kernel.org>
+To: Linux USB <linux-usb@vger.kernel.org>
 References: <ZTsR-RhhjxSpqrsz@debian.me>
  <055de764-c422-4c22-a79b-dd4db56122ce@gmail.com>
  <2023102704-stable-lid-c86a@gregkh>
@@ -83,30 +83,28 @@ References: <ZTsR-RhhjxSpqrsz@debian.me>
 From: LihaSika <lihasika@gmail.com>
 In-Reply-To: <2023102720-emotion-overlying-9bb4@gregkh>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 27.10.2023 16.53, Greg KH wrote:
-> 
-> Much better, thanks, the subject and changelog text are great!
-> 
-> But the patch is still corrupted, with tabs turned into spaces, and we
-> can't apply it at all :(
-> 
-> Can you fix that up and resend?
-> 
-> thanks,
-> 
-> greg k-h
+Change lower bcdDevice value for "Super Top USB 2.0  SATA BRIDGE" to match
+1.50. I have such an older device with bcdDevice=1.50 and it will not work
+otherwise.
 
+Cc: stable@vger.kernel.org
+Signed-off-by: Liha Sikanen <lihasika@gmail.com>
+---
 
-My apologies for the extra trouble and thank you for your patience 🙏
+diff --git a/drivers/usb/storage/unusual_cypress.h b/drivers/usb/storage/unusual_cypress.h
+index 0547daf..5df4075 100644
+--- a/drivers/usb/storage/unusual_cypress.h
++++ b/drivers/usb/storage/unusual_cypress.h
+@@ -19,7 +19,7 @@ UNUSUAL_DEV(  0x04b4, 0x6831, 0x0000, 0x9999,
+ 		"Cypress ISD-300LP",
+ 		USB_SC_CYP_ATACB, USB_PR_DEVICE, NULL, 0),
+ 
+-UNUSUAL_DEV( 0x14cd, 0x6116, 0x0160, 0x0160,
++UNUSUAL_DEV( 0x14cd, 0x6116, 0x0150, 0x0160,
+ 		"Super Top",
+ 		"USB 2.0  SATA BRIDGE",
+ 		USB_SC_CYP_ATACB, USB_PR_DEVICE, NULL, 0),
 
-As a not-totally-noob I should've known better to be more thorough 😔 
-
-To be sure, I re-created, rebuilt and re-tested the patch. Thunderbird also had to be told "mailnews.send_plaintext_flowed=false".
-
-I'll send the fixed patch next in a separate mail, hope I got it right now!
-
-Thank you,
-Liha
 
