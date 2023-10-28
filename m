@@ -1,56 +1,46 @@
-Return-Path: <linux-usb+bounces-2310-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2311-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 126657DA662
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Oct 2023 12:23:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 638257DA667
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Oct 2023 12:31:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 39D6F1C20B36
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Oct 2023 10:23:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 11FFE281360
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Oct 2023 10:31:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00899DDDD;
-	Sat, 28 Oct 2023 10:23:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3847DDCD;
+	Sat, 28 Oct 2023 10:31:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="X/iIJVX7"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="xNv+sOq0"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 363E5291D
-	for <linux-usb@vger.kernel.org>; Sat, 28 Oct 2023 10:23:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36144C433C7;
-	Sat, 28 Oct 2023 10:23:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C71514F95
+	for <linux-usb@vger.kernel.org>; Sat, 28 Oct 2023 10:31:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77F0DC433C7;
+	Sat, 28 Oct 2023 10:31:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1698488584;
-	bh=Ybc/3OKDFGr5Oyuw6CaiBiWX3vORQK3q2t4/NJUbrXs=;
+	s=korg; t=1698489089;
+	bh=DLYTQpYu8yL88OLQO/D4DceJpOvPWTl4um1X4nFwKS8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=X/iIJVX7lQLpJrPONMym5FcssbOZKkCH7AvDEiJF8Qqgc48y1q8cDV9Czrv3Sv8ki
-	 55Q8RFG+SNz0Bp2SfgGtMSgAcWZvuxdRxuRHuuDHnMhklE2nLQj+tC1G5eXQAdppgN
-	 WumCyYuewnPDjHGgu6N5QRmaV5Cwy/zNzbqRTF+4=
-Date: Sat, 28 Oct 2023 12:23:01 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Bagas Sanjaya <bagasdotme@gmail.com>
-Cc: LihaSika <lihasika@gmail.com>, Linux USB <linux-usb@vger.kernel.org>,
-	Linux USB Storage <usb-storage@lists.one-eyed-alien.net>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Milan Svoboda <milan.svoboda@centrum.cz>,
-	Matthieu Castet <castet.matthieu@free.fr>
-Subject: Re: [PATCH] usb: storage: set 1.50 as the lower bcdDevice for older
- "Super Top" compatibility
-Message-ID: <2023102848-esteemed-reptile-851f@gregkh>
-References: <ZTsR-RhhjxSpqrsz@debian.me>
- <055de764-c422-4c22-a79b-dd4db56122ce@gmail.com>
- <2023102704-stable-lid-c86a@gregkh>
- <7484f7c8-a49c-4111-83f0-bb6db2906fae@gmail.com>
- <2023102729-spent-ninja-7e39@gregkh>
- <037e5af2-3afd-4a37-a4d7-6dc87af605c7@gmail.com>
- <21c2b8ee-7753-413e-98f9-d1401edf5c73@gmail.com>
- <2023102720-emotion-overlying-9bb4@gregkh>
- <ccf7d12a-8362-4916-b3e0-f4150f54affd@gmail.com>
- <ZTyyDXYR4f6WKdLM@debian.me>
+	b=xNv+sOq0/GmDJm+KZxMLh7Xk16HfEogFhS1Zkie3XunKSGmJwUtRQCOMnCE3iERKS
+	 txvbPfyqZd835I4rQlmaRmb/GeTxKIv3mbduqD4T6c787Jiu+23E9MrfX252i/lBAh
+	 V025nEy3EMdpIPACCCJ3/NrNVTplZJRjHnNdAO4k=
+Date: Sat, 28 Oct 2023 12:31:26 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Avichal Rakesh <arakesh@google.com>
+Cc: dan.scally@ideasonboard.com, etalvala@google.com, jchowdhary@google.com,
+	laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, m.grzeschik@pengutronix.de
+Subject: Re: [PATCH v9 2/4] usb: gadget: uvc: Allocate uvc_requests one at a
+ time
+Message-ID: <2023102824-pegboard-sadness-29da@gregkh>
+References: <73309396-3856-43a2-9a6f-81a40ed594db@google.com>
+ <20231027201959.1869181-1-arakesh@google.com>
+ <20231027201959.1869181-2-arakesh@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -59,38 +49,17 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZTyyDXYR4f6WKdLM@debian.me>
+In-Reply-To: <20231027201959.1869181-2-arakesh@google.com>
 
-On Sat, Oct 28, 2023 at 02:02:37PM +0700, Bagas Sanjaya wrote:
-> On Fri, Oct 27, 2023 at 08:28:04PM +0300, LihaSika wrote:
-> > Change lower bcdDevice value for "Super Top USB 2.0  SATA BRIDGE" to match
-> > 1.50. I have such an older device with bcdDevice=1.50 and it will not work
-> > otherwise.
-> 
-> What about below description?
-> 
-> ```
-> Some old USB hard drives using Super Top USB 2.0 SATA bridge have lower
-> minimum bcdDevice value than currently allowed (1.60). Such devices
-> cannot be used by ums-cypress driver since their bcdDevice is out of range.
-> 
-> Lower minimum bcdDevice to fix that. 
-> ```
-> 
-> > 
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Liha Sikanen <lihasika@gmail.com>
-> 
-> Is your intended author name in your From: header or Signed-off-by: trailer?
-> 
-> Also, don't forget to add Fixes: tag; that is:
-> 
-> Fixes: a9c143c82608 ("usb-storage: restrict bcdDevice range for Super Top in Cypress ATACB")
-> 
-> When above reviews are addressed, resend as v2. Make sure that the patch
-> subject begins with `[PATCH v2]`.
+On Fri, Oct 27, 2023 at 01:19:57PM -0700, Avichal Rakesh wrote:
+>  	BUG_ON(video->req_size);
+> +	BUG_ON(!list_empty(&video->ureqs));
 
-There's no need, I can take this as-is, thanks.
+Again, please do not add new BUG_ON() lines, the existing ones need to
+be removed as well, but you can do that in later changes.  I can't take
+changes that add new ones, sorry.
+
+thanks,
 
 greg k-h
 
