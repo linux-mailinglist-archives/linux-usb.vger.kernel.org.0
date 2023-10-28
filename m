@@ -1,187 +1,183 @@
-Return-Path: <linux-usb+bounces-2319-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2320-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EAD027DA7D0
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Oct 2023 17:31:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 432D57DA7F4
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Oct 2023 18:05:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 49CC1B2124B
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Oct 2023 15:31:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 740721C209A8
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Oct 2023 16:05:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 461A2168B7;
-	Sat, 28 Oct 2023 15:31:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 404EB171A6;
+	Sat, 28 Oct 2023 16:05:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UQ5ewBDM"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="m2c4u+Ew"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5891B66F;
-	Sat, 28 Oct 2023 15:31:33 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80E7FD3;
-	Sat, 28 Oct 2023 08:31:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698507091; x=1730043091;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lXhBg7CyUNDTmqFAHnbpKEyoQJs4rn3WPxNcO3/MONs=;
-  b=UQ5ewBDMQ9+S0B9EYLLj3KEoWBs6Hv/kwnz2b4KliUwX4zI6JRmW751q
-   alpjHaxxTvZtpSwLcaJUZorL8C+XsQHqvD+FVuw9BanQfkY/entWUaMRT
-   cIv676P4n2KKTJ4rh3CDfzNDkr2untMrSN2z4msKixo0IsRiX4mziaiZc
-   YlYnLrUZIcfCs+VxeLecI0kHM1Vaudz9czFg19qaW3i1SEK3oIzoKSJZb
-   rswqlG0TV7DW2PGsZRqE98ueuEoEtbeLP1q0Wh0eFkLe3coOPgjI5JVum
-   V4NNwqN1aH/OeATspkwxLS5glfoZwxsVFFyIKJu9x3SE8o4HDGIxULoWE
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10877"; a="387717868"
-X-IronPort-AV: E=Sophos;i="6.03,259,1694761200"; 
-   d="scan'208";a="387717868"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2023 08:31:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.03,259,1694761200"; 
-   d="scan'208";a="1120418"
-Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 28 Oct 2023 08:31:15 -0700
-Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1qwlHY-000Br5-3D;
-	Sat, 28 Oct 2023 15:31:25 +0000
-Date: Sat, 28 Oct 2023 23:30:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: Xingxing Luo <xingxing.luo@unisoc.com>, b-liu@ti.com,
-	gregkh@linuxfoundation.org, keescook@chromium.org,
-	nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org, xingxing0070.luo@gmail.com,
-	Zhiyong.Liu@unisoc.com, Cixi.Geng1@unisoc.com,
-	Orson.Zhai@unisoc.com, zhang.lyra@gmail.com
-Subject: Re: [PATCH] usb: musb: Check requset->buf before use to avoid crash
- issue
-Message-ID: <202310282331.d4wx1Z6b-lkp@intel.com>
-References: <20231023093153.6748-1-xingxing.luo@unisoc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDDB116418
+	for <linux-usb@vger.kernel.org>; Sat, 28 Oct 2023 16:05:06 +0000 (UTC)
+Received: from smtp.smtpout.orange.fr (smtp-16.smtpout.orange.fr [80.12.242.16])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 881FCE1
+	for <linux-usb@vger.kernel.org>; Sat, 28 Oct 2023 09:05:04 -0700 (PDT)
+Received: from pop-os.home ([86.243.2.178])
+	by smtp.orange.fr with ESMTPA
+	id wlo5q1cN8yBwnwlo6qKaMv; Sat, 28 Oct 2023 18:05:03 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1698509103;
+	bh=lJV0nrXGftDw+3aoT/GoqGQ9MO17enJwu7GrGnJ+O5s=;
+	h=From:To:Cc:Subject:Date;
+	b=m2c4u+Ew1ymLvM7aeveClQml6joGS6GtBS/tZTl21IhQB0cobcEtGP1V2iVVyi3Gn
+	 8gnVIMtkaBD96x9AJvnMpQA0Sb5LTYM/xzYCpQWQ4fcIrRO99EARgVybpzQOKWRyg8
+	 qVB6OYn9fNjCIbKMUj+06GIB/8Flz7EueT+1TEFob++hnkxZM0WKUoXHn0gZAVcauP
+	 cJc3ie0Vs6AbpXi/nFyUIofgBQtlsGWKTRnI4Gv67UVWUWojLBQJeFh1B+Cq69vNYt
+	 tM9WHgAvwBVlEp3OJzNKzWQlZUJNggzNnqU/wVeoFjvOrcUDhnPdG9A7O8p+9A/hDo
+	 7qxkmxbxWNtMQ==
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 28 Oct 2023 18:05:03 +0200
+X-ME-IP: 86.243.2.178
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To: Minas Harutyunyan <hminas@synopsys.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-kernel@vger.kernel.org,
+	kernel-janitors@vger.kernel.org,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	linux-usb@vger.kernel.org
+Subject: [PATCH v2] usb: dwc2: Use seq_buf instead of hand writing it
+Date: Sat, 28 Oct 2023 18:05:00 +0200
+Message-Id: <4eafde20b0fb4894a00f9749a2b17e847a7efa8c.1698509078.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231023093153.6748-1-xingxing.luo@unisoc.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Xingxing,
+cat_printf() re-implements what the seq_buf API does.
+So, switch to the seq_buf API to save some line of code.
 
-kernel test robot noticed the following build errors:
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+seq_buf_printf(&buf, ", "); could be seq_buf_puts(), but the result could
+be slightly different. So I kept a conservative approach.
 
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.6-rc7 next-20231027]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+If only some seq_buf_printf() are used, the final seq_buf_terminate() can
+be avoided, but I think it is cleaner with it.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Xingxing-Luo/usb-musb-Check-requset-buf-before-use-to-avoid-crash-issue/20231023-173938
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20231023093153.6748-1-xingxing.luo%40unisoc.com
-patch subject: [PATCH] usb: musb: Check requset->buf before use to avoid crash issue
-config: arm-davinci_all_defconfig (https://download.01.org/0day-ci/archive/20231028/202310282331.d4wx1Z6b-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231028/202310282331.d4wx1Z6b-lkp@intel.com/reproduce)
+Changes in v2:
+   - compile tested with DWC2_PRINT_SCHEDULE defined
+   - Fix some built issues
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310282331.d4wx1Z6b-lkp@intel.com/
+v1: https://lore.kernel.org/all/4c8b71efe4fe05ed0cc37f33ef774746d4d55299.1698489641.git.christophe.jaillet@wanadoo.fr/
+---
+ drivers/usb/dwc2/hcd_queue.c | 53 ++++++++----------------------------
+ 1 file changed, 11 insertions(+), 42 deletions(-)
 
-All errors (new ones prefixed by >>):
-
->> drivers/usb/musb/musb_gadget_ep0.c:534:7: error: use of undeclared identifier 'requset'; did you mean 'request'?
-     534 |         if (!requset->buf) {
-         |              ^~~~~~~
-         |              request
-   drivers/usb/musb/musb_gadget_ep0.c:521:22: note: 'request' declared here
-     521 |         struct usb_request      *request;
-         |                                  ^
-   1 error generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for PINCTRL_SINGLE
-   Depends on [n]: PINCTRL [=n] && OF [=y] && HAS_IOMEM [=y]
-   Selected by [y]:
-   - ARCH_DAVINCI [=y] && ARCH_MULTI_V5 [=y] && CPU_LITTLE_ENDIAN [=y]
-
-
-vim +534 drivers/usb/musb/musb_gadget_ep0.c
-
-   510	
-   511	/*
-   512	 * transmitting to the host (IN), this code might be called from IRQ
-   513	 * and from kernel thread.
-   514	 *
-   515	 * Context:  caller holds controller lock
-   516	 */
-   517	static void ep0_txstate(struct musb *musb)
-   518	{
-   519		void __iomem		*regs = musb->control_ep->regs;
-   520		struct musb_request	*req = next_ep0_request(musb);
-   521		struct usb_request	*request;
-   522		u16			csr = MUSB_CSR0_TXPKTRDY;
-   523		u8			*fifo_src;
-   524		u8			fifo_count;
-   525	
-   526		if (!req) {
-   527			/* WARN_ON(1); */
-   528			musb_dbg(musb, "odd; csr0 %04x", musb_readw(regs, MUSB_CSR0));
-   529			return;
-   530		}
-   531	
-   532		request = &req->request;
-   533	
- > 534		if (!requset->buf) {
-   535			musb_dbg(musb, "request->buf is NULL");
-   536			return;
-   537		}
-   538	
-   539		/* load the data */
-   540		fifo_src = (u8 *) request->buf + request->actual;
-   541		fifo_count = min((unsigned) MUSB_EP0_FIFOSIZE,
-   542			request->length - request->actual);
-   543		musb_write_fifo(&musb->endpoints[0], fifo_count, fifo_src);
-   544		request->actual += fifo_count;
-   545	
-   546		/* update the flags */
-   547		if (fifo_count < MUSB_MAX_END0_PACKET
-   548				|| (request->actual == request->length
-   549					&& !request->zero)) {
-   550			musb->ep0_state = MUSB_EP0_STAGE_STATUSOUT;
-   551			csr |= MUSB_CSR0_P_DATAEND;
-   552		} else
-   553			request = NULL;
-   554	
-   555		/* report completions as soon as the fifo's loaded; there's no
-   556		 * win in waiting till this last packet gets acked.  (other than
-   557		 * very precise fault reporting, needed by USB TMC; possible with
-   558		 * this hardware, but not usable from portable gadget drivers.)
-   559		 */
-   560		if (request) {
-   561			musb->ackpend = csr;
-   562			musb_g_ep0_giveback(musb, request);
-   563			if (!musb->ackpend)
-   564				return;
-   565			musb->ackpend = 0;
-   566		}
-   567	
-   568		/* send it out, triggering a "txpktrdy cleared" irq */
-   569		musb_ep_select(musb->mregs, 0);
-   570		musb_writew(regs, MUSB_CSR0, csr);
-   571	}
-   572	
-
+diff --git a/drivers/usb/dwc2/hcd_queue.c b/drivers/usb/dwc2/hcd_queue.c
+index 0d4495c6b9f7..4edb87c4247c 100644
+--- a/drivers/usb/dwc2/hcd_queue.c
++++ b/drivers/usb/dwc2/hcd_queue.c
+@@ -18,6 +18,7 @@
+ #include <linux/io.h>
+ #include <linux/slab.h>
+ #include <linux/usb.h>
++#include <linux/seq_buf.h>
+ 
+ #include <linux/usb/hcd.h>
+ #include <linux/usb/ch11.h>
+@@ -359,41 +360,6 @@ static unsigned long *dwc2_get_ls_map(struct dwc2_hsotg *hsotg,
+ }
+ 
+ #ifdef DWC2_PRINT_SCHEDULE
+-/*
+- * cat_printf() - A printf() + strcat() helper
+- *
+- * This is useful for concatenating a bunch of strings where each string is
+- * constructed using printf.
+- *
+- * @buf:   The destination buffer; will be updated to point after the printed
+- *         data.
+- * @size:  The number of bytes in the buffer (includes space for '\0').
+- * @fmt:   The format for printf.
+- * @...:   The args for printf.
+- */
+-static __printf(3, 4)
+-void cat_printf(char **buf, size_t *size, const char *fmt, ...)
+-{
+-	va_list args;
+-	int i;
+-
+-	if (*size == 0)
+-		return;
+-
+-	va_start(args, fmt);
+-	i = vsnprintf(*buf, *size, fmt, args);
+-	va_end(args);
+-
+-	if (i >= *size) {
+-		(*buf)[*size - 1] = '\0';
+-		*buf += *size;
+-		*size = 0;
+-	} else {
+-		*buf += i;
+-		*size -= i;
+-	}
+-}
+-
+ /*
+  * pmap_print() - Print the given periodic map
+  *
+@@ -417,8 +383,7 @@ static void pmap_print(unsigned long *map, int bits_per_period,
+ 
+ 	for (period = 0; period < periods_in_map; period++) {
+ 		char tmp[64];
+-		char *buf = tmp;
+-		size_t buf_size = sizeof(tmp);
++		struct seq_buf s;
+ 		int period_start = period * bits_per_period;
+ 		int period_end = period_start + bits_per_period;
+ 		int start = 0;
+@@ -426,6 +391,8 @@ static void pmap_print(unsigned long *map, int bits_per_period,
+ 		bool printed = false;
+ 		int i;
+ 
++		seq_buf_init(&s, tmp, sizeof(tmp));
++
+ 		for (i = period_start; i < period_end + 1; i++) {
+ 			/* Handle case when ith bit is set */
+ 			if (i < period_end &&
+@@ -442,17 +409,19 @@ static void pmap_print(unsigned long *map, int bits_per_period,
+ 				continue;
+ 
+ 			if (!printed)
+-				cat_printf(&buf, &buf_size, "%s %d: ",
+-					   period_name, period);
++				seq_buf_printf(&s, "%s %d: ", period_name,
++					       period);
+ 			else
+-				cat_printf(&buf, &buf_size, ", ");
++				seq_buf_printf(&s, ", ");
+ 			printed = true;
+ 
+-			cat_printf(&buf, &buf_size, "%d %s -%3d %s", start,
+-				   units, start + count - 1, units);
++			seq_buf_printf(&s, "%d %s -%3d %s", start, units,
++				       start + count - 1, units);
+ 			count = 0;
+ 		}
+ 
++		seq_buf_terminate(&s);
++
+ 		if (printed)
+ 			print_fn(tmp, print_data);
+ 	}
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
 
