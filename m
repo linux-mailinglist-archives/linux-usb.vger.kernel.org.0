@@ -1,193 +1,109 @@
-Return-Path: <linux-usb+bounces-2315-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2316-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B389C7DA6A8
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Oct 2023 13:10:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 876C07DA6B0
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Oct 2023 13:20:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0D3B0B213C1
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Oct 2023 11:10:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AF8561C20A23
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Oct 2023 11:20:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEA75FC1D;
-	Sat, 28 Oct 2023 11:10:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26C8610A08;
+	Sat, 28 Oct 2023 11:20:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SvYoWMez"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8804BA3A
-	for <linux-usb@vger.kernel.org>; Sat, 28 Oct 2023 11:10:43 +0000 (UTC)
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F0BB4
-	for <linux-usb@vger.kernel.org>; Sat, 28 Oct 2023 04:10:40 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1qwhD6-0003DP-FG; Sat, 28 Oct 2023 13:10:32 +0200
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1qwhD4-004qpF-Qf; Sat, 28 Oct 2023 13:10:30 +0200
-Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.94.2)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1qwhD4-00DGx5-H7; Sat, 28 Oct 2023 13:10:30 +0200
-Date: Sat, 28 Oct 2023 13:10:30 +0200
-From: Michael Grzeschik <mgr@pengutronix.de>
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Jayant Chowdhary <jchowdhary@google.com>, Thinh.Nguyen@synopsys.com,
-	arakesh@google.com, etalvala@google.com,
-	dan.scally@ideasonboard.com, gregkh@linuxfoundation.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2] usb:gadget:uvc Do not use worker thread to pump usb
- requests
-Message-ID: <ZTzsJo1/NPVTLCnY@pengutronix.de>
-References: <ZToOJhyOFeGCGUFj@pengutronix.de>
- <20231026215635.2478767-1-jchowdhary@google.com>
- <20231027075117.GJ26306@pendragon.ideasonboard.com>
- <ZTuanepgXLXRoSMW@pengutronix.de>
- <20231027114752.GB12144@pendragon.ideasonboard.com>
- <ZTu9oEw1QEOxbHCf@pengutronix.de>
- <7c30f943-aaad-47dd-9ae3-02f1ca57e49b@rowland.harvard.edu>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 689C4B65D
+	for <linux-usb@vger.kernel.org>; Sat, 28 Oct 2023 11:20:52 +0000 (UTC)
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C297AD9
+	for <linux-usb@vger.kernel.org>; Sat, 28 Oct 2023 04:20:50 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2c50906f941so42794561fa.2
+        for <linux-usb@vger.kernel.org>; Sat, 28 Oct 2023 04:20:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1698492049; x=1699096849; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gAck/6qKWDraen+tV31UeIYbVIAWhijiSU82fYtGfdA=;
+        b=SvYoWMezJFVeM2YhLUHboH9WRDzdKQNCVDOnU78ZiHIwatQonk2LpkcYYSeDLUBswm
+         sjCbveO+zlpGCHSLLUTjYuO2ZUUHkn5CvZeEr4uzfkt9/ZZVs0YA+dysyok125A5U+ip
+         fnZ3wDGGGqc+k5AHTiyEXSX9VOclBxMsVQM2F+OpdYewOM9IjtHpFQ9csi9GkeHjwqLW
+         RGbcAwYq/xp8IXbwlaCqkuyFfbDO7lH21LrPt3aNqRrN6KwU3QiEI50x6GW38J0JukRW
+         yLw6z4k1n1+d1sAcCwo+Pj6fj1HKUh3eT9hMIFnZcj6tH64YeuaGUDkBAc4bGIu888Xd
+         z4NQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698492049; x=1699096849;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gAck/6qKWDraen+tV31UeIYbVIAWhijiSU82fYtGfdA=;
+        b=eRW+oL/LEwLD8W61uDzxa0H1v91MTfg+LXvNWbnh0fjcINNHjh23YdHaOzgU0mJzW6
+         TlAWYatVBSF8pLLff7RAo65Tv1FIxziYHHcoSBVpT3lrTld38YaajBj6OdnYNOT8jww3
+         uusL+fvIUMbP+TngIu7K5RMW6eebMqiPpbmwXCTK4h6aHvFe6rezT55KvK3c+oCUs/cQ
+         /dPCdzTKuX4XDSrf2bO6OMu3t/sFVXsIfo5tf43WbXzWOi51teXT1LMjiJ3h5ZZWSue4
+         LUQIvJ1RDgc05pw5mmOK8UpqMYcuAKrIuI6vAgE4+/UtKXEQuloknHhimxr26zzryV59
+         tgCA==
+X-Gm-Message-State: AOJu0YwVZ1i6l7hRQ2tdumoXmqKvTIQmsNIe8yuMNLmKWeZeSKSCRRsm
+	QLU07bjK4iAA+1t5m9MvTLE=
+X-Google-Smtp-Source: AGHT+IG9fkF3rQlbUrbAtXRWCaq20nPyu4oSngW4d9oASqn1SrKnRSrQbFsCsZ7Kba1vXgVGg5hGVw==
+X-Received: by 2002:a05:651c:1032:b0:2be:54b4:ff90 with SMTP id w18-20020a05651c103200b002be54b4ff90mr3841957ljm.53.1698492048694;
+        Sat, 28 Oct 2023 04:20:48 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:4c14:9c00::188? (dltml4yyyyyyyyyyyyhfy-3.rev.dnainternet.fi. [2001:14ba:4c14:9c00::188])
+        by smtp.gmail.com with ESMTPSA id y28-20020a2e545c000000b002b657f10b78sm634531ljd.58.2023.10.28.04.20.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 28 Oct 2023 04:20:48 -0700 (PDT)
+Message-ID: <fc65171d-ce06-44cd-860b-8425ec066f0d@gmail.com>
+Date: Sat, 28 Oct 2023 14:20:47 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="yfFlOpHlyGVJvKC0"
-Content-Disposition: inline
-In-Reply-To: <7c30f943-aaad-47dd-9ae3-02f1ca57e49b@rowland.harvard.edu>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: storage: set 1.50 as the lower bcdDevice for older
+ "Super Top" compatibility
+Content-Language: en-US
+To: Bagas Sanjaya <bagasdotme@gmail.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Linux USB <linux-usb@vger.kernel.org>
+References: <ZTsR-RhhjxSpqrsz@debian.me>
+ <055de764-c422-4c22-a79b-dd4db56122ce@gmail.com>
+ <2023102704-stable-lid-c86a@gregkh>
+ <7484f7c8-a49c-4111-83f0-bb6db2906fae@gmail.com>
+ <2023102729-spent-ninja-7e39@gregkh>
+ <037e5af2-3afd-4a37-a4d7-6dc87af605c7@gmail.com>
+ <21c2b8ee-7753-413e-98f9-d1401edf5c73@gmail.com>
+ <2023102720-emotion-overlying-9bb4@gregkh>
+ <ccf7d12a-8362-4916-b3e0-f4150f54affd@gmail.com> <ZTyyDXYR4f6WKdLM@debian.me>
+ <2023102848-esteemed-reptile-851f@gregkh>
+ <68ad3c1c-bc5b-4dd5-9183-202d8b04b45f@gmail.com>
+From: LihaSika <lihasika@gmail.com>
+In-Reply-To: <68ad3c1c-bc5b-4dd5-9183-202d8b04b45f@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-
---yfFlOpHlyGVJvKC0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Fri, Oct 27, 2023 at 10:58:11AM -0400, Alan Stern wrote:
->On Fri, Oct 27, 2023 at 03:39:44PM +0200, Michael Grzeschik wrote:
->> On Fri, Oct 27, 2023 at 02:47:52PM +0300, Laurent Pinchart wrote:
->> > On Fri, Oct 27, 2023 at 01:10:21PM +0200, Michael Grzeschik wrote:
->> > > On Fri, Oct 27, 2023 at 10:51:17AM +0300, Laurent Pinchart wrote:
->> > > > On Thu, Oct 26, 2023 at 09:56:35PM +0000, Jayant Chowdhary wrote:
->> > > >> This patch is based on top of
->> > > >> https://lore.kernel.org/linux-usb/20230930184821.310143-1-arakesh=
-@google.com/T/#t:
->> > > >>
->> > > >> When we use an async work queue to perform the function of pumping
->> > > >> usb requests to the usb controller, it is possible that thread sc=
-heduling
->> > > >> affects at what cadence we're able to pump requests. This could m=
-ean usb
->> > > >> requests miss their uframes - resulting in video stream flickers =
-on the host
->> > > >> device.
->> > > >>
->> > > >> In this patch, we move the pumping of usb requests to
->> > > >> 1) uvcg_video_complete() complete handler for both isoc + bulk
->> > > >>    endpoints. We still send 0 length requests when there is no uv=
-c buffer
->> > > >>    available to encode.
->> > > >
->> > > > This means you will end up copying large amounts of data in interr=
-upt
->> > > > context. The work queue was there to avoid exactly that, as it will
->> > > > introduce delays that can affect other parts of the system. I thin=
-k this
->> > > > is a problem.
->> > >
->> > > Regarding Thin's argument about possible scheduling latency that is =
-already
->> > > introducing real errors, this seemed like a good solution.
->> > >
->> > > But sure, this potential latency introduced in the interrupt context=
- can
->> > > trigger other side effects.
->> > >
->> > > However I think we need some compromise since both arguments are ver=
-y valid.
->> >
->> > Agreed.
->> >
->> > > Any ideas, how to solve this?
->> >
->> > I'm afraid not.
+On 28.10.2023 14.05, Bagas Sanjaya wrote:
+> On 28/10/2023 17:23, Greg Kroah-Hartman wrote:
 >>
->> We discussed this and came to the conclusion that we could make use of
->> kthread_create and sched_setattr with an attr->sched_policy =3D SCHED_DE=
-ADLINE
->> here instead of the workqueue. This way we would ensure that the worker
->> would be triggered with hard definitions.
+>> There's no need, I can take this as-is, thanks.
 >>
->> Since the SG case is not that heavy on the completion handler, we could
->> also make this kthread conditionaly to the memcpy case.
->
->If you don't mind a naive suggestion from someone who knows nothing
->about the driver...
->
->An attractive possibility is to have the work queue (or kthread) do the
->time-consuming copying, but leave the submission up to the completion
->handler.  If the data isn't ready (or there's no data to send) when the
->handler runs, then queue a 0-length request.
->
->That will give you the best of both worlds: low latency while in
->interrupt context and a steady, constant flow of USB transfers at all
->times.  The question of how to schedule the work queue or kthread is a
->separate matter, not directly relevant to this design decision.
+> 
+> OK, thanks!
+> 
 
-That's it. This is probably the best way to tackle the overall problem.
+Thank you all 🙏
 
-So we leave the call of the encode callback to the worker, that will
-probably still can be a workqueue. The complete callback is calling
-the explicit uvcg_video_ep_queue when prepared requests are available
-and if there is nothing pending it will just enqueue zero requests.
+I will use git mail if I ever have any more to contribute in the future, thanks for all the advice 👍
 
-Thank you Alan, this makes so much sense!
+Have a nice weekend!
 
-Jayant, Laurent: Do you agree?
-If yes, Jayant will you change the patch accordingly?
-
-Michael
-
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
---yfFlOpHlyGVJvKC0
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmU87CMACgkQC+njFXoe
-LGRoCA/+PcBaIiaI6W358Cq6K6VRpLwqjM61/4QAOhPVk2ZDh2FaERuOu+dBudkn
-/74Gt5JP6x91HRNHiuq8I58rOTaxJPFu89nN2pOnuHr2/0BFE2UavYxbzRDmaXDt
-2G8dg0Ak5vtZq1JYa546WigQaEDnwkBVzvG2zqwGvAqb8YK/beojbwWivjFYUPLe
-cYSP/75aORzfSu6Vhqv1gWh/5alqzXEunbpucGKE4XfmGfNRT6d5Yd9hQbLJttZ1
-PH4eaTMAj7b+sb4Nmevwg/lKPPA/3ca/btrgjS+mmFGXHodr480ScehkdKCE59FQ
-ISrFHT8jljBLsO0uKGU3be6LiNjECbONGkCB/1E/rgJutwRBfhyoAuQNzu7k6/f7
-KrEd0hN2h4N1XICt/oFVF4kKuOmoEnrdrxE5v7PwML9KRhJ8z9cPu/Qeo9Et8N0F
-tUM63AIkUveHT5FMFuJlhcFAr7hxIf0XcPF2ML6Cxby089sOL9UOi3ME2Y8gNsD3
-+p/+eZuqURHqj64gtOZQA+yzuLmt9VE0dNn6WfppigYkyjH50UHO81sZEG8cGPvw
-gq4bM6tur2KaNEEqbbDZ68p44btabC6vTop7x5ERaPWDJSKYM5QcI5awrWoW8a6F
-mkPgjVhYv5Rgtr8adEOIqjvJtFZRs/xvhZ6v0eSk42izRqJXLUQ=
-=D4gP
------END PGP SIGNATURE-----
-
---yfFlOpHlyGVJvKC0--
+BR,
+Liha
 
