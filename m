@@ -1,177 +1,133 @@
-Return-Path: <linux-usb+bounces-2313-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2314-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D8D87DA68B
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Oct 2023 12:41:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0425A7DA69F
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Oct 2023 13:06:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3EE5F1C20D5F
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Oct 2023 10:41:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ABA3D28166E
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Oct 2023 11:06:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 709C4DF51;
-	Sat, 28 Oct 2023 10:41:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58CC5FBFC;
+	Sat, 28 Oct 2023 11:06:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="d0lOpQhB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FF8Kul9k"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEAF69471
-	for <linux-usb@vger.kernel.org>; Sat, 28 Oct 2023 10:41:23 +0000 (UTC)
-Received: from smtp.smtpout.orange.fr (smtp-14.smtpout.orange.fr [80.12.242.14])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 924A1F3
-	for <linux-usb@vger.kernel.org>; Sat, 28 Oct 2023 03:41:20 -0700 (PDT)
-Received: from pop-os.home ([86.243.2.178])
-	by smtp.orange.fr with ESMTPA
-	id wgkmq33su5fs2wgkmqHoZ5; Sat, 28 Oct 2023 12:41:17 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1698489678;
-	bh=Hvnsw6tiEqX0nnVX9A8IeBCG+0I6cphWZAOIfJoabhA=;
-	h=From:To:Cc:Subject:Date;
-	b=d0lOpQhBtwL2y5sCjIptt+P+dH2W6OPXgmaBfxhjpgB8MqUnVnn/KWR9ueM0kfAma
-	 ZYdNUuU4iApkxoAgDvQE9DDP3T+MITcL0K8W8GOdSGU8Iz2ibQEpc4ukqqRddj2CPU
-	 6CvrakjWoA44h+vaYBzI1Scyzvb0Qos5Iq721fJ5hQ7Q6u8gne0uHcVVrxydHKXk1k
-	 DIpjeCF08FrIokT4r1lY8t+NEDWJG1looGecBU/Mel8oQR2uR8xSlcros1L5IWt3Di
-	 63J7VtM6hp1q3Sc/JCqZXowF2JZsOgggNGL0hYHNfVL3eBc+R7LkGnFVvnn38awb2D
-	 BxAkdtkcl1Tug==
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 28 Oct 2023 12:41:18 +0200
-X-ME-IP: 86.243.2.178
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To: Minas Harutyunyan <hminas@synopsys.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	linux-usb@vger.kernel.org
-Subject: [PATCH] usb: dwc2: Use seq_buf instead of hand writing it
-Date: Sat, 28 Oct 2023 12:41:02 +0200
-Message-Id: <4c8b71efe4fe05ed0cc37f33ef774746d4d55299.1698489641.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 435FE1391
+	for <linux-usb@vger.kernel.org>; Sat, 28 Oct 2023 11:06:08 +0000 (UTC)
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15753B4;
+	Sat, 28 Oct 2023 04:06:07 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id 41be03b00d2f7-564b6276941so2408760a12.3;
+        Sat, 28 Oct 2023 04:06:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1698491166; x=1699095966; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TtYtgyOM9UtFee+JFxK1SBHozQSbcJd7lO6xgsYMlqs=;
+        b=FF8Kul9kYeTGNBzg9Thx52tM3b3B5I3vzCWqDHtfMFDuUbOLVW7NArAYOs0WRqXJCH
+         RnC57G4T7Pi2jzesXTXRjmGKAV+GMbyPrcT56FGV+x1F5Udxia5XG4mWav2wUryMxHvC
+         sXx1QAtCnD42Qp795++g9gzWCH40SgNNxA7Uyr0qz9E60D8xFD+GNpgHJo7pDYmfqGEk
+         8KlK72iN/lzcnhDvRYqHcaxIhZsGdeSj3hRy+72s5E3o5I4ynvYobB+nRNiBgVVXoBjx
+         3fzI4ag/07kRjuswCYzkRfJrY1Krtozd440QAGh3KpHpzLPx7lCgt9VrK5lIRd18i++q
+         EMNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698491166; x=1699095966;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TtYtgyOM9UtFee+JFxK1SBHozQSbcJd7lO6xgsYMlqs=;
+        b=W6eHAyKh8kAVD8thM6QoR2ct2wgq2pXRkkZaWxIjRFlpf12X/jj6U2TOwUjGC1me4a
+         uD1AykBAWh4i13wWKw88KODJyD7We4YXy0+2W7eUuFUsE4+YpyKrHUi2P/n/hcJeMmqH
+         0YJWnbrf76+bsJ3wCPFHyDOL4pmCtKPldu4FcJ4Bribj2HzbYTcsC+ZoHm2Hi/YOFDzs
+         2ASaKVLL37znO/jf+nKEAAsd2MwFO6RbtXS9ySnrTjbbDGXfpZQcQcqKxYcq+oMc8Dze
+         V7Lg7sYy+3Sx3/oWAjZSMOzTxarftIVAelyKaGQvMFBGCSDnJN1WXwAz7G8B8pG/CB28
+         f6vg==
+X-Gm-Message-State: AOJu0YyEm1tcus7MZsnvJ6/iDXtTORWxanN55BCPNNuST5kFOs+5qN5r
+	UA0dykhMABOqnwXnNxL3p2M=
+X-Google-Smtp-Source: AGHT+IHJITxpOSrEzugXRqz4MUXI5stA8yntxtM6zq/Z8aAygi7sn+DbIkgrJI5A5auo3ycqd3M6rA==
+X-Received: by 2002:a05:6a20:4323:b0:17b:9d92:7d0 with SMTP id h35-20020a056a20432300b0017b9d9207d0mr6723863pzk.52.1698491166458;
+        Sat, 28 Oct 2023 04:06:06 -0700 (PDT)
+Received: from [192.168.0.106] ([103.131.18.64])
+        by smtp.gmail.com with ESMTPSA id fa41-20020a056a002d2900b006bf536bcd23sm2781936pfb.161.2023.10.28.04.05.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 28 Oct 2023 04:06:05 -0700 (PDT)
+Message-ID: <68ad3c1c-bc5b-4dd5-9183-202d8b04b45f@gmail.com>
+Date: Sat, 28 Oct 2023 18:05:44 +0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: storage: set 1.50 as the lower bcdDevice for older
+ "Super Top" compatibility
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: LihaSika <lihasika@gmail.com>, Linux USB <linux-usb@vger.kernel.org>,
+ Linux USB Storage <usb-storage@lists.one-eyed-alien.net>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Alan Stern <stern@rowland.harvard.edu>,
+ Milan Svoboda <milan.svoboda@centrum.cz>,
+ Matthieu Castet <castet.matthieu@free.fr>
+References: <ZTsR-RhhjxSpqrsz@debian.me>
+ <055de764-c422-4c22-a79b-dd4db56122ce@gmail.com>
+ <2023102704-stable-lid-c86a@gregkh>
+ <7484f7c8-a49c-4111-83f0-bb6db2906fae@gmail.com>
+ <2023102729-spent-ninja-7e39@gregkh>
+ <037e5af2-3afd-4a37-a4d7-6dc87af605c7@gmail.com>
+ <21c2b8ee-7753-413e-98f9-d1401edf5c73@gmail.com>
+ <2023102720-emotion-overlying-9bb4@gregkh>
+ <ccf7d12a-8362-4916-b3e0-f4150f54affd@gmail.com> <ZTyyDXYR4f6WKdLM@debian.me>
+ <2023102848-esteemed-reptile-851f@gregkh>
+Content-Language: en-US
+From: Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <2023102848-esteemed-reptile-851f@gregkh>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-cat_printf() re-implements what the seq_buf API does.
-So, switch to the seq_buf API to save some line of code.
+On 28/10/2023 17:23, Greg Kroah-Hartman wrote:
+> On Sat, Oct 28, 2023 at 02:02:37PM +0700, Bagas Sanjaya wrote:
+>> On Fri, Oct 27, 2023 at 08:28:04PM +0300, LihaSika wrote:
+>>> Change lower bcdDevice value for "Super Top USB 2.0  SATA BRIDGE" to match
+>>> 1.50. I have such an older device with bcdDevice=1.50 and it will not work
+>>> otherwise.
+>>
+>> What about below description?
+>>
+>> ```
+>> Some old USB hard drives using Super Top USB 2.0 SATA bridge have lower
+>> minimum bcdDevice value than currently allowed (1.60). Such devices
+>> cannot be used by ums-cypress driver since their bcdDevice is out of range.
+>>
+>> Lower minimum bcdDevice to fix that. 
+>> ```
+>>
+>>>
+>>> Cc: stable@vger.kernel.org
+>>> Signed-off-by: Liha Sikanen <lihasika@gmail.com>
+>>
+>> Is your intended author name in your From: header or Signed-off-by: trailer?
+>>
+>> Also, don't forget to add Fixes: tag; that is:
+>>
+>> Fixes: a9c143c82608 ("usb-storage: restrict bcdDevice range for Super Top in Cypress ATACB")
+>>
+>> When above reviews are addressed, resend as v2. Make sure that the patch
+>> subject begins with `[PATCH v2]`.
+> 
+> There's no need, I can take this as-is, thanks.
+> 
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-seq_buf_printf(&buf, ", "); could be seq_buf_puts(), but the result could
-be slightly different. So I kept a conservative approach.
+OK, thanks!
 
-If only some seq_buf_printf() are used, the final seq_buf_terminate() can
-be avoided, but I think it is cleaner with it.
----
- drivers/usb/dwc2/hcd_queue.c | 53 ++++++++----------------------------
- 1 file changed, 11 insertions(+), 42 deletions(-)
-
-diff --git a/drivers/usb/dwc2/hcd_queue.c b/drivers/usb/dwc2/hcd_queue.c
-index 0d4495c6b9f7..66fb74a70bdd 100644
---- a/drivers/usb/dwc2/hcd_queue.c
-+++ b/drivers/usb/dwc2/hcd_queue.c
-@@ -18,6 +18,7 @@
- #include <linux/io.h>
- #include <linux/slab.h>
- #include <linux/usb.h>
-+#include <linux/seq_buf.h>
- 
- #include <linux/usb/hcd.h>
- #include <linux/usb/ch11.h>
-@@ -359,41 +360,6 @@ static unsigned long *dwc2_get_ls_map(struct dwc2_hsotg *hsotg,
- }
- 
- #ifdef DWC2_PRINT_SCHEDULE
--/*
-- * cat_printf() - A printf() + strcat() helper
-- *
-- * This is useful for concatenating a bunch of strings where each string is
-- * constructed using printf.
-- *
-- * @buf:   The destination buffer; will be updated to point after the printed
-- *         data.
-- * @size:  The number of bytes in the buffer (includes space for '\0').
-- * @fmt:   The format for printf.
-- * @...:   The args for printf.
-- */
--static __printf(3, 4)
--void cat_printf(char **buf, size_t *size, const char *fmt, ...)
--{
--	va_list args;
--	int i;
--
--	if (*size == 0)
--		return;
--
--	va_start(args, fmt);
--	i = vsnprintf(*buf, *size, fmt, args);
--	va_end(args);
--
--	if (i >= *size) {
--		(*buf)[*size - 1] = '\0';
--		*buf += *size;
--		*size = 0;
--	} else {
--		*buf += i;
--		*size -= i;
--	}
--}
--
- /*
-  * pmap_print() - Print the given periodic map
-  *
-@@ -417,8 +383,7 @@ static void pmap_print(unsigned long *map, int bits_per_period,
- 
- 	for (period = 0; period < periods_in_map; period++) {
- 		char tmp[64];
--		char *buf = tmp;
--		size_t buf_size = sizeof(tmp);
-+		struct seq_buf buf;
- 		int period_start = period * bits_per_period;
- 		int period_end = period_start + bits_per_period;
- 		int start = 0;
-@@ -426,6 +391,8 @@ static void pmap_print(unsigned long *map, int bits_per_period,
- 		bool printed = false;
- 		int i;
- 
-+		seq_buf_init((&s, tmp, sizeof(tmp));
-+
- 		for (i = period_start; i < period_end + 1; i++) {
- 			/* Handle case when ith bit is set */
- 			if (i < period_end &&
-@@ -442,17 +409,19 @@ static void pmap_print(unsigned long *map, int bits_per_period,
- 				continue;
- 
- 			if (!printed)
--				cat_printf(&buf, &buf_size, "%s %d: ",
--					   period_name, period);
-+				seq_buf_printf(&buf, "%s %d: ", period_name,
-+					       period);
- 			else
--				cat_printf(&buf, &buf_size, ", ");
-+				seq_buf_printf(&buf, ", ");
- 			printed = true;
- 
--			cat_printf(&buf, &buf_size, "%d %s -%3d %s", start,
--				   units, start + count - 1, units);
-+			seq_buf_printf(&buf, "%d %s -%3d %s", start, units,
-+				       start + count - 1, units);
- 			count = 0;
- 		}
- 
-+		seq_buf_terminate(&s);
-+
- 		if (printed)
- 			print_fn(tmp, print_data);
- 	}
 -- 
-2.34.1
+An old man doll... just what I always wanted! - Clara
 
 
