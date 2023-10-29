@@ -1,446 +1,245 @@
-Return-Path: <linux-usb+bounces-2324-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2325-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 833BE7DA95E
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Oct 2023 22:57:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 869A87DAC72
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Oct 2023 13:31:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 59723B20F4A
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Oct 2023 20:57:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 21077B20E32
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Oct 2023 12:31:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DD6BDF59;
-	Sat, 28 Oct 2023 20:57:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A8CBCA6D;
+	Sun, 29 Oct 2023 12:31:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="b+EUUdaJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DOjofjxf"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E245944B
-	for <linux-usb@vger.kernel.org>; Sat, 28 Oct 2023 20:56:59 +0000 (UTC)
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 063C9D9;
-	Sat, 28 Oct 2023 13:56:57 -0700 (PDT)
-Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id CD20E57E;
-	Sat, 28 Oct 2023 22:56:40 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1698526601;
-	bh=NreKPz61KKNY6eNPhgItZEV6/D6VH6FfuYh7jZM12Vs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=b+EUUdaJw/ETP34+PDKTarGqJNmnnatVWjYoTjyqvEhLkkdoihpthN17GihKycwGe
-	 1eWUtI6Att+wF09wjbWBlsoJdkqiaOu0YoXQfYMay+e1AjPzqzYpwFtMoQeN62McfR
-	 u/I6w3cCvK06KCC6rpsW0M9EiBxWF/BK43f7SpIU=
-Message-ID: <6d7b5ba5-9037-4a3e-a6b0-6b4ad6c8700a@ideasonboard.com>
-Date: Sat, 28 Oct 2023 21:56:51 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4E98B66B
+	for <linux-usb@vger.kernel.org>; Sun, 29 Oct 2023 12:31:02 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87735C1
+	for <linux-usb@vger.kernel.org>; Sun, 29 Oct 2023 05:31:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1698582661; x=1730118661;
+  h=date:from:to:cc:subject:message-id;
+  bh=lF2q5f9UBJPN7aUSVY3WVukGCt+touKWtZdE2X5uIPI=;
+  b=DOjofjxfvjAcc+pXeyLV6NyUFY+6g8B+JfKblqL+rbhsvmUF4cNEeODp
+   /4SFF/5O21bJb3bli9FXmp7rjusYIIw3KwS/0EguEoQ23Qe/aa4GqGhl5
+   dMLX8yjVT5egnOughzypd19tvTHOrfqo+nc6/GqAIKJJbkCHSZUFAk7pp
+   7TSLeFXiO/5kboYmT7sG84Za6iL6Lyku5rZaC0TB3MJgEr9OQCmJyIWcl
+   AJlLUTk0Y+izr9R3w5OWeSPC1NxyZ0osTVyTEbGc6Gkgsq9kcFF5RgTkh
+   eqkOkm2KE3mcNOU+dMAIM7v11t/cW0ycR1cWj9WsIn+pUHXQmB+GIVRJL
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10877"; a="789102"
+X-IronPort-AV: E=Sophos;i="6.03,261,1694761200"; 
+   d="scan'208";a="789102"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2023 05:31:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.03,261,1694761200"; 
+   d="scan'208";a="8089524"
+Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 29 Oct 2023 05:30:44 -0700
+Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qx4wT-000CYl-1U;
+	Sun, 29 Oct 2023 12:30:57 +0000
+Date: Sun, 29 Oct 2023 20:29:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD REGRESSION
+ c70793fb7632a153862ee9060e6d48131469a29c
+Message-ID: <202310292054.LePXV8Vb-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 4/4] usb: gadget: uvc: Fix use-after-free for inflight
- usb_requests
-Content-Language: en-US
-To: Avichal Rakesh <arakesh@google.com>
-Cc: etalvala@google.com, gregkh@linuxfoundation.org, jchowdhary@google.com,
- laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, m.grzeschik@pengutronix.de
-References: <73309396-3856-43a2-9a6f-81a40ed594db@google.com>
- <20231027201959.1869181-1-arakesh@google.com>
- <20231027201959.1869181-4-arakesh@google.com>
-From: Dan Scally <dan.scally@ideasonboard.com>
-Autocrypt: addr=dan.scally@ideasonboard.com; keydata=
- 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
-In-Reply-To: <20231027201959.1869181-4-arakesh@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-Hi Avichal
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: c70793fb7632a153862ee9060e6d48131469a29c  usb: gadget: uvc: Add missing initialization of ssp config descriptor
 
-On 27/10/2023 21:19, Avichal Rakesh wrote:
-> Currently, the uvc gadget driver allocates all uvc_requests as one array
-> and deallocates them all when the video stream stops. This includes
-> de-allocating all the usb_requests associated with those uvc_requests.
-> This can lead to use-after-free issues if any of those de-allocated
-> usb_requests were still owned by the usb controller.
->
-> This is patch 2 of 2 in fixing the use-after-free issue. It adds a new
-> flag to uvc_video to track when frames and requests should be flowing.
-> When disabling the video stream, the flag is tripped and, instead
-> of de-allocating all uvc_requests and usb_requests, the gadget
-> driver only de-allocates those usb_requests that are currently
-> owned by it (as present in req_free). Other usb_requests are left
-> untouched until their completion handler is called which takes care
-> of freeing the usb_request and its corresponding uvc_request.
->
-> Now that uvc_video does not depends on uvc->state, this patch removes
-> unnecessary upates to uvc->state that were made to accommodate uvc_video
-> logic. This should ensure that uvc gadget driver never accidentally
-> de-allocates a usb_request that it doesn't own.
->
-> Link: https://lore.kernel.org/7cd81649-2795-45b6-8c10-b7df1055020d@google.com
-> Suggested-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-> Reviewed-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-> Tested-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
-> Signed-off-by: Avichal Rakesh <arakesh@google.com>
-> ---
-> v1 -> v2: Rebased to ToT, and fixed deadlock reported in
->            https://lore.kernel.org/all/ZRv2UnKztgyqk2pt@pengutronix.de/
-> v2 -> v3: Fix email threading goof-up
-> v3 -> v4: re-rebase to ToT & moved to a uvc_video level lock
->            as discussed in
->            https://lore.kernel.org/b14b296f-2e08-4edf-aeea-1c5b621e2d0c@google.com/
-> v4 -> v5: Address review comments. Add Reviewed-by & Tested-by.
-> v5 -> v6: Added another patch before this one to make uvcg_video_disable
->            easier to review.
-> v6 -> v7: Fix warning reported in
->            https://lore.kernel.org/202310200457.GwPPFuHX-lkp@intel.com/
-> v7 -> v8: No change. Getting back in review queue
-> v8 -> v9: No change.
->
->   drivers/usb/gadget/function/uvc.h       |   1 +
->   drivers/usb/gadget/function/uvc_v4l2.c  |  12 +--
->   drivers/usb/gadget/function/uvc_video.c | 128 ++++++++++++++++++++----
->   3 files changed, 111 insertions(+), 30 deletions(-)
->
-> diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
-> index 993694da0bbc..be0d012aa244 100644
-> --- a/drivers/usb/gadget/function/uvc.h
-> +++ b/drivers/usb/gadget/function/uvc.h
-> @@ -102,6 +102,7 @@ struct uvc_video {
->   	unsigned int uvc_num_requests;
->
->   	/* Requests */
-> +	bool is_enabled; /* tracks whether video stream is enabled */
->   	unsigned int req_size;
->   	struct list_head ureqs; /* all uvc_requests allocated by uvc_video */
->   	struct list_head req_free;
-> diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
-> index 904dd283cbf7..2f8634e05612 100644
-> --- a/drivers/usb/gadget/function/uvc_v4l2.c
-> +++ b/drivers/usb/gadget/function/uvc_v4l2.c
-> @@ -451,8 +451,8 @@ uvc_v4l2_streamon(struct file *file, void *fh, enum v4l2_buf_type type)
->   	 * Complete the alternate setting selection setup phase now that
->   	 * userspace is ready to provide video frames.
->   	 */
-> -	uvc_function_setup_continue(uvc, 0);
->   	uvc->state = UVC_STATE_STREAMING;
-> +	uvc_function_setup_continue(uvc, 0);
->
->   	return 0;
->   }
-> @@ -468,11 +468,11 @@ uvc_v4l2_streamoff(struct file *file, void *fh, enum v4l2_buf_type type)
->   	if (type != video->queue.queue.type)
->   		return -EINVAL;
->
-> -	uvc->state = UVC_STATE_CONNECTED;
->   	ret = uvcg_video_disable(video);
->   	if (ret < 0)
->   		return ret;
->
-> +	uvc->state = UVC_STATE_CONNECTED;
->   	uvc_function_setup_continue(uvc, 1);
->   	return 0;
->   }
+Error/Warning ids grouped by kconfigs:
 
+gcc_recent_errors
+`-- powerpc-klondike_defconfig
+    |-- arch-powerpc-lib-sstep.c:error:variable-rc-set-but-not-used
+    `-- arch-powerpc-lib-sstep.c:error:variable-suffix-set-but-not-used
 
-I'm not sure I understand what these re-orderings are for...can you explain please?
+elapsed time: 1547m
 
-> @@ -507,14 +507,6 @@ uvc_v4l2_subscribe_event(struct v4l2_fh *fh,
->   static void uvc_v4l2_disable(struct uvc_device *uvc)
->   {
->   	uvc_function_disconnect(uvc);
-> -	/*
-> -	 * Drop uvc->state to CONNECTED if it was streaming before.
-> -	 * This ensures that the usb_requests are no longer queued
-> -	 * to the controller.
-> -	 */
-> -	if (uvc->state == UVC_STATE_STREAMING)
-> -		uvc->state = UVC_STATE_CONNECTED;
-> -
->   	uvcg_video_disable(&uvc->video);
->   	uvcg_free_buffers(&uvc->video.queue);
->   	uvc->func_connected = false;
-> diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
-> index 1081dd790fd6..8f330ce696ec 100644
-> --- a/drivers/usb/gadget/function/uvc_video.c
-> +++ b/drivers/usb/gadget/function/uvc_video.c
-> @@ -227,6 +227,9 @@ uvc_video_encode_isoc(struct usb_request *req, struct uvc_video *video,
->    * Request handling
->    */
->
-> +/*
-> + * Must be called with req_lock held as it modifies the list ureq is held in
-> + */
+configs tested: 158
+configs skipped: 2
 
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                        nsim_700_defconfig   gcc  
+arc                   randconfig-001-20231028   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                        clps711x_defconfig   gcc  
+arm                                 defconfig   gcc  
+arm                      integrator_defconfig   gcc  
+arm                         orion5x_defconfig   clang
+arm                   randconfig-001-20231028   gcc  
+arm                        spear6xx_defconfig   gcc  
+arm64                            allmodconfig   clang
+arm64                            allmodconfig   gcc  
+arm64                             allnoconfig   gcc  
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+hexagon                          alldefconfig   clang
+i386         buildonly-randconfig-001-20231028   gcc  
+i386         buildonly-randconfig-002-20231028   gcc  
+i386         buildonly-randconfig-003-20231028   gcc  
+i386         buildonly-randconfig-004-20231028   gcc  
+i386         buildonly-randconfig-005-20231028   gcc  
+i386         buildonly-randconfig-006-20231028   gcc  
+i386                                defconfig   gcc  
+i386                  randconfig-001-20231028   gcc  
+i386                  randconfig-002-20231028   gcc  
+i386                  randconfig-003-20231028   gcc  
+i386                  randconfig-004-20231028   gcc  
+i386                  randconfig-005-20231028   gcc  
+i386                  randconfig-006-20231028   gcc  
+i386                  randconfig-011-20231028   gcc  
+i386                  randconfig-012-20231028   gcc  
+i386                  randconfig-013-20231028   gcc  
+i386                  randconfig-014-20231028   gcc  
+i386                  randconfig-015-20231028   gcc  
+i386                  randconfig-016-20231028   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                        allyesconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20231028   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                       m5475evb_defconfig   gcc  
+m68k                        stmark2_defconfig   gcc  
+m68k                          sun3x_defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                  cavium_octeon_defconfig   clang
+mips                     decstation_defconfig   gcc  
+mips                     loongson1b_defconfig   gcc  
+mips                           mtx1_defconfig   clang
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+openrisc                         allmodconfig   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   gcc  
+powerpc                   bluestone_defconfig   clang
+powerpc                       ebony_defconfig   clang
+powerpc                      katmai_defconfig   clang
+powerpc                    klondike_defconfig   gcc  
+powerpc                 mpc8313_rdb_defconfig   clang
+powerpc                 mpc8315_rdb_defconfig   clang
+powerpc                     tqm8548_defconfig   gcc  
+powerpc                     tqm8555_defconfig   gcc  
+powerpc                      walnut_defconfig   clang
+powerpc64                           defconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                 randconfig-001-20231028   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                              allnoconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                  randconfig-001-20231028   gcc  
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sh                         ecovec24_defconfig   gcc  
+sh                          rsk7269_defconfig   gcc  
+sh                           se7705_defconfig   gcc  
+sh                           se7724_defconfig   gcc  
+sh                           se7750_defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                 randconfig-001-20231028   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64       buildonly-randconfig-001-20231028   gcc  
+x86_64       buildonly-randconfig-002-20231028   gcc  
+x86_64       buildonly-randconfig-003-20231028   gcc  
+x86_64       buildonly-randconfig-004-20231028   gcc  
+x86_64       buildonly-randconfig-005-20231028   gcc  
+x86_64       buildonly-randconfig-006-20231028   gcc  
+x86_64                              defconfig   gcc  
+x86_64                randconfig-001-20231028   gcc  
+x86_64                randconfig-002-20231028   gcc  
+x86_64                randconfig-003-20231028   gcc  
+x86_64                randconfig-004-20231028   gcc  
+x86_64                randconfig-005-20231028   gcc  
+x86_64                randconfig-006-20231028   gcc  
+x86_64                randconfig-011-20231028   gcc  
+x86_64                randconfig-012-20231028   gcc  
+x86_64                randconfig-013-20231028   gcc  
+x86_64                randconfig-014-20231028   gcc  
+x86_64                randconfig-015-20231028   gcc  
+x86_64                randconfig-016-20231028   gcc  
+x86_64                randconfig-071-20231028   gcc  
+x86_64                randconfig-072-20231028   gcc  
+x86_64                randconfig-073-20231028   gcc  
+x86_64                randconfig-074-20231028   gcc  
+x86_64                randconfig-075-20231028   gcc  
+x86_64                randconfig-076-20231028   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
 
-
-This comment probably belongs in patch #2. And in that case, shouldn't uvc_video_free_requests() 
-hold the lock in that patch?
-
->   static void
->   uvc_video_free_request(struct uvc_request *ureq, struct usb_ep *ep)
->   {
-> @@ -271,9 +274,25 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
->   	struct uvc_request *ureq = req->context;
->   	struct uvc_video *video = ureq->video;
->   	struct uvc_video_queue *queue = &video->queue;
-> -	struct uvc_device *uvc = video->uvc;
-> +	struct uvc_buffer *last_buf = NULL;
->   	unsigned long flags;
->
-> +	spin_lock_irqsave(&video->req_lock, flags);
-> +	if (!video->is_enabled) {
-> +		/*
-> +		 * When is_enabled is false, uvc_video_disable ensures that
-s/uvc_video_disable/uvc_video_disable()
-> +		 * in-flight uvc_buffers are returned, so we can safely
-> +		 * call free_request without worrying about last_buf.
-> +		 */
-> +		uvc_video_free_request(ureq, ep);
-Now I understand the conditional in this function in patch 2 :)
-> +		spin_unlock_irqrestore(&video->req_lock, flags);
-> +		return;
-> +	}
-> +
-> +	last_buf = ureq->last_buf;
-> +	ureq->last_buf = NULL;
-> +	spin_unlock_irqrestore(&video->req_lock, flags);
-
-
-I'm not a huge fan of this locking, unlocking and relocking the same spinlock within the same 
-function. Can we just hold the lock for the duration? if not, can there be an explanatory comment as 
-to why?
-> +
->   	switch (req->status) {
->   	case 0:
->   		break;
-> @@ -295,17 +314,26 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
->   		uvcg_queue_cancel(queue, 0);
->   	}
->
-> -	if (ureq->last_buf) {
-> -		uvcg_complete_buffer(&video->queue, ureq->last_buf);
-> -		ureq->last_buf = NULL;
-> +	if (last_buf) {
-> +		spin_lock_irqsave(&queue->irqlock, flags);
-> +		uvcg_complete_buffer(&video->queue, last_buf);
-> +		spin_unlock_irqrestore(&queue->irqlock, flags);
-
-
-
-I think it's right to take the irqlock here but it probably should have always been held, so this 
-probably ought to go in its own commit with a Fixes:
-
->   	}
->
->   	spin_lock_irqsave(&video->req_lock, flags);
-> -	list_add_tail(&req->list, &video->req_free);
-> -	spin_unlock_irqrestore(&video->req_lock, flags);
-> -
-> -	if (uvc->state == UVC_STATE_STREAMING)
-> +	/*
-> +	 * Video stream might have been disabled while we were
-> +	 * processing the current usb_request. So make sure
-> +	 * we're still streaming before queueing the usb_request
-> +	 * back to req_free
-> +	 */
-> +	if (video->is_enabled) {
-> +		list_add_tail(&req->list, &video->req_free);
->   		queue_work(video->async_wq, &video->pump);
-> +	} else {
-> +		uvc_video_free_request(ureq, ep);
-> +	}
-> +	spin_unlock_irqrestore(&video->req_lock, flags);
->   }
->
->   static int
-> @@ -393,20 +421,22 @@ static void uvcg_video_pump(struct work_struct *work)
->   	struct uvc_video_queue *queue = &video->queue;
->   	/* video->max_payload_size is only set when using bulk transfer */
->   	bool is_bulk = video->max_payload_size;
-> -	struct uvc_device *uvc = video->uvc;
->   	struct usb_request *req = NULL;
->   	struct uvc_buffer *buf;
->   	unsigned long flags;
->   	bool buf_done;
->   	int ret;
->
-> -	while (uvc->state == UVC_STATE_STREAMING && video->ep->enabled) {
-> +	while (true) {
-> +		if (!video->ep->enabled)
-> +			return;
-> +
->   		/*
-> -		 * Retrieve the first available USB request, protected by the
-> -		 * request lock.
-> +		 * Check is_enabled and retrieve the first available USB
-> +		 * request, protected by the request lock.
->   		 */
->   		spin_lock_irqsave(&video->req_lock, flags);
-> -		if (list_empty(&video->req_free)) {
-> +		if (!video->is_enabled || list_empty(&video->req_free)) {
->   			spin_unlock_irqrestore(&video->req_lock, flags);
->   			return;
->   		}
-> @@ -488,9 +518,11 @@ static void uvcg_video_pump(struct work_struct *work)
->   		return;
->
->   	spin_lock_irqsave(&video->req_lock, flags);
-> -	list_add_tail(&req->list, &video->req_free);
-> +	if (video->is_enabled)
-> +		list_add_tail(&req->list, &video->req_free);
-> +	else
-> +		uvc_video_free_request(req->context, video->ep);
->   	spin_unlock_irqrestore(&video->req_lock, flags);
-> -	return;
->   }
->
->   /*
-> @@ -499,7 +531,11 @@ static void uvcg_video_pump(struct work_struct *work)
->   int
->   uvcg_video_disable(struct uvc_video *video)
->   {
-> -	struct uvc_request *ureq;
-> +	unsigned long flags;
-> +	struct list_head inflight_bufs;
-> +	struct usb_request *req, *temp;
-> +	struct uvc_buffer *buf, *btemp;
-> +	struct uvc_request *ureq, *utemp;
->
->   	if (video->ep == NULL) {
->   		uvcg_info(&video->uvc->func,
-> @@ -507,15 +543,58 @@ uvcg_video_disable(struct uvc_video *video)
->   		return -ENODEV;
->   	}
->
-> +	INIT_LIST_HEAD(&inflight_bufs);
-> +	spin_lock_irqsave(&video->req_lock, flags);
-> +	video->is_enabled = false;
-> +
-> +	/*
-> +	 * Remove any in-flight buffers from the uvc_requests
-> +	 * because we want to return them before cancelling the
-> +	 * queue. This ensures that we aren't stuck waiting for
-> +	 * all complete callbacks to come through before disabling
-> +	 * vb2 queue.
-> +	 */
-> +	list_for_each_entry(ureq, &video->ureqs, list) {
-> +		if (ureq->last_buf) {
-> +			list_add_tail(&ureq->last_buf->queue, &inflight_bufs);
-> +			ureq->last_buf = NULL;
-> +		}
-> +	}
-> +	spin_unlock_irqrestore(&video->req_lock, flags);
-> +
->   	cancel_work_sync(&video->pump);
->   	uvcg_queue_cancel(&video->queue, 0);
->
-> -	list_for_each_entry(ureq, &video->ureqs, list) {
-> -		if (ureq->req)
-> -			usb_ep_dequeue(video->ep, ureq->req);
-> +	spin_lock_irqsave(&video->req_lock, flags);
-> +	/*
-> +	 * Remove all uvc_reqeusts from ureqs with list_del_init
-> +	 * This lets uvc_video_free_request correctly identify
-> +	 * if the uvc_request is attached to a list or not when freeing
-> +	 * memory.
-> +	 */
-> +	list_for_each_entry_safe(ureq, utemp, &video->ureqs, list)
-> +		list_del_init(&ureq->list);
-> +
-> +	list_for_each_entry_safe(req, temp, &video->req_free, list) {
-> +		list_del(&req->list);
-> +		uvc_video_free_request(req->context, video->ep);
->   	}
->
-> -	uvc_video_free_requests(video);
-> +	INIT_LIST_HEAD(&video->ureqs);
-> +	INIT_LIST_HEAD(&video->req_free);
-> +	video->req_size = 0;
-> +	spin_unlock_irqrestore(&video->req_lock, flags);
-> +
-> +	/*
-> +	 * Return all the video buffers before disabling the queue.
-> +	 */
-> +	spin_lock_irqsave(&video->queue.irqlock, flags);
-> +	list_for_each_entry_safe(buf, btemp, &inflight_bufs, queue) {
-> +		list_del(&buf->queue);
-> +		uvcg_complete_buffer(&video->queue, buf);
-> +	}
-> +	spin_unlock_irqrestore(&video->queue.irqlock, flags);
-> +
->   	uvcg_queue_enable(&video->queue, 0);
->   	return 0;
->   }
-> @@ -533,6 +612,14 @@ int uvcg_video_enable(struct uvc_video *video)
->   		return -ENODEV;
->   	}
->
-> +	/*
-> +	 * Safe to access request related fields without req_lock because
-> +	 * this is the only thread currently active, and no other
-> +	 * request handling thread will become active until this function
-> +	 * returns.
-> +	 */
-> +	video->is_enabled = true;
-> +
->   	if ((ret = uvcg_queue_enable(&video->queue, 1)) < 0)
->   		return ret;
->
-> @@ -558,6 +645,7 @@ int uvcg_video_enable(struct uvc_video *video)
->    */
->   int uvcg_video_init(struct uvc_video *video, struct uvc_device *uvc)
->   {
-> +	video->is_enabled = false;
->   	INIT_LIST_HEAD(&video->ureqs);
->   	INIT_LIST_HEAD(&video->req_free);
->   	spin_lock_init(&video->req_lock);
-> --
-> 2.42.0.820.g83a721a137-goog
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
