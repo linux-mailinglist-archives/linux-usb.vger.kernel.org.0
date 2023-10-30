@@ -1,243 +1,152 @@
-Return-Path: <linux-usb+bounces-2337-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2338-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 403237DB4C4
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Oct 2023 09:06:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A6BE7DB4F4
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Oct 2023 09:15:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 732051C209EC
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Oct 2023 08:06:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C817B281446
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Oct 2023 08:15:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFC77D265;
-	Mon, 30 Oct 2023 08:05:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B58B6D276;
+	Mon, 30 Oct 2023 08:15:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="bLXibatj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gpwVR6g/"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A538AAD5F
-	for <linux-usb@vger.kernel.org>; Mon, 30 Oct 2023 08:05:54 +0000 (UTC)
-Received: from smtp.smtpout.orange.fr (smtp-17.smtpout.orange.fr [80.12.242.17])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55238C4
-	for <linux-usb@vger.kernel.org>; Mon, 30 Oct 2023 01:05:46 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.2.178])
-	by smtp.orange.fr with ESMTPA
-	id xNHKqXbMchjcfxNHKq5hVe; Mon, 30 Oct 2023 09:05:44 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1698653144;
-	bh=eQeOxn3lchQjy9IwIOUUEredww/rqkL2X7LAfreMOiQ=;
-	h=Date:Subject:Cc:References:From:To:In-Reply-To;
-	b=bLXibatjRS5tWgqTWfDNAAz0gLqWsSbpcYGOnLBlQd5HQ3ksEwjRy8mhW75WwaxtL
-	 jU85TaDGWgz6zHlCz257bqbDg8wbK8CA2w36swL4HYhZhgm144T39xncBYt0FzCzJk
-	 8ouf/Z7SQZrUlXhQq4USRsbi0MO6ElyMlJCBw+aup2AWpGoUB0J/J7ZBprZm0LOBJp
-	 bADnpD1Qk5JLVZdIxUX5daJVJbo7gpnMs+z1BmNZEFo0OBuGwnnClg/RYBcjSGeb60
-	 IiQwHqeJ65+Zm5B6Aw9Bqt/VYCNxzTc6U4zDhpf5NHEPFIsKnrNrodwL108m+OtEt+
-	 6cJ8xGH+YgIKw==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Mon, 30 Oct 2023 09:05:44 +0100
-X-ME-IP: 86.243.2.178
-Message-ID: <6654879e-f577-4e0c-a00a-0ee45d379b51@wanadoo.fr>
-Date: Mon, 30 Oct 2023 09:05:42 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B801FD264
+	for <linux-usb@vger.kernel.org>; Mon, 30 Oct 2023 08:15:49 +0000 (UTC)
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7E291;
+	Mon, 30 Oct 2023 01:15:44 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-5079f9675c6so6280367e87.2;
+        Mon, 30 Oct 2023 01:15:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1698653742; x=1699258542; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KWYjvSDY5DIMMFjnpJiqvif2JTitQHxK/8ZOowXvcTI=;
+        b=gpwVR6g/irhgPQClnd1F4QpmwjX2W+eoQ5E5IbHIzEJvOHHCN8bJNfbZ3dlM2C4w4N
+         HXn7Su/r6ZaTIxVjKuBb0E0b3wYzGsDtvQFYgP4AozZPyN6qUbgOxHaRxbdDE+kxiXY4
+         W6Z/AXAAhVeBzV5+qLBHYj9Uaq0Xsb/hhEhoDFugEPwXfqezKJh203SUgGC6Wg9a3KHV
+         Csq89Zf97He0VofY4iP9mStj8we/DQF2RXowXTlf84pZ0hFy6vkHQ4u9tmVMQsT2ywx2
+         tvGb6aoZHptOPtKGg2hg6qDHaYldtEm4MMWV17pMgx4hnOAOJibIrRRHn/GSWL4uKPvX
+         wrPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698653742; x=1699258542;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KWYjvSDY5DIMMFjnpJiqvif2JTitQHxK/8ZOowXvcTI=;
+        b=vuiL7A+4p0T8e7DDJlV6FtdCkO1z/LLfbAMeLdhTyuTYc5mtyxItHmwwsnaDEQBIX4
+         GIgveE5l5U9KJP3UiBHLbb52fVJ9KoiCK63tNBOgApRAG7rWsnyBMh2Yj5aJeAgAwa0F
+         BxA/66rAXyuozKplop0CMEpTmyIIbQ0Lj+ewdl8xWoh9hNT6+gDGxdD+AeyRkEgpscdM
+         4zAZVKkc6YrKelJ9ahLoBhTS2i5vEpIDyGOvkFskeszwMPuOwY9dHvyYTjTClDsyyFd+
+         Nsz0mZA1G8KhRv7MMZBoZoFV1G/CdC1+atQ1BV5lejeu6o/IQzagoJN5NR2P0QK9AYCQ
+         eIrA==
+X-Gm-Message-State: AOJu0YwqtsjHV3mb6usPHrSlSnbgivm9V6BA9dFWXiL96bPhow3COZYj
+	PYBKHlur6s7BzZHrgX6c+rBAZuHsVoBxXd6YX2ErYtdX
+X-Google-Smtp-Source: AGHT+IHblBhpQey3QA286YT9LUKfwfKp4KRW2N0/x8HmCpUcyQrgHgSeWzhTZnzJekj9aqpKhjR75KioNv30Rn+svKI=
+X-Received: by 2002:ac2:4a79:0:b0:503:90d:e0df with SMTP id
+ q25-20020ac24a79000000b00503090de0dfmr6221722lfp.34.1698653742068; Mon, 30
+ Oct 2023 01:15:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 1/2] usb: dwc3: add Realtek DHC RTD SoC dwc3 glue layer
- driver
-Content-Language: fr
-Cc: Thinh.Nguyen@synopsys.com, conor+dt@kernel.org,
- devicetree@vger.kernel.org, gregkh@linuxfoundation.org,
- krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, robh+dt@kernel.org
-References: <20230826031028.1892-1-stanley_chang@realtek.com>
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To: stanley_chang@realtek.com
-In-Reply-To: <20230826031028.1892-1-stanley_chang@realtek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <CAFGKuwoFUaXMsOOWJNBenQDG6+syt80Z9pvQQK1XSZFztC2_SQ@mail.gmail.com>
+ <2023103052-unpeeled-calibrate-ae48@gregkh>
+In-Reply-To: <2023103052-unpeeled-calibrate-ae48@gregkh>
+From: ariel marcovitch <arielmarcovitch@gmail.com>
+Date: Mon, 30 Oct 2023 10:15:30 +0200
+Message-ID: <CAFGKuwp7JH8H9vjz8iJ24R9TRW0GDE-O96VBAG4L8X4DhTabXg@mail.gmail.com>
+Subject: Re: Gaps in logs while using usb-serial as a console
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: johan@kernel.org, linux-usb@vger.kernel.org, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Le 26/08/2023 à 05:10, Stanley Chang a écrit :
-> Realtek DHC RTD SoCs integrate dwc3 IP and has some customizations to
-> support different generations of SoCs.
-> 
-> The RTD1619b subclass SoC only supports USB 2.0 from dwc3. The driver
-> can set a maximum speed to support this. Add role switching function,
-> that can switch USB roles through other drivers, or switch USB roles
-> through user space through set /sys/class/usb_role/.
-> 
-> Signed-off-by: Stanley Chang <stanley_chang-Rasf1IRRPZFBDgjK7y7TUQ@public.gmane.org>
-> Acked-by: Thinh Nguyen <Thinh.Nguyen-HKixBCOQz3hWk0Htik3J/w@public.gmane.org>
-> ---
+On Mon, 30 Oct 2023 at 08:22, Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Sun, Oct 29, 2023 at 08:21:21PM +0200, ariel marcovitch wrote:
+> > Greetings!
+> >
+> > While using a usb-serial device as console, I've noticed some
+> > significant gaps in the kernel logs it receives.
+> >
+> > The problem can be reproduced in qemu like this (the kernel is a
+> > x86_64_defconfig with usb-serial enabled and with the ftdi_sio driver
+> > enabled):
+> > qemu-system-x86_64 -m 4G -kernel arch/x86_64/boot/bzImage -usb -device
+> > usb-serial,chardev=ser -chardev pty,id=ser -append 'console=ttyUSB0'
+> > (this will create a `pts` device that will connect to the other end of
+> > the emulated usb-serial)
+> >
+> > Then the logs look something like this:
+> > [    1.006459] SELinux:  Initializing.
+> > [    1.011620] Mount-cache hash table entries: 8192 (order: 4, 65536
+> > bytes, li[    2.315341] ACPI: \_SB_.LNKD: Enabled at IRQ 11
+> >
+> > This probably happens because of the code in
+> > `usb_serial_generic_write` which tries to insert the data into the
+> > fifo:
+> > count = kfifo_in_locked(&port->write_fifo, buf, count, &port->lock);
+> > Because added indications for when the result is less than expected
+> > and it showed significant losses.
+> > The return value is silently ignored in `usb_console_write`
+> > Also making the fifo bigger in `setup_port_bulk_out` helped (I made it
+> > 10 times bigger and there were no losses)
+> >
+> > The reason so much data is written at a short time is because
+> > usb-serial is initialized rather late, and when it is registered as a
+> > console, all the logs until this point are written to it.
+> >
+> > I'm not sure what the solution should be. Maybe we need to check
+> > whether the write in `console_emit_next_record` was successful and not
+> > increase the seq counter in this case.
+> >
+> > Any suggestions?
+>
+> Please realize that usb-serial console was the result of me loosing a
+> drunken bet.  It's amazing it works at all.  For "fake" devices like
+LOL your drunken bet was quite helpful to some people
+Because modern PCs come without a serial port, I wanted to use it to
+see early logs on my crashing kernel without having to use printk
+delay and things like that.
+I'm curious as to how kernel people debug PCs in general...
+In any case, the usb-serial setup was quite weird as it required two
+usb-serial and a gender changer
 
-...
+> this, that use the generic usb-serial code, yes, you will have overruns
+> and other problems, that's just part of how it works (i.e. not well.)
+>
+> For something like qemu, please use a real console, like the serial port
+> (i.e. a fake serial port), not the fake usb-serial port.
+Yeah I was just using it to demonstrate the problem (I agree it is
+quite weird to use usb-serial as a console for qemu)
+I experienced the same problem with a real usb-serial device, then I
+tried to use emulation so I can debug it more easily
 
-> +static int dwc3_rtk_probe_dwc3_core(struct dwc3_rtk *rtk)
-> +{
-> +	struct device *dev = rtk->dev;
-> +	struct device_node *node = dev->of_node;
-> +	struct platform_device *dwc3_pdev;
-> +	struct device *dwc3_dev;
-> +	struct device_node *dwc3_node;
-> +	enum usb_dr_mode dr_mode;
-> +	int ret = 0;
-> +
-> +	ret = dwc3_rtk_init(rtk);
-> +	if (ret)
-> +		return -EINVAL;
-> +
-> +	ret = of_platform_populate(node, NULL, NULL, dev);
-> +	if (ret) {
-> +		dev_err(dev, "failed to add dwc3 core\n");
-> +		return ret;
-> +	}
-> +
-> +	dwc3_node = of_get_compatible_child(node, "snps,dwc3");
-> +	if (!dwc3_node) {
-> +		dev_err(dev, "failed to find dwc3 core node\n");
-> +		ret = -ENODEV;
-> +		goto depopulate;
-> +	}
-> +
-> +	dwc3_pdev = of_find_device_by_node(dwc3_node);
-> +	if (!dwc3_pdev) {
-> +		dev_err(dev, "failed to find dwc3 core platform_device\n");
-> +		ret = -ENODEV;
-> +		goto err_node_put;
-> +	}
-> +
-> +	dwc3_dev = &dwc3_pdev->dev;
-> +	rtk->dwc = platform_get_drvdata(dwc3_pdev);
-> +	if (!rtk->dwc) {
-> +		dev_err(dev, "failed to find dwc3 core\n");
-> +		ret = -ENODEV;
-> +		goto err_pdev_put;
-> +	}
-> +
-> +	dr_mode = usb_get_dr_mode(dwc3_dev);
-> +	if (dr_mode != rtk->dwc->dr_mode) {
-> +		dev_info(dev, "dts set dr_mode=%d, but dwc3 set dr_mode=%d\n",
-> +			 dr_mode, rtk->dwc->dr_mode);
-> +		dr_mode = rtk->dwc->dr_mode;
-> +	}
-> +
-> +	switch (dr_mode) {
-> +	case USB_DR_MODE_PERIPHERAL:
-> +		rtk->cur_role = USB_ROLE_DEVICE;
-> +		break;
-> +	case USB_DR_MODE_HOST:
-> +		rtk->cur_role = USB_ROLE_HOST;
-> +		break;
-> +	default:
-> +		dev_dbg(rtk->dev, "%s: dr_mode=%d\n", __func__, dr_mode);
-> +		break;
-> +	}
-> +
-> +	if (device_property_read_bool(dwc3_dev, "usb-role-switch")) {
-> +		ret = dwc3_rtk_setup_role_switch(rtk);
-> +		if (ret) {
-> +			dev_err(dev, "dwc3_rtk_setup_role_switch fail=%d\n", ret);
-> +			goto err_pdev_put;
-> +		}
-> +		rtk->cur_role = dwc3_rtk_get_role(rtk);
-> +	}
-> +
-> +	switch_usb2_role(rtk, rtk->cur_role);
-> +
-> +	return 0;
-> +
-> +err_pdev_put:
-> +	platform_device_put(dwc3_pdev);
-> +err_node_put:
-> +	of_node_put(dwc3_node);
-> +depopulate:
-> +	of_platform_depopulate(dev);
-> +
-> +	return ret;
-> +}
-> +
-> +static int dwc3_rtk_probe(struct platform_device *pdev)
-> +{
-> +	struct dwc3_rtk *rtk;
-> +	struct device *dev = &pdev->dev;
-> +	struct resource *res;
-> +	void __iomem *regs;
-> +	int ret = 0;
-> +
-> +	rtk = devm_kzalloc(dev, sizeof(*rtk), GFP_KERNEL);
-> +	if (!rtk) {
-> +		ret = -ENOMEM;
-> +		goto out;
-> +	}
-> +
-> +	platform_set_drvdata(pdev, rtk);
-> +
-> +	rtk->dev = dev;
-> +
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	if (!res) {
-> +		dev_err(dev, "missing memory resource\n");
-> +		ret = -ENODEV;
-> +		goto out;
-> +	}
-> +
-> +	regs = devm_ioremap_resource(dev, res);
-> +	if (IS_ERR(regs)) {
-> +		ret = PTR_ERR(regs);
-> +		goto out;
-> +	}
-> +
-> +	rtk->regs = regs;
-> +	rtk->regs_size = resource_size(res);
-> +
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
-> +	if (res) {
-> +		rtk->pm_base = devm_ioremap_resource(dev, res);
-> +		if (IS_ERR(rtk->pm_base)) {
-> +			ret = PTR_ERR(rtk->pm_base);
-> +			goto out;
-> +		}
-> +	}
-> +
-> +	ret = dwc3_rtk_probe_dwc3_core(rtk);
-> +
-> +out:
-> +	return ret;
-> +}
-> +
-> +static void dwc3_rtk_remove(struct platform_device *pdev)
-> +{
-> +	struct dwc3_rtk *rtk = platform_get_drvdata(pdev);
-> +
-> +	rtk->dwc = NULL;
-> +
-> +	dwc3_rtk_remove_role_switch(rtk);
-> +
+>
+> So this is "working as designed" in that it wasn't designed at all and
+> again, it is a miracle any data is flowing there at all :)
+I see...
+However it may be possible to fix it without much effort, so why not?
+Something like checking the return value for the console's write
+function seems reasonable to me anyway...
+Besides, don't other types of consoles have the same problem (being
+initialized late, getting a lot of data, losing some of it)?
+>
+> sorry,
+>
+> greg k-h
+Thank you for your honest feedback,
 
-Hi,
-
-Is something like
-	platform_device_put(dwc3_pdev);
-	of_node_put(dwc3_node);
-needed in the remove function?
-
-(as done in the error handling path of dwc3_rtk_probe_dwc3_core())
-
-Or should it be added at the end of dwc3_rtk_probe_dwc3_core() if the 
-reference are nor needed anymore when we leave the function?
-
-CJ
-
-> +	of_platform_depopulate(rtk->dev);
-> +}
-> +
-
-...
-
+Ariel Marcovitch
 
