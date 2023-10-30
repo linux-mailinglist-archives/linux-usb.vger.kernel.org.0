@@ -1,100 +1,130 @@
-Return-Path: <linux-usb+bounces-2334-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2335-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2201E7DB3B7
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Oct 2023 07:57:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B2587DB451
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Oct 2023 08:30:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 533501C2094A
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Oct 2023 06:57:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A6B271F21225
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Oct 2023 07:30:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B26E3FE4;
-	Mon, 30 Oct 2023 06:57:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79758612B;
+	Mon, 30 Oct 2023 07:30:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="EoVYKNhn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PQz0Z++h"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CCEE1C11
-	for <linux-usb@vger.kernel.org>; Mon, 30 Oct 2023 06:56:58 +0000 (UTC)
-Received: from smtp.smtpout.orange.fr (smtp-14.smtpout.orange.fr [80.12.242.14])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E26DFD50
-	for <linux-usb@vger.kernel.org>; Sun, 29 Oct 2023 23:56:48 -0700 (PDT)
-Received: from pop-os.home ([86.243.2.178])
-	by smtp.orange.fr with ESMTPA
-	id xMCXqf3ZpdFbKxMCYqfBpU; Mon, 30 Oct 2023 07:56:44 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1698649004;
-	bh=KkbJNouXf1jB9o5VmPFQMXyslZ7BV0Kwtr1ZfMOhED0=;
-	h=From:To:Cc:Subject:Date;
-	b=EoVYKNhntLWgaYt3lWeEflSOZ13HEfu/PRa3sOcgLqsK3MV7pxUJifqbTgmfk2O7/
-	 vWjc7K1Z2Qbu21SmYAlk9rUHOYm6MlHCVJqFw2G2qJgljuXyc/CRI+92VrdCXZMPrZ
-	 AlYLANf8MBiak0D//G9tr+2KOybPtRV2adO1fED9zi91KE9VoSKzeC1xY2I3szqAMw
-	 zbdBSRWA2TkEOCnTLeTZxt6bUvI6AGzHTeiErlLWZpoDYhc83ym9e859FZQFnQ6rey
-	 hwbvzwcgRfI5Zf2LSKh96lQUMWAsMjF7ZLWt/OZl4BWM/Cd6WfZuzttBDWgfGm6Eek
-	 WvVUEnoMFaTiw==
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Mon, 30 Oct 2023 07:56:44 +0100
-X-ME-IP: 86.243.2.178
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Abdel Alkuor <abdelalkuor@geotab.com>
-Cc: linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	linux-usb@vger.kernel.org
-Subject: [PATCH] USB: typec: tps6598x: Fix a memory leak in an error handling path
-Date: Mon, 30 Oct 2023 07:56:40 +0100
-Message-Id: <23168336f18a9f6cb1a5b47130fc134dc0510d7f.1698648980.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A0266AA6
+	for <linux-usb@vger.kernel.org>; Mon, 30 Oct 2023 07:30:39 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BEE2C0;
+	Mon, 30 Oct 2023 00:30:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1698651038; x=1730187038;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gXWZpt2Baaec3XxSr1059DajNSiecR9cDaFSnzG5vok=;
+  b=PQz0Z++h+BP1Pp3w2Bxw6+Qo1Y2ZSKqN73ddO+qj6NXCK/A+weiygUyd
+   bz40V9A4bvaZd5ikDMyW8IdpqiMTKi8asPWSTwKx5VuqCMLx3u7QrFiTK
+   toLrlTePKCeH+YgDM6K6SJF3pJ6oMNr3yLg1eipwjfMW5wbcz5hUr8rzQ
+   sXWRgZ99C/5D6IWseIAAEL6F71ZPrfqk2Ix4IASG87PYDilYSiaewppk4
+   VsL12DYGbf8TCX6z4x4x5C6BRIB866W/cUK79jpoxUwtwuoMSHyO0bSlJ
+   2AkfKEC3vbH85bRQmSg9Jf4CTZd5Z2IQUgQfdUrVvyIyD8/fTR8+z7aUb
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10878"; a="390884489"
+X-IronPort-AV: E=Sophos;i="6.03,262,1694761200"; 
+   d="scan'208";a="390884489"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2023 00:30:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10878"; a="736661418"
+X-IronPort-AV: E=Sophos;i="6.03,262,1694761200"; 
+   d="scan'208";a="736661418"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by orsmga006.jf.intel.com with SMTP; 30 Oct 2023 00:30:35 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 30 Oct 2023 09:30:34 +0200
+Date: Mon, 30 Oct 2023 09:30:34 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: RD Babiera <rdbabiera@google.com>
+Cc: gregkh@linuxfoundation.org, linux@roeck-us.net,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	badhri@google.com, stable@vger.kernel.org
+Subject: Re: [PATCH v1] usb: typec: tcpm: only discover modes the port
+ supports svids for
+Message-ID: <ZT9bBnKPMTDqy6aW@kuha.fi.intel.com>
+References: <20231016232816.3355132-2-rdbabiera@google.com>
+ <ZTDkIGLmjmL9HwJP@kuha.fi.intel.com>
+ <CALzBnUF-EZjFEHCc4XRLdFr5yP8dCq7De4SaNif32LcL5=tMYA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALzBnUF-EZjFEHCc4XRLdFr5yP8dCq7De4SaNif32LcL5=tMYA@mail.gmail.com>
 
-All error handling end to the error handling path, except these ones.
-Go to 'release_fw' as well here, otherwise 'fw' is leaking.
+Hi,
 
-Fixes: 7e7a3c815d22 ("USB: typec: tps6598x: Add TPS25750 support")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/usb/typec/tipd/core.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+I'm sorry to keep you waiting.
 
-diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-index 0e867f531d34..b0184be06c3d 100644
---- a/drivers/usb/typec/tipd/core.c
-+++ b/drivers/usb/typec/tipd/core.c
-@@ -968,16 +968,17 @@ static int tps25750_start_patch_burst_mode(struct tps6598x *tps)
- 	ret = of_property_match_string(np, "reg-names", "patch-address");
- 	if (ret < 0) {
- 		dev_err(tps->dev, "failed to get patch-address %d\n", ret);
--		return ret;
-+		goto release_fw;
- 	}
- 
- 	ret = of_property_read_u32_index(np, "reg", ret, &addr);
- 	if (ret)
--		return ret;
-+		goto release_fw;
- 
- 	if (addr == 0 || (addr >= 0x20 && addr <= 0x23)) {
- 		dev_err(tps->dev, "wrong patch address %u\n", addr);
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto release_fw;
- 	}
- 
- 	bpms_data.addr = (u8)addr;
+<snip>
+
+> > If you need the modes to be discovered in some specific order, then we
+> > need the framework to allow you to do that. So perhaps the tcpci
+> > drivers should be able to supply the preferred order to the tcpm?
+> >
+> > But as such, unless I'm mistaken, this patch will change the logic so
+> > that only the partner alt modes that the port supports get registered,
+> > and that way are exposed to the user. You can't do that - right now
+> > it's the only way we can inform the user about them. All partner
+> > alternate modes (at least the SVIDs) must be exposed to the user one
+> > way or the other, regardless does the port support them or not.
+> 
+> The test this patch tries to fix could just be written without consideration
+> of this. My guess is that the test was designed such that the SVIDs before
+> the DisplayPort SVID are unknown to the port under test so the mentality
+> could have been "why should a port care about SVIDs it doesn't know
+> about?"
+> 
+> A defense I could make for it is that the USB PD CTS doesn't test
+> to see if a port under test sends Discover Modes for every SVID returned
+> in a Discover SVIDs ACK, so the interpretation isn't invalid. I've seen other
+> tcpm implementations handle Discover Modes this way as well.
+> 
+> Regardless, you're definitely right that the user should know about all
+> Alt Modes/SVIDs - the port would lose SVID information without
+> registering a partner altmode for it. Currently I think the approaches to pass
+> this test look like:
+>     1. Your suggestion - let the tcpci decide if there should be a
+> discovery order.
+> Alternatively, let the tcpci decide if it wants to opt into this
+> patch's behavior of
+> only discovering modes for known SVIDs - a strict discovery flag.
+>     2. Send a Discover Mode message to known SVIDs first in the order
+> they come in, and then to unknown SVIDs. The test passes and no information
+> is lost, but it's unnecessary refactoring just to pass one test for
+> one Alt Mode.
+>     3. Don't send a Discover Mode message to unknown SVIDs, but do register
+> an Alt Mode with blank info for that SVID. It passes the test without having to
+> do any reordering compared to the first option and it preserves supported
+> SVIDs. But, the port would lose information such as each SVID's Alt Modes
+> VDO plus each SVID can support more than one Alt Mode.
+> 
+> Let me know if any of these approaches sound worth pursuing; I do think
+> Option 1 does make more sense than the others.
+
+I would like to hear what Guenter thinks. Guenter, do you have time to
+take a look at this?
+
+thanks,
+
 -- 
-2.34.1
-
+heikki
 
