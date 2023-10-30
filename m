@@ -1,70 +1,68 @@
-Return-Path: <linux-usb+bounces-2342-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2343-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2C9D7DB59D
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Oct 2023 10:02:37 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 220767DB5BF
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Oct 2023 10:06:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F40031C20A65
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Oct 2023 09:02:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CFD05280DE3
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Oct 2023 09:06:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 380F9D30D;
-	Mon, 30 Oct 2023 09:02:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AD16D515;
+	Mon, 30 Oct 2023 09:06:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WqbSJhz3"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="St3EgCDl"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17DF3D505;
-	Mon, 30 Oct 2023 09:02:29 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3140B4;
-	Mon, 30 Oct 2023 02:02:28 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEC416AD9
+	for <linux-usb@vger.kernel.org>; Mon, 30 Oct 2023 09:06:09 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BCFDAF;
+	Mon, 30 Oct 2023 02:06:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698656548; x=1730192548;
+  t=1698656768; x=1730192768;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=i8w9x7dxltFrnpCuSRUPcPt133FkZLGMti/aX/HuhEE=;
-  b=WqbSJhz3R3Jxap63rcMr+CHjmZZADHuKPFujS0W4Aqwxar1ApZSQzJjf
-   8MC5f0SeYmz5/TCmQ6asAWlaHZAFY9wSJkE5oVQHEWNZM0OXzHkp8qrz+
-   /vvICiC1UmkGIDNeGlDrIEScZNaDJ0JlumNVbkstkd66nL3TLMlBfKu2I
-   PmdJkh/cFshwfEdspml7qLEDp3rcrIrnENucfva1m9LeGV6oS8kvkr0p6
-   lhPRRyEvsTtrhLLriOja/Y3T7LCdtYaGMlgSu14prM/W+ynlim78SBoVf
-   qtXIevgrBbgLY1IaNPCdEBmH6mV5VNXd4hfmUejYsAy1v6KzD+QG4di85
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10878"; a="367383147"
+  bh=b2hfpvqWcMJ6z+4+1eokRuqHS/bV7QdXuC5gbITo4n4=;
+  b=St3EgCDlsGrv5u0SGb/5RpUsFvv93nHfLWL1edjYfqjVUb6X4rFpAY5v
+   Kc6TDDHnzfh0CuactWnErPX6vSWm+mox72mwS6LKgD+ttr8B0Yv2sohRr
+   yCWwDJH1tjK5wXQv6lZHHNxNj/nriubm4EWPp+dYYM1TttuoDNWLKtt3k
+   z040ZDoK9/nWeHAZAWM4W3FlyS8w+kp8gda8lCbY6zPwdlXUDe5g7D6n7
+   sw1VSMbelwrFZv82RzI65Q+FY2Bdb91AWyFnBFi78vBP6g00wYz4sv/Iq
+   O0Uw1oG7VlZ8ZZuPCCH7wQ+F7NMh/ryD47djDnrFO/GL3J/+cdJow4KQp
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10878"; a="368253323"
 X-IronPort-AV: E=Sophos;i="6.03,263,1694761200"; 
-   d="scan'208";a="367383147"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2023 02:02:28 -0700
+   d="scan'208";a="368253323"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2023 02:06:07 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10878"; a="795210656"
+X-IronPort-AV: E=McAfee;i="6600,9927,10878"; a="933723386"
 X-IronPort-AV: E=Sophos;i="6.03,263,1694761200"; 
-   d="scan'208";a="795210656"
+   d="scan'208";a="933723386"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by orsmga001.jf.intel.com with SMTP; 30 Oct 2023 02:02:24 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 30 Oct 2023 11:02:23 +0200
-Date: Mon, 30 Oct 2023 11:02:23 +0200
+  by orsmga005.jf.intel.com with SMTP; 30 Oct 2023 02:06:04 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 30 Oct 2023 11:06:03 +0200
+Date: Mon, 30 Oct 2023 11:06:03 +0200
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Luca Weiss <luca.weiss@fairphone.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
+	Andy Gross <agross@kernel.org>,
 	Bjorn Andersson <andersson@kernel.org>,
-	~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] usb: typec: fsa4480: Add support to swap SBU
- orientation
-Message-ID: <ZT9xH7Rz1+oScLKW@kuha.fi.intel.com>
-References: <20231020-fsa4480-swap-v2-0-9a7f9bb59873@fairphone.com>
- <20231020-fsa4480-swap-v2-2-9a7f9bb59873@fairphone.com>
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Rob Herring <robh@kernel.org>, linux-usb@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] usb: typec: ucsi: fix UCSI on buggy Qualcomm
+ devices
+Message-ID: <ZT9x+z4XNOFK2lFv@kuha.fi.intel.com>
+References: <20231025115620.905538-1-dmitry.baryshkov@linaro.org>
+ <20231025115620.905538-2-dmitry.baryshkov@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -73,146 +71,96 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231020-fsa4480-swap-v2-2-9a7f9bb59873@fairphone.com>
+In-Reply-To: <20231025115620.905538-2-dmitry.baryshkov@linaro.org>
 
-On Fri, Oct 20, 2023 at 11:33:19AM +0200, Luca Weiss wrote:
-> On some hardware designs the AUX+/- lanes are connected reversed to
-> SBU1/2 compared to the expected design by FSA4480.
+On Wed, Oct 25, 2023 at 02:49:29PM +0300, Dmitry Baryshkov wrote:
+> On sevral Qualcomm platforms (SC8180X, SM8350, SC8280XP) a call to
+> UCSI_GET_PDOS for non-PD partners will cause a firmware crash with no
+> easy way to recover from it. Since we have no easy way to determine
+> whether the partner really has PD support, shortcut UCSI_GET_PDOS on
+> such platforms. This allows us to enable UCSI support on such devices.
 > 
-> Made more complicated, the otherwise compatible Orient-Chip OCP96011
-> expects the lanes to be connected reversed compared to FSA4480.
-> 
-> * FSA4480 block diagram shows AUX+ connected to SBU2 and AUX- to SBU1.
-> * OCP96011 block diagram shows AUX+ connected to SBU1 and AUX- to SBU2.
-> 
-> So if OCP96011 is used as drop-in for FSA4480 then the orientation
-> handling in the driver needs to be reversed to match the expectation of
-> the OCP96011 hardware.
-> 
-> Support parsing the data-lanes parameter in the endpoint node to swap
-> this in the driver.
-> 
-> The parse_data_lanes_mapping function is mostly taken from nb7vpq904m.c.
-> 
-> Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
->  drivers/usb/typec/mux/fsa4480.c | 71 +++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 71 insertions(+)
+>  drivers/usb/typec/ucsi/ucsi.c       |  3 +++
+>  drivers/usb/typec/ucsi/ucsi.h       |  3 +++
+>  drivers/usb/typec/ucsi/ucsi_glink.c | 13 +++++++++++++
+>  3 files changed, 19 insertions(+)
 > 
-> diff --git a/drivers/usb/typec/mux/fsa4480.c b/drivers/usb/typec/mux/fsa4480.c
-> index e0ee1f621abb..cb7cdf90cb0a 100644
-> --- a/drivers/usb/typec/mux/fsa4480.c
-> +++ b/drivers/usb/typec/mux/fsa4480.c
-> @@ -60,6 +60,7 @@ struct fsa4480 {
->  	unsigned int svid;
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index 61b64558f96c..5392ec698959 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -578,6 +578,9 @@ static int ucsi_read_pdos(struct ucsi_connector *con,
+>  	u64 command;
+>  	int ret;
 >  
->  	u8 cur_enable;
-> +	bool swap_sbu_lanes;
->  };
->  
->  static const struct regmap_config fsa4480_regmap_config = {
-> @@ -76,6 +77,9 @@ static int fsa4480_set(struct fsa4480 *fsa)
->  	u8 enable = FSA4480_ENABLE_DEVICE;
->  	u8 sel = 0;
->  
-> +	if (fsa->swap_sbu_lanes)
-> +		reverse = !reverse;
-> +
->  	/* USB Mode */
->  	if (fsa->mode < TYPEC_STATE_MODAL ||
->  	    (!fsa->svid && (fsa->mode == TYPEC_MODE_USB2 ||
-> @@ -179,12 +183,75 @@ static int fsa4480_mux_set(struct typec_mux_dev *mux, struct typec_mux_state *st
->  	return ret;
->  }
->  
-> +enum {
-> +	NORMAL_LANE_MAPPING,
-> +	INVERT_LANE_MAPPING,
-> +};
-> +
-> +#define DATA_LANES_COUNT	2
-> +
-> +static const int supported_data_lane_mapping[][DATA_LANES_COUNT] = {
-> +	[NORMAL_LANE_MAPPING] = { 0, 1 },
-> +	[INVERT_LANE_MAPPING] = { 1, 0 },
-> +};
-> +
-> +static int fsa4480_parse_data_lanes_mapping(struct fsa4480 *fsa)
-> +{
-> +	struct fwnode_handle *ep;
-> +	u32 data_lanes[DATA_LANES_COUNT];
-> +	int ret, i, j;
-> +
-> +	ep = fwnode_graph_get_next_endpoint(dev_fwnode(&fsa->client->dev), NULL);
-> +	if (!ep)
+> +	if (ucsi->quirks & UCSI_NO_PARTNER_PDOS)
 > +		return 0;
 > +
-> +	ret = fwnode_property_read_u32_array(ep, "data-lanes", data_lanes, DATA_LANES_COUNT);
-> +	if (ret == -EINVAL)
-> +		/* Property isn't here, consider default mapping */
-> +		goto out_done;
-> +	if (ret) {
-> +		dev_err(&fsa->client->dev, "invalid data-lanes property: %d\n", ret);
-> +		goto out_error;
-> +	}
+>  	command = UCSI_COMMAND(UCSI_GET_PDOS) | UCSI_CONNECTOR_NUMBER(con->num);
+>  	command |= UCSI_GET_PDOS_PARTNER_PDO(is_partner);
+>  	command |= UCSI_GET_PDOS_PDO_OFFSET(offset);
+> diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+> index 474315a72c77..6478016d5cb8 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.h
+> +++ b/drivers/usb/typec/ucsi/ucsi.h
+> @@ -317,6 +317,9 @@ struct ucsi {
+>  #define EVENT_PENDING	0
+>  #define COMMAND_PENDING	1
+>  #define ACK_PENDING	2
 > +
-> +	for (i = 0; i < ARRAY_SIZE(supported_data_lane_mapping); i++) {
-> +		for (j = 0; j < DATA_LANES_COUNT; j++) {
-> +			if (data_lanes[j] != supported_data_lane_mapping[i][j])
-> +				break;
-> +		}
+> +	unsigned long quirks;
+> +#define UCSI_NO_PARTNER_PDOS	BIT(0)	/* Don't read partner's PDOs */
+>  };
+>  
+>  #define UCSI_MAX_SVID		5
+> diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
+> index db6e248f8208..a94e2df6fd45 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_glink.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_glink.c
+> @@ -6,6 +6,7 @@
+>  #include <linux/auxiliary_bus.h>
+>  #include <linux/module.h>
+>  #include <linux/mutex.h>
+> +#include <linux/of_device.h>
+>  #include <linux/property.h>
+>  #include <linux/soc/qcom/pdr.h>
+>  #include <linux/usb/typec_mux.h>
+> @@ -296,11 +297,19 @@ static void pmic_glink_ucsi_destroy(void *data)
+>  	mutex_unlock(&ucsi->lock);
+>  }
+>  
+> +static const struct of_device_id pmic_glink_ucsi_of_quirks[] = {
+> +	{ .compatible = "qcom,sc8180x-pmic-glink", .data = (void *)UCSI_NO_PARTNER_PDOS, },
+> +	{ .compatible = "qcom,sc8280xp-pmic-glink", .data = (void *)UCSI_NO_PARTNER_PDOS, },
+> +	{ .compatible = "qcom,sm8350-pmic-glink", .data = (void *)UCSI_NO_PARTNER_PDOS, },
+> +	{}
+> +};
 > +
-> +		if (j == DATA_LANES_COUNT)
-> +			break;
-> +	}
-> +
-> +	switch (i) {
-> +	case NORMAL_LANE_MAPPING:
-> +		break;
-> +	case INVERT_LANE_MAPPING:
-> +		fsa->swap_sbu_lanes = true;
-> +		break;
-> +	default:
-> +		dev_err(&fsa->client->dev, "invalid data-lanes mapping\n");
-> +		ret = -EINVAL;
-> +		goto out_error;
-> +	}
-> +
-> +out_done:
-> +	ret = 0;
-> +
-> +out_error:
-> +	fwnode_handle_put(ep);
-> +
-> +	return ret;
-> +}
-> +
->  static int fsa4480_probe(struct i2c_client *client)
+>  static int pmic_glink_ucsi_probe(struct auxiliary_device *adev,
+>  				 const struct auxiliary_device_id *id)
 >  {
->  	struct device *dev = &client->dev;
->  	struct typec_switch_desc sw_desc = { };
->  	struct typec_mux_desc mux_desc = { };
->  	struct fsa4480 *fsa;
-> +	int ret;
+>  	struct pmic_glink_ucsi *ucsi;
+>  	struct device *dev = &adev->dev;
+> +	const struct of_device_id *match;
+>  	struct fwnode_handle *fwnode;
+>  	int ret;
 >  
->  	fsa = devm_kzalloc(dev, sizeof(*fsa), GFP_KERNEL);
->  	if (!fsa)
-> @@ -193,6 +260,10 @@ static int fsa4480_probe(struct i2c_client *client)
->  	fsa->client = client;
->  	mutex_init(&fsa->lock);
+> @@ -327,6 +336,10 @@ static int pmic_glink_ucsi_probe(struct auxiliary_device *adev,
+>  	if (ret)
+>  		return ret;
 >  
-> +	ret = fsa4480_parse_data_lanes_mapping(fsa);
-> +	if (ret)
-> +		return ret;
+> +	match = of_match_device(pmic_glink_ucsi_of_quirks, dev->parent);
+> +	if (match)
+> +		ucsi->ucsi->quirks = (unsigned long)match->data;
 > +
->  	fsa->regmap = devm_regmap_init_i2c(client, &fsa4480_regmap_config);
->  	if (IS_ERR(fsa->regmap))
->  		return dev_err_probe(dev, PTR_ERR(fsa->regmap), "failed to initialize regmap\n");
-> 
+>  	ucsi_set_drvdata(ucsi->ucsi, ucsi);
+>  
+>  	device_for_each_child_node(dev, fwnode) {
 > -- 
 > 2.42.0
 
