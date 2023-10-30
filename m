@@ -1,65 +1,63 @@
-Return-Path: <linux-usb+bounces-2335-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2336-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B2587DB451
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Oct 2023 08:30:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 205D77DB464
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Oct 2023 08:34:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A6B271F21225
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Oct 2023 07:30:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CFADD2813B2
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Oct 2023 07:34:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79758612B;
-	Mon, 30 Oct 2023 07:30:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 936A46AAD;
+	Mon, 30 Oct 2023 07:34:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PQz0Z++h"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RIQGv5/2"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A0266AA6
-	for <linux-usb@vger.kernel.org>; Mon, 30 Oct 2023 07:30:39 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BEE2C0;
-	Mon, 30 Oct 2023 00:30:38 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 926E0610D
+	for <linux-usb@vger.kernel.org>; Mon, 30 Oct 2023 07:34:02 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DEEBA7;
+	Mon, 30 Oct 2023 00:34:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698651038; x=1730187038;
+  t=1698651240; x=1730187240;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=gXWZpt2Baaec3XxSr1059DajNSiecR9cDaFSnzG5vok=;
-  b=PQz0Z++h+BP1Pp3w2Bxw6+Qo1Y2ZSKqN73ddO+qj6NXCK/A+weiygUyd
-   bz40V9A4bvaZd5ikDMyW8IdpqiMTKi8asPWSTwKx5VuqCMLx3u7QrFiTK
-   toLrlTePKCeH+YgDM6K6SJF3pJ6oMNr3yLg1eipwjfMW5wbcz5hUr8rzQ
-   sXWRgZ99C/5D6IWseIAAEL6F71ZPrfqk2Ix4IASG87PYDilYSiaewppk4
-   VsL12DYGbf8TCX6z4x4x5C6BRIB866W/cUK79jpoxUwtwuoMSHyO0bSlJ
-   2AkfKEC3vbH85bRQmSg9Jf4CTZd5Z2IQUgQfdUrVvyIyD8/fTR8+z7aUb
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10878"; a="390884489"
+  bh=GNuA/zgIziBiLAcaxX+JeavImVsEewi4l5yzenjLCTQ=;
+  b=RIQGv5/2uB96ddQKHd9VlSjVa44pAnpwUJxak30LOt99ETxwB1o3MQJ2
+   jg2Az1966AB/bB7vGIDxSGSX5FGozKrJhsEyCtUWGvUZydR4vunGHBnpL
+   NVjpjjIK757UFZ/Sj/Ps18yE2JESIge7OeOYbeGqSen+e9YBfrS/ptTx3
+   1pQgTbrGXKi4EZi3++xxeK/QEPyK4p82rdu6wNMbT3DvXSTsO3Skdu8Vg
+   LqD1j7AEU8CF4D5zl1pXXU2TyoYOwVfPyjkrKjZnaxb1czDbNZ5K0D4wc
+   Bw17PSDmx86wlolI3eRY5BHX4VHVyoLz9yidxn5unJ9cbuWc6fYUS3MFg
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10878"; a="6660082"
 X-IronPort-AV: E=Sophos;i="6.03,262,1694761200"; 
-   d="scan'208";a="390884489"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2023 00:30:38 -0700
+   d="scan'208";a="6660082"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2023 00:34:00 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10878"; a="736661418"
+X-IronPort-AV: E=McAfee;i="6600,9927,10878"; a="903906729"
 X-IronPort-AV: E=Sophos;i="6.03,262,1694761200"; 
-   d="scan'208";a="736661418"
+   d="scan'208";a="903906729"
 Received: from kuha.fi.intel.com ([10.237.72.185])
-  by orsmga006.jf.intel.com with SMTP; 30 Oct 2023 00:30:35 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 30 Oct 2023 09:30:34 +0200
-Date: Mon, 30 Oct 2023 09:30:34 +0200
+  by fmsmga001.fm.intel.com with SMTP; 30 Oct 2023 00:33:56 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 30 Oct 2023 09:33:55 +0200
+Date: Mon, 30 Oct 2023 09:33:55 +0200
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: RD Babiera <rdbabiera@google.com>
-Cc: gregkh@linuxfoundation.org, linux@roeck-us.net,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	badhri@google.com, stable@vger.kernel.org
-Subject: Re: [PATCH v1] usb: typec: tcpm: only discover modes the port
- supports svids for
-Message-ID: <ZT9bBnKPMTDqy6aW@kuha.fi.intel.com>
-References: <20231016232816.3355132-2-rdbabiera@google.com>
- <ZTDkIGLmjmL9HwJP@kuha.fi.intel.com>
- <CALzBnUF-EZjFEHCc4XRLdFr5yP8dCq7De4SaNif32LcL5=tMYA@mail.gmail.com>
+To: Jimmy Hu <hhhuuu@google.com>
+Cc: linux@roeck-us.net, gregkh@linuxfoundation.org, kyletso@google.com,
+	badhri@google.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2] usb: typec: tcpm: Fix NULL pointer dereference in
+ tcpm_pd_svdm()
+Message-ID: <ZT9b2FDESlJSsXsj@kuha.fi.intel.com>
+References: <20231020012132.100960-1-hhhuuu@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -68,62 +66,52 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CALzBnUF-EZjFEHCc4XRLdFr5yP8dCq7De4SaNif32LcL5=tMYA@mail.gmail.com>
+In-Reply-To: <20231020012132.100960-1-hhhuuu@google.com>
 
-Hi,
-
-I'm sorry to keep you waiting.
-
-<snip>
-
-> > If you need the modes to be discovered in some specific order, then we
-> > need the framework to allow you to do that. So perhaps the tcpci
-> > drivers should be able to supply the preferred order to the tcpm?
-> >
-> > But as such, unless I'm mistaken, this patch will change the logic so
-> > that only the partner alt modes that the port supports get registered,
-> > and that way are exposed to the user. You can't do that - right now
-> > it's the only way we can inform the user about them. All partner
-> > alternate modes (at least the SVIDs) must be exposed to the user one
-> > way or the other, regardless does the port support them or not.
+On Fri, Oct 20, 2023 at 01:21:32AM +0000, Jimmy Hu wrote:
+> It is possible that typec_register_partner() returns ERR_PTR on failure.
+> When port->partner is an error, a NULL pointer dereference may occur as
+> shown below.
 > 
-> The test this patch tries to fix could just be written without consideration
-> of this. My guess is that the test was designed such that the SVIDs before
-> the DisplayPort SVID are unknown to the port under test so the mentality
-> could have been "why should a port care about SVIDs it doesn't know
-> about?"
+> [91222.095236][  T319] typec port0: failed to register partner (-17)
+> ...
+> [91225.061491][  T319] Unable to handle kernel NULL pointer dereference
+> at virtual address 000000000000039f
+> [91225.274642][  T319] pc : tcpm_pd_data_request+0x310/0x13fc
+> [91225.274646][  T319] lr : tcpm_pd_data_request+0x298/0x13fc
+> [91225.308067][  T319] Call trace:
+> [91225.308070][  T319]  tcpm_pd_data_request+0x310/0x13fc
+> [91225.308073][  T319]  tcpm_pd_rx_handler+0x100/0x9e8
+> [91225.355900][  T319]  kthread_worker_fn+0x178/0x58c
+> [91225.355902][  T319]  kthread+0x150/0x200
+> [91225.355905][  T319]  ret_from_fork+0x10/0x30
 > 
-> A defense I could make for it is that the USB PD CTS doesn't test
-> to see if a port under test sends Discover Modes for every SVID returned
-> in a Discover SVIDs ACK, so the interpretation isn't invalid. I've seen other
-> tcpm implementations handle Discover Modes this way as well.
+> Add a check for port->partner to avoid dereferencing a NULL pointer.
 > 
-> Regardless, you're definitely right that the user should know about all
-> Alt Modes/SVIDs - the port would lose SVID information without
-> registering a partner altmode for it. Currently I think the approaches to pass
-> this test look like:
->     1. Your suggestion - let the tcpci decide if there should be a
-> discovery order.
-> Alternatively, let the tcpci decide if it wants to opt into this
-> patch's behavior of
-> only discovering modes for known SVIDs - a strict discovery flag.
->     2. Send a Discover Mode message to known SVIDs first in the order
-> they come in, and then to unknown SVIDs. The test passes and no information
-> is lost, but it's unnecessary refactoring just to pass one test for
-> one Alt Mode.
->     3. Don't send a Discover Mode message to unknown SVIDs, but do register
-> an Alt Mode with blank info for that SVID. It passes the test without having to
-> do any reordering compared to the first option and it preserves supported
-> SVIDs. But, the port would lose information such as each SVID's Alt Modes
-> VDO plus each SVID can support more than one Alt Mode.
-> 
-> Let me know if any of these approaches sound worth pursuing; I do think
-> Option 1 does make more sense than the others.
+> Fixes: 5e1d4c49fbc8 ("usb: typec: tcpm: Determine common SVDM Version")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Jimmy Hu <hhhuuu@google.com>
 
-I would like to hear what Guenter thinks. Guenter, do you have time to
-take a look at this?
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-thanks,
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 6e843c511b85..792ec4ac7d8d 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -1625,6 +1625,9 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
+>  			if (PD_VDO_VID(p[0]) != USB_SID_PD)
+>  				break;
+>  
+> +			if (IS_ERR_OR_NULL(port->partner))
+> +				break;
+> +
+>  			if (PD_VDO_SVDM_VER(p[0]) < svdm_version) {
+>  				typec_partner_set_svdm_version(port->partner,
+>  							       PD_VDO_SVDM_VER(p[0]));
 
 -- 
 heikki
