@@ -1,118 +1,243 @@
-Return-Path: <linux-usb+bounces-2336-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2337-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 205D77DB464
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Oct 2023 08:34:11 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 403237DB4C4
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Oct 2023 09:06:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CFADD2813B2
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Oct 2023 07:34:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 732051C209EC
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Oct 2023 08:06:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 936A46AAD;
-	Mon, 30 Oct 2023 07:34:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFC77D265;
+	Mon, 30 Oct 2023 08:05:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RIQGv5/2"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="bLXibatj"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 926E0610D
-	for <linux-usb@vger.kernel.org>; Mon, 30 Oct 2023 07:34:02 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DEEBA7;
-	Mon, 30 Oct 2023 00:34:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698651240; x=1730187240;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GNuA/zgIziBiLAcaxX+JeavImVsEewi4l5yzenjLCTQ=;
-  b=RIQGv5/2uB96ddQKHd9VlSjVa44pAnpwUJxak30LOt99ETxwB1o3MQJ2
-   jg2Az1966AB/bB7vGIDxSGSX5FGozKrJhsEyCtUWGvUZydR4vunGHBnpL
-   NVjpjjIK757UFZ/Sj/Ps18yE2JESIge7OeOYbeGqSen+e9YBfrS/ptTx3
-   1pQgTbrGXKi4EZi3++xxeK/QEPyK4p82rdu6wNMbT3DvXSTsO3Skdu8Vg
-   LqD1j7AEU8CF4D5zl1pXXU2TyoYOwVfPyjkrKjZnaxb1czDbNZ5K0D4wc
-   Bw17PSDmx86wlolI3eRY5BHX4VHVyoLz9yidxn5unJ9cbuWc6fYUS3MFg
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10878"; a="6660082"
-X-IronPort-AV: E=Sophos;i="6.03,262,1694761200"; 
-   d="scan'208";a="6660082"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2023 00:34:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10878"; a="903906729"
-X-IronPort-AV: E=Sophos;i="6.03,262,1694761200"; 
-   d="scan'208";a="903906729"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 30 Oct 2023 00:33:56 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 30 Oct 2023 09:33:55 +0200
-Date: Mon, 30 Oct 2023 09:33:55 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Jimmy Hu <hhhuuu@google.com>
-Cc: linux@roeck-us.net, gregkh@linuxfoundation.org, kyletso@google.com,
-	badhri@google.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2] usb: typec: tcpm: Fix NULL pointer dereference in
- tcpm_pd_svdm()
-Message-ID: <ZT9b2FDESlJSsXsj@kuha.fi.intel.com>
-References: <20231020012132.100960-1-hhhuuu@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A538AAD5F
+	for <linux-usb@vger.kernel.org>; Mon, 30 Oct 2023 08:05:54 +0000 (UTC)
+Received: from smtp.smtpout.orange.fr (smtp-17.smtpout.orange.fr [80.12.242.17])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55238C4
+	for <linux-usb@vger.kernel.org>; Mon, 30 Oct 2023 01:05:46 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.2.178])
+	by smtp.orange.fr with ESMTPA
+	id xNHKqXbMchjcfxNHKq5hVe; Mon, 30 Oct 2023 09:05:44 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1698653144;
+	bh=eQeOxn3lchQjy9IwIOUUEredww/rqkL2X7LAfreMOiQ=;
+	h=Date:Subject:Cc:References:From:To:In-Reply-To;
+	b=bLXibatjRS5tWgqTWfDNAAz0gLqWsSbpcYGOnLBlQd5HQ3ksEwjRy8mhW75WwaxtL
+	 jU85TaDGWgz6zHlCz257bqbDg8wbK8CA2w36swL4HYhZhgm144T39xncBYt0FzCzJk
+	 8ouf/Z7SQZrUlXhQq4USRsbi0MO6ElyMlJCBw+aup2AWpGoUB0J/J7ZBprZm0LOBJp
+	 bADnpD1Qk5JLVZdIxUX5daJVJbo7gpnMs+z1BmNZEFo0OBuGwnnClg/RYBcjSGeb60
+	 IiQwHqeJ65+Zm5B6Aw9Bqt/VYCNxzTc6U4zDhpf5NHEPFIsKnrNrodwL108m+OtEt+
+	 6cJ8xGH+YgIKw==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Mon, 30 Oct 2023 09:05:44 +0100
+X-ME-IP: 86.243.2.178
+Message-ID: <6654879e-f577-4e0c-a00a-0ee45d379b51@wanadoo.fr>
+Date: Mon, 30 Oct 2023 09:05:42 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231020012132.100960-1-hhhuuu@google.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 1/2] usb: dwc3: add Realtek DHC RTD SoC dwc3 glue layer
+ driver
+Content-Language: fr
+Cc: Thinh.Nguyen@synopsys.com, conor+dt@kernel.org,
+ devicetree@vger.kernel.org, gregkh@linuxfoundation.org,
+ krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, robh+dt@kernel.org
+References: <20230826031028.1892-1-stanley_chang@realtek.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To: stanley_chang@realtek.com
+In-Reply-To: <20230826031028.1892-1-stanley_chang@realtek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Fri, Oct 20, 2023 at 01:21:32AM +0000, Jimmy Hu wrote:
-> It is possible that typec_register_partner() returns ERR_PTR on failure.
-> When port->partner is an error, a NULL pointer dereference may occur as
-> shown below.
+Le 26/08/2023 à 05:10, Stanley Chang a écrit :
+> Realtek DHC RTD SoCs integrate dwc3 IP and has some customizations to
+> support different generations of SoCs.
 > 
-> [91222.095236][  T319] typec port0: failed to register partner (-17)
-> ...
-> [91225.061491][  T319] Unable to handle kernel NULL pointer dereference
-> at virtual address 000000000000039f
-> [91225.274642][  T319] pc : tcpm_pd_data_request+0x310/0x13fc
-> [91225.274646][  T319] lr : tcpm_pd_data_request+0x298/0x13fc
-> [91225.308067][  T319] Call trace:
-> [91225.308070][  T319]  tcpm_pd_data_request+0x310/0x13fc
-> [91225.308073][  T319]  tcpm_pd_rx_handler+0x100/0x9e8
-> [91225.355900][  T319]  kthread_worker_fn+0x178/0x58c
-> [91225.355902][  T319]  kthread+0x150/0x200
-> [91225.355905][  T319]  ret_from_fork+0x10/0x30
+> The RTD1619b subclass SoC only supports USB 2.0 from dwc3. The driver
+> can set a maximum speed to support this. Add role switching function,
+> that can switch USB roles through other drivers, or switch USB roles
+> through user space through set /sys/class/usb_role/.
 > 
-> Add a check for port->partner to avoid dereferencing a NULL pointer.
-> 
-> Fixes: 5e1d4c49fbc8 ("usb: typec: tcpm: Determine common SVDM Version")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Jimmy Hu <hhhuuu@google.com>
-
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
+> Signed-off-by: Stanley Chang <stanley_chang-Rasf1IRRPZFBDgjK7y7TUQ@public.gmane.org>
+> Acked-by: Thinh Nguyen <Thinh.Nguyen-HKixBCOQz3hWk0Htik3J/w@public.gmane.org>
 > ---
->  drivers/usb/typec/tcpm/tcpm.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 6e843c511b85..792ec4ac7d8d 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -1625,6 +1625,9 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
->  			if (PD_VDO_VID(p[0]) != USB_SID_PD)
->  				break;
->  
-> +			if (IS_ERR_OR_NULL(port->partner))
-> +				break;
-> +
->  			if (PD_VDO_SVDM_VER(p[0]) < svdm_version) {
->  				typec_partner_set_svdm_version(port->partner,
->  							       PD_VDO_SVDM_VER(p[0]));
 
--- 
-heikki
+...
+
+> +static int dwc3_rtk_probe_dwc3_core(struct dwc3_rtk *rtk)
+> +{
+> +	struct device *dev = rtk->dev;
+> +	struct device_node *node = dev->of_node;
+> +	struct platform_device *dwc3_pdev;
+> +	struct device *dwc3_dev;
+> +	struct device_node *dwc3_node;
+> +	enum usb_dr_mode dr_mode;
+> +	int ret = 0;
+> +
+> +	ret = dwc3_rtk_init(rtk);
+> +	if (ret)
+> +		return -EINVAL;
+> +
+> +	ret = of_platform_populate(node, NULL, NULL, dev);
+> +	if (ret) {
+> +		dev_err(dev, "failed to add dwc3 core\n");
+> +		return ret;
+> +	}
+> +
+> +	dwc3_node = of_get_compatible_child(node, "snps,dwc3");
+> +	if (!dwc3_node) {
+> +		dev_err(dev, "failed to find dwc3 core node\n");
+> +		ret = -ENODEV;
+> +		goto depopulate;
+> +	}
+> +
+> +	dwc3_pdev = of_find_device_by_node(dwc3_node);
+> +	if (!dwc3_pdev) {
+> +		dev_err(dev, "failed to find dwc3 core platform_device\n");
+> +		ret = -ENODEV;
+> +		goto err_node_put;
+> +	}
+> +
+> +	dwc3_dev = &dwc3_pdev->dev;
+> +	rtk->dwc = platform_get_drvdata(dwc3_pdev);
+> +	if (!rtk->dwc) {
+> +		dev_err(dev, "failed to find dwc3 core\n");
+> +		ret = -ENODEV;
+> +		goto err_pdev_put;
+> +	}
+> +
+> +	dr_mode = usb_get_dr_mode(dwc3_dev);
+> +	if (dr_mode != rtk->dwc->dr_mode) {
+> +		dev_info(dev, "dts set dr_mode=%d, but dwc3 set dr_mode=%d\n",
+> +			 dr_mode, rtk->dwc->dr_mode);
+> +		dr_mode = rtk->dwc->dr_mode;
+> +	}
+> +
+> +	switch (dr_mode) {
+> +	case USB_DR_MODE_PERIPHERAL:
+> +		rtk->cur_role = USB_ROLE_DEVICE;
+> +		break;
+> +	case USB_DR_MODE_HOST:
+> +		rtk->cur_role = USB_ROLE_HOST;
+> +		break;
+> +	default:
+> +		dev_dbg(rtk->dev, "%s: dr_mode=%d\n", __func__, dr_mode);
+> +		break;
+> +	}
+> +
+> +	if (device_property_read_bool(dwc3_dev, "usb-role-switch")) {
+> +		ret = dwc3_rtk_setup_role_switch(rtk);
+> +		if (ret) {
+> +			dev_err(dev, "dwc3_rtk_setup_role_switch fail=%d\n", ret);
+> +			goto err_pdev_put;
+> +		}
+> +		rtk->cur_role = dwc3_rtk_get_role(rtk);
+> +	}
+> +
+> +	switch_usb2_role(rtk, rtk->cur_role);
+> +
+> +	return 0;
+> +
+> +err_pdev_put:
+> +	platform_device_put(dwc3_pdev);
+> +err_node_put:
+> +	of_node_put(dwc3_node);
+> +depopulate:
+> +	of_platform_depopulate(dev);
+> +
+> +	return ret;
+> +}
+> +
+> +static int dwc3_rtk_probe(struct platform_device *pdev)
+> +{
+> +	struct dwc3_rtk *rtk;
+> +	struct device *dev = &pdev->dev;
+> +	struct resource *res;
+> +	void __iomem *regs;
+> +	int ret = 0;
+> +
+> +	rtk = devm_kzalloc(dev, sizeof(*rtk), GFP_KERNEL);
+> +	if (!rtk) {
+> +		ret = -ENOMEM;
+> +		goto out;
+> +	}
+> +
+> +	platform_set_drvdata(pdev, rtk);
+> +
+> +	rtk->dev = dev;
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	if (!res) {
+> +		dev_err(dev, "missing memory resource\n");
+> +		ret = -ENODEV;
+> +		goto out;
+> +	}
+> +
+> +	regs = devm_ioremap_resource(dev, res);
+> +	if (IS_ERR(regs)) {
+> +		ret = PTR_ERR(regs);
+> +		goto out;
+> +	}
+> +
+> +	rtk->regs = regs;
+> +	rtk->regs_size = resource_size(res);
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+> +	if (res) {
+> +		rtk->pm_base = devm_ioremap_resource(dev, res);
+> +		if (IS_ERR(rtk->pm_base)) {
+> +			ret = PTR_ERR(rtk->pm_base);
+> +			goto out;
+> +		}
+> +	}
+> +
+> +	ret = dwc3_rtk_probe_dwc3_core(rtk);
+> +
+> +out:
+> +	return ret;
+> +}
+> +
+> +static void dwc3_rtk_remove(struct platform_device *pdev)
+> +{
+> +	struct dwc3_rtk *rtk = platform_get_drvdata(pdev);
+> +
+> +	rtk->dwc = NULL;
+> +
+> +	dwc3_rtk_remove_role_switch(rtk);
+> +
+
+Hi,
+
+Is something like
+	platform_device_put(dwc3_pdev);
+	of_node_put(dwc3_node);
+needed in the remove function?
+
+(as done in the error handling path of dwc3_rtk_probe_dwc3_core())
+
+Or should it be added at the end of dwc3_rtk_probe_dwc3_core() if the 
+reference are nor needed anymore when we leave the function?
+
+CJ
+
+> +	of_platform_depopulate(rtk->dev);
+> +}
+> +
+
+...
+
 
