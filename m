@@ -1,181 +1,248 @@
-Return-Path: <linux-usb+bounces-2365-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2366-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 942027DBFFE
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Oct 2023 19:41:45 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 813247DC11C
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Oct 2023 21:22:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48220281688
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Oct 2023 18:41:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DD428B20E1B
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Oct 2023 20:22:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B26A118B1E;
-	Mon, 30 Oct 2023 18:41:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C7161B284;
+	Mon, 30 Oct 2023 20:22:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="geMCgZzi"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gvKoH2W+"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 593FA15EB9;
-	Mon, 30 Oct 2023 18:41:35 +0000 (UTC)
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0310BC9;
-	Mon, 30 Oct 2023 11:41:32 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39UINMXH005744;
-	Mon, 30 Oct 2023 18:41:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=DBcvM7I6vA3kOhdjHsguFx5PKkUbrhWdDwhRXky9OcE=;
- b=geMCgZzi+kN3gO1A+f53U0jAXFkJbFIMGve9v8h8vlGD+bnGiOJ/l6v3yUxxlHm9xXgL
- Pd6TgYjyb+bl0Wwp4SewmrcwV110h3nbeihkGP5n7u0kD4SO0Pp8uBXexaqqUk7Pp1U/
- 4CQjWaXP+E6n340eOfb55EHmgEFL8e3xh36rXzazGY2Hi/im0Xds724CTNkPXEPLpOPm
- S8FY4USoonO/cV9NEVVUcRtXL9AswVA1h2pbuIWMrX1l78SnC+/11zmnA8L9pyDrCX9G
- xfnmjd3Ppw4/XU+9fnFP7jNlZehaE8eDmPvaPN1Wn1dlAERNAeNx/rSdK9BR8tmw6RbD iA== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3u2dey0t9h-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 30 Oct 2023 18:41:26 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39UIfPla006490
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 30 Oct 2023 18:41:25 GMT
-Received: from [10.110.59.210] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.39; Mon, 30 Oct
- 2023 11:41:25 -0700
-Message-ID: <4f37aace-004f-5ff1-bff4-d939892176be@quicinc.com>
-Date: Mon, 30 Oct 2023 11:41:24 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BF351B264
+	for <linux-usb@vger.kernel.org>; Mon, 30 Oct 2023 20:22:40 +0000 (UTC)
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA9B102
+	for <linux-usb@vger.kernel.org>; Mon, 30 Oct 2023 13:22:36 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5a7be940fe1so49810487b3.2
+        for <linux-usb@vger.kernel.org>; Mon, 30 Oct 2023 13:22:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1698697355; x=1699302155; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RZbkFdW7n25fZk9cwmO7qLQnmgnKAK5eU70WepjOvI4=;
+        b=gvKoH2W+4/t9QzFXL/8SBkeGxP72e1Uh7PRT3YaKNFyI9XhOQXxrbi9hMH0/4bXW01
+         lSH3qMwzNs3Mc7eqCdM/xYPdZCtDJn7aUV4IEV0iR5yHICJCzuym0/NMucWIoY3hGKYA
+         RoYdCfWGHXnr5OUyZTdMVYKi2peejmR+KcoTZATUERIXZ5Icx8ZFnsQuFWuJG1i5vf/v
+         MC0Vsl26d9JzeYjT4nYzFYSQEQ7iqeqv2I0kCFIAPtkcxbcemu+RazEDR2fcLolI5RU0
+         ZvhrHgMdXAVCnNg5DKHOWcQBl/f+x7qtCZj7UXvRQTDiKABaeoTEi1anPTN6uJF/9GaV
+         /5Jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698697355; x=1699302155;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RZbkFdW7n25fZk9cwmO7qLQnmgnKAK5eU70WepjOvI4=;
+        b=wA1L15UFs2weif1KU8oGVhjVFLoGdY6ZsEOcCF+MfjhcAV0ktmwUdwj1EN0j0ZMAM8
+         qCi+EGjYxovQEBVbtEBMj9D0/uRF5B74D9J+70wh2hxYZzlktvgi0twdOKDWE8C5r9P5
+         /31KfFD4KxkH+qtOJCGmhL/aYckg/aVlhT8rQvmtF9gXKTJh8tZqfV5Ov/dnpMQsKehW
+         ShQgPd/LbWaaqZISRN8t+YMOcapZpTqFQRR9f3HIlsRMaXcdrUV7SxLQ+5i+dqkQv6HJ
+         DXp48HuArXJEIi5pH+/OV8mkRMIUveHFjaERL2qm5xJNp9Jyc3SHZiq47vFobWYJDnfA
+         4SrA==
+X-Gm-Message-State: AOJu0YwelDhv3kFZ8lpygXD7VvEScWASiEOKEKBbmCveZ8cCIVUTs2LF
+	wYpUQE4rk9Giw54Rvlp5ixQxfKKGuPu9
+X-Google-Smtp-Source: AGHT+IHat5B8FCm1prDUO4wysUSxkPtzPuT2YX9PKgBozG5IUodlAPr6/mBcF+W/g6u1xK/XEFTvRIAulDvd
+X-Received: from hi-h2o-specialist.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3cef])
+ (user=arakesh job=sendgmr) by 2002:a81:920b:0:b0:59b:f3a2:cd79 with SMTP id
+ j11-20020a81920b000000b0059bf3a2cd79mr219783ywg.8.1698697355197; Mon, 30 Oct
+ 2023 13:22:35 -0700 (PDT)
+Date: Mon, 30 Oct 2023 13:22:28 -0700
+In-Reply-To: <73309396-3856-43a2-9a6f-81a40ed594db@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v4 3/3] usb: dwc3: Modify runtime pm ops to handle bus
- suspend
-Content-Language: en-US
-To: Roger Quadros <rogerq@kernel.org>, <gregkh@linuxfoundation.org>,
-        <Thinh.Nguyen@synopsys.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <devicetree@vger.kernel.org>
-CC: <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
-References: <20230814185043.9252-1-quic_eserrao@quicinc.com>
- <20230814185043.9252-4-quic_eserrao@quicinc.com>
- <9be9fae5-f6f2-42fe-bd81-78ab50aafa06@kernel.org>
- <cd294a89-33e7-0569-81b3-df77a255f061@quicinc.com>
- <0dee3bec-d49f-4808-a2f8-7a4205303e1f@kernel.org>
- <c7fc7bc2-1a84-e6b5-5198-1b8cc602d738@quicinc.com>
- <bd74947f-8827-4539-a590-9c53d5ddd02d@kernel.org>
- <ceb0f48f-8db9-40ae-769a-08e36373b922@quicinc.com>
- <09707469-193b-43c5-8503-b75f97ba1fbf@kernel.org>
-From: Elson Serrao <quic_eserrao@quicinc.com>
-In-Reply-To: <09707469-193b-43c5-8503-b75f97ba1fbf@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: v0iFOVinI0uV_gTyNVsky44UZQW0ytlH
-X-Proofpoint-GUID: v0iFOVinI0uV_gTyNVsky44UZQW0ytlH
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-10-30_12,2023-10-27_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 suspectscore=0 spamscore=0 bulkscore=0 mlxscore=0
- phishscore=0 priorityscore=1501 impostorscore=0 mlxlogscore=648
- adultscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2310240000 definitions=main-2310300145
+Mime-Version: 1.0
+References: <73309396-3856-43a2-9a6f-81a40ed594db@google.com>
+X-Mailer: git-send-email 2.42.0.820.g83a721a137-goog
+Message-ID: <20231030202231.3263253-1-arakesh@google.com>
+Subject: [PATCH v10 1/4] usb: gadget: uvc: prevent use of disabled endpoint
+From: Avichal Rakesh <arakesh@google.com>
+To: arakesh@google.com, dan.scally@ideasonboard.com
+Cc: etalvala@google.com, gregkh@linuxfoundation.org, jchowdhary@google.com, 
+	laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, m.grzeschik@pengutronix.de
+Content-Type: text/plain; charset="UTF-8"
 
+Currently the set_alt callback immediately disables the endpoint and queues
+the v4l2 streamoff event. However, as the streamoff event is processed
+asynchronously, it is possible that the video_pump thread attempts to queue
+requests to an already disabled endpoint.
 
+This change moves disabling usb endpoint to the end of streamoff event
+callback. As the endpoint's state can no longer be used, video_pump is
+now guarded by uvc->state as well. To be consistent with the actual
+streaming state, uvc->state is now toggled between CONNECTED and STREAMING
+from the v4l2 event callback only.
 
-On 10/26/2023 11:37 PM, Roger Quadros wrote:
-> 
-> 
-> On 27/10/2023 03:07, Elson Serrao wrote:
->>
->>
->>
->>>>>>>
->>>>>>> While this takes care of runtime suspend case, what about system_suspend?
->>>>>>> Should this check be moved to dwc3_suspend_common() instead?
->>>>>>>
->>>>>>
->>>>>> Sure I can move these checks to dwc3_suspend_common to make it generic.
->>>>>
->>>>> Before you do that let's first decide how we want the gadget driver to behave
->>>>> in system_suspend case.
->>>>>
->>>>> Current behavior is to Disconnect from the Host.
->>>>>
->>>>> Earlier I was thinking on the lines that we prevent system suspend if
->>>>> we are not already in USB suspend. But I'm not sure if that is the right
->>>>> thing to do anymore. Mainly because, system suspend is a result of user
->>>>> request and it may not be nice to not to meet his/her request.
->>>>
->>>> Agree. Irrespective of whether USB is suspended or not it is better to honor the system suspend request from user.
->>>>
->>>>> Maybe best to leave this policy handling to user space?
->>>>> i.e. if user wants USB gadget operation to be alive, he will not issue
->>>>> system suspend?
->>>>>
->>>>
->>>> Sure. So below two cases
->>>>
->>>> Case1: User doesn't care if gadget operation is alive and triggers system suspend irrespective of USB suspend. Like you mentioned, current behavior already takes care of this and initiates a DISCONNECT
->>>>
->>>> Case2:  User wants gadget to stay alive and hence can trigger system suspend only when USB is suspended (there are already user space hooks that read cdev->suspended bit to tell whether USB is suspended or not for user to decide). Attempts to request system suspend when USB is not suspended, would result in a DISCONNECT.
->>>>
->>>> For supporting Case2 from gadget driver point of view, we need to extend this series by having relevant checks in suspend_common()
->>>>
->>>> Also, is it better to provide separate flags to control the gadget driver behavior for runtime suspend Vs system suspend when USB is suspended ? For example, what if we want to enable bus suspend handling for runtime suspend only and not for system suspend (Case1).
->>>
->>> But you mentioned that for Case1, USB gadget would disconnect from Host. So USB will be in disconnected state and USB controller can be fully de-activated? Except maybe wakeup handling to bring system out of suspend on a USB plug/unplug event?
->>> Why do we need separate flags for?
->>>
->>
->> Sorry let me clarify. This is in reference to deciding how we want the dwc3 driver to behave in system_suspend case.
->>
->> One option is to continue with the existing behavior where USB gadget would disconnect from Host irrespective of bus suspend state. We dont need any modification in this case and we can leave this series limited to runtime suspend only.
->>
->> Second option is to stay connected IF we are in bus suspend state (U3/L2) otherwise DISCONNECT IF we are not in bus suspend state. The main motivation is to preserve the ongoing usb session
->> without going through a re-enumeration (ofcourse true only if we are in bus suspend state). This would need relevant checks in suspend_common().
-> 
-> The catch here is, what to do if the USB device is not in bus suspend state but user wants to put the system in suspend state? Do we still disconnect?
-> 
-> You might also want to refer to the discussion in [1]
-> 
-> [1] - https://lore.kernel.org/all/Y+z9NK6AyhvTQMir@rowland.harvard.edu/
-> 
+Link: https://lore.kernel.org/20230615171558.GK741@pendragon.ideasonboard.com/
+Link: https://lore.kernel.org/20230531085544.253363-1-dan.scally@ideasonboard.com/
+Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
+Reviewed-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+Tested-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+Signed-off-by: Avichal Rakesh <arakesh@google.com>
+---
+v1 -> v2 : Rebased to ToT and reworded commit message.
+v2 -> v3 : Fix email threading goof-up
+v3 -> v4 : Address review comments & re-rebase to ToT
+v4 -> v5 : Add Reviewed-by & Tested-by
+v5 -> v6 : No change
+v6 -> v7 : No change
+v7 -> v8 : No change. Getting back in review queue
+v8 -> v9 : Fix typo. No functional change.
+v9 -> v10: Rebase to ToT (usb-next)
 
-Thanks for the details. If we dont DISCONNECT when the USB link is NOT 
-in bus suspend, the other alternatives we have are below ones
+ drivers/usb/gadget/function/f_uvc.c     | 11 +++++------
+ drivers/usb/gadget/function/f_uvc.h     |  2 +-
+ drivers/usb/gadget/function/uvc.h       |  2 +-
+ drivers/usb/gadget/function/uvc_v4l2.c  | 20 +++++++++++++++++---
+ drivers/usb/gadget/function/uvc_video.c |  3 ++-
+ 5 files changed, 26 insertions(+), 12 deletions(-)
 
-1.) Abort system_suspend: In addition to not honoring the users request 
-to put the system in suspend, there is always a possibility of host 
-driver never sending bus suspend interrupt. If that happens we would be 
-denying system_suspend every time user requests it. So this is not a 
-right approach.
+diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+index 786379f1b7b7..77999ed53d33 100644
+--- a/drivers/usb/gadget/function/f_uvc.c
++++ b/drivers/usb/gadget/function/f_uvc.c
+@@ -263,10 +263,13 @@ uvc_function_setup(struct usb_function *f, const struct usb_ctrlrequest *ctrl)
+ 	return 0;
+ }
 
-2.) Keep the gadget connected and proceed with system_suspend: Now the 
-system is suspended but from host point of view the USB link is active 
-and would continue the communication normally. The signalling probably 
-is not going to to be detected as a wakeup by the Rx hardware as there 
-is no explicit resume signal involved here . The only exception is if we 
-can somehow configure each and every event from the host as a wakeup 
-signal(not sure if this is even possible)
+-void uvc_function_setup_continue(struct uvc_device *uvc)
++void uvc_function_setup_continue(struct uvc_device *uvc, int disable_ep)
+ {
+ 	struct usb_composite_dev *cdev = uvc->func.config->cdev;
 
-So IMO it is best to DISCONNECT from the host when USB link is NOT in 
-bus suspend state and user requests system_suspend.
++	if (disable_ep && uvc->video.ep)
++		usb_ep_disable(uvc->video.ep);
++
+ 	usb_composite_setup_continue(cdev);
+ }
 
-Thanks
-Elson
+@@ -337,15 +340,11 @@ uvc_function_set_alt(struct usb_function *f, unsigned interface, unsigned alt)
+ 		if (uvc->state != UVC_STATE_STREAMING)
+ 			return 0;
 
+-		if (uvc->video.ep)
+-			usb_ep_disable(uvc->video.ep);
+-
+ 		memset(&v4l2_event, 0, sizeof(v4l2_event));
+ 		v4l2_event.type = UVC_EVENT_STREAMOFF;
+ 		v4l2_event_queue(&uvc->vdev, &v4l2_event);
+
+-		uvc->state = UVC_STATE_CONNECTED;
+-		return 0;
++		return USB_GADGET_DELAYED_STATUS;
+
+ 	case 1:
+ 		if (uvc->state != UVC_STATE_CONNECTED)
+diff --git a/drivers/usb/gadget/function/f_uvc.h b/drivers/usb/gadget/function/f_uvc.h
+index 1db972d4beeb..083aef0c65c6 100644
+--- a/drivers/usb/gadget/function/f_uvc.h
++++ b/drivers/usb/gadget/function/f_uvc.h
+@@ -11,7 +11,7 @@
+
+ struct uvc_device;
+
+-void uvc_function_setup_continue(struct uvc_device *uvc);
++void uvc_function_setup_continue(struct uvc_device *uvc, int disable_ep);
+
+ void uvc_function_connect(struct uvc_device *uvc);
+
+diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
+index 6751de8b63ad..989bc6b4e93d 100644
+--- a/drivers/usb/gadget/function/uvc.h
++++ b/drivers/usb/gadget/function/uvc.h
+@@ -177,7 +177,7 @@ struct uvc_file_handle {
+  * Functions
+  */
+
+-extern void uvc_function_setup_continue(struct uvc_device *uvc);
++extern void uvc_function_setup_continue(struct uvc_device *uvc, int disable_ep);
+ extern void uvc_function_connect(struct uvc_device *uvc);
+ extern void uvc_function_disconnect(struct uvc_device *uvc);
+
+diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
+index 3f0a9795c0d4..7cb8d027ff0c 100644
+--- a/drivers/usb/gadget/function/uvc_v4l2.c
++++ b/drivers/usb/gadget/function/uvc_v4l2.c
+@@ -451,7 +451,7 @@ uvc_v4l2_streamon(struct file *file, void *fh, enum v4l2_buf_type type)
+ 	 * Complete the alternate setting selection setup phase now that
+ 	 * userspace is ready to provide video frames.
+ 	 */
+-	uvc_function_setup_continue(uvc);
++	uvc_function_setup_continue(uvc, 0);
+ 	uvc->state = UVC_STATE_STREAMING;
+
+ 	return 0;
+@@ -463,11 +463,18 @@ uvc_v4l2_streamoff(struct file *file, void *fh, enum v4l2_buf_type type)
+ 	struct video_device *vdev = video_devdata(file);
+ 	struct uvc_device *uvc = video_get_drvdata(vdev);
+ 	struct uvc_video *video = &uvc->video;
++	int ret = 0;
+
+ 	if (type != video->queue.queue.type)
+ 		return -EINVAL;
+
+-	return uvcg_video_enable(video, 0);
++	uvc->state = UVC_STATE_CONNECTED;
++	ret = uvcg_video_enable(video, 0);
++	if (ret < 0)
++		return ret;
++
++	uvc_function_setup_continue(uvc, 1);
++	return 0;
+ }
+
+ static int
+@@ -500,6 +507,14 @@ uvc_v4l2_subscribe_event(struct v4l2_fh *fh,
+ static void uvc_v4l2_disable(struct uvc_device *uvc)
+ {
+ 	uvc_function_disconnect(uvc);
++	/*
++	 * Drop uvc->state to CONNECTED if it was streaming before.
++	 * This ensures that the usb_requests are no longer queued
++	 * to the controller.
++	 */
++	if (uvc->state == UVC_STATE_STREAMING)
++		uvc->state = UVC_STATE_CONNECTED;
++
+ 	uvcg_video_enable(&uvc->video, 0);
+ 	uvcg_free_buffers(&uvc->video.queue);
+ 	uvc->func_connected = false;
+@@ -647,4 +662,3 @@ const struct v4l2_file_operations uvc_v4l2_fops = {
+ 	.get_unmapped_area = uvcg_v4l2_get_unmapped_area,
+ #endif
+ };
+-
+diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
+index 91af3b1ef0d4..c334802ac0a4 100644
+--- a/drivers/usb/gadget/function/uvc_video.c
++++ b/drivers/usb/gadget/function/uvc_video.c
+@@ -384,13 +384,14 @@ static void uvcg_video_pump(struct work_struct *work)
+ 	struct uvc_video_queue *queue = &video->queue;
+ 	/* video->max_payload_size is only set when using bulk transfer */
+ 	bool is_bulk = video->max_payload_size;
++	struct uvc_device *uvc = video->uvc;
+ 	struct usb_request *req = NULL;
+ 	struct uvc_buffer *buf;
+ 	unsigned long flags;
+ 	bool buf_done;
+ 	int ret;
+
+-	while (video->ep->enabled) {
++	while (uvc->state == UVC_STATE_STREAMING && video->ep->enabled) {
+ 		/*
+ 		 * Retrieve the first available USB request, protected by the
+ 		 * request lock.
+--
+2.42.0.820.g83a721a137-goog
 
