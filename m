@@ -1,228 +1,181 @@
-Return-Path: <linux-usb+bounces-2364-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2365-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B40D77DBF93
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Oct 2023 19:16:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 942027DBFFE
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Oct 2023 19:41:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D59C91C209AB
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Oct 2023 18:16:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48220281688
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Oct 2023 18:41:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 809A619BA7;
-	Mon, 30 Oct 2023 18:16:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B26A118B1E;
+	Mon, 30 Oct 2023 18:41:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CgvScvb7"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="geMCgZzi"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9579E199C8
-	for <linux-usb@vger.kernel.org>; Mon, 30 Oct 2023 18:16:32 +0000 (UTC)
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D15698;
-	Mon, 30 Oct 2023 11:16:30 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-99bdeae1d0aso766348666b.1;
-        Mon, 30 Oct 2023 11:16:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698689789; x=1699294589; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=E+SLeA2ywujo0UQWzu6cCHaMWc4I0sH1eRVwPgmtHyM=;
-        b=CgvScvb7u5M/zNDLnCJGYeNEdWSQOnTaBgiMx+lpvIQ9Mvxz1F83WSyF1GoAbR7ESu
-         fElcQJ/1aEACJDWhNpv9TAqY2mGWlPvoiytAHIiU8lUx1OJZrvWypLoZalxP6tKJ/g8+
-         DosokS0+ycF5J/z1wY9CENDFksAv/8+fUV72JHouGKg3NGspZnoSVJ5SEfbosDog0DJr
-         RFpnbIGIlvalfjB3nkvOBRKDYnBzWtTBFFL2/M2Y3em6yBupseHOCjN0CS8AUI2p6tJM
-         TFAqSLPJyyjiWbs8MRDJhBReSFh0Q/UsWtGbnp1o4mJhJBahS45p5MCYck9hBizKt5Cl
-         zQzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698689789; x=1699294589;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=E+SLeA2ywujo0UQWzu6cCHaMWc4I0sH1eRVwPgmtHyM=;
-        b=SPL0d7ONn0kAVtarPFwbABMVAitgNHjCF3weRdgjKYefknyT1SIMNKyWhNtO6nUmZK
-         CvtmdSWTVSICX9hVaYGbPwuHFCVcBlfn8pPiWdyDmRXp3WV2cndBJxtdPvDiR3+A+xF7
-         eNlVIEM+8NWHDvePrpDoRQAX3lJXzPQVmtvs8rCxLcm1JypS/QVUhkl2/GdmECCJ/Bby
-         p8hq994KAZSTw/SW4BBoxiwx2EZNsp9ntka8Mu2bDJoTQ988fABwIicl5RAvWxUscH7B
-         xYGgefgobSo+BkoCU88n7OneDTYdMM65jQD4UQQ8nHJ5wlL4xQ5jjIeRjDUJ4dCDyj49
-         a8BQ==
-X-Gm-Message-State: AOJu0Yxhx9F2yX0WPnHBu8M39XA8TepM2KtpV5VKnEr/3rTcN72zcBWm
-	v80zC0ckPJ0mxu8v60eMhxE=
-X-Google-Smtp-Source: AGHT+IExySIDlqCzufDXY5RxYGxYbPo8d+PjFIx5GhNWy7cZ1oeYLQdSrBJHnEgU5Z9HZbJPS9CUgw==
-X-Received: by 2002:a17:906:b257:b0:9d2:9dbe:a2f9 with SMTP id ce23-20020a170906b25700b009d29dbea2f9mr3942214ejb.50.1698689788708;
-        Mon, 30 Oct 2023 11:16:28 -0700 (PDT)
-Received: from [192.168.2.30] (85-70-151-113.rcd.o2.cz. [85.70.151.113])
-        by smtp.gmail.com with ESMTPSA id fy19-20020a170906b7d300b009cc6323fe5asm6340242ejb.134.2023.10.30.11.16.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Oct 2023 11:16:28 -0700 (PDT)
-Message-ID: <db9dbd1f-2d49-4d31-9214-a4a2437f0fc7@gmail.com>
-Date: Mon, 30 Oct 2023 19:16:27 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 593FA15EB9;
+	Mon, 30 Oct 2023 18:41:35 +0000 (UTC)
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0310BC9;
+	Mon, 30 Oct 2023 11:41:32 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39UINMXH005744;
+	Mon, 30 Oct 2023 18:41:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=DBcvM7I6vA3kOhdjHsguFx5PKkUbrhWdDwhRXky9OcE=;
+ b=geMCgZzi+kN3gO1A+f53U0jAXFkJbFIMGve9v8h8vlGD+bnGiOJ/l6v3yUxxlHm9xXgL
+ Pd6TgYjyb+bl0Wwp4SewmrcwV110h3nbeihkGP5n7u0kD4SO0Pp8uBXexaqqUk7Pp1U/
+ 4CQjWaXP+E6n340eOfb55EHmgEFL8e3xh36rXzazGY2Hi/im0Xds724CTNkPXEPLpOPm
+ S8FY4USoonO/cV9NEVVUcRtXL9AswVA1h2pbuIWMrX1l78SnC+/11zmnA8L9pyDrCX9G
+ xfnmjd3Ppw4/XU+9fnFP7jNlZehaE8eDmPvaPN1Wn1dlAERNAeNx/rSdK9BR8tmw6RbD iA== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3u2dey0t9h-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 30 Oct 2023 18:41:26 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 39UIfPla006490
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 30 Oct 2023 18:41:25 GMT
+Received: from [10.110.59.210] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.39; Mon, 30 Oct
+ 2023 11:41:25 -0700
+Message-ID: <4f37aace-004f-5ff1-bff4-d939892176be@quicinc.com>
+Date: Mon, 30 Oct 2023 11:41:24 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4] usb-storage,uas: use host helper to generate driver
- info
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
- linux-scsi@vger.kernel.org, gregkh@linuxfoundation.org, oneukum@suse.com
-References: <20231026101615.395113-1-gmazyland@gmail.com>
- <20231028174145.691523-1-gmazyland@gmail.com>
- <f6b275d9-eeeb-47ee-bc0e-3fd491e62791@rowland.harvard.edu>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v4 3/3] usb: dwc3: Modify runtime pm ops to handle bus
+ suspend
 Content-Language: en-US
-From: Milan Broz <gmazyland@gmail.com>
-Autocrypt: addr=gmazyland@gmail.com; keydata=
- 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
-In-Reply-To: <f6b275d9-eeeb-47ee-bc0e-3fd491e62791@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To: Roger Quadros <rogerq@kernel.org>, <gregkh@linuxfoundation.org>,
+        <Thinh.Nguyen@synopsys.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <devicetree@vger.kernel.org>
+CC: <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
+References: <20230814185043.9252-1-quic_eserrao@quicinc.com>
+ <20230814185043.9252-4-quic_eserrao@quicinc.com>
+ <9be9fae5-f6f2-42fe-bd81-78ab50aafa06@kernel.org>
+ <cd294a89-33e7-0569-81b3-df77a255f061@quicinc.com>
+ <0dee3bec-d49f-4808-a2f8-7a4205303e1f@kernel.org>
+ <c7fc7bc2-1a84-e6b5-5198-1b8cc602d738@quicinc.com>
+ <bd74947f-8827-4539-a590-9c53d5ddd02d@kernel.org>
+ <ceb0f48f-8db9-40ae-769a-08e36373b922@quicinc.com>
+ <09707469-193b-43c5-8503-b75f97ba1fbf@kernel.org>
+From: Elson Serrao <quic_eserrao@quicinc.com>
+In-Reply-To: <09707469-193b-43c5-8503-b75f97ba1fbf@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: v0iFOVinI0uV_gTyNVsky44UZQW0ytlH
+X-Proofpoint-GUID: v0iFOVinI0uV_gTyNVsky44UZQW0ytlH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-30_12,2023-10-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ lowpriorityscore=0 suspectscore=0 spamscore=0 bulkscore=0 mlxscore=0
+ phishscore=0 priorityscore=1501 impostorscore=0 mlxlogscore=648
+ adultscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2310240000 definitions=main-2310300145
 
 
-On 10/30/23 18:40, Alan Stern wrote:
-> On Sat, Oct 28, 2023 at 07:41:45PM +0200, Milan Broz wrote:
->> The USB mass storage quirks flags can be stored in driver_info in
->> a 32-bit integer (unsigned long on 32-bit platforms).
->> As this attribute cannot be enlarged, we need to use some form
->> of translation of 64-bit quirk bits.
+
+On 10/26/2023 11:37 PM, Roger Quadros wrote:
+> 
+> 
+> On 27/10/2023 03:07, Elson Serrao wrote:
 >>
->> This problem was discussed on the USB list
->> https://lore.kernel.org/linux-usb/f9e8acb5-32d5-4a30-859f-d4336a86b31a@gmail.com/
 >>
->> The initial solution to use a static array extensively increased the size
->> of the kernel module, so I decided to try the second suggested solution:
->> generate a table by host-compiled program and use bit 31 to indicate
->> that the value is an index, not the actual value.
 >>
->> This patch adds a host-compiled program that processes unusual_devs.h
->> (and unusual_uas.h) and generates files usb-ids.c and usb-ids-uas.c
->> (for pre-processed USB device table with 32-bit device info).
->> These files also contain a generated translation table for driver_info
->> to 64-bit values.
+>>>>>>>
+>>>>>>> While this takes care of runtime suspend case, what about system_suspend?
+>>>>>>> Should this check be moved to dwc3_suspend_common() instead?
+>>>>>>>
+>>>>>>
+>>>>>> Sure I can move these checks to dwc3_suspend_common to make it generic.
+>>>>>
+>>>>> Before you do that let's first decide how we want the gadget driver to behave
+>>>>> in system_suspend case.
+>>>>>
+>>>>> Current behavior is to Disconnect from the Host.
+>>>>>
+>>>>> Earlier I was thinking on the lines that we prevent system suspend if
+>>>>> we are not already in USB suspend. But I'm not sure if that is the right
+>>>>> thing to do anymore. Mainly because, system suspend is a result of user
+>>>>> request and it may not be nice to not to meet his/her request.
+>>>>
+>>>> Agree. Irrespective of whether USB is suspended or not it is better to honor the system suspend request from user.
+>>>>
+>>>>> Maybe best to leave this policy handling to user space?
+>>>>> i.e. if user wants USB gadget operation to be alive, he will not issue
+>>>>> system suspend?
+>>>>>
+>>>>
+>>>> Sure. So below two cases
+>>>>
+>>>> Case1: User doesn't care if gadget operation is alive and triggers system suspend irrespective of USB suspend. Like you mentioned, current behavior already takes care of this and initiates a DISCONNECT
+>>>>
+>>>> Case2:  User wants gadget to stay alive and hence can trigger system suspend only when USB is suspended (there are already user space hooks that read cdev->suspended bit to tell whether USB is suspended or not for user to decide). Attempts to request system suspend when USB is not suspended, would result in a DISCONNECT.
+>>>>
+>>>> For supporting Case2 from gadget driver point of view, we need to extend this series by having relevant checks in suspend_common()
+>>>>
+>>>> Also, is it better to provide separate flags to control the gadget driver behavior for runtime suspend Vs system suspend when USB is suspended ? For example, what if we want to enable bus suspend handling for runtime suspend only and not for system suspend (Case1).
+>>>
+>>> But you mentioned that for Case1, USB gadget would disconnect from Host. So USB will be in disconnected state and USB controller can be fully de-activated? Except maybe wakeup handling to bring system out of suspend on a USB plug/unplug event?
+>>> Why do we need separate flags for?
+>>>
 >>
->> The translation function is used only in usb-storage and uas modules; all
->> other USB storage modules store flags directly, using only 32-bit flags.
+>> Sorry let me clarify. This is in reference to deciding how we want the dwc3 driver to behave in system_suspend case.
 >>
->> For 64-bit platforms, where unsigned long is 64-bit, we do not need to
->> convert quirk flags to 32-bit index; the translation function there uses
->> flags directly.
+>> One option is to continue with the existing behavior where USB gadget would disconnect from Host irrespective of bus suspend state. We dont need any modification in this case and we can leave this series limited to runtime suspend only.
 >>
->> Signed-off-by: Milan Broz <gmazyland@gmail.com>
->> ---
+>> Second option is to stay connected IF we are in bus suspend state (U3/L2) otherwise DISCONNECT IF we are not in bus suspend state. The main motivation is to preserve the ongoing usb session
+>> without going through a re-enumeration (ofcourse true only if we are in bus suspend state). This would need relevant checks in suspend_common().
 > 
->> diff --git a/drivers/usb/storage/Makefile b/drivers/usb/storage/Makefile
->> index 46635fa4a340..b8c5daeb8ff3 100644
->> --- a/drivers/usb/storage/Makefile
->> +++ b/drivers/usb/storage/Makefile
->> @@ -45,3 +45,34 @@ ums-realtek-y		:= realtek_cr.o
->>   ums-sddr09-y		:= sddr09.o
->>   ums-sddr55-y		:= sddr55.o
->>   ums-usbat-y		:= shuttle_usbat.o
->> +
->> +# The mkflags host-compiled generator produces usb-ids.c (usb-storage)
->> +# and usb-ids-uas.c (uas) with USB device tables.
->> +# These tables include pre-computed 32-bit values, as USB driver_info
->> +# (where the value is stored) can be only 32-bit.
->> +# The most significant bit means it is index to 64-bit pre-computed table
->> +# generated by mkflags host-compiled program.
->> +# Currently used only by mass-storage and uas driver.
->> +
->> +$(obj)/usual-tables.o:	$(obj)/usb-ids.c
->> +$(obj)/uas.o:		$(obj)/usb-ids-uas.c
+> The catch here is, what to do if the USB device is not in bus suspend state but user wants to put the system in suspend state? Do we still disconnect?
 > 
-> Quick test: After those two lines were commented out from the Makefile,
-> the compiler still knew to rebuild unusual-tables.o and uas.o when
-> usb-ids.c and usb-ids-uas.c were changed.  So these lines aren't needed.
+> You might also want to refer to the discussion in [1]
+> 
+> [1] - https://lore.kernel.org/all/Y+z9NK6AyhvTQMir@rowland.harvard.edu/
+> 
 
-ok, thx, this is perhaps relict of some previous try (I tried different
-approaches) - will remove it.
+Thanks for the details. If we dont DISCONNECT when the USB link is NOT 
+in bus suspend, the other alternatives we have are below ones
 
+1.) Abort system_suspend: In addition to not honoring the users request 
+to put the system in suspend, there is always a possibility of host 
+driver never sending bus suspend interrupt. If that happens we would be 
+denying system_suspend every time user requests it. So this is not a 
+right approach.
 
-> Apart from this, I tried running the patch through checkpatch.pl, and it
-> flagged a bunch of issues.  Some of them were false positives, but
-> others really should be changed to match the kernel's style:
-> 
-> 	The SPDX license line in .c files is supposed to be a
-> 	C++-style comment, i.e., use // instead of /* ... */.
+2.) Keep the gadget connected and proceed with system_suspend: Now the 
+system is suspended but from host point of view the USB link is active 
+and would continue the communication normally. The signalling probably 
+is not going to to be detected as a wakeup by the Rx hardware as there 
+is no explicit resume signal involved here . The only exception is if we 
+can somehow configure each and every event from the host as a wakeup 
+signal(not sure if this is even possible)
 
-Perhaps just copied from header file, it is different format there.
-(And my bad, I forget to run checkpatch after many last changes...)
+So IMO it is best to DISCONNECT from the host when USB link is NOT in 
+bus suspend state and user requests system_suspend.
 
-> 
-> 	We aren't supposed to add new typedefs.  Instead of writing:
-> 
-> 		typedef enum {...} dev_type;
-> 
-> 	write:
-> 
-> 		enum dev_type {...};
-> 
-> 	and the same for dev_flags_set.
-> 
-> 	checkpatch would like the FLAGS_END macro value to be enclosed
-> 	in parentheses, since it's a complex expression.  Same for the
-> 	HI32 macro.  These don't really matter, but you may as well do
-> 	it just to get rid of the warnings.
-> 
-> 	Quoted strings (line 117 in mkflags.c) aren't supposed to be
-> 	broken across lines.  It should just be one very long line.
-> 
-> 	Contrariwise, some other lines are longer than checkpatch likes
-> 	to see (its maximum is 100 columns).  They should be wrapped.
-> 
-> These issues ought to be fixed.  But it's all stylistic stuff; I don't
-> see any actual errors or things to improve in the patch.
-
-ok, I'll send next version once I have time to do it.
-
-Thanks,
-Milan
+Thanks
+Elson
 
 
