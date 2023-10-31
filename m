@@ -1,208 +1,153 @@
-Return-Path: <linux-usb+bounces-2408-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2409-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E42B77DD8A1
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Oct 2023 23:53:09 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30B3E7DD914
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Nov 2023 00:04:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 29A8DB20F71
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Oct 2023 22:53:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 68F7A1C20CAD
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Oct 2023 23:04:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA6D927452;
-	Tue, 31 Oct 2023 22:53:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A38832746E;
+	Tue, 31 Oct 2023 23:04:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bmVR+nPf"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BACC5D29A
-	for <linux-usb@vger.kernel.org>; Tue, 31 Oct 2023 22:52:59 +0000 (UTC)
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53409B9
-	for <linux-usb@vger.kernel.org>; Tue, 31 Oct 2023 15:52:58 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1qxxbU-0005Es-RH; Tue, 31 Oct 2023 23:52:56 +0100
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1qxxbU-005fRk-6n; Tue, 31 Oct 2023 23:52:56 +0100
-Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.94.2)
-	(envelope-from <mgr@pengutronix.de>)
-	id 1qxxbT-0004rR-TZ; Tue, 31 Oct 2023 23:52:55 +0100
-Date: Tue, 31 Oct 2023 23:52:55 +0100
-From: Michael Grzeschik <mgr@pengutronix.de>
-To: Dan Scally <dan.scally@ideasonboard.com>
-Cc: linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
-	gregkh@linuxfoundation.org, balbi@kernel.org,
-	laurent.pinchart@ideasonboard.com, kernel@pengutronix.de,
-	stable <stable@kernel.org>
-Subject: Re: [PATCH v2 2/2] usb: gadget: uvc: limit isoc_sg to super speed
- gadgets
-Message-ID: <ZUGFR7JYbvd4QPBW@pengutronix.de>
-References: <20221125153450.344392-1-m.grzeschik@pengutronix.de>
- <20221125153450.344392-2-m.grzeschik@pengutronix.de>
- <be391e47-afe2-e7f6-93c8-7135b399598c@ideasonboard.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0E9927455
+	for <linux-usb@vger.kernel.org>; Tue, 31 Oct 2023 23:04:27 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 209BC103;
+	Tue, 31 Oct 2023 16:04:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1698793466; x=1730329466;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rrdo+pxc08eDuJsbTiYZVvEMJaUTmPZQSBv0NuXRWOU=;
+  b=bmVR+nPfEcqzuAksavwnrj9DzkYsLpL3Yolpz8S0jwz6uJMtMq+HVNhp
+   HNkabBant4QD2sHZO3UcPm1j+jUB7ASas4l+j66QZncsmMfyj32zlLSA0
+   wTIHh0xbeYRtJPGdTlZzSv1iV2w6zFwPc11kfbGReziRO1so8YOxShGTU
+   kxSpdYxuAh1ZnHmcKz6ZHXTVAfLfuCcAECOYDCJ8UmQvBjgUoh+KjWfRr
+   04c6iRRLhv/J01b48saEYsa9l93mFBfbodwVpaj5zNV9zhB+Tqcx801+Y
+   E5q+ellffiet65WPJHOrBwsC90xJaZG61aXRss771/cXpd5qAj+VS9VXh
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10880"; a="387276548"
+X-IronPort-AV: E=Sophos;i="6.03,266,1694761200"; 
+   d="scan'208";a="387276548"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2023 16:03:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.03,266,1694761200"; 
+   d="scan'208";a="8855384"
+Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 31 Oct 2023 16:03:56 -0700
+Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qxxm6-0000Ro-2b;
+	Tue, 31 Oct 2023 23:03:54 +0000
+Date: Wed, 1 Nov 2023 07:02:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mario Limonciello <mario.limonciello@amd.com>, bhelgaas@google.com,
+	mika.westerberg@linux.intel.com
+Cc: oe-kbuild-all@lists.linux.dev, andreas.noever@gmail.com,
+	michael.jamet@intel.com, YehezkelShB@gmail.com,
+	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, Alexander.Deucher@amd.com,
+	Mario Limonciello <mario.limonciello@amd.com>
+Subject: Re: [PATCH 2/2] PCI: Ignore PCIe ports used for tunneling in
+ pcie_bandwidth_available()
+Message-ID: <202311010646.KCczSLIW-lkp@intel.com>
+References: <20231031133438.5299-2-mario.limonciello@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="jk5G+1bNph3qgNq3"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <be391e47-afe2-e7f6-93c8-7135b399598c@ideasonboard.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+In-Reply-To: <20231031133438.5299-2-mario.limonciello@amd.com>
+
+Hi Mario,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on pci/for-linus]
+[also build test WARNING on westeri-thunderbolt/next linus/master v6.6 next-20231031]
+[cannot apply to pci/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/PCI-Ignore-PCIe-ports-used-for-tunneling-in-pcie_bandwidth_available/20231031-224221
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git for-linus
+patch link:    https://lore.kernel.org/r/20231031133438.5299-2-mario.limonciello%40amd.com
+patch subject: [PATCH 2/2] PCI: Ignore PCIe ports used for tunneling in pcie_bandwidth_available()
+config: arc-randconfig-002-20231101 (https://download.01.org/0day-ci/archive/20231101/202311010646.KCczSLIW-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231101/202311010646.KCczSLIW-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311010646.KCczSLIW-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/pci/pci.c:6234: warning: Function parameter or member 'pdev' not described in 'pcie_is_tunneling_port'
+>> drivers/pci/pci.c:6234: warning: Excess function parameter 'dev' description in 'pcie_is_tunneling_port'
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for VIDEO_OV7670
+   Depends on [n]: MEDIA_SUPPORT [=y] && VIDEO_DEV [=y] && VIDEO_CAMERA_SENSOR [=n]
+   Selected by [y]:
+   - VIDEO_CAFE_CCIC [=y] && MEDIA_SUPPORT [=y] && MEDIA_PLATFORM_SUPPORT [=y] && MEDIA_PLATFORM_DRIVERS [=y] && V4L_PLATFORM_DRIVERS [=y] && PCI [=y] && I2C [=y] && VIDEO_DEV [=y] && COMMON_CLK [=y]
 
 
---jk5G+1bNph3qgNq3
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+vim +6234 drivers/pci/pci.c
 
-Hi,
+  6225	
+  6226	/**
+  6227	 * pcie_is_tunneling_port - Check if a PCI device is used for TBT3/USB4 tunneling
+  6228	 * @dev: PCI device to check
+  6229	 *
+  6230	 * Returns true if the device is used for PCIe tunneling, false otherwise.
+  6231	 */
+  6232	static bool
+  6233	pcie_is_tunneling_port(struct pci_dev *pdev)
+> 6234	{
+  6235		struct device_link *link;
+  6236		struct pci_dev *supplier;
+  6237	
+  6238		/* Intel TBT3 bridge */
+  6239		if (pdev->is_thunderbolt)
+  6240			return true;
+  6241	
+  6242		if (!pci_is_pcie(pdev))
+  6243			return false;
+  6244	
+  6245		if (pci_pcie_type(pdev) != PCI_EXP_TYPE_ROOT_PORT)
+  6246			return false;
+  6247	
+  6248		/* PCIe root port used for tunneling linked to USB4 router */
+  6249		list_for_each_entry(link, &pdev->dev.links.suppliers, c_node) {
+  6250			supplier = to_pci_dev(link->supplier);
+  6251			if (!supplier)
+  6252				continue;
+  6253			if (supplier->class == PCI_CLASS_SERIAL_USB_USB4)
+  6254				return true;
+  6255		}
+  6256	
+  6257		return false;
+  6258	}
+  6259	
 
-On Mon, Jul 24, 2023 at 01:47:09PM +0100, Dan Scally wrote:
->On 25/11/2022 15:34, Michael Grzeschik wrote:
->>When calling uvc_video_encode_isoc_sg the function is preparing the sg pa=
-yload
->>by setting the sglist pointers of the videobuffer for the request. The usb
->>gadget driver then is parsing the sg list and uses each sg entry to send =
-in one
->>urb to the host. Because of the unrelated buffer of the uvc header that b=
-uffer
->>has to be send separately in an extra sg entry.
->>
->>When it comes to transfers with an limited payload (e.g. the maximum of 3=
-kB for
->>high-speed) this extra payload handling is not justified. A simple memcpy=
- of
->>the header and payload is usually faster and does not come with that extra
->>runtime overhead.
->
->
->Sorry for the delay with this one. I don't suppose you benchmarked
->this at all? I'd be curious to see the effect.
-
-No, I don't think that this was benchmarked. However since the last
-discussions about overall smaller request sizes to increase the
-performance on the fifo side of the usb-controller this whole
-topic needs to be rethought. I will look over this once we have
-a solution for the worker/queue_req situation as discussed in this
-thread:
-
-https://lore.kernel.org/linux-usb/ZToOJhyOFeGCGUFj@pengutronix.de/T/#t
-
-
->>This patch is changing the uvc_video_encode_isoc_sg encode function only =
-to be
->>used for super speed gadgets.
->>
->>Cc: stable <stable@kernel.org>
->>Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
->>---
->>v1 -> v2: - left the sg assignment in uvc_buffer_sg under the test for us=
-e_sg
->>           - rephrased the commit message
->>
->>  drivers/usb/gadget/function/uvc_queue.c | 3 +--
->>  drivers/usb/gadget/function/uvc_video.c | 9 +++++++--
->>  2 files changed, 8 insertions(+), 4 deletions(-)
->>
->>diff --git a/drivers/usb/gadget/function/uvc_queue.c b/drivers/usb/gadget=
-/function/uvc_queue.c
->>index 0aa3d7e1f3cc32..0abb1763faf1b6 100644
->>--- a/drivers/usb/gadget/function/uvc_queue.c
->>+++ b/drivers/usb/gadget/function/uvc_queue.c
->>@@ -87,9 +87,8 @@ static int uvc_buffer_prepare(struct vb2_buffer *vb)
->>  	if (queue->use_sg) {
->>  		buf->sgt =3D vb2_dma_sg_plane_desc(vb, 0);
->>  		buf->sg =3D buf->sgt->sgl;
->>-	} else {
->>-		buf->mem =3D vb2_plane_vaddr(vb, 0);
->>  	}
->>+	buf->mem =3D vb2_plane_vaddr(vb, 0);
->>  	buf->length =3D vb2_plane_size(vb, 0);
->>  	if (vb->type =3D=3D V4L2_BUF_TYPE_VIDEO_CAPTURE)
->>  		buf->bytesused =3D 0;
->>diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget=
-/function/uvc_video.c
->>index dd1c6b2ca7c6f3..b6ea600b011185 100644
->>--- a/drivers/usb/gadget/function/uvc_video.c
->>+++ b/drivers/usb/gadget/function/uvc_video.c
->>@@ -459,6 +459,9 @@ static void uvcg_video_pump(struct work_struct *work)
->>   */
->>  int uvcg_video_enable(struct uvc_video *video, int enable)
->>  {
->>+	struct uvc_device *uvc =3D video->uvc;
->>+	struct usb_composite_dev *cdev =3D uvc->func.config->cdev;
->>+	struct usb_gadget *gadget =3D cdev->gadget;
->>  	unsigned int i;
->>  	int ret;
->>@@ -490,9 +493,11 @@ int uvcg_video_enable(struct uvc_video *video, int e=
-nable)
->>  	if (video->max_payload_size) {
->>  		video->encode =3D uvc_video_encode_bulk;
->>  		video->payload_size =3D 0;
->>-	} else
->>-		video->encode =3D video->queue.use_sg ?
->>+	} else {
->>+		video->encode =3D (video->queue.use_sg &&
->>+				 !(gadget->speed <=3D USB_SPEED_HIGH)) ?
->>  			uvc_video_encode_isoc_sg : uvc_video_encode_isoc;
->>+	}
->
->
->I think it'd be better to just set video->queue.use_sg n=20
->uvcg_queue_init() by checking cdev->gadget->speed as well as=20
->cdev->gadget->sg_supported; can we do that?
-
-Yes, this is the better place to check this.
-
-In case this patch will be send again, I will work this in sure.
-
->>  	video->req_int_count =3D 0;
-
-Michael
-
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
---jk5G+1bNph3qgNq3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmVBhUMACgkQC+njFXoe
-LGRXxw/5AZp7ihGjRG67Kjbri+PofS0Rc+8nEI5DTWoVqLD7o4KScuD+F/VJgdwj
-VHpd5ndHMJcZ+XIVqLF3pU1OICvasKzHYQT6AhGmOiz/Rc6sqF9ytzV9NkG4yU5D
-6SCOfAQay62key6pcAdegV45+dNCGP1uTwlgCKqwbzsJOxnFV4xWWxfo42BYw7g8
-z2BicclEyRlBiIQfdHDeLfz9VNq8pXxKPhpfRWz6PTKO4duBvjbLptdYfdNU5kyQ
-lg/kWICkdAlsV7l+Qm6DT8tGURfBj1Gg2OLC63uCoSR8SoB/Xbaxr0CAlz1meBkn
-KaMYdr2GRFQOMyt9WmyRlYGcUSwfBGUulwd9Z3HaLa7j6CZP59y27oTxju8Dxr/R
-snszRk+dwg+zlDg8AsxrFxioXHwR1fn+K9naEOfDbGTwj+liu0a4VVP21oz/MTLj
-Ihdvw6FVa+PqF+t4zFnLeuku9r3OBC8uIFM6uidWUUJjeSI6kyvKa5P+6AAMuuOI
-GtvojgmUyvg0kgjDxUQQzDJjoIo4au+BSoCpj8S0qr0jmueZrs4f9zsxapMhFvdU
-r1gUStcmG68VAz+VHY0N5zllw3dPmfT0aYC1leoJSBSaAr1AIrGpuK4cAIxGFZ09
-Yc8DVfC5fbz+TFS7rC0EbmpuUd++WEx3mcc+vSwrvv8QLiL7M3U=
-=sn2U
------END PGP SIGNATURE-----
-
---jk5G+1bNph3qgNq3--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
