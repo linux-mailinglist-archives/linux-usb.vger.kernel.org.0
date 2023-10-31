@@ -1,126 +1,123 @@
-Return-Path: <linux-usb+bounces-2406-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2407-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91E167DD5CA
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Oct 2023 19:07:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EA7DA7DD893
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Oct 2023 23:46:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C27701C20CF7
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Oct 2023 18:07:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 277CC1C20D20
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Oct 2023 22:46:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDC2321364;
-	Tue, 31 Oct 2023 18:07:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GXLxsoTO"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DE1727452;
+	Tue, 31 Oct 2023 22:46:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5785221113
-	for <linux-usb@vger.kernel.org>; Tue, 31 Oct 2023 18:07:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C2F3FC433C8
-	for <linux-usb@vger.kernel.org>; Tue, 31 Oct 2023 18:07:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1698775649;
-	bh=LrId0kyTi/IpfBvWc+JVPhYjduwF8uz8B3ybq8KhXGo=;
-	h=From:To:Subject:Date:From;
-	b=GXLxsoTOhXHg1PR+NArEjCaUmtOLusY7/3ybUmIIuhmiDv+jpLN3tVPPVk0Ppc/aW
-	 fcn0Xv2UZfcNbrM4LbXg+bQpLSm3n6QLBRZq1kSDWpzHRlit+RCHiMmpIOxRTyPYpJ
-	 QBKQZfUci+xOQBP/vpQ8dKTPPcR30z7whV2nbbhbkYxCbGnbp5DoMneuuYL6UIfBEJ
-	 sCC2C1neeIC4fh06tjxFGVIpyCOYGdDHlzVpsjUXoFSw1W2fM4HVNOtcmPmyuLn0hG
-	 KMjqKHZCqxUBrO5e6xhD7f2FQ3LAe5wSaMzVMxtY0oG0pHLepgWlbw+JtRQDJVZHD4
-	 Vc5DNNuLHxupw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id A199BC4332E; Tue, 31 Oct 2023 18:07:29 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 218093] New: Keyboard will not register any input after using
- certain FN-Combos
-Date: Tue, 31 Oct 2023 18:07:29 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: kotversuchung@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter
- cf_regression
-Message-ID: <bug-218093-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7924610790
+	for <linux-usb@vger.kernel.org>; Tue, 31 Oct 2023 22:46:14 +0000 (UTC)
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52BB4ED
+	for <linux-usb@vger.kernel.org>; Tue, 31 Oct 2023 15:46:13 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1qxxUx-0003rp-Lf; Tue, 31 Oct 2023 23:46:11 +0100
+Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1qxxUw-005fR8-Tr; Tue, 31 Oct 2023 23:46:10 +0100
+Received: from mgr by pty.whiteo.stw.pengutronix.de with local (Exim 4.94.2)
+	(envelope-from <mgr@pengutronix.de>)
+	id 1qxxUw-0004pG-Kd; Tue, 31 Oct 2023 23:46:10 +0100
+Date: Tue, 31 Oct 2023 23:46:10 +0100
+From: Michael Grzeschik <mgr@pengutronix.de>
+To: Hans Verkuil <hverkuil@xs4all.nl>
+Cc: linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+	gregkh@linuxfoundation.org, balbi@kernel.org,
+	laurent.pinchart@ideasonboard.com, kernel@pengutronix.de,
+	stable <stable@kernel.org>
+Subject: Re: [PATCH v2 1/2] media: videobuf2-dma-sg: fix vmap and vunmap
+ callbacks
+Message-ID: <ZUGDsqO/QXL+q8Vq@pengutronix.de>
+References: <20221125153450.344392-1-m.grzeschik@pengutronix.de>
+ <20230124223453.GB7611@pengutronix.de>
+ <481daff2-ee22-e0a9-3583-a3ee828c5c43@xs4all.nl>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="6UN7E6yBpuvB3vW5"
+Content-Disposition: inline
+In-Reply-To: <481daff2-ee22-e0a9-3583-a3ee828c5c43@xs4all.nl>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218093
 
-            Bug ID: 218093
-           Summary: Keyboard will not register any input after using
-                    certain FN-Combos
-           Product: Drivers
-           Version: 2.5
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P3
-         Component: USB
-          Assignee: drivers_usb@kernel-bugs.kernel.org
-          Reporter: kotversuchung@gmail.com
-        Regression: No
+--6UN7E6yBpuvB3vW5
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-MSI B550 A-Pro Motherboard
-Sharkoon SGK3 Keyboard
+Hi Hans,
 
-I pretty much tried all Kernels. The Issue is always the same:
+On Tue, Jul 18, 2023 at 10:40:57AM +0200, Hans Verkuil wrote:
+>I'm going through some old patches in patchwork and found this one.
+>Is this patch specifically for the uvc gadget driver, or is it a
+>generic fix? If it is the latter (I suspect it is), then can you
+>post this as a v3 by itself and rebased to the latest kernel?
 
-When pressing a FN-Combo for the Keyboard-LEDs in my Case FN+=3D. The keybo=
-ard
-might not be able to send any more input. "Normal" Combos like using the FN=
- key
-to increase or decrease  the Volume like FN+F2/F3 will not cause this issue=
-.=20
-When checking with tools like evtest i noticed that sometimes no release
-command of the keyboard is received and it spams the Terminal while no more
-other input is recognized. Connecting the Keyboard to a USB3 Port (instead =
-of
-the USB "Keyboard Port") the keyboard stays responsive though you'll still =
-see
-the "terminal spam" caused by no release event.
+I will just send v3 then. It is totally working without other
+dependencies. This is long overdue.
 
-I tried blacklisting certain combos so that i wouldn't accidently hit that =
-key
-though it just doesn't help. To be honest it seems to me that Linux
-recognizes/receives that it shouldn't. Because even if the Input "freezes" =
-i'm
-still able to change the LED-Behaviour of the Keyboard..=20
-On Windows this issue doesn't exist. So i'm pretty certain that it is relat=
-ed
-to Linux in some way. I also tried an Uefi-Update yet the Issue persisted.
-I'm by no means a "Linux Pro" and actually have no clue what else i could t=
-ry.
-So i just wanted to report that here in case someone else is having this is=
-sue.
+>The fact that it was combined with the uvc gadget patch in the patch
+>series is the main reason for this delay (see also my upcoming reply
+>to patch 2/2).
+
+I will look into this aswell.
+
+Thanks,
+Michael
 
 --=20
-You may reply to this email to add a comment.
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+--6UN7E6yBpuvB3vW5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmVBg6kACgkQC+njFXoe
+LGSDJg/+KCMWzKyb1EQ17aEEVhV6Nq9s0od/IO2w9PNnXa7EhJIX3HmQg0ThdkWG
+suVhdAvGmtKZBp0cXx2UfW3QhK3cPSxbTR7UPZwjbMQXiNdRmHud2EMbn4rNW+sl
+NsaE8xiquzTuLviiUEI1AKf4PUN8krO8nlrZsxJOgl4bzPGtogL3edKCHC3GRCjg
+6kGm0V9JNRSX5xlH4dtykgQRMaxa7XyFynmso7mV1T3WRBEkflVkJjbDk4+VEWC6
+4FOgr3buJHiUDyS0vlU2AoKlcR28SD2zgyl6vNiU4LDJZA15DgifZu+le2uaAzY5
+4jsjgvAUHQpYfbEOO065WsfS8NLBdDlvDsWdErnzezyjpI6QDQ9Zboy3pAp1Ym2u
+1fTI+gshPR2KDKclXTdTNLh5aVdKIMMll/gO5SkTMAK83/ML3Z6MqWsyB7eFTyhp
+nXQi2LdWjch1zsdzsNcDo5D4Wxzh9UHCYRVO+5tVvu8q5AGM7FzFryVq559ssiWH
+3gGnyUm834rZO4WpWx7fSoXGd9g9Cspp6uEe6ZFfvnnxMnsuQU4OxugF+h7JZuiZ
+nJ1dbjDJ2cDGZiQqTFkl5goghhIUhEu8EUxvBPjo7oLB/t2SMgx6OUuMcV35Uflt
++iVBF6OFHwP/9UysMfSnEC9dMu/SmLDrVQ/GlfBwEKGx2e9lo24=
+=pxqZ
+-----END PGP SIGNATURE-----
+
+--6UN7E6yBpuvB3vW5--
 
