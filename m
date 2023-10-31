@@ -1,117 +1,290 @@
-Return-Path: <linux-usb+bounces-2385-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2386-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D10A57DC898
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Oct 2023 09:45:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69C3D7DC8E5
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Oct 2023 10:02:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7119AB20E9B
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Oct 2023 08:45:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2BFEB2817A6
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Oct 2023 09:02:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92E1910976;
-	Tue, 31 Oct 2023 08:45:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kFKGwLq7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1D4E12E4A;
+	Tue, 31 Oct 2023 09:02:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 028681118E;
-	Tue, 31 Oct 2023 08:45:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31203C433C7;
-	Tue, 31 Oct 2023 08:45:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1698741931;
-	bh=5wJvna+beQCOoBMamTqBSNyLMYqw9va5g3L23JcTKjA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kFKGwLq7atkoZk2ctNWkWaLtX4huxVdg21TgdNNRR2yAe/z8URE4aL6tQYTYLwbSu
-	 RIU3UyLGInK0tgSbcbnImAPdIEfVkRxb7vHp144UVq5OrYD+6MHAGUoRWcf1VdOuAS
-	 pZLoa10u3NM4weaC1sgGuFsFXei+JH+fF/1sULHZoNAs6qJ17aEbgsm5x7wtwAEvYB
-	 KpDqxlBZiTvQjg+xLj5tKhJKVJriQNjd8gg+iMOaoCw+Vm7AYrLWxueqSOt6/veZOV
-	 6LsoegmdKO3Ab66D7fzLJW1hiEDt2iBo1Hk51Dx3Fa+YwE7j3VWzEWTen6Ky28l8RY
-	 k12bpp2L9Th+Q==
-Date: Tue, 31 Oct 2023 16:45:21 +0800
-From: Peter Chen <peter.chen@kernel.org>
-To: Frank Li <Frank.Li@nxp.com>
-Cc: imx@lists.linux.dev, Pawel Laszczak <pawell@cadence.com>,
-	Roger Quadros <rogerq@kernel.org>,
-	Aswath Govindraju <a-govindraju@ti.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"open list:CADENCE USB3 DRD IP DRIVER" <linux-usb@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/1] usb: cdns3: skip set TRB_IOC when usb_request:
- no_interrupt is true
-Message-ID: <20231031084521.GA1948529@nchen-desktop>
-References: <20231027183919.664271-1-Frank.Li@nxp.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0835E6FCC
+	for <linux-usb@vger.kernel.org>; Tue, 31 Oct 2023 09:02:25 +0000 (UTC)
+Received: from mail-oi1-f205.google.com (mail-oi1-f205.google.com [209.85.167.205])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8C8FB3
+	for <linux-usb@vger.kernel.org>; Tue, 31 Oct 2023 02:02:23 -0700 (PDT)
+Received: by mail-oi1-f205.google.com with SMTP id 5614622812f47-3b2e7a8fbbdso7126685b6e.1
+        for <linux-usb@vger.kernel.org>; Tue, 31 Oct 2023 02:02:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698742943; x=1699347743;
+        h=content-transfer-encoding:to:from:subject:message-id:date
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Gbd8Lm/cxXlJYk8RguQqD2HHq3LCFPG8wS7Enybuhz0=;
+        b=Pcussc0YP2aGpHggxM2TzKgRptEHezmupSaZUVBUvR0m0i6iLk0exnuI9IBVz8Fg9g
+         Qsdkkm2i1md9hinOEKHw82lAh+eV/4yoYCdEGOAA1HvHR/10Opk8y6GdO4upX5GAyR9r
+         sAEjotgSJBK46fzh5LjK67lcTPzvPEq9Kp+WZZckqb6eRQT5L9UAVlJAgKoq03Z4rzWU
+         NvQbLS4BEIMnfUa/xc4FTLWXMSTJ35wfXhDjAS+7mN39GGJhlgrLXFauQdCcrJ4MQhtN
+         lq8F7M3YzYhOoGib2ioqk91jZWatiLU3igSshPSoLHB1wi9ksJpPyFOjjJbd2NrVBSwF
+         DQ+w==
+X-Gm-Message-State: AOJu0YzRQ4ci4gIdPA4ENBA6S0CG//O5u0OcTzD7+xlKGCMF9/Pm6a7m
+	SOySxjSjUU/MNsrQnDOg0p0rzz6rmELeME4h464Q+ejwDvCI
+X-Google-Smtp-Source: AGHT+IH8AkwArgChFf8K+myrjGZEkXNpTv4Z9zj8jUH4cFkpyaSO+eVZ0/zSAlPlqMgDY06I8Jnqf7tgdYxSy2zIJoDhmMvepGHk
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231027183919.664271-1-Frank.Li@nxp.com>
+X-Received: by 2002:a05:6808:1523:b0:3b2:e46e:448c with SMTP id
+ u35-20020a056808152300b003b2e46e448cmr4356963oiw.3.1698742943154; Tue, 31 Oct
+ 2023 02:02:23 -0700 (PDT)
+Date: Tue, 31 Oct 2023 02:02:23 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b1093b0608ff6979@google.com>
+Subject: [syzbot] [usb?] INFO: rcu detected stall in raw_ioctl
+From: syzbot <syzbot+5f996b83575ef4058638@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 23-10-27 14:39:19, Frank Li wrote:
-> No completion irq is needed if no_interrupt is true. Needn't set TRB_IOC
-> at this case.
-> 
-> Check usb_request: no_interrupt and set/skip TRB_IOC in
-> cdns3_ep_run_transfer().
-> 
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+Hello,
 
-Acked-by: Peter Chen <peter.chen@kernel.org>
+syzbot found the following issue on:
 
-Peter
-> ---
->  drivers/usb/cdns3/cdns3-gadget.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
-> index 69a44bd7e5d02..cd08897f8da8b 100644
-> --- a/drivers/usb/cdns3/cdns3-gadget.c
-> +++ b/drivers/usb/cdns3/cdns3-gadget.c
-> @@ -1124,6 +1124,7 @@ static int cdns3_ep_run_transfer(struct cdns3_endpoint *priv_ep,
->  	u16 total_tdl = 0;
->  	struct scatterlist *s = NULL;
->  	bool sg_supported = !!(request->num_mapped_sgs);
-> +	u32 ioc = request->no_interrupt ? 0 : TRB_IOC;
->  
->  	if (priv_ep->type == USB_ENDPOINT_XFER_ISOC)
->  		num_trb = priv_ep->interval;
-> @@ -1233,11 +1234,11 @@ static int cdns3_ep_run_transfer(struct cdns3_endpoint *priv_ep,
->  			control |= pcs;
->  
->  		if (priv_ep->type == USB_ENDPOINT_XFER_ISOC  && !priv_ep->dir) {
-> -			control |= TRB_IOC | TRB_ISP;
-> +			control |= ioc | TRB_ISP;
->  		} else {
->  			/* for last element in TD or in SG list */
->  			if (sg_iter == (num_trb - 1) && sg_iter != 0)
-> -				control |= pcs | TRB_IOC | TRB_ISP;
-> +				control |= pcs | ioc | TRB_ISP;
->  		}
->  
->  		if (sg_iter)
-> @@ -1268,7 +1269,7 @@ static int cdns3_ep_run_transfer(struct cdns3_endpoint *priv_ep,
->  	priv_req->num_of_trb = num_trb;
->  
->  	if (sg_iter == 1)
-> -		trb->control |= cpu_to_le32(TRB_IOC | TRB_ISP);
-> +		trb->control |= cpu_to_le32(ioc | TRB_ISP);
->  
->  	if (priv_dev->dev_ver < DEV_VER_V2 &&
->  	    (priv_ep->flags & EP_TDLCHK_EN)) {
-> -- 
-> 2.34.1
-> 
+HEAD commit:    9b6db9a3a675 Merge tag 'thunderbolt-for-v6.7-rc1' of git:/.=
+.
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.=
+git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=3D13cae767680000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3Da6685a8ab59f583=
+8
+dashboard link: https://syzkaller.appspot.com/bug?extid=3D5f996b83575ef4058=
+638
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Deb=
+ian) 2.40
 
--- 
+Unfortunately, I don't have any reproducer for this issue yet.
 
-Thanks,
-Peter Chen
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/a7b1b6a564cc/disk-=
+9b6db9a3.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/a091a2f990e1/vmlinux-=
+9b6db9a3.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/5d14ab1c75e4/bzI=
+mage-9b6db9a3.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit=
+:
+Reported-by: syzbot+5f996b83575ef4058638@syzkaller.appspotmail.com
+
+rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: {
+ 1-....
+ } 2684 jiffies s: 17493 root: 0x2/.
+rcu: blocking rcu_node structures (internal RCU debug):
+Sending NMI from CPU 0 to CPUs 1:
+lowmem_reserve[]: 0 0 3924 3924
+NMI backtrace for cpu 1
+CPU: 1 PID: 22191 Comm: syz-executor.1 Not tainted 6.6.0-rc6-syzkaller-0015=
+8-g9b6db9a3a675 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Goo=
+gle 10/09/2023
+RIP: 0010:io_serial_out+0x8f/0xb0 drivers/tty/serial/8250/8250_port.c:424
+Code: 48 8d 7d 40 44 89 e1 48 b8 00 00 00 00 00 fc ff df 48 89 fa d3 e3 48 =
+c1 ea 03 80 3c 02 00 75 18 66 03 5d 40 44 89 e8 89 da ee <5b> 5d 41 5c 41 5=
+d c3 e8 e5 49 16 ff eb a4 e8 3e 4a 16 ff eb e1 66
+RSP: 0018:ffffc90000198388 EFLAGS: 00000006
+RAX: 0000000000000000 RBX: 00000000000003f9 RCX: 0000000000000000
+RDX: 00000000000003f9 RSI: ffffffff8283a005 RDI: ffffffff8c156d20
+RBP: ffffffff8c156ce0 R08: 0000000000000001 R09: 000000000000001f
+R10: 0000000000000000 R11: 205d314320202020 R12: 0000000000000000
+R13: 0000000000000000 R14: ffffffff8c156d30 R15: 00000000000000c6
+FS:  00007f0ea81f96c0(0000) GS:ffff8881f6700000(0000) knlGS:000000000000000=
+0
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f0ea8217ff0 CR3: 000000011831a000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <NMI>
+ </NMI>
+ <IRQ>
+ serial_out drivers/tty/serial/8250/8250.h:122 [inline]
+ serial8250_clear_IER+0x98/0xb0 drivers/tty/serial/8250/8250_port.c:717
+ serial8250_console_write+0x1e9/0x1060 drivers/tty/serial/8250/8250_port.c:=
+3417
+ console_emit_next_record kernel/printk/printk.c:2910 [inline]
+ console_flush_all+0x4eb/0xfb0 kernel/printk/printk.c:2966
+ console_unlock+0x10c/0x260 kernel/printk/printk.c:3035
+ vprintk_emit+0x17f/0x5f0 kernel/printk/printk.c:2307
+ vprintk+0x7b/0x90 kernel/printk/printk_safe.c:45
+ _printk+0xc8/0x100 kernel/printk/printk.c:2332
+ show_free_areas+0x1257/0x2140 mm/show_mem.c:353
+ __show_mem+0x34/0x140 mm/show_mem.c:409
+ k_spec drivers/tty/vt/keyboard.c:667 [inline]
+ k_spec+0xea/0x140 drivers/tty/vt/keyboard.c:656
+ kbd_keycode drivers/tty/vt/keyboard.c:1524 [inline]
+ kbd_event+0xcc8/0x17c0 drivers/tty/vt/keyboard.c:1543
+ input_to_handler+0x382/0x4c0 drivers/input/input.c:132
+ input_pass_values.part.0+0x52f/0x7a0 drivers/input/input.c:161
+ input_pass_values drivers/input/input.c:148 [inline]
+ input_event_dispose+0x5ee/0x770 drivers/input/input.c:378
+ input_handle_event+0x11c/0xd80 drivers/input/input.c:406
+ input_repeat_key+0x251/0x340 drivers/input/input.c:2263
+ call_timer_fn+0x19e/0x580 kernel/time/timer.c:1700
+ expire_timers kernel/time/timer.c:1751 [inline]
+ __run_timers+0x764/0xb10 kernel/time/timer.c:2022
+ run_timer_softirq+0x58/0xd0 kernel/time/timer.c:2035
+ __do_softirq+0x20b/0x94e kernel/softirq.c:553
+ invoke_softirq kernel/softirq.c:427 [inline]
+ __irq_exit_rcu kernel/softirq.c:632 [inline]
+ irq_exit_rcu+0xa7/0x110 kernel/softirq.c:644
+ sysvec_apic_timer_interrupt+0x8e/0xb0 arch/x86/kernel/apic/apic.c:1074
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:=
+645
+RIP: 0010:console_flush_all+0x9e0/0xfb0 kernel/printk/printk.c:2972
+Code: 66 19 23 00 9c 5b 81 e3 00 02 00 00 31 ff 48 89 de e8 b4 68 1c 00 48 =
+85 db 0f 85 97 03 00 00 e8 16 6d 1c 00 fb 48 8b 44 24 08 <48> 8b 14 24 0f b=
+6 00 83 e2 07 38 d0 7f 08 84 c0 0f 85 08 05 00 00
+RSP: 0018:ffffc9000d37faf0 EFLAGS: 00000293
+RAX: fffff52001a6ff89 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff888120331d00 RSI: ffffffff8131088a RDI: 0000000000000007
+RBP: dffffc0000000000 R08: 0000000000000007 R09: 0000000000000000
+R10: 0000000000000000 R11: 205d314320202020 R12: ffffffff88351760
+R13: 0000000000000001 R14: ffffffff883517b8 R15: 0000000000000001
+ console_unlock+0x10c/0x260 kernel/printk/printk.c:3035
+ vprintk_emit+0x17f/0x5f0 kernel/printk/printk.c:2307
+ vprintk+0x7b/0x90 kernel/printk/printk_safe.c:45
+ _printk+0xc8/0x100 kernel/printk/printk.c:2332
+ usb_gadget_register_driver_owner+0x1c2/0x2d0 drivers/usb/gadget/udc/core.c=
+:1695
+ raw_ioctl_run drivers/usb/gadget/legacy/raw_gadget.c:559 [inline]
+ raw_ioctl+0x172f/0x2b80 drivers/usb/gadget/legacy/raw_gadget.c:1266
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:871 [inline]
+ __se_sys_ioctl fs/ioctl.c:857 [inline]
+ __x64_sys_ioctl+0x18f/0x210 fs/ioctl.c:857
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x38/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f0ea8eb884b
+Code: 00 48 89 44 24 18 31 c0 48 8d 44 24 60 c7 04 24 10 00 00 00 48 89 44 =
+24 08 48 8d 44 24 20 48 89 44 24 10 b8 10 00 00 00 0f 05 <89> c2 3d 00 f0 f=
+f ff 77 1c 48 8b 44 24 18 64 48 2b 04 25 28 00 00
+RSP: 002b:00007f0ea81f6fa0 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 0000000000000004 RCX: 00007f0ea8eb884b
+RDX: 0000000000000000 RSI: 0000000000005501 RDI: 0000000000000004
+RBP: 00007f0ea81f8070 R08: 0000000000000010 R09: 00312e6364755f79
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007f0ea81f7040 R14: 0000000020000080 R15: 00007f0ea90fcb88
+ </TASK>
+Node 0 Normal free:2722092kB boost:0kB min:6108kB low:10124kB high:14140kB =
+reserved_highatomic:0KB active_anon:56432kB inactive_anon:206832kB active_f=
+ile:21556kB inactive_file:162020kB unevictable:0kB writepending:48kB presen=
+t:5242880kB managed:4018384kB mlocked:0kB bounce:0kB free_pcp:6736kB local_=
+pcp:2472kB free_cma:0kB
+lowmem_reserve[]: 0 0 0 0
+Node 0 DMA: 0*4kB 0*8kB 0*16kB 0*32kB 0*64kB 0*128kB 0*256kB 0*512kB 1*1024=
+kB (U) 1*2048kB (M) 3*4096kB (M) =3D 15360kB
+Node 0 DMA32: 3*4kB (M) 1*8kB (M) 2*16kB (M) 3*32kB (M) 3*64kB (M) 3*128kB =
+(M) 2*256kB (M) 2*512kB (M) 2*1024kB (M) 1*2048kB (M) 702*4096kB (M) =3D 28=
+81748kB
+Node 0 Normal: 833*4kB (ME) 497*8kB (UME) 242*16kB (ME) 124*32kB (UME) 42*6=
+4kB (UME) 9*128kB (ME) 1*256kB (E) 1*512kB (M) 3*1024kB (UME) 2*2048kB (UM)=
+ 658*4096kB (M) =3D 2722092kB
+Node 0 hugepages_total=3D4 hugepages_free=3D4 hugepages_surp=3D0 hugepages_=
+size=3D2048kB
+101532 total pagecache pages
+0 pages in swap cache
+Free swap  =3D 124996kB
+Total swap =3D 124996kB
+2097051 pages RAM
+0 pages HighMem/MovableOnly
+367316 pages reserved
+iowarrior 2-1:0.0: iowarrior_callback - usb_submit_urb failed with result -=
+19
+Mem-Info:
+active_anon:14108 inactive_anon:51414 isolated_anon:0
+ active_file:5389 inactive_file:40505 isolated_file:0
+ unevictable:0 dirty:0 writeback:0
+ slab_reclaimable:5350 slab_unreclaimable:84376
+ mapped:11391 shmem:55640 pagetables:388
+ sec_pagetables:0 bounce:0
+ kernel_misc_reclaimable:0
+ free:1412738 free_pcp:1798 free_cma:0
+Node 0 active_anon:56432kB inactive_anon:205656kB active_file:21556kB inact=
+ive_file:162020kB unevictable:0kB isolated(anon):0kB isolated(file):0kB map=
+ped:45564kB dirty:0kB writeback:0kB shmem:222560kB writeback_tmp:0kB kernel=
+_stack:4020kB pagetables:1552kB sec_pagetables:0kB all_unreclaimable? no
+Node 0 DMA free:15360kB boost:0kB min:20kB low:32kB high:44kB reserved_high=
+atomic:0KB active_anon:0kB inactive_anon:0kB active_file:0kB inactive_file:=
+0kB unevictable:0kB writepending:0kB present:15992kB managed:15360kB mlocke=
+d:0kB bounce:0kB free_pcp:0kB local_pcp:0kB free_cma:0kB
+lowmem_reserve[]: 0 2814 6738 6738
+Node 0 DMA32 free:2881748kB boost:0kB min:4380kB low:7260kB high:10140kB re=
+served_highatomic:0KB active_anon:0kB inactive_anon:0kB active_file:0kB ina=
+ctive_file:0kB unevictable:0kB writepending:0kB present:3129332kB managed:2=
+885196kB mlocked:0kB bounce:0kB free_pcp:3448kB local_pcp:3384kB free_cma:0=
+kB
+lowmem_reserve[]: 0 0 3924 3924
+Node 0 Normal free:2753844kB boost:0kB min:6108kB low:10124kB high:14140kB =
+reserved_highatomic:0KB active_anon:56432kB inactive_anon:205576kB active_f=
+ile:21556kB inactive_file:162020kB unevictable:0kB writepending:0kB present=
+:5242880kB managed:4018384kB mlocked:0kB bounce:0kB free_pcp:5844kB local_p=
+cp:1464kB free_cma:0kB
+lowmem_reserve[]: 0 0 0 0
+Node 0 DMA: 0*4kB 0*8kB 0*16kB 0*32kB 0*64kB 0*128kB 0*256kB 0*512kB 1*1024=
+kB (U) 1*2048kB (M) 3*4096kB (M) =3D 15360kB
+Node 0 DMA32: 3*4kB (M) 1*8kB (M) 2*16kB (M) 3*32kB (M) 3*64kB (M) 3*128kB =
+(M) 2*256kB (M) 2*512kB (M) 2*1024kB (M) 1*2048kB (M) 702*4096kB (M) =3D 28=
+81748kB
+Node 0 Normal: 1173*4kB (UME) 658*8kB (UME) 453*16kB (UME) 398*32kB (UME) 1=
+31*64kB (UME) 61*128kB (UME) 11*256kB (UME) 5*512kB (UME) 3*1024kB (UME) 2*=
+2048kB (UM) 658*4096kB (M) =3D 2753844kB
+Node 0 hugepages_total=3D4 hugepages_free=3D4 hugepages_surp=3D0 hugepages_=
+size=3D2048kB
+101535 total pagecache pages
+0 pages in swap cache
+Free swap  =3D 124996kB
+Total swap =3D 124996kB
+2097051 pages RAM
+0 pages HighMem/MovableOnly
+367316 pages reserved
+iowarrior 2-1:0.0: iowarrior_callback - usb_submit_urb failed with result -=
+19
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to overwrite bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
