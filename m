@@ -1,43 +1,45 @@
-Return-Path: <linux-usb+bounces-2381-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2382-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4FC607DC625
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Oct 2023 06:54:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFACD7DC62B
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Oct 2023 07:00:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 772321C20BBE
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Oct 2023 05:54:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5A47F28170D
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Oct 2023 06:00:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A334DDB8;
-	Tue, 31 Oct 2023 05:54:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 050C2DDDA;
+	Tue, 31 Oct 2023 06:00:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="O2pk7oQ8"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Zh2A5CVZ"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0340ED2EE
-	for <linux-usb@vger.kernel.org>; Tue, 31 Oct 2023 05:54:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E40E1C433CB;
-	Tue, 31 Oct 2023 05:54:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F1C1D535
+	for <linux-usb@vger.kernel.org>; Tue, 31 Oct 2023 06:00:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77CA8C433CA;
+	Tue, 31 Oct 2023 06:00:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1698731678;
-	bh=XbuXcOofB+YYRpzkpEc0cY0O+v3jQnt9AfKHu8wLDNk=;
+	s=korg; t=1698732048;
+	bh=iB7SU7X4lCstBjTo8XyyKak/6Jb9SnOPNn+3KyJ7p0I=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=O2pk7oQ8OQJofOOofISvUW+jJEHoj29SYT6GffWr7gbgZL7jLiBZv1AHj26RAL7hL
-	 z/83Twn6THDhyRXHZIh3dqf7jtr4Y8zB46kvfl+11DWxDCx//U9GYnXhzrAuIBLVf2
-	 BKn9oYExNzO4Lrcjc5eKmdb7sLnQ6NZsNZz6y7mE=
-Date: Tue, 31 Oct 2023 06:54:34 +0100
+	b=Zh2A5CVZRru44YRIKIqWgBlvs+Eka4zB5nuE+V1uSdIzn+2pyUyu8fNZoXzVlJeb3
+	 jK88r+MzXmF/B9wcDF+a0H03NTf4zlODNJbAy8VhyW48AnY9vQUFXafHtFCKMZzIt3
+	 Q/LqauFxEy+LhgzZAEaZX3fI/h4nUR9xzrdK+h6U=
+Date: Tue, 31 Oct 2023 07:00:43 +0100
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Naveen Kumar <mnkumar@google.com>
-Cc: Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, royluo@google.com
-Subject: Re: [PATCH 2/2] dt-bindings: usb: add no-64-bit-support property
-Message-ID: <2023103104-stamp-amniotic-369d@gregkh>
-References: <20231031044021.1162403-1-mnkumar@google.com>
- <20231031044021.1162403-3-mnkumar@google.com>
+To: Manan Aurora <maurora@google.com>
+Cc: Alan Stern <stern@rowland.harvard.edu>,
+	Badhri Jagan Sridharan <badhri@google.com>,
+	Francesco Dolcini <francesco.dolcini@toradex.com>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	manugautam@google.com
+Subject: Re: [PATCH] usb: gadget: Support transfers from device memory
+Message-ID: <2023103156-clapping-shed-4626@gregkh>
+References: <20231031035403.661938-1-maurora@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -46,43 +48,68 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231031044021.1162403-3-mnkumar@google.com>
+In-Reply-To: <20231031035403.661938-1-maurora@google.com>
 
-On Tue, Oct 31, 2023 at 04:40:21AM +0000, Naveen Kumar wrote:
-> From: Naveen Kumar M <mnkumar@google.com>
+On Tue, Oct 31, 2023 at 03:54:02AM +0000, Manan Aurora wrote:
+> USB gadget stack only supports usb_request objects that point to buffers
+> located in memory. Support use cases where data is transferred from
+> physical addresses in device mmio regions
 > 
-> Add a new DT option to specify whether a host controller is able to
-> support 64-bit DMA memory pointers
+> Added a bit "pre_mapped" to usb_request to bypass dma_map_single and
+> dma_map_sg for such requests
 > 
-> Signed-off-by: Naveen Kumar M <mnkumar@google.com>
+> The caller must determine the dma address for the request before queuing
+> it
+> 
+> Signed-off-by: Manan Aurora <maurora@google.com>
 > ---
->  Documentation/devicetree/bindings/usb/usb-xhci.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
+>  drivers/usb/gadget/udc/core.c | 4 ++--
+>  include/linux/usb/gadget.h    | 1 +
+>  2 files changed, 3 insertions(+), 2 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/usb-xhci.yaml b/Documentation/devicetree/bindings/usb/usb-xhci.yaml
-> index 180a261c3e8f..20dc134004f3 100644
-> --- a/Documentation/devicetree/bindings/usb/usb-xhci.yaml
-> +++ b/Documentation/devicetree/bindings/usb/usb-xhci.yaml
-> @@ -25,6 +25,10 @@ properties:
->      description: Set if the controller has broken port disable mechanism
->      type: boolean
+> diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+> index ded9531f141b..236165ba08f4 100644
+> --- a/drivers/usb/gadget/udc/core.c
+> +++ b/drivers/usb/gadget/udc/core.c
+> @@ -900,7 +900,7 @@ EXPORT_SYMBOL_GPL(usb_gadget_activate);
+>  int usb_gadget_map_request_by_dev(struct device *dev,
+>  		struct usb_request *req, int is_in)
+>  {
+> -	if (req->length == 0)
+> +	if (req->pre_mapped || req->length == 0)
+>  		return 0;
 >  
-> +  quirk-no-64-bit-support:
-> +    description: Set if the xHC doesn't support 64-bit DMA memory pointers
-> +    type: boolean
-> +
->    imod-interval-ns:
->      description: Interrupt moderation interval
->      default: 5000
+>  	if (req->num_sgs) {
+> @@ -948,7 +948,7 @@ EXPORT_SYMBOL_GPL(usb_gadget_map_request);
+>  void usb_gadget_unmap_request_by_dev(struct device *dev,
+>  		struct usb_request *req, int is_in)
+>  {
+> -	if (req->length == 0)
+> +	if (req->pre_mapped || req->length == 0)
+>  		return;
+>  
+>  	if (req->num_mapped_sgs) {
+> diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
+> index a771ccc038ac..6bc035439098 100644
+> --- a/include/linux/usb/gadget.h
+> +++ b/include/linux/usb/gadget.h
+> @@ -111,6 +111,7 @@ struct usb_request {
+>  	unsigned		zero:1;
+>  	unsigned		short_not_ok:1;
+>  	unsigned		dma_mapped:1;
+> +	unsigned		pre_mapped:1;
+>  
+>  	void			(*complete)(struct usb_ep *ep,
+>  					struct usb_request *req);
 > -- 
 > 2.42.0.820.g83a721a137-goog
 > 
 > 
 
-You did not send this patch to all of the relevant
-maintainers/reviewers, why not?
-
-please always use scripts/get_maintainer.pl on your patches.
+You can not add features/functionality that no in-kernel driver uses, so
+this can not be accepted as-is, sorry.  Please submit it as part of a
+patch series where it is actually used, otherwise we have no idea if
+this is even something that we should do or not.
 
 thanks,
 
