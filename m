@@ -1,128 +1,99 @@
-Return-Path: <linux-usb+bounces-2426-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2427-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C5477DDD6D
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Nov 2023 08:49:07 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 758667DDDC7
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Nov 2023 09:38:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3BA1D1C20D3D
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Nov 2023 07:49:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 035DD281825
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Nov 2023 08:38:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 931C163C0;
-	Wed,  1 Nov 2023 07:49:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="LXdBHclx"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B9524C77;
+	Wed,  1 Nov 2023 08:38:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B68D63BB
-	for <linux-usb@vger.kernel.org>; Wed,  1 Nov 2023 07:48:58 +0000 (UTC)
-Received: from smtp.smtpout.orange.fr (smtp-24.smtpout.orange.fr [80.12.242.24])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A0B120
-	for <linux-usb@vger.kernel.org>; Wed,  1 Nov 2023 00:48:53 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.2.178])
-	by smtp.orange.fr with ESMTPA
-	id y5y5qB80Rlciay5y5qrV60; Wed, 01 Nov 2023 08:48:52 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1698824932;
-	bh=CHO9ALMzPTlbEkghyJZxxX8YXlVDHe23Eei/dtpPG50=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=LXdBHclxjNCD3uIXRewY+ORmSBe35cHR1JjuVFDRDU8kDrSTRifteRQoW4s64jwnT
-	 hEAdOYyZJfqc81IOQQKhsFSf/5KRwlKHISzP2jr75ZnqPyHfLc7HIuT47TWZCXfZWt
-	 2bujopMXPT/Mqp/QF2XTTdRwpZdXMOBLIKRvPgCYG0ry3/RS1+P5AHQWP7dR2HLig5
-	 7+WZRU/T+y4jCl/k+TwXlJGKGEllyGJ2i0kEyU4l90WZDtEf38wfgMRFXfc7uEQQW1
-	 WEpakuLrSVci2vxwk0TP7s17m1Ploxi0ciw54aIONfoON4Md3n7RGk9/Rug4xWMT+E
-	 WA0TYoGxfamEw==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Wed, 01 Nov 2023 08:48:52 +0100
-X-ME-IP: 86.243.2.178
-Message-ID: <baceb44d-0d58-4410-b662-ad2830869db1@wanadoo.fr>
-Date: Wed, 1 Nov 2023 08:48:48 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53C931850;
+	Wed,  1 Nov 2023 08:37:59 +0000 (UTC)
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C388DF;
+	Wed,  1 Nov 2023 01:37:58 -0700 (PDT)
+Received: from [192.168.1.103] (31.173.85.63) by msexch01.omp.ru (10.188.4.12)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1258.12; Wed, 1 Nov
+ 2023 11:37:47 +0300
+Subject: Re: [PATCH V2] usb: musb: Check requset->buf before use to avoid
+ crash issue
+To: Xingxing Luo <xingxing.luo@unisoc.com>, <b-liu@ti.com>,
+	<gregkh@linuxfoundation.org>, <keescook@chromium.org>, <nathan@kernel.org>,
+	<ndesaulniers@google.com>, <trix@redhat.com>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-hardening@vger.kernel.org>, <llvm@lists.linux.dev>,
+	<xingxing0070.luo@gmail.com>, <Zhiyong.Liu@unisoc.com>,
+	<Cixi.Geng1@unisoc.com>, <Orson.Zhai@unisoc.com>, <zhang.lyra@gmail.com>
+References: <20231101071421.29462-1-xingxing.luo@unisoc.com>
+From: Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <6720b83c-e89b-6a22-e7b6-1503df7c8a0d@omp.ru>
+Date: Wed, 1 Nov 2023 11:37:46 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: RE: [PATCH v6 1/2] usb: dwc3: add Realtek DHC RTD SoC dwc3 glue
- layer driver
-Content-Language: fr, en-US
-To: =?UTF-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= <stanley_chang@realtek.com>
-Cc: "Thinh.Nguyen@synopsys.com" <Thinh.Nguyen@synopsys.com>,
- "conor+dt@kernel.org" <conor+dt@kernel.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
- "krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "robh+dt@kernel.org" <robh+dt@kernel.org>
-References: <20230826031028.1892-1-stanley_chang@realtek.com>
- <202310301424.39UEOShlC2187546@rtits1.realtek.com.tw>
- <bc33c01db5b048899dce5467e7efec74@realtek.com>
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <bc33c01db5b048899dce5467e7efec74@realtek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20231101071421.29462-1-xingxing.luo@unisoc.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [31.173.85.63]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 6.0.0, Database issued on: 11/01/2023 08:21:19
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 181034 [Nov 01 2023]
+X-KSE-AntiSpam-Info: Version: 6.0.0.2
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 543 543 1e3516af5cdd92079dfeb0e292c8747a62cb1ee4
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.85.63 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.85.63 in (user) dbl.spamhaus.org}
+X-KSE-AntiSpam-Info:
+	127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;omp.ru:7.1.1
+X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.85.63
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 11/01/2023 08:27:00
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 11/1/2023 5:24:00 AM
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
 
-Le 01/11/2023 à 07:27, Stanley Chang[昌育德] a écrit :
-> Hi CJ,
-> 
-> I think these functions are not needed in remove function.
-> 
-> In dwc3_rtk_probe_dwc3_core,
-> I have used
-> dwc3_node = of_get_compatible_child(node, "snps,dwc3");
-> and
-> dwc3_pdev = of_find_device_by_node(dwc3_node);
-> 
-> So, I call these put functions.
-> platform_device_put(dwc3_pdev);
-> of_node_put(dwc3_node);
+Hello!
 
-Yes, but you call it only in the error handling path of the function.
+   You have have a typo in the subject: s/requset/request/...
 
-I wonder if they should also be called in the remove function in order 
-to decrement the ref-counted reference.
-
-
-Same in __get_dwc3_maximum_speed(), the reference taken by:
-    dwc3_np = of_get_compatible_child(np, "snps,dwc3");
-is never released.
-
-
-See the comment at [1] to see what I mean.
-
-
-[1]: https://elixir.bootlin.com/linux/v6.6/source/drivers/of/base.c#L681
-
-CJ
-> 
-> Thanks,
-> Stanley
-> 
->> Hi,
->>
->> Is something like
->>          platform_device_put(dwc3_pdev);
->>          of_node_put(dwc3_node);
->> needed in the remove function?
->>
->> (as done in the error handling path of dwc3_rtk_probe_dwc3_core())
->>
->> Or should it be added at the end of dwc3_rtk_probe_dwc3_core() if the
->> reference are nor needed anymore when we leave the function?
->>
->> CJ
->>
->>> +     of_platform_depopulate(rtk->dev); }
->>> +
->>
->> ...
-> 
-
+MBR, Sergey
 
