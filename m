@@ -1,126 +1,123 @@
-Return-Path: <linux-usb+bounces-2416-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2417-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53B087DDAE6
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Nov 2023 03:19:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E4847DDBEB
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Nov 2023 05:36:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 092FA281943
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Nov 2023 02:19:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 17F7D281A09
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Nov 2023 04:36:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC28AED5;
-	Wed,  1 Nov 2023 02:19:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 564C715C8;
+	Wed,  1 Nov 2023 04:36:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QiAXIgx8"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SNivXMfD"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E312FEA6
-	for <linux-usb@vger.kernel.org>; Wed,  1 Nov 2023 02:19:15 +0000 (UTC)
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544F6BD
-	for <linux-usb@vger.kernel.org>; Tue, 31 Oct 2023 19:19:14 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-5b62a669d61so4708511a12.1
-        for <linux-usb@vger.kernel.org>; Tue, 31 Oct 2023 19:19:14 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88033186D
+	for <linux-usb@vger.kernel.org>; Wed,  1 Nov 2023 04:36:51 +0000 (UTC)
+Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE17FC
+	for <linux-usb@vger.kernel.org>; Tue, 31 Oct 2023 21:36:48 -0700 (PDT)
+Received: by mail-ua1-x934.google.com with SMTP id a1e0cc1a2514c-7b9ba0c07f9so1960937241.3
+        for <linux-usb@vger.kernel.org>; Tue, 31 Oct 2023 21:36:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1698805154; x=1699409954; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=YxMLCnvrWc25EU4H4xs2rJSBgkcEn2A7t+6WriOcpdA=;
-        b=QiAXIgx8BWbe7hw4awJHYl6/U2/l+ROHgBNVlkSD30Gb99uEQ2bdhkO7MLWQEXNa00
-         BJfdVKe0AtA7YwbxV0K2HbYcpv78wL3V/VcJ4je2dLWmactBdkwYkQBQLqtn6Lz7em9s
-         b1PH7UJ45SUSJ6Ye0qIVs7RMy3XFVrH+s7Kt7WTcQr6+ZL/W6ClFkvDc3CeEh7l6TkY3
-         L2uOQBbvqt/Hkm8QEtKc/uhoSpZK1L9EmezEJEU9Nb5PLJzURJ4v9nt2492zptkbYdwI
-         YNnplLVJQLIl5ifpfIqdEk5h4B88y4E9jyhfsPl8XJtcVKlb43lPaAbH+GNsuHou+dG7
-         THtA==
+        d=google.com; s=20230601; t=1698813407; x=1699418207; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ID+S04pHkx9aSKdp+ucIhh2PVs3MifW7Ts+8UbZjHPQ=;
+        b=SNivXMfD1r2UTkiVgFup6bvLT4FDiCVNeHZzBncHYLwxQ+nUWWnKk67ysW0pKA5PDd
+         W+uQ9GAsFJ9KMJPRF9oukF/ymb9GbxjHwWzBuuzNG0p5T9ez7sOwlih7OR1BJsslSAT4
+         1uG9ZuZbKMQGgiB9W5kZFctdYgcXSprni/YKNy7w20lABGwEVWMkwzSFtdUkcMcuT26P
+         h1JQs5Ypr+gbDzmubh8ei4Y0xbbhd/UQgUTFcZaFAMGmglSS5GqCF20cZYBnz9mG/48G
+         9fDsQu/Y2BEE5/PApQ09YHyw8ay8tYiQ/J4R37e09mKGsYCq0NSSPRl+zG4DGoBUOnyU
+         QSNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698805154; x=1699409954;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YxMLCnvrWc25EU4H4xs2rJSBgkcEn2A7t+6WriOcpdA=;
-        b=Jq1xO8djhRXj26hFjKT2AUK0/RK71srcIHESSUOJ55F8n2Y9aJdCSaTP6K7DdCzj7s
-         C43AI1rSwDZ2BSKLm6F7TDvU/2sZP+rK2smAHUMFU5Vxs+adEae3+ToM7u0Go53yO7Ms
-         nN7em/RGse2uvGZP6T7KunU2eo6/MGOZ4+1eYiE5u3Bnr4Gui5/t6zkPm9v6DIdXdaPJ
-         GhdlFuUEzMyT1l2nYNNh2+se4bmQw4wsOMbZHw1UxIDCVBZSWSz5s9IYZ13AQvYO320j
-         OV+52sxR6lr7sJ+Jg3wbxYIeILOcbP9IsBmGpeSMB1kB8/WTKt15MF4u9rul7JTaPiYG
-         C6Gw==
-X-Gm-Message-State: AOJu0YxoJVBLVqDr5rW6qzEtPPqY+8lqiiImOmSg0T+3hq6cpNFldsP1
-	agRzG2mg4onGUtsnHAAWxzWXyK9t5Ro=
-X-Google-Smtp-Source: AGHT+IG12wBNMJ1P0/BdAkR/0ARm+Dw/pyRIRjaikGvugugX+UjkePUEUplt1JoJ//05fozTbly+stJq0Ow=
-X-Received: from badhri.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:6442])
- (user=badhri job=sendgmr) by 2002:a63:344b:0:b0:5a9:fb7b:7f1d with SMTP id
- b72-20020a63344b000000b005a9fb7b7f1dmr255710pga.0.1698805153730; Tue, 31 Oct
- 2023 19:19:13 -0700 (PDT)
-Date: Wed,  1 Nov 2023 02:19:09 +0000
+        d=1e100.net; s=20230601; t=1698813407; x=1699418207;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ID+S04pHkx9aSKdp+ucIhh2PVs3MifW7Ts+8UbZjHPQ=;
+        b=UjgNSLyLvCfE5mAXx4nZ9wIKhKuDxVVZUB/MD4IWxoo/d8SFiCJxtFsJg4tf6bCFGV
+         N3RKE0dBQuYHYz4AHnQa6HE5ewy+hQbi3yv0A9GiXXWd26QUebdWeVyTxWAiHQLjjAY3
+         VFPVKa26w4GWnnI9mJO3rULmDBqxD8iKY4RPDWuM0jorxHTQodlMqGMRWn3RT1BASyTk
+         MXvTN3EYC415y4KauBpL4ZQAmj+lKkWYLJWrCYB6KJFORvl6+tKNUPmeQU1dPnuEV6CP
+         9oPI8IFG7/my/WqmuHOAlbsCXcUbpjukAzOnauT2zJLT8XTGzltDshWjpyB1wZG2ho57
+         AOZg==
+X-Gm-Message-State: AOJu0YzzAvVMzI4gfMVXjtDqN2sQWr2PPj6wGe9VuYZwvjCb89ZKNjMH
+	A34AIyIriZhUm3J6ueHvl+M/Qf8VuHSW0LPl7K9NUQ==
+X-Google-Smtp-Source: AGHT+IGGPNy92jDHvzo6JCYso3G1dtSpwuYY7OA/tZfjM1GsDrY498EUJvuQNbMJaRXlcFCh5cGPYqjJsOt5s/jDg6k=
+X-Received: by 2002:a67:e0d8:0:b0:45b:ede:fbcf with SMTP id
+ m24-20020a67e0d8000000b0045b0edefbcfmr9395038vsl.8.1698813407287; Tue, 31 Oct
+ 2023 21:36:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.42.0.820.g83a721a137-goog
-Message-ID: <20231101021909.2962679-1-badhri@google.com>
-Subject: [PATCH v1] usb: typec: tcpm: Skip hard reset when in error recovery
-From: Badhri Jagan Sridharan <badhri@google.com>
-To: gregkh@linuxfoundation.org, linux@roeck-us.net, 
-	heikki.krogerus@linux.intel.com
-Cc: kyletso@google.com, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, rdbabiera@google.com, amitsd@google.com, 
-	stable@vger.kernel.org, Badhri Jagan Sridharan <badhri@google.com>
+MIME-Version: 1.0
+References: <20231031044021.1162403-1-mnkumar@google.com> <20231031044021.1162403-3-mnkumar@google.com>
+ <CA+Hc5+4Gh6gDuD_NORmJR0zHx3qK6oTagx=wQ_EWf=_NJ0qy6A@mail.gmail.com>
+In-Reply-To: <CA+Hc5+4Gh6gDuD_NORmJR0zHx3qK6oTagx=wQ_EWf=_NJ0qy6A@mail.gmail.com>
+From: Naveen Kumar M <mnkumar@google.com>
+Date: Wed, 1 Nov 2023 10:06:36 +0530
+Message-ID: <CA+Hc5+72DurrRMNtMyzg9EDwJjDJx4iR1isU=L+6DG06Gx4iMQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] dt-bindings: usb: add no-64-bit-support property
+To: Mathias Nyman <mathias.nyman@intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, royluo@google.com, 
+	devicetree@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hard reset queued prior to error recovery (or) received during
-error recovery will make TCPM to prematurely exit error recovery
-sequence. Ignore hard resets received during error recovery (or)
-port reset sequence.
+Apologies for sending without plain text mode in the previous mail.
+Adding the reviewers/maintainers I missed in the initial mail to this
+patch
 
-```
-[46505.459688] state change SNK_READY -> ERROR_RECOVERY [rev3 NONE_AMS]
-[46505.459706] state change ERROR_RECOVERY -> PORT_RESET [rev3 NONE_AMS]
-[46505.460433] disable vbus discharge ret:0
-[46505.461226] Setting usb_comm capable false
-[46505.467244] Setting voltage/current limit 0 mV 0 mA
-[46505.467262] polarity 0
-[46505.470695] Requesting mux state 0, usb-role 0, orientation 0
-[46505.475621] cc:=0
-[46505.476012] pending state change PORT_RESET -> PORT_RESET_WAIT_OFF @ 100 ms [rev3 NONE_AMS]
-[46505.476020] Received hard reset
-[46505.476024] state change PORT_RESET -> HARD_RESET_START [rev3 HARD_RESET]
-```
-
-Cc: stable@vger.kernel.org
-Fixes: f0690a25a140 ("staging: typec: USB Type-C Port Manager (tcpm)")
-Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
----
- drivers/usb/typec/tcpm/tcpm.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 058d5b853b57..b386102f7a3a 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -5391,6 +5391,15 @@ static void _tcpm_pd_hard_reset(struct tcpm_port *port)
- 	if (port->bist_request == BDO_MODE_TESTDATA && port->tcpc->set_bist_data)
- 		port->tcpc->set_bist_data(port->tcpc, false);
- 
-+	switch (port->state) {
-+	case ERROR_RECOVERY:
-+	case PORT_RESET:
-+	case PORT_RESET_WAIT_OFF:
-+		return;
-+	default:
-+		break;
-+	}
-+
- 	if (port->ams != NONE_AMS)
- 		port->ams = NONE_AMS;
- 	if (port->hard_reset_count < PD_N_HARD_RESET_COUNT)
-
-base-commit: c70793fb7632a153862ee9060e6d48131469a29c
--- 
-2.42.0.820.g83a721a137-goog
-
+On Wed, Nov 1, 2023 at 9:50=E2=80=AFAM Naveen Kumar M <mnkumar@google.com> =
+wrote:
+>
+> Adding the reviewers/maintainers I missed in the previous mail to this pa=
+tch
+>
+> On Tue, Oct 31, 2023 at 10:11=E2=80=AFAM Naveen Kumar <mnkumar@google.com=
+> wrote:
+>>
+>> From: Naveen Kumar M <mnkumar@google.com>
+>>
+>> Add a new DT option to specify whether a host controller is able to
+>> support 64-bit DMA memory pointers
+>>
+>> Signed-off-by: Naveen Kumar M <mnkumar@google.com>
+>> ---
+>>  Documentation/devicetree/bindings/usb/usb-xhci.yaml | 4 ++++
+>>  1 file changed, 4 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/usb/usb-xhci.yaml b/Docum=
+entation/devicetree/bindings/usb/usb-xhci.yaml
+>> index 180a261c3e8f..20dc134004f3 100644
+>> --- a/Documentation/devicetree/bindings/usb/usb-xhci.yaml
+>> +++ b/Documentation/devicetree/bindings/usb/usb-xhci.yaml
+>> @@ -25,6 +25,10 @@ properties:
+>>      description: Set if the controller has broken port disable mechanis=
+m
+>>      type: boolean
+>>
+>> +  quirk-no-64-bit-support:
+>> +    description: Set if the xHC doesn't support 64-bit DMA memory point=
+ers
+>> +    type: boolean
+>> +
+>>    imod-interval-ns:
+>>      description: Interrupt moderation interval
+>>      default: 5000
+>> --
+>> 2.42.0.820.g83a721a137-goog
+>>
 
