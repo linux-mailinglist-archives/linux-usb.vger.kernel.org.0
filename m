@@ -1,187 +1,126 @@
-Return-Path: <linux-usb+bounces-2415-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2416-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43D7F7DDABA
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Nov 2023 02:48:41 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53B087DDAE6
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Nov 2023 03:19:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F114628189E
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Nov 2023 01:48:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 092FA281943
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Nov 2023 02:19:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2779EA4;
-	Wed,  1 Nov 2023 01:48:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC28AED5;
+	Wed,  1 Nov 2023 02:19:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jbAKFXMw"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QiAXIgx8"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 524AFA35
-	for <linux-usb@vger.kernel.org>; Wed,  1 Nov 2023 01:48:32 +0000 (UTC)
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 368F9F4;
-	Tue, 31 Oct 2023 18:48:29 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-6b1e46ca282so6365153b3a.2;
-        Tue, 31 Oct 2023 18:48:29 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E312FEA6
+	for <linux-usb@vger.kernel.org>; Wed,  1 Nov 2023 02:19:15 +0000 (UTC)
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544F6BD
+	for <linux-usb@vger.kernel.org>; Tue, 31 Oct 2023 19:19:14 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-5b62a669d61so4708511a12.1
+        for <linux-usb@vger.kernel.org>; Tue, 31 Oct 2023 19:19:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698803308; x=1699408108; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=F2BaTa6G2HWw9DgMuR1O5iLUXYXlCPDt7//P1EX5GrM=;
-        b=jbAKFXMwl47tJA2EeQxqwzX9zgg4wmQCgd+ZsWR1eF327Tm7oZj9W1yVQoSMZWBxtu
-         jzkALMJggtC3ahoduXdZ6l0sEsns88vQWkter36ZNrI6Ez4q9WpVKUCAQGmbqJQ/6rpT
-         +sxahbL2zKb5dqO7RIkexwmtWphrYv7b9rNwZK+p5UbEm93F00p7CHiP15eQiabcnYEN
-         ejnbg00OtYg78oDOm8zsc63rl6hOWOK3BW28iClLsSQdlXVvdynD+KYnd0QLyB0Q0MLD
-         PxHFINQfdALI1ZPdSXm5vBpiEET+8mzWuTBvpbwcfufhOSci3Prcy8oLeOCZSDgmhnxS
-         CsLw==
+        d=google.com; s=20230601; t=1698805154; x=1699409954; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=YxMLCnvrWc25EU4H4xs2rJSBgkcEn2A7t+6WriOcpdA=;
+        b=QiAXIgx8BWbe7hw4awJHYl6/U2/l+ROHgBNVlkSD30Gb99uEQ2bdhkO7MLWQEXNa00
+         BJfdVKe0AtA7YwbxV0K2HbYcpv78wL3V/VcJ4je2dLWmactBdkwYkQBQLqtn6Lz7em9s
+         b1PH7UJ45SUSJ6Ye0qIVs7RMy3XFVrH+s7Kt7WTcQr6+ZL/W6ClFkvDc3CeEh7l6TkY3
+         L2uOQBbvqt/Hkm8QEtKc/uhoSpZK1L9EmezEJEU9Nb5PLJzURJ4v9nt2492zptkbYdwI
+         YNnplLVJQLIl5ifpfIqdEk5h4B88y4E9jyhfsPl8XJtcVKlb43lPaAbH+GNsuHou+dG7
+         THtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698803308; x=1699408108;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=F2BaTa6G2HWw9DgMuR1O5iLUXYXlCPDt7//P1EX5GrM=;
-        b=EsRkyGAMNEPSrvnH0o5EKgzzYrekIlgwZPSxh1wpMiOxC7phJ68DgukWmFzRjvh1GA
-         C7UxOCdoDOM2GTZ/KO2HVI5EVpfEqm17AzviMQg4NmYFWEyq+IDSgytdxOVYJ+F/9UE1
-         SB8bulZo5E+NpctnqdRLBxNQiLqww+jYdfOQrvVfyxaYAcZXZeeyEX8HtiAsASgjlvzJ
-         d/8KAN+Ep24U6+eWPyNaslj7bytw3Az50MJLGi7NY4JIyE4SXnZcFBh7jm7h+VD9/zsE
-         z9xcrIJ7foQO9wUAdPBjwxsKJWmDDC/KEeEg6mOSruQ+vAAyb1OwmJYGXO+/3gdP9yqI
-         kP5g==
-X-Gm-Message-State: AOJu0YxuuPOJu//VnvHKllY6ypIg4XlyuHpkLB2YjOOnl1mfRGeXEBj4
-	RkGAoPdm82oHepPCpvI5q/5xU5bZxtc=
-X-Google-Smtp-Source: AGHT+IF79z/Pz4pTmLfsoJ3VxWrULK5C/eTSmgGYC6l5NroooZgsEqHrx4e6FT7YFA7d/6791SdA8A==
-X-Received: by 2002:a05:6a20:938c:b0:17b:40:ccd6 with SMTP id x12-20020a056a20938c00b0017b0040ccd6mr19669737pzh.2.1698803308466;
-        Tue, 31 Oct 2023 18:48:28 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id mj3-20020a17090b368300b002800b26dbc1sm1659875pjb.32.2023.10.31.18.48.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Oct 2023 18:48:26 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <feb4297d-eaa4-40b0-824d-af2c6bdb97e3@roeck-us.net>
-Date: Tue, 31 Oct 2023 18:48:25 -0700
+        d=1e100.net; s=20230601; t=1698805154; x=1699409954;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YxMLCnvrWc25EU4H4xs2rJSBgkcEn2A7t+6WriOcpdA=;
+        b=Jq1xO8djhRXj26hFjKT2AUK0/RK71srcIHESSUOJ55F8n2Y9aJdCSaTP6K7DdCzj7s
+         C43AI1rSwDZ2BSKLm6F7TDvU/2sZP+rK2smAHUMFU5Vxs+adEae3+ToM7u0Go53yO7Ms
+         nN7em/RGse2uvGZP6T7KunU2eo6/MGOZ4+1eYiE5u3Bnr4Gui5/t6zkPm9v6DIdXdaPJ
+         GhdlFuUEzMyT1l2nYNNh2+se4bmQw4wsOMbZHw1UxIDCVBZSWSz5s9IYZ13AQvYO320j
+         OV+52sxR6lr7sJ+Jg3wbxYIeILOcbP9IsBmGpeSMB1kB8/WTKt15MF4u9rul7JTaPiYG
+         C6Gw==
+X-Gm-Message-State: AOJu0YxoJVBLVqDr5rW6qzEtPPqY+8lqiiImOmSg0T+3hq6cpNFldsP1
+	agRzG2mg4onGUtsnHAAWxzWXyK9t5Ro=
+X-Google-Smtp-Source: AGHT+IG12wBNMJ1P0/BdAkR/0ARm+Dw/pyRIRjaikGvugugX+UjkePUEUplt1JoJ//05fozTbly+stJq0Ow=
+X-Received: from badhri.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:6442])
+ (user=badhri job=sendgmr) by 2002:a63:344b:0:b0:5a9:fb7b:7f1d with SMTP id
+ b72-20020a63344b000000b005a9fb7b7f1dmr255710pga.0.1698805153730; Tue, 31 Oct
+ 2023 19:19:13 -0700 (PDT)
+Date: Wed,  1 Nov 2023 02:19:09 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] usb: typec: tcpm: Fix sink caps op current check
-Content-Language: en-US
-To: Badhri Jagan Sridharan <badhri@google.com>, gregkh@linuxfoundation.org,
- heikki.krogerus@linux.intel.com
-Cc: kyletso@google.com, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20231101012845.2701348-1-badhri@google.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20231101012845.2701348-1-badhri@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.42.0.820.g83a721a137-goog
+Message-ID: <20231101021909.2962679-1-badhri@google.com>
+Subject: [PATCH v1] usb: typec: tcpm: Skip hard reset when in error recovery
+From: Badhri Jagan Sridharan <badhri@google.com>
+To: gregkh@linuxfoundation.org, linux@roeck-us.net, 
+	heikki.krogerus@linux.intel.com
+Cc: kyletso@google.com, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, rdbabiera@google.com, amitsd@google.com, 
+	stable@vger.kernel.org, Badhri Jagan Sridharan <badhri@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On 10/31/23 18:28, Badhri Jagan Sridharan wrote:
-> TCPM checks for sink caps operational current even when PD is disabled.
-> This incorrectly sets tcpm_set_charge() when PD is disabled.
-> Check for sink caps only when PD is enabled.
-> 
-> [   97.572342] Start toggling
-> [   97.578949] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
-> [   99.571648] CC1: 0 -> 0, CC2: 0 -> 4 [state TOGGLING, polarity 0, connected]
-> [   99.571658] state change TOGGLING -> SNK_ATTACH_WAIT [rev3 NONE_AMS]
-> [   99.571673] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev3 NONE_AMS]
-> [   99.741778] state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED [delayed 170 ms]
-> [   99.789283] CC1: 0 -> 0, CC2: 4 -> 5 [state SNK_DEBOUNCED, polarity 0, connected]
-> [   99.789306] state change SNK_DEBOUNCED -> SNK_DEBOUNCED [rev3 NONE_AMS]
-> [   99.903584] VBUS on
-> [   99.903591] state change SNK_DEBOUNCED -> SNK_ATTACHED [rev3 NONE_AMS]
-> [   99.903600] polarity 1
-> [   99.910155] enable vbus discharge ret:0
-> [   99.910160] Requesting mux state 1, usb-role 2, orientation 2
-> [   99.946791] state change SNK_ATTACHED -> SNK_STARTUP [rev3 NONE_AMS]
-> [   99.946798] state change SNK_STARTUP -> SNK_DISCOVERY [rev3 NONE_AMS]
-> [   99.946800] Setting voltage/current limit 5000 mV 500 mA
-> [   99.946803] vbus=0 charge:=1
-> [  100.027139] state change SNK_DISCOVERY -> SNK_READY [rev3 NONE_AMS]
-> [  100.027145] Setting voltage/current limit 5000 mV 3000 mA
-> [  100.466830] VBUS on
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 803b1c8a0cea ("usb: typec: tcpm: not sink vbus if operational current is 0mA")
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+Hard reset queued prior to error recovery (or) received during
+error recovery will make TCPM to prematurely exit error recovery
+sequence. Ignore hard resets received during error recovery (or)
+port reset sequence.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+```
+[46505.459688] state change SNK_READY -> ERROR_RECOVERY [rev3 NONE_AMS]
+[46505.459706] state change ERROR_RECOVERY -> PORT_RESET [rev3 NONE_AMS]
+[46505.460433] disable vbus discharge ret:0
+[46505.461226] Setting usb_comm capable false
+[46505.467244] Setting voltage/current limit 0 mV 0 mA
+[46505.467262] polarity 0
+[46505.470695] Requesting mux state 0, usb-role 0, orientation 0
+[46505.475621] cc:=0
+[46505.476012] pending state change PORT_RESET -> PORT_RESET_WAIT_OFF @ 100 ms [rev3 NONE_AMS]
+[46505.476020] Received hard reset
+[46505.476024] state change PORT_RESET -> HARD_RESET_START [rev3 HARD_RESET]
+```
 
-> ---
-> Changes since v2:
-> * Fix the "Fixes" tag
-> * Refactor code based on Guenter Roeck's suggestion.
-> 
-> Changes since v1:
-> * Fix commit title and description to address comments from Guenter Roeck
-> ---
->   drivers/usb/typec/tcpm/tcpm.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 058d5b853b57..afc791ab6d4f 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -4273,7 +4273,8 @@ static void run_state_machine(struct tcpm_port *port)
->   				current_lim = PD_P_SNK_STDBY_MW / 5;
->   			tcpm_set_current_limit(port, current_lim, 5000);
->   			/* Not sink vbus if operational current is 0mA */
-> -			tcpm_set_charge(port, !!pdo_max_current(port->snk_pdo[0]));
-> +			tcpm_set_charge(port, !port->pd_supported ||
-> +					pdo_max_current(port->snk_pdo[0]));
->   
->   			if (!port->pd_supported)
->   				tcpm_set_state(port, SNK_READY, 0);
-> 
-> base-commit: c70793fb7632a153862ee9060e6d48131469a29c
+Cc: stable@vger.kernel.org
+Fixes: f0690a25a140 ("staging: typec: USB Type-C Port Manager (tcpm)")
+Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+---
+ drivers/usb/typec/tcpm/tcpm.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 058d5b853b57..b386102f7a3a 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -5391,6 +5391,15 @@ static void _tcpm_pd_hard_reset(struct tcpm_port *port)
+ 	if (port->bist_request == BDO_MODE_TESTDATA && port->tcpc->set_bist_data)
+ 		port->tcpc->set_bist_data(port->tcpc, false);
+ 
++	switch (port->state) {
++	case ERROR_RECOVERY:
++	case PORT_RESET:
++	case PORT_RESET_WAIT_OFF:
++		return;
++	default:
++		break;
++	}
++
+ 	if (port->ams != NONE_AMS)
+ 		port->ams = NONE_AMS;
+ 	if (port->hard_reset_count < PD_N_HARD_RESET_COUNT)
+
+base-commit: c70793fb7632a153862ee9060e6d48131469a29c
+-- 
+2.42.0.820.g83a721a137-goog
 
 
