@@ -1,73 +1,73 @@
-Return-Path: <linux-usb+bounces-2417-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2418-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E4847DDBEB
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Nov 2023 05:36:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CBF07DDBED
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Nov 2023 05:42:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 17F7D281A09
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Nov 2023 04:36:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F2FB02818BA
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Nov 2023 04:42:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 564C715C8;
-	Wed,  1 Nov 2023 04:36:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2843915BB;
+	Wed,  1 Nov 2023 04:42:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SNivXMfD"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HPOr7tlW"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88033186D
-	for <linux-usb@vger.kernel.org>; Wed,  1 Nov 2023 04:36:51 +0000 (UTC)
-Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE17FC
-	for <linux-usb@vger.kernel.org>; Tue, 31 Oct 2023 21:36:48 -0700 (PDT)
-Received: by mail-ua1-x934.google.com with SMTP id a1e0cc1a2514c-7b9ba0c07f9so1960937241.3
-        for <linux-usb@vger.kernel.org>; Tue, 31 Oct 2023 21:36:48 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C1DD7F
+	for <linux-usb@vger.kernel.org>; Wed,  1 Nov 2023 04:42:18 +0000 (UTC)
+Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6177ED
+	for <linux-usb@vger.kernel.org>; Tue, 31 Oct 2023 21:42:16 -0700 (PDT)
+Received: by mail-vs1-xe2b.google.com with SMTP id ada2fe7eead31-4584e93ca8bso2694224137.1
+        for <linux-usb@vger.kernel.org>; Tue, 31 Oct 2023 21:42:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1698813407; x=1699418207; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1698813736; x=1699418536; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ID+S04pHkx9aSKdp+ucIhh2PVs3MifW7Ts+8UbZjHPQ=;
-        b=SNivXMfD1r2UTkiVgFup6bvLT4FDiCVNeHZzBncHYLwxQ+nUWWnKk67ysW0pKA5PDd
-         W+uQ9GAsFJ9KMJPRF9oukF/ymb9GbxjHwWzBuuzNG0p5T9ez7sOwlih7OR1BJsslSAT4
-         1uG9ZuZbKMQGgiB9W5kZFctdYgcXSprni/YKNy7w20lABGwEVWMkwzSFtdUkcMcuT26P
-         h1JQs5Ypr+gbDzmubh8ei4Y0xbbhd/UQgUTFcZaFAMGmglSS5GqCF20cZYBnz9mG/48G
-         9fDsQu/Y2BEE5/PApQ09YHyw8ay8tYiQ/J4R37e09mKGsYCq0NSSPRl+zG4DGoBUOnyU
-         QSNg==
+        bh=AgH3+HSLjETT5wLuuz9AiA0y3mldkhc/pGAcIcF0398=;
+        b=HPOr7tlWDtj1r7EhuTvm6NgawnYJHRhVxrQ1DeukYuYZikSK2ybtSZsvuf8IpVoTur
+         /zZ3k8ObgekeLr/qpoqKTczRAphN+rSz86yXkSdBCtHgSacRnfVYI5iusD7XWrNcd/Mr
+         oxIZupMjxeBxa/BTceLYDlaTaO/EkbyLwD9CNPwU7cBxB9pCUoxPNuFNgyVaRaQidmGF
+         I5VB2JpuMGf9+s6pCiKTe/6ZWEREHofMLMzxr71xYJPGNCe0AxicUTjAo6ZXJwIHTQgB
+         ebsjaV3PRSrUof5yrYoF9rMQxzvPJCFIEnkOLwcAV0IA1JDUgFqXIM/2a+Wd5CyQC3te
+         rMOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698813407; x=1699418207;
+        d=1e100.net; s=20230601; t=1698813736; x=1699418536;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ID+S04pHkx9aSKdp+ucIhh2PVs3MifW7Ts+8UbZjHPQ=;
-        b=UjgNSLyLvCfE5mAXx4nZ9wIKhKuDxVVZUB/MD4IWxoo/d8SFiCJxtFsJg4tf6bCFGV
-         N3RKE0dBQuYHYz4AHnQa6HE5ewy+hQbi3yv0A9GiXXWd26QUebdWeVyTxWAiHQLjjAY3
-         VFPVKa26w4GWnnI9mJO3rULmDBqxD8iKY4RPDWuM0jorxHTQodlMqGMRWn3RT1BASyTk
-         MXvTN3EYC415y4KauBpL4ZQAmj+lKkWYLJWrCYB6KJFORvl6+tKNUPmeQU1dPnuEV6CP
-         9oPI8IFG7/my/WqmuHOAlbsCXcUbpjukAzOnauT2zJLT8XTGzltDshWjpyB1wZG2ho57
-         AOZg==
-X-Gm-Message-State: AOJu0YzzAvVMzI4gfMVXjtDqN2sQWr2PPj6wGe9VuYZwvjCb89ZKNjMH
-	A34AIyIriZhUm3J6ueHvl+M/Qf8VuHSW0LPl7K9NUQ==
-X-Google-Smtp-Source: AGHT+IGGPNy92jDHvzo6JCYso3G1dtSpwuYY7OA/tZfjM1GsDrY498EUJvuQNbMJaRXlcFCh5cGPYqjJsOt5s/jDg6k=
-X-Received: by 2002:a67:e0d8:0:b0:45b:ede:fbcf with SMTP id
- m24-20020a67e0d8000000b0045b0edefbcfmr9395038vsl.8.1698813407287; Tue, 31 Oct
- 2023 21:36:47 -0700 (PDT)
+        bh=AgH3+HSLjETT5wLuuz9AiA0y3mldkhc/pGAcIcF0398=;
+        b=IMGVUgxJs7raOhMJNjXu3Hy3Ir3mOofGMLGUbYd54TxHd4eQ8gbpJVGuBk2efsi44P
+         v47Is3X7fZPN8Feq73A/R2oUtlgKZ0ubvDYelpA/QUbh3l8okX01q6OSXl6MySMyJRop
+         km2E0wG7jZjeVSVQKDoNiyY5zK3O/oLK1uHttCbDzlSzvD/4w4kqgHv2ou0nUwIc8MuU
+         g8/vOdPJVzbikaH7bFi/f/ji9Prlpa2bzlmbeDpwk8WVQYMAds2B2j0dzRNn5AnlQKsY
+         1v2AEi3e7ARp2syPQdO1w1YlDcVkYl1Cxl1UfNLQbidBmzd1cKFqNRRM7qmZ12C+lqAi
+         I8Bg==
+X-Gm-Message-State: AOJu0YyrohbsN1y2kX+hMClgtG9wH7MR8dBHoZsywaScNxDPrKrx90a2
+	/qKZgheIW9XCRDUWofZdJmJzhK4sVays/qV1x1n7LaKdxK9rLMuSezb+fw==
+X-Google-Smtp-Source: AGHT+IHwPNtghu32HE5o0YvdXHVy1gAosLlFpssriydow3gFdL0loxYzv/76Zvu0G96qi1rk3zj6nssPQCL3MzyHtjs=
+X-Received: by 2002:a05:6102:aca:b0:457:ee76:4317 with SMTP id
+ m10-20020a0561020aca00b00457ee764317mr14206176vsh.0.1698813735673; Tue, 31
+ Oct 2023 21:42:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231031044021.1162403-1-mnkumar@google.com> <20231031044021.1162403-3-mnkumar@google.com>
- <CA+Hc5+4Gh6gDuD_NORmJR0zHx3qK6oTagx=wQ_EWf=_NJ0qy6A@mail.gmail.com>
-In-Reply-To: <CA+Hc5+4Gh6gDuD_NORmJR0zHx3qK6oTagx=wQ_EWf=_NJ0qy6A@mail.gmail.com>
+References: <20231031044021.1162403-1-mnkumar@google.com>
+In-Reply-To: <20231031044021.1162403-1-mnkumar@google.com>
 From: Naveen Kumar M <mnkumar@google.com>
-Date: Wed, 1 Nov 2023 10:06:36 +0530
-Message-ID: <CA+Hc5+72DurrRMNtMyzg9EDwJjDJx4iR1isU=L+6DG06Gx4iMQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] dt-bindings: usb: add no-64-bit-support property
+Date: Wed, 1 Nov 2023 10:12:05 +0530
+Message-ID: <CA+Hc5+5ZmywtRdu5KQ=jbgx114c8eJc=TY_KQWWyeuiAC-_7MA@mail.gmail.com>
+Subject: Re: [PATCH 0/2] Add a quirk in xhci-plat for parent nodes to specify
+ no 64 bit support
 To: Mathias Nyman <mathias.nyman@intel.com>, 
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh+dt@kernel.org>, 
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>
@@ -76,48 +76,29 @@ Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, royluo@google.com,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Apologies for sending without plain text mode in the previous mail.
-Adding the reviewers/maintainers I missed in the initial mail to this
-patch
+Adding the reviewers/maintainers I missed in the previous mail to this patc=
+h
 
-On Wed, Nov 1, 2023 at 9:50=E2=80=AFAM Naveen Kumar M <mnkumar@google.com> =
+On Tue, Oct 31, 2023 at 10:10=E2=80=AFAM Naveen Kumar <mnkumar@google.com> =
 wrote:
 >
-> Adding the reviewers/maintainers I missed in the previous mail to this pa=
-tch
+> From: Naveen Kumar M <mnkumar@google.com>
 >
-> On Tue, Oct 31, 2023 at 10:11=E2=80=AFAM Naveen Kumar <mnkumar@google.com=
-> wrote:
->>
->> From: Naveen Kumar M <mnkumar@google.com>
->>
->> Add a new DT option to specify whether a host controller is able to
->> support 64-bit DMA memory pointers
->>
->> Signed-off-by: Naveen Kumar M <mnkumar@google.com>
->> ---
->>  Documentation/devicetree/bindings/usb/usb-xhci.yaml | 4 ++++
->>  1 file changed, 4 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/usb/usb-xhci.yaml b/Docum=
-entation/devicetree/bindings/usb/usb-xhci.yaml
->> index 180a261c3e8f..20dc134004f3 100644
->> --- a/Documentation/devicetree/bindings/usb/usb-xhci.yaml
->> +++ b/Documentation/devicetree/bindings/usb/usb-xhci.yaml
->> @@ -25,6 +25,10 @@ properties:
->>      description: Set if the controller has broken port disable mechanis=
-m
->>      type: boolean
->>
->> +  quirk-no-64-bit-support:
->> +    description: Set if the xHC doesn't support 64-bit DMA memory point=
-ers
->> +    type: boolean
->> +
->>    imod-interval-ns:
->>      description: Interrupt moderation interval
->>      default: 5000
->> --
->> 2.42.0.820.g83a721a137-goog
->>
+> This patch aims to expose the XHCI_NO_64BIT_SUPPORT flag to the parent
+> nodes of xhci for clients to specify if they can not support 64 bit DMA
+> memory pointers. This issue was observed with a Google SoC that uses
+> a DWC3 controller where the virtual address's higher order bits are
+> truncated
+>
+> Naveen Kumar M (2):
+>   usb: host: xhci-plat: Add quirk-no-64-bit-support
+>   dt-bindings: usb: add no-64-bit-support property
+>
+>  Documentation/devicetree/bindings/usb/usb-xhci.yaml | 4 ++++
+>  drivers/usb/host/xhci-plat.c                        | 3 +++
+>  2 files changed, 7 insertions(+)
+>
+> --
+> 2.42.0.820.g83a721a137-goog
+>
 
