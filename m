@@ -1,137 +1,195 @@
-Return-Path: <linux-usb+bounces-2438-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2439-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EC957DE7F3
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Nov 2023 23:14:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3A9D7DE85C
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Nov 2023 23:53:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 256E31C20E1A
-	for <lists+linux-usb@lfdr.de>; Wed,  1 Nov 2023 22:14:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 92511281A09
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Nov 2023 22:53:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74B721BDEC;
-	Wed,  1 Nov 2023 22:14:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F23C18E23;
+	Wed,  1 Nov 2023 22:53:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="clx1ASjh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KXkKwkBD"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A82C11CBB
-	for <linux-usb@vger.kernel.org>; Wed,  1 Nov 2023 22:14:02 +0000 (UTC)
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DD1E10F
-	for <linux-usb@vger.kernel.org>; Wed,  1 Nov 2023 15:14:01 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id 5614622812f47-3b566ee5f1dso217059b6e.0
-        for <linux-usb@vger.kernel.org>; Wed, 01 Nov 2023 15:14:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1698876840; x=1699481640; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vlCR/tLfeyi2t/6kexPICovuqpYCh6D5uLc0MpM42zU=;
-        b=clx1ASjhxySIpiT+9S/iX6wpXXiuJ1jHocfu63PCcZci14X0rJ4oLCgr2ZjVDcjEb2
-         e0m9lugAAbxP7OEhmg0ANyc73YYMa7r8zxaPpWe/AXM6EsEFCwvYS4YVGrVP1Y2Ey8jN
-         oLLEqC2DxkPRjUFzy0ozRAmQxY9XZdj3TlmFTwxQQVJPP+xn8dScmvJ+w7FIw/jAfHGZ
-         hNvrNvaZmC6LEuVU4uT/EGKsJnc9h+vzTOrQXrJPmOPC9bg8+cRa/RRGrsCgG0y1YPrI
-         9F5B6SHcA1Zs9Z1CxKb9vNLfFYzaCwjNIXYmpDqkma1IHtnHIQp05eS7tO2k7jmHqepD
-         KugQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698876840; x=1699481640;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vlCR/tLfeyi2t/6kexPICovuqpYCh6D5uLc0MpM42zU=;
-        b=Of6nANnLm6lqngOtvnb03hCVKrrX8WsOGlBxzUeyhqsnZ42GYgS6M1AvGLhnTvr1ca
-         m9CDZM8W53VCr2/JFVrfC97ofbUWxCWsxJoFUFVWnwoK9Z6SjuIAISmhoODDTj43w7hQ
-         aaDZvWt8nyTfVmUdfyvEVJ99L4hKHtVpuyqS1afRwSaMBcu+V3zme9xFyoHE3DPFLNC4
-         /nH/mOf+EgTQj4JNFZIFy+eg2mWk4FXO8yCuCmLIk999BHaZngFKsEPglr0b3Tqc6gPl
-         ExR6F8VubLesqYONAWMjEaYObn2KyzSXT14mBugycKc8RrJklzrJkYbyRnEnB+Qrucda
-         wUxg==
-X-Gm-Message-State: AOJu0Ywo7W37CDopd6qN3z0dlFbtes/FxEpzuLjE50FqS4erfZ52Q2jO
-	7S9uDF644KQa+PdxNT+Q4DunDA==
-X-Google-Smtp-Source: AGHT+IGWBafYpym6IOSMbRqd53gquhbqtYIFv73RgIewZiuiQDtXVDi9y84GeqUuJPFa/BOiphfZKQ==
-X-Received: by 2002:a05:6808:8db:b0:3ae:5e0e:1669 with SMTP id k27-20020a05680808db00b003ae5e0e1669mr17916649oij.42.1698876840645;
-        Wed, 01 Nov 2023 15:14:00 -0700 (PDT)
-Received: from [192.168.60.239] (183.43.230.35.bc.googleusercontent.com. [35.230.43.183])
-        by smtp.gmail.com with ESMTPSA id fh37-20020a056a00392500b006c03f58b5b1sm1682286pfb.59.2023.11.01.15.13.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Nov 2023 15:13:59 -0700 (PDT)
-Message-ID: <d08b080c-54cc-4fdf-929a-df2b6ad41844@google.com>
-Date: Wed, 1 Nov 2023 15:13:58 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A2831BDDE
+	for <linux-usb@vger.kernel.org>; Wed,  1 Nov 2023 22:53:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CBAFC433C7;
+	Wed,  1 Nov 2023 22:53:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1698879181;
+	bh=KWFA4MzcMdhYJbaozAjCfZFUA3cJ1Xl92DjhTOQbp2E=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=KXkKwkBDn0dymVcYC8WrV2Y7glzL59nzHFz/XIWUCK6l+hV3ynajqD+snl7Q1W61C
+	 q9eqorNMx97iI8b+klYYSsaRrPU4ySPj/UtdIs+i4hBLFuADsgUQehCg/WVcuoofg+
+	 AfwTcvCu8GX5oQ11+I/GXYtRIWravcw77xhIA2Slbu6aONklbJKijiwxb3TZgWnIS+
+	 pVokuvia+U3kURRTHeyf2WgsJMUVRo4JV+u2ILp+ymQx7umtmyz2r/D5I+TERjgwLw
+	 tro9wbdtVMemXCoLj3T3NJRuT3kbe5frQthjBURnSvK5HcFAzwy6V31SP4/7yVwis6
+	 58OSI4B2ugUjQ==
+Date: Wed, 1 Nov 2023 17:52:59 -0500
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: bhelgaas@google.com, mika.westerberg@linux.intel.com,
+	andreas.noever@gmail.com, michael.jamet@intel.com,
+	YehezkelShB@gmail.com, linux-pci@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	Alexander.Deucher@amd.com
+Subject: Re: [PATCH 2/2] PCI: Ignore PCIe ports used for tunneling in
+ pcie_bandwidth_available()
+Message-ID: <20231101225259.GA101390@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 2/4] usb: gadget: uvc: Allocate uvc_requests one at a
- time
-Content-Language: en-US
-To: Dan Scally <dan.scally@ideasonboard.com>
-Cc: etalvala@google.com, gregkh@linuxfoundation.org, jchowdhary@google.com,
- laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, m.grzeschik@pengutronix.de
-References: <73309396-3856-43a2-9a6f-81a40ed594db@google.com>
- <20231030202231.3263253-1-arakesh@google.com>
- <20231030202231.3263253-2-arakesh@google.com>
- <7d4c762a-9fe1-41ba-b394-cefa8fa70786@ideasonboard.com>
-From: Avichal Rakesh <arakesh@google.com>
-In-Reply-To: <7d4c762a-9fe1-41ba-b394-cefa8fa70786@ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231031133438.5299-2-mario.limonciello@amd.com>
 
+On Tue, Oct 31, 2023 at 08:34:38AM -0500, Mario Limonciello wrote:
+> The USB4 spec specifies that PCIe ports that are used for tunneling
+> PCIe traffic over USB4 fabric will be hardcoded to advertise 2.5GT/s.
+> 
+> In reality these ports speed is controlled by the fabric implementation.
 
+So I guess you're saying the speed advertised by PCI_EXP_LNKSTA is not
+the actual speed?  And we don't have a generic way to find the actual
+speed?
 
-On 11/1/23 04:06, Dan Scally wrote:
-> Morning Avichal
+> Downstream drivers such as amdgpu which utilize pcie_bandwidth_available()
+> to program the device will always find the PCIe ports used for
+> tunneling as a limiting factor and may make incorrect decisions.
 > 
-> On 30/10/2023 20:22, Avichal Rakesh wrote:
->> Currently, the uvc gadget driver allocates all uvc_requests as one array
->> and deallocates them all when the video stream stops. This includes
->> de-allocating all the usb_requests associated with those uvc_requests.
->> This can lead to use-after-free issues if any of those de-allocated
->> usb_requests were still owned by the usb controller.
->>
->> This patch is 1 of 2 patches addressing the use-after-free issue.
->> Instead of bulk allocating all uvc_requests as an array, this patch
->> allocates uvc_requests one at a time, which should allows for similar
->> granularity when deallocating the uvc_requests. This patch has no
->> functional changes other than allocating each uvc_request separately,
->> and similarly freeing each of them separately.
->>
->> Link: https://lore.kernel.org/7cd81649-2795-45b6-8c10-b7df1055020d@google.com
->> Suggested-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
->> Reviewed-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
->> Tested-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
->> Signed-off-by: Avichal Rakesh <arakesh@google.com>
+> To prevent problems in downstream drivers check explicitly for ports
+> being used for PCIe tunneling and skip them when looking for bandwidth
+> limitations.
 > 
+> 2 types of devices are detected:
+> 1) PCIe root port used for PCIe tunneling
+> 2) Intel Thunderbolt 3 bridge
 > 
-> Thanks for the update; this seems ok now:
-> 
-> 
-> Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
+> Downstream drivers could make this change on their own but then they
+> wouldn't be able to detect other potential speed bottlenecks.
 
-Awesome, thank you! I'll add the Reviewed-by in the next patchset
-(assuming you have more review comments on patch 4/4 v10). 
+Is the implication that a tunneling port can *never* be a speed
+bottleneck?  That seems to be how this patch would work in practice.
 
-Regards,
-Avi.
+> Link: https://lore.kernel.org/linux-pci/7ad4b2ce-4ee4-429d-b5db-3dfc360f4c3e@amd.com/
+> Link: https://www.usb.org/document-library/usb4r-specification-v20
+>       USB4 V2 with Errata and ECN through June 2023 - CLEAN p710
 
+I guess this is sec 11.2.1 ("PCIe Physical Layer Logical Sub-block")
+on PDF p710 (labeled "666" on the printed page).  How annoying that
+the PDF page numbers don't match the printed ones; do the section
+numbers at least stay stable in new spec revisions?
+
+> Link: https://gitlab.freedesktop.org/drm/amd/-/issues/2925
+
+This issue says the external GPU doesn't work at all.  Does this patch
+fix that?  This patch looks like it might improve GPU performance, but
+wouldn't fix something that didn't work at all.
+
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+>  drivers/pci/pci.c | 41 +++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 41 insertions(+)
 > 
->> ---
->> v1 -> v2 : Rebased to ToT
->> v2 -> v3 : Fix email threading goof-up
->> v3 -> v4 : Address review comments & re-rebase to ToT
->> v4 -> v5 : Address more review comments. Add Reviewed-by & Tested-by.
->> v5 -> v6 : No change
->> v6 -> v7 : No change
->> v7 -> v8 : No change. Getting back in review queue
->> v8 -> v9 : Address review comments.
->> v9 -> v10: Address review comments; remove BUG_ON(&video->reqs);
->>             Rebase to ToT (usb-next)
->>
->>   <snip>
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index 59c01d68c6d5..4a7dc9c2b8f4 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -6223,6 +6223,40 @@ int pcie_set_mps(struct pci_dev *dev, int mps)
+>  }
+>  EXPORT_SYMBOL(pcie_set_mps);
+>  
+> +/**
+> + * pcie_is_tunneling_port - Check if a PCI device is used for TBT3/USB4 tunneling
+> + * @dev: PCI device to check
+> + *
+> + * Returns true if the device is used for PCIe tunneling, false otherwise.
+> + */
+> +static bool
+> +pcie_is_tunneling_port(struct pci_dev *pdev)
+
+Use usual function signature styling (all on one line).
+
+> +{
+> +	struct device_link *link;
+> +	struct pci_dev *supplier;
+> +
+> +	/* Intel TBT3 bridge */
+> +	if (pdev->is_thunderbolt)
+> +		return true;
+> +
+> +	if (!pci_is_pcie(pdev))
+> +		return false;
+> +
+> +	if (pci_pcie_type(pdev) != PCI_EXP_TYPE_ROOT_PORT)
+> +		return false;
+> +
+> +	/* PCIe root port used for tunneling linked to USB4 router */
+> +	list_for_each_entry(link, &pdev->dev.links.suppliers, c_node) {
+> +		supplier = to_pci_dev(link->supplier);
+> +		if (!supplier)
+> +			continue;
+> +		if (supplier->class == PCI_CLASS_SERIAL_USB_USB4)
+> +			return true;
+
+Since this is in drivers/pci, and this USB4/Thunderbolt routing is not
+covered by the PCIe specs, this is basically black magic.  Is there a
+reference to the USB4 spec we could include to help make it less
+magical?
+
+Lukas' brief intro in
+https://lore.kernel.org/all/20230925141930.GA21033@wunner.de/ really
+helped me connect a few dots, because things like
+Documentation/admin-guide/thunderbolt.rst assume we already know those
+details.
+
+> +	}
+> +
+> +	return false;
+> +}
+> +
+>  /**
+>   * pcie_bandwidth_available - determine minimum link settings of a PCIe
+>   *			      device and its bandwidth limitation
+> @@ -6236,6 +6270,8 @@ EXPORT_SYMBOL(pcie_set_mps);
+>   * limiting_dev, speed, and width pointers are supplied) information about
+>   * that point.  The bandwidth returned is in Mb/s, i.e., megabits/second of
+>   * raw bandwidth.
+> + *
+> + * This function excludes root ports and bridges used for USB4 and TBT3 tunneling.
+>   */
+>  u32 pcie_bandwidth_available(struct pci_dev *dev, struct pci_dev **limiting_dev,
+>  			     enum pci_bus_speed *speed,
+> @@ -6254,6 +6290,10 @@ u32 pcie_bandwidth_available(struct pci_dev *dev, struct pci_dev **limiting_dev,
+>  	bw = 0;
+>  
+>  	while (dev) {
+> +		/* skip root ports and bridges used for tunneling */
+> +		if (pcie_is_tunneling_port(dev))
+> +			goto skip;
+> +
+>  		pcie_capability_read_word(dev, PCI_EXP_LNKSTA, &lnksta);
+>  
+>  		next_speed = pcie_link_speed[lnksta & PCI_EXP_LNKSTA_CLS];
+> @@ -6274,6 +6314,7 @@ u32 pcie_bandwidth_available(struct pci_dev *dev, struct pci_dev **limiting_dev,
+>  				*width = next_width;
+>  		}
+>  
+> +skip:
+>  		dev = pci_upstream_bridge(dev);
+>  	}
+>  
+> -- 
+> 2.34.1
+> 
 
