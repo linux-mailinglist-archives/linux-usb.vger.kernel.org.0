@@ -1,205 +1,132 @@
-Return-Path: <linux-usb+bounces-2466-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2467-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CFCF7DF78F
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Nov 2023 17:22:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 439747DF7C7
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Nov 2023 17:34:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AB52CB212A4
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Nov 2023 16:22:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 65D301C20EED
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Nov 2023 16:34:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD4391DA4F;
-	Thu,  2 Nov 2023 16:22:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE7C01DA59;
+	Thu,  2 Nov 2023 16:34:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="0ZFnSk3m"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wOiwZgvY"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76EBA1DDC6
-	for <linux-usb@vger.kernel.org>; Thu,  2 Nov 2023 16:22:16 +0000 (UTC)
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD3E111;
-	Thu,  2 Nov 2023 09:22:11 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MTrze9U+OcGXmDXeUcFybSxb7CB2tfP8F5y3KPdA1HC53g8Ath36zaJ7xxe2r8nS/is8rS4iXMXRXJ+8fyt+QYdDjzYbBpL6lv2IL4qQjev+R9qQZmGfbiMSSl5At0+XIRHKFHJAMoxOCsPjR1wOWn07wjiCW3xiDuG6QsK8draczohCxllmFp/3iI0xpKLLv0tWxD2aw5+hoVgzkRtfKr4PvfZDczHKy0qIpedCGz57HL8VNviRs01Az3UuLy+wBHZYpkvquFl7VxqmnToS9Pryi/nh7lN6flfaLlcTqwoT7Eg6i5XHew2XemEtxbToSt6VboGSE9PfFj1vAvuyXw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eJ5rhoqwvhPhcz0s1QkwTaB4pRYnF3E1kJOVb+FSYM0=;
- b=ZCoUufgseOU5JyowGaKGg2OoOMLaPFYbLogjxh4W6kKINEpcRorZT2yOHGs6zGHLvyrmgMSrUbbCI55nVtEpPwJrqffGdn2Jo17DOIqb8Lhs7tPFNgDW0uaXspD+un5kbDaLNaljs1VftPiQiKmCj0SUVTnaj3N9aHDcW7BuduZiO2xIyBTtJhYJSkIYiDbmR3A0OFlh7daPh25j2htCg8bMmUgquFRzxkGujIYYkpIMujys5cNO8DkSgh4UQO43dNpv6whoR1lbHGm5ImTvny58szCOTtrYE52zVJN0d9Ps3uryFMFlqFxUPO//1UZh6RYJQ7FeKjGJA7USZLv4Ow==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eJ5rhoqwvhPhcz0s1QkwTaB4pRYnF3E1kJOVb+FSYM0=;
- b=0ZFnSk3mby5HHdPBtF69XU4+iVrtvns2qLY8mMmGTaLvwtcAenFwcXTho9fJBfA8cxD+ojQAQ89Mqx+Tkf5sHx5UfC9UeFj7HodbeVZSkuqT2M1bJoNQVecb4f65JxSDB8dU/oK8jpYtEMHIbMp06j9JJAJyIi55iaWJaqe0kiU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by CH3PR12MB7620.namprd12.prod.outlook.com (2603:10b6:610:150::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.19; Thu, 2 Nov
- 2023 16:22:08 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::83d7:9c4f:4d9b:1f2a]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::83d7:9c4f:4d9b:1f2a%5]) with mapi id 15.20.6933.024; Thu, 2 Nov 2023
- 16:22:08 +0000
-Message-ID: <67e7d200-52aa-44b9-8e87-e416e3d53a6c@amd.com>
-Date: Thu, 2 Nov 2023 11:22:05 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] PCI: Ignore PCIe ports used for tunneling in
- pcie_bandwidth_available()
-Content-Language: en-US
-To: Lukas Wunner <lukas@wunner.de>
-Cc: Bjorn Helgaas <helgaas@kernel.org>, bhelgaas@google.com,
- mika.westerberg@linux.intel.com, andreas.noever@gmail.com,
- michael.jamet@intel.com, YehezkelShB@gmail.com, linux-pci@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- Alexander.Deucher@amd.com
-References: <20231101225259.GA101390@bhelgaas>
- <928df647-5b20-406b-8da5-3199f5cfbb48@amd.com>
- <20231102152154.GA22270@wunner.de>
- <bb4d8fad-dced-4fed-9582-2db50643e868@amd.com>
- <20231102153345.GA30347@wunner.de>
-From: Mario Limonciello <mario.limonciello@amd.com>
-In-Reply-To: <20231102153345.GA30347@wunner.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: DS7PR03CA0296.namprd03.prod.outlook.com
- (2603:10b6:5:3ad::31) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D63D2134A
+	for <linux-usb@vger.kernel.org>; Thu,  2 Nov 2023 16:34:39 +0000 (UTC)
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C82E3192
+	for <linux-usb@vger.kernel.org>; Thu,  2 Nov 2023 09:34:33 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-32da4ffd7e5so748797f8f.0
+        for <linux-usb@vger.kernel.org>; Thu, 02 Nov 2023 09:34:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1698942872; x=1699547672; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Pf6+egC7wEh4Nlc1mgScW1ILeruY7HuDBJxg1UYN0M8=;
+        b=wOiwZgvYjp0ReUvC7YBIm7zrAbvhsX9u6tIY88Jjbi4O+9wV7ld+3jsEQEswvqh0H9
+         zp++/Vt6Afq33RULvZujOdvwM1m40TwB8y86rMrl4wiBKUw5z8EBpeNc+arH9uLzGm90
+         +QQ9nvAtzMxA6fXxBXTClxg5IStN5tJS8bXx6zxNPAGuWqI+EbbfUGN7AZrOh4QHHcPQ
+         MFpLNxMHIXEGbgExIw35dNUXYM7m8lAjwWz1akGzeaiywwF+bmLOXdjQOfKGfBPWcTXs
+         6kii7jC9qDL1YF9hECl9Nurh3gyPTiQ6M2LihI4cmG53hZQTIIs2yp5r8Lze9moau5Mz
+         jUQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698942872; x=1699547672;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Pf6+egC7wEh4Nlc1mgScW1ILeruY7HuDBJxg1UYN0M8=;
+        b=UwIUlDUUgpco1MJlDOrEKDXTJAaywKEcVF9NPfEQJT6ecezKGGmICG5Bt319v+3XqT
+         2YD2f8/9RS+PQkW3CKe7UZSbp+M4/0wYd3FweWCfZ7SASdqLlMHUC2hXt5PfruYvRLZX
+         DHEO3tYXbjdO7lpECHQlgtjDRAPHLTyvwS+MERKnRQjirQ0RarBsPlHdVAUR50wpgJB/
+         hY8qnaOE2+hUwYGHXOh+nDzr6J+dB+qxFXc/56dzochqAHeKGaUl7Z/creRElX8MZ/x3
+         14oRTSNCdErtAd4S7l5g/e4Jw8g+uX8Ja/2CnTwe5A55/OSyVw3syZkEkeeihct44bRL
+         d5Xg==
+X-Gm-Message-State: AOJu0YzNM1/2UAcDjYtVTTRZAOOs/ySYManj9e2gMmrf9CxyuzczhT4n
+	BtTlXb0GJNgOctcH1wKzhbfGag==
+X-Google-Smtp-Source: AGHT+IGtoGUpxxIbCzigG2VX+swrGvRJcm+9x+JnerHx+hb4qtVy636oxKeC9OepR+OM/OtMm1CkVg==
+X-Received: by 2002:a5d:6d06:0:b0:32f:8b51:3708 with SMTP id e6-20020a5d6d06000000b0032f8b513708mr34589wrq.2.1698942872155;
+        Thu, 02 Nov 2023 09:34:32 -0700 (PDT)
+Received: from [192.168.67.140] (92.40.204.238.threembb.co.uk. [92.40.204.238])
+        by smtp.gmail.com with ESMTPSA id j20-20020a05600c191400b00407752bd834sm25019wmq.1.2023.11.02.09.33.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Nov 2023 09:34:16 -0700 (PDT)
+Message-ID: <272a9764-1cae-4d86-88b1-00175de83333@linaro.org>
+Date: Thu, 2 Nov 2023 16:33:19 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|CH3PR12MB7620:EE_
-X-MS-Office365-Filtering-Correlation-Id: fb070266-6eb1-4d15-6a1b-08dbdbbfdc1a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	qubG+kNAoLJdt5HaGUK6sSXCy6k+WUazWK1XwjjskxoKYb4RSzD4vF+ztc0FCUPz7htoQ42Mc7HiKuRhph5MMFw1dSGlGVbwbnLNVMFItKi36M87rOvi/h8YvODCDW5+dUlXtpJCMGuSGcGMkiTNB5w2wKjwzgxwtghzMwpPYGD6ewHJf0+FXNAtSnnzmqZfXL0y33dhZBXFrB8PWTZJ9uGhcoYZmK0unKjZ0O2cj662tC6mdisf3wfQ/y4qg5MT89cUbKSaT1mWPHaz1qm8VazqMLtUiRDybBsl+ymoSeAVVJD+kx4oyjKwDGw8ysNuoGlobKca88htZmdIgMRY6fPV3oF4xFRHoYb2+fEXJCMKFkTlarcZ0dxEDFw2iW0dS8Q7/iMgcY0y7fnMDEGyeKGhv7yPk/+/9yGPTO+NXbI/97RkEew0FjxmdjOSVVqAVXMNggQIyGORr9f3yz4IdhUhkcUML2KiCcR1O8nzTkHB9nv+Uo3yJ02y0qKNW+plkvCRG3Yi0kxcM27Amr3bfZzFYYdsMKVVVvw0i01jiBQUmpGj5UIDUOaQHSFdzeo0swPaJtNmBP0DAn739BcLuVPgerCgfcq9k7gj7z3iHsSjWkeY0emxkFHC/yDWInKjJLGX6Vjg7hWji/oFLBrHKNCSduhRDMIVCZxqHD4esG8=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(346002)(39860400002)(396003)(376002)(136003)(230922051799003)(64100799003)(1800799009)(186009)(451199024)(36756003)(31686004)(966005)(6486002)(8936002)(8676002)(4326008)(38100700002)(6512007)(26005)(6666004)(2616005)(6506007)(66476007)(66574015)(6916009)(478600001)(316002)(66946007)(53546011)(66556008)(31696002)(44832011)(2906002)(86362001)(7416002)(5660300002)(41300700001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?Q0ZuWDg0cW1ob2FrVjBweFd1S0xnL2ZkdG9LYy81RFFCeXRVZDZ4V1VZa296?=
- =?utf-8?B?WlZmenBHamRvRnFoU2s0NzZ0TlljY2Q5bTh6ZnZ3ZWM0SkNMcVpFZTF4OHVk?=
- =?utf-8?B?UHZPRkI3RDZNMkphOEpYWm8wT0FPOTZxM1RReHRHNEkyelJKSVJBdHFrOHN1?=
- =?utf-8?B?dmVZTGExTExGQmRtUThzZVpEekU5MjBQRjRHQU9MdS9ITXZDaVNManNZMVJy?=
- =?utf-8?B?SEVpRzhSSTdsa3N5SE5Rd1Zxc1RLTkVBdThRY28yRFZhdVUzbTRKMjR2R3N2?=
- =?utf-8?B?bFY2YWVyN1FKQzBKM2JlQTdEeThldlpSRnRQWjhjc09VUGU1ZjV0TWpNVURQ?=
- =?utf-8?B?VEhUNjhlTkpPMzl3Rnl4cXZNMVk1OEZvZVk5OHc2WXBFbnYrRW5QNEp3UGFQ?=
- =?utf-8?B?TGgyQlNHZFEwZVM0d2FxWFkyaFBqZlUxblNaZ2N0a2Y1b1IvMzBXdVR2a3o3?=
- =?utf-8?B?Y1pESTVGUE15UHNtZkc5Q3hGOVB4RE5LL0UwQ0c2MExwSmt3aEdDS1h3cEtL?=
- =?utf-8?B?S0p0YWxQcU5xcTdaMVIxaFAvVlhGdzJhdUhSWnRJVlE3VFVqQzgxK1gwZklY?=
- =?utf-8?B?b3lJSEYwZlF0c1Z2cC9RWTF6b1FQS3A2ZE96Ymdyd2czVmNEVWh6b1FhUHYv?=
- =?utf-8?B?YWp2R2RFYkhjR01JVm1lK3JEZG9EKzM3Nk50R29VZ3RGUGxlYnhVTTNrTkxa?=
- =?utf-8?B?aC9VQTd2ay94SElhVUpNTFljTXFCdDhmR0Y4T1lzOVoxZFl1a0tlejFuOU05?=
- =?utf-8?B?TUpha0J2a0R0REhSbjZWYTNnbk1CNTI1eE1lbk1Sa3lqOXJsVTBRS1dGaEY3?=
- =?utf-8?B?TUFGQ3hrcTBHZWlJMWdlSGNRd1pWWkVVMHRkYjZ2STdvVzArZm9KRVhZOU56?=
- =?utf-8?B?ZnBZR2VJWktjMjlZdmN4Y1BjdTBpK1V4b2x0RTI3NzlUYngvT1htM0ZPamNz?=
- =?utf-8?B?b04yczQ1VHhaNVVvRUswYVU0VEJMaHVpMHpJcVBXMXByZzUrTmdWZGxzcVdS?=
- =?utf-8?B?K1l4YlVZNGZQQ1M0b2k4QU5hbUVjd1MyM0ZPaU1SWGJscXlWbHVFRGhtT3VH?=
- =?utf-8?B?WDdKakM3ZUtPR3FJWkFMb0t3QXRkL1BQWVFZTFo4UFFQRElwQkM2L2EvdnpE?=
- =?utf-8?B?Z3o5ODQ1dGtwVElyNzZ5ZTdDRi9wSGt5b1FNNkZWZXBYOUZzVzVhVzVBeXpj?=
- =?utf-8?B?MGhQc0pyMncwY25OaWNHU0ppR2Z2Z3JRUUVGWUtGbVE3S0tmdXR3RWc1a1VN?=
- =?utf-8?B?KzA4cmxtdGxHVzZIQWVhOUx5UnFLTmFVVlhsOG9ySTU5QWJONTVoQzBLWjNM?=
- =?utf-8?B?ZUF6dkVlYmRhendXa3ZNbHJ0dEptK0pHd2FDbGJnTWRZUDBqa1RKaXlXMU5v?=
- =?utf-8?B?bUo0cnlaOEp2YUtxUjFTckU4NFJuY0daMmhHUHRKWnY5bk5UcnJ2SnFoVlpm?=
- =?utf-8?B?UWJEU3VJd29pZUhHcUV4MDZWVFdHcTVGbVc4N3hFQWpQeXQyRnRHL25pZWRB?=
- =?utf-8?B?QWt0azhHS2JOSzF6S2RiUkhoTG9IR1ViNEYvVVJDTm9aU3YyaFNuajRpK2ZG?=
- =?utf-8?B?eGZ2YzVVR0xJUXdnTWJ1eGZCQXpSemFPalNnUlJyVlMzMEJXVGZLc0R3RXhN?=
- =?utf-8?B?dmZTa01lRFdnQVhmeE9sZXRvR215dkdSMUlndlFSTFA0QW1Ua1BwdUZVM3JL?=
- =?utf-8?B?ZVA2eEcvMjFXdjkwSDJQeTNPK2JWbzc4MFI5ekdmRFlxOUxVZ2p4b2JRNDJT?=
- =?utf-8?B?RVdNNG42dWVid0FNSStyM0xCODFhd1VvN3hnN2dOV1dCQkU3d3NwZ0NJTnVw?=
- =?utf-8?B?aE84c1VQa3JzNmlCbFNNUEwzUFowTU8xa1J2elZ4cTJ2U3dBRFVTaHI4Qm91?=
- =?utf-8?B?Vy9XMEhMSG1EVVFKck1OYlQzTWgxazRoYlFvZGYyYVZDRndOdGxBYStLS08x?=
- =?utf-8?B?ZE4vVEFaY05uZngvU3NFemo1di9mcFJMVG1rWlEvcWxkOThPcVBVOXV3aSs4?=
- =?utf-8?B?NkdrMmFxVUEyeHYvaVBLNFRIYm1WUzFLUEpsTlFPRmRjZVZzYlRHYTRFYkov?=
- =?utf-8?B?dkFCd0x4L3pZV1ZJMjBDa05PaGxXeWF4N1hHRndRcnNxYnVJdys0ejhReEJk?=
- =?utf-8?Q?Pj4M+AN3uf6ZA3Z2FBFcDX9AM?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fb070266-6eb1-4d15-6a1b-08dbdbbfdc1a
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Nov 2023 16:22:08.2780
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3xV418wlJPRJpKYfyVjulhyLxhOS6KTlkZjcdmFtPIlKVbWsAGu/WTiPF0RMOnYYtaPZHuAsHWfIZTU5difPoQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB7620
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC 1/8] dt-bindings: usb: qcom,dwc3: Add bindings to enable
+ runtime
+Content-Language: en-US
+To: Krishna Kurapati <quic_kriskura@quicinc.com>,
+ Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Philipp Zabel <p.zabel@pengutronix.de>, Andy Gross <agross@kernel.org>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, quic_wcheng@quicinc.com
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+ quic_ppratap@quicinc.com, quic_jackp@quicinc.com
+References: <20231017131851.8299-1-quic_kriskura@quicinc.com>
+ <20231017131851.8299-2-quic_kriskura@quicinc.com>
+From: Caleb Connolly <caleb.connolly@linaro.org>
+In-Reply-To: <20231017131851.8299-2-quic_kriskura@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 11/2/2023 10:33, Lukas Wunner wrote:
-> On Thu, Nov 02, 2023 at 10:26:31AM -0500, Mario Limonciello wrote:
->> On 11/2/2023 10:21, Lukas Wunner wrote:
->>> On Wed, Nov 01, 2023 at 08:14:31PM -0500, Mario Limonciello wrote:
->>>> Considering this I think it's a good idea to move that creation of the
->>>> device link into drivers/pci/pci-acpi.c and store a bit in struct
->>>> pci_device to indicate it's a tunneled port.
->>>>
->>>> Then 'thunderbolt' can look for this directly instead of walking all
->>>> the FW nodes.
->>>>
->>>> pcie_bandwidth_available() can just look at the tunneled port bit
->>>> instead of the existence of the device link.
->>>
->>> pci_is_thunderbolt_attached() should already be doing exactly what
->>> you want to achieve with the new bit.  It tells you whether a PCI
->>> device is behind a Thunderbolt tunnel.  So I don't think a new bit
->>> is actually needed.
->>
->> It's only for a device connected to an Intel TBT3 controller though; it
->> won't apply to USB4.
+
+
+On 17/10/2023 14:18, Krishna Kurapati wrote:
+> Add enable-rt binding to let the device register vendor hooks to
+> core and facilitate runtime suspend and resume.
+
+Hi Krishna,
+
+ From reading through these patches, it's not clear to me why this 
+behaviour should be conditional on a new devicetree property. Are there 
+some platforms where this behaviour would be undesirable? And if so then 
+would it be possible to determine this based on the QSCRATCH registers?
 > 
-> Time to resurrect this patch here...? :)
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> ---
+>   Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 5 +++++
+>   1 file changed, 5 insertions(+)
 > 
-> https://lore.kernel.org/all/20220204182820.130339-3-mario.limonciello@amd.com/
+> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> index cb50261c6a36..788d9c510abc 100644
+> --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> @@ -151,6 +151,11 @@ properties:
+>         HS/FS/LS modes are supported.
+>       type: boolean
+>   
+> +  qcom,enable-rt:
+> +    description:
+> +      If present, register vendor hooks to facilitate runtime suspend/resume
+> +    type: boolean
 
-That thought crossed my mind, but I don't think it's actually correct.
-That's the major reason I didn't resurrect that series.
+A Krzysztof pointed out, properties should define the hardware 
+behaviour, not tot the implementation details. For this case the 
+hardware isn't wired up to vbus, so maybe something like "qcom,no-vbus"?
+> +
+>     wakeup-source: true
+>   
+>   # Required child node:
 
-The PCIe topology looks like this:
-
-├─PCIe tunneled root port
-|  └─PCIe bridge/switch (TBT3 or USB4 hub)
-|    └─PCIe device
-└─PCIe root port
-   └─USB 4 Router
-
-In this topology the USB4 PCIe class device is going to be the USB4 
-router.  This *isn't* a tunneled device.
-
-The two problematic devices are going to be that PCIe bridge (TBT or 
-USB4 hub) and PCIe tunneled root port.
-Looking for the class is going to mark the wrong device for the "USB 4 
-Router".
-
-I looked through the USB4 spec again and I don't see any way that such a 
-port can be distinguished.
-
-I feel the correct way to identify it is via the relationship specified 
-in ACPI.
-
-FWIW I also think that that all the kernel users of 
-pci_is_thunderbolt_attached() *should* be using dev_is_removable().
-
-amdgpu is going to be switching over to this as one of the fixes I 
-mentioned for that bug:
-https://patchwork.freedesktop.org/patch/564738/
-
-If nouveau and radeon also switch over we can probably should axe the 
-function pci_is_thunderbolt_attached() all together.
-
-If you guys agree I can send out a separate series for this to go after 
-the amdgpu patch merges.
-
+-- 
+// Caleb (they/them)
 
