@@ -1,87 +1,126 @@
-Return-Path: <linux-usb+bounces-2451-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2452-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9DFC7DF0A6
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Nov 2023 11:55:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BD96C7DF0C2
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Nov 2023 12:00:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 47372281A0B
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Nov 2023 10:55:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 49507281A59
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Nov 2023 11:00:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0615514006;
-	Thu,  2 Nov 2023 10:55:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C9E11426B;
+	Thu,  2 Nov 2023 10:59:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kN6VVeEk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C84BF13AE6
-	for <linux-usb@vger.kernel.org>; Thu,  2 Nov 2023 10:55:09 +0000 (UTC)
-Received: from mail-oa1-f72.google.com (mail-oa1-f72.google.com [209.85.160.72])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C780186
-	for <linux-usb@vger.kernel.org>; Thu,  2 Nov 2023 03:55:04 -0700 (PDT)
-Received: by mail-oa1-f72.google.com with SMTP id 586e51a60fabf-1e98a9dd333so947093fac.2
-        for <linux-usb@vger.kernel.org>; Thu, 02 Nov 2023 03:55:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698922503; x=1699527303;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=la7hzjP2zBKUn3oiit+lIJoZEhMcvAayTPixEdh76yQ=;
-        b=Rce8d94oqN7XQj/kgXwoUJz436zXXQtrP44t2LWevYyW/mtxnSn4kKd8n0JHgYXAR9
-         S2uyFPmzJQUFoYEGZPOP5jZAjbnLZ+WGVuGLkaAlMFITXm5C/y4zE5OBwiciFm5/uKnP
-         XMk7azzp/5WZ3a+EAw4AdaGiyBUxb0Oik2m8RpGs+PuIyXaMIGdpZ2vXaCCRmgE9ofpA
-         aMa7iYK2zRscqeso3zfPMXHA+swDDn1TiwyspI3Doa+LdOucVhzx0Orha25EbRTVif63
-         MosAMDHONpdAxfuZ+EHyfv22Fby0PxeoIjpcJIBOiqfZt+xDo70+ym7y29jQwNY64uQi
-         ecLg==
-X-Gm-Message-State: AOJu0YwBpv5ugCyDOKe8pg6FTQxA0ZxmHjAdvfrvhCYI4wpSBqxJ4pGx
-	HxISCs/WKOdRBWnXn/gN4ICWRXXLX0clfejgmjX2wc9bH5Xs
-X-Google-Smtp-Source: AGHT+IElbKg+EeRIp1W9TwX1La69cw8Mn5P2aiLEy92t+6/mJ3coq2apA+VdMgsutl5EcPvBfgvYaOyr/g+K7qN1O8/97/Nr1hUF
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E260710A3A
+	for <linux-usb@vger.kernel.org>; Thu,  2 Nov 2023 10:59:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 65848C433C8
+	for <linux-usb@vger.kernel.org>; Thu,  2 Nov 2023 10:59:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1698922797;
+	bh=egWSpLvGIra5L3oXAE8EriCq5MTOyQ2iMBwe0m3wdOQ=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=kN6VVeEkjLLkZhfIHGe+RqWx8eTG8UfnjiersswCkSn+eagtwTBvGnePXeTIOnEbM
+	 lh7JeOiIklnu3Zg9C4jc/rGyLMBfiYLbBJFt467dMaL/6pjMCNka+lTFv8s1tEghD7
+	 lsbhwLizG6ZtaMcl6somC5WwUNDlfhZuD0xtqdEdkCMFdxlXLpMNRYkJpclWPEQ9R8
+	 KnXvrynv7sMDpbE2HfhqRvu5DKVItge5ALMPEytD6yyAK/GNn09v69xTE83i6LHstq
+	 r5p0vipVoG8zDVvh/VwCasW7FnCnELgWlzP554J5Em9H7dqLzfhBzesZ2ROjDqy6Vk
+	 cJk/qD0AkNNDQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 52D83C53BD0; Thu,  2 Nov 2023 10:59:57 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 215906] DMAR fault when connected usb hub (xhci_hcd)
+Date: Thu, 02 Nov 2023 10:59:57 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: mathias.nyman@linux.intel.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-215906-208809-aWFC9pSc1U@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215906-208809@https.bugzilla.kernel.org/>
+References: <bug-215906-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6870:1d0:b0:1e9:90f0:613f with SMTP id
- n16-20020a05687001d000b001e990f0613fmr8462067oad.0.1698922503157; Thu, 02 Nov
- 2023 03:55:03 -0700 (PDT)
-Date: Thu, 02 Nov 2023 03:55:03 -0700
-In-Reply-To: <0000000000009ee19a0609135c34@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004d3e3d0609293891@google.com>
-Subject: Re: [syzbot] [net?] [usb?] INFO: rcu detected stall in
- nsim_dev_trap_report_work (2)
-From: syzbot <syzbot+193dae06b6680599fbab@syzkaller.appspotmail.com>
-To: davem@davemloft.net, eadavis@qq.com, edumazet@google.com, 
-	idosch@nvidia.com, jiri@nvidia.com, kuba@kernel.org, leon@kernel.org, 
-	linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org, 
-	linux-usb@vger.kernel.org, netdev@vger.kernel.org, pabeni@redhat.com, 
-	petrm@nvidia.com, saeedm@nvidia.com, syzkaller-bugs@googlegroups.com, 
-	tariqt@nvidia.com
-Content-Type: text/plain; charset="UTF-8"
 
-syzbot has bisected this issue to:
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215906
 
-commit 644a66c60f02f302d82c3008ae2ffe67cf495383
-Author: Jiri Pirko <jiri@nvidia.com>
-Date:   Fri Jul 29 07:10:36 2022 +0000
+--- Comment #17 from Mathias Nyman (mathias.nyman@linux.intel.com) ---
+If I understand correctly this is caused by the VIA VL805 xHC controller wi=
+th
+bad firmware accessing some DMA address outside the allowed range.
 
-    net: devlink: convert reload command to take implicit devlink->lock
+With IOMMU enabled the IOMMU will prevent this access, and the controller
+fails.
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13c76cf3680000
-start commit:   66f1e1ea3548 Add linux-next specific files for 20231027
-git tree:       linux-next
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=10276cf3680000
-console output: https://syzkaller.appspot.com/x/log.txt?x=17c76cf3680000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2911330219149de4
-dashboard link: https://syzkaller.appspot.com/bug?extid=193dae06b6680599fbab
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10b8e977680000
+I'm speculating here, but it could be possible the controller accesses past=
+ one
+of the DMA ranges wile trying to read-ahead.
 
-Reported-by: syzbot+193dae06b6680599fbab@syzkaller.appspotmail.com
-Fixes: 644a66c60f02 ("net: devlink: convert reload command to take implicit devlink->lock")
+If we can figure out past which area, then its possible to make a driver
+workaround for this controller that allocates a bit larger DMA chunk for th=
+at
+specific purpose.=20
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+DMA memory allocated for xHC use before any USB device is connected:
+
+- dcbaa device context base address array.
+  arrays of pointers to device contexts
+  dma_alloc_coherent(dev)
+
+- command ring
+  dma_pool_zalloc(segment_pool)
+
+- event ring
+  dma_pool_zalloc(segment_pool)
+
+- event ring segment table
+  info about event ring, segents, size and location
+  dma_alloc_coherent(dev)
+
+- Scratchpad,
+  only touched (RW) by xHC controller, not driver.
+  dma_alloc_coheret()
+
+DMA memory allocated for each connected USB device.
+
+- device contexts
+  dma_pool_zalloc(device_pool)
+
+- transfer rings,
+  contains TRBs, metadata about transfers.
+  dma_pool_zalloc(segment_pool)
+
+- stream contexts,
+  dma_alloc_coherent() or dma_pool_alloc(*_streams_pool)
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
