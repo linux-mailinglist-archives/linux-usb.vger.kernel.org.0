@@ -1,106 +1,105 @@
-Return-Path: <linux-usb+bounces-2521-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2522-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3BF07E0A6C
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Nov 2023 21:42:30 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4ADA7E0A7D
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Nov 2023 21:48:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0C3001C2108C
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Nov 2023 20:42:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D3A5CB21480
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Nov 2023 20:48:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A44DA2033A;
-	Fri,  3 Nov 2023 20:42:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90032208CC;
+	Fri,  3 Nov 2023 20:48:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 150D51A59B
-	for <linux-usb@vger.kernel.org>; Fri,  3 Nov 2023 20:42:20 +0000 (UTC)
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by lindbergh.monkeyblade.net (Postfix) with SMTP id 36AD9D53
-	for <linux-usb@vger.kernel.org>; Fri,  3 Nov 2023 13:42:19 -0700 (PDT)
-Received: (qmail 862562 invoked by uid 1000); 3 Nov 2023 16:42:18 -0400
-Date: Fri, 3 Nov 2023 16:42:18 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: "Li, Meng" <Meng.Li@windriver.com>, Steven Rostedt <rostedt@goodmis.org>,
-  Ingo Molnar <mingo@redhat.com>,
-  USB mailing list <linux-usb@vger.kernel.org>,
-  linux-rt-users <linux-rt-users@vger.kernel.org>
-Subject: Re: USB: add check to detect host controller hardware removal
-Message-ID: <a0116b73-2017-4f3b-a081-6d420b04b7d0@rowland.harvard.edu>
-References: <PH0PR11MB5191924ECC92A8F67891D614F1D6A@PH0PR11MB5191.namprd11.prod.outlook.com>
- <d6d9478c-585b-4f51-a076-dc2955c6b2b0@rowland.harvard.edu>
- <PH0PR11MB51911132F6CB7DF0C41F15DEF1D5A@PH0PR11MB5191.namprd11.prod.outlook.com>
- <1f8fe9f9-d8d6-48d9-8c7d-1215d10ece91@rowland.harvard.edu>
- <20231019123823.4fjUs8Rl@linutronix.de>
- <128e4bea-6064-4e46-b9c7-75296e9f553d@rowland.harvard.edu>
- <55925f45-4921-46cc-81df-ac705ad7530e@rowland.harvard.edu>
- <20231020095238.Z4m-M_oS@linutronix.de>
- <1f26049d-b16d-4db8-8b7a-ed93213faf76@rowland.harvard.edu>
- <20231103154624.WEWPMHTp@linutronix.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9644A1D695
+	for <linux-usb@vger.kernel.org>; Fri,  3 Nov 2023 20:48:26 +0000 (UTC)
+Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com [209.85.210.71])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E56E1D55
+	for <linux-usb@vger.kernel.org>; Fri,  3 Nov 2023 13:48:24 -0700 (PDT)
+Received: by mail-ot1-f71.google.com with SMTP id 46e09a7af769-6d3251109ebso3092509a34.3
+        for <linux-usb@vger.kernel.org>; Fri, 03 Nov 2023 13:48:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699044504; x=1699649304;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JYI7n3mLYM40cy95YfSnPmk+FiWhPpVvFYPVeIDOOxo=;
+        b=CID2nZ1aFG4YShkR5/m+LpSPzqvyB7oL83OXgzJLMxeRhe91E8pyqEV13ovuIQnqip
+         eECx8Y1syAyqKAJ89sM06y0MVVY37L0HpC5qOtculDFPhltW0/b5WMjb+pR1kLA20nqX
+         pqj7DVfXzYXG/PQl233xzm8t1knc4QN5Vp7GzJ4qUL/Kz+15Aay2cyyHdjEdZ91f6JZD
+         lV89wzRWiEf3TmrEi1D6xz+nE7+yV6vANsX08H0aKSMtQgpPJ8Y7CbXP+CmZJiiVr8DI
+         dEuI4bCOk+rEHM3OoNXFYEpgvipCRKBAWXOtW/a4Exkmo5XGKZb3X01hqh5DAq4q5a60
+         OuUQ==
+X-Gm-Message-State: AOJu0YypbZoiVCvVqJe5NCpFmPdU7Vc1mKGcRUD8sDb6Ptc9Bjte5V9c
+	GDPTUzW3A3ywSmayUrjcuRshsjS2BMrWFlZy9HpcL/0C3cqX
+X-Google-Smtp-Source: AGHT+IGyIWMHQ/zphzXyDcZk+20Zoe4Op6VCSDwF0dOdH62NQphlgHA+dNlSlM98pmJm55H3wmWvGlyyDlkXcPcti/mf4ktGFXDF
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231103154624.WEWPMHTp@linutronix.de>
+X-Received: by 2002:a9d:6c93:0:b0:6b8:6f61:5f61 with SMTP id
+ c19-20020a9d6c93000000b006b86f615f61mr6098580otr.6.1699044504280; Fri, 03 Nov
+ 2023 13:48:24 -0700 (PDT)
+Date: Fri, 03 Nov 2023 13:48:24 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000022a5d8060945a0fd@google.com>
+Subject: [syzbot] Monthly usb report (Nov 2023)
+From: syzbot <syzbot+listbdb465433a25244527e1@syzkaller.appspotmail.com>
+To: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Nov 03, 2023 at 04:46:24PM +0100, Sebastian Andrzej Siewior wrote:
-> On 2023-10-20 11:19:49 [-0400], Alan Stern wrote:
-> > Hmmm...  This turns out not to be as easy as one might think.
-> > 
-> > Sebastian, if you can instead suggest a way to call drivers' interrupt 
-> > handlers (i.e., simulate an interrupt) without causing problems for RT 
-> > kernels, I think that would be a better approach.
-> 
-> So there is generic_handle_irq_safe(). It should get all the details
-> right like incrementing the counter in /proc/interrupts, doing nothing
-> if the interrupt has been masked or waking the interrupt thread if the
-> interrupt has happen to be threaded.
-> It triggers the interrupt so for a shared handler it will invoke _all_
-> registered interrupt handler and for threaded interrupts it will return
-> before the thread had a chance to run (free_irq() will handle it
-> properly and wait for the interrupt thread/handler to complete).
+Hello usb maintainers/developers,
 
-Good.  Meng Li, can you test a patch that replaces the
-local_irq_disable() - usb_hcd_irq() - local_irq_enable() lines with a
-single call to generic_handle_irq_safe()?
+This is a 31-day syzbot report for the usb subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/usb
 
-> > The fundamental problem here is that the uhci-hcd driver was not written 
-> > with unexpected hardware removal in mind.  It doesn't have timeouts to 
-> > handle situations where the device doesn't generate an IRQ to indicate 
-> > completion of an I/O operation.  And since it's been ten years since 
-> > I've done any significant work on the driver, I'd really like to avoid 
-> > the need for such a far-reaching change (not least because I don't have 
-> > any way to test it).
-> 
-> I see. Don't over complicate or "correct" things here. What should work
-> is that the removal callback can be called at any time and things
-> continue work. That means it will purge all queues, cancel all requests,
-> timers, whatever and free all resources associated with the driver/
-> device.
+During the period, 2 new issues were detected and 3 were fixed.
+In total, 65 issues are still open and 331 have been fixed so far.
 
-The driver _does_ work under those circumstances -- provided the
-hardware is still present and accessible.
+Some of the still happening issues:
 
-> If it comes to PCI-hotplug you have to have a so called PCI-hotplug
-> slot. This "slot" will let the OS know if the hardware has been removed
-> or added. If you don't have such a thing you have to maintain the state
-> yourself by using the "remove" and "rescan" sysfs files of the PCI slot.
-> 
-> I'm not aware of any requirement for a PCI-driver to check if its device
-> has been removed.
+Ref  Crashes Repro Title
+<1>  2721    Yes   KMSAN: uninit-value in dib3000mb_attach (2)
+                   https://syzkaller.appspot.com/bug?extid=c88fc0ebe0d5935c70da
+<2>  2144    Yes   KASAN: slab-use-after-free Read in pvr2_context_set_notify
+                   https://syzkaller.appspot.com/bug?extid=621409285c4156a009b3
+<3>  944     Yes   WARNING in implement
+                   https://syzkaller.appspot.com/bug?extid=38e7237add3712479d65
+<4>  819     Yes   general protection fault in ir_raw_event_store_with_filter
+                   https://syzkaller.appspot.com/bug?extid=34008406ee9a31b13c73
+<5>  368     Yes   INFO: task hung in r871xu_dev_remove
+                   https://syzkaller.appspot.com/bug?extid=f39c1dad0b7db49ca4a8
+<6>  364     Yes   INFO: task hung in usbdev_open (2)
+                   https://syzkaller.appspot.com/bug?extid=b73659f5bb96fac34820
+<7>  304     Yes   KASAN: use-after-free Read in v4l2_fh_init
+                   https://syzkaller.appspot.com/bug?extid=c025d34b8eaa54c571b8
+<8>  239     Yes   INFO: task hung in netdev_run_todo (2)
+                   https://syzkaller.appspot.com/bug?extid=9d77543f47951a63d5c1
+<9>  222     No    INFO: task hung in hub_event (3)
+                   https://syzkaller.appspot.com/bug?extid=a7edecbf389d11a369d4
+<10> 138     Yes   INFO: rcu detected stall in hub_event
+                   https://syzkaller.appspot.com/bug?extid=ec5f884c4a135aa0dbb9
 
-That's the problem: The driver doesn't really support PCI-hotplug.
-The code that Meng Li wants to change was sort of a half-baked way to
-add such support.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Alan Stern
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
+
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
+
+You may send multiple commands in a single email message.
 
