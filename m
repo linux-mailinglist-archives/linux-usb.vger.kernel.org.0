@@ -1,141 +1,138 @@
-Return-Path: <linux-usb+bounces-2492-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2493-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 687B27E0517
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Nov 2023 15:56:58 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E67DD7E0538
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Nov 2023 16:04:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C64B8B2136B
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Nov 2023 14:56:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 919CCB21428
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Nov 2023 15:04:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12B111A58D;
-	Fri,  3 Nov 2023 14:56:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Pn24tQiU"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5B451A5A5;
+	Fri,  3 Nov 2023 15:04:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51ADE1A287
-	for <linux-usb@vger.kernel.org>; Fri,  3 Nov 2023 14:56:49 +0000 (UTC)
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D508D4B
-	for <linux-usb@vger.kernel.org>; Fri,  3 Nov 2023 07:56:43 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2c509f2c46cso30551801fa.1
-        for <linux-usb@vger.kernel.org>; Fri, 03 Nov 2023 07:56:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1699023401; x=1699628201; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YzRav2ZfuBCwiXlPtdX/9u8isJFM6SrzAhyoI7wYWQE=;
-        b=Pn24tQiUjPLyBLkG3Qe2NpyvS10i7qITQ7YbnU1hGUUdtW+034F7pXZ27hmtaeVd2Y
-         +BB2M18gEOq+1Xfg+CnuPGz8iuBUijfEYPWJ4cP3PqM3/gsL2wMd8ozxgYWyP92FFOU3
-         NlJbDtSKDEWzNd3yaqN9ec9AAxIncQH+aOmP508WeqgYr/COzepVlf49nZcES5y+wQxF
-         t1Jf/UGUWv6gX/h6iM81V8NULbY2LpEpYhqI7Iyoj+88NdDEb4DYJJmwUT8pmb18tDOJ
-         gICf859WcxLFEmPgonKhOTgepAo4r8IaXzPTEFssBF8/ltxbZzxjKlJl+TrAa6Acp5N8
-         f7Og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699023401; x=1699628201;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YzRav2ZfuBCwiXlPtdX/9u8isJFM6SrzAhyoI7wYWQE=;
-        b=jAxMxJo2ncPH9sdPMyoL9m4qsuPiZrFi6bh8r3EKHUO1uz3XUhqMUboeY8iU5Avi4Y
-         IPrGIot423P6rRqlxfi9rHmMHkRXQ8CTPGi2BJ+t3AwFEFUv3ZKidhmXAc4JKtFEgJEv
-         4sqstLj7dPd0Ptv1o4AYAmDQ0iuICeh+sMqjDUbYVo3EkGXykMFs0FPY7iQbYxOpUfyZ
-         vQRnmUFwib/klgm78x1cZl87JzhZ4Sqx2ZfUr1hviK+4K1QcQ4FmLTnfayBAppAWoxAO
-         3hx1hhomhZMdEbsBsM/Kgd9pZnuZwGOeEQf5KS8eTUVa9EZ58YRi95rfjMhc+KQ4kgjr
-         hsjQ==
-X-Gm-Message-State: AOJu0YzPXOQO0fM1aU1rwCBoBj4EEHxxoVu2Zytq3sQn5mUf6Gd72ttt
-	iZyZjVpWjY103dvE9YlJihIADA==
-X-Google-Smtp-Source: AGHT+IHrwPsCOO5sN+SmbdkmMIdCW6kgWzAR/USeO8iPtpDH8HwcJAhi+6vW3PBDfaeLUzgkB8gAOQ==
-X-Received: by 2002:a2e:be0c:0:b0:2c5:1bd9:f95c with SMTP id z12-20020a2ebe0c000000b002c51bd9f95cmr20995596ljq.53.1699023400703;
-        Fri, 03 Nov 2023 07:56:40 -0700 (PDT)
-Received: from [192.168.1.7] (host-92-25-138-185.as13285.net. [92.25.138.185])
-        by smtp.gmail.com with ESMTPSA id er14-20020a05600c84ce00b0040472ad9a3dsm2656519wmb.14.2023.11.03.07.56.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Nov 2023 07:56:40 -0700 (PDT)
-Message-ID: <96b3ebe5-781a-432a-9a73-2217a2a674f4@linaro.org>
-Date: Fri, 3 Nov 2023 14:56:39 +0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 431AF1A585
+	for <linux-usb@vger.kernel.org>; Fri,  3 Nov 2023 15:04:43 +0000 (UTC)
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by lindbergh.monkeyblade.net (Postfix) with SMTP id 62DE9D55
+	for <linux-usb@vger.kernel.org>; Fri,  3 Nov 2023 08:04:38 -0700 (PDT)
+Received: (qmail 850690 invoked by uid 1000); 3 Nov 2023 11:04:36 -0400
+Date: Fri, 3 Nov 2023 11:04:36 -0400
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: syzbot <syzbot+b6f11035e572f08bc20f@syzkaller.appspotmail.com>,
+  gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+  linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [usb?] INFO: task hung in hub_port_init (3)
+Message-ID: <ff0083c2-249e-4c1e-9546-0b81cf2c6e6f@rowland.harvard.edu>
+References: <000000000000704d6305fdb75642@google.com>
+ <88cc734c-2a88-4495-aa1e-f16294eb6cea@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC 1/8] dt-bindings: usb: qcom,dwc3: Add bindings to enable
- runtime
-Content-Language: en-US
-To: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc: quic_wcheng@quicinc.com, linux-usb@vger.kernel.org,
- Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
- Philipp Zabel <p.zabel@pengutronix.de>, Rob Herring <robh+dt@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, devicetree@vger.kernel.org,
- quic_ppratap@quicinc.com, quic_jackp@quicinc.com
-References: <20231017131851.8299-1-quic_kriskura@quicinc.com>
- <20231017131851.8299-2-quic_kriskura@quicinc.com>
- <272a9764-1cae-4d86-88b1-00175de83333@linaro.org>
- <960101cc-78c0-49cf-ab62-90614eeb9ee2@quicinc.com>
- <dbf4a48e-c808-4611-96b1-563ece1e451a@linaro.org>
- <f0820464-16d6-47fd-90bc-cf80b5d76058@quicinc.com>
-From: Caleb Connolly <caleb.connolly@linaro.org>
-In-Reply-To: <f0820464-16d6-47fd-90bc-cf80b5d76058@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <88cc734c-2a88-4495-aa1e-f16294eb6cea@collabora.com>
 
+On Fri, Nov 03, 2023 at 07:03:20PM +0500, Muhammad Usama Anjum wrote:
+> On 6/10/23 12:25 AM, syzbot wrote:
+> > syzbot has found a reproducer for the following issue on:
+> > 
+> > HEAD commit:    33f2b5785a2b Merge tag 'drm-fixes-2023-06-09' of git://ano..
+> > git tree:       upstream
+> > console+strace: https://syzkaller.appspot.com/x/log.txt?x=1206f143280000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3c980bfe8b399968
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=b6f11035e572f08bc20f
+> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1676f51b280000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=129632fd280000
+> > 
+> > Downloadable assets:
+> > disk image: https://storage.googleapis.com/syzbot-assets/a817d99af39d/disk-33f2b578.raw.xz
+> > vmlinux: https://storage.googleapis.com/syzbot-assets/8916e1d053fc/vmlinux-33f2b578.xz
+> > kernel image: https://storage.googleapis.com/syzbot-assets/e53956f3cfd4/bzImage-33f2b578.xz
+> > 
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+b6f11035e572f08bc20f@syzkaller.appspotmail.com
+> > 
+> > INFO: task kworker/0:2:901 blocked for more than 143 seconds.
+> >       Not tainted 6.4.0-rc5-syzkaller-00178-g33f2b5785a2b #0
+> > "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> > task:kworker/0:2     state:D stack:26800 pid:901   ppid:2      flags:0x00004000
+> > Workqueue: usb_hub_wq hub_event
+> > Call Trace:
+> >  <TASK>
+> >  context_switch kernel/sched/core.c:5343 [inline]
+> >  __schedule+0xc9a/0x5880 kernel/sched/core.c:6669
+> >  schedule+0xde/0x1a0 kernel/sched/core.c:6745
+> >  usb_kill_urb.part.0+0x19a/0x220 drivers/usb/core/urb.c:728
+> >  usb_kill_urb+0x83/0xa0 drivers/usb/core/urb.c:717
+> >  usb_start_wait_urb+0x24a/0x4b0 drivers/usb/core/message.c:64
+> >  usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
+> >  usb_control_msg+0x320/0x4a0 drivers/usb/core/message.c:153
+> >  hub_port_init+0x14f3/0x3900 drivers/usb/core/hub.c:4874
+> >  hub_port_connect drivers/usb/core/hub.c:5336 [inline]
+> >  hub_port_connect_change drivers/usb/core/hub.c:5551 [inline]
+> >  port_event drivers/usb/core/hub.c:5711 [inline]
+> >  hub_event+0x2b89/0x4e40 drivers/usb/core/hub.c:5793
+> >  process_one_work+0x99a/0x15e0 kernel/workqueue.c:2405
+> >  worker_thread+0x67d/0x10c0 kernel/workqueue.c:2552
+> >  kthread+0x344/0x440 kernel/kthread.c:379
+> >  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+> >  </TASK>
+> > INFO: task syz-executor104:5004 blocked for more than 143 seconds.
+> This is being reproduced on linux-next. The USB IP is being fuzzed. I'd
+> modified the reproducer to try to understand the issue. The execution of
+> application creates kworkers (can be found in hub->events). One of the usb
+> hub kworker gets stuck because of wrong use_count. I don't know USB side of
+> logic. But a worker shouldn't go to sleep indefinitely.
 
+I doubt that the problem is a wrong value for use_count.  More likely
+it's a bug in the usbip driver.
 
-On 03/11/2023 05:34, Krishna Kurapati PSSNV wrote:
+> My debug logs are as following which can help an expert USB developer to
+> pin point the problem:
 > 
-> 
-> On 11/3/2023 12:10 AM, Caleb Connolly wrote:
->>> Hi Caleb,
->>>
->>>    There are two types of platforms, some use extcon and some use
->>> role-switch to deliver vbus/id notifications. Extcon targets already
->>> have this qscratch modifications present today in vbus and id
->>> handlers. But for role-switch based targets we don't have any way to
->>> get this notification to dwc3-qcom. In this implementation, I wanted
->>> to get those notications from core to glue and for this we
->>> implenented vendor hooks.
->>>
->>> The property added has been used to do two things:
->>>
->>> 1. Register glue's vendor hooks to core driver
->>> 2. Do runtime_allow for glue (and by default for core as the dt is
->>> not flattened)
->>>
->>> In case of extcon, we don't want to register vendor hooks as
->>> notifications are not necessary.
->>
->> Could it just be enabled when role_switch is present then?
->>>
-> 
-> So we would register vendor hooks when usb-role-switch is present but
-> don't do runtime allow, and leave that option to user space right ?
-> I think it would work and we can do away with the binding completely.
+> [  118.904272][    T9] usb_submit_urb urb->use_count: 0
+> [  118.904942][    T9] usb_hcd_submit_urb urb->use_count: 1
+> [  118.905715][    T9] usb_submit_urb urb->use_count: 1
+> [  118.906428][    T9] usb_start_wait_urb urb->use_count: 1
+> [  123.938978][    T9] usb_kill_urb use_count: 1
 
-Can we still enable runtime suspend? Maybe someone else wants to chime
-in here, but I'd guess that it's preferable to have it enabled by
-default, particularly for devices like phones. Or are there side effects
-from this?
-> 
-> Will wait for comments from other folks as well on this approach.
+These don't mean much because they don't give the address of urb, so
+we don't know if the various lines all refer to the same URB or to
+different ones.
 
-Sounds good, thanks!
-> 
-> Thanks for the review,
-> Krishna,
+> At this point, wait is being done on usb_kill_urb_queue as use_count isn't
+> zero and no event on usb_kill_urb_queue is received.
 
--- 
-// Caleb (they/them)
+Right.  The usbip driver is supposed to terminate the URB in a timely
+fashion (because usb_kill_urb() calls usb_hcd_unlink_urb()), but it
+isn't doing so.  When the URB completes, the event will occur.
+
+> The comment for usb_kill_urb is:
+> > * This routine may not be used in an interrupt context (such as a bottom
+> > * half or a completion handler), or when holding a spinlock, or in other
+> > * situations where the caller can't schedule().
+> 
+> But several locks are held by this kworker and sleeps indefinitely.
+
+No spinlocks are held, only mutexes.  The difference is that a task is
+allowed to sleep while holding a mutex, but it's not allowed to sleep
+while holding a spinlock.
+
+If you want to fix this problem (and probably a bunch of other ones in
+syzbot's list of pending bugs), figure out what's wrong with the
+->urb_dequeue() callback routine in the usbip driver and fix it.
+
+Alan Stern
 
