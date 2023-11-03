@@ -1,138 +1,149 @@
-Return-Path: <linux-usb+bounces-2493-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2494-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E67DD7E0538
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Nov 2023 16:04:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3539D7E055B
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Nov 2023 16:15:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 919CCB21428
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Nov 2023 15:04:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BA0C0B2144E
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Nov 2023 15:15:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5B451A5A5;
-	Fri,  3 Nov 2023 15:04:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4109B1B278;
+	Fri,  3 Nov 2023 15:15:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WLW0DLxh"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 431AF1A585
-	for <linux-usb@vger.kernel.org>; Fri,  3 Nov 2023 15:04:43 +0000 (UTC)
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by lindbergh.monkeyblade.net (Postfix) with SMTP id 62DE9D55
-	for <linux-usb@vger.kernel.org>; Fri,  3 Nov 2023 08:04:38 -0700 (PDT)
-Received: (qmail 850690 invoked by uid 1000); 3 Nov 2023 11:04:36 -0400
-Date: Fri, 3 Nov 2023 11:04:36 -0400
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc: syzbot <syzbot+b6f11035e572f08bc20f@syzkaller.appspotmail.com>,
-  gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-  linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [usb?] INFO: task hung in hub_port_init (3)
-Message-ID: <ff0083c2-249e-4c1e-9546-0b81cf2c6e6f@rowland.harvard.edu>
-References: <000000000000704d6305fdb75642@google.com>
- <88cc734c-2a88-4495-aa1e-f16294eb6cea@collabora.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FA121A5AE
+	for <linux-usb@vger.kernel.org>; Fri,  3 Nov 2023 15:15:01 +0000 (UTC)
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A22B2D4B
+	for <linux-usb@vger.kernel.org>; Fri,  3 Nov 2023 08:14:52 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-32fb1d757f7so867716f8f.0
+        for <linux-usb@vger.kernel.org>; Fri, 03 Nov 2023 08:14:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1699024491; x=1699629291; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JQmtajR/Lo5kWZGagJsWizBqcJuSRUlM8N3Px2Mnlzc=;
+        b=WLW0DLxhI6kNo/vp1JLsCwd5z2ctRoiSgmOMUmrtNkjrJS8ksnB6Lnr9KClsKfeR6s
+         zLs+7jabuSJYFFvMJVzKgEF9uj3trz0B868fvE33Ysywxoue0FB5HxzP4RQ5HoAC2tIJ
+         XATbApGnxbjk6HmtsQ58KIvR5Os8kzjii/IiExYsHHaot80spaquxlfVqiOrS/JU9SUb
+         U9VBacCBzWuuGy+0wt5kwf+qeHEkSJomzZUrLXU+dnwkxphzqm7EETBxDC+mVpzxr3hT
+         uZN1pW91Ys5b+etp8ISYEmrCUJCZseUxQbASPULys4blLcC2v3g05tV+OLy+9/FCJBN3
+         8vCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699024491; x=1699629291;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JQmtajR/Lo5kWZGagJsWizBqcJuSRUlM8N3Px2Mnlzc=;
+        b=Zn97goOXyLONJ5o4oGGY0GdoynR+BWRy5jHZ5spPSGJXHUuFIMpx8NMvoRwe7NqU2m
+         jYyHj+pNOQ5gdo3EznHTJK4FeVqaZdY9FiiwTKkfzG7rzB0Qu1HA99HosK5PmAitOB0X
+         l4cU4Vjpkm19YDtDZD9d1IxTYFeA7JDcx6VQ1LBhEwacAgjvo0RmCrchhAEHMXxMu5qS
+         A2tp/3YtEqvh2CwMgDN2Ce2ReBnZ0HxmwInYBk9/UXuWvBUU+yDI3jjEMCsVlTU9+ZPC
+         Wh1I2ijXS+nL6OpiSKwmyPjRZt7e/5uMDHpkD8lv7Ar9uKIVe6mkggg7puTKtfJ2IAS7
+         rrCQ==
+X-Gm-Message-State: AOJu0YxUpVcDghElzQnxI7NoCSXDpwR8N5rpnvT5vCbOG2Ao1XjB8epr
+	XirCMeQYyuGI+ppBUjqfcH2gXQ==
+X-Google-Smtp-Source: AGHT+IGD/xeq7bY+n2+xagtvTANWbDHhn+sJbmaTPg5nPjbUi9qXD9HyIs80yHobXO3D3Wqg4buNJw==
+X-Received: by 2002:a5d:6f1a:0:b0:32d:b2cf:8ccd with SMTP id ay26-20020a5d6f1a000000b0032db2cf8ccdmr27222679wrb.47.1699024490887;
+        Fri, 03 Nov 2023 08:14:50 -0700 (PDT)
+Received: from [192.168.100.102] ([37.228.218.3])
+        by smtp.gmail.com with ESMTPSA id k12-20020adff28c000000b0032f99801273sm2065454wro.66.2023.11.03.08.14.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 03 Nov 2023 08:14:50 -0700 (PDT)
+Message-ID: <e700133b-58f7-4a4d-8e5c-0d04441b789b@linaro.org>
+Date: Fri, 3 Nov 2023 15:14:49 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <88cc734c-2a88-4495-aa1e-f16294eb6cea@collabora.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC 2/8] usb: dwc3: core: Register vendor hooks for dwc3-qcom
+Content-Language: en-US
+To: Krishna Kurapati <quic_kriskura@quicinc.com>,
+ Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Philipp Zabel <p.zabel@pengutronix.de>, Andy Gross <agross@kernel.org>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, quic_wcheng@quicinc.com
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+ quic_ppratap@quicinc.com, quic_jackp@quicinc.com
+References: <20231017131851.8299-1-quic_kriskura@quicinc.com>
+ <20231017131851.8299-3-quic_kriskura@quicinc.com>
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <20231017131851.8299-3-quic_kriskura@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Nov 03, 2023 at 07:03:20PM +0500, Muhammad Usama Anjum wrote:
-> On 6/10/23 12:25 AM, syzbot wrote:
-> > syzbot has found a reproducer for the following issue on:
-> > 
-> > HEAD commit:    33f2b5785a2b Merge tag 'drm-fixes-2023-06-09' of git://ano..
-> > git tree:       upstream
-> > console+strace: https://syzkaller.appspot.com/x/log.txt?x=1206f143280000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3c980bfe8b399968
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=b6f11035e572f08bc20f
-> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1676f51b280000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=129632fd280000
-> > 
-> > Downloadable assets:
-> > disk image: https://storage.googleapis.com/syzbot-assets/a817d99af39d/disk-33f2b578.raw.xz
-> > vmlinux: https://storage.googleapis.com/syzbot-assets/8916e1d053fc/vmlinux-33f2b578.xz
-> > kernel image: https://storage.googleapis.com/syzbot-assets/e53956f3cfd4/bzImage-33f2b578.xz
-> > 
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+b6f11035e572f08bc20f@syzkaller.appspotmail.com
-> > 
-> > INFO: task kworker/0:2:901 blocked for more than 143 seconds.
-> >       Not tainted 6.4.0-rc5-syzkaller-00178-g33f2b5785a2b #0
-> > "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> > task:kworker/0:2     state:D stack:26800 pid:901   ppid:2      flags:0x00004000
-> > Workqueue: usb_hub_wq hub_event
-> > Call Trace:
-> >  <TASK>
-> >  context_switch kernel/sched/core.c:5343 [inline]
-> >  __schedule+0xc9a/0x5880 kernel/sched/core.c:6669
-> >  schedule+0xde/0x1a0 kernel/sched/core.c:6745
-> >  usb_kill_urb.part.0+0x19a/0x220 drivers/usb/core/urb.c:728
-> >  usb_kill_urb+0x83/0xa0 drivers/usb/core/urb.c:717
-> >  usb_start_wait_urb+0x24a/0x4b0 drivers/usb/core/message.c:64
-> >  usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
-> >  usb_control_msg+0x320/0x4a0 drivers/usb/core/message.c:153
-> >  hub_port_init+0x14f3/0x3900 drivers/usb/core/hub.c:4874
-> >  hub_port_connect drivers/usb/core/hub.c:5336 [inline]
-> >  hub_port_connect_change drivers/usb/core/hub.c:5551 [inline]
-> >  port_event drivers/usb/core/hub.c:5711 [inline]
-> >  hub_event+0x2b89/0x4e40 drivers/usb/core/hub.c:5793
-> >  process_one_work+0x99a/0x15e0 kernel/workqueue.c:2405
-> >  worker_thread+0x67d/0x10c0 kernel/workqueue.c:2552
-> >  kthread+0x344/0x440 kernel/kthread.c:379
-> >  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
-> >  </TASK>
-> > INFO: task syz-executor104:5004 blocked for more than 143 seconds.
-> This is being reproduced on linux-next. The USB IP is being fuzzed. I'd
-> modified the reproducer to try to understand the issue. The execution of
-> application creates kworkers (can be found in hub->events). One of the usb
-> hub kworker gets stuck because of wrong use_count. I don't know USB side of
-> logic. But a worker shouldn't go to sleep indefinitely.
-
-I doubt that the problem is a wrong value for use_count.  More likely
-it's a bug in the usbip driver.
-
-> My debug logs are as following which can help an expert USB developer to
-> pin point the problem:
+On 17/10/2023 14:18, Krishna Kurapati wrote:
+> Currently on QC targets, the conndone/disconnect events in device mode are
+> generated by controller when software writes to QSCRATCH registers in qcom
+> glue layer rather than the vbus line being routed to dwc3 core IP for it
+> to recognize and generate these events.
 > 
-> [  118.904272][    T9] usb_submit_urb urb->use_count: 0
-> [  118.904942][    T9] usb_hcd_submit_urb urb->use_count: 1
-> [  118.905715][    T9] usb_submit_urb urb->use_count: 1
-> [  118.906428][    T9] usb_start_wait_urb urb->use_count: 1
-> [  123.938978][    T9] usb_kill_urb use_count: 1
-
-These don't mean much because they don't give the address of urb, so
-we don't know if the various lines all refer to the same URB or to
-different ones.
-
-> At this point, wait is being done on usb_kill_urb_queue as use_count isn't
-> zero and no event on usb_kill_urb_queue is received.
-
-Right.  The usbip driver is supposed to terminate the URB in a timely
-fashion (because usb_kill_urb() calls usb_hcd_unlink_urb()), but it
-isn't doing so.  When the URB completes, the event will occur.
-
-> The comment for usb_kill_urb is:
-> > * This routine may not be used in an interrupt context (such as a bottom
-> > * half or a completion handler), or when holding a spinlock, or in other
-> > * situations where the caller can't schedule().
+> We need to write '1' to  UTMI_OTG_VBUS_VALID bit of QSCRATCH_HS_PHY_CTRL
+> register to generate a connection done event and "0" if we need to
+> generate a disconnect event during cable removal or mode switch. Exactly
+> what is done by "dwc3_qcom_vbus_override_enable" call in dwc3-qcom.
 > 
-> But several locks are held by this kworker and sleeps indefinitely.
+> When the disconnect is not generated upon cable removal, the connected
+> flag of dwc3 is left marked as "true" and it blocks runtime suspend.
+> 
+> The goal of these vendor hooks is to let the mode change and cable removal
+> notifications from core reach the  glue layers so that glue can take
+> necessary action.
+> 
+> Before flattening the device tree, glue driver is not sure when the core
+> probe was completed as core probe can be deferred. In this case, glue is
+> not sure when to register vendor hooks. So mandate enabling runtime only
+> for flattened device node platforms so that glue can know when to register
+> vendor hooks.
+> 
+> The following are the requirements aimed in this implementation:
+> 
+> 1. When enum in device mode, Glue/core must stay active.
+> 
+> 2. When cable is connected but UDC is not written yet, then glue/core
+> must be suspended.
+> 
+> 3. Upon removing cable in device mode, the disconnect event must be
+> generated and unblock runtime suspend for dwc3 core.
+> 
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
 
-No spinlocks are held, only mutexes.  The difference is that a task is
-allowed to sleep while holding a mutex, but it's not allowed to sleep
-while holding a spinlock.
+What happens to this code if you
 
-If you want to fix this problem (and probably a bunch of other ones in
-syzbot's list of pending bugs), figure out what's wrong with the
-->urb_dequeue() callback routine in the usbip driver and fix it.
+static int count;
 
-Alan Stern
+1. sleep in dwc3_probe for 10 milliseconds
+2. return -EPROBE_DEFER
+3. if count++ < 5 goto 1
+
+i.e. if we simulate say waiting on a PHY driver to probe in dwc3_probe()
+
+and what happens if we introduce a 100 millsecond sleep into 
+dwc3_qcom_probe() - and run a fake disconnect event from 
+dwc3_qcom_probe_core() directly ?
+
+In other words if make it that dwc3_probe() completes and struct 
+dwc3_glue_ops->notify_cable_disconnect() fires prior to 
+dwc3_qcom_probe_core() completing ?
+
+i.e. I don't immediately see how you've solved the probe() completion 
+race condition here.
+
+---
+bod
 
