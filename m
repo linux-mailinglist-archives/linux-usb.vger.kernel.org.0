@@ -1,145 +1,132 @@
-Return-Path: <linux-usb+bounces-2502-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2503-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 134BC7E0705
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Nov 2023 17:52:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B4F5E7E073A
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Nov 2023 18:15:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 72168281EFD
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Nov 2023 16:52:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6F8AB281F1B
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Nov 2023 17:15:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6B731D6AA;
-	Fri,  3 Nov 2023 16:52:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u6Ysm8k5"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF56D1F616;
+	Fri,  3 Nov 2023 17:15:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ACB31D550;
-	Fri,  3 Nov 2023 16:52:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81D36C433C8;
-	Fri,  3 Nov 2023 16:52:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699030370;
-	bh=K+AWM+g16f6TCciCdpbXKjq6QoLeLnYSS3177Re7WV4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=u6Ysm8k5ChAO4XemOmOjhx9P0UbJw0BMp0ENkfORfw5NRHEekqQaJd7TFZoo6in+x
-	 wZfcV8AXyYRDO09LmHJ1wT3uD+TZqOcq1Cft9zsdPRczvnLbTgdLo5seaCo2+rigEB
-	 A+GSiqQS72v8NqsI9xYC6knPh/f69Wv5OGfcCqlNvzh38myv1Jy7RdUgyFjEslGuWp
-	 25aVjx+5ESBWJ50qXJJ8NMDOWxQHH87ajElQz4o/UOcXW94/uP5EbatmzsfCpDL5d/
-	 6HJyC0PhsBW5sEbRuueMbs9O9FFLs5x8fH2IDgex7HgVepCW8rCsGW58IjvM0O51cG
-	 4KUcmoLelgtyQ==
-Date: Fri, 3 Nov 2023 16:52:44 +0000
-From: Simon Horman <horms@kernel.org>
-To: Doug Anderson <dianders@chromium.org>
-Cc: Jakub Kicinski <kuba@kernel.org>, Hayes Wang <hayeswang@realtek.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Edward Hill <ecgh@chromium.org>,
-	Laura Nao <laura.nao@collabora.com>,
-	Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
-	Grant Grundler <grundler@chromium.org>,
-	=?utf-8?B?QmrDuHJu?= Mork <bjorn@mork.no>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v5 8/8] r8152: Block future register access if register
- access fails
-Message-ID: <20231103165244.GB714036@kernel.org>
-References: <20231020210751.3415723-1-dianders@chromium.org>
- <20231020140655.v5.8.Ib2affdbfdc2527aaeef9b46d4f23f7c04147faeb@changeid>
- <20231025162824.GK57304@kernel.org>
- <CAD=FV=XVJVkyA09Ca_YGa5xRS4jGra4cw-6ArgwCekMzn7uWcA@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13B7E1C6AE
+	for <linux-usb@vger.kernel.org>; Fri,  3 Nov 2023 17:14:55 +0000 (UTC)
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 625BF13E
+	for <linux-usb@vger.kernel.org>; Fri,  3 Nov 2023 10:14:53 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1qyxkp-0000xK-5O; Fri, 03 Nov 2023 18:14:43 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1qyxko-006NEa-4G; Fri, 03 Nov 2023 18:14:42 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1qyxkn-00CTl5-RA; Fri, 03 Nov 2023 18:14:41 +0100
+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Valentina Manea <valentina.manea.m@gmail.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Hongren Zheng <i@zenithal.me>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org,
+	kernel@pengutronix.de
+Subject: [PATCH] USB: usbip: vudc: Convert to platform remove callback returning void
+Date: Fri,  3 Nov 2023 18:14:29 +0100
+Message-ID: <20231103171428.3636570-2-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2467; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=wb7HKG8qqxy4/8uF5ahW233jByJYDRq4CSWBwEWFblQ=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlRSp0dvVdQwjuF01NcAhUJJh/uMs9F4IUHTQ6p PCtylnC8WqJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZUUqdAAKCRCPgPtYfRL+ TrIkB/9Wou9M0JxplWJC7/iUocnUPLxRcLM9ckWZaUuSjhVlO9Mh9HxwSkyqvLpRtZ1jkTvlPdk 9g1yhg0INig/wJOvHijl0IQ8FiSBYlxb/HAbpo4ofEb3e/66t0Xp8S8hZj3deXwvp+QtBomaxgn Lnmd2nZWVJFy3CqgQrQlhJe3MVi77lQdZe1Y+4otUUXFqioJkTmOh5ISH6kPcMLCVzmpR3FnOiu 7QnsKfLSNbxFu1SrkHCgZGZOKVHtDv49uMxbL/EYqUc3pykut7UagyUcjncTSR/+gl1MiB/t6Vx SGb7BaJuoIccGKFaex+0uJWOeWmHdzsIVrYiJjfF/rdsHIWi
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAD=FV=XVJVkyA09Ca_YGa5xRS4jGra4cw-6ArgwCekMzn7uWcA@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-On Wed, Oct 25, 2023 at 01:24:55PM -0700, Doug Anderson wrote:
-> Hi,
-> 
-> On Wed, Oct 25, 2023 at 9:28 AM Simon Horman <horms@kernel.org> wrote:
-> >
-> > On Fri, Oct 20, 2023 at 02:06:59PM -0700, Douglas Anderson wrote:
-> >
-> > ...
-> >
-> > > @@ -9603,25 +9713,14 @@ static bool rtl8152_supports_lenovo_macpassthru(struct usb_device *udev)
-> > >       return 0;
-> > >  }
-> > >
-> > > -static int rtl8152_probe(struct usb_interface *intf,
-> > > -                      const struct usb_device_id *id)
-> > > +static int rtl8152_probe_once(struct usb_interface *intf,
-> > > +                           const struct usb_device_id *id, u8 version)
-> > >  {
-> > >       struct usb_device *udev = interface_to_usbdev(intf);
-> > >       struct r8152 *tp;
-> > >       struct net_device *netdev;
-> > > -     u8 version;
-> > >       int ret;
-> > >
-> > > -     if (intf->cur_altsetting->desc.bInterfaceClass != USB_CLASS_VENDOR_SPEC)
-> > > -             return -ENODEV;
-> > > -
-> > > -     if (!rtl_check_vendor_ok(intf))
-> > > -             return -ENODEV;
-> > > -
-> > > -     version = rtl8152_get_version(intf);
-> > > -     if (version == RTL_VER_UNKNOWN)
-> > > -             return -ENODEV;
-> > > -
-> > >       usb_reset_device(udev);
-> > >       netdev = alloc_etherdev(sizeof(struct r8152));
-> > >       if (!netdev) {
-> > > @@ -9784,10 +9883,20 @@ static int rtl8152_probe(struct usb_interface *intf,
-> > >       else
-> > >               device_set_wakeup_enable(&udev->dev, false);
-> > >
-> > > +     /* If we saw a control transfer error while probing then we may
-> > > +      * want to try probe() again. Consider this an error.
-> > > +      */
-> > > +     if (test_bit(PROBE_SHOULD_RETRY, &tp->flags))
-> > > +             goto out2;
-> >
-> > Sorry for being a bit slow here, but if this is an error condition,
-> > sould ret be set to an error value?
-> >
-> > As flagged by Smatch.
-> 
-> Thanks for the note. I think we're OK, though. If you look at the
-> "out:" label, which is right after "out1" it tests for the same bit.
-> That will set "ret = -EAGAIN" for us.
+The .remove() callback for a platform driver returns an int which makes
+many driver authors wrongly assume it's possible to do error handling by
+returning an error code. However the value returned is ignored (apart
+from emitting a warning) and this typically results in resource leaks.
 
-Thanks, and sorry for being even slower than the previous time.
-I see your point regarding "out:" and agree that the code is correct.
+To improve here there is a quest to make the remove callback return
+void. In the first step of this quest all drivers are converted to
+.remove_new(), which already returns void. Eventually after all drivers
+are converted, .remove_new() will be renamed to .remove().
 
-> I'll admit it probably violates the principle of least astonishment,
-> but there's a method to my madness. Specifically:
-> 
-> a) We need a test here to make sure we don't return "success" if the
-> bit is set. The driver doesn't error check for success when it
-> modifies HW registers so it might _thnk_ it was successful but still
-> have this bit set. ...so we need this check right before we return
-> "success".
-> 
-> b) We also need to test for this bit if we're in the error handling
-> code. Even though the driver doesn't check for success in lots of
-> places, there still could be some places that notice an error. It may
-> return any kind of error here, so we need to override it to -EAGAIN.
-> 
-> ...so I just set "ret = -EAGAIN" in one place.
-> 
-> Does that make sense? If you want to submit a patch adjusting the
-> comment to make this more obvious, I'm happy to review it.
+Trivially convert this driver from always returning zero in the remove
+callback to the void returning variant.
 
-Thanks it does make sense.
-And I don't think any further action is required.
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ drivers/usb/usbip/vudc.h      | 2 +-
+ drivers/usb/usbip/vudc_dev.c  | 3 +--
+ drivers/usb/usbip/vudc_main.c | 2 +-
+ 3 files changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/usbip/vudc.h b/drivers/usb/usbip/vudc.h
+index 1bd4bc005829..faf61c9c6a98 100644
+--- a/drivers/usb/usbip/vudc.h
++++ b/drivers/usb/usbip/vudc.h
+@@ -173,6 +173,6 @@ struct vudc_device *alloc_vudc_device(int devid);
+ void put_vudc_device(struct vudc_device *udc_dev);
+ 
+ int vudc_probe(struct platform_device *pdev);
+-int vudc_remove(struct platform_device *pdev);
++void vudc_remove(struct platform_device *pdev);
+ 
+ #endif /* __USBIP_VUDC_H */
+diff --git a/drivers/usb/usbip/vudc_dev.c b/drivers/usb/usbip/vudc_dev.c
+index 44b04c54c086..f11535020e35 100644
+--- a/drivers/usb/usbip/vudc_dev.c
++++ b/drivers/usb/usbip/vudc_dev.c
+@@ -628,12 +628,11 @@ int vudc_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-int vudc_remove(struct platform_device *pdev)
++void vudc_remove(struct platform_device *pdev)
+ {
+ 	struct vudc *udc = platform_get_drvdata(pdev);
+ 
+ 	usb_del_gadget_udc(&udc->gadget);
+ 	cleanup_vudc_hw(udc);
+ 	kfree(udc);
+-	return 0;
+ }
+diff --git a/drivers/usb/usbip/vudc_main.c b/drivers/usb/usbip/vudc_main.c
+index 993e721cb840..8bee553e4894 100644
+--- a/drivers/usb/usbip/vudc_main.c
++++ b/drivers/usb/usbip/vudc_main.c
+@@ -19,7 +19,7 @@ MODULE_PARM_DESC(num, "number of emulated controllers");
+ 
+ static struct platform_driver vudc_driver = {
+ 	.probe		= vudc_probe,
+-	.remove		= vudc_remove,
++	.remove_new	= vudc_remove,
+ 	.driver		= {
+ 		.name	= GADGET_NAME,
+ 		.dev_groups = vudc_groups,
+
+base-commit: e27090b1413ff236ca1aec26d6b022149115de2c
+-- 
+2.42.0
+
 
