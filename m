@@ -1,192 +1,175 @@
-Return-Path: <linux-usb+bounces-2506-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2507-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A62E07E0878
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Nov 2023 19:49:54 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD94E7E0914
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Nov 2023 20:08:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 06588B21485
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Nov 2023 18:49:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0C1E21C211FE
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Nov 2023 19:08:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4318533F1;
-	Fri,  3 Nov 2023 18:49:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B131122EF8;
+	Fri,  3 Nov 2023 19:08:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="HyXMIt8a"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="BRkffatP"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0CDF23CC;
-	Fri,  3 Nov 2023 18:49:40 +0000 (UTC)
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BFD4184;
-	Fri,  3 Nov 2023 11:49:36 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3A3IR546016764;
-	Fri, 3 Nov 2023 18:49:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=V4iWzqRHOUbACCWPKoiAq+ncPwLVlJrHH2OBYCcZKBI=;
- b=HyXMIt8aozdCojV335Wsqm5kCz0dJuAvoMaD5I0yDYBpmSza5jnpQRWLUQQr0hWwEsy9
- VHiwtnntuJxFBU+2AjlRgI8q76RA6EL7NslWK8rDCPYCf6AsI6d4CgPQAEiyWpHEo8Uy
- t8wSYpNuDZMrcbErawdLIgaKXhVZ82b6Hg5a9DEO50nKTP/l6Sw9hZKor1BpNXvk/zdo
- 2zSPHYqNswrgiAQdmrbEbGNyXM1OmP6ouLMtF49TgsaKIflRsd0v4cgexmWahyD1y13Q
- 23bqPOB1Ftk1ArEWnOxAcTfkFI3vO1fr46AwBFdfueIAGexXXv2ka99l622NvXHTf8ac 2g== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3u4wmjhaqf-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 03 Nov 2023 18:49:21 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3A3InKhA011089
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 3 Nov 2023 18:49:20 GMT
-Received: from [10.249.21.155] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.39; Fri, 3 Nov
- 2023 11:49:13 -0700
-Message-ID: <3be5e95f-85d2-4abf-a8b4-18b019341602@quicinc.com>
-Date: Sat, 4 Nov 2023 00:19:08 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B88B224F2;
+	Fri,  3 Nov 2023 19:08:32 +0000 (UTC)
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2049.outbound.protection.outlook.com [40.107.220.49])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70DE7D4D;
+	Fri,  3 Nov 2023 12:08:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JqnbDEA7K+aFT6czuR4GnFxUWkdO9uZllJNz7WirK41WFLzRv/mqzd9iVAtFhr4JtahU5YazaRvIFTG0k7lYxtigbol0YYGx9kglDMahuAMehov5qTXE6Ym4i56KB9bE6WZVGdFAQSdCGJ4B7r1T/na7evFPBoSUhnaSAs2OA+iwN4+OgzFWX9UL56Peju/sOsVkQ//JrNP3Z3Z6y/yfugn+2AQrOaotGM/FwNgRbh00VrcenRc40peUZBHxoGybBVPmLO9HGr3aboLXNOr0RJMO7EeZYUVGFFCE0mRei2qS1opoJX22A5uNH46gWhgPaFy4uVhFowQoqCB6q/9Hdg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=l1mFvWxxG1gDlJsQRp+1hd6XhnFf+gocwVTPX9COVag=;
+ b=M/uoFTglDFULUwOzkU09wueaEH1OdgmeDyIfZ+Kh1YHYKnkjCzKWr5iMzFe/IsCKAMfVyooydvnWl7V6Kj3oqjJGenBlyZjpj3iKOBuj1pZQeIqDQ8u4jmNBnuDAtaRWhhmnHxgEAoh6LvuSXgG70bLDDOZtMPqpHyyz7hzXdbIFxFrb68n3mrtVXjX8uGWpRZRx346dRtaUt8vrMXMcLiMAR00sL6hiSVjkJDYWVYke0UY4Era7X2YYpSdUagnDzupNgqYcdvvP0G/38GMlfxXGxa4t6z4IxogULJIFQkfyxZWimLj/NfOyPny9yjRI+xZvVQZFHyY2TSZ6ReNoAg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=redhat.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=l1mFvWxxG1gDlJsQRp+1hd6XhnFf+gocwVTPX9COVag=;
+ b=BRkffatP26p3xAQ+o2EW4kuF0OVeaX6c+Jx9pl3g9xrEU9udxXTxxLee2iSQsnkzrDBQqBjRsaqcVs6WLVoSF1lTU75XuaDRSAqRHcaspZWDY4OpaBivmSMXp1k7bI1IBHNVv3r7vfg1NCfCKBmYMz9MggPm+FUPraQvn75XKOE=
+Received: from MW4P221CA0029.NAMP221.PROD.OUTLOOK.COM (2603:10b6:303:8b::34)
+ by MN2PR12MB4046.namprd12.prod.outlook.com (2603:10b6:208:1da::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.21; Fri, 3 Nov
+ 2023 19:08:22 +0000
+Received: from CO1PEPF000044F0.namprd05.prod.outlook.com
+ (2603:10b6:303:8b:cafe::85) by MW4P221CA0029.outlook.office365.com
+ (2603:10b6:303:8b::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.22 via Frontend
+ Transport; Fri, 3 Nov 2023 19:08:22 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1PEPF000044F0.mail.protection.outlook.com (10.167.241.70) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6954.19 via Frontend Transport; Fri, 3 Nov 2023 19:08:21 +0000
+Received: from AUS-P9-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.32; Fri, 3 Nov
+ 2023 14:08:18 -0500
+From: Mario Limonciello <mario.limonciello@amd.com>
+To: Karol Herbst <kherbst@redhat.com>, Lyude Paul <lyude@redhat.com>, "Alex
+ Deucher" <alexander.deucher@amd.com>, =?UTF-8?q?Christian=20K=C3=B6nig?=
+	<christian.koenig@amd.com>, Bjorn Helgaas <bhelgaas@google.com>, "Hans de
+ Goede" <hdegoede@redhat.com>, =?UTF-8?q?Ilpo=20J=C3=A4rvinen?=
+	<ilpo.jarvinen@linux.intel.com>, Mika Westerberg
+	<mika.westerberg@linux.intel.com>, Lukas Wunner <lukas@wunner.de>
+CC: Danilo Krummrich <dakr@redhat.com>, David Airlie <airlied@gmail.com>,
+	Daniel Vetter <daniel@ffwll.ch>, Xinhui Pan <Xinhui.Pan@amd.com>, "Rafael J .
+ Wysocki" <rafael@kernel.org>, Mark Gross <markgross@kernel.org>, "Andreas
+ Noever" <andreas.noever@gmail.com>, Michael Jamet <michael.jamet@intel.com>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>, =?UTF-8?q?Pali=20Roh=C3=A1r?=
+	<pali@kernel.org>, =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>, "Maciej
+ W . Rozycki" <macro@orcam.me.uk>, Manivannan Sadhasivam <mani@kernel.org>,
+	Mario Limonciello <mario.limonciello@amd.com>, "open list:DRM DRIVER FOR
+ NVIDIA GEFORCE/QUADRO GPUS" <dri-devel@lists.freedesktop.org>, "open list:DRM
+ DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS" <nouveau@lists.freedesktop.org>, "open
+ list" <linux-kernel@vger.kernel.org>, "open list:RADEON and AMDGPU DRM
+ DRIVERS" <amd-gfx@lists.freedesktop.org>, "open list:PCI SUBSYSTEM"
+	<linux-pci@vger.kernel.org>, "open list:ACPI" <linux-acpi@vger.kernel.org>,
+	"open list:X86 PLATFORM DRIVERS" <platform-driver-x86@vger.kernel.org>, "open
+ list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>
+Subject: [PATCH v2 0/9] Improvements to pcie_bandwidth_available() for eGPUs
+Date: Fri, 3 Nov 2023 14:07:49 -0500
+Message-ID: <20231103190758.82911-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC 2/8] usb: dwc3: core: Register vendor hooks for dwc3-qcom
-Content-Language: en-US
-From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Bjorn Andersson
-	<andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Conor
- Dooley" <conor+dt@kernel.org>
-CC: <linux-usb@vger.kernel.org>,
-        Krzysztof Kozlowski
-	<krzysztof.kozlowski+dt@linaro.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Thinh
- Nguyen" <Thinh.Nguyen@synopsys.com>,
-        Rob Herring <robh+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <quic_ppratap@quicinc.com>,
-        <quic_jackp@quicinc.com>, <quic_wcheng@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-References: <20231017131851.8299-1-quic_kriskura@quicinc.com>
- <20231017131851.8299-3-quic_kriskura@quicinc.com>
- <e700133b-58f7-4a4d-8e5c-0d04441b789b@linaro.org>
- <5ef66bdc-9645-4bbe-8182-baa7fe4c583a@quicinc.com>
-In-Reply-To: <5ef66bdc-9645-4bbe-8182-baa7fe4c583a@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: oIkqhL3-zpoiPmr7Mi0Cnuw2gWddhm6G
-X-Proofpoint-GUID: oIkqhL3-zpoiPmr7Mi0Cnuw2gWddhm6G
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-03_18,2023-11-02_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- suspectscore=0 bulkscore=0 clxscore=1015 priorityscore=1501
- mlxlogscore=999 malwarescore=0 spamscore=0 adultscore=0 mlxscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2310240000 definitions=main-2311030157
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF000044F0:EE_|MN2PR12MB4046:EE_
+X-MS-Office365-Filtering-Correlation-Id: 05f6751c-6262-4a03-0cb4-08dbdca03f75
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	gIUwtuiwRHSSxYI/2JfiMZ4O2VMiaEcxqYwqOw8zDk575QDZaPfQ+BvZWx8vvVuSsqpf3+FWZdrSI9tlgon47OH9oUI9p1kcU766+VQRq72lKAEt6VSK30OqIBKqdK6SlmsvE2ESo6cl0zhfgUtRyxvpaIPkQTw6XvxDIu4KLh2gXPoasjTOtyk6TsXUM2fpzOUO0QCU0/zdUJgKupZoCV1vxdB8KdB1RLC8kjytu7dYBkccilXY/5YbU3oPQKCRZwmbyxsDwIdAncPiihhpVnalzhw7cn9aHm1TlETsZ0W5txkPWz8Xjf9aC+/ucUuvvSxUby4zbfUIF35QcC6Uo/1WVMINQwulMQKmF+j81Df72FrloheE7ZsXcAj1hh4AYjZ6/U+8befnrvuOe1bdvFu0cmNEqiasE67YPcGeU4Bmk78I0N37sjrPj8Di7wMy6IgJsIeN4aRhX9HJXshuWmzRXkanhaBAVXosHkY5C2jCJvBohm1zONpPOhRWIB9zVX41vbIfpmSJfKkXb5OnILr1jFVtzzLqNGKkim44ObFmazl8CjoSBm67eajEBA+E6Jw1M4gsnggNFm4dRmZMaTbQNLl8dSeTagyAEpPpZXMqc+j9tFpMG8EgdqBLXuEzrNNMiZs2UriGE88lUErU8uLpCPNGwy8BXTd56uDVpRqB6mlNoSnmFuhPSGGiztUM/intx2Tx0IgFSh5FSv8f/ik4aEi5v62TYq3Aj6zqFXsLjDnGEOKszCycPmL/Tq6l
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(376002)(39860400002)(396003)(136003)(346002)(230922051799003)(64100799003)(1800799009)(186009)(82310400011)(451199024)(40470700004)(46966006)(36840700001)(40480700001)(40460700003)(8676002)(70206006)(7416002)(47076005)(336012)(16526019)(26005)(1076003)(83380400001)(81166007)(426003)(356005)(36860700001)(110136005)(5660300002)(54906003)(70586007)(41300700001)(44832011)(478600001)(6666004)(4326008)(316002)(2616005)(2906002)(966005)(7696005)(8936002)(82740400003)(36756003)(86362001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Nov 2023 19:08:21.9164
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 05f6751c-6262-4a03-0cb4-08dbdca03f75
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CO1PEPF000044F0.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4046
 
+Downstream drivers are getting the wrong values from
+pcie_bandwidth_available() which is causing problems for performance
+of eGPUs.
 
+This series overhauls Thunderbolt related device detection and uses
+the changes to change the behavior of pcie_bandwidth_available().
 
-On 11/4/2023 12:15 AM, Krishna Kurapati PSSNV wrote:
-> 
-> 
-> On 11/3/2023 8:44 PM, Bryan O'Donoghue wrote:
->> On 17/10/2023 14:18, Krishna Kurapati wrote:
->>>
->>> The following are the requirements aimed in this implementation:
->>>
->>> 1. When enum in device mode, Glue/core must stay active.
->>>
->>> 2. When cable is connected but UDC is not written yet, then glue/core
->>> must be suspended.
->>>
->>> 3. Upon removing cable in device mode, the disconnect event must be
->>> generated and unblock runtime suspend for dwc3 core.
->>>
->>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
->>
-> 
-> Hi Bryan,
-> 
->> What happens to this code if you
->>
->> static int count;
->>
->> 1. sleep in dwc3_probe for 10 milliseconds
->> 2. return -EPROBE_DEFER
->> 3. if count++ < 5 goto 1
->>
->> i.e. if we simulate say waiting on a PHY driver to probe in dwc3_probe()
->>
-> The vendor hooks are used in __dwc3_set_mode and role_switch_set calls 
-> in core and drd files respectively. These are invoked only if we are OTG 
-> capable. The drd_work is initialized in core_init_mode which is called 
-> at the end of dwc3_probe. If dwc3_probe fails and gets deferred before 
-> that, none of the vendor hooks will be fired and dwc3_qcom_probe is also 
-> deferred.
-> 
-> However I see that if core_init_mode fails (the cleanup is already done 
-> in drd to prevent set_role from getting invoked already),  I need to 
-> cleanup vendor hooks in error path of dwc3_probe().
-> 
->> and what happens if we introduce a 100 millsecond sleep into 
->> dwc3_qcom_probe() - and run a fake disconnect event from 
->> dwc3_qcom_probe_core() directly ?
->>
->> In other words if make it that dwc3_probe() completes and struct 
->> dwc3_glue_ops->notify_cable_disconnect() fires prior to 
->> dwc3_qcom_probe_core() completing ?
->>
->> i.e. I don't immediately see how you've solved the probe() completion 
->> race condition here.
->>
-> Just wanted to understand the situation clearly. Is this the sequence 
-> you are referring to ?
-> 
-> 1. dwc3_probe is successful and role switch is registered properly.
-> 2. added delay after dwc3_qcom_probe_core and before interconnect_init
-> 3. Between this delay, we got a disconnect notificiation from glink
-> 4. We are clearing the qscratch reg in case of device mode and 
-> un-registering notifier in case of host mode.
-> 
-> If so, firstly I don't see any issue if we process disconnect event 
-> before qcom probe is complete. If we reached this stage, the clocks/gdsc 
-> is definitely ON and register accesses are good to go.
-> 
-> If we are in host mode at this point, we would just unregister to 
-> usb-core notifier and mark last busy. If we are in device mode, we would 
-> just clear the hs_phy_ctrl reg of qscratch. After the 100ms delay you 
-> mentioned we would call dwc3_remove anyways and cleanup the vendor 
-> hooks. But is the concern here that, what if we enter runtime_suspend at 
-> this point ?
-> 
+NOTE: This series is currently based on top of v6.6 + this change that
+      will be merged for 6.7:
+Link: https://patchwork.freedesktop.org/patch/564738/
 
-Just to clarify one more thing. The probe completion requirement came in 
-because, before the device tree was flattened, dwc3-qcom and core are 
-two different platform devices. And if the dwc3 core device probe got 
-deferred, dwc3-qcom probe still gets successfully completed. The glue 
-would never know when to register vendor hook callbacks to dwc3-core as 
-it would never know when the core probe was completed.
+v1->v2:
+ * Rename is_thunderbolt
+ * Look for _DSD instead of link
+ * Drop pci_is_thunderbolt_attached() from all drivers
+ * Adjust links
+ * Adjust commit messages
+ * Add quirk for Tiger Lake
 
-That is the reason we wanted to find out accurate point where core probe 
-is done to ensure we can properly register these callbacks.
+Mario Limonciello (9):
+  drm/nouveau: Switch from pci_is_thunderbolt_attached() to
+    dev_is_removable()
+  drm/radeon: Switch from pci_is_thunderbolt_attached() to
+    dev_is_removable()
+  PCI: Drop pci_is_thunderbolt_attached()
+  PCI: Move the `PCI_CLASS_SERIAL_USB_USB4` definition to common header
+  PCI: pciehp: Move check for is_thunderbolt into a quirk
+  PCI: Rename is_thunderbolt to is_tunneled
+  PCI: ACPI: Detect PCIe root ports that are used for tunneling
+  PCI: Exclude PCIe ports used for tunneling in
+    pcie_bandwidth_available()
+  PCI: Add a quirk to mark 0x8086 : 0x9a23 as supporting PCIe tunneling
 
-Regards,
-Krishna,
+ drivers/gpu/drm/nouveau/nouveau_vga.c  |  6 +-
+ drivers/gpu/drm/radeon/radeon_device.c |  4 +-
+ drivers/gpu/drm/radeon/radeon_kms.c    |  2 +-
+ drivers/pci/hotplug/pciehp_hpc.c       |  6 +-
+ drivers/pci/pci-acpi.c                 | 16 ++++++
+ drivers/pci/pci.c                      | 76 +++++++++++++++++---------
+ drivers/pci/probe.c                    |  2 +-
+ drivers/pci/quirks.c                   | 31 +++++++++++
+ drivers/platform/x86/apple-gmux.c      |  2 +-
+ drivers/thunderbolt/nhi.h              |  2 -
+ include/linux/pci.h                    | 25 +--------
+ include/linux/pci_ids.h                |  1 +
+ 12 files changed, 109 insertions(+), 64 deletions(-)
+
+-- 
+2.34.1
+
 
