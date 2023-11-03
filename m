@@ -1,105 +1,169 @@
-Return-Path: <linux-usb+bounces-2522-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2523-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4ADA7E0A7D
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Nov 2023 21:48:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 038D37E0BC6
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Nov 2023 00:04:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D3A5CB21480
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Nov 2023 20:48:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B1CDE282014
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Nov 2023 23:04:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90032208CC;
-	Fri,  3 Nov 2023 20:48:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A267F250E9;
+	Fri,  3 Nov 2023 23:04:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="FKQY3QeQ"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9644A1D695
-	for <linux-usb@vger.kernel.org>; Fri,  3 Nov 2023 20:48:26 +0000 (UTC)
-Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com [209.85.210.71])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E56E1D55
-	for <linux-usb@vger.kernel.org>; Fri,  3 Nov 2023 13:48:24 -0700 (PDT)
-Received: by mail-ot1-f71.google.com with SMTP id 46e09a7af769-6d3251109ebso3092509a34.3
-        for <linux-usb@vger.kernel.org>; Fri, 03 Nov 2023 13:48:24 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A71192374F
+	for <linux-usb@vger.kernel.org>; Fri,  3 Nov 2023 23:04:19 +0000 (UTC)
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC4F7D61
+	for <linux-usb@vger.kernel.org>; Fri,  3 Nov 2023 16:04:16 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-50930f126b1so3186700e87.3
+        for <linux-usb@vger.kernel.org>; Fri, 03 Nov 2023 16:04:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1699052655; x=1699657455; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GXIeW4GsOHRxaU3fctULVZJpGwQnd0E/lSvL3ZRRAIk=;
+        b=FKQY3QeQlyhlQ8Up88JWsIj7+PtH4DbqXMHTGglOkyrL+DoF+ChahkYvOPdZwN8/fy
+         zpjZIT/zZ+Cix+QdC93ThU7WJZLuNsOJCxOZJA/FJAwCecgOa7y8BeGz2Dj7SpKJedfc
+         wCgHGkZvz5uiiknvDECx3gG+MKiAhRgcjzeIvtn2Rf1ENk2TlS/6F9wssFxM7JT70WVy
+         XsMoAtPRPDNhP+Ws7z+pFzuwsogqwWV7bZRN18swrBvEHiXr5q8Svndi15df6Oh7uaaP
+         4PRAdWhaOz9jb28KnhRNXbAmjmghfAFyWi8NYZ+KAFCwOwxj1SXT93YC1h+0ZZohOCMI
+         aegg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699044504; x=1699649304;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JYI7n3mLYM40cy95YfSnPmk+FiWhPpVvFYPVeIDOOxo=;
-        b=CID2nZ1aFG4YShkR5/m+LpSPzqvyB7oL83OXgzJLMxeRhe91E8pyqEV13ovuIQnqip
-         eECx8Y1syAyqKAJ89sM06y0MVVY37L0HpC5qOtculDFPhltW0/b5WMjb+pR1kLA20nqX
-         pqj7DVfXzYXG/PQl233xzm8t1knc4QN5Vp7GzJ4qUL/Kz+15Aay2cyyHdjEdZ91f6JZD
-         lV89wzRWiEf3TmrEi1D6xz+nE7+yV6vANsX08H0aKSMtQgpPJ8Y7CbXP+CmZJiiVr8DI
-         dEuI4bCOk+rEHM3OoNXFYEpgvipCRKBAWXOtW/a4Exkmo5XGKZb3X01hqh5DAq4q5a60
-         OuUQ==
-X-Gm-Message-State: AOJu0YypbZoiVCvVqJe5NCpFmPdU7Vc1mKGcRUD8sDb6Ptc9Bjte5V9c
-	GDPTUzW3A3ywSmayUrjcuRshsjS2BMrWFlZy9HpcL/0C3cqX
-X-Google-Smtp-Source: AGHT+IGyIWMHQ/zphzXyDcZk+20Zoe4Op6VCSDwF0dOdH62NQphlgHA+dNlSlM98pmJm55H3wmWvGlyyDlkXcPcti/mf4ktGFXDF
+        d=1e100.net; s=20230601; t=1699052655; x=1699657455;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GXIeW4GsOHRxaU3fctULVZJpGwQnd0E/lSvL3ZRRAIk=;
+        b=ficILI7+89FK55iLWFVfalsrNNBpqAAFgFXr/gX6nDb7Cl52S67W46pCrTK+ir2slF
+         1GHyZb8T9/D61fLnG+63V/HQ4ddwSOvWSO7kwFQziz4BGuAvShIan9b+W/vf5AQSXx5N
+         loXVC7/TjrsLXwBGs10Kzas9DCiqtgYLzUFnGCH4zKcD1+vnPX8CN/hkVMADDq6mWD0f
+         GTyyFuTSnER9ozYI8ju3R39oVTLDVOAMZ+HMVaNE1E8p2aG20UQZwT7L0KHyL/Qrb+vD
+         5eqxyWWU4aR6iebBAI6BygqElb2C32YemO5DG1zyQBahn3zXyhqGeC3uTLMullVcuGdk
+         Sf2w==
+X-Gm-Message-State: AOJu0YxDwL9e64ezGDFE8TavMbDH62h17tbaBZfAuqn2TcbfjMEYaA6+
+	jsTSJWdUV+pLksDcenBWlrIehA==
+X-Google-Smtp-Source: AGHT+IFoXzOXhXBxDzb1hTvIAcYEh+H5qZuHfzgUAzlorrDsdIJFHrrZhJIyqpoiknvP1IZYHUsBww==
+X-Received: by 2002:a05:6512:688:b0:507:9a13:27bd with SMTP id t8-20020a056512068800b005079a1327bdmr22258057lfe.7.1699052655045;
+        Fri, 03 Nov 2023 16:04:15 -0700 (PDT)
+Received: from eriador.lan (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id s16-20020ac24650000000b00504211d2a7bsm329919lfo.297.2023.11.03.16.04.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Nov 2023 16:04:14 -0700 (PDT)
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: David Airlie <airlied@gmail.com>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Robert Foss <rfoss@kernel.org>,
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: dri-devel@lists.freedesktop.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-phy@lists.infradead.org,
+	linux-usb@vger.kernel.org,
+	freedreno@lists.freedesktop.org
+Subject: [PATCH v6 0/6] drm: simplify support for transparent DRM bridges
+Date: Sat,  4 Nov 2023 01:03:03 +0200
+Message-ID: <20231103230414.1483428-1-dmitry.baryshkov@linaro.org>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a9d:6c93:0:b0:6b8:6f61:5f61 with SMTP id
- c19-20020a9d6c93000000b006b86f615f61mr6098580otr.6.1699044504280; Fri, 03 Nov
- 2023 13:48:24 -0700 (PDT)
-Date: Fri, 03 Nov 2023 13:48:24 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000022a5d8060945a0fd@google.com>
-Subject: [syzbot] Monthly usb report (Nov 2023)
-From: syzbot <syzbot+listbdb465433a25244527e1@syzkaller.appspotmail.com>
-To: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hello usb maintainers/developers,
+Supporting DP/USB-C can result in a chain of several transparent
+bridges (PHY, redrivers, mux, etc). All attempts to implement DP support
+in a different way resulted either in series of hacks or in device tree
+not reflecting the actual hardware design. This results in drivers
+having similar boilerplate code for such bridges.
 
-This is a 31-day syzbot report for the usb subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/usb
+Next, these drivers are susceptible to -EPROBE_DEFER loops: the next
+bridge can either be probed from the bridge->attach callback, when it is
+too late to return -EPROBE_DEFER, or from the probe() callback, when the
+next bridge might not yet be available, because it depends on the
+resources provided by the probing device. Device links can not fully
+solve this problem since there are mutual dependencies between adjancent
+devices.
 
-During the period, 2 new issues were detected and 3 were fixed.
-In total, 65 issues are still open and 331 have been fixed so far.
+Last, but not least, this results in the the internal knowledge of DRM
+subsystem slowly diffusing into other subsystems, like PHY or USB/TYPEC.
 
-Some of the still happening issues:
+To solve all these issues, define a separate DRM helper, which creates
+separate aux device just for the bridge. During probe such aux device
+doesn't result in the EPROBE_DEFER loops. Instead it allows the device
+drivers to probe properly, according to the actual resource
+dependencies. The bridge auxdevs are then probed when the next bridge
+becomes available, sparing drivers from drm_bridge_attach() returning
+-EPROBE_DEFER.
 
-Ref  Crashes Repro Title
-<1>  2721    Yes   KMSAN: uninit-value in dib3000mb_attach (2)
-                   https://syzkaller.appspot.com/bug?extid=c88fc0ebe0d5935c70da
-<2>  2144    Yes   KASAN: slab-use-after-free Read in pvr2_context_set_notify
-                   https://syzkaller.appspot.com/bug?extid=621409285c4156a009b3
-<3>  944     Yes   WARNING in implement
-                   https://syzkaller.appspot.com/bug?extid=38e7237add3712479d65
-<4>  819     Yes   general protection fault in ir_raw_event_store_with_filter
-                   https://syzkaller.appspot.com/bug?extid=34008406ee9a31b13c73
-<5>  368     Yes   INFO: task hung in r871xu_dev_remove
-                   https://syzkaller.appspot.com/bug?extid=f39c1dad0b7db49ca4a8
-<6>  364     Yes   INFO: task hung in usbdev_open (2)
-                   https://syzkaller.appspot.com/bug?extid=b73659f5bb96fac34820
-<7>  304     Yes   KASAN: use-after-free Read in v4l2_fh_init
-                   https://syzkaller.appspot.com/bug?extid=c025d34b8eaa54c571b8
-<8>  239     Yes   INFO: task hung in netdev_run_todo (2)
-                   https://syzkaller.appspot.com/bug?extid=9d77543f47951a63d5c1
-<9>  222     No    INFO: task hung in hub_event (3)
-                   https://syzkaller.appspot.com/bug?extid=a7edecbf389d11a369d4
-<10> 138     Yes   INFO: rcu detected stall in hub_event
-                   https://syzkaller.appspot.com/bug?extid=ec5f884c4a135aa0dbb9
+Changes since v5:
+ - Removed extra semicolon in !DRM_AUX_HPD_BRIDGE stubs definition.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Changes since v4:
+ - Added documentation for new API (Sima)
+ - Added generic code to handle "last mile" DP bridges implementing just
+   the HPD functionality.
+ - Rebased on top of linux-next to be able to drop #ifdef's around
+   drm_bridge->of_node
 
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
+Changes since v3:
+ - Moved bridge driver to gpu/drm/bridge (Neil Armstrong)
+ - Renamed it to aux-bridge (since there is already a simple_bridge driver)
+ - Made CONFIG_OF mandatory for this driver (Neil Armstrong)
+ - Added missing kfree and ida_free (Dan Carpenter)
 
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
+Changes since v2:
+ - ifdef'ed bridge->of_node access (LKP)
 
-You may send multiple commands in a single email message.
+Changes since v1:
+ - Added EXPORT_SYMBOL_GPL / MODULE_LICENSE / etc. to drm_simple_bridge
+
+Dmitry Baryshkov (6):
+  drm/bridge: add transparent bridge helper
+  phy: qcom: qmp-combo: switch to DRM_AUX_BRIDGE
+  usb: typec: nb7vpq904m: switch to DRM_AUX_BRIDGE
+  drm/bridge: implement generic DP HPD bridge
+  soc: qcom: pmic-glink: switch to DRM_AUX_HPD_BRIDGE
+  usb: typec: qcom-pmic-typec: switch to DRM_AUX_HPD_BRIDGE
+
+ drivers/gpu/drm/bridge/Kconfig                |  17 ++
+ drivers/gpu/drm/bridge/Makefile               |   2 +
+ drivers/gpu/drm/bridge/aux-bridge.c           | 140 +++++++++++++++
+ drivers/gpu/drm/bridge/aux-hpd-bridge.c       | 164 ++++++++++++++++++
+ drivers/phy/qualcomm/Kconfig                  |   2 +-
+ drivers/phy/qualcomm/phy-qcom-qmp-combo.c     |  44 +----
+ drivers/soc/qcom/Kconfig                      |   1 +
+ drivers/soc/qcom/pmic_glink_altmode.c         |  33 +---
+ drivers/usb/typec/mux/Kconfig                 |   2 +-
+ drivers/usb/typec/mux/nb7vpq904m.c            |  44 +----
+ drivers/usb/typec/tcpm/Kconfig                |   1 +
+ drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c |  41 +----
+ include/drm/bridge/aux-bridge.h               |  37 ++++
+ 13 files changed, 383 insertions(+), 145 deletions(-)
+ create mode 100644 drivers/gpu/drm/bridge/aux-bridge.c
+ create mode 100644 drivers/gpu/drm/bridge/aux-hpd-bridge.c
+ create mode 100644 include/drm/bridge/aux-bridge.h
+
+-- 
+2.42.0
+
 
