@@ -1,128 +1,177 @@
-Return-Path: <linux-usb+bounces-2487-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2488-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0FEDE7E01AD
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Nov 2023 11:55:08 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95CEF7E01B5
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Nov 2023 12:05:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BDB7E281E70
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Nov 2023 10:55:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 84580B213B6
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Nov 2023 11:05:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 448F214ABA;
-	Fri,  3 Nov 2023 10:55:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFF3714F89;
+	Fri,  3 Nov 2023 11:05:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="A8PTZc6D"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81942125A8;
-	Fri,  3 Nov 2023 10:54:56 +0000 (UTC)
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61559D7;
-	Fri,  3 Nov 2023 03:54:51 -0700 (PDT)
-X-SpamFilter-By: ArmorX SpamTrap 5.78 with qID 3A3AsRIl9092021, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-	by rtits2.realtek.com.tw (8.15.2/2.95/5.92) with ESMTPS id 3A3AsRIl9092021
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 3 Nov 2023 18:54:27 +0800
-Received: from RTEXDAG01.realtek.com.tw (172.21.6.100) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Fri, 3 Nov 2023 18:54:27 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXDAG01.realtek.com.tw (172.21.6.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Fri, 3 Nov 2023 18:54:26 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::40c2:6c24:2df4:e6c7]) by
- RTEXMBS04.realtek.com.tw ([fe80::40c2:6c24:2df4:e6c7%5]) with mapi id
- 15.01.2375.007; Fri, 3 Nov 2023 18:54:26 +0800
-From: =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= <stanley_chang@realtek.com>
-To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-CC: "Thinh.Nguyen@synopsys.com" <Thinh.Nguyen@synopsys.com>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>,
-        "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>,
-        "gregkh@linuxfoundation.org"
-	<gregkh@linuxfoundation.org>,
-        "krzysztof.kozlowski+dt@linaro.org"
-	<krzysztof.kozlowski+dt@linaro.org>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org"
-	<linux-usb@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>
-Subject: RE: RE: [PATCH v6 1/2] usb: dwc3: add Realtek DHC RTD SoC dwc3 glue layer driver
-Thread-Topic: RE: [PATCH v6 1/2] usb: dwc3: add Realtek DHC RTD SoC dwc3 glue
- layer driver
-Thread-Index: AQHZ18re3VzH2NdIJ0+XVY2ifQSysbBh2g4AgAONr8D//5JCAIAD1jtg
-Date: Fri, 3 Nov 2023 10:54:26 +0000
-Message-ID: <da4c75ba87c3476694361ee3bc333401@realtek.com>
-References: <20230826031028.1892-1-stanley_chang@realtek.com>
- <202310301424.39UEOShlC2187546@rtits1.realtek.com.tw>
- <bc33c01db5b048899dce5467e7efec74@realtek.com>
- <202311011453.3A1ErwKI3829148@rtits1.realtek.com.tw>
-In-Reply-To: <202311011453.3A1ErwKI3829148@rtits1.realtek.com.tw>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-x-originating-ip: [172.21.190.159]
-x-kse-serverinfo: RTEXDAG01.realtek.com.tw, 9
-x-kse-antivirus-attachment-filter-interceptor-info: license violation
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0B4214276
+	for <linux-usb@vger.kernel.org>; Fri,  3 Nov 2023 11:05:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B97DC433C8;
+	Fri,  3 Nov 2023 11:05:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1699009518;
+	bh=WbzEvZR+1Bw780CazrRCCK5Cz3D//L6XBlaXsKA2PLY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=A8PTZc6DFHslHLyhUTwVbrBMvhzPCXtw4ULQY83KkeBQpmmKAYozOncVmFc+2J//m
+	 G8JQcQElRcne7hhVr6VqI+Rs99DvbOa7kUBN/3XgYTJOmY5+WL8LGOVO0C0yN/34uC
+	 vtSSEQcKx/stiQQ8Jsxj5dGCjCi1+JmqTrl09z0A=
+Date: Fri, 3 Nov 2023 12:05:15 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Francesco Dolcini <francesco@dolcini.it>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Felipe Balbi <balbi@ti.com>,
+	Kishon Vijay Abraham I <kishon@ti.com>,
+	Stefan Eichenberger <stefan.eichenberger@toradex.com>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Francesco Dolcini <francesco.dolcini@toradex.com>
+Subject: Re: [PATCH v1] USB: dwc3: only call usb_phy_set_suspend in
+ suspend/resume
+Message-ID: <2023110307-numeral-yogurt-e649@gregkh>
+References: <20231103102236.13656-1-francesco@dolcini.it>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231103102236.13656-1-francesco@dolcini.it>
 
-SGkgQ2hyaXN0b3BoZSwNCg0KPiBMZSAwMS8xMS8yMDIzIMOgIDA3OjI3LCBTdGFubGV5IENoYW5n
-W+aYjOiCsuW+t10gYSDDqWNyaXQgOg0KPiA+IEhpIENKLA0KPiA+DQo+ID4gSSB0aGluayB0aGVz
-ZSBmdW5jdGlvbnMgYXJlIG5vdCBuZWVkZWQgaW4gcmVtb3ZlIGZ1bmN0aW9uLg0KPiA+DQo+ID4g
-SW4gZHdjM19ydGtfcHJvYmVfZHdjM19jb3JlLA0KPiA+IEkgaGF2ZSB1c2VkDQo+ID4gZHdjM19u
-b2RlID0gb2ZfZ2V0X2NvbXBhdGlibGVfY2hpbGQobm9kZSwgInNucHMsZHdjMyIpOyBhbmQgZHdj
-M19wZGV2DQo+ID4gPSBvZl9maW5kX2RldmljZV9ieV9ub2RlKGR3YzNfbm9kZSk7DQo+ID4NCj4g
-PiBTbywgSSBjYWxsIHRoZXNlIHB1dCBmdW5jdGlvbnMuDQo+ID4gcGxhdGZvcm1fZGV2aWNlX3B1
-dChkd2MzX3BkZXYpOw0KPiA+IG9mX25vZGVfcHV0KGR3YzNfbm9kZSk7DQo+IA0KPiBZZXMsIGJ1
-dCB5b3UgY2FsbCBpdCBvbmx5IGluIHRoZSBlcnJvciBoYW5kbGluZyBwYXRoIG9mIHRoZSBmdW5j
-dGlvbi4NCj4gDQo+IEkgd29uZGVyIGlmIHRoZXkgc2hvdWxkIGFsc28gYmUgY2FsbGVkIGluIHRo
-ZSByZW1vdmUgZnVuY3Rpb24gaW4gb3JkZXIgdG8NCj4gZGVjcmVtZW50IHRoZSByZWYtY291bnRl
-ZCByZWZlcmVuY2UuDQo+IA0KPiANCj4gU2FtZSBpbiBfX2dldF9kd2MzX21heGltdW1fc3BlZWQo
-KSwgdGhlIHJlZmVyZW5jZSB0YWtlbiBieToNCj4gICAgIGR3YzNfbnAgPSBvZl9nZXRfY29tcGF0
-aWJsZV9jaGlsZChucCwgInNucHMsZHdjMyIpOyBpcyBuZXZlciByZWxlYXNlZC4NCj4gDQo+IA0K
-PiBTZWUgdGhlIGNvbW1lbnQgYXQgWzFdIHRvIHNlZSB3aGF0IEkgbWVhbi4NCj4gDQo+IA0KPiBb
-MV06IGh0dHBzOi8vZWxpeGlyLmJvb3RsaW4uY29tL2xpbnV4L3Y2LjYvc291cmNlL2RyaXZlcnMv
-b2YvYmFzZS5jI0w2ODENCg0KWW91IGFyZSByaWdodCENCkZvciBkd2MzX3BkZXYsIGR3YzNfbnAg
-b3IgZHdjM19ub2RlLCBJIHNob3VsZCBhZGQgb2Zfbm9kZV9wdXQgdG8gcmVsZWFzZSB0aGVtIHdo
-ZW4gdGhlIGZ1bmN0aW9uIGV4aXRzLiANCmh0dHBzOi8vZWxpeGlyLmJvb3RsaW4uY29tL2xpbnV4
-L3Y2LjUuMTAvc291cmNlL2RyaXZlcnMvdXNiL2R3YzMvZHdjMy1tZXNvbi1nMTJhLmMjTDU2Nw0K
-DQpJIHdpbGwgYWRkIGEgcGF0Y2ggdG8gZml4IHRoaXMuDQoNCkZvciBleGFtcGxlLA0KZGlmZiAt
-LWdpdCBhL2RyaXZlcnMvdXNiL2R3YzMvZHdjMy1ydGsuYyBiL2RyaXZlcnMvdXNiL2R3YzMvZHdj
-My1ydGsuYw0KaW5kZXggNTkwMDI4ZThmZGNiLi45ZDZmMmE4YmQ2Y2UgMTAwNjQ0DQotLS0gYS9k
-cml2ZXJzL3VzYi9kd2MzL2R3YzMtcnRrLmMNCisrKyBiL2RyaXZlcnMvdXNiL2R3YzMvZHdjMy1y
-dGsuYw0KQEAgLTE4Nyw2ICsxODcsNyBAQCBzdGF0aWMgZW51bSB1c2JfZGV2aWNlX3NwZWVkIF9f
-Z2V0X2R3YzNfbWF4aW11bV9zcGVlZChzdHJ1Y3QgZGV2aWNlX25vZGUgKm5wKQ0KDQogICAgICAg
-IHJldCA9IG1hdGNoX3N0cmluZyhzcGVlZF9uYW1lcywgQVJSQVlfU0laRShzcGVlZF9uYW1lcyks
-IG1heGltdW1fc3BlZWQpOw0KDQorICAgICAgIG9mX25vZGVfcHV0KGR3YzNfbnApOw0KICAgICAg
-ICByZXR1cm4gKHJldCA8IDApID8gVVNCX1NQRUVEX1VOS05PV04gOiByZXQ7DQogfQ0KDQpAQCAt
-MzM5LDYgKzM0MCw4IEBAIHN0YXRpYyBpbnQgZHdjM19ydGtfcHJvYmVfZHdjM19jb3JlKHN0cnVj
-dCBkd2MzX3J0ayAqcnRrKQ0KDQogICAgICAgIHN3aXRjaF91c2IyX3JvbGUocnRrLCBydGstPmN1
-cl9yb2xlKTsNCg0KKyAgICAgICBwbGF0Zm9ybV9kZXZpY2VfcHV0KGR3YzNfcGRldik7DQorICAg
-ICAgIG9mX25vZGVfcHV0KGR3YzNfbm9kZSk7DQogICAgICAgIHJldHVybiAwOw0KDQogZXJyX3Bk
-ZXZfcHV0Og0KDQoNClRoYW5rcywNClN0YW5sZXkNCg0KPiBDSg0KPiA+DQo+ID4gVGhhbmtzLA0K
-PiA+IFN0YW5sZXkNCj4gPg0KPiA+PiBIaSwNCj4gPj4NCj4gPj4gSXMgc29tZXRoaW5nIGxpa2UN
-Cj4gPj4gICAgICAgICAgcGxhdGZvcm1fZGV2aWNlX3B1dChkd2MzX3BkZXYpOw0KPiA+PiAgICAg
-ICAgICBvZl9ub2RlX3B1dChkd2MzX25vZGUpOw0KPiA+PiBuZWVkZWQgaW4gdGhlIHJlbW92ZSBm
-dW5jdGlvbj8NCj4gPj4NCj4gPj4gKGFzIGRvbmUgaW4gdGhlIGVycm9yIGhhbmRsaW5nIHBhdGgg
-b2YgZHdjM19ydGtfcHJvYmVfZHdjM19jb3JlKCkpDQo+ID4+DQo+ID4+IE9yIHNob3VsZCBpdCBi
-ZSBhZGRlZCBhdCB0aGUgZW5kIG9mIGR3YzNfcnRrX3Byb2JlX2R3YzNfY29yZSgpIGlmIHRoZQ0K
-PiA+PiByZWZlcmVuY2UgYXJlIG5vciBuZWVkZWQgYW55bW9yZSB3aGVuIHdlIGxlYXZlIHRoZSBm
-dW5jdGlvbj8NCj4gPj4NCj4gPj4gQ0oNCj4gPj4NCj4gPj4+ICsgICAgIG9mX3BsYXRmb3JtX2Rl
-cG9wdWxhdGUocnRrLT5kZXYpOyB9DQo+ID4+PiArDQo+ID4+DQo+ID4+IC4uLg0KPiA+DQoNCg==
+On Fri, Nov 03, 2023 at 11:22:36AM +0100, Francesco Dolcini wrote:
+> From: Stefan Eichenberger <stefan.eichenberger@toradex.com>
+> 
+> Currently we have the following two call chains:
+> dwc3_probe -> dwc3_core_init -> dwc3_phy_init -> usb_phy_init
+> dwc3_probe -> dwc3_core_init -> dwc3_phy_power_on -> usb_phy_set_suspend
+> 
+> If we look at phy-generic we see the following calls:
+> usb_gen_phy_init -> regulator_enable
+> usb_gen_phy_init -> clk_prepare_enable
+> 
+> If we call usb_phy_set_suspend we call the following in phy-generic:
+> nop_set_suspend -> clk_prepare_enable
+> and we sent a patch to also call:
+> nop_set_suspend -> regulator_enable
+> 
+> Because clk_prepare_enable and regulator_enable do reference counting we
+> increased the reference counter of the clock and regulator to two. If we
+> want to put the system into suspend we only decrease the reference
+> counters by one and therefore the clock and regulator stay on.
+> 
+> This change fixes it by not calling usb_phy_set_suspend in
+> dwc3_phy_power_on but only in dwc3_suspend_common.
+> 
+> Fixes: 8ba007a971bb ("usb: dwc3: core: enable the USB2 and USB3 phy in probe")
+> Signed-off-by: Stefan Eichenberger <stefan.eichenberger@toradex.com>
+> Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
+> ---
+>  drivers/usb/dwc3/core.c | 17 +++++++----------
+>  1 file changed, 7 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index 9c6bf054f15d..fae24a9c480d 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -770,12 +770,9 @@ static int dwc3_phy_power_on(struct dwc3 *dwc)
+>  {
+>  	int ret;
+>  
+> -	usb_phy_set_suspend(dwc->usb2_phy, 0);
+> -	usb_phy_set_suspend(dwc->usb3_phy, 0);
+> -
+>  	ret = phy_power_on(dwc->usb2_generic_phy);
+>  	if (ret < 0)
+> -		goto err_suspend_usb3_phy;
+> +		return ret;
+>  
+>  	ret = phy_power_on(dwc->usb3_generic_phy);
+>  	if (ret < 0)
+> @@ -785,9 +782,6 @@ static int dwc3_phy_power_on(struct dwc3 *dwc)
+>  
+>  err_power_off_usb2_phy:
+>  	phy_power_off(dwc->usb2_generic_phy);
+> -err_suspend_usb3_phy:
+> -	usb_phy_set_suspend(dwc->usb3_phy, 1);
+> -	usb_phy_set_suspend(dwc->usb2_phy, 1);
+>  
+>  	return ret;
+>  }
+> @@ -796,9 +790,6 @@ static void dwc3_phy_power_off(struct dwc3 *dwc)
+>  {
+>  	phy_power_off(dwc->usb3_generic_phy);
+>  	phy_power_off(dwc->usb2_generic_phy);
+> -
+> -	usb_phy_set_suspend(dwc->usb3_phy, 1);
+> -	usb_phy_set_suspend(dwc->usb2_phy, 1);
+>  }
+>  
+>  static int dwc3_clk_enable(struct dwc3 *dwc)
+> @@ -2018,6 +2009,9 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+>  		break;
+>  	}
+>  
+> +	usb_phy_set_suspend(dwc->usb2_phy, 1);
+> +	usb_phy_set_suspend(dwc->usb3_phy, 1);
+> +
+>  	return 0;
+>  }
+>  
+> @@ -2027,6 +2021,9 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_message_t msg)
+>  	int		ret;
+>  	u32		reg;
+>  
+> +	usb_phy_set_suspend(dwc->usb2_phy, 0);
+> +	usb_phy_set_suspend(dwc->usb3_phy, 0);
+> +
+>  	switch (dwc->current_dr_role) {
+>  	case DWC3_GCTL_PRTCAP_DEVICE:
+>  		ret = dwc3_core_init_for_resume(dwc);
+> -- 
+> 2.25.1
+> 
+> 
+
+Hi,
+
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- You have marked a patch with a "Fixes:" tag for a commit that is in an
+  older released kernel, yet you do not have a cc: stable line in the
+  signed-off-by area at all, which means that the patch will not be
+  applied to any older kernel releases.  To properly fix this, please
+  follow the documented rules in the
+  Documentation/process/stable-kernel-rules.rst file for how to resolve
+  this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
 
