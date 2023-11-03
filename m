@@ -1,38 +1,47 @@
-Return-Path: <linux-usb+bounces-2520-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2521-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 481187E0A53
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Nov 2023 21:30:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3BF07E0A6C
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Nov 2023 21:42:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 78D071C21149
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Nov 2023 20:30:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0C3001C2108C
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Nov 2023 20:42:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F591224ED;
-	Fri,  3 Nov 2023 20:30:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A44DA2033A;
+	Fri,  3 Nov 2023 20:42:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8941023762
-	for <linux-usb@vger.kernel.org>; Fri,  3 Nov 2023 20:30:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 150D51A59B
+	for <linux-usb@vger.kernel.org>; Fri,  3 Nov 2023 20:42:20 +0000 (UTC)
 Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-	by lindbergh.monkeyblade.net (Postfix) with SMTP id 6984A1AA
-	for <linux-usb@vger.kernel.org>; Fri,  3 Nov 2023 13:30:30 -0700 (PDT)
-Received: (qmail 862000 invoked by uid 1000); 3 Nov 2023 16:30:29 -0400
-Date: Fri, 3 Nov 2023 16:30:29 -0400
+	by lindbergh.monkeyblade.net (Postfix) with SMTP id 36AD9D53
+	for <linux-usb@vger.kernel.org>; Fri,  3 Nov 2023 13:42:19 -0700 (PDT)
+Received: (qmail 862562 invoked by uid 1000); 3 Nov 2023 16:42:18 -0400
+Date: Fri, 3 Nov 2023 16:42:18 -0400
 From: Alan Stern <stern@rowland.harvard.edu>
-To: Milan Broz <gmazyland@gmail.com>
-Cc: linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-  linux-scsi@vger.kernel.org, gregkh@linuxfoundation.org, oneukum@suse.com
-Subject: Re: [PATCH v5] usb-storage,uas: use host helper to generate driver
- info
-Message-ID: <d26c884e-3505-436f-9a76-ec701fb5e2bb@rowland.harvard.edu>
-References: <20231028174145.691523-1-gmazyland@gmail.com>
- <20231103201709.124372-1-gmazyland@gmail.com>
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: "Li, Meng" <Meng.Li@windriver.com>, Steven Rostedt <rostedt@goodmis.org>,
+  Ingo Molnar <mingo@redhat.com>,
+  USB mailing list <linux-usb@vger.kernel.org>,
+  linux-rt-users <linux-rt-users@vger.kernel.org>
+Subject: Re: USB: add check to detect host controller hardware removal
+Message-ID: <a0116b73-2017-4f3b-a081-6d420b04b7d0@rowland.harvard.edu>
+References: <PH0PR11MB5191924ECC92A8F67891D614F1D6A@PH0PR11MB5191.namprd11.prod.outlook.com>
+ <d6d9478c-585b-4f51-a076-dc2955c6b2b0@rowland.harvard.edu>
+ <PH0PR11MB51911132F6CB7DF0C41F15DEF1D5A@PH0PR11MB5191.namprd11.prod.outlook.com>
+ <1f8fe9f9-d8d6-48d9-8c7d-1215d10ece91@rowland.harvard.edu>
+ <20231019123823.4fjUs8Rl@linutronix.de>
+ <128e4bea-6064-4e46-b9c7-75296e9f553d@rowland.harvard.edu>
+ <55925f45-4921-46cc-81df-ac705ad7530e@rowland.harvard.edu>
+ <20231020095238.Z4m-M_oS@linutronix.de>
+ <1f26049d-b16d-4db8-8b7a-ed93213faf76@rowland.harvard.edu>
+ <20231103154624.WEWPMHTp@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -41,37 +50,57 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231103201709.124372-1-gmazyland@gmail.com>
+In-Reply-To: <20231103154624.WEWPMHTp@linutronix.de>
 
-On Fri, Nov 03, 2023 at 09:17:09PM +0100, Milan Broz wrote:
-> The USB mass storage quirks flags can be stored in driver_info in
-> a 32-bit integer (unsigned long on 32-bit platforms).
-> As this attribute cannot be enlarged, we need to use some form
-> of translation of 64-bit quirk bits.
+On Fri, Nov 03, 2023 at 04:46:24PM +0100, Sebastian Andrzej Siewior wrote:
+> On 2023-10-20 11:19:49 [-0400], Alan Stern wrote:
+> > Hmmm...  This turns out not to be as easy as one might think.
+> > 
+> > Sebastian, if you can instead suggest a way to call drivers' interrupt 
+> > handlers (i.e., simulate an interrupt) without causing problems for RT 
+> > kernels, I think that would be a better approach.
 > 
-> This problem was discussed on the USB list
-> https://lore.kernel.org/linux-usb/f9e8acb5-32d5-4a30-859f-d4336a86b31a@gmail.com/
-> 
-> The initial solution to use a static array extensively increased the size
-> of the kernel module, so I decided to try the second suggested solution:
-> generate a table by host-compiled program and use bit 31 to indicate
-> that the value is an index, not the actual value.
-> 
-> This patch adds a host-compiled program that processes unusual_devs.h
-> (and unusual_uas.h) and generates files usb-ids.c and usb-ids-uas.c
-> (for pre-processed USB device table with 32-bit device info).
-> These files also contain a generated translation table for driver_info
-> to 64-bit values.
-> 
-> The translation function is used only in usb-storage and uas modules; all
-> other USB storage modules store flags directly, using only 32-bit flags.
-> 
-> For 64-bit platforms, where unsigned long is 64-bit, we do not need to
-> convert quirk flags to 32-bit index; the translation function there uses
-> flags directly.
-> 
-> Signed-off-by: Milan Broz <gmazyland@gmail.com>
-> ---
+> So there is generic_handle_irq_safe(). It should get all the details
+> right like incrementing the counter in /proc/interrupts, doing nothing
+> if the interrupt has been masked or waking the interrupt thread if the
+> interrupt has happen to be threaded.
+> It triggers the interrupt so for a shared handler it will invoke _all_
+> registered interrupt handler and for threaded interrupts it will return
+> before the thread had a chance to run (free_irq() will handle it
+> properly and wait for the interrupt thread/handler to complete).
 
-Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
+Good.  Meng Li, can you test a patch that replaces the
+local_irq_disable() - usb_hcd_irq() - local_irq_enable() lines with a
+single call to generic_handle_irq_safe()?
+
+> > The fundamental problem here is that the uhci-hcd driver was not written 
+> > with unexpected hardware removal in mind.  It doesn't have timeouts to 
+> > handle situations where the device doesn't generate an IRQ to indicate 
+> > completion of an I/O operation.  And since it's been ten years since 
+> > I've done any significant work on the driver, I'd really like to avoid 
+> > the need for such a far-reaching change (not least because I don't have 
+> > any way to test it).
+> 
+> I see. Don't over complicate or "correct" things here. What should work
+> is that the removal callback can be called at any time and things
+> continue work. That means it will purge all queues, cancel all requests,
+> timers, whatever and free all resources associated with the driver/
+> device.
+
+The driver _does_ work under those circumstances -- provided the
+hardware is still present and accessible.
+
+> If it comes to PCI-hotplug you have to have a so called PCI-hotplug
+> slot. This "slot" will let the OS know if the hardware has been removed
+> or added. If you don't have such a thing you have to maintain the state
+> yourself by using the "remove" and "rescan" sysfs files of the PCI slot.
+> 
+> I'm not aware of any requirement for a PCI-driver to check if its device
+> has been removed.
+
+That's the problem: The driver doesn't really support PCI-hotplug.
+The code that Meng Li wants to change was sort of a half-baked way to
+add such support.
+
+Alan Stern
 
