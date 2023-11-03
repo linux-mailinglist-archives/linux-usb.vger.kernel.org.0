@@ -1,93 +1,123 @@
-Return-Path: <linux-usb+bounces-2498-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2499-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E30E7E058C
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Nov 2023 16:27:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD6007E05BB
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Nov 2023 16:46:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6EF751C21088
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Nov 2023 15:27:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 77C96281085
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Nov 2023 15:46:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D69801BDF7;
-	Fri,  3 Nov 2023 15:27:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5952F1C687;
+	Fri,  3 Nov 2023 15:46:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="fC+queIc"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="i9jZs2it";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="mtn8Zxm7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F3751BDD8
-	for <linux-usb@vger.kernel.org>; Fri,  3 Nov 2023 15:27:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 698FFC433C8;
-	Fri,  3 Nov 2023 15:27:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1699025267;
-	bh=p/DiDfiUtswqrFHT3cMsob/M/g+W2LgY1gl/ew9gAGk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fC+queIcZU2LH4AFim+lu7T2gRZ6R17KqpWewCWomt/rvCqkexrYr+jGOcN8hjZoo
-	 AVGZ5jGWN6DUmShdPFjXJ9iCW91m/ttGQzYXztjTxq6XbTm8tphRJ0Yav6UE5lwI64
-	 Ba2vQNUMimspOCn7bo1IRPwE9p+2uCwIBrMy9+AE=
-Date: Fri, 3 Nov 2023 16:27:43 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Hardik Gajjar <hgajjar@de.adit-jv.com>
-Cc: Mathias Nyman <mathias.nyman@linux.intel.com>,
-	stern@rowland.harvard.edu, mathias.nyman@intel.com,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	erosca@de.adit-jv.com, s.shtylyov@omp.ru
-Subject: Re: [PATCH v7 1/2] usb: xhci: Add timeout argument in address_device
- USB HCD callback
-Message-ID: <2023110305-decade-slacking-a36e@gregkh>
-References: <20231027152029.104363-1-hgajjar@de.adit-jv.com>
- <aa328f6d-be12-45ef-42dd-2b4dc0821771@linux.intel.com>
- <20231103151822.GA101660@vmlxhi-118.adit-jv.com>
- <2023110341-decode-atonable-64b4@gregkh>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 611CE1C2B6;
+	Fri,  3 Nov 2023 15:46:31 +0000 (UTC)
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE625A6;
+	Fri,  3 Nov 2023 08:46:26 -0700 (PDT)
+Date: Fri, 3 Nov 2023 16:46:24 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1699026385;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Q+1CRt1917HHw3pLNlKBXO0zVNN0Ea4qtcbWbWLFu/Y=;
+	b=i9jZs2itnJsYLKKR+bl4MfVIjX4RZW0rdDJ3CTlsfWrhXDtbjl+ZimGG1Vj50cBNpQjbhi
+	EHlnlk0B20he+oac6ZeoWs/ThI4VwvPsJaMvQ4hOzHvwE+qM7Y0X4Mf+Y/6cj+L3mf6Eh2
+	hArJiLos5KylASvZCbbKea5Bkm9OKyg1IlMl0q73xBDAtRwac8GTdfgAbP0c5d0Yf6mYI+
+	3ESyOeedoLKTM9lsHs4cg9O53b0d945aP2odeDExdt7OeqvhrvjMC3IISn0OUMlnq190WP
+	lCQwxu2ulnL1JQTCPuI6gWrQvTNICvkI8BvGi112bKZ6Vf56D0OvW7wXYYRTBA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1699026385;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Q+1CRt1917HHw3pLNlKBXO0zVNN0Ea4qtcbWbWLFu/Y=;
+	b=mtn8Zxm7oxzCzqwD0LyJUqGmWYO/Xtb2G1VSKYhgkd0GrzNgI+7FjZJjaw/5unFDZEbsnc
+	2WfU4R+IA2PkHpCQ==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: "Li, Meng" <Meng.Li@windriver.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	USB mailing list <linux-usb@vger.kernel.org>,
+	linux-rt-users <linux-rt-users@vger.kernel.org>
+Subject: Re: USB: add check to detect host controller hardware removal
+Message-ID: <20231103154624.WEWPMHTp@linutronix.de>
+References: <62fdcf97-11c6-4dee-8db1-74752d6949f3@rowland.harvard.edu>
+ <PH0PR11MB5191924ECC92A8F67891D614F1D6A@PH0PR11MB5191.namprd11.prod.outlook.com>
+ <d6d9478c-585b-4f51-a076-dc2955c6b2b0@rowland.harvard.edu>
+ <PH0PR11MB51911132F6CB7DF0C41F15DEF1D5A@PH0PR11MB5191.namprd11.prod.outlook.com>
+ <1f8fe9f9-d8d6-48d9-8c7d-1215d10ece91@rowland.harvard.edu>
+ <20231019123823.4fjUs8Rl@linutronix.de>
+ <128e4bea-6064-4e46-b9c7-75296e9f553d@rowland.harvard.edu>
+ <55925f45-4921-46cc-81df-ac705ad7530e@rowland.harvard.edu>
+ <20231020095238.Z4m-M_oS@linutronix.de>
+ <1f26049d-b16d-4db8-8b7a-ed93213faf76@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <2023110341-decode-atonable-64b4@gregkh>
+In-Reply-To: <1f26049d-b16d-4db8-8b7a-ed93213faf76@rowland.harvard.edu>
 
-On Fri, Nov 03, 2023 at 04:26:37PM +0100, Greg KH wrote:
-> On Fri, Nov 03, 2023 at 04:18:22PM +0100, Hardik Gajjar wrote:
-> > On Mon, Oct 30, 2023 at 12:45:54PM +0200, Mathias Nyman wrote:
-> > > On 27.10.2023 18.20, Hardik Gajjar wrote:
-> > > > - The HCD address_device callback now accepts a user-defined timeout value
-> > > >    in milliseconds, providing better control over command execution times.
-> > > > - The default timeout value for the address_device command has been set
-> > > >    to 5000 ms, aligning with the USB 3.2 specification. However, this
-> > > >    timeout can be adjusted as needed.
-> > > > - The xhci_setup_device function has been updated to accept the timeout
-> > > >    value, allowing it to specify the maximum wait time for the command
-> > > >    operation to complete.
-> > > > - The hub driver has also been updated to accommodate the newly added
-> > > >    timeout parameter during the SET_ADDRESS request.
-> > > > 
-> > > > Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
-> > > 
-> > > For the xhci parts
-> > > 
-> > > Reviewed-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-> > > 
-> > >
-> > 
-> > @Greg KH, Friendly reminder.
+On 2023-10-20 11:19:49 [-0400], Alan Stern wrote:
+> Hmmm...  This turns out not to be as easy as one might think.
 > 
-> It is the m iddle of the merge window, my branches are closed for
-> obvious reasons until after -rc1 is out.  Please relax and wait for a
-> week or so _after_ -rc1 is out before worrying about anything.
+> Sebastian, if you can instead suggest a way to call drivers' interrupt 
+> handlers (i.e., simulate an interrupt) without causing problems for RT 
+> kernels, I think that would be a better approach.
 
-In the meantime, to make things go faster, please help review patches
-from others on the mailing list so that when the merge window does open
-back up, my queue will be much smaller and lighter and yours will be
-closer to the top.
+So there is generic_handle_irq_safe(). It should get all the details
+right like incrementing the counter in /proc/interrupts, doing nothing
+if the interrupt has been masked or waking the interrupt thread if the
+interrupt has happen to be threaded.
+It triggers the interrupt so for a shared handler it will invoke _all_
+registered interrupt handler and for threaded interrupts it will return
+before the thread had a chance to run (free_irq() will handle it
+properly and wait for the interrupt thread/handler to complete).
 
-thanks,
+> The fundamental problem here is that the uhci-hcd driver was not written 
+> with unexpected hardware removal in mind.  It doesn't have timeouts to 
+> handle situations where the device doesn't generate an IRQ to indicate 
+> completion of an I/O operation.  And since it's been ten years since 
+> I've done any significant work on the driver, I'd really like to avoid 
+> the need for such a far-reaching change (not least because I don't have 
+> any way to test it).
 
-greg k-h
+I see. Don't over complicate or "correct" things here. What should work
+is that the removal callback can be called at any time and things
+continue work. That means it will purge all queues, cancel all requests,
+timers, whatever and free all resources associated with the driver/
+device.
+
+If it comes to PCI-hotplug you have to have a so called PCI-hotplug
+slot. This "slot" will let the OS know if the hardware has been removed
+or added. If you don't have such a thing you have to maintain the state
+yourself by using the "remove" and "rescan" sysfs files of the PCI slot.
+
+I'm not aware of any requirement for a PCI-driver to check if its device
+has been removed.
+
+> I suppose an alternative approach would be to add a new callback pointer 
+> to the hc_driver structure -- something that could tell the driver to 
+> check for hardware removal.  I'll do that if there's no other choice.  
+> But simulating an interrupt seems easier, provided it can be done at 
+> all.
+> 
+> Alan Stern
+
+Sebastian
 
