@@ -1,204 +1,176 @@
-Return-Path: <linux-usb+bounces-2529-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2530-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36C997E0BD6
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Nov 2023 00:04:46 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77F397E0CC0
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Nov 2023 01:38:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BF4F4281EEB
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Nov 2023 23:04:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A8A391C209B6
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Nov 2023 00:38:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B52C2511F;
-	Fri,  3 Nov 2023 23:04:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4EC51C14;
+	Sat,  4 Nov 2023 00:38:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="t+r7XI4g"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dyKNqf0K"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC05E25108
-	for <linux-usb@vger.kernel.org>; Fri,  3 Nov 2023 23:04:23 +0000 (UTC)
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42AA5D62
-	for <linux-usb@vger.kernel.org>; Fri,  3 Nov 2023 16:04:22 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2c5087d19a6so34811121fa.0
-        for <linux-usb@vger.kernel.org>; Fri, 03 Nov 2023 16:04:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1699052660; x=1699657460; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RMc9DJrhHFukjQ0QSTQddBGYIHrkhtn026KunSVyHrs=;
-        b=t+r7XI4gyd2lEd4ltYpMc3tAqLguDprkgo3WYwfjD3a2rLyn7U0xTRfXMglxZqANT8
-         UaCnOdJBfTC81OGOxMEWYyhhVH/+o3gdiOV7hlwmJYIAm79c4kSSgHLi0xK2g0YbsbIv
-         oVZCsmdyWrB7mjouMqjjCPUF/SksJwvVqzJXdBhKWBOZi7i4rJ+54KptaQlRgiIKHv5C
-         9WSJzSMAZ8+kB+vFF4tVD6Z46cWQn/c0HBYHGRwQ+CNvQeR5E4i6rXsdDWb0st33BwZD
-         GQp2KZ//ffAh+Z/PAixsEw8jgqvrKIUvTWfMSdBtMgeEaoSOyx+5IQnDtJPtMyhiy3Xx
-         x/bA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699052660; x=1699657460;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RMc9DJrhHFukjQ0QSTQddBGYIHrkhtn026KunSVyHrs=;
-        b=QvHCpHAy58L0M+iX8Yn7kNzIqT1aA9gMSpKLOOQ5axuKHLGk1/PmUiNjwQ5Y9UPvUh
-         Ed74sTyOTvQ3cZzwpjK3n6+XiHlu67QFULfakSsLamyRQ9VjC79cs+Kqt/0cunF75JPA
-         fNjRZ/gqkBXUQuMgSmci/g4E/7lUjAFjRS+oIMapHBr9iZD3YPmlt0rn3ToE6iwoz6Qt
-         yFd9KprszADLsDKmGNW1UdlSW6LdrzzpFzz4ojSFppb2oHHyQyl87Z2JUFQFIx4tEMr4
-         jXr3sQWxhTyqM2BHybRc1ULtwI81A736vuDCRrxeD+az4mRnjJdrVXpMgp/nr0/1BzTh
-         HZQA==
-X-Gm-Message-State: AOJu0YzKpJy65EjxIsbU28chvNA+lgnHi5XCuPlUyxTxACv0sL3RA2jh
-	aBNQmtkLjM2lIK3Co6KpWuNRCQ==
-X-Google-Smtp-Source: AGHT+IFZ7oB8PJ8HIVCwttUFOTPFsyuly9xwudtCOZ+IkVYj1zJZPMykPCji5igqCU5JxU9LfDeAiw==
-X-Received: by 2002:a19:5206:0:b0:507:adc9:a739 with SMTP id m6-20020a195206000000b00507adc9a739mr18412890lfb.37.1699052660610;
-        Fri, 03 Nov 2023 16:04:20 -0700 (PDT)
-Received: from eriador.lan (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id s16-20020ac24650000000b00504211d2a7bsm329919lfo.297.2023.11.03.16.04.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Nov 2023 16:04:20 -0700 (PDT)
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: David Airlie <airlied@gmail.com>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Robert Foss <rfoss@kernel.org>,
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-	Jonas Karlman <jonas@kwiboo.se>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: dri-devel@lists.freedesktop.org,
-	linux-arm-msm@vger.kernel.org,
-	linux-phy@lists.infradead.org,
-	linux-usb@vger.kernel.org,
-	freedreno@lists.freedesktop.org
-Subject: [PATCH v6 6/6] usb: typec: qcom-pmic-typec: switch to DRM_AUX_HPD_BRIDGE
-Date: Sat,  4 Nov 2023 01:03:09 +0200
-Message-ID: <20231103230414.1483428-7-dmitry.baryshkov@linaro.org>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231103230414.1483428-1-dmitry.baryshkov@linaro.org>
-References: <20231103230414.1483428-1-dmitry.baryshkov@linaro.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DBCC622;
+	Sat,  4 Nov 2023 00:38:27 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90A39D45;
+	Fri,  3 Nov 2023 17:38:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1699058299; x=1730594299;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lgdwiAyPRysKtnT+0nfDxaf8k2i2tuiMEm+OGHK/8NQ=;
+  b=dyKNqf0KjUWdxcLnEF6dEat40PVvphPZaY+pHG7iXbkNMzELgriU42o5
+   VJxc+wz6xKHCcYfwgRVVYKCeafktags6VSsQL7eRm96A2tdy3YQo4LytY
+   4iAA+9LaOnsSR6/t52umMuW9e0aHBv25GXolYMED3Ju23yGQvZ6VhxB1r
+   PvyRvjg9X5mhJlURTv7wP9/dW74NdpBdsMyrM/4ZPyrYbRPgS8xfMDsb5
+   te2qMkLOuMskSFPs/eEZBtF0SZfV4rNPjrSJd1i/cHnRNS3eIploRqxNu
+   BbY+aRBeThJ+QKJf5UD4RC+nDDPXSS+FAk7zDHwB+s801AcafBGTLV7Tz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10883"; a="369252348"
+X-IronPort-AV: E=Sophos;i="6.03,275,1694761200"; 
+   d="scan'208";a="369252348"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2023 17:38:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10883"; a="755313891"
+X-IronPort-AV: E=Sophos;i="6.03,275,1694761200"; 
+   d="scan'208";a="755313891"
+Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 03 Nov 2023 17:38:11 -0700
+Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1qz4fx-00038N-1g;
+	Sat, 04 Nov 2023 00:38:09 +0000
+Date: Sat, 4 Nov 2023 08:37:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mario Limonciello <mario.limonciello@amd.com>,
+	Karol Herbst <kherbst@redhat.com>, Lyude Paul <lyude@redhat.com>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Bjorn Helgaas <helgaas@kernel.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Lukas Wunner <lukas@wunner.de>
+Cc: oe-kbuild-all@lists.linux.dev, Danilo Krummrich <dakr@redhat.com>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Xinhui Pan <Xinhui.Pan@amd.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Mark Gross <markgross@kernel.org>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+	Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+	"Maciej W . Rozycki" <macro@orcam.me.uk>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	"open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS" <dri-devel@lists.freedesktop.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>,
+	"open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+	"open list:ACPI" <linux-acpi@vger.kernel.org>,
+	"open list:X86 PLATFORM DRIVERS" <platform-driver-x86@vger.kernel.org>,
+	"open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH v2 3/9] PCI: Drop pci_is_thunderbolt_attached()
+Message-ID: <202311040800.zpVIwNrB-lkp@intel.com>
+References: <20231103190758.82911-4-mario.limonciello@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231103190758.82911-4-mario.limonciello@amd.com>
 
-Use the freshly defined DRM_AUX_HPD_BRIDGE instead of open-coding the
-same functionality for the DRM bridge chain termination.
+Hi Mario,
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- drivers/usb/typec/tcpm/Kconfig                |  1 +
- drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c | 41 +++----------------
- 2 files changed, 7 insertions(+), 35 deletions(-)
+kernel test robot noticed the following build errors:
 
-diff --git a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec/tcpm/Kconfig
-index 0b2993fef564..64d5421c69e6 100644
---- a/drivers/usb/typec/tcpm/Kconfig
-+++ b/drivers/usb/typec/tcpm/Kconfig
-@@ -80,6 +80,7 @@ config TYPEC_QCOM_PMIC
- 	tristate "Qualcomm PMIC USB Type-C Port Controller Manager driver"
- 	depends on ARCH_QCOM || COMPILE_TEST
- 	depends on DRM || DRM=n
-+	select DRM_AUX_HPD_BRIDGE if DRM_BRIDGE
- 	help
- 	  A Type-C port and Power Delivery driver which aggregates two
- 	  discrete pieces of silicon in the PM8150b PMIC block: the
-diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
-index 581199d37b49..1a2b4bddaa97 100644
---- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
-+++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c
-@@ -18,7 +18,7 @@
- #include <linux/usb/tcpm.h>
- #include <linux/usb/typec_mux.h>
- 
--#include <drm/drm_bridge.h>
-+#include <drm/bridge/aux-bridge.h>
- 
- #include "qcom_pmic_typec_pdphy.h"
- #include "qcom_pmic_typec_port.h"
-@@ -36,7 +36,6 @@ struct pmic_typec {
- 	struct pmic_typec_port	*pmic_typec_port;
- 	bool			vbus_enabled;
- 	struct mutex		lock;		/* VBUS state serialization */
--	struct drm_bridge	bridge;
- };
- 
- #define tcpc_to_tcpm(_tcpc_) container_of(_tcpc_, struct pmic_typec, tcpc)
-@@ -150,35 +149,6 @@ static int qcom_pmic_typec_init(struct tcpc_dev *tcpc)
- 	return 0;
- }
- 
--#if IS_ENABLED(CONFIG_DRM)
--static int qcom_pmic_typec_attach(struct drm_bridge *bridge,
--				     enum drm_bridge_attach_flags flags)
--{
--	return flags & DRM_BRIDGE_ATTACH_NO_CONNECTOR ? 0 : -EINVAL;
--}
--
--static const struct drm_bridge_funcs qcom_pmic_typec_bridge_funcs = {
--	.attach = qcom_pmic_typec_attach,
--};
--
--static int qcom_pmic_typec_init_drm(struct pmic_typec *tcpm)
--{
--	tcpm->bridge.funcs = &qcom_pmic_typec_bridge_funcs;
--#ifdef CONFIG_OF
--	tcpm->bridge.of_node = of_get_child_by_name(tcpm->dev->of_node, "connector");
--#endif
--	tcpm->bridge.ops = DRM_BRIDGE_OP_HPD;
--	tcpm->bridge.type = DRM_MODE_CONNECTOR_DisplayPort;
--
--	return devm_drm_bridge_add(tcpm->dev, &tcpm->bridge);
--}
--#else
--static int qcom_pmic_typec_init_drm(struct pmic_typec *tcpm)
--{
--	return 0;
--}
--#endif
--
- static int qcom_pmic_typec_probe(struct platform_device *pdev)
- {
- 	struct pmic_typec *tcpm;
-@@ -186,6 +156,7 @@ static int qcom_pmic_typec_probe(struct platform_device *pdev)
- 	struct device_node *np = dev->of_node;
- 	const struct pmic_typec_resources *res;
- 	struct regmap *regmap;
-+	struct device *bridge_dev;
- 	u32 base[2];
- 	int ret;
- 
-@@ -241,14 +212,14 @@ static int qcom_pmic_typec_probe(struct platform_device *pdev)
- 	mutex_init(&tcpm->lock);
- 	platform_set_drvdata(pdev, tcpm);
- 
--	ret = qcom_pmic_typec_init_drm(tcpm);
--	if (ret)
--		return ret;
--
- 	tcpm->tcpc.fwnode = device_get_named_child_node(tcpm->dev, "connector");
- 	if (!tcpm->tcpc.fwnode)
- 		return -EINVAL;
- 
-+	bridge_dev = drm_dp_hpd_bridge_register(tcpm->dev, to_of_node(tcpm->tcpc.fwnode));
-+	if (IS_ERR(bridge_dev))
-+		return PTR_ERR(bridge_dev);
-+
- 	tcpm->tcpm_port = tcpm_register_port(tcpm->dev, &tcpm->tcpc);
- 	if (IS_ERR(tcpm->tcpm_port)) {
- 		ret = PTR_ERR(tcpm->tcpm_port);
+[auto build test ERROR on pci/for-linus]
+[also build test ERROR on drm-misc/drm-misc-next westeri-thunderbolt/next rafael-pm/linux-next rafael-pm/acpi-bus linus/master rafael-pm/devprop v6.6 next-20231103]
+[cannot apply to pci/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/drm-nouveau-Switch-from-pci_is_thunderbolt_attached-to-dev_is_removable/20231104-030945
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git for-linus
+patch link:    https://lore.kernel.org/r/20231103190758.82911-4-mario.limonciello%40amd.com
+patch subject: [PATCH v2 3/9] PCI: Drop pci_is_thunderbolt_attached()
+config: loongarch-randconfig-002-20231104 (https://download.01.org/0day-ci/archive/20231104/202311040800.zpVIwNrB-lkp@intel.com/config)
+compiler: loongarch64-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231104/202311040800.zpVIwNrB-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311040800.zpVIwNrB-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   drivers/gpu/drm/amd/amdgpu/nbio_v2_3.c: In function 'nbio_v2_3_enable_aspm':
+>> drivers/gpu/drm/amd/amdgpu/nbio_v2_3.c:364:21: error: implicit declaration of function 'pci_is_thunderbolt_attached' [-Werror=implicit-function-declaration]
+     364 |                 if (pci_is_thunderbolt_attached(adev->pdev))
+         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+--
+   drivers/gpu/drm/amd/amdgpu/amdgpu_device.c: In function 'amdgpu_device_ip_early_init':
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:2118:14: error: implicit declaration of function 'pci_is_thunderbolt_attached' [-Werror=implicit-function-declaration]
+    2118 |             !pci_is_thunderbolt_attached(to_pci_dev(dev->dev)))
+         |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +/pci_is_thunderbolt_attached +364 drivers/gpu/drm/amd/amdgpu/nbio_v2_3.c
+
+f1213b15976881d Evan Quan 2020-08-18  350  
+f1213b15976881d Evan Quan 2020-08-18  351  static void nbio_v2_3_enable_aspm(struct amdgpu_device *adev,
+f1213b15976881d Evan Quan 2020-08-18  352  				  bool enable)
+f1213b15976881d Evan Quan 2020-08-18  353  {
+f1213b15976881d Evan Quan 2020-08-18  354  	uint32_t def, data;
+f1213b15976881d Evan Quan 2020-08-18  355  
+f1213b15976881d Evan Quan 2020-08-18  356  	def = data = RREG32_PCIE(smnPCIE_LC_CNTL);
+f1213b15976881d Evan Quan 2020-08-18  357  
+f1213b15976881d Evan Quan 2020-08-18  358  	if (enable) {
+f1213b15976881d Evan Quan 2020-08-18  359  		/* Disable ASPM L0s/L1 first */
+f1213b15976881d Evan Quan 2020-08-18  360  		data &= ~(PCIE_LC_CNTL__LC_L0S_INACTIVITY_MASK | PCIE_LC_CNTL__LC_L1_INACTIVITY_MASK);
+f1213b15976881d Evan Quan 2020-08-18  361  
+f1213b15976881d Evan Quan 2020-08-18  362  		data |= NAVI10_PCIE__LC_L0S_INACTIVITY_DEFAULT << PCIE_LC_CNTL__LC_L0S_INACTIVITY__SHIFT;
+f1213b15976881d Evan Quan 2020-08-18  363  
+f1213b15976881d Evan Quan 2020-08-18 @364  		if (pci_is_thunderbolt_attached(adev->pdev))
+f1213b15976881d Evan Quan 2020-08-18  365  			data |= NAVI10_PCIE__LC_L1_INACTIVITY_TBT_DEFAULT  << PCIE_LC_CNTL__LC_L1_INACTIVITY__SHIFT;
+f1213b15976881d Evan Quan 2020-08-18  366  		else
+f1213b15976881d Evan Quan 2020-08-18  367  			data |= NAVI10_PCIE__LC_L1_INACTIVITY_DEFAULT << PCIE_LC_CNTL__LC_L1_INACTIVITY__SHIFT;
+f1213b15976881d Evan Quan 2020-08-18  368  
+f1213b15976881d Evan Quan 2020-08-18  369  		data &= ~PCIE_LC_CNTL__LC_PMI_TO_L1_DIS_MASK;
+f1213b15976881d Evan Quan 2020-08-18  370  	} else {
+f1213b15976881d Evan Quan 2020-08-18  371  		/* Disbale ASPM L1 */
+f1213b15976881d Evan Quan 2020-08-18  372  		data &= ~PCIE_LC_CNTL__LC_L1_INACTIVITY_MASK;
+f1213b15976881d Evan Quan 2020-08-18  373  		/* Disable ASPM TxL0s */
+f1213b15976881d Evan Quan 2020-08-18  374  		data &= ~PCIE_LC_CNTL__LC_L0S_INACTIVITY_MASK;
+f1213b15976881d Evan Quan 2020-08-18  375  		/* Disable ACPI L1 */
+f1213b15976881d Evan Quan 2020-08-18  376  		data |= PCIE_LC_CNTL__LC_PMI_TO_L1_DIS_MASK;
+f1213b15976881d Evan Quan 2020-08-18  377  	}
+f1213b15976881d Evan Quan 2020-08-18  378  
+f1213b15976881d Evan Quan 2020-08-18  379  	if (def != data)
+f1213b15976881d Evan Quan 2020-08-18  380  		WREG32_PCIE(smnPCIE_LC_CNTL, data);
+f1213b15976881d Evan Quan 2020-08-18  381  }
+f1213b15976881d Evan Quan 2020-08-18  382  
+
 -- 
-2.42.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
