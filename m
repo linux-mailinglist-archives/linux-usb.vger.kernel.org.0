@@ -1,307 +1,170 @@
-Return-Path: <linux-usb+bounces-2532-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2533-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC0A97E0E27
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Nov 2023 07:57:53 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C629D7E0E43
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Nov 2023 09:01:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A2C4C1C21050
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Nov 2023 06:57:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 81208281F3C
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Nov 2023 08:01:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0BE18F42;
-	Sat,  4 Nov 2023 06:57:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C52AC13C;
+	Sat,  4 Nov 2023 08:01:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="r+RoXsvL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eHNWUtqx"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6DB9BE4C;
-	Sat,  4 Nov 2023 06:57:44 +0000 (UTC)
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2077.outbound.protection.outlook.com [40.107.223.77])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C3F21B9;
-	Fri,  3 Nov 2023 23:57:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Awr5OqHnvV1hmC29geWUbSlec4qzr4u9TGgQvdheDfnWvRMW030gWPLnBkIT2mJb/oF0EOfbKz9KRee7ITZfrm1o2VwI/tbZW6x/OJ6YmjzJOrvhrYOHUoi2iOTUW1AUeUVV30NGJRtVOLjHX6MyVYekTb1oZQVHip6ubONq1pQEgJLgsD82DcSC85uOAeONj1pgZD9cPYRreS/+1dVt8TmPAtorrP7/WoaOfp9FWfCQ/2MIk68QZwNPXNrai7x9iCNw1rsLjD/dl5+kL1MNhDu9LQRRRXLzSE/5a7iy/f30SBw531FtegRCtSju47VLHGXndHnT29LABL4ERzzgSw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dxiayzGVQs0Dlew/58DoZQz3IwGgGxDbtVfrFx/w480=;
- b=Ucl+ltdX0TB//dxxVrmu2snnUD8/rwHoiOpLqoeoZzFbHBM1ZA+hnkChSOIswOuXVPNfnUZFN0DhIeh8vTjT808/1c4m3mdHyQgicGA/Lux/WcYrxtbOJWf7WtDTeBFPjX6Nh/EmOp5fR+p1j92psi67qd1JfDDzzz42lcKl2dx84IJXJdTFyznxvoKakfpg2QvOjEPYpcnprV2QRH2RHrzt52yggxwMMoacwXvca7Psj3Th2YMgB4wIhubbY3TaPqDB6W1YbodNk57cjGNgAAYut47l0nAxey8DpaUHkA/mnz6CQs4LArwJaxJ/9cy4kdmJ8v1q01je/0DAdNOI6Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dxiayzGVQs0Dlew/58DoZQz3IwGgGxDbtVfrFx/w480=;
- b=r+RoXsvLAvHMrU7CbpY91pgOCUTdR8Fd5GMIPiYhtbfLxoalBRcRPPRQg87Hx67KHHaUtu6yvSwsKwdW6iWyIC3we9jN88wCbgOUW7MsDVRgPaHjRD4Ud7kOFSZaPo3zWhdf7q7JxXQwJswMc4dSV8sIw84RP7ysnDuwXTtoyos=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BYAPR12MB4614.namprd12.prod.outlook.com (2603:10b6:a03:a6::22)
- by MW6PR12MB8899.namprd12.prod.outlook.com (2603:10b6:303:248::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.21; Sat, 4 Nov
- 2023 06:57:38 +0000
-Received: from BYAPR12MB4614.namprd12.prod.outlook.com
- ([fe80::ce36:81fc:9c50:c892]) by BYAPR12MB4614.namprd12.prod.outlook.com
- ([fe80::ce36:81fc:9c50:c892%6]) with mapi id 15.20.6954.024; Sat, 4 Nov 2023
- 06:57:38 +0000
-Message-ID: <b8097564-dcba-e4bc-2d65-5c6936373772@amd.com>
-Date: Sat, 4 Nov 2023 12:27:22 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH v2 8/9] PCI: Exclude PCIe ports used for tunneling in
- pcie_bandwidth_available()
-Content-Language: en-US
-To: Mario Limonciello <mario.limonciello@amd.com>,
- Karol Herbst <kherbst@redhat.com>, Lyude Paul <lyude@redhat.com>,
- Alex Deucher <alexander.deucher@amd.com>,
- =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
- Bjorn Helgaas <bhelgaas@google.com>, Hans de Goede <hdegoede@redhat.com>,
- =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- Mika Westerberg <mika.westerberg@linux.intel.com>,
- Lukas Wunner <lukas@wunner.de>
-Cc: "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
- "Rafael J . Wysocki" <rafael@kernel.org>,
- "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
- "open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS"
- <dri-devel@lists.freedesktop.org>,
- "open list:X86 PLATFORM DRIVERS" <platform-driver-x86@vger.kernel.org>,
- Andreas Noever <andreas.noever@gmail.com>, David Airlie <airlied@gmail.com>,
- =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>,
- "open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>,
- "open list:ACPI" <linux-acpi@vger.kernel.org>,
- Danilo Krummrich <dakr@redhat.com>,
- "open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS"
- <nouveau@lists.freedesktop.org>, Manivannan Sadhasivam <mani@kernel.org>,
- Michael Jamet <michael.jamet@intel.com>, Mark Gross <markgross@kernel.org>,
- Xinhui Pan <Xinhui.Pan@amd.com>, open list <linux-kernel@vger.kernel.org>,
- Daniel Vetter <daniel@ffwll.ch>, Yehezkel Bernat <YehezkelShB@gmail.com>,
- =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
- "Maciej W . Rozycki" <macro@orcam.me.uk>
-References: <20231103190758.82911-1-mario.limonciello@amd.com>
- <20231103190758.82911-9-mario.limonciello@amd.com>
-From: "Lazar, Lijo" <lijo.lazar@amd.com>
-In-Reply-To: <20231103190758.82911-9-mario.limonciello@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BMXP287CA0009.INDP287.PROD.OUTLOOK.COM
- (2603:1096:b00:2c::15) To BYAPR12MB4614.namprd12.prod.outlook.com
- (2603:10b6:a03:a6::22)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AECA7497
+	for <linux-usb@vger.kernel.org>; Sat,  4 Nov 2023 08:01:49 +0000 (UTC)
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F65B19D;
+	Sat,  4 Nov 2023 01:01:48 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-32f7bd27c2aso1928448f8f.2;
+        Sat, 04 Nov 2023 01:01:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1699084906; x=1699689706; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hS3Le+HbToOOqCmf/VLmbjpEkM0sZUVHEoDgdyjma5k=;
+        b=eHNWUtqxZDdyOwKFG8QTEUS3cweGgffbvri7HNraW63+OByRwEyUvdWnhNE/siCAl1
+         0KL9vKwgoHV4/11aLKfuIvFnV6F2GT02ELYCS+To9dCM3XI1GaT3tQO3hxxpximApT3y
+         I2GGRqlcHrGZG80CvwVoHqZuzpMWUm0jXdaZ8kMh4lnLyu6xrjdWl5EeaXkxnSGWaqxh
+         nq94Byz5LVbvNFYVUoNOkX1Y4Af6+JOgKIMwVv0s3iTdB4Bx6mVU8OP/WpKxaNQNZQFZ
+         1+9g4zAFiF7SjcY2oPz3Zzox9uqx2wTH1T+M7nwo6Hrd1jKb7YJbXh7BM3EaQu0AdhEa
+         GGXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699084906; x=1699689706;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hS3Le+HbToOOqCmf/VLmbjpEkM0sZUVHEoDgdyjma5k=;
+        b=V31G4Go/BGcC5UR8kZ5naY9Ee/ZBHNqN5geIS9VdO7wxT+8vi/OIQW2vgfw+W3acJA
+         hhpT5xbFbupqBpI+UoAt0Gqd0w1kNGBDvmU5/4dOT6g33+xYjxYOgiO8J1Z/zy1ui5pF
+         gWeGNvGCz0YundwIDftl2GQFurO8T3VIPBeyz7nCEkjV7P+7+EMe0bTnQavS1NMd+dcp
+         Lknav4h7zrSuxsfLBnPqFDSL2RqgtbFrc5AQxxHxl0i8W0E9CnsoZVi3+OlgMVff49JP
+         XpugE2muqPq+xtxeMjlcSFIrXH500UukdMzowhQYtoJ2eZyCZEI9vBgFzxtZj0cn5ja+
+         NMHA==
+X-Gm-Message-State: AOJu0YwOx95xFP552EsZCdDNrnl/0rPGE9yGSLiyJHjdgBgfuI1RQkeU
+	TMgHmLMyNUDWopVXjZ+mqHw=
+X-Google-Smtp-Source: AGHT+IGdVfS2CvoSckI0P8OyIN3WvS8hnw2CSGVUfb9ZAVe4UHlFUw+L9clUOEa/KZtQJSoiR9qE/A==
+X-Received: by 2002:adf:d1c9:0:b0:32d:8505:b9d7 with SMTP id b9-20020adfd1c9000000b0032d8505b9d7mr19906302wrd.43.1699084906348;
+        Sat, 04 Nov 2023 01:01:46 -0700 (PDT)
+Received: from [192.168.2.31] (85-70-151-113.rcd.o2.cz. [85.70.151.113])
+        by smtp.gmail.com with ESMTPSA id k17-20020a5d6e91000000b0032d9382e6e0sm3724244wrz.45.2023.11.04.01.01.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 04 Nov 2023 01:01:45 -0700 (PDT)
+Message-ID: <b8fd6e0b-8164-4992-8124-135744430b9c@gmail.com>
+Date: Sat, 4 Nov 2023 09:01:44 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB4614:EE_|MW6PR12MB8899:EE_
-X-MS-Office365-Filtering-Correlation-Id: 770d3860-f64f-433a-68ba-08dbdd03548d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	3W83KYT0vAGW0hDnzK57G8/eSxaTQ7d2aBtMbTbaoA/Bcqy+ljZL714yiuOBt2bMuJ3Zr86WN7mUNj3iBr/fpM2feKONYDg0jyMsNUjK6aS+7cEoe43C+Xx2wrzPJwqB+l0KCtAwRpmpNSbTjFi6+psufw9ePOix2sz8+3PApLvJI7qiyzEkfKZMRRBKq0knEsZP5kkIwhCgf5xFgCw2EBISIKhr7y5EykUG9Wv3our/9+bNhXDN4ikgpPWvkDzOAZfPl32MCR6f8ziMCmPENq725hP9qyuN5TFmnRhkyhMKziwFCirVKJb6WqnHzF47aWCNzUQRsyHQS2x4UsujmNpUPvWCytYuop68RXf+Zqz3r6ImIPhkLmY6v5Riey1/SjY5z9WURunZlpH7f/HF52FlWng/4t2/JTd8NIM+lwbTCt2FAFopMzd/DX1UmLHPQQNkXCYP00+u2OoWuI9SNSMuiHhJprFRJj5GpV5CJdx7RQce6dQ75P4/Cg/xm4mptkZjLeEfNQ6WK7z63WOm+mhUvWF9ub68lLzxPAGTb2xLPDFvKul2cdQm4Yq+AmQgGT7m+ggAmX7zAsqP7D2ZJVaxkGdToVRCwkd++pZ8Wtlv6gBj+FEK1ulUo1wGSwBnigQX7STs6XAtGgVAXu5a5w==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4614.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(39860400002)(376002)(346002)(366004)(396003)(230922051799003)(1800799009)(186009)(451199024)(64100799003)(31686004)(26005)(53546011)(2616005)(6512007)(38100700002)(86362001)(36756003)(921008)(31696002)(2906002)(8676002)(7416002)(478600001)(6506007)(6666004)(4326008)(66476007)(6486002)(66556008)(316002)(54906003)(8936002)(41300700001)(5660300002)(110136005)(66946007)(83380400001)(966005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?VGhpZ1ZJLzJ2QWZlVjZHdkl5ZWduVmlMU2cvM1R5VkVTUURack84ZEZMc3dl?=
- =?utf-8?B?Sk5wcGdWM0hBL2FJaTRMejVIQ3ZIaHFURUNkMWtkRVZ1cEdLMXdPams5d29m?=
- =?utf-8?B?a2Y2TWxPUjZDU1ZBUCtIV21IUkZjcVdXRUwxYTdTV1RKY1Z1eDZjMTdXQVFi?=
- =?utf-8?B?RmZ1OVJVMC81V1hwZUd4QXVIbVJjV2xkY3ozNklCV0p1TGFCQzNlNzVZQmN2?=
- =?utf-8?B?MFY3L3VxbDdZK3pVRDU3ZEErSXJOcnZock5PM05YTFdZUGlWU202L1RIQ0xW?=
- =?utf-8?B?WVpjLzdWSzNKTk5lM1ROaVRGclo5RzhoSmVIcVJLM1JNV3Nxa3JTN2xhWXpw?=
- =?utf-8?B?SjNUNzg2SE9RUnExTk5VaDZ3bE5XczhOYzFRdWQxMUJsSERtWlJxTmhVeXcx?=
- =?utf-8?B?TnlzVWZSNzNwVGIxa0JtMkpmUThIR0dnd21SZW5XSjUyNmdSVmdJcU1TRk14?=
- =?utf-8?B?NWRGcVRpcHg3VlROZGlWOHc2aENEdCtvc3RuWm0ySXhQVXdTYkMrS0VpZEN5?=
- =?utf-8?B?d2VsaFplRENrUVpZUXhNODVwRUN6Q3oyVGVTSnI5TUtoeWFxc3EzWlIxbnNl?=
- =?utf-8?B?MHBqVjh3akRtL0QwN0N2TndqbW9KNnJXMGdpOWhRVG9aS2JhZld3NVIwMzE3?=
- =?utf-8?B?MmlmR3d4VE9HS01NQVVqQSs3Z1J6dEtUVGJlU1B5M1NxMkFmQzN4ckREZURW?=
- =?utf-8?B?RCs0R2JnZHlDbk5vU3JxUVpVZ05IZGpuUjFvRzJmNGNSS3lZQUozd0FOVVJk?=
- =?utf-8?B?eXBKMnduYXVDbmplRnNLY3BpZEhwZm1LWlc0NXRiTkdzbWdSdk5EODFETEM2?=
- =?utf-8?B?VHVOOXNZNER0ZlVyaUtwTVBqZTZENTdDZTVlUnBqMDBZSk93dkk4QjB5MlRn?=
- =?utf-8?B?Y2dyZXg2MUx3cUlkejBuT05HTEVSQ1hXdlN0MStJQXJBTWVNWXhOTWNBenI2?=
- =?utf-8?B?R1RCSEdSNlFRWmdKSHZBejVTVlAxTkhlRCtoa29qZ05ob0xkbnJuRG5ncXVo?=
- =?utf-8?B?WUJ5UjRYcDBaNVczRkFncG16a0dIVUJtbWxZSWs2NmZFc0lzeTZNbHhyQVN6?=
- =?utf-8?B?Mk9nSktxaFNjQkxMUWswaUZVNWhVVkUyRStpRHBaK0Z5VS80aDZuWmZSRXVV?=
- =?utf-8?B?Z0h5YzRsdmw3aTI2UHpQd0h1M0t5N2JmZTA0dzhqY2N4elJIdWUrQm5pNDd6?=
- =?utf-8?B?QWJCa1lIU1ZkV0JSdlRzT3I0OTFIaTdKUUsvaDF2Q0JXb3AvTTRGTFpuNk1y?=
- =?utf-8?B?ekZENWFodFVQVUMvMDNYYnBLOHFvdEo3R2s3WEF3YjBtRFdxVDV0bDhOdU0r?=
- =?utf-8?B?WkJac0NhVWtIV3J0cXFQRDh6ZU03QkJDREJEbm9NTHBLY21kZmdpUDhSM0dw?=
- =?utf-8?B?Slpsd3pOSmphTlVOM3p3QzRTMkp1Q1Nyb3ZBSGtLakhodzNLcVhhQjhubXEv?=
- =?utf-8?B?cjk5L09xS05jdGxsazlRdGFuVTB0aTJZdUNwKy9mSFZMaElpMjZ3RUpYc1Ur?=
- =?utf-8?B?ZVRORnlxVk5lM1FuUHZ0RWc0S0RxL0MxWkFDZE5wODdhTFNwVmNhOEp2RWdB?=
- =?utf-8?B?L1VmMHVjZ3UwaDR0U1dlL0QvK3MzaUFOY1owdmtmaloyT21qY094N2Jpcisv?=
- =?utf-8?B?RzdUSUdhMGlzSHFjd0ZnVzNycmJic3pObU9UeWZKQldhUnJaaUs2dTZzWFNa?=
- =?utf-8?B?UzF1ZS9pVHpKS1BWM0pFREU0K3N6OWpNMlg5MkR6dlRjSkRMTXBEMmtKVXlF?=
- =?utf-8?B?WkZiMnBvLy9Fdk1Ock9hL1U5dzl5UU9pMk96WlA2YkFCTmViQkJQQ2QzQ1ZO?=
- =?utf-8?B?cnFPeEN1dUt2OHUxZE8wdkpqSCtYQWZFdkJrU2VsWTAzSHJVSlJ1MUxxR3RK?=
- =?utf-8?B?WXQzc1JXQ2tZWk83dlIzVHJUU05IbzRGQ0tkbklZYzJCK21BRmRWcGxuUFp2?=
- =?utf-8?B?N0N3N2Jqa0h6Tm1KaCtUZ1BZQjVHYW9RUGQ5TXNHMXQzYit5VE1JNk1FT1dC?=
- =?utf-8?B?SUZXd0txUUxBdjN0L0hySE9QL0IvRnJXM2dXd1ZTQVJDbjZWZU5OU1pwNnJh?=
- =?utf-8?B?cE0rb3p1MkFGNW10dUdHdmlQckJ0eHdIemNjdE83UXZ1eE1CVW9LeXc4emdR?=
- =?utf-8?Q?+K88K9LCO9Jyk3+gOE7Fbzh26?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 770d3860-f64f-433a-68ba-08dbdd03548d
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4614.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Nov 2023 06:57:38.0334
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PyJ0pRlwA/k8XKAkIoRBW6B0gkDQ2SwjiDarsWw3DTo71MWvnNMP05Br+ABeokQB
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR12MB8899
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5] usb-storage,uas: use host helper to generate driver
+ info
+Content-Language: en-US
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+ linux-scsi@vger.kernel.org, gregkh@linuxfoundation.org, oneukum@suse.com
+References: <20231028174145.691523-1-gmazyland@gmail.com>
+ <20231103201709.124372-1-gmazyland@gmail.com>
+ <d26c884e-3505-436f-9a76-ec701fb5e2bb@rowland.harvard.edu>
+From: Milan Broz <gmazyland@gmail.com>
+Autocrypt: addr=gmazyland@gmail.com; keydata=
+ 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
+In-Reply-To: <d26c884e-3505-436f-9a76-ec701fb5e2bb@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+On 11/3/23 21:30, Alan Stern wrote:
+> On Fri, Nov 03, 2023 at 09:17:09PM +0100, Milan Broz wrote:
+>> The USB mass storage quirks flags can be stored in driver_info in
+>> a 32-bit integer (unsigned long on 32-bit platforms).
+>> As this attribute cannot be enlarged, we need to use some form
+>> of translation of 64-bit quirk bits.
+>>
+>> This problem was discussed on the USB list
+>> https://lore.kernel.org/linux-usb/f9e8acb5-32d5-4a30-859f-d4336a86b31a@gmail.com/
+>>
+>> The initial solution to use a static array extensively increased the size
+>> of the kernel module, so I decided to try the second suggested solution:
+>> generate a table by host-compiled program and use bit 31 to indicate
+>> that the value is an index, not the actual value.
+>>
+>> This patch adds a host-compiled program that processes unusual_devs.h
+>> (and unusual_uas.h) and generates files usb-ids.c and usb-ids-uas.c
+>> (for pre-processed USB device table with 32-bit device info).
+>> These files also contain a generated translation table for driver_info
+>> to 64-bit values.
+>>
+>> The translation function is used only in usb-storage and uas modules; all
+>> other USB storage modules store flags directly, using only 32-bit flags.
+>>
+>> For 64-bit platforms, where unsigned long is 64-bit, we do not need to
+>> convert quirk flags to 32-bit index; the translation function there uses
+>> flags directly.
+>>
+>> Signed-off-by: Milan Broz <gmazyland@gmail.com>
+>> ---
+> 
+> Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
 
+Thanks.
 
-On 11/4/2023 12:37 AM, Mario Limonciello wrote:
-> The USB4 spec specifies that PCIe ports that are used for tunneling
-> PCIe traffic over USB4 fabric will be hardcoded to advertise 2.5GT/s and
-> behave as a PCIe Gen1 device. The actual performance of these ports is
-> controlled by the fabric implementation.
+Unfortunately, the build rules, I removed in this version, are needed, see
+https://lore.kernel.org/oe-kbuild-all/202311041507.AOYwj5tK-lkp@intel.com/
 
-The code below ties a generic term 'tunneling' to USB4 spec. I think it 
-should be something like if (is_USB4 && is_tunneled), exclude from 
-bandwidth calculations - it should specifically identify usb4 based 
-tunneling rather than applying to all 'tunneled' cases.
+I'll keep fixed version in my branch on kernel.org for a day and once
+there are no such bot reports, new version v6 appears in the list.
 
 Thanks,
-Lijo
-
-> 
-> Downstream drivers such as amdgpu which utilize pcie_bandwidth_available()
-> to program the device will always find the PCIe ports used for
-> tunneling as a limiting factor potentially leading to incorrect
-> performance decisions.
-> 
-> To prevent problems in downstream drivers check explicitly for ports
-> being used for PCIe tunneling and skip them when looking for bandwidth
-> limitations of the hierarchy. If the only device connected is a root port
-> used for tunneling then report that device.
-> 
-> Downstream drivers could make this change on their own but then they
-> wouldn't be able to detect other potential speed bottlenecks from the
-> hierarchy without duplicating pcie_bandwidth_available() logic.
-> 
-> Link: https://gitlab.freedesktop.org/drm/amd/-/issues/2925#note_2145860
-> Link: https://www.usb.org/document-library/usb4r-specification-v20
->        USB4 V2 with Errata and ECN through June 2023
->        Section 11.2.1
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
->   drivers/pci/pci.c | 74 +++++++++++++++++++++++++++++++----------------
->   1 file changed, 49 insertions(+), 25 deletions(-)
-> 
-> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> index d9aa5a39f585..15e37164ce56 100644
-> --- a/drivers/pci/pci.c
-> +++ b/drivers/pci/pci.c
-> @@ -6223,6 +6223,35 @@ int pcie_set_mps(struct pci_dev *dev, int mps)
->   }
->   EXPORT_SYMBOL(pcie_set_mps);
->   
-> +static u32 pcie_calc_bw_limits(struct pci_dev *dev, u32 bw,
-> +			       struct pci_dev **limiting_dev,
-> +			       enum pci_bus_speed *speed,
-> +			       enum pcie_link_width *width)
-> +{
-> +	enum pcie_link_width next_width;
-> +	enum pci_bus_speed next_speed;
-> +	u32 next_bw;
-> +	u16 lnksta;
-> +
-> +	pcie_capability_read_word(dev, PCI_EXP_LNKSTA, &lnksta);
-> +	next_speed = pcie_link_speed[lnksta & PCI_EXP_LNKSTA_CLS];
-> +	next_width = (lnksta & PCI_EXP_LNKSTA_NLW) >> PCI_EXP_LNKSTA_NLW_SHIFT;
-> +	next_bw = next_width * PCIE_SPEED2MBS_ENC(next_speed);
-> +
-> +	/* Check if current device limits the total bandwidth */
-> +	if (!bw || next_bw <= bw) {
-> +		bw = next_bw;
-> +		if (limiting_dev)
-> +			*limiting_dev = dev;
-> +		if (speed)
-> +			*speed = next_speed;
-> +		if (width)
-> +			*width = next_width;
-> +	}
-> +
-> +	return bw;
-> +}
-> +
->   /**
->    * pcie_bandwidth_available - determine minimum link settings of a PCIe
->    *			      device and its bandwidth limitation
-> @@ -6236,47 +6265,42 @@ EXPORT_SYMBOL(pcie_set_mps);
->    * limiting_dev, speed, and width pointers are supplied) information about
->    * that point.  The bandwidth returned is in Mb/s, i.e., megabits/second of
->    * raw bandwidth.
-> + *
-> + * This excludes the bandwidth calculation that has been returned from a
-> + * PCIe device used for transmitting tunneled PCIe traffic over a Thunderbolt
-> + * or USB4 link that is part of larger hierarchy. The calculation is excluded
-> + * because the USB4 specification specifies that the max speed returned from
-> + * PCIe configuration registers for the tunneling link is always PCI 1x 2.5 GT/s.
-> + * When only tunneled devices are present, the bandwidth returned is the
-> + * bandwidth available from the first tunneled device.
->    */
->   u32 pcie_bandwidth_available(struct pci_dev *dev, struct pci_dev **limiting_dev,
->   			     enum pci_bus_speed *speed,
->   			     enum pcie_link_width *width)
->   {
-> -	u16 lnksta;
-> -	enum pci_bus_speed next_speed;
-> -	enum pcie_link_width next_width;
-> -	u32 bw, next_bw;
-> +	struct pci_dev *tdev = NULL;
-> +	u32 bw = 0;
->   
->   	if (speed)
->   		*speed = PCI_SPEED_UNKNOWN;
->   	if (width)
->   		*width = PCIE_LNK_WIDTH_UNKNOWN;
->   
-> -	bw = 0;
-> -
->   	while (dev) {
-> -		pcie_capability_read_word(dev, PCI_EXP_LNKSTA, &lnksta);
-> -
-> -		next_speed = pcie_link_speed[lnksta & PCI_EXP_LNKSTA_CLS];
-> -		next_width = (lnksta & PCI_EXP_LNKSTA_NLW) >>
-> -			PCI_EXP_LNKSTA_NLW_SHIFT;
-> -
-> -		next_bw = next_width * PCIE_SPEED2MBS_ENC(next_speed);
-> -
-> -		/* Check if current device limits the total bandwidth */
-> -		if (!bw || next_bw <= bw) {
-> -			bw = next_bw;
-> -
-> -			if (limiting_dev)
-> -				*limiting_dev = dev;
-> -			if (speed)
-> -				*speed = next_speed;
-> -			if (width)
-> -				*width = next_width;
-> +		if (dev->is_tunneled) {
-> +			if (!tdev)
-> +				tdev = dev;
-> +			goto skip;
->   		}
-> -
-> +		bw = pcie_calc_bw_limits(dev, bw, limiting_dev, speed, width);
-> +skip:
->   		dev = pci_upstream_bridge(dev);
->   	}
->   
-> +	/* If nothing "faster" found on link, limit to first tunneled device */
-> +	if (tdev && !bw)
-> +		bw = pcie_calc_bw_limits(tdev, bw, limiting_dev, speed, width);
-> +
->   	return bw;
->   }
->   EXPORT_SYMBOL(pcie_bandwidth_available);
+Milan
 
