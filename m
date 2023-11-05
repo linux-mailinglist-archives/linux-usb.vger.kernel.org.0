@@ -1,143 +1,201 @@
-Return-Path: <linux-usb+bounces-2544-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2545-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4E8D7E1271
-	for <lists+linux-usb@lfdr.de>; Sun,  5 Nov 2023 08:26:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E65427E1340
+	for <lists+linux-usb@lfdr.de>; Sun,  5 Nov 2023 13:02:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DF0C32814ED
-	for <lists+linux-usb@lfdr.de>; Sun,  5 Nov 2023 07:26:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2377D2813BD
+	for <lists+linux-usb@lfdr.de>; Sun,  5 Nov 2023 12:02:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0BFC613E;
-	Sun,  5 Nov 2023 07:26:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42B2ABA2B;
+	Sun,  5 Nov 2023 12:02:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="GaXRtocQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fXA6OrMD"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20F982CA7;
-	Sun,  5 Nov 2023 07:26:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0D73C433C8;
-	Sun,  5 Nov 2023 07:26:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1699169206;
-	bh=6/RPGmtF74OYAOj5+K+VLy3tMMPqiKm7Xs8iyq0nqvA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GaXRtocQAc1Paqxsn6eJGYeevFhJZtamePoCHs5x+2VpxyAkji8CIWA4de+DG3GbZ
-	 P6iV5WitOwk+I8IrczfC9K7cn7AvJ39ND41w9YoNCUz6NLnXKckY43H+09VQSEph4i
-	 8z5FIUVv+RdRC8FoG1GOk0Drz7As2tylEbJgLTtE=
-Date: Sun, 5 Nov 2023 08:26:43 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Alice Ryhl <aliceryhl@google.com>, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Wedson Almeida Filho <walmeida@microsoft.com>,
-	linux-usb@vger.kernel.org, rust-for-linux@vger.kernel.org
-Subject: Re: [RFC PATCH v3 2/2] samples: rust: Add USB sample bindings
-Message-ID: <2023110544-nimble-routing-98b6@gregkh>
-References: <20231104211213.225891-1-yakoyoku@gmail.com>
- <20231104211213.225891-3-yakoyoku@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F941B66D
+	for <linux-usb@vger.kernel.org>; Sun,  5 Nov 2023 12:02:21 +0000 (UTC)
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C07FB
+	for <linux-usb@vger.kernel.org>; Sun,  5 Nov 2023 04:02:19 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-53de0d1dc46so5985186a12.3
+        for <linux-usb@vger.kernel.org>; Sun, 05 Nov 2023 04:02:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1699185737; x=1699790537; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:subject:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ULRZxqpz6jrWkTei6MQpuWNUK4OPDyJfETbLXRnqMDg=;
+        b=fXA6OrMDuTC/Fy1zI3A52+kvxEUa7LyNJmwOp7P21nI4L2hhegQUK7ea3DxTdUywjT
+         rq39iiajmsTQmKCebGcM8hNk+9hUd84kJCbe930t7Y0TB42PGO+STv8f6QspD1uon5JF
+         9ggHorO/MmSCtX1IpXFoXqpWgSUyX8RIctuHjsyoS3d+X3qbgZnw7kH5DruYjx6KNQRF
+         t8r4K9pGGjWQ0NwR6fCZuPbTOCR+zoVmVfjHGjo1s+GALc9K7bY507Eqfv8nK80MsZ8X
+         wB9L5xKEbokqmJdgigRyX2SdqJr0Dd4XtxcER6+cc6vzM2FzX60nn6nEQC9q4IVd3Fz+
+         fYJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699185737; x=1699790537;
+        h=content-transfer-encoding:mime-version:message-id:subject:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ULRZxqpz6jrWkTei6MQpuWNUK4OPDyJfETbLXRnqMDg=;
+        b=Vo4FdLpUwL5aJwDwF8+2SNMpSropt6jUmZo7TCOadetRP9KbTrx/gBckojh6OF4pDu
+         dFzatFfRP75/cNHdiZWgUyr9+HdgvtlkJMVbPfoEGMwQ2wo1v2FkLq6QoIfMOi9kd7/M
+         NIL+fU1wGWDOFjzWWgzqigvnK+wiRJVAxwLf2Pxk9WQYGEBktTfcA2Jcb7fIPEBUwcwc
+         q5uWIf2kxdFhXu0IsxFYY9PV8aEKby3rWItlXsiFzyIH4lGBk6fMFcJtwN34fHTCYpSb
+         J2sr9qaTZa9n2m+nTPeNMZ21TgXiiMp8+caVSVqquozlwfvMX/94f8I7deCAYokKX8sS
+         /Ayw==
+X-Gm-Message-State: AOJu0YwkZfQmV4KA9nAcIpVKglbGCilp6kK26n2JaAuE42s5ZYHWpNUX
+	U8wC/mTS2WjvpT1gUqaNUDyXnUVoodk=
+X-Google-Smtp-Source: AGHT+IF3HKNkrY7+zuRNNeQ5Jta07WettzD8IaSM8IEskHSaWLA1QWRmYwVOi68NIAaXu6dR8L2miw==
+X-Received: by 2002:a17:907:3f02:b0:9bf:f20:876d with SMTP id hq2-20020a1709073f0200b009bf0f20876dmr13194423ejc.75.1699185737421;
+        Sun, 05 Nov 2023 04:02:17 -0800 (PST)
+Received: from ping (dynamic-2a01-0c23-614a-dd00-56d7-c8e7-9783-ba85.c23.pool.telefonica.de. [2a01:c23:614a:dd00:56d7:c8e7:9783:ba85])
+        by smtp.gmail.com with ESMTPSA id jp6-20020a170906f74600b009ad89697c86sm2976970ejb.144.2023.11.05.04.02.16
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Nov 2023 04:02:17 -0800 (PST)
+Date: Sun, 5 Nov 2023 13:02:15 +0100
+From: Fabian Melzow <fabian.melzow@gmail.com>
+To: linux-usb@vger.kernel.org
+Subject: 0bda:b812 USB "3.0" WLAN devices only report a maximum of 480 Mbps
+Message-ID: <20231105130215.2b669c8b@ping>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231104211213.225891-3-yakoyoku@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Sat, Nov 04, 2023 at 06:11:59PM -0300, Martin Rodriguez Reboredo wrote:
-> This is a demonstration of the capabilities of doing bindings with
-> subsystems that may or may not be statically linked.
-> 
-> Signed-off-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-> ---
-> v2 -> v3:
-> - Generate bindings for USB.
-> v1 -> v2:
-> - Added this patch.
+Hello,
 
-I know you are just using this for an example, but here's some
-USB-specific things that you might want to clean up for when you submit
-this as a "real" binding sometime in the future:
+I have three USB "3.0" WLAN sticks (https://i.imgur.com/zSg5s0d.jpg)
+which are all based on the Realtek RTW8822BU (<=780 Mbps with IEEE
+802.11ac) and use the same vendor and product ID 0bda:b812 and have the
+exact same output of "lsusb -vd 0bda:b812".
 
-> +config USB_RUST
-> +	bool "Rust USB bindings"
+These devices should report 5 Gbps for USB 3.0 in the Binary Object
+Store Descriptor, but don't do so.
 
-This is a "USB Host" binding.  We have both USB host mode (when you plug
-a USB device into a system running Linux), and USB gadget mode (when
-Linux is running on the USB device you plug into any other USB system).
+Maybe it is possible to add a software fix for this hardware
+problem, so I report it here.
 
-So please be specific here, this should be "USB_HOST_RUST" and then
-later, "USB_GADGET_RUST".
+Output of lsusb from usbutils 017 on x86_64 with kernel 6.6.0:
 
-> +	depends on USB && RUST
-> +	default n
-
-Again, "default n" is the default, never list it again.
-
-
-> +	help
-> +	  Enables Rust bindings for USB.
-
-USB Host, not all of USB.
-
-> diff --git a/drivers/usb/core/Makefile b/drivers/usb/core/Makefile
-> index 7d338e9c0657..00e116913591 100644
-> --- a/drivers/usb/core/Makefile
-> +++ b/drivers/usb/core/Makefile
-> @@ -11,6 +11,7 @@ usbcore-y += phy.o port.o
->  usbcore-$(CONFIG_OF)		+= of.o
->  usbcore-$(CONFIG_USB_PCI)		+= hcd-pci.o
->  usbcore-$(CONFIG_ACPI)		+= usb-acpi.o
-> +usbcore-$(CONFIG_USB_RUST)		+= libusb.rlib
->  
->  ifdef CONFIG_USB_ONBOARD_HUB
->  usbcore-y			+= ../misc/onboard_usb_hub_pdevs.o
-> @@ -18,4 +19,6 @@ endif
->  
->  obj-$(CONFIG_USB)		+= usbcore.o
->  
-> +rust-libs			:= ./usb
-
-Why the "./", why not just ":= usb" ?
-
-> +config SAMPLE_RUST_USB_SIMPLE
-> +	tristate "USB simple device driver"
-> +	help
-> +	  This option builds the Rust USB simple driver sample.
-
-Rust USB simple host driver sample.
-
->  subdir-$(CONFIG_SAMPLE_RUST_HOSTPROGS)		+= hostprogs
-> diff --git a/samples/rust/rust_usb_simple.rs b/samples/rust/rust_usb_simple.rs
-> new file mode 100644
-> index 000000000000..3523f81d5eb8
-> --- /dev/null
-> +++ b/samples/rust/rust_usb_simple.rs
-> @@ -0,0 +1,22 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +//! Rust USB sample.
-> +
-> +use kernel::prelude::*;
-> +
-> +module! {
-> +    type: UsbSimple,
-
-"USBSimple" please.  I thought I said that before.
-
-thanks,
-
-greg k-h
+Bus 001 Device 003: ID 0bda:b812 Realtek Semiconductor Corp. RTL88x2bu [AC1200 Techkey]
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.10
+  bDeviceClass            0 [unknown]
+  bDeviceSubClass         0 [unknown]
+  bDeviceProtocol         0 
+  bMaxPacketSize0        64
+  idVendor           0x0bda Realtek Semiconductor Corp.
+  idProduct          0xb812 RTL88x2bu [AC1200 Techkey]
+  bcdDevice            2.10
+  iManufacturer           1 Realtek
+  iProduct                2 USB3.0 802.11ac 1200M Adapter
+  iSerial                 3 123456
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x0035
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          0 
+    bmAttributes         0x80
+      (Bus Powered)
+    MaxPower              500mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           5
+      bInterfaceClass       255 Vendor Specific Class
+      bInterfaceSubClass    255 Vendor Specific Subclass
+      bInterfaceProtocol    255 Vendor Specific Protocol
+      iInterface              2 USB3.0 802.11ac 1200M Adapter
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x84  EP 4 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x05  EP 5 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x06  EP 6 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x87  EP 7 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               3
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x08  EP 8 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+Binary Object Store Descriptor:
+  bLength                 5
+  bDescriptorType        15
+  wTotalLength       0x0016
+  bNumDeviceCaps          2
+  USB 2.0 Extension Device Capability:
+    bLength                 7
+    bDescriptorType        16
+    bDevCapabilityType      2
+    bmAttributes   0x00000002
+      HIRD Link Power Management (LPM) Supported
+  SuperSpeed USB Device Capability:
+    bLength                10
+    bDescriptorType        16
+    bDevCapabilityType      3
+    bmAttributes         0x00
+    wSpeedsSupported   0x0006
+      Device can operate at Full Speed (12Mbps)
+      Device can operate at High Speed (480Mbps)
+    bFunctionalitySupport   1
+      Lowest fully-functional device speed is Full Speed (12Mbps)
+    bU1DevExitLat          10 micro seconds
+    bU2DevExitLat        1023 micro seconds
+Device Status:     0x0000
+  (Bus Powered)
 
