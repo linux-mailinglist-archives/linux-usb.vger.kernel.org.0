@@ -1,105 +1,107 @@
-Return-Path: <linux-usb+bounces-2563-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2564-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2349B7E1BCF
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Nov 2023 09:20:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B36D7E1C20
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Nov 2023 09:27:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 534A01C209CD
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Nov 2023 08:20:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 06A7D281338
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Nov 2023 08:27:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52E48FC1F;
-	Mon,  6 Nov 2023 08:20:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1688014F76;
+	Mon,  6 Nov 2023 08:27:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lZIQMuJv"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="aFhDGKNj";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="UQ6a0VGC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1EF23C0F
-	for <linux-usb@vger.kernel.org>; Mon,  6 Nov 2023 08:20:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19772C433C7;
-	Mon,  6 Nov 2023 08:20:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699258804;
-	bh=nPH/BnrNNKYu+SnYLgUUWF6lghiewNMl8ubSLajK9IM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lZIQMuJv3NM7DJO00UHZQll5WzsWNG2Gg4AjU1lM3QElF+mcuSYkt4W6dOkvN8AN9
-	 r0x1iiDHpbuF26CFVKL6sq3G41WlTzyCgOWF9g2hp2l0k+sbbzd7sYgyBNDhXltvOv
-	 EFPVGOlKSc8I05cEM6kAGZoX4hh6D6+92WkGUcOdwOnX9oXh6autCiM55zflO/6Yvi
-	 6wjvOIHtVV609AD+hO3KrD+Gx6SdB1m5bx4CeOOUrmzkUt+dW1lKNWlsCrJxYAV/2p
-	 ffPhrv1udeFM425zU0tG5gcJ05EgzST4v29c1WhdL2/3edgP6/dKEj5YWdGi6N6onB
-	 DfDMNVBG56DLQ==
-Received: from johan by xi.lan with local (Exim 4.96)
-	(envelope-from <johan@kernel.org>)
-	id 1qzuqm-0006gp-2p;
-	Mon, 06 Nov 2023 09:20:48 +0100
-Date: Mon, 6 Nov 2023 09:20:48 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Stefan Eichenberger <stefan.eichenberger@toradex.com>
-Cc: Francesco Dolcini <francesco@dolcini.it>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Felipe Balbi <balbi@ti.com>, Kishon Vijay Abraham I <kishon@ti.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	Francesco Dolcini <francesco.dolcini@toradex.com>
-Subject: Re: [PATCH v1] USB: dwc3: only call usb_phy_set_suspend in
- suspend/resume
-Message-ID: <ZUih4BJLkslLIMx5@hovoldconsulting.com>
-References: <20231103102236.13656-1-francesco@dolcini.it>
- <ZUUkqeKFZmsubxu5@hovoldconsulting.com>
- <GV0P278MB0589921FFF5487D2F94D3FF2E8A4A@GV0P278MB0589.CHEP278.PROD.OUTLOOK.COM>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF143134BF;
+	Mon,  6 Nov 2023 08:27:42 +0000 (UTC)
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3919010C6;
+	Mon,  6 Nov 2023 00:27:16 -0800 (PST)
+Date: Mon, 6 Nov 2023 09:27:10 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1699259233;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=RaRit34QigfAN6g1ok2Kh0sQJTih4++oBpWcoF/3X7s=;
+	b=aFhDGKNjomzYu8thqpDzhPSV9a7fC/ieq+RQldztq8olokBxD8ZnX0IKqrEiM7tuXIH9/o
+	PF1ZXuOqLxd8EXgPk7tvSeFq6poRinag0BtTyeRC2zZyYfIi+xnW12Lp7paie3vvOrFdhG
+	PxojcDRBWK8gjGahGyhK5apovtbhCHIVVpKMWgUJGdtPez4gtiHzNoN7QWNG7kiEjnlfJ1
+	Q0D04YnnaElmshWTjEOfS2aRvBdXXCz+ARDfQ2nxqxD53SChi01T0Pe2JYKJ5GkI+nzZsp
+	wsubw1Q367KuByq+I7dvf9mWaU49w+0dWVjzzoSkbI0KMe9ZHgzapdR45W09xg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1699259233;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=RaRit34QigfAN6g1ok2Kh0sQJTih4++oBpWcoF/3X7s=;
+	b=UQ6a0VGCHMUkCqLiEwExT9FNgarRugUzwdfjFhDe8393e5eISs02lUh3Lv++ymRXQBAYZF
+	Rm4bIoXIAzM6FBCA==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: "Li, Meng" <Meng.Li@windriver.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	USB mailing list <linux-usb@vger.kernel.org>,
+	linux-rt-users <linux-rt-users@vger.kernel.org>
+Subject: Re: USB: add check to detect host controller hardware removal
+Message-ID: <20231106082710.eTb2__57@linutronix.de>
+References: <d6d9478c-585b-4f51-a076-dc2955c6b2b0@rowland.harvard.edu>
+ <PH0PR11MB51911132F6CB7DF0C41F15DEF1D5A@PH0PR11MB5191.namprd11.prod.outlook.com>
+ <1f8fe9f9-d8d6-48d9-8c7d-1215d10ece91@rowland.harvard.edu>
+ <20231019123823.4fjUs8Rl@linutronix.de>
+ <128e4bea-6064-4e46-b9c7-75296e9f553d@rowland.harvard.edu>
+ <55925f45-4921-46cc-81df-ac705ad7530e@rowland.harvard.edu>
+ <20231020095238.Z4m-M_oS@linutronix.de>
+ <1f26049d-b16d-4db8-8b7a-ed93213faf76@rowland.harvard.edu>
+ <20231103154624.WEWPMHTp@linutronix.de>
+ <a0116b73-2017-4f3b-a081-6d420b04b7d0@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <GV0P278MB0589921FFF5487D2F94D3FF2E8A4A@GV0P278MB0589.CHEP278.PROD.OUTLOOK.COM>
+In-Reply-To: <a0116b73-2017-4f3b-a081-6d420b04b7d0@rowland.harvard.edu>
 
-On Sat, Nov 04, 2023 at 11:51:22AM +0000, Stefan Eichenberger wrote:
-> > From: Johan Hovold <johan@kernel.org>
+On 2023-11-03 16:42:18 [-0400], Alan Stern wrote:
+> > I see. Don't over complicate or "correct" things here. What should work
+> > is that the removal callback can be called at any time and things
+> > continue work. That means it will purge all queues, cancel all requests,
+> > timers, whatever and free all resources associated with the driver/
+> > device.
+> 
+> The driver _does_ work under those circumstances -- provided the
+> hardware is still present and accessible.
 
-> > When reviewing the driver I did find a bug in the xhci-plat driver which
-> > is likely the cause for the imbalance you're seeing. I just sent a fix
-> > here in case you want to give it a try:
+In that case I don't see a problem.
+
+> > If it comes to PCI-hotplug you have to have a so called PCI-hotplug
+> > slot. This "slot" will let the OS know if the hardware has been removed
+> > or added. If you don't have such a thing you have to maintain the state
+> > yourself by using the "remove" and "rescan" sysfs files of the PCI slot.
 > > 
-> >         https://lore.kernel.org/lkml/20231103164323.14294-1-johan+linaro@kernel.org/
+> > I'm not aware of any requirement for a PCI-driver to check if its device
+> > has been removed.
 > 
-> I tested it and it solves the issue we have. Thanks a lot for the fix!
-> Before the use count for our regulator always went up to 2 and now it is
-> 1 as expected.
-> root@verdin-imx8mp-14773241:~# cat /sys/kernel/debug/regulator/CTRL_SLEEP_MOCI#/use_count
-> 1
-> 
-> Also when going to suspend the regulator is turned off now. With the
-> suspend patch applied from us the use count will be one more but
-> everything still works as expected.
+> That's the problem: The driver doesn't really support PCI-hotplug.
+> The code that Meng Li wants to change was sort of a half-baked way to
+> add such support.
 
-Thanks for testing.
+This sounds half-baked. Just remove the device from sysfs and then
+physically plug the card. It is going to end in mess if every driver
+gets some "hotplug" support.
 
-> > But, also, why are you using legacy PHYs? Which platform is this for?
-> 
-> We have an external hub that we want to turn off when the system goes
-> into suspend. For the i.MX8MM we use the phy-generic driver to achieve
-> this. When I saw that the dwc3 driver would support the phy-generic via
-> usb-phy, I thought we could use the same approach for the i.MX8MP and,
-> in the future, the AM62. Maybe I misunderstood, would the right solution
-> be to add a suspend function to the fsl,imx8mp-usb-phy driver and use
-> vbus instead? But what would we do for the AM62, as it doesn't have a
-> phy driver if I'm not mistaken.
+> Alan Stern
 
-That's not how the phy driver is supposed be used, and for on-board hubs
-we now have:
-
-	drivers/usb/misc/onboard_usb_hub.c
-
-Have you tried using that one instead?
-
-Johan
+Sebastian
 
