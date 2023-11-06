@@ -1,68 +1,57 @@
-Return-Path: <linux-usb+bounces-2567-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2568-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1D2D7E1D05
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Nov 2023 10:09:39 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 517197E1D85
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Nov 2023 10:52:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 77798281356
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Nov 2023 09:09:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B2AE4B20E24
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Nov 2023 09:52:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CBD415AE2;
-	Mon,  6 Nov 2023 09:09:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B436D168DB;
+	Mon,  6 Nov 2023 09:52:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="y6Hb0MUX";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="O6MzddOj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T1m8kRbW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F71BAD35;
-	Mon,  6 Nov 2023 09:09:29 +0000 (UTC)
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 913F2D49;
-	Mon,  6 Nov 2023 01:09:27 -0800 (PST)
-Date: Mon, 6 Nov 2023 10:09:24 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1699261766;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=e2N6vJfqBq6qhs7eNQmT5PjZBJpKmPU/uOG+3V2MjLw=;
-	b=y6Hb0MUX1PleRzOmY2ZlEwKPuVBMyodZ2WiNugTaAO4QqllpwMv15fTE8Nslq+XKEgV+kH
-	KAXcUE631PfcdxPtr8TMKfzCfngmITYCpnt9E5HKjJy65my44vMj2PPlpNLU5ZCvWNp156
-	4NZwfiuPykSGot+/HOHRU6Um8Q2z4xVK3bNtzqS3C5azjJcHWrjNs0cOFDwj94fd0FJpHH
-	wzq1C0YL+pJjkyk6GBS1g5P8fZSe4W61g6tdsHjNQfwIAxra5TsX6Cxj58koKHdgqwDLP5
-	Tz5H1AG3idLXmNXYeScxbHV+Iv93gU1e9qyOYPmo/ii17wBIGAyOm74Q81u+cw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1699261766;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=e2N6vJfqBq6qhs7eNQmT5PjZBJpKmPU/uOG+3V2MjLw=;
-	b=O6MzddOjl/KhrR+5X5v0pQg6zgPMWo/kFSnpPqzU5ET3QyCzMIDBaFICzbkLMl9//WwOSQ
-	8vzo76WZQMPa4gDA==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: "Li, Meng" <Meng.Li@windriver.com>
-Cc: Alan Stern <stern@rowland.harvard.edu>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	USB mailing list <linux-usb@vger.kernel.org>,
-	linux-rt-users <linux-rt-users@vger.kernel.org>
-Subject: Re: RE: RE: USB: add check to detect host controller hardware removal
-Message-ID: <20231106090924.3qeWpk98@linutronix.de>
-References: <20231019123823.4fjUs8Rl@linutronix.de>
- <128e4bea-6064-4e46-b9c7-75296e9f553d@rowland.harvard.edu>
- <55925f45-4921-46cc-81df-ac705ad7530e@rowland.harvard.edu>
- <20231020095238.Z4m-M_oS@linutronix.de>
- <1f26049d-b16d-4db8-8b7a-ed93213faf76@rowland.harvard.edu>
- <20231103154624.WEWPMHTp@linutronix.de>
- <a0116b73-2017-4f3b-a081-6d420b04b7d0@rowland.harvard.edu>
- <PH0PR11MB5191B5D71DBD450210E2BEDFF1AAA@PH0PR11MB5191.namprd11.prod.outlook.com>
- <20231106082829.iBvQ9hCY@linutronix.de>
- <PH0PR11MB519187340D0C1AD3F05DC74CF1AAA@PH0PR11MB5191.namprd11.prod.outlook.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 340EE168A6
+	for <linux-usb@vger.kernel.org>; Mon,  6 Nov 2023 09:52:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9165C433C8;
+	Mon,  6 Nov 2023 09:52:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1699264345;
+	bh=E4/L+LlFjPb2WwOsFdRog7Iics6lqBe9DHzObFZjQaQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=T1m8kRbWZJn7jsk5RLHokR9jTw6xjTC7WAG3HzgnbzkI4rIjkbPbBe1xbsxTjC9ZG
+	 bQD/OVdd2XWQfDScwPip752ciLnUAU9sTG4Nag+Il9hHmCU9wx92SirzX93CcAldqe
+	 Q19vK4kZHziaINx+dpu1dRcaB6bAsL0Wdf4KQjiwM5zUMYDkShQatGQ5LnsMqpHI7E
+	 666nsBMFCYw/naCOjZzJQbS2kPc6WDZs+la98bV6LFiUl6gf63uKDyxU8LB7HPsm8C
+	 sG78jW0v8g6Kqw8NETlTVsiq0OCadkK47lKKpiQX3RgqkfhO4TpWxYkYUsiKenry3/
+	 M0sR8hlOWTbGA==
+Received: from johan by xi.lan with local (Exim 4.96)
+	(envelope-from <johan@kernel.org>)
+	id 1qzwIA-0007JB-2C;
+	Mon, 06 Nov 2023 10:53:10 +0100
+Date: Mon, 6 Nov 2023 10:53:10 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Stanley =?utf-8?B?Q2hhbmdb5piM6IKy5b63XQ==?= <stanley_chang@realtek.com>
+Cc: Stefan Eichenberger <eichest@gmail.com>,
+	Johan Hovold <johan+linaro@kernel.org>,
+	Mathias Nyman <mathias.nyman@intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"stable@vger.kernel.org" <stable@vger.kernel.org>,
+	Maxime Ripard <mripard@kernel.org>
+Subject: Re: [PATCH] USB: xhci-plat: fix legacy PHY double inity
+Message-ID: <ZUi3hrDbseJbIsWZ@hovoldconsulting.com>
+References: <20231103164323.14294-1-johan+linaro@kernel.org>
+ <ZUY8cGrofUtPOMV8@eichest-laptop>
+ <5a493e6fedb449bc93f83f31a682e5b9@realtek.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -71,44 +60,62 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <PH0PR11MB519187340D0C1AD3F05DC74CF1AAA@PH0PR11MB5191.namprd11.prod.outlook.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5a493e6fedb449bc93f83f31a682e5b9@realtek.com>
 
-On 2023-11-06 08:54:50 [+0000], Li, Meng wrote:
+On Mon, Nov 06, 2023 at 06:53:23AM +0000, Stanley Chang[昌育德] wrote:
+> > > On Fri, Nov 03, 2023 at 05:43:23PM +0100, Johan Hovold wrote:
+> > > > Commits 7b8ef22ea547 ("usb: xhci: plat: Add USB phy support") and
+> > > > 9134c1fd0503 ("usb: xhci: plat: Add USB 3.0 phy support") added
+> > > > support for looking up legacy PHYs from the sysdev devicetree node
+> > > > and initialising them.
+> > > >
+> > > > This broke drivers such as dwc3 which manages PHYs themself as the
+> > > > PHYs would now be initialised twice, something which specifically
+> > > > can lead to resources being left enabled during suspend (e.g. with
+> > > > the usb_phy_generic PHY driver).
+> > > >
+> > > > As the dwc3 driver uses driver-name matching for the xhci platform
+> > > > device, fix this by only looking up and initialising PHYs for
+> > > > devices that have been matched using OF.
 
-> This is not my original issue that I encountered.
-> I agree that we should remove the device from sys interface firstly,
-> and then do hot-plug action.
-> My original issue was the calltrace on RT kernel if I remove the
-> device from sys interface.
-> # echo 1 > /sys/bus/pci/devices/0001:01:00.0/remove
-> xhci_hcd 0001:01:00.0: remove, state 1
-> usb usb2: USB disconnect, device number 1
-> usb 2-4: USB disconnect, device number 2
-> xhci_hcd 0001:01:00.0: USB bus 2 deregistered
-> BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:46
-> in_atomic(): 0, irqs_disabled(): 128, non_block: 0, pid: 765, name: sh
+> > Tested-by: Stanley Chang <stanley_chang@realtek.com>
 
-Right.
+> I am sorry to notify you this patch is tested fail.
 
-> and then I checked the commit log to get which commit introduced this issue.
-> I found out the commit is 
-> commit c548795abe0d3520b74e18f23ca0a0d72deddab9
-> Author: Alan Stern <stern@rowland.harvard.edu>
-> Date:   Wed Jun 9 17:34:27 2010 -0400
-> 
->     USB: add check to detect host controller hardware removal
-> 
-> And then, Alan Stern told me the background of this issue. so, I
-> started to do hotplug operation on my board to see what symptom on my
-> nxp-ls1043/6 board.
-> And then there were lots of discussion followed.
+Hmm. Thanks for testing.
 
-Okay. I somehow mapped it that you try to add this to xhci.
-The suggested replacement should cover it. Better if we could get rid of
-it ;)
+> I test the Realtek phy driver at drivers/phy/Realtek/phy-rtk-usb2.c again.
+> But I can't get the phy in xhci.
 
-> Thanks,
-> Limeng
+> It is a dwc3 generic phy driver, and it is also a usb phy driver. 
 
-Sebastian
+That sounds broken (i.e. to be relying on both frameworks), but indeed
+that seems to be the current state of the generic and legacy USB PHY
+implementations.
+
+What a mess.
+
+> Base on you modified, I can't run on callback 
+> rtk_phy->phy.notify_port_status = rtk_phy_notify_port_status;
+
+Which dwc3 driver are you using? Unless I'm missing something this would
+not be an issue unless you are doing something crazy like describing the
+same PHY twice in the devicetree (i.e. both as a generic and legacy
+PHY).
+
+Apparently, there are no in-tree users of this particular realtek PHY so
+I can't check the devicetree, but we do have other instances of such
+abuse since at least a decade:
+
+	6747caa76cab ("usb: phy: twl4030: use the new generic PHY framework")
+
+And, yes, then this is sort of expected. The dwc3 driver has always
+managed its own PHYs, but functionality has now been bolted on top so
+that people may have started relying on it being managed *also* by xhci,
+well at least for notifications like the one you just added:
+
+	a08799cf17c2 ("usb: phy: add usb phy notify port status API")
+
+Johan
 
