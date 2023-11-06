@@ -1,129 +1,105 @@
-Return-Path: <linux-usb+bounces-2562-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2563-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 783317E1AA5
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Nov 2023 08:03:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2349B7E1BCF
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Nov 2023 09:20:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A4DD21C20A4B
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Nov 2023 07:03:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 534A01C209CD
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Nov 2023 08:20:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A400BA43;
-	Mon,  6 Nov 2023 07:03:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52E48FC1F;
+	Mon,  6 Nov 2023 08:20:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AnRTz0J1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lZIQMuJv"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DD234422
-	for <linux-usb@vger.kernel.org>; Mon,  6 Nov 2023 07:03:07 +0000 (UTC)
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4717C6
-	for <linux-usb@vger.kernel.org>; Sun,  5 Nov 2023 23:03:05 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-32ded3eb835so2901022f8f.0
-        for <linux-usb@vger.kernel.org>; Sun, 05 Nov 2023 23:03:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699254184; x=1699858984; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:to:from:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UQQrXVp1yB3RDtpJdxHWupcjK/Y8l8iZQURbUIaupXM=;
-        b=AnRTz0J1c4qFZKIUi7sdaNRmweQ3U2OkueW7nySRk4iiO0kbALwc94l1VWP7aDpHAc
-         ukf/yX4s4yyny+DNVCCLlJuCcuwjlfh6J2iy5B2UmK/godaB1BjvS3AxXXfvkzMAmIJ7
-         q0yuUCDeDu9kUFO17wI2t7QXbBxrNNZrx/Pu+KG/tcvWQ+/KlH0tFZaBuO04WjHNwxRP
-         LsZZIePJNtWUmpHVaI/dCQrpTqFSwTvYvfj6JOsPt+/9PFrOT2VKK//UzgZtAe7dOEvp
-         9V0jGVnMMhkSUrwlsmIELPIHIYsBpqKdl1zFldjbu74mPfS+WzPW7fGGS2Aa/7AHTeel
-         kijA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699254184; x=1699858984;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UQQrXVp1yB3RDtpJdxHWupcjK/Y8l8iZQURbUIaupXM=;
-        b=RPg7ItuBEL6S4IV7ElvBxjJSkOaMKQzeqVYCac8nkqCaql24oyu3qn8tKin5w/y+h0
-         zGp7bz2Py6jA1JaHPBWO8QtKnwuj2vCqzGW5z9PC0vlYgUMQzG+Oz+E+gTlidFBz4vcd
-         5V+WFf/DZxecqw/YJshMwi8s8lDf3DRnejcdYssgtl8rj1mFIupvXDphb9bA2qxXsMdN
-         wo8PrQyisscQM4ExZrEqXGSBwu8S1sJOpkEliHcOJDs7WgMNXGvIh0TLGGL6ct37rv9A
-         /4p7bgWqW96owCPilLAIvEmUwyLziDCWo+UROaii50rBWV2ho31/PJPoT/zd1QYOkNgx
-         AVqQ==
-X-Gm-Message-State: AOJu0Yy7LgDfCv7e0ws6K0Z71CdAsnUYhi9UvYbDkyzzOH1HljMmLtgA
-	L65+FjNvT2ExM09YUHZN1sYEiPBI4BGHQOuj
-X-Google-Smtp-Source: AGHT+IFcA7xyUDz9n42qeoOf1u91/MCpHmVwBipXdbaYHcYln8jCox0nv+dHGONFiwFiw+MypG7f6w==
-X-Received: by 2002:a05:6000:1ac7:b0:32d:a213:4d7d with SMTP id i7-20020a0560001ac700b0032da2134d7dmr24521297wry.56.1699254184010;
-        Sun, 05 Nov 2023 23:03:04 -0800 (PST)
-Received: from ping (dynamic-2a01-0c23-6413-4b00-4825-3d85-08ce-2b8a.c23.pool.telefonica.de. [2a01:c23:6413:4b00:4825:3d85:8ce:2b8a])
-        by smtp.gmail.com with ESMTPSA id h2-20020a5d4fc2000000b00323287186aasm8589118wrw.32.2023.11.05.23.03.03
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Nov 2023 23:03:03 -0800 (PST)
-Date: Mon, 6 Nov 2023 08:03:02 +0100
-From: Fabian Melzow <fabian.melzow@gmail.com>
-To: linux-usb@vger.kernel.org
-Subject: Re: 0bda:b812 USB "3.0" WLAN devices only report a maximum of 480
- Mbps
-Message-ID: <20231106080024.197ffdd2@ping>
-In-Reply-To: <61fb4593-c24d-4891-8d44-e2ef819af57d@rowland.harvard.edu>
-References: <20231105130215.2b669c8b@ping>
- <2023110540-unseemly-mobilize-9e82@gregkh>
- <20231105134909.6c3f28d1@ping>
- <2023110534-fester-schematic-818a@gregkh>
- <20231105143051.2b28c316@ping>
- <76fc65db-4efe-4da7-a13f-d7a451f836fa@rowland.harvard.edu>
- <20231105163300.3b8df5ad@ping>
- <7738cb40-9ef1-4e8e-8888-b8faadb7ba8a@rowland.harvard.edu>
- <20231105210616.79fea846@ping>
- <61fb4593-c24d-4891-8d44-e2ef819af57d@rowland.harvard.edu>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1EF23C0F
+	for <linux-usb@vger.kernel.org>; Mon,  6 Nov 2023 08:20:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19772C433C7;
+	Mon,  6 Nov 2023 08:20:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1699258804;
+	bh=nPH/BnrNNKYu+SnYLgUUWF6lghiewNMl8ubSLajK9IM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lZIQMuJv3NM7DJO00UHZQll5WzsWNG2Gg4AjU1lM3QElF+mcuSYkt4W6dOkvN8AN9
+	 r0x1iiDHpbuF26CFVKL6sq3G41WlTzyCgOWF9g2hp2l0k+sbbzd7sYgyBNDhXltvOv
+	 EFPVGOlKSc8I05cEM6kAGZoX4hh6D6+92WkGUcOdwOnX9oXh6autCiM55zflO/6Yvi
+	 6wjvOIHtVV609AD+hO3KrD+Gx6SdB1m5bx4CeOOUrmzkUt+dW1lKNWlsCrJxYAV/2p
+	 ffPhrv1udeFM425zU0tG5gcJ05EgzST4v29c1WhdL2/3edgP6/dKEj5YWdGi6N6onB
+	 DfDMNVBG56DLQ==
+Received: from johan by xi.lan with local (Exim 4.96)
+	(envelope-from <johan@kernel.org>)
+	id 1qzuqm-0006gp-2p;
+	Mon, 06 Nov 2023 09:20:48 +0100
+Date: Mon, 6 Nov 2023 09:20:48 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Stefan Eichenberger <stefan.eichenberger@toradex.com>
+Cc: Francesco Dolcini <francesco@dolcini.it>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Felipe Balbi <balbi@ti.com>, Kishon Vijay Abraham I <kishon@ti.com>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	Francesco Dolcini <francesco.dolcini@toradex.com>
+Subject: Re: [PATCH v1] USB: dwc3: only call usb_phy_set_suspend in
+ suspend/resume
+Message-ID: <ZUih4BJLkslLIMx5@hovoldconsulting.com>
+References: <20231103102236.13656-1-francesco@dolcini.it>
+ <ZUUkqeKFZmsubxu5@hovoldconsulting.com>
+ <GV0P278MB0589921FFF5487D2F94D3FF2E8A4A@GV0P278MB0589.CHEP278.PROD.OUTLOOK.COM>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <GV0P278MB0589921FFF5487D2F94D3FF2E8A4A@GV0P278MB0589.CHEP278.PROD.OUTLOOK.COM>
 
-Am Sun, 5 Nov 2023 21:10:47 -0500
-schrieb Alan Stern <stern@rowland.harvard.edu>:
+On Sat, Nov 04, 2023 at 11:51:22AM +0000, Stefan Eichenberger wrote:
+> > From: Johan Hovold <johan@kernel.org>
 
-> On Sun, Nov 05, 2023 at 09:06:16PM +0100, Fabian Melzow wrote:
-> > Am Sun, 5 Nov 2023 14:16:18 -0500
-> > schrieb Alan Stern <stern@rowland.harvard.edu>:
-> >   
-> > > Have you tried plugging the device into a system running a
-> > > different OS (Windows or MacOS-X)?  Or even a different Linux
-> > > system?  
+> > When reviewing the driver I did find a bug in the xhci-plat driver which
+> > is likely the cause for the imbalance you're seeing. I just sent a fix
+> > here in case you want to give it a try:
 > > 
-> > Yes, I also made a short test with the lsusb of an old Debian 11
-> > Live-DVD. I got these devices for testing from the Amazon Vine
-> > program and after the third Monday-Hardware WLAN-device with the
-> > same problem I thought I should report this problem, to maybe help
-> > real users.  
+> >         https://lore.kernel.org/lkml/20231103164323.14294-1-johan+linaro@kernel.org/
 > 
-> A test with Windows might be more informative, if you can manage to
-> do one.  Perhaps the Windows driver knows how to configure the device
-> to run at higher speed.
->
-> Also, curiously enough, when I did a web search for reports of
-> problems with this chip, the vast majority of messages were about it
-> not working with Linux at all because Debian/Ubuntu did not include
-> sufficiently up-to-date drivers.  People had to download driver
-> source code from a github project and build and install it for
-> themselves in order to get the device to function.  They didn't
-> mention what speed it used on the USB bus.
+> I tested it and it solves the issue we have. Thanks a lot for the fix!
+> Before the use count for our regulator always went up to 2 and now it is
+> 1 as expected.
+> root@verdin-imx8mp-14773241:~# cat /sys/kernel/debug/regulator/CTRL_SLEEP_MOCI#/use_count
+> 1
+> 
+> Also when going to suspend the regulator is turned off now. With the
+> suspend patch applied from us the use count will be one more but
+> everything still works as expected.
 
-The Linux rtw88 driver is maintained by Realtek and, if my searching is
-right, first appeared in Linux 5.18, so it's a newer one. I could
-trigger an Oops, which I also reported yesterday. According to
-the Debian backport https://github.com/lwfinger/rtw88 some versions of
-the chipset are still unsupported. 
+Thanks for testing.
 
-The rwt8822bu driver has also a non-USB version rwt8822b, so the chip
-for the USB support can also be separate from the main chip, but until
-now don't want to destroy one of the plastic cases.
+> > But, also, why are you using legacy PHYs? Which platform is this for?
+> 
+> We have an external hub that we want to turn off when the system goes
+> into suspend. For the i.MX8MM we use the phy-generic driver to achieve
+> this. When I saw that the dwc3 driver would support the phy-generic via
+> usb-phy, I thought we could use the same approach for the i.MX8MP and,
+> in the future, the AM62. Maybe I misunderstood, would the right solution
+> be to add a suspend function to the fsl,imx8mp-usb-phy driver and use
+> vbus instead? But what would we do for the AM62, as it doesn't have a
+> phy driver if I'm not mistaken.
 
-Fabian Melzow
+That's not how the phy driver is supposed be used, and for on-board hubs
+we now have:
+
+	drivers/usb/misc/onboard_usb_hub.c
+
+Have you tried using that one instead?
+
+Johan
 
