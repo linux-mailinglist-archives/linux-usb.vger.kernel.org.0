@@ -1,71 +1,74 @@
-Return-Path: <linux-usb+bounces-2589-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2590-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32B9C7E28D2
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Nov 2023 16:35:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 74C017E28DC
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Nov 2023 16:38:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D7C48281279
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Nov 2023 15:35:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 29E7128136D
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Nov 2023 15:38:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88EED28E1D;
-	Mon,  6 Nov 2023 15:35:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1169A28E24;
+	Mon,  6 Nov 2023 15:38:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="K6JU2LWY"
+	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="WTROihwv"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6239728E0F
-	for <linux-usb@vger.kernel.org>; Mon,  6 Nov 2023 15:35:14 +0000 (UTC)
-Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2088.outbound.protection.outlook.com [40.107.105.88])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DBC7DB;
-	Mon,  6 Nov 2023 07:35:12 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F02B928E1D
+	for <linux-usb@vger.kernel.org>; Mon,  6 Nov 2023 15:38:36 +0000 (UTC)
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2074.outbound.protection.outlook.com [40.107.21.74])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40E24FA;
+	Mon,  6 Nov 2023 07:38:35 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nJ9XOcdpXmlq/39TmV6lxSDuRx4KRMyLPxYrJL78RD904pRULHiOX7JnlPgM0TmxgKKZvnJPiGrrUwiq/UuDWxC9JBnQX59odeLxwpmVKmNWDZZoz2jfKpnqe0zKT8QnTH8eKT1ZGSxxomSCZtKHDfKbvPPUJCCBAYmL9u3l/PguVs5a/opKzY6ua2z5OnN+l0dPaG9CbscRwmkrt7roP0aYGiqbdkeItRoleJBMrbindujo/299C3Brk/iL40NRPyKXai+v6bgpnM8R50VsevY2n3xDJRVUT4/e2k6ks3xcYtM8LEBzAPO2jF8xm8qcdv4FNSikyeBqB3Z0DWFO9A==
+ b=MpDFRaP1AhKoh2qT3Q01aETblVgS+LY1HsMaL0qc/zWguJax8vvjSTW/Ci1x4j+XNH3DKft8LALD1rBB8TOYccJjPU3aKZ376F7gZKV1rlB/h+SQJRk1gud/T6S82tiUKRu5hZdkkrosJOPO8toUFd2HZjx2DwLJYXGIPfOXa3DvojLtZLqdVUoG9Kj29CIRDhwf2tY95MDCMFENGHBkoQM671OVeX2Dquv27UB3oNtt5RFWAKIiZyVYIi08BMkckkC5spPiTGi2Y1OC83RUBmibLqNUV+fdmtRVFf6xzJOzmbMXNGTcvRhEv9tFcbNgETF22uwOCSSXPTc35a33GQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Vp889dFH/3ILxFvFd+Wf2bwzyznNr11RlwMvCD4M+Rg=;
- b=VATwBCcSPacRrEQzqFDJtgliTfcB8fB4M//gwicfOPqu3FY8EWrl563qNL+1EyiaJ6uzxacXxoMKb+lYPqjEMZHAoBuCXDv7uoLXMZoH3e6joabl7y4spAc2H0+f8rFogmgXFUCcYj6nzOhAxy7dZWUc5czfnKdZ2TvUV28X3vQwUj5un2zsEeWbzcdBgz5UiE1dLdkUFZRSZMqxSjXZtuLEvEvPRm1GypYg8E2xXWdeXmplthCLBBqBLaiB59io7Le4Ii69Pkw0fHXvrRWukNT5Pk8cPZW20wE55Oya7I7A7bIApk5qnzsNijAup+3iN3ejHIx9YUyQ4rTd2qjvAQ==
+ bh=9Bj29JVZ2zmud50YwC3rk8EnqusnfP1hWSP2iFx5EmM=;
+ b=XJMjKSVtMCH3Erw5Ba8wu12hpUwggQpl63pyFzC2uw45vsr0arYPCVL5Rn7rchxwu91N9O/F6S9145FMUgdyxO2UsuiGtnsm0CuIh6uw1nCk9v6V96RAeRhvilQ0sSnzFcak4z2h5CGmz54h2eyjLm8sOPbgDsxHURnwHgfPY1Hr8rd5gBHIQzi3YkyX+jpJrPD/P5WyPhZgy74NwsosNMHkD8aqPrtJ4Lev/AZFIQKQPzAHWhJm5rcJqIiGyP7SPtRDvAD2bhSQIrxptdIDB6prkp7YgwTSwo1Nd/qyBbdAtB7Qmxiwmos+mHCn6+kIXS9yH5RSgp3QyhyrpuQOww==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Vp889dFH/3ILxFvFd+Wf2bwzyznNr11RlwMvCD4M+Rg=;
- b=K6JU2LWYTV5EeeVbJkI4XzgkWW4PKlNmYdIYhs1o+8TYUGlHRq2jp1JC00dhd44YjvaPoLuiFUTT+lKEUiBaxW8yrifpJ9PTTlpj8D7O7vG/NNwUH3icTjHdxfjMwGCoFcq/rjqFYIu5/6nexJyVQ/HBIKyCDycVLxpsa9V5jhc=
+ bh=9Bj29JVZ2zmud50YwC3rk8EnqusnfP1hWSP2iFx5EmM=;
+ b=WTROihwvvGt6jRQ0l5f1nfbHWtMquDhFzFwv4UvM1sFQmcXXlFYatWLSWGbAi5PZ93MukSdAsEfbB2qJAltnKTAaSSXQTx3HgLovonSOw0ht8XBuvXp80l8VgXf105Y7oVib+CZsIMrvvP586nCqGmbEDMQHjvzQu5+G1bbiDCo=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from AM6PR04MB4838.eurprd04.prod.outlook.com (2603:10a6:20b:4::16)
- by AS8PR04MB8915.eurprd04.prod.outlook.com (2603:10a6:20b:42e::20) with
+ by AS8PR04MB8513.eurprd04.prod.outlook.com (2603:10a6:20b:340::8) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6977.16; Mon, 6 Nov
- 2023 15:35:09 +0000
+ 2023 15:38:32 +0000
 Received: from AM6PR04MB4838.eurprd04.prod.outlook.com
  ([fe80::2635:52a:c866:2576]) by AM6PR04MB4838.eurprd04.prod.outlook.com
  ([fe80::2635:52a:c866:2576%6]) with mapi id 15.20.6977.013; Mon, 6 Nov 2023
- 15:35:09 +0000
-From: Frank Li <Frank.Li@nxp.com>
-To: Peter Chen <peter.chen@kernel.org>,
-	Pawel Laszczak <pawell@cadence.com>,
-	Roger Quadros <rogerq@kernel.org>,
-	Aswath Govindraju <a-govindraju@ti.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Felipe Balbi <felipe.balbi@linux.intel.com>,
-	linux-usb@vger.kernel.org (open list:CADENCE USB3 DRD IP DRIVER),
-	linux-kernel@vger.kernel.org (open list)
-Cc: imx@lists.linux.dev
-Subject: [PATCH 1/1] usb: cdns3: fix uvc failure work since sg support enabled
-Date: Mon,  6 Nov 2023 10:34:52 -0500
-Message-Id: <20231106153452.2397035-1-Frank.Li@nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR03CA0369.namprd03.prod.outlook.com
- (2603:10b6:a03:3a1::14) To AM6PR04MB4838.eurprd04.prod.outlook.com
+ 15:38:32 +0000
+Date: Mon, 6 Nov 2023 10:38:24 -0500
+From: Frank Li <Frank.li@nxp.com>
+To: Pawel Laszczak <pawell@cadence.com>
+Cc: "peter.chen@kernel.org" <peter.chen@kernel.org>,
+	"rogerq@kernel.org" <rogerq@kernel.org>,
+	"a-govindraju@ti.com" <a-govindraju@ti.com>,
+	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"imx@lists.linux.dev" <imx@lists.linux.dev>
+Subject: Re: cdns3 uvc first ISO parkage lost problem
+Message-ID: <ZUkIcCAdDQS0n8A5@lizhi-Precision-Tower-5810>
+References: <ZTvhEl+JcnhJXcrl@lizhi-Precision-Tower-5810>
+ <BYAPR07MB5381F7224612F0C0793B6B29DDA1A@BYAPR07MB5381.namprd07.prod.outlook.com>
+ <ZT/XkhOvbucxA90V@lizhi-Precision-Tower-5810>
+ <BYAPR07MB538112FE4150BC19696D7613DDAAA@BYAPR07MB5381.namprd07.prod.outlook.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BYAPR07MB538112FE4150BC19696D7613DDAAA@BYAPR07MB5381.namprd07.prod.outlook.com>
+X-ClientProxiedBy: BYAPR08CA0065.namprd08.prod.outlook.com
+ (2603:10b6:a03:117::42) To AM6PR04MB4838.eurprd04.prod.outlook.com
  (2603:10a6:20b:4::16)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -74,203 +77,240 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM6PR04MB4838:EE_|AS8PR04MB8915:EE_
-X-MS-Office365-Filtering-Correlation-Id: e1e4f8a4-7e03-4771-a2dc-08dbdeddf594
+X-MS-TrafficTypeDiagnostic: AM6PR04MB4838:EE_|AS8PR04MB8513:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9c844697-9477-4bdd-2d7e-08dbdede6e83
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	am/p1SwjM2ZYpAWrIV0pVsxr9UdG9tAtlGbyr8HIj0TOJaEdq9WueQ7ZyuK7oV0GBL00xY6DGNrQdkIEz5crJFQ7ZrW5/oP9LxjaZ1kpxpEn5aJs0aVbimMUVL7wMzWNkIvhbQ1vqyHxMVuitJUfq3vwGHC4Nts1mC9GMlSTsNDBY6qTL3YKOkubIZ/mMk4ZHc9vycbTM0tdPUZZ+wIS9oIk1JfQgfpkjOlypmHL+Kd8trsqYuAvMJ8H2NgPpbfICcP+WcgZ1tJN1icIYiRyY+UdM3gHsDzT/OTkFUsClUKY3IESLqlIZHCjLYCvA9OTnZO/eYMzYUcRDyfIiWgTq1XVUsSbH3R4lWAAuncg64IiUutkqd1o2IUULQSY3x9VFYRNCcFTsFbugrbr6R+kgsphi43rMvdvcSBMKeu7gRrCEEwvHOzh156bsR3jYDAJLuR2ayjMafD69SWR2jm0tNW8Zr3TOXcYRxwDk9Tb3sIMI7EzwcJ4hvpkRJlWvTu6NPWh1stDDtaQqi9LbgIEe2pvPGoJczQ6v6cpgFgoZuPzgZvorKm+gNeD/ih5Cf4CW+iFl0siTHcZ8LA7gXeAU5Jhb76e64zVD115f0zYArU=
+	vqAw2zwB/7lfTmMHE/mUlc8NnqU7qB6i6+xeAKm8Fz1DvfG/9RvN18wn+jVVcHRlkF4T58rFSw9rzlgP9+dUycwRTUUrcPru3lvWQf4IVqmB2EsjxCTz2UIZVfqqQD5xw/PGsKxmqj+Uv0Yrxx+or+DrqH0+VPoYws6a4oFgpuMKzzWlMD/KSMwKoOGun/yXwqQKwR06n9EWW2+WgtM7LoiLvSZmzWmIlxAV2bKXHwL0hHknxD/4xDsGG3pO2vEoyw6HHBVYrT0rDl9PqtSZMZixXZB38RlGzEAVAbiE2/hx36G9NVxw1X13JbGc3RQ+Rj+rXRNxWP/57lFJ/6BfkAQPRmH+Fzg/Ckkmi9lNZu/EkNvDe4+Dsbiy3oWTdIu7ND9Km8t2KoNCdY0jxTlMKaWMatkfZX+LWzSz0xmYZyeahpCGwQzrx2rVvuxHqlSJ4o00cs4ZskgdYY8ub0I+dngw1HT3LCHTVYB0GX/BhP0lSGCeC0JPoegYF6gGDEV76C15msuPrB9jyyzDlF/I5hQnNhjNT+MIk8RSrJXmKlvPW5s2JN6Wm1QONfXezjqtI4O5jOhmadjNZf/iQT3wp3y7i4yfvZx0bV5u4WcpCsA=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4838.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(376002)(136003)(346002)(39860400002)(366004)(230922051799003)(1800799009)(186009)(64100799003)(451199024)(41300700001)(1076003)(26005)(52116002)(6506007)(6666004)(2616005)(6512007)(8936002)(83380400001)(4326008)(8676002)(5660300002)(2906002)(6486002)(966005)(478600001)(66946007)(66556008)(316002)(110136005)(66476007)(38350700005)(38100700002)(36756003)(86362001);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4838.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(396003)(136003)(376002)(366004)(346002)(39860400002)(230922051799003)(1800799009)(64100799003)(451199024)(186009)(86362001)(38100700002)(5660300002)(41300700001)(2906002)(38350700005)(33716001)(478600001)(83380400001)(52116002)(9686003)(6512007)(66946007)(26005)(66556008)(316002)(6916009)(54906003)(66476007)(966005)(6486002)(6666004)(6506007)(45080400002)(4326008)(8936002)(8676002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?M1i/Ocl62XH2EdvqKZNCSsiUh4OoJNvWgMCEjZoKfHN5MbYeSy0beUzKdkwj?=
- =?us-ascii?Q?qEnUwqk6coZVE7v05cFnJI7BKznFAezlliEvlJwEnSZI63KDhiA4LRbnZdFS?=
- =?us-ascii?Q?f59Aj5Y33vF4nbd8NnhIFMgwgwnoI8aOc783sXAFmMYJWQSy6LsisoQpE4Lj?=
- =?us-ascii?Q?KPhv5hlkjyFX8RW0cbkWkjFdXfN2AGP6Z/KLt8NTA6LTdyaE+0ZtM5eJFOUW?=
- =?us-ascii?Q?QyPkQDfAh8SU39AJvAjde7lZXnsivw2/xgUukrNCd0WBnVoELvPG1//jmZs/?=
- =?us-ascii?Q?vsqZebuFdU/Rq32Sb3C2wOF6ZsO+nEhX5HCiBe9kermeA+Gdi3/HnOj7vkBn?=
- =?us-ascii?Q?2w1tb5c1qpBaV7lsGBSOSp+ojftwGl6HkzOCA6PEK7hd5zqi6N/H4mVp+yEN?=
- =?us-ascii?Q?Dam1KdqumLHyzyxBT9CZgbqsmWkWArqXaooAu+qzAOYWF/ku/+Hq9RYdBfR4?=
- =?us-ascii?Q?vRYRMQCDKXG0gNRDm1XjFsrCGS8Z5ZksfyC097/9jcfqC/f+Kv41v/eqjfS+?=
- =?us-ascii?Q?+kZ+rUGJlCVeXkCnYKjT4GtF6iqWjvuP4XNh0XRl4x70i+NCgcj3p+IvTPyK?=
- =?us-ascii?Q?PvytLTOI9NwPzbdxzokb04gG7cNKoMmYulTW+xLEkK6pbmjJH9wLXOHd7ANj?=
- =?us-ascii?Q?Ny0f82o5t+cAswrKDBLnZoZKUJcAxZqp66LadY592H/SlQvYh8RDrZcAiI5H?=
- =?us-ascii?Q?4LFpG14GexJ3PUPObCJMbclNJ6tSfJAnf41TlVSHFql8jcpjd7xk1w7mB0u8?=
- =?us-ascii?Q?V86DpjDYjVH7fbesNmLaFnce1j02IHzTnTdHn5FFPsyrSDI/GOzrqq5bTaVO?=
- =?us-ascii?Q?xgIEbnmguiU+jmCLfkA2HX8wctZzuPIyTvGJnIT1H9g2Hh5vTj7PuLhuXysM?=
- =?us-ascii?Q?/H1ny4ORKDUd6H7nV+RmPquHJQRerpwvy3tgfC8AW8In+j7+LDB29z+n1q9o?=
- =?us-ascii?Q?Tzk4KVUpX2e7ze3ooaIEATwIMJWI7+N5PpygzHk83qepcVdy1ahWlEBRYhBQ?=
- =?us-ascii?Q?odmO2wDJDu/9gmfulRQS/BsOA3aKb6p02jvD1yoJq3z5LAox3DC8xxQc07gO?=
- =?us-ascii?Q?bWziLufWBPwaGAI7+Yjkd/mWbWHIZnYhnkjY9esDoN0RSeYl3s/QpupCb+iO?=
- =?us-ascii?Q?uImF/qksZofN/5gd6fqFEkfE+8zPUAWrRA8qJsaTaKlh3kwRjtgHLOPLBdnS?=
- =?us-ascii?Q?9OnG866bHrCB9PC+8bAojAom/GuTAu3mA5yLfBymFznj461UhNdpPIp3DWTD?=
- =?us-ascii?Q?1/fwAXwSRPWkZ0PBSmhg5V+YzMc2LvIw6sbVS+K6XB13NWP0gItmomq2tymF?=
- =?us-ascii?Q?V7/7YIYZdMR/rqPwOB9KavjFJQR3zS0oXtzwXuCcm3+cwUBim+80o8/oZ9NL?=
- =?us-ascii?Q?T3ot9qrwCUS8aOYktTT/mRjGz29O+KrJXyQXK6KBOXVLdIFwuby+x4TPiR93?=
- =?us-ascii?Q?mK52rd4DlbNn+B3fyAznl8ELm/A6dGVBhQNl9ZkWIi6mkxdjejmdwk/xySUT?=
- =?us-ascii?Q?POPy8Vq2kriCjlEX6i2s6pnOG4Qf7SBgW0GcY5r281VjgrMhGUYZAMmTUOjc?=
- =?us-ascii?Q?s4UXRA9JjClknncWxdGKEXDsdhYDygdBSaT9/Ppw?=
+	=?us-ascii?Q?Entdm5YBa7naOmzIdolxvpFPrFZEyM8TJPR1E7ME+DbqlwVU+zEmLM/qClMc?=
+ =?us-ascii?Q?Wc6Qtb4sJ3lPOhfSiepqb9D84iDnUik/u7LJd+chQf8ZVJGkXwxXLl7zkeiT?=
+ =?us-ascii?Q?UK8ilT7DQ9+/T9COLfNLrMZHtFAs7COi02TNnzJtLpag4Zs8+8CMrEh91pOd?=
+ =?us-ascii?Q?25DhC3E3zMWTS7esOhOWYPQbstQ4LSY6bJ4Rlf3eSzU50oMk3ejxq+E6ixen?=
+ =?us-ascii?Q?UJxOuDGleQbx/z5mh2skS3uk6wBVfmHRbrHW58X3AVN6XaENlBAVyFLc7pNU?=
+ =?us-ascii?Q?hW9+n/rV9zFvWCEORfdHXIEIsRCuLztZ/RUhlMcz8gIRUvtrXSmUnt0bCMen?=
+ =?us-ascii?Q?qhptyNEzJ3U///NyS4wPaglgMp+zSB01AOog8MQ4J/2v2N61BzkjY7f885WF?=
+ =?us-ascii?Q?wO3bU/hQWABBLIofeDz4paICfmUl3qtYjjxbQNp8WIGYs5E//32BbVRRACBy?=
+ =?us-ascii?Q?4C1bVgnv7Zke6FyCPusw7b7iTQ3j0uQeiE7zSOEeN0uQKyC1IN5P5qhcdtDD?=
+ =?us-ascii?Q?HHcnyDAap2POTkOG6KaE6o5+JWpv9OqA3TgCb+sIzUVtmUed1xb2gXaPklU0?=
+ =?us-ascii?Q?InAxHd6Kenf1aY2Z31aZodLXY2GjUpBlm+pxmYGRNdjyE67Jdw5mTNRpplW2?=
+ =?us-ascii?Q?ot7aJSXJuF3v8ngrkyrVX5zbSWANusN0a5jOUZyNYAL9b2vCT+yfEopSfUm/?=
+ =?us-ascii?Q?A5dywIhJPKJkD9j/3fnI9aBWowS8HhLTFWvREgLad6BpyP7RYn4aIuT4aPlq?=
+ =?us-ascii?Q?R64T7w+dZoVYJuRuzXdZJF3DHOVkkXEncb85OtTWu23HwqsdJpVPjJNykGsc?=
+ =?us-ascii?Q?sS6llpix6ym6gzQ9eCaZu1IC5dvAI5gvgMOCbB9kR049/PaJWKxrFXqZLqGv?=
+ =?us-ascii?Q?nnnN5J8RocAtRJ5p9AKqXfTS5G+8Jz0BiV1TJPyUtuherqrYYLSw63q3F1rD?=
+ =?us-ascii?Q?pfGS6fiXLtKa5xyjW3F3sIU2a7d/yetlRXsUqxapukVckrWVjp/EeyP63Hin?=
+ =?us-ascii?Q?fwj8GK4kJIOh6H9FaBbMPj9XOUFIcLa4YOdjl+Kvx+9tU5gw0ZAzmGS9YTXa?=
+ =?us-ascii?Q?ozg5Z3t6GR34UscdNVrEUeDs4XM9im813rUruXLpwXLkeZLuvOoZGw4tztpq?=
+ =?us-ascii?Q?wl3PWmlQqBo+TbTgZx3nvSspLpmC6yTcLoJCmdEhmGYl7sOqYYqmDpoDT7Pa?=
+ =?us-ascii?Q?y2hpbWhDoYuSZu0r6c3kqEay8mPxqXFvSvyE5UkIYNZFcgTPfYV105w7DPcB?=
+ =?us-ascii?Q?kljamf8hb8FdTPSPxgyHVRWtmjodk60woClpsGTh91iHVoaoOZWnuT76b3OT?=
+ =?us-ascii?Q?XUl0DOtWSXS3JYiGmiL2u70cDOT0j9nJaMry6IbHeCUwkeuKE6nsTb8SlOw8?=
+ =?us-ascii?Q?OqsACJYxCgga7+jIAbSO9B9SDLHE084Ewx/N/jW9dmtmwdWeOHpOgoTBcxL/?=
+ =?us-ascii?Q?3pKqJHxJBORF++PmqKVRTns+oDDsKayNs9RZmyA4TCot0S+Am1nlkI4xFBaU?=
+ =?us-ascii?Q?fOpWzTQqKVCe5JxezhSeyTAoRMO/ZlOGc/pfIVhIb84hly9it6hnkp0/5JDQ?=
+ =?us-ascii?Q?0rc8uqFjRkAeo5MWtbw=3D?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e1e4f8a4-7e03-4771-a2dc-08dbdeddf594
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9c844697-9477-4bdd-2d7e-08dbdede6e83
 X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4838.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Nov 2023 15:35:09.4604
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Nov 2023 15:38:32.3003
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bcj4ErNxN3tPl74+rJRb1R79/cP8jXf2O5q8DSMufsu3aonTInr6fNMLywwRV0vpW4CqaceHV0G35mukRxRZoQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8915
+X-MS-Exchange-CrossTenant-UserPrincipalName: RQPS3BNqQq+La8jXiu3vpXLLdYA5RZuSp6fkXi9BLHjBmn3vV3JW345wsnWTki686nykzPyDFLzYhbGYnHWtcg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8513
 
-When IP version >= DEV_VER_V2, gadget:sg_supported is true. So uvc gadget
-function driver will use sg to equeue data, first is 8bytes header, the
-second is 1016bytes data.
+On Mon, Nov 06, 2023 at 11:12:10AM +0000, Pawel Laszczak wrote:
+> >
+> >On Mon, Oct 30, 2023 at 06:34:48AM +0000, Pawel Laszczak wrote:
+> >>
+> >> >
+> >> >hi Pawel Laszczak
+> >> >
+> >> >Recently, I met the problem when use uvc. UVC report jpg header error.
+> >> >
+> >> >Basic reproduce steps.
+> >> >Gadget side:
+> >> >1 -
+> >> >	https://urldefense.com/v3/__https://gist.github.com/kbingham/c39c
+> >>
+> >>4cc7c20882a104c08df5206e2f9f?permalink_comment_id=3270713__;!!EHsc
+> >m
+> >>
+> >>S1ygiU1lA!H1h8GlLnbS6vqklXm_2qGyinP638O62Kk2eLB9zeMkjAGXUAPYyPXD
+> >L
+> >> >FasSqYt16xq0RGT0Ff-cP4A$
+> >> >	uvc-gadget.sh start
+> >> >2 -
+> >> >	https://urldefense.com/v3/__https://git.ideasonboard.org/uvc-
+> >>
+> >>gadget.git__;!!EHscmS1ygiU1lA!H1h8GlLnbS6vqklXm_2qGyinP638O62Kk2eLB
+> >9z
+> >> >eMkjAGXUAPYyPXDLFasSqYt16xq0RGT1ogOdRQA$
+> >> >	uvc-gadget -i test.jpg
+> >> >
+> >> >
+> >> >Host side:
+> >> >	https://urldefense.com/v3/__https://github.com/thekvs/uvccapture2
+> >>
+> >>__;!!EHscmS1ygiU1lA!H1h8GlLnbS6vqklXm_2qGyinP638O62Kk2eLB9zeMkjAG
+> >X
+> >> >UAPYyPXDLFasSqYt16xq0RGT1MNlKiXA$
+> >> >	uvccapture2 --device /dev/video0  --resolution 640x360 --count 1 --
+> >> >result 8qxp.jpeg
+> >> >
+> >> >	It will report jpeg header error.
+> >> >
+> >> >
+> >> >After debugs, I found two problem.
+> >> >
+> >> >Problem 1, sg is enabled. so uvc driver will use sg. each package
+> >> >include two trb,  trb0 is 8bytes header, trb1 is 1016bytes. total 1024.
+> >> >
+> >> >num_trb here is wrong.
+> >> >it should be
+> >> >	num_trb = priv_ep->interval * request->num_mapped_sgs.
+> >> >
+> >> >because priv_ep->interval is 1, I just simple set to
+> >> >request->num_mapped_sg as below patch. USB analyer show one whole
+> >> >1024 ISO package sent out as expectation although document said only
+> >> >support one TD when use ISO (Maybe my doc is too old).
+> >>
+> >> Support for sg  in uvc has been added after upstreaming this driver,
+> >> so the driver needs some improvement.
+> >>
+> >> Calculating of num_trb probably will more complicated change.
+> >>
+> >> You can see how it is implemented in
+> >>
+> >https://urldefense.com/v3/__https://elixir.bootlin.com/linux/latest/source/d
+> >rivers/usb/gadget/udc/cdns2/cdns2-
+> >gadget.c*L412__;Iw!!EHscmS1ygiU1lA!EZS2StTKnSzdCT7N5B1-
+> >l8nGXQgS63KwgcGINcpBC8rnRJu2u8ryV1UjwQb6YfwYLPq9T_115KC5qQ$ .
+> >>
+> >> CDNS2 is different controller and support only HS but has borrowed the
+> >DMA part from CDNS3.
+> >> It was upsteamed after adding sg to UVC.
+> >>
+> >> Regarding TD, it is true that controller can support only one TD per
+> >> SOF but this TD can contain many TRBs
+> >
+> >Okay, great. I can work a patch if I can resolve problem 2.
+> 
+> At this moment I don't know how to resolve the problem 2.
+> I'm going to recreate this case on my side and try to find some solution.
+> 
+> Pawel 
 
-    cdns3_prepare_trb: ep2in: trb 0000000000ac755f, dma buf: 0xbf455000, size: 8, burst: 128 ctrl: 0x00000415 (C=1, T=0, ISP, CHAIN, Normal)
-    cdns3_prepare_trb: ep2in: trb 00000000a574e693, dma buf: 0xc0200fe0, size: 1016, burst: 128 ctrl: 0x00000405 (C=1, T=0, ISP, Normal)
+I post a sg ISO fix patch, in case you need it.
+https://lore.kernel.org/imx/BYAPR07MB538112FE4150BC19696D7613DDAAA@BYAPR07MB5381.namprd07.prod.outlook.com/#R
 
-But cdns3_ep_run_transfer() can't correctly handle this case, which only
-support one TRB for ISO transfer.
+It fixed my case. but android looks like still issue. Recently quite busy.
 
-The controller requires duplicate the TD for each SOF if priv_ep->interval
-is not 1. DMA will read data from DDR to internal FIFO when get SOF. Send
-data to bus when receive IN token. DMA always refill FIFO when get SOF
-regardless host send IN token or not. If host send IN token later, some
-frames data will be lost.
+Frank Li
 
-Fixed it by below major steps:
-
-1. Calculate numembers of TRB base on sg_nums and priv_ep->interval.
-2. Remove CHAIN flags for each end TRB of TD when duplicate TD.
-3. The controller requires LINK TRB must be first TRB of TD. When check
-there are not enough TRBs lefts, just fill LINK TRB for left TRBs.
-
-.... CHAIN_TRB DATA_TRB, CHAIN_TRB DATA_TRB,  LINK_TRB ... LINK_TRB
-                                                           ^End of TRB List
-
-Fixes: 7733f6c32e36f ("usb: cdns3: Add Cadence USB3 DRD Driver")
-Signed-off-by: Frank Li <Frank.Li@nxp.com>
----
-
-This patch is depend on https://lore.kernel.org/imx/20231031084521.GA1948529@nchen-desktop/T/#t
-
- drivers/usb/cdns3/cdns3-gadget.c | 51 +++++++++++++++++++++++++-------
- 1 file changed, 40 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
-index cd08897f8da8..23580ec33202 100644
---- a/drivers/usb/cdns3/cdns3-gadget.c
-+++ b/drivers/usb/cdns3/cdns3-gadget.c
-@@ -1117,6 +1117,7 @@ static int cdns3_ep_run_transfer(struct cdns3_endpoint *priv_ep,
- 	dma_addr_t trb_dma;
- 	u32 togle_pcs = 1;
- 	int sg_iter = 0;
-+	int num_trb_req;
- 	int num_trb;
- 	int address;
- 	u32 control;
-@@ -1126,15 +1127,13 @@ static int cdns3_ep_run_transfer(struct cdns3_endpoint *priv_ep,
- 	bool sg_supported = !!(request->num_mapped_sgs);
- 	u32 ioc = request->no_interrupt ? 0 : TRB_IOC;
- 
-+	num_trb_req = sg_supported ? request->num_mapped_sgs : 1;
-+
-+	/* ISO transfer require each SOF have a TD, each TD include some TRBs */
- 	if (priv_ep->type == USB_ENDPOINT_XFER_ISOC)
--		num_trb = priv_ep->interval;
-+		num_trb = priv_ep->interval * num_trb_req;
- 	else
--		num_trb = sg_supported ? request->num_mapped_sgs : 1;
--
--	if (num_trb > priv_ep->free_trbs) {
--		priv_ep->flags |= EP_RING_FULL;
--		return -ENOBUFS;
--	}
-+		num_trb = num_trb_req;
- 
- 	priv_req = to_cdns3_request(request);
- 	address = priv_ep->endpoint.desc->bEndpointAddress;
-@@ -1183,14 +1182,31 @@ static int cdns3_ep_run_transfer(struct cdns3_endpoint *priv_ep,
- 
- 		link_trb->control = cpu_to_le32(((priv_ep->pcs) ? TRB_CYCLE : 0) |
- 				    TRB_TYPE(TRB_LINK) | TRB_TOGGLE | ch_bit);
-+
-+		if (priv_ep->type == USB_ENDPOINT_XFER_ISOC) {
-+			/*
-+			 * ISO require LINK TRB must be first one of TD.
-+			 * Fill LINK TRBs for left trb space to simply software process logic.
-+			 */
-+			while (priv_ep->enqueue) {
-+				*trb = *link_trb;
-+				trace_cdns3_prepare_trb(priv_ep, trb);
-+
-+				cdns3_ep_inc_enq(priv_ep);
-+				trb = priv_ep->trb_pool + priv_ep->enqueue;
-+				priv_req->trb = trb;
-+			}
-+		}
-+	}
-+
-+	if (num_trb > priv_ep->free_trbs) {
-+		priv_ep->flags |= EP_RING_FULL;
-+		return -ENOBUFS;
- 	}
- 
- 	if (priv_dev->dev_ver <= DEV_VER_V2)
- 		togle_pcs = cdns3_wa1_update_guard(priv_ep, trb);
- 
--	if (sg_supported)
--		s = request->sg;
--
- 	/* set incorrect Cycle Bit for first trb*/
- 	control = priv_ep->pcs ? 0 : TRB_CYCLE;
- 	trb->length = 0;
-@@ -1208,6 +1224,9 @@ static int cdns3_ep_run_transfer(struct cdns3_endpoint *priv_ep,
- 	do {
- 		u32 length;
- 
-+		if (!(sg_iter % num_trb_req) && sg_supported)
-+			s = request->sg;
-+
- 		/* fill TRB */
- 		control |= TRB_TYPE(TRB_NORMAL);
- 		if (sg_supported) {
-@@ -1249,7 +1268,7 @@ static int cdns3_ep_run_transfer(struct cdns3_endpoint *priv_ep,
- 		if (sg_supported) {
- 			trb->control |= cpu_to_le32(TRB_ISP);
- 			/* Don't set chain bit for last TRB */
--			if (sg_iter < num_trb - 1)
-+			if ((sg_iter % num_trb_req) < num_trb_req - 1)
- 				trb->control |= cpu_to_le32(TRB_CHAIN);
- 
- 			s = sg_next(s);
-@@ -1507,6 +1526,12 @@ static void cdns3_transfer_completed(struct cdns3_device *priv_dev,
- 
- 		/* The TRB was changed as link TRB, and the request was handled at ep_dequeue */
- 		while (TRB_FIELD_TO_TYPE(le32_to_cpu(trb->control)) == TRB_LINK) {
-+
-+			/* ISO ep_traddr may stop at LINK TRB */
-+			if (priv_ep->dequeue == cdns3_get_dma_pos(priv_dev, priv_ep) &&
-+			    priv_ep->type == USB_ENDPOINT_XFER_ISOC)
-+				break;
-+
- 			trace_cdns3_complete_trb(priv_ep, trb);
- 			cdns3_ep_inc_deq(priv_ep);
- 			trb = priv_ep->trb_pool + priv_ep->dequeue;
-@@ -1539,6 +1564,10 @@ static void cdns3_transfer_completed(struct cdns3_device *priv_dev,
- 			}
- 
- 			if (request_handled) {
-+				/* TRBs are duplicated by priv_ep->interval time for ISO IN */
-+				if (priv_ep->type == USB_ENDPOINT_XFER_ISOC && priv_ep->dir)
-+					request->actual /= priv_ep->interval;
-+
- 				cdns3_gadget_giveback(priv_ep, priv_req, 0);
- 				request_handled = false;
- 				transfer_end = false;
--- 
-2.34.1
-
+> 
+> >
+> >>
+> >> >
+> >> >diff --git a/drivers/usb/cdns3/cdns3-gadget.c
+> >> >b/drivers/usb/cdns3/cdns3- gadget.c index
+> >> >69a44bd7e5d02..8cc99a885883f 100644
+> >> >--- a/drivers/usb/cdns3/cdns3-gadget.c
+> >> >+++ b/drivers/usb/cdns3/cdns3-gadget.c
+> >> >@@ -1125,10 +1125,7 @@ static int cdns3_ep_run_transfer(struct
+> >> >cdns3_endpoint *priv_ep,
+> >> >        struct scatterlist *s = NULL;
+> >> >        bool sg_supported = !!(request->num_mapped_sgs);
+> >> >
+> >> >-       if (priv_ep->type == USB_ENDPOINT_XFER_ISOC)
+> >> >-               num_trb = priv_ep->interval;
+> >> >-       else
+> >> >-               num_trb = sg_supported ? request->num_mapped_sgs : 1;
+> >> >+       num_trb = sg_supported ? request->num_mapped_sgs : 1;
+> >> >
+> >> >        if (num_trb > priv_ep->free_trbs) {
+> >> >                priv_ep->flags |= EP_RING_FULL;
+> >> >
+> >> >
+> >> >*** Problem 2 ***
+> >> >
+> >> >According to doc and my observation, looks like hardware fetch data
+> >> >into FIFO when get SOF, then transfer data when get IN token. Each
+> >> >SOF will increase TRB regardless it is ready or not.
+> >>
+> >> Yes, but this fetched data will be sent in next  ITP.
+> >>
+> >> >
+> >> >When gadget complete equeue ISO data, so SOF will increase TRB
+> >> >regardless if there are IN token.
+> >> >
+> >> >   SOF       SOF       SOF     SOF  IN    SOF ....
+> >> >      TRB0      TRB1      TRB2      TRB3  ...
+> >> >
+> >> >
+> >> >Host may start get data at some time after gadget queue data.
+> >> >
+> >> >So TRB0..2 data will be lost.
+> >> >
+> >> >If it is audio data, it should be okay. But for uvc, it is jpeg
+> >> >header, so host side report error.
+> >> >
+> >> >I checked dwc gadget driver, which start equeue ISO data only get NYET.
+> >> >
+> >> >I check cdns spec, there are ISOERR. But it is never happen.
+> >> >According to document, ISOERR should issue when IN token and FIFO no
+> >data.
+> >> >
+> >>
+> >> Current CDNS3 driver has disabled ISOERR. Did you enable it?
+> >
+> >Yes, I enabled all IRQ.
+> >
+> >+       if (priv_ep->type == USB_ENDPOINT_XFER_ISOC && priv_ep->dir) {
+> >+               priv_ep->flags |= EP_QUIRK_ISO_IN_NOST;
+> >+               reg |= 0xFFFF;
+> >+       }
+> >
+> >Supposed ISOERR should happen even DMA is disabled.
+> >But I also tried enable DMA, and using lenght 0 TRB and link to loop.
+> >
+> >Still no ISOERR happen. I can see TRBADDR changed, but still no ISOERR
+> >
+> >
+> > irq/447-5b13000-200     [000] d..1.    78.662729: cdns3_epx_irq: IRQ for ep2in:
+> >00000804 IOC , ep_traddr: c0086018 ep_last_sid: 00000000 use_streams: 0
+> >
+> >	 ^^^^^^^
+> > irq/447-5b13000-200     [000] d..1.    78.662851: cdns3_epx_irq: IRQ for ep2in:
+> >00000804 IOC , ep_traddr: c008600c ep_last_sid: 00000000 use_streams: 0
+> > irq/447-5b13000-200     [000] d..1.    78.662975: cdns3_epx_irq: IRQ for ep2in:
+> >00000804 IOC , ep_traddr: c0086018 ep_last_sid: 00000000 use_streams: 0
+> >
+> >STS is 0x804, only IOC set.
+> >
+> >Frank
+> >
+> >>
+> >> >I tried below method
+> >> >	1.  Delay queue TRB, but no ISOERR.
+> >> >	2.  queue a lenght 0 TRB,but no ISOERR
+> >> >
+> >> >My question is how to delay queue TRB to ISO IN token really happen
+> >> >to avoid lost JPEG header.
+> >> >
+> >> >Frank
+> >> >
+> >> >
+> >> >
+> >> >
+> >> >
+> >>
 
