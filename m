@@ -1,135 +1,112 @@
-Return-Path: <linux-usb+bounces-2569-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2570-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 700347E1DEB
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Nov 2023 11:08:54 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8DFB57E1E1E
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Nov 2023 11:17:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A00DF1C209E5
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Nov 2023 10:08:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 16CE1B20E2F
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Nov 2023 10:17:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2A4F17743;
-	Mon,  6 Nov 2023 10:08:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10C5A17753;
+	Mon,  6 Nov 2023 10:17:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HvFQJqqX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7437915AE2
-	for <linux-usb@vger.kernel.org>; Mon,  6 Nov 2023 10:08:47 +0000 (UTC)
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E764B8;
-	Mon,  6 Nov 2023 02:08:42 -0800 (PST)
-X-SpamFilter-By: ArmorX SpamTrap 5.78 with qID 3A6A8OtC43454666, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-	by rtits2.realtek.com.tw (8.15.2/2.95/5.92) with ESMTPS id 3A6A8OtC43454666
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 6 Nov 2023 18:08:24 +0800
-Received: from RTEXMBS06.realtek.com.tw (172.21.6.99) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Mon, 6 Nov 2023 18:08:25 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS06.realtek.com.tw (172.21.6.99) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Mon, 6 Nov 2023 18:08:24 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::40c2:6c24:2df4:e6c7]) by
- RTEXMBS04.realtek.com.tw ([fe80::40c2:6c24:2df4:e6c7%5]) with mapi id
- 15.01.2375.007; Mon, 6 Nov 2023 18:08:24 +0800
-From: =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= <stanley_chang@realtek.com>
-To: Johan Hovold <johan@kernel.org>
-CC: Stefan Eichenberger <eichest@gmail.com>,
-        Johan Hovold
-	<johan+linaro@kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        "Greg
- Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org"
-	<linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org"
-	<stable@vger.kernel.org>,
-        Maxime Ripard <mripard@kernel.org>
-Subject: RE: [PATCH] USB: xhci-plat: fix legacy PHY double inity
-Thread-Topic: [PATCH] USB: xhci-plat: fix legacy PHY double inity
-Thread-Index: AQHaDxyJZpnjRAISQ06Vkn+OQSkmobBsqcjggAAuZtD//7GWAIAAhs6A
-Date: Mon, 6 Nov 2023 10:08:24 +0000
-Message-ID: <b2f3db01ad7d43dbbb8ee11cfd1346ea@realtek.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ADD44422
+	for <linux-usb@vger.kernel.org>; Mon,  6 Nov 2023 10:17:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1DD0C433C7;
+	Mon,  6 Nov 2023 10:17:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1699265864;
+	bh=56DOiJvzIsi7Obpg+U9KIIzKzZZh+cCT26ywVwVbTOY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HvFQJqqXXbFNiDd5C6P5JCFywSMtm6Pj46+T/tXynkOwiEqTvTQEjXAZIYOUSOZe+
+	 oD0NK50DCUi3tMjfBBBtYdBX0x/ijO1nfz7HSyrY2NPZziVBApDa7m+b327GVtcTZw
+	 bSlXACgKr/DY6cld1ssbNpk8NufZ1JK1K5vvmGZ20jGOtt2OWfTc0x8wiG/bnandTY
+	 yO4N+9WoaxutrHwe4WfIx83bVygi7EzYWM6VRwXP22qVwhc86W3tjziCnVDzzso6Vk
+	 DKtBzq3CrklsTsuoP7d7qqOCITux1ETWuARc3tOP4HyYGZfp6iUDaf2qpEGYy/7RlF
+	 0hsJh3TPmt0fQ==
+Received: from johan by xi.lan with local (Exim 4.96)
+	(envelope-from <johan@kernel.org>)
+	id 1qzwgg-0007WT-0W;
+	Mon, 06 Nov 2023 11:18:30 +0100
+Date: Mon, 6 Nov 2023 11:18:30 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Stanley =?utf-8?B?Q2hhbmdb5piM6IKy5b63XQ==?= <stanley_chang@realtek.com>
+Cc: Stefan Eichenberger <eichest@gmail.com>,
+	Johan Hovold <johan+linaro@kernel.org>,
+	Mathias Nyman <mathias.nyman@intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"stable@vger.kernel.org" <stable@vger.kernel.org>,
+	Maxime Ripard <mripard@kernel.org>
+Subject: Re: [PATCH] USB: xhci-plat: fix legacy PHY double inity
+Message-ID: <ZUi9dgnvBT5f6wzo@hovoldconsulting.com>
 References: <20231103164323.14294-1-johan+linaro@kernel.org>
  <ZUY8cGrofUtPOMV8@eichest-laptop>
  <5a493e6fedb449bc93f83f31a682e5b9@realtek.com>
  <ZUi3hrDbseJbIsWZ@hovoldconsulting.com>
-In-Reply-To: <ZUi3hrDbseJbIsWZ@hovoldconsulting.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-x-originating-ip: [172.21.190.159]
-x-kse-serverinfo: RTEXMBS06.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ <b2f3db01ad7d43dbbb8ee11cfd1346ea@realtek.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b2f3db01ad7d43dbbb8ee11cfd1346ea@realtek.com>
 
-SGkgSm9oYW4sDQoNCj4gDQo+IE9uIE1vbiwgTm92IDA2LCAyMDIzIGF0IDA2OjUzOjIzQU0gKzAw
-MDAsIFN0YW5sZXkgQ2hhbmdb5piM6IKy5b63XSB3cm90ZToNCj4gPiA+ID4gT24gRnJpLCBOb3Yg
-MDMsIDIwMjMgYXQgMDU6NDM6MjNQTSArMDEwMCwgSm9oYW4gSG92b2xkIHdyb3RlOg0KPiA+ID4g
-PiA+IENvbW1pdHMgN2I4ZWYyMmVhNTQ3ICgidXNiOiB4aGNpOiBwbGF0OiBBZGQgVVNCIHBoeSBz
-dXBwb3J0IikNCj4gPiA+ID4gPiBhbmQNCj4gPiA+ID4gPiA5MTM0YzFmZDA1MDMgKCJ1c2I6IHho
-Y2k6IHBsYXQ6IEFkZCBVU0IgMy4wIHBoeSBzdXBwb3J0IikgYWRkZWQNCj4gPiA+ID4gPiBzdXBw
-b3J0IGZvciBsb29raW5nIHVwIGxlZ2FjeSBQSFlzIGZyb20gdGhlIHN5c2RldiBkZXZpY2V0cmVl
-DQo+ID4gPiA+ID4gbm9kZSBhbmQgaW5pdGlhbGlzaW5nIHRoZW0uDQo+ID4gPiA+ID4NCj4gPiA+
-ID4gPiBUaGlzIGJyb2tlIGRyaXZlcnMgc3VjaCBhcyBkd2MzIHdoaWNoIG1hbmFnZXMgUEhZcyB0
-aGVtc2VsZiBhcw0KPiA+ID4gPiA+IHRoZSBQSFlzIHdvdWxkIG5vdyBiZSBpbml0aWFsaXNlZCB0
-d2ljZSwgc29tZXRoaW5nIHdoaWNoDQo+ID4gPiA+ID4gc3BlY2lmaWNhbGx5IGNhbiBsZWFkIHRv
-IHJlc291cmNlcyBiZWluZyBsZWZ0IGVuYWJsZWQgZHVyaW5nDQo+ID4gPiA+ID4gc3VzcGVuZCAo
-ZS5nLiB3aXRoIHRoZSB1c2JfcGh5X2dlbmVyaWMgUEhZIGRyaXZlcikuDQo+ID4gPiA+ID4NCj4g
-PiA+ID4gPiBBcyB0aGUgZHdjMyBkcml2ZXIgdXNlcyBkcml2ZXItbmFtZSBtYXRjaGluZyBmb3Ig
-dGhlIHhoY2kNCj4gPiA+ID4gPiBwbGF0Zm9ybSBkZXZpY2UsIGZpeCB0aGlzIGJ5IG9ubHkgbG9v
-a2luZyB1cCBhbmQgaW5pdGlhbGlzaW5nDQo+ID4gPiA+ID4gUEhZcyBmb3IgZGV2aWNlcyB0aGF0
-IGhhdmUgYmVlbiBtYXRjaGVkIHVzaW5nIE9GLg0KPiANCj4gPiA+IFRlc3RlZC1ieTogU3Rhbmxl
-eSBDaGFuZyA8c3RhbmxleV9jaGFuZ0ByZWFsdGVrLmNvbT4NCj4gDQo+ID4gSSBhbSBzb3JyeSB0
-byBub3RpZnkgeW91IHRoaXMgcGF0Y2ggaXMgdGVzdGVkIGZhaWwuDQo+IA0KPiBIbW0uIFRoYW5r
-cyBmb3IgdGVzdGluZy4NCj4gDQo+ID4gSSB0ZXN0IHRoZSBSZWFsdGVrIHBoeSBkcml2ZXIgYXQg
-ZHJpdmVycy9waHkvUmVhbHRlay9waHktcnRrLXVzYjIuYyBhZ2Fpbi4NCj4gPiBCdXQgSSBjYW4n
-dCBnZXQgdGhlIHBoeSBpbiB4aGNpLg0KPiANCj4gPiBJdCBpcyBhIGR3YzMgZ2VuZXJpYyBwaHkg
-ZHJpdmVyLCBhbmQgaXQgaXMgYWxzbyBhIHVzYiBwaHkgZHJpdmVyLg0KPiANCj4gVGhhdCBzb3Vu
-ZHMgYnJva2VuIChpLmUuIHRvIGJlIHJlbHlpbmcgb24gYm90aCBmcmFtZXdvcmtzKSwgYnV0IGlu
-ZGVlZCB0aGF0DQo+IHNlZW1zIHRvIGJlIHRoZSBjdXJyZW50IHN0YXRlIG9mIHRoZSBnZW5lcmlj
-IGFuZCBsZWdhY3kgVVNCIFBIWQ0KPiBpbXBsZW1lbnRhdGlvbnMuDQo+IA0KPiBXaGF0IGEgbWVz
-cy4NCg0KPiA+IEJhc2Ugb24geW91IG1vZGlmaWVkLCBJIGNhbid0IHJ1biBvbiBjYWxsYmFjaw0K
-PiA+IHJ0a19waHktPnBoeS5ub3RpZnlfcG9ydF9zdGF0dXMgPSBydGtfcGh5X25vdGlmeV9wb3J0
-X3N0YXR1czsNCj4gDQo+IFdoaWNoIGR3YzMgZHJpdmVyIGFyZSB5b3UgdXNpbmc/IFVubGVzcyBJ
-J20gbWlzc2luZyBzb21ldGhpbmcgdGhpcyB3b3VsZCBub3QNCj4gYmUgYW4gaXNzdWUgdW5sZXNz
-IHlvdSBhcmUgZG9pbmcgc29tZXRoaW5nIGNyYXp5IGxpa2UgZGVzY3JpYmluZyB0aGUgc2FtZSBQ
-SFkNCj4gdHdpY2UgaW4gdGhlIGRldmljZXRyZWUgKGkuZS4gYm90aCBhcyBhIGdlbmVyaWMgYW5k
-IGxlZ2FjeSBQSFkpLg0KDQpJIHVzZSBkcml2ZXJzL3VzYi9kd2MzL2NvcmUuYyBhbmQgZHJpdmVy
-cy91c2IvZHdjMy9kd2MzLXJ0ay5jDQpJIGRlc2NyaWJlIHRoZSBQSFkgYXMgZ2VuZXJpYyBhbmQg
-bGVnYWN5IFBIWSBpbiBkZXZpY2UgdHJlZS4NCk91ciBkcml2ZXIgbmVlZHMgdGhlIEFQSSBiYXNl
-IG9uIGEwODc5OWNmMTdjMiAoInVzYjogcGh5OiBhZGQgdXNiIHBoeSBub3RpZnkgcG9ydCBzdGF0
-dXMgQVBJIikuDQpCdXQgZ2VuZXJpYyBQSFkgZHJpdmVyIGlzIG5vdCBzdXBwb3J0IHRoaXMuDQoN
-ClRoYW5rcywNClN0YW5sZXkNCg0KPiBBcHBhcmVudGx5LCB0aGVyZSBhcmUgbm8gaW4tdHJlZSB1
-c2VycyBvZiB0aGlzIHBhcnRpY3VsYXIgcmVhbHRlayBQSFkgc28gSSBjYW4ndA0KPiBjaGVjayB0
-aGUgZGV2aWNldHJlZSwgYnV0IHdlIGRvIGhhdmUgb3RoZXIgaW5zdGFuY2VzIG9mIHN1Y2ggYWJ1
-c2Ugc2luY2UgYXQNCj4gbGVhc3QgYSBkZWNhZGU6DQo+IA0KPiAgICAgICAgIDY3NDdjYWE3NmNh
-YiAoInVzYjogcGh5OiB0d2w0MDMwOiB1c2UgdGhlIG5ldyBnZW5lcmljIFBIWQ0KPiBmcmFtZXdv
-cmsiKQ0KPiANCj4gQW5kLCB5ZXMsIHRoZW4gdGhpcyBpcyBzb3J0IG9mIGV4cGVjdGVkLiBUaGUg
-ZHdjMyBkcml2ZXIgaGFzIGFsd2F5cyBtYW5hZ2VkIGl0cw0KPiBvd24gUEhZcywgYnV0IGZ1bmN0
-aW9uYWxpdHkgaGFzIG5vdyBiZWVuIGJvbHRlZCBvbiB0b3Agc28gdGhhdCBwZW9wbGUgbWF5DQo+
-IGhhdmUgc3RhcnRlZCByZWx5aW5nIG9uIGl0IGJlaW5nIG1hbmFnZWQgKmFsc28qIGJ5IHhoY2ks
-IHdlbGwgYXQgbGVhc3QgZm9yDQo+IG5vdGlmaWNhdGlvbnMgbGlrZSB0aGUgb25lIHlvdSBqdXN0
-IGFkZGVkOg0KPiANCj4gICAgICAgICBhMDg3OTljZjE3YzIgKCJ1c2I6IHBoeTogYWRkIHVzYiBw
-aHkgbm90aWZ5IHBvcnQgc3RhdHVzIEFQSSIpDQo+IA0KPiBKb2hhbg0K
+On Mon, Nov 06, 2023 at 10:08:24AM +0000, Stanley Chang[昌育德] wrote:
+> > On Mon, Nov 06, 2023 at 06:53:23AM +0000, Stanley Chang[昌育德] wrote:
+
+> > > I test the Realtek phy driver at drivers/phy/Realtek/phy-rtk-usb2.c again.
+> > > But I can't get the phy in xhci.
+> > 
+> > > It is a dwc3 generic phy driver, and it is also a usb phy driver.
+> > 
+> > That sounds broken (i.e. to be relying on both frameworks), but indeed that
+> > seems to be the current state of the generic and legacy USB PHY
+> > implementations.
+> > 
+> > What a mess.
+> 
+> > > Base on you modified, I can't run on callback
+> > > rtk_phy->phy.notify_port_status = rtk_phy_notify_port_status;
+> > 
+> > Which dwc3 driver are you using? Unless I'm missing something this would not
+> > be an issue unless you are doing something crazy like describing the same PHY
+> > twice in the devicetree (i.e. both as a generic and legacy PHY).
+> 
+> I use drivers/usb/dwc3/core.c and drivers/usb/dwc3/dwc3-rtk.c
+> I describe the PHY as generic and legacy PHY in device tree.
+
+That's not right. You should just use the generic PHY binding for new
+platforms.
+
+> Our driver needs the API base on a08799cf17c2 ("usb: phy: add usb phy notify port status API").
+> But generic PHY driver is not support this.
+
+Yes, but you added that interface yourself, and that I think merging
+that was a mistake.
+
+We should not be building functionality on top of the legacy USB PHY
+implementation which is stuck in some transitional limbo.
+
+Apparently, your PHY drivers which were merged for 6.6 are the only
+users of this interface, and there are no upstream devicetrees that use
+these PHYs.
+
+I think we should revert this mess before we dig ourselves into an even
+deeper hole.
+
+Johan
 
