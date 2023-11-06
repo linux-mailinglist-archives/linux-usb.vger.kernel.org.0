@@ -1,115 +1,129 @@
-Return-Path: <linux-usb+bounces-2561-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2562-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 732517E1A84
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Nov 2023 07:53:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 783317E1AA5
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Nov 2023 08:03:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 918161C20A80
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Nov 2023 06:53:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A4DD21C20A4B
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Nov 2023 07:03:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27D4C8F63;
-	Mon,  6 Nov 2023 06:53:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A400BA43;
+	Mon,  6 Nov 2023 07:03:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AnRTz0J1"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E2A43D90
-	for <linux-usb@vger.kernel.org>; Mon,  6 Nov 2023 06:53:39 +0000 (UTC)
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB69810B;
-	Sun,  5 Nov 2023 22:53:37 -0800 (PST)
-X-SpamFilter-By: ArmorX SpamTrap 5.78 with qID 3A66rNxN53324606, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-	by rtits2.realtek.com.tw (8.15.2/2.95/5.92) with ESMTPS id 3A66rNxN53324606
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 6 Nov 2023 14:53:23 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Mon, 6 Nov 2023 14:53:23 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Mon, 6 Nov 2023 14:53:23 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::40c2:6c24:2df4:e6c7]) by
- RTEXMBS04.realtek.com.tw ([fe80::40c2:6c24:2df4:e6c7%5]) with mapi id
- 15.01.2375.007; Mon, 6 Nov 2023 14:53:23 +0800
-From: =?big5?B?U3RhbmxleSBDaGFuZ1up96h8vHdd?= <stanley_chang@realtek.com>
-To: Stefan Eichenberger <eichest@gmail.com>,
-        Johan Hovold
-	<johan+linaro@kernel.org>
-CC: Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org"
-	<linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org"
-	<stable@vger.kernel.org>,
-        Maxime Ripard <mripard@kernel.org>
-Subject: RE: [PATCH] USB: xhci-plat: fix legacy PHY double inity
-Thread-Topic: [PATCH] USB: xhci-plat: fix legacy PHY double inity
-Thread-Index: AQHaDxyJZpnjRAISQ06Vkn+OQSkmobBsqcjggAAuZtA=
-Date: Mon, 6 Nov 2023 06:53:23 +0000
-Message-ID: <5a493e6fedb449bc93f83f31a682e5b9@realtek.com>
-References: <20231103164323.14294-1-johan+linaro@kernel.org>
- <ZUY8cGrofUtPOMV8@eichest-laptop> 
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-x-originating-ip: [172.21.190.159]
-x-kse-serverinfo: RTEXMBS04.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="big5"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DD234422
+	for <linux-usb@vger.kernel.org>; Mon,  6 Nov 2023 07:03:07 +0000 (UTC)
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4717C6
+	for <linux-usb@vger.kernel.org>; Sun,  5 Nov 2023 23:03:05 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-32ded3eb835so2901022f8f.0
+        for <linux-usb@vger.kernel.org>; Sun, 05 Nov 2023 23:03:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1699254184; x=1699858984; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:to:from:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UQQrXVp1yB3RDtpJdxHWupcjK/Y8l8iZQURbUIaupXM=;
+        b=AnRTz0J1c4qFZKIUi7sdaNRmweQ3U2OkueW7nySRk4iiO0kbALwc94l1VWP7aDpHAc
+         ukf/yX4s4yyny+DNVCCLlJuCcuwjlfh6J2iy5B2UmK/godaB1BjvS3AxXXfvkzMAmIJ7
+         q0yuUCDeDu9kUFO17wI2t7QXbBxrNNZrx/Pu+KG/tcvWQ+/KlH0tFZaBuO04WjHNwxRP
+         LsZZIePJNtWUmpHVaI/dCQrpTqFSwTvYvfj6JOsPt+/9PFrOT2VKK//UzgZtAe7dOEvp
+         9V0jGVnMMhkSUrwlsmIELPIHIYsBpqKdl1zFldjbu74mPfS+WzPW7fGGS2Aa/7AHTeel
+         kijA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699254184; x=1699858984;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UQQrXVp1yB3RDtpJdxHWupcjK/Y8l8iZQURbUIaupXM=;
+        b=RPg7ItuBEL6S4IV7ElvBxjJSkOaMKQzeqVYCac8nkqCaql24oyu3qn8tKin5w/y+h0
+         zGp7bz2Py6jA1JaHPBWO8QtKnwuj2vCqzGW5z9PC0vlYgUMQzG+Oz+E+gTlidFBz4vcd
+         5V+WFf/DZxecqw/YJshMwi8s8lDf3DRnejcdYssgtl8rj1mFIupvXDphb9bA2qxXsMdN
+         wo8PrQyisscQM4ExZrEqXGSBwu8S1sJOpkEliHcOJDs7WgMNXGvIh0TLGGL6ct37rv9A
+         /4p7bgWqW96owCPilLAIvEmUwyLziDCWo+UROaii50rBWV2ho31/PJPoT/zd1QYOkNgx
+         AVqQ==
+X-Gm-Message-State: AOJu0Yy7LgDfCv7e0ws6K0Z71CdAsnUYhi9UvYbDkyzzOH1HljMmLtgA
+	L65+FjNvT2ExM09YUHZN1sYEiPBI4BGHQOuj
+X-Google-Smtp-Source: AGHT+IFcA7xyUDz9n42qeoOf1u91/MCpHmVwBipXdbaYHcYln8jCox0nv+dHGONFiwFiw+MypG7f6w==
+X-Received: by 2002:a05:6000:1ac7:b0:32d:a213:4d7d with SMTP id i7-20020a0560001ac700b0032da2134d7dmr24521297wry.56.1699254184010;
+        Sun, 05 Nov 2023 23:03:04 -0800 (PST)
+Received: from ping (dynamic-2a01-0c23-6413-4b00-4825-3d85-08ce-2b8a.c23.pool.telefonica.de. [2a01:c23:6413:4b00:4825:3d85:8ce:2b8a])
+        by smtp.gmail.com with ESMTPSA id h2-20020a5d4fc2000000b00323287186aasm8589118wrw.32.2023.11.05.23.03.03
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 05 Nov 2023 23:03:03 -0800 (PST)
+Date: Mon, 6 Nov 2023 08:03:02 +0100
+From: Fabian Melzow <fabian.melzow@gmail.com>
+To: linux-usb@vger.kernel.org
+Subject: Re: 0bda:b812 USB "3.0" WLAN devices only report a maximum of 480
+ Mbps
+Message-ID: <20231106080024.197ffdd2@ping>
+In-Reply-To: <61fb4593-c24d-4891-8d44-e2ef819af57d@rowland.harvard.edu>
+References: <20231105130215.2b669c8b@ping>
+ <2023110540-unseemly-mobilize-9e82@gregkh>
+ <20231105134909.6c3f28d1@ping>
+ <2023110534-fester-schematic-818a@gregkh>
+ <20231105143051.2b28c316@ping>
+ <76fc65db-4efe-4da7-a13f-d7a451f836fa@rowland.harvard.edu>
+ <20231105163300.3b8df5ad@ping>
+ <7738cb40-9ef1-4e8e-8888-b8faadb7ba8a@rowland.harvard.edu>
+ <20231105210616.79fea846@ping>
+ <61fb4593-c24d-4891-8d44-e2ef819af57d@rowland.harvard.edu>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-SGkgSm9oYW4sDQoNCj4gPiBPbiBGcmksIE5vdiAwMywgMjAyMyBhdCAwNTo0MzoyM1BNICswMTAw
-LCBKb2hhbiBIb3ZvbGQgd3JvdGU6DQo+ID4gPiBDb21taXRzIDdiOGVmMjJlYTU0NyAoInVzYjog
-eGhjaTogcGxhdDogQWRkIFVTQiBwaHkgc3VwcG9ydCIpIGFuZA0KPiA+ID4gOTEzNGMxZmQwNTAz
-ICgidXNiOiB4aGNpOiBwbGF0OiBBZGQgVVNCIDMuMCBwaHkgc3VwcG9ydCIpIGFkZGVkDQo+ID4g
-PiBzdXBwb3J0IGZvciBsb29raW5nIHVwIGxlZ2FjeSBQSFlzIGZyb20gdGhlIHN5c2RldiBkZXZp
-Y2V0cmVlIG5vZGUNCj4gPiA+IGFuZCBpbml0aWFsaXNpbmcgdGhlbS4NCj4gPiA+DQo+ID4gPiBU
-aGlzIGJyb2tlIGRyaXZlcnMgc3VjaCBhcyBkd2MzIHdoaWNoIG1hbmFnZXMgUEhZcyB0aGVtc2Vs
-ZiBhcyB0aGUNCj4gPiA+IFBIWXMgd291bGQgbm93IGJlIGluaXRpYWxpc2VkIHR3aWNlLCBzb21l
-dGhpbmcgd2hpY2ggc3BlY2lmaWNhbGx5DQo+ID4gPiBjYW4gbGVhZCB0byByZXNvdXJjZXMgYmVp
-bmcgbGVmdCBlbmFibGVkIGR1cmluZyBzdXNwZW5kIChlLmcuIHdpdGgNCj4gPiA+IHRoZSB1c2Jf
-cGh5X2dlbmVyaWMgUEhZIGRyaXZlcikuDQo+ID4gPg0KPiA+ID4gQXMgdGhlIGR3YzMgZHJpdmVy
-IHVzZXMgZHJpdmVyLW5hbWUgbWF0Y2hpbmcgZm9yIHRoZSB4aGNpIHBsYXRmb3JtDQo+ID4gPiBk
-ZXZpY2UsIGZpeCB0aGlzIGJ5IG9ubHkgbG9va2luZyB1cCBhbmQgaW5pdGlhbGlzaW5nIFBIWXMg
-Zm9yDQo+ID4gPiBkZXZpY2VzIHRoYXQgaGF2ZSBiZWVuIG1hdGNoZWQgdXNpbmcgT0YuDQo+ID4g
-Pg0KPiA+ID4gTm90ZSB0aGF0IGNoZWNraW5nIHRoYXQgdGhlIHBsYXRmb3JtIGRldmljZSBoYXMg
-YSBkZXZpY2V0cmVlIG5vZGUNCj4gPiA+IHdvdWxkIGN1cnJlbnRseSBiZSBzdWZmaWNpZW50LCBi
-dXQgdGhhdCBjb3VsZCBsZWFkIHRvIHN1YnRsZQ0KPiA+ID4gYnJlYWthZ2VzIGluIGNhc2UgYW55
-b25lIGV2ZXIgdHJpZXMgdG8gcmV1c2UgYW4gYW5jZXN0b3IncyBub2RlLg0KPiA+ID4NCj4gPiA+
-IEZpeGVzOiA3YjhlZjIyZWE1NDcgKCJ1c2I6IHhoY2k6IHBsYXQ6IEFkZCBVU0IgcGh5IHN1cHBv
-cnQiKQ0KPiA+ID4gRml4ZXM6IDkxMzRjMWZkMDUwMyAoInVzYjogeGhjaTogcGxhdDogQWRkIFVT
-QiAzLjAgcGh5IHN1cHBvcnQiKQ0KPiA+ID4gQ2M6IHN0YWJsZUB2Z2VyLmtlcm5lbC5vcmcgICAg
-ICAjIDQuMQ0KPiA+ID4gQ2M6IE1heGltZSBSaXBhcmQgPG1yaXBhcmRAa2VybmVsLm9yZz4NCj4g
-PiA+IENjOiBTdGFubGV5IENoYW5nIDxzdGFubGV5X2NoYW5nQHJlYWx0ZWsuY29tPg0KPiA+ID4g
-U2lnbmVkLW9mZi1ieTogSm9oYW4gSG92b2xkIDxqb2hhbitsaW5hcm9Aa2VybmVsLm9yZz4NCj4g
-Pg0KPiA+IFRlc3RlZC1ieTogU3RlZmFuIEVpY2hlbmJlcmdlciA8c3RlZmFuLmVpY2hlbmJlcmdl
-ckB0b3JhZGV4LmNvbT4NCj4gDQo+IFRlc3RlZC1ieTogU3RhbmxleSBDaGFuZyA8c3RhbmxleV9j
-aGFuZ0ByZWFsdGVrLmNvbT4NCj4gDQoNCkkgYW0gc29ycnkgdG8gbm90aWZ5IHlvdSB0aGlzIHBh
-dGNoIGlzIHRlc3RlZCBmYWlsLg0KSSB0ZXN0IHRoZSBSZWFsdGVrIHBoeSBkcml2ZXIgYXQgZHJp
-dmVycy9waHkvUmVhbHRlay9waHktcnRrLXVzYjIuYyBhZ2Fpbi4NCkJ1dCBJIGNhbid0IGdldCB0
-aGUgcGh5IGluIHhoY2kuDQpJdCBpcyBhIGR3YzMgZ2VuZXJpYyBwaHkgZHJpdmVyLCBhbmQgaXQg
-aXMgYWxzbyBhIHVzYiBwaHkgZHJpdmVyLiANCg0KQmFzZSBvbiB5b3UgbW9kaWZpZWQsIEkgY2Fu
-J3QgcnVuIG9uIGNhbGxiYWNrIA0KcnRrX3BoeS0+cGh5Lm5vdGlmeV9wb3J0X3N0YXR1cyA9IHJ0
-a19waHlfbm90aWZ5X3BvcnRfc3RhdHVzOw0KVGhhbmtzLA0KU3RhbmxleS4NCg0K
+Am Sun, 5 Nov 2023 21:10:47 -0500
+schrieb Alan Stern <stern@rowland.harvard.edu>:
+
+> On Sun, Nov 05, 2023 at 09:06:16PM +0100, Fabian Melzow wrote:
+> > Am Sun, 5 Nov 2023 14:16:18 -0500
+> > schrieb Alan Stern <stern@rowland.harvard.edu>:
+> >   
+> > > Have you tried plugging the device into a system running a
+> > > different OS (Windows or MacOS-X)?  Or even a different Linux
+> > > system?  
+> > 
+> > Yes, I also made a short test with the lsusb of an old Debian 11
+> > Live-DVD. I got these devices for testing from the Amazon Vine
+> > program and after the third Monday-Hardware WLAN-device with the
+> > same problem I thought I should report this problem, to maybe help
+> > real users.  
+> 
+> A test with Windows might be more informative, if you can manage to
+> do one.  Perhaps the Windows driver knows how to configure the device
+> to run at higher speed.
+>
+> Also, curiously enough, when I did a web search for reports of
+> problems with this chip, the vast majority of messages were about it
+> not working with Linux at all because Debian/Ubuntu did not include
+> sufficiently up-to-date drivers.  People had to download driver
+> source code from a github project and build and install it for
+> themselves in order to get the device to function.  They didn't
+> mention what speed it used on the USB bus.
+
+The Linux rtw88 driver is maintained by Realtek and, if my searching is
+right, first appeared in Linux 5.18, so it's a newer one. I could
+trigger an Oops, which I also reported yesterday. According to
+the Debian backport https://github.com/lwfinger/rtw88 some versions of
+the chipset are still unsupported. 
+
+The rwt8822bu driver has also a non-USB version rwt8822b, so the chip
+for the USB support can also be separate from the main chip, but until
+now don't want to destroy one of the plastic cases.
+
+Fabian Melzow
 
