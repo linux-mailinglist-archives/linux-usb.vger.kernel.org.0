@@ -1,196 +1,537 @@
-Return-Path: <linux-usb+bounces-2597-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2602-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCD8E7E2A88
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Nov 2023 17:59:31 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D4917E2B76
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Nov 2023 18:51:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E77121C20CA3
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Nov 2023 16:59:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C89CBB211DE
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Nov 2023 17:51:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81A6429CE1;
-	Mon,  6 Nov 2023 16:59:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E651B2C850;
+	Mon,  6 Nov 2023 17:51:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Kd2m+dcb"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="M9qYOlqC"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB54928E13;
-	Mon,  6 Nov 2023 16:59:23 +0000 (UTC)
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2044.outbound.protection.outlook.com [40.107.244.44])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67AAA1BC;
-	Mon,  6 Nov 2023 08:59:21 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OhTyLHssfhKx5JSglgv6018yRunxO8nlSFl87F66CtEpaV6nQG9sjerfFT7qLsd8WfN6Z+ghLPYlK8hOf0sZatG5aYMb3zWQWhczD3FR9XM8qCXHBwbQ+Ck/sXGnZqAhFYT0ZvQuVPQoBZ2bK/MiQfZPK6HFkpW06hZ86FbUXzzuSJ5+R/1ncrUSGqqCguLB+ES3lYMGLSbujxqCtQ6KNXxlSM6+3h1Vg92D/lyeO989aKF3SGzBRqZIxcMj1IGz2xB/F+eEPDv5H/lbqh44/rMCvHw6CFKU/WZxC7TgZq17J47uuw8ZO+JUwJ33vGOgm+Birca0EcWskEMcoP6YOg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uFO9DUFf8Xo9CLO/loZ4PgLcz6BCj+RthB9zzIvOQ08=;
- b=CBvUGoJH6ul9fF4iZ3901oF/2NEbvv0Rxsi4tlS++lDe0QLRv11Gh196E59NjmQ2Xkd8qpMDj+FSZvz7nSfkyHQcrPc0aiEqPDc9W0kMVST5JFSkta+vAiVeuc4T2ANx5lkhvHPUjRToK9sHiXyCy43XaoBDFqcG32xHlsN3KRFiv37Hn4bAQJG/NTy4KNsPq/n+FfbxCxImsvXcBaWSZH1RDqXYPTaoxe3pNsB94M8Jr7mtL5kLc7fEeKeXVs+sxkNrhyUmKRPUYqCsBq/UXrqXJm5lpCaaxI723dJIvtjGqoF8i7r0lPTa07jnpxnx7XwYolTAKvQiIuS1bsLpMg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uFO9DUFf8Xo9CLO/loZ4PgLcz6BCj+RthB9zzIvOQ08=;
- b=Kd2m+dcb7hPaR3eSm9fvxDbye71O2P2OtyQoMvWB6BnTqpaoGw2t9St79mVu/tHZ4Gj4ZAQPItOA7P5Vd/OVE5VR9ezSSasPCOxRZisz3+FTMDwOtpRavqwJufuD+7LldJzRdfaJfbESu3MsAz9M1QCkiWW3bjRvDe/SA0bI9ok=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by PH7PR12MB5806.namprd12.prod.outlook.com (2603:10b6:510:1d2::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.28; Mon, 6 Nov
- 2023 16:59:18 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::83d7:9c4f:4d9b:1f2a]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::83d7:9c4f:4d9b:1f2a%5]) with mapi id 15.20.6954.027; Mon, 6 Nov 2023
- 16:59:18 +0000
-Message-ID: <9b1a5e36-337b-4750-9dad-b54e28cde03a@amd.com>
-Date: Mon, 6 Nov 2023 10:59:13 -0600
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 6/9] PCI: Rename is_thunderbolt to is_tunneled
-Content-Language: en-US
-To: Lukas Wunner <lukas@wunner.de>
-Cc: Karol Herbst <kherbst@redhat.com>, Lyude Paul <lyude@redhat.com>,
- Alex Deucher <alexander.deucher@amd.com>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Bjorn Helgaas <bhelgaas@google.com>, Hans de Goede <hdegoede@redhat.com>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- Mika Westerberg <mika.westerberg@linux.intel.com>,
- Danilo Krummrich <dakr@redhat.com>, David Airlie <airlied@gmail.com>,
- Daniel Vetter <daniel@ffwll.ch>, Xinhui Pan <Xinhui.Pan@amd.com>,
- "Rafael J . Wysocki" <rafael@kernel.org>, Mark Gross <markgross@kernel.org>,
- Andreas Noever <andreas.noever@gmail.com>,
- Michael Jamet <michael.jamet@intel.com>,
- Yehezkel Bernat <YehezkelShB@gmail.com>, =?UTF-8?Q?Pali_Roh=C3=A1r?=
- <pali@kernel.org>, =?UTF-8?Q?Marek_Beh=C3=BAn?= <kabel@kernel.org>,
- "Maciej W . Rozycki" <macro@orcam.me.uk>,
- Manivannan Sadhasivam <mani@kernel.org>,
- "open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS"
- <dri-devel@lists.freedesktop.org>,
- "open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS"
- <nouveau@lists.freedesktop.org>, open list <linux-kernel@vger.kernel.org>,
- "open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>,
- "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
- "open list:ACPI" <linux-acpi@vger.kernel.org>,
- "open list:X86 PLATFORM DRIVERS" <platform-driver-x86@vger.kernel.org>,
- "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>
-References: <20231103190758.82911-1-mario.limonciello@amd.com>
- <20231103190758.82911-7-mario.limonciello@amd.com>
- <20231105173946.GA31955@wunner.de>
-From: Mario Limonciello <mario.limonciello@amd.com>
-In-Reply-To: <20231105173946.GA31955@wunner.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: DM6PR06CA0004.namprd06.prod.outlook.com
- (2603:10b6:5:120::17) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD81D156E1
+	for <linux-usb@vger.kernel.org>; Mon,  6 Nov 2023 17:51:21 +0000 (UTC)
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2D899
+	for <linux-usb@vger.kernel.org>; Mon,  6 Nov 2023 09:51:19 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-6b20a48522fso3988318b3a.1
+        for <linux-usb@vger.kernel.org>; Mon, 06 Nov 2023 09:51:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1699293079; x=1699897879; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KSUc2tB8uzZ/MHmxTBVfGTNn8uhJUjEVx8nAmw/fGIo=;
+        b=M9qYOlqCE5EtzPa9TypTaiZ9ohLlXvzhhHB6PG1N3iy1/IwOI4XuCLmAxRkfe+Otud
+         U+Y97HiVQuOE2CDEZfKNwdh7ZWx7VgfkU8kY8RY3/8+4UtLi/cI4kTtPe4kZtTjkXZ9G
+         VnVHYnmYo/3rgbM01NuZwkboQUUsXF3OfT4N6H+n8gzjckeeKuaTrUVw0a4Y3j7RYWYo
+         pxkdtjaCCqwcJUmBEluLhwIfYdq0sikdkU86IwmE4OqTuBDy6azfBd6smNfrtAwyAWLE
+         EdloWFm8Xt9yTccs69z9ErvRYsfD0ynEq4B3bBSZYQ/OZ5T0jyeqHnw0/i9FJr2fFSAS
+         L42w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699293079; x=1699897879;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KSUc2tB8uzZ/MHmxTBVfGTNn8uhJUjEVx8nAmw/fGIo=;
+        b=Ntv+t3VdTZv4kQiefWrHb2SVKlE0IFqPmvtWVjPHq3jejtPCq8AkVBKttamTzgqcxQ
+         deHV39odJ+CoWN6Ee/Jr7+7OPrrSH3GVtAHYy63qsCkfH0lxAsRrzqOrB+Ke/NYRgbfZ
+         iN3ejVylwiRjZ+xWgz5SBVKm6ic5O7Tx/701rQFAiU0fSBHuFgOPrLq5k5mzq2zHT4HE
+         4H4T/Gmt9YoWypTBu5P+J3z1k6dIe+Dq8B9TDr+2znrvG/EU6H1Z/uPnKn8oyCnb2IeR
+         u7uuGFfVjRwJuTRcCvNVJHCBLGRCG6978VxHF+eCnHGl5sT7n5JmZDZR7UTbuUGCOnZD
+         NkWg==
+X-Gm-Message-State: AOJu0YxLb7TS6Bt27FvekyFDJRL2/IdI+KJb9B3VIx3DSmtohrqz+ems
+	ypNTsBERpmd7jP4pXdYcdl3XEQ==
+X-Google-Smtp-Source: AGHT+IGKtlWH2foshsgm5S9fKrt+uBGcV3k3z7lN2TvAw1pmVcGsjGN0PvJJGlPcusMdNIczWh/pLQ==
+X-Received: by 2002:a05:6a21:3e02:b0:180:e3f1:4f60 with SMTP id bk2-20020a056a213e0200b00180e3f14f60mr16453899pzc.45.1699293078299;
+        Mon, 06 Nov 2023 09:51:18 -0800 (PST)
+Received: from ?IPV6:2601:645:8100:1350:85c9:fc68:934d:7263? ([2601:645:8100:1350:85c9:fc68:934d:7263])
+        by smtp.gmail.com with ESMTPSA id fm14-20020a056a002f8e00b006bde2480806sm5853215pfb.47.2023.11.06.09.51.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Nov 2023 09:51:17 -0800 (PST)
+Message-ID: <f441757a-fbdb-422c-9d71-24bbae5eeaf9@google.com>
+Date: Mon, 6 Nov 2023 09:51:15 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|PH7PR12MB5806:EE_
-X-MS-Office365-Filtering-Correlation-Id: 97f51e6b-f870-4531-a580-08dbdee9b6d6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	HSCpNuaRHs+Qu6xyQBT0sgz9oh4LtSPSr6mxqQeLQGMZDzErGUnq1Vd7B/ejJzAvqAkfh+akERGpwjLophlrFEjsXBjriFLkx2FsFjKqHDFZKys+3qbRrCFjEn7NeWQokAIcCeeZJC8WKLU2RB5mFNheQoggq8T+w32Osx5MeOiDxvy4akBbZy8YCCsYFjbdgZNBTQ5CyRnOBkNFu/vZ8ohpBPvLz9GnKdcpqZXfmgComrP+xyzCeWYlVCyRcwrZN3v3ju3Z9KpvILJ3sgoP3R6hjK8DFa+BPavX7DihbKJNtsUQDIuCWIeEmSGP2+t0dElS1s23CU58UM4+VTzJ2VF9JUlhHgLgI5lmfX3wDGO1LElKhJnnPPh0ja7HmftMWV0+JpGXKLHjv37F4+gYudrRRhzBQUhSXdu4KvzDMwWiLdxzDzKR94psAfhAwTKN7ooNb4uDjHgL3VYQGXjZ0VF1lZxYYeaq09EfcNPBr7YOvqz1wR9WlmrKYfAwSLk4EsspWjvZV0KoGbNFwgy/M4RPuGOz+oB7itdiT3hoZayO0IP7AV0NK3FWisQh9gdiEUwD1sFzifUV5+7kTTIZhv/kYOdaQAZ9LtAV9hNTbjQ6Lmhg8KQ45eZ3hxE9r+MMQfsRPkuqclfxkjVzWrvnHg==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(39860400002)(376002)(346002)(136003)(396003)(230922051799003)(1800799009)(64100799003)(451199024)(186009)(54906003)(41300700001)(66946007)(44832011)(4326008)(8676002)(8936002)(66556008)(66476007)(6486002)(478600001)(31686004)(5660300002)(6916009)(316002)(2906002)(7416002)(6512007)(6666004)(6506007)(2616005)(26005)(36756003)(53546011)(38100700002)(31696002)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?NVo1WDJOVUtGS3h3cER2Z292U0RGbXFBMVoySHV0Mlp3bXBLR2dwWjlwM3I4?=
- =?utf-8?B?Y2lGblhTckRLZnRyM0ZSQzhaVkRtYW1MUzNNNkx6UkpVUVJSM1FaV3lQMkFF?=
- =?utf-8?B?UWQ4Qm01T1gxNGRoM1RkVUdQUStVZEsrYXorRmRvZDNqdGUzamxGQnRnTVg4?=
- =?utf-8?B?dFljT0FBcjJDM0hpR2xEU3VzZ2N0UG5MRCs5ajJMQ09DVTB4eHFIR2NiT0hn?=
- =?utf-8?B?VHgwTkRGN29KOFNCTTdRampmQk5VNU83SW84dzNtd2xiYjU4MFc2RytRY2x3?=
- =?utf-8?B?a3ZHYm1ORlBqN3dRQm4weERsSTgxK2VlQTVQZ253S1o0K1Yyay9JeWt5UkdH?=
- =?utf-8?B?N2lIZ2xSWEQzaDlKeGdjZlJ6S0hQdlQyb1cxbElhR3VuMXZkV0dxUWZrUnZM?=
- =?utf-8?B?YVdQT3NTV0VEeWw4TThwVUZtdjk5YzcyQlFpMXd6ck5USDZZTG9qUDZUY0dq?=
- =?utf-8?B?MUsvVlVhVDM1dGhLemJtMTAwMGtqN2FDRDAwd1BqODZ5eUlKcVZ2MzYrRmEz?=
- =?utf-8?B?WHlDcXFPQTNqVVNQTkZ2djJwc3puNDBhclpQZEtzZDJCVG45TmNwb0lnc0pi?=
- =?utf-8?B?dXBjYVEzTDRaVlBmN3VZZzMzZXpFQVNRRDMwZzVtdHNKY3JXY2tRc3pTT29w?=
- =?utf-8?B?a2Z1Qld6aXkxT3R2Y2tmQW5nNjRiTGxwdGhLU3N0ek5wZG9hOEUyT1ljWXZE?=
- =?utf-8?B?VFF5bjk3ZjFMd3ZCMnZhV0wvQWlOREFqaDFLN3RjS05abTNCNXFoZU9nOWdX?=
- =?utf-8?B?anByMGt6YXRxYWlBSGR0WHRRYmlCVHV1ckRrdFJ3SXpUWkQwbUhwcjFpLzg4?=
- =?utf-8?B?L2VxdndlemlMb0hZL0RBVndjWWtoenJYd1I2UjVYVHJ5OHU3VFBvQ3hPaElV?=
- =?utf-8?B?REZGRzI3NXZrVWM3M09UNkRmRFFrR0x1NmRhcnVUeldIOUtsN1JEUHg1ckZp?=
- =?utf-8?B?OTUwUlhiQlpXYVkwQVNJcVE2OFh0MXc2anlVclFzOEQ5aWJ4SDJybFlrOTJW?=
- =?utf-8?B?L0kweU16ZDZzcG5vSkVOUE12bS9jSUhJY1lnK2lxdHJlbDFMWVljWm9YSUNm?=
- =?utf-8?B?MFhtd0o5ai9VcUFOVngxbFlmaWtkTklWY1BXdGduaENYRkRkQm4zZFhINmlm?=
- =?utf-8?B?VDlYb3RtR1ZVemdSSm1OVnN2Vm1ycVR5NGFONm5uVlpJUmFaNTAvSWVTaTVq?=
- =?utf-8?B?OWcwWDA1cnpFMXBPcjhLWDhZNEpuUzJ2R0RuOVN0a2pLa2lDQVBaUVg5clc4?=
- =?utf-8?B?TDczR1RaZGNDTmtPSXh2OEdTelBKK2JZeGdSVC8xQUpPMitrdlJidFVWdDJv?=
- =?utf-8?B?T25FNndWUW0vbE5QRU5oRk5UdkxDWEh0ejEwMTl4Q1U3VkdBV3BUOXZWOTky?=
- =?utf-8?B?Q2IrZFFXV0QxbnZ2alpqV1YwWE9ZTjFpNVMwSGJ4YXlxZkZRT1hGci9tNmZN?=
- =?utf-8?B?RFF5MXZxTmN1TWU5a2RScTJEVE9la1VlZGJ2S0ptUEF1T1ZwNkdMR1FxVWZC?=
- =?utf-8?B?Vm5nYWJrcWdKYjhYMmtmME9nbTBhZ2V6K0xmaE1QSDRsZmhLWXI4WHRDZDlY?=
- =?utf-8?B?dDFNWmFVd2dKZTJQVnVaZmZ4VktxUXJFdXBQbURjNjFxY2g1OHQyWFdVYnF1?=
- =?utf-8?B?dVRKNk9XOEVaVDZDZmhNZUZWL0E4cjMxS3ZBNVFCNGxKTklUeWJsTlRvZXRx?=
- =?utf-8?B?d3g1TXRialRJdVNIS21QU0dTSFN0QWtWWFZQeXBSdHJQd1d3QnZTZVBXekJh?=
- =?utf-8?B?a1hUSWVDdE95TnJTVDFZRXRKNmMrMUhUZ3JHaHREL09nclpPbEJVSVQzdGdQ?=
- =?utf-8?B?dkw4a3BwTlhpWDNTRkhqME92L0hQSmJtNUtoVXRhM0F6WlpjdWowcmY5TzdI?=
- =?utf-8?B?Y0pRTDViWmV5NnlydVFhem1HL3ZHVWFLcUhtSkw1UU5sYnNXb0pJWm81SWQw?=
- =?utf-8?B?UmRwdGl5cHBqSW9yeUg0c0l4ZXEwRFlnRWZ5V252T0lIR2JGd1RhdUFLWUVK?=
- =?utf-8?B?L2lraUlrczV0eXVRV0JuNGFQZXV2d25uQUJEbFZOMEU5NTlEMlZBZGxaVitT?=
- =?utf-8?B?WVEwelg2djNXaW5CMGZKNjBNL081bHF3Yzh0R1FqdldsZGJXT3UwaU50enE3?=
- =?utf-8?Q?V9fHI8bLiebJdylVPqUglJ6hO?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 97f51e6b-f870-4531-a580-08dbdee9b6d6
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Nov 2023 16:59:18.0995
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: nmKEfuiiQxg97LxE1t/pGMHuA/Qfw/C0XLsYQR8X4IOI+/ZGRJYwrW8E6grWW6AU0a6qMHpVxmQ1b4DibyXBjw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5806
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] usb:gadget:uvc Do not use worker thread to queue isoc
+ usb requests
+Content-Language: en-US
+To: Michael Grzeschik <mgr@pengutronix.de>
+Cc: Dan Scally <dan.scally@ideasonboard.com>, stern@rowland.harvard.edu,
+ laurent.pinchart@ideasonboard.com, gregkh@linuxfoundation.org,
+ Thinh.Nguyen@synopsys.com, arakesh@google.com, etalvala@google.com,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20231026215635.2478767-1-jchowdhary@google.com>
+ <20231102060120.1159112-1-jchowdhary@google.com>
+ <915ef27a-11c8-49ba-8f8a-b4524b85c75a@ideasonboard.com>
+ <b6732f9f-f77f-449a-8934-f23a7f5b3177@google.com>
+ <ZUTLgfRRkUOna//G@pengutronix.de>
+From: Jayant Chowdhary <jchowdhary@google.com>
+In-Reply-To: <ZUTLgfRRkUOna//G@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 11/5/2023 11:39, Lukas Wunner wrote:
-> On Fri, Nov 03, 2023 at 02:07:55PM -0500, Mario Limonciello wrote:
->> The `is_thunderbolt` bit has been used to indicate that a PCIe device
->> contained the Intel VSEC which is used by various parts of the kernel
->> to change behavior. To later allow usage with USB4 controllers as well,
->> rename this to `is_tunneled`.
-> 
-> This doesn't seem to make sense.  is_thunderbolt indicates that a device
-> is part of a Thunderbolt controller.  See the code comment:
-> 
->> -	unsigned int	is_thunderbolt:1;	/* Thunderbolt controller */
-> 
-> A Thunderbolt controller is not necessarily tunneled.  The PCIe switch,
-> NHI and XHCI of the Thunderbolt host controller are not tunneled at all.
-> 
-> Thanks,
-> 
-> Lukas
+Hi Michael,
 
-I could really use some clarification which PCIe devices actually 
-contain the Intel VSEC.
+On 11/3/23 03:29, Michael Grzeschik wrote:
+> On Fri, Nov 03, 2023 at 12:28:31AM -0700, Jayant Chowdhary wrote:
+>> Hi Dan,
+>> Thank you for the comments.
+>> I uploaded a new patch at https://lore.kernel.org/linux-usb/20231103071353.1577383-1-jchowdhary@google.com/T/#u.
+>>
+>> On 11/2/23 09:07, Dan Scally wrote:
+>>> Hi Jayant - thanks for the patch
+>>>
+>>> On 02/11/2023 06:01, Jayant Chowdhary wrote:
+>>>> When we use an async work queue to perform the function of pumping
+>>>> usb requests to the usb controller, it is possible that amongst other
+>>>> factors, thread scheduling affects at what cadence we're able to pump
+>>>> requests. This could mean isoc usb requests miss their uframes - resulting
+>>>> in video stream flickers on the host device.
+>>>>
+>>>> To avoid this, we make the async_wq thread only produce isoc usb_requests
+>>>> with uvc buffers encoded into them. The process of queueing to the
+>>>> endpoint is done by the uvc_video_complete() handler. In case no
+>>>> usb_requests are ready with encoded information, we just queue a zero
+>>>> length request to the endpoint from the complete handler.
+>>>>
+>>>> For bulk endpoints the async_wq thread still queues usb requests to the
+>>>> endpoint.
+>>>>
+>>>> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+>>>> Signed-off-by: Jayant Chowdhary <jchowdhary@google.com>
+>>>> Suggested-by: Avichal Rakesh <arakesh@google.com>
+>>>> Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+>>>> ---
+>>>>   Based on top of
+>>>>   https://lore.kernel.org/linux-usb/20230930184821.310143-1-arakesh@google.com/T/#t:
+>>>>   v1->v2: Added self Signed-Off-by and addressed review comments
+>>>>   v2->v3: Encode to usb requests in async_wq; queue to ep in complete handler
+>>>>      for isoc transfers.
+>>>>
+>>>>   drivers/usb/gadget/function/uvc.h       |   8 +
+>>>>   drivers/usb/gadget/function/uvc_video.c | 187 +++++++++++++++++++-----
+>>>>   2 files changed, 156 insertions(+), 39 deletions(-)
+>>>>
+>>>> diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
+>>>> index e8d4c87f1e09..82c783410554 100644
+>>>> --- a/drivers/usb/gadget/function/uvc.h
+>>>> +++ b/drivers/usb/gadget/function/uvc.h
+>>>> @@ -105,7 +105,15 @@ struct uvc_video {
+>>>>       bool is_enabled; /* tracks whether video stream is enabled */
+>>>>       unsigned int req_size;
+>>>>       struct list_head ureqs; /* all uvc_requests allocated by uvc_video */
+>>>> +
+>>>> +    /* USB requests video pump thread can encode into*/
+>>>
+>>> "USB requests that the video pump thread can encode into", and a space before the closing */ please (and the same a few more times below).
+>>
+>> Done.
+>>
+>>>
+>>>>       struct list_head req_free;
+>>>> +
+>>>> +    /*
+>>>> +     * USB requests video pump thread has already encoded into. These are
+>>>> +     * ready to be queued to the endpoint.
+>>>> +     */
+>>>> +    struct list_head req_ready;
+>>>>       spinlock_t req_lock;
+>>>>         unsigned int req_int_count;
+>>>> diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
+>>>> index 53feb790a4c3..c84183e9afcc 100644
+>>>> --- a/drivers/usb/gadget/function/uvc_video.c
+>>>> +++ b/drivers/usb/gadget/function/uvc_video.c
+>>>> @@ -268,6 +268,98 @@ static int uvcg_video_ep_queue(struct uvc_video *video, struct usb_request *req)
+>>>>       return ret;
+>>>>   }
+>>>>   +/* This function must be called with video->req_lock held*/
+>>>> +static int uvcg_video_usb_req_queue(struct uvc_video *video,
+>>>> +    struct usb_request *req, bool queue_to_ep) {
+>>> Brace on a new line please - same a few more times below
+>>
+>> Done.
+>>
+>>>> +    bool is_bulk = video->max_payload_size;
+>>> empty line here
+>>>> +    if (!video->is_enabled) {
+>>>> +        uvc_video_free_request(req->context, video->ep);
+>>>> +        return -ENODEV;
+>>>> +    }
+>>>> +    if (queue_to_ep) {
+>>>> +        struct uvc_request *ureq = req->context;
+>>>> +        /*
+>>>> +         * With USB3 handling more requests at a higher speed, we can't
+>>>> +         * afford to generate an interrupt for every request. Decide to
+>>>> +         * interrupt:
+>>>> +         *
+>>>> +         * - When no more requests are available in the free queue, as
+>>>> +         *   this may be our last chance to refill the endpoint's
+>>>> +         *   request queue.
+>>>> +         *
+>>>> +         * - When this is request is the last request for the video
+>>>> +         *   buffer, as we want to start sending the next video buffer
+>>>> +         *   ASAP in case it doesn't get started already in the next
+>>>> +         *   iteration of this loop.
+>>>> +         *
+>>>> +         * - Four times over the length of the requests queue (as
+>>>> +         *   indicated by video->uvc_num_requests), as a trade-off
+>>>> +         *   between latency and interrupt load.
+>>>> +        */
+>>>> +        if (list_empty(&video->req_free) || ureq->last_buf ||
+>>>> +            !(video->req_int_count %
+>>>> +            DIV_ROUND_UP(video->uvc_num_requests, 4))) {
+>>>> +            video->req_int_count = 0;
+>>>> +            req->no_interrupt = 0;
+>>>> +        } else {
+>>>> +            req->no_interrupt = 1;
+>>>> +        }
+>>>> +        video->req_int_count++;
+>>>> +        return uvcg_video_ep_queue(video, req);
+>>>> +    } else {
+>>>> +        /*
+>>>> +        * If we're not queing to the ep, for isoc we're queing
+>>>> +        * to the req_ready list, otherwise req_free.
+>>>> +        */
+>>>> +        struct list_head *list =
+>>>> +            is_bulk ? &video->req_free : &video->req_ready;
+>>>> +        list_add_tail(&req->list, list);
+>>>> +    }
+>>>> +    return 0;
+>>>> +}
+>>>> +
+>>>> +static int uvcg_video_ep_queue_zero_length(struct usb_request *req,
+>>>> +    struct uvc_video *video) {
+>>>> +    req->length = 0;
+>>>> +    return uvcg_video_ep_queue(video, req);
+>>>> +}
+>>> Not sure this is worth its own function
+>>
+>> Removed the function.
+>>
+>>>> +
+>>>> +/* Must only be called from uvcg_video_enable - since after that we only want to
+>>>> + * queue requests to the endpoint from the uvc_video_complete complete handler.
+>>>> + * This function is needed in order to 'kick start' the flow of requests from
+>>>> + * gadget driver to the usb controller.
+>>>> + */
+>>>> +static void uvc_video_ep_queue_initial_requests(struct uvc_video *video) {
+>>>> +    struct usb_request *req = NULL;
+>>>> +    unsigned long flags = 0;
+>>>> +    unsigned int count = 0;
+>>>> +    int ret = 0;
+>>>> +    /* We only queue half of the free list since we still want to have
+>>>> +     * some free usb_requests in the free list for the video_pump async_wq
+>>>> +     * thread to encode uvc buffers into. Otherwise we could get into a
+>>>> +     * situation where the free list does not have any usb requests to
+>>>> +     * encode into - we always end up queueing 0 length requests to the
+>>>> +     * end point.
+>>>> +     */
+>>>> +    unsigned half_list_size = video->uvc_num_requests / 2;
+>>>> +    spin_lock_irqsave(&video->req_lock, flags);
+>>>> +    /* Take these requests off the free list and queue them all to the
+>>>> +     * endpoint. Since we queue the requests with the req_lock held,
+>>>> +     */
+>>>
+>>> This comment seems to be incomplete? You also want an opening /* on its own line:
+>>
+>> Apologies I think I missed out completing this comment I will send out another patch later.
+>>
+>>>
+>>>
+>>> /*
+>>>  * Multi line comments
+>>>  * look like this
+>>>  */
+>>>
+>>
+>> Done.
+>>
+>>>> +    while (count < half_list_size) {
+>>>> +        req = list_first_entry(&video->req_free, struct usb_request,
+>>>> +                    list);
+>>>> +        list_del(&req->list);
+>>>> +        ret = uvcg_video_ep_queue_zero_length(req, video);
+>>>> +        if (ret < 0) {
+>>>> +            uvcg_queue_cancel(&video->queue, /*disconnect*/0);
+>>>> +            break;
+>>>> +        }
+>>>> +        count++;
+>>>> +    }
+>>>> +    spin_unlock_irqrestore(&video->req_lock, flags);
+>>>> +}
+>>>> +
+>>>
+>>> So if I'm understanding the new starting sequence right for an isoc endpoint there's an initial flight of half the requests (between 2 and 32) that are queued as zero length - the very first one to .complete() being re-queued as a zero length request before the workqueue is started and encodes data into the _other_ half of the requests which were left in req_free and putting them into req_ready. At that point the .complete()s being run start to pick requests off req_ready instead and they get sent out with data...does that sound right?
+>>>
+>>>
+>> That is correct - the first half of number of usb requests allocated (2, 32) are queued at zero length initially. We’ll have half of the requests being sent to the ep in flight and half in the free list yes.
+>> queue_work will actually start with either uvc_v4l2_qbuf (uvc_v4l2.c) or at a zero length request being completed - whichever comes first.
+>>
+>>> What are the implications of those initial 3-33 zero length requests? What kind of latency can that introduce to the start of the video stream?
+>>
+>> At the worst, we’ll have  a 32 x 125us(uframe period) = 4ms  delay for the first frame of the uvc buffer stream being sent out to the usb controller.
+>> After that, since uvc buffers are typically queued at a much lower rate than usb requests being sent to the endpoint, we should be fine ?
+>> In my local testing, I don't see any delay observable to the naked eye.
+>
+> You won't see the any effect in most cases, because what you actually
+> lose is potential bandwidth. Let's think of a possible scenario; you
+> have the hard limits of displaying a frame every 33ms. If the frame is
+> small enough to be transmitted in the remaining 29ms with the active
+> bandwidth tweaks in the usb endpoint (mult, burst), the streaming is
+> totally fine.
+>
+Would we really lose bandwidth as long as the time taken to encode a frame and
+send it to the USB endpoint is really <= 33ms (in that case we can't meet the 30 fps
+requirement anyway)
 
-Is it in all 3 of those PCIe devices and not just the switch?
+If we consider a 30fps stream and picture the timeline. The host expects the first
+frame at 33ms, second at 66ms and so on. We start encoding the first frame at A- 4ms.
+Let's say we take 32ms to encode it and send it. Its received by the host at B- 36ms.
+The next frame starts encoding and again takes 32ms. The host gets it at point C which is
+at 68ms in the timeline. If we keep following the train, we see that the difference in the skew
+keeps decreasing and we eventually start hitting the expected timeline.
 
-If so, I think I would rather introduce a separate bit.  So after this 
-series we would have:
 
-is_tunneled:1
-is_thunderbolt:1
-no_command_complete:1
+0ms  4ms                  33ms  36ms          66ms  68ms               99ms 100ms
+|----|---------------------|-----|-------------|----|--------------------|--|
 
-* TBT1 devices would set no_command_complete
-   - The consumer would be pcie_init()
-* All devices with the Intel VSEC would set is_thunderbolt and the two 
-consumers would be:
-  - apple-gmux.c
-  - pci_bridge_d3_possible()
-* USB4 devices and PCIe switches with the VSEC would set is_tunneled.
+     A<------------------------->B<----------------->C<--------------------->D
 
+
+Thanks,
+Jayant
+
+
+> The only downside is that you loose possible 4ms of processing time
+> after the total frame did hit the host. But this only matters if the
+> presentation time stamp (PTS) is actually set and would take an effect.
+>
+> Regards,
+> Michael
+>
+>>>
+>>>>   static void
+>>>>   uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
+>>>>   {
+>>>> @@ -276,6 +368,8 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
+>>>>       struct uvc_video_queue *queue = &video->queue;
+>>>>       struct uvc_buffer *last_buf = NULL;
+>>>>       unsigned long flags;
+>>>> +    bool is_bulk = video->max_payload_size;
+>>>> +    int ret = 0;
+>>>>         spin_lock_irqsave(&video->req_lock, flags);
+>>>>       if (!video->is_enabled) {
+>>>> @@ -329,7 +423,38 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
+>>>>        * back to req_free
+>>>>        */
+>>>>       if (video->is_enabled) {
+>>>> -        list_add_tail(&req->list, &video->req_free);
+>>>> +        /*
+>>>> +         * Here we check whether any request is available in the ready
+>>>> +         * list. If it is, queue it to the ep and add the current
+>>>> +         * usb_request to the req_free list - for video_pump to fill in.
+>>>> +         * Otherwise, just use the current usb_request to queue a 0
+>>>> +         * length request to the ep. Since we always add to the req_free
+>>>> +         * list if we dequeue from the ready list, there will never
+>>>> +         * be a situation where the req_free list is completely out of
+>>>> +         * requests and cannot recover.
+>>>> +         */
+>>>> +        struct usb_request *to_queue = req;
+>>>> +        to_queue->length = 0;
+>>>> +        if (!list_empty(&video->req_ready)) {
+>>>> +            to_queue = list_first_entry(&video->req_ready,
+>>>> +                struct usb_request, list);
+>>>> +            list_del(&to_queue->list);
+>>>> +            /* Add it to the free list. */
+>>>> +            list_add_tail(&req->list, &video->req_free);
+>>>> +        }
+>>>> +        /*
+>>>> +         * Queue to the endpoint. The actual queueing to ep will
+>>>> +         * only happen on one thread - the async_wq for bulk endpoints
+>>>> +         * and this thread for isoc endpoints.
+>>>> +         */
+>>>> +        ret = uvcg_video_usb_req_queue(video, to_queue,
+>>>> +                           /*queue_to_ep*/!is_bulk);
+>>>
+>>>
+>>> In principle in-line comments are fine, but I don't think the parameter name is worth a comment
+>>
+>> Done.
+>>
+>>>
+>>>> +        if(ret < 0) {
+>>>> +            uvcg_queue_cancel(queue, 0);
+>>>> +        }
+>>>> +        /* Queue work to the wq as well since its possible that a buffer
+>>>> +         * may not have been completed.
+>>>> +         */
+>>>
+>>>
+>>> The phrasing of this implies this is a bit of defensive programming, but if we don't queue to the wq here then doesn't that mean it'll never run?
+>>
+>>
+>> I've updated the comment here - it is possible that we hit a situation where the in-flight usb requests may not be enough to completely
+>> encode a uvc buffer. In that case if we don't call queue_work, we'll never get the buffer marked as 'completed' and the buffer won't be
+>> returned to user-space. That'll prevent the dequeue->queue->dequeue loop and flow of buffers.
+>>
+>>>
+>>>>           queue_work(video->async_wq, &video->pump);
+>>>>       } else {
+>>>>           uvc_video_free_request(ureq, ep);
+>>>> @@ -347,6 +472,7 @@ uvc_video_free_requests(struct uvc_video *video)
+>>>>         INIT_LIST_HEAD(&video->ureqs);
+>>>>       INIT_LIST_HEAD(&video->req_free);
+>>>> +    INIT_LIST_HEAD(&video->req_ready);
+>>>>       video->req_size = 0;
+>>>>       return 0;
+>>>>   }
+>>>> @@ -424,8 +550,7 @@ static void uvcg_video_pump(struct work_struct *work)
+>>>>       struct usb_request *req = NULL;
+>>>>       struct uvc_buffer *buf;
+>>>>       unsigned long flags;
+>>>> -    bool buf_done;
+>>>> -    int ret;
+>>>> +    int ret = 0;
+>>>>         while (true) {
+>>>>           if (!video->ep->enabled)
+>>>> @@ -454,7 +579,6 @@ static void uvcg_video_pump(struct work_struct *work)
+>>>>             if (buf != NULL) {
+>>>>               video->encode(req, video, buf);
+>>>> -            buf_done = buf->state == UVC_BUF_STATE_DONE;
+>>>>           } else if (!(queue->flags & UVC_QUEUE_DISCONNECTED) && !is_bulk) {
+>>>>               /*
+>>>>                * No video buffer available; the queue is still connected and
+>>>> @@ -462,7 +586,6 @@ static void uvcg_video_pump(struct work_struct *work)
+>>>>                * prevent missed ISOC transfers.
+>>>>                */
+>>>>               req->length = 0;
+>>>> -            buf_done = false;
+>>>>           } else {
+>>>>               /*
+>>>>                * Either the queue has been disconnected or no video buffer
+>>>> @@ -473,45 +596,26 @@ static void uvcg_video_pump(struct work_struct *work)
+>>>>               break;
+>>>>           }
+>>>>   -        /*
+>>>> -         * With USB3 handling more requests at a higher speed, we can't
+>>>> -         * afford to generate an interrupt for every request. Decide to
+>>>> -         * interrupt:
+>>>> -         *
+>>>> -         * - When no more requests are available in the free queue, as
+>>>> -         *   this may be our last chance to refill the endpoint's
+>>>> -         *   request queue.
+>>>> -         *
+>>>> -         * - When this is request is the last request for the video
+>>>> -         *   buffer, as we want to start sending the next video buffer
+>>>> -         *   ASAP in case it doesn't get started already in the next
+>>>> -         *   iteration of this loop.
+>>>> -         *
+>>>> -         * - Four times over the length of the requests queue (as
+>>>> -         *   indicated by video->uvc_num_requests), as a trade-off
+>>>> -         *   between latency and interrupt load.
+>>>> -         */
+>>>> -        if (list_empty(&video->req_free) || buf_done ||
+>>>> -            !(video->req_int_count %
+>>>> -               DIV_ROUND_UP(video->uvc_num_requests, 4))) {
+>>>> -            video->req_int_count = 0;
+>>>> -            req->no_interrupt = 0;
+>>>> -        } else {
+>>>> -            req->no_interrupt = 1;
+>>>> -        }
+>>>> -
+>>>> -        /* Queue the USB request */
+>>>> -        ret = uvcg_video_ep_queue(video, req);
+>>>>           spin_unlock_irqrestore(&queue->irqlock, flags);
+>>>>   +        /* Queue the USB request.*/
+>>> I think just drop this - it was always superfluous.
+>>
+>> The uvcg_video_usb_req_queue function mentions that req_lock must be held while calling
+>> it - since its possible we might add to the req_ready list. We could say the function
+>> should hold req_lock only when the queue_to_ep parameter is false - but that doesn't
+>> seem as clean ?
+>>
+>>>> +        spin_lock_irqsave(&video->req_lock, flags);
+>>>> +        /* For bulk end points we queue from the worker thread
+>>>> +         * since we would preferably not want to wait on requests
+>>>> +         * to be ready, in the uvcg_video_complete() handler.
+>>>> +         * For isoc endpoints we add the request to the ready list
+>>>> +         * and only queue it to the endpoint from the complete handler.
+>>>> +         */
+>>>> +        ret = uvcg_video_usb_req_queue(video, req, is_bulk);
+>>>> +        spin_unlock_irqrestore(&video->req_lock, flags);
+>>>> +
+>>>>           if (ret < 0) {
+>>>>               uvcg_queue_cancel(queue, 0);
+>>>>               break;
+>>>>           }
+>>>>   -        /* Endpoint now owns the request */
+>>>> +        /* The request is owned by  the endpoint / ready list*/
+>>>>           req = NULL;
+>>>> -        video->req_int_count++;
+>>>>       }
+>>>>         if (!req)
+>>>> @@ -567,7 +671,7 @@ uvcg_video_disable(struct uvc_video *video)
+>>>>         spin_lock_irqsave(&video->req_lock, flags);
+>>>>       /*
+>>>> -     * Remove all uvc_reqeusts from ureqs with list_del_init
+>>>> +     * Remove all uvc_requests from ureqs with list_del_init
+>>> This should get fixed in the earlier series.
+>>>>        * This lets uvc_video_free_request correctly identify
+>>>>        * if the uvc_request is attached to a list or not when freeing
+>>>>        * memory.
+>>>> @@ -579,9 +683,13 @@ uvcg_video_disable(struct uvc_video *video)
+>>>>           list_del(&req->list);
+>>>>           uvc_video_free_request(req->context, video->ep);
+>>>>       }
+>>>> -
+>>> keep the empty line please
+>>
+>> Done.
+>>
+>>>> +    list_for_each_entry_safe(req, temp, &video->req_ready, list) {
+>>>> +        list_del(&req->list);
+>>>> +        uvc_video_free_request(req->context, video->ep);
+>>>> +    }
+>>> and one here too.
+>>
+>> Done.
+>>
+>> Thanks!
+>>
+>>>>       INIT_LIST_HEAD(&video->ureqs);
+>>>>       INIT_LIST_HEAD(&video->req_free);
+>>>> +    INIT_LIST_HEAD(&video->req_ready);
+>>>>       video->req_size = 0;
+>>>>       spin_unlock_irqrestore(&video->req_lock, flags);
+>>>>   @@ -635,7 +743,7 @@ int uvcg_video_enable(struct uvc_video *video)
+>>>>         video->req_int_count = 0;
+>>>>   -    queue_work(video->async_wq, &video->pump);
+>>>> +    uvc_video_ep_queue_initial_requests(video);
+>>>>         return ret;
+>>>>   }
+>>>> @@ -648,6 +756,7 @@ int uvcg_video_init(struct uvc_video *video, struct uvc_device *uvc)
+>>>>       video->is_enabled = false;
+>>>>       INIT_LIST_HEAD(&video->ureqs);
+>>>>       INIT_LIST_HEAD(&video->req_free);
+>>>> +    INIT_LIST_HEAD(&video->req_ready);
+>>>>       spin_lock_init(&video->req_lock);
+>>>>       INIT_WORK(&video->pump, uvcg_video_pump);
+>>>>  
+>>
+>
 
