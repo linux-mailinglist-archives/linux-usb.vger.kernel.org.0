@@ -1,550 +1,329 @@
-Return-Path: <linux-usb+bounces-2636-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2637-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2A527E4A64
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Nov 2023 22:15:41 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A2367E4B5E
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Nov 2023 23:02:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 38AFBB20F0F
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Nov 2023 21:15:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE5082814A8
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Nov 2023 22:02:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C4572A1C2;
-	Tue,  7 Nov 2023 21:15:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 880222F869;
+	Tue,  7 Nov 2023 22:02:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RgQLYGvQ"
+	dkim=pass (2048-bit key) header.d=hotmail.com header.i=@hotmail.com header.b="FWe9U/cy"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0B202A1A4
-	for <linux-usb@vger.kernel.org>; Tue,  7 Nov 2023 21:15:28 +0000 (UTC)
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B2DB10DC
-	for <linux-usb@vger.kernel.org>; Tue,  7 Nov 2023 13:15:27 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id 41be03b00d2f7-5bd33a450fdso4264979a12.0
-        for <linux-usb@vger.kernel.org>; Tue, 07 Nov 2023 13:15:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1699391727; x=1699996527; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=M5DjIdJhyNtpFoxWvAgrfrRM/ffsmD/7IKGOew5Rtso=;
-        b=RgQLYGvQRuc5m4MA2NiLfwFnqKyNU4SrgCEdsiVUBQzZA0q5ltlhVECmVeRA23boFW
-         oTF3Q/nA4/6I69MdOFgo99azrub9/U1hMCL/GcbJW3XsaBWRgTuuMv6EPDYVJDGXCzNJ
-         Z8oVJbtovzpXXeq+/xLlvE3pGZz+s0YET9095kO4KQq+bqp05AADbIB5ZWKwIS7xCdYY
-         DZ8spUcOuxzimtaDp6FOz4Lb6nG2GDAnL0dLrfLrfPBrd60s0LD19xRJeyltw2gz+5h7
-         0oK6iwaHARL0iebwK7REN7nFmmsl2rKmdSYoLwtfWCpG6KFjLvW7IwgEvo4KUVHB+i70
-         46tQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699391727; x=1699996527;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=M5DjIdJhyNtpFoxWvAgrfrRM/ffsmD/7IKGOew5Rtso=;
-        b=uB7PMuT54Y79q89PS2dv19hG0ShF9AGfqUgJDkc9saU3nl5qQufhMFT3MVJu0giVpF
-         P6TDeo+dWjwMTxXbfqp1U0sWb3gt2ewZaUbSwVpJh8b98do6ZFfqV20CRxePyGdTCPVU
-         ZcXXhTqe/mWovHOZk4WjGG51KR0tiyw1sPPpil0Azgq6MgXVAnG1mbuiGQ6jZLosu0ao
-         cF25ayHMBbDSQ+n9oDM9ELG9DbredbJgf5LidRkNApASkFN2KUBLdUjolQBFWrU0tGh7
-         OFVyPdzbVstUgiV3f5pj/rKSSFPecK+rWTuwlNKYnI6ZQPQ/AssRBzX2JELfV8FUcMD9
-         XlcQ==
-X-Gm-Message-State: AOJu0YyasR7y3/mXZtHpFEKzNg++WlHggmArHN8H7Cf9ujAgs5MjO1Gr
-	Nv4W2bd+gq7jQjFo2PHaKb14iw==
-X-Google-Smtp-Source: AGHT+IGx1bKN29xz9oylF+RVtb9Ju/drsAZBy+DdnNNKUViiSTwglKWaepQR676H2S01DeOgIZZ7Sg==
-X-Received: by 2002:a05:6a20:840d:b0:181:15:5755 with SMTP id c13-20020a056a20840d00b0018100155755mr192652pzd.56.1699391726711;
-        Tue, 07 Nov 2023 13:15:26 -0800 (PST)
-Received: from [192.168.60.239] (183.43.230.35.bc.googleusercontent.com. [35.230.43.183])
-        by smtp.gmail.com with ESMTPSA id s12-20020a056a00194c00b006979f70fdd5sm7480538pfk.219.2023.11.07.13.15.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Nov 2023 13:15:26 -0800 (PST)
-Message-ID: <b355d95f-d1c3-4744-b9b9-16dd07f893d8@google.com>
-Date: Tue, 7 Nov 2023 13:15:24 -0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCE5B2F85F
+	for <linux-usb@vger.kernel.org>; Tue,  7 Nov 2023 22:02:31 +0000 (UTC)
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11olkn2010.outbound.protection.outlook.com [40.92.20.10])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03C0B10F3;
+	Tue,  7 Nov 2023 14:02:31 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=C4mN+V0bYm+zeQedsfNeCn6dmF96l8VKlQNH9zKjaeTGaLAjArD9bjsZxbA8grpXFr7vUaOJemj34aFEM2d5bkcpdf9/2gqxquVN9jjvcxOIQHdO6UUrJmSVPMQlkstuS3bmL7yIJ3gewZe4eKQXNHKax5/4o6xi68asq9PYQH+JzWAdyfB8Ssz8NMvsSmclMsOK9IecSCiv91bvr7Dq/mYEpd7eS+JpiGSdGAa5+/CRD7YXIJlwr1Juow/wMNXM91YZjyZ+7jUSxlG3Vxe2TUxcpS4rPgPnLeYnXUZzQvcyplsWezRWcM3O67esXPGXFwXwG40fzg5sQ8G+cmG39Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zB76wM2hT+D3n4/PVpXrSPpDCEFYc1NH3i1p5VO/9mw=;
+ b=ZNs+VIQgDqzCBGvw8ahu07efG/u5KLt4w7avxgX7geR/xV3JI092YHgXQowded4erP2zYHgeMQRjis4oFFTQ7XhIkU3XXLDzSTrt+SVy6JKW24/xhl3BYzQNgqmX9uH2kPfPtS2FxAEthd/vk+isQ7hdMiIsa7PEHO4ZWc6jfAYvbXOj1S13jCcZo9m/gdIKvbRhueVRUOXOe5QUPuowFlHqJzSfthxlI7Md6Z8ZGb6jvHDLT9WiqHe8Bg2ihZcYHEe2uh/hkP1ve5+A6DJghBF6kMKmpFbSrjq4Gg3eEpBlPD+svWvPQ1nBN5JWB4qCkDJqFAVbvVvHIJqd8cIG5g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zB76wM2hT+D3n4/PVpXrSPpDCEFYc1NH3i1p5VO/9mw=;
+ b=FWe9U/cyyqR0A2iiWU+iYJetbwcRfL0342S1sycg4ELtKTBchCqibK8rFNABJC4wcnDBzIkdeHvaYw2vyMvlgBHiLDfcUy9+dtLLcOZOIoRorYFYdsMbECLyvIN1aMukmMA2OL5RdYLEYI/PocKWXE2nkGYkJWTSEeWCyAjnuCPQfm4ZRK6hYI5PbTMxUWB4+gHF+5iWgo69Xb3VcXYRB/z3LFih7w6/lm/7YNnTQEbYkoSIer2rw0F5A3qKaCGoZgSorZViaqv5IM3DR6bo4/ITiKGPXvT5JkEnEFWGF5G7P4xmp+xwCtjmbmVqa+HjAv8xgPYotB3yWE+kJsBE0Q==
+Received: from PH0PR06MB7817.namprd06.prod.outlook.com (2603:10b6:510:ed::8)
+ by PH0PR06MB8618.namprd06.prod.outlook.com (2603:10b6:510:119::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.28; Tue, 7 Nov
+ 2023 22:02:28 +0000
+Received: from PH0PR06MB7817.namprd06.prod.outlook.com
+ ([fe80::f9e:b4b4:77a7:442a]) by PH0PR06MB7817.namprd06.prod.outlook.com
+ ([fe80::f9e:b4b4:77a7:442a%7]) with mapi id 15.20.6954.028; Tue, 7 Nov 2023
+ 22:02:28 +0000
+From: Victor Fragoso <victorffs@hotmail.com>
+To: "larsm17@gmail.com" <larsm17@gmail.com>, "johan@kernel.org"
+	<johan@kernel.org>
+CC: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] USB: serial: option: add Fibocom L7xx modules
+Thread-Topic: [PATCH] USB: serial: option: add Fibocom L7xx modules
+Thread-Index: AQHaB6s8qAI51809GEez52FxUyeChbBcDQMAgAHhJYCAACLBAIARa/GA
+Date: Tue, 7 Nov 2023 22:02:28 +0000
+Message-ID: <e56d75116d36eee749439f8d0a1b8ca4f7ce1445.camel@hotmail.com>
+References: <9315051ae981aaad1d46724641defc6e5f79d12b.camel@hotmail.com>
+	 <84a78bb8-fd85-4ee5-9c92-859e8450a587@gmail.com>
+	 <94477736e69cc76eaaef8584d7e1aa5078a0611e.camel@hotmail.com>
+	 <103aa944-073a-4dd0-8d58-8c9123dc2352@gmail.com>
+In-Reply-To: <103aa944-073a-4dd0-8d58-8c9123dc2352@gmail.com>
+Accept-Language: pt-BR, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-ms-exchange-messagesentrepresentingtype: 1
+x-tmn: [42jDaD44XYfrBM/2VUyABADTt02WE9GJ]
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH0PR06MB7817:EE_|PH0PR06MB8618:EE_
+x-ms-office365-filtering-correlation-id: 9f63d678-0cc6-4cfd-944d-08dbdfdd3bcf
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ V4UXchbCg1+LhqYsJoFVs5dVz/trELtoOA2YBBtVsD+mKRVGGrY1mIxXfqc9uKiKlTygo8mPAo9ByzI7rQF/Aw29tyt5cvN0rNSsyHvqRN+LUWPMRupzfUDiMoHWflSVXjUIWYm1JTDM1TAlYkzcP0k3e0OYQMtGFDKuBRFclTeoo4NYv4DHlvxAWzf9CKKX1GUlelAk7FKyXjCxtk7GTbpx2dGdcjMbfsghtUtyIV+eJcduPrgrI8aNtLrZbdtMA7/CVGDgyD+M28pIlH/E90+nrPYvyjbnqJHp5vdpGIDvXCG4SZQb88DcVaep1HR6AiyZL62oFjXBP0dYIyue+LtvAdxKvQ5AsZuyU7SVdpL0YnK2grI7GCKDGuVrGbSlGDxelMLU17c8helqA9ElJucqxJhXi9eDEnb8QrrT+IXkRFjo8JH077fXIQ4GeoHkUNSmOci/fVNDndmfH2Y0XAibhHey+XI5C0VFo4Lj3lQK2mgCddCV2I/KYYaRQp2QjVmGSMby5sPj/X3z2Z3/g4WMydLGEvId7IgbtxQ57QyaYg3v6e74zW5YAK2XJo3d
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?c2l2UHJtRlp6ajI3SjQ1OHROaHNaOExmcGRjQlZaUVNHTzhNbXdRRS81VU9X?=
+ =?utf-8?B?Ulo5cWw1QVRndjd0Z3p0NldZODdvRFVrNHZQWTFtK0gxVVJ1MTc2a3VHZ084?=
+ =?utf-8?B?dGJ2ckh0WmMzd1BPb3AwLzRMU2p0a0YvR29Hc0l0aHJXZmVsOW05NDk1YVdo?=
+ =?utf-8?B?cmpkWjAxS3ZuTzJKd005cVFlWDZ5MTJ0bDh5bVdPcjBuRTFCSkNCMTlOS3Ra?=
+ =?utf-8?B?bElNMXZlTVVleXA4bXFjbjFDV3NRV09qTXJsWW5wdU5IYXo4MDlRSlhuV1JT?=
+ =?utf-8?B?TFdIYy9SY2JVTFAxZVFGZHdFVG4vdWV0N296SFYzWklYb0pSZnB4RDU5cGdT?=
+ =?utf-8?B?aHRhOEJDdnFxSDdQalk3b0RTYjZBY2IwcTBZd0pXbmYxVUltVGY3bngrYTR5?=
+ =?utf-8?B?bGwzVXhJTlVxY3Z0YXRoWlFpcFRINWViZjRieDRSUFptN2s0SXQ2dDYwZzJC?=
+ =?utf-8?B?WG5vajVSTUxWNlEwNmFvZHYxdndqbFZiNkd5NklOUmVVZmMwbFUrNE1hSWFS?=
+ =?utf-8?B?ajZxaGhYa1VUV05ORmY4TzQ1cU5jUnB4YVZoK2E3Z3JnNDhzcmdYSG43VVN4?=
+ =?utf-8?B?RnFwcTY2RllFdzZBME8xelY3Z2lnMmJRN21EY3JCV2xsMHlDN1pMR1hNdmQ4?=
+ =?utf-8?B?N1JHQnVuZk13dk5mcERFT1EwRHhWSStFSVV3cGcyeUVod21iVUhtZFp4VDV2?=
+ =?utf-8?B?amdNTVNYRWZVUkVyQmsxdmRpdzRqMDNkamFISnl5L1RZU1M4bFp1eURQUkJN?=
+ =?utf-8?B?WlZ4eVZkcnIyb2l6bDZEZUtVZHNsZ3hYNWJJR243OWlCR1ZiRzhEc1NCVDNB?=
+ =?utf-8?B?b1RISVZUZlFkc04vQng5MytLYUwxUnV3MlJLRE1RTkZrYjN4VTIraHI0NEJz?=
+ =?utf-8?B?QUpHRjVvMXdickpsbWxjVHUxWGx1bnk3c0VhOUVMaXJIVEpBbk9sckNmb0Zm?=
+ =?utf-8?B?N2dUbjlyZEw5bG56Q0p3VzZ6ekFMUUlIa04xamdjaW1wVENXdE8wWitkdkxr?=
+ =?utf-8?B?VXFvQ2tzNDhVVVJvZ24rOE52dWJIZmJSbGY4Y0JxVHpPNlZKNUdlcTc3Y2Zv?=
+ =?utf-8?B?TnZSWnF6R1VnWUxDaWhmV0dxemg0cnJUcHE1bGt6TCtyRWovRTBHS2E2NFpu?=
+ =?utf-8?B?R0R3eUxFU2JNU3NPbnNDWTZKNXd6YUZrTHZPUkJSVm5rd3JTeHIvN0xHNGlK?=
+ =?utf-8?B?aWNsQjN2Z1FMcjc0ZVF1UFdTbGc5b21XLzM1cHNaQTFrWEx5RWpHVDYycUVX?=
+ =?utf-8?B?RE0vN1BzOHZad0R3Y0c5RitxbkozVGlJdEp0cmVtTmgxMFhtcS82SFE4Z1Nw?=
+ =?utf-8?B?RG5oNE11Ni9HZGFxY25ENkxPZjJUWW0wZnR6TnBxenBqdDNYT3gvOUlFSDk1?=
+ =?utf-8?B?c0FDSk50T3Z3V0cra3NxelhiaGtlYlpSTlNqaEo2NTNqWUVYVkRSZ2NyTDRI?=
+ =?utf-8?B?MVVOSmNGYzZhWkJodHlFblRselJDL1pmKzhESG5ObDdsSkZObS80MjJGanhX?=
+ =?utf-8?B?ZUpFMDFVSVk2QmdDWFl6U3U2Z2VxMFdodEk2S0xaTVZnMzhMUHdsUUxkUnc1?=
+ =?utf-8?B?clJrWXFSWmo4aDZCY2F6bG4xbmtkUmJ2RFZTT1VTeEJZMklDQkZmeThWYUJQ?=
+ =?utf-8?Q?i7sIyTN/HJ4o3ypVzBjExX8mw6NDxtJo7d4pYHLK6T0A=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <B715724E04B32F4BB47263D61BD74C48@namprd06.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 4/4] usb: gadget: uvc: Fix use-after-free for inflight
- usb_requests
-Content-Language: en-US
-From: Avichal Rakesh <arakesh@google.com>
-To: Dan Scally <dan.scally@ideasonboard.com>
-Cc: etalvala@google.com, gregkh@linuxfoundation.org, jchowdhary@google.com,
- laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, m.grzeschik@pengutronix.de
-References: <73309396-3856-43a2-9a6f-81a40ed594db@google.com>
- <20231027201959.1869181-1-arakesh@google.com>
- <20231027201959.1869181-4-arakesh@google.com>
- <6d7b5ba5-9037-4a3e-a6b0-6b4ad6c8700a@ideasonboard.com>
- <7f5f38fb-3c32-437f-8a3b-e94fa923fec4@google.com>
- <3219a0bd-97a8-4e84-9873-ddd508149b98@ideasonboard.com>
- <ce4eec12-47d8-4ae4-8ff3-6bca813c28bb@google.com>
-In-Reply-To: <ce4eec12-47d8-4ae4-8ff3-6bca813c28bb@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-89723.templateTenant
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR06MB7817.namprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9f63d678-0cc6-4cfd-944d-08dbdfdd3bcf
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Nov 2023 22:02:28.6808
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR06MB8618
 
-
-
-On 11/2/23 13:39, Avichal Rakesh wrote:
-> Hey Dan, thank you for taking the time to review the patch!
-> 
-> Sent out v11 with some comments addressed:
-> https://lore.kernel.org/all/20231102201939.4171214-1-arakesh@google.com/
-> 
-> On 11/2/23 06:29, Dan Scally wrote:
->> Hi Avichal
->>
->> On 30/10/2023 20:56, Avichal Rakesh wrote:
->>> Thank you for taking a look Dan!
->>>
->>> On 10/28/23 13:56, Dan Scally wrote:
->>>> Hi Avichal
->>>>
->>>> On 27/10/2023 21:19, Avichal Rakesh wrote:
->>>>> Currently, the uvc gadget driver allocates all uvc_requests as one array
->>>>> and deallocates them all when the video stream stops. This includes
->>>>> de-allocating all the usb_requests associated with those uvc_requests.
->>>>> This can lead to use-after-free issues if any of those de-allocated
->>>>> usb_requests were still owned by the usb controller.
->>>>>
->>>>> This is patch 2 of 2 in fixing the use-after-free issue. It adds a new
->>>>> flag to uvc_video to track when frames and requests should be flowing.
->>>>> When disabling the video stream, the flag is tripped and, instead
->>>>> of de-allocating all uvc_requests and usb_requests, the gadget
->>>>> driver only de-allocates those usb_requests that are currently
->>>>> owned by it (as present in req_free). Other usb_requests are left
->>>>> untouched until their completion handler is called which takes care
->>>>> of freeing the usb_request and its corresponding uvc_request.
->>>>>
->>>>> Now that uvc_video does not depends on uvc->state, this patch removes
->>>>> unnecessary upates to uvc->state that were made to accommodate uvc_video
->>>>> logic. This should ensure that uvc gadget driver never accidentally
->>>>> de-allocates a usb_request that it doesn't own.
->>>>>
->>>>> Link: https://lore.kernel.org/7cd81649-2795-45b6-8c10-b7df1055020d@google.com
->>>>> Suggested-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
->>>>> Reviewed-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
->>>>> Tested-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
->>>>> Signed-off-by: Avichal Rakesh <arakesh@google.com>
->>>>> ---
->>>>> v1 -> v2: Rebased to ToT, and fixed deadlock reported in
->>>>>             https://lore.kernel.org/all/ZRv2UnKztgyqk2pt@pengutronix.de/
->>>>> v2 -> v3: Fix email threading goof-up
->>>>> v3 -> v4: re-rebase to ToT & moved to a uvc_video level lock
->>>>>             as discussed in
->>>>>             https://lore.kernel.org/b14b296f-2e08-4edf-aeea-1c5b621e2d0c@google.com/
->>>>> v4 -> v5: Address review comments. Add Reviewed-by & Tested-by.
->>>>> v5 -> v6: Added another patch before this one to make uvcg_video_disable
->>>>>             easier to review.
->>>>> v6 -> v7: Fix warning reported in
->>>>>             https://lore.kernel.org/202310200457.GwPPFuHX-lkp@intel.com/
->>>>> v7 -> v8: No change. Getting back in review queue
->>>>> v8 -> v9: No change.
->>>>>
->>>>>    drivers/usb/gadget/function/uvc.h       |   1 +
->>>>>    drivers/usb/gadget/function/uvc_v4l2.c  |  12 +--
->>>>>    drivers/usb/gadget/function/uvc_video.c | 128 ++++++++++++++++++++----
->>>>>    3 files changed, 111 insertions(+), 30 deletions(-)
->>>>>
->>>>> diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
->>>>> index 993694da0bbc..be0d012aa244 100644
->>>>> --- a/drivers/usb/gadget/function/uvc.h
->>>>> +++ b/drivers/usb/gadget/function/uvc.h
->>>>> @@ -102,6 +102,7 @@ struct uvc_video {
->>>>>        unsigned int uvc_num_requests;
->>>>>
->>>>>        /* Requests */
->>>>> +    bool is_enabled; /* tracks whether video stream is enabled */
->>>>>        unsigned int req_size;
->>>>>        struct list_head ureqs; /* all uvc_requests allocated by uvc_video */
->>>>>        struct list_head req_free;
->>>>> diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
->>>>> index 904dd283cbf7..2f8634e05612 100644
->>>>> --- a/drivers/usb/gadget/function/uvc_v4l2.c
->>>>> +++ b/drivers/usb/gadget/function/uvc_v4l2.c
->>>>> @@ -451,8 +451,8 @@ uvc_v4l2_streamon(struct file *file, void *fh, enum v4l2_buf_type type)
->>>>>         * Complete the alternate setting selection setup phase now that
->>>>>         * userspace is ready to provide video frames.
->>>>>         */
->>>>> -    uvc_function_setup_continue(uvc, 0);
->>>>>        uvc->state = UVC_STATE_STREAMING;
->>>>> +    uvc_function_setup_continue(uvc, 0);
->>>>>
->>>>>        return 0;
->>>>>    }
->>>>> @@ -468,11 +468,11 @@ uvc_v4l2_streamoff(struct file *file, void *fh, enum v4l2_buf_type type)
->>>>>        if (type != video->queue.queue.type)
->>>>>            return -EINVAL;
->>>>>
->>>>> -    uvc->state = UVC_STATE_CONNECTED;
->>>>>        ret = uvcg_video_disable(video);
->>>>>        if (ret < 0)
->>>>>            return ret;
->>>>>
->>>>> +    uvc->state = UVC_STATE_CONNECTED;
->>>>>        uvc_function_setup_continue(uvc, 1);
->>>>>        return 0;
->>>>>    }
->>>>
->>>> I'm not sure I understand what these re-orderings are for...can you explain please?
->>> This specific one was a leftover from testing, removed this hunk.
->>> But the ones below are undoing the change in patch 1, which is
->>> flawed in its use of uvc->state without any memory guarantees.
->>>
->>> So from patch 1 to patch 4, we shuffle the code around a bit,
->>> but this makes patch 1 somewhat complete and functional even if
->>> patch 4 were to be reverted.
->>
->>
->> Okedokey - that's fine (and good)
->>
->>>
->>>>> @@ -507,14 +507,6 @@ uvc_v4l2_subscribe_event(struct v4l2_fh *fh,
->>>>>    static void uvc_v4l2_disable(struct uvc_device *uvc)
->>>>>    {
->>>>>        uvc_function_disconnect(uvc);
->>>>> -    /*
->>>>> -     * Drop uvc->state to CONNECTED if it was streaming before.
->>>>> -     * This ensures that the usb_requests are no longer queued
->>>>> -     * to the controller.
->>>>> -     */
->>>>> -    if (uvc->state == UVC_STATE_STREAMING)
->>>>> -        uvc->state = UVC_STATE_CONNECTED;
->>>>> -
->>>>>        uvcg_video_disable(&uvc->video);
->>>>>        uvcg_free_buffers(&uvc->video.queue);
->>>>>        uvc->func_connected = false;
->>>>> diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
->>>>> index 1081dd790fd6..8f330ce696ec 100644
->>>>> --- a/drivers/usb/gadget/function/uvc_video.c
->>>>> +++ b/drivers/usb/gadget/function/uvc_video.c
->>>>> @@ -227,6 +227,9 @@ uvc_video_encode_isoc(struct usb_request *req, struct uvc_video *video,
->>>>>     * Request handling
->>>>>     */
->>>>>
->>>>> +/*
->>>>> + * Must be called with req_lock held as it modifies the list ureq is held in
->>>>> + */
->>>>
->>>>
->>>> This comment probably belongs in patch #2. And in that case, shouldn't uvc_video_free_requests() hold the lock in that patch?
->>> Patch 2 doesn't change any existing locking semantics. The current
->>> code does not enforce any locking on freeing the requests, and neither
->>> does patch 2.
->>>
->>> Patch 4 introduces another call site for uvc_video_free_request, so
->>> some synchronization guarantees are needed (and hence the addition
->>> of this comment).
->>>
->>> As for uvc_video_free_requests not holding the lock, it is safe because
->>> uvc_video_free_requests is only called if request initialization fails.
->>> So uvc_video_free_requests should be the thread safe, as no other thread
->>> is processing requests when it is called.
->>>
->>> I did add a comment in uvcg_video_enable mentioning why it is safe to
->>> not hold req_free even though it accesses request related fields.
->>
->>
->> I understand, but in that case I think the comment is a little confusing - it's not the fact that the function modifies the list ureq is held in that requires it to be locked but that there're potentially multiple threads doing so. Can we go for something like "Callers must take care to hold req_lock when using this function outside of a single thread"? Feel free to re-word that however you like, as long as it's clear that it's only necessary when multiple threads could be active.
-> 
-> I see. I think having all the context made it obvious in my mind.
-> Updated the comment to be more explicit!
-> 
->>
->>>
->>> Happy to add another comment to uvc_video_free_requests if that makes it
->>> clearer!
->>>
->>>>>    static void
->>>>>    uvc_video_free_request(struct uvc_request *ureq, struct usb_ep *ep)
->>>>>    {
->>>>> @@ -271,9 +274,25 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
->>>>>        struct uvc_request *ureq = req->context;
->>>>>        struct uvc_video *video = ureq->video;
->>>>>        struct uvc_video_queue *queue = &video->queue;
->>>>> -    struct uvc_device *uvc = video->uvc;
->>>>> +    struct uvc_buffer *last_buf = NULL;
->>
->>
->> This initialisation's unnecessary since it's unconditionally set below.
->>
->>>>>        unsigned long flags;
->>>>>
->>>>> +    spin_lock_irqsave(&video->req_lock, flags);
->>>>> +    if (!video->is_enabled) {
->>>>> +        /*
->>>>> +         * When is_enabled is false, uvc_video_disable ensures that
->>>> s/uvc_video_disable/uvc_video_disable()
->>> Done!
->>>
->>>>> +         * in-flight uvc_buffers are returned, so we can safely
->>>>> +         * call free_request without worrying about last_buf.
->>>>> +         */
->>>>> +        uvc_video_free_request(ureq, ep);
->>>> Now I understand the conditional in this function in patch 2 :)
->>>>> +        spin_unlock_irqrestore(&video->req_lock, flags);
->>>>> +        return;
->>>>> +    }
->>>>> +
->>>>> +    last_buf = ureq->last_buf;
->>>>> +    ureq->last_buf = NULL;
->>>>> +    spin_unlock_irqrestore(&video->req_lock, flags);
->>>>
->>>> I'm not a huge fan of this locking, unlocking and relocking the same spinlock within the same function. Can we just hold the lock for the duration? if not, can there be an explanatory comment as to why?
->>> I agree that this is a little unfortunate, and it'd be nice if we
->>> only had a single driver level lock. However, as it stands, if
->>> we hold req_lock for the entirety of completion handler, we risk
->>> two things:
->>>
->>> 1. Adding dependencies between queue->irqlock and video->reqlock
->>> 2. Starving the video_pump thread.
->>>
->>> As of this patch, uvc_video_complete follows the same pattern as
->>> video_pump function:
->>> 1. Acquire req_lock
->>> 2. Fetch/Query usb_request
->>> 3. Drop req_lock
->>>
->>> 4. Acquire queue->irqlock
->>> 5. Buffer ops (encode/free/stop)
->>> 6. Drop queue->irqlock
->>>
->>> 7. Acquire req_lock
->>> 8. usb_request cleanup/handling
->>> 9. Drop req_lock
->>>
->>> (7), (8), and (9) are optional for video_pump, while
->>> (4), (5), and (6) are optional for uvc_video_complete.
->>>
->>> We can short-circuit uvc_video_complete with only one lock
->>> on the happy path, but this would have to be the flow for
->>> non-happy paths unless we want to hold the two locks at
->>> the same time (which isn't the worst idea, but comes with
->>> its own set of concerns).
->>>
->>
->> Yeah. Sorry - I had missed that uvcg_video_pump() follows the same pattern too. Alright, I think leave this as-is.
->>
->>>>> +
->>>>>        switch (req->status) {
->>>>>        case 0:
->>>>>            break;
->>>>> @@ -295,17 +314,26 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
->>>>>            uvcg_queue_cancel(queue, 0);
->>>>>        }
->>>>>
->>>>> -    if (ureq->last_buf) {
->>>>> -        uvcg_complete_buffer(&video->queue, ureq->last_buf);
->>>>> -        ureq->last_buf = NULL;
->>>>> +    if (last_buf) {
->>>>> +        spin_lock_irqsave(&queue->irqlock, flags);
->>>>> +        uvcg_complete_buffer(&video->queue, last_buf);
->>>>> +        spin_unlock_irqrestore(&queue->irqlock, flags);
->>>>
->>>>
->>>> I think it's right to take the irqlock here but it probably should have always been held, so this probably ought to go in its own commit with a Fixes:
->>> The lock here wasn't required before, because uvcg_complete_buffer was
->>> only ever called by the completion handler, which is synchronized by
->>> the usb controller. This is the reason we never saw an issue despite
->>> not holding the lock.
->>
->>
->> Ah - I was misled by the "called with &queue_irqlock held..." comment on uvc_complete_buffer()...I assumed that meant "you must call this function with &queue->irqlock held", but that turns out to be something of a hangover - originally it was placed there by 95faf82bd3ea6 because the callers of (at the time uvc_queue_next_buffer(), later renamed to) uvcg_complete_buffer() already held the irqlock. Clearly it needed locking then, but the function at the time manipulated queue->irqqueue and now it no longer does - that part has been stripped out to encode_bulk/encode_isoc/encode_isoc_sg(). So, probably that comment ought to have been removed at some point.
->>
->>> This patch introduces another call site in uvcg_video_disable, so to
->>> protect memory consistency, we need to make sure calls to
->>> uvcg_complete_buffer are synchronized on something other than
->>> the usb controller.
->>
->> If it's simply to prevent double calling uvcg_complete_buffer() for a buffer, is holding the irqlock necessary? Both uvc_video_complete() and uvc_video_disable() conditionally call uvcg_complete_buffer() based on whether ureq->last_buf is set or not, and both functions assess that whilst holding req_lock, so unless I'm missing something that situation is already guarded against.
-> 
-> Even without holding queue->irqlock, we guaratee that uvcg_complete_buffer()
-> is only called once per buffer (by querying last_buf with req_lock held).
-> However, uvcg_complete_buffer modifies queue->flags which in honesty
-> will not cause any problems, but is promlematic from theoretical
-> correctness standpoint. 
-> 
-> Either way, this shouldn't be too much overhead, as
-> this is only called once per frame, and most requests don't
-> have last_buf set anyway. Let me know if you feel strongly
-> about not having the locks there, and I can drop it.
-> 
->>
->>
->>>
->>>>>        }
->>>>>
->>>>>        spin_lock_irqsave(&video->req_lock, flags);
->>>>> -    list_add_tail(&req->list, &video->req_free);
->>>>> -    spin_unlock_irqrestore(&video->req_lock, flags);
->>>>> -
->>>>> -    if (uvc->state == UVC_STATE_STREAMING)
->>>>> +    /*
->>>>> +     * Video stream might have been disabled while we were
->>>>> +     * processing the current usb_request. So make sure
->>>>> +     * we're still streaming before queueing the usb_request
->>>>> +     * back to req_free
->>>>> +     */
->>>>> +    if (video->is_enabled) {
->>>>> +        list_add_tail(&req->list, &video->req_free);
->>>>>            queue_work(video->async_wq, &video->pump);
->>>>> +    } else {
->>>>> +        uvc_video_free_request(ureq, ep);
->>>>> +    }
->>>>> +    spin_unlock_irqrestore(&video->req_lock, flags);
->>>>>    }
->>>>>
->>>>>    static int
->>>>> @@ -393,20 +421,22 @@ static void uvcg_video_pump(struct work_struct *work)
->>>>>        struct uvc_video_queue *queue = &video->queue;
->>>>>        /* video->max_payload_size is only set when using bulk transfer */
->>>>>        bool is_bulk = video->max_payload_size;
->>>>> -    struct uvc_device *uvc = video->uvc;
->>>>>        struct usb_request *req = NULL;
->>>>>        struct uvc_buffer *buf;
->>>>>        unsigned long flags;
->>>>>        bool buf_done;
->>>>>        int ret;
->>>>>
->>>>> -    while (uvc->state == UVC_STATE_STREAMING && video->ep->enabled) {
->>>>> +    while (true) {
->>>>> +        if (!video->ep->enabled)
->>>>> +            return;
->>>>> +
->>>>>            /*
->>>>> -         * Retrieve the first available USB request, protected by the
->>>>> -         * request lock.
->>>>> +         * Check is_enabled and retrieve the first available USB
->>>>> +         * request, protected by the request lock.
->>>>>             */
->>>>>            spin_lock_irqsave(&video->req_lock, flags);
->>>>> -        if (list_empty(&video->req_free)) {
->>>>> +        if (!video->is_enabled || list_empty(&video->req_free)) {
->>>>>                spin_unlock_irqrestore(&video->req_lock, flags);
->>>>>                return;
->>>>>            }
->>>>> @@ -488,9 +518,11 @@ static void uvcg_video_pump(struct work_struct *work)
->>>>>            return;
->>>>>
->>>>>        spin_lock_irqsave(&video->req_lock, flags);
->>>>> -    list_add_tail(&req->list, &video->req_free);
->>>>> +    if (video->is_enabled)
->>>>> +        list_add_tail(&req->list, &video->req_free);
->>>>> +    else
->>>>> +        uvc_video_free_request(req->context, video->ep);
->>>>>        spin_unlock_irqrestore(&video->req_lock, flags);
->>>>> -    return;
->>>>>    }
->>>>>
->>>>>    /*
->>>>> @@ -499,7 +531,11 @@ static void uvcg_video_pump(struct work_struct *work)
->>>>>    int
->>>>>    uvcg_video_disable(struct uvc_video *video)
->>>>>    {
->>>>> -    struct uvc_request *ureq;
->>>>> +    unsigned long flags;
->>>>> +    struct list_head inflight_bufs;
->>>>> +    struct usb_request *req, *temp;
->>>>> +    struct uvc_buffer *buf, *btemp;
->>>>> +    struct uvc_request *ureq, *utemp;
->>>>>
->>>>>        if (video->ep == NULL) {
->>>>>            uvcg_info(&video->uvc->func,
->>>>> @@ -507,15 +543,58 @@ uvcg_video_disable(struct uvc_video *video)
->>>>>            return -ENODEV;
->>>>>        }
->>>>>
->>>>> +    INIT_LIST_HEAD(&inflight_bufs);
->>>>> +    spin_lock_irqsave(&video->req_lock, flags);
->>>>> +    video->is_enabled = false;
->>>>> +
->>>>> +    /*
->>>>> +     * Remove any in-flight buffers from the uvc_requests
->>>>> +     * because we want to return them before cancelling the
->>>>> +     * queue. This ensures that we aren't stuck waiting for
->>>>> +     * all complete callbacks to come through before disabling
->>>>> +     * vb2 queue.
->>>>> +     */
->>>>> +    list_for_each_entry(ureq, &video->ureqs, list) {
->>>>> +        if (ureq->last_buf) {
->>>>> +            list_add_tail(&ureq->last_buf->queue, &inflight_bufs);
->>>>> +            ureq->last_buf = NULL;
->>>>> +        }
->>>>> +    }
->>>>> +    spin_unlock_irqrestore(&video->req_lock, flags);
->>>>> +
->>>>>        cancel_work_sync(&video->pump);
->>>>>        uvcg_queue_cancel(&video->queue, 0);
->>>>>
->>>>> -    list_for_each_entry(ureq, &video->ureqs, list) {
->>>>> -        if (ureq->req)
->>>>> -            usb_ep_dequeue(video->ep, ureq->req);
->>>>> +    spin_lock_irqsave(&video->req_lock, flags);
->>>>> +    /*
->>>>> +     * Remove all uvc_reqeusts from ureqs with list_del_init
->> s/uvc_reqeusts/uvc_requests
->>>>> +     * This lets uvc_video_free_request correctly identify
->>>>> +     * if the uvc_request is attached to a list or not when freeing
->>>>> +     * memory.
->>>>> +     */
->>>>> +    list_for_each_entry_safe(ureq, utemp, &video->ureqs, list)
->>>>> +        list_del_init(&ureq->list);
->>>>> +
->>>>> +    list_for_each_entry_safe(req, temp, &video->req_free, list) {
->>>>> +        list_del(&req->list);
->>>>> +        uvc_video_free_request(req->context, video->ep);
->>>>>        }
->>>>>
->>>>> -    uvc_video_free_requests(video);
->>>>> +    INIT_LIST_HEAD(&video->ureqs);
->>>>> +    INIT_LIST_HEAD(&video->req_free);
->>>>> +    video->req_size = 0;
->>>>> +    spin_unlock_irqrestore(&video->req_lock, flags);
->>>>> +
->>>>> +    /*
->>>>> +     * Return all the video buffers before disabling the queue.
->>>>> +     */
->>>>> +    spin_lock_irqsave(&video->queue.irqlock, flags);
->>>>> +    list_for_each_entry_safe(buf, btemp, &inflight_bufs, queue) {
->>>>> +        list_del(&buf->queue);
->>>>> +        uvcg_complete_buffer(&video->queue, buf);
->>>>> +    }
->>>>> +    spin_unlock_irqrestore(&video->queue.irqlock, flags);
->>>>> +
->>>>>        uvcg_queue_enable(&video->queue, 0);
->>>>>        return 0;
->>>>>    }
->>>>> @@ -533,6 +612,14 @@ int uvcg_video_enable(struct uvc_video *video)
->>>>>            return -ENODEV;
->>>>>        }
->>>>>
->>>>> +    /*
->>>>> +     * Safe to access request related fields without req_lock because
->>>>> +     * this is the only thread currently active, and no other
->>>>> +     * request handling thread will become active until this function
->>>>> +     * returns.
->>>>> +     */
->>>>> +    video->is_enabled = true;
->>>>> +
->>>>>        if ((ret = uvcg_queue_enable(&video->queue, 1)) < 0)
->>>>>            return ret;
->>>>>
->>>>> @@ -558,6 +645,7 @@ int uvcg_video_enable(struct uvc_video *video)
->>>>>     */
->>>>>    int uvcg_video_init(struct uvc_video *video, struct uvc_device *uvc)
->>>>>    {
->>>>> +    video->is_enabled = false;
->>>>>        INIT_LIST_HEAD(&video->ureqs);
->>>>>        INIT_LIST_HEAD(&video->req_free);
->>>>>        spin_lock_init(&video->req_lock);
->>>>> -- 
->>>>> 2.42.0.820.g83a721a137-goog
-
-Hey Dan, let me know if Patch v11 looks good.
-
-Thank you!
-- Avi.
+T24gU2F0LCAyMDIzLTEwLTI4IGF0IDAyOjU5ICswNzAwLCBMYXJzIE1lbGluIHdyb3RlOg0KPiBP
+biAxMC8yOC8yMDIzIDA6NTUsIFZpY3RvciBGcmFnb3NvIHdyb3RlOg0KPiA+IE9uIFRodSwgMjAy
+My0xMC0yNiBhdCAyMDoxMyArMDcwMCwgTGFycyBNZWxpbiB3cm90ZToNCj4gPiA+IE9uIDEwLzI2
+LzIwMjMgODoyNCwgVmljdG9yIEZyYWdvc28gd3JvdGU6DQo+ID4gPiA+IEFkZCBzdXBwb3J0IGZv
+ciBGaWJvY29tIEw3eHggbW9kdWxlIHNlcmllcyBhbmQgdmFyaWFudHMuDQo+ID4gPiA+IA0KPiA+
+ID4gPiBMNzE2LUVVLTYwIChFQ00pOg0KPiA+ID4gPiBUOiAgQnVzPTAzIExldj0wMSBQcm50PTAx
+IFBvcnQ9MDEgQ250PTAxIERldiM9IDE3IFNwZD00ODAgIE14Q2g9IDANCj4gPiA+ID4gRDogIFZl
+cj0gMi4wMCBDbHM9MDAoPmlmYyApIFN1Yj0wMCBQcm90PTAwIE14UFM9NjQgI0NmZ3M9ICAxDQo+
+ID4gPiA+IFA6ICBWZW5kb3I9MTlkMiBQcm9kSUQ9MDU3OSBSZXY9IDEuMDANCj4gPiA+ID4gUzog
+IE1hbnVmYWN0dXJlcj1GaWJvY29tLEluY29ycG9yYXRlZA0KPiA+ID4gPiBTOiAgUHJvZHVjdD1G
+aWJvY29tIE1vYmlsZSBCb2FyZGJhbmQNCj4gPiA+ID4gUzogIFNlcmlhbE51bWJlcj0xMjM0NTY3
+ODkwQUJDREVGDQo+ID4gPiA+IEM6KiAjSWZzPSA3IENmZyM9IDEgQXRyPWUwIE14UHdyPTUwMG1B
+DQo+ID4gPiA+IEE6ICBGaXJzdElmIz0gMCBJZkNvdW50PSAyIENscz0wMihjb21tLikgU3ViPTA2
+IFByb3Q9MDANCj4gPiA+ID4gSToqIElmIz0gMCBBbHQ9IDAgI0VQcz0gMSBDbHM9MDIoY29tbS4p
+IFN1Yj0wNiBQcm90PTAwIERyaXZlcj1jZGNfZXRoZXINCj4gPiA+ID4gRTogIEFkPTg3KEkpIEF0
+cj0wMyhJbnQuKSBNeFBTPSAgMTYgSXZsPTMybXMNCj4gPiA+ID4gSTogIElmIz0gMSBBbHQ9IDAg
+I0VQcz0gMCBDbHM9MGEoZGF0YSApIFN1Yj0wMCBQcm90PTAwIERyaXZlcj1jZGNfZXRoZXINCj4g
+PiA+ID4gSToqIElmIz0gMSBBbHQ9IDEgI0VQcz0gMiBDbHM9MGEoZGF0YSApIFN1Yj0wMCBQcm90
+PTAwIERyaXZlcj1jZGNfZXRoZXINCj4gPiA+ID4gRTogIEFkPTgxKEkpIEF0cj0wMihCdWxrKSBN
+eFBTPSA1MTIgSXZsPTBtcw0KPiA+ID4gPiBFOiAgQWQ9MDEoTykgQXRyPTAyKEJ1bGspIE14UFM9
+IDUxMiBJdmw9MG1zDQo+ID4gPiA+IEk6KiBJZiM9IDIgQWx0PSAwICNFUHM9IDIgQ2xzPWZmKHZl
+bmQuKSBTdWI9ZmYgUHJvdD1mZiBEcml2ZXI9b3B0aW9uDQo+ID4gPiA+IEU6ICBBZD04MihJKSBB
+dHI9MDIoQnVsaykgTXhQUz0gNTEyIEl2bD0wbXMNCj4gPiA+ID4gRTogIEFkPTAyKE8pIEF0cj0w
+MihCdWxrKSBNeFBTPSA1MTIgSXZsPTBtcw0KPiA+ID4gPiBJOiogSWYjPSAzIEFsdD0gMCAjRVBz
+PSAyIENscz1mZih2ZW5kLikgU3ViPWZmIFByb3Q9ZmYgRHJpdmVyPW9wdGlvbg0KPiA+ID4gPiBF
+OiAgQWQ9ODMoSSkgQXRyPTAyKEJ1bGspIE14UFM9IDUxMiBJdmw9MG1zDQo+ID4gPiA+IEU6ICBB
+ZD0wMyhPKSBBdHI9MDIoQnVsaykgTXhQUz0gNTEyIEl2bD0wbXMNCj4gPiA+ID4gSToqIElmIz0g
+NCBBbHQ9IDAgI0VQcz0gMiBDbHM9ZmYodmVuZC4pIFN1Yj1mZiBQcm90PWZmIERyaXZlcj1vcHRp
+b24NCj4gPiA+ID4gRTogIEFkPTg0KEkpIEF0cj0wMihCdWxrKSBNeFBTPSA1MTIgSXZsPTBtcw0K
+PiA+ID4gPiBFOiAgQWQ9MDQoTykgQXRyPTAyKEJ1bGspIE14UFM9IDUxMiBJdmw9MG1zDQo+ID4g
+PiA+IEk6KiBJZiM9IDUgQWx0PSAwICNFUHM9IDIgQ2xzPWZmKHZlbmQuKSBTdWI9ZmYgUHJvdD1m
+ZiBEcml2ZXI9b3B0aW9uDQo+ID4gPiA+IEU6ICBBZD04NShJKSBBdHI9MDIoQnVsaykgTXhQUz0g
+NTEyIEl2bD0wbXMNCj4gPiA+ID4gRTogIEFkPTA1KE8pIEF0cj0wMihCdWxrKSBNeFBTPSA1MTIg
+SXZsPTBtcw0KPiA+ID4gPiBJOiogSWYjPSA2IEFsdD0gMCAjRVBzPSAyIENscz1mZih2ZW5kLikg
+U3ViPTQyIFByb3Q9MDEgRHJpdmVyPXVzYmZzDQo+ID4gPiA+IEU6ICBBZD04NihJKSBBdHI9MDIo
+QnVsaykgTXhQUz0gNTEyIEl2bD0wbXMNCj4gPiA+ID4gRTogIEFkPTA2KE8pIEF0cj0wMihCdWxr
+KSBNeFBTPSA1MTIgSXZsPTBtcw0KPiA+ID4gPiANCj4gPiA+ID4gTDcxNi1FVS02MCAoUk5ESVMp
+Og0KPiA+ID4gPiBUOiAgQnVzPTAzIExldj0wMSBQcm50PTAxIFBvcnQ9MDEgQ250PTAxIERldiM9
+IDIxIFNwZD00ODAgIE14Q2g9IDANCj4gPiA+ID4gRDogIFZlcj0gMi4wMCBDbHM9MDAoPmlmYyAp
+IFN1Yj0wMCBQcm90PTAwIE14UFM9NjQgI0NmZ3M9ICAxDQo+ID4gPiA+IFA6ICBWZW5kb3I9MmNi
+NyBQcm9kSUQ9MDAwMSBSZXY9IDEuMDANCj4gPiA+ID4gUzogIE1hbnVmYWN0dXJlcj1GaWJvY29t
+LEluY29ycG9yYXRlZA0KPiA+ID4gPiBTOiAgUHJvZHVjdD1GaWJvY29tIE1vYmlsZSBCb2FyZGJh
+bmQNCj4gPiA+ID4gUzogIFNlcmlhbE51bWJlcj0xMjM0NTY3ODkwQUJDREVGDQo+ID4gPiA+IEM6
+KiAjSWZzPSA3IENmZyM9IDEgQXRyPWUwIE14UHdyPTUwMG1BDQo+ID4gPiA+IEE6ICBGaXJzdElm
+Iz0gMCBJZkNvdW50PSAyIENscz0wMihjb21tLikgU3ViPTA2IFByb3Q9MDANCj4gPiA+ID4gSToq
+IElmIz0gMCBBbHQ9IDAgI0VQcz0gMSBDbHM9MDIoY29tbS4pIFN1Yj0wNiBQcm90PTAwIERyaXZl
+cj1jZGNfZXRoZXINCj4gPiA+ID4gRTogIEFkPTg3KEkpIEF0cj0wMyhJbnQuKSBNeFBTPSAgMTYg
+SXZsPTMybXMNCj4gPiA+ID4gSTogIElmIz0gMSBBbHQ9IDAgI0VQcz0gMCBDbHM9MGEoZGF0YSAp
+IFN1Yj0wMCBQcm90PTAwIERyaXZlcj1jZGNfZXRoZXINCj4gPiA+ID4gSToqIElmIz0gMSBBbHQ9
+IDEgI0VQcz0gMiBDbHM9MGEoZGF0YSApIFN1Yj0wMCBQcm90PTAwIERyaXZlcj1jZGNfZXRoZXIN
+Cj4gPiA+ID4gRTogIEFkPTgxKEkpIEF0cj0wMihCdWxrKSBNeFBTPSA1MTIgSXZsPTBtcw0KPiA+
+ID4gPiBFOiAgQWQ9MDEoTykgQXRyPTAyKEJ1bGspIE14UFM9IDUxMiBJdmw9MG1zDQo+ID4gPiA+
+IEk6KiBJZiM9IDIgQWx0PSAwICNFUHM9IDIgQ2xzPWZmKHZlbmQuKSBTdWI9ZmYgUHJvdD1mZiBE
+cml2ZXI9b3B0aW9uDQo+ID4gPiA+IEU6ICBBZD04MihJKSBBdHI9MDIoQnVsaykgTXhQUz0gNTEy
+IEl2bD0wbXMNCj4gPiA+ID4gRTogIEFkPTAyKE8pIEF0cj0wMihCdWxrKSBNeFBTPSA1MTIgSXZs
+PTBtcw0KPiA+ID4gPiBJOiogSWYjPSAzIEFsdD0gMCAjRVBzPSAyIENscz1mZih2ZW5kLikgU3Vi
+PWZmIFByb3Q9ZmYgRHJpdmVyPW9wdGlvbg0KPiA+ID4gPiBFOiAgQWQ9ODMoSSkgQXRyPTAyKEJ1
+bGspIE14UFM9IDUxMiBJdmw9MG1zDQo+ID4gPiA+IEU6ICBBZD0wMyhPKSBBdHI9MDIoQnVsaykg
+TXhQUz0gNTEyIEl2bD0wbXMNCj4gPiA+ID4gSToqIElmIz0gNCBBbHQ9IDAgI0VQcz0gMiBDbHM9
+ZmYodmVuZC4pIFN1Yj1mZiBQcm90PWZmIERyaXZlcj1vcHRpb24NCj4gPiA+ID4gRTogIEFkPTg0
+KEkpIEF0cj0wMihCdWxrKSBNeFBTPSA1MTIgSXZsPTBtcw0KPiA+ID4gPiBFOiAgQWQ9MDQoTykg
+QXRyPTAyKEJ1bGspIE14UFM9IDUxMiBJdmw9MG1zDQo+ID4gPiA+IEk6KiBJZiM9IDUgQWx0PSAw
+ICNFUHM9IDIgQ2xzPWZmKHZlbmQuKSBTdWI9ZmYgUHJvdD1mZiBEcml2ZXI9b3B0aW9uDQo+ID4g
+PiA+IEU6ICBBZD04NShJKSBBdHI9MDIoQnVsaykgTXhQUz0gNTEyIEl2bD0wbXMNCj4gPiA+ID4g
+RTogIEFkPTA1KE8pIEF0cj0wMihCdWxrKSBNeFBTPSA1MTIgSXZsPTBtcw0KPiA+ID4gPiBJOiog
+SWYjPSA2IEFsdD0gMCAjRVBzPSAyIENscz1mZih2ZW5kLikgU3ViPTQyIFByb3Q9MDEgRHJpdmVy
+PXVzYmZzDQo+ID4gPiA+IEU6ICBBZD04NihJKSBBdHI9MDIoQnVsaykgTXhQUz0gNTEyIEl2bD0w
+bXMNCj4gPiA+ID4gRTogIEFkPTA2KE8pIEF0cj0wMihCdWxrKSBNeFBTPSA1MTIgSXZsPTBtcw0K
+PiA+ID4gPiANCj4gPiA+ID4gTDcxNi1FVS0xMCAoRUNNKToNCj4gPiA+ID4gVDogIEJ1cz0wMyBM
+ZXY9MDEgUHJudD0wMSBQb3J0PTAxIENudD0wMSBEZXYjPSAyMSBTcGQ9NDgwICBNeENoPSAwDQo+
+ID4gPiA+IEQ6ICBWZXI9IDIuMDAgQ2xzPTAwKD5pZmMgKSBTdWI9MDAgUHJvdD0wMCBNeFBTPTY0
+ICNDZmdzPSAgMQ0KPiA+ID4gPiBQOiAgVmVuZG9yPTJjYjcgUHJvZElEPTAwMDEgUmV2PSAxLjAw
+DQo+ID4gPiA+IFM6ICBNYW51ZmFjdHVyZXI9Rmlib2NvbSxJbmNvcnBvcmF0ZWQNCj4gPiA+ID4g
+UzogIFByb2R1Y3Q9Rmlib2NvbSBNb2JpbGUgQm9hcmRiYW5kDQo+ID4gPiA+IFM6ICBTZXJpYWxO
+dW1iZXI9MTIzNDU2Nzg5MEFCQ0RFRg0KPiA+ID4gPiBDOiogI0lmcz0gNyBDZmcjPSAxIEF0cj1l
+MCBNeFB3cj01MDBtQQ0KPiA+ID4gPiBBOiAgRmlyc3RJZiM9IDAgSWZDb3VudD0gMiBDbHM9MDIo
+Y29tbS4pIFN1Yj0wNiBQcm90PTAwDQo+ID4gPiA+IEk6KiBJZiM9IDAgQWx0PSAwICNFUHM9IDEg
+Q2xzPTAyKGNvbW0uKSBTdWI9MDYgUHJvdD0wMCBEcml2ZXI9Y2RjX2V0aGVyDQo+ID4gPiA+IEU6
+ICBBZD04NyhJKSBBdHI9MDMoSW50LikgTXhQUz0gIDE2IEl2bD0zMm1zDQo+ID4gPiA+IEk6ICBJ
+ZiM9IDEgQWx0PSAwICNFUHM9IDAgQ2xzPTBhKGRhdGEgKSBTdWI9MDAgUHJvdD0wMCBEcml2ZXI9
+Y2RjX2V0aGVyDQo+ID4gPiA+IEk6KiBJZiM9IDEgQWx0PSAxICNFUHM9IDIgQ2xzPTBhKGRhdGEg
+KSBTdWI9MDAgUHJvdD0wMCBEcml2ZXI9Y2RjX2V0aGVyDQo+ID4gPiA+IEU6ICBBZD04MShJKSBB
+dHI9MDIoQnVsaykgTXhQUz0gNTEyIEl2bD0wbXMNCj4gPiA+ID4gRTogIEFkPTAxKE8pIEF0cj0w
+MihCdWxrKSBNeFBTPSA1MTIgSXZsPTBtcw0KPiA+ID4gPiBJOiogSWYjPSAyIEFsdD0gMCAjRVBz
+PSAyIENscz1mZih2ZW5kLikgU3ViPWZmIFByb3Q9ZmYgRHJpdmVyPW9wdGlvbg0KPiA+ID4gPiBF
+OiAgQWQ9ODIoSSkgQXRyPTAyKEJ1bGspIE14UFM9IDUxMiBJdmw9MG1zDQo+ID4gPiA+IEU6ICBB
+ZD0wMihPKSBBdHI9MDIoQnVsaykgTXhQUz0gNTEyIEl2bD0wbXMNCj4gPiA+ID4gSToqIElmIz0g
+MyBBbHQ9IDAgI0VQcz0gMiBDbHM9ZmYodmVuZC4pIFN1Yj1mZiBQcm90PWZmIERyaXZlcj1vcHRp
+b24NCj4gPiA+ID4gRTogIEFkPTgzKEkpIEF0cj0wMihCdWxrKSBNeFBTPSA1MTIgSXZsPTBtcw0K
+PiA+ID4gPiBFOiAgQWQ9MDMoTykgQXRyPTAyKEJ1bGspIE14UFM9IDUxMiBJdmw9MG1zDQo+ID4g
+PiA+IEk6KiBJZiM9IDQgQWx0PSAwICNFUHM9IDIgQ2xzPWZmKHZlbmQuKSBTdWI9ZmYgUHJvdD1m
+ZiBEcml2ZXI9b3B0aW9uDQo+ID4gPiA+IEU6ICBBZD04NChJKSBBdHI9MDIoQnVsaykgTXhQUz0g
+NTEyIEl2bD0wbXMNCj4gPiA+ID4gRTogIEFkPTA0KE8pIEF0cj0wMihCdWxrKSBNeFBTPSA1MTIg
+SXZsPTBtcw0KPiA+ID4gPiBJOiogSWYjPSA1IEFsdD0gMCAjRVBzPSAyIENscz1mZih2ZW5kLikg
+U3ViPWZmIFByb3Q9ZmYgRHJpdmVyPW9wdGlvbg0KPiA+ID4gPiBFOiAgQWQ9ODUoSSkgQXRyPTAy
+KEJ1bGspIE14UFM9IDUxMiBJdmw9MG1zDQo+ID4gPiA+IEU6ICBBZD0wNShPKSBBdHI9MDIoQnVs
+aykgTXhQUz0gNTEyIEl2bD0wbXMNCj4gPiA+ID4gSToqIElmIz0gNiBBbHQ9IDAgI0VQcz0gMiBD
+bHM9ZmYodmVuZC4pIFN1Yj00MiBQcm90PTAxIERyaXZlcj11c2Jmcw0KPiA+ID4gPiBFOiAgQWQ9
+ODYoSSkgQXRyPTAyKEJ1bGspIE14UFM9IDUxMiBJdmw9MG1zDQo+ID4gPiA+IEU6ICBBZD0wNihP
+KSBBdHI9MDIoQnVsaykgTXhQUz0gNTEyIEl2bD0wbXMNCj4gPiA+ID4gDQo+ID4gPiA+IFNpZ25l
+ZC1vZmYtYnk6IFZpY3RvciBGcmFnb3NvIDx2aWN0b3JmZnNAaG90bWFpbC5jb20+DQo+ID4gPiA+
+IC0tLQ0KPiA+ID4gPiAgICBkcml2ZXJzL3VzYi9zZXJpYWwvb3B0aW9uLmMgfCA1ICsrKysrDQo+
+ID4gPiA+ICAgIDEgZmlsZSBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKykNCj4gPiA+ID4gDQo+ID4g
+PiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9zZXJpYWwvb3B0aW9uLmMgYi9kcml2ZXJzL3Vz
+Yi9zZXJpYWwvb3B0aW9uLmMNCj4gPiA+ID4gaW5kZXggNDVkY2ZhYWRhZjk4Li40YmEzZGMzNTJk
+NjUgMTAwNjQ0DQo+ID4gPiA+IC0tLSBhL2RyaXZlcnMvdXNiL3NlcmlhbC9vcHRpb24uYw0KPiA+
+ID4gPiArKysgYi9kcml2ZXJzL3VzYi9zZXJpYWwvb3B0aW9uLmMNCj4gPiA+ID4gQEAgLTIyNjIs
+NiArMjI2MiwxMSBAQCBzdGF0aWMgY29uc3Qgc3RydWN0IHVzYl9kZXZpY2VfaWQgb3B0aW9uX2lk
+c1tdID0NCj4gPiA+ID4gew0KPiA+ID4gPiAgICAJeyBVU0JfREVWSUNFX0lOVEVSRkFDRV9DTEFT
+UygweDJjYjcsIDB4MDFhMiwgMHhmZikNCj4gPiA+ID4gfSwJCQkvKiBGaWJvY29tIEZNMTAxLUdM
+IChsYXB0b3AgTUJJTSkgKi8NCj4gPiA+ID4gICAgCXsgVVNCX0RFVklDRV9JTlRFUkZBQ0VfQ0xB
+U1MoMHgyY2I3LCAweDAxYTQsDQo+ID4gPiA+IDB4ZmYpLAkJCS8qIEZpYm9jb20gRk0xMDEtR0wg
+KGxhcHRvcCBNQklNKSAqLw0KPiA+ID4gPiAgICAJICAuZHJpdmVyX2luZm8gPSBSU1ZEKDQpIH0s
+DQo+ID4gPiA+ICsJeyBVU0JfREVWSUNFX0FORF9JTlRFUkZBQ0VfSU5GTygweDJjYjcsIDB4MDAw
+MSwgMHhmZiwgMHhmZiwNCj4gPiA+ID4gMHhmZikgfSwJLyogRmlib2NvbSBMNzF4ICovDQo+ID4g
+PiA+ICsJeyBVU0JfREVWSUNFX0FORF9JTlRFUkZBQ0VfSU5GTygweDJjYjcsIDB4MDAwMSwgMHgw
+YSwgMHgwMCwNCj4gPiA+ID4gMHhmZikgfSwJLyogRmlib2NvbSBMNzF4ICovDQo+ID4gPiA+ICsJ
+eyBVU0JfREVWSUNFX0FORF9JTlRFUkZBQ0VfSU5GTygweDJjYjcsIDB4MDEwMCwgMHhmZiwgMHhm
+ZiwNCj4gPiA+ID4gMHhmZikgfSwJLyogRmlib2NvbSBMNzF4ICovDQo+ID4gPiA+ICsJeyBVU0Jf
+REVWSUNFX0FORF9JTlRFUkZBQ0VfSU5GTygweDE5ZDIsIDB4MDI1NiwgMHhmZiwgMHhmZiwNCj4g
+PiA+ID4gMHhmZikgfSwJLyogRmlib2NvbSBMNzF4ICovDQo+ID4gPiA+ICsJeyBVU0JfREVWSUNF
+X0FORF9JTlRFUkZBQ0VfSU5GTygweDE5ZDIsIDB4MDU3OSwgMHhmZiwgMHhmZiwNCj4gPiA+ID4g
+MHhmZikgfSwJLyogRmlib2NvbSBMNzF4ICovDQo+ID4gPiA+ICAgIAl7IFVTQl9ERVZJQ0VfSU5U
+RVJGQUNFX0NMQVNTKDB4MmRmMywgMHg5ZDAzLCAweGZmKQ0KPiA+ID4gPiB9LAkJCS8qIExvbmdT
+dW5nIE01NzEwICovDQo+ID4gPiA+ICAgIAl7IFVTQl9ERVZJQ0VfSU5URVJGQUNFX0NMQVNTKDB4
+MzA1YSwgMHgxNDA0LCAweGZmKQ0KPiA+ID4gPiB9LAkJCS8qIEdvc3VuQ24gR001MDAgUk5ESVMg
+Ki8NCj4gPiA+ID4gICAgCXsgVVNCX0RFVklDRV9JTlRFUkZBQ0VfQ0xBU1MoMHgzMDVhLCAweDE0
+MDUsIDB4ZmYpDQo+ID4gPiA+IH0sCQkJLyogR29zdW5DbiBHTTUwMCBNQklNICovDQo+ID4gPiAN
+Cj4gPiA+IA0KPiA+ID4gSGkgVmljdG9yLCB0aGFua3MgZm9yIHRoZSBwYXRjaCwgdGhlcmUgaXMg
+dW5mb3J0dW5hdGVseSB0aGUgZm9sbG93aW5nDQo+ID4gPiBlcnJvcnMgaW4gaXQ6DQo+ID4gPiBU
+aGUgZGV2aWNlIGxpc3QgaXMgc29ydGVkIGluIGFzY2VuZGluZyBvcmRlciBiYXNlZCBvbiB2aWQ6
+cGlkLCB5b3UgaGF2ZQ0KPiA+ID4gaW5zZXJ0ZWQgYWxsIG9mIHlvdXIgYWRkZWQgSWQncyBpbiB0
+aGUgd3JvbmcgcGxhY2UuDQo+ID4gPiANCj4gPiA+IDE5ZDI6MDU3OSBpcyBhIFpURSBkZXZpY2Ug
+SWQgYW5kIHNob3VsZCBiZSBwbGFjZWQgYW1vbmcgdGhlIG90aGVyIDE5ZDINCj4gPiA+IGRldmlj
+ZXMuDQo+ID4gPiANCj4gPiA+IFlvdSBoYXZlIG5vdCBpbmNsdWRlZCB1c2ItZGV2aWNlcyBvdXRw
+dXQgZm9yIDE5ZDI6MDI1NiBhbmQgMmNiNzowMTAwLA0KPiA+ID4gYW5kIEkgaGF2ZSBzdHJvbmcg
+cmVhc29ucyB0byBiZWxpZXZlIHRoYXQgdGhleSBzaG91bGQgbm90IGJlIGluY2x1ZGVkIGluDQo+
+ID4gPiB0aGUgb3B0aW9uIGRyaXZlci4NCj4gPiA+IElmIHlvdSBhcmUgb2YgYW5vdGhlciBvcGlu
+aW9uIHRoZW4gcGxlYXNlIHNob3cgdGhlIHVzYi1kZXZpY2VzIG91dHB1dA0KPiA+ID4gZm9yIHRo
+ZW0sIG90aGVyd2lzZSByZW1vdmUgdGhlbSBmcm9tIHRoZSBwYXRjaC4NCj4gPiA+IA0KPiA+ID4g
+WW91IGhhdmUgYWRkZWQgc3VwcG9ydCBmb3IgYW4gaW50ZXJmYWNlIHdpdGggdGhlIGF0dHJpYnV0
+ZXMgMGEvMDAvZmYgLA0KPiA+ID4gdGhlcmUgaXMgbm8gc3VjaCBpbnRlcmZhY2UgaW4geW91ciBw
+cm92aWRlZCB1c2ItZGV2aWNlcyBsaXN0aW5nLA0KPiA+ID4gaW50ZXJmYWNlIENsYXNzIDBhIGRv
+ZXMgbm90IGV2ZW4gYmVsb25nIHRvIHRoZSBvcHRpb24gZHJpdmVyLg0KPiA+ID4gDQo+ID4gPiBU
+aGFua3MNCj4gPiA+IExhcnMNCj4gPiANCj4gPiBIaSBMYXJzLCBzb3JyeSBhYm91dCB0aGUgd3Jv
+bmcgb3JkZXIsIEkgd2lsbCBjb3JyZWN0IGl0Lg0KPiA+IA0KPiA+IEJ1dCBhYm91dCB0aGUgWlRF
+IGRldmljZSBJRCwgSSBiZWxpdmUgdGhhdCB3ZSBzaG91bGQgaW5zZXJ0IGFtb25nDQo+ID4gRmli
+b2NvbSBkcml2ZXJzIGJlY2F1c2Ugd2UgYXJlIHRhbGtpbmcgYWJvdXQgYSBGaWJvY29tIG1vZHVs
+ZSB0aGF0IGlzDQo+ID4gdXNpbmcgYW4gWlRFIENoaXBzZXQuDQo+ID4gU28sIHRoaXMgaXMgZXhh
+Y3RseSB0aGUgc2FtZSBzaXR1YXRpb24gZnJvbSBGaWJvY29tIEw2MTAgSURzICgweDE3ODIsDQo+
+ID4gMHg0ZDEwIC8gMHgxNzgyLCAweDRkMTEpIHRoYXQgaXMgdXNpbmcgdGhlIFVuaXNvYyBDaGlw
+c2V0IGJ1dCB3ZXJlDQo+ID4gaW5zZXJ0ZWQgYW1vbmcgRmlib2NvbSBkcml2ZXJzLg0KPiA+IA0K
+PiA+IEFuZCBhYm91dCB0aGUgdXNiLWRldmljZXMgb3V0cHV0LCBsZXQgbWUgZXhwbGFpbiBiZXR0
+ZXI6DQo+ID4gSSBhbSBhIEZpZWxkIEFwcGxpY2F0aW9uIEVuZ2lubmVyIGF0IEZpYm9jb20gQnJh
+emlsIGFuZCBJIGFtIHVzaW5nIHRoZQ0KPiA+IElEcyBmcm9tIG91ciBpbnRlcm5hbCBhbmQgb2Zm
+aWNpYWwgZG9jdW1lbnRhdGlvbi4NCj4gPiBPbiB0aGlzIGRvY3VtZW50cyBpdHMgc3VnZ2VzdGVk
+IHRvIGFkZCBhbGwgdGhpcyBJRHMgYmVjYXVzZSBpdCB3aWxsDQo+ID4gZ3VhcmFudGVlIHRoYXQg
+Y2FuIGJlIHVzZWQgb24gYWxsIHRoZSB2YXJpYW50cyBkZXZpY2VzIGZyb20gTDcxeCBzZXJpZXMN
+Cj4gPiAodGhhdCBjYW4gY2hhbmdlIGFjY29yZGluZyB0byBkaWZmZXJlbnQgcGFydCBudW1iZXIs
+IHJlZ2lvbiBzdXBwb3J0IG9yDQo+ID4gbmV0d29yayBwcm90b2NvbCkuDQo+ID4gVW5mb3J0dW5h
+dGVseSwgSSBkb24ndCBoYXZlIGFsbCB0aGUgbW9kdWxlcyB2YXJpYXRpb25zIGF2YWlsYWJsZSB3
+aXRoDQo+ID4gbWUgcmlnaHQgbm93IHRvIHRlc3QgYW5kIHNoYXJlIGFsbCB0aGUgb3V0cHV0cy4N
+Cj4gPiANCj4gPiBDYW4gd2UgY29udGludWUgd2l0aCBhbGwgdGhlIElEcyB0aGF0IEkgaGF2ZSBp
+bnNlcnRlZD8NCj4gPiBPciBkbyB5b3UgcHJlZmVyIHRvIGtlZXAganVzdCB0aGUgZGV2aWNlcyB0
+aGF0IEkgdGVzdGVkIGJ5IG15c2VsZiB1bnRpbA0KPiA+IG5vdz8NCj4gPiANCj4gPiBWaWN0b3Ig
+RnJhZ29zbw0KPiANCj4gSm9oYW4gbWF5IGhhdmUgYSBkaWZmZXJlbnQgb3BpbmlvbiBmcm9tIG1p
+bmUgYW5kIGhlIGlzIHRoZSBvbmUgdG8gDQo+IGRlY2lkZSwgbXkgdGFrZSBpcyB0aGF0IHRoZXJl
+IGlzIG5vIHZhbHVlIGluIGhhdmluZyBhIG1pbm9yIHBhcnQgb2YgdGhlIA0KPiBsaXN0IGdyb3Vw
+ZWQgYnkgbWZnciBhbmQgdGhlIG1ham9yIHBhcnQgb2YgdGhlIGxpc3Qgc29ydGVkIGJ5IFVTQiBJ
+ZC4NCj4gV2UgaGF2ZSBhbHNvIHNlZW4gaW4gdGhlIHBhc3QgdGhhdCB3aGVuIGEgbWZncjEgYnV5
+cyBhIGNoaXBzZXQgZnJvbSANCj4gbWZncjIgYW5kIHRoZW4gc2VsbHMgaGlzIHByb2R1Y3Qgd2l0
+aCBtZmdyMiBJZCBpbnN0ZWFkIG9mIHVzaW5nIG9uZSBvZiANCj4gaGlzIG93biBJZCdzIHRoZW4g
+dGhlcmUgaXMgYWxzbyBub3QgdW5jb21tb24gdGhhdCBtZmdyMyBpcyBhbHNvIGJ1eWluZyANCj4g
+dGhlIHNhbWUgY2hpcHNldCB3aXRob3V0IGNoYW5naW5nIElkLiBIZW5jZSAiTWFudWZhY3R1cmVy
+IG5hbWUiIGlzIG5vdCANCj4gdW5pcXVlIGJ1dCB0aGUgdmlkIGlzLi4NCj4gDQo+IFRoZSBsaXN0
+IHNob3VsZCBub3QgYmUgc2VlbiBvciB1c2VkIGFzIGEgY3Jvc3MgcmVmZXJlbmNlIGJldHdlZW4g
+DQo+IG1mZ3I6cHJvZHVjdCBuYW1lIGFuZCB2aWQ6cGlkLCBhbnlvbmUgd2hvIG5lZWRzIHRvIHNl
+YXJjaCB0aGUgZHJpdmVyIA0KPiBzb3VyY2UgdG8gc2VlIGlmIGEgZGV2aWNlIGlzIHN1cHBvcnRl
+ZCBvdWdodCB0byBrbm93IGl0cyB2aWQ6cGlkIHNvIGNhbiANCj4gc2VhcmNoIG9uIHRob3NlIGFu
+ZCB0aGF0IHdvcmtzIG11Y2ggYmV0dGVyIGlmIHRoZSBsaXN0IGlzIHNvcnRlZCBieSANCj4gdmlk
+OnBpZCBpbiBhc2NlbmRpbmcgb3JkZXIuIFBlcnNvbmFsbHkgSSdkIHJhdGhlciBzZWUgYSBzb3Vy
+Y2Ugd2l0aG91dCANCj4gYWxsIHRoZSB1bm5lY2Vzc2FyeSBkZWZpbmVzLCBvbmx5IHZpZDpwaWQg
+YmFzZWQgYW5kIHdpdGggdGhlIA0KPiBtZmdyL3Byb2R1Y3QgYXMgYW4gb3B0aW9uYWwgY29tbWVu
+dC4NCj4gDQo+IFdoZW4gYWRkaW5nIElkJ3MgdG8gdGhlIGRyaXZlciBpdCBpcyB5b3Ugd2hvIHNo
+b3VsZCBrbm93IHRoZSBkZXZpY2VzIHlvdSANCj4gYXJlIGFkZGluZywgZG9uJ3QgYWRkIElkJ3Mg
+aWYgeW91IGhhdmUgbm90IHBlcnNvbmFsbHkgY29uZmlybWVkIHRoZWlyIA0KPiBpbnRlcmZhY2Ug
+Y29tcG9zaXRpb24gYW5kIHVzYWdlLg0KPiBUaG9zZSB3aG8gdG9sZCB5b3UgYWRkIHRoZXNlIElk
+J3MgYXBwYXJlbnRseSBhbHNvIHRvbGQgeW91IHRoYXQgdGhlcmUgDQo+IGFyZSB0d28gdmVyc2lv
+bnMgb2YgMmNiNzowMDAxLCBvbmUgd2l0aCBFQ00gaW50ZXJmYWNlcyBhbmQgb25lIHdpdGggDQo+
+IFJORElTIGludGVyZmFjZXMgYnV0IHlvdXIgdXNiLWRldmljZXMgb3V0cHV0IHNob3cgYm90aCB0
+byBiZSBpZGVudGljYWwuLiANCj4gVGhlcmUgaXMgbm8gUk5ESVMgaW50ZXJmYWNlIGluIHlvdXIg
+bGlzdGluZ3MsIGJvdGggb2YgdGhlbSB3aWxsIGxvYWQNCj4gdGhlIGNkY19ldGhlciBkcml2ZXIu
+DQo+IA0KPiBicg0KPiBMYXJzDQo+IA0KDQpMYXJzLCB1bmRlcnN0b29kLiBZb3VyIHBvaW50IG1h
+a2VzIHNlbnNlIGFuZCBJIGNvdWxkIGFjY2VwdCBpdCB3aXRoIG5vDQpwcm9ibGVtcy4NCg0KSm9o
+YW4sIGNhbiB5b3UgcGxlYXNlIHNoYXJlIHlvdXIgb3BpbmlvbiB0byBkZWNpZGU/DQoNCjEtIFNo
+b3VsZCBJIGNyZWF0ZSBhIG5ldyBjb21taXQgaW5zZXJ0aW5nIHRoZSBQSUQgZ3JvdXBlZCBhbW9u
+ZyB0bw0KRmlib2NvbSdzIFZJRD8gT3Igc2VwYXJhdGVseSBvbiBGaWJvY29tJ3MgVklEIHNlY3Rp
+b24gYW5kIGFub3RoZXIgb25lDQpvbiBaVEUncyBWSUQgc2VjdGlvbj8gDQoyLSBTaG91bGQgSSBy
+ZW1vdmUgdGhlIGdlbmVyaWMgRmlib2NvbSBwcm9kdWN0IGNvbW1lbnQgYW5kIGFkZCBqdXN0IHRo
+ZQ0KcHJvZHVjdC9tb2RlIHRoYXQgSSBjb3VsZCB0ZXN0IGl0PyBlLmcuIEZpYm9jb20gTDcxNi1F
+VSAoRUNNKQ0KDQpWaWN0b3IgRnJhZ29zbw0K
 
