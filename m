@@ -1,97 +1,216 @@
-Return-Path: <linux-usb+bounces-2621-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2622-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5EC8B7E361E
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Nov 2023 08:55:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9BAD47E36A5
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Nov 2023 09:30:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EE8F3B20C1C
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Nov 2023 07:55:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5A492281016
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Nov 2023 08:30:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCD59CA6E;
-	Tue,  7 Nov 2023 07:55:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8338711708;
+	Tue,  7 Nov 2023 08:29:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Zej0VJI7"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49E9BCA59
-	for <linux-usb@vger.kernel.org>; Tue,  7 Nov 2023 07:55:19 +0000 (UTC)
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8552DED;
-	Mon,  6 Nov 2023 23:55:17 -0800 (PST)
-X-SpamFilter-By: ArmorX SpamTrap 5.78 with qID 3A77sj7W34057066, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-	by rtits2.realtek.com.tw (8.15.2/2.95/5.92) with ESMTPS id 3A77sj7W34057066
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 7 Nov 2023 15:54:45 +0800
-Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Tue, 7 Nov 2023 15:54:45 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Tue, 7 Nov 2023 15:54:45 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::40c2:6c24:2df4:e6c7]) by
- RTEXMBS04.realtek.com.tw ([fe80::40c2:6c24:2df4:e6c7%5]) with mapi id
- 15.01.2375.007; Tue, 7 Nov 2023 15:54:45 +0800
-From: =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= <stanley_chang@realtek.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC: Vinod Koul <vkoul@kernel.org>, Johan Hovold <johan+linaro@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>,
-        "linux-phy@lists.infradead.org"
-	<linux-phy@lists.infradead.org>,
-        "linux-usb@vger.kernel.org"
-	<linux-usb@vger.kernel.org>
-Subject: RE: [PATCH 0/3] Revert "usb: phy: add usb phy notify port status API"
-Thread-Topic: [PATCH 0/3] Revert "usb: phy: add usb phy notify port status
- API"
-Thread-Index: AQHaEKFYYUMOc04m8UWBbMSA7W5TDrBsnd2AgAACc4CAAcfbIP//gVOAgACUP4A=
-Date: Tue, 7 Nov 2023 07:54:45 +0000
-Message-ID: <52875bf017ae4b8f841caf91b08fb315@realtek.com>
-References: <20231106110654.31090-1-johan+linaro@kernel.org>
- <2023110623-pointing-stump-643d@gregkh> <ZUjM/VEliT5c8H4C@matsya>
- <28e77cbc531248bf913ceedba6425cf6@realtek.com>
- <2023110713-morphine-mortuary-337e@gregkh>
-In-Reply-To: <2023110713-morphine-mortuary-337e@gregkh>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-x-originating-ip: [172.21.190.159]
-x-kse-serverinfo: RTEXMBS03.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E02C11189;
+	Tue,  7 Nov 2023 08:29:56 +0000 (UTC)
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73ACFE8;
+	Tue,  7 Nov 2023 00:29:54 -0800 (PST)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3A77S1Ck031262;
+	Tue, 7 Nov 2023 08:29:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=CAgbhith+IxcJgMX58QDJcHe1eTf1v+UVLj/drat0xQ=;
+ b=Zej0VJI7e8Jl0x4pmULEu5oRNAZKqujqru3VEOTjKp1MRdqGB8f8FoXvF25Hj1YbJJl6
+ xgF6RXLGKoHjPR+DDYPoM5jjiTPH6g8gwvsc+Ce+4kpcT5AOdSjm7DtQayYezL5XrPs6
+ WPzdo9KVD7j8YayLrHbJbEcsc2aWtwAmyjXOWUQDwEWb1E4CBH+Ex9gyqUPSMdynW2eF
+ /FZsS7a/Z6JBzPnfVaUij5lidRCAa3SOb8vSEOYX3C3QohnyvKYiJ5YbCVrGlKxxo4QJ
+ dyCwLfCNH/38xvznnuKGPl/sjfSJkkTqzczGs9iZc8zS31Wthkb+i6xLisH3HZ5+Nphw xQ== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3u74v31kef-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 07 Nov 2023 08:29:43 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3A78TgcO009928
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 7 Nov 2023 08:29:42 GMT
+Received: from [10.249.29.138] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.39; Tue, 7 Nov
+ 2023 00:29:36 -0800
+Message-ID: <7f800c67-064e-405a-bc36-39544d9e28ef@quicinc.com>
+Date: Tue, 7 Nov 2023 13:59:32 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v13 05/10] usb: dwc3: qcom: Refactor IRQ handling in QCOM
+ Glue driver
+From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+To: Johan Hovold <johan@kernel.org>
+CC: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Andy
+ Gross" <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Konrad
+ Dybcio" <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi
+	<balbi@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>, <quic_jackp@quicinc.com>,
+        <ahalaney@redhat.com>, <quic_shazhuss@quicinc.com>
+References: <20231007154806.605-1-quic_kriskura@quicinc.com>
+ <20231007154806.605-6-quic_kriskura@quicinc.com>
+ <ZTJ_T1UL8-s2cgNz@hovoldconsulting.com>
+ <14fc724c-bc99-4b5d-9893-3e5eff8895f7@quicinc.com>
+ <ZTY7Lwjd3_8NlfEi@hovoldconsulting.com>
+ <cabf24d0-8eea-4eb5-8205-bf7fe6017ec2@quicinc.com>
+ <ZTZ-EvvbuA6HpycT@hovoldconsulting.com>
+ <fb5e5e1d-520c-4cbc-adde-f30e853421a1@quicinc.com>
+ <ZTdqnSHq_Jo8AuPW@hovoldconsulting.com>
+ <04615205-e380-4719-aff1-f32c26004b14@quicinc.com>
+Content-Language: en-US
+In-Reply-To: <04615205-e380-4719-aff1-f32c26004b14@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 5i7WXT_WEm9jwcoxvpclFngisjiOE05r
+X-Proofpoint-ORIG-GUID: 5i7WXT_WEm9jwcoxvpclFngisjiOE05r
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-06_15,2023-11-02_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ bulkscore=0 clxscore=1015 impostorscore=0 spamscore=0 priorityscore=1501
+ malwarescore=0 phishscore=0 suspectscore=0 adultscore=0 mlxlogscore=883
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2310240000
+ definitions=main-2311070069
 
-SGkgR3JlZywNCg0KPiBPbiBUdWUsIE5vdiAwNywgMjAyMyBhdCAwNjo0NDoyNkFNICswMDAwLCBT
-dGFubGV5IENoYW5nW+aYjOiCsuW+t10gd3JvdGU6DQo+ID4gSGkgSm9oYW4gYW5kIFZpbm9kLA0K
-PiA+DQo+ID4gSSBtb2RpZmllZCB0aGUgUmVhbHRlayBwaHkgdG8gc29sdmUgdGhpcyBpc3N1ZSBh
-bmQgb25seSB1c2UgdGhlIGdlbmVyaWMgUEhZLg0KPiA+IEFuZCBzdWJtaXR0ZWQgdGhlc2UgcGF0
-Y2hlcyB0b2RheSBhcyBmb2xsb3dzDQo+ID4gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGludXgt
-dXNiLzIwMjMxMTA3MDYzNTE4LjI3ODI0LTEtc3RhbmxleV9jaGFuZw0KPiA+IEByZWFsdGVrLmNv
-bS8NCj4gPiBodHRwczovL2xvcmUua2VybmVsLm9yZy9saW51eC11c2IvMjAyMzExMDcwNjM1MTgu
-Mjc4MjQtMi1zdGFubGV5X2NoYW5nDQo+ID4gQHJlYWx0ZWsuY29tLw0KPiA+IGh0dHBzOi8vbG9y
-ZS5rZXJuZWwub3JnL2xpbnV4LXVzYi8yMDIzMTEwNzA2MzUxOC4yNzgyNC0zLXN0YW5sZXlfY2hh
-bmcNCj4gPiBAcmVhbHRlay5jb20vDQo+ID4gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGludXgt
-dXNiLzIwMjMxMTA3MDYzNTE4LjI3ODI0LTQtc3RhbmxleV9jaGFuZw0KPiA+IEByZWFsdGVrLmNv
-bS8NCj4gPg0KPiA+IEkgZG9uJ3QgdGhpbmsgdGhpcyBwYXRjaCBpcyBuZWVkZWQgdG8gcmV2ZXJ0
-IGEwODc5OWNmMTdjMiAoInVzYjpwaHk6IE5ldyB1c2INCj4gcGh5IG5vdGlmaWNhdGlvbiBwb3J0
-IHN0YXR1cyBBUEkiKS4NCj4gDQo+IEkgaGFkIGFscmVhZHkgYXBwbGllZCB0aG9zZSByZXZlcnRz
-IHllc3RlcmRheSwgYnV0IGZvcmdvdCB0byBwdXNoIHRoZW0gb3V0DQo+IChzb3JyeSBhYm91dCB0
-aGF0LCBub3cgZml4ZWQuKSAgTGV0J3Mgc3RhcnQgb3ZlciBoZXJlIGFuZCB5b3UgY2FuIHJlYmFz
-ZSB5b3VyDQo+IG5ldyBzZXJpZXMgb24gdGhlIDYuNy1yYzEuDQoNCk9rYXksIEkgd2lsbCByZXN1
-Ym1pdCBsYXRlci4NCg0KVGhhbmtzLA0KU3RhbmxleQ0KDQo+IHRoYW5rcywNCj4gDQo+IGdyZWcg
-ay1oDQo=
+>>
+>> But there is already support for these interrupts in the driver. You
+>> work for Qualcomm who built the thing so surely you can figure how they
+>> intended these to be used?
+>>
+>> You need to provide this information so that we can determine what the
+>> binding should look like. The implementation would also be simplified if
+>> we don't have to add random hacks to it just because we don't know why
+>> the vendor driver you refer does not use it currently on this particular
+>> platform.
+>>
+> 
+> Hi Johan,
+> 
+> Regarding the points of discussion we had last week on [1], here are 
+> some clarifications:
+> 
+> 1. We do have hs_phy_irq 1/2/3/4 for tertiary port of Sc8280 as 
+> mentioned. Why do we need them and would we use it in multiport targets ?
+> 
+> DPSE and DMSE are single ended line state of DP and DM lines. The DP 
+> line and DM line stay in steady High or Low during suspend and they flip 
+> when there is a RESUME or REMOTE WAKE. This is what we do/check in 
+> dwc3_qcom_enable_interrupts call for dp/dm irq's based on usb2_speed.
+> 
+> Initially in QUSB2 targets, the interrupts were enabled and configured 
+> in phy and the wakeup was interrupt was read on hs_phy_irq vector - [2].
+> In that case, we modify DP/DM interrupts in phy registers, specifically 
+> QUSB2PHY_INTR_CTRL and when wakeup signal comes in, hs_phy_irq is 
+> triggered. But in femto targets, this is done via DP/DM interrupts and 
+> there is no use of hs_phy_irq. Even hw folks confirmed they dont use 
+> hs_ph_irq in femto phy targets.
+> 
+> As an experiment, I tried to test wakeup by pressing buttons on 
+> connected keyboard when in suspend state or connecting/disconnecting 
+> keyboard in suspended state on different ports and only see dp/dm IRQ's 
+> getting fired although we register for hs_phy_irq as well:
+> 
+> / # cat /proc/interrupts  |grep phy_
+> 171:   1  0   0   0  0  0  0  0       PDC 127 Edge      dp_hs_phy_1
+> 172:   2  0   0   0  0  0  0  0       PDC 126 Edge      dm_hs_phy_1
+> 173:   3  0   0   0  0  0  0  0       PDC 129 Edge      dp_hs_phy_2
+> 174:   4  0   0   0  0  0  0  0       PDC 128 Edge      dm_hs_phy_2
+> 175:   0  0   0   0  0  0  0  0       PDC 131 Edge      dp_hs_phy_3
+> 176:   2  0   0   0  0  0  0  0       PDC 130 Edge      dm_hs_phy_3
+> 177:   2  0   0   0  0  0  0  0       PDC 133 Edge      dp_hs_phy_4
+> 178:   5  0   0   0  0  0  0  0       PDC 132 Edge      dm_hs_phy_4
+> 179:   0  0   0   0  0  0  0  0       PDC  16 Level     ss_phy_1
+> 180:   0  0   0   0  0  0  0  0       PDC  17 Level     ss_phy_2
+> 181:   0  0   0   0  0  0  0  0     GICv3 163 Level     hs_phy_1
+> 182:   0  0   0   0  0  0  0  0     GICv3 168 Level     hs_phy_2
+> 183:   0  0   0   0  0  0  0  0     GICv3 892 Level     hs_phy_3
+> 184:   0  0   0   0  0  0  0  0     GICv3 891 Level     hs_phy_4
+> 
+> Since the hs_phy_irq is applicable only for qusb2 targets, do we still 
+> need to add it to DT.
+> 
+> 2. BAM Irq usage (u_usb31_scnd_mvs_pipe_wrapper_usb31_bam_irq[0]):
+> 
+> BAM IRQ is not needed in host-only controller. It was just added in 
+> process of porting/deriving code from DRD controllers and is 
+> non-functional (confirmed by HW team here). We can skip this from DT of 
+> multiport.
+> 
+> 3. ctrl_irq[1] usage:
+> 
+> This is a feature of SNPS controller, not qcom glue wrapper, and is 
+> present on all targets (non-QC as well probably). As mentioned before on 
+> [3], this is used for HW acceleration.
+> 
+> In host mode, XHCI spec does allow for multiple interrupters when 
+> multiple event rings are used. A possible usage is multiple execution 
+> environments something like what we are doing on mobile with ADSP audio 
+> offload [4]. Another possibility could be some of virtualization where 
+> host/hyp would manage the first interrupter and could allow a guest to 
+> operate only with the second (though current design does not go far 
+> enough to offer true isolation for real VM type workloads). The 
+> additional interrupts (ones other than ctrl_irq[0]) are either for 
+> virtualization use cases, or for our various “hw offload” features. In 
+> device mode, these are used for offloading tethering functionality to 
+> IPA FW.
+> 
+> Since the DeviceTree passed to the OS, should describe the hardware to 
+> the OS, and should represent the hardware from the point-of-view of the 
+> OS, adding one interrupt (ctrl_irq[0]) might be sufficient as Linux 
+> would not use the other interrupts. Furthermore AFAIK even UEFI/Windows 
+> also use only ctrl_irq[0] for host mode in their execution environment 
+> today. Do we still need to add this to bindings and DT ?
+> 
+> [1]: https://lore.kernel.org/all/ZTJ_T1UL8-s2cgNz@hovoldconsulting.com/
+> [2]: 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/phy/qualcomm/phy-qcom-qusb2.c?h=v6.6#n626
+> [3]: https://lore.kernel.org/all/ZTduh5LULBMYf3wq@hovoldconsulting.com/
+> [4]: 
+> https://lore.kernel.org/all/20231017200109.11407-1-quic_wcheng@quicinc.com/
+> 
+
+Hi Johan,
+
+  Can you help provide your comments on the above mentioned points so 
+that we can take the discussion forward and finalize changes for v14 
+patches. And thanks for all the reviews so far on previous revisions.
+
+Regards,
+Krishna,
 
