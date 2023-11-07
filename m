@@ -1,151 +1,231 @@
-Return-Path: <linux-usb+bounces-2629-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2630-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 045597E3802
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Nov 2023 10:42:48 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 052957E3A14
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Nov 2023 11:41:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3D5011C20931
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Nov 2023 09:42:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6F3A0B20D39
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Nov 2023 10:41:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72D33125BE;
-	Tue,  7 Nov 2023 09:42:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3664E28E2B;
+	Tue,  7 Nov 2023 10:41:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=toradex.com header.i=@toradex.com header.b="LS+qgxRZ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="O37E3DG6"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 426AD111A4
-	for <linux-usb@vger.kernel.org>; Tue,  7 Nov 2023 09:42:39 +0000 (UTC)
-Received: from de-smtp-delivery-113.mimecast.com (de-smtp-delivery-113.mimecast.com [194.104.111.113])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A32EE102
-	for <linux-usb@vger.kernel.org>; Tue,  7 Nov 2023 01:42:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=toradex.com; s=toradex-com;
-	t=1699350156;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=iw7QAZJpv2/t/WEGNgJgX9o82ZsApkInULH6r4kuz00=;
-	b=LS+qgxRZO8dxSJ1ScOL+TXIzOi2hfpCXsvyS6jLfrJuE4pcgTsOtHT33diDSzkJj7jxxI9
-	LgWVyXVNipdoh86oOxqHUlZhAGC9uxwPVq/AH6wdf4Vo8mBi46yRwjBXfNY7BHr3pgtnZJ
-	G0SldsRpGa9F+qNKWcnCmYXc91KKvz4=
-Received: from CHE01-ZR0-obe.outbound.protection.outlook.com
- (mail-zr0che01lp2105.outbound.protection.outlook.com [104.47.22.105]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- de-mta-18-MKV1JAO2NeWu6yRcufyytA-2; Tue, 07 Nov 2023 10:42:32 +0100
-X-MC-Unique: MKV1JAO2NeWu6yRcufyytA-2
-Received: from GV0P278MB0589.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:40::8) by
- GVAP278MB0120.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:22::11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6954.29; Tue, 7 Nov 2023 09:42:29 +0000
-Received: from GV0P278MB0589.CHEP278.PROD.OUTLOOK.COM
- ([fe80::c00:111c:9d5c:7066]) by GV0P278MB0589.CHEP278.PROD.OUTLOOK.COM
- ([fe80::c00:111c:9d5c:7066%7]) with mapi id 15.20.6954.029; Tue, 7 Nov 2023
- 09:42:29 +0000
-From: Stefan Eichenberger <stefan.eichenberger@toradex.com>
-To: Johan Hovold <johan@kernel.org>
-CC: Francesco Dolcini <francesco@dolcini.it>, Thinh Nguyen
-	<Thinh.Nguyen@synopsys.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Felipe Balbi <balbi@ti.com>, Kishon Vijay Abraham I <kishon@ti.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Francesco
- Dolcini <francesco.dolcini@toradex.com>
-Subject: Re: [PATCH v1] USB: dwc3: only call usb_phy_set_suspend in
- suspend/resume
-Thread-Topic: [PATCH v1] USB: dwc3: only call usb_phy_set_suspend in
- suspend/resume
-Thread-Index: AQHaDj+z53GEj9qQB0uSGx9v53wrl7Bozv+AgAE8U8KAAux5AIABqPKW
-Date: Tue, 7 Nov 2023 09:42:29 +0000
-Message-ID: <GV0P278MB05896EF2725F208A93C0294FE8A9A@GV0P278MB0589.CHEP278.PROD.OUTLOOK.COM>
-References: <20231103102236.13656-1-francesco@dolcini.it>
- <ZUUkqeKFZmsubxu5@hovoldconsulting.com>
- <GV0P278MB0589921FFF5487D2F94D3FF2E8A4A@GV0P278MB0589.CHEP278.PROD.OUTLOOK.COM>
- <ZUih4BJLkslLIMx5@hovoldconsulting.com>
-In-Reply-To: <ZUih4BJLkslLIMx5@hovoldconsulting.com>
-Accept-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: GV0P278MB0589:EE_|GVAP278MB0120:EE_
-x-ms-office365-filtering-correlation-id: b813b5da-b5d5-4dd8-52a8-08dbdf75dbd3
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0
-x-microsoft-antispam-message-info: RoNYUrz/91bIkzVQM022r3qjqY3QdodRa+vs9mYUDAcScGHoX7JCPZe3SzjCmcesfaSOTNoze7qnVput5c4Ttcy2c2psJF6W7L7mSwtfYb/kKhV/d1xU+jSIL7NOCvQIhy5p1YtJfcTa7F8sNzllggomfoEMaUbl0Fff2tGtgn2CrMMNHm7WgXxGizz52iEHcKeNOW7nOUgR9C5W9RqZ5U7bbharSPhpZ1F66gqBxrPeV7KKGqvwE9I9JACSa3JaaZ8lfTnGnPUqs6ULK7fXkyOsRthYwk4KCfMBMZphB8TFSsvhY1DYDwkC12eaFMWlcyvdcVn9qTMDDwhejVE+5CIwsP08v+Uey5QWsZOWnhmaQwlxGLSZSJcSM6qbTS3lqNcoTD9OFPd5c9l/KyWU3TrGR63jFujv9480GVQPI7VbyodzAWrBO9yAhNpRQE0TMEP2d1mixvclLHyt5hvrum6l4SqBRl2o4CzDR7ey8v35DVClikxLbzFRhusu+xxSusjPv/GWJtHN6SRvK/xd3o6M5tmArEeMUwUlxHHujldhjy4y0iE9NQy3Hkjv0XYa9Qim35HWAHf/vf/1FL1t5x9DaoV7pITCGrnzZrSgSzNpI9fXH+tmkpljI0JIztbI2UlPOOwCQ9gjgNzfoX6+vNl7bo9kP+zq5zfGtpBYOmo=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV0P278MB0589.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(136003)(376002)(346002)(39850400004)(366004)(396003)(230173577357003)(230273577357003)(230922051799003)(451199024)(186009)(1800799009)(64100799003)(122000001)(83380400001)(9686003)(7696005)(71200400001)(107886003)(6506007)(6916009)(478600001)(316002)(66946007)(55016003)(66556008)(76116006)(4326008)(8936002)(8676002)(52536014)(64756008)(66446008)(66476007)(54906003)(38100700002)(4744005)(15650500001)(2906002)(41300700001)(33656002)(44832011)(86362001)(5660300002)(38070700009);DIR:OUT;SFP:1102
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?u47blGj/Jd75Twf4bTys+Lo/TG4onlDSxmMO1EKBxoV4Pcd4gm2E+NMTca?=
- =?iso-8859-1?Q?G43oKQHFZSPBIMlBAztUj9hFZp/JqEJO9xMQzh4UCziawosXkwhcMg3BVE?=
- =?iso-8859-1?Q?6GopeGawaDYra/1qONRjNAaawhzRcUzVrpI486iS+yWYgu6zywBPTHFiFT?=
- =?iso-8859-1?Q?oTXiBNb3mxPbCGL8/2Od1cRbd1VcdR5ocfmhx6gaOH3mwRsmhLpfC0u1jf?=
- =?iso-8859-1?Q?O/V/ojgrxGRG3sOwwx6g8pTPEIWBni7Z7aBjHe9SjfPAu6FYpiS+IyyxWE?=
- =?iso-8859-1?Q?sIDt/0688rehgLqouH90TsDeMG2umR5G4ThdVbf8gTXLH9RtCVOD4SkMt8?=
- =?iso-8859-1?Q?/eg73vcV+r+RRpRC+SAy+jp6qPGNYqN9uOZN7q4hnS7/LxN+Tp/bxv5P+m?=
- =?iso-8859-1?Q?vb2oINzBX5ShevjzU8JDuxh91Sm/0Kp2Fmmx7jxpcGHGRKTnBlD3Y5A0U/?=
- =?iso-8859-1?Q?OOPrSqNZNt8PDk3ClqC7TrbGbUWsGJrGepxQFP8gCBIaFnpkAhQ4ZEkurd?=
- =?iso-8859-1?Q?tTN5ZOYnPql2OiTUzuM0VJ8iLR1VeRh4OUQ74nWfHMFfhW3rOOiXumHW+X?=
- =?iso-8859-1?Q?kFSXUSiZuvWe8hLWnWI99MflX71F9N4DY02cKWoKvUXxkHeEUejwJ1sA79?=
- =?iso-8859-1?Q?4URPLAJdEA0/M5hY1o0i5srAqVbXBJ5iI0Y83WJvOS/nuUbJ4wYblTcnZK?=
- =?iso-8859-1?Q?xRdNz2/g2a7wvdD2/rRsDTva8t0SWijIftBrB5YsmmOWrS7rUmR/CIqMxF?=
- =?iso-8859-1?Q?ntWUm1wI2rL7xFWlSrFQdKZ/nE7oat7UlKWEGNOCpB18U8whiFp3CZEIwh?=
- =?iso-8859-1?Q?WQqUUw17Foy8oQ9w1Ic9e20LleR8prBQkZeWK3I67YVDWua7pohb5h8v5/?=
- =?iso-8859-1?Q?JRLTKTrSz8dmB8xJxhcFx1WJDbDBNCXcT0A60e+VXin1O/c0gK8W9ErGtz?=
- =?iso-8859-1?Q?0oiqxqnW1c7KuOSxUFNV/LL71FsIlX0IFPULTynMHGJvSURTYSN2zMVOkp?=
- =?iso-8859-1?Q?rhWoDbP3DBEZcTo2zQKXRxHDwDpUGuXWvp7Coxr88QAdHcCeSy+x04Uw0c?=
- =?iso-8859-1?Q?uBIhSDb34y2b3FjinwWQnRnqxx2ArK19iqPLAwaU5bMq5EvLdSI6A+9+/0?=
- =?iso-8859-1?Q?xk9g6IUUDZlsHQwlOQ/78DzXxSvDojuZTtiFhSS4IT+EbKN70nSxTmJYKI?=
- =?iso-8859-1?Q?YGYQ1kBPe4balXm2xQ1/qj+jPGffoMEmAKUUInQK903Ln/9uDmXjeokj/3?=
- =?iso-8859-1?Q?PLcDz/dpeZoHF9+KUM+oZJGf1uZmjKkJNBpSt0L+Uev/v8hoO3CcxXIk2e?=
- =?iso-8859-1?Q?mNTGE2NkxvSXxleqZjw5zF79uO9j27trP4kZwh01frYH2Bsbc/IoXYI9fL?=
- =?iso-8859-1?Q?vE2Mp56B0FruHrkPh22qHI6bJHFXC/LyckfOja0rI0AVDi98edRrAdFT52?=
- =?iso-8859-1?Q?d1yaTszmq9XZVrHCf7zlg4gX2YOxVrIQfDmpUJ7LQbaj5M3cYVvSsp0khH?=
- =?iso-8859-1?Q?hV9HIp4pzQIr6s5HCsZ7Dzy5mc3BZdLtu93v1A3isU8p94BWot8mN3TAA2?=
- =?iso-8859-1?Q?2PuOahKTSe4dVvqIunVyqDMVFYYt0xwFJsg2UbmenGHjZnESsEb5aduKJk?=
- =?iso-8859-1?Q?rO4dn2lkZUJwRNVlv5AlFMhNLfsPJFEoYwnvzGb0R55XnM3C+ijR0JnwDA?=
- =?iso-8859-1?Q?RyyldhAdOTU8xr5H0JTUIPzHhH7zC8/j1Sfh9KsxLeq8mvqJNdDY18k7Qj?=
- =?iso-8859-1?Q?LxRQ=3D=3D?=
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0993A28E28
+	for <linux-usb@vger.kernel.org>; Tue,  7 Nov 2023 10:41:18 +0000 (UTC)
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25809A3
+	for <linux-usb@vger.kernel.org>; Tue,  7 Nov 2023 02:41:17 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-4079ed65582so41215185e9.1
+        for <linux-usb@vger.kernel.org>; Tue, 07 Nov 2023 02:41:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1699353675; x=1699958475; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sieNHgKFMufLfZS/x+ERBd5dxwAS53P7pOyGN5G0KI8=;
+        b=O37E3DG6p+HOfARyN97Q/oCOUO/TbybKTCTVACtLgWRVMVkP6EO+tlmGfDPm1ZXQXi
+         UclSU9CYexNc2lrUT4gZZnNvucq4odst3tbCUuwJe8kWzUw7z7ZvkjNHdfX/YebHtt4N
+         C9/P1gwKRWrP5QITbVE4oyqBhZS1sYaHwrvPS4lHdgVEt4NH4onSoBz9aLeT/s65pp4I
+         iLdxPa0ZSTxXLHNIZMpMiNA3lSEXUbSHwwS+b1e+XnfwRaZa6zHaBGgafa7nMY1CMz0Z
+         TuSJSPNJJUyFtk9Dpguxjw7BUYujWAGT1Mw/tBimajzB8MJXIqONPIRso5JAdDTeAtQc
+         Da0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699353675; x=1699958475;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sieNHgKFMufLfZS/x+ERBd5dxwAS53P7pOyGN5G0KI8=;
+        b=f8SFRpx+MrBY4lFvm6o1FJJ4SXI7R6lCKgV8RtdWpLjpnfLHSwvStxOK6Dhe+5vgYM
+         CaUjhmz3Eq6eA+sz2FGshn2TIZcAzcAQaStsRXluiiK7z2X/YGpQbUUq0bbZR20gjiwb
+         AXlBhDqQv4juiowWJttqZpVTvG4OowphRYjMBBTtQNoCyyEYAghNN4MzkbYbVFqDXwAU
+         Op8WSp8y1qCz/7v4yGKCg61F0ObgPsBRxRw0xGYYT2owIPZ2l56U/0hu+4BubIGkO9Wg
+         hFglhXEl+gRv/o7D1S4O9DZ3njrk3CBnDvlU3lacGGzqVeV19eiYz+V4T+Zyd7ZqpmId
+         3j5w==
+X-Gm-Message-State: AOJu0YwVEdN7opDPUPOC3cRFvaTJb3gySHWUDfeYtxUNLS5EFyZ1Xhdt
+	YyYoEVZ9DRdRcsYuzfJ/1SL5+g==
+X-Google-Smtp-Source: AGHT+IHo3GaRGX6QxrETyItSGPni1XwJu7CfTVMiNpshaJEkePhGrzcYQMqz8OP93kQcIVWIOX8Dpw==
+X-Received: by 2002:a5d:5846:0:b0:32f:7e2f:4454 with SMTP id i6-20020a5d5846000000b0032f7e2f4454mr22645157wrf.46.1699353675455;
+        Tue, 07 Nov 2023 02:41:15 -0800 (PST)
+Received: from [192.168.100.102] ([37.228.218.3])
+        by smtp.gmail.com with ESMTPSA id o3-20020a056000010300b0032da4f70756sm2010923wrx.5.2023.11.07.02.41.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Nov 2023 02:41:14 -0800 (PST)
+Message-ID: <f94ca738-476c-4664-a8f1-e3ef3ac8220a@linaro.org>
+Date: Tue, 7 Nov 2023 10:41:13 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: toradex.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: GV0P278MB0589.CHEP278.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: b813b5da-b5d5-4dd8-52a8-08dbdf75dbd3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Nov 2023 09:42:29.5009
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: d9995866-0d9b-4251-8315-093f062abab4
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: S0zI67mdoH6Bgkx7CIdsyEf2txhccgqESkx09zz7cfcAWvMK68ip55dQ1aGg3yZ6rW9LWj+spBO92Tb8J5/1PNgnGcUG7zMG47cIVZRgCwQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVAP278MB0120
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: toradex.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC 2/8] usb: dwc3: core: Register vendor hooks for dwc3-qcom
 Content-Language: en-US
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Transfer-Encoding: quoted-printable
+To: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>, Conor Dooley <conor+dt@kernel.org>
+Cc: linux-usb@vger.kernel.org,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ linux-kernel@vger.kernel.org, Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+ Rob Herring <robh+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, quic_ppratap@quicinc.com,
+ quic_jackp@quicinc.com, quic_wcheng@quicinc.com,
+ Andy Gross <agross@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Philipp Zabel <p.zabel@pengutronix.de>
+References: <20231017131851.8299-1-quic_kriskura@quicinc.com>
+ <20231017131851.8299-3-quic_kriskura@quicinc.com>
+ <e700133b-58f7-4a4d-8e5c-0d04441b789b@linaro.org>
+ <5ef66bdc-9645-4bbe-8182-baa7fe4c583a@quicinc.com>
+ <3be5e95f-85d2-4abf-a8b4-18b019341602@quicinc.com>
+ <cf553cd8-45f8-4a61-b016-69e7a80eee9f@linaro.org>
+ <ea919050-22a8-4d28-ade2-fd16a99876cb@quicinc.com>
+ <105d84b6-cbea-4758-9eba-1c104fa7a670@quicinc.com>
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <105d84b6-cbea-4758-9eba-1c104fa7a670@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-> From: Johan Hovold <johan@kernel.org>=0A> >=0A> > We have an external hub=
- that we want to turn off when the system goes=0A> > into suspend. For the =
-i.MX8MM we use the phy-generic driver to achieve=0A> > this. When I saw tha=
-t the dwc3 driver would support the phy-generic via=0A> > usb-phy, I though=
-t we could use the same approach for the i.MX8MP and,=0A> > in the future, =
-the AM62. Maybe I misunderstood, would the right solution=0A> > be to add a=
- suspend function to the fsl,imx8mp-usb-phy driver and use=0A> > vbus inste=
-ad? But what would we do for the AM62, as it doesn't have a=0A> > phy drive=
-r if I'm not mistaken.=0A>=0A> That's not how the phy driver is supposed be=
- used, and for on-board hubs=0A> we now have:=0A>=0A>         drivers/usb/m=
-isc/onboard_usb_hub.c=0A>=0A> Have you tried using that one instead?=0A=0AT=
-hanks for the tip. I have now tested it and it seems to work for our=0Ause =
-case. I will see if I can use it for the other devices as well.=0A=0ABest r=
-egards,=0AStefan
+On 07/11/2023 08:33, Krishna Kurapati PSSNV wrote:
+> 
+> 
+> On 11/4/2023 10:32 PM, Krishna Kurapati PSSNV wrote:
+>>>
+>>> Are you saying to you require/rely on both of these series being 
+>>> applied first ?
+>>>
+>>> [1]: 
+>>> https://lore.kernel.org/all/af60c05b-4a0f-51b8-486a-1fc601602515@quicinc.com/
+>>> [2]: 
+>>> https://lore.kernel.org/all/20231016-dwc3-refactor-v1-0-ab4a84165470@quicinc.com/
+>>>
+>>> Must be, nothing applies for me in this series.
+>>
+>> The first one is not a patch. It is just a discussion thread I started 
+>> to get community's opinion before on disconnect interrupt handling. 
+>> The current series is based on top of [2] made by Bjorn (as you 
+>> already found out) and as I mentioned in cover letter of my series.
+>>
+> 
+> Hi Bryan,
+> 
+>    Are you able to apply the series after including Bjorn's patches ? 
+> Also can you confirm if the comments provided to your queries on [1] are 
+> proper and if you have any other comments w.r.t probe deferral.
+> 
+> [1]: 
+> https://lore.kernel.org/all/e700133b-58f7-4a4d-8e5c-0d04441b789b@linaro.org/
+> 
+> Regards,
+> Krishna,
 
+I wonder could you give a base SHA to apply the various series on ?
+
+Your referenced precursor doesn't apply to usb-next
+
+deckard@sagittarius-a:~/Development/qualcomm/qlt-kernel$ b4 shazam 
+20231016-dwc3-refactor-v1-0-ab4a84165470@quicinc.com
+Grabbing thread from 
+lore.kernel.org/all/20231016-dwc3-refactor-v1-0-ab4a84165470@quicinc.com/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 27 messages in the thread
+Checking attestation on all messages, may take a moment...
+---
+   [PATCH 1/12] dt-bindings: usb: qcom,dwc3: Add qcom,sc8180x-dwc3
+   [PATCH 2/12] usb: dwc3: qcom: Rename dwc3 platform_device reference
+     + Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+   [PATCH 3/12] usb: dwc3: qcom: Merge resources from urs_usb device
+   [PATCH 4/12] usb: dwc3: Expose core driver as library
+   [PATCH 5/12] usb: dwc3: Override end of dwc3 memory resource
+     + Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+   [PATCH 6/12] usb: dwc3: qcom: Add dwc3 core reference in driver state
+   [PATCH 7/12] usb: dwc3: qcom: Instantiate dwc3 core directly
+   [PATCH 8/12] usb: dwc3: qcom: Inline the qscratch constants
+     + Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+   [PATCH 9/12] dt-bindings: usb: qcom,dwc3: Rename to "glue"
+     + Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+   [PATCH 10/12] dt-bindings: usb: qcom,dwc3: Introduce flattened 
+qcom,dwc3 binding
+   [PATCH 11/12] usb: dwc3: qcom: Flatten the Qualcomm dwc3 binding and 
+implementation
+   [PATCH 12/12] arm64: dts: qcom: sc8180x: flatten usb_sec node
+   ---
+   ✗ No key: ed25519/quic_bjorande@quicinc.com
+   ---
+   NOTE: install dkimpy for DKIM signature verification
+---
+Total patches: 12
+---
+  Base: using specified base-commit 4d0515b235dec789578d135a5db586b25c5870cb
+Applying: dt-bindings: usb: qcom,dwc3: Add qcom,sc8180x-dwc3
+Patch failed at 0001 dt-bindings: usb: qcom,dwc3: Add qcom,sc8180x-dwc3
+When you have resolved this problem, run "git am --continue".
+If you prefer to skip this patch, run "git am --skip" instead.
+To restore the original branch and stop patching, run "git am --abort".
+error: patch failed: Documentation/devicetree/bindings/usb/qcom,dwc3.yaml:29
+error: Documentation/devicetree/bindings/usb/qcom,dwc3.yaml: patch does 
+not apply
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+deckard@sagittarius-a:~/Development/qualcomm/qlt-kernel$ git diff
+deckard@sagittarius-a:~/Development/qualcomm/qlt-kernel$ git am --skip
+Applying: usb: dwc3: qcom: Rename dwc3 platform_device reference
+error: patch failed: drivers/usb/dwc3/dwc3-qcom.c:67
+error: drivers/usb/dwc3/dwc3-qcom.c: patch does not apply
+Patch failed at 0002 usb: dwc3: qcom: Rename dwc3 platform_device reference
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+When you have resolved this problem, run "git am --continue".
+If you prefer to skip this patch, run "git am --skip" instead.
+To restore the original branch and stop patching, run "git am --abort".
+deckard@sagittarius-a:~/Development/qualcomm/qlt-kernel$ git am --skip
+Applying: usb: dwc3: qcom: Merge resources from urs_usb device
+error: patch failed: drivers/usb/dwc3/dwc3-qcom.c:68
+error: drivers/usb/dwc3/dwc3-qcom.c: patch does not apply
+Patch failed at 0003 usb: dwc3: qcom: Merge resources from urs_usb device
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+When you have resolved this problem, run "git am --continue".
+If you prefer to skip this patch, run "git am --skip" instead.
+To restore the original branch and stop patching, run "git am --abort".
+deckard@sagittarius-a:~/Development/qualcomm/qlt-kernel$ git am --skip
+Applying: usb: dwc3: Expose core driver as library
+error: patch failed: drivers/usb/dwc3/core.c:1876
+error: drivers/usb/dwc3/core.c: patch does not apply
+error: patch failed: drivers/usb/dwc3/core.h:1568
+error: drivers/usb/dwc3/core.h: patch does not apply
+Patch failed at 0004 usb: dwc3: Expose core driver as library
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+When you have resolved this problem, run "git am --continue".
+If you prefer to skip this patch, run "git am --skip" instead.
+To restore the original branch and stop patching, run "git am --abort".
+deckard@sagittarius-a:~/Development/qualcomm/qlt-kernel$ git am --skip
+Applying: usb: dwc3: Override end of dwc3 memory resource
+error: patch failed: drivers/usb/dwc3/core.c:1908
+error: drivers/usb/dwc3/core.c: patch does not apply
+Patch failed at 0005 usb: dwc3: Override end of dwc3 memory resource
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+When you have resolved this problem, run "git am --continue".
+If you prefer to skip this patch, run "git am --skip" instead.
+To restore the original branch and stop patching, run "git am --abort".
+deckard@sagittarius-a:~/Development/qualcomm/qlt-kernel$ git am --skip
+Applying: usb: dwc3: qcom: Add dwc3 core reference in driver state
+error: patch failed: drivers/usb/dwc3/dwc3-qcom.c:67
+error: drivers/usb/dwc3/dwc3-qcom.c: patch does not apply
+Patch failed at 0006 usb: dwc3: qcom: Add dwc3 core reference in driver 
+state
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+When you have resolved this problem, run "git am --continue".
+If you prefer to skip this patch, run "git am --skip" instead.
+To restore the original branch and stop patching, run "git am --abort".
+deckard@sagittarius-a:~/Development/qualcomm/qlt-kernel$ git am --abort
+
+---
+bod
 
