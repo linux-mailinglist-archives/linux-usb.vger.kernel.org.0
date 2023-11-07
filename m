@@ -1,52 +1,49 @@
-Return-Path: <linux-usb+bounces-2651-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2652-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 356B27E4CDC
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Nov 2023 00:24:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B56A7E4CE2
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Nov 2023 00:24:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 670F31C20BF7
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Nov 2023 23:24:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA04B281169
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Nov 2023 23:24:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 452D334547;
-	Tue,  7 Nov 2023 23:23:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 452CA34546;
+	Tue,  7 Nov 2023 23:24:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tTU7awKQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gqiHDXk5"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABC8A34541
-	for <linux-usb@vger.kernel.org>; Tue,  7 Nov 2023 23:23:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE4B1C433CA;
-	Tue,  7 Nov 2023 23:23:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F07834540
+	for <linux-usb@vger.kernel.org>; Tue,  7 Nov 2023 23:24:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94C39C433C8;
+	Tue,  7 Nov 2023 23:24:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699399438;
-	bh=7uMxTlYCW9j7hQgBIvnv4kngJvJJJNQXAQnng5dh/WM=;
+	s=k20201202; t=1699399443;
+	bh=spoou1fQGxcmL1A5+u2uQy123FFjHiyb6mxfu4lt4q0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=tTU7awKQTrg0POv6AXVZeMpRbhwBa88XwaiOiA/qK7+b69sr/pPMQ9zW81D0GKSeF
-	 EbjNc8WCY4ZSlscZ/atuBanRzKQ+WtgGSAw+uvp8FEJ+jEuAIUSJuneMQbf3dNaCBn
-	 e6RhX8j3zPlpDcpEnRYbGkGKTO2arQ7XVoiBZfCqMWvccca0asYIxMBCKY+mbCKMEM
-	 VRl82x2H/iIr+lea5rDJh/IrOdkJ6PrrGI8s79R8OmLLyOm5oPlZNa02JCIo/WT6i9
-	 PLm6TpS3XFlY70RzvtOVuriGkz+6BsdIqMckAIo+3QDOQA94RtzXXnNUs6zV6oPFqd
-	 KnlKtrKq/Uurg==
+	b=gqiHDXk5pZAE0ujAe1KGNsu+qUtz2M2LCfAEZT+SCC7LvcvcDskDtAGn5cG0aeFck
+	 a0FBBQGOjcR4NNfM6chFYFd9mH5g6Zn5/Wvs/TpNG+Q7NFzEXqytkYm8A5+kzBJ2Lh
+	 D6XjyENCZApGEzPdK5LYSHXKwtAybaOtWuYf00d0TIkNRYQLl/jteM6j2ntk7TE4xy
+	 lef85NLJX+IxSIpQd/C1caI82dJPFOzMNRu1KKuv+PpvepAXHR/3A30wgW++mHY1/H
+	 aGXWISYvzeL9zYjzS8KxPxKhy1RcxvdEjq8F0RlQe2HU4OlMuXeXDm6HfgA3qMVSxH
+	 nSZj+I/wWH4Hg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Neil Armstrong <neil.armstrong@linaro.org>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
+Cc: Wesley Cheng <quic_wcheng@quicinc.com>,
+	Mathias Nyman <mathias.nyman@linux.intel.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
-	minhuadotchen@gmail.com,
-	robh@kernel.org,
+	mathias.nyman@intel.com,
 	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.5 11/18] usb: ucsi: glink: use the connector orientation GPIO to provide switch events
-Date: Tue,  7 Nov 2023 18:23:06 -0500
-Message-ID: <20231107232330.3776001-11-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.5 15/18] usb: host: xhci: Avoid XHCI resume delay if SSUSB device is not present
+Date: Tue,  7 Nov 2023 18:23:10 -0500
+Message-ID: <20231107232330.3776001-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231107232330.3776001-1-sashal@kernel.org>
 References: <20231107232330.3776001-1-sashal@kernel.org>
@@ -61,127 +58,69 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.5.10
 Content-Transfer-Encoding: 8bit
 
-From: Neil Armstrong <neil.armstrong@linaro.org>
+From: Wesley Cheng <quic_wcheng@quicinc.com>
 
-[ Upstream commit c6165ed2f425c273244191930a47c8be23bc51bd ]
+[ Upstream commit 6add6dd345cb754ce18ff992c7264cabf31e59f6 ]
 
-On SM8550, the non-altmode orientation is not given anymore within
-altmode events, even with USB SVIDs events.
+There is a 120ms delay implemented for allowing the XHCI host controller to
+detect a U3 wakeup pulse.  The intention is to wait for the device to retry
+the wakeup event if the USB3 PORTSC doesn't reflect the RESUME link status
+by the time it is checked.  As per the USB3 specification:
 
-On the other side, the Type-C connector orientation is correctly
-reported by a signal from the PMIC.
+  tU3WakeupRetryDelay ("Table 7-12. LTSSM State Transition Timeouts")
 
-Take this gpio signal when we detect some Type-C port activity
-to notify any Type-C switches tied to the Type-C port connectors.
+This would allow the XHCI resume sequence to determine if the root hub
+needs to be also resumed.  However, in case there is no device connected,
+or if there is only a HSUSB device connected, this delay would still affect
+the overall resume timing.
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Link: https://lore.kernel.org/r/20231002-topic-sm8550-upstream-type-c-orientation-v2-2-125410d3ff95@linaro.org
+Since this delay is solely for detecting U3 wake events (USB3 specific)
+then ignore this delay for the disconnected case and the HSUSB connected
+only case.
+
+[skip helper function, rename usb3_connected variable -Mathias ]
+
+Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Link: https://lore.kernel.org/r/20231019102924.2797346-20-mathias.nyman@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/typec/ucsi/ucsi_glink.c | 54 ++++++++++++++++++++++++++++-
- 1 file changed, 53 insertions(+), 1 deletion(-)
+ drivers/usb/host/xhci.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
-index 1fe9cb5b6bd96..a2d862eebcecb 100644
---- a/drivers/usb/typec/ucsi/ucsi_glink.c
-+++ b/drivers/usb/typec/ucsi/ucsi_glink.c
-@@ -9,9 +9,13 @@
- #include <linux/mutex.h>
- #include <linux/property.h>
- #include <linux/soc/qcom/pdr.h>
-+#include <linux/usb/typec_mux.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/soc/qcom/pmic_glink.h>
- #include "ucsi.h"
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index fae994f679d45..82aab2f9adbb8 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -968,6 +968,7 @@ int xhci_resume(struct xhci_hcd *xhci, pm_message_t msg)
+ 	int			retval = 0;
+ 	bool			comp_timer_running = false;
+ 	bool			pending_portevent = false;
++	bool			suspended_usb3_devs = false;
+ 	bool			reinit_xhc = false;
  
-+#define PMIC_GLINK_MAX_PORTS	2
+ 	if (!hcd->state)
+@@ -1115,10 +1116,17 @@ int xhci_resume(struct xhci_hcd *xhci, pm_message_t msg)
+ 		/*
+ 		 * Resume roothubs only if there are pending events.
+ 		 * USB 3 devices resend U3 LFPS wake after a 100ms delay if
+-		 * the first wake signalling failed, give it that chance.
++		 * the first wake signalling failed, give it that chance if
++		 * there are suspended USB 3 devices.
+ 		 */
++		if (xhci->usb3_rhub.bus_state.suspended_ports ||
++		    xhci->usb3_rhub.bus_state.bus_suspended)
++			suspended_usb3_devs = true;
 +
- #define UCSI_BUF_SIZE                   48
- 
- #define MSG_TYPE_REQ_RESP               1
-@@ -53,6 +57,9 @@ struct ucsi_notify_ind_msg {
- struct pmic_glink_ucsi {
- 	struct device *dev;
- 
-+	struct gpio_desc *port_orientation[PMIC_GLINK_MAX_PORTS];
-+	struct typec_switch *port_switch[PMIC_GLINK_MAX_PORTS];
+ 		pending_portevent = xhci_pending_portevent(xhci);
+-		if (!pending_portevent && msg.event == PM_EVENT_AUTO_RESUME) {
 +
- 	struct pmic_glink_client *client;
- 
- 	struct ucsi *ucsi;
-@@ -221,8 +228,20 @@ static void pmic_glink_ucsi_notify(struct work_struct *work)
- 	}
- 
- 	con_num = UCSI_CCI_CONNECTOR(cci);
--	if (con_num)
-+	if (con_num) {
-+		if (con_num < PMIC_GLINK_MAX_PORTS &&
-+		    ucsi->port_orientation[con_num - 1]) {
-+			int orientation = gpiod_get_value(ucsi->port_orientation[con_num - 1]);
-+
-+			if (orientation >= 0) {
-+				typec_switch_set(ucsi->port_switch[con_num - 1],
-+						 orientation ? TYPEC_ORIENTATION_REVERSE
-+							     : TYPEC_ORIENTATION_NORMAL);
-+			}
-+		}
-+
- 		ucsi_connector_change(ucsi->ucsi, con_num);
-+	}
- 
- 	if (ucsi->sync_pending && cci & UCSI_CCI_BUSY) {
- 		ucsi->sync_val = -EBUSY;
-@@ -283,6 +302,7 @@ static int pmic_glink_ucsi_probe(struct auxiliary_device *adev,
- {
- 	struct pmic_glink_ucsi *ucsi;
- 	struct device *dev = &adev->dev;
-+	struct fwnode_handle *fwnode;
- 	int ret;
- 
- 	ucsi = devm_kzalloc(dev, sizeof(*ucsi), GFP_KERNEL);
-@@ -310,6 +330,38 @@ static int pmic_glink_ucsi_probe(struct auxiliary_device *adev,
- 
- 	ucsi_set_drvdata(ucsi->ucsi, ucsi);
- 
-+	device_for_each_child_node(dev, fwnode) {
-+		struct gpio_desc *desc;
-+		u32 port;
-+
-+		ret = fwnode_property_read_u32(fwnode, "reg", &port);
-+		if (ret < 0) {
-+			dev_err(dev, "missing reg property of %pOFn\n", fwnode);
-+			return ret;
-+		}
-+
-+		if (port >= PMIC_GLINK_MAX_PORTS) {
-+			dev_warn(dev, "invalid connector number, ignoring\n");
-+			continue;
-+		}
-+
-+		desc = devm_gpiod_get_index_optional(&adev->dev, "orientation", port, GPIOD_IN);
-+
-+		/* If GPIO isn't found, continue */
-+		if (!desc)
-+			continue;
-+
-+		if (IS_ERR(desc))
-+			return dev_err_probe(dev, PTR_ERR(desc),
-+					     "unable to acquire orientation gpio\n");
-+		ucsi->port_orientation[port] = desc;
-+
-+		ucsi->port_switch[port] = fwnode_typec_switch_get(fwnode);
-+		if (IS_ERR(ucsi->port_switch[port]))
-+			return dev_err_probe(dev, PTR_ERR(ucsi->port_switch[port]),
-+					"failed to acquire orientation-switch\n");
-+	}
-+
- 	ucsi->client = devm_pmic_glink_register_client(dev,
- 						       PMIC_GLINK_OWNER_USBC,
- 						       pmic_glink_ucsi_callback,
++		if (suspended_usb3_devs && !pending_portevent &&
++		    msg.event == PM_EVENT_AUTO_RESUME) {
+ 			msleep(120);
+ 			pending_portevent = xhci_pending_portevent(xhci);
+ 		}
 -- 
 2.42.0
 
