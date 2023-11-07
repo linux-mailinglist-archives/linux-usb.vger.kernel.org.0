@@ -1,138 +1,193 @@
-Return-Path: <linux-usb+bounces-2612-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2615-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA0487E3531
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Nov 2023 07:24:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2F0C7E3548
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Nov 2023 07:37:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D7ADC1C20A33
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Nov 2023 06:24:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 69F9E1F2142B
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Nov 2023 06:37:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E866BA3F;
-	Tue,  7 Nov 2023 06:24:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IGCMk8ZZ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BF19C15B;
+	Tue,  7 Nov 2023 06:37:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F55C947A;
-	Tue,  7 Nov 2023 06:24:16 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD9C101;
-	Mon,  6 Nov 2023 22:24:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699338255; x=1730874255;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xMd2rVgz/0nCDHGO5G5Cgmns963Fjfa40nHUcD2LIxI=;
-  b=IGCMk8ZZpOLcTsOgycxyY4TH3dQ/eEP5ApYP7g3QYG2nqGBUAliuOluS
-   5q0Nz+BKL2CeVuwhRrIK8vN1mQEN37rWnUNnI1BxvrXCo+05EWGnNTi1a
-   v0CS1yb/0h97f5ax1fmFs62RLrv9b8S/jp6ZWJnJBMIpQNvLbykJfLf2g
-   rNGe2YlKqBXrWEN561Ln0J9ZPIlalDjgXgkN7YnreOfgI5XG4VSa6AX7F
-   vArXh463zL2b9g2BwG+UkgLqjUbL1QWzwUxvGEE1WFQ3ROxRSdHNFEo9H
-   S5O6TpHxQWi8cqEM+Y1t2t7jqE0j+jbZLdSqqwa251uJAq1k49tAaNClj
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10886"; a="475682216"
-X-IronPort-AV: E=Sophos;i="6.03,282,1694761200"; 
-   d="scan'208";a="475682216"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2023 22:24:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10886"; a="1094047505"
-X-IronPort-AV: E=Sophos;i="6.03,282,1694761200"; 
-   d="scan'208";a="1094047505"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga005.fm.intel.com with ESMTP; 06 Nov 2023 22:24:07 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 15A0E3CC; Tue,  7 Nov 2023 08:24:05 +0200 (EET)
-Date: Tue, 7 Nov 2023 08:24:05 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Lukas Wunner <lukas@wunner.de>
-Cc: Mario Limonciello <mario.limonciello@amd.com>,
-	Karol Herbst <kherbst@redhat.com>, Lyude Paul <lyude@redhat.com>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-	Danilo Krummrich <dakr@redhat.com>,
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-	Xinhui Pan <Xinhui.Pan@amd.com>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Mark Gross <markgross@kernel.org>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>,
-	Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-	"Maciej W . Rozycki" <macro@orcam.me.uk>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	"open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS" <dri-devel@lists.freedesktop.org>,
-	"open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS" <nouveau@lists.freedesktop.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>,
-	"open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
-	"open list:ACPI" <linux-acpi@vger.kernel.org>,
-	"open list:X86 PLATFORM DRIVERS" <platform-driver-x86@vger.kernel.org>,
-	"open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH v2 8/9] PCI: Exclude PCIe ports used for tunneling in
- pcie_bandwidth_available()
-Message-ID: <20231107062405.GU17433@black.fi.intel.com>
-References: <20231103190758.82911-1-mario.limonciello@amd.com>
- <20231103190758.82911-9-mario.limonciello@amd.com>
- <20231106181022.GA18564@wunner.de>
- <712ebb25-3fc0-49b5-96a1-a13c3c4c4921@amd.com>
- <20231106185652.GA3360@wunner.de>
- <20231107054526.GT17433@black.fi.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7520617F0
+	for <linux-usb@vger.kernel.org>; Tue,  7 Nov 2023 06:37:30 +0000 (UTC)
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 766B2119;
+	Mon,  6 Nov 2023 22:37:27 -0800 (PST)
+X-SpamFilter-By: ArmorX SpamTrap 5.78 with qID 3A76ZJYm84026363, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+	by rtits2.realtek.com.tw (8.15.2/2.95/5.92) with ESMTPS id 3A76ZJYm84026363
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 7 Nov 2023 14:35:19 +0800
+Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32; Tue, 7 Nov 2023 14:35:19 +0800
+Received: from RTEXH36505.realtek.com.tw (172.21.6.25) by
+ RTEXMBS01.realtek.com.tw (172.21.6.94) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Tue, 7 Nov 2023 14:35:19 +0800
+Received: from localhost.localdomain (172.21.252.101) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server id
+ 15.1.2375.32 via Frontend Transport; Tue, 7 Nov 2023 14:35:19 +0800
+From: Stanley Chang <stanley_chang@realtek.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC: Stanley Chang <stanley_chang@realtek.com>, Vinod Koul <vkoul@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh@kernel.org>, Jinjie Ruan <ruanjinjie@huawei.com>,
+        "Alan
+ Stern" <stern@rowland.harvard.edu>,
+        Yang Yingliang
+	<yangyingliang@huawei.com>,
+        =?UTF-8?q?Ricardo=20Ca=C3=B1uelo?=
+	<ricardo.canuelo@collabora.com>,
+        Roy Luo <royluo@google.com>,
+        Heikki Krogerus
+	<heikki.krogerus@linux.intel.com>,
+        Ray Chi <raychi@google.com>, <linux-phy@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
+Subject: [PATCH v1 1/4] phy: core: add notify_connect and notify_disconnect callback
+Date: Tue, 7 Nov 2023 14:33:44 +0800
+Message-ID: <20231107063518.27824-1-stanley_chang@realtek.com>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20231107054526.GT17433@black.fi.intel.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-KSE-ServerInfo: RTEXMBS01.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
 
-On Tue, Nov 07, 2023 at 07:45:26AM +0200, Mika Westerberg wrote:
-> Hi,
-> 
-> On Mon, Nov 06, 2023 at 07:56:52PM +0100, Lukas Wunner wrote:
-> > On Mon, Nov 06, 2023 at 12:44:25PM -0600, Mario Limonciello wrote:
-> > > Tangentially related; the link speed is currently symmetric but there are
-> > > two sysfs files.  Mika left a comment in drivers/thunderbolt/switch.c it may
-> > > be asymmetric in the future. So we may need to keep that in mind on any
-> > > design that builds on top of them.
-> > 
-> > Aren't asymmetric Thunderbolt speeds just a DisplayPort thing?
-> 
-> No, they affect the whole fabric. We have the initial code for
-> asymmetric switching in v6.7-rc1.
-> 
-> > > As 'thunderbolt' can be a module or built in, we need to bring code into PCI
-> > > core so that it works in early boot before it loads.
-> > 
-> > tb_switch_get_generation() is small enough that it could be moved to the
-> > PCI core.  I doubt that we need to make thunderbolt built-in only
-> > or move a large amount of code to the PCI core.
-> 
-> If at all possible I would like to avoid this and littering PCI side
-> with non-PCI stuff. There could be other similar "mediums" in the future
-> where you can transfer packets of "native" protocols such as PCIe so
-> instead of making it Thunderbolt/USB4 specific it should be generic
-> enough to support future extensions.
-> 
-> In case of Thunderbolt/USB4 there is no real way to figure out how much
-> bandwidth each PCIe tunnel gets (it is kind of bulk traffic that gets
-> what is left from isochronous protocols) so I would not even try that
-> and instead use the real PCIe links in pcie_bandwidth_available() and
-> skip all the "virtual" ones.
+In Realtek SoC, the parameter of usb phy is designed to can dynamic
+tuning base on port status. Therefore, add a notify callback of phy
+driver when usb connection/disconnection change.
 
-Actually can we call the new function something like pci_link_is_virtual()
-instead and make pcie_bandwidth_available() call it? That would be more
-future proof IMHO.
+Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
+---
+ drivers/phy/phy-core.c  | 47 +++++++++++++++++++++++++++++++++++++++++
+ include/linux/phy/phy.h | 18 ++++++++++++++++
+ 2 files changed, 65 insertions(+)
+
+diff --git a/drivers/phy/phy-core.c b/drivers/phy/phy-core.c
+index 96a0b1e111f3..a84ad4896b7f 100644
+--- a/drivers/phy/phy-core.c
++++ b/drivers/phy/phy-core.c
+@@ -489,6 +489,53 @@ int phy_calibrate(struct phy *phy)
+ }
+ EXPORT_SYMBOL_GPL(phy_calibrate);
+ 
++/**
++ * phy_notify_connect() - phy connect notify
++ * @phy: the phy returned by phy_get()
++ * @port: the port index for connect
++ *
++ * If phy need the get connection status, the callback can be used.
++ * Returns: %0 if successful, a negative error code otherwise
++ */
++int phy_notify_connect(struct phy *phy, int port)
++{
++	int ret;
++
++	if (!phy || !phy->ops->connect)
++		return 0;
++
++	mutex_lock(&phy->mutex);
++	ret = phy->ops->connect(phy, port);
++	mutex_unlock(&phy->mutex);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(phy_notify_connect);
++
++/**
++ * phy_notify_disconnect() - phy disconnect notify
++ * @phy: the phy returned by phy_get()
++ * @port: the port index for disconnect
++ *
++ * If phy need the get disconnection status, the callback can be used.
++ *
++ * Returns: %0 if successful, a negative error code otherwise
++ */
++int phy_notify_disconnect(struct phy *phy, int port)
++{
++	int ret;
++
++	if (!phy || !phy->ops->disconnect)
++		return 0;
++
++	mutex_lock(&phy->mutex);
++	ret = phy->ops->disconnect(phy, port);
++	mutex_unlock(&phy->mutex);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(phy_notify_disconnect);
++
+ /**
+  * phy_configure() - Changes the phy parameters
+  * @phy: the phy returned by phy_get()
+diff --git a/include/linux/phy/phy.h b/include/linux/phy/phy.h
+index f6d607ef0e80..cf98cb29ddaa 100644
+--- a/include/linux/phy/phy.h
++++ b/include/linux/phy/phy.h
+@@ -122,6 +122,8 @@ struct phy_ops {
+ 			    union phy_configure_opts *opts);
+ 	int	(*reset)(struct phy *phy);
+ 	int	(*calibrate)(struct phy *phy);
++	int	(*connect)(struct phy *phy, int port);
++	int	(*disconnect)(struct phy *phy, int port);
+ 	void	(*release)(struct phy *phy);
+ 	struct module *owner;
+ };
+@@ -243,6 +245,8 @@ static inline enum phy_mode phy_get_mode(struct phy *phy)
+ }
+ int phy_reset(struct phy *phy);
+ int phy_calibrate(struct phy *phy);
++int phy_notify_connect(struct phy *phy, int port);
++int phy_notify_disconnect(struct phy *phy, int port);
+ static inline int phy_get_bus_width(struct phy *phy)
+ {
+ 	return phy->attrs.bus_width;
+@@ -396,6 +400,20 @@ static inline int phy_calibrate(struct phy *phy)
+ 	return -ENOSYS;
+ }
+ 
++static inline int phy_notify_connect(struct phy *phy, int index)
++{
++	if (!phy)
++		return 0;
++	return -ENOSYS;
++}
++
++static inline int phy_notify_disconnect(struct phy *phy, int index)
++{
++	if (!phy)
++		return 0;
++	return -ENOSYS;
++}
++
+ static inline int phy_configure(struct phy *phy,
+ 				union phy_configure_opts *opts)
+ {
+-- 
+2.34.1
+
 
