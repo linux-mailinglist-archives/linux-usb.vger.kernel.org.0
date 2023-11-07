@@ -1,53 +1,52 @@
-Return-Path: <linux-usb+bounces-2664-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2665-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E6DD7E4D18
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Nov 2023 00:25:24 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8DF97E4D1B
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Nov 2023 00:25:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CAB9E280C57
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Nov 2023 23:25:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 304B7B20FA7
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Nov 2023 23:25:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2258A34564;
-	Tue,  7 Nov 2023 23:25:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 584FA34562;
+	Tue,  7 Nov 2023 23:25:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kX3LmvER"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YgOd1v9Z"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CB053454F
-	for <linux-usb@vger.kernel.org>; Tue,  7 Nov 2023 23:25:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68D26C433C7;
-	Tue,  7 Nov 2023 23:25:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0A9B3454F
+	for <linux-usb@vger.kernel.org>; Tue,  7 Nov 2023 23:25:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3B92C433CB;
+	Tue,  7 Nov 2023 23:25:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699399513;
-	bh=rE94rYR//MG94b5BE7CgWu08eIDAfa2vir9WKR1OFfM=;
+	s=k20201202; t=1699399523;
+	bh=rs6TirQNpzD5Di50UaIzhFKkS5AVZDByy9c/yp8b6M0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=kX3LmvER8rdcZzrPN7GKn8CvZ20+9ebWMBSw7o4tfBW0CMYgzCmBnnndDbnbI6CYJ
-	 +I4mPhTHU5gttj2ypqpszhsF7zrFvaXmNkgjfIT+3/E9zZsVKXr+dAQRl21lmX+yNb
-	 IszyGdAMbbyFwsITfpgC+yh73Li6i4bpzo+FDn92huSaRC1z4WYQTuaf1Aw3hoCmv6
-	 WsfZ/wOsx2+w+2xzyOD/Lbq8Kn6mH9F0IFFJpMbYamvb1C1bDHEXrIAbfyH2a++YJ8
-	 E2YiCyxQzhFGnyWv2X6Jdo+UJSFKI93rqVCNcDzXKRGlVA9QUWyZnUDzt/frdOaGqi
-	 zFY2mqqZxGqJA==
+	b=YgOd1v9ZWi4Yk1QYmCYPsDjXtu7aF5+WbgrP53AbmcTpQBWSmKBtpbZP1eAY/2pFt
+	 0pqzGzqA9jsR+iWohTK6Ab7mUt+jdviMikR+UMCTqI8TeGLmVgsy6A0jtx2Bdl/JYr
+	 /kloGFTeEFo05zYYDMBlZ8axc9TeSaXIrqZQ2MSwEe+2dwpEMFo/jF9jj6mnyHrIdq
+	 4soeeCmfV6hWJiO5IN3KgIBKVnwur9wOsw/JI08HeSQCpIAvt6+NP9PX2bDjzVTbHJ
+	 PK76cNTtUT/JWTiEyLNgE057+mkm01fGLa1akzxrPIcVWZnOoxkKhi8l1Y7RudZKL0
+	 fhSzolyft+36Q==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Hardik Gajjar <hgajjar@de.adit-jv.com>,
+Cc: Niklas Schnelle <schnelle@linux.ibm.com>,
+	Arnd Bergmann <arnd@kernel.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
-	quic_linyyuan@quicinc.com,
-	maze@google.com,
-	quic_kriskura@quicinc.com,
+	mathias.nyman@intel.com,
 	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 4/5] usb: gadget: f_ncm: Always set current gadget in ncm_bind()
-Date: Tue,  7 Nov 2023 18:24:59 -0500
-Message-ID: <20231107232503.3776802-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 2/4] usb: pci-quirks: group AMD specific quirk code together
+Date: Tue,  7 Nov 2023 18:25:14 -0500
+Message-ID: <20231107232519.3776922-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231107232503.3776802-1-sashal@kernel.org>
-References: <20231107232503.3776802-1-sashal@kernel.org>
+In-Reply-To: <20231107232519.3776922-1-sashal@kernel.org>
+References: <20231107232519.3776922-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -56,138 +55,226 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.199
+X-stable-base: Linux 5.4.259
 Content-Transfer-Encoding: 8bit
 
-From: Hardik Gajjar <hgajjar@de.adit-jv.com>
+From: Niklas Schnelle <schnelle@linux.ibm.com>
 
-[ Upstream commit a04224da1f3424b2c607b12a3bd1f0e302fb8231 ]
+[ Upstream commit 7ca9f9ba8aa7380dee5dd8346b57bbaf198b075a ]
 
-Previously, gadget assignment to the net device occurred exclusively
-during the initial binding attempt.
+A follow on patch will introduce CONFIG_USB_PCI_AMD governing the AMD
+quirk and adding its compile time dependency on HAS_IOPORT. In order to
+minimize the number of #ifdefs in C files and make that patch easier
+to read first group the code together. This is pure code movement
+no functional change is intended.
 
-Nevertheless, the gadget pointer could change during bind/unbind
-cycles due to various conditions, including the unloading/loading
-of the UDC device driver or the detachment/reconnection of an
-OTG-capable USB hub device.
-
-This patch relocates the gether_set_gadget() function out from
-ncm_opts->bound condition check, ensuring that the correct gadget
-is assigned during each bind request.
-
-The provided logs demonstrate the consistency of ncm_opts throughout
-the power cycle, while the gadget may change.
-
-* OTG hub connected during boot up and assignment of gadget and
-  ncm_opts pointer
-
-[    2.366301] usb 2-1.5: New USB device found, idVendor=2996, idProduct=0105
-[    2.366304] usb 2-1.5: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-[    2.366306] usb 2-1.5: Product: H2H Bridge
-[    2.366308] usb 2-1.5: Manufacturer: Aptiv
-[    2.366309] usb 2-1.5: SerialNumber: 13FEB2021
-[    2.427989] usb 2-1.5: New USB device found, VID=2996, PID=0105
-[    2.428959] dabridge 2-1.5:1.0: dabridge 2-4 total endpoints=5, 0000000093a8d681
-[    2.429710] dabridge 2-1.5:1.0: P(0105) D(22.06.22) F(17.3.16) H(1.1) high-speed
-[    2.429714] dabridge 2-1.5:1.0: Hub 2-2 P(0151) V(06.87)
-[    2.429956] dabridge 2-1.5:1.0: All downstream ports in host mode
-
-[    2.430093] gadget 000000003c414d59 ------> gadget pointer
-
-* NCM opts and associated gadget pointer during First ncm_bind
-
-[   34.763929] NCM opts 00000000aa304ac9
-[   34.763930] NCM gadget 000000003c414d59
-
-* OTG capable hub disconnecte or assume driver unload.
-
-[   97.203114] usb 2-1: USB disconnect, device number 2
-[   97.203118] usb 2-1.1: USB disconnect, device number 3
-[   97.209217] usb 2-1.5: USB disconnect, device number 4
-[   97.230990] dabr_udc deleted
-
-* Reconnect the OTG hub or load driver assaign new gadget pointer.
-
-[  111.534035] usb 2-1.1: New USB device found, idVendor=2996, idProduct=0120, bcdDevice= 6.87
-[  111.534038] usb 2-1.1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-[  111.534040] usb 2-1.1: Product: Vendor
-[  111.534041] usb 2-1.1: Manufacturer: Aptiv
-[  111.534042] usb 2-1.1: SerialNumber: Superior
-[  111.535175] usb 2-1.1: New USB device found, VID=2996, PID=0120
-[  111.610995] usb 2-1.5: new high-speed USB device number 8 using xhci-hcd
-[  111.630052] usb 2-1.5: New USB device found, idVendor=2996, idProduct=0105, bcdDevice=21.02
-[  111.630055] usb 2-1.5: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-[  111.630057] usb 2-1.5: Product: H2H Bridge
-[  111.630058] usb 2-1.5: Manufacturer: Aptiv
-[  111.630059] usb 2-1.5: SerialNumber: 13FEB2021
-[  111.687464] usb 2-1.5: New USB device found, VID=2996, PID=0105
-[  111.690375] dabridge 2-1.5:1.0: dabridge 2-8 total endpoints=5, 000000000d87c961
-[  111.691172] dabridge 2-1.5:1.0: P(0105) D(22.06.22) F(17.3.16) H(1.1) high-speed
-[  111.691176] dabridge 2-1.5:1.0: Hub 2-6 P(0151) V(06.87)
-[  111.691646] dabridge 2-1.5:1.0: All downstream ports in host mode
-
-[  111.692298] gadget 00000000dc72f7a9 --------> new gadget ptr on connect
-
-* NCM opts and associated gadget pointer during second ncm_bind
-
-[  113.271786] NCM opts 00000000aa304ac9 -----> same opts ptr used during first bind
-[  113.271788] NCM gadget 00000000dc72f7a9 ----> however new gaget ptr, that will not set
-                                                 in net_device due to ncm_opts->bound = true
-
-Signed-off-by: Hardik Gajjar <hgajjar@de.adit-jv.com>
-Link: https://lore.kernel.org/r/20231020153324.82794-1-hgajjar@de.adit-jv.com
+Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+Link: https://lore.kernel.org/r/20230911125653.1393895-2-schnelle@linux.ibm.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/gadget/function/f_ncm.c | 27 +++++++++++----------------
- 1 file changed, 11 insertions(+), 16 deletions(-)
+ drivers/usb/host/pci-quirks.c | 119 +++++++++++++++++-----------------
+ drivers/usb/host/pci-quirks.h |  14 ++--
+ 2 files changed, 68 insertions(+), 65 deletions(-)
 
-diff --git a/drivers/usb/gadget/function/f_ncm.c b/drivers/usb/gadget/function/f_ncm.c
-index 00aea45a04e95..d42cd1d036bdf 100644
---- a/drivers/usb/gadget/function/f_ncm.c
-+++ b/drivers/usb/gadget/function/f_ncm.c
-@@ -1435,7 +1435,7 @@ static int ncm_bind(struct usb_configuration *c, struct usb_function *f)
- 	struct usb_composite_dev *cdev = c->cdev;
- 	struct f_ncm		*ncm = func_to_ncm(f);
- 	struct usb_string	*us;
--	int			status;
-+	int			status = 0;
- 	struct usb_ep		*ep;
- 	struct f_ncm_opts	*ncm_opts;
+diff --git a/drivers/usb/host/pci-quirks.c b/drivers/usb/host/pci-quirks.c
+index f6d04491df608..c178eb89070f6 100644
+--- a/drivers/usb/host/pci-quirks.c
++++ b/drivers/usb/host/pci-quirks.c
+@@ -57,6 +57,22 @@
+ #define EHCI_USBLEGCTLSTS	4		/* legacy control/status */
+ #define EHCI_USBLEGCTLSTS_SOOE	(1 << 13)	/* SMI on ownership change */
  
-@@ -1453,22 +1453,17 @@ static int ncm_bind(struct usb_configuration *c, struct usb_function *f)
- 		f->os_desc_table[0].os_desc = &ncm_opts->ncm_os_desc;
- 	}
++/* ASMEDIA quirk use */
++#define ASMT_DATA_WRITE0_REG	0xF8
++#define ASMT_DATA_WRITE1_REG	0xFC
++#define ASMT_CONTROL_REG	0xE0
++#define ASMT_CONTROL_WRITE_BIT	0x02
++#define ASMT_WRITEREG_CMD	0x10423
++#define ASMT_FLOWCTL_ADDR	0xFA30
++#define ASMT_FLOWCTL_DATA	0xBA
++#define ASMT_PSEUDO_DATA	0
++
++/* Intel quirk use */
++#define USB_INTEL_XUSB2PR      0xD0
++#define USB_INTEL_USB2PRM      0xD4
++#define USB_INTEL_USB3_PSSEN   0xD8
++#define USB_INTEL_USB3PRM      0xDC
++
+ /* AMD quirk use */
+ #define	AB_REG_BAR_LOW		0xe0
+ #define	AB_REG_BAR_HIGH		0xe1
+@@ -90,21 +106,6 @@
+ #define	NB_PIF0_PWRDOWN_0	0x01100012
+ #define	NB_PIF0_PWRDOWN_1	0x01100013
  
--	/*
--	 * in drivers/usb/gadget/configfs.c:configfs_composite_bind()
--	 * configurations are bound in sequence with list_for_each_entry,
--	 * in each configuration its functions are bound in sequence
--	 * with list_for_each_entry, so we assume no race condition
--	 * with regard to ncm_opts->bound access
--	 */
--	if (!ncm_opts->bound) {
--		mutex_lock(&ncm_opts->lock);
--		gether_set_gadget(ncm_opts->net, cdev->gadget);
-+	mutex_lock(&ncm_opts->lock);
-+	gether_set_gadget(ncm_opts->net, cdev->gadget);
-+	if (!ncm_opts->bound)
- 		status = gether_register_netdev(ncm_opts->net);
--		mutex_unlock(&ncm_opts->lock);
--		if (status)
--			goto fail;
--		ncm_opts->bound = true;
+-#define USB_INTEL_XUSB2PR      0xD0
+-#define USB_INTEL_USB2PRM      0xD4
+-#define USB_INTEL_USB3_PSSEN   0xD8
+-#define USB_INTEL_USB3PRM      0xDC
+-
+-/* ASMEDIA quirk use */
+-#define ASMT_DATA_WRITE0_REG	0xF8
+-#define ASMT_DATA_WRITE1_REG	0xFC
+-#define ASMT_CONTROL_REG	0xE0
+-#define ASMT_CONTROL_WRITE_BIT	0x02
+-#define ASMT_WRITEREG_CMD	0x10423
+-#define ASMT_FLOWCTL_ADDR	0xFA30
+-#define ASMT_FLOWCTL_DATA	0xBA
+-#define ASMT_PSEUDO_DATA	0
+-
+ /*
+  * amd_chipset_gen values represent AMD different chipset generations
+  */
+@@ -457,50 +458,6 @@ void usb_amd_quirk_pll_disable(void)
+ }
+ EXPORT_SYMBOL_GPL(usb_amd_quirk_pll_disable);
+ 
+-static int usb_asmedia_wait_write(struct pci_dev *pdev)
+-{
+-	unsigned long retry_count;
+-	unsigned char value;
+-
+-	for (retry_count = 1000; retry_count > 0; --retry_count) {
+-
+-		pci_read_config_byte(pdev, ASMT_CONTROL_REG, &value);
+-
+-		if (value == 0xff) {
+-			dev_err(&pdev->dev, "%s: check_ready ERROR", __func__);
+-			return -EIO;
+-		}
+-
+-		if ((value & ASMT_CONTROL_WRITE_BIT) == 0)
+-			return 0;
+-
+-		udelay(50);
 -	}
-+	mutex_unlock(&ncm_opts->lock);
+-
+-	dev_warn(&pdev->dev, "%s: check_write_ready timeout", __func__);
+-	return -ETIMEDOUT;
+-}
+-
+-void usb_asmedia_modifyflowcontrol(struct pci_dev *pdev)
+-{
+-	if (usb_asmedia_wait_write(pdev) != 0)
+-		return;
+-
+-	/* send command and address to device */
+-	pci_write_config_dword(pdev, ASMT_DATA_WRITE0_REG, ASMT_WRITEREG_CMD);
+-	pci_write_config_dword(pdev, ASMT_DATA_WRITE1_REG, ASMT_FLOWCTL_ADDR);
+-	pci_write_config_byte(pdev, ASMT_CONTROL_REG, ASMT_CONTROL_WRITE_BIT);
+-
+-	if (usb_asmedia_wait_write(pdev) != 0)
+-		return;
+-
+-	/* send data to device */
+-	pci_write_config_dword(pdev, ASMT_DATA_WRITE0_REG, ASMT_FLOWCTL_DATA);
+-	pci_write_config_dword(pdev, ASMT_DATA_WRITE1_REG, ASMT_PSEUDO_DATA);
+-	pci_write_config_byte(pdev, ASMT_CONTROL_REG, ASMT_CONTROL_WRITE_BIT);
+-}
+-EXPORT_SYMBOL_GPL(usb_asmedia_modifyflowcontrol);
+-
+ void usb_amd_quirk_pll_enable(void)
+ {
+ 	usb_amd_quirk_pll(0);
+@@ -630,6 +587,50 @@ bool usb_amd_pt_check_port(struct device *device, int port)
+ }
+ EXPORT_SYMBOL_GPL(usb_amd_pt_check_port);
+ 
++static int usb_asmedia_wait_write(struct pci_dev *pdev)
++{
++	unsigned long retry_count;
++	unsigned char value;
 +
-+	if (status)
-+		goto fail;
++	for (retry_count = 1000; retry_count > 0; --retry_count) {
 +
-+	ncm_opts->bound = true;
++		pci_read_config_byte(pdev, ASMT_CONTROL_REG, &value);
 +
- 	us = usb_gstrings_attach(cdev, ncm_strings,
- 				 ARRAY_SIZE(ncm_string_defs));
- 	if (IS_ERR(us)) {
++		if (value == 0xff) {
++			dev_err(&pdev->dev, "%s: check_ready ERROR", __func__);
++			return -EIO;
++		}
++
++		if ((value & ASMT_CONTROL_WRITE_BIT) == 0)
++			return 0;
++
++		udelay(50);
++	}
++
++	dev_warn(&pdev->dev, "%s: check_write_ready timeout", __func__);
++	return -ETIMEDOUT;
++}
++
++void usb_asmedia_modifyflowcontrol(struct pci_dev *pdev)
++{
++	if (usb_asmedia_wait_write(pdev) != 0)
++		return;
++
++	/* send command and address to device */
++	pci_write_config_dword(pdev, ASMT_DATA_WRITE0_REG, ASMT_WRITEREG_CMD);
++	pci_write_config_dword(pdev, ASMT_DATA_WRITE1_REG, ASMT_FLOWCTL_ADDR);
++	pci_write_config_byte(pdev, ASMT_CONTROL_REG, ASMT_CONTROL_WRITE_BIT);
++
++	if (usb_asmedia_wait_write(pdev) != 0)
++		return;
++
++	/* send data to device */
++	pci_write_config_dword(pdev, ASMT_DATA_WRITE0_REG, ASMT_FLOWCTL_DATA);
++	pci_write_config_dword(pdev, ASMT_DATA_WRITE1_REG, ASMT_PSEUDO_DATA);
++	pci_write_config_byte(pdev, ASMT_CONTROL_REG, ASMT_CONTROL_WRITE_BIT);
++}
++EXPORT_SYMBOL_GPL(usb_asmedia_modifyflowcontrol);
++
+ /*
+  * Make sure the controller is completely inactive, unable to
+  * generate interrupts or do DMA.
+diff --git a/drivers/usb/host/pci-quirks.h b/drivers/usb/host/pci-quirks.h
+index e729de21fad7a..cde2263a9d2e4 100644
+--- a/drivers/usb/host/pci-quirks.h
++++ b/drivers/usb/host/pci-quirks.h
+@@ -3,8 +3,6 @@
+ #define __LINUX_USB_PCI_QUIRKS_H
+ 
+ #ifdef CONFIG_USB_PCI
+-void uhci_reset_hc(struct pci_dev *pdev, unsigned long base);
+-int uhci_check_and_reset_hc(struct pci_dev *pdev, unsigned long base);
+ int usb_hcd_amd_remote_wakeup_quirk(struct pci_dev *pdev);
+ bool usb_amd_hang_symptom_quirk(void);
+ bool usb_amd_prefetch_quirk(void);
+@@ -12,23 +10,27 @@ void usb_amd_dev_put(void);
+ bool usb_amd_quirk_pll_check(void);
+ void usb_amd_quirk_pll_disable(void);
+ void usb_amd_quirk_pll_enable(void);
++void sb800_prefetch(struct device *dev, int on);
++bool usb_amd_pt_check_port(struct device *device, int port);
++
++void uhci_reset_hc(struct pci_dev *pdev, unsigned long base);
++int uhci_check_and_reset_hc(struct pci_dev *pdev, unsigned long base);
+ void usb_asmedia_modifyflowcontrol(struct pci_dev *pdev);
+ void usb_enable_intel_xhci_ports(struct pci_dev *xhci_pdev);
+ void usb_disable_xhci_ports(struct pci_dev *xhci_pdev);
+-void sb800_prefetch(struct device *dev, int on);
+-bool usb_amd_pt_check_port(struct device *device, int port);
+ #else
+ struct pci_dev;
+ static inline void usb_amd_quirk_pll_disable(void) {}
+ static inline void usb_amd_quirk_pll_enable(void) {}
+-static inline void usb_asmedia_modifyflowcontrol(struct pci_dev *pdev) {}
+ static inline void usb_amd_dev_put(void) {}
+-static inline void usb_disable_xhci_ports(struct pci_dev *xhci_pdev) {}
+ static inline void sb800_prefetch(struct device *dev, int on) {}
+ static inline bool usb_amd_pt_check_port(struct device *device, int port)
+ {
+ 	return false;
+ }
++
++static inline void usb_asmedia_modifyflowcontrol(struct pci_dev *pdev) {}
++static inline void usb_disable_xhci_ports(struct pci_dev *xhci_pdev) {}
+ #endif  /* CONFIG_USB_PCI */
+ 
+ #endif  /*  __LINUX_USB_PCI_QUIRKS_H  */
 -- 
 2.42.0
 
