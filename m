@@ -1,167 +1,138 @@
-Return-Path: <linux-usb+bounces-2611-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2612-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40DCE7E352A
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Nov 2023 07:17:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BA0487E3531
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Nov 2023 07:24:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 713EB1C20A9A
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Nov 2023 06:17:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D7ADC1C20A33
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Nov 2023 06:24:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6243BA28;
-	Tue,  7 Nov 2023 06:17:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E866BA3F;
+	Tue,  7 Nov 2023 06:24:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="ff1NJIfU";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="KpJ9Htw4"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IGCMk8ZZ"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C620E947A;
-	Tue,  7 Nov 2023 06:17:28 +0000 (UTC)
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD95124;
-	Mon,  6 Nov 2023 22:17:26 -0800 (PST)
-Received: from compute7.internal (compute7.nyi.internal [10.202.2.48])
-	by mailout.west.internal (Postfix) with ESMTP id 28A733200A7E;
-	Tue,  7 Nov 2023 01:17:22 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute7.internal (MEProxy); Tue, 07 Nov 2023 01:17:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:sender
-	:subject:subject:to:to; s=fm3; t=1699337841; x=1699424241; bh=iW
-	pOWkNXoKYBVtNR8pc31dTRMJjKZhIZTzDhH+VOCtU=; b=ff1NJIfUlXMbk2qYNk
-	qU8kBYJx6U3SxoMuQXe6LEgQkwhnDmkqs7g9Esm82dRG6OuYa7RE8md8kiPTiTdp
-	UKpZDTNC6UlaOCzc1NshaAgCRDB6p2xNPsxKH3F8P1JhSTvtY9yvF3/mhorQBm0I
-	2rLgKodpqPlKXC1/7zLCu8CvkWi9apMOnn4rC5SvLtTczqcLThUTmVKW3d33hPRX
-	omKtBOlU4GkMnMjCWuJoH2pzSS8Dn2ZFmQMIhoyU1k8zL22f00ZBT0msEvBQahIB
-	8qo638YTurdTXd2Bo71TBa1+gPWYGTBeuBaQxYD0ueuDgd8nUjYnyD3uV+HplFth
-	xrZg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm3; t=1699337841; x=1699424241; bh=iWpOWkNXoKYBV
-	tNR8pc31dTRMJjKZhIZTzDhH+VOCtU=; b=KpJ9Htw4JMo5/MNczh0+oggoZWvEV
-	I6Z9/54krtfvM4CZVmbiKvzZ3c5ZG+3JNJXAMjrTOS0dUL/IEk78s8hgQEmBJfuE
-	pLm8BgNhlpkRlTmT+b4c7wg5lOoUmzql6/cp4UdWhD/75dG+XWnQ5uHCqgVLO9mG
-	ATN3RuEi+7ijCd7oe6s8c8V+GITb3QH7LTx394xOhGB0YIuE7smDwtNoh0huF+R5
-	X5SOmFHC9aC2ZURo7PO1ou7Tnx5ho6zI3va77qXCWEVrECW4nEPh6+55OodkWqlt
-	A5jGQSHO6y6IuJWV3hR6RKEW52j3ihr/r8/XifrBcPGMfMisR7R14+idw==
-X-ME-Sender: <xms:b9ZJZUAtu50MjgLLJOa1snm6cyer-Dxq0q5Mxa8JEcL4_SEDQo-Npw>
-    <xme:b9ZJZWjgT9IZfc1CGkTG0r6454erYMvaU7LRRtHTO5ZFg1idrBFRG5nxhNi4osMKz
-    6JiWZRlmsSVVQ>
-X-ME-Received: <xmr:b9ZJZXlU4FZP0eajsYArJI7lUfYWnidgoDA067nkBypySkJ6mX7Y4Do_U_TjrXDQUq-FeFHiSspgz5iWVtqdLDUBAZW2qPDdHdl6Jw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudduhedgledtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvd
-    evvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhs
-    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorg
-    hhrdgtohhm
-X-ME-Proxy: <xmx:b9ZJZawZ2JuxRtvdL5kufPmjp8iVAllIq5gVGT2JYasDk8dsMKao_A>
-    <xmx:b9ZJZZQ655Co81z1NdgEWQlnvE3X8WQ-b0upW03mcAqI4QblZn_T5Q>
-    <xmx:b9ZJZVaFa0oZwb8803LrvjYXbfpifFrWMJN4rb2cpFntLtg5yPvZCw>
-    <xmx:cdZJZYKs0X043u3XrtuIkcle1cMNnNKm19bbQFP0YnjnKrd4BX2ZAg>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 7 Nov 2023 01:17:19 -0500 (EST)
-Date: Tue, 7 Nov 2023 07:17:14 +0100
-From: Greg KH <greg@kroah.com>
-To: "Li, Meng" <Meng.Li@windriver.com>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	USB mailing list <linux-usb@vger.kernel.org>,
-	linux-rt-users <linux-rt-users@vger.kernel.org>
-Subject: Re: RE: RE: USB: add check to detect host controller hardware removal
-Message-ID: <2023110741-festival-reload-c9db@gregkh>
-References: <55925f45-4921-46cc-81df-ac705ad7530e@rowland.harvard.edu>
- <20231020095238.Z4m-M_oS@linutronix.de>
- <1f26049d-b16d-4db8-8b7a-ed93213faf76@rowland.harvard.edu>
- <20231103154624.WEWPMHTp@linutronix.de>
- <a0116b73-2017-4f3b-a081-6d420b04b7d0@rowland.harvard.edu>
- <PH0PR11MB5191B5D71DBD450210E2BEDFF1AAA@PH0PR11MB5191.namprd11.prod.outlook.com>
- <20231106082829.iBvQ9hCY@linutronix.de>
- <PH0PR11MB519187340D0C1AD3F05DC74CF1AAA@PH0PR11MB5191.namprd11.prod.outlook.com>
- <20231106090924.3qeWpk98@linutronix.de>
- <PH0PR11MB51911F20E4AE1E1FD8D25FFCF1A9A@PH0PR11MB5191.namprd11.prod.outlook.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F55C947A;
+	Tue,  7 Nov 2023 06:24:16 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD9C101;
+	Mon,  6 Nov 2023 22:24:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1699338255; x=1730874255;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xMd2rVgz/0nCDHGO5G5Cgmns963Fjfa40nHUcD2LIxI=;
+  b=IGCMk8ZZpOLcTsOgycxyY4TH3dQ/eEP5ApYP7g3QYG2nqGBUAliuOluS
+   5q0Nz+BKL2CeVuwhRrIK8vN1mQEN37rWnUNnI1BxvrXCo+05EWGnNTi1a
+   v0CS1yb/0h97f5ax1fmFs62RLrv9b8S/jp6ZWJnJBMIpQNvLbykJfLf2g
+   rNGe2YlKqBXrWEN561Ln0J9ZPIlalDjgXgkN7YnreOfgI5XG4VSa6AX7F
+   vArXh463zL2b9g2BwG+UkgLqjUbL1QWzwUxvGEE1WFQ3ROxRSdHNFEo9H
+   S5O6TpHxQWi8cqEM+Y1t2t7jqE0j+jbZLdSqqwa251uJAq1k49tAaNClj
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10886"; a="475682216"
+X-IronPort-AV: E=Sophos;i="6.03,282,1694761200"; 
+   d="scan'208";a="475682216"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2023 22:24:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10886"; a="1094047505"
+X-IronPort-AV: E=Sophos;i="6.03,282,1694761200"; 
+   d="scan'208";a="1094047505"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga005.fm.intel.com with ESMTP; 06 Nov 2023 22:24:07 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id 15A0E3CC; Tue,  7 Nov 2023 08:24:05 +0200 (EET)
+Date: Tue, 7 Nov 2023 08:24:05 +0200
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Lukas Wunner <lukas@wunner.de>
+Cc: Mario Limonciello <mario.limonciello@amd.com>,
+	Karol Herbst <kherbst@redhat.com>, Lyude Paul <lyude@redhat.com>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+	Danilo Krummrich <dakr@redhat.com>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Xinhui Pan <Xinhui.Pan@amd.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Mark Gross <markgross@kernel.org>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>,
+	Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+	"Maciej W . Rozycki" <macro@orcam.me.uk>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	"open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS" <dri-devel@lists.freedesktop.org>,
+	"open list:DRM DRIVER FOR NVIDIA GEFORCE/QUADRO GPUS" <nouveau@lists.freedesktop.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list:RADEON and AMDGPU DRM DRIVERS" <amd-gfx@lists.freedesktop.org>,
+	"open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+	"open list:ACPI" <linux-acpi@vger.kernel.org>,
+	"open list:X86 PLATFORM DRIVERS" <platform-driver-x86@vger.kernel.org>,
+	"open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH v2 8/9] PCI: Exclude PCIe ports used for tunneling in
+ pcie_bandwidth_available()
+Message-ID: <20231107062405.GU17433@black.fi.intel.com>
+References: <20231103190758.82911-1-mario.limonciello@amd.com>
+ <20231103190758.82911-9-mario.limonciello@amd.com>
+ <20231106181022.GA18564@wunner.de>
+ <712ebb25-3fc0-49b5-96a1-a13c3c4c4921@amd.com>
+ <20231106185652.GA3360@wunner.de>
+ <20231107054526.GT17433@black.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <PH0PR11MB51911F20E4AE1E1FD8D25FFCF1A9A@PH0PR11MB5191.namprd11.prod.outlook.com>
+In-Reply-To: <20231107054526.GT17433@black.fi.intel.com>
 
-On Tue, Nov 07, 2023 at 03:08:13AM +0000, Li, Meng wrote:
+On Tue, Nov 07, 2023 at 07:45:26AM +0200, Mika Westerberg wrote:
+> Hi,
 > 
+> On Mon, Nov 06, 2023 at 07:56:52PM +0100, Lukas Wunner wrote:
+> > On Mon, Nov 06, 2023 at 12:44:25PM -0600, Mario Limonciello wrote:
+> > > Tangentially related; the link speed is currently symmetric but there are
+> > > two sysfs files.  Mika left a comment in drivers/thunderbolt/switch.c it may
+> > > be asymmetric in the future. So we may need to keep that in mind on any
+> > > design that builds on top of them.
+> > 
+> > Aren't asymmetric Thunderbolt speeds just a DisplayPort thing?
 > 
-> > -----Original Message-----
-> > From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> > Sent: Monday, November 6, 2023 5:09 PM
-> > To: Li, Meng <Meng.Li@windriver.com>
-> > Cc: Alan Stern <stern@rowland.harvard.edu>; Steven Rostedt
-> > <rostedt@goodmis.org>; Ingo Molnar <mingo@redhat.com>; USB mailing list
-> > <linux-usb@vger.kernel.org>; linux-rt-users <linux-rt-users@vger.kernel.org>
-> > Subject: Re: RE: RE: USB: add check to detect host controller hardware
-> > removal
-> > 
-> > CAUTION: This email comes from a non Wind River email account!
-> > Do not click links or open attachments unless you recognize the sender and
-> > know the content is safe.
-> > 
-> > On 2023-11-06 08:54:50 [+0000], Li, Meng wrote:
-> > 
-> > > This is not my original issue that I encountered.
-> > > I agree that we should remove the device from sys interface firstly,
-> > > and then do hot-plug action.
-> > > My original issue was the calltrace on RT kernel if I remove the
-> > > device from sys interface.
-> > > # echo 1 > /sys/bus/pci/devices/0001:01:00.0/remove
-> > > xhci_hcd 0001:01:00.0: remove, state 1 usb usb2: USB disconnect,
-> > > device number 1 usb 2-4: USB disconnect, device number 2 xhci_hcd
-> > > 0001:01:00.0: USB bus 2 deregistered
-> > > BUG: sleeping function called from invalid context at
-> > > kernel/locking/spinlock_rt.c:46
-> > > in_atomic(): 0, irqs_disabled(): 128, non_block: 0, pid: 765, name: sh
-> > 
-> > Right.
-> > 
-> > > and then I checked the commit log to get which commit introduced this
-> > issue.
-> > > I found out the commit is
-> > > commit c548795abe0d3520b74e18f23ca0a0d72deddab9
-> > > Author: Alan Stern <stern@rowland.harvard.edu>
-> > > Date:   Wed Jun 9 17:34:27 2010 -0400
-> > >
-> > >     USB: add check to detect host controller hardware removal
-> > >
-> > > And then, Alan Stern told me the background of this issue. so, I
-> > > started to do hotplug operation on my board to see what symptom on my
-> > > nxp-ls1043/6 board.
-> > > And then there were lots of discussion followed.
-> > 
-> > Okay. I somehow mapped it that you try to add this to xhci.
-> > The suggested replacement should cover it. Better if we could get rid of it ;)
-> > 
+> No, they affect the whole fabric. We have the initial code for
+> asymmetric switching in v6.7-rc1.
 > 
-> generic_handle_irq_safe(dev->irq) works find on my board, there is no calltrace anymore.
-> Will you create a patch in later?
+> > > As 'thunderbolt' can be a module or built in, we need to bring code into PCI
+> > > core so that it works in early boot before it loads.
+> > 
+> > tb_switch_get_generation() is small enough that it could be moved to the
+> > PCI core.  I doubt that we need to make thunderbolt built-in only
+> > or move a large amount of code to the PCI core.
+> 
+> If at all possible I would like to avoid this and littering PCI side
+> with non-PCI stuff. There could be other similar "mediums" in the future
+> where you can transfer packets of "native" protocols such as PCIe so
+> instead of making it Thunderbolt/USB4 specific it should be generic
+> enough to support future extensions.
+> 
+> In case of Thunderbolt/USB4 there is no real way to figure out how much
+> bandwidth each PCIe tunnel gets (it is kind of bulk traffic that gets
+> what is left from isochronous protocols) so I would not even try that
+> and instead use the real PCIe links in pcie_bandwidth_available() and
+> skip all the "virtual" ones.
 
-As you have tested this, please create it and submit it so that we know
-exactly what changes are required and you get the proper credit for
-doing this work.
-
-thanks,
-
-greg k-h
+Actually can we call the new function something like pci_link_is_virtual()
+instead and make pcie_bandwidth_available() call it? That would be more
+future proof IMHO.
 
