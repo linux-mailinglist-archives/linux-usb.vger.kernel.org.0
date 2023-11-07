@@ -1,65 +1,54 @@
-Return-Path: <linux-usb+bounces-2631-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2632-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7EC5D7E3A5C
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Nov 2023 11:55:37 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17D947E3AB6
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Nov 2023 12:03:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 37F09280F15
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Nov 2023 10:55:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AC29FB20CCC
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Nov 2023 11:03:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7F6629D00;
-	Tue,  7 Nov 2023 10:55:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 733F02D05A;
+	Tue,  7 Nov 2023 11:03:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="VVZ4AG1v"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="o6f7W2Nu"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5AB612E7B
-	for <linux-usb@vger.kernel.org>; Tue,  7 Nov 2023 10:55:29 +0000 (UTC)
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31C7DEA
-	for <linux-usb@vger.kernel.org>; Tue,  7 Nov 2023 02:55:28 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-40859c466efso40166565e9.3
-        for <linux-usb@vger.kernel.org>; Tue, 07 Nov 2023 02:55:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1699354526; x=1699959326; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9YR3HyIcWUCtOVLP7VoPEa4NXJBtPEhrFvCreFh9ZV8=;
-        b=VVZ4AG1vhGCbALpfV8Ugd4SIprlDADjT0xix1Q5fSvPzfwkATJAsQV9e67xD5+lehd
-         Nry9SdweUzcx6YmGAMZHNJkAEAIIyAj857pf/ierCS4byw18v8Z3Qvo5HVpK05g0yPIg
-         /x0CrU77ut860S01NLHgLVt6njNhCRqQReuC6Qgfj/XK2EKsh38Vey6ijO/vNL9H/zRZ
-         n/T7odO30sY5/lt1vP3tdijwPcLcaesw9aCBviKM09CmE/6zGFC6bj2CEVK3xGRz93rQ
-         LZQG5gobadvRRfpzYLCP0QpOG/1MiP/z/5NJLv4+sbUhOLZjg7KvYi11PlhlpUiGKdX5
-         CmEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699354526; x=1699959326;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9YR3HyIcWUCtOVLP7VoPEa4NXJBtPEhrFvCreFh9ZV8=;
-        b=UYVvnFSA7t0D3snN8R82gIQdkxlyybE9iBFJ2wxtvsptjTzDFsaRaSCXMigut7zbHG
-         f12N/oVmOR0n2i/4zpIlMgmlQlk9RqWWX1tufATCpdy7yCDQJaJoaWdrKbpQXDVo1Y3v
-         J6t0vIK6eKdr0WlzPz8Zq2LZ2seKGISJyoZdLWxIgET7vknYJ8xI22Gb9LCFWpn5ftlq
-         zi5weVwxZ/8nK6JLnEkYxmAJeDtK5Et1XP4QB66+oThkvSaEIex/fyz6vu07siuMlTxy
-         TTdhqVRJsLfBLfjDHz0c4GQRRDPpK0v22PJBfTRC4e10nor6+0ugLfU2YKrvI+CwH8R0
-         iF1A==
-X-Gm-Message-State: AOJu0YxWRidhEt6GK0ioPg42jhuvZrVt3u6bJKULScj/FyHS4PSAVl+G
-	DW/edBBmYHFBYrCcES92GVxT3Q==
-X-Google-Smtp-Source: AGHT+IGJhP7SgEGrSMxqmO/hcQGe8Dh/czcY9QMxuvEh3I2lNVZq1cwfNUr3DfJnKmQwX4kPVuuU/A==
-X-Received: by 2002:a05:600c:46c6:b0:406:5308:cfeb with SMTP id q6-20020a05600c46c600b004065308cfebmr2281387wmo.11.1699354526560;
-        Tue, 07 Nov 2023 02:55:26 -0800 (PST)
-Received: from [192.168.100.102] ([37.228.218.3])
-        by smtp.gmail.com with ESMTPSA id t14-20020a05600c198e00b00405d9a950a2sm15456999wmq.28.2023.11.07.02.55.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 07 Nov 2023 02:55:26 -0800 (PST)
-Message-ID: <4b3e1f66-31e0-4b7a-9cc0-0b7a7a6ef2f5@linaro.org>
-Date: Tue, 7 Nov 2023 10:55:24 +0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C9882D039;
+	Tue,  7 Nov 2023 11:03:06 +0000 (UTC)
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596A7114;
+	Tue,  7 Nov 2023 03:03:05 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3A7ADrx4029500;
+	Tue, 7 Nov 2023 11:02:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=SFRYKwU5koGWL5dv8W4KKvT9e10tazgxHr6Z4LinXI8=;
+ b=o6f7W2NuUH8oSnUhvHydTzahuShmT1Mny2h94uCM5ff6zpNJbMZMQOvNGZq6NZglJwlB
+ S0/GavH2bfBBHDFQtSIOtcnqz2P4BVlFcQMtNgX4UC0qc0Vi4Ff/Drd9gRZkJ0Dn/fXX
+ jL7+EBmbYqppZs/M3+rAJJO06N080P8sDuQjI1MQsjbep5I3pLZhd6NtZnbNyiru60GS
+ 5VUKR9lEcq6Yu6Q2L0ZJAI52Ew/vsy+ConhB3Ynox3x4vgDU2qvMei0Pi3VnRcjaYSVS
+ K3Coyx3aBR7ev1VWTGKVFHwsFMqlnHtGGlm2B54WGx6UQmBgqM4O/umUN8Rm0P0oqKNr Jw== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3u6xdub4bh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 07 Nov 2023 11:02:52 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3A7B2puZ018234
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 7 Nov 2023 11:02:51 GMT
+Received: from [10.249.29.138] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.39; Tue, 7 Nov
+ 2023 03:02:46 -0800
+Message-ID: <70b5cdc9-f0e1-4fad-a1ab-858fff3c110c@quicinc.com>
+Date: Tue, 7 Nov 2023 16:32:43 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -68,20 +57,25 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [RFC 2/8] usb: dwc3: core: Register vendor hooks for dwc3-qcom
-Content-Language: en-US
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>, Conor Dooley <conor+dt@kernel.org>
-Cc: linux-usb@vger.kernel.org,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- linux-kernel@vger.kernel.org, Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
- Rob Herring <robh+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, quic_ppratap@quicinc.com,
- quic_jackp@quicinc.com, quic_wcheng@quicinc.com,
- Andy Gross <agross@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Philipp Zabel <p.zabel@pengutronix.de>
+To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Bjorn Andersson
+	<andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Conor
+ Dooley" <conor+dt@kernel.org>
+CC: <linux-usb@vger.kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Thinh
+ Nguyen" <Thinh.Nguyen@synopsys.com>,
+        Rob Herring <robh+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <quic_ppratap@quicinc.com>,
+        <quic_jackp@quicinc.com>, <quic_wcheng@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
 References: <20231017131851.8299-1-quic_kriskura@quicinc.com>
  <20231017131851.8299-3-quic_kriskura@quicinc.com>
  <e700133b-58f7-4a4d-8e5c-0d04441b789b@linaro.org>
@@ -91,68 +85,97 @@ References: <20231017131851.8299-1-quic_kriskura@quicinc.com>
  <ea919050-22a8-4d28-ade2-fd16a99876cb@quicinc.com>
  <105d84b6-cbea-4758-9eba-1c104fa7a670@quicinc.com>
  <f94ca738-476c-4664-a8f1-e3ef3ac8220a@linaro.org>
-In-Reply-To: <f94ca738-476c-4664-a8f1-e3ef3ac8220a@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ <4b3e1f66-31e0-4b7a-9cc0-0b7a7a6ef2f5@linaro.org>
+Content-Language: en-US
+From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <4b3e1f66-31e0-4b7a-9cc0-0b7a7a6ef2f5@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Mxfa6Z2ES4PVL7h7l10ERvgnqaGGyPkf
+X-Proofpoint-ORIG-GUID: Mxfa6Z2ES4PVL7h7l10ERvgnqaGGyPkf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-07_01,2023-11-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ lowpriorityscore=0 suspectscore=0 mlxlogscore=876 priorityscore=1501
+ spamscore=0 impostorscore=0 mlxscore=0 malwarescore=0 clxscore=1015
+ bulkscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2310240000 definitions=main-2311070091
 
-On 07/11/2023 10:41, Bryan O'Donoghue wrote:
-> On 07/11/2023 08:33, Krishna Kurapati PSSNV wrote:
->>
->>
->> On 11/4/2023 10:32 PM, Krishna Kurapati PSSNV wrote:
->>>>
->>>> Are you saying to you require/rely on both of these series being 
->>>> applied first ?
->>>>
->>>> [1]: 
->>>> https://lore.kernel.org/all/af60c05b-4a0f-51b8-486a-1fc601602515@quicinc.com/
->>>> [2]: 
->>>> https://lore.kernel.org/all/20231016-dwc3-refactor-v1-0-ab4a84165470@quicinc.com/
->>>>
->>>> Must be, nothing applies for me in this series.
+
+
+On 11/7/2023 4:25 PM, Bryan O'Donoghue wrote:
+> On 07/11/2023 10:41, Bryan O'Donoghue wrote:
+>> On 07/11/2023 08:33, Krishna Kurapati PSSNV wrote:
 >>>
->>> The first one is not a patch. It is just a discussion thread I 
->>> started to get community's opinion before on disconnect interrupt 
->>> handling. The current series is based on top of [2] made by Bjorn (as 
->>> you already found out) and as I mentioned in cover letter of my series.
 >>>
+>>> On 11/4/2023 10:32 PM, Krishna Kurapati PSSNV wrote:
+>>>>>
+>>>>> Are you saying to you require/rely on both of these series being 
+>>>>> applied first ?
+>>>>>
+>>>>> [1]: 
+>>>>> https://lore.kernel.org/all/af60c05b-4a0f-51b8-486a-1fc601602515@quicinc.com/
+>>>>> [2]: 
+>>>>> https://lore.kernel.org/all/20231016-dwc3-refactor-v1-0-ab4a84165470@quicinc.com/
+>>>>>
+>>>>> Must be, nothing applies for me in this series.
+>>>>
+>>>> The first one is not a patch. It is just a discussion thread I 
+>>>> started to get community's opinion before on disconnect interrupt 
+>>>> handling. The current series is based on top of [2] made by Bjorn 
+>>>> (as you already found out) and as I mentioned in cover letter of my 
+>>>> series.
+>>>>
+>>>
+>>> Hi Bryan,
+>>>
+>>>    Are you able to apply the series after including Bjorn's patches ? 
+>>> Also can you confirm if the comments provided to your queries on [1] 
+>>> are proper and if you have any other comments w.r.t probe deferral.
+>>>
+>>> [1]: 
+>>> https://lore.kernel.org/all/e700133b-58f7-4a4d-8e5c-0d04441b789b@linaro.org/
+>>>
+>>> Regards,
+>>> Krishna,
 >>
->> Hi Bryan,
+>> I wonder could you give a base SHA to apply the various series on ?
 >>
->>    Are you able to apply the series after including Bjorn's patches ? 
->> Also can you confirm if the comments provided to your queries on [1] 
->> are proper and if you have any other comments w.r.t probe deferral.
->>
->> [1]: 
->> https://lore.kernel.org/all/e700133b-58f7-4a4d-8e5c-0d04441b789b@linaro.org/
->>
->> Regards,
->> Krishna,
+>> Your referenced precursor doesn't apply to usb-next
 > 
-> I wonder could you give a base SHA to apply the various series on ?
+> Well now, that doesn't point where I thought it pointed usb-next/master 
+> is extremely old
 > 
-> Your referenced precursor doesn't apply to usb-next
+>   b3a9e3b9622ae - (HEAD -> usb-next-23-10-07-usb-glue-test, tag: 
+> v5.8-rc1, usb-next/master, origin/tracking-qcomlt-sm8150-gcc, 
+> linaro/tracking-qcomlt-sm8150-gcc, fecked-old, delete-this-branch2, 
+> delete-this-branch) Linux 5.8-rc1 (3 years, 5 months ago)
+> 
+> I want usb-next/main
+> 
+> *   d2f51b3516dad - (usb-next/usb-testing, usb-next/usb-next, 
+> usb-next/main) Merge tag 'rtc-6.7' of 
+> git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux (32 hours ago)
+> 
+> Everything applies there.
 
-Well now, that doesn't point where I thought it pointed usb-next/master 
-is extremely old
+Hi Bryan,
 
-  b3a9e3b9622ae - (HEAD -> usb-next-23-10-07-usb-glue-test, tag: 
-v5.8-rc1, usb-next/master, origin/tracking-qcomlt-sm8150-gcc, 
-linaro/tracking-qcomlt-sm8150-gcc, fecked-old, delete-this-branch2, 
-delete-this-branch) Linux 5.8-rc1 (3 years, 5 months ago)
+   I should have mentioned that series is pushed on top of usb-next. 
+Apologies.
 
-I want usb-next/main
+> 
+> Anyway, your pointing to Bjorn's series answers my question re: 
+> sequencing of the probe.
 
-*   d2f51b3516dad - (usb-next/usb-testing, usb-next/usb-next, 
-usb-next/main) Merge tag 'rtc-6.7' of 
-git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux (32 hours ago)
+Perfect. Thanks for the confirmation.
 
-Everything applies there.
-
-Anyway, your pointing to Bjorn's series answers my question re: 
-sequencing of the probe.
-
----
-bod
-
+Regards,
+Krishna,
 
