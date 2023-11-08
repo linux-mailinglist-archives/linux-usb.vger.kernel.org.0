@@ -1,184 +1,168 @@
-Return-Path: <linux-usb+bounces-2684-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2685-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 826E57E5570
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Nov 2023 12:26:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5377D7E55BF
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Nov 2023 12:45:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3D5D928141A
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Nov 2023 11:26:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C10A2815C2
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Nov 2023 11:45:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1C3E15EA6;
-	Wed,  8 Nov 2023 11:25:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40B1A16404;
+	Wed,  8 Nov 2023 11:45:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="N2F9q8OD"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lzfV9utw"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F2F714015
-	for <linux-usb@vger.kernel.org>; Wed,  8 Nov 2023 11:25:55 +0000 (UTC)
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A491FC2;
-	Wed,  8 Nov 2023 03:25:54 -0800 (PST)
-Received: from [100.98.85.67] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id 975476607401;
-	Wed,  8 Nov 2023 11:25:50 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1699442752;
-	bh=U55f29h+NnKrIuLnkahY6gMTTnaGbwfPV8HL4gf8q2M=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=N2F9q8ODcDNebAFBUhEsDB2QG9zBTXIrFXrZDQ0c4JflmH/l7dKUmY0t+tM3/I4uJ
-	 dg9xmuHC/mZvl3TfKrA8oIw1RLSfzW13sNC/Ftpikgj2ji+ZfUcjtXVZoxdesPlD23
-	 Ehvub2BfLYrDbIzdKwvMsTbwK+TtmrK65cgbNDxeX+3HqSjP0nMfRjvgstCyuSgDcZ
-	 tRacm+2Y9+JwJ4xrZOeamrQEx5qFXDCjW9OEJIiIVj9fr5lX8pXsvIILpYFC/RiYEx
-	 gBQHMvo9QjkUyAofv+hJ5B4bEwhW7hSFpMlb5U2LHdu59WHk6UBK0jEiOL/iuH2Jsx
-	 blDH43UzKRbLA==
-Message-ID: <722c5417-d76a-44f3-b6d4-f585f54a3e02@collabora.com>
-Date: Wed, 8 Nov 2023 16:25:45 +0500
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33855171BA
+	for <linux-usb@vger.kernel.org>; Wed,  8 Nov 2023 11:44:57 +0000 (UTC)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899D4198A
+	for <linux-usb@vger.kernel.org>; Wed,  8 Nov 2023 03:44:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1699443897; x=1730979897;
+  h=date:from:to:cc:subject:message-id;
+  bh=hFlpjEyoti/2nSgmle7kbi2CpWnO46cuYb2gxEmBlr8=;
+  b=lzfV9utwjdPIIPbpg3fXKqKHLFsh7gC5JZXmPrag6Dc9zt8+FFtYLtl6
+   /4nFU85NQokqzQI4w5odg6OJWFiVBagpBj6OY6Up7UJvPCXvw7RK00a4S
+   nEGEJC3h2nhILSNH5kcteaTn+sz8NEYe/ka0S37SC+FEQ0+uUcBVZ61oh
+   xQj129UyoiVLU8UwMm1D5XSv+/dl4h1YngxeIgGayayPVxOO4eIzUVLws
+   lvYOQI0GjbXqfaK93nxLjQB6zswHXAyMmqtmgGSIxGT/49qb4AZQ3g303
+   PVKzkbg1PJPzneaix2DOKBoNtep5XsxEt7YYTfZYOIDitSibICLcZmodf
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10887"; a="420852535"
+X-IronPort-AV: E=Sophos;i="6.03,286,1694761200"; 
+   d="scan'208";a="420852535"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2023 03:44:57 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10887"; a="906748589"
+X-IronPort-AV: E=Sophos;i="6.03,286,1694761200"; 
+   d="scan'208";a="906748589"
+Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 08 Nov 2023 03:44:56 -0800
+Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r0gzO-0007uS-0c;
+	Wed, 08 Nov 2023 11:44:54 +0000
+Date: Wed, 08 Nov 2023 19:43:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:gadget_char] BUILD SUCCESS
+ a2e2e07c52fe91d1c3c8ac5e3da8995e1fb1320d
+Message-ID: <202311081958.z1N0CwiH-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- syzbot <syzbot+b6f11035e572f08bc20f@syzkaller.appspotmail.com>,
- gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [usb?] INFO: task hung in hub_port_init (3)
-Content-Language: en-US
-To: Alan Stern <stern@rowland.harvard.edu>
-References: <000000000000704d6305fdb75642@google.com>
- <88cc734c-2a88-4495-aa1e-f16294eb6cea@collabora.com>
- <ff0083c2-249e-4c1e-9546-0b81cf2c6e6f@rowland.harvard.edu>
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <ff0083c2-249e-4c1e-9546-0b81cf2c6e6f@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 11/3/23 8:04 PM, Alan Stern wrote:
-> On Fri, Nov 03, 2023 at 07:03:20PM +0500, Muhammad Usama Anjum wrote:
->> On 6/10/23 12:25 AM, syzbot wrote:
->>> syzbot has found a reproducer for the following issue on:
->>>
->>> HEAD commit:    33f2b5785a2b Merge tag 'drm-fixes-2023-06-09' of git://ano..
->>> git tree:       upstream
->>> console+strace: https://syzkaller.appspot.com/x/log.txt?x=1206f143280000
->>> kernel config:  https://syzkaller.appspot.com/x/.config?x=3c980bfe8b399968
->>> dashboard link: https://syzkaller.appspot.com/bug?extid=b6f11035e572f08bc20f
->>> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
->>> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1676f51b280000
->>> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=129632fd280000
->>>
->>> Downloadable assets:
->>> disk image: https://storage.googleapis.com/syzbot-assets/a817d99af39d/disk-33f2b578.raw.xz
->>> vmlinux: https://storage.googleapis.com/syzbot-assets/8916e1d053fc/vmlinux-33f2b578.xz
->>> kernel image: https://storage.googleapis.com/syzbot-assets/e53956f3cfd4/bzImage-33f2b578.xz
->>>
->>> IMPORTANT: if you fix the issue, please add the following tag to the commit:
->>> Reported-by: syzbot+b6f11035e572f08bc20f@syzkaller.appspotmail.com
->>>
->>> INFO: task kworker/0:2:901 blocked for more than 143 seconds.
->>>       Not tainted 6.4.0-rc5-syzkaller-00178-g33f2b5785a2b #0
->>> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
->>> task:kworker/0:2     state:D stack:26800 pid:901   ppid:2      flags:0x00004000
->>> Workqueue: usb_hub_wq hub_event
->>> Call Trace:
->>>  <TASK>
->>>  context_switch kernel/sched/core.c:5343 [inline]
->>>  __schedule+0xc9a/0x5880 kernel/sched/core.c:6669
->>>  schedule+0xde/0x1a0 kernel/sched/core.c:6745
->>>  usb_kill_urb.part.0+0x19a/0x220 drivers/usb/core/urb.c:728
->>>  usb_kill_urb+0x83/0xa0 drivers/usb/core/urb.c:717
->>>  usb_start_wait_urb+0x24a/0x4b0 drivers/usb/core/message.c:64
->>>  usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
->>>  usb_control_msg+0x320/0x4a0 drivers/usb/core/message.c:153
->>>  hub_port_init+0x14f3/0x3900 drivers/usb/core/hub.c:4874
->>>  hub_port_connect drivers/usb/core/hub.c:5336 [inline]
->>>  hub_port_connect_change drivers/usb/core/hub.c:5551 [inline]
->>>  port_event drivers/usb/core/hub.c:5711 [inline]
->>>  hub_event+0x2b89/0x4e40 drivers/usb/core/hub.c:5793
->>>  process_one_work+0x99a/0x15e0 kernel/workqueue.c:2405
->>>  worker_thread+0x67d/0x10c0 kernel/workqueue.c:2552
->>>  kthread+0x344/0x440 kernel/kthread.c:379
->>>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
->>>  </TASK>
->>> INFO: task syz-executor104:5004 blocked for more than 143 seconds.
->> This is being reproduced on linux-next. The USB IP is being fuzzed. I'd
->> modified the reproducer to try to understand the issue. The execution of
->> application creates kworkers (can be found in hub->events). One of the usb
->> hub kworker gets stuck because of wrong use_count. I don't know USB side of
->> logic. But a worker shouldn't go to sleep indefinitely.
-> 
-> I doubt that the problem is a wrong value for use_count.  More likely
-> it's a bug in the usbip driver.
-> 
->> My debug logs are as following which can help an expert USB developer to
->> pin point the problem:
->>
->> [  118.904272][    T9] usb_submit_urb urb->use_count: 0
->> [  118.904942][    T9] usb_hcd_submit_urb urb->use_count: 1
->> [  118.905715][    T9] usb_submit_urb urb->use_count: 1
->> [  118.906428][    T9] usb_start_wait_urb urb->use_count: 1
->> [  123.938978][    T9] usb_kill_urb use_count: 1
-> 
-> These don't mean much because they don't give the address of urb, so
-> we don't know if the various lines all refer to the same URB or to
-> different ones.
-I've confirmed locally again that the logs belong to same urb. This kworker
-gets stuck:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git gadget_char
+branch HEAD: a2e2e07c52fe91d1c3c8ac5e3da8995e1fb1320d  USB: gadget: dummy_hcd: switch char * to u8 *
 
-[  131.064283] usb_control_msg
-[  131.065326] usb_internal_control_msg, urb: FFFF88814CC2AE00
-urb->use_count: 0
-[  131.066320] usb_start_wait_urb urb: FFFF88814CC2AE00 urb->use_count: 0
-[  131.069988] usb_submit_urb urb: FFFF88814CC2AE00 urb->use_count: 0
-[  131.070881] usb_hcd_submit_urb urb: FFFF88814CC2AE00 urb->use_count 1
-[  131.072268] usb_submit_urb 0 urb: FFFF88814CC2AE00 urb->use_count: 1
-[  131.073186] usb_start_wait_urb urb: FFFF88814CC2AE00 urb->use_count: 1
-[  136.151750] usb_start_wait_urb wait_for_completion
-[  136.153286] usb_kill_urb might_sleep
-[  136.153859] vhci_hcd: vhci_urb_dequeue:875: vhci_urb_dequeue
-[  136.154853] vhci_hcd: vhci_urb_dequeue:952: vhci_urb_dequeue return
-[  136.155773] usb_kill_urb usb_hcd_unlink_urb use_count: 1
-[  285.831355] INFO: task kworker/0:4:1586 blocked for more than 143 seconds.
+elapsed time: 2993m
 
-> 
->> At this point, wait is being done on usb_kill_urb_queue as use_count isn't
->> zero and no event on usb_kill_urb_queue is received.
-> 
-> Right.  The usbip driver is supposed to terminate the URB in a timely
-> fashion (because usb_kill_urb() calls usb_hcd_unlink_urb()), but it
-> isn't doing so.  When the URB completes, the event will occur.
-> 
->> The comment for usb_kill_urb is:
->>> * This routine may not be used in an interrupt context (such as a bottom
->>> * half or a completion handler), or when holding a spinlock, or in other
->>> * situations where the caller can't schedule().
->>
->> But several locks are held by this kworker and sleeps indefinitely.
-> 
-> No spinlocks are held, only mutexes.  The difference is that a task is
-> allowed to sleep while holding a mutex, but it's not allowed to sleep
-> while holding a spinlock.
-> 
-> If you want to fix this problem (and probably a bunch of other ones in
-> syzbot's list of pending bugs), figure out what's wrong with the
-> ->urb_dequeue() callback routine in the usbip driver and fix it.
-I'm looking at it, haven't found anything yet.
+configs tested: 85
+configs skipped: 2
 
-> 
-> Alan Stern
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                   randconfig-001-20231107   gcc  
+arc                   randconfig-002-20231107   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+csky                  randconfig-001-20231107   gcc  
+csky                  randconfig-002-20231107   gcc  
+i386                             allmodconfig   gcc  
+i386                              allnoconfig   gcc  
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                        allyesconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20231107   gcc  
+loongarch             randconfig-002-20231107   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                              allnoconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                               defconfig   gcc  
+openrisc                         allmodconfig   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                              allnoconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                             allnoconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc                               defconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa                            allnoconfig   gcc  
+xtensa                           allyesconfig   gcc  
 
 -- 
-BR,
-Muhammad Usama Anjum
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
