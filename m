@@ -1,119 +1,184 @@
-Return-Path: <linux-usb+bounces-2682-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2684-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D76C47E533B
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Nov 2023 11:22:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 826E57E5570
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Nov 2023 12:26:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F0A028144F
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Nov 2023 10:22:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3D5D928141A
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Nov 2023 11:26:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EB6310A3D;
-	Wed,  8 Nov 2023 10:22:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1C3E15EA6;
+	Wed,  8 Nov 2023 11:25:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jFhpgRSN"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="N2F9q8OD"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6598810A2D
-	for <linux-usb@vger.kernel.org>; Wed,  8 Nov 2023 10:22:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEDEDC433C8;
-	Wed,  8 Nov 2023 10:22:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699438971;
-	bh=JGmlL0KgwRDqiQzXzq/RBHugjS46fQ4CpIjGxsM+Uuk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jFhpgRSNJqU6Nh/RWEkc0vMD13+y2eepajbN5iM89ys/pfDaFWmWj5dVkKOXe+/b1
-	 WxBEEH0Xyqt0G5/tNgiZRYNutglEmB377IuXRhsML8UPY4kqUgTBhlpoibaNmf087Z
-	 aKhdk8hKAtiA/WJVHHLLJ977UOVrb/VqXhwAxK3HgxT3GnlJMjcWdZ9xAbET6hnREJ
-	 POXWJLjxuNa4e8AOkt3kCNJEsMZhOvtugswmikdfZbnqkwOcXFC+mE33Wobmd8b35c
-	 pU+cVu82OKmIW7RK5vnyU3UBDRM2Y44Fc0iFBGYtoo5m+53LCUC0IhTvmvVqsYXy3n
-	 FeuECdMj3bV4Q==
-Received: from johan by xi.lan with local (Exim 4.96)
-	(envelope-from <johan@kernel.org>)
-	id 1r0fio-0007El-0Z;
-	Wed, 08 Nov 2023 11:23:42 +0100
-Date: Wed, 8 Nov 2023 11:23:42 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Victor Fragoso <victorffs@hotmail.com>
-Cc: "dcbw@redhat.com" <dcbw@redhat.com>,
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] USB: serial: option: add Fibocom L7xx modules
-Message-ID: <ZUthrrt4WkYXTTZD@hovoldconsulting.com>
-References: <9315051ae981aaad1d46724641defc6e5f79d12b.camel@hotmail.com>
- <8a8d4a7787e9d8b4f7f3c119b057ec4a8a6b1a91.camel@redhat.com>
- <a389548ccffa29ff58f30262410c535bf9137c49.camel@hotmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F2F714015
+	for <linux-usb@vger.kernel.org>; Wed,  8 Nov 2023 11:25:55 +0000 (UTC)
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A491FC2;
+	Wed,  8 Nov 2023 03:25:54 -0800 (PST)
+Received: from [100.98.85.67] (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id 975476607401;
+	Wed,  8 Nov 2023 11:25:50 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1699442752;
+	bh=U55f29h+NnKrIuLnkahY6gMTTnaGbwfPV8HL4gf8q2M=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=N2F9q8ODcDNebAFBUhEsDB2QG9zBTXIrFXrZDQ0c4JflmH/l7dKUmY0t+tM3/I4uJ
+	 dg9xmuHC/mZvl3TfKrA8oIw1RLSfzW13sNC/Ftpikgj2ji+ZfUcjtXVZoxdesPlD23
+	 Ehvub2BfLYrDbIzdKwvMsTbwK+TtmrK65cgbNDxeX+3HqSjP0nMfRjvgstCyuSgDcZ
+	 tRacm+2Y9+JwJ4xrZOeamrQEx5qFXDCjW9OEJIiIVj9fr5lX8pXsvIILpYFC/RiYEx
+	 gBQHMvo9QjkUyAofv+hJ5B4bEwhW7hSFpMlb5U2LHdu59WHk6UBK0jEiOL/iuH2Jsx
+	 blDH43UzKRbLA==
+Message-ID: <722c5417-d76a-44f3-b6d4-f585f54a3e02@collabora.com>
+Date: Wed, 8 Nov 2023 16:25:45 +0500
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a389548ccffa29ff58f30262410c535bf9137c49.camel@hotmail.com>
+User-Agent: Mozilla Thunderbird
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ syzbot <syzbot+b6f11035e572f08bc20f@syzkaller.appspotmail.com>,
+ gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [usb?] INFO: task hung in hub_port_init (3)
+Content-Language: en-US
+To: Alan Stern <stern@rowland.harvard.edu>
+References: <000000000000704d6305fdb75642@google.com>
+ <88cc734c-2a88-4495-aa1e-f16294eb6cea@collabora.com>
+ <ff0083c2-249e-4c1e-9546-0b81cf2c6e6f@rowland.harvard.edu>
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <ff0083c2-249e-4c1e-9546-0b81cf2c6e6f@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Oct 27, 2023 at 05:55:27PM +0000, Victor Fragoso wrote:
-> On Thu, 2023-10-26 at 08:49 -0500, Dan Williams wrote:
-> > On Thu, 2023-10-26 at 01:24 +0000, Victor Fragoso wrote:
-> > > Add support for Fibocom L7xx module series and variants.
-> > > 
-> > > L716-EU-60 (ECM):
-
-> > > A:  FirstIf#= 0 IfCount= 2 Cls=02(comm.) Sub=06 Prot=00
-> > > I:* If#= 0 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=06 Prot=00 Driver=cdc_ether
-> > > E:  Ad=87(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
-> > > I:  If#= 1 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
-> > > I:* If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
-> > > E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > > E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > > I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> > > E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > > E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > > I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> > > E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > > E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > > I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> > > E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > > E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > > I:* If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
-> > > E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > > E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > > I:* If#= 6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=usbfs
-> > > E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> > > E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-
-> > Also, are you at all able to give hints in the comments about what kind
-> > of ports these are? AT? GPS? PPP? etc?  That's usually described in the
-> > driver documentation or in the Windows drivers themselves.
-
-> About the hints on comments (AT, PPP, etc) I am not so sure if I should
-> add other hints.
-> As I've mentioned on the other email to Lars:
-> I am a Field Application Enginner at Fibocom Brazil and I am using the
-> IDs from our internal and official documentation.
-> This IDs will guarantee that can be used on all the variants devices
-> from L71x series.
-> For example, the 0x2cb7 0x0001 can be used by L716-EU on RNDIS, L716-
-> EU-10 on ECM and L710 too. While 19d2 0579 can be used by L716-EU-60 on
-> ECM and probably other variants.
+On 11/3/23 8:04 PM, Alan Stern wrote:
+> On Fri, Nov 03, 2023 at 07:03:20PM +0500, Muhammad Usama Anjum wrote:
+>> On 6/10/23 12:25 AM, syzbot wrote:
+>>> syzbot has found a reproducer for the following issue on:
+>>>
+>>> HEAD commit:    33f2b5785a2b Merge tag 'drm-fixes-2023-06-09' of git://ano..
+>>> git tree:       upstream
+>>> console+strace: https://syzkaller.appspot.com/x/log.txt?x=1206f143280000
+>>> kernel config:  https://syzkaller.appspot.com/x/.config?x=3c980bfe8b399968
+>>> dashboard link: https://syzkaller.appspot.com/bug?extid=b6f11035e572f08bc20f
+>>> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+>>> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1676f51b280000
+>>> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=129632fd280000
+>>>
+>>> Downloadable assets:
+>>> disk image: https://storage.googleapis.com/syzbot-assets/a817d99af39d/disk-33f2b578.raw.xz
+>>> vmlinux: https://storage.googleapis.com/syzbot-assets/8916e1d053fc/vmlinux-33f2b578.xz
+>>> kernel image: https://storage.googleapis.com/syzbot-assets/e53956f3cfd4/bzImage-33f2b578.xz
+>>>
+>>> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+>>> Reported-by: syzbot+b6f11035e572f08bc20f@syzkaller.appspotmail.com
+>>>
+>>> INFO: task kworker/0:2:901 blocked for more than 143 seconds.
+>>>       Not tainted 6.4.0-rc5-syzkaller-00178-g33f2b5785a2b #0
+>>> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+>>> task:kworker/0:2     state:D stack:26800 pid:901   ppid:2      flags:0x00004000
+>>> Workqueue: usb_hub_wq hub_event
+>>> Call Trace:
+>>>  <TASK>
+>>>  context_switch kernel/sched/core.c:5343 [inline]
+>>>  __schedule+0xc9a/0x5880 kernel/sched/core.c:6669
+>>>  schedule+0xde/0x1a0 kernel/sched/core.c:6745
+>>>  usb_kill_urb.part.0+0x19a/0x220 drivers/usb/core/urb.c:728
+>>>  usb_kill_urb+0x83/0xa0 drivers/usb/core/urb.c:717
+>>>  usb_start_wait_urb+0x24a/0x4b0 drivers/usb/core/message.c:64
+>>>  usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
+>>>  usb_control_msg+0x320/0x4a0 drivers/usb/core/message.c:153
+>>>  hub_port_init+0x14f3/0x3900 drivers/usb/core/hub.c:4874
+>>>  hub_port_connect drivers/usb/core/hub.c:5336 [inline]
+>>>  hub_port_connect_change drivers/usb/core/hub.c:5551 [inline]
+>>>  port_event drivers/usb/core/hub.c:5711 [inline]
+>>>  hub_event+0x2b89/0x4e40 drivers/usb/core/hub.c:5793
+>>>  process_one_work+0x99a/0x15e0 kernel/workqueue.c:2405
+>>>  worker_thread+0x67d/0x10c0 kernel/workqueue.c:2552
+>>>  kthread+0x344/0x440 kernel/kthread.c:379
+>>>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+>>>  </TASK>
+>>> INFO: task syz-executor104:5004 blocked for more than 143 seconds.
+>> This is being reproduced on linux-next. The USB IP is being fuzzed. I'd
+>> modified the reproducer to try to understand the issue. The execution of
+>> application creates kworkers (can be found in hub->events). One of the usb
+>> hub kworker gets stuck because of wrong use_count. I don't know USB side of
+>> logic. But a worker shouldn't go to sleep indefinitely.
 > 
-> So, to avoid any misunderstand I prefer to keep it simple and mention
-> just as L71x series.
+> I doubt that the problem is a wrong value for use_count.  More likely
+> it's a bug in the usbip driver.
+> 
+>> My debug logs are as following which can help an expert USB developer to
+>> pin point the problem:
+>>
+>> [  118.904272][    T9] usb_submit_urb urb->use_count: 0
+>> [  118.904942][    T9] usb_hcd_submit_urb urb->use_count: 1
+>> [  118.905715][    T9] usb_submit_urb urb->use_count: 1
+>> [  118.906428][    T9] usb_start_wait_urb urb->use_count: 1
+>> [  123.938978][    T9] usb_kill_urb use_count: 1
+> 
+> These don't mean much because they don't give the address of urb, so
+> we don't know if the various lines all refer to the same URB or to
+> different ones.
+I've confirmed locally again that the logs belong to same urb. This kworker
+gets stuck:
 
-For the device entry comment I think you should use the model you've
-tested, and if there are multiple modules you can possibly list more
-than one if that makes sense.
- 
-But I think Dan was asking you to say something about what the
-individual interfaces are used for. That's better added to the commit
-message (i.e. describing which port is which).
+[  131.064283] usb_control_msg
+[  131.065326] usb_internal_control_msg, urb: FFFF88814CC2AE00
+urb->use_count: 0
+[  131.066320] usb_start_wait_urb urb: FFFF88814CC2AE00 urb->use_count: 0
+[  131.069988] usb_submit_urb urb: FFFF88814CC2AE00 urb->use_count: 0
+[  131.070881] usb_hcd_submit_urb urb: FFFF88814CC2AE00 urb->use_count 1
+[  131.072268] usb_submit_urb 0 urb: FFFF88814CC2AE00 urb->use_count: 1
+[  131.073186] usb_start_wait_urb urb: FFFF88814CC2AE00 urb->use_count: 1
+[  136.151750] usb_start_wait_urb wait_for_completion
+[  136.153286] usb_kill_urb might_sleep
+[  136.153859] vhci_hcd: vhci_urb_dequeue:875: vhci_urb_dequeue
+[  136.154853] vhci_hcd: vhci_urb_dequeue:952: vhci_urb_dequeue return
+[  136.155773] usb_kill_urb usb_hcd_unlink_urb use_count: 1
+[  285.831355] INFO: task kworker/0:4:1586 blocked for more than 143 seconds.
 
-Johan
+> 
+>> At this point, wait is being done on usb_kill_urb_queue as use_count isn't
+>> zero and no event on usb_kill_urb_queue is received.
+> 
+> Right.  The usbip driver is supposed to terminate the URB in a timely
+> fashion (because usb_kill_urb() calls usb_hcd_unlink_urb()), but it
+> isn't doing so.  When the URB completes, the event will occur.
+> 
+>> The comment for usb_kill_urb is:
+>>> * This routine may not be used in an interrupt context (such as a bottom
+>>> * half or a completion handler), or when holding a spinlock, or in other
+>>> * situations where the caller can't schedule().
+>>
+>> But several locks are held by this kworker and sleeps indefinitely.
+> 
+> No spinlocks are held, only mutexes.  The difference is that a task is
+> allowed to sleep while holding a mutex, but it's not allowed to sleep
+> while holding a spinlock.
+> 
+> If you want to fix this problem (and probably a bunch of other ones in
+> syzbot's list of pending bugs), figure out what's wrong with the
+> ->urb_dequeue() callback routine in the usbip driver and fix it.
+I'm looking at it, haven't found anything yet.
+
+> 
+> Alan Stern
+
+-- 
+BR,
+Muhammad Usama Anjum
 
