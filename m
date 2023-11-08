@@ -1,182 +1,141 @@
-Return-Path: <linux-usb+bounces-2720-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2721-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54A5D7E5D68
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Nov 2023 19:42:04 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B1ADB7E5E8B
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Nov 2023 20:27:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 09A2B2814BF
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Nov 2023 18:42:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 49E77B20D3C
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Nov 2023 19:27:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2640C3067C;
-	Wed,  8 Nov 2023 18:42:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C92CB37144;
+	Wed,  8 Nov 2023 19:27:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZEQZIVdP"
+	dkim=pass (2048-bit key) header.d=ravnborg.org header.i=@ravnborg.org header.b="HOH6miiY";
+	dkim=permerror (0-bit key) header.d=ravnborg.org header.i=@ravnborg.org header.b="xWIbuz4e"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAE833032C
-	for <linux-usb@vger.kernel.org>; Wed,  8 Nov 2023 18:41:58 +0000 (UTC)
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B6282105;
-	Wed,  8 Nov 2023 10:41:58 -0800 (PST)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-5a7fb84f6ceso206267b3.1;
-        Wed, 08 Nov 2023 10:41:58 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF24D36AFC
+	for <linux-usb@vger.kernel.org>; Wed,  8 Nov 2023 19:27:03 +0000 (UTC)
+X-Greylist: delayed 964 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 08 Nov 2023 11:27:03 PST
+Received: from mailrelay2-1.pub.mailoutpod2-cph3.one.com (mailrelay2-1.pub.mailoutpod2-cph3.one.com [IPv6:2a02:2350:5:401::1])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EAC2210E
+	for <linux-usb@vger.kernel.org>; Wed,  8 Nov 2023 11:27:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699468917; x=1700073717; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=+BbXRbAsp+NPpKrdmZggvoi57cHhfYvlMAtcCMHLnD0=;
-        b=ZEQZIVdPSErSJ624z4fabvUM9v4MeX7t+OI4DodPjBxyZ7fobzWLUTG/IbyNswmOsC
-         OcxwrrAHC7h2PlXmqSgOHTXZGAnFVuBYX402/9V9Z+yBrjAFs476BvoOg8Lv7VQo4YFJ
-         0f6fmi4SCjR5taYaowzT9n83x2PhQRRCX1ilBD6SDgsA6/IuxtfNmdfmNqoUD+oth50B
-         f5Vn8SSvONhm5W8WUupjcz+b4oLZytQvA6oss5M1Tzl7OXN/x34l5NDjBchTx7kU7gdx
-         7JkmTw+H2hskShwvcA3tIz0DVKxxeCLAVzSFb7LlfjRH9Vj0tRuDHiabQ7c8CsP02OR+
-         v4LA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699468917; x=1700073717;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+BbXRbAsp+NPpKrdmZggvoi57cHhfYvlMAtcCMHLnD0=;
-        b=kgNnyXUvHHUIReiLsl7xjfP1r8AzAo4R4qnSmOhZcr7bBP/JZg8q7d/0s3wVywZtCF
-         5jRSVIe4d5EIauwhiFhxk3ybBSFp4rwno5g4I5TYJ5dsAlDlgCuVqofoycJqcgNe8/v5
-         df99U1UcgchIkTt1IlkjNJzFMSUx9JQh9H9qHiHFVqLLqJWJoYlgKAduJl2XD+Bvq1/k
-         ObvPJPtPLBzpHOeU3lRn1G1A4g5iUP6m1zUgHKYTVdL84GjPbYDSM5wIDiUt5n/bhx+3
-         G9VwLevcC7++w3tDseuBc4OdhxD4UePtp5nme+KmsQkNse0TiGaFkbY+hCbPA3aSEjS7
-         /I0g==
-X-Gm-Message-State: AOJu0YxwUab6Jbs7rL8p+gTpevOQ9/XkZB6LjPgW8fwiVfggByvMK4TO
-	mffNVFaDzpv3X427osRtxNI=
-X-Google-Smtp-Source: AGHT+IEHkS1jSyto38h4sLFxXm4J55FVf9334ZttR+9wMs+z5iCBgLAtKGiecS9bqiWHMxFU1dkUBQ==
-X-Received: by 2002:a0d:fb07:0:b0:5a2:15bc:b32c with SMTP id l7-20020a0dfb07000000b005a215bcb32cmr2511738ywf.42.1699468917138;
-        Wed, 08 Nov 2023 10:41:57 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d7-20020a0ddb07000000b005a7bf9749c8sm7212241ywe.4.2023.11.08.10.41.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Nov 2023 10:41:56 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <0b9df102-24c0-4b0d-a341-22891892e708@roeck-us.net>
-Date: Wed, 8 Nov 2023 10:41:55 -0800
+	d=ravnborg.org; s=rsa2;
+	h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+	 from:date:from;
+	bh=t0PhdPpL9ITFkVHWShkqwebGTKveq1EAqYCULbPtu5I=;
+	b=HOH6miiY3B+TPoRIYH1MiG21R2R+dh1yYG8FVwEQyDXIhn1Ao3kJLxPWfeHQZl9v5C+Z5Chab0l7C
+	 HikW4LWGdU4we9PVHZJww6fDwD1yj+77Jj5I/65wiERNQSINaBzToUrUeOoJSPC/FGkywpiTFZYc/w
+	 G5VUedzBJU7HvjvKlrHVnE6S2n/CsFEdiawBE7NIbof73jQYss2IVV4HvlcVLH+T8ZX3pzF6bx9t1o
+	 bMg34L0eMDuXbRC6rLKy6PjcIUoJKPRTeePAKA2fUAAx68YXNhrJFCda5nk8ULj+i07dneXw+hSXiH
+	 JNZyftfJd+q/T1+u1UqHapE9CdUwJnw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+	d=ravnborg.org; s=ed2;
+	h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+	 from:date:from;
+	bh=t0PhdPpL9ITFkVHWShkqwebGTKveq1EAqYCULbPtu5I=;
+	b=xWIbuz4e/7unjVoPKeu7dePVTkZEjAQgGTQa2oJ1BHdQOZexDAZtyLcvnX3YqDagH5rAul9U45aVe
+	 EhYmmucCA==
+X-HalOne-ID: 87baf6c1-7e6a-11ee-909c-a34c9b1f9040
+Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
+	by mailrelay2 (Halon) with ESMTPSA
+	id 87baf6c1-7e6a-11ee-909c-a34c9b1f9040;
+	Wed, 08 Nov 2023 19:10:52 +0000 (UTC)
+Date: Wed, 8 Nov 2023 20:10:50 +0100
+From: Sam Ravnborg <sam@ravnborg.org>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	linux-kbuild@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+	Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>, Guo Ren <guoren@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Greg Ungerer <gerg@linux-m68k.org>, Michal Simek <monstr@monstr.eu>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Geoff Levand <geoff@infradead.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+	Helge Deller <deller@gmx.de>,
+	Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Timur Tabi <timur@kernel.org>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	David Woodhouse <dwmw2@infradead.org>,
+	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+	Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+	Kees Cook <keescook@chromium.org>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	Al Viro <viro@zeniv.linux.org.uk>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+	loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+	netdev@vger.kernel.org, linux-parisc@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linux-bcachefs@vger.kernel.org,
+	linux-mtd@lists.infradead.org
+Subject: Re: [PATCH 09/22] [v2] arch: fix asm-offsets.c building with
+ -Wmissing-prototypes
+Message-ID: <20231108191050.GA171153@ravnborg.org>
+References: <20231108125843.3806765-1-arnd@kernel.org>
+ <20231108125843.3806765-10-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] usb: typec: tcpm: Skip hard reset when in error
- recovery
-Content-Language: en-US
-To: Badhri Jagan Sridharan <badhri@google.com>, gregkh@linuxfoundation.org,
- heikki.krogerus@linux.intel.com
-Cc: kyletso@google.com, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, rdbabiera@google.com, amitsd@google.com,
- stable@vger.kernel.org
-References: <20231101021909.2962679-1-badhri@google.com>
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20231101021909.2962679-1-badhri@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231108125843.3806765-10-arnd@kernel.org>
 
-On 10/31/23 19:19, Badhri Jagan Sridharan wrote:
-> Hard reset queued prior to error recovery (or) received during
-> error recovery will make TCPM to prematurely exit error recovery
-> sequence. Ignore hard resets received during error recovery (or)
-> port reset sequence.
+On Wed, Nov 08, 2023 at 01:58:30PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> ```
-> [46505.459688] state change SNK_READY -> ERROR_RECOVERY [rev3 NONE_AMS]
-> [46505.459706] state change ERROR_RECOVERY -> PORT_RESET [rev3 NONE_AMS]
-> [46505.460433] disable vbus discharge ret:0
-> [46505.461226] Setting usb_comm capable false
-> [46505.467244] Setting voltage/current limit 0 mV 0 mA
-> [46505.467262] polarity 0
-> [46505.470695] Requesting mux state 0, usb-role 0, orientation 0
-> [46505.475621] cc:=0
-> [46505.476012] pending state change PORT_RESET -> PORT_RESET_WAIT_OFF @ 100 ms [rev3 NONE_AMS]
-> [46505.476020] Received hard reset
-> [46505.476024] state change PORT_RESET -> HARD_RESET_START [rev3 HARD_RESET]
-> ```
+> When -Wmissing-prototypes is enabled, the some asm-offsets.c files fail
+> to build, even when this warning is disabled in the Makefile for normal
+> files:
 > 
-> Cc: stable@vger.kernel.org
-> Fixes: f0690a25a140 ("staging: typec: USB Type-C Port Manager (tcpm)")
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-> ---
->   drivers/usb/typec/tcpm/tcpm.c | 9 +++++++++
->   1 file changed, 9 insertions(+)
+> arch/sparc/kernel/asm-offsets.c:22:5: error: no previous prototype for 'sparc32_foo' [-Werror=missing-prototypes]
+> arch/sparc/kernel/asm-offsets.c:48:5: error: no previous prototype for 'foo' [-Werror=missing-prototypes]
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 058d5b853b57..b386102f7a3a 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -5391,6 +5391,15 @@ static void _tcpm_pd_hard_reset(struct tcpm_port *port)
->   	if (port->bist_request == BDO_MODE_TESTDATA && port->tcpc->set_bist_data)
->   		port->tcpc->set_bist_data(port->tcpc, false);
->   
-> +	switch (port->state) {
-> +	case ERROR_RECOVERY:
-> +	case PORT_RESET:
-> +	case PORT_RESET_WAIT_OFF:
-> +		return;
-> +	default:
-> +		break;
-> +	}
-> +
->   	if (port->ams != NONE_AMS)
->   		port->ams = NONE_AMS;
->   	if (port->hard_reset_count < PD_N_HARD_RESET_COUNT)
+> Address this by making use of the same trick as x86, marking these
+> functions as 'static __used' to avoid the need for a prototype
+> by not drop them in dead-code elimination.
 > 
-> base-commit: c70793fb7632a153862ee9060e6d48131469a29c
-
+> Suggested-by: Masahiro Yamada <masahiroy@kernel.org>
+> Link: https://lore.kernel.org/lkml/CAK7LNARfEmFk0Du4Hed19eX_G6tUC5wG0zP+L1AyvdpOF4ybXQ@mail.gmail.com/
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Looks good. I sometimes looks at sparc patches so I looked at this one.
+Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
 
