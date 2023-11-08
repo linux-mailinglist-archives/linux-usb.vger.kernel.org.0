@@ -1,134 +1,198 @@
-Return-Path: <linux-usb+bounces-2676-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2677-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4DCE7E5137
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Nov 2023 08:38:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DC4E7E5215
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Nov 2023 09:44:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4A569B20EED
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Nov 2023 07:38:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5EE5B1C20D5A
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Nov 2023 08:44:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 760B5D2F0;
-	Wed,  8 Nov 2023 07:38:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37EA46ADB;
+	Wed,  8 Nov 2023 08:44:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VE8UrAWt"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="R8QooS0v"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70BCFD2E9
-	for <linux-usb@vger.kernel.org>; Wed,  8 Nov 2023 07:38:14 +0000 (UTC)
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C04C6170D;
-	Tue,  7 Nov 2023 23:38:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699429094; x=1730965094;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=znukz4gJNNSFkFYdHeSEpjae6onBUCfjTHzzo5l8Lj8=;
-  b=VE8UrAWt5xH2VkqOPNjudhWli/q4pqn5UBlOfr9FGqGug2ih6vvu4Zxp
-   Q9L6XtcJtXVjaQmw3tyrIx00mY1+a8EaIxLOH0mBe/Rh3XNsqUlnAYRuM
-   dvmeB4+qlupVIMt2bc2ecUlC1yiVUpsdEvjBeCRF7xlXNofX95ilEfuww
-   2YQvm84FY6oRe/eoFCgte5t2gWuJBfSOtbNjNDXY09ZJcKBkuj18UMiDR
-   dIG5K1HuQ+G06KIdDemhfl43XAlFabLHNq0tFctEu+ElwsqBFRxtNtg7r
-   +zA1yA/trixxpKRXQo3g6CHF59u9OunxBf3es1eHUvpkPS1i/+/uaYnZn
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10887"; a="8360581"
-X-IronPort-AV: E=Sophos;i="6.03,285,1694761200"; 
-   d="scan'208";a="8360581"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2023 23:38:13 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10887"; a="906690102"
-X-IronPort-AV: E=Sophos;i="6.03,285,1694761200"; 
-   d="scan'208";a="906690102"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 07 Nov 2023 23:38:10 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 08 Nov 2023 09:38:09 +0200
-Date: Wed, 8 Nov 2023 09:38:09 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Badhri Jagan Sridharan <badhri@google.com>
-Cc: gregkh@linuxfoundation.org, linux@roeck-us.net, kyletso@google.com,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v3] usb: typec: tcpm: Fix sink caps op current check
-Message-ID: <ZUs64UHL+vMD0gq4@kuha.fi.intel.com>
-References: <20231101012845.2701348-1-badhri@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54B463457C
+	for <linux-usb@vger.kernel.org>; Wed,  8 Nov 2023 08:44:38 +0000 (UTC)
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C7EB1717
+	for <linux-usb@vger.kernel.org>; Wed,  8 Nov 2023 00:44:37 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-54357417e81so10108a12.0
+        for <linux-usb@vger.kernel.org>; Wed, 08 Nov 2023 00:44:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1699433076; x=1700037876; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3qu6xuDhGJ5JPWC5oSGyyY7P53x8jjCQYiy8YEQLeeo=;
+        b=R8QooS0vDNoKoV3XJANVjelsz9aaQFjE/CtumDCIubPSnH27LQd+D7oCwCNc1wbCxn
+         fpyO/eIINl6muOmwwfmuv/yxtkTsBpf0ssKOX8Ceabhnr0Lh4qeWw914gNco4azDtiu9
+         oA3tZeLm1s5UVBfdbcz+Z3OpXsOsTZDxCErgnydcH2AI3iYhmH7163uMiQHV8JDlH8BW
+         R3Uwpi2hm1K3IVCl1Lm1Gnz+v19c0/PzurB9oPBfxDIAnf0PzmronhrJtlW+DPUK4DIn
+         v0xyTXaiVsAoh1WVDeGrtrQ5zUBupX4MW+vM3D2ZvH/AFHp96EWGhFTS7VKJ8F/gQJCs
+         v8PQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699433076; x=1700037876;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3qu6xuDhGJ5JPWC5oSGyyY7P53x8jjCQYiy8YEQLeeo=;
+        b=wfQA1Pz7LkUs54ZBMrtWZpwjYJ0XL6LVW1kJ16Iq1TL+/aDpQXoetEHz4FvyHMJlyS
+         Qvuh+RH/o+eLXkLU+tU0jFrPTwM8qLYs6IktdpRlZt8RXu4k0QS+raNIlVAJEZJLFkNo
+         ISQtJQswks1nui+XohzOJvxX9Aa5aWYx1PcifKE2cSSWaogWVRbqQbBl0LM8aeC1oB5K
+         jycMz8XGayCw8t0KBjptZlENP11PMHOFHETF02xO1JU6kWtlyDB8bB4K3lWpC0rvIxH+
+         kYBtnMSjX8dycelu7uLOXkPqMbtEZRSvMm0PfUDsFf+UFe8qUyEFxkA15kbveY7KoQFp
+         6YuA==
+X-Gm-Message-State: AOJu0YwHbU5uytV8kZNB/zepTf6qZWnUGGDIztFPL1LNZOiVJ/soF4gz
+	3cwPrr497OchS2iRGFfgH41trFj6KskLKzTO1XHA1Q==
+X-Google-Smtp-Source: AGHT+IGyWNKdsQPn0juqLKFUlvmF17TwBL6KgBg6m2mliS9T29mVwbiqFgwdC+K06dLDG1APWCHyg0Dmv5+/5eV19Dg=
+X-Received: by 2002:a50:9eeb:0:b0:544:4762:608 with SMTP id
+ a98-20020a509eeb000000b0054447620608mr246797edf.2.1699433075593; Wed, 08 Nov
+ 2023 00:44:35 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231101012845.2701348-1-badhri@google.com>
+References: <20231031093921.755204-1-guanyulin@google.com> <2023103133-kelp-copartner-8e9c@gregkh>
+In-Reply-To: <2023103133-kelp-copartner-8e9c@gregkh>
+From: Guan-Yu Lin <guanyulin@google.com>
+Date: Wed, 8 Nov 2023 16:44:24 +0800
+Message-ID: <CAOuDEK3x95u6+68e=fkejnjWhRrA5Yt1qTaAG3Prje8C-+6dmw@mail.gmail.com>
+Subject: Re: [PATCH] rpm: pm: enable PM_RPM_EXCEPTION config flag
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz, 
+	stern@rowland.harvard.edu, heikki.krogerus@linux.intel.com, 
+	mkl@pengutronix.de, hadess@hadess.net, mailhol.vincent@wanadoo.fr, 
+	ivan.orlov0322@gmail.com, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, pumahsu@google.com, 
+	raychi@google.com, albertccwang@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 01, 2023 at 01:28:45AM +0000, Badhri Jagan Sridharan wrote:
-> TCPM checks for sink caps operational current even when PD is disabled.
-> This incorrectly sets tcpm_set_charge() when PD is disabled.
-> Check for sink caps only when PD is enabled.
-> 
-> [   97.572342] Start toggling
-> [   97.578949] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
-> [   99.571648] CC1: 0 -> 0, CC2: 0 -> 4 [state TOGGLING, polarity 0, connected]
-> [   99.571658] state change TOGGLING -> SNK_ATTACH_WAIT [rev3 NONE_AMS]
-> [   99.571673] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev3 NONE_AMS]
-> [   99.741778] state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED [delayed 170 ms]
-> [   99.789283] CC1: 0 -> 0, CC2: 4 -> 5 [state SNK_DEBOUNCED, polarity 0, connected]
-> [   99.789306] state change SNK_DEBOUNCED -> SNK_DEBOUNCED [rev3 NONE_AMS]
-> [   99.903584] VBUS on
-> [   99.903591] state change SNK_DEBOUNCED -> SNK_ATTACHED [rev3 NONE_AMS]
-> [   99.903600] polarity 1
-> [   99.910155] enable vbus discharge ret:0
-> [   99.910160] Requesting mux state 1, usb-role 2, orientation 2
-> [   99.946791] state change SNK_ATTACHED -> SNK_STARTUP [rev3 NONE_AMS]
-> [   99.946798] state change SNK_STARTUP -> SNK_DISCOVERY [rev3 NONE_AMS]
-> [   99.946800] Setting voltage/current limit 5000 mV 500 mA
-> [   99.946803] vbus=0 charge:=1
-> [  100.027139] state change SNK_DISCOVERY -> SNK_READY [rev3 NONE_AMS]
-> [  100.027145] Setting voltage/current limit 5000 mV 3000 mA
-> [  100.466830] VBUS on
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 803b1c8a0cea ("usb: typec: tcpm: not sink vbus if operational current is 0mA")
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+On Tue, Oct 31, 2023 at 5:48=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org=
+> wrote:
+>
+> On Tue, Oct 31, 2023 at 05:38:55PM +0800, Guan-Yu Lin wrote:
+> > Introducing PM_RPM_EXCEPTION config flag, which may alter the priority
+> > between system power management and runtime power management. In
+> > suspend-to-idle flow, PM core will suspend all devices to avoid device
+> > interact with the system. However, chances are devices might be used by
+> > other systems rather than a single system. In this case, PM core should=
+n't
+> > suspend the devices. One may use PM_RPM_EXCEPTION config flag to mark
+> > such exception, and determine the power state of a device with runtime
+> > power management rather than system power management.
+> >
+> > Signed-off-by: Guan-Yu Lin <guanyulin@google.com>
+> > ---
+> >  drivers/usb/core/generic.c |  6 ++++++
+> >  drivers/usb/core/usb.h     | 16 ++++++++++++++++
+> >  kernel/power/Kconfig       |  8 ++++++++
+> >  3 files changed, 30 insertions(+)
+> >
+> > diff --git a/drivers/usb/core/generic.c b/drivers/usb/core/generic.c
+> > index 740342a2812a..bb0dfcfc9764 100644
+> > --- a/drivers/usb/core/generic.c
+> > +++ b/drivers/usb/core/generic.c
+> > @@ -266,6 +266,9 @@ int usb_generic_driver_suspend(struct usb_device *u=
+dev, pm_message_t msg)
+> >  {
+> >       int rc;
+> >
+> > +     if (usb_runtime_pm_exception(udev))
+> > +             return 0;
+> > +
+> >       /* Normal USB devices suspend through their upstream port.
+> >        * Root hubs don't have upstream ports to suspend,
+> >        * so we have to shut down their downstream HC-to-USB
+> > @@ -294,6 +297,9 @@ int usb_generic_driver_resume(struct usb_device *ud=
+ev, pm_message_t msg)
+> >  {
+> >       int rc;
+> >
+> > +     if (usb_runtime_pm_exception(udev))
+> > +             return 0;
+> > +
+> >       /* Normal USB devices resume/reset through their upstream port.
+> >        * Root hubs don't have upstream ports to resume or reset,
+> >        * so we have to start up their downstream HC-to-USB
+> > diff --git a/drivers/usb/core/usb.h b/drivers/usb/core/usb.h
+> > index 60363153fc3f..14a054f814a2 100644
+> > --- a/drivers/usb/core/usb.h
+> > +++ b/drivers/usb/core/usb.h
+> > @@ -90,6 +90,22 @@ extern void usb_major_cleanup(void);
+> >  extern int usb_device_supports_lpm(struct usb_device *udev);
+> >  extern int usb_port_disable(struct usb_device *udev);
+> >
+> > +#ifdef       CONFIG_PM_RPM_EXCEPTION
+> > +
+> > +static inline int usb_runtime_pm_exception(struct usb_device *udev)
+> > +{
+> > +     return atomic_read(&udev->dev.power.usage_count);
+> > +}
+> > +
+> > +#else
+> > +
+> > +static inline int usb_runtime_pm_exception(struct usb_device *udev)
+> > +{
+> > +     return 0;
+> > +}
+> > +
+> > +#endif
+> > +
+> >  #ifdef       CONFIG_PM
+> >
+> >  extern int usb_suspend(struct device *dev, pm_message_t msg);
+> > diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
+> > index 4b31629c5be4..beba7a0f3947 100644
+> > --- a/kernel/power/Kconfig
+> > +++ b/kernel/power/Kconfig
+> > @@ -193,6 +193,14 @@ config PM
+> >         responsible for the actual handling of device suspend requests =
+and
+> >         wake-up events.
+> >
+> > +config PM_RPM_EXCEPTION
+> > +     bool "Prioritize Runtime Power Management more than Power Managem=
+ent"
+> > +     default n
+>
+> The default is always 'n' so no need to specify it.
+>
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Thanks, I will include this in the next version.
 
-> ---
-> Changes since v2:
-> * Fix the "Fixes" tag
-> * Refactor code based on Guenter Roeck's suggestion.
-> 
-> Changes since v1:
-> * Fix commit title and description to address comments from Guenter Roeck
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 058d5b853b57..afc791ab6d4f 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -4273,7 +4273,8 @@ static void run_state_machine(struct tcpm_port *port)
->  				current_lim = PD_P_SNK_STDBY_MW / 5;
->  			tcpm_set_current_limit(port, current_lim, 5000);
->  			/* Not sink vbus if operational current is 0mA */
-> -			tcpm_set_charge(port, !!pdo_max_current(port->snk_pdo[0]));
-> +			tcpm_set_charge(port, !port->pd_supported ||
-> +					pdo_max_current(port->snk_pdo[0]));
->  
->  			if (!port->pd_supported)
->  				tcpm_set_state(port, SNK_READY, 0);
-> 
-> base-commit: c70793fb7632a153862ee9060e6d48131469a29c
-> -- 
-> 2.42.0.820.g83a721a137-goog
+> > +     help
+> > +     Provides a way to prioritize Runtime Power Management more than P=
+ower
+> > +     Management. This way system can suspnd with maintaining specific
+> > +     components in operation.
+>
+> This really doesn't give me a good description of why someone would ever
+> want to enable this at all.
+>
+> And why does this have to be a build option?  That feels very heavy, why
+> not make it changable at runtime?
+>
+> If this is a build option, how are you going to get all the distros and
+> all of the Android/ChromeOS systems in the world to enable it?
+>
+> thanks,
+>
+> greg k-h
 
--- 
-heikki
+Let's reach a consensus on what this patch should do first. I'll then
+change the description and implementation accordingly if needed. Please
+see the next reply for an explanation of my idea.
+
+Thanks,
+Guan-Yu
 
