@@ -1,167 +1,153 @@
-Return-Path: <linux-usb+bounces-2714-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2715-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5808A7E588A
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Nov 2023 15:19:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA9567E5987
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Nov 2023 15:54:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D5B642816A2
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Nov 2023 14:19:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0086E1C20A43
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Nov 2023 14:54:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20AF7199DA;
-	Wed,  8 Nov 2023 14:19:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 782452BCF8;
+	Wed,  8 Nov 2023 14:54:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="FMiQMMUu"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="L3k36UKO"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE8ED199D3
-	for <linux-usb@vger.kernel.org>; Wed,  8 Nov 2023 14:19:23 +0000 (UTC)
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B80C1FC3;
-	Wed,  8 Nov 2023 06:19:23 -0800 (PST)
-Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id A75209CC;
-	Wed,  8 Nov 2023 15:18:59 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1699453140;
-	bh=yStNjADaT5ZcsiE8x3Oa1LhD4fZZvecWjz5Q4pBKu24=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=FMiQMMUuMpvrxHhgyWuPKgLDmFdvqblog7C3YVsfvsQvW400Vh74bz8TqMbk+D0+s
-	 jxnfMUQgcP99iUJKJ83Mm8ZXn3S2YK1p4y/G+nCfeYH9qa49iDj6H0fP8zB+PDu0VI
-	 MJVvteZ61KUcEuGPWI1xHFp/FiIAZjcScOHuGB4c=
-Message-ID: <9ee4f736-e346-4b92-9a6d-8104d87132fc@ideasonboard.com>
-Date: Wed, 8 Nov 2023 14:19:18 +0000
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59EE92BCF3
+	for <linux-usb@vger.kernel.org>; Wed,  8 Nov 2023 14:54:48 +0000 (UTC)
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2061.outbound.protection.outlook.com [40.107.212.61])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4C211BDD;
+	Wed,  8 Nov 2023 06:54:47 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=J91kYStla8tNjzfaYINqQhb9PZuLJESU195rg59NmFYHr5ZE+xp9qVXdnGJX3xiBL1hWsqDA7vYRm9QHbVlhi5WNmkddUli/xTQqqXKAYaciB1RzTHMrDLmpUaXlmzf913Er9w6D8av+6xAIjpn2A5aBo/0iHp0ZE/kg7EURE2qIO0JfLj1qLtnY9WEYQ/7McJzQ67bC7F/Om9Yo7kjY6fWxgro96AMOvnD/3+vvxm4JGB5zMjD+bIkMWa4A3CBmmubM1DRNvfd0LS3ZTy/G5dHdQIOmJ7Jm+kNdk0tyNwwDmjTVTY+nZSrbXmOASZiTyD+T25MLsBCT90HTUm7CWQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=80Hu0Ak65fOGd2sqhF+5aodRNAAjsTCb/QibLqC6xGI=;
+ b=FsiyKncU2tAcD9XnWHDCFRUnD2NjDGDHP9HbGm8uUs0SVshqgVU0Gv5ReE3RbXopDJL+8p8zrMuv9jyGHCVYbGbT6E4ieBW8lBEeRf+/GVRYqHOr8OKqmuB3GLNqvzxmdiKCorIPPBSdLU9JamRlpROV+Z2p/MhD1EvHboJrP2hOD0EdaV6RaTWLT+8+9ByxJauni7rfL8h9fToRQZ5gYj90QW4kER+zC4QgVs5TptxsFox965Cpqjw5l5FZ03lvlHlgR8+lgcPKM7T6acTHYYCvi6Y1aCXZoRQaT4ZQgpEvOqetKAc/YuelGNKGL/+yi/jAn2xaF9U6v3+lEyxaEQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=80Hu0Ak65fOGd2sqhF+5aodRNAAjsTCb/QibLqC6xGI=;
+ b=L3k36UKOSrL1lg3ybRwNcMozp8MyHvojjykB1IJBlX4Xfsko63SIVp8dk2j3NsSPiNIdujQepxo8Amboa1zy3LDbNwg8ciyTCrObx/sYGOJ3Xb5liHk2qIZB6x93KwyGrQHMW9vTcL9tRN09yzo6ByNbT1MxvJkMiTyRxrGaTIs=
+Received: from MN2PR16CA0019.namprd16.prod.outlook.com (2603:10b6:208:134::32)
+ by IA1PR12MB7758.namprd12.prod.outlook.com (2603:10b6:208:421::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.29; Wed, 8 Nov
+ 2023 14:54:43 +0000
+Received: from BL02EPF0001A100.namprd03.prod.outlook.com
+ (2603:10b6:208:134:cafe::6b) by MN2PR16CA0019.outlook.office365.com
+ (2603:10b6:208:134::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6907.34 via Frontend
+ Transport; Wed, 8 Nov 2023 14:54:43 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL02EPF0001A100.mail.protection.outlook.com (10.167.242.107) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6977.16 via Frontend Transport; Wed, 8 Nov 2023 14:54:43 +0000
+Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.32; Wed, 8 Nov
+ 2023 08:54:42 -0600
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB06.amd.com
+ (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.32; Wed, 8 Nov
+ 2023 08:54:42 -0600
+Received: from xhdpiyushm40.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.32 via Frontend
+ Transport; Wed, 8 Nov 2023 08:54:39 -0600
+From: Piyush Mehta <piyush.mehta@amd.com>
+To: <gregkh@linuxfoundation.org>, <michal.simek@amd.com>,
+	<laurent.pinchart@ideasonboard.com>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<dan.scally@ideasonboard.com>, <s.shtylyov@omp.ru>, <khtsai@google.com>,
+	<siva.durga.prasad.paladugu@amd.com>, <radhey.shyam.pandey@amd.com>, "Piyush
+ Mehta" <piyush.mehta@amd.com>
+Subject: [PATCH V2] usb: gadget: uvc_video: unlock before submitting a request to ep
+Date: Wed, 8 Nov 2023 20:24:26 +0530
+Message-ID: <20231108145426.2358406-1-piyush.mehta@amd.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: gadget: uvc_video: unlock before submitting a
- request to ep
-Content-Language: en-US
-To: Kuen-Han Tsai <khtsai@google.com>
-Cc: gregkh@linuxfoundation.org, laurent.pinchart@ideasonboard.com,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- michal.simek@amd.com, piyush.mehta@amd.com, radhey.shyam.pandey@amd.com,
- siva.durga.prasad.paladugu@amd.com
-References: <80a05f4a-eaae-4db1-9604-c5eed9ff594c@ideasonboard.com>
- <20231108114848.794045-1-khtsai@google.com>
-From: Dan Scally <dan.scally@ideasonboard.com>
-Autocrypt: addr=dan.scally@ideasonboard.com; keydata=
- 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
-In-Reply-To: <20231108114848.794045-1-khtsai@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF0001A100:EE_|IA1PR12MB7758:EE_
+X-MS-Office365-Filtering-Correlation-Id: 53e5d423-332d-40e3-ac4f-08dbe06aa44f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	QNe3BHK7fgLDN+vWZMYgLhB9QM1vgU/tb+XqLwjpf8yr65MP1OUQgridKeGOKOpTPHZnRxHr3sOpuGFnJAKp5OMgwSdg/GXbnEbJkgiBKvJ6rCTaMxmwc1tMA5ynycssDI2A4xM/0WZR6PD1C7uVPc4hvlQUg/DOn2vyEY7pZqy6ADzLUNyTnmUei49/d8R3Ruk9kbKOgcxRs6pUJa8ay7wLaG3Yi/cdHxPoxffuJNa0Fx9VEW9u/FV87JEGrusswtADGPJ07B7ffDISucYlxKQ3haUk3h0eNLmjq2QV/uTX9mrF3c9J/UnqKz6ChcHB8VdJ4XHdt2nsQbeeiexEHhpYdDbe3PYiXSO4ngAC8hApIq5AvthqNl1qP4qF8lQOl0CB9djx2hJSfYtXCLAGzboEtevzAiii2WcxAKkSnfXMfqlbrs7wg0OnPIgU//yun2dG58xHnIDyqKiy3dq1zU2O46KLhRbCESpFFJcYiDbeueMNGgWvp07z/dhTuDSo/CrfA7CphgM4uR2nSk8SiWH0JEBnR1fvO7J7uEDz+nIoOb8ykuo1F8bxYFScKyjWh272d/XzJtn170EleR10iKFwfnxpS+Ox1QzbCoQpHW101jTQ031qLaLAIlVDYxkLvj0sgcZMgWSET+aRQvSFfuu6ahA0GTyEUcJgfulNHseSzsxyHgKbCnQrglsKppqABeoCk9eVdTF9/TC2rLnZIy7Hnxh/aUPMStvBhNCTL1VWQ9JfVY+bt4uSa4Gh/cmC76t3DgehdGHVl/moDn+gcA==
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(136003)(376002)(346002)(396003)(39860400002)(230922051799003)(451199024)(1800799009)(186009)(64100799003)(82310400011)(46966006)(36840700001)(40470700004)(2616005)(40460700003)(40480700001)(966005)(478600001)(36860700001)(47076005)(82740400003)(36756003)(86362001)(356005)(81166007)(83380400001)(2906002)(1076003)(336012)(426003)(6666004)(70206006)(54906003)(110136005)(70586007)(26005)(316002)(44832011)(41300700001)(8936002)(4326008)(8676002)(5660300002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Nov 2023 14:54:43.0428
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 53e5d423-332d-40e3-ac4f-08dbe06aa44f
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL02EPF0001A100.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7758
 
-Hello
+There could be chances where the usb_ep_queue() could fail and trigger
+complete() handler with error status. In this case, if usb_ep_queue()
+is called with lock held and the triggered complete() handler is waiting
+for the same lock to be cleared could result in a deadlock situation and
+could result in system hang, so call usb_ep_queue() without the lock to
+resolve this issue.
 
-On 08/11/2023 11:48, Kuen-Han Tsai wrote:
-> On 02/11/2023 07:11, Piyush Mehta wrote:
->> There could be chances where the usb_ep_queue() could fail and trigger
->> complete() handler with error status. In this case, if usb_ep_queue()
->> is called with lock held and the triggered complete() handler is waiting
->> for the same lock to be cleared could result in a deadlock situation and
->> could result in system hang. To aviod this scenerio, call usb_ep_queue()
->> with lock removed. This patch does the same.
-> I would like to provide more background information on this problem.
->
-> We met a deadlock issue on Android devices and the followings are stack traces.
->
-> [35845.978435][T18021] Core - Debugging Information for Hardlockup core(8) - locked CPUs mask (0x100)
-> [35845.978442][T18021] Call trace:
-> [*][T18021]  queued_spin_lock_slowpath+0x84/0x388
-> [35845.978451][T18021]  uvc_video_complete+0x180/0x24c
-> [35845.978458][T18021]  usb_gadget_giveback_request+0x38/0x14c
-> [35845.978464][T18021]  dwc3_gadget_giveback+0xe4/0x218
-> [35845.978469][T18021]  dwc3_gadget_ep_cleanup_cancelled_requests+0xc8/0x108
-> [35845.978474][T18021]  __dwc3_gadget_kick_transfer+0x34c/0x368
-> [35845.978479][T18021]  __dwc3_gadget_start_isoc+0x13c/0x3b8
-> [35845.978483][T18021]  dwc3_gadget_ep_queue+0x150/0x2f0
-> [35845.978488][T18021]  usb_ep_queue+0x58/0x16c
-> [35845.978493][T18021]  uvcg_video_pump+0x22c/0x518
->
-> As mentioned by Piyush, the uvcg_video_pump function acquires a spinlock before submitting the USB
-> request to the endpoint, which will be processed by the dwc3 controller in our case.
->
-> However, a deadlock can occur when the dwc3 controller fails to kick the transfer and decides to
-> cancel and clean up all requests. At this point, the dwc3 driver calls the giveback function asking
-> the corresponding driver to handle the cancellation. The uvcg_queue_cancel function then acquires
-> the same spinlock to cancel the request, which results in a double acquirement and a deadlock.
+Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
+---
+Changes in V2:
+- Addressed Dan and Sergey review comments:
+ - Removed unwanted usb_ep_set_halt, it's alreadly call on error path.
+ - Updated commit message.
 
+Link: https://lore.kernel.org/lkml/20231102071138.828126-1-piyush.mehta@amd.com/T/
+---
+ drivers/usb/gadget/function/uvc_video.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Yep - I understand. I think the locking change looks fine, it's just the addition of the 
-usb_ep_set_halt() that doesn't seem necessary.
+diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
+index 91af3b1ef0d4..705d762b7f5c 100644
+--- a/drivers/usb/gadget/function/uvc_video.c
++++ b/drivers/usb/gadget/function/uvc_video.c
+@@ -460,10 +460,10 @@ static void uvcg_video_pump(struct work_struct *work)
+ 			req->no_interrupt = 1;
+ 		}
+ 
+-		/* Queue the USB request */
+-		ret = uvcg_video_ep_queue(video, req);
+ 		spin_unlock_irqrestore(&queue->irqlock, flags);
+ 
++		/* Queue the USB request */
++		ret = uvcg_video_ep_queue(video, req);
+ 		if (ret < 0) {
+ 			uvcg_queue_cancel(queue, 0);
+ 			break;
+-- 
+2.25.1
 
->
->> Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
->> ---
->>    drivers/usb/gadget/function/uvc_video.c | 5 +++--
->>    1 file changed, 3 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
->> index 91af3b1ef0d4..0a5d9ac145e7 100644
->> --- a/drivers/usb/gadget/function/uvc_video.c
->> +++ b/drivers/usb/gadget/function/uvc_video.c
->> @@ -460,11 +460,12 @@ static void uvcg_video_pump(struct work_struct *work)
->>    			req->no_interrupt = 1;
->>    		}
->>
->> -		/* Queue the USB request */
->> -		ret = uvcg_video_ep_queue(video, req);
->>    		spin_unlock_irqrestore(&queue->irqlock, flags);
->>
->> +		/* Queue the USB request */
->> +		ret = uvcg_video_ep_queue(video, req);
->>    		if (ret < 0) {
->> +			usb_ep_set_halt(video->ep);
->>    			uvcg_queue_cancel(queue, 0);
->>    			break;
->>    		}
 
