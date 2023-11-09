@@ -1,54 +1,65 @@
-Return-Path: <linux-usb+bounces-2750-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2751-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 109A57E6F45
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Nov 2023 17:39:05 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A46FA7E6FA4
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Nov 2023 17:47:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 333F51C20B5A
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Nov 2023 16:39:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 09597B20EBB
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Nov 2023 16:47:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDFCE1E531;
-	Thu,  9 Nov 2023 16:38:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6F371DFEF;
+	Thu,  9 Nov 2023 16:47:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="IhuNzHHv"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vlSSsaqk"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ABA038DDA;
-	Thu,  9 Nov 2023 16:38:51 +0000 (UTC)
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D21B03C06;
-	Thu,  9 Nov 2023 08:38:45 -0800 (PST)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3A9Btrsa011736;
-	Thu, 9 Nov 2023 16:38:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Y5xJO2ELmJsVcxwCnU/qdhAbrf5g1FNg/Tt1AVfUmvE=;
- b=IhuNzHHvw5y5w407svhexAMV65EWJqIP01e9v/Wn2DLEyznIbq6lIwv+XAeqQOkP8z9j
- YT2tekmLfsE0j0lim7zF/GB/YP9lZHP59x0LvLodgyhqg0ZLkZmofQ1cLnOpFZCMC2Zs
- TInr6eYBfxIXo4DWEMGMkiozbb1x4oija/tpQ89GQBALuFzsHCURnjj+HO6K18/TDRKn
- EhzWzip3PQjfWIt7AP/rsDMjkfP8Y8R0Xj1GsGoALt+jACXOwQUyYSkAVjZibijKGh+H
- h39tFfiiqp6W9uNLWdC2FAyadP/I3hOiBM5zh9T1jf4mkAaMkjHlqLBAkxRnAKtCkCv0 uA== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3u8tcrsmbt-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 09 Nov 2023 16:38:25 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3A9GcO6f013137
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 9 Nov 2023 16:38:24 GMT
-Received: from [10.249.28.118] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.39; Thu, 9 Nov
- 2023 08:38:17 -0800
-Message-ID: <2b19b5e2-5eb0-49e0-8c47-8aff3d48f34e@quicinc.com>
-Date: Thu, 9 Nov 2023 22:08:12 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D645B1DDD5
+	for <linux-usb@vger.kernel.org>; Thu,  9 Nov 2023 16:47:02 +0000 (UTC)
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53DE72102
+	for <linux-usb@vger.kernel.org>; Thu,  9 Nov 2023 08:47:02 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id 41be03b00d2f7-5bdbe2de25fso881322a12.3
+        for <linux-usb@vger.kernel.org>; Thu, 09 Nov 2023 08:47:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1699548422; x=1700153222; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TFEYzf0bj7ciKv8BP9ybJSLaBDaWIMdV0O6fJdozic0=;
+        b=vlSSsaqkUPAwzgwvWxnlDNy4a6HNW3zQovvd1Yxbun2jhBH1uG6CWv9FwCDpq9e8wY
+         R2E1M1IE1YJclcj8aB8N4FGQ0Ns+xyHFpVo0YihjdbIGuR9TGUX16pk5EznnX/kk4cyY
+         t+eMliop/i/VtqagKzyXFSyF7YewrQ9emSE0uQJunQD3bGdnltoh1jP8iOUUJnNZBu4/
+         mfpVRrqXfjvfTHTDSrMLvaqbatts3MMX4sXTAwfyhroMHkF+0lgM2LVDAL/q4TkCExCF
+         Dg0Aqa1gbMISDAeSI6fYripPOEfE4gZmKMxwhqwP7UMPLAT55q1nVDw/yRE3ecwjELlH
+         wFAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699548422; x=1700153222;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TFEYzf0bj7ciKv8BP9ybJSLaBDaWIMdV0O6fJdozic0=;
+        b=ZkY/cwWlp8zR3G9h9ZKv4QcfWTx6v1EeL7CGBSAEnByJzkt65wQyGzmyd+xBJDIKgd
+         UakyHwDNy5gkrwkVldZJHsEgCdvPmer7+cjpvSzL0zqghyU+yDEJIGwnfiEqqE3M1zaG
+         pD/xvgQx2M7xXN0hTj5ttBHapgcUu1DPjHA3sMek0cql8emR1Mabzp5TJAvOEYcDL8wL
+         hUMYK7lSc8LYOMd9QZ200cqg1KJUK837ejlqvs9rN60XTTs4zCE/3L8yHuy798myseKI
+         sV/AIYgP3KpmjZUu+PFTuKLHo92MR7kVMJim/U1IPDT+5zWJOzF5QEDlne1vohLawSdj
+         T2WA==
+X-Gm-Message-State: AOJu0YxwYGuzUIJwfWfUiQATvGOAVmlm2IKdQBdjaSgCN6+deO52ucFt
+	ACOAN5UInViv//jSAZ510UxEHw==
+X-Google-Smtp-Source: AGHT+IE+hP8IdIpVlUKjnOWrU1AELw/IX8/mfl+V0YAW1swkpXDv2+GRhrbtvzyfk6PdfS+3sdXg0g==
+X-Received: by 2002:a05:6a21:339b:b0:16b:d137:de59 with SMTP id yy27-20020a056a21339b00b0016bd137de59mr6430468pzb.28.1699548421216;
+        Thu, 09 Nov 2023 08:47:01 -0800 (PST)
+Received: from [192.168.88.158] (48.109.197.35.bc.googleusercontent.com. [35.197.109.48])
+        by smtp.gmail.com with ESMTPSA id c10-20020a170902d48a00b001b890009634sm3755690plg.139.2023.11.09.08.46.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Nov 2023 08:47:00 -0800 (PST)
+Message-ID: <a5da9b9b-1821-41dc-880c-d5f591c6a96c@google.com>
+Date: Thu, 9 Nov 2023 08:46:57 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -56,258 +67,440 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v13 05/10] usb: dwc3: qcom: Refactor IRQ handling in QCOM
- Glue driver
-To: Johan Hovold <johan@kernel.org>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Bjorn Andersson <andersson@kernel.org>
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel
-	<p.zabel@pengutronix.de>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio
-	<konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof
- Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi
-	<balbi@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
-        <quic_ppratap@quicinc.com>, <quic_jackp@quicinc.com>,
-        <ahalaney@redhat.com>, <quic_shazhuss@quicinc.com>
-References: <20231007154806.605-1-quic_kriskura@quicinc.com>
- <20231007154806.605-6-quic_kriskura@quicinc.com>
- <ZTJ_T1UL8-s2cgNz@hovoldconsulting.com>
- <14fc724c-bc99-4b5d-9893-3e5eff8895f7@quicinc.com>
- <ZTY7Lwjd3_8NlfEi@hovoldconsulting.com>
- <cabf24d0-8eea-4eb5-8205-bf7fe6017ec2@quicinc.com>
- <ZTZ-EvvbuA6HpycT@hovoldconsulting.com>
- <fb5e5e1d-520c-4cbc-adde-f30e853421a1@quicinc.com>
- <ZTdqnSHq_Jo8AuPW@hovoldconsulting.com>
- <04615205-e380-4719-aff1-f32c26004b14@quicinc.com>
- <ZUz4RD3MjnLlPn6V@hovoldconsulting.com>
+Subject: Re: [PATCH v3] usb:gadget:uvc Do not use worker thread to queue isoc
+ usb requests
 Content-Language: en-US
-From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <ZUz4RD3MjnLlPn6V@hovoldconsulting.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To: Dan Scally <dan.scally@ideasonboard.com>, stern@rowland.harvard.edu,
+ laurent.pinchart@ideasonboard.com, m.grzeschik@pengutronix.de,
+ gregkh@linuxfoundation.org
+Cc: Thinh.Nguyen@synopsys.com, arakesh@google.com, etalvala@google.com,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20231026215635.2478767-1-jchowdhary@google.com>
+ <20231102060120.1159112-1-jchowdhary@google.com>
+ <915ef27a-11c8-49ba-8f8a-b4524b85c75a@ideasonboard.com>
+ <b6732f9f-f77f-449a-8934-f23a7f5b3177@google.com>
+ <ed364330-edb4-4cfa-b3aa-95c2b10948ef@ideasonboard.com>
+From: Jayant Chowdhary <jchowdhary@google.com>
+In-Reply-To: <ed364330-edb4-4cfa-b3aa-95c2b10948ef@ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: rTgt5H7Aq3LkWvAni5gt6hzA3u-xMBhA
-X-Proofpoint-ORIG-GUID: rTgt5H7Aq3LkWvAni5gt6hzA3u-xMBhA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-09_14,2023-11-09_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 clxscore=1015
- suspectscore=0 bulkscore=0 malwarescore=0 mlxscore=0 priorityscore=1501
- phishscore=0 mlxlogscore=628 impostorscore=0 lowpriorityscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311060000 definitions=main-2311090126
 
+Hi Dan,
+Thanks for the comments.
+I sent out v6 here https://lore.kernel.org/linux-usb/20231109073453.751860-1-jchowdhary@google.com/T/#u
 
-
-On 11/9/2023 8:48 PM, Johan Hovold wrote:
-> On Fri, Nov 03, 2023 at 03:34:52PM +0530, Krishna Kurapati PSSNV wrote:
->> On 10/24/2023 12:26 PM, Johan Hovold wrote:
->>> On Mon, Oct 23, 2023 at 10:42:31PM +0530, Krishna Kurapati PSSNV wrote:
->>>> On 10/23/2023 7:37 PM, Johan Hovold wrote:
+On 11/7/23 09:01, Dan Scally wrote:
+> Hi Jayant
+>
+> On 03/11/2023 07:28, Jayant Chowdhary wrote:
+>> Hi Dan,
+>> Thank you for the comments.
+>> I uploaded a new patch at https://lore.kernel.org/linux-usb/20231103071353.1577383-1-jchowdhary@google.com/T/#u.
+>>
+>> On 11/2/23 09:07, Dan Scally wrote:
+>>> Hi Jayant - thanks for the patch
 >>>
->>>>> Right. And I assume there are hs_phy_irqs also for the first two USB
->>>>> controllers on sc8280xp?
+>>> On 02/11/2023 06:01, Jayant Chowdhary wrote:
+>>>> When we use an async work queue to perform the function of pumping
+>>>> usb requests to the usb controller, it is possible that amongst other
+>>>> factors, thread scheduling affects at what cadence we're able to pump
+>>>> requests. This could mean isoc usb requests miss their uframes - resulting
+>>>> in video stream flickers on the host device.
+>>>>
+>>>> To avoid this, we make the async_wq thread only produce isoc usb_requests
+>>>> with uvc buffers encoded into them. The process of queueing to the
+>>>> endpoint is done by the uvc_video_complete() handler. In case no
+>>>> usb_requests are ready with encoded information, we just queue a zero
+>>>> length request to the endpoint from the complete handler.
+>>>>
+>>>> For bulk endpoints the async_wq thread still queues usb requests to the
+>>>> endpoint.
+>>>>
+>>>> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+>>>> Signed-off-by: Jayant Chowdhary <jchowdhary@google.com>
+>>>> Suggested-by: Avichal Rakesh <arakesh@google.com>
+>>>> Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+>>>> ---
+>>>>    Based on top of
+>>>>    https://lore.kernel.org/linux-usb/20230930184821.310143-1-arakesh@google.com/T/#t:
+>>>>    v1->v2: Added self Signed-Off-by and addressed review comments
+>>>>    v2->v3: Encode to usb requests in async_wq; queue to ep in complete handler
+>>>>       for isoc transfers.
+>>>>
+>>>>    drivers/usb/gadget/function/uvc.h       |   8 +
+>>>>    drivers/usb/gadget/function/uvc_video.c | 187 +++++++++++++++++++-----
+>>>>    2 files changed, 156 insertions(+), 39 deletions(-)
+>>>>
+>>>> diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
+>>>> index e8d4c87f1e09..82c783410554 100644
+>>>> --- a/drivers/usb/gadget/function/uvc.h
+>>>> +++ b/drivers/usb/gadget/function/uvc.h
+>>>> @@ -105,7 +105,15 @@ struct uvc_video {
+>>>>        bool is_enabled; /* tracks whether video stream is enabled */
+>>>>        unsigned int req_size;
+>>>>        struct list_head ureqs; /* all uvc_requests allocated by uvc_video */
+>>>> +
+>>>> +    /* USB requests video pump thread can encode into*/
+>>> "USB requests that the video pump thread can encode into", and a space before the closing */ please (and the same a few more times below).
+>> Done.
+>>
+>>>>        struct list_head req_free;
+>>>> +
+>>>> +    /*
+>>>> +     * USB requests video pump thread has already encoded into. These are
+>>>> +     * ready to be queued to the endpoint.
+>>>> +     */
+>>>> +    struct list_head req_ready;
+>>>>        spinlock_t req_lock;
+>>>>          unsigned int req_int_count;
+>>>> diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
+>>>> index 53feb790a4c3..c84183e9afcc 100644
+>>>> --- a/drivers/usb/gadget/function/uvc_video.c
+>>>> +++ b/drivers/usb/gadget/function/uvc_video.c
+>>>> @@ -268,6 +268,98 @@ static int uvcg_video_ep_queue(struct uvc_video *video, struct usb_request *req)
+>>>>        return ret;
+>>>>    }
+>>>>    +/* This function must be called with video->req_lock held*/
+>>>> +static int uvcg_video_usb_req_queue(struct uvc_video *video,
+>>>> +    struct usb_request *req, bool queue_to_ep) {
+>>> Brace on a new line please - same a few more times below
+>> Done.
+>>
+>>>> +    bool is_bulk = video->max_payload_size;
+>>> empty line here
+>>>> +    if (!video->is_enabled) {
+>>>> +        uvc_video_free_request(req->context, video->ep);
+>>>> +        return -ENODEV;
+>>>> +    }
+>>>> +    if (queue_to_ep) {
+>>>> +        struct uvc_request *ureq = req->context;
+>>>> +        /*
+>>>> +         * With USB3 handling more requests at a higher speed, we can't
+>>>> +         * afford to generate an interrupt for every request. Decide to
+>>>> +         * interrupt:
+>>>> +         *
+>>>> +         * - When no more requests are available in the free queue, as
+>>>> +         *   this may be our last chance to refill the endpoint's
+>>>> +         *   request queue.
+>>>> +         *
+>>>> +         * - When this is request is the last request for the video
+>>>> +         *   buffer, as we want to start sending the next video buffer
+>>>> +         *   ASAP in case it doesn't get started already in the next
+>>>> +         *   iteration of this loop.
+>>>> +         *
+>>>> +         * - Four times over the length of the requests queue (as
+>>>> +         *   indicated by video->uvc_num_requests), as a trade-off
+>>>> +         *   between latency and interrupt load.
+>>>> +        */
+>>>> +        if (list_empty(&video->req_free) || ureq->last_buf ||
+>>>> +            !(video->req_int_count %
+>>>> +            DIV_ROUND_UP(video->uvc_num_requests, 4))) {
+>>>> +            video->req_int_count = 0;
+>>>> +            req->no_interrupt = 0;
+>>>> +        } else {
+>>>> +            req->no_interrupt = 1;
+>>>> +        }
+>>>> +        video->req_int_count++;
+>>>> +        return uvcg_video_ep_queue(video, req);
+>>>> +    } else {
+>>>> +        /*
+>>>> +        * If we're not queing to the ep, for isoc we're queing
+>>>> +        * to the req_ready list, otherwise req_free.
+>>>> +        */
+>>>> +        struct list_head *list =
+>>>> +            is_bulk ? &video->req_free : &video->req_ready;
+>>>> +        list_add_tail(&req->list, list);
+>>>> +    }
+>>>> +    return 0;
+>>>> +}
+>>>> +
+>>>> +static int uvcg_video_ep_queue_zero_length(struct usb_request *req,
+>>>> +    struct uvc_video *video) {
+>>>> +    req->length = 0;
+>>>> +    return uvcg_video_ep_queue(video, req);
+>>>> +}
+>>> Not sure this is worth its own function
+>> Removed the function.
+>>
+>>>> +
+>>>> +/* Must only be called from uvcg_video_enable - since after that we only want to
+>>>> + * queue requests to the endpoint from the uvc_video_complete complete handler.
+>>>> + * This function is needed in order to 'kick start' the flow of requests from
+>>>> + * gadget driver to the usb controller.
+>>>> + */
+>>>> +static void uvc_video_ep_queue_initial_requests(struct uvc_video *video) {
+>>>> +    struct usb_request *req = NULL;
+>>>> +    unsigned long flags = 0;
+>>>> +    unsigned int count = 0;
+>>>> +    int ret = 0;
+>>>> +    /* We only queue half of the free list since we still want to have
+>>>> +     * some free usb_requests in the free list for the video_pump async_wq
+>>>> +     * thread to encode uvc buffers into. Otherwise we could get into a
+>>>> +     * situation where the free list does not have any usb requests to
+>>>> +     * encode into - we always end up queueing 0 length requests to the
+>>>> +     * end point.
+>>>> +     */
+>>>> +    unsigned half_list_size = video->uvc_num_requests / 2;
+>>>> +    spin_lock_irqsave(&video->req_lock, flags);
+>>>> +    /* Take these requests off the free list and queue them all to the
+>>>> +     * endpoint. Since we queue the requests with the req_lock held,
+>>>> +     */
+>>> This comment seems to be incomplete? You also want an opening /* on its own line:
+>> Apologies I think I missed out completing this comment I will send out another patch later.
+>>
 >>>
->>>> There are, I can dig through and find out. Atleast in downstream I don't
->>>> see any use of them.
+>>> /*
+>>>   * Multi line comments
+>>>   * look like this
+>>>   */
 >>>
->>> Yes, please do post how these are wired as well for completeness.
-> 
-> Did you find these two interrupts as well?
-> 
-> 
->> Regarding the points of discussion we had last week on [1], here are
->> some clarifications:
+>> Done.
 >>
->> 1. We do have hs_phy_irq 1/2/3/4 for tertiary port of Sc8280 as
->> mentioned. Why do we need them and would we use it in multiport targets ?
+>>>> +    while (count < half_list_size) {
+>>>> +        req = list_first_entry(&video->req_free, struct usb_request,
+>>>> +                    list);
+>>>> +        list_del(&req->list);
+>>>> +        ret = uvcg_video_ep_queue_zero_length(req, video);
+>>>> +        if (ret < 0) {
+>>>> +            uvcg_queue_cancel(&video->queue, /*disconnect*/0);
+>>>> +            break;
+>>>> +        }
+>>>> +        count++;
+>>>> +    }
+>>>> +    spin_unlock_irqrestore(&video->req_lock, flags);
+>>>> +}
+>>>> +
+>>> So if I'm understanding the new starting sequence right for an isoc endpoint there's an initial flight of half the requests (between 2 and 32) that are queued as zero length - the very first one to .complete() being re-queued as a zero length request before the workqueue is started and encodes data into the _other_ half of the requests which were left in req_free and putting them into req_ready. At that point the .complete()s being run start to pick requests off req_ready instead and they get sent out with data...does that sound right?
+>>>
+>>>
+>> That is correct - the first half of number of usb requests allocated (2, 32) are queued at zero length initially. We’ll have half of the requests being sent to the ep in flight and half in the free list yes.
+>> queue_work will actually start with either uvc_v4l2_qbuf (uvc_v4l2.c) or at a zero length request being completed - whichever comes first.
 >>
->> DPSE and DMSE are single ended line state of DP and DM lines. The DP
->> line and DM line stay in steady High or Low during suspend and they flip
->> when there is a RESUME or REMOTE WAKE. This is what we do/check in
->> dwc3_qcom_enable_interrupts call for dp/dm irq's based on usb2_speed.
-> 
-> Right, this bit is clear.
-> 
->> Initially in QUSB2 targets, the interrupts were enabled and configured
->> in phy and the wakeup was interrupt was read on hs_phy_irq vector - [2].
->> In that case, we modify DP/DM interrupts in phy registers, specifically
->> QUSB2PHY_INTR_CTRL and when wakeup signal comes in, hs_phy_irq is
->> triggered. But in femto targets, this is done via DP/DM interrupts and
->> there is no use of hs_phy_irq. Even hw folks confirmed they dont use
->> hs_ph_irq in femto phy targets.
-> 
-> Ok, thanks for pointing to QUSB2. The same mechanism is apparently used
-> in phy-qcom-usb-hs-28nm.c as well (even if the dtsi currently does not
-> define the wakeup interrupts).
-> 
-> Furthermore, that implementation is broken and has never worked due to
-> another half-arsed, incomplete Qualcomm implementation. Specifically, no
-> one is changing the PHY mode based on the current speed before suspend
-> as commits like
-> 
-> 	3b3cd24ae61b ("phy: Add USB speed related PHY modes")
-> 
-> and
-> 
-> 	891a96f65ac3 ("phy: qcom-qusb2: Add support for runtime PM")
-> 
-> depend on. Guess I should go revert that mess too...
-> 
->> As an experiment, I tried to test wakeup by pressing buttons on
->> connected keyboard when in suspend state or connecting/disconnecting
->> keyboard in suspended state on different ports and only see dp/dm IRQ's
->> getting fired although we register for hs_phy_irq as well:
+>>> What are the implications of those initial 3-33 zero length requests? What kind of latency can that introduce to the start of the video stream?
+>> At the worst, we’ll have  a 32 x 125us(uframe period) = 4ms  delay for the first frame of the uvc buffer stream being sent out to the usb controller.
+>> After that, since uvc buffers are typically queued at a much lower rate than usb requests being sent to the endpoint, we should be fine ?
+>
+>
+> I think that the 'ongoing' stream should be fine using this method yes, though if possible I'd like to avoid introducing the delay to the first frame. Do you know if there's a simple way to remove it? I recognise the delay is small so I don't think it's necessarily a dealbreaker but it would be nice if we could avoid it.
+
+We could introduce a flag and have the async_wq thread queue requests to the ep for the first uvc buffer. However, what that would do is it would possibly add a skew between the first and second frames. 
+Let's say we send out frame 1 at t = 0ms. It is possible that by the time frame 2 comes around, we have 32 0 length usb requests queued up in the usb controller. As a result the time distance
+between frame 1's start and frame 2's start would be 33ms + 4ms = 37ms (instead of 4ms and 37ms). So its a tradeoff between skew vs 4ms delay in starting the stream. The current logic avoids the
+skew at the expense of the delay in the first frame - and its simpler to follow in code. Happy to hear your and others' thoughts on this as well.
+
+
+>
+>> In my local testing, I don't see any delay observable to the naked eye.
 >>
->> / # cat /proc/interrupts  |grep phy_
->> 171:   1  0   0   0  0  0  0  0       PDC 127 Edge      dp_hs_phy_1
->> 172:   2  0   0   0  0  0  0  0       PDC 126 Edge      dm_hs_phy_1
->> 173:   3  0   0   0  0  0  0  0       PDC 129 Edge      dp_hs_phy_2
->> 174:   4  0   0   0  0  0  0  0       PDC 128 Edge      dm_hs_phy_2
->> 175:   0  0   0   0  0  0  0  0       PDC 131 Edge      dp_hs_phy_3
->> 176:   2  0   0   0  0  0  0  0       PDC 130 Edge      dm_hs_phy_3
->> 177:   2  0   0   0  0  0  0  0       PDC 133 Edge      dp_hs_phy_4
->> 178:   5  0   0   0  0  0  0  0       PDC 132 Edge      dm_hs_phy_4
->> 179:   0  0   0   0  0  0  0  0       PDC  16 Level     ss_phy_1
->> 180:   0  0   0   0  0  0  0  0       PDC  17 Level     ss_phy_2
->> 181:   0  0   0   0  0  0  0  0     GICv3 163 Level     hs_phy_1
->> 182:   0  0   0   0  0  0  0  0     GICv3 168 Level     hs_phy_2
->> 183:   0  0   0   0  0  0  0  0     GICv3 892 Level     hs_phy_3
->> 184:   0  0   0   0  0  0  0  0     GICv3 891 Level     hs_phy_4
-> 
-> Yes, but that doesn't really say much since you never enable the hs_phy
-> interrupt in the PHY on suspend.
-
-I did register to and enabled the hs_phy_irq interrupt when I tested and 
-posted the above table.
-
->   
->> Since the hs_phy_irq is applicable only for qusb2 targets, do we still
->> need to add it to DT.
-> 
-> Are you sure there's no support for hs_phy_irq also in the "femto" PHYs
-> and that it's just that there is currently no driver support for using
-> them?
-> 
-> And why is it defined if there is truly no use for it?
-
-Femto phy's have nothing to be configured for interrupts like we do for 
-qusb2 phy's. I confirmed from hw validation team that they never used 
-hs_phy_irq for validating wakeup. They only used dp/dm IRQ's for wakeup.
-
-> Also, if hs_phy_irq and dp/dm_phy_irq were mutually exclusive, why does
-> the following Qualcomm SoCs define all three?
-> 
-
-Similar to BAM IRQ's these might have been just ported over targets I 
-believe. I say so because HW Validation team confirmed they don't use 
-this interrupt at all on femto phy targets.
-
->                - qcom,ipq4019-dwc3
->                - qcom,ipq6018-dwc3
->                - qcom,ipq8064-dwc3
->                - qcom,ipq8074-dwc3
->                - qcom,msm8994-dwc3
->                - qcom,qcs404-dwc3
->                - qcom,sc7180-dwc3
-> 	      - qcom,sc7280-dwc3
->                - qcom,sdm670-dwc3
->                - qcom,sdm845-dwc3
->                - qcom,sdx55-dwc3
->                - qcom,sdx65-dwc3
->                - qcom,sm4250-dwc3
->                - qcom,sm6125-dwc3
->                - qcom,sm6350-dwc3
->                - qcom,sm8150-dwc3
->                - qcom,sm8250-dwc3
->                - qcom,sm8350-dwc3
->                - qcom,sm8450-dwc3
->                - qcom,sm8550-dwc3
-> 
-> Some of those use QUSB2 PHYs and some use "femto" PHYs.
->  > And this comes from Qualcomm through commits like:
-> 
-> 	0b766e7fe5a2 ("arm64: dts: qcom: sc7180: Add USB related nodes")
-> 	bb9efa59c665 ("arm64: dts: qcom: sc7280: Add USB related nodes")
-> 
-> 
->> 3. ctrl_irq[1] usage:
+>>>>    static void
+>>>>    uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
+>>>>    {
+>>>> @@ -276,6 +368,8 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
+>>>>        struct uvc_video_queue *queue = &video->queue;
+>>>>        struct uvc_buffer *last_buf = NULL;
+>>>>        unsigned long flags;
+>>>> +    bool is_bulk = video->max_payload_size;
+>>>> +    int ret = 0;
+>>>>          spin_lock_irqsave(&video->req_lock, flags);
+>>>>        if (!video->is_enabled) {
+>>>> @@ -329,7 +423,38 @@ uvc_video_complete(struct usb_ep *ep, struct usb_request *req)
+>>>>         * back to req_free
+>>>>         */
+>>>>        if (video->is_enabled) {
+>>>> -        list_add_tail(&req->list, &video->req_free);
+>>>> +        /*
+>>>> +         * Here we check whether any request is available in the ready
+>>>> +         * list. If it is, queue it to the ep and add the current
+>>>> +         * usb_request to the req_free list - for video_pump to fill in.
+>>>> +         * Otherwise, just use the current usb_request to queue a 0
+>>>> +         * length request to the ep. Since we always add to the req_free
+>>>> +         * list if we dequeue from the ready list, there will never
+>>>> +         * be a situation where the req_free list is completely out of
+>>>> +         * requests and cannot recover.
+>>>> +         */
+>>>> +        struct usb_request *to_queue = req;
+>>>> +        to_queue->length = 0;
+>>>> +        if (!list_empty(&video->req_ready)) {
+>>>> +            to_queue = list_first_entry(&video->req_ready,
+>>>> +                struct usb_request, list);
+>>>> +            list_del(&to_queue->list);
+>>>> +            /* Add it to the free list. */
+>>>> +            list_add_tail(&req->list, &video->req_free);
+>>>> +        }
+>>>> +        /*
+>>>> +         * Queue to the endpoint. The actual queueing to ep will
+>>>> +         * only happen on one thread - the async_wq for bulk endpoints
+>>>> +         * and this thread for isoc endpoints.
+>>>> +         */
+>>>> +        ret = uvcg_video_usb_req_queue(video, to_queue,
+>>>> +                           /*queue_to_ep*/!is_bulk);
+>>>
+>>> In principle in-line comments are fine, but I don't think the parameter name is worth a comment
+>> Done.
 >>
->> This is a feature of SNPS controller, not qcom glue wrapper, and is
->> present on all targets (non-QC as well probably). As mentioned before on
->> [3], this is used for HW acceleration.
+>>>> +        if(ret < 0) {
+>>>> +            uvcg_queue_cancel(queue, 0);
+>>>> +        }
+>>>> +        /* Queue work to the wq as well since its possible that a buffer
+>>>> +         * may not have been completed.
+>>>> +         */
+>>>
+>>> The phrasing of this implies this is a bit of defensive programming, but if we don't queue to the wq here then doesn't that mean it'll never run?
 >>
->> In host mode, XHCI spec does allow for multiple interrupters when
->> multiple event rings are used. A possible usage is multiple execution
->> environments something like what we are doing on mobile with ADSP audio
->> offload [4]. Another possibility could be some of virtualization where
->> host/hyp would manage the first interrupter and could allow a guest to
->> operate only with the second (though current design does not go far
->> enough to offer true isolation for real VM type workloads). The
->> additional interrupts (ones other than ctrl_irq[0]) are either for
->> virtualization use cases, or for our various “hw offload” features. In
->> device mode, these are used for offloading tethering functionality to
->> IPA FW.
-> 
-> Ok, thanks for clarifying what you meant by "HW acceleration".
-> 
->> Since the DeviceTree passed to the OS, should describe the hardware to
->> the OS, and should represent the hardware from the point-of-view of the
->> OS, adding one interrupt (ctrl_irq[0]) might be sufficient as Linux
->> would not use the other interrupts.
-> 
-> I've only skimmed the virtualisation bits in xHCI spec, but it seems
-> Linux as VMM would still be involved in assigning these interrupts to
-> VMs.
+>> I've updated the comment here - it is possible that we hit a situation where the in-flight usb requests may not be enough to completely
+>> encode a uvc buffer. In that case if we don't call queue_work, we'll never get the buffer marked as 'completed' and the buffer won't be
+>> returned to user-space. That'll prevent the dequeue->queue->dequeue loop and flow of buffers.
 
-I didn't understand this sentence. Are you referring to cases where 
-Linux needs to act as the entity using the ctrl_irq[1] ?
+I added this queue_work call to the if statement which checks if the ready list has any requests. If it doesn't, there's no point
+in queuing any work - since we wouldn't be giving back to the req_free list.
 
-On QCOM SoC's, in reality (atleast in device mode) I can say that we 
-create the event rings for IPA FW (which registers for ctrl_irq[1]) to 
-use and read depevt's. We don't register or get this IRQ from DT and 
-then provide to IPA (not even in downstream).
+Thank you
 
-> 
-> This may possibly be something that we can ignore for now, but perhaps
-> someone more familiar with the hardware, like Thinh, can chime in.
-> 
->> Furthermore AFAIK even UEFI/Windows
->> also use only ctrl_irq[0] for host mode in their execution environment
->> today. Do we still need to add this to bindings and DT ?
-> 
-> But the second interrupt is described in the ACPI tables, which means
-> that a simple driver update could (in theory) allow for it to be used.
-> 
-> You need to get into the same mindset when it comes to devicetree. Even
-> if Linux currently does not use an interrupt, like the pwr_event_irq,
-> you should still add it so that when/if someone implements support for
-> it, an older platform using the original dt may also take advantage of
-> it.
->  > Sure, there are complications and we sometimes break DT backwards
-> compatibility, but this is the goal that you should strive for.
-> 
+>>
+>>>>            queue_work(video->async_wq, &video->pump);
+>>>>        } else {
+>>>>            uvc_video_free_request(ureq, ep);
+>>>> @@ -347,6 +472,7 @@ uvc_video_free_requests(struct uvc_video *video)
+>>>>          INIT_LIST_HEAD(&video->ureqs);
+>>>>        INIT_LIST_HEAD(&video->req_free);
+>>>> +    INIT_LIST_HEAD(&video->req_ready);
+>>>>        video->req_size = 0;
+>>>>        return 0;
+>>>>    }
+>>>> @@ -424,8 +550,7 @@ static void uvcg_video_pump(struct work_struct *work)
+>>>>        struct usb_request *req = NULL;
+>>>>        struct uvc_buffer *buf;
+>>>>        unsigned long flags;
+>>>> -    bool buf_done;
+>>>> -    int ret;
+>>>> +    int ret = 0;
+>>>>          while (true) {
+>>>>            if (!video->ep->enabled)
+>>>> @@ -454,7 +579,6 @@ static void uvcg_video_pump(struct work_struct *work)
+>>>>              if (buf != NULL) {
+>>>>                video->encode(req, video, buf);
+>>>> -            buf_done = buf->state == UVC_BUF_STATE_DONE;
+>>>>            } else if (!(queue->flags & UVC_QUEUE_DISCONNECTED) && !is_bulk) {
+>>>>                /*
+>>>>                 * No video buffer available; the queue is still connected and
+>>>> @@ -462,7 +586,6 @@ static void uvcg_video_pump(struct work_struct *work)
+>>>>                 * prevent missed ISOC transfers.
+>>>>                 */
+>>>>                req->length = 0;
+>>>> -            buf_done = false;
+>>>>            } else {
+>>>>                /*
+>>>>                 * Either the queue has been disconnected or no video buffer
+>>>> @@ -473,45 +596,26 @@ static void uvcg_video_pump(struct work_struct *work)
+>>>>                break;
+>>>>            }
+>>>>    -        /*
+>>>> -         * With USB3 handling more requests at a higher speed, we can't
+>>>> -         * afford to generate an interrupt for every request. Decide to
+>>>> -         * interrupt:
+>>>> -         *
+>>>> -         * - When no more requests are available in the free queue, as
+>>>> -         *   this may be our last chance to refill the endpoint's
+>>>> -         *   request queue.
+>>>> -         *
+>>>> -         * - When this is request is the last request for the video
+>>>> -         *   buffer, as we want to start sending the next video buffer
+>>>> -         *   ASAP in case it doesn't get started already in the next
+>>>> -         *   iteration of this loop.
+>>>> -         *
+>>>> -         * - Four times over the length of the requests queue (as
+>>>> -         *   indicated by video->uvc_num_requests), as a trade-off
+>>>> -         *   between latency and interrupt load.
+>>>> -         */
+>>>> -        if (list_empty(&video->req_free) || buf_done ||
+>>>> -            !(video->req_int_count %
+>>>> -               DIV_ROUND_UP(video->uvc_num_requests, 4))) {
+>>>> -            video->req_int_count = 0;
+>>>> -            req->no_interrupt = 0;
+>>>> -        } else {
+>>>> -            req->no_interrupt = 1;
+>>>> -        }
+>>>> -
+>>>> -        /* Queue the USB request */
+>>>> -        ret = uvcg_video_ep_queue(video, req);
+>>>>            spin_unlock_irqrestore(&queue->irqlock, flags);
+>>>>    +        /* Queue the USB request.*/
+>>> I think just drop this - it was always superfluous.
+>> The uvcg_video_usb_req_queue function mentions that req_lock must be held while calling
+>> it - since its possible we might add to the req_ready list. We could say the function
+>> should hold req_lock only when the queue_to_ep parameter is false - but that doesn't
+>> seem as clean ?
+>
+>
+> Sorry - I wasn't clear here. I meant that the comment "Queue the USB request" was superfluous rather than the spin_lock_irqsave()
 
-I agree with you. That we need to make the devicetree as flexible and 
-backward compatible as possible.
+Removed.
 
-I will let Thinh comment on whether this IRQ needs to be added to DT or 
-not. If someone really wants to add driver support, bindings needs to be 
-clear for the driver design in this case (Linux as VMM like you 
-mentioned) and I have not idea on the same.
-
-Regards,
-Krishna,
-
+>
+>>
+>>>> +        spin_lock_irqsave(&video->req_lock, flags);
+>>>> +        /* For bulk end points we queue from the worker thread
+>>>> +         * since we would preferably not want to wait on requests
+>>>> +         * to be ready, in the uvcg_video_complete() handler.
+>>>> +         * For isoc endpoints we add the request to the ready list
+>>>> +         * and only queue it to the endpoint from the complete handler.
+>>>> +         */
+>>>> +        ret = uvcg_video_usb_req_queue(video, req, is_bulk);
+>>>> +        spin_unlock_irqrestore(&video->req_lock, flags);
+>>>> +
+>>>>            if (ret < 0) {
+>>>>                uvcg_queue_cancel(queue, 0);
+>>>>                break;
+>>>>            }
+>>>>    -        /* Endpoint now owns the request */
+>>>> +        /* The request is owned by  the endpoint / ready list*/
+>>>>            req = NULL;
+>>>> -        video->req_int_count++;
+>>>>        }
+>>>>          if (!req)
+>>>> @@ -567,7 +671,7 @@ uvcg_video_disable(struct uvc_video *video)
+>>>>          spin_lock_irqsave(&video->req_lock, flags);
+>>>>        /*
+>>>> -     * Remove all uvc_reqeusts from ureqs with list_del_init
+>>>> +     * Remove all uvc_requests from ureqs with list_del_init
+>>> This should get fixed in the earlier series.
+>>>>         * This lets uvc_video_free_request correctly identify
+>>>>         * if the uvc_request is attached to a list or not when freeing
+>>>>         * memory.
+>>>> @@ -579,9 +683,13 @@ uvcg_video_disable(struct uvc_video *video)
+>>>>            list_del(&req->list);
+>>>>            uvc_video_free_request(req->context, video->ep);
+>>>>        }
+>>>> -
+>>> keep the empty line please
+>> Done.
+>>
+>>>> +    list_for_each_entry_safe(req, temp, &video->req_ready, list) {
+>>>> +        list_del(&req->list);
+>>>> +        uvc_video_free_request(req->context, video->ep);
+>>>> +    }
+>>> and one here too.
+>> Done.
+>>
+>> Thanks!
+>>
+>>>>        INIT_LIST_HEAD(&video->ureqs);
+>>>>        INIT_LIST_HEAD(&video->req_free);
+>>>> +    INIT_LIST_HEAD(&video->req_ready);
+>>>>        video->req_size = 0;
+>>>>        spin_unlock_irqrestore(&video->req_lock, flags);
+>>>>    @@ -635,7 +743,7 @@ int uvcg_video_enable(struct uvc_video *video)
+>>>>          video->req_int_count = 0;
+>>>>    -    queue_work(video->async_wq, &video->pump);
+>>>> +    uvc_video_ep_queue_initial_requests(video);
+>>>>          return ret;
+>>>>    }
+>>>> @@ -648,6 +756,7 @@ int uvcg_video_init(struct uvc_video *video, struct uvc_device *uvc)
+>>>>        video->is_enabled = false;
+>>>>        INIT_LIST_HEAD(&video->ureqs);
+>>>>        INIT_LIST_HEAD(&video->req_free);
+>>>> +    INIT_LIST_HEAD(&video->req_ready);
+>>>>        spin_lock_init(&video->req_lock);
+>>>>        INIT_WORK(&video->pump, uvcg_video_pump);
+>>>>    
 
