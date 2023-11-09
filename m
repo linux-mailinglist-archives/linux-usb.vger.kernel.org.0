@@ -1,265 +1,251 @@
-Return-Path: <linux-usb+bounces-2728-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2729-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9351A7E60FA
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Nov 2023 00:20:35 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 190417E617F
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Nov 2023 01:41:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 31D4B2815F2
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Nov 2023 23:20:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7FDEAB20D44
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Nov 2023 00:41:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B35D374F7;
-	Wed,  8 Nov 2023 23:20:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEF1D361;
+	Thu,  9 Nov 2023 00:41:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BzFtaBog"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4kFlzVHv"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D334430355;
-	Wed,  8 Nov 2023 23:20:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FB6AC433C8;
-	Wed,  8 Nov 2023 23:20:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699485626;
-	bh=PYJW4QGKn9tJvNiaagWV7uxmfj3dj1vHSKjkB8gGQNU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=BzFtaBogfySwWTla2NJeVqR4PuaYoyopTLM2Vi9KPqLDdx3zZhWzGVJP/DnI0doAr
-	 DCysq9OUVMln4AwlnrEJVkGy7f+Qm12tVyciJjWeul+4uzovgGCKk2sMAtDMAjSHQk
-	 VewIlU9Taz4GP2QauTMdLCa7SvSTilwhfOh7tff1Ga+FrRKGb/HdT6qnkIpQd6cOAM
-	 O/27XvUeKFXk5bmEslLGwZ3jtw7QVPeQvIoDsIh/p8JjCWRipxoFk8lN/qC5a7ewR/
-	 H/tawx3cjSx2H40w4euTMdD4AcO2ZafY4Qwdj7yo9jdfRTzsx4bJpJ6lI9DE3yX0ny
-	 IuIsDgsRCUzJQ==
-Date: Thu, 9 Nov 2023 08:20:09 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
- Masahiro Yamada <masahiroy@kernel.org>, linux-kbuild@vger.kernel.org, Arnd
- Bergmann <arnd@arndb.de>, Matt Turner <mattst88@gmail.com>, Vineet Gupta
- <vgupta@kernel.org>, Russell King <linux@armlinux.org.uk>, Catalin Marinas
- <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Steven Rostedt
- <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland
- <mark.rutland@arm.com>, Guo Ren <guoren@kernel.org>, Peter Zijlstra
- <peterz@infradead.org>, Ard Biesheuvel <ardb@kernel.org>, Huacai Chen
- <chenhuacai@kernel.org>, Greg Ungerer <gerg@linux-m68k.org>, Michal Simek
- <monstr@monstr.eu>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Dinh
- Nguyen <dinguyen@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>,
- Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy
- <christophe.leroy@csgroup.eu>, Geoff Levand <geoff@infradead.org>, Palmer
- Dabbelt <palmer@dabbelt.com>, Heiko Carstens <hca@linux.ibm.com>, John Paul
- Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, "David S. Miller"
- <davem@davemloft.net>, Andy Lutomirski <luto@kernel.org>, Thomas Gleixner
- <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, x86@kernel.org, Helge
- Deller <deller@gmx.de>, Sudip Mukherjee <sudipm.mukherjee@gmail.com>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, Timur Tabi <timur@kernel.org>,
- Kent Overstreet <kent.overstreet@linux.dev>, David Woodhouse
- <dwmw2@infradead.org>, "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, Anil S
- Keshavamurthy <anil.s.keshavamurthy@intel.com>, Kees Cook
- <keescook@chromium.org>, Vincenzo Frascino <vincenzo.frascino@arm.com>,
- Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot
- <vincent.guittot@linaro.org>, Nathan Chancellor <nathan@kernel.org>, Nick
- Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>,
- Al Viro <viro@zeniv.linux.org.uk>, Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?=
- <u.kleine-koenig@pengutronix.de>, linux-alpha@vger.kernel.org,
- linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- linux-trace-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
- loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
- linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
- linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
- netdev@vger.kernel.org, linux-parisc@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-bcachefs@vger.kernel.org,
- linux-mtd@lists.infradead.org
-Subject: Re: [PATCH 03/22] [RESEND] kprobes: unify
- kprobes_exceptions_nofify() prototypes
-Message-Id: <20231109082009.a34621399a98181ee6cde60b@kernel.org>
-In-Reply-To: <20231108125843.3806765-4-arnd@kernel.org>
-References: <20231108125843.3806765-1-arnd@kernel.org>
-	<20231108125843.3806765-4-arnd@kernel.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A564A360
+	for <linux-usb@vger.kernel.org>; Thu,  9 Nov 2023 00:41:09 +0000 (UTC)
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08C19268E
+	for <linux-usb@vger.kernel.org>; Wed,  8 Nov 2023 16:41:09 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5a7aa161b2fso4178207b3.2
+        for <linux-usb@vger.kernel.org>; Wed, 08 Nov 2023 16:41:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1699490468; x=1700095268; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=H3EiwN1qoUJxzkJq7np8tfIJfl4CuGSTuhpyOd2tJ0s=;
+        b=4kFlzVHvsQH9kXbIcIS917dp+b+1apoiiGwUo4dY2KCLiruw0L35IjaBsdnI5tj0bT
+         VbcQeqqOVuPMbQJ4fKRH0ckABnfqC5FhsRpFM3oTkD66SsTA1HOwYaavsrw3AbJT1DHR
+         lrfctQ0NLRjGESZ0m1K4tHQKIQEe3w91Zm3LxO0Mg1LZoC6vUWJQg7EfkxZ3AMWuWZJf
+         X2gL1EH8hyfhlOOVHgiNvDlu2899RM56PpeAxzjDXDcKybe4gFT4o0ZPl06g2cBzwLdT
+         1TCY3A52S3P/pxlyHRAqpakk/S++rDIm9NmpPvorkgTF5tq6aExRLYXlGhgodP3SVD2c
+         LYyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699490468; x=1700095268;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=H3EiwN1qoUJxzkJq7np8tfIJfl4CuGSTuhpyOd2tJ0s=;
+        b=SpGhGp5vSL+I9MbB8kZaNWEXMHWh7fUPPgxeawtHPtVcn9oLV/kkzkbsGYGnPIYkEU
+         7HdR1gaWIrFC1FirYFH34gzqnW38yZh4ZPKZKFsKQEIeg8ixzJotN1xI8+OuKME4KgP/
+         geNxQPqgwrBZh6lFN90vdbQUJjiqTfu/mdDDkcUhSD0Kqct8dAChmfZUOiqxd9RWQCBX
+         mxhFiV/t/yQRpqbBJO7qasSv/ZN9A1EeorYczPoEGyKXANyoWrdYF+4N2BRcuBosyh6F
+         YqP1ULWGjjDOjtuM8lRr2goqRoUXYtif/6lSv06yAT+BO5mysLJDXLTtguI5jH7s7w4n
+         8Axg==
+X-Gm-Message-State: AOJu0YzrxI+yq56g6lQ8czn2jZFA0asNj9LQF017uAFjjDU930R/kDmF
+	kB1YtWReARkSef6NVxDtkr0S6p5G1YQW
+X-Google-Smtp-Source: AGHT+IFO7FYCH0Og+ExNPyGA7Cj94s+xhLX9PbzDvB0wr2/zfk7+nwV/0djWkSPigUu0wJNy8wlRTjgVyTkB
+X-Received: from hi-h2o-specialist.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3cef])
+ (user=arakesh job=sendgmr) by 2002:a0d:d752:0:b0:59b:e97e:f7df with SMTP id
+ z79-20020a0dd752000000b0059be97ef7dfmr100355ywd.2.1699490468293; Wed, 08 Nov
+ 2023 16:41:08 -0800 (PST)
+Date: Wed,  8 Nov 2023 16:41:01 -0800
+In-Reply-To: <73309396-3856-43a2-9a6f-81a40ed594db@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <73309396-3856-43a2-9a6f-81a40ed594db@google.com>
+X-Mailer: git-send-email 2.42.0.869.gea05f2083d-goog
+Message-ID: <20231109004104.3467968-1-arakesh@google.com>
+Subject: [PATCH v12 1/4] usb: gadget: uvc: prevent use of disabled endpoint
+From: Avichal Rakesh <arakesh@google.com>
+To: arakesh@google.com, dan.scally@ideasonboard.com, 
+	gregkh@linuxfoundation.org
+Cc: etalvala@google.com, jchowdhary@google.com, 
+	laurent.pinchart@ideasonboard.com, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, m.grzeschik@pengutronix.de
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed,  8 Nov 2023 13:58:24 +0100
-Arnd Bergmann <arnd@kernel.org> wrote:
+Currently the set_alt callback immediately disables the endpoint and queues
+the v4l2 streamoff event. However, as the streamoff event is processed
+asynchronously, it is possible that the video_pump thread attempts to queue
+requests to an already disabled endpoint.
 
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Most architectures that support kprobes declare this function in their
-> own asm/kprobes.h header and provide an override, but some are missing
-> the prototype, which causes a warning for the __weak stub implementation:
-> 
-> kernel/kprobes.c:1865:12: error: no previous prototype for 'kprobe_exceptions_notify' [-Werror=missing-prototypes]
->  1865 | int __weak kprobe_exceptions_notify(struct notifier_block *self,
-> 
-> Move the prototype into linux/kprobes.h so it is visible to all
-> the definitions.
+This change moves disabling usb endpoint to the end of streamoff event
+callback. As the endpoint's state can no longer be used, video_pump is
+now guarded by uvc->state as well. To be consistent with the actual
+streaming state, uvc->state is now toggled between CONNECTED and STREAMING
+from the v4l2 event callback only.
 
-Thanks, let me pick this to linux-trace tree.
+Link: https://lore.kernel.org/20230615171558.GK741@pendragon.ideasonboard.com/
+Link: https://lore.kernel.org/20230531085544.253363-1-dan.scally@ideasonboard.com/
+Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
+Reviewed-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+Tested-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+Signed-off-by: Avichal Rakesh <arakesh@google.com>
+---
+v1  -> v2  : Rebased to ToT and reworded commit message.
+v2  -> v3  : Fix email threading goof-up
+v3  -> v4  : Address review comments & re-rebase to ToT
+v4  -> v5  : Add Reviewed-by & Tested-by
+v5  -> v6  : No change
+v6  -> v7  : No change
+v7  -> v8  : No change. Getting back in review queue
+v8  -> v9  : Fix typo. No functional change.
+v9  -> v10 : Rebase to ToT (usb-next)
+v10 -> v11 : No change
+v11 -> v12 : Rebase to ToT (usb-next)
 
-> 
-> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  arch/arc/include/asm/kprobes.h     | 3 ---
->  arch/arm/include/asm/kprobes.h     | 2 --
->  arch/arm64/include/asm/kprobes.h   | 2 --
->  arch/mips/include/asm/kprobes.h    | 2 --
->  arch/powerpc/include/asm/kprobes.h | 2 --
->  arch/s390/include/asm/kprobes.h    | 2 --
->  arch/sh/include/asm/kprobes.h      | 2 --
->  arch/sparc/include/asm/kprobes.h   | 2 --
->  arch/x86/include/asm/kprobes.h     | 2 --
->  include/linux/kprobes.h            | 4 ++++
->  10 files changed, 4 insertions(+), 19 deletions(-)
-> 
-> diff --git a/arch/arc/include/asm/kprobes.h b/arch/arc/include/asm/kprobes.h
-> index de1566e32cb8..68e8301c0df2 100644
-> --- a/arch/arc/include/asm/kprobes.h
-> +++ b/arch/arc/include/asm/kprobes.h
-> @@ -32,9 +32,6 @@ struct kprobe;
->  
->  void arch_remove_kprobe(struct kprobe *p);
->  
-> -int kprobe_exceptions_notify(struct notifier_block *self,
-> -			     unsigned long val, void *data);
-> -
->  struct prev_kprobe {
->  	struct kprobe *kp;
->  	unsigned long status;
-> diff --git a/arch/arm/include/asm/kprobes.h b/arch/arm/include/asm/kprobes.h
-> index e26a278d301a..5b8dbf1b0be4 100644
-> --- a/arch/arm/include/asm/kprobes.h
-> +++ b/arch/arm/include/asm/kprobes.h
-> @@ -40,8 +40,6 @@ struct kprobe_ctlblk {
->  
->  void arch_remove_kprobe(struct kprobe *);
->  int kprobe_fault_handler(struct pt_regs *regs, unsigned int fsr);
-> -int kprobe_exceptions_notify(struct notifier_block *self,
-> -			     unsigned long val, void *data);
->  
->  /* optinsn template addresses */
->  extern __visible kprobe_opcode_t optprobe_template_entry[];
-> diff --git a/arch/arm64/include/asm/kprobes.h b/arch/arm64/include/asm/kprobes.h
-> index 05cd82eeca13..be7a3680dadf 100644
-> --- a/arch/arm64/include/asm/kprobes.h
-> +++ b/arch/arm64/include/asm/kprobes.h
-> @@ -37,8 +37,6 @@ struct kprobe_ctlblk {
->  
->  void arch_remove_kprobe(struct kprobe *);
->  int kprobe_fault_handler(struct pt_regs *regs, unsigned int fsr);
-> -int kprobe_exceptions_notify(struct notifier_block *self,
-> -			     unsigned long val, void *data);
->  void __kretprobe_trampoline(void);
->  void __kprobes *trampoline_probe_handler(struct pt_regs *regs);
->  
-> diff --git a/arch/mips/include/asm/kprobes.h b/arch/mips/include/asm/kprobes.h
-> index 68b1e5d458cf..bc27d99c9436 100644
-> --- a/arch/mips/include/asm/kprobes.h
-> +++ b/arch/mips/include/asm/kprobes.h
-> @@ -71,8 +71,6 @@ struct kprobe_ctlblk {
->  	struct prev_kprobe prev_kprobe;
->  };
->  
-> -extern int kprobe_exceptions_notify(struct notifier_block *self,
-> -				    unsigned long val, void *data);
->  
->  #endif /* CONFIG_KPROBES */
->  #endif /* _ASM_KPROBES_H */
-> diff --git a/arch/powerpc/include/asm/kprobes.h b/arch/powerpc/include/asm/kprobes.h
-> index c8e4b4fd4e33..4525a9c68260 100644
-> --- a/arch/powerpc/include/asm/kprobes.h
-> +++ b/arch/powerpc/include/asm/kprobes.h
-> @@ -84,8 +84,6 @@ struct arch_optimized_insn {
->  	kprobe_opcode_t *insn;
->  };
->  
-> -extern int kprobe_exceptions_notify(struct notifier_block *self,
-> -					unsigned long val, void *data);
->  extern int kprobe_fault_handler(struct pt_regs *regs, int trapnr);
->  extern int kprobe_handler(struct pt_regs *regs);
->  extern int kprobe_post_handler(struct pt_regs *regs);
-> diff --git a/arch/s390/include/asm/kprobes.h b/arch/s390/include/asm/kprobes.h
-> index 21b9e5290c04..01f1682a73b7 100644
-> --- a/arch/s390/include/asm/kprobes.h
-> +++ b/arch/s390/include/asm/kprobes.h
-> @@ -73,8 +73,6 @@ struct kprobe_ctlblk {
->  void arch_remove_kprobe(struct kprobe *p);
->  
->  int kprobe_fault_handler(struct pt_regs *regs, int trapnr);
-> -int kprobe_exceptions_notify(struct notifier_block *self,
-> -	unsigned long val, void *data);
->  
->  #define flush_insn_slot(p)	do { } while (0)
->  
-> diff --git a/arch/sh/include/asm/kprobes.h b/arch/sh/include/asm/kprobes.h
-> index eeba83e0a7d2..65d4c3316a5b 100644
-> --- a/arch/sh/include/asm/kprobes.h
-> +++ b/arch/sh/include/asm/kprobes.h
-> @@ -46,8 +46,6 @@ struct kprobe_ctlblk {
->  };
->  
->  extern int kprobe_fault_handler(struct pt_regs *regs, int trapnr);
-> -extern int kprobe_exceptions_notify(struct notifier_block *self,
-> -				    unsigned long val, void *data);
->  extern int kprobe_handle_illslot(unsigned long pc);
->  #else
->  
-> diff --git a/arch/sparc/include/asm/kprobes.h b/arch/sparc/include/asm/kprobes.h
-> index 06c2bc767ef7..aec742cd898f 100644
-> --- a/arch/sparc/include/asm/kprobes.h
-> +++ b/arch/sparc/include/asm/kprobes.h
-> @@ -47,8 +47,6 @@ struct kprobe_ctlblk {
->  	struct prev_kprobe prev_kprobe;
->  };
->  
-> -int kprobe_exceptions_notify(struct notifier_block *self,
-> -			     unsigned long val, void *data);
->  int kprobe_fault_handler(struct pt_regs *regs, int trapnr);
->  asmlinkage void __kprobes kprobe_trap(unsigned long trap_level,
->  				      struct pt_regs *regs);
-> diff --git a/arch/x86/include/asm/kprobes.h b/arch/x86/include/asm/kprobes.h
-> index a2e9317aad49..5939694dfb28 100644
-> --- a/arch/x86/include/asm/kprobes.h
-> +++ b/arch/x86/include/asm/kprobes.h
-> @@ -113,8 +113,6 @@ struct kprobe_ctlblk {
->  };
->  
->  extern int kprobe_fault_handler(struct pt_regs *regs, int trapnr);
-> -extern int kprobe_exceptions_notify(struct notifier_block *self,
-> -				    unsigned long val, void *data);
->  extern int kprobe_int3_handler(struct pt_regs *regs);
->  
->  #else
-> diff --git a/include/linux/kprobes.h b/include/linux/kprobes.h
-> index 365eb092e9c4..ab1da3142b06 100644
-> --- a/include/linux/kprobes.h
-> +++ b/include/linux/kprobes.h
-> @@ -445,6 +445,10 @@ int kprobe_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
->  
->  int arch_kprobe_get_kallsym(unsigned int *symnum, unsigned long *value,
->  			    char *type, char *sym);
-> +
-> +int kprobe_exceptions_notify(struct notifier_block *self,
-> +			     unsigned long val, void *data);
-> +
->  #else /* !CONFIG_KPROBES: */
->  
->  static inline int kprobe_fault_handler(struct pt_regs *regs, int trapnr)
-> -- 
-> 2.39.2
-> 
+ drivers/usb/gadget/function/f_uvc.c     | 11 +++++------
+ drivers/usb/gadget/function/f_uvc.h     |  2 +-
+ drivers/usb/gadget/function/uvc.h       |  2 +-
+ drivers/usb/gadget/function/uvc_v4l2.c  | 20 +++++++++++++++++---
+ drivers/usb/gadget/function/uvc_video.c |  3 ++-
+ 5 files changed, 26 insertions(+), 12 deletions(-)
 
+diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+index 786379f1b7b7..77999ed53d33 100644
+--- a/drivers/usb/gadget/function/f_uvc.c
++++ b/drivers/usb/gadget/function/f_uvc.c
+@@ -263,10 +263,13 @@ uvc_function_setup(struct usb_function *f, const struct usb_ctrlrequest *ctrl)
+ 	return 0;
+ }
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+-void uvc_function_setup_continue(struct uvc_device *uvc)
++void uvc_function_setup_continue(struct uvc_device *uvc, int disable_ep)
+ {
+ 	struct usb_composite_dev *cdev = uvc->func.config->cdev;
+
++	if (disable_ep && uvc->video.ep)
++		usb_ep_disable(uvc->video.ep);
++
+ 	usb_composite_setup_continue(cdev);
+ }
+
+@@ -337,15 +340,11 @@ uvc_function_set_alt(struct usb_function *f, unsigned interface, unsigned alt)
+ 		if (uvc->state != UVC_STATE_STREAMING)
+ 			return 0;
+
+-		if (uvc->video.ep)
+-			usb_ep_disable(uvc->video.ep);
+-
+ 		memset(&v4l2_event, 0, sizeof(v4l2_event));
+ 		v4l2_event.type = UVC_EVENT_STREAMOFF;
+ 		v4l2_event_queue(&uvc->vdev, &v4l2_event);
+
+-		uvc->state = UVC_STATE_CONNECTED;
+-		return 0;
++		return USB_GADGET_DELAYED_STATUS;
+
+ 	case 1:
+ 		if (uvc->state != UVC_STATE_CONNECTED)
+diff --git a/drivers/usb/gadget/function/f_uvc.h b/drivers/usb/gadget/function/f_uvc.h
+index 1db972d4beeb..083aef0c65c6 100644
+--- a/drivers/usb/gadget/function/f_uvc.h
++++ b/drivers/usb/gadget/function/f_uvc.h
+@@ -11,7 +11,7 @@
+
+ struct uvc_device;
+
+-void uvc_function_setup_continue(struct uvc_device *uvc);
++void uvc_function_setup_continue(struct uvc_device *uvc, int disable_ep);
+
+ void uvc_function_connect(struct uvc_device *uvc);
+
+diff --git a/drivers/usb/gadget/function/uvc.h b/drivers/usb/gadget/function/uvc.h
+index 6751de8b63ad..989bc6b4e93d 100644
+--- a/drivers/usb/gadget/function/uvc.h
++++ b/drivers/usb/gadget/function/uvc.h
+@@ -177,7 +177,7 @@ struct uvc_file_handle {
+  * Functions
+  */
+
+-extern void uvc_function_setup_continue(struct uvc_device *uvc);
++extern void uvc_function_setup_continue(struct uvc_device *uvc, int disable_ep);
+ extern void uvc_function_connect(struct uvc_device *uvc);
+ extern void uvc_function_disconnect(struct uvc_device *uvc);
+
+diff --git a/drivers/usb/gadget/function/uvc_v4l2.c b/drivers/usb/gadget/function/uvc_v4l2.c
+index 3f0a9795c0d4..7cb8d027ff0c 100644
+--- a/drivers/usb/gadget/function/uvc_v4l2.c
++++ b/drivers/usb/gadget/function/uvc_v4l2.c
+@@ -451,7 +451,7 @@ uvc_v4l2_streamon(struct file *file, void *fh, enum v4l2_buf_type type)
+ 	 * Complete the alternate setting selection setup phase now that
+ 	 * userspace is ready to provide video frames.
+ 	 */
+-	uvc_function_setup_continue(uvc);
++	uvc_function_setup_continue(uvc, 0);
+ 	uvc->state = UVC_STATE_STREAMING;
+
+ 	return 0;
+@@ -463,11 +463,18 @@ uvc_v4l2_streamoff(struct file *file, void *fh, enum v4l2_buf_type type)
+ 	struct video_device *vdev = video_devdata(file);
+ 	struct uvc_device *uvc = video_get_drvdata(vdev);
+ 	struct uvc_video *video = &uvc->video;
++	int ret = 0;
+
+ 	if (type != video->queue.queue.type)
+ 		return -EINVAL;
+
+-	return uvcg_video_enable(video, 0);
++	uvc->state = UVC_STATE_CONNECTED;
++	ret = uvcg_video_enable(video, 0);
++	if (ret < 0)
++		return ret;
++
++	uvc_function_setup_continue(uvc, 1);
++	return 0;
+ }
+
+ static int
+@@ -500,6 +507,14 @@ uvc_v4l2_subscribe_event(struct v4l2_fh *fh,
+ static void uvc_v4l2_disable(struct uvc_device *uvc)
+ {
+ 	uvc_function_disconnect(uvc);
++	/*
++	 * Drop uvc->state to CONNECTED if it was streaming before.
++	 * This ensures that the usb_requests are no longer queued
++	 * to the controller.
++	 */
++	if (uvc->state == UVC_STATE_STREAMING)
++		uvc->state = UVC_STATE_CONNECTED;
++
+ 	uvcg_video_enable(&uvc->video, 0);
+ 	uvcg_free_buffers(&uvc->video.queue);
+ 	uvc->func_connected = false;
+@@ -647,4 +662,3 @@ const struct v4l2_file_operations uvc_v4l2_fops = {
+ 	.get_unmapped_area = uvcg_v4l2_get_unmapped_area,
+ #endif
+ };
+-
+diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
+index 91af3b1ef0d4..c334802ac0a4 100644
+--- a/drivers/usb/gadget/function/uvc_video.c
++++ b/drivers/usb/gadget/function/uvc_video.c
+@@ -384,13 +384,14 @@ static void uvcg_video_pump(struct work_struct *work)
+ 	struct uvc_video_queue *queue = &video->queue;
+ 	/* video->max_payload_size is only set when using bulk transfer */
+ 	bool is_bulk = video->max_payload_size;
++	struct uvc_device *uvc = video->uvc;
+ 	struct usb_request *req = NULL;
+ 	struct uvc_buffer *buf;
+ 	unsigned long flags;
+ 	bool buf_done;
+ 	int ret;
+
+-	while (video->ep->enabled) {
++	while (uvc->state == UVC_STATE_STREAMING && video->ep->enabled) {
+ 		/*
+ 		 * Retrieve the first available USB request, protected by the
+ 		 * request lock.
+--
+2.42.0.869.gea05f2083d-goog
 
