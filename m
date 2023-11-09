@@ -1,187 +1,217 @@
-Return-Path: <linux-usb+bounces-2742-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2743-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93ED57E6A80
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Nov 2023 13:23:44 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90CEE7E6B05
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Nov 2023 14:11:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 946131C20BC7
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Nov 2023 12:23:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 99EAFB20E88
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Nov 2023 13:11:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A78C21DA5F;
-	Thu,  9 Nov 2023 12:23:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8034B1944C;
+	Thu,  9 Nov 2023 13:11:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="JOE+Y96n"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t45PhcK8"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F5131DA34;
-	Thu,  9 Nov 2023 12:23:32 +0000 (UTC)
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D6C52D55;
-	Thu,  9 Nov 2023 04:23:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-	s=201909; t=1699532610;
-	bh=R2IIgl4ZRFgwipCQ4ZBWquxZCbtnLxeQT8yMzVcSClk=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=JOE+Y96nQb0g0fD7YjgIsTtXOrsQ0zdJ9Xit6bae239vdgrtE8Xe20tGEjOEwp6b5
-	 bBGasTtN2qhciM6Vxj5gO1APMLHXfhhNabxTTxDpDoDz6AXcIv0hdu9+rRXuZNmSj3
-	 PriUuPEOny5OCaNxYhuQeMYyhW0D7Uuip11fA5kii4KmxM9zaRV2MnEviCDpMHy6zq
-	 fUfZ9elCA6bj44/a3P1CQqNaCruTVzrNA2B2UxDQEd/EBpaSM5DHluHgXy74J1JLYp
-	 rlgnpTfcT5fdD0htnPYkbVFENF7DqxPzxI5N3NUPYBgm/lUlPDoiySV3dJVovZ01Br
-	 M0UtCQNJ+RaEQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4SR1MD6jtmz4wd2;
-	Thu,  9 Nov 2023 23:23:20 +1100 (AEDT)
-From: Michael Ellerman <mpe@ellerman.id.au>
-To: Christophe Leroy <christophe.leroy@csgroup.eu>, Arnd Bergmann
- <arnd@arndb.de>, Arnd
- Bergmann <arnd@kernel.org>, Andrew Morton <akpm@linux-foundation.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Masahiro
- Yamada <masahiroy@kernel.org>, "linux-kbuild@vger.kernel.org"
- <linux-kbuild@vger.kernel.org>
-Cc: Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
- Russell King <linux@armlinux.org.uk>, Catalin Marinas
- <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Steven Rostedt
- <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, Mark
- Rutland <mark.rutland@arm.com>, guoren <guoren@kernel.org>, Peter Zijlstra
- <peterz@infradead.org>, Ard Biesheuvel <ardb@kernel.org>, Huacai Chen
- <chenhuacai@kernel.org>, Greg Ungerer <gerg@linux-m68k.org>, Michal Simek
- <monstr@monstr.eu>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Dinh
- Nguyen <dinguyen@kernel.org>, Nicholas Piggin <npiggin@gmail.com>, Geoff
- Levand <geoff@infradead.org>, Palmer Dabbelt <palmer@dabbelt.com>, Heiko
- Carstens <hca@linux.ibm.com>, John Paul Adrian Glaubitz
- <glaubitz@physik.fu-berlin.de>, "David S . Miller" <davem@davemloft.net>,
- Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- Ingo
- Molnar <mingo@redhat.com>, "x86@kernel.org" <x86@kernel.org>, Helge Deller
- <deller@gmx.de>, Sudip Mukherjee <sudipm.mukherjee@gmail.com>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, Timur Tabi <timur@kernel.org>,
- Kent Overstreet <kent.overstreet@linux.dev>, David Woodhouse
- <dwmw2@infradead.org>, "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, Anil
- S
- Keshavamurthy <anil.s.keshavamurthy@intel.com>, Kees Cook
- <keescook@chromium.org>, Vincenzo Frascino <vincenzo.frascino@arm.com>,
- Juri
- Lelli <juri.lelli@redhat.com>, Vincent Guittot
- <vincent.guittot@linaro.org>, Nathan Chancellor <nathan@kernel.org>, Nick
- Desaulniers <ndesaulniers@google.com>, Nicolas Schier <nicolas@fjasle.eu>,
- Alexander Viro <viro@zeniv.linux.org.uk>, Uwe =?utf-8?Q?Kleine-K=C3=B6nig?=
- <u.kleine-koenig@pengutronix.de>, "linux-alpha@vger.kernel.org"
- <linux-alpha@vger.kernel.org>, "linux-snps-arc@lists.infradead.org"
- <linux-snps-arc@lists.infradead.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "linux-trace-kernel@vger.kernel.org" <linux-trace-kernel@vger.kernel.org>,
- "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
- "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
- "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
- "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
- "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
- "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
- "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>, Netdev
- <netdev@vger.kernel.org>, "linux-parisc@vger.kernel.org"
- <linux-parisc@vger.kernel.org>, "linux-usb@vger.kernel.org"
- <linux-usb@vger.kernel.org>, "linux-fbdev@vger.kernel.org"
- <linux-fbdev@vger.kernel.org>, "dri-devel@lists.freedesktop.org"
- <dri-devel@lists.freedesktop.org>, "linux-bcachefs@vger.kernel.org"
- <linux-bcachefs@vger.kernel.org>, "linux-mtd@lists.infradead.org"
- <linux-mtd@lists.infradead.org>
-Subject: Re: [PATCH 15/22] arch: vdso: consolidate gettime prototypes
-In-Reply-To: <886df4e4-9fc2-ca52-e7e9-53688e6e821a@csgroup.eu>
-References: <20231108125843.3806765-1-arnd@kernel.org>
- <20231108125843.3806765-16-arnd@kernel.org>
- <ecedb0f1-9543-35c6-18bd-723e6bf21173@csgroup.eu>
- <d94de5b8-db92-4055-9484-f2666973c02a@app.fastmail.com>
- <87o7g3qlf5.fsf@mail.lhotse>
- <886df4e4-9fc2-ca52-e7e9-53688e6e821a@csgroup.eu>
-Date: Thu, 09 Nov 2023 23:23:20 +1100
-Message-ID: <87il6bqfnr.fsf@mail.lhotse>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6DD913AE5;
+	Thu,  9 Nov 2023 13:11:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93FD6C433C8;
+	Thu,  9 Nov 2023 13:11:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1699535471;
+	bh=KDTvTMPiNksL74W/4/oLEC7ABrgUyx5Y9dSsvidmpeQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=t45PhcK8gVbwMXMf90KAaXTHO5/F4TKITgkv2aSfYoZQzWu4iUWpziHlFqXPmxZNO
+	 gocP6sHNtZjKdLjG7MgmGCdDo7cl5feBTNpzWgPY2W3VaH9oOrCFXVDvHIV3kkEOq5
+	 mKOLtUsPbXqAWmz0ZIdVTCjmipaU/aKDoecWYv/5gqf8lVXWWPixXERm29BD7ICAkS
+	 FbyMTprURuuP533FADd0y+CXDcQL4ckHERSILt+Q9G4F9+4x+BulfeejRE+z0ApzEn
+	 p6UB+C2pbnjMQ5cI/AvWiC+lJziDS78CKx+J+Zl2a1LeBPoJ0Qrqx/7Ed/9zOiAJT6
+	 DXv81tQCcUNpg==
+Date: Thu, 9 Nov 2023 21:11:00 +0800
+From: Peter Chen <peter.chen@kernel.org>
+To: Frank Li <Frank.Li@nxp.com>
+Cc: Pawel Laszczak <pawell@cadence.com>, Roger Quadros <rogerq@kernel.org>,
+	Aswath Govindraju <a-govindraju@ti.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Felipe Balbi <felipe.balbi@linux.intel.com>,
+	"open list:CADENCE USB3 DRD IP DRIVER" <linux-usb@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>, imx@lists.linux.dev
+Subject: Re: [PATCH 1/1] usb: cdns3: fix uvc failure work since sg support
+ enabled
+Message-ID: <20231109131100.GA48178@nchen-desktop>
+References: <20231106153452.2397035-1-Frank.Li@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231106153452.2397035-1-Frank.Li@nxp.com>
 
-Christophe Leroy <christophe.leroy@csgroup.eu> writes:
-> Le 09/11/2023 =C3=A0 11:18, Michael Ellerman a =C3=A9crit=C2=A0:
->> "Arnd Bergmann" <arnd@arndb.de> writes:
->>> On Wed, Nov 8, 2023, at 19:31, Christophe Leroy wrote:
->>>> Le 08/11/2023 =C3=A0 13:58, Arnd Bergmann a =C3=A9crit=C2=A0:
->>>
->>>> powerpc has functions doing more or less the same, they are called
->>>> __c_kernel_clock_gettime() and alike with their prototypes siting in
->>>> arch/powerpc/include/asm/vdso/gettimeofday.h
->>>>
->>>> Should those prototypes be moved to include/vdso/gettime.h too and
->>>> eventually renamed, or are they considered too powerpc specific ?
->>>
->>> I don't actually know, my initial interpretation was that
->>> these function names are part of the user ABI for the vdso,
->>> but I never looked closely enough at how vdso works to
->>> be sure what the actual ABI is.
->>=20
->> AFAIK the ABI is just the symbols we export, as defined in the linker
->> script:
->>=20
->> /*
->>   * This controls what symbols we export from the DSO.
->>   */
->> VERSION
->> {
->> 	VDSO_VERSION_STRING {
->> 	global:
->> 		__kernel_get_syscall_map;
->> 		__kernel_gettimeofday;
->> 		__kernel_clock_gettime;
->> 		__kernel_clock_getres;
->> 		__kernel_get_tbfreq;
->> 		__kernel_sync_dicache;
->> 		__kernel_sigtramp_rt64;
->> 		__kernel_getcpu;
->> 		__kernel_time;
->>=20
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/=
-arch/powerpc/kernel/vdso/vdso64.lds.S?h=3Dv6.6&#n117
->>=20
->>> If __c_kernel_clock_gettime() etc are not part of the user-facing
->>> ABI, I think renaming them for consistency with the other
->>> architectures would be best.
->>=20
->> The __c symbols are not part of the ABI, so we could rename them.
->>=20
->> At the moment though they don't have the same prototype as the generic
->> versions, because we find the VDSO data in asm and pass it to the C
->> functions, eg:
->>=20
->> int __c_kernel_gettimeofday(struct __kernel_old_timeval *tv, struct time=
-zone *tz,
->> 			    const struct vdso_data *vd);
->>=20
->> I think we can rework that though, by implementing
->> __arch_get_vdso_data() and getting the vdso_data in C. Then we'd be able
->> to share the prototypes.
->
-> I think it would not a been good idea, it would be less performant, for=20
-> explanation see commit=20
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit=
-/?id=3De876f0b69dc993e86ca7795e63e98385aa9a7ef3
+On 23-11-06 10:34:52, Frank Li wrote:
+> When IP version >= DEV_VER_V2, gadget:sg_supported is true. So uvc gadget
+> function driver will use sg to equeue data, first is 8bytes header, the
+> second is 1016bytes data.
+> 
+>     cdns3_prepare_trb: ep2in: trb 0000000000ac755f, dma buf: 0xbf455000, size: 8, burst: 128 ctrl: 0x00000415 (C=1, T=0, ISP, CHAIN, Normal)
+>     cdns3_prepare_trb: ep2in: trb 00000000a574e693, dma buf: 0xc0200fe0, size: 1016, burst: 128 ctrl: 0x00000405 (C=1, T=0, ISP, Normal)
+> 
+> But cdns3_ep_run_transfer() can't correctly handle this case, which only
+> support one TRB for ISO transfer.
+> 
+> The controller requires duplicate the TD for each SOF if priv_ep->interval
+> is not 1. DMA will read data from DDR to internal FIFO when get SOF. Send
+> data to bus when receive IN token. DMA always refill FIFO when get SOF
+> regardless host send IN token or not. If host send IN token later, some
+> frames data will be lost.
+> 
+> Fixed it by below major steps:
+> 
+> 1. Calculate numembers of TRB base on sg_nums and priv_ep->interval.
+> 2. Remove CHAIN flags for each end TRB of TD when duplicate TD.
+> 3. The controller requires LINK TRB must be first TRB of TD. When check
+> there are not enough TRBs lefts, just fill LINK TRB for left TRBs.
+> 
+> .... CHAIN_TRB DATA_TRB, CHAIN_TRB DATA_TRB,  LINK_TRB ... LINK_TRB
+>                                                            ^End of TRB List
+> 
+> Fixes: 7733f6c32e36f ("usb: cdns3: Add Cadence USB3 DRD Driver")
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
 
-Ah thanks. I was wondering why you had done it in asm.
+You mentioned android still has some problems, so let's wait your
+qualify results. Since it is a big change, please test more classes
+(mtp/adb/uvc/ncm).
+> ---
+> 
+> This patch is depend on https://lore.kernel.org/imx/20231031084521.GA1948529@nchen-desktop/T/#t
+> 
+>  drivers/usb/cdns3/cdns3-gadget.c | 51 +++++++++++++++++++++++++-------
+>  1 file changed, 40 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
+> index cd08897f8da8..23580ec33202 100644
+> --- a/drivers/usb/cdns3/cdns3-gadget.c
+> +++ b/drivers/usb/cdns3/cdns3-gadget.c
+> @@ -1117,6 +1117,7 @@ static int cdns3_ep_run_transfer(struct cdns3_endpoint *priv_ep,
+>  	dma_addr_t trb_dma;
+>  	u32 togle_pcs = 1;
+>  	int sg_iter = 0;
+> +	int num_trb_req;
+>  	int num_trb;
+>  	int address;
+>  	u32 control;
+> @@ -1126,15 +1127,13 @@ static int cdns3_ep_run_transfer(struct cdns3_endpoint *priv_ep,
+>  	bool sg_supported = !!(request->num_mapped_sgs);
+>  	u32 ioc = request->no_interrupt ? 0 : TRB_IOC;
+>  
+> +	num_trb_req = sg_supported ? request->num_mapped_sgs : 1;
+> +
+> +	/* ISO transfer require each SOF have a TD, each TD include some TRBs */
+>  	if (priv_ep->type == USB_ENDPOINT_XFER_ISOC)
+> -		num_trb = priv_ep->interval;
+> +		num_trb = priv_ep->interval * num_trb_req;
+>  	else
+> -		num_trb = sg_supported ? request->num_mapped_sgs : 1;
+> -
+> -	if (num_trb > priv_ep->free_trbs) {
+> -		priv_ep->flags |= EP_RING_FULL;
+> -		return -ENOBUFS;
+> -	}
+> +		num_trb = num_trb_req;
+>  
+>  	priv_req = to_cdns3_request(request);
+>  	address = priv_ep->endpoint.desc->bEndpointAddress;
+> @@ -1183,14 +1182,31 @@ static int cdns3_ep_run_transfer(struct cdns3_endpoint *priv_ep,
+>  
+>  		link_trb->control = cpu_to_le32(((priv_ep->pcs) ? TRB_CYCLE : 0) |
+>  				    TRB_TYPE(TRB_LINK) | TRB_TOGGLE | ch_bit);
+> +
+> +		if (priv_ep->type == USB_ENDPOINT_XFER_ISOC) {
+> +			/*
+> +			 * ISO require LINK TRB must be first one of TD.
+> +			 * Fill LINK TRBs for left trb space to simply software process logic.
+> +			 */
+> +			while (priv_ep->enqueue) {
+> +				*trb = *link_trb;
+> +				trace_cdns3_prepare_trb(priv_ep, trb);
+> +
+> +				cdns3_ep_inc_enq(priv_ep);
+> +				trb = priv_ep->trb_pool + priv_ep->enqueue;
+> +				priv_req->trb = trb;
+> +			}
+> +		}
+> +	}
+> +
+> +	if (num_trb > priv_ep->free_trbs) {
+> +		priv_ep->flags |= EP_RING_FULL;
+> +		return -ENOBUFS;
+>  	}
+>  
+>  	if (priv_dev->dev_ver <= DEV_VER_V2)
+>  		togle_pcs = cdns3_wa1_update_guard(priv_ep, trb);
+>  
+> -	if (sg_supported)
+> -		s = request->sg;
+> -
+>  	/* set incorrect Cycle Bit for first trb*/
+>  	control = priv_ep->pcs ? 0 : TRB_CYCLE;
+>  	trb->length = 0;
+> @@ -1208,6 +1224,9 @@ static int cdns3_ep_run_transfer(struct cdns3_endpoint *priv_ep,
+>  	do {
+>  		u32 length;
+>  
+> +		if (!(sg_iter % num_trb_req) && sg_supported)
+> +			s = request->sg;
+> +
+>  		/* fill TRB */
+>  		control |= TRB_TYPE(TRB_NORMAL);
+>  		if (sg_supported) {
+> @@ -1249,7 +1268,7 @@ static int cdns3_ep_run_transfer(struct cdns3_endpoint *priv_ep,
+>  		if (sg_supported) {
+>  			trb->control |= cpu_to_le32(TRB_ISP);
+>  			/* Don't set chain bit for last TRB */
+> -			if (sg_iter < num_trb - 1)
+> +			if ((sg_iter % num_trb_req) < num_trb_req - 1)
+>  				trb->control |= cpu_to_le32(TRB_CHAIN);
+>  
+>  			s = sg_next(s);
+> @@ -1507,6 +1526,12 @@ static void cdns3_transfer_completed(struct cdns3_device *priv_dev,
+>  
+>  		/* The TRB was changed as link TRB, and the request was handled at ep_dequeue */
+>  		while (TRB_FIELD_TO_TYPE(le32_to_cpu(trb->control)) == TRB_LINK) {
+> +
+> +			/* ISO ep_traddr may stop at LINK TRB */
+> +			if (priv_ep->dequeue == cdns3_get_dma_pos(priv_dev, priv_ep) &&
+> +			    priv_ep->type == USB_ENDPOINT_XFER_ISOC)
+> +				break;
+> +
+>  			trace_cdns3_complete_trb(priv_ep, trb);
+>  			cdns3_ep_inc_deq(priv_ep);
+>  			trb = priv_ep->trb_pool + priv_ep->dequeue;
+> @@ -1539,6 +1564,10 @@ static void cdns3_transfer_completed(struct cdns3_device *priv_dev,
+>  			}
+>  
+>  			if (request_handled) {
+> +				/* TRBs are duplicated by priv_ep->interval time for ISO IN */
+> +				if (priv_ep->type == USB_ENDPOINT_XFER_ISOC && priv_ep->dir)
+> +					request->actual /= priv_ep->interval;
+> +
+>  				cdns3_gadget_giveback(priv_ep, priv_req, 0);
+>  				request_handled = false;
+>  				transfer_end = false;
+> -- 
+> 2.34.1
+> 
 
-It's a pity but you're right that's probably a measurable performance
-hit for some of those calls.
+-- 
 
-cheers
+Thanks,
+Peter Chen
 
