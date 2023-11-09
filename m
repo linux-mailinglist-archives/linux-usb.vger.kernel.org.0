@@ -1,39 +1,39 @@
-Return-Path: <linux-usb+bounces-2748-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2749-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8EF77E6EF6
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Nov 2023 17:36:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1194A7E6EFB
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Nov 2023 17:37:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 053721C209EB
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Nov 2023 16:36:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BD5C128130D
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Nov 2023 16:37:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B663C107AF;
-	Thu,  9 Nov 2023 16:36:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1B6614F7D;
+	Thu,  9 Nov 2023 16:37:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="buKg7j7K"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dwkkM2Jg"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FF4222325
-	for <linux-usb@vger.kernel.org>; Thu,  9 Nov 2023 16:36:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F587C433C8;
-	Thu,  9 Nov 2023 16:36:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64F7E2232D
+	for <linux-usb@vger.kernel.org>; Thu,  9 Nov 2023 16:37:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C0ADC433C7;
+	Thu,  9 Nov 2023 16:37:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699547786;
-	bh=X0JXThTYDldD1RoKuZYvLpbUHSFMmcAgluk/KMaoBLQ=;
+	s=k20201202; t=1699547847;
+	bh=N3Ewrl8VPTxsQ+u3R4DFOO3VaEiknH/PqrP7ssBhXTk=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=buKg7j7KClZGTXIGDPWEa8Ph4nSypnYpkZABzLpAVaWUHo7+eA1h8vGl3iF/yg6ng
-	 iii36/hhKD1mYqrXLNPaHNwmxmHO6UEqCCc4Yr9s6LmDuiU6We4p0w/mx6SXKUAuc3
-	 MX57tSAmJdw9/GG7JYvNSnEVmpqDTL1YqzRoZNp/ow08XqQNXlavDK4tc/2cGlP+Jz
-	 fO2w7qDUILxctjs/BU2hquisHDkT/g3I+hW2JuTSghucBknPu1XsUqzHKBcolFzOwa
-	 b4ZX3Rz5xhuJyADElj0OfA5uELDsSHLlEsDhQ1LJ4jgSYuYmjdx0o96HyIqoaGdZNY
-	 HlxlNYo52V71A==
-Message-ID: <d5722bdf-2d5a-455e-809b-6470b4c5760c@kernel.org>
-Date: Thu, 9 Nov 2023 17:36:16 +0100
+	b=dwkkM2JgkWRZ8oCtVRhyq9lCaV1fc2LPJb5OsOPMa3b43eS+Zpf5msJ8532gExn5H
+	 7BgV7k8Kqa4BG3PnxLJAJm7RGHq8aRuKW584o+A4xkIyCs4C+WCGTrhLjB9mNSpLfp
+	 mOsBIZ9tIkgytxcw31Bmc6Oq5yT7C2vfLron+3d05UC6ETgl0NqWOs0O81Nc15pPkP
+	 7TCz9CrUiZ/mXrV/tE2qQ2FdL8vK6DK3A/nhKGXPbwzbtIL16pdUobqyREBrPyihsj
+	 mJv2sc9nz8Vdn0z3tVobwHOeP+tsRtEuW7Hq6pAe5WyerVgo3dInMIhnqYnZNvsQXn
+	 w2Jh0Z0VbGQ7A==
+Message-ID: <2ac1a861-0328-446d-b8f1-53122133f96f@kernel.org>
+Date: Thu, 9 Nov 2023 17:37:21 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -41,8 +41,8 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/4] phy: realtek: usb: add new driver for the Realtek
- RTD SoC USB 2.0 PHY
+Subject: Re: [PATCH v2 3/4] phy: realtek: usb: add new driver for the Realtek
+ RTD SoC USB 3.0 PHY
 Content-Language: en-US
 To: Stanley Chang <stanley_chang@realtek.com>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -50,13 +50,12 @@ Cc: Vinod Koul <vkoul@kernel.org>, Johan Hovold <johan@kernel.org>,
  Kishon Vijay Abraham I <kishon@kernel.org>,
  Geert Uytterhoeven <geert+renesas@glider.be>, Rob Herring <robh@kernel.org>,
  Jinjie Ruan <ruanjinjie@huawei.com>, Alan Stern <stern@rowland.harvard.edu>,
- Yang Yingliang <yangyingliang@huawei.com>, Roy Luo <royluo@google.com>,
+ Yang Yingliang <yangyingliang@huawei.com>, Ray Chi <raychi@google.com>,
  =?UTF-8?Q?Ricardo_Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Ray Chi <raychi@google.com>, linux-kernel@vger.kernel.org,
+ Roy Luo <royluo@google.com>, linux-kernel@vger.kernel.org,
  linux-phy@lists.infradead.org, linux-usb@vger.kernel.org
 References: <20231107083525.24901-1-stanley_chang@realtek.com>
- <20231107083525.24901-2-stanley_chang@realtek.com>
+ <20231107083525.24901-3-stanley_chang@realtek.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -101,64 +100,30 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20231107083525.24901-2-stanley_chang@realtek.com>
+In-Reply-To: <20231107083525.24901-3-stanley_chang@realtek.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 07/11/2023 09:31, Stanley Chang wrote:
 > Realtek DHC (digital home center) RTD SoCs support DWC3 XHCI USB
-> controller. Added the driver to drive the USB 2.0 PHY transceivers.
+> controller. Added the driver to drive the USB 3.0 PHY transceivers.
 > 
-> Note: New driver,remove the port status notification on legacy USB PHY.
+> Note: New driver, remove the port status notification on legacy USB PHY.
 > Use the generic PHY to notify the usb device connect and disconnect.
 > To avoid using these PHYs would require describing the very same
 > PHY using both the generic "phy" property and the deprecated "usb-phy"
 > property.
 > 
-> Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
-> ---
-> v1 to v2 change:
-
-
 
 ...
-> +
-> +static const struct of_device_id usbphy_rtk_dt_match[] = {
-> +	{ .compatible = "realtek,rtd1295-usb2phy", .data = &rtd1295_phy_cfg },
-> +	{ .compatible = "realtek,rtd1312c-usb2phy", .data = &rtd1312c_phy_cfg },
-> +	{ .compatible = "realtek,rtd1315e-usb2phy", .data = &rtd1315e_phy_cfg },
-> +	{ .compatible = "realtek,rtd1319-usb2phy", .data = &rtd1319_phy_cfg },
-> +	{ .compatible = "realtek,rtd1319d-usb2phy", .data = &rtd1319d_phy_cfg },
-> +	{ .compatible = "realtek,rtd1395-usb2phy", .data = &rtd1395_phy_cfg },
-> +	{ .compatible = "realtek,rtd1395-usb2phy-2port", .data = &rtd1395_phy_cfg_2port },
-> +	{ .compatible = "realtek,rtd1619-usb2phy", .data = &rtd1619_phy_cfg },
-> +	{ .compatible = "realtek,rtd1619b-usb2phy", .data = &rtd1619b_phy_cfg },
 
-Why is this sent separately from the bindings?
-
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(of, usbphy_rtk_dt_match);
 > +
-> +static struct platform_driver rtk_usb2phy_driver = {
-> +	.probe		= rtk_usb2phy_probe,
-> +	.remove_new	= rtk_usb2phy_remove,
-> +	.driver		= {
-> +		.name	= "rtk-usb2phy",
-> +		.of_match_table = usbphy_rtk_dt_match,
-> +	},
-> +};
-> +
-> +module_platform_driver(rtk_usb2phy_driver);
+> +module_platform_driver(rtk_usb3phy_driver);
 > +
 > +MODULE_LICENSE("GPL");
-> +MODULE_ALIAS("platform: rtk-usb2phy");
+> +MODULE_ALIAS("platform: rtk-usb3phy");
 
-You should not need MODULE_ALIAS() in normal cases. If you need it,
-usually it means your device ID table is wrong (e.g. misses either
-entries or MODULE_DEVICE_TABLE()). MODULE_ALIAS() is not a substitute
-for incomplete ID table.
-
+Same as in the other patch. Drop.
 
 Best regards,
 Krzysztof
