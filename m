@@ -1,128 +1,85 @@
-Return-Path: <linux-usb+bounces-2781-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2782-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 332A47E7C93
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Nov 2023 14:28:50 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CF4C7E7CA2
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Nov 2023 14:48:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E28032813F1
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Nov 2023 13:28:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A2E90281458
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Nov 2023 13:48:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB3F61A714;
-	Fri, 10 Nov 2023 13:28:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 427111A72B;
+	Fri, 10 Nov 2023 13:48:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tODKqcpu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W/krW53+"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4101719BAF;
-	Fri, 10 Nov 2023 13:28:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC265C433C8;
-	Fri, 10 Nov 2023 13:28:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5DB719BB9;
+	Fri, 10 Nov 2023 13:48:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E63DC433C8;
+	Fri, 10 Nov 2023 13:48:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699622921;
-	bh=RKp5JkDrgXTCaSZhsV2VwufdEyP5Z2U+wHi62OW9Q6w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tODKqcpuMevzLNd4CWQL470DP6V+/C91mGFko7GtrGqiI5/8nJL+iaOSGXfe9iJam
-	 4+2AJKynIosW4XZVgpbwO9XoXEoZLdeJh5NBu9kxI3XgY35UdPOBey65o6O8wI5IjD
-	 O4+074ugJgTxCpnS/mBi7qoHI8ZpB8F8cL7nLhTkOSuElxIkqL8LTYTIwv7CY2WIGE
-	 2zc8BYyEA4oxTgNiw/zVbllNyov/yZMJpMuCG6ege/eGhVnGIXZ3gbmJUCN8lraQM3
-	 5mybm5OxBhiC1wALLfpbxcxiEju0Rvk4xfBu3+tDRWskYuvAvzuB/e/bmM00yIdGmW
-	 Hhmq9Cne10bGQ==
+	s=k20201202; t=1699624095;
+	bh=pZ8aJuV2KsVuZiJJPUJVNZcJ8el4lhhalq2w7PkrUTo=;
+	h=From:To:Cc:Subject:Date:From;
+	b=W/krW53+BRT4JGtLpBr/mvjqVWq/HeHSW3CWLLU2YXXobeSJErYVhIR+0Fo5phhZH
+	 J4bpH/qH4etORqvKrXNo068V+oWzF+E64/mBvzUyVGJlU98Ry2ZoT8VYA1Sp5VzdeX
+	 dlLSEZVOf+GvWYjbznn750a/9SpB6BXdfXuH4PsTi1jwWENcV+MaW+GOI/cbBNAU7L
+	 ITvEUqraOEAS6hKbor+6W8zO+WdXmYsGYNUG2m6qq1aAT4DtDa/RxTocbiAT6MMjxL
+	 ciPBHSa43/qzSB7sfkyCwJN+7SpCPw0oBx26Pfd2yOfwekyXiNNCJozTGJKza93RFB
+	 8FsmrF9WY5KnA==
 Received: from johan by theta with local (Exim 4.96.2)
-	(envelope-from <johan@kernel.org>)
-	id 1r1RYp-0007mQ-1r;
-	Fri, 10 Nov 2023 14:28:35 +0100
-Date: Fri, 10 Nov 2023 14:28:35 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>,
+	(envelope-from <johan+linaro@kernel.org>)
+	id 1r1Rrl-0008LS-2n;
+	Fri, 10 Nov 2023 14:48:09 +0100
+From: Johan Hovold <johan+linaro@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Felipe Balbi <balbi@kernel.org>,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
-	quic_ppratap@quicinc.com, quic_jackp@quicinc.com,
-	ahalaney@redhat.com, quic_shazhuss@quicinc.com,
-	Bjorn Andersson <quic_bjorande@quicinc.com>,
-	Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v11 02/13] dt-bindings: usb: Add bindings for multiport
- properties on DWC3 controller
-Message-ID: <ZU4wA9xhfjYBCaTU@hovoldconsulting.com>
-References: <20230828133033.11988-1-quic_kriskura@quicinc.com>
- <20230828133033.11988-3-quic_kriskura@quicinc.com>
+	Conor Dooley <conor+dt@kernel.org>,
+	linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH] dt-bindings: usb: hcd: add missing phy name to example
+Date: Fri, 10 Nov 2023 14:48:02 +0100
+Message-ID: <20231110134802.32060-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.42.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230828133033.11988-3-quic_kriskura@quicinc.com>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Aug 28, 2023 at 07:00:22PM +0530, Krishna Kurapati wrote:
-> Add bindings to indicate properties required to support multiport
-> on Synopsys DWC3 controller.
-> 
-> Suggested-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> ---
->  .../devicetree/bindings/usb/snps,dwc3.yaml          | 13 +++++++------
->  1 file changed, 7 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> index a696f23730d3..5bc941355b43 100644
-> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> @@ -85,15 +85,16 @@ properties:
->  
->    phys:
->      minItems: 1
-> -    maxItems: 2
-> +    maxItems: 8
->  
->    phy-names:
->      minItems: 1
-> -    maxItems: 2
-> -    items:
-> -      enum:
-> -        - usb2-phy
-> -        - usb3-phy
-> +    maxItems: 8
-> +    oneOf:
-> +      - items:
-> +          enum: [ usb2-phy, usb3-phy ]
-> +      - items:
-> +          pattern: "^usb[23]-port[0-3]$"
+The example host controller node has two PHYs and therefore needs two
+PHY names.
 
-Shouldn't this just be
+Fixes: 3aa3c66aedef ("dt-bindings: usb: Bring back phy-names")
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+---
+ Documentation/devicetree/bindings/usb/usb-hcd.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-	pattern: "^usb[23]-[0-3]$"
+diff --git a/Documentation/devicetree/bindings/usb/usb-hcd.yaml b/Documentation/devicetree/bindings/usb/usb-hcd.yaml
+index 692dd60e3f73..45a19d4928af 100644
+--- a/Documentation/devicetree/bindings/usb/usb-hcd.yaml
++++ b/Documentation/devicetree/bindings/usb/usb-hcd.yaml
+@@ -41,7 +41,7 @@ examples:
+   - |
+     usb {
+         phys = <&usb2_phy1>, <&usb3_phy1>;
+-        phy-names = "usb";
++        phy-names = "usb2", "usb3";
+         #address-cells = <1>;
+         #size-cells = <0>;
+ 
+-- 
+2.42.1
 
-so that it matches the names that are used by the nvidia bindings?
-
-We already have some inconsistency in that Amlogic uses a variant based
-on the legacy names that needlessly includes "phy" in the names:
-
-	const: usb2-phy0
-	const: usb2-phy1
-	const: usb3-phy0
-	...
-
-I don't think we should be introducing a third naming scheme here so I
-suggest just following the nvidia bindings.
-
-Johan
 
