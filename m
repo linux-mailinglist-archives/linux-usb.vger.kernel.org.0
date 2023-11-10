@@ -1,139 +1,96 @@
-Return-Path: <linux-usb+bounces-2783-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2784-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA71B7E7CDD
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Nov 2023 15:10:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD15A7E7D0C
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Nov 2023 15:37:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EB3181C20A84
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Nov 2023 14:10:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 81804281103
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Nov 2023 14:37:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B08F21B28E;
-	Fri, 10 Nov 2023 14:10:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA8D614AA8;
+	Fri, 10 Nov 2023 14:37:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="x1ZO6wYv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y/2Sl8LG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD359D272
-	for <linux-usb@vger.kernel.org>; Fri, 10 Nov 2023 14:10:41 +0000 (UTC)
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80577387AB
-	for <linux-usb@vger.kernel.org>; Fri, 10 Nov 2023 06:10:40 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-4084095722aso15531285e9.1
-        for <linux-usb@vger.kernel.org>; Fri, 10 Nov 2023 06:10:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1699625439; x=1700230239; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SqD24JlDtZddGkyT2YIsGW856ufA/CMCPfozrVi43fY=;
-        b=x1ZO6wYvVjzlCseG9krBPxcH3Ew/nS+qjJv7HL5ixJEA28n6jKvuNxfB35S95bZXoC
-         0Lervh11pkFPIQFNM9LgIorxPZVJLjHSlK6+MuVZ99wRzJJQuh0dV8Wjy0Q2EhzLUpK2
-         //M2q0ztFclFV28++EQ9Guq7oQZD0aDWi/3Sc1FOLboD4wsVQUa7aiuxLss2ShdeiHuI
-         FZzux2Qo7VZOjrJdVMLWF2Prbawls3Xgm/xy2Nojefu5FMHDHjZg2pHZ1/3hYW95QYVY
-         bgsLYiRwVNNs45DoVT5COeCc7d1bt3tJAcMFkVz7DVH8LFZfSdVR1/Jz5sh+U8rez1Pf
-         iS2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699625439; x=1700230239;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SqD24JlDtZddGkyT2YIsGW856ufA/CMCPfozrVi43fY=;
-        b=nWsY1HALkE8fZg9Yz4uek9tSf/gfokYx891EalS5oy7GmKEX+zuE5rw8CpmyMQMzla
-         5PhiHRVHxEJARIgrb/oTiqgNMco+pNbchsj3IO5X1wZkAmFhkqmM46sBoun8iiDhT97q
-         9/uLQmc9ezED3w4zn6cNuClfXtgoK7ljFQ5UXOhnJ0/T9c8RJePFCAP26skNvDO+2lcQ
-         8KR8qJ95Dq5sz6nB41IWUGCCOAr55hde8meJkyqnbRNzpyWOgkvE2xWvMIm6jd2eyoKi
-         UnIZmUwbvUftDbwEYEZNemrjiCGlpdsSZt5K8skNgS9o1IBIH2kFVau2DuPiLDm9d13x
-         wo9g==
-X-Gm-Message-State: AOJu0YydKukGuKTZ3/dC92ASYl3/u6tLcF3PiC9Y5yI/g9pIzx9dVMPR
-	yNytX7YoSRM7kz18OAhCOE7V9A==
-X-Google-Smtp-Source: AGHT+IEdMcvXOf60sHOMwSweIqd4q3L2xTihKBvLKcKc68d3vUYNKqxIAPqzJgGJBvsRPOXt/+fFaA==
-X-Received: by 2002:a05:600c:3596:b0:406:7029:c4f2 with SMTP id p22-20020a05600c359600b004067029c4f2mr7616844wmq.26.1699625438930;
-        Fri, 10 Nov 2023 06:10:38 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.218.126])
-        by smtp.gmail.com with ESMTPSA id i15-20020a05600c354f00b004067e905f44sm5353769wmq.9.2023.11.10.06.10.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Nov 2023 06:10:38 -0800 (PST)
-Message-ID: <f9ec64ec-f7b0-4905-b81d-82c1ce598108@linaro.org>
-Date: Fri, 10 Nov 2023 15:10:37 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5998D18E04
+	for <linux-usb@vger.kernel.org>; Fri, 10 Nov 2023 14:37:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C4E9EC433C7
+	for <linux-usb@vger.kernel.org>; Fri, 10 Nov 2023 14:37:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1699627069;
+	bh=NQDO+1kgNXcpqmlFyf2YJiCfNJC+kxADCtYCfHKAcuw=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=Y/2Sl8LGINCWxHOuQo7mc7VKys/6L9cIx0hXPcXQXY+8C9kFlRlIfGgjOLI3hpkSC
+	 vjt+YGsuffNs//WaWEvuc2wimZbhEvJA+cjSqkWUuf8QxglHKboO38+wvg7A1zZLfW
+	 i42HkPllip9zA7OxTfMYiGiU67zCo8nNSBBBU6G5WA2ktseHnCRr6y3rE9o8lwakqt
+	 LfFt3JtOuScyNPdKDh3oatK32gllVgBmp1SEIU6gF1vg0toOsbloNBWDex4DmAIzs0
+	 DZgsJR6DPMG8CNaSDweifhdOqee6A69J0D6gfR4H6ZXuxURTz48wuNw/iOxA+EPCaQ
+	 /a/+6ZBFvM8iw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id A9B54C4332E; Fri, 10 Nov 2023 14:37:49 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 218118] USB3 port does not work on Chromebook XE303C12 with
+ Linux kernel 6.5.11
+Date: Fri, 10 Nov 2023 14:37:49 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: mathias.nyman@linux.intel.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218118-208809-4SLSavAfL3@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218118-208809@https.bugzilla.kernel.org/>
+References: <bug-218118-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] dt-bindings: usb: hcd: add missing phy name to example
-Content-Language: en-US
-To: Johan Hovold <johan+linaro@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, linux-usb@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20231110134802.32060-1-johan+linaro@kernel.org>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231110134802.32060-1-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 10/11/2023 14:48, Johan Hovold wrote:
-> The example host controller node has two PHYs and therefore needs two
-> PHY names.
-> 
-> Fixes: 3aa3c66aedef ("dt-bindings: usb: Bring back phy-names")
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218118
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+--- Comment #8 from Mathias Nyman (mathias.nyman@linux.intel.com) ---
+The debug output causes some latency, that could be one reason.
 
-Best regards,
-Krzysztof
+The log for example show that usb3 bus was just about to be suspended befor=
+e it
+detected something on the port:
 
+[    2.337685] xhci-hcd xhci-hcd.6.auto: Get port status 3-1 read: 0x2a0,
+return 0x100
+[    2.337727] hub 3-0:1.0: state 7 ports 1 chg 0000 evt 0000
+[    2.337745] hub 3-0:1.0: hub_suspend
+[    2.337769] usb usb3: bus auto-suspend, wakeup 1
+[    2.337780] usb usb3: suspend raced with wakeup event
+[    2.337786] usb usb3: usb auto-resume
+[    2.376930] xhci-hcd xhci-hcd.6.auto: Port change event, 3-1, id 1, port=
+sc:
+0xa0206e1
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
