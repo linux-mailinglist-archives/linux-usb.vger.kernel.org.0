@@ -1,46 +1,71 @@
-Return-Path: <linux-usb+bounces-2768-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2769-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 919E47E7A35
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Nov 2023 09:38:26 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88DF97E7A90
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Nov 2023 10:19:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E46AF2816EC
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Nov 2023 08:38:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D82F7B20F58
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Nov 2023 09:19:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 281813C3C;
-	Fri, 10 Nov 2023 08:38:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99F0F1119F;
+	Fri, 10 Nov 2023 09:19:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="g+QazQqV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i/15eAPS"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20B5F7E9
-	for <linux-usb@vger.kernel.org>; Fri, 10 Nov 2023 08:38:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CC2FC433C7;
-	Fri, 10 Nov 2023 08:38:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1699605498;
-	bh=PK1GkP+CRvrpK5hxzUQzj2w72P4wxfJVIt/yBBjv5qs=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 060D5D26B;
+	Fri, 10 Nov 2023 09:19:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7238FC433C7;
+	Fri, 10 Nov 2023 09:19:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1699607946;
+	bh=b9jyp9d6eUs12groes8KvuLudG/6cY80nzVdpBVlpl4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=g+QazQqVR6PPjd6tJgrpux0j4i7yMQqC1b3pDQVp+ESNko/FmiFJ2tDtYZMKPXEda
-	 Ow0lUk/RdVMo+vNSOHZriA5wRY0rjDET+5M+wULos6EUJyzbhX1ZQz0I6NMKdrKUrO
-	 ZG0NXgCBiO0kF2DGD1O56vrd/tiCnQPIxfJYxY8c=
-Date: Fri, 10 Nov 2023 09:38:14 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: ariel marcovitch <arielmarcovitch@gmail.com>
-Cc: johan@kernel.org, linux-usb@vger.kernel.org,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: Gaps in logs while using usb-serial as a console
-Message-ID: <2023111049-boat-approach-6504@gregkh>
-References: <CAFGKuwoFUaXMsOOWJNBenQDG6+syt80Z9pvQQK1XSZFztC2_SQ@mail.gmail.com>
- <2023103052-unpeeled-calibrate-ae48@gregkh>
- <CAFGKuwp7JH8H9vjz8iJ24R9TRW0GDE-O96VBAG4L8X4DhTabXg@mail.gmail.com>
- <2023103003-defection-recess-cf49@gregkh>
- <CAFGKuwpSEW4G6CFY10x29a5L53je2mQDO=dm1Tw3gtzqTVky3A@mail.gmail.com>
+	b=i/15eAPSmNar0fmxrbidbkveb69ykFpmetwPD7Yza1TswwTh+IpgJSSIMHqzZNP9R
+	 y5zAQ2Xgo4NVYjaMLLxRV+fKgppRoxikGpT8QuJVGwVFHJaX6m1BDUiFI53AkD7Dbz
+	 DyACF7jrbVQmI5Jnpy08C5eX54ntRlki7xM+T2Y0m2YS4H/Xz3fMr2EJwl3mwn7UDv
+	 sjZg3ZAHHD5t+GMii5Cj+4M6636v+g9yQBPCcq/Vf3X1RyLQ1J7vLUK5eyGvqYYDyQ
+	 dEgZLzY2ud9Jql0Gk5YRq3ySoVaFUhITcouW50caJp5GhCovdhVD99hjRRxMa7yL65
+	 BLTtCnLJ6qZJg==
+Received: from johan by theta with local (Exim 4.96.2)
+	(envelope-from <johan@kernel.org>)
+	id 1r1NfH-0002iZ-2T;
+	Fri, 10 Nov 2023 10:18:59 +0100
+Date: Fri, 10 Nov 2023 10:18:59 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Andy Gross <agross@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Felipe Balbi <balbi@kernel.org>,
+	Wesley Cheng <quic_wcheng@quicinc.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
+	quic_ppratap@quicinc.com, quic_jackp@quicinc.com,
+	ahalaney@redhat.com, quic_shazhuss@quicinc.com
+Subject: Re: [PATCH v13 05/10] usb: dwc3: qcom: Refactor IRQ handling in QCOM
+ Glue driver
+Message-ID: <ZU31gx-LY5GBJGPU@hovoldconsulting.com>
+References: <ZTJ_T1UL8-s2cgNz@hovoldconsulting.com>
+ <14fc724c-bc99-4b5d-9893-3e5eff8895f7@quicinc.com>
+ <ZTY7Lwjd3_8NlfEi@hovoldconsulting.com>
+ <cabf24d0-8eea-4eb5-8205-bf7fe6017ec2@quicinc.com>
+ <ZTZ-EvvbuA6HpycT@hovoldconsulting.com>
+ <fb5e5e1d-520c-4cbc-adde-f30e853421a1@quicinc.com>
+ <ZTdqnSHq_Jo8AuPW@hovoldconsulting.com>
+ <04615205-e380-4719-aff1-f32c26004b14@quicinc.com>
+ <ZUz4RD3MjnLlPn6V@hovoldconsulting.com>
+ <2b19b5e2-5eb0-49e0-8c47-8aff3d48f34e@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -49,94 +74,139 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAFGKuwpSEW4G6CFY10x29a5L53je2mQDO=dm1Tw3gtzqTVky3A@mail.gmail.com>
+In-Reply-To: <2b19b5e2-5eb0-49e0-8c47-8aff3d48f34e@quicinc.com>
 
-On Thu, Nov 09, 2023 at 08:55:49PM +0200, ariel marcovitch wrote:
-> Hello and sorry for the delay
+On Thu, Nov 09, 2023 at 10:08:12PM +0530, Krishna Kurapati PSSNV wrote:
+> On 11/9/2023 8:48 PM, Johan Hovold wrote:
+> > On Fri, Nov 03, 2023 at 03:34:52PM +0530, Krishna Kurapati PSSNV wrote:
+> > > On 10/24/2023 12:26 PM, Johan Hovold wrote:
+> > > > On Mon, Oct 23, 2023 at 10:42:31PM +0530, Krishna Kurapati PSSNV wrote:
+> > > > > On 10/23/2023 7:37 PM, Johan Hovold wrote:
+> > > > 
+> > > > > > Right. And I assume there are hs_phy_irqs also for the first two USB
+> > > > > > controllers on sc8280xp?
+> > > > 
+> > > > > There are, I can dig through and find out. Atleast in downstream I don't
+> > > > > see any use of them.
+> > > > 
+> > > > Yes, please do post how these are wired as well for completeness.
+> > 
+> > Did you find these two interrupts as well?
+
+Please answer.
+
+> > > As an experiment, I tried to test wakeup by pressing buttons on
+> > > connected keyboard when in suspend state or connecting/disconnecting
+> > > keyboard in suspended state on different ports and only see dp/dm IRQ's
+> > > getting fired although we register for hs_phy_irq as well:
+> > > 
+> > > / # cat /proc/interrupts  |grep phy_
+> > > 171:   1  0   0   0  0  0  0  0       PDC 127 Edge      dp_hs_phy_1
+> > > 172:   2  0   0   0  0  0  0  0       PDC 126 Edge      dm_hs_phy_1
+> > > 173:   3  0   0   0  0  0  0  0       PDC 129 Edge      dp_hs_phy_2
+> > > 174:   4  0   0   0  0  0  0  0       PDC 128 Edge      dm_hs_phy_2
+> > > 175:   0  0   0   0  0  0  0  0       PDC 131 Edge      dp_hs_phy_3
+> > > 176:   2  0   0   0  0  0  0  0       PDC 130 Edge      dm_hs_phy_3
+> > > 177:   2  0   0   0  0  0  0  0       PDC 133 Edge      dp_hs_phy_4
+> > > 178:   5  0   0   0  0  0  0  0       PDC 132 Edge      dm_hs_phy_4
+> > > 179:   0  0   0   0  0  0  0  0       PDC  16 Level     ss_phy_1
+> > > 180:   0  0   0   0  0  0  0  0       PDC  17 Level     ss_phy_2
+> > > 181:   0  0   0   0  0  0  0  0     GICv3 163 Level     hs_phy_1
+> > > 182:   0  0   0   0  0  0  0  0     GICv3 168 Level     hs_phy_2
+> > > 183:   0  0   0   0  0  0  0  0     GICv3 892 Level     hs_phy_3
+> > > 184:   0  0   0   0  0  0  0  0     GICv3 891 Level     hs_phy_4
+> > 
+> > Yes, but that doesn't really say much since you never enable the hs_phy
+> > interrupt in the PHY on suspend.
 > 
-> On Mon, 30 Oct 2023 at 10:30, Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Mon, Oct 30, 2023 at 10:15:30AM +0200, ariel marcovitch wrote:
-> > > > Please realize that usb-serial console was the result of me loosing a
-> > > > drunken bet.  It's amazing it works at all.  For "fake" devices like
-> > > LOL your drunken bet was quite helpful to some people
-> > > Because modern PCs come without a serial port, I wanted to use it to
-> > > see early logs on my crashing kernel without having to use printk
-> > > delay and things like that.
-> > > I'm curious as to how kernel people debug PCs in general...
-> >
-> > We use a usb debug port connection (it's a special cable).
-> Interesting
-> What makes it work well as opposed to usb-serial? Is it a less
-> complicated format?
+> I did register to and enabled the hs_phy_irq interrupt when I tested and
+> posted the above table.
 
-Yes, it looks like a serial console you just write the characters to and
-they come out the other end.  No messing around with USB stuff.
+Yes, but, again, you never enabled them in the PHY (cf. QUSB2) so it's
+hardly surprising that they do not fire.
 
-> What code is responsible for this feature?
+Still good to know that requesting them doesn't trigger spurious
+interrupts either since these are apparently enabled on most Qualcomm
+SoCs even though they are not used. We should fix that too.
 
-drivers/usb/host/xhci-dbgtty.c
+> > > Since the hs_phy_irq is applicable only for qusb2 targets, do we still
+> > > need to add it to DT.
+> > 
+> > Are you sure there's no support for hs_phy_irq also in the "femto" PHYs
+> > and that it's just that there is currently no driver support for using
+> > them?
+> > 
+> > And why is it defined if there is truly no use for it?
+> 
+> Femto phy's have nothing to be configured for interrupts like we do for
+> qusb2 phy's. I confirmed from hw validation team that they never used
+> hs_phy_irq for validating wakeup. They only used dp/dm IRQ's for wakeup.
 
-> > > In any case, the usb-serial setup was quite weird as it required two
-> > > usb-serial and a gender changer
-> >
-> > Yes, that's normal.
-> >
-> > > > this, that use the generic usb-serial code, yes, you will have overruns
-> > > > and other problems, that's just part of how it works (i.e. not well.)
-> > > >
-> > > > For something like qemu, please use a real console, like the serial port
-> > > > (i.e. a fake serial port), not the fake usb-serial port.
-> > > Yeah I was just using it to demonstrate the problem (I agree it is
-> > > quite weird to use usb-serial as a console for qemu)
-> > > I experienced the same problem with a real usb-serial device, then I
-> > > tried to use emulation so I can debug it more easily
-> >
-> > Which real usb-serial device?  That matters as it's up to the individual
-> > driver to handle the flow control properly.
-> Oh sorry I really thought I mentioned but it seems I missed it: pl2302
-> Isn't the problem generic, though? (The speed of the device may make some
-> difference probably)
+Ok.
 
-The type of device and the speed it is sending out the characters makes
-all the difference here.  A pl2303 device is a very tiny and dumb uart
-with almost no buffer in it at all.  Overruns will happen if you try to
-use a console to get boot messages.
+Is there some other (non-wakeup) functionality which may potentially use
+this interrupt?
 
-> > > > So this is "working as designed" in that it wasn't designed at all and
-> > > > again, it is a miracle any data is flowing there at all :)
-> > > I see...
-> > > However it may be possible to fix it without much effort, so why not?
-> > > Something like checking the return value for the console's write
-> > > function seems reasonable to me anyway...
-> >
-> > But overflows for buffers can not be handled by consoles like this
-> >
-> > > Besides, don't other types of consoles have the same problem (being
-> > > initialized late, getting a lot of data, losing some of it)?
-> >
-> > Yes, they do have that problem, this is not unique.  You can just see it
-> > very easily when using the generic usb-serial driver as there is almost
-> > no buffering at all in it other than what the tty layer provides.
-> >
-> > Adding larger buffers can help with this, but where do you stop?  What
-> > is the proper buffer size to always use?
-> Specifically, since we are talking about data coming from the console,
-> and it saves the full log anyway (or at least buffers a lot of it, in
-> a configurable manner),
-> why can't it make the per-console seq track the actual data that was
-> able to be sent?
-> It sound reasonable for me, is it really that bad?
+> > Also, if hs_phy_irq and dp/dm_phy_irq were mutually exclusive, why does
+> > the following Qualcomm SoCs define all three?
+> > 
+> 
+> Similar to BAM IRQ's these might have been just ported over targets I
+> believe. I say so because HW Validation team confirmed they don't use this
+> interrupt at all on femto phy targets.
 
-Try changing it and see!  :)
+So then including the hs_phy_irq for most of these SoCs was a mistake
+and we should drop it from the bindings?
 
-It's complex stuff, there is buffering already, but for slow devices
-with no additional buffers in them, you will have overruns.
+What about the QUSB2 SoCs that also define DP/DM, are both useable
+there?
 
-But hey, I could be totally wrong here, patches are always gladly
-reviewed for this stuff if you find some places that could be improved.
+And if so, is there any reason to prefer one mechanism over the other?
 
-thanks,
+> >                - qcom,ipq4019-dwc3
+> >                - qcom,ipq6018-dwc3
+> >                - qcom,ipq8064-dwc3
+> >                - qcom,ipq8074-dwc3
+> >                - qcom,msm8994-dwc3
+> >                - qcom,qcs404-dwc3
+> >                - qcom,sc7180-dwc3
+> > 	      - qcom,sc7280-dwc3
+> >                - qcom,sdm670-dwc3
+> >                - qcom,sdm845-dwc3
+> >                - qcom,sdx55-dwc3
+> >                - qcom,sdx65-dwc3
+> >                - qcom,sm4250-dwc3
+> >                - qcom,sm6125-dwc3
+> >                - qcom,sm6350-dwc3
+> >                - qcom,sm8150-dwc3
+> >                - qcom,sm8250-dwc3
+> >                - qcom,sm8350-dwc3
+> >                - qcom,sm8450-dwc3
+> >                - qcom,sm8550-dwc3
+> > 
+> > Some of those use QUSB2 PHYs and some use "femto" PHYs.
 
-greg k-h
+> > > Since the DeviceTree passed to the OS, should describe the hardware to
+> > > the OS, and should represent the hardware from the point-of-view of the
+> > > OS, adding one interrupt (ctrl_irq[0]) might be sufficient as Linux
+> > > would not use the other interrupts.
+> > 
+> > I've only skimmed the virtualisation bits in xHCI spec, but it seems
+> > Linux as VMM would still be involved in assigning these interrupts to
+> > VMs.
+> 
+> I didn't understand this sentence. Are you referring to cases where Linux
+> needs to act as the entity using the ctrl_irq[1] ?
+
+It seems Linux acting as VMM would need to be involved in configuring
+such interrupts and passing them to the VM that eventually use them.
+
+> On QCOM SoC's, in reality (atleast in device mode) I can say that we create
+> the event rings for IPA FW (which registers for ctrl_irq[1]) to use and read
+> depevt's. We don't register or get this IRQ from DT and then provide to IPA
+> (not even in downstream).
+
+Yeah, I don't know how such things would best be handled.
+
+Johan
 
