@@ -1,164 +1,128 @@
-Return-Path: <linux-usb+bounces-2780-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2781-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A48E7E7C43
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Nov 2023 13:45:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 332A47E7C93
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Nov 2023 14:28:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2AC1AB20F02
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Nov 2023 12:45:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E28032813F1
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Nov 2023 13:28:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9CD514280;
-	Fri, 10 Nov 2023 12:45:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB3F61A714;
+	Fri, 10 Nov 2023 13:28:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tODKqcpu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0FB61118F
-	for <linux-usb@vger.kernel.org>; Fri, 10 Nov 2023 12:45:02 +0000 (UTC)
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E313482C
-	for <linux-usb@vger.kernel.org>; Fri, 10 Nov 2023 04:45:01 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1r1Qqm-0008RY-G3; Fri, 10 Nov 2023 13:43:04 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1r1Qqd-0081VE-CM; Fri, 10 Nov 2023 13:42:55 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1r1Qqd-00Gimy-0Z; Fri, 10 Nov 2023 13:42:55 +0100
-Date: Fri, 10 Nov 2023 13:41:23 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	linux-kbuild@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-	Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
-	Russell King <linux@armlinux.org.uk>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>, Guo Ren <guoren@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Greg Ungerer <gerg@linux-m68k.org>, Michal Simek <monstr@monstr.eu>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Geoff Levand <geoff@infradead.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-	Helge Deller <deller@gmx.de>,
-	Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4101719BAF;
+	Fri, 10 Nov 2023 13:28:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC265C433C8;
+	Fri, 10 Nov 2023 13:28:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1699622921;
+	bh=RKp5JkDrgXTCaSZhsV2VwufdEyP5Z2U+wHi62OW9Q6w=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=tODKqcpuMevzLNd4CWQL470DP6V+/C91mGFko7GtrGqiI5/8nJL+iaOSGXfe9iJam
+	 4+2AJKynIosW4XZVgpbwO9XoXEoZLdeJh5NBu9kxI3XgY35UdPOBey65o6O8wI5IjD
+	 O4+074ugJgTxCpnS/mBi7qoHI8ZpB8F8cL7nLhTkOSuElxIkqL8LTYTIwv7CY2WIGE
+	 2zc8BYyEA4oxTgNiw/zVbllNyov/yZMJpMuCG6ege/eGhVnGIXZ3gbmJUCN8lraQM3
+	 5mybm5OxBhiC1wALLfpbxcxiEju0Rvk4xfBu3+tDRWskYuvAvzuB/e/bmM00yIdGmW
+	 Hhmq9Cne10bGQ==
+Received: from johan by theta with local (Exim 4.96.2)
+	(envelope-from <johan@kernel.org>)
+	id 1r1RYp-0007mQ-1r;
+	Fri, 10 Nov 2023 14:28:35 +0100
+Date: Fri, 10 Nov 2023 14:28:35 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Timur Tabi <timur@kernel.org>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	David Woodhouse <dwmw2@infradead.org>,
-	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-	Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-	Kees Cook <keescook@chromium.org>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nicolas Schier <nicolas@fjasle.eu>,
-	Al Viro <viro@zeniv.linux.org.uk>, linux-alpha@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-trace-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
-	loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-	netdev@vger.kernel.org, linux-parisc@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linux-bcachefs@vger.kernel.org,
-	linux-mtd@lists.infradead.org
-Subject: Re: [PATCH 04/22] [RESEND] time: make sysfs_get_uname() function
- visible in header
-Message-ID: <20231110124123.5mado2cc5vnywqfx@pengutronix.de>
-References: <20231108125843.3806765-1-arnd@kernel.org>
- <20231108125843.3806765-5-arnd@kernel.org>
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Felipe Balbi <balbi@kernel.org>,
+	Wesley Cheng <quic_wcheng@quicinc.com>,
+	Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
+	quic_ppratap@quicinc.com, quic_jackp@quicinc.com,
+	ahalaney@redhat.com, quic_shazhuss@quicinc.com,
+	Bjorn Andersson <quic_bjorande@quicinc.com>,
+	Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v11 02/13] dt-bindings: usb: Add bindings for multiport
+ properties on DWC3 controller
+Message-ID: <ZU4wA9xhfjYBCaTU@hovoldconsulting.com>
+References: <20230828133033.11988-1-quic_kriskura@quicinc.com>
+ <20230828133033.11988-3-quic_kriskura@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ljpauxr7qypfgjtq"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231108125843.3806765-5-arnd@kernel.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+In-Reply-To: <20230828133033.11988-3-quic_kriskura@quicinc.com>
 
+On Mon, Aug 28, 2023 at 07:00:22PM +0530, Krishna Kurapati wrote:
+> Add bindings to indicate properties required to support multiport
+> on Synopsys DWC3 controller.
+> 
+> Suggested-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../devicetree/bindings/usb/snps,dwc3.yaml          | 13 +++++++------
+>  1 file changed, 7 insertions(+), 6 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> index a696f23730d3..5bc941355b43 100644
+> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> @@ -85,15 +85,16 @@ properties:
+>  
+>    phys:
+>      minItems: 1
+> -    maxItems: 2
+> +    maxItems: 8
+>  
+>    phy-names:
+>      minItems: 1
+> -    maxItems: 2
+> -    items:
+> -      enum:
+> -        - usb2-phy
+> -        - usb3-phy
+> +    maxItems: 8
+> +    oneOf:
+> +      - items:
+> +          enum: [ usb2-phy, usb3-phy ]
+> +      - items:
+> +          pattern: "^usb[23]-port[0-3]$"
 
---ljpauxr7qypfgjtq
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Shouldn't this just be
 
-Hello Arnd,
+	pattern: "^usb[23]-[0-3]$"
 
-On Wed, Nov 08, 2023 at 01:58:25PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
->=20
-> This function is defined globally in clocksource.c and used conditionally
-> in clockevent.c, which the declaration hidden when clockevent support
+so that it matches the names that are used by the nvidia bindings?
 
-s/which/with/ ?
+We already have some inconsistency in that Amlogic uses a variant based
+on the legacy names that needlessly includes "phy" in the names:
 
-> is disabled. This causes a harmless warning in the definition:
->=20
-> kernel/time/clocksource.c:1324:9: warning: no previous prototype for 'sys=
-fs_get_uname' [-Wmissing-prototypes]
->  1324 | ssize_t sysfs_get_uname(const char *buf, char *dst, size_t cnt)
->=20
-> Move the declaration out of the #ifdef so it is always visible.
->=20
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+	const: usb2-phy0
+	const: usb2-phy1
+	const: usb3-phy0
+	...
 
-Other than that:
+I don't think we should be introducing a third naming scheme here so I
+suggest just following the nvidia bindings.
 
-Reviewed-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---ljpauxr7qypfgjtq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmVOJO4ACgkQj4D7WH0S
-/k65EAf/UjDsSsmivHFeg9uWSJLPICzRXZuL3swrSrbDypaI8PuJaX8767ZWsiYT
-oDeWDpXzpAvyvz7WUCuFkRJIytR6EpscoR2t39XsflnxAYmcgYmiBDesY/A6xtuZ
-k2ZldHp9NVszzJP3PiXQ8JOcEFA1LEc08SjHzEz4F6QAsno6WZD/do4yBIU+ikEg
-57Rbk4CJghGfXhgOAmwcWrN91qOFQwhPpKHHDgFfYSZ3zLo+f6H9hSUkzOuLGDhx
-zbK1UnRCuRi3iiJlIqS2LzaSySmRQ9tsbtjk9aQx7+GqdGprHajLMikxQ13xn8jh
-U+F4kOqRAwsIV6i5/GUFGEGtLnMsSQ==
-=9raj
------END PGP SIGNATURE-----
-
---ljpauxr7qypfgjtq--
+Johan
 
