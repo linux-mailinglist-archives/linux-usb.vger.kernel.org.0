@@ -1,104 +1,132 @@
-Return-Path: <linux-usb+bounces-2793-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2794-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C15EB7E8A5F
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Nov 2023 11:45:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A17E27E8A67
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Nov 2023 11:55:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5962B1F20F37
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Nov 2023 10:45:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5BE82280D6E
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Nov 2023 10:55:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D489125BD;
-	Sat, 11 Nov 2023 10:45:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7AE412B87;
+	Sat, 11 Nov 2023 10:55:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hCxthHA8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jhQJBw2p"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8339A7F
-	for <linux-usb@vger.kernel.org>; Sat, 11 Nov 2023 10:45:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01504C433C7;
-	Sat, 11 Nov 2023 10:45:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A754107B7;
+	Sat, 11 Nov 2023 10:55:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2F7FC433C8;
+	Sat, 11 Nov 2023 10:55:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699699520;
-	bh=7QU9G6Pt0jobK5bptvySxSMCA2aLwKQOGddcVU+8egc=;
+	s=k20201202; t=1699700121;
+	bh=yhZpTjWRK6RKd63R4nWe56MWy0CMG7eNfkNMHL2QcRE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hCxthHA8jUEej9Oo3FBMYJ3kt6G0T3Kq5fz4PKwPqLSij2agcf6zZojrd7bx4owJ/
-	 qt4/fG5YAvkQkG3ygL9Ye3O0OoROV4nlLAxFtOqWWh9QOs10AEHTJ3/pjJb4mfdG0i
-	 a8fl5ThCQAqozqwuWswYg5kJZe2jPwrJz94rgB+RMn8Ng5q8YFHHK3LzfP1VEuog/Z
-	 4v/oVTWIyqOGQYMMbW0/O/NYbQHO0mmt0mJloVGG7VNEQHFJfgtpigy9MuCMidaOkv
-	 EZC64C+T5BJnMEN5WV36bUClEvJGQxsgxedqJD5RiQL7j+jn27Wb/jUBKI6LDu0gi6
-	 Wt/+A30ao3y7w==
+	b=jhQJBw2ply+Us4XYDAgeXbr4WDWJ3jiVW/6DPinTKjrwVwX+DmVqt8lhxT2BJwxSK
+	 l744L/rFpeuiglGmmqHidvqtcPsa/pdvx7WgBhSCEnYEwM13o4/mwh8zGli154MW3Y
+	 H31OjHIdZq16RiXnkZSVBjDwI7OSWu0R+lv2XDGJU+DvUFgQLtUq60r7nlwQGq8Q3l
+	 i7UnynQxBXATG4WzeeQlve+49tMYVrHcmk4LplX+wKMj3OJqHVha8D3fTd0uuS1EZB
+	 4kwdRzV75i3StzG5p2Xr/ARidjukxRKkQi1GDKLAnVT/LLpHwnFrd0qnFD3GjRChA/
+	 /sF61VX7QLYvQ==
 Received: from johan by xi.lan with local (Exim 4.96)
 	(envelope-from <johan@kernel.org>)
-	id 1r1lUK-0001L6-1z;
-	Sat, 11 Nov 2023 11:45:16 +0100
-Date: Sat, 11 Nov 2023 11:45:16 +0100
+	id 1r1le1-0001Tb-17;
+	Sat, 11 Nov 2023 11:55:18 +0100
+Date: Sat, 11 Nov 2023 11:55:17 +0100
 From: Johan Hovold <johan@kernel.org>
-To: Stanley Chang <stanley_chang@realtek.com>
+To: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
 Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] usb: dwc3: add device put function to decrement the
- ref-counted reference
-Message-ID: <ZU9bPMHqz7Gj4rHj@hovoldconsulting.com>
-References: <20231107091252.11783-1-stanley_chang@realtek.com>
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
+	Wesley Cheng <quic_wcheng@quicinc.com>,
+	Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
+	quic_ppratap@quicinc.com, quic_jackp@quicinc.com,
+	ahalaney@redhat.com, quic_shazhuss@quicinc.com,
+	Bjorn Andersson <quic_bjorande@quicinc.com>,
+	Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v11 02/13] dt-bindings: usb: Add bindings for multiport
+ properties on DWC3 controller
+Message-ID: <ZU9dlfM8tdfdqKkx@hovoldconsulting.com>
+References: <20230828133033.11988-1-quic_kriskura@quicinc.com>
+ <20230828133033.11988-3-quic_kriskura@quicinc.com>
+ <ZU4wA9xhfjYBCaTU@hovoldconsulting.com>
+ <bc3e9da6-c932-46a0-923a-44be817bd129@quicinc.com>
+ <c8b0af46-6513-43fc-994d-4d04f6c65b5e@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20231107091252.11783-1-stanley_chang@realtek.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c8b0af46-6513-43fc-994d-4d04f6c65b5e@quicinc.com>
 
-On Tue, Nov 07, 2023 at 05:12:51PM +0800, Stanley Chang wrote:
-> When the function exits, the count should be decremented via
-> platform_device_put and of_node_put.
+On Sat, Nov 11, 2023 at 03:17:40PM +0530, Krishna Kurapati PSSNV wrote:
+> On 11/11/2023 2:00 PM, Krishna Kurapati PSSNV wrote:
+> > On 11/10/2023 6:58 PM, Johan Hovold wrote:
 
-This isn't really a self-contained commit message (and your use of
-'count' is too vague). You're also changing two functions in two
-different ways here.
+> >>>     phy-names:
+> >>>       minItems: 1
+> >>> -    maxItems: 2
+> >>> -    items:
+> >>> -      enum:
+> >>> -        - usb2-phy
+> >>> -        - usb3-phy
+> >>> +    maxItems: 8
+> >>> +    oneOf:
+> >>> +      - items:
+> >>> +          enum: [ usb2-phy, usb3-phy ]
+> >>> +      - items:
+> >>> +          pattern: "^usb[23]-port[0-3]$"
+> >>
+> >> Shouldn't this just be
+> >>
+> >>     pattern: "^usb[23]-[0-3]$"
+> >>
+> >> so that it matches the names that are used by the nvidia bindings?
+> >>
+> >> We already have some inconsistency in that Amlogic uses a variant based
+> >> on the legacy names that needlessly includes "phy" in the names:
+> >>
+> >>     const: usb2-phy0
+> >>     const: usb2-phy1
+> >>     const: usb3-phy0
+> >>     ...
+> >>
+> >> I don't think we should be introducing a third naming scheme here so I
+> >> suggest just following the nvidia bindings.
 
-> Fixes: 34c200483569 ("usb: dwc3: add Realtek DHC RTD SoC dwc3 glue layer driver")
-> Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
-> ---
->  drivers/usb/dwc3/dwc3-rtk.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-rtk.c b/drivers/usb/dwc3/dwc3-rtk.c
-> index 590028e8fdcb..9d6f2a8bd6ce 100644
-> --- a/drivers/usb/dwc3/dwc3-rtk.c
-> +++ b/drivers/usb/dwc3/dwc3-rtk.c
-> @@ -187,6 +187,7 @@ static enum usb_device_speed __get_dwc3_maximum_speed(struct device_node *np)
->  
->  	ret = match_string(speed_names, ARRAY_SIZE(speed_names), maximum_speed);
->  
-> +	of_node_put(dwc3_np);
+> >> > In that case, why don't we use  "^usb[23]-phy[0-3]$". I think its close
+> > to what we have on dwc3 core already today (usb2-phy/usb3-phy).
+>
+> I mean, it isn't needless. It is a phy and shouldn't the binding suggest 
+> that and include "-phy" in the name ?
 
-You're still leaking a reference in the of_property_read_string() error
-path just above.
+No, adding a '-phy' suffix to each name is unnecessary since the
+property is called 'phy-names'.
 
->  	return (ret < 0) ? USB_SPEED_UNKNOWN : ret;
->  }
->  
-> @@ -339,6 +340,8 @@ static int dwc3_rtk_probe_dwc3_core(struct dwc3_rtk *rtk)
->  
->  	switch_usb2_role(rtk, rtk->cur_role);
->  
-> +	platform_device_put(dwc3_pdev);
-> +	of_node_put(dwc3_node);
+This is also documented:
 
-Please keep the new line before return for readability.
+	For names used in {clock,dma,interrupt,reset}-names, do not add
+	any suffix, e.g.: "tx" instead of "txirq" (for interrupt).
 
->  	return 0;
->  
->  err_pdev_put:
+	https://docs.kernel.org/devicetree/bindings/writing-bindings.html
+
+and we've already discussed this when I asked you to drop the likewise
+redundant '_irq' suffix from the interrupt names.
 
 Johan
 
