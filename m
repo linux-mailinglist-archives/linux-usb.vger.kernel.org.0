@@ -1,179 +1,119 @@
-Return-Path: <linux-usb+bounces-2795-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2796-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A63617E8AFF
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Nov 2023 14:05:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9502F7E8B25
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Nov 2023 15:20:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D6F931C208C8
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Nov 2023 13:05:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5325E1F20F8F
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Nov 2023 14:20:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3969614A92;
-	Sat, 11 Nov 2023 13:05:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD7CD156CD;
+	Sat, 11 Nov 2023 14:20:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="l4Wx1J+H"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="B0qdyuO/"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1938779F6;
-	Sat, 11 Nov 2023 13:05:29 +0000 (UTC)
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD5D130E6;
-	Sat, 11 Nov 2023 05:05:28 -0800 (PST)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ABD0fSk015903;
-	Sat, 11 Nov 2023 13:05:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=abIu2MORsikqvY3d7KBcDOW2/Dr/HxEN9qt7rLxhROM=;
- b=l4Wx1J+HQXSPgoPAp9YqxN/JR/5P24Ga42hRiq7xsadFQAWh+hgGIo3EQpnoQGxhy1MO
- qzcmDYRv78VTfYLq506ngWFoJwHyd6MITA+870BQ+fO6dn13OhlpZwpAaLcQtmWV0oNH
- xM1tc7jgcuRXFoBcsNdTujqc/NBTnL8reD6QSj1ig3Nt/1Bzpe8jqZg+eLDuXbI1iM1G
- Q28q4F69Nv6PyNDJaQgF+zHZh6zCJzBT7XrbYt8X3mm1jICePehUB1H724PCZe+OZ91F
- Ty5mKqRfafjZTHXkTExs9H2rGJkybUJBZ72CyHcfFr9I3FbPINiN7wlUHaNV1w0IItru ew== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ua1778mvr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 11 Nov 2023 13:05:08 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3ABD57hL009576
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 11 Nov 2023 13:05:07 GMT
-Received: from [10.216.23.41] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.39; Sat, 11 Nov
- 2023 05:05:00 -0800
-Message-ID: <8591f3d1-5c29-4fa0-a791-62ffb26c90f1@quicinc.com>
-Date: Sat, 11 Nov 2023 18:34:56 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C733614F77
+	for <linux-usb@vger.kernel.org>; Sat, 11 Nov 2023 14:20:00 +0000 (UTC)
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DCC73AA6
+	for <linux-usb@vger.kernel.org>; Sat, 11 Nov 2023 06:19:59 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-53e2308198eso4645829a12.1
+        for <linux-usb@vger.kernel.org>; Sat, 11 Nov 2023 06:19:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1699712397; x=1700317197; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ptbiafykJ7pRIMqCQZ06p889hMKKC590ILuJm+wGBD4=;
+        b=B0qdyuO/jUCpcDtPvNLuwdV38f5yqma60rauBCnaq2ysK7eOpMku3EGkNSnUbzTFfM
+         37MKFNqPHx7yzdet44hHrdMaSuoY08KOzuaZnaZSIb8eUS56dL8vvEpc7lk2Bx3dRC6a
+         prt4r+VI2V7hs3HgMgbNKX+NGB8+HViayYM+S/QARLnxwh8KKe6fpYGmxqXJnq3uNWS9
+         ZV33sFTOJY2N+rcXN5ly2Ts4H1or0+JwkLDcaaOFlKyWy6ue+LDqD/dbuxHgj/XwLZEP
+         xVN+dLKXFecjODi+PyRwPRcmIYZSvN7tPXP3Bg1dPg/TqF3NRX4wnAyVktE7KAexPPEI
+         NuvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699712397; x=1700317197;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ptbiafykJ7pRIMqCQZ06p889hMKKC590ILuJm+wGBD4=;
+        b=AhfULePbHZIXRuhHw1sz3XG/tBnkZMYqWFviCUaB+6DvcElZuVnHBbrisurEz/HrLL
+         uvrsaMzmy1DQmL9drFn4kEZw39QgJkrYfdztoKfIJmcSrtnSiuVgtqe9iQOaSvG8AzEa
+         LMBu27QKcXAC9IsHnAh09r9G2QHIav0gWd+GN5vd87BS3IDq5mVSQfzVnu8RPyWAEJl6
+         vi+80CVRa1I3mU7uHHwZ0KMNE3kB2pMe89Yy3KAQej7ZCaugthOGOgF4R6v81nW8WBwn
+         hGyt1b43+qNx1+pbIHd9Dsd6p107+tl9KSc94bgxspxmNk4aWGckax1bMZY94aOubq+A
+         RAQQ==
+X-Gm-Message-State: AOJu0YwaeqQ8FOPNti8Ufg9WjftlBCNq7VlBstwf5EMeSf6NTeQSVnx5
+	NKAQC+fKY0gx3S979kzzqJwquQ==
+X-Google-Smtp-Source: AGHT+IF6WuaSFh+2WoYZFrNj5cszOB/hqZsoJg0oXGWaqi+IL9O7EVOR6XOKlu/R5PzGbWOpD3GPlQ==
+X-Received: by 2002:aa7:dd56:0:b0:53e:7781:2279 with SMTP id o22-20020aa7dd56000000b0053e77812279mr1490668edw.36.1699712397566;
+        Sat, 11 Nov 2023 06:19:57 -0800 (PST)
+Received: from krzk-bin.. ([178.197.218.126])
+        by smtp.gmail.com with ESMTPSA id dm20-20020a05640222d400b00537666d307csm1035408edb.32.2023.11.11.06.19.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Nov 2023 06:19:57 -0800 (PST)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Wesley Cheng <quic_wcheng@quicinc.com>,
+	linux-arm-msm@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] dt-bindings: usb: qcom,dwc3: adjust number of interrupts on SM6125
+Date: Sat, 11 Nov 2023 15:19:53 +0100
+Message-Id: <20231111141953.51841-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v11 02/13] dt-bindings: usb: Add bindings for multiport
- properties on DWC3 controller
-To: Johan Hovold <johan@kernel.org>
-CC: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Krzysztof Kozlowski
-	<krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Andy
- Gross" <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Konrad
- Dybcio" <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, "Felipe
- Balbi" <balbi@kernel.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        "Mathias
- Nyman" <mathias.nyman@intel.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>,
-        <quic_jackp@quicinc.com>, <ahalaney@redhat.com>,
-        <quic_shazhuss@quicinc.com>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        "Rob Herring" <robh@kernel.org>
-References: <20230828133033.11988-1-quic_kriskura@quicinc.com>
- <20230828133033.11988-3-quic_kriskura@quicinc.com>
- <ZU4wA9xhfjYBCaTU@hovoldconsulting.com>
- <bc3e9da6-c932-46a0-923a-44be817bd129@quicinc.com>
- <c8b0af46-6513-43fc-994d-4d04f6c65b5e@quicinc.com>
- <ZU9dlfM8tdfdqKkx@hovoldconsulting.com>
-Content-Language: en-US
-From: Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <ZU9dlfM8tdfdqKkx@hovoldconsulting.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: zjWeNsImxlPMJuG07Jm__gxj8S3GoT91
-X-Proofpoint-GUID: zjWeNsImxlPMJuG07Jm__gxj8S3GoT91
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-11_11,2023-11-09_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
- bulkscore=0 priorityscore=1501 spamscore=0 suspectscore=0
- lowpriorityscore=0 adultscore=0 impostorscore=0 phishscore=0 mlxscore=0
- mlxlogscore=755 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311060000 definitions=main-2311110110
 
+Qualcomm SM6125 DWC3 USB controller comes with two interrupts (verified
+with downstream/vendor code of Trinket DTSI from Xiaomi Laurel device).
+Move the qcom,sm6125-dwc3 to appropriate place in allOf:if:then blocks
+constraining interrupts.
 
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 11/11/2023 4:25 PM, Johan Hovold wrote:
-> On Sat, Nov 11, 2023 at 03:17:40PM +0530, Krishna Kurapati PSSNV wrote:
->> On 11/11/2023 2:00 PM, Krishna Kurapati PSSNV wrote:
->>> On 11/10/2023 6:58 PM, Johan Hovold wrote:
-> 
->>>>>      phy-names:
->>>>>        minItems: 1
->>>>> -    maxItems: 2
->>>>> -    items:
->>>>> -      enum:
->>>>> -        - usb2-phy
->>>>> -        - usb3-phy
->>>>> +    maxItems: 8
->>>>> +    oneOf:
->>>>> +      - items:
->>>>> +          enum: [ usb2-phy, usb3-phy ]
->>>>> +      - items:
->>>>> +          pattern: "^usb[23]-port[0-3]$"
->>>>
->>>> Shouldn't this just be
->>>>
->>>>      pattern: "^usb[23]-[0-3]$"
->>>>
->>>> so that it matches the names that are used by the nvidia bindings?
->>>>
->>>> We already have some inconsistency in that Amlogic uses a variant based
->>>> on the legacy names that needlessly includes "phy" in the names:
->>>>
->>>>      const: usb2-phy0
->>>>      const: usb2-phy1
->>>>      const: usb3-phy0
->>>>      ...
->>>>
->>>> I don't think we should be introducing a third naming scheme here so I
->>>> suggest just following the nvidia bindings.
-> 
->>>>> In that case, why don't we use  "^usb[23]-phy[0-3]$". I think its close
->>> to what we have on dwc3 core already today (usb2-phy/usb3-phy).
->>
->> I mean, it isn't needless. It is a phy and shouldn't the binding suggest
->> that and include "-phy" in the name ?
-> 
-> No, adding a '-phy' suffix to each name is unnecessary since the
-> property is called 'phy-names'.
-> 
-> This is also documented:
-> 
-> 	For names used in {clock,dma,interrupt,reset}-names, do not add
-> 	any suffix, e.g.: "tx" instead of "txirq" (for interrupt).
-> 
-> 	https://docs.kernel.org/devicetree/bindings/writing-bindings.html
-> 
+diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+index 64043b91ffb9..3f41362b2a91 100644
+--- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
++++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+@@ -375,7 +375,6 @@ allOf:
+               - qcom,sdx65-dwc3
+               - qcom,sdx75-dwc3
+               - qcom,sm4250-dwc3
+-              - qcom,sm6125-dwc3
+               - qcom,sm6350-dwc3
+               - qcom,sm8150-dwc3
+               - qcom,sm8250-dwc3
+@@ -408,6 +407,7 @@ allOf:
+               - qcom,msm8996-dwc3
+               - qcom,msm8998-dwc3
+               - qcom,sm6115-dwc3
++              - qcom,sm6125-dwc3
+     then:
+       properties:
+         interrupts:
+-- 
+2.34.1
 
-Thanks for the explanation.
-
-> and we've already discussed this when I asked you to drop the likewise
-> redundant '_irq' suffix from the interrupt names.
-
-Yes, we did discuss this in irq context. But in this case I thought it 
-was fine because we already have usb(2/3)-"phy" already present.
-
-When pushing v14, will make this change to usb(2/3)-(0-3) and skip port/phy.
-
-Regards,
-Krishna,
 
