@@ -1,119 +1,122 @@
-Return-Path: <linux-usb+bounces-2796-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2797-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9502F7E8B25
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Nov 2023 15:20:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A19707E8B9B
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Nov 2023 17:24:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5325E1F20F8F
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Nov 2023 14:20:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5CED8280EC7
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Nov 2023 16:24:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD7CD156CD;
-	Sat, 11 Nov 2023 14:20:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5DDB1B274;
+	Sat, 11 Nov 2023 16:24:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="B0qdyuO/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ia4YKeMp"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C733614F77
-	for <linux-usb@vger.kernel.org>; Sat, 11 Nov 2023 14:20:00 +0000 (UTC)
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DCC73AA6
-	for <linux-usb@vger.kernel.org>; Sat, 11 Nov 2023 06:19:59 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-53e2308198eso4645829a12.1
-        for <linux-usb@vger.kernel.org>; Sat, 11 Nov 2023 06:19:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1699712397; x=1700317197; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ptbiafykJ7pRIMqCQZ06p889hMKKC590ILuJm+wGBD4=;
-        b=B0qdyuO/jUCpcDtPvNLuwdV38f5yqma60rauBCnaq2ysK7eOpMku3EGkNSnUbzTFfM
-         37MKFNqPHx7yzdet44hHrdMaSuoY08KOzuaZnaZSIb8eUS56dL8vvEpc7lk2Bx3dRC6a
-         prt4r+VI2V7hs3HgMgbNKX+NGB8+HViayYM+S/QARLnxwh8KKe6fpYGmxqXJnq3uNWS9
-         ZV33sFTOJY2N+rcXN5ly2Ts4H1or0+JwkLDcaaOFlKyWy6ue+LDqD/dbuxHgj/XwLZEP
-         xVN+dLKXFecjODi+PyRwPRcmIYZSvN7tPXP3Bg1dPg/TqF3NRX4wnAyVktE7KAexPPEI
-         NuvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699712397; x=1700317197;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ptbiafykJ7pRIMqCQZ06p889hMKKC590ILuJm+wGBD4=;
-        b=AhfULePbHZIXRuhHw1sz3XG/tBnkZMYqWFviCUaB+6DvcElZuVnHBbrisurEz/HrLL
-         uvrsaMzmy1DQmL9drFn4kEZw39QgJkrYfdztoKfIJmcSrtnSiuVgtqe9iQOaSvG8AzEa
-         LMBu27QKcXAC9IsHnAh09r9G2QHIav0gWd+GN5vd87BS3IDq5mVSQfzVnu8RPyWAEJl6
-         vi+80CVRa1I3mU7uHHwZ0KMNE3kB2pMe89Yy3KAQej7ZCaugthOGOgF4R6v81nW8WBwn
-         hGyt1b43+qNx1+pbIHd9Dsd6p107+tl9KSc94bgxspxmNk4aWGckax1bMZY94aOubq+A
-         RAQQ==
-X-Gm-Message-State: AOJu0YwaeqQ8FOPNti8Ufg9WjftlBCNq7VlBstwf5EMeSf6NTeQSVnx5
-	NKAQC+fKY0gx3S979kzzqJwquQ==
-X-Google-Smtp-Source: AGHT+IF6WuaSFh+2WoYZFrNj5cszOB/hqZsoJg0oXGWaqi+IL9O7EVOR6XOKlu/R5PzGbWOpD3GPlQ==
-X-Received: by 2002:aa7:dd56:0:b0:53e:7781:2279 with SMTP id o22-20020aa7dd56000000b0053e77812279mr1490668edw.36.1699712397566;
-        Sat, 11 Nov 2023 06:19:57 -0800 (PST)
-Received: from krzk-bin.. ([178.197.218.126])
-        by smtp.gmail.com with ESMTPSA id dm20-20020a05640222d400b00537666d307csm1035408edb.32.2023.11.11.06.19.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Nov 2023 06:19:57 -0800 (PST)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F55F19BC2;
+	Sat, 11 Nov 2023 16:24:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B52ECC433C7;
+	Sat, 11 Nov 2023 16:24:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1699719870;
+	bh=GKClXD6GTs5Oe+8N+6T6uTSKxWAvXwwhgME3dE69DWI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Ia4YKeMpG9rSsEq3hD1a5IKv88nxmCe3BKpAPUdJD+Ya4zgGwkdBHTiJBtzVY9xZB
+	 h3GqPZjtaWpzBfyEi8ceV80bQ1VwYje8yKIa1AHBRN88AjxhzwJz5QSf6UL8A40I7v
+	 p114zGSA59Fj4i/Ce2ls+JiTywezvTb4XyGW8YSaIYOUz+MuKqvzpZGKbQ3Z8BH5UE
+	 4h/vkBws6PVMBfrNyMeKBkX4NJ6hWfdCSMWlma3Hv/0RYi7Azw9pNw5SjJmRtxyOjs
+	 xjdjbYKygvIRfcIR19lzll9fOYPn0dN99fQESZ3EhXi4vl2A05LvXCyljNJ2VTiOQH
+	 r/HZLocG37oYw==
+Date: Sat, 11 Nov 2023 16:24:27 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
 	Konrad Dybcio <konrad.dybcio@linaro.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 	Conor Dooley <conor+dt@kernel.org>,
 	Wesley Cheng <quic_wcheng@quicinc.com>,
-	linux-arm-msm@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] dt-bindings: usb: qcom,dwc3: adjust number of interrupts on SM6125
-Date: Sat, 11 Nov 2023 15:19:53 +0100
-Message-Id: <20231111141953.51841-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: usb: qcom,dwc3: adjust number of interrupts
+ on SM6125
+Message-ID: <20231111-credible-omnivore-656130622958@squawk>
+References: <20231111141953.51841-1-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="8Myb6ZhNzaHjc+lW"
+Content-Disposition: inline
+In-Reply-To: <20231111141953.51841-1-krzysztof.kozlowski@linaro.org>
 
-Qualcomm SM6125 DWC3 USB controller comes with two interrupts (verified
-with downstream/vendor code of Trinket DTSI from Xiaomi Laurel device).
-Move the qcom,sm6125-dwc3 to appropriate place in allOf:if:then blocks
-constraining interrupts.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--8Myb6ZhNzaHjc+lW
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-index 64043b91ffb9..3f41362b2a91 100644
---- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-@@ -375,7 +375,6 @@ allOf:
-               - qcom,sdx65-dwc3
-               - qcom,sdx75-dwc3
-               - qcom,sm4250-dwc3
--              - qcom,sm6125-dwc3
-               - qcom,sm6350-dwc3
-               - qcom,sm8150-dwc3
-               - qcom,sm8250-dwc3
-@@ -408,6 +407,7 @@ allOf:
-               - qcom,msm8996-dwc3
-               - qcom,msm8998-dwc3
-               - qcom,sm6115-dwc3
-+              - qcom,sm6125-dwc3
-     then:
-       properties:
-         interrupts:
--- 
-2.34.1
+On Sat, Nov 11, 2023 at 03:19:53PM +0100, Krzysztof Kozlowski wrote:
+> Qualcomm SM6125 DWC3 USB controller comes with two interrupts (verified
+> with downstream/vendor code of Trinket DTSI from Xiaomi Laurel device).
+> Move the qcom,sm6125-dwc3 to appropriate place in allOf:if:then blocks
+> constraining interrupts.
+>=20
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+
+Cheers,
+Conor.
+
+> ---
+>  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Docum=
+entation/devicetree/bindings/usb/qcom,dwc3.yaml
+> index 64043b91ffb9..3f41362b2a91 100644
+> --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+> @@ -375,7 +375,6 @@ allOf:
+>                - qcom,sdx65-dwc3
+>                - qcom,sdx75-dwc3
+>                - qcom,sm4250-dwc3
+> -              - qcom,sm6125-dwc3
+>                - qcom,sm6350-dwc3
+>                - qcom,sm8150-dwc3
+>                - qcom,sm8250-dwc3
+> @@ -408,6 +407,7 @@ allOf:
+>                - qcom,msm8996-dwc3
+>                - qcom,msm8998-dwc3
+>                - qcom,sm6115-dwc3
+> +              - qcom,sm6125-dwc3
+>      then:
+>        properties:
+>          interrupts:
+> --=20
+> 2.34.1
+>=20
+
+--8Myb6ZhNzaHjc+lW
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZU+quAAKCRB4tDGHoIJi
+0r8eAP9enjrVOoi1KjZy3pS4wNk/dw2cmGZGu8BLhIKkrJ/bkAEAqgolF9+SK2Op
+6vpVoYMg53Uh4MsnhxTTUEH2xSZC+g0=
+=mUHv
+-----END PGP SIGNATURE-----
+
+--8Myb6ZhNzaHjc+lW--
 
