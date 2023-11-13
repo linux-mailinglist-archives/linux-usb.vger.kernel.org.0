@@ -1,94 +1,83 @@
-Return-Path: <linux-usb+bounces-2822-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2823-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E25477E9EA7
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Nov 2023 15:27:40 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8ECEB7E9EB8
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Nov 2023 15:29:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A15EF1F215F4
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Nov 2023 14:27:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BDDB01C20966
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Nov 2023 14:29:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17F572137F;
-	Mon, 13 Nov 2023 14:27:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 537D321116;
+	Mon, 13 Nov 2023 14:29:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="JKEFIsKB"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="tSW75R4W"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E2FE21115;
-	Mon, 13 Nov 2023 14:27:07 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498BE10E5;
-	Mon, 13 Nov 2023 06:27:05 -0800 (PST)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4C9EF1C001D;
-	Mon, 13 Nov 2023 14:27:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1699885623;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xSePrEltdrZVOTvOhxdlRrK/qcL9Ks2P2izMU5tje1Y=;
-	b=JKEFIsKBpS7AxZ3+kCpMqv8P5Lm/HTtIKtvBs8c7H0q2fKGbGECmfrHKImDfvuhobhcZ1u
-	Gev9AUbdxWIBRLqbHb9k+OlVwvxQ+DY57PY32FuoA6asoyuyGrY/3aU1cw9zXPwh40A6Fl
-	GkGACM+hTd3rwNT/kPle3JVOlWyYr2W7uGhaaJ0LHKZIJRVeUdOzSgyQm4/QJvm8+TYPlJ
-	6zPY419LPYhfOWk8JRyDs1PWuCrxJXCxFtTxK1QPgkK2j2S5NxvA9kO5dbHI6Fl56yOGMF
-	IXVctc1Up4doHSAd2pWgQRfsBDo87v3jFFRcn3Zy/HQI2ZibhVwnDVX29lxXVg==
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Date: Mon, 13 Nov 2023 15:27:01 +0100
-Subject: [PATCH 6/6] arm64: dts: ti: k3-j7200: use J7200-specific USB
- compatible
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90FEE210E7;
+	Mon, 13 Nov 2023 14:29:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F1D9C433C7;
+	Mon, 13 Nov 2023 14:29:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1699885783;
+	bh=rNE2QrdjIdpu7UFsTQxx90lK9l5ol0pX7lsm3WH4CMg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=tSW75R4WJBQ9NPl33UBWSBmNMIFvCcsUWCTM9NLS8EzqN4hZc35yJ+Nk0xGqGifNj
+	 dXrH917eivkzjrbD7oZ2KIzm66QA2cPMJPcEwEM5LaFREMHFT/gv/TX1hX3F/EaMOk
+	 OT0D2OcZrsK09FsKS68/BgnjCfNhGWWcwDcxwUPs=
+Date: Mon, 13 Nov 2023 09:29:39 -0500
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Yang Yingliang <yangyingliang@huawei.com>,
+	Mark Brown <broonie@kernel.org>, linux-input@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+	netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-spi@vger.kernel.org,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [PATCH v1 1/1] treewide, spi: Get rid of SPI_MASTER_HALF_DUPLEX
+Message-ID: <2023111307-payer-retiring-0d72@gregkh>
+References: <20231113111249.3982461-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20231113-j7200-usb-suspend-v1-6-ad1ee714835c@bootlin.com>
-References: <20231113-j7200-usb-suspend-v1-0-ad1ee714835c@bootlin.com>
-In-Reply-To: <20231113-j7200-usb-suspend-v1-0-ad1ee714835c@bootlin.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Rob Herring <robh+dt@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>, Roger Quadros <rogerq@kernel.org>, 
- Peter Chen <peter.chen@kernel.org>, Pawel Laszczak <pawell@cadence.com>, 
- Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>, 
- Tero Kristo <kristo@kernel.org>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-X-Mailer: b4 0.12.3
-X-GND-Sasl: theo.lebrun@bootlin.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231113111249.3982461-1-andriy.shevchenko@linux.intel.com>
 
-On our platform, suspend-to-idle or suspend-to-RAM turn the controller
-off thanks to a power-domain. This compatible triggers reset on resume
-behavior to reconfigure the hardware.
+On Mon, Nov 13, 2023 at 01:12:49PM +0200, Andy Shevchenko wrote:
+> The SPI_MASTER_HALF_DUPLEX is the legacy name of a definition
+> for a half duplex flag. Since all others had been replaced with
+> the respective SPI_CONTROLLER prefix get rid of the last one
+> as well. There is no functional change intended.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/input/rmi4/rmi_spi.c             | 2 +-
+>  drivers/mmc/host/mmc_spi.c               | 2 +-
+>  drivers/net/ethernet/micrel/ks8851_spi.c | 4 ++--
+>  drivers/usb/gadget/udc/max3420_udc.c     | 2 +-
+>  include/linux/spi/spi.h                  | 2 --
+>  5 files changed, 5 insertions(+), 7 deletions(-)
 
-Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
----
- arch/arm64/boot/dts/ti/k3-j7200-main.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This should go through the spi tree, right?  If so:
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi b/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
-index 709081cd1e7f..581905d9199e 100644
---- a/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
-@@ -788,7 +788,7 @@ pcie1_ep: pcie-ep@2910000 {
- 	};
- 
- 	usbss0: cdns-usb@4104000 {
--		compatible = "ti,j721e-usb";
-+		compatible = "ti,j7200-usb";
- 		reg = <0x00 0x4104000 0x00 0x100>;
- 		dma-coherent;
- 		power-domains = <&k3_pds 288 TI_SCI_PD_EXCLUSIVE>;
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
--- 
-2.41.0
+For the USB portion.
 
+thanks,
+
+greg k-h
 
