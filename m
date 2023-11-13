@@ -1,128 +1,106 @@
-Return-Path: <linux-usb+bounces-2845-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2846-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0956B7EA504
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Nov 2023 21:43:15 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 828657EA525
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Nov 2023 21:58:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B85CF280F7B
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Nov 2023 20:43:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 704A7B20A34
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Nov 2023 20:58:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACAB323776;
-	Mon, 13 Nov 2023 20:43:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="DzUQlpIL"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 561CA250EF;
+	Mon, 13 Nov 2023 20:58:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8564C22F18
-	for <linux-usb@vger.kernel.org>; Mon, 13 Nov 2023 20:43:07 +0000 (UTC)
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 751E2D56;
-	Mon, 13 Nov 2023 12:43:06 -0800 (PST)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ADJUUaG028485;
-	Mon, 13 Nov 2023 20:42:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=R1wDfApUJdDx6Oe62ut87q6ffTO+AP8d2ixBldbstqk=;
- b=DzUQlpILfrgIqd3eAXVxmM41yMK8+FvdBEojPx5VBiAxXRTluQ0o58GBytCZG8JZxR+P
- 2h3JIoDC5ZEThXLvvoH0zy5KZPdXESRBEgEVADmbcxG/fAXhFPPG1G5oawhbk4KHCFD0
- BkPunPAKr2MwJ6B6x3kLn75x+xxqSxn0e/UnY3GisclNRPF5bG1crxfnb5SiGxLCmNle
- YhCCnY03FOVKmbWNVytHxdl5GdioyP2C5hq+EXatK8Is0Q3LSREygKdGL/aP9icTrDhx
- Pnrk1xaTH2QX9u1gRGmcrxz+Gxys1lrYKcKDrUDB9moVbmV+DsBOVleEuVRCsJw987UH iQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ubf6d9rtn-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 13 Nov 2023 20:42:58 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3ADKgwR5014923
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 13 Nov 2023 20:42:58 GMT
-Received: from [10.110.104.83] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.39; Mon, 13 Nov
- 2023 12:42:57 -0800
-Message-ID: <25543cab-7c51-fc7f-767f-a70e5be37eab@quicinc.com>
-Date: Mon, 13 Nov 2023 12:42:16 -0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0276E24200
+	for <linux-usb@vger.kernel.org>; Mon, 13 Nov 2023 20:58:07 +0000 (UTC)
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by lindbergh.monkeyblade.net (Postfix) with SMTP id ED479D52
+	for <linux-usb@vger.kernel.org>; Mon, 13 Nov 2023 12:58:04 -0800 (PST)
+Received: (qmail 1195406 invoked by uid 1000); 13 Nov 2023 15:58:03 -0500
+Date: Mon, 13 Nov 2023 15:58:03 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Andreas Kempf <aakempf@gmail.com>
+Cc: USB mailing list <linux-usb@vger.kernel.org>
+Subject: Re: Slow enumeration of Creative Sound Blaster G3
+Message-ID: <98418f3d-79d7-44e8-897b-de8e0e20f968@rowland.harvard.edu>
+References: <e478e2c3-cc43-492a-989f-21bce674b1b8@rowland.harvard.edu>
+ <ZVCxDvNt3ERzZBpu@ryzen7700x.fritz.box>
+ <c8868479-2fc7-4891-a008-bd9b685c6b48@rowland.harvard.edu>
+ <ZVJ2EBlh8We2NrcF@ryzen7700x.fritz.box>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] usb: dwc3: Fix an issue that using pm_runtime_get_sync
- incorrectly
-Content-Language: en-US
-To: Kunwu Chan <chentao@kylinos.cn>, <Thinh.Nguyen@synopsys.com>,
-        <gregkh@linuxfoundation.org>
-CC: <kunwu.chan@hotmail.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20231113153515.751823-1-chentao@kylinos.cn>
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <20231113153515.751823-1-chentao@kylinos.cn>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 96C8uj6cFTZXo8hyjFMFJolZrRHZ5c1b
-X-Proofpoint-GUID: 96C8uj6cFTZXo8hyjFMFJolZrRHZ5c1b
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-11-13_11,2023-11-09_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 mlxlogscore=762 mlxscore=0 suspectscore=0 adultscore=0
- priorityscore=1501 phishscore=0 clxscore=1011 spamscore=0 impostorscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311060000 definitions=main-2311130161
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZVJ2EBlh8We2NrcF@ryzen7700x.fritz.box>
 
-Hi,
-
-On 11/13/2023 7:35 AM, Kunwu Chan wrote:
-> pm_runtime_get_sync() also returns 1 on success.
-> The documentation for pm_runtime_get_sync() suggests using
-> pm_runtime_resume_and_get() instead.
+On Mon, Nov 13, 2023 at 08:16:32PM +0100, Andreas Kempf wrote:
+> On Sun, Nov 12, 2023 at 11:28:47AM -0500, Alan Stern wrote:
+> I attached the usbmon output collected on my laptop and the lsusb -v
+> output for the device (collected on the "problematic" desktop).
+> As far as I can tell, the first column and the timestamp, as well as the
+> bus number are different, so the following command might remove these
+> parts:
 > 
-> Fixes: 77adb8bdf422 ("usb: dwc3: gadget: Allow runtime suspend if UDC unbinded")
-> Signed-off-by: Kunwu Chan <chentao@kylinos.cn>
-> ---
->   drivers/usb/dwc3/gadget.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> sdiff <(cut -d ' ' -f 3- busdata.txt | cut -d ':' -f1,3-) \
+>   <(cut -d ' ' -f 3- busdata_laptop.txt | cut -d ':' -f1,3-)
 > 
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index 858fe4c299b7..0330de73cd9c 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -2745,7 +2745,7 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
->   	 * successful resume, the DWC3 runtime PM resume routine will handle
->   	 * the run stop sequence, so avoid duplicate operations here.
->   	 */
-> -	ret = pm_runtime_get_sync(dwc->dev);
-> +	ret = pm_runtime_resume_and_get(dwc->dev);
+> I cut the laptop file short as I started playing something which created
+> a lot of data quickly.
+> 
+> I should say that the laptop is a few years old and slower (Thinkpad
+> E485) and probably does not support the same USB versions as my desktop.
 
-If pm_runtime_get_sync() returns 1, that means that the runtime state is 
-already in RPM_ACTIVE, so in that case, we should allow for the pullup 
-routine to continue.
+That probably doesn't make any difference.
 
-What is the end issue you're seeing with the current implementation?
+> > I've removed the first part of the usbmon trace.  It shows an ordinary
+> > device detection and enumeration.
+> > 
+> > > ffff888106725d40 503577493 S Co:5:002:0 s 00 09 0001 0000 0000 0
+> > > ffff888106725d40 503578614 C Co:5:002:0 0 0
+> > > ffff888106725d40 503578910 S Ci:5:002:0 s 80 06 0309 0409 00ff 255 <
+> > > ffff888106725d40 503581615 C Ci:5:002:0 0 34 = 22033100 35004300 31004500 35004500 33003100 36003500 42003900 42003300
+> > > ffff888106725d40 503581622 S Co:5:002:0 s 21 0a 0000 0000 0000 0
+> > > ffff888106725d40 503583615 C Co:5:002:0 0 0
+> > > ffff888106725d40 503583619 S Ci:5:002:0 s 81 06 2200 0000 004f 79 <
+> > > ffff888106725d40 503587625 C Ci:5:002:0 0 79 = 050c0901 a1011600 00260100 09e909ea 09e209cd 09b509b6 09b109b3 09b409cf
+> > > ffff888106725d40 503587756 S Ii:5:002:6 -115:32 64 <
+> > > ffff888106725c80 503644602 S Ci:5:002:0 s 80 06 0302 0409 00ff 255 <
+> > > ffff888106725c80 503646631 C Ci:5:002:0 0 34 = 22035300 6f007500 6e006400 20004200 6c006100 73007400 65007200 20004700
+> > > ffff888106725c80 503646635 S Ci:5:002:0 s 80 06 0301 0409 00ff 255 <
+> > > ffff888106725c80 503649624 C Ci:5:002:0 0 50 = 32034300 72006500 61007400 69007600 65002000 54006500 63006800 6e006f00
+> > 
+> > That part is normal also.  It shows a Set-Configuration request, HID
+> > Set-Idle and Get-Report-Descriptor requests, and a few Get-Descriptor
+> > requests for some strings.
 
->   	if (!ret || ret < 0) {
->   		pm_runtime_put(dwc->dev);
+This part is the same in the new usbmon trace.
 
-If you think using pm_runtime_resume_and_get() is still necessary, I 
-think you'll need to figure out how to address the above put call as 
-well.  pm_runtime_resume_and_get() already handles error cases and will 
-call a put noidle.
+> > > ffff888106725140 503649650 S Co:5:002:0 s 21 01 0100 2203 0001 1 = 01
+> > 
+> > I don't recognize this request.  It's probably a USB audio thing.  Its
+> > most notable aspect is that the device doesn't send a reply.  Maybe it
+> > gets confused?
 
-Thanks
-Wesley Cheng
+This request is also the same.  But in the new usbmon trace, the device 
+sends a reply almost immediately (under 1 microsecond).
+
+So there's no difference in the data being sent back and forth on the 
+two systems. The difference must lie somewhere else, and available power 
+is a likely candidate.
+
+If you decide that you don't want to pursue this any farther because
+it evidently isn't caused by a software bug, let us know.
+
+Alan Stern
+
 
