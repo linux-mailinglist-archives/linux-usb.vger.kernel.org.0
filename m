@@ -1,129 +1,111 @@
-Return-Path: <linux-usb+bounces-2843-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2844-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8CF57EA4CE
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Nov 2023 21:31:47 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7360D7EA4FB
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Nov 2023 21:41:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E728F1C209DD
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Nov 2023 20:31:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EFAD1B20A06
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Nov 2023 20:40:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEFB522F1C;
-	Mon, 13 Nov 2023 20:31:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GQ56aqx3"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1268250F5;
+	Mon, 13 Nov 2023 20:40:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DD37250EB;
-	Mon, 13 Nov 2023 20:31:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FB1BC433C9;
-	Mon, 13 Nov 2023 20:31:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699907502;
-	bh=fIARVbAefPJU30DddQ1rgV4vuTrk0KJXRxsHjap3SPc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GQ56aqx3L5+oc843PafhWwRe9LSIfrJkXlAZyn4pAKiJk8nkwDPbGz7xGB0/RqgWI
-	 FGnnkvOTBVW0stF6Nays6N4CAqat8dWY/RvWnZRKtuHwrd1/if8dxbfXan9s+scbhx
-	 3FSzORu6SL7Fv6xWwOwD3YlRtwwwa77FFsDguQXBAHsoL4WQu7+bzm02EdsUqVB8xq
-	 PNVfylEgf0H7ENR9w8wAac0hmyHZQQhFXA6qjjWxrYwHr93RSD28zgfy4rL0Nln8/Q
-	 z2ZfB3DiidattULbCqbo64l+lt/iPQeeAa9+UuqTlBSu4oM8HdDiDtdaAD/10xIWDW
-	 Apv81Ne1eoPMQ==
-Date: Mon, 13 Nov 2023 20:31:39 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Francesco Dolcini <francesco@dolcini.it>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Piyush Mehta <piyush.mehta@amd.com>,
-	Michal Simek <michal.simek@amd.com>,
-	Stefan Eichenberger <stefan.eichenberger@toradex.com>,
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Francesco Dolcini <francesco.dolcini@toradex.com>
-Subject: Re: [PATCH v1 1/2] dt-bindings: usb: microchip,usb5744: Add second
- supply
-Message-ID: <20231113-extruding-regroup-8c26fe2eec63@squawk>
-References: <20231113145921.30104-1-francesco@dolcini.it>
- <20231113145921.30104-2-francesco@dolcini.it>
- <20231113-jargon-manliness-584f34a5cf85@squawk>
- <ZVKCKop2zxI5FvCv@francesco-nb.int.toradex.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17F4A224C8;
+	Mon, 13 Nov 2023 20:40:47 +0000 (UTC)
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A3DD57;
+	Mon, 13 Nov 2023 12:40:46 -0800 (PST)
+Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-3b6ce6fac81so2030644b6e.1;
+        Mon, 13 Nov 2023 12:40:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699908046; x=1700512846;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=zlUyGqF8YFfY+SBOA/cyr6ZOVZJ7c/K2t3V+uvFzoZo=;
+        b=O3QbQ5AIEem6KzcyB8c7fodmhY2Ztze6NXpTr1eO5CHCswrYhNCAfRZ2JyNoXtlAho
+         GBrGYar232rLRx4cWIhIXLGx6+/47fn+2IVVVPcgjlINt1waoKErfkRrHjuVuGOcgbg9
+         xVE7vtgZIfTKm8Olys17DjhUqb9ZwOhv9mPM78bgLbiXmiz4nRFeqI312BVZuR05zTqA
+         TUDRiT1eIimSvYvpwP7OS20OrvWlt1mXB4FUWaKSn9Z7EYDg+VJDEm1hJ3Y6hUg/4gQV
+         3AMaOqsOSCnwWRKIi1oUC02dOV6xR/4A2oi+pdV2E+1JlRI7RdFS+8rix9SYUQtfEZ/2
+         Mgvw==
+X-Gm-Message-State: AOJu0YwRercYPCzD+WWirE4cZp2wWQvezkoCXKlN/+TaJMUjK2x3Fn2y
+	NaYw+wFJ6YW7BzvdiuMyUzCVjEGLmQ==
+X-Google-Smtp-Source: AGHT+IHBzTJq+oL6GFdaOVxFk4/Ftg8k5iAgT1Ifs85gnVEKM22ESG9dmEHGWLJWa+sT6dWirBhxpw==
+X-Received: by 2002:a05:6808:210f:b0:3b2:dc66:21a9 with SMTP id r15-20020a056808210f00b003b2dc6621a9mr10510321oiw.28.1699908046076;
+        Mon, 13 Nov 2023 12:40:46 -0800 (PST)
+Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id l5-20020a056808020500b003b2f3fb081csm902881oie.51.2023.11.13.12.40.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Nov 2023 12:40:45 -0800 (PST)
+Received: (nullmailer pid 38665 invoked by uid 1000);
+	Mon, 13 Nov 2023 20:40:42 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Y1ODAo1e3RHl1YOW"
-Content-Disposition: inline
-In-Reply-To: <ZVKCKop2zxI5FvCv@francesco-nb.int.toradex.com>
+From: Rob Herring <robh@kernel.org>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Andy Gross <agross@kernel.org>, =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Bjorn Andersson <andersson@kernel.org>, Mark Gross <markgross@kernel.org>, Conor Dooley <conor+dt@kernel.org>, platform-driver-x86@vger.kernel.org, Konrad Dybcio <konrad.dybcio@linaro.org>, Hans de Goede <hdegoede@redhat.com>, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org
+In-Reply-To: <20231113145328.42575-2-dmitry.baryshkov@linaro.org>
+References: <20231113145328.42575-1-dmitry.baryshkov@linaro.org>
+ <20231113145328.42575-2-dmitry.baryshkov@linaro.org>
+Message-Id: <169990801021.37946.4455016402393368576.robh@kernel.org>
+Subject: Re: [PATCH 1/3] dt-bindings: connector: usb: add altmodes
+ description
+Date: Mon, 13 Nov 2023 14:40:42 -0600
 
 
---Y1ODAo1e3RHl1YOW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Mon, 13 Nov 2023 16:33:07 +0200, Dmitry Baryshkov wrote:
+> Add description of the USB-C AltModes supported on the particular USB-C
+> connector. This is required for devices like Qualcomm Robotics RB5,
+> which have no other way to express alternative modes supported by the
+> hardware platform.
+> 
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+>  .../bindings/connector/usb-connector.yaml     | 35 +++++++++++++++++++
+>  1 file changed, 35 insertions(+)
+> 
 
-On Mon, Nov 13, 2023 at 09:08:10PM +0100, Francesco Dolcini wrote:
-> Hello Conor,
-> thanks for the review.
->=20
-> On Mon, Nov 13, 2023 at 07:55:20PM +0000, Conor Dooley wrote:
-> > On Mon, Nov 13, 2023 at 03:59:20PM +0100, Francesco Dolcini wrote:
-> > > From: Stefan Eichenberger <stefan.eichenberger@toradex.com>
-> > >=20
-> > > The USB5744 has two power supplies one for 3V3 and one for 1V2. Add t=
-he
-> > > second supply to the USB5744 DT binding.
-> > >=20
-> > > Signed-off-by: Stefan Eichenberger <stefan.eichenberger@toradex.com>
-> > > Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
-> > > ---
-> > >  .../devicetree/bindings/usb/microchip,usb5744.yaml         | 7 +++++=
-+-
-> > >  1 file changed, 6 insertions(+), 1 deletion(-)
-> > >=20
-> > > diff --git a/Documentation/devicetree/bindings/usb/microchip,usb5744.=
-yaml b/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
-> > > index ff3a1707ef57..6d4cfd943f58 100644
-> > > --- a/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
-> > > +++ b/Documentation/devicetree/bindings/usb/microchip,usb5744.yaml
-> > > @@ -36,7 +36,11 @@ properties:
-> > > =20
-> > >    vdd-supply:
-> > >      description:
-> > > -      VDD power supply to the hub
-> > > +      3V3 power supply to the hub
-> > > +
-> > > +  vdd2-supply:
-> > > +    description:
-> > > +      1V2 power supply to the hub
-> >=20
-> > How about v1p2-supply?
->=20
-> The reason for vdd2 is this
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-I see.
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+yamllint warnings/errors:
 
-Cheers,
-Conor.
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/connector/usb-connector.yaml: $defs:altmodes-list: 'anyOf' conditional failed, one must be fixed:
+	'descrption' is not one of ['$ref', 'additionalItems', 'additionalProperties', 'allOf', 'anyOf', 'const', 'contains', 'default', 'dependencies', 'dependentRequired', 'dependentSchemas', 'deprecated', 'description', 'else', 'enum', 'exclusiveMaximum', 'exclusiveMinimum', 'items', 'if', 'minItems', 'minimum', 'maxItems', 'maximum', 'multipleOf', 'not', 'oneOf', 'pattern', 'patternProperties', 'properties', 'required', 'then', 'typeSize', 'unevaluatedProperties', 'uniqueItems']
+	'type' was expected
+	hint: $defs entries must contain schemas
+	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
 
---Y1ODAo1e3RHl1YOW
-Content-Type: application/pgp-signature; name="signature.asc"
+doc reference errors (make refcheckdocs):
 
------BEGIN PGP SIGNATURE-----
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20231113145328.42575-2-dmitry.baryshkov@linaro.org
 
-iHUEARYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZVKHqAAKCRB4tDGHoIJi
-0mNjAP9fUcaKxFMcv3wv7oSMVK4Tu6svAPmuTFLJRlXDXPbO5QD8DIgec0uLbdKm
-Ikp0/BZFsla62RWFEecdOwC5K+OG+wM=
-=fEzx
------END PGP SIGNATURE-----
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
 
---Y1ODAo1e3RHl1YOW--
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
 
