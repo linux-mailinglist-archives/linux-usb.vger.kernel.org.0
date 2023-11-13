@@ -1,191 +1,151 @@
-Return-Path: <linux-usb+bounces-2833-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2834-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4677E7EA032
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Nov 2023 16:39:34 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4046F7EA0EB
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Nov 2023 17:08:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BE6FCB209A5
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Nov 2023 15:39:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 718E31C2097B
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Nov 2023 16:08:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8BCD219F8;
-	Mon, 13 Nov 2023 15:39:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DC7D219FC;
+	Mon, 13 Nov 2023 16:07:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="h+pKxhhp"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="S8wS8HR2"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 951122136C;
-	Mon, 13 Nov 2023 15:39:22 +0000 (UTC)
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F97C2;
-	Mon, 13 Nov 2023 07:39:20 -0800 (PST)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A665E1BF205;
-	Mon, 13 Nov 2023 15:39:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1699889959;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8145921A13
+	for <linux-usb@vger.kernel.org>; Mon, 13 Nov 2023 16:07:52 +0000 (UTC)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3615910FB
+	for <linux-usb@vger.kernel.org>; Mon, 13 Nov 2023 08:07:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1699891669;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=u9MG5uzj9KQUsOrxENnxvvEipektRY8PwOqU1a1sxvk=;
-	b=h+pKxhhp1kqlFBkKKeFOsot3Jc+zUn/nlEFFWqEDlvHPcjtwahibUEAswn7zXe4hcGw8Sk
-	w5xONfMo8ugmcpJwE3Gw/L0dWz/D/1LfSI2tdeC6KZUFLf1Q9RV9wwyyvu0uo9mzp7EW/2
-	r8bLenTiq9QDk03wLryYQkAxHwzlZdMMsDEK57EM1RYL1AVzuf6fq7ilsXrjU8dxdbkILK
-	LWmHeeXv945ljH7MmJyzKv+ykSBPZ0V2fgLU4BOhU2bqqEH0Klv4qozh8ovDTk7BGA+Si1
-	rA4xMoo1nFE+CgAXxnl6DdAdximE7BqZRfHJLhevYE/Ygc1PUEMQdeDowLKknw==
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
-To: =?utf-8?Q?Th=C3=A9o?= Lebrun <theo.lebrun@bootlin.com>, Greg
- Kroah-Hartman
- <gregkh@linuxfoundation.org>, Rob Herring <robh+dt@kernel.org>, Krzysztof
- Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley
- <conor+dt@kernel.org>, Roger Quadros <rogerq@kernel.org>, Peter Chen
- <peter.chen@kernel.org>, Pawel Laszczak <pawell@cadence.com>, Nishanth
- Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo
- <kristo@kernel.org>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- =?utf-8?Q?Th=C3=A9o?=
- Lebrun <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH 3/6] usb: cdns3-ti: add suspend/resume procedures for J7200
-In-Reply-To: <20231113-j7200-usb-suspend-v1-3-ad1ee714835c@bootlin.com>
-References: <20231113-j7200-usb-suspend-v1-0-ad1ee714835c@bootlin.com>
- <20231113-j7200-usb-suspend-v1-3-ad1ee714835c@bootlin.com>
-Date: Mon, 13 Nov 2023 16:39:17 +0100
-Message-ID: <87zfzh64t6.fsf@BL-laptop>
+	bh=pAkyWuAlP3WRAhkP+++lmx+mwvKY3DtmoscUolCQlDI=;
+	b=S8wS8HR28knBtVFcSPiGXyREKrrMviYRASH4lIe+6B4CnaG4WGtk1JWuXFy+59BxIhYyBQ
+	U+8E9U5S9Cn0hjNGwNHYMjQ7mTcsw+x/DQ/TJ2eiKHnk775CTPhTlbEAlCgp18gNyJEggg
+	C/5ITgjV89reE3utK23i0WoqgreZ4Tw=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-674-vRhUp1pOOmyS09kq02cxKQ-1; Mon, 13 Nov 2023 11:07:47 -0500
+X-MC-Unique: vRhUp1pOOmyS09kq02cxKQ-1
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-9dd489c98e7so321660366b.2
+        for <linux-usb@vger.kernel.org>; Mon, 13 Nov 2023 08:07:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699891666; x=1700496466;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pAkyWuAlP3WRAhkP+++lmx+mwvKY3DtmoscUolCQlDI=;
+        b=NNcXQreV0lYsvPsXbwjiYA1+GDewteGRzfQL+p7XGC7o0QMqR43mukECy2fuVio+K/
+         hrGMtKdS9k1QxtCRvPWW68gtZ34G3vdsDvuEKXXSHC0yEyCjL43qK+T6q58+Abk8vAk8
+         P1fnAnpXddKs9radb9eZbvc6By/e9O6KO6UbMoI0WnVmE1PXww5r3aZKP2MsXPG7dGnY
+         0VvS7OvF1608IzRGARtCyP1vY89W8zSRpw5luLI1pZoRckLOI8tdDhV0xB0UXt1yK4Wf
+         DPpn5/KCmAHcB0B3JO6nV0msMJxSDVkna4e1to8e7J/3epM7pTwKQ3f8Ivk/3s4F3pws
+         6KRw==
+X-Gm-Message-State: AOJu0YyfF7njpgIo9gQGpyNxN9taRpVFGZHZxkbRdZpgBeEaIkUng5J3
+	q0pfNEhKTU5dstxysO/GJ1EElU+LA2aAHAJLV+56BxENPuCnI1FkOJLutoCGTpcLGBg/Q3+XdOW
+	hOlOqCBaowLregarTAsrz
+X-Received: by 2002:a17:906:b1b:b0:9ae:5370:81d5 with SMTP id u27-20020a1709060b1b00b009ae537081d5mr4359535ejg.41.1699891666725;
+        Mon, 13 Nov 2023 08:07:46 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEGTihF/62EKU+Wtiz2v06QtymYDdd3hPfvECCV8zFTiBRYk2GSvIbvrQVO+5wZ5S1Ntj5ooA==
+X-Received: by 2002:a17:906:b1b:b0:9ae:5370:81d5 with SMTP id u27-20020a1709060b1b00b009ae537081d5mr4359512ejg.41.1699891666435;
+        Mon, 13 Nov 2023 08:07:46 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id um27-20020a170906cf9b00b009de467a25d5sm4272281ejb.13.2023.11.13.08.07.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Nov 2023 08:07:45 -0800 (PST)
+Message-ID: <ae5131e3-b282-437d-9a80-ae8b697eea3c@redhat.com>
+Date: Mon, 13 Nov 2023 17:07:44 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-Sasl: gregory.clement@bootlin.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/3] dt-bindings: connector: usb: provide bindings for
+ altmodes
+Content-Language: en-US, nl
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Andy Gross <agross@kernel.org>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Mark Gross <markgross@kernel.org>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+ linux-usb@vger.kernel.org
+References: <20231113145328.42575-1-dmitry.baryshkov@linaro.org>
+From: Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20231113145328.42575-1-dmitry.baryshkov@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hello Th=C3=A9o,
+Hi Dmitry,
 
-> Hardware initialisation is only done at probe. The J7200 USB controller
-> is reset at resume because of power-domains toggling off & on. We
-> therefore (1) toggle PM runtime at suspend/resume & (2) reconfigure the
-> hardware at resume.
->
-> Reuse the newly extracted cdns_ti_init_hw() function that contains the
-> register write sequence.
->
-> We guard this behavior based on compatible to avoid modifying the
-> current behavior on other platforms. If the controller does not reset
-> we do not want to touch PM runtime & do not want to redo reg writes.
->
-> Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
-> ---
->  drivers/usb/cdns3/cdns3-ti.c | 48 ++++++++++++++++++++++++++++++++++++++=
-+++++-
->  1 file changed, 47 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/usb/cdns3/cdns3-ti.c b/drivers/usb/cdns3/cdns3-ti.c
-> index c331bcd2faeb..50b38c4b9c87 100644
-> --- a/drivers/usb/cdns3/cdns3-ti.c
-> +++ b/drivers/usb/cdns3/cdns3-ti.c
-> @@ -197,6 +197,50 @@ static int cdns_ti_probe(struct platform_device *pde=
-v)
->  	return error;
->  }
->=20=20
-> +#ifdef CONFIG_PM
-> +
-> +static int cdns_ti_suspend(struct device *dev)
-> +{
-> +	struct cdns_ti *data =3D dev_get_drvdata(dev);
-> +
-> +	if (!of_device_is_compatible(dev_of_node(dev), "ti,j7200-usb"))
-> +		return 0;
+On 11/13/23 15:33, Dmitry Baryshkov wrote:
+> In some cases we need a way to specify USB-C AltModes that can be
+> supportd on the particular USB-C connector. For example, x86 INT33FE
+> driver does this by populating fwnode properties internally. For the
+> Qualcomm Robotics RB5 platform (and several similar devices which use
+> Qualcomm PMIC TCPM) we have to put this information to the DT.
+> 
+> Provide the DT bindings for this kind of information and while we are at
+> it, change svid property to be 16-bit unsigned integer instead of a
+> simple u32.
 
-Just a small remark:
+Thank you for your patches. I'm fine with this, one remark though:
 
-What about adding a boolean in the cdns_ti struct for taking care of
-it ? Then you will go through the device tree only during probe. Moreover
-if this behaviour is needed for more compatible we can just add them in
-the probe too.
+Since at least the existing arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
+is already using this I'm not sure of changing the svid property to
+an u16 is really a good idea from devicetree compatibility pov ?
 
-Besides this you still can add my
+Also the whole 16 bit property notation in the dts files seems
+less readable to me. So to me this seems more of something
+which one would use when having a significantly sized array
+of u16-s since then it will result in space-saving in the dtb.
 
-Reviewed-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+In this case I personally think it is fine to leave this
+as an u32.
 
-Thanks,
+With all that said, I'm fine either way.
 
-Gregory
+Here is my ack for routing the drivers/platform/x86/intel/chtwc_int33fe.c
+bits through whatever tree is best to get this upstream:
 
-> +
-> +	pm_runtime_put_sync(data->dev);
-> +
-> +	return 0;
-> +}
-> +
-> +static int cdns_ti_resume(struct device *dev)
-> +{
-> +	struct cdns_ti *data =3D dev_get_drvdata(dev);
-> +	int ret;
-> +
-> +	if (!of_device_is_compatible(dev_of_node(dev), "ti,j7200-usb"))
-> +		return 0;
-> +
-> +	ret =3D pm_runtime_get_sync(dev);
-> +	if (ret < 0) {
-> +		dev_err(dev, "pm_runtime_get_sync failed: %d\n", ret);
-> +		goto err;
-> +	}
-> +
-> +	cdns_ti_init_hw(data);
-> +
-> +	return 0;
-> +
-> +err:
-> +	pm_runtime_put_sync(data->dev);
-> +	pm_runtime_disable(data->dev);
-> +	return ret;
-> +}
-> +
-> +static const struct dev_pm_ops cdns_ti_pm_ops =3D {
-> +	SET_SYSTEM_SLEEP_PM_OPS(cdns_ti_suspend, cdns_ti_resume)
-> +};
-> +
-> +#endif /* CONFIG_PM */
-> +
->  static int cdns_ti_remove_core(struct device *dev, void *c)
->  {
->  	struct platform_device *pdev =3D to_platform_device(dev);
-> @@ -218,6 +262,7 @@ static void cdns_ti_remove(struct platform_device *pd=
-ev)
->  }
->=20=20
->  static const struct of_device_id cdns_ti_of_match[] =3D {
-> +	{ .compatible =3D "ti,j7200-usb", },
->  	{ .compatible =3D "ti,j721e-usb", },
->  	{ .compatible =3D "ti,am64-usb", },
->  	{},
-> @@ -228,8 +273,9 @@ static struct platform_driver cdns_ti_driver =3D {
->  	.probe		=3D cdns_ti_probe,
->  	.remove_new	=3D cdns_ti_remove,
->  	.driver		=3D {
-> -		.name	=3D "cdns3-ti",
-> +		.name		=3D "cdns3-ti",
->  		.of_match_table	=3D cdns_ti_of_match,
-> +		.pm		=3D pm_ptr(&cdns_ti_pm_ops),
->  	},
->  };
->=20=20
->
-> --=20
-> 2.41.0
->
->
+Acked-by: Hans de Goede <hdegoede@redhat.com>
 
---=20
-Gregory Clement, Bootlin
-Embedded Linux and Kernel engineering
-http://bootlin.com
+Regards,
+
+Hans
+
+
+
+
+> Dmitry Baryshkov (3):
+>   dt-bindings: connector: usb: add altmodes description
+>   usb: typec: change altmode SVID to u16 entry
+>   arm64: dts: qcom: qrb5165-rb5: use u16 for DP altmode svid
+> 
+>  .../bindings/connector/usb-connector.yaml     | 35 +++++++++++++++++++
+>  arch/arm64/boot/dts/qcom/qrb5165-rb5.dts      |  2 +-
+>  drivers/platform/x86/intel/chtwc_int33fe.c    |  2 +-
+>  drivers/usb/typec/class.c                     |  5 +--
+>  4 files changed, 40 insertions(+), 4 deletions(-)
+> 
+
 
