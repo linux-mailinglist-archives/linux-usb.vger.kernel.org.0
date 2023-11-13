@@ -1,111 +1,128 @@
-Return-Path: <linux-usb+bounces-2844-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-2845-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7360D7EA4FB
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Nov 2023 21:41:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0956B7EA504
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Nov 2023 21:43:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EFAD1B20A06
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Nov 2023 20:40:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B85CF280F7B
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Nov 2023 20:43:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1268250F5;
-	Mon, 13 Nov 2023 20:40:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACAB323776;
+	Mon, 13 Nov 2023 20:43:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="DzUQlpIL"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17F4A224C8;
-	Mon, 13 Nov 2023 20:40:47 +0000 (UTC)
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A3DD57;
-	Mon, 13 Nov 2023 12:40:46 -0800 (PST)
-Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-3b6ce6fac81so2030644b6e.1;
-        Mon, 13 Nov 2023 12:40:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699908046; x=1700512846;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=zlUyGqF8YFfY+SBOA/cyr6ZOVZJ7c/K2t3V+uvFzoZo=;
-        b=O3QbQ5AIEem6KzcyB8c7fodmhY2Ztze6NXpTr1eO5CHCswrYhNCAfRZ2JyNoXtlAho
-         GBrGYar232rLRx4cWIhIXLGx6+/47fn+2IVVVPcgjlINt1waoKErfkRrHjuVuGOcgbg9
-         xVE7vtgZIfTKm8Olys17DjhUqb9ZwOhv9mPM78bgLbiXmiz4nRFeqI312BVZuR05zTqA
-         TUDRiT1eIimSvYvpwP7OS20OrvWlt1mXB4FUWaKSn9Z7EYDg+VJDEm1hJ3Y6hUg/4gQV
-         3AMaOqsOSCnwWRKIi1oUC02dOV6xR/4A2oi+pdV2E+1JlRI7RdFS+8rix9SYUQtfEZ/2
-         Mgvw==
-X-Gm-Message-State: AOJu0YwRercYPCzD+WWirE4cZp2wWQvezkoCXKlN/+TaJMUjK2x3Fn2y
-	NaYw+wFJ6YW7BzvdiuMyUzCVjEGLmQ==
-X-Google-Smtp-Source: AGHT+IHBzTJq+oL6GFdaOVxFk4/Ftg8k5iAgT1Ifs85gnVEKM22ESG9dmEHGWLJWa+sT6dWirBhxpw==
-X-Received: by 2002:a05:6808:210f:b0:3b2:dc66:21a9 with SMTP id r15-20020a056808210f00b003b2dc6621a9mr10510321oiw.28.1699908046076;
-        Mon, 13 Nov 2023 12:40:46 -0800 (PST)
-Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id l5-20020a056808020500b003b2f3fb081csm902881oie.51.2023.11.13.12.40.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Nov 2023 12:40:45 -0800 (PST)
-Received: (nullmailer pid 38665 invoked by uid 1000);
-	Mon, 13 Nov 2023 20:40:42 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8564C22F18
+	for <linux-usb@vger.kernel.org>; Mon, 13 Nov 2023 20:43:07 +0000 (UTC)
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 751E2D56;
+	Mon, 13 Nov 2023 12:43:06 -0800 (PST)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ADJUUaG028485;
+	Mon, 13 Nov 2023 20:42:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=R1wDfApUJdDx6Oe62ut87q6ffTO+AP8d2ixBldbstqk=;
+ b=DzUQlpILfrgIqd3eAXVxmM41yMK8+FvdBEojPx5VBiAxXRTluQ0o58GBytCZG8JZxR+P
+ 2h3JIoDC5ZEThXLvvoH0zy5KZPdXESRBEgEVADmbcxG/fAXhFPPG1G5oawhbk4KHCFD0
+ BkPunPAKr2MwJ6B6x3kLn75x+xxqSxn0e/UnY3GisclNRPF5bG1crxfnb5SiGxLCmNle
+ YhCCnY03FOVKmbWNVytHxdl5GdioyP2C5hq+EXatK8Is0Q3LSREygKdGL/aP9icTrDhx
+ Pnrk1xaTH2QX9u1gRGmcrxz+Gxys1lrYKcKDrUDB9moVbmV+DsBOVleEuVRCsJw987UH iQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ubf6d9rtn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 13 Nov 2023 20:42:58 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3ADKgwR5014923
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 13 Nov 2023 20:42:58 GMT
+Received: from [10.110.104.83] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.39; Mon, 13 Nov
+ 2023 12:42:57 -0800
+Message-ID: <25543cab-7c51-fc7f-767f-a70e5be37eab@quicinc.com>
+Date: Mon, 13 Nov 2023 12:42:16 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Rob Herring <robh@kernel.org>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Andy Gross <agross@kernel.org>, =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Bjorn Andersson <andersson@kernel.org>, Mark Gross <markgross@kernel.org>, Conor Dooley <conor+dt@kernel.org>, platform-driver-x86@vger.kernel.org, Konrad Dybcio <konrad.dybcio@linaro.org>, Hans de Goede <hdegoede@redhat.com>, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org
-In-Reply-To: <20231113145328.42575-2-dmitry.baryshkov@linaro.org>
-References: <20231113145328.42575-1-dmitry.baryshkov@linaro.org>
- <20231113145328.42575-2-dmitry.baryshkov@linaro.org>
-Message-Id: <169990801021.37946.4455016402393368576.robh@kernel.org>
-Subject: Re: [PATCH 1/3] dt-bindings: connector: usb: add altmodes
- description
-Date: Mon, 13 Nov 2023 14:40:42 -0600
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] usb: dwc3: Fix an issue that using pm_runtime_get_sync
+ incorrectly
+Content-Language: en-US
+To: Kunwu Chan <chentao@kylinos.cn>, <Thinh.Nguyen@synopsys.com>,
+        <gregkh@linuxfoundation.org>
+CC: <kunwu.chan@hotmail.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20231113153515.751823-1-chentao@kylinos.cn>
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <20231113153515.751823-1-chentao@kylinos.cn>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 96C8uj6cFTZXo8hyjFMFJolZrRHZ5c1b
+X-Proofpoint-GUID: 96C8uj6cFTZXo8hyjFMFJolZrRHZ5c1b
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-13_11,2023-11-09_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ bulkscore=0 mlxlogscore=762 mlxscore=0 suspectscore=0 adultscore=0
+ priorityscore=1501 phishscore=0 clxscore=1011 spamscore=0 impostorscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311060000 definitions=main-2311130161
 
+Hi,
 
-On Mon, 13 Nov 2023 16:33:07 +0200, Dmitry Baryshkov wrote:
-> Add description of the USB-C AltModes supported on the particular USB-C
-> connector. This is required for devices like Qualcomm Robotics RB5,
-> which have no other way to express alternative modes supported by the
-> hardware platform.
+On 11/13/2023 7:35 AM, Kunwu Chan wrote:
+> pm_runtime_get_sync() also returns 1 on success.
+> The documentation for pm_runtime_get_sync() suggests using
+> pm_runtime_resume_and_get() instead.
 > 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Fixes: 77adb8bdf422 ("usb: dwc3: gadget: Allow runtime suspend if UDC unbinded")
+> Signed-off-by: Kunwu Chan <chentao@kylinos.cn>
 > ---
->  .../bindings/connector/usb-connector.yaml     | 35 +++++++++++++++++++
->  1 file changed, 35 insertions(+)
+>   drivers/usb/dwc3/gadget.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
+> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> index 858fe4c299b7..0330de73cd9c 100644
+> --- a/drivers/usb/dwc3/gadget.c
+> +++ b/drivers/usb/dwc3/gadget.c
+> @@ -2745,7 +2745,7 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+>   	 * successful resume, the DWC3 runtime PM resume routine will handle
+>   	 * the run stop sequence, so avoid duplicate operations here.
+>   	 */
+> -	ret = pm_runtime_get_sync(dwc->dev);
+> +	ret = pm_runtime_resume_and_get(dwc->dev);
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+If pm_runtime_get_sync() returns 1, that means that the runtime state is 
+already in RPM_ACTIVE, so in that case, we should allow for the pullup 
+routine to continue.
 
-yamllint warnings/errors:
+What is the end issue you're seeing with the current implementation?
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/connector/usb-connector.yaml: $defs:altmodes-list: 'anyOf' conditional failed, one must be fixed:
-	'descrption' is not one of ['$ref', 'additionalItems', 'additionalProperties', 'allOf', 'anyOf', 'const', 'contains', 'default', 'dependencies', 'dependentRequired', 'dependentSchemas', 'deprecated', 'description', 'else', 'enum', 'exclusiveMaximum', 'exclusiveMinimum', 'items', 'if', 'minItems', 'minimum', 'maxItems', 'maximum', 'multipleOf', 'not', 'oneOf', 'pattern', 'patternProperties', 'properties', 'required', 'then', 'typeSize', 'unevaluatedProperties', 'uniqueItems']
-	'type' was expected
-	hint: $defs entries must contain schemas
-	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
+>   	if (!ret || ret < 0) {
+>   		pm_runtime_put(dwc->dev);
 
-doc reference errors (make refcheckdocs):
+If you think using pm_runtime_resume_and_get() is still necessary, I 
+think you'll need to figure out how to address the above put call as 
+well.  pm_runtime_resume_and_get() already handles error cases and will 
+call a put noidle.
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20231113145328.42575-2-dmitry.baryshkov@linaro.org
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+Thanks
+Wesley Cheng
 
